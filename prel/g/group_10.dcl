@@ -12,8 +12,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="RELSET_1"/>

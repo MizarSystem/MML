@@ -178,15 +178,12 @@
 <Adjective nr="25" value="false"/>
 <Adjective nr="29" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="46"/>
 <Adjective nr="65"/>
 <Adjective nr="68"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="75"/>
 <Adjective nr="78"/>
 <Adjective nr="80"/>
 <Adjective nr="82"/>

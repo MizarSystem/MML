@@ -40,6 +40,7 @@
 <ArticleID name="MEASURE6"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="RCOMP_1"/>
@@ -62,7 +63,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="302">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -84,7 +85,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="375">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,7 +101,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="226">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -115,7 +116,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="368">
+<Func kind="K" nr="379">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -133,7 +134,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="368">
+<Func kind="K" nr="379">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

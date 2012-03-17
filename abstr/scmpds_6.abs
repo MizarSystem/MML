@@ -11,13 +11,13 @@ environ
       ABSVALUE, ARYTM_1, RELOC, SCMFSA6B, SCMPDS_5, AMI_5, SCMFSA8A, CAT_1,
       UNIALG_2, SCMFSA7B, SCMFSA8B, SCMPDS_6, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, CARD_1,
-      NUMBERS, COMPLEX1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, AMI_2, AMI_3,
-      FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, INT_2, SEQ_1, SCM_1, SCMPDS_1, SCMPDS_4,
-      SCMPDS_5, VALUED_1, PARTFUN1;
+      NUMBERS, COMPLEX1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, SCMNORM,
+      AMI_2, AMI_3, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, INT_2, SCM_1, SCMPDS_4, SCMPDS_5,
+      SCMNORM;
  registrations SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMPDS_2, SCMPDS_3, SCMPDS_4,
-      SCMPDS_5, ORDINAL1, XBOOLE_0, VALUED_1, FUNCT_2;
+      SCMPDS_5, ORDINAL1, XBOOLE_0, SCMNORM;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -37,12 +37,12 @@ theorem :: SCMPDS_6:1  :: S8A_Th3
 theorem :: SCMPDS_6:2
   for s being State of SCMPDS st s is halting
   for k being Element of NAT st LifeSpan s <= k holds
-  CurInstr (Computation s).k = halt SCMPDS;
+  CurInstr Computation(s,k) = halt SCMPDS;
 
 theorem :: SCMPDS_6:3
   for s being State of SCMPDS st s is halting
   for k being Element of NAT st LifeSpan s <= k holds
-  IC (Computation s).k = IC (Computation s).LifeSpan s;
+  IC Computation(s,k) = IC Computation(s,LifeSpan s);
 
 theorem :: SCMPDS_6:4  ::S8A_Th6
   for s1,s2 being State of SCMPDS holds s1,s2 equal_outside NAT
@@ -182,7 +182,7 @@ definition
 :: SCMPDS_6:def 2
 
   for k being Element of NAT holds
-  IC (Computation (s +* Initialized stop I )).k in dom stop I;
+  IC Computation(s+*Initialized stop I,k) in dom stop I;
   pred I is_halting_on s means
 :: SCMPDS_6:def 3
 
@@ -216,36 +216,36 @@ theorem :: SCMPDS_6:39
   for I,J being Program-block,s being State of SCMPDS
   st I is_closed_on s & I is_halting_on s holds
   (for k being Element of NAT st k <= LifeSpan (s +* Initialized stop I) holds
-  IC (Computation (s +* Initialized stop I)).k =
-  IC (Computation (s +* Initialized stop (I ';' J))).k) &
-  (Computation (s +* Initialized stop I)).
-  (LifeSpan (s +* Initialized stop I)) | SCM-Data-Loc =
-  (Computation (s +* Initialized stop (I ';' J))).
-  (LifeSpan (s +* Initialized stop I)) | SCM-Data-Loc;
+  IC  Computation( (s +* Initialized stop I),k) =
+  IC  Computation( (s +* Initialized stop (I ';' J)),k)) &
+   Computation( (s +* Initialized stop I),
+  (LifeSpan (s +* Initialized stop I))) | SCM-Data-Loc =
+   Computation( (s +* Initialized stop (I ';' J)),
+  (LifeSpan (s +* Initialized stop I))) | SCM-Data-Loc;
 
 theorem :: SCMPDS_6:40
   for I being Program-block,k be Element of NAT st I is_closed_on s &
   I is_halting_on s & k < LifeSpan (s +* Initialized stop(I))
-  holds IC (Computation (s +* Initialized stop(I))).k in dom I;
+  holds IC  Computation( (s +* Initialized stop(I)),k) in dom I;
 
 theorem :: SCMPDS_6:41
   for I,J being Program-block,s being State of SCMPDS,k being Element of NAT
   st I is_closed_on s & I is_halting_on s &
   k < LifeSpan (s +* Initialized stop I) holds
-  CurInstr (Computation (s +* Initialized stop I)).k =
-  CurInstr (Computation (s +* Initialized stop (I ';' J))).k;
+  CurInstr  Computation( (s +* Initialized stop I),k) =
+  CurInstr  Computation( (s +* Initialized stop (I ';' J)),k);
 
 theorem :: SCMPDS_6:42      ::SCMPDS_5:32
   for I being No-StopCode Program-block,s being State of SCMPDS,
   k being Element of NAT st I is_closed_on s & I is_halting_on s &
   k < LifeSpan (s +* Initialized stop I)
-  holds CurInstr (Computation (s +* Initialized stop I)).k <> halt SCMPDS;
+  holds CurInstr  Computation( (s +* Initialized stop I),k) <> halt SCMPDS;
 
 theorem :: SCMPDS_6:43
   for I being No-StopCode Program-block,s being State of SCMPDS
   st I is_closed_on s & I is_halting_on s holds
-  IC (Computation (s +* Initialized stop I)).
-  LifeSpan (s +* Initialized stop I) = inspos card I;
+  IC  Computation( (s +* Initialized stop I),
+  LifeSpan (s +* Initialized stop I)) = inspos card I;
 
 theorem :: SCMPDS_6:44   ::S8A_58
   for I,J being Program-block,s being State of SCMPDS
@@ -259,9 +259,9 @@ theorem :: SCMPDS_6:45   :: SP4_88,Th27
   for n being Element of NAT st Shift(stop I,n) c= s2 &
   IC s2 = inspos n & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
   for i being Element of NAT holds
-  IC (Computation s1).i + n = IC (Computation s2).i &
-  CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i) &
-  (Computation s1).i | SCM-Data-Loc = (Computation s2).i | SCM-Data-Loc;
+  IC  Computation( s1,i) + n = IC  Computation( s2,i) &
+  CurInstr ( Computation( s1,i)) = CurInstr ( Computation( s2,i)) &
+   Computation( s1,i) | SCM-Data-Loc =  Computation( s2,i) | SCM-Data-Loc;
 
 theorem :: SCMPDS_6:46   ::SCMFSA8A:61
   for s being State of SCMPDS,I being No-StopCode Program-block,

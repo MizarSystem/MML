@@ -8,14 +8,11 @@ environ
 
  vocabularies AMI_3, INT_1, POWER, ARYTM_1, FINSEQ_1, AMI_1, SCM_1, FUNCT_1,
       PRE_FF, GROUP_1, NAT_1, FIB_FUSC, ARYTM;
- notations TARSKI, XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER,
-      FINSEQ_1, AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, MEMBERED, SEQ_1, NEWTON, POWER, PRE_FF,
-      SCM_1, AMI_1, VALUED_1, PARTFUN1;
- registrations SUBSET_1, SETFAM_1, NUMBERS, XREAL_0, INT_1, MEMBERED, AMI_3,
-      AMI_2, VALUED_1, FUNCT_2, XBOOLE_0;
+ notations XCMPLX_0, SUBSET_1, NUMBERS, INT_1, NAT_1, NEWTON, POWER, FINSEQ_1,
+      AMI_1, SCM_1, AMI_3, PRE_FF, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, NEWTON, POWER, PRE_FF, SCM_1;
+ registrations SETFAM_1, NUMBERS, XREAL_0, INT_1, AMI_3, XBOOLE_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
- definitions VALUED_1;
  theorems REAL_1, NAT_1, INT_1, POWER, NEWTON, SCM_1, PRE_FF, AMI_3, AMI_1,
       XREAL_1, XXREAL_0, ORDINAL1;
  schemes NAT_1;
@@ -124,12 +121,12 @@ A8: s.L6 = FP := FC by SCM_1:14;
 A9: s.L7 = AddTo(FC, AUX) by SCM_1:14;
 A10: s.L8 = goto L3 by SCM_1:14;
 A11: s.C1 = 1 & s.n = N & s.FP = 0 & s.FC = 0 by SCM_1:14;
-  set s0 = (Computation s).0;
-A12: s = s0 by AMI_1:def 19;
-  set s1 = (Computation s).(0+1);
+  set s0 = Computation(s,0);
+A12: s = s0 by AMI_1:13;
+  set s1 = Computation(s,0+1);
 A13: s1.C1 = 1 & s1.n = N & s1.FP = 0 & s1.FC = 0 by A1,A2,A11,A12,SCM_1:25;
   defpred P[Element of NAT] means $1 < N implies for u being State of SCM
-  st u = (Computation s).(6*$1+3) holds
+  st u = Computation(s,6*$1+3) holds
   u.C1 = 1 & u.n = N-1-$1 & u.FP = Fib $1 & u.FC = Fib ($1+1) & IC u = L4;
 A14: P[0]
   proof
@@ -138,12 +135,12 @@ A14: P[0]
 A15: IC s1 = L2 by A1,A2,A11,A12,SCM_1:25;
     let t be State of SCM;
     assume
-A16: t = (Computation s).(6*0+3);
-    set s2 = (Computation s).(1+1);
+A16: t = Computation(s,6*0+3);
+    set s2 = Computation(s,1+1);
 A17: s2.FC = 1 by A4,A13,A15,SCM_1:18;
 A18: s2.C1 = 1 & s2.n = N & s2.FP = 0 by A4,A13,A15,Lm7,SCM_1:18;
 A19: IC s2 = il.(2+1) by A4,A15,SCM_1:18;
-    set s3 = (Computation s).(2+1);
+    set s3 = Computation(s,2+1);
     IC s3 = il.(3+1) by A5,A19,SCM_1:20;
     hence t.C1 = 1 & t.n = N-1-0 & t.FP = Fib 0 & t.FC = Fib (0+1) & IC t = L4
     by A5,A16,A17,A18,A19,Lm7,PRE_FF:1,SCM_1:20;
@@ -151,44 +148,44 @@ A19: IC s2 = il.(2+1) by A4,A15,SCM_1:18;
 A20: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
-A21: k < N implies for u being State of SCM st u = (Computation s).(6*k+3)
+A21: k < N implies for u being State of SCM st u = Computation(s,6*k+3)
     holds u.C1 = 1 & u.n = N-1-k & u.FP = Fib k & u.FC = Fib (k+1) &
     IC u = L4 and
 A22: k+1 < N;
     let t be State of SCM;
     assume
-A23: t = (Computation s).(6*(k+1)+3);
-    set s4 = (Computation s).(6*k+3);
+A23: t = Computation(s,6*(k+1)+3);
+    set s4 = Computation(s,6*k+3);
 A24: s4.C1 = 1 & s4.n = N-1-k & s4.FP = Fib k & s4.FC = Fib (k+1) &
     IC s4 = L4 by A21,A22,NAT_1:13;
     then
 A25: s4.n <> 0 by A22;
     set b = 6*k+3;
-    set s5 = (Computation s).(b+1);
+    set s5 = Computation(s,b+1);
 A26: IC s5 = il.(4+1) by A6,A24,A25,SCM_1:24;
 A27: s5.C1 = 1 & s5.n = N-1-k & s5.FP = Fib k & s5.FC = Fib (k+1)
     by A6,A24,SCM_1:24;
-    set s6 = (Computation s).(b+1+1);
+    set s6 = Computation(s,b+1+1);
 A28: IC s6 = il.(5+1) by A7,A26,SCM_1:18;
 A29: s6.AUX = Fib k by A7,A26,A27,SCM_1:18;
 A30: s6.C1 = 1 & s6.n = N-1-k & s6.FP = Fib k & s6.FC = Fib (k+1)
     by A7,A26,A27,Lm8,SCM_1:18;
-    set s7 = (Computation s).(b+1+1+1);
+    set s7 = Computation(s,b+1+1+1);
 A31: IC s7 = il.(6+1) by A8,A28,SCM_1:18;
 A32: s7.FP = Fib (k+1) by A8,A28,A30,SCM_1:18;
 A33: s7.C1 = 1 & s7.n = N-1-k & s7.FC = Fib (k+1) & s7.AUX = Fib k
     by A8,A28,A29,A30,Lm7,Lm8,SCM_1:18;
-    set s8 = (Computation s).(b+1+1+1+1);
+    set s8 = Computation(s,b+1+1+1+1);
 A34: IC s8 = il.(7+1) by A9,A31,SCM_1:19;
 A35: s8.FC = s7.AUX + s7.FC by A9,A31,SCM_1:19
       .= Fib (k+1+1) by A33,PRE_FF:1;
 A36: s8.C1 = 1 & s8.n = N-1-k & s8.FP = Fib (k+1)
     by A9,A31,A32,A33,Lm7,SCM_1:19;
-    set s9 = (Computation s).(b+1+1+1+1+1);
+    set s9 = Computation(s,b+1+1+1+1+1);
 A37: IC s9 = L3 by A10,A34,SCM_1:23;
 A38: s9.C1 = 1 & s9.n = N-1-k & s9.FP = Fib (k+1) & s9.FC = Fib (k+1+1)
     by A10,A34,A35,A36,SCM_1:23;
-    set s10 = (Computation s).(b+1+1+1+1+1+1);
+    set s10 = Computation(s,b+1+1+1+1+1+1);
 A39: IC s10 = il.(3+1) by A5,A37,SCM_1:20;
     s10.n = N-1-k - 1 by A5,A37,A38,SCM_1:20;
     hence t.C1 = 1 & t.n = N-1-(k+1) & t.FP = Fib (k+1) &
@@ -213,12 +210,12 @@ A42: s.(IC s1) = halt SCM by A1,A2,A3,A11,A12,SCM_1:25;
     then consider k being Nat such that
 A43: N = k+1;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    set r = (Computation s).(6*k+3);
+    set r = Computation(s,6*k+3);
 A44: k < N by A43,NAT_1:13;
     then
 A45: r.C1 = 1 & r.n = N-1-k & r.FP = Fib k &
     r.FC = Fib (k+1) & IC r = L4 by A40;
-    set t = (Computation s).(6*k+3+1);
+    set t = Computation(s,6*k+3+1);
     r.n = k+(1-1)-k by A40,A43,A44
       .= 0;
     then
@@ -291,16 +288,16 @@ A10: s.L7 = goto L0 by A2,SCM_1:14;
 A11: s.L8 = halt SCM by A2,SCM_1:14;
 A12: s.c2 = 2 & s.n = N & s.a = 1 & s.b = 0 by A2,SCM_1:14;
   defpred P[Element of NAT] means $1 <= log(2, N) + 1 implies
-  for u being State of SCM st u = (Computation s).(6*$1) holds
+  for u being State of SCM st u = Computation(s,6*$1) holds
   IC u = L0 & u.c2 = 2 & u.n = N qua Integer div (2 |^ $1) &
   u.n is Element of NAT & Fusc N = u.a*Fusc' u.n + u.b*Fusc' (u.n+1);
 A13: P[0]
   proof
     assume 0 <= log(2, N) + 1;
     let u be State of SCM;
-    assume u = (Computation s).(6*0);
+    assume u = Computation(s,6*0);
     then
-A14: u = s by AMI_1:def 19;
+A14: u = s by AMI_1:13;
     hence IC u = L0 & u.c2 = 2 by A2,SCM_1:14;
     thus u.n = N qua Integer div 1 by A12,A14,PRE_FF:2
       .= N qua Integer div (2 |^ 0) by NEWTON:9;
@@ -312,16 +309,16 @@ A15: for k being Element of NAT st P[k] holds P[k+1]
     let k be Element of NAT;
     assume
 A16: k <= log(2, N) + 1 implies
-    for u being State of SCM st u = (Computation s).(6*k) holds
+    for u being State of SCM st u = Computation(s,6*k) holds
     IC u = L0 & u.c2 = 2 & u.n = N qua Integer div (2 |^ k) & u.n
     is Element of NAT & Fusc N = u.a*Fusc' u.n + u.b*Fusc' (u.n+1);
     assume
 A17: k+1 <= log(2, N) + 1;
     let u be State of SCM;
     assume
-A18: u = (Computation s).(6*(k+1));
+A18: u = Computation(s,6*(k+1));
     set t = 6*k;
-    set t0 = (Computation s).t;
+    set t0 = Computation(s,t);
 A19: k <= k+1 by NAT_1:11;
     then
 A20: IC t0 = L0 & t0.c2 = 2 & t0.n = N qua Integer div (2 |^ k) & t0.n
@@ -330,20 +327,20 @@ A20: IC t0 = L0 & t0.c2 = 2 & t0.n = N qua Integer div (2 |^ k) & t0.n
     then 2 to_power k <= 2 to_power log(2, N) by PRE_FF:10;
     then 2 to_power k <= N by A1,POWER:def 3;
     then
-A21: 2 |^ k <= N & (2 |^ k) > 0 by NEWTON:102,POWER:48;
+A21: 2 |^ k <= N & (2 |^ k) > 0 by NEWTON:102,POWER:46;
     then
 A22: t0.n <> 0 by A20,PRE_FF:3;
-    set t1 = (Computation s).(t+1);
+    set t1 = Computation(s,t+1);
 A23: IC t1 = il.(0+1) by A3,A20,A22,SCM_1:24;
 A24: t1.c2 = 2 & t1.n = t0.n & t1.a = t0.a & t1.b = t0.b by A3,A20,SCM_1:24;
-    set t2 = (Computation s).(t+2);
+    set t2 = Computation(s,t+2);
 A25: t+1+1 = t + 2;
     then
 A26: IC t2 = il.(1+1) by A4,A23,SCM_1:18;
 A27: t2.aux = 2 by A4,A23,A24,A25,SCM_1:18;
 A28: t2.c2 = 2 & t2.n = t0.n & t2.a = t0.a & t2.b = t0.b
     by A4,A23,A24,A25,Lm8,SCM_1:18;
-    set t3 = (Computation s).(t+3);
+    set t3 = Computation(s,t+3);
 A29: t+2+1 = t+3;
     then
 A30: IC t3 = il.(2+1) by A5,A26,Lm8,SCM_1:22;
@@ -353,11 +350,11 @@ A32: t3.n = N qua Integer div (2|^k)*2 by A20,A21,PRE_FF:5
       .= N qua Integer div (2|^(k+1)) by NEWTON:11;
 A33: t3.aux = t0.n mod 2 by A5,A26,A27,A28,A29,Lm8,SCM_1:22;
 A34: t3.c2 = 2 & t3.a = t0.a & t3.b = t0.b by A5,A26,A28,A29,Lm7,Lm8,SCM_1:22;
-    set t4 = (Computation s).(t+4);
+    set t4 = Computation(s,t+4);
 A35: t+3+1 = t+4;
-    set t5 = (Computation s).(t+5);
+    set t5 = Computation(s,t+5);
 A36: t+4+1 = t+5;
-    set t6 = (Computation s).(t+6);
+    set t6 = Computation(s,t+6);
 A37: t+5+1 = t+6;
 A38: t0.n mod 2 = t0.n - (t0.n div 2)*2 by INT_1:def 8;
     per cases;
@@ -436,7 +433,7 @@ A62: log(2, N) - 1 < k by INT_1:def 4;
 A63: log (2, N) >= 0 & log(2, N) < k+1 by A62,POWER:59,XREAL_1:21;
   then k+1 > 0 by XXREAL_0:2;
   then reconsider k as Element of NAT by INT_1:16,20;
-  set u = (Computation s).(6*(k+1));
+  set u = Computation(s,6*(k+1));
   [\log(2, N)/] <= log(2, N) by INT_1:def 4;
   then k+1 <= log(2, N)+1 by XREAL_1:8;
   then
@@ -444,7 +441,7 @@ A64: IC u = L0 & u.n = N qua Integer div (2 |^ (k+1)) &
   Fusc N = u.a*Fusc' u.n + u.b*Fusc' (u.n+1) by A61;
   2 to_power (k+1) > 2 to_power log(2, N) by A63,POWER:44;
   then 2 to_power (k+1) > N by A1,POWER:def 3;
-  then 2 |^ (k+1) > N by POWER:48;
+  then 2 |^ (k+1) > N by POWER:46;
   then
 A65: u.n = 0 by A64,NAT_1:2,PRE_FF:4;
   then
@@ -452,7 +449,7 @@ A66: u.a*Fusc' u.n + u.b*Fusc' (u.n+1)
   = u.a * 0 + u.b * Fusc' (u.n+1) by Def2,PRE_FF:17
     .= u.b * Fusc (0+1) by A65,Def2
     .= u.b by PRE_FF:17;
-  set h = (Computation s).(6*(k+1)+1);
+  set h = Computation(s,6*(k+1)+1);
 A67: IC h = L8 by A3,A64,A65,SCM_1:24;
 A68: h.b = u.b by A3,A64,SCM_1:24;
   thus S is halting by A2,A11,A67,SCM_1:3;
@@ -497,15 +494,15 @@ A12: s.il.6 = FP := FC by SCM_1:14;
 A13: s.il.7 = AddTo(FC, AUX) by SCM_1:14;
 A14: s.il.8 = goto il.3 by SCM_1:14;
 A15: s.C1 = 1 & s.n = N+1 & s.FP = Fk & s.FC = Fk1 by SCM_1:14;
-    set s0 = (Computation s).0;
-A16: s = s0 by AMI_1:def 19;
-    set s1 = (Computation s).(0+1);
+    set s0 = Computation(s,0);
+A16: s = s0 by AMI_1:13;
+    set s1 = Computation(s,0+1);
 A17: s1.n = (N+1)-1 by A5,A9,A15,A16,SCM_1:20
       .= N;
 A18: s1.C1=1 & s1.FP=Fk & s1.FC=Fk1 by A5,A9,A15,A16,Lm7,SCM_1:20;
 A19: IC s1 = il.(3+1) by A5,A9,A16,SCM_1:20
       .= il.4;
-    set s2 = (Computation s).(1+1);
+    set s2 = Computation(s,1+1);
 A20: s2.C1=1 & s2.n=N & s2.FP=Fk & s2.FC=Fk1 by A10,A17,A18,A19,SCM_1:24;
 A21: N >= 0 by NAT_1:2;
     per cases by A21,REAL_1:def 5;
@@ -525,23 +522,23 @@ A23:  s.(IC s2) = halt SCM by A7,A10,A17,A19,SCM_1:24;
 A24:  N > 0;
       then
 A25:  IC s2 = il.(4+1) by A10,A17,A19,SCM_1:24;
-      set s3 = (Computation s).(2+1);
+      set s3 = Computation(s,2+1);
 A26:  IC s3 = il.(5+1) by A11,A25,SCM_1:18;
 A27:  s3.AUX = Fib k by A4,A11,A20,A25,SCM_1:18;
 A28:  s3.C1 = 1 & s3.n = N & s3.FP = Fib k & s3.FC = Fib (k+1)
       by A4,A11,A20,A25,Lm8,SCM_1:18;
-      set s4 = (Computation s).(3+1);
+      set s4 = Computation(s,3+1);
 A29:  IC s4 = il.(6+1) by A12,A26,SCM_1:18;
 A30:  s4.FP = Fib (k+1) by A12,A26,A28,SCM_1:18;
 A31:  s4.C1 = 1 & s4.n = N & s4.FC = Fib (k+1) & s4.AUX = Fib k
       by A12,A26,A27,A28,Lm7,Lm8,SCM_1:18;
-      set s5 = (Computation s).(4+1);
+      set s5 = Computation(s,4+1);
 A32:  IC s5 = il.(7+1) by A13,A29,SCM_1:19;
 A33:  s5.FC = s4.AUX + s4.FC by A13,A29,SCM_1:19
         .= Fib (k+1+1) by A31,PRE_FF:1;
 A34:  s5.C1 = 1 & s5.n = N & s5.FP = Fib (k+1)
       by A13,A29,A30,A31,Lm7,SCM_1:19;
-      set s6 = (Computation s).(5+1);
+      set s6 = Computation(s,5+1);
 A35:  IC s6 = il.3 by A14,A32,SCM_1:23;
 A36:  s6.C1 = 1 & s6.n = N & s6.FP = Fib (k+1) & s6.FC = Fib (k+1+1)
       by A14,A32,A33,A34,SCM_1:23;
@@ -613,9 +610,9 @@ A11: s.il.6 = AddTo(a, b) by SCM_1:14;
 A12: s.il.7 = goto il.0 by SCM_1:14;
 A13: s.il.8 = halt SCM by SCM_1:14;
 A14: s.c2 = 2 & s.n = nn & s.a = A & s.b = B by SCM_1:14;
-    set s0 = (Computation s).0;
-A15: s = s0 by AMI_1:def 19;
-    set s1 = (Computation s).(0+1);
+    set s0 = Computation(s,0);
+A15: s = s0 by AMI_1:13;
+    set s1 = Computation(s,0+1);
 A16: s1.c2 = 2 & s1.n = nn & s1.a = A & s1.b = B by A4,A5,A14,A15,SCM_1:24;
 A17: nn >= 0 by NAT_1:2;
 A18: now
@@ -638,19 +635,19 @@ A20:  s.(IC s1) = halt SCM by A4,A5,A13,A14,A15,SCM_1:24;
 A21:  nn > 0;
       then
 A22:  IC s1 = il.(0+1) by A4,A5,A14,A15,SCM_1:24;
-      set s2 = (Computation s).(1+1);
+      set s2 = Computation(s,1+1);
 A23:  IC s2 = il.(1+1) by A6,A22,SCM_1:18;
 A24:  s2.aux = 2 by A6,A16,A22,SCM_1:18;
 A25:  s2.c2 = 2 & s2.n = nn & s2.a = A & s2.b = B by A6,A16,A22,Lm8,SCM_1:18;
-      set s3 = (Computation s).(2+1);
+      set s3 = Computation(s,2+1);
 A26:  IC s3 = il.(2+1) by A7,A23,Lm8,SCM_1:22;
 A27:  s3.n = n2 div 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
 A28:  s3.aux = nn mod 2 by A7,A23,A24,A25,Lm8,SCM_1:22;
 A29:  s3.c2 =2 & s3.a =A & s3.b =B by A7,A23,A25,Lm7,Lm8,SCM_1:22;
       reconsider nn' = s3.n as Element of NAT by A27,PRE_FF:7;
-      set s4 = (Computation s).(3+1);
-      set s5 = (Computation s).(4+1);
-      set s6 = (Computation s).(5+1);
+      set s4 = Computation(s,3+1);
+      set s5 = Computation(s,4+1);
+      set s6 = Computation(s,5+1);
 A30:  nn mod 2 = nn - (nn div 2) * 2 by INT_1:def 8;
       per cases;
       suppose

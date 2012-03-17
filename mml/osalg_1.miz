@@ -8,15 +8,15 @@ environ
 
  vocabularies ZF_REFLE, PBOOLE, BOOLE, RELAT_1, RELAT_2, EQREL_1, FUNCT_1,
       PRALG_1, TDGROUP, SEQM_3, NATTRA_1, CARD_3, FINSEQ_1, FUNCOP_1, AMI_1,
-      QC_LANG1, CARD_5, CARD_LAR, SETFAM_1, MSUALG_1, ORDERS_1, OSALG_1, ARYTM;
+      QC_LANG1, CARD_5, CARD_LAR, SETFAM_1, MSUALG_1, ORDERS_1, OSALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
-      ORDERS_1, FUNCT_2, EQREL_1, SETFAM_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      CARD_3, PBOOLE, ORDERS_2, STRUCT_0, MSUALG_1, ORDERS_3;
- constructors EQREL_1, CARD_3, MSUALG_1, ORDERS_3, VALUED_1, PARTFUN1, SEQ_1;
+      ORDERS_1, FUNCT_2, EQREL_1, SETFAM_1, PARTFUN1, FINSEQ_1, FUNCOP_1,
+      FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, STRUCT_0, MSUALG_1, ORDERS_3;
+ constructors EQREL_1, CARD_3, MSUALG_1, ORDERS_3;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, EQREL_1,
-      STRUCT_0, MSUALG_1, MSAFREE, ORDERS_3, ORDINAL1, VALUED_1, FUNCT_2;
+      STRUCT_0, MSUALG_1, MSAFREE, ORDERS_3, ORDINAL1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, VALUED_1;
+ definitions TARSKI;
  theorems FUNCT_1, PARTFUN1, FINSEQ_1, FUNCOP_1, PBOOLE, FUNCT_2, CARD_3,
       FINSEQ_3, FINSEQ_2, RELAT_1, RELSET_1, EQREL_1, ZFMISC_1, ORDERS_3,
       STRUCT_0, MSUALG_1, ORDERS_2, RELAT_2, WELLFND1, FUNCT_4, ORDERS_1;
@@ -265,7 +265,6 @@ A4:   [x,y] = [x1,y1] & x1 in opss & y1 in opss by RELSET_1:6;
     end;
     assume
 A5: x in opss & x = y;
-    then reconsider x1 = x, y1 = y as OperSymbol of S;
     thus [x,y] in ol by A5,Def3;
   end;
   hence the Overloading of S = d by RELAT_1:def 10;
@@ -1160,7 +1159,7 @@ definition
   proof
     set c = ConstOSSet(S,z);
     deffunc ch1(Element of the OperSymbols of S) =
-    ((c# * the Arity of S).$1) --> z1;
+    ((c# * the Arity of S).$1) --> (z1 qua set);
     consider ch2 being Function such that
 A1: dom ch2 = the OperSymbols of S &
     for x being Element of (the OperSymbols of S) holds
@@ -1171,59 +1170,57 @@ A1: dom ch2 = the OperSymbols of S &
     is Function of (ConstOSSet(S,z)# * the Arity of S).i,
     (ConstOSSet(S,z) * the ResultSort of S).i
     proof
-      let i be set such that
-A2:   i in the OperSymbols of S;
-      reconsider o=i as OperSymbol of S by A2;
+      let i be set;
+      assume i in the OperSymbols of S;
+      then reconsider o=i as OperSymbol of S;
       (the ResultSort of S).o in the carrier of S;
       then
-A3:   o in ((the ResultSort of S)"(the carrier of S)) by FUNCT_2:46;
+A2:   o in ((the ResultSort of S)"(the carrier of S)) by FUNCT_2:46;
       (ConstOSSet(S,z) * the ResultSort of S).o =
       (((the ResultSort of S)"(the carrier of S)) --> z).o by FUNCOP_1:25
-        .= z by A3,FUNCOP_1:13;
+        .= z by A2,FUNCOP_1:13;
       then
-A4:   {z1} c= (ConstOSSet(S,z) * the ResultSort of S).i by ZFMISC_1: 37;
+A3:   {z1} c= (ConstOSSet(S,z) * the ResultSort of S).i by ZFMISC_1:37;
       ch4.i = ch1(o) by A1;
-      hence thesis by A4,FUNCT_2:9;
+      hence thesis by A3,FUNCT_2:9;
     end;
     then reconsider ch3 = ch4 as ManySortedFunction of
     (ConstOSSet(S,z)# * the Arity of S),
     (ConstOSSet(S,z) * the ResultSort of S) by PBOOLE:def 18;
     take T = ConstOSA(S,z,ch3); thus
-A5: the Sorts of T = ConstOSSet(S,z) by Def20;
+A4: the Sorts of T = ConstOSSet(S,z) by Def20;
     let o;
     Den(o,T) = (the Charact of T).o by MSUALG_1:def 11
       .= ch3.o by Def20
-      .=
-    ((c# * the Arity of S).o) --> z1 by A1
-      .=
-    Args(o,T) --> z1 by A5,MSUALG_1:def 9;
+      .= ((c# * the Arity of S).o) --> z1 by A1
+      .= Args(o,T) --> z1 by A4,MSUALG_1:def 9;
     hence thesis;
   end;
   uniqueness
   proof
     let T1,T2 be strict OSAlgebra of S;
     assume
-A6: the Sorts of T1 = ConstOSSet(S,z) &
+A5: the Sorts of T1 = ConstOSSet(S,z) &
     for o holds Den(o,T1) = Args(o,T1) --> z1;
     assume
-A7: the Sorts of T2 = ConstOSSet(S,z) &
+A6: the Sorts of T2 = ConstOSSet(S,z) &
     for o holds Den(o,T2) = Args(o,T2) --> z1;
     now
       let o1 be set such that
-A8:   o1 in the OperSymbols of S;
-      reconsider o = o1 as OperSymbol of S by A8;
+A7:   o1 in the OperSymbols of S;
+      reconsider o = o1 as OperSymbol of S by A7;
       thus (the Charact of T1).o1 = Den(o,T1) by MSUALG_1:def 11
         .=
-      Args(o,T1) --> z1 by A6
+      Args(o,T1) --> z1 by A5
         .=
-      ((ConstOSSet(S,z)# * the Arity of S).o) --> z1 by A6,MSUALG_1:def 9
+      ((ConstOSSet(S,z)# * the Arity of S).o) --> z1 by A5,MSUALG_1:def 9
         .=
-      Args(o,T2) --> z1 by A7,MSUALG_1:def 9
-        .= Den(o,T2) by A7
+      Args(o,T2) --> z1 by A6,MSUALG_1:def 9
+        .= Den(o,T2) by A6
         .=
       (the Charact of T2).o1 by MSUALG_1:def 11;
     end;
-    hence thesis by A6,A7,PBOOLE:3;
+    hence thesis by A5,A6,PBOOLE:3;
   end;
 end;
 

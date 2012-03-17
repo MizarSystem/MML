@@ -11,21 +11,21 @@ environ
       SCMFSA6A, AMI_2, FUNCT_7, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1, SCMFSA6B,
       FUNCOP_1, SCMPDS_4, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, FINSET_1, VALUED_1, SEQ_1,
-      STRUCT_0, AMI_1, AMI_2, AMI_3, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMPDS_3,
-      INT_2, XXREAL_0;
- constructors WELLORD2, XXREAL_0, NAT_1, SEQ_1, INT_2, AMI_5, SCMPDS_1,
-      SCMPDS_3, DOMAIN_1, VALUED_1, PARTFUN1;
+      RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, INT_1, NAT_1, FINSET_1, INT_2,
+      XXREAL_0, STRUCT_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
+      SCMPDS_3;
+ constructors WELLORD2, XXREAL_0, NAT_1, INT_2, AMI_5, SCMPDS_1, SCMPDS_3,
+      DOMAIN_1, SCMNORM;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, TREES_2,
-      AMI_1, SCMPDS_2, SCMPDS_3, AMI_2, SCMPDS_1, VALUED_1, FUNCT_2;
+      FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1,
+      SCMPDS_2, SCMPDS_3, AMI_2, SCMNORM, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, AMI_3, SCMPDS_3, FUNCT_7, XBOOLE_0, SCMPDS_2,
-      FUNCOP_1, AMI_2, VALUED_1;
- theorems AMI_1, AMI_3, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1, ZFMISC_1,
-      INT_1, RELAT_1, SCMPDS_2, AMI_2, FUNCT_2, FUNCT_7, SCMPDS_3, CARD_1,
-      PRE_CIRC, WELLORD2, ENUMSET1, CARD_3, ABSVALUE, GRFUNC_1, CARD_2,
-      FINSEQ_1, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, XXREAL_0;
+      FUNCOP_1, NAT_1;
+ theorems AMI_1, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1, ZFMISC_1, INT_1,
+      RELAT_1, SCMPDS_2, AMI_2, FUNCT_2, FUNCT_7, SCMPDS_3, CARD_1, PRE_CIRC,
+      WELLORD2, ENUMSET1, CARD_3, ABSVALUE, GRFUNC_1, CARD_2, XBOOLE_0,
+      XBOOLE_1, XREAL_1, ORDINAL1, FUNCOP_1, XXREAL_0, VALUED_1;
  schemes NAT_1, DOMAIN_1, FUNCT_7, CLASSES1;
 
 begin :: Definition of a program block and its basic properties
@@ -54,9 +54,9 @@ A1: dom I = {inspos 0} by CQC_LANG:5;
       thus I is initial
       proof
         let m,n such that
-A2:     inspos n in dom I and
+A2:      n in dom I and
 A3:     m < n;
-        thus inspos m in dom I by A1,A2,A3,TARSKI:def 1;
+        thus m in dom I by A1,A2,A3,TARSKI:def 1;
       end;
       thus dom I c= NAT by A1,ZFMISC_1:37;
     end;
@@ -72,10 +72,10 @@ registration
 end;
 
 theorem Th1:  ::SCMFSA6A=SCMPDS_4,Th15
-  for P being Program-block, n holds n < card P iff inspos n in dom P
+  for P being Program-block, n holds n < card P iff n in dom P
 proof
   let P be Program-block, n;
-  deffunc U(Element of NAT) = inspos $1;
+  deffunc U(Element of NAT) = $1;
   set A = { m : U(m) in dom P};
 A1: now
     let x be set;
@@ -83,10 +83,9 @@ A1: now
 A2: x in dom P;
     dom P c= NAT by AMI_1:def 40;
     then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
-    consider n such that
-A3: l = inspos n by SCMPDS_3:32;
+  reconsider n = l as Element of NAT by ORDINAL1:def 13;
     take n;
-    thus x = U(n) by A3;
+    thus x = U(n);
   end;
 A4: for n,m st U(n) = U(m) holds n = m;
 A5: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A4);
@@ -97,8 +96,8 @@ A6: A is Subset of NAT from DOMAIN_1:sch 7;
     let n,m such that
 A7: n in A and
 A8: m < n;
-    ex l st l = n & inspos l in dom P by A7;
-    then inspos m in dom P by A8,SCMPDS_3:def 5;
+    ex l being Element of NAT st l = n & l in dom P by A7;
+    then m in dom P by A8,SCMPDS_3:def 5;
     hence m in A;
   end;
   then reconsider A as Cardinal by A6,FUNCT_7:22;
@@ -109,10 +108,10 @@ A10: Card A = A by CARD_1:def 5;
     then Card n in Card card P by NAT_1:42;
     then n in card dom P by A9,PRE_CIRC:21;
     then n in Card A by A5,CARD_1:21;
-    then ex m st m = n & inspos m in dom P by A10;
-    hence inspos n in dom P;
+    then ex m st m = n & m in dom P by A10;
+    hence n in dom P;
   end;
-  assume inspos n in dom P;
+  assume n in dom P;
   then n in Card A by A10;
   then n in card dom P by A5,CARD_1:21;
   then Card n in Card card P by A9,PRE_CIRC:21;
@@ -125,26 +124,26 @@ registration
   coherence
   proof
     let m,n such that
-A1: inspos n in dom ProgramPart I and
+A1: n in dom ProgramPart I and
 A2: m < n;
     ProgramPart I c= I by RELAT_1:88;
     then dom ProgramPart I c= dom I by RELAT_1:25;
     then inspos m in dom I by A1,A2,SCMPDS_3:def 5;
-    hence inspos m in dom ProgramPart I by AMI_1:106;
+    hence m in dom ProgramPart I by AMI_1:106;
   end;
 end;
 
 theorem Th2:   ::S6A02,Th16
   dom I misses dom Shift(J,card I)
 proof
-A1: dom Shift(J,card I) = { inspos(l+card I):inspos l in dom J }
-  by SCMPDS_3:def 7;
+A1: dom Shift(J,card I) = { l+card I: l in dom J }
+  by VALUED_1:def 12;
   assume dom I meets dom Shift(J,card I);
   then consider x being set such that
 A2: x in dom I and
-A3: x in { inspos(l+card I):inspos l in dom J } by A1,XBOOLE_0:3;
+A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
-A4: x = inspos(l+card I) and inspos l in dom J by A3;
+A4: x = l+card I and l in dom J by A3;
   l+card I < card I by A2,A4,Th1;
   hence contradiction by NAT_1:11;
 end;
@@ -153,29 +152,29 @@ theorem Th3:    :: S6A03,Th17
   for I being programmed FinPartState of SCMPDS holds card Shift(I,m) = card I
 proof
   let I be programmed FinPartState of SCMPDS;
-  set B = { l:inspos l in dom I };
-  deffunc U(Element of NAT) = inspos $1;
+  deffunc U(Element of NAT) = $1;
 A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
   proof
     let x be set;
 A2: dom I c= NAT by AMI_1:def 40;
     assume x in dom I;
     then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
-    l=x;
-    hence thesis by SCMPDS_3:32;
+  reconsider l as Element of NAT by ORDINAL1:def 13;
+    take l;
+    thus thesis;
   end;
 A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1=d2;
-  deffunc V(Element of NAT) = inspos($1+m);
+  deffunc V(Element of NAT) = $1+m;
   defpred NC[set] means not contradiction;
-  defpred X[Element of NAT] means inspos $1 in dom I;
+  defpred X[Element of NAT] means $1 in dom I;
   set B = { l: U(l) in dom I }, C = { V(l): l in { n: X[n] } & NC[l] },
-  D = { V(l): l in B }, E = { inspos(l+m):inspos l in dom I };
+  D = { V(l): l in B }, E = { l+m: l in dom I };
 A4: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A3);
   set B = { l: X[l] };
   B is Subset of NAT from DOMAIN_1:sch 7;
   then
 A5: B c= NAT;
-  set B = { l:inspos l in dom I };
+  set B = { l: l in dom I };
 A6: for d1,d2 be Element of NAT st V(d1) = V(d2) holds d1 = d2;
 A7: C c= E
   proof
@@ -192,8 +191,8 @@ A10: E c= D
     let e be set;
     assume e in E;
     then consider l such that
-A11: e = inspos(l+m) and
-A12: inspos l in dom I;
+A11: e = l+m and
+A12: l in dom I;
     l in B by A12;
     hence e in D by A11;
   end;
@@ -210,7 +209,7 @@ A14: C = E by A7,XBOOLE_0:def 10;
   then
 A15: C = D by A10,A13,XBOOLE_0:def 10;
 A16: B,D are_equipotent from FUNCT_7:sch 4(A5,A6);
-  dom Shift(I,m) = E by SCMPDS_3:def 7;
+  dom Shift(I,m) = E by VALUED_1:def 12;
   then
 A17: dom Shift(I,m),dom I are_equipotent by A4,A14,A15,A16,WELLORD2:22;
   thus card Shift(I,m) = card dom Shift(I,m) by PRE_CIRC:21
@@ -229,7 +228,7 @@ proof
   let I,J be FinPartState of SCMPDS; thus
   Shift(ProgramPart(I +* J),n) = Shift(ProgramPart I +* ProgramPart J,n )
   by FUNCT_4:75
-    .= Shift(ProgramPart I,n) +* Shift(ProgramPart J,n) by SCMPDS_3:41;
+    .= Shift(ProgramPart I,n) +* Shift(ProgramPart J,n) by VALUED_1:24;
 end;
 
 reserve a,b,c for Int_position,
@@ -875,8 +874,9 @@ A2: e in S1 \/ S2 or e in S3 by SCMPDS_3:5,XBOOLE_0:def 2;
       end;
       case e in S3;
         then reconsider l=e as Instruction-Location of SCMPDS by AMI_1:def 4;
-        l=l;
-        hence ex m st e = inspos m by SCMPDS_3:32;
+  reconsider m = l as Element of NAT by ORDINAL1:def 13;
+         e = inspos m;
+        hence ex m st e = inspos m;
       end;
     end;
     then consider m such that
@@ -917,7 +917,7 @@ A13:  x is Int_position by SCMPDS_2:9;
       SCMPDS_2:52,53
         .= INT by SCMPDS_2:13;
       hence f.x in (the Object-Kind of SCMPDS).x
-      by A12,A13,INT_1:def 2,SCMPDS_2:52,53;
+      by A12,A13,INT_1:def 2,SCMPDS_2:53;
     end;
     suppose
 A14:  x in S1;
@@ -943,13 +943,15 @@ A16:  (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS by A14,TARSKI:def 1
 A17: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
   IC SCMPDS = inspos m & f.IC SCMPDS = F(m) or
   IC SCMPDS = DataLoc(m,0) & f.IC SCMPDS = G(m) by A8;
-  thus IC f = I() by A17,SCMPDS_2:52,98;
+   il.m <> IC SCMPDS by SCMPDS_2:98;
+  hence IC f = I() by A17,SCMPDS_2:52;
   let i be Element of NAT;
   consider m such that
 A18: inspos i = IC SCMPDS & f.inspos i = I() or
   inspos i = inspos m & f.inspos i = F(m) or
   inspos i = DataLoc(m,0) & f.inspos i = G(m) by A8;
-  thus f.inspos i = F(i) by A18,SCMPDS_2:53,98;
+   il.i <> IC SCMPDS by SCMPDS_2:98;
+  hence f.inspos i = F(i) by A18,SCMPDS_2:53;
   consider m such that
 A19: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
   DataLoc(i,0) = inspos m & f.DataLoc(i,0) = F(m) or
@@ -984,23 +986,23 @@ proof
 A1: NAT c= dom s1 by AMI_1:114;
 A2: NAT c= dom s2 by AMI_1:114;
 A3: (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
-  (for l being set st l in SCM-Instr-Loc holds s1.l = s2.l)
+  (for l being set st l in NAT holds s1.l = s2.l)
   proof
     assume
 A4: for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
     let x be set;
-    assume x in SCM-Instr-Loc;
+    assume x in NAT;
     then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
     s1.l = s2.l by A4;
     hence thesis;
   end;
-  (for l being set st l in SCM-Instr-Loc holds s1.l = s2.l) implies
+  (for l being set st l in NAT holds s1.l = s2.l) implies
   (for l being Instruction-Location of SCMPDS holds s1.l = s2.l)
   proof
     assume
-A5: for l being set st l in SCM-Instr-Loc holds s1.l = s2.l;
+A5: for l being set st l in NAT holds s1.l = s2.l;
     let l be Instruction-Location of SCMPDS;
-    l in SCM-Instr-Loc by AMI_1:def 4;
+    l in NAT by AMI_1:def 4;
     hence thesis by A5;
   end;
   hence thesis by A1,A2,A3,FUNCT_1:165;
@@ -1010,7 +1012,7 @@ theorem  :: T32
   for i being Instruction-Location of SCMPDS holds not i in SCM-Data-Loc
 proof
   let i be Instruction-Location of SCMPDS;
-  i in SCM-Instr-Loc by AMI_1:def 4;
+  i in NAT by AMI_1:def 4;
   hence thesis by AMI_2:29,XBOOLE_0:3;
 end;
 
@@ -1305,21 +1307,21 @@ definition
     P is initial
     proof
       let m,n such that
-A1:   inspos n in dom P and
+A1:    n in dom P and
 A2:   m < n;
-      set D = {inspos(l+card I): inspos l in dom J };
-      dom Shift(J,card I) = D by SCMPDS_3:def 7;
+      set D = {l+card I: l in dom J };
+      dom Shift(J,card I) = D by VALUED_1:def 12;
       then
 A3:   dom P = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 2;
       suppose inspos n in dom I;
         then inspos m in dom I by A2,SCMPDS_3:def 5;
-        hence inspos m in dom P by A3,XBOOLE_0:def 2;
+        hence  m in dom P by A3,XBOOLE_0:def 2;
       end;
       suppose inspos n in D;
         then consider l such that
-A4:     inspos n = inspos(l+card I) and
-A5:     inspos l in dom J;
+A4:      n = l+card I and
+A5:      l in dom J;
         now per cases;
           case m < card I;
             then inspos m in dom I by Th1;
@@ -1330,11 +1332,11 @@ A5:     inspos l in dom J;
 A6:         m = card I + l1 by NAT_1:10;
             reconsider l1 as Element of NAT by ORDINAL1:def 13;
             l1 < l by A2,A4,A6,XREAL_1:8;
-            then inspos l1 in dom J by A5,SCMPDS_3:def 5;
+            then l1 in dom J by A5,SCMPDS_3:def 5;
             hence inspos m in D by A6;
           end;
         end;
-        hence inspos m in dom P by A3,XBOOLE_0:def 2;
+        hence m in dom P by A3,XBOOLE_0:def 2;
       end;
     end;
     hence thesis;
@@ -1350,9 +1352,9 @@ proof
 A1: l in dom I;
   now
     assume l in dom Shift(J,card I);
-    then l in { inspos(m+card I):inspos m in dom J } by SCMPDS_3:def 7;
+    then l in { m+card I: m in dom J } by VALUED_1:def 12;
     then consider m such that
-A2: l = inspos(m+card I) and inspos m in dom J;
+A2: l = m+card I and m in dom J;
     m + card I < card I by A1,A2,Th1;
     hence contradiction by NAT_1:11;
   end;
@@ -1365,13 +1367,12 @@ theorem Th38:
 proof
   let I,J be Program-block, l be Instruction-Location of SCMPDS such that
 A1: l in dom J;
-  consider n such that
-A2: l=inspos n by SCMPDS_3:32;
-  inspos(n+card I) in { inspos(m+card I):inspos m in dom J } by A1,A2;
-  then inspos(n+card I) in dom Shift(J,card I) by SCMPDS_3:def 7;
-  then l+card I in dom Shift(J,card I) by A2,SCMPDS_3:def 3;
-  hence (I ';' J).(l+card I) = Shift(J, card I).(l+card I) by FUNCT_4:14
-    .=J.l by A1,SCMPDS_3:37;
+  reconsider n = l as Element of NAT by ORDINAL1:def 13;
+  inspos(n+card I) in { m+card I: m in dom J } by A1;
+  then inspos(n+card I) in dom Shift(J,card I) by VALUED_1:def 12;
+  then l+card I in dom Shift(J,card I);
+  hence (I ';' J).(l+card I) = Shift(J, card I).(n+card I) by FUNCT_4:14
+    .=J.l by A1,VALUED_1:def 12;
 end;
 
 theorem Th39:   :: Th56
@@ -1493,8 +1494,8 @@ theorem Th46:  :: Th62
   I ';' J ';' K = I ';' (J ';' K)
 proof
   Shift(J ';' K, card I)
-  = Shift(J,card I) +* Shift(Shift(K, card J), card I) by SCMPDS_3:41
-    .= Shift(J,card I) +* Shift(K, card J+card I) by SCMPDS_3:39
+  = Shift(J,card I) +* Shift(Shift(K, card J), card I) by VALUED_1:24
+    .= Shift(J,card I) +* Shift(K, card J+card I) by VALUED_1:22
     .= Shift(J,card I) +* Shift(K, card ( I ';'J)) by Th45;
   hence I ';' J ';' K = I ';' (J ';' K) by FUNCT_4:15;
 end;
@@ -1666,7 +1667,7 @@ definition
   attr I is paraclosed means
   :Def9:
   for s being State of SCMPDS, n being Element of NAT
-  st Initialized stop(I) c= s holds IC (Computation s).n in dom stop(I);
+  st Initialized stop(I) c= s holds IC Computation(s,n) in dom stop(I);
   attr I is parahalting means
   :Def10:
   Initialized stop(I) is halting;
@@ -1697,7 +1698,7 @@ A9: IC m1 = m1.IC SCMPDS by A3,AMI_1:def 43
     .= (Start-At inspos 0).IC SCMPDS by A2,FUNCT_4:14
     .= inspos 0 by CQC_LANG:6;
   take 0;
-  thus CurInstr((Computation s).0) = CurInstr s by AMI_1:def 19
+  thus CurInstr(Computation(s,0)) = CurInstr s by AMI_1:13
     .= s.IC m1 by A1,A3,AMI_1:97
     .= m1.inspos 0 by A1,A8,A9,GRFUNC_1:8
     .= m0.inspos 0 by A6,A7,GRFUNC_1:8
@@ -1745,15 +1746,8 @@ end;
 
 canceled;
 
-theorem Th65:
-  IC s <> Next IC s
-proof
-  assume
-A1: IC s = Next IC s;
-  consider mj be Element of SCM-Instr-Loc such that
-A2: mj = IC s & Next mj = Next IC s by SCMPDS_2:def 19;
-  thus contradiction by A1,A2;
-end;
+theorem
+  IC s <> Next IC s;
 
 theorem Th66:    ::TN66
   s2 +*((IC s2,Next IC s2) --> (goto 1, goto -1)) is not halting
@@ -1762,20 +1756,20 @@ proof
 A1: dom m = {IC s2,Next IC s2} by FUNCT_4:65;
   then
 A2: IC s2 in dom m & Next IC s2 in dom m by TARSKI:def 2;
-  IC s2<>Next IC s2 by Th65;
+  IC s2<>Next IC s2;
   then
 A3: m.(IC s2) = goto 1 & m.(Next IC s2)=goto -1 by FUNCT_4:66;
 A4: IC SCMPDS <> IC s2 by AMI_1:48;
   IC SCMPDS <> Next IC s2 by AMI_1:48;
   then
 A5: not IC SCMPDS in dom m by A1,A4,TARSKI:def 2;
-  defpred X[Element of NAT] means
-  IC((Computation s1).$1) = IC s1 or IC((Computation s1).$1) = Next IC s1;
-A6: X[0] by AMI_1:def 19;
+  defpred X[Nat] means
+  IC(Computation(s1,$1)) = IC s1 or IC(Computation(s1,$1)) = Next IC s1;
+A6: X[0] by AMI_1:13;
 A7: IC s1 = IC s2 by A5,FUNCT_4:12;
   now
     let n;
-    set Cn=(Computation s1).n;
+    set Cn=Computation(s1,n);
     assume
 A8: IC Cn = IC s1 or IC Cn = Next IC s1;
     per cases by A8;
@@ -1784,22 +1778,20 @@ A9:   IC Cn = IC s1;
       then
 A10:  CurInstr( Cn ) = s1.IC s1 by AMI_1:54
         .= goto 1 by A2,A3,A7,FUNCT_4:14;
-      thus IC ((Computation s1).(n+1)) = IC Following Cn by AMI_1:def 19
+      thus IC (Computation(s1,n+1)) = IC Following Cn by AMI_1:14
         .= ICplusConst(Cn,1) by A10,SCMPDS_2:66
         .= Next IC s1 by A9,SCMPDS_3:20;
     end;
     case
 A11:  IC Cn = Next IC s1;
       then
-A12:  CurInstr((Computation s1).n) = s1.(Next IC s1) by AMI_1:54
+A12:  CurInstr(Computation(s1,n)) = s1.(Next IC s1) by AMI_1:54
         .= goto -1 by A2,A3,A7,FUNCT_4:14;
       consider j be Element of NAT such that
 A13:  j = IC Cn & ICplusConst(Cn,-1)=abs(j+(-1)) by SCMPDS_2:def 20;
-      consider mj be Element of SCM-Instr-Loc such that
-A14:  mj = IC s1 & Next mj = Next IC s1 by SCMPDS_2:def 19;
       reconsider i = IC s1 as Element of NAT by AMI_1:def 4;
-      thus IC((Computation s1).(n+1)) = IC Following Cn by AMI_1:def 19
-        .=abs(i+4 + -4 ) by A11,A12,A13,A14,SCMPDS_2:66
+      thus IC(Computation(s1,n+1)) = IC Following Cn by AMI_1:14
+        .=abs(i+4 + -4 ) by A11,A12,A13,SCMPDS_2:66
         .=IC s1 by ABSVALUE:def 1;
     end;
   end;
@@ -1808,54 +1800,54 @@ A15: for n st X[n] holds X[n+1];
 A16: for n holds X[n] from NAT_1:sch 1(A6,A15);
   let n;
   per cases by A16;
-  suppose IC((Computation s1).n) = IC s1;
-    then CurInstr((Computation s1).n) = s1.IC s1 by AMI_1:54
+  suppose IC(Computation(s1,n)) = IC s1;
+    then CurInstr(Computation(s1,n)) = s1.IC s1 by AMI_1:54
       .= goto 1 by A2,A3,A7,FUNCT_4:14;
-    hence CurInstr((Computation s1).n) <> halt SCMPDS by SCMPDS_2:85;
+    hence CurInstr(Computation(s1,n)) <> halt SCMPDS by SCMPDS_2:85;
   end;
-  suppose IC((Computation s1).n) = Next IC s1;
-    then CurInstr((Computation s1).n) = s1.Next IC s1 by AMI_1:54
+  suppose IC(Computation(s1,n)) = Next IC s1;
+    then CurInstr(Computation(s1,n)) = s1.Next IC s1 by AMI_1:54
       .= goto -1 by A2,A3,A7,FUNCT_4:14;
-    hence CurInstr((Computation s1).n) <> halt SCMPDS by SCMPDS_2:85;
+    hence CurInstr(Computation(s1,n)) <> halt SCMPDS by SCMPDS_2:85;
   end;
 end;
 
 theorem Th67:   ::Th21
   s1,s2 equal_outside NAT & I c= s1 & I c= s2 &
-  (for m st m < n holds IC ((Computation s2).m) in dom I) implies
-  for m st m <= n holds (Computation s1).m, (Computation s2 ).m equal_outside
+  (for m st m < n holds IC (Computation(s2,m)) in dom I) implies
+  for m st m <= n holds Computation(s1,m), Computation(s2,m) equal_outside
   NAT
 proof
   assume that
 A1: s1,s2 equal_outside NAT and
 A2: I c= s1 and
 A3: I c= s2 and
-A4: for m st m < n holds IC((Computation s2).m) in dom I;
-  defpred X[Element of NAT] means $1 <= n implies
-  (Computation s1).$1, (Computation s2 ).$1 equal_outside NAT;
-  (Computation s1).0 = s1 & (Computation s2 ).0 = s2 by AMI_1:def 19;
+A4: for m st m < n holds IC(Computation(s2,m)) in dom I;
+  defpred X[Nat] means $1 <= n implies
+  Computation(s1,$1), Computation(s2,$1) equal_outside NAT;
+  Computation(s1,0) = s1 & Computation(s2,0) = s2 by AMI_1:13;
   then
 A5: X[0] by A1;
 A6: for m st X[m] holds X[m+1]
   proof
     let m such that
-A7: m <= n implies (Computation s1).m, (Computation s2 ).m equal_outside NAT;
-A8: (Computation s1).(m+1) = Following((Computation s1).m) by AMI_1:def 19
-      .= Exec(CurInstr((Computation s1).m),(Computation s1).m);
-A9: (Computation s2).(m+1) = Following((Computation s2).m) by AMI_1:def 19
-      .= Exec(CurInstr((Computation s2).m),(Computation s2).m);
+A7: m <= n implies Computation(s1,m), Computation(s2,m) equal_outside NAT;
+A8: Computation(s1,m+1) = Following(Computation(s1,m)) by AMI_1:14
+      .= Exec(CurInstr(Computation(s1,m)),Computation(s1,m));
+A9: Computation(s2,m+1) = Following(Computation(s2,m)) by AMI_1:14
+      .= Exec(CurInstr(Computation(s2,m)),Computation(s2,m));
     assume
 A10: m+1 <= n;
     then m < n by NAT_1:13;
     then
-A11: IC((Computation s2).m) in dom I by A4;
-A12: IC ((Computation s1).m) = IC ((Computation s2).m)
+A11: IC(Computation(s2,m)) in dom I by A4;
+A12: IC (Computation(s1,m)) = IC (Computation(s2,m))
     by A7,A10,AMI_1:121,NAT_1:13;
-    CurInstr((Computation s1).m) = s1.IC((Computation s1).m) by AMI_1:54
-      .= I.IC((Computation s1).m) by A2,A11,A12,GRFUNC_1:8
-      .= s2.IC((Computation s2).m) by A3,A11,A12,GRFUNC_1:8
-      .= CurInstr((Computation s2).m) by AMI_1:54;
-    hence (Computation s1).(m+1), (Computation s2 ).(m+1) equal_outside
+    CurInstr(Computation(s1,m)) = s1.IC(Computation(s1,m)) by AMI_1:54
+      .= I.IC(Computation(s1,m)) by A2,A11,A12,GRFUNC_1:8
+      .= s2.IC(Computation(s2,m)) by A3,A11,A12,GRFUNC_1:8
+      .= CurInstr(Computation(s2,m)) by AMI_1:54;
+    hence Computation(s1,m+1), Computation(s2,m+1) equal_outside
     NAT by A7,A8,A9,A10,Th15,NAT_1:13;
   end;
   thus for m holds X[m] from NAT_1:sch 1(A5,A6);
@@ -1888,27 +1880,18 @@ A2: l2 in dom (s +* (l1,i1)) by FUNCT_7:32;
     .=s +* (l1,i1) +* (l2,i2) by A2,FUNCT_7:def 3;
 end;
 
-theorem Th70:
-  Next inspos n = inspos(n+1)
-proof
-  consider l be Element of SCM-Instr-Loc such that
-A1: l = inspos n and
-A2: Next l = Next inspos n by SCMPDS_2:def 19;
-  thus Next inspos n=inspos(n+1) by A1,A2;
-end;
+canceled;
 
 theorem Th71:
   not IC s in dom I implies not Next IC s in dom I
 proof
   assume
 A1: not IC s in dom I;
-  consider m be Element of NAT such that
-A2: IC s=inspos m by SCMPDS_3:32;
-A3: m >= card I by A1,A2,Th1;
-A4: Next IC s=inspos(m+1) by A2,Th70;
+  reconsider m = IC s as Element of NAT by ORDINAL1:def 13;
+A3: m >= card I by A1,Th1;
   m+1 >= m by NAT_1:11;
   then m+1 >= card I by A3,XXREAL_0:2;
-  hence thesis by A4,Th1;
+  hence thesis by Th1;
 end;
 
 registration
@@ -1921,16 +1904,16 @@ A1: I is parahalting;
     let s be State of SCMPDS, n be Element of NAT;
     assume
 A2: Initialized stop(I) c= s;
-    defpred X[Nat] means not IC (Computation s).$1 in dom stop(I);
-    assume not IC (Computation s).n in dom stop(I);
+    defpred X[Nat] means not IC Computation(s,$1) in dom stop(I);
+    assume not IC Computation(s,n) in dom stop(I);
     then
 A3: ex n be Nat st X[n];
     consider n be Nat such that
 A4: X[n] and
 A5: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A3);
     reconsider n as Element of NAT by ORDINAL1:def 13;
-A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
-    set s2 = (Computation s).n,
+A6: not Next IC Computation(s,n) in dom stop(I) by A4,Th71;
+    set s2 = Computation(s,n),
     Ig = ((IC s2,Next IC s2) --> (goto 1, goto -1)), s0 = s +* Ig,
     s1 = s2 +* Ig, t1= s +* (IC s2,goto 1), t2= t1 +* (Next IC s2,goto -1),
     t3= s2 +* (IC s2,goto 1), t4= t3 +* (Next IC s2,goto -1), IL=NAT;
@@ -1938,8 +1921,7 @@ A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
     dom stop(I) misses dom Start-At inspos 0 by Th54;
     then
 A7: stop I c= IAt by FUNCT_4:33;
-A8: IC s2 in SCM-Instr-Loc by AMI_1:def 4;
-A9: Next IC s2 in SCM-Instr-Loc by AMI_1:def 4;
+A8: IC s2 in NAT by AMI_1:def 4;
     Initialized stop(I) = IAt;
     then
 A10: IAt is halting by A1,Def10;
@@ -1948,7 +1930,7 @@ A10: IAt is halting by A1,Def10;
 A11: dom stop (I) = dom(IAt) /\ IL by RELAT_1:90;
     then
 A12: not IC s2 in dom IAt by A4,A8,XBOOLE_0:def 3;
-A13: not Next IC s2 in dom IAt by A6,A9,A11,XBOOLE_0:def 3;
+A13: not Next IC s2 in dom IAt by A6,A11,XBOOLE_0:def 3;
     IAt c= t1 by A2,A12,FUNCT_7:91;
     then IAt c= t2 by A13,FUNCT_7:91;
     then
@@ -1956,30 +1938,30 @@ A14: IAt c= s0 by Th69;
     then
 A15: s0 is halting by A10,AMI_1:def 26;
 A16: s,t1 equal_outside IL by A8,FUNCT_7:93;
-    t1,t2 equal_outside IL by A9,FUNCT_7:93;
+    t1,t2 equal_outside IL by FUNCT_7:93;
     then s,t2 equal_outside IL by A16,FUNCT_7:29;
     then s,s0 equal_outside IL by Th69;
     then
 A17: s0,s equal_outside IL by FUNCT_7:28;
 A18: stop I c= s0 by A7,A14,XBOOLE_1:1;
 A19: stop I c= s by A2,A7,XBOOLE_1:1;
-    for m st m < n holds IC((Computation s).m) in dom stop I by A5;
+    for m st m < n holds IC(Computation(s,m)) in dom stop I by A5;
     then
-A20: (Computation s0).n,s2 equal_outside IL by A17,A18,A19,Th67;
+A20: Computation(s0,n),s2 equal_outside IL by A17,A18,A19,Th67;
 A21: s2,t3 equal_outside IL by A8,FUNCT_7:93;
-    t3,t4 equal_outside IL by A9,FUNCT_7:93;
+    t3,t4 equal_outside IL by FUNCT_7:93;
     then s2,t4 equal_outside IL by A21,FUNCT_7:29;
     then s2,s1 equal_outside IL by Th69;
     then
-A22: (Computation s0).n, s1 equal_outside IL by A20,FUNCT_7:29;
+A22: Computation(s0,n), s1 equal_outside IL by A20,FUNCT_7:29;
     s| IL = s2 | IL by AMI_1:123;
     then t1 | IL = t3 | IL by FUNCT_7:95;
     then t2 | IL = t4 | IL by FUNCT_7:95;
     then s0 | IL = t4 | IL by Th69;
     then s0 | IL = s1 | IL by Th69;
-    then (Computation s0).n | IL = s1 | IL by AMI_1:123;
+    then Computation(s0,n) | IL = s1 | IL by AMI_1:123;
     then
-A23: (Computation s0).n = s1 by A22,FUNCT_7:92;
+A23: Computation(s0,n) = s1 by A22,FUNCT_7:92;
     s1 is not halting by Th66;
     hence contradiction by A15,A23,AMI_1:93;
   end;
@@ -2009,14 +1991,15 @@ end;
 
 theorem Th76:
   for p being programmed FinPartState of SCMPDS,k being Element of NAT,
-  il be Instruction-Location of SCMPDS st il in dom p holds
+  il be Element of NAT st il in dom p holds
   il+k in dom Shift(p,k)
 proof
   let p be programmed FinPartState of SCMPDS,k be Element of NAT,
-  il be Instruction-Location of SCMPDS;
+  il be Element of NAT;
   assume
 A1: il in dom p;
-  dom Shift(p,k) = { loc+k : loc in dom p} by SCMPDS_3:38;
+  dom Shift(p,k) = { loc+k where loc is Element of NAT : loc in dom p}
+   by VALUED_1:def 12;
   hence thesis by A1;
 end;
 
@@ -2208,8 +2191,8 @@ registration
       let n,i such that
 A1:   inspos n in dom IJ and
 A2:   i=IJ.(inspos n);
-      set D = {inspos(l+card I): inspos l in dom J };
-      dom Shift(J,card I) = D by SCMPDS_3:def 7;
+      set D = {l+card I: l in dom J };
+      dom Shift(J,card I) = D by VALUED_1:def 12;
       then
 A3:   dom IJ = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 2;
@@ -2220,10 +2203,10 @@ A4:     inspos n in dom I;
       end;
       suppose inspos n in D;
         then consider l such that
-A5:     inspos n = inspos(l+card I) and
-A6:     inspos l in dom J;
+A5:      n = l+card I and
+A6:      l in dom J;
 A7:     J.inspos l=IJ.(inspos l+card I) by A6,Th38
-          .=i by A2,A5,SCMPDS_3:def 3;
+          .=i by A2,A5;
         hence InsCode i <> 1 & InsCode i <> 3 by A6,Def12;
         i valid_at l by A6,A7,Def12;
         hence i valid_at n by A5,Th77,NAT_1:11;
@@ -2301,8 +2284,8 @@ A1: card I + k1 >= 0;
     let n,i such that
 A2: inspos n in dom Ig and
 A3: i=Ig.(inspos n);
-    set D = {inspos(l+card I): inspos l in dom J };
-    dom Shift(J,card I) = D by SCMPDS_3:def 7;
+    set D = {l+card I: l in dom J };
+    dom Shift(J,card I) = D by VALUED_1:def 12;
     then
 A4: dom Ig = dom I \/ D by FUNCT_4:def 1;
     per cases by A2,A4,XBOOLE_0:def 2;
@@ -2313,15 +2296,15 @@ A5:   inspos n in dom I;
     end;
     suppose inspos n in D;
       then consider l such that
-A6:   inspos n = inspos(l+card I) and
-A7:   inspos l in dom J;
+A6:    n = l+card I and
+A7:    l in dom J;
       dom J = { inspos 0 } by CQC_LANG:5;
       then
 A8:   inspos l = inspos 0 by A7,TARSKI:def 1;
       then
 A9:   goto k1 =J.inspos l by CQC_LANG:6
         .=Ig.(inspos l+card I) by A7,Th38
-        .=i by A3,A6,SCMPDS_3:def 3;
+        .=i by A3,A6;
       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
       InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:21;
       hence i valid_at n by A1,A6,A8,A9,Def11;
@@ -2367,8 +2350,8 @@ A1: card I + k2 >= 0;
     let n,i such that
 A2: inspos n in dom Ig and
 A3: i=Ig.(inspos n);
-    set D = {inspos(l+card I): inspos l in dom J };
-    dom Shift(J,card I) = D by SCMPDS_3:def 7;
+    set D = {l+card I: l in dom J };
+    dom Shift(J,card I) = D by VALUED_1:def 12;
     then
 A4: dom Ig = dom I \/ D by FUNCT_4:def 1;
     per cases by A2,A4,XBOOLE_0:def 2;
@@ -2379,15 +2362,15 @@ A5:   inspos n in dom I;
     end;
     suppose inspos n in D;
       then consider l such that
-A6:   inspos n = inspos(l+card I) and
-A7:   inspos l in dom J;
+A6:    n = l+card I and
+A7:    l in dom J;
       dom J = { inspos 0 } by CQC_LANG:5;
       then
 A8:   inspos l = inspos 0 by A7,TARSKI:def 1;
       then
 A9:   ii=J.inspos l by CQC_LANG:6
         .=Ig.(inspos l+card I) by A7,Th38
-        .=i by A3,A6,SCMPDS_3:def 3;
+        .=i by A3,A6;
       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
       InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:25;
       hence i valid_at n by A1,A6,A8,A9,Def11;
@@ -2433,8 +2416,8 @@ A1: card I + k2 >= 0;
     let n,i such that
 A2: inspos n in dom Ig and
 A3: i=Ig.(inspos n);
-    set D = {inspos(l+card I): inspos l in dom J };
-    dom Shift(J,card I) = D by SCMPDS_3:def 7;
+    set D = {l+card I: l in dom J };
+    dom Shift(J,card I) = D by VALUED_1:def 12;
     then
 A4: dom Ig = dom I \/ D by FUNCT_4:def 1;
     per cases by A2,A4,XBOOLE_0:def 2;
@@ -2445,15 +2428,15 @@ A5:   inspos n in dom I;
     end;
     suppose inspos n in D;
       then consider l such that
-A6:   inspos n = inspos(l+card I) and
-A7:   inspos l in dom J;
+A6:    n = l+card I and
+A7:    l in dom J;
       dom J = { inspos 0 } by CQC_LANG:5;
       then
 A8:   inspos l = inspos 0 by A7,TARSKI:def 1;
       then
 A9:   ii =J.inspos l by CQC_LANG:6
         .=Ig.(inspos l+card I) by A7,Th38
-        .=i by A3,A6,SCMPDS_3:def 3;
+        .=i by A3,A6;
       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A9,SCMPDS_2:26;
       hence i valid_at n by A1,A6,A8,A9,Def11;
@@ -2499,8 +2482,8 @@ A1: card I + k2 >= 0;
     let n,i such that
 A2: inspos n in dom Ig and
 A3: i=Ig.(inspos n);
-    set D = {inspos(l+card I): inspos l in dom J };
-    dom Shift(J,card I) = D by SCMPDS_3:def 7;
+    set D = {l+card I: l in dom J };
+    dom Shift(J,card I) = D by VALUED_1:def 12;
     then
 A4: dom Ig = dom I \/ D by FUNCT_4:def 1;
     per cases by A2,A4,XBOOLE_0:def 2;
@@ -2511,15 +2494,15 @@ A5:   inspos n in dom I;
     end;
     suppose inspos n in D;
       then consider l such that
-A6:   inspos n = inspos(l+card I) and
-A7:   inspos l in dom J;
+A6:    n = l+card I and
+A7:    l in dom J;
       dom J = { inspos 0 } by CQC_LANG:5;
       then
 A8:   inspos l = inspos 0 by A7,TARSKI:def 1;
       then
 A9:   ii =J.inspos l by CQC_LANG:6
         .=Ig.(inspos l+card I) by A7,Th38
-        .=i by A3,A6,SCMPDS_3:def 3;
+        .=i by A3,A6;
       hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A9,SCMPDS_2:27;
       hence i valid_at n by A1,A6,A8,A9,Def11;
@@ -2567,12 +2550,11 @@ A4: n1 = IC s1 & ICplusConst(s1,k1) = abs(n1+k1) by SCMPDS_2:def 20;
   consider n2 be Element of NAT such that
 A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2+k1) by SCMPDS_2:def 20;
   reconsider mk=m+k1 as Element of NAT by A2,INT_1:16;
-A6: n2=inspos ( m + n) by A1,A3,A5,SCMPDS_3:def 3
+A6: n2=inspos ( m + n) by A1,A3,A5
     .=(m+n);
-  consider nk be Element of NAT such that
-A7: inspos nk=ICplusConst(s1,k1) by SCMPDS_3:32;
-A8: nk=mk by A1,A4,A7,ABSVALUE:def 1;
-  thus ICplusConst(s1,k1) +n=inspos(nk +n) by A7,SCMPDS_3:def 3
+  reconsider nk = ICplusConst(s1,k1) as Element of NAT by ORDINAL1:def 13;
+A8: nk=mk by A1,A4,ABSVALUE:def 1;
+  thus ICplusConst(s1,k1) +n=inspos(nk +n)
     .=ICplusConst(s2,k1) by A5,A6,A8,ABSVALUE:def 1;
 end;
 
@@ -2594,16 +2576,8 @@ A4: InsCode i <> 3 and
 A5: IC s1 + n = IC s2 and
 A6: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
   set D = SCM-Data-Loc;
-  consider k1 being Element of NAT such that
-A7: IC s1 = inspos k1 by SCMPDS_3:32;
-A8: Next IC s1 + n = Next IC s2
-  proof
-    thus Next IC s1 + n = inspos (k1 + 1) + n by A7,Th70
-      .= inspos (k1 + 1 + n) by SCMPDS_3:def 3
-      .= inspos (k1 + n + 1)
-      .= Next inspos (k1 + n) by Th70
-      .= Next (IC s2) by A5,A7,SCMPDS_3:def 3;
-  end;
+  reconsider k1 = IC s1 as Element of NAT by ORDINAL1:def 13;
+A8: Next IC s1 + n = Next IC s2 by A5;
   set Ci=InsCode i;
 A9: now
     assume Ci <> 0 & Ci<>1 & Ci<>4 & Ci<>5 & Ci<> 6;
@@ -2961,9 +2935,9 @@ theorem  ::Th27 T0
   for J being parahalting shiftable Program-block st Initialized stop J c= s1
   for n being Element of NAT st Shift(stop J,n) c= s2 & IC s2 = inspos n &
   s1 | SCM-Data-Loc = s2 | SCM-Data-Loc for i being Element of NAT holds
-  IC (Computation s1).i + n = IC (Computation s2).i &
-  CurInstr ((Computation s1).i) = CurInstr ((Computation s2).i) &
-  (Computation s1).i | SCM-Data-Loc = (Computation s2).i | SCM-Data-Loc
+  IC Computation(s1,i) + n = IC Computation(s2,i) &
+  CurInstr (Computation(s1,i)) = CurInstr (Computation(s2,i)) &
+  Computation(s1,i) | SCM-Data-Loc = Computation(s2,i) | SCM-Data-Loc
 proof
   let I be parahalting shiftable Program-block;
   set SI=stop I, II = Initialized SI;
@@ -2974,12 +2948,12 @@ A1: II c= s1;
 A2: Shift(SI,n) c= s2 and
 A3: IC s2 = inspos n and
 A4: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
-  set C1 = Computation s1;
-  set C2 = Computation s2;
+:::  set C1 = Computation s1;
+:::  set C2 = Computation s2;
   let i be Element of NAT;
-  defpred P[Element of NAT] means IC C1.$1 + n = IC C2.$1 &
-  CurInstr (C1.$1) = CurInstr (C2.$1) &
-  C1.$1 | SCM-Data-Loc = C2.$1 | SCM-Data-Loc;
+  defpred P[Nat] means IC Computation(s1,$1) + n = IC Computation(s2,$1) &
+  CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
+  Computation(s1,$1) | SCM-Data-Loc = Computation(s2,$1) | SCM-Data-Loc;
   dom SI misses dom Start-At inspos 0 by Th54;
   then
 A5: SI c= II by FUNCT_4:33;
@@ -2991,55 +2965,56 @@ A8: P[0]
 A9: IC SCMPDS in dom II by Th7;
     inspos 0 + n in dom Shift(SI,n) by A7,Th76;
     then
-A10: inspos (0 + n) in dom Shift(SI,n) by SCMPDS_3:def 3;
-    IC C1.0 = s1.IC SCMPDS by AMI_1:def 19
+A10: inspos (0 + n) in dom Shift(SI,n);
+    IC Computation(s1,0) = s1.IC SCMPDS by AMI_1:13
       .= II.IC SCMPDS by A1,A9,GRFUNC_1:8
       .= inspos 0 by Th29;
-    hence IC C1.0 + n = inspos (0 + n) by SCMPDS_3:def 3
-      .= IC C2.0 by A3,AMI_1:def 19;
+    hence IC Computation(s1,0) + n = inspos (0 + n)
+      .= IC Computation(s2,0) by A3,AMI_1:13;
 A11: s1.IC s1 = s1.((II).IC SCMPDS) by A1,A9,GRFUNC_1:8
       .= s1.inspos 0 by Th29
       .= II.inspos 0 by A1,A6,A7,GRFUNC_1:8
       .= SI.inspos 0 by A5,A7,GRFUNC_1:8;
-    thus CurInstr (C1.0) = CurInstr s1 by AMI_1:def 19
-      .= Shift(SI,n).(inspos 0 + n) by A7,A11,SCMPDS_3:37
-      .= Shift(SI,n).inspos (0 + n) by SCMPDS_3:def 3
+    thus CurInstr (Computation(s1,0)) = CurInstr s1 by AMI_1:13
+      .= Shift(SI,n).(inspos 0 + n) by A7,A11,VALUED_1:def 12
+      .= Shift(SI,n).inspos (0 + n)
       .= CurInstr s2 by A2,A3,A10,GRFUNC_1:8
-      .= CurInstr (C2.0) by AMI_1:def 19;
-    thus C1.0 | SCM-Data-Loc = s2 | SCM-Data-Loc by A4,AMI_1:def 19
-      .= C2.0 | SCM-Data-Loc by AMI_1:def 19;
+      .= CurInstr (Computation(s2,0)) by AMI_1:13;
+    thus Computation(s1,0) | SCM-Data-Loc = s2 | SCM-Data-Loc by A4,AMI_1:13
+      .= Computation(s2,0) | SCM-Data-Loc by AMI_1:13;
   end;
 A12: for k being Element of NAT st P[k] holds P[k + 1]
   proof
     let k be Element of NAT;
     assume
 A13: P[k];
-    set i = CurInstr C1.k;
-A14: C1.(k + 1) = Following C1.k by AMI_1:def 19
-      .= Exec(CurInstr C1.k,C1.k);
-A15: C2.(k + 1) = Following C2.k by AMI_1:def 19
-      .= Exec(CurInstr C2.k,C2.k);
-A16: IC C1.k in dom SI by A1,Def9;
-A17: i = s1.IC C1.k by AMI_1:54
-      .= II.IC C1.k by A1,A6,A16,GRFUNC_1:8
-      .= SI.IC C1.k by A5,A16,GRFUNC_1:8;
-    consider m such that
-A18: IC C1.k =inspos m by SCMPDS_3:32;
+    set i = CurInstr Computation(s1,k);
+A14: Computation(s1,k+1) = Following Computation(s1,k) by AMI_1:14
+      .= Exec(CurInstr Computation(s1,k),Computation(s1,k));
+A15: Computation(s2,k+1) = Following Computation(s2,k) by AMI_1:14
+      .= Exec(CurInstr Computation(s2,k),Computation(s2,k));
+A16: IC Computation(s1,k) in dom SI by A1,Def9;
+A17: i = s1.IC Computation(s1,k) by AMI_1:54
+      .= II.IC Computation(s1,k) by A1,A6,A16,GRFUNC_1:8
+      .= SI.IC Computation(s1,k) by A5,A16,GRFUNC_1:8;
+  reconsider m = IC Computation(s1,k) as Element of NAT by ORDINAL1:def 13;
+A18: IC Computation(s1,k) =inspos m;
 A19: InsCode i <> 1 & InsCode i <> 3 & i valid_at m by A16,A17,A18,Def12;
     hence
-A20: IC C1.(k + 1) + n = IC C2.(k + 1) by A13,A14,A15,A18,Th83;
-    set l = IC C1.(k + 1);
-A21: IC C1.(k + 1) in dom SI by A1,Def9;
-A22: CurInstr C1.(k + 1) = s1.l by AMI_1:54
+A20: IC Computation(s1,k+1) + n = IC Computation(s2,k+1)
+ by A13,A14,A15,A18,Th83;
+    reconsider l = IC Computation(s1,k+1) as Element of NAT by ORDINAL1:def 13;
+A21: IC Computation(s1,k+1) in dom SI by A1,Def9;
+A22: CurInstr Computation(s1,k+1) = s1.l by AMI_1:54
       .= II.l by A1,A6,A21,GRFUNC_1:8
       .= SI.l by A5,A21,GRFUNC_1:8;
-A23: IC C2.(k + 1) in dom Shift(SI,n) by A20,A21,Th76;
-    thus CurInstr C1.(k + 1)
-    = Shift(SI,n).(IC C2.(k + 1)) by A20,A21,A22,SCMPDS_3:37
-      .= s2.IC C2.(k + 1) by A2,A23,GRFUNC_1:8
-      .= CurInstr C2.(k + 1) by AMI_1:54;
-    thus C1.(k + 1) | SCM-Data-Loc
-    = C2.(k + 1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
+A23: l+n in dom Shift(SI,n) by A21,Th76;
+    thus CurInstr Computation(s1,k+1)
+    = Shift(SI,n).(IC Computation(s2,k+1)) by A20,A21,A22,VALUED_1:def 12
+      .= s2.IC Computation(s2,k+1) by A2,A23,GRFUNC_1:8,A20
+      .= CurInstr Computation(s2,k+1) by AMI_1:54;
+    thus Computation(s1,k+1) | SCM-Data-Loc
+    = Computation(s2,k+1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A12);
   hence thesis;

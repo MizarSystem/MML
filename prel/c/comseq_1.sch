@@ -13,7 +13,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="COMSEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -43,7 +42,9 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="70">
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

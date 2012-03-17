@@ -9,15 +9,13 @@ environ
  vocabularies BOOLE, NAT_1, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_4, AMI_3, AMI_1,
       AMI_2, GR_CY_1, FINSEQ_1, FINSET_1, TARSKI, CAT_1, FUNCOP_1, MCART_1,
       ORDINAL2, QC_LANG1, AMI_4, AMI_5, INT_1, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
-      ZFMISC_1, MCART_1, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, INT_1,
-      NAT_1, STRUCT_0, FINSET_1, FINSEQ_1, AMI_1, AMI_2, AMI_3, AMI_4,
-      XXREAL_0;
- constructors WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, SEQ_1, FINSEQ_4,
-      AMI_2, AMI_4, VALUED_1, PARTFUN1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, AMI_3,
-      FINSET_1, VALUED_1, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, XCMPLX_0, ZFMISC_1,
+      MCART_1, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0,
+      FINSET_1, FINSEQ_1, AMI_1, SCMNORM, AMI_2, AMI_3, AMI_4, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, AMI_4;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL,
+      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, AMI_3, FINSET_1,
+      CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -30,9 +28,7 @@ reserve x,y for set;
 theorem :: AMI_5:18
   for dl being Data-Location ex i being Element of NAT st dl = dl.i;
 
-theorem :: AMI_5:19
-  for il being Instruction-Location of SCM ex i being Element of NAT
-  st il = il.i;
+canceled;
 
 theorem :: AMI_5:20
   for dl being Data-Location holds dl <> IC SCM;
@@ -46,7 +42,7 @@ theorem :: AMI_5:22
 reserve i, j, k for Element of NAT;
 
 theorem :: AMI_5:23
-  the carrier of SCM = {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc;
+  the carrier of SCM = {IC SCM} \/ SCM-Data-Loc \/ NAT;
 
 theorem :: AMI_5:24
   for s being State of SCM, d being Data-Location,
@@ -63,13 +59,13 @@ theorem :: AMI_5:27
   for s being State of SCM holds SCM-Data-Loc c= dom s;
 
 theorem :: AMI_5:28
-  for s being State of SCM holds SCM-Instr-Loc c= dom s;
+  for s being State of SCM holds NAT c= dom s;
 
 theorem :: AMI_5:29
   for s being State of SCM holds dom (s|SCM-Data-Loc) = SCM-Data-Loc;
 
 theorem :: AMI_5:30
-  for s being State of SCM holds dom (s|SCM-Instr-Loc) = SCM-Instr-Loc;
+  for s being State of SCM holds dom (s|NAT) = NAT;
 
 theorem :: AMI_5:31
   SCM-Data-Loc is not finite;
@@ -79,7 +75,6 @@ theorem :: AMI_5:32
 
 registration
   cluster SCM-Data-Loc -> infinite;
-  cluster NAT -> infinite;
 end;
 
 registration
@@ -97,7 +92,7 @@ definition
 end;
 
 definition
-  let loc be Element of SCM-Instr-Loc;
+  let loc be Element of NAT;
   func loc@ -> Instruction-Location of SCM equals
 :: AMI_5:def 3
 
@@ -113,7 +108,7 @@ definition
 end;
 
 reserve I,J,K for Element of Segm 9,
-  a,a1 for Element of SCM-Instr-Loc,
+  a,a1 for Element of NAT,
   b,b1,c for Element of SCM-Data-Loc;
 
 canceled 3;
@@ -128,7 +123,7 @@ theorem :: AMI_5:37
   InsCode (halt SCM) = 0;
 
 reserve I,J,K for Element of Segm 9,
-  a,a1 for Element of SCM-Instr-Loc,
+  a,a1 for Element of NAT,
   b,b1,c for Element of SCM-Data-Loc,
   da,db for Data-Location,
   loc for Instruction-Location of SCM;
@@ -193,7 +188,7 @@ theorem :: AMI_5:58
 
 theorem :: AMI_5:59
   for i being Instruction of SCM, s being State of SCM holds
-  Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc;
+  Exec (i, s) | NAT = s | NAT;
 
 begin
 
@@ -238,79 +233,79 @@ theorem :: AMI_5:85
 theorem :: AMI_5:86
   for p being autonomic non programmed FinPartState of SCM,
   s being State of SCM st p c= s for i being Element of NAT
-  holds IC (Computation s).i in dom ProgramPart(p);
+  holds IC  Computation(s,i) in dom ProgramPart(p);
 
 theorem :: AMI_5:87
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds IC (Computation s1).i = IC (Computation s2).i &
-  I = CurInstr ((Computation s2).i);
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds IC  Computation(s1,i) = IC  Computation(s2,i) &
+  I = CurInstr ( Computation(s2,i));
 
 theorem :: AMI_5:88
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = da := db & da in dom p
-  implies (Computation s1).i.db = (Computation s2).i.db;
+  st I = CurInstr ( Computation(s1,i)) holds I = da := db & da in dom p
+  implies  Computation(s1,i).db =  Computation(s2,i).db;
 
 theorem :: AMI_5:89
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = AddTo(da, db) & da in dom p
-  implies (Computation s1).i.da + (Computation s1).i.db
-  = (Computation s2).i.da + (Computation s2).i.db;
+  st I = CurInstr ( Computation(s1,i)) holds I = AddTo(da, db) & da in dom p
+  implies  Computation(s1,i).da +  Computation(s1,i).db
+  =  Computation(s2,i).da +  Computation(s2,i).db;
 
 theorem :: AMI_5:90
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = SubFrom(da, db) & da in dom p
-  implies (Computation s1).i.da - (Computation s1).i.db
-  = (Computation s2).i.da - (Computation s2).i.db;
+  st I = CurInstr ( Computation(s1,i)) holds I = SubFrom(da, db) & da in dom p
+  implies  Computation(s1,i).da -  Computation(s1,i).db
+  =  Computation(s2,i).da -  Computation(s2,i).db;
 
 theorem :: AMI_5:91
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = MultBy(da, db) & da in dom p
-  implies (Computation s1).i.da * (Computation s1).i.db
-  = (Computation s2).i.da * (Computation s2).i.db;
+  st I = CurInstr ( Computation(s1,i)) holds I = MultBy(da, db) & da in dom p
+  implies  Computation(s1,i).da *  Computation(s1,i).db
+  =  Computation(s2,i).da *  Computation(s2,i).db;
 
 theorem :: AMI_5:92
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i)
+  st I = CurInstr ( Computation(s1,i))
   holds I = Divide(da, db) & da in dom p & da <> db
-  implies (Computation s1).i.da div (Computation s1).i.db
-  = (Computation s2).i.da div (Computation s2).i.db;
+  implies  Computation(s1,i).da div  Computation(s1,i).db
+  =  Computation(s2,i).da div  Computation(s2,i).db;
 
 theorem :: AMI_5:93
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i)
+  st I = CurInstr ( Computation(s1,i))
   holds I = Divide(da, db) & db in dom p & da <> db
-  implies (Computation s1).i.da mod (Computation s1).i.db
-  = (Computation s2).i.da mod (Computation s2).i.db;
+  implies  Computation(s1,i).da mod  Computation(s1,i).db
+  =  Computation(s2,i).da mod  Computation(s2,i).db;
 
 theorem :: AMI_5:94
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da being Data-Location, loc being Instruction-Location of SCM,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds I = da=0_goto loc & loc <> Next (IC (Computation s1).i)
-  implies ((Computation s1).i.da = 0 iff (Computation s2).i.da = 0);
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds I = da=0_goto loc & loc <> Next (IC  Computation(s1,i))
+  implies ( Computation(s1,i).da = 0 iff  Computation(s2,i).da = 0);
 
 theorem :: AMI_5:95
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da being Data-Location, loc being Instruction-Location of SCM,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds I = da>0_goto loc & loc <> Next (IC (Computation s1).i)
-  implies ((Computation s1).i.da > 0 iff (Computation s2).i.da > 0);
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds I = da>0_goto loc & loc <> Next (IC  Computation(s1,i))
+  implies ( Computation(s1,i).da > 0 iff  Computation(s2,i).da > 0);
 
 theorem :: AMI_5:96
   for p being FinPartState of SCM holds DataPart p = p | SCM-Data-Loc;

@@ -9,17 +9,17 @@ environ
 
  vocabularies LATTICES, FILTER_0, RELAT_1, EQREL_1, BINOP_1, BOOLE, FUNCT_1,
       LATTICE2, ZF_LANG, SUBSET_1, FUNCT_4, WELLORD1, FUNCT_3, PARTFUN1,
-      FILTER_1, T_1TOPSP, ARYTM;
+      FILTER_1, T_1TOPSP;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, BINOP_1, EQREL_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4,
       STRUCT_0, LATTICES, FILTER_0, LATTICE2;
  constructors WELLORD1, BINOP_1, FUNCT_3, FUNCT_4, EQREL_1, REALSET1, FILTER_0,
-      LATTICE2, VALUED_1, PARTFUN1, SEQ_1;
+      LATTICE2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      EQREL_1, STRUCT_0, LATTICES, FILTER_0, LATTICE2, VALUED_1;
+      EQREL_1, STRUCT_0, LATTICES, FILTER_0, LATTICE2;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, WELLORD1, BINOP_1, FILTER_0, LATTICE2, LATTICES,
-      XBOOLE_0, VALUED_1;
+      XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_4, WELLORD1, DOMAIN_1, BINOP_1,
       EQREL_1, RELAT_1, ZFMISC_1, LATTICES, FILTER_0, LATTICE2, RELSET_1,
       WELLORD2, XBOOLE_0, XBOOLE_1;
@@ -103,12 +103,9 @@ definition
     [it.(x1,x2),it.(y1,y2)] in R;
   existence
   proof
-    deffunc F(Element of D,Element of D) = $1;
-    consider f being BinOp of D such that
-A1: for x,y being Element of D holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
-    take f;
+    take f = pr1(D,D);
     let x1,y1, x2,y2 be Element of D;
-    f.(x1,x2) = x1 & f.(y1,y2) = y1 by A1;
+    f.(x1,x2) = x1 & f.(y1,y2) = y1 by FUNCT_3:def 5;
     hence thesis;
   end;
 end;
@@ -153,8 +150,8 @@ A6:   y in dom g & x = g.y by FUNCT_1:def 5;
       x in y & y c= D by A4,A6;
       hence thesis;
     end;
-    then reconsider g as Function of Class R, D by A4,FUNCT_2:def 1
-    ,RELSET_1:11;
+
+then reconsider g as Function of Class R, D by A4,FUNCT_2:def 1,RELSET_1:11;
     take uR = f*u*g;
     let x,y;
     assume
@@ -225,8 +222,8 @@ A5:   y in dom g & x = g.y by FUNCT_1:def 5;
       x in y & y c= D by A4,A5;
       hence thesis;
     end;
-    then reconsider g as Function of Class R, D by A4,FUNCT_2:def 1
-    ,RELSET_1:11;
+
+then reconsider g as Function of Class R, D by A4,FUNCT_2:def 1,RELSET_1:11;
     deffunc F(Element of Class R,Element of Class R) = f.(b.(g.$1,g.$2));
     consider bR being BinOp of Class R such that
 A6: for x,y being Element of Class R
@@ -285,7 +282,6 @@ proof
   let x be Element of Class R();
   consider y such that
 A2: y in D() & x = Class(R(),y) by EQREL_1:def 5;
-  reconsider y as Element of D() by A2;
   thus thesis by A1,A2;
 end;
 
@@ -300,7 +296,6 @@ proof
 A2: y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
   consider y2 such that
 A3: y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
-  reconsider y1, y2 as Element of D() by A2,A3;
   thus thesis by A1,A2,A3;
 end;
 
@@ -317,7 +312,6 @@ A2: y1 in D() & x1 = Class(R(),y1) by EQREL_1:def 5;
 A3: y2 in D() & x2 = Class(R(),y2) by EQREL_1:def 5;
   consider y3 being set such that
 A4: y3 in D() & x3 = Class(R(),y3) by EQREL_1:def 5;
-  reconsider y1, y2, y3 as Element of D() by A2,A3,A4;
   thus thesis by A1,A2,A3,A4;
 end;
 
@@ -694,8 +688,7 @@ proof
     by EQREL_1:30,FILTER_0:def 8,LATTICES:22,def 11;
     then (i"\/"j) <=> j in FI & (i"\/"j) <=> j = ((i"\/"j) => j)"/\"(j =>
     (i"\/" j)) & i"/\"b [= j by FILTER_0:def 12,LATTICES:25;
-    then (i"\/"j) => j in FI & (i"\/"j) => j [= i => j by FILTER_0:def 1
-    ,def 8;
+    then (i"\/"j) => j in FI & (i"\/"j) => j [= i => j by FILTER_0:def 1,def 8;
     hence thesis by FILTER_0:9;
   end;
   assume
@@ -1969,8 +1962,7 @@ proof
 A1: now
     let a,b;
     thus (a => b)` = (a` "\/" b)` by FILTER_0:55
-      .= a`` "/\" b` by LATTICES:
-    51
+      .= a`` "/\" b` by LATTICES:51
       .= a "/\" b` by LATTICES:49;
   end;
   hence (a => b)` = a "/\" b`;
@@ -2048,7 +2040,7 @@ A1: (a<=>b) <=> (a<=>c) = ((a<=>b)"/\"(a<=>c))"\/"((a<=>b)`"/\"(a<=>c)`) &
   (a"/\"(b'c'"\/"bc))"\/"(a`"/\"(b'c'"\/"bc)) = (a"\/"a`)"/\"(b'c'"\/"bc)
   by LATTICES:18,43,48,def 5,def 7,def 11;
   then
-A2: (a<=>b) <=> (a<=>c) = b <=> c & B is I_Lattice by A1,Th51,FILTER_0: 40;
+A2: (a<=>b) <=> (a<=>c) = b <=> c & B is I_Lattice by A1,Th51,FILTER_0:40;
   assume a<=>b = a<=>c;
   then (a<=>b) => (a<=>c) = Top B & (a<=>c) => (a<=>b) = Top
   B by A2,FILTER_0:38;

@@ -12,20 +12,19 @@ environ
       FINSEQ_2, UPROOTS, FUNCT_2, SETWISEO, SGRAPH1, NAT_3, COMPLEX1, XCMPLX_0,
       COMPLSP1;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, CARD_1,
-      NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_1, NAT_D, INT_2, NEWTON,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1, SEQM_3, PBOOLE,
-      POLYNOM1, POLYNOM2, RVSUM_1, WSIERP_1, BINARITH, TREES_4, UPROOTS,
-      BINOP_2, PRE_CIRC, SETWOP_2;
+      NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_D, INT_2, RELAT_1, FUNCT_1,
+      FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, PBOOLE, POLYNOM1, POLYNOM2, RVSUM_1,
+      NAT_1, NEWTON, WSIERP_1, BINARITH, TREES_4, UPROOTS, BINOP_2, PRE_CIRC,
+      SETWOP_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_D, FINSEQOP, FINSOP_1, NEWTON,
       REALSET1, BINARITH, PRE_CIRC, WSIERP_1, FACIRC_1, POLYNOM2, UPROOTS,
-      VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
-      NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED,
-      SEQ_1, RVSUM_1, NEWTON, PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0,
-      VALUED_1, FUNCT_2;
+      SEQ_1, RECDEF_1, BINOP_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
+      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, NEWTON,
+      PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0, FINSEQ_1;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
- definitions TARSKI, XBOOLE_0, INT_2, NAT_D, FINSEQ_1, VALUED_1, SEQ_1, SEQM_3,
-      POLYNOM1, FINSEQ_2, VALUED_0;
+ definitions TARSKI, XBOOLE_0, INT_2, NAT_D, FINSEQ_1, POLYNOM1, FINSEQ_2,
+      VALUED_0;
  theorems ORDINAL1, REAL_1, NEWTON, NAT_1, XCMPLX_1, INT_1, CARD_4, XREAL_0,
       RVSUM_1, INT_2, PEPIN, PBOOLE, FUNCT_1, CARD_2, PREPOWER, POLYNOM1,
       FINSET_1, FINSEQ_1, TARSKI, XBOOLE_1, FUNCOP_1, CARD_1, WSIERP_1,
@@ -111,7 +110,7 @@ A8:   k in NAT by ORDINAL1:def 13;
       then x*a1 <= 0 by NAT_1:13;
       then x*a1 = 0;
       then x = 0 or a1 = 0 by XCMPLX_1:6;
-      hence contradiction by A1,A7,A8,CARD_4:51;
+      hence contradiction by A1,A7,CARD_4:51;
     end;
     hence k+1 <= a |^ (k+1) by A5,A6,XXREAL_0:2;
   end;
@@ -285,33 +284,32 @@ definition
     deffunc F(Nat) = f.$1 |^ a;
     consider p being FinSequence such that
 A1: len p = len f and
-A2: for k being Nat st k in Seg len f holds p.k = F(k) from FINSEQ_1:sch 2;
+A2: for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch 2;
     take p;
     thus len p = len f by A1;
-A3: dom p = Seg len p by FINSEQ_1:def 3;
     let i be set;
     assume
-A4: i in dom p;
+A5: i in dom p;
     then i is Nat by ORDINAL1:def 13;
-    hence thesis by A1,A2,A3,A4;
+    hence thesis by A2,A5;
   end;
   uniqueness
   proof
     let g,h be FinSequence such that
-A5: len g = len f and
-A6: for i being set st i in dom g holds g.i = f.i |^ a and
-A7: len h = len f and
-A8: for i being set st i in dom h holds h.i = f.i |^ a;
-A9: dom g = Seg len g by FINSEQ_1:def 3;
-A10: dom h = Seg len h by FINSEQ_1:def 3;
+A6: len g = len f and
+A7: for i being set st i in dom g holds g.i = f.i |^ a and
+A8: len h = len f and
+A9: for i being set st i in dom h holds h.i = f.i |^ a;
+A10: dom g = Seg len g by FINSEQ_1:def 3;
+A11: dom h = Seg len h by FINSEQ_1:def 3;
     for k being Nat st k in dom g holds g.k = h.k
     proof
       let k be Nat such that
-A11:  k in dom g;
-      thus g.k = f.k |^ a by A6,A11
-        .= h.k by A5,A7,A8,A9,A10,A11;
+A12:  k in dom g;
+      thus g.k = f.k |^ a by A7,A12
+        .= h.k by A6,A8,A9,A10,A11,A12;
     end;
-    hence g = h by A5,A7,A9,A10,FINSEQ_1:17;
+    hence g = h by A6,A8,A10,A11,FINSEQ_1:17;
   end;
 end;
 
@@ -430,11 +428,12 @@ A2: len ((f|^a)^(<*r*>|^a)) = len (f|^a) + len (<*r*>|^a) by FINSEQ_1:35
     .= len f + len (<*r|^a*>) by Th12
     .= len f + 1 by FINSEQ_1:57;
 A3: len (f|^a) = len f by Def1;
+X: dom ((f^<*r*>) |^ a) = Seg(len f +1)  by A1,FINSEQ_1:def 3;
   now
     let i be Nat such that
-A4: i in Seg (len f +1);
-A5: 1 <= i & i <= len f + 1 by A4,FINSEQ_1:3;
-A6: i in dom ((f^<*r*>) |^ a) by A1,A4,FINSEQ_1:def 3;
+A4: i in dom ((f^<*r*>) |^ a);
+A5: 1 <= i & i <= len f + 1 by A4,FINSEQ_1:3,X;
+A6: i in dom ((f^<*r*>) |^ a) by A4;
     per cases by A5,REAL_1:def 5;
     suppose i < len f +1;
       then
@@ -551,7 +550,7 @@ A1: for i being set st i in X holds f.i = F(i) from PBOOLE:sch 4;
     suppose
 A2:   not i in X;
 A3:   dom b = X by PBOOLE:def 3;
-      dom f = X by PBOOLE:def 3;
+       dom f = X by PBOOLE:def 3;
       hence f.i = a * 0 by A2,FUNCT_1:def 4
         .= a * b.i by A2,A3,FUNCT_1:def 4;
     end;
@@ -972,8 +971,6 @@ A13: len ca = card sa by UPROOTS:def 1;
 A14: sab = sa \/ sb by POLYNOM1:42;
 A15: rng cb = sb by UPROOTS:5;
 A16: rng ca = sa by UPROOTS:5;
-A17: cb is one-to-one by UPROOTS:4;
-A18: ca is one-to-one by UPROOTS:4;
 A19: len cg = card sa + card sb - card {} by A12,A13,FINSEQ_1:35
     .= card sab by A1,A14,CARD_2:64;
   then
@@ -984,10 +981,6 @@ A22: cg is one-to-one by A19,FINSEQ_4:77;
   then
 A23: dom (cg") = sab by A21,FUNCT_1:55;
 A24: rng (cg") = Seg card sab by A20,A22,FUNCT_1:55;
-A25: dom (cb") = sb by A15,A17,FUNCT_1:54;
-A26: rng (cb") = dom cb by A17,FUNCT_1:55;
-A27: dom (ca") = sa by A16,A18,FUNCT_1:54;
-A28: rng (ca") = dom ca by A18,FUNCT_1:55;
   dom a = X by PBOOLE:def 3;
   then
 A29: dom ca = dom fa by A5,A16,RELAT_1:46;
@@ -1030,13 +1023,10 @@ A43: cgx = d by A22,A41,A42,FUNCT_1:56;
 A44: cgxN <= len fa + len fb by A30,A31,A32,A41,FINSEQ_3:27;
 A45: 1 <= cgxN by A41,A43,FINSEQ_3:27;
     per cases by A14,A40,XBOOLE_0:def 2;
-    suppose
-A46:  cf.x in sa;
+    suppose cf.x in sa;
       then
 A47:  not cf.x in sb by A1,XBOOLE_0:def 3;
       set cax = ca".(cf.x);
-      cax in rng (ca") by A27,A46,FUNCT_1:12;
-      then reconsider cax as natural number by A28,ORDINAL1:def 13;
       now
         assume len fa < cgx;
         then
@@ -1066,8 +1056,6 @@ A55:  cf.x in sb;
       then
 A56:  not cf.x in sa by A1,XBOOLE_0:def 3;
       set cbx = cb".(cf.x);
-      cbx in rng (cb") by A25,A55,FUNCT_1:12;
-      then reconsider cbx as natural number by A26,ORDINAL1:def 13;
 A57:  now
         assume len fa +1 > cgx;
         then cgx <= len fa by NAT_1:13;
@@ -1152,7 +1140,7 @@ A8:   b.x <> 0 by POLYNOM1:def 7;
         suppose
 A9:       not x in X;
           hence f.x = 0 by A3,FUNCT_1:def 4
-            .= 0 |^ n1 by A5,NEWTON:16
+            .= (0 qua Nat) |^ n1 by A5,NEWTON:16
             .= b.x |^ n1 by A1,A9,FUNCT_1:def 4;
         end;
       end;
@@ -1169,7 +1157,7 @@ A9:       not x in X;
     suppose
 A10:  not i in X;
       hence f.i = 0 by A3,FUNCT_1:def 4
-        .= 0 |^ n by A5,NEWTON:16
+        .= (0 qua Nat) |^ n by A5,NEWTON:16
         .= b.i |^ n by A1,A10,FUNCT_1:def 4;
     end;
   end;
@@ -1236,12 +1224,12 @@ A2: n <> 0;
   d |^ it divides n & not d |^ (it+1) divides n;
   existence
   proof
-    reconsider d1 = d, n1 = n as Element of NAT by ORDINAL1:def 13;
+    reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
     per cases;
     suppose
 A3:   d = 0;
       take 0;
-      0 |^ 0 = 1 by NEWTON:9;
+      (0 qua Nat) |^ 0 = 1 by NEWTON:9;
       hence d |^ 0 divides n by A3,NAT_D:6;
       not 0 divides n1 by A2,INT_2:3;
       hence not d |^ (0+1) divides n by A3,NEWTON:16;
@@ -1637,7 +1625,6 @@ end;
 theorem Th35:
   a > n & n <> 0 implies (pfexp n).a = 0
 proof
-  set f = pfexp n;
   assume that
 A1: a > n and
 A2: n <> 0;
@@ -1738,7 +1725,6 @@ theorem Th39:
   pfexp 1 = EmptyBag SetPrimes
 proof
   set f = pfexp 1;
-  set g = SetPrimes --> 0;
   for z being set st z in dom f holds f.z = 0
   proof
     let z be set;
@@ -1864,7 +1850,7 @@ A12: x |^ (x |-count b) divides b by A7,Def7;
   x divides x |^ (x |-count b) by A10,A11,Th3;
   then x divides b by A12,NAT_D:4;
   then x divides 1 by A1,A9,NAT_D:def 5;
-  hence contradiction by A4,A7,WSIERP_1:20;
+  hence contradiction by A7,WSIERP_1:20;
 end;
 
 theorem Th45:
@@ -2570,7 +2556,7 @@ A3: ((ppf n) |^ m).i = (ppf n).i |^ m by Def6;
     suppose
 A4:   p |-count n = 0;
       hence (ppf (n|^m)).i = 0 by A2,Th55
-        .= 0 |^ m by A1,NEWTON:16
+        .= (0 qua Nat) |^ m by A1,NEWTON:16
         .= ((ppf n) |^ m).i by A3,A4,Th55;
     end;
     suppose
@@ -2651,7 +2637,6 @@ A19:  p > 1 by A17,INT_2:def 5;
       then s divides n by Def7;
       then consider t being Nat such that
 A20:  n = s * t by NAT_D:def 3;
-      set t1 = t;
       reconsider s, t as non empty natural number by A20;
 A21:  support ppf t = support pfexp t by Def9;
 A22:  support ppf t c= Seg k

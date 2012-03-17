@@ -28,6 +28,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
@@ -35,7 +36,6 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_6"/>
@@ -86,7 +86,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
-<Func kind="K" nr="149">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -97,7 +97,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="304">
+<Func kind="K" nr="305">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -119,7 +119,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="252">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -148,7 +148,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="149">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
 <LocusVar nr="3"/>
@@ -157,7 +157,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="307">
+<Func kind="K" nr="308">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -186,7 +186,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="149">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
 <LocusVar nr="3"/>
@@ -195,7 +195,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="308">
+<Func kind="K" nr="309">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -226,7 +226,7 @@
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
-<Func kind="K" nr="149">
+<Func kind="K" nr="150">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

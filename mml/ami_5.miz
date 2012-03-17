@@ -9,23 +9,18 @@ environ
  vocabularies BOOLE, NAT_1, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_4, AMI_3, AMI_1,
       AMI_2, GR_CY_1, FINSEQ_1, FINSET_1, TARSKI, CAT_1, FUNCOP_1, MCART_1,
       ORDINAL2, QC_LANG1, AMI_4, AMI_5, INT_1, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
-      ZFMISC_1, MCART_1, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, INT_1,
-      NAT_1, STRUCT_0, FINSET_1, FINSEQ_1, AMI_1, AMI_2, AMI_3, AMI_4,
-      XXREAL_0;
- constructors WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, SEQ_1, FINSEQ_4,
-      AMI_2, AMI_4, VALUED_1, PARTFUN1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, AMI_3,
-      FINSET_1, VALUED_1, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, XCMPLX_0, ZFMISC_1,
+      MCART_1, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0,
+      FINSET_1, FINSEQ_1, AMI_1, SCMNORM, AMI_2, AMI_3, AMI_4, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, AMI_4;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL,
+      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, AMI_3, FINSET_1,
+      CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, TARSKI, AMI_3, WELLORD2, FUNCT_1, XBOOLE_0, FUNCOP_1,
-      CARD_1, AMI_2, VALUED_1;
- theorems AMI_1, AMI_2, AMI_3, GRFUNC_1, NAT_1, SCM_1, CQC_LANG, TARSKI,
-      FUNCOP_1, FUNCT_4, FUNCT_1, MCART_1, GR_CY_1, FUNCT_2, CARD_3, FINSET_1,
-      ZFMISC_1, AMI_4, ENUMSET1, CARD_1, CARD_4, RELAT_1, ORDINAL1, XBOOLE_0,
-      XBOOLE_1, SYSREL;
- schemes FUNCT_2;
+ definitions AMI_1, TARSKI, AMI_3, FUNCOP_1, CARD_1, AMI_2;
+ theorems AMI_1, AMI_2, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCOP_1,
+      FUNCT_4, FUNCT_1, MCART_1, GR_CY_1, FUNCT_2, CARD_3, FINSET_1, ZFMISC_1,
+      AMI_4, ENUMSET1, RELAT_1, ORDINAL1, XBOOLE_0, XBOOLE_1, SYSREL;
 
 begin
 
@@ -47,15 +42,7 @@ A3: dl = [x,y] by ZFMISC_1:103;
   thus dl = dl.k by A1,A3,TARSKI:def 1;
 end;
 
-theorem Th19:
-  for il being Instruction-Location of SCM ex i being Element of NAT
-  st il = il.i
-proof
-  let il be Instruction-Location of SCM;
-  reconsider k = il as Element of NAT by AMI_1:def 4;
-  take k;
-  thus il = il.k;
-end;
+canceled;
 
 theorem Th20:
   for dl being Data-Location holds dl <> IC SCM
@@ -73,17 +60,15 @@ theorem Th22:
   il <> dl
 proof
   let il be Instruction-Location of SCM, dl be Data-Location;
-  consider i being Element of NAT such that
-A1: il = il.i by Th19;
   consider j being Element of NAT such that
 A2: dl = dl.j by Th18;
-  thus il <> dl by A1,A2,AMI_3:56;
+  thus il <> dl by A2,AMI_3:56;
 end;
 
 reserve i, j, k for Element of NAT;
 
 theorem
-  the carrier of SCM = {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by AMI_3:4;
+  the carrier of SCM = {IC SCM} \/ SCM-Data-Loc \/ NAT by AMI_3:4;
 
 theorem
   for s being State of SCM, d being Data-Location,
@@ -92,10 +77,10 @@ proof
   let s be State of SCM, d be Data-Location, l be Instruction-Location of SCM;
   d in SCM-Data-Loc by AMI_3:def 2;
   then d in {IC SCM} \/ SCM-Data-Loc by XBOOLE_0:def 2;
-  then d in {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_0:def 2;
+  then d in {IC SCM} \/ SCM-Data-Loc \/ NAT by XBOOLE_0:def 2;
   hence d in dom s by AMI_1:79,AMI_3:4;
-  l in SCM-Instr-Loc by AMI_1:def 4;
-  then l in {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_0:def 2;
+  l in NAT by AMI_1:def 4;
+  then l in {IC SCM} \/ SCM-Data-Loc \/ NAT by XBOOLE_0:def 2;
   hence l in dom s by AMI_1:79,AMI_3:4;
 end;
 
@@ -121,7 +106,7 @@ A6: SCM-Memory = dom g1 & SCM-Memory = dom g2 by A4,A5,FUNCT_2:def 1;
     let x be set such that
 A7: x in SCM-Memory;
 A8: x in {IC SCM} \/
-    SCM-Data-Loc or x in SCM-Instr-Loc by A7,AMI_3:4,XBOOLE_0:def 2;
+    SCM-Data-Loc or x in NAT by A7,AMI_3:4,XBOOLE_0:def 2;
     per cases by A8,XBOOLE_0:def 2;
     suppose x in {IC SCM};
       then x = IC SCM by TARSKI:def 1;
@@ -131,7 +116,7 @@ A8: x in {IC SCM} \/
       then x is Data-Location by AMI_3:def 2;
       hence g1.x = g2.x by A2,A4,A5;
     end;
-    suppose x in SCM-Instr-Loc;
+    suppose x in NAT;
       then reconsider l = x as Instruction-Location of SCM by AMI_1:def 4;
       g1.l = g2.l by A3,A4,A5;
       hence g1.x = g2.x;
@@ -144,20 +129,20 @@ theorem Th27:
   for s being State of SCM holds SCM-Data-Loc c= dom s
 proof
   let s be State of SCM;
-  SCM-Data-Loc c= SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_1:10;
-  then SCM-Data-Loc c= {IC SCM} \/ (SCM-Data-Loc \/ SCM-Instr-Loc) by
+  SCM-Data-Loc c= SCM-Data-Loc \/ NAT by XBOOLE_1:10;
+  then SCM-Data-Loc c= {IC SCM} \/ (SCM-Data-Loc \/ NAT) by
   XBOOLE_1:10;
-  then SCM-Data-Loc c= {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_1:
+  then SCM-Data-Loc c= {IC SCM} \/ SCM-Data-Loc \/ NAT by XBOOLE_1:
   4;
   hence SCM-Data-Loc c= dom s by AMI_1:79,AMI_3:4;
 end;
 
 theorem Th28:
-  for s being State of SCM holds SCM-Instr-Loc c= dom s
+  for s being State of SCM holds NAT c= dom s
 proof
   let s be State of SCM;
-  SCM-Instr-Loc c= {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_1:10;
-  hence SCM-Instr-Loc c= dom s by AMI_1:79,AMI_3:4;
+  NAT c= {IC SCM} \/ SCM-Data-Loc \/ NAT by XBOOLE_1:10;
+  hence NAT c= dom s by AMI_1:79,AMI_3:4;
 end;
 
 theorem
@@ -169,72 +154,22 @@ proof
 end;
 
 theorem
-  for s being State of SCM holds dom (s|SCM-Instr-Loc) = SCM-Instr-Loc
+  for s being State of SCM holds dom (s|NAT) = NAT
 proof
   let s be State of SCM;
-  SCM-Instr-Loc c= dom s by Th28;
-  hence dom (s|SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
-end;
-
-theorem Th31:
-  SCM-Data-Loc is not finite
-proof
-  deffunc F(Element of NAT) = [1,$1];
-  1 in {1} by TARSKI:def 1;
-  then
-A1: for x being Element of NAT holds F(x) is Element of SCM-Data-Loc
-  by ZFMISC_1:106;
-  consider f being Function of NAT, SCM-Data-Loc such that
-A2: for x being Element of NAT holds f.x = F(x) from FUNCT_2:sch 9(A1);
-A3: dom f = NAT by FUNCT_2:def 1;
-  NAT,SCM-Data-Loc are_equipotent
-  proof
-    take f;
-    thus f is one-to-one
-    proof
-      let x1,x2 be set such that
-A4:   x1 in dom f and
-A5:   x2 in dom f and
-A6:   f.x1 = f.x2;
-      reconsider k1 = x1,k2 = x2 as Element of NAT by A4,A5,FUNCT_2:def 1;
-      dl.k1 = f.k1 by A2
-        .= dl.k2 by A2,A6;
-      hence x1 = x2 by AMI_3:52;
-    end;
-    thus dom f = NAT by FUNCT_2:def 1;
-    thus rng f c= SCM-Data-Loc
-    proof
-      let y be set;
-      assume y in rng f;
-      then consider x be set such that
-A7:   x in dom f and
-A8:   y = f.x by FUNCT_1:def 5;
-      reconsider x as Element of NAT by A7,FUNCT_2:def 1;
-      y = dl.x by A2,A8;
-      hence y in SCM-Data-Loc by AMI_3:def 2;
-    end;
-    thus SCM-Data-Loc c= rng f
-    proof
-      let y be set such that
-A9:   y in SCM-Data-Loc;
-      reconsider d = y as Data-Location by A9,AMI_3:def 2;
-      consider k being Element of NAT such that
-A10:  d = dl.k by Th18;
-      y = f.k by A2,A10;
-      hence y in rng f by A3,FUNCT_1:def 5;
-    end;
-  end;
-  hence SCM-Data-Loc is not finite by CARD_1:68,CARD_4:15;
+  NAT c= dom s by Th28;
+  hence dom (s|NAT) = NAT by RELAT_1:91;
 end;
 
 theorem
-  NAT is not finite by CARD_4:15;
+  SCM-Data-Loc is not finite;
+
+theorem
+  NAT is not finite;
 
 registration
   cluster SCM-Data-Loc -> infinite;
-  coherence by Th31;
-  cluster NAT -> infinite;
-  coherence by CARD_4:15;
+  coherence;
 end;
 
 registration
@@ -260,7 +195,7 @@ definition
 end;
 
 definition
-  let loc be Element of SCM-Instr-Loc;
+  let loc be Element of NAT;
   func loc@ -> Instruction-Location of SCM equals
 
   loc;
@@ -276,7 +211,7 @@ definition
 end;
 
 reserve I,J,K for Element of Segm 9,
-  a,a1 for Element of SCM-Instr-Loc,
+  a,a1 for Element of NAT,
   b,b1,c for Element of SCM-Data-Loc;
 
 canceled 3;
@@ -324,7 +259,7 @@ theorem Th37:
   InsCode (halt SCM) = 0 by AMI_3:71,MCART_1:7;
 
 reserve I,J,K for Element of Segm 9,
-  a,a1 for Element of SCM-Instr-Loc,
+  a,a1 for Element of NAT,
   b,b1,c for Element of SCM-Data-Loc,
   da,db for Data-Location,
   loc for Instruction-Location of SCM;
@@ -639,7 +574,7 @@ theorem
 proof
   let loc be Instruction-Location of SCM;
   reconsider roku=6 as Element of Segm 9 by GR_CY_1:10;
-  reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
+  reconsider mk=loc as Element of NAT by AMI_1:def 4;
   @(goto loc) = [ roku, <*mk*>];
   hence (@(goto loc)) jump_address = loc by AMI_2:24;
 end;
@@ -651,7 +586,7 @@ theorem
 proof
   let loc be Instruction-Location of SCM, a be Data-Location;
   reconsider nana=7 as Element of Segm 9 by GR_CY_1:10;
-  reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
+  reconsider mk=loc as Element of NAT by AMI_1:def 4;
   reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
   @(a=0_goto loc) = [ nana, <*mk,aa*>];
   hence (@(a=0_goto loc)) cjump_address = loc &
@@ -665,7 +600,7 @@ theorem
 proof
   let loc be Instruction-Location of SCM, a be Data-Location;
   reconsider hachi=8 as Element of Segm 9 by GR_CY_1:10;
-  reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
+  reconsider mk=loc as Element of NAT by AMI_1:def 4;
   reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
   @(a>0_goto loc) = [ hachi, <*mk,aa*>];
   hence (@(a>0_goto loc)) cjump_address = loc &
@@ -1159,27 +1094,27 @@ end;
 
 theorem Th59:
   for i being Instruction of SCM, s being State of SCM holds
-  Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc
+  Exec (i, s) | NAT = s | NAT
 proof
   let i be Instruction of SCM, s be State of SCM;
   dom (Exec (i,s)) = the carrier of SCM by AMI_1:79;
   then
-A1: dom (Exec (i, s) | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
+A1: dom (Exec (i, s) | NAT) = NAT by RELAT_1:91;
   dom s = the carrier of SCM by AMI_1:79;
   then
-A2: dom (s | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
-  for x being set st x in SCM-Instr-Loc
-  holds (Exec (i, s) | SCM-Instr-Loc).x = (s | SCM-Instr-Loc).x
+A2: dom (s | NAT) = NAT by RELAT_1:91;
+  for x being set st x in NAT
+  holds (Exec (i, s) | NAT).x = (s | NAT).x
   proof
     let x be set;
-    assume x in SCM-Instr-Loc;
+    assume x in NAT;
     then reconsider l = x as Instruction-Location of SCM by AMI_1:def 4;
-A3: l in SCM-Instr-Loc by AMI_1:def 4;
-    hence (Exec (i, s) | SCM-Instr-Loc).x = (Exec (i, s)).l by FUNCT_1:72
+A3: l in NAT by AMI_1:def 4;
+    hence (Exec (i, s) | NAT).x = (Exec (i, s)).l by FUNCT_1:72
       .= s.l by AMI_1:def 13
-      .= (s | SCM-Instr-Loc).x by A3,FUNCT_1:72;
+      .= (s | NAT).x by A3,FUNCT_1:72;
   end;
-  hence Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc by A1,A2,FUNCT_1:9;
+  hence Exec (i, s) | NAT = s | NAT by A1,A2,FUNCT_1:9;
 end;
 
 begin :: Finite partial states of SCM
@@ -1193,7 +1128,7 @@ proof
   end;
   then SCM-Data-Loc misses {IC SCM} by ZFMISC_1:56;
   then
-A1: SCM-Data-Loc misses {IC SCM} \/ SCM-Instr-Loc by AMI_2:29,XBOOLE_1: 70;
+A1: SCM-Data-Loc misses {IC SCM} \/ NAT by AMI_2:29,XBOOLE_1: 70;
   the carrier of SCM = {IC SCM} \/ (NAT) \/ SCM-Data-Loc
   by AMI_3:4,XBOOLE_1:4;
   then (the carrier of SCM) \ ({IC SCM} \/ NAT)
@@ -1208,15 +1143,15 @@ proof
   let f be FinPartState of SCM;
   dom f c= the carrier of SCM by AMI_1:80;
   then
-A1: dom f c= {IC SCM} \/ SCM-Instr-Loc \/ SCM-Data-Loc by AMI_3:4, XBOOLE_1:4;
+A1: dom f c= {IC SCM} \/ NAT \/ SCM-Data-Loc by AMI_3:4, XBOOLE_1:4;
   now
     assume IC SCM in SCM-Data-Loc;
     then IC SCM is Data-Location by AMI_3:def 2;
     hence contradiction by Th20;
   end;
   then SCM-Data-Loc misses {IC SCM} by ZFMISC_1:56;
-  then SCM-Data-Loc misses {IC SCM} \/ SCM-Instr-Loc by AMI_2:29,XBOOLE_1:70;
-  then dom f misses {IC SCM} \/ SCM-Instr-Loc
+  then SCM-Data-Loc misses {IC SCM} \/ NAT by AMI_2:29,XBOOLE_1:70;
+  then dom f misses {IC SCM} \/ NAT
   iff dom f c= SCM-Data-Loc by A1,XBOOLE_1:63,73;
   hence thesis by AMI_1:def 50;
 end;
@@ -1242,15 +1177,15 @@ proof
   p be programmed FinPartState of SCM;
 A1: dom p c= NAT by AMI_1:def 40;
   now
-    assume {IC SCM} meets SCM-Instr-Loc;
+    assume {IC SCM} meets NAT;
     then consider x being set such that
 A2: x in {IC SCM} and
-A3: x in SCM-Instr-Loc by XBOOLE_0:3;
+A3: x in NAT by XBOOLE_0:3;
     reconsider l = x as Instruction-Location of SCM by A3,AMI_1:def 4;
     l = IC SCM by A2,TARSKI:def 1;
     hence contradiction by AMI_1:48;
   end;
-  then SCM-Data-Loc \/ {IC SCM} misses SCM-Instr-Loc by AMI_2:29,XBOOLE_1:70;
+  then SCM-Data-Loc \/ {IC SCM} misses NAT by AMI_2:29,XBOOLE_1:70;
   then
 A4: SCM-Data-Loc \/ {IC SCM} misses dom p by A1,XBOOLE_1:63;
   then
@@ -1259,16 +1194,16 @@ A5: s|(SCM-Data-Loc \/ {IC SCM}) = (s +* p) | (SCM-Data-Loc \/ {IC SCM})
 A6: (Exec(i,s) +* p)|(SCM-Data-Loc \/ {IC SCM})
   = Exec(i,s)|(SCM-Data-Loc \/ {IC SCM}) by A4,FUNCT_4:76
     .= Exec(i,s +* p) | (SCM-Data-Loc \/ {IC SCM}) by A5,Th58;
-A7: Exec (i, s +* p)|SCM-Instr-Loc = (s +* p)|SCM-Instr-Loc by Th59
-    .= s |SCM-Instr-Loc +* p|SCM-Instr-Loc by FUNCT_4:75
-    .= Exec (i,s) |SCM-Instr-Loc +* p|SCM-Instr-Loc by Th59
-    .= (Exec (i, s) +* p)|SCM-Instr-Loc by FUNCT_4:75;
+A7: Exec (i, s +* p)|NAT = (s +* p)|NAT by Th59
+    .= s |NAT +* p|NAT by FUNCT_4:75
+    .= Exec (i,s) |NAT +* p|NAT by Th59
+    .= (Exec (i, s) +* p)|NAT by FUNCT_4:75;
   thus Exec (i, s +* p)
   = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
-    .= Exec (i, s +* p)| ({IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc)
+    .= Exec (i, s +* p)| ({IC SCM} \/ SCM-Data-Loc \/ NAT)
   by AMI_1:79,AMI_3:4
     .= (Exec (i, s) +* p)| ({IC SCM} \/ SCM-Data-Loc)
-  +* (Exec (i, s) +* p)|SCM-Instr-Loc by A6,A7,FUNCT_4:83
+  +* (Exec (i, s) +* p)|NAT by A6,A7,FUNCT_4:83
     .= (Exec (i,s) +* p)| the carrier of SCM by AMI_3:4,FUNCT_4:83
     .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by AMI_1:79
     .= Exec (i,s) +* p by RELAT_1:97;
@@ -1384,9 +1319,9 @@ A15: dom p misses {il} by A9,ZFMISC_1:56;
     DataPart p c= p by RELAT_1:88;
     then
 A16: dom DataPart p c= dom p by RELAT_1:25;
-    dom ((Computation s1).1) = the carrier of SCM by AMI_1:79;
+    dom ( Computation(s1,1)) = the carrier of SCM by AMI_1:79;
     then
-A17: dom ((Computation s1).1|dom p) = dom p by AMI_1:80,RELAT_1:91;
+A17: dom ( Computation(s1,1)|dom p) = dom p by AMI_1:80,RELAT_1:91;
 A18: dom(Start-At il) = {IC SCM} by FUNCOP_1:19;
     then
 A19: IC SCM in dom (Start-At il) by TARSKI:def 1;
@@ -1445,15 +1380,15 @@ A36: s1.d2 = p1.d2 by A6,GRFUNC_1:8
       .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A34,FUNCT_4:12
       .= (d2.--> 0).d2 by A32,FUNCT_4:14
       .= 0 by CQC_LANG:6;
-    (Computation s1).(0+1).d1 = (Following (Computation s1).0).d1 by
-    AMI_1:def 19
-      .= (Following s1).d1 by AMI_1:def 19
+      Computation(s1,0+1).d1 = (Following  Computation(s1,0)).d1 by
+    AMI_1:14
+      .= (Following s1).d1 by AMI_1:13
       .= 0 by A23,A31,A36,AMI_3:8;
     then
-A37: ((Computation s1).1|dom p).d1 = 0 by A3,A16,A17,FUNCT_1:70;
-    dom ((Computation s2).1) = the carrier of SCM by AMI_1:79;
+A37: ( Computation(s1,1)|dom p).d1 = 0 by A3,A16,A17,FUNCT_1:70;
+    dom ( Computation(s2,1)) = the carrier of SCM by AMI_1:79;
     then
-A38: dom ((Computation s2).1|dom p) = dom p by AMI_1:80,RELAT_1:91;
+A38: dom ( Computation(s2,1)|dom p) = dom p by AMI_1:80,RELAT_1:91;
 A39: dom(Start-At il) = {IC SCM} by FUNCOP_1:19;
     then
 A40: IC SCM in dom (Start-At il) by TARSKI:def 1;
@@ -1512,11 +1447,11 @@ A57: s2.d2 = p2.d2 by A7,GRFUNC_1:8
       .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A55,FUNCT_4:12
       .= (d2.--> 1).d2 by A53,FUNCT_4:14
       .= 1 by CQC_LANG:6;
-    (Computation s2).(0+1).d1 = (Following (Computation s2).0).d1 by
-    AMI_1:def 19
-      .= (Following s2).d1 by AMI_1:def 19
+     Computation(s2,0+1).d1 = (Following  Computation(s2,0)).d1 by
+    AMI_1:14
+      .= (Following s2).d1 by AMI_1:13
       .= 1 by A44,A52,A57,AMI_3:8;
-    hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A16,A37
+    hence  Computation(s1,1)|dom p <>  Computation(s2,1)|dom p by A3,A16,A37
     ,A38,FUNCT_1:70;
   end;
   hence contradiction;
@@ -1545,9 +1480,7 @@ A4: dom ((Start-At il.0) +* Euclide-Algorithm)
     XBOOLE_0:def 2;
     hence IC SCM in dom p by A3,XBOOLE_0:def 2;
     assume IC SCM in NAT;
-    then reconsider il = IC SCM as Instruction-Location of SCM by AMI_1:def 4;
-    il in NAT by AMI_1:def 4;
-    hence contradiction by Th19,SCM_1:7;
+    hence contradiction by AMI_3:4;
   end;
 end;
 
@@ -1556,9 +1489,9 @@ theorem Th84:
   IC SCM in dom p
 proof
   let p be autonomic non programmed FinPartState of SCM;
-A1: not dom p c= SCM-Instr-Loc by AMI_1:def 40;
+A1: not dom p c= NAT by AMI_1:def 40;
   dom p = dom p /\ the carrier of SCM by AMI_1:80,XBOOLE_1:28
-    .= dom p /\ ({IC SCM} \/ SCM-Data-Loc) \/ dom p /\ SCM-Instr-Loc
+    .= dom p /\ ({IC SCM} \/ SCM-Data-Loc) \/ dom p /\ NAT
   by AMI_3:4,XBOOLE_1:23;
   then dom p /\ ({IC SCM} \/ SCM-Data-Loc) <> {} by A1,XBOOLE_1:17;
   then
@@ -1623,12 +1556,12 @@ A13: (Following s2).IC SCM
     = Exec (goto il.1,s2).IC SCM by A1,A4,A7,A11,AMI_1:97,XBOOLE_1:1
       .= il.1 by AMI_3:13;
     assume
-A14: (Computation s1).1|dom p = (Computation s2).1|dom p;
+A14:  Computation(s1,1)|dom p =  Computation(s2,1)|dom p;
 A15: (Following(s1))|dom p
-    = (Following ((Computation s1).0))|dom p by AMI_1:def 19
-      .= (Computation s1).(0+1)|dom p by AMI_1:def 19
-      .= (Following ((Computation s2).0))|dom p by A14, AMI_1:def 19
-      .= (Following(s2))|dom p by AMI_1:def 19;
+    = (Following ( Computation(s1,0)))|dom p by AMI_1:13
+      .=   Computation(s1,0+1)|dom p by AMI_1:14
+      .= (Following ( Computation(s2,0)))|dom p by A14, AMI_1:14
+      .= (Following(s2))|dom p by AMI_1:13;
     il.0 = ((Following(s1))|dom p).IC SCM by A1,A12,FUNCT_1:72
       .= il.1 by A1,A13,A15,FUNCT_1:72;
     hence contradiction;
@@ -1639,21 +1572,20 @@ end;
 theorem Th86:
   for p being autonomic non programmed FinPartState of SCM,
   s being State of SCM st p c= s for i being Element of NAT
-  holds IC (Computation s).i in dom ProgramPart(p)
+  holds IC  Computation(s,i) in dom ProgramPart(p)
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s be State of SCM such that
 A1: p c= s;
   let i be Element of NAT;
-  set Csi = (Computation s).i;
+  set Csi =  Computation(s,i);
   set loc = IC Csi;
-  consider ll being Element of NAT such that
-A2: loc = il.ll by Th19;
+  reconsider ll = loc as Element of NAT by ORDINAL1:def 13;
   set loc1 = il.(ll+1);
   assume
-A3: not IC (Computation s).i in dom ProgramPart(p);
-A4: loc in SCM-Instr-Loc by AMI_1:def 4;
-  loc in dom ProgramPart p iff loc in dom p /\ SCM-Instr-Loc by FUNCT_1:68;
+A3: not IC  Computation(s,i) in dom ProgramPart(p);
+A4: loc in NAT by AMI_1:def 4;
+  loc in dom ProgramPart p iff loc in dom p /\ NAT by FUNCT_1:68;
   then
 A5: not loc in dom p by A3,A4,XBOOLE_0:def 3;
   set p1 = p +* (loc .--> goto loc);
@@ -1671,8 +1603,8 @@ A9: loc in dom p1 & loc in dom p2 by A6,XBOOLE_0:def 2;
 A10: p1 c= s1 by AMI_1:82;
   consider s2 being State of SCM such that
 A11: p2 c= s2 by AMI_1:82;
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
   p is not autonomic
   proof
     take s1, s2;
@@ -1707,11 +1639,11 @@ A16: p c= s2 by A12,GRFUNC_1:8;
     then
 A17: s1.loc = goto loc & s2.loc = goto loc1 by A9,A10,A11,GRFUNC_1:8;
     take k = i+1;
-    set Cs1k = (Computation s1).k;
-    set Cs2k = (Computation s2).k;
-A18: Cs1k = Following Cs1i by AMI_1:def 19
+    set Cs1k =  Computation(s1,k);
+    set Cs2k =  Computation(s2,k);
+A18: Cs1k = Following Cs1i by AMI_1:14
       .= Exec (CurInstr Cs1i, Cs1i);
-A19: Cs2k = Following Cs2i by AMI_1:def 19
+A19: Cs2k = Following Cs2i by AMI_1:14
       .= Exec (CurInstr Cs2i, Cs2i);
 A20: Cs1i.loc = goto loc & Cs2i.loc = goto loc1 by A17,AMI_1:54;
 A21: (Cs1i|dom p) = (Csi|dom p) by A1,A14,AMI_1:def 25;
@@ -1723,7 +1655,7 @@ A22: Cs1i.IC SCM = (Cs1i|dom p).IC SCM &
 A23: Cs1k.IC SCM = loc & Cs2k.IC SCM = loc1 by A18,A19,A20,AMI_3:13;
     (Cs1k|dom p).IC SCM = Cs1k.IC SCM & (Cs2k|dom p).IC SCM = Cs2k.IC SCM
     by Th84,FUNCT_1:72;
-    hence Cs1k|dom p <> Cs2k|dom p by A2,A23;
+    hence Cs1k|dom p <> Cs2k|dom p by A23;
   end;
   hence contradiction;
 end;
@@ -1731,29 +1663,29 @@ end;
 theorem Th87:
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds IC (Computation s1).i = IC (Computation s2).i &
-  I = CurInstr ((Computation s2).i)
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds IC  Computation(s1,i) = IC  Computation(s2,i) &
+  I = CurInstr ( Computation(s2,i))
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i; thus
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i); thus
 A3: IC Cs1i = IC Cs2i
   proof
     assume
-A4: IC (Computation s1).i <> IC (Computation s2).i;
+A4: IC  Computation(s1,i) <> IC  Computation(s2,i);
     (Cs1i|dom p).IC SCM = Cs1i.IC SCM & (Cs2i|dom p).IC SCM = Cs2i.IC SCM
     by Th84,FUNCT_1:72;
     hence contradiction by A1,A4,AMI_1:def 25;
   end;
-  thus I = CurInstr ((Computation s2).i)
+  thus I = CurInstr ( Computation(s2,i))
   proof
     assume
-A5: I <> CurInstr ((Computation s2).i);
+A5: I <> CurInstr ( Computation(s2,i));
 A6: IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th86;
     ProgramPart p c= p by RELAT_1:88;
     then dom ProgramPart p c= dom p by GRFUNC_1:8;
@@ -1767,29 +1699,29 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = da := db & da in dom p
-  implies (Computation s1).i.db = (Computation s2).i.db
+  st I = CurInstr ( Computation(s1,i)) holds I = da := db & da in dom p
+  implies  Computation(s1,i).db =  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
   (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
   assume
 A7: I = da := db & da in dom p &
-  (Computation s1).i.db <> (Computation s2).i.db;
+   Computation(s1,i).db <>  Computation(s2,i).db;
   then Cs1i1.da = Cs1i.db & Cs2i1.da = Cs2i.db by A2,A3,A4,A5,AMI_3:8;
   hence contradiction by A1,A6,A7,AMI_1:def 25;
 end;
@@ -1798,31 +1730,31 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = AddTo(da, db) & da in dom p
-  implies (Computation s1).i.da + (Computation s1).i.db
-  = (Computation s2).i.da + (Computation s2).i.db
+  st I = CurInstr ( Computation(s1,i)) holds I = AddTo(da, db) & da in dom p
+  implies  Computation(s1,i).da +  Computation(s1,i).db
+  =  Computation(s2,i).da +  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
   (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
   assume
 A7: I = AddTo(da, db) & da in dom p &
-  (Computation s1).i.da + (Computation s1).i.db
-  <> (Computation s2).i.da + (Computation s2).i.db;
+   Computation(s1,i).da +  Computation(s1,i).db
+  <>  Computation(s2,i).da +  Computation(s2,i).db;
   then Cs1i1.da = Cs1i.da + Cs1i.db & Cs2i1.da = Cs2i.da + Cs2i.db
   by A2,A3,A4,A5,AMI_3:9;
   hence contradiction by A1,A6,A7,AMI_1:def 25;
@@ -1832,31 +1764,31 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = SubFrom(da, db) & da in dom p
-  implies (Computation s1).i.da - (Computation s1).i.db
-  = (Computation s2).i.da - (Computation s2).i.db
+  st I = CurInstr ( Computation(s1,i)) holds I = SubFrom(da, db) & da in dom p
+  implies  Computation(s1,i).da -  Computation(s1,i).db
+  =  Computation(s2,i).da -  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
   (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
   assume
 A7: I = SubFrom(da, db) & da in dom p &
-  (Computation s1).i.da - (Computation s1).i.db
-  <> (Computation s2).i.da - (Computation s2).i.db;
+   Computation(s1,i).da -  Computation(s1,i).db
+  <>  Computation(s2,i).da -  Computation(s2,i).db;
   then Cs1i1.da = Cs1i.da - Cs1i.db & Cs2i1.da = Cs2i.da - Cs2i.db
   by A2,A3,A4,A5,AMI_3:10;
   hence contradiction by A1,A6,A7,AMI_1:def 25;
@@ -1866,31 +1798,31 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i) holds I = MultBy(da, db) & da in dom p
-  implies (Computation s1).i.da * (Computation s1).i.db
-  = (Computation s2).i.da * (Computation s2).i.db
+  st I = CurInstr ( Computation(s1,i)) holds I = MultBy(da, db) & da in dom p
+  implies  Computation(s1,i).da *  Computation(s1,i).db
+  =  Computation(s2,i).da *  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
   (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
   assume
 A7: I = MultBy(da, db) & da in dom p &
-  (Computation s1).i.da * (Computation s1).i.db
-  <> (Computation s2).i.da * (Computation s2).i.db;
+   Computation(s1,i).da *  Computation(s1,i).db
+  <>  Computation(s2,i).da *  Computation(s2,i).db;
   then Cs1i1.da = Cs1i.da * Cs1i.db & Cs2i1.da = Cs2i.da * Cs2i.db
   by A2,A3,A4,A5,AMI_3:11;
   hence contradiction by A1,A6,A7,AMI_1:def 25;
@@ -1900,32 +1832,32 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i)
+  st I = CurInstr ( Computation(s1,i))
   holds I = Divide(da, db) & da in dom p & da <> db
-  implies (Computation s1).i.da div (Computation s1).i.db
-  = (Computation s2).i.da div (Computation s2).i.db
+  implies  Computation(s1,i).da div  Computation(s1,i).db
+  =  Computation(s2,i).da div  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: da in dom p implies (Cs1i1|dom p).da = Cs1i1.da &
   (Cs2i1|dom p).da = Cs2i1.da by FUNCT_1:72;
   assume
 A7: I = Divide(da, db) & da in dom p & da <> db &
-  (Computation s1).i.da div (Computation s1).i.db
-  <> (Computation s2).i.da div (Computation s2).i.db;
+   Computation(s1,i).da div  Computation(s1,i).db
+  <>  Computation(s2,i).da div  Computation(s2,i).db;
   then Cs1i1.da = Cs1i.da div Cs1i.db & Cs2i1.da = Cs2i.da div Cs2i.db
   by A2,A3,A4,A5,AMI_3:12;
   hence contradiction by A1,A6,A7,AMI_1:def 25;
@@ -1935,30 +1867,30 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da, db being Data-Location, I being Instruction of SCM
-  st I = CurInstr ((Computation s1).i)
+  st I = CurInstr ( Computation(s1,i))
   holds I = Divide(da, db) & db in dom p & da <> db
-  implies (Computation s1).i.da mod (Computation s1).i.db
-  = (Computation s2).i.da mod (Computation s2).i.db
+  implies  Computation(s1,i).da mod  Computation(s1,i).db
+  =  Computation(s2,i).da mod  Computation(s2,i).db
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da, db be Data-Location,
   I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
   assume
 A6: I = Divide(da, db) & db in dom p & da <> db &
-  (Computation s1).i.da mod (Computation s1).i.db
-  <> (Computation s2).i.da mod (Computation s2).i.db;
+   Computation(s1,i).da mod  Computation(s1,i).db
+  <>  Computation(s2,i).da mod  Computation(s2,i).db;
   then
 A7: (Cs1i1|dom p).db = Cs1i1.db & (Cs2i1|dom p).db = Cs2i1.db by FUNCT_1 :72;
   Cs1i1.db = Cs1i.da mod Cs1i.db & Cs2i1.db = Cs2i.da mod Cs2i.db
@@ -1970,87 +1902,87 @@ theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da being Data-Location, loc being Instruction-Location of SCM,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds I = da=0_goto loc & loc <> Next (IC (Computation s1).i)
-  implies ((Computation s1).i.da = 0 iff (Computation s2).i.da = 0)
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds I = da=0_goto loc & loc <> Next (IC  Computation(s1,i))
+  implies ( Computation(s1,i).da = 0 iff  Computation(s2,i).da = 0)
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da be Data-Location,
   loc be Instruction-Location of SCM, I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
-A3: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A4: Cs1i1 = Following Cs1i by AMI_1:def 19
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
+A3: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A4: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A5: Cs2i1 = Following Cs2i by AMI_1:def 19
+A5: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A6: (Cs1i1|dom p).IC SCM = Cs1i1.IC SCM &
   (Cs2i1|dom p).IC SCM = Cs2i1.IC SCM by Th84,FUNCT_1:72;
 A7: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
   assume
-A8: I = da=0_goto loc & loc <> Next (IC (Computation s1).i);
+A8: I = da=0_goto loc & loc <> Next (IC  Computation(s1,i));
 A9: now
-    assume (Computation s1).i.da = 0 & (Computation s2).i.da <> 0;
+    assume  Computation(s1,i).da = 0 &  Computation(s2,i).da <> 0;
     then Cs1i1.IC SCM = loc & Cs2i1.IC SCM = Next IC Cs2i
     by A2,A3,A4,A5,A8,AMI_3:14;
     hence contradiction by A1,A2,A6,A7,A8,Th87;
   end;
   now
-    assume (Computation s2).i.da = 0 & (Computation s1).i.da <> 0;
+    assume  Computation(s2,i).da = 0 &  Computation(s1,i).da <> 0;
     then Cs2i1.IC SCM = loc & Cs1i1.IC SCM = Next IC Cs1i
     by A2,A3,A4,A5,A8,AMI_3:14;
     hence contradiction by A1,A6,A8,AMI_1:def 25;
   end;
-  hence (Computation s1).i.da = 0 iff (Computation s2).i.da = 0 by A9;
+  hence  Computation(s1,i).da = 0 iff  Computation(s2,i).da = 0 by A9;
 end;
 
 theorem
   for p being autonomic non programmed FinPartState of SCM,
   s1, s2 being State of SCM st p c= s1 & p c= s2 for i being Element of NAT,
   da being Data-Location, loc being Instruction-Location of SCM,
-  I being Instruction of SCM st I = CurInstr ((Computation s1).i)
-  holds I = da>0_goto loc & loc <> Next (IC (Computation s1).i)
-  implies ((Computation s1).i.da > 0 iff (Computation s2).i.da > 0)
+  I being Instruction of SCM st I = CurInstr ( Computation(s1,i))
+  holds I = da>0_goto loc & loc <> Next (IC  Computation(s1,i))
+  implies ( Computation(s1,i).da > 0 iff  Computation(s2,i).da > 0)
 proof
   let p be autonomic non programmed FinPartState of SCM,
   s1, s2 be State of SCM such that
 A1: p c= s1 & p c= s2;
   let i be Element of NAT, da be Data-Location,
   loc be Instruction-Location of SCM, I be Instruction of SCM such that
-A2: I = CurInstr ((Computation s1).i);
-  set Cs1i = (Computation s1).i;
-  set Cs2i = (Computation s2).i;
+A2: I = CurInstr ( Computation(s1,i));
+  set Cs1i =  Computation(s1,i);
+  set Cs2i =  Computation(s2,i);
 A3: IC Cs1i = IC Cs2i by A1,A2,Th87;
-A4: I = CurInstr ((Computation s2).i) by A1,A2,Th87;
-  set Cs1i1 = (Computation s1).(i+1);
-  set Cs2i1 = (Computation s2).(i+1);
-A5: Cs1i1 = Following Cs1i by AMI_1:def 19
+A4: I = CurInstr ( Computation(s2,i)) by A1,A2,Th87;
+  set Cs1i1 =  Computation(s1,i+1);
+  set Cs2i1 =  Computation(s2,i+1);
+A5: Cs1i1 = Following Cs1i by AMI_1:14
     .= Exec (CurInstr Cs1i, Cs1i);
-A6: Cs2i1 = Following Cs2i by AMI_1:def 19
+A6: Cs2i1 = Following Cs2i by AMI_1:14
     .= Exec (CurInstr Cs2i, Cs2i);
 A7: (Cs1i1|dom p).IC SCM = Cs1i1.IC SCM &
   (Cs2i1|dom p).IC SCM = Cs2i1.IC SCM by Th84,FUNCT_1:72;
 A8: (Cs1i1|dom p) = (Cs2i1|dom p) by A1,AMI_1:def 25;
   assume
-A9: I = da>0_goto loc & loc <> Next (IC (Computation s1).i);
+A9: I = da>0_goto loc & loc <> Next (IC  Computation(s1,i));
 A10: now
     assume
-A11: (Computation s1).i.da > 0 & (Computation s2).i.da <= 0;
+A11:  Computation(s1,i).da > 0 &  Computation(s2,i).da <= 0;
     then Cs1i1.IC SCM = loc by A2,A5,A9,AMI_3:15;
     hence contradiction by A3,A4,A6,A7,A8,A9,A11,AMI_3:15;
   end;
   now
     assume
-A12: (Computation s2).i.da > 0 & (Computation s1).i.da <= 0;
+A12:  Computation(s2,i).da > 0 &  Computation(s1,i).da <= 0;
     then Cs2i1.IC SCM = loc by A4,A6,A9,AMI_3:15;
     hence contradiction by A2,A5,A7,A8,A9,A12,AMI_3:15;
   end;
-  hence (Computation s1).i.da > 0 iff (Computation s2).i.da > 0 by A10;
+  hence  Computation(s1,i).da > 0 iff  Computation(s2,i).da > 0 by A10;
 end;
 
 theorem

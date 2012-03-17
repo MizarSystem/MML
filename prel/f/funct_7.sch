@@ -10,14 +10,15 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="WELLORD2"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -71,7 +72,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="81">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -126,7 +127,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="21">
+<Pred kind="V" nr="22">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -143,7 +144,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="21">
+<Pred kind="V" nr="22">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
@@ -191,7 +192,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="4">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -279,7 +280,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="4">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -337,8 +338,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -353,8 +354,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 <Not>
@@ -371,9 +372,9 @@
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="102">
+<Func kind="K" nr="121">
 <Var nr="1"/>
-<Func kind="K" nr="104">
+<Func kind="K" nr="123">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -398,7 +399,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="4">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

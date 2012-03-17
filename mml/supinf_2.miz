@@ -8,19 +8,19 @@ environ
 
  vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
       RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
-      PARTFUN1, ARYTM;
+      PARTFUN1, ARYTM, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XCMPLX_0,
       REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1,
-      FUNCT_4, NAT_1, CARD_4, SUPINF_1;
- constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, NAT_D,
-      SUPINF_1, CARD_4, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
-      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, VALUED_1;
+      VALUED_0, FUNCT_4, NAT_1, CARD_4, SUPINF_1;
+ constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, SUPINF_1,
+      CARD_4, VALUED_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1,
+      NUMBERS, XREAL_0, MEMBERED, VALUED_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SUPINF_1, XBOOLE_0, XCMPLX_0, XXREAL_0, VALUED_1;
+ definitions TARSKI, SUPINF_1, XBOOLE_0, XCMPLX_0, XXREAL_0;
  theorems TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1, RELSET_1, CARD_4,
       SUBSET_1, FUNCT_4, FUNCOP_1, RELAT_1, ZFMISC_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, XREAL_0, PARTFUN1, ORDINAL1, NUMBERS;
+      XREAL_1, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS;
  schemes SUPINF_1, FUNCT_2, RECDEF_1, NAT_1;
 
 begin :: operations " + "," - " in R_eal numbers
@@ -1078,26 +1078,18 @@ definition
   let Y be non empty Subset of ExtREAL;
   let F be Function of X,Y;
   func sup F -> R_eal equals
-
   sup rng F;
   coherence;
   func inf F -> R_eal equals
-
   inf rng F;
   coherence;
 end;
 
 definition
-  let X be non empty set;
-  let Y be non empty Subset of ExtREAL;
-  let F be Function of X,Y;
-  let x be Element of X;
+  let F be ext-real-valued Function;
+  let x be set;
   redefine func F.x -> R_eal;
-  coherence
-  proof
-    F.x in ExtREAL by TARSKI:def 3;
-    hence thesis;
-  end;
+  coherence by XXREAL_0:def 1;
 end;
 
 definition
@@ -1738,8 +1730,8 @@ A12:      now
             hence contradiction by A7,A11,XBOOLE_0:def 10;
           end;
           dom(NAT \ f"IT --> x) = NAT \ f"IT by FUNCOP_1:19;
-          then F = (f|(f"IT)) \/ (NAT \ f"IT --> x) by A8,FUNCT_4:32,XBOOLE_1:
-          89;
+          then F = (f|(f"IT)) \/ (NAT \ f"IT --> x) by A8,FUNCT_4:32
+          ,XBOOLE_1:89;
           hence rng F = rng(f|(f"IT)) \/ rng(NAT \ f"IT --> x) by RELAT_1:26
             .= rng(f|(f"IT)) \/ {x} by A12,FUNCOP_1:14
             .= f.:(f"IT) \/ {x} by RELAT_1:148
@@ -1814,24 +1806,6 @@ definition
   existence by Def14;
 end;
 
-definition
-  let X be set;
-  let f be PartFunc of X,ExtREAL;
-  let x be set;
-  redefine func f.x -> R_eal;
-  coherence
-  proof
-    per cases;
-    suppose x in dom f;
-      hence thesis by PARTFUN1:27;
-    end;
-    suppose not x in dom f;
-      then f.x = 0. by FUNCT_1:def 4;
-      hence thesis;
-    end;
-  end;
-end;
-
 theorem Th53:
   for D being Denum_Set_of_R_EAL holds for N being Num of D holds
   ex F being Function of NAT,ExtREAL st F.0 = N.0 &
@@ -1891,7 +1865,7 @@ A5:     for k being Element of NAT st P[k] holds P[k+1]
           let k be Element of NAT;
           assume
 A6:       S1.k = S2.k;
-          reconsider y1 = S1.k, y2 = S2.k as R_eal;
+          reconsider y2 = S2.k as R_eal;
           thus S1.(k + 1) = y2 + N.(k + 1) by A1,A6
             .= S2.(k + 1) by A2;
         end;

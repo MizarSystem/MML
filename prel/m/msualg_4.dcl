@@ -11,16 +11,16 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -166,7 +166,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

@@ -12,10 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
@@ -32,7 +32,6 @@
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="WAYBEL_8"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -78,7 +77,7 @@
 <Adjective nr="151"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster>
 <Adjective nr="160">
 <LocusVar nr="1"/>
@@ -87,9 +86,9 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
-<Func kind="K" nr="185">
-<Func kind="K" nr="178">
+<Func kind="K" nr="195">
+<Func kind="K" nr="186">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -113,8 +112,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="194">
-<Func kind="K" nr="255">
+<Func kind="K" nr="195">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 </Func>
 </Func>

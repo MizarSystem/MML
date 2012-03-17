@@ -18,13 +18,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
-<ArticleID name="NEWTON"/>
 <ArticleID name="INT_5"/>
 </Signature>
 <FCluster>
@@ -40,30 +38,9 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="12">
-<Func kind="K" nr="175">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="17"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="160">
-<LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>

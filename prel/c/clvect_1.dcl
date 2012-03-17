@@ -73,13 +73,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="46"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
 </Cluster>

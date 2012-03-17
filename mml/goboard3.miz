@@ -10,19 +10,18 @@ environ
       FINSEQ_4, BOOLE, MATRIX_1, FUNCT_1, ABSVALUE, ARYTM_1, MCART_1, TREES_1,
       INCSP_1, SEQM_3, ORDINAL2, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, COMPLEX1,
-      NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, PRE_TOPC, FINSEQ_4,
-      STRUCT_0, MATRIX_1, EUCLID, TOPREAL1, GOBOARD1, XXREAL_0;
- constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, TOPREAL1, SEQ_1,
-      GOBOARD1, INT_1, VALUED_1;
+      NAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, PRE_TOPC, STRUCT_0, MATRIX_1, EUCLID,
+      TOPREAL1, GOBOARD1, XXREAL_0;
+ constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, TOPREAL1, SEQ_1, GOBOARD1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, STRUCT_0, EUCLID, SEQ_1, INT_1, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, STRUCT_0, EUCLID, INT_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, TOPREAL1, XBOOLE_0, VALUED_1;
+ definitions TARSKI, TOPREAL1, XBOOLE_0;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       FINSEQ_3, REAL_2, MATRIX_1, EUCLID, TOPREAL1, TOPREAL3, GOBOARD1,
       GOBOARD2, FINSEQ_4, PARTFUN2, INT_1, XBOOLE_0, XBOOLE_1, XREAL_1,
-      COMPLEX1, XXREAL_0, PARTFUN1, ORDINAL1;
- schemes NAT_1, FINSEQ_4, GOBOARD2;
+      COMPLEX1, XXREAL_0, PARTFUN1, ORDINAL1, CARD_2, RELAT_1;
+ schemes NAT_1, FINSEQ_4;
 
 begin
 
@@ -82,10 +81,10 @@ A2: len f=0 &
     (for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j)) &
     f is one-to-one unfolded s.n.c. special;
     take g=f;
-    f= {} by A2,FINSEQ_1:25;
+    f= {} by A2,CARD_2:59;
     then for n holds n in dom g & n+1 in dom g implies (
     for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G & g/.n=G*(m,k) &
-    g/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1) by FINSEQ_1:26;
+    g/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1) by RELAT_1:60;
     hence thesis by A2,GOBOARD1:def 11;
   end;
 A3: for k st P[k] holds P[k+1]
@@ -270,17 +269,18 @@ then reconsider w=i2-n as Element of NAT by A74,INT_1:18,XXREAL_0:2;
                 hence i2-n is Element of NAT & [i1,i2-n] in Indices G &
                 i2-n in Seg width G by A50,A51,ZFMISC_1:106;
               end;
-              defpred P1[Element of NAT,set] means for m st m=i2-$1
+              defpred P1[Nat,set] means for m st m=i2-$1
               holds $2=G*(i1,m);
 A75:          now
-                let n;
+                let n be Nat;
                 assume n in Seg l;
                 then reconsider m=i2-n as Element of NAT by A73;
                 take p=G*(i1,m);
                 thus P1[n,p];
               end;
               consider g2 such that
-A76:          len g2=l & for n st n in Seg l holds P1[n,g2/.n]
+A76:          len g2=l &
+for n being Nat st n in Seg l holds P1[n,g2/.n]
               from FINSEQ_4:sch 1(A75);
 A77:          dom g2 = Seg l by A76,FINSEQ_1:def 3;
               take g=g1^g2;
@@ -397,8 +397,7 @@ A101:           g2/.n=pn & l1/.n1=pn & 0<=n & i2-len g2<= n1
                 then
 A102:           x1.n1=pn`1 & x1.n1=x1.i2 & y1.n1=pn`2 & n1 <=i2 & j2<=n1
 
-by A51,A54,A58,A59,A60,A61,A62,A76,A100,GOBOARD1:def 2,def 3,def 4
-                ,REAL_2:173;
+by A51,A54,A58,A59,A60,A61,A62,A76,A100,GOBOARD1:def 2,def 3,def 4,REAL_2:173;
                 hence p`1=ppi`1 & pj`2<=p`2 & p`2<=ppi`2
                 by A51,A55,A59,A60,A62,A87,A99,A100,A101,GOBOARD2:18;
                 dom l1 = Seg len l1 by FINSEQ_1:def 3;
@@ -479,19 +478,17 @@ A118:           n+(1+1) = n+1+1;
                 n+1 <= n+2 by XREAL_1:8;
                 then n+1 <= len g2 by A112,XXREAL_0:2;
                 then
-A119:           LSeg(g2,n)=LSeg(u,u1) by A112,A115,A116, TOPREAL1:def 5;
+A119:           LSeg(g2,n)=LSeg(u,u1) by A112,A115,A116,TOPREAL1:def 5;
                 1 <= n+1 by NAT_1:11;
                 then
-A120:           LSeg(g2,n+1)=LSeg(u1,u2) by A112,A116,A117
-                ,A118,TOPREAL1:def 5;
+A120:           LSeg(g2,n+1)=LSeg(u1,u2) by A112,A116,A117,A118,TOPREAL1:def 5;
                 n<n+1 & n+1<n+1+1 & n+1+1=n+(1+1) by NAT_1:13;
                 then
-A121:           u2`2<u1`2 & u1`2<u`2 by A103,A113,A115, A116,A117;
+A121:           u2`2<u1`2 & u1`2<u`2 by A103,A113,A115,A116,A117;
                 then
-A122:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A116,
-                EUCLID:57;
+A122:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A116,EUCLID:57;
 
-then LSeg(g2/.n,g2/.(n+2))=lg by A115,A117,A121,TOPREAL3:15,XXREAL_0 :2;
+then LSeg(g2/.n,g2/.(n+2))=lg by A115,A117,A121,TOPREAL3:15,XXREAL_0:2;
                 hence thesis by A115,A116,A117,A119,A120,A122,TOPREAL1:14;
               end;
               thus g is unfolded
@@ -509,7 +506,7 @@ A128:           n+(1+1)=n+1+1;
 A129:           len g=len g1+len g2 by FINSEQ_1:35;
                 n+2-len g1 = n-len g1 +2;
                 then
-A130:           n-len g1 + 2 <= len g2 by A123,A129, XREAL_1:22;
+A130:           n-len g1 + 2 <= len g2 by A123,A129,XREAL_1:22;
 A131:           n+1+1 = n+(1+1);
                 per cases;
                 suppose
@@ -550,7 +547,7 @@ A140:                 g/.(n+1)=f1/.len f1 by A35,A134,A138,FINSEQ_4:83
                         .= ppi by A15,A16,A18,A47,FINSEQ_4:86;
 A141:                 1<=len g-len g1 by A124,A134,XREAL_1:21;
                       then
-A142:                 g/.(n+2)=g2/.1 by A128,A129, A134,GOBOARD2:5;
+A142:                 g/.(n+2)=g2/.1 by A128,A129,A134,GOBOARD2:5;
                       1 in dom g2 by A129,A141,FINSEQ_3:27;
                       then
 A143:                 g2/.1 in rng g2 by PARTFUN2:4;
@@ -561,7 +558,7 @@ A144:                 g2/.1=u1 & u1`1=ppi`1 & pj`2<=u1`2 & u1`2<=ppi`2;
                       then LSeg(ppi,u1) c= LSeg(f,k) & LSeg(g,n+1)=LSeg(ppi,u1
                       )
 
-by A90,A107,A123,A125,A131,A140,A142,A143,A144,TOPREAL1:12 ,def 5;
+by A90,A107,A123,A125,A131,A140,A142,A143,A144,TOPREAL1:12,def 5;
                       then
 A145:                 LSeg(g,n) /\ LSeg(g,n+1) c= {g /.(n+1)}
                       by A47,A136,A137,A139,A140,XBOOLE_1:27;
@@ -623,7 +620,7 @@ hence thesis by A149,A154,A155,A158,A159,A160,TOPREAL1:14;
                         end;
                         suppose len g1<>n;
                           then
-A161:                     len g1<n by A146, REAL_1:def 5;
+A161:                     len g1<n by A146,REAL_1:def 5;
                           n1 + len g1 = n;
                           then
 A162:                     LSeg(g,n)=LSeg(g2,n1) by A127,A161,GOBOARD2:10;
@@ -732,7 +729,7 @@ A190:         L~g1 /\ L~g2 = {}
                   then 1<k by A14,REAL_1:def 5;
                   then L~g1 /\ LSeg(f,k)={f/.k} by A5,A8,A9,A33,GOBOARD2:9;
                   then
-A191:             L~g1 /\ L~g2 c= {f/.k} by A180, XBOOLE_1:26;
+A191:             L~g1 /\ L~g2 c= {f/.k} by A180,XBOOLE_1:26;
                   now consider x being Element of L~g1 /\ L~g2;
                     assume L~g1 /\ L~g2 <> {};
 
@@ -781,7 +778,7 @@ A203:           n+1<=m+1 by A192,A194,XXREAL_0:2;
                   suppose
 A204:               m+1<=len g1;
                     then
-A205:               m<=len g1 & n+1<=len g1 by A194, A203,XXREAL_0:2;
+A205:               m<=len g1 & n+1<=len g1 by A194,A203,XXREAL_0:2;
                     then n<=len g1 by A194,XXREAL_0:2;
 
 then n in dom g1 & n+1 in dom g1 & m in dom g1 & m+1 in dom g1
@@ -815,7 +812,7 @@ A210:                   n in dom g1 & n+1 in dom g1
 A211:                   LSeg(g,n)=LSeg(g1,n) by TOPREAL3:25;
                         then LSeg(g,n) in l1 by A192,A194,A207;
                         then
-A212:                   LSeg(g,n) c= L~f1 by A33, ZFMISC_1:92;
+A212:                   LSeg(g,n) c= L~f1 by A33,ZFMISC_1:92;
                         LSeg(g,m) c= LSeg(f,k)
                         proof
                           let x;
@@ -871,7 +868,7 @@ then LSeg(g,n) /\ LSeg(g,m) = {} by A190,A220,XBOOLE_1:3,27;
                           end;
                           suppose len g1<n+1;
                             then
-A222:                       len g1<=n by NAT_1 :13;
+A222:                       len g1<=n by NAT_1:13;
 
 then reconsider n1=n-len g1 as Element of NAT by INT_1:18;
 A223:                       n - len g1 + 1 = n + 1 - len g1;
@@ -970,12 +967,12 @@ A237:                 j=len g1;
                       1<=len g1 by A14,A16,A36,XXREAL_0:2;
                       then len g1 in dom g1 by FINSEQ_3:27;
                       then
-A238:                 g/.len g1 = f1/.len f1 by A35, FINSEQ_4:83
+A238:                 g/.len g1 = f1/.len f1 by A35,FINSEQ_4:83
                         .= G*(i1,i2) by A15,A16,A18,A47,FINSEQ_4:86;
                       hence p`1=G*(i1,i2)`1 by A236,A237;
 
-thus G*(i1,j2)`2<=p`2 & p`2<=G*(i1,i2)`2 by A51,A55,A59,A60,A62
-                      ,A72,A87,A236,A237,A238,GOBOARD1:def 1;
+thus G*(i1,j2)`2<=p`2 & p`2<=G*(i1,i2)`2 by A51,A55,A59,A60,A62,A72,A87,A236
+                      ,A237,A238,GOBOARD1:def 1;
                       dom l1 = Seg len l1 by FINSEQ_1:def 3;
 
 hence p in rng l1 by A51,A62,A86,A236,A237,A238,PARTFUN2:4;
@@ -984,7 +981,7 @@ hence p in rng l1 by A51,A62,A86,A236,A237,A238,PARTFUN2:4;
                       then len g1 < j by A235,REAL_1:def 5;
                       then len g1 + 1<=j by NAT_1:13;
                       then
-A239:                 1<=w & w<=len g2 by A233,A235, XREAL_1:21,22;
+A239:                 1<=w & w<=len g2 by A233,A235,XREAL_1:21,22;
                       w + len g1 = j;
                       then
 A240:                 g/.j=g2/.w by A239,GOBOARD2:5;
@@ -1013,7 +1010,7 @@ then 1<=i & i<=len g1 & 1<=i+1 & i+1<=len g1 by A242,XXREAL_0:2;
                     then X=LSeg(g1,i) by A242,TOPREAL3:25;
                     then X in {LSeg(g1,j): 1<=j & j+1 <= len g1} by A242,A243;
 
-then x in L~f1 & L~f1 c= L~f by A33,A241,TARSKI:def 4,TOPREAL3: 27;
+then x in L~f1 & L~f1 c= L~f by A33,A241,TARSKI:def 4,TOPREAL3:27;
                     hence thesis;
                   end;
                   suppose
@@ -1065,7 +1062,7 @@ then x in LSeg(f,k) & LSeg(f,k) in lf by A14,A89,A247,A251;
                 let x;
                 assume x in L~f;
                 then
-A252:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2: 8;
+A252:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2:8;
                 per cases by A252,XBOOLE_0:def 2;
                 suppose x in L~f1;
                   then x in L~g1 & L~g1 c= L~g by A33,GOBOARD2:11;
@@ -1101,11 +1098,11 @@ A257:             P2[ma] & for n be Nat st P2[n] holds n<=ma from NAT_1:sch 6
 A258:                 ma=len g;
                       j2+1<=i2 by A72,NAT_1:13;
                       then
-A259:                 1<=l & l=len g2 by A76,XREAL_1 :21;
+A259:                 1<=l & l=len g2 by A76,XREAL_1:21;
                       then
 A260:                 l in dom g2 & i2-l=j2 by FINSEQ_3:27;
                       then
-A261:                 g/.ma=g2/.l by A76,A233,A258, FINSEQ_4:84
+A261:                 g/.ma=g2/.l by A76,A233,A258,FINSEQ_4:84
                         .= pj by A76,A77,A260;
                       then p1`2<=pj`2 by A257;
                       then
@@ -1123,7 +1120,7 @@ A265:                 1<=m1 by A264,XXREAL_0:2;
 A266:                 q`1=ppi`1 & pj`2<=q`2 & q=|[q`1,q`2]| & m1+1=ma
                       by A234,A263,A264,EUCLID:57;
                       then
-A267:                 LSeg(g,m1)=LSeg(pj,q) by A258, A261,A265,TOPREAL1:def 5;
+A267:                 LSeg(g,m1)=LSeg(pj,q) by A258,A261,A265,TOPREAL1:def 5;
 
 set lq={e where e is Point of TOP-REAL 2: e`1=ppi`1 & pj`2<=e`2 & e`2<=q`2};
                       LSeg(g,m1)=lq by A88,A266,A267,TOPREAL3:15;
@@ -1186,10 +1183,10 @@ A276:         i2=j2;
             case
 A277:         i2<j2;
               then reconsider l=j2-i2 as Element of NAT by INT_1:18;
-              deffunc F(Element of NAT) = G*(i1,i2+$1);
+              deffunc F(Nat) = G*(i1,i2+$1);
               consider g2 such that
-A278:         len g2=l & for n st n in dom g2 holds g2/.n=F(n) from
-              GOBOARD2:sch 1;
+A278:         len g2=l & for n being Nat st n in dom g2 holds g2/.n=F(n) from
+              FINSEQ_4:sch 2;
               take g=g1^g2;
 A279:         now
                 let n;
@@ -1312,8 +1309,7 @@ A300:           g2/.n=pn & l1/.n1=pn & 0<=n & n1<=i2+len g2
                 then
 A301:           x1.n1=pn`1 & x1.n1=x1.i2 & y1.n1=pn`2 & n1 <=j2 & i2<=n1
 
-by A51,A54,A58,A59,A60,A61,A62,A278,A299,GOBOARD1:def 2,def 3,def 4
-                ,REAL_2:173;
+by A51,A54,A58,A59,A60,A61,A62,A278,A299,GOBOARD1:def 2,def 3,def 4,REAL_2:173;
                 hence p`1=ppi`1 & ppi`2<=p`2 & p`2<=pj`2
                 by A51,A55,A59,A60,A62,A288,A298,A299,GOBOARD2:18;
                 dom l1 = Seg len l1 by FINSEQ_1:def 3;
@@ -1399,12 +1395,11 @@ A319:           LSeg(g2,n)=LSeg(u,u1) & LSeg(g2,n+1)=LSeg( u1,u2) &
                 by A311,A314,A315,A316,A317,A318,TOPREAL1:def 5;
                 n<n+1 & n+1<n+1+1 & n+1+1=n+(1+1) by NAT_1:13;
                 then
-A320:           u1`2<u2`2 & u`2<u1`2 by A302,A312,A314, A315,A316;
+A320:           u1`2<u2`2 & u`2<u1`2 by A302,A312,A314,A315,A316;
                 then
-A321:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A315,
-                EUCLID:57;
+A321:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A315,EUCLID:57;
 
-then LSeg(g2/.n,g2/.(n+2))=lg by A314,A316,A320,TOPREAL3:15,XXREAL_0 :2;
+then LSeg(g2/.n,g2/.(n+2))=lg by A314,A316,A320,TOPREAL3:15,XXREAL_0:2;
                 hence thesis by A315,A319,A321,TOPREAL1:14;
               end;
               thus g is unfolded
@@ -1422,7 +1417,7 @@ A327:           n+(1+1)=n+1+1;
 A328:           len g=len g1+len g2 by FINSEQ_1:35;
                 n+2-len g1 = n-len g1 +2;
                 then
-A329:           n-len g1 + 2 <= len g2 by A322,A328, XREAL_1:22;
+A329:           n-len g1 + 2 <= len g2 by A322,A328,XREAL_1:22;
                 per cases;
                 suppose
 A330:             n+2 <= len g1;
@@ -1462,7 +1457,7 @@ A338:                 g/.(n+1)=f1/.len f1 by A35,A332,A336,FINSEQ_4:83
                         .= ppi by A15,A16,A18,A47,FINSEQ_4:86;
 A339:                 1<=len g-len g1 by A323,A332,XREAL_1:21;
                       then
-A340:                 g/.(n+2)=g2/.1 by A327,A328, A332,GOBOARD2:5;
+A340:                 g/.(n+2)=g2/.1 by A327,A328,A332,GOBOARD2:5;
                       1 in dom g2 by A328,A339,FINSEQ_3:27;
                       then
 A341:                 g2/.1 in rng g2 by PARTFUN2:4;
@@ -1473,7 +1468,7 @@ A342:                 g2/.1=u1 & u1`1=ppi`1 & ppi`2<=u1`2 & u1`2<=pj`2;
                       then LSeg(ppi,u1) c= LSeg(f,k) & LSeg(g,n+1)=LSeg(ppi,u1
                       )
 
-by A291,A306,A322,A324,A327,A338,A340,A341,A342,TOPREAL1:12 ,def 5;
+by A291,A306,A322,A324,A327,A338,A340,A341,A342,TOPREAL1:12,def 5;
                       then
 A343:                 LSeg(g,n) /\ LSeg(g,n+1) c= {g /.(n+1)}
                       by A47,A334,A335,A337,A338,XBOOLE_1:27;
@@ -1532,7 +1527,7 @@ u1 in LSeg(ppi,u2) by A289,A353,A355,A356,TOPREAL3:15;
                         end;
                         suppose len g1<>n;
                           then
-A358:                     len g1<n by A344, REAL_1:def 5;
+A358:                     len g1<n by A344,REAL_1:def 5;
                           n1 + len g1 = n;
                           then
 A359:                     LSeg(g,n)=LSeg(g2,n1) by A326,A358,GOBOARD2:10;
@@ -1639,7 +1634,7 @@ A385:         L~g1 /\ L~g2 = {}
                   then 1<k by A14,REAL_1:def 5;
                   then L~g1 /\ LSeg(f,k)={f/.k} by A5,A8,A9,A33,GOBOARD2:9;
                   then
-A386:             L~g1 /\ L~g2 c= {f/.k} by A375, XBOOLE_1:26;
+A386:             L~g1 /\ L~g2 c= {f/.k} by A375,XBOOLE_1:26;
                   now consider x being Element of L~g1 /\ L~g2;
                     assume L~g1 /\ L~g2 <> {};
 
@@ -1689,7 +1684,7 @@ A398:           n+1<=m+1 by A387,A389,XXREAL_0:2;
                   suppose
 A399:               m+1<=len g1;
                     then
-A400:               m<=len g1 & n+1<=len g1 by A389, A398,XXREAL_0:2;
+A400:               m<=len g1 & n+1<=len g1 by A389,A398,XXREAL_0:2;
                     then n<=len g1 by A389,XXREAL_0:2;
 
 then n in dom g1 & n+1 in dom g1 & m in dom g1 & m+1 in dom g1
@@ -1723,7 +1718,7 @@ A405:                   n in dom g1 & n+1 in dom g1
 A406:                   LSeg(g,n)=LSeg(g1,n) by TOPREAL3:25;
                         then LSeg(g,n) in l1 by A387,A389,A402;
                         then
-A407:                   LSeg(g,n) c= L~f1 by A33, ZFMISC_1:92;
+A407:                   LSeg(g,n) c= L~f1 by A33,ZFMISC_1:92;
                         LSeg(g,m) c= LSeg(f,k)
                         proof
                           let x;
@@ -1779,7 +1774,7 @@ then LSeg(g,n) /\ LSeg(g,m) = {} by A385,A415,XBOOLE_1:3,27;
                           end;
                           suppose len g1<n+1;
                             then
-A417:                       len g1<=n by NAT_1 :13;
+A417:                       len g1<=n by NAT_1:13;
 
 then reconsider n1=n-len g1 as Element of NAT by INT_1:18;
 A418:                       n - len g1 + 1 = n + 1 - len g1;
@@ -1879,7 +1874,7 @@ A432:               j=len g1;
                     1<=len g1 by A14,A16,A36,XXREAL_0:2;
                     then len g1 in dom g1 by FINSEQ_3:27;
                     then
-A433:               g/.len g1 = f1/.len f1 by A35, FINSEQ_4:83
+A433:               g/.len g1 = f1/.len f1 by A35,FINSEQ_4:83
                       .= G*(i1,i2) by A15,A16,A18,A47,FINSEQ_4:86;
                     hence p`1=G*(i1,i2)`1 by A431,A432;
                     thus G*(i1,i2)`2<=p`2 & p`2<=G*
@@ -1895,7 +1890,7 @@ A434:               len g1 < j by A430,REAL_1:def 5;
 A435:               j = w + len g1;
                     len g1 + 1<=j by A434,NAT_1:13;
                     then
-A436:               1<=w & w<=len g2 by A428,A430, XREAL_1:21,22;
+A436:               1<=w & w<=len g2 by A428,A430,XREAL_1:21,22;
                     then
 A437:               g/.j=g2/.w by A435,GOBOARD2:5;
                     w in dom g2 by A436,FINSEQ_3:27;
@@ -1921,7 +1916,7 @@ then 1<=i & i<=len g1 & 1<=i+1 & i+1<=len g1 by A439,XXREAL_0:2;
                     then X=LSeg(g1,i) by A439,TOPREAL3:25;
                     then X in {LSeg(g1,j): 1<=j & j+1 <= len g1} by A439,A440;
 
-then x in L~f1 & L~f1 c= L~f by A33,A438,TARSKI:def 4,TOPREAL3: 27;
+then x in L~f1 & L~f1 c= L~f by A33,A438,TARSKI:def 4,TOPREAL3:27;
                     hence thesis;
                   end;
                   suppose
@@ -1975,7 +1970,7 @@ then x in LSeg(f,k) & LSeg(f,k) in lf by A14,A290,A444,A448;
                 let x;
                 assume x in L~f;
                 then
-A449:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2: 8;
+A449:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2:8;
                 now per cases by A449,XBOOLE_0:def 2;
                   suppose x in L~f1;
                     then x in L~g1 & L~g1 c= L~g by A33,GOBOARD2:11;
@@ -2014,11 +2009,11 @@ A456:                   1<=l by XREAL_1:21;
                         then
 A457:                   l in dom g2 & i2+l=j2 by A278,FINSEQ_3:27;
                         then
-A458:                   g/.ma=g2/.l by A278,A428, A455,FINSEQ_4:84
+A458:                   g/.ma=g2/.l by A278,A428,A455,FINSEQ_4:84
                           .= pj by A278,A457;
                         then pj`2<=p1`2 by A454;
                         then
-A459:                   p1`2=pj`2 by A450,XXREAL_0 :1;
+A459:                   p1`2=pj`2 by A450,XXREAL_0:1;
 A460:                   ma-1<=len g & len g1+1<=ma
                         by A278,A428,A455,A456,XREAL_1:9,45;
                         then
@@ -2082,8 +2077,7 @@ then x in LSeg(g,ma) & LSeg(g,ma) in lg by A450,A465,A466,A467,A468;
               then
 A471:         1<=l by XREAL_1:21;
               then
-A472:         l in dom g2 & len g=len g1 + l by A278,
-              FINSEQ_1:35 ,FINSEQ_3:27;
+A472:         l in dom g2 & len g=len g1 + l by A278,FINSEQ_1:35,FINSEQ_3:27;
               hence g/.len g=g2/.l by FINSEQ_4:84
                 .=G*(i1,i2+l) by A278,A472
                 .=f/.len f by A5,A49,A71;
@@ -2116,17 +2110,17 @@ then reconsider w=i1-n as Element of NAT by A476,INT_1:18,XXREAL_0:2;
 hence i1-n is Element of NAT & [i1-n,i2] in Indices G & i1-n in dom G
                 by A50,A51,ZFMISC_1:106;
               end;
-              defpred P1[Element of NAT,set] means for m st m=i1-$1
+              defpred P1[Nat,set] means for m st m=i1-$1
               holds $2=G*(m,i2);
 A477:         now
-                let n;
+                let n be Nat;
                 assume n in Seg l;
                 then reconsider m=i1-n as Element of NAT by A475;
                 take p=G*(m,i2);
                 thus P1[n,p];
               end;
               consider g2 such that
-A478:         len g2 = l & for n st n in Seg l holds P1[n,g2/.n]
+A478:         len g2 = l & for n being Nat st n in Seg l holds P1[n,g2/.n]
               from FINSEQ_4:sch 1(A477);
 A479:         dom g2=Seg l by A478,FINSEQ_1:def 3;
               take g=g1^g2;
@@ -2196,7 +2190,7 @@ A489:         y2.i1=ppi`2 & y2.j1=pj`2 & x2.i1=ppi`1 & x2.j1 =pj`1 & len g2 =l
 A490:         pj`1<ppi`1 & ppi`2=pj`2 & ppi=|[ppi`1,ppi`2]| & pj=|[pj`1,pj
               `2]|
 
-by A51,A52,A56,A57,A64,A65,A66,A68,A69,A474,EUCLID:57,GOBOARD1:def 1 ,def 2;
+by A51,A52,A56,A57,A64,A65,A66,A68,A69,A474,EUCLID:57,GOBOARD1:def 1,def 2;
 A491:         LSeg(f,k)=LSeg(pj,ppi) by A14,A47,A49,A473,TOPREAL1:def 5
                 .= lk by A490,TOPREAL3:16;
 A492:         LSeg(f,k)=LSeg(ppi,pj) by A14,A47,A49,A473,TOPREAL1:def 5;
@@ -2245,8 +2239,8 @@ A503:           g2/.n=pn & c1/.n1=pn & 0<=n & i1-len g2<= n1
                 then
 A504:           y2.n1=pn`2 & y2.n1=y2.i1 & x2.n1=pn`1 & n1 <=i1 & j1<=n1
 
-by A51,A52,A57,A64,A65,A66,A68,A69,A478,A502,GOBOARD1:def 2,def 3
-                ,def 4,REAL_2:173;
+by A51,A52,A57,A64,A65,A66,A68,A69,A478,A502,GOBOARD1:def 2,def 3,def 4
+                ,REAL_2:173;
                 hence p`2=ppi`2 & pj`1<=p`1 & p`1<=ppi`1
                 by A51,A52,A56,A64,A66,A69,A489,A501,A502,A503,GOBOARD2:18;
                 thus p in rng c1 by A70,A501,A502,A503,PARTFUN2:4;
@@ -2333,12 +2327,11 @@ A522:           LSeg(g2,n)=LSeg(u,u1) & LSeg(g2,n+1)=LSeg( u1,u2) &
                 by A514,A517,A518,A519,A520,A521,TOPREAL1:def 5;
                 n<n+1 & n+1<n+1+1 & n+1+1=n+(1+1) by NAT_1:13;
                 then
-A523:           u2`1<u1`1 & u1`1<u`1 by A505,A515,A517, A518,A519;
+A523:           u2`1<u1`1 & u1`1<u`1 by A505,A515,A517,A518,A519;
                 then
-A524:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A518,
-                EUCLID:57;
+A524:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A518,EUCLID:57;
 
-then LSeg(g2/.n,g2/.(n+2))=lg by A517,A519,A523,TOPREAL3:16,XXREAL_0 :2;
+then LSeg(g2/.n,g2/.(n+2))=lg by A517,A519,A523,TOPREAL3:16,XXREAL_0:2;
                 hence thesis by A518,A522,A524,TOPREAL1:14;
               end;
               thus g is unfolded
@@ -2356,7 +2349,7 @@ A530:           n+(1+1)=n+1+1;
 A531:           len g=len g1+len g2 by FINSEQ_1:35;
                 n+2-len g1 = n-len g1 +2;
                 then
-A532:           n-len g1 + 2 <= len g2 by A525,A531, XREAL_1:22;
+A532:           n-len g1 + 2 <= len g2 by A525,A531,XREAL_1:22;
                 per cases;
                 suppose
 A533:             n+2 <= len g1;
@@ -2397,7 +2390,7 @@ A541:                 g/.(n+1)=f1/.len f1 by A35,A535,A539,FINSEQ_4:83
                         .= ppi by A15,A16,A18,A47,FINSEQ_4:86;
                       1 <= len g2 by A525,A530,A531,A535,XREAL_1:8;
                       then
-A542:                 g/.(n+2)=g2/.1 by A530,A535, GOBOARD2:5;
+A542:                 g/.(n+2)=g2/.1 by A530,A535,GOBOARD2:5;
                       1<=len g-len g1 by A526,A535,XREAL_1:21;
                       then 1 in dom g2 by A531,FINSEQ_3:27;
                       then
@@ -2409,7 +2402,7 @@ A544:                 g2/.1=u1 & u1`2=ppi`2 & pj`1<=u1`1 & u1`1<=ppi`1;
                       then LSeg(ppi,u1) c= LSeg(f,k) & LSeg(g,n+1)=LSeg(ppi,u1
                       )
 
-by A492,A509,A525,A527,A530,A541,A542,A543,A544,TOPREAL1:12 ,def 5;
+by A492,A509,A525,A527,A530,A541,A542,A543,A544,TOPREAL1:12,def 5;
                       then
 A545:                 LSeg(g,n) /\ LSeg(g,n+1) c= {g /.(n+1)}
                       by A47,A537,A538,A540,A541,XBOOLE_1:27;
@@ -2470,7 +2463,7 @@ by A525,A527,A529,A530,A548,A550,A551,A554,A555,TOPREAL1:def 5;
                         end;
                         suppose len g1<>n;
                           then
-A560:                     len g1<n by A546, REAL_1:def 5;
+A560:                     len g1<n by A546,REAL_1:def 5;
                           n1 + len g1 = n;
                           then
 A561:                     LSeg(g,n)=LSeg(g2,n1) by A529,A560,GOBOARD2:10;
@@ -2576,7 +2569,7 @@ A587:         L~g1 /\ L~g2 = {}
                   then 1<k by A14,REAL_1:def 5;
                   then L~g1 /\ LSeg(f,k)={f/.k} by A5,A8,A9,A33,GOBOARD2:9;
                   then
-A588:             L~g1 /\ L~g2 c= {f/.k} by A577, XBOOLE_1:26;
+A588:             L~g1 /\ L~g2 c= {f/.k} by A577,XBOOLE_1:26;
                   now consider x being Element of L~g1 /\ L~g2;
                     assume L~g1 /\ L~g2 <> {};
 
@@ -2625,7 +2618,7 @@ A600:           n+1<=m+1 by A589,A591,XXREAL_0:2;
                   suppose
 A601:               m+1<=len g1;
                     then
-A602:               m<=len g1 & n+1<=len g1 by A591, A600,XXREAL_0:2;
+A602:               m<=len g1 & n+1<=len g1 by A591,A600,XXREAL_0:2;
                     then n<=len g1 by A591,XXREAL_0:2;
 
 then n in dom g1 & n+1 in dom g1 & m in dom g1 & m+1 in dom g1
@@ -2659,7 +2652,7 @@ A607:                   n in dom g1 & n+1 in dom g1
 A608:                   LSeg(g,n)=LSeg(g1,n) by TOPREAL3:25;
                         then LSeg(g,n) in l1 by A589,A591,A604;
                         then
-A609:                   LSeg(g,n) c= L~f1 by A33, ZFMISC_1:92;
+A609:                   LSeg(g,n) c= L~f1 by A33,ZFMISC_1:92;
                         LSeg(g,m) c= LSeg(f,k)
                         proof
                           let x;
@@ -2715,7 +2708,7 @@ then LSeg(g,n) /\ LSeg(g,m) = {} by A587,A617,XBOOLE_1:3,27;
                           end;
                           suppose len g1<n+1;
                             then
-A619:                       len g1<=n by NAT_1 :13;
+A619:                       len g1<=n by NAT_1:13;
 
 then reconsider n1=n-len g1 as Element of NAT by INT_1:18;
 A620:                       n - len g1 + 1 = n + 1 - len g1;
@@ -2814,12 +2807,12 @@ A634:               j=len g1;
                     1<=len g1 by A14,A16,A36,XXREAL_0:2;
                     then len g1 in dom g1 by FINSEQ_3:27;
                     then
-A635:               g/.len g1 = f1/.len f1 by A35, FINSEQ_4:83
+A635:               g/.len g1 = f1/.len f1 by A35,FINSEQ_4:83
                       .= G*(i1,i2) by A15,A16,A18,A47,FINSEQ_4:86;
                     hence p`2=G*(i1,i2)`2 by A633,A634;
                     thus G*(j1,i2)`1<=p`1 & p`1<=G*
 
-(i1,i2)`1 by A51,A52,A56,A64,A66,A69,A474,A489,A633,A634,A635, GOBOARD1:def 1;
+(i1,i2)`1 by A51,A52,A56,A64,A66,A69,A474,A489,A633,A634,A635,GOBOARD1:def 1;
                     Seg len c1 = dom c1 by FINSEQ_1:def 3;
 
 hence p in rng c1 by A51,A52,A69,A488,A633,A634,A635,PARTFUN2:4;
@@ -2830,7 +2823,7 @@ A636:               len g1 < j by A632,REAL_1:def 5;
 A637:               j = w + len g1;
                     len g1 + 1<=j by A636,NAT_1:13;
                     then
-A638:               1<=w & w<=len g2 by A630,A632, XREAL_1:21,22;
+A638:               1<=w & w<=len g2 by A630,A632,XREAL_1:21,22;
                     then
 A639:               g/.j=g2/.w by A637,GOBOARD2:5;
                     w in dom g2 by A638,FINSEQ_3:27;
@@ -2856,7 +2849,7 @@ then 1<=i & i<=len g1 & 1<=i+1 & i+1<=len g1 by A641,XXREAL_0:2;
                     then X=LSeg(g1,i) by A641,TOPREAL3:25;
                     then X in {LSeg(g1,j): 1<=j & j+1 <= len g1} by A641,A642;
 
-then x in L~f1 & L~f1 c= L~f by A33,A640,TARSKI:def 4,TOPREAL3: 27;
+then x in L~f1 & L~f1 c= L~f by A33,A640,TARSKI:def 4,TOPREAL3:27;
                     hence thesis;
                   end;
                   suppose
@@ -2908,7 +2901,7 @@ then x in LSeg(f,k) & LSeg(f,k) in lf by A14,A491,A646,A650;
                 let x;
                 assume x in L~f;
                 then
-A651:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2: 8;
+A651:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2:8;
                 per cases by A651,XBOOLE_0:def 2;
                 suppose x in L~f1;
                   then x in L~g1 & L~g1 c= L~g by A33,GOBOARD2:11;
@@ -2944,11 +2937,11 @@ A656:             P2[ma] & for n be Nat st P2[n] holds n<=ma from NAT_1:sch 6
 A657:                 ma=len g;
                       j1+1<=i1 by A474,NAT_1:13;
                       then
-A658:                 1<=l & l=len g2 by A478, XREAL_1:21;
+A658:                 1<=l & l=len g2 by A478,XREAL_1:21;
                       then
 A659:                 l in dom g2 & i1-l=j1 by FINSEQ_3:27;
                       then
-A660:                 g/.ma=g2/.l by A478,A630,A657, FINSEQ_4:84
+A660:                 g/.ma=g2/.l by A478,A630,A657,FINSEQ_4:84
                         .= pj by A478,A479,A659;
                       then p1`1<=pj`1 by A656;
                       then
@@ -2966,7 +2959,7 @@ A664:                 1<=m1 by A663,XXREAL_0:2;
 A665:                 q`2=ppi`2 & pj`1<=q`1 & q=|[q`1,q`2]| & m1+1=ma
                       by A631,A662,A663,EUCLID:57;
                       then
-A666:                 LSeg(g,m1)=LSeg(pj,q) by A657, A660,A664,TOPREAL1:def 5;
+A666:                 LSeg(g,m1)=LSeg(pj,q) by A657,A660,A664,TOPREAL1:def 5;
 
 set lq={e where e is Point of TOP-REAL 2: e`2=ppi`2 & pj`1<=e`1 & e`1<=q`1};
                       LSeg(g,m1)=lq by A490,A665,A666,TOPREAL3:16;
@@ -3029,10 +3022,10 @@ A675:         i1=j1;
             case
 A676:         i1<j1;
               then reconsider l=j1-i1 as Element of NAT by INT_1:18;
-              deffunc F(Element of NAT) = G*(i1+$1,i2);
+              deffunc F(Nat) = G*(i1+$1,i2);
               consider g2 such that
-A677:         len g2 = l & for n st n in dom g2 holds g2/.n = F(n)
-              from GOBOARD2:sch 1;
+A677:         len g2 = l & for n being Nat st n in dom g2 holds g2/.n = F(n)
+              from FINSEQ_4:sch 2;
 A678:         Seg l = dom g2 by A677,FINSEQ_1:def 3;
               take g=g1^g2;
 A679:         now
@@ -3107,7 +3100,7 @@ A688:         y2.i1=ppi`2 & y2.j1=pj`2 & x2.i1=ppi`1 & x2.j1 =pj`1
               then
 A689:         ppi`1<pj`1 & ppi`2=pj`2 & ppi=|[ppi`1,ppi`2]| & pj=|[pj`1,pj`2]|
 
-by A51,A56,A57,A64,A65,A66,A67,A68,A70,A676,EUCLID:57,GOBOARD1:def 1 ,def 2;
+by A51,A56,A57,A64,A65,A66,A67,A68,A70,A676,EUCLID:57,GOBOARD1:def 1,def 2;
 A690:         LSeg(f,k)=LSeg(ppi,pj) by A14,A47,A49,A473,TOPREAL1:def 5
                 .= lk by A689,TOPREAL3:16;
 A691:         LSeg(f,k)=LSeg(ppi,pj) by A14,A47,A49,A473,TOPREAL1:def 5;
@@ -3152,8 +3145,8 @@ A700:           g2/.n=pn & c1/.n1=pn & 0<=n & n1<=i1+len g2
                 then
 A701:           y2.n1=pn`2 & y2.n1=y2.i1 & x2.n1=pn`1 & n1 <=j1 & i1<=n1
 
-by A51,A57,A64,A65,A66,A67,A68,A70,A677,A699,GOBOARD1:def 2,def 3
-                ,def 4,REAL_2:173;
+by A51,A57,A64,A65,A66,A67,A68,A70,A677,A699,GOBOARD1:def 2,def 3,def 4
+                ,REAL_2:173;
                 hence p`2=ppi`2 & ppi`1<=p`1 & p`1<=pj`1
                 by A51,A56,A67,A70,A688,A698,A699,GOBOARD2:18;
                 thus p in rng c1 by A70,A698,A699,A700,PARTFUN2:4;
@@ -3237,12 +3230,11 @@ A719:           LSeg(g2,n)=LSeg(u,u1) & LSeg(g2,n+1)=LSeg( u1,u2) &
                 by A711,A714,A715,A716,A717,A718,TOPREAL1:def 5;
                 n<n+1 & n+1<n+1+1 & n+1+1=n+(1+1) by NAT_1:13;
                 then
-A720:           u1`1<u2`1 & u`1<u1`1 by A702,A712,A714, A715,A716;
+A720:           u1`1<u2`1 & u`1<u1`1 by A702,A712,A714,A715,A716;
                 then
-A721:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A715,
-                EUCLID:57;
+A721:           u1 in lg & u=|[u`1,u`2]| & u2=|[u2`1,u2`2 ]| by A715,EUCLID:57;
 
-then LSeg(g2/.n,g2/.(n+2))=lg by A714,A716,A720,TOPREAL3:16,XXREAL_0 :2;
+then LSeg(g2/.n,g2/.(n+2))=lg by A714,A716,A720,TOPREAL3:16,XXREAL_0:2;
                 hence thesis by A715,A719,A721,TOPREAL1:14;
               end;
               thus g is unfolded
@@ -3260,7 +3252,7 @@ A727:           n+(1+1)=n+1+1;
 A728:           len g=len g1+len g2 by FINSEQ_1:35;
                 n+2-len g1 = n-len g1 +2;
                 then
-A729:           n-len g1 + 2 <= len g2 by A722,A728, XREAL_1:22;
+A729:           n-len g1 + 2 <= len g2 by A722,A728,XREAL_1:22;
                 per cases;
                 suppose
 A730:             n+2 <= len g1;
@@ -3299,7 +3291,7 @@ A737:                 LSeg(g,n)=LSeg(g1,n) by TOPREAL3:25;
 A738:                 g/.(n+1)=f1/.len f1 by A35,A732,A736,FINSEQ_4:83
                         .= ppi by A15,A16,A18,A47,FINSEQ_4:86;
 
-n+2 = 1+len g1 & 1 <= len g2 by A722,A727,A728,A732,XREAL_1: 8;
+n+2 = 1+len g1 & 1 <= len g2 by A722,A727,A728,A732,XREAL_1:8;
                       then
 A739:                 g/.(n+2)=g2/.1 by GOBOARD2:5;
                       1<=len g-len g1 by A723,A732,XREAL_1:21;
@@ -3313,7 +3305,7 @@ A741:                 g2/.1=u1 & u1`2=ppi`2 & ppi`1<=u1`1 & u1`1<=pj`1;
                       then LSeg(ppi,u1) c= LSeg(f,k) & LSeg(g,n+1)=LSeg(ppi,u1
                       )
 
-by A691,A706,A722,A724,A727,A738,A739,A740,A741,TOPREAL1:12 ,def 5;
+by A691,A706,A722,A724,A727,A738,A739,A740,A741,TOPREAL1:12,def 5;
                       then
 A742:                 LSeg(g,n) /\ LSeg(g,n+1) c= {g /.(n+1)}
                       by A47,A734,A735,A737,A738,XBOOLE_1:27;
@@ -3372,7 +3364,7 @@ u1 in LSeg(ppi,u2) by A689,A752,A754,A755,TOPREAL3:16;
                         end;
                         suppose len g1<>n;
                           then
-A757:                     len g1<n by A743, REAL_1:def 5;
+A757:                     len g1<n by A743,REAL_1:def 5;
                           n1 + len g1 = n;
                           then
 A758:                     LSeg(g,n)=LSeg(g2,n1) by A726,A757,GOBOARD2:10;
@@ -3478,7 +3470,7 @@ A784:         L~g1 /\ L~g2 = {}
                   then 1<k by A14,REAL_1:def 5;
                   then L~g1 /\ LSeg(f,k)={f/.k} by A5,A8,A9,A33,GOBOARD2:9;
                   then
-A785:             L~g1 /\ L~g2 c= {f/.k} by A774, XBOOLE_1:26;
+A785:             L~g1 /\ L~g2 c= {f/.k} by A774,XBOOLE_1:26;
                   now consider x being Element of L~g1 /\ L~g2;
                     assume L~g1 /\ L~g2 <> {};
 
@@ -3527,7 +3519,7 @@ A797:           n+1<=m+1 by A786,A788,XXREAL_0:2;
                   suppose
 A798:               m+1<=len g1;
                     then
-A799:               m<=len g1 & n+1<=len g1 by A788, A797,XXREAL_0:2;
+A799:               m<=len g1 & n+1<=len g1 by A788,A797,XXREAL_0:2;
                     then n<=len g1 by A788,XXREAL_0:2;
 
 then n in dom g1 & n+1 in dom g1 & m in dom g1 & m+1 in dom g1
@@ -3561,7 +3553,7 @@ A804:                   n in dom g1 & n+1 in dom g1
 A805:                   LSeg(g,n)=LSeg(g1,n) by TOPREAL3:25;
                         then LSeg(g,n) in l1 by A786,A788,A801;
                         then
-A806:                   LSeg(g,n) c= L~f1 by A33, ZFMISC_1:92;
+A806:                   LSeg(g,n) c= L~f1 by A33,ZFMISC_1:92;
                         LSeg(g,m) c= LSeg(f,k)
                         proof
                           let x;
@@ -3617,7 +3609,7 @@ then LSeg(g,n) /\ LSeg(g,m) = {} by A784,A814,XBOOLE_1:3,27;
                           end;
                           suppose len g1<n+1;
                             then
-A816:                       len g1<=n by NAT_1 :13;
+A816:                       len g1<=n by NAT_1:13;
 
 then reconsider n1=n-len g1 as Element of NAT by INT_1:18;
 A817:                       n - len g1 + 1 = n + 1 - len g1;
@@ -3716,7 +3708,7 @@ A831:                 j=len g1;
                       1<=len g1 by A14,A16,A36,XXREAL_0:2;
                       then len g1 in dom g1 by FINSEQ_3:27;
                       then
-A832:                 g/.len g1 = f1/.len f1 by A35, FINSEQ_4:83
+A832:                 g/.len g1 = f1/.len f1 by A35,FINSEQ_4:83
                         .= G*(i1,i2) by A15,A16,A18,A47,FINSEQ_4:86;
                       hence p`2=G*(i1,i2)`2 by A830,A831;
                       thus G*(i1,i2)`1<=p`1 & p`1<=G*
@@ -3731,7 +3723,7 @@ A833:                 len g1 < j by A829,REAL_1:def 5;
 A834:                 j = w + len g1;
                       len g1 + 1 <= j by A833,NAT_1:13;
                       then
-A835:                 1<=w & w<=len g2 by A827,A829, XREAL_1:21,22;
+A835:                 1<=w & w<=len g2 by A827,A829,XREAL_1:21,22;
                       then
 A836:                 g/.j=g2/.w by A834,GOBOARD2:5;
                       w in dom g2 by A835,FINSEQ_3:27;
@@ -3760,7 +3752,7 @@ then 1<=i & i<=len g1 & 1<=i+1 & i+1<=len g1 by A838,XXREAL_0:2;
 
 then X in {LSeg(g1,j): 1<=j & j+1 <= len g1} by A838,A839;
 
-then x in L~f1 & L~f1 c= L~f by A33,A837,TARSKI:def 4,TOPREAL3: 27;
+then x in L~f1 & L~f1 c= L~f by A33,A837,TARSKI:def 4,TOPREAL3:27;
                       hence thesis;
                     end;
                     suppose
@@ -3817,7 +3809,7 @@ then x in LSeg(f,k) & LSeg(f,k) in lf by A14,A690,A843,A847;
                 let x;
                 assume x in L~f;
                 then
-A848:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2: 8;
+A848:           x in L~f1 \/ LSeg(f,k) by A5,A12,GOBOARD2:8;
                 now per cases by A848,XBOOLE_0:def 2;
                   suppose x in L~f1;
                     then x in L~g1 & L~g1 c= L~g by A33,GOBOARD2:11;
@@ -3857,11 +3849,11 @@ A855:                   1<=l by XREAL_1:21;
                         then
 A856:                   l in dom g2 & i1+l=j1 by A677,FINSEQ_3:27;
                         then
-A857:                   g/.ma=g2/.l by A677,A827, A854,FINSEQ_4:84
+A857:                   g/.ma=g2/.l by A677,A827,A854,FINSEQ_4:84
                           .= pj by A677,A856;
                         then pj`1<=p1`1 by A853;
                         then
-A858:                   p1`1=pj`1 by A849,XXREAL_0 :1;
+A858:                   p1`1=pj`1 by A849,XXREAL_0:1;
 A859:                   ma-1<=len g & len g1+1<=ma
                         by A677,A827,A854,A855,XREAL_1:9,45;
                         then
@@ -3902,7 +3894,7 @@ A867:                   now
                         then
 A868:                   qa`1<qa1`1 & qa`1<=p1`1 & p1`1<=qa1`1 &
 
-qa`2=ppi`2 & qa1 `2 = ppi`2 by A828,A853,A864,A865,A866, XXREAL_0:2;
+qa`2=ppi`2 & qa1 `2 = ppi`2 by A828,A853,A864,A865,A866,XXREAL_0:2;
                         set lma = {p2: p2`2=ppi`2 & qa`1<=p2`1 & p2`1<=qa1`1};
 A869:                   qa=|[qa`1,qa`2]| & qa1=|[qa1 `1, qa1 `2]| by EUCLID:57;
                         LSeg(g,ma)=LSeg(qa,qa1) by A864,A865,TOPREAL1:def 5
@@ -3925,8 +3917,7 @@ then x in LSeg(g,ma) & LSeg(g,ma) in lg by A849,A864,A865,A866,A867;
               then
 A870:         1<=l by XREAL_1:21;
               then
-A871:         l in dom g2 & len g=len g1 + l by A677,
-              FINSEQ_1:35 ,FINSEQ_3:27;
+A871:         l in dom g2 & len g=len g1 + l by A677,FINSEQ_1:35,FINSEQ_3:27;
               hence g/.len g=g2/.l by FINSEQ_4:84
                 .=G*(i1+l,i2) by A677,A871
                 .=f/.len f by A5,A49,A473;

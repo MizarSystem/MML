@@ -6,15 +6,15 @@
 
 environ
 
- vocabularies FINSEQ_1, FUNCT_1, RELAT_1, PARTFUN1, TARSKI, ARYTM_1, FUNCOP_1,
-      ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCOP_1, PARTFUN1, FINSEQ_1, FUNCT_2,
-      BINOP_1, DOMAIN_1;
- constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      FINSEQ_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      NUMBERS, XREAL_0, FINSEQ_1;
+ vocabularies FINSEQ_1, FUNCT_1, RELAT_1, TARSKI, ARYTM_1, FUNCOP_1, ARYTM,
+      VALUED_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, REAL_1,
+      NAT_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSEQ_1, FUNCT_2, BINOP_1, DOMAIN_1,
+      VALUED_0;
+ constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_1,
+      VALUED_0;
+ registrations SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
+      FINSEQ_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -26,8 +26,8 @@ reserve n,m,k for Element of NAT,
   p,q for FinSequence;
 
 definition
-  let D be set, p be PartFunc of D,NAT;
-  let n be Element of D;
+  let p be natural-valued Function;
+  let n be set;
   redefine func p.n -> Element of NAT;
 end;
 
@@ -54,17 +54,7 @@ provided
 ex y being Element of D() st P[n,x,y];
 
 scheme :: RECDEF_1:sch 3
- LambdaRecEx{A() -> set,G(set,set) -> set}:
-  ex f being Function st dom f = NAT &
-  f.0 = A() & for n being Element of NAT holds f.(n+1) = G(n,f.n);
-
-scheme :: RECDEF_1:sch 4
- LambdaRecExD{D() -> non empty set, A() -> Element of D(),
-  G(set,set) -> Element of D()}: ex f being Function of NAT,D() st
-  f.0 = A() & for n being Element of NAT holds f.(n+1) = G(n,f.n);
-
-scheme :: RECDEF_1:sch 5
- FinRecEx{A() -> set,N() -> Element of NAT,P[set,set,set]}:
+ FinRecEx{A() -> set,N() -> Nat,P[set,set,set]}:
   ex p being FinSequence st len p = N() & (p.1 = A() or N() = 0) &
   for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
 provided
@@ -74,16 +64,16 @@ and
  for n being Element of NAT st 1 <= n & n < N()
 for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
 
-scheme :: RECDEF_1:sch 6
+scheme :: RECDEF_1:sch 4
  FinRecExD{D() -> non empty set,A() -> Element of D(),
-  N() -> Element of NAT, P[set,set,set]}:
+  N() -> Nat, P[set,set,set]}:
   ex p being FinSequence of D() st len p = N() & (p.1 = A() or N() = 0) &
   for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
 provided
  for n being Element of NAT st 1 <= n & n < N() for x being Element of D()
 ex y being Element of D() st P[n,x,y];
 
-scheme :: RECDEF_1:sch 7
+scheme :: RECDEF_1:sch 5
  SeqBinOpEx{S() -> FinSequence,P[set,set,set]}:
   ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
   p.1 = S().1 & for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)]
@@ -93,7 +83,7 @@ and
  for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
 P[z,x,y1] & P[z,x,y2] holds y1 = y2;
 
-scheme :: RECDEF_1:sch 8
+scheme :: RECDEF_1:sch 6
  LambdaSeqBinOpEx{S() -> FinSequence,F(set,set) -> set}:
   ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
   p.1 = S().1 & for k st 1 <= k & k < len S() holds p.(k+1) = F(S().(k+1),p.k);
@@ -102,52 +92,8 @@ scheme :: RECDEF_1:sch 8
 ::     Schemes of uniqueness        ::
 ::::::::::::::::::::::::::::::::::::::
 
-scheme :: RECDEF_1:sch 9
- RecUn{A() -> set, F, G() -> Function, P[set,set,set]}: F() = G()
-provided
- dom F() = NAT & F().0 = A() & for n holds P[n,F().n,F().(n+1)]
-and
- dom G() = NAT & G().0 = A() & for n holds P[n,G().n,G().(n+1)]
-and
- for n for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
-
-scheme :: RECDEF_1:sch 10
- RecUnD{D() -> non empty set,A() -> Element of D(),
-  P[set,set,set], F, G() -> Function of NAT,D()} : F() = G()
-provided
- F().0 = A() & (for n holds P[n,F().n,F().(n+1)])
-and
- G().0 = A() & (for n holds P[n,G().n,G().(n+1)])
-and
- for n being Element of NAT,x,y1,y2 being Element of D()
-st P[n,x,y1] & P[n,x,y2] holds y1=y2;
-
-scheme :: RECDEF_1:sch 11
- LambdaRecUn{A() -> set, RecFun(set,set) -> set, F, G() -> Function}:
-  F() = G()
-provided
- dom F() = NAT & F().0 = A() & for n holds F().(n+1) = RecFun(n,F().n)
-and
- dom G() = NAT & G().0 = A() & for n holds G().(n+1) = RecFun(n,G().n);
-
-scheme :: RECDEF_1:sch 12
- LambdaRecUnD{D() -> non empty set,A() -> Element of D(),
-  RecFun(set,set) -> Element of D(), F, G() -> Function of NAT,D()}: F() = G()
-provided
- F().0 = A() & for n holds F().(n+1) = RecFun(n,F().n)
-and
- G().0 = A() & for n holds G().(n+1) = RecFun(n,G().n);
-
-scheme :: RECDEF_1:sch 13
- LambdaRecUnR{A() -> Real, RecFun(set,set) -> set,
-  F, G() -> Function of NAT,REAL}: F() = G()
-provided
- F().0 = A() & for n holds F().(n+1) = RecFun(n,F().n)
-and
- G().0 = A() & for n holds G().(n+1) = RecFun(n,G().n);
-
-scheme :: RECDEF_1:sch 14
- FinRecUn{A() -> set,N() -> Element of NAT,
+scheme :: RECDEF_1:sch 7
+ FinRecUn{A() -> set,N() -> Nat,
   F, G() -> FinSequence, P[set,set,set]}: F() = G()
 provided
  for n st 1 <= n & n < N()
@@ -159,9 +105,9 @@ and
  len G() = N() & (G().1 = A() or N() = 0) &
 for n st 1 <= n & n < N() holds P[n,G().n,G().(n+1)];
 
-scheme :: RECDEF_1:sch 15
+scheme :: RECDEF_1:sch 8
 
-  FinRecUnD{D() -> non empty set, A() -> Element of D(), N() -> Element of NAT,
+  FinRecUnD{D() -> non empty set, A() -> Element of D(), N() -> Nat,
   F, G() -> FinSequence of D(), P[set,set,set]}: F() = G()
 provided
  for n st 1 <= n & n < N() for x,y1,y2 being Element of D()
@@ -173,7 +119,7 @@ and
  len G() = N() & (G().1 = A() or N() = 0) &
 for n st 1 <= n & n < N() holds P[n,G().n,G().(n+1)];
 
-scheme :: RECDEF_1:sch 16
+scheme :: RECDEF_1:sch 9
  SeqBinOpUn{S() -> FinSequence,P[set,set,set],x, y() -> set}: x() = y()
 provided
  for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
@@ -185,7 +131,7 @@ and
  ex p being FinSequence st y() = p.(len p) & len p = len S() & p.1 = S().1 &
 for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)];
 
-scheme :: RECDEF_1:sch 17
+scheme :: RECDEF_1:sch 10
  LambdaSeqBinOpUn{S() -> FinSequence, F(set,set) -> set, x, y() -> set}:
   x() = y()
 provided
@@ -199,8 +145,8 @@ for k st 1 <= k & k < len S() holds p.(k+1) = F(S().(k+1),p.k);
 ::   Schemes of definitness  ::
 :::::::::::::::::::::::::::::::
 
-scheme :: RECDEF_1:sch 18
- DefRec{A() -> set,n() -> Element of NAT,P[set,set,set]}:
+scheme :: RECDEF_1:sch 11
+ DefRec{A() -> set,n() -> Nat,P[set,set,set]}:
   (ex y being set st ex f being Function st
   y = f.n() & dom f = NAT & f.0 = A() & for n holds P[n,f.n,f.(n+1)]) &
   for y1,y2 being set st (ex f being Function st
@@ -213,8 +159,8 @@ provided
 and
  for n,x,y1,y2 st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
 
-scheme :: RECDEF_1:sch 19
- LambdaDefRec{A() -> set,n() -> Element of NAT,RecFun(set,set) -> set}:
+scheme :: RECDEF_1:sch 12
+ LambdaDefRec{A() -> set,n() -> Nat,RecFun(set,set) -> set}:
   (ex y being set st ex f being Function st
   y = f.n() & dom f = NAT & f.0 = A() & for n holds f.(n+1) = RecFun(n,f.n)) &
   for y1,y2 being set st (ex f being Function st
@@ -223,9 +169,9 @@ scheme :: RECDEF_1:sch 19
   y2 = f.n() & dom f = NAT & f.0 = A() & for n holds f.(n+1) = RecFun(n,f.n))
   holds y1 = y2;
 
-scheme :: RECDEF_1:sch 20
+scheme :: RECDEF_1:sch 13
  DefRecD{D() -> non empty set,A() -> (Element of D()),
-  n() -> Element of NAT,P[set,set,set]}:
+  n() -> Nat,P[set,set,set]}:
   (ex y being Element of D() st ex f being Function of NAT,D() st
   y = f.n() & f.0 = A() & for n holds P[n,f.n,f.(n+1)]) &
   for y1,y2 being Element of D() st (ex f being Function of NAT,D() st
@@ -239,19 +185,19 @@ and
  for n being Element of NAT, x,y1,y2 being Element of D()
 st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
 
-scheme :: RECDEF_1:sch 21
+scheme :: RECDEF_1:sch 14
  LambdaDefRecD{D() -> non empty set, A() -> Element of D(),
-  n() -> Element of NAT, RecFun(set,set) -> Element of D()}:
+  n() -> Nat, RecFun(set,set) -> Element of D()}:
   (ex y being Element of D() st ex f being Function of NAT,D() st
   y = f.n() & f.0 = A() &
-  for n being Element of NAT holds f.(n+1) = RecFun(n,f.n)) &
+  for n being Nat holds f.(n+1) = RecFun(n,f.n)) &
   for y1,y2 being Element of D() st (ex f being Function of NAT,D() st
   y1 = f.n() & f.0 = A() &
-  for n being Element of NAT holds f.(n+1) = RecFun(n,f.n)) &
+  for n being Nat holds f.(n+1) = RecFun(n,f.n)) &
   (ex f being Function of NAT,D() st y2 = f.n() & f.0 = A() &
-  for n being Element of NAT holds f.(n+1) = RecFun(n,f.n)) holds y1 = y2;
+  for n being Nat holds f.(n+1) = RecFun(n,f.n)) holds y1 = y2;
 
-scheme :: RECDEF_1:sch 22
+scheme :: RECDEF_1:sch 15
  SeqBinOpDef{S() -> FinSequence,P[set,set,set]}:
   (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
   p.1 = S().1 & for k st 1 <= k & k < len S() holds
@@ -268,7 +214,7 @@ and
  for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
 P[z,x,y1] & P[z,x,y2] holds y1 = y2;
 
-scheme :: RECDEF_1:sch 23
+scheme :: RECDEF_1:sch 16
  LambdaSeqBinOpDef{S() -> FinSequence,F(set,set) -> set}:
   (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
   p.1 = S().1 & for k st 1 <= k & k < len S()

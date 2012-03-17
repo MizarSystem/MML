@@ -7,17 +7,17 @@
 environ
 
  vocabularies FUNCT_1, FUNCT_2, FUNCT_5, RELAT_1, BOOLE, FUNCT_3, CAT_1,
-      NATTRA_1, CAT_2, FINSEQ_2, FUNCOP_1, PARTFUN1, BORSUK_1, ISOCAT_2, ARYTM;
+      NATTRA_1, CAT_2, FINSEQ_2, FUNCOP_1, PARTFUN1, BORSUK_1, ISOCAT_2,
+      GRAPH_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3, FUNCT_5, FRAENKEL, PBOOLE, CAT_1,
-      CAT_2, NATTRA_1, ISOCAT_1;
- constructors PARTFUN1, DOMAIN_1, PBOOLE, ISOCAT_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, VALUED_1;
+      PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, FUNCT_3, FUNCT_5, FRAENKEL,
+      GRAPH_1, CAT_1, CAT_2, NATTRA_1, ISOCAT_1;
+ constructors PARTFUN1, DOMAIN_1, ISOCAT_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, CAT_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, CAT_1, NATTRA_1, ISOCAT_1, XBOOLE_0, BINOP_1,
-      VALUED_1;
+ definitions TARSKI, FUNCT_1, CAT_1, NATTRA_1, ISOCAT_1, XBOOLE_0, BINOP_1;
  theorems FUNCT_2, CAT_1, TARSKI, ZFMISC_1, FUNCT_1, DOMAIN_1, CAT_2, FUNCT_3,
-      FUNCOP_1, NATTRA_1, ISOCAT_1, FUNCT_5, RELSET_1, XBOOLE_1;
+      FUNCOP_1, NATTRA_1, ISOCAT_1, FUNCT_5, RELSET_1;
  schemes FUNCT_2;
 
 begin :: Preliminaries
@@ -135,7 +135,7 @@ reserve t for natural_transformation of F,F1;
 theorem Th8:
   o is Object of Functors(A,B) iff o is Functor of A,B
 proof
-  the Objects of Functors(A,B) = Funct(A,B) by NATTRA_1:def 18;
+  the Vertices of Functors(A,B) = Funct(A,B) by NATTRA_1:def 18;
   hence thesis by CAT_2:def 2;
 end;
 
@@ -151,7 +151,7 @@ proof
 A1: dom m = F & cod m = F1 and
 A2: m = [[F,F1],t] by NATTRA_1:40;
   take F,F1,t;
-  the Morphisms of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
+  the Edges of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
   hence F is_naturally_transformable_to F1 by A2,NATTRA_1:35;
   thus thesis by A1,A2;
 end;
@@ -187,10 +187,10 @@ A3:     x = [[F1',F2'],t'];
         hence b = t'.a by A2,A3,ZFMISC_1:33;
       end;
     end;
-    consider f being Function of NatTrans(A,B), the Morphisms of B such that
+    consider f being Function of NatTrans(A,B), the Edges of B such that
 A4: for x being Element of NatTrans(A,B) holds
     P[x,f.x] from FUNCT_2:sch 3(A1);
-A5: the Morphisms of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
+A5: the Edges of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
 A6: now
       let c be Object of Functors(A,B);
       reconsider F = c as Functor of A,B by Th8;
@@ -212,22 +212,22 @@ A11:  m = [[F,F1],t] by Th9;
 A12:  [[F,F],id F] is Morphism of Functors(A,B) by A5,NATTRA_1:def 16;
 A13:  [[F1,F1],id F1] is Morphism of Functors(A,B) by A5,NATTRA_1:def 16;
 A14:  Hom(F.a,F1.a) <> {} by A9,ISOCAT_1:30;
-      thus f.((the Id of Functors(A,B)).((the Dom of Functors(A,B)).m)) =
+      thus f.((the Id of Functors(A,B)).((the Source of Functors(A,B)).m)) =
       f.(id dom m)
         .= f.[[F,F],id F] by A10,NATTRA_1:def 18
         .= (id F).a by A4,A5,A12
         .= id(F.a) by NATTRA_1:21
         .= id dom(t.a) by A14,CAT_1:23
         .= id dom(f.m') by A4,A11
-        .= (the Id of B).((the Dom of B).(f.m));
-      thus f.((the Id of Functors(A,B)).((the Cod of Functors(A,B)).m)) =
+        .= (the Id of B).((the Source of B).(f.m));
+      thus f.((the Id of Functors(A,B)).((the Target of Functors(A,B)).m)) =
       f.(id cod m)
         .= f.[[F1,F1],id F1] by A10,NATTRA_1:def 18
         .= (id F1).a by A4,A5,A13
         .= id(F1.a) by NATTRA_1:21
         .= id cod(t.a) by A14,CAT_1:23
         .= id cod(f.m') by A4,A11
-        .= (the Id of B).((the Cod of B).(f.m));
+        .= (the Id of B).((the Target of B).(f.m));
     end;
     now
       let m1,m2 be Morphism of Functors(A,B);
@@ -261,7 +261,7 @@ A24:  m2*m1= [[F,F2],t'`*`t] by A16,A18,A20,NATTRA_1:42;
     then reconsider f as Functor of Functors(A,B),B by A5,A6,A8,CAT_1:def 18;
     take f;
     let F1,F2 be Functor of A,B, t be natural_transformation of F1,F2;
-A25: the Morphisms of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
+A25: the Edges of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
     assume F1 is_naturally_transformable_to F2;
     then [[F1,F2],t] is Morphism of Functors(A,B) by A25,NATTRA_1:35;
     hence thesis by A4,A25;
@@ -275,7 +275,7 @@ A27: for F1,F2 being Functor of A,B, t be natural_transformation of F1,F2
     st F1 is_naturally_transformable_to F2 holds f2.[[F1,F2],t] = t.a;
     now
       let c be Morphism of Functors(A,B);
-      the Morphisms of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
+      the Edges of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
       then consider F1,F2 being Functor of A,B,
       t being natural_transformation of F1,F2 such that
 A28:  c = [[F1,F2],t] and
@@ -296,21 +296,21 @@ proof
   take F = a |-> A;
   now
     let x,y be set;
-A1: the Morphisms of Functors(1Cat(o,m),A) = NatTrans(1Cat(o,m),A)
+A1: the Edges of Functors(1Cat(o,m),A) = NatTrans(1Cat(o,m),A)
     by NATTRA_1:def 18;
-    assume x in the Morphisms of Functors(1Cat(o,m),A);
+    assume x in the Edges of Functors(1Cat(o,m),A);
     then consider F1,F2 being Functor of 1Cat(o,m),A,
     t being natural_transformation of F1,F2 such that
 A2: x = [[F1,F2],t] & F1 is_naturally_transformable_to F2
     by A1,NATTRA_1:def 16;
-    assume y in the Morphisms of Functors(1Cat(o,m),A);
+    assume y in the Edges of Functors(1Cat(o,m),A);
     then consider F1',F2' being Functor of 1Cat(o,m),A,
     t' being natural_transformation of F1',F2' such that
 A3: y = [[F1',F2'],t'] & F1' is_naturally_transformable_to F2'
     by A1,NATTRA_1:def 16;
-    reconsider s=t,s'=t' as Function of {a}, the Morphisms of A;
+    reconsider s=t,s'=t' as Function of {a}, the Edges of A;
     reconsider G1=F1, G1'=F1', G2=F2, G2'=F2' as
-    Function of {m}, the Morphisms of A;
+    Function of {m}, the Edges of A;
 A4: F1 is_transformable_to F2 & F1' is_transformable_to F2'
     by A2,A3,NATTRA_1:def 7;
     assume F.x = F.y;
@@ -333,22 +333,14 @@ A9: G1.id a = id(F1'.a) by CAT_1:108
     hence x = y by A2,A3,A6,Th3;
   end;
   hence F is one-to-one by FUNCT_2:25;
-  thus rng F c= the Morphisms of A;
+  thus rng F c= the Edges of A;
   let x be set;
-  assume x in the Morphisms of A;
+  assume x in the Edges of A;
   then reconsider f = x as Morphism of A;
-A10: dom({m} --> id dom f) = the Morphisms of 1Cat(o,m) by FUNCOP_1:19;
-A11: dom({m} --> id cod f) = the Morphisms of 1Cat(o,m) by FUNCOP_1:19;
-  {id dom f} c= the Morphisms of A by ZFMISC_1:37;
-  then
-A12: rng({m} --> id dom f) c= the Morphisms of A by XBOOLE_1:1;
-  {id cod f} c= the Morphisms of A by ZFMISC_1:37;
-  then rng({m} --> id cod f) c= the Morphisms of A by XBOOLE_1:1;
-  then reconsider F1 = {m} --> id dom f, F2 = {m} --> id cod f
-  as Function of the Morphisms of 1Cat(o,m),the Morphisms of A
-  by A10,A11,A12,FUNCT_2:def 1,RELSET_1:11;
-A13:for c being Object of 1Cat(o,m) ex d being Object of A
-   st F1.(id c) = id d by FUNCOP_1:13;
+  reconsider F1 = {m} --> id dom f, F2 = {m} --> id cod f
+  as Function of the Edges of 1Cat(o,m),the Edges of A;
+A13: for c being Object of 1Cat(o,m) ex d being Object of A
+  st F1.(id c) = id d by FUNCOP_1:13;
 A14: now
     let g be Morphism of 1Cat(o,m);
     thus F1.(id dom g) = id dom f by FUNCOP_1:13
@@ -367,8 +359,8 @@ A16: Hom(dom f,dom f) <> {} by CAT_1:56;
       .= (id dom f)*(F1.h)by FUNCOP_1:13
       .= (F1.g)*(F1.h)by FUNCOP_1:13;
   end;
-A17:for c being Object of 1Cat(o,m) ex d being Object of A
-   st F2.(id c) = id d by FUNCOP_1:13;
+A17: for c being Object of 1Cat(o,m) ex d being Object of A
+  st F2.(id c) = id d by FUNCOP_1:13;
 A18: now
     let g be Morphism of 1Cat(o,m);
     thus F2.(id dom g) = id cod f by FUNCOP_1:13
@@ -404,12 +396,8 @@ A21: now
   end;
   then
 A22: F1 is_transformable_to F2 by NATTRA_1:def 2;
-A23: dom({a} --> f) = the Objects of 1Cat(o,m) by FUNCOP_1:19;
-  {f} c= the Morphisms of A by ZFMISC_1:37;
-  then rng({a} --> f) c= the Morphisms of A by XBOOLE_1:1;
-  then reconsider t = {a} --> f as
-  Function of the Objects of 1Cat(o,m), the Morphisms of A
-  by A23,FUNCT_2:def 1,RELSET_1:11;
+  reconsider t = {a} --> f as
+  Function of the Vertices of 1Cat(o,m), the Edges of A;
   now
     let b be Object of 1Cat(o,m);
 A24: t.b = f by FUNCOP_1:13;
@@ -450,7 +438,7 @@ A36: F1 is_naturally_transformable_to F2
   then reconsider t as natural_transformation of F1,F2 by A26,NATTRA_1:def 8;
   [[F1,F2],t] in NatTrans(1Cat(o,m),A) by A36,NATTRA_1:def 16;
   then
-A37: [[F1,F2],t] in the Morphisms of Functors(1Cat(o,m),A) by NATTRA_1:
+A37: [[F1,F2],t] in the Edges of Functors(1Cat(o,m),A) by NATTRA_1:
   def 18;
   F.[[F1,F2],t] = t.a by A36,Def1
     .= f by A25;
@@ -516,9 +504,10 @@ A1: F1 is_naturally_transformable_to F2;
   then
 A2: F1 is_transformable_to F2 by NATTRA_1:def 7;
   let u be natural_transformation of F1,F2, a be Object of A;
-  the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by CAT_2:33;
+  the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:]
+   by CAT_2:33;
   then reconsider t=u as
-  Function of [:the Objects of A, the Objects of B:], the Morphisms of C;
+  Function of [:the Vertices of A, the Vertices of B:], the Edges of C;
 A3: F1?-a is_transformable_to F2?-a
   proof
     let b be Object of B;
@@ -582,15 +571,15 @@ definition
   let A,B,C;
   let F be Functor of [:A,B:],C;
   let f be Morphism of A;
-  func curry(F,f) -> Function of the Morphisms of B,the Morphisms of C equals
+  func curry(F,f) -> Function of the Edges of B,the Edges of C equals
   (curry F).f;
   coherence
   proof
-    the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+    the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
     by CAT_2:33;
     then reconsider F as
-    Function of [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
-    (curry F).f is Function of the Morphisms of B,the Morphisms of C;
+    Function of [:the Edges of A,the Edges of B:], the Edges of C;
+    (curry F).f is Function of the Edges of B,the Edges of C;
     hence thesis;
   end;
 end;
@@ -614,17 +603,17 @@ theorem Th17:
   curry(F,f)*the Id of B is natural_transformation of F?-a,F?-b
 proof
   let F be Functor of [:A,B:], C;
-  the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+  the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
   by CAT_2:33;
   then reconsider G = F as
-  Function of [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
+  Function of [:the Edges of A,the Edges of B:], the Edges of C;
   let a1,a2 be Object of A such that
 A1: Hom(a1,a2) <> {};
   let f be Morphism of a1,a2;
   reconsider Ff = (curry G).(f qua Morphism of A)
-  as Function of the Morphisms of B,the Morphisms of C;
+  as Function of the Edges of B,the Edges of C;
   reconsider FfI = curry(F,f)*the Id of B
-  as Function of the Objects of B, the Morphisms of C;
+  as Function of the Vertices of B, the Edges of C;
 A2: now
     let b be Object of B;
 A3: (F?-a1).b = F.[a1,b] & (F?-a2).b = F.[a2,b] by Th12;
@@ -730,12 +719,12 @@ for F being Functor of [:A,B:],C, f being (Morphism of A), b being Object of B
   holds (F?-f).b = F.(f, id b)
 proof
   let F be Functor of [:A,B:],C, f be (Morphism of A), b be Object of B;
-  the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+  the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
   by CAT_2:33;
   then reconsider G = F as
-  Function of [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
+  Function of [:the Edges of A,the Edges of B:], the Edges of C;
   reconsider Ff = (curry G).f as
-  Function of the Morphisms of B,the Morphisms of C;
+  Function of the Edges of B,the Edges of C;
   F?-dom f is_naturally_transformable_to F?-cod f by Th18;
   then F?-dom f is_transformable_to F?-cod f by NATTRA_1:def 7;
   hence (F?-f).b = (curry(F,f)*the Id of B).b by NATTRA_1:def 5
@@ -748,17 +737,17 @@ theorem Th20:
   holds id(F?-a) = F?-id a
 proof
   let F be Functor of [:A,B:],C, a be Object of A;
-  the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+  the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
   by CAT_2:33;
   then reconsider G = F as
-  Function of [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
+  Function of [:the Edges of A,the Edges of B:], the Edges of C;
   reconsider Ff = (curry G).(id a qua Morphism of A)
-  as Function of the Morphisms of B,the Morphisms of C;
+  as Function of the Edges of B,the Edges of C;
   dom id a = a & cod id a = a by CAT_1:44;
   then reconsider I = F?-id a as transformation of F?-a,F?-a;
   now
     let b be Object of B;
-    thus (I qua Function of the Objects of B, the Morphisms of C).b
+    thus (I qua Function of the Vertices of B, the Edges of C).b
     = Ff.(id b qua Morphism of B) by FUNCT_2:21
       .= F.(id a,id b) by CAT_2:3
       .= F.(id [a,b] qua Morphism of [:A,B:]) by CAT_2:41
@@ -789,12 +778,12 @@ A5: F?-dom f is_transformable_to F?-cod g by NATTRA_1:19;
 A6: F?-dom(g*f) is_transformable_to F?-cod(g*f) by NATTRA_1:def 7;
 A7: cod(g*f) = cod g & dom(g*f) = dom f by A1,CAT_1:42;
   reconsider s = t as transformation of F?-dom f, F?-dom g;
-  the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+  the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
   by CAT_2:33;
   then reconsider G = F as
-  Function of [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
+  Function of [:the Edges of A,the Edges of B:], the Edges of C;
   reconsider Fgf = (curry G).(g*f), Ff = (curry G).f, Fg = (curry G).g
-  as Function of the Morphisms of B,the Morphisms of C;
+  as Function of the Edges of B,the Edges of C;
   now
     let b be Object of B;
 A8: (F?-g).b = (curry(F,g)*the Id of B).b by A4,NATTRA_1:def 5
@@ -837,17 +826,17 @@ definition
     st $1 = f holds $2 = [[F?-dom f,F?-cod f],F?-f];
 A1: now
       let m;
-      assume m in the Morphisms of A;
+      assume m in the Edges of A;
       then reconsider g = m as Morphism of A;
       take o = [[F?-dom(g),F?-cod(g)],F?-g];
       F?-dom(g) is_naturally_transformable_to F?-cod(g) by Th18;
       then o in NatTrans(B,C) by NATTRA_1:35;
-      hence o in the Morphisms of Functors(B,C) by NATTRA_1:def 18;
+      hence o in the Edges of Functors(B,C) by NATTRA_1:def 18;
       thus P[m,o];
     end;
     consider G being
-    Function of the Morphisms of A, the Morphisms of Functors(B,C) such that
-A2: for m st m in the Morphisms of A holds P[m,G.m] from FUNCT_2:sch 1(A1);
+    Function of the Edges of A, the Edges of Functors(B,C) such that
+A2: for m st m in the Edges of A holds P[m,G.m] from FUNCT_2:sch 1(A1);
     G is Functor of A, Functors(B,C)
     proof
       thus for c being Object of A ex d being Object of Functors(B,C)
@@ -864,7 +853,7 @@ A2: for m st m in the Morphisms of A holds P[m,G.m] from FUNCT_2:sch 1(A1);
       thus for f being Morphism of A holds
       G.id dom f = id dom(G.f) & G.id cod f = id cod(G.f)
       proof
-        let f be Element of the Morphisms of A;
+        let f be Element of the Edges of A;
         reconsider d = F?-dom f, c = F?-cod f as Object of Functors(B,C)
         by Th8;
 A3:     dom id dom f = dom f & cod id dom f = dom f &
@@ -883,7 +872,7 @@ A4:     G.f = [[F?-dom f,F?-cod f],F?-f] by A2;
       assume
 A5:   dom g = cod f;
       then reconsider t = F?-f as natural_transformation of F?-dom f,F?-dom g;
-      the Morphisms of Functors(B,C) = NatTrans(B,C) &
+      the Edges of Functors(B,C) = NatTrans(B,C) &
       F?-dom f is_naturally_transformable_to F?-cod f &
       F?-dom g is_naturally_transformable_to F?-cod g by Th18,NATTRA_1:def 18;
       then reconsider gg = [[F?-dom g,F?-cod g],F?-g],
@@ -991,7 +980,7 @@ theorem Th27:
   holds export F1 is_naturally_transformable_to export F2 &
   ex G being natural_transformation of export F1, export F2 st
   for s being Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C st t = s
+  [:the Vertices of A, the Vertices of B:], the Edges of C st t = s
   for a being Object of A
   holds G.a = [[(export F1).a,(export F2).a],(curry s).a]
 proof
@@ -1001,9 +990,10 @@ A1: F1 is_naturally_transformable_to F2;
   then
 A2: F1 is_transformable_to F2 by NATTRA_1:def 7;
   let t be natural_transformation of F1,F2;
-  the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by CAT_2:33;
+  the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:]
+   by CAT_2:33;
   then reconsider s = t as Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C;
+  [:the Vertices of A, the Vertices of B:], the Edges of C;
 A3: now
     let a be Object of A;
     let S1,S2 be Functor of B,C such that
@@ -1057,11 +1047,11 @@ A20: Hom(S1.b1,S1.b2) <> {} by A13,CAT_1:126;
 A21: Hom(S2.b1,S2.b2) <> {} by A13,CAT_1:126;
 A22: Hom(S1.b1,S2.b1) <> {} by A12,NATTRA_1:def 2;
 A23: Hom(S1.b2,S2.b2) <> {} by A12,NATTRA_1:def 2;
-A24: T.b1 = (T qua Function of the Objects of B, the Morphisms of C).b1
+A24: T.b1 = (T qua Function of the Vertices of B, the Edges of C).b1
     by A7,A11,NATTRA_1:def 5
       .= s.(a,b1) by A11,CAT_2:3
       .= t.[a,b1] by A2,NATTRA_1:def 5;
-A25: T.b2 = (T qua Function of the Objects of B, the Morphisms of C).b2
+A25: T.b2 = (T qua Function of the Vertices of B, the Edges of C).b2
     by A7,A11,NATTRA_1:def 5
       .= s.(a,b2) by A11,CAT_2:3
       .= t.[a,b2] by A2,NATTRA_1:def 5;
@@ -1081,11 +1071,11 @@ A27: S2.f = (F2?-a).f by A11,Th24
       .= S2.f*T.b1 by A21,A22,CAT_1:def 13;
   end;
   defpred P[set,set] means for f being Object of A, s being Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C st t = s & $1 = f
+  [:the Vertices of A, the Vertices of B:], the Edges of C st t = s & $1 = f
   holds $2 = [[(export F1).f,(export F2).f],(curry s).f];
 A28: now
     let m;
-    assume m in the Objects of A;
+    assume m in the Vertices of A;
     then reconsider a = m as Object of A;
     take o = [[(export F1).a,(export F2).a],(curry s).a];
     reconsider S1 = (export F1).a, S2 = (export F2).a as Functor of B,C
@@ -1100,12 +1090,12 @@ A29: S1 is_naturally_transformable_to S2
       thus thesis by A10;
     end;
     then o in NatTrans(B,C) by A29,NATTRA_1:35;
-    hence o in the Morphisms of Functors(B,C) by NATTRA_1:def 18;
+    hence o in the Edges of Functors(B,C) by NATTRA_1:def 18;
     thus P[m,o];
   end;
   consider G being
-  Function of the Objects of A, the Morphisms of Functors(B,C) such that
-A30: for m st m in the Objects of A holds P[m,G.m] from FUNCT_2:sch 1(A28);
+  Function of the Vertices of A, the Edges of Functors(B,C) such that
+A30: for m st m in the Vertices of A holds P[m,G.m] from FUNCT_2:sch 1(A28);
 A31: now
     let a be Object of A;
     reconsider S1 = (export F1).a, S2 = (export F2).a as Functor of B,C
@@ -1199,13 +1189,13 @@ A71:  Hom(F1.[b,c],F2.[b,c]) <> {} by A2,NATTRA_1:def 2;
 A72:  Hom(F1.[a,c],F1.[b,c]) <> {} by A68,CAT_1:126;
       reconsider fi = [f, id c] as Morphism of [a,c], [b,c] by A37,A67,
       CAT_2:43;
-      the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+      the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
       by CAT_2:33;
       then reconsider FF1 = F1, FF2 = F2 as Function of
-      [:the Morphisms of A,the Morphisms of B:], the Morphisms of C;
+      [:the Edges of A,the Edges of B:], the Edges of C;
 A73:  F2.fi = FF2.(f,id c) by A68,NATTRA_1:def 1
         .= curry(F2,f).id c by CAT_2:3
-        .= (F2?-f qua Function of the Objects of B, the Morphisms of C).c by
+        .= (F2?-f qua Function of the Vertices of B, the Edges of C).c by
       FUNCT_2:21
         .= T24.c by A49,NATTRA_1:def 5;
 A74:  t.[a,c] = s.(a,c) by A2,NATTRA_1:def 5
@@ -1213,7 +1203,7 @@ A74:  t.[a,c] = s.(a,c) by A2,NATTRA_1:def 5
         .= T12.c by A47,NATTRA_1:def 5;
 A75:  F1.fi = FF1.(f,id c) by A68,NATTRA_1:def 1
         .= curry(F1,f).id c by CAT_2:3
-        .= (F1?-f qua Function of the Objects of B, the Morphisms of C).c by
+        .= (F1?-f qua Function of the Vertices of B, the Edges of C).c by
       FUNCT_2:21
         .= T13.c by A51,NATTRA_1:def 5;
 A76:  t.[b,c] = s.(b,c) by A2,NATTRA_1:def 5
@@ -1250,7 +1240,7 @@ A78: export F1 is_naturally_transformable_to export F2
   then reconsider G as natural_transformation of export F1, export F2;
   take G;
   let s be Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C;
+  [:the Vertices of A, the Vertices of B:], the Edges of C;
   assume
 A79: t = s;
   let a be Object of A;
@@ -1266,7 +1256,7 @@ A1: F1 is_naturally_transformable_to F2;
   func export t -> natural_transformation of export F1, export F2 means
   :Def5:
   for s being Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C st t = s
+  [:the Vertices of A, the Vertices of B:], the Edges of C st t = s
   for a being Object of A
   holds it.a = [[(export F1).a,(export F2).a],(curry s).a];
   existence by A1,Th27;
@@ -1274,20 +1264,20 @@ A1: F1 is_naturally_transformable_to F2;
   proof
     let T1,T2 be natural_transformation of export F1, export F2 such that
 A2: for s being Function of
-    [:the Objects of A, the Objects of B:], the Morphisms of C st t = s
+    [:the Vertices of A, the Vertices of B:], the Edges of C st t = s
     for a being Object of A
     holds T1.a = [[(export F1).a,(export F2).a],(curry s).a] and
 A3: for s being Function of
-    [:the Objects of A, the Objects of B:], the Morphisms of C st t = s
+    [:the Vertices of A, the Vertices of B:], the Edges of C st t = s
     for a being Object of A
     holds T2.a = [[(export F1).a,(export F2).a],(curry s).a];
     export F1 is_naturally_transformable_to export F2 by A1,Th27;
     then
 A4: export F1 is_transformable_to export F2 by NATTRA_1:def 7;
-    the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by
+    the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:] by
     CAT_2:33;
     then reconsider s = t as Function of
-    [:the Objects of A, the Objects of B:], the Morphisms of C;
+    [:the Vertices of A, the Vertices of B:], the Edges of C;
     now
       let a be Object of A;
       T1.a = [[(export F1).a,(export F2).a],(curry s).a] by A2;
@@ -1301,19 +1291,20 @@ theorem Th28:
   for F being Functor of [:A,B:],C holds id export F = export id F
 proof
   let F be Functor of [:A,B:],C;
-  the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by CAT_2:33;
+  the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:]
+   by CAT_2:33;
   then reconsider s = id F as Function of
-  [:the Objects of A, the Objects of B:], the Morphisms of C;
+  [:the Vertices of A, the Vertices of B:], the Edges of C;
   now
     let a be Object of A;
     reconsider ff = (export F).a as Functor of B,C by Th8;
 A1: now
       let b be Object of B;
 A2:   Hom(b,b) <> {} by CAT_1:56;
-      thus (id ff qua Function of the Objects of B, the Morphisms of C).b
+      thus (id ff qua Function of the Vertices of B, the Edges of C).b
       = (id ff).b by NATTRA_1:def 5
         .= id(ff.b) by NATTRA_1:21
-        .= (ff qua Function of the Morphisms of B, the Morphisms of C)
+        .= (ff qua Function of the Edges of B, the Edges of C)
       .id b by CAT_1:108
         .= ff.id b by A2,NATTRA_1:def 1
         .= (F?-a).id b by Th24
@@ -1322,7 +1313,7 @@ A2:   Hom(b,b) <> {} by CAT_1:56;
         .= F.(id[a,b] qua Morphism of [:A,B:]) by CAT_2:41
         .= id(F.[a,b]) by CAT_1:108
         .= (id F).[a,b] by NATTRA_1:21
-        .= (id F qua Function of the Objects of [:A,B:], the Morphisms of C)
+        .= (id F qua Function of the Vertices of [:A,B:], the Edges of C)
       .(a,b) by NATTRA_1:def 5
         .= (curry s).a.b by CAT_2:3;
     end;
@@ -1360,10 +1351,10 @@ A10: export F2 is_transformable_to export F3 by NATTRA_1:def 7;
 A11: export F1 is_transformable_to export F3 by A8,NATTRA_1:19;
   now
     let a be Object of A;
-    the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by
+    the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:] by
     CAT_2:33;
     then reconsider s1 = t1, s2 = t2, s3 = t2`*`t1 as Function of
-    [:the Objects of A, the Objects of B:], the Morphisms of C;
+    [:the Vertices of A, the Vertices of B:], the Edges of C;
     reconsider S1 = (export F1).a, S2 = (export F2).a, S3 = (export F3).a
     as Functor of B,C by Th8;
 A12: S1 = F1?-a & S2 = F2?-a & S3 = F3?-a by Th24;
@@ -1389,15 +1380,15 @@ A20:  Hom(F1.[a,b],F2.[a,b]) <> {} by A4,NATTRA_1:def 2;
 A21:  Hom(F2.[a,b],F3.[a,b]) <> {} by A5,NATTRA_1:def 2;
 A22:  Hom(S1.b,S2.b) <> {} by A16,NATTRA_1:def 2;
 A23:  Hom(S2.b,S3.b) <> {} by A17,NATTRA_1:def 2;
-A24:  T2.b = (T2 qua Function of the Objects of B, the Morphisms of C).b
+A24:  T2.b = (T2 qua Function of the Vertices of B, the Edges of C).b
       by A17,NATTRA_1:def 5
         .= s2.(a,b) by CAT_2:3
         .= t2.[a,b] by A5,NATTRA_1:def 5;
-A25:  T1.b = (T1 qua Function of the Objects of B, the Morphisms of C).b
+A25:  T1.b = (T1 qua Function of the Vertices of B, the Edges of C).b
       by A16,NATTRA_1:def 5
         .= s1.(a,b) by CAT_2:3
         .= t1.[a,b] by A4,NATTRA_1:def 5;
-      thus T3.b = (T3 qua Function of the Objects of B, the Morphisms of C).b
+      thus T3.b = (T3 qua Function of the Vertices of B, the Edges of C).b
       by A15,NATTRA_1:def 5
         .= s3.(a,b) by CAT_2:3
         .= (t2`*`t1).[a,b] by A6,NATTRA_1:def 5
@@ -1435,10 +1426,10 @@ A3: export t1 = export t2;
     let ab be Object of [:A,B:];
     consider a being Object of A, b being Object of B such that
 A4: ab = [a,b] by CAT_2:35;
-    the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by
+    the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:] by
     CAT_2:33;
     then reconsider s1 = t1, s2 = t2 as
-    Function of [:the Objects of A, the Objects of B:], the Morphisms of C;
+    Function of [:the Vertices of A, the Vertices of B:], the Edges of C;
     [[(export F1).a,(export F2).a],(curry s1).a] = (export t1).a by A1, Def5
       .= [[(export F1).a,(export F2).a],(curry s2).a] by A1,A3,Def5;
     then
@@ -1463,7 +1454,7 @@ proof
   holds $2 = t.(cod g)*f1.g;
 A1: now
     let m;
-    assume m in the Morphisms of [:A,B:];
+    assume m in the Edges of [:A,B:];
     then consider m1 being (Morphism of A), m2 being Morphism of B such that
 A2: m = [m1, m2] by CAT_2:37;
     consider F1,F2 being Functor of B,C,
@@ -1472,7 +1463,7 @@ A2: m = [m1, m2] by CAT_2:37;
 A3: dom(G.m1) = F1 & cod(G.m1) = F2 & G.m1 = [[F1,F2],t1] by Th9;
     reconsider o = t1.(cod m2)*F1.m2 as set;
     take o;
-    thus o in the Morphisms of C;
+    thus o in the Edges of C;
     thus P[m,o]
     proof
       let f be (Morphism of A), g be Morphism of B;
@@ -1487,9 +1478,9 @@ A5:   G.f = [[f1,f2],t];
       hence o = t.cod g*f1.g by A3,A4,A5,ZFMISC_1:33;
     end;
   end;
-  consider F being Function of the Morphisms of [:A,B:], the Morphisms of C
+  consider F being Function of the Edges of [:A,B:], the Edges of C
   such that
-A6: for m st m in the Morphisms of [:A,B:] holds P[m,F.m] from FUNCT_2:sch 1
+A6: for m st m in the Edges of [:A,B:] holds P[m,F.m] from FUNCT_2:sch 1
   (A1);
   F is Functor of [:A,B:],C
   proof
@@ -1703,7 +1694,7 @@ A1: export F1 is_naturally_transformable_to export F2;
   t.a = [[(export F1).a,(export F2).a],$2];
 A2: now
     let o;
-    assume o in the Objects of A;
+    assume o in the Vertices of A;
     then reconsider a' = o as Object of A;
     consider f1,f2 being Functor of B,C,
     tau being natural_transformation of f1,f2 such that
@@ -1711,7 +1702,7 @@ A2: now
 A3: dom(t.a') = f1 & cod(t.a') = f2 & t.a' =[[f1,f2],tau] by Th9;
     reconsider m = tau as set;
     take m;
-    thus m in Funcs(the Objects of B, the Morphisms of C) by FUNCT_2:11;
+    thus m in Funcs(the Vertices of B, the Edges of C) by FUNCT_2:11;
     thus P[o,m]
     proof
       let a be Object of A such that
@@ -1724,20 +1715,21 @@ A4:   o = a;
     end;
   end;
   consider t' being Function of
-  the Objects of A, Funcs(the Objects of B,the Morphisms of C) such that
-A5: for o st o in the Objects of A holds P[o,t'.o] from FUNCT_2:sch 1(A2);
-A6: the Objects of [:A,B:] =
-  [:the Objects of A, the Objects of B:] by CAT_2:33;
-  the Objects of [:A,B:] = [:the Objects of A, the Objects of B:] by CAT_2:33;
+  the Vertices of A, Funcs(the Vertices of B,the Edges of C) such that
+A5: for o st o in the Vertices of A holds P[o,t'.o] from FUNCT_2:sch 1(A2);
+A6: the Vertices of [:A,B:] =
+  [:the Vertices of A, the Vertices of B:] by CAT_2:33;
+  the Vertices of [:A,B:] = [:the Vertices of A, the Vertices of B:]
+   by CAT_2:33;
   then reconsider u' = uncurry t' as Function of
-  the Objects of [:A,B:], the Morphisms of C;
+  the Vertices of [:A,B:], the Edges of C;
 A7: now
     let ab be Object of [:A,B:];
     consider a being Object of A, b being Object of B such that
 A8: ab = [a,b] by A6,DOMAIN_1:9;
     (export F1).a = F1?-a & (export F2).a = F2?-a by Th24;
     then t.a = [[F1?-a,F2?-a],t'.a] by A5;
-    then [[F1?-a,F2?-a],t'.a] in the Morphisms of Functors(B,C);
+    then [[F1?-a,F2?-a],t'.a] in the Edges of Functors(B,C);
     then [[F1?-a,F2?-a],t'.a] in NatTrans(B,C) by NATTRA_1:def 18;
     then consider G1,G2 being Functor of B,C,
     t'' being natural_transformation of G1,G2 such that
@@ -1746,7 +1738,7 @@ A10: G1 is_naturally_transformable_to G2 by NATTRA_1:def 15;
 A11: G1 is_transformable_to G2 by A10,NATTRA_1:def 7;
 A12: [F1?-a,F2?-a] = [G1,G2] & t'.a = t'' by A9,ZFMISC_1:33;
 A13: u'.(a,b) = t'.a.b by Th2
-      .= (t'' qua Function of the Objects of B, the Morphisms of C).b by A9,
+      .= (t'' qua Function of the Vertices of B, the Edges of C).b by A9,
     ZFMISC_1:33
       .= t''.b by A11,NATTRA_1:def 5;
 A14: F1.[a,b] = (F1?-a).b by Th12
@@ -1776,7 +1768,7 @@ A18: Hom(ab1,ab2) <> {};
 A19: ab1 = [a1,b1] by A6,DOMAIN_1:9;
     (export F1).a1 = F1?-a1 & (export F2).a1 = F2?-a1 by Th24;
     then t.a1 = [[F1?-a1,F2?-a1],t'.a1] by A5;
-    then [[F1?-a1,F2?-a1],t'.a1] in the Morphisms of Functors(B,C);
+    then [[F1?-a1,F2?-a1],t'.a1] in the Edges of Functors(B,C);
     then [[F1?-a1,F2?-a1],t'.a1] in NatTrans(B,C) by NATTRA_1:def 18;
     then consider G1,H1 being Functor of B,C,
     t1 being natural_transformation of G1,H1 such that
@@ -1789,7 +1781,7 @@ A23: F1?-a1 = G1 & F2?-a1 = H1 by ZFMISC_1:33;
 A24: ab2 = [a2,b2] by A6,DOMAIN_1:9;
     (export F1).a2 = F1?-a2 & (export F2).a2 = F2?-a2 by Th24;
     then t.a2 = [[F1?-a2,F2?-a2],t'.a2] by A5;
-    then [[F1?-a2,F2?-a2],t'.a2] in the Morphisms of Functors(B,C);
+    then [[F1?-a2,F2?-a2],t'.a2] in the Edges of Functors(B,C);
     then [[F1?-a2,F2?-a2],t'.a2] in NatTrans(B,C) by NATTRA_1:def 18;
     then consider G2,H2 being Functor of B,C,
     t2 being natural_transformation of G2,H2 such that
@@ -1799,8 +1791,8 @@ A27: [F1?-a2,F2?-a2] = [G2,H2] & t'.a2 = t2 by A25,ZFMISC_1:33;
     then
 A28: F1?-a2 = G2 & F2?-a2 = H2 by ZFMISC_1:33;
     let f be Morphism of ab1,ab2;
-    f is Morphism of [:A,B:] & the Morphisms of [:A,B:] =
-    [:the Morphisms of A, the Morphisms of B:] by CAT_2:33;
+    f is Morphism of [:A,B:] & the Edges of [:A,B:] =
+    [:the Edges of A, the Edges of B:] by CAT_2:33;
     then consider g being (Morphism of A), h being Morphism of B such that
 A29: f = [g,h] by DOMAIN_1:9;
 A30: Hom(b1,b2) <> {} & Hom(a1,a2) <> {} by A18,A19,A24,Th13;
@@ -1875,10 +1867,10 @@ A64: cod[id a1,h] = [a1,b2] by CAT_2:38
       .= dom[g,id b2] by A63,CAT_2:38;
     then
 A65: f = [g,id b2]*[id a1, h] by A29,A61,A62,CAT_2:40;
-    the Morphisms of [:A,B:] = [:the Morphisms of A, the Morphisms of B:]
+    the Edges of [:A,B:] = [:the Edges of A, the Edges of B:]
     by CAT_2:33;
     then reconsider FF1 = F1, FF2 = F2 as Function of
-    [:the Morphisms of A, the Morphisms of B:], the Morphisms of C;
+    [:the Edges of A, the Edges of B:], the Edges of C;
 A66: curry(F1,g) = (curry FF1).g;
 A67: v1.b2 = (curry(F1,g)*the Id of B).b2 by A33,NATTRA_1:def 5
       .= curry(F1,g).((the Id of B).b2) by FUNCT_2:21
@@ -1926,7 +1918,7 @@ A75: F1 is_naturally_transformable_to F2
   take u;
   now
     let s be Function of
-    [:the Objects of A, the Objects of B:], the Morphisms of C such that
+    [:the Vertices of A, the Vertices of B:], the Edges of C such that
 A76: u = s;
     let a be Object of A;
     t' = curry u' by Th1;
@@ -1951,7 +1943,7 @@ definition
     holds $2 = [[export F1,export F2],export t];
 A1: now
       let o;
-      assume o in the Morphisms of Functors([:A,B:],C);
+      assume o in the Edges of Functors([:A,B:],C);
       then o in NatTrans([:A,B:],C) by NATTRA_1:def 18;
       then consider F1,F2 being Functor of [:A,B:],C,
       t being natural_transformation of F1,F2 such that
@@ -1960,7 +1952,7 @@ A3:   F1 is_naturally_transformable_to F2 by NATTRA_1:def 16;
       take m = [[export F1, export F2], export t];
       export F1 is_naturally_transformable_to export F2 by A3,Th27;
       then m in NatTrans(A,Functors(B,C)) by NATTRA_1:def 16;
-      hence m in the Morphisms of Functors(A,Functors(B,C)) by NATTRA_1:def 18;
+      hence m in the Edges of Functors(A,Functors(B,C)) by NATTRA_1:def 18;
       thus P[o,m]
       proof
         let F1',F2' be Functor of [:A,B:],C,
@@ -1972,9 +1964,9 @@ A4:     o = [[F1',F2'],t'];
         hence m = [[export F1', export F2'], export t'] by A2,A4,ZFMISC_1:33;
       end;
     end;
-    consider FF being Function of the Morphisms of Functors([:A,B:],C),
-    the Morphisms of Functors(A,Functors(B,C)) such that
-A5: for o st o in the Morphisms of Functors([:A,B:],C) holds P[o,FF.o]
+    consider FF being Function of the Edges of Functors([:A,B:],C),
+    the Edges of Functors(A,Functors(B,C)) such that
+A5: for o st o in the Edges of Functors([:A,B:],C) holds P[o,FF.o]
     from FUNCT_2:sch 1(A1);
     FF is Functor of Functors([:A,B:],C),Functors(A,Functors(B,C))
     proof
@@ -2038,7 +2030,7 @@ A21:  FF.g = [[export F2, export G2], export u] by A5,A15,A18,A19;
 A22: F1 is_naturally_transformable_to F2;
     let t be natural_transformation of F1,F2;
     [[F1,F2],t] in NatTrans([:A,B:],C) by A22,NATTRA_1:35;
-    then [[F1,F2],t] in the Morphisms of Functors([:A,B:],C) by NATTRA_1:def
+    then [[F1,F2],t] in the Edges of Functors([:A,B:],C) by NATTRA_1:def
     18;
     hence FF.[[F1,F2],t] = [[export F1, export F2],export t] by A5;
   end;
@@ -2060,11 +2052,11 @@ A24: for F1,F2 being Functor of [:A,B:], C
       t being natural_transformation of F1,F2 such that
 A25:  F1 is_naturally_transformable_to F2 and
 A26:  dom f = F1 & cod f = F2 & f =[[F1,F2],t] by Th9;
-      thus (IT1 qua Function of the Morphisms of Functors([:A,B:],C),
-      the Morphisms of Functors(A,Functors(B,C)) ).f
+      thus (IT1 qua Function of the Edges of Functors([:A,B:],C),
+      the Edges of Functors(A,Functors(B,C)) ).f
       = [[export F1, export F2], export t] by A23,A25,A26
-        .= (IT2 qua Function of the Morphisms of Functors([:A,B:],C),
-      the Morphisms of Functors(A,Functors(B,C)) ).f by A24,A25,A26;
+        .= (IT2 qua Function of the Edges of Functors([:A,B:],C),
+      the Edges of Functors(A,Functors(B,C)) ).f by A24,A25,A26;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -2073,7 +2065,7 @@ end;
 theorem Th33:
   export(A,B,C) is_an_isomorphism
 proof
-A1: dom export(A,B,C) = the Morphisms of Functors([:A,B:],C) by FUNCT_2:def 1;
+A1: dom export(A,B,C) = the Edges of Functors([:A,B:],C) by FUNCT_2:def 1;
   thus export(A,B,C) is one-to-one
   proof
     let x1,x2 be set;
@@ -2100,9 +2092,9 @@ A6: [export F1, export F2] = [export G1, export G2] & export u = export t
     then F1 = G1 & F2 = G2 by Th26;
     hence x1 = x2 by A2,A3,A5,A6,Th30;
   end;
-  thus rng export(A,B,C) c= the Morphisms of Functors(A,Functors(B,C));
+  thus rng export(A,B,C) c= the Edges of Functors(A,Functors(B,C));
   let m;
-  assume m in the Morphisms of Functors(A,Functors(B,C));
+  assume m in the Edges of Functors(A,Functors(B,C));
   then reconsider f = m as Morphism of Functors(A,Functors(B,C));
   consider F1,F2 being Functor of A,Functors(B,C),
   t being natural_transformation of F1,F2 such that
@@ -2182,10 +2174,10 @@ theorem Th36:
 proof
   let F be Functor of A,B, G be Functor of A,C;
   thus Pr1<:F,G:> =
-  pr1(the Morphisms of B, the Morphisms of C)*<:F,G:> by CAT_2:def 10
+  pr1(the Edges of B, the Edges of C)*<:F,G:> by CAT_2:def 10
     .= F by FUNCT_3:82;
   thus Pr2<:F,G:> =
-  pr2(the Morphisms of B, the Morphisms of C)*<:F,G:> by CAT_2:def 11
+  pr2(the Edges of B, the Edges of C)*<:F,G:> by CAT_2:def 11
     .= G by FUNCT_3:82;
 end;
 
@@ -2194,17 +2186,17 @@ theorem Th37:
   holds F = G
 proof
   let F,G be Functor of A, [:B,C:];
-  the Morphisms of [:B,C:] = [:the Morphisms of B, the Morphisms of C:]
+  the Edges of [:B,C:] = [:the Edges of B, the Edges of C:]
   by CAT_2:33;
   then reconsider f = F, g = G as
-  Function of the Morphisms of A, [:the Morphisms of B, the Morphisms of C:];
+  Function of the Edges of A, [:the Edges of B, the Edges of C:];
   assume Pr1 F = Pr1 G;
   then
-A1: pr1(the Morphisms of B, the Morphisms of C)*f = Pr1 G by CAT_2:def 10
-    .= pr1(the Morphisms of B, the Morphisms of C)*g by CAT_2:def 10;
+A1: pr1(the Edges of B, the Edges of C)*f = Pr1 G by CAT_2:def 10
+    .= pr1(the Edges of B, the Edges of C)*g by CAT_2:def 10;
   assume Pr2 F = Pr2 G;
-  then pr2(the Morphisms of B, the Morphisms of C)*f = Pr2 G by CAT_2:def 11
-    .= pr2(the Morphisms of B, the Morphisms of C)*g by CAT_2:def 11;
+  then pr2(the Edges of B, the Edges of C)*f = Pr2 G by CAT_2:def 11
+    .= pr2(the Edges of B, the Edges of C)*g by CAT_2:def 11;
   hence thesis by A1,Th5;
 end;
 
@@ -2237,18 +2229,18 @@ A2: G1 is_naturally_transformable_to G2;
   let s be natural_transformation of F1,F2,
   t be natural_transformation of G1,G2 such that
 A3: Pr1 s = Pr1 t & Pr2 s = Pr2 t;
-  the Morphisms of [:B,C:] = [:the Morphisms of B, the Morphisms of C:]
+  the Edges of [:B,C:] = [:the Edges of B, the Edges of C:]
   by CAT_2:33;
   then reconsider S = s, T = t as
-  Function of the Objects of A, [:the Morphisms of B, the Morphisms of C:];
-A4: pr1(the Morphisms of B, the Morphisms of C)*S = pr1(B,C)*S by CAT_2:def 10
+  Function of the Vertices of A, [:the Edges of B, the Edges of C:];
+A4: pr1(the Edges of B, the Edges of C)*S = pr1(B,C)*S by CAT_2:def 10
     .= Pr1 s by A1,Th35
     .= pr1(B,C)*T by A2,A3,Th35
-    .= pr1(the Morphisms of B, the Morphisms of C)*T by CAT_2:def 10;
-  pr2(the Morphisms of B, the Morphisms of C)*S = pr2(B,C)*S by CAT_2:def 11
+    .= pr1(the Edges of B, the Edges of C)*T by CAT_2:def 10;
+  pr2(the Edges of B, the Edges of C)*S = pr2(B,C)*S by CAT_2:def 11
     .= Pr2 s by A1,Th35
     .= pr2(B,C)*T by A2,A3,Th35
-    .= pr2(the Morphisms of B, the Morphisms of C)*T by CAT_2:def 11;
+    .= pr2(the Edges of B, the Edges of C)*T by CAT_2:def 11;
   hence thesis by A4,Th5;
 end;
 
@@ -2261,8 +2253,8 @@ proof
 A1: F1 is_transformable_to G1 & F2 is_transformable_to G2;
   let t1 be transformation of F1,G1, t2 be transformation of F2,G2;
   let a be Object of A;
-  reconsider s1 = t1 as Function of the Objects of A, the Morphisms of B;
-  reconsider s2 = t2 as Function of the Objects of A, the Morphisms of C;
+  reconsider s1 = t1 as Function of the Vertices of A, the Edges of B;
+  reconsider s2 = t2 as Function of the Vertices of A, the Edges of C;
   thus <:t1,t2:>.a = [s1.a,s2.a] by FUNCT_3:79
     .= [t1.a,s2.a] by A1,NATTRA_1:def 5
     .= [t1.a,t2.a] by A1,NATTRA_1:def 5;
@@ -2336,10 +2328,10 @@ A1: F1 is_transformable_to G1 & F2 is_transformable_to G2;
   <:t1,t2:>;
   coherence
   proof
-    the Morphisms of [:B,C:] = [:the Morphisms of B, the Morphisms of C:]
+    the Edges of [:B,C:] = [:the Edges of B, the Edges of C:]
     by CAT_2:33;
     then reconsider t = <:t1,t2:> as
-    Function of the Objects of A, the Morphisms of [:B,C:];
+    Function of the Vertices of A, the Edges of [:B,C:];
     t is transformation of <:F1,F2:>,<:G1,G2:>
     proof thus <:F1,F2:> is_transformable_to <:G1,G2:> by A1,Th44;
       let a be Object of A;
@@ -2360,10 +2352,10 @@ proof
 A1: F1 is_transformable_to G1 & F2 is_transformable_to G2;
   let t1 be transformation of F1,G1, t2 be transformation of F2,G2;
   let a be Object of A;
-  reconsider s1 = t1 as Function of the Objects of A, the Morphisms of B;
-  reconsider s2 = t2 as Function of the Objects of A, the Morphisms of C;
+  reconsider s1 = t1 as Function of the Vertices of A, the Edges of B;
+  reconsider s2 = t2 as Function of the Vertices of A, the Edges of C;
   thus <:t1,t2:>.a = (<:t1,t2:> qua
-  Function of the Objects of A, the Morphisms of [:B,C:]).a
+  Function of the Vertices of A, the Edges of [:B,C:]).a
   by A1,Th44,NATTRA_1:def 5
     .= <:s1,s2:>.a by A1,Def11
     .= [t1.a,t2.a] by A1,Lm2;
@@ -2477,7 +2469,7 @@ A3: F1 is_transformable_to G1 & F2 is_transformable_to G2
   by A1,A2,NATTRA_1:def 7;
   let t1 be natural_transformation of F1,G1,
   t2 be natural_transformation of F2,G2;
-  reconsider s = t1 as Function of the Objects of A, the Morphisms of B;
+  reconsider s = t1 as Function of the Vertices of A, the Edges of B;
   <:F1,F2:> is_naturally_transformable_to <:G1,G2:> by A1,A2,Th46;
   then
 A4: <:F1,F2:> is_transformable_to <:G1,G2:> by NATTRA_1:def 7;
@@ -2485,23 +2477,23 @@ A4: <:F1,F2:> is_transformable_to <:G1,G2:> by NATTRA_1:def 7;
   *(<:t1,t2:> qua transformation of <:F1,F2:>,<:G1,G2:>)
   by A1,A2,Th46,ISOCAT_1:def 7
     .= pr1(B,C)*
-  (<:t1,t2:> qua Function of the Objects of A, the Morphisms of [:B,C:])
+  (<:t1,t2:> qua Function of the Vertices of A, the Edges of [:B,C:])
   by A4,ISOCAT_1:def 5
     .= pr1(B,C)* (<:t1 qua transformation of F1,G1,t2:>
-  qua Function of the Objects of A, the Morphisms of [:B,C:]) by A1,A2,Def12
+  qua Function of the Vertices of A, the Edges of [:B,C:]) by A1,A2,Def12
     .= pr1(B,C)*<:s,t2:> by A3,Def11
-    .= pr1(the Morphisms of B, the Morphisms of C)*<:s,t2:> by CAT_2:def 10
+    .= pr1(the Edges of B, the Edges of C)*<:s,t2:> by CAT_2:def 10
     .= t1 by FUNCT_3:82;
   thus Pr2<:t1,t2:> = pr2(B,C)
   *(<:t1,t2:> qua transformation of <:F1,F2:>,<:G1,G2:>)
   by A1,A2,Th46,ISOCAT_1:def 7
     .= pr2(B,C)*
-  (<:t1,t2:> qua Function of the Objects of A, the Morphisms of [:B,C:])
+  (<:t1,t2:> qua Function of the Vertices of A, the Edges of [:B,C:])
   by A4,ISOCAT_1:def 5
     .= pr2(B,C)* (<:t1 qua transformation of F1,G1,t2:>
-  qua Function of the Objects of A, the Morphisms of [:B,C:]) by A1,A2,Def12
+  qua Function of the Vertices of A, the Edges of [:B,C:]) by A1,A2,Def12
     .= pr2(B,C)*<:s,t2:> by A3,Def11
-    .= pr2(the Morphisms of B, the Morphisms of C)*<:s,t2:> by CAT_2:def 11
+    .= pr2(the Edges of B, the Edges of C)*<:s,t2:> by CAT_2:def 11
     .= t2 by FUNCT_3:82;
 end;
 
@@ -2521,8 +2513,8 @@ definition
     holds $2 = [[[Pr1 F1, Pr1 F2],Pr1 t],[[Pr2 F1, Pr2 F2],Pr2 t]];
 A1: now
       let f be Morphism of Functors(A,[:B,C:]);
-A2:   the Morphisms of Functors(A,B) = NatTrans(A,B) &
-      the Morphisms of Functors(A,C) = NatTrans(A,C) by NATTRA_1:def 18;
+A2:   the Edges of Functors(A,B) = NatTrans(A,B) &
+      the Edges of Functors(A,C) = NatTrans(A,C) by NATTRA_1:def 18;
       consider F1,F2 being Functor of A,[:B,C:],
       s being natural_transformation of F1,F2 such that
 A3:   F1 is_naturally_transformable_to F2 and
@@ -2545,14 +2537,14 @@ A5:     [G1,G2] = [F1,F2] & t = s by A4,ZFMISC_1:33;
         hence g = [[[Pr1 G1, Pr1 G2],Pr1 t],[[Pr2 G1, Pr2 G2],Pr2 t]] by A5;
       end;
     end;
-    consider IT being Function of the Morphisms of Functors(A,[:B,C:]),
-    the Morphisms of [:Functors(A,B),Functors(A,C):] such that
+    consider IT being Function of the Edges of Functors(A,[:B,C:]),
+    the Edges of [:Functors(A,B),Functors(A,C):] such that
 A6: for f being Morphism of Functors(A,[:B,C:]) holds P[f,IT.f]
     from FUNCT_2:sch 3(A1);
     IT is Functor of Functors(A,[:B,C:]), [:Functors(A,B),Functors(A,C):]
     proof
-A7:   the Morphisms of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
-A8:   the Morphisms of Functors(A,C) = NatTrans(A,C) by NATTRA_1:def 18;
+A7:   the Edges of Functors(A,B) = NatTrans(A,B) by NATTRA_1:def 18;
+A8:   the Edges of Functors(A,C) = NatTrans(A,C) by NATTRA_1:def 18;
       thus for c being Object of Functors(A,[:B,C:])
       ex d being Object of [:Functors(A,B),Functors(A,C):] st IT.id c = id d
       proof
@@ -2717,9 +2709,9 @@ A5: Pr1 s = Pr1 t & Pr2 s = Pr2 t &
     hence x1 = x2 by A2,A4;
   end;
   thus rng distribute(A,B,C) c=
-  the Morphisms of [:Functors(A,B),Functors(A,C):];
+  the Edges of [:Functors(A,B),Functors(A,C):];
   let o;
-  assume o in the Morphisms of [:Functors(A,B),Functors(A,C):];
+  assume o in the Edges of [:Functors(A,B),Functors(A,C):];
   then consider o1 being (Morphism of Functors(A,B)),
   o2 being Morphism of Functors(A,C) such that
 A6: o = [o1,o2] by CAT_2:37;

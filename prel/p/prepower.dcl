@@ -15,11 +15,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
-<ArticleID name="RAT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
 <RCluster>
@@ -37,10 +37,10 @@
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="78"/>
 </Adjective>
+<Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="28">
+<Adjective nr="27">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="78"/>
 </Adjective>
@@ -55,7 +55,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="107">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -93,7 +93,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -9,18 +9,18 @@ environ
  vocabularies ARYTM, ARYTM_1, ARYTM_3, ASYMPT_0, SQUARE_1, GROUP_1, ABSVALUE,
       FUNCT_1, POWER, PREPOWER, SEQ_1, SERIES_1, SERIES_3, ZF_LANG;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1,
-      NEWTON, REAL_1, PREPOWER, COMPLEX1, VALUED_1, SEQ_1, BINOP_2, POWER,
+      NEWTON, REAL_1, NAT_1, PREPOWER, COMPLEX1, VALUED_1, SEQ_1, POWER,
       SERIES_1, FUNCT_2;
- constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQ_1, NEWTON, PREPOWER,
-      SERIES_1, VALUED_1, PARTFUN1;
+ constructors REAL_1, SQUARE_1, NAT_1, SEQ_1, NEWTON, PREPOWER, SERIES_1,
+      VALUED_1, PARTFUN1;
  registrations NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED,
-      COMPLEX1, NEWTON, XBOOLE_0, VALUED_1, FUNCT_2, ORDINAL1;
+      COMPLEX1, NEWTON, VALUED_1, FUNCT_2, VALUED_0, RELSET_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
- definitions SQUARE_1, VALUED_1;
+ definitions SQUARE_1;
  theorems XCMPLX_1, SQUARE_1, SIN_COS2, REAL_1, REAL_2, POLYEQ_2, ABSVALUE,
       NEWTON, POWER, ASYMPT_1, XREAL_1, PREPOWER, FUNCT_2, SERIES_1, SEQ_1,
       COMPLEX1, POLYEQ_1, XXREAL_0, NAT_1;
- schemes NAT_1, RECDEF_1;
+ schemes NAT_1;
 
 begin
 
@@ -236,7 +236,7 @@ A4: (a+b)|^(2+1)>=4*a*b*(a+b) by NEWTON:11;
   then (b+c)|^2*(b+c)>=4*b*c*(b+c) by Lm1;
   then (b+c)|^(2+1)>=4*b*c*(b+c) by NEWTON:11;
   then
-A5: (a+b)|^3+(b+c)|^3>=(4*a^2*b+4*a*b^2)+(4*b^2*c+4*b*c^2) by A4,XREAL_1 :9;
+A5: (a+b)|^3+(b+c)|^3>=(4*a^2*b+4*a*b^2)+(4*b^2*c+4*b*c^2) by A4,XREAL_1:9;
   (a+c)^2*(a+c)>=4*a*c*(a+c) by Th9,XREAL_1:66;
   then (a+c)|^2*(a+c)>=4*a*c*(a+c) by Lm1;
   then (a+c)|^(2+1)>=4*a*c*(a+c) by NEWTON:11;
@@ -432,7 +432,7 @@ A3: (a+(1/a))*(b+1/b)=((1+a^2)/a)*(b+1/b) by XCMPLX_1:114
 A4: 1+((1-(a*b))^2)>=1+0 by XREAL_1:8;
 A5: a*b<=(1/2)^2 by A1,Th4;
   then
-A6: ((1+((1-(a*b))^2)))/(a*b)>=((1+((1-(a*b))^2)))/(1/4) by A4,XREAL_1: 120;
+A6: ((1+((1-(a*b))^2)))/(a*b)>=((1+((1-(a*b))^2)))/(1/4) by A4,XREAL_1:120;
   1-(a*b)>=1-(1/4) by A5,XREAL_1:12;
   then (1-(a*b))^2>=(3/4)^2 by SQUARE_1:77;
   then 1+(1-(a*b))^2>=1+(9/16) by XREAL_1:8;
@@ -1090,10 +1090,10 @@ definition
   it.0=s.0 & for n holds it.(n+1) = it.n * s.(n+1);
   existence
   proof
-    deffunc U(Element of NAT,Real) = $2 * s.($1+1);
+    deffunc U(Nat,Real) = $2 * s.($1+1);
     consider f being Function of NAT,REAL such that
-A1: f.0 = s.0 & for n being Element of NAT holds f.(n+1) = U(n,f.n)
-    from RECDEF_1:sch 4;
+A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n)
+    from NAT_1:sch 12;
     reconsider f as Real_Sequence;
     take f;
     thus thesis by A1;
@@ -1428,7 +1428,7 @@ A6: (1+Partial_Sums(s).n)*(1+s.(n+1))<=((Partial_Product s1).n)*(1+s.( n+1))
     ((Partial_Product s1).n)*(1+s.(n+1))=((Partial_Product s1).n)*s1.(n+1)
     by A1;
     then
-A7: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by A6, Def1;
+A7: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by A6,Def1;
     (Partial_Sums(s).n)*(s.(n+1))>=0 by A1,Lm10;
     then
 A8: (Partial_Sums(s).n)*(s.(n+1))+(1+s.(n+1)+Partial_Sums(s).n)>=
@@ -1621,8 +1621,8 @@ A23: sqrt(v+h^2)>=0 & sqrt(w+j^2)>=0 by A20,A21,SQUARE_1:def 4;
     then (v+h^2)*(w+j^2)>=(sqrt(v*w))^2+2*(sqrt(w*v))*(h*j)+(h*j)^2 by A16,
     SQUARE_1:def 4;
     then sqrt(((sqrt(v*w))+h*j)^2)<=sqrt((v+h^2)*(w+j^2)) by A17,SQUARE_1:94;
-    then (sqrt(v*w))+h*j<=sqrt((v+h^2)*(w+j^2)) by A18,A19,SQUARE_1:89,XREAL_1
-    :35;
+    then (sqrt(v*w))+h*j<=sqrt((v+h^2)*(w+j^2)) by A18,A19,SQUARE_1:89
+    ,XREAL_1:35;
     then 2*((sqrt(v*w))+h*j)<=2*(sqrt((v+h^2)*(w+j^2))) by XREAL_1:66;
     then
 A24: (v+w)+(2*(sqrt(v*w))+2*h*j)<=(v+w)+(2*(sqrt((v+h^2)*(w+j^2))))

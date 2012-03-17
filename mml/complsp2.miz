@@ -6,18 +6,16 @@
 
 environ
 
- vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, FUNCOP_1,
-      RVSUM_1, COMPLSP1, COMPLEX1, EUCLID_2, ARYTM_3, XCMPLX_0, VECTSP_1,
-      ARYTM;
+ vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, FUNCOP_1, RVSUM_1,
+      COMPLSP1, COMPLEX1, EUCLID_2, ARYTM_3, XCMPLX_0, VECTSP_1, ARYTM;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, ZFMISC_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQOP, VALUED_1, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2,
-      EUCLID_2, ORDINAL1, MATRIX_5, XXREAL_0;
+      EUCLID_2, ORDINAL1, MATRIX_5, XXREAL_0, SEQ_1;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, BINOP_2, FINSEQOP,
-      COMPLSP1, EUCLID_2, MATRIX_5, VALUED_1, SEQ_1;
+      COMPLSP1, EUCLID_2, MATRIX_5, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      BINOP_2, MEMBERED, COMPLEX1, SEQ_1, FINSEQ_2, XXREAL_0, VALUED_0,
-      VALUED_1, ORDINAL1;
+      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, VALUED_1;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, FINSEQOP, RELAT_1,
@@ -41,15 +39,14 @@ definition
   existence
   proof
     deffunc F(Nat)=(z.$1)*';
-    ex p being FinSequence st len p = len z
-    & for k being Nat st k in Seg len z holds p.k=F(k) from FINSEQ_1:sch 2;
-    then consider p being FinSequence such that
-A1: len p = len z & for k be Nat st k in Seg len z holds p.k=F(k);
+    consider p being FinSequence such that
+A1: len p = len z & for k be Nat st k in dom p holds p.k=F(k)
+        from FINSEQ_1:sch 2;
 A2: for i be Nat st 1<=i & i<=len z holds ((z.i)*')=p.i
     proof
       let i be Nat;
       assume 1<=i & i<=len z;
-      then i in Seg len z by FINSEQ_1:3;
+      then i in dom p by A1,FINSEQ_3:27;
       hence (z.i)*'=p.i by A1;
     end;
     rng p c= COMPLEX
@@ -58,9 +55,8 @@ A2: for i be Nat st 1<=i & i<=len z holds ((z.i)*')=p.i
       assume s2 in rng p;
       then consider s1 being set such that
 A3:   s1 in dom p & s2=p.s1 by FUNCT_1:def 5;
-A4:   s1 in Seg len p by A3,FINSEQ_1:def 3;
       reconsider nx=s1 as Element of NAT by A3;
-      p.nx = (z.nx)*' by A1,A4;
+      p.nx = (z.nx)*' by A1,A3;
       hence s2 in COMPLEX by A3;
     end;
     then p is FinSequence of COMPLEX by FINSEQ_1:def 4;
@@ -70,17 +66,17 @@ A4:   s1 in Seg len p by A3,FINSEQ_1:def 3;
   proof
     let p1,p2 be FinSequence of COMPLEX;
     assume
-A5: (len p1=len z & for i be Nat st 1<=i & i<=len z holds (z.i)*'=p1.i)&
+A4: (len p1=len z & for i be Nat st 1<=i & i<=len z holds (z.i)*'=p1.i)&
     (len p2=len z & for i be Nat st 1<=i & i<=len z holds (z.i)*'=p2.i);
     for i be Nat st 1<=i & i<=len p1 holds p1.i=p2.i
     proof
       let i be Nat;
       assume
-A6:   1<=i & i<=len p1;
-      then (z.i)*'=p1.i by A5;
-      hence p1.i=p2.i by A5,A6;
+A5:   1<=i & i<=len p1;
+      then (z.i)*'=p1.i by A4;
+      hence p1.i=p2.i by A4,A5;
     end;
-    hence p1=p2 by A5,FINSEQ_1:18;
+    hence p1=p2 by A4,FINSEQ_1:18;
   end;
 end;
 
@@ -755,7 +751,6 @@ theorem Th41:
 proof
   let c be complex number;
   reconsider cc = c as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
 A1: rng (0c (len x)) c= COMPLEX by FINSEQ_1:def 4;
   c*(0c (len x)) = multcomplex[;](cc,id COMPLEX)*(0c (len x)) by Lm1
     .= multcomplex[;](cc,(id COMPLEX)*(0c (len x))) by FUNCOP_1:44
@@ -846,26 +841,6 @@ A7: i in dom (G.:(x2,y2)) by A3,A5,FINSEQ_3:27;
       .= (G.:(x2,y2)).i by A7,FUNCOP_1:28;
   end;
   hence thesis by A2,A3,FINSEQ_1:18;
-end;
-
-Lm2: 0 = 0c;
-
-definition
-  let z be FinSequence of REAL, i be set;
-  redefine func z.i -> Element of REAL;
-  coherence
-  proof
-    per cases;
-    suppose
-A1:   i in dom z;
-      then reconsider i as Element of NAT;
-      i in dom z by A1;
-      hence thesis by FINSEQ_2:13;
-    end;
-    suppose not i in dom z;
-      hence z.i is Element of REAL by Lm2,FUNCT_1:def 4;
-    end;
-  end;
 end;
 
 theorem
@@ -996,7 +971,7 @@ proof
     .= a*(b*z) by Lm1;
 end;
 
-Lm3: -(0c (len x)) = 0c (len x)
+Lm2: -(0c (len x)) = 0c (len x)
 proof
   -(0c (len x)) = -((len x) |-> 0c) by COMPLSP1:def 13
     .= compcomplex*((len x) |-> 0c) by COMPLSP1:def 9
@@ -1016,7 +991,7 @@ A2: len (c*x)=len x by Th3;
     .= -(c*x)+ c*x by Th53
     .= -(c*x - c*x) by A2,Th39
     .= -(0c (len x)) by A2,Th34
-    .= 0c (len x) by Lm3;
+    .= 0c (len x) by Lm2;
   hence thesis by A1,A2,Th32;
 end;
 
@@ -1213,13 +1188,7 @@ proof
   let a be Element of COMPLEX, x be FinSequence of COMPLEX;
 A1: len (x*') = len x by Def1;
 A2: len Re x = len x by Th48;
-  reconsider z1=(a-<i>*(Im a)), z2=-<i>*(a-(Re a))
-  as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider z3=((Re a) + <i>*(Im a)), z4=(Re a * (1/2))
-  as Element of COMPLEX by XCMPLX_0:def 2;
   reconsider z5=Re a, z6=Im a as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider z7=<i>*Im a, z8=(-1/2) * <i>
-  as Element of COMPLEX by XCMPLX_0:def 2;
 A3: len (1/2*z5*x) = len x by Th3;
 A4: Re a * Re x =(z5 * (1/2))*(x+x*') by Th53
     .=(z5*1/2)*x+(z5*1/2)*(x*') by A1,Th30;

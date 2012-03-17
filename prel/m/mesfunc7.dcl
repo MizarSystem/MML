@@ -11,10 +11,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ENUMSET1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -70,7 +70,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="233"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -90,7 +90,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="233"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -134,7 +134,6 @@
 <Func kind="K" nr="48"/>
 </Func>
 <Cluster>
-<Adjective nr="7"/>
 <Adjective nr="57"/>
 </Cluster>
 </FCluster>

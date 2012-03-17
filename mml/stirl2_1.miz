@@ -13,20 +13,19 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, RELSET_1, ORDINAL1, SEQ_4, PARTFUN1, FINSET_1, AFINSQ_1,
       XCMPLX_0, XXREAL_0, FUNCT_2, NAT_1, INT_1, WELLORD2, BINOP_1, BINOP_2,
-      NEWTON, SETWISEO, DOMAIN_1, FUNCOP_1;
+      NEWTON, SETWISEO, DOMAIN_1, FUNCOP_1, RECDEF_1;
  constructors PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, SETWISEO, REAL_1,
-      SQUARE_1, NAT_1, SEQM_3, BINOP_2, SEQ_4, NEWTON, AFINSQ_1, VALUED_1,
-      SEQ_1;
+      SQUARE_1, NAT_1, BINOP_2, SEQ_4, NEWTON, AFINSQ_1, RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, SEQ_4,
-      AFINSQ_1, CARD_1, SEQM_3, VALUED_0, VALUED_1;
+      AFINSQ_1, CARD_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, VALUED_1;
- theorems AFINSQ_1, TARSKI, FINSEQ_1, FUNCT_1, XBOOLE_0, ZFMISC_1, RELAT_1,
-      XBOOLE_1, NAT_1, FUNCT_2, FINSET_1, AXIOMS, XCMPLX_1, REAL_1, CARD_2,
-      INT_1, ORDINAL1, WELLORD2, EULER_1, FRAENKEL, SUBSET_1, SQUARE_1,
-      ENUMSET1, CARD_1, BINOP_1, CARD_5, BINOP_2, NEWTON, WSIERP_1, SETWISEO,
-      FUNCOP_1, XREAL_1, XXREAL_0, SEQ_4;
+ definitions TARSKI, XBOOLE_0, FUNCT_1;
+ theorems AFINSQ_1, TARSKI, FUNCT_1, XBOOLE_0, ZFMISC_1, RELAT_1, XBOOLE_1,
+      NAT_1, FUNCT_2, FINSET_1, AXIOMS, XCMPLX_1, REAL_1, CARD_2, INT_1,
+      ORDINAL1, WELLORD2, EULER_1, FRAENKEL, SUBSET_1, SQUARE_1, ENUMSET1,
+      CARD_1, BINOP_1, CARD_5, BINOP_2, NEWTON, WSIERP_1, SETWISEO, FUNCOP_1,
+      XREAL_1, XXREAL_0, SEQ_4;
  schemes FUNCT_2, NAT_1, INT_1;
 
 begin
@@ -154,22 +153,7 @@ end;
 registration
   let n;
   cluster -> natural Element of n;
-  coherence
-  proof
-    per cases;
-    suppose
-A1:   n=0;
-      let k be Element of n;
-      thus thesis by A1,SUBSET_1:def 2;
-    end;
-    suppose
-A2:   n>0;
-      let k be Element of n;
-      k in n & n is Subset of NAT by A2,Th8;
-      then k is Element of NAT;
-      hence thesis;
-    end;
-  end;
+  coherence;
 end;
 
 theorem
@@ -562,7 +546,7 @@ A4:   for x be Element of n ex y be Element of k st F[x,y]
       proof
         let x be Element of n;
         min(x,k1)<=k1 & k1<k1+1 by NAT_1:13,XXREAL_0:17;
-        then min(x,k1)<k & min(x,k1) is natural by XXREAL_0:2,15;
+        then min(x,k1)<k & min(x,k1) is natural by XXREAL_0:2;
         then min(x,k1) in k by EULER_1:1;
         hence ex y be Element of k st F[x,y];
       end;
@@ -1437,8 +1421,6 @@ A9:       n>0;
           proof
             let k1 be set such that
 A10:        k1 in k;
-            k is Subset of NAT by Th8;
-            then reconsider k'=k1 as Element of NAT by A10;
             consider x be set such that
 A11:        x in dom f & f.x=k1 by A5,A10,FUNCT_1:def 5;
             dom f =n+1 & n+1 is Subset of NAT by A10,Th8,FUNCT_2:def 1;
@@ -1825,8 +1807,6 @@ A17:      f=x & f is onto "increasing & f"{f.n}={n} by A16;
             let i,j such that
 A18:        i=n\/{n} & j=k\/{k};
             i=n+1 & j=k+1 by A18,AFINSQ_1:4;
-            then reconsider f'=f as Function of i,j;
-            i=n+1 & j=k+1 by A18,AFINSQ_1:4;
             hence thesis by A17;
           end;
           then P[f,n\/{n},k\/{k}] & f.n=k & rng (f|n) c= k
@@ -1951,8 +1931,6 @@ A15:      f=x & f is onto "increasing & f"{f.n}<>{n}& f.n=l by A14;
           proof
             let i,j such that
 A16:        i=n\/{n} & j=k\/{l};
-            i=n+1 & j=k by A1,A16,Lm1,AFINSQ_1:4;
-            then reconsider f'=f as Function of i,j;
             i=n+1 & j=k by A1,A16,Lm1,AFINSQ_1:4;
             hence thesis by A15;
           end;
@@ -2285,7 +2263,7 @@ A1: P[<%>D]
     assume
 A2: b is associative & (b has_a_unity or len F >= 1 & len <%>D >= 1);
     thus b "**" (F ^ <%>D) = b "**" F by AFINSQ_1:32
-      .= b.(b "**" F,the_unity_wrt b) by A2,CARD_1:47 ,SETWISEO:23
+      .= b.(b "**" F,the_unity_wrt b) by A2,SETWISEO:23
       .= b.(b "**" F,b "**" <%>D) by A2,Def3,CARD_1:47;
   end;
 A3: for G,d st P[G] holds P[G ^ <%d%>]
@@ -2375,25 +2353,8 @@ end;
 definition
   let Fn;
   func Sum(Fn) -> Element of NAT equals
-
   addnat "**" Fn;
   coherence;
-end;
-
-definition
-  let Fn,x;
-  redefine func Fn.x -> Element of NAT;
-  coherence
-  proof
-    per cases;
-    suppose x in dom Fn;
-      then Fn.x in rng Fn & rng Fn c= NAT by FUNCT_1:def 5,ORDINAL1:def 8;
-      hence Fn.x is Element of NAT;
-    end;
-    suppose not x in dom Fn;
-      hence thesis by FUNCT_1:def 4,NAT_1:2;
-    end;
-  end;
 end;
 
 theorem Th50:
@@ -2770,8 +2731,6 @@ A20:      X in dom F() & X in k1 by XBOOLE_0:def 3;
         k1 in len CardF by A15,EULER_1:1;
         then k1 in dom F() by A8,AFINSQ_1:def 1;
         then reconsider Fk1=F().k1 as finite set by A1;
-        urFk1 \/Fk1=union rFk2 by Th54;
-        then reconsider urFk2=union rFk2 as finite set;
         len CardF = len F() by A7,AFINSQ_1:def 1;
         then k<len CardF & k1 in len F() & k1 <len CardF
         by A15,EULER_1:1,NAT_1:13;
@@ -4241,7 +4200,7 @@ A53:            Orde is one-to-one onto by A17,FUNCT_2:def 4;
               then
 A54:          i1 in dom P1 & P1.i1 in {i} & j1 in dom P1 &
               P1.j1 in {j} & dom P1=rF & (card rF={} implies rF={})
-              by CARD_2:59,FUNCT_1:def 13,FUNCT_2:def 1;
+              by FUNCT_1:def 13,FUNCT_2:def 1;
               then
 A55:          P1.i1=i & P1.j1=j & i1 in rF & j1 in rF & dom Orde=rF
               by FUNCT_2:def 1,TARSKI:def 1;
@@ -4253,12 +4212,12 @@ A56:          for l st l in rF & l < F.m holds
                 let l such that
 A57:            l in rF & l < F.m;
                 Orde is onto & (card rF={} implies rF={})
-                by A17,CARD_2:59,FUNCT_2:def 4;
+                by A17,FUNCT_2:def 4;
                 then
 A58:            dom Orde=rF & card rF=rng Orde by FUNCT_2: def 1,def 3;
                 then
 A59:            Orde.l < Orde.(F.m) & Orde.(F.m) in card rF &
-                card rF is Subset of NAT by A9,A18,A57,Th8,FUNCT_1:def 5;
+                card rF is Subset of NAT by A9,A18,A57,Th8;
                 then Orde.l+1<=Orde.(F.m) & Orde.(F.m) < card rF &
                 Orde.(F.m) is Element of NAT by EULER_1:1,NAT_1:13;
                 then Orde.l+1 < card rF by XXREAL_0:2;
@@ -4315,7 +4274,7 @@ A63:              x in dom G2 & G2.x=j1 by A46,FUNCT_1:def 5;
 A64:              i1 < F.m & j1=F.m;
                   then (i1 in rng FD or i1 in {F.m}) & not i1 in {F.m} &
                   card rF <>0 & Orde is onto & rng FD c= rF
-                  by A17,A45,A47,CARD_2:59,FUNCT_2:def 4,RELAT_1:99
+                  by A17,A45,A47,FUNCT_2:def 4,RELAT_1:99
                   ,TARSKI:def 1,XBOOLE_0:def 2;
                   then i1 in rF & card rF >0 & card rF=rng Orde
                   by FUNCT_2:def 3;
@@ -4342,7 +4301,7 @@ A64:              i1 < F.m & j1=F.m;
                   then
 A65:              P1.i1=i1 & P1.j1=Orde".0 by A19,A45, A46;
                   Orde is one-to-one onto & card rF is non empty
-                  by A17,CARD_2:59,FUNCT_2:def 4;
+                  by A17,FUNCT_2:def 4;
                   then rng (Orde")=dom Orde & dom (Orde")=rng Orde &
                   rng Orde=card rF & dom Orde=rF & i1 in rF
                   by A45,FUNCT_1:55,FUNCT_2:def 1,def 3;
@@ -4350,7 +4309,7 @@ A65:              P1.i1=i1 & P1.j1=Orde".0 by A19,A45, A46;
 A66:              x in dom Orde' & Orde'.x=i1 by FUNCT_1:def 5;
                   x in card rF & card rF is Subset of NAT by A66,Th8;
                   then reconsider x as Element of NAT;
-                  card rF <>0 & Orde is onto by A17,CARD_2:59 ,FUNCT_2:def 4;
+                  card rF <>0 & Orde is onto by A17,FUNCT_2:def 4;
                   then card rF>0&card rF=rng Orde by FUNCT_2:def 3;
                   then 0 in rng Orde & x in rng Orde & Orde'.x < Orde'.0
                   by A44,A55,A65,A66,EULER_1:1;

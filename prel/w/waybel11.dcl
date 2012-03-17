@@ -18,7 +18,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -382,7 +381,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="315">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -426,7 +425,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="315">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -468,7 +467,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="315">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -495,7 +494,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="316">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -520,7 +519,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="316">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -547,7 +546,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="314">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -569,7 +568,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="314">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -592,7 +591,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="314">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

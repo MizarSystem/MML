@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
@@ -39,8 +40,14 @@
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="33"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -54,8 +61,14 @@
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14" value="false"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="33"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -69,12 +82,12 @@
 <Func kind="K" nr="107"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="217">
+<Func kind="K" nr="219">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

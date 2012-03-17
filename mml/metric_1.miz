@@ -6,20 +6,20 @@
 
 environ
 
- vocabularies FUNCT_1, PARTFUN1, RELAT_1, BOOLE, FUNCOP_1, RELAT_2, ARYTM_3,
-      FUNCT_3, ABSVALUE, ARYTM_1, ARYTM, METRIC_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
-      COMPLEX1, REAL_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCOP_1, RELAT_1,
-      STRUCT_0, XXREAL_0;
- constructors BINOP_1, FUNCT_3, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, MEMBERED,
-      COMPLEX1, STRUCT_0, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, NUMBERS,
-      XREAL_0, MEMBERED, STRUCT_0, VALUED_1, FUNCT_2;
+ vocabularies FUNCT_1, PARTFUN1, RELAT_1, BOOLE, RELAT_2, ARYTM_3, FUNCT_3,
+      ABSVALUE, ARYTM_1, ARYTM, METRIC_1, MIDSP_1, VALUED_0, ORDINAL2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, COMPLEX1, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1,
+      RELAT_1, FUNCT_5, VALUED_0, STRUCT_0, XXREAL_0;
+ constructors BINOP_1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, STRUCT_0, VALUED_1,
+      FUNCT_5;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, MEMBERED,
+      STRUCT_0, VALUED_0;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
- definitions STRUCT_0, XBOOLE_0, BINOP_1, VALUED_1;
- theorems TARSKI, REAL_1, BINOP_1, FUNCOP_1, ZFMISC_1, FUNCT_2, RELSET_1,
-      RELAT_1, FUNCT_3, ABSVALUE, SUBSET_1, STRUCT_0, PARTFUN1, CARD_1,
-      FUNCT_1, XBOOLE_0, XBOOLE_1, XREAL_1, COMPLEX1;
+ definitions STRUCT_0, XBOOLE_0, BINOP_1;
+ theorems TARSKI, REAL_1, BINOP_1, ZFMISC_1, FUNCT_2, RELSET_1, RELAT_1,
+      FUNCT_3, ABSVALUE, SUBSET_1, STRUCT_0, PARTFUN1, CARD_1, FUNCT_1,
+      XBOOLE_0, XBOOLE_1, XREAL_1, COMPLEX1;
  schemes FRAENKEL, BINOP_1;
 
 begin
@@ -67,47 +67,62 @@ definition
   coherence;
 end;
 
+notation
+ synonym Empty^2-to-zero for op2;
+end;
+
 definition
-  func Empty^2-to-zero -> Function of [:{{}},{{}}:], REAL equals
-  [:{{}},{{}}:] --> 0;
+  redefine func Empty^2-to-zero -> Function of [:1,1:], REAL;
   coherence
   proof
-    set X=[:{{}},{{}}:];
-    {0} c= REAL & X<>{} by ZFMISC_1:37;
-    then X=dom (X-->0) & rng (X-->0) c= REAL by FUNCOP_1:14,19;
-    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+X:  op2 is Function of [:1,1:], 1;
+    0 in REAL;
+    then 1 c= REAL by ZFMISC_1:37,CARD_1:87;
+   hence thesis by FUNCT_2:9,X;
   end;
 end;
 
-Lm1: [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
-then
-
-Lm2: Empty^2-to-zero.({},{}) = 0 by FUNCOP_1:13;
-
-Lm3: for x,y be Element of {{}} holds Empty^2-to-zero.(x,y)=0 iff x=y
+Lm2: op2.({},{}) = 0
 proof
-  let x,y be Element of {{}};
-  x={} & y={} by TARSKI:def 1;
-  hence thesis by Lm1,FUNCOP_1:13;
+  [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
+  hence op2.({},{}) = {} by CARD_1:87,FUNCT_2:65;
 end;
 
-Lm4: for x,y be Element of {{}} holds
-Empty^2-to-zero.(x,y)=Empty^2-to-zero.(y,x)
+Lm3: for x,y be Element of 1 holds op2.(x,y)=0 iff x=y
 proof
-  let x,y be Element of {{}};
-  x={} & y={} by TARSKI:def 1;
+  let x,y be Element of 1;
+  x={} & y={} by TARSKI:def 1, CARD_1:87;
+  hence thesis by Lm2;
+end;
+
+Lm4: for x,y be Element of 1 holds
+op2.(x,y)=op2.(y,x)
+proof
+  let x,y be Element of 1;
+  x={} & y={} by TARSKI:def 1,CARD_1:87;
   hence thesis;
 end;
 
-Lm5: for x,y,z be Element of {{}} holds
-Empty^2-to-zero.(x,z) <= Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z)
+registration
+ cluster op2 -> natural-valued Function;
+ coherence;
+end;
+
+registration let f be natural-valued Function; let x,y be set;
+ cluster f.(x,y) -> natural; :: dlaczego potrzebne ????
+ coherence;
+end;
+
+Lm5: for x,y,z be Element of 1 holds
+ op2.(x,z) <= op2.(x,y) + op2.(y,z)
 proof
-  let x,y,z be Element of {{}};
-  x={} & y={} & z={} by TARSKI:def 1;
+  let x,y,z be Element of 1;
+  x={} & y={} & z={} by TARSKI:def 1, CARD_1:87;
   hence thesis by Lm2;
 end;
 
 definition
+ canceled;
   let A be set;
   let f be PartFunc of [:A,A:], REAL;
   attr f is Reflexive means
@@ -146,7 +161,7 @@ registration
   cluster strict Reflexive discerning symmetric triangle non empty MetrStruct;
   existence
   proof
-    reconsider M = MetrStruct(#{{}},Empty^2-to-zero#) as strict
+    reconsider M = MetrStruct(#1,Empty^2-to-zero#) as strict
     non empty MetrStruct by STRUCT_0:def 1;
     take M;
     M is Reflexive discerning symmetric triangle

@@ -22,8 +22,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="TURING_1"/>
 </Signature>
@@ -44,7 +44,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="181">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

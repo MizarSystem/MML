@@ -38,7 +38,6 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -78,7 +77,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -108,7 +107,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="317">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -165,7 +164,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -185,7 +184,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

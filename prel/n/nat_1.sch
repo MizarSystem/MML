@@ -12,6 +12,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
@@ -42,7 +45,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="61">
+<Func kind="K" nr="98">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -80,7 +83,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="60">
+<Func kind="K" nr="97">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -213,7 +216,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="60">
+<Func kind="K" nr="97">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -267,7 +270,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="60">
+<Func kind="K" nr="97">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -592,7 +595,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="60">
+<Func kind="K" nr="97">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -707,10 +710,715 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="60">
+<Func kind="K" nr="97">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="46"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Var nr="1"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Var nr="1"/>
+<Func kind="K" nr="97">
+<Var nr="2"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="2"/>
+<Func kind="K" nr="12">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+</Func>
+</Pred>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="19">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="2"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+<Func kind="K" nr="97">
+<Var nr="2"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="3">
+<Var nr="2"/>
+<Func kind="K" nr="12">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+</Func>
+</Pred>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="2"/>
+<Func kind="F" nr="3"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="1">
+<Func kind="F" nr="2"/>
+</Func>
+<Func kind="K" nr="46"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="2"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="2"/>
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="12">
+<Func kind="F" nr="2"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="1">
+<Func kind="F" nr="3"/>
+</Func>
+<Func kind="K" nr="46"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+<Var nr="4"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="1">
+<Var nr="3"/>
+<Var nr="4"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</For>
+</For>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="19">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="19">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="20">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="3"/>
+<Func kind="F" nr="4"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="2"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="2"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="4"/>
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+<Var nr="4"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="1">
+<Var nr="3"/>
+<Var nr="4"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</For>
+</For>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="3"/>
+<Func kind="F" nr="4"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="1">
+<Func kind="F" nr="3"/>
+</Func>
+<Func kind="K" nr="46"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="3"/>
+<Var nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="1">
+<Func kind="F" nr="4"/>
+</Func>
+<Func kind="K" nr="46"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="12">
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="4"/>
+<Var nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="19">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="19">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="20">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="4"/>
+<Func kind="F" nr="5"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="2"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="4"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="3">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="4"/>
+<Var nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="5"/>
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="F" nr="2"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="94">
+<Func kind="K" nr="46"/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="5"/>
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="3">
+<Var nr="1"/>
+<Func kind="K" nr="12">
+<Func kind="F" nr="5"/>
+<Var nr="1"/>
+</Func>
+</Func>
+</Pred>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="47"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Var nr="2"/>
+</Func>
+<Func kind="K" nr="47"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="16">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="16">
+<Func kind="F" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="F" nr="1">
+<Func kind="K" nr="97">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+<Not>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="47"/>
 </Pred>
 </Not>
 </And>

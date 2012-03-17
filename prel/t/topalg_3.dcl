@@ -20,7 +20,7 @@
 <ArticleID name="TOPS_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -62,7 +62,7 @@
 <Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="63"/>
+<Adjective nr="62"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -102,7 +102,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="200">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -137,7 +137,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="29"/>
-<Adjective nr="87"/>
+<Adjective nr="86"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -156,7 +156,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="18">
+<Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -164,7 +164,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="32">
-<Func kind="K" nr="222"/>
+<Func kind="K" nr="215"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

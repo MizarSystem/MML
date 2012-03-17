@@ -33,7 +33,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
-<ArticleID name="BINOP_2"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINARITH"/>
@@ -41,6 +40,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="FUNCT_6"/>
+<ArticleID name="RECDEF_1"/>
 <ArticleID name="COMPUT_1"/>
 </Signature>
 <Scheme>
@@ -87,9 +87,9 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="K" nr="28">
-<Func kind="K" nr="384">
+<Func kind="K" nr="339">
 <Func kind="K" nr="108">
 <Func kind="F" nr="2"/>
 </Func>
@@ -117,9 +117,9 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="359">
+<Func kind="K" nr="314">
 <Func kind="K" nr="82"/>
 <Var nr="1"/>
 </Func>
@@ -140,7 +140,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="119">
 <Func kind="K" nr="82"/>
@@ -215,9 +215,9 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="K" nr="28">
-<Func kind="K" nr="384">
+<Func kind="K" nr="339">
 <Func kind="K" nr="109">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -255,7 +255,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="119">
 <Func kind="K" nr="82"/>
@@ -281,7 +281,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="119">
 <Func kind="K" nr="82"/>
@@ -307,7 +307,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="35">
+<Func kind="K" nr="344">
 <Func kind="F" nr="3"/>
 <Func kind="K" nr="119">
 <Func kind="K" nr="82"/>

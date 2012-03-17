@@ -12,22 +12,21 @@ environ
       FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, NAT_1, INT_1,
-      FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, GRAPH_1, GRAPH_2, MSSCYC_1,
-      PRE_CIRC, ABIAN, XXREAL_0;
- constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, BINARITH,
-      PRE_CIRC, ABIAN, LANG1, GRAPH_2, MSSCYC_1, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, FUNCOP_1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, CARD_1, MEMBERED, FINSEQ_1, ABIAN, GRAPH_2,
-      MSSCYC_1, RELAT_1, VALUED_1, FUNCT_2;
+      FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, GRAPH_1, GRAPH_2,
+      MSSCYC_1, PRE_CIRC, ABIAN, XXREAL_0;
+ constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, FINSEQ_4, BINARITH, PRE_CIRC,
+      ABIAN, LANG1, GRAPH_2, MSSCYC_1, VALUED_1, SEQ_1;
+ registrations XBOOLE_0, ORDINAL1, FUNCOP_1, FINSET_1, XXREAL_0, XREAL_0,
+      NAT_1, INT_1, CARD_1, MEMBERED, FINSEQ_1, ABIAN, GRAPH_2, MSSCYC_1,
+      RELAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, PARTFUN1, GRAPH_1, GRAPH_2, MSSCYC_1, XBOOLE_0, FUNCOP_1,
-      VALUED_1;
+ definitions TARSKI, PARTFUN1, GRAPH_1, GRAPH_2, MSSCYC_1, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, REAL_1, ZFMISC_1, RELAT_1, FINSET_1, FUNCT_1, FUNCT_2, NAT_1,
       FSM_1, FUNCOP_1, FUNCT_4, PARTFUN1, CARD_1, CARD_2, CARD_5, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5, GRAPH_1, GRAPH_2, MSSCYC_1,
       PRE_CIRC, ABIAN, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
       ORDINAL1;
- schemes NAT_1, DOMAIN_1, RECDEF_1, XBOOLE_0;
+ schemes NAT_1, DOMAIN_1, XBOOLE_0;
 
 begin :: Preliminaries
 
@@ -173,7 +172,7 @@ theorem Th3:
 proof
   assume vs is_vertex_seq_of c;
   then len vs = len c +1 by GRAPH_2:def 7;
-  hence vs is non empty by FINSEQ_1:25;
+  hence vs is non empty by CARD_1:47;
 end;
 
 Lm2: 1 <= n & n <= len p & 1 <= m & m <= len p & n<>m implies p.n <> p.m
@@ -322,7 +321,7 @@ A1: m = 0;
 A2: (m+1,len p)-cut p = p by GRAPH_2:7;
     0 <= len p;
     then len (1,m)-cut p +1 = 0+1 by A1,Lm1;
-    then (1,m)-cut p = {} by FINSEQ_1:25;
+    then (1,m)-cut p = {} by CARD_2:59;
 
 hence ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G by A2,FINSEQ_1:47;
   end;
@@ -330,7 +329,7 @@ hence ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G by A2,FINSEQ_1:47;
 A3: 1 <= m & len p = m;
     1 <= m+1 by NAT_1:12;
     then len (m+1,len p)-cut p +(m+1) = len p +1 by A3,Lm1;
-    then (m+1,len p)-cut p = {} by A3,FINSEQ_1:25;
+    then (m+1,len p)-cut p = {} by A3,CARD_2:59;
     then ((m+1,len p)-cut p)^(1,m)-cut p = (1,m)-cut p by FINSEQ_1:47
       .= p by A3,GRAPH_2:7;
     hence thesis;
@@ -995,7 +994,7 @@ A4: c is non empty & vs is_vertex_seq_of c & vs.1 = vv & vs.len vs = v
   by A1,A3,Th23;
   defpred P[Nat] means 1 <= $1 & $1 <= len c & not vs.($1+1) in G-VSet X;
 A5: len vs = len c +1 by A4,GRAPH_2:def 7;
-  len c <> 0 by A4,FINSEQ_1:25;
+  len c <> 0 by A4,CARD_2:59;
   then 0 < len c;
   then 1+0 <= len c by NAT_1:13;
   then
@@ -1375,12 +1374,6 @@ theorem Th34:
 proof
   assume
 A1: X2 c= X1;
-  set n12I = card Edges_In(v, X1\X2);
-  set n12O = card Edges_Out(v, X1\X2);
-  set n1I = card Edges_In(v, X1);
-  set n2I = card Edges_In(v, X2);
-  set n1O = card Edges_Out(v, X1);
-  set n2O = card Edges_Out(v, X2);
 A2: card Edges_In(v, X1\X2) = card Edges_In(v, X1) - card Edges_In(v, X2)
   by A1,Th32;
   card Edges_Out(v, X1\X2) = card Edges_Out(v, X1) - card Edges_Out(v, X2)
@@ -1453,7 +1446,7 @@ A5: Edges_In(v, rng c) = {} & Edges_Out(v, rng c) = {} by CARD_2:59;
 A6: i in dom vs & vs.i = v by A3,FINSEQ_2:11;
 A7: 1 <= i & i <= len vs by A6,FINSEQ_3:27;
 A8: len vs = len c + 1 by A2,GRAPH_2:def 7;
-    len c <> 0 by A1,FINSEQ_1:25;
+    len c <> 0 by A1,CARD_2:59;
     then 0 < len c;
     then
 A9: 0+1 <= len c by NAT_1:13;
@@ -1547,7 +1540,7 @@ A4: c is non empty & vs is_vertex_seq_of c & vs.1 = v & vs.len vs = s by Th23;
     c is FinSequence of the Edges of G by MSSCYC_1:def 1;
     then
 A5: rng c c= the Edges of G by FINSEQ_1:def 4;
-    len c <> 0 by A4,FINSEQ_1:25;
+    len c <> 0 by A4,CARD_2:59;
     then 0 < len c;
     then
 A6: 0+1 <= len c by NAT_1:13;
@@ -2234,7 +2227,7 @@ A1: vs is_vertex_seq_of c & v in rng vs;
   per cases;
   suppose c is empty;
     then reconsider rc = rng c as empty set by RELAT_1:60;
-    Degree(v, rc)= 2 * 0 by CARD_1:78;
+    Degree(v, rc)= 2 * 0;
     hence Degree(v, rng c) is even;
   end;
   suppose
@@ -2260,7 +2253,7 @@ A6:   x = n & 1 <= n & n <= len c & vs.n = v;
 A7:   n in dom vs & vs.n = v by A1,FUNCT_1:def 5;
       reconsider n as Element of NAT by A7;
 A8:   1 <= n & n <= len vs by A7,FINSEQ_3:27;
-      len c <> 0 by A2,FINSEQ_1:25;
+      len c <> 0 by A2,CARD_2:59;
       then 0 < len c;
       then
 A9:   0+1 <= len c by NAT_1:13;
@@ -2836,7 +2829,7 @@ proof
   per cases;
   suppose c is empty;
     then reconsider rc = rng c as empty set by RELAT_1:60;
-    Degree(v, rc)= 2 * 0 by CARD_1:78;
+    Degree(v, rc)= 2 * 0;
     hence Degree(v, rng c) is even;
   end;
   suppose
@@ -3028,7 +3021,7 @@ A8: now
     per cases by A7,REAL_1:def 5;
     suppose 1 = n & n = len vs;
       then 0+1 = len c +1 by A4,GRAPH_2:def 7;
-      hence Cset is non empty by A3,FINSEQ_1:25,RELAT_1:60;
+      hence Cset is non empty by A3,CARD_2:59,RELAT_1:60;
     end;
     suppose 1 = n;
       then c in Cset by A4,A5;
@@ -3073,8 +3066,7 @@ A21:  vs21.1 = vs2.(0+1) by GRAPH_2:14
 A22:  0<=lv2 & lv2<len vs2 & len vs2=lv2+1 by A20,GRAPH_2:1;
 A23:  vs1.1 = vs.(1+0) by A14,A15,Lm1;
 A24:  vs2.len vs2 = vs.(n+lv2) by A9,A22,GRAPH_2:def 1
-        .= vs1.1 by A4,A17,A22
-      ,A23,MSSCYC_1:6;
+        .= vs1.1 by A4,A17,A22,A23,MSSCYC_1:6;
       now
         given y being set such that
 A25:    y in rng c1 & y in rng c2;
@@ -3219,7 +3211,7 @@ A19: vs12 is_vertex_seq_of c by A14,A15,A17,A18,GRAPH_2:47;
     then
 A20: 1 <= len vs1 by NAT_1:11;
     rng c2 is non empty by A5,Th21;
-    then len c'' <> 0 by A12,FINSEQ_1:25,RELAT_1:60;
+    then len c'' <> 0 by A12,CARD_2:59,RELAT_1:60;
     then 0 < len c'';
     then 0+1 < len c'' +1 by XREAL_1:8;
     then
@@ -3397,7 +3389,7 @@ A6:   x = len p;
 A7:   p = c & c is Path of G & c is non empty &
       ex vs being FinSequence of the Vertices of G
       st vs is_vertex_seq_of c & vs.1 = v by A3;
-      len p <> 0 by A7,FINSEQ_1:25;
+      len p <> 0 by A7,CARD_2:59;
       then 0 < len p;
       then
 A8:   0+1 <= len p by NAT_1:13;
@@ -3472,7 +3464,7 @@ A21:  e = e' & e' in Xp & e' in the Edges of G &
         given x being set such that
 A22:    x in rng ep & x in rng p;
         rng ep = {e} by FINSEQ_1:55;
-        then x in Xp by A21,A22, TARSKI:def 1;
+        then x in Xp by A21,A22,TARSKI:def 1;
         hence contradiction by A22,XBOOLE_0:def 4;
       end;
       then
@@ -3494,7 +3486,7 @@ A28:    vs1 is_vertex_seq_of p1 by A14,A25,A26,GRAPH_2:47;
         reconsider ep = <*e'*> as FinSequence of X;
         reconsider p as FinSequence of X by A11;
         reconsider xp1 = p^ep as Element of X* by FINSEQ_1:def 11;
-A29:    xp1 is non empty by A27,FINSEQ_1:25;
+A29:    xp1 is non empty by A27,CARD_1:47;
         vs1.1 = v by A14,A15,GRAPH_2:14;
         then xp1 in X-PathSet v by A3,A28,A29;
         then reconsider xp1 as Element of X-PathSet v;
@@ -3517,7 +3509,7 @@ A34:    vs1 is_vertex_seq_of p1 by A14,A31,A32,GRAPH_2:47;
         reconsider ep = <*e'*> as FinSequence of X;
         reconsider p as FinSequence of X by A11;
         reconsider xp1 = p^ep as Element of X* by FINSEQ_1:def 11;
-A35:    xp1 is non empty by A33,FINSEQ_1:25;
+A35:    xp1 is non empty by A33,CARD_1:47;
         vs1.1 = v by A14,A15,GRAPH_2:14;
         then xp1 in X-PathSet v by A3,A34,A35;
         then reconsider xp1 as Element of X-PathSet v;
@@ -3704,8 +3696,7 @@ A13: v = v' & v' in G-VSet rng c & Degree v' <> Degree(v', rng c);
   Degree(v, Erc) = Degree(v, E') - Degree(v, rng c) by A4,Th34;
   then Degree(v, Erc) <> 0 by A13,Th29;
   then
-A14: c' is non empty & rng c' c= E \ rng c & v in G-VSet rng c' by A7,A9
-  ,Th60;
+A14: c' is non empty & rng c' c= E \ rng c & v in G-VSet rng c' by A7,A9,Th60;
   then
 A15: G-VSet rng c meets G-VSet rng c' by A13,XBOOLE_0:3;
   then
@@ -3770,7 +3761,7 @@ A6: y in rng vs by XBOOLE_0:def 1;
 A7: c is non empty and
 A8: vs1 is_vertex_seq_of c and
 A9: vs1.1 = x & vs1.len vs1 = y by A4,A5,A6,Th23;
-  len c <> 0 by A7,FINSEQ_1:25;
+  len c <> 0 by A7,CARD_2:59;
   then
 A10: 1 <= len c by NAT_1:14;
   reconsider c as FinSequence of the Edges of G by MSSCYC_1:def 1;
@@ -3810,7 +3801,7 @@ A5: the Edges of G is empty by MSSCYC_1:def 3;
     {} is Element of G-CycleSet by Th56;
     then reconsider ec = {} as cyclic Path of G by Def8;
     take ec;
-    thus rng ec = the Edges of G by A5,FINSEQ_1:27;
+    thus rng ec = the Edges of G by A5,RELAT_1:60;
   end;
   suppose G is non empty;
     then reconsider G' = G as non empty finite connected Graph;
@@ -3825,10 +3816,10 @@ A6: now
     Degree V = Degree(V, E) by Th29;
     then
 A7: Degree(V, E) <> 0 by Th38;
-    deffunc F(Element of NAT,Element of G'-CycleSet) = ExtendCycle $2;
+    deffunc F(Nat,Element of G'-CycleSet) = ExtendCycle $2;
     consider f being Function of NAT, G'-CycleSet such that
-A8: f.0 = ec & for n being Element of NAT holds f.(n+1) =
-    F(n,(f.n)qua Element of G'-CycleSet) from RECDEF_1:sch 4;
+A8: f.0 = ec & for n being Nat holds f.(n+1) =
+    F(n,(f.n)qua Element of G'-CycleSet) from NAT_1:sch 12;
     now
       assume
 A9:   not ex n being Element of NAT, c being Element of G'-CycleSet
@@ -3929,8 +3920,7 @@ A11:  v' <> v1 & v' <> v2;
 A12:  v = v1 or v = v2;
       then
 A13:  Degree v' = Degree(v, E') +1 by A3,A6,A9,Th52
-        .= Degree v +1 by
-      A10,Th29;
+        .= Degree v +1 by A10,Th29;
       reconsider dv = Degree v as odd Element of NAT by A4,A12;
       dv +1 is even;
       hence Degree v' is even by A13;

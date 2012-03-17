@@ -13,10 +13,10 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -95,18 +95,9 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-</Adjective>
-<Adjective nr="34">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

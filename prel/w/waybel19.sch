@@ -14,7 +14,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -31,7 +30,7 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="CANTOR_1"/>
-<ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -47,11 +46,11 @@
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="23"/>
+<Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="58"/>
+<Adjective nr="79"/>
 <Adjective nr="80"/>
-<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>

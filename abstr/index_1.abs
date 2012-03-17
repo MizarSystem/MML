@@ -8,13 +8,13 @@ environ
 
  vocabularies MATRIX_1, PBOOLE, ZF_REFLE, FUNCT_1, CAT_5, CAT_1, MCART_1,
       COMMACAT, GRCAT_1, RELAT_1, BOOLE, FUNCOP_1, PRALG_1, FRAENKEL, PARTFUN1,
-      OPPCAT_1, GROUP_6, CAT_2, FUNCT_3, INDEX_1, ARYTM;
+      OPPCAT_1, GROUP_6, CAT_2, FUNCT_3, INDEX_1, GRAPH_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, PARTFUN1, PBOOLE, FRAENKEL, FUNCOP_1, CAT_1, CAT_2,
-      OPPCAT_1, PRE_CIRC, CAT_5;
- constructors PARTFUN1, DOMAIN_1, PRE_CIRC, OPPCAT_1, CAT_5, VALUED_1, SEQ_1;
+      FUNCT_2, BINOP_1, PARTFUN1, PBOOLE, FRAENKEL, FUNCOP_1, GRAPH_1, CAT_1,
+      CAT_2, OPPCAT_1, PRE_CIRC, CAT_5;
+ constructors PARTFUN1, DOMAIN_1, PRE_CIRC, OPPCAT_1, CAT_5;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, PBOOLE, CAT_2, CAT_5,
-      CIRCCOMB, VALUED_1, FUNCT_2;
+      CIRCCOMB, CAT_1;
  requirements SUBSET, BOOLE;
 
 
@@ -69,8 +69,8 @@ end;
 
 definition
   let C be Category;
-  mode ManySortedSet of C is ManySortedSet of the Objects of C;
-  mode ManySortedCategory of C is ManySortedCategory of the Objects of C;
+  mode ManySortedSet of C is ManySortedSet of the Vertices of C;
+  mode ManySortedCategory of C is ManySortedCategory of the Vertices of C;
 end;
 
 registration
@@ -101,7 +101,7 @@ registration
   cluster g*f -> Category-yielding;
 end;
 
-:: Objects and Morphisms
+:: Vertices and Morphisms
 
 definition
   let F be Category-yielding Function;
@@ -110,13 +110,13 @@ definition
 
   dom it = dom F &
   for x being set st x in dom F
-  for C being Category st C = F.x holds it.x = the Objects of C;
+  for C being Category st C = F.x holds it.x = the Vertices of C;
   func Mphs F -> non-empty Function means
 :: INDEX_1:def 3
 
   dom it = dom F &
   for x being set st x in dom F
-  for C being Category st C = F.x holds it.x = the Morphisms of C;
+  for C being Category st C = F.x holds it.x = the Edges of C;
 end;
 
 definition
@@ -129,8 +129,8 @@ end;
 
 theorem :: INDEX_1:3
   for X being set, C being Category holds
-  Objs (X --> C) = X --> the Objects of C &
-  Mphs (X --> C) = X --> the Morphisms of C;
+  Objs (X --> C) = X --> the Vertices of C &
+  Mphs (X --> C) = X --> the Edges of C;
 
 begin :: Pairs of Many Sorted Sets
 
@@ -245,7 +245,7 @@ theorem :: INDEX_1:4
   for m being Element of B holds I`2.m is Functor of I`1.(F.m), I`1.(G.m);
 
 theorem :: INDEX_1:5
-  for C being Category, I being Indexing of the Dom of C, the Cod of C
+  for C being Category, I being Indexing of the Source of C, the Target of C
   for m being Morphism of C holds I`2.m is Functor of I`1.dom m, I`1.cod m;
 
 definition
@@ -295,20 +295,22 @@ end;
 definition
   let C be Category;
   mode Indexing of C is
-    Indexing of the Dom of C, the Cod of C, the Comp of C, the Id of C;
+    Indexing of the Source of C, the Target of C, the Comp of C, the Id of C;
   mode coIndexing of C is
-    Indexing of the Cod of C, the Dom of C, ~(the Comp of C), the Id of C;
+  Indexing of the Target of C, the Source of C, ~(the Comp of C), the Id of C;
 end;
 
 theorem :: INDEX_1:6
-  for C being Category, I being Indexing of the Dom of C, the Cod of C holds
+  for C being Category,
+      I being Indexing of the Source of C, the Target of C holds
   I is Indexing of C iff
   (for a being Object of C holds I`2.id a = id (I`1.a)) &
   for m1, m2 being Morphism of C st dom m2 = cod m1 holds
   I`2.(m2*m1) = (I`2.m2)*(I`2.m1);
 
 theorem :: INDEX_1:7
-  for C being Category, I being Indexing of the Cod of C, the Dom of C holds
+  for C being Category,
+      I being Indexing of the Target of C, the Source of C holds
   I is coIndexing of C iff
   (for a being Object of C holds I`2.id a = id (I`1.a)) &
   for m1, m2 being Morphism of C st dom m2 = cod m1 holds
@@ -389,8 +391,8 @@ end;
 
 theorem :: INDEX_1:15
   for C,D being Category holds
-  [(the Objects of C) --> D, (the Morphisms of C) --> id D] is Indexing of C &
-  [(the Objects of C) --> D, (the Morphisms of C) --> id D] is coIndexing of C;
+  [(the Vertices of C) --> D, (the Edges of C) --> id D] is Indexing of C &
+  [(the Vertices of C) --> D, (the Edges of C) --> id D] is coIndexing of C;
 
 begin :: Indexing vs Functor into Categorial Categories
 

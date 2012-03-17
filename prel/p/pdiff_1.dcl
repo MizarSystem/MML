@@ -35,6 +35,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="REAL_NS1"/>
@@ -42,20 +43,20 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="331">
+<Func kind="K" nr="343">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="17">
-<Func kind="K" nr="301">
+<Func kind="K" nr="313">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="42"/>
 </Adjective>
 <Adjective nr="19">
-<Func kind="K" nr="301">
+<Func kind="K" nr="313">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="42"/>

@@ -36,14 +36,13 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="WAYBEL_6"/>
 <ArticleID name="WAYBEL_8"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 </Signature>
@@ -62,7 +61,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -86,7 +85,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -135,7 +134,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -167,7 +166,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -197,7 +196,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -227,7 +226,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -261,7 +260,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -293,7 +292,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -327,7 +326,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -361,7 +360,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -395,7 +394,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="303">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

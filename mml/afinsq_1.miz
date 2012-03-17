@@ -8,21 +8,21 @@ environ
 
  vocabularies FUNCT_1, BOOLE, ORDINAL1, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2,
       CARD_1, TARSKI, PARTFUN1, ALGSEQ_1, ARYTM_1, FUNCT_4, FINSEQ_7, CAT_1,
-      AFINSQ_1, FUNCOP_1, ARYTM;
+      AFINSQ_1, FUNCOP_1, ARYTM, VALUED_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
-      FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0;
- constructors WELLORD2, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, ORDINAL4, FUNCT_7,
-      ORDINAL3, VALUED_1, PARTFUN1, SEQ_1;
+      FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0, VALUED_0;
+ constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, ORDINAL4, FUNCT_7, ORDINAL3,
+      VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, ORDINAL3, VALUED_1, FUNCT_2;
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1, VALUED_1;
+ definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       PARTFUN1, ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
       CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1,
-      XREAL_1;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0;
+      XREAL_1, VALUED_0;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, CLASSES1;
 
 begin
 
@@ -56,8 +56,8 @@ theorem
   k = k /\ n implies k <= n by Th2;
 
 theorem Th4:  :: ORDINAL1:def 1, NAT_1:39
-  n \/ { n } = n+1
-proof
+  for n being Nat holds n \/ { n } = n+1
+proof let n be Nat;
   n+1 = succ n by NAT_1:39;
   hence thesis;
 end;
@@ -248,20 +248,8 @@ end;
 scheme XSeqEx{A()->Nat,P[set,set]}:
   ex p st dom p = A() & for k st k in A() holds P[k,p.k]
 provided
-A1: for k,y1,y2 st k in A() & P[k,y1] & P[k,y2] holds y1=y2
-and
 A2: for k st k in A() ex x st P[k,x]
 proof
-A3: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1=y2
-  proof
-    let x,y1,y2;
-    assume
-A4: x in A() & P[x,y1] & P[x,y2];
-    A()={i where i is Element of NAT: i<A()} by AXIOMS:30;
-    then consider i being Element of NAT such that
-A5: i=x & i<A() by A4;
-    thus y1=y2 by A1,A4,A5;
-  end;
 A6: for x st x in A() ex y st P[x,y]
   proof
     let x;
@@ -274,7 +262,7 @@ A8: i=x & i<A() by A7;
   end;
   consider f being Function such that
 A9: dom f = A() &
-  (for x st x in A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
+  (for x st x in A() holds P[x,f.x]) from CLASSES1:sch 1(A6);
   A() in NAT by ORDINAL1:def 13;
   then reconsider p=f as XFinSequence by A9,Th7;
   take p;
@@ -444,11 +432,7 @@ registration
 end;
 
 theorem Th18:
-  len p = 0 iff p = {}
-proof
-  len p = 0 iff p, {} are_equipotent by CARD_1:def 5;
-  hence thesis by CARD_1:46;
-end;
+  len p = 0 iff p = {} by CARD_1:47,CARD_2:59;
 
 theorem Th19:
   for D be set holds {} is XFinSequence of D
@@ -795,7 +779,7 @@ theorem Th32:
 proof
 A1: dom(p^{}) = len (p^{}) by Def1
     .= len p + len {} by Th20
-    .= len p + 0 by Th18
+    .= len p + 0
     .= dom p by Def1;
   thus p^{} = p
   proof
@@ -804,7 +788,7 @@ A1: dom(p^{}) = len (p^{}) by Def1
   end;
 A2: dom({}^p) = len ({}^p) by Def1
     .= (len {} + len p) by Th20
-    .= (0 + len p) by Th18
+    .= (0 + len p)
     .= dom p by Def1;
   for k st k in dom p holds p.k = ({}^p).k
   proof
@@ -812,7 +796,7 @@ A2: dom({}^p) = len ({}^p) by Def1
     assume
 A3: k in dom p;
     thus ({}^p).k = ({}^p).(0 + k)
-      .=({}^p).(len {} + k) by Th18
+      .=({}^p).(len {} + k)
       .=p.k by A3,Def4;
   end;
   hence {}^p=p by A2,Th10;
@@ -1248,7 +1232,7 @@ A1: P[{}]
   proof
     let p,q,s;
     assume p^q={}^s & len p <= len {};
-    then len p <= 0 by Th18;
+    then len p <= 0;
     then
 A2: len p = 0;
     take {};
@@ -1444,6 +1428,28 @@ A1: n <= 2 by CARD_1:66;
     suppose n = 2;
       hence contradiction by CARD_1:88,ZFMISC_1:10;
     end;
+  end;
+end;
+
+:: missing, 2008.02.02, A.K.
+
+registration
+  cluster -> real-valued XFinSequence of REAL;
+  coherence
+  proof
+    let F be XFinSequence of REAL;
+    rng F c= REAL by ORDINAL1:def 8;
+    hence thesis by VALUED_0:def 3;
+  end;
+end;
+
+registration
+  cluster -> natural-valued XFinSequence of NAT;
+  coherence
+  proof
+    let F be XFinSequence of NAT;
+    rng F c= NAT by ORDINAL1:def 8;
+    hence thesis by VALUED_0:def 6;
   end;
 end;
 

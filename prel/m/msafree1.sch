@@ -11,17 +11,17 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -182,7 +182,7 @@
 <Pred kind="R" nr="1">
 <Var nr="3"/>
 <Func kind="K" nr="176">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="K" nr="278">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -304,7 +304,7 @@
 <Pred kind="R" nr="1">
 <Var nr="3"/>
 <Func kind="K" nr="176">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="K" nr="278">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>

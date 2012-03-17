@@ -26,15 +26,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="7"/>
 <Adjective nr="8"/>
 <Adjective nr="9"/>

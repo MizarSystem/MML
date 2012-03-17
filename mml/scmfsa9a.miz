@@ -11,26 +11,26 @@ environ
       SCMFSA_4, BOOLE, SCMFSA8A, SCMFSA6A, SCMFSA7B, SCMFSA8B, CARD_1, FUNCT_4,
       AMI_5, RELOC, SCMFSA_9, UNIALG_2, CARD_3, SCMFSA6B, AMI_2, SCMFSA6C,
       SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
-      FINSUB_1, FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCT_4, PRE_FF, STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
- constructors XXREAL_0, NAT_1, NAT_D, INT_2, SEQ_1, PRE_FF, ABIAN, AMI_5,
-      SCMFSA_5, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA_9, SFMASTR1, VALUED_1, PARTFUN1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FUNCOP_1, FINSET_1, FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0,
-      NAT_1, INT_1, CARD_3, ABIAN, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
-      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      VALUED_1, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
+      FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, PRE_FF, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
+      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
+ constructors XXREAL_0, NAT_1, NAT_D, SEQ_1, PRE_FF, ABIAN, SCMFSA_5, SCMFSA_7,
+      SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
+      SCMNORM;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
+      FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
+      ABIAN, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, VALUED_1;
+ definitions FUNCOP_1, SCMFSA_2;
  theorems TARSKI, ZFMISC_1, REAL_1, ABSVALUE, NAT_1, INT_1, NAT_2, FUNCT_1,
       FUNCT_2, CQC_LANG, GRFUNC_1, FUNCOP_1, FUNCT_4, PRE_FF, ABIAN, FSM_1,
       AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR,
       SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1,
-      RELAT_1, XBOOLE_0, XBOOLE_1, CARD_3, XREAL_1, XXREAL_0, ORDINAL1, NAT_D;
+      RELAT_1, XBOOLE_0, XBOOLE_1, CARD_3, XREAL_1, XXREAL_0, ORDINAL1, NAT_D,
+      VALUED_1;
  schemes FUNCT_2, NAT_1, SEQ_4;
 
 begin :: SCM+FSA preliminaries
@@ -41,32 +41,7 @@ reserve k, n for Element of NAT,
 reserve l for Instruction-Location of SCM+FSA,
   i for Instruction of SCM+FSA;
 
-canceled 5;
-
-theorem Th6: :: LifeSpan0:
-  for IL being non empty set
-  for N being non empty with_non-empty_elements set,
-  S being halting IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over IL,N),
-  s being State of S, k being Element of NAT
-  st CurInstr((Computation s).k) = halt S
-  holds (Computation s).(LifeSpan s) = (Computation s).k
-proof
-  let IL be non empty set;
-  let N be non empty with_non-empty_elements set,
-  S be halting IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over IL,N),
-  s be State of S, k be Element of NAT such that
-A1: CurInstr((Computation s).k) = halt S;
-  set Ls = LifeSpan s;
-A2: s is halting by A1,AMI_1:def 20;
-  then
-A3: CurInstr((Computation s).Ls) = halt S &
-  for k being Element of NAT st CurInstr((Computation s).k) = halt S
-  holds Ls <= k by AMI_1:def 46;
-  Ls <= k by A1,A2,AMI_1:def 46;
-  hence (Computation s).(LifeSpan s) = (Computation s).k by A3,AMI_1:52;
-end;
+canceled 6;
 
 theorem Th7: :: singleUsed
   UsedIntLoc (l .--> i) = UsedIntLoc i
@@ -219,8 +194,8 @@ end;
 begin :: while=0, general
 
 Lm1: for a being Int-Location, I being Macro-Instruction holds
-insloc (card I +4) in dom if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
-if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
+card I +4 in dom if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
+if=0(a,I ';' Goto insloc 0,SCM+FSA-Stop).(card I +4)
 = goto ((insloc 0)+(card I +4))
 proof
   let a be Int-Location;
@@ -230,7 +205,7 @@ proof
   set J = SCM+FSA-Stop;
   set i = a =0_goto insloc (card J + 3);
   set c4 = card I + 4;
-  set Lc4 = insloc c4;
+  set Lc4 = c4;
   card I1 = card I + card G by SCMFSA6A:61
     .= card I +1 by SCMFSA8A:29;
   then card I1 + card J + 3 = card I +4 +1 by SCMFSA8A:17;
@@ -264,7 +239,6 @@ A7: dom if=0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4 )
   = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
   then
 A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
-A9: insloc 0 + c4 = insloc ( 0 + c4) by SCMFSA_4:def 1;
 A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
   then dom G = {insloc 0} by CQC_LANG:5;
   then
@@ -272,13 +246,13 @@ A11: insloc 0 in dom G by TARSKI:def 1;
 A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
 A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
 A14: dom G c= dom GJ by SCMFSA6A:56;
-  then insloc 0 + c4 in { il+c4 where il is Instruction-Location of SCM+FSA:
+  then insloc 0 + c4 in { il+c4 where il is Element of NAT:
   il in dom GJ} by A11;
   then
-A15: insloc c4 in dom Shift(GJ,c4) by A9,SCMFSA_4:31;
+A15: insloc c4 in dom Shift(GJ,c4) by VALUED_1:def 12;
   then
-A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by A9,AMI_1:def 47
-    .= GJ.insloc 0 by A11,A14,SCMFSA_4:30
+A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by AMI_1:def 47
+    .= GJ.insloc 0 by A11,A14,VALUED_1:def 12
     .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
   thus if=0(a,I1,J).Lc4
   = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
@@ -501,12 +475,12 @@ A3: for k holds ( F(k+1) < F(k) or S[k] ) by A2;
 A4: S[m] and
 A5: for n st S[n] holds m <= n from SEQ_4:sch 1(A3);
   defpred P[Element of NAT] means $1+1 <= m implies
-  ex k st StepWhile=0(a,I,s).($1+1)=(Computation s1).k;
+  ex k st StepWhile=0(a,I,s).($1+1)=Computation(s1,k);
 A6: P[0]
   proof
     assume 0+1 <= m;
     take n=(LifeSpan (s+* (I +* SAt)) + 3);
-    thus StepWhile=0(a,I,s).(0+1)=(Computation s1).n by SCMFSA_9:30;
+    thus StepWhile=0(a,I,s).(0+1)=Computation(s1,n) by SCMFSA_9:30;
   end;
 A7: IC SCM+FSA in dom (while=0(a,I) +* SAt ) by SF_MASTR:65;
 A8: now
@@ -523,15 +497,15 @@ A12:  (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
       set sk=StepWhile=0(a,I,s).k;
       set sk1=StepWhile=0(a,I,s).(k+1);
       consider n being Element of NAT such that
-A13:  sk1 = (Computation s1).n by A9,A10,A12,XXREAL_0:2;
-A14:  sk1 = (Computation (sk +* (while=0(a,I)+* SAt))).
-      (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 4;
+A13:  sk1 = Computation(s1,n) by A9,A10,A12,XXREAL_0:2;
+A14:  sk1 = Computation((sk +* (while=0(a,I)+* SAt)),
+      (LifeSpan (sk +* (I +* SAt)) + 3)) by SCMFSA_9:def 4;
 A15:  sk.a = 0 by A5,A11;
       then I is_closed_on sk & I is_halting_on sk by A1;
       then
 A16:  IC sk1 = insloc 0 by A14,A15,SCMFSA_9:22;
       take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
-      thus StepWhile=0(a,I,s).((k+1)+1)=(Computation s1).m
+      thus StepWhile=0(a,I,s).((k+1)+1)=Computation(s1,m)
       by A13,A16,SCMFSA_9:31;
     end;
     hence P[k+1];
@@ -553,9 +527,9 @@ A19:  m=i+1 by NAT_1:6;
       set sm1=sm +* (while=0(a,I)+* SAt);
       m=i+1 by A19;
       then consider n being Element of NAT such that
-A20:  sm = (Computation s1).n by A17;
-A21:  sm= (Computation (si +* (while=0(a,I)+* SAt))).
-      (LifeSpan (si +* (I +* SAt)) + 3) by A19,SCMFSA_9:def 4;
+A20:  sm = Computation(s1,n) by A17;
+A21:  sm= Computation((si +* (while=0(a,I)+* SAt)),
+      (LifeSpan (si +* (I +* SAt)) + 3)) by A19,SCMFSA_9:def 4;
       i < m by A19,NAT_1:13;
       then
 A22:  si.a = 0 by A5;
@@ -567,14 +541,14 @@ A24:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A23,SF_MASTR:66;
 A25:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A20,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A26:  sm1=sm by A24,A25,SCMFSA_9:29;
       while=0(a,I) is_halting_on sm by A4,SCMFSA_9:18;
       then sm1 is halting by SCMFSA7B:def 8;
       then consider j being Element of NAT such that
-A27:  CurInstr((Computation sm).j) = halt SCM+FSA by A26,AMI_1:def 20;
-      CurInstr (Computation s1).(n+j) = halt SCM+FSA by A20,A27,AMI_1: 51;
+A27:  CurInstr(Computation(sm,j)) = halt SCM+FSA by A26,AMI_1:def 20;
+      CurInstr Computation(s1,n+j) = halt SCM+FSA by A20,A27,AMI_1: 51;
       then s1 is halting by AMI_1:def 20;
       hence while=0(a,I) is_halting_on s by SCMFSA7B:def 8;
       set p=(LifeSpan (s+* (I +* SAt)) + 3);
@@ -588,18 +562,18 @@ A30:      StepWhile=0(a,I,s).0 = s by SCMFSA_9:def 4;
           then
 A31:      s.a = 0 by A5,A28;
           then I is_closed_on s & I is_halting_on s by A1,A30;
-          hence IC (Computation s1).q in dom while=0(a,I) by A29,A31,
+          hence IC Computation(s1,q) in dom while=0(a,I) by A29,A31,
           SCMFSA_9:22;
         end;
         suppose
 A32:      q > p;
           defpred P2[Nat] means
           $1<=m & $1<>0 & (ex k st StepWhile=0(a,I,s).$1=
-          (Computation s1).k & k <= q);
+          Computation(s1,k) & k <= q);
 A33:      for i be Nat st P2[i] holds i <= m;
 A34:      now
             take k=p;
-            thus StepWhile=0(a,I,s).1=(Computation s1).k & k <= q
+            thus StepWhile=0(a,I,s).1=Computation(s1,k) & k <= q
             by A32,SCMFSA_9:30;
           end;
           0+1 < m +1 by A28,XREAL_1:8;
@@ -613,14 +587,14 @@ A36:      P2[t] & for i be Nat st P2[i] holds i <= t
           now per cases;
             suppose t=m;
               then consider r being Element of NAT such that
-A37:          sm=(Computation s1).r & r <= q by A36;
+A37:          sm=Computation(s1,r) & r <= q by A36;
               consider x being Nat such that
 A38:          q = r+x by A37,NAT_1:10;
               reconsider x as Element of NAT by ORDINAL1:def 13;
-A39:          (Computation s1).q = (Computation sm1).x by A26,A37,A38,
+A39:          Computation(s1,q) = Computation(sm1,x) by A26,A37,A38,
               AMI_1:51;
               while=0(a,I) is_closed_on sm by A4,SCMFSA_9:18;
-              hence IC (Computation s1).q in dom while=0(a,I) by A39,
+              hence IC Computation(s1,q) in dom while=0(a,I) by A39,
               SCMFSA7B:def 7;
             end;
             suppose t<>m;
@@ -630,14 +604,14 @@ A40:          t < m by A36,REAL_1:def 5;
 A41:          t=y+1 by A36,NAT_1:6;
               reconsider y as Element of NAT by ORDINAL1:def 13;
               consider z being Element of NAT such that
-A42:          StepWhile=0(a,I,s).t=(Computation s1).z & z <= q by A36;
+A42:          StepWhile=0(a,I,s).t=Computation(s1,z) & z <= q by A36;
               y+ 0 < t by A41,XREAL_1:8;
               then
 A43:          y < m by A36,XXREAL_0:2;
               set Dy=StepWhile=0(a,I,s).y;
               set Dt=StepWhile=0(a,I,s).t;
-A44:          Dt= (Computation (Dy +* (while=0(a,I)+* SAt))).
-              (LifeSpan (Dy +* (I +* SAt)) + 3) by A41,SCMFSA_9:def 4;
+A44:          Dt= Computation((Dy +* (while=0(a,I)+* SAt)),
+              (LifeSpan (Dy +* (I +* SAt)) + 3)) by A41,SCMFSA_9:def 4;
 A45:          Dy.a = 0 by A5,A43;
               then I is_closed_on Dy & I is_halting_on Dy by A1;
               then
@@ -648,7 +622,7 @@ A47:          now
 A48:            z2 <= q;
 A49:            now
                   take k=z2;thus
-                  StepWhile=0(a,I,s).(t+1)=(Computation s1).k & k <= q
+                  StepWhile=0(a,I,s).(t+1)=Computation(s1,k) & k <= q
                   by A42,A46,A48,SCMFSA_9:31;
                 end;
                 t+1 <= m by A40,NAT_1:13;
@@ -658,16 +632,16 @@ A49:            now
 A50:          q = z+w by A42,NAT_1:10;
               reconsider w as Element of NAT by ORDINAL1:def 13;
 A51:          w < LifeSpan (Dt +* (I +* SAt)) + 3 by A47,A50,XREAL_1:8;
-A52:          (Computation s1).q = (Computation Dt ).w by A42,A50, AMI_1:51
-                .= (Computation (Dt +* (while=0(a,I)+* SAt))).w
+A52:          Computation(s1,q) = Computation(Dt,w) by A42,A50, AMI_1:51
+                .= Computation((Dt +* (while=0(a,I)+* SAt)),w)
               by A42,A46,SCMFSA_9:31;
 A53:          Dt.a = 0 by A5,A40;
               then I is_closed_on Dt & I is_halting_on Dt by A1;
-              hence IC (Computation s1).q in dom while=0(a,I)
+              hence IC Computation(s1,q) in dom while=0(a,I)
               by A51,A52,A53,SCMFSA_9:22;
             end;
           end;
-          hence IC (Computation s1).q in dom while=0(a,I);
+          hence IC Computation(s1,q) in dom while=0(a,I);
         end;
       end;
       hence while=0(a,I) is_closed_on s by SCMFSA7B:def 7;
@@ -694,18 +668,18 @@ end;
 theorem Th22: :: based on SCMFSA_9:10
   while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+  holds Computation(s,k) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations)
 proof
   assume that
 A1: while=0(a, I) +* SAt c= s and
 A2: s.a <> 0;
   set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
-  set s2 = (Computation s1).1;
-  set s3 = (Computation s1).2;
-  set s4 = (Computation s1).3;
-  set s5 = (Computation s1).4;
-  set C1 = Computation s1;
+  set s2 = Computation(s1,1);
+  set s3 = Computation(s1,2);
+  set s4 = Computation(s1,3);
+  set s5 = Computation(s1,4);
+:::  set C1 = Computation s1;
   set i = a =0_goto insloc 4;
 A3: s = s1 by A1,FUNCT_4:79;
 A4: insloc 0 in dom while=0(a,I) by SCMFSA_9:10;
@@ -722,24 +696,24 @@ A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
     .= i by SCMFSA_9:11;
   then
 A8: CurInstr s1 = i by A7,AMI_1:def 17;
-A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
-    .= Following s1 by AMI_1:def 19
+A9: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
+    .= Following s1 by AMI_1:13
     .= Exec(i,s1) by A8,AMI_1:def 18;
   not a in dom (while=0(a,I) +* Start-At insloc 0) & a in dom s
   by SCMFSA6B:12,SCMFSA_2:66;
   then
 A10: s1.a = s.a by FUNCT_4:12;
-A11: IC C1.1 = C1.1.IC SCM+FSA by AMI_1:def 15
+A11: IC Computation(s1,1) = Computation(s1,1).IC SCM+FSA by AMI_1:def 15
     .= Next insloc 0 by A2,A7,A9,A10,SCMFSA_2:96
-    .= insloc (0 + 1) by SCMFSA_2:32;
+    .= insloc (0 + 1);
 A12: insloc 1 in dom while=0(a,I) by SCMFSA_9:10;
-  C1.1.insloc 1 = s1.insloc 1 by AMI_1:54
+  Computation(s1,1).insloc 1 = s1.insloc 1 by AMI_1:54
     .= (while=0(a,I) +* Start-At insloc 0).insloc 1 by A5,A12,FUNCT_4:14
     .= while=0(a,I).insloc 1 by A12,SCMFSA6B:7
     .= goto insloc 2 by SCMFSA_9:11;
   then
-A13: CurInstr C1.1 = goto insloc 2 by A11,AMI_1:def 17;
-A14: (Computation s1).(1 + 1) = Following s2 by AMI_1:def 19
+A13: CurInstr Computation(s1,1) = goto insloc 2 by A11,AMI_1:def 17;
+A14: Computation(s1,1+1) = Following s2 by AMI_1:14
     .= Exec(goto insloc 2,s2) by A13,AMI_1:def 18;
 A15: insloc 2 in dom while=0(a,I) by SCMFSA_9:12;
 A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
@@ -750,7 +724,7 @@ A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
     .= goto insloc 3 by SCMFSA_9:16;
   then
 A17: CurInstr s3 = goto insloc 3 by A16,AMI_1:def 17;
-A18: (Computation s1).(2 + 1) = Following s3 by AMI_1:def 19
+A18: Computation(s1,2+1) = Following s3 by AMI_1:14
     .= Exec(goto insloc 3,s3) by A17,AMI_1:def 18;
 A19: insloc 3 in dom while=0(a,I) by SCMFSA_9:12;
   set loc5= insloc (card I +5);
@@ -762,7 +736,7 @@ A20: IC s4 = s4.IC SCM+FSA by AMI_1:def 15
     .= goto loc5 by SCMFSA_9:15;
   then
 A21: CurInstr s4 = goto loc5 by A20,AMI_1:def 17;
-A22: (Computation s1).(3 + 1) = Following s4 by AMI_1:def 19
+A22: Computation(s1,3+1) = Following s4 by AMI_1:14
     .= Exec(goto loc5,s4) by A21,AMI_1:def 18;
 A23: loc5 in dom while=0(a,I) by SCMFSA_9:13;
 A24: IC s5 = s5.IC SCM+FSA by AMI_1:def 15
@@ -778,14 +752,14 @@ A26: s1 is halting by AMI_1:def 20;
   now
     let k;
     assume
-A27: CurInstr((Computation s).k) = halt SCM+FSA;
+A27: CurInstr(Computation(s,k)) = halt SCM+FSA;
     assume 4 > k;
     then 3+1 > k;
     then
 A28: k <= 3 by NAT_1:13;
     per cases by A28,NAT_1:28;
     suppose k = 0;
-      then (Computation s).k = s by AMI_1:def 19;
+      then Computation(s,k) = s by AMI_1:13;
       hence contradiction by A3,A8,A27,SCMFSA_2:48,124;
     end;
     suppose k = 1;
@@ -812,19 +786,19 @@ A32: (for c being Int-Location holds Exec(goto insloc 2, s2).c = s2.c) &
 A33: (for c being Int-Location holds Exec(i, s1).c = s1.c) &
   for f being FinSeq-Location holds Exec(i, s1).f = s1.f by SCMFSA_2:96;
   then
-A34: (Computation s).1 | D = s | D by A3,A9,SCMFSA6A:38;
+A34: Computation(s,1) | D = s | D by A3,A9,SCMFSA6A:38;
   then
-A35: (Computation s).2 | D = s | D by A3,A14,A32,SCMFSA6A:38;
-  then (Computation s).3 | D = s | D by A3,A18,A31,SCMFSA6A:38;
+A35: Computation(s,2) | D = s | D by A3,A14,A32,SCMFSA6A:38;
+  then Computation(s,3) | D = s | D by A3,A18,A31,SCMFSA6A:38;
   then
-A36: (Computation s).4 | D = s | D by A3,A22,A30,SCMFSA6A:38;
+A36: Computation(s,4) | D = s | D by A3,A22,A30,SCMFSA6A:38;
   let k be Element of NAT;
   k <= 3 or 3 < k;
   then
 A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by NAT_1:13,28;
   per cases by A37;
   suppose k = 0;
-    hence thesis by AMI_1:def 19;
+    hence thesis by AMI_1:13;
   end;
   suppose k = 1;
     hence thesis by A3,A9,A33,SCMFSA6A:38;
@@ -836,18 +810,18 @@ A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by NAT_1:13,28;
     hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
   end;
   suppose 4 <= k;
-    then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
-    hence thesis by A29,A36,Th6;
+    then CurInstr Computation(s,k) = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
+    hence thesis by A29,A36,AMI_1:127;
   end;
 end;
 
 theorem Th23: :: based on SCMFSA_9:22
   I is_closed_on s & I is_halting_on s & s.a = 0 implies
-  (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+  Computation((s +* (while=0(a,I) +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3)) |
   (Int-Locations \/ FinSeq-Locations)
-  = (Computation (s +* (I +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0))) |
+  = Computation((s +* (I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)))) |
   (Int-Locations \/ FinSeq-Locations)
 proof
   assume that
@@ -855,7 +829,7 @@ A1: I is_closed_on s and
 A2: I is_halting_on s and
 A3: s.a = 0;
   set s1 = s +* (while=0(a,I) +* Start-At insloc 0);
-  set s2 = (Computation s1).1;
+  set s2 = Computation(s1,1);
   set i = a =0_goto insloc 4;
   set sI = s +* (I +* Start-At insloc 0);
 A4: insloc 0 in dom while=0(a,I) by SCMFSA_9:10;
@@ -872,8 +846,8 @@ A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
     .= i by SCMFSA_9:11;
   then
 A8: CurInstr s1 = i by A7,AMI_1:def 17;
-A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
-    .= Following s1 by AMI_1:def 19
+A9: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
+    .= Following s1 by AMI_1:13
     .= Exec(i,s1) by A8,AMI_1:def 18;
   not a in dom (while=0(a,I) +* Start-At insloc 0) & a in dom s
   by SCMFSA6B:12,SCMFSA_2:66;
@@ -888,20 +862,20 @@ A12: s2 | D = s1 | D by SCMFSA6A:38
     .= s | D by SCMFSA8A:11
     .= sI | D by SCMFSA8A:11;
   defpred P[Element of NAT] means $1 <= LifeSpan sI implies
-  IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
-  (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
+  IC Computation(s1,1+$1) = IC Computation(sI,$1) + 4 &
+  Computation(s1,1+$1) | D = Computation(sI,$1) | D;
 A13: P[0]
   proof
     assume 0 <= LifeSpan sI;
 A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
-    IC (Computation sI).0 = IC sI by AMI_1:def 19
+    IC Computation(sI,0) = IC sI by AMI_1:13
       .= sI.IC SCM+FSA by AMI_1:def 15
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
-    then IC (Computation sI).0 + 4 = insloc (0+ 4) by SCMFSA_4:def 1;
-    hence IC (Computation s1).(1 + 0) = IC (Computation sI).0 + 4 &
-    (Computation s1).(1 + 0) | D = (Computation sI).0 | D by A11,A12,
-    AMI_1:def 19;
+    then IC Computation(sI,0) + 4 = insloc (0+ 4);
+    hence IC Computation(s1,1+0) = IC Computation(sI,0) + 4 &
+    Computation(s1,1+0) | D = Computation(sI,0) | D by A11,A12,
+    AMI_1:13;
   end;
 A15: now
     let k be Element of NAT;
@@ -912,40 +886,40 @@ A16: P[k];
 A17:  k + 1 <= LifeSpan sI;
       k + 0 < k + 1 by XREAL_1:8;
       then k < LifeSpan sI by A17,XXREAL_0:2;
-      hence IC (Computation s1).(1 + k+1) = IC (Computation sI).(k+1) + 4 &
-      (Computation s1).(1 + k+1) | D = (Computation sI).(k+1) | D
+      hence IC Computation(s1,1+k+1) = IC Computation(sI,k+1) + 4 &
+      Computation(s1,1+k+1) | D = Computation(sI,k+1) | D
       by A1,A2,A16,SCMFSA_9:19;
     end;
     hence P[k + 1];
   end;
-  set s2 = (Computation s1).(1 + LifeSpan sI);
+  set s2 = Computation(s1,1+LifeSpan sI);
   set loc4 = insloc (card I + 4);
-  set s3 = (Computation s1).(1+LifeSpan sI+1);
+  set s3 = Computation(s1,1+LifeSpan sI+1);
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A15);
   then
 A18: P[LifeSpan sI qua Element of NAT];
   then
 A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:20;
-A20: s3 = Following s2 by AMI_1:def 19
+A20: s3 = Following s2 by AMI_1:14
     .= Exec(goto loc4,s2) by A19,AMI_1:def 18;
 A21: loc4 in dom while=0(a,I) by SCMFSA_9:13;
 A22: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
     .= loc4 by A20,SCMFSA_2:95;
 A23: (for c being Int-Location holds s3.c = s2.c) &
   (for f being FinSeq-Location holds s3.f = s2.f) by A20,SCMFSA_2:95;
-  set s4=(Computation s1).(1+LifeSpan sI+1+1);
+  set s4=Computation(s1,1+LifeSpan sI+1+1);
   s3.loc4 = s1.loc4 by AMI_1:54
     .= (while=0(a,I) +* Start-At insloc 0).loc4 by A5,A21,FUNCT_4:14
     .= while=0(a,I).loc4 by A21,SCMFSA6B:7
     .= goto insloc 0 by SCMFSA_9:21;
   then
 A24: CurInstr s3 = goto insloc 0 by A22,AMI_1:def 17;
-  s4 = Following s3 by AMI_1:def 19
+  s4 = Following s3 by AMI_1:14
     .= Exec(goto insloc 0,s3) by A24,AMI_1:def 18;
   then (for c being Int-Location holds s4.c = s3.c) &
   (for f being FinSeq-Location holds s4.f = s3.f) by SCMFSA_2:95;
-  hence (Computation s1).(LifeSpan sI + 3) | D = s3 | D by SCMFSA6A:38
-    .= (Computation sI).(LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
+  hence Computation(s1,LifeSpan sI+3) | D = s3 | D by SCMFSA6A:38
+    .= Computation(sI,LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
 end;
 
 theorem Th24: :: Step_eq0_0:
@@ -960,8 +934,8 @@ A2: (SW.k +* (while=0(a,I) +* SAt)) | D = SW.k | D by SCMFSA8A:11;
   then
 A3: SW.k.a = (SW.k +* (while=0(a,I) +* SAt)).a by SCMFSA6A:38;
 A4: while=0(a,I) +* SAt c= SW.k +* (while=0(a,I) +* SAt) by FUNCT_4:26;
-  thus SW.(k+1) | D = (Computation (SW.k +* (while=0(a,I) +* SAt))).
-  (LifeSpan (SW.k +* (I +* SAt)) + 3) | D by SCMFSA_9:def 4
+  thus SW.(k+1) | D = Computation((SW.k +* (while=0(a,I) +* SAt)),
+  (LifeSpan (SW.k +* (I +* SAt)) + 3)) | D by SCMFSA_9:def 4
     .= StepWhile=0(a, I, s).k | D by A1,A2,A3,A4,Th22;
 end;
 
@@ -996,8 +970,8 @@ A6: SWkI is halting by A5,FUNCT_4:79;
 A7: dom (SW.k | Ins) misses D by SCMFSA8A:3;
 A8: IExec(I, SW.k) | D = (Result(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
     .= (Result(SWkI)) | D by A7,FUNCT_4:94
-    .= (Computation SWkIS).(LifeSpan SWkIS) | D by A4,A6,AMI_1:122;
-A9: SW.(k+1) = (Computation (SW.k +* WHS)).(LifeSpan (SWkIS) + 3)
+    .= Computation(SWkIS,LifeSpan SWkIS) | D by A4,A6,AMI_1:122;
+A9: SW.(k+1) = Computation((SW.k +* WHS),LifeSpan (SWkIS) + 3)
   by SCMFSA_9:def 4;
 A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
   now
@@ -1057,10 +1031,10 @@ A13:  SWkI is halting by A12,FUNCT_4:79;
 A14:  dom (SW.k | Ins) misses D by SCMFSA8A:3;
 A15:  IExec(I, SW.k) | D = (Result (SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
         .= (Result(SWkI)) | D by A14,FUNCT_4:94
-        .= (Computation SWkIS).(LifeSpan SWkIS) | D by A11,A13,AMI_1:122;
+        .= Computation(SWkIS,LifeSpan SWkIS) | D by A11,A13,AMI_1:122;
       SW.(k+1) | D = IExec(I, SW.k) | D by A5,A6,A9,A10,Th25;
       hence SW.(k+1).intloc 0
-      = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
+      = (Computation(SWkIS,LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
         .= 1 by A5,A7,SCMFSA8C:97;
     end;
   end;
@@ -1103,13 +1077,13 @@ A7:   ST1.k.a <> 0;
 A8:   ST1.k.a = 0;
       then
 A9:   I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def1;
-A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
-      (LifeSpan (ST1kI) + 3) | D by SCMFSA_9:def 4
-        .= (Computation (ST1kI)). (LifeSpan (ST1kI)) | D by A8,A9,Th23;
+A10:  ST1.(k+1) | D = Computation((ST1.k +* (WH +* SAt)),
+      (LifeSpan (ST1kI) + 3)) | D by SCMFSA_9:def 4
+        .= Computation((ST1kI),LifeSpan (ST1kI)) | D by A8,A9,Th23;
 A11:  I is_closed_on ST2.k & I is_halting_on ST2.k by A5,A9,SCMFSA8B:8;
-A12:  ST2.(k+1) | D = (Computation (ST2.k +* (WH +* SAt))).
-      (LifeSpan (ST2kI) + 3) | D by SCMFSA_9:def 4
-        .= (Computation (ST2kI)). (LifeSpan (ST2kI)) | D by A6,A8,A11,Th23;
+A12:  ST2.(k+1) | D = Computation((ST2.k +* (WH +* SAt)),
+      (LifeSpan (ST2kI) + 3)) | D by SCMFSA_9:def 4
+        .= Computation((ST2kI),LifeSpan (ST2kI)) | D by A6,A8,A11,Th23;
 A13:  (ST1kI) | D = ST1.k | D by SCMFSA8A:11
         .= (ST2kI) | D by A5,SCMFSA8A:11;
 A14:  I +* SAt c= ST1kI by FUNCT_4:26;
@@ -1137,8 +1111,8 @@ A2: WithVariantWhile=0 a, I, s;
   :Def3:
   ex k being Element of NAT st it = k & (StepWhile=0(a, I, s).k).a <> 0 &
   (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
-  holds k <= i) & (Computation (s +* (while=0(a, I) +* (Start-At insloc 0)))).
-  (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0)))) |
+  holds k <= i) & Computation((s +* (while=0(a, I) +* (Start-At insloc 0))),
+  (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0))))) |
   (Int-Locations \/ FinSeq-Locations)
   = StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
   existence
@@ -1162,12 +1136,12 @@ A6: for n st X[n] holds m <= n from SEQ_4:sch 1(A4);
 A7: while=0(a, I) +* SAt c= S by FUNCT_4:26;
 A8: ProperBodyWhile=0 a, I, s by A1,Th19;
     defpred P[Element of NAT] means $1+1 <= m implies
-    ex k st StepWhile=0(a,I,s).($1+1)=(Computation S).k;
+    ex k st StepWhile=0(a,I,s).($1+1)=Computation(S,k);
 A9: P[0]
     proof
       assume 0+1 <= m;
       take n=(LifeSpan (s+* (I +* SAt)) + 3);
-      thus StepWhile=0(a,I,s).(0+1)=(Computation S).n by SCMFSA_9:30;
+      thus StepWhile=0(a,I,s).(0+1)=Computation(S,n) by SCMFSA_9:30;
     end;
 A10: IC SCM+FSA in dom (while=0(a,I) +* SAt ) by SF_MASTR:65;
 A11: now
@@ -1184,15 +1158,15 @@ A15:    (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
         set sk=StepWhile=0(a,I,s).k;
         set sk1=StepWhile=0(a,I,s).(k+1);
         consider n being Element of NAT such that
-A16:    sk1 = (Computation S).n by A12,A13,A15,XXREAL_0:2;
-A17:    sk1 = (Computation (sk +* (while=0(a,I)+* SAt))).
-        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 4;
+A16:    sk1 = Computation(S,n) by A12,A13,A15,XXREAL_0:2;
+A17:    sk1 = Computation((sk +* (while=0(a,I)+* SAt)),
+        (LifeSpan (sk +* (I +* SAt)) + 3)) by SCMFSA_9:def 4;
 A18:    sk.a = 0 by A6,A14;
         then I is_closed_on sk & I is_halting_on sk by A8,Def1;
         then
 A19:    IC sk1 =insloc 0 by A17,A18,SCMFSA_9:22;
         take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
-        thus StepWhile=0(a,I,s).((k+1)+1)=(Computation S).m
+        thus StepWhile=0(a,I,s).((k+1)+1)=Computation(S,m)
         by A16,A19,SCMFSA_9:31;
       end;
       hence P[k+1];
@@ -1204,7 +1178,7 @@ A21:  m = 0;
 A22:  S | D = s | D by SCMFSA8A:11
         .= SW.m | D by A21,SCMFSA_9:def 4;
       then S.a = SW.m.a by SCMFSA6A:38;
-      hence (Computation S).(LifeSpan S) | D = SW.m | D by A5,A7,A22,Th22;
+      hence Computation(S,LifeSpan S) | D = SW.m | D by A5,A7,A22,Th22;
     end;
     suppose m <> 0;
       then consider i being Nat such that
@@ -1215,9 +1189,9 @@ A23:  m=i+1 by NAT_1:6;
       set sm1 = sm +* (while=0(a,I)+* SAt);
       m=i+1 by A23;
       then consider n being Element of NAT such that
-A24:  sm = (Computation S).n by A20;
-A25:  sm = (Computation (si +* (while=0(a,I)+* SAt))).
-      (LifeSpan (si +* (I +* SAt)) + 3) by A23,SCMFSA_9:def 4;
+A24:  sm = Computation(S,n) by A20;
+A25:  sm = Computation((si +* (while=0(a,I)+* SAt)),
+      (LifeSpan (si +* (I +* SAt)) + 3)) by A23,SCMFSA_9:def 4;
       i < m by A23,NAT_1:13;
       then
 A26:  si.a = 0 by A6;
@@ -1229,19 +1203,19 @@ A28:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A27,SF_MASTR:66;
 A29:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL = S | IL by A24,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A30:  sm1 = sm by A28,A29,SCMFSA_9:29;
       while=0(a,I) is_halting_on sm by A5,SCMFSA_9:18;
       then sm1 is halting by SCMFSA7B:def 8;
       then consider j being Element of NAT such that
-A31:  CurInstr((Computation sm).j) = halt SCM+FSA by A30,AMI_1:def 20;
-A32:  CurInstr (Computation S).(n+j) = halt SCM+FSA by A24,A31,AMI_1:51;
+A31:  CurInstr(Computation(sm,j)) = halt SCM+FSA by A30,AMI_1:def 20;
+A32:  CurInstr Computation(S,n+j) = halt SCM+FSA by A24,A31,AMI_1:51;
 A33:  while=0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
-      (Computation S).(LifeSpan S) = (Computation S).(n+j) by A32,Th6
-        .= (Computation sm).j by A24,AMI_1:51
-        .= (Computation sm).(LifeSpan sm) by A31,Th6;
-      hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th22;
+      Computation(S,LifeSpan S) = Computation(S,n+j) by A32,AMI_1:127
+        .= Computation(sm,j) by A24,AMI_1:51
+        .= Computation(sm,LifeSpan sm) by A31,AMI_1:127;
+      hence Computation(S,LifeSpan S) | D = sm | D by A5,A33,Th22;
     end;
   end;
   uniqueness
@@ -1251,15 +1225,15 @@ A33:  while=0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
 A34: it1 = k1 and
 A35: (StepWhile=0(a, I, s).k1).a <> 0 and
 A36: for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
-    holds k1 <= i and ((Computation (s +* (while=0(a, I) +* SAt))).
-    (LifeSpan (s +* (while=0(a, I) +* SAt)))) | D
+    holds k1 <= i and (Computation((s +* (while=0(a, I) +* SAt)),
+    (LifeSpan (s +* (while=0(a, I) +* SAt))))) | D
     = StepWhile=0(a, I, s).k1 | D;
     given k2 being Element of NAT such that
 A37: it2 = k2 and
 A38: (StepWhile=0(a, I, s).k2).a <> 0 and
 A39: (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
-    holds k2 <= i) and ((Computation (s +* (while=0(a, I) +* SAt))).
-    (LifeSpan (s +* (while=0(a, I) +* SAt)))) | D
+    holds k2 <= i) and (Computation((s +* (while=0(a, I) +* SAt)),
+    (LifeSpan (s +* (while=0(a, I) +* SAt))))) | D
     = StepWhile=0(a, I, s).k2 | D;
     k1 <= k2 & k2 <= k1 by A35,A36,A38,A39;
     hence it1 = it2 by A34,A37,XXREAL_0:1;
@@ -1295,7 +1269,7 @@ A7: dom (s|Ins) misses D by SCMFSA8A:3;
   thus IExec(WH, s) | D
   = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
     .= (Result(s+*Initialized WH)) | D by A7,FUNCT_4:94
-    .= (Computation Ids).(LifeSpan Ids) | D by A6,AMI_1:122
+    .= Computation(Ids,LifeSpan Ids) | D by A6,AMI_1:122
     .= Ids | D by A2,A3,A5,Th22
     .= (Initialize s) | D by SCMFSA8B:5
     .= s | D by A1,SCMFSA8C:27;
@@ -1323,8 +1297,8 @@ A4: Ids is halting by A3,SCMFSA7B:def 8;
 A5: ExitsAtWhile=0(a, I, Is) = k and (StepWhile=0(a, I, Is).k).a <> 0 &
   (for i being Element of NAT st (StepWhile=0(a, I, Is).i).a <> 0
   holds k <= i) and
-A6: ((Computation (Is +* (while=0(a, I) +* SAt))).
-  (LifeSpan (Is +* (while=0(a, I) +* SAt)))) | D = StepWhile=0(a, I, Is).k | D
+A6: (Computation((Is +* (while=0(a, I) +* SAt)),
+  (LifeSpan (Is +* (while=0(a, I) +* SAt))))) | D = StepWhile=0(a, I, Is).k | D
   by A1,A2,Def3;
   Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
   then
@@ -1339,8 +1313,8 @@ end;
 begin :: while>0, general
 
 Lm4: for a being Int-Location, I being Macro-Instruction holds
-insloc (card I +4) in dom if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
-if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
+card I +4 in dom if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop) &
+if>0(a,I ';' Goto insloc 0,SCM+FSA-Stop).(card I +4)
 = goto ((insloc 0)+(card I +4))
 proof
   let a be Int-Location;
@@ -1350,7 +1324,7 @@ proof
   set J = SCM+FSA-Stop;
   set i = a >0_goto insloc (card J + 3);
   set c4 = card I + 4;
-  set Lc4 = insloc c4;
+  set Lc4 = c4;
   card I1 = card I + card G by SCMFSA6A:61
     .= card I +1 by SCMFSA8A:29;
   then card I1 + card J + 3 = card I +4 +1 by SCMFSA8A:17;
@@ -1384,7 +1358,6 @@ A7: dom if>0(a,I1,J) = dom Directed Mi \/ dom ProgramPart Relocated(GJ, c4 )
   = dom Mi \/ dom ProgramPart Relocated(GJ, c4) by SCMFSA6A:14;
   then
 A8: Lc4 in dom ProgramPart Relocated(GJ, c4) by A1,A5,XBOOLE_0:def 2;
-A9: insloc 0 + c4 = insloc ( 0 + c4) by SCMFSA_4:def 1;
 A10: G = insloc 0 .--> goto insloc 0 by SCMFSA8A:def 2;
   then dom G = {insloc 0} by CQC_LANG:5;
   then
@@ -1392,13 +1365,13 @@ A11: insloc 0 in dom G by TARSKI:def 1;
 A12: G.insloc 0 = goto insloc 0 by A10,CQC_LANG:6;
 A13: InsCode goto insloc 0 = 6 & InsCode halt SCM+FSA = 0 by SCMFSA_2:47,124;
 A14: dom G c= dom GJ by SCMFSA6A:56;
-  then insloc 0 + c4 in { il+c4 where il is Instruction-Location of SCM+FSA:
+  then insloc 0 + c4 in { il+c4 where il is Element of NAT:
   il in dom GJ} by A11;
   then
-A15: insloc c4 in dom Shift(GJ,c4) by A9,SCMFSA_4:31;
+A15: insloc c4 in dom Shift(GJ,c4) by VALUED_1:def 12;
   then
-A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by A9,AMI_1:def 47
-    .= GJ.insloc 0 by A11,A14,SCMFSA_4:30
+A16: pi(Shift(GJ,c4),Lc4) = Shift(GJ,c4).(insloc 0 +c4) by AMI_1:def 47
+    .= GJ.insloc 0 by A11,A14,VALUED_1:def 12
     .= goto insloc 0 by A11,A12,A13,SCMFSA6A:54;
   thus if>0(a,I1,J).Lc4
   = (ProgramPart Relocated(GJ,c4)).Lc4 by A1,A6,A7,A8,FUNCT_4:def 1
@@ -1621,12 +1594,12 @@ A3: for k holds ( F(k+1) < F(k) or S[k] ) by A2;
 A4: S[m] and
 A5: for n st S[n] holds m <= n from SEQ_4:sch 1(A3);
   defpred P[Element of NAT] means $1+1 <= m implies
-  ex k st StepWhile>0(a,I,s).($1+1)=(Computation s1).k;
+  ex k st StepWhile>0(a,I,s).($1+1)=Computation(s1,k);
 A6: P[0]
   proof
     assume 0+1 <= m;
     take n=(LifeSpan (s+* (I +* SAt)) + 3);
-    thus StepWhile>0(a,I,s).(0+1)=(Computation s1).n by SCMFSA_9:51;
+    thus StepWhile>0(a,I,s).(0+1)=Computation(s1,n) by SCMFSA_9:51;
   end;
 A7: IC SCM+FSA in dom (while>0(a,I) +* SAt ) by SF_MASTR:65;
 A8: now
@@ -1643,15 +1616,15 @@ A12:  (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
       set sk=StepWhile>0(a,I,s).k;
       set sk1=StepWhile>0(a,I,s).(k+1);
       consider n being Element of NAT such that
-A13:  sk1 = (Computation s1).n by A9,A10,A12,XXREAL_0:2;
-A14:  sk1 = (Computation (sk +* (while>0(a,I)+* SAt))).
-      (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 5;
+A13:  sk1 = Computation(s1,n) by A9,A10,A12,XXREAL_0:2;
+A14:  sk1 = Computation((sk +* (while>0(a,I)+* SAt)),
+      (LifeSpan (sk +* (I +* SAt)) + 3)) by SCMFSA_9:def 5;
 A15:  sk.a > 0 by A5,A11;
       then I is_closed_on sk & I is_halting_on sk by A1;
       then
 A16:  IC sk1 =insloc 0 by A14,A15,SCMFSA_9:47;
       take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
-      thus StepWhile>0(a,I,s).((k+1)+1)=(Computation s1).m
+      thus StepWhile>0(a,I,s).((k+1)+1)=Computation(s1,m)
       by A13,A16,SCMFSA_9:52;
     end;
     hence P[k+1];
@@ -1673,9 +1646,9 @@ A19:  m=i+1 by NAT_1:6;
       set sm1=sm +* (while>0(a,I)+* SAt);
       m=i+1 by A19;
       then consider n being Element of NAT such that
-A20:  sm = (Computation s1).n by A17;
-A21:  sm= (Computation (si +* (while>0(a,I)+* SAt))).
-      (LifeSpan (si +* (I +* SAt)) + 3) by A19,SCMFSA_9:def 5;
+A20:  sm = Computation(s1,n) by A17;
+A21:  sm= Computation((si +* (while>0(a,I)+* SAt)),
+      (LifeSpan (si +* (I +* SAt)) + 3)) by A19,SCMFSA_9:def 5;
       i < m by A19,NAT_1:13;
       then
 A22:  si.a > 0 by A5;
@@ -1687,14 +1660,14 @@ A24:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A23,SF_MASTR:66;
 A25:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A20,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A26:  sm1=sm by A24,A25,SCMFSA_9:29;
       while>0(a,I) is_halting_on sm by A4,SCMFSA_9:43;
       then sm1 is halting by SCMFSA7B:def 8;
       then consider j being Element of NAT such that
-A27:  CurInstr((Computation sm).j) = halt SCM+FSA by A26,AMI_1:def 20;
-      CurInstr (Computation s1).(n+j) = halt SCM+FSA by A20,A27,AMI_1: 51;
+A27:  CurInstr(Computation(sm,j)) = halt SCM+FSA by A26,AMI_1:def 20;
+      CurInstr Computation(s1,n+j) = halt SCM+FSA by A20,A27,AMI_1: 51;
       then s1 is halting by AMI_1:def 20;
       hence while>0(a,I) is_halting_on s by SCMFSA7B:def 8;
       set p=(LifeSpan (s+* (I +* SAt)) + 3);
@@ -1708,18 +1681,18 @@ A30:      StepWhile>0(a,I,s).0=s by SCMFSA_9:def 5;
           then
 A31:      s.a > 0 by A5,A28;
           then I is_closed_on s & I is_halting_on s by A1,A30;
-          hence IC (Computation s1).q in dom while>0(a,I) by A29,A31,
+          hence IC Computation(s1,q) in dom while>0(a,I) by A29,A31,
           SCMFSA_9:47;
         end;
         suppose
 A32:      q > p;
           defpred P2[Nat] means
           $1<=m & $1<>0 & (ex k st StepWhile>0(a,I,s).$1=
-          (Computation s1).k & k <= q);
+          Computation(s1,k) & k <= q);
 A33:      for i be Nat st P2[i] holds i <= m;
 A34:      now
             take k=p;
-            thus StepWhile>0(a,I,s).1=(Computation s1).k & k <= q
+            thus StepWhile>0(a,I,s).1=Computation(s1,k) & k <= q
             by A32,SCMFSA_9:51;
           end;
           0+1 < m +1 by A28,XREAL_1:8;
@@ -1732,14 +1705,14 @@ A36:      P2[t] & for i be Nat st P2[i] holds i <= t from NAT_1:sch 6(A33,A35);
           now per cases;
             suppose t=m;
               then consider r being Element of NAT such that
-A37:          sm=(Computation s1).r & r <= q by A36;
+A37:          sm=Computation(s1,r) & r <= q by A36;
               consider x being Nat such that
 A38:          q = r+x by A37,NAT_1:10;
               reconsider x as Element of NAT by ORDINAL1:def 13;
-A39:          (Computation s1).q = (Computation sm1).x by A26,A37,A38,
+A39:          Computation(s1,q) = Computation(sm1,x) by A26,A37,A38,
               AMI_1:51;
               while>0(a,I) is_closed_on sm by A4,SCMFSA_9:43;
-              hence IC (Computation s1).q in dom while>0(a,I) by A39,
+              hence IC Computation(s1,q) in dom while>0(a,I) by A39,
               SCMFSA7B:def 7;
             end;
             suppose t<>m;
@@ -1749,14 +1722,14 @@ A40:          t < m by A36,REAL_1:def 5;
 A41:          t=y+1 by A36,NAT_1:6;
               reconsider y as Element of NAT by ORDINAL1:def 13;
               consider z being Element of NAT such that
-A42:          StepWhile>0(a,I,s).t=(Computation s1).z & z <= q by A36;
+A42:          StepWhile>0(a,I,s).t=Computation(s1,z) & z <= q by A36;
               y+ 0 < t by A41,XREAL_1:8;
               then
 A43:          y < m by A36,XXREAL_0:2;
               set Dy=StepWhile>0(a,I,s).y;
               set Dt=StepWhile>0(a,I,s).t;
-A44:          Dt= (Computation (Dy +* (while>0(a,I)+* SAt))).
-              (LifeSpan (Dy +* (I +* SAt)) + 3) by A41,SCMFSA_9:def 5;
+A44:          Dt= Computation((Dy +* (while>0(a,I)+* SAt)),
+              (LifeSpan (Dy +* (I +* SAt)) + 3)) by A41,SCMFSA_9:def 5;
 A45:          Dy.a > 0 by A5,A43;
               then I is_closed_on Dy & I is_halting_on Dy by A1;
               then
@@ -1767,7 +1740,7 @@ A47:          now
 A48:            z2 <= q;
 A49:            now
                   take k=z2;thus
-                  StepWhile>0(a,I,s).(t+1)=(Computation s1).k & k <= q
+                  StepWhile>0(a,I,s).(t+1)=Computation(s1,k) & k <= q
                   by A42,A46,A48,SCMFSA_9:52;
                 end;
                 t+1 <= m by A40,NAT_1:13;
@@ -1777,16 +1750,16 @@ A49:            now
 A50:          q = z+w by A42,NAT_1:10;
               reconsider w as Element of NAT by ORDINAL1:def 13;
 A51:          w < LifeSpan (Dt +* (I +* SAt)) + 3 by A47,A50,XREAL_1:8;
-A52:          (Computation s1).q = (Computation Dt ).w by A42,A50, AMI_1:51
-                .= (Computation (Dt +* (while>0(a,I)+* SAt))).w
+A52:          Computation(s1,q) = Computation(Dt,w) by A42,A50, AMI_1:51
+                .= Computation((Dt +* (while>0(a,I)+* SAt)),w)
               by A42,A46,SCMFSA_9:52;
 A53:          Dt.a > 0 by A5,A40;
               then I is_closed_on Dt & I is_halting_on Dt by A1;
-              hence IC (Computation s1).q in dom while>0(a,I)
+              hence IC Computation(s1,q) in dom while>0(a,I)
               by A51,A52,A53,SCMFSA_9:47;
             end;
           end;
-          hence IC (Computation s1).q in dom while>0(a,I);
+          hence IC Computation(s1,q) in dom while>0(a,I);
         end;
       end;
       hence while>0(a,I) is_closed_on s by SCMFSA7B:def 7;
@@ -1813,18 +1786,18 @@ end;
 theorem Th35: :: based on SCMFSA_9:32
   while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+  holds Computation(s,k) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations)
 proof
   assume that
 A1: while>0(a, I) +* SAt c= s and
 A2: s.a <= 0;
   set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
-  set s2 = (Computation s1).1;
-  set s3 = (Computation s1).2;
-  set s4 = (Computation s1).3;
-  set s5 = (Computation s1).4;
-  set C1 = Computation s1;
+  set s2 = Computation(s1,1);
+  set s3 = Computation(s1,2);
+  set s4 = Computation(s1,3);
+  set s5 = Computation(s1,4);
+:::  set C1 = Computation s1;
   set i = a >0_goto insloc 4;
 A3: s = s1 by A1,FUNCT_4:79;
 A4: insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
@@ -1841,24 +1814,24 @@ A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
     .= i by SCMFSA_9:11;
   then
 A8: CurInstr s1 = i by A7,AMI_1:def 17;
-A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
-    .= Following s1 by AMI_1:def 19
+A9: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
+    .= Following s1 by AMI_1:13
     .= Exec(i,s1) by A8,AMI_1:def 18;
   not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom s
   by SCMFSA6B:12,SCMFSA_2:66;
   then
 A10: s1.a = s.a by FUNCT_4:12;
-A11: IC C1.1 = C1.1.IC SCM+FSA by AMI_1:def 15
+A11: IC Computation(s1,1) = Computation(s1,1).IC SCM+FSA by AMI_1:def 15
     .= Next insloc 0 by A2,A7,A9,A10,SCMFSA_2:97
-    .= insloc (0 + 1) by SCMFSA_2:32;
+    .= insloc (0 + 1);
 A12: insloc 1 in dom while>0(a,I) by SCMFSA_9:10;
-  C1.1.insloc 1 = s1.insloc 1 by AMI_1:54
+  Computation(s1,1).insloc 1 = s1.insloc 1 by AMI_1:54
     .= (while>0(a,I) +* Start-At insloc 0).insloc 1 by A5,A12,FUNCT_4:14
     .= while>0(a,I).insloc 1 by A12,SCMFSA6B:7
     .= goto insloc 2 by SCMFSA_9:11;
   then
-A13: CurInstr C1.1 = goto insloc 2 by A11,AMI_1:def 17;
-A14: (Computation s1).(1 + 1) = Following s2 by AMI_1:def 19
+A13: CurInstr Computation(s1,1) = goto insloc 2 by A11,AMI_1:def 17;
+A14: Computation(s1,1+1) = Following s2 by AMI_1:14
     .= Exec(goto insloc 2,s2) by A13,AMI_1:def 18;
 A15: insloc 2 in dom while>0(a,I) by SCMFSA_9:37;
 A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
@@ -1869,7 +1842,7 @@ A16: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
     .= goto insloc 3 by SCMFSA_9:41;
   then
 A17: CurInstr s3 = goto insloc 3 by A16,AMI_1:def 17;
-A18: (Computation s1).(2 + 1) = Following s3 by AMI_1:def 19
+A18: Computation(s1,2+1) = Following s3 by AMI_1:14
     .= Exec(goto insloc 3,s3) by A17,AMI_1:def 18;
 A19: insloc 3 in dom while>0(a,I) by SCMFSA_9:37;
   set loc5= insloc (card I +5);
@@ -1881,7 +1854,7 @@ A20: IC s4 = s4.IC SCM+FSA by AMI_1:def 15
     .= goto loc5 by SCMFSA_9:40;
   then
 A21: CurInstr s4 = goto loc5 by A20,AMI_1:def 17;
-A22: (Computation s1).(3 + 1) = Following s4 by AMI_1:def 19
+A22: Computation(s1,3+1) = Following s4 by AMI_1:14
     .= Exec(goto loc5,s4) by A21,AMI_1:def 18;
 A23: loc5 in dom while>0(a,I) by SCMFSA_9:38;
 A24: IC s5 = s5.IC SCM+FSA by AMI_1:def 15
@@ -1897,14 +1870,14 @@ A26: s1 is halting by AMI_1:def 20;
   now
     let k;
     assume
-A27: CurInstr((Computation s).k) = halt SCM+FSA;
+A27: CurInstr(Computation(s,k)) = halt SCM+FSA;
     assume 4 > k;
     then 3+1 > k;
     then
 A28: k <= 3 by NAT_1:13;
     per cases by A28,NAT_1:28;
     suppose k = 0;
-      then (Computation s).k = s by AMI_1:def 19;
+      then Computation(s,k) = s by AMI_1:13;
       hence contradiction by A3,A8,A27,SCMFSA_2:49,124;
     end;
     suppose k = 1;
@@ -1931,19 +1904,19 @@ A32: (for c being Int-Location holds Exec(goto insloc 2, s2).c = s2.c) &
 A33: (for c being Int-Location holds Exec(i, s1).c = s1.c) &
   for f being FinSeq-Location holds Exec(i, s1).f = s1.f by SCMFSA_2:97;
   then
-A34: (Computation s).1 | D = s | D by A3,A9,SCMFSA6A:38;
+A34: Computation(s,1) | D = s | D by A3,A9,SCMFSA6A:38;
   then
-A35: (Computation s).2 | D = s | D by A3,A14,A32,SCMFSA6A:38;
-  then (Computation s).3 | D = s | D by A3,A18,A31,SCMFSA6A:38;
+A35: Computation(s,2) | D = s | D by A3,A14,A32,SCMFSA6A:38;
+  then Computation(s,3) | D = s | D by A3,A18,A31,SCMFSA6A:38;
   then
-A36: (Computation s).4 | D = s | D by A3,A22,A30,SCMFSA6A:38;
+A36: Computation(s,4) | D = s | D by A3,A22,A30,SCMFSA6A:38;
   let k be Element of NAT;
   k <= 3 or 3 < k;
   then
 A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by NAT_1:13,28;
   per cases by A37;
   suppose k = 0;
-    hence thesis by AMI_1:def 19;
+    hence thesis by AMI_1:13;
   end;
   suppose k = 1;
     hence thesis by A3,A9,A33,SCMFSA6A:38;
@@ -1955,18 +1928,18 @@ A37: k = 0 or k = 1 or k = 2 or k = 3 or 3+1 <= k by NAT_1:13,28;
     hence thesis by A3,A18,A31,A35,SCMFSA6A:38;
   end;
   suppose 4 <= k;
-    then CurInstr (Computation s).k = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
-    hence thesis by A29,A36,Th6;
+    then CurInstr Computation(s,k) = halt SCM+FSA by A3,A26,A29,SCMFSA8A:4;
+    hence thesis by A29,A36,AMI_1:127;
   end;
 end;
 
 theorem Th36: :: based on SCMFSA_9:36
   I is_closed_on s & I is_halting_on s & s.a > 0 implies
-  (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+  Computation((s +* (while>0(a,I) +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3)) |
   (Int-Locations \/ FinSeq-Locations)
-  = (Computation (s +* (I +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0))) |
+  = Computation((s +* (I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)))) |
   (Int-Locations \/ FinSeq-Locations)
 proof
   assume that
@@ -1974,7 +1947,7 @@ A1: I is_closed_on s and
 A2: I is_halting_on s and
 A3: s.a > 0;
   set s1 = s +* (while>0(a,I) +* Start-At insloc 0);
-  set s2 = (Computation s1).1;
+  set s2 = Computation(s1,1);
   set i = a >0_goto insloc 4;
   set sI = s +* (I +* Start-At insloc 0);
 A4: insloc 0 in dom while>0(a,I) by SCMFSA_9:10;
@@ -1991,8 +1964,8 @@ A7: IC s1 = s1.IC SCM+FSA by AMI_1:def 15
     .= i by SCMFSA_9:11;
   then
 A8: CurInstr s1 = i by A7,AMI_1:def 17;
-A9: (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
-    .= Following s1 by AMI_1:def 19
+A9: Computation(s1,0+1) = Following Computation(s1,0) by AMI_1:14
+    .= Following s1 by AMI_1:13
     .= Exec(i,s1) by A8,AMI_1:def 18;
   not a in dom (while>0(a,I) +* Start-At insloc 0) & a in dom s
   by SCMFSA6B:12,SCMFSA_2:66;
@@ -2007,20 +1980,20 @@ A12: s2 | D = s1 | D by SCMFSA6A:38
     .= s | D by SCMFSA8A:11
     .= sI | D by SCMFSA8A:11;
   defpred P[Element of NAT] means $1 <= LifeSpan sI implies
-  IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
-  (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
+  IC Computation(s1,1+$1) = IC Computation(sI,$1) + 4 &
+  Computation(s1,1+$1) | D = Computation(sI,$1) | D;
 A13: P[0]
   proof
     assume 0 <= LifeSpan sI;
 A14: IC SCM+FSA in dom (I +* Start-At insloc 0) by SF_MASTR:65;
-    IC (Computation sI).0 = IC sI by AMI_1:def 19
+    IC Computation(sI,0) = IC sI by AMI_1:13
       .= sI.IC SCM+FSA by AMI_1:def 15
       .= (I +* Start-At insloc 0).IC SCM+FSA by A14,FUNCT_4:14
       .= insloc 0 by SF_MASTR:66;
-    then IC (Computation sI).0 + 4 = insloc (0+ 4) by SCMFSA_4:def 1;
-    hence IC (Computation s1).(1 + 0) = IC (Computation sI).0 + 4 &
-    (Computation s1).(1 + 0) | D = (Computation sI).0 | D by A11,A12,
-    AMI_1:def 19;
+    then IC Computation(sI,0) + 4 = insloc (0+ 4);
+    hence IC Computation(s1,1+0) = IC Computation(sI,0) + 4 &
+    Computation(s1,1+0) | D = Computation(sI,0) | D by A11,A12,
+    AMI_1:13;
   end;
 A15: now
     let k be Element of NAT;
@@ -2031,40 +2004,40 @@ A16: P[k];
 A17:  k + 1 <= LifeSpan sI;
       k + 0 < k + 1 by XREAL_1:8;
       then k < LifeSpan sI by A17,XXREAL_0:2;
-      hence IC (Computation s1).(1 + k+1) = IC (Computation sI).(k+1) + 4 &
-      (Computation s1).(1 + k+1) | D = (Computation sI).(k+1) | D
+      hence IC Computation(s1,1+k+1) = IC Computation(sI,k+1) + 4 &
+      Computation(s1,1+k+1) | D = Computation(sI,k+1) | D
       by A1,A2,A16,SCMFSA_9:44;
     end;
     hence P[k + 1];
   end;
-  set s2 = (Computation s1).(1 + LifeSpan sI);
+  set s2 = Computation(s1,1+LifeSpan sI);
   set loc4 = insloc (card I + 4);
-  set s3 = (Computation s1).(1+LifeSpan sI+1);
+  set s3 = Computation(s1,1+LifeSpan sI+1);
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A15);
   then
 A18: P[LifeSpan sI qua Element of NAT];
   then
 A19: CurInstr s2 = goto loc4 by A1,A2,SCMFSA_9:45;
-A20: s3 = Following s2 by AMI_1:def 19
+A20: s3 = Following s2 by AMI_1:14
     .= Exec(goto loc4,s2) by A19,AMI_1:def 18;
 A21: loc4 in dom while>0(a,I) by SCMFSA_9:38;
 A22: IC s3 = s3.IC SCM+FSA by AMI_1:def 15
     .= loc4 by A20,SCMFSA_2:95;
 A23: (for c being Int-Location holds s3.c = s2.c) &
   (for f being FinSeq-Location holds s3.f = s2.f) by A20,SCMFSA_2:95;
-  set s4=(Computation s1).(1+LifeSpan sI+1+1);
+  set s4=Computation(s1,1+LifeSpan sI+1+1);
   s3.loc4 = s1.loc4 by AMI_1:54
     .= (while>0(a,I) +* Start-At insloc 0).loc4 by A5,A21,FUNCT_4:14
     .= while>0(a,I).loc4 by A21,SCMFSA6B:7
     .= goto insloc 0 by SCMFSA_9:46;
   then
 A24: CurInstr s3 = goto insloc 0 by A22,AMI_1:def 17;
-  s4 = Following s3 by AMI_1:def 19
+  s4 = Following s3 by AMI_1:14
     .= Exec(goto insloc 0,s3) by A24,AMI_1:def 18;
   then (for c being Int-Location holds s4.c = s3.c) &
   (for f being FinSeq-Location holds s4.f = s3.f) by SCMFSA_2:95;
-  hence (Computation s1).(LifeSpan sI + 3) | D = s3 | D by SCMFSA6A:38
-    .= (Computation sI).(LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
+  hence Computation(s1,LifeSpan sI+3) | D = s3 | D by SCMFSA6A:38
+    .= Computation(sI,LifeSpan sI) | D by A18,A23,SCMFSA6A:38;
 end;
 
 theorem Th37: :: Step_gt0_0:
@@ -2079,8 +2052,8 @@ A2: (SW.k +* (while>0(a,I) +* SAt)) | D = SW.k | D by SCMFSA8A:11;
   then
 A3: SW.k.a = (SW.k +* (while>0(a,I) +* SAt)).a by SCMFSA6A:38;
 A4: while>0(a,I) +* SAt c= SW.k +* (while>0(a,I) +* SAt) by FUNCT_4:26;
-  thus SW.(k+1) | D = (Computation (SW.k +* (while>0(a,I) +* SAt))).
-  (LifeSpan (SW.k +* (I +* SAt)) + 3) | D by SCMFSA_9:def 5
+  thus SW.(k+1) | D = Computation((SW.k +* (while>0(a,I) +* SAt)),
+  (LifeSpan (SW.k +* (I +* SAt)) + 3)) | D by SCMFSA_9:def 5
     .= StepWhile>0(a, I, s).k | D by A1,A2,A3,A4,Th35;
 end;
 
@@ -2115,8 +2088,8 @@ A6: SWkI is halting by A5,FUNCT_4:79;
 A7: dom (SW.k | Ins) misses D by SCMFSA8A:3;
 A8: IExec(I, SW.k) | D = (Result(SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
     .= (Result(SWkI)) | D by A7,FUNCT_4:94
-    .= (Computation SWkIS).(LifeSpan SWkIS) | D by A4,A6,AMI_1:122;
-A9: SW.(k+1) = (Computation (SW.k +* WHS)).(LifeSpan (SWkIS) + 3)
+    .= Computation(SWkIS,LifeSpan SWkIS) | D by A4,A6,AMI_1:122;
+A9: SW.(k+1) = Computation((SW.k +* WHS),LifeSpan (SWkIS) + 3)
   by SCMFSA_9:def 5;
 A10: ISWk | D = SW.k | D by A3,SCMFSA8C:27;
   now
@@ -2175,10 +2148,10 @@ A13:  SWkI is halting by A12,FUNCT_4:79;
 A14:  dom (SW.k | Ins) misses D by SCMFSA8A:3;
 A15:  IExec(I, SW.k) | D = (Result (SWkI) +* SW.k | Ins) | D by SCMFSA6B:def 1
         .= (Result(SWkI)) | D by A14,FUNCT_4:94
-        .= (Computation SWkIS).(LifeSpan SWkIS) | D by A11,A13,AMI_1:122;
+        .= Computation(SWkIS,LifeSpan SWkIS) | D by A11,A13,AMI_1:122;
       SW.(k+1) | D = IExec(I, SW.k) | D by A5,A6,A9,A10,Th38;
       hence SW.(k+1).intloc 0
-      = ((Computation SWkIS).(LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
+      = (Computation(SWkIS,LifeSpan SWkIS)).intloc 0 by A15,SCMFSA6A:38
         .= 1 by A5,A7,SCMFSA8C:97;
     end;
   end;
@@ -2221,13 +2194,13 @@ A7:   ST1.k.a <= 0;
 A8:   ST1.k.a > 0;
       then
 A9:   I is_closed_on ST1.k & I is_halting_on ST1.k by A1,Def4;
-A10:  ST1.(k+1) | D = (Computation (ST1.k +* (WH +* SAt))).
-      (LifeSpan (ST1kI) + 3) | D by SCMFSA_9:def 5
-        .= (Computation (ST1kI)). (LifeSpan (ST1kI)) | D by A8,A9,Th36;
+A10:  ST1.(k+1) | D = Computation((ST1.k +* (WH +* SAt)),
+      (LifeSpan (ST1kI) + 3)) | D by SCMFSA_9:def 5
+        .= Computation((ST1kI),LifeSpan (ST1kI)) | D by A8,A9,Th36;
 A11:  I is_closed_on ST2.k & I is_halting_on ST2.k by A5,A9,SCMFSA8B:8;
-A12:  ST2.(k+1) | D = (Computation (ST2.k +* (WH +* SAt))).
-      (LifeSpan (ST2kI) + 3) | D by SCMFSA_9:def 5
-        .= (Computation (ST2kI)). (LifeSpan (ST2kI)) | D by A6,A8,A11,Th36;
+A12:  ST2.(k+1) | D = Computation((ST2.k +* (WH +* SAt)),
+      (LifeSpan (ST2kI) + 3)) | D by SCMFSA_9:def 5
+        .= Computation((ST2kI),LifeSpan (ST2kI)) | D by A6,A8,A11,Th36;
 A13:  (ST1kI) | D = ST1.k | D by SCMFSA8A:11
         .= (ST2kI) | D by A5,SCMFSA8A:11;
 A14:  I +* SAt c= ST1kI by FUNCT_4:26;
@@ -2255,8 +2228,8 @@ A2: WithVariantWhile>0 a, I, s;
   :Def6:
   ex k being Element of NAT st it = k & (StepWhile>0(a, I, s).k).a <= 0 &
   (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
-  holds k <= i) & (Computation (s +* (while>0(a, I) +* (Start-At insloc 0)))).
-  (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0)))) |
+  holds k <= i) & Computation((s +* (while>0(a, I) +* (Start-At insloc 0))),
+  (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0))))) |
   (Int-Locations \/ FinSeq-Locations)
   = StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
   existence
@@ -2279,12 +2252,12 @@ A6: for n st X[n] holds m <= n from SEQ_4:sch 1(A4);
 A7: while>0(a, I) +* SAt c= S by FUNCT_4:26;
 A8: ProperBodyWhile>0 a, I, s by A1,Th32;
     defpred P[Element of NAT] means $1+1 <= m implies
-    ex k st StepWhile>0(a,I,s).($1+1)=(Computation S).k;
+    ex k st StepWhile>0(a,I,s).($1+1)=Computation(S,k);
 A9: P[0]
     proof
       assume 0+1 <= m;
       take n=(LifeSpan (s+* (I +* SAt)) + 3);
-      thus StepWhile>0(a,I,s).(0+1)=(Computation S).n by SCMFSA_9:51;
+      thus StepWhile>0(a,I,s).(0+1)=Computation(S,n) by SCMFSA_9:51;
     end;
 A10: IC SCM+FSA in dom (while>0(a,I) +* SAt ) by SF_MASTR:65;
 A11: now
@@ -2301,15 +2274,15 @@ A15:    (k+1)+ 0 < (k+ 1)+ 1 by XREAL_1:8;
         set sk=StepWhile>0(a,I,s).k;
         set sk1=StepWhile>0(a,I,s).(k+1);
         consider n being Element of NAT such that
-A16:    sk1 = (Computation S).n by A12,A13,A15,XXREAL_0:2;
-A17:    sk1 = (Computation (sk +* (while>0(a,I)+* SAt))).
-        (LifeSpan (sk +* (I +* SAt)) + 3) by SCMFSA_9:def 5;
+A16:    sk1 = Computation(S,n) by A12,A13,A15,XXREAL_0:2;
+A17:    sk1 = Computation((sk +* (while>0(a,I)+* SAt)),
+        (LifeSpan (sk +* (I +* SAt)) + 3)) by SCMFSA_9:def 5;
 A18:    sk.a > 0 by A6,A14;
         then I is_closed_on sk & I is_halting_on sk by A8,Def4;
         then
 A19:    IC sk1 =insloc 0 by A17,A18,SCMFSA_9:47;
         take m=n +(LifeSpan (sk1 +* (I +* SAt)) + 3);
-        thus StepWhile>0(a,I,s).((k+1)+1)=(Computation S).m
+        thus StepWhile>0(a,I,s).((k+1)+1)=Computation(S,m)
         by A16,A19,SCMFSA_9:52;
       end;
       hence P[k+1];
@@ -2321,7 +2294,7 @@ A21:  m = 0;
 A22:  S | D = s | D by SCMFSA8A:11
         .= SW.m | D by A21,SCMFSA_9:def 5;
       then S.a = SW.m.a by SCMFSA6A:38;
-      hence (Computation S).(LifeSpan S) | D = SW.m | D by A5,A7,A22,Th35;
+      hence Computation(S,LifeSpan S) | D = SW.m | D by A5,A7,A22,Th35;
     end;
     suppose m <> 0;
       then consider i being Nat such that
@@ -2332,9 +2305,9 @@ A23:  m=i+1 by NAT_1:6;
       set sm1 = sm +* (while>0(a,I)+* SAt);
       m=i+1 by A23;
       then consider n being Element of NAT such that
-A24:  sm = (Computation S).n by A20;
-A25:  sm = (Computation (si +* (while>0(a,I)+* SAt))).
-      (LifeSpan (si +* (I +* SAt)) + 3) by A23,SCMFSA_9:def 5;
+A24:  sm = Computation(S,n) by A20;
+A25:  sm = Computation((si +* (while>0(a,I)+* SAt)),
+      (LifeSpan (si +* (I +* SAt)) + 3)) by A23,SCMFSA_9:def 5;
       i < m by A23,NAT_1:13;
       then
 A26:  si.a > 0 by A6;
@@ -2346,19 +2319,19 @@ A28:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A27,SF_MASTR:66;
 A29:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL = S | IL by A24,AMI_1:123;
-      then sm1 | IL = sm | IL by SCMFSA_9:27;
+      then sm1 | IL = sm | IL by FUNCT_4:100;
       then
 A30:  sm1 = sm by A28,A29,SCMFSA_9:29;
       while>0(a,I) is_halting_on sm by A5,SCMFSA_9:43;
       then sm1 is halting by SCMFSA7B:def 8;
       then consider j being Element of NAT such that
-A31:  CurInstr((Computation sm).j) = halt SCM+FSA by A30,AMI_1:def 20;
-A32:  CurInstr (Computation S).(n+j) = halt SCM+FSA by A24,A31,AMI_1:51;
+A31:  CurInstr(Computation(sm,j)) = halt SCM+FSA by A30,AMI_1:def 20;
+A32:  CurInstr Computation(S,n+j) = halt SCM+FSA by A24,A31,AMI_1:51;
 A33:  while>0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
-      (Computation S).(LifeSpan S) = (Computation S).(n+j) by A32,Th6
-        .= (Computation sm).j by A24,AMI_1:51
-        .= (Computation sm).(LifeSpan sm) by A31,Th6;
-      hence (Computation S).(LifeSpan S) | D = sm | D by A5,A33,Th35;
+      Computation(S,LifeSpan S) = Computation(S,n+j) by A32,AMI_1:127
+        .= Computation(sm,j) by A24,AMI_1:51
+        .= Computation(sm,LifeSpan sm) by A31,AMI_1:127;
+      hence Computation(S,LifeSpan S) | D = sm | D by A5,A33,Th35;
     end;
   end;
   uniqueness
@@ -2368,15 +2341,15 @@ A33:  while>0(a,I)+* SAt c= sm by A30,FUNCT_4:26;
 A34: it1 = k1 and
 A35: (StepWhile>0(a, I, s).k1).a <= 0 and
 A36: for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
-    holds k1 <= i and ((Computation (s +* (while>0(a, I) +* SAt))).
-    (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D
+    holds k1 <= i and (Computation((s +* (while>0(a, I) +* SAt)),
+    (LifeSpan (s +* (while>0(a, I) +* SAt))))) | D
     = StepWhile>0(a, I, s).k1 | D;
     given k2 being Element of NAT such that
 A37: it2 = k2 and
 A38: (StepWhile>0(a, I, s).k2).a <= 0 and
 A39: (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
-    holds k2 <= i) and ((Computation (s +* (while>0(a, I) +* SAt))).
-    (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D
+    holds k2 <= i) and (Computation((s +* (while>0(a, I) +* SAt)),
+    (LifeSpan (s +* (while>0(a, I) +* SAt))))) | D
     = StepWhile>0(a, I, s).k2 | D;
     k1 <= k2 & k2 <= k1 by A35,A36,A38,A39;
     hence it1 = it2 by A34,A37,XXREAL_0:1;
@@ -2412,7 +2385,7 @@ A7: dom (s|Ins) misses D by SCMFSA8A:3;
   thus IExec(WH, s) | D
   = (Result(s+*Initialized WH) +* s | Ins) | D by SCMFSA6B:def 1
     .= (Result(s+*Initialized WH)) | D by A7,FUNCT_4:94
-    .= (Computation Ids).(LifeSpan Ids) | D by A6,AMI_1:122
+    .= Computation(Ids,LifeSpan Ids) | D by A6,AMI_1:122
     .= Ids | D by A2,A3,A5,Th35
     .= (Initialize s) | D by SCMFSA8B:5
     .= s | D by A1,SCMFSA8C:27;
@@ -2440,8 +2413,8 @@ A4: Ids is halting by A3,SCMFSA7B:def 8;
 A5: ExitsAtWhile>0(a, I, Is) = k and (StepWhile>0(a, I, Is).k).a <= 0 &
   (for i being Element of NAT st (StepWhile>0(a, I, Is).i).a <= 0
   holds k <= i) and
-A6: ((Computation (Is +* (while>0(a, I) +* SAt))).
-  (LifeSpan (Is +* (while>0(a, I) +* SAt)))) | D = StepWhile>0(a, I, Is).k | D
+A6: (Computation((Is +* (while>0(a, I) +* SAt)),
+  (LifeSpan (Is +* (while>0(a, I) +* SAt))))) | D = StepWhile>0(a, I, Is).k | D
   by A1,A2,Def6;
   Ins misses D by SCMFSA_2:13,14,XBOOLE_1:70;
   then
@@ -2534,8 +2507,8 @@ A3: WithVariantWhile>0 a, I, s;
 A4: ExitsAtWhile>0(a, I, s) = K and
 A5: SW.K.a <= 0 and
 A6: for i being Element of NAT st SW.i.a <= 0 holds K <= i and
-  (Computation (s +* (while>0(a, I) +* SAt))).
-  (LifeSpan (s +* (while>0(a, I) +* SAt))) | D = SW.K | D by A2,A3,Def6;
+  Computation((s +* (while>0(a, I) +* SAt)),
+  (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D = SW.K | D by A2,A3,Def6;
   consider f being Function of product the Object-Kind of SCM+FSA, NAT
   such that
 A7: for k being Element of NAT holds f.(SW.(k+1)) < f.(SW.k) or SW.k.a <= 0
@@ -2684,8 +2657,8 @@ A4: for k being Element of NAT holds g.(SW.(k+1)) < g.(SW.k) or SW.k.a <= 0
   consider K being Element of NAT such that
 A5: ExitsAtWhile>0(a, I, s) = K and
 A6: SW.K.a <= 0 and for i being Element of NAT st SW.i.a <= 0 holds K <= i and
-  (Computation (s +* (while>0(a, I) +* SAt))).
-  (LifeSpan (s +* (while>0(a, I) +* SAt))) | D
+  Computation((s +* (while>0(a, I) +* SAt)),
+  (LifeSpan (s +* (while>0(a, I) +* SAt)))) | D
   = StepWhile>0(a, I, s).K | D by A2,A3,Def6;
   defpred P[State of SCM+FSA, set] means
   (ex k being Element of NAT st k <= K & $1 | D = SW.k | D & $2 = g.(SW.k)) or
@@ -3060,8 +3033,8 @@ A58: WithVariantWhile>0 aux, I, It by Def5;
 A59: ExitsAtWhile>0(aux, I, It) = k and
 A60: (StepWhile>0(aux, I, It).k).aux <= 0 and
   for i being Element of NAT st SWt.i.aux <= 0 holds k <= i and
-  ((Computation (It +* (while>0(aux, I) +* SAt))).
-  (LifeSpan (It +* (while>0(aux, I) +* SAt)))) | D
+  (Computation((It +* (while>0(aux, I) +* SAt)),
+  (LifeSpan (It +* (while>0(aux, I) +* SAt))))) | D
   = StepWhile>0(aux, I, It).k | D by Def6;
   consider au, ne, re being Element of NAT such that
 A61: SWt.k.aux = au and SWt.k.next = ne and

@@ -6,98 +6,34 @@
 
 environ
 
- vocabularies AMI_1, FINSET_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4,
-      SCMFSA_2, ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1,
-      FINSEQ_2, SCMFSA_4, CARD_3, FINSEQ_4, ARYTM;
+ vocabularies AMI_1, AMI_3, BOOLE, RELAT_1, FUNCT_1, FUNCT_4, SCMFSA_2,
+      ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2,
+      SCMFSA_4, CARD_3, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
-      NAT_1, BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4,
-      STRUCT_0, AMI_1, AMI_3, RELOC, SCMFSA_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, BINARITH, AMI_5,
-      PARTFUN1, RELOC, SCMFSA_2, SCMFSA_1, VALUED_1, SEQ_1;
+      NAT_1, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
+      FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
+      RELOC, SCMFSA_2, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, AMI_5, PARTFUN1, RELOC,
+      SCMFSA_2, SCMNORM;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, TREES_2, AMI_1,
-      AMI_3, SCMFSA_2, VALUED_1, FUNCT_2;
+      FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2,
+      SCMNORM, FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, AMI_1, AMI_3, XBOOLE_0, SCMFSA_2, FUNCOP_1, VALUED_1;
+ definitions TARSKI, AMI_1, SCMFSA_2, FUNCOP_1;
  theorems SCMFSA_2, BINARITH, ZFMISC_1, RELOC, ENUMSET1, NAT_1, FUNCOP_1,
-      RELAT_1, FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1, GRFUNC_1,
-      SCMFSA_3, RELSET_1, XBOOLE_0, XBOOLE_1, CARD_3;
- schemes CLASSES1, FUNCT_7;
+      RELAT_1, FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1, SCMFSA_3,
+      RELSET_1, XBOOLE_0, XBOOLE_1, CARD_3, ORDINAL1, VALUED_1;
+ schemes CLASSES1;
 
 begin  :: Incrementing and decrementing the instruction locations
 
 reserve j, k, l, m, n, p, q for Element of NAT;
 
-definition
-  let loc be Instruction-Location of SCM+FSA , k be Element of NAT;
-  func loc + k -> Instruction-Location of SCM+FSA means
-  :Def1:
-  ex m being Element of NAT st loc = insloc m & it = insloc(m+k);
-  existence
-  proof
-    consider m being Element of NAT such that
-A1: loc = insloc m by SCMFSA_2:21;
-    take IT = insloc(m+k);
-    take m;
-    thus loc = insloc m & IT = insloc(m+k) by A1;
-  end;
-  uniqueness;
-  func loc -' k -> Instruction-Location of SCM+FSA means
-  :Def2:
-  ex m being Element of NAT st loc = insloc m & it = insloc(m -' k);
-  existence
-  proof
-    consider m being Element of NAT such that
-A2: loc = insloc m by SCMFSA_2:21;
-    take IT = insloc(m -' k);
-    take m;
-    thus loc = insloc m & IT = insloc(m -' k) by A2;
-  end;
-  uniqueness;
-end;
-
-canceled 2;
-
-theorem Th3:
-  for l being Instruction-Location of SCM+FSA, m,n holds l+m+n = l+(m+n)
-proof
-  let l be Instruction-Location of SCM+FSA, m,n;
-  consider i being Element of NAT such that
-A1: l = insloc i and
-A2: l+m = insloc(i+m) by Def1;
-  l+m+n = insloc(i+m+n) by A2,Def1
-    .= insloc(i+(m+n));
-  hence l+m+n = l+(m+n) by A1,Def1;
-end;
-
-theorem Th4:
-  for loc being Instruction-Location of SCM+FSA ,k being Element of NAT
-  holds loc + k -' k = loc
-proof
-  let loc be Instruction-Location of SCM+FSA, k be Element of NAT;
-  consider m being Element of NAT such that
-A1: insloc m = loc by SCMFSA_2:21;
-  thus loc + k -' k = insloc(m + k) -' k by A1,Def1
-    .= insloc(m + k -' k) by Def2
-    .= loc by A1,BINARITH:39;
-end;
+canceled 5;
 
 reserve L for Instruction-Location of SCM,
   A for Data-Location,
   I for Instruction of SCM;
-
-theorem Th5:
-  for l being Instruction-Location of SCM+FSA, L st L = l holds l+k = L+k
-proof
-  let l be Instruction-Location of SCM+FSA, L such that
-A1: L = l;
-  consider m being Element of NAT such that
-A2: l = insloc m & l+k = insloc(m+k) by Def1;
-  consider M being Element of NAT such that
-A3: L = il.M & L+k = il.(M+k) by RELOC:def 1;
-  thus l+k = L+k by A1,A2,A3;
-end;
 
 theorem
   for l1,l2 being Instruction-Location of SCM+FSA , k being Element of NAT
@@ -113,8 +49,7 @@ A2: Start-At(l1 + k) = IC SCM+FSA .--> (l1 + k) &
     then {[IC SCM+FSA, l1 + k]} = {[IC SCM+FSA, l2 + k]} by A2,AMI_1:96;
     then [IC SCM+FSA, l1 + k] = [IC SCM+FSA, l2 + k] by ZFMISC_1:6;
     then l1 + k = l2 + k by ZFMISC_1:33;
-    then l1 = l2 + k -' k by Th4;
-    hence Start-At l1 = Start-At l2 by Th4;
+    hence Start-At l1 = Start-At l2;
   end;
   assume Start-At l1 = Start-At l2;
   then {[IC SCM+FSA, l1]} = Start-At l2 by AMI_1:96;
@@ -138,6 +73,7 @@ end;
 begin :: Incrementing addresses
 
 definition
+  canceled 2;
   let i be Instruction of SCM+FSA , k be Element of NAT;
   func IncAddr (i,k) -> Instruction of SCM+FSA means
   :Def3:
@@ -228,10 +164,9 @@ A2: IncAddr(goto loc,k) = IncAddr(I,k) by Def3;
   consider L such that
 A3: loc = L and
 A4: goto loc = goto L by SCMFSA_2:def 16;
-A5: L+k = loc+k by A3,Th5;
   reconsider i = goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
   thus IncAddr(goto loc,k) = i by A1,A2,A4,RELOC:10
-    .= goto (loc + k) by A5,SCMFSA_2:def 16;
+    .= goto (loc + k) by A3,SCMFSA_2:def 16;
 end;
 
 theorem Th15:
@@ -248,10 +183,9 @@ A2: IncAddr(a=0_goto loc,k) = IncAddr(I,k) by Def3;
   consider A,L such that
 A3: a = A & loc = L and
 A4: a=0_goto loc = A=0_goto L by SCMFSA_2:def 17;
-A5: L+k = loc+k by A3,Th5;
   reconsider i = A=0_goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
   thus IncAddr(a=0_goto loc,k) = i by A1,A2,A4,RELOC:11
-    .= a=0_goto (loc + k) by A3,A5,SCMFSA_2:def 17;
+    .= a=0_goto (loc + k) by A3,SCMFSA_2:def 17;
 end;
 
 theorem Th16:
@@ -268,10 +202,9 @@ A2: IncAddr(a>0_goto loc,k) = IncAddr(I,k) by Def3;
   consider A,L such that
 A3: a = A & loc = L and
 A4: a>0_goto loc = A>0_goto L by SCMFSA_2:def 18;
-A5: L+k = loc+k by A3,Th5;
   reconsider i = A>0_goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
   thus IncAddr(a>0_goto loc,k) = i by A1,A2,A4,RELOC:12
-    .= a>0_goto (loc + k) by A3,A5,SCMFSA_2:def 18;
+    .= a>0_goto (loc + k) by A3,SCMFSA_2:def 18;
 end;
 
 theorem Th17:
@@ -359,7 +292,7 @@ end;
 definition
   let IT be FinPartState of SCM+FSA;
   attr IT is initial means
-  for m,n st insloc n in dom IT & m < n holds insloc m in dom IT;
+  for m,n st n in dom IT & m < n holds m in dom IT;
 end;
 
 definition
@@ -377,10 +310,10 @@ A1: dom SCM+FSA-Stop = {insloc 0} by FUNCOP_1:19;
     thus SCM+FSA-Stop is initial
     proof
       let m,n such that
-A2:   insloc n in dom SCM+FSA-Stop and
+A2:    n in dom SCM+FSA-Stop and
 A3:   m < n;
       insloc n = insloc 0 by A1,A2,TARSKI:def 1;
-      hence insloc m in dom SCM+FSA-Stop by A3,NAT_1:2;
+      hence  m in dom SCM+FSA-Stop by A3,NAT_1:2;
     end;
     thus dom SCM+FSA-Stop c= NAT by A1,ZFMISC_1:37;
   end;
@@ -405,7 +338,7 @@ proof
 A1: i = goto l by SCMFSA_2:59;
     IncAddr(i,m) = goto(l+m) by A1,Th14;
     hence IncAddr(IncAddr(i,m),n) = goto(l+m+n) by Th14
-      .= goto (l+(m+n)) by Th3
+      .= goto (l+(m+n))
       .= IncAddr(i,m+n) by A1,Th14;
   end;
   suppose InsCode i = 7;
@@ -414,7 +347,7 @@ A1: i = goto l by SCMFSA_2:59;
 A2: i = a=0_goto l by SCMFSA_2:60;
     IncAddr(i,m) = a=0_goto(l+m) by A2,Th15;
     hence IncAddr(IncAddr(i,m),n) = a=0_goto(l+m+n) by Th15
-      .= a=0_goto (l+(m+n)) by Th3
+      .= a=0_goto (l+(m+n))
       .= IncAddr(i,m+n) by A2,Th15;
   end;
   suppose InsCode i = 8;
@@ -423,7 +356,7 @@ A2: i = a=0_goto l by SCMFSA_2:60;
 A3: i = a>0_goto l by SCMFSA_2:61;
     IncAddr(i,m) = a>0_goto(l+m) by A3,Th16;
     hence IncAddr(IncAddr(i,m),n) = a>0_goto(l+m+n) by Th16
-      .= a>0_goto (l+(m+n)) by Th3
+      .= a>0_goto (l+(m+n))
       .= IncAddr(i,m+n) by A3,Th16;
   end;
   suppose
@@ -443,11 +376,10 @@ definition
   func IncAddr(p,k) -> programmed FinPartState of SCM+FSA means
   :Def6:
   dom it = dom p &
-  for m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,insloc m),k);
+  for m st insloc m in dom p holds it.insloc m = IncAddr(pi(p,m),k);
   existence
   proof
-    defpred P [set,set] means ex m st $1 = insloc m &
-    $2 = IncAddr(pi(p,insloc m),k);
+    defpred P [set,set] means ex m st $1 = m & $2 = IncAddr(pi(p,m),k);
 A1: for e being set st e in dom p ex u being set st P[e,u]
     proof
       let e be set;
@@ -455,10 +387,9 @@ A1: for e being set st e in dom p ex u being set st P[e,u]
 A2:   e in dom p;
       dom p c= NAT by AMI_1:def 40;
       then reconsider e as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
-      consider m such that
-A3:   e = insloc m by SCMFSA_2:21;
-      take IncAddr(pi(p,insloc m),k);
-      thus thesis by A3;
+  reconsider m = e as Element of NAT by ORDINAL1:def 13;
+      take IncAddr(pi(p,m),k);
+      thus thesis;
     end;
     consider f being Function such that
 A4: dom f = dom p and
@@ -472,8 +403,8 @@ A7: dom f c= dom the Object-Kind of SCM+FSA by A4,FUNCT_2:def 1;
       let x be set;
       assume
 A8:   x in dom f;
-      then consider m such that x = insloc m and
-A9:   f.x = IncAddr(pi(p,insloc m),k) by A4,A5;
+      then consider m such that x = m and
+A9:   f.x = IncAddr(pi(p,m),k) by A4,A5;
       reconsider y = x as Instruction-Location of SCM+FSA
       by A4,A6,A8,AMI_1:def 4;
       (the Object-Kind of SCM+FSA).y = ObjectKind y
@@ -495,18 +426,18 @@ A9:   f.x = IncAddr(pi(p,insloc m),k) by A4,A5;
     let m;
     assume insloc m in dom p;
     then consider j such that
-A10: insloc m = insloc j and
-A11: f.insloc m = IncAddr(pi(p,insloc j),k) by A5;
-    thus IT.insloc m = IncAddr(pi(p,insloc m) ,k) by A10,A11;
+A10: insloc m = j and
+A11: f.insloc m = IncAddr(pi(p,j),k) by A5;
+    thus IT.insloc m = IncAddr(pi(p,m) ,k) by A10,A11;
   end;
   uniqueness
   proof
     let IT1,IT2 be programmed FinPartState of SCM+FSA such that
 A12: dom IT1 = dom p and
 A13: for m st insloc m in
-    dom p holds IT1.insloc m = IncAddr(pi(p,insloc m) ,k) and
+    dom p holds IT1.insloc m = IncAddr(pi(p,m) ,k) and
 A14: dom IT2 = dom p and
-A15: for m st insloc m in dom p holds IT2.insloc m = IncAddr(pi(p,insloc m) ,
+A15: for m st insloc m in dom p holds IT2.insloc m = IncAddr(pi(p,m) ,
     k);
     for x being set st x in dom p holds IT1.x = IT2.x
     proof
@@ -516,9 +447,9 @@ A16:  x in dom p;
       dom p c= NAT by AMI_1:def 40;
       then reconsider l = x as Instruction-Location of SCM+FSA
       by A16,AMI_1:def 4;
-      consider m such that
-A17:  l = insloc m by SCMFSA_2:21;
-      thus IT1.x = IncAddr(pi(p,insloc m),k) by A13,A16,A17
+  reconsider m = l as Element of NAT by ORDINAL1:def 13;
+A17:  l = insloc m;
+      hence IT1.x = IncAddr(pi(p,m),k) by A13,A16
         .= IT2.x by A15,A16,A17;
     end;
     hence IT1=IT2 by A12,A14,FUNCT_1:9;
@@ -527,14 +458,14 @@ end;
 
 theorem Th24:
   for p being programmed FinPartState of SCM+FSA , k being Element of NAT
-  for l being Instruction-Location of SCM+FSA st l in dom p
+  for l being Element of NAT st l in dom p
   holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
 proof
   let p be programmed FinPartState of SCM+FSA , k be Element of NAT;
-  let l be Instruction-Location of SCM+FSA such that
+  let l be Element of NAT such that
 A1: l in dom p;
-  consider m being Element of NAT such that
-A2: l = insloc m by SCMFSA_2:21;
+  reconsider m = l as Element of NAT;
+A2: l = insloc m;
   thus IncAddr (p,k).l = IncAddr(pi(p,l),k) by A1,A2,Def6;
 end;
 
@@ -554,24 +485,24 @@ A3: insloc m in dom(I +* J);
     per cases;
     suppose
 A4:   insloc m in dom J;
-A5:   pi(I +* J,insloc m) = (I +* J).insloc m by A3,AMI_1:def 47
+A5:   pi(I +* J,m) = (I +* J).insloc m by A3,AMI_1:def 47
         .= J.insloc m by A4,FUNCT_4:14
-        .= pi(J,insloc m) by A4,AMI_1:def 47;
+        .= pi(J,m) by A4,AMI_1:def 47;
       thus (IncAddr(I,n) +* IncAddr(J,n)).insloc m
       = IncAddr(J,n).insloc m by A1,A4,FUNCT_4:14
-        .= IncAddr(pi(I +* J,insloc m),n) by A4,A5,Def6;
+        .= IncAddr(pi(I +* J,m),n) by A4,A5,Def6;
     end;
     suppose
 A6:   not insloc m in dom J;
       insloc m in dom I \/ dom J by A3,FUNCT_4:def 1;
       then
 A7:   insloc m in dom I by A6,XBOOLE_0:def 2;
-A8:   pi(I +* J,insloc m) = (I +* J).insloc m by A3,AMI_1:def 47
+A8:   pi(I +* J,m) = (I +* J).insloc m by A3,AMI_1:def 47
         .= I.insloc m by A6,FUNCT_4:12
-        .= pi(I,insloc m) by A7,AMI_1:def 47;
+        .= pi(I,m) by A7,AMI_1:def 47;
       thus (IncAddr(I,n) +* IncAddr(J,n)).insloc m
       = IncAddr(I,n).insloc m by A1,A6,FUNCT_4:12
-        .= IncAddr(pi(I +* J,insloc m),n) by A7,A8,Def6;
+        .= IncAddr(pi(I +* J,m),n) by A7,A8,Def6;
     end;
   end;
   hence IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n) by A2,Def6;
@@ -619,11 +550,11 @@ A12: insloc m in dom s by AMI_1:119;
     per cases;
     suppose
 A13:  s.insloc m = halt SCM+FSA;
-A14:  IncAddr(s,n).insloc m = IncAddr(pi(s,insloc m),n) by A12,Th24
+A14:  IncAddr(s,n).insloc m = IncAddr(pi(s,m),n) by A12,Th24
         .= IncAddr(halt SCM+FSA,n) by A12,A13,AMI_1:def 47
         .= halt SCM+FSA by Th8;
 A15:  halt SCM+FSA in {halt SCM+FSA} by TARSKI:def 1;
-A16:  pi(f*s,insloc m) = (f*s).insloc m by A11,AMI_1:def 47
+A16:  pi(f*s,m) = (f*s).insloc m by A11,AMI_1:def 47
         .= f.halt SCM+FSA by A12,A13,FUNCT_1:23
         .= (halt SCM+FSA .--> i).halt SCM+FSA by A1,A3,A15,FUNCT_4:14
         .= i by FUNCOP_1:87;
@@ -631,29 +562,29 @@ A16:  pi(f*s,insloc m) = (f*s).insloc m by A11,AMI_1:def 47
       = g.(IncAddr(s,n).insloc m) by A10,A11,FUNCT_1:23
         .= (halt SCM+FSA .--> IncAddr(i,n)).(IncAddr(s,n).insloc m)
       by A2,A14,A15,FUNCT_4:14
-        .= IncAddr(pi(f*s,insloc m),n) by A14,A16,FUNCOP_1:87;
+        .= IncAddr(pi(f*s,m),n) by A14,A16,FUNCOP_1:87;
     end;
     suppose
 A17:  s.insloc m <> halt SCM+FSA;
-A18:  pi(s,insloc m) = s.insloc m by A12,AMI_1:def 47;
+A18:  pi(s,m) = s.insloc m by A12,AMI_1:def 47;
       then
-A19:  InsCode pi(s,insloc m) <> 0 by A17,SCMFSA_2:122;
-      InsCode IncAddr(pi(s,insloc m),n) = InsCode pi(s,insloc m) by Th22;
+A19:  InsCode pi(s,m) <> 0 by A17,SCMFSA_2:122;
+      InsCode IncAddr(pi(s,m),n) = InsCode pi(s,m) by Th22;
       then
-A20:  not IncAddr(pi(s,insloc m),n) in {halt SCM+FSA} by A19, SCMFSA_2:124
+A20:  not IncAddr(pi(s,m),n) in {halt SCM+FSA} by A19, SCMFSA_2:124
       ,TARSKI:def 1;
-A21:  not pi(s,insloc m) in {halt SCM+FSA} by A17,A18,TARSKI:def 1;
-A22:  pi(f*s,insloc m) = (f*s).insloc m by A11,AMI_1:def 47
+A21:  not pi(s,m) in {halt SCM+FSA} by A17,A18,TARSKI:def 1;
+A22:  pi(f*s,m) = (f*s).insloc m by A11,AMI_1:def 47
         .= f.(s.insloc m) by A12,FUNCT_1:23
-        .= (id the Instructions of SCM+FSA).pi(s,insloc m)
+        .= (id the Instructions of SCM+FSA).pi(s,m)
       by A1,A3,A18,A21,FUNCT_4:12
-        .= pi(s,insloc m) by FUNCT_1:35;
+        .= pi(s,m) by FUNCT_1:35;
       thus (g*IncAddr(s,n)).insloc m
       = g.(IncAddr(s,n).insloc m) by A10,A11,FUNCT_1:23
-        .= g.IncAddr(pi(s,insloc m),n) by A12,Def6
-        .= (id the Instructions of SCM+FSA).IncAddr(pi(s,insloc m),n)
+        .= g.IncAddr(pi(s,m),n) by A12,Def6
+        .= (id the Instructions of SCM+FSA).IncAddr(pi(s,m),n)
       by A2,A20,FUNCT_4:12
-        .= IncAddr(pi(f*s,insloc m),n) by A22,FUNCT_1:35;
+        .= IncAddr(pi(f*s,m),n) by A22,FUNCT_1:35;
     end;
   end;
   hence IncAddr(f*s,n) =
@@ -672,11 +603,11 @@ A2: dom IncAddr(I,m) = dom I by Def6;
     let l;
     assume
 A3: insloc l in dom I;
-    then pi(IncAddr(I,m),insloc l) = IncAddr(I,m).insloc l by A2,AMI_1:def 47
-      .= IncAddr(pi(I,insloc l),m) by A3,Th24;
+    then pi(IncAddr(I,m),l) = IncAddr(I,m).insloc l by A2,AMI_1:def 47
+      .= IncAddr(pi(I,l),m) by A3,Th24;
     hence IncAddr(IncAddr(I,m),n).insloc l
-    = IncAddr(IncAddr(pi(I,insloc l),m),n) by A2,A3,Th24
-      .= IncAddr(pi(I,insloc l),m+n) by Th23;
+    = IncAddr(IncAddr(pi(I,l),m),n) by A2,A3,Th24
+      .= IncAddr(pi(I,l),m+n) by Th23;
   end;
   hence IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n) by A1,A2,Def6;
 end;
@@ -688,16 +619,13 @@ theorem
 proof
   let s be State of SCM+FSA;
   set INS = CurInstr s;
-  consider m being Element of NAT such that
-A1: IC s = insloc m by SCMFSA_2:21;
-  consider m1 being Element of NAT such that
-A2: IC s = insloc m1 & IC s + k = insloc(m1 + k) by Def1;
+  reconsider m = IC s as Element of NAT by ORDINAL1:def 13;
 A3: Next IC (s +* Start-At (IC s + k))
-  = Next (insloc(m + k)) by A1,A2,AMI_1:111
-    .= insloc((m + k) + 1) by SCMFSA_2:32
+  = Next (insloc(m + k)) by AMI_1:111
+    .= insloc((m + k) + 1) by NAT_1:39
     .= insloc(m + 1 + k)
-    .= insloc(m + 1) + k by Def1
-    .= ((Next IC s) qua Instruction-Location of SCM+FSA) + k by A1,SCMFSA_2:32
+    .= insloc(m + 1) + k
+    .= ((Next IC s) qua Instruction-Location of SCM+FSA) + k by NAT_1:39
     .= IC (Exec(INS, s) +*
   Start-At (((Next IC s) qua Instruction-Location of SCM+FSA) + k))
   by AMI_1:111;
@@ -1386,22 +1314,22 @@ end;
 theorem
   for INS being Instruction of SCM+FSA, s being State of SCM+FSA,
   p being FinPartState of SCM+FSA, i, j, k being Element of NAT
-  st IC s = insloc(j+k) holds Exec(INS, s +* Start-At (IC s -' k))
+  st IC s = j+k holds Exec(INS, s +* Start-At (IC s -' k))
   = Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s) -' k)
 proof
   let INS be Instruction of SCM+FSA, s be State of SCM+FSA,
   p be FinPartState of SCM+FSA, i, j, k be Element of NAT;
   assume
-A1: IC s = insloc(j+k);
+A1: IC s = j+k;
   then
-A2: Next (IC s -' k) = Next (insloc j + k -' k) by Def1
-    .= Next (insloc j) by Th4
-    .= insloc(j+1) by SCMFSA_2:32
-    .= insloc(j+1) + k -' k by Th4
-    .= insloc(j+1+k) -' k by Def1
+A2: Next (IC s -' k) = Next (insloc j + k -' k)
+    .= Next (insloc j) by BINARITH:39
+    .= insloc(j+1) by NAT_1:39
+    .= insloc(j+1) + k -' k by BINARITH:39
+    .= insloc(j+1+k) -' k
     .= insloc(j+k+1) -' k
     .= ((Next IC s) qua Instruction-Location of SCM+FSA) -' k
-  by A1,SCMFSA_2:32;
+  by A1,NAT_1:39;
 A3: now
     let d be Instruction-Location of SCM+FSA;
     thus Exec(INS, s +* Start-At (IC s -' k)).d
@@ -1730,7 +1658,7 @@ A47: IncAddr(INS, k) = goto (loc + k) by A46,Th14;
     then
 A48: IC Exec(IncAddr(INS,k), s)= loc + k by SCMFSA_2:95;
 A49: IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A46,SCMFSA_2:95
-      .= IC Exec(IncAddr(INS,k), s) -' k by A48,Th4
+      .= IC Exec(IncAddr(INS,k), s) -' k by A48,BINARITH:39
 
 .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s) -' k))
     by AMI_1:111;
@@ -1766,7 +1694,7 @@ A54:    s.da = 0;
 A55:    (s +* Start-At (IC s -' k)).da = 0 by SCMFSA_3:11;
 A56:    IC Exec(IncAddr(INS,k), s)= loc + k by A52,A54,SCMFSA_2:96;
         IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A51,A55,SCMFSA_2:96
-          .= IC Exec(IncAddr(INS,k), s) -' k by A56,Th4
+          .= IC Exec(IncAddr(INS,k), s) -' k by A56,BINARITH:39
 
 .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s) -' k))
         by AMI_1:111;
@@ -1820,7 +1748,7 @@ A62:    s.da > 0;
 A63:    (s +* Start-At (IC s -' k)).da > 0 by SCMFSA_3:11;
 A64:    IC Exec(IncAddr(INS,k), s)= loc + k by A60,A62,SCMFSA_2:97;
         IC Exec(INS, s +* Start-At (IC s -' k)) = loc by A59,A63,SCMFSA_2:97
-          .= IC Exec(IncAddr(INS,k), s) -' k by A64,Th4
+          .= IC Exec(IncAddr(INS,k), s) -' k by A64,BINARITH:39
 
 .= IC (Exec(IncAddr(INS,k),s) +* Start-At (IC Exec(IncAddr(INS,k),s) -' k))
         by AMI_1:111;
@@ -2062,281 +1990,7 @@ end;
 
 begin :: Shifting the finite partial state
 
-definition
-  let p be FinPartState of SCM+FSA , k be Element of NAT;
-  func Shift(p,k) -> programmed FinPartState of SCM+FSA means
-  :Def7:
-  dom it = { insloc(m+k):insloc m in dom p } &
-  for m st insloc m in dom p holds it.insloc(m+k) = p.insloc m;
-  existence
-  proof
-    deffunc U(Element of NAT) = insloc $1;
-    deffunc V(Element of NAT) = insloc($1+k);
-    set A = { V(m): U(m) in dom p };
-    defpred P [set,set] means ex m st $1 = insloc(m+k) & $2 = p.insloc m;
-A1: for e being set st e in A ex u being set st P[e,u]
-    proof
-      let e be set;
-      assume e in A;
-      then consider m such that
-A2:   e = V(m) & U(m) in dom p;
-      take p.insloc m;
-      thus thesis by A2;
-    end;
-    consider f being Function such that
-A3: dom f = A and
-A4: for e being set st e in A holds P[e,f.e] from CLASSES1:sch 1(A1);
-A5: A c= NAT
-    proof
-      let x be set;
-      assume x in A;
-      then ex m st x = insloc(m+k) & insloc m in dom p;
-      hence x in NAT;
-    end;
-    then A c= the carrier of SCM+FSA by XBOOLE_1:1;
-    then
-A6: dom f c= dom the Object-Kind of SCM+FSA by A3,FUNCT_2:def 1;
-    for x being set st x in dom f holds f.x in (the Object-Kind of SCM+FSA ) .
-    x
-    proof
-      let x be set;
-      assume
-A7:   x in dom f;
-      then consider m such that
-A8:   x = insloc(m+k) and
-A9:   f.x = p.insloc m by A3,A4;
-      reconsider y = x as Instruction-Location of SCM+FSA
-      by A3,A5,A7,AMI_1:def 4;
-A10:  (the Object-Kind of SCM+FSA).y = ObjectKind y
-        .= the Instructions of SCM+FSA by AMI_1:def 14;
-      consider s being State of SCM+FSA such that
-A11:  p c= s by AMI_1:82;
-      consider j such that
-A12:  insloc(m+k) = insloc(j+k) and
-A13:  insloc j in dom p by A3,A7,A8;
-      s.insloc m in the Instructions of SCM+FSA;
-      hence f.x in (the Object-Kind of SCM+FSA).x
-      by A9,A10,A11,A12,A13,GRFUNC_1:8;
-    end;
-    then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
-    by A6,CARD_3:def 9;
-A14: dom p is finite;
-A15: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2;
-    A is finite from FUNCT_7:sch 2(A14,A15);
-    then reconsider f as FinPartState of SCM+FSA by A3,FINSET_1:29;
-    f is programmed
-    proof
-      let x be set;
-      assume x in dom f;
-      then ex m st x = insloc(m+k) & insloc m in dom p by A3;
-      hence x in NAT;
-    end;
-    then reconsider IT = f as programmed FinPartState of SCM+FSA;
-    take IT;
-    thus dom IT = { insloc(m+k):insloc m in dom p } by A3;
-    let m;
-    assume insloc m in dom p;
-    then insloc(m+k) in A;
-    then consider j such that
-A16: insloc(m+k) = insloc(j+k) and
-A17: f.insloc(m+k) = p.insloc j by A4;
-    thus IT.insloc(m+k) = p.insloc m by A16,A17;
-  end;
-  uniqueness
-  proof
-    let IT1,IT2 be programmed FinPartState of SCM+FSA such that
-A18: dom IT1 = { insloc(m+k):insloc m in dom p } and
-A19: for m st insloc m in dom p holds IT1.insloc(m+k) = p.insloc m and
-A20: dom IT2 = { insloc(m+k):insloc m in dom p } and
-A21: for m st insloc m in dom p holds IT2.insloc(m+k) = p.insloc m;
-    for x being set st x in { insloc(m+k):insloc m in dom p } holds
-    IT1.x = IT2.x
-    proof
-      let x be set;
-      assume x in { insloc(m+k):insloc m in dom p };
-      then consider m such that
-A22:  x = insloc(m+k) and
-A23:  insloc m in dom p;
-      thus IT1.x = p.insloc m by A19,A22,A23
-        .= IT2.x by A21,A22,A23;
-    end;
-    hence IT1=IT2 by A18,A20,FUNCT_1:9;
-  end;
-end;
-
-theorem Th30:
-  for l being Instruction-Location of SCM+FSA , k being Element of NAT,
-  p being FinPartState of SCM+FSA st l in dom p holds Shift(p,k).(l + k) = p.l
-proof
-  let l be Instruction-Location of SCM+FSA , k be Element of NAT,
-  p be FinPartState of SCM+FSA such that
-A1: l in dom p;
-  consider m being Element of NAT such that
-A2: l = insloc m by SCMFSA_2:21;
-  thus Shift(p,k).(l + k) = Shift(p,k).(insloc(m+k)) by A2,Def1
-    .= p.l by A1,A2,Def7;
-end;
-
-theorem
-  for p being FinPartState of SCM+FSA, k being Element of NAT
-  holds dom Shift(p,k) =
-  { il+k where il is Instruction-Location of SCM+FSA: il in dom p}
-proof
-  let p be FinPartState of SCM+FSA, k be Element of NAT;
-A1: dom Shift(p,k) = { insloc(m+k):insloc m in dom p } by Def7;
-  hereby
-    let e be set;
-    assume e in dom Shift(p,k);
-    then consider m being Element of NAT such that
-A2: e = insloc(m+k) and
-A3: insloc m in dom p by A1;
-    (insloc m)+k = insloc(m+k) by Def1;
-    hence e in { il+k where il is Instruction-Location of SCM+FSA: il in
-    dom p} by A2,A3;
-  end;
-  let e be set;
-  assume e in { il+k where il is Instruction-Location of SCM+FSA: il in
-  dom p};
-  then consider il being Instruction-Location of SCM+FSA such that
-A4: e = il+k and
-A5: il in dom p;
-  consider m being Element of NAT such that
-A6: il = insloc m and
-A7: il+k = insloc(m+k) by Def1;
-  thus e in dom Shift(p,k) by A1,A4,A5,A6,A7;
-end;
-
-theorem
-  for I being FinPartState of SCM+FSA holds Shift(Shift(I,m),n) = Shift(I,m+n)
-proof
-  let I be FinPartState of SCM+FSA;
-  set A = {insloc(l+m):insloc l in dom I };
-A1: dom Shift(I,m) = A by Def7;
-  {insloc(p+n):insloc p in A } = { insloc(q+(m+n)):insloc q in dom I}
-  proof
-    thus {insloc(p+n):insloc p in A } c= { insloc(q+(m+n)):insloc q in dom I}
-    proof
-      let x be set;
-      assume x in {insloc(p+n):insloc p in A };
-      then consider p such that
-A2:   x = insloc(p+n) and
-A3:   insloc p in A;
-      consider l such that
-A4:   insloc p = insloc(l+m) and
-A5:   insloc l in dom I by A3;
-      x = insloc(l+(m+n)) by A2,A4;
-      hence x in { insloc(q+(m+n)):insloc q in dom I} by A5;
-    end;
-    let x be set;
-    assume x in { insloc(q+(m+n)):insloc q in dom I};
-    then consider q such that
-A6: x = insloc(q+(m+n)) and
-A7: insloc q in dom I;
-A8: x = insloc((q+m)+n) by A6;
-    insloc(q+m) in A by A7;
-    hence x in {insloc(p+n):insloc p in A } by A8;
-  end;
-  then
-A9: dom Shift(Shift(I,m),n) = { insloc(l+(m+n)):insloc l in dom I} by A1
-  ,Def7;
-  now
-    let l;
-    assume
-A10: insloc l in dom I;
-    then
-A11: insloc(l+m) in dom Shift(I,m) by A1;
-    thus Shift(Shift(I,m),n).insloc(l+(m+n))
-    = Shift(Shift(I,m),n).insloc(l+m+n)
-      .= Shift(I,m).insloc(l+m) by A11,Def7
-      .= I.insloc l by A10,Def7;
-  end;
-  hence Shift(Shift(I,m),n) = Shift(I,m+n) by A9,Def7;
-end;
-
-theorem
-  for s be programmed FinPartState of SCM+FSA,
-  f be Function of the Instructions of SCM+FSA, the Instructions of SCM+FSA
-  for n holds Shift(f*s,n) = f*Shift(s,n)
-proof
-  let s be programmed FinPartState of SCM+FSA,
-  f be Function of the Instructions of SCM+FSA, the Instructions of SCM+FSA;
-  let n;
-A1: dom(f*s) = dom s by AMI_1:119;
-A2: dom(f*Shift(s,n)) = dom Shift(s,n) by AMI_1:119;
-A3: dom Shift(s,n) = { insloc(m+n):insloc m in dom(f*s) } by A1,Def7;
-  now
-    let m;
-    assume
-A4: insloc m in dom(f*s);
-    then insloc(m+n) in dom Shift(s,n) by A3;
-    hence (f*Shift(s,n)).insloc(m+n) = f.(Shift(s,n).insloc(m+n)) by FUNCT_1:23
-      .= f.(s.insloc m) by A1,A4,Def7
-      .= (f*s).insloc m by A1,A4,FUNCT_1:23;
-  end;
-  hence Shift(f*s,n) = f*Shift(s,n) by A2,A3,Def7;
-end;
-
-theorem
-  for I,J being FinPartState of SCM+FSA holds
-  Shift(I +* J, n) = Shift(I,n) +* Shift(J,n)
-proof
-  let I,J be FinPartState of SCM+FSA;
-A1: dom(I +* J) = dom I \/ dom J by FUNCT_4:def 1;
-A2: dom Shift(J,n) = { insloc(m+n):insloc m in dom J } by Def7;
-A3: dom Shift(I,n) = { insloc(m+n):insloc m in dom I } by Def7;
-  dom Shift(I,n) \/ dom Shift(J,n) = { insloc(m+n):insloc m in dom I \/ dom J
-  }
-  proof
-    hereby
-      let x be set;
-      assume x in dom Shift(I,n) \/ dom Shift(J,n);
-      then x in dom Shift(I,n) or x in dom Shift(J,n) by XBOOLE_0:def 2;
-      then consider m such that
-A4:   x = insloc(m+n) & insloc m in dom J or
-      x = insloc(m+n) & insloc m in dom I by A2,A3;
-      insloc m in dom I \/ dom J by A4,XBOOLE_0:def 2;
-      hence x in { insloc(l+n):insloc l in dom I \/ dom J } by A4;
-    end;
-    let x be set;
-    assume x in { insloc(m+n):insloc m in dom I \/ dom J };
-    then consider m such that
-A5: x = insloc(m+n) and
-A6: insloc m in dom I \/ dom J;
-    insloc m in dom I or insloc m in dom J by A6,XBOOLE_0:def 2;
-    then x in dom Shift(I,n) or x in dom Shift(J,n) by A2,A3,A5;
-    hence thesis by XBOOLE_0:def 2;
-  end;
-  then
-A7: dom(Shift(I,n) +* Shift(J,n)) = { insloc(m+n):insloc m in dom(I +* J ) }
-  by A1,FUNCT_4:def 1;
-  now
-    let m such that
-A8: insloc m in dom(I +* J);
-    per cases;
-    suppose
-A9:   insloc m in dom J;
-      then insloc(m+n) in dom Shift(J,n) by A2;
-      hence (Shift(I,n) +* Shift(J,n)).insloc(m+n)
-      = Shift(J,n).insloc(m+n) by FUNCT_4:14
-        .= J.insloc m by A9,Def7
-        .= (I +* J).insloc m by A9,FUNCT_4:14;
-    end;
-    suppose
-A10:  not insloc m in dom J;
-      then not ex l st insloc(m+n) = insloc(l+n) & insloc l in dom J;
-      then
-A11:  not insloc(m+n) in dom Shift(J,n) by A2;
-      insloc m in dom I \/ dom J by A8,FUNCT_4:def 1;
-      then
-A12:  insloc m in dom I by A10,XBOOLE_0:def 2;
-      thus (Shift(I,n) +* Shift(J,n)).insloc(m+n)
-      = Shift(I,n).insloc(m+n) by A11,FUNCT_4:12
-        .= I.insloc m by A12,Def7
-        .= (I +* J).insloc m by A10,FUNCT_4:12;
-    end;
-  end;
-  hence Shift(I +* J, n) = Shift(I,n) +* Shift(J,n) by A7,Def7;
-end;
+canceled 5;
 
 theorem
   for i,j being Element of NAT, p being programmed FinPartState of SCM+FSA
@@ -2346,30 +2000,31 @@ proof
 A1: dom(IncAddr(Shift(p,j),i)) = dom (Shift(p,j)) by Def6;
   dom(IncAddr(p,i)) = dom p by Def6;
   then
-A2: dom(Shift(p,j)) = { insloc(m+j):insloc m in dom (IncAddr(p,i)) } by Def7
-    .= dom (Shift(IncAddr(p,i),j)) by Def7;
+A2: dom(Shift(p,j)) = { m+j: m in dom (IncAddr(p,i)) } by VALUED_1:def 12
+    .= dom (Shift(IncAddr(p,i),j)) by VALUED_1:def 12;
   now
     let x be set;
 A3: dom (Shift(IncAddr(p,i),j)) c= NAT by AMI_1:def 40;
     assume
 A4: x in dom (Shift(IncAddr(p,i),j));
     then reconsider x'=x as Instruction-Location of SCM+FSA by A3,AMI_1:def 4;
-    x in { insloc(m+j) where m
-    is Element of NAT:insloc m in dom IncAddr(p,i) } by A4,Def7;
+    reconsider xx=x' as Element of NAT by ORDINAL1:def 13;
+    x in { m+j where m
+    is Element of NAT: m in dom IncAddr(p,i) } by A4,VALUED_1:def 12;
     then consider m being Element of NAT such that
-A5: x = insloc(m+j) & insloc m in dom IncAddr(p,i);
-A6: x = insloc m+j by A5,Def1;
+A5: x = m+j & m in dom IncAddr(p,i);
 A7: insloc m in dom p by A5,Def6;
-    dom Shift(p,j) = { insloc(mm+j)
-    where mm is Element of NAT : insloc mm in dom p} by Def7;
+    dom Shift(p,j) = { mm+j
+    where mm is Element of NAT : mm in dom p} by VALUED_1:def 12;
     then
 A8: x' in dom Shift(p,j) by A5,A7;
-A9: pi(p,insloc m) = p.(insloc m) by A7,AMI_1:def 47
-      .= Shift(p,j).((insloc m)+j) by A7,Th30
-      .= Shift(p,j).(insloc(m+j)) by Def1
-      .= pi(Shift(p,j),x') by A5,A8,AMI_1:def 47;
-    thus Shift(IncAddr(p,i),j).x = IncAddr(p,i).(insloc m) by A5,A6,Th30
-      .= IncAddr(pi(Shift(p,j),x'),i) by A7,A9,Th24
+A9: pi(p,m) = p.(insloc m) by A7,AMI_1:def 47
+      .= Shift(p,j).((insloc m)+j) by A7,VALUED_1:def 12
+      .= Shift(p,j).(insloc(m+j))
+      .= pi(Shift(p,j),xx) by A5,A8,AMI_1:def 47;
+    thus Shift(IncAddr(p,i),j).x = IncAddr(p,i).(insloc m)
+     by A5,VALUED_1:def 12
+      .= IncAddr(pi(Shift(p,j),xx),i) by A7,A9,Th24
       .= IncAddr(Shift(p,j),i).x by A8,Th24;
   end;
   hence Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i) by A1,A2,FUNCT_1:9;

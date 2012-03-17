@@ -13,16 +13,14 @@ environ
       RELSET_1, CARD_1, FINSET_1, NUMBERS, XXREAL_0, XCMPLX_0, REAL_1, NAT_1,
       PARTFUN1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, FINSEQOP, RVSUM_1,
       RFINSEQ, RFUNCT_3;
- constructors REAL_1, NAT_1, FINSEQOP, RVSUM_1, RFINSEQ, RFUNCT_3, VALUED_1,
-      PARTFUN1, SEQ_1;
+ constructors REAL_1, NAT_1, FINSEQOP, RVSUM_1, RFINSEQ, RFUNCT_3, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, RFUNCT_3, VALUED_0,
-      VALUED_1, FUNCT_2;
+      XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, RFUNCT_3, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, FINSEQ_2, VALUED_1;
+ definitions TARSKI, XBOOLE_0, FINSEQ_2;
  theorems FINSEQ_1, REAL_1, NAT_1, FUNCT_1, FINSEQ_2, TARSKI, CARD_2, REAL_2,
       CARD_1, PARTFUN1, FINSET_1, FINSEQ_3, RFUNCT_1, RVSUM_1, ZFMISC_1,
-      RFINSEQ, RFUNCT_3, RELAT_1, SEQ_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      RFINSEQ, RFUNCT_3, RELAT_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
       FUNCOP_1, ORDINAL1, VALUED_1;
  schemes NAT_1, FINSEQ_1;
 
@@ -411,7 +409,6 @@ proof
   assume n in dom A;
   then
 A1: 1<=n & n<=len A by FINSEQ_3:27;
-  then reconsider An = A.n as finite set by Lm2;
   assume A.n = {};
   then A.n = 0;
   hence contradiction by A1,Def1,CARD_1:78;
@@ -511,60 +508,60 @@ A1: card D = len A & A.(len A) = D by Th1,Th3;
     deffunc F(Nat)= D \ A.(len A -$1);
     consider f be FinSequence such that
 A2: len f = c1 and
-A3: for m be Nat st m in Seg c1 holds f.m = F(m) from FINSEQ_1:sch 2;
+A3: for m be Nat st m in dom f holds f.m = F(m) from FINSEQ_1:sch 2;
+A4: dom f = Seg c1 by A2,FINSEQ_1:def 3;
     rng f c= bool D
     proof
       let x;
       assume x in rng f;
       then consider m being Nat such that
-A4:   m in dom f & f.m = x by FINSEQ_2:11;
-A5:   m in Seg len f by A4,FINSEQ_1:def 3;
+A5:   m in dom f & f.m = x by FINSEQ_2:11;
       D \ A.(len A -m) c= D;
-      then x is Subset of D by A2,A3,A4,A5;
+      then x is Subset of D by A3,A5;
       hence x in bool(D);
     end;
     then reconsider f as FinSequence of bool(D) by FINSEQ_1:def 4;
     D c= D;
     then reconsider y = D as Subset of D;
     set C = f^<*y*>;
-A6: len C = len f + len <*y*> by FINSEQ_1:35
+A7: len C = len f + len <*y*> by FINSEQ_1:35
       .= len f + 1 by FINSEQ_1:56;
-A7: for m be Nat st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
+A8: for m be Nat st 1 <= m & m <= len C - 1 holds C.m c= C.(m+1)
     proof
       let m be Nat;
       assume
-A8:   1 <= m & m <= len C - 1;
+A9:   1 <= m & m <= len C - 1;
       then
-A9:   m in dom f by A6,FINSEQ_3:27;
+A10:   m in dom f by A7,FINSEQ_3:27;
       then
-A10:  m in Seg len f by FINSEQ_1:def 3;
-A11:  C.m = f.m by A9,FINSEQ_1:def 7
-        .= D \ A.(len A - m) by A2,A3,A10;
+A11:  m in Seg len f by FINSEQ_1:def 3;
+A12:  C.m = f.m by A10,FINSEQ_1:def 7
+        .= D \ A.(len A - m) by A2,A3,A11,A4;
       now per cases;
         case m = len C - 1;
-          then C.(m+1) = D by A6,FINSEQ_1:59;
-          hence C.m c= C.(m+1) by A11;
+          then C.(m+1) = D by A7,FINSEQ_1:59;
+          hence C.m c= C.(m+1) by A12;
         end;
         case m <> len C - 1;
           then
-A12:      m < len C - 1 by A8,REAL_1:def 5;
+A13:      m < len C - 1 by A9,REAL_1:def 5;
           then
-A13:      m+1 < len A by A1,A2,A6,XREAL_1:22;
+A14:      m+1 < len A by A1,A2,A7,XREAL_1:22;
           then m+1+1<=len A by NAT_1:13;
           then
-A14:      1 <= len A - (m+1) by XREAL_1:21;
-          max(0,len A -(m+1)) = len A -(m+1) by A13,FINSEQ_2:4;
+A15:      1 <= len A - (m+1) by XREAL_1:21;
+          max(0,len A -(m+1)) = len A -(m+1) by A14,FINSEQ_2:4;
           then reconsider l = len A -(m+1) as Element of NAT by FINSEQ_2:5;
-A15:      1 <= m+1 & m+1<= len C - 1 by A6,A12,NAT_1:11,13;
+A16:      1 <= m+1 & m+1<= len C - 1 by A7,A13,NAT_1:11,13;
           then l <= len A - 1 by REAL_1:92;
           then
-A16:      A.l c= A.(l+1) & A.l <> A.(l+1) by A14,Def2,Th6;
-A17:      m+1 in dom f by A6,A15,FINSEQ_3:27;
+A17:      A.l c= A.(l+1) & A.l <> A.(l+1) by A15,Def2,Th6;
+A18:      m+1 in dom f by A7,A16,FINSEQ_3:27;
           then
-A18:      m+1 in Seg len f by FINSEQ_1:def 3;
-          C.(m+1) = f.(m+1) by A17,FINSEQ_1:def 7
-            .= D \ A.l by A2,A3,A18;
-          hence C.m c= C.(m+1) by A11,A16,XBOOLE_1:34;
+A19:      m+1 in Seg len f by FINSEQ_1:def 3;
+          C.(m+1) = f.(m+1) by A18,FINSEQ_1:def 7
+            .= D \ A.l by A2,A3,A19,A4;
+          hence C.m c= C.(m+1) by A12,A17,XBOOLE_1:34;
         end;
       end;
       hence thesis;
@@ -573,77 +570,79 @@ A18:      m+1 in Seg len f by FINSEQ_1:def 3;
     proof
       let m be Nat;
       assume
-A19:  1 <= m & m <= len C;
+A20:  1 <= m & m <= len C;
       then max(0,len C -m) = len C -m by FINSEQ_2:4;
       then reconsider l = len C - m as Element of NAT by FINSEQ_2:5;
       let B be finite set such that
-A20:  B = C.m;
+A21:  B = C.m;
       now per cases;
         case m = len C;
-          hence card B=m by A2,A6,A20,FINSEQ_1:59;
+          hence card B=m by A2,A7,A21,FINSEQ_1:59;
         end;
         case m <> len C;
-          then m < len C by A19,REAL_1:def 5;
+          then m < len C by A20,REAL_1:def 5;
           then m+1 <= len C by NAT_1:13;
           then
-A21:      m <= len C - 1 & 1 <= l by XREAL_1:21;
+A22:      m <= len C - 1 & 1 <= l by XREAL_1:21;
           then
-A22:      m in dom f by A6,A19,FINSEQ_3:27;
+A23:      m in dom f by A7,A20,FINSEQ_3:27;
           then
-A23:      m in Seg len f by FINSEQ_1:def 3;
-A24:      C.m = f.m by A22,FINSEQ_1:def 7
-            .= D \ A.l by A1,A2,A3,A6,A23;
-A25:      l <= len A by A1,A2,A6,REAL_2:173;
+A24:      m in Seg len f by FINSEQ_1:def 3;
+A25:      C.m = f.m by A23,FINSEQ_1:def 7
+            .= D \ A.l by A1,A2,A3,A7,A24,A4;
+A26:      l <= len A by A1,A2,A7,REAL_2:173;
           then
-A26:      l in dom A by A21,FINSEQ_3:27;
+A27:      l in dom A by A22,FINSEQ_3:27;
           then reconsider Al = A.l as finite set by Lm5,FINSET_1:13;
-          thus card B = card(D) - card(Al) by A20,A24,A26,Lm5,CARD_2:63
-            .= len A - l by A1,A21,A25,Def1
-            .= m by A1,A2,A6;
+          thus card B = card(D) - card(Al) by A21,A25,A27,Lm5,CARD_2:63
+            .= len A - l by A1,A22,A26,Def1
+            .= m by A1,A2,A7;
         end;
       end;
       hence card B = m;
     end;
-    then reconsider C as RearrangmentGen of D by A2,A6,A7,Def2,Th1;
+    then reconsider C as RearrangmentGen of D by A2,A7,A8,Def2,Th1;
     take C;
     let m be Nat;
     assume 1 <= m & m <= len C - 1;
     then
-A27: m in Seg c1 by A2,A6,FINSEQ_1:3;
+A28: m in Seg c1 by A2,A7,FINSEQ_1:3;
     then m in dom f by A2,FINSEQ_1:def 3;
     hence C.m = f.m by FINSEQ_1:def 7
-      .= D \ A.(len A -m) by A3,A27;
+      .= D \ A.(len A -m) by A3,A28,A4;
   end;
   uniqueness
   proof
     let f1,f2 be RearrangmentGen of D such that
-A28: for m be Nat st 1 <= m & m <= len f1 - 1 holds
+A29: for m be Nat st 1 <= m & m <= len f1 - 1 holds
     f1.m = D \ A.(len A -m) and
-A29: for m be Nat st 1 <= m & m <= len f2 - 1 holds f2.m = D \ A.(len A -m);
-A30: len f1 = card D & len f2 = card D & len A = card D by Th1;
+A30: for m be Nat st 1 <= m & m <= len f2 - 1 holds f2.m = D \ A.(len A -m);
+A31: len f1 = card D & len f2 = card D & len A = card D by Th1;
+then
+X: dom f1 = Seg len A by FINSEQ_1:def 3;
     now
       let m be Nat;
-      assume m in Seg len A;
+      assume m in dom f1;
       then
-A31:  1<=m & m<=len A by FINSEQ_1:3;
+A32:  1<=m & m<=len A by FINSEQ_1:3,X;
       reconsider m1=m as Element of NAT by ORDINAL1:def 13;
       now per cases;
         case m = len A;
-          then f1.m = D & f2.m = D by A30,Th3;
+          then f1.m = D & f2.m = D by A31,Th3;
           hence f1.m = f2.m;
         end;
         case m <> len A;
-          then m<len A by A31,REAL_1:def 5;
+          then m<len A by A32,REAL_1:def 5;
           then m+1<=len A by NAT_1:13;
           then m<=len A - 1 by XREAL_1:21;
           then f1.m1 = D \ A.(len A -m1) & f2.m1 = D \ A.(len A -m1)
-          by A28,A29,A30,A31;
+          by A29,A30,A31,A32;
           hence f1.m = f2.m;
         end;
       end;
       hence f1.m = f2.m;
     end;
-    hence thesis by A30,FINSEQ_2:10;
+    hence thesis by A31,FINSEQ_2:10;
   end;
 end;
 
@@ -776,12 +775,13 @@ A7:   1<=n & n<=len A by FINSEQ_3:27;
       then A.1 c= A.n by A6,A7,Th2;
       hence thesis by A4;
     end;
+X: dom ((mf(#)h)#c) = Seg len mf by A3,FINSEQ_1:def 3;
     now
       let m be Nat;
       assume
-A8:   m in Seg len mf;
+A8:   m in dom((mf(#)h)#c);
       then
-A9:   m in dom mf by FINSEQ_1:def 3;
+A9:   m in dom mf by FINSEQ_1:def 3,X;
       reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
 A10:  h.m = chi(A.m,C) by A2,A3,A8,RFUNCT_3:def 6;
 A11:  1<=m & m<=len mf by A9,FINSEQ_3:27;
@@ -793,7 +793,7 @@ A13:      m=len mf;
           then mf.m = r1 by A3,RFINSEQ:def 3;
           then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
           then
-A14:      ((mf(#)h)#c).m = (r1(#)chi(A.m,C)).c by A2,A3,A8, RFUNCT_3:def 8;
+A14:      ((mf(#)h)#c).m = (r1(#)chi(A.m,C)).c by A8, RFUNCT_3:def 8;
           dom(r1(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
             .= C by RFUNCT_1:77;
           hence ((mf(#)h)#c).m = r1*(chi(A.m,C)).c by A14,VALUED_1:def 5
@@ -810,7 +810,7 @@ A15:      m<=len mf - 1 & 1<=m+1 by A11,XREAL_1:21,XXREAL_0:2;
 
 then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A8,A10,RFUNCT_3:def 7;
           then
-A16:      ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A2,A3,A8,
+A16:      ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A8,
           RFUNCT_3:def 8;
           dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
             .= C by RFUNCT_1:77;
@@ -856,20 +856,21 @@ A27: A.k c= A.n by A26,Th2;
     assume c in A.k;
     hence contradiction by A17,A27,XBOOLE_0:def 4;
   end;
+X: dom(n0^mfn) = Seg len mf by A21,FINSEQ_1:def 3;
   now
     let m be Nat;
     assume
-A28: m in Seg len mf;
+A28: m in dom (n0^mfn);
     then
-A29: m in dom mf by FINSEQ_1:def 3;
+A29: m in dom mf by FINSEQ_1:def 3,X;
     reconsider m1 = m as Element of NAT by ORDINAL1:def 13;
-A30: h.m = chi(A.m,C) by A2,A3,A28,RFUNCT_3:def 6;
+A30: h.m = chi(A.m,C) by A2,A3,A28,RFUNCT_3:def 6,X;
 A31: 1<=m & m<=len mf & m<=m+1 by A29,FINSEQ_3:27,NAT_1:11;
     reconsider r1=fd.m as Real;
     now per cases;
       case
 A32:    m<=n;
-        then not c in A.m by A2,A3,A25,A28;
+        then not c in A.m by A2,A3,A25,A28,X;
         then
 A33:    chi(A.m,C).c = 0 by RFUNCT_1:80;
 A34:    m in Seg n by A31,A32,FINSEQ_1:3;
@@ -882,9 +883,11 @@ A35:    n0.m = 0 by FUNCOP_1:13;
 A36:    m<=len mf - 1 by A3,XREAL_1:21;
         reconsider r2=fd.(m+1) as Real;
         mf.m1 = r1-r2 by A31,A36,RFINSEQ:def 3;
-        then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+        then (mf(#)h).m = (r1-r2)(#)chi(A.m,C)
+         by A2,A3,A28,A30,RFUNCT_3:def 7,X;
         then
-A37:    ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A2,A3,A28, RFUNCT_3:def 8;
+A37:    ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
+ by A2,A3,A28, RFUNCT_3:def 8,X;
         dom((r1-r2)(#)chi(A.m,C)) = dom chi(A.m,C) by VALUED_1:def 5
           .= C by RFUNCT_1:77;
         hence ((mf(#)h)#c).m = (r1-r2)*(chi(A.m,C)).c by A37,VALUED_1:def 5
@@ -894,7 +897,7 @@ A37:    ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c by A2,A3,A28, RFUNCT_3:def 8;
 A38:    n<m;
         then
 A39:    n+1<=m & n<=m by NAT_1:13;
-        then c in A.m by A2,A3,A23,A28;
+        then c in A.m by A2,A3,A23,A28,X;
         then
 A40:    chi(A.m,C).c = 1 by RFUNCT_1:79;
         max(0,m-n) = m-n by A38,FINSEQ_2:4;
@@ -904,9 +907,11 @@ A41:    1<=mn by A39,XREAL_1:21;
           case
 A42:        m = len mf;
             then mf.m = r1 by A3,RFINSEQ:def 3;
-            then (mf(#)h).m = r1(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+            then (mf(#)h).m = r1(#)chi(A.m,C)
+             by A2,A3,A28,A30,RFUNCT_3:def 7,X;
             then
-A43:        ((mf(#)h)#c).m =(r1(#)chi(A.m,C)).c by A2,A3,A28, RFUNCT_3:def 8;
+A43:        ((mf(#)h)#c).m =(r1(#)chi(A.m,C)).c
+ by A2,A3,A28, RFUNCT_3:def 8,X;
 A44:        mn in dom(mf/^n) by A19,A41,A42,FINSEQ_3:27;
 A45:        (n0^mfn).m = mfn.(m-n) by A19,A21,A31,A38,FINSEQ_1:37
               .=(mf/^n).mn by RFINSEQ:28
@@ -925,10 +930,10 @@ A46:        m<=len mf - 1 & 1<=m+1 by NAT_1:11,XREAL_1:21;
             reconsider r2=fd.(m+1) as Real;
             mf.m1 = r1-r2 by A31,A46,RFINSEQ:def 3;
 
-then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7;
+then (mf(#)h).m = (r1-r2)(#)chi(A.m,C) by A2,A3,A28,A30,RFUNCT_3:def 7,X;
             then
 A47:        ((mf(#)h)#c).m =((r1-r2)(#)chi(A.m,C)).c
-            by A2,A3,A28,RFUNCT_3:def 8;
+            by A2,A3,A28,RFUNCT_3:def 8,X;
             mn<=len(mf/^n) by A19,A31,XREAL_1:11;
             then
 A48:        mn in dom(mf/^n) by A41,FINSEQ_3:27;

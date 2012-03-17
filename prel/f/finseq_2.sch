@@ -56,8 +56,8 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="68">
-<Func kind="F" nr="1"/>
+<Func kind="K" nr="70">
+<Var nr="1"/>
 </Func>
 </Pred>
 <Not>

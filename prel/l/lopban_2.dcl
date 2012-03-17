@@ -12,9 +12,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -129,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="243">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -151,7 +151,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="243">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -172,7 +172,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="243">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -200,7 +200,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="244">
+<Func kind="K" nr="246">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -222,7 +222,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="244">
+<Func kind="K" nr="246">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -231,7 +231,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="206"/>
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="95"/>
@@ -239,7 +239,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="206"/>
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="35" value="false"/>
@@ -259,7 +259,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -281,7 +281,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -302,7 +302,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -334,7 +334,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

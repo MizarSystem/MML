@@ -8,16 +8,16 @@ environ
 
  vocabularies FUNCT_1, COMPLEX1, RELAT_1, BOOLE, PARTFUN1, SEQ_1, ARYTM_1,
       XCMPLX_0, ARYTM, VALUED_0, MEMBERED, RAT_1, INT_1, ORDINAL2, SQUARE_1,
-      ARYTM_3, ABSVALUE, FINSEQ_1;
+      ARYTM_3, ABSVALUE, FINSEQ_1, RELOC, FUNCT_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, COMPLEX1,
       XXREAL_0, XREAL_0, RAT_1, INT_1, INT_2, SQUARE_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, MEMBERED, VALUED_0;
- constructors PARTFUN1, REAL_1, COMPLEX1, RAT_1, INT_1, XXREAL_0, VALUED_0,
-      SQUARE_1, MEMBERED, FUNCT_2, INT_2, FRAENKEL, FINSEQ_1;
+      RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, MEMBERED, VALUED_0,
+      NAT_1;
+ constructors PARTFUN1, RAT_1, VALUED_0, SQUARE_1, MEMBERED, INT_2, FINSEQ_1,
+      NAT_1, FUNCT_4;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
-      MEMBERED, COMPLEX1, VALUED_0, RAT_1, INT_1, NAT_1, FRAENKEL, FUNCT_1,
-      RELAT_1, SUBSET_1;
- requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+      MEMBERED, VALUED_0, RAT_1, INT_1, NAT_1, FUNCT_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
@@ -1245,4 +1245,38 @@ end;
 theorem :: VALUED_1:19
   for f, g being FinSequence, h being Function st
   dom h = dom f /\ dom g holds h is FinSequence;
+
+begin :: Addenda
+
+:: from RELOC, 2008.02.14, A.T.
+
+reserve m,j,p,q,n,l for Element of NAT;
+
+definition
+  let p be Function, k be Element of NAT;
+  func Shift(p,k) -> Function means
+:: VALUED_1:def 12
+
+  dom it = { m+k:m in dom p } &
+  for m st m in dom p holds it.(m+k) = p.m;
+end;
+
+theorem :: VALUED_1:20  :: RELOC:17
+  for p being Function, k being Element of NAT
+  holds dom Shift(p,k) c= NAT;
+
+theorem :: VALUED_1:21      :: SCMFSA8C:11
+  for P,Q being Function,
+  k being Element of NAT st P c= Q holds Shift(P,k) c= Shift(Q,k);
+
+theorem :: VALUED_1:22 :: SCMFSA_4:32
+  for I being Function holds Shift(Shift(I,m),n) = Shift(I,m+n);
+
+theorem :: VALUED_1:23 :: SCMFSA_4:33
+  for s,f be Function
+  for n holds Shift(f*s,n) = f*Shift(s,n);
+
+theorem :: VALUED_1:24 :: SCMFSA_4:34
+  for I,J being Function holds
+  Shift(I +* J, n) = Shift(I,n) +* Shift(J,n);
 

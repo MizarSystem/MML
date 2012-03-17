@@ -8,9 +8,9 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XXREAL_0"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -23,8 +23,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Not>
 <Pred kind="P" nr="1">
@@ -38,8 +38,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Not>
 <And>
@@ -57,13 +57,13 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Not>
 <And>
 <Not>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="15">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>

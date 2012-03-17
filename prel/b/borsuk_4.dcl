@@ -26,6 +26,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -34,7 +35,6 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -88,21 +88,21 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="344"/>
+<Func kind="K" nr="338"/>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,7 +122,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="286">
 <Num nr="2"/>
 </Func>
 </Func>

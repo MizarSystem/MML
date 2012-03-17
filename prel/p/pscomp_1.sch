@@ -12,9 +12,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="SEQ_1"/>
@@ -23,7 +22,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -32,7 +31,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="15">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -54,11 +53,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="93">
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

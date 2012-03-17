@@ -13,8 +13,7 @@ environ
       MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1, DOMAIN_1,
       RELSET_1, FUNCT_2, FUNCT_3;
  constructors DOMAIN_1, FUNCT_3, FUNCOP_1, ORDINAL3;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ORDINAL2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ORDINAL2;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions TARSKI, XBOOLE_0, FUNCOP_1;
  theorems FUNCT_1, ENUMSET1, MCART_1, ZFMISC_1, TARSKI, RELAT_1, ORDINAL3,
@@ -57,7 +56,7 @@ A2:   y = x by TARSKI:def 1;
       hence y = p.{} by A2,FUNCOP_1:13;
     end;
     assume ex z be set st z in dom p & y = p.z;
-    then y = x by A1,FUNCOP_1:13;
+    then y = x by FUNCOP_1:13;
     hence y in {x} by TARSKI:def 1;
   end;
   hence rng p = {x} by FUNCT_1:def 5;
@@ -1067,6 +1066,11 @@ A34: for B st B in X holds B is finite
   end;
 end;
 
+registration let X be finite set;
+ cluster bool X -> finite;
+ coherence by Th24;
+end;
+
 theorem
   A is finite & (for X st X in A holds X is finite) iff union A is finite
 proof
@@ -1384,9 +1388,33 @@ registration
 end;
 
 registration
-  let f be finite Function;
-  cluster dom f -> finite;
-  coherence by Th29;
+  let R be finite Relation;
+  cluster dom R -> finite;
+  coherence
+  proof
+    consider f being Function such that
+W1:  dom f = R and
+W2:  for x st x in R holds f.x = x`1 from FUNCT_1:sch 3;
+    now let x;
+     thus x in rng f implies ex y st [x,y] in R
+      proof
+       assume x in rng f;
+        then consider a such that
+W3:      a in dom f and
+W4:      f.a = x by FUNCT_1:def 5;
+       take a`2;
+F:      ex x,y st a = [x,y] by W1,W3,RELAT_1:def 1;
+        x = a`1 by W2,W3,W4,W1;
+       hence [x,a`2] in R by W1,W3,MCART_1:8,F;
+      end;
+     given y such that
+G:    [x,y] in R;
+      f.[x,y] = [x,y]`1 by W2,G .= x by MCART_1:7;
+     hence x in rng f by W1,G,FUNCT_1:12;
+    end;
+    then rng f = dom R by RELAT_1:def 4;
+   hence thesis by W1,Th26;
+  end;
 end;
 
 :: from SCMFSA_4, 2007.07.22, A.T.
@@ -1420,5 +1448,37 @@ registration
   let x,y be set;
   cluster x .--> y -> finite;
   coherence;
+end;
+
+:: from FINSEQ_1, 2008.02.19, A.T.
+
+registration
+  let R be finite Relation;
+  cluster rng R -> finite;
+  coherence
+  proof
+    consider f being Function such that
+W1:  dom f = R and
+W2:  for x st x in R holds f.x = x`2 from FUNCT_1:sch 3;
+    now let y;
+     thus y in rng f implies ex x st [x,y] in R
+      proof
+       assume y in rng f;
+        then consider a such that
+W3:      a in dom f and
+W4:      f.a = y by FUNCT_1:def 5;
+       take a`1;
+F:      ex x,y st a = [x,y] by W1,W3,RELAT_1:def 1;
+        y = a`2 by W2,W3,W4,W1;
+       hence [a`1,y] in R by W1,W3,MCART_1:8,F;
+      end;
+     given x such that
+G:    [x,y] in R;
+      f.[x,y] = [x,y]`2 by W2,G .= y by MCART_1:7;
+     hence y in rng f by W1,G,FUNCT_1:12;
+    end;
+    then rng f = rng R by RELAT_1:def 5;
+   hence thesis by W1,Th26;
+  end;
 end;
 

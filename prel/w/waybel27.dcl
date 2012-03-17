@@ -44,7 +44,6 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -219,7 +218,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="399">
+<Func kind="K" nr="392">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -243,7 +242,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="415">
+<Func kind="K" nr="408">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -271,7 +270,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="415">
+<Func kind="K" nr="408">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -303,7 +302,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="415">
+<Func kind="K" nr="408">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -375,7 +374,7 @@
 <Cluster>
 <Adjective nr="44" value="false"/>
 </Cluster>
-<Typ kind="M" nr="32">
+<Typ kind="M" nr="31">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

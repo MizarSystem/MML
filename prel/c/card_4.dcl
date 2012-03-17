@@ -12,27 +12,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FINSUB_1"/>
 </Signature>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="52"/>
-<Cluster>
-<Adjective nr="18" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="81"/>
-<Cluster>
-<Adjective nr="18" value="false"/>
-</Cluster>
-</FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -48,18 +33,18 @@
 <Adjective nr="4"/>
 <Adjective nr="15">
 <LocusVar nr="1"/>
-<Func kind="K" nr="107">
+<Func kind="K" nr="100">
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
-<Func kind="K" nr="107">
+<Func kind="K" nr="100">
 <LocusVar nr="2"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="95">
+<Func kind="K" nr="88">
 <LocusVar nr="3"/>
 </Func>
 <Cluster>

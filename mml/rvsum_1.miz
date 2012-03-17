@@ -11,20 +11,19 @@ environ
       BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1, FINSOP_1, VALUED_0;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, VALUED_0, XBOOLE_0,
       XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1,
-      FINSEQ_1, FINSEQ_2, FINSEQ_4, VALUED_1, SEQ_1, FINSOP_1, FINSEQOP,
-      SETWOP_2;
- constructors PARTFUN1, BINOP_1, SETWISEO, REAL_1, SQUARE_1, NAT_1, BINOP_2,
-      VALUED_1, SEQ_1, FINSEQOP, FINSEQ_4, FINSOP_1, SETWOP_2, VALUED_0;
+      PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, VALUED_1, SEQ_1, FINSOP_1, FINSEQOP, SETWOP_2;
+ constructors PARTFUN1, BINOP_1, SETWISEO, SQUARE_1, NAT_1, BINOP_2, VALUED_1,
+      SEQ_1, FINSEQOP, FINSEQ_4, FINSOP_1, SETWOP_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
       NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, NAT_1, BINOP_2, MEMBERED, FINSEQ_1,
       FINSEQ_2, VALUED_0, VALUED_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_1, BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, FINSEQ_2, TARSKI;
+ definitions BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, FINSEQ_2, TARSKI;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1, FINSEQ_2,
       FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0, ZFMISC_1, XCMPLX_0,
-      XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, SEQ_1, NUMBERS, XBOOLE_1, FINSEQ_3,
-      ORDINAL1, VALUED_0, VALUED_1;
+      XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, NUMBERS, XBOOLE_1, FINSEQ_3,
+      ORDINAL1, VALUED_0, VALUED_1, CARD_1;
  schemes NAT_1, FUNCT_2;
 
 begin :: Auxiliary theorems
@@ -292,6 +291,7 @@ end;
 definition
   let F1,F2;
   redefine func F1 + F2 -> FinSequence of REAL equals
+
   addreal.:(F1,F2);
   coherence by Lm4;
   compatibility
@@ -436,6 +436,7 @@ end;
 definition
   let F;
   redefine func -F -> FinSequence of REAL equals
+
   compreal*F;
   coherence by Lm4;
   compatibility
@@ -545,6 +546,7 @@ end;
 definition
   let F1,F2;
   redefine func F1 - F2 -> FinSequence of REAL equals
+
   diffreal.:(F1,F2);
   coherence by Lm4;
   compatibility
@@ -761,6 +763,7 @@ end;
 definition
   let F,r;
   redefine func r*F -> FinSequence of REAL equals
+
   (r multreal)*F;
   coherence by Lm4;
   compatibility
@@ -980,6 +983,7 @@ end;
 definition
   let F1,F2;
   redefine func mlt(F1,F2) -> FinSequence of REAL equals
+
   multreal.:(F1,F2);
   coherence by Lm4;
   compatibility
@@ -1132,13 +1136,14 @@ A1: len R = i by FINSEQ_2:109;
   then
 A2: len(sqrreal*R) = i by FINSEQ_2:37;
 A3: len(multreal.:(R,R)) = i by A1,FINSEQ_2:86;
+X: dom (sqrreal*R) = Seg i by A2,FINSEQ_1:def 3;
   now
     let j;
     assume
-A4: j in Seg i;
+A4: j in dom (sqrreal*R);
     then
-A5: j in dom(sqrreal*R) by A2,FINSEQ_1:def 3;
-A6: j in dom(multreal.:(R,R)) by A3,A4,FINSEQ_1:def 3;
+A5: j in dom(sqrreal*R);
+A6: j in dom(multreal.:(R,R)) by A3,A4,FINSEQ_1:def 3,X;
     set r = R.j;
     thus (sqrreal*R).j = sqrreal.r by A5,FUNCT_1:22
       .= r^2 by Def2
@@ -1231,8 +1236,7 @@ registration
     consider f being FinSequence of COMPLEX such that
 A1: f = F & Sum F = addcomplex $$ f by Def11;
 A2: rng f c= REAL by A1,VALUED_0:def 3;
-    then reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
-    set mc = addcomplex, mr = addreal;
+    set mc = addcomplex;
 A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
     consider n being Nat such that
 A4: dom f = Seg n by FINSEQ_1:def 2;
@@ -1317,7 +1321,6 @@ A10:    not k+1 in dom f;
         hence thesis;
       end;
     end;
-    reconsider a = i.(k+1), b = g $$(finSeg k,i) as real number;
 A11: not (k + 1) in Seg k by FINSEQ_3:9;
     g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {.k+1.},i) by FINSEQ_1:11
       .= g.(g $$(finSeg k,i),i.(k+1)) by A11,SETWOP_2:4
@@ -1637,12 +1640,10 @@ proof
 A1: Sum sqr R = 0;
 A2: len R = i by FINSEQ_2:109;
 A3: len(i |-> 0) = i by FINSEQ_2:109;
-  then
-A4: Seg i = dom R & Seg i = dom(i |-> 0) by A2,FINSEQ_1:def 3;
   assume R <> i |-> 0;
   then consider j such that
 A5: j in dom R and
-A6: R.j <> (i |-> 0).j by A2,A3,A4,FINSEQ_2:10;
+A6: R.j <> (i |-> 0).j by A2,A3,FINSEQ_2:10;
 A7: dom sqr R = Seg len sqr R & dom R = Seg len R by FINSEQ_1:def 3;
 A8: now
     let k such that k in dom sqr R;
@@ -1682,7 +1683,7 @@ A4: R1 = R1'^<*x1*> by FINSEQ_2:137;
 A5: R2 = R2'^<*x2*> by FINSEQ_2:137;
     (Sum mlt(R1',R2'))^2 + 0 <= (Sum sqr R1')*(Sum sqr R2') by A3;
     then
-A6: 0 <= (Sum sqr R1')*(Sum sqr R2') - (Sum mlt(R1',R2'))^2 by XREAL_1 :21;
+A6: 0 <= (Sum sqr R1')*(Sum sqr R2') - (Sum mlt(R1',R2'))^2 by XREAL_1:21;
 A7: (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
     = (Sum sqr R1')*(Sum sqr R2')+(x1^2*(Sum sqr R2')+(Sum
     sqr R1')*x2^2)+x1^2*x2^2
@@ -1726,8 +1727,7 @@ A12: (Sum sqr R1)*(Sum sqr R2) - (Sum mlt(R1,R2))^2
     = (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
     + -(Sum mlt(R1',R2')+x1*x2)^2 by A4,A5,A8
       .= (Sum sqr R1')*(Sum sqr R2')+-(Sum mlt(R1',R2'))^2 +
-    ((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +- 2*Sum(mlt(x1*R2',x2*R1'))) by A7
-    ,A10
+    ((Sum sqr(x1*R2')+Sum sqr(x2*R1')) +- 2*Sum(mlt(x1*R2',x2*R1'))) by A7,A10
       .= (Sum sqr R1')*(Sum sqr R2')-(Sum mlt(R1',R2'))^2 + Sum
     sqr (x1*R2'-x2*R1') by A11,Th99;
     0 <= Sum sqr (x1*R2'-x2*R1') by Th116;
@@ -1765,8 +1765,7 @@ registration
     consider f being FinSequence of COMPLEX such that
 A1: f = F & Product F = multcomplex $$ f by Def14;
 A2: rng f c= REAL by A1,VALUED_0:def 3;
-    then reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
-    set mc = multcomplex, mr = multreal;
+    set mc = multcomplex;
 A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
     consider n being Nat such that
 A4: dom f = Seg n by FINSEQ_1:def 2;
@@ -1850,7 +1849,6 @@ A10:    not k+1 in dom f;
         hence thesis;
       end;
     end;
-    reconsider a = i.(k+1), b = g $$(finSeg k,i) as real number;
 A11: not (k + 1) in Seg k by FINSEQ_3:9;
     reconsider k as Element of NAT by ORDINAL1:def 13;
     g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {.k+1.},i) by FINSEQ_1:11
@@ -2023,7 +2021,7 @@ proof
   let p be complex-yielding FinSequence;
   assume
 A1: len p <> 0;
-  then p <> {} by FINSEQ_1:25;
+  then p <> {} by CARD_1:47;
   then consider q being FinSequence,d being set such that
 A2: p = q^<*d*> by FINSEQ_1:63;
   rng p c= COMPLEX by VALUED_0:def 1;
@@ -2170,10 +2168,8 @@ definition
     let x be set;
     assume x in rng (i |-> z);
     then consider y be set such that
-A1: y in dom (i |-> z) and
+    y in dom (i |-> z) and
 A2: x = (i |-> z).y by FUNCT_1:def 5;
-    reconsider y as Element of NAT by A1;
-    reconsider r1 = (i |-> z).y as complex number;
     thus x in COMPLEX by A2,XCMPLX_0:def 2;
   end;
 end;

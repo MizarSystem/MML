@@ -10,13 +10,13 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FRAENKEL"/>
@@ -64,7 +64,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="24"/>
+<Adjective nr="22"/>
 <Adjective nr="84">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -124,7 +124,7 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="K" nr="16">
-<Func kind="K" nr="202">
+<Func kind="K" nr="203">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -164,7 +164,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="16">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -203,7 +203,7 @@
 <LocusVar nr="3"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="236">
+<Func kind="K" nr="237">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -219,7 +219,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="238"/>
+<Func kind="K" nr="239"/>
 <Cluster>
 <Adjective nr="32"/>
 <Adjective nr="49"/>
@@ -234,7 +234,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="239">
+<Func kind="K" nr="240">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -8,24 +8,19 @@ environ
 
  vocabularies TREES_1, FUNCT_1, FINSEQ_1, ZFMISC_1, RELAT_1, BOOLE, ORDERS_1,
       ORDINAL1, TARSKI, FINSET_1, CARD_1, ARYTM_1, FUNCOP_1, TREES_2, HAHNBAN,
-      PRELAMB, MCART_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, MCART_1,
-      XCMPLX_0, FUNCT_1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSET_1,
-      RELSET_1, BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
- constructors WELLORD2, BINOP_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      TREES_1, VALUED_1, PARTFUN1, SEQ_1;
+      PRELAMB, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, XCMPLX_0,
+      FUNCT_1, REAL_1, NAT_1, CARD_1, NUMBERS, FINSEQ_1, FINSET_1, RELSET_1,
+      BINOP_1, FUNCT_2, FUNCOP_1, TREES_1, XXREAL_0;
+ constructors WELLORD2, BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, TREES_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, VALUED_1,
-      FUNCT_2;
+      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions RELAT_1, TARSKI, FUNCT_1, TREES_1, ORDINAL1, XBOOLE_0, BINOP_1,
-      VALUED_1;
+ definitions RELAT_1, TARSKI, FUNCT_1, TREES_1, ORDINAL1, XBOOLE_0, BINOP_1;
  theorems FUNCT_1, NAT_1, FINSEQ_1, TREES_1, TARSKI, ORDERS_1, ZFMISC_1,
       FINSET_1, CARD_1, CARD_2, WELLORD2, CARD_4, FUNCOP_1, FUNCT_2, RELAT_1,
-      FINSEQ_2, ORDINAL1, XBOOLE_0, XBOOLE_1, MCART_1, RELSET_1, XREAL_1,
-      XXREAL_0;
- schemes FUNCT_1, FRAENKEL, NAT_1, CARD_3, CLASSES1, RECDEF_1, DOMAIN_1,
-      XBOOLE_0;
+      FINSEQ_2, ORDINAL1, XBOOLE_0, XBOOLE_1, RELSET_1, XREAL_1, XXREAL_0;
+ schemes FUNCT_1, FRAENKEL, NAT_1, CARD_3, CLASSES1, DOMAIN_1, XBOOLE_0;
 
 begin
 
@@ -128,7 +123,7 @@ and
 A2: for t being Element of T(), n st P[t] & t^<*n*> in T() holds P[t^<*n*>]
 proof
   defpred X[set] means for t being Element of T() st len t = $1 holds P[t];
-A3: X[0] by A1,FINSEQ_1:25;
+A3: X[0] by A1,CARD_2:59;
 A4: X[k] implies X[k+1]
   proof
     assume
@@ -287,7 +282,7 @@ definition
   end;
   mode Level of W -> Subset of W means
     : Def4:
-    ex n st it = { w: len w = n};
+    ex n being Nat st it = { w: len w = n};
   existence
   proof
     {} in W by TREES_1:47;
@@ -298,13 +293,13 @@ definition
       let x;
       assume x in L;
       then x = {} & len {} = 0 & {} is Element of W
-      by FINSEQ_1:25,TARSKI:def 1;
+      by CARD_1:47,TARSKI:def 1;
       hence thesis;
     end;
     let x;
     assume x in { w: len w = 0};
     then ex w st x = w & len w = 0;
-    then x = {} by FINSEQ_1:25;
+    then x = {} by CARD_2:59;
     hence thesis by TARSKI:def 1;
   end;
   let w;
@@ -328,7 +323,7 @@ theorem
   for L being Level of W holds L is AntiChain_of_Prefixes of W
 proof
   let L be Level of W;
-  consider n such that
+  consider n being Nat such that
 A1: L = { w: len w = n } by Def4;
   L is AntiChain_of_Prefixes-like
   proof
@@ -414,7 +409,7 @@ A4:     y in A /\ C;
 end;
 
 definition
-  let W,n;
+  let W; let n be Nat;
   func W-level n -> Level of W equals
 
   { w: len w = n };
@@ -500,8 +495,9 @@ theorem
   for L being Level of W ex n st L = W-level n
 proof
   let L be Level of W;
-  consider n such that
+  consider n being Nat such that
 A1: L = { w: len w = n} by Def4;
+   reconsider n as Element of NAT by ORDINAL1:def 13;
   take n; thus thesis by A1;
 end;
 
@@ -822,7 +818,7 @@ A9: p in C & len p >= k by A5,A6,A7,XXREAL_0:2;
     reconsider q = p|Seg k as FinSequence by FINSEQ_1:19;
 A10: len q = k by A9,FINSEQ_1:21;
     then
-A11: ProperPrefixes q is finite & card ProperPrefixes q = k by TREES_1 :68;
+A11: ProperPrefixes q is finite & card ProperPrefixes q = k by TREES_1:68;
     then Card ProperPrefixes q <` Card C by A8,CARD_2:58;
     then
 A12: C \ ProperPrefixes q <> {} by CARD_2:4;
@@ -909,8 +905,8 @@ theorem Th29:
   p in C & q in C & len p <= len q implies p is_a_prefix_of q
 proof
   assume p in C & q in C & len p <= len q & not p is_a_prefix_of q;
-  then q in ProperPrefixes p & not q is_a_proper_prefix_of p by Th23,
-  TREES_1:24;
+
+then q in ProperPrefixes p & not q is_a_proper_prefix_of p by Th23,TREES_1:24;
   hence contradiction by TREES_1:36;
 end;
 
@@ -1152,8 +1148,8 @@ A5: y in X() & P[x,y] & Q[y] by A2;
 A6: dom g = Y & for x st x in Y holds Q[x,g.x] from CLASSES1:sch 1(A4);
   deffunc U(set,set) = g.$2;
   consider f such that
-A7: dom f = NAT & f.0 = a() & for n holds f.(n+1) = U(n,f.n)
-  from RECDEF_1:sch 3;
+A7: dom f = NAT & f.0 = a() & for n being Nat holds f.(n+1) = U(n,f.n)
+  from NAT_1:sch 11;
   take f;
   thus dom f = NAT by A7;
   defpred X[Element of NAT] means f.$1 in Y;
@@ -1272,7 +1268,7 @@ A27: C c= B by Th30;
     then consider p such that
 A28: p in C & len p >= n by A26,Th25;
     e in B & p in B by A27,A28,Th28;
-    then len p < len e + n & len e = 0 & 0 + n = n by A25,FINSEQ_1:25;
+    then len p < len e + n & len e = 0 & 0 + n = n by A25,CARD_1:47;
     hence contradiction by A28;
   end;
   defpred QQ[set] means ex t being Element of T st t = $1 & P[t];
@@ -1323,7 +1319,6 @@ A41: now
     assume k <= l;
     then consider n be Nat such that
 A42: l = k+n by NAT_1:10;
-    reconsider n as Element of NAT by ORDINAL1:def 13;
     thus for p,q st p = f.k & q = f.l holds p is_a_prefix_of q by A35,A42;
   end;
   C is Chain of T
@@ -1342,7 +1337,7 @@ A45: y in NAT & q = f.y by A33,A43,FUNCT_1:def 5;
   then reconsider C as Chain of T;
   take C;
   defpred X[Element of NAT] means for p st p = f.$1 holds len p = $1;
-A46: X[0] by A33,FINSEQ_1:25;
+A46: X[0] by A33,CARD_1:47;
 A47: X[k] implies X[k+1]
   proof
     assume
@@ -1660,9 +1655,7 @@ definition
   redefine func W --> d -> DecoratedTree of D;
   coherence
   proof
-    dom (W --> d) = W & rng (W --> d) c= {d} & {d} c= D
-    by FUNCOP_1:19,ZFMISC_1:37;
-    then W --> d is DecoratedTree & rng (W --> d) c= D by XBOOLE_1:1;
+    W --> d is DecoratedTree & rng (W --> d) c= D;
     hence thesis by Def9;
   end;
 end;
@@ -1850,7 +1843,7 @@ A2: P[0]
     let t be Element of dom T;
     t in dom T & dom T = W by FUNCOP_1:19;
     then t = {} by TARSKI:def 1;
-    hence len t <= 0 by FINSEQ_1:25;
+    hence len t <= 0 by CARD_1:47;
     assume len t < 0;
     hence thesis;
   end;
@@ -1985,7 +1978,7 @@ A25: now
       then consider l be Element of NAT, s being Element of dom T such that
 A26:  t = s^<*l*> & l in F(T.s);
       len s <= k & len <*l*> = 1 by A4,FINSEQ_1:56;
-      then len s + 1 <= k+1 & len s + 1 = len t by A26,FINSEQ_1:35,XREAL_1: 9;
+      then len s + 1 <= k+1 & len s + 1 = len t by A26,FINSEQ_1:35,XREAL_1:9;
       hence len t <= k+1;
     end;
     now
@@ -2023,8 +2016,8 @@ A32:  x = t^<*n*> & t^<*n*> in dom T';
       now per cases;
         suppose
 A33:      t^<*n*> in dom T;
-          then reconsider s = t^<*n*>, t' = t as Element of dom T by
-          TREES_1:46;
+
+then reconsider s = t^<*n*>, t' = t as Element of dom T by TREES_1:46;
           len s <= k & len s = len t + 1 by A4,FINSEQ_2:19;
           then len t < k by NAT_1:13;
           then succ t' = { t'^<*m*>: m in F(T.t') } & t^<*n*> in succ t'
@@ -2134,7 +2127,7 @@ A51: I[0]
       let t be Element of dom T1 such that
 A52:  len t <= 0;
       len t = 0 by A52;
-      then t = {} by FINSEQ_1:25;
+      then t = {} by CARD_2:59;
       hence thesis by A48,A49,A50,TREES_1:47;
     end;
 A53: I[k] implies I[k+1]
@@ -2158,7 +2151,7 @@ A57:    len p = k & k <= k & k < k1 by A56,FINSEQ_1:21,NAT_1:13;
         then
 A58:    p in dom T2 & T1.p = T2.p by A54;
         reconsider p' = p as Element of dom T2 by A54,A57;
-        t <> {} by A56,FINSEQ_1:25;
+        t <> {} by A56,CARD_1:47;
         then consider q being FinSequence, x being set such that
 A59:    t = q^<*x*> by FINSEQ_1:63;
         p is_a_prefix_of t & q is_a_prefix_of t & k+1 = len q + 1
@@ -2405,44 +2398,6 @@ registration
 end;
 
 registration
-  let R be finite Relation;
-  cluster dom R -> finite;
-  coherence
-  proof per cases;
-    suppose R = {};
-      hence thesis by RELAT_1:60;
-    end;
-    suppose R <> {};
-      then reconsider R as finite non empty Relation;
-      set X = { x`1 where x is Element of R: x in R };
-A1:   dom R = X
-      proof
-        thus dom R c= X
-        proof
-          let z be set;
-          assume z in dom R;
-          then consider y being set such that
-A2:       [z,y] in R by RELAT_1:def 4;
-          [z,y]`1 = z by MCART_1:7;
-          hence z in X by A2;
-        end;
-        let e be set;
-        assume e in X;
-        then consider x being Element of R such that
-A3:     e = x`1 and x in R;
-        consider z,y being set such that
-A4:     x = [z,y] by RELAT_1:def 1;
-        z = e by A3,A4,MCART_1:7;
-        hence e in dom R by A4,RELAT_1:def 4;
-      end;
-A5:   R is finite;
-      X is finite from FRAENKEL:sch 21(A5);
-      hence thesis by A1;
-    end;
-  end;
-end;
-
-registration
   let a,b be non empty set;
   cluster non empty Relation of a,b;
   existence
@@ -2573,7 +2528,7 @@ A2: P[0]
     let t be Element of dom T;
     t in dom T & dom T = W by FUNCOP_1:19;
     then t = {} by TARSKI:def 1;
-    hence len t <= 0 by FINSEQ_1:25;
+    hence len t <= 0 by CARD_1:47;
     assume len t < 0;
     hence thesis;
   end;
@@ -2707,7 +2662,7 @@ A25: now
       then consider l be Element of NAT, s being Element of dom T such that
 A26:  t = s^<*l*> & Q[l,T.s];
       len s <= k & len <*l*> = 1 by A4,FINSEQ_1:56;
-      then len s + 1 <= k+1 & len s + 1 = len t by A26,FINSEQ_1:35,XREAL_1: 9;
+      then len s + 1 <= k+1 & len s + 1 = len t by A26,FINSEQ_1:35,XREAL_1:9;
       hence len t <= k+1;
     end;
     now
@@ -2745,8 +2700,8 @@ A32:  x = t^<*n*> & t^<*n*> in dom T';
       now per cases;
         suppose
 A33:      t^<*n*> in dom T;
-          then reconsider s = t^<*n*>, t' = t as Element of dom T by
-          TREES_1:46;
+
+then reconsider s = t^<*n*>, t' = t as Element of dom T by TREES_1:46;
           len s <= k & len s = len t + 1 by A4,FINSEQ_2:19;
           then len t < k by NAT_1:13;
           then succ t' = { t'^<*m*>: Q[m,T.t'] } & t^<*n*> in succ t'
@@ -2855,7 +2810,7 @@ A51: I[0]
       let t be Element of dom T1 such that
 A52:  len t <= 0;
       len t = 0 by A52;
-      then t = {} by FINSEQ_1:25;
+      then t = {} by CARD_2:59;
       hence thesis by A48,A49,A50,TREES_1:47;
     end;
 A53: I[k] implies I[k+1]
@@ -2879,7 +2834,7 @@ A57:    len p = k & k <= k & k < k1 by A56,FINSEQ_1:21,NAT_1:13;
         then
 A58:    p in dom T2 & T1.p = T2.p by A54;
         reconsider p' = p as Element of dom T2 by A54,A57;
-        t <> {} by A56,FINSEQ_1:25;
+        t <> {} by A56,CARD_1:47;
         then consider q being FinSequence, x being set such that
 A59:    t = q^<*x*> by FINSEQ_1:63;
         p is_a_prefix_of t & q is_a_prefix_of t & k+1 = len q + 1

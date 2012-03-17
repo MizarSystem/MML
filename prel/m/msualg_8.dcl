@@ -30,11 +30,11 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FRAENKEL"/>
-<ArticleID name="CARD_3"/>
+<ArticleID name="NAT_LAT"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
-<ArticleID name="NAT_LAT"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="MSUALG_4"/>
 <ArticleID name="MSUALG_5"/>
 <ArticleID name="MSUALG_7"/>
@@ -45,7 +45,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="281">
+<Func kind="K" nr="282">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -61,7 +61,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="281">
+<Func kind="K" nr="282">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -76,26 +76,26 @@
 <Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="94" value="false"/>
+<Adjective nr="90" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="97">
+<Adjective nr="93">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="285">
+<Func kind="K" nr="286">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="47"/>
 <Adjective nr="103">
-<Func kind="K" nr="284">
+<Func kind="K" nr="285">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -106,7 +106,7 @@
 </Func>
 </Adjective>
 <Adjective nr="104">
-<Func kind="K" nr="284">
+<Func kind="K" nr="285">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

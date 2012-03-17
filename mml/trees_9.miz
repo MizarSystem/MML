@@ -12,13 +12,11 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1,
       FINSEQ_2, FUNCT_6, TREES_1, TREES_2, TREES_3, TREES_4;
- constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, VALUED_1,
-      PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
-      XREAL_0, FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, VALUED_1,
-      FUNCT_2;
+ constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XREAL_0,
+      FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3, VALUED_1;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3;
  theorems TARSKI, AXIOMS, ZFMISC_1, REAL_1, NAT_1, WELLORD2, FUNCT_1, FUNCT_2,
       FINSEQ_1, FINSEQ_3, CARD_1, CARD_2, FUNCT_6, TREES_1, TREES_2, TREES_3,
       TREES_4, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1,
@@ -53,42 +51,42 @@ registration
 A1: x^<*n*> in t;
     deffunc U(Nat) = x^<*$1-1*>;
     consider f being FinSequence such that
-A2: len f = n & for i being Nat st i in Seg n holds f.i = U(i)
+A2: len f = n & for i being Nat st i in dom f holds f.i = U(i)
     from FINSEQ_1:sch 2;
-A3: dom f = Seg n by A2,FINSEQ_1:def 3;
-A4: rng f c= succ x
+A4: dom f = Seg n by A2,FINSEQ_1:def 3;
+A5: rng f c= succ x
     proof
       let y be set;
       assume y in rng f;
       then consider i being set such that
-A5:   i in dom f & y = f.i by FUNCT_1:def 5;
-      reconsider i as Element of NAT by A5;
-A6:   i >= 1 & i <= n by A3,A5,FINSEQ_1:3;
+A6:   i in dom f & y = f.i by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A6;
+A7:   i >= 1 & i <= n by A4,A6,FINSEQ_1:3;
       then consider j being Nat such that
-A7:   i = 1+j by NAT_1:10;
+A8:   i = 1+j by NAT_1:10;
       reconsider j as Element of NAT by ORDINAL1:def 13;
-      j <= i by A7,NAT_1:11;
-      then i-1 = j & j <= n by A6,A7,XXREAL_0:2;
-      then y = x^<*j*> & x^<*j*> in t by A1,A2,A3,A5,TREES_1:def 5;
+      j <= i by A8,NAT_1:11;
+      then i-1 = j & j <= n by A7,A8,XXREAL_0:2;
+      then y = x^<*j*> & x^<*j*> in t by A1,A2,A6,TREES_1:def 5;
       hence thesis;
     end;
     f is one-to-one
     proof
       let z,y be set;
       assume
-A8:   z in dom f & y in dom f & f.z = f.y;
+A9:   z in dom f & y in dom f & f.z = f.y;
       then reconsider i1 = z, i2 = y as Element of NAT;
-      f.z = x^<*i1-1*> & f.y = x^<*i2-1*> by A2,A3,A8;
-      then <*i1-1*> = <*i2-1*> by A8,FINSEQ_1:46;
+      f.z = x^<*i1-1*> & f.y = x^<*i2-1*> by A2,A9;
+      then <*i1-1*> = <*i2-1*> by A9,FINSEQ_1:46;
       then i1-1 = <*i2-1*>.1 by FINSEQ_1:57
         .= i2-1 by FINSEQ_1:57;
       hence z = y;
     end;
     then Card(dom f qua set) <=` Card succ x & Card succ x <=` Card t
-    by A4,CARD_1:26,27;
+    by A5,CARD_1:26,27;
     then Card(dom f qua set) <=` Card t & Card Seg n = n
     by FINSEQ_1:78,XBOOLE_1:1;
-    then n <= card s & card s <= n by A3,NAT_1:11,40;
+    then n <= card s & card s <= n by A4,NAT_1:11,40;
     then n = card s + 0 by XXREAL_0:1;
     hence contradiction;
   end;
@@ -592,69 +590,68 @@ definition
     deffunc U(Nat) = p^<*$1-1*>;
     consider q being FinSequence such that
 A1: len q = card succ p &
-    for i being Nat st i in Seg card succ p holds q.i = U(i)
+    for i being Nat st i in dom q holds q.i = U(i)
     from FINSEQ_1:sch 2;
-A2: dom q = Seg card succ p by A1,FINSEQ_1:def 3;
-A3: for i being Element of NAT st i < len q holds q.(i+1) = p^<*i*>
+A4: for i being Element of NAT st i < len q holds q.(i+1) = p^<*i*>
     proof
       let i be Element of NAT;
       assume i < len q;
       then i+1 in dom q by Lm3;
-      then q.(i+1) = p^<*i+1-1*> by A1,A2;
+      then q.(i+1) = p^<*i+1-1*> by A1;
       hence thesis;
     end;
-A4: q is one-to-one
+A5: q is one-to-one
     proof
       let x1,x2 be set;
       assume
-A5:   x1 in dom q & x2 in dom q;
+A6:   x1 in dom q & x2 in dom q;
       then reconsider i1 = x1, i2 = x2 as Element of NAT;
       (p^<*i1-1*>).(len p+1) = i1-1 & (p^<*i2-1*>).(len p+1) = i2-1 &
-      q.x1 = p^<*i1-1*> & q.x2 = p^<*i2-1*> by A1,A2,A5,FINSEQ_1:59;
+      q.x1 = p^<*i1-1*> & q.x2 = p^<*i2-1*> by A1,A6,FINSEQ_1:59;
       hence thesis;
     end;
-A6: rng q c= succ p
+A7: rng q c= succ p
     proof
       let x be set;
       assume x in rng q;
       then consider k being Element of NAT such that
-A7:   k < len q & x = q.(k+1) by Lm4;
-      x = p^<*k*> by A3,A7;
-      hence thesis by A1,A7,Th7;
+A8:   k < len q & x = q.(k+1) by Lm4;
+      x = p^<*k*> by A4,A8;
+      hence thesis by A1,A8,Th7;
     end;
-    then reconsider q as one-to-one FinSequence of succ p by A4,FINSEQ_1:def 4;
-    take q; thus len q = card succ p & rng q c= succ p by A1,A6;
+    then reconsider q as one-to-one FinSequence of succ p by A5,FINSEQ_1:def 4;
+    take q; thus len q = card succ p & rng q c= succ p by A1,A7;
     thus succ p c= rng q
     proof
       let x be set;
       assume
-A8:   x in succ p;
+A9:   x in succ p;
       then consider n being Element of NAT such that
-A9:   x = p^<*n*> & p^<*n*> in t;
-      n < card succ p by A8,A9,Th7;
-      then q.(n+1) = x & q.(n+1) in rng q by A1,A3,A9,Lm3;
+A10:   x = p^<*n*> & p^<*n*> in t;
+      n < card succ p by A9,A10,Th7;
+      then q.(n+1) = x & q.(n+1) in rng q by A1,A4,A10,Lm3;
       hence thesis;
     end;
-    thus thesis by A3;
+    thus thesis by A4;
   end;
   uniqueness
   proof
     let q1, q2 be one-to-one FinSequence of t such that
-A10: len q1 = card succ p & rng q1 = succ p and
-A11: for i being Element of NAT st i < len q1 holds q1.(i+1) = p^<*i*> and
-A12: len q2 = card succ p & rng q2 = succ p and
-A13: for i being Element of NAT st i < len q2 holds q2.(i+1) = p^<*i*>;
-A14: dom q1 = Seg card succ p & dom q2 = Seg card succ p
-    by A10,A12,FINSEQ_1:def 3;
+A11: len q1 = card succ p & rng q1 = succ p and
+A12: for i being Element of NAT st i < len q1 holds q1.(i+1) = p^<*i*> and
+A13: len q2 = card succ p & rng q2 = succ p and
+A14: for i being Element of NAT st i < len q2 holds q2.(i+1) = p^<*i*>;
+A15: dom q1 = Seg card succ p & dom q2 = Seg card succ p
+    by A11,A13,FINSEQ_1:def 3;
     now
       let k be Nat;
       assume k in Seg card succ p;
       then consider n being Element of NAT such that
-A15:  k = n+1 & n < len q1 by A14,Lm1;
-      thus q1.k = p^<*n*> by A11,A15
-        .= q2.k by A10,A12,A13,A15;
+A16:  k = n+1 & n < len q1 by A15,Lm1;
+      thus q1.k = p^<*n*> by A12,A16
+        .= q2.k by A11,A13,A14,A16;
     end;
-    hence thesis by A14,FINSEQ_1:17;
+    hence thesis by A15,FINSEQ_1:17;
   end;
 end;
 

@@ -12,19 +12,20 @@ environ
       FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, BINARITH,
       XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_1, PARTFUN1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH, VALUED_1, SEQ_1;
+      BINARITH;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1, VALUED_1, FUNCT_2;
+      XREAL_0, NAT_1, INT_1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1, VALUED_1;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ, REALSET1, RELAT_1, INT_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, BINARITH, ORDINAL1, PARTFUN1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, BINARITH, ORDINAL1, PARTFUN1,
+      CARD_1, CARD_2;
  schemes FINSEQ_1;
 
 begin
 
-reserve i,i1,i2,j,k,m,n for Element of NAT;
+reserve i,i1,i2,j,k,m,n for Nat;
 
 theorem Th1:
   for i, n being Nat holds i <= n implies n - i + 1 is Element of NAT
@@ -37,9 +38,9 @@ proof
 end;
 
 theorem Th2:
-  for i being Nat holds i in Seg n implies n - i + 1 in Seg n
+  for i,n being Nat holds i in Seg n implies n - i + 1 in Seg n
 proof
-  let i be Nat;
+  let i,n be Nat;
   assume
 A1: i in Seg n;
   then 1 <= i & i <= n by FINSEQ_1:3;
@@ -146,7 +147,7 @@ theorem Th6:
   for f being non empty FinSequence holds 1 in dom f & len f in dom f
 proof
   let f be non empty FinSequence;
-  len f <> 0 by FINSEQ_1:25;
+  len f <> 0 by CARD_2:59;
   then
 A1: len f >= 1 by NAT_1:14;
   hence 1 in dom f by FINSEQ_3:27;
@@ -154,10 +155,11 @@ A1: len f >= 1 by NAT_1:14;
 end;
 
 theorem
-  for f being non empty FinSequence ex i be Nat st i+1 = len f
+  for f being non empty FinSequence
+   ex i being Nat st i+1 = len f
 proof
   let f be non empty FinSequence;
-  len f <> 0 by FINSEQ_1:25;
+  len f <> 0 by CARD_2:59;
   hence thesis by NAT_1:6;
 end;
 
@@ -167,20 +169,6 @@ proof
   let x be set, f be FinSequence;
   thus len(<*x*>^f) = len <*x*> + len f by FINSEQ_1:35
     .= 1 + len f by FINSEQ_1:56;
-end;
-
-scheme domSeqLambda{A()->Element of NAT,F(set) -> set}:
-  ex p being FinSequence st len p = A() & for k st k in dom p holds p.k=F(k)
-proof
-  consider p being FinSequence such that
-A1: len p = A() and
-A2: for k be Nat st k in Seg A() holds p.k=F(k) from FINSEQ_1:sch 2;
-  take p;
-  thus len p = A() by A1;
-  let k;
-  assume k in dom p;
-  then k in Seg A() by A1,FINSEQ_1:def 3;
-  hence thesis by A2;
 end;
 
 canceled;
@@ -277,7 +265,7 @@ A3: k in NAT by ORDINAL1:def 13;
     assume
 A4: 1 <= k & k <= len f;
     hence f.k = f/.k by FINSEQ_4:24
-      .= g/.k by A2,A3,A4
+      .= g/.k by A2,A4
       .= g.k by A1,A4,FINSEQ_4:24;
   end;
   hence thesis by A1,FINSEQ_1:18;
@@ -288,7 +276,7 @@ theorem Th15:
 proof
   assume
 A1: len f = 1;
-  then f is non empty by FINSEQ_1:25;
+  then f is non empty by CARD_1:47;
   then 1 in dom f by Th6;
   then f.1 = f/.1 by PARTFUN1:def 8;
   hence thesis by A1,FINSEQ_1:57;
@@ -377,7 +365,7 @@ theorem
 proof
   assume
 A1: i+1 = len f;
-  then f is non empty by FINSEQ_1:25;
+  then f is non empty by CARD_1:47;
   then
 A2: i+1 in dom f by A1,Th6;
   dom f = Seg(i+1) by A1,FINSEQ_1:def 3;
@@ -391,7 +379,7 @@ proof
   assume
 A1: f is one-to-one;
   now
-    let n,m such that
+    let n,m be Element of NAT such that
 A2: n in dom(f|i) and
 A3: m in dom(f|i) and
 A4: (f|i)/.n = (f|i)/.m;
@@ -423,19 +411,20 @@ A2: len(f|i) = i by FINSEQ_1:80;
   then i <= len(f^g) by FINSEQ_1:35;
   then
 A3: len((f^g)|i) = i by FINSEQ_1:80;
+X: dom(f|i)  = Seg i by A2,FINSEQ_1:def 3;
   now
     let j be Nat;
 A4: j in NAT by ORDINAL1:def 13;
     assume
-A5: j in Seg i;
-    then j <= i by FINSEQ_1:3;
-    then 1 <= j & j <= len f by A1,A5,FINSEQ_1:3,XXREAL_0:2;
+A5: j in dom(f|i);
+    then j <= i by FINSEQ_1:3,X;
+    then 1 <= j & j <= len f by A1,A5,FINSEQ_1:3,XXREAL_0:2,X;
     then j in Seg len f by A4;
     then
 A6: j in dom f by FINSEQ_1:def 3;
-    thus ((f^g)|i).j = (f^g).j by A5,FUNCT_1:72
+    thus ((f^g)|i).j = (f^g).j by A5,FUNCT_1:72,X
       .= f.j by A6,FINSEQ_1:def 7
-      .= (f|i).j by A5,FUNCT_1:72;
+      .= (f|i).j by A5,FUNCT_1:72,X;
   end;
   hence (f^g)|i = f|i by A2,A3,FINSEQ_2:10;
 end;
@@ -455,10 +444,9 @@ proof
   let D be set, f be FinSequence of D;
   assume
 A1: p in rng f;
-  then consider n such that
+  then consider n being Nat such that
 A2: n = p..f - 1 and
 A3: f-|p = f | Seg n by FINSEQ_4:def 6;
-  reconsider n as Element of NAT;
   n+1 in dom f & f.(n+1) = p by A1,A2,FINSEQ_4:29,30;
   hence (f-|p)^<*p*> = f|(p..f) by A2,A3,Th11;
 end;
@@ -500,7 +488,7 @@ A4: 1 <= i+n by A3,XXREAL_0:2;
   end;
   suppose n > len f;
     then f/^n = <*>D by RFINSEQ:def 2;
-    hence thesis by A1,FINSEQ_1:26;
+    hence thesis by A1,RELAT_1:60;
   end;
 end;
 
@@ -519,7 +507,7 @@ A3: n+i in dom f by A1,Th29;
   end;
   suppose n > len f;
     then f/^n = <*>D by RFINSEQ:def 2;
-    hence thesis by A1,FINSEQ_1:26;
+    hence thesis by A1,RELAT_1:60;
   end;
 end;
 
@@ -626,7 +614,7 @@ A1: len f <= i;
   suppose len f = i;
     then len(f/^i) = len f - len f by RFINSEQ:def 2
       .= 0;
-    hence thesis by FINSEQ_1:25;
+    hence thesis by CARD_2:59;
   end;
   suppose len f <> i;
     then len f < i by A1,REAL_1:def 5;
@@ -652,7 +640,7 @@ proof
   assume
 A1: f is one-to-one;
   now
-    let n,m such that
+    let n,m be Element of NAT such that
 A2: n in dom(f/^i) and
 A3: m in dom(f/^i) and
 A4: (f/^i)/.n = (f/^i)/.m;
@@ -681,10 +669,10 @@ A1: f is one-to-one;
   then consider x being set such that
 A2: x in rng(f|n) and
 A3: x in rng(f/^n) by XBOOLE_0:3;
-  consider i such that
+  consider i being Element of NAT such that
 A4: i in dom(f|n) and
 A5: (f|n)/.i = x by A2,PARTFUN2:4;
-  consider j such that
+  consider j being Element of NAT such that
 A6: j in dom(f/^n) and
 A7: (f/^n)/.j = x by A3,PARTFUN2:4;
 A8: dom(f|n) c= dom f by Th20;
@@ -725,7 +713,7 @@ A6: i in dom (f|--p);
     hence (f|--p).i = f.(i + p..f) by A1,FINSEQ_4:def 7
       .= (f/^(p..f)).i by A2,A3,A4,A5,A6,RFINSEQ:def 2;
   end;
-  hence thesis by A2,A4,A5,FINSEQ_2:10;
+  hence thesis by A2,A4,FINSEQ_2:10;
 end;
 
 theorem Th39:
@@ -941,7 +929,8 @@ definition
 end;
 
 theorem Th52:
-  p in rng f implies ex i st i+1 = p..f & f:-p = f/^i
+  p in rng f implies
+   ex i being Element of NAT st i+1 = p..f & f:-p = f/^i
 proof
   assume
 A1: p in rng f;
@@ -959,7 +948,7 @@ theorem Th53:
 proof
   assume
 A1: p in rng f;
-  then consider i such that
+  then consider i being Element of NAT such that
 A2: i+1 = p..f and
 A3: f:-p = f/^i by Th52;
   i <= p..f & p..f <= len f by A1,A2,FINSEQ_4:31,NAT_1:11;
@@ -997,7 +986,7 @@ proof
 A1: p in rng f and
 A2: j+1 in dom(f:-p);
   set i = j+1;
-  consider k such that
+  consider k being Element of NAT such that
 A3: k+1 = p..f and
 A4: f:-p = f/^k by A1,Th52;
   k <= p..f & p..f <= len f by A1,A3,FINSEQ_4:31,NAT_1:11;
@@ -1029,7 +1018,7 @@ theorem
   p in rng f implies rng(f:-p) c= rng f
 proof
   assume p in rng f;
-  then ex i st i+1 = p..f & f:-p = f/^i by Th52;
+  then ex i being Element of NAT st i+1 = p..f & f:-p = f/^i by Th52;
   hence thesis by Th36;
 end;
 
@@ -1037,9 +1026,11 @@ theorem
   p in rng f & f is one-to-one implies f:-p is one-to-one
 proof
   assume p in rng f;
-  then ex i st i+1 = p..f & f:-p = f/^i by Th52;
+  then ex i being Element of NAT st i+1 = p..f & f:-p = f/^i by Th52;
   hence thesis by Lm3;
 end;
+
+reserve i for Nat;
 
 definition
   let f be FinSequence;
@@ -1048,9 +1039,9 @@ definition
   len it = len f & for i st i in dom it holds it.i = f.(len f - i + 1);
   existence
   proof
-    deffunc F(Element of NAT) = f.(len f - $1 + 1);
+    deffunc F(Nat) = f.(len f - $1 + 1);
     ex p being FinSequence st len p = len f &
-    for k st k in dom p holds p.k = F(k) from domSeqLambda;
+    for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch 2;
     hence thesis;
   end;
   uniqueness
@@ -1119,10 +1110,10 @@ proof
 end;
 
 theorem Th62:
-  for f being FinSequence, i,j being Element of NAT
+  for f being FinSequence, i,j being Nat
   st i in dom f & i+j = len f + 1 holds j in dom Rev f
 proof
-  let f be FinSequence, i,j be Element of NAT such that
+  let f be FinSequence, i,j be Nat such that
 A1: i in dom f and
 A2: i+j = len f + 1;
 A3: dom f = Seg len f by FINSEQ_1:def 3;
@@ -1135,9 +1126,9 @@ registration
   let f be empty FinSequence;
   cluster Rev f -> empty;
   coherence
-  proof len {} = 0 by FINSEQ_1:25;
+  proof len {} = 0 by CARD_1:47;
     then len (Rev {}) = 0 by Def3;
-    hence thesis by FINSEQ_1:25;
+    hence thesis by CARD_2:59;
   end;
 end;
 
@@ -1201,7 +1192,7 @@ A2: dom Rev f = {} by Th60,RELAT_1:60;
   end;
   suppose f is non empty;
     then
-A3: len f <> 0 by FINSEQ_1:25;
+A3: len f <> 0 by CARD_2:59;
     then len f in Seg len f by FINSEQ_1:5;
     then len f in dom f by FINSEQ_1:def 3;
     hence (Rev f).(len f) = f.(len f - len f + 1) by Th61
@@ -1249,14 +1240,16 @@ A2: len(g^(Rev f)) = len g + len (Rev f) by FINSEQ_1:35
     .= 1 + len (Rev f) by FINSEQ_1:56
     .= n by Def3;
 A3: len(Rev(f^g)) = n by A1,Def3;
+then
+X: dom (Rev(f^g)) = Seg n by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A4: i in Seg n;
+A4: i in dom (Rev(f^g));
     then
-A5: 1 <= i & i <= n by FINSEQ_1:3;
+A5: 1 <= i & i <= n by FINSEQ_1:3,X;
 A6: len g = 1 by FINSEQ_1:57;
-A7: i in dom(Rev(f^g)) by A3,A4,FINSEQ_1:def 3;
+A7: i in dom(Rev(f^g)) by A4;
     per cases by A5,REAL_1:def 5;
     suppose
 A8:   i = 1;
@@ -1501,7 +1494,7 @@ proof
   assume that
 A1: 1 <= n and
 A2: f is non empty;
-  len f <> 0 by A2,FINSEQ_1:25;
+  len f <> 0 by A2,CARD_2:59;
   then
 A3: 1 <= len f by NAT_1:14;
   n <= len f implies len(f|n) = n by FINSEQ_1:80;
@@ -1652,7 +1645,7 @@ A18: l1>l2;
     by FINSEQ_1:4,FUNCT_1:68
       .={} NAT;
     then
-A19: (f/^l1)|(l2-'l1)=<*>(D) by FINSEQ_1:26;
+A19: (f/^l1)|(l2-'l1)=<*>(D) by RELAT_1:64;
     reconsider l1'=l1,l2'=l2 as Element of NAT by ORDINAL1:def 13;
     per cases;
     suppose l1<=len f;
@@ -1686,7 +1679,7 @@ A3: rng f c= D by FINSEQ_1:def 4;
     assume D is empty;
     then rng f = {} by A3,XBOOLE_1:3;
     then f = {} by RELAT_1:64;
-    hence contradiction by A1,FINSEQ_1:25;
+    hence contradiction by A1,CARD_1:47;
   end;
   then reconsider D as non empty set;
   reconsider f as FinSequence of D;
@@ -1716,10 +1709,10 @@ end;
 
 theorem Th86:
   for D being set, p be FinSequence of D
-  for i be Element of NAT st i < len p holds p|(i+1) = p|i ^ <*p.(i+1)*>
+  for i be Nat st i < len p holds p|(i+1) = p|i ^ <*p.(i+1)*>
 proof
   let D be set, p be FinSequence of D;
-  let i be Element of NAT;
+  let i be Nat;
   assume i < len p;
   then
 A1: i+1 <= len p by NAT_1:13;
@@ -1734,12 +1727,12 @@ end;
 
 theorem
   for D be non empty set for p be FinSequence of D
-  for n be Element of NAT st 1 <= n & n <= len p holds
+  for n be Nat st 1 <= n & n <= len p holds
   p = (p|(n-'1))^<*p.n*>^(p/^n)
 proof
   let D be non empty set;
   let p be FinSequence of D;
-  let n be Element of NAT;
+  let n be Nat;
   assume that
 A1: 1 <= n and
 A2: n <= len p;

@@ -12,27 +12,26 @@ environ
       MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
       FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, CARD_1, NUMBERS, XCMPLX_0, NAT_1,
-      FUNCT_4, FUNCT_1, ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0,
-      WAYBEL_4, FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN,
-      BINARITH, BINARI_3, SERIES_1, EUCLID, XXREAL_0;
+      RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, CARD_1, NUMBERS, FUNCT_4,
+      FUNCT_1, ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4,
+      FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN, BINARITH,
+      BINARI_3, SERIES_1, EUCLID, XXREAL_0, NAT_1;
  constructors SETFAM_1, FINSUB_1, XXREAL_0, NAT_1, CARD_3, FINSEQOP, SERIES_1,
-      BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3, VALUED_1,
-      PARTFUN1, SEQ_1;
+      BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, EQREL_1,
-      MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN, GOBRD13,
-      VALUED_1, FUNCT_2;
+      MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN, GOBRD13;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1, FINSEQ_2,
-      SUBSET_1, XBOOLEAN, VALUED_1;
+      SUBSET_1, XBOOLEAN;
  theorems TARSKI, RELSET_1, ZFMISC_1, EQREL_1, MCART_1, RELAT_1, RELAT_2,
       XBOOLE_0, XBOOLE_1, ORDERS_2, STRUCT_0, ENUMSET1, BAGORDER, WAYBEL_4,
       POLYNOM1, FINSET_1, SUBSET_1, SETFAM_1, MSSUBFAM, TREES_1, FUNCT_1,
       FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, CARD_3, BINARI_3, NAT_1, EUCLID,
       PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1, FUNCT_4, FINSUB_1,
-      PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0, ORDINAL1;
- schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0, FUNCT_1;
+      PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0, ORDINAL1, CARD_2;
+ schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0,
+ CLASSES1;
 
 begin
 
@@ -564,30 +563,31 @@ definition
     deffunc F(set) = (p/.$1) '&' (q/.$1);
     consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j being Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j being Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg n by A1,FINSEQ_1:def 3;
     z in BOOLEAN* by FINSEQ_1:def 11;
     then z in n-tuples_on BOOLEAN by A1;
     then reconsider z as Element of n-tuples_on BOOLEAN;
     take z;
     let i be set;
     assume
-A3: i in Seg n;
+A4: i in Seg n;
     then i is Nat by ORDINAL1:def 13;
-    hence thesis by A2,A3;
+    hence thesis by A2,A4,A3;
   end;
   uniqueness
   proof
     let it1, it2 be Element of n-tuples_on BOOLEAN such that
-A4: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
-A5: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
+A5: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
+A6: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
     now
-A6:   dom it1 = Seg n by Lm1;
+A7:   dom it1 = Seg n by Lm1;
       hence dom it1 = dom it2 by Lm1;
       let x be set;
       assume
-A7:   x in dom it1;
-      hence it1.x = (p/.x) '&' (q/.x) by A4,A6
-        .=it2.x by A5,A6,A7;
+A8:   x in dom it1;
+      hence it1.x = (p/.x) '&' (q/.x) by A5,A7
+        .=it2.x by A6,A7,A8;
     end;
     hence it1 = it2 by FUNCT_1:9;
   end;
@@ -633,13 +633,14 @@ A2: dom (nB '&' p) = dom p by Lm1;
     let x be set;
     assume
 A3: x in dom (nB '&' p);
+    then reconsider k=x as Element of NAT;
 A4: B = 0*n by BINARI_3:26
       .= n |-> 0 by EUCLID:def 4;
 A5: dom B = Seg n by Lm1;
     B.x = 0 by A1,A3,A4,FUNCOP_1:13;
     then
 A6: B/.x = FALSE by A1,A3,A5,PARTFUN1:def 8;
-    nB/.x = 'not' (B/.x) by A1,A3,BINARITH:def 4
+    nB/.x = 'not' (B/.k) by A1,A3,BINARITH:def 4
       .= TRUE by A6;
     hence (nB '&' p).x = TRUE '&' (p/.x) by A1,A3,Def5
       .= p.x by A2,A3,PARTFUN1:def 8;
@@ -1299,14 +1300,8 @@ definition
   mode Full-family of X is full_family Dependency-set of X;
 end;
 
-theorem Th22:
-  for X being finite set, F being Dependency-set of X holds F is finite
-proof
-  let X be finite set, F be Dependency-set of X;
-  bool X is finite by FINSET_1:24;
-  then [:bool X, bool X:] is finite by FINSET_1:19;
-  hence F is finite by FINSET_1:13;
-end;
+theorem
+  for X being finite set, F being Dependency-set of X holds F is finite;
 
 registration
   let X be finite set;
@@ -1316,12 +1311,10 @@ registration
     consider D being (F1) (F2) (F3) (F4) non empty Dependency-set of X;
     reconsider D as Full-family of X by Def15;
     take D;
-    bool X is finite by FINSET_1:24;
-    then [:bool X, bool X:] is finite by FINSET_1:19;
-    hence thesis by FINSET_1:13;
+    thus thesis;
   end;
   cluster -> finite Dependency-set of X;
-  coherence by Th22;
+  coherence;
 end;
 
 registration
@@ -2173,7 +2166,7 @@ A3:   x = [a,b] by Th10;
     end;
     consider f being Function such that
 A4: dom f = F and
-A5: for x being set st x in F holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
+A5: for x being set st x in F holds P[x,f.x] from CLASSES1:sch 1(A2);
 A6: rng f is finite by A4,FINSET_1:26;
     ss c= rng f
     proof
@@ -2434,7 +2427,6 @@ A5: [a, b] = [aa, bb] and
 A6: for c being set st c in B & aa c= c holds bb c= c;
 A7: a = aa & b = bb by A5,ZFMISC_1:33;
     set S = { b' where b' is Element of B': a c= b' };
-A8: bool X is finite by FINSET_1:24;
 A9: S c= bool X
     proof
       let x be set;
@@ -2444,8 +2436,6 @@ A10:  x = b' & a c= b';
       b' in B' & B c= bool X;
       hence x in bool X by A10;
     end;
-    then
-A11: S is finite by A8,FINSET_1:13;
 A12: X in S by A2;
 A13: S c= B
     proof
@@ -2489,7 +2479,7 @@ A19:  [a,mS] in F;
       [a,mS] >= [a,b] by A15,Th15;
       hence contradiction by A4,A18,A19,Th29;
     end;
-    hence x in B by A1,A2,A3,A11,A13,Th1;
+    hence x in B by A1,A2,A3,A13,Th1;
   end;
   hence B = saturated-subsets F by TARSKI:2;
   let G be Full-family of X;
@@ -2991,11 +2981,8 @@ A12:        [a,ic] in F;
       then consider S being Subset-Family of X such that
 A13:  Intersect S = x and
 A14:  S c= G;
-      bool X is finite by FINSET_1:24;
-      then
-A15:  S is finite Subset-Family of X by FINSET_1:13;
       X in ssF by A1, Def4;
-      hence x in ssF by A1,A2,A13,A14,A15,Th1,XBOOLE_1:1;
+      hence x in ssF by A1,A2,A13,A14,Th1,XBOOLE_1:1;
     end;
     hence ssF = H by TARSKI:2;
   end;
@@ -3031,11 +3018,8 @@ A4:     Intersect sx = meet sx by SETFAM_1:def 10;
       then consider S being Subset-Family of X such that
 A5:   Intersect S = x and
 A6:   S c= G;
-      bool X is finite by FINSET_1:24;
-      then
-A7:   S is finite Subset-Family of X by FINSET_1:13;
       X in G by A1,Def4;
-      hence x in G by A1,A5,A6,A7,Th1;
+      hence x in G by A1,A5,A6,Th1;
     end;
     hence G = H by TARSKI:2;
   end;
@@ -3126,11 +3110,9 @@ theorem  :: WWA5:
 proof
   let X be non empty finite set, F be Full-family of X;
   consider G being Subset-Family of X such that
-A1: G is_generator-set_of saturated-subsets F and
+ G is_generator-set_of saturated-subsets F and
 A2: F = X deps_encl_by G by Th45;
-  G c= saturated-subsets F by A1,Def26;
-  then G is finite by FINSET_1:13;
-  then consider H being FinSequence such that
+  consider H being FinSequence such that
 A3: rng H = G and H is one-to-one by FINSEQ_4:73;
   reconsider H as FinSequence of G by A3,FINSEQ_1:def 4;
   reconsider D = X --> INT as non-empty ManySortedSet of X;
@@ -3164,8 +3146,6 @@ A8: G is empty;
     thus the Attributes of BD = X &
     for a being Element of X holds (the Domains of BD).a = INT by FUNCOP_1:13;
     set Ds = Dependency-str BD;
-
-set Dsd = {[A, B] where A, B is Subset of the Attributes of BD: A >|> B, BD};
     now
       let x be set;
       hereby
@@ -3192,7 +3172,7 @@ A10:  x = [A,B] and A >|> B, BD;
   suppose
 A11: G is non empty;
     then reconsider n =len H as non empty Element of NAT
-    by A3,FINSEQ_1:25,RELAT_1:60;
+    by A3,CARD_2:59,RELAT_1:60;
 A12: dom H = Seg n by FINSEQ_1:def 3;
     defpred R[set, Element of n-tuples_on BOOLEAN ] means
     for i being Element of NAT st i in Seg n holds
@@ -3261,8 +3241,6 @@ A22: X --> 0 in R by A7;
     thus the Attributes of BD = X &
     for a being Element of X holds (the Domains of BD).a = INT by FUNCOP_1:13;
     set Ds = Dependency-str BD;
-
-set Dsd = {[A, B] where A, B is Subset of the Attributes of BD: A >|> B, BD};
     now
       let x be set;
       hereby
@@ -3895,7 +3873,6 @@ A11:    x in L;
   take DB = DB-Rel(# X, D, R #);
   thus the Attributes of DB = X;
   set ds = Dependency-str DB;
-  set dox = Dependencies-Order X;
   set ck = { A where A is Subset of X : [A, X] in Maximal_wrt ds };
 A12: [#]X = X;
 

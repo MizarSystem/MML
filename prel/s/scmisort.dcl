@@ -19,19 +19,21 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FRAENKEL"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
+<ArticleID name="AMI_2"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="SCMFSA_4"/>
 <ArticleID name="SCMFSA6A"/>
@@ -46,31 +48,31 @@
 <Adjective nr="89"/>
 </Cluster>
 <Func kind="U" nr="9">
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="271"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="86"/>
-<Func kind="K" nr="246">
+<Func kind="K" nr="265">
 <Func kind="K" nr="86"/>
 </Func>
 </Func>
-<Func kind="K" nr="248"/>
+<Func kind="K" nr="287"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="276">
+<Func kind="K" nr="311">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="24"/>
 <Adjective nr="79">
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="271"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="86"/>
-<Func kind="K" nr="246">
+<Func kind="K" nr="265">
 <Func kind="K" nr="86"/>
 </Func>
 </Func>
-<Func kind="K" nr="248"/>
+<Func kind="K" nr="287"/>
 </Adjective>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
@@ -78,16 +80,16 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="33">
 <Cluster>
 <Adjective nr="85" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="33">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="256">
+<Func kind="K" nr="294">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

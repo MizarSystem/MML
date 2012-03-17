@@ -25,7 +25,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="97"/>
+<Func kind="K" nr="99"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="9">
@@ -43,7 +43,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="166"/>
+<Func kind="K" nr="168"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>

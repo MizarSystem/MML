@@ -9,17 +9,16 @@ environ
  vocabularies ARYTM_1, NAT_1, INT_1, RADIX_1, FINSEQ_1, MIDSP_3, FINSEQ_4,
       GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6, ARYTM;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1, NAT_1, NAT_D,
-      NEWTON, BINARITH, RADIX_1, FINSEQ_4, FINSEQ_1, FUNCT_1, RELSET_1,
-      PARTFUN1, GR_CY_1, RADIX_5;
- constructors REAL_1, NAT_1, NAT_D, PARTFUN1, FINSEQ_4, NEWTON, BINARITH,
-      GR_CY_1, RADIX_5, VALUED_1, SEQ_1;
+      NEWTON, BINARITH, RADIX_1, FINSEQ_1, FUNCT_1, RELSET_1, PARTFUN1,
+      GR_CY_1, RADIX_5;
+ constructors REAL_1, NAT_1, NAT_D, PARTFUN1, NEWTON, BINARITH, GR_CY_1,
+      RADIX_5, SEQ_1;
  registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, NEWTON,
-      XBOOLE_0, VALUED_1, FUNCT_2;
+      XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions VALUED_1;
  theorems RADIX_1, RADIX_2, RADIX_4, RADIX_5, REAL_1, REAL_2, INT_1, INT_3,
       NAT_1, NAT_2, FINSEQ_1, FINSEQ_2, RVSUM_1, NEWTON, PREPOWER, FUNCT_1,
-      FINSEQ_3, XREAL_1, BINARITH, XXREAL_0, NAT_D, ORDINAL1;
+      FINSEQ_3, XREAL_1, BINARITH, XXREAL_0, NAT_D;
  schemes FINSEQ_2, NAT_1;
 
 begin
@@ -201,32 +200,35 @@ definition
     deffunc F1(Nat) = M0Digit(r,$1);
     consider z being FinSequence of k-SD such that
 A1: len z = m+2 and
-A2: for j be Nat st j in Seg (m+2) holds z.j = F1(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F1(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg(m+2) by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
     let i be Nat;
     assume
-A3: i in Seg (m+2);
+A4: i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
-      .= M0Digit(r,i) by A2,A3;
+      .= M0Digit(r,i) by A2,A4,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of (m+2),k-SD such that
-A4: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = M0Digit(r,i) and
-A5: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = M0Digit(r,i);
-A6: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+A5: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = M0Digit(r,i) and
+A6: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = M0Digit(r,i);
+A7: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+    then
+X: dom k1 = Seg (m+2) by FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg (m+2);
-      then k1.j = DigA(k1,j) by RADIX_1:def 3
-        .= M0Digit(r,j) by A4,A7
-        .= DigA(k2,j) by A5,A7
-        .= k2.j by A7,RADIX_1:def 3;
+A8:   j in dom k1;
+      then k1.j = DigA(k1,j) by RADIX_1:def 3,X
+        .= M0Digit(r,j) by A5,A8,X
+        .= DigA(k2,j) by A6,A8,X
+        .= k2.j by A8,RADIX_1:def 3,X;
       hence k1.j = k2.j;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence k1 = k2 by A7,FINSEQ_2:10;
   end;
 end;
 
@@ -263,32 +265,34 @@ definition
     deffunc F(Nat) = MmaxDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1: len z = m+2 and
-A2: for j be Nat st j in Seg (m+2) holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg(m+2) by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
     let i be Nat;
     assume
-A3: i in Seg (m+2);
+A4: i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
-      .= MmaxDigit(r,i) by A2,A3;
+      .= MmaxDigit(r,i) by A2,A4,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of (m+2),k-SD such that
-A4: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MmaxDigit(r,i) and
-A5: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MmaxDigit(r,i);
-A6: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+A5: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MmaxDigit(r,i) and
+A6: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MmaxDigit(r,i);
+A7: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+X: dom k1 = Seg(m+2)  by A7,FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg (m+2);
-      then k1.j = DigA(k1,j) by RADIX_1:def 3
-        .= MmaxDigit(r,j) by A4,A7
-        .= DigA(k2,j) by A5,A7
-        .= k2.j by A7,RADIX_1:def 3;
+A8:   j in dom k1;
+      then k1.j = DigA(k1,j) by RADIX_1:def 3,X
+        .= MmaxDigit(r,j) by A5,A8,X
+        .= DigA(k2,j) by A6,A8,X
+        .= k2.j by A8,RADIX_1:def 3,X;
       hence k1.j = k2.j;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence k1 = k2 by A7,FINSEQ_2:10;
   end;
 end;
 
@@ -334,32 +338,34 @@ definition
     deffunc F(Nat) = MminDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1: len z = m+2 and
-A2: for j be Nat st j in Seg (m+2) holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg(m+2) by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
     let i be Nat;
     assume
-A3: i in Seg (m+2);
+A4: i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
-      .= F(i) by A2,A3;
+      .= F(i) by A2,A4,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of (m+2),k-SD such that
-A4: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MminDigit(r,i) and
-A5: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MminDigit(r,i);
-A6: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+A5: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MminDigit(r,i) and
+A6: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MminDigit(r,i);
+A7: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+X: dom k1 = Seg(m+2)  by A7,FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg (m+2);
-      then k1.j = DigA(k1,j) by RADIX_1:def 3
-        .= MminDigit(r,j) by A4,A7
-        .= DigA(k2,j) by A5,A7
-        .= k2.j by A7,RADIX_1:def 3;
+A8:   j in dom k1;
+      then k1.j = DigA(k1,j) by RADIX_1:def 3,X
+        .= MminDigit(r,j) by A5,A8,X
+        .= DigA(k2,j) by A6,A8,X
+        .= k2.j by A8,RADIX_1:def 3,X;
       hence k1.j = k2.j;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence k1 = k2 by A7,FINSEQ_2:10;
   end;
 end;
 
@@ -740,8 +746,6 @@ proof
   let r be Tuple of (m+2),k-SD;
   assume
 A1: m >= 1 & k >= 2;
-  set MLow = SDDec(Mmin(r));
-  set MHigh = SDDec(Mmax(r));
   set MZero = SDDec(M0(r));
   set R = SDDec(r);
   now per cases;
@@ -789,32 +793,34 @@ definition
     deffunc F(Nat) = MmaskDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1: len z = m+2 and
-A2: for j be Nat st j in Seg (m+2) holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg(m+2) by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
     let i be Nat;
     assume
-A3: i in Seg (m+2);
+A4: i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
-      .= MmaskDigit(r,i) by A2,A3;
+      .= MmaskDigit(r,i) by A2,A4,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of (m+2),k-SD such that
-A4: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MmaskDigit(r,i) and
-A5: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MmaskDigit(r,i);
-A6: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+A5: for i be Nat st i in Seg (m+2) holds DigA(k1,i) = MmaskDigit(r,i) and
+A6: for i be Nat st i in Seg (m+2) holds DigA(k2,i) = MmaskDigit(r,i);
+A7: len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
+X: dom k1 = Seg(m+2)  by A7,FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg (m+2);
-      then k1.j = DigA(k1,j) by RADIX_1:def 3
-        .= MmaskDigit(r,j) by A4,A7
-        .= DigA(k2,j) by A5,A7
-        .= k2.j by A7,RADIX_1:def 3;
+A8:   j in dom k1;
+      then k1.j = DigA(k1,j) by RADIX_1:def 3,X
+        .= MmaskDigit(r,j) by A5,A8,X
+        .= DigA(k2,j) by A6,A8,X
+        .= k2.j by A8,RADIX_1:def 3,X;
       hence k1.j = k2.j;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence k1 = k2 by A7,FINSEQ_2:10;
   end;
 end;
 
@@ -923,32 +929,34 @@ definition
     deffunc F(Nat) = FSDMinDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1: len z = n and
-A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg n by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
     let i be Nat;
     assume
-A3: i in Seg n;
+A4: i in Seg n;
     then DigA(z,i) = z.i by RADIX_1:def 3;
-    hence thesis by A2,A3;
+    hence thesis by A2,A4,A3;
   end;
   uniqueness
   proof
     let k1,k2 be Tuple of n,k-SD such that
-A4: for i be Nat st i in Seg n holds DigA(k1,i) = FSDMinDigit(m,k,i) and
-A5: for i be Nat st i in Seg n holds DigA(k2,i) = FSDMinDigit(m,k,i);
-A6: len k1 = n & len k2 = n by FINSEQ_2:109;
+A5: for i be Nat st i in Seg n holds DigA(k1,i) = FSDMinDigit(m,k,i) and
+A6: for i be Nat st i in Seg n holds DigA(k2,i) = FSDMinDigit(m,k,i);
+A7: len k1 = n & len k2 = n by FINSEQ_2:109;
+X: dom k1 = Seg n by A7,FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg n;
-      then k1.j = DigA(k1,j) by RADIX_1:def 3
-        .= FSDMinDigit(m,k,j) by A4,A7
-        .= DigA(k2,j) by A5,A7
-        .= k2.j by A7,RADIX_1:def 3;
+A8:   j in dom k1;
+      then k1.j = DigA(k1,j) by RADIX_1:def 3,X
+        .= FSDMinDigit(m,k,j) by A5,A8,X
+        .= DigA(k2,j) by A6,A8,X
+        .= k2.j by A8,RADIX_1:def 3,X;
       hence k1.j = k2.j;
     end;
-    hence k1 = k2 by A6,FINSEQ_2:10;
+    hence k1 = k2 by A7,FINSEQ_2:10;
   end;
 end;
 

@@ -23,16 +23,16 @@ environ
       BINOP_2, POLYNOM1, FVSUM_1, UPROOTS, SIN_COS;
  constructors WELLORD2, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_D, FINSEQOP,
       FINSOP_1, RVSUM_1, PREPOWER, POWER, REALSET1, BINARITH, SIN_COS, GROUP_4,
-      MOD_2, MATRIX_2, HAHNBAN1, GRAPH_2, POLYNOM4, POLYNOM5, UPROOTS,
-      VALUED_1, PARTFUN1, SEQ_1;
+      MOD_2, MATRIX_2, HAHNBAN1, GRAPH_2, POLYNOM4, POLYNOM5, UPROOTS, SEQ_1,
+      RECDEF_1, BINOP_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1, MEMBERED,
-      FINSEQ_1, SEQ_1, FINSEQ_2, RVSUM_1, REALSET1, SIN_COS, WSIERP_1,
-      STRUCT_0, GROUP_1, VECTSP_1, COMPLFLD, QUOFIELD, POLYNOM1, POLYNOM3,
-      POLYNOM5, VALUED_0, ALGSTR_0, VALUED_1, FUNCT_2;
+      FINSEQ_1, FINSEQ_2, REALSET1, WSIERP_1, STRUCT_0, GROUP_1, VECTSP_1,
+      COMPLFLD, QUOFIELD, POLYNOM1, POLYNOM3, POLYNOM5, VALUED_0, ALGSTR_0,
+      POWER;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, GROUP_1, XBOOLE_0, BINOP_1, REALSET1, SQUARE_1, HAHNBAN1,
-      POLYNOM3, FINSEQ_2, COMPLEX1, GROUP_4, RLVECT_1, ALGSTR_0, VALUED_1;
+      POLYNOM3, FINSEQ_2, COMPLEX1, GROUP_4, RLVECT_1, ALGSTR_0;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
       RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, VECTSP_1, PREPOWER, COMPTRIG,
       COMPLFLD, BINOP_1, REAL_1, XCMPLX_1, COMPLEX1, HAHNBAN1, SIN_COS, POWER,
@@ -152,7 +152,6 @@ A3: P[0]
 A4: len f = len g and
     for i being Element of NAT st i in dom f holds |. f/.i .| = g.i and
 A5: 0 = len f;
-    reconsider Pf = Product f as Element of COMPLEX by COMPLFLD:def 1;
     f = <*>(the carrier of F_Complex) by A5,FINSEQ_1:32;
     then Product f = 1r by COMPLFLD:10,GROUP_4:11;
     hence |.Product f.|
@@ -171,7 +170,6 @@ A11: f = f1^<*c*> by A10,FINSEQ_2:22;
     consider g1 being FinSequence of REAL, r being Real such that
 A12: g = g1^<*r*> by A8,A10,FINSEQ_2:22;
 A13: Product f = Product f1 * c by A11,GROUP_4:9;
-    reconsider Pf1c = Product f1 * c as Element of COMPLEX by COMPLFLD:def 1;
     reconsider Pf1 = Product f1 as Element of COMPLEX by COMPLFLD:def 1;
     reconsider cc = c as Element of COMPLEX by COMPLFLD:def 1;
 A14: Product g = Product g1 * r by A12,RVSUM_1:126;
@@ -192,7 +190,7 @@ A20:  dom f1 c= dom f by A11,FINSEQ_1:39;
       hence |. f1/.i .| = g.i by A9,A19,A20
         .= g1.i by A12,A17,A19,FINSEQ_1:def 7;
     end;
-    f <> {} by A10,FINSEQ_1:25;
+    f <> {} by A10,CARD_1:47;
     then
 A21: len f in dom f by FINSEQ_5:6;
     then
@@ -217,7 +215,6 @@ theorem Th4:
   holds |.eval(poly_with_roots((s,1)-bag),x).| = Product(r)
 proof
   set FC = F_Complex;
-  set cFC = the carrier of F_Complex;
   let s be non empty finite Subset of FC, x being Element of FC,
   r being FinSequence of REAL such that
 A1: len r = card s and
@@ -266,7 +263,6 @@ A16: i in dom f;
     c in s by A3,A7,A16,FINSEQ_2:13;
     then reconsider c = (canFS(s)).i as Element of FC;
 A17: f.i = eval(<% -c, 1_F_Complex %>,x) by A9,A16;
-    reconsider xc = x, cc = c as Element of COMPLEX by COMPLFLD:def 1;
     f/.i = f.i by A16,PARTFUN1:def 8
       .= -c + x by A17,POLYNOM5:48
       .= x-c;
@@ -380,7 +376,6 @@ theorem Th9:
 proof
   let ps be non empty FinSequence of REAL, x be Real such that
 A1: x >= 1 & for j being Element of NAT st j in dom ps holds ps.j > x;
-A2: len ps <> 0 by FINSEQ_1:25;
   consider ps1 being FinSequence, y being set such that
 A3: ps = ps1^<*y*> by FINSEQ_1:63;
   len ps = len ps1 + len <*y*> by A3,FINSEQ_1:35;
@@ -391,7 +386,7 @@ A4: len ps = len ps1 + 1 by FINSEQ_1:56;
   then {y} c= REAL by FINSEQ_1:55;
   then reconsider y2=y as Real by ZFMISC_1:37;
 A5: ps.(len ps) = y2 by A3,A4,FINSEQ_1:59;
-  len ps in Seg len ps by A2,FINSEQ_1:5;
+  len ps in Seg len ps by FINSEQ_1:5;
   then
 A6: len ps in dom ps by FINSEQ_1:def 3;
   reconsider q=ps1 as FinSequence of REAL by A3,FINSEQ_1:50;
@@ -421,7 +416,7 @@ A13: P[k];
     let f be FinSequence of REAL such that
 A14: len f = k+1 and
 A15: for j being Element of NAT st j in dom f holds f.j > x;
-    f <> {} by A14,FINSEQ_1:25;
+    f <> {} by A14,CARD_1:47;
     then consider v being FinSequence, w being set such that
 A16: f=v^<*w*> by FINSEQ_1:63;
     reconsider f1=v, f2=<*w*> as FinSequence of REAL by A16,FINSEQ_1:50;
@@ -616,7 +611,7 @@ A2: P[0]
     let F be FinSequence of F_Complex such that
 A3: len F = 0 & for i being Element of NAT st i in dom F holds F.i is Integer;
     0-tuples_on the carrier of F_Complex = {{}} & F = {}
-    by A3,COMPUT_1:8,FINSEQ_1:25;
+    by A3,COMPUT_1:8,CARD_2:59;
     then F is Element of 0-tuples_on the carrier of F_Complex by TARSKI:def 1;
     hence thesis by COMPLFLD:9,FVSUM_1:93;
   end;
@@ -627,7 +622,7 @@ A5: P[k];
     let F be FinSequence of F_Complex such that
 A6: len F = k+1 & for i being Element of NAT st i in dom F
     holds F.i is Integer;
-    F <> {} by A6,FINSEQ_1:25;
+    F <> {} by A6,CARD_1:47;
     then consider G being FinSequence, x being set such that
 A7: F = G^<*x*> by FINSEQ_1:63;
     reconsider f1=G as FinSequence of F_Complex by A7,FINSEQ_1:50;
@@ -900,7 +895,6 @@ theorem Th26:
 proof
   let n be non empty Element of NAT, x be Element of F_Complex such that
 A1: x in n-roots_of_1;
-  reconsider z = 1_F_Complex as Element of F_Complex;
 A2: now
     assume x = 0.F_Complex;
     then (power F_Complex).(x,n) <> 1_F_Complex by VECTSP_1:95;
@@ -920,7 +914,7 @@ A6: |.x.| < 1;
     reconsider n' = n as Rational;
     |.x.| #Q n' < 1 by A4,A6,PREPOWER:76;
     then |.x.| |^ n < 1 by A4,PREPOWER:60;
-    hence contradiction by A3,A4,POWER:46;
+    hence contradiction by A3;
   end;
   suppose |.x.| > 1;
     hence contradiction by A3,POWER:40;
@@ -933,7 +927,6 @@ theorem Th27:
   iff ex k being Element of NAT st x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **]
 proof
   let n be non empty Element of NAT, x be Element of F_Complex;
-  reconsider z = 1_F_Complex as Element of F_Complex;
   hereby
     assume
 A1: x in n-roots_of_1;
@@ -962,7 +955,7 @@ A9:     |.x.| < 1;
         reconsider n' = n as Rational;
         |.x.| #Q n' < 1 by A8,A9,PREPOWER:76;
         then |.x.| |^ n < 1 by A8,PREPOWER:60;
-        hence contradiction by A5,A8,POWER:46;
+        hence contradiction by A5;
       end;
       suppose |.x.| > 1;
         hence contradiction by A5,POWER:40;
@@ -970,8 +963,7 @@ A9:     |.x.| < 1;
     end;
     reconsider z = x as Element of COMPLEX by XCMPLX_0:def 2;
     n >= 0+1 by NAT_1:13;
-    then
-A10: |.z.| to_power n = |.z.| |^ n by POWER:47;
+A10: |.z.| to_power n = |.z.| |^ n;
 A11: z|^n = (|.z.| |^ n)*cos (n*Arg z)+(|.z.| |^ n)*sin (n*Arg z)*<i>
     by COMPTRIG:72;
     x is CRoot of n,(1_F_Complex) by A1,Th24;
@@ -979,13 +971,10 @@ A11: z|^n = (|.z.| |^ n)*cos (n*Arg z)+(|.z.| |^ n)*sin (n*Arg z)*<i>
     then
 A12: z |^n = [** 1, 0 **] by COMPLFLD:112;
     then
-A13: cos(n*Arg x) = 1 & sin(n*Arg x) = 0 by A5,A10,A11,COMPLEX1:163;
-    set d = (n*Arg x)*(1/(2*PI));
-    set m = [\d/];
+A13: cos(n*Arg x) = 1 & sin(n*Arg x) = 0 by A5,A11,COMPLEX1:163;
     consider r being real number such that
 A14: r = (2*PI) * (-[\ ((n*Arg x)/(2*PI)) /]) + (n*Arg x) &
     0 <= r & r < (2*PI) by COMPLEX2:2,COMPTRIG:21;
-    set a = ((2*PI) * [\ ((n*Arg x)/(2*PI)) /]);
     0 <= n*Arg x by A3,REAL_2:121;
     then
 A15: 0 <= (n*Arg x)/(2*PI) by COMPTRIG:21,REAL_2:125;
@@ -1006,7 +995,7 @@ A17: cos(n*Arg x) = cos.(2*PI*m + r) by A14,SIN_COS:def 23
       .= sin(r) by SIN_COS:def 21;
     then r = 0 or r = PI by A13,A14,COMPTRIG:33;
     then (n*Arg x)/(n
-    *1) = (2*PI*m)/n by A5,A10,A11,A12,A14,A17,COMPLEX1:163,SIN_COS:82;
+    *1) = (2*PI*m)/n by A5,A11,A12,A14,A17,COMPLEX1:163,SIN_COS:82;
     then ((n/n)*Arg x)/1 = (2*PI*m)/n by XCMPLX_1:84;
     then (Arg x)/1 = (2*PI*m)/n by XCMPLX_1:89;
     hence ex k being Element of NAT st x=[**cos((2*PI*k)/n),sin((2*PI*k)/n)**]
@@ -1039,7 +1028,6 @@ A1: x in n-roots_of_1 and
 A2: y in n-roots_of_1;
   reconsider a=x as Element of F_Complex by COMPLFLD:def 1;
   reconsider b=y as Element of F_Complex by COMPLFLD:def 1;
-  reconsider c = x*y as Element of F_Complex by COMPLFLD:def 1;
   consider i being Element of NAT such that
 A3: a = [** cos((2*PI*i)/n), sin((2*PI*i)/n) **] by A1,Th27;
   consider j being Element of NAT such that
@@ -1099,7 +1087,6 @@ A4: 1 <= a & a <= n by A3,FINSEQ_1:3;
 A5: a-'1 < n by A4,BINARITH:50;
     consider b being Element of NAT such that
 A6: b = a-'1;
-    set yy = [**cos((2*PI*b)/n),sin((2*PI*b)/n)**];
     [**cos((2*PI*b)/n),sin((2*PI*b)/n)**] in X by A5,A6;
     hence thesis by A6;
   end;
@@ -1766,9 +1753,6 @@ A12: i in dom null;
     hence null.i = 0.F_Complex by FUNCOP_1:13;
   end;
   set xn = (power F_Complex).(x,n);
-  reconsider zt = (power F_Complex).(x,n) as Element of COMPLEX
-  by COMPLFLD:def 1;
-  reconsider 1f = -1_F_Complex as Element of COMPLEX by COMPLFLD:def 1;
   len F - 1 + 1 = len F;
   then
 A13: len F-'1+1 = len F by A5,BINARITH:50;
@@ -2163,7 +2147,6 @@ A4: nr1 = {x where x is Element of MultGroup F_Complex :
 A5: now
     let i being Nat;
     assume i in Seg len f;
-    set fi = f|Seg i;
     reconsider fi = f|Seg i as FinSequence of
     (the carrier of Polynom-Ring F_Complex) by FINSEQ_1:23;
     set x = Product fi;
@@ -2364,7 +2347,6 @@ A62:    ord y2 = i+1 by A43,A58;
 A63: for i being Element of NAT st 1 <= i & i <= len f holds R[i]
   from POLYNOM2:sch 4 (A8,A20);
   reconsider sB = MG(n) as finite Subset of F_Complex by A7;
-  set B = (sB,1)-bag;
   now
     let x be set;
     hereby
@@ -2460,7 +2442,7 @@ A19: n in Seg n by A1,FINSEQ_1:3;
 A20: f.n = cyclotomic_poly n by A6,A11;
   reconsider fn = f|Seg n as FinSequence of cPRFC by FINSEQ_1:23;
 A21: f = fn by A10,FINSEQ_2:23
-    .= fm^<*cyclotomic_poly n*> by A6,A8,A9,A19,A20,FINSEQ_5:11;
+    .= fm^<*cyclotomic_poly n*> by A6,A8,A19,A20,FINSEQ_5:11;
   reconsider FC1 = <%1_F_Complex %> as Element of cPRFC by POLYNOM3:def 12;
   <* FC1 *> is FinSequence of cPRFC;
   then reconsider h = fm^<* <%1_F_Complex %> *> as FinSequence of cPRFC
@@ -2578,7 +2560,6 @@ A17:    l+1 in Seg len f;
         per cases;
         suppose
 A18:      l = 0;
-          reconsider l1 = l+1 as non empty Element of NAT;
           reconsider g = f | Seg (l+1) as FinSequence of cPRFC by FINSEQ_1:23;
 
 reconsider p = Product(g) as Polynomial of F_Complex by POLYNOM3:def 12;
@@ -2697,8 +2678,6 @@ A38:              j1i = 0 or j1i >= 0+1 by NAT_1:13;
                   end;
                 end;
                 then reconsider fl1pj1i = fl1p.(j+1-'i) as Integer;
-                reconsider pi1c = pi1, fl1pj1ic = fl1pj1i
-                as Element of COMPLEX by XCMPLX_0:def 2;
                 r.i = p.(i-'1) * fl1p.(j+1-'i) by A36,A37
                   .= pi1 * fl1pj1i;
                 hence r.i is integer;
@@ -2750,10 +2729,7 @@ A49:          for m be Element of NAT st m in dom r
                 assume
 A50:            i in dom r;
                 reconsider pi1 = p.(i-'1) as Integer by A27;
-                set j1i = j+1-'i;
                 reconsider fl1pj1i = fl1p.(j+1-'i) as Integer by A3,A40,A41;
-                reconsider pi1c = pi1, fl1pj1ic = fl1pj1i
-                as Element of COMPLEX by XCMPLX_0:def 2;
                 r.i = p.(i-'1) * fl1p.(j+1-'i) by A49,A50
                   .= pi1 * fl1pj1i;
                 hence r.i is integer;
@@ -2768,7 +2744,7 @@ A50:            i in dom r;
 A51:  for l being Nat st l in Seg len f ex x being set st G[l,x];
       consider F being FinSequence such that dom F = Seg len f and
 A52:  for i being Nat st i in Seg len f holds G[i,F.i] from FINSEQ_1:sch 1
-      (A13,A51);
+      (A51);
       consider g being FinSequence of cPRFC,
       p1 being Polynomial of F_Complex such that
 A53:  g = f | Seg k & p1 = Product(g) & F.k = p1 and
@@ -2865,9 +2841,6 @@ A79:          s.i = r.(1+1+i1) by A74,A78,GRAPH_2:def 1
               i <> 0 & m <> 0 by A73,A76,FINSEQ_3:27;
               then reconsider cpkmi = cp(k).(m-'i) as Integer by A64,NAT_2:11;
               reconsider ppi = p.i as Integer by A54,A55;
-              reconsider cpkmic = cp(k).(m-'i), ppic = p.i
-              as Element of COMPLEX by COMPLFLD:def 1;
-              reconsider ppi = p.i as Integer by A54,A55;
               1 <= i+1 & i+1 <= len s +1 by A77,NAT_1:11,XREAL_1:8;
               then 1+i in dom r by A75,FINSEQ_3:27;
               then r.(1+i) = p.(1+i-'1) * cp(k).(m+1-'(1+i)) by A67
@@ -2953,13 +2926,11 @@ A3: for i being non empty Element of NAT st i in dom f holds
   (i divides n & not i divides ni & i <> n implies f.i = cyclotomic_poly(i));
 A4: len f = n by A2,FINSEQ_1:def 3;
 A5: 0+1 <= n by NAT_1:13;
-  set b = (s,1)-bag;
   defpred P[Nat,set] means
   for fi being FinSequence of cPRFC st fi = f|Seg $1 holds $2 = Product(fi);
 A6: now
     let i being Nat;
     assume i in Seg len f;
-    set fi = f|Seg i;
     reconsider fi = f|Seg i as FinSequence of cPRFC by FINSEQ_1:23;
     set x = Product fi;
     take x; thus P[i,x];
@@ -3150,7 +3121,6 @@ A65:    ord y2 = i+1 by A46,A61;
 A66: for i being Element of NAT st 1 <= i & i <= len f holds R[i]
   from POLYNOM2:sch 4 (A9,A21);
   reconsider sB = MG(n) as finite Subset of F_Complex by A8;
-  set B = (sB,1)-bag;
   now
     let x be set;
     hereby
@@ -3382,7 +3352,6 @@ A7: 0+1 <= len f by NAT_1:13;
 A8: now
       let i be Nat;
       assume i in Seg len f;
-      set fi = f|Seg i;
       reconsider fi = f|Seg i as FinSequence of
       (the carrier of Polynom-Ring F_Complex) by FINSEQ_1:23;
       set x = Product fi;
@@ -3490,7 +3459,6 @@ A1: qc = q and
 A2: j = eval(cyclotomic_poly(n),qc) and
 A3: k = eval(unital_poly(F_Complex, n),qc);
   set jfc = eval(cyclotomic_poly(n),qc);
-  reconsider jc = jfc as Element of COMPLEX by COMPLFLD:def 1;
   per cases by UPROOTS:1;
   suppose n = 1;
     hence thesis by A2,A3,Th52,POLYNOM5:def 4;
@@ -3522,10 +3490,8 @@ A9:   i in dom f;
       end;
     end;
     then reconsider ep = epfc as Integer by A1,A5,Th59;
-    reconsider epc = epfc as Element of COMPLEX by COMPLFLD:def 1;
     set eup1fc = eval(unital_poly(F_Complex,1),qc);
     reconsider eup1 = eup1fc as Integer by A1,Th51;
-    reconsider eup1c = eup1fc as Element of COMPLEX by COMPLFLD:def 1;
     k = eval((unital_poly(F_Complex,1)*'cyclotomic_poly(n)),qc) * epfc
     by A3,A8,POLYNOM4:27;
     then k = eup1fc * jfc * epfc by POLYNOM4:27;
@@ -3609,7 +3575,6 @@ proof
 A1: qc = q;
   let j be Integer such that
 A2: j = eval(cyclotomic_poly(n),qc);
-  reconsider ni=n as non empty Element of NAT;
   consider k,l being Integer;
   consider y1 being Element of F_Complex such that
 A3: y1 = q & eval(unital_poly(F_Complex,n),y1) = (q |^ n) - 1 by Th48;
@@ -3656,11 +3621,7 @@ A4: i = eval(cyclotomic_poly(n),qc);
   1+1 <= qi by A2,INT_1:20;
   then
 A5: 1+1+-1 <= qi +-1 by XREAL_1:9;
-  q in COMPLEX by XCMPLX_0:def 2;
-  then reconsider qc1=q+0*<i> as Element of F_Complex by COMPLFLD:def 1;
   consider ir being Real;
-  ir in COMPLEX by XCMPLX_0:def 2;
-  then reconsider qc2=ir+0*<i> as Element of F_Complex by COMPLFLD:def 1;
   consider S being non empty finite Subset of F_Complex such that
 A6: S = {y where y is Element of cMGFC : ord y = n} and
 A7: cyclotomic_poly(n) = poly_with_roots((S,1)-bag) by Def5;
@@ -3669,66 +3630,67 @@ A7: cyclotomic_poly(n) = poly_with_roots((S,1)-bag) by Def5;
 A8: rng fs = S by UPROOTS:5;
 A9: len fs = card S by UPROOTS:def 1;
   consider nth being Element of MGFC;
-  fs <> {} by A8,FINSEQ_1:27;
+  fs <> {} by A8,RELAT_1:60;
   then
-A10: len fs <> 0 by FINSEQ_1:25;
+A10: len fs <> 0 by CARD_2:59;
   deffunc F(set) = |.qc - fs/.$1.|;
   consider p1 being FinSequence such that
-A11: len p1 = len fs & for i being Nat st i in Seg len fs holds p1.i = F(i)
+A11: len p1 = len fs & for i being Nat st i in dom p1 holds p1.i = F(i)
   from FINSEQ_1:sch 2;
-A12: for i being Element of NAT, c being Element of F_Complex
+A12: dom p1 = Seg len fs by A11,FINSEQ_1:def 3;
+A13: for i being Element of NAT, c being Element of F_Complex
   st i in dom p1 & c = (canFS(S)).i holds p1.i = |.qc - c.|
   proof
     let i be Element of NAT, c being Element of F_Complex such that
-A13: i in dom p1 and
-A14: c = (canFS(S)).i;
-    i in dom fs by A11,A13,FINSEQ_3:31;
+A14: i in dom p1 and
+A15: c = (canFS(S)).i;
+    i in dom fs by A11,A14,FINSEQ_3:31;
     then
-A15: fs/.i = (canFS(S)).i by PARTFUN1:def 8;
-    i in Seg len p1 by A13,FINSEQ_1:def 3;
-    hence thesis by A11,A14,A15;
+A16: fs/.i = (canFS(S)).i by PARTFUN1:def 8;
+    i in Seg len p1 by A14,FINSEQ_1:def 3;
+    hence thesis by A11,A15,A16,A12;
   end;
   for x being set st x in rng p1 holds x in REAL
   proof
     let x be set such that
-A16: x in rng p1;
+A17: x in rng p1;
     consider i being Nat such that
-A17: i in dom p1 and
-A18: p1.i = x by A16,FINSEQ_2:11;
-    i in dom fs by A11,A17,FINSEQ_3:31;
+A18: i in dom p1 and
+A19: p1.i = x by A17,FINSEQ_2:11;
+    i in dom fs by A11,A18,FINSEQ_3:31;
     then fs/.i = (canFS(S)).i by PARTFUN1:def 8;
-    then x = |.qc - fs/.i.| by A12,A17,A18;
+    then x = |.qc - fs/.i.| by A13,A18,A19;
     hence thesis;
   end;
   then rng p1 c= REAL by TARSKI:def 3;
   then reconsider ps=p1 as non empty FinSequence of REAL
-  by A10,A11,FINSEQ_1:25,def 4;
-A19: |.eval(cyclotomic_poly(n),qc).| = Product(ps) by A7,A9,A11,A12,Th4;
+  by A10,A11,CARD_1:47,FINSEQ_1:def 4;
+A20: |.eval(cyclotomic_poly(n),qc).| = Product(ps) by A7,A9,A11,A13,Th4;
   for i being Element of NAT st i in dom ps holds ps.i > q - 1
   proof
     let i be Element of NAT such that
-A20: i in dom ps;
-    i in dom fs by A11,A20,FINSEQ_3:31;
+A21: i in dom ps;
+    i in dom fs by A11,A21,FINSEQ_3:31;
     then fs/.i = (canFS(S)).i by PARTFUN1:def 8;
     then
-A21: ps.i = |.[**q,0**] - fs/.i.| by A3,A12,A20;
-A22: i in dom fs by A11,A20,FINSEQ_3:31;
+A22: ps.i = |.[**q,0**] - fs/.i.| by A3,A13,A21;
+A23: i in dom fs by A11,A21,FINSEQ_3:31;
     then fs.i in rng fs by FUNCT_1:12;
-    then fs/.i in rng fs by A22, PARTFUN1:def 8;
+    then fs/.i in rng fs by A23, PARTFUN1:def 8;
     then consider y being Element of MGFC such that
-A23: fs/.i = y and
-A24: ord y = n by A6,A8;
-    fs/.i in n-roots_of_1 by A23,A24,Th37;
+A24: fs/.i = y and
+A25: ord y = n by A6,A8;
+    fs/.i in n-roots_of_1 by A24,A25,Th37;
     then
-A25: |.fs/.i.| = 1 by Th26;
+A26: |.fs/.i.| = 1 by Th26;
     now
       assume
-A26:  fs/.i = [**1,0**];
+A27:  fs/.i = [**1,0**];
       1_MultGroup F_Complex = [**1, 0**] by Th20,COMPLFLD:10;
-      hence contradiction by A1,A23,A24,A26,GROUP_1:84;
+      hence contradiction by A1,A24,A25,A27,GROUP_1:84;
     end;
-    hence thesis by A2,A21,A25,Th8;
+    hence thesis by A2,A22,A26,Th8;
   end;
-  hence abs(i) > q - 1 by A4,A5,A19,Th9;
+  hence abs(i) > q - 1 by A4,A5,A20,Th9;
 end;
 

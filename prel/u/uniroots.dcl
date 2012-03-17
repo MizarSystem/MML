@@ -15,8 +15,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -123,7 +123,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="427">
+<Func kind="K" nr="429">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -143,7 +143,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="428">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -159,7 +159,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="428">
+<Func kind="K" nr="430">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -182,7 +182,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="430">
+<Func kind="K" nr="432">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

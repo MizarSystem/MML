@@ -12,15 +12,14 @@ environ
       FUNCOP_1, SCMFSA8B, AMI_2, SCMFSA8C, CARD_3, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1,
-      SCMFSA_2, SCMFSA_4, SCMFSA_5, SF_MASTR, SCMFSA6A, SCMFSA6B, SCMFSA6C,
-      SCMFSA7B, SCMFSA8A, SCMFSA8B, BINARITH, XXREAL_0;
- constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SEQ_1, BINARITH,
-      SCM_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A,
-      SCMFSA8B, VALUED_1;
- registrations SUBSET_1, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, TREES_2, AMI_1,
-      SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, ORDINAL1, XBOOLE_0, VALUED_1, FUNCT_2;
+      SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SF_MASTR, SCMFSA6A, SCMFSA6B,
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, BINARITH, XXREAL_0;
+ constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SCMFSA_5, SCMFSA6A,
+      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMNORM;
+ registrations SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FRAENKEL, NUMBERS,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMFSA_2, SCMFSA_4,
+      SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, ORDINAL1,
+      XBOOLE_0, SCMNORM, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -34,13 +33,10 @@ theorem :: SCMFSA8C:2  ::T4425 ** n.t
   for s being State of SCM+FSA,P being initial FinPartState of SCM+FSA
   st P is_pseudo-closed_on s for k being Element of NAT st
   (for n being Element of NAT st n <= k holds
-  IC (Computation (s +* (P +* Start-At insloc 0))).n in dom P)
+  IC  Computation( (s +* (P +* Start-At insloc 0)),n) in dom P)
   holds k < pseudo-LifeSpan(s,P);
 
-canceled 4;
-
-theorem :: SCMFSA8C:7
-  for l being Instruction-Location of SCM+FSA holds l + 0 = l;
+canceled 5;
 
 theorem :: SCMFSA8C:8
   for i being Instruction of SCM+FSA holds IncAddr(i,0) = i;
@@ -53,9 +49,7 @@ theorem :: SCMFSA8C:10
   for P,Q being FinPartState of SCM+FSA st P c= Q holds
   ProgramPart P c= ProgramPart Q;
 
-theorem :: SCMFSA8C:11
-  for P,Q being programmed FinPartState of SCM+FSA,
-  k being Element of NAT st P c= Q holds Shift(P,k) c= Shift(Q,k);
+canceled;
 
 theorem :: SCMFSA8C:12
   for P,Q being FinPartState of SCM+FSA, k being Element of NAT st P c= Q holds
@@ -198,10 +192,10 @@ theorem :: SCMFSA8C:42
   for n being Element of NAT st ProgramPart Relocated(I,n) c= s2 &
   IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations) =
   s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
-  IC (Computation s1).i + n = IC (Computation s2).i &
-  IncAddr(CurInstr ((Computation s1).i),n) = CurInstr ((Computation s2).i) &
-  (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
-  = (Computation s2).i | (Int-Locations \/ FinSeq-Locations);
+  IC  Computation( s1,i) + n = IC  Computation( s2,i) &
+  IncAddr(CurInstr ( Computation( s1,i)),n) = CurInstr ( Computation( s2,i)) &
+   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations)
+  =  Computation( s2,i) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8C:43
   for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
@@ -209,10 +203,10 @@ theorem :: SCMFSA8C:43
   I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
   s1 | (Int-Locations \/ FinSeq-Locations) =
   s2 | (Int-Locations \/ FinSeq-Locations) for i being Element of NAT holds
-  IC (Computation s1).i = IC (Computation s2).i &
-  CurInstr (Computation s1).i = CurInstr (Computation s2).i &
-  (Computation s1).i | (Int-Locations \/ FinSeq-Locations) =
-  (Computation s2).i | (Int-Locations \/ FinSeq-Locations);
+  IC  Computation( s1,i) = IC  Computation( s2,i) &
+  CurInstr  Computation( s1,i) = CurInstr  Computation( s2,i) &
+   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations) =
+   Computation( s2,i) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8C:44
   for s1,s2 being State of SCM+FSA,I being Macro-Instruction st
@@ -269,11 +263,11 @@ theorem :: SCMFSA8C:51
   IC s2 = insloc n & s1 | (Int-Locations \/ FinSeq-Locations)
   = s2 | (Int-Locations \/ FinSeq-Locations) holds
   ((for i being Element of NAT st i < pseudo-LifeSpan(s1,I) holds
-  IncAddr(CurInstr (Computation s1).i,n) = CurInstr (Computation s2).i) &
+  IncAddr(CurInstr  Computation( s1,i),n) = CurInstr  Computation( s2,i)) &
   for i being Element of NAT st i <= pseudo-LifeSpan(s1,I) holds
-  IC (Computation s1).i + n = IC (Computation s2).i &
-  (Computation s1).i | (Int-Locations \/ FinSeq-Locations)
-  = (Computation s2).i | (Int-Locations \/ FinSeq-Locations));
+  IC  Computation( s1,i) + n = IC  Computation( s2,i) &
+   Computation( s1,i) | (Int-Locations \/ FinSeq-Locations)
+  =  Computation( s2,i) | (Int-Locations \/ FinSeq-Locations));
 
 theorem :: SCMFSA8C:52
   for s1,s2 being State of SCM+FSA, I being Macro-Instruction st
@@ -300,13 +294,13 @@ theorem :: SCMFSA8C:55  ::TD2 ** n.t
 
 theorem :: SCMFSA8C:56  ::T6327 ** n.t
   for a being Int-Location, I,J being Macro-Instruction, n being Element of NAT
-  st n < card I + card J + 3 holds insloc n in dom if=0(a,I,J) &
-  if=0(a,I,J).insloc n <> halt SCM+FSA;
+  st n < card I + card J + 3 holds n in dom if=0(a,I,J) &
+  if=0(a,I,J).n <> halt SCM+FSA;
 
 theorem :: SCMFSA8C:57  ::T6327' ** n.t
   for a being Int-Location, I,J being Macro-Instruction, n being Element of NAT
-  st n < card I + card J + 3 holds insloc n in dom if>0(a,I,J) &
-  if>0(a,I,J).insloc n <> halt SCM+FSA;
+  st n < card I + card J + 3 holds n in dom if>0(a,I,J) &
+  if>0(a,I,J).n <> halt SCM+FSA;
 
 theorem :: SCMFSA8C:58
   for s being State of SCM+FSA, I being Macro-Instruction st
@@ -315,12 +309,12 @@ theorem :: SCMFSA8C:58
   LifeSpan (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0)) =
   pseudo-LifeSpan(s,Directed I) &
   (for n being Element of NAT st n < pseudo-LifeSpan(s,Directed I) holds
-  IC (Computation (s +* (I +* Start-At insloc 0))).n =
-  IC (Computation (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))).n) &
+  IC  Computation( (s +* (I +* Start-At insloc 0)),n) =
+  IC  Computation( (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0)),n)) &
   for n being Element of NAT st n <= pseudo-LifeSpan(s,Directed I) holds
-  (Computation (s +* (I +* Start-At insloc 0))).n |
+   Computation( (s +* (I +* Start-At insloc 0)),n) |
   (Int-Locations \/ FinSeq-Locations) =
-  (Computation (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))).n |
+   Computation( (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0)),n) |
   (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8C:59
@@ -328,15 +322,15 @@ theorem :: SCMFSA8C:59
   Directed I is_pseudo-closed_on s holds
   (Result (s +* (I ';' SCM+FSA-Stop +* Start-At insloc 0))) |
   (Int-Locations \/ FinSeq-Locations) =
-  (Computation (s +* (I +* Start-At insloc 0))).
-  pseudo-LifeSpan(s,Directed I) | (Int-Locations \/ FinSeq-Locations);
+   Computation( (s +* (I +* Start-At insloc 0)),
+  pseudo-LifeSpan(s,Directed I)) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8C:60
   for s being State of SCM+FSA, I being Macro-Instruction st
   s.intloc 0 = 1 & Directed I is_pseudo-closed_on s holds
   IExec(I ';' SCM+FSA-Stop,s) | (Int-Locations \/ FinSeq-Locations) =
-  (Computation (s +* (I +* Start-At insloc 0))).
-  pseudo-LifeSpan(s,Directed I) | (Int-Locations \/ FinSeq-Locations);
+   Computation( (s +* (I +* Start-At insloc 0)),
+  pseudo-LifeSpan(s,Directed I)) | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA8C:61  ::TMP20 ** n.t
   for I,J being Macro-Instruction,a being Int-Location holds
@@ -480,29 +474,29 @@ theorem :: SCMFSA8C:87
   for s being State of SCM+FSA, I being Macro-Instruction
   st I is_halting_on Initialize s holds
   (for a being read-write Int-Location holds
-  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).
-  (LifeSpan (Initialize s +* (I +* Start-At insloc 0))).a) &
+  IExec(I,s).a =  Computation(Initialize s +* (I +* Start-At insloc 0),
+  (LifeSpan (Initialize s +* (I +* Start-At insloc 0)))).a) &
   for f being FinSeq-Location holds
-  IExec(I,s).f = (Computation (Initialize s +* (I +* Start-At insloc 0))).
-  (LifeSpan (Initialize s +* (I +* Start-At insloc 0))).f;
+  IExec(I,s).f =  Computation(Initialize s +* (I +* Start-At insloc 0),
+   LifeSpan(Initialize s +* (I +* Start-At insloc 0))).f;
 
 theorem :: SCMFSA8C:88
   for s being State of SCM+FSA, I being parahalting Macro-Instruction,
   a being read-write Int-Location holds
-  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).
-  (LifeSpan (Initialize s +* (I +* Start-At insloc 0))).a;
+  IExec(I,s).a =  Computation(Initialize s +* (I +* Start-At insloc 0),
+  (LifeSpan (Initialize s +* (I +* Start-At insloc 0)))).a;
 
 theorem :: SCMFSA8C:89
   for s being State of SCM+FSA, I being Macro-Instruction,
   a being Int-Location,k being Element of NAT st
   I is_closed_on Initialize s & I is_halting_on Initialize s &
   I does_not_destroy a holds
-  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a;
+  IExec(I,s).a =  Computation( (Initialize s +* (I +* Start-At insloc 0)),k).a;
 
 theorem :: SCMFSA8C:90
   for s being State of SCM+FSA, I being parahalting Macro-Instruction,
   a being Int-Location,k being Element of NAT st I does_not_destroy a holds
-  IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).k.a;
+  IExec(I,s).a =  Computation( (Initialize s +* (I +* Start-At insloc 0)),k).a;
 
 theorem :: SCMFSA8C:91
   for s being State of SCM+FSA, I being parahalting Macro-Instruction,
@@ -513,47 +507,47 @@ theorem :: SCMFSA8C:92
   for s being State of SCM+FSA, I being keeping_0 Macro-Instruction st
   I is_halting_on Initialize s holds IExec(I,s).intloc 0 = 1 &
   for k being Element of NAT holds
-  (Computation (Initialize s +* (I +* Start-At insloc 0))).k.intloc 0 = 1;
+   Computation( (Initialize s +* (I +* Start-At insloc 0)),k).intloc 0 = 1;
 
 theorem :: SCMFSA8C:93
   for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
   st I does_not_destroy a holds for k being Element of NAT
-  st IC (Computation (s +* (I +* Start-At insloc 0))).k in dom I
-  holds (Computation (s +* (I +* Start-At insloc 0))).(k + 1).a =
-  (Computation (s +* (I +* Start-At insloc 0))).k.a;
+  st IC  Computation( (s +* (I +* Start-At insloc 0)),k) in dom I
+  holds  Computation( (s +* (I +* Start-At insloc 0)),k + 1).a =
+   Computation( (s +* (I +* Start-At insloc 0)),k).a;
 
 theorem :: SCMFSA8C:94
   for s being State of SCM+FSA, I being Macro-Instruction, a being Int-Location
   st I does_not_destroy a holds
   for m being Element of NAT st (for n being Element of NAT st n < m holds
-  IC (Computation (s +* (I +* Start-At insloc 0))).n in dom I) holds
+  IC  Computation( (s +* (I +* Start-At insloc 0)),n) in dom I) holds
   for n being Element of NAT st n <= m holds
-  (Computation (s +* (I +* Start-At insloc 0))).n.a = s.a;
+   Computation( (s +* (I +* Start-At insloc 0)),n).a = s.a;
 
 theorem :: SCMFSA8C:95
   for s being State of SCM+FSA, I being good Macro-Instruction
   for m being Element of NAT st (for n being Element of NAT st n < m holds
-  IC (Computation (s +* (I +* Start-At insloc 0))).n in dom I) holds
+  IC  Computation( (s +* (I +* Start-At insloc 0)),n) in dom I) holds
   for n being Element of NAT st n <= m holds
-  (Computation (s +* (I +* Start-At insloc 0))).n.intloc 0 = s.intloc 0;
+   Computation( (s +* (I +* Start-At insloc 0)),n).intloc 0 = s.intloc 0;
 
 theorem :: SCMFSA8C:96
   for s being State of SCM+FSA, I being good Macro-Instruction st
   I is_halting_on Initialize s & I is_closed_on Initialize s holds
   IExec(I,s).intloc 0 = 1 & for k being Element of NAT holds
-  (Computation (Initialize s +* (I +* Start-At insloc 0))).k.intloc 0 = 1;
+   Computation( (Initialize s +* (I +* Start-At insloc 0)),k).intloc 0 = 1;
 
 theorem :: SCMFSA8C:97
   for s being State of SCM+FSA, I being good Macro-Instruction
   st I is_closed_on s holds for k being Element of NAT holds
-  (Computation (s +* (I +* Start-At insloc 0))).k.intloc 0 = s.intloc 0;
+   Computation( (s +* (I +* Start-At insloc 0)),k).intloc 0 = s.intloc 0;
 
 theorem :: SCMFSA8C:98
 
 for s being State of SCM+FSA, I being keeping_0 parahalting Macro-Instruction,
   a being read-write Int-Location st I does_not_destroy a holds
-  (Computation (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
-  Start-At insloc 0))).(LifeSpan (Initialize s +*
+   Computation( (Initialize s +* (I ';' SubFrom(a,intloc 0) +*
+  Start-At insloc 0)),LifeSpan (Initialize s +*
   (I ';' SubFrom(a,intloc 0) +* Start-At insloc 0))).a = s.a - 1;
 
 theorem :: SCMFSA8C:99
@@ -566,10 +560,10 @@ theorem :: SCMFSA8C:100  ::T13'   6B
   s1 | (Int-Locations \/ FinSeq-Locations) =
   s2 | (Int-Locations \/ FinSeq-Locations) holds
   for k being Element of NAT holds
-  (Computation (s1 +* (I +* Start-At insloc 0))).k,
-  (Computation (s2 +* (I +* Start-At insloc 0))).k equal_outside NAT &
-  CurInstr (Computation (s1 +* (I +* Start-At insloc 0))).k =
-  CurInstr (Computation (s2 +* (I +* Start-At insloc 0))).k;
+   Computation( (s1 +* (I +* Start-At insloc 0)),k),
+   Computation( (s2 +* (I +* Start-At insloc 0)),k) equal_outside NAT &
+  CurInstr  Computation( (s1 +* (I +* Start-At insloc 0)),k) =
+  CurInstr  Computation( (s2 +* (I +* Start-At insloc 0)),k);
 
 theorem :: SCMFSA8C:101  ::T14'   6B
   for s1,s2 being State of SCM+FSA,I being Macro-Instruction
@@ -587,7 +581,7 @@ theorem :: SCMFSA8C:103
   for s1,s2 being State of SCM+FSA,I being Macro-Instruction
   st I is_closed_on s1 & I is_halting_on s1 &
   I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-  ex k being Element of NAT st (Computation s1).k,s2 equal_outside NAT holds
+  ex k being Element of NAT st  Computation( s1,k),s2 equal_outside NAT holds
   Result s1,Result s2 equal_outside NAT;
 
 begin :: loop
@@ -630,41 +624,40 @@ theorem :: SCMFSA8C:109
   for s being State of SCM+FSA, I being Macro-Instruction
   st I is_closed_on s & I is_halting_on s
   for m being Element of NAT st m <= LifeSpan (s +* (I +* Start-At insloc 0))
-  holds (Computation (s +* (I +* Start-At insloc 0))).m,
-  (Computation(s +* (loop I +* Start-At insloc 0))).m equal_outside NAT;
+  holds  Computation( (s +* (I +* Start-At insloc 0)),m),
+   Computation((s +* (loop I +* Start-At insloc 0)),m) equal_outside NAT;
 
 theorem :: SCMFSA8C:110
   for s being State of SCM+FSA, I being Macro-Instruction
   st I is_closed_on s & I is_halting_on s
   for m being Element of NAT st m < LifeSpan (s +* (I +* Start-At insloc 0))
-  holds CurInstr (Computation (s +* (I +* Start-At insloc 0))).m =
-  CurInstr (Computation(s +* (loop I +* Start-At insloc 0))).m;
+  holds CurInstr  Computation( (s +* (I +* Start-At insloc 0)),m) =
+  CurInstr  Computation((s +* (loop I +* Start-At insloc 0)),m);
 
 theorem :: SCMFSA8C:111
   for s being State of SCM+FSA, I being Macro-Instruction
   st I is_closed_on s & I is_halting_on s
   for m being Element of NAT st m <= LifeSpan (s +* (I +* Start-At insloc 0))
   holds
-  CurInstr (Computation (s +* (loop I +* Start-At insloc 0))).m <> halt SCM+FSA
-;
+  CurInstr  Computation(s +* (loop I +* Start-At insloc 0),m) <> halt SCM+FSA;
 
 theorem :: SCMFSA8C:112
   for s being State of SCM+FSA, I being Macro-Instruction
   st I is_closed_on s & I is_halting_on s holds
-  CurInstr (Computation (s +* (loop I +* Start-At insloc 0))).
-  LifeSpan (s +* (I +* Start-At insloc 0)) = goto insloc 0;
+  CurInstr  Computation( (s +* (loop I +* Start-At insloc 0)),
+  LifeSpan (s +* (I +* Start-At insloc 0))) = goto insloc 0;
 
 theorem :: SCMFSA8C:113
   for s being State of SCM+FSA, I being paraclosed Macro-Instruction
   st I +* Start-At insloc 0 c= s & s is halting
   for m being Element of NAT st m <= LifeSpan s
-  holds (Computation s).m,(Computation (s +* loop I)).m equal_outside NAT;
+  holds  Computation( s,m), Computation( (s +* loop I),m) equal_outside NAT;
 
 theorem :: SCMFSA8C:114
   for s being State of SCM+FSA, I being parahalting Macro-Instruction
   st Initialized I c= s holds
   for k being Element of NAT st k <= LifeSpan s holds
-  CurInstr (Computation (s +* loop I)).k <> halt SCM+FSA;
+  CurInstr  Computation( (s +* loop I),k) <> halt SCM+FSA;
 
 begin :: Times
 
@@ -723,12 +716,12 @@ theorem :: SCMFSA8C:122
   I ';' SubFrom(a,intloc 0)) +* Start-At insloc 0) &
   k = LifeSpan (s +* (if=0(a,Goto insloc 2,
   I ';' SubFrom(a,intloc 0)) +* Start-At insloc 0)) + 1 &
-  (Computation s2).k.a = s.a - 1 & (Computation s2).k.intloc 0 = 1 &
+   Computation( s2,k).a = s.a - 1 &  Computation( s2,k).intloc 0 = 1 &
   (for b being read-write Int-Location st b <> a holds
-  (Computation s2).k.b = IExec(I,s).b) &
-  (for f being FinSeq-Location holds (Computation s2).k.f = IExec(I,s).f) &
-  IC (Computation s2).k = insloc 0 &
-  for n being Element of NAT st n <= k holds IC (Computation s2).n in
+   Computation( s2,k).b = IExec(I,s).b) &
+  (for f being FinSeq-Location holds  Computation( s2,k).f = IExec(I,s).f) &
+  IC  Computation( s2,k) = insloc 0 &
+  for n being Element of NAT st n <= k holds IC  Computation( s2,n) in
   dom loop if=0(a,Goto insloc 2,I ';' SubFrom(a,intloc 0));
 
 theorem :: SCMFSA8C:123

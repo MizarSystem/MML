@@ -12,18 +12,17 @@ environ
       ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FINSEQ_1, FUNCT_2, STRUCT_0, ALGSTR_0, NAT_1, NAT_D, GROUP_1, GROUP_4,
-      BINOP_1, RLVECT_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2,
-      FINSEQ_3, FINSEQ_4, FINSEQOP, NUMBERS, XCMPLX_0, XXREAL_0;
+      BINOP_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3,
+      FINSEQ_4, FINSEQOP, NUMBERS, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, NAT_1, NAT_D,
-      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1, VECTSP_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1,
-      MATRIX_1, ORDINAL1, ALGSTR_0, VALUED_1;
+      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1, VECTSP_1;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, NAT_1,
+      FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1, MATRIX_1, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, FINSEQ_2, MATRIX_1, TARSKI, ALGSTR_0, VALUED_1;
+ definitions STRUCT_0, FINSEQ_2, MATRIX_1, TARSKI, ALGSTR_0;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, GROUP_1, FUNCT_1, FUNCT_2,
       ZFMISC_1, NAT_1, BINOP_1, FINSUB_1, FINSET_1, GROUP_4, FRAENKEL,
-      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1, NAT_D;
+      MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1, NAT_D, CARD_2;
  schemes BINOP_1, MATRIX_1, XBOOLE_0;
 
 begin :: Some Examples of Matrices
@@ -172,43 +171,45 @@ proof
 end;
 
 definition
-  let n;
-  let K be Field;
-  mode Upper_Triangular_Matrix of n,K -> Matrix of n,K means
-    for i,j st [i,j] in Indices it holds (i>j implies it*(i,j) = 0.K );
+  let n, K;
+  let M be Matrix of n,K;
+  attr M is upper_triangular means
+  for i,j st [i,j] in Indices M & i>j holds M*(i,j) = 0.K;
+  attr M is lower_triangular means
+  for i,j st [i,j] in Indices M & i<j holds M*(i,j) = 0.K;
+end;
+
+registration
+  let n, K;
+  cluster -> upper_triangular lower_triangular Diagonal of n,K;
+  coherence
+  proof
+    let M be Diagonal of n,K;
+    thus M is upper_triangular
+    proof
+    thus for i,j st [i,j] in Indices M & i>j holds M*(i,j) = 0.K
+      by MATRIX_1:def 15;
+    end;
+    thus for i,j st [i,j] in Indices M & i<j holds M*(i,j) = 0.K
+    by MATRIX_1:def 15;
+  end;
+end;
+
+registration
+  let n, K;
+  cluster lower_triangular upper_triangular Matrix of n,K;
   existence
   proof
-    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-    defpred P[Nat,Nat,Element of K] means
-    ($1 <= $2 implies $3= 1_ K) & ($1 > $2 implies $3 = 0.K );
-A1: for i,j st [i,j] in [:Seg n1, Seg n1:]
-    for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
-A2: for i,j st [i,j] in [:Seg n1, Seg n1:] ex x being Element of K st P[i,j,x]
-    proof
-      let i,j;
-      assume [i,j] in [:Seg n1, Seg n1:];
-      (i<=j implies P[i,j,1_ K]) & (i>j implies P[i,j,0.K]);
-      hence thesis;
-    end;
-    consider M being Matrix of n1,K such that
-A3: for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
-    from MATRIX_1:sch 2(A1,A2);
-    reconsider M as Matrix of n,K;
+    consider M being Diagonal of n,K;
     take M;
-    thus thesis by A3;
+    thus thesis;
   end;
 end;
 
 definition
   let n, K;
-  mode Lower_Triangular_Matrix of n,K -> Matrix of n,K means
-    for i,j st [i,j] in Indices it & i<j holds it*(i,j) = 0.K;
-  existence
-  proof
-    consider M being Diagonal of n,K;
-    take M;
-    thus thesis by MATRIX_1:def 15;
-  end;
+  mode Upper_Triangular_Matrix of n,K is upper_triangular Matrix of n,K;
+  mode Lower_Triangular_Matrix of n,K is lower_triangular Matrix of n,K;
 end;
 
 theorem
@@ -233,8 +234,8 @@ A5: for x st x in rng M ex q st x = q & len q = k by MATRIX_1:9;
 A6: ex q st x = q & len q = k by A3,A5;
     now per cases;
       suppose n= 0;
-        then M={} by A1,FINSEQ_1:25;
-        hence len p= m by A3,FINSEQ_1:27;
+        then M={} by A1,CARD_2:59;
+        hence len p= m by A3,RELAT_1:60;
       end;
       suppose n>0;
         then consider s being FinSequence such that
@@ -402,12 +403,13 @@ A18:        N.k=Line(N,k) by Th10;
             then reconsider s=N.k as FinSequence;
 A19:        len s= m by A15,A18,MATRIX_1:def 8;
 A20:        len Del (Line(M,k),i)=m by A7,A17;
+X: dom s = Seg m by FINSEQ_1:def 3,A19;
             now
               let j be Nat;
               assume
-A21:          j in Seg m;
-              then Line(N,k).j=N*(k,j) by A15,MATRIX_1:def 8;
-              hence s.j=Del(Line(M,k),i).j by A16,A17,A18,A21;
+A21:          j in dom s;
+              then Line(N,k).j=N*(k,j) by A15,MATRIX_1:def 8,X;
+              hence s.j=Del(Line(M,k),i).j by A16,A17,A18,A21,X;
             end;
             hence thesis by A19,A20,FINSEQ_2:10;
           end;
@@ -425,15 +427,15 @@ A22: len M1=len M and
 A23: for k st k in dom M holds M1.k=Del(Line(M,k),i) and
 A24: len M2=len M and
 A25: for k st k in dom M holds M2.k=Del(Line(M,k),i);
-A26: now
+X: dom M1 = dom M by A22,FINSEQ_3:31;
+   now
       let k be Nat;
       assume
-A27:  k in dom M;
-      hence M1.k=Del(Line(M,k),i) by A23
-        .=M2.k by A25,A27;
+A27:  k in dom M1;
+      hence M1.k=Del(Line(M,k),i) by A23,X
+        .=M2.k by A25,A27,X;
     end;
-    dom M = Seg len M by FINSEQ_1:def 3;
-    hence M1=M2 by A22,A24,A26,FINSEQ_2:10;
+    hence M1=M2 by A22,A24,FINSEQ_2:10;
   end;
 end;
 
@@ -598,16 +600,18 @@ A3: len Col(M@,i) = len (M@) &
   for j st j in dom (M@) holds Col(M@,i).j = M@*(j,i) by MATRIX_1:def 9;
 A4: len (M@)=width M by MATRIX_1:def 7;
 A5: len Col(M@,i)=width M by A3,MATRIX_1:def 7;
+then
+X: dom Col(M@,i) = Seg width M by FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A6: j in Seg width M;
+A6: j in dom Col(M@,i);
     then
-A7: Line(M,i).j=M*(i,j) by MATRIX_1:def 8;
-A8: [i,j] in Indices M by A1,A6,ZFMISC_1:106;
+A7: Line(M,i).j=M*(i,j) by MATRIX_1:def 8,X;
+A8: [i,j] in Indices M by A1,A6,ZFMISC_1:106,X;
 A9: dom (M@) = Seg len (M@) by FINSEQ_1:def 3;
     thus Line(M,i).j=M@*(j,i) by A7,A8,MATRIX_1:def 7
-      .=Col(M@,i).j by A4,A6,A9,MATRIX_1:def 9;
+      .=Col(M@,i).j by A4,A6,A9,MATRIX_1:def 9,X;
   end;
   hence thesis by A2,A5,FINSEQ_2:10;
 end;
@@ -652,8 +656,8 @@ A2: M.i in rng M by FUNCT_1:def 5;
   rng M c= D* by FINSEQ_1:def 4;
   then reconsider p=M.i as FinSequence of D by A2,FINSEQ_1:def 11;
   rng M <> {} by A1,FUNCT_1:12;
-  then M<> {} by FINSEQ_1:27;
-  then len M <> 0 & len M >= 0 by FINSEQ_1:25;
+  then M<> {} by RELAT_1:60;
+  then len M <> 0 & len M >= 0 by CARD_2:59;
   then M is Matrix of len M,width M,D by MATRIX_1:20;
   then
 A3: len p = width M by A2,MATRIX_1:def 3;
@@ -667,12 +671,14 @@ A4: for j st j in Seg (width M) holds M*(i,j) =p.j
   end;
 A5: len Line(M,i)= width M &
   for j st j in Seg width M holds (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8;
+  then
+X: dom Line(M,i) = Seg width M by FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A6: j in Seg width M;
-    hence (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8
-      .=p.j by A4,A6;
+A6: j in dom Line(M,i);
+    hence (Line(M,i)).j=M*(i,j) by MATRIX_1:def 8,X
+      .=p.j by A4,A6,X;
   end;
   hence thesis by A3,A5,FINSEQ_2:10;
 end;
@@ -1173,7 +1179,7 @@ A1: (len l) mod 2=0 by FINSEQ_1:32;
   by GROUP_4:11;
   then
 A2: idseq n=Product l by Th28;
-  for i st i in dom l ex q st l.i=q & q is_transposition by FINSEQ_1:26;
+  for i st i in dom l ex q st l.i=q & q is_transposition by RELAT_1:60;
   hence thesis by A1,A2,Def15;
 end;
 

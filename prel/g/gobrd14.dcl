@@ -25,6 +25,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -46,7 +47,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="113">
 <Func kind="U" nr="1">
-<Func kind="K" nr="266">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -57,13 +58,13 @@
 <Adjective nr="120"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="266">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="295">
+<Func kind="K" nr="305">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

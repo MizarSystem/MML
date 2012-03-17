@@ -1,0 +1,143 @@
+:: Normal Computers
+::  by Andrzej Trybulec
+::
+:: Received March 3, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies ORDINAL2, AMI_1, ARYTM_1, ORDINAL1, AMI_2, RELOC, FUNCT_1,
+      RELAT_1, FINSET_1, AMI_3;
+ notations TARSKI, SETFAM_1, ORDINAL1, FINSET_1, SUBSET_1, RELAT_1, FUNCT_1,
+      NUMBERS, VALUED_1, XCMPLX_0, NAT_1, BINARITH, STRUCT_0, AMI_1;
+ constructors NAT_1, BINARITH, AMI_1, VALUED_1;
+ registrations ORDINAL1, XREAL_0, CARD_3, FRAENKEL, AMI_1, RELSET_1, XBOOLE_0,
+      SETFAM_1;
+ requirements BOOLE, SUBSET, ARITHM;
+ definitions NAT_1, TARSKI, XBOOLE_0, AMI_1;
+ theorems AMI_1, XBOOLE_1, FUNCT_2, GRFUNC_1, CARD_3, FINSET_1, VALUED_1;
+ schemes FRAENKEL;
+
+begin :: The instruction locations equal to NAT, 2008.02.06, A.T.
+
+registration let N be set, S be AMI-Struct over NAT,N;
+ cluster -> natural Instruction-Location of S;
+ coherence;
+end;
+
+notation let N be set, S be AMI-Struct over NAT,N;
+ let l be Instruction-Location of S;
+ synonym Next l for succ l;
+end;
+
+definition let N be set, S be AMI-Struct over NAT,N;
+  let l be Instruction-Location of S;
+  redefine func Next l -> Instruction-Location of S;
+  coherence by AMI_1:def 4;
+end;
+
+definition let N be set, S be AMI-Struct over NAT,N;
+  let l be Instruction-Location of S, k be Nat;
+  redefine func l + k -> Instruction-Location of S;
+  coherence
+   proof
+     l+k in NAT;
+    hence thesis by AMI_1:def 4;
+   end;
+  func l -' k -> Instruction-Location of S;
+  coherence by AMI_1:def 4;
+end;
+
+reserve m,j for Element of NAT;
+
+definition
+ let N be with_non-empty_elements set,
+ S be definite (stored-program non empty AMI-Struct over NAT,N);
+  let p be FinPartState of S , k be Element of NAT;
+  redefine func Shift(p,k) -> FinPartState of S;
+  coherence
+  proof
+    set A = { m+k:m in dom p }, B = { m:m in dom p};
+    set f = Shift(p,k);
+A3: dom f = A by VALUED_1:def 12;
+A5: A c= NAT
+    proof
+      let x be set;
+      assume x in A;
+      then ex m st x = m+k & m in dom p;
+      hence x in NAT;
+    end;
+    NAT c= the carrier of S by AMI_1:def 3;
+    then A c= the carrier of S by A5,XBOOLE_1:1;
+    then
+A6: dom f c= dom the Object-Kind of S by A3,FUNCT_2:def 1;
+X:  for x being set st x in dom f holds f.x in (the Object-Kind of S). x
+    proof
+      let x be set;
+      assume
+A7:   x in dom f;
+      then x in A by VALUED_1:def 12;
+      then consider m such that
+A8:   x = m+k and
+X2:   m in dom p;
+A9:   f.x = p.m by A8,VALUED_1:def 12,X2;
+      reconsider y = x as Instruction-Location of S by A3,A5,A7,AMI_1:def 4;
+A10:  (the Object-Kind of S).y = ObjectKind y
+        .= the Instructions of S by AMI_1:def 14;
+      consider s being State of S such that
+A11:  p c= s by AMI_1:82;
+      consider j such that
+A12:  m+k = j+k and
+A13:  j in dom p by A3,A7,A8;
+      reconsider m as Instruction-Location of S by AMI_1:def 4;
+      s.m in the Instructions of S;
+      hence f.x in (the Object-Kind of S).x by A9,A10,A11,A12,A13,GRFUNC_1:8;
+    end;
+A14: dom p is finite by FINSET_1:29;
+    deffunc F(Element of NAT) = $1;
+A15: {F(j) : j in dom p} is finite from FRAENKEL:sch 21(A14);
+A20: B is finite by A15;
+    deffunc F(Element of NAT) = $1+k;
+A21: {F(m):m in B} is finite from FRAENKEL:sch 21(A20);
+    defpred T[Element of NAT] means $1 in dom p;
+    {F(m): m in B } = A
+    proof
+      thus {F(m): m in B } c= A
+      proof
+        let x be set;
+        assume x in {F(m): m in B };
+        then consider m3 being Element of NAT such that
+A22:    x = F(m3) & m3 in { m5 where m5 is Element of NAT:T[m5]};
+        consider m4 being Element of NAT such that
+A23:    m4 = m3 & T[m4] by A22;
+        thus thesis by A22,A23;
+      end;
+      let x be set;
+      assume x in A;
+      then consider m2 being Element of NAT such that
+A24:  x = F(m2) & m2 in dom p;
+      m2 in B by A24;
+      hence thesis by A24;
+    end;
+    hence thesis by A3,A21,FINSET_1:29,A6,CARD_3:def 9,X;
+  end;
+end;
+
+registration
+ let N be with_non-empty_elements set,
+ S be definite (stored-program non empty AMI-Struct over NAT,N);
+  let p be programmed FinPartState of S , k be Element of NAT;
+  cluster Shift(p,k) -> programmed FinPartState of S;
+  coherence
+  proof
+A3: dom Shift(p,k) = { m+k:m in dom p } by VALUED_1:def 12;
+    Shift(p,k) is programmed
+    proof
+      let x be set;
+      assume x in dom Shift(p,k);
+      then ex m st x = m+k & m in dom p by A3;
+      hence x in NAT;
+    end;
+    hence Shift(p,k) is programmed FinPartState of S;
+  end;
+end;

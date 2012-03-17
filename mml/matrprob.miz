@@ -10,23 +10,23 @@ environ
  vocabularies ARYTM, FINSEQ_1, SQUARE_1, BOOLE, FUNCT_1, RELAT_1, MEASURE6,
       MATRIXC1, RVSUM_1, EUCLID_2, MATRIX_2, FINSEQ_2, INCSP_1, QC_LANG1,
       MATRIXR1, CAT_3, SEQ_1, RLVECT_1, MATRIX_1, MATRPROB, TREES_1, VECTSP_1;
- notations TARSKI, SUBSET_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, VALUED_1, SEQ_1, ZFMISC_1,
-      GROUP_1, BINOP_1, EUCLID_2, RLVECT_1, BINOP_2, VECTSP_1, FUNCT_2,
-      RVSUM_1, FVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, STRUCT_0,
-      MATRLIN, MATRIXR1, MATRIX_3, MATRIX_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
+      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1, GROUP_1, BINOP_1,
+      EUCLID_2, RLVECT_1, BINOP_2, VECTSP_1, FUNCT_2, RVSUM_1, FVSUM_1,
+      FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, STRUCT_0, MATRLIN, MATRIXR1,
+      MATRIX_3, MATRIX_1;
  constructors XXREAL_0, REAL_1, NAT_1, BINOP_2, NEWTON, FVSUM_1, MATRIX_3,
-      MATRLIN, EUCLID_2, MATRIXR1, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1, MATRIX_1,
-      MATRLIN, VALUED_0, VALUED_1, FUNCT_2;
+      MATRLIN, EUCLID_2, MATRIXR1, SEQ_1;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, NAT_1,
+      MEMBERED, FINSEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1, MATRIX_1, MATRLIN,
+      VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, EUCLID_2, FINSEQ_2, VALUED_1;
+ definitions TARSKI, EUCLID_2, FINSEQ_2;
  theorems FUNCT_1, SEQ_1, NAT_1, TARSKI, ZFMISC_1, REAL_2, MATRIX_3, MATRIX_2,
       XREAL_1, GOBOARD1, BINOP_2, FVSUM_1, VECTSP_1, RLVECT_1, MATRLIN,
       XBOOLE_0, FINSEQ_1, PROB_3, MATRIX_1, GOBRD13, FINSEQ_2, FUNCOP_1,
       RFINSEQ, FINSEQ_3, RVSUM_1, EUCLID_2, MATRIXR1, ORDINAL1, XREAL_0,
-      MATRIXC1, XXREAL_0, STRUCT_0;
+      MATRIXC1, XXREAL_0, STRUCT_0, CARD_1, CARD_2, RELAT_1;
  schemes FUNCT_1, FINSEQ_2, PARTFUN1, SEQ_1, NAT_1, MATRIX_1;
 
 begin
@@ -51,8 +51,8 @@ A1:   g.n in rng g by FUNCT_1:12;
       hence thesis;
     end;
     suppose not n in dom g;
-      then g.n = {} by FUNCT_1:def 4;
-      hence thesis by FINSEQ_1:29;
+      then g.n = <*>d by FUNCT_1:def 4;
+      hence thesis;
     end;
   end;
 end;
@@ -237,8 +237,8 @@ proof
 A1: for i be Nat st i in dom e holds 0 <= e.i;
   per cases;
   suppose len e = 0;
-    then e = {} by FINSEQ_1:25;
-    hence thesis by FINSEQ_1:26;
+    then e = {} by CARD_2:59;
+    hence thesis by RELAT_1:60;
   end;
   suppose len e <> 0;
     then
@@ -751,25 +751,24 @@ definition
   proof
     deffunc f(Nat) = Sum(e.$1);
     consider e1 being FinSequence of REAL such that
-A1: len e1 = len e & for k be Nat st k in Seg len e holds e1.k = f(k)
+A1: len e1 = len e & for k be Nat st k in dom e1 holds e1.k = f(k)
     from FINSEQ_2:sch 1;
     take e1;
-    Seg len e1 = dom e1 by FINSEQ_1:def 3;
-    hence thesis by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
     let e1,e2 being FinSequence of REAL such that
-A2: len e1 = len e & for k st k in dom e1 holds e1.k = Sum(e.k) and
-A3: len e2 = len e & for k st k in dom e2 holds e2.k = Sum(e.k);
+A3: len e1 = len e & for k st k in dom e1 holds e1.k = Sum(e.k) and
+A4: len e2 = len e & for k st k in dom e2 holds e2.k = Sum(e.k);
     dom e1 = dom e2 & (for k be Nat st k in dom e1 holds e1.k = e2.k)
     proof thus
-A4:   dom e1 = Seg len e by A2,FINSEQ_1:def 3
-        .= dom e2 by A3,FINSEQ_1:def 3;
+A5:   dom e1 = Seg len e by A3,FINSEQ_1:def 3
+        .= dom e2 by A4,FINSEQ_1:def 3;
       let k be Nat such that
-A5:   k in dom e1;
-      thus e1.k = Sum(e.k) by A2,A5
-        .= e2.k by A3,A4,A5;
+A6:   k in dom e1;
+      thus e1.k = Sum(e.k) by A3,A6
+        .= e2.k by A4,A5,A6;
     end;
     hence thesis by FINSEQ_1:17;
   end;
@@ -809,25 +808,27 @@ definition
   proof
     deffunc f(Nat) = Sum Col(m,$1);
     consider e being FinSequence of REAL such that
-A1: len e = width m & for k be Nat st k in Seg width m holds e.k = f(k)
+A1: len e = width m & for k be Nat st k in dom e holds e.k = f(k)
     from FINSEQ_2:sch 1;
-    thus thesis by A1;
+    dom e = Seg width m by A1,FINSEQ_1:def 3;
+    hence thesis by A1;
   end;
   uniqueness
   proof
     let p1,p2 being FinSequence of REAL such that
-A2: len p1 = width m &
+A3: len p1 = width m &
     for i be Nat st i in Seg width m holds p1.i = Sum Col(m,i) and
-A3: len p2 = width m &
+A4: len p2 = width m &
     for i be Nat st i in Seg width m holds p2.i = Sum Col(m,i);
-    for j be Nat st j in Seg width m holds p1.j=p2.j
+X: dom p1 = Seg width m by A3,FINSEQ_1:def 3;
+    for j be Nat st j in dom p1 holds p1.j=p2.j
     proof
       let j be Nat;
-      assume j in Seg width m;
-      then p1.j = Sum Col(m,j) & p2.j = Sum Col(m,j) by A2,A3;
+      assume j in dom p1;
+      then p1.j = Sum Col(m,j) & p2.j = Sum Col(m,j) by A3,A4,X;
       hence thesis;
     end;
-    hence thesis by A2,A3,FINSEQ_2:10;
+    hence thesis by A3,A4,FINSEQ_2:10;
   end;
 end;
 
@@ -945,13 +946,12 @@ A1: len Sum(M1^M2) = len (M1^M2) by Def1
     .= len Sum M1 + len M2 by Def1
     .= len Sum M1 + len Sum M2 by Def1
     .= len ((Sum M1)^(Sum M2)) by FINSEQ_1:35;
+X: dom Sum(M1^M2) = Seg len Sum(M1^M2) by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A2: i in Seg len Sum(M1^M2);
-    then
-A3: i in dom Sum(M1^M2) by FINSEQ_1:def 3;
-    i in Seg len (M1^M2) by A2,Def1;
+A2: i in dom Sum(M1^M2);
+    i in Seg len (M1^M2) by A2,Def1,X;
     then
 A4: i in dom (M1^M2) by FINSEQ_1:def 3;
     now
@@ -961,7 +961,7 @@ A5:     i in dom M1;
         len M1 = len Sum M1 by Def1;
         then
 A6:     dom M1 = dom Sum M1 by FINSEQ_3:31;
-        thus Sum(M1^M2).i = Sum ((M1^M2).i) by A3,Def1
+        thus Sum(M1^M2).i = Sum ((M1^M2).i) by A2,Def1
           .= Sum (M1.i) by A5,FINSEQ_1:def 7
           .= (Sum M1).i by A5,A6,Def1
           .= ((Sum M1)^(Sum M2)).i by A5,A6,FINSEQ_1:def 7;
@@ -973,7 +973,7 @@ A8:     len M1 = len Sum M1 by Def1;
         len M2 = len Sum M2 by Def1;
         then
 A9:     dom M2 = dom Sum M2 by FINSEQ_3:31;
-        thus Sum(M1^M2).i = Sum ((M1^M2).i) by A3,Def1
+        thus Sum(M1^M2).i = Sum ((M1^M2).i) by A2,Def1
           .= Sum (M2.n) by A7,FINSEQ_1:def 7
           .= (Sum M2).n by A7,A9,Def1
           .= ((Sum M1)^(Sum M2)).i by A7,A8,A9,FINSEQ_1:def 7;
@@ -1000,15 +1000,15 @@ A2: len (Sum M1 + Sum M2) = len (addreal.:(Sum M1,Sum M2)) by RVSUM_1:def 4
     .= min(len M1,len M2) by Def1
     .= len (M1 ^^ M2) by A1,FINSEQ_1:8
     .= len Sum(M1 ^^ M2) by Def1;
+X: dom (Sum M1 + Sum M2) = Seg len (Sum M1 + Sum M2) by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A3: i in Seg len (Sum M1 + Sum M2);
-    then i in dom (Sum M1 + Sum M2) by FINSEQ_1:def 3;
+A3: i in dom (Sum M1 + Sum M2);
     then
 A4: i in dom (addreal.:(Sum M1, Sum M2)) by RVSUM_1:def 4;
-A5: i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3;
-    i in Seg len (M1 ^^ M2) by A2,A3,Def1;
+A5: i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3,X;
+    i in Seg len (M1 ^^ M2) by A2,A3,Def1,X;
     then
 A6: i in dom (M1 ^^ M2) by FINSEQ_1:def 3;
     then i in dom M1 /\ dom M2 by MATRLIN:def 2;
@@ -1017,7 +1017,6 @@ A6: i in dom (M1 ^^ M2) by FINSEQ_1:def 3;
     then i in Seg len Sum M1 & i in Seg len Sum M2 by Def1;
     then
 A7: i in dom Sum M1 & i in dom Sum M2 by FINSEQ_1:def 3;
-    reconsider m1 = M1.i,m2 = M2.i as FinSequence;
 A8: ((M1.i) ^ (M2.i)) = (M1 ^^ M2).i by A6,MATRLIN:def 2;
     thus (Sum M1 + Sum M2).i = (addreal.:(Sum M1,Sum M2)).i by RVSUM_1:def 4
       .= (addreal).((Sum M1).i,(Sum M2).i) by A4,FUNCOP_1:28
@@ -1076,13 +1075,14 @@ A5:   SumAll <*p*> = SumAll (<*p*>@);
       then
 A6:   len (<*p*> ^^ <*<*x*>*>) = 1 by FINSEQ_1:8
         .= len <*p^<*x*>*> by FINSEQ_1:56;
+X: dom <*p^<*x*>*> = Seg len <*p^<*x*>*> by FINSEQ_1:def 3;
 A7:   now
         let i be Nat;
         assume
-A8:     i in Seg len <*p^<*x*>*>;
+A8:     i in dom <*p^<*x*>*>;
         then
-A9:     i in dom (<*p*> ^^ <*<*x*>*>) by A6,FINSEQ_1:def 3;
-        i in { 1 } by A8,FINSEQ_1:4,57;
+A9:     i in dom (<*p*> ^^ <*<*x*>*>) by A6,FINSEQ_1:def 3,X;
+        i in { 1 } by A8,FINSEQ_1:4,57,X;
         then
 A10:    i = 1 by TARSKI:def 1;
         reconsider M1 = <*p*>.i,M2 = <*<*x*>*>.i as FinSequence;
@@ -1094,7 +1094,7 @@ A10:    i = 1 by TARSKI:def 1;
       per cases;
       suppose len p = 0;
         then
-A11:    p = {} by FINSEQ_1:25;
+A11:    p = {} by CARD_2:59;
         hence SumAll <*p^<*x*>*> = SumAll <*<*x*>*> by FINSEQ_1:47
           .= SumAll (<*<*x*>*>@) by MATRLIN:19
           .= SumAll (<*p^<*x*>*>@) by A11,FINSEQ_1:47;
@@ -1985,7 +1985,7 @@ registration
     consider p be FinSequence of REAL such that
 A1: len p = n & (for i st i in dom p holds p.i >= 0) & Sum p = 1 by Th52;
     take p;
-    thus thesis by A1,Def5,FINSEQ_1:25;
+    thus thesis by A1,Def5,CARD_1:47;
   end;
 end;
 
@@ -2481,7 +2481,7 @@ A5:   Sum Line(M,i) = Sum (M.i) by A2,MATRIX_2:18
       for k st k in dom M holds Sum (M.k) = 1 by A1,Def6,Def9;
       then for j st j in dom Line(M,i) holds Line(M,i).j >=0 by A2,Lm2;
       hence Line(M,i) is non empty ProbFinS FinSequence of REAL
-      by A3,A4,A5,Def5,FINSEQ_1:25;
+      by A3,A4,A5,Def5,CARD_1:47;
     end;
   end;
   assume
@@ -2565,7 +2565,7 @@ A7:   i in Seg len M by A3,A6,FINSEQ_1:def 3;
     end;
     Sum e = SumAll M
       .= 1 by Def7;
-    hence thesis by A2,A4,A5,Def5,FINSEQ_1:25;
+    hence thesis by A2,A4,A5,Def5,CARD_1:47;
   end;
   cluster Column_Marginal M -> non empty ProbFinS;
   coherence
@@ -2589,7 +2589,7 @@ A14:  i in Seg width M by A10,A13,FINSEQ_1:def 3;
     end;
     Sum e = SumAll M by Th29
       .= 1 by Def7;
-    hence thesis by A8,A11,A12,Def5,FINSEQ_1:25;
+    hence thesis by A8,A11,A12,Def5,CARD_1:47;
   end;
 end;
 
@@ -2666,7 +2666,7 @@ A16: for k be Nat st k in dom mlt(p,Col(P,i))
       .= Sum(mlt(p,Col(P,i)));
     hence thesis by A16,RVSUM_1:114;
   end;
-  hence thesis by A2,A3,A11,Def5,FINSEQ_1:25;
+  hence thesis by A2,A3,A11,Def5,CARD_1:47;
 end;
 
 theorem

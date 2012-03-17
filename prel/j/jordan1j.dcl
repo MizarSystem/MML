@@ -13,13 +13,13 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -30,6 +30,7 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -47,7 +48,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="310">
+<Func kind="K" nr="320">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -58,8 +59,8 @@
 <Adjective nr="5"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17"/>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 <Adjective nr="27" value="false"/>
 <Adjective nr="126"/>
 <Adjective nr="127"/>
@@ -76,18 +77,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="328">
+<Func kind="K" nr="338">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -95,7 +96,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 </Registrations>

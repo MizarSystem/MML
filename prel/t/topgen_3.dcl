@@ -21,60 +21,6 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPGEN_3"/>
 </Signature>
-<RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</RCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="65"/>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="64"/>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="62"/>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="10">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

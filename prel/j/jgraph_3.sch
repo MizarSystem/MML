@@ -30,6 +30,7 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 </Signature>
@@ -40,7 +41,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -53,7 +54,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="273">
+<Func kind="K" nr="283">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -62,17 +63,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="273">
+<Func kind="K" nr="283">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -86,7 +87,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -99,7 +100,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="273">
+<Func kind="K" nr="283">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -108,7 +109,7 @@
 </Fraenkel>
 <Func kind="K" nr="35">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -116,7 +117,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -128,17 +129,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="231">
+<Func kind="K" nr="232">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="273">
+<Func kind="K" nr="283">
 <Num nr="2"/>
 </Func>
 </Func>

@@ -9,12 +9,12 @@ environ
  vocabularies MCART_1, FUNCT_1, INT_1, NAT_1, ARYTM_3, ARYTM_1, POWER, GROUP_1,
       FINSEQ_1, RELAT_1, PRE_FF, FINSEQ_4, ARYTM;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XCMPLX_0,
-      XREAL_0, INT_1, NAT_1, NAT_D, MCART_1, DOMAIN_1, POWER, FUNCT_1,
-      PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, NEWTON;
- constructors FUNCT_2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, MEMBERED,
-      PARTFUN1, NEWTON, POWER, SEQ_1;
+      XREAL_0, INT_1, NAT_D, MCART_1, DOMAIN_1, POWER, FUNCT_1,
+      PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, SEQ_1, NAT_1, NEWTON;
+ constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, MEMBERED, PARTFUN1,
+      NEWTON, POWER, SEQ_1;
  registrations SUBSET_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, XBOOLE_0, FUNCT_2;
+      MEMBERED, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems TARSKI, AXIOMS, REAL_1, NAT_1, INT_1, MCART_1, POWER, NEWTON,
       FINSEQ_1, FINSEQ_4, CARD_5, FINSEQ_3, XCMPLX_1, XREAL_1, XXREAL_0,
@@ -47,7 +47,7 @@ definition
   func Fib (n) -> Element of NAT means
   :Def1:
   ex fib being Function of NAT, [:NAT, NAT:] st
-  it = (fib.n)`1 & fib.0 = [0,1] & for n being Element of NAT
+  it = (fib.n)`1 & fib.0 = [0,1] & for n being Nat
   holds fib.(n+1) = [ (fib.n)`2, (fib.n)`1 + (fib.n)`2 ];
   existence
   proof
@@ -55,9 +55,9 @@ definition
     deffunc F(set,Element of [: NAT, NAT :]) = [ $2`2, $2`1 + $2`2 ];
     consider fib being Function of NAT, [: NAT, NAT :] such that
 A1: fib.0 = [0,1] and
-A2: for n being Element of NAT
+A2: for n being Nat
     holds fib.(n+1) = F(n,(fib.n)qua Element of [: NAT, NAT :])
-    from RECDEF_1:sch 4;
+    from NAT_1:sch 12;
     take (fib.n qua Element of [:NAT, NAT:])`1, fib;
     thus thesis by A1,A2;
   end;
@@ -67,13 +67,15 @@ A2: for n being Element of NAT
     deffunc F(set,Element of [:NAT,NAT:]) = [$2`2, $2`1+$2`2];
     given fib1 being Function of NAT, [:NAT, NAT:] such that
 A3: it1 = (fib1.n)`1 and
-A4: fib1.0 = [0,1] & for n being Element of NAT holds
+A4: fib1.0 = [0,1] and
+B4: for n being Nat holds
     fib1.(n+1) = F(n,(fib1.n)qua Element of [: NAT, NAT :]);
     given fib2 being Function of NAT, [:NAT, NAT:] such that
 A5: it2 = (fib2.n)`1 and
-A6: fib2.0 = [0,1] & for n being Element of NAT holds
+A6: fib2.0 = [0,1] and
+B6: for n being Nat holds
     fib2.(n+1) = F(n,(fib2.n)qua Element of [: NAT, NAT :]);
-    fib1 = fib2 from RECDEF_1:sch 12(A4,A6);
+    fib1 = fib2 from NAT_1:sch 16(A4,B4,A6,B6);
     hence thesis by A3,A5;
   end;
 end;
@@ -85,9 +87,9 @@ proof
   deffunc F(set,Element of [: NAT, NAT :]) = [ $2`2, $2`1 + $2`2 ];
   consider fib being Function of NAT, [: NAT, NAT :] such that
 A1: fib.0 = [0,1] and
-A2: for n being Element of NAT
+A2: for n being Nat
   holds fib.(n+1) = F(n,(fib.n)qua Element of [: NAT, NAT :])
-  from RECDEF_1:sch 4;
+  from NAT_1:sch 12;
   thus Fib (0) = [0, 1]`1 by A1,A2,Def1
     .= 0 by MCART_1:7;
   thus Fib (1) = (fib.(0+1))`1 by A1,A2,Def1
@@ -289,10 +291,10 @@ A5: 2*n < 2 to_power k by A2,POWER:def 3;
   then 0 <= k by INT_1:47;
   then reconsider k as Element of NAT by INT_1:16;
   reconsider 2tpk = 2 |^ k as Element of NAT;
-  2*n < 2tpk by A5,POWER:48;
+  2*n < 2tpk by A5,POWER:46;
   then
 A6: 2*n + 1 <= 2tpk by NAT_1:13;
-  2tpk <= 2*n + 1 by A4,POWER:48;
+  2tpk <= 2*n + 1 by A4,POWER:46;
   then
 A7: 2tpk = 2*n+1 by A6,XXREAL_0:1;
   per cases by NAT_1:6;
@@ -375,9 +377,9 @@ definition
 end;
 
 ::  Why does the above work?
-defpred P[Element of NAT,FinSequence of NAT,set] means
-(for k being Element of NAT st $1+2 = 2*k holds $3 = $2^<*$2/.k*>) &
-(for k being Element of NAT st $1+2 = 2*k+1
+defpred P[Nat,FinSequence of NAT,set] means
+(for k being Nat st $1+2 = 2*k holds $3 = $2^<*$2/.k*>) &
+(for k being Nat st $1+2 = 2*k+1
 holds $3 = $2^<*($2/.k)+($2/.(k+1))*>);
 
 Lm1: for n be Element of NAT for x be Element of NAT*
@@ -391,27 +393,27 @@ A1: n+2 mod 2 = 0 & y = x^<*x/.(n+2 div 2)*> or
   reconsider y as Element of NAT* by FINSEQ_1:def 11;
   take y;
   hereby
-    let k be Element of NAT;
+    let k be Nat;
     assume n+2 = 2*k;
     then n+2 = 2*k+0;
     hence y = x^<*x/.k*> by A1,NAT_D:def 1,def 2;
   end;
   hereby
-    let k be Element of NAT;
+    let k be Nat;
     assume n+2 = 2*k+1;
     then n+2 mod 2 = 1 & n+2 div 2 = k by NAT_D:def 1,def 2;
     hence y = x^<*(x/.k)+(x/.(k+1))*> by A1;
   end;
 end;
-defpred Q[Element of NAT,FinSequence of NAT,set] means
+defpred Q[Nat,FinSequence of NAT,set] means
 (for k being Element of NAT st $1+2 = 2*k holds $3 = $2^<*$2/.k*>) &
 (for k being Element of NAT st $1+2 = 2*k+1
 holds $3 = $2^<*($2/.k)+($2/.(k+1))*>);
 
-Lm2: for n be Element of NAT,x,y1,y2 be Element of NAT*
+Lm2: for n be Nat,x,y1,y2 be Element of NAT*
 st Q[n,x,y1] & Q[n,x,y2] holds y1 = y2
 proof
-  let n be Element of NAT, x, y1, y2 be Element of NAT*;
+  let n be Nat, x, y1, y2 be Element of NAT*;
   assume
 A1: (for k being Element of NAT st n+2 = 2*k holds y1 = x^<*x/.k*>) &
   (for k being Element of NAT st n+2 = 2*k+1
@@ -432,8 +434,13 @@ consider fusc being Function of NAT, NAT* such that
 
 Lm3: fusc.0 = single1 and
 
-Lm4: for n being Element of NAT holds P[n,fusc.n,fusc.(n+1)]
+Lm4': for n being Element of NAT holds P[n,fusc.n,fusc.(n+1)]
 from RECDEF_1:sch 2(Lm1);
+Lm4: for n being Nat holds P[n,fusc.n qua Element of NAT*,fusc.(n+1)]
+   proof let n be Nat;
+    n in NAT by ORDINAL1:def 13;
+    hence thesis by Lm4';
+   end;
 
 definition
   let n be Nat;
@@ -442,11 +449,14 @@ definition
   it = 0 if n = 0 otherwise
   ex l being Element of NAT, fusc being Function of NAT, NAT* st
   l+1 = n & it = (fusc.l)/.n & fusc.0 = <*1*> &
-  for n being Element of NAT holds
-  (for k being Element of NAT st n+2 = 2*k holds
-  fusc.(n+1) = fusc.n^<*(fusc.n)/.k*>) &
-  (for k being Element of NAT st n+2 = 2*k+1 holds
-  fusc.(n+1) = fusc.n^<*((fusc.n)/.k)+((fusc.n)/.(k+1))*>);
+  for n being Nat holds
+  (for k being Nat st n+2 = 2*k holds
+  fusc.(n+1) = (fusc.n qua Element of NAT*)^
+  <*(fusc.n qua Element of NAT*)/.k*>) &
+  (for k being Nat st n+2 = 2*k+1 holds
+  fusc.(n+1) =
+   (fusc.n qua Element of NAT*)^<*((fusc.n qua Element of NAT*)/.k)+
+   ((fusc.n qua Element of NAT*)/.(k+1))*>);
   consistency;
   existence
   proof
@@ -454,28 +464,49 @@ definition
     assume n <> 0;
     then consider l being Nat such that
 A1: n = l+1 by NAT_1:6;
-    reconsider l as Element of NAT by ORDINAL1:def 13;
-    take ((fusc.l)/.n), l, fusc; thus thesis by A1,Lm3,Lm4;
+     reconsider l' = l as Element of NAT by ORDINAL1:def 13;
+     reconsider IT = ((fusc.l qua Element of NAT*)/.n) as Element of NAT;
+    take IT, l';
+    thus thesis by A1,Lm3,Lm4;
   end;
   uniqueness
   proof
     let n1, n2 be Element of NAT;
     thus n = 0 & n1 = 0 & n2 = 0 implies n1 = n2;
     assume n <> 0;
-    assume
-A2: not thesis;
-    then consider l1 being Element of NAT, fusc1 being Function of NAT, NAT*
-    such that
-A3: l1+1 = n & n1 = (fusc1.l1)/.n and
-A4: fusc1.0 = single1 &
-    for n being Element of NAT holds Q[n,fusc1.n,fusc1.(n+1)];
-    consider l2 being Element of NAT, fusc2 being Function of NAT, NAT*
-    such that
-A5: l2+1 = n & n2 = (fusc2.l2)/.n and
-A6: fusc2.0 = single1 &
-    for n being Element of NAT holds Q[n,fusc2.n,fusc2.(n+1)] by A2;
-    fusc1 = fusc2 from RECDEF_1:sch 10(A4,A6,Lm2);
-    hence contradiction by A2,A3,A5;
+    given l1 being Element of NAT, fusc1 being Function of NAT, NAT* such that
+G1:  l1+1 = n and
+G2: n1 = (fusc1.l1)/.n and
+G3: fusc1.0 = <*1*> and
+G4:  for n being Nat holds
+  (for k being Nat st n+2 = 2*k holds
+  fusc1.(n+1) = (fusc1.n qua Element of NAT*)^
+  <*(fusc1.n qua Element of NAT*)/.k*>) &
+  (for k being Nat st n+2 = 2*k+1 holds
+  fusc1.(n+1) =
+   (fusc1.n qua Element of NAT*)^<*((fusc1.n qua Element of NAT*)/.k)+
+   ((fusc1.n qua Element of NAT*)/.(k+1))*>);
+A3: l1+1 = n & n1 = (fusc1.l1)/.n by G1,G2;
+A4: fusc1.0 = single1 by G3;
+B4: for n being Nat holds Q[n,fusc1.n qua Element of NAT*,fusc1.(n+1)]
+          by G4;
+    given l2 being Element of NAT, fusc2 being Function of NAT, NAT* such that
+G1:  l2+1 = n and
+G2: n2 = (fusc2.l2)/.n and
+G3: fusc2.0 = <*1*> and
+G4:  for n being Nat holds
+  (for k being Nat st n+2 = 2*k holds
+  fusc2.(n+1) = (fusc2.n qua Element of NAT*)^
+  <*(fusc2.n qua Element of NAT*)/.k*>) &
+  (for k being Nat st n+2 = 2*k+1 holds
+  fusc2.(n+1) =
+   (fusc2.n qua Element of NAT*)^<*((fusc2.n qua Element of NAT*)/.k)+
+   ((fusc2.n qua Element of NAT*)/.(k+1))*>);
+A5: l2+1 = n & n2 = (fusc2.l2)/.n by G1,G2;
+A6: fusc2.0 = single1 by G3;
+B6: for n being Nat holds Q[n,fusc2.n qua Element of NAT*,fusc2.(n+1)] by G4;
+    fusc1 = fusc2 from NAT_1:sch 14(A4,B4,A6,B6,Lm2);
+   hence thesis by A3,A5;
   end;
 end;
 

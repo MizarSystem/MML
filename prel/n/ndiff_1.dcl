@@ -13,14 +13,14 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -68,7 +68,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -112,7 +112,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -182,7 +182,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -202,14 +202,14 @@
 <Func kind="K" nr="64"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -238,7 +238,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -255,7 +255,7 @@
 <Func kind="K" nr="64"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -263,7 +263,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="23">
+<Adjective nr="17">
 <Func kind="K" nr="64"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>

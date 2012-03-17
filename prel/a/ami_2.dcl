@@ -38,13 +38,6 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="61"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
 <Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>

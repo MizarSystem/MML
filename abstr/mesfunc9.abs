@@ -1,0 +1,418 @@
+:: The Lebesgue Monotone Convergence Theorem
+::  by Noboru Endou , Keiko Narita and Yasunari Shidama
+:: 
+:: Received March 18, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, MEASURE1, RELAT_1, FUNCT_1, ORDINAL2, COMPLEX1, SEQ_1,
+      SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, TARSKI, ARYTM_3,
+      SQUARE_1, RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC5,
+      SUPINF_1, SUPINF_2, FUNCT_3, SEQFUNC, TDGROUP, SERIES_1, RFUNCT_3,
+      SETFAM_1, GRCAT_1, MESFUNC8, MESFUNC9, FUNCT_2, SEQM_3, RINFSUP1,
+      FINSET_1, MEASURE2, VALUED_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, COMPLEX1, REAL_1, XXREAL_0, VALUED_0, RELAT_1, FUNCT_1,
+      RELSET_1, BINOP_1, FUNCT_2, PARTFUN1, NAT_1, MEMBERED, PROB_1, SETFAM_1,
+      SUPINF_1, SUPINF_2, SEQ_1, KURATO_2, MEASURE1, MEASURE2, EXTREAL1,
+      MESFUNC1, MEASURE6, MESFUNC2, LIMFUNC1, SEQFUNC, MESFUNC5, MESFUNC8,
+      RINFSUP2;
+ constructors REAL_1, NAT_1, EXTREAL1, EXTREAL2, BINOP_1, SEQ_1, NEWTON,
+      MESFUNC1, MEASURE2, MESFUNC3, MEASURE6, MESFUNC2, LIMFUNC1, KURATO_2,
+      MESFUNC5, MESFUNC8, RINFSUP2, VALUED_0;
+ registrations SUBSET_1, NAT_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1,
+      STRUCT_0, MEASURE1, FUNCT_2, RELAT_1, XBOOLE_0, NUMBERS, XXREAL_0,
+      XCMPLX_0, MESFUNC8, FUNCT_1, VALUED_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve X for non empty set,
+        S for SigmaField of X,
+        M for sigma_Measure of S,
+        E,E1 for Element of S,
+        F,G for Functional_Sequence of X,ExtREAL,
+        I for ExtREAL_sequence,
+        f,g for PartFunc of X,ExtREAL,
+        seq, seq1, seq2 for ExtREAL_sequence,
+        p for ext-real number,
+        n,m for Nat,
+        x for Element of X,
+        z,D for set;
+
+theorem :: MESFUNC9:1
+f is without+infty & g is without+infty implies
+  dom(f+g)=dom f /\ dom g;
+
+theorem :: MESFUNC9:2
+f is without+infty & g is without-infty implies
+  dom(f-g)=dom f /\ dom g;
+
+theorem :: MESFUNC9:3
+f is without-infty & g is without-infty implies f+g is without-infty;
+
+theorem :: MESFUNC9:4
+f is without+infty & g is without+infty implies f+g is without+infty;
+
+theorem :: MESFUNC9:5
+f is without-infty & g is without+infty implies f-g is without-infty;
+
+theorem :: MESFUNC9:6
+f is without+infty & g is without-infty implies f-g is without+infty;
+
+theorem :: MESFUNC9:7
+( seq is convergent_to_finite_number implies
+     ex g be real number st lim seq = g &
+      for p be real number st 0<p
+        ex n be Nat st
+         for m be Nat st n<=m holds |. seq.m - lim seq .| < p ) &
+( seq is convergent_to_+infty implies lim seq = +infty ) &
+( seq is convergent_to_-infty implies lim seq = -infty );
+
+theorem :: MESFUNC9:8
+seq is nonnegative implies not seq is convergent_to_-infty;
+
+theorem :: MESFUNC9:9
+seq is convergent & (for k be Nat holds seq.k <= p) implies lim seq <= p;
+
+theorem :: MESFUNC9:10
+seq is convergent & (for k be Nat holds p <= seq.k) implies p <= lim seq;
+
+theorem :: MESFUNC9:11
+seq1 is convergent & seq2 is convergent &
+seq1 is nonnegative & seq2 is nonnegative &
+(for k be Nat holds seq.k = seq1.k + seq2.k)
+implies
+  seq is nonnegative & seq is convergent &
+  lim seq = lim seq1 + lim seq2;
+
+theorem :: MESFUNC9:12
+(for n be Nat holds G.n = (F.n)|D) & x in D implies
+ (F#x is convergent_to_+infty implies G#x is convergent_to_+infty) &
+ (F#x is convergent_to_-infty implies G#x is convergent_to_-infty) &
+ (F#x is convergent_to_finite_number
+   implies G#x is convergent_to_finite_number) &
+ (F#x is convergent implies G#x is convergent);
+
+theorem :: MESFUNC9:13
+E = dom f & f is_measurable_on E & f is nonnegative &
+M.(E /\ eq_dom(f,+infty)) <> 0 implies
+  Integral(M,f) = +infty;
+
+theorem :: MESFUNC9:14 :: MESFUNC7:24
+Integral(M,chi(E,X)) = M.E & Integral(M,(chi(E,X))|E) = M.E;
+
+theorem :: MESFUNC9:15
+E c= dom f & E c= dom g & f is_measurable_on E & g is_measurable_on E &
+f is nonnegative & (for x be Element of X st x in E holds f.x <= g.x)
+implies
+  Integral(M,f|E) <= Integral(M,g|E);
+
+begin :: Selected Properties of Extended Real Sequence
+
+definition :: to be removed in next MML version                                                                          let f be ext-real-valued Function;
+  let f be ext-real-valued Function, x be set;
+  redefine func f.x -> Element of ExtREAL;
+end;
+
+definition let s be ext-real-valued Function;
+ func Partial_Sums s -> ExtREAL_sequence means
+:: MESFUNC9:def 1
+ it.0=s.0 & for n be Nat holds it.(n+1) = it.n + s.(n+1);
+end;
+
+definition let s be ext-real-valued Function;
+ attr s is summable means
+:: MESFUNC9:def 2
+ Partial_Sums s is convergent;
+end;
+
+definition let s be ext-real-valued Function;
+ func Sum s -> R_eal equals
+:: MESFUNC9:def 3
+   lim Partial_Sums s;
+end;
+
+theorem :: MESFUNC9:16
+seq is nonnegative implies
+ Partial_Sums seq is nonnegative & Partial_Sums seq is non-decreasing;
+
+theorem :: MESFUNC9:17
+(for n be Nat holds 0 < seq.n) implies
+ (for m be Nat holds 0 < (Partial_Sums seq).m);
+
+theorem :: MESFUNC9:18
+F is with_the_same_dom & (for n be Nat holds G.n = (F.n)|D) implies
+  G is with_the_same_dom;
+
+theorem :: MESFUNC9:19
+D c= dom(F.0) &
+(for n be Nat holds G.n = (F.n)|D) &
+(for x be Element of X st x in D holds F#x is convergent) implies
+  (lim F)|D = lim G;
+
+theorem :: MESFUNC9:20
+F is with_the_same_dom & E c= dom(F.0) &
+(for m be Nat holds F.m is_measurable_on E & G.m= (F.m)|E)
+implies
+ G.n is_measurable_on E;
+
+theorem :: MESFUNC9:21
+E c= dom(F.0) & G is with_the_same_dom &
+(for x be Element of X st x in E holds F#x is summable) &
+(for n be Nat holds G.n= (F.n)|E)
+implies
+   for x be Element of X st x in E holds G#x is summable;
+
+begin :: Partial Sums of Functional Sequence and their Properties
+
+definition let X be non empty set, F be Functional_Sequence of X,ExtREAL;
+func Partial_Sums F -> Functional_Sequence of X,ExtREAL means
+:: MESFUNC9:def 4
+ it.0 = F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
+end;
+
+definition let X be set, F be Functional_Sequence of X,ExtREAL;
+ attr F is additive means
+:: MESFUNC9:def 5
+ for n,m be Nat st n <> m holds
+  for x be set st x in dom(F.n) /\ dom(F.m) holds
+   (F.n).x <> +infty or (F.m).x <> -infty;
+end;
+
+theorem :: MESFUNC9:22
+z in dom((Partial_Sums F).n) & m <= n implies
+      z in dom((Partial_Sums F).m) & z in dom(F.m);
+
+theorem :: MESFUNC9:23
+z in dom((Partial_Sums F).n) & ((Partial_Sums F).n).z = +infty implies
+   ex m be Nat st m <= n & (F.m).z = +infty;
+
+theorem :: MESFUNC9:24
+F is additive & z in dom((Partial_Sums F).n) &
+((Partial_Sums F).n).z = +infty & m <= n implies
+ (F.m).z <> -infty;
+
+theorem :: MESFUNC9:25
+z in dom((Partial_Sums F).n) & ((Partial_Sums F).n).z = -infty implies
+   ex m be Nat st m <= n & (F.m).z = -infty;
+
+theorem :: MESFUNC9:26
+F is additive & z in dom((Partial_Sums F).n) &
+((Partial_Sums F).n).z = -infty & m <= n implies
+  (F.m).z <> +infty;
+
+theorem :: MESFUNC9:27
+F is additive implies
+  ((Partial_Sums F).n)"{-infty} /\ (F.(n+1))"{+infty} = {} &
+  ((Partial_Sums F).n)"{+infty} /\ (F.(n+1))"{-infty} = {};
+
+theorem :: MESFUNC9:28
+F is additive implies
+   dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k <= n};
+
+theorem :: MESFUNC9:29
+F is additive & F is with_the_same_dom implies
+  dom((Partial_Sums F).n) = dom(F.0);
+
+theorem :: MESFUNC9:30
+(for n be Nat holds F.n is nonnegative) implies F is additive;
+
+theorem :: MESFUNC9:31
+F is additive & (for n holds G.n = (F.n)|D) implies G is additive;
+
+theorem :: MESFUNC9:32
+F is additive & F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n;
+
+theorem :: MESFUNC9:33
+ F is additive & F is with_the_same_dom & D c= dom(F.0) & x in D implies
+  ( Partial_Sums(F#x) is convergent_to_finite_number
+      iff (Partial_Sums F)#x is convergent_to_finite_number )
+  &
+  ( Partial_Sums(F#x) is convergent_to_+infty
+      iff (Partial_Sums F)#x is convergent_to_+infty )
+  &
+  ( Partial_Sums(F#x) is convergent_to_-infty
+      iff (Partial_Sums F)#x is convergent_to_-infty )
+  &
+  ( Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent );
+
+theorem :: MESFUNC9:34
+F is additive & F is with_the_same_dom & dom f c= dom(F.0) &
+x in dom f & F#x is summable & f.x = Sum(F#x) implies
+   f.x = lim((Partial_Sums F)#x);
+
+theorem :: MESFUNC9:35
+(for m be Nat holds F.m is_simple_func_in S) implies
+  F is additive & (Partial_Sums F).n is_simple_func_in S;
+
+theorem :: MESFUNC9:36
+(for m be Nat holds F.m is nonnegative)
+implies (Partial_Sums F).n is nonnegative;
+
+theorem :: MESFUNC9:37
+F is with_the_same_dom & x in dom(F.0) &
+(for k be Nat holds F.k is nonnegative) & n <= m implies
+  ((Partial_Sums F).n).x <= ((Partial_Sums F).m).x;
+
+theorem :: MESFUNC9:38
+F is with_the_same_dom & x in dom(F.0) &
+(for m be Nat holds F.m is nonnegative) implies
+  (Partial_Sums F)#x is non-decreasing &
+  (Partial_Sums F)#x is convergent;
+
+theorem :: MESFUNC9:39
+(for m be Nat holds F.m is without-infty) implies
+ (Partial_Sums F).n is without-infty;
+
+theorem :: MESFUNC9:40
+(for m be Nat holds F.m is without+infty) implies
+ (Partial_Sums F).n is without+infty;
+
+theorem :: MESFUNC9:41
+(for n be Nat holds F.n is_measurable_on E & F.n is without-infty)
+implies
+(Partial_Sums F).m is_measurable_on E;
+
+theorem :: MESFUNC9:42
+F is additive & F is with_the_same_dom &
+G is additive & G is with_the_same_dom & x in dom(F.0) /\ dom(G.0) &
+(for k be Nat, y be Element of X st
+   y in dom(F.0) /\ dom(G.0) holds (F.k).y <= (G.k).y)
+implies ((Partial_Sums F).n).x <= ((Partial_Sums G).n).x;
+
+theorem :: MESFUNC9:43
+for X be non empty set, F be Functional_Sequence of X,ExtREAL st
+ F is additive & F is with_the_same_dom holds
+  Partial_Sums F is with_the_same_dom;
+
+theorem :: MESFUNC9:44
+dom(F.0) = E & F is additive & F is with_the_same_dom &
+(for n be Nat holds (Partial_Sums F).n is_measurable_on E) &
+(for x be Element of X st x in E holds F#x is summable)
+  implies lim(Partial_Sums F) is_measurable_on E;
+
+theorem :: MESFUNC9:45
+(for n be Nat holds F.n is_integrable_on M)
+implies
+ (for m be Nat holds (Partial_Sums F).m is_integrable_on M);
+
+theorem :: MESFUNC9:46
+E = dom(F.0) & F is additive & F is with_the_same_dom &
+(for n be Nat holds
+  F.n is_measurable_on E & F.n is nonnegative & I.n = Integral(M,F.n))
+implies
+   Integral(M,(Partial_Sums F).m) = (Partial_Sums I).m;
+
+begin
+
+theorem :: MESFUNC9:47
+E c= dom f & f is nonnegative & f is_measurable_on E & F is additive &
+(for n holds F.n is_simple_func_in S & F.n is nonnegative & E c= dom(F.n)) &
+(for x st x in E holds F#x is summable & f.x = Sum(F#x))
+implies
+  ex I be ExtREAL_sequence st
+   (for n holds I.n = Integral(M,(F.n)|E)) &
+   I is summable & Integral(M,f|E) = Sum I;
+
+theorem :: MESFUNC9:48
+E c= dom f & f is nonnegative & f is_measurable_on E
+implies
+ ex g be Functional_Sequence of X,ExtREAL st
+  g is additive &
+  (for n be Nat holds
+    g.n is_simple_func_in S & g.n is nonnegative & g.n is_measurable_on E) &
+  (for x be Element of X st x in E holds g#x is summable & f.x = Sum(g#x)) &
+  ex I be ExtREAL_sequence st
+   (for n be Nat holds I.n = Integral(M,(g.n)|E)) &
+   I is summable & Integral(M,f|E) = Sum I;
+
+registration
+let X be non empty set;
+cluster additive with_the_same_dom Functional_Sequence of X,ExtREAL;
+end;
+
+definition let C,D,X be non empty set,
+  F be Function of [:C,D:],PFuncs(X,ExtREAL);
+  let c be Element of C, d be Element of D;
+ redefine func F.(c,d) -> PartFunc of X,ExtREAL;
+end;
+
+definition let C,D,X be non empty set;
+  let F be Function of [:C,D:],X; let c be Element of C;
+ func ProjMap1(F,c) -> Function of D,X means
+:: MESFUNC9:def 6
+  for d be Element of D holds it.d = F.(c,d);
+end;
+
+definition let C,D,X be non empty set;
+  let F be Function of [:C,D:],X; let d be Element of D;
+ func ProjMap2(F,d) -> Function of C,X means
+:: MESFUNC9:def 7
+  for c be Element of C holds it.c = F.(c,d);
+end;
+
+definition let X,Y be set,
+  F be Function of [:NAT,NAT:],PFuncs(X,Y), n be Nat;
+ func ProjMap1(F,n) -> Functional_Sequence of X,Y means
+:: MESFUNC9:def 8
+  for m be Nat holds it.m = F.(n,m);
+
+ func ProjMap2(F,n) -> Functional_Sequence of X,Y means
+:: MESFUNC9:def 9
+  for m be Nat holds it.m = F.(m,n);
+end;
+
+definition let X be non empty set,
+ F be Function of NAT,Funcs(NAT,PFuncs(X,ExtREAL)),
+ n be Nat;
+redefine func F.n -> Functional_Sequence of X,ExtREAL;
+end;
+
+theorem :: MESFUNC9:49
+E = dom(F.0) & F is with_the_same_dom &
+(for n be Nat holds F.n is nonnegative & F.n is_measurable_on E )
+implies
+  ex FF be Function of NAT,Funcs(NAT,PFuncs(X,ExtREAL)) st
+   for n be Nat holds
+    (for m be Nat holds
+       (FF.n).m is_simple_func_in S & dom((FF.n).m) = dom(F.n)) &
+    (for m be Nat holds (FF.n).m is nonnegative) &
+    (for j,k be Nat st j <= k holds
+      for x be Element of X st x in dom(F.n) holds
+         ((FF.n).j).x <= ((FF.n).k).x) &
+    (for x be Element of X st x in dom(F.n) holds
+      (FF.n)#x is convergent & lim((FF.n)#x) = (F.n).x);
+
+theorem :: MESFUNC9:50
+E = dom(F.0) & F is additive & F is with_the_same_dom &
+(for n be Nat holds F.n is_measurable_on E & F.n is nonnegative)
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds
+    I.n = Integral(M,F.n) &
+    Integral(M,(Partial_Sums F).n) = (Partial_Sums I).n);
+
+theorem :: MESFUNC9:51
+E c= dom(F.0) & F is additive & F is with_the_same_dom &
+(for n be Nat holds F.n is nonnegative & F.n is_measurable_on E) &
+(for x be Element of X st x in E holds F#x is summable)
+implies
+  ex I be ExtREAL_sequence st
+   (for n be Nat holds I.n = Integral(M,(F.n)|E)) &
+   I is summable & Integral(M,(lim(Partial_Sums F))|E) = Sum I;
+
+:: Lebesgue Monotone Convergence Theorem
+theorem :: MESFUNC9:52
+E = dom(F.0) & F.0 is nonnegative & F is with_the_same_dom &
+(for n be Nat holds F.n is_measurable_on E) &
+(for n,m be Nat st n <=m holds
+  for x be Element of X st x in E holds (F.n).x <= (F.m).x ) &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+  ex I be ExtREAL_sequence st
+   (for n be Nat holds I.n = Integral(M,F.n)) &
+   I is convergent & Integral(M,lim F) = lim I;

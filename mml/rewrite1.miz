@@ -10,16 +10,17 @@ environ
       PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1, MONOID_0,
       ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FINSEQ_1, PBOOLE, FINSEQ_5;
+      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FINSEQ_1, FUNCOP_1, PBOOLE,
+      FINSEQ_5;
  constructors SETFAM_1, WELLORD1, XXREAL_0, XREAL_0, NAT_1, EQREL_1, PBOOLE,
-      FINSEQ_5, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1, NAT_1,
-      XXREAL_0, XREAL_0, FINSEQ_1, VALUED_1, FUNCT_2;
+      FINSEQ_5;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1, NAT_1, XXREAL_0,
+      XREAL_0, FINSEQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, RELAT_1, RELAT_2, WELLORD1, VALUED_1;
+ definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, WELLORD1, RELAT_1, RELAT_2, FUNCT_1,
       FUNCOP_1, PBOOLE, FINSEQ_1, TREES_1, FINSEQ_5, EQREL_1, WELLORD2,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, CARD_1, CARD_2;
  schemes NAT_1, RELAT_1, EQREL_1, TREES_2;
 
 begin :: Forgetting concatenation and reduction sequence
@@ -27,15 +28,15 @@ begin :: Forgetting concatenation and reduction sequence
 definition
   let p,q be FinSequence;
   func p$^q -> FinSequence means
-  :
-  Def1: it = p^q if p = {} or q = {} otherwise
+  :Def1:
+  it = p^q if p = {} or q = {} otherwise
   ex i being Element of NAT, r being FinSequence st len p = i+1 & r = p|Seg i
   & it = r^q;
   existence
   proof
     thus p = {} or q = {} implies ex r being FinSequence st r = p^q;
     assume p <> {} & q <> {};
-    then len p <> 0 & len p >= 0 by FINSEQ_1:25;
+    then len p <> 0 & len p >= 0 by CARD_2:59;
     then len p >= 0+1 by NAT_1:13;
     then consider i being Nat such that
 A1: len p = 1+i by NAT_1:10;
@@ -105,7 +106,7 @@ A4: len r = i by A1,FINSEQ_1:21;
   then consider t being FinSequence such that
 A5: p^t = r by A1,A2,A3,FINSEQ_1:64;
   len r + 0 = len p + len t by A5,FINSEQ_1:35;
-  then t = {} by A1,A3,A4,FINSEQ_1:25;
+  then t = {} by A1,A3,A4,CARD_2:59;
   hence thesis by A1,A5,FINSEQ_1:47;
 end;
 
@@ -129,7 +130,7 @@ proof
 A1: p <> {};
   defpred P[Element of NAT] means
   for p st p <> {} & len p = $1 ex x,q st p = <*x*>^q & len p = len q+1;
-A2: P[0] by FINSEQ_1:25;
+A2: P[0] by CARD_2:59;
 A3: for i be Element of NAT st P[i] holds P[i+1]
   proof
     now
@@ -187,13 +188,12 @@ A7: 1 in Seg len q() & Seg len q() = dom q() by FINSEQ_1:3,def 3;
   let x,y be set;
   assume
 A8: x = (p()$^q()).i & y = (p()$^q()).(i+1);
-A9: p() <> {} & q() <> {} by A3,FINSEQ_1:25;
+A9: p() <> {} & q() <> {} by A3,CARD_1:47;
   then consider r being FinSequence, a being set such that
 A10: p() = r^<*a*> by FINSEQ_1:63;
 A11: p()$^q() = r^q() by A9,A10,Th2;
 A12: len p() = len r + len <*a*> by A10,FINSEQ_1:35
-    .= len r + 1 by
-  FINSEQ_1:57;
+    .= len r + 1 by FINSEQ_1:57;
   per cases;
   suppose
 A13: i < len p();
@@ -252,12 +252,7 @@ end;
 registration
   let R be Relation;
   cluster -> non empty RedSequence of R;
-  coherence
-  proof
-    let p be RedSequence of R;
-    len p > 0 by Def2;
-    hence thesis by FINSEQ_1:25;
-  end;
+  coherence by Def2,CARD_1:47;
 end;
 
 canceled;
@@ -478,7 +473,7 @@ A5: r = p1^q by A4,Th2;
   then
 A6: len r = len p1+len q by FINSEQ_1:35;
   len p1 = 0 or len p1 > 0;
-  then p1 = {} or len p1 >= 0+1 by FINSEQ_1:25,NAT_1:13;
+  then p1 = {} or len p1 >= 0+1 by CARD_2:59,NAT_1:13;
   then r = q & p = <*x*> or 1 in Seg len p1 by A4,A5,FINSEQ_1:3,47;
   then 1 in dom p1 or len p = 1 & r = q by FINSEQ_1:57,def 3;
   then r.1 = p1.1 & p1.1 = a or r.1 = b & b = a by A1,A2,A4,A5,FINSEQ_1:def 7;
@@ -511,8 +506,8 @@ A6:   i+(j+1) = i+j+1;
 A7:   i+j >= 1 & i+j < len p by A5,A6,Lm2,XXREAL_0:2;
       then i+j in dom p by Lm3;
       then [p.(i+j),p.(i+(j+1))] in R by A5,A6,Def2;
-      then R reduces p.i,p.(i+j) & R reduces p.(i+j), p.(i+(j+1)) by A4,A7,Lm3
-      , Th16;
+      then R reduces p.i,p.(i+j) & R reduces p.(i+j), p.(i+(j+1)) by A4,A7,Lm3,
+      Th16;
       hence R reduces p.i,p.(i+(j+1)) by Th17;
     end;
     hence thesis;
@@ -1866,8 +1861,8 @@ A17:    R reduces p.2,d & R reduces q.2,d by Def7;
         then consider e being set such that
 A18:    R reduces b,e & R reduces d,e by Def7;
         len q in dom q by FINSEQ_5:6;
-        then R reduces q.2,e & R reduces q.2,c by A11,A13,A14,A17,A18,Th17
-        ,Th18;
+
+then R reduces q.2,e & R reduces q.2,c by A11,A13,A14,A17,A18,Th17,Th18;
         then e,c are_convergent_wrt R by A8,A15,A16;
         hence b,c are_convergent_wrt R by A18,Th43;
       end;

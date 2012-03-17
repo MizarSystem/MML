@@ -14,23 +14,22 @@ environ
       RELAT_1, RELAT_2, RLVECT_1, SQUARE_1, TARSKI, TREES_1, UPROOTS;
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, CARD_1, NUMBERS, SUBSET_1,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1,
-      FUNCT_1, FINSEQ_1, FINSEQ_2, VALUED_1, SEQ_1, PBOOLE, FUNCT_2, RVSUM_1,
-      ABIAN, ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4,
+      FUNCT_1, FINSEQ_1, FINSEQ_2, SEQ_1, PBOOLE, FUNCT_2, RVSUM_1, ABIAN,
+      ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4,
       GLIB_000, GLIB_001, GLIB_002, GLIB_003;
  constructors DOMAIN_1, REAL_1, SQUARE_1, BINOP_2, FINSOP_1, RVSUM_1, GRAPH_2,
-      UPROOTS, GLIB_002, GLIB_003, VALUED_1, PARTFUN1, SEQ_1;
+      UPROOTS, GLIB_002, GLIB_003, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, GLIB_000,
-      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0, VALUED_1,
-      FUNCT_2;
+      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1, VALUED_1;
+ definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1;
  theorems BAGORDER, CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSET_1, FRAENKEL, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000,
       GLIB_001, GLIB_002, GLIB_003, HEYTING3, INT_1, JORDAN12, NAT_1, PARTFUN1,
-      PBOOLE, POLYNOM1, REAL_1, RELAT_1, RVSUM_1, SEQ_1, TARSKI, TREES_1,
-      UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, XREAL_1, XXREAL_0,
-      ORDINAL1, FINSOP_1, FUNCT_7, VALUED_0;
+      PBOOLE, POLYNOM1, REAL_1, RELAT_1, RVSUM_1, TARSKI, TREES_1, UPROOTS,
+      XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1,
+      FINSOP_1, FUNCT_7;
  schemes NAT_1, SUBSET_1, RECDEF_1, GRAPH_5, CQC_SIM1;
 
 begin :: Preliminaries on Sum of RBag
@@ -963,9 +962,6 @@ proof
   let G be finite real-WEV WEVGraph;
   set BestEdges = DIJK:NextBestEdges(G), e = choose BestEdges;
   set nextEG = G.labelEdge(e,1), nextG = DIJK:Step(G);
-  set VG = the_VLabel_of G, VNextEG = the_VLabel_of nextEG;
-  set VNextG = the_VLabel_of nextG;
-  set cardG = card VG, cardNextEG = card VNextEG, cardNextG = card VNextG;
   set src = (the_Source_of G).e, target = (the_Target_of G).e;
   set val = (the_VLabel_of G).src + (the_Weight_of G).e;
   hereby
@@ -1027,7 +1023,6 @@ theorem Th14: ::tDSTEP02
 proof
   let G be real-WEV WEVGraph;
   set NextG = DIJK:Step(G);
-  set VG = the_VLabel_of G, VNextG = the_VLabel_of NextG;
   set BestEdges = DIJK:NextBestEdges(G), e = choose BestEdges;
   set NextEG = G.labelEdge(e,1), target = (the_Target_of G).e;
   set val = (the_VLabel_of G).((the_Source_of G).e) + (the_Weight_of G).e;
@@ -1047,7 +1042,6 @@ A3:   e in BestEdges by A1;
 A4:   the_Vertices_of G = the_Vertices_of NextEG &
       the_VLabel_of G = the_VLabel_of NextEG by GLIB_000:def 36,GLIB_003:43;
       then reconsider target as Vertex of NextEG by A3,FUNCT_2:7;
-      set LV = NextEG.labelVertex(target, val);
       G == NextEG & NextEG == NextG by A2,GLIB_003:41,47;
       hence G == NextG by GLIB_000:88;
       thus the_Weight_of G = the_Weight_of NextEG by GLIB_003:42
@@ -1170,7 +1164,6 @@ A2: P[0] by A1,ZFMISC_1:37;
     let k be Element of NAT such that
 A3: (DCS.k).labeledV() c= G.reachableDFrom(src);
     set Gk = DCS.k, NextG = DCS.(k+1);
-    set VGk = (the_VLabel_of Gk), VNextG = (the_VLabel_of NextG);
     set BestEdges = DIJK:NextBestEdges(Gk), e = choose BestEdges;
     set NextEG = Gk.labelEdge(e,1);
     set v1 = (the_Source_of Gk).e, target = (the_Target_of Gk).e;
@@ -1189,7 +1182,7 @@ A5:   x in (DCS.(k+1)).labeledV();
 A6:       BestEdges <> {};
           then
 A7:       NextG = NextEG.labelVertex(target, pc+ec) by A4,Def5;
-          set xx = x, GE = NextEG.labelVertex(target,pc+ec);
+          set xx = x;
           G == DCS.(k+1) by Th17;
           then reconsider xx as Vertex of G by A5,GLIB_000:def 36;
           e DSJoins Gk.labeledV(),the_Vertices_of Gk \ Gk.labeledV(),Gk
@@ -1248,10 +1241,10 @@ proof
   let G be finite real-weighted WGraph, src be Vertex of G,
   n be Element of NAT;
   set DCS = DIJK:CompSeq(G,src), RFS = G.reachableDFrom(src);
-  set Gn = DCS.n, Gn1a = DCS.(n+1), VGn = the_VLabel_of Gn;
-  set BestEdges = DIJK:NextBestEdges(Gn), e = choose BestEdges;
-  set SG = the_Source_of G, SGn = the_Source_of Gn;
-  set TG = the_Target_of G, TGn = the_Target_of Gn;
+  set Gn = DCS.n, Gn1a = DCS.(n+1);
+  set BestEdges = DIJK:NextBestEdges(Gn);
+  set SGn = the_Source_of Gn;
+  set TGn = the_Target_of Gn;
 A1: Gn1a = DIJK:Step(Gn) by Def7;
   hereby
     assume
@@ -1386,8 +1379,7 @@ A2: P[0] by A1,XXREAL_0:def 8;
 A3: Card (DCS.k).labeledV() = min(k+1, card RFS);
 A4: DCS.(k+1) = DIJK:Step(DCS.k) by Def7;
     set Gk = DCS.k, Gk1b = DCS.(k+1);
-    set VGk = the_VLabel_of Gk;
-    set BestEdges = DIJK:NextBestEdges(Gk), e = choose BestEdges;
+    set BestEdges = DIJK:NextBestEdges(Gk);
     now per cases;
       suppose
 A5:     BestEdges = {};
@@ -1836,7 +1828,6 @@ A76:        not target in WT'.vertices() by A27,A42, XBOOLE_0: def 4;
           then reconsider W2 as DPath of Dn1W by GLIB_001:151;
           take W2;
           thus W2 is_Walk_from src,target by A61,A72,GLIB_001:67;
-          reconsider W2G = W2 as DWalk of G by GLIB_001:176;
           now
 A77:        WT'.last() = source by A72,GLIB_001:def 23;
 A78:        e in the_Edges_of Dn1W &
@@ -1936,7 +1927,7 @@ A107:         1 is odd & 1 <= k2a & k2a < len WA - 0
 A108:         sk in Dn.labeledV() by A105,A107;
               then reconsider sk as Vertex of G by A19, GLIB_000:def 36;
               reconsider tk as Vertex of G by A105,GLIB_001:8;
-              set WK1 = WA.cut(1,k2a), WK2 = WA.cut(k2a,len WA);
+              set WK1 = WA.cut(1,k2a);
               set WKA = WA.cut(1,k), WKB = WA.cut(k,len WA);
               tk = WA.(k2a+2);
               then
@@ -2088,12 +2079,9 @@ proof
   set DCS = DIJK:CompSeq(G, src);
   now
     take n = card G.reachableDFrom(src);
-    set Gn = DCS.n, Gn1a = DCS.(n+1), VGn = the_VLabel_of Gn;
-    set BestEdges = DIJK:NextBestEdges(Gn), e = choose BestEdges;
-    set NextEG = Gn.labelEdge(e, 1), target = (the_Target_of Gn).e;
+    set Gn = DCS.n, Gn1a = DCS.(n+1);
+    set BestEdges = DIJK:NextBestEdges(Gn);
     set RSize = card G.reachableDFrom(src);
-    set pc = (the_VLabel_of Gn).((the_Source_of Gn).e);
-    set ec = (the_Weight_of Gn).e;
 A1: Gn1a = DIJK:Step(Gn) by Def7;
     now per cases;
       suppose BestEdges = {};
@@ -2132,11 +2120,7 @@ theorem Th24: ::tDIJK02
 proof
   let G be finite real-weighted WGraph, src be Vertex of G;
   set DCS = DIJK:CompSeq(G,src), RFS = G.reachableDFrom(src);
-  src in RFS by GLIB_002:18;
-  then {src} c= RFS by ZFMISC_1:37;
-  then card {src} <= card RFS by NAT_1:44;
-  then card RFS <> 0 by CARD_1:79;
-  then consider k being Nat such that
+  consider k being Nat such that
 A1: card RFS = k + 1 by NAT_1:6;
   reconsider k as Element of NAT by ORDINAL1:def 13;
   set Gk = DCS.k, Gk1 = DCS.(k+1);
@@ -2203,7 +2187,7 @@ proof
   let G be finite nonnegative-weighted WGraph, src be Vertex of G,
   G2 be inducedWSubgraph of G, DIJK:SSSP(G,src).labeledV(),
   DIJK:SSSP(G,src).labeledE();
-  set Res = DIJK:SSSP(G,src), DCS = DIJK:CompSeq(G,src);
+  set Res = DIJK:SSSP(G,src);
   thus G2 is_mincost_DTree_rooted_at src by Th22;
   let v being Vertex of G;
   assume
@@ -2290,7 +2274,6 @@ Lm3: for G being WGraph holds
 dom (G.strict(WGraphSelectors)) = WGraphSelectors
 proof
   let G be WGraph;
-  set G2 = G.strict(WGraphSelectors);
   WGraphSelectors c= dom G by Lm1;
   hence thesis by RELAT_1:91;
 end;
@@ -2517,7 +2500,7 @@ proof
   assume the_Edges_of G = {};
   then dom (the_Edges_of G --> 0) = {} &
   dom the_Weight_of G = {} by FUNCOP_1:16,PBOOLE:def 3;
-  then the_Weight_of G = the_Edges_of G --> 0 by FUNCOP_1:4;
+  then the_Weight_of G = the_Edges_of G --> 0 by RELAT_1:196;
   then the_Weight_of G = EmptyBag the_Edges_of G by POLYNOM1:def 15;
   hence thesis by UPROOTS:13;
 end;
@@ -2723,7 +2706,6 @@ end;
 
 definition
   let G be real-WEV WEVGraph;
-  set e = choose PRIM:NextBestEdges(G);
   func PRIM:Step(G) -> real-WEV WEVGraph equals
   :Def14: ::dPRIMSTEP
   G if PRIM:NextBestEdges(G) = {}, G.labelEdge(choose PRIM:NextBestEdges(G),1)
@@ -2960,7 +2942,6 @@ proof
   let G be real-WEV WEVGraph;
   set G2 = PRIM:Step(G);
   set Next = PRIM:NextBestEdges(G), e = choose Next, GE = G.labelEdge(e,1);
-  set src = (the_Source_of G).e, tar = (the_Target_of G).e;
   now per cases;
     suppose Next = {};
       hence thesis by Def14;
@@ -3543,8 +3524,8 @@ proof
   let G be finite real-weighted WGraph, n be Element of NAT;
   set src = choose the_Vertices_of G;
   set PCS = PRIM:CompSeq(G), RFS = G.reachableFrom(src);
-  set Gn = PCS.n, Gn1 = PCS.(n+1);
-  set Next = PRIM:NextBestEdges(Gn), e = choose Next;
+  set Gn = PCS.n;
+  set Next = PRIM:NextBestEdges(Gn);
   set GnV = Gn.labeledV(), GnVg = the_Vertices_of Gn \ GnV;
   hereby
     assume
@@ -3747,8 +3728,7 @@ proof
   let G be finite real-weighted WGraph;
   set PCS = PRIM:CompSeq(G);
   set src = choose the_Vertices_of G, RFS = G.reachableFrom(src);
-  card RFS <> 0 by CARD_2:59;
-  then consider n being Nat such that
+  consider n being Nat such that
 A1: n + 1 = card RFS by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
   set Gn = PCS.n, Gn1 = PCS.(n+1);
@@ -3787,7 +3767,7 @@ A11: PRIM:CompSeq(G) is halting by GLIB_000:def 56;
     let m be Nat;
     assume
 A12: PCS.m = PCS.(m+1);
-    set Gm = PCS.m, Gm1 = PCS.(m+1);
+    set Gm = PCS.m;
     now
       assume m < n;
       then
@@ -3855,9 +3835,6 @@ A8: the_Source_of Gn = the_Source_of G1 &
       then
 A9:   the_Vertices_of G2 = Gn1.labeledV() &
       the_Edges_of G2 = Gn1.labeledE() by GLIB_000:def 39;
-      then the_Vertices_of G3 c= the_Vertices_of G2 &
-      the_Edges_of G3 c= the_Edges_of G2 by A4,A7,Lm7;
-      then reconsider G3'=G3 as Subgraph of G2 by GLIB_000:47;
 A10:  G3.order() = G3.size() + 1 by A5,GLIB_002:46;
       now per cases;
         suppose Next = {};
@@ -4151,7 +4128,7 @@ theorem Th52: ::tPRIMMST03
   (PRIM:CompSeq(G).n).labeledE() c= PRIM:MST(G).labeledE()
 proof
   let G be finite connected real-weighted WGraph, n be Nat;
-  set PCS = PRIM:CompSeq(G), PMST = PRIM:MST(G);
+  set PCS = PRIM:CompSeq(G);
   defpred P[Nat] means (PCS.(PCS.Lifespan()+$1)) = PRIM:MST(G);
 A1: P[0];
 A2: now
@@ -4298,10 +4275,6 @@ A18:  (PCS.k2).labeledE() c= the_Edges_of G' by A15;
     end;
 A19: now
       let G be Element of X, k1,k2 be Element of NAT;
-      G in X;
-      then consider G' being Element of G1.allWSubgraphs() such that
-A20:  G = G' & G' is minimumSpanningTree of G1;
-      reconsider G' = G as minimumSpanningTree of G1 by A20;
       assume Z[G,k1] & Z[G,k2];
       then k1+1 > k2 & k2+1 > k1;
       then k1 >= k2 & k2 >= k1 by NAT_1:13;

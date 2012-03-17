@@ -14,17 +14,18 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="INT_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -40,7 +41,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="248">
+<Func kind="K" nr="258">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -53,7 +54,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="268"/>
 <Cluster>
 <Adjective nr="77"/>
 </Cluster>
@@ -67,7 +68,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="248">
+<Func kind="K" nr="258">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -75,8 +76,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="44">
-<Func kind="K" nr="248">
+<Adjective nr="38">
+<Func kind="K" nr="258">
 <Num nr="2"/>
 </Func>
 </Adjective>

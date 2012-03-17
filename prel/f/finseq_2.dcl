@@ -9,11 +9,14 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
 </Signature>
 <RCluster>
@@ -22,7 +25,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="11">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -34,7 +37,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -43,7 +46,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -51,4 +54,19 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="11">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</CCluster>
 </Registrations>

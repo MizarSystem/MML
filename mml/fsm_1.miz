@@ -11,21 +11,21 @@ environ
       MCART_1, RELAT_2, FUNCOP_1, FUNCT_4, FSM_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, INT_1, SETFAM_1, FINSET_1, STRUCT_0, MCART_1, DOMAIN_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, XXREAL_0, FUNCT_4, FINSEQ_1,
-      FINSEQ_3, EQREL_1, BORSUK_1;
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, XXREAL_0, FUNCT_4,
+      FINSEQ_1, FINSEQ_3, EQREL_1, BORSUK_1;
  constructors SETFAM_1, FUNCT_4, REAL_1, XXREAL_0, NAT_1, NAT_D, MEMBERED,
-      FINSEQ_3, BORSUK_1, VALUED_1, PARTFUN1, SEQ_1;
+      FUNCOP_1, FINSEQ_3, BORSUK_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, EQREL_1,
-      STRUCT_0, ORDINAL1, VALUED_1;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, EQREL_1, STRUCT_0,
+      FINSEQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SETFAM_1, XBOOLE_0, BINOP_1, VALUED_1;
- theorems TARSKI, SUBSET_1, SETFAM_1, MCART_1, FINSET_1, FUNCOP_1, RELSET_1,
-      REAL_1, NAT_1, INT_1, CARD_1, CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, EQREL_1, BORSUK_1, ZFMISC_1,
-      STRUCT_0, XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1, BINOP_1, XXREAL_0,
-      ORDINAL1;
- schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1, BINOP_1;
+ definitions TARSKI, SETFAM_1, XBOOLE_0, BINOP_1;
+ theorems TARSKI, SUBSET_1, SETFAM_1, MCART_1, FINSET_1, RELSET_1, REAL_1,
+      NAT_1, INT_1, CARD_1, CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
+      FUNCT_1, FUNCT_2, FUNCT_4, EQREL_1, BORSUK_1, ZFMISC_1, STRUCT_0,
+      XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1, BINOP_1, XXREAL_0, ORDINAL1;
+ schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1, BINOP_1,
+ CLASSES1;
 
 begin :: Preliminaries
 
@@ -113,18 +113,13 @@ end;
 theorem
   for W being non empty set, PW being a_partition of W holds PW is non empty;
 
-theorem Th10:
-  for Z being finite set, PZ being a_partition of Z holds PZ is finite
-proof
-  let Z be finite set, PZ be a_partition of Z;
-  bool Z is finite & PZ c= bool Z by FINSET_1:24;
-  hence PZ is finite by FINSET_1:13;
-end;
+theorem
+  for Z being finite set, PZ being a_partition of Z holds PZ is finite;
 
 registration
   let Z be finite set;
   cluster -> finite a_partition of Z;
-  coherence by Th10;
+  coherence;
 end;
 
 registration
@@ -371,7 +366,7 @@ A2:   1 <= n;
     consider p being FinSequence of D such that
 A3: len p = N & (p.1 = q or N = 0) &
     for n being Element of NAT st 1 <= n & n < N holds P[n, p.n, p.(n+1)]
-    from RECDEF_1:sch 6 (A1);
+    from RECDEF_1:sch 4 (A1);
     take p; thus p.1 = q by A3;
     thus len p = len w + 1 by A3;
     let i be Nat;
@@ -431,13 +426,14 @@ theorem Th16:
   (q, <*>IAlph)-admissible = <*q*>
 proof
   set eis = <*>IAlph;
-  len eis = 0 by FINSEQ_1:25;
+  len eis = 0 by CARD_1:47;
   then
 A1: len <*q*> = len eis + 1 by FINSEQ_1:57;
 A2: <*q*>.1 = q by FINSEQ_1:57;
   for i being Nat st 1 <= i & i <= len eis
   ex wi being Element of IAlph, qi, qi1 being State of fsm st
-  wi=eis.i & qi=<*q*>.i & qi1=<*q*>.(i+1)& wi-succ_of qi=qi1 by FINSEQ_1:25;
+  wi=eis.i & qi=<*q*>.i & qi1=<*q*>.(i+1)& wi-succ_of qi=qi1
+   by CARD_1:47,CARD_2:59;
   hence thesis by A1,A2,Def2;
 end;
 
@@ -456,7 +452,7 @@ theorem Th17:
 proof
   set eis = <*>IAlph;
 A1: (q, eis)-admissible = <*q*> by Th16;
-  <*q*>.(len eis + 1) = <*q*>.(0+1) by FINSEQ_1:25
+  <*q*>.(len eis + 1) = <*q*>.(0+1) by CARD_1:47
     .= q by FINSEQ_1:57;
   hence thesis by A1,Def3;
 end;
@@ -781,7 +777,7 @@ definition
 A1: Seg len w = dom w by FINSEQ_1:def 3;
     deffunc F(Nat) = (the OFun of tfsm).[qs.$1, w.$1];
     consider p being FinSequence such that
-A2: len p = len w & for i being Nat st i in Seg len w holds p.i = F(i)
+A2: len p = len w & for i being Nat st i in dom p holds p.i = F(i)
     from FINSEQ_1:sch 2;
     rng p c= OAlph
     proof
@@ -797,12 +793,13 @@ A6:   len qs = len p + 1 by A2,Def2;
       then x in dom qs by A5,A6,FINSEQ_3:27;
       then reconsider qsx = qs.x as Element of tfsm by FINSEQ_2:13;
       reconsider wx = w.x as Element of IAlph by A1,A2,A3,A4,FINSEQ_2:13;
-      p.x = (the OFun of tfsm).[qsx, wx] by A2,A3,A4;
+      p.x = (the OFun of tfsm).[qsx, wx] by A2,A3;
       hence y in OAlph by A3;
     end;
     then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
-    len p' = len w & for i being Element of NAT st i in dom w holds
-    p'.i = (the OFun of tfsm).[qs.i, w.i] by A1,A2;
+    dom p = dom w by A2,FINSEQ_3:31;
+    then len p' = len w & for i being Element of NAT st i in dom w holds
+    p'.i = (the OFun of tfsm).[qs.i, w.i] by A2;
     hence thesis;
   end;
   uniqueness
@@ -849,7 +846,7 @@ definition
 A1: Seg len qs' = dom qs' by FINSEQ_1:def 3;
     deffunc F(Nat) = (the OFun of sfsm).(qs'.$1);
     consider p being FinSequence such that
-A2: len p = len qs' & for i being Nat st i in Seg len qs' holds
+A2: len p = len qs' & for i being Nat st i in dom p holds
     p.i = F(i) from FINSEQ_1:sch 2;
     rng p c= OAlph
     proof
@@ -858,35 +855,36 @@ A2: len p = len qs' & for i being Nat st i in Seg len qs' holds
       then consider x being set such that
 A3:   x in dom p & y = p.x by FUNCT_1:def 5;
       reconsider x as Element of NAT by A3;
-A4:   dom p = Seg len p by FINSEQ_1:def 3;
+      dom p = Seg len p by FINSEQ_1:def 3;
       then reconsider qsx = qs'.x as State of sfsm by A1,A2,A3,FINSEQ_2:13;
-      p.x = (the OFun of sfsm).qsx by A2,A3,A4;
+      p.x = (the OFun of sfsm).qsx by A2,A3;
       hence y in OAlph by A3;
     end;
     then reconsider p' = p as FinSequence of OAlph by FINSEQ_1:def 4;
-A5: len qs' = len w + 1 by Def2;
-    len p' = len qs' & for i being Element of NAT st i in dom qs' holds
-    p'.i = (the OFun of sfsm).(qs'.i) by A1,A2;
-    hence thesis by A1,A5;
+A4: len qs' = len w + 1 by Def2;
+    dom p = dom qs' by A2,FINSEQ_3:31;
+    then len p' = len qs' & for i being Element of NAT st i in dom qs' holds
+    p'.i = (the OFun of sfsm).(qs'.i) by A2;
+    hence thesis by A1,A4;
   end;
   uniqueness
   proof
     set qs' = (qs, w)-admissible;
     let it1, it2 be FinSequence of OAlph;
     assume
-A6: len it1 = len w + 1 &
+A5: len it1 = len w + 1 &
     for i being Element of NAT st i in Seg (len w + 1) holds
     it1.i = (the OFun of sfsm).(qs'.i);
     assume
-A7: len it2 = len w + 1 &
+A6: len it2 = len w + 1 &
     for i being Element of NAT st i in Seg (len w + 1) holds
     it2.i = (the OFun of sfsm).(qs'.i);
-    now thus len it1 = len it2 by A6,A7;
+    now thus len it1 = len it2 by A5,A6;
       let i be Nat;
       assume 1 <= i & i <= len it1;
       then i in Seg len it1 by FINSEQ_1:3;
       then it1.i = (the OFun of sfsm).(qs'.i) &
-      it2.i = (the OFun of sfsm).(qs'.i) by A6,A7;
+      it2.i = (the OFun of sfsm).(qs'.i) by A5,A6;
       hence it1.i = it2.i;
     end;
     hence it1 = it2 by FINSEQ_1:18;
@@ -1013,9 +1011,14 @@ A2: (q11,w1^w2)-response = (q21,w1^w2)-response;
   set r21 = (q21,w)-response;
 A3: len r2w1 = len w1 & len r1w1 = len w1 by Def6;
 A4: len r12 = len w2 & len r22 = len w2 by Def6;
-  then consider j being Nat such that
-A5: j in Seg len w2 & r12.j <> r22.j by A1,FINSEQ_2:10;
-A6: j in dom r12 & j in dom r22 by A4,A5,FINSEQ_1:def 3;
+then
+X: dom w2 = Seg len r12 by FINSEQ_1:def 3;
+then
+ dom w2 = dom r12 by FINSEQ_1:def 3;
+  then
+  consider j being Nat such that
+A5: j in dom w2 & r12.j <> r22.j by A1,FINSEQ_2:10,A4;
+A6: j in dom r12 & j in dom r22 by A4,A5,FINSEQ_1:def 3,X;
   r11 = r1w1 ^ r12 & r21 = r2w1 ^ r22 by A1,Th26;
   then r11.(len w1 + j)=r12.j & r21.(len w1 + j)=r22.j by A3,A6,FINSEQ_1:def
   7;
@@ -1087,16 +1090,19 @@ A9:   twi = tw.i & tqi = twa.i & tqi1 = twa.(i+1) & twi-succ_of tqi = tqi1
     end;
   end;
 A10: for i being Element of NAT holds P[i] from NAT_1:sch 1( A2, A3 );
-  now thus len (<*sOF.IS*>^((tIS, tw)-response))
+  now thus
+K:   len (<*sOF.IS*>^((tIS, tw)-response))
     = len <*sOF.IS*> + len ((tIS, tw)-response) by FINSEQ_1:35
       .= 1+len ((tIS, tw)-response) by FINSEQ_1:57
       .=len tw +1 by Def6;
     thus len ((IS, tw)-response) = len tw + 1 by Def7;
+X: dom (<*sOF.IS*>^((tIS, tw)-response)) = Seg (len tw + 1)
+ by FINSEQ_1:def 3,K;
     let i be Nat;
     assume
-A11: i in Seg (len tw + 1);
+A11: i in dom (<*sOF.IS*>^((tIS, tw)-response));
     then
-A12: 1 <= i & i <= len tw + 1 by FINSEQ_1:3;
+A12: 1 <= i & i <= len tw + 1 by FINSEQ_1:3,X;
     per cases by A12,REAL_1:def 5;
     suppose
 A13:  i = 1;
@@ -1131,7 +1137,7 @@ A22:  j in dom tw by A18,FINSEQ_1:def 3;
         .= (the OFun of tfsm).[(tIS, tw)-admissible.j, tw.j] by A22,Def6
         .= tOF.((IS, tw)-admissible.j, tw.j) by A10,A19
         .= sOF.(T.(swaj, swj)) by A1,A21
-        .= (IS, tw)-response.i by A11,A14,A21,Def7;
+        .= (IS, tw)-response.i by A11,A14,A21,Def7,X;
       hence (<*sOF.IS*>^((tIS, tw)-response)).i = (IS, tw)-response.i;
     end;
   end;
@@ -1204,16 +1210,18 @@ hence twa.(i+1) = (swa.(i+1))`1 by A5,A9,A10,A11,FINSEQ_1:3,MCART_1:def 1;
       end;
     end;
 A12: for i being Element of NAT holds P[i] from NAT_1:sch 1 ( A3, A4 );
-    now thus len (<*sOF.sI*>^((IS, tw)-response))
+    now thus
+K:     len (<*sOF.sI*>^((IS, tw)-response))
       = len <*sOF.sI*> + len ((IS, tw)-response) by FINSEQ_1:35
         .= 1 + len ((IS, tw)-response) by FINSEQ_1:57
         .= len tw + 1 by Def6;
       thus len ((SI, tw)-response) = len tw + 1 by Def7;
+X: dom (<*sOF.sI*>^((IS, tw)-response)) = Seg (len tw + 1) by FINSEQ_1:def 3,K;
       let i be Nat;
       assume
-A13:  i in Seg (len tw + 1);
+A13:  i in dom (<*sOF.sI*>^((IS, tw)-response));
       then
-A14:  1 <= i & i <= len tw + 1 by FINSEQ_1:3;
+A14:  1 <= i & i <= len tw + 1 by FINSEQ_1:3,X;
       per cases by A14,REAL_1:def 5;
       suppose
 A15:    i = 1;
@@ -1250,7 +1258,7 @@ A24:    j in dom tw by A20,FINSEQ_1:def 3;
           .= tOF.(swaj`1, tw.j) by A12,A21,A23
           .= sOF.(T.(swaj`1, swj), tOF.(swaj`1, swj)) by A2,A23
           .= sOF.(sT.(swaj, swj)) by A1
-          .= (SI, tw)-response.i by A13,A16,A23,Def7;
+          .= (SI, tw)-response.i by A13,A16,A23,Def7,X;
       end;
     end;
     hence thesis by FINSEQ_2:10;
@@ -1378,17 +1386,19 @@ A1: qa' = (the Tran of tfsm).[qa, s];
   set asresp = OF.[qa, s];
 A2: len (<*s*>^w) = len <*s*> + len w by FINSEQ_1:35
     .= 1+len w by FINSEQ_1:57;
-  now thus len ((qa, <*s*>^w)-response) = 1 + len w by A2,Def6; thus
+  now thus
+K:   len ((qa, <*s*>^w)-response) = 1 + len w by A2,Def6; thus
 A3: len (<*asresp*>^(qa', w)-response)
     = len <*asresp*> + len ((qa', w)-response) by FINSEQ_1:35
       .= 1 + len ((qa', w)-response) by FINSEQ_1:57
       .= 1 + len w by Def6;
+X: dom (qa, <*s*>^w)-response = Seg (1 + len w) by K,FINSEQ_1:def 3;
     let j be Nat;
     assume
-A4: j in Seg (1 + len w);
+A4: j in dom (qa, <*s*>^w)-response;
     then
-A5: 1 <= j & j <= 1 + len w by FINSEQ_1:3;
-A6: j in dom(<*s*>^w) by A2,A4,FINSEQ_1:def 3;
+A5: 1 <= j & j <= 1 + len w by FINSEQ_1:3,X;
+A6: j in dom(<*s*>^w) by A2,A4,FINSEQ_1:def 3,X;
     per cases by A5,REAL_1:def 5;
     suppose
 A7:   j = 1; thus (qa, <*s*>^w)-response.j
@@ -1402,7 +1412,7 @@ A8:   j > 1;
       then consider i being Element of NAT such that
 A9:   i = j - 1 & 1 <= i by INT_1:78;
 A10:  len <*asresp*> = 1 by FINSEQ_1:57;
-      j <= len w + 1 by A4,FINSEQ_1:3;
+      j <= len w + 1 by A4,FINSEQ_1:3,X;
       then j - 1 <= len w + 1-1 by XREAL_1:11;
       then
 A11:  i in Seg len w by A9,FINSEQ_1:3;
@@ -1841,7 +1851,6 @@ theorem Th46:
   Class ((k+m)-eq_states_EqR tfsm) = Class (k-eq_states_EqR tfsm)
 proof
   let k be Nat;
-  reconsider k'=k as Element of NAT by ORDINAL1:def 13;
   set S = the carrier of tfsm;
   set CEk = Class (k-eq_states_EqR tfsm);
   set Ek = (k-eq_states_EqR tfsm);
@@ -1981,7 +1990,6 @@ A2: i <= k;
 A3: (i+1)-eq_states_partition tfsm = i-eq_states_partition tfsm;
   consider d being Nat such that
 A4: k = i+d by A2,NAT_1:10;
-  reconsider d as Element of NAT by ORDINAL1:def 13;
 A5: k-eq_states_partition tfsm = i-eq_states_partition tfsm by A3,A4,Th46;
   i <= k+1 by A2,NAT_1:12;
   then consider e being Nat such that
@@ -2142,7 +2150,6 @@ proof
   set kpart = k-eq_states_partition tfsm;
   set k1part = (k+1)-eq_states_partition tfsm;
   set keq = k-eq_states_EqR tfsm;
-  set k1eq = (k+1)-eq_states_EqR tfsm;
   assume
 A1: kpart = k1part;
   now
@@ -3163,8 +3170,7 @@ registration
     reconsider IS = 1 as Element of S by TARSKI:def 1;
     set dF = [:S, IAlph:];
     set Tr = dF --> 1;
-    dom Tr = dF & rng Tr c= S by FUNCOP_1:19;
-    then reconsider T = Tr as Function of dF, S by FUNCT_2:def 1,RELSET_1:11;
+    reconsider T = Tr as Function of dF, S;
     consider out being Element of OAlph;
     reconsider OF = dF --> out as Function of [:S, IAlph:], OAlph;
     reconsider M = Mealy-FSM(#S, T, OF, IS#) as
@@ -3353,14 +3359,16 @@ A3: cInitS = the InitS of M;
   set ma= (the InitS of M,w)-admissible;
   set cma= (the InitS of cm, w)-admissible;
 A4: now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
-    defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
-A5: P[0] by FINSEQ_1:3;
+then
+X: dom ma = Seg(len w + 1)  by FINSEQ_1:def 3;
+    defpred P[Nat] means $1 in dom ma implies ma.$1 = cma.$1;
+A5: P[0] by FINSEQ_1:3,X;
 A6: for k being Nat st P[k] holds P[k + 1]
     proof
       let j be Nat such that
-A7:   j in Seg (len w + 1) implies ma.j = cma.j;
-      assume j+1 in Seg (len w + 1);
-      then 1<=j+1 & j+1<=len w + 1 by FINSEQ_1:3;
+A7:   j in dom ma implies ma.j = cma.j;
+      assume j+1 in dom ma;
+      then 1<=j+1 & j+1<=len w + 1 by FINSEQ_1:3,X;
       then
 A8:   j<=len w&j<len w +1 by NAT_1:13,XREAL_1:8;
 A9:   0=j or 0<j & 0+1=1;
@@ -3379,7 +3387,7 @@ A12:    mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
         ex cmwj being Element of IAlph,cmqj,cmqj1 being State of cm st
         cmwj = w.j & cmqj = cma.j & cmqj1 = cma.(j+1) & cmwj-succ_of cmqj=cmqj1
         by A8,A11,Def2;
-        hence ma.(j+1) = cma.(j+1) by A1,A7,A8,A11,A12,FINSEQ_1:3,FUNCT_1:72;
+        hence ma.(j+1) = cma.(j+1) by A1,A7,A8,A11,A12,FINSEQ_1:3,FUNCT_1:72,X;
       end;
     end;
     thus for j be Nat holds P[j] from NAT_1:sch 2(A5, A6);
@@ -3389,12 +3397,14 @@ A13: ma = cma by FINSEQ_2:10;
   set mr = (the InitS of M, w)-response;
   set cmr = (the InitS of cm, w)-response;
   now thus len mr = len w & len cmr = len w by Def6;
+   then
+X: dom mr = Seg len w by FINSEQ_1:def 3;
     let j be Nat;
     assume
-A14: j in Seg len w;
+A14: j in dom mr;
     then
-A15: j in dom w by FINSEQ_1:def 3;
-A16: j in Seg (len w + 1) by A14,FINSEQ_2:9;
+A15: j in dom w by FINSEQ_1:def 3,X;
+A16: j in Seg (len w + 1) by A14,FINSEQ_2:9,X;
     then j in dom ma by A4,FINSEQ_1:def 3;
     then
 A17: ma.j in the carrier of M & w.j in IAlph by A15,FINSEQ_2:13;
@@ -3434,14 +3444,16 @@ A1: now
     set ma= (the InitS of M,w)-admissible;
     set cma= (the InitS of cm,w)-admissible;
     now thus len ma = len w + 1 & len cma = len w + 1 by Def2;
-      defpred P[Nat] means $1 in Seg (len w + 1) implies ma.$1 = cma.$1;
-A2:   P[0] by FINSEQ_1:3;
+    then
+X: dom ma = Seg (len w + 1) by FINSEQ_1:def 3;
+      defpred P[Nat] means $1 in dom ma implies ma.$1 = cma.$1;
+A2:   P[0] by FINSEQ_1:3,X;
 A3:   for k being Nat st P[k] holds P[k + 1]
       proof
         let j be Nat such that
-A4:     j in Seg (len w + 1) implies ma.j = cma.j;
-        assume j+1 in Seg(len w +1);
-        then 1<=j+1&j+1<=len w +1 by FINSEQ_1:3;
+A4:     j in dom ma implies ma.j = cma.j;
+        assume j+1 in dom ma;
+        then 1<=j+1&j+1<=len w +1 by FINSEQ_1:3,X;
         then
 A5:     j<=len w&j<len w +1 by NAT_1:13,XREAL_1:8;
 A6:     0=j or 0<j & 0+1 = 1;
@@ -3461,7 +3473,7 @@ A9:       mwj = w.j & mqj = ma.j & mqj1 = ma.(j+1) & mwj-succ_of mqj = mqj1
 
 cmwj = w.j & cmqj = cma.j & cmqj1 = cma.(j+1) & cmwj-succ_of cmqj=cmqj1
           by A5,A8,Def2;
-          hence ma.(j+1) = cma.(j+1) by A4,A5,A8,A9,FINSEQ_1:3,FUNCT_1:72;
+          hence ma.(j+1) = cma.(j+1) by A4,A5,A8,A9,FINSEQ_1:3,FUNCT_1:72,X;
         end;
       end;
       thus for j be Nat holds P[j] from NAT_1:sch 2(A2, A3);
@@ -3493,13 +3505,15 @@ A11: len ma = len w + 1 & len cma = len w + 1 by Def2;
   set mr = (the InitS of M, w)-response;
   set cmr = (the InitS of cm, w)-response;
   now thus len mr = len w & len cmr = len w by Def6;
+  then
+X: dom mr = Seg len w by FINSEQ_1:def 3;
     let j be Nat;
     assume
-A12: j in Seg len w;
+A12: j in dom mr;
     then
-A13: j in Seg (len w + 1) by FINSEQ_2:9;
+A13: j in Seg (len w + 1) by FINSEQ_2:9,X;
 A14: [ma.j, w.j] = [cma.j, w.j] by A1;
-A15: j in dom w by A12,FINSEQ_1:def 3;
+A15: j in dom w by A12,FINSEQ_1:def 3,X;
     j in dom ma by A11,A13,FINSEQ_1:def 3;
     then
 A16: ma.j in the carrier of M & w.j in IAlph by A15,FINSEQ_2:13;
@@ -4524,51 +4538,6 @@ A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
 A2: SRUN = final_states_partition UN by Def18;
   defpred P[set, set] means
   ex part being Element of SRUN st $1 in part & $2 in part \ { $1 };
-A3: for x,y1,y2 being set st x in Srtfsm1 & P[x,y1] & P[x,y2] holds y1 = y2
-  proof
-    let x, y1, y2 be set;
-    assume
-A4: x in Srtfsm1 & P[x,y1] & P[x,y2];
-    then reconsider x' = x as Element of Srtfsm1;
-    consider part1 being Element of SRUN such that
-A5: x' in part1 & y1 in part1 \ { x' } by A4;
-    consider part2 being Element of SRUN such that
-A6: x' in part2 & y2 in part2 \ { x' } by A4;
-    assume
-A7: y1 <> y2;
-A8: y1 in part1 by A5;
-    part1 is Subset of UN by A2,TARSKI:def 3;
-    then part1 is Subset of Srtfsm1 \/ Srtfsm2 by Def24;
-    then
-A9: y1 in Srtfsm1 or y1 in Srtfsm2 by A8,XBOOLE_0:def 2;
-A10: not y1 in Srtfsm1
-    proof
-      assume
-A11:  y1 in Srtfsm1;
-      reconsider y1 as Element of part1 by A5;
-      reconsider x' as Element of part1 by A5;
-      y1 <> x' by A5,ZFMISC_1:64;
-      hence contradiction by A1,A11,Th78;
-    end;
-A12: y2 in part2 by A6;
-    part2 is Subset of UN by A2,TARSKI:def 3;
-    then part2 is Subset of Srtfsm1 \/ Srtfsm2 by Def24;
-    then
-A13: y2 in Srtfsm1 or y2 in Srtfsm2 by A12,XBOOLE_0:def 2;
-A14: not y2 in Srtfsm1
-    proof
-      assume
-A15:  y2 in Srtfsm1;
-      reconsider y2 as Element of part2 by A6;
-      reconsider x' as Element of part2 by A6;
-      y2 <> x' by A6,ZFMISC_1:64;
-      hence contradiction by A1,A15,Th78;
-    end;
-A16: part1 is Subset of UN by A2,TARSKI:def 3;
-    part2 is Subset of UN by A2,TARSKI:def 3;
-    then part1 = part2 or part1 misses part2 by A2,A16,EQREL_1:def 6;
-    hence contradiction by A1,A5,A6,A7,A9,A10,A13,A14,Th79,XBOOLE_0:3;
-  end;
 A17: for x being set st x in Srtfsm1 ex y being set st P[x,y]
   proof
     let x be set;
@@ -4594,7 +4563,7 @@ A22: y in part \ xs by A20,ZFMISC_1:64;
   end;
   consider f being Function such that
 A23: dom f = Srtfsm1 & for x being set st x in Srtfsm1 holds P[x,f.x]
-  from FUNCT_1:sch 2 ( A3,A17 );
+  from CLASSES1:sch 1 (A17 );
 A24: f is one-to-one
   proof
     now

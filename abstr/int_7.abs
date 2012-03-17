@@ -1,0 +1,213 @@
+:: Uniqueness of factoring an integer and multiplicative group $Z/pZ^{*}$
+::  by Hiroyuki Okazaki and Yasunari Shidama
+::
+:: Received January 31, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, TARSKI, BINOP_1, INT_1, CARD_1, FUNCT_1, VECTSP_1,
+      RELAT_1, ARYTM_1, GR_CY_1, FUNCT_7, RLVECT_1, ABSVALUE, NAT_1, NAT_3,
+      ARYTM_3, INT_2, ORDINAL2, NAT_LAT, ALGSTR_0, INT_3, ARYTM, GROUP_1,
+      GROUP_2, GROUP_4, PBOOLE, POWER, INT_7, REALSET1, COMPLEX1, FINSET_1,
+      GRAPH_1, FINSEQ_4, RFINSEQ, FINSEQ_1, POLYNOM1, POLYNOM2, ALGSEQ_1,
+      POLYNOM3, POLYNOM5, SQUARE_1, SGRAPH1, SEQ_1, FUNCT_2, HURWITZ, FILTER_0,
+      CARD_3, UPROOTS, VALUED_0, FUNCT_4, FUNCOP_1, ANPROJ_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, FINSET_1, RVSUM_1,
+      CARD_1, DOMAIN_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, POWER, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, FINSEQ_1, POLYNOM1,
+      FUNCT_4, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, BINOP_1,
+      RFINSEQ, PBOOLE, GROUP_2, BHSP_1, ALGSEQ_1, POLYNOM2, WSIERP_1, POLYNOM3,
+      POLYNOM4, UPROOTS, NAT_3, POLYNOM5, GROUP_4, GR_CY_1, INT_1, FUNCT_7,
+      NEWTON, INT_2, INT_3, HURWITZ, VALUED_0, REALSET1, RECDEF_1;
+ constructors REAL_1, NAT_D, NAT_3, SEQ_1, PEPIN, EUCLID, REALSET1, GROUP_4,
+      GR_CY_1, INT_3, WSIERP_1, BINARITH, BHSP_1, POLYNOM2, POLYNOM4, POLYNOM5,
+      WELLORD2, POWER, RFINSEQ, ALGSTR_1, HURWITZ, UPROOTS, FUNCT_4, RECDEF_1,
+      BINOP_2;
+ registrations XBOOLE_0, STRUCT_0, FUNCT_1, XREAL_0, ORDINAL1, NAT_1, INT_1,
+      GROUP_1, GROUP_2, FINSET_1, FINSEQ_1, FUNCT_2, GR_CY_1, ALGSTR_0,
+      MEMBERED, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1, RELAT_1, CARD_1,
+      ALGSTR_1, POLYNOM1, NAT_3, VALUED_0, POLYNOM3, POLYNOM4, POLYNOM5,
+      UPROOTS;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Uniqueness of factoring an integer
+
+reserve x,X,y for set;
+
+theorem :: INT_7:1
+  for p being ManySortedSet of X st support p = {x} holds p = (X-->0)+*(x,p.x);
+
+theorem :: INT_7:2
+  for X be set,p,q,r be real-valued ManySortedSet of X
+  st (support p) /\ (support q) = {} & (support p) \/ (support q) =(support r)
+  & p|(support p) = r | (support p) & q|(support q) = r | (support q) holds
+  p+q = r;
+
+theorem :: INT_7:3
+  for X be set,p,q be ManySortedSet of X
+  st p|(support p) = q|(support q) holds p = q;
+
+theorem :: INT_7:4
+  for X be set,p,q be bag of X st support p = {} & support q={} holds p = q;
+
+definition
+  let p be bag of SetPrimes;
+  attr p is prime-factorization-like means
+:: INT_7:def 1
+
+  for x being Prime st x in support p
+  ex n be natural number st 0 < n & p.x = x |^n;
+end;
+
+registration
+  let n be non empty natural number;
+  cluster ppf n -> prime-factorization-like;
+end;
+
+theorem :: INT_7:5
+  for p,q be Prime,n,m be natural number
+  st p divides m*(q|^n) & p <> q holds p divides m;
+
+theorem :: INT_7:6
+  for f be FinSequence of NAT, b be bag of SetPrimes,a be Prime
+  st b is prime-factorization-like & Product b <> 1 & a divides Product b &
+  Product b = Product f & f = b*canFS(support b) holds a in support b;
+
+theorem :: INT_7:7
+  for p,q be bag of SetPrimes
+  st (support p) c= (support q) & p | (support p) = q | (support p) holds
+  (Product p) divides (Product q);
+
+theorem :: INT_7:8
+  for p be bag of SetPrimes,x be Prime st p is prime-factorization-like holds
+  x divides Product p iff x in support p;
+
+theorem :: INT_7:9
+  for n,m,k be non empty natural number st k = n lcm m holds
+  support ppf k=(support ppf n) \/ (support ppf m);
+
+theorem :: INT_7:10
+  for X being set,b1,b2 being bag of X
+  holds support min(b1,b2) = support b1 /\ support b2;
+
+theorem :: INT_7:11
+  for n,m,k be non empty natural number st k = n gcd m holds
+  support ppf k = (support ppf n) /\ (support ppf m);
+
+theorem :: INT_7:12
+  for p,q be bag of SetPrimes st p is prime-factorization-like &
+  q is prime-factorization-like & (support p) misses (support q) holds
+  Product p,Product q are_relative_prime;
+
+theorem :: INT_7:13
+  for p be bag of SetPrimes st p is prime-factorization-like holds
+  Product p <> 0;
+
+theorem :: INT_7:14
+  for p be bag of SetPrimes st p is prime-factorization-like holds
+  Product p = 1 iff support p = {};
+
+theorem :: INT_7:15
+  for p,q be bag of SetPrimes st
+  p is prime-factorization-like &q is prime-factorization-like&
+  Product p = Product q holds p=q;
+
+theorem :: INT_7:16
+  for p be bag of SetPrimes, n be non empty natural number st
+  p is prime-factorization-like & n = Product p holds (ppf n) = p;
+
+theorem :: INT_7:17
+  for n,m be Element of NAT st 1<=n & 1 <=m holds
+  ex m0,n0 be Element of NAT st n lcm m =n0*m0 & n0 gcd m0 = 1 &
+  n0 divides n & m0 divides m & n0 <> 0 & m0 <> 0;
+
+begin ::multiplicative group
+
+definition
+  let n be natural number;
+  assume
+ 1 < n;
+  func Segm0(n) -> non empty finite Subset of NAT equals
+:: INT_7:def 2
+
+  Segm(n) \ {0};
+end;
+
+theorem :: INT_7:18
+  for n be natural number st 1 < n holds Card Segm0(n) = n-1;
+
+definition
+  let n be Prime;
+  func multint0(n) -> BinOp of Segm0(n) equals
+:: INT_7:def 3
+
+  (multint n) || Segm0 n;
+end;
+
+theorem :: INT_7:19
+  for p be Prime holds multMagma(#Segm0(p),multint0(p)#)
+  is associative commutative Group-like;
+
+definition
+  let p be Prime;
+  func Z/Z*(p) -> commutative Group equals
+:: INT_7:def 4
+
+  multMagma(#Segm0(p),multint0(p)#);
+end;
+
+theorem :: INT_7:20
+  for p be Prime,x,y be Element of Z/Z*(p),
+  x1,y1 be Element of INT.Ring(p) st x=x1 & y=y1 holds x*y = x1*y1;
+
+theorem :: INT_7:21
+  for p be Prime holds 1_Z/Z*(p) =1 & 1_Z/Z*(p) = 1.(INT.Ring(p));
+
+theorem :: INT_7:22
+  for p be Prime, x be Element of Z/Z*(p),
+  x1 be Element of INT.Ring(p) st x=x1 holds x" = x1";
+
+registration
+  let p be Prime;
+  cluster Z/Z*(p) -> finite;
+end;
+
+theorem :: INT_7:23
+  for p be Prime holds ord Z/Z*(p) = p-1;
+
+theorem :: INT_7:24
+  for G be Group,a be Element of G, i be Integer st a is_not_of_order_0 holds
+  ex n,k be Element of NAT st a|^i=a|^n & n=k*ord(a) +i;
+
+theorem :: INT_7:25
+  for G be commutative Group,a,b be Element of G, n,m be natural number
+  st G is finite & ord a=n & ord b= m & n gcd m = 1 holds ord (a*b) = n*m;
+
+theorem :: INT_7:26
+  for L be non empty ZeroStr, p being Polynomial of L st 0 <= deg p
+  holds p is non-zero;
+
+theorem :: INT_7:27
+  for L be Field,f be Polynomial of L st 0 <= deg f holds
+  Roots(f) is finite set & ex m,n be Element of NAT st n=deg f
+  & m=Card(Roots(f)) & m <= n;
+
+theorem :: INT_7:28
+  for p be Prime, z be Element of Z/Z*(p),
+  y be Element of INT.Ring(p) st z=y holds for n be Element of NAT holds
+  (power Z/Z*(p)).(z,n) = (power INT.Ring(p)).(y,n);
+
+theorem :: INT_7:29
+  for p be Prime, a,b be Element of Z/Z*(p),
+  n be natural number st 0< n & ord a=n & b |^n =1 holds
+  b is Element of gr {a};
+
+theorem :: INT_7:30
+  for G be Group, z be Element of G, d,l be Element of NAT
+  st G is finite & ord z=d*l holds ord (z|^d)=l;
+
+theorem :: INT_7:31
+  for p be Prime holds Z/Z*(p) is cyclic Group;
+

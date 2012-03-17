@@ -15,14 +15,14 @@ environ
       NUMBERS, ENUMSET1, SETWOP_2, XCMPLX_0, XREAL_0, REAL_1, RELAT_1, FUNCT_1,
       PARTFUN1, BINOP_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSOP_1,
       STRUCT_0, ALGSTR_0, MATRIX_1, FVSUM_1, RLVECT_1, FINSEQ_7, SETWISEO,
-      GROUP_1, MATRIX_2, MATRIX_3, MATRIX_6, MATRIXR1, VALUED_1, SEQ_1, EUCLID,
-      MATRIX_7, MATRIX_4, RVSUM_1, VECTSP_1, EUCLID_2, MATRPROB;
+      GROUP_1, MATRIX_2, MATRIX_3, MATRIX_6, MATRIXR1, EUCLID, MATRIX_7,
+      MATRIX_4, RVSUM_1, VECTSP_1, EUCLID_2, MATRPROB;
  constructors XXREAL_0, FVSUM_1, TOPMETR, BINOP_2, FINSEQ_7, SETWISEO,
       FINSOP_1, FINSEQ_4, MATRIX_7, MATRIXR1, MATRIX_6, REAL_1, NAT_1,
-      EUCLID_2, MATRPROB, VALUED_1, PARTFUN1, SEQ_1;
- registrations FINSEQ_2, XREAL_0, NAT_1, RELSET_1, SEQ_1, MEMBERED, STRUCT_0,
-      VECTSP_1, NUMBERS, XXREAL_0, MATRIX_2, FINSEQ_1, FVSUM_1, FINSET_1,
-      XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
+      EUCLID_2, SEQ_1;
+ registrations FINSEQ_2, NAT_1, RELSET_1, MEMBERED, STRUCT_0, VECTSP_1,
+      NUMBERS, XXREAL_0, MATRIX_2, FINSEQ_1, FVSUM_1, FINSET_1, XBOOLE_0,
+      VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, MATRIX_1, STRUCT_0, RLVECT_1, VECTSP_1, MATRIXR1,
       FINSEQ_1, VALUED_1;
@@ -30,7 +30,8 @@ environ
       FINSEQ_1, NAT_1, FINSEQ_7, MATRIX_2, FINSEQ_2, TARSKI, FINSOP_1, FVSUM_1,
       SETWISEO, FUNCT_2, XBOOLE_0, ENUMSET1, XCMPLX_0, ZFMISC_1, MATRIX_7,
       MATRIXR1, FINSEQ_3, XXREAL_0, EUCLID_2, RVSUM_1, ORDINAL1, MATRIX10,
-      MATRIX11, MATRPROB, FINSEQ_4, MATRIX_9, MATRIXC1, PARTFUN1;
+      MATRIX11, MATRPROB, FINSEQ_4, MATRIX_9, MATRIXC1, PARTFUN1, RELAT_1,
+      CARD_2;
  schemes FINSEQ_4;
 
 begin :: Preliminaries
@@ -105,9 +106,7 @@ proof
   let a be real number,A be Matrix of REAL;
   assume
 A1: len (a*A) =len A & width (a*A)=width A & [i,j] in Indices A;
-  set K=F_Real;
   reconsider aa=a as Element of F_Real by XREAL_0:def 1;
-  reconsider N=MXR2MXF A as Matrix of K;
   (a*A)*(i,j) = (MXF2MXR (aa*(MXR2MXF A)))*(i,j) by MATRIXR1:def 7
     .= aa*((MXR2MXF A)*(i,j)) by A1,MATRIX_3:def 5
     .= a*(A*(i,j));
@@ -221,8 +220,6 @@ proof
   let A be Matrix of REAL;
   assume
 A1: len (-A)=len A & width (-A)=width A & [i,j] in Indices A;
-  set K=F_Real;
-  reconsider N=MXR2MXF A as Matrix of K;
   (-A)*(i,j) = -((MXR2MXF A)*(i,j)) by A1,MATRIX_3:def 2;
   hence thesis;
 end;
@@ -1055,7 +1052,7 @@ proof
   dom f=Seg 0 by FUNCT_2:67;
   then reconsider p=f as FinSequence by FINSEQ_1:def 2;
   dom f={} by FINSEQ_1:4,FUNCT_2:67;
-  then p=<*>NAT by FINSEQ_1:26;
+  then p=<*>NAT by RELAT_1:64;
   hence thesis;
 end;
 
@@ -1143,7 +1140,6 @@ theorem
   for A being Matrix of n,REAL holds Det A = Det (A@)
 proof
   let A be Matrix of n,REAL;
-  set K=F_Real;
   reconsider N1=MXR2MXF A, N2=MXR2MXF (A@) as Matrix of n,F_Real;
   reconsider N3=MXF2MXR (N1@) as Matrix of n,REAL;
   reconsider N4=MXR2MXF N3 as Matrix of n,F_Real;
@@ -1176,7 +1172,6 @@ theorem Th46:
 proof
   let A,B be Matrix of n,REAL;
   set K=F_Real;
-  reconsider Ne=MXR2MXF(A*B) as Matrix of n,K;
   reconsider Na=MXR2MXF A, Nb=MXR2MXF B as Matrix of n,K;
   Det (A*B) = (Det Na) * (Det Nb) by Th45
     .= (Det A)*(Det B);
@@ -1388,7 +1383,6 @@ A10: i in Seg 1 & j in Seg (width A) by A9,ZFMISC_1:106;
     then
 A11: i=1 by XXREAL_0:1;
 A12: j in dom (x*A) by A4,A10,FINSEQ_1:def 3;
-    reconsider xx=x as FinSequence of F_Real;
 A13: (Line((LineVec2Mx x)*A,1)).j=(LineVec2Mx (x*A))*(1,j)
     by A12,MATRIXR1:def 10;
 A14: width ((LineVec2Mx x)*A)=width A by A1,A3,MATRIX_3:def 4;
@@ -1468,8 +1462,6 @@ A13: j in Seg 1 & i in Seg (len A) by A11,ZFMISC_1:106;
     then
 A14: j=1 by XXREAL_0:1;
 A15: i in dom (A*x) by A2,A13,FINSEQ_1:def 3;
-    reconsider q=(ColVec2Mx (A*x)).i as FinSequence;
-    reconsider xx=x as FinSequence of F_Real;
 A16: i in Seg (len (ColVec2Mx (A*x))) & 1 in Seg 1 by A5,A11,A12,ZFMISC_1:106;
     Indices (ColVec2Mx (A*x))=[:Seg (len (ColVec2Mx (A*x))),Seg 1:]
     by A3,FINSEQ_1:def 3;
@@ -1481,8 +1473,7 @@ A18: (Col(A*(ColVec2Mx x),1)).i =(<*(A*x).i*>).1 by FINSEQ_1:57
     len (A*(ColVec2Mx x))=len A by A1,A4,MATRIX_3:def 4;
     then i in dom (A*(ColVec2Mx x)) by A13,FINSEQ_1:def 3;
     then
-A19: (Col(A*(ColVec2Mx x),1)).i=(A*(ColVec2Mx x))*(i,j) by A14,
-    MATRIX_1:def 9;
+A19: (Col(A*(ColVec2Mx x),1)).i=(A*(ColVec2Mx x))*(i,j) by A14,MATRIX_1:def 9;
 A20: i in Seg len ((MXR2MXF A)*(MXR2MXF (ColVec2Mx x)))
     by A9,A11,A12,ZFMISC_1:106;
     j in Seg width ((MXR2MXF A)*(MXR2MXF (ColVec2Mx x)))
@@ -1525,7 +1516,6 @@ A3: i in dom (B*A) & j in Seg width (B*A) by ZFMISC_1:106;
 A4: len A=m by MATRIX_1:def 3;
 A5: width B=m by A1,MATRIX_1:24;
 A6: width B=len A by A1,A4,MATRIX_1:24;
-  reconsider r=((Line(B,i))*A).j as Element of REAL;
 A7: (B*A)*(i,j) =Line(B,i) "*" Col(A,j) by A2,A6,MATRPROB:39;
 A8: len A=len (Line(B,i)) by A4,A5,MATRIX_1:def 8;
   width A=width (B*A) by A4,A5,MATRPROB:39;
@@ -1546,7 +1536,6 @@ A2: i in dom (B*A) & j in Seg width (B*A) by ZFMISC_1:106;
 A3: len A=n by MATRIX_1:def 3;
 A4: width B=n by MATRIX_1:25;
 A5: width B=len A by A3,MATRIX_1:25;
-  reconsider r=((Line(B,i))*A).j as Element of REAL;
 A6: (B*A)*(i,j) =Line(B,i) "*" Col(A,j) by A1,A5,MATRPROB:39;
 A7: len A=len (Line(B,i)) by A3,A4,MATRIX_1:def 8;
   width A=width (B*A) by A3,A4,MATRPROB:39;
@@ -1571,7 +1560,6 @@ A4: len (A*B)=n & width (A*B)=n by MATRIX_1:25;
 A5: len B=n by MATRIX_1:def 3;
 A6: len A=n & width A=n by MATRIX_1:25;
 A7: width A=len B by A5,MATRIX_1:25;
-  reconsider r=(A*(Col(B,i))).j as Element of REAL;
 A8: (A*B)*(i,j) = Line(A,i) "*" Col(B,j) by A2,A7,MATRPROB:39;
 A9: width A=len (Col(B,j)) by A5,A6,MATRIX_1:def 9;
   then i in Seg len (A*(Col(B,j))) by A1,A3,A4,A6,MATRIXR1:61;
@@ -1840,8 +1828,7 @@ proof
 end;
 
 definition
-  let n;
-  let i;
+  let n; let i be Nat;
   func Base_FinSeq(n,i) -> FinSequence of REAL equals
   Replace(n |-> (0 qua Element of REAL), i,1);
   coherence;
@@ -2089,9 +2076,9 @@ theorem
 proof
 A1: len 1_Rmatrix(0) = 0 & width 1_Rmatrix(0)=0 by MATRIX_1:25;
   len 0_Rmatrix(0) = 0 & width 0_Rmatrix(0)=0 by MATRIX_1:25;
-  then 0_Rmatrix(0)={} by FINSEQ_1:25;
-  hence 1_Rmatrix(0)=0_Rmatrix(0) by A1,FINSEQ_1:25;
-  thus 1_Rmatrix(0)={} by A1,FINSEQ_1:25;
+  then 0_Rmatrix(0)={} by CARD_2:59;
+  hence 1_Rmatrix(0)=0_Rmatrix(0) by A1,CARD_2:59;
+  thus 1_Rmatrix(0)={} by A1,CARD_2:59;
 end;
 
 theorem Th86:
@@ -2269,11 +2256,12 @@ A2: for i holds ex x being FinSequence of REAL st
   defpred P[set,set] means
   for s being Element of NAT,q being FinSequence of REAL st s=$1 & q=$2 holds
   len q=n & q*A=Base_FinSeq(n,s);
-A3: for j st j in Seg n ex d being Element of REAL* st P[j,d]
+A3: for j being Nat st j in Seg n ex d being Element of REAL* st P[j,d]
   proof
-    let j;
+    let j be Nat;
     assume j in Seg n;
-    consider x being FinSequence of REAL such that
+    then j in NAT by ORDINAL1:def 13;
+    then consider x being FinSequence of REAL such that
 A4: len x=n & x*A=Base_FinSeq(n,j) by A2;
     reconsider d0=x as Element of REAL* by FINSEQ_1:def 11;
     for s being Element of NAT,q being FinSequence of REAL st s=j & q=d0 holds
@@ -2281,7 +2269,8 @@ A4: len x=n & x*A=Base_FinSeq(n,j) by A2;
     hence ex d being Element of REAL* st P[j,d];
   end;
   consider f being FinSequence of REAL* such that
-A5: len f = n & for j st j in Seg n holds P[j,(f/.j)] from FINSEQ_4:sch 1(A3);
+A5: len f = n &
+for j being Nat st j in Seg n holds P[j,(f/.j)] from FINSEQ_4:sch 1(A3);
   for x being set st x in rng f ex p being FinSequence of REAL st
   x = p & len p = n
   proof

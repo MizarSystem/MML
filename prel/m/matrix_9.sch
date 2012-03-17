@@ -50,7 +50,7 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="191">
 <Func kind="F" nr="1"/>
@@ -73,7 +73,7 @@
 </Not>
 </For>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="191">
 <Func kind="F" nr="1"/>

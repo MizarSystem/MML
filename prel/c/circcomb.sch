@@ -20,9 +20,9 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="PRE_CIRC"/>
@@ -134,11 +134,11 @@
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="177">
+<Func kind="K" nr="178">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="119"/>
 </Func>
 </Pred>
 <For>
@@ -151,7 +151,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="161">
+<Func kind="K" nr="163">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -207,7 +207,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="161">
+<Func kind="K" nr="163">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -240,22 +240,22 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="15">
-<Func kind="K" nr="162">
-<Func kind="K" nr="137">
+<Func kind="K" nr="164">
+<Func kind="K" nr="145">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="119"/>
 </Func>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="119"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="162">
-<Func kind="K" nr="137">
+<Func kind="K" nr="164">
+<Func kind="K" nr="145">
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="119"/>
 </Func>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="119"/>
 </Typ>
 </Is>
 </Not>

@@ -8,16 +8,16 @@ environ
 
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
       FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, CAT_1,
-      FUNCT_4, INT_1, ARYTM;
+      FUNCT_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
-      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, NAT_1, REAL_1, VALUED_1, SEQ_1,
-      SEQM_3, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1, XXREAL_0;
+      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, NAT_1, REAL_1, SEQ_1, SEQM_3,
+      FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQM_3,
-      FINSEQ_4, FINSOP_1, RVSUM_1, VALUED_1, SEQ_1;
+      FINSEQ_4, FINSOP_1, RVSUM_1, SEQ_1, FUNCOP_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, SEQ_1, FUNCOP_1, SUBSET_1, VALUED_0, VALUED_1;
+      NAT_1, MEMBERED, FINSEQ_1, FUNCOP_1, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1, FUNCOP_1, VALUED_1;
+ definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1, FUNCOP_1;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, FINSOP_1,
@@ -676,13 +676,14 @@ definition
       deffunc F(Nat)=f.($1+n);
       consider p be FinSequence such that
 A1:   len p = k &
-      for m be Nat st m in Seg k holds p.m = F(m) from FINSEQ_1:sch 2;
+      for m be Nat st m in dom p holds p.m = F(m) from FINSEQ_1:sch 2;
+A2: dom p = Seg k by A1,FINSEQ_1:def 3;
       take p;
       thus len p = len f - n by A1;
       let m be Nat;
       assume m in dom p;
       then m in Seg k by A1,FINSEQ_1:def 3;
-      hence p.m = f.(m+n) by A1;
+      hence p.m = f.(m+n) by A1,A2;
     end;
     thus not n<=len f implies ex p1 be FinSequence st p1 = {};
   end;
@@ -695,17 +696,17 @@ A1:   len p = k &
     implies p1 = p2
     proof
       assume that n<=len f and
-A2:   len p1 = len f - n & for m be Nat st m in dom p1 holds
+A3:   len p1 = len f - n & for m be Nat st m in dom p1 holds
       p1.m = f.(m+n) and
-A3:   len p2 = len f - n & for m be Nat st m in dom p2 holds p2.m = f.(m+n);
-A4:   dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
+A4:   len p2 = len f - n & for m be Nat st m in dom p2 holds p2.m = f.(m+n);
+A5:   dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
       now
         let m be Nat;
-        assume m in Seg len p1;
-        then p1.m = f.(m+n) & p2.m = f.(m+n) by A2,A3,A4;
+        assume m in dom p1;
+        then p1.m = f.(m+n) & p2.m = f.(m+n) by A3,A4,A5;
         hence p1.m = p2.m;
       end;
-      hence p1 = p2 by A2,A3,FINSEQ_2:10;
+      hence p1 = p2 by A3,A4,FINSEQ_2:10;
     end;
     thus not n<=len f & p1 = {} & p2 = {} implies p1 = p2;
   end;
@@ -787,11 +788,12 @@ A3: len fn = n by A1,FINSEQ_1:80,NAT_1:11;
   then
 A4: len (fn^<*x*>) = n + len <*x*> by FINSEQ_1:35
     .= len f by A1,FINSEQ_1:57;
+X: dom f = Seg len f by FINSEQ_1:def 3;
   now
     let m be Nat;
-    assume m in Seg len f;
+    assume m in dom f;
     then
-A5: 1<=m & m<=len f by FINSEQ_1:3;
+A5: 1<=m & m<=len f by FINSEQ_1:3,X;
     now per cases;
       case m = len f;
         hence f.m = (fn^<*x*>).m by A1,A3,FINSEQ_1:59;
@@ -838,11 +840,12 @@ A5:   len (f|n) = n by A3,FINSEQ_1:80;
 A6:   len ((f|n)^(f/^n)) = n+(len f - n) by A4,FINSEQ_1:35
         .= len f;
 A7:   dom(f|n) = Seg n & dom f = dom f & dom fn = dom fn by A5,FINSEQ_1:def 3;
+X: dom f = Seg len f by FINSEQ_1:def 3;
       now
         let m be Nat;
-        assume m in Seg len f;
+        assume m in dom f;
         then
-A8:     1<=m & m<=len f by FINSEQ_1:3;
+A8:     1<=m & m<=len f by FINSEQ_1:3,X;
         now per cases;
           case m<=n;
             then
@@ -1008,11 +1011,12 @@ A6: len p1 = len R & p1.(len p1) = R.(len R) and
 A7: for n be Nat st 1<=n & n<=len p1 - 1 holds p1.n = R.n - R.(n+1) and
 A8: len p2 = len R & p2.(len p2) = R.(len R) and
 A9: for n be Nat st 1<=n & n<=len p2 - 1 holds p2.n = R.n - R.(n+1);
+X: dom p1 = Seg len R by A6,FINSEQ_1:def 3;
     now
       let n be Nat;
-      assume n in Seg len R;
+      assume n in dom p1;
       then
-A10:  1<=n & n<=len R by FINSEQ_1:3;
+A10:  1<=n & n<=len R by FINSEQ_1:3,X;
       set r = R.n;
       now per cases;
         case n = len R;
@@ -1062,12 +1066,13 @@ A10: n+1 in Seg(n+2) & n+1 in Seg(n+1) by A3,FINSEQ_1:3;
   then f1.(n+1) = s by A1,A9,Th19;
   then
 A11: m1.(n+1) = s by A4,A5,Def3;
+X: dom m1 = Seg(n+1)  by A5,FINSEQ_1:def 3;
   now
     let m be Nat;
     assume
-A12: m in Seg (n+1);
+A12: m in dom m1;
     then
-A13: 1<=m & m<=n+1 by FINSEQ_1:3;
+A13: 1<=m & m<=n+1 by FINSEQ_1:3,X;
     now per cases;
       case m = n+1;
         hence m1.m = (fn^<*s*>).m by A7,A11,FINSEQ_1:59;
@@ -1090,7 +1095,7 @@ A19:    1<=m+1 & m+1<=n+2 by A2,A13,NAT_1:11,XREAL_1:8;
 A20:    r1 - r2 = fn.m by A13,A17,A18,Def3
           .= (fn^<*s*>).m by A7,A9,A16,FINSEQ_1:def 7;
 A21:    len m1 -1 = n by A5;
-A22:    f1.m = r1 by A1,A9,A10,A12,Th19;
+A22:    f1.m = r1 by A1,A9,A10,A12,Th19,X;
         m+1<=n+1 by A14,NAT_1:13;
         then m+1 in Seg(n+1) by A19,FINSEQ_1:3;
         then f1.(m+1) = r2 by A1,A9,A10,Th19;
@@ -1121,11 +1126,12 @@ A5: len nf = n by A2,FINSEQ_1:80,NAT_1:11;
 A6: len(nf^<* r-s,s *>) = n+2 & <*r-s,s*>.1 = r-s & <*r-s,s*>.2 = s
   by FINSEQ_1:61;
 A7: n<n+2 by A4,NAT_1:13;
+X: dom mf = Seg(n+2)  by A2,FINSEQ_1:def 3;
   now
     let m be Nat;
-    assume m in Seg(n+2);
+    assume m in dom mf;
     then
-A8: 1<=m & m<=n+2 by FINSEQ_1:3;
+A8: 1<=m & m<=n+2 by FINSEQ_1:3,X;
     now per cases;
       case
 A9:     m = n+2;
@@ -1173,7 +1179,7 @@ theorem Th25:
 proof
   set o = <*>REAL, mo = MIM(o);
 A1: len mo = len o & len o = 0 by Def3,FINSEQ_1:32;
-  for n be Nat st n in Seg 0 holds mo.n = o.n by FINSEQ_1:4;
+  for n be Nat st n in dom o holds mo.n = o.n;
   hence thesis by A1,FINSEQ_2:10;
 end;
 
@@ -1185,10 +1191,12 @@ proof
 A1: len f = 1 & f.1 = r by FINSEQ_1:57;
   then
 A2: len MIM(f) = 1 by Def3;
+then
+X: dom MIM(f) = Seg 1 by FINSEQ_1:def 3;
   now
     let n be Nat;
-    assume n in Seg 1;
-    then n = 1 by FINSEQ_1:4,TARSKI:def 1;
+    assume n in dom MIM(f);
+    then n = 1 by FINSEQ_1:4,TARSKI:def 1,X;
     hence MIM(f).n = f.n by A1,A2,Def3;
   end;
   hence thesis by A1,A2,FINSEQ_2:10;
@@ -1226,21 +1234,22 @@ A4:   len fn = len R - n &
       for m st m in dom fn holds fn.m = R.(m+n) by A2,Def2;
 A5:   len mn = len fn by Def3;
 A6:   Seg len fn = dom fn & Seg len(mf/^n) = dom(mf/^n) by FINSEQ_1:def 3;
+X: dom mn = Seg len fn by A5,FINSEQ_1:def 3;
       now
         let m be Nat;
         assume
-A7:     m in Seg len fn;
+A7:     m in dom mn;
         then
-A8:     1<=m & m<=len fn by FINSEQ_1:3;
+A8:     1<=m & m<=len fn by FINSEQ_1:3,X;
         m<=m+n by NAT_1:11;
         then
 A9:     1<=m+n & m+n<=len R by A4,A8,XREAL_1:21,XXREAL_0:2;
         set r1 = R.(m+n);
-A10:    fn.m = r1 by A2,A6,A7,Def2;
+A10:    fn.m = r1 by A2,A6,A7,Def2,X;
         now per cases;
           case
 A11:        m = len fn;
-            thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7
+            thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7,X
               .= r1 by A1,A4,A11,Def3
               .= mn.m by A5,A10,A11,Def3;
           end;
@@ -1258,7 +1267,7 @@ A15:        m+n<=len R - 1 & m<=len fn - 1 by A12,A13,XREAL_1: 21;
             then m+1 in dom fn by A12,FINSEQ_3:27;
             then
 A16:        fn.(m+1) = r2 by A2,Def2;
-            thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7
+            thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7,X
               .= r1-r2 by A1,A9,A14,A15,Def3
               .= mn.m by A1,A8,A10,A15,A16,Def3;
           end;
@@ -1425,7 +1434,7 @@ A1: len R = 0 or len R = 1;
     case len R = 0;
       then R = <*>REAL by FINSEQ_1:32;
 
-then for n st n in dom R & n+1 in dom R holds R.n>=R.(n+1) by FINSEQ_1:26;
+then for n st n in dom R & n+1 in dom R holds R.n>=R.(n+1) by RELAT_1:60;
       hence thesis by Def4;
     end;
     case len R = 1;
@@ -1570,7 +1579,7 @@ A5:     len fn = len f - n & r = f.(m+n) & s = f.(m+n+1) by A1,A3, Def2;
       end;
       case len f<n;
         then fn = <*>REAL by Def2;
-        hence r>=s by A1,FINSEQ_1:26;
+        hence r>=s by A1,RELAT_1:60;
       end;
     end;
     hence r>=s;
@@ -2035,7 +2044,7 @@ proof
   let D be non empty set, f be FinSequence of D;
   len (f /^ len f) = len f - len f by Def2
     .= 0;
-  hence thesis by FINSEQ_1:25;
+  hence thesis by CARD_2:59;
 end;
 
 :: from SCMBSORT, 2007.07.26, A.T.

@@ -12,7 +12,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -74,9 +73,10 @@
 </RCluster>
 <RCluster>
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="54"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="41">
@@ -335,7 +335,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -355,7 +355,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="164">
+<Func kind="K" nr="161">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -381,7 +381,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -423,7 +423,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="76">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -446,21 +446,21 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
-<Func kind="K" nr="176">
+<Func kind="K" nr="173">
 <Num nr="2"/>
-<Func kind="K" nr="382"/>
+<Func kind="K" nr="377"/>
 </Func>
-<Func kind="K" nr="382"/>
+<Func kind="K" nr="377"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="176">
+<Func kind="K" nr="173">
 <Num nr="2"/>
-<Func kind="K" nr="382"/>
+<Func kind="K" nr="377"/>
 </Func>
-<Func kind="K" nr="382"/>
+<Func kind="K" nr="377"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="395">
+<Func kind="K" nr="390">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -484,12 +484,14 @@
 </CCluster>
 <CCluster>
 <ArgTypes/>
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+<Typ kind="M" nr="1">
 <Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="54"/>
 </Typ>
 <Cluster>
+<Adjective nr="14"/>
 <Adjective nr="90" value="false"/>
 </Cluster>
 </CCluster>

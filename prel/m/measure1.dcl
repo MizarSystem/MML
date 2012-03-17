@@ -27,6 +27,7 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 </Signature>
@@ -90,7 +91,7 @@
 <Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="63">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -232,7 +233,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="63">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -247,7 +248,7 @@
 <Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="63">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -309,7 +310,7 @@
 <Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="63">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

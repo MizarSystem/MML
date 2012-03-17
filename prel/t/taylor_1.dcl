@@ -16,20 +16,20 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="200"/>
+<Func kind="K" nr="201"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -41,7 +41,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="124">
+<Func kind="K" nr="100">
 <Func kind="K" nr="58"/>
 </Func>
 <Cluster>

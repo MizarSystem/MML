@@ -9,20 +9,19 @@ environ
  vocabularies ARYTM, COMPLEX1, COMSEQ_1, SEQ_1, FDIFF_1, ARYTM_3, ARYTM_1,
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
-      RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SIN_COS, FINSEQ_4, GROUP_1, XCMPLX_0,
-      FUNCOP_1, FRECHET2, SIN_COS4, RELOC;
+      RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SIN_COS, GROUP_1, XCMPLX_0, FRECHET2,
+      SIN_COS4, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1,
-      FUNCT_2, VALUED_1, SEQ_1, SEQ_2, FDIFF_1, FUNCOP_1, SERIES_1, NAT_1,
-      FINSEQ_4, NEWTON, SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH,
-      RFUNCT_1, RFUNCT_2, COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
- constructors PARTFUN1, FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2,
-      RCOMP_1, FINSEQ_4, COMSEQ_1, RFUNCT_1, COMSEQ_2, RFUNCT_2, FCONT_1,
-      FDIFF_1, PREPOWER, SERIES_1, COMSEQ_3, BINARITH, SEQ_1, VALUED_1;
+      FUNCT_2, VALUED_1, SEQ_1, SEQ_2, FDIFF_1, SERIES_1, NAT_1, NEWTON,
+      SQUARE_1, PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1, RFUNCT_2,
+      COMSEQ_1, COMSEQ_2, COMSEQ_3, PREPOWER;
+ constructors PARTFUN1, FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, NAT_1, RCOMP_1,
+      RFUNCT_1, COMSEQ_2, RFUNCT_2, FCONT_1, FDIFF_1, PREPOWER, COMSEQ_3,
+      BINARITH, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, COMPLEX1, SEQ_1, SEQM_3,
-      RCOMP_1, COMSEQ_1, COMSEQ_2, FDIFF_1, NEWTON, COMSEQ_3, VALUED_0,
-      VALUED_1;
+      XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, SEQM_3, RCOMP_1, COMSEQ_2,
+      FDIFF_1, NEWTON, COMSEQ_3, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -114,11 +113,11 @@ theorem :: SIN_COS:1
   0!c = 1 & n!c <> 0 & (n+1)!c = n!c * (n+1);
 
 theorem :: SIN_COS:2
-  n! <> 0 & (n+1)! = n! * (n+1);
+  (n+1)! = n! * (n+1);
 
 theorem :: SIN_COS:3
-  (for k st 0 < k holds ((k-'1)!c ) * k = k!c) &
-  for m,k st k <= m holds ((m-'k)!c) * (m+1-k) = (m+1-'k)!c;
+  (0 < k implies ((k-'1)!c ) * k = k!c) &
+  (k <= m implies ((m-'k)!c) * (m+1-k) = (m+1-'k)!c);
 
 definition
   let n be Element of NAT;
@@ -273,16 +272,16 @@ theorem :: SIN_COS:22
   holds abs(Partial_Sums(|.Conj(k,z,w).|).k) < p;
 
 theorem :: SIN_COS:23
-  for seq st for k holds seq.k=Partial_Sums((Conj(k,z,w))).k
-  holds seq is convergent & lim seq = 0;
+  (for k holds seq.k=Partial_Sums((Conj(k,z,w))).k) implies
+  seq is convergent & lim seq = 0;
 
 begin :: Definition of Exponential Function on Complex
 
 definition
-  func exp -> PartFunc of COMPLEX, COMPLEX means
+  func exp -> Function of COMPLEX, COMPLEX means
 :: SIN_COS:def 18
 
-  dom it = COMPLEX & for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
+  for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
 end;
 
 definition
@@ -307,7 +306,7 @@ definition
   func sin -> Function of REAL, REAL means
 :: SIN_COS:def 20
 
-  dom it = REAL & for d being Element of REAL holds
+  for d being Element of REAL holds
   it.d = Im(Sum([*0,d*] ExpSeq));
 end;
 
@@ -329,16 +328,13 @@ definition
   redefine func sin th -> Real;
 end;
 
-theorem :: SIN_COS:25
-  sin is Function of REAL,REAL;
-
 reserve d for Real;
 
 definition
   func cos -> Function of REAL, REAL means
 :: SIN_COS:def 22
 
-  dom it = REAL & for d holds it.d = Re(Sum([*0,d*] ExpSeq));
+  for d holds it.d = Re(Sum([*0,d*] ExpSeq));
 end;
 
 definition
@@ -359,8 +355,7 @@ definition
   redefine func cos th -> Real;
 end;
 
-theorem :: SIN_COS:26
-  cos is Function of REAL,REAL;
+canceled 2;
 
 theorem :: SIN_COS:27
   dom(sin)=REAL & dom(cos)=REAL;
@@ -395,7 +390,7 @@ definition
   func th P_sin -> Real_Sequence means
 :: SIN_COS:def 24
 
-  for n holds it.n= (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
+  for n holds it.n = (-1)|^ n * (th)|^ (2*n+1)/((2*n+1)!);
   func th P_cos -> Real_Sequence means
 :: SIN_COS:def 25
 
@@ -410,7 +405,7 @@ theorem :: SIN_COS:36
   & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*];
 
 theorem :: SIN_COS:37
-  for n holds n!c=[*n!,0*];
+  n!c = n!;
 
 theorem :: SIN_COS:38
   for th being Real holds
@@ -428,20 +423,20 @@ theorem :: SIN_COS:40
   cos.th=Sum(th P_cos) & sin.th=Sum(th P_sin);
 
 theorem :: SIN_COS:41
-  for p,th,rseq st rseq is convergent&
-  lim(rseq)=th &(for n holds rseq.n >= p) holds th >= p;
+  for p,th,rseq st rseq is convergent &
+  lim(rseq)=th & (for n holds rseq.n >= p) holds th >= p;
 
 theorem :: SIN_COS:42
-  for n,k,m st n < k holds m!>0 & n!<=k!;
+  n <= k implies n!<=k!;
 
 theorem :: SIN_COS:43
-  for th,n,k st 0<=th & th <=1 & n<=k holds th |^ k <= th |^ n;
+  0<=th & th <=1 & n<=k implies th |^ k <= th |^ n;
 
 theorem :: SIN_COS:44
   for th being Real holds [*th,0*]|^ n=[* th |^ n,0 *];
 
 theorem :: SIN_COS:45
-  for th being Real holds [*th,0*] |^ n /(n!c )=[*(th|^ n) /(n!),0*];
+  for th being Real holds th |^ n /(n!c)=(th|^ n) /(n!);
 
 theorem :: SIN_COS:46
   for p being Real holds Im(Sum([*p,0*] ExpSeq))=0;
@@ -464,7 +459,7 @@ definition
   func exp_R -> Function of REAL, REAL means
 :: SIN_COS:def 26
 
-  dom it = REAL & for d being real number holds it.d=Sum(d ExpSeq);
+  for d being real number holds it.d = Sum(d ExpSeq);
 end;
 
 definition
@@ -503,7 +498,7 @@ theorem :: SIN_COS:56
   exp_R(0) =1;
 
 theorem :: SIN_COS:57
-  for th st th > 0 holds exp_R.th >=1;
+  th > 0 implies exp_R.th >=1;
 
 theorem :: SIN_COS:58
   th < 0 implies 0<exp_R.th & exp_R.th <=1;
@@ -529,16 +524,16 @@ definition
 end;
 
 theorem :: SIN_COS:61
-  for z holds z P_dt is absolutely_summable;
+  z P_dt is absolutely_summable;
 
 theorem :: SIN_COS:62
-  for z holds z*(Sum(z P_dt))=(Sum(z ExpSeq))-1r-z;
+  z*(Sum(z P_dt))=(Sum(z ExpSeq))-1r-z;
 
 theorem :: SIN_COS:63
   for p st p>0 holds ex q st q>0 & for z st |.z.|<q holds |.(Sum(z P_dt)).|<p;
 
 theorem :: SIN_COS:64
-  for z,z1 holds (Sum((z1+z) ExpSeq))-(Sum(z1 ExpSeq))
+  (Sum((z1+z) ExpSeq))-(Sum(z1 ExpSeq))
   =(Sum(z1 ExpSeq))*z+z*(Sum(z P_dt))*(Sum(z1 ExpSeq));
 
 theorem :: SIN_COS:65
@@ -563,18 +558,16 @@ theorem :: SIN_COS:70
   exp_R is_differentiable_in p & diff(exp_R,p)=exp_R.p;
 
 theorem :: SIN_COS:71
-  exp_R is_differentiable_on REAL &
-  (for th st th in REAL holds diff(exp_R,th)=exp_R.th);
+  exp_R is_differentiable_on REAL & diff(exp_R,th)=exp_R.th;
 
 theorem :: SIN_COS:72
-  cos is_differentiable_on REAL &
-  (for th st th in REAL holds diff(cos,th)=-sin.(th));
+  cos is_differentiable_on REAL & diff(cos,th)=-sin.th;
 
 theorem :: SIN_COS:73
   sin is_differentiable_on REAL & diff(sin,th)=cos.th;
 
 theorem :: SIN_COS:74
-  th in [.0,1 .] implies 0<cos.(th) & cos.(th)>=1/2;
+  th in [.0,1 .] implies 0<cos.th & cos.th>=1/2;
 
 definition
   func tan -> PartFunc of REAL, REAL equals
@@ -588,7 +581,7 @@ definition
 end;
 
 theorem :: SIN_COS:75
-  [.0,1 .] c= dom tan & ].0,1 .[c=dom tan;
+  [.0,1 .] c= dom tan & ].0,1 .[ c= dom tan;
 
 theorem :: SIN_COS:76
   tan is_continuous_on [. 0, 1 .];
@@ -612,7 +605,7 @@ end;
 theorem :: SIN_COS:78
   sin.(PI/4) = cos.(PI/4);
 
-begin ::Formulas of sin and cos
+begin :: Formulas of sin and cos
 
 theorem :: SIN_COS:79
   sin.(th1+th2)=(sin.(th1)) *(cos.(th2))+(cos.(th1)) * (sin.(th2)) &
@@ -662,3 +655,8 @@ theorem :: SIN_COS:88
 theorem :: SIN_COS:89
   cos(a-b) = cos(a)*cos(b)+sin(a)*sin(b);
 
+definition let n;
+  redefine func n!c equals
+:: SIN_COS:def 33
+    n!;
+end;

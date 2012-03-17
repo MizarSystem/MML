@@ -1,0 +1,1890 @@
+:: Banach Algebra of Bounded Functionals
+::  by Yasunari Shidama , Hikofumi Suzuki and Noboru Endou
+:: 
+:: Received March 3, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies RLVECT_1, ARYTM_1, RELAT_1, FUNCT_1, RSSPACE, RSSPACE3, VECTSP_1,
+      VECTSP_2, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FUNCOP_1, LATTICES, SEQ_2,
+      ABSVALUE, FUNCSDOM, LOPBAN_1, ORDINAL2, ARYTM_3, PARTFUN2, ARYTM,
+      BINOP_1, ALGSTR_0, NORMSP_1, FUNCT_2, SEQM_3, BHSP_3, RSSPACE4, GROUP_1,
+      PRE_TOPC, LOPBAN_2, C0SP1, ALGSTR_2, IDEAL_1, SUBSET_1, POLYALG1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
+      XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, REALSET1, FUNCT_1,
+      FUNCT_2, BINOP_1, DOMAIN_1, RELSET_1, PRE_TOPC, BINOP_2, RLVECT_1,
+      GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM, PARTFUN1, PARTFUN2, IDEAL_1,
+      RSSPACE, RSSPACE3, RCOMP_1, PSCOMP_1, VALUED_1, SEQ_1, XXREAL_0,
+      RFUNCT_1, SEQ_2, SEQ_4, PRE_CIRC, RLSUB_1, NORMSP_1, SEQM_3, LOPBAN_1,
+      LOPBAN_2;
+ constructors REAL_1, REALSET1, PRE_CIRC, PARTFUN2, RSSPACE3, COMPLEX1,
+      RFUNCT_3, PSCOMP_1, NAT_1, BINOP_2, RCOMP_1, RLSUB_1, LOPBAN_2, ALGSTR_1,
+      FUNCT_2, VALUED_1, SEQ_1, SEQ_2, ALGSTR_0, IDEAL_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, XREAL_0, REALSET1,
+      ALGSTR_0, NUMBERS, ORDINAL1, MEMBERED, FUNCSDOM, RELAT_1, XXREAL_0,
+      RLVECT_1, VECTSP_1, VECTSP_2, FUNCT_2, VALUED_0, VALUED_1, LOPBAN_2,
+      GCD_1, SEQM_3;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions PRE_TOPC, PSCOMP_1, REALSET1, ALGSTR_0, TARSKI, ORDINAL1,
+      XCMPLX_0, FINSET_1, REAL_1, FUNCT_2, MEMBERED, ZFMISC_1, NORMSP_1,
+      FINSEQ_1, GOBOARD1, PARTFUN1, SEQ_4, RFUNCT_1, FUNCSDOM, RLVECT_1,
+      RLSUB_1, RSSPACE, RSSPACE3, VECTSP_1, VECTSP_2, STRUCT_0, GROUP_1,
+      BINOP_1, LOPBAN_2, VALUED_1;
+ theorems STRUCT_0, SEQ_4, RFUNCT_1, FUNCT_1, SEQ_1, SEQ_2, ABSVALUE,
+      ALGSTR_0, COMPLEX1, ZFMISC_1, TARSKI, RSSPACE3, RELAT_1, XREAL_0,
+      XXREAL_0, PARTFUN2, FUNCSDOM, NORMSP_1, LOPBAN_1, FUNCT_2, XBOOLE_0,
+      XREAL_1, XCMPLX_0, RLVECT_1, FUNCOP_1, VECTSP_1, GROUP_1, LOPBAN_2,
+      VALUED_1, RSSPACE2, IDEAL_1;
+ schemes SEQ_1, FUNCT_2;
+
+begin :: Some properties of Rings
+
+definition
+  let V be non empty addLoopStr;
+  let V1 be Subset of V;
+  attr V1 is having-inverse means :Rdef210b:
+  for v be Element of V st v in V1 holds -v in V1;
+end;
+
+definition
+  let V be non empty addLoopStr;
+  let V1 be Subset of V;
+  attr V1 is additively-closed means :Rdef210:
+  V1 is add-closed having-inverse;
+end;
+
+Cor1:
+for V be non empty addLoopStr holds [#]V is add-closed
+proof
+   let V be non empty addLoopStr;
+   for v,u be Element of V st v in [#]V & u in [#]V holds v + u in [#]V;
+   hence [#]V is add-closed by IDEAL_1:def 1;
+end;
+
+Cor2:
+for V be non empty addLoopStr holds [#]V is having-inverse
+proof
+   let V be non empty addLoopStr;
+   for v be Element of V st v in [#]V holds -v in [#]V;
+   hence [#]V is having-inverse by Rdef210b;
+end;
+
+registration
+  let V be non empty addLoopStr;
+  cluster [#]V -> add-closed having-inverse;
+correctness by Cor1,Cor2;
+end;
+
+registration
+  let V be non empty doubleLoopStr;
+  cluster additively-closed -> add-closed having-inverse Subset of V;
+  coherence by Rdef210;
+  cluster add-closed having-inverse -> additively-closed Subset of V;
+  coherence by Rdef210;
+end;
+
+registration
+  let V be non empty addLoopStr;
+  cluster add-closed having-inverse non empty Subset of V;
+correctness
+proof
+   take [#]V;
+   thus thesis;
+end;
+end;
+
+definition let V be Ring;
+mode Subring of V -> Ring means :DefSubRing:
+ the carrier of it c= the carrier of V &
+ the addF of it = (the addF of V)||the carrier of it &
+ the multF of it = (the multF of V)||the carrier of it &
+ 1.it=1.V & 0.it = 0.V;
+existence
+proof
+   take V;
+   thus the carrier of V c= the carrier of V &
+   the addF of V = (the addF of V)||the carrier of V &
+   the multF of V = (the multF of V)||the carrier of V &
+   1.V =1.V & 0.V = 0.V by FUNCT_2:40;
+end;
+end;
+
+reserve X for non empty set;
+reserve x for Element of X;
+reserve d1,d2,a,b for Element of X;
+reserve A for BinOp of X;
+reserve M for Function of [:X,X:],X;
+reserve V for Ring;
+reserve V1 for Subset of V;
+
+theorem Th01:
+V1 = X &
+A = (the addF of V)||V1 &
+M = (the multF of V)||V1 &
+d1 = 1.V &
+d2 = 0.V &
+V1 is having-inverse implies
+  doubleLoopStr (# X,A,M,d1,d2 #) is Subring of V
+proof
+   assume that
+A1: V1 = X and
+A3: A = (the addF of V)||V1 and
+A4: M = (the multF of V)||V1 and
+A0: d1 = 1.V and
+A2: d2 = 0.V and
+B0: for v be Element of V st v in V1 holds -v in V1;
+
+   reconsider W  = doubleLoopStr(# X,A,M,d1,d2 #) as non empty doubleLoopStr;
+A5:0.W = 0.V & 1.W = 1.V by A2,A0;
+
+A6:now let x,y be Element of W;
+    x + y = (the addF of V).([x,y]) by A1,A3,FUNCT_1:72;
+    hence x + y = (the addF of V).(x,y);
+   end;
+
+A7:now let a,x be Element of W;
+    a*x = (the multF of V).([a,x]) by A1,A4,FUNCT_1:72;
+    hence a*x = (the multF of V).(a,x);
+   end;
+
+   W is Abelian add-associative right_zeroed right_complementable
+       associative well-unital distributive
+   proof
+    set Av = the addF of V;
+    set MV = the multF of V;
+
+    hereby let x,y be Element of W;
+     reconsider x1 = x, y1 = y as Element of V by A1,TARSKI:def 3;
+     x + y = x1 + y1 & y + x = y1 + x1 by A6;
+     hence x + y = y + x;
+    end;
+
+    hereby let x,y,z be Element of W;
+     reconsider x1 = x, y1 = y, z1 = z as Element of V by A1,TARSKI:def 3;
+     (x + y) + z = Av.(x +y,z1) & x + (y + z) = Av.(x1,y + z) by A6; then
+     (x + y) + z = (x1 + y1) + z1 & x + (y + z) = x1 + (y1 + z1) by A6;
+     hence (x + y) + z = x + (y + z) by RLVECT_1:def 6;
+    end;
+
+    hereby let x be Element of W;
+     reconsider y = x, z = 0.W as Element of V by A1,TARSKI:def 3;
+     x + 0.W = y + 0.V by A2,A6;
+     hence x + 0.W = x by RLVECT_1:10;
+    end;
+
+    thus W is right_complementable
+    proof
+     let x be Element of W;
+     reconsider x1 = x as Element of V by A1,TARSKI:def 3;
+     consider v be Element of V such that
+A8:   x1 + v = 0.V by ALGSTR_0:def 11;
+     v = - x1 by A8,VECTSP_1:63; then
+     reconsider y = v as Element of W by A1,B0;
+     take y;
+     thus x + y = 0.W by A2,A6,A8;
+    end;
+
+    hereby let a,b,x be Element of W;
+     reconsider y=x, a1=a, b1=b as Element of V by A1,TARSKI:def 3;
+     a * b = a1 * b1 & a * (b * x) = MV.(a,b * x) by A7; then
+     (a * b) * x = (a1 * b1) * y & a * (b * x) = a1 * (b1 * y) by A7;
+     hence (a * b) * x = a * (b * x) by GROUP_1:def 4;
+    end;
+
+    hereby let x be Element of W;
+     reconsider y = x as Element of V by A1,TARSKI:def 3;
+     x*1.W = y * 1.V & 1.W * x = 1.V * y by A0,A7;
+     hence x*1.W = x & 1.W * x =x by VECTSP_1:def 16;
+    end;
+
+    hereby let a,x,y be Element of W;
+     reconsider x1=x, y1=y, a1=a as Element of V by A1,TARSKI:def 3;
+     a*(x+y) = MV.(a,x+y) & (x+y)*a = MV.(x+y,a) by A7; then
+     a*(x+y) = a1*(x1+y1) & (x+y)*a = (x1+y1)*a1 by A6; then
+     a*(x+y) = a1*x1 + a1*y1 & (x+y)*a = x1*a1 + y1*a1 by VECTSP_1:def 18; then
+     a*(x+y) = Av.(MV.(a,x1),a*y) & (x+y)*a = Av.(MV.(x1,a1),y*a) by A7; then
+     a*(x+y) = Av.(a*x,a*y) & (x+y)*a = Av.(x*a,y*a) by A7;
+     hence a*(x+y) = a*x + a*y & (x+y)*a = x*a + y*a by A6;
+    end;
+   end;
+   hence thesis by A1,A3,A4,A5,DefSubRing;
+end;
+
+registration let V be Ring;
+ cluster strict Subring of V;
+existence
+proof
+   set V1 = [#]V;
+   the addF of V = (the addF of V)||V1 &
+   the multF of V = (the multF of V)||V1 &
+   1.V = 1.V & 0.V = 0.V by FUNCT_2:40;
+   then doubleLoopStr (# the carrier of V, the addF of V,
+         the multF of V, 1.V, 0.V #) is Subring of V by Th01;
+   hence thesis;
+end;
+end;
+
+definition
+let V be non empty multLoopStr_0;
+let V1 be Subset of V;
+ attr V1 is multiplicatively-closed means :Rdef200:
+  1.V in V1 &
+  for v,u be Element of V st v in V1 & u in V1 holds v * u in V1;
+end;
+
+definition let V be non empty addLoopStr, V1 be Subset of V such that
+A1:V1 is add-closed non empty;
+func Add_(V1,V) -> BinOp of V1 equals :Rdef211:
+ (the addF of V)||V1;
+correctness
+proof
+A3:dom(the addF of V) = [:the carrier of V,the carrier of V:]
+      by FUNCT_2:def 1; then
+A4:dom((the addF of V)||V1) =[:V1,V1:] by ZFMISC_1:119,RELAT_1:91;
+
+   for z be set st z in [:V1,V1:] holds ((the addF of V)||V1).z in V1
+   proof
+    let z be set;
+    assume A5: z in [:V1,V1:]; then
+    consider r,x be set such that
+A6:  r in V1 & x in V1 & z=[r,x] by ZFMISC_1:def 2;
+    reconsider y=x,r1=r as Element of V by A6;
+    [r,x] in dom((the addF of V)||V1) by A3,A5,A6,ZFMISC_1:119,RELAT_1:91; then
+    ((the addF of V)||V1).z = r1+y by A6,FUNCT_1:70;
+
+    hence ((the addF of V)||V1).z in V1 by A6,A1,IDEAL_1:def 1;
+   end;
+   hence thesis by A4,FUNCT_2:5;
+end;
+end;
+
+definition let V be non empty multLoopStr_0, V1 be Subset of V such that
+A1:V1 is multiplicatively-closed non empty;
+func mult_(V1,V) -> BinOp of V1 equals :Rdef220:
+ (the multF of V)||V1;
+correctness
+proof
+A3:dom(the multF of V) = [:the carrier of V,the carrier of V:]
+      by FUNCT_2:def 1; then
+A4:dom((the multF of V)||V1) =[:V1,V1:] by ZFMISC_1:119,RELAT_1:91;
+   for z be set st z in [:V1,V1:] holds ((the multF of V)||V1).z in V1
+   proof
+    let z be set;
+    assume A5: z in [:V1,V1:]; then
+    consider r,x be set such that
+A6:  r in V1 & x in V1 & z=[r,x] by ZFMISC_1:def 2;
+    reconsider y=x,r1=r as Element of V by A6;
+    [r,x] in dom((the multF of V)||V1) by ZFMISC_1:119,A3,A5,A6,RELAT_1:91;
+    then ((the multF of V)||V1).z = r1*y by A6,FUNCT_1:70;
+    hence ((the multF of V)||V1).z in V1 by A1,A6,Rdef200;
+   end;
+   hence thesis by A4,FUNCT_2:5;
+end;
+end;
+
+definition let V be add-associative right_zeroed
+  right_complementable (non empty doubleLoopStr), V1 be Subset of V such that
+A1:V1 is add-closed having-inverse non empty;
+func Zero_(V1,V) -> Element of V1 equals :Rdef213:
+  0.V;
+correctness
+proof
+   consider x be Element of V1;
+   reconsider x1=x as Element of V by A1,TARSKI:def 3;
+P2:-x1 in V1 by A1,Rdef210b;
+   x1 + -x1 = 0.V by RLVECT_1:def 11;
+   hence thesis by P2,A1,IDEAL_1:def 1;
+end;
+end;
+
+definition let V be non empty multLoopStr_0, V1 be Subset of V such that
+A1:V1 is multiplicatively-closed non empty;
+func One_(V1,V) -> Element of V1 equals :Rdef214:
+  1.V;
+correctness by A1,Rdef200;
+end;
+
+theorem
+V1 is additively-closed multiplicatively-closed non empty implies
+ doubleLoopStr(# V1,Add_(V1,V),mult_(V1,V),One_(V1,V),Zero_(V1,V) #) is Ring
+proof
+   assume
+A1: V1 is additively-closed
+    multiplicatively-closed non empty; then
+A2: V1 is add-closed & V1 is having-inverse  by Rdef210; then
+   Zero_(V1,V) = 0.V & Add_(V1,V)= (the addF of V)||V1 &
+   One_(V1,V) =1_V & mult_(V1,V) = (the multF of V) || V1
+     by A1,Rdef211,Rdef213,Rdef214,Rdef220;
+   hence thesis by A1,A2,Th01;
+end;
+
+begin :: Some properties of Algebras
+
+reserve V for Algebra;
+reserve V1 for Subset of V;
+reserve v,w for Element of V;
+reserve v1,w1 for Element of V1;
+reserve MR for Function of [:REAL,X:],X;
+reserve a,b for Real;
+
+definition let V be Algebra;
+mode Subalgebra of V -> Algebra means :DefSubAlg:
+ the carrier of it c= the carrier of V &
+ the addF of it = (the addF of V)||the carrier of it &
+ the multF of it = (the multF of V)||the carrier of it &
+ the Mult of it = (the Mult of V) | [:REAL,the carrier of it:] &
+ 1.it = 1.V & 0.it = 0.V;
+existence
+proof
+   take V;
+   thus the carrier of V c= the carrier of V &
+   the addF of V = (the addF of V)||the carrier of V &
+   the multF of V = (the multF of V)||the carrier of V &
+   the Mult of V = (the Mult of V) | [:REAL,the carrier of V:] &
+   1.V = 1.V & 0.V = 0.V by FUNCT_2:40;
+end;
+end;
+
+theorem Th02:
+ V1 = X &
+ d1 = 0.V &
+ d2 = 1.V &
+ A = (the addF of V)||V1 &
+ M = (the multF of V)||V1 &
+ MR = (the Mult of V) | [:REAL,V1:] &
+ V1 is having-inverse
+implies
+   AlgebraStr(# X,M,A,MR,d2,d1 #) is Subalgebra of V
+proof
+   assume that
+A1: V1 = X and
+A2: d1 = 0.V and
+B2: d2 = 1.V and
+A3: A = (the addF of V)||V1 and
+B3: M = (the multF of V)||V1 and
+A4: MR = (the Mult of V) | [:REAL,V1:] and
+B4: for v be Element of V st v in V1 holds -v in V1;
+   reconsider W = AlgebraStr(# X,M,A,MR,d2,d1 #) as non empty AlgebraStr
+     by STRUCT_0:def 1;
+
+A5:0.W = 0.V & 1.W= 1.V by A2,B2;
+
+A6:now let x,y be Element of W;
+    x + y = (the addF of V).[x,y] by A1,A3,FUNCT_1:72;
+    hence x + y = (the addF of V).(x,y);
+   end;
+
+A7:now let a;
+    let x be VECTOR of W;
+    a * x = (the Mult of V).([a,x]) by A1,A4,FUNCT_1:72;
+    hence a * x = (the Mult of V).(a,x);
+   end;
+
+B7:now let a,x be VECTOR of W;
+    a * x = (the multF of V).([a,x]) by A1,B3,FUNCT_1:72;
+    hence a * x = (the multF of V).(a,x);
+   end;
+
+   W is Abelian add-associative right_zeroed right_complementable
+        commutative associative right_unital right-distributive Algebra-like
+   proof
+    set Av = the addF of V; set MV = the Mult of V;
+    set Mv = the multF of V;
+    hereby let x,y be VECTOR of W;
+     reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
+     x + y = x1 + y1 & y + x = y1 + x1 by A6;
+     hence x + y = y + x;
+    end;
+
+    hereby let x,y,z be VECTOR of W;
+     reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
+     (x + y) + z = Av.(x + y,z1) & x + (y + z) = Av.(x1,y + z) by A6; then
+     (x + y) + z = (x1 + y1) + z1 & x + (y + z) = x1 + (y1 + z1) by A6;
+     hence (x + y) + z = x + (y + z) by RLVECT_1:def 6;
+    end;
+
+    hereby let x be VECTOR of W;
+     reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
+     thus x + 0.W = y + 0.V by A2,A6 .= x by RLVECT_1:10;
+    end;
+
+    thus W is right_complementable
+    proof
+     let x be Element of W;
+     reconsider x1 = x as Element of V by A1,TARSKI:def 3;
+     consider v be Element of V such that
+A8:   x1 + v = 0.V by ALGSTR_0:def 11;
+     v = - x1 by A8,VECTSP_1:63; then
+     reconsider y = v as Element of W by A1,B4;
+     take y;
+     thus x + y = 0.W by A2,A6,A8;
+    end;
+
+    hereby let v,w being Element of W;
+     reconsider v1 = v, w1=w as Element of V by A1,TARSKI:def 3;
+     v * w = v1 * w1 & w * v = w1 * v1 by B7;
+     hence v * w = w * v;
+    end;
+
+    hereby let a,b,x be Element of W;
+     reconsider y=x, a1=a, b1=b as Element of V by A1,TARSKI:def 3;
+     a * b = a1 * b1 & a * (b * x) = Mv.(a,b * x) by B7; then
+     (a * b) * x = (a1 * b1) * y & a * (b * x) = a1 * (b1 * y) by B7;
+     hence (a * b) * x = a * (b * x) by GROUP_1:def 4;
+    end;
+
+    hereby let v being Element of W;
+     reconsider v1 = v as Element of V by A1,TARSKI:def 3;
+     v * 1.W =v1*1.V by B7,B2;
+     hence v * 1.W = v by VECTSP_1:def 13;
+    end;
+
+    hereby let x,y,z being Element of W;
+     reconsider x1=x, y1=y, z1=z as Element of V by A1,TARSKI:def 3;
+ T2: x*y = x1*y1 & x*z = x1*z1 by B7;
+     y+z = y1+z1 by A6; then
+     x*(y+z) = x1*(y1+z1) by B7; then
+     x*(y+z) = x1*y1 + x1*z1 by VECTSP_1:def 11;
+     hence x*(y+z) = x*y + x*z by T2,A6;
+    end;
+
+    thus W is Algebra-like
+    proof
+     let x,y,z being Element of W;
+     let a,b be Real;
+     reconsider x1=x, y1=y as Element of V by A1,TARSKI:def 3;
+ T0: x+y = x1+y1 by A6;
+ T4: a*x = a*x1 & a*y = a*y1 & b*x = b*x1 by A7;
+     x*y = x1*y1 by B7; then
+     a*(x*y) =a*(x1*y1) by A7; then
+     a*(x*y) = (a*x1)*y1 by FUNCSDOM:def 20;
+     hence a*(x*y) = (a*x)*y by T4,B7;
+     a*(x+y) =a*(x1+y1) by T0,A7; then
+     a*(x+y) =a*x1 + a*y1 by FUNCSDOM:def 20;
+     hence a*(x+y) = a*x + a*y by T4,A6;
+     (a+b)*x = (a+b)*x1 by A7; then
+     (a+b)*x = a*x1 + b*x1 by FUNCSDOM:def 20;
+     hence (a+b)*x =a*x + b*x by T4,A6;
+     (a*b)*x = (a*b)*x1 by A7; then
+     (a*b)*x = a*(b*x1) by FUNCSDOM:def 20;
+     hence (a*b)*x = a*(b*x) by A7,T4;
+    end;
+   end;
+   hence thesis by A1,A3,B3,A4,A5,DefSubAlg;
+end;
+
+registration let V be Algebra;
+cluster strict Subalgebra of V;
+existence
+proof
+   set V1 = [#]V;
+   the addF of V = (the addF of V)||V1 &
+   the multF of V = (the multF of V)||V1 &
+   the Mult of V = (the Mult of V) | [:REAL,V1:] &
+   1_V = 1_V & 0.V = 0.V by FUNCT_2:40;
+   then AlgebraStr (# the carrier of V, the multF of V, the addF of V,
+        the Mult of V, 1.V, 0.V #) is Subalgebra of V by Th02;
+   hence thesis;
+end;
+end;
+
+definition let V be Algebra, V1 be Subset of V;
+attr V1 is additively-linearly-closed means :def210:
+  V1 is add-closed having-inverse &
+  for a be Real, v be Element of V st v in V1 holds a * v in V1;
+end;
+
+registration let V be Algebra;
+  cluster additively-linearly-closed -> additively-closed Subset of V;
+  coherence
+  proof
+   now let V1 be Subset of V;
+    assume V1 is additively-linearly-closed; then
+    V1 is add-closed having-inverse by def210;
+    hence V1 is additively-closed by Rdef210;
+   end;
+   hence thesis;
+  end;
+end;
+
+definition let V be Algebra, V1 be Subset of V such that
+A1:V1 is additively-linearly-closed non empty;
+func Mult_(V1,V) -> Function of [:REAL,V1:], V1 equals :def212:
+  (the Mult of V) | [:REAL,V1:];
+correctness
+proof
+A2:[:REAL,V1:] c= [:REAL,the carrier of V:] by ZFMISC_1:118;
+A3:dom(the Mult of V) = [:REAL,the carrier of V:] by FUNCT_2:def 1; then
+A4:dom((the Mult of V) | [:REAL,V1:]) =[:REAL,V1:] by A2,RELAT_1:91;
+   for z be set st z in [:REAL,V1:] holds
+     ((the Mult of V) | [:REAL,V1:]).z in V1
+   proof
+    let z be set such that
+A5:  z in [:REAL,V1:];
+    consider r,x be set such that
+A6:  r in REAL & x in V1 & z=[r,x] by A5,ZFMISC_1:def 2;
+    reconsider y=x as VECTOR of V by A6;
+    reconsider r as Real by A6;
+    [r,x] in dom((the Mult of V) | [:REAL,V1:]) by A2,A3,A5,A6,RELAT_1:91; then
+    ((the Mult of V) | [:REAL,V1:]).z = r*y by A6,FUNCT_1:70;
+    hence thesis by A1,A6,def210;
+   end;
+   hence thesis by A4,FUNCT_2:5;
+end;
+end;
+
+definition let V be non empty RLSStruct;
+  attr V is scalar-mult-cancelable means :DefSMC:
+    for a be Real, v be Element of V st a*v=0.V holds a=0 or v=0.V;
+end;
+
+theorem RLVECT123:
+for V being add-associative right_zeroed right_complementable
+      Algebra-like (non empty AlgebraStr), a be Real holds
+ a*0.V = 0.V
+proof
+   let V be add-associative right_zeroed right_complementable
+         Algebra-like (non empty AlgebraStr);
+   let a be Real;
+   a * 0.V + a * 0.V = a * (0.V + 0.V) by FUNCSDOM:def 20; then
+   a * 0.V + a * 0.V = a * 0.V by RLVECT_1:10; then
+   a * 0.V + a * 0.V = a * 0.V + 0.V by RLVECT_1:10;
+   hence a * 0.V = 0.V by RLVECT_1:21;
+end;
+
+theorem
+for V being Abelian add-associative right_zeroed right_complementable
+      Algebra-like (non empty AlgebraStr) st
+V is scalar-mult-cancelable holds V is RealLinearSpace
+proof
+  let V being Abelian add-associative right_zeroed right_complementable
+      Algebra-like (non empty AlgebraStr);
+   assume A1: V is scalar-mult-cancelable;
+B0:1 * 0.V = 0.V by RLVECT123;
+A2:for v being VECTOR of V holds 1 * v = v
+   proof
+    let v be VECTOR of V;
+B1: (1*v) - (1*v) = 0.V by RLVECT_1:28;
+    (1*v) + (1 * -v) = 1 * (v + -v) by FUNCSDOM:def 20; then
+    (1*v) + (1 * -v) = 1 * 0.V by RLVECT_1:16; then
+B2: -(1*v) = 1*(-v) by B0,B1,RLVECT_1:21;
+    1 * v = (1 * 1) * v .= 1 * (1 * v) by FUNCSDOM:def 20; then
+    1 * (1 * v) - 1 * v = 0.V by RLVECT_1:28; then
+    1 * (1 * v - v) = 0.V by B2,FUNCSDOM:def 20; then
+    (1*v) - v = 0.V by A1,DefSMC;
+    hence 1*v = v by RLVECT_1:35;
+   end;
+   (for a be Real for v,w being VECTOR of V holds a*(v+w) = a*v + a*w) &
+   (for a,b be Real for v being VECTOR of V holds (a+b)*v = a*v + b*v) &
+   (for a,b be Real for v being VECTOR of V holds (a*b)*v = a*(b*v))
+     by FUNCSDOM:def 20;
+   hence thesis by A2,RLVECT_1:def 9;
+end;
+
+LmAlgebra:
+for V being Abelian add-associative right_zeroed right_complementable
+      Algebra-like (non empty AlgebraStr) st
+ for v being VECTOR of V holds 1 * v = v holds V is RealLinearSpace
+proof
+   let V being Abelian add-associative right_zeroed right_complementable
+      Algebra-like (non empty AlgebraStr);
+   assume A1: for v being VECTOR of V holds 1 * v = v;
+   (for a be Real for v,w being VECTOR of V holds a*(v+w) = a*v + a*w) &
+   (for a,b be Real for v being VECTOR of V holds (a+b)*v = a*v + b*v) &
+   (for a,b be Real for v being VECTOR of V holds (a*b)*v = a*(b*v))
+     by FUNCSDOM:def 20;
+   hence thesis by A1,RLVECT_1:def 9;
+end;
+
+theorem Th03:
+V1 is additively-linearly-closed multiplicatively-closed non empty implies
+ AlgebraStr(# V1,mult_(V1,V), Add_(V1,V), Mult_(V1,V),
+              One_(V1,V), Zero_(V1,V) #) is Subalgebra of V
+proof
+   assume
+A1: V1 is additively-linearly-closed multiplicatively-closed non empty; then
+A2: V1 is add-closed having-inverse &
+   for a be Real, v be Element of V st v in V1 holds a*v in V1 by def210; then
+   Zero_(V1,V) = 0.V & Add_(V1,V)= (the addF of V)||V1 &
+   One_(V1,V) =1_V & mult_(V1,V) = (the multF of V) || V1 &
+   Mult_(V1,V) = (the Mult of V) | [:REAL,V1:]
+     by A1,Rdef213,Rdef211,Rdef214,Rdef220,def212;
+   hence thesis by A1,A2,Th02;
+end;
+
+registration let X be non empty set;
+cluster RAlgebra X -> Abelian add-associative right_zeroed right_complementable
+         commutative associative right_unital right-distributive Algebra-like;
+correctness by FUNCSDOM:50;
+end;
+
+theorem LmAlgebra2:
+RAlgebra X is RealLinearSpace
+proof
+   for v being VECTOR of RAlgebra X holds 1 * v = v by FUNCSDOM:23;
+   hence thesis by LmAlgebra;
+end;
+
+theorem RLSUB121:
+for V be Algebra, V1 be Subalgebra of V holds
+ ( for v1,w1 be Element of V1, v,w be Element of V st
+     v1=v & w1=w holds v1+w1=v+w ) &
+ ( for v1,w1 be Element of V1, v,w be Element of V st
+     v1=v & w1=w holds v1*w1=v*w ) &
+ ( for v1 be Element of V1, v be Element of V, a be Real st
+     v1=v holds a*v1=a*v ) &
+ 1_V1 = 1_V & 0.V1=0.V
+proof
+   let V be Algebra, V1 be Subalgebra of V;
+   hereby let x1,y1 be Element of V1, x,y be Element of V;
+    assume AS: x1=x & y1=y;
+    x1 + y1 = ((the addF of V)||the carrier of V1).[x1,y1] by DefSubAlg;
+    hence x1 + y1 = x+y by AS,FUNCT_1:72;
+   end;
+   hereby let x1,y1 be Element of V1, x,y be Element of V;
+    assume AS: x1=x & y1=y;
+    x1 * y1 = ((the multF of V)||the carrier of V1).[x1,y1] by DefSubAlg;
+    hence x1 * y1 = x*y by AS,FUNCT_1:72;
+   end;
+   hereby let v1 be Element of V1, v be Element of V, a be Real;
+    assume AS: v1 = v;
+    a * v1 = ((the Mult of V) | [:REAL,the carrier of V1:]).[a,v1]
+      by DefSubAlg;
+    hence a * v1 = a * v by AS,FUNCT_1:72;
+   end;
+   thus thesis by DefSubAlg;
+end;
+
+begin :: Banach Algebra of Bounded Functionals
+
+definition let X be non empty set;
+func BoundedFunctions X -> non empty Subset of RAlgebra X equals
+  { f where f is Function of X,REAL : f is_bounded_on X };
+correctness
+proof
+P1:{ f where f is Function of X,REAL : f is_bounded_on X } c= Funcs(X,REAL)
+   proof
+    let x be set;
+    assume x in { f where f is Function of X,REAL : f is_bounded_on X }; then
+    ex f be Function of X,REAL st x=f & f is_bounded_on X;
+    hence x in Funcs(X,REAL) by FUNCT_2:11;
+   end;
+   { f where f is Function of X,REAL : f is_bounded_on X } is non empty
+   proof
+    reconsider g = X --> 0 as Function of X,REAL by FUNCOP_1:58;
+    for x be Element of X st x in X /\ dom g holds g.x =0 by FUNCOP_1:13; then
+    g is_constant_on X by PARTFUN2:76; then
+    g is_bounded_on X by RFUNCT_1:108; then
+    g in { f where f is Function of X,REAL : f is_bounded_on X };
+    hence thesis;
+   end;
+   hence thesis by P1;
+end;
+end;
+
+theorem ThB7:
+BoundedFunctions X is additively-linearly-closed multiplicatively-closed
+proof
+   set W = BoundedFunctions X;
+   set V = RAlgebra X;
+
+P0:RAlgebra X is RealLinearSpace by LmAlgebra2;
+
+   for v,u be Element of V st v in W & u in W holds v + u in W
+   proof
+    let v,u be Element of V such that
+XS1: v in W & u in W;
+
+    consider v1 be Function of X,REAL such that
+L010:v1=v & v1 is_bounded_on X by XS1;
+
+    consider u1 be Function of X,REAL such that
+L020:u1=u & u1 is_bounded_on X by XS1;
+    dom(v1+u1) = X /\ X by FUNCT_2:def 1; then
+L04:v1+u1 is Function of X,REAL & v1+u1 is_bounded_on X
+       by L010,L020,RFUNCT_1:100;
+
+    reconsider h = v+u as Element of Funcs(X,REAL);
+XSF:ex f being Function st h = f & dom f = X & rng f c= REAL by FUNCT_2:def 2;
+    dom v1 /\ dom u1 = X /\ dom u1 by FUNCT_2:def 1; then
+R3: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = v1.x + u1.x
+       by L010,L020,FUNCSDOM:10; then
+    v+u=v1+u1 by VALUED_1:def 1,R3,XSF;
+    hence v+u in W by L04;
+   end; then
+P1:W is add-closed by IDEAL_1:def 1;
+
+   for v be Element of V st v in W holds -v in W
+   proof
+    let v be Element of V such that
+XS1: v in W;
+
+    consider v1 be Function of X,REAL such that
+L010:v1=v & v1 is_bounded_on X by XS1;
+M1: -v1 is Function of X,REAL & -v1 is_bounded_on X
+      by L010,RFUNCT_1:99;
+    reconsider h = -v, v2 = v as Element of Funcs(X,REAL);
+
+R1: h=(-1)*v by P0,RLVECT_1:29;
+XSF:ex f being Function st h = f & dom f = X & rng f c= REAL by FUNCT_2:def 2;
+R3: dom v1 =X by FUNCT_2:def 1;
+    now let x be set;
+     assume x in dom h; then
+     reconsider y=x as Element of X;
+     h.x = (-1)*(v2.y) by R1,FUNCSDOM:15;
+     hence h.x = -v1.x by L010;
+    end; then
+    -v=-v1 by VALUED_1:9,R3,XSF;
+    hence -v in W by M1;
+   end; then
+Q1:W is having-inverse by Rdef210b;
+
+   for a be Real, u be Element of V st u in W holds a * u in W
+   proof
+    let a be Real, u be Element of V such that
+XS1: u in W;
+    consider u1 be Function of X,REAL such that
+L110:u1=u & u1 is_bounded_on X by XS1;
+M2: a(#)u1 is Function of X,REAL & a(#)u1 is_bounded_on X
+       by L110,RFUNCT_1:97;
+
+    reconsider h = a*u as Element of Funcs(X,REAL);
+XSF:ex f being Function st h = f & dom f = X & rng f c= REAL by FUNCT_2:def 2;
+R3: dom u1 = X by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = a*(u1.x) by L110,FUNCSDOM:15; then
+    a*u=a(#)u1 by VALUED_1:def 5,R3,XSF;
+    hence a*u in W by M2;
+   end;
+   hence BoundedFunctions X is additively-linearly-closed by P1,Q1,def210;
+
+Q2:for v,u be Element of V st v in W & u in W holds v * u in W
+   proof
+    let v,u be Element of V such that
+XS1: v in W & u in W;
+
+    consider v1 be Function of X,REAL such that
+L010:v1=v & v1 is_bounded_on X by XS1;
+
+    consider u1 be Function of X,REAL such that
+L020:u1=u & u1 is_bounded_on X by XS1;
+    dom(v1(#)u1) = X /\ X by FUNCT_2:def 1; then
+M3: v1(#)u1 is Function of X,REAL & v1(#)u1 is_bounded_on X
+       by L010,L020,RFUNCT_1:101;
+
+    reconsider h = v*u as Element of Funcs(X,REAL);
+XSF:ex f being Function st h = f & dom f = X & rng f c= REAL by FUNCT_2:def 2;
+    dom v1 /\ dom u1 = X /\ dom u1 by FUNCT_2:def 1; then
+R3: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
+    for x be set st x in dom h holds h.x = v1.x *u1.x
+      by L010,L020,FUNCSDOM:11; then
+    v*u=v1(#)u1 by VALUED_1:def 4,R3,XSF;
+    hence v*u in W by M3;
+   end;
+
+   reconsider g = RealFuncUnit X as Function of X,REAL;
+   for x be Element of X st x in X /\ dom g holds g.x =1 by FUNCOP_1:13; then
+   g is_constant_on X by PARTFUN2:76; then
+   g is_bounded_on X by RFUNCT_1:108; then
+   1.V in W;
+   hence thesis by Rdef200,Q2;
+end;
+
+registration let X;
+  cluster BoundedFunctions X -> additively-linearly-closed
+                                multiplicatively-closed;
+  coherence by ThB7;
+end;
+
+theorem
+AlgebraStr (# BoundedFunctions X, mult_(BoundedFunctions X,RAlgebra X),
+    Add_(BoundedFunctions X,RAlgebra X), Mult_(BoundedFunctions X,RAlgebra X),
+    One_(BoundedFunctions X,RAlgebra X), Zero_(BoundedFunctions X,RAlgebra X)
+  #) is Subalgebra of RAlgebra X by Th03;
+
+definition let X be non empty set;
+func R_Algebra_of_BoundedFunctions X -> Algebra equals
+  AlgebraStr (# BoundedFunctions X, mult_(BoundedFunctions X,RAlgebra X),
+   Add_(BoundedFunctions X,RAlgebra X), Mult_(BoundedFunctions X,RAlgebra X),
+   One_(BoundedFunctions X,RAlgebra X), Zero_(BoundedFunctions X,RAlgebra X)
+  #);
+coherence by Th03;
+end;
+
+theorem
+R_Algebra_of_BoundedFunctions X is RealLinearSpace
+proof
+   now let v being VECTOR of R_Algebra_of_BoundedFunctions X;
+    reconsider v1=v as VECTOR of RAlgebra X by TARSKI:def 3;
+    R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03; then
+    1 * v = 1*v1 by RLSUB121;
+    hence 1 * v =v by FUNCSDOM:23;
+   end;
+   hence thesis by LmAlgebra;
+end;
+
+reserve F,G,H for VECTOR of R_Algebra_of_BoundedFunctions X;
+reserve f,g,h for Function of X,REAL;
+
+theorem ThB10:
+f=F & g=G & h=H implies
+  ( H = F+G iff (for x be Element of X holds h.x = f.x + g.x) )
+proof
+   assume A1: f=F & g=G & h=H;
+A4:R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03;
+   reconsider f1=F, g1=G, h1=H as VECTOR of RAlgebra X by TARSKI:def 3;
+   hereby assume A6: H = F+G;
+    let x be Element of X;
+    h1=f1+g1 by A4,A6,RLSUB121;
+    hence h.x = f.x+g.x by A1,FUNCSDOM:10;
+   end;
+   assume for x be Element of X holds h.x = f.x+g.x; then
+   h1=f1+g1 by A1,FUNCSDOM:10;
+   hence H =F+G by A4,RLSUB121;
+end;
+
+theorem ThB11:
+f=F & g=G implies
+  ( G = a*F iff for x be Element of X holds g.x = a*f.x )
+proof
+   assume A1: f=F & g=G;
+A3:R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03;
+   reconsider f1=F, g1=G as VECTOR of RAlgebra X by TARSKI:def 3;
+   hereby assume A5: G = a*F;
+    let x be Element of X;
+    g1=a*f1 by A3,A5,RLSUB121;
+    hence g.x=a*f.x by A1,FUNCSDOM:15;
+   end;
+   assume for x be Element of X holds g.x=a*f.x; then
+   g1=a*f1 by A1,FUNCSDOM:15;
+   hence G =a*F by A3,RLSUB121;
+end;
+
+theorem ThB12:
+f=F & g=G & h=H implies
+  ( H = F*G iff (for x be Element of X holds h.x = f.x * g.x) )
+proof
+   assume A1: f=F & g=G & h=H;
+A2:R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03;
+   reconsider f1=F, g1=G, h1=H as VECTOR of RAlgebra X by TARSKI:def 3;
+   hereby assume A3: H = F*G;
+    let x be Element of X;
+    h1 = f1*g1 by A2,A3,RLSUB121;
+    hence h.x = f.x * g.x by A1,FUNCSDOM:11;
+   end;
+   assume for x be Element of X holds h.x = f.x * g.x; then
+   h1 = f1 * g1 by A1,FUNCSDOM:11;
+   hence H = F * G by A2,RLSUB121;
+end;
+
+theorem ThB12Zero:
+0.R_Algebra_of_BoundedFunctions X = X -->0
+proof
+A1:R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03;
+   0.RAlgebra X = X -->0;
+   hence thesis by A1,RLSUB121;
+end;
+
+theorem ThB12One:
+1_R_Algebra_of_BoundedFunctions X = X -->1
+proof
+A1:R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X by Th03;
+   1_RAlgebra X = X -->1;
+   hence thesis by A1,RLSUB121;
+end;
+
+definition let X be non empty set, F be set such that
+A1:F in BoundedFunctions X;
+func modetrans(F,X) -> Function of X,REAL means :DefB7:
+  it=F & it is_bounded_on X;
+correctness by A1;
+end;
+
+definition let X be non empty set, f be Function of X,REAL;
+func PreNorms f -> non empty Subset of REAL equals
+  { abs(f.x) where x is Element of X : not contradiction };
+coherence
+proof
+A1:now let z be set;
+    now assume z in {abs(f.x) where x is Element of X : not contradiction };
+     then
+     ex x be Element of X st z=abs(f.x);
+     hence z in REAL;
+    end;
+    hence z in {abs(f.x) where x is Element of X : not contradiction }
+      implies z in REAL;
+   end;
+   consider z be Element of X;
+   abs(f.z) in {abs(f.x) where x is Element of X : not contradiction };
+   hence thesis by A1,TARSKI:def 3;
+end;
+end;
+
+theorem ThB13:
+f is_bounded_on X implies PreNorms f is non empty bounded_above
+proof
+   assume f is_bounded_on X; then
+   consider K be real number such that
+A1: for x be set st x in X /\ dom f holds abs(f.x) <= K by RFUNCT_1:90;
+A3:X /\ dom f = X /\ X by FUNCT_2:def 1;
+   now let r be real number;
+    assume r in PreNorms f; then
+    ex t be Element of X st r=abs(f.t);
+    hence r <=K by A1,A3;
+   end;
+   hence PreNorms f is non empty bounded_above by SEQ_4:def 1;
+end;
+
+theorem
+f is_bounded_on X iff PreNorms f is bounded_above
+proof
+   now assume A1: PreNorms f is bounded_above;
+    reconsider K = sup PreNorms f as Real;
+A7: now let t be set;
+     assume t in X /\ dom f; then
+     abs(f.t) in PreNorms f;
+     hence abs(f.t) <= K by A1,SEQ_4:def 4;
+    end;
+    take K;
+    thus f is_bounded_on X by A7,RFUNCT_1:90;
+   end;
+   hence thesis by ThB13;
+end;
+
+theorem ThB15:
+ex NORM be Function of BoundedFunctions X,REAL st
+  for F be set st F in BoundedFunctions X holds
+   NORM.F = sup PreNorms(modetrans(F,X))
+proof
+   deffunc F(set) = sup PreNorms(modetrans($1,X));
+A1:for z be set st z in BoundedFunctions X holds F(z) in REAL;
+   ex f being Function of BoundedFunctions X,REAL st
+    for x being set st x in BoundedFunctions X holds
+     f.x = F(x) from FUNCT_2:sch 2(A1);
+   hence thesis;
+end;
+
+definition let X be non empty set;
+func BoundedFunctionsNorm X -> Function of BoundedFunctions X,REAL means:DefB9:
+ for x be set st x in BoundedFunctions X holds
+  it.x = sup PreNorms(modetrans(x,X));
+existence by ThB15;
+uniqueness
+proof
+   let NORM1,NORM2 be Function of BoundedFunctions X,REAL such that
+A1: for x be set st x in BoundedFunctions X holds
+        NORM1.x = sup PreNorms(modetrans(x,X)) and
+A2: for x be set st x in BoundedFunctions X holds
+        NORM2.x = sup PreNorms(modetrans(x,X));
+A3:dom NORM1 = BoundedFunctions X &
+   dom NORM2 = BoundedFunctions X by FUNCT_2:def 1;
+   for z be set st z in BoundedFunctions X holds NORM1.z = NORM2.z
+   proof
+    let z be set such that
+A4:  z in BoundedFunctions X;
+    NORM1.z = sup PreNorms(modetrans(z,X)) by A1,A4;
+    hence thesis by A2,A4;
+   end;
+   hence thesis by A3,FUNCT_1:9;
+end;
+end;
+
+theorem ThB16:
+f is_bounded_on X implies modetrans(f,X) = f
+proof
+   assume f is_bounded_on X; then
+   f in BoundedFunctions X;
+   hence thesis by DefB7;
+end;
+
+theorem ThB17:
+f is_bounded_on X implies (BoundedFunctionsNorm X).f = sup PreNorms f
+proof
+   reconsider f'=f as set;
+   assume A0:f is_bounded_on X; then
+   f in BoundedFunctions X; then
+   (BoundedFunctionsNorm X).f = sup PreNorms(modetrans(f',X)) by DefB9;
+   hence (BoundedFunctionsNorm X).f = sup PreNorms f by ThB16,A0;
+end;
+
+definition let X be non empty set;
+ func R_Normed_Algebra_of_BoundedFunctions X -> Normed_AlgebraStr equals
+  Normed_AlgebraStr (# BoundedFunctions X,
+    mult_(BoundedFunctions X,RAlgebra X),
+    Add_(BoundedFunctions X,RAlgebra X),
+    Mult_(BoundedFunctions X,RAlgebra X),
+    One_(BoundedFunctions X,RAlgebra X),
+    Zero_(BoundedFunctions X,RAlgebra X),
+    BoundedFunctionsNorm X #);
+correctness;
+end;
+
+registration let X be non empty set;
+ cluster R_Normed_Algebra_of_BoundedFunctions X -> non empty;
+correctness
+proof
+   thus the carrier of R_Normed_Algebra_of_BoundedFunctions X is non empty;
+   thus thesis;
+end;
+end;
+
+UNITAL:
+now let X be non empty set;
+   set F = R_Normed_Algebra_of_BoundedFunctions X;
+   let x,e be Element of F;
+   assume
+A1: e = One_(BoundedFunctions X,RAlgebra X);
+   set X1 = BoundedFunctions X;
+   reconsider f = x as Element of X1;
+   1_RAlgebra X = 1_R_Algebra_of_BoundedFunctions X by ThB12One; then
+P5:[f,1_RAlgebra X] in [:X1,X1:] & [1_RAlgebra X,f] in [:X1,X1:]
+     by ZFMISC_1:106;
+   x * e = (mult_(X1,RAlgebra X)).(f,1_RAlgebra X) by A1,Rdef214; then
+   x * e = ((the multF of RAlgebra X)||X1).(f,1_RAlgebra X) by Rdef220; then
+   x * e = f * 1_RAlgebra X by P5,FUNCT_1:72;
+   hence x * e = x by FUNCSDOM:49;
+   e * x = (mult_(X1,RAlgebra X)).(1_RAlgebra X,f) by A1,Rdef214; then
+   e * x = ((the multF of RAlgebra X)||X1).(1_RAlgebra X,f) by Rdef220; then
+   e * x = 1_RAlgebra X * f by P5,FUNCT_1:72;
+   hence e * x = x by FUNCSDOM:49;
+end;
+
+registration let X be non empty set;
+cluster R_Normed_Algebra_of_BoundedFunctions X -> unital;
+correctness
+proof
+  reconsider e = One_(BoundedFunctions X,RAlgebra X) as
+    Element of R_Normed_Algebra_of_BoundedFunctions X;
+  take e;
+  thus thesis by UNITAL;
+end;
+end;
+
+theorem RSSPACE34:
+for W be Normed_AlgebraStr, V be Algebra st
+ the AlgebraStr of W = V & 1.V = 1.W holds W is Algebra
+proof
+   let W be Normed_AlgebraStr,V be Algebra such that
+A1:the AlgebraStr of W = V & 1.V =1.W;
+   reconsider W as non empty AlgebraStr by A1,STRUCT_0:def 1;
+
+L1:for x,y being VECTOR of W holds x + y = y + x
+   proof
+    let x,y be VECTOR of W;
+    reconsider x1 = x, y1 = y as VECTOR of V by A1;
+    x + y = x1+y1 by A1; then
+    x + y =y1 + x1;
+    hence x + y = y + x by A1;
+   end;
+
+L2:for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
+   proof
+    let x,y,z be VECTOR of W;
+    reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1;
+    (x + y) + z = (x1 + y1) + z1 by A1; then
+    (x + y) + z = x1 + (y1 + z1) by RLVECT_1:def 6;
+    hence (x + y) + z = x + (y + z) by A1;
+   end;
+
+L3:for x being VECTOR of W holds x + 0.W = x
+   proof
+    let x be VECTOR of W;
+    reconsider y = x, z = 0.W as VECTOR of V by A1;
+    x + 0.W = y + 0.V by A1;
+    hence x + 0.W = x by RLVECT_1:10;
+   end;
+
+L4:for x being Element of W holds x is right_complementable
+   proof
+    let x be Element of W;
+    reconsider x1 = x as Element of V by A1;
+    consider v be Element of V such that
+A8:  x1 + v = 0.V by ALGSTR_0:def 11;
+    reconsider y = v as Element of W by A1;
+    x + y = 0.W by A8,A1;
+    hence thesis by ALGSTR_0:def 11;
+   end;
+
+L5:for v,w being Element of W holds v * w =  w * v
+   proof
+    let v,w being Element of W;
+    reconsider v1 = v, w1 = w as Element of V by A1;
+    v * w = v1*w1 by A1; then
+    v * w = w1*v1;
+    hence v * w =w*v by A1;
+   end;
+
+L6:for a,b,x being Element of W holds (a * b) * x = a * (b * x)
+   proof
+    let a,b,x be Element of W;
+    reconsider y = x, a1 = a, b1 = b as Element of V by A1;
+    (a * b) * x = (a1 * b1) * y by A1; then
+    (a * b) * x = a1 * (b1 * y) by GROUP_1:def 4;
+    hence (a * b) * x = a * (b * x) by A1;
+   end;
+
+L7:W is right_unital
+   proof
+    let x being Element of W;
+    reconsider x1 = x as Element of V by A1;
+    x*1.W = x1*1.V by A1;
+    hence x*1.W = x by VECTSP_1:def 13;
+   end;
+
+L8:W is right-distributive
+   proof
+    let x,y,z being Element of W;
+    reconsider x1 = x, y1 = y, z1 = z as Element of V by A1;
+    x*(y+z) = x1*(y1+z1) by A1; then
+    x*(y+z) = x1*y1 + x1*z1 by VECTSP_1:def 11;
+    hence x*(y+z) = x*y + x*z by A1;
+   end;
+
+   W is Algebra-like
+   proof
+    let x,y,z being Element of W;
+    let a,b be Real;
+    reconsider x1 = x, y1 = y, z1 = z as Element of V by A1;
+    a*(x*y) = a*(x1*y1) by A1; then
+    a*(x*y) = (a*x1)*y1 by FUNCSDOM:def 20;
+    hence a*(x*y) = (a*x)*y by A1;
+    a*(x+y) = a*(x1+y1) by A1; then
+    a*(x+y) = a*x1 + a*y1 by FUNCSDOM:def 20;
+    hence a*(x+y) = a*x + a*y by A1;
+    (a+b)*x = (a+b)*x1 by A1; then
+    (a+b)*x = a*x1 + b*x1 by FUNCSDOM:def 20;
+    hence (a+b)*x =a*x + b*x by A1;
+    (a*b)*x = (a*b)*x1 by A1; then
+    (a*b)*x = a*(b*x1) by FUNCSDOM:def 20;
+    hence (a*b)*x = a*(b*x) by A1;
+   end;
+   hence thesis by L1,L2,L3,L4,L5,L6,L7,L8,RLVECT_1:def 5,def 6,def 7,
+              ALGSTR_0:def 16,GROUP_1:def 4,def 16;
+end;
+
+reserve F,G,H for Point of R_Normed_Algebra_of_BoundedFunctions X;
+
+theorem LmAlgebra4:
+R_Normed_Algebra_of_BoundedFunctions X is Algebra
+proof
+   1.(R_Normed_Algebra_of_BoundedFunctions X)
+     = 1_R_Algebra_of_BoundedFunctions X;
+   hence thesis by RSSPACE34;
+end;
+
+theorem FUNCSDOM23:
+(Mult_(BoundedFunctions X,RAlgebra X)).(1,F) = F
+proof
+   set X1 = BoundedFunctions X;
+   reconsider f1 = F as Element of X1;
+A2:[1,f1] in [:REAL,X1:] by ZFMISC_1:106;
+   thus (Mult_(BoundedFunctions X,RAlgebra X)).(1,F)
+    = ((the Mult of RAlgebra X)| [:REAL,X1:]).(1,f1) by def212
+   .= (the Mult of RAlgebra X).(1,f1) by A2,FUNCT_1:72
+   .= F by FUNCSDOM:23;
+end;
+
+theorem LmAlgebra5:
+R_Normed_Algebra_of_BoundedFunctions X is RealLinearSpace
+proof
+P1:for v being VECTOR of R_Normed_Algebra_of_BoundedFunctions X
+     holds 1 * v = v by FUNCSDOM23;
+   R_Normed_Algebra_of_BoundedFunctions X is Algebra by LmAlgebra4;
+   hence thesis by LmAlgebra,P1;
+end;
+
+theorem ThB18:
+X-->0 = 0.R_Normed_Algebra_of_BoundedFunctions X
+proof
+   X-->0 = 0.R_Algebra_of_BoundedFunctionsX by ThB12Zero;
+   hence X-->0 =0.R_Normed_Algebra_of_BoundedFunctions X;
+end;
+
+theorem ThB19:
+f=F & f is_bounded_on X implies abs(f.x) <= ||.F.||
+proof
+   assume A1: f=F & f is_bounded_on X; then
+A2:PreNorms f is non empty bounded_above by ThB13;
+   abs(f.x) in PreNorms f; then
+   abs(f.x) <= sup PreNorms f by A2,SEQ_4:def 4;
+   hence abs(f.x) <= ||.F.|| by A1,ThB17;
+end;
+
+theorem
+0 <= ||.F.||
+proof
+   F in BoundedFunctions X; then
+   consider g be Function of X,REAL such that
+A0: F=g & g is_bounded_on X;
+A1:now let r be Real;
+    assume r in PreNorms g; then
+    ex t be Element of X st r=abs(g.t);
+    hence 0 <= r by COMPLEX1:132;
+   end;
+A4:PreNorms g is non empty bounded_above by A0,ThB13;
+   consider r0 be set such that
+A5: r0 in PreNorms g by XBOOLE_0:def 1;
+   reconsider r0 as Real by A5;
+   0 <= r0 by A1,A5; then
+   0 <=sup PreNorms g by A4,A5,SEQ_4:def 4;
+   hence thesis by A0,ThB17;
+end;
+
+theorem ThB21:
+F = 0.R_Normed_Algebra_of_BoundedFunctions X implies 0 = ||.F.||
+proof
+   assume A1: F = 0.R_Normed_Algebra_of_BoundedFunctions X;
+    set z = X --> 0;
+    reconsider z as Function of X, REAL by FUNCOP_1:58;
+    F in BoundedFunctions X; then
+    consider g be Function of X,REAL such that
+A0:  g=F & g is_bounded_on X;
+A3: now let r be Real;
+     assume r in PreNorms g; then
+     consider t be Element of X such that
+A5:   r=abs(g.t);
+     z=g by A1,A0,ThB18; then
+     abs(g.t) = abs(0) by FUNCOP_1:13;
+     hence 0 <= r & r <=0 by A5,ABSVALUE:7;
+    end;
+A6: PreNorms g is non empty bounded_above by A0,ThB13;
+    consider r0 be set such that
+A7:  r0 in PreNorms g by XBOOLE_0:def 1;
+    reconsider r0 as Real by A7;
+A8: 0 <= r0 & r0<=0 by A3,A7;
+    (for s be real number st s in PreNorms g holds s <= 0)
+      implies sup PreNorms g <= 0 by SEQ_4:62; then
+    sup PreNorms g = 0 by A3,A6,A7,A8,SEQ_4:def 4;
+    hence thesis by A0,ThB17;
+end;
+
+theorem ThB22:
+f=F & g=G & h=H implies
+ (H = F+G iff for x be Element of X holds h.x = f.x + g.x)
+proof
+   assume A1: f=F & g=G & h=H;
+   reconsider f1=F, g1=G, h1=H as VECTOR of R_Algebra_of_BoundedFunctions X;
+   H=F+G iff h1=f1+g1;
+   hence thesis by A1,ThB10;
+end;
+
+theorem ThB23:
+f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x )
+proof
+   assume A1: f=F & g=G;
+   reconsider f1=F, g1=G as VECTOR of R_Algebra_of_BoundedFunctions X;
+   G=a*F iff g1=a*f1;
+   hence thesis by A1,ThB11;
+end;
+
+theorem ThB23a:
+ f=F & g=G & h=H implies
+(H = F*G iff for x be Element of X holds h.x = f.x * g.x)
+proof
+   assume A1: f=F & g=G & h=H;
+   reconsider f1=F, g1=G, h1=H as VECTOR of R_Algebra_of_BoundedFunctions X;
+   H=F*G iff h1=f1*g1;
+   hence thesis by A1,ThB12;
+end;
+
+theorem ThB24:
+( ||.F.|| = 0 iff F = 0.R_Normed_Algebra_of_BoundedFunctions X ) &
+||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||
+proof
+A1:now assume A2: ||.F.|| = 0;
+    F in BoundedFunctions X; then
+    consider g be Function of X,REAL such that
+A3:  F=g & g is_bounded_on X;
+    set z = X --> 0;
+    reconsider z as Function of X,REAL by FUNCOP_1:58;
+    now let t be Element of X;
+     abs(g.t) <= ||.F.|| by A3,ThB19; then
+     abs(g.t) = 0 by A2,COMPLEX1:132;
+     hence g.t =0 by ABSVALUE:7 .=z.t by FUNCOP_1:13;
+    end; then
+    g=z by FUNCT_2:113;
+    hence F=0.R_Normed_Algebra_of_BoundedFunctions X by A3,ThB18;
+   end;
+
+A3:now assume A4: F = 0.R_Normed_Algebra_of_BoundedFunctions X;
+    set z = X --> 0;
+    reconsider z as Function of X,REAL by FUNCOP_1:58;
+    F in BoundedFunctions X; then
+    consider g be Function of X,REAL such that
+A41: F=g & g is_bounded_on X;
+
+A5: z=g by A41,A4,ThB18;
+A6: now let r be Real such that
+A7:  r in PreNorms g;
+     consider t be Element of X such that
+A8:   r=abs(g.t) by A7;
+     abs(g.t) = abs(0) by A5,FUNCOP_1:13 .= 0 by ABSVALUE:7;
+     hence 0 <= r & r <=0 by A8;
+    end;
+A9: PreNorms g is non empty bounded_above by A41,ThB13;
+    consider r0 be set such that
+A10: r0 in PreNorms g by XBOOLE_0:def 1;
+    reconsider r0 as Real by A10;
+A11:0<=r0 by A6,A10;
+    (for s be real number st s in PreNorms g holds s <= 0)
+      implies sup PreNorms g <= 0 by SEQ_4:62; then
+    sup PreNorms g = 0 by A6,A9,A10,A11,SEQ_4:def 4;
+    hence ||.F.|| = 0 by A41,ThB17;
+   end;
+
+A12:||.a*F.|| = abs a * ||.F.||
+   proof
+    F in BoundedFunctions X; then
+    consider f1 be Function of X,REAL such that
+A121:f1=F & f1 is_bounded_on X;
+    a*F in BoundedFunctions X; then
+    consider h1 be Function of X,REAL such that
+A122:h1=a*F & h1 is_bounded_on X;
+
+A13:now let t be Element of X;
+     abs(h1.t) = abs(a*f1.t) by A121,A122,ThB23; then
+A15: abs(h1.t) = abs a * abs(f1.t) by COMPLEX1:151;
+     0<= abs a by COMPLEX1:132;
+     hence abs(h1.t) <= abs a *||.F.|| by A15,A121,ThB19,XREAL_1:66;
+    end;
+A17:now let r be Real;
+     assume r in PreNorms h1; then
+     ex t be Element of X st r=abs(h1.t);
+     hence r <= abs a *||.F.|| by A13;
+    end;
+
+    (for s be real number st s in PreNorms h1 holds s <= abs a *||.F.|| )
+       implies sup PreNorms h1 <= abs a *||.F.|| by SEQ_4:62; then
+A21:||.a*F.|| <= abs a *||.F.|| by A17,A122,ThB17;
+    per cases;
+    suppose A22: a <> 0; then
+A31: abs(a) <>0 by COMPLEX1:133;
+A23: now let t be Element of X;
+      h1.t=a*f1.t by A121,A122,ThB23; then
+      a"*h1.t = (a"* a)*f1.t; then
+A24:  a"*h1.t =1*f1.t by A22,XCMPLX_0:def 7;
+A25:  abs(a"*h1.t) = abs(a")*abs(h1.t) by COMPLEX1:151;
+A27:  0 <= abs(a") by COMPLEX1:132;
+      abs(a") =abs(1/a); then
+      abs(a") =1/abs(a) by ABSVALUE:15;
+      hence abs(f1.t) <= abs(a)"*||.a*F.||
+          by A24,A25,A122,ThB19,A27,XREAL_1:66;
+     end;
+A28: now let r be Real;
+      assume r in PreNorms f1; then
+      ex t be Element of X st r=abs(f1.t);
+      hence r <= abs(a)"*||.a*F.|| by A23;
+     end;
+A32: (for s be real number st s in PreNorms f1 holds s <= abs(a)"*||.a*F.||)
+       implies sup PreNorms f1 <= abs(a)"*||.a*F.|| by SEQ_4:62;
+A33: ||.F.|| <=abs(a)"*||.a*F.|| by A28,A32,A121,ThB17;
+     0 <= abs a by COMPLEX1:132; then
+     abs(a)*||.F.|| <=abs(a)*(abs(a)"*||.a*F.||) by A33,XREAL_1:66; then
+     abs(a)*||.F.|| <=(abs(a)*abs(a)")*||.a*F.||; then
+     abs(a)*||.F.|| <=1*||.a*F.|| by A31,XCMPLX_0:def 7;
+     hence ||.a*F.|| = abs(a) * ||.F.|| by A21,XXREAL_0:1;
+    end;
+    suppose A34: a=0;
+     reconsider fz=F as VECTOR of R_Algebra_of_BoundedFunctions X;
+     a*fz =(a+a)*fz by A34 .=a*fz + a* fz by FUNCSDOM:def 20; then
+     0.R_Algebra_of_BoundedFunctions X
+       = -(a*fz)+(a*fz + a* fz) by VECTSP_1:63; then
+     0.R_Algebra_of_BoundedFunctions X
+       = -(a*fz)+a*fz + a* fz by RLVECT_1:def 6; then
+     0.R_Algebra_of_BoundedFunctions X
+       = 0.R_Algebra_of_BoundedFunctions X + a * fz by VECTSP_1:63; then
+A35: a*F =0.R_Normed_Algebra_of_BoundedFunctions X by RLVECT_1:10;
+     abs(a)* ||.F.|| =0 * ||.F.|| by A34,ABSVALUE:7;
+     hence abs(a)* ||.F.|| =||.a*F.|| by A35,ThB21;
+    end;
+   end;
+
+   ||.F+G.|| <= ||.F.|| + ||.G.||
+   proof
+    F in BoundedFunctions X; then
+    consider f1 be Function of X,REAL such that
+A361:f1=F & f1 is_bounded_on X;
+    G in BoundedFunctions X; then
+    consider g1 be Function of X,REAL such that
+A362:g1=G & g1 is_bounded_on X;
+    F+G in BoundedFunctions X; then
+    consider h1 be Function of X,REAL such that
+A363:h1=F+G & h1 is_bounded_on X;
+
+A36:now let t be Element of X;
+A37: abs(h1.t) =abs(f1.t+g1.t) by A361,A362,A363,ThB22;
+A38: abs(f1.t+g1.t) <=abs(f1.t) +abs(g1.t) by COMPLEX1:142;
+     abs(f1.t) <= ||.F.|| & abs(g1.t)<= ||.G.|| by A361,A362,ThB19; then
+     abs(f1.t) +abs(g1.t) <= ||.F.|| + ||.G.|| by XREAL_1:9;
+     hence abs(h1.t)  <= ||.F.|| + ||.G.|| by A37,A38,XXREAL_0:2;
+    end;
+
+A40:now let r be Real;
+     assume r in PreNorms h1; then
+     ex t be Element of X st r=abs(h1.t);
+     hence r <= ||.F.|| + ||.G.|| by A36;
+    end;
+    (for s be real number st s in PreNorms h1 holds s <= ||.F.|| + ||.G.||)
+      implies sup PreNorms h1 <= ||.F.|| + ||.G.|| by SEQ_4:62;
+    hence ||.F+G.|| <=||.F.|| + ||.G.|| by A40,A363,ThB17;
+   end;
+   hence thesis by A1,A3,A12;
+end;
+
+theorem ThB25:
+R_Normed_Algebra_of_BoundedFunctions X is RealNormSpace-like
+proof
+   for x, y being Point of R_Normed_Algebra_of_BoundedFunctions X
+   for a be Real holds
+     ( ||.x.|| = 0 iff x = 0.R_Normed_Algebra_of_BoundedFunctions(X) ) &
+    ||.a*x.|| = abs(a) * ||.x.|| &
+    ||.x+y.|| <= ||.x.|| + ||.y.|| by ThB24;
+   hence thesis by NORMSP_1:def 2;
+end;
+
+registration let X be non empty set;
+ cluster R_Normed_Algebra_of_BoundedFunctions X ->
+             RealNormSpace-like RealLinearSpace-like
+             Abelian add-associative right_zeroed right_complementable;
+coherence by ThB25,LmAlgebra5;
+end;
+
+theorem ThB27:
+ f=F & g=G & h=H implies
+  (H = F-G iff (for x be Element of X holds h.x = f.x - g.x))
+proof
+   assume A1: f=F & g=G & h=H;
+A4:now assume H=F-G; then
+    H+G=F-(G-G) by RLVECT_1:43; then
+    H+G=F-0.R_Normed_Algebra_of_BoundedFunctions X by RLVECT_1:28; then
+A5: H+G=F by RLVECT_1:26;
+    now let x be Element of X;
+     f.x=h.x + g.x by A1,A5,ThB22;
+     hence f.x-g.x=h.x;
+    end;
+    hence for x be Element of X holds h.x = f.x - g.x;
+   end;
+   now assume
+A6: for x be Element of X holds h.x = f.x - g.x;
+    now let x be Element of X;
+     h.x = f.x - g.x by A6;
+     hence h.x + g.x= f.x;
+    end; then
+    F=H+G by A1,ThB22; then
+    F-G=H+(G-G) by RLVECT_1:def 6; then
+    F-G=H+0.R_Normed_Algebra_of_BoundedFunctions X by RLVECT_1:28;
+    hence F-G=H by RLVECT_1:10;
+   end;
+   hence thesis by A4;
+end;
+
+theorem ThB28:
+for X be non empty set
+for seq be sequence of R_Normed_Algebra_of_BoundedFunctions X st
+ seq is Cauchy_sequence_by_Norm holds seq is convergent
+proof
+   let X be non empty set;
+   let vseq be sequence of R_Normed_Algebra_of_BoundedFunctions X;
+   assume A2: vseq is Cauchy_sequence_by_Norm;
+   now let e1 be real number such that
+A4: e1 >0;
+    reconsider e =e1 as Real by XREAL_0:def 1;
+    consider k be Element of NAT such that
+A5:  for n,m be Element of NAT st n >= k & m >= k holds
+       ||. vseq.n - vseq.m .|| < e by A2,A4,RSSPACE3:10;
+A6: now let m be Element of NAT;
+     assume m >= k; then
+A7:  ||. vseq.m - vseq.k .|| <e by A5;
+A8:  abs(||.vseq.m.||- ||.vseq.k.||) <= ||. vseq.m - vseq.k .|| by NORMSP_1:13;
+     ||.vseq.k.||= ||.vseq.||.k & ||.vseq.m.||= ||.vseq.||.m
+       by NORMSP_1:def 10;
+     hence abs( ||.vseq.||.m - ||.vseq.||.k ) < e1 by A7,A8,XXREAL_0:2;
+    end;
+    take k;
+    thus for m be Element of NAT st m >= k holds
+            abs(||.vseq.||.m - ||.vseq.||.k ) < e1 by A6;
+   end; then
+A3:||.vseq.|| is convergent by SEQ_4:58;
+
+   defpred P[set,set] means
+    ex xseq be Real_Sequence st
+     (for n be Element of NAT holds xseq.n=modetrans(vseq.n,X).$1) &
+     xseq is convergent & $2= lim xseq;
+
+A11:for x be Element of X ex y be Element of REAL st P[x,y]
+   proof
+    let x be Element of X;
+    deffunc F(Element of NAT) = modetrans(vseq.$1,X).x;
+    consider xseq be Real_Sequence such that
+A12: for n be Element of NAT holds xseq.n = F(n) from FUNCT_2:sch 4;
+
+A13:for m,k be Element of NAT holds abs(xseq.m-xseq.k) <= ||.vseq.m - vseq.k.||
+    proof
+     let m,k be Element of NAT;
+     vseq.m in BoundedFunctions X; then
+     ex vseqm be Function of X,REAL st
+      vseq.m=vseqm & vseqm is_bounded_on X; then
+A14: modetrans(vseq.m,X)=vseq.m by ThB16;
+     vseq.k in BoundedFunctions X; then
+     ex vseqk be Function of X,REAL st
+       vseq.k=vseqk & vseqk is_bounded_on X; then
+A15: modetrans(vseq.k,X)=vseq.k by ThB16;
+
+     vseq.m-vseq.k in BoundedFunctions X; then
+     consider h1 be Function of X,REAL such that
+A161: h1=vseq.m-vseq.k & h1 is_bounded_on X;
+
+     xseq.m =modetrans(vseq.m,X).x & xseq.k =modetrans(vseq.k,X).x by A12; then
+     xseq.m - xseq.k = h1.x by A14,A15,A161,ThB27;
+     hence thesis by ThB19,A161;
+    end;
+
+    now let e be real number such that
+A18: e > 0;
+
+     e is Real by XREAL_0:def 1; then
+     consider k be Element of NAT such that
+A19:  for n, m be Element of NAT st n >= k & m >= k holds
+       ||.(vseq.n) - (vseq.m).|| < e by A2,A18,RSSPACE3:10;
+     take k;
+     hereby let n be Element of NAT;
+      assume n >=k; then
+A21:  ||. vseq.n - vseq.k .|| < e by A19;
+      abs(xseq.n-xseq.k) <= ||. vseq.n - vseq.k .|| by A13;
+      hence abs(xseq.n-xseq.k) < e by A21,XXREAL_0:2;
+     end;
+    end; then
+A17:xseq is convergent by SEQ_4:58;
+    take y = lim xseq;
+    thus thesis by A12,A17;
+   end;
+
+   consider tseq be Function of X,REAL such that
+A22:for x be Element of X holds P[x,tseq.x] from FUNCT_2:sch 3(A11);
+
+   now let x be set;
+    assume AD0: x in X /\ dom tseq; then
+    consider xseq be Real_Sequence such that
+A25: (for n be Element of NAT holds xseq.n=modetrans(vseq.n,X).x) &
+     xseq is convergent & tseq.x = lim xseq by A22;
+
+A28:abs xseq is convergent & abs(tseq.x) = lim abs(xseq) by A25,SEQ_4:26,27;
+
+    for n be Element of NAT holds abs(xseq).n <= ||.vseq.|| .n
+    proof
+     let n be Element of NAT;
+     vseq.n in BoundedFunctions X; then
+A261:ex h1 be Function of X,REAL st vseq.n=h1 & h1 is_bounded_on X; then
+A27: modetrans(vseq.n,X)=vseq.n by ThB16;
+     xseq.n =modetrans(vseq.n,X).x by A25; then
+     abs(xseq.n) <= ||.vseq.n.|| by A27,A261,AD0,ThB19; then
+     abs(xseq).n <= ||.vseq.n.|| by VALUED_1:18;
+     hence abs(xseq).n <= ||.vseq.|| .n by NORMSP_1:def 10;
+    end;
+    hence abs(tseq.x) <= lim ||.vseq.|| by A3,A28,SEQ_2:32;
+   end; then
+A23:tseq is_bounded_on X by RFUNCT_1:90;
+
+A31:
+   for e be Real st e > 0
+    ex k be Element of NAT st
+     for n be Element of NAT st n >= k holds
+      for x be Element of X holds abs(modetrans(vseq.n,X).x - tseq.x) <= e
+   proof
+    let e be Real such that
+A32: e > 0;
+    consider k be Element of NAT such that
+A33: for n,m be Element of NAT st n >= k & m >= k holds
+      ||. vseq.n - vseq.m .|| < e by A2,A32,RSSPACE3:10;
+A34:now let n be Element of NAT such that
+A35: n >= k;
+     now let x be Element of X;
+      consider xseq be Real_Sequence such that
+A36:   (for n be Element of NAT holds xseq.n=modetrans(vseq.n,X).x) &
+       xseq is convergent & tseq.x = lim xseq by A22;
+
+A37:  for m,k be Element of NAT holds
+       abs(xseq.m-xseq.k) <= ||.vseq.m - vseq.k.||
+      proof
+       let m,k be Element of NAT;
+       vseq.m in BoundedFunctions X; then
+       ex vseqm be Function of X,REAL st
+         vseq.m=vseqm & vseqm is_bounded_on X; then
+A38:   modetrans(vseq.m,X) = vseq.m by ThB16;
+       vseq.k in BoundedFunctions X; then
+       ex vseqk be Function of X,REAL st
+         vseq.k=vseqk & vseqk is_bounded_on X; then
+A39:   modetrans(vseq.k,X)=vseq.k by ThB16;
+       vseq.m-vseq.k in BoundedFunctions X; then
+       consider h1 be Function of X,REAL such that
+A401:   h1 =vseq.m-vseq.k & h1 is_bounded_on X;
+A40:   xseq.m =modetrans(vseq.m,X).x by A36;
+       xseq.k =modetrans((vseq.k),X).x by A36; then
+       xseq.m - xseq.k =h1.x by A38,A39,A40,A401,ThB27;
+       hence abs(xseq.m-xseq.k) <= ||.vseq.m - vseq.k.|| by ThB19,A401;
+      end;
+      reconsider fseq = NAT --> xseq.n as Real_Sequence by FUNCOP_1:57;
+A42b: fseq is convergent by SEQ_4:39;
+      lim fseq = fseq.0 by SEQ_4:41; then
+A42c: lim fseq =xseq.n by FUNCOP_1:13;
+      set wseq = xseq-fseq;
+A43:  now let m be Element of NAT;
+       wseq.m = xseq.m +(-fseq).m by SEQ_1:11; then
+       wseq.m = xseq.m +-fseq.m by SEQ_1:14;
+       hence wseq.m = xseq.m - xseq.n by FUNCOP_1:13;
+      end;
+
+      deffunc F(Element of NAT) = abs(xseq.$1 - xseq.n);
+      consider rseq be Real_Sequence such that
+A44:   for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch 1;
+
+A46:  wseq is convergent by A36,A42b,SEQ_2:25;
+A47:  lim wseq= tseq.x - xseq.n by A36,A42b,A42c,SEQ_2:26;
+      now let x be set such that
+A48:    x in NAT;
+       reconsider k=x as Element of NAT by A48;
+       rseq.x = abs(xseq.k - xseq.n) by A44; then
+       rseq.x = abs(wseq.k) by A43;
+       hence rseq.x = abs(wseq).x by VALUED_1:18;
+      end; then
+      rseq = abs(wseq) by SEQ_1:8; then
+A45:  rseq is convergent & lim rseq = abs(tseq.x-xseq.n)
+           by A46,A47,SEQ_4:26,SEQ_4:27;
+
+      for m be Element of NAT st m >= k holds rseq.m <= e
+      proof
+       let m be Element of NAT such that
+A49:     m >=k;
+       rseq.m = abs(xseq.m-xseq.n) by A44; then
+       rseq.m = abs(xseq.n-xseq.m) by COMPLEX1:146; then
+A41:   rseq.m <= ||.vseq.n - vseq.m.|| by A37;
+       ||.vseq.n - vseq.m.|| <e by A33,A35,A49;
+       hence rseq.m <= e by A41,XXREAL_0:2;
+      end; then
+      lim rseq <= e by A45,RSSPACE2:6; then
+      abs(xseq.n-tseq.x) <= e by A45,COMPLEX1:146;
+      hence abs(modetrans(vseq.n,X).x - tseq.x) <= e by A36;
+     end;
+     hence for x be Element of X holds
+            abs(modetrans(vseq.n,X).x - tseq.x) <= e;
+    end;
+    take k;
+    thus thesis by A34;
+   end;
+
+   tseq in BoundedFunctions X by A23; then
+   reconsider tv=tseq as Point of R_Normed_Algebra_of_BoundedFunctions X;
+
+A50:for e be Real st
+    e > 0 ex k be Element of NAT st for n be Element of NAT st
+     n >= k holds ||.vseq.n - tv.|| <= e
+   proof
+    let e be Real such that
+A51:  e > 0;
+    consider k be Element of NAT such that
+A52: for n be Element of NAT st n >= k holds
+      for x be Element of X holds
+       abs(modetrans((vseq.n),X).x - tseq.x) <= e by A31,A51;
+    take k;
+    hereby let n be Element of NAT such that
+A53: n >= k;
+     vseq.n in BoundedFunctions X; then
+     consider f1 be Function of X,REAL such that
+G1:   f1=vseq.n & f1 is_bounded_on X;
+     vseq.n-tv in BoundedFunctions X; then
+     consider h1 be Function of X,REAL such that
+A531: h1=vseq.n-tv & h1 is_bounded_on X;
+A54: now let t be Element of X;
+J1:   modetrans(vseq.n,X)=f1 by G1,DefB7;
+      h1.t = f1.t- tseq.t by G1,A531,ThB27;
+      hence abs(h1.t) <=e by A52,A53,J1;
+     end;
+A55: now let r be Real;
+      assume r in PreNorms h1; then
+      ex t be Element of X st r=abs(h1.t);
+      hence r <=e by A54;
+     end;
+     (for s be real number st s in PreNorms h1 holds s <= e)
+       implies sup PreNorms h1 <= e by SEQ_4:62;
+     hence ||.vseq.n-tv.|| <=e by A55,A531,ThB17;
+    end;
+   end;
+
+   for e be Real st e > 0
+    ex m be Element of NAT st for n be Element of NAT st
+     n >= m holds ||.(vseq.n) - tv.|| < e
+   proof
+    let e be Real such that
+A59: e > 0;
+A60:e/2 > 0 by A59,SEQ_2:3;
+A61:e/2<e by A59,XREAL_1:218;
+    consider m be Element of NAT such that
+A62: for n be Element of NAT st
+      n >= m holds ||.(vseq.n) - tv.|| <= e/2 by A50,A60;
+    take m;
+    hereby let n be Element of NAT such that
+A63: n >= m;
+     ||.(vseq.n) - tv.|| <= e/2 by A62,A63;
+     hence ||.(vseq.n) - tv.|| < e by A61,XXREAL_0:2;
+    end;
+   end;
+   hence thesis by NORMSP_1:def 9;
+end;
+
+theorem ThB29:
+R_Normed_Algebra_of_BoundedFunctions X is RealBanachSpace
+proof
+   for seq be sequence of R_Normed_Algebra_of_BoundedFunctions X st
+    seq is Cauchy_sequence_by_Norm holds seq is convergent by ThB28;
+   hence thesis by LOPBAN_1:def 16;
+end;
+
+registration let X be non empty set;
+ cluster R_Normed_Algebra_of_BoundedFunctions X -> complete;
+coherence by ThB29;
+end;
+
+theorem
+R_Normed_Algebra_of_BoundedFunctions X is Banach_Algebra
+proof
+   set B = R_Normed_Algebra_of_BoundedFunctions X;
+   set X1 = BoundedFunctions X;
+   reconsider B as non empty Normed_Algebra by LmAlgebra4;
+
+A1:now let f,g being Element of B;
+    f in BoundedFunctions X; then
+    consider f1 be Function of X,REAL such that
+A01: f1=f & f1 is_bounded_on X;
+    g in BoundedFunctions X; then
+    consider g1 be Function of X,REAL such that
+A02: g1=g & g1 is_bounded_on X;
+
+    f*g in BoundedFunctions X; then
+    consider h1 be Function of X,REAL such that
+A03: h1=f*g & h1 is_bounded_on X;
+
+A04:PreNorms f1 is non empty bounded_above &
+    PreNorms g1 is non empty bounded_above &
+    PreNorms h1 is non empty bounded_above by A01,A02,A03,ThB13;
+
+B01:||.f.|| = sup PreNorms f1 by A01,ThB17;
+B02:||.g.|| = sup PreNorms g1 by A02,ThB17;
+
+    now let s be real number;
+     assume s in PreNorms h1; then
+     consider t be Element of X such that
+E1:   s = abs(h1.t);
+     abs(h1.t) = abs(f1.t * g1.t) by A01,A02,A03,ThB23a; then
+E2:  abs(h1.t) = abs(f1.t)*abs(g1.t) by COMPLEX1:151;
+E3:  0 <= abs(f1.t) & 0 <= abs(g1.t) by COMPLEX1:132;
+     abs(f1.t) in PreNorms f1; then
+E4:  abs(f1.t) <= sup PreNorms f1 by A04,SEQ_4:def 4; then
+E5:  abs(f1.t)*abs(g1.t) <= (sup PreNorms f1)*abs(g1.t) by E3,XREAL_1:66;
+E6:  0 <= sup PreNorms f1 by E4,COMPLEX1:132;
+     abs(g1.t) in PreNorms g1; then
+     abs(g1.t) <= sup PreNorms g1 by A04,SEQ_4:def 4; then
+     (sup PreNorms f1)*abs(g1.t) <= (sup PreNorms f1)*(sup PreNorms g1)
+       by E6,XREAL_1:66;
+     hence s <= (sup PreNorms f1)*(sup PreNorms g1) by E1,E2,E5,XXREAL_0:2;
+    end; then
+    sup PreNorms h1 <= (sup PreNorms f1)*(sup PreNorms g1) by SEQ_4:62;
+    hence ||. f*g .|| <= ||.f.|| * ||.g.|| by B01,B02,A03,ThB17;
+   end;
+   1.B in BoundedFunctions X; then
+   consider ONE be Function of X,REAL such that
+A21:ONE = 1.B & ONE is_bounded_on X;
+   1.B = 1_R_Algebra_of_BoundedFunctions X; then
+A22:1.B = X --> 1 by ThB12One;
+   for s be set holds s in PreNorms ONE iff s = 1
+   proof
+    let s be set;
+    hereby assume s in PreNorms ONE; then
+     consider t be Element of X such that
+A23:  s = abs((X-->1).t) by A21,A22;
+     (X-->1).t = 1 by FUNCOP_1:13;
+     hence s = 1 by A23,COMPLEX1:134;
+    end;
+    assume A24:s = 1;
+    consider t be Element of X;
+    (X-->1).t = 1 by FUNCOP_1:13; then
+    s = abs((X-->1).t) by A24,COMPLEX1:134;
+    hence s in PreNorms ONE by A21,A22;
+   end; then
+   PreNorms ONE = {1} by TARSKI:def 1; then
+   sup PreNorms ONE = 1 by SEQ_4:22; then
+A2:||. 1.B .|| = 1 by A21,ThB17;
+
+A3:now let a be Real, f,g be Element of B;
+    f in BoundedFunctions X; then
+    consider f1 be Function of X,REAL such that
+A31: f1=f & f1 is_bounded_on X;
+    g in BoundedFunctions X; then
+    consider g1 be Function of X,REAL such that
+A32: g1=g & g1 is_bounded_on X;
+
+    a*g in BoundedFunctions X; then
+    consider h1 be Function of X,REAL such that
+A33: h1=a*g & h1 is_bounded_on X;
+
+    f*g in BoundedFunctions X; then
+    consider h2 be Function of X,REAL such that
+A34: h2=f*g & h2 is_bounded_on X;
+
+    a*(f*g) in BoundedFunctions X; then
+    consider h3 be Function of X,REAL such that
+A35: h3=a*(f*g) & h3 is_bounded_on X;
+
+    now let x be Element of X;
+     h3.x = a*h2.x by A34,A35,ThB23; then
+     h3.x = a * (f1.x * g1.x) by A31,A32,A34,ThB23a; then
+     h3.x = f1.x * (a * g1.x);
+     hence h3.x = f1.x * h1.x by A32,A33,ThB23;
+    end;
+    hence a*(f*g) = f*(a*g) by A31,A33,A35,ThB23a;
+   end;
+
+A4:now let f,g,h be Element of B;
+    f in BoundedFunctions X; then
+    consider f1 be Function of X,REAL such that
+A41: f1=f & f1 is_bounded_on X;
+    g in BoundedFunctions X; then
+    consider g1 be Function of X,REAL such that
+A42: g1=g & g1 is_bounded_on X;
+
+    h in BoundedFunctions X; then
+    consider h1 be Function of X,REAL such that
+A43: h1=h & h1 is_bounded_on X;
+
+    g+h in BoundedFunctions X; then
+    consider gPh1 be Function of X,REAL such that
+A44: gPh1=g+h & gPh1 is_bounded_on X;
+
+    g*f in BoundedFunctions X; then
+    consider gf1 be Function of X,REAL such that
+A45: gf1=g*f & gf1 is_bounded_on X;
+
+    h*f in BoundedFunctions X; then
+    consider hf1 be Function of X,REAL such that
+A46: hf1=h*f & hf1 is_bounded_on X;
+
+    (g+h)*f in BoundedFunctions X; then
+    consider F1 be Function of X,REAL such that
+A47: F1=(g+h)*f & F1 is_bounded_on X;
+
+    now let x be Element of X;
+     F1.x = gPh1.x * f1.x by A44,A41,A47,ThB23a; then
+     F1.x = (g1.x + h1.x) * f1.x by A42,A43,A44,ThB22; then
+     F1.x = g1.x * f1.x + h1.x * f1.x; then
+     F1.x = gf1.x + h1.x * f1.x by A41,A42,A45,ThB23a;
+     hence F1.x = gf1.x + hf1.x by A41,A43,A46,ThB23a;
+    end;
+    hence (g+h)*f = g*f + h*f by A45,A46,A47,ThB22;
+   end;
+
+A5:for f be Element of B holds 1.B * f = f by UNITAL;
+   B is Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
+     left-distributive left_unital complete Normed_Algebra
+     by A1,A2,A3,A4,A5,LOPBAN_2:def 9,def 10,def 11,VECTSP_1:def 12,def 19;
+   hence thesis;
+end;

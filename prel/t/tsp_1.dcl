@@ -79,7 +79,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -99,7 +99,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -122,7 +122,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -306,7 +306,7 @@
 <Cluster>
 <Adjective nr="12" value="false"/>
 </Cluster>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -331,7 +331,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -354,7 +354,7 @@
 <Adjective nr="12" value="false"/>
 <Adjective nr="46"/>
 </Cluster>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

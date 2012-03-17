@@ -16,7 +16,7 @@ environ
       SETFAM_1, ORDINAL1, WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4,
       FINSET_1, CARD_2, CLASSES1;
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCOP_1,
-      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1, SEQ_1;
+      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, XREAL_0, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -76,7 +76,7 @@ registration
       assume
 A1:   x in dom(ff|X);
       then
-A2:   (ff|X).x = ff.x & dom(ff|X) = dom ff /\ X by FUNCT_1:70, RELAT_1:90;
+A2:   (ff|X).x = ff.x & dom(ff|X) = dom ff /\ X by FUNCT_1:70,RELAT_1:90;
       then x in dom ff by A1,XBOOLE_0:def 3;
       hence thesis by A2,Def1;
     end;
@@ -93,7 +93,7 @@ registration
     proof
       let x;
       assume x in dom(X --> K);
-      then x in X by FUNCOP_1:19;
+      then x in X;
       hence thesis by FUNCOP_1:13;
     end;
     hence thesis;
@@ -298,8 +298,7 @@ proof
   then consider Z such that
 A1: x in Z & Z in rng (X --> Y) by TARSKI:def 4;
 A2: ex z st z in dom (X --> Y) & Z = (X --> Y).z by A1,FUNCT_1:def 5;
-  dom (X --> Y) = X by FUNCOP_1:19;
-  hence x in Y by A1,A2,FUNCOP_1:13;
+  thus x in Y by A1,A2,FUNCOP_1:13;
 end;
 
 theorem Th16:
@@ -396,7 +395,6 @@ definition
   proof
     consider Y such that
 A1: y in Y iff y in X & P[y] from XBOOLE_0:sch 1;
-A2: for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
 A3: for y st y in Y ex z st R[y,z]
     proof
       let y;
@@ -405,7 +403,7 @@ A3: for y st y in Y ex z st R[y,z]
       take y.x, y; thus thesis;
     end;
     consider f such that
-A4: dom f = Y & for y st y in Y holds R[y,f.y] from FUNCT_1:sch 2(A2,A3);
+A4: dom f = Y & for y st y in Y holds R[y,f.y] from CLASSES1:sch 1(A3);
     take rng f;
     let y;
     thus y in rng f implies ex f st f in X & y = f.x
@@ -597,7 +595,6 @@ proof
   consider Y such that
 A1: y in Y iff y in X & P[y] from XBOOLE_0:sch 1;
   defpred R[set,set] means ex g st $1 = g & $2 = g.x;
-A2: for y,z1,z2 being set st y in Y & R[y,z1] & R[y,z2] holds z1 = z2;
 A3: for y st y in Y ex z st R[y,z]
   proof
     let y;
@@ -606,7 +603,7 @@ A3: for y st y in Y ex z st R[y,z]
     take y.x, y; thus thesis;
   end;
   consider f such that
-A4: dom f = Y & for y st y in Y holds R[y,f.y] from FUNCT_1:sch 2(A2,A3);
+A4: dom f = Y & for y st y in Y holds R[y,f.y] from CLASSES1:sch 1(A3);
   now
     let y;
     thus y in rng f implies ex f st f in X & y = f.x
@@ -1003,16 +1000,6 @@ A2: dom f <> {};
     defpred P[set,set] means
     x in $2 iff x in Funcs(Card $1,$1) & ex g st x = g & rng g = $1;
     defpred W[set,set] means P[f.$1,$2];
-A3: for x,y1,y2 st x in dom f & W[x,y1] & W[x,y2] holds y1 = y2
-    proof
-      let x,y1,y2 such that x in dom f;
-      defpred Q[set] means
-      $1 in Funcs(Card (f.x),f.x) & ex g st $1 = g & rng g = f.x;
-      assume that
-A4:   z in y1 iff Q[z] and
-A5:   z in y2 iff Q[z];
-      thus y1 = y2 from XBOOLE_0:sch 2(A4,A5);
-    end;
 A6: for x st x in dom f ex y st W[x,y]
     proof
       let x such that x in dom f;
@@ -1023,8 +1010,8 @@ A7:   z in Y iff z in Funcs(Card (f.x),f.x) & A[z] from XBOOLE_0:sch 1;
       thus thesis by A7;
     end;
     consider k being Function such that
-A8: dom k = dom f & for x st x in dom f holds W[x,k.x] from FUNCT_1:sch 2
-    (A3,A6);
+A8: dom k = dom f & for x st x in dom f holds W[x,k.x] from CLASSES1:sch 1
+    (A6);
     reconsider M = rng k as non empty set by A2,A8,RELAT_1:65;
     now
       let X;
@@ -1041,7 +1028,6 @@ A10:  g is one-to-one & dom g = Card(f.x) & rng g = f.x by WELLORD2:def 4;
 A11: dom FF = M & for X st X in M holds FF.X in X by WELLORD2:28;
     set DD = union rng disjoin Card f;
     defpred S[set,set] means ex g st g = FF.(k.$1`2) & $2 = g.$1`1;
-A12: for x,y1,y2 st x in DD & S[x,y1] & S[x,y2] holds y1 = y2;
 A13: for x st x in DD ex y st S[x,y]
     proof
       let x;
@@ -1063,8 +1049,8 @@ A18:  FF.(k.x`2) = g & dom g = Card (f.x`2) & rng g c= f.x`2 by FUNCT_2:def 2;
       take g.x`1, g; thus thesis by A18;
     end;
     consider t being Function such that
-A19: dom t = DD & for x st x in DD holds S[x,t.x] from FUNCT_1:sch 2
-    (A12,A13);
+A19: dom t = DD & for x st x in DD holds S[x,t.x] from CLASSES1:sch 1
+    (A13);
     union rng f c= rng t
     proof
       let x;
@@ -1088,7 +1074,7 @@ A24:  z in dom g & x = g.z by A20,A21,A23,FUNCT_1:def 5;
       then [z,y] in [:dom g,{y}:] & [:dom g,{y}:] in rng disjoin Card f
       by A21,A24,FUNCT_1:def 5,ZFMISC_1:106;
       then
-A25:  [z,y] in DD & [z,y]`1 = z & [z,y]`2 = y by MCART_1:7,TARSKI: def 4;
+A25:  [z,y] in DD & [z,y]`1 = z & [z,y]`2 = y by MCART_1:7,TARSKI:def 4;
       then ex g st g = FF.(k.y) & t.[z,y] = g.z by A19;
       hence thesis by A19,A23,A24,A25,FUNCT_1:def 5;
     end;
@@ -1133,22 +1119,6 @@ A5: a = h & dom h = dom f & for x st x in dom f holds h.x in f.x by A4,Def5;
   defpred P[set,Function] means dom $2 = dom F & for x st x in dom F holds
   ($1`2 = x implies $2.x = $1`1) & ($1`2 <> x implies $2.x = h.x);
   defpred R[set,set] means ex g st $2 = g & P[$1,g];
-A6: for x,y,z st x in Union disjoin F & R[x,y] & R[x,z] holds y = z
-  proof
-    let x,y,z such that x in Union disjoin F;
-    given g1 being Function such that
-A7: y = g1 & P[x,g1];
-    given g2 being Function such that
-A8: z = g2 & P[x,g2];
-    now
-      let u;
-      assume u in dom F;
-      then (x`2 = u implies g1.u = x`1) & (x`2 <> u implies g1.u = h.u) &
-      (x`2 = u implies g2.u = x`1) & (x`2 <> u implies g2.u = h.u) by A7,A8;
-      hence g1.u = g2.u;
-    end;
-    hence thesis by A7,A8,FUNCT_1:9;
-  end;
 A9: for x st x in Union disjoin F ex y st R[x,y]
   proof
     let x such that x in Union disjoin F;
@@ -1164,7 +1134,7 @@ A10: dom g = dom F & for u st u in dom F holds
   end;
   consider f1 such that
 A11: dom f1 = Union disjoin F & for x st x in Union disjoin F holds R[x,f1.x]
-  from FUNCT_1:sch 2(A6,A9);
+  from CLASSES1:sch 1(A9);
 A12: f1 is one-to-one
   proof
     let x,y;
@@ -1413,15 +1383,6 @@ scheme FuncSeparation { X()->set, F(set)->set, P[set,set] }:
   for x st x in X() for y holds y in f.x iff y in F(x) & P[x,y]
 proof
   defpred Q[set,set] means y in $2 iff y in F($1) & P[$1,y];
-A1: for x,y1,y2 st x in X() & Q[x,y1] & Q[x,y2] holds y1 = y2
-  proof
-    let x,y1,y2 such that x in X();
-    defpred Z[set] means $1 in F(x) & P[x,$1];
-    assume that
-A2: y in y1 iff Z[y] and
-A3: y in y2 iff Z[y];
-    thus y1 = y2 from XBOOLE_0:sch 2(A2,A3);
-  end;
 A4: for x st x in X() ex y st Q[x,y]
   proof
     let x such that x in X();
@@ -1432,7 +1393,7 @@ A5: y in Y iff y in F(x) & R[y] from XBOOLE_0:sch 1;
     thus thesis by A5;
   end;
   thus ex f st dom f = X() &
-  for x st x in X() holds Q[x,f.x] from FUNCT_1:sch 2(A1,A4);
+  for x st x in X() holds Q[x,f.x] from CLASSES1:sch 1(A4);
 end;
 
 Lm1: Rank n is finite implies Rank (n+1) is finite
@@ -1782,7 +1743,7 @@ A48: A in order_type_of Q;
       take f = g|A;
       A c= dom g by A42,A48,ORDINAL1:def 2;
       hence
-A49:  f is one-to-one & dom f = A by A42,FUNCT_1:84 ,RELAT_1:91;
+A49:  f is one-to-one & dom f = A by A42,FUNCT_1:84,RELAT_1:91;
       thus rng f c= Q-Seg(g.A)
       proof
         let x;
@@ -2183,7 +2144,7 @@ A1:   A = {};
     case A <> {};
       then rng (A --> B) = { B } by FUNCOP_1:14;
       then
-A2:   dom(A --> B) = A & B = union rng (A --> B) by FUNCOP_1:19, ZFMISC_1:31;
+A2:   dom(A --> B) = A & B = union rng (A --> B) by FUNCOP_1:19,ZFMISC_1:31;
       thus PFuncs(A,B) c= sproduct (A --> B)
       proof
         let x;

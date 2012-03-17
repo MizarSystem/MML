@@ -12,15 +12,13 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, COMPLEX1, FUNCT_1,
       SETFAM_1, PARTFUN1, FUNCT_2, XXREAL_0, REAL_1, DOMAIN_1, STRUCT_0,
       PRE_TOPC, RLVECT_1, RUSUB_4, CONVEX1, NAT_1, FINSEQ_1, RLSUB_1, RLVECT_2,
-      RVSUM_1, FINSEQ_4, RLTOPSP1, RUSUB_5;
+      RVSUM_1, RLTOPSP1, RUSUB_5;
  constructors PARTFUN1, SETFAM_1, DOMAIN_1, XXREAL_0, REAL_1, BINOP_2,
-      COMPLEX1, FINSEQ_4, FINSOP_1, RVSUM_1, RUSUB_5, CONVEX1, RLTOPSP1,
-      VALUED_1, SEQ_1;
+      COMPLEX1, FINSOP_1, RVSUM_1, RUSUB_5, CONVEX1, RLTOPSP1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQ_1, STRUCT_0, RLVECT_1, RLTOPSP1, VALUED_0,
-      VALUED_1, FUNCT_2;
+      XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, RLTOPSP1, VALUED_0;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, RLTOPSP1, RVSUM_1, VALUED_1;
+ definitions TARSKI, XBOOLE_0, RLTOPSP1, RVSUM_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, SUBSET_1, SETFAM_1, XCMPLX_0,
       FUNCT_1, RLVECT_1, RUSUB_4, CONVEX1, REAL_2, RLTOPSP1, RVSUM_1, FINSEQ_1,
       RLSUB_1, RUSUB_5, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, CARD_2, XREAL_1,
@@ -413,9 +411,6 @@ A5:   r*Cir M = {r*v where v is Point of V: v in Cir M} by CONVEX1:def 1;
       then consider v being Point of V such that
 A6:   x = r*v and
 A7:   v in Cir M by A5;
-      consider Y being set such that
-A8:   Y in Circled-Family M by XBOOLE_0:def 1;
-      reconsider Y as Subset of V by A8;
       for W being set st W in Circled-Family (r*M) holds r*v in W
       proof
         let W be set;
@@ -710,10 +705,10 @@ A4: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
   by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A5: len f = len F & for n being Nat st n in Seg len F holds f.n = F(n)
+A5: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
   from FINSEQ_1:sch 2;
 A6: len F = 1 by A3,A4,FINSEQ_3:105;
-  then 1 in Seg len F by FINSEQ_1:4,TARSKI:def 1;
+  then 1 in dom f by A5,FINSEQ_3:27;
   then
 A7: f.1 = L.(F.1) by A5;
   F = <*v*> by A3,A4,FINSEQ_3:106;
@@ -727,12 +722,13 @@ A9: Sum(f) = 1 by FINSOP_1:12;
   for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
   proof
     let n be Nat;
-    assume n in dom f;
+    assume
+A10:   n in dom f;
     then n in Seg len f by FINSEQ_1:def 3;
-    hence thesis by A1,A5,A6,A7,A8,FINSEQ_1:4,TARSKI:def 1;
+    hence thesis by A1,A5,A6,A7,A8,FINSEQ_1:4,TARSKI:def 1,A10;
   end;
   then reconsider L as circled_Combination of V by A4,A5,A9,Def4;
-A10: for A being non empty Subset of V st v in A holds
+A11: for A being non empty Subset of V st v in A holds
   L is circled_Combination of A
   proof
     let A be non empty Subset of V;
@@ -742,7 +738,7 @@ A10: for A being non empty Subset of V st v in A holds
   end;
   take L;
   Sum(L) = 1 * v by A1,A3,RLVECT_2:53;
-  hence thesis by A10,RLVECT_1:def 9;
+  hence thesis by A11,RLVECT_1:def 9;
 end;
 
 theorem
@@ -766,10 +762,10 @@ A5: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
   by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A6: len f = len F & for n being Nat st n in Seg(len F) holds f.n = F(n)
+A6: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
   from FINSEQ_1:sch 2;
 A7: len F = 2 by A1,A4,A5,FINSEQ_3:107;
-  then 1 in Seg len F & 2 in Seg len F by FINSEQ_1:3;
+  then 1 in dom f & 2 in dom f by A6,FINSEQ_3:27;
   then
 A8: f.1 = L.(F.1) & f.2 = L.(F.2) by A6;
   now per cases by A1,A4,A5,FINSEQ_3:108;
@@ -792,44 +788,46 @@ A10:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A11:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A9,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A6,A7,A8,A9,FINSEQ_1:4,TARSKI:def 2,A11;
       end;
       then reconsider L as circled_Combination of V by A5,A6,A10,Def4;
-A11:  for A being non empty Subset of V st {v1,v2} c= A holds
+A12:  for A being non empty Subset of V st {v1,v2} c= A holds
       L is circled_Combination of A by A4,RLVECT_2:def 8;
       take L;
-      thus thesis by A11;
+      thus thesis by A12;
     end;
     suppose F = <*v2,v1*>;
       then
-A12:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
+A13:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
       rng f c= REAL
       proof
-        f = <*1/2,1/2*> by A2,A6,A7,A8,A12,FINSEQ_1:61;
+        f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
         then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
         then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
           .= {1/2} by FINSEQ_1:55;
         hence thesis;
       end;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/2,1/2*> by A2,A6,A7,A8,A12,FINSEQ_1:61;
+      f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
       then
-A13:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
+A14:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
         .= 1;
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A15:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A12,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A6,A7,A8,A13,FINSEQ_1:4,TARSKI:def 2,A15;
       end;
-      then reconsider L as circled_Combination of V by A5,A6,A13,Def4;
-A14:  for A being non empty Subset of V st {v1,v2} c= A holds
+      then reconsider L as circled_Combination of V by A5,A6,A14,Def4;
+A16:  for A being non empty Subset of V st {v1,v2} c= A holds
       L is circled_Combination of A by A4,RLVECT_2:def 8;
       take L;
-      thus thesis by A14;
+      thus thesis by A16;
     end;
   end;
   hence thesis;

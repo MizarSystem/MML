@@ -9,14 +9,14 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -63,7 +63,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -146,7 +146,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="208">
 <Func kind="K" nr="372">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -200,7 +200,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -257,7 +257,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -366,20 +366,20 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="244">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 <Adjective nr="29"/>
 </Cluster>
 </FCluster>
@@ -404,7 +404,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -425,7 +425,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -449,7 +449,7 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 <Func kind="K" nr="28">
-<Func kind="K" nr="312">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -507,7 +507,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 <CCluster>

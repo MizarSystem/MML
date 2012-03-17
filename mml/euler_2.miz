@@ -10,15 +10,14 @@ environ
       RELAT_1, FUNCT_1, RFINSEQ, SQUARE_1, BOOLE, CARD_1, EULER_1, FINSET_1,
       FILTER_0, CARD_3, GROUP_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, CARD_1,
-      INT_1, INT_2, FINSET_1, NAT_1, NAT_D, FUNCT_1, NEWTON, EULER_1, RFINSEQ,
-      RVSUM_1, RELAT_1, FINSEQ_1, FINSEQ_3, TREES_4, WSIERP_1;
+      RELAT_1, FUNCT_1, RECDEF_1, INT_1, INT_2, FINSET_1, NAT_1, NAT_D, NEWTON,
+      EULER_1, RFINSEQ, RVSUM_1, FINSEQ_1, FINSEQ_3, TREES_4, WSIERP_1;
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, NEWTON, RFINSEQ, WSIERP_1,
-      EULER_1, SEQM_3, VALUED_1, PARTFUN1, SEQ_1;
+      EULER_1, SEQ_1, RECDEF_1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, FINSEQ_1, RVSUM_1, WSIERP_1, SEQM_3, NEWTON, XBOOLE_0, VALUED_0,
-      VALUED_1, FUNCT_2;
+      INT_1, FINSEQ_1, SEQM_3, NEWTON, XBOOLE_0, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0, VALUED_1;
+ definitions TARSKI, FUNCT_1, XBOOLE_0;
  theorems INT_2, FINSEQ_1, NAT_1, ABSVALUE, REAL_1, INT_1, FUNCT_1, REAL_2,
       EULER_1, PREPOWER, RFINSEQ, FINSEQ_2, RVSUM_1, FINSEQ_3, FINSET_1,
       NEWTON, RELAT_1, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_5, XXREAL_0,
@@ -339,16 +338,15 @@ definition
     deffunc F(Nat) = (f.$1) mod m;
     consider g be FinSequence such that
 A1: len g = len f and
-A2: for k being Nat st k in Seg len f holds g.k = F(k) from FINSEQ_1:sch 2;
+A2: for k being Nat st k in dom g holds g.k = F(k) from FINSEQ_1:sch 2;
     rng g c= NAT
     proof
       let x be set;
       assume x in rng g;
       then consider y being set such that
 A3:   y in dom g & x = g.y by FUNCT_1:def 5;
-A4:   y in Seg len g by A3,FINSEQ_1:def 3;
       reconsider y as Element of NAT by A3;
-      g.y = (f.y) mod m by A1,A2,A4;
+      g.y = (f.y) mod m by A2,A3;
       hence x in NAT by A3;
     end;
     then reconsider g as FinSequence of NAT by FINSEQ_1:def 4;
@@ -356,7 +354,7 @@ A4:   y in Seg len g by A3,FINSEQ_1:def 3;
     thus len g = len f by A1;
     let k be Nat;
     assume k in dom f;
-    then k in Seg len f by FINSEQ_1:def 3;
+    then k in dom g by A1,FINSEQ_3:31;
     hence g.k = (f.k) mod m by A2;
   end;
   uniqueness
@@ -475,7 +473,7 @@ A3: n = m*k2+(n mod m) and n mod m < m by A1,NAT_D:def 2;
   (a-1)*n = m*(k1-k2) by A1,A2,A3;
   then
 A4: m divides (a-1)*n by INT_1:def 9;
-  reconsider t = (a-1),m,n as Integer;
+  reconsider t = (a-1),m as Integer;
   m divides t by A1,A4,INT_2:40;
   then consider tt be Integer such that
 A5: (a-1) = m*tt by INT_1:def 9;
@@ -774,7 +772,7 @@ A17: s >= 1 & s <= m by A11;
     then 0 = a*(t-s)-m*(((a*t) div m)-((a*s) div m)) by A12,A15;
     then
 A18: m divides a*(t-s) by INT_1:def 9;
-    reconsider m,a,c = (t-s) as Integer;
+    reconsider m,c = (t-s) as Integer;
     1-m <= c & c <= m-1 by A14,A17,REAL_1:92;
     then t-s = 0 by A1,A18,Lm4,INT_2:40;
     hence contradiction by A11,A13,A16;

@@ -8,16 +8,16 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, FINSEQ_1, BOOLE, MSAFREE2, FACIRC_1, BINARITH,
       LATTICES, CIRCCOMB, CIRCUIT1, AMI_1, MSUALG_1, TWOSCOMP, FUNCT_4,
-      PARTFUN1, MARGREL1, ZF_LANG, CIRCUIT2, FSCIRC_1, ARYTM;
+      PARTFUN1, MARGREL1, ZF_LANG, CIRCUIT2, FSCIRC_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, STRUCT_0,
       MARGREL1, NAT_1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
       TWOSCOMP, FACIRC_1, BINARITH;
  constructors ENUMSET1, BINARITH, CIRCUIT1, CIRCUIT2, FACIRC_1, TWOSCOMP,
-      VALUED_1, PARTFUN1, SEQ_1;
+      NAT_1;
  registrations RELSET_1, FRAENKEL, CARD_3, STRUCT_0, CIRCCOMB, FACIRC_1,
-      ORDINAL1, VALUED_1, FUNCT_2;
+      ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions CIRCUIT2, FACIRC_1, MSAFREE2, VALUED_1;
+ definitions CIRCUIT2, FACIRC_1, MSAFREE2;
  theorems TARSKI, ENUMSET1, RELAT_1, FUNCT_1, FINSEQ_2, CIRCUIT1, CIRCUIT2,
       CIRCCOMB, FACIRC_1, TWOSCOMP, XBOOLE_0, XBOOLE_1;
 
@@ -192,9 +192,7 @@ theorem
   for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
   st a = s.x & b = s.c holds (Following s).[<*x,c*>, and2a] = 'not' a '&' b
 proof
-  set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
-  set S1 = 1GateCircStr(xy, and2a), A1 = 1GateCircuit(x,y, and2a);
-  set S2 = 1GateCircStr(yc, and2 ), A2 = 1GateCircuit(y,c, and2 );
+  set xc = <*x,c*>;
   set S3 = 1GateCircStr(xc, and2a), A3 = 1GateCircuit(x,c, and2a);
   set S = BorrowIStr(x,y,c), A = BorrowICirc(x,y,c);
   set v3 = [xc, and2a];
@@ -342,7 +340,7 @@ A10: InnerVertices MI = {[<*x,y*>,and2a]} \/ {[<*y,c*>,and2]}
   then InputVertices S \ InnerVertices MI = {} by A6,XBOOLE_1:37;
   hence InputVertices M =
   (InputVertices(1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2)))
-  \/ InputVertices 1GateCircStr(<*x,c*>,and2a) by A1,A2,A5,A7,A9, FACIRC_1:7
+  \/ InputVertices 1GateCircStr(<*x,c*>,and2a) by A1,A2,A5,A7,A9,FACIRC_1:7
     .= (InputVertices 1GateCircStr(<*x,y*>,and2a)) \/
   (InputVertices 1GateCircStr(<*y,c*>,and2)) \/
   (InputVertices 1GateCircStr(<*x,c*>,and2a)) by A1,A7,FACIRC_1:7
@@ -605,7 +603,6 @@ theorem
   {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)}
 proof
   let x,y,c be non pair set;
-  set S = BitSubtracterWithBorrowStr(x,y,c);
   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
 A1: {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
   {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)}
@@ -670,7 +667,6 @@ theorem
 proof
   let x,y,c be non pair set;
   set f = 'xor';
-  set S = BitSubtracterWithBorrowStr(x,y,c);
   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
   set A = BitSubtracterWithBorrowCirc(x,y,c);
   set A1 = BitSubtracterCirc(x,y,c), A2 = BorrowCirc(x,y,c);
@@ -713,7 +709,6 @@ theorem
   holds Following(s,2) is stable
 proof
   let x,y,c be non pair set;
-  set f = 'xor';
   set S = BitSubtracterWithBorrowStr(x,y,c);
   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
   set A = BitSubtracterWithBorrowCirc(x,y,c);
@@ -750,8 +745,7 @@ A6: the carrier of S = (the carrier of S1) \/ the carrier of S2
   now
     let a be set;
     assume a in the carrier of S;
-    then a in the carrier of S1 or a in the carrier of S2 by A6,
-    XBOOLE_0:def 2;
+    then a in the carrier of S1 or a in the carrier of S2 by A6,XBOOLE_0:def 2;
     then Following(s,2).a = Following(s1,2).a &
     Following(s,3).a = Following(s1,3).a or
     Following(s,2).a = Following(s2,2).a &

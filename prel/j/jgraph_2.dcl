@@ -30,6 +30,7 @@
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JGRAPH_2"/>
@@ -57,7 +58,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="282">
+<Func kind="K" nr="292">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -67,21 +68,21 @@
 <Adjective nr="4"/>
 <Adjective nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="53">
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="272">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -12,15 +12,15 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="BCIALG_1"/>
-<ArticleID name="ALGSTR_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="BCIALG_1"/>
 <ArticleID name="BCIALG_4"/>
 </Signature>
 <RCluster>
@@ -38,7 +38,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="99"/>
 </Cluster>
 </RCluster>
@@ -48,27 +48,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="14">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
 </Cluster>
@@ -79,12 +63,28 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="14">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="100"/>
 <Adjective nr="101"/>
 </Cluster>
@@ -95,12 +95,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="100"/>
 <Adjective nr="102"/>
 </Cluster>
@@ -111,8 +111,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="83"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
 <Adjective nr="103"/>
@@ -126,12 +126,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="100"/>
 <Adjective nr="106"/>
 </Cluster>
@@ -140,8 +140,8 @@
 <ArgTypes/>
 <Func kind="K" nr="146"/>
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="31"/>
 <Adjective nr="99"/>
 </Cluster>
 </FCluster>
@@ -149,11 +149,11 @@
 <ArgTypes/>
 <Func kind="K" nr="146"/>
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
 <Adjective nr="100"/>
 </Cluster>
 </FCluster>
@@ -161,11 +161,11 @@
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="15" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
 <Adjective nr="100"/>
 </Cluster>
 </Typ>
@@ -204,7 +204,7 @@
 <ArgTypes/>
 <Func kind="K" nr="146"/>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="83"/>
 <Adjective nr="100"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>

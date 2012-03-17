@@ -133,7 +133,7 @@
 </Func>
 </Adjective>
 <Adjective nr="25"/>
-<Adjective nr="102" value="false">
+<Adjective nr="104" value="false">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -184,7 +184,7 @@
 </Func>
 </Adjective>
 <Adjective nr="25"/>
-<Adjective nr="102">
+<Adjective nr="104">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -238,7 +238,7 @@
 </Func>
 </Adjective>
 <Adjective nr="25"/>
-<Adjective nr="102" value="false">
+<Adjective nr="104" value="false">
 <Num nr="3"/>
 </Adjective>
 </Cluster>

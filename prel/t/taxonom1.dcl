@@ -18,6 +18,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
 </Signature>
@@ -57,7 +58,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="117">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -22,6 +22,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="INT_1"/>
@@ -45,7 +46,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="111">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -56,7 +57,7 @@
 <Adjective nr="118"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -64,11 +65,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="295">
+<Func kind="K" nr="305">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

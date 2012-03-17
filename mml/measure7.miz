@@ -12,15 +12,15 @@ environ
       MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1, MEASURE4, MEASURE1,
       MEASURE7, FUNCOP_1, PROB_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
-      ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, SUPINF_1, SUPINF_2,
-      MEASURE1, MEASURE4, MEASURE5;
- constructors PARTFUN1, DOMAIN_1, FUNCOP_1, FRAENKEL, NAT_1, MEASURE4,
-      MEASURE5, VALUED_1, SEQ_1;
+      ORDINAL1, NUMBERS, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1,
+      MEASURE4, MEASURE5, RECDEF_1;
+ constructors PARTFUN1, DOMAIN_1, FUNCOP_1, NAT_1, MEASURE4, MEASURE5,
+      RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FRAENKEL,
-      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_1;
+      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0, VALUED_1;
+ definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4, MEASURE5,
       MEASURE6, ZFMISC_1, FUNCT_2, NAT_1, MCART_1, XBOOLE_0, XBOOLE_1,
       FUNCOP_1, XXREAL_0, ORDINAL1;
@@ -221,18 +221,6 @@ proof
   let F be Function of NAT,ExtREAL;
   for n being Element of NAT holds F.n <= F.n;
   hence thesis by Th6;
-end;
-
-definition
-  let S be non empty Subset of NAT;
-  let H be Function of S,NAT;
-  let n be Element of S;
-  redefine func H.n -> Element of NAT;
-  correctness
-  proof
-    H.n is Element of NAT;
-    hence thesis;
-  end;
 end;
 
 definition
@@ -437,7 +425,7 @@ A3: P[0]
     per cases;
     suppose
 A4:   0 in S;
-      then reconsider m = H.0 as Element of NAT by FUNCT_2:7;
+      reconsider m = H.0 as Element of NAT;
       take m;
       let F be Function of NAT,ExtREAL;
       assume
@@ -470,7 +458,7 @@ A11: for F being Function of NAT,ExtREAL st F is nonnegative holds
     per cases;
     suppose
 A12:  k+1 in S;
-      then reconsider m1 = H.(k+1) as Element of NAT by FUNCT_2:7;
+      reconsider m1 = H.(k+1) as Element of NAT;
       set m = m0 + m1;
 A13:  m1 <= m by NAT_1:11;
       take m;
@@ -726,14 +714,12 @@ end;
 ::                       Outside Lebesque measure
 ::
 
-Lm1: REAL c= REAL;
-then consider G0 being Function of NAT, bool REAL such that
+REAL in bool REAL by ZFMISC_1:def 1;
+then reconsider G0 = NAT --> REAL as Function of NAT, bool REAL by FUNCOP_1:57;
 
-Lm2: rng G0 = {REAL} by MEASURE1:34;
-REAL in {REAL} by TARSKI:def 1;
-then
+Lm2: rng G0 = {REAL} by FUNCOP_1:14;
 
-Lm3: REAL c= union rng G0 by Lm2,ZFMISC_1:92;
+Lm3: REAL c= union rng G0 by Lm2,ZFMISC_1:31;
 
 Lm4: for n being Element of NAT holds G0.n is Interval
 proof
@@ -776,8 +762,7 @@ A1: for n being Element of NAT holds G0 is Interval_Covering of F.n
       hence thesis by Def2,Lm4;
     end;
     reconsider G = G0 as Element of Funcs(NAT,bool REAL) by FUNCT_2:11;
-    reconsider H = NAT --> G as Function of NAT,Funcs(NAT,bool REAL)
-    by FUNCOP_1:57;
+    reconsider H = NAT --> G as Function of NAT,Funcs(NAT,bool REAL);
 A2: for n being Element of NAT holds H.n is Interval_Covering of F.n
     proof
       let n be Element of NAT;
@@ -953,9 +938,10 @@ registration
     defpred P[set] means ex F being Interval_Covering of A st $1 = vol(F);
     consider D being set such that
 A1: for x being set holds x in D iff x in ExtREAL & P[x] from XBOOLE_0:sch 1;
-    consider F0 being Function of NAT, bool REAL such that
+    REAL c= REAL;
+    then consider F0 being Function of NAT, bool REAL such that
 A2: rng F0 = {REAL,{}} & F0.0 = REAL &
-    for n being Element of NAT st 0 < n holds F0.n = {} by Lm1,MEASURE1:40;
+    for n being Element of NAT st 0 < n holds F0.n = {} by MEASURE1:40;
 A3: union{REAL,{}} = REAL \/ {} by ZFMISC_1:93;
 
 for n being Element of NAT holds F0.n is Interval by A2,MEASURE6:35,NAT_1:3;
@@ -1144,7 +1130,8 @@ A11: for n being Element of NAT holds G2.n = (G.(pr1(H).n)).(pr2(H).n);
     hence thesis by FUNCT_2:18;
   end;
 end;
-reconsider D = NAT --> {} as Function of NAT,bool REAL by FUNCOP_1:57;
+
+reconsider D = NAT --> {} as Function of NAT,bool REAL;
 
 theorem Th15:
   for H being Function of NAT,[:NAT,NAT:] st
@@ -1320,7 +1307,7 @@ A24:        SUM((G1.n) vol) = 0. by Th1;
               hence thesis;
             end;
             then
-A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by A22,SUPINF_2: 62;
+A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by A22,SUPINF_2:62;
             for s being Element of NAT holds ((G.n) vol).s <= ((G0.n) vol).s
             proof
               let s be Element of NAT;
@@ -1357,7 +1344,7 @@ A30:        SUM((G0.n) vol) = 0. by A28,Th1;
             for s being Element of NAT holds
             ((G1.n) vol).s <= ((G.n) vol).s by A27;
             then
-A31:        SUM((G1.n) vol) <= SUM((G.n) vol) by A29,SUPINF_2: 62;
+A31:        SUM((G1.n) vol) <= SUM((G.n) vol) by A29,SUPINF_2:62;
             for s being Element of NAT holds
             ((G.n) vol).s <= ((G1.n) vol).s by A27;
             then SUM((G.n) vol) <= SUM((G1.n) vol) by A22,SUPINF_2:62;
@@ -1440,10 +1427,10 @@ A50: vol(G0) is nonnegative by SUPINF_2:58;
 A51: (vol(G0)).(pr1(H).(k+1)) <= (Ser(vol(G0))).(pr1(H).(k+1 )) by Th2;
     (Ser vol(G0)).(pr1(H).(k+1)) <= (Ser vol(G0)).m by A50,SUPINF_2:60;
     then
-A52: SUM(G0.(pr1(H).(k+1)) vol) <= (Ser vol(G0)).m by A49,A51,XXREAL_0 :2;
+A52: SUM(G0.(pr1(H).(k+1)) vol) <= (Ser vol(G0)).m by A49,A51,XXREAL_0:2;
     (Ser(GG0 vol)).(k+1) <= SUM(G0.(pr1(H).(k+1)) vol) by A34,A48,XXREAL_0:2;
     then
-A53: (Ser (GG0 vol)).(k+1) <= (Ser vol(G0)).m by A52, XXREAL_0:2;
+A53: (Ser (GG0 vol)).(k+1) <= (Ser vol(G0)).m by A52,XXREAL_0:2;
 A54: (Ser(GG1 vol)).k <= (Ser vol(G1)).m0 by A7;
     GG1.(k+1) = (G1.(pr1(H).(k+1))).(pr2(H).(k+1)) by A2,Def13
       .= {} by A15;
@@ -1457,7 +1444,7 @@ A56: (Ser (GG1 vol)).(k+1) = (Ser (GG1 vol)).k by A55,SUPINF_2:18;
     then vol(G1) is nonnegative by SUPINF_2:58;
     then (Ser vol(G1)).m0 <= (Ser vol(G1)).m by SUPINF_2:60;
     then
-A57: (Ser (GG1 vol)).(k+1) <= (Ser vol(G1)).m by A54,A56, XXREAL_0:2;
+A57: (Ser (GG1 vol)).(k+1) <= (Ser vol(G1)).m by A54,A56,XXREAL_0:2;
     GG0 vol is nonnegative & GG1 vol is nonnegative by Th13;
     then
 A58: 0. <= (Ser (GG0 vol)).(k+1) & 0. <= (Ser (GG1 vol)).(k+1) by SUPINF_2:59;
@@ -1736,7 +1723,7 @@ A43:  SUM(vol(FF)) <= SUM(G0) by A41,SUPINF_2:62;
       then SUM(OS_Meas*F) + SUM(E) <= SUM(OS_Meas*F) + eps by A27,MEASURE1:4;
       then SUM(G0) <= SUM(OS_Meas*F) + eps by A40,XXREAL_0:2;
       then
-A44:  SUM (vol(FF)) <= SUM (OS_Meas*F) + eps by A43, XXREAL_0:2;
+A44:  SUM (vol(FF)) <= SUM (OS_Meas*F) + eps by A43,XXREAL_0:2;
       y <= SUM vol(FF) by Th16;
       hence thesis by A21,A26,A44,XXREAL_0:2;
     end;

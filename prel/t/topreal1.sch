@@ -12,7 +12,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -23,7 +22,9 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -99,7 +100,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -110,7 +111,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -161,7 +162,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -172,7 +173,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -184,7 +185,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -222,7 +223,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>

@@ -13,10 +13,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FINSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
 </Signature>
@@ -77,7 +78,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -88,7 +89,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -143,7 +144,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="16">
 <Func kind="K" nr="66"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -162,7 +163,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18">
+<Adjective nr="16">
 <Func kind="K" nr="66"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -185,7 +186,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="19"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

@@ -21,6 +21,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -44,7 +45,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -67,7 +68,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -97,7 +98,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -120,7 +121,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -143,7 +144,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -166,7 +167,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -189,7 +190,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

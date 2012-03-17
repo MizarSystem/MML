@@ -13,26 +13,18 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, NUMBERS, SUBSET_1, SETFAM_1,
       DOMAIN_1, XCMPLX_0, ABIAN, XXREAL_0, RELAT_1, FUNCT_1, PBOOLE, FUNCT_2,
       FINSEQ_1, FINSET_1, NAT_1, FUNCOP_1, GLIB_000, GLIB_001;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, BINOP_2, CARD_FIL, GLIB_001,
-      VALUED_1, PARTFUN1, SEQ_1;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, CARD_FIL, GLIB_001, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, XREAL_0, NAT_1, INT_1, CARD_1, GLIB_000, ABIAN, GLIB_001,
-      VALUED_1, FUNCT_2;
+      FINSET_1, XREAL_0, NAT_1, INT_1, CARD_1, GLIB_000, ABIAN, GLIB_001;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions TARSKI, FUNCOP_1, VALUED_1;
- theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSET_1, FUNCT_1,
-      FUNCT_2, GLIB_000, GLIB_001, HEYTING3, INT_1, JORDAN12, NAT_1, ORDINAL1,
-      PBOOLE, PENCIL_1, REAL_1, RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+ definitions TARSKI, FUNCOP_1;
+ theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_3, FUNCT_1, FUNCT_2,
+      GLIB_000, GLIB_001, HEYTING3, INT_1, JORDAN12, NAT_1, ORDINAL1, PBOOLE,
+      PENCIL_1, REAL_1, RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, XCMPLX_1,
       ZFMISC_1, XREAL_1, XXREAL_0;
- schemes BINARITH, NAT_1, SUBSET_1, GLIB_000;
+ schemes NAT_1, SUBSET_1, GLIB_000;
 
 begin :: Preliminary
-
-registration
-  let X be finite set;
-  cluster bool X -> finite;
-  coherence by FINSET_1:24;
-end;
 
 theorem Th1: :: tCARD02
   for X being finite set st 1 < card X holds
@@ -141,8 +133,8 @@ A1: not ex W being Walk of G st W is Cycle-like;
     now
       given e being set such that
 A2:   e in the_Edges_of G & (the_Source_of G).e = (the_Target_of G).e;
-      set v1 = (the_Source_of G).e, v2 = (the_Target_of G).e;
-      reconsider v1,v2 as Vertex of G by A2,FUNCT_2:7;
+      set v1 = (the_Source_of G).e;
+      reconsider v1 as Vertex of G by A2,FUNCT_2:7;
 A3:   e Joins v1,v1,G by A2,GLIB_000:def 15;
       set W = G.walkOf(v1,e,v1);
       len W = 3 by A3,GLIB_001:15;
@@ -710,7 +702,7 @@ definition
   coherence
   proof
     G.numComponents() = card G.componentSet();
-    hence thesis by CARD_2:59;
+    hence thesis;
   end;
 end;
 
@@ -814,8 +806,8 @@ A18:        n1 <> 1 by A4,A9,A16,TARSKI:def 1;
             1 <= n1 by HEYTING3:1;
             then
 A19:        1 < n1 by A18,REAL_1:def 5;
-            reconsider n2 = n1 - 1 as even Element of NAT by INT_1:18,
-            HEYTING3:1;
+            reconsider n2 = n1 - 1 as even Element of NAT by HEYTING3:1
+            ,INT_1:18;
             T.n2 in v.edgesInOut() by A13,A17,A19,GLIB_001:12;
             then
 A20:        T.n = T.n2 by A2,A11,A15,TARSKI:def 1;
@@ -1198,7 +1190,7 @@ proof
 A1: not G.numComponents() <` G3.numComponents() by Def10;
 A2: G3.numComponents() <=` G.numComponents() by A1,CARD_1:14;
     let G2 be removeVertex of G,v;
-    thus G2.numComponents() <=` G.numComponents() by A2,Lm12, GLIB_000:96;
+    thus G2.numComponents() <=` G.numComponents() by A2,Lm12,GLIB_000:96;
   end;
   assume
 A3: for G2 being removeVertex of G,v holds
@@ -1227,7 +1219,7 @@ A1: not v is cut-vertex;
   then
 A2: G2.numComponents() = {} or G2.numComponents() = {{}} by ZFMISC_1:39;
   consider x being Vertex of G2;
-  G2.numComponents() = {} \/ {{}} by A2,CARD_2:59
+  G2.numComponents() = {} \/ {{}} by A2
     .= succ 0 by ORDINAL1:def 1
     .= 1;
   hence G2 is connected by Lm18;
@@ -1560,9 +1552,7 @@ A71:                              m <= len P2 & P2.m = cv by GLIB_001:88;
                                   then
 A72:                              P.(n+m-1) = cv & n+m-1 in dom P
                                   by A68,A71,GLIB_001:48;
-                                  then reconsider nm1 = n+m-1 as
-                                  odd Element of NAT;
-                                  1+1 < n+m by A69,XREAL_1:10, HEYTING3:1;
+                                  1+1 < n+m by A69,HEYTING3:1,XREAL_1:10;
                                   then 1+1-1 < n+m-1 by REAL_1:92;
                                   then
 A73:                              2*0+1 < n+m-1;
@@ -1642,7 +1632,7 @@ A83:                          W is_Walk_from y,a by A81,GLIB_001:18;
 
 not e in v.edgesInOut() by A25,A52,A74,GLIB_000:68;
 
-then e in (the_Edges_of G) \ v.edgesInOut() by A26, XBOOLE_0:def 4;
+then e in (the_Edges_of G) \ v.edgesInOut() by A26,XBOOLE_0:def 4;
 
 then e in (the_Edges_of G)\G.edgesInOut({v}) by GLIB_000:def 42;
 
@@ -1686,9 +1676,7 @@ A91:                              m <= len P2 & P2.m = cv by GLIB_001:88;
                                   then
 A92:                              P.(n+m-1) = cv & n+m-1 in dom P
                                   by A88,A91,GLIB_001:48;
-                                  then reconsider nm1 = n+m-1
-                                  as odd Element of NAT;
-                                  1+1 < n+m by A89,XREAL_1:10,HEYTING3:1;
+                                  1+1 < n+m by A89,HEYTING3:1,XREAL_1:10;
                                   then 1+1-1 < n+m-1 by REAL_1:92;
                                   then
 A93:                              2*0+1 < n+m-1;
@@ -1731,7 +1719,7 @@ A96:                the_Vertices_of
                     not cv in {v} by A52,TARSKI:def 1;
 
 then reconsider cv' = cv as Vertex of G3 by A96,XBOOLE_0:def 4;
-A97:               the_Vertices_of C = G2.reachableFrom(v') by Lm16;
+A97:                the_Vertices_of C = G2.reachableFrom(v') by Lm16;
                     now
                       let y be Vertex of G3;
                       now per cases;
@@ -1740,10 +1728,10 @@ A97:               the_Vertices_of C = G2.reachableFrom(v') by Lm16;
                           hence ex W being Walk of G3 st W is_Walk_from cv',y;
                         end;
                         suppose
-A98:                     y <> cv;
+A98:                      y <> cv;
                           now per cases;
                             suppose
-A99:                         y in the_Vertices_of C;
+A99:                          y in the_Vertices_of C;
                               not y in {v1} by A96,XBOOLE_0:def 4;
                               then
 A100:                         y
@@ -1813,9 +1801,7 @@ A112:                             m <= len P2 & P2.m = cv by GLIB_001:88;
                                   then
 A113:                             P.(n+m-1) = cv & n+m-1 in dom P by A109,A112,
                                   GLIB_001:48;
-
-then reconsider nm1 = n+m-1 as odd Element of NAT;
-                                  1+1 < n+m by A110,XREAL_1:10, HEYTING3:1;
+                                  1+1 < n+m by A110,HEYTING3:1,XREAL_1:10;
                                   then 1+1-1 < n+m-1 by REAL_1:92;
                                   then
 A114:                             2*0+1 < n+m-1;
@@ -1974,7 +1960,7 @@ A2: now
     assume P[k];
     then consider P being Path of G such that
 A3: len P = k;
-    2*len P.vertexSeq() <= 2*(G.order()+1) by XREAL_1:66,GLIB_001:155;
+    2*len P.vertexSeq() <= 2*(G.order()+1) by GLIB_001:155,XREAL_1:66;
     then k + 1 <= 2*(G.order() + 1) by A3,GLIB_001:def 14;
     then k+1-1 <= 2*(G.order() + 1) - 0 by REAL_1:92;
     hence k <= 2*(G.order()+1);
@@ -2484,7 +2470,7 @@ A18:      e = P.(m+2+x1) & m+2+x1 in dom P by A8,A16,A17,GLIB_001:37;
 A19:      m+2+x1 <= len P by FINSEQ_3:27;
           m+1 < m+1+1 by NAT_1:13;
           then
-A20:      m+1+0 < m+2+x1 by XREAL_1:10, NAT_1:2;
+A20:      m+1+0 < m+2+x1 by NAT_1:2,XREAL_1:10;
           1 <= m+1 by NAT_1:12;
           hence contradiction by A8,A18,A19,A20,GLIB_001:139;
         end;
@@ -2859,7 +2845,7 @@ A9: the_Edges_of G2A = the_Edges_of G1A by A6,A7,GLIB_000:50;
   G2 is Subgraph of G1 by A1,GLIB_000:90;
   then G2A is Subgraph of G1 by GLIB_000:46;
   hence G2.numComponents() <` G2A.numComponents()
-  by A3,Lm12,A8,A9,GLIB_000:89;
+  by A3,A8,A9,Lm12,GLIB_000:89;
 end;
 
 theorem Th40: ::tGCONNECT_GF01
@@ -2869,7 +2855,7 @@ proof
   $1 is connected implies $1.order() <= $1.size() + 1;
 A1: for G being finite _Graph st G.order() = 1 holds P[G] by NAT_1:12;
 A2: now
-    let k be non empty Element of NAT;
+    let k be non empty Nat;
     assume
 A3: for Gk being finite _Graph st Gk.order() = k holds P[Gk];
     let Gk1 be finite _Graph;
@@ -2946,7 +2932,7 @@ proof
     assume
 A1: G is Tree-like;
     hence G is acyclic by Def3;
-    defpred P[Element of NAT] means for T being finite Tree-like _Graph st
+    defpred P[Nat] means for T being finite Tree-like _Graph st
     T.order() = $1 holds $1 = T.size() + 1;
     now
       let T be finite Tree-like _Graph;
@@ -2975,7 +2961,7 @@ A3:     e in ET;
     then
 A4: P[1];
     now
-      let k be non empty Element of NAT;
+      let k be non empty Nat;
       assume
 A5:   for T being finite Tree-like _Graph st T.order() = k
       holds k = T.size() + 1;
@@ -2995,14 +2981,14 @@ A7:   k = T2.size() + 1 by A5;
       hence k+1 = T.size() + 1 by A7,GLIB_000:51;
     end;
     then
-A8: for k being non empty Element of NAT st P[k] holds P[k+1];
-    for k being non empty Element of NAT holds P[k]
-    from BINARITH:sch 1(A4,A8);
+A8: for k being non empty Nat st P[k] holds P[k+1];
+    for k being non empty Nat holds P[k]
+    from NAT_1:sch 10(A4,A8);
     hence G.order() = G.size() + 1 by A1;
   end;
   assume
 A9: G is acyclic & G.order() = G.size() + 1;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for G being finite acyclic _Graph st G.order() = $1 &
   G.order() = G.size() + 1 holds G is connected;
   now
@@ -3033,8 +3019,7 @@ A13: G.order() = k+1 & G.order() = G.size()+1;
       then 0 + 1 = k + 1 by A13;
       hence contradiction;
     end;
-    then reconsider aG = G as non trivial finite acyclic _Graph by
-    GLIB_000:29;
+    then reconsider aG = G as non trivial finite acyclic _Graph by GLIB_000:29;
     the_Edges_of G <> {} by A13,CARD_1:78,GLIB_000:def 27;
     then consider v,v2 being Vertex of aG such that
 A14: v <> v2 & v is endvertex & v2 is endvertex &
@@ -3052,9 +3037,9 @@ A17: v.edgesInOut() = {e} & not e Joins v,v,G by A14,GLIB_000:def 53;
     hence G is connected by A16,A17,Th3;
   end;
   then
-A18: for k being non empty Element of NAT st P[k] holds P[k+1];
-  for k being non empty Element of NAT holds P[k]
-  from BINARITH:sch 1(A11,A18);
+A18: for k being non empty Nat st P[k] holds P[k+1];
+  for k being non empty Nat holds P[k]
+  from NAT_1:sch 10(A11,A18);
   then G is connected by A9;
   hence G is Tree-like by A9,Def3;
 end;

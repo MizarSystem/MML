@@ -12,8 +12,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -58,11 +58,11 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -94,11 +94,11 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -128,11 +128,11 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

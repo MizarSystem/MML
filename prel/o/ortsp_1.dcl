@@ -23,6 +23,8 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="SYMSP_1"/>
 <ArticleID name="ORTSP_1"/>
 </Signature>
@@ -44,7 +46,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -57,10 +59,10 @@
 <Adjective nr="91">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="93">
+<Adjective nr="102">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="104">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

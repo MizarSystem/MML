@@ -13,12 +13,11 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1, PARTFUN2,
-      RFUNCT_1, RFUNCT_2, RCOMP_1;
+      RFUNCT_1, RFUNCT_2, RCOMP_1, RECDEF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1, SEQ_2,
-      SEQM_3, SEQ_4, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, SEQ_1;
+      SEQM_3, SEQ_4, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, SEQM_3, RCOMP_1, PARTFUN2, RFUNCT_2, VALUED_0, VALUED_1,
-      FUNCT_2;
+      MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SQUARE_1, RELAT_1, VALUED_1;
  theorems TARSKI, ZFMISC_1, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2,
@@ -41,8 +40,8 @@ definition
   let f,x0;
   pred f is_continuous_in x0 means
   :Def1:
-
-x0 in dom f & for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
+  x0 in dom f &
+  for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
   f*s1 is convergent & f.x0 = lim (f*s1);
 end;
 
@@ -224,8 +223,7 @@ A44:    k<=m;
         now per cases;
           suppose s2.m=x0;
             then abs((f*s2).m-f.x0)= abs(f.x0-f.x0) by A2,RFUNCT_2:21
-              .=0 by
-            ABSVALUE:7;
+              .=0 by ABSVALUE:7;
             hence abs((f*s2).m-f.x0)<p by A42;
           end;
           suppose s2.m<>x0;
@@ -330,7 +328,7 @@ A18: now
 A19:  0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
       abs(f.x1-f.x0)<p by A16;
       consider n such that
-A20:  for m st n<=m holds abs(s1.m-x0)<s by A17,A19, SEQ_2:def 7;
+A20:  for m st n<=m holds abs(s1.m-x0)<s by A17,A19,SEQ_2:def 7;
       take k=n;
       let m such that
 A21:  k<=m;
@@ -674,7 +672,7 @@ A7: x=(f1*s1).n by RFUNCT_2:9;
   then
 A8: rng (f1*s1) c= dom f2 by TARSKI:def 3;
   then
-A9: f2*(f1*s1) is convergent & f2.(f1.x0) = lim (f2*(f1*s1)) by A1,A6, Def1;
+A9: f2*(f1*s1) is convergent & f2.(f1.x0) = lim (f2*(f1*s1)) by A1,A6,Def1;
   f2*(f1*s1) = f2*f1*s1
   proof
     now
@@ -762,8 +760,7 @@ A15:  (f|X)*s1 = f*s1 by FUNCT_2:113;
       (f|X).(lim s1) = f.(lim s1) by A10,A11,A12,FUNCT_1:68
         .= lim ((f|X)*s1) by A9,A10,A11,A12,A15;
 
-hence (f|X)*s1 is convergent & (f|X).x1 = lim ((f|X)*s1) by A9,A10,A11,A12
-      ,A15;
+hence (f|X)*s1 is convergent & (f|X).x1 = lim ((f|X)*s1) by A9,A10,A11,A12,A15;
     end;
     hence f|X is_continuous_in x1 by A10,A11,Def1;
   end;
@@ -977,8 +974,8 @@ A10: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A8,Th14;
 A11: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A8,Th14;
     then
 A12: (f1*s1)+(f2*s1) is convergent by A10,SEQ_2:19;
-    (f1+f2).(lim s1) = lim (f1*s1) + lim (f2*s1) by A5,A8,A10,A11,VALUED_1:
-    def 1
+    (f1+f2).(lim s1) = lim (f1*s1) + lim (f2*s1) by A5,A8,A10,A11,
+    VALUED_1:def 1
       .= lim (f1*s1 + f2*s1) by A10,A11,SEQ_2:20
       .= lim ((f1+f2)*s1) by A9,RFUNCT_2:23;
 
@@ -996,8 +993,7 @@ A15: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A13,Th14;
 A16: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A13,Th14;
     then
 A17: (f1*s1)-(f2*s1) is convergent by A15,SEQ_2:25;
-    (f1-f2).(lim s1) = lim (f1*s1) - lim (f2*s1) by A6,A13,A15,A16,
-    VALUED_1:13
+    (f1-f2).(lim s1) = lim (f1*s1) - lim (f2*s1) by A6,A13,A15,A16,VALUED_1:13
       .= lim (f1*s1 - f2*s1) by A15,A16,SEQ_2:26
       .= lim ((f1-f2)*s1) by A14,RFUNCT_2:23;
 
@@ -1015,7 +1011,7 @@ A20: f1*s1 is convergent & f1.(lim s1) = lim (f1*s1) by A1,A18,Th14;
 A21: f2*s1 is convergent & f2.(lim s1) = lim (f2*s1) by A2,A18,Th14;
     then
 A22: (f1*s1)(#)(f2*s1) is convergent by A20,SEQ_2:28;
-    (f1(#)f2).(lim s1) = lim (f1*s1) * lim (f2*s1) by A20,A21, VALUED_1:5
+    (f1(#)f2).(lim s1) = lim (f1*s1) * lim (f2*s1) by A20,A21,VALUED_1:5
       .= lim ((f1*s1) (#) (f2*s1)) by A20,A21,SEQ_2:29
       .= lim ((f1(#)f2)*s1) by A19,RFUNCT_2:23;
     hence (f1(#)f2)*s1 is convergent & (f1(#)f2).(lim s1)=lim((f1(#)
@@ -1091,7 +1087,7 @@ A6:   rng s1 c= dom ((abs(f))|X) & s1 is convergent & lim s1 = r;
       then
 A7:   rng s1 c= dom (f|X) by RELAT_1:90;
       then
-A8:   (f|X)*s1 is convergent & (f|X).r = lim ((f|X)*s1) by A4,A6, Def1;
+A8:   (f|X)*s1 is convergent & (f|X).r = lim ((f|X)*s1) by A4,A6,Def1;
       now
         let n;
 A9:     s1.n in rng s1 by RFUNCT_2:9;
@@ -1171,8 +1167,7 @@ A17:  now
       hence contradiction by A2,A3,A4,A5,FUNCT_1:def 13;
     end;
     then
-A18: lim ((f|X)*s1) <> 0 & (f|X)*s1 is_not_0 by A6,A8,A9,A12,A13,Def1,
-    SEQ_1:7;
+A18: lim ((f|X)*s1) <> 0 & (f|X)*s1 is_not_0 by A6,A8,A9,A12,A13,Def1,SEQ_1:7;
     now
       let n;
 A19:  s1.n in rng s1 by RFUNCT_2:9;
@@ -1353,7 +1348,7 @@ A7: rng q1 c= dom f by TARSKI:def 3;
     now
       let n;
       q1.n in dom f & f.(q1.n)=s1.n by A6;
-      hence (f*q1).n= s1.n by A7, RFUNCT_2:21;
+      hence (f*q1).n= s1.n by A7,RFUNCT_2:21;
     end;
     then
 A8: f*q1=s1 by FUNCT_2:113;
@@ -1678,8 +1673,7 @@ A4: p=0;
     assume
 A5: x1 in X & x2 in X;
     then
-A6: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by A2,
-    VALUED_1:def 5
+A6: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by A2,VALUED_1:def 5
       .= abs(0 - p*(f.x2)) by A2,A4,A5,VALUED_1:def 5
       .= 0 by A4,ABSVALUE:7;
     0<=abs(x1-x2) by COMPLEX1:132;
@@ -1695,8 +1689,7 @@ A7: 0*s<abs(p)*s by A3,XREAL_1:70;
     assume
 A8: x1 in X & x2 in X;
     then
-A9: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by A2,
-    VALUED_1:def 5
+A9: abs((p(#)f).x1-(p(#)f).x2) = abs(p*(f.x1)-(p(#)f).x2) by A2,VALUED_1:def 5
       .= abs(p*(f.x1) - p*(f.x2)) by A2,A8,VALUED_1:def 5
       .= abs(p*(f.x1 - f.x2))
       .= abs(p)*abs(f.x1 - f.x2) by COMPLEX1:151;
@@ -2016,7 +2009,7 @@ A12:        (f|X).:X = f.:X by RFUNCT_2:5;
 A13:        (f|X).x0 in [.p,g.] by A3,A11,RFUNCT_2:5;
             [.p,g.] = ].p,g.[ \/ {p,g} by A3,RCOMP_1:11;
             then
-A14:        (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A13, XBOOLE_0:def 2;
+A14:        (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A13,XBOOLE_0:def 2;
             now
               let N1 be Neighbourhood of (f|X).x0;
               now per cases by A14,TARSKI:def 2;
@@ -2075,7 +2068,7 @@ A33:              x1<>x0 by A28,A31,XREAL_1:21;
                   now
                     assume
 A34:                x0<x1;
-A35:                x0 in X /\ dom(f|X) by A9,A10, XBOOLE_0:def 3;
+A35:                x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A28,XBOOLE_0:def 3;
                     hence contradiction by A8,A28,A32,A34,A35,RFUNCT_2:def 4;
                   end;
@@ -2087,7 +2080,7 @@ A38:              x0<>x2 by A18,A30,XREAL_1:31;
                   now
                     assume
 A39:                x2<x0;
-A40:                x0 in X /\ dom(f|X) by A9,A10, XBOOLE_0:def 3;
+A40:                x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3;
                     x2 in X /\ dom(f|X) by A30,XBOOLE_0:def 3;
                     hence contradiction by A8,A30,A37,A39,A40,RFUNCT_2:def 4;
                   end;
@@ -2116,11 +2109,11 @@ A45:              x-x0<R by A42,XREAL_1:21;
                   R<=x2-x0 by XXREAL_0:17;
                   then x-x0<x2-x0 by A45,XXREAL_0:2;
                   then
-A46:              x-x0+x0<x2-x0+x0 by XREAL_1: 8;
+A46:              x-x0+x0<x2-x0+x0 by XREAL_1:8;
 A47:              x in X /\ dom(f|X) by A41,RELAT_1:87,XBOOLE_1:28;
                   x2 in X /\ dom(f|X) by A30,XBOOLE_0:def 3;
                   then
-A48:              (f|X).x <= (f|X).x2 by A8,A46,A47, RFUNCT_2:def 4;
+A48:              (f|X).x <= (f|X).x2 by A8,A46,A47,RFUNCT_2:def 4;
                   x1 in X /\ dom(f|X) by A28,XBOOLE_0:def 3;
                   then (f|X).x1 <= (f|X).x by A8,A44,A47,RFUNCT_2:def 4;
 
@@ -2161,7 +2154,7 @@ A60:              p-R<p+r by A59,XXREAL_0:2;
                   then p-R in {s where s is Real: p-r<s & s<p+r} by A60;
                   then p-R in ].p-r,p+r.[ by RCOMP_1:def 2;
                   then
-A61:              [.p-R,p+R.] c= N1 by A50,A58,RCOMP_1: 17;
+A61:              [.p-R,p+R.] c= N1 by A50,A58,RCOMP_1:17;
                   min(r,g-p) <= g-p by XXREAL_0:17;
                   then R<g-p by A53,XXREAL_0:2;
                   then p+R<g by XREAL_1:22;
@@ -2176,7 +2169,7 @@ in dom (f|X) & x1 in X & p+R=(f|X).x1 by A3,A12,A62,PARTFUN2:78;
                   now
                     assume
 A64:                x1<x0;
-A65:                x0 in X /\ dom(f|X) by A9,A10, XBOOLE_0:def 3;
+A65:                x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A63,XBOOLE_0:def 3;
 
 hence contradiction by A8,A49,A57,A63,A64,A65,RFUNCT_2:def 4;
@@ -2198,8 +2191,8 @@ then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
 A68:              p-R<=(f|X).x by A59,XXREAL_0:2;
 A69:              x in X /\ dom(f|X) by A66,A67,XBOOLE_0:def 3;
 A70:              x1 in X /\ dom(f|X) by A63,XBOOLE_0:def 3;
-                  x in {s where s is Real: x0-(x1-x0)<s & s<x0+(x1-x0)} by A66
-                  , RCOMP_1:def 2;
+                  x in {s where s is Real: x0-(x1-x0)<s & s<x0+(x1-x0)} by A66,
+                  RCOMP_1:def 2;
                   then ex s be Real st s=x & x0-(x1-x0)<s & s<x0+(x1-x0);
                   then (f|X).x<=p+R by A8,A63,A69,A70,RFUNCT_2:def 4;
                   then (f|X).x in {s where s is Real: p-R<=s & s<= p+R} by A68;
@@ -2238,7 +2231,7 @@ A82:              g-R<g+r by A81,XXREAL_0:2;
                   then g-R in {s where s is Real: g-r<s & s<g+r} by A82;
                   then g-R in ].g-r,g+r.[ by RCOMP_1:def 2;
                   then
-A83:              [.g-R,g+R.] c= N1 by A72,A80,RCOMP_1: 17;
+A83:              [.g-R,g+R.] c= N1 by A72,A80,RCOMP_1:17;
                   min(r,g-p) <= g-p by XXREAL_0:17;
                   then R<g-p by A75,XXREAL_0:2;
                   then R+p<g by XREAL_1:22;
@@ -2255,7 +2248,7 @@ A86:              x1<>x0 by A71,A74,A85,XREAL_1:46;
                   now
                     assume
 A87:                x0<x1;
-A88:                x0 in X /\ dom(f|X) by A9,A10, XBOOLE_0:def 3;
+A88:                x0 in X /\ dom(f|X) by A9,A10,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A85,XBOOLE_0:def 3;
 
 hence contradiction by A8,A71,A81,A85,A87,A88,RFUNCT_2:def 4;
@@ -2277,8 +2270,8 @@ then (f|X).x in {s where s is Real: p<=s & s<=g} by RCOMP_1:def 1;
 A91:              (f|X).x<=g+R by A79,XXREAL_0:2;
 A92:              x in X /\ dom(f|X) by A89,A90,XBOOLE_0:def 3;
 A93:              x1 in X /\ dom(f|X) by A85,XBOOLE_0:def 3;
-                  x in {s where s is Real: x0-(x0-x1)<s & s<x0+(x0-x1)} by A89
-                  , RCOMP_1:def 2;
+                  x in {s where s is Real: x0-(x0-x1)<s & s<x0+(x0-x1)} by A89,
+                  RCOMP_1:def 2;
                   then ex s be Real st s=x & x0-(x0-x1)<s & s<x0+(x0-x1);
                   then g-R<=(f|X).x by A8,A85,A92,A93,RFUNCT_2:def 4;
                   then (f|X).x in {s where s is Real: g-R<=s & s<= g+R} by A91;
@@ -2314,7 +2307,7 @@ A99:        (f|X).:X = f.:X by RFUNCT_2:5;
 A100:       (f|X).x0 in [.p,g.] by A3,A98,RFUNCT_2:5;
             [.p,g.] = ].p,g.[ \/ {p,g} by A3,RCOMP_1:11;
             then
-A101:       (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A100, XBOOLE_0:def 2;
+A101:       (f|X).x0 in ].p,g.[ or (f|X).x0 in {p,g} by A100,XBOOLE_0:def 2;
             now
               let N1 be Neighbourhood of (f|X).x0;
               now per cases by A101,TARSKI:def 2;
@@ -2371,7 +2364,7 @@ A120:             x1<>x0 by A115,A118,XREAL_1:21;
                   now
                     assume
 A121:               x0>x1;
-A122:               x0 in X /\ dom(f|X) by A96,A97, XBOOLE_0:def 3;
+A122:               x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A115,XBOOLE_0:def 3;
 
 hence contradiction by A95,A115,A119,A121,A122,RFUNCT_2:def 5;
@@ -2384,7 +2377,7 @@ A125:             x0<>x2 by A105,A117,XREAL_1:31;
                   now
                     assume
 A126:               x2>x0;
-A127:               x0 in X /\ dom(f|X) by A96,A97, XBOOLE_0:def 3;
+A127:               x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:def 3;
                     x2 in X /\ dom(f|X) by A117,XBOOLE_0:def 3;
 
 hence contradiction by A95,A117,A124,A126,A127,RFUNCT_2:def 5;
@@ -2418,7 +2411,7 @@ A133:             x-x0+x0<x1-x0+x0 by XREAL_1:8;
 A134:             x in X /\ dom(f|X) by A128,RELAT_1:87,XBOOLE_1:28;
                   x2 in X /\ dom(f|X) by A117,XBOOLE_0:def 3;
                   then
-A135:             (f|X).x <= (f|X).x2 by A95,A131,A134, RFUNCT_2:def 5;
+A135:             (f|X).x <= (f|X).x2 by A95,A131,A134,RFUNCT_2:def 5;
                   x1 in X /\ dom(f|X) by A115,XBOOLE_0:def 3;
                   then (f|X).x1 <= (f|X).x by A95,A133,A134,RFUNCT_2:def 5;
 
@@ -2459,7 +2452,7 @@ A147:             p-R<p+r by A146,XXREAL_0:2;
                   then p-R in {s where s is Real: p-r<s & s<p+r} by A147;
                   then p-R in ].p-r,p+r.[ by RCOMP_1:def 2;
                   then
-A148:             [.p-R,p+R.] c= N1 by A137,A145,RCOMP_1 :17;
+A148:             [.p-R,p+R.] c= N1 by A137,A145,RCOMP_1:17;
                   min(r,g-p) <= g-p by XXREAL_0:17;
                   then R<g-p by A140,XXREAL_0:2;
                   then p+R<g by XREAL_1:22;
@@ -2473,13 +2466,13 @@ A150:             x1 in dom (f|X) & x1 in X & p+R=(f|X).x1
                   now
                     assume
 A151:               x1>x0;
-A152:               x0 in X /\ dom(f|X) by A96,A97, XBOOLE_0:def 3;
+A152:               x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A150,XBOOLE_0:def 3;
 
 hence contradiction by A95,A136,A144,A150,A151,A152,RFUNCT_2:def 5;
                   end;
                   then x0>x1 by A136,A144,A150,REAL_1:def 5;
-                  then x0-x1>0 by XREAL_1: 52;
+                  then x0-x1>0 by XREAL_1:52;
 
 then reconsider N=].x0-(x0-x1),x0+(x0-x1).[ as Neighbourhood of x0
                   by RCOMP_1:def 7;
@@ -2535,7 +2528,7 @@ A169:             g-R<g+r by A168,XXREAL_0:2;
                   then g-R in {s where s is Real: g-r<s & s<g+r} by A169;
                   then g-R in ].g-r,g+r.[ by RCOMP_1:def 2;
                   then
-A170:             [.g-R,g+R.] c= N1 by A159,A167,RCOMP_1 :17;
+A170:             [.g-R,g+R.] c= N1 by A159,A167,RCOMP_1:17;
                   min(r,g-p) <= g-p by XXREAL_0:17;
                   then R<g-p by A162,XXREAL_0:2;
                   then R+p<g by XREAL_1:22;
@@ -2551,7 +2544,7 @@ A173:             x1<>x0 by A158,A161,A172,XREAL_1:46;
                   now
                     assume
 A174:               x0>x1;
-A175:               x0 in X /\ dom(f|X) by A96,A97, XBOOLE_0:def 3;
+A175:               x0 in X /\ dom(f|X) by A96,A97,XBOOLE_0:def 3;
                     x1 in X /\ dom(f|X) by A172,XBOOLE_0:def 3;
 
 hence contradiction by A95,A158,A168,A172,A174,A175,RFUNCT_2:def 5;

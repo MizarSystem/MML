@@ -19,22 +19,20 @@ environ
       FINSEQ_4, STRUCT_0, ALGSTR_0, FUNCT_3, XXREAL_0, BINOP_1, FUNCT_4, NAT_1,
       ALGSTR_1, RLVECT_1, FINSEQ_2, WELLORD1, SEQM_3, CARD_3, GROUP_1,
       VECTSP_1, TRIANG_1, WSIERP_1, FUNCOP_1, FUNCT_7, FRAENKEL, DTCONSTR,
-      BINARITH, MATRLIN, RFUNCT_3, RFINSEQ, FVSUM_1, VALUED_0, VALUED_1, SEQ_1;
- constructors WELLORD2, BINOP_1, SETWISEO, NAT_1, CARD_3, FINSEQOP, FINSOP_1,
+      BINARITH, MATRLIN, RFINSEQ, FVSUM_1, VALUED_0, VALUED_1, SEQ_1, RECDEF_1;
+ constructors WELLORD2, BINOP_1, SETWISEO, CARD_3, FINSEQOP, FINSOP_1,
       FINSEQ_4, RFINSEQ, RFUNCT_3, BINARITH, WSIERP_1, FUNCT_7, ALGSTR_1,
-      FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1, RAT_1, VALUED_1, PARTFUN1, SEQ_1;
+      FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1, RECDEF_1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ORDINAL3, FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, BINOP_2,
-      CARD_1, MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, CARD_3, STRUCT_0, VECTSP_1,
-      ALGSTR_1, CIRCCOMB, HEYTING2, GOBRD13, SEQM_3, VALUED_0, VALUED_1,
-      FUNCT_2;
+      ORDINAL3, FINSET_1, FRAENKEL, XXREAL_0, XREAL_0, NAT_1, BINOP_2, CARD_1,
+      MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3, STRUCT_0, VECTSP_1, ALGSTR_1,
+      CIRCCOMB, HEYTING2, GOBRD13, VALUED_0, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, MATRLIN, CARD_3,
-      RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, SEQM_3, GROUP_1,
-      VALUED_1, SEQ_1, BINOP_1, FINSEQ_2, STRUCT_0, ANPROJ_1, VALUED_0,
-      ALGSTR_0;
+      RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, GROUP_1, BINOP_1,
+      FINSEQ_2, STRUCT_0, ANPROJ_1, VALUED_0, ALGSTR_0;
  theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
-      RLVECT_1, VECTSP_1, FUNCOP_1, STRUCT_0, TARSKI, FUNCT_7, BINOP_1, SEQ_1,
+      RLVECT_1, VECTSP_1, FUNCOP_1, STRUCT_0, TARSKI, FUNCT_7, BINOP_1,
       RELAT_1, MATRLIN, FINSEQ_2, CARD_3, RFINSEQ, DTCONSTR, GROUP_7, CQC_LANG,
       RELSET_1, FUNCT_4, CARD_1, ORDINAL1, RVSUM_1, FINSEQ_5, NAT_1, BINARITH,
       PBOOLE, NAT_2, SUBSET_1, ORDERS_1, EULER_1, WELLSET1, WELLORD1, RELAT_2,
@@ -42,7 +40,7 @@ environ
       SETWOP_2, CARD_2, FUNCT_5, FINSUB_1, GROUP_1, ANPROJ_1, PARTFUN2,
       XBOOLE_0, XBOOLE_1, RLVECT_2, PARTFUN1, BINOP_2, XREAL_1, XXREAL_0,
       VALUED_0, VALUED_1;
- schemes FRAENKEL, SETWISEO, FUNCT_2, FINSEQ_2, FINSEQ_5, GOBOARD2, PBOOLE,
+ schemes FRAENKEL, SETWISEO, FUNCT_2, FINSEQ_2, FINSEQ_1, PBOOLE,
       RELSET_1, FINSEQ_4, ORDINAL1, FUNCT_7, SUBSET_1, XBOOLE_0, BINOP_1;
 
 begin
@@ -55,12 +53,8 @@ theorem Th2:
 proof
   let X be set, A be non empty set, F be BinOp of A,
   f be Function of X, A, x be Element of A;
-A1: rng (dom f --> x) c= {x} by FUNCOP_1:19;
-  {x} c= A by ZFMISC_1:37;
-  then
-A2: rng (dom f --> x) c= A by A1,XBOOLE_1:1;
 A3: rng <:f, dom f --> x:> c= [:rng f, rng (dom f --> x):] by FUNCT_3:71;
-A4: [:rng f, rng (dom f --> x):] c= [:A,A:] by A2,ZFMISC_1:119;
+A4: [:rng f, rng (dom f --> x):] c= [:A,A:] by ZFMISC_1:119;
 A5: dom F = [:A,A:] by FUNCT_2:def 1;
 A6: dom (dom f --> x) = dom f by FUNCOP_1:19;
   thus dom (F[:](f,x)) = dom (F*<:f, dom f --> x:>) by FUNCOP_1:def 4
@@ -400,7 +394,6 @@ registration
     let f be FinSequence of NAT;
     let x be set;
     assume x in dom f;
-    then reconsider x as Element of NAT;
     thus thesis;
   end;
 end;
@@ -605,7 +598,8 @@ proof
   let L be non empty addLoopStr, F be FinSequence of (the carrier of L)*;
   dom Sum (<*>((the carrier of L)*)) = dom (<*>((the carrier of L)*
   )) by Th15;
-  hence Sum (<*>((the carrier of L)*)) = <*>(the carrier of L) by FINSEQ_1:26;
+  hence Sum (<*>((the carrier of L)*)) = <*>(the carrier of L)
+   by RELAT_1:64;
 end;
 
 theorem Th17:
@@ -673,9 +667,8 @@ end;
 definition
   let L be non empty multMagma, p be FinSequence of the carrier of L,
   a be Element of L;
-  redefine
   canceled;
-  func a*p -> FinSequence of the carrier of L means
+  redefine func a*p -> FinSequence of the carrier of L means
   :Def2:
   dom it = dom p &
   for i being set st i in dom p holds it/.i = a*(p/.i);
@@ -743,13 +736,15 @@ definition
     deffunc F(set) = (p/.$1)*a;
     consider f being FinSequence of the carrier of L such that
 A1: len f = len p and
-A2: for j being Element of NAT st j in dom f holds f/.j = F(j)
-    from GOBOARD2:sch 1;
+A2: for j being Nat st j in dom f holds f/.j = F(j)
+    from FINSEQ_4:sch 2;
     take f; thus
 A3: dom f = dom p by A1,FINSEQ_3:31;
     let j be set;
-    assume j in dom p;
-    hence f/.j = (p/.j)*a by A2,A3;
+    assume
+Z:   j in dom p;
+     then j is Nat by ORDINAL1:def 13;
+    hence f/.j = (p/.j)*a by A2,A3,Z;
   end;
   uniqueness
   proof
@@ -759,7 +754,7 @@ A5: for i being set st i in dom p holds it1/.i = (p/.i)*a and
 A6: dom it2 = dom p and
 A7: for i being set st i in dom p holds it2/.i = (p/.i)*a;
     now
-      let j be Element of NAT;
+      let j be Nat;
       assume
 A8:   j in dom p;
       hence it1/.j = (p/.j)*a by A5
@@ -845,7 +840,7 @@ A6: dom (a*(p^q)) = dom (p^q) by Def2;
   then
 A7: dom (a*(p^q)) = dom ((a*p)^(a*q)) by A5,FINSEQ_3:31;
   now
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A8: i in dom (a*(p^q));
     per cases by A6,A8,FINSEQ_1:38;
@@ -886,7 +881,7 @@ A6: dom ((p^q)*a) = dom (p^q) by Def3;
   then
 A7: dom ((p^q)*a) = dom ((p*a)^(q*a)) by A5,FINSEQ_3:31;
   now
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A8: i in dom ((p^q)*a);
     per cases by A6,A8,FINSEQ_1:38;
@@ -1029,7 +1024,7 @@ theorem Th30:
 proof
   let D be set;
   defpred P[FinSequence of D*] means len FlattenSeq $1 = Sum Card $1;
-A1: P[<*>(D*)] by FINSEQ_1:25,RVSUM_1:102;
+A1: P[<*>(D*)] by RVSUM_1:102;
 A2: now
     let F be FinSequence of D*, p be Element of D* such that
 A3: P[F];
@@ -1338,13 +1333,6 @@ A16: j in dom (F.i) by A10,FINSEQ_3:31;
 end;
 
 begin :: Functions yielding natural and real numbers -------------------------
-
-definition
-  let f be natural-yielding Function;
-  let x be set;
-  redefine func f.x -> Element of NAT;
-  coherence by ORDINAL1:def 13;
-end;
 
 registration
   let f be natural-yielding Function, x be set, n be Element of NAT;
@@ -1714,10 +1702,7 @@ registration
   proof
     set f = X --> 0;
 A1: dom f = X by FUNCOP_1:19;
-A2: {0} c= NAT by ZFMISC_1:37;
-    rng f c= {0} by FUNCOP_1:19;
-    then rng f c= NAT by A2,XBOOLE_1:1;
-    then reconsider f as Function of X, NAT by A1,FUNCT_2:def 1,RELSET_1:11;
+    reconsider f as Function of X, NAT;
     take f;
     now
       assume support f <> {};
@@ -3077,12 +3062,12 @@ definition
   st i in dom it & p = (divisors b)/.i holds it/.i = <*p, b-'p*>;
   existence
   proof
-    defpred P[Element of NAT,set] means
+    defpred P[Nat,set] means
     for p being bag of n st p = (divisors b)/.$1 holds $2 = <*p,b-'p*>;
-A1: for k being Element of NAT st k in Seg len divisors b
+A1: for k being Nat st k in Seg len divisors b
     ex d being Element of 2-tuples_on Bags n st P[k,d]
     proof
-      let k be Element of NAT such that k in Seg len divisors b;
+      let k be Nat such that k in Seg len divisors b;
       reconsider p = (divisors b)/.k as bag of n by Def14;
       reconsider b1=p, b2=b-'p as Element of Bags n by Def14;
       len<*p,b-'p*> = 2 by FINSEQ_1:61;
@@ -3093,7 +3078,7 @@ A1: for k being Element of NAT st k in Seg len divisors b
     end;
     consider f being FinSequence of 2-tuples_on Bags n such that
 A2: len f = len divisors b and
-A3: for n being Element of NAT st n in Seg len divisors b holds P[n,f/.n]
+A3: for n being Nat st n in Seg len divisors b holds P[n,f/.n]
     from FINSEQ_4:sch 1(A1);
     take f;
     thus dom f = dom divisors b by A2,FINSEQ_3:31;
@@ -3113,7 +3098,7 @@ A8: dom G = dom divisors b and
 A9: for i being Element of NAT, p being bag of n
     st i in dom G & p = (divisors b)/.i holds G/.i = <*p, b-'p*>;
     now
-      let i be Element of NAT;
+      let i be Nat;
       reconsider p = (divisors b)/.i as bag of n by Def14;
       assume
 A10:  i in dom F;
@@ -3296,11 +3281,11 @@ theorem Th78:
   for n being Ordinal, b being bag of n,
   f, g being FinSequence of (3-tuples_on Bags n)*
   st dom f = dom decomp b & dom g = dom decomp b &
-  (for k being Element of NAT st k in dom f holds
+  (for k being Nat st k in dom f holds
   f.k = ((decomp ((((decomp b)/.k)/.1) qua Element of Bags n))) ^^
   ((len (decomp ((((decomp b)/.k)/.1) qua Element of Bags n)))
   |-> <*(((decomp b)/.k)/.2)*>)) &
-  (for k being Element of NAT st k in dom g holds
+  (for k being Nat st k in dom g holds
   g.k = ((len (decomp ((((decomp b)/.k)/.2) qua Element of Bags n)))
   |-> <*((decomp b)/.k)/.1*>) ^^
   (decomp ((((decomp b)/.k)/.2) qua Element of Bags n)))
@@ -3311,11 +3296,11 @@ proof
   f, g be FinSequence of (3-tuples_on Bags n)* such that
 A1: dom f = dom decomp b and
 A2: dom g = dom decomp b and
-A3: (for k being Element of NAT st k in dom f holds
+A3: (for k being Nat st k in dom f holds
   f.k = ((decomp ((((decomp b)/.k)/.1) qua Element of Bags n))) ^^
   ((len (decomp ((((decomp b)/.k)/.1) qua Element of Bags n)))
   |-> <*(((decomp b)/.k)/.2)*>)) and
-A4: (for k being Element of NAT st k in dom g holds
+A4: (for k being Nat st k in dom g holds
   g.k = ((len (decomp ((((decomp b)/.k)/.2) qua Element of Bags n)))
   |-> <*(((decomp b)/.k)/.1)*>) ^^
   (decomp ((((decomp b)/.k)/.2) qua Element of Bags n)));
@@ -3752,7 +3737,7 @@ definition
   func 0_(n, S) -> Series of n, S equals
 
   (Bags n) --> 0.S;
-  coherence by FUNCOP_1:57;
+  coherence;
 end;
 
 theorem Th81:
@@ -3841,11 +3826,11 @@ definition
 A1: now
       let bb be Element of Bags n;
       reconsider b = bb as bag of n;
-      defpred Q[Element of NAT, set] means
+      defpred Q[Nat, set] means
       ex b1, b2 being bag of n st (decomp b)/.$1 = <*b1, b2*> &
       $2 = p.b1*q.b2;
 A2:   now
-        let k be Element of NAT;
+        let k be Nat;
         assume k in Seg len decomp b;
         then k in dom decomp b by FINSEQ_1:def 3;
         then consider b1, b2 being bag of n such that
@@ -3856,7 +3841,7 @@ A3:     (decomp b)/.k = <*b1,b2*> and b = b1+b2 by Th72;
       end;
       consider s being FinSequence of the carrier of L such that
 A4:   len s = len decomp b and
-A5:   for k being Element of NAT st k in Seg len decomp b holds Q[k, s/.k]
+A5:   for k being Nat st k in Seg len decomp b holds Q[k, s/.k]
       from FINSEQ_4:sch 1 (A2);
       reconsider y = Sum s as Element of L;
       take y;
@@ -3969,10 +3954,11 @@ A10: dom t = dom s & dom u = dom s by A2,A5,A8,FINSEQ_3:31;
 A11: dom (t+u) = dom s by Th5;
     then
 A12: len (t+u) = len s by FINSEQ_3:31;
+X: dom s = Seg len s by FINSEQ_1:def 3;
     now
       let i be Nat;
-      assume i in Seg len S;
-      then 1 <= i & i <= len s by FINSEQ_1:3;
+      assume i in dom s;
+      then 1 <= i & i <= len s by FINSEQ_1:3,X;
       then
 A13:  i in dom s by FINSEQ_3:27;
       then consider sb1, sb2 being bag of n such that
@@ -4022,20 +4008,18 @@ A5: len rs = len decomp b and
 A6: for k being Element of NAT st k in dom rs
     ex b1,b2 being bag of n st db/.k = <*b1,b2*> &
     rs/.k = p.b1*qr.b2 by Def26;
-    deffunc F(Element of NAT)
+    deffunc F(Nat)
     = ((decomp (((db/.$1)/.1) qua Element of Bags n))) ^^
     ((len (decomp (((db/.$1)/.1) qua Element of Bags n)))|-> <*(db/.$1)/.2*>);
     consider dbl being FinSequence such that
 A7: len dbl = len db and
-A8: for k being Element of NAT st k in dom dbl holds dbl.k = F(k)
-    from FINSEQ_5:sch 1;
-    deffunc G(Element of NAT)
+A8: for k being Nat st k in dom dbl holds dbl.k = F(k) from FINSEQ_1:sch 2;
+    deffunc G(Nat)
     = ((len (decomp (((db/.$1)/.2) qua Element of Bags n)))
     |-> <*(db/.$1)/.1*>) ^^ ((decomp (((db/.$1)/.2) qua Element of Bags n)));
     consider dbr being FinSequence such that
 A9: len dbr = len db and
-A10: for k being Element of NAT st k in dom dbr holds dbr.k = G(k)
-    from FINSEQ_5:sch 1;
+A10: for k being Nat st k in dom dbr holds dbr.k = G(k) from FINSEQ_1:sch 2;
 A11: rng dbl c= (3-tuples_on Bags n)*
     proof
       let y be set;
@@ -4045,6 +4029,7 @@ A12:  k in dom dbl & y = dbl.k by FUNCT_1:def 5;
       set ddbk1 = decomp (((db/.k)/.1) qua Element of Bags n);
       set dbk2 = (db/.k)/.2;
       set dblk = ddbk1 ^^ ((len ddbk1) |-> <*dbk2*>);
+      reconsider k as Nat by A12,ORDINAL1:def 13;
 A13:  dbl.k = ddbk1 ^^ ((len ddbk1) |-> <*dbk2*>) by A8,A12;
 A14:  dom dblk = dom ddbk1 /\ dom ((len ddbk1) |-> <*dbk2*>) by MATRLIN:def 2
         .= dom ddbk1 /\ Seg len ddbk1 by FUNCOP_1:19
@@ -4074,6 +4059,7 @@ A17:    ((len ddbk1) |-> <*dbk2*>).i' = <*dbk2*> by A14,A15,A16,FUNCOP_1:13;
       assume y in rng dbr;
       then consider k being set such that
 A18:  k in dom dbr & y = dbr.k by FUNCT_1:def 5;
+      reconsider k as Nat by A18,ORDINAL1:def 13;
       set ddbk1 = decomp (((db/.k)/.2) qua Element of Bags n);
       set dbk2 = (db/.k)/.1;
       set dbrk = ((len ddbk1) |-> <*dbk2*>) ^^ ddbk1;
@@ -4484,11 +4470,11 @@ A2: len s = len decomp b and
 A3: for k being Element of NAT st k in dom s
     ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*>
     & s/.k = p.b1*O.b2 by Def26;
-A4: len s <> 0 by A2,FINSEQ_1:25;
+A4: len s <> 0 by A2;
     then consider t being FinSequence of cL, s1 being Element of cL such that
 A5: s = t^<*s1*> by FINSEQ_2:22;
 A6: Sum s = (Sum t) + (Sum <*s1*>) by A5,RLVECT_1:58;
-    s is non empty by A4,FINSEQ_1:25;
+    s is non empty by A4,CARD_1:47;
     then
 A7: len s in dom s by FINSEQ_5:6;
     then consider b1, b2 being bag of n such that
@@ -4550,7 +4536,7 @@ A29:        b1 = EmptyBag n & b2 = b by A26,A27,GROUP_7:2;
               assume b = EmptyBag n;
               then decomp b = <* <*EmptyBag n, EmptyBag n*> *> by Th77;
               then len t +1 = 0 qua Nat+1 by A2,A19,FINSEQ_1:56;
-              hence contradiction by A14,FINSEQ_1:25;
+              hence contradiction by A14,CARD_2:59;
             end;
             then s.k = (p.EmptyBag n)*0.L by A22,A28,A29,Th84
               .= 0.L by VECTSP_1:36;
@@ -4582,13 +4568,13 @@ A2: len s = len decomp b and
 A3: for k being Element of NAT st k in dom s
     ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*>
     & s/.k = O.b1*p.b2 by Def26;
-A4: len s <> 0 by A2,FINSEQ_1:25;
-    then s is non empty by FINSEQ_1:25;
+A4: len s <> 0 by A2;
+    then s is non empty by CARD_1:47;
     then consider s1 being Element of cL, t being FinSequence of cL such that
 A5: s1 = s.1 and
 A6: s = <*s1*>^t by FINSEQ_3:111;
 A7: Sum s = (Sum <*s1*>) + (Sum t) by A6,RLVECT_1:58;
-    s is non empty by A4,FINSEQ_1:25;
+    s is non empty by A4,CARD_1:47;
     then
 A8: 1 in dom s by FINSEQ_5:6;
     then consider b1, b2 being bag of n such that
@@ -4650,7 +4636,7 @@ A29:        b2 = EmptyBag n & b1 = b by A26,A27,GROUP_7:2;
               assume b = EmptyBag n;
               then decomp b = <* <*EmptyBag n, EmptyBag n*> *> by Th77;
               then len t +1 = 0 qua Nat+1 by A2,A19,FINSEQ_1:56;
-              hence contradiction by A14,FINSEQ_1:25;
+              hence contradiction by A14,CARD_2:59;
             end;
             then s.(k+1) = 0.L*(p.EmptyBag n) by A22,A28,A29,Th84
               .= 0.L by VECTSP_1:39;
@@ -4673,7 +4659,7 @@ registration
   existence
   proof
     reconsider P = Bags n --> 0.S
-    as Function of Bags n, the carrier of S by FUNCOP_1:57;
+    as Function of Bags n, the carrier of S;
     reconsider P as Function of Bags n, S;
     reconsider P as Series of n, S;
     take P;
@@ -4895,7 +4881,7 @@ A8:   q' = q & q' is finite-Support by A1;
 A9: for x being Element of P, y being Element of P holds M[x,y,fmult.(x,y)]
     from BINOP_1:sch 3(A6);
     reconsider Z = (Bags n) --> 0.L
-    as Function of Bags n, the carrier of L by FUNCOP_1:57;
+    as Function of Bags n, the carrier of L;
     reconsider Z' = Z as Function of Bags n, L;
     reconsider Z' as Series of n, L;
     reconsider ZZ = Z as Element of Funcs(Bags n, the carrier of L)

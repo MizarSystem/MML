@@ -9,15 +9,15 @@ environ
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
       ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1, SUBSET_1,
-      SGRAPH1, ARYTM, ALGSTR_0;
+      SGRAPH1, ALGSTR_0, GRAPH_1, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, DOMAIN_1, CLASSES2, BINOP_1, FUNCT_5,
-      STRUCT_0, ALGSTR_0, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, VECTSP_2,
-      FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
+      REALSET1, PARTFUN1, FUNCT_2, CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
+      ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1, CAT_2,
+      ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
-      ALGSTR_1, MIDSP_2, FUNCT_5, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, FUNCOP_1, CLASSES2,
-      STRUCT_0, GROUP_1, ALGSTR_1, MIDSP_2, ALGSTR_0, VALUED_1;
+      ALGSTR_1, MIDSP_2;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0,
+      ALGSTR_1, MIDSP_2, ALGSTR_0, CAT_1, CAT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -64,12 +64,12 @@ theorem :: GRCAT_1:8
 ::  0d. Auxiliary theorems: subcategories
 
 reserve C for Category;
-reserve O for non empty Subset of the Objects of C;
+reserve O for non empty Subset of the Vertices of C;
 
 definition
   let C,O;
   canceled 4;
-  func Morphs(O) -> Subset of the Morphisms of C equals
+  func Morphs(O) -> Subset of the Edges of C equals
 :: GRCAT_1:def 5
   union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O};
 end;
@@ -84,11 +84,11 @@ definition
   func dom(O) -> Function of Morphs(O),O equals
 :: GRCAT_1:def 6
 
-  (the Dom of C)|Morphs(O);
+  (the Source of C)|Morphs(O);
   func cod(O) -> Function of Morphs(O),O equals
 :: GRCAT_1:def 7
 
-  (the Cod of C)|Morphs(O);
+  (the Target of C)|Morphs(O);
   func comp(O) -> PartFunc of [:Morphs(O),(Morphs(O)):],Morphs(O) equals
 :: GRCAT_1:def 8
   (the Comp of C)||Morphs(O);
@@ -113,7 +113,7 @@ end;
 canceled;
 
 theorem :: GRCAT_1:10
-  the Objects of cat(O) = O;
+  the Vertices of cat(O) = O;
 
 ::  1a. Maps of the carriers of groups
 
@@ -158,13 +158,13 @@ theorem :: GRCAT_1:16
   for G being non empty addLoopStr,
   H being right_zeroed (non empty addLoopStr) holds ZeroMap(G,H) is additive;
 
-::  1b. Morphisms of groups
+::  1b. Edges of groups
 
 reserve G,H for AddGroup;
 
 definition
-  struct GroupMorphismStr (# Dom,Cod -> AddGroup,
-    Fun -> Function of the Dom, the Cod #);
+  struct GroupMorphismStr (# Source,Target -> AddGroup,
+    Fun -> Function of the Source, the Target #);
 end;
 
 definition
@@ -172,11 +172,11 @@ definition
   func dom(f) -> AddGroup equals
 :: GRCAT_1:def 14
 
-  the Dom of f;
+  the Source of f;
   func cod(f) -> AddGroup equals
 :: GRCAT_1:def 15
 
-  the Cod of f;
+  the Target of f;
 end;
 
 definition
@@ -349,7 +349,7 @@ theorem :: GRCAT_1:34
   & (for f being strict GroupMorphism st cod f = G holds (ID G)*f = f)
   & (for g being strict GroupMorphism st dom g = G holds g*(ID G) = g);
 
-::  2. Domains of groups
+::  2. Sourceains of groups
 
 definition
   let IT be set;
@@ -605,7 +605,7 @@ end;
 
 registration
   let UN;
-  cluster GroupCat(UN) -> strict;
+  cluster GroupCat(UN) -> strict non void;
 end;
 
 theorem :: GRCAT_1:46
@@ -644,9 +644,9 @@ end;
 
 definition
   let UN;
-  func AbGroupObjects(UN) -> Subset of the Objects of GroupCat(UN) equals
+  func AbGroupObjects(UN) -> Subset of the Vertices of GroupCat(UN) equals
 :: GRCAT_1:def 37
-  {G where G is Element of the Objects of GroupCat(UN)
+  {G where G is Element of the Vertices of GroupCat(UN)
   : ex H being AbGroup st G = H};
 end;
 
@@ -671,15 +671,15 @@ registration
 end;
 
 theorem :: GRCAT_1:52
-  the Objects of AbGroupCat(UN) = AbGroupObjects(UN);
+  the Vertices of AbGroupCat(UN) = AbGroupObjects(UN);
 
 ::  6. Subcategory of groups with the operator of 1/2
 
 definition
   let UN;
-  func MidOpGroupObjects(UN) -> Subset of the Objects of AbGroupCat(UN) equals
+  func MidOpGroupObjects(UN) -> Subset of the Vertices of AbGroupCat(UN) equals
 :: GRCAT_1:def 39
-  {G where G is Element of the Objects of AbGroupCat(UN)
+  {G where G is Element of the Vertices of AbGroupCat(UN)
   : ex H being midpoint_operator AbGroup st G = H};
 end;
 
@@ -701,7 +701,7 @@ registration
 end;
 
 theorem :: GRCAT_1:53
-  the Objects of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
+  the Vertices of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
 
 theorem :: GRCAT_1:54
   Trivial-addLoopStr in MidOpGroupObjects(UN);

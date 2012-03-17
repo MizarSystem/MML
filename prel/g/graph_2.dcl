@@ -11,11 +11,11 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
 </Signature>
@@ -27,8 +27,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 </Cluster>
@@ -49,8 +49,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -68,8 +68,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
@@ -91,8 +91,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
+<Adjective nr="22"/>
 <Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
@@ -131,7 +131,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 </Cluster>
 </CCluster>
 <CCluster>

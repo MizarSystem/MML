@@ -13,12 +13,11 @@ environ
       REAL_1, RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1,
       SETFAM_1, FUNCOP_1, PROB_1, PROB_2, CARD_4, SUPINF_1, SUPINF_2;
  constructors ENUMSET1, PARTFUN1, FUNCOP_1, FINSUB_1, REAL_1, NAT_1, PROB_2,
-      SUPINF_2, VALUED_1, SEQ_1;
+      SUPINF_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      MEMBERED, PROB_1, VALUED_1;
+      MEMBERED, PROB_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0, SUBSET_1,
-      VALUED_1;
+ definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0, SUBSET_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ENUMSET1, ZFMISC_1, NAT_1, SETFAM_1,
       SUPINF_2, RELAT_1, RELSET_1, FUNCOP_1, FINSUB_1, PROB_2, PROB_1,
       SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, CARD_4;
@@ -276,9 +275,8 @@ end;
 definition
   let X be set;
   let IT be Subset-Family of X;
-  redefine
   canceled 2;
-  attr IT is compl-closed means
+  redefine attr IT is compl-closed means
   :Def3:
   for A being set holds A in IT implies X\A in IT;
   compatibility
@@ -471,19 +469,10 @@ theorem
   for S being Field_Subset of X holds {} in S & X in S by PROB_1:10,11;
 
 definition
-  let S be non empty set;
-  let F be Function of S,ExtREAL;
-  let A be Element of S;
-  redefine func F.A -> R_eal;
-  coherence by FUNCT_2:7;
-end;
-
-definition
   let X be non empty set, F be Function of X,ExtREAL;
   redefine attr F is nonnegative means
   :Def4:
-  for A being Element of X holds
-  0. <= F.A;
+  for A being Element of X holds 0. <= F.A;
   compatibility by SUPINF_2:58;
 end;
 
@@ -495,7 +484,7 @@ theorem Th23:
   for A,B being Element of S st A misses B holds M.(A \/ B) = M.A + M.B
 proof
   let S be Field_Subset of X;
-  reconsider M = S --> 0. as Function of S,ExtREAL by FUNCOP_1:57;
+  reconsider M = S --> 0. as Function of S,ExtREAL;
 A1: M is nonnegative
   proof
     for x being Element of S holds 0.<= M.x by FUNCOP_1:13;
@@ -604,37 +593,17 @@ A3: C c= B by XBOOLE_1:36;
   hence thesis by A2,Th4;
 end;
 
-definition
-  let X be set, S be Field_Subset of X, M be Measure of S, A be set;
-  pred A is_measurable M means
-  :Def6:
-  A in S;
-end;
-
 canceled;
 
 theorem
   for S being Field_Subset of X, M being Measure of S holds
-  {} is_measurable M & X is_measurable M & for A,B being set st
-  A is_measurable M & B is_measurable M holds
-  X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
-proof
-  let S be Field_Subset of X, M be Measure of S;
-A1: {} in S & X in S by PROB_1:10,11;
-  for A,B being set st A is_measurable M & B is_measurable M holds
-  X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
-  proof
-    let A,B be set;
-    assume A is_measurable M & B is_measurable M;
-    then A in S & B in S by Def6;
-    then X \ A in S & A \/ B in S & A /\ B in S & A \ B in S
-    by Th19,Th20,FINSUB_1:def 1;
-    hence thesis by Def6;
-  end;
-  hence thesis by A1,Def6;
-end;
+  {} in S & X in S & for A,B being set st
+  A in S & B in S holds
+  X \ A in S & A \/ B in S & A /\ B in S
+   by Th19,FINSUB_1:def 1,PROB_1:10,11;
 
 definition
+ canceled;
   let X be set, S be Field_Subset of X, M be Measure of S;
   mode measure_zero of M -> Element of S means
     :Def7:
@@ -701,7 +670,7 @@ A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th27;
   then
 A3: M.(A \/ B) <= M.A by SUPINF_2:18;
-A4: M.A <= M.(A \/ B) by Th25, XBOOLE_1:7;
+A4: M.A <= M.(A \/ B) by Th25,XBOOLE_1:7;
 A5: M.(A /\ B) <= 0.by A1,Th25,XBOOLE_1:17;
   then
 A6: M.(A /\ B) = 0.by A2,XXREAL_0:1;
@@ -720,7 +689,7 @@ theorem Th34:
   for A being Subset of X ex F being Function of NAT,bool X st rng F = {A}
 proof
   let A be Subset of X;
-  reconsider F = NAT --> A as Function of NAT, bool X by FUNCOP_1:57;
+  reconsider F = NAT --> A as Function of NAT, bool X;
   take F;
   thus thesis by FUNCOP_1:14;
 end;
@@ -730,8 +699,7 @@ theorem Th35:
   for n being Element of NAT holds F.n = A
 proof
   let A be set;
-  A in {A} by TARSKI:def 1;
-  then reconsider F = NAT --> A as Function of NAT, {A} by FUNCOP_1:57;
+  reconsider F = NAT --> A as Function of NAT, {A};
   take F;
   thus thesis by TARSKI:def 1;
 end;
@@ -1593,59 +1561,39 @@ proof
   hence thesis by Th27;
 end;
 
-definition
-  let X be set, S be SigmaField of X, M be sigma_Measure of S, A be set;
-  pred A is_measurable M means
-  :Def12:
-  A in S;
-end;
-
 canceled;
 
 theorem
   for S being SigmaField of X, M being sigma_Measure of S holds
-  {} is_measurable M & X is_measurable M &
-  for A,B being set st A is_measurable M & B is_measurable M holds
-  X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
-proof
-  let S be SigmaField of X, M be sigma_Measure of S;
-A1: {} in S & X in S by PROB_1:10,11;
-  for A,B being set st A is_measurable M & B is_measurable M holds
-  X \ A is_measurable M & A \/ B is_measurable M & A /\ B is_measurable M
-  proof
-    let A,B be set;
-    assume A is_measurable M & B is_measurable M;
-    then A in S & B in S by Def12;
-    then X \ A in S & A \/ B in S & A /\ B in S & A \ B in S
-    by Th19,Th20,FINSUB_1:def 1;
-    hence thesis by Def12;
-  end;
-  hence thesis by A1,Def12;
-end;
+  {} in S & X in S &
+  for A,B being set st A in S & B in S holds
+  X \ A in S & A \/ B in S & A /\ B in S
+   by Th19,FINSUB_1:def 1,PROB_1:10,11;
 
 theorem
   for S being SigmaField of X, M being sigma_Measure of S,
   T being N_Sub_set_fam of X st
-  (for A being set st A in T holds A is_measurable M) holds
-  union T is_measurable M & meet T is_measurable M
+  (for A being set st A in T holds A in S) holds
+  union T in S & meet T in S
 proof
   let S be SigmaField of X, M be sigma_Measure of S, T be N_Sub_set_fam of X;
   assume
-A1: for A being set st A in T holds A is_measurable M;
+A1: for A being set st A in T holds A in S;
 A2: T c= S
   proof
     let x be set;
     assume x in T;
-    then x is_measurable M by A1;
-    hence thesis by Def12;
+    then x in S by A1;
+    hence thesis;
   end;
   then
 A3: union T in S by Def9;
   meet T in S by A2,Th49;
-  hence thesis by A3,Def12;
+  hence thesis by A3;
 end;
 
 definition
+canceled;
   let X be set, S be SigmaField of X, M be sigma_Measure of S;
   mode measure_zero of M -> Element of S means
     :Def13:
@@ -1715,7 +1663,7 @@ A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th64;
   then
 A3: M.(A \/ B) <= M.A by SUPINF_2:18;
-A4: M.A <= M.(A \/ B) by Th62, XBOOLE_1:7;
+A4: M.A <= M.(A \/ B) by Th62,XBOOLE_1:7;
 A5: M.(A /\ B) <= 0.by A1,Th62,XBOOLE_1:17;
   then
 A6: M.(A /\ B) = 0.by A2,XXREAL_0:1;

@@ -13,17 +13,17 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
@@ -31,22 +31,23 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="82"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="129">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <Func kind="K" nr="213"/>
 </Func>
 <Func kind="K" nr="213"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="129">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <Func kind="K" nr="213"/>
 </Func>
@@ -64,13 +65,13 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="49">
+<Adjective nr="48">
 <Func kind="K" nr="210">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="50">
+<Adjective nr="49">
 <Func kind="K" nr="210">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

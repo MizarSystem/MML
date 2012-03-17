@@ -9,16 +9,16 @@ environ
  vocabularies BOOLE, BHSP_1, PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM_1,
       FINSET_1, RELAT_1, BHSP_5, BINOP_1, VECTSP_1, PROB_2, FUZZY_2, SQUARE_1,
       FUNCT_2, FINSEQ_1, SETWISEO, CARD_1, FINSOP_1, DECOMP_1, ARYTM, ALGSTR_0;
- notations TARSKI, SUBSET_1, XBOOLE_0, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      NAT_1, STRUCT_0, ALGSTR_0, REAL_1, FUNCT_2, FINSET_1, RELAT_1, BINOP_2,
+ notations TARSKI, SUBSET_1, XBOOLE_0, CARD_1, NUMBERS, XXREAL_0, NAT_1,
+      STRUCT_0, ALGSTR_0, REAL_1, FUNCT_2, FINSET_1, RELAT_1, BINOP_2,
       PRE_TOPC, RLVECT_1, BHSP_1, SQUARE_1, BINOP_1, SETWISEO, FUNCT_1,
       FINSEQ_1, FINSOP_1;
  constructors PARTFUN1, BINOP_1, DOMAIN_1, SETWISEO, REAL_1, SQUARE_1, NAT_1,
-      NAT_D, BINOP_2, MEMBERED, FINSOP_1, BHSP_1, VALUED_1, SEQ_1;
+      NAT_D, BINOP_2, MEMBERED, FINSOP_1, BHSP_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
-      NUMBERS, XREAL_0, BINOP_2, MEMBERED, FINSEQ_1, STRUCT_0, VALUED_1;
+      NUMBERS, BINOP_2, MEMBERED, FINSEQ_1, STRUCT_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, SQUARE_1, BINOP_1, RLVECT_1, ALGSTR_0, VALUED_1;
+ definitions TARSKI, SQUARE_1, BINOP_1, RLVECT_1, ALGSTR_0;
  theorems XBOOLE_0, SUBSET_1, BHSP_1, SQUARE_1, TARSKI, REAL_1, INT_1,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, NAT_1, RELSET_1,
       FUNCT_2, FINSOP_1, CARD_2, HILBASIS, XBOOLE_1, BINOP_2, XREAL_1,
@@ -290,19 +290,17 @@ A2: p0 is one-to-one by FINSEQ_4:73;
     reconsider p = p0 as FinSequence of the carrier of X by A1,FINSEQ_1:def 4;
     set ll = len p;
     deffunc F(Nat) = PO($1,p,x);
-    ex q0 being FinSequence st len q0 = ll &
-    for i be Nat st i in Seg ll holds q0.i = F(i) from FINSEQ_1:sch 2;
-    then consider q0 being FinSequence such that
-A3: len q0 = ll & for i be Nat st i in Seg ll holds q0.i = PO(i,p,x);
+    consider q0 being FinSequence such that
+A3: len q0 = ll & for i be Nat st i in dom q0 holds q0.i = F(i)
+        from FINSEQ_1:sch 2;
 A4: dom q0 = Seg ll by A3,FINSEQ_1:def 3;
-    then
-A5: dom q0 = dom p by FINSEQ_1:def 3;
+A5: dom q0 = dom p by A3,FINSEQ_3:31;
     now
       let i be Nat;
       assume
 A6:   i in dom q0;
       then
-A7:   q0.i = PO(i,p,x) by A3,A4
+A7:   q0.i = PO(i,p,x) by A3
         .=(the scalar of X).[x,p.i];
       reconsider y=p.i as Point of X by A5,A6,FINSEQ_2:13;
       (the scalar of X).[x,p.i]= x .|. y by BHSP_1:def 1;
@@ -1111,8 +1109,6 @@ A12: q is one-to-one by A2,A6,A7,A9,A10,FINSEQ_3:98;
 A13: setopfunc(Z, DX, DK, F, f) = f "**" Func_Seq(F,q) by A1,A5,A12,Def5;
 A14: ex fp1, fp2 be FinSequence st
   fp1 = F*p1 & fp2 = F*p2 & F*(p1^p2) = fp1^fp2 by A4,A5,A7,A10,HILBASIS:1;
-  then reconsider fp1 = F*p1 as FinSequence;
-  reconsider fp2 = F*p2 as FinSequence by A14;
   thus thesis by A1,A8,A11,A13,A14,FINSOP_1:6;
 end;
 

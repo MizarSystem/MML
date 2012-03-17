@@ -11,19 +11,18 @@ environ
       SCMFSA_4, BOOLE, SCMFSA8A, SCMFSA6A, SCMFSA7B, SCMFSA8B, CARD_1, FUNCT_4,
       AMI_5, RELOC, SCMFSA_9, UNIALG_2, CARD_3, SCMFSA6B, AMI_2, SCMFSA6C,
       SFMASTR1, PRE_FF, ABSVALUE, SCMFSA9A, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
-      FINSUB_1, FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1,
-      FUNCT_2, FUNCT_4, PRE_FF, STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
- constructors XXREAL_0, NAT_1, NAT_D, INT_2, SEQ_1, PRE_FF, ABIAN, AMI_5,
-      SCMFSA_5, SCMFSA_7, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA_9, SFMASTR1, VALUED_1, PARTFUN1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FUNCOP_1, FINSET_1, FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0,
-      NAT_1, INT_1, CARD_3, ABIAN, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
-      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      VALUED_1, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
+      FUNCOP_1, CARD_3, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, PRE_FF, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
+      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
+ constructors XXREAL_0, NAT_1, NAT_D, SEQ_1, PRE_FF, ABIAN, SCMFSA_5, SCMFSA_7,
+      SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
+      SCMNORM;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
+      FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
+      ABIAN, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -35,16 +34,7 @@ reserve k, n for Element of NAT,
 reserve l for Instruction-Location of SCM+FSA,
   i for Instruction of SCM+FSA;
 
-canceled 5;
-
-theorem :: SCMFSA9A:6  :: LifeSpan0:
-  for IL being non empty set
-  for N being non empty with_non-empty_elements set,
-  S being halting IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over IL,N),
-  s being State of S, k being Element of NAT
-  st CurInstr((Computation s).k) = halt S
-  holds (Computation s).(LifeSpan s) = (Computation s).k;
+canceled 6;
 
 theorem :: SCMFSA9A:7  :: singleUsed
   UsedIntLoc (l .--> i) = UsedIntLoc i;
@@ -128,16 +118,16 @@ theorem :: SCMFSA9A:21    :: SCMFSA_9:25, corrected
 theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
   while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+  holds Computation(s,k) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:23  :: based on SCMFSA_9:22
   I is_closed_on s & I is_halting_on s & s.a = 0 implies
-  (Computation (s +* (while=0(a,I) +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+  Computation((s +* (while=0(a,I) +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3)) |
   (Int-Locations \/ FinSeq-Locations)
-  = (Computation (s +* (I +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0))) |
+  = Computation((s +* (I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)))) |
   (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:24  :: Step_eq0_0:
@@ -173,8 +163,8 @@ definition
 
   ex k being Element of NAT st it = k & (StepWhile=0(a, I, s).k).a <> 0 &
   (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
-  holds k <= i) & (Computation (s +* (while=0(a, I) +* (Start-At insloc 0)))).
-  (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0)))) |
+  holds k <= i) & Computation((s +* (while=0(a, I) +* (Start-At insloc 0))),
+  (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0))))) |
   (Int-Locations \/ FinSeq-Locations)
   = StepWhile=0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 end;
@@ -231,16 +221,16 @@ theorem :: SCMFSA9A:34    :: SCMFSA_9:43, corrected
 theorem :: SCMFSA9A:35  :: based on SCMFSA_9:32
   while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0
   implies LifeSpan s = 4 & for k being Element of NAT
-  holds (Computation s).k | (Int-Locations \/ FinSeq-Locations) =
+  holds Computation(s,k) | (Int-Locations \/ FinSeq-Locations) =
   s | (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:36  :: based on SCMFSA_9:36
   I is_closed_on s & I is_halting_on s & s.a > 0 implies
-  (Computation (s +* (while>0(a,I) +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3) |
+  Computation((s +* (while>0(a,I) +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3)) |
   (Int-Locations \/ FinSeq-Locations)
-  = (Computation (s +* (I +* Start-At insloc 0))).
-  (LifeSpan (s +* (I +* Start-At insloc 0))) |
+  = Computation((s +* (I +* Start-At insloc 0)),
+  (LifeSpan (s +* (I +* Start-At insloc 0)))) |
   (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMFSA9A:37  :: Step_gt0_0:
@@ -276,8 +266,8 @@ definition
 
   ex k being Element of NAT st it = k & (StepWhile>0(a, I, s).k).a <= 0 &
   (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
-  holds k <= i) & (Computation (s +* (while>0(a, I) +* (Start-At insloc 0)))).
-  (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0)))) |
+  holds k <= i) & Computation((s +* (while>0(a, I) +* (Start-At insloc 0))),
+  (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0))))) |
   (Int-Locations \/ FinSeq-Locations)
   = StepWhile>0(a, I, s).k | (Int-Locations \/ FinSeq-Locations);
 end;

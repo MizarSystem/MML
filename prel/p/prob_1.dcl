@@ -6,15 +6,15 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -37,7 +37,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="3"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
@@ -123,7 +123,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="3"/>
 <Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>

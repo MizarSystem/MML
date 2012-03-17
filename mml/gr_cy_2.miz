@@ -7,19 +7,19 @@
 environ
 
  vocabularies REALSET1, GROUP_2, GRAPH_1, GROUP_6, INT_1, GR_CY_1, NAT_1,
-      ARYTM_1, ARYTM_3, GROUP_1, FINSET_1, GROUP_4, VECTSP_1, RELAT_1,
-      FINSEQ_1, FUNCT_1, QC_LANG1, WELLORD1, FILTER_0, GROUP_5, GROUP_3, ARYTM,
-      ALGSTR_0;
+      ARYTM_1, ARYTM_3, GROUP_1, FINSET_1, GROUP_4, RELAT_1, FINSEQ_1, FUNCT_1,
+      QC_LANG1, WELLORD1, FILTER_0, GROUP_5, GROUP_3, ARYTM, ALGSTR_0,
+      VECTSP_1;
  notations TARSKI, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
       NUMBERS, INT_1, INT_2, NAT_1, CARD_1, NAT_D, GROUP_2, DOMAIN_1, STRUCT_0,
       ALGSTR_0, GROUP_1, GROUP_3, GROUP_4, GROUP_5, GROUP_6, GR_CY_1, FINSEQ_1,
       XXREAL_0;
  constructors BINOP_1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, GROUP_4, GROUP_5, GROUP_6, GR_CY_1, VALUED_1, PARTFUN1, SEQ_1;
+      GROUP_4, GROUP_5, GROUP_6, GR_CY_1;
  registrations XBOOLE_0, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1,
-      STRUCT_0, GROUP_1, GROUP_2, GR_CY_1, ORDINAL1, VALUED_1, FUNCT_2;
+      STRUCT_0, GROUP_1, GROUP_2, GR_CY_1, ORDINAL1, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCT_1, CARD_1, TARSKI, ALGSTR_0, VALUED_1;
+ definitions FUNCT_1, CARD_1, TARSKI, ALGSTR_0;
  theorems FUNCT_2, GROUP_1, GROUP_2, GROUP_4, GROUP_5, FUNCT_1, GROUP_6,
       GR_CY_1, NAT_1, INT_1, INT_2, REAL_1, FINSEQ_1, TARSKI, RELSET_1,
       XBOOLE_0, XCMPLX_1, NEWTON, XREAL_1, ORDINAL1, NAT_D, STRUCT_0;
@@ -269,8 +269,7 @@ end;
 
 theorem Th17:
   for G being finite Group, G1 being Subgroup of G, a being Element of G holds
-  ord G = n & G=gr {a} & ord G1 = p & G1= gr{a|^k} implies
-  n divides k*p
+  ord G = n & G=gr {a} & ord G1 = p & G1= gr{a|^k} implies n divides k*p
 proof
   let G be finite Group, G1 be Subgroup of G, a be Element of G;
   assume that
@@ -308,8 +307,7 @@ end;
 
 theorem
   for G being strict finite Group, a be Element of G holds
-  G = gr {a} & ord G = n implies
-  ( G = gr {a|^k} iff k hcf n = 1 )
+  G = gr {a} & ord G = n implies ( G = gr {a|^k} iff k hcf n = 1 )
 proof
   let G be strict finite Group, a be Element of G;
   assume that
@@ -442,8 +440,8 @@ A8:       g|^i2 = g|^( (i2 div r) * r + (i2 mod r) ) by A5,NEWTON:80
         proof
           deffunc F(Nat) = g|^$1;
           consider F being FinSequence such that
-A9:      len F = m and
-A10:      for p be Nat holds p in Seg m implies F.p = F(p) from FINSEQ_1:sch 2;
+A9:       len F = m and
+A10:      for p be Nat holds p in dom F implies F.p = F(p) from FINSEQ_1:sch 2;
 A11:      dom F = Seg m by A9,FINSEQ_1:def 3;
 A12:      for y st y in rng F holds ex n st y=g|^n
           proof
@@ -454,7 +452,7 @@ A13:        x in dom F and
 A14:        F.x=y by FUNCT_1:def 5;
             reconsider n=x as Element of NAT by A13;
             take n;
-            thus thesis by A10,A11,A13,A14;
+            thus thesis by A10,A13,A14;
           end;
 A15:      rng F c= the carrier of Gc
           proof
@@ -488,7 +486,7 @@ A22:            m >= 1
                 then
 A23:            m in Seg m by FINSEQ_1:3;
 A24:            m in dom F by A11,A22,FINSEQ_1:3;
-                F.m = a by A10,A21,A23;
+                F.m = a by A10,A21,A23,A11;
                 hence thesis by A24;
               end;
               suppose
@@ -500,7 +498,7 @@ A26:            n >= 1
                 then
 A27:            n in Seg m by A20,FINSEQ_1:3;
 A28:            n in dom F by A11,A20,A26,FINSEQ_1:3;
-                F.n = a by A10,A19,A27;
+                F.n = a by A10,A19,A27,A11;
                 hence thesis by A28;
               end;
             end;
@@ -541,7 +539,7 @@ A32:      g|^i2 = g|^( (i2 div r) * r + (i2 mod r) ) by A29,NEWTON:80
           deffunc F(Nat) = g|^$1;
           consider F being FinSequence such that
 A33:      len F = m and
-A34:      for p be Nat holds p in Seg m implies F.p=F(p) from FINSEQ_1:sch 2;
+A34:      for p be Nat holds p in dom F implies F.p=F(p) from FINSEQ_1:sch 2;
 A35:      dom F = Seg m by A33,FINSEQ_1:def 3;
 A36:      for y st y in rng F holds ex n st y=g|^n
           proof
@@ -552,7 +550,7 @@ A37:        x in dom F and
 A38:        F.x=y by FUNCT_1:def 5;
             reconsider n=x as Element of NAT by A37;
             take n;
-            thus thesis by A34,A35,A37,A38;
+            thus thesis by A34,A37,A38;
           end;
 A39:      rng F c= the carrier of Gc
           proof
@@ -586,7 +584,7 @@ A46:            m >= 1
                 then
 A47:            m in Seg m by FINSEQ_1:3;
 A48:            m in dom F by A35,A46,FINSEQ_1:3;
-                F.m = a by A34,A45,A47;
+                F.m = a by A34,A45,A47,A35;
                 hence thesis by A48;
               end;
               suppose
@@ -598,7 +596,7 @@ A50:            n >= 1
                 then
 A51:            n in Seg m by A44,FINSEQ_1:3;
 A52:            n in dom F by A35,A44,A50,FINSEQ_1:3;
-                F.n = a by A34,A43,A51;
+                F.n = a by A34,A43,A51,A35;
                 hence thesis by A52;
               end;
             end;
@@ -663,7 +661,7 @@ A6: INT.Group(n) = multMagma(#Segm(n),addint(n)#) by A1,GR_CY_1:def 6;
 A7: dom h = the carrier of INT.Group(n) by FUNCT_2:def 1;
 A8: rng h = the carrier of Gc
     proof
-A9:  rng h c= the carrier of Gc by RELSET_1:12;
+A9:   rng h c= the carrier of Gc by RELSET_1:12;
       the carrier of Gc c= rng h
       proof
         let x;
@@ -921,8 +919,7 @@ end;
 
 theorem Th24:
   for F,G being strict finite Group st
-  ord F = p & ord G = p & p is prime holds
-  F,G are_isomorphic
+  ord F = p & ord G = p & p is prime holds F,G are_isomorphic
 proof
   let F,G be strict finite Group;
   assume that
@@ -1015,8 +1012,7 @@ A1: Gc=gr {g};
 end;
 
 theorem Th30:
-  for Gc being strict finite cyclic Group st
-  (ex k st ord Gc = 2*k) holds
+  for Gc being strict finite cyclic Group st (ex k st ord Gc = 2*k) holds
   ex g1 being Element of Gc st ord g1 = 2 &
   for g2 being Element of Gc st ord g2 = 2 holds g1=g2
 proof
@@ -1106,8 +1102,7 @@ registration
 end;
 
 theorem
-  for Gc being strict finite cyclic Group st
-  ex k st ord Gc = 2*k holds
+  for Gc being strict finite cyclic Group st ex k st ord Gc = 2*k holds
   ex H being Subgroup of Gc st ord H = 2 & H is cyclic Group
 proof
   let Gc be strict finite cyclic Group;

@@ -10,20 +10,17 @@ environ
       ALGSEQ_1, ARYTM_1, FINSEQ_7, AFINSQ_1, ARYTM, INT_1, FINSEQ_4, RVSUM_1,
       EUCLID_2, FUNCOP_1, RLVECT_1, FINSEQ_2, CQC_LANG, PRGCOR_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
-      ORDINAL1, REAL_1, NAT_1, FINSET_1, PARTFUN1, FINSEQ_1, FUNCOP_1,
-      AFINSQ_1, INT_1, FINSEQ_4, RVSUM_1, BINARITH, EUCLID_2, FINSEQ_2,
-      XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, INT_1, PARTFUN1, FINSEQ_4, BINARITH,
-      AFINSQ_1, EUCLID_2, VALUED_1, SEQ_1;
- registrations SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1, AFINSQ_1, XBOOLE_0,
-      VALUED_0, VALUED_1, FUNCT_2;
+      ORDINAL1, REAL_1, NAT_1, FINSET_1, PARTFUN1, FINSEQ_1, FUNCOP_1, SEQ_1,
+      AFINSQ_1, INT_1, RVSUM_1, BINARITH, EUCLID_2, FINSEQ_2, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, PARTFUN1, BINARITH, AFINSQ_1, EUCLID_2,
+      SEQ_1, BINOP_2;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      MEMBERED, FINSEQ_1, AFINSQ_1, XBOOLE_0, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, VALUED_1;
- theorems TARSKI, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, ORDINAL1, CARD_1,
+ definitions TARSKI;
+ theorems TARSKI, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, ORDINAL1,
       FINSEQ_1, FUNCOP_1, ORDINAL3, AFINSQ_1, RVSUM_1, FINSEQ_4, EUCLID_2,
-      BINARITH, FINSEQ_2, JORDAN8, XREAL_1, XXREAL_0, SEQ_1, PARTFUN1,
-      VALUED_1;
+      BINARITH, FINSEQ_2, JORDAN8, XREAL_1, XXREAL_0, PARTFUN1, VALUED_1;
  schemes NAT_1, FINSEQ_1, AFINSQ_1;
 
 begin
@@ -150,41 +147,42 @@ definition
   proof
     deffunc F(Nat) =q.($1-'1);
     ex p being FinSequence st len p = len q &
-    for k being Nat st k in Seg len q holds p.k=F(k) from FINSEQ_1:sch 2;
+    for k being Nat st k in dom p holds p.k=F(k) from FINSEQ_1:sch 2;
     then consider p being FinSequence such that
-A1: len p = len q & for k being Nat st k in Seg len q holds p.k=F(k);
-A2: for i st 1<=i & i<=len q holds q.(i-'1)=p.i
+A1: len p = len q & for k being Nat st k in dom p holds p.k=F(k);
+A2: dom p = Seg len q by A1,FINSEQ_1:def 3;
+A3: for i st 1<=i & i<=len q holds q.(i-'1)=p.i
     proof
       let i;
       assume 1<=i & i<=len q;
       then i in Seg len q by FINSEQ_1:3;
-      hence q.(i-'1)=p.i by A1;
+      hence q.(i-'1)=p.i by A1,A2;
     end;
     rng p c= D
     proof
       let y be set;
       assume y in rng p;
       then consider x being set such that
-A3:   x in dom p & y=p.x by FUNCT_1:def 5;
-A4:   x in Seg len p by A3,FINSEQ_1:def 3;
-      reconsider nx=x as Element of NAT by A3;
-A5:   nx in Seg len q by A1,A3,FINSEQ_1:def 3;
-A6:   p.nx= q.(nx -'1) by A1,A4;
-A7:   1<=nx & nx<=len q by A5,FINSEQ_1:3;
+A4:   x in dom p & y=p.x by FUNCT_1:def 5;
+A5:   x in Seg len p by A4,FINSEQ_1:def 3;
+      reconsider nx=x as Element of NAT by A4;
+A6:   nx in Seg len q by A1,A4,FINSEQ_1:def 3;
+A7:   p.nx= q.(nx -'1) by A1,A5,A2;
+A8:   1<=nx & nx<=len q by A6,FINSEQ_1:3;
       then nx-1>=0 by XREAL_1:50;
       then
-A8:   nx-1=nx-'1 by BINARITH:def 3;
+A9:   nx-1=nx-'1 by BINARITH:def 3;
       nx-'1<nx-'1+1 by NAT_1:13;
-      then nx-'1<len q by A7,A8,XXREAL_0:2;
+      then nx-'1<len q by A8,A9,XXREAL_0:2;
       then nx-'1 in len q by NAT_1:45;
       then nx-'1 in dom q by AFINSQ_1:def 1;
       then
-A9:   q.(nx-'1) in rng q by FUNCT_1:def 5;
+A10:   q.(nx-'1) in rng q by FUNCT_1:def 5;
       rng q c= D by ORDINAL1:def 8;
-      hence y in D by A3,A6,A9;
+      hence y in D by A4,A7,A10;
     end;
     then p is FinSequence of D by FINSEQ_1:def 4;
-    hence thesis by A1,A2;
+    hence thesis by A1,A3;
   end;
   uniqueness
   proof
@@ -194,17 +192,17 @@ A9:   q.(nx-'1) in rng q by FUNCT_1:def 5;
     proof
       let p1,p2 be FinSequence of D;
       assume
-A10:  (len p1=len q & for i st 1<=i & i<=len q holds q.(i-'1)=p1.i)&
+A11:  (len p1=len q & for i st 1<=i & i<=len q holds q.(i-'1)=p1.i)&
       (len p2=len q & for i st 1<=i & i<=len q holds q.(i-'1)=p2.i);
       for i be Nat st 1<=i & i<=len p1 holds p1.i=p2.i
       proof
         let i be Nat;
         assume
-A11:    1<=i & i<=len p1;
-        then q.(i-'1)=p1.i by A10;
-        hence p1.i=p2.i by A10,A11;
+A12:    1<=i & i<=len p1;
+        then q.(i-'1)=p1.i by A11;
+        hence p1.i=p2.i by A11,A12;
       end;
-      hence p1=p2 by A10,FINSEQ_1:18;
+      hence p1=p2 by A11,FINSEQ_1:18;
     end;
   end;
 end;
@@ -377,8 +375,6 @@ A23: ( len q = (p1.0) & len p1=n & (for i st 1<=i & i<= len q holds p1.i=q.i)&
       let i be Element of NAT;
       assume
 A24:  i<n;
-      len q in NAT;
-      then reconsider x=len q as Element of D by A1;
       i<0+1 or 1<=i & i<=len q or len q<i & i<n by A24;
       then
 A25:  i<=0 or 1<=i & i<=len q or len q<i & i<n by NAT_1:13;
@@ -415,42 +411,42 @@ A1: NAT c= D & p.0 is Nat & p.0 in len p;
     reconsider m0=p.0 as Element of NAT by A1,ORDINAL1:def 13;
     deffunc F(set)= p.$1;
     ex q being FinSequence st len q = m0 &
-    for k being Nat st k in Seg m0 holds q.k=F(k) from FINSEQ_1:sch 2;
+    for k being Nat st k in dom q holds q.k=F(k) from FINSEQ_1:sch 2;
     then consider q being FinSequence such that
-A2: len q = m0 & for k being Nat st k in Seg m0 holds q.k=F(k);
+A2: len q = m0 & for k being Nat st k in dom q holds q.k=F(k);
+A3: dom q = Seg m0 by A2,FINSEQ_1:def 3;
     rng q c= D
     proof
       let y be set;
       assume y in rng q;
       then consider x being set such that
-A3:   x in dom q & y=q.x by FUNCT_1:def 5;
-A4:   x in Seg len q by A3,FINSEQ_1:def 3;
-      reconsider k0=x as Element of NAT by A3;
-A5:   k0 in Seg m0 by A2,A3,FINSEQ_1:def 3;
-A6:   q.k0=p.k0 & y=p.k0 by A2,A3,A4;
-A7:   1<=k0 & k0<=m0 by A5,FINSEQ_1:3;
-A8:   rng p c= D by ORDINAL1:def 8;
+A4:   x in dom q & y=q.x by FUNCT_1:def 5;
+      reconsider k0=x as Element of NAT by A4;
+A6:   k0 in Seg m0 by A2,A4,FINSEQ_1:def 3;
+A7:   q.k0=p.k0 & y=p.k0 by A2,A4;
+A8:   1<=k0 & k0<=m0 by A6,FINSEQ_1:3;
+A9:   rng p c= D by ORDINAL1:def 8;
       m0 < len p by A1,NAT_1:45;
-      then k0 < len p by A7,XXREAL_0:2;
+      then k0 < len p by A8,XXREAL_0:2;
       then k0 in len p by NAT_1:45;
       then k0 in dom p by AFINSQ_1:def 1;
-      then y in rng p by A6,FUNCT_1:def 5;
-      hence y in D by A8;
+      then y in rng p by A7,FUNCT_1:def 5;
+      hence y in D by A9;
     end;
     then reconsider q0=q as FinSequence of D by FINSEQ_1:def 4;
     for m st m = (p.0) holds len q0 =m & for i st 1<=i & i<= m holds q0.i=p.i
     proof
       let m;
       assume
-A9:   m = p.0;
+A10:   m = p.0;
       for i st 1<=i & i<= m0 holds q0.i=p.i
       proof
         let i;
         assume 1<=i & i<= m0;
         then i in Seg m0 by FINSEQ_1:3;
-        hence q0.i=p.i by A2;
+        hence q0.i=p.i by A2,A3;
       end;
-      hence len q0 =m & for i st 1<=i & i<= m holds q0.i=p.i by A2,A9;
+      hence len q0 =m & for i st 1<=i & i<= m holds q0.i=p.i by A2,A10;
     end;
     hence thesis;
   end;
@@ -458,21 +454,21 @@ A9:   m = p.0;
   proof
     let g1,g2 be FinSequence of D;
     assume
-A10: (for m st m = p.0 holds len g1 =m &
+A11: (for m st m = p.0 holds len g1 =m &
     for i st 1<=i & i<= m holds g1.i=p.i)& (for m st m = p.0 holds len g2 =m &
     for i st 1<=i & i<= m holds g2.i=p.i);
     reconsider m2=(p.0) as Nat by A1;
-A11: len g1=m2 by A10;
-A12: len g2=m2 by A10;
+A12: len g1=m2 by A11;
+A13: len g2=m2 by A11;
     for i be Nat st 1<=i & i<=len g1 holds g1.i=g2.i
     proof
       let i be Nat;
       assume
-A13:  1<=i & i<=len g1;
-      then g1.i=p.i by A10,A11;
-      hence g1.i=g2.i by A10,A11,A13;
+A14:  1<=i & i<=len g1;
+      then g1.i=p.i by A11,A12;
+      hence g1.i=g2.i by A11,A12,A14;
     end;
-    hence g1=g2 by A11,A12,FINSEQ_1:18;
+    hence g1=g2 by A12,A13,FINSEQ_1:18;
   end;
 end;
 
@@ -510,7 +506,6 @@ A1: NAT c= D & (p.0) is Nat & (p.0) in len p;
 A2: len (XFS2FS*(p)) =m0 &
   for i st 1<=i & i<= m0 holds (XFS2FS*(p)).i=p.i by A1,Def4;
 A3: m0<len p by A1,NAT_1:45;
-  set q=XFS2FS*(p);
   thus p is_an_xrep_of (XFS2FS*(p)) by A1,A2,A3,Def5;
 end;
 
@@ -622,27 +617,6 @@ A21: i in NAT by ORDINAL1:def 13;
   end;
   then p2 is_an_xrep_of q by A1,A3,A16,A17,Def5;
   hence thesis by A3,A16;
-end;
-
-definition
-  let b be XFinSequence of REAL,n be Nat;
-  redefine func b.n -> Real;
-  coherence
-  proof
-    now per cases;
-      case n in dom b;
-        then
-A1:     b.n in rng b by FUNCT_1:def 5;
-        rng b c= REAL by ORDINAL1:def 8;
-        hence b.n is Real by A1;
-      end;
-      case not n in dom b;
-        then b.n = 0 by FUNCT_1:def 4;
-        hence b.n is Real;
-      end;
-    end;
-    hence b.n is Real;
-  end;
 end;
 
 :: Non-overwriting program calculating inner product of vectors
@@ -1046,7 +1020,6 @@ A7: len p=len p2 by AFINSQ_1:48;
   ex n being Integer st p2.0=b.0 & n=b.0 & (n<>0 implies
   for i being Nat st 1<=i & i<=n holds p2.i=a*(b.i))
   proof
-    reconsider n=b.0 as Integer by A1;
 A8: k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i=a*(b.i)
     proof
       now
@@ -1164,7 +1137,6 @@ A7: len p=len p2 by AFINSQ_1:48;
   ex n being Integer st p2.0=b.0 & n=b.0 &
   (n<>0 implies for i being Nat st 1<=i & i<=n holds p2.i= -(b.i))
   proof
-    reconsider n=b.0 as Integer by A1;
 A8: (k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i= -(b.i))
     proof
       assume k<>0;
@@ -1283,7 +1255,6 @@ A9: len p=len p2 by AFINSQ_1:48;
   ex n being Integer st p2.0=b.0 & n=b.0 & (n<>0 implies
   for i being Nat st 1<=i & i<=n holds p2.i=(a.i)+(b.i) )
   proof
-    reconsider n=b.0 as Integer by A1;
 A10: (k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i=(a.i)+(b.i) )
     proof
       now
@@ -1420,7 +1391,6 @@ A9: len p=len p2 by AFINSQ_1:48;
   ex n being Integer st p2.0=b.0 & n=b.0 & (n<>0 implies
   for i being Nat st 1<=i & i<=n holds p2.i=(a.i)-(b.i) )
   proof
-    reconsider n=b.0 as Integer by A1;
 A10: (k<>0 implies for i being Nat st 1<=i & i<=k holds p2.i=(a.i)-(b.i))
     proof
       now

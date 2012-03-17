@@ -12,12 +12,11 @@ environ
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, MEMBERED,
       DOMAIN_1, XREAL_0, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, REAL_1, NAT_1,
       XXREAL_0, SUPINF_1, SUPINF_2, MEASURE5;
- constructors WELLORD2, DOMAIN_1, REAL_1, NAT_1, NAT_D, CARD_1, SUPINF_2,
-      MEASURE5, VALUED_1, PARTFUN1, SEQ_1;
+ constructors WELLORD2, DOMAIN_1, REAL_1, NAT_1, CARD_1, SUPINF_2, MEASURE5;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, VALUED_1, FUNCT_2;
+      XREAL_0, MEMBERED;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, VALUED_1;
+ definitions TARSKI, XBOOLE_0;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE3, MEASURE4,
       MEASURE5, ZFMISC_1, FUNCT_2, NAT_1, CARD_4, WELLORD2, XREAL_0, REAL_2,
       XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, NUMBERS, MEMBERED,
@@ -151,7 +150,7 @@ A3: (x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,+infty}) &
 A4: x = +infty & y in REAL & z in REAL;
     then reconsider c = z, b = y as Real;
 A5: z + y = c + b by SUPINF_2:1;
-    z + x = +infty & x - y = +infty by A1,A4,SUPINF_1:6,SUPINF_2:6 ,def 2;
+    z + x = +infty & x - y = +infty by A1,A4,SUPINF_1:6,SUPINF_2:6,def 2;
     hence thesis by A5,SUPINF_2:6;
   end;
   suppose
@@ -251,51 +250,51 @@ A3: x + z <> y + z
 end;
 
 definition
-  let x be real number;
+  let x be ext-real number;
   func R_EAL x -> R_eal equals
-
   x;
   coherence by XXREAL_0:def 1;
 end;
 
 theorem
-  for x,y being real number holds x <= y iff R_EAL x <= R_EAL y;
+  for x,y being ext-real number holds x <= y iff R_EAL x <= R_EAL y;
 
 theorem
-  for x,y being real number holds x < y iff R_EAL x < R_EAL y;
+  for x,y being ext-real number holds x < y iff R_EAL x < R_EAL y;
 
 theorem Th15:
-  for x,y,z being R_eal holds x < y & y < z implies y is Real
+  for x,y,z being ext-real number holds x < y & y < z implies y is Real
 proof
-  let x,y,z be R_eal;
+  let x,y,z be ext-real number;
   assume x < y & y < z;
   then y <> -infty & y <> +infty by XXREAL_0:4,6;
   hence thesis by MEASURE3:2;
 end;
 
 theorem
-  for x,y,z being R_eal holds
+  for x,y,z being ext-real number holds
   x is Real & z is Real & x <= y & y <= z implies y is Real
 proof
-  let x,y,z be R_eal;
+  let x,y,z be ext-real number;
   assume x is Real & z is Real & x <= y & y <= z;
   then y <> -infty & y <> +infty by XXREAL_0:4,6;
   hence thesis by MEASURE3:2;
 end;
 
 theorem Th17:
-  for x,y,z being R_eal st (x is Real & x <= y & y < z) holds y is Real
+  for x,y,z being ext-real number st x is Real & x <= y & y < z holds
+  y is Real
 proof
-  let x,y,z be R_eal;
+  let x,y,z be ext-real number;
   assume x is Real & x <= y & y < z;
   then y <> -infty & y <> +infty by XXREAL_0:4,6;
   hence thesis by MEASURE3:2;
 end;
 
 theorem Th18:
-  for x,y,z being R_eal st (x < y & y <= z & z is Real) holds y is Real
+  for x,y,z being ext-real number st x < y & y <= z & z is Real holds y is Real
 proof
-  let x,y,z be R_eal;
+  let x,y,z be ext-real number;
   assume x < y & y <= z & z is Real;
   then y <> -infty & y <> +infty by XXREAL_0:4,6;
   hence thesis by MEASURE3:2;
@@ -324,7 +323,7 @@ end;
 
 theorem
   for x,y,z being R_eal holds
-  (0. <= x & 0. <= z & z + x < y) implies z < y - x
+  0. <= x & 0. <= z & z + x < y implies z < y - x
 proof
   let x,y,z be R_eal;
   assume
@@ -729,7 +728,7 @@ A15:  Ser(F).l <= Ser(F).l & F.(l+1) + F.(l+1) <= F.l by A8,Th30;
 A16:  0. <= F.(l+1) + F.(l+1) by SUPINF_2:18;
 A17:  0. <= Ser(F).l by A9,SUPINF_2:59;
       then
-A18:  Ser(F).l + (F.(l+1) + F.(l+1)) <= Ser(F).l + F.l by A15,A16, MEASURE1:4;
+A18:  Ser(F).l + (F.(l+1) + F.(l+1)) <= Ser(F).l + F.l by A15,A16,MEASURE1:4;
       0. <= F.(l+1) by A8;
       then Ser(F).l + F.(l+1) + F.(l+1) <= Ser(F).l + F.l
       by A17,A18,MEASURE4:1;
@@ -886,8 +885,7 @@ A4: REAL c= ].-infty,+infty.]
   end;
   REAL c= REAL;
   then reconsider P = REAL as Subset of REAL;
-  -infty <= +infty & REAL = ].-infty,+infty.[ by A1,XBOOLE_0:def 10,XXREAL_0:
-  5;
+  -infty <= +infty & REAL = ].-infty,+infty.[ by A1,XBOOLE_0:def 10,XXREAL_0:5;
   then P is open_interval by MEASURE5:def 5;
   hence thesis by A1,A2,A3,A4,MEASURE5:def 9,XBOOLE_0:def 10;
 end;
@@ -1590,8 +1588,6 @@ A2: A^^ <= ^^B;
   ^^B <= R_EAL b & R_EAL b <= B^^ by A1,Th54;
   then
 A3: R_EAL a <= ^^B & ^^B <= R_EAL b by A2,XXREAL_0:2;
-  reconsider x = a,y = b as Real by XREAL_0:def 1;
-  reconsider x,y as R_eal by XXREAL_0:def 1;
   thus thesis by A3,XXREAL_0:2;
 end;
 
@@ -1700,7 +1696,6 @@ A8:         x in A;
             suppose
 A9:           x < c;
               reconsider d = c as R_eal by XXREAL_0:def 1;
-              reconsider e = x as R_eal;
               ^^B <= R_EAL b & R_EAL b <= B^^ by A7,Th54;
               then
 A10:          ^^B < d & d <= B^^ by A1,A5,A9,XXREAL_0:2;
@@ -1721,7 +1716,6 @@ A11:        x in B;
               case
 A12:            c < x;
                 reconsider d = c as R_eal by XXREAL_0:def 1;
-                reconsider e = x as R_eal;
                 ^^A <= R_EAL a & R_EAL a <= A^^ by A7,Th54;
                 then
 A13:            ^^A <= d & d < A^^ by A5,A12,XXREAL_0:2;

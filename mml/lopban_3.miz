@@ -12,24 +12,24 @@ environ
       LOPBAN_3, SUPINF_2, FUNCOP_1, FRECHET2, ALGSTR_0, GROUP_1, VECTSP_2,
       BINOP_1;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
-      DOMAIN_1, BINOP_1, FUNCOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XREAL_0,
-      XXREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, RLVECT_1, GROUP_1,
-      VECTSP_1, NORMSP_1, RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
-      PREPOWER, POWER, BHSP_3, BHSP_4, LOPBAN_1, LOPBAN_2;
+      DOMAIN_1, FUNCOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XREAL_0, XXREAL_0,
+      ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, RLVECT_1, GROUP_1, VECTSP_1,
+      NORMSP_1, RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER,
+      POWER, BHSP_3, BHSP_4, LOPBAN_1, LOPBAN_2, RECDEF_1;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
       BINOP_2, PREPOWER, SERIES_1, BHSP_3, BHSP_4, RSSPACE3, LOPBAN_2, SEQ_1,
-      VECTSP_1, GCD_1, VALUED_1;
+      GCD_1, VALUED_1, RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQM_3, STRUCT_0, VECTSP_1, NORMSP_1, LOPBAN_2,
-      ALGSTR_0, GCD_1, VALUED_1, FUNCT_2;
+      XREAL_0, MEMBERED, SEQM_3, STRUCT_0, NORMSP_1, LOPBAN_2, ALGSTR_0, GCD_1,
+      VALUED_1, FUNCT_2, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions SEQ_2, SERIES_1, NORMSP_1, BHSP_3, RLVECT_1, BINOP_1, ALGSTR_0,
-      VECTSP_1, VALUED_1;
+      VECTSP_1;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, FUNCSDOM, RELAT_1, SEQ_1, SEQ_2,
       SEQM_3, SERIES_1, FUNCT_1, NAT_1, INT_1, FUNCT_2, NORMSP_1, SEQ_4,
       RSSPACE3, LOPBAN_1, PREPOWER, LOPBAN_2, GROUP_1, FUNCOP_1, BHSP_3,
       XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, BHSP_4, VALUED_0, ALGSTR_0;
- schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
+ schemes SEQ_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Norm Space
 
@@ -76,7 +76,7 @@ registration
   cluster summable sequence of X;
   existence
   proof
-    reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
+    reconsider C = NAT --> 0.X as sequence of X;
 A1: for n be Element of NAT holds C.n = 0.X by FUNCOP_1:13;
     take C, 0.X;
     let p be Real such that
@@ -205,7 +205,7 @@ A8:     ||.seq.m -seq.k.||<s/2 by A6,A7;
         ||.seq.n -seq.k.||<s/2 by A6,A7;
         then ||.seq.k-seq.n.||<s/2 by NORMSP_1:11;
         then
-A9:     ||.seq.m -seq.k.||+||.seq.k-seq.n.||<s/2+s/2 by A8,XREAL_1 :10;
+A9:     ||.seq.m -seq.k.||+||.seq.k-seq.n.||<s/2+s/2 by A8,XREAL_1:10;
 A10:    ||.seq.m -seq.k+(seq.k-seq.n).||
         <=||.seq.m -seq.k.||+||.seq.k-seq.n.|| by NORMSP_1:def 2;
         ||.seq.m -seq.k+(seq.k-seq.n).|| =||.seq.m -seq.n.|| by Th3;
@@ -236,7 +236,7 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
 A4: P[k];
     thus ||.seq.||.(k+1) = ||.0.X.|| + ||.seq.||.(k+1)
       .= ||.seq.k.|| + ||.seq.||.(k+1) by A1
-      .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1) by A4, NORMSP_1:def 10
+      .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1) by A4,NORMSP_1:def 10
       .= (Partial_Sums ||.seq.||).(k+1) by SERIES_1:def 1;
   end;
   for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
@@ -417,10 +417,12 @@ A5: for m be Element of NAT st n1<=m holds ||.(seq.m)-g1.||<p by A3;
   let m be Element of NAT such that
 A6: n<=m;
   m<=Nseq.m by SEQM_3:33;
+
   then
 A7: n<=Nseq.m by A6,XXREAL_0:2;
   seq1.m=seq.(Nseq.m) by A4,Th7;
   hence ||.(seq1.m)-g.||<p by A5,A7;
+
 end;
 
 theorem Th12:
@@ -445,10 +447,12 @@ A5: for m be Element of NAT st n1<=m
     let m be Element of NAT such that
 A6: n<=m;
     m<=Nseq.m by SEQM_3:33;
+
     then
 A7: n<=Nseq.m by A6,XXREAL_0:2;
     seq1.m=seq.(Nseq.m) by A4,Th7;
     hence ||.(seq1.m)-(lim seq).||<p by A5,A7;
+
   end;
   hence thesis by A3,NORMSP_1:def 11;
 end;
@@ -710,7 +714,7 @@ registration
   cluster norm_summable sequence of X;
   existence
   proof
-    reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
+    reconsider C = NAT --> 0.X as sequence of X;
 A1: for n be Element of NAT holds C.n = 0.X by FUNCOP_1:13;
     take C;
     thus thesis by A1,Th18;
@@ -986,7 +990,7 @@ A2: for n be Element of NAT st X[n] holds X[n+1]
     then
 A3: Partial_Sums(s^\n)^\1 is convergent by Th14;
 A4: s^\(n+1)=(s^\n)^\1 by Th10;
-    reconsider s1 = NAT --> (s^\n).0 as sequence of X by FUNCOP_1:57;
+    reconsider s1 = NAT --> (s^\n).0 as sequence of X;
 A5: for k be Element of NAT holds s1.k = (s^\n).0 by FUNCOP_1:13;
 A6: s1 is convergent by Th17;
     Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th26;
@@ -1654,7 +1658,7 @@ definition
     deffunc G(set,set)=(the multF of X).[$2,z];
     consider g be Function such that
 A1: dom g = NAT & g.0 = 1.X
-    & for n being Element of NAT holds g.(n+1) = G(n,g.n) from RECDEF_1:sch 3;
+    & for n being Nat holds g.(n+1) = G(n,g.n) from NAT_1:sch 11;
     defpred P[Element of NAT] means g.$1 in the carrier of X;
 A2: P[0] by A1;
 A3: for k be Element of NAT st P[k] holds P[k+1]

@@ -22,8 +22,8 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -56,7 +56,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="259"/>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="25"/>
@@ -66,7 +66,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="258"/>
+<Func kind="K" nr="259"/>
 <Cluster>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
@@ -74,7 +74,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="259"/>
+<Func kind="K" nr="260"/>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="25"/>
@@ -84,7 +84,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="259"/>
+<Func kind="K" nr="260"/>
 <Cluster>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
@@ -110,7 +110,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="260">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -144,9 +144,9 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -185,9 +185,9 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
-<Func kind="K" nr="260">
+<Func kind="K" nr="261">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

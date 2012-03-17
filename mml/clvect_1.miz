@@ -13,21 +13,19 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
-      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, VALUED_1, SEQ_1, SEQ_2,
-      COMPLEX1, NORMSP_1, CFUNCT_1;
+      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2, COMPLEX1,
+      NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, REALSET1, STRUCT_0, RLVECT_1,
-      ALGSTR_0, VALUED_1, FUNCT_2;
+      XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0,
-      VALUED_1;
+ definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0;
  theorems STRUCT_0, TARSKI, RLVECT_1, COMPLEX1, XCMPLX_0, SQUARE_1, FINSEQ_1,
       NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1, RELSET_1,
       REAL_1, ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1, XXREAL_0, NORMSP_1,
       ALGSTR_0, CARD_1;
- schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
+ schemes FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
 
 begin :: Complex Linear Space
 
@@ -295,7 +293,7 @@ proof
   Sum(S) = f.(len S) & f.0 = 0.V &
   for j being Element of NAT, v being Element of V
   st j < len S & v = S.(j + 1) holds f.(j + 1) = f.j + v by RLVECT_1:def 13;
-  hence thesis by FINSEQ_1:25;
+  hence thesis by CARD_1:47;
 end;
 
 Lm2: for
@@ -428,9 +426,6 @@ theorem
   Sum<* - v,- v *> = [* -2,0 *] * v
 proof
   reconsider 2r = 2+0*<i>, m2 = -2+0*<i>
-  as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider
-  x = Re(-1r)*Re(2r)-Im(-1r)*Im(2r)+(Re(-1r)*Im(2r)+Re(2r)*Im(-1r))*<i>
   as Element of COMPLEX by XCMPLX_0:def 2;
   thus Sum<* - v,- v *> = - (v + v) by RLVECT_1:78
     .= - Sum<* v,v *> by RLVECT_1:62
@@ -656,7 +651,6 @@ theorem Th33:
 proof
   assume
 A1: v = w1 & u = w2;
-  reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th30;
   w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2] by Def5;
   hence thesis by A1,FUNCT_1:72;
 end;
@@ -666,7 +660,6 @@ theorem Th34:
 proof
   assume
 A1: w = v;
-  reconsider ww1 = w as VECTOR of V by Th30;
   z * w = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,w] by Def5;
   hence thesis by A1,FUNCT_1:72;
 end;
@@ -817,7 +810,7 @@ A6: for x,y being VECTOR of W holds x + y = (the addF of V).[x,y]
     thus for x being VECTOR of W holds x + 0.W = x
     proof
       let x be VECTOR of W;
-      reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
+      reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
       thus x + 0.W = y + 0.V by A2,A6
         .= x by RLVECT_1:10;
     end;
@@ -1392,7 +1385,6 @@ reserve B,C for Coset of W;
 theorem Th62:
   0.V in v + W iff v in W
 proof
-  set A = {v + u : u in W};
   thus 0.V in v + W implies v in W
   proof
     assume 0.V in v + W;
@@ -1423,7 +1415,6 @@ theorem
 theorem Th65:
   v + (0).V = {v}
 proof
-  set A = {v + u : u in (0).V};
   thus v + (0).V c= {v}
   proof
     let x be set;
@@ -1447,7 +1438,6 @@ end;
 
 Lm6: v in W iff v + W = the carrier of W
 proof
-  set A = {v + u : u in W};
   thus v in W implies v + W = the carrier of W
   proof
     assume
@@ -1506,7 +1496,6 @@ theorem
 theorem Th69:
   v in W implies (z * v) + W = the carrier of W
 proof
-  set A = {z * v + u : u in W};
   assume
 A1: v in W;
   thus (z * v) + W c= the carrier of W
@@ -1563,8 +1552,6 @@ end;
 theorem Th72:
   u in W iff v + W = (v + u) + W
 proof
-  set A = {v + v1 : v1 in W};
-  set B = {(v + u) + v2 : v2 in W};
   thus u in W implies v + W = (v + u) + W
   proof
     assume
@@ -1622,8 +1609,6 @@ end;
 theorem Th74:
   v in u + W iff u + W = v + W
 proof
-  set A = {u + v1 : v1 in W};
-  set B = {v + v2 : v2 in W};
   thus v in u + W implies u + W = v + W
   proof
     assume v in u + W;
@@ -1691,8 +1676,6 @@ proof
   assume that
 A1: u in v1 + W and
 A2: u in v2 + W;
-  set A = {v1 + u1 : u1 in W};
-  set B = {v2 + u2 : u2 in W};
   consider x1 being VECTOR of V such that
 A3: u = v1 + x1 and
 A4: x1 in W by A1;
@@ -1784,7 +1767,6 @@ end;
 theorem Th81:
   u + v in v + W iff u in W
 proof
-  set A = {v + v1 : v1 in W};
   thus u + v in v + W implies u in W
   proof
     assume u + v in v + W;
@@ -1809,7 +1791,6 @@ end;
 theorem Th83:
   u in v + W iff (ex v1 st v1 in W & u = v + v1)
 proof
-  set A = {v + v2 : v2 in W};
   thus u in v + W implies (ex v1 st v1 in W & u = v + v1)
   proof
     assume u in v + W;
@@ -1824,7 +1805,6 @@ end;
 theorem
   u in v + W iff (ex v1 st v1 in W & u = v - v1)
 proof
-  set A = {v + v2 : v2 in W};
   thus u in v + W implies (ex v1 st v1 in W & u = v - v1)
   proof
     assume u in v + W;

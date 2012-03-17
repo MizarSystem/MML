@@ -17,13 +17,12 @@ environ
       CARD_1, CARD_3, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1, ORDERS_2, YELLOW_0,
       WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23;
  constructors SETFAM_1, XXREAL_0, FINSEQ_4, REALSET1, VALUAT_1, TOPS_2,
-      T_0TOPSP, CANTOR_1, WAYBEL_8, WAYBEL23, VALUED_1, PARTFUN1, SEQ_1;
+      T_0TOPSP, CANTOR_1, WAYBEL_8, WAYBEL23;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, FINSEQ_1,
       MARGREL1, FINSEQ_2, REALSET1, CARD_5, STRUCT_0, TOPS_1, LATTICE3, TSP_1,
-      CANTOR_1, WAYBEL_0, WAYBEL_3, WAYBEL23, ORDINAL1, VALUED_1, FUNCT_2;
+      CANTOR_1, WAYBEL_0, WAYBEL_3, WAYBEL23, ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
- definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_2, MARGREL1, XBOOLEAN, STRUCT_0,
-      VALUED_1;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_2, MARGREL1, XBOOLEAN, STRUCT_0;
  theorems TARSKI, STRUCT_0, SETFAM_1, ZFMISC_1, FINSET_1, RELAT_1, FUNCT_1,
       FUNCT_2, FUNCT_6, MSSUBFAM, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
       EQREL_1, CATALG_1, FUNCOP_1, CARD_1, CARD_4, T_0TOPSP, PRE_TOPC, TOPS_2,
@@ -106,18 +105,12 @@ A3: D is empty;
 end;
 
 theorem Th3:
-  for T be finite set for S be Subset-Family of T holds S is finite
-proof
-  let T be finite set;
-  let S be Subset-Family of T;
-  bool T is finite by FINSET_1:24;
-  hence S is finite by FINSET_1:13;
-end;
+  for T be finite set for S be Subset-Family of T holds S is finite;
 
 registration
   let T be finite set;
   cluster -> finite Subset-Family of T;
-  coherence by Th3;
+  coherence;
 end;
 
 registration
@@ -167,7 +160,7 @@ definition
     deffunc F(Nat) = IFEQ(q.$1,TRUE,p.$1,X\p.$1);
     consider r be FinSequence such that
 A1: len r = len p and
-A2: for i be Nat st i in Seg len p holds r.i = F(i) from FINSEQ_1:sch 2;
+A2: for i be Nat st i in dom r holds r.i = F(i) from FINSEQ_1:sch 2;
     rng r c= bool X
     proof
       let z be set;
@@ -176,8 +169,7 @@ A2: for i be Nat st i in Seg len p holds r.i = F(i) from FINSEQ_1:sch 2;
 A3:   i in dom r and
 A4:   r.i = z by FINSEQ_2:11;
 A5:   i in Seg len p by A1,A3,FINSEQ_1:def 3;
-      then
-A6:   z = IFEQ(q.i,TRUE,p.i,X\p.i) by A2,A4;
+A6:   z = IFEQ(q.i,TRUE,p.i,X\p.i) by A2,A4,A3;
 A7:   i in dom p by A5,FINSEQ_1:def 3;
       now per cases;
         suppose q.i = TRUE;
@@ -193,7 +185,7 @@ A7:   i in dom p by A5,FINSEQ_1:def 3;
     end;
     then reconsider r as FinSequence of bool X by FINSEQ_1:def 4;
     take r;
-    dom p = Seg len p by FINSEQ_1:def 3;
+    dom p = dom r by A1,FINSEQ_3:31;
     hence thesis by A1,A2;
   end;
   uniqueness
@@ -203,11 +195,12 @@ A8: len r1 = len p and
 A9: for i be Nat st i in dom p holds r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) and
 A10: len r2 = len p and
 A11: for i be Nat st i in dom p holds r2.i = IFEQ(q.i,TRUE,p.i,X\p.i);
+X: dom r1 = Seg len p by A8,FINSEQ_1:def 3;
     now
       let i be Nat;
-      assume i in Seg len p;
+      assume i in dom r1;
       then
-A12:  i in dom p by FINSEQ_1:def 3;
+A12:  i in dom p by FINSEQ_1:def 3,X;
       hence r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) by A9
         .= r2.i by A11,A12;
     end;
@@ -865,9 +858,9 @@ A3: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
       assume z in Components(Y);
       then consider q be FinSequence of BOOLEAN such that
 A4:   z = Intersect (rng MergeSequence(p,q)) and len q = len p by A3;
-      p = <*>(bool X) by A2,FINSEQ_1:27;
+      p = <*>(bool X) by A2,RELAT_1:64;
       then MergeSequence(p,q) = <*>(bool X) by Th9;
-      then rng MergeSequence(p,q) = {} by FINSEQ_1:27;
+      then rng MergeSequence(p,q) = {} by RELAT_1:60;
       then Intersect (rng MergeSequence(p,q)) = X by SETFAM_1:def 10;
       hence z in {X} by A4,TARSKI:def 1;
     end;
@@ -875,9 +868,9 @@ A4:   z = Intersect (rng MergeSequence(p,q)) and len q = len p by A3;
     assume z in {X};
     then
 A5: z = X by TARSKI:def 1;
-    p = <*>(bool X) by A2,FINSEQ_1:27;
+    p = <*>(bool X) by A2,RELAT_1:64;
     then MergeSequence(p,<*>(BOOLEAN)) = <*>(bool X) by Th9;
-    then rng MergeSequence(p,<*>(BOOLEAN)) = {} by FINSEQ_1:27;
+    then rng MergeSequence(p,<*>(BOOLEAN)) = {} by RELAT_1:60;
     then Intersect (rng MergeSequence(p,<*>(BOOLEAN))) = X by SETFAM_1:def 10;
     hence z in Components(Y) by A1,A3,A5;
   end;
@@ -1060,11 +1053,13 @@ A6: B = Intersect (rng MergeSequence(p,q2)) and len q2 = len p by A2,A4;
 A7: z in A /\ B by XBOOLE_0:def 1;
 A8: z in A & z in B by A7,XBOOLE_0:def 3;
 A9: len MergeSequence(p,q1) = len p & len MergeSequence(p,q2) = len p by Def1;
+    then
+X: dom MergeSequence(p,q1) = Seg len p by FINSEQ_1:def 3;
   now
     let i be Nat;
-    assume i in Seg len p;
+    assume i in dom MergeSequence(p,q1);
     then
-A10: i in dom p by FINSEQ_1:def 3;
+A10: i in dom p by FINSEQ_1:def 3,X;
     then i in dom MergeSequence(p,q1) & i in dom MergeSequence(p,q2) by Th5;
     then MergeSequence(p,q1).i in rng MergeSequence(p,q1) &
     MergeSequence(p,q2).i in rng MergeSequence(p,q2) by FUNCT_1:def 5;

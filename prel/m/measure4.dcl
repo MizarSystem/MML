@@ -25,6 +25,7 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MEASURE2"/>
@@ -35,12 +36,12 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="22">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="171">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -49,7 +50,7 @@
 <Adjective nr="27">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="60">
+<Adjective nr="66">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

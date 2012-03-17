@@ -14,17 +14,16 @@ environ
       MCART_1, DOMAIN_1, PARTFUN1, FINSEQ_2, FUNCT_4, FUNCT_5, CARD_3,
       DTCONSTR, UNIALG_1, UNIALG_2, PBOOLE;
  constructors BINOP_1, DOMAIN_1, FUNCT_4, FUNCT_5, CARD_3, PBOOLE, UNIALG_2,
-      DTCONSTR, VALUED_1, PARTFUN1, SEQ_1;
+      DTCONSTR;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
-      FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, UNIALG_1,
-      VALUED_1, FUNCT_2;
+      FUNCOP_1, FINSEQ_1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, UNIALG_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, UNIALG_1, UNIALG_2, FUNCT_1, PBOOLE, XBOOLE_0, BINOP_1,
-      FINSEQ_2, VALUED_1;
+      FINSEQ_2;
  theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2, FUNCOP_1, UNIALG_1,
       DOMAIN_1, ZFMISC_1, MCART_1, UNIALG_2, FUNCT_2, PBOOLE, FUNCT_5, CARD_3,
       FUNCT_4, FINSEQ_3, RELAT_1, RELSET_1, STRUCT_0, ORDINAL1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, CARD_1, CARD_2;
  schemes FINSEQ_1, PARTFUN1, FUNCT_2, FUNCT_1, CLASSES1, WELLORD2;
 
 begin
@@ -148,7 +147,7 @@ A10:  len pr1 s = len s & len pr2 s = len s by Def1,Def2;
       s1 in {s3 where s3 is Element of A* : len s3 = arity(f1)} by A8,A10;
       then
 A11:  f1.s1 in rng f1 by A2,FUNCT_1:def 5;
-      s2 in {s3 where s3 is Element of B* : len s3 = arity(f2)} by A1,A8, A10;
+      s2 in {s3 where s3 is Element of B* : len s3 = arity(f2)} by A1,A8,A10;
       then f2.s2 in rng f2 by A3,FUNCT_1:def 5;
       hence thesis by A4,A5,A9,A11,ZFMISC_1:106;
     end;
@@ -310,15 +309,16 @@ A9: len y = len the charact of(U1) and
 A10: for n st n in dom y holds for h1,h2
     st h1=(the charact of(U1)).n & h2=(the charact of(U2)).n
     holds y.n = [[:h1,h2:]];
+X: dom x = Seg len the charact of(U1) by A7,FINSEQ_1:def 3;
     now
       let m be Nat;
       assume
-A11:  m in Seg len the charact of(U1);
+A11:  m in dom x;
       Seg len the charact of(U2) = Seg len the charact of(U1)
       by A1,UNIALG_2:3;
       then
 A12:  m in dom the charact of(U1) & m in dom the charact of(U2) &
-      m in dom x & m in dom y by A7,A9,A11,FINSEQ_1:def 3;
+      m in dom x & m in dom y by A9,A11,FINSEQ_1:def 3,X;
       then reconsider h1=(the charact of(U1)).m
       as homogeneous quasi_total non empty PartFunc
       of (the carrier of U1)*,the carrier of U1
@@ -381,12 +381,7 @@ A7: n in dom the charact of(C) & h = (the charact of(C)).n;
     h = [[:h1,h2:]] by A1,A7,Def4;
     hence h is homogeneous;
   end;
-A8: the charact of(C) <> {}
-  proof
-    assume the charact of(C) = {};
-    then len the charact of(C) = 0 by FINSEQ_1:25;
-    hence contradiction by A3,FINSEQ_1:25;
-  end;
+A8: the charact of(C) <> {} by A3,CARD_1:47,CARD_2:59;
   the charact of(C) is non-empty
   proof
     let n be set;
@@ -554,16 +549,17 @@ A3: dom signature(U1) = Seg len signature(U1) &
   dom the charact of(U2) = Seg len the charact of(U2) &
   dom the charact of([:U1,U2:]) = Seg len the charact of([:U1,U2:])
   by FINSEQ_1:def 3;
+X: dom signature(U1) = Seg len signature(U1) by FINSEQ_1:def 3;
   now
     let n be Nat;
     assume
-A4: n in Seg len signature(U1);
+A4: n in dom signature(U1);
     then
-A5: n in Seg len the charact of(U1) by UNIALG_1:def 11;
+A5: n in Seg len the charact of(U1) by UNIALG_1:def 11,X;
     then n in dom the charact of (U1) by FINSEQ_1:def 3;
     then reconsider o1 = (the charact of U1).n as operation of U1 by
     FUNCT_1:def 5;
-A6: (signature(U1)).n = arity(o1) by A3,A4,UNIALG_1:def 11;
+A6: (signature(U1)).n = arity(o1) by A4,UNIALG_1:def 11;
     n in dom the charact of([:U1,U2:]) by A2,A3,A4,UNIALG_1:def 11;
 
 then reconsider o12 = (the charact of [:U1,U2:]).n as operation of [:U1,U2:]
@@ -597,7 +593,7 @@ A4: U1,U3 are_similar by A2,UNIALG_2:4;
 A5: [:
   U1,U3:] = UAStr (# [:the carrier of U1,the carrier of U3:], Opers(U1,U3) #) &
   [:U2,U4:] = UAStr (# [:the carrier of U2,the carrier of U4:], Opers(U2,U4) #)
-  by A2,A3,Def5, UNIALG_2:4;
+  by A2,A3,Def5,UNIALG_2:4;
 A6: the carrier of U1 is Subset of U2 & the carrier of U3 is Subset of U4
   by A1,UNIALG_2:def 8;
   then
@@ -687,12 +683,12 @@ A26: len the charact of(U4) = len the charact of(U2) by UNIALG_1:def 11;
 A27: len the charact of(U1) = len the charact of(U3) by UNIALG_1:def 11;
 A28: dom the charact of(U2) = dom Opers(U2,B1) by UNIALG_2:def 7;
 A29: dom the charact of(U4) = dom Opers(U4,B3) by UNIALG_2:def 7;
-  for n being Nat st n in Seg len the charact of([:U1,U3:]) holds
+  for n being Nat st n in dom the charact of([:U1,U3:]) holds
   (the charact of [:U1,U3:]).n = Opers([:U2,U4:],B).n
   proof
     let n be Nat;
     assume
-A30: n in Seg len the charact of([:U1,U3:]);
+A30: n in dom the charact of([:U1,U3:]);
     then reconsider o2 = (the charact of U2).n as operation of U2
     by A22,A24,A25,FUNCT_1:def 5;
     reconsider o4 = (the charact of U4).n as operation of U4
@@ -714,9 +710,9 @@ A35: o3 = o4/.B3 by A1,A33,UNIALG_2:def 8;
 A36: B is_closed_on o24 & B1 is_closed_on o2 & B3 is_closed_on o4
     by A9,A10,UNIALG_2:def 5;
     then
-A37: arity (o2/.B1) = arity o2 & arity (o4/.B3) = arity o4 by UNIALG_2 :8;
+A37: arity (o2/.B1) = arity o2 & arity (o4/.B3) = arity o4 by UNIALG_2:8;
     then
-A38: dom ([[:o2/.B1,o4/.B3:]]) = (arity o2)-tuples_on B by A5,A8,A31, Def3;
+A38: dom ([[:o2/.B1,o4/.B3:]]) = (arity o2)-tuples_on B by A5,A8,A31,Def3;
 A39: dom ([[:o2,o4:]]|((arity o24)-tuples_on B)) = dom ([[:o2,o4:]]) /\
     ((arity o2)-tuples_on B) by A31,FUNCT_1:68
       .= (arity o2)-tuples_on (the carrier of [:U2,U4:]) /\
@@ -736,7 +732,7 @@ A42:  s = x & len s = arity o2;
 A43:  dom ([[:o2,o4:]]|((arity o24)-tuples_on B)) c= dom [[:o2,o4:]]
       by RELAT_1:89;
 A44:  ([[:o2,o4:]]|((arity o24)-tuples_on B)).x = [[:o2,o4:]].s0
-      by A39,A41,A42, FUNCT_1:68
+      by A39,A41,A42,FUNCT_1:68
         .= [o2.(pr1 s0),o4.(pr2 s0)] by A31,A39,A41,A42,A43,Def3;
       reconsider s1 = s as FinSequence of
       [:B1 qua non empty set,B3 qua non empty set:] by A5,A8;
@@ -752,7 +748,7 @@ A46:  dom (o2|(arity o2)-tuples_on B1)
         .= (arity o2)-tuples_on B1 by UNIALG_2:1;
       len (pr2 s1) = len s1 & len (pr2 s0) = len s0 by Def2;
       then
-A47:  s12 in {b where b is Element of B3*: len b = arity o4} by A31, A42;
+A47:  s12 in {b where b is Element of B3*: len b = arity o4} by A31,A42;
 A48:  dom (o4|(arity o4)-tuples_on B3)
       = dom o4 /\ (arity o4)-tuples_on B3 by FUNCT_1:68
         .= ((arity o4)-tuples_on the carrier of U4) /\ (arity o4)-tuples_on B3
@@ -772,7 +768,7 @@ A48:  dom (o4|(arity o4)-tuples_on B3)
     thus Opers([:U2,U4:],B).n = o24/.B by A24,A25,A30,UNIALG_2:def 7
       .= [[:o2,o4:]]|((arity o24)-tuples_on B) by A31,A36,UNIALG_2:def 6
       .= [[:o2/.B1,o4/.B3:]] by A38,A39,A40,FUNCT_1:9
-      .= (the charact of [:U1,U3:]).n by A4,A5,A25,A30,A34,A35,Def4;
+      .= (the charact of [:U1,U3:]).n by A4,A5,A30,A34,A35,Def4;
   end;
   hence thesis by A10,A24,FINSEQ_2:10,UNIALG_2:def 5;
 end;
@@ -831,13 +827,14 @@ A2:   len x = len y & x in dom f;
 A3:   x = k |-> {} by A1,TARSKI:def 1;
       then
 A4:   len x = k by FINSEQ_2:69;
+X: dom x = Seg len x by FINSEQ_1:def 3;
       now
         let n be Nat;
         assume
-A5:     n in Seg len x;
+A5:     n in dom x;
         then
-A6:     x.n = {} by A3,A4,FUNCOP_1:13;
-        n in dom y by A2,A5,FINSEQ_1:def 3;
+A6:     x.n = {} by A3,A4,FUNCOP_1:13,X;
+        n in dom y by A2,A5,FINSEQ_1:def 3,X;
         then y.n in {{}} by FINSEQ_2:13;
         hence x.n = y.n by A6,TARSKI:def 1;
       end;
@@ -905,11 +902,12 @@ A3: (len x=len f & for n st n in dom x for m st m = f.n
     holds x.n=TrivialOp(m)) &
     (len y=len f & for n st n in dom y for m st m = f.n
     holds y.n=TrivialOp(m));
+X: dom x = Seg len f by A3,FINSEQ_1:def 3;
     now
       let n be Nat;
-      assume n in Seg len f;
+      assume n in dom x;
       then
-A4:   n in dom f & n in dom x & n in dom y by A3,FINSEQ_1:def 3;
+A4:   n in dom f & n in dom x & n in dom y by A3,FINSEQ_1:def 3,X;
       then reconsider m = f.n as Element of NAT by FINSEQ_2:13;
       x.n=TrivialOp(m) & y.n=TrivialOp(m) by A3,A4;
       hence x.n = y.n;
@@ -975,8 +973,8 @@ A1: f <> {};
   set U0 = UAStr (#{{}},TrivialOps(f)#);
 A2: the charact of U0 is homogeneous quasi_total non-empty by Th10;
   len (the charact of U0) = len f by Def8;
-  then len (the charact of U0) <> 0 by A1,FINSEQ_1:25;
-  then the charact of U0 <> {} by FINSEQ_1:25;
+  then len (the charact of U0) <> 0 by A1,CARD_2:59;
+  then the charact of U0 <> {} by CARD_1:47;
   hence thesis by A2,UNIALG_1:def 7,def 8,def 9;
 end;
 
@@ -1632,8 +1630,8 @@ A4:       dom (O..(EmptySeq B)) = J by PBOOLE:def 3
             then reconsider j = z as Element of J by PBOOLE:def 3;
 A5:         (O..(EmptySeq B)).z = (O.j).((EmptySeq B).j) by Def18
               .= (O.j).({}(B.j)) by Def20;
-            w = {} by A3,FINSEQ_1:26;
-            then len w = 0 by FINSEQ_1:25;
+            w = {} by A3,RELAT_1:64;
+            then len w = 0 by CARD_1:47;
             then arity (O.j) = 0 by A2,Def19;
             then dom (O.j) = 0-tuples_on (B.j) by UNIALG_2:2
               .= {<*>(B.j)} by FINSEQ_2:112;
@@ -1683,7 +1681,7 @@ A13:          y = (~uncurry w).(j,x) by A10,A12;
 A14:          dom (uncurry w) = [:dom w,J:] by PBOOLE:def 3;
               dom g = dom w by A11,FINSEQ_1:def 3;
               then
-A15:          [x,j] in dom (uncurry w) by A12,A14,ZFMISC_1: 106;
+A15:          [x,j] in dom (uncurry w) by A12,A14,ZFMISC_1:106;
               then
 A16:          y = (uncurry w).(x,j) by A13,FUNCT_4:def 2;
               consider a be set,f be Function, b be set such that
@@ -1782,8 +1780,8 @@ A29:  x in ca-tuples_on pr;
 A30:  x = s & len s = ca;
       now per cases;
         case dom s = {};
-          then f.s = O..(EmptySeq B) & g.s = O..(EmptySeq B) by A27,A28,A29,
-          A30;
+
+then f.s = O..(EmptySeq B) & g.s = O..(EmptySeq B) by A27,A28,A29,A30;
           hence thesis by A30;
         end;
         case dom s <> {};
@@ -1961,11 +1959,12 @@ A3: (len x = len (ComSign A) & for n st n in dom x holds x.n = [[: ProdOp(A,n)
     :]])
     & len y = len (ComSign A) & for n st n in dom y holds y.n = [[: ProdOp(A,n)
     :]];
+X: dom x = Seg len (ComSign A) by A3,FINSEQ_1:def 3;
     now
       let n be Nat;
-      assume n in Seg len (ComSign A);
+      assume n in dom x;
       then n in dom (ComSign A) & n in dom x & n in dom y
-      by A3,FINSEQ_1:def 3;
+      by A3,FINSEQ_1:def 3,X;
       then x.n = [[: ProdOp(A,n) :]] & y.n = [[: ProdOp(A,n) :]] by A3;
       hence x.n = y.n;
     end;
@@ -2017,11 +2016,11 @@ A5:   n in dom (the charact of ua);
     then
 A6: the charact of(ua) is non-empty by FUNCT_1:def 15;
     consider j be Element of J;
-A7: len the charact of(A.j) <> 0 by FINSEQ_1:25;
+A7: len the charact of(A.j) <> 0 by CARD_2:59;
     len the charact of(ua) = len ComSign A by Def23
       .= len(signature A.j) by Def14
       .= len the charact of(A.j) by UNIALG_1:def 11;
-    then the charact of(ua) <> {} by A7,FINSEQ_1:25;
+    then the charact of(ua) <> {} by A7,CARD_1:47;
     hence thesis by A2,A4,A6,UNIALG_1:def 7,def 8,def 9;
   end;
 end;

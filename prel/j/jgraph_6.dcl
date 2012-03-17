@@ -30,6 +30,7 @@
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JGRAPH_6"/>
@@ -52,14 +53,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="276">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="252">
+<Func kind="K" nr="263">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -84,7 +85,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="276">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

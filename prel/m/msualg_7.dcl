@@ -31,10 +31,10 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="NAT_LAT"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="MSUALG_4"/>
 <ArticleID name="MSUALG_5"/>
 <ArticleID name="MSUALG_7"/>
@@ -49,7 +49,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -77,7 +77,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
+<Func kind="K" nr="285">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,7 +100,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
+<Func kind="K" nr="285">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -126,7 +126,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -149,7 +149,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="26">
+<Typ kind="M" nr="25">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

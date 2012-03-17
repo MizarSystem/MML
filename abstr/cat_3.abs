@@ -7,11 +7,11 @@
 environ
 
  vocabularies CAT_1, FUNCT_1, FINSEQ_4, RELAT_1, FUNCOP_1, FUNCT_4, BOOLE,
-      FUNCT_6, OPPCAT_1, WELLORD1, CAT_3, ARYTM;
+      FUNCT_6, OPPCAT_1, WELLORD1, CAT_3, ARYTM, GRAPH_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1,
-      FUNCT_4, NUMBERS, FUNCT_2, FINSEQ_4, CAT_1, OPPCAT_1;
- constructors PARTFUN1, FINSEQ_4, OPPCAT_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, RELSET_1, FUNCOP_1, VALUED_1, FUNCT_2;
+      FUNCT_4, NUMBERS, FUNCT_2, GRAPH_1, CAT_1, OPPCAT_1;
+ constructors PARTFUN1, OPPCAT_1;
+ registrations XBOOLE_0, RELSET_1, FUNCOP_1, CAT_1;
  requirements SUBSET, BOOLE;
 
 
@@ -53,12 +53,6 @@ scheme :: CAT_3:sch 2
   (for x st x in I() holds F2/.x = F(x)) holds F1 = F2);
 
 definition
-  let A,I;
-  let a be Element of A;
-  redefine func I --> a -> Function of I,A;
-end;
-
-definition
   let A,x;
   let a be Element of A;
   redefine func x .--> a -> Function of {x},A;
@@ -77,13 +71,13 @@ begin :: Indexed families of morphisms
 
 definition
   let C,I;
-  let F be Function of I,the Morphisms of C;
+  let F be Function of I,the Edges of C;
   canceled;
-  func doms F -> Function of I, the Objects of C means
+  func doms F -> Function of I, the Vertices of C means
 :: CAT_3:def 3
 
   for x st x in I holds it/.x = dom(F/.x);
-  func cods F -> Function of I, the Objects of C means
+  func cods F -> Function of I, the Vertices of C means
 :: CAT_3:def 4
 
   for x st x in I holds it/.x = cod(F/.x);
@@ -103,8 +97,8 @@ theorem :: CAT_3:11
 
 definition
   let C,I;
-  let F be Function of I,the Morphisms of C;
-  func F opp -> Function of I,the Morphisms of C opp means
+  let F be Function of I,the Edges of C;
+  func F opp -> Function of I,the Edges of C opp means
 :: CAT_3:def 5
 
   for x st x in I holds it/.x = (F/.x) opp;
@@ -117,12 +111,12 @@ theorem :: CAT_3:13
   x1 <> x2 implies ((x1,x2)-->(p1,p2)) opp = (x1,x2)-->(p1 opp,p2 opp);
 
 theorem :: CAT_3:14
-  for F being Function of I,the Morphisms of C holds F opp opp = F;
+  for F being Function of I,the Edges of C holds F opp opp = F;
 
 definition
   let C,I;
-  let F be Function of I,the Morphisms of C opp;
-  func opp F -> Function of I,the Morphisms of C means
+  let F be Function of I,the Edges of C opp;
+  func opp F -> Function of I,the Edges of C means
 :: CAT_3:def 6
 
   for x st x in I holds it/.x = opp (F/.x);
@@ -136,16 +130,16 @@ theorem :: CAT_3:16
   opp ((x1,x2)-->(p1,p2)) = (x1,x2)-->(opp p1,opp p2);
 
 theorem :: CAT_3:17
-  for F being Function of I,the Morphisms of C holds opp(F opp) = F;
+  for F being Function of I,the Edges of C holds opp(F opp) = F;
 
 definition
   let C,I;
-  let F be Function of I,the Morphisms of C, f;
-  func F*f -> Function of I,the Morphisms of C means
+  let F be Function of I,the Edges of C, f;
+  func F*f -> Function of I,the Edges of C means
 :: CAT_3:def 7
 
   for x st x in I holds it/.x = (F/.x)*f;
-  func f*F -> Function of I,the Morphisms of C means
+  func f*F -> Function of I,the Edges of C means
 :: CAT_3:def 8
 
   for x st x in I holds it/.x = f*(F/.x);
@@ -158,24 +152,24 @@ theorem :: CAT_3:19
   x1 <> x2 implies f*((x1,x2)-->(p1,p2)) = (x1,x2)-->(f*p1,f*p2);
 
 theorem :: CAT_3:20
-  for F being Function of I,the Morphisms of C st doms F = I-->cod f
+  for F being Function of I,the Edges of C st doms F = I-->cod f
   holds doms(F*f) = I-->dom f & cods(F*f) = cods F;
 
 theorem :: CAT_3:21
-  for F being Function of I,the Morphisms of C st cods F = I-->dom f
+  for F being Function of I,the Edges of C st cods F = I-->dom f
   holds doms(f*F) = doms F & cods(f*F) = I-->cod f;
 
 definition
   let C,I;
-  let F,G be Function of I,the Morphisms of C;
-  func F"*"G -> Function of I,the Morphisms of C means
+  let F,G be Function of I,the Edges of C;
+  func F"*"G -> Function of I,the Edges of C means
 :: CAT_3:def 9
 
   for x st x in I holds it/.x = (F/.x)*(G/.x);
 end;
 
 theorem :: CAT_3:22
-  for F,G being Function of I,the Morphisms of C st doms F = cods G
+  for F,G being Function of I,the Edges of C st doms F = cods G
   holds doms(F"*"G) = doms G & cods(F"*"G) = cods F;
 
 theorem :: CAT_3:23
@@ -183,10 +177,10 @@ theorem :: CAT_3:23
   ((x1,x2)-->(p1,p2))"*"((x1,x2)-->(q1,q2)) = (x1,x2)-->(p1*q1,p2*q2);
 
 theorem :: CAT_3:24
-  for F being Function of I,the Morphisms of C holds F*f = F"*"(I-->f);
+  for F being Function of I,the Edges of C holds F*f = F"*"(I-->f);
 
 theorem :: CAT_3:25
-  for F being Function of I,the Morphisms of C holds f*F = (I-->f)"*"F;
+  for F being Function of I,the Edges of C holds f*F = (I-->f)"*"F;
 
 begin :: Retractions and Coretractions
 
@@ -243,7 +237,7 @@ theorem :: CAT_3:37
 theorem :: CAT_3:38
   f is coretraction iff f opp is retraction;
 
-begin :: Morphisms determined by a terminal Object
+begin :: Edges determined by a terminal Object
 
 definition
   let C,a,b;
@@ -264,7 +258,7 @@ theorem :: CAT_3:40
 theorem :: CAT_3:41
   for f being Morphism of a,b st b is terminal holds term(a,b) = f;
 
-begin :: Morphisms determined by an iniatial object
+begin :: Edges determined by an iniatial object
 
 definition
   let C,a,b;
@@ -289,7 +283,7 @@ begin :: Products
 
 definition
   let C,a,I;
-  mode Projections_family of a,I -> Function of I,the Morphisms of C means
+  mode Projections_family of a,I -> Function of I,the Edges of C means
 :: CAT_3:def 14
 
     doms it = I --> a;
@@ -299,7 +293,7 @@ theorem :: CAT_3:45
   for F being Projections_family of a,I st x in I holds dom(F/.x) = a;
 
 theorem :: CAT_3:46
-  for F being Function of {},the Morphisms of C
+  for F being Function of {},the Edges of C
   holds F is Projections_family of a,{};
 
 theorem :: CAT_3:47
@@ -316,7 +310,7 @@ theorem :: CAT_3:50
   holds F*f is Projections_family of dom f,I;
 
 theorem :: CAT_3:51
-  for F being Function of I,the Morphisms of C,
+  for F being Function of I,the Edges of C,
   G being Projections_family of a,I st doms F = cods G
   holds F"*"G is Projections_family of a,I;
 
@@ -325,7 +319,7 @@ theorem :: CAT_3:52
 
 definition
   let C,a,I;
-  let F be Function of I,the Morphisms of C;
+  let F be Function of I,the Edges of C;
   pred a is_a_product_wrt F means
 :: CAT_3:def 15
 
@@ -346,7 +340,7 @@ theorem :: CAT_3:54
   for x st x in I holds F/.x is retraction;
 
 theorem :: CAT_3:55
-  for F being Function of {},the Morphisms of C holds
+  for F being Function of {},the Edges of C holds
   a is_a_product_wrt F iff a is terminal;
 
 theorem :: CAT_3:56
@@ -412,7 +406,7 @@ begin :: Coproducts
 
 definition
   let C,c,I;
-  mode Injections_family of c,I -> Function of I,the Morphisms of C means
+  mode Injections_family of c,I -> Function of I,the Edges of C means
 :: CAT_3:def 17
 
     cods it = I --> c;
@@ -422,7 +416,7 @@ theorem :: CAT_3:67
   for F being Injections_family of c,I st x in I holds cod(F/.x) = c;
 
 theorem :: CAT_3:68
-  for F being Function of {},the Morphisms of C
+  for F being Function of {},the Edges of C
   holds F is Injections_family of a,{};
 
 theorem :: CAT_3:69
@@ -440,15 +434,15 @@ theorem :: CAT_3:72
 
 theorem :: CAT_3:73
   for F being Injections_family of b,I,
-  G being Function of I,the Morphisms of C st doms F = cods G
+  G being Function of I,the Edges of C st doms F = cods G
   holds F"*"G is Injections_family of b,I;
 
 theorem :: CAT_3:74
-  for F be Function of I,the Morphisms of C holds
+  for F be Function of I,the Edges of C holds
   F is Projections_family of c,I iff F opp is Injections_family of c opp,I;
 
 theorem :: CAT_3:75
-  for F be Function of I,the Morphisms of C opp, c being Object of C opp holds
+  for F be Function of I,the Edges of C opp, c being Object of C opp holds
   F is Injections_family of c,I iff opp F is Projections_family of opp c,I;
 
 theorem :: CAT_3:76
@@ -456,7 +450,7 @@ theorem :: CAT_3:76
 
 definition
   let C,c,I;
-  let F be Function of I,the Morphisms of C;
+  let F be Function of I,the Edges of C;
   pred c is_a_coproduct_wrt F means
 :: CAT_3:def 18
 
@@ -467,7 +461,7 @@ definition
 end;
 
 theorem :: CAT_3:77
-  for F being Function of I,the Morphisms of C holds
+  for F being Function of I,the Edges of C holds
   c is_a_product_wrt F iff c opp is_a_coproduct_wrt F opp;
 
 theorem :: CAT_3:78

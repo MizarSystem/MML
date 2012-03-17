@@ -23,6 +23,8 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
 <ArticleID name="SYMSP_1"/>
 </Signature>
 <RCluster>
@@ -43,12 +45,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="93">
+<Adjective nr="102">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -71,7 +73,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -97,7 +99,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -127,7 +129,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -140,10 +142,10 @@
 <Adjective nr="91">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="93">
+<Adjective nr="102">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="94">
+<Adjective nr="103">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -218,7 +220,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="13">
+<Func kind="G" nr="14">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -228,7 +230,7 @@
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="93">
+<Adjective nr="102">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

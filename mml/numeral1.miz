@@ -9,23 +9,26 @@ environ
  vocabularies BOOLE, NUMERAL1, ARYTM, AFINSQ_1, FUNCT_1, FINSEQ_1, ARYTM_1,
       RELAT_1, RLVECT_1, ALGSEQ_1, GROUP_1, NAT_1, MONOID_0, FINSOP_1, SEQ_1,
       SERIES_1, PREPOWER, POWER, ARYTM_3;
- notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, BINOP_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, BINOP_1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, NAT_D, BINOP_2, VALUED_1, SEQ_1,
-      NEWTON, PREPOWER, POWER, SERIES_1, AFINSQ_1, STIRL2_1, FUNCT_2;
+      NEWTON, PREPOWER, POWER, SERIES_1, STIRL2_1, FUNCT_2, RECDEF_1, AFINSQ_1;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      SEQ_1, NEWTON, PREPOWER, SERIES_1, STIRL2_1, VALUED_1, PARTFUN1;
+      SEQ_1, NEWTON, PREPOWER, SERIES_1, STIRL2_1, VALUED_1, PARTFUN1,
+      RECDEF_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, NEWTON, RFINSEQ, AFINSQ_1,
-      CARD_1, VALUED_1, FUNCT_2;
+      CARD_1, VALUED_1, FUNCT_2, POWER;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
- definitions TARSKI, STIRL2_1, VALUED_1;
+ definitions TARSKI, STIRL2_1;
  theorems ORDINAL1, FUNCT_1, STIRL2_1, AFINSQ_1, CARD_5, TARSKI, RELAT_1,
       XBOOLE_1, FUNCT_2, NAT_2, XREAL_1, NAT_1, INT_1, NEWTON, BINOP_2,
       XBOOLE_0, SERIES_1, SEQ_1, PREPOWER, POWER, XCMPLX_1, PRGCOR_2, PEPIN,
       PRE_FF, NAT_D, XXREAL_0;
- schemes AFINSQ_1, RECDEF_1, STIRL2_1, NAT_1;
+ schemes AFINSQ_1, STIRL2_1, NAT_1;
 
 begin :: Preliminaries
+
+
 
 Lm1: for d being XFinSequence holds
 (ex n being Nat st n in dom d) iff len d > 0
@@ -393,11 +396,11 @@ A1: b>1;
     proof
       assume
 A2:   n<>0;
-      deffunc G(Element of NAT,Element of NAT)=$2 div B;
+      deffunc G(Nat,Element of NAT)=$2 div B;
       consider f being Function of NAT,NAT such that
 A3:   f.0=N &
-      for i being Element of NAT holds f.(i+1)=G(i,(f.i) qua Element of NAT)
-      from RECDEF_1:sch 4;
+      for i being Nat holds f.(i+1)=G(i,(f.i) qua Element of NAT)
+      from NAT_1:sch 12;
       defpred R[Nat] means f.$1 = 0;
       defpred Q[Nat] means ex i being Element of NAT st f.i = $1;
 A4:   ex k being Nat st Q[k] by A3;
@@ -428,9 +431,8 @@ A11:  f.m<>0 by A9;
 A12:  R[l] by A9;
 A13:  now
         let i be Nat such that l <= i;
-A14:    i in NAT by ORDINAL1:def 13;
         assume R[i];
-        then f.(i+1)=0 div b by A3,A14;
+        then f.(i+1)=0 div b by A3;
         hence R[i+1] by NAT_2:4;
       end;
 A15:  for i being Nat st l <= i holds R[i] from NAT_1:sch 8(A12,A13);
@@ -499,7 +501,7 @@ A28:  0 in m+1 by PRGCOR_2:1;
         .= (n mod b)*1 by A3,NEWTON:9
         .= N-B*(N div B) by A1,NEWTON:77
         .= n-(n div b)*b|^1 by NEWTON:10
-        .= n-f.(0+1)*b|^(0+1) by A3;
+        .= n-f.(0 qua Nat+1)*b|^(0 qua Nat+1) by A3;
       then
 A29:  I[0] by A27;
 A30:  now
@@ -538,8 +540,7 @@ A34:  for i being Element of NAT holds I[i] from NAT_1:sch 1(A29,A30);
       then n=Sum d' by A27;
       hence value(d,b)=n by A22,A23,Def1;
       d.(len(d)-1) = g.m mod b by A19,A26,AFINSQ_1:1
-        .= g.m by A1,A25,NAT_2:
-      14,NAT_D:24;
+        .= g.m by A1,A25,NAT_2:14,NAT_D:24;
       hence d.(len(d)-1) <> 0 by A11,AFINSQ_1:1,FUNCT_1:72;
       let i be Nat;
       assume i in dom d;
@@ -588,7 +589,7 @@ A43:  log(2,b)>0 by POWER:59;
       then (d.k)*(b|^k) <= n by A38,A39,A41,STIRL2_1:52;
       then b|^k <= n by A40,XXREAL_0:2;
       then log(2,b|^k) <= log(2,n) by A42,PRE_FF:12;
-      then log(2,b to_power k) <= log(2,n) by A1,POWER:46;
+      then log(2,b to_power k) <= log(2,n);
       then k*log(2,b) <= log(2,n) by A1,POWER:63;
       then k*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A43,XREAL_1:74;
       then
@@ -609,11 +610,11 @@ A48:  Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).k by Th2
         .= ((b-1)(#)Partial_Sums(b GeoSeq)).k by SERIES_1:12
         .= (b-1)*(Partial_Sums(b GeoSeq).k) by SEQ_1:13
         .= (b-1)*((1 - (b to_power (k+1)))/(1-b)) by A1,SERIES_1:26
-        .= (b-1)*((1 - (b |^ (k+1)))/(1-b)) by A1,POWER:46
+        .= (b-1)*((1 - (b |^ (k+1)))/(1-b))
         .= -((1-b)*((1 - (b |^ (k+1)))/(1-b)))
         .= -(1 - (b |^ (k+1))) by A47,XCMPLX_1:88
         .= b|^(k+1)-1;
-A49:  len D >= 0+1 by A41,NAT_1:13;
+A49:  len D >= 0 qua Nat+1 by A41,NAT_1:13;
 A50:  len D = dom D by AFINSQ_1:def 1
         .= len d by A38,AFINSQ_1:def 1
         .= len g by A46,AFINSQ_1:def 1;
@@ -637,7 +638,7 @@ A53:    d.i <= b1 by NAT_1:13;
       then n <= (b|^(k+1))-1 by A38,A48,A49,A50,Th4;
       then n < b|^(k+1)-1+1 by XREAL_1:41;
       then log(2,n) < log(2,b|^(k+1)) by A35,POWER:65;
-      then log(2,n) < log(2,b to_power (k+1)) by A1,POWER:46;
+      then log(2,n) < log(2,b to_power (k+1));
       then log(2,n) < (k+1)*log(2,b) by A1,POWER:63;
       then log(2,n)/log(2,b) < (k+1)*log(2,b)/log(2,b) by A43,XREAL_1:76;
       then
@@ -658,7 +659,7 @@ A59:  log(2,b)>0 by POWER:59;
       then (e.l)*(b|^l) <= n by A45,A55,A57,STIRL2_1:52;
       then b|^l <= n by A56,XXREAL_0:2;
       then log(2,b|^l) <= log(2,n) by A58,PRE_FF:12;
-      then log(2,b to_power l) <= log(2,n) by A1,POWER:46;
+      then log(2,b to_power l) <= log(2,n);
       then l*log(2,b) <= log(2,n) by A1,POWER:63;
       then l*log(2,b)/log(2,b) <= log(2,n)/log(2,b) by A59,XREAL_1:74;
       then
@@ -675,11 +676,11 @@ A63:  Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).l by Th2
         .= ((b-1)(#)Partial_Sums(b GeoSeq)).l by SERIES_1:12
         .= (b-1)*(Partial_Sums(b GeoSeq).l) by SEQ_1:13
         .= (b-1)*((1 - (b to_power (l+1)))/(1-b)) by A1,SERIES_1:26
-        .= (b-1)*((1 - (b |^ (l+1)))/(1-b)) by A1,POWER:46
+        .= (b-1)*((1 - (b |^ (l+1)))/(1-b))
         .= -((1-b)*((1 - (b |^ (l+1)))/(1-b)))
         .= -(1 - (b |^ (l+1))) by A62,XCMPLX_1:88
         .= b|^(l+1)-1;
-A64:  len E >= 0+1 by A57,NAT_1:13;
+A64:  len E >= 0 qua Nat+1 by A57,NAT_1:13;
 A65:  len E = dom E by AFINSQ_1:def 1
         .= len e by A45,AFINSQ_1:def 1
         .= len g by A61,AFINSQ_1:def 1;
@@ -703,7 +704,7 @@ A68:    e.i <= b1 by NAT_1:13;
       then n <= (b|^(l+1))-1 by A45,A63,A64,A65,Th4;
       then n < b|^(l+1)-1+1 by XREAL_1:41;
       then log(2,n) < log(2,b|^(l+1)) by A35,POWER:65;
-      then log(2,n) < log(2,b to_power (l+1)) by A1,POWER:46;
+      then log(2,n) < log(2,b to_power (l+1));
       then log(2,n) < (l+1)*log(2,b) by A1,POWER:63;
       then log(2,n)/log(2,b) < (l+1)*log(2,b)/log(2,b) by A59,XREAL_1:76;
       then log(2,n)/log(2,b) < l+1 by A59,XCMPLX_1:90;
@@ -753,11 +754,12 @@ A79:      E = <%E.0%> by AFINSQ_1:38
 A80:      o = 0 & o < k;
           set d'=D;
 A81:      dom d'= oo by A38,A80,AFINSQ_1:def 1;
-          set do=<%>NAT;
+          reconsider do=<%>NAT as XFinSequence of NAT;
 A82:      len d'=oo by A81,AFINSQ_1:def 1;
 A83:      len do=o by A80,AFINSQ_1:18;
           then
 A84:      dom D = len do + len d' by A38,A82,AFINSQ_1:def 1;
+          dom {} = {}; then
 A85:      for x being Element of NAT st x in dom do holds D.x=do.x;
           for x being Element of NAT st x in dom d' holds D.(len do+x)=d'.x
           by A80,A83;
@@ -831,11 +833,11 @@ A104:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A101
             .= -(1 - (b |^ o1)) by A103,XCMPLX_1:88
             .= b|^o1-1;
-A105:     len do1>=0+1 by A96,NAT_1:13;
+A105:     len do1>=0 qua Nat+1 by A96,NAT_1:13;
 A106:     len do1 = len g1 by A96,A102,AFINSQ_1:def 1;
           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
@@ -916,11 +918,12 @@ A118:     d.o = (b|^o*((n div (b|^o)) - (n div (b|^o1)) * b))/b |^o
           by A87,XCMPLX_1:90;
           set d'=E;
 A119:     dom d'= oo by A45,A70,A80,AFINSQ_1:def 1;
-          set do=<%>NAT;
+          reconsider do=<%>NAT as XFinSequence of NAT;
 A120:     len d'=oo by A119,AFINSQ_1:def 1;
 A121:     len do=o by A80,AFINSQ_1:18;
           then
 A122:     dom E = len do + len d' by A45,A70,A120,AFINSQ_1:def 1;
+          dom {} = {}; then
 A123:     for x being Element of NAT st x in dom do holds E.x=do.x;
           for x being Element of NAT st x in dom d' holds E.(len do+x)=d'.x
           by A80,A121;
@@ -994,11 +997,11 @@ A142:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A139
             .= -(1 - (b |^ o1)) by A141,XCMPLX_1:88
             .= b|^o1-1;
-A143:     len do1>=0+1 by A134,NAT_1:13;
+A143:     len do1>=0 qua Nat+1 by A134,NAT_1:13;
 A144:     len do1 = len g1 by A134,A140,AFINSQ_1:def 1;
           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
@@ -1121,11 +1124,11 @@ A169:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o))/(1-b))) by A166
             .= -(1 - (b |^ o)) by A168,XCMPLX_1:88
             .= b|^o-1;
-A170:     len do>=0+1 by A157,A160,NAT_1:13;
+A170:     len do>=0 qua Nat+1 by A157,A160,NAT_1:13;
 A171:     len do = len g by A160,A167,AFINSQ_1:def 1;
           for i being Nat st i in dom do holds do.i <= g.i
           proof
@@ -1214,11 +1217,11 @@ A191:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o))/(1-b))) by A188
             .= -(1 - (b |^ o)) by A190,XCMPLX_1:88
             .= b|^o-1;
-A192:     len do>=0+1 by A157,A182,NAT_1:13;
+A192:     len do>=0 qua Nat+1 by A157,A182,NAT_1:13;
 A193:     len do = len g by A182,A189,AFINSQ_1:def 1;
           for i being Nat st i in dom do holds do.i <= g.i
           proof
@@ -1307,11 +1310,11 @@ A214:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o))/(1-b))) by A211
             .= -(1 - (b |^ o)) by A213,XCMPLX_1:88
             .= b|^o-1;
-A215:     len do>=0+1 by A201,A206,NAT_1:13;
+A215:     len do>=0 qua Nat+1 by A201,A206,NAT_1:13;
 A216:     len do = len g by A206,A212,AFINSQ_1:def 1;
           for i being Nat st i in dom do holds do.i <= g.i
           proof
@@ -1362,8 +1365,8 @@ A224:     (n div (b|^o)) * b|^o = Sum d' by A221,A223,NAT_D:3;
 A225:     o1 <= k & k < len d by A201,NAT_1:13,XREAL_1:149;
           then
 A226:     o1 < len d by XXREAL_0:2;
-          reconsider oo1=len d - o1 as Element of NAT by A225,NAT_1:21,XXREAL_0
-          :2;
+          reconsider oo1=len d - o1 as Element of NAT by A225,NAT_1:21
+          ,XXREAL_0:2;
           defpred P[Element of NAT,set] means $2=D.($1+o1);
 A227:     for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
@@ -1401,11 +1404,11 @@ A239:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A236
             .= -(1 - (b |^ o1)) by A238,XCMPLX_1:88
             .= b|^o1-1;
-A240:     len do1>=0+1 by A231,NAT_1:13;
+A240:     len do1>=0 qua Nat+1 by A231,NAT_1:13;
 A241:     len do1 = len g1 by A231,A237,AFINSQ_1:def 1;
           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
@@ -1531,11 +1534,11 @@ A268:     Sum g = Partial_Sums((b-1)(#)(b GeoSeq)).ok by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o))/(1-b))) by A265
             .= -(1 - (b |^ o)) by A267,XCMPLX_1:88
             .= b|^o-1;
-A269:     len do>=0+1 by A201,A260,NAT_1:13;
+A269:     len do>=0 qua Nat+1 by A201,A260,NAT_1:13;
 A270:     len do = len g by A260,A266,AFINSQ_1:def 1;
           for i being Nat st i in dom do holds do.i <= g.i
           proof
@@ -1586,8 +1589,8 @@ A278:     (n div (b|^o)) * b|^o = Sum d' by A275,A277,NAT_D:3;
 A279:     o1 <= k & k < len d by A201,NAT_1:13,XREAL_1:149;
           then
 A280:     o1 < len d by XXREAL_0:2;
-          reconsider oo1=len d - o1 as Element of NAT by A279,NAT_1:21,XXREAL_0
-          :2;
+          reconsider oo1=len d - o1 as Element of NAT by A279,NAT_1:21
+          ,XXREAL_0:2;
           defpred P[Element of NAT,set] means $2=E.($1+o1);
 A281:     for u being Element of NAT st u in oo1
           ex x be Element of NAT st P[u,x];
@@ -1625,11 +1628,11 @@ A293:     Sum g1 = Partial_Sums((b-1)(#)(b GeoSeq)).ok1 by Th2
             .= ((b-1)(#)Partial_Sums(b GeoSeq)).ok1 by SERIES_1:12
             .= (b-1)*(Partial_Sums(b GeoSeq).ok1) by SEQ_1:13
             .= (b-1)*((1 - (b to_power (ok1+1)))/(1-b)) by A1,SERIES_1:26
-            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b)) by A1,POWER:46
+            .= (b-1)*((1 - (b |^ (ok1+1)))/(1-b))
             .= -((1-b)*((1 - (b |^ o1))/(1-b))) by A290
             .= -(1 - (b |^ o1)) by A292,XCMPLX_1:88
             .= b|^o1-1;
-A294:     len do1>=0+1 by A285,NAT_1:13;
+A294:     len do1>=0 qua Nat+1 by A285,NAT_1:13;
 A295:     len do1 = len g1 by A285,A291,AFINSQ_1:def 1;
           for i being Nat st i in dom do1 holds do1.i <= g1.i
           proof
@@ -2097,7 +2100,7 @@ A7: i in dom p;
     hence p'.i = p.i mod 3 by A3
       .= (digits(n,10).i)*(dz+1) mod 3 by A1,A7
       .= ((digits(n,10).i)*dz+ digits(n,10).i) mod 3
-      .= (0+digits(n,10).i) mod 3 by A6,NAT_D:22
+      .= (0 qua Nat+digits(n,10).i) mod 3 by A6,NAT_D:22
       .= digits(n,10).i mod 3;
   end;
   thus 3 divides n implies 3 divides Sum digits(n,10)

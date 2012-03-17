@@ -13,27 +13,25 @@ environ
       PARTFUN1, SCM_HALT, SCMBSORT, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1, FUNCT_2,
-      FUNCT_4, FINSEQ_2, VALUED_1, SEQ_1, FINSEQ_4, FUNCT_7, STRUCT_0, AMI_1,
-      SCMFSA_2, FUNCOP_1, SCMFSA_4, FINSUB_1, CARD_3, PARTFUN1, SCMFSA6B,
-      SCMFSA6C, SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, RFINSEQ,
-      SCMFSA7B, BINARITH, SCM_HALT, XXREAL_0;
+      FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, FUNCOP_1,
+      SCMFSA_4, FINSUB_1, CARD_3, PARTFUN1, SCMFSA6B, SCMFSA6C, SCMFSA6A,
+      SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, RFINSEQ, SCMFSA7B, BINARITH,
+      SCM_HALT, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, INT_2, SEQM_3,
-      FINSEQ_4, RVSUM_1, RFINSEQ, BINARITH, AMI_5, SCMFSA_1, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT,
-      AMI_2, VALUED_1, SEQ_1;
+      RFINSEQ, AMI_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A,
+      SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1, SCMNORM;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
       RFINSEQ, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SCM_HALT, STRUCT_0, AMI_2, SCMFSA_1,
-      VALUED_1, FUNCT_2;
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SCM_HALT, STRUCT_0, VALUED_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCOP_1, AMI_1, XBOOLE_0, SCMFSA_2, SCMFSA8C, VALUED_1;
+ definitions TARSKI, FUNCOP_1, AMI_1, XBOOLE_0, SCMFSA_2, SCMFSA8C;
  theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, FUNCT_2,
       ZFMISC_1, SCMFSA6A, FUNCT_4, FINSEQ_3, ENUMSET1, REAL_1, NAT_1, FINSEQ_1,
       RELSET_1, TARSKI, INT_1, PARTFUN1, GRFUNC_1, BINARITH, RFINSEQ, SCMFSA_2,
       SCMFSA6B, SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4, SCMFSA6C,
-      SCM_HALT, ABSVALUE, FINSEQ_4, FINSEQ_2, XBOOLE_0, XBOOLE_1, SCMFSA9A,
-      XREAL_1, ORDINAL1, SCMFSA_1, XXREAL_0, AMI_3;
+      SCM_HALT, ABSVALUE, FINSEQ_4, XBOOLE_0, XBOOLE_1, SCMFSA9A, XREAL_1,
+      ORDINAL1, SCMFSA_1, XXREAL_0, AMI_3;
  schemes RELSET_1, FUNCT_1, NAT_1;
 
 begin :: Preliminaries
@@ -244,14 +242,14 @@ theorem Th25:
   for i,k being Element of NAT,t being FinPartState of SCM+FSA,
   p being Macro-Instruction, s1,s2 being State of SCM+FSA
   st k <= i & p c= s1 & p c= s2 & dom t c= Int-Locations \/ FinSeq-Locations &
-  (for j holds IC (Computation s1).j in dom p &
-  IC (Computation s2).j in dom p) &
-  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
-  (Computation s1).k |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
-  (Computation s2).k |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) holds
-  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
-  (Computation s1).i |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
-  (Computation s2).i |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p)
+  (for j holds IC Computation(s1,j) in dom p &
+  IC Computation(s2,j) in dom p) &
+  Computation(s1,k).IC SCM+FSA = Computation(s2,k).IC SCM+FSA &
+  Computation(s1,k) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
+  Computation(s2,k) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) holds
+  Computation(s1,i).IC SCM+FSA = Computation(s2,i).IC SCM+FSA &
+  Computation(s1,i) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p) =
+  Computation(s2,i) |(dom t \/ UsedInt*Loc p \/ UsedIntLoc p)
 proof
   let i,k;
   let t be FinPartState of SCM+FSA,p be Macro-Instruction,
@@ -259,10 +257,10 @@ proof
   set Dloc=dom t \/ UsedInt*Loc p \/ UsedIntLoc p;
   assume
 A1: k <= i & p c= s1 & p c= s2 & dom t c= Int-Locations \/ FinSeq-Locations &
-  (for j holds IC (Computation s1).j in dom p &
-  IC (Computation s2).j in dom p) &
-  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
-  (Computation s1).k |Dloc = (Computation s2).k|Dloc;
+  (for j holds IC Computation(s1,j) in dom p &
+  IC Computation(s2,j) in dom p) &
+  Computation(s1,k).IC SCM+FSA = Computation(s2,k).IC SCM+FSA &
+  Computation(s1,k) |Dloc = Computation(s2,k)|Dloc;
   then consider m being Nat such that
 A2: i=k+m by NAT_1:10;
   reconsider m as Element of NAT by ORDINAL1:def 13;
@@ -272,18 +270,18 @@ A4: UsedIntLoc p c= Dloc by XBOOLE_1:7;
   then
 A5: UsedInt*Loc p c= Dloc by XBOOLE_1:7;
   defpred P[Element of NAT] means
-  (Computation s1).(k+$1).IC SCM+FSA = (Computation s2).(k+$1).IC SCM+FSA &
-  (Computation s1).(k+$1) |Dloc = (Computation s2).(k+$1)|Dloc;
+   Computation( s1,k+$1).IC SCM+FSA =  Computation( s2,k+$1).IC SCM+FSA &
+   Computation( s1,k+$1) |Dloc =  Computation( s2,k+$1)|Dloc;
 A6: P[0] by A1;
 A7: now
     let m be Element of NAT;
     assume
 A8: P[m];
-    set sk1=(Computation s1).(k+m);
-    set sk11=(Computation s1).(k+(m+1));
+    set sk1= Computation( s1,k+m);
+    set sk11= Computation( s1,k+(m+1));
     set i1=CurInstr sk1;
-    set sk2=(Computation s2).(k+m);
-    set sk12=(Computation s2).(k+(m+1));
+    set sk2= Computation( s2,k+m);
+    set sk12= Computation( s2,k+(m+1));
     set i2=CurInstr sk2;
 A9: IC sk1 in dom p by A1;            :: SCMFSA6B:def 2,C1=paraclosed;
     then
@@ -296,11 +294,11 @@ A11: i1 in rng p by A9,FUNCT_1:def 5;
     then
 A12: i2 =(sk2 |dom p).IC sk2 by FUNCT_1:72
       .=i1 by A1,A8,A10,AMI_1:124;
-A13: sk11=(Computation s1).(k+m+1)
-      .=Following sk1 by AMI_1:def 19
+A13: sk11= Computation( s1,k+m+1)
+      .=Following sk1 by AMI_1:14
       .= Exec(i1,sk1);
-A14: sk12=(Computation s2).(k+m+1)
-      .=Following sk2 by AMI_1:def 19
+A14: sk12= Computation( s2,k+m+1)
+      .=Following sk2 by AMI_1:14
       .= Exec(i2,sk2);
 A15: dom sk11 = the carrier of SCM+FSA by AMI_1:79
       .= dom sk12 by AMI_1:79;
@@ -903,27 +901,30 @@ end;
 theorem Th26:
   for i,k being Element of NAT,p being Macro-Instruction,
   s1,s2 being State of SCM+FSA st k <= i & p c= s1 & p c= s2 &
-  (for j holds IC (Computation s1).j in dom p &
-  IC (Computation s2).j in dom p) &
-  (Computation s1).k.IC SCM+FSA = (Computation s2).k.IC SCM+FSA &
-  (Computation s1).k | (UsedInt*Loc p \/ UsedIntLoc p) =
-  (Computation s2).k | (UsedInt*Loc p \/ UsedIntLoc p) holds
-  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
-  (Computation s1).i |(UsedInt*Loc p \/ UsedIntLoc p) =
-  (Computation s2).i |(UsedInt*Loc p \/ UsedIntLoc p)
+  (for j holds IC Computation(s1,j) in dom p &
+  IC Computation(s2,j) in dom p) &
+  Computation(s1,k).IC SCM+FSA = Computation(s2,k).IC SCM+FSA &
+  Computation(s1,k) | (UsedInt*Loc p \/ UsedIntLoc p) =
+  Computation(s2,k) | (UsedInt*Loc p \/ UsedIntLoc p) holds
+  Computation(s1,i).IC SCM+FSA = Computation(s2,i).IC SCM+FSA &
+  Computation(s1,i) |(UsedInt*Loc p \/ UsedIntLoc p) =
+  Computation(s2,i) |(UsedInt*Loc p \/ UsedIntLoc p)
 proof
   let i,k be Element of NAT,p be Macro-Instruction,s1,s2 be State of SCM+FSA;
-  set Cs1=Computation s1,Cs2=Computation s2, D= UsedInt*Loc p \/ UsedIntLoc p;
+:::  set Cs1=Computation s1;::,Cs2=Computation s2;
+  set D= UsedInt*Loc p \/ UsedIntLoc p;
   assume
 A1: k <= i & p c= s1 & p c= s2 &
-  (for j holds IC Cs1.j in dom p & IC Cs2.j in dom p) &
-  Cs1.k.IC SCM+FSA = Cs2.k.IC SCM+FSA & Cs1.k | D = Cs2.k | D;
+  (for j holds IC Computation(s1,j) in dom p & IC Computation(s2,j) in dom p) &
+  Computation(s1,k).IC SCM+FSA = Computation(s2,k).IC SCM+FSA &
+  Computation(s1,k) | D = Computation(s2,k) | D;
   reconsider t={} as FinPartState of SCM+FSA by AMI_1:63;
   set D1= dom t \/ UsedInt*Loc p \/ UsedIntLoc p;
 A2: dom t c= Int-Locations \/ FinSeq-Locations by RELAT_1:60,XBOOLE_1:2;
 A3: D1 = D by RELAT_1:60;
-  hence Cs1.i.IC SCM+FSA = Cs2.i.IC SCM+FSA by A1,A2,Th25;
-  thus Cs1.i | D = Cs2.i | D by A1,A2,A3,Th25;
+  hence Computation(s1,i).IC SCM+FSA = Computation(s2,i).IC SCM+FSA
+   by A1,A2,Th25;
+  thus Computation(s1,i) | D = Computation(s2,i) | D by A1,A2,A3,Th25;
 end;
 
 canceled 2;
@@ -998,8 +999,7 @@ theorem Th31:
   UsedIntLoc Times(a,I) = UsedIntLoc I \/ {a,intloc 0}
 proof
   let a be Int-Location,I be Macro-Instruction;
-  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), SS=SCM+FSA-Stop,
-  if0=if=0(a,g1,I ';' SF); thus
+  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), if0=if=0(a,g1,I ';' SF); thus
   UsedIntLoc Times(a,I) ={a} \/ UsedIntLoc loop if0 \/ {} by Th29, SCMFSA9A:9
     .={a} \/ UsedIntLoc Directed(if0,insloc 0) by SCMFSA8A:def 1
     .={a} \/ UsedIntLoc if0 by Th30
@@ -1063,8 +1063,7 @@ theorem Th37:
   UsedInt*Loc Times(a,I) = UsedInt*Loc I
 proof
   let a be Int-Location,I be Macro-Instruction;
-  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), SS=SCM+FSA-Stop,
-  if0=if=0(a,g1,I ';' SF);
+  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), if0=if=0(a,g1,I ';' SF);
   thus UsedInt*Loc Times(a,I) =UsedInt*Loc loop if0 \/ {} by SCMFSA9A:10,16
     .=UsedInt*Loc Directed(if0,insloc 0) by SCMFSA8A:def 1
     .=UsedInt*Loc if0 by Th36
@@ -1152,8 +1151,7 @@ theorem Th44:
   card Times(a,I) = card I + 12
 proof
   let a be Int-Location,I be Macro-Instruction;
-  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), SS=SCM+FSA-Stop,
-  if0=if=0(a,g1,I ';' SF);
+  set g1=Goto insloc 2, SF=SubFrom(a,intloc 0), if0=if=0(a,g1,I ';' SF);
   thus card Times(a,I)= card (loop if0)+1+4 by SCMFSA8A:17,SCMFSA8B:15
     .= card (loop if0)+(1+4)
     .= card Directed(if0,insloc 0)+5 by SCMFSA8A:def 1
@@ -1210,7 +1208,7 @@ end;
 
 theorem Th47:
   for w be FinSequence of INT,f be FinSeq-Location,I be Macro-Instruction
-  holds Initialized I +* (f .--> w) starts_at insloc 0
+  holds Initialized I +* (f .--> w) starts_at 0
 proof
   let w be FinSequence of INT,f be FinSeq-Location, I be Macro-Instruction;
   set p = Initialized I, s = f .--> w;
@@ -1227,7 +1225,7 @@ A6: not IC SCM+FSA in dom s by A1,XBOOLE_0:3; thus
   IC SCM+FSA in dom(p +* s) by A4,A5;
   thus IC(p +* s) = (p +* s).IC SCM+FSA by A4,A5,AMI_1:def 43
     .= p.IC SCM+FSA by A6,FUNCT_4:12
-    .= insloc 0 by SCMFSA6A:46;
+    .= 0 by SCMFSA6A:46;
 end;
 
 theorem Th48:
@@ -1965,164 +1963,165 @@ A15: card X6=card (X5 ';' Macro W6) by SCMFSA6A:def 6
 end;
 
 Lm3: for s being State of SCM+FSA st Bubble-Sort-Algorithm c= s &
-s starts_at insloc 0 holds (Computation s).1.IC SCM+FSA = insloc 1 &
-(Computation s).1.a0=s.a0 & (Computation s).1.fsloc 0=s.fsloc 0 &
-(Computation s).2.IC SCM+FSA = insloc 2 &
-(Computation s).2.a0=s.a0 & (Computation s).2.fsloc 0=s.fsloc 0 &
-(Computation s).3.IC SCM+FSA = insloc 3 &
-(Computation s).3.a0=s.a0 & (Computation s).3.fsloc 0=s.fsloc 0 &
-(Computation s).4.IC SCM+FSA = insloc 4 &
-(Computation s).4.a0=s.a0 & (Computation s).4.fsloc 0=s.fsloc 0 &
-(Computation s).5.IC SCM+FSA = insloc 5 &
-(Computation s).5.a0=s.a0 & (Computation s).5.fsloc 0=s.fsloc 0 &
-(Computation s).6.IC SCM+FSA = insloc 6 &
-(Computation s).6.a0=s.a0 & (Computation s).6.fsloc 0=s.fsloc 0 &
-(Computation s).7.IC SCM+FSA = insloc 7 &
-(Computation s).7.a0=s.a0 & (Computation s).7.fsloc 0=s.fsloc 0 &
-(Computation s).8.IC SCM+FSA = insloc 8 &
-(Computation s).8.a0=s.a0 & (Computation s).8.fsloc 0=s.fsloc 0 &
-(Computation s).9.IC SCM+FSA = insloc 9 &
-(Computation s).9.a0=s.a0 & (Computation s).9.fsloc 0=s.fsloc 0 &
-(Computation s).10.IC SCM+FSA = insloc 10 &
-(Computation s).10.a0=s.a0 & (Computation s).10.fsloc 0=s.fsloc 0 &
-(Computation s).11.IC SCM+FSA = insloc 11 &
-(Computation s).11.a0=s.a0 & (Computation s).11.fsloc 0=s.fsloc 0 &
-(Computation s).11.a1=len(s.fsloc 0) &
-(Computation s).11.a2=s.a0 & (Computation s).11.a3=s.a0 &
-(Computation s).11.a4=s.a0 & (Computation s).11.a5=s.a0 &
-(Computation s).11.a6=s.a0
+s starts_at 0 holds  Computation( s,1).IC SCM+FSA = insloc 1 &
+ Computation( s,1).a0=s.a0 &  Computation( s,1).fsloc 0=s.fsloc 0 &
+ Computation( s,2).IC SCM+FSA = insloc 2 &
+ Computation( s,2).a0=s.a0 &  Computation( s,2).fsloc 0=s.fsloc 0 &
+ Computation( s,3).IC SCM+FSA = insloc 3 &
+ Computation( s,3).a0=s.a0 &  Computation( s,3).fsloc 0=s.fsloc 0 &
+ Computation( s,4).IC SCM+FSA = insloc 4 &
+ Computation( s,4).a0=s.a0 &  Computation( s,4).fsloc 0=s.fsloc 0 &
+ Computation( s,5).IC SCM+FSA = insloc 5 &
+ Computation( s,5).a0=s.a0 &  Computation( s,5).fsloc 0=s.fsloc 0 &
+ Computation( s,6).IC SCM+FSA = insloc 6 &
+ Computation( s,6).a0=s.a0 &  Computation( s,6).fsloc 0=s.fsloc 0 &
+ Computation( s,7).IC SCM+FSA = insloc 7 &
+ Computation( s,7).a0=s.a0 &  Computation( s,7).fsloc 0=s.fsloc 0 &
+ Computation( s,8).IC SCM+FSA = insloc 8 &
+ Computation( s,8).a0=s.a0 &  Computation( s,8).fsloc 0=s.fsloc 0 &
+ Computation( s,9).IC SCM+FSA = insloc 9 &
+ Computation( s,9).a0=s.a0 &  Computation( s,9).fsloc 0=s.fsloc 0 &
+ Computation( s,10).IC SCM+FSA = insloc 10 &
+ Computation( s,10).a0=s.a0 &  Computation( s,10).fsloc 0=s.fsloc 0 &
+ Computation( s,11).IC SCM+FSA = insloc 11 &
+ Computation( s,11).a0=s.a0 &  Computation( s,11).fsloc 0=s.fsloc 0 &
+ Computation( s,11).a1=len(s.fsloc 0) &
+ Computation( s,11).a2=s.a0 &  Computation( s,11).a3=s.a0 &
+ Computation( s,11).a4=s.a0 &  Computation( s,11).a5=s.a0 &
+ Computation( s,11).a6=s.a0
 proof
   let s be State of SCM+FSA such that
 A1: Bubble-Sort-Algorithm c= s and
-A2: s starts_at insloc 0;
-  set Cs= Computation s;
-A3: Cs.0 = s by AMI_1:def 19;
+A2: s starts_at 0;
+:::  set Cs= Computation s;
+A3: Computation(s,0) = s by AMI_1:13;
   then
-A4: IC Cs.0 = insloc 0 by A2,AMI_1:def 41;
+A4: IC Computation(s,0) = insloc 0 by A2,AMI_1:def 41;
   then
-A5: Cs.(0+1) = Exec(s.insloc 0,Cs.0) by AMI_1:55
-    .= Exec(a2:=a0,Cs.0) by A1,Lm2;
-  hence Cs.1.IC SCM+FSA = Next IC Cs.0 by SCMFSA_2:89
-    .= insloc (0+1) by A4,SCMFSA_2:32
+A5: Computation(s,0+1) = Exec(s.insloc 0,Computation(s,0)) by AMI_1:55
+    .= Exec(a2:=a0,Computation(s,0)) by A1,Lm2;
+  hence Computation(s,1).IC SCM+FSA = Next IC Computation(s,0) by SCMFSA_2:89
+    .= insloc (0+1) by A4
     .= insloc 1;
   then
-A6: IC Cs.1= insloc 1;
-A7: Cs.1.a2 =s.a0 by A3,A5,SCMFSA_2:89; thus
-A8: Cs.1.a0 =s.a0 by A3,A5,Lm1,SCMFSA_2:89; thus
-A9: Cs.1.(fsloc 0) =s.(fsloc 0) by A3,A5,SCMFSA_2:89;
-A10: Cs.(1+1) = Exec(s.insloc 1,Cs.1) by A6,AMI_1:55
-    .= Exec(goto insloc 2,Cs.1) by A1,Lm2;
+A6: IC Computation(s,1)= insloc 1;
+A7: Computation(s,1).a2 =s.a0 by A3,A5,SCMFSA_2:89; thus
+A8: Computation(s,1).a0 =s.a0 by A3,A5,Lm1,SCMFSA_2:89; thus
+A9: Computation(s,1).(fsloc 0) =s.(fsloc 0) by A3,A5,SCMFSA_2:89;
+A10: Computation(s,1+1) = Exec(s.insloc 1,Computation(s,1)) by A6,AMI_1:55
+    .= Exec(goto insloc 2,Computation(s,1)) by A1,Lm2;
   hence
-A11: Cs.2.IC SCM+FSA = insloc 2 by SCMFSA_2:95;
-A12: IC Cs.2= insloc 2 by A10,SCMFSA_2:95; thus
-A13: Cs.2.a0 =s.a0 by A8,A10,SCMFSA_2:95; thus
-A14: Cs.2.(fsloc 0) =s.(fsloc 0) by A9,A10,SCMFSA_2:95;
-A15: Cs.2.a2 =s.a0 by A7,A10,SCMFSA_2:95;
-A16: Cs.(2+1) = Exec(s.insloc 2,Cs.2) by A12,AMI_1:55
-    .= Exec(a3:=a0,Cs.2) by A1,Lm2;
-  hence Cs.3.IC SCM+FSA = Next IC Cs.2 by SCMFSA_2:89
-    .= insloc (2+1) by A11,SCMFSA_2:32
+A11: Computation(s,2).IC SCM+FSA = insloc 2 by SCMFSA_2:95;
+A12: IC Computation(s,2)= insloc 2 by A10,SCMFSA_2:95; thus
+A13: Computation(s,2).a0 =s.a0 by A8,A10,SCMFSA_2:95; thus
+A14: Computation(s,2).(fsloc 0) =s.(fsloc 0) by A9,A10,SCMFSA_2:95;
+A15: Computation(s,2).a2 =s.a0 by A7,A10,SCMFSA_2:95;
+A16: Computation(s,2+1) = Exec(s.insloc 2,Computation(s,2)) by A12,AMI_1:55
+    .= Exec(a3:=a0,Computation(s,2)) by A1,Lm2;
+  hence Computation(s,3).IC SCM+FSA = Next IC Computation(s,2) by SCMFSA_2:89
+    .= insloc (2+1) by A11
     .= insloc 3;
   then
-A17: IC Cs.3= insloc 3;
-A18: Cs.3.a3 =s.a0 by A13,A16,SCMFSA_2:89; thus
-A19: Cs.3.a0 =s.a0 by A13,A16,Lm1,SCMFSA_2:89; thus
-A20: Cs.3.(fsloc 0) =s.(fsloc 0) by A14,A16,SCMFSA_2:89;
-A21: Cs.3.a2 =s.a0 by A15,A16,Lm1,SCMFSA_2:89;
-A22: Cs.(3+1) = Exec(s.insloc 3,Cs.3) by A17,AMI_1:55
-    .= Exec(goto insloc 4,Cs.3) by A1,Lm2;
+A17: IC Computation(s,3)= insloc 3;
+A18: Computation(s,3).a3 =s.a0 by A13,A16,SCMFSA_2:89; thus
+A19: Computation(s,3).a0 =s.a0 by A13,A16,Lm1,SCMFSA_2:89; thus
+A20: Computation(s,3).(fsloc 0) =s.(fsloc 0) by A14,A16,SCMFSA_2:89;
+A21: Computation(s,3).a2 =s.a0 by A15,A16,Lm1,SCMFSA_2:89;
+A22: Computation(s,3+1) = Exec(s.insloc 3,Computation(s,3)) by A17,AMI_1:55
+    .= Exec(goto insloc 4,Computation(s,3)) by A1,Lm2;
   hence
-A23: Cs.4.IC SCM+FSA = insloc 4 by SCMFSA_2:95;
-A24: IC Cs.4= insloc 4 by A22,SCMFSA_2:95; thus
-A25: Cs.4.a0 =s.a0 by A19,A22,SCMFSA_2:95; thus
-A26: Cs.4.(fsloc 0) =s.(fsloc 0) by A20,A22,SCMFSA_2:95;
-A27: Cs.4.a2 =s.a0 by A21,A22,SCMFSA_2:95;
-A28: Cs.4.a3 =s.a0 by A18,A22,SCMFSA_2:95;
-A29: Cs.(4+1) = Exec(s.insloc 4,Cs.4) by A24,AMI_1:55
-    .= Exec(a4:=a0,Cs.4) by A1,Lm2;
-  hence Cs.5.IC SCM+FSA = Next IC Cs.4 by SCMFSA_2:89
-    .= insloc (4+1) by A23,SCMFSA_2:32
+A23: Computation(s,4).IC SCM+FSA = insloc 4 by SCMFSA_2:95;
+A24: IC Computation(s,4)= insloc 4 by A22,SCMFSA_2:95; thus
+A25: Computation(s,4).a0 =s.a0 by A19,A22,SCMFSA_2:95; thus
+A26: Computation(s,4).(fsloc 0) =s.(fsloc 0) by A20,A22,SCMFSA_2:95;
+A27: Computation(s,4).a2 =s.a0 by A21,A22,SCMFSA_2:95;
+A28: Computation(s,4).a3 =s.a0 by A18,A22,SCMFSA_2:95;
+A29: Computation(s,4+1) = Exec(s.insloc 4,Computation(s,4)) by A24,AMI_1:55
+    .= Exec(a4:=a0,Computation(s,4)) by A1,Lm2;
+  hence Computation(s,5).IC SCM+FSA = Next IC Computation(s,4) by SCMFSA_2:89
+    .= insloc (4+1) by A23
     .= insloc 5;
   then
-A30: IC Cs.5= insloc 5;
-A31: Cs.5.a4 =s.a0 by A25,A29,SCMFSA_2:89; thus
-A32: Cs.5.a0 =s.a0 by A25,A29,Lm1,SCMFSA_2:89; thus
-A33: Cs.5.(fsloc 0) =s.(fsloc 0) by A26,A29,SCMFSA_2:89;
-A34: Cs.5.a2 =s.a0 by A27,A29,Lm1,SCMFSA_2:89;
-A35: Cs.5.a3 =s.a0 by A28,A29,Lm1,SCMFSA_2:89;
-A36: Cs.(5+1) = Exec(s.insloc 5,Cs.5) by A30,AMI_1:55
-    .= Exec(goto insloc 6,Cs.5) by A1,Lm2;
+A30: IC Computation(s,5)= insloc 5;
+A31: Computation(s,5).a4 =s.a0 by A25,A29,SCMFSA_2:89; thus
+A32: Computation(s,5).a0 =s.a0 by A25,A29,Lm1,SCMFSA_2:89; thus
+A33: Computation(s,5).(fsloc 0) =s.(fsloc 0) by A26,A29,SCMFSA_2:89;
+A34: Computation(s,5).a2 =s.a0 by A27,A29,Lm1,SCMFSA_2:89;
+A35: Computation(s,5).a3 =s.a0 by A28,A29,Lm1,SCMFSA_2:89;
+A36: Computation(s,5+1) = Exec(s.insloc 5,Computation(s,5)) by A30,AMI_1:55
+    .= Exec(goto insloc 6,Computation(s,5)) by A1,Lm2;
   hence
-A37: Cs.6.IC SCM+FSA = insloc 6 by SCMFSA_2:95;
-A38: IC Cs.6= insloc 6 by A36,SCMFSA_2:95; thus
-A39: Cs.6.a0 =s.a0 by A32,A36,SCMFSA_2:95; thus
-A40: Cs.6.(fsloc 0) =s.(fsloc 0) by A33,A36,SCMFSA_2:95;
-A41: Cs.6.a2 =s.a0 by A34,A36,SCMFSA_2:95;
-A42: Cs.6.a3 =s.a0 by A35,A36,SCMFSA_2:95;
-A43: Cs.6.a4 =s.a0 by A31,A36,SCMFSA_2:95;
-A44: Cs.(6+1) = Exec(s.insloc 6,Cs.6) by A38,AMI_1:55
-    .= Exec(a5:=a0,Cs.6) by A1,Lm2;
-  hence Cs.7.IC SCM+FSA = Next IC Cs.6 by SCMFSA_2:89
-    .= insloc (6+1) by A37,SCMFSA_2:32
+A37: Computation(s,6).IC SCM+FSA = insloc 6 by SCMFSA_2:95;
+A38: IC Computation(s,6)= insloc 6 by A36,SCMFSA_2:95; thus
+A39: Computation(s,6).a0 =s.a0 by A32,A36,SCMFSA_2:95; thus
+A40: Computation(s,6).(fsloc 0) =s.(fsloc 0) by A33,A36,SCMFSA_2:95;
+A41: Computation(s,6).a2 =s.a0 by A34,A36,SCMFSA_2:95;
+A42: Computation(s,6).a3 =s.a0 by A35,A36,SCMFSA_2:95;
+A43: Computation(s,6).a4 =s.a0 by A31,A36,SCMFSA_2:95;
+A44: Computation(s,6+1) = Exec(s.insloc 6,Computation(s,6)) by A38,AMI_1:55
+    .= Exec(a5:=a0,Computation(s,6)) by A1,Lm2;
+  hence Computation(s,7).IC SCM+FSA = Next IC Computation(s,6) by SCMFSA_2:89
+    .= insloc (6+1) by A37
     .= insloc 7;
   then
-A45: IC Cs.7= insloc 7;
-A46: Cs.7.a5 =s.a0 by A39,A44,SCMFSA_2:89; thus
-A47: Cs.7.a0 =s.a0 by A39,A44,Lm1,SCMFSA_2:89; thus
-A48: Cs.7.(fsloc 0) =s.(fsloc 0) by A40,A44,SCMFSA_2:89;
-A49: Cs.7.a2 =s.a0 by A41,A44,Lm1,SCMFSA_2:89;
-A50: Cs.7.a3 =s.a0 by A42,A44,Lm1,SCMFSA_2:89;
-A51: Cs.7.a4 =s.a0 by A43,A44,Lm1,SCMFSA_2:89;
-A52: Cs.(7+1) = Exec(s.insloc 7,Cs.7) by A45,AMI_1:55
-    .= Exec(goto insloc 8,Cs.7) by A1,Lm2;
+A45: IC Computation(s,7)= insloc 7;
+A46: Computation(s,7).a5 =s.a0 by A39,A44,SCMFSA_2:89; thus
+A47: Computation(s,7).a0 =s.a0 by A39,A44,Lm1,SCMFSA_2:89; thus
+A48: Computation(s,7).(fsloc 0) =s.(fsloc 0) by A40,A44,SCMFSA_2:89;
+A49: Computation(s,7).a2 =s.a0 by A41,A44,Lm1,SCMFSA_2:89;
+A50: Computation(s,7).a3 =s.a0 by A42,A44,Lm1,SCMFSA_2:89;
+A51: Computation(s,7).a4 =s.a0 by A43,A44,Lm1,SCMFSA_2:89;
+A52: Computation(s,7+1) = Exec(s.insloc 7,Computation(s,7)) by A45,AMI_1:55
+    .= Exec(goto insloc 8,Computation(s,7)) by A1,Lm2;
   hence
-A53: Cs.8.IC SCM+FSA = insloc 8 by SCMFSA_2:95;
-A54: IC Cs.8= insloc 8 by A52,SCMFSA_2:95; thus
-A55: Cs.8.a0 =s.a0 by A47,A52,SCMFSA_2:95; thus
-A56: Cs.8.(fsloc 0) =s.(fsloc 0) by A48,A52,SCMFSA_2:95;
-A57: Cs.8.a2 =s.a0 by A49,A52,SCMFSA_2:95;
-A58: Cs.8.a3 =s.a0 by A50,A52,SCMFSA_2:95;
-A59: Cs.8.a4 =s.a0 by A51,A52,SCMFSA_2:95;
-A60: Cs.8.a5 =s.a0 by A46,A52,SCMFSA_2:95;
-A61: Cs.(8+1) = Exec(s.insloc 8,Cs.8) by A54,AMI_1:55
-    .= Exec(a6:=a0,Cs.8) by A1,Lm2;
-  hence Cs.9.IC SCM+FSA = Next IC Cs.8 by SCMFSA_2:89
-    .= insloc (8+1) by A53,SCMFSA_2:32
+A53: Computation(s,8).IC SCM+FSA = insloc 8 by SCMFSA_2:95;
+A54: IC Computation(s,8)= insloc 8 by A52,SCMFSA_2:95; thus
+A55: Computation(s,8).a0 =s.a0 by A47,A52,SCMFSA_2:95; thus
+A56: Computation(s,8).(fsloc 0) =s.(fsloc 0) by A48,A52,SCMFSA_2:95;
+A57: Computation(s,8).a2 =s.a0 by A49,A52,SCMFSA_2:95;
+A58: Computation(s,8).a3 =s.a0 by A50,A52,SCMFSA_2:95;
+A59: Computation(s,8).a4 =s.a0 by A51,A52,SCMFSA_2:95;
+A60: Computation(s,8).a5 =s.a0 by A46,A52,SCMFSA_2:95;
+A61: Computation(s,8+1) = Exec(s.insloc 8,Computation(s,8)) by A54,AMI_1:55
+    .= Exec(a6:=a0,Computation(s,8)) by A1,Lm2;
+  hence Computation(s,9).IC SCM+FSA = Next IC Computation(s,8) by SCMFSA_2:89
+    .= insloc (8+1) by A53
     .= insloc 9;
   then
-A62: IC Cs.9= insloc 9;
-A63: Cs.9.a6 =s.a0 by A55,A61,SCMFSA_2:89; thus
-A64: Cs.9.a0 =s.a0 by A55,A61,Lm1,SCMFSA_2:89; thus
-A65: Cs.9.(fsloc 0) =s.(fsloc 0) by A56,A61,SCMFSA_2:89;
-A66: Cs.9.a2 =s.a0 by A57,A61,Lm1,SCMFSA_2:89;
-A67: Cs.9.a3 =s.a0 by A58,A61,Lm1,SCMFSA_2:89;
-A68: Cs.9.a4 =s.a0 by A59,A61,Lm1,SCMFSA_2:89;
-A69: Cs.9.a5 =s.a0 by A60,A61,Lm1,SCMFSA_2:89;
-A70: Cs.(9+1) = Exec(s.insloc 9,Cs.9) by A62,AMI_1:55
-    .= Exec(goto insloc 10,Cs.9) by A1,Lm2;
+A62: IC Computation(s,9)= insloc 9;
+A63: Computation(s,9).a6 =s.a0 by A55,A61,SCMFSA_2:89; thus
+A64: Computation(s,9).a0 =s.a0 by A55,A61,Lm1,SCMFSA_2:89; thus
+A65: Computation(s,9).(fsloc 0) =s.(fsloc 0) by A56,A61,SCMFSA_2:89;
+A66: Computation(s,9).a2 =s.a0 by A57,A61,Lm1,SCMFSA_2:89;
+A67: Computation(s,9).a3 =s.a0 by A58,A61,Lm1,SCMFSA_2:89;
+A68: Computation(s,9).a4 =s.a0 by A59,A61,Lm1,SCMFSA_2:89;
+A69: Computation(s,9).a5 =s.a0 by A60,A61,Lm1,SCMFSA_2:89;
+A70: Computation(s,9+1) = Exec(s.insloc 9,Computation(s,9)) by A62,AMI_1:55
+    .= Exec(goto insloc 10,Computation(s,9)) by A1,Lm2;
   hence
-A71: Cs.10.IC SCM+FSA = insloc 10 by SCMFSA_2:95;
-A72: IC Cs.10= insloc 10 by A70,SCMFSA_2:95; thus
-A73: Cs.10.a0 =s.a0 by A64,A70,SCMFSA_2:95; thus
-A74: Cs.10.(fsloc 0) =s.(fsloc 0) by A65,A70,SCMFSA_2:95;
-A75: Cs.10.a2 =s.a0 by A66,A70,SCMFSA_2:95;
-A76: Cs.10.a3 =s.a0 by A67,A70,SCMFSA_2:95;
-A77: Cs.10.a4 =s.a0 by A68,A70,SCMFSA_2:95;
-A78: Cs.10.a5 =s.a0 by A69,A70,SCMFSA_2:95;
-A79: Cs.10.a6 =s.a0 by A63,A70,SCMFSA_2:95;
-A80: Cs.(10+1) = Exec(s.insloc 10,Cs.10) by A72,AMI_1:55
-    .= Exec(a1:=len fsloc 0,Cs.10) by A1,Lm2;
-  hence Cs.11.IC SCM+FSA = Next IC Cs.10 by SCMFSA_2:100
-    .= insloc (10+1) by A71,SCMFSA_2:32
+A71: Computation(s,10).IC SCM+FSA = insloc 10 by SCMFSA_2:95;
+A72: IC Computation(s,10)= insloc 10 by A70,SCMFSA_2:95; thus
+A73: Computation(s,10).a0 =s.a0 by A64,A70,SCMFSA_2:95; thus
+A74: Computation(s,10).(fsloc 0) =s.(fsloc 0) by A65,A70,SCMFSA_2:95;
+A75: Computation(s,10).a2 =s.a0 by A66,A70,SCMFSA_2:95;
+A76: Computation(s,10).a3 =s.a0 by A67,A70,SCMFSA_2:95;
+A77: Computation(s,10).a4 =s.a0 by A68,A70,SCMFSA_2:95;
+A78: Computation(s,10).a5 =s.a0 by A69,A70,SCMFSA_2:95;
+A79: Computation(s,10).a6 =s.a0 by A63,A70,SCMFSA_2:95;
+A80: Computation(s,10+1) = Exec(s.insloc 10,Computation(s,10)) by A72,AMI_1:55
+    .= Exec(a1:=len fsloc 0,Computation(s,10)) by A1,Lm2;
+  hence Computation(s,11).IC SCM+FSA = Next IC Computation(s,10)
+   by SCMFSA_2:100
+    .= insloc (10+1) by A71
     .= insloc 11;
-  thus Cs.11.a0 =s.a0 by A73,A80,Lm1,SCMFSA_2:100;
-  thus Cs.11.(fsloc 0) =s.(fsloc 0) by A74,A80,SCMFSA_2:100;
-  thus Cs.11.a1 =len(s.fsloc 0) by A74,A80,SCMFSA_2:100;
-  thus Cs.11.a2 =s.a0 by A75,A80,Lm1,SCMFSA_2:100;
-  thus Cs.11.a3 =s.a0 by A76,A80,Lm1,SCMFSA_2:100;
-  thus Cs.11.a4 =s.a0 by A77,A80,Lm1,SCMFSA_2:100;
-  thus Cs.11.a5 =s.a0 by A78,A80,Lm1,SCMFSA_2:100;
-  thus Cs.11.a6 =s.a0 by A79,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).a0 =s.a0 by A73,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).(fsloc 0) =s.(fsloc 0) by A74,A80,SCMFSA_2:100;
+  thus Computation(s,11).a1 =len(s.fsloc 0) by A74,A80,SCMFSA_2:100;
+  thus Computation(s,11).a2 =s.a0 by A75,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).a3 =s.a0 by A76,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).a4 =s.a0 by A77,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).a5 =s.a0 by A78,A80,Lm1,SCMFSA_2:100;
+  thus Computation(s,11).a6 =s.a0 by A79,A80,Lm1,SCMFSA_2:100;
 end;
 
 Lm4: body2 does_not_destroy b2
@@ -2286,11 +2285,9 @@ A6: abs(s.b3)=s.b3 by A1,ABSVALUE:def 1;
   reconsider k1=s.b3-1 as Element of NAT by A2,INT_1:16;
   reconsider k2=s.b3 as Element of NAT by A1,INT_1:16;
 A7: k1 in dom (s.f0) by A2,A4,FINSEQ_3:27;
-  then s.f0.k1 in INT by FINSEQ_2:13;
-  then reconsider n1=s.f0.k1 as Integer by INT_1:def 2;
+  reconsider n1=s.f0.k1 as Integer;
 A8: k2 in dom (s.f0) by A1,A5,FINSEQ_3:27;
-  then s.f0.k2 in INT by FINSEQ_2:13;
-  then reconsider n2=s.f0.k2 as Integer by INT_1:def 2;
+  reconsider n2=s.f0.k2 as Integer;
   set s0=Initialize s, s1=Exec(i1, s0), s2=IExec(i1 ';' i2, s),
   s3=IExec(i1 ';' i2 ';' i3,s), s4=IExec(i1 ';' i2 ';' i3 ';' i4,s),
   s5=IExec(i1 ';' i2 ';' i3 ';' i4 ';'i5,s), s6=IExec(body2,s);
@@ -2537,13 +2534,10 @@ A1: 0=t.b2 & 0 < t.b3 & t.b3 <= len (t.f0);
     hereby
       let m be Element of NAT;
       assume
-A2:   m >= (t.b3-0) & m<=t.b3;
+   m >= (t.b3-0) & m<=t.b3;
       then
 A3:   m=t.b3 by XXREAL_0:1;
-      m>=0+1 by A1,A2,INT_1:20;
-      then m in dom (t.f0) by A1,A3,FINSEQ_3:27;
-      then t.f0.m in INT by FINSEQ_2:13;
-      then reconsider n1=t.f0.m as Integer by INT_1:def 2;
+      reconsider n1=t.f0.m as Integer;
       take x1=n1,x2=n1;
       thus x1=IExec(T2,t).f0.(t.b3-0) by A1,A3,SCM_HALT:80;
       thus x2=If0.m by A1,SCM_HALT:80;
@@ -3056,7 +3050,7 @@ theorem Th66:
   for i being Element of NAT, s being State of SCM+FSA,
   w being FinSequence of INT
   st Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
-  holds IC (Computation s).i in dom Bubble-Sort-Algorithm
+  holds IC  Computation( s,i) in dom Bubble-Sort-Algorithm
 proof
   set Ba=Bubble-Sort-Algorithm, Ib=Initialized Ba;
   let i be Element of NAT, s be State of SCM+FSA,w be FinSequence of INT;
@@ -3105,9 +3099,8 @@ A6: i in dom u & j in dom u & i<j;
     then
 A7: i>=1 by FINSEQ_3:27;
 A8: j<=len (s.f0) by A5,A6,FINSEQ_3:27;
-A9: z.i in INT & z.j in INT by A6,FINSEQ_2:13;
-    then reconsider y1=z.i as Integer by INT_1:def 2;
-    reconsider y2=z.j as Integer by A9,INT_1:def 2;
+    reconsider y1=z.i as Integer;
+    reconsider y2=z.j as Integer;
     y1 >= y2 by A6,A7,A8,Th65;
     hence u.i>=u.j;
   end;
@@ -3128,17 +3121,17 @@ proof
   set p=Initialized Bubble-Sort-Algorithm +* ((fsloc 0) .--> w),
   q=Bubble-Sort-Algorithm;
 A1: for s1,s2 being State of SCM+FSA,i st p c= s1 & p c= s2 & i <= 10 holds
-  (Computation s1).i.intloc 0 = (Computation s2).i.intloc 0 &
-  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA &
-  (Computation s1).i.fsloc 0 = (Computation s2).i.fsloc 0
+  Computation(s1,i).intloc 0 = Computation(s2,i).intloc 0 &
+  Computation(s1,i).IC SCM+FSA = Computation(s2,i).IC SCM+FSA &
+  Computation(s1,i).fsloc 0 = Computation(s2,i).fsloc 0
   proof
     let s1,s2 be State of SCM+FSA,i;
     assume
 A2: p c= s1 & p c=s2 & i <= 10;
-    set Cs1=Computation s1, Cs2=Computation s2;
-A3: Cs1.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
-A4: s1 starts_at insloc 0 by A2,Th47,AMI_1:92;
-A5: s2 starts_at insloc 0 by A2,Th47,AMI_1:92;
+:::    set Cs1=Computation s1;::, Cs2=Computation s2;
+A3: Computation(s1,0) = s1 & Computation(s2,0) = s2 by AMI_1:13;
+A4: s1 starts_at 0 by A2,Th47,AMI_1:92;
+A5: s2 starts_at 0 by A2,Th47,AMI_1:92;
 A6: q c= s1 & q c=s2 by A2,Th53;
 A7: s1.intloc 0 =1 by A2,Th54
       .= s2.intloc 0 by A2,Th54;
@@ -3149,99 +3142,100 @@ A9: IC s1 = insloc 0 by A4,AMI_1:def 41
     per cases by A2,NAT_1:35;
     suppose
 A10:  i = 0;
-      hence Cs1.i.intloc 0 = Cs2.i.intloc 0 by A3,A7;
-      thus (Cs1.i).IC SCM+FSA = (Cs2.i).IC SCM+FSA by A3,A9,A10;
-      thus Cs1.i.fsloc 0 = Cs2.i.fsloc 0 by A3,A8,A10;
+      hence Computation(s1,i).intloc 0 = Computation(s2,i).intloc 0 by A3,A7;
+      thus (Computation(s1,i)).IC SCM+FSA = (Computation(s2,i)).IC SCM+FSA
+       by A3,A9,A10;
+      thus Computation(s1,i).fsloc 0 = Computation(s2,i).fsloc 0 by A3,A8,A10;
     end;
     suppose
 A11:  i = 1;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A11,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 1 by A4,A6,A11,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A11,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A11,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A11,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A11,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 1 by A4,A6,A11,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A11,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A11,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A11,Lm3;
     end;
     suppose
 A12:  i = 2;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A12,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 2 by A4,A6,A12,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A12,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A12,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A12,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A12,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 2 by A4,A6,A12,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A12,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A12,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A12,Lm3;
     end;
     suppose
 A13:  i = 3;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A13,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 3 by A4,A6,A13,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A13,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A13,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A13,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A13,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 3 by A4,A6,A13,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A13,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A13,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A13,Lm3;
     end;
     suppose
 A14:  i = 4;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A14,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 4 by A4,A6,A14,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A14,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A14,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A14,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A14,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 4 by A4,A6,A14,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A14,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A14,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A14,Lm3;
     end;
     suppose
 A15:  i = 5;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A15,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 5 by A4,A6,A15,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A15,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A15,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A15,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A15,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 5 by A4,A6,A15,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A15,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A15,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A15,Lm3;
     end;
     suppose
 A16:  i = 6;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A16,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 6 by A4,A6,A16,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A16,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A16,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A16,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A16,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 6 by A4,A6,A16,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A16,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A16,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A16,Lm3;
     end;
     suppose
 A17:  i = 7;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A17,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 7 by A4,A6,A17,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A17,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A17,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A17,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A17,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 7 by A4,A6,A17,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A17,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A17,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A17,Lm3;
     end;
     suppose
 A18:  i = 8;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A18,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 8 by A4,A6,A18,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A18,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A18,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A18,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A18,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 8 by A4,A6,A18,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A18,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A18,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A18,Lm3;
     end;
     suppose
 A19:  i = 9;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A19,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 9 by A4,A6,A19,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A19,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A19,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A19,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A19,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 9 by A4,A6,A19,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A19,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A19,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A19,Lm3;
     end;
     suppose
 A20:  i = 10;
-      hence Cs1.i.intloc 0 = s1.intloc 0 by A4,A6,Lm3
-        .= Cs2.i.intloc 0 by A5,A6,A7,A20,Lm3;
-      thus (Cs1.i).IC SCM+FSA = insloc 10 by A4,A6,A20,Lm3
-        .= (Cs2.i).IC SCM+FSA by A5,A6,A20,Lm3;
-      thus Cs1.i.fsloc 0 = s1.fsloc 0 by A4,A6,A20,Lm3
-        .= Cs2.i.fsloc 0 by A5,A6,A8,A20,Lm3;
+      hence Computation(s1,i).intloc 0 = s1.intloc 0 by A4,A6,Lm3
+        .= Computation(s2,i).intloc 0 by A5,A6,A7,A20,Lm3;
+      thus (Computation(s1,i)).IC SCM+FSA = insloc 10 by A4,A6,A20,Lm3
+        .= (Computation(s2,i)).IC SCM+FSA by A5,A6,A20,Lm3;
+      thus Computation(s1,i).fsloc 0 = s1.fsloc 0 by A4,A6,A20,Lm3
+        .= Computation(s2,i).fsloc 0 by A5,A6,A8,A20,Lm3;
     end;
   end;
   set UD={fsloc 0,a0,a1,a2,a3,a4,a5,a6}, Us=UsedInt*Loc q \/ UsedIntLoc q;
@@ -3251,16 +3245,16 @@ A22: UsedIntLoc q ={a0,a1,a2,a3,a4,a5,a6} by Th58;
 A23: Us = UD by A21,ENUMSET1:62;
 A24: for i being Element of NAT,s1,s2 being State of SCM+FSA
   st 11 <= i & p c= s1 & p c= s2
-  holds (Computation s1).i | Us = (Computation s2).i | Us &
-  (Computation s1).i.IC SCM+FSA = (Computation s2).i.IC SCM+FSA
+  holds Computation(s1,i) | Us = Computation(s2,i) | Us &
+  Computation(s1,i).IC SCM+FSA = Computation(s2,i).IC SCM+FSA
   proof
     let i be Element of NAT,s1,s2 be State of SCM+FSA such that
 A25: 11 <= i and
 A26: p c= s1 and
 A27: p c= s2;
-    set Cs11=(Computation s1).11, Cs21=(Computation s2).11;
-A28: s1 starts_at insloc 0 by A26,Th47,AMI_1:92;
-A29: s2 starts_at insloc 0 by A27,Th47,AMI_1:92;
+    set Cs11= Computation( s1,11), Cs21= Computation( s2,11);
+A28: s1 starts_at 0 by A26,Th47,AMI_1:92;
+A29: s2 starts_at 0 by A27,Th47,AMI_1:92;
 A30: q c= s1 by A26,Th53;
 A31: q c= s2 by A27,Th53;
 A32: s1.intloc 0 =1 by A26,Th54
@@ -3320,8 +3314,8 @@ A44:    x = a6;
 A45: Cs11 | Us = Cs21 | Us by A34,A35,FUNCT_1:165;
 A46: Cs11.IC SCM+FSA = insloc 11 by A28,A30,Lm3
       .=Cs21.IC SCM+FSA by A29,A31,Lm3;
-A47: for i holds IC (Computation s1).i in dom q by A26,Th66;
-    for i holds IC (Computation s2).i in dom q by A27,Th66;
+A47: for i holds IC Computation(s1,i) in dom q by A26,Th66;
+    for i holds IC Computation(s2,i) in dom q by A27,Th66;
     hence thesis by A25,A30,A31,A45,A46,A47,Th26;
   end;
   set DD={intloc 0,IC SCM+FSA,fsloc 0};
@@ -3330,7 +3324,7 @@ A48: dom p = dom q \/ DD by Th42;
     let s1,s2 be State of SCM+FSA,i;
     assume
 A49: p c= s1 & p c=s2;
-    set Cs1i=(Computation s1).i, Cs2i=(Computation s2).i;
+    set Cs1i=Computation(s1,i), Cs2i=Computation(s2,i);
     q c= s1 & q c=s2 by A49,Th53;
     then
 A50: Cs1i | dom q = Cs2i| dom q by AMI_1:124;
@@ -3395,7 +3389,7 @@ A61:      x=fsloc 0;
     hence Cs1i| dom p = Cs2i | dom p by A48,A50,RELAT_1:185;
   end;
   then for s1,s2 being State of SCM+FSA st p c= s1 & p c= s2
-  for i holds (Computation s1).i|dom p = (Computation s2).i|dom p;
+  for i holds Computation(s1,i)|dom p = Computation(s2,i)|dom p;
   hence thesis by AMI_1:def 25;
 end;
 

@@ -40,42 +40,42 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="63"/>
 <Cluster>
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="68"/>
 <Cluster>
 <Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="61"/>
+<Func kind="K" nr="62"/>
 <Cluster>
 <Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="63"/>
+<Func kind="K" nr="64"/>
 <Cluster>
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="65"/>
 <Cluster>
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="60"/>
+<Func kind="K" nr="61"/>
 <Cluster>
 <Adjective nr="27"/>
 </Cluster>
@@ -1125,7 +1125,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="62"/>
+<Func kind="K" nr="63"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1138,7 +1138,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="68"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1151,7 +1151,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="61"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1164,7 +1164,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="63"/>
+<Func kind="K" nr="64"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1177,7 +1177,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="65"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1190,7 +1190,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
-<Func kind="K" nr="65"/>
+<Func kind="K" nr="66"/>
 </Func>
 </Typ>
 <Cluster>
@@ -1420,6 +1420,17 @@
 <Func kind="K" nr="18">
 <LocusVar nr="1"/>
 </Func>
+</Typ>
+<Cluster>
+<Adjective nr="27"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="66"/>
 </Typ>
 <Cluster>
 <Adjective nr="27"/>

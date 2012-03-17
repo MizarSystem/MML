@@ -18,6 +18,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 </Signature>
@@ -62,7 +63,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -78,7 +79,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -14,12 +14,12 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -31,9 +31,8 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="73"/>
 <Func kind="K" nr="77"/>
 </Typ>
 </ArgTypes>
@@ -56,8 +55,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="189">
-<Func kind="F" nr="1"/>
+<Func kind="K" nr="12">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

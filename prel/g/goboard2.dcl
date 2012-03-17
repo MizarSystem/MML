@@ -13,18 +13,19 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
@@ -43,13 +44,13 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="290">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -63,13 +64,13 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="291">
+<Func kind="K" nr="301">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -91,7 +92,7 @@
 <Func kind="K" nr="53"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="303">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -119,7 +120,7 @@
 <Func kind="K" nr="53"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="303">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -138,7 +139,7 @@
 <Func kind="K" nr="53"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="294">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -153,13 +154,13 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="295">
+<Func kind="K" nr="305">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

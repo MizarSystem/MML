@@ -8,21 +8,21 @@ environ
 
  vocabularies GR_CY_1, AMI_2, INT_1, FINSEQ_1, FUNCT_1, RELAT_1, TARSKI, BOOLE,
       NAT_1, CARD_3, AMI_1, FUNCT_4, CAT_1, ABSVALUE, ARYTM_1, MCART_1,
-      CQC_LANG, FUNCT_2, FUNCT_5, SCMPDS_1, FINSEQ_4, ARYTM;
+      CQC_LANG, FUNCT_2, FUNCT_5, SCMPDS_1, FINSEQ_4, ARYTM, ORDINAL1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       CARD_1, PARTFUN1, FUNCT_2, BINOP_1, MCART_1, NUMBERS, XCMPLX_0, CARD_3,
-      INT_1, NAT_1, NAT_D, FINSEQ_1, FRAENKEL, FINSEQ_4, FUNCOP_1, FUNCT_4,
+      INT_1, NAT_1, FINSEQ_1, FRAENKEL, FINSEQ_4, FUNCOP_1, FUNCT_4, XXREAL_0,
       CAT_2, AMI_2, INT_2;
- constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, INT_2, FINSEQ_4, CAT_2, AMI_1,
-      AMI_2, DOMAIN_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, GR_CY_1,
-      AMI_2, AFINSQ_1, VALUED_1, FUNCT_2;
+ constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_1, AMI_2,
+      DOMAIN_1;
+ registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FRAENKEL,
+      NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, GR_CY_1, AMI_2,
+      AFINSQ_1, ORDINAL2, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FINSEQ_1, FUNCOP_1, AMI_2, VALUED_1;
+ definitions TARSKI, FINSEQ_1, FUNCOP_1, AMI_2;
  theorems AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, MCART_1, TARSKI, ZFMISC_1, INT_1,
-      XBOOLE_0, XBOOLE_1, NAT_D;
+      XBOOLE_0, XBOOLE_1, NAT_D, NUMBERS, ORDINAL1;
  schemes FUNCT_2, BINOP_1;
 
 begin :: Preliminaries
@@ -30,7 +30,7 @@ begin :: Preliminaries
 reserve x1,x2,x3,x4,x5 for set,
   i, j, k for Element of NAT,
   I,I2,I3,I4 for Element of Segm 14,
-  i1 for Element of SCM-Instr-Loc,
+  i1 for Element of NAT,
   d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
   k1,k2 for Integer;
 
@@ -207,12 +207,12 @@ end;
 
 theorem Th14:
   for k being Element of SCM-Memory
-  holds k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc
+  holds k = NAT or k in SCM-Data-Loc or k in NAT
 proof
   let k be Element of SCM-Memory;
-  k in {NAT} \/ SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
-  then k in {NAT} or k in SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
-  hence k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc by TARSKI:def 1;
+  k in {NAT} \/ SCM-Data-Loc or k in NAT by XBOOLE_0:def 2;
+  then k in {NAT} or k in SCM-Data-Loc or k in NAT by XBOOLE_0:def 2;
+  hence k = NAT or k in SCM-Data-Loc or k in NAT by TARSKI:def 1;
 end;
 
 canceled;
@@ -249,65 +249,65 @@ end;
 
 Lm1: now
   let k be Element of SCM-Memory;
-  k in {NAT} \/ SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
-  then k in {NAT} or k in SCM-Data-Loc or k in SCM-Instr-Loc by XBOOLE_0:def 2;
-  hence k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc by TARSKI:def 1;
+  k in {NAT} \/ SCM-Data-Loc or k in NAT by XBOOLE_0:def 2;
+  then k in {NAT} or k in SCM-Data-Loc or k in NAT by XBOOLE_0:def 2;
+  hence k = NAT or k in SCM-Data-Loc or k in NAT by TARSKI:def 1;
 end;
 
 definition
   func SCMPDS-OK ->
-  Function of SCM-Memory, { INT } \/ { SCMPDS-Instr, SCM-Instr-Loc } means
+  Function of SCM-Memory, { INT } \/ { SCMPDS-Instr, NAT } means
   :Def4:
   for k being Element of SCM-Memory holds
-  (k = NAT implies it.k = SCM-Instr-Loc) &
+  (k = NAT implies it.k = NAT) &
   (k in SCM-Data-Loc implies it.k = INT) &
-  (k in SCM-Instr-Loc implies it.k = SCMPDS-Instr);
+  (k in NAT implies it.k = SCMPDS-Instr);
   existence
   proof
-    defpred P[set,set] means $1 = NAT & $2 = SCM-Instr-Loc or
-    $1 in SCM-Data-Loc & $2 = INT or $1 in SCM-Instr-Loc & $2 = SCMPDS-Instr;
+    defpred P[set,set] means $1 = NAT & $2 = NAT or
+    $1 in SCM-Data-Loc & $2 = INT or $1 in NAT & $2 = SCMPDS-Instr;
 A1: now
       let k be Element of SCM-Memory;
-      {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc }
-      = { INT, SCMPDS-Instr, SCM-Instr-Loc } by ENUMSET1:42;
+      {INT} \/ { SCMPDS-Instr, NAT }
+      = { INT, SCMPDS-Instr, NAT } by ENUMSET1:42;
       then
-A2:   INT in {INT} \/ { SCMPDS-Instr,SCM-Instr-Loc } &
-      SCMPDS-Instr in {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc } &
-      SCM-Instr-Loc in {INT} \/ { SCMPDS-Instr, SCM-Instr-Loc }
+A2:   INT in {INT} \/ { SCMPDS-Instr,NAT } &
+      SCMPDS-Instr in {INT} \/ { SCMPDS-Instr, NAT } &
+      NAT in {INT} \/ { SCMPDS-Instr, NAT }
       by ENUMSET1:def 1;
-      P[k,SCM-Instr-Loc] or P[k,INT] or P[k,SCMPDS-Instr] by Lm1;
+      P[k,NAT] or P[k,INT] or P[k,SCMPDS-Instr] by Lm1;
       hence ex b being Element of {INT} \/
-      { SCMPDS-Instr, SCM-Instr-Loc } st P[k,b] by A2;
+      { SCMPDS-Instr, NAT } st P[k,b] by A2;
     end;
     consider h being Function of SCM-Memory, {INT} \/
-    { SCMPDS-Instr, SCM-Instr-Loc } such that
+    { SCMPDS-Instr, NAT } such that
 A3: for a being Element of SCM-Memory holds P[a,h.a] from FUNCT_2:sch 3(A1);
     take h;
     let k be Element of SCM-Memory;
 A4: P[k,h.k] by A3;
-    thus k = NAT implies h.k = SCM-Instr-Loc by A3,AMI_2:27,28;
+    thus k = NAT implies h.k = NAT by A3,AMI_2:27,28;
     thus k in SCM-Data-Loc implies h.k = INT by A4,AMI_2:27,29,XBOOLE_0:3;
-    thus k in SCM-Instr-Loc implies h.k = SCMPDS-Instr
+    thus k in NAT implies h.k = SCMPDS-Instr
     by A4,AMI_2:29,XBOOLE_0:3;
   end;
   uniqueness
   proof
     let f, g be Function of SCM-Memory, {INT} \/
-    { SCMPDS-Instr, SCM-Instr-Loc } such that
+    { SCMPDS-Instr, NAT } such that
 A5: for k being Element of SCM-Memory holds
-    (k = NAT implies f.k = SCM-Instr-Loc) &
+    (k = NAT implies f.k = NAT) &
     (k in SCM-Data-Loc implies f.k = INT) &
-    (k in SCM-Instr-Loc implies f.k = SCMPDS-Instr) and
+    (k in NAT implies f.k = SCMPDS-Instr) and
 A6: for k being Element of SCM-Memory holds
-    (k = NAT implies g.k = SCM-Instr-Loc) &
+    (k = NAT implies g.k = NAT) &
     (k in SCM-Data-Loc implies g.k = INT) &
-    (k in SCM-Instr-Loc implies g.k = SCMPDS-Instr);
+    (k in NAT implies g.k = SCMPDS-Instr);
     now
       let k be Element of SCM-Memory;
       now per cases by Lm1;
         suppose
 A7:       k = NAT;
-          hence f.k = SCM-Instr-Loc by A5
+          hence f.k = NAT by A5
             .= g.k by A6,A7;
         end;
         suppose
@@ -316,7 +316,7 @@ A8:       k in SCM-Data-Loc;
             .= g.k by A6,A8;
         end;
         suppose
-A9:       k in SCM-Instr-Loc;
+A9:       k in NAT;
           hence f.k = SCMPDS-Instr by A5
             .= g.k by A6,A9;
         end;
@@ -332,7 +332,7 @@ definition
 end;
 
 theorem Th17:
-  SCM-Instr-Loc <> SCMPDS-Instr & SCMPDS-Instr <> INT
+  NAT <> SCMPDS-Instr & SCMPDS-Instr <> INT
 proof
   set S1={ [0,<*k1*>] where k1 is Element of INT: not contradiction},
   S2={ [1,<*d1*>] : not contradiction},
@@ -363,20 +363,20 @@ end;
 
 theorem Th18:
   for i being Element of SCM-Memory holds
-  SCMPDS-OK.i = SCM-Instr-Loc iff i = NAT
+  SCMPDS-OK.i = NAT iff i = NAT
 proof
   let i be Element of SCM-Memory;
-  thus SCMPDS-OK.i = SCM-Instr-Loc implies i = NAT
+  thus SCMPDS-OK.i = NAT implies i = NAT
   proof
     assume
-A1: SCMPDS-OK.i = SCM-Instr-Loc;
+A1: SCMPDS-OK.i = NAT;
     assume
 A2: i <> NAT;
     per cases by A2,Lm1;
     suppose i in SCM-Data-Loc;
-      hence contradiction by A1,Def4,AMI_2:31;
+      hence contradiction by A1,Def4,NUMBERS:27;
     end;
-    suppose i in SCM-Instr-Loc;
+    suppose i in NAT;
       hence contradiction by A1,Def4,Th17;
     end;
   end;
@@ -396,9 +396,9 @@ A1: SCMPDS-OK.i = INT;
 A2: not i in SCM-Data-Loc;
     per cases by A2,Th14;
     suppose i = NAT;
-      hence contradiction by A1,Def4,AMI_2:6;
+      hence contradiction by A1,Def4,NUMBERS:27;
     end;
-    suppose i in SCM-Instr-Loc;
+    suppose i in NAT;
       hence contradiction by A1,Def4,Th17;
     end;
   end;
@@ -407,15 +407,15 @@ end;
 
 theorem Th20:
   for i being Element of SCM-Memory
-  holds SCMPDS-OK.i = SCMPDS-Instr iff i in SCM-Instr-Loc
+  holds SCMPDS-OK.i = SCMPDS-Instr iff i in NAT
 proof
   let i be Element of SCM-Memory;
-  thus SCMPDS-OK.i = SCMPDS-Instr implies i in SCM-Instr-Loc
+  thus SCMPDS-OK.i = SCMPDS-Instr implies i in NAT
   proof
     assume
 A1: SCMPDS-OK.i = SCMPDS-Instr;
     assume
-A2: not i in SCM-Instr-Loc;
+A2: not i in NAT;
     per cases by A2,Th14;
     suppose i = NAT;
       hence contradiction by A1,Def4,Th17;
@@ -434,11 +434,11 @@ theorem
   SCMPDS-OK.i1 = SCMPDS-Instr by Th20;
 
 theorem Th23:
-  pi(product SCMPDS-OK,NAT) = SCM-Instr-Loc
+  pi(product SCMPDS-OK,NAT) = NAT
 proof
   dom SCMPDS-OK = SCM-Memory by FUNCT_2:def 1;
   hence pi(product SCMPDS-OK,NAT) = SCMPDS-OK.NAT by AMI_2:30,CARD_3:22
-    .= SCM-Instr-Loc by Def4,AMI_2:30;
+    .= NAT by Def4,AMI_2:30;
 end;
 
 theorem Th24:
@@ -459,14 +459,14 @@ end;
 
 definition
   let s be SCMPDS-State;
-  func IC s -> Element of SCM-Instr-Loc equals
+  func IC s -> Element of NAT equals
 
   s.NAT;
   coherence by Th23,CARD_3:def 6;
 end;
 
 definition
-  let s be SCMPDS-State, u be Element of SCM-Instr-Loc;
+  let s be SCMPDS-State, u be Nat;
   func SCM-Chg(s,u) -> SCMPDS-State equals
 
   s +* (NAT .--> u);
@@ -489,7 +489,7 @@ A4:       x = NAT;
           then NAT in dom(NAT .--> u) by TARSKI:def 1;
           then (s +* (NAT .--> u)).NAT = (NAT .--> u).NAT by FUNCT_4:14
             .= u by FUNCOP_1:87;
-          then (s +* (NAT .--> u)).NAT in SCM-Instr-Loc;
+          then (s +* (NAT .--> u)).NAT in NAT by ORDINAL1:def 13;
           hence (s +* (NAT .--> u)).x in SCMPDS-OK.x by A4,Th18,AMI_2:30;
         end;
         suppose
@@ -507,10 +507,10 @@ A5:       x <> NAT;
 end;
 
 theorem
-  for s being SCMPDS-State, u being Element of SCM-Instr-Loc
+  for s being SCMPDS-State, u being Nat
   holds SCM-Chg(s,u).NAT = u
 proof
-  let s be SCMPDS-State, u be Element of SCM-Instr-Loc;
+  let s be SCMPDS-State, u be Nat;
   {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
   then NAT in dom(NAT .--> u) by TARSKI:def 1;
   hence SCM-Chg(s,u).NAT = (NAT .--> u).NAT by FUNCT_4:14
@@ -518,23 +518,25 @@ proof
 end;
 
 theorem
-  for s being SCMPDS-State, u being Element of SCM-Instr-Loc,
+  for s being SCMPDS-State, u being Nat,
   mk being Element of SCM-Data-Loc holds SCM-Chg(s,u).mk = s.mk
 proof
-  let s be SCMPDS-State, u be Element of SCM-Instr-Loc,
+  let s be SCMPDS-State, u be Nat,
   mk be Element of SCM-Data-Loc;
-A1: SCMPDS-OK.NAT = SCM-Instr-Loc & SCMPDS-OK.mk = INT by Th18,Th19,AMI_2:30;
+A1: SCMPDS-OK.NAT = NAT & SCMPDS-OK.mk = INT by Th18,Th19,AMI_2:30;
   {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-  then not mk in dom(NAT .--> u) by A1,AMI_2:6,TARSKI:def 1;
+  then not mk in dom(NAT .--> u) by A1,TARSKI:def 1,NUMBERS:27;
   hence SCM-Chg(s,u).mk = s.mk by FUNCT_4:12;
 end;
 
 theorem
-  for s being SCMPDS-State, u, v being Element of SCM-Instr-Loc
+  for s being SCMPDS-State, u, v being Nat
   holds SCM-Chg(s,u).v = s.v
 proof
-  let s be SCMPDS-State, u, v be Element of SCM-Instr-Loc;
-A1: SCMPDS-OK.NAT = SCM-Instr-Loc & SCMPDS-OK.v = SCMPDS-Instr
+  let s be SCMPDS-State, u, v be Nat;
+   v in NAT by ORDINAL1:def 13;
+   then
+A1: SCMPDS-OK.NAT = NAT & SCMPDS-OK.v = SCMPDS-Instr
   by Th18,Th20,AMI_2:30;
   {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
   then not v in dom(NAT .--> u) by A1,Th17,TARSKI:def 1;
@@ -587,9 +589,9 @@ theorem
   holds SCM-Chg(s,t,u).NAT = s.NAT
 proof
   let s be SCMPDS-State, t be Element of SCM-Data-Loc, u be Integer;
-A1: SCMPDS-OK.NAT = SCM-Instr-Loc & SCMPDS-OK.t = INT by Th18,Th19,AMI_2:30;
+A1: SCMPDS-OK.NAT = NAT & SCMPDS-OK.t = INT by Th18,Th19,AMI_2:30;
   {t} = dom(t .--> u) by FUNCOP_1:19;
-  then not NAT in dom(t .--> u) by A1,AMI_2:6,TARSKI:def 1;
+  then not NAT in dom(t .--> u) by A1,TARSKI:def 1,NUMBERS:27;
   hence SCM-Chg(s,t,u).NAT = s.NAT by FUNCT_4:12;
 end;
 
@@ -618,10 +620,10 @@ end;
 
 theorem
   for s being SCMPDS-State, t being Element of SCM-Data-Loc, u being Integer,
-  v being Element of SCM-Instr-Loc holds SCM-Chg(s,t,u).v = s.v
+  v being Element of NAT holds SCM-Chg(s,t,u).v = s.v
 proof
   let s be SCMPDS-State, t be Element of SCM-Data-Loc, u be Integer,
-  v be Element of SCM-Instr-Loc;
+  v be Element of NAT;
 A1: SCMPDS-OK.v = SCMPDS-Instr & SCMPDS-OK.t = INT by Th19,Th20;
   {t} = dom(t .--> u) by FUNCOP_1:19;
   then not v in dom(t .--> u) by A1,Th17,TARSKI:def 1;
@@ -649,8 +651,8 @@ end;
 
 definition
   let s be SCMPDS-State, n be Integer;
-  func jump_address(s,n) -> Element of SCM-Instr-Loc equals
-  abs((IC s qua Element of SCM-Instr-Loc)+n);
+  func jump_address(s,n) -> Element of NAT equals
+  abs((IC s qua Element of NAT)+n);
   coherence;
 end;
 
@@ -953,7 +955,7 @@ end;
 
 definition
   let s be SCMPDS-State, a be Element of SCM-Data-Loc;
-  func PopInstrLoc(s,a) -> Element of SCM-Instr-Loc equals
+  func PopInstrLoc(s,a) -> Element of NAT equals
 
   abs(s.a)+2;
   coherence;
@@ -977,49 +979,49 @@ definition
   let x be Element of SCMPDS-Instr, s be SCMPDS-State;
   func SCM-Exec-Res (x,s) -> SCMPDS-State equals
   SCM-Chg(s, jump_address(s,x const_INT )) if ex k1 st x = [ 0, <*k1*>],
-  SCM-Chg(SCM-Chg(s, x P21address, x P22const), Next IC s)
+  SCM-Chg(SCM-Chg(s, x P21address, x P22const), succ IC s)
   if ex d1,k1 st x = [ 2, <*d1, k1*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P21address,x P22const),
-  IC s qua Element of SCM-Instr-Loc),Next IC s)
+  IC s qua Element of NAT),succ IC s)
   if ex d1,k1 st x = [ 3, <*d1, k1*>],
   SCM-Chg(SCM-Chg(s, x address_1,s.Address_Add(s,x address_1,RetSP)),
   PopInstrLoc(s,Address_Add(s,x address_1,RetIC)) )
   if ex d1 st x = [ 1, <*d1*>],
   SCM-Chg(s, IFEQ(s.Address_Add(s,x P31address,x P32const), 0,
-  Next IC s,jump_address(s,x P33const )))
+  succ IC s,jump_address(s,x P33const )))
   if ex d1,k1,k2 st x = [ 4, <*d1,k1,k2*>],
   SCM-Chg(s, IFGT(s.Address_Add(s,x P31address,x P32const), 0,
-  Next IC s,jump_address(s,x P33const )))
+  succ IC s,jump_address(s,x P33const )))
   if ex d1,k1,k2 st x = [ 5, <*d1,k1,k2*>],
   SCM-Chg(s, IFGT(0, s.Address_Add(s,x P31address,x P32const),
-  Next IC s,jump_address(s,x P33const )))
+  succ IC s,jump_address(s,x P33const )))
   if ex d1,k1,k2 st x = [ 6, <*d1,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P31address,x P32const),
-  x P33const), Next IC s) if ex d1,k1,k2 st x = [ 7, <*d1,k1,k2*>],
+  x P33const), succ IC s) if ex d1,k1,k2 st x = [ 7, <*d1,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P31address,x P32const),
-  s.Address_Add(s,x P31address,x P32const)+ (x P33const)), Next IC s)
+  s.Address_Add(s,x P31address,x P32const)+ (x P33const)), succ IC s)
   if ex d1,k1,k2 st x = [ 8, <*d1,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
   s.Address_Add(s,x P41address,x P43const)+
-  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+  s.Address_Add(s,x P42address,x P44const)),succ IC s)
   if ex d1,d2,k1,k2 st x = [ 9, <*d1,d2,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
   s.Address_Add(s,x P41address,x P43const) -
-  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+  s.Address_Add(s,x P42address,x P44const)),succ IC s)
   if ex d1,d2,k1,k2 st x = [ 10, <*d1,d2,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
   s.Address_Add(s,x P41address,x P43const) *
-  s.Address_Add(s,x P42address,x P44const)),Next IC s)
+  s.Address_Add(s,x P42address,x P44const)),succ IC s)
   if ex d1,d2,k1,k2 st x = [ 11, <*d1,d2,k1,k2*>],
   SCM-Chg(SCM-Chg(s, Address_Add(s,x P41address,x P43const),
-  s.Address_Add(s,x P42address,x P44const)), Next IC s)
+  s.Address_Add(s,x P42address,x P44const)), succ IC s)
   if ex d1,d2,k1,k2 st x = [13, <*d1,d2,k1,k2*>], SCM-Chg(SCM-Chg(
   SCM-Chg(s,Address_Add(s,x P41address,x P43const),
   s.Address_Add(s,x P41address,x P43const) div
   s.Address_Add(s,x P42address,x P44const)),
   Address_Add(s,x P42address,x P44const),
   s.Address_Add(s,x P41address,x P43const) mod
-  s.Address_Add(s,x P42address,x P44const)), Next IC s)
+  s.Address_Add(s,x P42address,x P44const)), succ IC s)
   if ex d1,d2,k1,k2 st x = [12, <*d1,d2,k1,k2*>] otherwise s;
   coherence;
   consistency by ZFMISC_1:33;

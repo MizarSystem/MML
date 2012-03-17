@@ -33,7 +33,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
 <ArticleID name="COMPTS_1"/>
@@ -92,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -119,7 +118,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -146,7 +145,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -210,7 +209,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="296">
+<Func kind="K" nr="288">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -256,7 +255,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="296">
+<Func kind="K" nr="288">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -285,7 +284,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="297">
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -314,7 +313,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="297">
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -345,7 +344,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="297">
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -379,7 +378,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="297">
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -427,7 +426,7 @@
 <Cluster>
 <Adjective nr="140"/>
 </Cluster>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -448,7 +447,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

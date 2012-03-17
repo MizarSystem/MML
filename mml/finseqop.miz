@@ -11,10 +11,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, FUNCT_1, FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3,
       FUNCOP_1, FINSEQ_2, SETWISEO;
- constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCOP_1, SETWISEO, NAT_1, FINSEQ_2,
-      SEQ_1;
+ constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCOP_1, SETWISEO, NAT_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1,
-      FINSEQ_2, ORDINAL1, XCMPLX_0;
+      FINSEQ_2, ORDINAL1, XCMPLX_0, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions BINOP_1, FUNCOP_1, FINSEQ_2;
  theorems ZFMISC_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSEQ_1, BINOP_1, SETWISEO,
@@ -168,15 +167,16 @@ A1: len q = len(p^<*d*>) by FINSEQ_2:37;
 A2: len(p^<*d*>) = i by FINSEQ_2:19;
 A3: len r = len(h*p)+1 by FINSEQ_2:19;
 A4: len(h*p) = len p by FINSEQ_2:37;
+X: dom q = Seg i by A1,A2,FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A5: j in Seg i;
+A5: j in dom q;
     then
-A6: j in dom q & j in dom r by A1,A2,A3,A4,FINSEQ_1:def 3;
+A6: j in dom q & j in dom r by A3,A4,FINSEQ_1:def 3,X;
 A7: Seg len p = dom p by FINSEQ_1:def 3;
 A8: Seg len(h*p) = dom(h*p) by FINSEQ_1:def 3;
-    now per cases by A5,A7,FINSEQ_2:8;
+    now per cases by A5,A7,FINSEQ_2:8,X;
       suppose
 A9:     j in dom p;
         hence h.((p^<*d*>).j) = h.(p.j) by FINSEQ_1:def 7
@@ -259,13 +259,14 @@ A1: len T = i & len T' = i by FINSEQ_2:109;
 A2: len r = i+1 by FINSEQ_2:86;
 A3: len pq = i by A1,FINSEQ_2:86;
 A4: len s = len pq + 1 by FINSEQ_2:19;
+X: dom r = Seg(i+1)  by A2,FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A5: j in Seg(i+1);
+A5: j in dom r;
     then
-A6: j in dom r by A2,FINSEQ_1:def 3;
-    now per cases by A5,FINSEQ_2:8;
+A6: j in dom r;
+    now per cases by A5,FINSEQ_2:8,X;
       suppose
 A7:     j in Seg i;
         then
@@ -336,13 +337,14 @@ A1: len pd = i + 1 by FINSEQ_2:19;
 A2: len q = i by FINSEQ_2:92;
 A3: len r = i + 1 by A1,FINSEQ_2:92;
 A4: len s = len q + 1 by FINSEQ_2:19;
+X: dom r = Seg(i+1)  by A3,FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A5: j in Seg(i+1);
+A5: j in dom r;
     then
-A6: j in dom r by A3,FINSEQ_1:def 3;
-    now per cases by A5,FINSEQ_2:8;
+A6: j in dom r;
+    now per cases by A5,FINSEQ_2:8,X;
       suppose
 A7:     j in Seg i;
         then
@@ -397,13 +399,14 @@ A1: len pd = i + 1 by FINSEQ_2:19;
 A2: len q = i by FINSEQ_2:98;
 A3: len r = i + 1 by A1,FINSEQ_2:98;
 A4: len s = len q + 1 by FINSEQ_2:19;
+X: dom r = Seg(i+1)  by A3,FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A5: j in Seg(i+1);
+A5: j in dom r;
     then
-A6: j in dom r by A3,FINSEQ_1:def 3;
-    now per cases by A5,FINSEQ_2:8;
+A6: j in dom r;
+    now per cases by A5,FINSEQ_2:8,X;
       suppose
 A7:     j in Seg i;
         then
@@ -791,7 +794,7 @@ proof
 A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
 A2: dom h = D by FUNCT_2:def 1;
 A3: dom(h*f) = C by FUNCT_2:def 1;
-  reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
+  reconsider g = C --> d as Function of C,D;
   thus h*(F[;](d,f)) = h*(F.:(g,f)) by FUNCT_2:def 1
     .= H.:(h*g,h*f) by A1,Th38
     .= H[;](h.d,h*f) by A2,A3,FUNCOP_1:23;
@@ -805,7 +808,7 @@ proof
 A1: for d1,d2 holds h.(F.(d1,d2)) = H.(h.d1,h.d2);
 A2: dom h = D by FUNCT_2:def 1;
 A3: dom(h*f) = C by FUNCT_2:def 1;
-  reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
+  reconsider g = C --> d as Function of C,D;
   thus h*(F[:](f,d)) = h*(F.:(f,g)) by FUNCT_2:def 1
     .= H.:(h*f,h*g) by A1,Th38
     .= H[:](h*f,h.d) by A2,A3,FUNCOP_1:23;
@@ -839,7 +842,7 @@ proof
   assume
 A1: F has_a_unity;
   set e = the_unity_wrt F;
-  reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+  reconsider g = C-->e as Function of C,D;
   now
     let c;
     thus (F.:(g,f)).c = F.(g.c,f.c) by FUNCOP_1:48
@@ -1199,8 +1202,7 @@ proof
 A1: F has_a_unity & F is associative & F is commutative & F has_an_inverseOp;
   set e = the_unity_wrt F, u = the_inverseOp_wrt F;
   let d1,d2;
-  F.(F.(u.d1,u.d2),F.(d1,d2)) = F.(u.d1,F.(u.d2,F.(d1,d2))) by A1,
-  BINOP_1:def 3
+  F.(F.(u.d1,u.d2),F.(d1,d2)) = F.(u.d1,F.(u.d2,F.(d1,d2))) by A1,BINOP_1:def 3
     .= F.(u.d1,F.(F.(u.d2,d1),d2)) by A1,BINOP_1:def 3
     .= F.(u.d1,F.(F.(d1,u.d2),d2)) by A1,BINOP_1:def 2
     .= F.(u.d1,F.(d1,F.(u.d2,d2))) by A1,BINOP_1:def 3
@@ -1365,7 +1367,7 @@ proof
   assume
 A1: F has_a_unity & F is associative & F has_an_inverseOp;
   set u = the_inverseOp_wrt F;
-  reconsider g = C-->the_unity_wrt F as Function of C,D by FUNCOP_1:58;
+  reconsider g = C-->the_unity_wrt F as Function of C,D;
   now
     let c;
     thus (F.:(f,u*f)).c = F.(f.c,(u*f).c) by FUNCOP_1:48
@@ -1393,7 +1395,7 @@ proof
 A1: F is associative & F has_an_inverseOp & F has_a_unity and
 A2: F.:(f,f') = C-->the_unity_wrt F;
   set e = the_unity_wrt F;
-  reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+  reconsider g = C-->e as Function of C,D;
   set u = the_inverseOp_wrt F;
   now
     let c;
@@ -1465,7 +1467,7 @@ proof
   assume
 A1: F is associative & F has_a_unity & e = the_unity_wrt F &
   F has_an_inverseOp & G is_distributive_wrt F;
-  reconsider g = C-->e as Function of C,D by FUNCOP_1:58;
+  reconsider g = C-->e as Function of C,D;
   now
     let c;
     thus (G[;](e,f)).c = G.(e,f.c) by FUNCOP_1:66

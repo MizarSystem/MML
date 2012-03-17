@@ -6,25 +6,25 @@
 
 environ
 
- vocabularies FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, INT_1, FINSEQ_1,
-      FINSEQ_4, ARYTM_1, RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A,
-      SCMFSA7B, AMI_3, UNIALG_2, SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5,
-      ABSVALUE, SCMFSA8B, SCMFSA_9, CARD_1, SCMFSA8A, SFMASTR1, CARD_3,
-      SCMFSA9A, SCM_1, FINSEQ_2, SFMASTR3, ARYTM;
+ vocabularies FUNCT_2, FUNCT_4, FUNCT_1, RELAT_1, BOOLE, FINSEQ_1, FINSEQ_4,
+      ARYTM_1, RFUNCT_2, AMI_1, SCMFSA_2, SF_MASTR, SCMFSA6A, SCMFSA7B, AMI_3,
+      UNIALG_2, SCMFSA6C, SCMFSA6B, SCMFSA_4, CAT_1, AMI_5, ABSVALUE, SCMFSA8B,
+      SCMFSA_9, CARD_1, SCMFSA8A, SFMASTR1, CARD_3, SCMFSA9A, SCM_1, FINSEQ_2,
+      SFMASTR3, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       NAT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, FINSEQ_4, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A,
-      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
-      SFMASTR1, SCMFSA9A, XXREAL_0;
- constructors PARTFUN1, SETWISEO, REAL_1, NAT_1, INT_2, SEQ_1, FINSEQ_4,
-      MESFUNC1, AMI_5, SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA_9, SFMASTR1, SCMFSA9A, VALUED_1;
+      FINSEQ_1, FINSEQ_2, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SCMFSA6B,
+      SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
+      SCMFSA9A, XXREAL_0;
+ constructors PARTFUN1, SETWISEO, REAL_1, NAT_1, INT_2, SEQ_1, MESFUNC1,
+      SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
+      SCMFSA9A, SCMNORM;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      WSIERP_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C,
-      SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, XBOOLE_0, VALUED_1;
+      WSIERP_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, VALUED_1;
+ definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2;
  theorems TARSKI, ZFMISC_1, ENUMSET1, REAL_1, ABSVALUE, NAT_1, INT_1, RELAT_1,
       FUNCT_7, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, GRAPH_2,
       AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C,
@@ -56,9 +56,9 @@ A2: I does_not_destroy a;
 A3: (Initialize s) | D = (Initialize s +* (I +* Start-At insloc 0)) | D
   by SCMFSA8A:11;
   thus IExec(I,s).a
-  = (Computation (Initialize s +* (I +* Start-At insloc 0))).0.a by A1,A2,
+  = Computation((Initialize s +* (I +* Start-At insloc 0)),0).a by A1,A2,
   SCMFSA8C:89
-    .= (Initialize s +* (I +* Start-At insloc 0)).a by AMI_1:def 19
+    .= (Initialize s +* (I +* Start-At insloc 0)).a by AMI_1:13
     .= (Initialize s).a by A3,SCMFSA6A:38;
 end;
 
@@ -705,7 +705,6 @@ end;
 
 definition
   let a, b, c be Int-Location, I be Macro-Instruction;
-  set aux = 1-stRWNotIn ({a, b, c} \/ UsedIntLoc I);
   func for-up(a, b, c, I) -> Macro-Instruction equals
   (1-stRWNotIn ({a, b, c} \/ UsedIntLoc I)) := c ';'
   SubFrom(1-stRWNotIn ({a, b, c} \/ UsedIntLoc I), b) ';'
@@ -1074,8 +1073,8 @@ A13: s1 | D = s2 | D by A1,Th22;
 A14: Ex1 = K and
 A15: SW1.K.aux <= 0 and
 A16: for i being Element of NAT st SW1.i.aux <= 0 holds K <= i and
-  (Computation ((Initialize s1) +* (while>0(aux, IB) +* SAt))).
-  (LifeSpan ((Initialize s1) +* (while>0(aux, IB) +* SAt))) | D
+  Computation(((Initialize s1) +* (while>0(aux, IB) +* SAt)),
+  (LifeSpan ((Initialize s1) +* (while>0(aux, IB) +* SAt)))) | D
   = SW1.K | D by A8,A10,SCMFSA9A:def 6;
   SW1.K | D = SW2.K | D by A6,A8,A13,SCMFSA9A:40;
   then
@@ -1168,7 +1167,6 @@ A1: c <> aa;
   set aux1 = 1-stRWNotIn {a, b, c};
   set aux2 = 2-ndRWNotIn {a, b, c};
   set cv = 3-rdRWNotIn {a, b, c};
-  set i0 = c := a;
   set i10 = aux1 := (f, cv);
   set i11 = aux2 := (f, c);
   set I12 = if>0(aux2, aux1, Macro (c := cv), SCM+FSA-Stop);
@@ -2111,8 +2109,6 @@ begin :: Selection sort
 
 definition
   let f be FinSeq-Location;
-  set cv = 1-stRWNotIn {} Int-Locations;
-  set minpos = 2-ndRWNotIn {} Int-Locations;
   func Selection-sort f -> Macro-Instruction equals
   (1-stNotUsed swap(f, 1-stRWNotIn {} Int-Locations,
   2-ndRWNotIn {} Int-Locations)) :=len f ';'

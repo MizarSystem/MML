@@ -24,12 +24,13 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
@@ -47,10 +48,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="53"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="141"/>
+<Func kind="K" nr="142"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,12 +59,12 @@
 <Func kind="K" nr="62"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="344">
+<Func kind="K" nr="355">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 </Registrations>

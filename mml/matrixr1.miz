@@ -10,18 +10,18 @@ environ
       MATRIX_1, TREES_1, ARYTM, RELAT_1, FINSEQ_2, INCSP_1, CAT_3, RVSUM_1,
       QC_LANG1, EUCLID, ALGSTR_0;
  notations TARSKI, SUBSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FUNCT_1,
-      MATRIX_1, NUMBERS, ORDINAL1, VECTSP_1, RELSET_1, FINSEQ_1, VALUED_1,
-      SEQ_1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, MATRIX_4, MATRIX_3,
-      RVSUM_1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
+      MATRIX_1, NUMBERS, ORDINAL1, VECTSP_1, RELSET_1, FINSEQ_1, SEQ_1,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, MATRIX_4, MATRIX_3, RVSUM_1,
+      FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
  constructors XXREAL_0, REAL_1, BINOP_2, FVSUM_1, GOBOARD1, MATRIX_3, MATRIX_4,
-      VALUED_1, PARTFUN1, SEQ_1;
- registrations RELSET_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1,
-      FINSEQ_2, STRUCT_0, VECTSP_1, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
+      SEQ_1;
+ registrations RELSET_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1,
+      FINSEQ_2, STRUCT_0, VECTSP_1, XBOOLE_0, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions VECTSP_1, MATRIX_1, STRUCT_0, ALGSTR_0, VALUED_1;
+ definitions VECTSP_1, MATRIX_1, STRUCT_0, VALUED_1;
  theorems MATRIX_3, MATRIX_1, MATRIX_4, MATRIX_5, XREAL_0, FUNCT_1, FINSEQ_1,
       MATRIX_2, FINSEQ_2, TARSKI, FVSUM_1, ZFMISC_1, EUCLID_2, RVSUM_1, EUCLID,
-      FINSEQ_3, XXREAL_0, ORDINAL1, SEQ_1, VALUED_1;
+      FINSEQ_3, XXREAL_0, ORDINAL1, VALUED_1;
  schemes FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -643,7 +643,6 @@ proof
   let A be Matrix of REAL;
   reconsider e3=(1_F_Real) + (1_F_Real) + (1_F_Real) as Element of F_Real;
 A1: len A =len MXR2MXF A & width A=width MXR2MXF A;
-  reconsider rr=1+1 as Element of REAL;
   3*A= MXF2MXR (e3*(MXR2MXF A)) by Def7
     .=MXF2MXR ((1_F_Real)*(MXR2MXF A)
   + ((1_F_Real)+ (1_F_Real))*(MXR2MXF A)) by MATRIX_5:13
@@ -832,18 +831,18 @@ A1: len x > 0;
     deffunc F(Nat) = <*x.$1*>;
     reconsider n=len x as Element of NAT;
     consider C being FinSequence such that
-A2: len C=n & for j be Nat st j in Seg n holds C.j = F(j) from FINSEQ_1:sch 2;
+A2: len C=n & for j be Nat st j in dom C holds C.j = F(j) from FINSEQ_1:sch 2;
+A3:  dom C = Seg n by A2,FINSEQ_1:def 3;
     for y being set st y in rng C ex p being FinSequence of REAL
     st y = p & len p = 1
     proof
       let y be set;
       assume y in rng C;
       then consider z be set such that
-A3:   z in dom C & y=C.z by FUNCT_1:def 5;
-      reconsider z as Element of NAT by A3;
-A4:   z in Seg len C by A3,FINSEQ_1:def 3;
+A4:   z in dom C & y=C.z by FUNCT_1:def 5;
+      reconsider z as Element of NAT by A4;
       len <*x.z*>=1 by FINSEQ_1:56;
-      hence ex p being FinSequence of REAL st y = p & len p = 1 by A2,A3,A4;
+      hence ex p being FinSequence of REAL st y = p & len p = 1 by A2,A4;
     end;
     then reconsider B=C as Matrix of REAL by MATRIX_1:9;
     for p being FinSequence of REAL st p in rng B holds len p = 1
@@ -851,34 +850,33 @@ A4:   z in Seg len C by A3,FINSEQ_1:def 3;
       let p be FinSequence of REAL;
       assume p in rng B;
       then consider i be Nat such that
-A5:   i in dom B and
-A6:   B.i =p by FINSEQ_2:11;
-A7:   i in Seg len B by A5,FINSEQ_1:def 3;
+A6:   i in dom B and
+A7:   B.i =p by FINSEQ_2:11;
       len <*x.i*>=1 by FINSEQ_1:56;
-      hence thesis by A2,A6,A7;
+      hence thesis by A2,A7,A6;
     end;
     then reconsider A=B as Matrix of len B,1,REAL by MATRIX_1:def 3;
-A8: width A = 1 by A1,A2,MATRIX_1:24;
+A9: width A = 1 by A1,A2,MATRIX_1:24;
     Seg len x = dom x by FINSEQ_1:def 3;
-    hence thesis by A2,A8;
+    hence thesis by A2,A9,A3;
   end;
   uniqueness
   proof
     let A,B be Matrix of REAL;
     assume that
-A9: len A = len x & width A = 1 and
-A10: for k being Nat st k in dom x holds A.k =<*x.k*> and
-A11: len B = len x & width B = 1 and
-A12: for k being Nat st k in dom x holds B.k =<*x.k*>;
-A13: dom A = dom x & dom B = dom x by A9,A11,FINSEQ_3:31;
+A10: len A = len x & width A = 1 and
+A11: for k being Nat st k in dom x holds A.k =<*x.k*> and
+A12: len B = len x & width B = 1 and
+A13: for k being Nat st k in dom x holds B.k =<*x.k*>;
+A14: dom A = dom x & dom B = dom x by A10,A12,FINSEQ_3:31;
     now
       let k be Nat;
       assume
-A14:  k in dom x;
-      hence A.k=<*x.k*> by A10
-        .=B.k by A12,A14;
+A15:  k in dom x;
+      hence A.k=<*x.k*> by A11
+        .=B.k by A13,A15;
     end;
-    hence A=B by A13,FINSEQ_1:17;
+    hence A=B by A14,FINSEQ_1:17;
   end;
 end;
 
@@ -1010,7 +1008,6 @@ proof
   let a be Real,x be FinSequence of REAL;
   assume
 A1: len x>0;
-  reconsider ea=a as Element of F_Real;
 A2: len (a*ColVec2Mx x)=len ColVec2Mx x by Th27
     .=len x by A1,Def9;
 A3: width (a*ColVec2Mx x)=width ColVec2Mx x by Th27
@@ -1111,7 +1108,6 @@ A5: 1 in dom C by FINSEQ_1:3;
     j in Seg len x by A4,FINSEQ_1:def 3;
     then
 A6: [1,j] in Indices C by A3,A5,ZFMISC_1:def 2;
-    reconsider j1=j as Element of NAT by ORDINAL1:def 13;
     thus C*(1,j) =x.j by A2,A6,MATRIX_1:def 6;
   end;
   uniqueness
@@ -1277,7 +1273,6 @@ theorem
   LineVec2Mx (a*x)=a*LineVec2Mx x
 proof
   let a be Real, x be FinSequence of REAL;
-  reconsider ea=a as Element of F_Real;
 A1: len (a*LineVec2Mx x)=len LineVec2Mx x by Th27
     .=1 by Def10;
 A2: width (a*LineVec2Mx x)=width LineVec2Mx x by Th27

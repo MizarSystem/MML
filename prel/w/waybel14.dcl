@@ -15,7 +15,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -23,6 +22,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -37,7 +37,6 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="WAYBEL_8"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
@@ -50,9 +49,9 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="54"/>
 <Adjective nr="125"/>
 </Cluster>
 </Typ>
@@ -63,7 +62,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="270">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -82,13 +81,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="194">
 <Func kind="U" nr="4">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 <Adjective nr="95"/>
 </Cluster>
 </FCluster>
@@ -96,16 +95,16 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="54"/>
 <Adjective nr="125"/>
 <Adjective nr="126"/>
 <Adjective nr="127"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="315">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

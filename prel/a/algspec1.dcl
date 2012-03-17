@@ -11,14 +11,14 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -71,13 +71,13 @@
 <Adjective nr="4"/>
 <Adjective nr="8">
 <LocusVar nr="2"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
 <LocusVar nr="2"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

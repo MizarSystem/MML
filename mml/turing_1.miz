@@ -11,22 +11,21 @@ environ
       ARYTM_1, AMI_1, FUNCT_2, LANG1, MCART_1, FINSEQ_4, COMPUT_1, FINSEQ_2,
       BORSUK_1, ORDINAL1, UNIALG_1, PRALG_3, SCMFSA6A, TURING_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      REAL_1, NAT_1, INT_1, FINSET_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2,
-      FUNCT_4, FINSEQ_1, VALUED_1, SEQ_1, FINSEQ_2, FRAENKEL, FUNCOP_1,
-      PARTFUN1, GR_CY_1, FINSEQ_4, GROUP_4, RELAT_1, UNIALG_1, COMPUT_1,
-      XXREAL_0;
+      REAL_1, INT_1, FINSET_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, FINSEQ_1, SEQ_1, FINSEQ_2, FRAENKEL, FUNCOP_1, PARTFUN1,
+      GR_CY_1, FINSEQ_4, GROUP_4, RELAT_1, UNIALG_1, COMPUT_1, XXREAL_0, NAT_1;
  constructors DOMAIN_1, FRAENKEL, REAL_1, NAT_1, BINOP_2, FINSEQ_4, FINSOP_1,
-      PRE_CIRC, GROUP_4, GR_CY_1, COMPUT_1, VALUED_1, PARTFUN1, SEQ_1;
+      PRE_CIRC, GROUP_4, GR_CY_1, COMPUT_1, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FINSET_1, NUMBERS, XREAL_0, INT_1, COMPUT_1, VALUED_1, FUNCT_2;
+      FINSET_1, NUMBERS, XREAL_0, INT_1, COMPUT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, GROUP_4, GR_CY_1, COMPUT_1, FUNCOP_1, VALUED_1;
+ definitions TARSKI, GROUP_4, GR_CY_1, COMPUT_1, FUNCOP_1;
  theorems FUNCOP_1, FUNCT_4, ZFMISC_1, TARSKI, FUNCT_2, INT_1, MCART_1, NAT_1,
       RELSET_1, PARTFUN1, DOMAIN_1, GR_CY_1, CQC_THE1, ENUMSET1, FINSEQ_2,
       FINSEQ_1, FINSEQ_3, REAL_1, FUNCT_1, RELAT_1, FINSEQ_6, FINSEQ_7,
       COMPUT_1, FINSEQ_4, ORDINAL1, XBOOLE_0, XBOOLE_1, NUMBERS, XREAL_1,
       FUNCT_7, FINSOP_1, XXREAL_0, RVSUM_1;
- schemes RECDEF_1, NAT_1, FUNCT_2, BINOP_2;
+ schemes NAT_1, FUNCT_2, BINOP_2;
 
 begin :: Preliminaries
 
@@ -67,8 +66,7 @@ definition
   proof
     set p = a .--> b;
 A1: dom p = {a} & rng p ={b} by FUNCOP_1:14,19;
-    p is PartFunc of dom p, rng p by PARTFUN1:24;
-    hence p is PartFunc of X, Y by A1,PARTFUN1:32;
+    thus p is PartFunc of X, Y by A1,PARTFUN1:32;
   end;
 end;
 
@@ -308,14 +306,14 @@ definition
   func Computation s -> Function of NAT,
   [: the States of T, INT, Funcs(INT,the Symbols of T) :] means
   :Def8:
-  it.0 = s & for i holds it.(i+1) = Following(it.i);
+  it.0 = s & for i being Nat holds it.(i+1) = Following(it.i);
   existence
   proof
     deffunc U(set,All-State of T) = Following $2;
     consider f being Function of NAT,
     [: the States of T, INT, Funcs(INT,the Symbols of T) :] such that
-A1: f.0 = s & for n being Element of NAT holds f.(n+1) = U(n,f.n)
-    from RECDEF_1:sch 4;
+A1: f.0 = s & for n being Nat holds f.(n+1) = U(n,f.n)
+    from NAT_1:sch 12;
     take f;
     thus thesis by A1;
   end;
@@ -323,12 +321,14 @@ A1: f.0 = s & for n being Element of NAT holds f.(n+1) = U(n,f.n)
   proof
     let F1,F2 be Function of NAT,
     [: the States of T, INT, Funcs(INT,the Symbols of T) :] such that
-A2: F1.0 = s & for i holds F1.(i+1) = Following(F1.i) and
-A3: F2.0 = s & for i holds F2.(i+1) = Following(F2.i);
+A2: F1.0 = s & for i being Nat holds F1.(i+1) = Following(F1.i) and
+A3: F2.0 = s & for i being Nat holds F2.(i+1) = Following(F2.i);
     deffunc U(set,All-State of T) = Following $2;
-A4: F1.0 = s & for i holds F1.(i+1) = U(i,F1.i) by A2;
-A5: F2.0 = s & for i holds F2.(i+1) = U(i,F2.i) by A3;
-    thus F1 = F2 from RECDEF_1:sch 12(A4,A5);
+A4: F1.0 = s by A2;
+B4: for i being Nat holds F1.(i+1) = U(i,F1.i) by A2;
+A5: F2.0 = s by A3;
+B5: for i being Nat holds F2.(i+1) = U(i,F2.i) by A3;
+    thus F1 = F2 from NAT_1:sch 16(A4,B4,A5,B5);
   end;
 end;
 
@@ -1227,7 +1227,7 @@ A67:  now
           .=t3 by A65,Th28;
       end;
 A68:  offset TRAN(sk)=-1 by A66,MCART_1:68; thus
-      (Computation sp4).(k+1)=Following sk by A61,A62,A63,Def8,XXREAL_0: 2
+      (Computation sp4).(k+1)=Following sk by A61,A62,A63,Def8,XXREAL_0:2
         .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk), t3] by A67,Lm3
         .= [4, Head(sk)+ offset TRAN(sk), t3] by A66,MCART_1:68
         .= [4, j2-k+-1, t3] by A68,MCART_1:68
@@ -1677,7 +1677,7 @@ A52:  now
       end;
 A53:  offset TRAN(sk)=-1 by A51,MCART_1:68;
       hereby thus
-        (Computation sp3).(k+1)=Following sk by A45,A46,A47,Def8,XXREAL_0: 2
+        (Computation sp3).(k+1)=Following sk by A45,A46,A47,Def8,XXREAL_0:2
           .= [(TRAN(sk))`1, Head(sk)+ offset TRAN(sk), t3] by A52,Lm7
           .= [3, Head(sk)+ offset TRAN(sk), t3] by A51,MCART_1:68
           .= [3, nk-k+-1, t3] by A53,MCART_1:68
@@ -2163,8 +2163,7 @@ A6:   k < m by NAT_1:13;
       consider t1 being Tape of tm such that
 A7:   (Computation s).k=[p,d+k,t1] &
       (for i be Integer st d <= i & i < d+k holds t1.i=0) &
-      (for i be Integer st d > i or i >= d+k holds t1.i=t.i) by A4,A5,
-      NAT_1:13;
+      (for i be Integer st d > i or i >= d+k holds t1.i=t.i) by A4,A5,NAT_1:13;
       set dk=d+k;
       reconsider ik=d+k as Element of INT by INT_1:def 2;
       set sk=[p,ik,t1];
@@ -2304,8 +2303,7 @@ A17: offset TRAN(s2)=1 by A15,MCART_1:68;
   set j1=h+1+m1+1;
   reconsider k1=j1 as Element of INT by INT_1:def 2;
   set s3= [p2,k1,t1];
-A18: Following s2 = [(TRAN(s2))`1, Head(s2)+offset TRAN(s2),t1] by A13,A16,
-  Lm13
+A18: Following s2 = [(TRAN(s2))`1, Head(s2)+offset TRAN(s2),t1] by A13,A16,Lm13
     .= [2, Head(s2)+ offset TRAN(s2),t1] by A15,MCART_1:68
     .= s3 by A13,A17,MCART_1:68;
 A19: (the Tran of U3(n)Turing).[p2,1] =[p2,0,1] by Def22,Th41;
@@ -2814,7 +2812,7 @@ A16:  s3i1=Following s3i by Def8
       hence s1i1`2= Head(s3i) + offset f by A7,A8,A9,A15,MCART_1:def 6
       ,XXREAL_0:2
         .= s3i1`2 by A16,MCART_1:def 6; thus
-      s1i1`3= ss3 +* (h .--> (g`2)) by A7,A8,A9,A15,MCART_1:def 7 ,XXREAL_0:2
+      s1i1`3= ss3 +* (h .--> (g`2)) by A7,A8,A9,A15,MCART_1:def 7,XXREAL_0:2
         .= s3i1`3 by A7,A8,A9,A14,A16,MCART_1:def 7,XXREAL_0:2;
     end;
     hence P[i+1];
@@ -2886,8 +2884,7 @@ A30:  ski1=Following ski by Def8
       hence s2i1`2= Head(ski) + offset f by A21,A22,A23,A29,MCART_1:def 6
       ,XXREAL_0:2
         .= ski1`2 by A30,MCART_1:def 6; thus
-      s2i1`3= ssk +* (h .--> (g`2)) by A21,A22,A23,A29,MCART_1:def 7
-      ,XXREAL_0:2
+      s2i1`3= ssk +* (h .--> (g`2)) by A21,A22,A23,A29,MCART_1:def 7,XXREAL_0:2
         .= ski1`3 by A21,A22,A23,A28,A30,MCART_1:def 7,XXREAL_0:2;
     end;
     hence Q[i+1];
@@ -2898,7 +2895,7 @@ A30:  ski1=Following ski by Def8
 A31: [pF,s2m`1]=skm`1 & s2m`2=skm`2 & s2m`3=skm`3;
 A32: (Computation s3).(k+m)=skm by Th13;
   then
-A33: ((Computation s3).(k+m))`1=the AcceptS of tm1 ';' tm2 by A18,A31, Def32;
+A33: ((Computation s3).(k+m))`1=the AcceptS of tm1 ';' tm2 by A18,A31,Def32;
   hence s3 is Accept-Halt by Def9;
   hence (Result s3)`2=(Result s2)`2 &
   (Result s3)`3=(Result s2)`3 by A18,A31,A32,A33,Def10;

@@ -14,8 +14,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -23,6 +23,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="NEWTON"/>
 </Signature>
 <RCluster>
@@ -43,6 +44,12 @@
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -76,7 +83,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="125">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -100,7 +107,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -121,7 +128,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -142,7 +149,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -158,7 +165,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -178,7 +185,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -199,7 +206,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -215,7 +222,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -224,7 +231,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="142">
+<Func kind="K" nr="143">
 <Num nr="2"/>
 </Func>
 <Cluster>
@@ -233,7 +240,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="141"/>
+<Func kind="K" nr="142"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="22" value="false"/>

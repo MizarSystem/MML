@@ -46,7 +46,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster>
 <Adjective nr="85">
 <Func kind="F" nr="1"/>
@@ -73,7 +73,7 @@
 <Var nr="2"/>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster>
 <Adjective nr="85">
 <Func kind="F" nr="1"/>
@@ -105,7 +105,7 @@
 </Not>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster>
 <Adjective nr="85">
 <Func kind="F" nr="1"/>

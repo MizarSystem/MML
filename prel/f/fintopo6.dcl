@@ -12,10 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -62,7 +62,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -79,9 +79,9 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="145">
 <LocusVar nr="1"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -134,7 +134,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="96">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -157,7 +157,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

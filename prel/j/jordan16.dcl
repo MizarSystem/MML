@@ -27,6 +27,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
@@ -47,7 +48,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="283">
+<Func kind="K" nr="293">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -95,7 +96,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="292">
+<Func kind="K" nr="302">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

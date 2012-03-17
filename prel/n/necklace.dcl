@@ -9,11 +9,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -173,7 +173,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -185,7 +185,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 <CCluster>

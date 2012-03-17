@@ -14,15 +14,13 @@ environ
       RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, AMI_1, SCMFSA_2, SCMFSA6A,
       SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A,
       INT_2, XXREAL_0;
- constructors XXREAL_0, NAT_1, INT_2, PRE_FF, AMI_5, SCMFSA6A, SCMFSA6B,
-      SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, VALUED_1, PARTFUN1,
-      SEQ_1;
+ constructors XXREAL_0, NAT_1, INT_2, PRE_FF, SCMFSA6A, SCMFSA6B, SCMFSA6C,
+      SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, SEQ_1, SCMNORM;
  registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMFSA_2,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1,
-      XBOOLE_0, VALUED_1, FUNCT_2;
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SF_MASTR,
+      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SCMFSA9A, SUBSET_1, VALUED_1;
+ definitions SCMFSA9A, SUBSET_1;
  theorems TARSKI, ZFMISC_1, REAL_1, ABSVALUE, NAT_1, INT_1, FUNCT_4, PRE_FF,
       SCMFSA_2, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
       SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCMFSA9A, XBOOLE_0, XBOOLE_1,
@@ -67,11 +65,11 @@ A6: Is+*(I +* Start-At insloc 0) is halting by A2,SCMFSA7B:def 8;
 A7: dom (s | IL) misses D by SCMFSA8A:3;
 A8: IExec(I, s) | D = (Result(sI) +* s | IL) | D by SCMFSA6B:def 1
     .= (Result(sI)) | D by A7,FUNCT_4:94
-    .= (Computation sI).(LifeSpan sI) | D by A4,A6,AMI_1:122;
-  for m st m < (LifeSpan sI) holds IC (Computation sI).m in dom I
+    .= Computation(sI,LifeSpan sI) | D by A4,A6,AMI_1:122;
+  for m st m < (LifeSpan sI) holds IC Computation(sI,m) in dom I
   by A1,A4,SCMFSA7B:def 7;
   then
-A9: (Computation sI).(LifeSpan sI).a = sI.a by A3,A5,SF_MASTR:69;
+A9: Computation(sI,LifeSpan sI).a = sI.a by A3,A5,SF_MASTR:69;
   sI | D = Is | D by SCMFSA8B:5;
   then sI.a = Is.a by SCMFSA6A:38;
   hence IExec(I, s).a = (Initialize s).a by A8,A9,SCMFSA6A:38;
@@ -98,11 +96,11 @@ A6: Is+*(I +* Start-At insloc 0) is halting by A2,SCMFSA7B:def 8;
 A7: dom (s | IL) misses D by SCMFSA8A:3;
 A8: IExec(I, s) | D = (Result(sI) +* s | IL) | D by SCMFSA6B:def 1
     .= (Result(sI)) | D by A7,FUNCT_4:94
-    .= (Computation sI).(LifeSpan sI) | D by A4,A6,AMI_1:122;
-  for m st m < (LifeSpan sI) holds IC (Computation sI).m in dom I
+    .= Computation(sI,LifeSpan sI) | D by A4,A6,AMI_1:122;
+  for m st m < (LifeSpan sI) holds IC Computation(sI,m) in dom I
   by A1,A4,SCMFSA7B:def 7;
   then
-A9: (Computation sI).(LifeSpan sI).a = sI.a by A3,A5,SF_MASTR:71;
+A9: Computation(sI,LifeSpan sI).a = sI.a by A3,A5,SF_MASTR:71;
   sI | D = Is | D by SCMFSA8B:5;
   then sI.a = Is.a by SCMFSA6A:38;
   hence IExec(I, s).a = (Initialize s).a by A8,A9,SCMFSA6A:38;
@@ -390,7 +388,6 @@ proof
   set ST = StepTimes(a, I, s);
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set Is = Initialize s;
-  set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a, Is));
   a in {a} by TARSKI:def 1;
   then a in {a} \/ UsedIntLoc I by XBOOLE_0:def 2;
   then
@@ -409,7 +406,6 @@ proof
   set ST = StepTimes(a, I, s);
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set Is = Initialize s;
-  set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a, Is));
   thus ST.0.f = Exec(au := a, Is).f by SCMFSA_9:def 5
     .= Is.f by SCMFSA_2:89
     .= s.f by SCMFSA6C:3;
@@ -597,7 +593,6 @@ A1: s.intloc 0 = 1;
   set ST = StepTimes(a, I, s);
   set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
   set Is = Initialize s;
-  set SW = StepWhile>0 (au, I ';' SubFrom(au, intloc 0), Exec(au := a, Is));
   set UILI = UsedIntLoc I;
 A2: (Initialize s) | D = s | D by A1,SCMFSA8C:27;
 A3: now
@@ -870,7 +865,7 @@ A38: IExec(WH, s1) | D = ISW.ExitsAtWhile>0(au, ISu, Is1) | D
 A39: ExitsAtWhile>0(au, ISu, Is1) = K and
 A40: ISW.K.au <= 0 and
 A41: (for i being Element of NAT st ISW.i.au <= 0 holds K <= i) and
-  (Computation (Is1 +* (WH +* SAt))). (LifeSpan (Is1 +* (WH +* SAt))) | D
+  Computation((Is1 +* (WH +* SAt)),(LifeSpan (Is1 +* (WH +* SAt)))) | D
   = ISW.K | D by A19,A23,SCMFSA9A:def 6;
 A42: ISW.k | D = SW.k | D by A6,A7,SCMFSA9A:40;
 A43: ISW.K | D = SW.K | D by A6,A7,SCMFSA9A:40;

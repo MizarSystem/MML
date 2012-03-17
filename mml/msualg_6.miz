@@ -10,23 +10,21 @@ environ
       AMI_1, CARD_3, QC_LANG1, ZF_REFLE, MOD_4, ALG_1, TDGROUP, FUNCT_4,
       REWRITE1, FINSEQ_1, FUNCT_7, FUNCT_2, MSUALG_4, CIRCUIT2, EQREL_1,
       MCART_1, MSUALG_5, MSUALG_6, FINSEQ_4, PARTFUN1, RELAT_2, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-      MCART_1, STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE, FUNCOP_1,
-      MSUALG_1, MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
- constructors FRAENKEL, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, REWRITE1, FUNCT_7,
-      MSUALG_3, MSUALG_5, VALUED_1, PARTFUN1, SEQ_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
+      STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, PBOOLE, FUNCOP_1, MSUALG_1,
+      MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7, XXREAL_0;
+ constructors XXREAL_0, NAT_1, NAT_D, REWRITE1, FUNCT_7, MSUALG_3, MSUALG_5;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
       FRAENKEL, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, PBOOLE, REWRITE1, FUNCT_7,
-      STRUCT_0, MSUALG_1, MSUALG_3, MSUALG_4, ALTCAT_1, MSUALG_5, ORDINAL1,
-      VALUED_1;
+      STRUCT_0, MSUALG_1, MSUALG_3, MSUALG_4, ALTCAT_1, MSUALG_5, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RELAT_1, REWRITE1, FUNCT_1, PBOOLE, MSUALG_3, MSUALG_4,
-      FUNCT_7, FUNCOP_1, VALUED_1;
+      FUNCT_7, FUNCOP_1;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, RELAT_1, RELSET_1, EQREL_1,
       FUNCT_1, FINSEQ_1, FINSEQ_3, FUNCT_2, CARD_3, FUNCT_7, REWRITE1, PBOOLE,
       PRALG_2, MSUALG_3, MSUALG_4, MSUALG_5, FINSEQ_5, XBOOLE_0, PARTFUN1,
-      RELAT_2, ORDERS_1, XREAL_1, XXREAL_0, ORDINAL1;
+      RELAT_2, ORDERS_1, XREAL_1, XXREAL_0, ORDINAL1, CARD_1, CARD_2;
  schemes NAT_1, RECDEF_1, RELSET_1, FUNCT_1, FINSEQ_1, CARD_3, CLASSES1,
       PBOOLE, PUA2MSS1;
 
@@ -596,7 +594,7 @@ A2: for i being (Element of NAT), f being Function,
   suppose
 A3: p = {};
     then compose(p, (the Sorts of A).s1) = id ((the Sorts of A).s1) &
-    len p = 0 by FINSEQ_1:25,FUNCT_7:41;
+    len p = 0 by CARD_1:47,FUNCT_7:41;
     hence thesis by A1,A3;
   end;
   suppose p <> {};
@@ -615,79 +613,81 @@ A7: dom q = Seg len q & dom p = Seg len p by FINSEQ_1:def 3;
     deffunc F(set) = (the Sorts of A).(q.$1);
     consider pp being FinSequence such that
 A8: len pp = len q and
-A9: for i being Nat st i in Seg len q holds pp.i = F(i) from FINSEQ_1:sch 2;
-A10: 1 in dom q & dom pp = Seg len q by A8,FINSEQ_1:def 3,FINSEQ_5:6;
+A9: for i being Nat st i in dom pp holds pp.i = F(i) from FINSEQ_1:sch 2;
+A10: dom pp = Seg len q by A8,FINSEQ_1:def 3;
+A11: 1 in dom q & dom pp = Seg len q by A8,FINSEQ_1:def 3,FINSEQ_5:6;
     defpred P[Element of NAT] means $1 in dom pp implies pp.$1 is not empty;
-A11: P[0] by FINSEQ_3:27;
-A12: for i be Element of NAT st P[i] holds P[(i+1)]
+A12: P[0] by FINSEQ_3:27;
+A13: for i be Element of NAT st P[i] holds P[(i+1)]
     proof
       let i be Element of NAT such that i in dom pp implies pp.i is not empty
       and
-A13:  i+1 in dom pp;
-      i <= i+1 & i+1 <= len pp by A13,FINSEQ_3:27,NAT_1:11;
+A14:  i+1 in dom pp;
+      i <= i+1 & i+1 <= len pp by A14,FINSEQ_3:27,NAT_1:11;
       then
-A14:  i <= len pp by XXREAL_0:2;
+A15:  i <= len pp by XXREAL_0:2;
       per cases;
       suppose i = 0;
-        hence pp.(i+1) is not empty by A6,A9,A10,A13;
+        hence pp.(i+1) is not empty by A6,A9,A14;
       end;
       suppose i > 0;
         then i >= 0+1 by NAT_1:13;
         then
-A15:    i in dom pp by A14,FINSEQ_3:27;
+A16:    i in dom pp by A15,FINSEQ_3:27;
         then
-A16:    i in dom p by A1,A8,A13,FUNCT_7:24;
+A17:    i in dom p by A1,A8,A14,FUNCT_7:24;
         reconsider f = p.i as Function;
-        [q.i,q.(i+1)] in TranslationRel S by A7,A10,A13,A15,REWRITE1:def 2;
+        [q.i,q.(i+1)] in TranslationRel S by A7,A11,A14,A16,REWRITE1:def 2;
 
 then reconsider s1 = q.i, s2 = q.(i+1) as SortSymbol of S by ZFMISC_1:106;
         f is_e.translation_of A,s1,s2 & pp.(i+1) = (the Sorts of A).s2
-        by A2,A9,A10,A13,A16;
+        by A2,A9,A14,A17;
         hence pp.(i+1) is not empty by Th11;
       end;
     end;
-A17: for i being Element of NAT holds P[i] from NAT_1:sch 1(A11,A12);
-A18: pp is non-empty
+A18: for i being Element of NAT holds P[i] from NAT_1:sch 1(A12,A13);
+A19: pp is non-empty
     proof
       let x be set;
       assume x in dom pp;
-      hence pp.x is non empty by A17;
+      hence pp.x is non empty by A18;
     end;
-    [1,pp.1] in pp by A7,A10,FUNCT_1:def 4;
-    then reconsider pp as non empty non-empty FinSequence by A18;
+    [1,pp.1] in pp by A7,A11,FUNCT_1:def 4;
+    then reconsider pp as non empty non-empty FinSequence by A19;
     p is FuncSequence of pp
     proof thus len p+1 = len pp by A1,A8;
       let j be Element of NAT;
       assume
-A19:  j in dom p;
+A20:  j in dom p;
       reconsider f = p.j as Function;
-A20:  j >= 1 & j <= len p by A7,A19,FINSEQ_1:3;
+A21:  j >= 1 & j <= len p by A7,A20,FINSEQ_1:3;
       then j <= len q & j+1 <= len q & j+1 >= 1 by A1,NAT_1:13,XREAL_1:8;
       then
-A21:  j in Seg len q & j+1 in Seg len q by A20,FINSEQ_1:3;
+A22:  j in Seg len q & j+1 in Seg len q by A21,FINSEQ_1:3;
       then [q.j,q.(j+1)] in TranslationRel S by A7,REWRITE1:def 2;
 
 then reconsider s1 = q.j, s2 = q.(j+1) as SortSymbol of S by ZFMISC_1:106;
       set i = j;
       p.j = f & i = j &
-      s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,s1,s2 by A2,A19;
+      s1 = q.i & s2 = q.(i+1) & f is_e.translation_of A,s1,s2 by A2,A20;
       then
-A22:  p.j is Function of (the Sorts of A).s1,(the Sorts of A).s2 &
+A23:  p.j is Function of (the Sorts of A).s1,(the Sorts of A).s2 &
       (the Sorts of A).s2 <> {} by Th11;
-      pp.j = (the Sorts of A).s1 & pp.(j+1) = (the Sorts of A).s2 by A9,A21;
-      hence p.j in Funcs(pp.j, pp.(j+1)) by A22,FUNCT_2:11;
+      pp.j = (the Sorts of A).s1 & pp.(j+1) = (the Sorts of A).s2 by A9,A22,A10
+;
+      hence p.j in Funcs(pp.j, pp.(j+1)) by A23,FUNCT_2:11;
     end;
     then reconsider p' = p as FuncSequence of pp;
     1 in dom q & len q in dom q by FINSEQ_5:6;
     then
-A23: pp.1 = (the Sorts of A).s1 & pp.len pp = (the Sorts of A).s2 &
-    pp.1 <> {} & pp.len pp <> {} by A1,A7,A8,A9,A10,A17;
+A24: pp.1 = (the Sorts of A).s1 & pp.len pp = (the Sorts of A).s2 &
+    pp.1 <> {} & pp.len pp <> {} by A1,A7,A8,A9,A11,A18;
     then dom compose(p',(the Sorts of A).s1) = (the Sorts of A).s1 &
     rng compose(p',(the Sorts of A).s1) c= (the Sorts of A).s2 by FUNCT_7:69;
     hence compose(p, (the Sorts of A).s1) is
-    Function of (the Sorts of A).s1, (the Sorts of A).s2 by A23,FUNCT_2:def 1
+    Function of (the Sorts of A).s1, (the Sorts of A).s2 by A24,FUNCT_2:def 1
     ,RELSET_1:11;
-    thus thesis by A23;
+    thus thesis by A24;
   end;
 end;
 
@@ -812,7 +812,8 @@ proof
   thus TranslationRel S reduces s,s by REWRITE1:13;
 A1: id ((the Sorts of A).s) = compose({}, (the Sorts of A).s) by FUNCT_7:41;
 A2: <*s*> is RedSequence of TranslationRel S by REWRITE1:7;
-A3: len <*s*> = 0+1 & len {} = 0 & <*s*>.1 = s by FINSEQ_1:25,57;
+A3: len <*s*> = 0+1 & len {} = 0 & <*s*>.1 = s
+by CARD_1:47,FINSEQ_1:57;
   for i being (Element of NAT), f being Function,
   s1,s2 being SortSymbol of S st
   i in dom {} & f = {}.i & s1 = <*s*>.i & s2 = <*s*>.(i+1)
@@ -903,7 +904,7 @@ A13: q = q1^r2 by A8,A9,A11,FINSEQ_1:45;
   0 <= len r1 & 0 >= len r1 by FINSEQ_1:3,def 3,NAT_1:13;
   then q.1 = r1.1 & r1.1 = q1.1 or len r1 = 0 & {}^q2 = q2
   by A8,A11,FINSEQ_1:47,def 7;
-  hence s1 = q.1 by A3,A6,A11,FINSEQ_1:25;
+  hence s1 = q.1 by A3,A6,A11,CARD_2:59;
   len q2 in dom q2 by FINSEQ_5:6;
   hence s3 = q.len q by A6,A11,A12,FINSEQ_1:def 7;
   let i be Element of NAT;
@@ -1066,12 +1067,13 @@ A18:    k in Seg (i+1);
 A19: for i being Element of NAT holds Q[i] from NAT_1:sch 1(A7,A8);
   per cases;
   suppose p = {};
-    then t = id ((the Sorts of A).s1) & len p = 0 by A4,FINSEQ_1:25,FUNCT_7:
+    then t = id ((the Sorts of A).s1) & len p = 0
+     by A4,CARD_1:47,FUNCT_7:
     41;
     hence P[t,s1,s2] by A1,A5;
   end;
   suppose p <> {};
-    then len p <> 0 by FINSEQ_1:25;
+    then len p <> 0 by CARD_2:59;
     then len p > 0;
     then len p >= 0+1 by NAT_1:13;
     then len p in dom p & dom p = Seg len p & p|dom p = p
@@ -1386,7 +1388,7 @@ A6:   n in dom the_arity_of o by FINSEQ_3:27;
 A7: len p = (len the_arity_of o)+1 and
 A8: p.1 = a' or (len the_arity_of o)+1 = 0 and
 A9: for i being Element of NAT st 1 <= i & i < (len the_arity_of o)+1
-    holds P[i,p.i,p.(i+1)] from RECDEF_1:sch 6(A5);
+    holds P[i,p.i,p.(i+1)] from RECDEF_1:sch 4(A5);
     defpred P[Element of NAT] means $1 <= len the_arity_of o implies
     ex c being Element of Args(o,A) st c = p.($1+1) &
     (for j being Element of NAT st j in dom the_arity_of o & j > $1
@@ -1881,7 +1883,7 @@ A4: for Q being invariant ManySortedRelation of A st R c= Q holds Q2 c= Q;
     consider Q being ManySortedRelation of the Sorts of A such that
 A5: for s being SortSymbol of S, a,b being Element of A,s holds
     [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
-    reconsider R,Q as ManySortedRelation of A;
+    reconsider Q as ManySortedRelation of A;
     reconsider Q as invariant ManySortedRelation of A by A5,Lm1;
     take Q; thus thesis by A5,Lm1;
   end;
@@ -2043,7 +2045,7 @@ A4: for Q being stable ManySortedRelation of A st R c= Q holds Q2 c= Q;
     consider Q being ManySortedRelation of the Sorts of A such that
 A5: for s being SortSymbol of S, a,b being Element of A,s holds
     [a,b] in Q.s iff Z[s,a,b] from MSRExistence;
-    reconsider R,Q as ManySortedRelation of A;
+    reconsider Q as ManySortedRelation of A;
     reconsider Q as stable ManySortedRelation of A by A5,Lm2;
     take Q; thus thesis by A5,Lm2;
   end;
@@ -2688,7 +2690,7 @@ A4: for Q being EquationalTheory of A st R c= Q holds Q2 c= Q;
     consider P being ManySortedRelation of the Sorts of A such that
 A5: for s being SortSymbol of S for a,b being Element of A,s
     holds [a,b] in P.s iff Z[s,a,b] from MSRExistence;
-    reconsider P,R1 = R as ManySortedRelation of A;
+    reconsider P as ManySortedRelation of A;
     reconsider P as EquationalTheory of A by A5,Th50;
     take P;
     thus R c= P

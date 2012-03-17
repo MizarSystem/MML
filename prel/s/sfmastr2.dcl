@@ -10,27 +10,29 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FRAENKEL"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
+<ArticleID name="AMI_2"/>
+<ArticleID name="SCMFSA_1"/>
 <ArticleID name="SCMFSA_2"/>
 <ArticleID name="SCMFSA_4"/>
 <ArticleID name="SCMFSA7B"/>
@@ -44,50 +46,50 @@
 <Cluster>
 <Adjective nr="20"/>
 <Adjective nr="75">
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="118">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="243"/>
+<Func kind="K" nr="282"/>
 </Adjective>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 </Cluster>
-<Func kind="K" nr="128">
+<Func kind="K" nr="175">
 <Func kind="U" nr="10">
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="118">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="243"/>
+<Func kind="K" nr="282"/>
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="33">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="283">
+<Func kind="K" nr="318">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="20"/>
 <Adjective nr="75">
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
 <Func kind="K" nr="118">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
-<Func kind="K" nr="243"/>
+<Func kind="K" nr="282"/>
 </Adjective>
 <Adjective nr="78"/>
 <Adjective nr="79"/>

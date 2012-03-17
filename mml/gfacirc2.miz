@@ -10,21 +10,21 @@ environ
       FUNCT_5, FUNCOP_1, FINSEQ_1, FINSEQ_2, PBOOLE, MARGREL1, LATTICES,
       ZF_REFLE, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1,
       TWOSCOMP, GFACIRC1, GFACIRC2, ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, NAT_1, MCART_1,
-      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FUNCT_5, FINSEQ_1, FINSEQ_2,
-      PBOOLE, MARGREL1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, MCART_1,
+      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, PBOOLE,
+      NAT_1, MARGREL1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
       FACIRC_1, TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT2,
-      FACIRC_1, TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS;
+ constructors ENUMSET1, XXREAL_0, CIRCUIT2, FACIRC_1, TWOSCOMP, FACIRC_2,
+      GFACIRC1, NAT_1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0, XREAL_0, NAT_1,
       FINSEQ_1, MARGREL1, FINSEQ_2, STRUCT_0, CIRCCOMB, FACIRC_1, CIRCCMB2,
-      FACIRC_2, NUMBERS;
+      FACIRC_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions XBOOLE_0, FACIRC_1, GFACIRC1;
+ definitions FACIRC_1, GFACIRC1;
  theorems TARSKI, ENUMSET1, MCART_1, NAT_1, RELAT_1, ORDINAL1, PBOOLE,
-      XBOOLE_0, XBOOLE_1, XREAL_1, FUNCT_2, FUNCT_5, FUNCOP_1, FINSEQ_1,
-      PRALG_1, CIRCCOMB, FACIRC_1, CIRCCMB2, FACIRC_2, GFACIRC1;
- schemes NAT_1, RECDEF_1, PBOOLE, CIRCCMB2;
+      XBOOLE_0, XBOOLE_1, XREAL_1, FUNCT_2, FUNCOP_1, FINSEQ_1, PRALG_1,
+      CIRCCOMB, FACIRC_1, CIRCCMB2, FACIRC_2, GFACIRC1, CARD_2;
+ schemes NAT_1, PBOOLE, CIRCCMB2;
 
 begin :: 1. Stability of n-bit Generalized Full Adder Circuit (TYPE-0)
 
@@ -57,6 +57,8 @@ begin :: 1. Stability of n-bit Generalized Full Adder Circuit (TYPE-0)
 definition
   let n be Nat;
   let x,y be FinSequence;
+    set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
+    set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
 A1: 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE)
   is unsplit gate`1=arity gate`2isBoolean non void non empty strict;
   func n-BitGFA0Str(x,y) ->
@@ -66,39 +68,35 @@ A1: 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE)
   ex f,h being ManySortedSet of NAT st
   it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-  for n being Element of NAT, S being non empty ManySortedSign, z be set
+  for n being Nat, S being non empty ManySortedSign, z be set
   st S = f.n & z = h.n holds f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
   h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), z);
   uniqueness
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
-    set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
-    set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    reconsider n as Nat;
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA0Str(x .($3+1), y.($3+1), $2);
-    deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
     for S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
     strict non empty ManySortedSign st
     (ex f,h being ManySortedSet of NAT st S1 = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n)) &
     (ex f,h being ManySortedSet of NAT st S2 = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n))
     holds S1 = S2 from CIRCCMB2:sch 9;
     hence thesis;
   end;
   existence
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
-    set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
-    set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc S(set, Element of NAT) = BitGFA0Str(x .($2+1), y.($2+1), $1);
-    deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+    reconsider n as Nat;
+    deffunc S(set, Nat) = BitGFA0Str(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
     ex S being unsplit gate`1=arity gate`2isBoolean
     non void non empty non empty strict ManySortedSign,
     f,h being ManySortedSet of NAT st S = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n
     holds f.(n+1) = S +* S(x,n) & h.(n+1) = o(x,n) from CIRCCMB2:sch 8(A1);
     hence thesis;
@@ -108,7 +106,7 @@ end;
 :: Algebraic Circuit Structure (n-bit) of GFA TYPE-0
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   func n-BitGFA0Circ(x,y) ->
   Boolean gate`2=den strict Circuit of n-BitGFA0Str(x,y) means
@@ -117,7 +115,7 @@ definition
   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
@@ -129,24 +127,24 @@ definition
     set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE);
     set Sn = n-BitGFA0Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA0Str(x .($3+1), y.($3+1), $2);
     deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-    set, Element of NAT) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
-    deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+    set, Nat) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
+    deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
 A1: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
     for A1,A2 being Boolean gate`2=den strict Circuit of Sn st
     (ex f,g,h being ManySortedSet of NAT st Sn= f.n & A1 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n)) &
     (ex f,g,h being ManySortedSet of NAT st Sn = f.n & A2 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n))
@@ -159,28 +157,28 @@ A1: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
     set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE);
     set Sn = n-BitGFA0Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA0Str(x .($3+1), y.($3+1), $2);
     deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-    set, Element of NAT) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
-    deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+    set, Nat) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
+    deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
 A2: for S being unsplit gate`1=arity gate`2isBoolean non void strict
-    non empty ManySortedSign, x being set, n being Element of NAT holds
+    non empty ManySortedSign, x being set, n being Nat holds
     S(S,x,n) is unsplit gate`1=arity gate`2isBoolean non void strict;
 A3: ex f,h being ManySortedSet of NAT st Sn = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n) by Def1;
 A4: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
 A5: for S,S1 being unsplit gate`1=arity gate`2isBoolean non void strict
     non empty ManySortedSign, A being Boolean gate`2=den strict Circuit of S
-    for x being set, n being Element of NAT st S1 = S(S,x,n) holds
+    for x being set, n being Nat st S1 = S(S,x,n) holds
     A(S,A,x,n) is Boolean gate`2=den strict Circuit of S1;
     ex A being Boolean gate`2=den strict Circuit of Sn,
     f,g,h being ManySortedSet of NAT st Sn = f.n & A = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n)
@@ -192,31 +190,30 @@ end;
 :: Ripple Carry Output (c[1..n]) of n-bit GFA (TYPE-0)
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   func n-BitGFA0CarryOutput(x,y) ->
   Element of InnerVertices (n-BitGFA0Str(x,y)) means
   :Def3:
   ex h being ManySortedSet of NAT st
   it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-  for n being Element of NAT holds
-  h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h.n);
+  for n being Nat holds h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h.n);
   uniqueness
   proof
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc o(Element of NAT,set) = GFA0CarryOutput(x .($1+1), y.($1+1), $2);
+    deffunc o(Nat,set) = GFA0CarryOutput(x .($1+1), y.($1+1), $2);
     let o1, o2 be Element of InnerVertices (n-BitGFA0Str(x,y));
     given h1 being ManySortedSet of NAT such that
-A1: o1 = h1.n & h1.0 = o0 & for n being Element of NAT holds
-    h1.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h1.n);
+A1: o1 = h1.n and
+B1: h1.0 = o0 and
+C1: for n being Nat holds h1.(n+1) = o(n,h1.n);
     given h2 being ManySortedSet of NAT such that
-A2: o2 = h2.n & h2.0 = o0 & for n being Element of NAT holds
-    h2.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h2.n);
-A3: dom h1 = NAT & h1.0 = o0 &
-    for n being Element of NAT holds h1.(n+1) = o(n,h1.n) by A1,PBOOLE:def 3;
-A4: dom h2 = NAT & h2.0 = o0 &
-    for n being Element of NAT holds h2.(n+1) = o(n,h2.n) by A2,PBOOLE:def 3;
-    h1 = h2 from RECDEF_1:sch 11(A3,A4);
+A2: o2 = h2.n and
+B2: h2.0 = o0 and
+C2: for n being Nat holds h2.(n+1) = o(n,h2.n);
+A3: dom h1 = NAT by PBOOLE:def 3;
+A4: dom h2 = NAT by PBOOLE:def 3;
+    h1 = h2 from NAT_1:sch 15(A3,B1,C1,A4,B2,C2);
     hence thesis by A1,A2;
   end;
   existence
@@ -225,12 +222,12 @@ A4: dom h2 = NAT & h2.0 = o0 &
     set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
     set Sn = n-BitGFA0Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA0Str(x .($3+1), y.($3+1), $2);
-    deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
     consider f,g being ManySortedSet of NAT such that
 A5: Sn = f.n & f.0 = S0 & g.0 = o0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign, z be set
+A6: for n being Nat, S being non empty ManySortedSign, z be set
     st S = f.n & z = g.n holds f.(n+1) = S(S,z,n) & g.(n+1) = o(z,n) by Def1;
     defpred P[Nat] means ex S being non empty ManySortedSign
     st S = f.$1 & g.$1 in InnerVertices S;
@@ -238,9 +235,9 @@ A6: for n being Element of NAT, S being non empty ManySortedSign, z be set
     then o0 in InnerVertices S0 by TARSKI:def 1;
     then
 A7: P[0] by A5;
-A8: for i being Element of NAT st P[i] holds P[i+1]
+A8: for i being Nat st P[i] holds P[i+1]
     proof
-      let i be Element of NAT such that
+      let i be Nat such that
 A9:   ex S being non empty ManySortedSign
       st S = f.i & g.i in InnerVertices S and
 A10:  for S being non empty ManySortedSign
@@ -255,17 +252,17 @@ A11:  S = f.i & g.i in InnerVertices S by A9;
       g.(i+1) = GFA0CarryOutput(x .(i+1), y.(i+1), g.i) by A6,A11,FACIRC_1:22;
       hence contradiction by A10;
     end;
-    for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
+    for i being Nat holds P[i] from NAT_1:sch 2(A7,A8);
 
 then ex S being non empty ManySortedSign st S = f.n & g.n in InnerVertices S;
     then reconsider o = g.n as Element of InnerVertices Sn by A5;
     take o, g; thus o = g.n & g.0 = o0 by A5;
-    let i be Element of NAT;
+    let i be Nat;
 A12: ex S being non empty ManySortedSign, x being set
     st S = f.0 & x = g.0 & P[S, x, 0] by A5;
-A13: for n being Element of NAT, S being non empty ManySortedSign, x being set
+A13: for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = g.n & P[S, x, n] holds P[S(S,x,n), o(x, n), n+1];
-    for n being Element of NAT ex S being non empty ManySortedSign
+    for n being Nat ex S being non empty ManySortedSign
     st S = f.n & P[S,g.n,n] from CIRCCMB2:sch 2(A12,A6,A13);
     then ex S being non empty ManySortedSign st S = f.i;
     hence thesis by A6;
@@ -282,13 +279,13 @@ theorem Th1:
   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
   g.(n+1) = A +* BitGFA0Circ(x .(n+1), y.(n+1), z) &
   h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), z)
-  for n being Element of NAT holds
+  for n being Nat holds
   n-BitGFA0Str(x,y) = f.n & n-BitGFA0Circ(x,y) = g.n &
   n-BitGFA0CarryOutput(x,y) = h.n
 proof
@@ -296,24 +293,24 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-  deffunc S(non empty ManySortedSign,set,Element of NAT)
+  deffunc S(non empty ManySortedSign,set,Nat)
   = $1 +* BitGFA0Str(x .($3+1), y.($3+1), $2);
   deffunc A(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
-  deffunc o(set, Element of NAT) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
-  deffunc F(Element of NAT, set) = GFA0CarryOutput(x .($1+1), y.($1+1), $2);
+  set, Nat) = $2 +* BitGFA0Circ(x .($4+1), y.($4+1), $3);
+  deffunc o(set, Nat) = GFA0CarryOutput(x .($2+1), y.($2+1), $1);
+  deffunc F(Nat, set) = GFA0CarryOutput(x .($1+1), y.($1+1), $2);
   assume that
 A1: f.0 = f0 & g.0 = g0 and
 A2: h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds f.(n+1) = S(S,z,n) &
   g.(n+1) = A(S,A,z,n) & h.(n+1) = o(z,n);
-  let n be Element of NAT;
+  let n be Nat;
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A4: n-BitGFA0Str(x,y) = f1.n & n-BitGFA0Circ(x,y) = g1.n and
 A5: f1.0 = f0 & g1.0 = g0 & h1.0 = h0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign,
+A6: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f1.n & A = g1.n & z = h1.n holds
   f1.(n+1) = S(S,z,n) & g1.(n+1) = A(S,A,z,n) & h1.(n+1) = o(z,n) by Def2;
@@ -321,26 +318,26 @@ A7: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
   st S = f.0 & A = g.0 by A1;
 A8: f.0 = f1.0 & g.0 = g1.0 & h.0 = h1.0 by A1,A2,A5;
 A9: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-  for z being set, n being Element of NAT holds
+  for z being set, n being Nat holds
   A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
   f = f1 & g = g1 & h = h1 from CIRCCMB2:sch 14(A7,A8,A3,A6,A9);
   hence n-BitGFA0Str(x,y) = f.n & n-BitGFA0Circ(x,y) = g.n by A4;
-A10: for n being Element of NAT, S being non empty ManySortedSign, z being set
+A10: for n being Nat, S being non empty ManySortedSign, z being set
   st S = f.n & z = h.n holds f.(n+1) = S(S,z,n) &
   h.(n+1) = o(z,n) from CIRCCMB2:sch 15(A1,A3,A9);
 A11: f.0 = f0 by A1;
-  for n being Element of NAT, z being set st z = h.n
+X:for n being Nat, z being set st z = h.n
   holds h.(n+1) = o(z,n) from CIRCCMB2:sch 3(A11,A10);
-  then
-A12: dom h = NAT & h.0 = h0 &
-  for n being Element of NAT holds h.(n+1) = F(n,h.n) by A2,PBOOLE:def 3;
+A12: dom h = NAT by PBOOLE:def 3;
+B12: h.0 = h0 by A2;
+C12: for n being Nat holds h.(n+1) = F(n,h.n) by X;
   consider h1 being ManySortedSet of NAT such that
 A13: n-BitGFA0CarryOutput(x,y) = h1.n and
-A14: h1.0 = h0 & for n being Element of NAT holds
-  h1.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h1.n) by Def3;
-A15: dom h1 = NAT & h1.0 = h0 &
-  for n being Element of NAT holds h1.(n+1) = F(n,h1.n) by A14,PBOOLE:def 3;
-  h = h1 from RECDEF_1:sch 11(A12,A15);
+A14: h1.0 = h0 & for n being Nat holds h1.(n+1) = F(n,h1.n) by Def3;
+A15: dom h1 = NAT by PBOOLE:def 3;
+B15: h1.0 = h0 by A14;
+C15: for n being Nat holds h1.(n+1) = F(n,h1.n) by A14;
+  h = h1 from NAT_1:sch 15(A12,B12,C12,A15,B15,C15);
   hence thesis by A13;
 end;
 
@@ -360,7 +357,7 @@ proof
 A1: 0-BitGFA0Str(a,b) = f.0 & 0-BitGFA0Circ(a,b) = g.0 and
 A2: f.0 = f0 and
 A3: g.0 = g0 and h.0 = h0 and
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA0Str(a .(n+1), b.(n+1), z) &
@@ -392,7 +389,7 @@ A1: c = h0;
 A2: 1-BitGFA0Str(a,b) = f.1 and
 A3: 1-BitGFA0Circ(a,b) = g.1 and
 A4: f.0 = f0 & g.0 = g0 & h.0 = c and
-A5: for n being Element of NAT, S being non empty ManySortedSign,
+A5: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n
   holds f.(n+1) = S +* BitGFA0Str(a.(n+1),b.(n+1), z) &
@@ -422,13 +419,13 @@ end;
 :: input signals p[1..n] ^ p[n+1].
 
 theorem Th5:
-  for n be Element of NAT for p,q being FinSeqLen of n
+  for n be Nat for p,q being FinSeqLen of n
   for p1,p2, q1,q2 being FinSequence holds
   n-BitGFA0Str(p^p1, q^q1) = n-BitGFA0Str(p^p2, q^q2) &
   n-BitGFA0Circ(p^p1, q^q1) = n-BitGFA0Circ(p^p2, q^q2) &
   n-BitGFA0CarryOutput(p^p1, q^q1) = n-BitGFA0CarryOutput(p^p2, q^q2)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let p,q be FinSeqLen of n;
   let p1,p2, q1,q2 be FinSequence;
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
@@ -437,45 +434,45 @@ proof
   set Sn1 = n-BitGFA0Str(p^p1,q^q1);
   set An1 = n-BitGFA0Circ(p^p1,q^q1);
   set On1 = n-BitGFA0CarryOutput(p^p1, q^q1);
-  deffunc S1(non empty ManySortedSign,set, Element of NAT)
+  deffunc S1(non empty ManySortedSign,set, Nat)
   = $1 +* BitGFA0Str((p^p1) .($3+1), (q^q1).($3+1), $2);
   deffunc A1(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA0Circ((p^p1) .($4+1), (q^q1).($4+1), $3);
-  deffunc o1(set, Element of NAT)
+  set, Nat) = $2 +* BitGFA0Circ((p^p1) .($4+1), (q^q1).($4+1), $3);
+  deffunc o1(set, Nat)
   = GFA0CarryOutput((p^p1) .($2+1), (q^q1).($2+1), $1);
-  deffunc F1(Element of NAT, set)
+  deffunc F1(Nat, set)
   = GFA0CarryOutput((p^p1) .($1+1), (q^q1).($1+1), $2);
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A1: Sn1 = f1.n & An1 = g1.n and
 A2: f1.0 = f0 & g1.0 = g0 & h1.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f1.n & A = g1.n & z = h1.n holds f1.(n+1) = S1(S,z,n) &
   g1.(n+1) = A1(S,A,z,n) & h1.(n+1) = o1(z,n) by Def2;
   set Sn2 = n-BitGFA0Str(p^p2,q^q2);
   set An2 = n-BitGFA0Circ(p^p2,q^q2);
   set On2 = n-BitGFA0CarryOutput(p^p2, q^q2);
-  deffunc S2(non empty ManySortedSign,set, Element of NAT)
+  deffunc S2(non empty ManySortedSign,set, Nat)
   = $1 +* BitGFA0Str((p^p2) .($3+1), (q^q2).($3+1), $2);
   deffunc A2(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA0Circ((p^p2) .($4+1), (q^q2).($4+1), $3);
-  deffunc o2(set, Element of NAT)
+  set, Nat) = $2 +* BitGFA0Circ((p^p2) .($4+1), (q^q2).($4+1), $3);
+  deffunc o2(set, Nat)
   = GFA0CarryOutput((p^p2) .($2+1), (q^q2).($2+1), $1);
-  deffunc F2(Element of NAT, set)
+  deffunc F2(Nat, set)
   = GFA0CarryOutput((p^p2) .($1+1), (q^q2).($1+1), $2);
   consider f2,g2,h2 being ManySortedSet of NAT such that
 A4: Sn2 = f2.n & An2 = g2.n and
 A5: f2.0 = f0 & g2.0 = g0 & h2.0 = h0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign,
+A6: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f2.n & A = g2.n & z = h2.n holds f2.(n+1) = S2(S,z,n) &
   g2.(n+1) = A2(S,A,z,n) & h2.(n+1) = o2(z,n) by Def2;
   defpred L[Nat] means
   $1 <= n implies h1.$1 = h2.$1 & f1.$1 = f2.$1 & g1.$1 = g2.$1;
 A7: L[0] by A2,A5;
-A8: for i being Element of NAT st L[i] holds L[i+1]
+A8: for i being Nat st L[i] holds L[i+1]
   proof
-    let i be Element of NAT such that
+    let i be Nat such that
 A9: i <= n implies h1.i = h2.i & f1.i = f2.i & g1.i = g2.i and
 A10: i+1 <= n;
     len p = n & len q = n by CIRCCOMB:def 12;
@@ -489,14 +486,14 @@ A12: (p^p1).(i+1) = p.(i+1) & (p^p2).(i+1) = p.(i+1) &
     defpred P[set,set,set,set] means not contradiction;
 A13: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
     x being set st S = f1.0 & A = g1.0 & x = h1.0 & P[S, A, x, 0] by A2;
-A14: for n being Element of NAT, S being non empty ManySortedSign,
+A14: for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f1.n & A = g1.n & x = h1.n & P[S,A,x,n]
     holds P[S1(S,x,n), A1(S,A,x,n), o1(x,n), n+1];
 A15: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A1(S,A,x,n) is non-empty MSAlgebra over S1(S,x,n);
-    for n being Element of NAT ex S being non empty ManySortedSign,
+    for n being Nat ex S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S st S = f1.n & A = g1.n & P[S,A,h1.n,n]
     from CIRCCMB2:sch 13(A13,A3,A14,A15);
     then consider S being non empty ManySortedSign,
@@ -509,7 +506,7 @@ A16: S = f1.i & A = g1.i;
     thus g1.(i+1) = A2(S,A,h2.i,i) by A3,A9,A10,A12,A16,NAT_1:13
       .= g2.(i+1) by A6,A9,A10,A16,NAT_1:13;
   end;
-A17: for i being Element of NAT holds L[i] from NAT_1:sch 1(A7,A8);
+A17: for i being Nat holds L[i] from NAT_1:sch 2(A7,A8);
   hence Sn1 = Sn2 & An1 = An2 by A1,A4;
   On1 = h1.n & On2 = h2.n by A2,A3,A5,A6,Th1;
   hence thesis by A17;
@@ -519,7 +516,7 @@ end;
 ::                x[1..n]^a and y[1..n]^b.
 
 theorem
-  for n be Element of NAT for x,y being FinSeqLen of n for a,b being set holds
+  for n be Nat for x,y being FinSeqLen of n for a,b being set holds
   (n+1)-BitGFA0Str(x^<*a*>, y^<*b*>) = n-BitGFA0Str(x, y) +*
   BitGFA0Str(a, b, n-BitGFA0CarryOutput(x, y)) &
   (n+1)-BitGFA0Circ(x^<*a*>, y^<*b*>) = n-BitGFA0Circ(x, y) +*
@@ -530,14 +527,14 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSeqLen of n;
   let a,b be set;
   set p = x^<*a*>, q = y^<*b*>;
   consider f,g,h being ManySortedSet of NAT such that
 A1: n-BitGFA0Str(p,q) = f.n & n-BitGFA0Circ(p,q) = g.n and
 A2: f.0 = f0 & g.0 = g0 & h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA0Str(p.(n+1), q.(n+1), z) &
@@ -561,7 +558,7 @@ end;
 ::                    x[1..n] and y[1..n].
 
 theorem Th7:
-  for n be Element of NAT for x,y being FinSequence holds
+  for n be Nat for x,y being FinSequence holds
   (n+1)-BitGFA0Str(x, y) = n-BitGFA0Str(x, y) +*
   BitGFA0Str(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x, y)) &
   (n+1)-BitGFA0Circ(x, y) = n-BitGFA0Circ(x, y) +*
@@ -572,12 +569,12 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   consider f,g,h being ManySortedSet of NAT such that
 A1: n-BitGFA0Str(x,y) = f.n & n-BitGFA0Circ(x,y) = g.n and
 A2: f.0 = f0 & g.0 = g0 & h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
@@ -596,21 +593,21 @@ end;
 :: n-bit GFA Circuit if n<=m.
 
 theorem Th8:
-  for n,m be Element of NAT st n <= m for x,y being FinSequence holds
+  for n,m be Nat st n <= m for x,y being FinSequence holds
   InnerVertices (n-BitGFA0Str(x,y)) c= InnerVertices (m-BitGFA0Str(x,y))
 proof
-  let n,m be Element of NAT such that
+  let n,m be Nat such that
 A1: n <= m;
   let x,y be FinSequence;
   consider i being Nat such that
 A2: m = n+i by A1,NAT_1:10;
-  reconsider i as Element of NAT by ORDINAL1:def 13;
+  reconsider i as Nat;
   defpred L[Nat] means InnerVertices (n-BitGFA0Str(x,y)) c=
   InnerVertices ((n+$1)-BitGFA0Str(x,y));
 A3: L[0];
-A4: for j being Element of NAT st L[j] holds L[j+1]
+A4: for j being Nat st L[j] holds L[j+1]
   proof
-    let j be Element of NAT;
+    let j be Nat;
     set Sn = n-BitGFA0Str(x,y);
     set Snj = (n+j)-BitGFA0Str(x,y);
     set SSnj = BitGFA0Str(x .((n+j)+1), y.((n+j)+1),
@@ -626,7 +623,7 @@ A6: InnerVertices (Sn) c= InnerVertices (Sn) \/ InnerVertices (SSnj)
     then InnerVertices (Sn) c= InnerVertices (Snj +* SSnj) by FACIRC_1:27;
     hence thesis by Th7;
   end;
-A7: for j being Element of NAT holds L[j] from NAT_1:sch 1(A3,A4);
+A7: for j being Nat holds L[j] from NAT_1:sch 2(A3,A4);
   m = n+i by A2;
   hence thesis by A7;
 end;
@@ -635,11 +632,11 @@ end;
 :: of internal signals in n-bit GFA Circuits and one-bit GFA Circuit.
 
 theorem
-  for n be Element of NAT for x,y being FinSequence holds
+  for n be Nat for x,y being FinSequence holds
   InnerVertices ((n+1)-BitGFA0Str(x,y)) = InnerVertices (n-BitGFA0Str(x,y)) \/
   InnerVertices BitGFA0Str(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x,y))
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   set Sn = n-BitGFA0Str(x,y);
   set SSn = BitGFA0Str(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x, y));
@@ -651,22 +648,22 @@ end;
 :: k-th (k \in [1,n]) Adder Output of n-bit Combined GFA Circuit (TYPE-0)
 
 definition
-  let k,n be Element of NAT such that
+  let k,n be Nat such that
 A1: k >= 1 & k <= n;
   let x,y be FinSequence;
   func (k,n)-BitGFA0AdderOutput(x,y) ->
   Element of InnerVertices (n-BitGFA0Str(x,y)) means
   :Def4:
-  ex i being Element of NAT st k = i+1 &
+  ex i being Nat st k = i+1 &
   it = GFA0AdderOutput(x .k, y.k, i-BitGFA0CarryOutput(x,y));
   uniqueness;
   existence
   proof
     consider i being Nat such that
 A2: k = 1+i by A1,NAT_1:10;
-    reconsider i as Element of NAT by ORDINAL1:def 13;
-    deffunc S(Element of NAT) = $1-BitGFA0Str(x,y);
-    deffunc SS(Element of NAT) = BitGFA0Str(x .($1+1), y.($1+1),
+    reconsider i as Nat;
+    deffunc S(Nat) = $1-BitGFA0Str(x,y);
+    deffunc SS(Nat) = BitGFA0Str(x .($1+1), y.($1+1),
     $1-BitGFA0CarryOutput(x,y));
     set o = GFA0AdderOutput(x .k, y.k, i-BitGFA0CarryOutput(x,y));
 A3: InnerVertices (S(k)) c= InnerVertices (S(n)) by A1,Th8;
@@ -684,72 +681,72 @@ end;
 :: Main Proposision : k-th Ripple Carry Output of n-depth GFA Circuit
 
 theorem
-  for n,k being Element of NAT st k < n for x,y being FinSequence holds
+  for n,k being Nat st k < n for x,y being FinSequence holds
   (k+1,n)-BitGFA0AdderOutput(x,y) =
   GFA0AdderOutput(x .(k+1), y.(k+1), k-BitGFA0CarryOutput(x,y))
 proof
-  let n,k be Element of NAT such that
+  let n,k be Nat such that
 A1: k < n;
   let x,y be FinSequence;
 A2: k+1 >= 1 by NAT_1:11;
   k+1 <= n by A1,NAT_1:13;
-  then consider i being Element of NAT such that
+  then consider i being Nat such that
 A3: k+1 = i+1 & (k+1,n)-BitGFA0AdderOutput(x,y) =
   GFA0AdderOutput(x .(k+1), y.(k+1), i-BitGFA0CarryOutput(x,y)) by A2,Def4;
   thus thesis by A3;
 end;
 
 theorem
-  for n being Element of NAT for x,y being FinSequence holds
+  for n being Nat for x,y being FinSequence holds
   InnerVertices (n-BitGFA0Str(x,y)) is Relation
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE);
-  deffunc S(Element of NAT) = $1-BitGFA0Str(x,y);
-  deffunc SS(Element of NAT) = BitGFA0Str(x .($1+1), y.($1+1),
+  deffunc S(Nat) = $1-BitGFA0Str(x,y);
+  deffunc SS(Nat) = BitGFA0Str(x .($1+1), y.($1+1),
   $1-BitGFA0CarryOutput(x,y));
-  defpred P[Element of NAT] means InnerVertices (S($1)) is Relation;
+  defpred P[Nat] means InnerVertices (S($1)) is Relation;
   S(0) = S0 by Th2;
   then
 A1: P[0] by FACIRC_1:38;
 A2: now
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3: P[i];
 A4: S(i+1) = S(i) +* SS(i) by Th7;
     InnerVertices SS(i) is Relation by GFACIRC1:40;
     hence P[i+1] by A3,A4,FACIRC_1:3;
   end;
-  for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
+  for i being Nat holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   cluster n-BitGFA0CarryOutput(x,y) -> pair;
   coherence
   proof
     set f1 = and2, f2 = and2, f3 = and2, f4 = or3;
     set h0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-    deffunc o(Element of NAT) = $1-BitGFA0CarryOutput(x,y);
+    deffunc o(Nat) = $1-BitGFA0CarryOutput(x,y);
     consider h being ManySortedSet of NAT such that
 A1: o(0) = h.0 and
-A2: h.0 = h0 and for n being Element of NAT holds
+A2: h.0 = h0 and for n being Nat holds
     h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h.n) by Def3;
-    defpred P[Element of NAT] means $1-BitGFA0CarryOutput(x,y) is pair;
+    defpred P[Nat] means $1-BitGFA0CarryOutput(x,y) is pair;
 A3: P[0] by A1,A2;
-A4: for n being Element of NAT st P[n] holds P[n+1]
+A4: for n being Nat st P[n] holds P[n+1]
     proof
-      let n be Element of NAT;
+      let n be Nat;
       set c = n-BitGFA0CarryOutput(x, y);
       o(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), c) by Th7
         .= [<*[<*x .(n+1),y.(n+1)*>, f1], [<*y.(n+1),c*>, f2],
       [<*c, x .(n+1)*>, f3]*>, f4];
       hence thesis;
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
+    for n being Nat holds P[n] from NAT_1:sch 2(A3,A4);
     hence thesis;
   end;
 end;
@@ -758,7 +755,7 @@ end;
 :: 1-4. InputVertices of n-Bit GFA Structure (TYPE-0)
 ::--------------------------------------
 
-Lm1: for x,y being FinSequence, n being Element of NAT holds
+Lm1: for x,y being FinSequence, n being Nat holds
 (n-BitGFA0CarryOutput(x,y))`1 = <*> &
 (n-BitGFA0CarryOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->FALSE &
 proj1 (n-BitGFA0CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
@@ -767,7 +764,7 @@ proj1 (n-BitGFA0CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN
 proof
   set f1 = and2, f2 = and2, f3 = and2, f4 = or3;
   let x,y be FinSequence;
-  defpred P[Element of NAT] means ($1-BitGFA0CarryOutput(x,y))`1 = <*> &
+  defpred P[Nat] means ($1-BitGFA0CarryOutput(x,y))`1 = <*> &
   ($1-BitGFA0CarryOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->FALSE &
   proj1 ($1-BitGFA0CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   Card ($1-BitGFA0CarryOutput(x,y))`1 = 3 &
@@ -778,9 +775,9 @@ proof
   0-BitGFA0CarryOutput(x,y) = [<*>, (0-tuples_on BOOLEAN)-->FALSE]
   by Th2,FUNCOP_1:19,MCART_1:7;
   then
-A1: P[0] by FUNCT_5:21,MCART_1:7;
+A1: P[0] by MCART_1:7;
 A2: now
-    let n be Element of NAT;
+    let n be Nat;
     assume P[n];
     set c = n-BitGFA0CarryOutput(x, y);
     (n+1)-BitGFA0CarryOutput(x, y)
@@ -791,20 +788,20 @@ A2: now
     = <*[<*x .(n+1),y.(n+1)*>, f1], [<*y.(n+1),c*>, f2],
     [<*c, x .(n+1)*>, f3]*> &
     ((n+1)-BitGFA0CarryOutput(x, y))`2 = f4 by FUNCT_2:def 1,MCART_1:7;
-    hence P[n+1] by FINSEQ_1:62,FUNCT_5:21;
+    hence P[n+1] by FINSEQ_1:62;
   end;
-  thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
+  thus for i being Nat holds P[i] from NAT_1:sch 2(A1,A2);
 end;
 
-Lm2: for n being Element of NAT for x,y being FinSequence for p being set
+Lm2: for n being Nat for x,y being FinSequence for p being set
 for f being Function of 2-tuples_on BOOLEAN, BOOLEAN holds
 n-BitGFA0CarryOutput(x,y) <> [p, f]
 proof
-  let n be Element of NAT, x,y be FinSequence, p be set;
+  let n be Nat, x,y be FinSequence, p be set;
   let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
   dom f = 2-tuples_on BOOLEAN & [p, f]`2 = f by FUNCT_2:def 1,MCART_1:7;
   then
-A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN by FUNCT_5:21;
+A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN;
   proj1 (n-BitGFA0CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   proj1 (n-BitGFA0CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN by Lm1;
   hence thesis by A1,PRALG_1:1;
@@ -814,7 +811,7 @@ end;
 :: of input signals in n-bit GFA Circuits and one-bit GFA Circuit.
 
 theorem Th12:
-  for f,g being nonpair-yielding FinSequence for n being Element of NAT holds
+  for f,g being nonpair-yielding FinSequence for n being Nat holds
   InputVertices ((n+1)-BitGFA0Str(f,g)) =
   (InputVertices (n-BitGFA0Str(f,g)))\/
   ((InputVertices BitGFA0Str(f.(n+1),g.(n+1),
@@ -824,13 +821,13 @@ theorem Th12:
 proof
   set f1 = and2, f2 = and2, f3 = and2, f0 = xor2;
   let f,g be nonpair-yielding FinSequence;
-  deffunc Sn(Element of NAT) = $1-BitGFA0Str(f,g);
-  deffunc S(set, Element of NAT) = BitGFA0Str(f.($2+1),g.($2+1), $1);
-  deffunc F(Element of NAT) = $1-BitGFA0CarryOutput(f,g);
+  deffunc Sn(Nat) = $1-BitGFA0Str(f,g);
+  deffunc S(set, Nat) = BitGFA0Str(f.($2+1),g.($2+1), $1);
+  deffunc F(Nat) = $1-BitGFA0CarryOutput(f,g);
   consider h being ManySortedSet of NAT such that
 A1: for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
-  deffunc h(Element of NAT) = h.$1;
-  deffunc o(set, Element of NAT) = GFA0CarryOutput(f.($2+1),g.($2+1), $1);
+  deffunc h(Nat) = h.$1;
+  deffunc o(set, Nat) = GFA0CarryOutput(f.($2+1),g.($2+1), $1);
   set k = (0-tuples_on BOOLEAN)-->FALSE;
 A2: Sn(0) = 1GateCircStr(<*>, k) by Th2;
   then
@@ -839,20 +836,21 @@ A4: InputVertices Sn(0) is without_pairs by A2,FACIRC_1:39;
   h(0) = F(0) by A1;
   then
 A5: h.0 in InnerVertices Sn(0);
-A6: for n being Element of NAT, x being set holds
+A6: for n being Nat, x being set holds
   InnerVertices S(x,n) is Relation by GFACIRC1:40;
 A7: now
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A8: x = h(n);
-    h(n) = F(n) by A1;
+    n in NAT by ORDINAL1:def 13;
+    then h(n) = F(n) by A1;
     then f.(n+1) <> [<*g.(n+1),x*>, f2] & g.(n+1) <> [<*x,f.(n+1)*>, f3] &
     x <> [<*f.(n+1),g.(n+1)*>, f1] & x <> [<*f.(n+1),g.(n+1)*>, f0] by A8,Lm2;
     hence InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by GFACIRC1:41;
   end;
-A9: for n being Element of NAT, x being set st x = h.n holds
+A9: for n being Nat, x being set st x = h.n holds
   (InputVertices S(x, n)) \ {x} is without_pairs
   proof
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A10: x = h(n);
 A11: InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A10;
     thus (InputVertices S(x, n)) \ {x} is without_pairs
@@ -866,12 +864,13 @@ A11: InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A10;
     end;
   end;
 A12: now
-    let n be Element of NAT, S be non empty ManySortedSign, x be set;
+    let n be Nat, S be non empty ManySortedSign, x be set;
     assume
 A13: S = Sn(n) & x = h.n;
+        n in NAT by ORDINAL1:def 13;
     then
 A14: x = n-BitGFA0CarryOutput(f,g) &
-    h(n+1) = (n+1)-BitGFA0CarryOutput(f,g) by A1;
+    h(n+1) = (n+1)-BitGFA0CarryOutput(f,g) by A1,A13;
     hence Sn(n+1) = S +* S(x,n) by A13,Th7;
     thus h.(n+1) = o(x, n) by A14,Th7;
     InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A13;
@@ -883,24 +882,25 @@ A15: InnerVertices S(x, n) = {[<*f.(n+1),g.(n+1)*>,f0]} \/
     o(x,n) in {o(x,n)} by TARSKI:def 1;
     hence o(x, n) in InnerVertices S(x, n) by A15,XBOOLE_0:def 2;
   end;
-A16: for n being Element of NAT holds InputVertices Sn(n+1) =
+A16: for n being Nat holds InputVertices Sn(n+1) =
   (InputVertices Sn(n)) \/ ((InputVertices S(h.(n),n)) \ {h.(n)}) &
   InnerVertices Sn(n) is Relation & InputVertices Sn(n) is without_pairs
   from CIRCCMB2:sch 11(A3,A4,A5,A6,A9,A12);
-  let n be Element of NAT;
-  h.n = n-BitGFA0CarryOutput(f,g) by A1;
+  let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+    then h.n = n-BitGFA0CarryOutput(f,g) by A1;
   hence thesis by A16;
 end;
 
 :: Main Proposision : whole input signals of n-depth GFA Circuit
 
 theorem
-  for n being Element of NAT
+  for n being Nat
   for x,y being nonpair-yielding FinSeqLen of n holds
   InputVertices (n-BitGFA0Str(x,y)) = rng x \/ rng y
 proof
   set f1 = and2, f2 = and2, f3 = and2, f0 = xor2;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for x,y being nonpair-yielding FinSeqLen of $1 holds
   InputVertices ($1-BitGFA0Str(x,y)) = rng x \/ rng y;
 A1: P[0]
@@ -909,22 +909,23 @@ A1: P[0]
     set f = (0-tuples_on BOOLEAN)-->FALSE;
     len x = 0 & len y = 0 by CIRCCOMB:def 12;
     then
-A2: rng x = {} & rng y = {} by FINSEQ_1:25,RELAT_1:60;
+A2: rng x = {} & rng y = {} by CARD_2:59,RELAT_1:60;
     0-BitGFA0Str(x,y) = 1GateCircStr(<*>, f) by Th2;
     hence InputVertices (0-BitGFA0Str(x,y)) = rng <*> by CIRCCOMB:49
       .= rng x \/ rng y by A2;
   end;
-A3: for i being Element of NAT st P[i] holds P[i+1]
+A3: for i being Nat st P[i] holds P[i+1]
   proof
-    let i be Element of NAT such that
+    let i be Nat such that
 A4: P[i];
+X:   i in NAT by ORDINAL1:def 13;
     let x,y be nonpair-yielding FinSeqLen of i+1;
     consider x' being nonpair-yielding FinSeqLen of i,
     z1 being non pair set such that
-A5: x = x'^<*z1*> by FACIRC_2:36;
+A5: x = x'^<*z1*> by FACIRC_2:36,X;
     consider y' being nonpair-yielding FinSeqLen of i,
     z2 being non pair set such that
-A6: y = y'^<*z2*> by FACIRC_2:36;
+A6: y = y'^<*z2*> by FACIRC_2:36,X;
 A7: 1 in Seg 1 by FINSEQ_1:3;
     then
 A8: 1 in dom <*z1*> by FINSEQ_1:def 8;
@@ -937,7 +938,7 @@ A10: 1 in dom <*z2*> by A7,FINSEQ_1:def 8;
     then
 A11: y .(i+1) = <*z2*>.1 by A6,A10,FINSEQ_1:def 7
       .= z2 by FINSEQ_1:def 8;
-    deffunc F(Element of NAT) = $1-BitGFA0CarryOutput(x,y);
+    deffunc F(Nat) = $1-BitGFA0CarryOutput(x,y);
 A12: {z1,z2,F(i)} = {F(i),z1,z2} by ENUMSET1:100;
 A13: rng x = rng x' \/ rng <*z1*> by A5,FINSEQ_1:44
       .= rng x' \/ {z1} by FINSEQ_1:55;
@@ -959,7 +960,7 @@ A15: z1 <> [<*z2,F(i)*>, f2] & z2 <> [<*F(i),z1*>, f3] &
       .= rng x' \/ {z1} \/ rng y' \/ {z2} by XBOOLE_1:4
       .= rng x \/ rng y by A13,A14,XBOOLE_1:4;
   end;
-  thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A3);
+  thus for i being Nat holds P[i] from NAT_1:sch 2(A1,A3);
 end;
 
 ::--------------------------------
@@ -967,37 +968,40 @@ end;
 ::--------------------------------
 
 theorem
-  for n being Element of NAT for x,y being nonpair-yielding FinSeqLen of n
+  for n being Nat for x,y being nonpair-yielding FinSeqLen of n
   for s being State of n-BitGFA0Circ(x,y) holds Following(s,1+2*n) is stable
 proof
-  let n be Element of NAT, f,g be nonpair-yielding FinSeqLen of n;
-  deffunc S(set,Element of NAT) = BitGFA0Str(f.($2+1), g.($2+1), $1);
-  deffunc A(set,Element of NAT) = BitGFA0Circ(f.($2+1), g.($2+1), $1);
-  deffunc o(set,Element of NAT) = GFA0CarryOutput(f.($2+1), g.($2+1), $1);
+  let n be Nat, f,g be nonpair-yielding FinSeqLen of n;
+  deffunc S(set,Nat) = BitGFA0Str(f.($2+1), g.($2+1), $1);
+  deffunc A(set,Nat) = BitGFA0Circ(f.($2+1), g.($2+1), $1);
+  deffunc o(set,Nat) = GFA0CarryOutput(f.($2+1), g.($2+1), $1);
   set S0 = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->FALSE);
   set A0 = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->FALSE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
-  consider N being Function of NAT,NAT such that
+  n in NAT by ORDINAL1:def 13;
+  then consider N being Function of NAT,NAT such that
 A1: N.0 = 1 & N.1 = 2 & N.2 = n by FACIRC_2:37;
-  deffunc n(Element of NAT) = N.$1;
-A2: for x being set, n being Element of NAT holds
+  deffunc n(Nat) = N.$1;
+A2: for x being set, n being Nat holds
   A(x,n) is Boolean gate`2=den strict Circuit of S(x,n);
 A3: now
     let s be State of A0;
     Following(s, 1) = Following s by FACIRC_1:14;
     hence Following(s, n(0)) is stable by A1,CIRCCMB2:2;
   end;
-  deffunc F(Element of NAT) = $1-BitGFA0CarryOutput(f,g);
+  deffunc F(Nat) = $1-BitGFA0CarryOutput(f,g);
   consider h being ManySortedSet of NAT such that
 A4: for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
-A5: for n being Element of NAT, x being set
+A5: for n being Nat, x being set
   for A being non-empty Circuit of S(x,n) st x = h.(n) & A = A(x,n)
   for s being State of A holds Following(s, n(1)) is stable
   proof
     set f1 = and2, f2 = and2, f3 = and2, f0 = xor2;
-    let n be Element of NAT, x be set, A be non-empty Circuit of S(x,n);
-    assume x = h.n;
-    then x = F(n) by A4;
+    let n be Nat, x be set, A be non-empty Circuit of S(x,n);
+    assume
+Z:     x = h.n;
+        n in NAT by ORDINAL1:def 13;
+    then x = F(n) by A4,Z;
     then f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &
     x <> [<*f.(n+1),g.(n+1)*>,f1] & x <> [<*f.(n+1),g.(n+1)*>,f0] by Lm2;
     hence thesis by A1,GFACIRC1:48;
@@ -1008,22 +1012,23 @@ A5: for n being Element of NAT, x being set
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A6: Sn = f1.n & An = g1.n and
 A7: f1.0 = S0 & g1.0 = A0 & h1.0 = h0 &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f1.n & A = g1.n & z = h1.n holds
   f1.(n+1) = S +* S(z,n) & g1.(n+1) = A +* A(z,n) & h1.(n+1) = o(z,n) by Def2;
   now
     let i be set;
-    assume i in NAT;
-    then reconsider j = i as Element of NAT;
+    assume
+Z:     i in NAT;
+    then reconsider j = i as Nat by ORDINAL1:def 13;
     thus h1.i = F(j) by A7,Th1
-      .= h.i by A4;
+      .= h.i by A4,Z;
   end;
   then
 A8: h1 = h by PBOOLE:3;
 A9: ex u,v being ManySortedSet of NAT st Sn = u.(n(2)) & An = v.(n(2)) &
   u.0 = S0 & v.0 = A0 & h.0 = o0 &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A1 being non-empty MSAlgebra over S
   for x being set, A2 being non-empty MSAlgebra over S(x,n)
   st S = u.n & A1 = v.n & x = h.n & A2 = A(x,n)
@@ -1037,15 +1042,16 @@ A10: InnerVertices S0 is Relation & InputVertices S0 is without_pairs
   o0 = h0 & InnerVertices S0 = {h0} by Th2,CIRCCOMB:49;
   then
 A11: h.0 = o0 & o0 in InnerVertices S0 by A4,TARSKI:def 1;
-A12: for n being Element of NAT, x being set holds
+A12: for n being Nat, x being set holds
   InnerVertices S(x,n) is Relation by GFACIRC1:40;
-A13: for n being Element of NAT, x being set st x = h.n holds
+A13: for n being Nat, x being set st x = h.n holds
   (InputVertices S(x, n)) \ {x} is without_pairs
   proof
     set f1 = and2, f2 = and2, f3 = and2, f0 = xor2;
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A14: x = h.n;
-    x = F(n) by A4,A14;
+        n in NAT by ORDINAL1:def 13;
+    then x = F(n) by A4,A14;
     then f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &
     x <> [<*f.(n+1),g.(n+1)*>,f1] & x <> [<*f.(n+1),g.(n+1)*>,f0] by Lm2;
     then
@@ -1057,14 +1063,15 @@ A15: InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by GFACIRC1:41;
     by ENUMSET1:def 1,TARSKI:def 1;
     hence thesis;
   end;
-A16: for n being Element of NAT, x being set st x = h.n holds
+A16: for n being Nat, x being set st x = h.n holds
   h.(n+1) = o(x, n) &
   x in InputVertices S(x,n) & o(x, n) in InnerVertices S(x, n)
   proof
     set f1 = and2, f2 = and2, f3 = and2, f0 = xor2;
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A17: x = h.n;
-A18: x = F(n) & h.(n+1) = F(n+1) by A4,A17;
+    n in NAT by ORDINAL1:def 13;
+    then A18: x = F(n) & h.(n+1) = F(n+1) by A4,A17;
     hence h.(n+1) = o(x, n) by Th7;
     f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &
     x <> [<*f.(n+1),g.(n+1)*>,f1] & x <> [<*f.(n+1),g.(n+1)*>,f0] by A18,Lm2;
@@ -1124,39 +1131,39 @@ A1: 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE)
   ex f,h being ManySortedSet of NAT st
   it = f.n & f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-  for n being Element of NAT, S being non empty ManySortedSign, z be set
+  for n being Nat, S being non empty ManySortedSign, z be set
   st S = f.n & z = h.n holds f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
   h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), z);
   uniqueness
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Nat;
     set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA1Str(x .($3+1), y.($3+1), $2);
-    deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
     for S1,S2 being unsplit gate`1=arity gate`2isBoolean non void non empty
     strict non empty ManySortedSign st
     (ex f,h being ManySortedSet of NAT st S1 = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n)) &
     (ex f,h being ManySortedSet of NAT st S2 = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n))
     holds S1 = S2 from CIRCCMB2:sch 9;
     hence thesis;
   end;
   existence
   proof
-    reconsider n as Element of NAT by ORDINAL1:def 13;
+    reconsider n as Nat;
     set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc S(set, Element of NAT) = BitGFA1Str(x .($2+1), y.($2+1), $1);
-    deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+    deffunc S(set, Nat) = BitGFA1Str(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
     ex S being unsplit gate`1=arity gate`2isBoolean
     non void non empty non empty strict ManySortedSign,
     f,h being ManySortedSet of NAT st S = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n
     holds f.(n+1) = S +* S(x,n) & h.(n+1) = o(x,n) from CIRCCMB2:sch 8(A1);
     hence thesis;
@@ -1166,7 +1173,7 @@ end;
 :: Algebraic Circuit Structure (n-bit) of GFA TYPE-1
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   func n-BitGFA1Circ(x,y) ->
   Boolean gate`2=den strict Circuit of n-BitGFA1Str(x,y) means
@@ -1175,7 +1182,7 @@ definition
   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
@@ -1187,24 +1194,24 @@ definition
     set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
     set Sn = n-BitGFA1Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA1Str(x .($3+1), y.($3+1), $2);
     deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-    set, Element of NAT) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
-    deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+    set, Nat) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
+    deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
 A1: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
     for A1,A2 being Boolean gate`2=den strict Circuit of Sn st
     (ex f,g,h being ManySortedSet of NAT st Sn= f.n & A1 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n)) &
     (ex f,g,h being ManySortedSet of NAT st Sn = f.n & A2 = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n))
@@ -1217,28 +1224,28 @@ A1: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
     set A0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
     set Sn = n-BitGFA1Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA1Str(x .($3+1), y.($3+1), $2);
     deffunc A(non empty ManySortedSign, non-empty MSAlgebra over $1,
-    set, Element of NAT) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
-    deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+    set, Nat) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
+    deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
 A2: for S being unsplit gate`1=arity gate`2isBoolean non void strict
-    non empty ManySortedSign, x being set, n being Element of NAT holds
+    non empty ManySortedSign, x being set, n being Nat holds
     S(S,x,n) is unsplit gate`1=arity gate`2isBoolean non void strict;
 A3: ex f,h being ManySortedSet of NAT st Sn = f.n & f.0 = S0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign, x being set
+    for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = h.n holds f.(n+1) = S(S,x,n) & h.(n+1) = o(x,n) by Def5;
 A4: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A(S,A,x,n) is non-empty MSAlgebra over S(S,x,n);
 A5: for S,S1 being unsplit gate`1=arity gate`2isBoolean non void strict
     non empty ManySortedSign, A being Boolean gate`2=den strict Circuit of S
-    for x being set, n being Element of NAT st S1 = S(S,x,n) holds
+    for x being set, n being Nat st S1 = S(S,x,n) holds
     A(S,A,x,n) is Boolean gate`2=den strict Circuit of S1;
     ex A being Boolean gate`2=den strict Circuit of Sn,
     f,g,h being ManySortedSet of NAT st Sn = f.n & A = g.n &
     f.0 = S0 & g.0 = A0 & h.0 = o0 &
-    for n being Element of NAT, S being non empty ManySortedSign,
+    for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f.n & A = g.n & x = h.n
     holds f.(n+1) = S(S,x,n) & g.(n+1) = A(S,A,x,n) & h.(n+1) = o(x,n)
@@ -1250,31 +1257,33 @@ end;
 :: Ripple Carry Output (c[1..n]) of n-bit GFA (TYPE-1)
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   func n-BitGFA1CarryOutput(x,y) ->
   Element of InnerVertices (n-BitGFA1Str(x,y)) means
   :Def7:
   ex h being ManySortedSet of NAT st
   it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-  for n being Element of NAT holds
+  for n being Nat holds
   h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h.n);
   uniqueness
   proof
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc o(Element of NAT,set) = GFA1CarryOutput(x .($1+1), y.($1+1), $2);
+    deffunc o(Nat,set) = GFA1CarryOutput(x .($1+1), y.($1+1), $2);
     let o1, o2 be Element of InnerVertices (n-BitGFA1Str(x,y));
     given h1 being ManySortedSet of NAT such that
-A1: o1 = h1.n & h1.0 = o0 & for n being Element of NAT holds
+A1: o1 = h1.n & h1.0 = o0 & for n being Nat holds
     h1.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h1.n);
     given h2 being ManySortedSet of NAT such that
-A2: o2 = h2.n & h2.0 = o0 & for n being Element of NAT holds
+A2: o2 = h2.n & h2.0 = o0 & for n being Nat holds
     h2.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h2.n);
-A3: dom h1 = NAT & h1.0 = o0 &
-    for n being Element of NAT holds h1.(n+1) = o(n,h1.n) by A1,PBOOLE:def 3;
-A4: dom h2 = NAT & h2.0 = o0 &
-    for n being Element of NAT holds h2.(n+1) = o(n,h2.n) by A2,PBOOLE:def 3;
-    h1 = h2 from RECDEF_1:sch 11(A3,A4);
+A3: dom h1 = NAT by PBOOLE:def 3;
+B3: h1.0 = o0 by A1;
+C3: for n being Nat holds h1.(n+1) = o(n,h1.n) by A1;
+A4: dom h2 = NAT by PBOOLE:def 3;
+B4: h2.0 = o0 by A2;
+C4:   for n being Nat holds h2.(n+1) = o(n,h2.n) by A2;
+    h1 = h2 from NAT_1:sch 15(A3,B3,C3,A4,B4,C4);
     hence thesis by A1,A2;
   end;
   existence
@@ -1283,22 +1292,22 @@ A4: dom h2 = NAT & h2.0 = o0 &
     set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
     set Sn = n-BitGFA1Str(x,y);
     set o0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc S(non empty ManySortedSign, set, Element of NAT)
+    deffunc S(non empty ManySortedSign, set, Nat)
     = $1 +* BitGFA1Str(x .($3+1), y.($3+1), $2);
-    deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+    deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
     consider f,g being ManySortedSet of NAT such that
 A5: Sn = f.n & f.0 = S0 & g.0 = o0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign, z be set
+A6: for n being Nat, S being non empty ManySortedSign, z be set
     st S = f.n & z = g.n holds f.(n+1) = S(S,z,n) & g.(n+1) = o(z,n) by Def5;
-    defpred P[Element of NAT] means ex S being non empty ManySortedSign
+    defpred P[Nat] means ex S being non empty ManySortedSign
     st S = f.$1 & g.$1 in InnerVertices S;
     InnerVertices S0 = {o0} by CIRCCOMB:49;
     then o0 in InnerVertices S0 by TARSKI:def 1;
     then
 A7: P[0] by A5;
-A8: for i being Element of NAT st P[i] holds P[i+1]
+A8: for i being Nat st P[i] holds P[i+1]
     proof
-      let i be Element of NAT such that
+      let i be Nat such that
 A9:   ex S being non empty ManySortedSign
       st S = f.i & g.i in InnerVertices S and
 A10:  for S being non empty ManySortedSign
@@ -1313,17 +1322,17 @@ A11:  S = f.i & g.i in InnerVertices S by A9;
       g.(i+1) = GFA1CarryOutput(x .(i+1), y.(i+1), g.i) by A6,A11,FACIRC_1:22;
       hence contradiction by A10;
     end;
-    for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
+    for i being Nat holds P[i] from NAT_1:sch 2(A7,A8);
 
 then ex S being non empty ManySortedSign st S = f.n & g.n in InnerVertices S;
     then reconsider o = g.n as Element of InnerVertices Sn by A5;
     take o, g; thus o = g.n & g.0 = o0 by A5;
-    let i be Element of NAT;
+    let i be Nat;
 A12: ex S being non empty ManySortedSign, x being set
     st S = f.0 & x = g.0 & P[S, x, 0] by A5;
-A13: for n being Element of NAT, S being non empty ManySortedSign, x being set
+A13: for n being Nat, S being non empty ManySortedSign, x being set
     st S = f.n & x = g.n & P[S, x, n] holds P[S(S,x,n), o(x, n), n+1];
-    for n being Element of NAT ex S being non empty ManySortedSign
+    for n being Nat ex S being non empty ManySortedSign
     st S = f.n & P[S,g.n,n] from CIRCCMB2:sch 2(A12,A6,A13);
     then ex S being non empty ManySortedSign st S = f.i;
     hence thesis by A6;
@@ -1340,13 +1349,13 @@ theorem Th15:
   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
   g.(n+1) = A +* BitGFA1Circ(x .(n+1), y.(n+1), z) &
   h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), z)
-  for n being Element of NAT holds
+  for n being Nat holds
   n-BitGFA1Str(x,y) = f.n & n-BitGFA1Circ(x,y) = g.n &
   n-BitGFA1CarryOutput(x,y) = h.n
 proof
@@ -1354,24 +1363,24 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-  deffunc S(non empty ManySortedSign,set,Element of NAT)
+  deffunc S(non empty ManySortedSign,set,Nat)
   = $1 +* BitGFA1Str(x .($3+1), y.($3+1), $2);
   deffunc A(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
-  deffunc o(set, Element of NAT) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
-  deffunc F(Element of NAT, set) = GFA1CarryOutput(x .($1+1), y.($1+1), $2);
+  set, Nat) = $2 +* BitGFA1Circ(x .($4+1), y.($4+1), $3);
+  deffunc o(set, Nat) = GFA1CarryOutput(x .($2+1), y.($2+1), $1);
+  deffunc F(Nat, set) = GFA1CarryOutput(x .($1+1), y.($1+1), $2);
   assume that
 A1: f.0 = f0 & g.0 = g0 and
 A2: h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds f.(n+1) = S(S,z,n) &
   g.(n+1) = A(S,A,z,n) & h.(n+1) = o(z,n);
-  let n be Element of NAT;
+  let n be Nat;
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A4: n-BitGFA1Str(x,y) = f1.n & n-BitGFA1Circ(x,y) = g1.n and
 A5: f1.0 = f0 & g1.0 = g0 & h1.0 = h0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign,
+A6: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f1.n & A = g1.n & z = h1.n holds
   f1.(n+1) = S(S,z,n) & g1.(n+1) = A(S,A,z,n) & h1.(n+1) = o(z,n) by Def6;
@@ -1379,26 +1388,28 @@ A7: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S
   st S = f.0 & A = g.0 by A1;
 A8: f.0 = f1.0 & g.0 = g1.0 & h.0 = h1.0 by A1,A2,A5;
 A9: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-  for z being set, n being Element of NAT holds
+  for z being set, n being Nat holds
   A(S,A,z,n) is non-empty MSAlgebra over S(S,z,n);
   f = f1 & g = g1 & h = h1 from CIRCCMB2:sch 14(A7,A8,A3,A6,A9);
   hence n-BitGFA1Str(x,y) = f.n & n-BitGFA1Circ(x,y) = g.n by A4;
-A10: for n being Element of NAT, S being non empty ManySortedSign, z being set
+A10: for n being Nat, S being non empty ManySortedSign, z being set
   st S = f.n & z = h.n holds f.(n+1) = S(S,z,n) &
   h.(n+1) = o(z,n) from CIRCCMB2:sch 15(A1,A3,A9);
 A11: f.0 = f0 by A1;
-  for n being Element of NAT, z being set st z = h.n
+A12: dom h = NAT by PBOOLE:def 3;
+B12: h.0 = h0 by A2;
+  for n being Nat, z being set st z = h.n
   holds h.(n+1) = o(z,n) from CIRCCMB2:sch 3(A11,A10);
   then
-A12: dom h = NAT & h.0 = h0 &
-  for n being Element of NAT holds h.(n+1) = F(n,h.n) by A2,PBOOLE:def 3;
+C12:  for n being Nat holds h.(n+1) = F(n,h.n);
   consider h1 being ManySortedSet of NAT such that
 A13: n-BitGFA1CarryOutput(x,y) = h1.n and
-A14: h1.0 = h0 & for n being Element of NAT holds
+A14: h1.0 = h0 & for n being Nat holds
   h1.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h1.n) by Def7;
-A15: dom h1 = NAT & h1.0 = h0 &
-  for n being Element of NAT holds h1.(n+1) = F(n,h1.n) by A14,PBOOLE:def 3;
-  h = h1 from RECDEF_1:sch 11(A12,A15);
+A15: dom h1 = NAT by PBOOLE:def 3;
+B15: h1.0 = h0 by A14;
+C15:  for n being Nat holds h1.(n+1) = F(n,h1.n) by A14;
+  h = h1 from NAT_1:sch 15(A12,B12,C12,A15,B15,C15);
   hence thesis by A13;
 end;
 
@@ -1418,7 +1429,7 @@ proof
 A1: 0-BitGFA1Str(a,b) = f.0 & 0-BitGFA1Circ(a,b) = g.0 and
 A2: f.0 = f0 and
 A3: g.0 = g0 and h.0 = h0 and
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA1Str(a .(n+1), b.(n+1), z) &
@@ -1450,7 +1461,7 @@ A1: c = h0;
 A2: 1-BitGFA1Str(a,b) = f.1 and
 A3: 1-BitGFA1Circ(a,b) = g.1 and
 A4: f.0 = f0 & g.0 = g0 & h.0 = c and
-A5: for n being Element of NAT, S being non empty ManySortedSign,
+A5: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n
   holds f.(n+1) = S +* BitGFA1Str(a.(n+1),b.(n+1), z) &
@@ -1480,13 +1491,13 @@ end;
 :: input signals p[1..n] ^ p[n+1].
 
 theorem Th19:
-  for n be Element of NAT for p,q being FinSeqLen of n
+  for n be Nat for p,q being FinSeqLen of n
   for p1,p2, q1,q2 being FinSequence holds
   n-BitGFA1Str(p^p1, q^q1) = n-BitGFA1Str(p^p2, q^q2) &
   n-BitGFA1Circ(p^p1, q^q1) = n-BitGFA1Circ(p^p2, q^q2) &
   n-BitGFA1CarryOutput(p^p1, q^q1) = n-BitGFA1CarryOutput(p^p2, q^q2)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let p,q be FinSeqLen of n;
   let p1,p2, q1,q2 be FinSequence;
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
@@ -1495,45 +1506,45 @@ proof
   set Sn1 = n-BitGFA1Str(p^p1,q^q1);
   set An1 = n-BitGFA1Circ(p^p1,q^q1);
   set On1 = n-BitGFA1CarryOutput(p^p1, q^q1);
-  deffunc S1(non empty ManySortedSign,set, Element of NAT)
+  deffunc S1(non empty ManySortedSign,set, Nat)
   = $1 +* BitGFA1Str((p^p1) .($3+1), (q^q1).($3+1), $2);
   deffunc A1(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA1Circ((p^p1) .($4+1), (q^q1).($4+1), $3);
-  deffunc o1(set, Element of NAT)
+  set, Nat) = $2 +* BitGFA1Circ((p^p1) .($4+1), (q^q1).($4+1), $3);
+  deffunc o1(set, Nat)
   = GFA1CarryOutput((p^p1) .($2+1), (q^q1).($2+1), $1);
-  deffunc F1(Element of NAT, set)
+  deffunc F1(Nat, set)
   = GFA1CarryOutput((p^p1) .($1+1), (q^q1).($1+1), $2);
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A1: Sn1 = f1.n & An1 = g1.n and
 A2: f1.0 = f0 & g1.0 = g0 & h1.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f1.n & A = g1.n & z = h1.n holds f1.(n+1) = S1(S,z,n) &
   g1.(n+1) = A1(S,A,z,n) & h1.(n+1) = o1(z,n) by Def6;
   set Sn2 = n-BitGFA1Str(p^p2,q^q2);
   set An2 = n-BitGFA1Circ(p^p2,q^q2);
   set On2 = n-BitGFA1CarryOutput(p^p2, q^q2);
-  deffunc S2(non empty ManySortedSign,set, Element of NAT)
+  deffunc S2(non empty ManySortedSign,set, Nat)
   = $1 +* BitGFA1Str((p^p2) .($3+1), (q^q2).($3+1), $2);
   deffunc A2(non empty ManySortedSign,non-empty MSAlgebra over $1,
-  set, Element of NAT) = $2 +* BitGFA1Circ((p^p2) .($4+1), (q^q2).($4+1), $3);
-  deffunc o2(set, Element of NAT)
+  set, Nat) = $2 +* BitGFA1Circ((p^p2) .($4+1), (q^q2).($4+1), $3);
+  deffunc o2(set, Nat)
   = GFA1CarryOutput((p^p2) .($2+1), (q^q2).($2+1), $1);
-  deffunc F2(Element of NAT, set)
+  deffunc F2(Nat, set)
   = GFA1CarryOutput((p^p2) .($1+1), (q^q2).($1+1), $2);
   consider f2,g2,h2 being ManySortedSet of NAT such that
 A4: Sn2 = f2.n & An2 = g2.n and
 A5: f2.0 = f0 & g2.0 = g0 & h2.0 = h0 and
-A6: for n being Element of NAT, S being non empty ManySortedSign,
+A6: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f2.n & A = g2.n & z = h2.n holds f2.(n+1) = S2(S,z,n) &
   g2.(n+1) = A2(S,A,z,n) & h2.(n+1) = o2(z,n) by Def6;
-  defpred L[Element of NAT] means
+  defpred L[Nat] means
   $1 <= n implies h1.$1 = h2.$1 & f1.$1 = f2.$1 & g1.$1 = g2.$1;
 A7: L[0] by A2,A5;
-A8: for i being Element of NAT st L[i] holds L[i+1]
+A8: for i being Nat st L[i] holds L[i+1]
   proof
-    let i be Element of NAT such that
+    let i be Nat such that
 A9: i <= n implies h1.i = h2.i & f1.i = f2.i & g1.i = g2.i and
 A10: i+1 <= n;
     len p = n & len q = n by CIRCCOMB:def 12;
@@ -1547,14 +1558,14 @@ A12: (p^p1).(i+1) = p.(i+1) & (p^p2).(i+1) = p.(i+1) &
     defpred P[set,set,set,set] means not contradiction;
 A13: ex S being non empty ManySortedSign, A being non-empty MSAlgebra over S,
     x being set st S = f1.0 & A = g1.0 & x = h1.0 & P[S, A, x, 0] by A2;
-A14: for n being Element of NAT, S being non empty ManySortedSign,
+A14: for n being Nat, S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S
     for x being set st S = f1.n & A = g1.n & x = h1.n & P[S,A,x,n]
     holds P[S1(S,x,n), A1(S,A,x,n), o1(x,n), n+1];
 A15: for S being non empty ManySortedSign, A being non-empty MSAlgebra over S
-    for x being set, n being Element of NAT holds
+    for x being set, n being Nat holds
     A1(S,A,x,n) is non-empty MSAlgebra over S1(S,x,n);
-    for n being Element of NAT ex S being non empty ManySortedSign,
+    for n being Nat ex S being non empty ManySortedSign,
     A being non-empty MSAlgebra over S st S = f1.n & A = g1.n & P[S,A,h1.n,n]
     from CIRCCMB2:sch 13(A13,A3,A14,A15);
     then consider S being non empty ManySortedSign,
@@ -1567,7 +1578,7 @@ A16: S = f1.i & A = g1.i;
     thus g1.(i+1) = A2(S,A,h2.i,i) by A3,A9,A10,A12,A16,NAT_1:13
       .= g2.(i+1) by A6,A9,A10,A16,NAT_1:13;
   end;
-A17: for i being Element of NAT holds L[i] from NAT_1:sch 1(A7,A8);
+A17: for i being Nat holds L[i] from NAT_1:sch 2(A7,A8);
   hence Sn1 = Sn2 & An1 = An2 by A1,A4;
   On1 = h1.n & On2 = h2.n by A2,A3,A5,A6,Th15;
   hence thesis by A17;
@@ -1577,7 +1588,7 @@ end;
 ::                x[1..n]^a and y[1..n]^b.
 
 theorem
-  for n be Element of NAT for x,y being FinSeqLen of n for a,b being set holds
+  for n be Nat for x,y being FinSeqLen of n for a,b being set holds
   (n+1)-BitGFA1Str(x^<*a*>, y^<*b*>) = n-BitGFA1Str(x, y) +*
   BitGFA1Str(a, b, n-BitGFA1CarryOutput(x, y)) &
   (n+1)-BitGFA1Circ(x^<*a*>, y^<*b*>) = n-BitGFA1Circ(x, y) +*
@@ -1588,14 +1599,14 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSeqLen of n;
   let a,b be set;
   set p = x^<*a*>, q = y^<*b*>;
   consider f,g,h being ManySortedSet of NAT such that
 A1: n-BitGFA1Str(p,q) = f.n & n-BitGFA1Circ(p,q) = g.n and
 A2: f.0 = f0 & g.0 = g0 & h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA1Str(p.(n+1), q.(n+1), z) &
@@ -1619,7 +1630,7 @@ end;
 ::                    x[1..n] and y[1..n].
 
 theorem Th21:
-  for n be Element of NAT for x,y being FinSequence holds
+  for n be Nat for x,y being FinSequence holds
   (n+1)-BitGFA1Str(x, y) = n-BitGFA1Str(x, y) +*
   BitGFA1Str(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x, y)) &
   (n+1)-BitGFA1Circ(x, y) = n-BitGFA1Circ(x, y) +*
@@ -1630,12 +1641,12 @@ proof
   set f0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set g0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   consider f,g,h being ManySortedSet of NAT such that
 A1: n-BitGFA1Str(x,y) = f.n & n-BitGFA1Circ(x,y) = g.n and
 A2: f.0 = f0 & g.0 = g0 & h.0 = h0 and
-A3: for n being Element of NAT, S being non empty ManySortedSign,
+A3: for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z be set st S = f.n & A = g.n & z = h.n holds
   f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
@@ -1654,21 +1665,21 @@ end;
 :: n-bit GFA Circuit if n<=m.
 
 theorem Th22:
-  for n,m be Element of NAT st n <= m for x,y being FinSequence holds
+  for n,m be Nat st n <= m for x,y being FinSequence holds
   InnerVertices (n-BitGFA1Str(x,y)) c= InnerVertices (m-BitGFA1Str(x,y))
 proof
-  let n,m be Element of NAT such that
+  let n,m be Nat such that
 A1: n <= m;
   let x,y be FinSequence;
   consider i being Nat such that
 A2: m = n+i by A1,NAT_1:10;
-  reconsider i as Element of NAT by ORDINAL1:def 13;
-  defpred L[Element of NAT] means InnerVertices (n-BitGFA1Str(x,y)) c=
+  reconsider i as Nat;
+  defpred L[Nat] means InnerVertices (n-BitGFA1Str(x,y)) c=
   InnerVertices ((n+$1)-BitGFA1Str(x,y));
 A3: L[0];
-A4: for j being Element of NAT st L[j] holds L[j+1]
+A4: for j being Nat st L[j] holds L[j+1]
   proof
-    let j be Element of NAT;
+    let j be Nat;
     set Sn = n-BitGFA1Str(x,y);
     set Snj = (n+j)-BitGFA1Str(x,y);
     set SSnj = BitGFA1Str(x .((n+j)+1), y.((n+j)+1),
@@ -1684,7 +1695,7 @@ A6: InnerVertices (Sn) c= InnerVertices (Sn) \/ InnerVertices (SSnj)
     then InnerVertices (Sn) c= InnerVertices (Snj +* SSnj) by FACIRC_1:27;
     hence thesis by Th21;
   end;
-A7: for j being Element of NAT holds L[j] from NAT_1:sch 1(A3,A4);
+A7: for j being Nat holds L[j] from NAT_1:sch 2(A3,A4);
   m = n+i by A2;
   hence thesis by A7;
 end;
@@ -1693,11 +1704,11 @@ end;
 :: of internal signals in n-bit GFA Circuits and one-bit GFA Circuit.
 
 theorem
-  for n be Element of NAT for x,y being FinSequence holds
+  for n be Nat for x,y being FinSequence holds
   InnerVertices ((n+1)-BitGFA1Str(x,y)) = InnerVertices (n-BitGFA1Str(x,y)) \/
   InnerVertices BitGFA1Str(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x,y))
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   set Sn = n-BitGFA1Str(x,y);
   set SSn = BitGFA1Str(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x, y));
@@ -1709,22 +1720,22 @@ end;
 :: k-th (k \in [1,n]) Adder Output of n-bit Combined GFA Circuit (TYPE-1)
 
 definition
-  let k,n be Element of NAT such that
+  let k,n be Nat such that
 A1: k >= 1 & k <= n;
   let x,y be FinSequence;
   func (k,n)-BitGFA1AdderOutput(x,y) ->
   Element of InnerVertices (n-BitGFA1Str(x,y)) means
   :Def8:
-  ex i being Element of NAT st k = i+1 &
+  ex i being Nat st k = i+1 &
   it = GFA1AdderOutput(x .k, y.k, i-BitGFA1CarryOutput(x,y));
   uniqueness;
   existence
   proof
     consider i being Nat such that
 A2: k = 1+i by A1,NAT_1:10;
-    reconsider i as Element of NAT by ORDINAL1:def 13;
-    deffunc S(Element of NAT) = $1-BitGFA1Str(x,y);
-    deffunc SS(Element of NAT) = BitGFA1Str(x .($1+1), y.($1+1),
+    reconsider i as Nat;
+    deffunc S(Nat) = $1-BitGFA1Str(x,y);
+    deffunc SS(Nat) = BitGFA1Str(x .($1+1), y.($1+1),
     $1-BitGFA1CarryOutput(x,y));
     set o = GFA1AdderOutput(x .k, y.k, i-BitGFA1CarryOutput(x,y));
 A3: InnerVertices (S(k)) c= InnerVertices (S(n)) by A1,Th22;
@@ -1742,72 +1753,72 @@ end;
 :: Main Proposision : k-th Ripple Carry Output of n-depth GFA Circuit
 
 theorem
-  for n,k being Element of NAT st k < n for x,y being FinSequence holds
+  for n,k being Nat st k < n for x,y being FinSequence holds
   (k+1,n)-BitGFA1AdderOutput(x,y) =
   GFA1AdderOutput(x .(k+1), y.(k+1), k-BitGFA1CarryOutput(x,y))
 proof
-  let n,k be Element of NAT such that
+  let n,k be Nat such that
 A1: k < n;
   let x,y be FinSequence;
 A2: k+1 >= 1 by NAT_1:11;
   k+1 <= n by A1,NAT_1:13;
-  then consider i being Element of NAT such that
+  then consider i being Nat such that
 A3: k+1 = i+1 & (k+1,n)-BitGFA1AdderOutput(x,y) =
   GFA1AdderOutput(x .(k+1), y.(k+1), i-BitGFA1CarryOutput(x,y)) by A2,Def8;
   thus thesis by A3;
 end;
 
 theorem
-  for n being Element of NAT for x,y being FinSequence holds
+  for n being Nat for x,y being FinSequence holds
   InnerVertices (n-BitGFA1Str(x,y)) is Relation
 proof
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   set S0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE);
-  deffunc S(Element of NAT) = $1-BitGFA1Str(x,y);
-  deffunc SS(Element of NAT) = BitGFA1Str(x .($1+1), y.($1+1),
+  deffunc S(Nat) = $1-BitGFA1Str(x,y);
+  deffunc SS(Nat) = BitGFA1Str(x .($1+1), y.($1+1),
   $1-BitGFA1CarryOutput(x,y));
-  defpred P[Element of NAT] means InnerVertices (S($1)) is Relation;
+  defpred P[Nat] means InnerVertices (S($1)) is Relation;
   S(0) = S0 by Th16;
   then
 A1: P[0] by FACIRC_1:38;
 A2: now
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3: P[i];
 A4: S(i+1) = S(i) +* SS(i) by Th21;
     InnerVertices SS(i) is Relation by GFACIRC1:77;
     hence P[i+1] by A3,A4,FACIRC_1:3;
   end;
-  for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
+  for i being Nat holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
 registration
-  let n be Element of NAT;
+  let n be Nat;
   let x,y be FinSequence;
   cluster n-BitGFA1CarryOutput(x,y) -> pair;
   coherence
   proof
     set f1 = and2c, f2 = and2a, f3 = and2, f4 = or3;
     set h0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-    deffunc o(Element of NAT) = $1-BitGFA1CarryOutput(x,y);
+    deffunc o(Nat) = $1-BitGFA1CarryOutput(x,y);
     consider h being ManySortedSet of NAT such that
 A1: o(0) = h.0 and
-A2: h.0 = h0 and for n being Element of NAT holds
+A2: h.0 = h0 and for n being Nat holds
     h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h.n) by Def7;
-    defpred P[Element of NAT] means $1-BitGFA1CarryOutput(x,y) is pair;
+    defpred P[Nat] means $1-BitGFA1CarryOutput(x,y) is pair;
 A3: P[0] by A1,A2;
-A4: for n being Element of NAT st P[n] holds P[n+1]
+A4: for n being Nat st P[n] holds P[n+1]
     proof
-      let n be Element of NAT;
+      let n be Nat;
       set c = n-BitGFA1CarryOutput(x, y);
       o(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), c) by Th21
         .= [<*[<*x .(n+1),y.(n+1)*>, f1], [<*y.(n+1),c*>, f2],
       [<*c, x .(n+1)*>, f3]*>, f4];
       hence thesis;
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
+    for n being Nat holds P[n] from NAT_1:sch 2(A3,A4);
     hence thesis;
   end;
 end;
@@ -1816,7 +1827,7 @@ end;
 :: 2-4. InputVertices of n-Bit GFA Structure (TYPE-1)
 ::--------------------------------------
 
-Lm3: for x,y being FinSequence, n being Element of NAT holds
+Lm3: for x,y being FinSequence, n being Nat holds
 (n-BitGFA1CarryOutput(x,y))`1 = <*> &
 (n-BitGFA1CarryOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->TRUE &
 proj1 (n-BitGFA1CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
@@ -1825,7 +1836,7 @@ proj1 (n-BitGFA1CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN
 proof
   set f1 = and2c, f2 = and2a, f3 = and2, f4 = or3;
   let x,y be FinSequence;
-  defpred P[Element of NAT] means ($1-BitGFA1CarryOutput(x,y))`1 = <*> &
+  defpred P[Nat] means ($1-BitGFA1CarryOutput(x,y))`1 = <*> &
   ($1-BitGFA1CarryOutput(x,y))`2 = (0-tuples_on BOOLEAN)-->TRUE &
   proj1 ($1-BitGFA1CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   Card ($1-BitGFA1CarryOutput(x,y))`1 = 3 &
@@ -1836,9 +1847,9 @@ proof
   0-BitGFA1CarryOutput(x,y) = [<*>, (0-tuples_on BOOLEAN)-->TRUE]
   by Th16,FUNCOP_1:19,MCART_1:7;
   then
-A1: P[0] by FUNCT_5:21,MCART_1:7;
+A1: P[0] by MCART_1:7;
 A2: now
-    let n be Element of NAT;
+    let n be Nat;
     assume P[n];
     set c = n-BitGFA1CarryOutput(x, y);
     (n+1)-BitGFA1CarryOutput(x, y)
@@ -1849,20 +1860,20 @@ A2: now
     = <*[<*x .(n+1),y.(n+1)*>, f1], [<*y.(n+1),c*>, f2],
     [<*c, x .(n+1)*>, f3]*> &
     ((n+1)-BitGFA1CarryOutput(x, y))`2 = f4 by FUNCT_2:def 1,MCART_1:7;
-    hence P[n+1] by FINSEQ_1:62,FUNCT_5:21;
+    hence P[n+1] by FINSEQ_1:62;
   end;
-  thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A2);
+  thus for i being Nat holds P[i] from NAT_1:sch 2(A1,A2);
 end;
 
-Lm4: for n being Element of NAT for x,y being FinSequence for p being set
+Lm4: for n being Nat for x,y being FinSequence for p being set
 for f being Function of 2-tuples_on BOOLEAN, BOOLEAN holds
 n-BitGFA1CarryOutput(x,y) <> [p, f]
 proof
-  let n be Element of NAT, x,y be FinSequence, p be set;
+  let n be Nat, x,y be FinSequence, p be set;
   let f be Function of 2-tuples_on BOOLEAN, BOOLEAN;
   dom f = 2-tuples_on BOOLEAN & [p, f]`2 = f by FUNCT_2:def 1,MCART_1:7;
   then
-A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN by FUNCT_5:21;
+A1: proj1 [p, f]`2 = 2-tuples_on BOOLEAN;
   proj1 (n-BitGFA1CarryOutput(x,y))`2 = 0-tuples_on BOOLEAN or
   proj1 (n-BitGFA1CarryOutput(x,y))`2 = 3-tuples_on BOOLEAN by Lm3;
   hence thesis by A1,PRALG_1:1;
@@ -1872,7 +1883,7 @@ end;
 :: of input signals in n-bit GFA Circuits and one-bit GFA Circuit.
 
 theorem Th26:
-  for f,g being nonpair-yielding FinSequence for n being Element of NAT holds
+  for f,g being nonpair-yielding FinSequence for n being Nat holds
   InputVertices ((n+1)-BitGFA1Str(f,g)) =
   (InputVertices (n-BitGFA1Str(f,g)))\/
   ((InputVertices BitGFA1Str(f.(n+1),g.(n+1),
@@ -1882,13 +1893,13 @@ theorem Th26:
 proof
   set f1 = and2c, f2 = and2a, f3 = and2, f0 = xor2c;
   let f,g be nonpair-yielding FinSequence;
-  deffunc Sn(Element of NAT) = $1-BitGFA1Str(f,g);
-  deffunc S(set, Element of NAT) = BitGFA1Str(f.($2+1),g.($2+1), $1);
-  deffunc F(Element of NAT) = $1-BitGFA1CarryOutput(f,g);
+  deffunc Sn(Nat) = $1-BitGFA1Str(f,g);
+  deffunc S(set, Nat) = BitGFA1Str(f.($2+1),g.($2+1), $1);
+  deffunc F(Nat) = $1-BitGFA1CarryOutput(f,g);
   consider h being ManySortedSet of NAT such that
 A1: for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
-  deffunc h(Element of NAT) = h.$1;
-  deffunc o(set, Element of NAT) = GFA1CarryOutput(f.($2+1),g.($2+1), $1);
+  deffunc h(Nat) = h.$1;
+  deffunc o(set, Nat) = GFA1CarryOutput(f.($2+1),g.($2+1), $1);
   set k = (0-tuples_on BOOLEAN)-->TRUE;
 A2: Sn(0) = 1GateCircStr(<*>, k) by Th16;
   then
@@ -1897,20 +1908,21 @@ A4: InputVertices Sn(0) is without_pairs by A2,FACIRC_1:39;
   h(0) = F(0) by A1;
   then
 A5: h.0 in InnerVertices Sn(0);
-A6: for n being Element of NAT, x being set holds
+A6: for n being Nat, x being set holds
   InnerVertices S(x,n) is Relation by GFACIRC1:77;
 A7: now
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A8: x = h(n);
-    h(n) = F(n) by A1;
+        n in NAT by ORDINAL1:def 13;
+    then h(n) = F(n) by A1;
     then f.(n+1) <> [<*g.(n+1),x*>, f2] & g.(n+1) <> [<*x,f.(n+1)*>, f3] &
     x <> [<*f.(n+1),g.(n+1)*>, f1] & x <> [<*f.(n+1),g.(n+1)*>, f0] by A8,Lm4;
     hence InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by GFACIRC1:78;
   end;
-A9: for n being Element of NAT, x being set st x = h.n holds
+A9: for n being Nat, x being set st x = h.n holds
   (InputVertices S(x, n)) \ {x} is without_pairs
   proof
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A10: x = h(n);
 A11: InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A10;
     thus (InputVertices S(x, n)) \ {x} is without_pairs
@@ -1924,12 +1936,12 @@ A11: InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A10;
     end;
   end;
 A12: now
-    let n be Element of NAT, S be non empty ManySortedSign, x be set;
+    let n be Nat, S be non empty ManySortedSign, x be set;
     assume
 A13: S = Sn(n) & x = h.n;
-    then
-A14: x = n-BitGFA1CarryOutput(f,g) &
-    h(n+1) = (n+1)-BitGFA1CarryOutput(f,g) by A1;
+        n in NAT by ORDINAL1:def 13;
+    then A14: x = n-BitGFA1CarryOutput(f,g) &
+h(n+1) = (n+1)-BitGFA1CarryOutput(f,g) by A1,A13;
     hence Sn(n+1) = S +* S(x,n) by A13,Th21;
     thus h.(n+1) = o(x, n) by A14,Th21;
     InputVertices S(x, n) = {f.(n+1), g.(n+1), x} by A7,A13;
@@ -1941,24 +1953,25 @@ A15: InnerVertices S(x, n) = {[<*f.(n+1),g.(n+1)*>,f0]} \/
     o(x,n) in {o(x,n)} by TARSKI:def 1;
     hence o(x, n) in InnerVertices S(x, n) by A15,XBOOLE_0:def 2;
   end;
-A16: for n being Element of NAT holds InputVertices Sn(n+1) =
+A16: for n being Nat holds InputVertices Sn(n+1) =
   (InputVertices Sn(n)) \/ ((InputVertices S(h.(n),n)) \ {h.(n)}) &
   InnerVertices Sn(n) is Relation & InputVertices Sn(n) is without_pairs
   from CIRCCMB2:sch 11(A3,A4,A5,A6,A9,A12);
-  let n be Element of NAT;
-  h.n = n-BitGFA1CarryOutput(f,g) by A1;
+  let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+    then h.n = n-BitGFA1CarryOutput(f,g) by A1;
   hence thesis by A16;
 end;
 
 :: Main Proposision : whole input signals of n-depth GFA Circuit
 
 theorem
-  for n being Element of NAT
+  for n being Nat
   for x,y being nonpair-yielding FinSeqLen of n holds
   InputVertices (n-BitGFA1Str(x,y)) = rng x \/ rng y
 proof
   set f1 = and2c, f2 = and2a, f3 = and2, f0 = xor2c;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
   for x,y being nonpair-yielding FinSeqLen of $1 holds
   InputVertices ($1-BitGFA1Str(x,y)) = rng x \/ rng y;
 A1: P[0]
@@ -1967,22 +1980,23 @@ A1: P[0]
     set f = (0-tuples_on BOOLEAN)-->TRUE;
     len x = 0 & len y = 0 by CIRCCOMB:def 12;
     then
-A2: rng x = {} & rng y = {} by FINSEQ_1:25,RELAT_1:60;
+A2: rng x = {} & rng y = {} by CARD_2:59,RELAT_1:60;
     0-BitGFA1Str(x,y) = 1GateCircStr(<*>, f) by Th16;
     hence InputVertices (0-BitGFA1Str(x,y)) = rng <*> by CIRCCOMB:49
       .= rng x \/ rng y by A2;
   end;
-A3: for i being Element of NAT st P[i] holds P[i+1]
+A3: for i being Nat st P[i] holds P[i+1]
   proof
-    let i be Element of NAT such that
+    let i be Nat such that
 A4: P[i];
     let x,y be nonpair-yielding FinSeqLen of i+1;
+X:   i in NAT by ORDINAL1:def 13;
     consider x' being nonpair-yielding FinSeqLen of i,
     z1 being non pair set such that
-A5: x = x'^<*z1*> by FACIRC_2:36;
+A5: x = x'^<*z1*> by FACIRC_2:36,X;
     consider y' being nonpair-yielding FinSeqLen of i,
     z2 being non pair set such that
-A6: y = y'^<*z2*> by FACIRC_2:36;
+A6: y = y'^<*z2*> by FACIRC_2:36,X;
 A7: 1 in Seg 1 by FINSEQ_1:3;
     then
 A8: 1 in dom <*z1*> by FINSEQ_1:def 8;
@@ -1995,7 +2009,7 @@ A10: 1 in dom <*z2*> by A7,FINSEQ_1:def 8;
     then
 A11: y .(i+1) = <*z2*>.1 by A6,A10,FINSEQ_1:def 7
       .= z2 by FINSEQ_1:def 8;
-    deffunc F(Element of NAT) = $1-BitGFA1CarryOutput(x,y);
+    deffunc F(Nat) = $1-BitGFA1CarryOutput(x,y);
 A12: {z1,z2,F(i)} = {F(i),z1,z2} by ENUMSET1:100;
 A13: rng x = rng x' \/ rng <*z1*> by A5,FINSEQ_1:44
       .= rng x' \/ {z1} by FINSEQ_1:55;
@@ -2017,7 +2031,7 @@ A15: z1 <> [<*z2,F(i)*>, f2] & z2 <> [<*F(i),z1*>, f3] &
       .= rng x' \/ {z1} \/ rng y' \/ {z2} by XBOOLE_1:4
       .= rng x \/ rng y by A13,A14,XBOOLE_1:4;
   end;
-  thus for i being Element of NAT holds P[i] from NAT_1:sch 1(A1,A3);
+  thus for i being Nat holds P[i] from NAT_1:sch 2(A1,A3);
 end;
 
 ::--------------------------------
@@ -2025,37 +2039,40 @@ end;
 ::--------------------------------
 
 theorem
-  for n being Element of NAT for x,y being nonpair-yielding FinSeqLen of n
+  for n being Nat for x,y being nonpair-yielding FinSeqLen of n
   for s being State of n-BitGFA1Circ(x,y) holds Following(s,1+2*n) is stable
 proof
-  let n be Element of NAT, f,g be nonpair-yielding FinSeqLen of n;
-  deffunc S(set,Element of NAT) = BitGFA1Str(f.($2+1), g.($2+1), $1);
-  deffunc A(set,Element of NAT) = BitGFA1Circ(f.($2+1), g.($2+1), $1);
-  deffunc o(set,Element of NAT) = GFA1CarryOutput(f.($2+1), g.($2+1), $1);
+  let n be Nat, f,g be nonpair-yielding FinSeqLen of n;
+  deffunc S(set,Nat) = BitGFA1Str(f.($2+1), g.($2+1), $1);
+  deffunc A(set,Nat) = BitGFA1Circ(f.($2+1), g.($2+1), $1);
+  deffunc o(set,Nat) = GFA1CarryOutput(f.($2+1), g.($2+1), $1);
   set S0 = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->TRUE);
   set A0 = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->TRUE);
   set h0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
-  consider N being Function of NAT,NAT such that
+  n in NAT by ORDINAL1:def 13;
+  then consider N being Function of NAT,NAT such that
 A1: N.0 = 1 & N.1 = 2 & N.2 = n by FACIRC_2:37;
-  deffunc n(Element of NAT) = N.$1;
-A2: for x being set, n being Element of NAT holds
+  deffunc n(Nat) = N.$1;
+A2: for x being set, n being Nat holds
   A(x,n) is Boolean gate`2=den strict Circuit of S(x,n);
 A3: now
     let s be State of A0;
     Following(s, 1) = Following s by FACIRC_1:14;
     hence Following(s, n(0)) is stable by A1,CIRCCMB2:2;
   end;
-  deffunc F(Element of NAT) = $1-BitGFA1CarryOutput(f,g);
+  deffunc F(Nat) = $1-BitGFA1CarryOutput(f,g);
   consider h being ManySortedSet of NAT such that
 A4: for n being Element of NAT holds h.n = F(n) from PBOOLE:sch 5;
-A5: for n being Element of NAT, x being set
+A5: for n being Nat, x being set
   for A being non-empty Circuit of S(x,n) st x = h.(n) & A = A(x,n)
   for s being State of A holds Following(s, n(1)) is stable
   proof
     set f1 = and2c, f2 = and2a, f3 = and2, f0 = xor2c;
-    let n be Element of NAT, x be set, A be non-empty Circuit of S(x,n);
-    assume x = h.n;
-    then x = F(n) by A4;
+    let n be Nat, x be set, A be non-empty Circuit of S(x,n);
+    assume
+Z:     x = h.n;
+        n in NAT by ORDINAL1:def 13;
+    then x = F(n) by A4,Z;
     then f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &
     x <> [<*f.(n+1),g.(n+1)*>,f1] & x <> [<*f.(n+1),g.(n+1)*>,f0] by Lm4;
     hence thesis by A1,GFACIRC1:85;
@@ -2066,22 +2083,23 @@ A5: for n being Element of NAT, x being set
   consider f1,g1,h1 being ManySortedSet of NAT such that
 A6: Sn = f1.n & An = g1.n and
 A7: f1.0 = S0 & g1.0 = A0 & h1.0 = h0 &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A being non-empty MSAlgebra over S
   for z being set st S = f1.n & A = g1.n & z = h1.n holds
   f1.(n+1) = S +* S(z,n) & g1.(n+1) = A +* A(z,n) & h1.(n+1) = o(z,n) by Def6;
   now
     let i be set;
-    assume i in NAT;
-    then reconsider j = i as Element of NAT;
+    assume
+Z:     i in NAT;
+    then reconsider j = i as Nat by ORDINAL1:def 13;
     thus h1.i = F(j) by A7,Th15
-      .= h.i by A4;
+      .= h.i by A4,Z;
   end;
   then
 A8: h1 = h by PBOOLE:3;
 A9: ex u,v being ManySortedSet of NAT st Sn = u.(n(2)) & An = v.(n(2)) &
   u.0 = S0 & v.0 = A0 & h.0 = o0 &
-  for n being Element of NAT, S being non empty ManySortedSign,
+  for n being Nat, S being non empty ManySortedSign,
   A1 being non-empty MSAlgebra over S
   for x being set, A2 being non-empty MSAlgebra over S(x,n)
   st S = u.n & A1 = v.n & x = h.n & A2 = A(x,n)
@@ -2095,15 +2113,16 @@ A10: InnerVertices S0 is Relation & InputVertices S0 is without_pairs
   o0 = h0 & InnerVertices S0 = {h0} by Th16,CIRCCOMB:49;
   then
 A11: h.0 = o0 & o0 in InnerVertices S0 by A4,TARSKI:def 1;
-A12: for n being Element of NAT, x being set holds
+A12: for n being Nat, x being set holds
   InnerVertices S(x,n) is Relation by GFACIRC1:77;
-A13: for n being Element of NAT, x being set st x = h.n holds
+A13: for n being Nat, x being set st x = h.n holds
   (InputVertices S(x, n)) \ {x} is without_pairs
   proof
     set f1 = and2c, f2 = and2a, f3 = and2, f0 = xor2c;
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A14: x = h.n;
-    x = F(n) by A4,A14;
+        n in NAT by ORDINAL1:def 13;
+    then x = F(n) by A4,A14;
     then f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &
     x <> [<*f.(n+1),g.(n+1)*>,f1] & x <> [<*f.(n+1),g.(n+1)*>,f0] by Lm4;
     then
@@ -2115,13 +2134,15 @@ A15: InputVertices S(x, n) = {f.(n+1),g.(n+1),x} by GFACIRC1:78;
     by ENUMSET1:def 1,TARSKI:def 1;
     hence thesis;
   end;
-A16: for n being Element of NAT, x being set st x = h.n holds
+A16: for n being Nat, x being set st x = h.n holds
   h.(n+1) = o(x, n) &
   x in InputVertices S(x,n) & o(x, n) in InnerVertices S(x, n)
   proof
     set f1 = and2c, f2 = and2a, f3 = and2, f0 = xor2c;
-    let n be Element of NAT, x be set such that
+    let n be Nat, x be set such that
 A17: x = h.n;
+    n in NAT by ORDINAL1:def 13;
+    then
 A18: x = F(n) & h.(n+1) = F(n+1) by A4,A17;
     hence h.(n+1) = o(x, n) by Th21;
     f.(n+1) <> [<*g.(n+1),x*>,f2] & g.(n+1) <> [<*x,f.(n+1)*>,f3] &

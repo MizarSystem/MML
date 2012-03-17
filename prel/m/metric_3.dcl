@@ -16,6 +16,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 </Signature>
 <FCluster>

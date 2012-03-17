@@ -16,14 +16,13 @@ environ
       PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, FUNCT_3, FUNCOP_1,
       RELSET_1, PARTFUN1;
  constructors SETFAM_1, DOMAIN_1, FUNCT_3, FUNCOP_1, FINSET_1, MEMBERED,
-      EQREL_1, RCOMP_1, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, PCOMPS_1, VALUED_1,
-      PARTFUN1, SEQ_1;
+      EQREL_1, RCOMP_1, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2, PCOMPS_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FUNCOP_1, FINSET_1, XREAL_0, MEMBERED, EQREL_1, STRUCT_0, PRE_TOPC,
-      TOPS_1, METRIC_1, PCOMPS_1, VALUED_1;
+      FINSET_1, XREAL_0, MEMBERED, EQREL_1, STRUCT_0, PRE_TOPC, TOPS_1,
+      METRIC_1, PCOMPS_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, PRE_TOPC, TOPS_2, CONNSP_2, COMPTS_1, EQREL_1, STRUCT_0,
-      XBOOLE_0, SUBSET_1, BINOP_1, RELAT_1, VALUED_1;
+      XBOOLE_0, SUBSET_1, BINOP_1, RELAT_1, SETFAM_1;
  theorems TARSKI, ZFMISC_1, DOMAIN_1, PRE_TOPC, FUNCT_1, FUNCT_2, TOPS_1,
       EQREL_1, SETWISEO, FUNCT_3, SUBSET_1, TOPS_2, CONNSP_2, FUNCOP_1,
       COMPTS_1, FINSET_1, SETFAM_1, PCOMPS_1, METRIC_1, RCOMP_1, MCART_1,
@@ -53,12 +52,7 @@ A1: F.:X c= F.:F"X1 by RELAT_1:156;
 end;
 
 theorem
-  (X --> u).:X1 c= {u}
-proof
-  (X --> u).:X1 c= rng(X --> u) & rng(X --> u) c= {u}
-  by FUNCOP_1:19,RELAT_1:144;
-  hence thesis by XBOOLE_1:1;
-end;
+  (X --> u).:X1 c= {u};
 
 canceled 2;
 
@@ -362,13 +356,6 @@ proof
   thus [:F,id Z:]"{[y,z]} = [:F,id Z:]"[:{y},{z}:] by ZFMISC_1:35
     .= [:F"{y},(id Z)"{z}:] by FUNCT_3:94
     .= [:F"{y},{z}:] by FUNCT_2:171;
-end;
-
-definition
-  let B be non empty set, A be set;
-  let x be Element of B;
-  redefine func A --> x -> Function of A,B;
-  coherence by FUNCOP_1:58;
 end;
 
 begin
@@ -781,8 +768,8 @@ proof
   let X be non empty TopSpace;
   let x be Point of X;
   let F be Subset-Family of X such that
-A1: F is_a_cover_of {x} and F is open;
-  {x} c= union F by A1,COMPTS_1:def 1;
+A1: F is Cover of {x} and F is open;
+  {x} c= union F by A1,SETFAM_1:def 12;
   then x in union F by ZFMISC_1:37;
   then consider A being set such that
 A2: x in A & A in F by TARSKI:def 4;
@@ -1072,7 +1059,7 @@ A6: for e st e in A ex X1 being Subset of X, Y1 being Subset of Y st
     assume e in A;
     then consider X1 being Subset of X, Y1 being Subset of Y such that
 A7: e = [:X1,Y1:] & X1 is open & Y1 is open by A6;
-    X1 in the topology of X & Y1 in the topology of Y by A7, PRE_TOPC:def 5;
+    X1 in the topology of X & Y1 in the topology of Y by A7,PRE_TOPC:def 5;
     hence thesis by A7;
   end;
   hence B in the topology of [:X,Y:] by A1,A5;
@@ -1476,15 +1463,15 @@ end;
 
 theorem Th62:
   for H being Subset-Family of [:X,Y:],
-  X1 being Subset of X, Y1 being Subset of Y st H is_a_cover_of [:X1,Y1:]
-  holds (Y1 <> {} implies Pr1(X,Y).:H is_a_cover_of X1) &
-  (X1 <> {} implies Pr2(X,Y).:H is_a_cover_of Y1)
+  X1 being Subset of X, Y1 being Subset of Y st H is Cover of [:X1,Y1:]
+  holds (Y1 <> {} implies Pr1(X,Y).:H is Cover of X1) &
+  (X1 <> {} implies Pr2(X,Y).:H is Cover of Y1)
 proof
   let H be Subset-Family of [:X,Y:], X1 be Subset of X, Y1 be Subset of Y;
 A1: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
   assume
 A2: [:X1,Y1:] c= union H;
-  thus Y1 <> {} implies Pr1(X,Y).:H is_a_cover_of X1
+  thus Y1 <> {} implies Pr1(X,Y).:H is Cover of X1
   proof
     assume Y1 <> {};
     then consider y being Point of Y such that
@@ -1506,7 +1493,7 @@ A7: pr1(the carrier of X, the carrier of Y).:A in Pr1(X,Y).:H
     by A1,A5,A6,FUNCT_1:def 12;
     [x,y] in [:the carrier of X, the carrier of Y:] by ZFMISC_1:106;
     then
-A8: [x,y] in dom pr1(the carrier of X, the carrier of Y) by FUNCT_3: def 5;
+A8: [x,y] in dom pr1(the carrier of X, the carrier of Y) by FUNCT_3:def 5;
     e = pr1(the carrier of X, the carrier of Y).(x,y) by FUNCT_3:def 5;
     then e in pr1(the carrier of X, the carrier of Y).:A by A5,A8,
     FUNCT_1:def 12;
@@ -1541,15 +1528,15 @@ end;
 
 theorem Th63:
   for X, Y being TopSpace, H being Subset-Family of X,
-  Y being Subset of X st H is_a_cover_of Y
-  ex F being Subset-Family of X st F c= H & F is_a_cover_of Y &
+  Y being Subset of X st H is Cover of Y
+  ex F being Subset-Family of X st F c= H & F is Cover of Y &
   for C being set st C in F holds C meets Y
 proof
   let X, Y be TopSpace, H be Subset-Family of X;
   let Y be Subset of X;
-  assume H is_a_cover_of Y;
+  assume H is Cover of Y;
   then
-A1: Y c= union H by COMPTS_1:def 1;
+A1: Y c= union H by SETFAM_1:def 12;
   defpred P[set] means $1 in H & $1 /\ Y <> {};
   { Z where Z is Subset of X: P[Z]} is Subset-Family of X from DOMAIN_1:sch 7;
   then reconsider F = { Z where Z is Subset of X:
@@ -1563,7 +1550,7 @@ A1: Y c= union H by COMPTS_1:def 1;
     then ex Z being Subset of X st e = Z & Z in H & Z /\ Y <> {};
     hence thesis;
   end;
-  thus F is_a_cover_of Y
+  thus F is Cover of Y
   proof
     let e;
     assume
@@ -1647,24 +1634,24 @@ A2: the carrier of [:X,Y:] = [:the carrier of X, the carrier of Y:] by Def5;
 A3:   A <> {} X;
       [:A,{t}:] c= Int G by CONNSP_2:def 2;
       then [:A,{t}:] c= union Base-Appr G by Th55;
-      then Base-Appr G is_a_cover_of [:A,{t}:] by COMPTS_1:def 1;
+      then Base-Appr G is Cover of [:A,{t}:] by SETFAM_1:def 12;
       then consider K being Subset-Family of [:X,Y:] such that
 A4:   K c= Base-Appr G and
-A5:   K is_a_cover_of [:A,{t}:] and
+A5:   K is Cover of [:A,{t}:] and
 A6:   for c being set st c in K holds c meets [:A,{t}:] by Th63;
       reconsider PK = Pr1(X,Y).:K as Subset-Family of X;
-A7:   PK is_a_cover_of A by A5,Th62;
+A7:   PK is Cover of A by A5,Th62;
       K is open by A4,Th51,TOPS_2:18;
       then Pr1(X,Y).:K is open & Pr2(X,Y).:K is open by Th60;
       then consider M being Subset-Family of X such that
 A8:   M c= Pr1(X,Y).:K and
-A9:   M is_a_cover_of A and
+A9:   M is Cover of A and
 A10:  M is finite by A1,A7,COMPTS_1:def 7;
       consider N being Subset-Family of [:X,Y:] such that
 A11:  N c= K and
 A12:  N is finite and
 A13:  Pr1(X,Y).:N = M by A8,A10,Th64;
-A14:  N is_a_cover_of [:A,{t}:]
+A14:  N is Cover of [:A,{t}:]
       proof
         let e1,e2 be set;
         assume
@@ -1673,7 +1660,7 @@ A15:    [e1,e2] in [:A,{t}:];
 A16:    [e1,e2]`1 in A & [e1,e2]`2 in {t} by MCART_1:10;
         then
 A17:    [e1,e2]`2 = t by TARSKI:def 1;
-        A c= union M by A9,COMPTS_1:def 1;
+        A c= union M by A9,SETFAM_1:def 12;
         then consider X1 being set such that
 A18:    [e1,e2]`1 in X1 & X1 in M by A16,TARSKI:def 4;
         consider XY being Subset of [:X,Y:] such that
@@ -1709,15 +1696,15 @@ A26:  now
       end;
 A27:  N is open by A25,Th51,TOPS_2:18;
       [:A,{t}:] <> {} & [:A,{t}:] c= union N
-      by A3,A14,COMPTS_1:def 1,ZFMISC_1:113;
+      by A3,A14,SETFAM_1:def 12,ZFMISC_1:113;
       then
 A28:  N <> {} by XBOOLE_1:3,ZFMISC_1:2;
       reconsider F = Pr1(X,Y).:N as Subset-Family of X;
       F is open by A27,Th60;
       then
 A29:  union F is open by TOPS_2:26;
-      F is_a_cover_of A by A14,Th62;
-      then A c= union F by COMPTS_1:def 1;
+      F is Cover of A by A14,Th62;
+      then A c= union F by SETFAM_1:def 12;
       then A c= Int union F by A29,TOPS_1:55;
       then reconsider V = union F as a_neighborhood of A by CONNSP_2:def 2;
       reconsider H = Pr2(X,Y).:N as Subset-Family of Y;
@@ -2781,8 +2768,8 @@ A3:   (Proj D*R).xx<>(Proj D*R).xx';
       then R.xx=xx & R.xx'=xx' by A1,Def19;
       then
 A4:   Proj D.xx = (Proj D*R).xx & Proj D.xx'= (Proj D*R).xx' by FUNCT_2:21;
-      Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx'=Proj D.xx' by A2,A3,
-      Th76,Th78;
+      Proj TrivExt D.xx=Proj D.xx & Proj TrivExt D.xx'=Proj D.xx' by A2,A3,Th76
+      ,Th78;
       hence contradiction by A2,A3,A4;
     end;
     then consider F being
@@ -2861,8 +2848,8 @@ A8: Proj TrivExt D*CH1 = THETA*II by Th19;
   proof
     let WT be Point of [:space TrivExt D,I[01]:];
     reconsider xt'=WT as
-    Element of [:the carrier of space TrivExt D, the carrier of I[01]:] by
-    Def5;
+
+Element of [:the carrier of space TrivExt D, the carrier of I[01]:] by Def5;
     let G be a_neighborhood of THETA.WT;
     reconsider FF = Proj TrivExt D*CH1
     as continuous Function of [:XX,I[01]:], space TrivExt D by TOPS_2:58;

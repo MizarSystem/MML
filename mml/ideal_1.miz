@@ -18,19 +18,18 @@ environ
       MCART_1, POLYNOM1, SETFAM_1, DOMAIN_1, STRUCT_0, ALGSTR_0, RLVECT_1,
       VECTSP_1, GROUP_1, BINOP_1, VECTSP_2, FUNCT_7, GCD_1, BINOM;
  constructors SETFAM_1, BINOP_1, XXREAL_0, NAT_1, PRE_CIRC, REALSET2, ALGSTR_1,
-      GCD_1, INT_3, POLYNOM1, BINOM, VALUED_1, PARTFUN1, SEQ_1;
+      GCD_1, INT_3, POLYNOM1, BINOM;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, REALSET1, PRE_CIRC,
-      STRUCT_0, GROUP_1, VECTSP_1, ALGSTR_1, GR_CY_1, INT_3, POLYNOM1, BINOM,
-      SEQM_3, VALUED_0, ALGSTR_0, VALUED_1;
+      STRUCT_0, VECTSP_1, ALGSTR_1, GR_CY_1, INT_3, VALUED_0, ALGSTR_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions CARD_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, STRUCT_0, RLVECT_1,
-      ALGSTR_0, VALUED_1;
+      ALGSTR_0;
  theorems INT_3, SEQ_4, TARSKI, ZFMISC_1, RLVECT_1, VECTSP_1, GCD_1, FUNCT_1,
       FUNCT_2, POLYNOM1, RELAT_1, FINSET_1, PRE_CIRC, NAT_1, GR_CY_1, ALGSTR_1,
       REAL_1, MCART_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, SETFAM_1, INT_1, FUNCT_7,
       FINSEQ_4, FINSEQ_5, POLYNOM2, BINOM, XBOOLE_0, XBOOLE_1, ORDINAL1,
-      REALSET1, GROUP_1, XREAL_1, DOMAIN_1, XXREAL_0, PARTFUN1, ALGSTR_0;
+      REALSET1, GROUP_1, XREAL_1, DOMAIN_1, XXREAL_0, PARTFUN1, CARD_1, CARD_2;
  schemes NAT_1, RECDEF_1, FUNCT_2, POLYNOM2, FINSEQ_2, DOMAIN_1;
 
 begin :: Preliminaries
@@ -1393,7 +1392,7 @@ theorem Th32:
 proof
   let S be non empty doubleLoopStr, F be non empty Subset of S,
   lc be non empty LinearCombination of F;
-  len lc <> 0 by FINSEQ_1:25;
+  len lc <> 0 by CARD_2:59;
   then consider p being FinSequence of the carrier of S,
   e being Element of S such that
 A1: lc = p^<*e*> by FINSEQ_2:22;
@@ -1437,7 +1436,7 @@ theorem Th33:
 proof
   let S be non empty doubleLoopStr, F be non empty Subset of S,
   lc be non empty LeftLinearCombination of F;
-  len lc <> 0 by FINSEQ_1:25;
+  len lc <> 0 by CARD_2:59;
   then consider p being FinSequence of the carrier of S,
   e being Element of S such that
 A1: lc = p^<*e*> by FINSEQ_2:22;
@@ -1481,7 +1480,7 @@ theorem Th34:
 proof
   let S be non empty doubleLoopStr, F be non empty Subset of S,
   lc be non empty RightLinearCombination of F;
-  len lc <> 0 by FINSEQ_1:25;
+  len lc <> 0 by CARD_2:59;
   then consider p being FinSequence of the carrier of S,
   e being Element of S such that
 A1: lc = p^<*e*> by FINSEQ_2:22;
@@ -1588,29 +1587,27 @@ A2: E represents lc;
   deffunc F(Nat)=(P.(E/.$1)`1)*(P.(E/.$1)`2)*(P.(E/.$1)`3);
   consider LC being FinSequence of the carrier of S such that
 A3: len LC = len lc and
-A4: for k being Nat st k in Seg len lc holds LC.k = F(k) from FINSEQ_2:sch 1;
+A4: for k being Nat st k in dom LC holds LC.k = F(k) from FINSEQ_2:sch 1;
   now
     let i be set such that
-A5: i in dom LC;
-A6: dom LC = Seg len lc by A3,FINSEQ_1:def 3;
+A6: i in dom LC;
     reconsider u = P.(E/.i)`1, v = P.(E/.i)`3 as Element of S;
-A7: dom P = the carrier of R by FUNCT_2:def 1;
-A8: i is Nat by A5,ORDINAL1:def 13;
+A8: dom P = the carrier of R by FUNCT_2:def 1;
+A9: i is Nat by A6,ORDINAL1:def 13;
     dom lc = dom LC by A3,FINSEQ_3:31;
-    then (E/.i)`2 in F by A2,A5,Def12;
-    then P.((E/.i)`2) in P.:F by A7,FUNCT_1:def 12;
+    then (E/.i)`2 in F by A2,A6,Def12;
+    then P.((E/.i)`2) in P.:F by A8,FUNCT_1:def 12;
     then reconsider a = P.(E/.i)`2 as Element of G by A1;
     take u, v, a;
-    LC.i = LC/.i by A5,PARTFUN1:def 8;
-    hence LC/.i = u*a*v by A4,A5,A6,A8;
+    LC.i = LC/.i by A6,PARTFUN1:def 8;
+    hence LC/.i = u*a*v by A4,A6,A9;
   end;
   then reconsider LC as LinearCombination of G by Def9;
   take LC; thus len lc = len LC by A3;
   let i be set such that
-A9: i in dom LC;
-A10: i is Nat by A9,ORDINAL1:def 13;
-  dom LC = Seg len lc by A3,FINSEQ_1:def 3;
-  hence thesis by A4,A9,A10;
+A10: i in dom LC;
+A11: i is Nat by A10,ORDINAL1:def 13;
+  thus thesis by A4,A10,A11;
 end;
 
 definition
@@ -1682,29 +1679,27 @@ A2: E represents lc;
   deffunc F(Nat)=(P.(E/.$1)`1)*(P.(E/.$1)`2);
   consider LC being FinSequence of the carrier of S such that
 A3: len LC = len lc and
-A4: for k being Nat st k in Seg len lc holds LC.k = F(k) from FINSEQ_2:sch 1;
+A4: for k being Nat st k in dom LC holds LC.k = F(k) from FINSEQ_2:sch 1;
   now
     let i be set such that
-A5: i in dom LC;
-A6: dom LC = Seg len lc by A3,FINSEQ_1:def 3;
-A7: i is Nat by A5,ORDINAL1:def 13;
+A6: i in dom LC;
+A8: i is Nat by A6,ORDINAL1:def 13;
     reconsider u = P.(E/.i)`1 as Element of S;
-A8: dom P = the carrier of R by FUNCT_2:def 1;
+A9: dom P = the carrier of R by FUNCT_2:def 1;
     dom lc = dom LC by A3,FINSEQ_3:31;
-    then (E/.i)`2 in F by A2,A5, Def13;
-    then P.((E/.i)`2) in P.:F by A8,FUNCT_1:def 12;
+    then (E/.i)`2 in F by A2,A6, Def13;
+    then P.((E/.i)`2) in P.:F by A9,FUNCT_1:def 12;
     then reconsider a = P.(E/.i)`2 as Element of G by A1;
     take u, a;
-    LC.i = LC/.i by A5,PARTFUN1:def 8;
-    hence LC/.i = u*a by A4,A5,A6,A7;
+    LC.i = LC/.i by A6,PARTFUN1:def 8;
+    hence LC/.i = u*a by A4,A6,A8;
   end;
   then reconsider LC as LeftLinearCombination of G by Def10;
   take LC; thus len lc = len LC by A3;
   let i be set such that
-A9: i in dom LC;
-A10: i is Nat by A9,ORDINAL1:def 13;
-  dom LC = Seg len lc by A3,FINSEQ_1:def 3;
-  hence thesis by A4,A9,A10;
+A10: i in dom LC;
+A11: i is Nat by A10,ORDINAL1:def 13;
+  thus thesis by A4,A10,A11;
 end;
 
 definition
@@ -1776,29 +1771,27 @@ A2: E represents lc;
   deffunc F(Nat)=(P.(E/.$1)`1)*(P.(E/.$1)`2);
   consider LC being FinSequence of the carrier of S such that
 A3: len LC = len lc and
-A4: for k being Nat st k in Seg len lc holds LC.k = F(k) from FINSEQ_2:sch 1;
+A4: for k being Nat st k in dom LC holds LC.k = F(k) from FINSEQ_2:sch 1;
   now
     let i be set such that
-A5: i in dom LC;
-A6: dom LC = Seg len lc by A3,FINSEQ_1:def 3;
-A7: i is Nat by A5,ORDINAL1:def 13;
+A6: i in dom LC;
+A8: i is Nat by A6,ORDINAL1:def 13;
     reconsider v = P.(E/.i)`2 as Element of S;
-A8: dom P = the carrier of R by FUNCT_2:def 1;
+A9: dom P = the carrier of R by FUNCT_2:def 1;
     dom lc = dom LC by A3,FINSEQ_3:31;
-    then (E/.i)`1 in F by A2,A5, Def14;
-    then P.((E/.i)`1) in P.:F by A8,FUNCT_1:def 12;
+    then (E/.i)`1 in F by A2,A6, Def14;
+    then P.((E/.i)`1) in P.:F by A9,FUNCT_1:def 12;
     then reconsider a = P.(E/.i)`1 as Element of G by A1;
     take v, a;
-    LC.i = LC/.i by A5,PARTFUN1:def 8;
-    hence LC/.i = a*v by A4,A5,A6,A7;
+    LC.i = LC/.i by A6,PARTFUN1:def 8;
+    hence LC/.i = a*v by A4,A6,A8;
   end;
   then reconsider LC as RightLinearCombination of G by Def11;
   take LC; thus len lc = len LC by A3;
   let i be set such that
-A9: i in dom LC;
-A10: i is Nat by A9,ORDINAL1:def 13;
-  dom LC = Seg len lc by A3,FINSEQ_1:def 3;
-  hence thesis by A4,A9,A10;
+A10: i in dom LC;
+A11: i is Nat by A10,ORDINAL1:def 13;
+  thus thesis by A4,A10,A11;
 end;
 
 theorem
@@ -2325,7 +2318,7 @@ A2: P[0]
       let lc be LinearCombination of F;
       assume len lc <= 0;
       then len lc = 0;
-      then lc = <*>(the carrier of L) by FINSEQ_1:25;
+      then lc = <*>(the carrier of L) by CARD_2:59;
       then
 A3:   Sum lc = 0.L by RLVECT_1:60;
       consider y being Element of F;
@@ -2351,7 +2344,7 @@ A7:     len lc <= k+1;
         end;
         suppose
 A8:       len lc = k+1;
-          then lc is non empty by FINSEQ_1:25;
+          then lc is non empty by CARD_1:47;
           then consider q being LinearCombination of F,
           r being Element of L such that
 A9:       lc=q^<*r*> & <*r*> is LinearCombination of F by Th32;
@@ -2497,7 +2490,7 @@ A2: P[0]
       let lc be LeftLinearCombination of F;
       assume len lc <= 0;
       then len lc = 0;
-      then lc = <*>(the carrier of L) by FINSEQ_1:25;
+      then lc = <*>(the carrier of L) by CARD_2:59;
       then
 A3:   Sum lc = 0.L by RLVECT_1:60;
       consider y being Element of F;
@@ -2523,7 +2516,7 @@ A7:     len lc <= k+1;
         end;
         suppose
 A8:       len lc = k+1;
-          then lc is non empty by FINSEQ_1:25;
+          then lc is non empty by CARD_1:47;
           then consider q being LeftLinearCombination of F,
           r being Element of L such that
 A9:       lc=q^<*r*> & <*r*> is LeftLinearCombination of F by Th33;
@@ -2656,7 +2649,7 @@ A2: P[0]
       let lc be RightLinearCombination of F;
       assume len lc <= 0;
       then len lc = 0;
-      then lc = <*>(the carrier of L) by FINSEQ_1:25;
+      then lc = <*>(the carrier of L) by CARD_2:59;
       then
 A3:   Sum lc = 0.L by RLVECT_1:60;
       consider y being Element of F;
@@ -2682,7 +2675,7 @@ A7:     len lc <= k+1;
         end;
         suppose
 A8:       len lc = k+1;
-          then lc is non empty by FINSEQ_1:25;
+          then lc is non empty by CARD_1:47;
           then consider q being RightLinearCombination of F,
           r being Element of L such that
 A9:       lc=q^<*r*> & <*r*> is RightLinearCombination of F by Th34;

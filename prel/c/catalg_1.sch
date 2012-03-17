@@ -21,6 +21,7 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
@@ -63,15 +64,15 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="58">
-<Func kind="K" nr="343">
+<Adjective nr="69">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="343">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -90,12 +91,12 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
 <Func kind="U" nr="14">
-<Func kind="K" nr="343">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="349">
+<Func kind="K" nr="357">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -115,11 +116,11 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
-<Func kind="K" nr="198">
-<Func kind="K" nr="343">
+<Func kind="K" nr="206">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="348">
+<Func kind="K" nr="356">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -176,11 +177,11 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
-<Func kind="K" nr="198">
-<Func kind="K" nr="343">
+<Func kind="K" nr="206">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="350">
+<Func kind="K" nr="358">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

@@ -15,7 +15,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
@@ -42,8 +41,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="87">
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

@@ -14,13 +14,13 @@ environ
       FUNCT_2, ZFMISC_1, NAT_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQOP, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2, EUCLID_2,
       ORDINAL1, MATRIX_5, MATRIX_1, MATRIX_3, MATRIX_4, RLVECT_1, COMPLSP2,
-      SETWOP_2, COMPLFLD, BINARITH, FINSEQ_4, STRUCT_0, GROUP_1;
- constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, FINSEQ_4, FINSOP_1,
-      BINARITH, MATRIX_3, EUCLID_2, MATRIX_4, MATRIX_5, COMPLSP2, VALUED_1,
-      SEQ_1, COMPLSP1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, BINOP_2, MEMBERED, SEQ_1, FINSEQ_2,
-      COMPLFLD, MATRIX_1, VALUED_0, VALUED_1;
+      SETWOP_2, COMPLFLD, BINARITH, STRUCT_0, GROUP_1, SEQ_1;
+ constructors PARTFUN1, SETWISEO, XXREAL_0, NAT_1, FINSOP_1, BINARITH,
+      MATRIX_3, EUCLID_2, MATRIX_4, MATRIX_5, COMPLSP2, SEQ_1, COMPLSP1,
+      BINOP_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQ_2, COMPLFLD,
+      MATRIX_1, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions MATRIX_1, RVSUM_1, VALUED_1;
  theorems FINSEQ_1, FUNCT_1, NAT_1, MATRIX_1, FINSEQ_2, COMPLEX1, BINOP_2,
@@ -483,19 +483,19 @@ A1: len x > 0;
     deffunc F(Nat) = <*x.$1*>;
     reconsider n=len x as Element of NAT;
     consider M3 being FinSequence such that
-A2: len M3=n & for j be Nat st j in Seg n holds M3.j = F(j)
+A2: len M3=n & for j be Nat st j in dom M3 holds M3.j = F(j)
     from FINSEQ_1:sch 2;
+A3:  dom M3 = Seg n by A2,FINSEQ_1:def 3;
     for y being set st y in rng M3 ex p being FinSequence of COMPLEX
     st y = p & len p = 1
     proof
       let y be set;
       assume y in rng M3;
       then consider z be set such that
-A3:   z in dom M3 & y=M3.z by FUNCT_1:def 5;
-      reconsider z as Element of NAT by A3;
-A4:   z in Seg len M3 by A3,FINSEQ_1:def 3;
+A4:   z in dom M3 & y=M3.z by FUNCT_1:def 5;
+      reconsider z as Element of NAT by A4;
       len <*x.z*>=1 by FINSEQ_1:56;
-      hence ex p being FinSequence of COMPLEX st y = p & len p = 1 by A2,A3,A4;
+      hence ex p being FinSequence of COMPLEX st y = p & len p = 1 by A2,A4;
     end;
     then reconsider M2=M3 as Matrix of COMPLEX by MATRIX_1:9;
     take M2;
@@ -504,32 +504,32 @@ A4:   z in Seg len M3 by A3,FINSEQ_1:def 3;
       let p be FinSequence of COMPLEX;
       assume p in rng M2;
       then consider i be Nat such that
-A5:   i in dom M2 and
-A6:   M2.i =p by FINSEQ_2:11;
-A7:   i in Seg len M2 by A5,FINSEQ_1:def 3;
+A6:   i in dom M2 and
+A7:   M2.i =p by FINSEQ_2:11;
       len <*x.i*>=1 by FINSEQ_1:56;
-      hence thesis by A2,A6,A7;
+      hence thesis by A2,A7,A6;
     end;
     then reconsider M1=M2 as Matrix of len M2,1,COMPLEX by MATRIX_1:def 3;
     width M1 = 1 by A1,A2,MATRIX_1:24;
-    hence thesis by A2;
+    hence thesis by A2,A3;
   end;
   uniqueness
   proof
     let M1,M2 be Matrix of COMPLEX;
     assume that
-A8: len M1 = len x & width M1 = 1 and
-A9: for k st k in Seg len x holds M1.k =<*x.k*> and
-A10: len M2 = len x & width M2 = 1 and
-A11: for k st k in Seg len x holds M2.k =<*x.k*>;
+A9: len M1 = len x & width M1 = 1 and
+A10: for k st k in Seg len x holds M1.k =<*x.k*> and
+A11: len M2 = len x & width M2 = 1 and
+A12: for k st k in Seg len x holds M2.k =<*x.k*>;
+X: dom M1 = Seg len x by A9,FINSEQ_1:def 3;
     now
       let k be Nat;
       assume
-A12:  k in Seg len x;
-      hence M1.k=<*x.k*> by A9
-        .=M2.k by A11,A12;
+A13:  k in dom M1;
+      hence M1.k=<*x.k*> by A10,X
+        .=M2.k by A12,A13,X;
     end;
-    hence M1=M2 by A8,A10,FINSEQ_2:10;
+    hence M1=M2 by A9,A11,FINSEQ_2:10;
   end;
 end;
 
@@ -585,26 +585,28 @@ definition
   proof
     deffunc V(Nat) = Sum mlt(Line(M,$1),F);
     consider z being FinSequence of COMPLEX such that
-A1: len z=len M & for i be Nat st i in Seg len M holds z.i=V(i)
+A1: len z=len M & for i be Nat st i in dom z holds z.i=V(i)
     from FINSEQ_2:sch 1;
+A2: dom z = Seg len M by A1,FINSEQ_1:def 3;
     take z;
-    thus thesis by A1;
+    thus thesis by A1,A2;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of COMPLEX;
     assume that
-A2: len p1 = len M &
+A3: len p1 = len M &
     for i st i in Seg len M holds p1.i=Sum mlt(Line(M,i),F) and
-A3: len p2 = len M & for i st i in Seg len M holds p2.i=Sum mlt(Line(M,i),F);
+A4: len p2 = len M & for i st i in Seg len M holds p2.i=Sum mlt(Line(M,i),F);
+X: dom p1 = Seg len M by A3,FINSEQ_1:def 3;
     now
       let i be Nat;
       assume
-A4:   i in Seg len M;
-      then p1.i=Sum mlt(Line(M,i),F) by A2;
-      hence p1.i = p2.i by A3,A4;
+A5:   i in dom p1;
+      then p1.i=Sum mlt(Line(M,i),F) by A3,X;
+      hence p1.i = p2.i by A4,A5,X;
     end;
-    hence p1=p2 by A2,A3,FINSEQ_2:10;
+    hence p1=p2 by A3,A4,FINSEQ_2:10;
   end;
 end;
 
@@ -742,13 +744,7 @@ A5: (for n be Element of NAT st 0 <> n & n < len (F*') holds
   f22.(n + 1) = addcomplex.(f22.n,(F*').(n + 1))) and
 A6: addcomplex $$ (F*') = f22.(len (F*')) by A1,FINSOP_1:2;
   defpred P[set,set] means $2= f22.$1;
-A7: for k be Nat st k in Seg len (F*') ex x being Element of COMPLEX st P[k,x]
-  proof
-    let k be Nat;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
-    f22.k is Element of COMPLEX;
-    hence thesis;
-  end;
+A7: for k be Nat st k in Seg len (F*') ex x being Element of COMPLEX st P[k,x];
   ex f2 being FinSequence of COMPLEX st dom f2 = Seg len (F*') &
   for k be Nat st k in Seg len (F*') holds P[k,f2.k] from FINSEQ_1:sch 5(A7);
   then consider f2 being FinSequence of COMPLEX such that
@@ -859,7 +855,6 @@ A7: len ((mlt(x,(y*')))*') = len mlt(y,(x*')) by A1,A2,A4,A5,FINSEQ_2:86;
   reconsider y1'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider x1'=x*' as Element of (len (x*'))-tuples_on COMPLEX
   by FINSEQ_2:110;
-  set a'=mlt(x,(y*'));
   now
     let i be Nat;
     assume 1 <= i & i <= len ((mlt(x,(y*')))*');
@@ -977,13 +972,7 @@ A3: for n be Element of NAT st 0 <> n & n < len R holds
   f22.(n + 1) = addreal.(f22.n,R.(n + 1)) and
 A4: addreal $$ R = f22.len R by A1,FINSOP_1:2;
   defpred P[set,set] means $2= f22.$1;
-A5: for k be Nat st k in Seg len R ex x being Element of REAL st P[k,x]
-  proof
-    let k be Nat;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
-    f22.k is Element of REAL;
-    hence thesis;
-  end;
+A5: for k be Nat st k in Seg len R ex x being Element of REAL st P[k,x];
   ex f2 being FinSequence of REAL st dom f2 = Seg len R &
   for k be Nat st k in Seg len R holds P[k,f2.k] from FINSEQ_1:sch 5(A5);
   then consider f2 being FinSequence of REAL such that
@@ -1274,8 +1263,6 @@ A2: len Re x=len x by COMPLSP2:48;
 A3: len Re y=len y by COMPLSP2:48;
 A4: len Im x=len x by COMPLSP2:48;
 A5: len Im y=len y by COMPLSP2:48;
-  reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
 A6: mlt(Im x,Im y)= mlt(FR2FC(Im x),FR2FC(Im y)) by A1,A4,A5,Th38;
 A7: mlt(Im x,Re y)= mlt(FR2FC(Im x),FR2FC(Re y)) by A1,A3,A4,Th38;
 A8: mlt(Re x,Re y)= mlt(FR2FC Re x,FR2FC Re y) by A1,A2,A3,Th38;
@@ -1576,28 +1563,30 @@ definition
     deffunc F(Nat) = Sum Line(M,$1);
     consider z being FinSequence of COMPLEX such that
 A1: len z = len M and
-A2: for j be Nat st j in Seg len M holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg len M by A1,FINSEQ_1:def 3;
     take z;
     thus len z = len M by A1;
     let j be Nat;
-    thus thesis by A2;
+    thus thesis by A2,A3;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of COMPLEX;
     assume that
-A3: len p1=len M and
-A4: for j st j in Seg len M holds p1.j = Sum Line(M,j) and
-A5: len p2=len M and
-A6: for j st j in Seg len M holds p2.j = Sum Line(M,j);
-    for j be Nat st j in Seg len M holds p1.j=p2.j
+A4: len p1=len M and
+A5: for j st j in Seg len M holds p1.j = Sum Line(M,j) and
+A6: len p2=len M and
+A7: for j st j in Seg len M holds p2.j = Sum Line(M,j);
+X: dom p1 = Seg len M by A4,FINSEQ_1:def 3;
+    for j be Nat st j in dom p1 holds p1.j=p2.j
     proof
       let j be Nat;
-      assume j in Seg len M;
-      then p1.j = Sum Line(M,j) & p2.j = Sum Line(M,j) by A4,A6;
+      assume j in dom p1;
+      then p1.j = Sum Line(M,j) & p2.j = Sum Line(M,j) by A5,A7,X;
       hence thesis;
     end;
-    hence thesis by A3,A5,FINSEQ_2:10;
+    hence thesis by A4,A6,FINSEQ_2:10;
   end;
 end;
 
@@ -1612,28 +1601,30 @@ definition
     deffunc F(Nat) = Sum Col(M,$1);
     consider f being FinSequence of COMPLEX such that
 A1: len f = width M and
-A2: for j be Nat st j in Seg width M holds f.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom f holds f.j = F(j) from FINSEQ_2:sch 1;
+A3: dom f = Seg width M  by A1,FINSEQ_1:def 3;
     take f;
     thus len f = width M by A1;
     let j be Nat;
-    thus thesis by A2;
+    thus thesis by A2,A3;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of COMPLEX;
     assume that
-A3: len p1=width M and
-A4: for j st j in Seg width M holds p1.j = Sum (Col(M,j)) and
-A5: len p2=width M and
-A6: for j st j in Seg width M holds p2.j = Sum (Col(M,j));
-    for j be Nat st j in Seg width M holds p1.j=p2.j
+A4: len p1=width M and
+A5: for j st j in Seg width M holds p1.j = Sum (Col(M,j)) and
+A6: len p2=width M and
+A7: for j st j in Seg width M holds p2.j = Sum (Col(M,j));
+X: dom p1 = Seg width M by A4,FINSEQ_1:def 3;
+    for j be Nat st j in dom p1 holds p1.j=p2.j
     proof
       let j be Nat;
-      assume j in Seg width M;
-      then p1.j = (Sum (Col(M,j))) & p2.j = (Sum (Col(M,j))) by A4,A6;
+      assume j in dom p1;
+      then p1.j = (Sum (Col(M,j))) & p2.j = (Sum (Col(M,j))) by A5,A7,X;
       hence thesis;
     end;
-    hence thesis by A3,A5,FINSEQ_2:10;
+    hence thesis by A4,A6,FINSEQ_2:10;
   end;
 end;
 

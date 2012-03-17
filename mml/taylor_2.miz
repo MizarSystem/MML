@@ -10,23 +10,24 @@ environ
       RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, SEQ_1, SEQ_2,
       RCOMP_1, SIN_COS, FDIFF_1, SERIES_1, GROUP_1, SUPINF_2, TAYLOR_1,
       TAYLOR_2, RFUNCT_2, MATRIX_2;
- notations SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XCMPLX_0,
-      XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, VALUED_1, SEQ_1,
+ notations SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XREAL_0,
+      ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, FUNCT_2, VALUED_1, SEQ_1,
       SEQ_2, SERIES_1, FDIFF_1, SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN;
  constructors ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, RFUNCT_2, LIMFUNC1,
-      FDIFF_1, SERIES_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1, VALUED_1,
-      PARTFUN1;
- registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1,
-      RCOMP_1, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1;
+      FDIFF_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1;
+ registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, RCOMP_1,
+      XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TAYLOR_1, VALUED_1;
  theorems XBOOLE_1, ABSVALUE, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
       SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, NEWTON, POWER,
       FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1, ABIAN, COMPLEX1,
-      XXREAL_0, VALUED_1;
+      XXREAL_0, VALUED_1, FUNCT_2;
  schemes NAT_1;
 
 begin
+
+ reserve Z for open Subset of REAL;
 
 theorem Th1:
   for x be Real, n be Element of NAT holds abs(x |^ n) = abs(x) |^ n
@@ -125,44 +126,50 @@ A5: f.x=Partial_Sums(Maclaurin(f, ].-r,r.[,x)).n
   thus thesis by A4,A5;
 end;
 
-theorem Th5:
-  for r be Real holds exp_R `| ].-r,r.[ = exp_R | ].-r,r.[ &
-  dom(exp_R | ].-r,r.[) = ].-r,r.[
+LemX:
+  for f being Function of REAL, REAL holds
+    dom (f | Z) = Z
 proof
-  let r be Real;
-A1: exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
+  let f be Function of REAL, REAL;
+A1: dom f = REAL by FUNCT_2:def 1;
+  thus dom (f|Z) = dom f /\ Z by FUNCT_1:68
+    .= Z by XBOOLE_1:28,A1;
+end;
+
+theorem Th5:
+  exp_R `| Z = exp_R | Z & dom(exp_R | Z) = Z
+proof
+A1: exp_R is_differentiable_on Z by FDIFF_1:34,TAYLOR_1:16;
   then
-A2: dom (exp_R `| ].-r,r.[) = ].-r,r.[ by FDIFF_1:def 8;
-A3: dom (exp_R | ].-r,r.[) = dom(exp_R) /\ ].-r,r.[ by FUNCT_1:68
-    .= ].-r,r.[ by TAYLOR_1:16,XBOOLE_1:28;
-  for x be Real st x in ].-r,r.[ holds
-  (exp_R `| ].-r,r.[).x=(exp_R | ].-r,r.[).x
+A2: dom (exp_R `| Z) = Z by FDIFF_1:def 8;
+A3: dom (exp_R | Z) = Z by LemX;
+  for x be Real st x in Z holds
+  (exp_R `| Z).x=(exp_R | Z).x
   proof
     let x be Real such that
-A4: x in ].-r,r.[;
-    thus (exp_R `| ].-r,r.[).x=diff(exp_R,x) by A1,A4,FDIFF_1:def 8
+A4: x in Z;
+    thus (exp_R `| Z).x=diff(exp_R,x) by A1,A4,FDIFF_1:def 8
       .=exp_R.x by TAYLOR_1:16
-      .=(exp_R | ].-r,r.[).x by A3,A4,FUNCT_1:70;
+      .=(exp_R | Z).x by A3,A4,FUNCT_1:70;
   end;
   hence thesis by A2,A3,PARTFUN1:34;
 end;
 
 theorem Th6:
-  for n be Element of NAT, r be Real
-  holds diff(exp_R,].-r,r.[).n=exp_R | ].-r,r.[
+  for n be Element of NAT
+  holds diff(exp_R,Z).n=exp_R | Z
 proof
-  let n be Element of NAT, r be Real;
-  defpred P[Element of NAT] means diff(exp_R,].-r,r.[).$1 =exp_R | ].-r,r.[;
+  let n be Element of NAT;
+  defpred P[Element of NAT] means diff(exp_R,Z).$1 = exp_R | Z;
 A1: P[0] by TAYLOR_1:def 5;
 A2: for k be Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
 A3: P[k];
-A4: exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
-    diff(exp_R,].-r,r.[).(k+1)=(diff(exp_R,].-r,r.[).k) `| ].-r,r.[
-    by TAYLOR_1:def 5
-      .=exp_R `| ].-r,r.[ by A3,A4,FDIFF_2:16
-      .=exp_R | ].-r,r.[ by Th5;
+A4: exp_R is_differentiable_on Z by FDIFF_1:34,TAYLOR_1:16;
+    diff(exp_R,Z).(k+1)=(diff(exp_R,Z).k) `| Z by TAYLOR_1:def 5
+      .=exp_R `| Z by A3,A4,FDIFF_2:16
+      .=exp_R | Z by Th5;
     hence thesis;
   end;
   for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
@@ -170,14 +177,14 @@ A4: exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
 end;
 
 theorem Th7:
-  for n be Element of NAT, r, x be Real st x in ].-r,r.[ holds
-  (diff(exp_R,].-r,r.[).n).x = exp_R.x
+  for n be Element of NAT, x be Real st x in Z holds
+  (diff(exp_R,Z).n).x = exp_R.x
 proof
   let n be Element of NAT;
-  let r,x be Real such that
-A1: x in ].-r,r.[;
-A2: x in dom(exp_R | ].-r,r.[) by A1,Th5;
-  (diff(exp_R,].-r,r.[).n).x=(exp_R | ].-r,r.[).x by Th6
+  let x be Real such that
+A1: x in Z;
+A2: x in dom(exp_R | Z) by A1,Th5;
+  (diff(exp_R,Z).n).x=(exp_R | Z).x by Th6
     .=exp_R.x by A2,FUNCT_1:70;
   hence thesis;
 end;
@@ -233,22 +240,22 @@ A6: abs((n+1)!) = ((n+1)!) by ABSVALUE:def 1;
 end;
 
 theorem Th10:
-  for r be Real, n be Element of NAT holds
-  exp_R is_differentiable_on n, ].-r,r.[
+  for n be Element of NAT holds
+  exp_R is_differentiable_on n, Z
 proof
-  let r be Real, n be Element of NAT;
+  let n be Element of NAT;
   let i be Element of NAT such that i <= n-1;
   reconsider i as Element of NAT;
-A1: dom(diff(exp_R,].-r,r.[).i) = dom(exp_R | ].-r,r.[) by Th6
-    .= ].-r,r.[ by Th5;
-  for x be Real st x in ].-r,r.[ holds
-  diff(exp_R,].-r,r.[).i | ].-r,r.[ is_differentiable_in x
+A1: dom(diff(exp_R,Z).i) = dom(exp_R | Z) by Th6
+    .= Z by Th5;
+  for x be Real st x in Z holds
+  diff(exp_R,Z).i | Z is_differentiable_in x
   proof
     let x be Real such that
-A2: x in ].-r,r.[;
-A3: diff(exp_R,].-r,r.[).i | ].-r,r.[ = exp_R | ].-r,r.[ | ].-r,r.[ by Th6
-      .= exp_R | ].-r,r.[ by FUNCT_1:82;
-    exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
+A2: x in Z;
+A3: diff(exp_R,Z).i | Z = exp_R | Z | Z by Th6
+      .= exp_R | Z by FUNCT_1:82;
+    exp_R is_differentiable_on Z by FDIFF_1:34,TAYLOR_1:16;
     hence thesis by A2,A3,FDIFF_1:def 7;
   end;
   hence thesis by A1,FDIFF_1:def 7;
@@ -494,46 +501,42 @@ A3:   t in NAT;
 end;
 
 theorem Th17:
-  for r be Real holds sin `| ].-r,r.[ = cos | ].-r,r.[
-  & cos `| ].-r,r.[ = (-sin) | ].-r,r.[ & dom(sin | ].-r,r.[) = ].-r,r.[
-  & dom(cos | ].-r,r.[) = ].-r,r.[
+  sin `| Z = cos | Z & cos `| Z = (-sin) | Z &
+  dom(sin | Z) = Z & dom(cos | Z) = Z
 proof
-  let r be Real;
-A1: sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
+A1: sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
   then
-A2: dom (sin `| ].-r,r.[) = ].-r,r.[ by FDIFF_1:def 8;
-A3: cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
-A4: dom ((-sin) | ].-r,r.[) = dom((-1)(#)sin) /\ ].-r,r.[ by FUNCT_1:68
-    .= dom(sin) /\ ].-r,r.[ by VALUED_1:def 5
-    .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
-A5: dom (sin | ].-r,r.[) = dom(sin) /\ ].-r,r.[ by FUNCT_1:68
-    .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
-A6: dom (cos | ].-r,r.[) = dom(cos) /\ ].-r,r.[ by FUNCT_1:68
-    .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
-A7: for x be Real st x in ].-r,r.[ holds
-  (sin `| ].-r,r.[).x = (cos | ].-r,r.[).x
+A2: dom (sin `| Z) = Z by FDIFF_1:def 8;
+A3: cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72;
+A4: dom ((-sin) | Z) = dom((-1)(#)sin) /\ Z by FUNCT_1:68
+    .= dom(sin) /\ Z by VALUED_1:def 5
+    .= Z by SIN_COS:27,XBOOLE_1:28;
+A5: dom (sin | Z) = dom(sin) /\ Z by FUNCT_1:68
+    .= Z by SIN_COS:27,XBOOLE_1:28;
+A6: dom (cos | Z) = dom(cos) /\ Z by FUNCT_1:68
+    .= Z by SIN_COS:27,XBOOLE_1:28;
+A7: for x be Real st x in Z holds (sin `| Z).x = (cos | Z).x
   proof
     let x be Real such that
-A8: x in ].-r,r.[;
-    (sin `| ].-r,r.[).x=diff(sin,x) by A1,A8,FDIFF_1:def 8
+A8: x in Z;
+    (sin `| Z).x=diff(sin,x) by A1,A8,FDIFF_1:def 8
       .=cos.x by SIN_COS:69
-      .=(cos | ].-r,r.[).x by A6,A8,FUNCT_1:70;
+      .=(cos | Z).x by A6,A8,FUNCT_1:70;
     hence thesis;
   end;
-A9: dom (cos `| ].-r,r.[) = ].-r,r.[ by A3,FDIFF_1:def 8;
-  for x be Real st x in ].-r,r.[ holds
-  (cos `| ].-r,r.[).x = ((-sin) | ].-r,r.[).x
+A9: dom (cos `| Z) = Z by A3,FDIFF_1:def 8;
+  for x be Real st x in Z holds
+  (cos `| Z).x = ((-sin) | Z).x
   proof
     let x be Real such that
-A10: x in ].-r,r.[;
-    x in dom (sin) by SIN_COS:27;
-    then
-A11: x in dom ((-1)(#)sin ) by VALUED_1:def 5;
-    (cos `| ].-r,r.[).x=diff(cos,x) by A3,A10,FDIFF_1:def 8
+A10: x in Z;
+    x in dom (sin) by SIN_COS:27; then
+A11: x in dom ((-1)(#)sin) by VALUED_1:def 5;
+    (cos `| Z).x=diff(cos,x) by A3,A10,FDIFF_1:def 8
       .=-sin.x by SIN_COS:68
       .=(-1)*sin.x
       .=(-sin).x by A11,VALUED_1:def 5
-      .=((-sin) | ].-r,r.[).x by A4,A10,FUNCT_1:70;
+      .=((-sin) | Z).x by A4,A10,FUNCT_1:70;
     hence thesis;
   end;
   hence thesis by A2,A4,A5,A6,A7,A9,PARTFUN1:34;
@@ -552,83 +555,77 @@ A1: f is_differentiable_on Z;
 end;
 
 theorem Th19:
-  for r be Real, n be Element of NAT holds
-  diff(sin,].-r,r.[).(2*n) = (-1) |^ n (#) sin | ].-r,r.[ &
-  diff(sin,].-r,r.[).(2*n+1) = (-1) |^ n (#) cos | ].-r,r.[ &
-  diff(cos,].-r,r.[).(2*n) = (-1) |^ n (#)cos | ].-r,r.[ &
-  diff(cos,].-r,r.[).(2*n+1) = (-1) |^ (n+1) (#)sin | ].-r,r.[
+  for n be Element of NAT holds
+  diff(sin,Z).(2*n) = (-1) |^ n (#) sin | Z &
+  diff(sin,Z).(2*n+1) = (-1) |^ n (#) cos | Z &
+  diff(cos,Z).(2*n) = (-1) |^ n (#)cos | Z &
+  diff(cos,Z).(2*n+1) = (-1) |^ (n+1) (#)sin | Z
 proof
-  let r be Real, n be Element of NAT;
-A1: sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
-A2: cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
+  let n be Element of NAT;
+A1: sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
+A2: cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72;
   defpred P[Element of NAT] means
-  diff(sin,].-r,r.[).(2*$1) = (-1) |^ $1 (#) sin | ].-r,r.[ &
-  diff(sin,].-r,r.[).(2*$1+1) = (-1) |^ $1 (#) cos | ].-r,r.[ &
-  diff(cos,].-r,r.[).(2*$1) = (-1) |^ $1 (#) cos | ].-r,r.[ &
-  diff(cos,].-r,r.[).(2*$1+1) = (-1) |^ ($1+1) (#) sin | ].-r,r.[;
+  diff(sin,Z).(2*$1) = (-1) |^ $1 (#) sin | Z &
+  diff(sin,Z).(2*$1+1) = (-1) |^ $1 (#) cos | Z &
+  diff(cos,Z).(2*$1) = (-1) |^ $1 (#) cos | Z &
+  diff(cos,Z).(2*$1+1) = (-1) |^ ($1+1) (#) sin | Z;
 A3: P[0]
   proof
-A4: diff(sin,].-r,r.[).(2*0) = sin | ].-r,r.[ by TAYLOR_1:def 5
-      .= 1 (#) (sin | ].-r,r.[) by RFUNCT_1:33
-      .= (-1) |^ 0 (#) (sin | ].-r,r.[) by NEWTON:9;
-A5: diff(sin,].-r,r.[).(2*0+1) = diff(sin,].-r,r.[).0 `| ].-r,r.[
-    by TAYLOR_1:def 5
-      .= sin | ].-r,r.[ `| ].-r,r.[ by TAYLOR_1:def 5
-      .= sin `| ].-r,r.[ by A1,FDIFF_2:16
-      .= cos | ].-r,r.[ by Th17
-      .= 1 (#) (cos | ].-r,r.[) by RFUNCT_1:33
-      .= (-1) |^ 0 (#) (cos | ].-r,r.[) by NEWTON:9;
-A6: diff(cos,].-r,r.[).(2*0) = cos | ].-r,r.[ by TAYLOR_1:def 5
-      .= 1 (#) (cos | ].-r,r.[) by RFUNCT_1:33
-      .= (-1) |^ 0 (#) (cos | ].-r,r.[) by NEWTON:9;
-    diff(cos,].-r,r.[).(2*0+1) = diff(cos,].-r,r.[).0 `| ].-r,r.[
-    by TAYLOR_1:def 5
-      .= cos | ].-r,r.[ `| ].-r,r.[ by TAYLOR_1:def 5
-      .= cos `| ].-r,r.[ by A2,FDIFF_2:16
-      .= (-sin) | ].-r,r.[ by Th17
-      .= 1 (#) (-sin) | ].-r,r.[ by RFUNCT_1:33
-      .= ((-1) |^ 0) (#) ((-1) (#) sin) | ].-r,r.[ by NEWTON:9
-      .= ((-1) |^ 0) (#) ((-1) (#) sin | ].-r,r.[) by RFUNCT_1:65
-      .= (((-1) |^ 0) * (-1)) (#) sin | ].-r,r.[ by RFUNCT_1:29
-      .= (-1) |^ (0+1) (#) sin | ].-r,r.[ by NEWTON:11;
+A4: diff(sin,Z).(2*0) = sin | Z by TAYLOR_1:def 5
+      .= 1 (#) (sin | Z) by RFUNCT_1:33
+      .= (-1) |^ 0 (#) (sin | Z) by NEWTON:9;
+A5: diff(sin,Z).(2*0+1) = diff(sin,Z).0 `| Z by TAYLOR_1:def 5
+      .= sin | Z `| Z by TAYLOR_1:def 5
+      .= sin `| Z by A1,FDIFF_2:16
+      .= cos | Z by Th17
+      .= 1 (#) (cos | Z) by RFUNCT_1:33
+      .= (-1) |^ 0 (#) (cos | Z) by NEWTON:9;
+A6: diff(cos,Z).(2*0) = cos | Z by TAYLOR_1:def 5
+      .= 1 (#) (cos | Z) by RFUNCT_1:33
+      .= (-1) |^ 0 (#) (cos | Z) by NEWTON:9;
+    diff(cos,Z).(2*0+1) = diff(cos,Z).0 `| Z by TAYLOR_1:def 5
+      .= cos | Z `| Z by TAYLOR_1:def 5
+      .= cos `| Z by A2,FDIFF_2:16
+      .= (-sin) | Z by Th17
+      .= 1 (#) (-sin) | Z by RFUNCT_1:33
+      .= ((-1) |^ 0) (#) ((-1) (#) sin) | Z by NEWTON:9
+      .= ((-1) |^ 0) (#) ((-1) (#) sin | Z) by RFUNCT_1:65
+      .= (((-1) |^ 0) * (-1)) (#) sin | Z by RFUNCT_1:29
+      .= (-1) |^ (0+1) (#) sin | Z by NEWTON:11;
     hence thesis by A4,A5,A6;
   end;
 A7: for k be Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
 A8: P[k];
-A9: (sin | ].-r,r.[) is_differentiable_on ].-r,r.[ &
-    (cos | ].-r,r.[) is_differentiable_on ].-r,r.[ by A1,A2,FDIFF_2:16;
-A10: diff(sin,].-r,r.[).(2*(k+1)) = diff(sin,].-r,r.[).((2*k+1)+1)
-      .= diff(sin,].-r,r.[).(2*k+1) `| ].-r,r.[ by TAYLOR_1:def 5
-      .= ((-1) |^ k) (#) ((cos | ].-r,r.[) `| ].-r,r.[) by A8,A9,FDIFF_2:19
-      .= ((-1) |^ k) (#) (cos `| ].-r,r.[) by A2,FDIFF_2:16
-      .= ((-1) |^ k) (#) (((-1) (#) sin) | ].-r,r.[) by Th17
-      .= ((-1) |^ k) (#) ((-1) (#) sin | ].-r,r.[) by RFUNCT_1:65
-      .= (((-1) |^ k) * (-1)) (#) (sin | ].-r,r.[) by RFUNCT_1:29
-      .= (-1) |^ (k+1) (#) sin | ].-r,r.[ by NEWTON:11;
-A11: diff(sin,].-r,r.[).(2*(k+1)+1) = diff(sin,].-r,r.[).(2*(k+1)) `| ].-r,r.[
+A9: (sin | Z) is_differentiable_on Z &
+    (cos | Z) is_differentiable_on Z by A1,A2,FDIFF_2:16;
+A10: diff(sin,Z).(2*(k+1)) = diff(sin,Z).((2*k+1)+1)
+      .= diff(sin,Z).(2*k+1) `| Z by TAYLOR_1:def 5
+      .= ((-1) |^ k) (#) ((cos | Z) `| Z) by A8,A9,FDIFF_2:19
+      .= ((-1) |^ k) (#) (cos `| Z) by A2,FDIFF_2:16
+      .= ((-1) |^ k) (#) (((-1) (#) sin) | Z) by Th17
+      .= ((-1) |^ k) (#) ((-1) (#) sin | Z) by RFUNCT_1:65
+      .= (((-1) |^ k) * (-1)) (#) (sin | Z) by RFUNCT_1:29
+      .= (-1) |^ (k+1) (#) sin | Z by NEWTON:11;
+A11: diff(sin,Z).(2*(k+1)+1) = diff(sin,Z).(2*(k+1)) `| Z
     by TAYLOR_1:def 5
-      .= ((-1) |^ (k+1)) (#) ((sin | ].-r,r.[) `| ].-r,r.[)
-    by A9,A10,FDIFF_2:19
-      .= ((-1) |^ (k+1)) (#) (sin `| ].-r,r.[) by A1,FDIFF_2:16
-      .= (-1) |^ (k+1) (#) cos | ].-r,r.[ by Th17;
-A12: diff(cos,].-r,r.[).(2*(k+1)) = diff(cos,].-r,r.[).((2*k+1)+1)
-      .= diff(cos,].-r,r.[).(2*k+1) `| ].-r,r.[ by TAYLOR_1:def 5
-      .= ((-1) |^ (k+1)) (#) ((sin | ].-r,r.[) `| ].-r,r.[)
-    by A8,A9,FDIFF_2:19
-      .= (-1) |^ (k+1) (#) (sin `| ].-r,r.[) by A1,FDIFF_2:16
-      .= (-1) |^ (k+1) (#) cos | ].-r,r.[ by Th17;
-    diff(cos,].-r,r.[).(2*(k+1)+1) = diff(cos,].-r,r.[).(2*(k+1)) `| ].-r,r.[
+      .= ((-1) |^ (k+1)) (#) ((sin | Z) `| Z) by A9,A10,FDIFF_2:19
+      .= ((-1) |^ (k+1)) (#) (sin `| Z) by A1,FDIFF_2:16
+      .= (-1) |^ (k+1) (#) cos | Z by Th17;
+A12: diff(cos,Z).(2*(k+1)) = diff(cos,Z).((2*k+1)+1)
+      .= diff(cos,Z).(2*k+1) `| Z by TAYLOR_1:def 5
+      .= ((-1) |^ (k+1)) (#) ((sin | Z) `| Z) by A8,A9,FDIFF_2:19
+      .= (-1) |^ (k+1) (#) (sin `| Z) by A1,FDIFF_2:16
+      .= (-1) |^ (k+1) (#) cos | Z by Th17;
+    diff(cos,Z).(2*(k+1)+1) = diff(cos,Z).(2*(k+1)) `| Z
     by TAYLOR_1:def 5
-      .= ((-1) |^ (k+1)) (#) ((cos | ].-r,r.[) `| ].-r,r.[)
-    by A9,A12,FDIFF_2:19
-      .= ((-1) |^ (k+1)) (#) (cos `| ].-r,r.[)
-    by A2,FDIFF_2:16
-      .= ((-1) |^ (k+1)) (#) ((-1) (#) sin) | ].-r,r.[ by Th17
-      .= ((-1) |^ (k+1)) (#) ((-1) (#) sin | ].-r,r.[) by RFUNCT_1:65
-      .= (((-1) |^ (k+1)) * (-1)) (#) sin | ].-r,r.[ by RFUNCT_1:29
-      .= (-1) |^ ((k+1)+1) (#) sin | ].-r,r.[ by NEWTON:11;
+      .= ((-1) |^ (k+1)) (#) ((cos | Z) `| Z) by A9,A12,FDIFF_2:19
+      .= ((-1) |^ (k+1)) (#) (cos `| Z) by A2,FDIFF_2:16
+      .= ((-1) |^ (k+1)) (#) ((-1) (#) sin) | Z by Th17
+      .= ((-1) |^ (k+1)) (#) ((-1) (#) sin | Z) by RFUNCT_1:65
+      .= (((-1) |^ (k+1)) * (-1)) (#) sin | Z by RFUNCT_1:29
+      .= (-1) |^ ((k+1)+1) (#) sin | Z by NEWTON:11;
     hence thesis by A10,A11,A12;
   end;
   for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A7);
@@ -693,106 +690,104 @@ A10: Maclaurin(cos, ].-r,r.[,x).(2*n)
 end;
 
 theorem Th21:
-  for r be Real, n be Element of NAT holds
-  sin is_differentiable_on n, ].-r,r.[ & cos is_differentiable_on n, ].-r,r.[
+  for n be Element of NAT holds
+  sin is_differentiable_on n, Z & cos is_differentiable_on n, Z
 proof
-  let r be Real, n be Element of NAT;
+  let n be Element of NAT;
   now
     let i be Element of NAT such that i <= n-1;
 A1: now per cases;
       suppose i is even;
         then consider j be Element of NAT such that
 A2:     i=2*j by ABIAN:def 2;
-        thus dom(diff(sin,].-r,r.[).i)
-        = dom((-1) |^ j (#) sin | ].-r,r.[) by A2,Th19
-          .= dom((sin | ].-r,r.[)) by VALUED_1:def 5
-          .= ].-r,r.[ by Th17;
+        thus dom(diff(sin,Z).i)
+        = dom((-1) |^ j (#) sin | Z) by A2,Th19
+          .= dom((sin | Z)) by VALUED_1:def 5
+          .= Z by Th17;
       end;
       suppose i is odd;
         then consider j be Element of NAT such that
 A3:     i=2*j+1 by ABIAN:9;
-        thus dom(diff(sin,].-r,r.[).i)
-        = dom((-1) |^ j (#) cos | ].-r,r.[) by A3,Th19
-          .= dom((cos | ].-r,r.[)) by VALUED_1:def 5
-          .= ].-r,r.[ by Th17;
+        thus dom(diff(sin,Z).i)
+        = dom((-1) |^ j (#) cos | Z) by A3,Th19
+          .= dom((cos | Z)) by VALUED_1:def 5
+          .= Z by Th17;
       end;
     end;
-    for x be Real st x in ].-r,r.[ holds
-    diff(sin,].-r,r.[).i | ].-r,r.[ is_differentiable_in x
+    for x be Real st x in Z holds
+    diff(sin,Z).i | Z is_differentiable_in x
     proof
       let x be Real such that
-A4:   x in ].-r,r.[;
+A4:   x in Z;
       now per cases;
         suppose i is even;
           then consider j be Element of NAT such that
 A5:       i = 2*j by ABIAN:def 2;
-A6:       diff(sin,].-r,r.[).i = (-1) |^ j (#) sin | ].-r,r.[ by A5,Th19;
-          sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
-          then (sin | ].-r,r.[) is_differentiable_in x by A4,FDIFF_1:def 7;
-          hence diff(sin,].-r,r.[).i is_differentiable_in x by A6,FDIFF_1:23;
+A6:       diff(sin,Z).i = (-1) |^ j (#) sin | Z by A5,Th19;
+          sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
+          then (sin | Z) is_differentiable_in x by A4,FDIFF_1:def 7;
+          hence diff(sin,Z).i is_differentiable_in x by A6,FDIFF_1:23;
         end;
         suppose i is odd;
           then consider j be Element of NAT such that
 A7:       i = 2*j+1 by ABIAN:9;
-A8:       diff(sin,].-r,r.[).i = (-1) |^ j (#) cos | ].-r,r.[ by A7,Th19;
-          cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
-          then (cos | ].-r,r.[) is_differentiable_in x by A4,FDIFF_1:def 7;
-          hence diff(sin,].-r,r.[).i is_differentiable_in x by A8,FDIFF_1:23;
+A8:       diff(sin,Z).i = (-1) |^ j (#) cos | Z by A7,Th19;
+          cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72;
+          then (cos | Z) is_differentiable_in x by A4,FDIFF_1:def 7;
+          hence diff(sin,Z).i is_differentiable_in x by A8,FDIFF_1:23;
         end;
       end;
       hence thesis by A1,RELAT_1:97;
     end;
-    hence diff(sin,].-r,r.[).i is_differentiable_on ].-r,r.[
-    by A1,FDIFF_1:def 7;
+    hence diff(sin,Z).i is_differentiable_on Z by A1,FDIFF_1:def 7;
   end;
-  hence sin is_differentiable_on n, ].-r,r.[ by TAYLOR_1:def 6;
+  hence sin is_differentiable_on n, Z by TAYLOR_1:def 6;
   now
     let i be Element of NAT such that i <= n-1;
 A9: now per cases;
       suppose i is even;
         then consider j be Element of NAT such that
 A10:    i = 2*j by ABIAN:def 2;
-        thus dom(diff(cos,].-r,r.[).i)
-        = dom((-1) |^ j (#) cos | ].-r,r.[) by A10,Th19
-          .= dom((cos | ].-r,r.[)) by VALUED_1:def 5
-          .= ].-r,r.[ by Th17;
+        thus dom(diff(cos,Z).i)
+        = dom((-1) |^ j (#) cos | Z) by A10,Th19
+          .= dom((cos | Z)) by VALUED_1:def 5
+          .= Z by Th17;
       end;
       suppose i is odd;
         then consider j be Element of NAT such that
 A11:    i = 2*j+1 by ABIAN:9;
-        thus dom(diff(cos,].-r,r.[).i)
-        = dom((-1) |^ (j+1) (#) sin | ].-r,r.[) by A11,Th19
-          .= dom((sin | ].-r,r.[)) by VALUED_1:def 5
-          .= ].-r,r.[ by Th17;
+        thus dom(diff(cos,Z).i)
+        = dom((-1) |^ (j+1) (#) sin | Z) by A11,Th19
+          .= dom((sin | Z)) by VALUED_1:def 5
+          .= Z by Th17;
       end;
     end;
-    for x be Real st x in ].-r,r.[ holds
-    diff(cos,].-r,r.[).i | ].-r,r.[ is_differentiable_in x
+    for x be Real st x in Z holds
+    diff(cos,Z).i | Z is_differentiable_in x
     proof
       let x be Real such that
-A12:  x in ].-r,r.[;
+A12:  x in Z;
       now per cases;
         suppose i is even;
           then consider j be Element of NAT such that
 A13:      i = 2*j by ABIAN:def 2;
-A14:      diff(cos,].-r,r.[).i = (-1) |^ j (#) cos | ].-r,r.[ by A13,Th19;
-          cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
-          then (cos | ].-r,r.[) is_differentiable_in x by A12,FDIFF_1:def 7;
-          hence diff(cos,].-r,r.[).i is_differentiable_in x by A14,FDIFF_1:23;
+A14:      diff(cos,Z).i = (-1) |^ j (#) cos | Z by A13,Th19;
+          cos is_differentiable_on Z by FDIFF_1:34,SIN_COS:72;
+          then (cos | Z) is_differentiable_in x by A12,FDIFF_1:def 7;
+          hence diff(cos,Z).i is_differentiable_in x by A14,FDIFF_1:23;
         end;
         suppose i is odd;
           then consider j be Element of NAT such that
 A15:      i = 2*j+1 by ABIAN:9;
-A16:      diff(cos,].-r,r.[).i = (-1) |^ (j+1) (#) sin | ].-r,r.[ by A15,Th19;
-          sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
-          then (sin | ].-r,r.[) is_differentiable_in x by A12,FDIFF_1:def 7;
-          hence diff(cos,].-r,r.[).i is_differentiable_in x by A16,FDIFF_1:23;
+A16:      diff(cos,Z).i = (-1) |^ (j+1) (#) sin | Z by A15,Th19;
+          sin is_differentiable_on Z by FDIFF_1:34,SIN_COS:73;
+          then (sin | Z) is_differentiable_in x by A12,FDIFF_1:def 7;
+          hence diff(cos,Z).i is_differentiable_in x by A16,FDIFF_1:23;
         end;
       end;
       hence thesis by A9,RELAT_1:97;
     end;
-    hence diff(cos,].-r,r.[).i is_differentiable_on ].-r,r.[
-    by A9,FDIFF_1:def 7;
+    hence diff(cos,Z).i is_differentiable_on Z by A9,FDIFF_1:def 7;
   end;
   hence thesis by TAYLOR_1:def 6;
 end;

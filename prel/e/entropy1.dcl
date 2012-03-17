@@ -31,6 +31,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="MATRPROB"/>
@@ -52,6 +53,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="21"/>
 <Adjective nr="25"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
@@ -76,6 +78,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="21"/>
 <Adjective nr="25"/>
 <Adjective nr="79"/>
 <Adjective nr="141">

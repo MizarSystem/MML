@@ -7,11 +7,11 @@
 environ
 
  vocabularies ORDINAL2, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, ORDINAL1,
-      CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0, FUNCOP_1,
-      FRAENKEL, FUNCT_4, ZF_REFLE, ARYTM;
+      CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MONOID_0, FUNCOP_1, FRAENKEL,
+      FUNCT_4, ZF_REFLE, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
       FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, CARD_1, NUMBERS,
-      PARTFUN1, FUNCT_4, MCART_1, FINSET_1, XXREAL_0;
+      PARTFUN1, FUNCT_4, FINSET_1, XXREAL_0;
  constructors WELLORD2, FUNCOP_1, FUNCT_4, FRAENKEL, XXREAL_0, XREAL_0, NAT_1,
       CARD_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
@@ -136,13 +136,11 @@ scheme :: FINSEQ_1:sch 1
  SeqEx{A()->Nat,P[set,set]}:
   ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
 provided
- for k,y1,y2 st k in Seg A() & P[k,y1] & P[k,y2] holds y1=y2
-and
  for k st k in Seg A() ex x st P[k,x];
 
 scheme :: FINSEQ_1:sch 2
  SeqLambda{A()->Nat,F(set) -> set}:
-  ex p being FinSequence st len p = A() & for k st k in Seg A() holds p.k=F(k);
+  ex p being FinSequence st len p = A() & for k st k in dom p holds p.k=F(k);
 
 theorem :: FINSEQ_1:16
   z in p implies ex k st k in dom p & z=[k,p.k];
@@ -200,29 +198,23 @@ theorem :: FINSEQ_1:23
 theorem :: FINSEQ_1:24
   for D being non empty set ex p being FinSequence of D st len p = a;
 
+::::::::::::::::::::::::::::::::::::
+::                                ::
+::    The Empty FinSequence       ::
+::                                ::
+::::::::::::::::::::::::::::::::::::
+
 registration
   cluster empty FinSequence;
 end;
 
-theorem :: FINSEQ_1:25
-  len p = 0 iff p = {};
+:::theorem CARD_1:47,CARD_2:59:
+::: q = {} iff len q = 0 by CARD_1:47,CARD_2:59;
 
-theorem :: FINSEQ_1:26
-  p={} iff dom p = {};
-
-theorem :: FINSEQ_1:27
-  p={} iff rng p = {};
+canceled 3;
 
 theorem :: FINSEQ_1:28
   p <> {} iff len p >= 1;
-
-theorem :: FINSEQ_1:29
-  for D be set holds {} is FinSequence of D;
-
-registration
-  let D be set;
-  cluster empty FinSequence of D;
-end;
 
 definition
   let x;
@@ -234,13 +226,23 @@ end;
 
 definition
   let D be set;
-  func <*>D -> empty FinSequence of D equals
+  func <*>D -> FinSequence of D equals
 :: FINSEQ_1:def 6
 
   {};
 end;
 
-canceled 2;
+registration
+  let D be set;
+ cluster <*>D -> empty;
+end;
+
+registration
+  let D be set;
+  cluster empty FinSequence of D;
+end;
+
+canceled 3;
 
 theorem :: FINSEQ_1:32
   p=<*>D iff len p = 0;
@@ -508,11 +510,6 @@ begin :: from FINSET_1, 1998
 theorem :: FINSEQ_1:73 :: FINSET_1:def 1
   D is finite iff ex p st D = rng p;
 
-registration
-  let R be finite Relation;
-  cluster rng R -> finite;
-end;
-
 begin :: Moved from CARD_1, 1999
 
 theorem :: FINSEQ_1:74
@@ -757,4 +754,9 @@ definition
 :: FINSEQ_1:def 17
   len p = len q & for k st 1 <= k & k <= len p holds p.k = q.k;
 end;
+
+:: from MATRIX_1, 2007.07.22, A.T generalized
+
+theorem :: FINSEQ_1:104
+  for M1, M2 being set st Card M1 = 0 & Card M2 = 0 holds M1 = M2;
 

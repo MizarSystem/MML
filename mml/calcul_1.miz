@@ -11,16 +11,15 @@ environ
       MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA,
       ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
-      QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XCMPLX_0, XXREAL_0, NAT_1,
-      FUNCOP_1, CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1,
-      FUNCT_2, FRAENKEL, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
+      QC_LANG1, CARD_1, NUMBERS, ORDINAL1, FINSEQ_2, XXREAL_0, NAT_1, FUNCOP_1,
+      CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1, FUNCT_2,
+      FRAENKEL, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
-      CQC_THE1, SUBSTUT2, VALUED_1, SEQ_1;
+      CQC_THE1, SUBSTUT2;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_5, QC_LANG1, CQC_LANG,
-      VALUED_1, FUNCT_2;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_5, QC_LANG1, CQC_LANG;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1, VALUED_1;
+ definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
       RELAT_1, QC_LANG3, QC_LANG2, SUBSTUT1, FUNCT_4, SUBLEMMA, NAT_1,
       FINSEQ_1, FINSEQ_3, VALUAT_1, FINSEQ_2, SUBSTUT2, FUNCOP_1, CQC_THE1,
@@ -75,12 +74,7 @@ A3:     a in rng g;
       for i st len f = i+1 holds g = f|(Seg i) by A2;
       hence thesis;
     end;
-    not len f > 0 implies ex g being FinSequence of D st g = {}
-    proof
-      assume not len f > 0;
-      take g = {};
-      thus thesis by FINSEQ_1:29;
-    end;
+     <*>D = {};
     hence thesis by A1;
   end;
   uniqueness
@@ -193,10 +187,11 @@ A2: len f = len Ant(f)+1 by Th2;
   then len f = len Ant(f) + len <*Suc(f)*> by FINSEQ_1:56;
   then
 A3: len f = len (Ant(f)^<*Suc(f)*>) by FINSEQ_1:35;
+X: dom f = Seg len f by FINSEQ_1:def 3;
 A4: now
     let j be Nat such that
-A5: j in Seg len f;
-A6: 1 <= j & j <= len Ant(f)+1 by A2,A5,FINSEQ_1:3;
+A5: j in dom f;
+A6: 1 <= j & j <= len Ant(f)+1 by A2,A5,FINSEQ_1:3,X;
 A7: now
       assume j <= len Ant(f);
       then
@@ -270,7 +265,7 @@ proof
   len (fin^fin1) = len fin + len fin1 by FINSEQ_1:35;
   hence len fin <= len (fin^fin1) & len fin1 <= len (fin^fin1) by NAT_1:12;
   assume fin <> {};
-  then len fin <> 0 by FINSEQ_1:25;
+  then len fin <> 0 by CARD_2:59;
   then 0 < len fin;
   then
 A1: 0+1 <= len fin by NAT_1:13;
@@ -1527,8 +1522,8 @@ A4: a in rng <*[g,2]*>;
     then a = [g,2] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A3,ZFMISC_1:106;
   end;
-  then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by
-  TARSKI:def 3;
+
+then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by TARSKI:def 3;
   then reconsider PR1 = <*[g,2]*> as FinSequence of
   [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
   set PR2 = PR^PR1;
@@ -1756,7 +1751,7 @@ A21:  k = 1 by FINSEQ_1:4,TARSKI:def 1;
       then PR2.k = [Ant(Ant(f))^<*p*>,4] by FINSEQ_1:57;
       then (PR2.k)`1 = Ant(Ant(f))^<*p*> & (PR2.k)`2 = 4 by MCART_1:7;
       then
-A22:  (PR3.n)`1 = Ant(Ant(f))^<*p*> & (PR3.n)`2 = 4 by A20, FINSEQ_1 :def 7;
+A22:  (PR3.n)`1 = Ant(Ant(f))^<*p*> & (PR3.n)`2 = 4 by A20,FINSEQ_1:def 7;
 A23:  PR1 <> {} by A3,Def8;
       then
 A24:  1 <= len PR & len PR < len (PR^PR1) by A6,Th6;
@@ -2073,7 +2068,7 @@ A12:  k = 1 by FINSEQ_1:4,TARSKI:def 1;
       then PR1.k = [Ant(f)^<*p.(x,y)*>,8] by FINSEQ_1:57;
       then (PR1.k)`1 = Ant(f)^<*p.(x,y)*> & (PR1.k)`2 = 8 by MCART_1:7;
       then
-A13:  (PR2.n)`1 = Ant(f)^<*p.(x,y)*> & (PR2.n)`2 = 8 by A11, FINSEQ_1:def 7;
+A13:  (PR2.n)`1 = Ant(f)^<*p.(x,y)*> & (PR2.n)`2 = 8 by A11,FINSEQ_1:def 7;
 A14:  1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13;
       then len PR in dom PR by FINSEQ_3:27;
       then f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
@@ -2140,7 +2135,7 @@ A12:  k = 1 by FINSEQ_1:4,TARSKI:def 1;
       then PR1.k = [Ant(f)^<*All(x,p)*>,9] by FINSEQ_1:57;
       then (PR1.k)`1 = Ant(f)^<*All(x,p)*> & (PR1.k)`2 = 9 by MCART_1:7;
       then
-A13:  (PR2.n)`1 = Ant(f)^<*All(x,p)*> & (PR2.n)`2 = 9 by A11, FINSEQ_1:def 7;
+A13:  (PR2.n)`1 = Ant(f)^<*All(x,p)*> & (PR2.n)`2 = 9 by A11,FINSEQ_1:def 7;
 A14:  1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13;
       then len PR in dom PR by FINSEQ_3:27;
       then f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
@@ -2683,7 +2678,7 @@ A14: (Ant(f4)).(len f+2) = p by Th14;
 A15: |- f4 by Th33;
 A16: Ant(f3) = Ant(f1) & Suc(f3) = Suc(f4) by A12,Th5;
   then
-A17: Ant(Ant(f3)) = f^<*'not' 'not' p*> & Suc(Ant(f3)) = 'not' p by A2, Th5;
+A17: Ant(Ant(f3)) = f^<*'not' 'not' p*> & Suc(Ant(f3)) = 'not' p by A2,Th5;
   then
 A18: Ant(Ant(f3)) = Ant(Ant(f4)) & Suc(Ant(f3)) = 'not' Suc(Ant(f4))
   by A12,Th5;
@@ -2738,7 +2733,7 @@ A11: |- f^<*'not' q*>^<*'not' 'not' p '&' 'not' q*> by Th48;
   set f4 = f^<*'not' q*>^<*'not' 'not' p '&' 'not' q*>;
   Suc(f4) = 'not' 'not' p '&' 'not' q by Th5;
   then
-A12: |- Ant(f4)^<*'not' 'not' p*> & |- Ant(f4)^<*'not' q*> by A11,Th40, Th41;
+A12: |- Ant(f4)^<*'not' 'not' p*> & |- Ant(f4)^<*'not' q*> by A11,Th40,Th41;
   then
 A13: |- Ant(f4)^<*p*> by Th55;
   set f5 = Ant(f4)^<*p*>;
@@ -2940,7 +2935,6 @@ theorem Th63:
   still_not-bound_in f is finite
 proof
   defpred P[set,set] means ex p st $2 = still_not-bound_in p & p = f.$1;
-  set X = {still_not-bound_in p : ex i st i in dom f & p = f.i};
 A1: for a,b1,b2 being set st a in dom f & P[a,b1] & P[a,b2] holds b1 = b2;
 A2: for a being set st a in dom f ex b st P[a,b]
   proof

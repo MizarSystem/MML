@@ -9,16 +9,16 @@ environ
  vocabularies AMI_1, INT_1, AMI_2, GR_CY_1, SCMPDS_1, RELAT_1, FUNCT_1, BOOLE,
       CAT_1, FINSET_1, AMI_3, AMI_5, ORDINAL2, FINSEQ_1, MCART_1, ABSVALUE,
       CARD_3, ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2, TARSKI, FUNCT_7,
-      ARYTM;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      FUNCT_1, FUNCT_2, INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3,
-      ZFMISC_1, STRUCT_0, RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4,
-      FUNCT_7, AMI_1, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0;
+      ARYTM, ORDINAL1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
+      FUNCT_2, INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, ZFMISC_1,
+      STRUCT_0, RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7, AMI_1,
+      SCMNORM, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_5,
-      SCMPDS_1, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
-      FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2,
-      SCMPDS_1, VALUED_1, FUNCT_2;
+      SCMPDS_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FRAENKEL,
+      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, SCMPDS_1,
+      SCMNORM, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -39,7 +39,7 @@ registration
 end;
 
 theorem :: SCMPDS_2:1
-  (ex k being Element of NAT st x = k) iff x in SCM-Instr-Loc;
+  (ex k being Element of NAT st x = k) iff x in NAT;
 
 canceled;
 
@@ -51,7 +51,7 @@ registration
 end;
 
 theorem :: SCMPDS_2:4
-  NAT <> INT & the Instructions of SCMPDS <> INT &
+  the Instructions of SCMPDS <> INT &
   NAT <> the Instructions of SCMPDS;
 
 canceled;
@@ -86,10 +86,6 @@ theorem :: SCMPDS_2:12
 theorem :: SCMPDS_2:13
   for l being Int_position holds ObjectKind l = INT;
 
-theorem :: SCMPDS_2:14
-  for x being set st x in SCM-Instr-Loc
-  holds x is Instruction-Location of SCMPDS;
-
 begin :: The Instruction Structure
 
 reserve d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
@@ -101,6 +97,8 @@ registration
 end;
 
 reserve I for Instruction of SCMPDS;
+
+canceled;
 
 theorem :: SCMPDS_2:15
   for I being Instruction of SCMPDS holds InsCode I <= 13;
@@ -330,21 +328,9 @@ theorem :: SCMPDS_2:54
   (for a being Int_position holds s1.a = s2.a) &
   for i being Instruction-Location of SCMPDS holds s1.i = s2.i holds s1 = s2;
 
-definition
-  let loc be Instruction-Location of SCMPDS;
-  func Next loc -> Instruction-Location of SCMPDS means
-:: SCMPDS_2:def 19
-
-  ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
-end;
-
-theorem :: SCMPDS_2:55
-  for loc being Instruction-Location of SCMPDS,
-  mj being Element of SCM-Instr-Loc st mj = loc holds Next mj = Next loc;
-
 begin :: Execution semantics of the SCMPDS instructions
 
-canceled;
+canceled 2;
 
 theorem :: SCMPDS_2:57
   Exec( a:=k1, s).IC SCMPDS = Next IC s & Exec( a:=k1, s).a = k1 &
@@ -401,6 +387,7 @@ theorem :: SCMPDS_2:65
   Exec(Divide(a,k1,a,k1),s).c = s.c;
 
 definition
+ canceled;
   let s be State of SCMPDS,c be Integer;
   func ICplusConst(s,c) -> Instruction-Location of SCMPDS means
 :: SCMPDS_2:def 20

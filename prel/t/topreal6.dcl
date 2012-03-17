@@ -18,7 +18,6 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XXREAL_1"/>
@@ -29,6 +28,7 @@
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -60,10 +60,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -72,7 +72,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -80,7 +80,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="102">
+<Adjective nr="101">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -96,10 +96,10 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="23"/>
+<Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="110"/>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -118,13 +118,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="43"/>
+<Adjective nr="40"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -132,7 +132,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -140,34 +140,34 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="302">
+<Func kind="K" nr="298">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="49">
-<Func kind="K" nr="293">
+<Adjective nr="48">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="102">
+<Adjective nr="101">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="303"/>
+<Func kind="K" nr="299"/>
 <Cluster>
-<Adjective nr="49">
-<Func kind="K" nr="293">
+<Adjective nr="48">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -184,7 +184,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -195,45 +195,45 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="109"/>
+<Adjective nr="108"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="78"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="109"/>
+<Adjective nr="108"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="108"/>
+<Adjective nr="107"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="78"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="108"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="406"/>
+<Func kind="K" nr="401"/>
 <Cluster>
+<Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -249,12 +249,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="140">
+<Func kind="K" nr="126">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="29"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -281,9 +281,28 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="49">
+<Adjective nr="48">
 <LocusVar nr="1"/>
 </Adjective>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="98" value="false"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<Func kind="K" nr="289">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -295,7 +314,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -308,27 +327,8 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="100" value="false"/>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<Func kind="K" nr="293">
-<Num nr="2"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster>
-<Adjective nr="98">
-<Func kind="K" nr="293">
+<Adjective nr="97">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -337,20 +337,20 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="45">
-<Func kind="K" nr="293">
+<Adjective nr="44">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="49">
-<Func kind="K" nr="293">
+<Adjective nr="48">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -359,13 +359,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="45">
-<Func kind="K" nr="293">
+<Adjective nr="44">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="49">
-<Func kind="K" nr="293">
+<Adjective nr="48">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -374,15 +374,15 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="98">
-<Func kind="K" nr="293">
+<Adjective nr="97">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -397,7 +397,26 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="98"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -410,40 +429,21 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="293">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="100"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster>
-<Adjective nr="96"/>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<Func kind="K" nr="293">
-<Num nr="2"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="49">
-<Func kind="K" nr="293">
+<Adjective nr="48">
+<Func kind="K" nr="289">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -461,7 +461,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 </Registrations>

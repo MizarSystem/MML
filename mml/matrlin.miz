@@ -9,26 +9,25 @@ environ
  vocabularies FINSEQ_2, PARTFUN1, FINSEQ_4, MATRIX_1, RELAT_1, FUNCT_1,
       INCSP_1, FINSEQ_1, MATRIX_2, BOOLE, TREES_1, ARYTM_1, FUNCT_2, CARD_1,
       SUBSET_1, FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1,
-      FINSET_1, RLSUB_1, BINOP_1, LATTICES, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1,
-      RLSUB_2, CAT_3, MATRLIN, VECTSP_2, ARYTM, ALGSTR_0;
+      FINSET_1, RLSUB_1, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1, RLSUB_2, CAT_3,
+      MATRLIN, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       MOD_2, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, STRUCT_0,
-      ALGSTR_0, MATRIX_1, MATRIX_3, FVSUM_1, RLVECT_1, GROUP_1, VECTSP_1,
-      VECTSP_4, VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3,
-      CARD_1, FINSEQ_2, FINSEQOP, BINOP_1, XXREAL_0;
- constructors PARTFUN1, BINOP_1, FUNCT_3, SQUARE_1, NAT_1, FINSEQ_4, VECTSP_6,
-      VECTSP_7, MOD_2, FVSUM_1, MATRIX_3, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1,
-      MATRIX_1, VALUED_1, ALGSTR_0;
+      ALGSTR_0, MATRIX_1, MATRIX_3, FVSUM_1, RLVECT_1, VECTSP_1, VECTSP_4,
+      VECTSP_6, VECTSP_7, FINSET_1, FUNCOP_1, FINSEQ_3, CARD_1, FINSEQ_2,
+      FINSEQOP, BINOP_1, XXREAL_0;
+ constructors PARTFUN1, BINOP_1, FUNCT_3, SQUARE_1, NAT_1, VECTSP_6, VECTSP_7,
+      MOD_2, FVSUM_1, MATRIX_3;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1, MATRIX_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FVSUM_1, FUNCOP_1, ALGSTR_0, VALUED_1;
+ definitions TARSKI, FVSUM_1, FUNCOP_1, ALGSTR_0;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, VECTSP_1, VECTSP_3,
       VECTSP_4, VECTSP_6, VECTSP_7, RLVECT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
       CARD_2, FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0,
-      XBOOLE_1, RLVECT_2, GROUP_1, XREAL_1, NEWTON, ORDINAL1, PARTFUN1;
- schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, CLASSES1;
+      XBOOLE_1, RLVECT_2, XREAL_1, NEWTON, ORDINAL1, PARTFUN1, CARD_1;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, NAT_1, CLASSES1, FINSEQ_4;
 
 begin :: Preliminaries
 
@@ -132,7 +131,7 @@ A2: len Del(M,n+1) = n by Th3;
   per cases;
   suppose
 A3: n = 0;
-    then Del(M,n+1) = {} by A2,FINSEQ_1:25;
+    then Del(M,n+1) = {} by A2,CARD_2:59;
     hence thesis by A3,MATRIX_1:13;
   end;
   suppose
@@ -150,7 +149,7 @@ proof
   let M be FinSequence;
   assume
 A1: len M = n + 1;
-  then M <> {} by FINSEQ_1:25;
+  then M <> {} by CARD_1:47;
   then consider q be FinSequence,x such that
 A2: M = q ^ <*x*> by FINSEQ_1:63;
   reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -160,14 +159,15 @@ A4: len M = len q + len <*x*> by A2,FINSEQ_1:35
   then
 A5: M.(len M) = x by A2,FINSEQ_1:59;
 A6: len Del(M,len M) = len q by A4,Th3;
+X: dom q = Seg len q by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A7: i in Seg len q;
+A7: i in dom q;
     then
-A8: i in dom q by FINSEQ_1:def 3;
+A8: i in dom q;
 A9: i in NAT by ORDINAL1:def 13;
-    1<=i & i<=len q by A7,FINSEQ_1:3;
+    1<=i & i<=len q by A7,FINSEQ_1:3,X;
     then 1<=i & i<len M by A4,NAT_1:13;
     hence Del(M,len M).i = M.i by A1,A3,A9,FINSEQ_3:119
       .= q.i by A2,A8,FINSEQ_1:def 7;
@@ -703,40 +703,42 @@ definition
   proof
     deffunc F(Nat) = Sum (M/.$1);
     consider F being FinSequence of V1 such that
-A1: len F = len M & for k be Nat st k in Seg len M holds F.k = F(k)
+A1: len F = len M & for k be Nat st k in dom F holds F.k = F(k)
     from FINSEQ_2:sch 1;
+A2: dom F = Seg len M by A1,FINSEQ_1:def 3;
     take F;
     thus len F = len M by A1;
     hereby
       let k;
       assume
-A2:   k in dom F;
+A3:   k in dom F;
       then
-A3:   k in Seg len M by A1,FINSEQ_1:def 3;
-      thus F/.k = F.k by A2,PARTFUN1:def 8
-        .= Sum (M/.k) by A1,A3;
+A4:   k in Seg len M by A1,FINSEQ_1:def 3;
+      thus F/.k = F.k by A3,PARTFUN1:def 8
+        .= Sum (M/.k) by A1,A4,A2;
     end;
   end;
   uniqueness
   proof
     let F1,F2 be FinSequence of V1 such that
-A4: len F1 = len M and
-A5: for k st k in dom F1 holds F1/.k = Sum (M/.k) and
-A6: len F2 = len M and
-A7: for k st k in dom F2 holds F2/.k = Sum (M/.k);
+A5: len F1 = len M and
+A6: for k st k in dom F1 holds F1/.k = Sum (M/.k) and
+A7: len F2 = len M and
+A8: for k st k in dom F2 holds F2/.k = Sum (M/.k);
+X: dom F1 = Seg len F1 by FINSEQ_1:def 3;
     now
       let k be Nat;
       assume
-A8:   k in Seg len F1;
+A9:   k in dom F1;
       then
-A9:   k in dom F1 by FINSEQ_1:def 3;
-A10:  k in dom F2 by A4,A6,A8,FINSEQ_1:def 3;
-      thus F1.k = F1/.k by A9,PARTFUN1:def 8
-        .= Sum (M/.k) by A5,A9
-        .= F2/.k by A7,A10
-        .= F2.k by A10,PARTFUN1:def 8;
+A10:   k in dom F1;
+A11:  k in dom F2 by A5,A7,A9,FINSEQ_1:def 3,X;
+      thus F1.k = F1/.k by A10,PARTFUN1:def 8
+        .= Sum (M/.k) by A6,A10
+        .= F2/.k by A8,A11
+        .= F2.k by A11,PARTFUN1:def 8;
     end;
-    hence thesis by A4,A6,FINSEQ_2:10;
+    hence thesis by A5,A7,FINSEQ_2:10;
   end;
 end;
 
@@ -851,9 +853,9 @@ A4: dom p = dom (f*p) by RELAT_1:46;
 A5: len (f*lmlt(a,p)) = len lmlt(a,f*p) by FINSEQ_2:37;
   now
     let k be Nat;
-    assume k in Seg len (f*lmlt(a,p));
+    assume k in dom (f*lmlt(a,p));
     then
-A6: k in dom (f*lmlt(a,p)) by FINSEQ_1:def 3;
+A6: k in dom (f*lmlt(a,p));
 A7: dom (f*lmlt(a,p)) c= dom lmlt(a,p) by RELAT_1:44;
     then k in dom lmlt(a,p) by A6;
     then
@@ -1159,13 +1161,13 @@ definition
     suppose
 A1:   n = 0;
       then len M1 = 0 by MATRIX_1:def 3;
-      then M1 = {} by FINSEQ_1:25;
+      then M1 = {} by CARD_2:59;
       hence thesis by A1,FINSEQ_1:47;
     end;
     suppose
 A2:   m = 0;
       then len M2 = 0 by MATRIX_1:def 3;
-      then M2 = {} by FINSEQ_1:25;
+      then M2 = {} by CARD_2:59;
       hence thesis by A2,FINSEQ_1:47;
     end;
     suppose that
@@ -1327,13 +1329,14 @@ A3: len Col(M1^M2,i) = len (M1^M2) by MATRIX_1:def 9
     .= len M1 + len Col(M2,i) by MATRIX_1:def 9
     .= len Col(M1,i) + len Col(M2,i) by MATRIX_1:def 9
     .= len (Col(M1,i)^Col(M2,i)) by FINSEQ_1:35;
+X: dom Col(M1^M2,i) = Seg len Col(M1^M2,i) by FINSEQ_1:def 3;
   now
     let j be Nat;
     assume
-A4: j in Seg len (Col(M1,i)^Col(M2,i));
+A4: j in dom Col(M1^M2,i);
     then
-A5: j in dom (Col(M1,i)^Col(M2,i)) by FINSEQ_1:def 3;
-    j in Seg len (M1^M2) by A3,A4,MATRIX_1:def 9;
+A5: j in dom (Col(M1,i)^Col(M2,i)) by FINSEQ_1:def 3,X,A3;
+    j in Seg len (M1^M2) by A4,MATRIX_1:def 9,X;
     then
 A6: j in dom (M1^M2) by FINSEQ_1:def 3;
     i in Seg width (M1^M2) by A1,A2,Th28;
@@ -1393,13 +1396,14 @@ A1: len Sum(M1^M2) = len (M1^M2) by Def8
     .= len Sum M1 + len M2 by Def8
     .= len Sum M1 + len Sum M2 by Def8
     .= len ((Sum M1)^(Sum M2)) by FINSEQ_1:35;
+X: dom Sum(M1^M2) = Seg len Sum(M1^M2) by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A2: i in Seg len Sum(M1^M2);
+A2: i in dom Sum(M1^M2);
     then
-A3: i in dom Sum(M1^M2) by FINSEQ_1:def 3;
-    i in Seg len (M1^M2) by A2,Def8;
+A3: i in dom Sum(M1^M2);
+    i in Seg len (M1^M2) by A2,Def8,X;
     then
 A4: i in dom (M1^M2) by FINSEQ_1:def 3;
 A5: i in NAT by ORDINAL1:def 13;
@@ -1454,13 +1458,13 @@ A2: Seg len (M1@ ^^ M2@) = dom (M1@ ^^ M2@) by FINSEQ_1:def 3
 A3: len ((M1^M2)@) = width (M1^M2) by MATRIX_1:def 7
     .= width M1 by A1,Th28
     .= len (M1@ ^^ M2@) by A2,FINSEQ_1:8;
+X: dom ((M1^M2)@) = Seg len ((M1^M2)@) by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A4: i in Seg len ((M1^M2)@);
-A5: Seg len ((M1^M2)@) = dom ((M1^M2)@) by FINSEQ_1:def 3;
-A6: i in Seg width (M1^M2) by A4,MATRIX_1:def 7;
-A7: i in dom (M1@ ^^ M2@) by A3,A4,FINSEQ_1:def 3;
+A4: i in dom ((M1^M2)@);
+A6: i in Seg width (M1^M2) by A4,MATRIX_1:def 7,X;
+A7: i in dom (M1@ ^^ M2@) by A3,A4,FINSEQ_1:def 3,X;
     then
 A8: i in dom (M1@) /\ dom (M2@) by Def2;
     then i in Seg len (M1@) /\ dom (M2@) by FINSEQ_1:def 3;
@@ -1470,7 +1474,7 @@ A8: i in dom (M1@) /\ dom (M2@) by Def2;
 A9: i in Seg width M1 /\ Seg width M2 by MATRIX_1:def 7;
 A10: i in dom (M1@) & i in dom (M2@) by A8,XBOOLE_0:def 3;
     then reconsider m1 = M1@.i,m2 = M2@.i as FinSequence by Def1;
-    thus (M1^M2)@.i = Line((M1^M2)@,i) by A4,A5,MATRIX_2:18
+    thus (M1^M2)@.i = Line((M1^M2)@,i) by A4,MATRIX_2:18
       .= Col(M1^M2,i) by A6,MATRIX_2:17
       .= Col(M1,i)^Col(M2,i) by A1,A9,Th30
       .= Line(M1@,i)^Col(M2,i) by A1,A9,MATRIX_2:17
@@ -1498,14 +1502,15 @@ A2: len (Sum M1+Sum M2) = min(len Sum M1,len Sum M2) by FINSEQ_2:85
     .= min(len M1,len M2) by Def8
     .= len (M1 ^^ M2) by A1,FINSEQ_1:8
     .= len Sum(M1 ^^ M2) by Def8;
+X: dom (Sum M1 + Sum M2) = Seg len(Sum M1 + Sum M2)  by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
-A3: i in Seg len (Sum M1+Sum M2);
+A3: i in dom (Sum M1+Sum M2);
     then
-A4: i in dom (Sum M1+Sum M2) by FINSEQ_1:def 3;
-A5: i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3;
-    i in Seg len (M1 ^^ M2) by A2,A3,Def8;
+A4: i in dom (Sum M1+Sum M2);
+A5: i in dom Sum(M1 ^^ M2) by A2,A3,FINSEQ_1:def 3,X;
+    i in Seg len (M1 ^^ M2) by A2,A3,Def8,X;
     then
 A6: i in dom (M1 ^^ M2) by FINSEQ_1:def 3;
     then i in dom M1 /\ dom M2 by Def2;
@@ -1590,14 +1595,15 @@ A6:   Sum Sum <*P*> = Sum Sum (<*P*>@);
       then
 A7:   len (<*P*> ^^ <*<*x*>*>) = 1 by FINSEQ_1:8
         .= len <*P^<*x*>*> by FINSEQ_1:56;
+X: dom (<*P*> ^^ <*<*x*>*>) = Seg len <*P^<*x*>*> by A7,FINSEQ_1:def 3;
 A8:   now
         let i be Nat;
         assume
-A9:     i in Seg len <*P^<*x*>*>;
+A9:     i in dom (<*P*> ^^ <*<*x*>*>);
         then
-A10:    i in dom (<*P*> ^^ <*<*x*>*>) by A7,FINSEQ_1:def 3;
-A11:    i in Seg 1 by A9,FINSEQ_1:57;
-        i in { 1 } by A9,FINSEQ_1:4,57;
+A10:    i in dom (<*P*> ^^ <*<*x*>*>);
+A11:    i in Seg 1 by A9,FINSEQ_1:57,X;
+        i in { 1 } by A9,FINSEQ_1:4,57,X;
         then
 A12:    i = 1 by TARSKI:def 1;
         i in dom <*P*> & i in dom <*<*x*>*> by A11,FINSEQ_1:55;
@@ -1610,7 +1616,7 @@ A12:    i = 1 by TARSKI:def 1;
       per cases;
       suppose len P = 0;
         then
-A13:    P = {} by FINSEQ_1:25;
+A13:    P = {} by CARD_2:59;
         hence Sum Sum <*P^<*x*>*> = Sum Sum <*<*x*>*> by FINSEQ_1:47
           .= Sum Sum (<*<*x*>*>@) by Th19
           .= Sum Sum (<*P^<*x*>*>@) by A13,FINSEQ_1:47;
@@ -1762,143 +1768,144 @@ A11: now
 A12: i in dom Sum M1;
     deffunc V(Nat) = (p/.i) * (lmlt(Line(M,i),b)/.$1);
     consider F be FinSequence of V1 such that
-A13: len F = len b & for j be Nat st j in Seg len b holds F.j = V(j)
+A13: len F = len b & for j be Nat st j in dom F holds F.j = V(j)
     from FINSEQ_2:sch 1;
-A14: len F = width M1 by A1,A3,A13,MATRIX_1:24;
-A15: len F = width M by A1,A3,A13,MATRIX_1:24;
-A16: len Line(M1,i) = len F by A14,MATRIX_1:def 8;
-A17: dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
-      .= Seg len F by A15,MATRIX_1:def 8
+A14: dom F = Seg len b by A13,FINSEQ_1:def 3;
+A15: len F = width M1 by A1,A3,A13,MATRIX_1:24;
+A16: len F = width M by A1,A3,A13,MATRIX_1:24;
+A17: len Line(M1,i) = len F by A15,MATRIX_1:def 8;
+A18: dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
+      .= Seg len F by A16,MATRIX_1:def 8
       .= dom b by A13,FINSEQ_1:def 3;
     i in Seg len Sum M1 by A12,FINSEQ_1:def 3;
     then i in Seg len M1 by Def8;
     then
-A18: i in dom M1 by FINSEQ_1:def 3;
+A19: i in dom M1 by FINSEQ_1:def 3;
     then
-A19: M1/.i = M1.i by PARTFUN1:def 8
-      .= Line(M1,i) by A18,MATRIX_2:18;
-A20: now
+A20: M1/.i = M1.i by PARTFUN1:def 8
+      .= Line(M1,i) by A19,MATRIX_2:18;
+X: dom (M1/.i) = Seg len F by A20,A17,FINSEQ_1:def 3;
+A21: now
       let j be Nat;
       assume
-A21:  j in Seg len F;
+A22:  j in dom (M1/.i);
       then
-A22:  j in dom b by A13,FINSEQ_1:def 3;
+A23:  j in dom b by A13,FINSEQ_1:def 3,X;
       then
-A23:  j in dom (lmlt(Line(M,i),b)) by A17,Th16;
-A24:  b.j = b/.j by A22,PARTFUN1:def 8;
-A25:  Line(M,i).j = M*(i,j) by A15,A21,MATRIX_1:def 8;
-      [i,j] in [:dom M1,Seg width M1:] by A14,A18,A21,ZFMISC_1:106;
+A24:  j in dom (lmlt(Line(M,i),b)) by A18,Th16;
+A25:  b.j = b/.j by A23,PARTFUN1:def 8;
+A26:  Line(M,i).j = M*(i,j) by A16,A22,MATRIX_1:def 8,X;
+      [i,j] in [:dom M1,Seg width M1:] by A15,A19,A22,ZFMISC_1:106,X;
       then
-A26:  [i,j] in Indices M1 by MATRIX_1:def 5;
-A27:  (lmlt(Line(M,i),b)/.j) = lmlt(Line(M,i),b).j by A23,PARTFUN1:def 8
-        .= (the lmult of V1).(Line(M,i).j,b.j) by A23,FUNCOP_1:28
-        .= M*(i,j) * (b/.j) by A24,A25,VECTSP_1:def 24;
-      thus (M1/.i).j = M1*(i,j) by A14,A19,A21,MATRIX_1:def 8
-        .= (p/.i) * (M*(i,j)) * (b/.j) by A4,A26
-        .= (p/.i) * (lmlt(Line(M,i),b)/.j) by A27,VECTSP_1:def 26
-        .= F.j by A13,A21;
+A27:  [i,j] in Indices M1 by MATRIX_1:def 5;
+A28:  (lmlt(Line(M,i),b)/.j) = lmlt(Line(M,i),b).j by A24,PARTFUN1:def 8
+        .= (the lmult of V1).(Line(M,i).j,b.j) by A24,FUNCOP_1:28
+        .= M*(i,j) * (b/.j) by A25,A26,VECTSP_1:def 24;
+      thus (M1/.i).j = M1*(i,j) by A15,A20,A22,MATRIX_1:def 8,X
+        .= (p/.i) * (M*(i,j)) * (b/.j) by A4,A27
+        .= (p/.i) * (lmlt(Line(M,i),b)/.j) by A28,VECTSP_1:def 26
+        .= F.j by A13,A22,A14,X;
     end;
-A28: i in dom c by A8,A9,A10,A12,FINSEQ_3:31;
+A29: i in dom c by A8,A9,A10,A12,FINSEQ_3:31;
     then
-A29: c.i = c/.i by PARTFUN1:def 8;
-A30: p.i = p/.i by A8,A28,PARTFUN1:def 8;
-A31: i in dom ((the lmult of V1).:(p,c)) by A10,A12,FINSEQ_3:31;
-A32: dom lmlt(Line(M,i),b) = dom b by A17,Th16;
+A30: c.i = c/.i by PARTFUN1:def 8;
+A31: p.i = p/.i by A8,A29,PARTFUN1:def 8;
+A32: i in dom ((the lmult of V1).:(p,c)) by A10,A12,FINSEQ_3:31;
+A33: dom lmlt(Line(M,i),b) = dom b by A18,Th16;
     then
-A33: len F = len lmlt(Line(M,i),b) by A13,FINSEQ_3:31;
-A34: dom F = dom lmlt(Line(M,i),b) by A13,A32,FINSEQ_3:31;
-A35: now
-      let j be Element of NAT;
-      assume j in dom F;
-      then j in Seg len F by FINSEQ_1:def 3;
-      hence F.j = (p/.i) * (lmlt(Line(M,i),b)/.j) by A13;
-    end;
-    thus lmlt(p,c).i = (the lmult of V1).(p.i,c.i) by A31,FUNCOP_1:28
-      .= (p/.i) * (c/.i) by A29,A30,VECTSP_1:def 24
-      .= (p/.i) * Sum lmlt(Line(M,i),b) by A3,A28
-      .= Sum F by A33,A34,A35,VECTSP_3:10
-      .= Sum (M1/.i) by A16,A19,A20,FINSEQ_2:10
+A34: len F = len lmlt(Line(M,i),b) by A13,FINSEQ_3:31;
+A35: dom F = dom lmlt(Line(M,i),b) by A13,A33,FINSEQ_3:31;
+A36: for j be Element of NAT st j in dom F
+      holds F.j = (p/.i) * (lmlt(Line(M,i),b)/.j) by A13;
+    thus lmlt(p,c).i = (the lmult of V1).(p.i,c.i) by A32,FUNCOP_1:28
+      .= (p/.i) * (c/.i) by A30,A31,VECTSP_1:def 24
+      .= (p/.i) * Sum lmlt(Line(M,i),b) by A3,A29
+      .= Sum F by A34,A35,A36,VECTSP_3:10
+      .= Sum (M1/.i) by A17,A20,A21,FINSEQ_2:10
       .= (Sum M1)/.i by A12,Def8
       .= (Sum M1).i by A12,PARTFUN1:def 8;
   end;
-A36: dom d = dom b by A2,A3,FINSEQ_3:31;
+A37: dom d = dom b by A2,A3,FINSEQ_3:31;
   then
-A37: dom lmlt(d,b) = dom d by Th16;
-A38: dom lmlt(d,b) = dom b by A36,Th16;
-A39: width M1 = len (M1@) by MATRIX_1:def 7
+A38: dom lmlt(d,b) = dom d by Th16;
+A39: dom lmlt(d,b) = dom b by A37,Th16;
+A40: width M1 = len (M1@) by MATRIX_1:def 7
     .= len Sum (M1@) by Def8;
-A40: len lmlt(d,b) = len b by A38,FINSEQ_3:31
-    .= len Sum (M1@) by A1,A3,A39,MATRIX_1:24;
-A41: now
+A41: len lmlt(d,b) = len b by A39,FINSEQ_3:31
+    .= len Sum (M1@) by A1,A3,A40,MATRIX_1:24;
+Y: dom lmlt(d,b) = Seg len Sum(M1@) by A41,FINSEQ_1:def 3;
+A42: now
     let j be Nat such that
-A42: j in Seg len Sum(M1@);
-A43: Seg len Sum(M1@) = dom Sum(M1@) by FINSEQ_1:def 3;
+A43: j in dom lmlt(d,b);
+A44: Seg len Sum(M1@) = dom Sum(M1@) by FINSEQ_1:def 3;
     reconsider H = mlt(p,Col(M,j)) as FinSequence of K;
     deffunc V(Nat) = (H/.$1) * (b/.j);
     consider G be FinSequence of V1 such that
-A44: len G = len p & for i be Nat st i in Seg len p holds G.i = V(i)
+A45: len G = len p & for i be Nat st i in dom G holds G.i = V(i)
     from FINSEQ_2:sch 1;
-A45: Seg len p = dom p by FINSEQ_1:def 3;
-A46: dom p = dom G by A44,FINSEQ_3:31;
-A47: len Line(M1@,j) = width (M1@) by MATRIX_1:def 8
+A46: dom G = Seg len p by A45,FINSEQ_1:def 3;
+A48: dom p = dom G by A45,FINSEQ_3:31;
+A49: len Line(M1@,j) = width (M1@) by MATRIX_1:def 8
       .= len ((M1@)@) by MATRIX_1:def 7
-      .= len G by A1,A2,A5,A6,A44,MATRIX_2:15;
-A48: len p = len Col(M,j) by A2,A7,MATRIX_1:def 9;
+      .= len G by A1,A2,A5,A6,A45,MATRIX_2:15;
+A50: len p = len Col(M,j) by A2,A7,MATRIX_1:def 9;
     then
-A49: len ((the multF of K).:(p,Col(M,j))) = len p by FINSEQ_2:86;
-A50: now
+A51: len ((the multF of K).:(p,Col(M,j))) = len p by FINSEQ_2:86;
+X: dom Line(M1@,j) = Seg len G by FINSEQ_1:def 3,A49;
+A52: now
       let i be Nat;
       assume
-A51:  i in Seg len G;
+A53:  i in dom Line(M1@,j);
       then
-A52:  i in Seg width (M1@) by A47,MATRIX_1:def 8;
-A53:  Seg len G = dom G by FINSEQ_1:def 3;
-      dom M1 = dom G by A2,A5,A44,FINSEQ_3:31;
-      then [i,j] in [:dom M1,Seg width M1:] by A39,A42,A51,A53,ZFMISC_1:106;
+A54:  i in Seg width (M1@) by A49,MATRIX_1:def 8,X;
+A55:  Seg len G = dom G by FINSEQ_1:def 3;
+      dom M1 = dom G by A2,A5,A45,FINSEQ_3:31;
+      then [i,j] in [:dom M1,Seg width M1:]
+       by A40,A43,A53,A55,ZFMISC_1:106,X,Y;
       then
-A54:  [i,j] in Indices M1 by MATRIX_1:def 5;
-A55:  i in Seg len ((the multF of K).:(p,Col(M,j)))
-      by A44,A48,A51,FINSEQ_2:86;
+A56:  [i,j] in Indices M1 by MATRIX_1:def 5;
+A57:  i in Seg len ((the multF of K).:(p,Col(M,j)))
+      by A45,A50,A53,FINSEQ_2:86,X;
       then
-A56:  i in dom H by FINSEQ_1:def 3;
-A57:  i in dom ((the multF of K).:(p,Col(M,j))) by A55,FINSEQ_1:def 3;
-A58:  dom M = Seg len M by FINSEQ_1:def 3;
-A59:  (p/.i) * (M*(i,j)) = (the multF of K).(p.i,M*(i,j)) by A46,A51,A53,
+A58:  i in dom H by FINSEQ_1:def 3;
+A59:  i in dom ((the multF of K).:(p,Col(M,j))) by A57,FINSEQ_1:def 3;
+A60:  dom M = Seg len M by FINSEQ_1:def 3;
+A61:  (p/.i) * (M*(i,j)) = (the multF of K).(p.i,M*(i,j)) by A48,A53,A55,X,
       PARTFUN1:def 8
         .= (the multF of K).(p.i,Col(M,j).i)
-      by A2,A7,A44,A51,A58,MATRIX_1:def 9
-        .= ((the multF of K).:(p,Col(M,j))).i by A57,FUNCOP_1:28
-        .= H/.i by A56,PARTFUN1:def 8;
-      thus Line(M1@,j).i = (M1@)*(j,i) by A52,MATRIX_1:def 8
-        .= M1*(i,j) by A54,MATRIX_1:def 7
-        .= (H/.i) * (b/.j) by A4,A54,A59
-        .= G.i by A44,A51;
+      by A2,A7,A45,A53,A60,MATRIX_1:def 9,X
+        .= ((the multF of K).:(p,Col(M,j))).i by A59,FUNCOP_1:28
+        .= H/.i by A58,PARTFUN1:def 8;
+      thus Line(M1@,j).i = (M1@)*(j,i) by A54,MATRIX_1:def 8
+        .= M1*(i,j) by A56,MATRIX_1:def 7
+        .= (H/.i) * (b/.j) by A4,A56,A61
+        .= G.i by A45,A53,A46,X;
     end;
-A60: j in dom Sum(M1@) by A42,FINSEQ_1:def 3;
-A61: j in dom lmlt(d,b) by A40,A42,FINSEQ_1:def 3;
+A62: j in dom Sum(M1@) by A43,FINSEQ_1:def 3,Y;
+A63: j in dom lmlt(d,b) by A43;
     then
-A62: d/.j = d.j by A37,PARTFUN1:def 8;
-A63: b/.j = b.j by A38,A61,PARTFUN1:def 8;
-A64: j in dom d by A36,A61,Th16;
-A65: dom H = dom G by A44,A49,FINSEQ_3:31;
+A64: d/.j = d.j by A38,PARTFUN1:def 8;
+A65: b/.j = b.j by A39,A63,PARTFUN1:def 8;
+A66: j in dom d by A37,A63,Th16;
+A67: dom H = dom G by A45,A51,FINSEQ_3:31;
     len Sum(M1@) = len (M1@) by Def8;
     then
-A66: dom Sum(M1@) = dom (M1@) by FINSEQ_3:31;
+A68: dom Sum(M1@) = dom (M1@) by FINSEQ_3:31;
     then
-A67: M1@/.j = M1@.j by A60,PARTFUN1:def 8
+A69: M1@/.j = M1@.j by A62,PARTFUN1:def 8
       .= Line(M1@,j)
-    by A60,A66,MATRIX_2:18;
-    thus lmlt(d,b).j = (the lmult of V1).(d.j,b.j) by A61,FUNCOP_1:28
-      .= (d/.j) * (b/.j) by A62,A63,VECTSP_1:def 24
-      .= Sum H * (b/.j) by A2,A64
-      .= Sum G by A44,A45,A46,A49,A65,Th14
-      .= Sum (M1@/.j) by A47,A50,A67,FINSEQ_2:10
-      .= Sum (M1@)/.j by A60,Def8
-      .= (Sum (M1@)).j by A42,A43,PARTFUN1:def 8;
+    by A62,A68,MATRIX_2:18;
+    thus lmlt(d,b).j = (the lmult of V1).(d.j,b.j) by A63,FUNCOP_1:28
+      .= (d/.j) * (b/.j) by A64,A65,VECTSP_1:def 24
+      .= Sum H * (b/.j) by A2,A66
+      .= Sum G by A45,A51,A67,Th14
+      .= Sum (M1@/.j) by A49,A52,A69,FINSEQ_2:10
+      .= Sum (M1@)/.j by A62,Def8
+      .= (Sum (M1@)).j by A43,A44,PARTFUN1:def 8,Y;
   end;
   thus Sum lmlt(p,c) = Sum Sum M1 by A10,A11,NEWTON:3
     .= Sum Sum (M1@) by Th37
-    .= Sum lmlt(d,b) by A40,A41,FINSEQ_2:10;
+    .= Sum lmlt(d,b) by A41,A42,FINSEQ_2:10;
 end;
 
 begin :: Decomposition of a Vector in Basis
@@ -1922,7 +1929,8 @@ A2: Carrier KL c= b2 by Th12;
     deffunc V(Nat) = KL.(b1/.$1);
     consider A be FinSequence of K such that
 A3: len A = len b1 and
-A4: for k be Nat st k in Seg len b1 holds A.k = V(k) from FINSEQ_2:sch 1;
+A4: for k be Nat st k in dom A holds A.k = V(k) from FINSEQ_2:sch 1;
+A5: dom A = Seg len b1 by A3,FINSEQ_1:def 3;
     take A;
     thus len A = len b1 by A3;
     take KL;
@@ -1931,43 +1939,43 @@ A4: for k be Nat st k in Seg len b1 holds A.k = V(k) from FINSEQ_2:sch 1;
     let k;
     assume 1<=k & k<=len A;
     then
-A5: k in Seg len b1 by A3,FINSEQ_1:3;
+A6: k in Seg len b1 by A3,FINSEQ_1:3;
     then k in dom A by A3,FINSEQ_1:def 3;
     then A.k = A/.k by PARTFUN1:def 8;
-    hence thesis by A4,A5;
+    hence thesis by A4,A6,A5;
   end;
   uniqueness
   proof
     let F1,F2 be FinSequence of K;
     assume
-A6: len F1 = len b1;
+A7: len F1 = len b1;
     given KL1 be Linear_Combination of V such that
-A7: W = Sum(KL1) and
-A8: Carrier(KL1) c= rng b1 and
-A9: for k st 1<=k & k<=len F1 holds F1/.k=KL1.(b1/.k);
+A8: W = Sum(KL1) and
+A9: Carrier(KL1) c= rng b1 and
+A10: for k st 1<=k & k<=len F1 holds F1/.k=KL1.(b1/.k);
     assume
-A10: len F2 = len b1;
+A11: len F2 = len b1;
     given KL2 be Linear_Combination of V such that
-A11: W = Sum(KL2) and
-A12: Carrier(KL2) c= rng b1 and
-A13: for k st 1<=k & k<=len F2 holds F2/.k=KL2.(b1/.k);
+A12: W = Sum(KL2) and
+A13: Carrier(KL2) c= rng b1 and
+A14: for k st 1<=k & k<=len F2 holds F2/.k=KL2.(b1/.k);
     reconsider b = rng b1 as Basis of V by Def4;
-A14: b is linearly-independent by VECTSP_7:def 3;
+A15: b is linearly-independent by VECTSP_7:def 3;
     for k be Nat st 1<=k & k<=len F1 holds F1.k = F2.k
     proof
       let k be Nat;
       assume
-A15:  1<=k & k<=len F1;
+A16:  1<=k & k<=len F1;
       then
-A16:  k in dom F1 by FINSEQ_3:27;
-A17:  k in dom F2 by A6,A10,A15,FINSEQ_3:27;
-      thus F1.k = F1/.k by A16,PARTFUN1:def 8
-        .= KL1.(b1/.k) by A9,A15
-        .= KL2.(b1/.k) by A7,A8,A11,A12,A14,Th9
-        .= F2/.k by A6,A10,A13,A15
-        .= F2.k by A17,PARTFUN1:def 8;
+A17:  k in dom F1 by FINSEQ_3:27;
+A18:  k in dom F2 by A7,A11,A16,FINSEQ_3:27;
+      thus F1.k = F1/.k by A17,PARTFUN1:def 8
+        .= KL1.(b1/.k) by A10,A16
+        .= KL2.(b1/.k) by A8,A9,A12,A13,A15,Th9
+        .= F2/.k by A7,A11,A14,A16
+        .= F2.k by A18,PARTFUN1:def 8;
     end;
-    hence F1 = F2 by A6,A10,FINSEQ_1:18;
+    hence F1 = F2 by A7,A11,FINSEQ_1:18;
   end;
 end;
 
@@ -2163,8 +2171,8 @@ Lm2: for p be FinSequence, k be set st k in dom p holds len p > 0
 proof
   let p be FinSequence, k be set;
   assume k in dom p;
-  then p <> {} by FINSEQ_1:26;
-  then len p <> 0 by FINSEQ_1:25;
+  then p <> {} by RELAT_1:60;
+  then len p <> 0 by CARD_2:59;
   hence thesis;
 end;
 
@@ -2190,13 +2198,9 @@ A6: for i,j st [i,j] in Indices M holds M*(i,j) = V(i,j) from MATRIX_1:sch 1;
   deffunc W(Nat) = Sum mlt(a,Col(M,$1));
   consider dd being FinSequence of K such that
 A7: len dd = len b2 &
-  for j be Element of NAT st j in dom dd holds dd/.j = W(j)
-  from GOBOARD2:sch 1;
-A8: now
-    let j;
-    j in NAT by ORDINAL1:def 13;
-    hence j in dom dd implies dd/.j = W(j) by A7;
-  end;
+  for j be Nat st j in dom dd holds dd/.j = W(j)
+  from FINSEQ_4:sch 2;
+A8: for j holds j in dom dd implies dd/.j = W(j) by A7;
   len M = len b1 by MATRIX_1:def 3;
   then
 A9: dom M = dom b1 by FINSEQ_3:31;
@@ -2248,7 +2252,7 @@ A26:  [i,j] in Indices M by MATRIX_1:def 5;
   end;
 A27: j in dom dd by A2,A7,FINSEQ_3:31;
   thus (Sum(lmlt(a,f*b1))|--b2)/.j = (Sum(lmlt(dd,b2))|--b2)/.j
-  by A1,A3,A5,A7,A8,A10,A20,Th38
+  by A1,A3,A5,A7,A10,A20,Th38
     .= dd/.j by A7,Th41
     .= Sum(mlt(a,Col(M,j))) by A8,A27
     .= Sum(mlt(a,d)) by A12,A16,NEWTON:3;
@@ -2270,21 +2274,22 @@ definition
     deffunc V(Nat) = f.(b1/.$1)|--b2;
     consider M be FinSequence such that
 A1: len M = len b1 and
-A2: for k be Nat st k in Seg len b1 holds M.k = V(k) from FINSEQ_1:sch 2;
+A2: for k be Nat st k in dom M holds M.k = V(k) from FINSEQ_1:sch 2;
+A3:  dom M = Seg len b1 by A1,FINSEQ_1:def 3;
     ex n being Nat st for x st x in rng M ex s st s=x & len s = n
     proof
       take n = len(f.(b1/.1)|--b2);
       let x be set;
       assume x in rng M;
       then consider y such that
-A3:   y in dom M & x = M.y by FUNCT_1:def 5;
-      reconsider y as Nat by A3,FINSEQ_3:25;
-A4:   y in Seg len M by A3,FINSEQ_1:def 3;
-      then M.y = f.(b1/.y)|--b2 by A1,A2;
+A4:   y in dom M & x = M.y by FUNCT_1:def 5;
+      reconsider y as Nat by A4,FINSEQ_3:25;
+A5:   y in Seg len M by A4,FINSEQ_1:def 3;
+      then M.y = f.(b1/.y)|--b2 by A1,A2,A3;
       then reconsider s = M.y as FinSequence;
       take s;
-      thus s = x by A3;
-      thus len s = len (f.(b1/.y)|--b2) by A1,A2,A4
+      thus s = x by A4;
+      thus len s = len (f.(b1/.y)|--b2) by A1,A2,A5,A3
         .= len b2 by Def9
         .= n by Def9;
     end;
@@ -2293,12 +2298,12 @@ A4:   y in Seg len M by A3,FINSEQ_1:def 3;
       let x;
       assume x in rng M;
       then consider y such that
-A5:   y in dom M & x = M.y by FUNCT_1:def 5;
-      reconsider y as Nat by A5,FINSEQ_3:25;
-      y in Seg len M by A5,FINSEQ_1:def 3;
-      then M.y = f.(b1/.y)|--b2 by A1,A2;
+A6:   y in dom M & x = M.y by FUNCT_1:def 5;
+      reconsider y as Nat by A6,FINSEQ_3:25;
+      y in Seg len M by A6,FINSEQ_1:def 3;
+      then M.y = f.(b1/.y)|--b2 by A1,A2,A3;
       then reconsider s = M.y as FinSequence of K;
-      s = x by A5;
+      s = x by A6;
       hence x in (the carrier of K)* by FINSEQ_1:def 11;
     end;
     then rng M c= (the carrier of K)* by TARSKI:def 3;
@@ -2308,37 +2313,37 @@ A5:   y in dom M & x = M.y by FUNCT_1:def 5;
     proof
       let k be Nat;
       assume
-A6:   k in dom b1;
+A7:   k in dom b1;
       then
-A7:   k in Seg len b1 by FINSEQ_1:def 3;
+A8:   k in Seg len b1 by FINSEQ_1:def 3;
       dom M1 = dom b1 by A1,FINSEQ_3:31;
-      hence M1/.k = M1.k by A6,PARTFUN1:def 8
-        .= f.(b1/.k)|--b2 by A2,A7;
+      hence M1/.k = M1.k by A7,PARTFUN1:def 8
+        .= f.(b1/.k)|--b2 by A2,A8,A3;
     end;
     hence thesis by A1;
   end;
   uniqueness
   proof
     let K1,K2 be Matrix of K such that
-A8: len K1 = len b1 and
-A9: for k st k in dom b1 holds K1/.k = f.(b1/.k)|--b2 and
-A10: len K2 = len b1 and
-A11: for k st k in dom b1 holds K2/.k = f.(b1/.k)|--b2;
+A9: len K1 = len b1 and
+A10: for k st k in dom b1 holds K1/.k = f.(b1/.k)|--b2 and
+A11: len K2 = len b1 and
+A12: for k st k in dom b1 holds K2/.k = f.(b1/.k)|--b2;
     for k be Nat st 1 <= k & k <= len K1 holds K1.k = K2.k
     proof
       let k be Nat;
       assume
-A12:  1 <= k & k <= len K1;
+A13:  1 <= k & k <= len K1;
       then
-A13:  k in dom b1 by A8,FINSEQ_3:27;
-A14:  k in dom K2 by A8,A10,A12,FINSEQ_3:27;
-      k in dom K1 by A12,FINSEQ_3:27;
+A14:  k in dom b1 by A9,FINSEQ_3:27;
+A15:  k in dom K2 by A9,A11,A13,FINSEQ_3:27;
+      k in dom K1 by A13,FINSEQ_3:27;
       hence K1.k = K1/.k by PARTFUN1:def 8
-        .= f.(b1/.k)|--b2 by A9,A13
-        .= K2/.k by A11,A13
-        .=K2.k by A14,PARTFUN1:def 8;
+        .= f.(b1/.k)|--b2 by A10,A14
+        .= K2/.k by A12,A14
+        .=K2.k by A15,PARTFUN1:def 8;
     end;
-    hence K1 = K2 by A8,A10,FINSEQ_1:18;
+    hence K1 = K2 by A9,A11,FINSEQ_1:18;
   end;
 end;
 
@@ -2354,7 +2359,7 @@ proof
   assume len b1 = 0;
   then len AutMt(f,b1,b2) = 0 by Def10;
   then dom AutMt(f,b1,b2) = {} by FINSEQ_1:4,def 3;
-  hence AutMt(f,b1,b2) = {} by FINSEQ_1:26;
+  hence AutMt(f,b1,b2) = {} by RELAT_1:64;
 end;
 
 theorem Th44:
@@ -2464,57 +2469,57 @@ A18: p1 = (AutMt(g*f,b1,b3))/.i by A11,A14,PARTFUN1:def 8
 A19: j in dom p1 by A18,FINSEQ_1:def 3;
     deffunc V(Nat) = (g.((b2/.$1))|--b3)/.j;
     consider d be FinSequence of K such that
-A20: len d = len b2 & for k be Nat st k in Seg len b2 holds
+A20: len d = len b2 & for k be Nat st k in dom d holds
     d.k = V(k) from FINSEQ_2:sch 1;
-A21: Seg len b2 = dom b2 by FINSEQ_1:def 3;
+A21: dom d = Seg len b2 by A20,FINSEQ_1:def 3;
+A22: Seg len b2 = dom b2 by FINSEQ_1:def 3;
     len AutMt(f,b1,b2) = len b1 by Def10;
     then
-A22: i in dom AutMt(f,b1,b2) by A11,A12,FINSEQ_3:31;
+A23: i in dom AutMt(f,b1,b2) by A11,A12,FINSEQ_3:31;
     then
-A23: Line(AutMt(f,b1,b2),i) = AutMt(f,b1,b2).i by MATRIX_2:18
-      .= (AutMt(f,b1,b2))/.i by A22,PARTFUN1:def 8
+A24: Line(AutMt(f,b1,b2),i) = AutMt(f,b1,b2).i by MATRIX_2:18
+      .= (AutMt(f,b1,b2))/.i by A23,PARTFUN1:def 8
       .= f.(b1/.i)|--b2 by A13,Def10;
-A24: len Col(AutMt(g,b2,b3),j) = len AutMt(g,b2,b3) by MATRIX_1:def 9
+A25: len Col(AutMt(g,b2,b3),j) = len AutMt(g,b2,b3) by MATRIX_1:def 9
       .= len d by A20,Def10;
-A25: now
+A26: now
       let k be Nat;
       assume
-A26:  1 <=k & k <= len d;
+A27:  1 <=k & k <= len d;
       then
-A27:  k in dom d by FINSEQ_3:27;
-A28:  dom d = Seg len d by FINSEQ_1:def 3;
-A29:  len AutMt(g,b2,b3) = len b2 by Def10;
+A28:  k in dom d by FINSEQ_3:27;
+A30:  len AutMt(g,b2,b3) = len b2 by Def10;
       then
-A30:  k in dom AutMt(g,b2,b3) & j in Seg width AutMt(g,b2,b3)
-      by A6,A9,A20,A26,FINSEQ_3:27,ZFMISC_1:106;
+A31:  k in dom AutMt(g,b2,b3) & j in Seg width AutMt(g,b2,b3)
+      by A6,A9,A20,A27,FINSEQ_3:27,ZFMISC_1:106;
       then [k,j] in [:dom AutMt(g,b2,b3),Seg width AutMt(g,b2,b3):]
       by ZFMISC_1:106;
       then [k,j] in Indices AutMt(g,b2,b3) by MATRIX_1:def 5;
       then consider p2 be FinSequence of K such that
-A31:  p2= AutMt(g,b2,b3).k & AutMt(g,b2,b3)*(k,j) = p2.j by MATRIX_1:def 6;
-A32:  k in dom AutMt(g,b2,b3) by A20,A26,A29,FINSEQ_3:27;
-A33:  k in dom b2 by A20,A26,FINSEQ_3:27;
-A34:  p2 = (AutMt(g,b2,b3))/.k by A30,A31,PARTFUN1:def 8
-        .= g.(b2/.k)|--b3 by A33,Def10;
+A32:  p2= AutMt(g,b2,b3).k & AutMt(g,b2,b3)*(k,j) = p2.j by MATRIX_1:def 6;
+A33:  k in dom AutMt(g,b2,b3) by A20,A27,A30,FINSEQ_3:27;
+A34:  k in dom b2 by A20,A27,FINSEQ_3:27;
+A35:  p2 = (AutMt(g,b2,b3))/.k by A31,A32,PARTFUN1:def 8
+        .= g.(b2/.k)|--b3 by A34,Def10;
       then j in Seg len p2 by A16,Def9;
       then
-A35:  j in dom p2 by FINSEQ_1:def 3;
-      thus Col(AutMt(g,b2,b3),j).k = p2.j by A31,A32,MATRIX_1:def 9
-        .= (g.(b2/.k)|--b3)/.j by A34,A35,PARTFUN1:def 8
-        .= d.k by A20,A27,A28;
+A36:  j in dom p2 by FINSEQ_1:def 3;
+      thus Col(AutMt(g,b2,b3),j).k = p2.j by A32,A33,MATRIX_1:def 9
+        .= (g.(b2/.k)|--b3)/.j by A35,A36,PARTFUN1:def 8
+        .= d.k by A20,A28;
     end;
     b1/.i in the carrier of V1;
     then
-A36: b1/.i in dom f by FUNCT_2:def 1;
-A37: len (f.(b1/.i)|--b2) = len b2 by Def9;
+A37: b1/.i in dom f by FUNCT_2:def 1;
+A38: len (f.(b1/.i)|--b2) = len b2 by Def9;
     thus AutMt(g*f,b1,b3)*(i,j) = ((g*f).(b1/.i)|--b3)/.j
     by A14,A18,A19,PARTFUN1:def 8
-      .= (g.(f.(b1/.i))|--b3)/.j by A36,FUNCT_1:23
+      .= (g.(f.(b1/.i))|--b3)/.j by A37,FUNCT_1:23
       .= (g.Sum(lmlt(f.(b1/.i)|--b2,b2))|--b3)/.j by Th40
-      .= (Sum(lmlt(f.(b1/.i)|--b2,g*b2))|--b3)/.j by A1,A37,Th22
-      .= Sum(mlt(f.(b1/.i)|--b2,d)) by A2,A17,A20,A21,A37,Th42
+      .= (Sum(lmlt(f.(b1/.i)|--b2,g*b2))|--b3)/.j by A1,A38,Th22
+      .= Sum(mlt(f.(b1/.i)|--b2,d)) by A2,A17,A20,A22,A38,Th42,A21
       .= Line(AutMt(f,b1,b2),i) "*" Col(AutMt(g,b2,b3),j)
-    by A23,A24,A25,FINSEQ_1:18
+    by A24,A25,A26,FINSEQ_1:18
       .= (AutMt(f,b1,b2) * AutMt(g,b2,b3))*(i,j) by A3,A10,MATRIX_3:def 4;
   end;
   hence thesis by A4,A7,MATRIX_1:21;

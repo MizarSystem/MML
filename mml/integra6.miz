@@ -18,18 +18,18 @@ environ
       RFUNCT_2, RSSPACE, INTEGRA4, INTEGRA5, XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FDIFF_1, RFINSEQ, PRE_CIRC, RSSPACE, PSCOMP_1, INTEGRA2,
-      INTEGRA4, INTEGRA5, INT_1, VALUED_1, SEQ_1;
+      INTEGRA4, INTEGRA5, SEQ_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1, RCOMP_1, FDIFF_1,
-      GOBOARD1, INTEGRA1, VALUED_0, VALUED_1;
+      XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, RCOMP_1, FDIFF_1, GOBOARD1,
+      INTEGRA1, VALUED_0, VALUED_1, FINSET_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions TARSKI, XCMPLX_0, INTEGRA1, FINSEQ_1, INTEGRA5, VALUED_1;
+ definitions TARSKI, XCMPLX_0, INTEGRA1, FINSEQ_1, INTEGRA5;
  theorems ORDINAL1, REAL_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1,
       FINSEQ_1, RVSUM_1, SEQ_1, SEQ_2, FDIFF_1, ABSVALUE, PRE_CIRC, NAT_1,
       INT_1, COMPLEX1, TARSKI, INTEGRA2, INTEGRA3, RFINSEQ, GOBOARD1, INTEGRA4,
       FINSEQ_2, FINSEQ_3, RCOMP_1, FCONT_1, RFUNCT_2, XREAL_0, XXREAL_0,
       FUNCT_2, FINSEQ_5, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, INTEGRA5,
-      RSSPACE, RELAT_1, VALUED_1;
+      RSSPACE, RELAT_1, VALUED_1, CARD_1, CARD_2;
  schemes FUNCT_2, PARTFUN1, FINSEQ_2;
 
 begin :: Preliminaries
@@ -197,7 +197,6 @@ theorem Th10:
   a<=b & [' a,b '] c= dom f & f is_integrable_on [' a,b '] &
   f is_bounded_on [' a,b '] implies integral(c(#)f,a,b) =c*integral(f,a,b)
 proof
-  set F = f||['a,b '], G = (c(#)f)|['a,b '];
 A1: c is Real by XREAL_0:def 1;
   assume
 A2: a<=b & [' a,b '] c= dom f & f is_integrable_on [' a,b '] &
@@ -236,7 +235,6 @@ theorem Th12:
   integral(f+g,a,b) =integral(f,a,b) + integral(g,a,b) &
   integral(f-g,a,b) =integral(f,a,b) - integral(g,a,b)
 proof
-  set F = f||['a,b '], G = g||['a,b '];
   assume
 A1: a<=b & [' a,b '] c= dom f & [' a,b '] c= dom g &
   f is_integrable_on [' a,b '] & g is_integrable_on [' a,b '] &
@@ -282,54 +280,45 @@ proof
 A1: n > 0 & vol A > 0;
   deffunc F(Nat)=inf A + vol(A)/n*$1;
   consider D being FinSequence of REAL such that
-A2: len D = n & for i be Nat st i in Seg n holds D.i=F(i) from FINSEQ_2:sch 1;
+A2: len D = n & for i be Nat st i in dom D holds D.i=F(i) from FINSEQ_2:sch 1;
+A3: dom D = Seg n by A2,FINSEQ_1:def 3;
   for i,j be Element of NAT st i in dom D & j in dom D & i<j holds D.i < D.j
   proof
     let i,j be Element of NAT;
     assume
-A3: i in dom D & j in dom D & i < j;
-    then
-A4: i in Seg n & j in Seg n by A2,FINSEQ_1:def 3;
+A4: i in dom D & j in dom D & i < j;
     vol(A)/n > 0 by A1,REAL_2:127;
-    then vol(A)/n*i < vol(A)/n*j by A3,XREAL_1:70;
+    then vol(A)/n*i < vol(A)/n*j by A4,XREAL_1:70;
     then inf A + vol(A)/n*i < inf A + vol(A)/n*j by XREAL_1:8;
     then D.i < inf A + vol(A)/n*j by A2,A4;
     hence thesis by A2,A4;
   end;
   then reconsider D as non empty increasing FinSequence of REAL
-  by A1,A2,FINSEQ_1:25,GOBOARD1:def 1;
+  by A1,A2,CARD_1:47,GOBOARD1:def 1;
   for x1 being set st x1 in rng D holds x1 in A
   proof
     let x1 be set;
     assume x1 in rng D;
     then consider i be Element of NAT such that
-A5: i in dom D & D.i=x1 by PARTFUN1:26;
-    i in Seg n by A2,A5,FINSEQ_1:def 3;
+A6: i in dom D & D.i=x1 by PARTFUN1:26;
+A7: x1 = inf A + vol(A)/n*i by A2,A6;
+A8: 1 <= i & i <= len D & vol(A)/n>0 by A1,A6,FINSEQ_3:27,REAL_2:127;
     then
-A6: x1 = inf A + vol(A)/n*i by A2,A5;
-A7: 1 <= i & i <= len D & vol(A)/n>0 by A1,A5,FINSEQ_3:27,REAL_2:127;
-    then
-A8: vol(A)/n*i>0 by REAL_2:122;
-    vol(A)/n*i <= vol(A)/n*n by A2,A7,XREAL_1:66;
+A9: vol(A)/n*i>0 by REAL_2:122;
+    vol(A)/n*i <= vol(A)/n*n by A2,A8,XREAL_1:66;
     then vol(A)/n*i <= vol A by A1,XCMPLX_1:88;
     then inf A <= inf A + vol(A)/n*i & inf A + vol(A)/n*i <= inf A+ vol A
-    by A8,XREAL_1:8,31;
-    hence thesis by A6,INTEGRA2:1;
+    by A9,XREAL_1:8,31;
+    hence thesis by A7,INTEGRA2:1;
   end;
   then
-A9: rng D c= A by TARSKI:def 3;
-  D.(len D)=inf A + vol(A)/n*n by A1,A2,FINSEQ_1:5;
+A10: rng D c= A by TARSKI:def 3;
+  D.(len D)=inf A + vol(A)/n*n by A1,A2,FINSEQ_1:5,A3;
   then D.(len D)=inf A + vol(A) by A1,XCMPLX_1:88;
-  then D is DivisionPoint of A by A9,INTEGRA1:def 2;
+  then D is DivisionPoint of A by A10,INTEGRA1:def 2;
   then reconsider D as Element of divs A by INTEGRA1:def 3;
   take D;
-  now
-    let i be Element of NAT;
-    assume i in dom D;
-    then i in Seg n by A2,FINSEQ_1:def 3;
-    hence D.i=inf A+vol(A)/n*i by A2;
-  end;
-  hence thesis by A2;
+  thus thesis by A2;
 end;
 
 begin :: Integrability on a Subinterval
@@ -383,10 +372,11 @@ A9:     ex n being Element of NAT, e being Element of divs A st
         n = i & e = D & e divide_into_equal n+1 by A4;
         k in Seg len upper_volume(chi(A,A),(T.i)) by A8,FINSEQ_1:def 3;
         then
-A10:    k in Seg len D by INTEGRA1:def 7;
+        k in Seg len D by INTEGRA1:def 7;
+  then
+A12:  k in dom D by FINSEQ_1:def 3;
         then
 A11:    x1=vol(divset(D,k)) by A8,INTEGRA1:22;
-A12:    k in dom D by A10,FINSEQ_1:def 3;
         sup divset(D,k)-inf divset(D,k)=vol(A)/(i+1)
         proof
 A13:      now
@@ -433,12 +423,13 @@ A19:    x1 = vol(A)/(i+1) by TARSKI:def 1;
 A20:    1 in dom D by FINSEQ_3:34;
         then
 A21:    1 in Seg len D by FINSEQ_1:def 3;
-        then 1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7;
+B21:  1 in dom D by A20;
+        1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7,A21;
         then 1 in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
         then
 A22:    (upper_volume(chi(A,A),D)).1 in rng upper_volume(chi(A,A), D)
         by FUNCT_1:def 5;
-A23:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by A21,INTEGRA1:22;
+A23:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by INTEGRA1:22,B21;
 A24:    sup divset(D,1)=D.1 & inf divset(D,1)=inf A by A20,INTEGRA1:def 5;
 A25:    ex n being Element of NAT, e being Element of divs A st
         n = i & e = D & e divide_into_equal n+1 by A4;
@@ -653,7 +644,7 @@ A29: 1 <= len S by A27,XXREAL_0:2;
 A30: 1 <= len T by A29,RFINSEQ:def 2;
     then
 A31: T is non empty increasing FinSequence of REAL
-    by A29,FINSEQ_1:25,INTEGRA1:36;
+    by A29,CARD_1:47,INTEGRA1:36;
     rng T c= rng S by FINSEQ_5:36;
     then
 A32: rng T c= [' c,b '] by A28,XBOOLE_1:1;
@@ -712,9 +703,8 @@ A47: c < D.1 by A42,A45,XXREAL_0:2;
       let i be Element of NAT;
       assume
 A48:  i in dom D;
-      then i in Seg len D by FINSEQ_1:def 3;
       then
-A49:  1 <=i by FINSEQ_1:3;
+A49:  1 <=i by FINSEQ_3:27;
       thus now
         assume i <> 1;
         then 1 < i by A49,REAL_1:def 5;
@@ -757,8 +747,10 @@ A58:      x in Seg len upper_volume(XCB,T2.n) by A57,FINSEQ_1:def 3;
           reconsider D=T2.n as DivisionPoint of [' c,b '] by INTEGRA1:def 3;
 A59:      len (upper_volume(XCB,T2.n)) = len D by INTEGRA1:def 7;
           then
+U:           dom (upper_volume(XCB,T2.n)) = dom D by FINSEQ_3:31;
+          then
 A60:      y=( sup rng(XCB|divset(T2.n,i)) ) * vol divset(T2.n,i)
-          by A57,A58,INTEGRA1:def 7;
+          by A57,INTEGRA1:def 7;
           consider E be DivisionPoint of [' c,b '] such that
 A61:      E=S2.n & T2.n=E/^1 by A33;
           consider E1 be DivisionPoint of [' c,b '] such that
@@ -772,9 +764,7 @@ A65:      now
 A66:        i = 1;
             then
 A67:        1 in dom D by A58,A59,FINSEQ_1:def 3;
-A68:        2 in Seg len E by A61,A62;
-            then
-A69:        2 in dom E by FINSEQ_1:def 3;
+A69:        2 in dom E by A61,A62,FINSEQ_3:27;
 A70:        divset((T2.n),i)
 
 = [. inf(divset((T2.n),1)),sup(divset((T2.n),1)) .] by A66,INTEGRA1:5
@@ -812,7 +802,7 @@ A72:        (upper_volume(XCB,S2.n)).2 < e/2 by A55,XXREAL_0:2;
             by PRE_CIRC:def 1;
             then
 A73:        (upper_volume(XCB,S2.n)).1 < e/2 by A55,XXREAL_0:2;
-A74:        1 in Seg len E by A61,A62,A63;
+            1 in Seg len E by A61,A62,A63;
             then
 A75:        1 in dom E by FINSEQ_1:def 3;
             divset(S2.n,1) = [. inf divset(S2.n,1),sup divset(S2.n,1) .]
@@ -835,7 +825,7 @@ A78:        divset(S2.n,2) = [. sup divset(S2.n,1),sup divset( S2.n,2) .]
 A79:        [. sup divset(S2.n,1) ,sup divset(S2.n,2) .]
             = [.inf([. sup divset(S2.n,1) ,sup divset(S2.n,2) .]),
             sup([. sup divset(S2.n,1) ,sup divset(S2.n,2) .]).] by INTEGRA1:5;
-            y =vol divset(T2.n,1) by A57,A58,A59,A66,INTEGRA1:22;
+            y =vol divset(T2.n,1) by A57,A66,INTEGRA1:22,U;
             then y =(sup divset(S2.n,2)-sup divset(S2.n,1))
             + (sup([. inf([' c,b ']),sup divset(S2.n,1) .])-inf([' c,b ']))
             by A66,A70,A71,A76;
@@ -845,9 +835,9 @@ then y =(sup divset(S2.n,2) - sup divset(S2.n,1)) + vol divset(S2.n,1)
 
 then y = vol divset(S2.n,2) + vol divset(S2.n,1) by A78,A79,INTEGRA1:6;
             then y = (upper_volume(XCB,S2.n)).2 + vol divset(S2.n,1)
-            by A61,A68,INTEGRA1:22;
+            by A61,INTEGRA1:22,A69;
             then y = (upper_volume(XCB,S2.n)).2 + (upper_volume(XCB,S2.n)).1
-            by A61,A74,INTEGRA1:22;
+            by A61,INTEGRA1:22,A75;
             then y < (e/2)+(e/2) by A72,A73,XREAL_1:10;
             hence y < e;
           end;
@@ -887,9 +877,12 @@ A87:        divset(T2.n,i)
             by INTEGRA1:def 7;
             then
 A88:        i1 in Seg len (upper_volume(XCB,S2.n)) by A58, FINSEQ_1:81;
+  then
+B88:  i1 in dom upper_volume(XCB,S2.n) by FINSEQ_1:def 3;
             len upper_volume(XCB,S2.n) = len E by A61,INTEGRA1:def 7;
+            then dom upper_volume(XCB,S2.n) = dom E by FINSEQ_3:31;
             then
-A89:        y = (upper_volume(XCB,S2.n)).i1 by A60,A61,A87,A88
+A89:        y = (upper_volume(XCB,S2.n)).i1 by A60,A61,A87,B88
             ,INTEGRA1:def 7;
             i1 in dom upper_volume(XCB,S2.n) by A88,FINSEQ_1:def 3;
             then y in rng upper_volume(XCB,S2.n) by A89,FUNCT_1:def 5;
@@ -938,16 +931,14 @@ A94: T.(len T) = T.(len S1 + len S2) by FINSEQ_1:35
       let i,j be Element of NAT;
       assume
 A95:  i in dom T & j in dom T & i < j;
-      then i in Seg len T & j in Seg len T by FINSEQ_1:def 3;
       then
-A96:  1 <= i & i <= len T & 1 <= j & j <= len T by FINSEQ_1:3;
+A96:  1 <= i & i <= len T & 1 <= j & j <= len T by FINSEQ_3:27;
 A97:  now
         assume
 A98:    j <= len S1;
         then i <= len S1 by A95,XXREAL_0:2;
-        then i in Seg len S1 & j in Seg len S1 by A96,A98;
         then
-A99:    i in dom S1 & j in dom S1 by FINSEQ_1:def 3;
+A99:    i in dom S1 & j in dom S1 by FINSEQ_3:27,A96,A98;
         then T.i = S1.i & T.j = S1.j by FINSEQ_1:def 7;
         hence T.i < T.j by A95,A99,GOBOARD1:def 1;
       end;
@@ -970,9 +961,8 @@ A104:   1 <= 1+m by A102,XREAL_1:21;
 A105:   j - len S1 in dom S2 by A103,FINSEQ_1:def 3;
 A106:   now
           assume i <= len S1;
-          then i in Seg len S1 by A96;
           then
-A107:     i in dom S1 by FINSEQ_1:def 3;
+A107:     i in dom S1 by A96,FINSEQ_3:27;
           then T.i = S1.i by FINSEQ_1:def 7;
           then T.i in rng S1 by A107,FUNCT_1:def 5;
           then
@@ -1109,8 +1099,8 @@ A143: now
       assume
 A144: k=1;
       then
-A145: len S1 + k <> 1 by FINSEQ_1:25;
-      len S1 <> 0 by FINSEQ_1:25;
+A145: len S1 + k <> 1 by CARD_2:59;
+      len S1 <> 0 by CARD_2:59;
       then len S1 in Seg len S1 by FINSEQ_1:5;
       then
 A146: len S1 in dom S1 by FINSEQ_1:def 3;
@@ -1201,9 +1191,10 @@ A167:     x in Seg len (upper_volume(XAB,T.m)) by A166,FINSEQ_1:def 3;
           reconsider i=x as Element of NAT by A166;
           reconsider Tm=T.m as DivisionPoint of [' a,b '] by INTEGRA1:def 3;
 A168:     len(upper_volume(XAB,T.m)) =len Tm by INTEGRA1:def 7;
+          then dom(upper_volume(XAB,T.m)) =dom Tm by FINSEQ_3:31;
           then
 A169:     y=(sup rng(XAB|divset(T.m,i))) * vol divset(T.m,i)
-          by A166,A167,INTEGRA1:def 7;
+          by A166,INTEGRA1:def 7;
           consider S1 be DivisionPoint of [' a,c '],
           S2 be DivisionPoint of [' c,b '] such that
 A170:     S1=T1.m & S2=T2.m & T.m = S1^S2 by A115;
@@ -1213,13 +1204,14 @@ A172:     1 <= i & i <= len Tm by A167,A168,FINSEQ_1:3;
           suppose i <= len S1;
             then
 A173:       i in Seg len S1 by A172;
-            then
-A174:       divset(T1.m,i) = divset(T.m,i) by A120,A170;
+  then
+B173:  i in dom S1 by FINSEQ_1:def 3;
+A174:       divset(T1.m,i) = divset(T.m,i) by A120,A170,A173;
 A175:       divset(T1.m,i) c= [' a,c '] by A116,A170,A173;
             then divset(T1.m,i) c= [' a,b '] by A5,XBOOLE_1:1;
             then XAC|divset(T1.m,i) = XAB|divset(T.m,i) by A174,A175,Th4;
             then
-A176:       y=(upper_volume(XAC,T1.m)).i by A169,A170,A173, A174,
+A176:       y=(upper_volume(XAC,T1.m)).i by A169,A170,A174,B173,
             INTEGRA1:def 7;
             len (upper_volume(XAC,T1.m)) = len S1 by A170,INTEGRA1:def 7;
             then i in dom (upper_volume(XAC,T1.m)) by A173,FINSEQ_1:def 3;
@@ -1240,14 +1232,15 @@ A179:       1 <= 1+k by A177,XREAL_1:21;
             i-len S1 <= len S2 by A171,A172,XREAL_1:22;
             then
 A180:       1+k in Seg len S2 by A178,A179;
-            then
-A181:       divset(T2.m,i1) =divset(T.m,len S1 + i1) by A136, A170;
+  then
+B180:  1+k in dom S2 by FINSEQ_1:def 3;
+A181:       divset(T2.m,i1) =divset(T.m,len S1 + i1) by A136, A170,A180;
 A182:       divset(T2.m,i1) c= [' c,b '] by A118,A170,A180;
             then divset(T2.m,i1) c= [' a,b '] by A5,XBOOLE_1:1;
             then y=(sup rng(XCB|divset(T2.m,i1))) * vol divset(T2.m,i1)
             by A169,A178,A181,A182,Th4;
             then
-A183:       y=(upper_volume(XCB,T2.m)).i1 by A170,A180, INTEGRA1:def 7;
+A183:       y=(upper_volume(XCB,T2.m)).i1 by A170,INTEGRA1:def 7,B180;
             len (upper_volume(XCB,T2.m)) = len S2 by A170,INTEGRA1:def 7;
             then i1 in dom (upper_volume(XCB,T2.m)) by A180,FINSEQ_1:def 3;
             then y in rng upper_volume(XCB,T2.m) by A183,FUNCT_1:def 5;
@@ -1297,16 +1290,18 @@ A191:   Seg len F1 c= Seg len F by FINSEQ_1:7;
         then
 A192:   k in Seg len F & k in Seg(len S1) by A187,A191,INTEGRA1: def 7;
         then k in Seg(len S) by INTEGRA1:def 7;
+  then  k in dom S by FINSEQ_1:def 3;
         then
 A193:   F.k = (sup rng(FAB|divset(T.i,k)))*vol divset(T.i,k) by
         INTEGRA1:def 7;
+B192:  k in dom S1 by FINSEQ_1:def 3,A192;
 A194:   divset(T.i,k) = divset(T1.i,k) by A120,A187,A192;
         then
 A195:   divset(T.i,k) c= [' a,c '] by A116,A187,A192;
         then divset(T.i,k) c= [' a,b '] by A5,XBOOLE_1:1;
         then F.k = (sup rng(FAC|divset(T1.i,k))) * vol divset(T1.i,k) by A193
         ,A194,A195,Th3;
-        hence F.k = F1.k by A187,A192,INTEGRA1:def 7;
+        hence F.k = F1.k by A187,INTEGRA1:def 7,B192;
       end;
       now
         let k be Nat;
@@ -1325,8 +1320,11 @@ A200:   k+ len F1 in Seg len F by A198;
         k in Seg len F2 by A196,FINSEQ_1:def 3;
         then
 A201:   k in Seg len S2 by A187,INTEGRA1:def 7;
+  then
+B201:  k in dom S2 by FINSEQ_1:def 3;
 A202:   len F1= len S1 by A187,INTEGRA1:def 7;
         len F1 + k in Seg len S by A200,INTEGRA1:def 7;
+  then len F1 + k in dom S by FINSEQ_1:def 3;
         then
 A203:   F.(len F1 + k)
         =(sup rng(FAB|divset(T.i,(len F1 + k)))) * vol divset(T.i,len F1 + k)
@@ -1337,7 +1335,7 @@ A205:   divset(T.i,len F1 + k) c= [' c,b '] by A118,A187,A201;
         then divset(T.i,len F1 + k) c= [' a,b '] by A5,XBOOLE_1:1;
         then F.(len F1 + k)=(sup rng(FCB|divset(T2.i,k))) * vol divset(T2.i,k)
         by A203,A204,A205,Th3;
-        hence F.(len F1 + k) =F2.k by A187,A201,INTEGRA1:def 7;
+        hence F.(len F1 + k) =F2.k by A187,INTEGRA1:def 7,B201;
       end;
       hence thesis by A189,A190,FINSEQ_1:def 7;
     end;
@@ -1397,22 +1395,24 @@ A217: now
         let k be Nat;
         assume
 A218:   k in dom F1;
-        len F1 <= len F by A214,NAT_1:11;
-        then
-A219:   Seg len F1 c= Seg len F by FINSEQ_1:7;
-A220:   k in Seg len F1 by A218,FINSEQ_1:def 3;
+T:      len F1 <= len F by A214,NAT_1:11;
+B219:   dom F1 c= dom F by T,FINSEQ_3:32;
+        k in Seg len F1 by A218,FINSEQ_1:def 3;
         then
 A221:   k in Seg len S1 by A213,INTEGRA1:def 8;
+  then
+B221:  k in dom S1 by FINSEQ_1:def 3;
         len lower_volume(FAB,T.i) = len S by INTEGRA1:def 8;
+        then dom lower_volume(FAB,T.i) = dom S by FINSEQ_3:31;
         then
 A222:   F.k=(inf rng(FAB|divset(T.i,k))) * vol divset(T.i,k)
-        by A219,A220,INTEGRA1:def 8;
+        by INTEGRA1:def 8,A218,B219;
 A223:   divset(T.i,k) = divset(T1.i,k) & divset(T1.i,k) c=[' a,c ']
         by A116,A120,A213,A221;
         then divset(T.i,k) c= [' a,b '] by A5,XBOOLE_1:1;
 
 then F.k=(inf rng(FAC|divset(T1.i,k))) * vol divset(T1.i,k) by A222,A223, Th3;
-        hence F.k=F1.k by A213,A221,INTEGRA1:def 8;
+        hence F.k=F1.k by A213,INTEGRA1:def 8,B221;
       end;
       now
         let k be Nat;
@@ -1428,18 +1428,20 @@ A227:   1 + len F1 <= k + len F1 by A225,XREAL_1:8;
         then 1 <= k + len F1 by A227,XXREAL_0:2;
         then k+ len F1 in Seg len F by A226;
         then len F1 + k in Seg len S by INTEGRA1:def 8;
+  then len F1 + k in dom S by FINSEQ_1:def 3;
         then
 A228:   F.(len F1 + k)
         = (inf rng(FAB|divset(T.i,len F1 + k))) * vol divset(T.i,(len F1 + k))
         by INTEGRA1:def 8;
 A229:   k in Seg len S2 & len F1= len S1 by A213,A224,INTEGRA1:def 8;
         then
+B229:   k in dom S2 by FINSEQ_1:def 3;
 A230:   divset(T.i,len F1 + k) = divset(T2.i,k) &
-        divset(T2.i,k) c= [' c,b '] by A118,A136,A213;
+        divset(T2.i,k) c= [' c,b '] by A118,A136,A213,A229;
         then divset(T.i,len F1 + k) c= [' a,b '] by A5,XBOOLE_1:1;
         then F.(len F1 + k)=(inf rng(FCB|divset(T2.i,k))) * vol divset(T2.i,k)
         by A228,A230,Th3;
-        hence F.(len F1 + k)=F2.k by A213,A229,INTEGRA1:def 8;
+        hence F.(len F1 + k)=F2.k by A213,INTEGRA1:def 8,B229;
       end;
       hence thesis by A216,A217,FINSEQ_1:def 7;
     end;

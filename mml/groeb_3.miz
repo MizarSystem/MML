@@ -20,13 +20,13 @@ environ
       FUNCT_7, REWRITE1, BAGORDER, TERMORD, GROEB_1, POLYRED, GROEB_2,
       WAYBEL_4, POLYNOM1;
  constructors XXREAL_0, PRE_CIRC, REWRITE1, VECTSP_2, WAYBEL_4, POLYNOM2,
-      BAGORDER, TERMORD, POLYRED, GROEB_1, GROEB_2, VALUED_1, PARTFUN1, SEQ_1;
+      BAGORDER, TERMORD, POLYRED, GROEB_1, GROEB_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2,
-      ALGSTR_1, POLYNOM1, POLYNOM2, POLYNOM4, BINOM, POLYNOM7, TERMORD,
-      POLYRED, ORDINAL1, VALUED_0, ALGSTR_0, VALUED_1, FUNCT_2;
+      ALGSTR_1, POLYNOM1, POLYNOM2, POLYNOM4, POLYNOM7, TERMORD, POLYRED,
+      ORDINAL1, VALUED_0, ALGSTR_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, VALUED_1;
+ definitions TARSKI;
  theorems TARSKI, VECTSP_1, POLYNOM1, REAL_1, RLVECT_1, NAT_1, INT_1, POLYNOM7,
       REWRITE1, XBOOLE_0, TERMORD, CARD_1, FUNCT_1, XBOOLE_1, POLYRED, FUNCT_2,
       RELAT_1, BAGORDER, ALGSTR_1, CARD_2, GROEB_1, FUNCT_4, FUNCOP_1,
@@ -348,10 +348,8 @@ proof
   assume R reduces f,g;
   then consider p being RedSequence of R such that
 A1: p.1 = f & p.len p = g by REWRITE1:def 3;
-A2: len p > 0 by REWRITE1:def 2;
-  then
 A3: 1 <= len p by NAT_1:14;
-  reconsider l = len p - 1 as Element of NAT by A2,INT_1:18,NAT_1:14;
+  reconsider l = len p - 1 as Element of NAT by INT_1:18,NAT_1:14;
   1 <= l + 1 & l + 1 <= len p by NAT_1:12;
   then
 A4: l + 1 in dom p by FINSEQ_3:27;
@@ -703,7 +701,7 @@ A2: P[0]
       proof
         set M = {} Bags n;
         take M;
-        thus thesis by CARD_1:47,XBOOLE_1:2;
+        thus thesis by XBOOLE_1:2;
       end;
       hence thesis;
     end;
@@ -1120,7 +1118,7 @@ A1: 1 <= i & i <= card(Support p);
   then Support p <> {} by CARD_1:def 5;
   then p <> 0_(n,L) by POLYNOM7:1;
   then reconsider p as non-zero Polynomial of n,L by POLYNOM7:def 2;
-  set l = Low(p,T,i), sl = Lower_Support(p,T,i);
+  set sl = Lower_Support(p,T,i);
   Support(Low(p,T,i)) c= Support(p) by A1,Th26;
   then Support(Low(p,T,i)) \ {HT(p,T)} c= Support(p) \ {HT(p,T)}
   by XBOOLE_1:33;
@@ -1689,7 +1687,7 @@ A1: i <= card(Support p);
   then
 A2: i <= card Support(m*'p) by Th10;
   let b be bag of n;
-  set l = Low(p,T,i), lm = Low(m*'p,T,i);
+  set l = Low(p,T,i);
 A3: Support l c= Support p by A1,Th26;
 A4: Support Up(p,T,i) = Upper_Support(p,T,i) &
   Support Low(p,T,i) = Lower_Support(p,T,i) by A1,Lm3;
@@ -1950,8 +1948,8 @@ A8: card Support l1 = card(Support p) - (i+1) by A2,A6,Th24;
   then
 A9: HT(Low(p,T,i),T) in Support l by A5,TERMORD:def 6;
   card(Support Low(p,T,i) \ Support Low(p,T,i+1))
-  = (card(Support p) - i) - (card(Support p) - (i+1)) by A1,A7,A8,Th41,CARD_2:
-  63
+  = (card(Support p) - i) - (card(Support p) - (i+1)) by A1,A7,A8,Th41,
+  CARD_2:63
     .= 1;
   then consider x being set such that
 A10: Support Low(p,T,i) \ Support Low(p,T,i+1) = {x} by CARD_2:60;
@@ -2412,7 +2410,7 @@ proof
   commutative associative well-unital distributive
   Abelian almost_left_invertible (non trivial doubleLoopStr),
   f,g be non-zero Polynomial of n,L;
-  set fg = f*'g, rf = Red(f,T);
+  set fg = f*'g;
   set q = fg - (fg.HT(fg,T)/HC(g,T)) * (HT(f,T) *' g);
 A1: fg <> 0_(n,L) & g <> 0_(n,L) by POLYNOM7:def 2;
   then Support fg <> {} by POLYNOM7:1;
@@ -2457,7 +2455,7 @@ proof
   f,g be non-zero Polynomial of n,L, p be Polynomial of n,L;
   assume
 A1: p.(HT(f*'g,T)) = 0.L;
-  set fg = f*'g+p, rf = Red(f,T)+p;
+  set fg = f*'g+p;
   set q = fg - ((fg).HT(f*'g,T)/HC(g,T)) * (HT(f,T) *' g);
   f*'g <> 0_(n,L) by POLYNOM7:def 2;
   then Support(f*'g) <> {} by POLYNOM7:1;
@@ -2546,8 +2544,7 @@ A9:   l in P & p reduces_to q,l,T by POLYRED:def 7;
   end;
 A10: for i being Element of NAT st 1<=i & i<=len R holds P[i]
   from POLYNOM2:sch 4(A2,A3);
-  0 < len R by REWRITE1:def 2;
-  then 1 <= len R by NAT_1:14;
+  1 <= len R by NAT_1:14;
   hence thesis by A1,A10;
 end;
 
@@ -2600,8 +2597,7 @@ A9:   k in dom R by A5,FINSEQ_3:27;
   end;
 A10: for i being Element of NAT st 1<=i & i<=len R holds P[i]
   from POLYNOM2:sch 4(A3,A4);
-  0 < len R by REWRITE1:def 2;
-  then 1 <= len R by NAT_1:14;
+  1 <= len R by NAT_1:14;
   hence thesis by A2,A10;
 end;
 
@@ -2655,8 +2651,7 @@ A4:   card(Support f) = k+1;
       then
 A5:   {HT(f,T)} c= Support f by TARSKI:def 3;
       Support rf = Support(f) \ {HT(f,T)} by TERMORD:36;
-      then card(Support rf) = card(Support f) - card({HT(f,T)}) by A5,CARD_2:
-      63
+      then card(Support rf) = card(Support f) - card({HT(f,T)}) by A5,CARD_2:63
         .= (k + 1) - 1 by A4,CARD_1:50
         .= k + 0;
       then
@@ -3052,8 +3047,8 @@ A42:    Support z1 c= Support red2 by A41,XBOOLE_1:1;
         z <> 0_(n,L) by POLYNOM7:def 2;
         then Support z <> {} by POLYNOM7:1;
         then card(Support z) <> 0 by CARD_2:59;
-        then reconsider w = card(Support z) - 1 as Element of NAT by INT_1:18,
-        NAT_1:14;
+        then reconsider w = card(Support z) - 1 as Element of NAT by INT_1:18
+        ,NAT_1:14;
         reconsider lowzw = Low(z,T,w) as non-zero Monomial of n,L by Th37;
 A43:    card(Support z) = card(Support z1) by Th10;
         w = card(Support z1) - 1 by Th10;
@@ -3095,8 +3090,7 @@ A54:    HT(p1,T) divides b by A52,POLYNOM1:54;
         then
 A55:    s + HT(p1,T) = b by GROEB_2:def 1;
 A56:    s = s +HT(p1,T)-'HT(p1,T) by POLYNOM1:52
-          .= t by A52,A53,A55,
-        POLYNOM1:52;
+          .= t by A52,A53,A55,POLYNOM1:52;
         then
 A57:    s in Support Red(p2,T) by A42,A52;
 A58:    Support Red(p2,T) c= Support p2 by TERMORD:35;
@@ -3143,7 +3137,7 @@ A69:      Support HM(p2,T) = {x} by A67,POLYNOM7:6;
 A70:    now
           assume (Red(p1,T)*'Low(p2,T,m')).b <> 0.L;
           then
-A71:      b in Support(Red(p1,T)*'Low(p2,T,m')) by A44,POLYNOM1: def 9;
+A71:      b in Support(Red(p1,T)*'Low(p2,T,m')) by A44,POLYNOM1:def 9;
           Support(Red(p1,T)*'Low(p2,T,m')) c=
           {u + v where u,v is Element of Bags n :
           u in Support Red(p1,T) & v in Support Low(p2,T,m')} by TERMORD:30;
@@ -3604,8 +3598,8 @@ A5:       u in {g1,g2};
           hence u in G;
         end;
         then {g1,g2} c= G by TARSKI:def 3;
-        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4,
-        REWRITE1:23;
+        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4
+        ,REWRITE1:23;
       end;
       case not(HT(g1,T),HT(g2,T) are_disjoint);
         hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A2,A3;
@@ -3666,8 +3660,8 @@ A5:       u in {g1,g2};
           hence u in G;
         end;
         then {g1,g2} c= G by TARSKI:def 3;
-        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4,
-        REWRITE1:23;
+        hence PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L) by A4,GROEB_1:4
+        ,REWRITE1:23;
       end;
       case
 A6:     not(HT(g1,T),HT(g2,T) are_disjoint);

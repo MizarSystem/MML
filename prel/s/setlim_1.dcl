@@ -42,8 +42,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="117">
-<LocusVar nr="1"/>
+<Func kind="K" nr="116">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -58,6 +57,21 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
+<Typ kind="M" nr="6">
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="15">
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
 </FCluster>
 <FCluster>
 <ArgTypes>
@@ -81,7 +95,6 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="118">
-<LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -96,81 +109,20 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="27">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="30">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<Func kind="K" nr="10">
+<Adjective nr="5"/>
+<Adjective nr="15">
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
-</Func>
-</Typ>
-<Typ kind="M" nr="9">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="121">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-<Cluster>
-<Adjective nr="28">
-<LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="27">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="30">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<Func kind="K" nr="10">
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
-</Func>
 </Typ>
-<Typ kind="M" nr="9">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="120">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-<Cluster>
-<Adjective nr="29">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
 </FCluster>
 </Registrations>

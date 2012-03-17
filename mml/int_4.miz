@@ -14,26 +14,23 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, MEMBERED, ORDINAL1,
       XXREAL_0, XCMPLX_0, XREAL_0, INT_1, NAT_1, REAL_1, INT_2, NAT_D, NEWTON,
       SQUARE_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, RVSUM_1, BINARITH,
-      EULER_1, EQREL_1, RELAT_2, PARTFUN1, FINSET_1, POLYNOM1, POLYNOM2, NAT_3,
-      UPROOTS, TREES_4, WSIERP_1, MEASURE6, INTEGRA2;
+      EULER_1, EQREL_1, RELAT_2, PARTFUN1, FINSET_1, POLYNOM2, NAT_3, UPROOTS,
+      TREES_4, WSIERP_1, MEASURE6, INTEGRA2, RECDEF_1;
  constructors EULER_1, REAL_1, EQREL_1, WELLORD2, BINARITH, WSIERP_1, PEPIN,
-      POLYNOM2, UPROOTS, NAT_3, NAT_D, MEASURE6, INTEGRA2, VALUED_1, PARTFUN1,
-      SEQ_1;
- registrations RELAT_1, FINSEQ_1, CARD_1, PARTFUN1, SQUARE_1, WSIERP_1, NAT_1,
-      INT_1, MEMBERED, FINSET_1, SEQM_3, NEWTON, NAT_3, XXREAL_0, NUMBERS,
-      XBOOLE_0, XREAL_0, ORDINAL1, SUBSET_1, FUNCT_1, PREPOWER, XCMPLX_0,
-      BINOP_2, SEQ_1, RVSUM_1, PRE_CIRC, TEX_2, POLYNOM1, VALUED_0, VALUED_1,
-      FUNCT_2;
+      POLYNOM2, UPROOTS, NAT_3, NAT_D, MEASURE6, INTEGRA2, SEQ_1, RECDEF_1;
+ registrations RELAT_1, FINSEQ_1, CARD_1, PARTFUN1, NAT_1, INT_1, MEMBERED,
+      FINSET_1, SEQM_3, NEWTON, NAT_3, XXREAL_0, NUMBERS, XBOOLE_0, XREAL_0,
+      ORDINAL1, FUNCT_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCT_1, INT_1, FINSEQ_1, XCMPLX_0, INT_2, EULER_1, SQUARE_1,
-      RELAT_2, PARTFUN1, CARD_1, TARSKI, XBOOLE_0, WELLORD2, VALUED_1;
+ definitions FUNCT_1, INT_1, FINSEQ_1, XCMPLX_0, EULER_1, SQUARE_1, RELAT_2,
+      PARTFUN1, CARD_1, TARSKI, XBOOLE_0, WELLORD2;
  theorems RELAT_1, FINSEQ_3, FINSEQ_2, ABSVALUE, REAL_2, FINSEQ_5, BINARITH,
       EULER_2, INT_3, CARD_2, SEQ_2, RELAT_2, RELSET_1, EQREL_1, CARD_FIN,
       ORDERS_1, FINSEQ_4, AXIOMS, MOEBIUS1, XBOOLE_0, NAT_3, NEWTON, INT_2,
       WSIERP_1, CARD_1, PEPIN, NAT_1, XCMPLX_1, XREAL_1, ORDINAL1, EULER_1,
       FINSEQ_1, XBOOLE_1, TARSKI, ZFMISC_1, RVSUM_1, INT_1, FUNCT_1, UPROOTS,
-      REAL_1, RADIX_1, SEQM_3, XXREAL_0, NAT_D, MEASURE6, XREAL_0, MEMBERED,
-      INTEGRA2, VALUED_0;
+      REAL_1, RADIX_1, XXREAL_0, NAT_D, MEASURE6, XREAL_0, MEMBERED, INTEGRA2,
+      VALUED_0;
  schemes NAT_1, FINSEQ_1, FINSEQ_2, RELSET_1, GRAPH_5;
 
 begin
@@ -1016,12 +1013,11 @@ A6: (a*x1 - b) mod m = 0 mod m by A2,A3,INT_3:12;
   deffunc P(Nat) = x1+($1-1)*m1;
   consider fp being FinSequence such that
 A7: len fp = l &
-  for c being Nat st c in Seg l holds fp.c = P(c) from FINSEQ_1:sch 2;
+  for c being Nat st c in dom fp holds fp.c = P(c) from FINSEQ_1:sch 2;
   for c being Nat st c in dom fp holds fp.c in INT
   proof
     let c be Nat;
     assume c in dom fp;
-    then c in Seg l by A7,FINSEQ_1:def 3;
     then fp.c = x1+(c-1)*m1 by A7;
     hence thesis by INT_1:def 2;
   end;
@@ -1031,7 +1027,6 @@ A8: for c st c in dom fp holds (a*(fp.c)-b) mod m = 0
   proof
     let c;
     assume c in dom fp;
-    then c in Seg l by A7,FINSEQ_1:def 3;
     hence (a*(fp.c)-b) mod m = (a*(x1+(c-1)*m1)-b) mod m by A7
       .= ((a*x1-b)+a1*(c-1)*m) mod m by A2
       .= (a*x1 - b) mod m by INT_3:8
@@ -1045,8 +1040,7 @@ A8: for c st c in dom fp holds (a*(fp.c)-b) mod m = 0
 A9: c1 in dom fp & c2 in dom fp & c1<>c2;
     then
 A10: c1 in Seg l & c2 in Seg l by A7,FINSEQ_1:def 3;
-    then
-A11: fp.c1 = x1+(c1-1)*m1 & fp.c2 = x1+(c2-1)*m1 by A7;
+A11: fp.c1 = x1+(c1-1)*m1 & fp.c2 = x1+(c2-1)*m1 by A7,A9;
     assume fp.c1,fp.c2 are_congruent_mod m;
     then m divides (((c1-1)*m1+x1)-((c2-1)*m1+x1)) by A11,INT_2:19;
     then consider w being Integer such that
@@ -1071,7 +1065,8 @@ begin
 
 reserve fp,fp1,fp2 for FinSequence of NAT,
   fr for FinSequence of INT,
-  a,b,c,d,k,n for Element of NAT;
+  b,c,d,k,n for Element of NAT,
+  a for Nat;
 
 theorem Th30:
   for b,n st b in dom fp & len fp = n+1
@@ -1236,6 +1231,9 @@ A27:          Product Del(fp,b) hcf fp.b = 1 by A3,A11,A14,A25,NAT_1:13;
               = Product Del(fp1,k+1) hcf d by FINSEQ_1:59
                 .= Product(fp) hcf d by WSIERP_1:48
                 .= 1 by A17,WSIERP_1:43;
+  (for a be Nat st a in dom fp holds fp.a hcf d=1)
+   implies (Product(fp) hcf d)=1
+                     by WSIERP_1:43;
             end;
           end;
           hence CC[fp1];
@@ -1344,10 +1342,11 @@ A1: n > 0 & i1 mod n = 0;
 end;
 
 theorem Th36:
-  (for b st b in dom fp holds a divides fp.b) implies a divides Sum fp
+  (for b being Nat st b in dom fp holds a divides fp.b)
+   implies a divides Sum fp
 proof
   defpred RP[FinSequence of NAT] means
-  for b st b in dom $1 holds a divides $1.b;
+  for b being Nat st b in dom $1 holds a divides $1.b;
   defpred CC[FinSequence of NAT] means a divides Sum $1;
   defpred TH[FinSequence of NAT] means RP[$1] implies CC[$1];
 A1: TH[<*>NAT] by NAT_D:6,RVSUM_1:102;
@@ -1360,7 +1359,7 @@ A3: TH[fp];
 A4:   RP[fp1];
 A5:   RP[fp]
       proof
-        let b such that
+        let b be Nat such that
 A6:     b in dom fp;
 A7:     dom fp c= dom fp1 by FINSEQ_1:39;
         fp1.b = fp.b by A6,FINSEQ_1:def 7;
@@ -1421,7 +1420,7 @@ A9: dom s = Seg len fp & for a be Nat st a in Seg len fp holds FF[a,s.a]
   from FINSEQ_1:sch 5(A4);
   deffunc P(Nat) = Product Del(fp,$1)*(s.$1)*(fp1.$1);
   consider s1 being FinSequence such that
-A10: len s1=k+1 & for a be Nat st a in Seg (k+1) holds s1.a=P(a)
+A10: len s1=k+1 & for a be Nat st a in dom s1 holds s1.a=P(a)
   from FINSEQ_1:sch 2;
   for a being Nat st a in dom s1 holds s1.a in NAT
   proof
@@ -1429,8 +1428,7 @@ A10: len s1=k+1 & for a be Nat st a in Seg (k+1) holds s1.a=P(a)
     assume
 A11: a in dom s1;
     reconsider a as Element of NAT by ORDINAL1:def 13;
-    a in Seg len s1 by A11,FINSEQ_1:def 3;
-    then s1.a = Product Del(fp,a)*(s.a)*(fp1.a) by A10;
+    s1.a = Product Del(fp,a)*(s.a)*(fp1.a) by A10,A11;
     hence thesis by ORDINAL1:def 13;
   end;
   then reconsider s1 as FinSequence of NAT by FINSEQ_2:14;
@@ -1439,8 +1437,7 @@ A12: for a,b st a in dom fp & b in dom fp & a<>b holds fp.b divides s1.a
     let a,b;
     assume
 A13: a in dom fp & b in dom fp & a<>b;
-    then
-A14: a in Seg (k+1) by A3,FINSEQ_1:def 3;
+A14:   a in dom s1 by A10,FINSEQ_3:31,A13,A3;
     len fp >= 1 by A1,XXREAL_0:2;
     then fp.b divides Product Del(fp,a)*((s.a)*(fp1.a)) by A13,Th35,NAT_D: 9;
     then fp.b divides Product Del(fp,a)*(s.a)*(fp1.a);
@@ -1502,6 +1499,7 @@ A30: Sum Del (s1,b) = (fp.b)*w by NAT_D:def 3;
     then
 A31: fp.b >0;
 A32: b in Seg (k+1) by A29;
+    then b in dom s1 by FINSEQ_1:def 3,A10;
     then
 A33: s1.b - fp1.b = Product Del(fp,b)*(s.b)*(fp1.b) - 1*fp1.b by A10
       .= (Product Del(fp,b)*(s.b) - 1)*fp1.b;
@@ -1545,7 +1543,6 @@ A2: now
     let fp,d such that
 A3: TH[fp];
     set fp1=fp^<*d*>;
-    set k=len fp;
     len fp + 1 >= 0 + 1 by XREAL_1:8;
     then
 A4: len fp1 >= 1 by FINSEQ_2:19;
@@ -1648,7 +1645,7 @@ A7:     i<0;
       hence thesis by A6,NAT_D:def 3;
     end;
     k is Element of NAT by ORDINAL1:def 13;
-    then Product fp divides k by A1,A3,Th38;
+    Product fp divides k by A1,A3,Th38;
     then consider l being Nat such that
 A8: k=(Product fp)*l by NAT_D:def 3;
     Product fp divides (x-y) by A8,INT_1:def 9;
@@ -1682,7 +1679,7 @@ A14:    i<0;
       hence thesis by A12,NAT_D:def 3;
     end;
     k is Element of NAT by ORDINAL1:def 13;
-    then Product fp divides k by A1,A9,Th38;
+    Product fp divides k by A1,A9,Th38;
     then consider l being Nat such that
 A15: k=(Product fp)*l by NAT_D:def 3;
     Product fp divides (y-x) by A15,INT_1:def 9;
@@ -2239,67 +2236,61 @@ theorem Th48:
 proof
   deffunc F(Nat) = $1-'1;
   consider fp being FinSequence such that
-A1: len fp=m & for a be Nat st a in Seg m holds fp.a=F(a) from FINSEQ_1:sch 2;
+A1: len fp=m & for a be Nat st a in dom fp holds fp.a=F(a) from FINSEQ_1:sch 2;
   for a being Nat st a in dom fp holds fp.a in INT
   proof
     let a be Nat;
     assume a in dom fp;
-    then a in Seg len fp by FINSEQ_1:def 3;
     then fp.a=F(a) by A1;
     hence thesis by INT_1:def 2;
   end;
   then reconsider fp as FinSequence of INT by FINSEQ_2:14;
-A2: dom fp = Seg m by A1,FINSEQ_1:def 3;
-A3: for a be Nat st a in dom fp holds fp.a in Class(Cong(m),a-'1)
+A2: for a be Nat st a in dom fp holds fp.a in Class(Cong(m),a-'1)
   proof
     let a be Nat;
     assume a in dom fp;
     then
-A4: fp.a = a-'1 by A1,A2;
+A3: fp.a = a-'1 by A1;
     (a-'1),(a-'1) are_congruent_mod m by INT_1:32;
     then [a-'1,a-'1] in Cong(m) by Def1;
-    hence thesis by A4,EQREL_1:26;
+    hence thesis by A3,EQREL_1:26;
   end;
   { a: a < m } = rng fp
   proof
     set A = { a: a < m };
-A5: A c= rng fp
+A4: A c= rng fp
     proof
       let b be set;
       assume b in A;
       then consider k being Element of NAT such that
-A6:   k = b & k < m;
-A7:   k+1 in NAT by ORDINAL1:def 13;
-      k+1>=1 & k+1<=m by A6,NAT_1:11,13;
+A5:   k = b & k < m;
+      k+1>=1 & k+1<=m by A5,NAT_1:11,13;
       then
-A8:   k+1 in Seg m by A7;
-      reconsider l=(k+1) as Element of NAT by ORDINAL1:def 13;
-A9:   fp.(k+1) = (k+1)-'1 by A1,A8
+A6:   k+1 in dom fp by A1,FINSEQ_3:27;
+   fp.(k+1) = (k+1)-'1 by A1,A6
         .= k by BINARITH:39;
-      (k+1) in dom fp by A1,A8,FINSEQ_1:def 3;
-      hence thesis by A6,A9,FUNCT_1:def 5;
+      hence thesis by A5,A6,FUNCT_1:def 5;
     end;
     rng fp c= A
     proof
       let b be set;
       assume b in rng fp;
       then consider k being set such that
-A10:  k in dom fp & b = fp.k by FUNCT_1:def 5;
-      reconsider b as Integer by A10;
-      reconsider k as Element of NAT by A10;
-      k in Seg m by A1,A10,FINSEQ_1:def 3;
+A8:  k in dom fp & b = fp.k by FUNCT_1:def 5;
+      reconsider b as Integer by A8;
+      reconsider k as Element of NAT by A8;
+      k in Seg m by A1,A8,FINSEQ_1:def 3;
       then
-A11:  k>=1 & k<=m by FINSEQ_1:3;
+A9:  k>=1 & k<=m by FINSEQ_1:3;
       then k-1>=0 & k-1<m by XREAL_1:50,149;
       then
-A12:  k-'1>=0 & k-'1<m by A11,BINARITH:50;
-A13:  b = k-'1 by A1,A2,A10;
-      then reconsider b as Element of NAT;
-      thus thesis by A12,A13;
+A10:  k-'1>=0 & k-'1<m by A9,BINARITH:50;
+A11:  b = k-'1 by A1,A8;
+      thus thesis by A10,A11;
     end;
-    hence thesis by A5,XBOOLE_0:def 10;
+    hence thesis by A4,XBOOLE_0:def 10;
   end;
-  hence thesis by A1,A3,Def2;
+  hence thesis by A1,A2,Def2;
 end;
 
 theorem Th49:
@@ -2400,10 +2391,9 @@ theorem Th50:
 proof thus {} is_CRS_of m implies m = 0 by Th49,CARD_1:78;
   assume
 A1: m = 0;
-  reconsider fp={} as FinSequence of INT by FINSEQ_1:29;
-A2: {} = rng fp & len fp = m by A1,FINSEQ_1:25,27;
-  (for b be Nat st b in dom fp holds fp.b in Class(Cong(m),b-'1))
-  by FINSEQ_1:26;
+  set fp=<*>INT;
+A2: {} = rng fp & len fp = m by A1;
+  (for b be Nat st b in dom fp holds fp.b in Class(Cong(m),b-'1));
   hence thesis by A2,Def2;
 end;
 

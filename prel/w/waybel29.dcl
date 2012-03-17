@@ -15,10 +15,10 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_2"/>
@@ -28,12 +28,12 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="T_0TOPSP"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
@@ -100,7 +100,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="34">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -319,7 +319,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="140">
+<Func kind="K" nr="142">
 <Func kind="U" nr="1">
 <Func kind="K" nr="465">
 <LocusVar nr="1"/>
@@ -617,7 +617,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="34">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -640,7 +640,7 @@
 <Cluster>
 <Adjective nr="182"/>
 </Cluster>
-<Typ kind="M" nr="34">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

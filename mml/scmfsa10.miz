@@ -12,24 +12,25 @@ environ
       SGRAPH1, GOBOARD5, FRECHET, ARYTM_1, NAT_1, ABSVALUE, FINSEQ_2, UNIALG_1,
       CARD_5, CARD_3, RELOC, FUNCT_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, MCART_1, SETFAM_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, REALSET1, ORDINAL1, NUMBERS, XCMPLX_0, INT_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, REALSET1, ORDINAL1, XCMPLX_0, INT_1,
       FUNCOP_1, FINSEQ_1, FINSEQ_2, FUNCT_4, COMPLEX1, CARD_1, CARD_3, FUNCT_7,
-      FINSEQ_4, AMI_1, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, SCMFSA_3, AMISTD_1,
-      AMISTD_2, XXREAL_0;
+      XXREAL_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, SCMFSA_3,
+      AMISTD_1, AMISTD_2;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, INT_2, FINSEQ_4, REALSET1,
-      PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2, VALUED_1, PARTFUN1, SEQ_1;
+      PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2, VALUED_1, PARTFUN1, SEQ_1,
+      SCMNORM;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, TEX_2,
       AMI_1, AMI_3, AMI_5, SCMFSA_2, AMISTD_2, AMI_2, RELSET_1, FUNCT_4,
-      CARD_3, VALUED_1, FUNCT_2;
+      CARD_3, VALUED_1, FUNCT_2, AMISTD_1, SCMNORM;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, SCMFSA_2, AMISTD_1, AMISTD_2, XBOOLE_0,
-      FUNCOP_1, SCMFSA_1, AMI_1, AMI_2, AMI_3, CARD_3, VALUED_1;
+      FUNCOP_1, SCMFSA_1, AMI_1, AMI_3, CARD_3, NAT_1;
  theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, FUNCT_1, FUNCT_2, RELSET_1,
       FUNCOP_1, SETFAM_1, AMISTD_1, MCART_1, FINSEQ_1, FINSEQ_3, AMISTD_2,
-      AMI_6, FUNCT_7, CARD_3, SCMFSA6A, SCMFSA_2, INT_1, ENUMSET1, BVFUNC14,
-      ABSVALUE, GROUP_7, FINSEQ_2, XBOOLE_0, XBOOLE_1, NAT_D, RELAT_1,
-      ZFMISC_1, AMI_5, PARTFUN1, ORDINAL1;
+      FUNCT_7, CARD_3, SCMFSA6A, SCMFSA_2, INT_1, ENUMSET1, BVFUNC14, ABSVALUE,
+      GROUP_7, FINSEQ_2, XBOOLE_0, XBOOLE_1, NAT_D, RELAT_1, ZFMISC_1, AMI_5,
+      PARTFUN1, ORDINAL1;
  schemes FUNCT_2;
 
 begin
@@ -105,22 +106,7 @@ proof
   hence thesis by SCMFSA_2:11,12,TARSKI:def 1;
 end;
 
-registration
-  cluster -> natural Element of SCM+FSA-Instr-Loc;
-  coherence;
-end;
-
-theorem Th8:
-  i1 <> i2 implies Next i1 <> Next i2
-proof
-  assume
-A1: i1 <> i2 & Next i1 = Next i2;
-  consider m1 being Element of SCM+FSA-Instr-Loc such that
-A2: m1 = i1 & Next i1 = Next m1 by SCMFSA_2:def 9;
-  consider m2 being Element of SCM+FSA-Instr-Loc such that
-A3: m2 = i2 & Next i2 = Next m2 by SCMFSA_2:def 9;
-  thus contradiction by A1,A2,A3;
-end;
+canceled;
 
 theorem Th9:
   a := b = [1, <* a,b *>]
@@ -1686,7 +1672,6 @@ proof
   assume
 A1: for s being State of SCM+FSA st IC s = l & s.l = i
   holds Exec(i, s).IC SCM+FSA = Next IC s;
-  set X = {IC Following s where s is State of SCM+FSA: IC s = l & s.l = i};
   hereby
     let x be set;
     assume x in NIC(i,l);
@@ -1704,8 +1689,8 @@ A3: x = Next l by TARSKI:def 1;
   then reconsider il1 = l as Element of ObjectKind IC SCM+FSA by AMI_1:def 11;
   reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
   set u = t+*((IC SCM+FSA, l)-->(il1, I));
-A4: IC u = l by AMI_6:6;
-A5: u.l = i by AMI_6:6;
+A4: IC u = l by AMI_1:129;
+A5: u.l = i by AMI_1:129;
   then IC Following u = Next l by A1,A4;
   hence thesis by A3,A4,A5;
 end;
@@ -1728,7 +1713,7 @@ A2: x in meet X by XBOOLE_0:def 1;
   then {Next p} in X & {Next q} in X;
   then x in {Next p} & x in {Next q} by A2,SETFAM_1:def 1;
   then x = Next p & x = Next q by TARSKI:def 1;
-  hence contradiction by Th8;
+  hence contradiction;
 end;
 
 theorem Th68:
@@ -1749,8 +1734,8 @@ A2:   x = il;
       then
 A3:   IC SCM+FSA in dom ((IC SCM+FSA, il)-->(il1, I)) by TARSKI:def 2;
 A4:   IC SCM+FSA <> il by AMI_1:48;
-A5:   u.il = halt SCM+FSA by AMI_6:6;
-A6:   IC u = il by AMI_6:6;
+A5:   u.il = halt SCM+FSA by AMI_1:129;
+A6:   IC u = il by AMI_1:129;
       then IC Following u = u.IC SCM+FSA by A5,AMI_1:def 8
         .= ((IC SCM+FSA, il)-->(il1, I)).IC SCM+FSA by A3,FUNCT_4:14
         .= il by A4,FUNCT_4:66;
@@ -1899,8 +1884,8 @@ A2:   x = i1;
       by AMI_1:def 11;
       reconsider I = goto i1 as Element of ObjectKind il by AMI_1:def 14;
       set u = t+*((IC SCM+FSA, il)-->(il1, I));
-A3:   IC u = il by AMI_6:6;
-A4:   u.il = goto i1 by AMI_6:6;
+A3:   IC u = il by AMI_1:129;
+A4:   u.il = goto i1 by AMI_1:129;
       then IC Following u = i1 by A3,SCMFSA_2:95;
       hence x in {IC Following s : IC s = il & s.il=goto i1} by A2,A3,A4;
     end;
@@ -1960,7 +1945,6 @@ end;
 theorem Th76:
   NIC(a=0_goto i1, il) = {i1, Next il}
 proof
-  set F = {IC Following s : IC s = il & s.il= a=0_goto i1};
   hereby
     let x be set;
     assume x in NIC(a=0_goto i1, il);
@@ -1997,11 +1981,11 @@ A6: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then not IC SCM+FSA in dom (a .--> 0) by A4,TARSKI:def 1;
     then
 A7: IC v = IC u by FUNCT_4:12
-      .= il by AMI_6:6;
+      .= il by AMI_1:129;
     not il in dom (a .--> 0) by A3,A6,TARSKI:def 1;
     then
 A8: v.il = u.il by FUNCT_4:12
-      .= I by AMI_6:6;
+      .= I by AMI_1:129;
     a in dom (a .--> 0) by A6,TARSKI:def 1;
     then v.a = (a .--> 0).a by FUNCT_4:14
       .= 0 by FUNCOP_1:87;
@@ -2015,11 +1999,11 @@ A10: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then not IC SCM+FSA in dom (a .--> 1) by A4,TARSKI:def 1;
     then
 A11: IC v = IC u by FUNCT_4:12
-      .= il by AMI_6:6;
+      .= il by AMI_1:129;
     not il in dom (a .--> 1) by A3,A10,TARSKI:def 1;
     then
 A12: v.il = u.il by FUNCT_4:12
-      .= I by AMI_6:6;
+      .= I by AMI_1:129;
     a in dom (a .--> 1) by A10,TARSKI:def 1;
     then v.a = (a .--> 1).a by FUNCT_4:14
       .= 1 by FUNCOP_1:87;
@@ -2046,7 +2030,7 @@ A2:   x in NIC(a=0_goto i1, il1) & x in NIC(a=0_goto i1, il2)
       NIC(a=0_goto i1, il2) = {i1, Next il2} by Th76;
 
 then (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A2,TARSKI:def 2;
-      hence x in {i1} by Th8,TARSKI:def 1;
+      hence x in {i1} by TARSKI:def 1;
     end;
     assume x in {i1};
     then
@@ -2078,7 +2062,6 @@ end;
 theorem Th78:
   NIC(a>0_goto i1, il) = {i1, Next il}
 proof
-  set F = {IC Following s : IC s = il & s.il= a>0_goto i1};
   hereby
     let x be set;
     assume x in NIC(a>0_goto i1, il);
@@ -2114,11 +2097,11 @@ A6: dom (a .--> 1) = {a} by FUNCOP_1:19;
     then not IC SCM+FSA in dom (a .--> 1) by A4,TARSKI:def 1;
     then
 A7: IC v = IC u by FUNCT_4:12
-      .= il by AMI_6:6;
+      .= il by AMI_1:129;
     not il in dom (a .--> 1) by A3,A6,TARSKI:def 1;
     then
 A8: v.il = u.il by FUNCT_4:12
-      .= I by AMI_6:6;
+      .= I by AMI_1:129;
     a in dom (a .--> 1) by A6,TARSKI:def 1;
     then v.a = (a .--> 1).a by FUNCT_4:14
       .= 1 by FUNCOP_1:87;
@@ -2132,11 +2115,11 @@ A10: dom (a .--> 0) = {a} by FUNCOP_1:19;
     then not IC SCM+FSA in dom (a .--> 0) by A4,TARSKI:def 1;
     then
 A11: IC v = IC u by FUNCT_4:12
-      .= il by AMI_6:6;
+      .= il by AMI_1:129;
     not il in dom (a .--> 0) by A3,A10,TARSKI:def 1;
     then
 A12: v.il = u.il by FUNCT_4:12
-      .= I by AMI_6:6;
+      .= I by AMI_1:129;
     a in dom (a .--> 0) by A10,TARSKI:def 1;
     then v.a = (a .--> 0).a by FUNCT_4:14
       .= 0 by FUNCOP_1:87;
@@ -2163,7 +2146,7 @@ A2:   x in NIC(a>0_goto i1, il1) & x in NIC(a>0_goto i1, il2)
       NIC(a>0_goto i1, il2) = {i1, Next il2} by Th78;
 
 then (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A2,TARSKI:def 2;
-      hence x in {i1} by Th8,TARSKI:def 1;
+      hence x in {i1} by TARSKI:def 1;
     end;
     assume x in {i1};
     then
@@ -2432,35 +2415,31 @@ A4:   f.x1 = f.x2;
         let x be set;
         assume x in NAT;
         then reconsider l=x as Instruction-Location of SCM+FSA by AMI_1:def 4;
-        consider i being Element of NAT such that
-A5:     l = insloc i by SCMFSA_2:21;
+  reconsider i = l as Element of NAT by ORDINAL1:def 13;
         dom f = NAT by FUNCT_2:def 1;
         then insloc i = f.i & i in dom f by A1;
-        hence x in rng f by A5,FUNCT_1:def 5;
+        hence x in rng f by FUNCT_1:def 5;
       end;
     end;
   end;
   let k be Element of NAT;
 A6: SUCC (f.k) = {f.k, Next (f.k)} by Th84;
   reconsider k1=k+1 as Element of NAT by ORDINAL1:def 13;
-A7: f.k1 in NAT by AMI_1:def 4;
+ f.k1 in NAT;
   then
 A8: f.(k+1) = insloc (k+1) & f.k = insloc k by A1;
-A9: f.(k+1) = insloc (k+1) by A1,A7
-    .= Next insloc k by SCMFSA_2:32;
-  hence f.(k+1) in SUCC (f.k) by A6,A8,TARSKI:def 2;
+  thus f.(k+1) in SUCC (f.k) by A6,A8,TARSKI:def 2;
   let j be Element of NAT;
   assume
 A10: f.j in SUCC (f.k);
 A11: f is one-to-one by A2,FUNCT_2:def 4;
 A12: dom f = NAT by FUNCT_2:def 1;
-A13: Next (f.k) in NAT by AMI_1:def 4;
   per cases by A6,A10,TARSKI:def 2;
   suppose f.j = f.k;
     hence k <= j by A11,A12,FUNCT_1:def 8;
   end;
   suppose f.j = Next (f.k);
-    then j = k+1 by A8,A9,A11,A12,A13,FUNCT_1:def 8;
+    then j = k+1 by A8,A11,A12,FUNCT_1:def 8;
     hence k <= j by NAT_1:11;
   end;
 end;
@@ -2508,7 +2487,8 @@ theorem Th87:
   Next il.(SCM+FSA,k) = il.(SCM+FSA,k+1)
 proof
   thus Next il.(SCM+FSA,k) = Next insloc k by Th86
-    .= insloc (k+1) by SCMFSA_2:32
+    .= k + 1
+    .= insloc (k+1)
     .= il.(SCM+FSA,k+1) by Th86;
 end;
 
@@ -4587,8 +4567,8 @@ A14:        IC Exec(I, s2) = Next IC s2 by A7,A10,A12,SCMFSA_2:96
             IC Exec(I,s1) = Next IC s1 by A7,A12,SCMFSA_2:96
               .= NextLoc IC s1 by Th88
               .= il.(SCM+FSA,locnum IC s1 + 1);
-
-hence IC Exec(I,s1) + k = Exec(I,s2).IC SCM+FSA by A14,AMISTD_1:def 13
+            hence IC Exec(I,s1) + k = Exec(I,s2).IC SCM+FSA
+            by A14,AMISTD_1:def 13
               .= Next IC s2 by A7,A10,A12,SCMFSA_2:96
               .= IC Exec(a=0_goto il.(SCM+FSA, locnum i1 + k),s2) by A10,A12,
             SCMFSA_2:96

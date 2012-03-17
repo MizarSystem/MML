@@ -9,16 +9,15 @@ environ
  vocabularies INT_1, REALSET1, GROUP_2, GROUP_3, FINSEQ_1, GROUP_1, RELAT_1,
       LATTICES, BINOP_1, FUNCT_1, BOOLE, QC_LANG1, RCOMP_1, ARYTM_1, GROUP_4,
       RLSUB_1, SUBSET_1, FINSET_1, CARD_1, TARSKI, GROUP_5, CARD_3, FINSEQ_4,
-      VECTSP_1, ARYTM;
+      ARYTM, VECTSP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_1,
       PARTFUN1, CARD_1, FINSEQ_1, FINSET_1, FINSEQ_4, INT_1, DOMAIN_1,
       STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3, GROUP_4;
- constructors PARTFUN1, SETFAM_1, NAT_1, FINSEQ_4, FINSOP_1, REALSET1, GROUP_4,
-      VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XREAL_0, INT_1, CARD_1,
-      STRUCT_0, GROUP_1, GROUP_2, GROUP_3, ORDINAL1, VALUED_1, FUNCT_2;
+ constructors PARTFUN1, SETFAM_1, NAT_1, FINSEQ_4, FINSOP_1, REALSET1, GROUP_4;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0,
+      GROUP_1, GROUP_2, GROUP_3, ORDINAL1, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, GROUP_1, XBOOLE_0, GROUP_2, GROUP_3, GROUP_4, VALUED_1;
+ definitions TARSKI, GROUP_1, XBOOLE_0, GROUP_2, GROUP_3, GROUP_4;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, GROUP_1, GROUP_2,
       GROUP_3, GROUP_4, TARSKI, ZFMISC_1, XBOOLE_0, XBOOLE_1, CARD_2, FINSOP_1,
       STRUCT_0, PARTFUN1;
@@ -160,29 +159,31 @@ definition
   for k be Nat st k in dom F holds it.k = (F/.k) |^ a;
   existence
   proof
-A1: Seg len F = dom F by FINSEQ_1:def 3;
     deffunc F(Nat) = (F/.$1) |^ a;
-    ex F1 st len F1 = len F &
-    for k be Nat st k in Seg len F holds F1.k = F(k) from FINSEQ_2:sch 1;
-    hence thesis by A1;
+   consider F1 such that
+A2:    len F1 = len F &
+    for k be Nat st k in dom F1 holds F1.k = F(k) from FINSEQ_2:sch 1;
+     dom F1 = dom F by FINSEQ_3:31,A2;
+    hence thesis by A2;
   end;
   correctness
   proof
     let F1,F2;
     assume that
-A2: len F1 = len F and
-A3: for k be Nat st k in dom F holds F1.k = (F/.k) |^ a and
-A4: len F2 = len F and
-A5: for k be Nat st k in dom F holds F2.k = (F/.k) |^ a;
+A3: len F1 = len F and
+A4: for k be Nat st k in dom F holds F1.k = (F/.k) |^ a and
+A5: len F2 = len F and
+A6: for k be Nat st k in dom F holds F2.k = (F/.k) |^ a;
+X: dom F1 = Seg len F by A3,FINSEQ_1:def 3;
     now
       let k be Nat;
-      assume k in Seg len F;
+      assume k in dom F1;
       then
-A6:   k in dom F by FINSEQ_1:def 3;
-      hence F1.k = (F/.k) |^ a by A3
-        .= F2.k by A5,A6;
+A7:   k in dom F by FINSEQ_1:def 3,X;
+      hence F1.k = (F/.k) |^ a by A4
+        .= F2.k by A6,A7;
     end;
-    hence thesis by A2,A4,FINSEQ_2:10;
+    hence thesis by A3,A5,FINSEQ_2:10;
   end;
 end;
 
@@ -229,7 +230,7 @@ theorem Th13:
   (<*> the carrier of G) |^ a = {}
 proof len((<*> the carrier of G) |^ a) = len <*> the carrier of G by Def1
     .= 0 by FINSEQ_1:32;
-  hence thesis by FINSEQ_1:25;
+  hence thesis by CARD_2:59;
 end;
 
 theorem Th14:
@@ -313,11 +314,12 @@ A4: len(F |^ I |^ a) = len(F |^ I) by Def1
   len(F |^ I) = len F by GROUP_4:def 4;
   then
 A5: dom(F |^ I) = dom F by FINSEQ_3:31;
+X: dom ((F |^ a) |^ I) = Seg len F by A3,A1,FINSEQ_1:def 3;
   now
     let k be Nat;
-    assume k in Seg len F;
+    assume k in dom ((F |^ a) |^ I);
     then
-A6: k in dom F by FINSEQ_1:def 3;
+A6: k in dom F by FINSEQ_1:def 3,X;
     then
 A7: (F |^ a)/.k = (F |^ a).k & (F |^ I)/.k = (F |^ I).k
     by A2,A5,PARTFUN1:def 8;
@@ -1435,52 +1437,55 @@ A2: a = Product(F |^ I) by Th69;
     deffunc F(Nat) = (F/.$1)";
     consider F1 such that
 A3: len F1 = len F and
-A4: for k be Nat st k in Seg len F holds F1.k = F(k) from FINSEQ_2:sch 1;
+A4: for k be Nat st k in dom F1 holds F1.k = F(k) from FINSEQ_2:sch 1;
+A5: dom F1 = Seg len F by A3,FINSEQ_1:def 3;
     deffunc F(Nat) = @(- @(I/.$1));
     consider I1 such that
-A5: len I1 = len F and
-A6: for k be Nat st k in Seg len F holds I1.k = F(k) from FINSEQ_2:sch 1;
-A7: dom F = Seg len F by FINSEQ_1:def 3;
-A8: dom F1 = dom F by A3,FINSEQ_3:31;
-A9: dom I1 = dom F by A5,FINSEQ_3:31;
+A6: len I1 = len F and
+A7: for k be Nat st k in dom I1 holds I1.k = F(k) from FINSEQ_2:sch 1;
+A9: dom F = Seg len F by FINSEQ_1:def 3;
+A10: dom F1 = dom F by A3,FINSEQ_3:31;
+A11: dom I1 = dom F by A6,FINSEQ_3:31;
     set J = F1 |^ I1;
-A10: len J = len F & len(F |^ I) = len F by A3,GROUP_4:def 4;
+A12: len J = len F & len(F |^ I) = len F by A3,GROUP_4:def 4;
+then
+X: dom(F |^ I)  = Seg len F by FINSEQ_1:def 3;
     now
       let k be Nat;
       assume
-A11:  k in Seg len F;
+A13:  k in dom(F |^ I);
       then
-A12:  k in dom F by FINSEQ_1:def 3;
+A14:  k in dom F by FINSEQ_1:def 3,X;
       J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k & F1.k = (F/.k)" &
       I1.k = (I1/.k) & @(I1/.k) = I1/.k &
       I1.k = @(- @(I/.k)) & @(- @(I/.k)) = - @(I/.k)
-      by A4,A6,A7,A8,A9,A11,GROUP_4:def 4,PARTFUN1:def 8;
+      by A4,A7,A9,A10,A11,A13,GROUP_4:def 4,PARTFUN1:def 8,X;
       then J.k = ((F/.k)" |^ @(I/.k))" by GROUP_1:70
         .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
         .= (F/.k) |^ @(I/.k) by GROUP_1:19;
-      hence (F |^ I).k = J.k by A12,GROUP_4:def 4;
+      hence (F |^ I).k = J.k by A14,GROUP_4:def 4;
     end;
     then
-A13: J = F |^ I by A10,FINSEQ_2:10;
+A15: J = F |^ I by A12,FINSEQ_2:10;
     rng F1 c= commutators(N2,N1)
     proof
       let x;
       assume x in rng F1;
       then consider y such that
-A14:  y in dom F1 and
-A15:  F1.y = x by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A14;
-      y in dom F by A3,A14,FINSEQ_3:31;
+A16:  y in dom F1 and
+A17:  F1.y = x by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A16;
+      y in dom F by A3,A16,FINSEQ_3:31;
       then F.y in rng F by FUNCT_1:def 5;
       then consider b,c such that
-A16:  F.y = [.b,c.] and
-A17:  b in N1 & c in N2 by A1,Th58;
-      y in dom F by A3,A14,FINSEQ_3:31;
-      then x = (F/.y)" & F/.y = F.y by A4,A7,A15,PARTFUN1:def 8;
-      then x = [.c,b.] by A16,Th25;
-      hence thesis by A17,Th58;
+A18:  F.y = [.b,c.] and
+A19:  b in N1 & c in N2 by A1,Th58;
+      y in dom F by A3,A16,FINSEQ_3:31;
+      then x = (F/.y)" & F/.y = F.y by A4,A9,A17,PARTFUN1:def 8,A5;
+      then x = [.c,b.] by A18,Th25;
+      hence thesis by A19,Th58;
     end;
-    hence a in [.N2,N1.] by A2,A3,A5,A13,Th69;
+    hence a in [.N2,N1.] by A2,A3,A6,A15,Th69;
   end;
   hence thesis by GROUP_2:67;
 end;

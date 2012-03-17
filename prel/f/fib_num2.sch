@@ -11,10 +11,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
@@ -22,12 +22,11 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="14"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -40,12 +39,11 @@
 <Num nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="14"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
 </Typ>
 <Not>
 <And>
@@ -53,14 +51,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="57">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="57">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -73,12 +71,11 @@
 <Scheme>
 <ArgTypes/>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="14"/>
 <Adjective nr="19" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -91,12 +88,11 @@
 <Num nr="3"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
+<Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="14"/>
 <Adjective nr="19" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
 </Typ>
 <Not>
 <And>
@@ -104,14 +100,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="57">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="57">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>

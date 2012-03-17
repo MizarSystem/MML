@@ -16,20 +16,20 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="POWER"/>
-<ArticleID name="SERIES_1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
+<ArticleID name="POWER"/>
+<ArticleID name="SERIES_1"/>
 <ArticleID name="COMSEQ_3"/>
 <ArticleID name="SIN_COS"/>
 </Signature>

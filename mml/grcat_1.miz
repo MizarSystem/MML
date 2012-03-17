@@ -9,17 +9,17 @@ environ
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
       ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1, SUBSET_1,
-      SGRAPH1, ARYTM, ALGSTR_0;
+      SGRAPH1, ALGSTR_0, GRAPH_1, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, DOMAIN_1, CLASSES2, BINOP_1, FUNCT_5,
-      STRUCT_0, ALGSTR_0, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, VECTSP_2,
-      FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
+      REALSET1, PARTFUN1, FUNCT_2, CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
+      ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1, CAT_2,
+      ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
-      ALGSTR_1, MIDSP_2, FUNCT_5, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, FUNCOP_1, CLASSES2,
-      STRUCT_0, GROUP_1, ALGSTR_1, MIDSP_2, ALGSTR_0, VALUED_1;
+      ALGSTR_1, MIDSP_2;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0,
+      ALGSTR_1, MIDSP_2, ALGSTR_0, CAT_1, CAT_2;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0, VALUED_1;
+ definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
       VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1, ORDINAL1,
       XBOOLE_0, TOPS_2, BINOP_1, CARD_1;
@@ -125,12 +125,12 @@ theorem
 ::  0d. Auxiliary theorems: subcategories
 
 reserve C for Category;
-reserve O for non empty Subset of the Objects of C;
+reserve O for non empty Subset of the Vertices of C;
 
 definition
   let C,O;
   canceled 4;
-  func Morphs(O) -> Subset of the Morphisms of C equals
+  func Morphs(O) -> Subset of the Edges of C equals
   union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O};
   coherence by CAT_2:28;
 end;
@@ -145,11 +145,11 @@ definition
   let C,O;
   func dom(O) -> Function of Morphs(O),O equals
 
-  (the Dom of C)|Morphs(O);
+  (the Source of C)|Morphs(O);
   coherence by CAT_2:29;
   func cod(O) -> Function of Morphs(O),O equals
 
-  (the Cod of C)|Morphs(O);
+  (the Target of C)|Morphs(O);
   coherence by CAT_2:29;
   func comp(O) -> PartFunc of [:Morphs(O),(Morphs(O)):],Morphs(O) equals
   (the Comp of C)||Morphs(O);
@@ -181,7 +181,7 @@ end;
 canceled;
 
 theorem
-  the Objects of cat(O) = O;
+  the Vertices of cat(O) = O;
 
 ::  1a. Maps of the carriers of groups
 
@@ -200,12 +200,7 @@ definition
   func ZeroMap(G,H) -> Function of G,H equals
 
   (the carrier of G) --> 0.H;
-  coherence
-  proof
-    set i = (the carrier of G) --> 0.H;
-    dom i = the carrier of G & rng i = {0.H} by FUNCOP_1:14,19;
-    hence i is Function of G,H by FUNCT_2:4;
-  end;
+  coherence;
 end;
 
 definition
@@ -271,24 +266,24 @@ proof
   hence thesis by Def13;
 end;
 
-::  1b. Morphisms of groups
+::  1b. Edges of groups
 
 reserve G,H for AddGroup;
 
 definition
-  struct GroupMorphismStr (# Dom,Cod -> AddGroup,
-    Fun -> Function of the Dom, the Cod #);
+  struct GroupMorphismStr (# Source,Target -> AddGroup,
+    Fun -> Function of the Source, the Target #);
 end;
 
 definition
   let f be GroupMorphismStr;
   func dom(f) -> AddGroup equals
 
-  the Dom of f;
+  the Source of f;
   coherence;
   func cod(f) -> AddGroup equals
 
-  the Cod of f;
+  the Target of f;
   coherence;
 end;
 
@@ -456,9 +451,9 @@ theorem Th22:
   st the GroupMorphismStr of F = GroupMorphismStr(# G,H,f#) & f is additive
 proof
   let F be Morphism of G,H;
-A1: the Dom of F = dom(F)
+A1: the Source of F = dom(F)
     .= G by Def19;
-A2: the Cod of F = cod(F)
+A2: the Target of F = cod(F)
     .= H by Def19;
   then reconsider f = the Fun of F as Function of G,H by A1;
   take f;
@@ -480,7 +475,7 @@ theorem Th24:
   for F being GroupMorphism ex G,H st F is Morphism of G,H
 proof
   let F be GroupMorphism;
-  take G = the Dom of F,H = the Cod of F;
+  take G = the Source of F,H = the Target of F;
   dom(F) = G & cod(F) = H;
   hence thesis by Def19;
 end;
@@ -721,7 +716,7 @@ A6: f' = GroupMorphismStr(# G,H,m#) by Th23;
   end;
 end;
 
-::  2. Domains of groups
+::  2. Sourceains of groups
 
 definition
   let IT be set;
@@ -1398,7 +1393,7 @@ end;
 
 registration
   let UN;
-  cluster GroupCat(UN) -> strict;
+  cluster GroupCat(UN) -> strict non void;
   coherence;
 end;
 
@@ -1593,12 +1588,12 @@ end;
 
 definition
   let UN;
-  func AbGroupObjects(UN) -> Subset of the Objects of GroupCat(UN) equals
-  {G where G is Element of the Objects of GroupCat(UN)
+  func AbGroupObjects(UN) -> Subset of the Vertices of GroupCat(UN) equals
+  {G where G is Element of the Vertices of GroupCat(UN)
   : ex H being AbGroup st G = H};
   coherence
   proof
-    set D2 = the Objects of GroupCat(UN);
+    set D2 = the Vertices of GroupCat(UN);
     now
       let x be set;
       assume x in {G where G is Element of D2 : ex H being AbGroup st G = H};
@@ -1612,7 +1607,7 @@ end;
 theorem Th51:
   Trivial-addLoopStr in AbGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the Objects of GroupCat(UN) by Th42;
+  Trivial-addLoopStr in the Vertices of GroupCat(UN) by Th42;
   hence thesis;
 end;
 
@@ -1636,18 +1631,18 @@ registration
 end;
 
 theorem
-  the Objects of AbGroupCat(UN) = AbGroupObjects(UN);
+  the Vertices of AbGroupCat(UN) = AbGroupObjects(UN);
 
 ::  6. Subcategory of groups with the operator of 1/2
 
 definition
   let UN;
-  func MidOpGroupObjects(UN) -> Subset of the Objects of AbGroupCat(UN) equals
-  {G where G is Element of the Objects of AbGroupCat(UN)
+  func MidOpGroupObjects(UN) -> Subset of the Vertices of AbGroupCat(UN) equals
+  {G where G is Element of the Vertices of AbGroupCat(UN)
   : ex H being midpoint_operator AbGroup st G = H};
   coherence
   proof
-    set D2 = the Objects of AbGroupCat(UN);
+    set D2 = the Vertices of AbGroupCat(UN);
     now
       let x be set;
       assume x in {G where G is Element of D2
@@ -1665,7 +1660,7 @@ registration
   cluster MidOpGroupObjects(UN) -> non empty;
   coherence
   proof
-    set D2 = the Objects of AbGroupCat(UN);
+    set D2 = the Vertices of AbGroupCat(UN);
     set D1 = {G where G is Element of D2
     : ex H being midpoint_operator AbGroup st G = H};
     set T = Trivial-addLoopStr;
@@ -1697,12 +1692,12 @@ registration
 end;
 
 theorem
-  the Objects of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
+  the Vertices of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
 
 theorem
   Trivial-addLoopStr in MidOpGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the Objects of AbGroupCat(UN) by Th51;
+  Trivial-addLoopStr in the Vertices of AbGroupCat(UN) by Th51;
   hence thesis;
 end;
 

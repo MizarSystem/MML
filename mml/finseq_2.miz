@@ -7,19 +7,19 @@
 environ
 
  vocabularies FINSEQ_1, SQUARE_1, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_2,
-      FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2, ARYTM;
+      FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2, ARYTM, FRAENKEL;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
-      DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, FINSEQ_1,
-      BINOP_1, FUNCOP_1, XXREAL_0;
+      FRAENKEL, DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      FINSEQ_1, BINOP_1, FUNCOP_1, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1,
-      SQUARE_1, NAT_1, FINSEQ_1, SEQ_1;
+      SQUARE_1, NAT_1, FINSEQ_1, FRAENKEL;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FINSEQ_1;
+ definitions TARSKI, FRAENKEL, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1, XBOOLE_1, XREAL_1, GRFUNC_1,
-      XXREAL_0, ORDINAL1;
+      XXREAL_0, ORDINAL1, CARD_1, CARD_2;
  schemes FINSEQ_1, NAT_1;
 
 begin
@@ -34,11 +34,7 @@ reserve p,q,r for FinSequence;
 :: Auxiliary theorems
 
 theorem
-  min(i,j) is Element of NAT & max(i,j) is Element of NAT
-proof
-  i is Element of NAT & j is Element of NAT by ORDINAL1:def 13;
-  hence thesis by XXREAL_0:15,16;
-end;
+ min(i,j) is Element of NAT & max(i,j) is Element of NAT by ORDINAL1:def 13;
 
 theorem Th2:
   l = min(i,j) implies Seg i /\ Seg j = Seg l
@@ -106,13 +102,13 @@ end;
 
 :: Additional propositions related to Finite Sequences
 
-theorem Th10:
-  len p = i & len q = i & (for j st j in Seg i holds p.j = q.j) implies p = q
+theorem
+  len p = len q & (for j st j in dom p holds p.j = q.j) implies p = q
 proof
   assume that
-A1: len p = i & len q = i and
-A2: for j st j in Seg i holds p.j = q.j;
-  dom p = Seg i & dom q = Seg i by A1,FINSEQ_1:def 3;
+A1: len p = len q and
+A2: for j st j in dom p holds p.j = q.j;
+  dom p = Seg len p & dom q = Seg len p by A1,FINSEQ_1:def 3;
   hence thesis by A2,FINSEQ_1:17;
 end;
 
@@ -218,12 +214,7 @@ A1: p^<*a*> = q^<*b*>;
 end;
 
 theorem Th21:
-  len p = i + 1 implies ex q,a st p = q^<*a*>
-proof
-  assume len p = i + 1;
-  then p <> {} by FINSEQ_1:25;
-  hence thesis by FINSEQ_1:63;
-end;
+  len p = i + 1 implies ex q,a st p = q^<*a*> by FINSEQ_1:63,CARD_1:47;
 
 theorem Th22:
   for p being FinSequence of A st len p <> 0
@@ -232,7 +223,7 @@ proof
   let p be FinSequence of A;
   assume
 A1: len p <> 0;
-  then p <> {} by FINSEQ_1:25;
+  then p <> {} by CARD_1:47;
   then consider q being FinSequence,d being set such that
 A2: p = q^<*d*> by FINSEQ_1:63;
 A3: for i st i in dom q holds q.i in A
@@ -309,17 +300,17 @@ end;
 scheme
   SeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}:
   ex z being FinSequence of D() st len z = i() &
-  for j being Nat st j in Seg i() holds z.j = F(j)
+  for j being Nat st j in dom z holds z.j = F(j)
 proof
   consider z being FinSequence such that
 A1: len z = i() and
-A2: for i being Nat st i in Seg i() holds z.i = F(i) from FINSEQ_1:sch 2;
+A2: for i being Nat st i in dom z holds z.i = F(i) from FINSEQ_1:sch 2;
 A3: Seg i() = dom z by A1,FINSEQ_1:def 3;
   for j be Nat st j in Seg i() holds z.j in D()
   proof
     let j be Nat;
     assume j in Seg i();
-    then z.j = F(j) by A2;
+    then z.j = F(j) by A2,A3;
     hence z.j in D();
   end;
   then reconsider z as FinSequence of D() by A3,Th14;
@@ -658,7 +649,7 @@ theorem
 theorem
   idseq 0 = {}
 proof len idseq 0 = 0 by Th55;
-  hence thesis by FINSEQ_1:25;
+  hence thesis by CARD_2:59;
 end;
 
 theorem Th59:
@@ -759,7 +750,7 @@ theorem
 theorem Th72:
   0 |-> a = {}
 proof len(0 |-> a) = 0 by Th69;
-  hence thesis by FINSEQ_1:25;
+  hence thesis by CARD_2:59;
 end;
 
 theorem Th73:
@@ -780,8 +771,8 @@ A3: len p = len q + 1 by A2,Th19;
 A4: p.(i+1) = a by FINSEQ_1:6,FUNCOP_1:13;
   now per cases;
     suppose i = 0;
-      then q = {} & len (i |-> a) = 0 by A1,A3,Th69,FINSEQ_1:25;
-      hence q = i |-> a by FINSEQ_1:25;
+      then q = {} & len (i |-> a) = 0 by A1,A3,Th69,CARD_2:59;
+      hence q = i |-> a by CARD_2:59;
     end;
     suppose
 A5:   i <> 0;
@@ -1771,7 +1762,8 @@ theorem
 proof
   let z1,z2 be Element of i-tuples_on D;
   len z1 = i & len z2 = i by Th109;
-  hence thesis by Th10;
+   then dom z1 = Seg i & dom z2 = Seg i by FINSEQ_1:def 3;
+  hence thesis by FINSEQ_1:17;
 end;
 
 theorem
@@ -1906,11 +1898,11 @@ A5: dom p2 = Seg i by A3,FINSEQ_1:def 3;
   now
     let j;
     assume
-A6: j in Seg i;
-    hence p1.j = q.j by A1,A4,GRFUNC_1:8
-      .= p2.j by A2,A5,A6,GRFUNC_1:8;
+A6: j in dom p1;
+    hence p1.j = q.j by A1,GRFUNC_1:8
+      .= p2.j by A2,A4,A5,A6,GRFUNC_1:8;
   end;
-  hence p1 = p2 by A3,Th10;
+  hence p1 = p2 by A4,A5,FINSEQ_1:17;
 end;
 
 :: from MODAL_1, 2007.03.14, A.T.
@@ -1946,5 +1938,18 @@ A5:   s = <*n*>^w by A3;
   end;
   for p being FinSequence of NAT holds P[p] from IndSeqD(A1,A2);
   hence thesis;
+end;
+
+:: Moved from AMISTD_2 by AK, 2008.02.02
+
+registration
+  let D be set;
+  cluster -> functional FinSequenceSet of D;
+  coherence
+  proof
+    let f be FinSequenceSet of D;
+    let x be set;
+    thus thesis by Def3;
+  end;
 end;
 

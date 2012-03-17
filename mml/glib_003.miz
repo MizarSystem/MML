@@ -12,20 +12,19 @@ environ
       RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1;
  notations TARSKI, XBOOLE_0, CARD_1, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0,
       XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, PBOOLE, RELSET_1,
-      FUNCT_2, VALUED_1, SEQ_1, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1,
-      FINSEQ_1, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001,
-      GLIB_002;
+      FUNCT_2, SEQ_1, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, FINSEQ_1, FINSET_1,
+      NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, GLIB_002, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, FINSOP_1, RVSUM_1, FINSEQ_5,
-      POLYNOM1, GRAPH_5, GLIB_001, GLIB_002, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, GLIB_000,
-      GRAPH_2, POLYNOM1, SEQM_3, GLIB_002, INT_1, VALUED_0, VALUED_1, FUNCT_2;
+      GRAPH_5, GLIB_001, GLIB_002, SEQ_1, RECDEF_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
+      NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GLIB_000, GRAPH_2, POLYNOM1,
+      GLIB_002, INT_1, VALUED_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions GLIB_000, FUNCOP_1, RVSUM_1, VALUED_1;
+ definitions GLIB_000, FUNCOP_1, RVSUM_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5,
       FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
       GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3, REAL_1,
-      RELAT_1, RELSET_1, RVSUM_1, SEQ_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0,
+      RELAT_1, RELSET_1, RVSUM_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0,
       ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1, ORDINAL1,
       FINSOP_1, VALUED_0;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
@@ -99,7 +98,7 @@ A1: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
     len Seq fss=0;
     then
 A2: for i being Nat st i in dom fs holds 0 <= fs.i;
-    Seq fss = <*> REAL by A1,FINSEQ_1:25;
+    Seq fss = <*> REAL by A1,CARD_2:59;
     hence Sum (Seq fss) <= Sum fs by A2,RVSUM_1:102,114;
   end;
   then
@@ -1804,7 +1803,7 @@ registration
   coherence
   proof
 A1: dom (v.-->val) = {v} & rng (v.-->val) = {val} by FUNCOP_1:14,19;
-    then reconsider X = (v.-->val) as PartFunc of {v},{val} by PARTFUN1:24;
+    reconsider X = (v.-->val) as PartFunc of {v},{val};
     reconsider X as PartFunc of the_Vertices_of G, {val} by A1,PARTFUN1:28;
     reconsider X as PartFunc of the_Vertices_of G, REAL by A1,PARTFUN1:29;
     G.set(VLabelSelector,X) is real-vlabeled;
@@ -1818,7 +1817,7 @@ registration
   coherence
   proof
 A1: dom (v.-->val) = {v} & rng (v.-->val) = {val} by FUNCOP_1:14,19;
-    then reconsider X = (v.-->val) as PartFunc of {v},{val} by PARTFUN1:24;
+    reconsider X = (v.-->val) as PartFunc of {v},{val};
     reconsider X as PartFunc of the_Vertices_of G, {val} by A1,PARTFUN1:28;
     now
       let x be set;
@@ -2039,13 +2038,13 @@ definition
   proof
     deffunc F(Nat) = (the_Weight_of G).(W.edgeSeq().$1);
     consider IT being FinSequence such that
-A1: len IT =len W.edgeSeq() & for k being Nat st k in Seg len W.edgeSeq()
+A1: len IT =len W.edgeSeq() & for k being Nat st k in dom IT
     holds IT.k = F(k) from FINSEQ_1:sch 2;
     take IT;
     thus len IT = len W.edgeSeq() by A1;
     let n be Nat;
     assume 1 <= n & n <= len IT;
-    then n in Seg len W.edgeSeq() by A1,FINSEQ_1:3;
+    then n in dom IT by FINSEQ_3:27;
     hence IT.n = (the_Weight_of G).(W.edgeSeq().n) by A1;
   end;
   uniqueness
@@ -3155,7 +3154,7 @@ proof
   then W.length() = 0 by GLIB_001:def 26;
   then len W.edgeSeq() = 0 by GLIB_001:def 18;
   then len W.weightSeq() = 0 by Def18;
-  hence W.weightSeq() = {} by FINSEQ_1:25;
+  hence W.weightSeq() = {} by CARD_2:59;
 end;
 
 theorem  ::tWWSEQ02
@@ -3381,8 +3380,7 @@ A2: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
 A3: len WS2 = len W1.edgeSeq() by A2,Def18
       .= len WS1 by Def18;
     let x be Nat;
-    assume x in Seg len WS1;
-    then x in dom WS1 by FINSEQ_1:def 3;
+    assume x in dom WS1;
     then
 A4: 1 <= x & x <= len WS1 & x <= len WS2 by A3,FINSEQ_3:27;
     hence WS2.x = (the_Weight_of G2).(W2.edgeSeq().x) by Def18
@@ -3406,8 +3404,7 @@ A1: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
 A2: len WS2 = len W1.edgeSeq() by A1,Def18
       .= len WS1 by Def18;
     let x be Nat;
-    assume x in Seg len WS1;
-    then x in dom WS1 by FINSEQ_1:def 3;
+    assume x in dom WS1;
     then
 A3: 1 <= x & x <= len WS1 & x <= len WS2 by A2,FINSEQ_3:27;
     then x <= len W2.edgeSeq() by Def18;
@@ -3526,7 +3523,6 @@ proof
   let G be nonnegative-weighted WGraph, W1 be Walk of G, W2 be Subwalk of W1;
   consider ws being Subset of W1.weightSeq() such that
 A1: W2.weightSeq() = Seq ws by Th25;
-  reconsider ws'=ws as Subset of W1.weightSeq();
   for i being Element of NAT st i in dom W1.weightSeq()
   holds 0 <= (W1.weightSeq()).i by Th35;
   hence W2.cost() <= W1.cost() by A1,Th2;

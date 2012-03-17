@@ -18,12 +18,12 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
@@ -33,11 +33,11 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="196"/>
+<Func kind="K" nr="189"/>
 <Cluster>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="69"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -56,7 +56,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -70,7 +70,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="29"/>
-<Adjective nr="69"/>
+<Adjective nr="68"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -78,7 +78,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="29"/>
-<Adjective nr="71"/>
+<Adjective nr="70"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="29"/>
-<Adjective nr="71"/>
+<Adjective nr="70"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -94,7 +94,7 @@
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="29"/>
-<Adjective nr="72"/>
+<Adjective nr="71"/>
 </Cluster>
 </CCluster>
 </Registrations>

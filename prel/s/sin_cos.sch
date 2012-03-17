@@ -13,12 +13,10 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="COMSEQ_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -62,7 +60,8 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="102">
+<Func kind="K" nr="79"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -84,7 +83,8 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="102">
+<Func kind="K" nr="79"/>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -104,7 +104,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -143,7 +143,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="102">
 <Func kind="K" nr="78"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -166,7 +166,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="102">
 <Func kind="K" nr="78"/>
 <Var nr="2"/>
 <Var nr="3"/>

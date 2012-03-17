@@ -41,88 +41,10 @@ proof
   hence thesis by RELAT_1:64;
 end;
 
-definition
-  let X;
-  func proj1 X -> set means
-  : Def1:
-  x in it iff ex y st [x,y] in X;
-  existence
-  proof
-    defpred P[set] means ex y,z st $1 = [y,z];
-    consider Y such that
-A1: x in Y iff x in X & P[ x ] from XBOOLE_0:sch 1;
-    deffunc F(set) = $1`1;
-    consider f such that
-A2: dom f = Y & for x st x in Y holds f.x = F(x) from FUNCT_1:sch 3;
-    take IT = rng f;
-    let x;
-    thus x in IT implies ex y st [x,y] in X
-    proof
-      assume x in IT;
-      then consider y such that
-A3:   y in dom f & x = f.y by FUNCT_1:def 5;
-      consider t,v being set such that
-A4:   y = [t,v] by A1,A2,A3;
-      x = y`1 & y`1 = t & y in X by A1,A2,A3,A4,MCART_1:7;
-      hence thesis by A4;
-    end;
-    given y such that
-A5: [x,y] in X;
-A6: [x,y] in Y & [x,y]`1 = x by A1,A5,MCART_1:7;
-    then f.[x,y] = x by A2;
-    hence x in IT by A2,A6,FUNCT_1:def 5;
-  end;
-  uniqueness
-  proof
-    defpred P[set] means ex y st [ $1,y] in X;
-    let X1,X2 be set such that
-A7: x in X1 iff P[ x ] and
-A8: x in X2 iff P[ x ];
-    thus thesis from XBOOLE_0:sch 2(A7,A8);
-  end;
-  func proj2 X -> set means
-  : Def2:
-  y in it iff ex x st [x,y] in X;
-  existence
-  proof
-    defpred P[set] means ex y,z st $1 = [y,z];
-    consider Y such that
-A9: x in Y iff x in X & P[ x ] from XBOOLE_0:sch 1;
-    deffunc F(set) = $1`2;
-    consider f such that
-A10: dom f = Y & for x st x in Y holds f.x = F(x) from FUNCT_1:sch 3;
-    take IT = rng f;
-    let y;
-    thus y in IT implies ex x st [x,y] in X
-    proof
-      assume y in IT;
-      then consider x such that
-A11:  x in dom f & y = f.x by FUNCT_1:def 5;
-      consider t,v being set such that
-A12:  x = [t,v] by A9,A10,A11;
-      y = x`2 & x`2 = v & x in X by A9,A10,A11,A12,MCART_1:7;
-      hence thesis by A12;
-    end;
-    given x such that
-A13: [x,y] in X;
-A14: [x,y] in Y & [x,y]`2 = y by A9,A13,MCART_1:7;
-    then f.[x,y] = y by A10;
-    hence y in IT by A10,A14,FUNCT_1:def 5;
-  end;
-  uniqueness
-  proof
-    defpred P[set] means ex x st [x,$1] in X;
-    let X1,X2 be set such that
-A15: y in X1 iff P[y] and
-A16: y in X2 iff P[y];
-    thus thesis from XBOOLE_0:sch 2(A15,A16);
-  end;
-end;
-
 canceled 2;
 
 theorem
-  [x,y] in X implies x in proj1 X & y in proj2 X by Def1,Def2;
+  [x,y] in X implies x in proj1 X & y in proj2 X by RELAT_1:def 4,def 5;
 
 theorem Th5:
   X c= Y implies proj1 X c= proj1 Y & proj2 X c= proj2 Y
@@ -134,16 +56,16 @@ A1: x in X implies x in Y;
     let x;
     assume x in proj1 X;
     then consider y such that
-A2: [x,y] in X by Def1;
+A2: [x,y] in X by RELAT_1:def 4;
     [x,y] in Y by A1,A2;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   let y;
   assume y in proj2 X;
   then consider x such that
-A3: [x,y] in X by Def2;
+A3: [x,y] in X by RELAT_1:def 5;
   [x,y] in Y by A1,A3;
-  hence thesis by Def2;
+  hence thesis by RELAT_1:def 5;
 end;
 
 theorem Th6:
@@ -154,9 +76,9 @@ proof
     let x;
     assume x in proj1(X \/ Y);
     then consider y such that
-A1: [x,y] in X \/ Y by Def1;
+A1: [x,y] in X \/ Y by RELAT_1:def 4;
     [x,y] in X or [x,y] in Y by A1,XBOOLE_0:def 2;
-    then x in proj1 X or x in proj1 Y by Def1;
+    then x in proj1 X or x in proj1 Y by RELAT_1:def 4;
     hence thesis by XBOOLE_0:def 2;
   end;
 A2: X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
@@ -167,9 +89,9 @@ A2: X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
     let y;
     assume y in proj2(X \/ Y);
     then consider x such that
-A3: [x,y] in X \/ Y by Def2;
+A3: [x,y] in X \/ Y by RELAT_1:def 5;
     [x,y] in X or [x,y] in Y by A3,XBOOLE_0:def 2;
-    then y in proj2 X or y in proj2 Y by Def2;
+    then y in proj2 X or y in proj2 Y by RELAT_1:def 5;
     hence thesis by XBOOLE_0:def 2;
   end;
   proj2 X c= proj2(X \/ Y) & proj2 Y c= proj2(X \/ Y) by A2,Th5;
@@ -184,17 +106,17 @@ proof
     let x;
     assume x in proj1(X /\ Y);
     then consider y such that
-A1: [x,y] in X /\ Y by Def1;
+A1: [x,y] in X /\ Y by RELAT_1:def 4;
     [x,y] in X & [x,y] in Y by A1,XBOOLE_0:def 3;
-    then x in proj1 X & x in proj1 Y by Def1;
+    then x in proj1 X & x in proj1 Y by RELAT_1:def 4;
     hence thesis by XBOOLE_0:def 3;
   end;
   let y;
   assume y in proj2(X /\ Y);
   then consider x such that
-A2: [x,y] in X /\ Y by Def2;
+A2: [x,y] in X /\ Y by RELAT_1:def 5;
   [x,y] in X & [x,y] in Y by A2,XBOOLE_0:def 3;
-  then y in proj2 X & y in proj2 Y by Def2;
+  then y in proj2 X & y in proj2 Y by RELAT_1:def 5;
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -209,10 +131,10 @@ A1: x in proj1 X \ proj1 Y;
     then
 A2: x in proj1 X & not x in proj1 Y by XBOOLE_0:def 4;
     consider y such that
-A3: [x,y] in X by A1,Def1;
-    not [x,y] in Y by A2,Def1;
+A3: [x,y] in X by A1,RELAT_1:def 4;
+    not [x,y] in Y by A2,RELAT_1:def 4;
     then [x,y] in X \ Y by A3,XBOOLE_0:def 4;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   let y;
   assume
@@ -220,15 +142,15 @@ A4: y in proj2 X \ proj2 Y;
   then
 A5: y in proj2 X & not y in proj2 Y by XBOOLE_0:def 4;
   consider x such that
-A6: [x,y] in X by A4,Def2;
-  not [x,y] in Y by A5,Def2;
+A6: [x,y] in X by A4,RELAT_1:def 5;
+  not [x,y] in Y by A5,RELAT_1:def 5;
   then [x,y] in X \ Y by A6,XBOOLE_0:def 4;
-  hence thesis by Def2;
+  hence thesis by RELAT_1:def 5;
 end;
 
 theorem
-  proj1 X \+\ proj1 Y c= proj1(X \+\ Y) & proj2 X \+\ proj2 Y c= proj2(X \+\ Y
-  )
+  proj1 X \+\ proj1 Y c= proj1(X \+\ Y) &
+  proj2 X \+\ proj2 Y c= proj2(X \+\ Y)
 proof
   proj1 X \+\ proj1 Y = (proj1 X \ proj1 Y) \/ (proj1 Y \ proj1 X) &
   proj2 X \+\ proj2 Y = (proj2 X \ proj2 Y) \/ (proj2 Y \ proj2 X) &
@@ -243,18 +165,7 @@ proof
 end;
 
 theorem Th10:
-  proj1 {} = {} & proj2 {} = {}
-proof
-  hereby consider x being Element of proj1 {};
-    assume proj1 {} <> {};
-    then ex y st [x,y] in {} by Def1;
-    hence contradiction;
-  end;
-  consider y being Element of proj2 {};
-  assume proj2 {} <> {};
-  then ex x st [x,y] in {} by Def2;
-  hence contradiction;
-end;
+  proj1 {} = {} & proj2 {} = {};
 
 theorem Th11:
   Y <> {} or [:X,Y:] <> {} or [:Y,X:] <> {} implies
@@ -269,13 +180,13 @@ A1: Y <> {} by ZFMISC_1:113;
     x in X implies [x,y] in [:X,Y:] by A1,ZFMISC_1:106;
     hence x in X iff ex y st [x,y] in [:X,Y:] by ZFMISC_1:106;
   end;
-  hence proj1 [:X,Y:] = X by Def1;
+  hence proj1 [:X,Y:] = X by RELAT_1:def 4;
   now
     let x;
     x in X implies [y,x] in [:Y,X:] by A1,ZFMISC_1:106;
     hence x in X iff ex y st [y,x] in [:Y,X:] by ZFMISC_1:106;
   end;
-  hence proj2 [:Y,X:] = X by Def2;
+  hence proj2 [:Y,X:] = X by RELAT_1:def 5;
 end;
 
 theorem Th12:
@@ -285,12 +196,12 @@ proof
   proof
     let x;
     assume x in proj1 [:X,Y:];
-    then ex y st [x,y] in [:X,Y:] by Def1;
+    then ex y st [x,y] in [:X,Y:] by RELAT_1:def 4;
     hence x in X by ZFMISC_1:106;
   end;
   let y;
   assume y in proj2 [:X,Y:];
-  then ex x st [x,y] in [:X,Y:] by Def2;
+  then ex x st [x,y] in [:X,Y:] by RELAT_1:def 5;
   hence y in Y by ZFMISC_1:106;
 end;
 
@@ -313,7 +224,7 @@ proof
     let z;
     assume z in proj1 {[x,y]};
     then consider t such that
-A1: [z,t] in {[x,y]} by Def1;
+A1: [z,t] in {[x,y]} by RELAT_1:def 4;
     [z,t] = [x,y] by A1,TARSKI:def 1;
     then z = x by ZFMISC_1:33;
     hence thesis by TARSKI:def 1;
@@ -324,14 +235,14 @@ A1: [z,t] in {[x,y]} by Def1;
     assume z in {x};
     then z = x by TARSKI:def 1;
     then [z,y] in {[x,y]} by TARSKI:def 1;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   thus proj2 {[x,y]} c= {y}
   proof
     let z;
     assume z in proj2 {[x,y]};
     then consider t such that
-A2: [t,z] in {[x,y]} by Def2;
+A2: [t,z] in {[x,y]} by RELAT_1:def 5;
     [t,z] = [x,y] by A2,TARSKI:def 1;
     then z = y by ZFMISC_1:33;
     hence thesis by TARSKI:def 1;
@@ -342,15 +253,15 @@ A2: [t,z] in {[x,y]} by Def2;
     assume z in {y};
     then z = y by TARSKI:def 1;
     then [x,z] in {[x,y]} by TARSKI:def 1;
-    hence thesis by Def2;
+    hence thesis by RELAT_1:def 5;
   end;
 end;
 
 theorem
   proj1 {[x,y],[z,t]} = {x,z} & proj2 {[x,y],[z,t]} = {y,t}
 proof
-  {[x,y],[z,t]} = {[x,y]} \/ {[z,t]} & {x,z} = {x} \/ {z} & {y,t} = {y} \/ { t
-  } by ENUMSET1:41;
+  {[x,y],[z,t]} = {[x,y]} \/ {[z,t]} & {x,z} = {x} \/ {z} &
+  {y,t} = {y} \/ {t} by ENUMSET1:41;
   then proj1 {[x,y],[z,t]} = proj1 {[x,y]} \/ proj1 {[z,t]} &
   proj2 {[x,y],[z,t]} = proj2 {[x,y]} \/ proj2 {[z,t]} &
   proj1 {[x,y]} = {x} & proj1 {[z,t]} = {z} &
@@ -365,24 +276,25 @@ proof
 A1: not (ex x,y st [x,y] in X);
   hereby consider x being Element of proj1 X;
     assume proj1 X <> {};
-    then ex y st [x,y] in X by Def1;
+    then ex y st [x,y] in X by RELAT_1:def 4;
     hence contradiction by A1;
   end;
   consider x being Element of proj2 X;
   assume proj2 X <> {};
-  then ex y st [y,x] in X by Def2;
+  then ex y st [y,x] in X by RELAT_1:def 5;
   hence thesis by A1;
 end;
 
 theorem
-  proj1 X = {} or proj2 X = {} implies not ex x,y st [x,y] in X by Def1,Def2;
+  proj1 X = {} or proj2 X = {} implies not ex x,y st [x,y] in X
+  by RELAT_1:def 4,def 5;
 
 theorem
   proj1 X = {} iff proj2 X = {}
 proof
   (proj1 X = {} or proj2 X = {} implies not ex x,y st [x,y] in X) &
   (not (ex x,y st [x,y] in X) implies proj1 X = {} & proj2 X = {})
-  by Def1,Def2,Th17;
+  by RELAT_1:def 4,RELAT_1:def 5,Th17;
   hence thesis;
 end;
 
@@ -394,77 +306,48 @@ proof
     let x;
     assume x in proj1 dom f;
     then consider y such that
-A1: [x,y] in dom f by Def1;
+A1: [x,y] in dom f by RELAT_1:def 4;
     [y,x] in dom ~f by A1,FUNCT_4:43;
-    hence thesis by Def2;
+    hence thesis by RELAT_1:def 5;
   end;
   thus proj2 dom ~f c= proj1 dom f
   proof
     let y;
     assume y in proj2 dom ~f;
     then consider x such that
-A2: [x,y] in dom ~f by Def2;
+A2: [x,y] in dom ~f by RELAT_1:def 5;
     [y,x] in dom f by A2,FUNCT_4:43;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   thus proj2 dom f c= proj1 dom ~f
   proof
     let y;
     assume y in proj2 dom f;
     then consider x such that
-A3: [x,y] in dom f by Def2;
+A3: [x,y] in dom f by RELAT_1:def 5;
     [y,x] in dom ~f by A3,FUNCT_4:43;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   thus proj1 dom ~f c= proj2 dom f
   proof
     let x;
     assume x in proj1 dom ~f;
     then consider y such that
-A4: [x,y] in dom ~f by Def1;
+A4: [x,y] in dom ~f by RELAT_1:def 4;
     [y,x] in dom f by A4,FUNCT_4:43;
-    hence thesis by Def2;
+    hence thesis by RELAT_1:def 5;
   end;
 end;
 
 theorem
-  for f being Relation holds proj1 f = dom f & proj2 f = rng f
-proof
-  let f be Relation;
-  thus proj1 f c= dom f
-  proof
-    let x;
-    assume x in proj1 f;
-    then ex y st [x,y] in f by Def1;
-    hence x in dom f by RELAT_1:def 4;
-  end;
-  thus dom f c= proj1 f
-  proof
-    let x;
-    assume x in dom f;
-    then ex y st [x,y] in f by RELAT_1:def 4;
-    hence thesis by Def1;
-  end;
-  thus proj2 f c= rng f
-  proof
-    let y;
-    assume y in proj2 f;
-    then consider x such that
-A1: [x,y] in f by Def2;
-    thus thesis by A1,RELAT_1:def 5;
-  end;
-  let y;
-  assume y in rng f;
-  then consider x such that
-A2: [x,y] in f by RELAT_1:def 5;
-  thus thesis by A2,Def2;
-end;
+  for f being Relation holds proj1 f = dom f & proj2 f = rng f;
 
 definition
+  canceled 2;
   let f;
   func curry f -> Function means
-  :
-  Def3: dom it = proj1 dom f & for x st x in proj1 dom f ex g st it.x = g &
+  :Def3:
+  dom it = proj1 dom f & for x st x in proj1 dom f ex g st it.x = g &
   dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
   for y st y in dom g holds g.y = f.(x,y);
   existence
@@ -642,7 +525,7 @@ theorem Th26:
 proof
   assume [x,y] in dom f;
   then
-A1: x in proj1 dom f by Def1;
+A1: x in proj1 dom f by RELAT_1:def 4;
   hence x in dom curry f by Def3;
   ex g st (curry f).x = g & dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
   for y st y in dom g holds g.y = f.(x,y) by A1,Def3;
@@ -654,14 +537,14 @@ theorem Th27:
 proof
   assume
 A1: [x,y] in dom f & g = (curry f).x;
-  then x in proj1 dom f by Def1;
+  then x in proj1 dom f by RELAT_1:def 4;
   then
 A2: ex h st (curry f).x = h & dom h = proj2 (dom f /\ [:{x},proj2 dom f :]) &
   for y st y in dom h holds h.y = f.(x,y) by Def3;
-  y in proj2 dom f by A1,Def2;
+  y in proj2 dom f by A1,RELAT_1:def 5;
   then [x,y] in [:{x},proj2 dom f:] by ZFMISC_1:128;
   then [x,y] in dom f /\ [:{x},proj2 dom f:] by A1,XBOOLE_0:def 3;
-  hence y in dom g by A1,A2,Def2;
+  hence y in dom g by A1,A2,RELAT_1:def 5;
   hence thesis by A1,A2;
 end;
 
@@ -842,7 +725,7 @@ A2: (curry f).x = h & dom h = proj2 (dom f /\ [:{x},proj2 dom f:]) &
     then consider z such that
 A3: z in dom g & y = g.z by FUNCT_1:def 5;
     consider t such that
-A4: [t,z] in dom f /\ [:{x},proj2 dom f:] by A1,A2,A3,Def2;
+A4: [t,z] in dom f /\ [:{x},proj2 dom f:] by A1,A2,A3,RELAT_1:def 5;
     [t,z] in dom f & [t,z] in [:{x},proj2 dom f:] by A4,XBOOLE_0:def 3;
     then h.z = f.(x,z) & [x,z] in dom f by A1,A2,A3,ZFMISC_1:128;
     hence thesis by A1,A2,A3,FUNCT_1:def 5;
@@ -851,7 +734,7 @@ A4: [t,z] in dom f /\ [:{x},proj2 dom f:] by A1,A2,A3,Def2;
   assume
 A5: y in dom g;
   then consider t such that
-A6: [t,y] in dom f /\ [:{x},proj2 dom f:] by A1,A2,Def2;
+A6: [t,y] in dom f /\ [:{x},proj2 dom f:] by A1,A2,RELAT_1:def 5;
   [t,y] in dom f & [t,y] in [:{x},proj2 dom f:] by A6,XBOOLE_0:def 3;
   hence thesis by A1,A2,A5,ZFMISC_1:128;
 end;
@@ -899,31 +782,31 @@ A4: dom g c= proj1 (dom f /\ [:proj1 dom f,{x}:])
     let z;
     assume z in dom g;
     then consider y such that
-A5: [y,z] in dom ~f /\ [:{x},proj1 dom f:] by A3,Def2;
+A5: [y,z] in dom ~f /\ [:{x},proj1 dom f:] by A3,RELAT_1:def 5;
     [y,z] in dom ~f & [y,z] in [:{x},proj1 dom f:] by A5,XBOOLE_0:def 3;
     then [z,y] in dom f & [z,y] in [:proj1 dom f,{x}:]
     by FUNCT_4:43,ZFMISC_1:107;
     then [z,y] in dom f /\ [:proj1 dom f,{x}:] by XBOOLE_0:def 3;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   thus proj1 (dom f /\ [:proj1 dom f,{x}:]) c= dom g
   proof
     let z;
     assume z in proj1 (dom f /\ [:proj1 dom f,{x}:]);
     then consider y such that
-A6: [z,y] in dom f /\ [:proj1 dom f,{x}:] by Def1;
+A6: [z,y] in dom f /\ [:proj1 dom f,{x}:] by RELAT_1:def 4;
     [z,y] in dom f & [z,y] in [:proj1 dom f,{x}:] by A6,XBOOLE_0:def 3;
     then [y,z] in dom ~f & [y,z] in [:{x},proj1 dom f:]
     by FUNCT_4:43,ZFMISC_1:107;
     then [y,z] in dom ~f /\ [:{x},proj1 dom f:] by XBOOLE_0:def 3;
-    hence thesis by A3,Def2;
+    hence thesis by A3,RELAT_1:def 5;
   end; thus
   dom g c= proj1 dom f & rng g c= rng f by A2,Th20,XBOOLE_1:1;
   let y;
   assume
 A7: y in dom g;
   then consider z such that
-A8: [y,z] in dom f /\ [:proj1 dom f,{x}:] by A4,Def1;
+A8: [y,z] in dom f /\ [:proj1 dom f,{x}:] by A4,RELAT_1:def 4;
   [y,z] in dom f & [y,z] in [:proj1 dom f,{x}:] by A8,XBOOLE_0:def 3;
   then [z,y] in dom ~f & z = x by FUNCT_4:43,ZFMISC_1:129;
   then (~f).(x,y) = f.(y,x) & [y,x] in dom f by FUNCT_4:43,44;
@@ -1094,8 +977,8 @@ theorem Th49:
   curry {} = {} & curry' {} = {}
 proof
 A1: dom {} = {} & dom curry {} = proj1 dom {} by Def3;
-  hence curry {} = {} by Th10,RELAT_1:64;
-  thus thesis by A1,Th1,Th10,RELAT_1:64;
+  hence curry {} = {} by RELAT_1:64;
+  thus thesis by A1,Th1,RELAT_1:64;
 end;
 
 theorem Th50:
@@ -1183,8 +1066,7 @@ A8: f2.x = g2 & dom g2 = X & rng g2 c= Y by A1,A6,FUNCT_2:def 2;
       assume y in X;
       then [x,y] in dom uncurry f1 & [x,y] in dom uncurry f2 & [x,y]`1 = x &
       [x,y]`2 = y by A1,A5,A7,Def4,MCART_1:7;
-      then (uncurry f1).[x,y] = g1.y & (uncurry f2).[x,y] = g2.y by A7,A8,
-      Def4;
+      then (uncurry f1).[x,y] = g1.y & (uncurry f2).[x,y] = g2.y by A7,A8,Def4;
       hence g1.y = g2.y by A1;
     end;
     hence f1.x = f2.x by A7,A8,FUNCT_1:9;
@@ -1340,7 +1222,7 @@ A5: dom g <> {} by RELAT_1:64;
     consider y being Element of dom g;
     [x,y] in dom uncurry f & dom curry uncurry f = proj1 dom uncurry f
     by A3,A4,A5,Def3,Th45;
-    hence thesis by Def1;
+    hence thesis by RELAT_1:def 4;
   end;
   now
     let x;
@@ -1361,7 +1243,8 @@ A9: dom h = dom g
         let z;
         assume z in dom h;
         then consider t such that
-A10:    [t,z] in dom uncurry f /\ [:{x},proj2 dom uncurry f:] by A8,Def2;
+A10:    [t,z] in dom uncurry f /\ [:{x},proj2 dom uncurry f:]
+        by A8,RELAT_1:def 5;
 A11:    [t,z] in dom uncurry f & [t,z] in [:{x},proj2 dom uncurry f:]
         by A10,XBOOLE_0:def 3;
         then consider x1,g1,x2 such that
@@ -1767,8 +1650,8 @@ A14: now
       by A12,CARD_1:48;
     end;
     hence Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent by A12,Th64;
-    thus Card Funcs([:X,Y:],Z) = Card Funcs(X,Funcs(Y,Z)) by A11,A13,A14,Th64
-    , CARD_1:21,ZFMISC_1:113;
+    thus Card Funcs([:X,Y:],Z) = Card Funcs(X,Funcs(Y,Z)) by A11,A13,A14,Th64,
+    CARD_1:21,ZFMISC_1:113;
   end;
   hence thesis by A2;
 end;
@@ -1840,7 +1723,7 @@ A12:  dom(pr1(X,Y)*g) = Z & dom(pr2(X,Y)*g) = Z by A11,RELAT_1:46;
     let x;
     assume x in [:Funcs(Z,X),Funcs(Z,Y):];
     then
-A13: x = [x`1,x`2] & x`1 in Funcs(Z,X) & x`2 in Funcs(Z,Y) by MCART_1: 10,23;
+A13: x = [x`1,x`2] & x`1 in Funcs(Z,X) & x`2 in Funcs(Z,Y) by MCART_1:10,23;
     then consider g1 such that
 A14: x`1 = g1 & dom g1 = Z & rng g1 c= X by FUNCT_2:def 2;
     consider g2 such that
@@ -2051,17 +1934,22 @@ definition
 end;
 
 definition
-  func op1 -> UnOp of 1 equals
+  func op1 equals
 
   0 .--> 0;
-  coherence
-  proof
-    0 in 1 by CARD_1:87,TARSKI:def 1;
-    hence thesis by CARD_1:87,FUNCOP_1:57;
-  end;
-  func op2 -> BinOp of 1 equals
+  coherence;
+  func op2 equals
 
   (0,0) :-> 0;
+  coherence;
+end;
+
+definition
+  redefine func op1 -> UnOp of 1;
+
+  coherence by CARD_1:87;
+  func op2 -> BinOp of 1;
+
   coherence by CARD_1:87;
 end;
 

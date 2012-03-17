@@ -15,13 +15,13 @@ environ
       COMPLEX1, REAL_1, NAT_1, INT_1, REALSET1, FUNCT_1, RELSET_1, FINSET_1,
       PSCOMP_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1, PARTFUN2, RFUNCT_1,
       FINSEQ_2, SEQ_2, SEQ_4, PRE_CIRC, RCOMP_1, FDIFF_1, GOBOARD1, SQUARE_1,
-      FINSEQ_4, RVSUM_1, INTEGRA1, INTEGRA2, RFUNCT_3, PARTFUN1, XXREAL_0;
- constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, FINSEQ_4,
-      FINSOP_1, PARTFUN2, FDIFF_1, REALSET1, RFUNCT_3, PRE_CIRC, PSCOMP_1,
-      INTEGRA2, INT_1, VALUED_1, PARTFUN1, SEQ_1;
+      RVSUM_1, INTEGRA1, INTEGRA2, RFUNCT_3, PARTFUN1, XXREAL_0;
+ constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, FINSOP_1,
+      PARTFUN2, FDIFF_1, REALSET1, RFUNCT_3, PRE_CIRC, PSCOMP_1, INTEGRA2,
+      SEQ_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2,
-      GOBOARD1, INTEGRA1, VALUED_0, VALUED_1;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
+      INTEGRA1, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SQUARE_1, RVSUM_1, FINSEQ_2, VALUED_1;
  theorems REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
@@ -29,7 +29,8 @@ environ
       NAT_1, TARSKI, GOBOARD1, SQUARE_1, FINSEQ_3, INTEGRA2, INTEGRA3,
       FINSEQ_2, SEQM_3, PARTFUN2, NAT_2, INT_1, CATALG_1, RCOMP_1, RFUNCT_3,
       RELAT_1, XREAL_0, FUNCT_2, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
-      XREAL_1, COMPLEX1, XXREAL_0, FINSOP_1, FUNCOP_1, VALUED_1;
+      XREAL_1, COMPLEX1, XXREAL_0, FINSOP_1, FUNCOP_1, VALUED_1, CARD_1,
+      CARD_2;
  schemes FINSEQ_2, FUNCT_2;
 
 begin :: Basic integrable functions and first mean value theorem
@@ -350,6 +351,7 @@ A9:     sup divset(D1,len D1)=D1.len D1 by A7,INTEGRA1:def 5
         hence thesis by INTEGRA1:5;
       end;
       1 in Seg len D1 by A7,FINSEQ_1:3;
+  then 1 in dom D1 by FINSEQ_1:def 3;
       then upper_volume(f,D1).1=(sup rng(f|divset(D1,1)))*vol(A) by A8,
       INTEGRA1:def 7
         .=0 by A1;
@@ -442,6 +444,7 @@ A9:     sup divset(D1,len D1)=D1.len D1 by A7,INTEGRA1:def 5
         hence thesis by INTEGRA1:5;
       end;
       1 in Seg len D1 by A7,FINSEQ_1:3;
+  then 1 in dom D1 by FINSEQ_1:def 3;
       then lower_volume(f,D1).1=(inf rng(f|divset(D1,1)))*vol(A) by A8,
       INTEGRA1:def 8
         .=0 by A1;
@@ -626,12 +629,14 @@ A7:     for k being Element of NAT st k in dom D holds vol(divset(D,k))=0
           assume k in dom D;
           then
 A8:       k in Seg len D by FINSEQ_1:def 3;
-          then k in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7;
+  then
+B8:  k in dom D by FINSEQ_1:def 3;
+          k in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7,A8;
           then k in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
           then upper_volume(chi(A,A),D).k in rng upper_volume(chi(A,A),D)
           by FUNCT_1:def 5;
           then upper_volume(chi(A,A),D).k <= 0 by A6,PRE_CIRC:def 1;
-          then vol(divset(D,k))<=0 by A8,INTEGRA1:22;
+          then vol(divset(D,k))<=0 by INTEGRA1:22,B8;
           hence thesis by INTEGRA1:11;
         end;
         upper_volume(chi(A,A),D)=((len D) |-> (0 qua Real))
@@ -648,6 +653,7 @@ A9:       len upper_volume(chi(A,A),D)=len ((len D)|->(0 qua Real)) by
             then j in Seg len upper_volume(chi(A,A),D) by FINSEQ_1:3;
             then
 A10:        j in Seg len D by INTEGRA1:def 7;
+  then j in dom D by FINSEQ_1:def 3;
             then
 A11:        upper_volume(chi(A,A),D).j=vol(divset(D,j)) by INTEGRA1:22;
             j in dom D by A10,FINSEQ_1:def 3;
@@ -687,6 +693,7 @@ A17:        sup divset(D,len D)=D.(len D) by A14,INTEGRA1:def 5
             hence thesis by INTEGRA1:5;
           end;
           1 in Seg len D by A14,FINSEQ_1:3;
+  then 1 in dom D by FINSEQ_1:def 3;
           then lower_volume(f,D).1=(inf rng(f|divset(D,1)))*vol(A) by A16,
           INTEGRA1:def 8
             .=0 by A12;
@@ -737,12 +744,14 @@ A6:     for k being Element of NAT st k in dom D holds vol(divset(D,k))=0
           assume k in dom D;
           then
 A7:       k in Seg len D by FINSEQ_1:def 3;
-          then k in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7;
+  then
+B7:  k in dom D by FINSEQ_1:def 3;
+          k in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7,A7;
           then k in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
           then upper_volume(chi(A,A),D).k in rng upper_volume(chi(A,A),D)
           by FUNCT_1:def 5;
           then upper_volume(chi(A,A),D).k <= 0 by A5,PRE_CIRC:def 1;
-          then vol(divset(D,k))<=0 by A7,INTEGRA1:22;
+          then vol(divset(D,k))<=0 by INTEGRA1:22,B7;
           hence thesis by INTEGRA1:11;
         end;
         upper_volume(chi(A,A),D)=((len D) |-> (0 qua Real))
@@ -759,6 +768,7 @@ A8:       len upper_volume(chi(A,A),D)=len ((len D)|->(0 qua Real)) by
             then j in Seg len upper_volume(chi(A,A),D) by FINSEQ_1:3;
             then
 A9:         j in Seg len D by INTEGRA1:def 7;
+  then j in dom D by FINSEQ_1:def 3;
             then
 A10:        upper_volume(chi(A,A),D).j=vol(divset(D,j)) by INTEGRA1:22;
             j in dom D by A9,FINSEQ_1:def 3;
@@ -798,6 +808,7 @@ A16:        sup divset(D,len D)=D.(len D) by A13,INTEGRA1:def 5
             hence thesis by INTEGRA1:5;
           end;
           1 in Seg len D by A13,FINSEQ_1:3;
+  then 1 in dom D by FINSEQ_1:def 3;
           then upper_volume(f,D).1=(sup rng(f|divset(D,1)))*vol(A) by A15,
           INTEGRA1:def 7
             .=0 by A11;
@@ -876,23 +887,23 @@ A1: n>0 and
 A2: vol(A)>0;
   deffunc F(Nat)=inf A + vol(A)/n*$1;
   consider D being FinSequence of REAL such that
-A3: len D = n & for i be Nat st i in Seg n holds D.i=F(i) from FINSEQ_2:sch 1;
+A3: len D = n & for i be Nat st i in dom D holds D.i=F(i) from FINSEQ_2:sch 1;
+A4: dom D = Seg n by A3,FINSEQ_1:def 3;
   for i,j st i in dom D & j in dom D & i<j holds D.i < D.j
   proof
     let i,j;
     assume that
-A4: i in dom D and
-A5: j in dom D and
-A6: i<j;
-A7: i in Seg n & j in Seg n by A3,A4,A5,FINSEQ_1:def 3;
+A5: i in dom D and
+A6: j in dom D and
+A7: i<j;
     vol(A)/n > 0 by A1,A2,REAL_2:127;
-    then vol(A)/n*i < vol(A)/n*j by A6,XREAL_1:70;
+    then vol(A)/n*i < vol(A)/n*j by A7,XREAL_1:70;
     then inf A + vol(A)/n*i < inf A + vol(A)/n*j by XREAL_1:8;
-    then D.i < inf A + vol(A)/n*j by A3,A7;
-    hence thesis by A3,A7;
+    then D.i < inf A + vol(A)/n*j by A3,A5;
+    hence thesis by A3,A6;
   end;
   then reconsider D as non empty increasing FinSequence of REAL
-  by A1,A3,FINSEQ_1:25,GOBOARD1:def 1;
+  by A1,A3,CARD_1:47,GOBOARD1:def 1;
 A8: rng D c= A
   proof
     for x1 being set st x1 in rng D holds x1 in A
@@ -903,8 +914,6 @@ A9:   x1 in rng D;
       then reconsider x1 as Real;
       consider i such that
 A10:  i in dom D & D.i=x1 by A9,PARTFUN1:26;
-      i in Seg n by A3,A10,FINSEQ_1:def 3;
-      then
 A11:  x1 = inf A + vol(A)/n*i by A3,A10;
       0<vol(A)/n*i & vol(A)/n*i<=vol(A)
       proof
@@ -925,7 +934,7 @@ A14:  inf A <= inf A + vol(A)/n*i & inf A + vol(A)/n*i <= inf A+vol( A)
   end;
   D.(len D)=sup A
   proof
-    D.(len D)=inf A + vol(A)/n*n by A1,A3,FINSEQ_1:5;
+    D.(len D)=inf A + vol(A)/n*n by A1,A3,FINSEQ_1:5,A4;
     then
 A15: D.(len D)=inf A + vol(A) by A1,XCMPLX_1:88;
     vol(A)=sup A-inf A by INTEGRA1:def 6;
@@ -933,15 +942,8 @@ A15: D.(len D)=inf A + vol(A) by A1,XCMPLX_1:88;
   end;
   then D is DivisionPoint of A by A8,INTEGRA1:def 2;
   then reconsider D as Element of divs A by INTEGRA1:def 3;
-A16: for i st i in dom D holds D.i=inf A+vol(A)/n*i
-  proof
-    let i;
-    assume i in dom D;
-    then i in Seg n by A3,FINSEQ_1:def 3;
-    hence thesis by A3;
-  end;
   take D;
-  thus thesis by A3,A16;
+  thus thesis by A3;
 end;
 
 Lm4: vol(A)>0 implies ex T being DivSequence of A st delta(T) is convergent
@@ -992,6 +994,7 @@ A9:     ex n being Element of NAT, e being Element of divs A st n = i & e = D &
         k in Seg len upper_volume(chi(A,A),(T.i)) by A8,FINSEQ_1:def 3;
         then
 A10:    k in Seg len D by INTEGRA1:def 7;
+  then k in dom D by FINSEQ_1:def 3;
         then x1=vol(divset(D,k)) by A8,INTEGRA1:22;
         then
 A11:    x1=sup divset(D,k) - inf divset(D,k) by INTEGRA1:def 6;
@@ -1047,12 +1050,14 @@ A20:    x1 = vol(A)/(i+1) by TARSKI:def 1;
 A21:    1 in dom D by FINSEQ_3:34;
         then
 A22:    1 in Seg len D by FINSEQ_1:def 3;
-        then 1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7;
+  then
+B22:  1 in dom D by FINSEQ_1:def 3;
+        1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7,A22;
         then 1 in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
         then
 A23:    (upper_volume(chi(A,A),D)).1 in rng upper_volume(chi(A,A), D)
         by FUNCT_1:def 5;
-A24:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by A22,INTEGRA1:22;
+A24:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by INTEGRA1:22,B22;
 A25:    vol(divset(D,1))=sup divset(D,1) - inf divset(D,1) by INTEGRA1:def 6;
 A26:    sup divset(D,1)=D.1 & inf divset(D,1)=inf A by A21,INTEGRA1:def 5;
 A27:    ex n being Element of NAT, e being Element of divs A st n = i & e = D &
@@ -1144,7 +1149,7 @@ A3: len D = 1
     proof
       assume
 A4:   len D <> 1;
-      len D <> 0 by FINSEQ_1:25;
+      len D <> 0 by CARD_2:59;
       then len D is non trivial by A4,NAT_2:def 1;
       then
 A5:   len D >= 2 by NAT_2:31;
@@ -1175,6 +1180,7 @@ A11:    k in dom upper_volume(chi(A,A),D) & (upper_volume(chi(A,A),D)).k=x1
         k in Seg len upper_volume(chi(A,A),D) by A11,FINSEQ_1:def 3;
         then
 A12:    k in Seg len D by INTEGRA1:def 7;
+  then k in dom D by FINSEQ_1:def 3;
         then
 A13:    x1=vol(divset(D,k)) by A11,INTEGRA1:22;
         then
@@ -1191,12 +1197,14 @@ A15:  rng upper_volume(chi(A,A),D) c= {0} by TARSKI:def 3;
         assume
 A16:    x1 in {0};
 A17:    1 in Seg len D by A3,FINSEQ_1:5;
-        then 1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7;
+  then
+B17:  1 in dom D by FINSEQ_1:def 3;
+        1 in Seg len upper_volume(chi(A,A),D) by INTEGRA1:def 7,A17;
         then 1 in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
         then
 A18:    (upper_volume(chi(A,A),D)).1 in rng upper_volume(chi(A,A), D)
         by FUNCT_1:def 5;
-A19:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by A17,INTEGRA1:22;
+A19:    (upper_volume(chi(A,A),D)).1 = vol(divset(D,1)) by INTEGRA1:22,B17;
         sup divset(D,1)=sup A & inf divset(D,1)=inf A
         proof
           1 in dom D by A17,FINSEQ_1:def 3;
@@ -1543,22 +1551,25 @@ A18:    osc1.m=Sum(UV1-LV1) by A17,RVSUM_1:120;
         for j be Nat st j in Seg (len D) holds (UV1-LV1).j <= (UV-LV).j
         proof
           let j be Nat;
-          assume that
+          assume
 A19:      j in Seg (len D);
+  then
+B19:  j in dom D by FINSEQ_1:def 3;
           set x=(UV1-LV1).j, y=(UV-LV).j;
 A20:      UV1.j=(sup (rng (max+(f)|divset(D,j))))*vol(divset(D,j))
-          by A19,INTEGRA1:def 7;
+          by INTEGRA1:def 7,B19;
           LV1.j=(inf (rng (max+(f)|divset(D,j))))*vol(divset(D,j))
-          by A19,INTEGRA1:def 8;
+          by INTEGRA1:def 8,B19;
           then
 A21:      x=(sup rng (max+(f)|divset(D,j)))*vol(divset(D,j))
           -(inf rng (max+(f)|divset(D,j)))*vol(divset(D,j)) by A20,RVSUM_1:48
             .=(sup rng (max+(f)|divset(D,j))-inf rng (max+(f)|divset(D,j)))
           *vol(divset(D,j));
 A22:      UV
-          .j=(sup rng (f|divset(D,j)))*vol(divset(D,j)) by A19,INTEGRA1:def 7;
+          .j=(sup rng (f|divset(D,j)))*vol(divset(D,j))
+           by INTEGRA1:def 7,B19;
           LV.j=(inf rng (f|divset(D,j)))*vol(divset(D,j))
-          by A19,INTEGRA1:def 8;
+          by INTEGRA1:def 8,B19;
           then
 A23:      y=(sup rng (f|divset(D,j)))*vol(divset(D,j))
           -(inf rng (f|divset(D,j)))*vol(divset(D,j)) by A22,RVSUM_1:48
@@ -2005,6 +2016,7 @@ A98:        j in dom F;
             j in Seg len F by A98,FINSEQ_1:def 3;
             then
 A99:        j in Seg len D by FINSEQ_2:109;
+  then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(sup (rng (max+(f)|divset(D,j))))*vol(divset(D,j))
             & LV1.j=(inf (rng (max+(f)|divset(D,j))))*vol(divset(D,j))
             by INTEGRA1:def 7,def 8;
@@ -2450,22 +2462,25 @@ A19:    osc1.m=Sum(UV1-LV1) by A18,RVSUM_1:120;
         for j be Nat st j in Seg (len D) holds (UV1-LV1).j <= (a*(UV-LV)).j
         proof
           let j be Nat;
-          assume that
+          assume
 A20:      j in Seg (len D);
+  then
+B20:  j in dom D by FINSEQ_1:def 3;
           set x=(UV1-LV1).j, y=(a*(UV-LV)).j;
 A21:      UV1.j=(sup (rng (g|divset(D,j))))*vol(divset(D,j))
-          by A20,INTEGRA1:def 7;
+          by INTEGRA1:def 7,B20;
           LV1.j=(inf (rng (g|divset(D,j))))*vol(divset(D,j))
-          by A20,INTEGRA1:def 8;
+          by INTEGRA1:def 8,B20;
           then
 A22:      x=(sup rng (g|divset(D,j)))*vol(divset(D,j))
           -(inf rng (g|divset(D,j)))*vol(divset(D,j)) by A21,RVSUM_1:48
             .=(sup rng (g|divset(D,j))-inf rng (g|divset(D,j)))
           *vol(divset(D,j));
 A23:      UV
-          .j=(sup rng (f|divset(D,j)))*vol(divset(D,j)) by A20,INTEGRA1:def 7;
+          .j=(sup rng (f|divset(D,j)))*vol(divset(D,j))
+           by INTEGRA1:def 7,B20;
 A24:      LV.j=(inf rng (f|divset(D,j)))*vol(divset(D,j))
-          by A20,INTEGRA1:def 8;
+          by INTEGRA1:def 8,B20;
           y=a*((UV-LV).j) by RVSUM_1:67;
           then
 A25:      y=a*((sup rng (f|divset(D,j)))*vol(divset(D,j))
@@ -2533,6 +2548,7 @@ A36:        j in dom F;
             j in Seg len F by A36,FINSEQ_1:def 3;
             then
 A37:        j in Seg len D by FINSEQ_2:109;
+  then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(sup (rng (g|divset(D,j))))*vol(divset(D,j))
             & LV1.j=(inf (rng (g|divset(D,j))))*vol(divset(D,j))
             by INTEGRA1:def 7,def 8;
@@ -2705,24 +2721,29 @@ A30:    osc2.m=Sum(UV2-LV2) by A29,RVSUM_1:120;
         holds (UV2-LV2).j <= (a*((UV-LV)+(UV1-LV1))).j
         proof
           let j be Nat;
-          assume that
+          assume
 A31:      j in Seg (len D);
+  then
+B31:  j in dom D by FINSEQ_1:def 3;
           set x=(UV2-LV2).j, y=(a*((UV-LV)+(UV1-LV1))).j;
 A32:      UV2.j=(sup (rng (h|divset(D,j))))*vol(divset(D,j))
-          by A31,INTEGRA1:def 7;
+          by INTEGRA1:def 7,B31;
           LV2.j=(inf (rng (h|divset(D,j))))*vol(divset(D,j))
-          by A31,INTEGRA1:def 8;
+          by INTEGRA1:def 8,B31;
           then
 A33:      x=(sup rng (h|divset(D,j)))*vol(divset(D,j))
           -(inf rng (h|divset(D,j)))*vol(divset(D,j)) by A32,RVSUM_1:48
             .=(sup rng (h|divset(D,j))-inf rng (h|divset(D,j)))
           *vol(divset(D,j));
 A34:      LV
-          .j=(inf rng (f|divset(D,j)))*vol(divset(D,j)) by A31,INTEGRA1:def 8;
+          .j=(inf rng (f|divset(D,j)))*vol(divset(D,j))
+           by INTEGRA1:def 8,B31;
 A35:      UV1
-          .j=(sup rng (g|divset(D,j)))*vol(divset(D,j)) by A31,INTEGRA1:def 7;
+          .j=(sup rng (g|divset(D,j)))*vol(divset(D,j))
+           by INTEGRA1:def 7,B31;
 A36:      LV1
-          .j=(inf rng (g|divset(D,j)))*vol(divset(D,j)) by A31,INTEGRA1:def 8;
+          .j=(inf rng (g|divset(D,j)))*vol(divset(D,j))
+           by INTEGRA1:def 8,B31;
           y=a*(((UV-LV)+(UV1-LV1)).j) by RVSUM_1:67
             .=a*((UV-LV).j+(UV1-LV1).j) by RVSUM_1:27
             .=a*(UV.j-LV.j+(UV1-LV1).j) by RVSUM_1:48
@@ -2732,7 +2753,7 @@ A37:      y=a*(((sup rng (f|divset(D,j)))*vol(divset(D,j))
           -(inf rng (f|divset(D,j)))*vol(divset(D,j)))
           +((sup rng (g|divset(D,j)))*vol(divset(D,j))
           -(inf rng (g|divset(D,j)))*vol(divset(D,j))))
-          by A31,A34,A35,A36,INTEGRA1:def 7
+          by A34,A35,A36,INTEGRA1:def 7,B31
             .=a*(((sup rng(f|divset(D,j))-inf rng(f|divset(D,j)))
 
 +(sup rng (g|divset(D,j))-inf rng (g|divset(D,j)))))*vol(divset(D,j));
@@ -2812,6 +2833,7 @@ A50:        j in dom F;
             j in Seg len F by A50,FINSEQ_1:def 3;
             then
 A51:        j in Seg len D by FINSEQ_2:109;
+  then j in dom D by FINSEQ_1:def 3;
             then UV2.j=(sup (rng (h|divset(D,j))))*vol(divset(D,j))
             & LV2.j=(inf (rng (h|divset(D,j))))*vol(divset(D,j))
             by INTEGRA1:def 7,def 8;
@@ -2865,6 +2887,7 @@ A58:        j in dom H;
             j in Seg len H by A58,FINSEQ_1:def 3;
             then
 A59:        j in Seg len D by FINSEQ_2:109;
+  then j in dom D by FINSEQ_1:def 3;
             then UV.j=(sup (rng (f|divset(D,j))))*vol(divset(D,j))
             & LV.j=(inf (rng (f|divset(D,j))))*vol(divset(D,j))
             by INTEGRA1:def 7,def 8;
@@ -2911,6 +2934,7 @@ A64:        j in dom G;
             j in Seg len G by A64,FINSEQ_1:def 3;
             then
 A65:        j in Seg len D by FINSEQ_2:109;
+  then j in dom D by FINSEQ_1:def 3;
             then UV1.j=(sup (rng (g|divset(D,j))))*vol(divset(D,j))
             & LV1.j=(inf (rng (g|divset(D,j))))*vol(divset(D,j))
             by INTEGRA1:def 7,def 8;

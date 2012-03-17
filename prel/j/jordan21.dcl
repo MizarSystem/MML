@@ -20,12 +20,13 @@
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -43,7 +44,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -52,17 +53,17 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="32">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="35">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="41">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -80,14 +81,14 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="276">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -103,14 +104,14 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -127,7 +128,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -146,7 +147,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="259">
 <Num nr="2"/>
 </Func>
 </Func>

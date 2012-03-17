@@ -16,6 +16,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="METRIC_2"/>
 </Signature>
@@ -27,7 +28,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="106">
+<Func kind="K" nr="115">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -45,7 +46,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="115">
+<Func kind="K" nr="124">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

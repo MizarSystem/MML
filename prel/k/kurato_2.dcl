@@ -25,6 +25,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -111,19 +112,19 @@
 <Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="295">
+<Func kind="K" nr="307">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="308">
+<Func kind="K" nr="320">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="41">
-<Func kind="K" nr="295">
+<Func kind="K" nr="307">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -141,7 +142,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="167">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -155,7 +156,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="295">
+<Func kind="K" nr="307">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

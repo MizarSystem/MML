@@ -9,12 +9,13 @@ environ
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
       NAT_1, INT_1, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI, SQUARE_1,
-      XCMPLX_0, SEQ_1, COMPLEX1;
+      XCMPLX_0, SEQ_1, COMPLEX1, CQC_LANG;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
+      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1,
+      FINSEQ_2, FUNCOP_1, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1,
+      XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, FINSEQ_4, FINSOP_1, SEQ_1, RVSUM_1;
+      FINSOP_1, SEQ_1, RVSUM_1, FUNCOP_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RVSUM_1,
       VALUED_0;
@@ -23,8 +24,8 @@ environ
  theorems TARSKI, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FUNCT_1, INT_1, XREAL_0, XBOOLE_0, XCMPLX_1, REAL_2, INT_2, FINSET_1,
       CARD_2, CARD_1, XBOOLE_1, XREAL_1, XCMPLX_0, XXREAL_0, RELAT_1, FINSOP_1,
-      ORDINAL1, SEQ_1, NAT_D, PARTFUN1, VALUED_1;
- schemes NAT_1, FINSEQ_1, SUBSET_1;
+      ORDINAL1, NAT_D, PARTFUN1, VALUED_1, FUNCOP_1;
+ schemes NAT_1, FINSEQ_1, SUBSET_1, NAT_D;
 
 begin
 
@@ -77,36 +78,36 @@ A5:   n>1;
   end;
   {1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n} c= Seg n
   proof
-A6:   for d be set holds d in {1} implies d in Seg n
-      proof
-        let d be set;
-        assume d in {1};
-        then d = 1 by TARSKI:def 1;
-        hence d in Seg n by A1;
-      end;
-A7:   for d be set holds d in {k where k is Element of NAT: 1<k & k<n}
-      implies d in Seg n
-      proof
-        let d be set;
-        assume d in {k where k is Element of NAT: 1<k & k<n};
-        then consider k being Element of NAT such that
-A8:     d = k & 1<k & k<n;
-        thus d in Seg n by A8;
-      end;
-A9:   for d be set holds d in {n} implies d in Seg n
-      proof
-        let d be set;
-        assume d in {n};
-        then d = n by TARSKI:def 1;
-        hence d in Seg n by A1,A2;
-      end;
+A6: for d be set holds d in {1} implies d in Seg n
+    proof
       let d be set;
-      assume d in ({1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n});
-      then d in ({1} \/ {k where k is Element of NAT: 1<k & k<n}) or
-      d in {n} by XBOOLE_0:def 2;
-      then d in {1} or d in {k where k is Element of NAT: 1<k & k<n} or
-      d in {n} by XBOOLE_0:def 2;
-      hence thesis by A6,A7,A9;
+      assume d in {1};
+      then d = 1 by TARSKI:def 1;
+      hence d in Seg n by A1;
+    end;
+A7: for d be set holds d in {k where k is Element of NAT: 1<k & k<n}
+    implies d in Seg n
+    proof
+      let d be set;
+      assume d in {k where k is Element of NAT: 1<k & k<n};
+      then consider k being Element of NAT such that
+A8:   d = k & 1<k & k<n;
+      thus d in Seg n by A8;
+    end;
+A9: for d be set holds d in {n} implies d in Seg n
+    proof
+      let d be set;
+      assume d in {n};
+      then d = n by TARSKI:def 1;
+      hence d in Seg n by A1,A2;
+    end;
+    let d be set;
+    assume d in ({1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n});
+    then d in ({1} \/ {k where k is Element of NAT: 1<k & k<n}) or
+    d in {n} by XBOOLE_0:def 2;
+    then d in {1} or d in {k where k is Element of NAT: 1<k & k<n} or
+    d in {n} by XBOOLE_0:def 2;
+    hence thesis by A6,A7,A9;
   end;
   hence thesis by A3,XBOOLE_0:def 10;
 end;
@@ -151,6 +152,7 @@ end;
 definition
   let x be complex number, n be Nat;
   func x |^ n equals
+
   Product (n |-> x);
   coherence;
 end;
@@ -314,6 +316,7 @@ end;
 definition
   let n be Nat;
   func n! -> Real equals
+
   Product idseq n;
   coherence;
 end;
@@ -403,7 +406,8 @@ end;
 
 definition
   let k,n be Nat;
-  func n choose k means :Def3:
+  func n choose k means
+  :Def3:
   for l be Nat st l = n-k holds
   it = (n!)/((k!) * (l!)) if n >= k otherwise it = 0;
   consistency;
@@ -680,7 +684,7 @@ A13:    G.i = F.i by A5,FINSEQ_1:def 7;
 A14:  dom F = Seg (m+1) by A4,FINSEQ_1:def 3;
       n+m = n +(m+1)-1;
       then
-A15:  (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A14,FINSEQ_1 :6
+A15:  (n+m) choose n = (G^<*x*>).(len G +1) by A4,A5,A6,A14,FINSEQ_1:6
         .= x by FINSEQ_1:59;
       thus Sum F = Sum G + x by A5,RVSUM_1:104
         .= (n+m) choose (n+1) + (n+m) choose n by A3,A6,A10,A11,A15
@@ -706,7 +710,8 @@ end;
 definition
   let a,b be real number;
   let n be Nat;
-  func (a,b) In_Power n -> FinSequence of REAL means :Def4:
+  func (a,b) In_Power n -> FinSequence of REAL means
+  :Def4:
   len it = n+1 &
   (for i,l,m being Nat st i in dom it & m = i - 1 & l = n-m holds
   it.i = (n choose m)* a|^l * b|^m);
@@ -744,7 +749,7 @@ A5:   k >= 1 & k <= n+1 by FINSEQ_1:3;
     end;
     consider p being FinSequence such that
 A6: dom p = Seg(n+1) and
-A7: for k be Nat st k in Seg(n+1) holds P[k,p.k] from FINSEQ_1:sch 1(A1,A4);
+A7: for k be Nat st k in Seg(n+1) holds P[k,p.k] from FINSEQ_1:sch 1(A4);
     rng p c= REAL
     proof
       let x be set;
@@ -989,6 +994,7 @@ A43:    r1 = (a*((a,b) In_Power n)).i by A33,A41,FINSEQ_1:def 7
         by A36,A39,Def4
           .= a|^(l1+1)*((n choose m1)*b|^m1) + b*b|^m2*((n choose m2)*a|^l2)
           .=
+
 a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
         by Th11
           .= ((n choose (m2+1)) + (n choose m2))*a|^(l1+1)*b|^(m2+1)
@@ -1020,7 +1026,7 @@ A54:    r1 = ((a*((a,b) In_Power n))^<*0*>).(len (a*((a,b) In_Power n))+1)
         by A16,A46,A48,PARTFUN1:def 8
           .= 0 by FINSEQ_1:59;
 A55:    r2 = F2.i by A17,PARTFUN1:def 8;
-A56:    r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A46, PARTFUN1:def 8
+A56:    r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A46,PARTFUN1:def 8
           .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A47,FINSEQ_1:56
           .= (b*((a,b) In_Power n)).j by A50,FINSEQ_1:def 7
           .= b*b|^n by A51,A52,RVSUM_1:66
@@ -1047,7 +1053,8 @@ end;
 
 definition
   let n be Nat;
-  func Newton_Coeff n -> FinSequence of REAL means :Def5:
+  func Newton_Coeff n -> FinSequence of REAL means
+  :Def5:
   len it = n+1 &
   (for i,k be Nat st i in dom it & k = i-1 holds it.i = n choose k);
   existence
@@ -1078,7 +1085,7 @@ A3: for l be Nat st l in Seg (n+1) ex x being set st P[l,x]
     end;
     consider F being FinSequence such that
 A4: dom F = Seg (n+1) & for l be Nat st l in Seg (n+1) holds
-    P[l,F.l] from FINSEQ_1:sch 1(A1,A3);
+    P[l,F.l] from FINSEQ_1:sch 1(A3);
     rng F c= REAL
     proof
       let x be set;
@@ -1245,7 +1252,6 @@ A1: P[0];
 A2: P[m] implies P[m+1]
   proof
     assume m/(m+1)<1;
-    set r=m+1;
     (m+1) < ((m+1)+1) by XREAL_1:31;
     hence thesis by REAL_2:142;
   end;
@@ -1583,7 +1589,7 @@ A1: M divides k & M divides m & for i st i divides m & i divides
   hence thesis by A1,NAT_D:def 5;
 end;
 
-theorem
+theorem Th71:
   n > 0 implies n hcf m > 0
 proof
   assume that
@@ -1792,7 +1798,8 @@ end;
 :: from NAT_LAT
 
 definition
-  func SetPrimes -> Subset of NAT means :Def6:
+  func SetPrimes -> Subset of NAT means
+  :Def6:
   for n being Nat holds n in it iff n is prime;
   existence
   proof
@@ -1844,7 +1851,8 @@ reserve x for set;
 
 definition
   let p be Nat;
-  func SetPrimenumber p -> Subset of NAT means :Def7:
+  func SetPrimenumber p -> Subset of NAT means
+  :Def7:
   for q being Nat holds q in it iff q < p & q is prime;
   existence
   proof
@@ -1884,12 +1892,12 @@ end;
 theorem Th82:
   SetPrimenumber p c= SetPrimes
 proof
-    let x;
-    assume
+  let x;
+  assume
 A1: x in SetPrimenumber p;
-    then reconsider x' = x as Element of NAT;
-    x' < p & x' is prime by A1,Def7;
-    hence thesis by Def6;
+  then reconsider x' = x as Element of NAT;
+  x' < p & x' is prime by A1,Def7;
+  hence thesis by Def6;
 end;
 
 theorem
@@ -1897,13 +1905,13 @@ theorem
 proof
   assume
 A1: p <= q;
-    let x;
-    assume
+  let x;
+  assume
 A2: x in SetPrimenumber p;
-    then reconsider x' = x as Element of NAT;
-    x' < p & x' is prime by A2,Def7;
-    then x' < q & x' is prime by A1,XXREAL_0:2;
-    hence thesis by Def7;
+  then reconsider x' = x as Element of NAT;
+  x' < p & x' is prime by A2,Def7;
+  then x' < q & x' is prime by A1,XXREAL_0:2;
+  hence thesis by Def7;
 end;
 
 theorem Th84:
@@ -2058,7 +2066,8 @@ end;
 
 definition
   let n be Nat;
-  func primenumber n -> prime Element of NAT means :Def8:
+  func primenumber n -> prime Element of NAT means
+  :Def8:
   n = card SetPrimenumber it;
   existence
   proof
@@ -2130,12 +2139,14 @@ A15: f<>g;
       case
 A16:    f<g;
 A17:    not f in SetPrimenumber f by Def7;
+
 card (SetPrimenumber f\/{f}) <= card SetPrimenumber g by A16,Th94,NAT_1:44;
         hence thesis by A13,A14,A17,CARD_2:54;
       end;
       case
 A18:    g<f;
 A19:    not g in SetPrimenumber g by Def7;
+
 card (SetPrimenumber g\/{g}) <= card SetPrimenumber f by A18,Th94,NAT_1:44;
         hence thesis by A13,A14,A19,CARD_2:54;
       end;
@@ -2371,3 +2382,108 @@ proof
   hence thesis by XXREAL_0:2;
 end;
 
+:: from AMI_4, 2008.02.14, A.T.
+
+reserve k,i for Element of NAT;
+
+scheme Euklides' { F(Nat)->Element of NAT,G(Nat)->
+  Element of NAT,a()->Element of NAT,b()->Element of NAT } :
+  ex k st F(k) = a() hcf b() & G(k) = 0
+provided
+A1: 0 < b()
+and
+A2: b() < a()
+and
+A3: F(0) = a()
+and
+A4: G(0) = b()
+and
+A5: for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k)
+proof
+A6: 0 < b() & b() < a() by A1,A2;
+  deffunc F(Nat,set) = IFEQ($2,0,0,G($1));
+  consider q being Function of NAT,NAT such that
+A7: q.0 = a() and
+A8: for i being Nat holds q.(i+1) = F(i,q.i) from NAT_1:sch 12;
+  deffunc Q(Element of NAT) = q.$1;
+  q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
+    .= G(0) by A2,A7,FUNCOP_1:def 8;
+  then
+A9: Q(0) = a() & Q(1 qua Element of NAT) = b() by A4,A7;
+A10: for k st q.k qua Element of NAT > 0 holds q.k = F(k)
+  proof
+    let k such that
+A11: q.k qua Element of NAT > 0;
+    now per cases;
+      case k = 0;
+        hence q.k = F(k) by A3,A7;
+      end;
+      case k <> 0;
+        then consider i being Nat such that
+A12:    k = i+1 by NAT_1:6;
+        reconsider i as Element of NAT by ORDINAL1:def 13;
+A13:    now
+          assume
+A14:      q.i qua Element of NAT = 0;
+          q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+            .= 0 by A14,FUNCOP_1:def 8;
+          hence contradiction by A11;
+        end;
+        q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+          .= G(i) by A13,FUNCOP_1:def 8;
+        hence q.k = F(k) by A5,A11,A12;
+      end;
+    end;
+    hence q.k = F(k);
+  end;
+A15: for k holds Q(k+2) = Q(k) mod Q(k+1)
+  proof
+    let k;
+    now per cases;
+      case
+A16:    q.(k+1) <> 0;
+        now
+          assume
+A17:      G(k) = 0;
+A18:      q.k = 0 or q.k <> 0;
+          q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A17,A18,FUNCOP_1:def 8;
+          hence contradiction by A16;
+        end;
+        then
+A19:    G(k) > 0;
+A20:    q.(k+(1+1)) = q.((k+1)+1)
+          .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+          .= G(k+1) by A16,FUNCOP_1:def 8
+          .= F(k) mod G(k) by A5,A19;
+A21:    now
+          assume
+A22:      q.k = 0;
+          q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            .= 0 by A22,FUNCOP_1:def 8;
+          hence contradiction by A16;
+        end;
+        then
+A23:    q.k qua Element of NAT > 0;
+        q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+          .= G(k) by A21,FUNCOP_1:def 8;
+        hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
+      end;
+      case
+A24:    q.(k+1) = 0;
+        thus q.(k+2) = q.((k+1)+1)
+          .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
+          .= 0 by A24,FUNCOP_1:def 8
+          .= q.(k) mod q.(k+1) by A24,NAT_D:def 2;
+      end;
+    end;
+    hence q.(k+2) = q.(k) mod q.(k+1);
+  end;
+  consider k such that
+A25: Q(k) = a() hcf b() & Q(k + 1) = 0 from NAT_D:sch 1(A6,A9,A15);
+  take k;
+A26: a() hcf b() > 0 by A1,Th71;
+  thus F(k) = a() hcf b() by A1,A10,A25,Th71;
+  thus G(k) = IFEQ(q.k,0,0,G(k)) by A25,A26,FUNCOP_1:def 8
+    .= 0 by A8,A25;
+end;

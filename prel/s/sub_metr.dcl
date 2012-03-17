@@ -16,6 +16,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="SUB_METR"/>
 </Signature>
@@ -49,10 +50,8 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="5">
-<Func kind="K" nr="1">
-<Func kind="K" nr="5"/>
-</Func>
-<Func kind="K" nr="96"/>
+<Num nr="1"/>
+<Func kind="K" nr="105"/>
 </Func>
 <Cluster>
 <Adjective nr="31"/>
@@ -64,7 +63,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="115"/>
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="31"/>
@@ -72,7 +71,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="115"/>
 <Cluster>
 <Adjective nr="36"/>
 <Adjective nr="38"/>

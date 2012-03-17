@@ -14,16 +14,15 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       XXREAL_0, COMPLEX1, REAL_1, NAT_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
       PARTFUN2, PSCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, SEQ_4,
-      SQUARE_1, PREPOWER, FCONT_1, FDIFF_1, FINSEQ_2, FINSEQ_4, RVSUM_1,
-      INTEGRA1, INTEGRA2, SEQFUNC, INTEGRA5, SIN_COS, TAYLOR_1;
- constructors ARYTM_0, REAL_1, FDIFF_1, FINSEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1,
-      INTEGRA2, LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2, INTEGRA5,
-      COMSEQ_3, SIN_COS, PREPOWER, TAYLOR_1, SQUARE_1, VALUED_1, SEQ_1;
- registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, SEQ_1, RCOMP_1, INT_1,
-      ORDINAL1, MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1,
-      FUNCT_2;
+      SQUARE_1, PREPOWER, FCONT_1, FDIFF_1, FINSEQ_2, RVSUM_1, INTEGRA1,
+      INTEGRA2, SEQFUNC, INTEGRA5, SIN_COS, TAYLOR_1;
+ constructors REAL_1, FDIFF_1, PARTFUN1, PARTFUN2, RFUNCT_1, INTEGRA2,
+      LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2, INTEGRA5, SIN_COS, PREPOWER,
+      TAYLOR_1, SQUARE_1, SEQ_1;
+ registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, RCOMP_1, INT_1, ORDINAL1,
+      MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions XCMPLX_0, SUBSET_1, INTEGRA1, INTEGRA5, VALUED_1;
+ definitions XCMPLX_0, SUBSET_1, INTEGRA1, INTEGRA5, VALUED_1, FDIFF_1;
  theorems TARSKI, PARTFUN1, RVSUM_1, ZFMISC_1, PREPOWER, INTEGRA1, INTEGRA2,
       RFUNCT_1, FUNCT_1, SEQ_1, SEQ_2, FDIFF_1, SEQFUNC, ABSVALUE, XCMPLX_1,
       FINSEQ_1, FINSEQ_2, SQUARE_1, RCOMP_1, FCONT_1, FCONT_3, FDIFF_2,
@@ -171,20 +170,19 @@ A1: x in X & f|X is_differentiable_in x;
 A2: N c= dom(f|X) & ex L be LINEAR, R be REST st
   for x1 be Real st x1 in N holds (f|X).x1 - (f|X).x = L.(x1-x) + R.(x1-x)
   by FDIFF_1:def 5;
+  take N;
   N c= dom f /\ X by A2,FUNCT_1:68;
-  then
-A3: N c= dom f by XBOOLE_1:18;
+  hence
+ N c= dom f by XBOOLE_1:18;
   consider L be LINEAR, R be REST such that
 A4: for x1 be Real st x1 in N holds (f|X).x1 - (f|X).x = L.(x1-x) + R.(x1-x)
   by A2;
-  now
+  take L,R;
     let x1 be Real;
     assume
 A5: x1 in N;
     then (f|X).x1 = f.x1 & (f|X).x = f.x by A1,A2,FUNCT_1:70,72;
-    hence f.x1 - f.x = L.(x1-x) + R.(x1-x) by A4,A5;
-  end;
-  hence thesis by A3,FDIFF_1:def 5;
+    hence thesis by A4,A5;
 end;
 
 theorem
@@ -220,8 +218,8 @@ A1: f is_differentiable_on X & g is_differentiable_on X;
   X c= dom g & (for x be Real st x in X holds g|X is_differentiable_in x)
   by A1,FDIFF_1:def 7;
   then Z c= dom f /\ dom g by XBOOLE_1:19;
-  then Z c= dom(f+g) & Z c= dom(f-g) & Z c= dom(f(#)g) by VALUED_1:12,def 1,
-  def 4;
+  then Z c= dom(f+g) & Z c= dom(f-g) & Z c= dom(f(#)g) by VALUED_1:12,def 1
+  ,def 4;
   hence thesis by A1,FDIFF_1:26,27,29;
 end;
 
@@ -470,8 +468,8 @@ A2: F is_differentiable_on X & F`|X = f|X &
 A3: F(#)G is_differentiable_on X by Th6;
   dom(f|X) = X & dom(g|X) = X by A2,FDIFF_1:def 8;
   then dom f /\ X = X & dom g /\ X = X by FUNCT_1:68;
-  then X c= dom f & X c= dom F & X c= dom g & X c= dom G by A1,Th11,
-  XBOOLE_1:18;
+
+then X c= dom f & X c= dom F & X c= dom g & X c= dom G by A1,Th11,XBOOLE_1:18;
   then X c= dom f /\ dom G & X c= dom F /\ dom g by XBOOLE_1:19;
   then X c= dom(f(#)G) & X c= dom(F(#)g) by VALUED_1:def 4;
   then X c= dom(f(#)G) /\ dom(F(#)g) by XBOOLE_1:19;
@@ -491,7 +489,7 @@ A7: ((F(#)G)`|X).x = diff(F(#)G,x) by A3,FDIFF_1:def 8;
     by A2,A6,FDIFF_1:def 7;
     then F is_differentiable_in x & G is_differentiable_in x by A6,Th4;
     then
-A8: ((F(#)G)`|X).x = (G.x)*diff(F,x) + (F.x)*diff(G,x) by A7,FDIFF_1: 24;
+A8: ((F(#)G)`|X).x = (G.x)*diff(F,x) + (F.x)*diff(G,x) by A7,FDIFF_1:24;
     (F`|X).x = diff(F,x) & (G`|X).x = diff(G,x) by A2,A6,FDIFF_1:def 8;
     then f.x = diff(F,x) & g.x = diff(G,x) by A2,A6,FUNCT_1:72;
     then (F(#)g).x = (F.x)*diff(G,x) & (f(#)G).x = (G.x)*diff(F,x)
@@ -518,7 +516,7 @@ A4: F/G is_differentiable_on X by A1,Th8;
   dom(f|X) = X & dom(g|X) = X by A3,FDIFF_1:def 8;
   then dom f /\ X = X & dom g /\ X = X by FUNCT_1:68;
   then
-A5: X c= dom f & X c= dom F & X c= dom g & X c= dom G by A2,Th11, XBOOLE_1:18;
+A5: X c= dom f & X c= dom F & X c= dom g & X c= dom G by A2,Th11,XBOOLE_1:18;
   then X c= dom f /\ dom G & X c= dom F /\ dom g by XBOOLE_1:19;
   then X c= dom(f(#)G) & X c= dom(F(#)g) by VALUED_1:def 4;
   then X c= dom(f(#)G) /\ dom(F(#)g) by XBOOLE_1:19;
@@ -588,7 +586,7 @@ A19: x in dom((f(#)G-F(#)g)/((G|X)(#)(G|X))) by RFUNCT_1:def 4;
     then (F(#)g).x = (F.x)*diff(G,x) & (f(#)G).x = (G.x)*diff(F,x)
     by VALUED_1:5;
     then
-A20: (f(#)G-F(#)g).x = diff(F,x)*G.x - diff(G,x)*F.x by A6,A11, VALUED_1:13;
+A20: (f(#)G-F(#)g).x = diff(F,x)*G.x - diff(G,x)*F.x by A6,A11,VALUED_1:13;
     G.x = (G|X).x by A11,FUNCT_1:72;
     then (G.x)^2 = (G|X).x * (G|X).x by SQUARE_1:def 3;
     then (G.x)^2 = ((G|X)(#)(G|X)).x by VALUED_1:5;
@@ -607,7 +605,6 @@ theorem
   (for x be real number st x in ].a,b.[ holds F.x = integral(f,a,x) + F.a)
   implies F is_integral_of f,]. a,b .[
 proof
-  set C = [' a,b '];
   set O = ].a,b.[;
   assume that
 A1: a <= b and
@@ -733,8 +730,7 @@ A33: F|O = G+H by A30,VALUED_1:def 1;
   then F|O is_differentiable_on O &
   for x be Real st x in O holds ((F|O)`|O).x = diff(G,x) + diff(H,x)
   by A22,A28,A29,FDIFF_1:26;
-  then for x be Real st x in O holds F|O is_differentiable_in x by FDIFF_1:
-  16;
+  then for x be Real st x in O holds F|O is_differentiable_in x by FDIFF_1:16;
   then
 A34: F is_differentiable_on O by A4,FDIFF_1:def 7;
   then dom(F`|O) = O by FDIFF_1:def 8;
@@ -963,9 +959,7 @@ theorem Th23:
   sin is_integral_of cos,REAL
 proof
 A1: dom(sin`|REAL) = REAL by FDIFF_1:def 8,SIN_COS:73;
-  dom(cos|REAL) = (dom cos) /\ REAL by FUNCT_1:68;
-  then
-A2: dom(cos|REAL) = REAL /\ REAL by SIN_COS:def 22;
+A2: dom(cos|REAL) = REAL /\ REAL by SIN_COS:27,FUNCT_1:68;
   now
     let x be set;
     assume
@@ -1013,16 +1007,12 @@ end;
 theorem Th25:
   (-1)(#)cos is_integral_of sin,REAL
 proof
-  dom cos = REAL by SIN_COS:def 22;
+A1: dom((-1)(#)cos) =REAL by VALUED_1:def 5,SIN_COS:27;
   then
-A1: dom((-1)(#)cos) =REAL by VALUED_1:def 5;
-  then
-A2: (-1)(#)cos is_differentiable_on REAL by FCONT_3:4,FDIFF_1:28,SIN_COS :72;
+A2: (-1)(#)cos is_differentiable_on REAL by FCONT_3:4,FDIFF_1:28,SIN_COS:72;
   then
 A3: dom (((-1)(#)cos)`|REAL) = REAL by FDIFF_1:def 8;
-  dom(sin|REAL) = dom sin /\ REAL by FUNCT_1:68;
-  then
-A4: dom(sin|REAL) = REAL /\ REAL by SIN_COS:def 20;
+A4: dom(sin|REAL) = REAL /\ REAL by SIN_COS:27,FUNCT_1:68;
   now
     let x be set;
     assume
@@ -1040,11 +1030,10 @@ end;
 theorem
   cos.a - cos.b = integral(sin,a,b)
 proof
-A1: dom cos = REAL & REAL = dom sin by SIN_COS:def 20,def 22;
 A2: sin is_continuous_on REAL by FDIFF_1:33,SIN_COS:73;
   min(a,b) in REAL & max(a,b) in REAL by XREAL_0:def 1;
   then
-A3: min(a,b) in dom((-1)(#)cos) & max(a,b) in dom((-1)(#)cos) by A1,
+A3: min(a,b) in dom((-1)(#)cos) & max(a,b) in dom((-1)(#)cos) by SIN_COS:27,
   VALUED_1:def 5;
 A4: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
   [. min(a,b),max(a,b) .] c= REAL;
@@ -1314,7 +1303,7 @@ A15: (H.n)||AB is Function of AB,REAL by FUNCT_2:131,INTEGRA5:6;
   lim(H,AB) is_bounded_above_on AB &
   lim(H,AB) is_bounded_below_on AB by A12,RFUNCT_1:def 11;
   then
-A16: H0 is_bounded_above_on AB & H0 is_bounded_below_on AB by INTEGRA5:7 ,8;
+A16: H0 is_bounded_above_on AB & H0 is_bounded_below_on AB by INTEGRA5:7,8;
   then
 A17: H0 is_bounded_on AB by RFUNCT_1:def 11;
 A18: H0 is Function of AB,REAL by A5,FUNCT_2:131,INTEGRA5:6;
@@ -1333,11 +1322,12 @@ A21: for n be Element of NAT,x be Element of REAL st n>=N & x in AB
     take N;
     now
       let n,k be Element of NAT;
+      reconsider Tk=T.k as DivisionPoint of AB by INTEGRA1:def 4;
+      set l0 = len Tk;
+X:  dom  Tk = Seg l0 by FINSEQ_1:def 3;
       assume
 A22:  N<= n;
       set Hn = (H.n)||AB;
-      reconsider Tk=T.k as DivisionPoint of AB by INTEGRA1:def 4;
-      set l0 = len Tk;
       len upper_volume(Hn,T.k) = l0 by INTEGRA1:def 7;
       then reconsider R1=upper_volume(Hn,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
@@ -1354,19 +1344,19 @@ A23:  rng H1 = {e} & H1 is_bounded_on AB by INTEGRA4:5;
       then upper_sum(Hn,T).k-upper_sum(H0,T).k
       =upper_sum(Hn,T.k)-upper_sum(H0,T.k) by INTEGRA2:def 4;
       then
-A24:  upper_sum(Hn,T).k-upper_sum(H0,T).k = Sum(R1-R2) by RVSUM_1: 120;
+A24:  upper_sum(Hn,T).k-upper_sum(H0,T).k = Sum(R1-R2) by RVSUM_1:120;
       upper_sum(H0,T).k-upper_sum(Hn,T).k
       = upper_sum(H0,T.k)-upper_sum(Hn,T).k by INTEGRA2:def 4;
       then upper_sum(H0,T).k-upper_sum(Hn,T).k
       = upper_sum(H0,T.k)-upper_sum(Hn,T.k) by INTEGRA2:def 4;
       then
-A25:  upper_sum(H0,T).k-upper_sum(Hn,T).k = Sum(R2-R1) by RVSUM_1: 120;
-A26:  for i be Element of NAT st i in Seg l0 holds
+A25:  upper_sum(H0,T).k-upper_sum(Hn,T).k = Sum(R2-R1) by RVSUM_1:120;
+A26:  for i be Element of NAT st i in dom Tk holds
       (R1-R2).i <= R3.i & (R2-R1).i <= R3.i
       proof
         let i be Element of NAT;
         assume
-A27:    i in Seg l0;
+A27:    i in dom Tk;
         (R1-R2).i = R1.i-R2.i by RVSUM_1:48;
         then (R1-R2).i = sup rng(Hn|divset(T.k,i)) * vol divset(T.k,i)
         - (upper_volume(H0,T.k)).i by A27,INTEGRA1:def 7;
@@ -1389,23 +1379,20 @@ A30:    sup rng(Hn|divset(T.k,i)) - sup rng(H0|divset(T.k,i))
         sup rng(H0|divset(T.k,i)) - sup rng(Hn|divset(T.k,i))
         <= sup rng(H1|divset(T.k,i))
         proof
-A31:      i in dom Tk by A27,FINSEQ_1:def 3;
-          then
-A32:      divset(T.k,i) c= AB by INTEGRA1:10;
+A32:      divset(T.k,i) c= AB by INTEGRA1:10,A27;
           Hn is_bounded_on AB by A14;
           then Hn is_bounded_above_on AB by RFUNCT_1:def 11;
           then
-A33:      Hn|divset(T.k,i) is_bounded_above_on divset(T.k,i) by A31,INTEGRA1
-          :10,INTEGRA2:5;
+A33:      Hn|divset(T.k,i) is_bounded_above_on divset(T.k,i) by A27,INTEGRA1:10
+          ,INTEGRA2:5;
           Hn is Function of AB, REAL by A14;
 
 then reconsider f = Hn|divset(T.k,i) as Function of divset(T.k,i),REAL
           by A32,FUNCT_2:38;
           reconsider g = H0|divset(T.k,i) as Function of divset(T.k,i),REAL
           by A18,A32,FUNCT_2:38;
-A34:      rng
-          f is bounded_above & rng g is bounded_above by A16,A32,A33,INTEGRA1
-          :15,INTEGRA2:5;
+A34:      rng f is bounded_above & rng g is bounded_above by A16,A32,A33,
+          INTEGRA1:15,INTEGRA2:5;
 A35:      rng (H1|divset(T.k,i)) c= {e} by A23,RELAT_1:99;
           consider x0 be set such that
 A36:      x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1453,19 +1440,18 @@ A41:    0 <= vol divset(T.k,i) by INTEGRA1:11;
         by A29,A30,A41,XREAL_1:66;
         hence thesis by A27,INTEGRA1:def 7;
       end;
-      then for i be Nat st i in Seg l0 holds (R1-R2).i <= R3.i;
+      then for i be Nat st i in Seg l0 holds (R1-R2).i <= R3.i by X;
       then
-A42:  upper_sum(Hn,T).k-upper_sum(H0,T).k <= Sum R3 by A24,RVSUM_1: 112;
+A42:  upper_sum(Hn,T).k-upper_sum(H0,T).k <= Sum R3 by A24,RVSUM_1:112;
 A43:  sup rng H1 = e by A23,SEQ_4:22;
 A44:  vol AB = b-a by A1,INTEGRA6:5;
       H1 is_bounded_above_on AB by A23,RFUNCT_1:def 11;
       then
 A45:  upper_sum(H1,T.k) <= e*(b-a) by A43,A44,INTEGRA1:29;
       then
-A46:  upper_sum((H.n)||AB,T).k-upper_sum(H0,T).k <= e*(b-a) by A42,
-      XXREAL_0:2;
-      for i be Nat st i in Seg l0 holds (R2-R1).i <= R3.i by A26;
-      then upper_sum(H0,T).k-upper_sum(Hn,T).k <= Sum R3 by A25,RVSUM_1:112;
+A46:  upper_sum((H.n)||AB,T).k-upper_sum(H0,T).k <= e*(b-a) by A42,XXREAL_0:2;
+      for i be Nat st i in dom Tk holds (R2-R1).i <= R3.i by A26;
+      then upper_sum(H0,T).k-upper_sum(Hn,T).k <= Sum R3 by A25,RVSUM_1:112,X;
       then upper_sum(H0,T).k-upper_sum(Hn,T).k <= e*(b-a) by A45,XXREAL_0:2;
       then -e*(b-a) <= -(upper_sum(H0,T).k - upper_sum((H.n)||AB,T).k)
       by XREAL_1:26;
@@ -1491,6 +1477,7 @@ A49:  N<= n;
       set Hn=(H.n)||AB;
       reconsider Tk=T.k as DivisionPoint of AB by INTEGRA1:def 4;
       set l0 = len Tk;
+X:    Seg l0 = dom Tk by FINSEQ_1:def 3;
       len lower_volume(Hn,T.k) = l0 by INTEGRA1:def 8;
       then reconsider R1=lower_volume(Hn,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
@@ -1507,19 +1494,19 @@ A50:  rng H1 = {e} & H1 is_bounded_on AB by INTEGRA4:5;
       then lower_sum(Hn,T).k-lower_sum(H0,T).k
       =lower_sum(Hn,T.k)-lower_sum(H0,T.k) by INTEGRA2:def 5;
       then
-A51:  lower_sum(Hn,T).k-lower_sum(H0,T).k = Sum(R1-R2) by RVSUM_1: 120;
+A51:  lower_sum(Hn,T).k-lower_sum(H0,T).k = Sum(R1-R2) by RVSUM_1:120;
       lower_sum(H0,T).k-lower_sum(Hn,T).k
       =lower_sum(H0,T.k)-lower_sum(Hn,T).k by INTEGRA2:def 5;
       then lower_sum(H0,T).k-lower_sum(Hn,T).k
       =lower_sum(H0,T.k)-lower_sum(Hn,T.k) by INTEGRA2:def 5;
       then
 A52:  lower_sum(H0,T).k-lower_sum(Hn,T).k =Sum(R2-R1) by RVSUM_1:120;
-A53:  for i be Element of NAT st i in Seg l0 holds
+A53:  for i be Element of NAT st i in dom Tk holds
       (R1-R2).i <= R3.i & (R2-R1).i <= R3.i
       proof
         let i be Element of NAT;
         assume
-A54:    i in Seg l0;
+A54:    i in dom Tk;
         (R1-R2).i = R1.i-R2.i by RVSUM_1:48;
         then (R1-R2).i = inf rng(Hn|divset(T.k,i)) * vol divset(T.k,i)
         - (lower_volume(H0,T.k)).i by A54,INTEGRA1:def 8;
@@ -1536,11 +1523,9 @@ A55:    (R1-R2).i = (inf rng(Hn|divset(T.k,i)) - inf rng(H0|divset (T.k,i)) )
         then
 A56:    (R2-R1).i = (inf rng(H0|divset(T.k,i)) - inf rng(Hn|divset (T.k,i)))
         * vol divset(T.k,i);
-A57:    i in dom Tk by A54,FINSEQ_1:def 3;
-        then
-A58:    divset(T.k,i) c= AB by INTEGRA1:10;
-A59:    H0|divset(T.k,i) is_bounded_below_on divset(T.k,i) by A16,A57,INTEGRA1:
-        10,INTEGRA2:6;
+A58:    divset(T.k,i) c= AB by INTEGRA1:10,A54;
+A59:    H0|divset(T.k,i) is_bounded_below_on divset(T.k,i) by A16,A54,
+        INTEGRA1:10,INTEGRA2:6;
         reconsider g = H0|divset(T.k,i) as Function of divset(T.k,i),REAL
         by A18,A58,FUNCT_2:38;
         Hn is Function of AB,REAL by A14;
@@ -1549,8 +1534,8 @@ A59:    H0|divset(T.k,i) is_bounded_below_on divset(T.k,i) by A16,A57,INTEGRA1:
         Hn is_bounded_on AB by A14;
         then Hn is_bounded_below_on AB by RFUNCT_1:def 11;
         then
-A60:    rng f is bounded_below & rng g is bounded_below by A58,A59,INTEGRA1
-        :13,INTEGRA2:6;
+A60:    rng f is bounded_below & rng g is bounded_below by A58,A59,INTEGRA1:13
+        ,INTEGRA2:6;
 A61:    rng(H1|divset(T.k,i)) c= {e} by A50,RELAT_1:99;
         consider x0 be set such that
 A62:    x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1592,7 +1577,7 @@ A67:      x in divset(T.k,i);
         by A56,A65,XREAL_1:66;
         hence thesis by A54,INTEGRA1:def 8;
       end;
-      then for i be Nat st i in Seg l0 holds (R1-R2).i <= R3.i;
+      then for i be Nat st i in Seg l0 holds (R1-R2).i <= R3.i by X;
       then
 A68:  lower_sum(Hn,T).k-lower_sum(H0,T).k <=lower_sum(H1,T.k)
       by A51,RVSUM_1:112;
@@ -1605,9 +1590,8 @@ A71:  upper_sum(H1,T.k) <= e*(b-a) by A69,A70,INTEGRA1:29;
       then
 A72:  lower_sum(H1,T.k) <= e*(b-a) by A71,XXREAL_0:2;
       then
-A73:  lower_sum((H.n)||AB,T).k-lower_sum(H0,T).k <= e*(b-a) by A68,
-      XXREAL_0:2;
-      for i be Nat st i in Seg l0 holds (R2-R1).i <= R3.i by A53;
+A73:  lower_sum((H.n)||AB,T).k-lower_sum(H0,T).k <= e*(b-a) by A68,XXREAL_0:2;
+      for i be Nat st i in Seg l0 holds (R2-R1).i <= R3.i by A53,X;
       then lower_sum(H0,T).k-lower_sum(Hn,T).k <= Sum R3 by A52,RVSUM_1:112;
       then lower_sum(H0,T).k-lower_sum(Hn,T).k <= e*(b-a) by A72,XXREAL_0:2;
       then -e*(b-a) <= -(lower_sum(H0,T).k - lower_sum((H.n)||AB,T).k)
@@ -1677,7 +1661,7 @@ A82:  now
       end;
 A83:  upper_sum((H.n)||AB,T) is convergent by A14;
       then
-A84:  upper_sum((H.n)||AB,T)-upper_sum(H0,T) is convergent by A77, SEQ_2:25;
+A84:  upper_sum((H.n)||AB,T)-upper_sum(H0,T) is convergent by A77,SEQ_2:25;
       lim(upper_sum((H.n)||AB,T)-upper_sum(H0,T))
       = lim upper_sum((H.n)||AB,T) -lim upper_sum(H0,T) by A77,A83,SEQ_2:26;
       then lim(upper_sum((H.n)||AB,T)-upper_sum(H0,T))

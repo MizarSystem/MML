@@ -10,21 +10,21 @@ environ
       CAT_1, FUNCT_2, SUBSET_1, PRE_TOPC, TARSKI, RELAT_2, SETFAM_1, CARD_1,
       FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, EQREL_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XCMPLX_0, FINSET_1, NAT_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, FINSEQ_4, INT_2,
+      XCMPLX_0, FINSET_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, INT_2, SEQ_1, NAT_1,
       XXREAL_0, STRUCT_0, ORDERS_2;
  constructors SETFAM_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, INT_2,
-      EQREL_1, FINSEQ_4, ORDERS_2, VALUED_1, PARTFUN1, SEQ_1;
+      EQREL_1, FINSEQ_4, ORDERS_2, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1, STRUCT_0, VALUED_1, FUNCT_2;
+      XREAL_0, NAT_1, INT_1, STRUCT_0, FINSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, STRUCT_0, ORDINAL1, XBOOLE_0, SUBSET_1, RELAT_2, ORDERS_2,
-      RELAT_1, FUNCOP_1, VALUED_1;
+      RELAT_1, FUNCOP_1, SETFAM_1;
  theorems NAT_1, TARSKI, FUNCOP_1, SUBSET_1, ZFMISC_1, FINSET_1, INT_1, CARD_1,
       FINSEQ_4, FUNCT_1, FUNCT_2, FINSEQ_1, ABSVALUE, RELSET_1, XBOOLE_0,
       XBOOLE_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1, EQREL_1,
       ORDERS_2, PARTFUN1;
- schemes RECDEF_1, NAT_1, FINSEQ_2, DOMAIN_1;
+ schemes NAT_1, FINSEQ_2, DOMAIN_1;
 
 begin
 
@@ -125,10 +125,10 @@ A2: B() c= A()
 and
 A3: for A being Subset of X() st A c= A() holds A c= F(A) & F(A) c= A()
 proof
-  deffunc F(Element of NAT,Subset of X()) = F($2);
+  deffunc F(Nat,Subset of X()) = F($2);
   consider f being Function of NAT,bool X() such that
 A4: f.0 = B() and
-A5: for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
+A5: for n being Nat holds f.(n+1) = F(n,f.n) from NAT_1:sch 12;
   defpred P[Nat] means f.$1 c= A();
 A6: P[0] by A2,A4;
 A7: now
@@ -189,132 +189,133 @@ A24: k+1 in Seg(k+1) by FINSEQ_1:6;
   deffunc G(Nat) = f.(abs($1-1));
   consider z being FinSequence of bool X() such that
 A25: len z = k+1 and
-A26: for j being Nat st j in Seg(k+1) holds z.j = G(j) from FINSEQ_2:sch 1;
+A26: for j being Nat st j in dom z holds z.j = G(j) from FINSEQ_2:sch 1;
+A27: dom z = Seg(k+1)  by A25,FINSEQ_1:def 3;
   take z;
   thus 0 < len z by A25;
-A27: 0+1 <= len z by A25,NAT_1:13;
+A28: 0+1 <= len z by A25,NAT_1:13;
   then
-A28: 1 in Seg(k+1) by A25,FINSEQ_1:3;
-  thus z/.1 = z.1 by A27,FINSEQ_4:24
-    .= f.(abs(1-1)) by A26,A28
+A29: 1 in Seg(k+1) by A25,FINSEQ_1:3;
+  thus z/.1 = z.1 by A28,FINSEQ_4:24
+    .= f.(abs(1-1)) by A26,A29,A27
     .= B() by A4,ABSVALUE:7; thus
-A29: for i being Element of NAT st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
+A30: for i being Element of NAT st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
   proof
     let i be Element of NAT;
     assume
-A30: i > 0 & i < len z;
+A31: i > 0 & i < len z;
     then
-A31: 0+1 <= i & i <= k+1 by A25,NAT_1:13;
+A32: 0+1 <= i & i <= k+1 by A25,NAT_1:13;
     then
-A32: i in Seg(k+1) by FINSEQ_1:3;
+A33: i in Seg(k+1) by FINSEQ_1:3;
     then
-A33: z.i = f.(abs(i-1)) by A26;
-    0+1 < i+1 by A30,XREAL_1:8;
+A34: z.i = f.(abs(i-1)) by A26,A27;
+    0+1 < i+1 by A31,XREAL_1:8;
     then
-A34: 1 <= i+1 & i+1 <= k+1 by A25,A30,NAT_1:13;
+A35: 1 <= i+1 & i+1 <= k+1 by A25,A31,NAT_1:13;
     then
-A35: i+1 in Seg(k+1) by FINSEQ_1:3;
-    1-1 <= i-1 by A31,XREAL_1:11;
+A36: i+1 in Seg(k+1) by FINSEQ_1:3;
+    1-1 <= i-1 by A32,XREAL_1:11;
     then
-A36: 0 <= (i-1)*1;
-A37: i in dom z by A25,A32,FINSEQ_1:def 3;
-    thus z/.(i+1) = z.(i+1) by A25,A34,FINSEQ_4:24
-      .= f.(abs(i+1-1)) by A26,A35
+A37: 0 <= (i-1)*1;
+A38: i in dom z by A25,A33,FINSEQ_1:def 3;
+    thus z/.(i+1) = z.(i+1) by A25,A35,FINSEQ_4:24
+      .= f.(abs(i+1-1)) by A26,A36,A27
       .= f.(abs(i-1+1))
-      .= f.(abs(i-1)+abs(1)) by A36,ABSVALUE:24
+      .= f.(abs(i-1)+abs(1)) by A37,ABSVALUE:24
       .= f.(abs(i-1)+1) by ABSVALUE:def 1
       .= F(f.(abs(i-1))) by A5
-      .= F(z/.i) by A33,A37,PARTFUN1:def 8;
+      .= F(z/.i) by A34,A38,PARTFUN1:def 8;
   end;
   thus F(z/.len z)=z/.len z
   proof
     k in NAT by ORDINAL1:def 13;
     then
-A38: f.k c= f.(k+1) by A14;
+A39: f.k c= f.(k+1) by A14;
     k+1 in NAT;
     then k+1 in dom f by FUNCT_2:def 1;
     then f.(k+1) in rng f by FUNCT_1:def 5;
     then
-A39: f.(k+1) c= f.k by A19,A22;
+A40: f.(k+1) c= f.k by A19,A22;
     len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
     then
-A40: len z in dom z by A25,FINSEQ_1:def 3;
+A41: len z in dom z by A25,FINSEQ_1:def 3;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-A41: z.len z = f.(abs(k+1-1)) by A25,A26,FINSEQ_1:5
+A42: z.len z = f.(abs(k+1-1)) by A25,A26,FINSEQ_1:5,A27
       .= f.k by ABSVALUE:def 1;
-    hence F(z/.len z) = F(f.k') by A40,PARTFUN1:def 8
+    hence F(z/.len z) = F(f.k') by A41,PARTFUN1:def 8
       .= f.(k+1) by A5
-      .= z.len z by A38,A39,A41,XBOOLE_0:def 10
-      .= z/.len z by A40,PARTFUN1:def 8;
+      .= z.len z by A39,A40,A42,XBOOLE_0:def 10
+      .= z/.len z by A41,PARTFUN1:def 8;
   end;
   let i, j be Element of NAT;
   assume
-A42: 0 < i & i < j & j <= len z;
+A43: 0 < i & i < j & j <= len z;
   then
-A43: 0+1 <= i by NAT_1:13;
-A44: i <= len z by A42,XXREAL_0:2;
-A45: i < len z by A42,XXREAL_0:2;
-  reconsider l = i-1 as Element of NAT by A43,INT_1:18;
-A46: i in Seg(k+1) by A25,A43,A44,FINSEQ_1:3;
-A47: z/.i = z.i by A43,A44,FINSEQ_4:24
-    .= f.(abs(i-1)) by A26,A46
+A44: 0+1 <= i by NAT_1:13;
+A45: i <= len z by A43,XXREAL_0:2;
+A46: i < len z by A43,XXREAL_0:2;
+  reconsider l = i-1 as Element of NAT by A44,INT_1:18;
+A47: i in Seg(k+1) by A25,A44,A45,FINSEQ_1:3;
+A48: z/.i = z.i by A44,A45,FINSEQ_4:24
+    .= f.(abs(i-1)) by A26,A47,A27
     .= f.l by ABSVALUE:def 1;
   hence z/.i c= A() by A9;
-A48: for i being Element of NAT st 1 <= i & i < len z holds z/.i c= z/.(i+1)
+A49: for i being Element of NAT st 1 <= i & i < len z holds z/.i c= z/.(i+1)
   proof
     let i be Element of NAT;
     assume
-A49: 1 <= i & i < len z;
+A50: 1 <= i & i < len z;
     then
-A50: i in Seg(k+1) by A25,FINSEQ_1:3;
-A51: 1-1 <= i-1 by A49,XREAL_1:11;
-A52: z/.i = z.i by A49,FINSEQ_4:24
-      .= f.(abs(i-1)) by A26,A50
-      .= f.(i-1) by A51,ABSVALUE:def 1;
-A53: 1 <= i+1 & i+1 <= len z by A49,NAT_1:13;
+A51: i in Seg(k+1) by A25,FINSEQ_1:3;
+A52: 1-1 <= i-1 by A50,XREAL_1:11;
+A53: z/.i = z.i by A50,FINSEQ_4:24
+      .= f.(abs(i-1)) by A26,A51,A27
+      .= f.(i-1) by A52,ABSVALUE:def 1;
+A54: 1 <= i+1 & i+1 <= len z by A50,NAT_1:13;
     then
-A54: i+1 in Seg(k+1) by A25,FINSEQ_1:3;
-A55: z/.(i+1) = z.(i+1) by A53,FINSEQ_4:24
-      .= f.(abs(i+1-1)) by A26,A54
+A55: i+1 in Seg(k+1) by A25,FINSEQ_1:3;
+A56: z/.(i+1) = z.(i+1) by A54,FINSEQ_4:24
+      .= f.(abs(i+1-1)) by A26,A55,A27
       .= f.(i-1+1) by ABSVALUE:def 1;
-    i-1 is Element of NAT by A51,INT_1:16;
-    hence z/.i c= z/.(i+1) by A14,A52,A55;
+    i-1 is Element of NAT by A52,INT_1:16;
+    hence z/.i c= z/.(i+1) by A14,A53,A56;
   end;
-  hence z/.i c= z/.j by A42,A43,Th1;
+  hence z/.i c= z/.j by A43,A44,Th1;
   assume
-A56: z/.i = z/.j;
-  i <= i+1 & i+1 <= j by A42,NAT_1:13;
+A57: z/.i = z/.j;
+  i <= i+1 & i+1 <= j by A43,NAT_1:13;
   then
-A57: z/.i = z/.(i+1) by A42,A43,A48,A56,Th2
-    .= F(z/.i) by A29,A42,A45;
+A58: z/.i = z/.(i+1) by A43,A44,A49,A57,Th2
+    .= F(z/.i) by A30,A43,A46;
   defpred P[Element of NAT] means i+$1 <= len z implies z/.i = z/.(i+$1);
-A58: P[0];
-A59: now
+A59: P[0];
+A60: now
     let n be Element of NAT such that
-A60: P[n];
+A61: P[n];
     thus P[n+1]
     proof
-A61:  i+n > 0 by A42,NAT_1:11;
+A62:  i+n > 0 by A43,NAT_1:11;
       assume i+(n+1) <= len z;
       then i+n+1 <= len z;
       then i+n < len z by NAT_1:13;
-      hence z/.i = z/.(i+n+1) by A29,A57,A60,A61
+      hence z/.i = z/.(i+n+1) by A30,A58,A61,A62
         .= z/.(i+(n+1));
     end;
   end;
-A62: for n being Element of NAT holds P[n] from NAT_1:sch 1(A58,A59);
+A63: for n being Element of NAT holds P[n] from NAT_1:sch 1(A59,A60);
   consider n0 being Nat such that
-A63: i+n0 = len z by A44,NAT_1:10;
+A64: i+n0 = len z by A45,NAT_1:10;
   reconsider n0 as Element of NAT by ORDINAL1:def 13;
-A64: k+1 in dom z by A24,A25,FINSEQ_1:def 3;
-  i+n0=len z by A63;
-  then f.l = z/.(k+1) by A25,A47,A62
-    .= z.(k+1) by A64,PARTFUN1:def 8
-    .= f.(abs(k+1-1)) by A26,FINSEQ_1:6
+A65: k+1 in dom z by A24,A25,FINSEQ_1:def 3;
+  i+n0=len z by A64;
+  then f.l = z/.(k+1) by A25,A48,A63
+    .= z.(k+1) by A65,PARTFUN1:def 8
+    .= f.(abs(k+1-1)) by A26,FINSEQ_1:6,A27
     .= m by A22,ABSVALUE:def 1;
   then k <= l by A23;
   then len z <= l + 1 by A25,XREAL_1:8;
-  hence contradiction by A42,XXREAL_0:2;
+  hence contradiction by A43,XXREAL_0:2;
 end;
 
 registration
@@ -425,8 +426,7 @@ end;
 theorem Th8:
   FT{0} is finite
 proof
-  rng <*0*> = {0} by FINSEQ_1:55;
-  hence the carrier of FT{0} is finite;
+  thus the carrier of FT{0} is finite;
 end;
 
 registration
@@ -439,17 +439,9 @@ registration
   existence by Th7;
 end;
 
-definition
-  let T be 1-sorted, F be set;
-  canceled;
-  pred F is_a_cover_of T means
-
-  the carrier of T c= union F;
-end;
-
 theorem
   for FT being filled (non empty RelStr) holds
-  {U_FT x where x is Element of FT : not contradiction} is_a_cover_of FT
+  {U_FT x where x is Element of FT : not contradiction} is Cover of FT
 proof
   let FT be filled (non empty RelStr);
   let a be set;
@@ -463,6 +455,7 @@ end;
 reserve A for Subset of FT;
 
 definition
+ canceled 2;
   let FT;
   let A be Subset of FT;
   func A^delta -> Subset of FT equals
@@ -798,7 +791,7 @@ A1: A is connected;
     let x be Element of FT such that
 A2: x in A;
     deffunc F(Subset of FT) = $1^b /\ A;
-A3: A is finite by FINSET_1:13;
+A3: A is finite;
 A4: {x} c= A by A2,ZFMISC_1:37;
 A5: for B being Subset of FT st B c= A holds B c= F(B) & F(B) c= A
     proof

@@ -13,33 +13,28 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="RAT_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="50"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
 <Adjective nr="13"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 <Adjective nr="24" value="false"/>
-<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -50,13 +45,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
 <Adjective nr="13"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="23"/>
 <Adjective nr="24" value="false"/>
 </Cluster>
 </RCluster>

@@ -9,22 +9,21 @@ environ
  vocabularies FUNCT_1, RELAT_1, FUNCT_4, FUNCT_7, BOOLE, CAT_1, AMI_3, AMI_1,
       SCMFSA_2, CARD_1, FUNCOP_1, FINSET_1, TARSKI, AMI_5, RELOC, INT_1, AMI_2,
       ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6A, FINSEQ_4, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, CARD_3, NUMBERS, XCMPLX_0,
-      COMPLEX1, NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, STRUCT_0,
-      AMI_1, FUNCT_7, SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
- constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4,
-      AMI_5, RELOC, SCMFSA_4, SCMFSA_5, SCMFSA_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, FUNCT_7,
-      STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, VALUED_1, FUNCT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
+      FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, STRUCT_0, AMI_1, SCMNORM, FUNCT_7,
+      SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
+ constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC,
+      SCMFSA_4, SCMFSA_5, SCMNORM;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
+      FINSET_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, FUNCT_7, STRUCT_0,
+      AMI_1, SCMFSA_2, SCMFSA_4, SCMNORM;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_3, SCMFSA_2, SCMFSA_4, FUNCT_7, XBOOLE_0, TARSKI,
-      AMI_1, VALUED_1;
+ definitions FUNCOP_1, SCMFSA_2, SCMFSA_4, FUNCT_7, XBOOLE_0, TARSKI, AMI_1;
  theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, PRE_CIRC, WELLORD2,
       CARD_2, ENUMSET1, INT_1, SCMFSA_5, GRFUNC_1, CARD_3, FINSEQ_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, AMI_3;
+      XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, AMI_3, VALUED_1;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, CLASSES1;
 
 begin
@@ -120,11 +119,11 @@ registration
   coherence
   proof
     let m,n such that
-A1: insloc n in dom Directed I and
+A1:  n in dom Directed I and
 A2: m < n;
     insloc n in dom I by A1,Th14;
     then insloc m in dom I by A2,SCMFSA_4:def 4;
-    hence insloc m in dom Directed I by Th14;
+    hence  m in dom Directed I by Th14;
   end;
 end;
 
@@ -158,13 +157,13 @@ A5:   I.x in rng I by A3,FUNCT_1:def 5;
       thus I is initial
       proof
         let m,n such that
-A6:     insloc n in dom I and
+A6:      n in dom I and
 A7:     m < n;
         insloc n = insloc 0 or insloc n = insloc 1 by A1,A6,TARSKI:def 2;
         then n = 0+1 by A7,NAT_1:2;
         then m <= 0 by A7,NAT_1:13;
         then m = 0 by NAT_1:3;
-        hence insloc m in dom I by A1,TARSKI:def 2;
+        hence  m in dom I by A1,TARSKI:def 2;
       end;
       thus dom I c= NAT by A1,ZFMISC_1:38;
     end;
@@ -180,22 +179,19 @@ registration
 end;
 
 theorem Th15:
-  for P being Macro-Instruction, n holds n < card P iff insloc n in dom P
+  for P being Macro-Instruction, n holds n < card P iff n in dom P
 proof
   let P be Macro-Instruction, n;
-  deffunc U(Element of NAT) = insloc $1;
+  deffunc U(Element of NAT) = $1;
   set A = { m : U(m) in dom P};
 A1: now
     let x be set;
     assume
 A2: x in dom P;
     dom P c= NAT by AMI_1:def 40;
-    then reconsider l = x as Instruction-Location of SCM+FSA
-    by A2,AMI_1:def 4;
-    consider n such that
-A3: l = insloc n by SCMFSA_2:21;
-    take n;
-    thus x = U(n) by A3;
+    then reconsider l = x as Element of NAT by A2;
+    take l;
+    thus x = U(l);
   end;
 A4: for n,m st U(n) = U(m) holds n = m;
 A5: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A4);
@@ -206,8 +202,8 @@ A6: A is Subset of NAT from DOMAIN_1:sch 7;
     let n,m such that
 A7: n in A and
 A8: m < n;
-    ex l st l = n & insloc l in dom P by A7;
-    then insloc m in dom P by A8,SCMFSA_4:def 4;
+    ex l st l = n & l in dom P by A7;
+    then m in dom P by A8,SCMFSA_4:def 4;
     hence m in A;
   end;
   then reconsider A as Cardinal by A6,FUNCT_7:22;
@@ -218,10 +214,10 @@ A10: Card A = A by CARD_1:def 5;
     then Card n in Card card P by NAT_1:42;
     then n in card dom P by A9,PRE_CIRC:21;
     then n in Card A by A5,CARD_1:21;
-    then ex m st m = n & insloc m in dom P by A10;
-    hence insloc n in dom P;
+    then ex m st m = n & m in dom P by A10;
+    hence n in dom P;
   end;
-  assume insloc n in dom P;
+  assume n in dom P;
   then n in Card A by A10;
   then n in card dom P by A5,CARD_1:21;
   then Card n in Card card P by A9,PRE_CIRC:21;
@@ -234,12 +230,12 @@ registration
   coherence
   proof
     let m,n such that
-A1: insloc n in dom ProgramPart I and
+A1:  n in dom ProgramPart I and
 A2: m < n;
     ProgramPart I c= I by RELAT_1:88;
     then dom ProgramPart I c= dom I by RELAT_1:25;
     then insloc m in dom I by A1,A2,SCMFSA_4:def 4;
-    hence insloc m in dom ProgramPart I by AMI_1:106;
+    hence  m in dom ProgramPart I by AMI_1:106;
   end;
 end;
 
@@ -250,13 +246,13 @@ A1: dom ProgramPart Relocated(J, card I)
   = dom IncAddr(Shift(ProgramPart J,card I),card I) by SCMFSA_5:2
     .= dom IncAddr(Shift(J,card I),card I) by AMI_1:105
     .= dom Shift(J,card I) by SCMFSA_4:def 6
-    .= { insloc(l+card I):insloc l in dom J } by SCMFSA_4:def 7;
+    .= { l+card I: l in dom J } by VALUED_1:def 12;
   assume dom I meets dom ProgramPart Relocated(J, card I);
   then consider x being set such that
 A2: x in dom I and
-A3: x in { insloc(l+card I):insloc l in dom J } by A1,XBOOLE_0:3;
+A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
-A4: x = insloc(l+card I) and insloc l in dom J by A3;
+A4: x = l+card I and l in dom J by A3;
   l+card I < card I by A2,A4,Th15;
   hence contradiction by NAT_1:11;
 end;
@@ -266,7 +262,7 @@ theorem Th17:
   holds card ProgramPart Relocated(I, m) = card I
 proof
   let I be programmed FinPartState of SCM+FSA;
-  deffunc U(Element of NAT) = insloc $1;
+  deffunc U(Element of NAT) = $1;
   set B = { l : U(l) in dom I};
 A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
   proof
@@ -275,7 +271,8 @@ A2: dom I c= NAT by AMI_1:def 40;
     assume x in dom I;
     then reconsider l = x as Instruction-Location of SCM+FSA
     by A2,AMI_1:def 4;
-    ex d being Element of NAT st l = U(d) by SCMFSA_2:21;
+  reconsider d = l as Element of NAT by ORDINAL1:def 13;
+    l = U(d);
     hence thesis;
   end;
 A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1 = d2;
@@ -285,43 +282,43 @@ A4: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A3);
   D is Subset of NAT from DOMAIN_1:sch 7;
   then
 A5: B c= NAT;
-  deffunc V(Element of NAT) = insloc($1+m);
+  deffunc V(Element of NAT) = $1+m;
   set C = { V(l): l in B };
 A6: for d1,d2 be Element of NAT st V(d1) = V(d2) holds d1 = d2;
 A7: B,C are_equipotent from FUNCT_7:sch 4(A5,A6);
   defpred X[set] means not contradiction;
-  defpred Z[Element of NAT] means insloc $1 in dom I;
+  defpred Z[Element of NAT] means $1 in dom I;
   set C = { V(l): l in { n : Z[n]} & X[l] }, A = { V(l): Z[l] & X[l] };
 A8: C = A from FRAENKEL:sch 14; :: brak symetrii dla rownosci w tym schemacie
-A9: C = { insloc(l+m): l in B }
+A9: C = { l+m: l in B }
   proof
-    thus C c= { insloc(l+m): l in B }
+    thus C c= { l+m: l in B }
     proof
       let e be set;
       assume e in C;
       then ex l st e = V(l) & l in B;
-      hence e in { insloc(l+m): l in B };
+      hence e in { l+m: l in B };
     end;
     let e be set;
-    assume e in { insloc(l+m): l in B };
-    then ex l st e = insloc(l+m) & l in B;
+    assume e in { l+m: l in B };
+    then ex l st e = l+m & l in B;
     hence e in C;
   end;
-  A = { insloc(l+m):insloc l in dom I }
+  A = { l+m: l in dom I }
   proof
-    thus A c= { insloc(l+m): insloc l in dom I }
+    thus A c= { l+m: l in dom I }
     proof
       let e be set;
       assume e in A;
-      then ex l st e = V(l) & insloc l in dom I;
-      hence e in { insloc(l+m): insloc l in dom I };
+      then ex l st e = V(l) & l in dom I;
+      hence e in { l+m: l in dom I };
     end;
     let e be set;
-    assume e in { insloc(l+m):insloc l in dom I };
-    then ex l st e = insloc(l+m) & insloc l in dom I;
+    assume e in { l+m: l in dom I };
+    then ex l st e = l+m & l in dom I;
     hence e in A;
   end;
-  then dom Shift(I,m) = A by SCMFSA_4:def 7;
+  then dom Shift(I,m) = A by VALUED_1:def 12;
   then
 A10: dom Shift(I,m),dom I are_equipotent by A4,A7,A8,A9,WELLORD2:22;
   thus card ProgramPart Relocated(I, m)
@@ -368,12 +365,12 @@ A6: rng((id the Instructions of SCM+FSA) +*
   (halt SCM+FSA .--> goto insloc card I)
   as Function of the Instructions of SCM+FSA,
   the Instructions of SCM+FSA by A4,A6,FUNCT_2:def 1,RELSET_1:11;
-A7: IncAddr(goto insloc card I,m) = goto((insloc card I)+m) by SCMFSA_4:14
-    .= goto insloc(m + card I) by SCMFSA_4:def 1;
+A7: IncAddr(goto insloc card I,m)
+    = goto insloc(m + card I) by SCMFSA_4:14;
   ProgramPart Directed I = f*ProgramPart I by RELAT_1:112;
   hence ProgramPart Relocated(Directed I, m)
   = IncAddr(Shift(f*ProgramPart I,m),m) by SCMFSA_5:2
-    .= IncAddr(f*Shift(ProgramPart I,m),m) by SCMFSA_4:33
+    .= IncAddr(f*Shift(ProgramPart I,m),m) by VALUED_1:23
     .= ((id the Instructions of SCM+FSA) +*
   (halt SCM+FSA .--> goto insloc(m + card I)))*
   IncAddr(Shift(ProgramPart I,m),m) by A7,SCMFSA_4:26
@@ -399,7 +396,7 @@ A1: ProgramPart Relocated(I,n) = IncAddr(Shift(ProgramPart I,n),n) &
   = IncAddr(Shift(ProgramPart(I +* J),n),n) by SCMFSA_5:2
     .= IncAddr(Shift(ProgramPart I +* ProgramPart J,n),n) by FUNCT_4:75
     .= IncAddr(Shift(ProgramPart I,n) +* Shift(ProgramPart J,n),n)
-  by SCMFSA_4:34
+  by VALUED_1:24
     .= ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n) by A1,
   SCMFSA_4:25;
 end;
@@ -413,7 +410,7 @@ proof
     .= IncAddr(Shift(ProgramPart Relocated(I, m),n),n) by AMI_1:105
     .= IncAddr(Shift(IncAddr(Shift(ProgramPart I,m),m),n),n) by SCMFSA_5:2
     .= IncAddr(IncAddr(Shift(Shift(ProgramPart I,m),n),m),n) by SCMFSA_4:35
-    .= IncAddr(IncAddr(Shift(ProgramPart I,m+n),m),n) by SCMFSA_4:32
+    .= IncAddr(IncAddr(Shift(ProgramPart I,m+n),m),n) by VALUED_1:22
     .= IncAddr(Shift(ProgramPart I,m+n),m+n) by SCMFSA_4:27
     .= ProgramPart Relocated(I, m + n) by SCMFSA_5:2;
 end;
@@ -1138,8 +1135,9 @@ A2: e in Int-Locations \/ FinSeq-Locations or e in {IC SCM+FSA} or
       case e in NAT;
         then reconsider l = e as Instruction-Location of SCM+FSA
         by AMI_1:def 4;
-        l in NAT by AMI_1:def 4;
-        hence ex m st e = insloc m by SCMFSA_2:21;
+  reconsider m = l as Element of NAT by ORDINAL1:def 13;
+        take m;
+        thus e = insloc m;
       end;
     end;
     then consider m such that
@@ -1187,7 +1185,7 @@ A14:  x is Int-Location by SCMFSA_2:11;
       SCMFSA_2:81,83,84
         .= INT by SCMFSA_2:26;
       hence f.x in (the Object-Kind of SCM+FSA).x
-      by A13,A14,INT_1:def 2,SCMFSA_2:81,83,84;
+      by A13,A14,INT_1:def 2,SCMFSA_2:83,84;
     end;
     suppose x in FinSeq-Locations;
       then
@@ -1441,15 +1439,12 @@ A1: IC s1 + n = IC s2 and
 A2: s1 | (Int-Locations \/ FinSeq-Locations) =
   s2 | (Int-Locations \/ FinSeq-Locations);
   set D = Int-Locations \/ FinSeq-Locations;
-  consider k1 being Element of NAT such that
-A3: IC s1 = insloc k1 by SCMFSA_2:21;
+  reconsider k1 = IC s1 as Element of NAT by ORDINAL1:def 13;
 A4: Next IC s1 + n = Next IC s2
   proof
-    thus Next IC s1 + n = insloc (k1 + 1) + n by A3,SCMFSA_2:32
-      .= insloc (k1 + 1 + n) by SCMFSA_4:def 1
+    thus Next IC s1 + n = insloc (k1 + 1) + n by NAT_1:39
       .= insloc (k1 + n + 1)
-      .= Next insloc (k1 + n) by SCMFSA_2:32
-      .= Next (IC s2) by A1,A3,SCMFSA_4:def 1;
+      .= Next (IC s2) by A1,NAT_1:39;
   end;
 A5: now
     assume that
@@ -2213,9 +2208,9 @@ definition
     P is initial
     proof
       let m,n such that
-A1:   insloc n in dom(P) and
+A1:    n in dom(P) and
 A2:   m < n;
-      set D = {insloc(l+card I):insloc l in dom ProgramPart J};
+      set D = {l+card I: l in dom ProgramPart J};
 A3:   dom Directed I = dom I by Th14;
       dom ProgramPart Relocated(J,card I) = D by SCMFSA_5:3;
       then
@@ -2223,12 +2218,12 @@ A4:   dom(P) = dom I \/ D by A3,FUNCT_4:def 1;
       per cases by A1,A4,XBOOLE_0:def 2;
       suppose insloc n in dom I;
         then insloc m in dom I by A2,SCMFSA_4:def 4;
-        hence insloc m in dom(P) by A4,XBOOLE_0:def 2;
+        hence  m in dom(P) by A4,XBOOLE_0:def 2;
       end;
       suppose insloc n in D;
         then consider l such that
-A5:     insloc n = insloc(l+card I) and
-A6:     insloc l in dom ProgramPart J;
+A5:     insloc n = l+card I and
+A6:      l in dom ProgramPart J;
         now per cases;
           case m < card I;
             then insloc m in dom I by Th15;
@@ -2243,7 +2238,7 @@ A7:         m = card I + l1 by NAT_1:10;
             hence insloc m in D by A7;
           end;
         end;
-        hence insloc m in dom(P) by A4,XBOOLE_0:def 2;
+        hence  m in dom(P) by A4,XBOOLE_0:def 2;
       end;
     end;
     hence thesis;
@@ -2265,10 +2260,10 @@ A3: dom ProgramPart Relocated(J, card I)
   = dom Shift(ProgramPart J,card I) by SCMFSA_4:def 6;
 A4: now
     assume l in dom(ProgramPart Relocated(J, card I));
-    then l in { insloc(m+card I):insloc m in dom ProgramPart J }
-    by A3,SCMFSA_4:def 7;
+    then l in { m+card I: m in dom ProgramPart J }
+    by A3,VALUED_1:def 12;
     then consider m such that
-A5: l = insloc(m+card I) and insloc m in dom ProgramPart J;
+A5: l = m+card I and m in dom ProgramPart J;
     m + card I < card I by A1,A5,Th15;
     hence contradiction by NAT_1:11;
   end;
@@ -2486,3 +2481,4 @@ theorem
 
 theorem
   i ';' j ';' k = i ';' (j ';' k) by Th62;
+

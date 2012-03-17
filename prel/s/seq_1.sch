@@ -11,10 +11,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 </Signature>
@@ -22,7 +21,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,9 +46,7 @@
 <Func kind="K" nr="82"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="86">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

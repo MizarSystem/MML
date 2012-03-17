@@ -11,21 +11,20 @@ environ
       FINSET_1, CONVEX2, CONVEX3, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
       REAL_1, RELAT_1, FUNCT_1, FINSET_1, NAT_1, DOMAIN_1, PARTFUN1, STRUCT_0,
-      ALGSTR_0, FUNCT_2, FINSEQ_1, RLVECT_1, FINSEQ_4, RLVECT_2, RVSUM_1,
-      CONVEX1, RFINSEQ, CONVEX2;
- constructors DOMAIN_1, PARTFUN1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, FINSOP_1,
-      RVSUM_1, RFINSEQ, BINARITH, CONVEX1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1, STRUCT_0, RLVECT_1, VALUED_0,
-      VALUED_1, FUNCT_2;
+      ALGSTR_0, FUNCT_2, FINSEQ_1, RLVECT_1, RLVECT_2, RVSUM_1, CONVEX1,
+      RFINSEQ, CONVEX2;
+ constructors DOMAIN_1, PARTFUN1, XXREAL_0, REAL_1, NAT_1, FINSOP_1, RVSUM_1,
+      RFINSEQ, BINARITH, CONVEX1, SEQ_1, BINOP_2;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
+      XREAL_0, NAT_1, MEMBERED, STRUCT_0, RLVECT_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RVSUM_1, VALUED_1;
+ definitions RVSUM_1;
  theorems RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI, ZFMISC_1, XBOOLE_0,
       REAL_2, XBOOLE_1, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, ENUMSET1,
       CONVEX1, FUNCT_2, NAT_1, RFINSEQ, CONVEX2, RLVECT_3, CARD_2, CARD_4,
       FINSEQ_5, PARTFUN2, GRAPH_5, RELAT_1, XCMPLX_1, XREAL_1, XXREAL_0,
-      FINSOP_1, ORDINAL1, SEQ_1, PARTFUN1, VALUED_1;
- schemes BINARITH, RLVECT_4, XBOOLE_0, FINSEQ_1, FUNCT_1;
+      FINSOP_1, ORDINAL1, PARTFUN1, VALUED_1;
+ schemes NAT_1, RLVECT_4, XBOOLE_0, FINSEQ_1, CLASSES1;
 
 begin :: Equality of Convex Hull and Set of Convex Combinations
 
@@ -99,10 +98,10 @@ A4: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
   by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A5: len f = len F & for n being Nat st n in Seg(len F) holds f.n = F(n)
+A5: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
   from FINSEQ_1:sch 2;
 A6: len F = 1 by A3,A4,FINSEQ_3:105;
-  then 1 in Seg len F by FINSEQ_1:4,TARSKI:def 1;
+  then 1 in dom f by A5,FINSEQ_3:27;
   then
 A7: f.1 = L.(F.1) by A5;
   F = <*v*> by A3,A4,FINSEQ_3:106;
@@ -121,12 +120,13 @@ A9: Sum(f) = 1 by FINSOP_1:12;
   for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
   proof
     let n be Nat;
-    assume n in dom f;
+    assume
+A10:     n in dom f;
     then n in Seg len f by FINSEQ_1:def 3;
-    hence thesis by A1,A5,A6,A7,A8,FINSEQ_1:4,TARSKI:def 1;
+    hence thesis by A1,A5,A6,A7,A8,FINSEQ_1:4,TARSKI:def 1,A10;
   end;
   then reconsider L as Convex_Combination of V by A4,A5,A9,CONVEX1:def 3;
-A10: for A being non empty Subset of V st v in A holds
+A11: for A being non empty Subset of V st v in A holds
   L is Convex_Combination of A
   proof
     let A be non empty Subset of V;
@@ -136,7 +136,7 @@ A10: for A being non empty Subset of V st v in A holds
   end;
   take L;
   Sum(L) = 1 * v by A1,A3,RLVECT_2:53;
-  hence thesis by A10,RLVECT_1:def 9;
+  hence thesis by A11,RLVECT_1:def 9;
 end;
 
 theorem
@@ -161,10 +161,10 @@ A5: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
   by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A6: len f = len F & for n being Nat st n in Seg(len F) holds f.n = F(n)
+A6: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
   from FINSEQ_1:sch 2;
 A7: len F = 2 by A1,A4,A5,FINSEQ_3:107;
-  then 1 in Seg len F & 2 in Seg len F by FINSEQ_1:3;
+  then 1 in dom f & 2 in dom f by A6,FINSEQ_3:27;
   then
 A8: f.1 = L.(F.1) & f.2 = L.(F.2) by A6;
   now per cases by A1,A4,A5,FINSEQ_3:108;
@@ -187,44 +187,46 @@ A10:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A11:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A9,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A6,A7,A8,A9,FINSEQ_1:4,TARSKI:def 2,A11;
       end;
       then reconsider L as Convex_Combination of V by A5,A6,A10,CONVEX1:def 3;
-A11:  for A being non empty Subset of V st {v1,v2} c= A holds
+A12:  for A being non empty Subset of V st {v1,v2} c= A holds
       L is Convex_Combination of A by A4,RLVECT_2:def 8;
       take L;
-      thus thesis by A11;
+      thus thesis by A12;
     end;
     suppose F = <*v2,v1*>;
       then
-A12:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
+A13:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
       rng f c= REAL
       proof
-        f = <*1/2,1/2*> by A2,A6,A7,A8,A12,FINSEQ_1:61;
+        f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
         then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
         then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
           .= {1/2} by FINSEQ_1:55;
         hence thesis;
       end;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/2,1/2*> by A2,A6,A7,A8,A12,FINSEQ_1:61;
+      f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
       then
-A13:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
+A14:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
         .= 1;
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A15:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A12,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A6,A7,A8,A13,FINSEQ_1:4,TARSKI:def 2,A15;
       end;
-      then reconsider L as Convex_Combination of V by A5,A6,A13,CONVEX1:def 3;
-A14:  for A being non empty Subset of V st {v1,v2} c= A holds
+      then reconsider L as Convex_Combination of V by A5,A6,A14,CONVEX1:def 3;
+A16:  for A being non empty Subset of V st {v1,v2} c= A holds
       L is Convex_Combination of A by A4,RLVECT_2:def 8;
       take L;
-      thus thesis by A14;
+      thus thesis by A16;
     end;
   end;
   hence thesis;
@@ -263,10 +265,10 @@ A8: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
   by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A9: len f = len F & for n being Nat st n in Seg(len F) holds f.n = F(n)
+A9: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
   from FINSEQ_1:sch 2;
 A10: len F = 3 by A1,A2,A3,A7,A8,FINSEQ_3:110;
-  then 1 in Seg len F & 2 in Seg len F & 3 in Seg len F by FINSEQ_1:3;
+  then 1 in dom f & 2 in dom f & 3 in dom f by A9,FINSEQ_3:27;
   then
 A11: f.1 = L.(F.1) & f.2 = L.(F.2) & f.3 = L.(F.3) by A9;
   now per cases by A1,A2,A3,A7,A8,CONVEX1:31;
@@ -290,22 +292,23 @@ A13:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A14:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A12,ENUMSET1:def 1,FINSEQ_3:1;
+        hence thesis by A4,A9,A10,A11,A12,ENUMSET1:def 1,FINSEQ_3:1,A14;
       end;
       then reconsider L as Convex_Combination of V by A8,A9,A13,CONVEX1:def 3;
-A14:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
+A15:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
       L is Convex_Combination of A by A7,RLVECT_2:def 8;
       take L;
-      thus thesis by A14;
+      thus thesis by A15;
     end;
     suppose F = <* v1,v3,v2*>;
       then
-A15:  F.1 = v1 & F.2 = v3 & F.3 = v2 by FINSEQ_1:62;
+A16:  F.1 = v1 & F.2 = v3 & F.3 = v2 by FINSEQ_1:62;
       rng f c= REAL
       proof
-        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A15,FINSEQ_1:62;
+        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A16,FINSEQ_1:62;
         then f = <*1/3*>^<*1/3*>^<*1/3*> by FINSEQ_1:def 10;
         then rng f = rng (<*1/3*>^<*1/3*>) \/ rng <*1/3*> by FINSEQ_1:44
           .= rng <*1/3*> \/ rng <*1/3*> \/ rng <*1/3*> by FINSEQ_1:44
@@ -313,29 +316,30 @@ A15:  F.1 = v1 & F.2 = v3 & F.3 = v2 by FINSEQ_1:62;
         hence thesis;
       end;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A15,FINSEQ_1:62;
+      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A16,FINSEQ_1:62;
       then
-A16:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
+A17:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
         .= 1;
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A18:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A15,ENUMSET1:def 1,FINSEQ_3:1;
+        hence thesis by A4,A9,A10,A11,A16,ENUMSET1:def 1,FINSEQ_3:1,A18;
       end;
-      then reconsider L as Convex_Combination of V by A8,A9,A16,CONVEX1:def 3;
-A17:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
+      then reconsider L as Convex_Combination of V by A8,A9,A17,CONVEX1:def 3;
+A19:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
       L is Convex_Combination of A by A7,RLVECT_2:def 8;
       take L;
-      thus thesis by A17;
+      thus thesis by A19;
     end;
     suppose F = <*v2,v1,v3*>;
       then
-A18:  F.1 = v2 & F.2 = v1 & F.3 = v3 by FINSEQ_1:62;
+A20:  F.1 = v2 & F.2 = v1 & F.3 = v3 by FINSEQ_1:62;
       rng f c= REAL
       proof
-        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A18,FINSEQ_1:62;
+        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A20,FINSEQ_1:62;
         then f = <*1/3*>^<*1/3*>^<*1/3*> by FINSEQ_1:def 10;
         then rng f = rng (<*1/3*>^<*1/3*>) \/ rng <*1/3*> by FINSEQ_1:44
           .= rng <*1/3*> \/ rng <*1/3*> \/ rng <*1/3*> by FINSEQ_1:44
@@ -343,56 +347,27 @@ A18:  F.1 = v2 & F.2 = v1 & F.3 = v3 by FINSEQ_1:62;
         hence thesis;
       end;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A18,FINSEQ_1:62;
+      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A20,FINSEQ_1:62;
       then
-A19:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
+A21:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
         .= 1;
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A22:         n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A18,ENUMSET1:def 1,FINSEQ_3:1;
+        hence thesis by A4,A9,A10,A11,A20,ENUMSET1:def 1,FINSEQ_3:1,A22;
       end;
-      then reconsider L as Convex_Combination of V by A8,A9,A19,CONVEX1:def 3;
-A20:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
-      L is Convex_Combination of A by A7,RLVECT_2:def 8;
-      take L;
-      thus thesis by A20;
-    end;
-    suppose F = <* v2,v3,v1*>;
-      then
-A21:  F.1 = v2 & F.2 = v3 & F.3 = v1 by FINSEQ_1:62;
-      rng f c= REAL
-      proof
-        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A21,FINSEQ_1:62;
-        then f = <*1/3*>^<*1/3*>^<*1/3*> by FINSEQ_1:def 10;
-        then rng f = rng (<*1/3*>^<*1/3*>) \/ rng <*1/3*> by FINSEQ_1:44
-          .= rng <*1/3*> \/ rng <*1/3*> \/ rng <*1/3*> by FINSEQ_1:44
-          .= {1/3} by FINSEQ_1:55;
-        hence thesis;
-      end;
-      then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A21,FINSEQ_1:62;
-      then
-A22:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
-        .= 1;
-      for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
-      proof
-        let n be Nat;
-        assume n in dom f;
-        then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A21,ENUMSET1:def 1,FINSEQ_3:1;
-      end;
-      then reconsider L as Convex_Combination of V by A8,A9,A22,CONVEX1:def 3;
+      then reconsider L as Convex_Combination of V by A8,A9,A21,CONVEX1:def 3;
 A23:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
       L is Convex_Combination of A by A7,RLVECT_2:def 8;
       take L;
       thus thesis by A23;
     end;
-    suppose F = <* v3,v1,v2*>;
+    suppose F = <* v2,v3,v1*>;
       then
-A24:  F.1 = v3 & F.2 = v1 & F.3 = v2 by FINSEQ_1:62;
+A24:  F.1 = v2 & F.2 = v3 & F.3 = v1 by FINSEQ_1:62;
       rng f c= REAL
       proof
         f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A24,FINSEQ_1:62;
@@ -410,22 +385,23 @@ A25:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A26:        n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A24,ENUMSET1:def 1,FINSEQ_3:1;
+        hence thesis by A4,A9,A10,A11,A24,ENUMSET1:def 1,FINSEQ_3:1,A26;
       end;
       then reconsider L as Convex_Combination of V by A8,A9,A25,CONVEX1:def 3;
-A26:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
+A27:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
       L is Convex_Combination of A by A7,RLVECT_2:def 8;
       take L;
-      thus thesis by A26;
+      thus thesis by A27;
     end;
-    suppose F = <* v3,v2,v1*>;
+    suppose F = <* v3,v1,v2*>;
       then
-A27:  F.1 = v3 & F.2 = v2 & F.3 = v1 by FINSEQ_1:62;
+A28:  F.1 = v3 & F.2 = v1 & F.3 = v2 by FINSEQ_1:62;
       rng f c= REAL
       proof
-        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A27,FINSEQ_1:62;
+        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A28,FINSEQ_1:62;
         then f = <*1/3*>^<*1/3*>^<*1/3*> by FINSEQ_1:def 10;
         then rng f = rng (<*1/3*>^<*1/3*>) \/ rng <*1/3*> by FINSEQ_1:44
           .= rng <*1/3*> \/ rng <*1/3*> \/ rng <*1/3*> by FINSEQ_1:44
@@ -433,22 +409,54 @@ A27:  F.1 = v3 & F.2 = v2 & F.3 = v1 by FINSEQ_1:62;
         hence thesis;
       end;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A27,FINSEQ_1:62;
+      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A28,FINSEQ_1:62;
       then
-A28:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
+A29:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
         .= 1;
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+A30:        n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A4,A9,A10,A11,A27,ENUMSET1:def 1,FINSEQ_3:1;
+        hence thesis by A4,A9,A10,A11,A28,ENUMSET1:def 1,FINSEQ_3:1,A30;
       end;
-      then reconsider L as Convex_Combination of V by A8,A9,A28,CONVEX1:def 3;
-A29:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
+      then reconsider L as Convex_Combination of V by A8,A9,A29,CONVEX1:def 3;
+A31:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
       L is Convex_Combination of A by A7,RLVECT_2:def 8;
       take L;
-      thus thesis by A29;
+      thus thesis by A31;
+    end;
+    suppose F = <* v3,v2,v1*>;
+      then
+A32:  F.1 = v3 & F.2 = v2 & F.3 = v1 by FINSEQ_1:62;
+      rng f c= REAL
+      proof
+        f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A32,FINSEQ_1:62;
+        then f = <*1/3*>^<*1/3*>^<*1/3*> by FINSEQ_1:def 10;
+        then rng f = rng (<*1/3*>^<*1/3*>) \/ rng <*1/3*> by FINSEQ_1:44
+          .= rng <*1/3*> \/ rng <*1/3*> \/ rng <*1/3*> by FINSEQ_1:44
+          .= {1/3} by FINSEQ_1:55;
+        hence thesis;
+      end;
+      then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
+      f = <*1/3,1/3,1/3*> by A4,A9,A10,A11,A32,FINSEQ_1:62;
+      then
+A33:  Sum(f) = 1/3 + 1/3 + 1/3 by RVSUM_1:108
+        .= 1;
+      for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+      proof
+        let n be Nat;
+        assume
+A34:        n in dom f;
+        then n in Seg len f by FINSEQ_1:def 3;
+        hence thesis by A4,A9,A10,A11,A32,ENUMSET1:def 1,FINSEQ_3:1,A34;
+      end;
+      then reconsider L as Convex_Combination of V by A8,A9,A33,CONVEX1:def 3;
+A35:  for A being non empty Subset of V st {v1,v2,v3} c= A holds
+      L is Convex_Combination of A by A7,RLVECT_2:def 8;
+      take L;
+      thus thesis by A35;
     end;
   end;
   hence thesis;
@@ -622,7 +630,7 @@ A34: for x being set st x in the carrier of V ex y being set st P[x,y]
   consider L2 being Function such that
 A35: dom L2 = the carrier of V &
   for x being set st x in the carrier of V holds P[x,L2.x]
-  from FUNCT_1:sch 2(A33,A34);
+  from CLASSES1:sch 1(A34);
   for y being set st y in rng L2 holds y in REAL
   proof
     let y be set;
@@ -716,7 +724,7 @@ A52: Carrier(L) \ rng(F/^i) = rng(F|i) by A51,XBOOLE_1:88;
   deffunc F(set) = L2.((F|i).$1);
   consider f2 being FinSequence such that
 A53: len f2 = len(F|i) &
-  for k being Nat st k in Seg len(F|i) holds f2.k = F(k) from FINSEQ_1:sch 2;
+  for k being Nat st k in dom f2 holds f2.k = F(k) from FINSEQ_1:sch 2;
   for y being set st y in rng f2 holds y in REAL
   proof
     let y be set;
@@ -732,7 +740,7 @@ A56: (F|i).x in rng (F|i) by FUNCT_1:12;
 A57: L2 = L2' & dom L2' = the carrier of V & rng L2' c= REAL by FUNCT_2:def 2;
     L2.((F|i).x) in rng L2 by A50,A56,A57,FUNCT_1:12;
     then L2.((F|i).x) in REAL;
-    hence thesis by A53,A54,A55;
+    hence thesis by A53,A54;
   end;
   then rng f2 c= REAL by TARSKI:def 3;
   then reconsider f2 as FinSequence of REAL by FINSEQ_1:def 4;
@@ -754,7 +762,7 @@ A62: for k being Element of NAT st k in dom f2
       assume
 A63:  k in dom f2;
       then
-A64:  f2.k = L2.((F|i).k) by A53,A59;
+A64:  f2.k = L2.((F|i).k) by A53;
       k in dom (f|Seg i) & f|i = f|(Seg i) by A60,A63,FINSEQ_1:def 15;
       then
 A65:  k in dom f /\ Seg i & (f|i).k = f.k by FUNCT_1:68;
@@ -813,7 +821,7 @@ A80: f = (f|i)^(f/^i) by RFINSEQ:21;
       .= 1/((1-r)/(1-r)) by XCMPLX_1:82
       .= 1/1 by A31,XCMPLX_1:60
       .= 1;
-    thus thesis by A53,A59,A62;
+    thus thesis by A53,A62;
   end;
   then reconsider L2 as Convex_Combination of M by A43,A50,A53,CONVEX1:def 3;
 A81: v in {v} by TARSKI:def 1;
@@ -919,7 +927,7 @@ A5:   v = L.x*x by A2,A4,RLVECT_2:53
     end;
     suppose
 A6:   card Carrier(L) >= 2;
-      defpred P[Element of NAT] means
+      defpred P[Nat] means
       for LL being Convex_Combination of M st card Carrier LL = 1 + $1 &
       (ex L1,L2 being Convex_Combination of M, r being Real st
       0 < r & r < 1 & LL = r*L1 + (1-r)*L2 &
@@ -959,9 +967,9 @@ A16:    Sum L1 in M & Sum L2 in M by A12,A13,A15,ZFMISC_1:37;
           .= r*Sum L1 + (1-r)*Sum L2 by RLVECT_3:2;
         hence Sum LL in M by A1,A10,A16,CONVEX1:def 2;
       end;
-A17:  for k being non empty Element of NAT st P[k] holds P[k+1]
+A17:  for k being non empty Nat st P[k] holds P[k+1]
       proof
-        let k being non empty Element of NAT;
+        let k being non empty Nat;
         assume
 A18:    P[k];
         let LL be Convex_Combination of M;
@@ -994,8 +1002,7 @@ A26:    Sum L2 in M by A18,A19,A21,A25;
           .= r*Sum L1 + (1-r)*Sum L2 by RLVECT_3:2;
         hence Sum LL in M by A1,A21,A24,A26,CONVEX1:def 2;
       end;
-A27:  for k being non empty Element of NAT holds P[k]
-      from BINARITH:sch 1(A7,A17);
+A27:  for k being non empty Nat holds P[k] from NAT_1:sch 10(A7,A17);
       consider k being Nat such that
 A28:  card Carrier L = k + 1 by A6,NAT_1:6;
       reconsider k as non empty Element of NAT by A6,A28,ORDINAL1:def 13;
@@ -1264,7 +1271,7 @@ A7: for x being set st x in the carrier of V ex y being set st P[x,y]
   consider L2 being Function such that
 A8: dom L2 = the carrier of V &
   for x being set st x in the carrier of V holds P[x,L2.x]
-  from FUNCT_1:sch 2(A6,A7);
+  from CLASSES1:sch 1(A7);
   for y being set st y in rng L2 holds y in REAL
   proof
     let y be set;
@@ -1410,7 +1417,7 @@ A2: M is convex & M is cone;
     let L be Linear_Combination of M;
     assume
 A3: Carrier L <> {} & for v being VECTOR of V st v in Carrier L holds L.v > 0;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
     for LL being Linear_Combination of M st card Carrier LL = $1 &
     (for u being VECTOR of V st u in Carrier LL holds LL.u > 0) &
     (ex L1,L2 being Linear_Combination of M st Sum LL = Sum L1 + Sum L2 &
@@ -1441,9 +1448,9 @@ A9:   Sum LL = LL.x * x by A7,RLVECT_2:53;
       then LL.x > 0 by A6;
       hence thesis by A2,A8,A9,Def3;
     end;
-A10: for k being non empty Element of NAT st P[k] holds P[k+1]
+A10: for k being non empty Nat st P[k] holds P[k+1]
     proof
-      let k be non empty Element of NAT;
+      let k be non empty Nat;
       assume
 A11:  P[k];
       let LL be Linear_Combination of M;
@@ -1495,8 +1502,8 @@ A18:  ex LL1,LL2 being Linear_Combination of M st
       then Sum L1 in M by A4,A15,A18;
       hence thesis by A2,A15,A17,Th7;
     end;
-A19: for k being non empty Element of NAT holds P[k]
-    from BINARITH:sch 1(A4,A10);
+A19: for k being non empty Nat holds P[k]
+    from NAT_1:sch 10(A4,A10);
 A20: card Carrier L <> 0 by A3,CARD_2:59;
     then card Carrier L > 0;
     then card Carrier L >= 0 + 1 by NAT_1:13;

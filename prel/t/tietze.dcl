@@ -21,13 +21,13 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="FUNCOP_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="METRIC_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="SEQ_2"/>
@@ -52,11 +52,11 @@
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="25"/>
-<Adjective nr="50">
+<Adjective nr="61">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="75"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -132,7 +132,7 @@
 </Func>
 <Cluster>
 <Adjective nr="36"/>
-<Adjective nr="69">
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

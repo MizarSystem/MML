@@ -9,19 +9,18 @@ environ
  vocabularies INT_1, VECTSP_1, ABSVALUE, BINOP_1, FUNCT_1, ARYTM_1, REALSET1,
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
       GROUP_1, ENDALG, ARYTM, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, FINSET_1, STRUCT_0,
-      ALGSTR_0, RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
+ notations TARSKI, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, SEQ_1, STRUCT_0, ALGSTR_0,
+      RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, FINSEQOP, RLVECT_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
+      FINSEQOP, RLVECT_1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, VALUED_1, FUNCT_2, CARD_1;
+      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO, ALGSTR_0,
-      VALUED_1;
+ definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO, ALGSTR_0;
  theorems ABSVALUE, BINOP_1, CARD_1, FINSEQOP, FUNCT_2, INT_1, NAT_1, REAL_1,
       ZFMISC_1, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, NAT_D;
- schemes FUNCT_1, FUNCT_2, INT_1, NAT_1, RECDEF_1, BINOP_1;
+ schemes FUNCT_2, INT_1, NAT_1, BINOP_1, CLASSES1;
 
 begin
 
@@ -562,11 +561,10 @@ A12: for x be set st x in the carrier of G ex y be set st P[x,y]
       let x be set;
       assume x in the carrier of G;
       then reconsider b = x as Element of G;
-      deffunc F(Element of NAT,Element of G) = $2 * b;
+      deffunc F(Nat,Element of G) = $2 * b;
       consider g0 being Function of NAT, the carrier of G such that
 A13:  g0.0 = 1_G and
-A14:  for n being Element of NAT holds g0.(n + 1) = F(n,g0.n)
-      from RECDEF_1:sch 4;
+A14:  for n being Nat holds g0.(n + 1) = F(n,g0.n) from NAT_1:sch 12;
       reconsider y = g0 as set;
       take y;
       take g0;
@@ -577,7 +575,7 @@ A14:  for n being Element of NAT holds g0.(n + 1) = F(n,g0.n)
     end;
     consider f being Function such that dom f = the carrier of G and
 A15: for x be set st x in the carrier of G holds P[x,f.x]
-    from FUNCT_1:sch 2(A1,A12);
+    from CLASSES1:sch 1(A12);
     defpred P[Element of G,Element of NAT,set] means
     ex g0 being Function of NAT, the carrier of G st g0 = f.$1 & $3 = g0.$2;
 A16: for a being Element of G, n being Element of NAT
@@ -1361,7 +1359,6 @@ A4:   for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A2);
       take k;
       thus h |^ k = 1_G & k <> 0 by A3;
       let m;
-      reconsider n = m as Element of NAT by ORDINAL1:def 13;
       assume h |^ m = 1_G & m <> 0;
       hence k <= m by A4;
     end;
@@ -1461,6 +1458,7 @@ end;
 definition
   let G be 1-sorted;
   func Ord G -> Cardinal equals
+
   Card the carrier of G;
   correctness;
 end;
@@ -1474,6 +1472,7 @@ definition
   let G be finite 1-sorted;
   canceled;
   redefine func ord G -> Element of NAT equals
+
   card the carrier of G;
   coherence
   proof

@@ -15,14 +15,12 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="ALGSTR_0"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="NORMSP_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -31,6 +29,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 </Signature>
@@ -44,7 +43,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="274">
+<Func kind="K" nr="263">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -58,7 +57,7 @@
 <Adjective nr="17">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="274">
+<Func kind="K" nr="263">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -66,7 +65,7 @@
 </Cluster>
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="274">
+<Func kind="K" nr="263">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -79,9 +78,11 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="142">
-<Func kind="K" nr="274">
+<Func kind="K" nr="97">
+<Func kind="U" nr="1">
+<Func kind="K" nr="263">
 <Func kind="F" nr="1"/>
+</Func>
 </Func>
 <Var nr="1"/>
 <Var nr="2"/>

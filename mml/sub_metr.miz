@@ -6,19 +6,18 @@
 
 environ
 
- vocabularies SQUARE_1, METRIC_1, BOOLE, FUNCT_1, RELAT_2, FUNCOP_1, RELAT_1,
-      SUB_METR, ARYTM;
+ vocabularies SQUARE_1, METRIC_1, BOOLE, FUNCT_1, RELAT_2, FUNCOP_1, SUB_METR,
+      ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, RELAT_1, FUNCT_2, BINOP_1, FUNCOP_1, DOMAIN_1, STRUCT_0,
-      METRIC_1, XXREAL_0;
- constructors DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, MEMBERED, METRIC_1,
-      VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCOP_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, STRUCT_0, METRIC_1, METRIC_3, VALUED_1, FUNCT_2;
- requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, VALUED_1;
- theorems TARSKI, FUNCOP_1, ZFMISC_1, METRIC_1, FUNCT_2, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0;
+      XREAL_0, FUNCT_2, BINOP_1, FUNCOP_1, DOMAIN_1, STRUCT_0, METRIC_1,
+      XXREAL_0;
+ constructors DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, MEMBERED, METRIC_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      MEMBERED, STRUCT_0, METRIC_1, METRIC_3;
+ requirements REAL, SUBSET, BOOLE, ARITHM;
+ definitions BINOP_1, FUNCT_5;
+ theorems TARSKI, FUNCOP_1, METRIC_1, FUNCT_2, XBOOLE_0, XBOOLE_1, XREAL_1,
+      XXREAL_0, CARD_1;
  schemes FRAENKEL;
 
 begin
@@ -54,57 +53,56 @@ proof
   then dist(x,y) <> 0 by METRIC_1:2;
   hence thesis by METRIC_1:5;
 end;
+:::then
 
-Lm1: [{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
-then
-
-Lm2: Empty^2-to-zero.({},{}) =0 by FUNCOP_1:13,METRIC_1:def 2;
+:::Lm2: Empty^2-to-zero.({},{}) =0 by FUNCOP_1:13;
 
 canceled;
 
 theorem Th4:
-  for x being Element of {{}} holds Empty^2-to-zero.(x,x) = 0
-proof
-  let x be Element of {{}};
-  x={} by TARSKI:def 1;
-  hence thesis by Lm1,FUNCOP_1:13,METRIC_1:def 2;
+  for x being Element of 1 holds Empty^2-to-zero.(x,x) = 0
+proof let x be Element of 1;
+   [x,x] in [:1,1:];
+  hence Empty^2-to-zero.(x,x) = 0 by CARD_1:87,FUNCT_2:65;
 end;
 
 theorem Th5:
-  for x,y being Element of {{}} holds x <> y implies 0 < Empty^2-to-zero.(x,y)
+  for x,y being Element of 1 holds x <> y implies 0 < Empty^2-to-zero.(x,y)
 proof
-  let x,y be Element of {{}};
-  x={} & y={} by TARSKI:def 1;
+  let x,y be Element of 1;
+  x={} & y={} by TARSKI:def 1, CARD_1:87;
   hence thesis;
 end;
 
 theorem Th6:
-  for x,y being Element of {{}} holds
+  for x,y being Element of 1 holds
   Empty^2-to-zero.(x,y) = Empty^2-to-zero.(y,x)
 proof
-  let x,y be Element of {{}};
-  x={} & y={} by TARSKI:def 1;
+  let x,y be Element of 1;
+  x={} & y={} by TARSKI:def 1, CARD_1:87;
   hence thesis;
 end;
 
 theorem Th7:
-  for x,y,z being Element of {{}} holds
+  for x,y,z being Element of 1 holds
   Empty^2-to-zero.(x,z) <= Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z)
 proof
-  let x,y,z be Element of {{}};
-  x={} & y={} & z={} by TARSKI:def 1;
-  hence thesis by Lm2;
+  let x,y,z be Element of 1;
+   x = {} & y = {} & z = {} by TARSKI:def 1,CARD_1:87;
+  then Empty^2-to-zero.(x,z) = 0 & Empty^2-to-zero.(x,y) = 0
+   & Empty^2-to-zero.(y,z) = 0 by Th4;
+  hence thesis;
 end;
 
 theorem Th8:
-  for x,y,z being Element of {{}} holds
+  for x,y,z being Element of 1 holds
   Empty^2-to-zero.(x,z) <= max(Empty^2-to-zero.(x,y),Empty^2-to-zero.(y,z))
 proof
-  let x,y,z be Element of {{}};
-  x={} & y={} & z={} by TARSKI:def 1;
+  let x,y,z be Element of 1;
+  x={} & y={} & z={} by TARSKI:def 1, CARD_1:87;
   hence thesis;
 end;
-set M0=MetrStruct(#{{}},Empty^2-to-zero#);
+set M0=MetrStruct(#1,Empty^2-to-zero#);
 
 definition
   mode PseudoMetricSpace is Reflexive symmetric triangle
@@ -158,7 +156,7 @@ A2: the distance of M is Discerning by Def2;
 end;
 
 registration
-  cluster MetrStruct(#{{}},Empty^2-to-zero#) -> Reflexive symmetric Discerning
+  cluster MetrStruct(#1,Empty^2-to-zero#) -> Reflexive symmetric Discerning
     triangle;
   coherence
   proof
@@ -291,28 +289,10 @@ end;
 definition
   func Set_to_zero -> Function of [:{{},{{}}},{{},{{}}}:],REAL equals
   [:{{},{{}}},{{},{{}}}:] --> 0;
-  coherence
-  proof
-    set X =[:{{},{{}}},{{},{{}}}:];
-    {0} c= REAL & X <> {};
-    then X = dom(X --> 0) & rng(X --> 0) c= REAL by FUNCOP_1:14,19;
-    hence thesis by FUNCT_2:def 1,RELSET_1:11;
-  end;
+  coherence;
 end;
 
-canceled 20;
-
-theorem
-  [{},{}] in [:{{},{{}}},{{},{{}}}:] & [{},{{}}] in [:{{},{{}}},{{},{{}}}:] &
-  [{{}},{}] in [:{{},{{}}},{{},{{}}}:] &
-  [{{}},{{}}] in [:{{},{{}}},{{},{{}}}:]
-proof
-A1: {} in {{},{{}}} & {{}} in {{},{{}}} by TARSKI:def 2;
-  hence [{},{}] in [:{{},{{}}},{{},{{}}}:] by ZFMISC_1:106;
-  thus [{},{{}}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
-  thus [{{}},{}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
-  thus [{{}},{{}}] in [:{{},{{}}},{{},{{}}}:] by A1,ZFMISC_1:106;
-end;
+canceled 21;
 
 theorem Th40:
   for x,y being Element of {{},{{}}} holds Set_to_zero.(x,y) = 0

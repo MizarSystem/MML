@@ -11,15 +11,14 @@ environ
       FINSET_1, PETRI, RELOC, INT_1, ORDINAL2, ARYTM;
  notations TARSKI, XBOOLE_0, DOMAIN_1, RELAT_1, FUNCT_1, SUBSET_1, FINSET_1,
       PARTFUN1, CARD_1, FINSEQ_1, FUNCT_2, FUNCOP_1, NUMBERS, ORDINAL1,
-      XCMPLX_0, NAT_1, BINARITH, MCART_1, FINSEQ_2, FINSEQ_4, LANG1, FUNCT_7,
-      INT_1, XXREAL_0, VALUED_1;
- constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_1,
-      FINSEQ_4, BINARITH, FUNCT_7, LANG1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, NAT_1,
-      XREAL_0, INT_1, FINSEQ_1, FUNCT_7, GRAPH_2, FINSET_1, VALUED_0, VALUED_1,
-      FUNCT_2, MEMBERED, NUMBERS, RELSET_1;
+      XCMPLX_0, NAT_1, BINARITH, MCART_1, FINSEQ_2, LANG1, FUNCT_7, INT_1,
+      XXREAL_0, VALUED_1;
+ constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINARITH,
+      FUNCT_7, LANG1, VALUED_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XREAL_0, INT_1, FINSEQ_1,
+      FUNCT_7, GRAPH_2, FINSET_1, VALUED_0, VALUED_1, FUNCT_2, MEMBERED;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1, VALUED_1;
+ definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, REAL_1, REAL_2, RELSET_1, FUNCOP_1,
       XBOOLE_1, CARD_1, RELAT_1, MCART_1, INT_1, FINSEQ_1, FUNCT_7, XBOOLE_0,
       TREES_2, FINSEQ_3, ENUMSET1, ZFMISC_1, GRFUNC_1, PRE_CIRC, CARD_2,
@@ -74,7 +73,7 @@ A1: dom q c= Seg k by FINSEQ_1:def 12;
     assume
 A2: q = {};
 A3: Seq q = q*Sgm dom q by FINSEQ_1:def 14;
-    dom q = {} by A2,FINSEQ_1:26;
+    dom q = {} by A2,RELAT_1:60;
     hence Seq q = q*{} by A1,A3,FINSEQ_1:72
       .= {};
   end;
@@ -419,28 +418,6 @@ notation
   let m be marking of P;
   let p be set;
   synonym m multitude_of p for m.p;
-end;
-
-definition
-  let P be set;
-  let m be marking of P;
-  let p be set;
-  redefine func m multitude_of p -> Element of NAT;
-  coherence
-  proof
-A1: rng m c= NAT by Def1;
-    p in dom m or not p in dom m;
-    then m.p in rng m or m.p = 0 by FUNCT_1:12,def 4;
-    hence m.p is Element of NAT by A1;
-  end;
-  redefine func m.p -> Element of NAT;
-  coherence
-  proof
-A2: rng m c= NAT by Def1;
-    p in dom m or not p in dom m;
-    then m.p in rng m or m.p = 0 by FUNCT_1:12,def 4;
-    hence m.p is Element of NAT by A2;
-  end;
 end;
 
 scheme MarkingLambda { P() -> set, F(set) -> Element of NAT }:
@@ -1046,46 +1023,46 @@ definition
     deffunc G(set) = fire (C/.$1 qua Element of N);
     consider F being FinSequence such that
 A1: len F = len C and
-A2: for k being Nat st k in Seg len C holds F.k = G(k) from FINSEQ_1:sch 2;
-A3: dom F = Seg len F & dom C = Seg len C by FINSEQ_1:def 3;
+A2: for k being Nat st k in dom F holds F.k = G(k) from FINSEQ_1:sch 2;
+A4: dom F = Seg len F & dom C = Seg len C by FINSEQ_1:def 3;
     F is Function-yielding
     proof
       let x be set;
       assume
-A4:   x in dom F;
+A5:   x in dom F;
       then reconsider i = x as Element of NAT;
-      F.x = fire (C/.i qua Element of N) by A1,A2,A3,A4;
+      F.x = fire (C/.i qua Element of N) by A2,A5;
       hence thesis;
     end;
     then reconsider F as Function-yielding FinSequence;
     take f = compose(F, Funcs(P, NAT)), F;
     thus f = compose(F, Funcs(P, NAT));
     thus len F = len C & for i being Element of NAT st i in dom C
-    holds F.i = fire (C /. i qua Element of N) by A1,A2,A3;
+    holds F.i = fire (C /. i qua Element of N) by A1,A2,A4;
   end;
   uniqueness
   proof
     let f1,f2 be Function;
     given F1 being Function-yielding FinSequence such that
-A5: f1 = compose(F1, Funcs(P, NAT)) and
-A6: len F1 = len C and
-A7: for i being Element of NAT st i in dom C
+A6: f1 = compose(F1, Funcs(P, NAT)) and
+A7: len F1 = len C and
+A8: for i being Element of NAT st i in dom C
     holds F1.i = fire (C/.i qua Element of N);
     given F2 being Function-yielding FinSequence such that
-A8: f2 = compose(F2, Funcs(P, NAT)) and
-A9: len F2 = len C and
-A10: for i being Element of NAT st i in dom C
+A9: f2 = compose(F2, Funcs(P, NAT)) and
+A10: len F2 = len C and
+A11: for i being Element of NAT st i in dom C
     holds F2.i = fire (C/.i qua Element of N);
-A11: dom F1 = Seg len F1 & dom F2 = Seg len F2 & dom C = Seg len C
+A12: dom F1 = Seg len F1 & dom F2 = Seg len F2 & dom C = Seg len C
     by FINSEQ_1:def 3;
     now
       let i be Nat;
       assume
-A12:  i in dom C;
-      then F1.i = fire (C/.i qua Element of N) by A7;
-      hence F1.i = F2.i by A10,A12;
+A13:  i in dom C;
+      then F1.i = fire (C/.i qua Element of N) by A8;
+      hence F1.i = F2.i by A11,A13;
     end;
-    hence thesis by A5,A6,A8,A9,A11,FINSEQ_1:17;
+    hence thesis by A6,A7,A9,A10,A12,FINSEQ_1:17;
   end;
 end;
 
@@ -1099,7 +1076,7 @@ A1: fire(<*>N) = compose(F, Funcs(P, NAT)) and
 A2: len F = len <*>N and for i being Element of NAT st i in dom <*>N holds
   F.i = fire ((<*>N)/.i qua Element of N) by Def11;
   len F = 0 by A2,FINSEQ_1:32;
-  then F = {} by FINSEQ_1:25;
+  then F = {} by CARD_2:59;
   hence thesis by A1,FUNCT_7:41;
 end;
 
@@ -1174,7 +1151,7 @@ A1: P[0]
   proof
     let F be Function-yielding FinSequence;
     assume len F = 0;
-    then F = {} by FINSEQ_1:25;
+    then F = {} by CARD_2:59;
     then compose(F, Funcs(P, NAT)) = id Funcs(P, NAT) by FUNCT_7:41;
     hence thesis by RELAT_1:71;
   end;
@@ -1440,7 +1417,6 @@ end;
 theorem Th45:
   {C1} before {C2} = {C1^C2}
 proof
-  set X = {fs1^fs2: fs1 in {C1} & fs2 in {C2}};
   thus {C1} before {C2} c= {C1^C2}
   proof
     let x;
@@ -1573,8 +1549,6 @@ theorem Th49:
 proof
   set C1 = <*e1*>, C2 = <*e2*>;
   set R1 = {C1}, R2 = {C2};
-  set X = {C: ex q1,q2 being FinSubsequence st C = q1 \/ q2 & q1 misses q2 &
-  Seq q1 in R1 & Seq q2 in R2};
   thus {C1} concur {C2} c= {<*e1,e2*>, <*e2,e1*>}
   proof
     let x;
@@ -2095,22 +2069,23 @@ proof
 A1: p1 = {} & p2 = {};
     then
 A2: dom (p1 \/ ((len p1) Shift p2)) = dom p1 by Th55;
-    len p2 = 0 by A1,FINSEQ_1:25;
+    len p2 = 0 by A1,CARD_1:47;
     hence thesis by A2,FINSEQ_1:def 3;
   end;
   suppose
 A3: p1 <> {} & p2 = {};
     then
 A4: (len p1) Shift p2 = {} by Th55;
-    len p2 = 0 by A3,FINSEQ_1:25;
+    len p2 = 0 by A3,CARD_1:47;
     hence thesis by A4,FINSEQ_1:def 3;
   end;
   suppose
 A5: p1 = {} & p2 <> {};
-    then dom (p1 \/ ((len p1) Shift p2)) = dom (0 Shift p2) by FINSEQ_1:25
+    then dom (p1 \/ ((len p1) Shift p2)) = dom (0 Shift p2)
+     by CARD_1:47
       .= dom p2 by Th52
       .= Seg (0 qua Nat+len p2) by FINSEQ_1:def 3
-      .= Seg (len p1 + len p2) by A5,FINSEQ_1:25;
+      .= Seg (len p1 + len p2) by A5,CARD_1:47;
     hence thesis;
   end;
   suppose
@@ -3053,7 +3028,7 @@ A3: ss = q1 \/ (len p1 Shift q2) by A1,Th79;
     then
 A4: dom Seq ss = Seg len Seq q1 by A3,FINSEQ_1:def 3;
     Seq q2 = {} by A2,Th2;
-    then len Seq q2 = 0 by FINSEQ_1:25;
+    then len Seq q2 = 0 by CARD_1:47;
     hence thesis by A3,A4;
   end;
   suppose
@@ -3111,7 +3086,7 @@ A6: q1 = {} & q2 <> {};
     then
 A7: Seq ss = Seq q2 by A2,Th77;
 A8: Seq q1 = {} by A6,Th2;
-    then len Seq q1 = 0 by FINSEQ_1:25;
+    then len Seq q1 = 0 by CARD_1:47;
     then Seq q1 \/ (len Seq q1 Shift Seq q2) = Seq q2 by A8,Th52;
     hence thesis by A2,A3,A7;
   end;

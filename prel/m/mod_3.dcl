@@ -11,17 +11,17 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_4"/>
 <ArticleID name="MOD_3"/>
@@ -30,11 +30,11 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="73"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="71"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
@@ -46,12 +46,12 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="83">
+<Adjective nr="12" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="81">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="84">
+<Adjective nr="82">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="87"/>

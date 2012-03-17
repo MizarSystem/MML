@@ -14,22 +14,21 @@ environ
       NUMBERS, XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, BINARITH, ABIAN,
       SQUARE_1, NEWTON, FINSET_1, PEPIN, NAT_3, RELAT_1, REAL_1, FUNCT_1,
       FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, PRE_CIRC, POWER,
-      MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1;
+      MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1, RECDEF_1;
  constructors REAL_1, NAT_1, NAT_D, FINSEQOP, PREPOWER, POWER, BINARITH,
-      PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3, VALUED_1, PARTFUN1,
-      SEQ_1;
+      PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3, SEQ_1, RECDEF_1,
+      BINOP_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
-      FINSEQ_2, RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0,
-      VALUED_1, FUNCT_2;
+      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2,
+      RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON, VALUED_1;
+ definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON;
  theorems TARSKI, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1,
       CARD_2, FINSET_1, SQUARE_1, EULER_1, EULER_2, BINARITH, PREPOWER, POWER,
       ABSVALUE, NEWTON, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1,
       CARD_4, XBOOLE_0, PRE_CIRC, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
       FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1, PROB_3, INTEGRA5,
-      COMPTRIG, XXREAL_0, SEQ_1, NAT_D, VALUED_1;
+      COMPTRIG, XXREAL_0, NAT_D, VALUED_1;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -938,7 +937,6 @@ A9: not(a div (x|^(x|-count a)) is non empty Nat);
     suppose x|-count a=0;
       then
 A10:  x|^(x|-count a)=1 by NEWTON:9;
-      set n = x|^(x|-count a);
       thus contradiction by A9,A10,NAT_2:6;
     end;
     suppose x|-count a<>0;
@@ -3255,7 +3253,6 @@ A15: q-'1=q-1 by BINARITH:50;
 A16: q=n+1 by A15;
     set a = Product Sgm{p where p is prime Element of NAT:p<=q};
     set b = 4 to_power (q-1);
-    set c = 4 to_power (x-1);
     a<=b by A16,Th45;
     hence thesis by A10,A14,XXREAL_0:2;
   end;
@@ -3297,7 +3294,7 @@ A5:   not p|^k divides n;
   end;
   consider f being FinSequence such that
 A6: dom f = Seg n and
-A7: for k being Nat st k in Seg n holds P[k,f.k] from FINSEQ_1:sch 1(A2,A3);
+A7: for k being Nat st k in Seg n holds P[k,f.k] from FINSEQ_1:sch 1(A3);
   now
     let x be set;
     assume x in rng f;
@@ -3327,8 +3324,8 @@ A11: p|^(p |-count n) divides n by A1,NAT_3:def 7;
 A12: p |^ (p |-count n) <= n by A11,NAT_D:7;
 A13: p>1 by INT_2:def 5;
     then p to_power n < p to_power (p |-count n) by A10,POWER:44;
-    then p |^ n < p to_power (p |-count n) by POWER:48;
-    then p |^ n < p |^ (p |-count n) by POWER:48;
+    then p |^ n < p to_power (p |-count n) by POWER:46;
+    then p |^ n < p |^ (p |-count n) by POWER:46;
     then p |^ n < n by A12,XXREAL_0:2;
     hence contradiction by A13,Th3;
   end;
@@ -3737,15 +3734,13 @@ A36:  -(f1^f0) is Element of len(-(f1^f0))-tuples_on REAL by FINSEQ_2:110;
 end;
 
 Lm8: for n,r being Element of NAT, p being Prime, f being FinSequence of REAL
-st n>=2 & p|^r <= 2*n & 2*n < p|^(r+1) & len f = 2*n &
+st p|^r <= 2*n & 2*n < p|^(r+1) & len f = 2*n &
 (for k being Element of NAT st k in dom f
 holds f.k=[\(2*n)/(p|^k)/] - 2*[\n/(p|^k)/]) holds Sum f <= r
 proof
   let n,r be Element of NAT;
   let p be Prime;
   let f be FinSequence of REAL;
-  assume
-A1: n>=2;
   assume
 A2: p|^r <= 2*n;
   assume
@@ -3755,12 +3750,6 @@ A4: len f = 2*n;
   assume
 A5: for k being Element of NAT st k in dom f
   holds f.k=[\(2*n)/(p|^k)/] - 2*[\n/(p|^k)/];
-  n*2<>0*2 by A1;
-  then f<>{} by A4,FINSEQ_1:25;
-  then dom f<>{} by FINSEQ_1:26;
-  then consider k being set such that
-A6: k in dom f by XBOOLE_0:def 1;
-  reconsider k as Element of NAT by A6;
   set f0 = (r |-> 1)^((2*n -' r)|-> 0);
 A7: p>1 by INT_2:def 5;
 A8: 2*n >= r
@@ -3976,9 +3965,9 @@ A30:    2<=k by NAT_1:13;
 A31:    2*n<p|^(1+1) by NEWTON:11;
         p>1 & (k=2 or 2<k) by A30,INT_2:def 5,XXREAL_0:1;
         then p to_power 2 <= p to_power k by POWER:44;
-        then p|^2 <= p to_power k by POWER:48;
+        then p|^2 <= p to_power k by POWER:46;
         then
-A32:    p|^2 <= p|^k by POWER:48;
+A32:    p|^2 <= p|^k by POWER:46;
         then 2*n < p|^k by A31,XXREAL_0:2;
         then 2*n/(p|^k) < (p|^k)/(p|^k) by XREAL_1:76;
         then 2*n/(p|^k) < 1 by XCMPLX_1:60;
@@ -4056,12 +4045,12 @@ A50: 2*n>=p*p by SQUARE_1:def 4;
   then reconsider r as Element of NAT by A48,INT_1:16;
   r < log(p,2*n) or r = log(p,2*n) by A48,XXREAL_0:1;
   then p to_power r <= p to_power log(p,2*n) by A46,POWER:44;
-  then p|^r <= p to_power log(p,2*n) by POWER:48;
+  then p|^r <= p to_power log(p,2*n) by POWER:46;
   then
 A51: p|^r <= 2*n by A46,A50,POWER:def 3;
   log(p,2*n) - 1 +1 < r +1 by A48,XREAL_1:8;
   then p to_power log(p,2*n) < p to_power (r+1) by A46,POWER:44;
-  then p to_power log(p,2*n) < p|^(r+1) by POWER:48;
+  then p to_power log(p,2*n) < p|^(r+1) by POWER:46;
   then
 A52: 2*n < p|^(r+1) by A46,POWER:def 3;
   set k0=p |-count (2*n choose n);
@@ -4069,8 +4058,8 @@ A52: 2*n < p|^(r+1) by A46,POWER:def 3;
   then k0 <= r by A2,A51,A52;
   then k0 = r or k0 < r by XXREAL_0:1;
   then p to_power k0 <= p to_power r by A46,POWER:44;
-  then p|^k0 <= p to_power r by POWER:48;
-  then p|^k0 <= p|^r by POWER:48;
+  then p|^k0 <= p to_power r by POWER:46;
+  then p|^k0 <= p|^r by POWER:46;
   hence p|^(p |-count (2*n choose n)) <= 2*n by A51,XXREAL_0:2;
 end;
 
@@ -4085,16 +4074,14 @@ definition
     deffunc F(Nat) = p |-count f.$1;
     consider g being FinSequence such that
 A1: len g = len f and
-A2: for k being Nat st k in Seg len f holds g.k = F(k) from FINSEQ_1:sch 2;
-A3: dom g = Seg len g by FINSEQ_1:def 3;
+A2: for k being Nat st k in dom g holds g.k = F(k) from FINSEQ_1:sch 2;
     now
       let y be set;
       assume y in rng g;
       then consider x be set such that
-A4:   x in dom g & y=g.x by FUNCT_1:def 5;
-      reconsider x as Element of NAT by A4;
-      x in Seg len f by A1,A4,FINSEQ_1:def 3;
-      then y=F(x) by A2,A4;
+A5:   x in dom g & y=g.x by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A5;
+      y=F(x) by A2,A5;
       hence y in NAT;
     end;
     then rng g c= NAT by TARSKI:def 3;
@@ -4103,28 +4090,28 @@ A4:   x in dom g & y=g.x by FUNCT_1:def 5;
     thus len g = len f by A1;
     let i be set;
     assume
-A5: i in dom g;
+A6: i in dom g;
     then i is Nat by ORDINAL1:def 13;
-    hence thesis by A1,A2,A3,A5;
+    hence thesis by A2,A6;
   end;
   uniqueness
   proof
     let g,h be FinSequence of NAT such that
-A6: len g = len f and
-A7: for i being set st i in dom g holds g.i = p |-count f.i and
-A8: len h = len f and
-A9: for i being set st i in dom h holds h.i = p |-count f.i;
-A10: dom g = Seg len g by FINSEQ_1:def 3;
-A11: dom h = Seg len h by FINSEQ_1:def 3;
+A7: len g = len f and
+A8: for i being set st i in dom g holds g.i = p |-count f.i and
+A9: len h = len f and
+A10: for i being set st i in dom h holds h.i = p |-count f.i;
+A11: dom g = Seg len g by FINSEQ_1:def 3;
+A12: dom h = Seg len h by FINSEQ_1:def 3;
     for k being Nat st k in dom g holds g.k = h.k
     proof
       let k be Nat;
       assume
-A12:  k in dom g;
-      hence g.k = p |-count f.k by A7
-        .= h.k by A6,A8,A9,A10,A11,A12;
+A13:  k in dom g;
+      hence g.k = p |-count f.k by A8
+        .= h.k by A7,A9,A10,A11,A12,A13;
     end;
-    hence g = h by A6,A8,A10,A11,FINSEQ_1:17;
+    hence g = h by A7,A9,A11,A12,FINSEQ_1:17;
   end;
 end;
 
@@ -4135,7 +4122,7 @@ proof
   let f be FinSequence of NAT;
   assume f={};
   then len (p |-count f) = len {} by Def1;
-  hence p |-count f = {} by FINSEQ_1:25;
+  hence p |-count f = {} by CARD_2:59;
 end;
 
 theorem Th51:
@@ -4231,7 +4218,7 @@ A1: P[0]
     let p be Prime;
     assume 0=len f & Product f<>0;
     then
-A2: f={} by FINSEQ_1:25;
+A2: f={} by CARD_2:59;
     then
 A3: Sum (p |-count f) = 0 by Th50,RVSUM_1:102;
     p<>1 by INT_2:def 5;
@@ -4291,8 +4278,8 @@ A1: P[0]
   proof
     let f1,f2 be FinSequence of REAL;
     assume len f1 = len f2 & 0=len f1;
-    then f1={} & len f2 = 0 by FINSEQ_1:25;
-    hence thesis by FINSEQ_1:25;
+    then f1={} & len f2 = 0 by CARD_2:59;
+    hence thesis by CARD_2:59;
   end;
 A2: for n being Element of NAT st P[n] holds P[n+1]
   proof
@@ -5329,7 +5316,6 @@ A14:  x in X3 by XBOOLE_0:def 1;
     then
 A15: m = (Product Sgm X1)*(Product Sgm X2)*1
     by A2,Lm10,FINSEQ_3:49,RVSUM_1:124,XXREAL_0:2;
-    set XX=Seg m;
 A16: m <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1))
     by A6,A13,A15,XREAL_1:68;
     4|^n / (2*n) <= m by Th6;
@@ -5392,7 +5378,7 @@ A26: (n1+1) to_power 6 <= (2 to_power (6-root(2*n))) to_power 6 by POWER:42;
     then
 A27: (sqrt(2*n)+1)*3>0*3 by XREAL_1:70;
     reconsider 2n=2*n as real number;
-A28: 6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:47
+A28: 6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:46
       .= 2n by COMPTRIG:17;
     6-root(2*n) to_power 6 < (n1+1) to_power 6 by A23,A24,POWER:42;
     then 2*n < (2 to_power (6-root(2*n))) to_power 6 by A26,A28,XXREAL_0:2;

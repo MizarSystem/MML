@@ -16,9 +16,9 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="METRIC_6"/>
 </Signature>
 <RCluster>
@@ -41,7 +41,6 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="7"/>
@@ -58,12 +57,6 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="46">
-<Func kind="K" nr="66"/>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -149,7 +142,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

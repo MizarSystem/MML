@@ -30,6 +30,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
@@ -53,7 +54,6 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="YELLOW_0"/>
@@ -117,7 +117,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="486">
+<Func kind="K" nr="487">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -141,7 +141,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="575">
+<Func kind="K" nr="576">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -169,7 +169,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="575">
+<Func kind="K" nr="576">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -202,7 +202,7 @@
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="575">
+<Func kind="K" nr="576">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -210,7 +210,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="453">
+<Func kind="K" nr="454">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -220,7 +220,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="572"/>
+<Func kind="K" nr="573"/>
 <Cluster>
 <Adjective nr="49" value="false"/>
 <Adjective nr="52"/>
@@ -236,8 +236,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
+<Func kind="K" nr="452">
 <Func kind="K" nr="451">
-<Func kind="K" nr="450">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -263,7 +263,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="218">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -291,7 +291,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="4">
-<Func kind="K" nr="218">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

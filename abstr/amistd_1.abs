@@ -10,18 +10,17 @@ environ
       RELAT_1, AMI_1, BOOLE, FUNCT_1, SGRAPH1, FUNCOP_1, CAT_1, GRAPH_2,
       FINSEQ_4, FUNCT_4, CARD_3, AMI_5, SETFAM_1, TARSKI, GOBOARD5, ARYTM_1,
       ORDINAL1, FUNCT_2, FRECHET, PRE_TOPC, WAYBEL_0, CARD_1, AMISTD_1,
-      MEMBERED, NAT_1;
+      MEMBERED;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
       CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1,
       RELSET_1, PARTFUN1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
       FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, FUNCT_2, AMI_1;
- constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, SEQ_1,
-      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, STRUCT_0, GRAPH_2, AMI_1, INT_2,
-      VALUED_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
-      MEMBERED, FINSEQ_1, CARD_3, REALSET1, FINSEQ_5, PRE_CIRC, FUNCT_7,
-      STRUCT_0, AMI_1, CARD_4, JORDAN1J, VALUED_1;
+ constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, FINSEQ_4,
+      REALSET1, BINARITH, PRE_CIRC, AMI_1, INT_2;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, MEMBERED,
+      FINSEQ_1, CARD_3, REALSET1, FINSEQ_5, PRE_CIRC, FUNCT_7, STRUCT_0, AMI_1,
+      JORDAN1J, CARD_1;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
 
 
@@ -452,7 +451,7 @@ definition
   let N be with_non-empty_elements set;
   let S be IC-Ins-separated definite
   (non empty stored-program AMI-Struct over IL,N);
-  let F be FinPartState of S;
+  let F be programmed FinPartState of S;
   attr F is closed means
 :: AMISTD_1:def 17
 
@@ -461,7 +460,7 @@ definition
   attr F is really-closed means
 :: AMISTD_1:def 18
   for s being State of S st F c= s & IC s in dom F
-  for k being Element of NAT holds IC (Computation s).k in dom F;
+  for k being Element of NAT holds IC  Computation(s,k) in dom F;
 end;
 
 definition
@@ -472,17 +471,19 @@ definition
   attr F is para-closed means
 :: AMISTD_1:def 19
   for s being State of S st F c= s & IC s = il.(S,0)
-  for k being Element of NAT holds IC (Computation s).k in dom F;
+  for k being Element of NAT holds IC  Computation(s,k) in dom F;
 end;
 
 theorem :: AMISTD_1:44
   for S being standard steady-programmed (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over NAT,N)), F being FinPartState of S
+  (non empty stored-program AMI-Struct over NAT,N)),
+  F being programmed FinPartState of S
   st F is really-closed & il.(S,0) in dom F holds F is para-closed;
 
 theorem :: AMISTD_1:45
   for S being IC-Ins-separated definite steady-programmed
-  (non empty stored-program AMI-Struct over IL,N), F being FinPartState of S
+  (non empty stored-program AMI-Struct over IL,N),
+  F being programmed FinPartState of S
   st F is closed holds F is really-closed;
 
 registration
@@ -490,7 +491,7 @@ registration
   let N be with_non-empty_elements set,
   S be IC-Ins-separated definite steady-programmed
   (non empty stored-program AMI-Struct over IL,N);
-  cluster closed -> really-closed FinPartState of S;
+  cluster closed -> really-closed (programmed FinPartState of S);
 end;
 
 theorem :: AMISTD_1:46
@@ -576,8 +577,8 @@ registration
   let N be with_non-empty_elements set,
   S be standard steady-programmed (IC-Ins-separated
   definite (non empty stored-program AMI-Struct over NAT,N));
-  cluster really-closed lower non empty programmed -> para-closed
-    FinPartState of S;
+  cluster really-closed lower non empty  -> para-closed
+    (programmed FinPartState of S);
 end;
 
 definition
@@ -607,7 +608,7 @@ registration
   let N be with_non-empty_elements set;
   let S be standard halting realistic (IC-Ins-separated
   definite (non empty stored-program AMI-Struct over NAT,N));
-  cluster trivial closed lower non empty programmed FinPartState of S;
+  cluster trivial closed lower non empty (programmed FinPartState of S);
 end;
 
 registration
@@ -648,4 +649,20 @@ theorem :: AMISTD_1:56
 theorem :: AMISTD_1:57
   for i being Element of the Instructions of Trivial-AMI(IL,N) holds
   InsCode i = 0;
+
+begin :: Addenda
+
+:: from SCMPDS_9, 2008.03.10, A.T.
+
+theorem :: AMISTD_1:58
+  for IL being non empty set for N being with_non-empty_elements set,
+  S being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N), i being Instruction of S,
+  l being Instruction-Location of S holds JUMP(i) c= NIC(i,l);
+
+theorem :: AMISTD_1:59
+  for IL being non empty set for N being with_non-empty_elements set,
+  S being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
+  l1, l2 being Instruction-Location of S st SUCC(l1) = IL holds l1 <= l2;
 

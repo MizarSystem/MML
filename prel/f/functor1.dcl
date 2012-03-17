@@ -21,6 +21,7 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
@@ -32,51 +33,51 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="61"/>
-<Adjective nr="64"/>
+<Adjective nr="62"/>
+<Adjective nr="72"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="75"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="22">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="75"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="75"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="85">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -84,22 +85,22 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="22">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="75"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="223">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="85">
 <LocusVar nr="4"/>
 <LocusVar nr="2"/>
 </Adjective>

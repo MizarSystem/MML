@@ -1,0 +1,1378 @@
+:: Ideals of BCI-Algebras and Their Properties
+::  by Chenglong Wu and Yuzhong Ding
+:: 
+:: Received March 3, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BINOP_1, BCIALG_1, BOOLE, RLVECT_1, WAYBEL15, FILTER_2, PRE_TOPC,
+      SUBSET_1, BCIIDEAL, ASYMPT_0, CHORD;
+ notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, RLVECT_1,
+      BINOP_1, STRUCT_0, GROUP_1, VECTSP_1, MIDSP_1, VECTSP_2, NAT_1, RELAT_1,
+      BCIALG_1, BCIALG_2, BCIALG_3;
+ constructors TARSKI, BINOP_1, REAL_1, BINOP_2, RLVECT_1, MEMBERED, XBOOLE_0,
+      GROUP_1, VECTSP_1, MIDSP_1, FUNCT_1, VECTSP_2, REALSET1, STRUCT_0,
+      SUBSET_1, ENUMSET1, ZFMISC_1, RELAT_1, BCIALG_1, POWER, BCIALG_2,
+      BCIALG_3;
+ registrations STRUCT_0, RLVECT_1, RELSET_1, MEMBERED, GROUP_1, XBOOLE_0,
+      REALSET1, SUBSET_1, RELAT_1, BCIALG_1, BCIALG_2, BCIALG_3;
+ requirements NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions BCIALG_1, TARSKI, XBOOLE_0;
+ theorems BCIALG_1, TARSKI, XBOOLE_0, BCIALG_2, BCIALG_3;
+
+begin :: Ideal of X
+
+ reserve X,Y for BCI-algebra;
+ reserve X1 for non empty Subset of X;
+ reserve A,I,I1 for Ideal of X;
+ reserve x,y,z for Element of X;
+ reserve a for Element of A;
+
+::P20
+theorem
+for x,y,z,u being Element of X st x<=y holds u\(z\x)<=u\(z\y)
+proof
+let x,y,z,u be Element of X;
+assume x<=y;
+then z\y<=z\x by BCIALG_1:5;
+hence thesis by BCIALG_1:5;
+end;
+
+theorem
+for x,y,z,u being Element of X holds (x\(y\z))\(x\(y\u))<=z\u
+proof
+let x,y,z,u be Element of X;
+((x\(y\z))\(x\(y\u)))\((y\u)\(y\z))=0.X by BCIALG_1:1;
+then ((x\(y\z))\(x\(y\u)))<=((y\u)\(y\z)) by BCIALG_1:def 11;
+then A2:((x\(y\z))\(x\(y\u)))\(z\u)<=((y\u)\(y\z))\(z\u) by BCIALG_1:5;
+A3:((y\u)\(y\z))\(z\u)=((y\u)\(z\u))\(y\z) by BCIALG_1:7;
+((x\(y\z))\(x\(y\u)))\(z\u)<=0.X by A2,A3,BCIALG_1:def 3;
+then ((x\(y\z))\(x\(y\u)))\(z\u)\0.X=0.X by BCIALG_1:def 11;
+then ((x\(y\z))\(x\(y\u)))\(z\u)=0.X by BCIALG_1:2;
+hence thesis by BCIALG_1:def 11;
+end;
+
+theorem
+for x,y,z,u,v being Element of X holds (x\(y\(z\u)))\(x\(y\(z\v)))<=v\u
+proof
+let x,y,z,u,v be Element of X;
+ (x\(y\(z\u)))\(x\(y\(z\v)))\((y\(z\v))\(y\(z\u)))=0.X by BCIALG_1:1;
+then (x\(y\(z\u)))\(x\(y\(z\v)))
+<=((y\(z\v))\(y\(z\u))) by BCIALG_1:def 11;
+then A2:(x\(y\(z\u)))\(x\(y\(z\v)))\((z\u)\(z\v))
+<=((y\(z\v))\(y\(z\u)))\((z\u)\(z\v)) by BCIALG_1:5;
+A3:((y\(z\v))\(y\(z\u)))\((z\u)\(z\v))=((y\(z\v))\((z\u)\(z\v)))\(y\(z\u))
+                                                            by BCIALG_1:7;
+ (x\(y\(z\u)))\(x\(y\(z\v)))\((z\u)\(z\v))<=0.X by A2,A3,BCIALG_1:def 3;
+then (x\(y\(z\u)))\(x\(y\(z\v)))\((z\u)\(z\v))\0.X=0.X by BCIALG_1:def 11;
+then (x\(y\(z\u)))\(x\(y\(z\v)))\((z\u)\(z\v))=0.X
+by BCIALG_1:2;
+then (x\(y\(z\u)))\(x\(y\(z\v))) <= (z\u)\(z\v) by BCIALG_1:def 11;
+then B1:(x\(y\(z\u)))\(x\(y\(z\v)))\(v\u)<= ((z\u)\(z\v))\(v\u) by BCIALG_1:5;
+ ((z\u)\(z\v))\(v\u)=((z\u)\(v\u))\(z\v) by BCIALG_1:7
+                       .=0.X by BCIALG_1:def 3;
+then (x\(y\(z\u)))\(x\(y\(z\v)))\(v\u)\0.X=0.X by BCIALG_1:def 11,B1;
+then (x\(y\(z\u)))\(x\(y\(z\v)))\(v\u)=0.X by BCIALG_1:2;
+hence thesis by BCIALG_1:def 11;
+end;
+
+theorem
+for x,y being Element of X holds (0.X\(x\y))\(y\x)=0.X
+proof
+let x,y be Element of X;
+A1:(0.X\(x\y))\(y\x)=((x\y)`)\(y\x)
+                    .=(x`\y`)\(y\x) by BCIALG_1:9
+                      .=((0.X\x)\(0.X\y))\(y\x);
+A5:((0.X\x)\(0.X\y))\(y\x)=((0.X\x)\(y\x))\(0.X\y) by BCIALG_1:7;
+ ((0.X\x)\(0.X\y))\(y\x)=(((y\x)`)\x)\(0.X\y) by A5,BCIALG_1:7
+                     .=(((y`\x`))\x)\(0.X\y) by BCIALG_1:9
+                     .=(((y`\x))\x`)\(0.X\y) by BCIALG_1:7
+                     .=(((y`\x))\y`)\x` by BCIALG_1:7
+                     .=(((y`\y`))\x)\x` by BCIALG_1:7
+                     .=x`\x` by BCIALG_1:def 5
+                     .=0.X by BCIALG_1:def 5;
+hence thesis by A1;
+end;
+
+::P26
+definition let X; let a be Element of X;
+  func initial_section(a) equals
+    {x where x is Element of X:x<=a};
+  coherence;
+end;
+
+theorem P141:  ::proposition 1.4.1
+   x<=a implies x in A
+proof
+   assume x<=a;
+   then x\a = 0.X by BCIALG_1:def 11;
+   then x\a in A by BCIALG_1:def 18;
+   hence thesis by BCIALG_1:def 18;
+end;
+
+::P37
+theorem
+  for x,a,b being Element of AtomSet(X)
+      holds x is Element of BranchV(b)
+  implies a\x=a\b
+proof
+  set P = AtomSet(X);
+  let x,a,b be Element of P;
+  set B = BranchV(b);
+  assume A0:x is Element of B;
+A1:x in B by A0;
+  x in {x1 where x1 is Element of X:x1 is minimal};
+  then consider x1 being Element of X such that
+B1:x=x1&x1 is minimal;
+  consider x3 being Element of X such that
+C1:x=x3&b<=x3 by A1;
+  b\x=0.X by BCIALG_1:def 11, C1;
+  hence thesis by BCIALG_1:def 14,B1;
+end;
+
+theorem
+for a being Element of X,x,b being Element of AtomSet(X)
+holds x is Element of BranchV(b)
+implies a\x=a\b
+proof
+set P = AtomSet(X);
+let a be Element of X;
+let x,b be Element of P;
+ set B = BranchV(b);
+ assume A0:x is Element of B;
+ A1:x in B by A0;
+ x in {x1 where x1 is Element of X:x1 is minimal};
+       then consider x1 being Element of X such that
+        B1:x=x1&x1 is minimal;
+      consider x3 being Element of X such that
+        C1:x=x3&b<=x3 by A1;
+       b\x=0.X by BCIALG_1:def 11, C1;
+        hence thesis by BCIALG_1:def 14,B1;
+end;
+
+theorem
+   initial_section(a) c= A
+proof
+   let b be set;
+   assume b in initial_section(a);
+   then consider x1 being Element of X such that
+A3:b=x1 & x1<=a;
+   thus b in A by A3,P141;
+end;
+
+theorem
+  AtomSet(X) is Ideal of X implies
+   (for x being Element of BCK-part(X),a being Element of
+    AtomSet(X) st x\a in AtomSet(X) holds x=0.X)
+ proof
+ set B = BCK-part(X);
+ set P = AtomSet(X);
+ assume A0:P is Ideal of X;
+Lm1:x in {0.X} iff x in B/\P
+  proof
+   thus x in {0.X} implies x in B/\P
+   proof
+   A1:0.X in B by BCIALG_1:19;
+   0.X in P;
+  then 0.X in B/\P by A1,XBOOLE_0:def 3;
+  hence thesis by TARSKI:def 1;
+   end;
+   thus x in B/\P implies x in {0.X}
+   proof
+   assume A1: x in B/\P;
+   then A2:x in B by XBOOLE_0:def 3;
+        consider x1 being Element of X such that
+        B1:x=x1&0.X<=x1 by A2;
+     C: x in {x2 where x2 is Element of X:x2 is minimal} by A1,XBOOLE_0:def 3;
+       consider x2 being Element of X such that
+        B2:x=x2&x2 is minimal by C;
+    0.X\x=0.X by BCIALG_1:def 11,B1;
+    then 0.X=x by B2,BCIALG_1:def 14;
+   hence thesis by TARSKI:def 1;
+   end;
+  end;
+ for x being Element of B,a being Element of P st x\a in P holds x=0.X
+   proof
+ let x be Element of B;
+ let a be Element of P;
+assume A1: x\a in P;
+        x in P by A0,BCIALG_1:def 18,A1;
+       then x in B /\ P by XBOOLE_0:def 3;
+       then x in {0.X} by Lm1;
+       hence thesis by TARSKI:def 1;
+   end;
+   hence thesis;
+  end;
+
+theorem
+  AtomSet(X) is Ideal of X implies
+    AtomSet(X) is closed Ideal of X
+proof
+  set P = AtomSet(X);
+  assume C1:P is Ideal of X;
+  for x being Element of P holds x` in P
+  proof
+    let x be Element of P;
+    x` is minimal by BCIALG_2:30;
+    hence thesis;
+  end;
+  hence thesis by C1,BCIALG_1:def 19;
+end;
+
+::p47
+definition let X,I;
+  attr I is positive means
+    for x being Element of I holds x is positive;
+end;
+
+::P48
+theorem
+   for X being BCK-algebra,A,I being Ideal of X holds
+      (A/\I={0.X} iff for x being Element of A,y being Element of I
+         holds x\y =x )
+   proof
+   let X be BCK-algebra;
+   let A,I be Ideal of X;
+   thus A/\I={0.X} implies(for x being Element of A,y being Element of I holds
+   x\y =x)
+         proof
+         assume B1:A/\I={0.X};
+        let x be Element of A;
+        let y be Element of I;
+        C:(x\y)\x = x\x\y by BCIALG_1:7
+        .=y` by BCIALG_1:def 5
+        .=0.X by BCIALG_1:def 8;
+        C1:(x\(x\y))\x = x\x\(x\y) by BCIALG_1:7
+                    .=(x\y)` by BCIALG_1:def 5
+                     .=0.X by BCIALG_1:def 8;
+         (x\(x\y))<=x by BCIALG_1:def 11,C1;
+        then A1:x\(x\y) in A by P141;
+          x\(x\y)\y=0.X by BCIALG_1:1;
+         then x\(x\y)<=y by BCIALG_1:def 11;
+         then x\(x\y) in I by P141;
+                    then x\(x\y) in {0.X} by B1,A1,XBOOLE_0:def 3;
+          then x\(x\y)=0.X by TARSKI:def 1;
+                  hence thesis by C,BCIALG_1:def 7;
+         end;
+    thus (for x being Element of A,y being Element of I holds
+   x\y =x) implies A/\I={0.X}
+         proof
+         assume A1:for x being Element of A,y being Element of I holds
+   x\y =x;
+         thus A/\I c= {0.X}
+        proof
+         let x be set;
+         assume C:x in A/\I;
+          then reconsider xxx=x as Element of A by XBOOLE_0:def 3;
+            reconsider xx=x as Element of I by C,XBOOLE_0:def 3;
+           xxx\xx=xxx by A1;
+          then x=0.X by BCIALG_1:def 5;
+        hence thesis by TARSKI:def 1;
+         end;
+        let x be set;
+         assume A0:x in {0.X};
+          A2:x =0.X by A0,TARSKI:def 1;
+         A3:0.X in A by BCIALG_1:def 18;
+         0.X in I by BCIALG_1:def 18;
+         hence thesis by A2,A3,XBOOLE_0:def 3;
+        end;
+end;
+
+::P50
+theorem
+   for X being associative BCI-algebra,A being Ideal of X holds A is closed
+proof
+   let X be associative BCI-algebra;
+   let A be Ideal of X;
+   for x being Element of A holds x` in A
+   proof
+   let x be Element of A;
+    0.X\x=x\0.X by BCIALG_1:48
+             .=x by BCIALG_1:2;
+   hence thesis;
+   end;
+   hence thesis by BCIALG_1:def 19;
+end;
+
+theorem
+   for X being BCI-algebra,A being Ideal of X st X is quasi-associative
+       holds A is closed
+proof
+let X be BCI-algebra;
+   let A be Ideal of X;
+   assume A0:X is quasi-associative;
+   for x being Element of A holds x` in A
+   proof
+   let x be Element of A;
+   x`<=x by BCIALG_1:71,A0;
+   hence thesis by P141;
+   end;
+   hence thesis by BCIALG_1:def 19;
+end;
+
+begin :: associative  Ideal of X
+definition let X be BCI-algebra,IT be Ideal of X;
+  attr IT is associative means :Defzzz:
+    0.X in IT & for x,y,z being Element of X st
+      x\(y\z) in IT & y\z in IT holds x in IT;
+end;
+
+registration let X be BCI-algebra;
+  cluster associative Ideal of X;
+  existence
+  proof
+    take Y={0.X};
+    reconsider YY=Y as Ideal of X by BCIALG_1:43;
+    A1:for x,y,z being Element of X st x\(y\z) in YY & y\z in YY holds x=0.X
+    proof
+      let x,y,z be Element of X;
+      assume x\(y\z) in YY & y\z in YY;
+      then x\(y\z)=0.X & y\z=0.X by TARSKI:def 1;
+      hence thesis by BCIALG_1:2;
+    end;
+A3: 0.X in YY&for x,y,z being Element of X st x\(y\z) in YY&y\z in YY
+              holds x=0.X by A1,TARSKI:def 1;
+    0.X in YY&for x,y,z being Element of X st x\(y\z) in YY&y\z in YY
+              holds x in YY by A3;
+    hence thesis by Defzzz;
+  end;
+end;
+
+definition let X be BCI-algebra;
+  mode associative-ideal of X -> non empty Subset of X means :Def8:
+    0.X in it & for x,y,z being Element of X st
+      (x\y)\z in it & y\z in it holds x in it;
+  existence
+  proof
+    take X1=the carrier of X;
+    X1 c= the carrier of X;
+    hence thesis;
+  end;
+end;
+
+theorem
+  X1 is associative-ideal of X implies X1 is Ideal of X
+proof
+   assume A1:X1 is associative-ideal of X;
+   then A3:0.X in X1 by Def8;
+   for x,y being Element of X st x\y in X1&y in X1 holds x in X1
+   proof
+     let x,y be Element of X;
+     assume x\y in X1 & y in X1;
+     then (x\y)\0.X in X1 & y\0.X in X1 by BCIALG_1:2;
+     hence thesis by A1,Def8;
+   end;
+   hence thesis by BCIALG_1:def 18,A3;
+end;
+
+theorem TL31321:
+  I is associative-ideal of X iff
+  (for x,y,z st (x\y)\z in I holds x\(y\z) in I)
+proof
+  thus I is associative-ideal of X implies
+         (for x,y,z st (x\y)\z in I holds x\(y\z) in I)
+    proof
+      assume A:I is associative-ideal of X;
+      let x,y,z such that A1:(x\y)\z in I;
+      x\(x\y)\y =0.X by BCIALG_1:1;
+      then x\(x\y)<= y by BCIALG_1:def 11;
+      then x\(x\y)\(y\z)<= y\(y\z) by BCIALG_1:5;
+      then A5:(x\(x\y)\(y\z))\z <= (y\(y\z))\z by BCIALG_1:5;
+       C:(y\(y\z))\z =0.X by BCIALG_1:1;
+       ((x\(x\y)\(y\z))\z)\0.X=0.X by BCIALG_1:def 11,A5,C;
+      then ((x\(x\y))\(y\z))\z =0.X by BCIALG_1:2;
+      then A8:((x\(x\y))\(y\z))\z in I by Def8,A;
+       ((x\(y\z))\(x\y))\z in I by A8, BCIALG_1:7;
+      hence x\(y\z) in I by Def8,A1,A;
+    end;
+      assume B:for x,y,z st (x\y)\z in I holds x\(y\z) in I;
+      B1:0.X in I by BCIALG_1:def 18;
+      for x,y,z st (x\y)\z in I & y\z in I holds x in I
+        proof
+          let x,y,z such that C:(x\y)\z in I & y\z in I;
+           x\(y\z) in I by B,C;
+          hence x in I by C,BCIALG_1:def 18;
+        end;
+      hence I is associative-ideal of X by B1,Def8;
+end;
+
+theorem
+   I is associative-ideal of X implies for x being Element of X
+                                holds x\(0.X\x) in I
+    proof
+      assume A:I is associative-ideal of X;
+      let x be Element of X;
+      A1:0.X in I by Def8,A;
+       x\x = 0.X by BCIALG_1:def 5;
+      then (x\0.X)\x =0.X by BCIALG_1:2;
+      hence thesis by A,TL31321,A1;
+    end;
+
+theorem
+  (for x being Element of X holds x\(0.X\x) in I) implies
+                             I is closed Ideal of X
+proof
+  assume B:for x being Element of X holds x\(0.X\x) in I;
+  for x1 being Element of I holds x1` in I
+  proof
+    let x1 be Element of I;
+    C3:(0.X\x1)\x1=(0.X\(0.X\(0.X\x1)))\x1 by BCIALG_1:8;
+    (0.X\x1)\x1=(0.X\x1)\(0.X\(0.X\x1)) by C3,BCIALG_1:7;
+    then (0.X\x1)\x1 in I by B;
+    hence thesis by BCIALG_1:def 18;
+  end;
+  hence thesis by BCIALG_1:def 19;
+end;
+
+definition let X be BCI-algebra;
+  mode p-ideal of X -> non empty Subset of X means :Def1:
+    0.X in it & for x,y,z being Element of X st
+      (x\z)\(y\z) in it & y in it holds x in it;
+  existence
+  proof
+    take X1=the carrier of X;
+    X1 c= X1;
+    hence thesis;
+  end;
+end;
+
+theorem
+  X1 is p-ideal of X implies X1 is Ideal of X
+proof
+  assume A1: X1 is p-ideal of X;
+  A3:0.X in X1 by Def1,A1;
+  for x,y being Element of X st x\y in X1 & y in X1 holds x in X1
+  proof
+    let x,y be Element of X;
+    assume x\y in X1 & y in X1;
+    then (x\0.X)\y in X1 & y in X1 by BCIALG_1:2;
+    then (x\0.X)\(y\0.X) in X1 & y in X1 by BCIALG_1:2;
+    hence thesis by A1,Def1;
+  end;
+  hence thesis by A3,BCIALG_1:def 18;
+end;
+
+theorem TL352:
+  for X,I st I is p-ideal of X holds BCK-part(X) c= I
+proof
+  let X,I;
+  assume A1:I is p-ideal of X;
+  then BB:0.X in I by Def1;
+  let x be set;
+  assume x in BCK-part(X);
+  then consider x1 being Element of X such that
+  B1:x=x1&0.X<=x1;
+  reconsider x as Element of X by B1;
+       0.X\x = 0.X by BCIALG_1:def 11,B1;
+  then 0.X\(0.X\x)=0.X by BCIALG_1:2;
+  then (x\x)\(0.X\x)=0.X by BCIALG_1:def 5;
+  hence thesis by Def1,A1,BB;
+end;
+
+theorem
+   BCK-part(X) is p-ideal of X
+proof
+     set A = BCK-part(X);
+     0.X in A & for x,y,z being Element of X st
+        (x\z)\(y\z) in A & y in A holds x in A
+  proof
+ C1:now let x,y,z be Element of X;
+    assume B1: (x\z)\(y\z) in A & y in A;
+    then consider d being Element of X such that
+    B4:y=d & 0.X<=d;
+     B5:y` = 0.X by B4,BCIALG_1:def 11;
+    consider c being Element of X such that
+    B3:((x\z)\(y\z) = c&0.X<=c) by B1;
+         ((x\z)\(y\z))`= 0.X by BCIALG_1:def 11,B3;
+         then ((x\z)`)\((y\z)`)=0.X by BCIALG_1:9;
+         then (x`\z`)\((y\z)`)=0.X by BCIALG_1:9;
+         then ((x`\z`)\(0.X\z`))\(x`\0.X)=(x`\0.X)` by B5,BCIALG_1:9;
+         then ((x`\z`)\(0.X\z`))\(x`\0.X)=x`` by BCIALG_1:2;
+         then 0.X = 0.X\(0.X\x) by BCIALG_1:def 3;
+         then 0.X\x = 0.X by BCIALG_1:1;
+         then 0.X <= x by BCIALG_1:def 11;
+       hence x in A;
+    end;
+    0.X\0.X=0.X by BCIALG_1:def 5;
+    then 0.X <= 0.X by BCIALG_1:def 11;
+   hence thesis by C1;
+  end;
+  hence thesis by Def1;
+end;
+
+theorem TL358:
+  I is p-ideal of X iff (for x,y st x in I & x<=y holds y in I)
+proof
+  thus I is p-ideal of X implies (for x,y st x in I & x<=y holds y in I)
+    proof
+      assume A:I is p-ideal of X;
+      let x,y such that A2: x in I & x <= y;
+      AC:BCK-part(X) c= I by A,TL352;
+      A3:x\y = 0.X & x in I by BCIALG_1:def 11,A2;
+      then (y\x)`=x\y by BCIALG_1:6;
+      then 0.X <= y\x by BCIALG_1:def 11,A3;
+      then y\x in BCK-part(X);
+      hence thesis by A2,BCIALG_1:def 18,AC;
+    end;
+      assume B:for x,y st x in I & x<=y holds y in I;
+       B1:0.X in I by BCIALG_1:def 18;
+      for x,y,z st (x\z)\(y\z) in I & y in I holds x in I
+        proof
+          let x,y,z such that C1:(x\z)\(y\z) in I & y in I;
+          ((x\z)\(y\z))\(x\y)=0.X by BCIALG_1:def 3;
+         then ((x\z)\(y\z))<= x\y by BCIALG_1:def 11;
+         then x\y in I by C1,B;
+         hence x in I by C1,BCIALG_1:def 18;
+        end;
+   hence I is p-ideal of X by Def1,B1;
+end;
+
+theorem
+  I is p-ideal of X iff (for x,y,z st (x\z)\(y\z) in I holds x\y in I)
+proof
+  thus I is p-ideal of X implies (for x,y,z st (x\z)\(y\z) in I holds x\y in I)
+    proof
+      assume A: I is p-ideal of X;
+      let x,y,z such that A2:(x\z)\(y\z) in I;
+      (x\z)\(y\z)\(x\y) = 0.X by BCIALG_1:def 3;
+      then (x\z)\(y\z) <= (x\y) by BCIALG_1:def 11;
+      hence thesis by A2,TL358,A;
+    end;
+      assume B:for x,y,z st (x\z)\(y\z) in I holds x\y in I;
+       B1:0.X in I by BCIALG_1:def 18;
+      for x,y,z st (x\z)\(y\z) in I & y in I holds x in I
+        proof
+          let x,y,z such that C1:(x\z)\(y\z) in I&y in I;
+           x\y in I by B,C1;
+          hence x in I by BCIALG_1:def 18,C1;
+        end;
+      hence I is p-ideal of X by B1,Def1;
+end;
+
+begin :: P132: commutative Ideal of X
+
+definition let X be BCK-algebra, IT be Ideal of X;
+  attr IT is commutative means :Def4:
+    for x,y,z being Element of X st
+      (x\y)\z in IT & z in IT holds x\(y\(y\x)) in IT;
+end;
+
+registration let X be BCK-algebra;
+  cluster commutative Ideal of X;
+existence
+   proof
+    set X1 = BCK-part(X);
+    take X1;
+ A2:X1 is Ideal of X
+ proof
+A1: 0.X in BCK-part(X) by BCIALG_1:19;
+     for x,y being Element of X st x\y in X1 & y in X1 holds x in X1
+    proof
+     let x,y be Element of X such that
+    A2:x\y in X1 & y in X1;
+        consider x1 being Element of X such that
+        B1:x\y=x1&0.X<=x1 by A2;
+        consider x2 being Element of X such that
+        B2:y=x2&0.X<=x2 by A2;
+          A6:y`=0.X by B2,BCIALG_1:def 11;
+        (x\y)`=0.X by B1,BCIALG_1:def 11;
+     then x`\0.X = 0.X by A6,BCIALG_1:9;
+     then 0.X\x=0.X by BCIALG_1:2;
+     then 0.X<= x by BCIALG_1:def 11;
+     hence x in X1;
+    end;
+    hence thesis by BCIALG_1:def 18,A1;
+ end;
+ for x,y,z being Element of X st (x\y)\z in X1 & z in X1
+      holds x\(y\(y\x)) in X1
+    proof
+     let x,y,z be Element of X;
+     assume (x\y)\z in X1 & z in X1;
+     0.X\(x\(y\(y\x)))=(x\(y\(y\x)))`
+                     .= 0.X by BCIALG_1:def 8;
+     then 0.X <= (x\(y\(y\x))) by BCIALG_1:def 11;
+     hence thesis;
+    end;
+    hence thesis by A2,Def4;
+   end;
+end;
+
+theorem
+for X being BCK-algebra holds BCK-part(X) is commutative Ideal of X
+proof
+let X be BCK-algebra;
+set B = BCK-part(X);
+ A2:B is Ideal of X
+ proof
+A1: 0.X in BCK-part(X) by BCIALG_1:19;
+ for x,y being Element of X st x\y in B & y in B holds x in B
+    proof
+ let x,y be Element of X such that
+ A2:x\y in B & y in B;
+ consider x1 being Element of X such that
+ B1:x\y=x1&0.X<=x1 by A2;
+ consider x2 being Element of X such that
+ B2:y=x2&0.X<=x2 by A2;
+  A7:(x\y)`=0.X by B1,BCIALG_1:def 11;
+     x`\y`=0.X by A7,BCIALG_1:9;
+ then x`\0.X = 0.X by B2,BCIALG_1:def 11;
+ then 0.X\x=0.X by BCIALG_1:2;
+ then 0.X<= x by BCIALG_1:def 11;
+ hence x in B;
+    end;
+    hence thesis by BCIALG_1:def 18,A1;
+ end;
+  for x,y,z being Element of X st (x\y)\z in B & z in B
+ holds x\(y\(y\x)) in B
+  proof
+ let x,y,z be Element of X;
+ assume (x\y)\z in B & z in B;
+  0.X\(x\(y\(y\x)))=(x\(y\(y\x)))`
+                     .= 0.X by BCIALG_1:def 8;
+ then 0.X <= (x\(y\(y\x))) by BCIALG_1:def 11;
+  hence thesis;
+    end;
+    hence thesis by A2,Def4;
+end;
+
+theorem
+for X being BCK-algebra st X is p-Semisimple BCI-algebra
+holds {0.X} is commutative Ideal of X
+proof
+let X be BCK-algebra;
+  assume C:X is p-Semisimple BCI-algebra;
+  set X1={0.X};
+     A:{0.X} is Ideal of X
+    proof
+      A1:X1 c= the carrier of X
+     proof
+       let xx be set;
+       assume xx in X1;
+       then xx=0.X by TARSKI:def 1;
+       hence xx in the carrier of X;
+     end;
+     A2:  0.X in {0.X} by TARSKI:def 1;
+      for x,y being Element of X
+                   st x\y in {0.X} & y in {0.X} holds x in {0.X}
+      proof let x,y be Element of X;
+      set X1={0.X};
+      assume x\y in X1 & y in X1;
+      then x\y = 0.X & y = 0.X by TARSKI:def 1;
+      then x=0.X by BCIALG_1:2;
+      hence thesis by TARSKI:def 1;
+      end;
+     hence thesis by A1,A2,BCIALG_1:def 18;
+    end;
+    reconsider X1 as Ideal of X by A;
+     for x,y,z being Element of X st
+        (x\y)\z in X1 & z in X1 holds x\(y\(y\x)) in X1
+    proof
+    let x,y,z be Element of X;
+    assume CC:(x\y)\z in X1& z in X1;
+      B3:y is atom by C,BCIALG_1:52;
+     (x\y)\z=0.X & z=0.X by CC,TARSKI:def 1;
+    then x\y = 0.X by BCIALG_1:2;
+    then x=y by BCIALG_1:def 14,B3;
+    then x\(y\(y\x))=x\(x\(0.X)) by BCIALG_1:def 5;
+    then x\(y\(y\x))=x\x by BCIALG_1:2;
+    then x\(y\(y\x))=0.X by BCIALG_1:def 5;
+   hence thesis by TARSKI:def 1;
+    end;
+    hence thesis by Def4;
+  end;
+
+Lm3:for X being BCK-algebra holds the carrier of X c= BCK-part(X)
+proof
+  let X be BCK-algebra;
+  let x be set;
+  assume A1:x in the carrier of X;
+  consider x1 being Element of X such that
+A2:x=x1 by A1;
+  x1` = 0.X by BCIALG_1:def 8;
+  then 0.X <= x1 by BCIALG_1:def 11;
+  hence x in BCK-part(X) by A2;
+end;
+
+ reserve X for BCK-algebra;
+
+theorem P25010:
+  BCK-part(X) = the carrier of X
+proof
+  the carrier of X c= BCK-part(X) by Lm3;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+ reserve X for BCI-algebra;
+
+theorem
+  (for X being BCI-algebra,x,y being Element of X holds (x\y)\y=x\y)
+     implies the carrier of X = BCK-part(X)
+proof
+  assume for X being BCI-algebra,x,y being Element of X holds (x\y)\y=x\y;
+  then X is BCK-algebra by BCIALG_1:13;
+  hence thesis by P25010;
+end;
+
+theorem
+  (for X being BCI-algebra,x,y being Element of X holds x\(y\x)=x)
+     implies the carrier of X = BCK-part(X)
+proof assume
+   for X being BCI-algebra,x,y being Element of X holds x\(y\x)=x;
+   then X is BCK-algebra by BCIALG_1:14;
+   hence thesis by P25010;
+end;
+
+theorem
+  (for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x))
+     implies the carrier of X = BCK-part(X)
+proof
+   assume
+for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x);
+   then X is BCK-algebra by BCIALG_1:12;
+   hence thesis by P25010;
+end;
+
+theorem
+   (for X being BCI-algebra,x,y,z being Element of X holds (x\y)\y=(x\z)\(y\z))
+       implies the carrier of X = BCK-part(X)
+proof
+  assume
+  for X being BCI-algebra,x,y,z being Element of X holds (x\y)\y=(x\z)\(y\z);
+  then X is BCK-algebra by BCIALG_1:15;
+  hence thesis by P25010;
+end;
+
+theorem
+  (for X being BCI-algebra,x,y being Element of X holds (x\y)\(y\x)=x\y)
+       implies the carrier of X = BCK-part(X)
+proof
+  assume for X being BCI-algebra,x,y being Element of X holds (x\y)\(y\x)=x\y;
+  then X is BCK-algebra by BCIALG_1:16;
+  hence thesis by P25010;
+end;
+
+theorem
+   (for X being BCI-algebra,x,y being Element of X holds
+       (x\y)\((x\y)\(y\x))=0.X) implies
+       the carrier of X = BCK-part(X)
+proof assume for X being BCI-algebra,x,y being Element of X holds
+   (x\y)\((x\y)\(y\x))=0.X;
+   then X is BCK-algebra by BCIALG_1:17;
+   hence thesis by P25010;
+end;
+
+ reserve X for BCK-algebra;
+
+theorem
+for X being BCK-algebra holds the carrier of X is commutative Ideal of X
+proof
+let X be BCK-algebra;
+set B = BCK-part(X);
+ B0: the carrier of X=B by P25010;
+ A2:B is Ideal of X
+ proof
+A1: 0.X in BCK-part(X) by BCIALG_1:19;
+ for x,y being Element of X st x\y in B & y in B holds x in B
+    proof
+ let x,y be Element of X such that
+ A2:x\y in B & y in B;
+  consider x1 being Element of X such that
+ B1:x\y=x1&0.X<=x1 by A2;
+ consider x2 being Element of X such that
+ B2:y=x2&0.X<=x2 by A2;
+ A7:(x\y)`=0.X by B1,BCIALG_1:def 11;
+    x`\y`=0.X by A7,BCIALG_1:9;
+ then x`\0.X = 0.X by B2,BCIALG_1:def 11;
+ then 0.X\x=0.X by BCIALG_1:2;
+     then 0.X<= x by BCIALG_1:def 11;
+     hence x in B;
+ end;
+    hence thesis by BCIALG_1:def 18,A1;
+ end;
+  for x,y,z being Element of X st (x\y)\z in B & z in B
+ holds x\(y\(y\x)) in B
+  proof
+ let x,y,z be Element of X;
+ assume (x\y)\z in B & z in B;
+  0.X\(x\(y\(y\x)))=(x\(y\(y\x)))`
+                     .= 0.X by BCIALG_1:def 8;
+ then 0.X <= (x\(y\(y\x))) by BCIALG_1:def 11;
+  hence thesis;
+    end;
+    hence thesis by A2,Def4,B0;
+   end;
+
+ reserve X for BCK-algebra;
+ reserve I,A for Ideal of X;
+
+theorem TL251:
+I is commutative Ideal of X iff
+( for x,y being Element of X st x\y in I holds x\(y\(y\x)) in I)
+proof
+thus I is commutative Ideal of X implies
+(for x,y being Element of X st x\y in I holds x\(y\(y\x)) in I)
+proof
+assume A1:I is commutative Ideal of X;
+let x,y be Element of X such that A2:x\y in I;
+ A3:(x\y)\0.X in I by A2, BCIALG_1:2;
+0.X in I by BCIALG_1:def 18;
+hence thesis by A1,A3,Def4;
+end;
+assume A:for x,y being Element of X st x\y in I holds x\(y\(y\x)) in I;
+for x,y,z being Element of X st
+        (x\y)\z in I & z in I holds x\(y\(y\x)) in I
+    proof
+    let x,y,z be Element of X such that A2:(x\y)\z in I & z in I;
+     x\y in I by A2,BCIALG_1:def 18;
+     hence thesis by A;
+    end;
+hence thesis by Def4;
+end;
+
+theorem TL252:
+for I,A being Ideal of X st
+I c= A & I is commutative Ideal of X holds A is commutative Ideal of X
+proof
+let I,A be Ideal of X;
+assume A1:I c= A & I is commutative Ideal of X;
+for x,y being Element of X st
+        x\y in A holds x\(y\(y\x)) in A
+        proof
+        let x,y be Element of X;
+        assume A2:x\y in A;
+         (x\(x\y))\y=(x\y)\(x\y) by BCIALG_1:7
+                        .=0.X by BCIALG_1:def 5;
+        then (x\(x\y))\y in I by BCIALG_1:def 18;
+        then (x\(x\y))\(y\(y\(x\(x\y)))) in I by TL251,A1;
+        then (x\(x\y))\(y\(y\(x\(x\y)))) in A by A1;
+        then (x\(y\(y\(x\(x\y)))))\(x\y) in A by BCIALG_1:7;
+        then A5:(x\(y\(y\(x\(x\y))))) in A by A2,BCIALG_1:def 18;
+        (x\(x\y))\x=(x\x)\(x\y) by BCIALG_1:7
+                   .= (x\y)` by BCIALG_1:def 5
+                   .= 0.X by BCIALG_1:def 8;
+        then A6:x\(x\y)<=x by BCIALG_1:def 11;
+        for x,y,z,u being Element of X st x<=y holds u\(z\x)<=u\(z\y)
+        proof
+        let x,y,z,u be Element of X;
+          assume x<=y;
+         then z\y<=z\x by BCIALG_1:5;
+         hence thesis by BCIALG_1:5;
+         end;
+        then y\(y\(x\(x\y)))<=y\(y\x) by A6;
+        then x\(y\(y\x))<=x\(y\(y\(x\(x\y)))) by BCIALG_1:5;
+        hence thesis by P141,A5;
+        end;
+hence thesis by TL251;
+end;
+
+theorem TL253:
+(for I being Ideal of X holds I is commutative Ideal of X) iff
+{0.X} is commutative Ideal of X
+proof
+thus (for I being Ideal of X holds I is commutative Ideal of X) implies
+{0.X} is commutative Ideal of X by BCIALG_1:43;
+thus {0.X} is commutative Ideal of X implies
+(for I being Ideal of X holds I is commutative Ideal of X)
+proof
+assume A1:{0.X} is commutative Ideal of X;
+let I be Ideal of X;
+for I being Ideal of X holds {0.X} c= I
+proof
+ let I be Ideal of X;
+  let x be set;
+   assume x in {0.X};
+    then x=0.X by TARSKI:def 1;
+    hence x in I by BCIALG_1:def 18;
+end;
+hence thesis by A1,TL252;
+end;
+end;
+
+theorem TL254:
+{0.X} is commutative Ideal of X iff
+X is commutative BCK-algebra
+proof
+thus {0.X} is commutative Ideal of X implies
+X is commutative BCK-algebra
+proof
+assume A:{0.X} is commutative Ideal of X;
+ for x,y being Element of X st x<=y holds x=y\(y\x)
+ proof
+ let x,y be Element of X;
+ assume x<=y;
+then B2:x\y=0.X by BCIALG_1:def 11;
+ B4:(y\(y\x))\x=0.X by BCIALG_1:1;
+x\y in {0.X} by B2,TARSKI:def 1;
+then x\(y\(y\x)) in {0.X} by A,TL251;
+then x\(y\(y\x))=0.X by TARSKI:def 1;
+hence thesis by B4,BCIALG_1:def 7;
+ end;
+ hence thesis by BCIALG_3:5;
+end;
+assume A:X is commutative BCK-algebra;
+A1:X is commutative BCK-algebra implies
+      (for x,y being Element of X holds x\y = x\(y\(y\x)))
+   proof
+    assume A2:X is commutative BCK-algebra;
+    let x,y be Element of X;
+    x\y = x\(x\(x\y)) by BCIALG_1:8
+         .= x\(y\(y\x)) by A2,BCIALG_3:def 1;
+    hence thesis;
+   end;
+  for x,y being Element of X st x\y in {0.X} holds x\(y\(y\x)) in {0.X}
+    by A,A1;
+  hence thesis by TL251,BCIALG_1:43;
+end;
+
+theorem TL255:
+X is commutative BCK-algebra iff
+(for I being Ideal of X holds I is commutative Ideal of X)
+proof
+thus X is commutative BCK-algebra implies
+for I being Ideal of X holds I is commutative Ideal of X
+proof
+assume A:X is commutative BCK-algebra;
+ {0.X} is commutative Ideal of X by TL254,A;
+ hence thesis by TL253;
+end;
+assume A:(for I being Ideal of X holds I is commutative Ideal of X);
+{0.X} is commutative Ideal of X by TL253,A;
+hence thesis by TL254;
+end;
+
+theorem
+{0.X} is commutative Ideal of X iff
+(for I being Ideal of X holds I is commutative Ideal of X)
+proof
+thus {0.X} is commutative Ideal of X implies
+(for I being Ideal of X holds I is commutative Ideal of X)
+proof
+assume {0.X} is commutative Ideal of X;
+then X is commutative BCK-algebra by TL254;
+hence thesis by TL255;
+end;
+assume for I being Ideal of X holds I is commutative Ideal of X;
+then X is commutative BCK-algebra by TL255;
+hence thesis by TL254;
+end;
+
+ reserve I for Ideal of X;
+
+theorem
+for x,y being Element of X holds x\(x\y) in I implies x\((x\y)\((x\y)\x)) in I
+& (y\(y\x))\x in I & y\(y\x)\(x\y) in I
+proof
+let x,y be Element of X;
+assume B1:x\(x\y) in I;
+  (x\y)\((x\y)\x)=(x\y)\((x\x)\y) by BCIALG_1:7
+              .=(x\((x\x)\y))\y by BCIALG_1:7
+              .=(x\y`)\y by BCIALG_1:def 5
+               .=(x\0.X)\y by BCIALG_1:def 8
+               .=x\y by BCIALG_1:2;
+hence x\((x\y)\((x\y)\x)) in I by B1;
+    (y\0.X)\(y\x)\(x\0.X)=0.X by BCIALG_1:1;
+then (y\0.X)\(y\x)\(x\0.X) in I by BCIALG_1:def 18;
+then y\(y\x)\(x\0.X) in I by BCIALG_1:2;
+hence y\(y\x)\x in I by BCIALG_1:2;
+(y\0.X)\(y\x)\(x\0.X)=0.X by BCIALG_1:1;
+then (y\0.X)\(y\x)<=(x\0.X) by BCIALG_1:def 11;
+then (y\0.X)\(y\x)\(x\y)<=(x\0.X)\(x\y) by BCIALG_1:5;
+then y\(y\x)\(x\y)<=(x\0.X)\(x\y) by BCIALG_1:2;
+then y\(y\x)\(x\y)<=x\(x\y) by BCIALG_1:2;
+then y\(y\x)\(x\y)\(x\(x\y)) =0.X by BCIALG_1:def 11;
+then y\(y\x)\(x\y)\(x\(x\y)) in I by BCIALG_1:def 18;
+hence thesis by B1,BCIALG_1:def 18;
+end;
+
+theorem
+{0.X} is commutative Ideal of X iff
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+proof
+thus {0.X} is commutative Ideal of X implies
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+  proof
+    assume A:{0.X} is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL254;
+    hence thesis by BCIALG_3:1;
+  end;
+ assume A:(for x,y being Element of X holds x\(x\y) <= y\(y\x));
+    X is commutative BCK-algebra by A,BCIALG_3:1;
+    hence thesis by TL254;
+end;
+
+theorem
+  {0.X} is commutative Ideal of X iff
+     (for x,y being Element of X holds x\y = x\(y\(y\x)) )
+proof
+thus {0.X} is commutative Ideal of X implies
+     (for x,y being Element of X holds x\y = x\(y\(y\x)) )
+  proof
+    assume A:{0.X} is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL254;
+    hence thesis by BCIALG_3:3;
+  end;
+ assume A:(for x,y being Element of X holds x\y = x\(y\(y\x)) );
+    X is commutative BCK-algebra by A,BCIALG_3:3;
+    hence thesis by TL254;
+end;
+
+theorem
+  {0.X} is commutative Ideal of X iff
+     (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+proof
+thus {0.X} is commutative Ideal of X implies
+     (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+  proof
+    assume A:{0.X} is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL254;
+    hence thesis by BCIALG_3:4;
+  end;
+  assume A:(for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) );
+  X is commutative BCK-algebra by A,BCIALG_3:4;
+  hence thesis by TL254;
+end;
+
+theorem
+  {0.X} is commutative Ideal of X iff
+    (for x,y being Element of X st x<= y holds x= y\(y\x))
+proof
+  thus {0.X} is commutative Ideal of X implies
+     (for x,y being Element of X st x<= y holds x= y\(y\x))
+  proof
+    assume A:{0.X} is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL254;
+    hence thesis by BCIALG_3:5;
+  end;
+  assume A:(for x,y being Element of X st x<= y holds x= y\(y\x));
+  X is commutative BCK-algebra by A,BCIALG_3:5;
+  hence thesis by TL254;
+end;
+
+theorem
+  ({0.X} is commutative Ideal of X implies
+    ((for x,y being Element of X holds (x\y=x iff y\(y\x)=0.X)))
+ &
+    (for x,y being Element of X st x\y=x holds y\x=y)
+ & (for x,y,a being Element of X st y <= a holds (a\x)\(a\y) = y\x)
+ &(for x,y being Element of X holds x\(y\(y\x))=x\y & (x\y)\((x\y)\x)=x\y)
+ & (for x,y,a being Element of X
+    st x <= a holds (a\y)\((a\y)\(a\x)) = (a\y)\(x\y)))
+proof
+assume A:{0.X} is commutative Ideal of X;
+A1:X is commutative BCK-algebra by A,TL254;
+thus (for x,y being Element of X holds (x\y=x iff y\(y\x)=0.X))
+                                                              by A1,BCIALG_3:9;
+thus (for x,y being Element of X st x\y=x holds y\x=y) by A1,BCIALG_3:7;
+thus (for x,y,a being Element of X st y <= a holds (a\x)\(a\y) = y\x)
+                                                              by A1,BCIALG_3:8;
+thus (for x,y being Element of X holds x\(y\(y\x))=x\y &(x\y)\((x\y)\x)=x\y)
+                                                          by A1,BCIALG_3:10;
+thus (for x,y,a being Element of X
+    st x <= a holds (a\y)\((a\y)\(a\x)) = (a\y)\(x\y)) by A1,BCIALG_3:11;
+end;
+
+theorem
+(for I being Ideal of X holds I is commutative Ideal of X) iff
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+proof
+ thus (for I being Ideal of X holds I is commutative Ideal of X) implies
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+  proof
+    assume A:(for I being Ideal of X holds I is commutative Ideal of X);
+    X is commutative BCK-algebra by A,TL255;
+    hence thesis by BCIALG_3:1;
+  end;
+ assume for x,y being Element of X holds x\(x\y) <= y\(y\x);
+ then X is commutative BCK-algebra by BCIALG_3:1;
+   hence thesis by TL255;
+end;
+
+theorem
+  (for I being Ideal of X holds I is commutative Ideal of X) iff
+     (for x,y being Element of X holds x\y = x\(y\(y\x)) )
+proof
+ thus (for I being Ideal of X holds I is commutative Ideal of X) implies
+     (for x,y being Element of X holds x\y = x\(y\(y\x)) )
+  proof
+    assume A:for I being Ideal of X holds I is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL255;
+    hence thesis by BCIALG_3:3;
+  end;
+ assume A:for x,y being Element of X holds x\y = x\(y\(y\x));
+    X is commutative BCK-algebra by A,BCIALG_3:3;
+    hence thesis by TL255;
+end;
+
+theorem
+  (for I being Ideal of X holds I is commutative Ideal of X) iff
+     (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+proof
+ thus (for I being Ideal of X holds I is commutative Ideal of X) implies
+     (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+  proof
+    assume A:(for I being Ideal of X holds I is commutative Ideal of X);
+    X is commutative BCK-algebra by A,TL255;
+    hence thesis by BCIALG_3:4;
+  end;
+ assume A:(for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) );
+   X is commutative BCK-algebra by A,BCIALG_3:4;
+    hence thesis by TL255;
+end;
+
+theorem
+  (for I being Ideal of X holds I is commutative Ideal of X) iff
+    (for x,y being Element of X st x<= y holds x= y\(y\x))
+proof
+ thus (for I being Ideal of X holds I is commutative Ideal of X) implies
+     (for x,y being Element of X st x<= y holds x= y\(y\x))
+  proof
+    assume A:for I being Ideal of X holds I is commutative Ideal of X;
+    X is commutative BCK-algebra by A,TL255;
+    hence thesis by BCIALG_3:5;
+  end;
+ assume A:for x,y being Element of X st x<= y holds x= y\(y\x);
+ X is commutative BCK-algebra by A,BCIALG_3:5;
+ hence thesis by TL255;
+end;
+
+theorem
+  ((for I being Ideal of X holds I is commutative Ideal of X) implies
+    ((for x,y being Element of X holds (x\y=x iff y\(y\x)=0.X))) &
+    (for x,y being Element of X st x\y=x holds y\x=y)
+ & (for x,y,a being Element of X st y <= a holds (a\x)\(a\y) = y\x)
+ &(for x,y being Element of X holds x\(y\(y\x))=x\y & (x\y)\((x\y)\x)=x\y)
+ & (for x,y,a being Element of X
+    st x <= a holds (a\y)\((a\y)\(a\x)) = (a\y)\(x\y)))
+proof
+assume A:(for I being Ideal of X holds I is commutative Ideal of X);
+A1:X is commutative BCK-algebra by A,TL255;
+thus (for x,y being Element of X holds (x\y=x iff y\(y\x)=0.X))
+                                                              by A1,BCIALG_3:9;
+thus (for x,y being Element of X st x\y=x holds y\x=y) by A1,BCIALG_3:7;
+thus (for x,y,a being Element of X st y <= a holds (a\x)\(a\y) = y\x)
+                                                              by A1,BCIALG_3:8;
+thus (for x,y being Element of X holds x\(y\(y\x))=x\y &(x\y)\((x\y)\x)=x\y)
+                                                          by A1,BCIALG_3:10;
+thus (for x,y,a being Element of X
+    st x <= a holds (a\y)\((a\y)\(a\x)) = (a\y)\(x\y)) by A1,BCIALG_3:11;
+end;
+
+begin :: implicative Ideal of X & positive-implicative-ideal
+
+definition let X be BCK-algebra;
+  mode implicative-ideal of X -> non empty Subset of X means :Def2:
+    0.X in it & for x,y,z being Element of X st
+      (x\(y\x))\z in it& z in it holds x in it;
+  existence
+  proof
+    take X1=the carrier of X;
+    X1 c= the carrier of X;
+    hence thesis;
+  end;
+end;
+
+ reserve X for BCK-algebra;
+ reserve I,A for Ideal of X;
+ reserve x,y,z for Element of X;
+
+theorem P351:
+ I is implicative-ideal of X iff
+for x,y being Element of X st x\(y\x) in I holds x in I
+proof
+C1:  I is implicative-ideal of X implies
+for x,y being Element of X st x\(y\x) in I holds x in I
+proof
+assume A:I is implicative-ideal of X;
+let x,y be Element of X;
+assume x\(y\x) in I;
+then A2:x\(y\x)\0.X in I by BCIALG_1:2;
+0.X in I by A,Def2;
+hence thesis by A,A2,Def2;
+end;
+  (for x,y being Element of X st x\(y\x) in I holds x in I) implies
+ I is implicative-ideal of X
+proof
+assume B:for x,y being Element of X st x\(y\x) in I holds x in I;
+D:for x,y,z being Element of X st (x\(y\x))\z in I & z in I holds x in I
+proof
+let x,y,z be Element of X;
+assume (x\(y\x))\z in I& z in I;
+then x\(y\x) in I by BCIALG_1:def 18;
+hence thesis by B;
+end;
+0.X in I by BCIALG_1:def 18;
+hence thesis by Def2,D;
+end;
+hence thesis by C1;
+end;
+
+definition let X be BCK-algebra;
+  mode positive-implicative-ideal of X -> non empty Subset of X means :Def5:
+    0.X in it &for x,y,z being Element of X st
+    (x\y)\z in it & y\z in it holds x\z in it;
+  existence
+  proof
+    take X1=the carrier of X;
+    X1 c= the carrier of X;
+    hence thesis;
+  end;
+end;
+
+theorem TL341:
+I is positive-implicative-ideal of X iff
+for x,y being Element of X st (x\y)\y in I holds x\y in I
+proof
+thus I is positive-implicative-ideal of X implies
+for x,y being Element of X st (x\y)\y in I holds x\y in I
+proof
+assume A:I is positive-implicative-ideal of X;
+let x,y be Element of X;
+assume B1:(x\y)\y in I;
+y\y =0.X by BCIALG_1:def 5;
+then y\y in I by A,Def5;
+hence thesis by Def5,B1,A;
+end;
+thus (for x,y being Element of X st (x\y)\y in I holds x\y in I) implies
+ I is positive-implicative-ideal of X
+ proof
+ assume A:for x,y being Element of X st (x\y)\y in I holds x\y in I;
+ A1:0.X in I by BCIALG_1:def 18;
+ for x,y,z being Element of X st
+(x\y)\z in I & y\z in I holds x\z in I
+proof
+let x,y,z be Element of X;
+assume B1:(x\y)\z in I & y\z in I;
+((x\z)\z)\((x\y)\z)\((x\z)\(x\y))=0.X by BCIALG_1:def 3;
+then ((x\z)\z)\((x\y)\z)<=(x\z)\(x\y) by BCIALG_1:def 11;
+then ((x\z)\z)\((x\y)\z)\(y\z)<=(x\z)\(x\y)\(y\z) by BCIALG_1:5;
+then ((x\z)\z)\((x\y)\z)\(y\z)<=0.X by BCIALG_1:1;
+then ((x\z)\z)\((x\y)\z)\(y\z)\0.X=0.X by BCIALG_1:def 11;
+then ((x\z)\z)\((x\y)\z)\(y\z)=0.X by BCIALG_1:2;
+then ((x\z)\z)\((x\y)\z)<=y\z by BCIALG_1:def 11;
+then ((x\z)\z)\((x\y)\z) in I by P141,B1;
+then (x\z)\z in I by BCIALG_1:def 18,B1;
+hence thesis by A;
+end;
+hence thesis by A1,Def5;
+ end;
+end;
+
+theorem TL3421:
+(for x,y,z being Element of X st (x\y)\z in I & y\z in I holds x\z in I)
+implies (for x,y,z being Element of X st (x\y)\z in I holds (x\z)\(y\z) in I)
+proof
+assume A:for x,y,z being Element of X st (x\y)\z in I & y\z in I
+holds x\z in I;
+let x,y,z be Element of X;
+assume A1:(x\y)\z in I;
+x\(y\z) \ (x\y) \ (y\(y\z)) =0.X by BCIALG_1:1;
+then x\(y\z) \ (x\y)<=y\(y\z) by BCIALG_1:def 11;
+then A2:x\(y\z) \ (x\y)\z<=y\(y\z)\z by BCIALG_1:5;
+y\(y\z)\z =y\z\(y\z) by BCIALG_1:7;
+then x\(y\z) \ (x\y)\z<=0.X by A2,BCIALG_1:def 5;
+then x\(y\z) \ (x\y)\z\0.X=0.X by BCIALG_1:def 11;
+then x\(y\z) \ (x\y)\z=0.X by BCIALG_1:2;
+then (x\(y\z))\(x\y)\z in I by BCIALG_1:def 18;
+then x\(y\z)\z in I by A1,A;
+hence thesis by BCIALG_1:7;
+end;
+
+theorem TL3422:
+(for x,y,z being Element of X st (x\y)\z in I holds (x\z)\(y\z) in I)
+implies I is positive-implicative-ideal of X
+proof
+assume A:for x,y,z being Element of X st (x\y)\z in I holds (x\z)\(y\z) in I;
+ B:for x,y,z being Element of X st
+(x\y)\z in I & y\z in I holds x\z in I
+proof
+let x,y,z be Element of X;
+assume A1:(x\y)\z in I & y\z in I;
+then (x\z)\(y\z) in I by A;
+hence thesis by A1,BCIALG_1:def 18;
+end;
+0.X in I by BCIALG_1:def 18;
+hence thesis by B,Def5;
+end;
+
+theorem
+I is positive-implicative-ideal of X iff
+for x,y,z being Element of X st (x\y)\z in I & y\z in I holds x\z in I
+proof
+thus I is positive-implicative-ideal of X implies
+for x,y,z being Element of X st (x\y)\z in I & y\z in I holds x\z in I
+  by Def5;
+assume A:for x,y,z being Element of X st (x\y)\z in I
+& y\z in I holds x\z in I;
+0.X in I by BCIALG_1:def 18;
+hence thesis by A,Def5;
+end;
+
+theorem
+I is positive-implicative-ideal of X iff
+(for x,y,z being Element of X st (x\y)\z in I holds (x\z)\(y\z) in I)
+proof
+I is positive-implicative-ideal of X implies
+(for x,y,z being Element of X st (x\y)\z in I & y\z in I holds x\z in I)
+  by Def5;
+hence thesis by TL3422,TL3421;
+end;
+
+theorem
+for I,A being Ideal of X st
+I c= A & I is positive-implicative-ideal of X holds
+A is positive-implicative-ideal of X
+proof
+let I,A be Ideal of X;
+assume A1:I c= A & I is positive-implicative-ideal of X;
+for x,y being Element of X st (x\y)\y in A holds x\y in A
+proof
+let x,y be Element of X;
+assume A:(x\y)\y in A;
+((x\((x\y)\y)\y))\y = ((x\y)\((x\y)\y))\y by BCIALG_1:7
+                   .=(x\y\y)\ ((x\y)\y) by BCIALG_1:7
+                   .=0.X by BCIALG_1:def 5;
+then ((x\((x\y)\y)\y))\y in I by BCIALG_1:def 18;
+then (x\((x\y)\y)\y) in I by A1,TL341;
+then (x\y)\((x\y)\y) in I by BCIALG_1:7;
+hence thesis by A,BCIALG_1:def 18,A1;
+end;
+hence thesis by TL341;
+end;
+
+theorem
+ I is implicative-ideal of X implies
+I is commutative Ideal of X & I is positive-implicative-ideal of X
+proof
+assume A:I is implicative-ideal of X;
+C1:for x,y being Element of X st x\y in I holds x\(y\(y\x)) in I
+proof
+let x,y be Element of X;
+assume B1:x\y in I;
+(x\(y\(y\x)))\x = (x\x)\(y\(y\x)) by BCIALG_1:7
+                .=(y\(y\x))` by BCIALG_1:def 5
+                .=0.X by BCIALG_1:def 8;
+then (x\(y\(y\x)))<=x by BCIALG_1:def 11;
+then y\x<=y\(x\(y\(y\x))) by BCIALG_1:5;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x))))<=(x\(y\(y\x)))\(y\x) by BCIALG_1:5;
+then B2:(x\(y\(y\x)))\(y\(x\(y\(y\x))))\(x\y)
+                                    <=(x\(y\(y\x)))\(y\x)\(x\y) by BCIALG_1:5;
+(x\(y\(y\x)))\(y\x)=(x\(y\x))\(y\(y\x)) by BCIALG_1:7;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x))))\(x\y)<=0.X by B2,BCIALG_1:def 3;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x))))\(x\y)\0.X=0.X by BCIALG_1:def 11;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x))))\(x\y)=0.X by BCIALG_1:2;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x))))<=x\y by BCIALG_1:def 11;
+then (x\(y\(y\x)))\(y\(x\(y\(y\x)))) in I by B1,P141;
+hence thesis by P351,A;
+end;
+for x,y being Element of X st (x\y)\y in I holds x\y in I
+proof
+let x,y be Element of X;
+assume A1:(x\y)\y in I;
+(x\y)\(x\(x\y))\((x\y)\y)=0.X by BCIALG_1:1;
+then (x\y)\(x\(x\y))<=((x\y)\y) by BCIALG_1:def 11;
+then (x\y)\(x\(x\y)) in I by P141,A1;
+hence thesis by A,P351;
+end;
+hence thesis by C1,TL251,TL341;
+end;

@@ -12,17 +12,16 @@ environ
       FINSET_1, MSUALG_6, MSUALG_7, MSUALG_8, CARD_3, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
       DOMAIN_1, NUMBERS, STRUCT_0, NAT_1, BINOP_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FINSET_1, FINSEQ_1, CARD_3, FINSEQ_4, REWRITE1, EQREL_1, LATTICES,
-      LATTICE3, PBOOLE, MSSUBFAM, MSUALG_1, MSUALG_4, MSUALG_5, CLOSURE2,
-      MSUALG_6, MSUALG_7, XXREAL_0;
- constructors SETFAM_1, BINOP_1, XXREAL_0, NAT_1, MEMBERED, FINSEQ_4, REALSET1,
-      REWRITE1, MSSUBFAM, LATTICE3, PRALG_2, MSUALG_5, CLOSURE2, MSUALG_6,
-      MSUALG_7, VALUED_1, PARTFUN1, SEQ_1;
+      FINSET_1, FINSEQ_1, CARD_3, REWRITE1, EQREL_1, LATTICES, LATTICE3,
+      PBOOLE, MSSUBFAM, MSUALG_1, MSUALG_4, MSUALG_5, CLOSURE2, MSUALG_6,
+      MSUALG_7, XXREAL_0;
+ constructors SETFAM_1, BINOP_1, XXREAL_0, NAT_1, MEMBERED, REALSET1, REWRITE1,
+      MSSUBFAM, LATTICE3, MSUALG_5, CLOSURE2, MSUALG_6, MSUALG_7;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, FRAENKEL,
       MEMBERED, EQREL_1, PBOOLE, STRUCT_0, LATTICES, MSUALG_1, MSUALG_3,
-      MSUALG_5, CLOSURE2, MSUALG_6, MSUALG_7, VALUED_1, FUNCT_2;
+      MSUALG_5, CLOSURE2, MSUALG_6, MSUALG_7;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, EQREL_1, VALUED_1;
+ definitions TARSKI, XBOOLE_0, EQREL_1;
  theorems TARSKI, PBOOLE, NAT_LAT, MSUALG_4, MSUALG_5, MSUALG_7, CLOSURE2,
       SETFAM_1, LATTICES, LATTICE3, MSSUBFAM, ZFMISC_1, FINSEQ_1, SUBSET_1,
       REWRITE1, RELAT_1, MSUALG_6, FUNCT_2, RELSET_1, NAT_1, EQREL_1, VECTSP_8,
@@ -596,7 +595,6 @@ proof
   : x is MSCongruence of A & C [= x};
   assume
 A1: C is MSCongruence of A;
-  then reconsider C' = C as MSCongruence of A;
 A2: C in Z by A1;
   now
     let q be Element of EqRelLatt the Sorts of A;
@@ -1035,42 +1033,43 @@ A6: t'.a in M.s2 & t'.b in M.s2 by A4,FUNCT_2:7;
     proof
       deffunc F(set)=t.(f.$1);
       consider g be FinSequence such that
-A7:   len g = len f & for k be Nat st k in Seg len f holds
+A7:   len g = len f & for k be Nat st k in dom g holds
       g.k = F(k) from FINSEQ_1:sch 2;
+A8: dom g = Seg len f by A7,FINSEQ_1:def 3;
       take g;
       thus 1 <= len g by A5,A7;
       1 in Seg len f by A5,FINSEQ_1:3;
-      hence g.1 = t.a by A5,A7;
+      hence g.1 = t.a by A5,A7,A8;
       len g in Seg len f by A5,A7,FINSEQ_1:3;
-      hence g.(len g) = t.b by A5,A7;
+      hence g.(len g) = t.b by A5,A7,A8;
       let j be Element of NAT;
       assume
-A8:   1 <= j & j < len g;
+A9:   1 <= j & j < len g;
       then [f.j,f.(j+1)] in union EqRelSet (X,s1) by A5,A7;
       then consider Z be set such that
-A9:   [f.j,f.(j+1)] in Z & Z in EqRelSet (X,s1) by TARSKI:def 4;
+A10:   [f.j,f.(j+1)] in Z & Z in EqRelSet (X,s1) by TARSKI:def 4;
       consider Eq be Equivalence_Relation of M such that
-A10:  Z = Eq.s1 & Eq in X by A9,Def3;
+A11:  Z = Eq.s1 & Eq in X by A10,Def3;
       reconsider Eq as ManySortedRelation of A;
       reconsider Eq as MSEquivalence-like ManySortedRelation of A
       by MSUALG_4:def 5;
-      Eq is MSCongruence of A by A10,MSUALG_5:def 6;
+      Eq is MSCongruence of A by A11,MSUALG_5:def 6;
       then reconsider Eq as
       compatible MSEquivalence-like ManySortedRelation of A by MSUALG_6:27;
       ex W be set st [t.(f.j),t.(f.(j+1))] in W & W in EqRelSet (X,s2)
       proof
         take W = Eq.s2;
-        thus [t.(f.j),t.(f.(j+1))] in W by A1,A9,A10,MSUALG_6:def 8;
-        thus W in EqRelSet (X,s2) by A10,Def3;
+        thus [t.(f.j),t.(f.(j+1))] in W by A1,A10,A11,MSUALG_6:def 8;
+        thus W in EqRelSet (X,s2) by A11,Def3;
       end;
       then
-A11:  [t.(f.j),t.(f.(j+1))] in union EqRelSet (X,s2) by TARSKI:def 4;
-      j in Seg len f by A7,A8,FINSEQ_1:3;
+A12:  [t.(f.j),t.(f.(j+1))] in union EqRelSet (X,s2) by TARSKI:def 4;
+      j in Seg len f by A7,A9,FINSEQ_1:3;
       then
-A12:  g.j = t.(f.j) by A7;
-      1 <= j+1 & j+1 <= len f by A7,A8,NAT_1:13;
+A13:  g.j = t.(f.j) by A7,A8;
+      1 <= j+1 & j+1 <= len f by A7,A9,NAT_1:13;
       then j+1 in Seg len f by FINSEQ_1:3;
-      hence [g.j,g.(j+1)] in union EqRelSet (X,s2) by A7,A11,A12;
+      hence [g.j,g.(j+1)] in union EqRelSet (X,s2) by A7,A12,A13,A8;
     end;
     then [t.a,t.b] in "\/" EqRelSet (X,s2) by A6,Th10;
     hence [t.a, t.b] in V.s2 by Th17;

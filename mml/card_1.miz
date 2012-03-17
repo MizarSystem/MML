@@ -7,19 +7,15 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM, CAT_1,
-      FUNCT_4;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ENUMSET1, FUNCT_1,
-      FUNCOP_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
- constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1,
-      FUNCT_4;
+      FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
+ constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions ORDINAL1, TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1,
-      FUNCOP_1;
+ definitions ORDINAL1, TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, FUNCT_1, ZFMISC_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2,
-      RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, ENUMSET1, ORDINAL3,
-      FUNCT_4;
+      RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, ENUMSET1, ORDINAL3;
  schemes ORDINAL1, ORDINAL2, FUNCT_1, FINSET_1, XBOOLE_0;
 
 begin
@@ -165,6 +161,31 @@ A4: X,N are_equipotent;
     hence thesis by Th8;
   end;
   projectivity;
+end;
+
+registration
+ cluster {} -> cardinal;
+ coherence
+  proof
+    take {}; thus {} = {};
+    let A such that A,{} are_equipotent;
+    thus thesis by XBOOLE_1:2;
+  end;
+end;
+
+registration let X be empty set;
+ cluster Card X -> empty;
+ coherence by Def5;
+end;
+
+registration let X be non empty set;
+ cluster Card X -> non empty;
+ coherence
+  proof assume Card X is empty;
+    then X,{} are_equipotent by Def5;
+    then ex f st f is one-to-one & dom f = X & rng f = {} by WELLORD2:def 4;
+   hence contradiction by RELAT_1:65;
+  end;
 end;
 
 canceled 6;
@@ -473,8 +494,7 @@ end;
 theorem
   Card {} <` nextcard X
 proof
-  {} c= X by XBOOLE_1:2;
-  then Card {} <=` Card X & Card X <` nextcard X by Def6,Th27;
+   Card {} <=` Card X & Card X <` nextcard X by Def6,XBOOLE_1:2;
   hence thesis by ORDINAL1:22;
 end;
 
@@ -721,30 +741,15 @@ proof
 end;
 
 theorem Th46:
-  X,{} are_equipotent iff X = {}
+  X,{} are_equipotent implies X = {}
 proof
-  thus X,{} are_equipotent implies X = {}
-  proof
     given f such that
 A1: f is one-to-one & dom f = X & rng f = {};
     thus thesis by A1,RELAT_1:65;
-  end;
-  thus thesis;
 end;
 
 theorem
-  Card {} = {}
-proof
-  {} is cardinal
-  proof
-    take {}; thus {} = {};
-    let A such that A,{} are_equipotent;
-    thus thesis by XBOOLE_1:2;
-  end;
-  then reconsider M = {} as Cardinal;
-  {},M are_equipotent;
-  hence thesis by Def5;
-end;
+  Card {} = {};
 
 theorem Th48:
   X,{x} are_equipotent iff ex x st X = { x }
@@ -803,10 +808,7 @@ A1: 1 = succ 0;
   hence thesis by Def5;
 end;
 
-theorem
-  0 = {};
-
-canceled 6;
+canceled 7;
 
 theorem Th58:
   X misses X1 & Y misses Y1 & X,Y are_equipotent &
@@ -1209,7 +1211,7 @@ end;
 canceled;
 
 theorem
-  card {} = 0 by Def5;
+  card {} = 0;
 
 theorem
   card { x } = 1 by Th50;
@@ -1457,7 +1459,6 @@ definition
   redefine func Segm n -> Subset of omega;
   coherence
   proof
-    set X = Segm n;
     n in omega by ORDINAL1:def 13;
     hence thesis by ORDINAL1:26;
   end;
@@ -1502,7 +1503,7 @@ A7: A = succ B by ORDINAL1:42;
   hence thesis;
 end;
 
-theorem
+theorem Th103:
   A is finite iff A in omega
 proof
   thus A is finite implies A in omega
@@ -1537,6 +1538,45 @@ registration
     assume X is natural;
     then X in omega by ORDINAL1:def 13;
     hence X is cardinal by Th65;
+  end;
+end;
+
+:: from CARD_4, CARD_5 etc. 2008.02.21, A.T.
+
+registration
+ cluster omega -> infinite;
+ coherence
+  proof
+    not omega in omega;
+   hence thesis by Th103;
+  end;
+end;
+
+registration
+ cluster infinite set;
+ existence
+  proof
+   take omega;
+   thus thesis;
+  end;
+end;
+
+registration let A be infinite set;
+ cluster bool A -> infinite;
+ coherence by FINSET_1:24;
+ let B be non empty set;
+ cluster [:A,B:] ->infinite;
+ coherence by FINSET_1:22;
+ cluster [:B,A:] ->infinite;
+ coherence by FINSET_1:23;
+end;
+
+registration
+  let X be infinite set;
+  cluster infinite Subset of X;
+  existence
+  proof X c= X;
+    hence thesis;
   end;
 end;
 

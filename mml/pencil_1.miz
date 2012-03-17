@@ -15,11 +15,11 @@ environ
       FUNCT_1, WAYBEL_3, FINSEQ_1, CARD_3, PRE_TOPC, PBOOLE, PZFMISC1,
       PRE_CIRC, PRALG_1, POLYNOM1, XXREAL_0;
  constructors XXREAL_0, NAT_1, PRE_CIRC, PZFMISC1, REALSET2, PRALG_1, WAYBEL_3,
-      POLYNOM1, VALUED_1, PARTFUN1, SEQ_1;
+      POLYNOM1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, XREAL_0, CARD_3,
-      REALSET1, PZFMISC1, STRUCT_0, YELLOW_6, ORDINAL1, VALUED_1, FUNCT_2;
+      REALSET1, PZFMISC1, STRUCT_0, YELLOW_6, ORDINAL1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
- definitions TARSKI, WAYBEL_3, PBOOLE, XBOOLE_0, PRALG_1, VALUED_1;
+ definitions TARSKI, WAYBEL_3, PBOOLE, XBOOLE_0, PRALG_1;
  theorems TARSKI, FUNCT_1, FUNCOP_1, PBOOLE, CARD_3, PRALG_1, STRUCT_0, CARD_1,
       YELLOW11, ENUMSET1, CARD_5, FINSEQ_1, CARD_2, TRIANG_1, CARD_4, ZFMISC_1,
       NAT_1, FUNCT_7, YELLOW_6, YELLOW_8, PZFMISC1, PUA2MSS1, PRE_TOPC,
@@ -2052,31 +2052,32 @@ A7: 1 in dom f by A2,A3,FUNCT_1:def 4;
 A8: len f in dom f by A3,FUNCT_1:def 4;
     deffunc F(Nat) = (f.$1) /\ f.($1+1);
     consider h being FinSequence such that
-A9: len h = n & for k being Nat st k in Seg n holds h.k=F(k)
+A9: len h = n & for k being Nat st k in dom h holds h.k=F(k)
     from FINSEQ_1:sch 2;
-A10: (len h) + 1 = len f by A9;
+A10: dom h = Seg n by A9,FINSEQ_1:def 3;
+A11: (len h) + 1 = len f by A9;
     now
       assume {} in rng h;
       then consider i being set such that
-A11:  i in dom h & h.i = {} by FUNCT_1:def 5;
-      reconsider i as Element of NAT by A11;
-A12:  1 <= i & i <= len h by A11,FINSEQ_3:27;
+A12:  i in dom h & h.i = {} by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A12;
+A13:  1 <= i & i <= len h by A12,FINSEQ_3:27;
       then i in Seg n by A9,FINSEQ_1:3;
       then
-A13:  h.i=(f.i) /\ (f.(i+1)) by A9;
-      1 <= i & i < len f by A10,A12,NAT_1:13;
-      then 2 c= Card (h.i) by A5,A13;
-      hence contradiction by A11,Th4;
+A14:  h.i=(f.i) /\ (f.(i+1)) by A9,A10;
+      1 <= i & i < len f by A11,A13,NAT_1:13;
+      then 2 c= Card (h.i) by A5,A14;
+      hence contradiction by A12,Th4;
     end;
     then product h <> {} by CARD_3:37;
     then consider c being set such that
-A14: c in product h by XBOOLE_0:def 1;
+A15: c in product h by XBOOLE_0:def 1;
     consider ce being Function such that
-A15: ce = c & dom ce = dom h & for a being set st a in dom h holds ce.a in h.a
-    by A14,CARD_3:def 5;
-    reconsider c as Function by A15;
-A16: dom h = Seg n by A9,FINSEQ_1:def 3;
-    then reconsider c as FinSequence by A15,FINSEQ_1:def 2;
+A16: ce = c & dom ce = dom h & for a being set st a in dom h holds ce.a in h.a
+    by A15,CARD_3:def 5;
+    reconsider c as Function by A16;
+A17: dom h = Seg n by A9,FINSEQ_1:def 3;
+    then reconsider c as FinSequence by A16,FINSEQ_1:def 2;
     rng (<*x*>^c^<*y*>) c= the carrier of S
     proof
       let r be set;
@@ -2084,24 +2085,24 @@ A16: dom h = Seg n by A9,FINSEQ_1:def 3;
       then r in rng (<*x*>^c) \/ rng <*y*> by FINSEQ_1:44;
       then r in rng (<*x*>^c) or r in rng <*y*> by XBOOLE_0:def 2;
       then
-A17:  r in (rng <*x*>) \/ (rng c) or r in rng <*y*> by FINSEQ_1:44;
-      per cases by A17,XBOOLE_0:def 2;
+A18:  r in (rng <*x*>) \/ (rng c) or r in rng <*y*> by FINSEQ_1:44;
+      per cases by A18,XBOOLE_0:def 2;
       suppose r in rng <*x*>;
         then r in {x} by FINSEQ_1:55;
         hence r in the carrier of S;
       end;
       suppose r in rng c;
         then consider o being set such that
-A18:    o in dom c & r = c.o by FUNCT_1:def 5;
-        reconsider o as Element of NAT by A18;
-        h.o=(f.o) /\ f.(o+1) by A9,A15,A16,A18;
-        then r in (f.o) /\ f.(o+1) by A15,A18;
+A19:    o in dom c & r = c.o by FUNCT_1:def 5;
+        reconsider o as Element of NAT by A19;
+        h.o=(f.o) /\ f.(o+1) by A9,A16,A19;
+        then r in (f.o) /\ f.(o+1) by A16,A19;
         then
-A19:    r in f.o by XBOOLE_0:def 3;
-        len h <= len f by A10,NAT_1:11;
+A20:    r in f.o by XBOOLE_0:def 3;
+        len h <= len f by A11,NAT_1:11;
         then dom h c= dom f by FINSEQ_3:32;
-        then f.o in rng f by A15,A18,FUNCT_1:def 5;
-        hence r in the carrier of S by A6,A19;
+        then f.o in rng f by A16,A19,FUNCT_1:def 5;
+        hence r in the carrier of S by A6,A20;
       end;
       suppose r in rng <*y*>;
         then r in {y} by FINSEQ_1:55;
@@ -2111,131 +2112,131 @@ A19:    r in f.o by XBOOLE_0:def 3;
     then reconsider g = <*x*>^c^<*y*> as
     FinSequence of the carrier of S by FINSEQ_1:def 4;
     take g;
-A20: g = <*x*>^(c^<*y*>) by FINSEQ_1:45;
+A21: g = <*x*>^(c^<*y*>) by FINSEQ_1:45;
     hence x=g.1 by FINSEQ_1:58;
     len g = len (<*x*>^c) + len <*y*> by FINSEQ_1:35;
     then
-A21: len (<*x*>^c) + 1 = len g by FINSEQ_1:56;
+A22: len (<*x*>^c) + 1 = len g by FINSEQ_1:56;
     hence
-A22: y=g.(len g) by FINSEQ_1:59;
-A23: len (<*x*>^c) = len <*x*> + len c by FINSEQ_1:35;
+A23: y=g.(len g) by FINSEQ_1:59;
+A24: len (<*x*>^c) = len <*x*> + len c by FINSEQ_1:35;
     then
-A24: len (<*x*>^c) = len c + 1 by FINSEQ_1:56;
+A25: len (<*x*>^c) = len c + 1 by FINSEQ_1:56;
     let i be Nat;
     assume
-A25: 1 <= i & i < len g;
+A26: 1 <= i & i < len g;
     then
-A26: i <= len (<*x*>^c) by A21,NAT_1:13;
+A27: i <= len (<*x*>^c) by A22,NAT_1:13;
     let a,b be Point of S;
     assume
-A27: a = g.i & b = g.(i+1);
+A28: a = g.i & b = g.(i+1);
     reconsider i as Element of NAT by ORDINAL1:def 13;
-A28: len <*x*> = 1 & len <*y*> = 1 by FINSEQ_1:56;
-    per cases by A24,A25,A26,NAT_1:8,XXREAL_0:1;
+A29: len <*x*> = 1 & len <*y*> = 1 by FINSEQ_1:56;
+    per cases by A25,A26,A27,NAT_1:8,XXREAL_0:1;
     suppose
-A29:  i = 1 & i <= len c;
+A30:  i = 1 & i <= len c;
       then
-A30:  1 in dom c by FINSEQ_3:27;
-A31:  len (c^<*y*>) = len c + 1 by A28,FINSEQ_1:35;
-A32:  b = (<*x*>^(c^<*y*>)).2 by A27,A29,FINSEQ_1:45;
+A31:  1 in dom c by FINSEQ_3:27;
+A32:  len (c^<*y*>) = len c + 1 by A29,FINSEQ_1:35;
+A33:  b = (<*x*>^(c^<*y*>)).2 by A28,A30,FINSEQ_1:45;
       len (<*x*>^(c^<*y*>)) = len <*x*> + len (c^<*y*>) by FINSEQ_1:35;
-      then len (<*x*>^(c^<*y*>)) = 1 + 1 + len c by A28,A31;
-      then b = (c^<*y*>).(2 - len <*x*>) by A28,A32,FINSEQ_1:37,NAT_1:11;
+      then len (<*x*>^(c^<*y*>)) = 1 + 1 + len c by A29,A32;
+      then b = (c^<*y*>).(2 - len <*x*>) by A29,A33,FINSEQ_1:37,NAT_1:11;
       then b = (c^<*y*>).(2-1) by FINSEQ_1:56;
       then
-A33:  b = c.1 by A30,FINSEQ_1:def 7;
-A34:  c.1 in h.1 by A15,A30;
-      h.1=(f.1) /\ f.(1+1) by A9,A15,A16,A30;
+A34:  b = c.1 by A31,FINSEQ_1:def 7;
+A35:  c.1 in h.1 by A16,A31;
+      h.1=(f.1) /\ f.(1+1) by A9,A16,A31;
       then
-A35:  b in f.1 by A33,A34,XBOOLE_0:def 3;
-A36:  f.1 in rng f by A7,FUNCT_1:def 5;
+A36:  b in f.1 by A34,A35,XBOOLE_0:def 3;
+A37:  f.1 in rng f by A7,FUNCT_1:def 5;
       then reconsider f1=f.1 as Subset of S by A6;
-A37:  f1 is closed_under_lines strong by A4,A36;
-      a = x by A20,A27,A29,FINSEQ_1:58;
-      hence a,b are_collinear by A2,A3,A35,A37,Def3;
+A38:  f1 is closed_under_lines strong by A4,A37;
+      a = x by A21,A28,A30,FINSEQ_1:58;
+      hence a,b are_collinear by A2,A3,A36,A38,Def3;
     end;
     suppose
-A38:  i = 1 & i = len c + 1;
+A39:  i = 1 & i = len c + 1;
       then
-A39:  len h = 0 by A15,FINSEQ_3:31;
-A40:  f.1 in rng f by A7,FUNCT_1:def 5;
+A40:  len h = 0 by A16,FINSEQ_3:31;
+A41:  f.1 in rng f by A7,FUNCT_1:def 5;
       then reconsider f1=f.1 as Subset of S by A6;
-      f1 is closed_under_lines strong by A4,A40;
+      f1 is closed_under_lines strong by A4,A41;
       then
-A41:  x,y are_collinear by A2,A3,A9,A39,Def3;
+A42:  x,y are_collinear by A2,A3,A9,A40,Def3;
       len <*x*> = 1 by FINSEQ_1:56;
-      then len g = i+1 by A21,A38,FINSEQ_1:35;
-      hence a,b are_collinear by A20,A22,A27,A38,A41,FINSEQ_1:58;
+      then len g = i+1 by A22,A39,FINSEQ_1:35;
+      hence a,b are_collinear by A21,A23,A28,A39,A42,FINSEQ_1:58;
     end;
     suppose
-A42:  1 < i & i <= len c;
-A43:  len h <= len h + 1 by NAT_1:11;
-A44:  len c = len h by A15,FINSEQ_3:31;
-A45:  i <= len h by A15,A42,FINSEQ_3:31;
-      i <= len h + 1 by A42,A43,A44,XXREAL_0:2;
+A43:  1 < i & i <= len c;
+A44:  len h <= len h + 1 by NAT_1:11;
+A45:  len c = len h by A16,FINSEQ_3:31;
+A46:  i <= len h by A16,A43,FINSEQ_3:31;
+      i <= len h + 1 by A43,A44,A45,XXREAL_0:2;
       then
-A46:  i in dom f by A9,A42,FINSEQ_3:27;
+A47:  i in dom f by A9,A43,FINSEQ_3:27;
       then
-A47:  f.i in rng f by FUNCT_1:def 5;
+A48:  f.i in rng f by FUNCT_1:def 5;
       then reconsider ff = f.i as Subset of S by A6;
-A48:  ff is closed_under_lines strong by A4,A47;
-      reconsider j = i-1 as Nat by A46,FINSEQ_3:28;
+A49:  ff is closed_under_lines strong by A4,A48;
+      reconsider j = i-1 as Nat by A47,FINSEQ_3:28;
       j + 1 = i;
       then
-A49:  1 <= j by A42,NAT_1:13;
+A50:  1 <= j by A43,NAT_1:13;
       j <= j + 1 by NAT_1:11;
-      then j <= n by A9,A45,XXREAL_0:2;
+      then j <= n by A9,A46,XXREAL_0:2;
       then
-A50:  j in Seg n by A49,FINSEQ_1:3;
+A51:  j in Seg n by A50,FINSEQ_1:3;
       then
-A51:  c.j in h.j by A15,A16;
-A52:  len <*x*> < i & i <= len(<*x*>^c) by A23,A28,A42,NAT_1:13;
-      i <= len c + 1 by A42,A43,A44,XXREAL_0:2;
-      then i in dom (<*x*>^c) by A24,A42,FINSEQ_3:27;
-      then a = (<*x*>^c).i by A27,FINSEQ_1:def 7;
-      then a = c.j by A28,A52,FINSEQ_1:37;
-      then a in (f.j) /\ f.(j+1) by A9,A50,A51;
+A52:  c.j in h.j by A16,A17;
+A53:  len <*x*> < i & i <= len(<*x*>^c) by A24,A29,A43,NAT_1:13;
+      i <= len c + 1 by A43,A44,A45,XXREAL_0:2;
+      then i in dom (<*x*>^c) by A25,A43,FINSEQ_3:27;
+      then a = (<*x*>^c).i by A28,FINSEQ_1:def 7;
+      then a = c.j by A29,A53,FINSEQ_1:37;
+      then a in (f.j) /\ f.(j+1) by A9,A51,A52,A10;
       then
-A53:  a in ff by XBOOLE_0:def 3;
-      i <= len h by A15,A42,FINSEQ_3:31;
+A54:  a in ff by XBOOLE_0:def 3;
+      i <= len h by A16,A43,FINSEQ_3:31;
       then
-A54:  i in Seg n by A9,A42,FINSEQ_1:3;
+A55:  i in Seg n by A9,A43,FINSEQ_1:3;
       then
-A55:  c.i in h.i by A15,A16;
-A56:  len <*x*> < i+1 by A28,A42,NAT_1:13;
-A57:  i+1 <= len c + 1 by A42,XREAL_1:8;
-      then i+1 in dom (<*x*>^c) by A23,A28,A56,FINSEQ_3:27;
-      then b = (<*x*>^c).(i+1) by A27,FINSEQ_1:def 7;
-      then b = c.(i + 1 - len <*x*>) by A24,A56,A57,FINSEQ_1:37;
-      then b in (f.i) /\ f.(i+1) by A9,A28,A54,A55;
+A56:  c.i in h.i by A16,A17;
+A57:  len <*x*> < i+1 by A29,A43,NAT_1:13;
+A58:  i+1 <= len c + 1 by A43,XREAL_1:8;
+      then i+1 in dom (<*x*>^c) by A24,A29,A57,FINSEQ_3:27;
+      then b = (<*x*>^c).(i+1) by A28,FINSEQ_1:def 7;
+      then b = c.(i + 1 - len <*x*>) by A25,A57,A58,FINSEQ_1:37;
+      then b in (f.i) /\ f.(i+1) by A9,A29,A55,A56,A10;
       then b in ff by XBOOLE_0:def 3;
-      hence a,b are_collinear by A48,A53,Def3;
+      hence a,b are_collinear by A49,A54,Def3;
     end;
     suppose
-A58:  1 < i & i = len c + 1;
-A59:  len (<*x*>^c) = 1 + len c by A28,FINSEQ_1:35;
+A59:  1 < i & i = len c + 1;
+A60:  len (<*x*>^c) = 1 + len c by A29,FINSEQ_1:35;
       then
-A60:  b = y by A27,A58,FINSEQ_1:59;
-A61:  f.(len f) in rng f by A8,FUNCT_1:def 5;
+A61:  b = y by A28,A59,FINSEQ_1:59;
+A62:  f.(len f) in rng f by A8,FUNCT_1:def 5;
       then reconsider ff = f.(len f) as Subset of S by A6;
-A62:  ff is closed_under_lines strong by A4,A61;
-      i in dom (<*x*>^c) by A58,A59,FINSEQ_3:27;
+A63:  ff is closed_under_lines strong by A4,A62;
+      i in dom (<*x*>^c) by A59,A60,FINSEQ_3:27;
       then
-A63:  a = (<*x*>^c).i by A27,FINSEQ_1:def 7
-        .= c.(len c + 1 - 1) by A28,A58,A59,FINSEQ_1:37
+A64:  a = (<*x*>^c).i by A28,FINSEQ_1:def 7
+        .= c.(len c + 1 - 1) by A29,A59,A60,FINSEQ_1:37
         .= c.(len c);
-      0 + 1 < len c + 1 by A58;
+      0 + 1 < len c + 1 by A59;
       then consider k being Nat such that
-A64:  len c = k + 1 by NAT_1:6;
-      1 <= len c by A64,NAT_1:11;
+A65:  len c = k + 1 by NAT_1:6;
+      1 <= len c by A65,NAT_1:11;
       then
-A65:  len c in dom h by A15,FINSEQ_3:27;
-      then a in h.(len c) by A15,A63;
+A66:  len c in dom h by A16,FINSEQ_3:27;
+      then a in h.(len c) by A16,A64;
       then
-A66:  a in (f.(len c)) /\ (f.(len c + 1)) by A9,A16,A65;
-      len c = len h by A15,FINSEQ_3:31;
-      then a in ff by A9,A66,XBOOLE_0:def 3;
-      hence a,b are_collinear by A3,A60,A62,Def3;
+A67:  a in (f.(len c)) /\ (f.(len c + 1)) by A9,A66;
+      len c = len h by A16,FINSEQ_3:31;
+      then a in ff by A9,A67,XBOOLE_0:def 3;
+      hence a,b are_collinear by A3,A61,A63,Def3;
     end;
   end;
 end;

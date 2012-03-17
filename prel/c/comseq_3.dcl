@@ -17,8 +17,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_2"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="SEQ_2"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
@@ -144,7 +144,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="250">
-<Func kind="K" nr="167">
+<Func kind="K" nr="166">
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="86"/>
 <LocusVar nr="1"/>
@@ -156,7 +156,7 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="33"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -183,7 +183,7 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="30"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -210,7 +210,7 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="30"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -255,7 +255,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="165">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -359,7 +359,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -410,7 +410,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="156">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -453,7 +453,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="136">
+<Func kind="K" nr="135">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -535,7 +535,7 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="27"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -559,7 +559,7 @@
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="30"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 <CCluster>

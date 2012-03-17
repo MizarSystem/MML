@@ -13,20 +13,19 @@ environ
       GOBOARD2, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FINSEQ_1, VALUED_1, SEQ_1, FINSET_1, STRUCT_0, PRE_TOPC, SEQ_4, FINSEQ_4,
-      MATRIX_1, EUCLID, TOPREAL1, GOBOARD1, XXREAL_0;
- constructors PARTFUN1, SQUARE_1, NAT_1, COMPLEX1, SEQ_4, FINSEQ_4, TOPREAL1,
-      GOBOARD1, INT_1, VALUED_1, SEQ_1;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, STRUCT_0, EUCLID, GOBOARD1, SEQ_1,
-      INT_1, VALUED_0, VALUED_1, FUNCT_2;
+      FINSEQ_1, SEQ_1, FINSET_1, STRUCT_0, PRE_TOPC, SEQ_4, MATRIX_1, EUCLID,
+      TOPREAL1, GOBOARD1, XXREAL_0;
+ constructors PARTFUN1, SQUARE_1, NAT_1, COMPLEX1, SEQ_4, TOPREAL1, GOBOARD1,
+      SEQ_1;
+ registrations XBOOLE_0, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
+      MEMBERED, FINSEQ_1, STRUCT_0, EUCLID, GOBOARD1, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, TOPREAL1, GOBOARD1, XBOOLE_0, VALUED_1;
+ definitions TARSKI, TOPREAL1, GOBOARD1, XBOOLE_0;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE, CARD_1,
       SEQ_4, FINSEQ_2, CARD_2, REAL_2, MATRIX_1, EUCLID, TOPREAL1, TOPREAL3,
       GOBOARD1, FINSEQ_4, FINSEQ_3, RELAT_1, PARTFUN2, INT_1, XBOOLE_0,
       XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, PARTFUN1;
- schemes NAT_1, FINSEQ_2, MATRIX_1, FINSEQ_4;
+ schemes NAT_1, MATRIX_1, FINSEQ_4;
 
 begin
 
@@ -38,22 +37,6 @@ reserve p,p1,p2,q for Point of TOP-REAL 2,
   G for Go-board,
   x for set;
 
-scheme PiLambdaD{D()-> non empty set, l()->Element of NAT,
-  F(set)-> Element of D()}: ex g being FinSequence of D() st
-  len g=l() & for n st n in dom g holds g/.n=F(n)
-proof
-  consider g being FinSequence of D() such that
-A1: len g=l() &
-  for n be Nat st n in Seg l() holds g.n=F(n) from FINSEQ_2:sch 1;
-  take g;
-  thus len g=l() by A1;
-  let n;
-  assume
-A2: n in dom g;
-  then n in Seg l() by A1,FINSEQ_1:def 3;
-  then g.n = F(n) by A1;
-  hence thesis by A2,PARTFUN1:def 8;
-end;
 defpred P[Nat] means
 for R being finite Subset of REAL st R <> {} & card R = $1 holds
 R is bounded_above & upper_bound(R) in R &
@@ -642,7 +625,7 @@ theorem Th14:
 proof
   assume f <> {} & X_axis(f) = {};
   then len X_axis(f) = len f & len f <> 0 & len X_axis(f) = 0
-  by FINSEQ_1:25,GOBOARD1:def 3;
+  by CARD_1:47,CARD_2:59,GOBOARD1:def 3;
   hence contradiction;
 end;
 
@@ -651,7 +634,7 @@ theorem Th15:
 proof
   assume f <> {} & Y_axis(f) = {};
   then len Y_axis(f) = len f & len f <> 0 & len Y_axis(f) = 0
-  by FINSEQ_1:25,GOBOARD1:def 4;
+  by CARD_1:47,CARD_2:59,GOBOARD1:def 4;
   hence contradiction;
 end;
 
@@ -751,10 +734,10 @@ A2: len f=0 &
     (for n st n in dom f ex i,j st [i,j] in Indices G & f/.n=G*(i,j)) &
     f is special & for n st n in dom f & n+1 in dom f holds f/.n <> f/.(n+1);
     take g=f;
-    f={} by A2,FINSEQ_1:25;
+    f={} by A2,CARD_2:59;
     then for n holds n in dom g & n+1 in dom g implies (
     for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G & g/.n=G*(m,k) &
-    g/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1) by FINSEQ_1:26;
+    g/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1) by RELAT_1:60;
     hence g is_sequence_on G & L~f = L~g & g/.1=f/.1 & g/.len g=f/.len f
     & len f<=len g by A2,GOBOARD1:def 11;
   end;
@@ -893,17 +876,18 @@ then reconsider w=i2-n as Element of NAT by A47,INT_1:18,XXREAL_0:2;
                   [i1,i2-n] in Indices G & i2-n in Seg width G
                   by A27,A28,ZFMISC_1:106;
                 end;
-                defpred P1[Element of NAT,set] means
+                defpred P1[Nat,set] means
                 for m st m=i2-$1 holds $2=G*(i1,m);
 A48:            now
-                  let n;
+                  let n be Nat;
                   assume n in Seg l;
                   then reconsider m=i2-n as Element of NAT by A46;
                   take p=G*(i1,m);
                   thus P1[n,p];
                 end;
                 consider g2 such that
-A49:            len g2 = l & for n st n in Seg l holds P1[n,g2/.n]
+A49:            len g2 = l &
+for n being Nat st n in Seg l holds P1[n,g2/.n]
                 from FINSEQ_4:sch 1(A48);
 A50:            dom g2 = Seg l by A49,FINSEQ_1:def 3;
                 take g=g1^g2;
@@ -1269,10 +1253,10 @@ A118:           l in dom g2 & len g=len g1 + len g2 & len g2 = l
               case
 A119:           i2<j2;
                 then reconsider l=j2-i2 as Element of NAT by INT_1:18;
-                deffunc F(Element of NAT) = G*(i1,i2+$1);
+                deffunc F(Nat) = G*(i1,i2+$1);
                 consider g2 such that
-A120:           len g2=l & for n st n in dom g2 holds g2/.n=F(n)
-                from PiLambdaD;
+A120:           len g2=l & for n being Nat st n in dom g2 holds g2/.n=F(n)
+                from FINSEQ_4:sch 2;
 A121:           dom g2 = Seg l by A120,FINSEQ_1:def 3;
                 take g=g1^g2;
 A122:           now
@@ -1671,17 +1655,18 @@ then reconsider w=i1-n as Element of NAT by A195,INT_1:18,XXREAL_0:2;
 hence i1-n is Element of NAT & [i1-n,i2] in Indices G & i1-n in dom G
                   by A27,A28,ZFMISC_1:106;
                 end;
-                defpred P1[Element of NAT,set] means
+                defpred P1[Nat,set] means
                 for m st m=i1-$1 holds $2=G*(m,i2);
 A196:           now
-                  let n;
+                  let n be Nat;
                   assume n in Seg l;
                   then reconsider m=i1-n as Element of NAT by A194;
                   take p=G*(m,i2);
                   thus P1[n,p];
                 end;
                 consider g2 such that
-A197:           len g2= l & for n st n in Seg l holds P1[n,g2/.n]
+A197:           len g2= l &
+for n being Nat st n in Seg l holds P1[n,g2/.n]
                 from FINSEQ_4:sch 1(A196);
 A198:           dom g2 = Seg l by A197,FINSEQ_1:def 3;
                 take g=g1^g2;
@@ -2048,10 +2033,10 @@ A265:           l in dom g2 & len g=len g1 + len g2 & len g2 = l
               case
 A266:           i1<j1;
                 then reconsider l=j1-i1 as Element of NAT by INT_1:18;
-                deffunc F(Element of NAT) = G*(i1+$1,i2);
+                deffunc F(Nat) = G*(i1+$1,i2);
                 consider g2 such that
-A267:           len g2 = l & for n st n in dom g2 holds g2/.n = F(n)
-                from PiLambdaD;
+A267:           len g2 = l & for n being Nat st n in dom g2 holds g2/.n = F(n)
+                from FINSEQ_4:sch 2;
 A268:           dom g2 = Seg l by A267,FINSEQ_1:def 3;
                 take g=g1^g2;
 A269:           now
@@ -2503,12 +2488,12 @@ proof
   then
 A1: rng v = {} by CARD_2:59;
   then
-A2: v = {} by FINSEQ_1:27;
+A2: v = {} by RELAT_1:64;
   take v1 = v;
   thus rng v1 = rng v;
-  thus len v1 = card rng v by A1,FINSEQ_1:27;
+  thus len v1 = card rng v by A1,RELAT_1:64;
   for n,m holds n in dom v1 & m in dom v1 & n<m implies v1.n < v1.m
-  by A2,FINSEQ_1:26;
+  by A2,RELAT_1:60;
   hence v1 is increasing by GOBOARD1:def 1;
 end;
 
@@ -2593,7 +2578,7 @@ proof
   let v1,v2;
   assume len v1=0 & len v2=0 & rng v1=rng v2 & v1 is increasing & v2 is
   increasing;
-  then v1={} & v2={} by FINSEQ_1:25;
+  then v1={} & v2={} by CARD_2:59;
   hence v1=v2;
 end;
 
@@ -2607,11 +2592,7 @@ A2: len v1=n+1 & len v2=n+1 & rng v1=rng v2 & v1 is increasing &
 A3: dom v1 = Seg len v1 & dom v2=Seg len v2 & rng v1 c= REAL
   by FINSEQ_1:def 3,def 4;
   reconsider X = rng v1 as Subset of REAL by FINSEQ_1:def 4;
-  now
-    assume X={};
-    then v1={} by FINSEQ_1:27;
-    hence contradiction by A2,FINSEQ_1:25;
-  end;
+  X <> {} by RELAT_1:64,A2,CARD_1:47;
   then
 A4: X is bounded_above & upper_bound(X) in X by Th1;
   set u = upper_bound(X);
@@ -2728,11 +2709,12 @@ A37: 1<=i & i<=len v2 by A35,FINSEQ_3:27;
 A38: f1=f2 by A1,A2,A19,A21,A30;
 A39: len (f1^<*u*>) = n + len <*u*> by A19,FINSEQ_1:35
     .= len v1 by A2,FINSEQ_1:56;
+X: dom v1 = Seg len v1 by FINSEQ_1:def 3;
   now
     let i be Nat;
-    assume i in Seg len v1;
+    assume i in dom v1;
     then
-A40: 1<=i & i<=len f1+1 by A2,A19,FINSEQ_1:3;
+A40: 1<=i & i<=len f1+1 by A2,A19,FINSEQ_1:3,X;
     now per cases;
       suppose i=len f1+1;
         hence (f1^<*u*>).i=v1.i by A2,A5,A7,A19,FINSEQ_1:59;
@@ -2752,11 +2734,12 @@ A41:    i in dom f1 by A18,A19,A40,FINSEQ_1:3;
 A42: v1=f1^<*u*> by A39,FINSEQ_2:10;
 A43: len (f2^<*u*>) = n + len <*u*> by A19,FINSEQ_1:35
     .= len v2 by A2,FINSEQ_1:56;
+X: dom v2 = Seg len v2 by FINSEQ_1:def 3;
   now
     let i be Nat;
-    assume i in Seg len v2;
+    assume i in dom v2;
     then
-A44: 1<=i & i<=len f2+1 by A2,A19,FINSEQ_1:3;
+A44: 1<=i & i<=len f2+1 by A2,A19,FINSEQ_1:3,X;
     now per cases;
       suppose i=len f2+1;
         hence (f2^<*u*>).i=v2.i by A2,A11,A13,A19,FINSEQ_1:59;
@@ -2829,7 +2812,7 @@ A5:   [i,j] in [:Seg len v1,Seg len v2:];
     consider M be Matrix of len v1,len v2,the carrier of TOP-REAL 2 such that
 A6: for i,j being Nat st [i,j] in Indices M holds P[i,j,M*(i,j)]
     from MATRIX_1:sch 2(A3,A4);
-    len v1 <>0 & len v2 <> 0 by A1,FINSEQ_1:25;
+    len v1 <>0 & len v2 <> 0 by A1,CARD_2:59;
     then
 A7: 0 < len v1 & 0 < len v2;
     reconsider M as Matrix of the carrier of TOP-REAL 2;
@@ -2869,7 +2852,7 @@ registration
   coherence
   proof
     set M = GoB(v1,v2);
-A1: len v1 <>0 & len v2 <> 0 by FINSEQ_1:25;
+A1: len v1 <>0 & len v2 <> 0 by CARD_2:59;
 A2: len M=len v1 & width M=len v2 by Def1;
     then
 A3: dom M = dom v1 & width M=len v2 by FINSEQ_3:31;
@@ -3039,8 +3022,8 @@ proof
 A1: v <> {};
   assume Incr(v) = {};
   then len Incr(v) = 0 & len Incr(v)=card rng v & rng v is finite
-  by Def2,FINSEQ_1:25;
-  then rng v = {} & rng v <> {} by A1,CARD_2:59,FINSEQ_1:27;
+  by Def2,CARD_1:47;
+  then rng v = {} & rng v <> {} by A1,CARD_2:59,RELAT_1:64;
   hence contradiction;
 end;
 

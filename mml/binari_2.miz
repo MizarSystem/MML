@@ -13,19 +13,19 @@ environ
       INT_1, PARTFUN1, BINOP_1, SETWOP_2, SERIES_1, FUNCOP_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_4, BINOP_2, XBOOLEAN, MARGREL1, BINARITH;
  constructors PARTFUN1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, FINSEQ_4,
-      FINSOP_1, SERIES_1, BINARITH, VALUED_1, SEQ_1;
+      FINSOP_1, SERIES_1, BINARITH, BINOP_2;
  registrations ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1, BINOP_2, XBOOLEAN,
-      MARGREL1, XBOOLE_0, VALUED_1, FUNCT_2;
+      MARGREL1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions XBOOLEAN, VALUED_1;
+ definitions XBOOLEAN;
  theorems BINARITH, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, POWER, NAT_1,
       FINSOP_1, BINOP_2, XBOOLEAN, PARTFUN1;
- schemes FINSEQ_2, BINARITH;
+ schemes FINSEQ_2, NAT_1;
 
 begin
 
-reserve i,j,n for Element of NAT;
-reserve m for non empty Element of NAT;
+reserve i,j,n for Nat;
+reserve m for non empty Nat;
 reserve p,q for Tuple of n, BOOLEAN;
 reserve d,d1,d2 for Element of BOOLEAN;
 
@@ -35,20 +35,21 @@ proof
   assume that
 A1: len p = n & len q = n and
 A2: for i st i in Seg n holds p/.i = q/.i;
-  for i being Nat st i in Seg n holds p.i = q.i
+X: dom p = Seg n by A1,FINSEQ_1:def 3;
+  for i being Nat st i in dom p holds p.i = q.i
   proof
     let i be Nat;
     assume
-A3: i in Seg n;
-    then i in dom p & i in dom q by A1,FINSEQ_1:def 3;
+A3: i in dom p;
+    then i in dom p & i in dom q by A1,FINSEQ_1:def 3,X;
     then p/.i=p.i & q/.i = q.i by PARTFUN1:def 8;
-    hence thesis by A2,A3;
+    hence thesis by A2,A3,X;
   end;
   hence thesis by A1,FINSEQ_2:10;
 end;
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func Bin1 (n) -> Tuple of n, BOOLEAN means
   :Def1:
   for i st i in Seg n holds it/.i = IFEQ(i,1,TRUE,FALSE);
@@ -57,39 +58,42 @@ definition
     deffunc F(set) = IFEQ($1,1,TRUE,FALSE);
     consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg n by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
     take z;
     let i;
     assume
-A3: i in Seg n;
+A4: i in Seg n;
     then i in dom z by A1,FINSEQ_1:def 3;
     hence z/.i = z.i by PARTFUN1:def 8
-      .= IFEQ(i,1,TRUE,FALSE) by A2,A3;
+      .= IFEQ(i,1,TRUE,FALSE) by A2,A4,A3;
   end;
   uniqueness
   proof
     let z1, z2 be Tuple of n, BOOLEAN such that
-A4: for i st i in Seg n holds z1/.i = IFEQ(i,1,TRUE,FALSE) and
-A5: for i st i in Seg n holds z2/.i = IFEQ(i,1,TRUE,FALSE);
-A6: len z1 = n & len z2 = n by FINSEQ_2:109;
+A5: for i st i in Seg n holds z1/.i = IFEQ(i,1,TRUE,FALSE) and
+A6: for i st i in Seg n holds z2/.i = IFEQ(i,1,TRUE,FALSE);
+A7: len z1 = n & len z2 = n by FINSEQ_2:109;
+then
+X: dom z1 = Seg n by FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg n;
+A8:   j in dom z1;
       then
-A8:   j in dom z1 & j in dom z2 by A6,FINSEQ_1:def 3;
+A9:   j in dom z1 & j in dom z2 by A7,FINSEQ_1:def 3,X;
       hence z1.j = z1/.j by PARTFUN1:def 8
-        .= IFEQ(j,1,TRUE,FALSE) by A4,A7
-        .= z2/.j by A5,A7
-        .= z2.j by A8,PARTFUN1:def 8;
+        .= IFEQ(j,1,TRUE,FALSE) by A5,A8,X
+        .= z2/.j by A6,A8,X
+        .= z2.j by A9,PARTFUN1:def 8;
     end;
-    hence z1 = z2 by A6,FINSEQ_2:10;
+    hence z1 = z2 by A7,FINSEQ_2:10;
   end;
 end;
 
 definition
-  let n be non empty Element of NAT, x be Tuple of n, BOOLEAN;
+  let n be non empty Nat, x be Tuple of n, BOOLEAN;
   func Neg2 (x) -> Tuple of n,BOOLEAN equals
 
   'not' x + Bin1 (n);
@@ -97,7 +101,7 @@ definition
 end;
 
 definition
-  let n be Element of NAT, x be Tuple of n, BOOLEAN;
+  let n be Nat, x be Tuple of n, BOOLEAN;
   func Intval (x) -> Integer equals
   :Def3:
   Absval (x) if x/.n = FALSE
@@ -106,14 +110,14 @@ definition
 end;
 
 definition
-  let n be non empty Element of NAT, z1,z2 be Tuple of n, BOOLEAN;
+  let n be non empty Nat, z1,z2 be Tuple of n, BOOLEAN;
   func Int_add_ovfl(z1,z2) -> Element of BOOLEAN equals
   'not' (z1/.n) '&' 'not' (z2/.n) '&' (carry(z1,z2)/.n);
   correctness;
 end;
 
 definition
-  let n be non empty Element of NAT, z1,z2 be Tuple of n, BOOLEAN;
+  let n be non empty Nat, z1,z2 be Tuple of n, BOOLEAN;
   func Int_add_udfl(z1,z2) -> Element of BOOLEAN equals
   (z1/.n) '&' (z2/.n) '&' 'not' (carry(z1,z2)/.n);
   correctness;
@@ -288,7 +292,7 @@ end;
 theorem Th7:
   for i st i in Seg n & i = 1 holds (Bin1(n))/.i = TRUE
 proof
-  let i be Element of NAT such that
+  let i be Nat such that
 A1: i in Seg n and
 A2: i = 1;
   thus (Bin1(n))/.i = IFEQ(i,1,TRUE,FALSE) by A1,Def1
@@ -298,7 +302,7 @@ end;
 theorem Th8:
   for i st i in Seg n & i <> 1 holds (Bin1(n))/.i = FALSE
 proof
-  let i be Element of NAT such that
+  let i be Nat such that
 A1: i in Seg n and
 A2: i <> 1;
   thus (Bin1(n))/.i = IFEQ(i,1,TRUE,FALSE) by A1,Def1
@@ -347,7 +351,7 @@ end;
 theorem Th10:
   for m holds Intval (Bin1(m)^<*FALSE*>) = 1
 proof
-  defpred P[non empty Element of NAT] means Intval (Bin1($1)^<*FALSE*>) = 1;
+  defpred P[non empty Nat] means Intval (Bin1($1)^<*FALSE*>) = 1;
 A1: P[1]
   proof
     consider k being Element of BOOLEAN such that
@@ -358,7 +362,7 @@ A3: (Bin1(1))/.1 = k by A2,FINSEQ_4:25;
     hence thesis by Th4;
   end;
 A4: now
-    let m be non empty Element of NAT such that
+    let m be non empty Nat such that
 A5: P[m];
     (Bin1(m)^<*FALSE*>)/.(m+1) = FALSE by BINARITH:3;
     then
@@ -372,7 +376,7 @@ A6: Absval(Bin1(m)^<*FALSE*>) = 1 by A5,Def3;
       .= 1;
     hence P[m+1];
   end;
-  thus for m holds P[m] from BINARITH:sch 1 (A1,A4);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A4);
 end;
 
 theorem Th11:
@@ -410,7 +414,7 @@ end;
 theorem Th12:
   for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Intval(z^<*d*>) =
-  Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Element of NAT)
+  Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat)
 proof
   let z be Tuple of m, BOOLEAN;
   let d;
@@ -423,7 +427,7 @@ A2: Intval(z^<*d*>) = Absval(z^<*d*>) by Def3
       .= Absval(z)+IFEQ(d,FALSE,0,2 to_power(m)) by BINARITH:46
       .= Absval(z)+0 by A1,FUNCOP_1:def 8
       .= Absval(z);
-    Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Element of NAT)
+    Absval(z)-(IFEQ(d,FALSE,0,2 to_power(m)) qua Nat)
     = Absval(z) - 0 by A1,FUNCOP_1:def 8
       .= Absval(z);
     hence thesis by A2;
@@ -608,7 +612,7 @@ theorem Th15:
   for m for x being Tuple of m, BOOLEAN holds
   Absval('not' x) = - Absval(x) + 2 to_power m - 1
 proof
-  defpred P[Element of NAT] means for x being Tuple of $1, BOOLEAN holds
+  defpred P[Nat] means for x being Tuple of $1, BOOLEAN holds
   Absval('not' x) = - Absval(x) + 2 to_power $1 - 1;
 A1: P[1]
   proof
@@ -701,7 +705,7 @@ A20:      Absval('not' x)
     end;
     hence P[m+1];
   end;
-  thus for m holds P[m] from BINARITH:sch 1 (A1,A12);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A12);
 end;
 
 theorem Th16:
@@ -779,7 +783,7 @@ theorem
   for m for z being Tuple of m, BOOLEAN for d being Element of BOOLEAN holds
   Neg2(Neg2(z^<*d*>)) = z^<*d*>
 proof
-  defpred P[non empty Element of NAT] means for z being Tuple of $1, BOOLEAN
+  defpred P[non empty Nat] means for z being Tuple of $1, BOOLEAN
   for d being Element of BOOLEAN holds Neg2(Neg2(z^<*d*>)) = z^<*d*>;
 A1: P[1]
   proof
@@ -1043,11 +1047,11 @@ A23:  'not' ('not' d 'xor' C) 'xor' C
     end;
     hence P[m+1];
   end;
-  thus for m holds P[m] from BINARITH:sch 1 (A1,A11);
+  thus for m holds P[m] from NAT_1:sch 10(A1,A11);
 end;
 
 definition
-  let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
+  let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
   func x - y -> Tuple of n, BOOLEAN means
   :Def6:
   for i st i in Seg n holds
@@ -1058,37 +1062,40 @@ definition
     'xor' ((carry(x,Neg2(y)))/.$1);
     consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in dom z holds z.j = F(j) from FINSEQ_2:sch 1;
+A3: dom z = Seg n by A1,FINSEQ_1:def 3;
     reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
     take z;
     let i;
     assume
-A3: i in Seg n;
+A4: i in Seg n;
     then i in dom z by A1,FINSEQ_1:def 3;
     hence z/.i = z.i by PARTFUN1:def 8
-      .= (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) by A2,A3;
+      .= (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) by A2,A4,A3;
   end;
   uniqueness
   proof
     let z1, z2 be Tuple of n, BOOLEAN such that
-A4: for i st i in Seg n holds
-    z1/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) and
 A5: for i st i in Seg n holds
+    z1/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) and
+A6: for i st i in Seg n holds
     z2/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
-A6: len z1 = n & len z2 = n by FINSEQ_2:109;
+A7: len z1 = n & len z2 = n by FINSEQ_2:109;
+then
+X: dom z1 = Seg n by FINSEQ_1:def 3;
     now
       let j be Nat;
       assume
-A7:   j in Seg n;
+A8:   j in dom z1;
       Seg n = Seg len z1 & Seg n = Seg len z2 by FINSEQ_2:109;
       then
-A8:   j in dom z1 & j in dom z2 by A7,FINSEQ_1:def 3;
+A9:   j in dom z1 & j in dom z2 by A8,FINSEQ_1:def 3,X;
       hence z1.j = z1/.j by PARTFUN1:def 8
-        .= (x/.j) 'xor' ((Neg2(y))/.j) 'xor' ((carry(x,Neg2(y)))/.j) by A4,A7
-        .= z2/.j by A5,A7
-        .= z2.j by A8,PARTFUN1:def 8;
+        .= (x/.j) 'xor' ((Neg2(y))/.j) 'xor' ((carry(x,Neg2(y)))/.j) by A5,A8,X
+        .= z2/.j by A6,A8,X
+        .= z2.j by A9,PARTFUN1:def 8;
     end;
-    hence z1 = z2 by A6,FINSEQ_2:10;
+    hence z1 = z2 by A7,FINSEQ_2:10;
   end;
 end;
 

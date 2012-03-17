@@ -11,18 +11,17 @@ environ
       PRELAMB, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, REAL_1,
       BINOP_1, RELSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSET_1, MCART_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, FUNCT_5, MIDSP_1, RVSUM_1,
-      XCMPLX_0, NAT_1, TREES_1, TREES_2, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, FUNCT_5, RVSUM_1, XCMPLX_0,
+      NAT_1, TREES_1, TREES_2, XXREAL_0;
  constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, RVSUM_1, TREES_2, MIDSP_1,
-      FUNCT_5, VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, TREES_2,
-      STRUCT_0, VALUED_0, VALUED_1, FUNCT_2;
+      FUNCT_5;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      NUMBERS, MEMBERED, FINSEQ_1, TREES_2, STRUCT_0, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0, XBOOLE_0, BINOP_1, VALUED_1;
+ definitions TARSKI, STRUCT_0, XBOOLE_0, BINOP_1;
  theorems FINSEQ_1, ZFMISC_1, TREES_2, RELSET_1, FUNCOP_1, FUNCT_2, TARSKI,
-      FINSET_1, MCART_1, CARD_1, TREES_1, NAT_1, CARD_2, FUNCT_1, RVSUM_1,
-      FUNCT_3, RELAT_1, STRUCT_0, XBOOLE_1;
+      MCART_1, CARD_1, TREES_1, NAT_1, CARD_2, RVSUM_1, RELAT_1, STRUCT_0,
+      XBOOLE_1;
  schemes FUNCT_2, FINSEQ_2;
 
 begin
@@ -70,55 +69,6 @@ definition
 
   (the inner_product of s).(x,y);
   correctness;
-end;
-
-Lm1: for f being Function holds pr1(dom f,rng f).:f = dom f
-proof
-  let f be Function;
-  now
-    let y be set;
-    thus y in dom f implies
-    ex x being set st x in dom pr1(dom f,rng f) & x in f &
-    y = pr1(dom f,rng f).x
-    proof
-      assume
-A1:   y in dom f;
-      then
-A2:   f.y in rng f by FUNCT_1:def 5;
-      take [y,f.y];
-      [y,f.y] in [:dom f,rng f:] by A1,A2,ZFMISC_1:106;
-      hence [y,f.y] in dom pr1(dom f,rng f) by FUNCT_3:def 5;
-      thus [y,f.y] in f by A1,FUNCT_1:def 4;
-      thus y = pr1(dom f,rng f).(y,f.y) by A1,A2,FUNCT_3:def 5
-        .= pr1(dom f,rng f).[y,f.y];
-    end;
-    given x being set such that
-A3: x in dom pr1(dom f,rng f) and x in f and
-A4: y = pr1(dom f,rng f).x;
-    dom pr1(dom f,rng f) = [:dom f, rng f:] by FUNCT_3:def 5;
-    then consider x1,x2 being set such that
-A5: x1 in dom f and
-A6: x2 in rng f and
-A7: x = [x1,x2] by A3,ZFMISC_1:103;
-    y = pr1(dom f,rng f).(x1,x2) by A4,A7;
-    hence y in dom f by A5,A6,FUNCT_3:def 5;
-  end;
-  hence pr1(dom f,rng f).:f = dom f by FUNCT_1:def 12;
-end;
-
-Lm2: for f being Function holds dom f is finite iff f is finite
-proof
-  let f be Function;
-  thus dom f is finite implies f is finite
-  proof
-    assume
-A1: dom f is finite;
-    then rng f is finite by FINSET_1:26;
-    then [:dom f, rng f:] is finite by A1,FINSET_1:19;
-    hence f is finite by FINSET_1:13,RELAT_1:21;
-  end;
-  pr1(dom f,rng f).:f = dom f by Lm1;
-  hence thesis by FINSET_1:17;
 end;
 
 definition
@@ -262,7 +212,7 @@ definition
     set Tr = {{}} --> [[<*x*>,x],0];
 A1: dom Tr = {{}} by FUNCOP_1:19;
     then reconsider Tr as finite DecoratedTree
-    by Lm2,TREES_1:48,TREES_2:def 8;
+    by TREES_1:48,TREES_2:def 8;
 A2: [[<*x*>,x],0] in [:PAIRSOF(s), NAT:] by ZFMISC_1:106;
     {[[<*x*>,x],0]} = rng Tr by FUNCOP_1:14;
     then rng Tr c= [:PAIRSOF(s), NAT:] by A2,ZFMISC_1:37;
@@ -278,7 +228,7 @@ A4: now consider x being Element of dom Tr-level 1;
       then consider w being Element of dom Tr such that
 A5:   x = w & len w = 1;
       w = {} by A1,TARSKI:def 1;
-      hence contradiction by A5,FINSEQ_1:25;
+      hence contradiction by A5,CARD_1:47;
     end;
 A6: branchdeg v = card succ v by TREES_2:def 13
       .= 0 by A3,A4,CARD_1:78,TREES_2:15;
@@ -345,8 +295,7 @@ A1: v is correct by Def13;
   assume
 A2: (p.v)`2 = 1;
   then
-A3: ex T,x,y st (p.v)`1 = [T,x/"y] & (p.(v^<*0*>))`1 = [T^<*y*>,x] by A1
-  ,Def5;
+A3: ex T,x,y st (p.v)`1 = [T,x/"y] & (p.(v^<*0*>))`1 = [T^<*y*>,x] by A1,Def5;
   branchdeg v = 1 by A1,A2,Def5;
   then v^<*0*> in dom p by Th1;
   hence thesis by A3;
@@ -360,7 +309,7 @@ A1: v is correct by Def13;
   assume
 A2: (p.v)`2 = 2;
   then
-A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1, Def5;
+A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1,Def5;
   branchdeg v = 1 by A1,A2,Def5;
   then v^<*0*> in dom p by Th1;
   hence thesis by A3;

@@ -12,18 +12,17 @@ environ
       ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       RELAT_1, RELAT_2, SETFAM_1, ORDERS_1, DOMAIN_1, NAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCT_3, FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      FINSUB_1, STRUCT_0, WELLORD1, TOLER_1, GOBOARD1, PBOOLE, ORDERS_2,
-      FINSEQOP, FUNCOP_1, XXREAL_0;
+      FUNCT_2, FUNCT_3, FRAENKEL, FINSET_1, FINSEQ_1, FINSEQ_2, FINSUB_1,
+      STRUCT_0, WELLORD1, TOLER_1, GOBOARD1, PBOOLE, ORDERS_2, FINSEQOP,
+      FUNCOP_1, XXREAL_0;
  constructors SETFAM_1, WELLORD2, DOMAIN_1, FUNCT_3, FINSUB_1, FRAENKEL,
-      XXREAL_0, NAT_1, TOLER_1, FINSEQOP, FINSEQ_4, PBOOLE, ORDERS_2, GOBOARD1,
-      VALUED_1, PARTFUN1, SEQ_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      STRUCT_0, ORDERS_2, MEMBERED, SEQ_1, VALUED_0, VALUED_1, FUNCT_2;
+      XXREAL_0, NAT_1, TOLER_1, FINSEQOP, PBOOLE, ORDERS_2, GOBOARD1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FINSET_1,
+      FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
+      ORDERS_2, MEMBERED, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions RELAT_2, TARSKI, SETFAM_1, FUNCT_1, GOBOARD1, WELLORD1, ORDERS_2,
-      FINSEQ_2, SUBSET_1, VALUED_1;
+      FINSEQ_2, SUBSET_1;
  theorems RELAT_1, ORDERS_2, RELAT_2, ZFMISC_1, TARSKI, SUBSET_1, ORDERS_1,
       FINSUB_1, NAT_1, FUNCT_2, PBOOLE, FUNCT_1, CARD_1, FINSEQ_1, FINSET_1,
       REAL_1, WELLORD2, CARD_2, FINSEQ_4, FINSEQ_2, FUNCOP_1, GOBOARD1,
@@ -508,7 +507,7 @@ A43:    q/.n = q.n by PARTFUN1:def 8
       for q being FinSequence of RelStr(#A',R|_2 A'#) st rng q = rng $1 &
       for n,m be Nat st n in dom q & m in dom q & n < m
       holds q/.n <> q/.m & [q/.n,q/.m] in R holds q=$1;
-A44:  X[E] by FINSEQ_1:27;
+A44:  X[E] by RELAT_1:64;
 A45:  for p being FinSequence of RelStr(#A',R|_2 A'#)
       for x being Element of RelStr(#A',R|_2 A'#) st X[p] holds X[p^<*x*>]
       proof
@@ -580,70 +579,61 @@ A57:        len(p^<*x*>) in dom (p^<*x*>) by FINSEQ_1:def 3;
             hence [l,m] in R by A47,A52,A53,A56,A57;
           end;
         end;
-A58:    len q <> 0
-        proof
-          assume len q = 0;
-          then q = {} by FINSEQ_1:25;
-          hence contradiction by A48,FINSEQ_1:27;
-        end;
+A58:    len q <> 0 by A48,RELAT_1:60,CARD_2:59;
         then consider n be Nat such that
 A59:    len q = n+1 by NAT_1:6;
         deffunc U(Nat) = q.$1;
         reconsider n as Element of NAT by ORDINAL1:def 13;
         ex q' being FinSequence st len q' = n &
-        for m be Nat st m in Seg n holds q'.m = U(m) from FINSEQ_1:sch 2;
+        for m be Nat st m in dom q' holds q'.m = U(m) from FINSEQ_1:sch 2;
         then consider q' being FinSequence such that
-A60:    len q' = n & for m be Nat st m in Seg n holds q'.m = q.m;
+A60:    len q' = n & for m be Nat st m in dom q' holds q'.m = q.m;
+A61: dom q' = Seg n by A60,FINSEQ_1:def 3;
         q' is FinSequence of RelStr(#A',R|_2 A'#)
         proof
           now
             let x;
             assume x in rng q';
             then consider y such that
-A61:        y in dom q' & x=q'.y by FUNCT_1:def 5;
-A62:        y in Seg len q' by A61,FINSEQ_1:def 3;
-            reconsider y as Element of NAT by A61;
-A63:        1 <= y & y <= n by A60,A62,FINSEQ_1:3;
+A62:        y in dom q' & x=q'.y by FUNCT_1:def 5;
+A63:        y in Seg len q' by A62,FINSEQ_1:def 3;
+            reconsider y as Element of NAT by A62;
+A64:        1 <= y & y <= n by A60,A63,FINSEQ_1:3;
             n <= n + 1 by NAT_1:11;
-            then 1 <= y & y <= n+1 by A63,XXREAL_0:2;
+            then 1 <= y & y <= n+1 by A64,XXREAL_0:2;
             then y in Seg (n+1) by FINSEQ_1:3;
             then y in dom q by A59,FINSEQ_1:def 3;
             then
-A64:        q.y in rng q by FUNCT_1:def 5;
+A65:        q.y in rng q by FUNCT_1:def 5;
             rng q c= the carrier of RelStr(#A',R|_2 A'#) by FINSEQ_1:def 4;
-            then q.y in the carrier of RelStr(#A',R|_2 A'#) by A64;
-            hence x in the carrier of RelStr(#A',R|_2 A'#) by A60,A61,A62;
+            then q.y in the carrier of RelStr(#A',R|_2 A'#) by A65;
+            hence x in the carrier of RelStr(#A',R|_2 A'#) by A60,A62;
           end;
           then rng q' c= the carrier of RelStr(#A',R|_2 A'#) by TARSKI:def 3;
           hence thesis by FINSEQ_1:def 4;
         end;
         then reconsider f=q' as FinSequence of RelStr(#A',R|_2 A'#);
-A65:    q'^<*x*> = q
+A66:    q'^<*x*> = q
         proof
-A66:      dom q = Seg (n+1) by A59,FINSEQ_1:def 3
+A67:      dom q = Seg (n+1) by A59,FINSEQ_1:def 3
             .= Seg (len q' + len <*x*>) by A60,FINSEQ_1:56;
-A67:      for m be Nat st m in dom q' holds q'.m = q.m
-          proof
-            let m be Nat;
-            assume m in dom q';
-            then m in Seg n by A60,FINSEQ_1:def 3;
-            hence thesis by A60;
-          end;
+A68:      for m be Nat st m in dom q' holds q'.m = q.m
+ by A60;
           for m be Nat st m in dom <*x*> holds q.(len q' + m) = <*x*>.m
           proof
             let m be Nat;
             assume m in dom <*x*>;
             then
-A68:        m in {1} by FINSEQ_1:4,def 8;
+A69:        m in {1} by FINSEQ_1:4,def 8;
             then
-A69:        m=1 by TARSKI:def 1;
+A70:        m=1 by TARSKI:def 1;
             q.(len q' + m) = x
             proof
               assume q.(len q' + m) <> x;
               then
-A70:          q.len q <> x by A59,A60,A68,TARSKI:def 1;
+A71:          q.len q <> x by A59,A60,A69,TARSKI:def 1;
               consider d1 being Element of RelStr(#A',R|_2 A'#) such that
-A71:          d1=x & for l being Element of RelStr(#A',R|_2 A'#)
+A72:          d1=x & for l being Element of RelStr(#A',R|_2 A'#)
               st l in rng (p^<*x*>) & l<>x holds [l,d1] in R by A50;
               x in rng q
               proof
@@ -653,91 +643,91 @@ A71:          d1=x & for l being Element of RelStr(#A',R|_2 A'#)
                 hence x in rng q by A48,FINSEQ_1:44;
               end;
               then consider y such that
-A72:          y in dom q & x=q.y by FUNCT_1:def 5;
-A73:          y in Seg len q by A72,FINSEQ_1:def 3;
-              reconsider y as Element of NAT by A72;
-A74:          1 <= y & y <= len q by A73,FINSEQ_1:3;
+A73:          y in dom q & x=q.y by FUNCT_1:def 5;
+A74:          y in Seg len q by A73,FINSEQ_1:def 3;
+              reconsider y as Element of NAT by A73;
+A75:          1 <= y & y <= len q by A74,FINSEQ_1:3;
               len q in Seg len q by A58,FINSEQ_1:5;
               then
-A75:          y in dom q & len q in dom q by A72,FINSEQ_1: def 3;
-A76:          y < len q by A70,A72,A74,REAL_1:def 5;
-A77:          q.len q is Element of A & q.len q in rng (p^<*x*>)
+A76:          y in dom q & len q in dom q by A73,FINSEQ_1: def 3;
+A77:          y < len q by A71,A73,A75,REAL_1:def 5;
+A78:          q.len q is Element of A & q.len q in rng (p^<*x*>)
               proof
-A78:            rng q c= the carrier of RelStr(#A',R|_2 A'#) by FINSEQ_1:def 4;
-                q.len q in rng q by A75,FUNCT_1:def 5;
-                hence q.len q is Element of A by A78;
-                thus q.len q in rng (p^<*x*>) by A48,A75,FUNCT_1:def 5;
+A79:            rng q c= the carrier of RelStr(#A',R|_2 A'#) by FINSEQ_1:def 4;
+                q.len q in rng q by A76,FUNCT_1:def 5;
+                hence q.len q is Element of A by A79;
+                thus q.len q in rng (p^<*x*>) by A48,A76,FUNCT_1:def 5;
               end;
               then reconsider k = q.len q as Element of RelStr(#A',R|_2 A'#);
               reconsider d = d1 as Element of RelStr(#A',R|_2 A'#);
-A79:          k = q/.len q & d = q/.y by A71,A72,A75,PARTFUN1:def 8;
+A80:          k = q/.len q & d = q/.y by A72,A73,A76,PARTFUN1:def 8;
               then
-A80:          k <> d by A48,A75,A76;
-A81:          [k,d] in R by A70,A71,A77;
-A82:          [d,k] in R by A48,A75,A76,A79;
+A81:          k <> d by A48,A76,A77;
+A82:          [k,d] in R by A71,A72,A78;
+A83:          [d,k] in R by A48,A76,A77,A80;
               field R = X by ORDERS_1:97;
               then
-A83:          R is_antisymmetric_in X by RELAT_2:def 12;
+A84:          R is_antisymmetric_in X by RELAT_2:def 12;
               k in A & d in A;
-              hence contradiction by A80,A81,A82,A83,RELAT_2:def 4;
+              hence contradiction by A81,A82,A83,A84,RELAT_2:def 4;
             end;
-            hence q.(len q' + m) = <*x*>.m by A69,FINSEQ_1:57;
+            hence q.(len q' + m) = <*x*>.m by A70,FINSEQ_1:57;
           end;
-          hence thesis by A66,A67,FINSEQ_1:def 7;
+          hence thesis by A67,A68,FINSEQ_1:def 7;
         end;
         q' = p
         proof
-A84:      p is FinSequence of RelStr(#A',R|_2 A'#) &
+A85:      p is FinSequence of RelStr(#A',R|_2 A'#) &
           for l,m be Nat st l in dom p & m in dom p & l < m
           holds p/.l <> p/.m & [p/.l,p/.m] in R
           proof
             thus p is FinSequence of RelStr(#A',R|_2 A'#);
             let l,m be Nat;
             assume
-A85:        l in dom p & m in dom p & l < m;
-A86:        dom p c= dom (p^<*x*>) by FINSEQ_1:39;
-            p.l = (p^<*x*>).l by A85,FINSEQ_1:def 7;
-            then p.l = (p^<*x*>)/.l by A85,A86,PARTFUN1:def 8;
+A86:        l in dom p & m in dom p & l < m;
+A87:        dom p c= dom (p^<*x*>) by FINSEQ_1:39;
+            p.l = (p^<*x*>).l by A86,FINSEQ_1:def 7;
+            then p.l = (p^<*x*>)/.l by A86,A87,PARTFUN1:def 8;
             then
-A87:        p/.l = (p^<*x*>)/.l by A85,PARTFUN1:def 8;
-            p.m = (p^<*x*>).m by A85,FINSEQ_1:def 7;
-            then p.m = (p^<*x*>)/.m by A85,A86,PARTFUN1:def 8;
-            then p/.m = (p^<*x*>)/.m by A85,PARTFUN1:def 8;
-            hence thesis by A47,A85,A86,A87;
+A88:        p/.l = (p^<*x*>)/.l by A86,PARTFUN1:def 8;
+            p.m = (p^<*x*>).m by A86,FINSEQ_1:def 7;
+            then p.m = (p^<*x*>)/.m by A86,A87,PARTFUN1:def 8;
+            then p/.m = (p^<*x*>)/.m by A86,PARTFUN1:def 8;
+            hence thesis by A47,A86,A87,A88;
           end;
-A88:      rng p = rng (p^<*x*>) \ {x}
+A89:      rng p = rng (p^<*x*>) \ {x}
           proof
-A89:        not x in rng p
+A90:        not x in rng p
             proof
               assume x in rng p;
               then consider y such that
-A90:          y in dom p & x=p.y by FUNCT_1:def 5;
-A91:          y in Seg len p by A90,FINSEQ_1:def 3;
-              reconsider y as Element of NAT by A90;
+A91:          y in dom p & x=p.y by FUNCT_1:def 5;
+A92:          y in Seg len p by A91,FINSEQ_1:def 3;
+              reconsider y as Element of NAT by A91;
               len p + 1 = len p + len <*x*> by FINSEQ_1:56
                 .= len (p^<*x*>) by FINSEQ_1:35;
               then (len p + 1) in Seg (len(p^<*x*>)) by FINSEQ_1:6;
               then
-A92:          (len p + 1) in dom (p^<*x*>) by FINSEQ_1:def 3;
-A93:          dom p c= dom (p^<*x*>) by FINSEQ_1:39;
-A94:          1 <= y & y <= len p by A91,FINSEQ_1:3;
-A95:          1 <= y & y < len p + 1 & len p + 1 <= len (p^<*x*>)
+A93:          (len p + 1) in dom (p^<*x*>) by FINSEQ_1:def 3;
+A94:          dom p c= dom (p^<*x*>) by FINSEQ_1:39;
+A95:          1 <= y & y <= len p by A92,FINSEQ_1:3;
+A96:          1 <= y & y < len p + 1 & len p + 1 <= len (p^<*x*>)
               proof
-                thus 1 <= y by A91,FINSEQ_1:3;
-                thus y < len p + 1 by A94,NAT_1:13;
+                thus 1 <= y by A92,FINSEQ_1:3;
+                thus y < len p + 1 by A95,NAT_1:13;
                 len p + 1 = len p + len <*x*> by FINSEQ_1:56
                   .= len (p^<*x*>) by FINSEQ_1:35;
                 hence len p + 1 <= len (p^<*x*>);
               end;
-              x = (p^<*x*>).y by A90,FINSEQ_1:def 7;
+              x = (p^<*x*>).y by A91,FINSEQ_1:def 7;
               then
-A96:          x = (p^<*x*>)/.y by A90,A93,PARTFUN1:def 8;
+A97:          x = (p^<*x*>)/.y by A91,A94,PARTFUN1:def 8;
               x = (p^<*x*>).(len p + 1 ) by FINSEQ_1:59;
               then (p^<*x*>)/.y = (p^<*x*>)/.(len p + 1 )
-              by A92,A96,PARTFUN1:def 8;
-              hence contradiction by A47,A90,A92,A93,A95;
+              by A93,A97,PARTFUN1:def 8;
+              hence contradiction by A47,A91,A93,A94,A96;
             end;
-A97:        rng (p^<*x*>) = rng p \/ rng <*x*> by FINSEQ_1:44
+A98:        rng (p^<*x*>) = rng p \/ rng <*x*> by FINSEQ_1:44
               .= rng p \/ {x} by FINSEQ_1:56;
             for z holds z in rng p \/ {x} \ {x} iff z in rng p
             proof
@@ -749,49 +739,49 @@ A97:        rng (p^<*x*>) = rng p \/ rng <*x*> by FINSEQ_1:44
                 hence z in rng p by XBOOLE_0:def 2;
               end;
               assume
-A98:          z in rng p;
+A99:          z in rng p;
               then
-A99:          not z in {x} by A89,TARSKI:def 1;
-              z in rng p \/ {x} by A98,XBOOLE_0:def 2;
-              hence z in rng p \/ {x} \ {x} by A99,XBOOLE_0:def 4;
+A100:          not z in {x} by A90,TARSKI:def 1;
+              z in rng p \/ {x} by A99,XBOOLE_0:def 2;
+              hence z in rng p \/ {x} \ {x} by A100,XBOOLE_0:def 4;
             end;
-            hence rng p = rng (p^<*x*>) \ {x} by A97,TARSKI:2;
+            hence rng p = rng (p^<*x*>) \ {x} by A98,TARSKI:2;
           end;
           rng f = rng p & for l,m be Nat st l in dom f & m in dom f & l < m
           holds f/.l <> f/.m & [f/.l,f/.m] in R
           proof
             thus rng f = rng p
             proof
-A100:         not x in rng f
+A101:         not x in rng f
               proof
                 assume x in rng f;
                 then consider y such that
-A101:           y in dom f & x=f.y by FUNCT_1:def 5;
-A102:           y in Seg len f by A101,FINSEQ_1:def 3;
-                reconsider y as Element of NAT by A101;
-A103:           1 <= y & y <= len f by A102,FINSEQ_1:3;
+A102:           y in dom f & x=f.y by FUNCT_1:def 5;
+A103:           y in Seg len f by A102,FINSEQ_1:def 3;
+                reconsider y as Element of NAT by A102;
+A104:           1 <= y & y <= len f by A103,FINSEQ_1:3;
                 len f + 1 = len f + len <*x*> by FINSEQ_1:56
                   .= len (f^<*x*>) by FINSEQ_1:35;
                 then (len f + 1) in Seg (len(f^<*x*>)) by FINSEQ_1:6;
                 then
-A104:           (len f + 1) in dom (f^<*x*>) by FINSEQ_1: def 3;
-A105:           dom f c= dom (f^<*x*>) by FINSEQ_1:39;
-A106:           1 <= y & y < len f + 1 & len f + 1 <= len (f^<*x*>)
+A105:           (len f + 1) in dom (f^<*x*>) by FINSEQ_1: def 3;
+A106:           dom f c= dom (f^<*x*>) by FINSEQ_1:39;
+A107:           1 <= y & y < len f + 1 & len f + 1 <= len (f^<*x*>)
                 proof
-                  thus 1 <= y by A102,FINSEQ_1:3;
-                  thus y < len f + 1 by A103,NAT_1:13;
+                  thus 1 <= y by A103,FINSEQ_1:3;
+                  thus y < len f + 1 by A104,NAT_1:13;
                   len f + 1 = len f + len <*x*> by FINSEQ_1:56
                     .= len (f^<*x*>) by FINSEQ_1:35;
                   hence len f + 1 <= len (f^<*x*>);
                 end;
-                x = q.y by A65,A101,FINSEQ_1:def 7;
+                x = q.y by A66,A102,FINSEQ_1:def 7;
                 then
-A107:           x = q/.y by A65,A101,A105,PARTFUN1:def 8;
-                x = q.(len f + 1) by A65,FINSEQ_1:59;
-                then q/.y = q/.(len f + 1) by A65,A104,A107,PARTFUN1:def 8;
-                hence contradiction by A48,A65,A101,A104,A105,A106;
+A108:           x = q/.y by A66,A102,A106,PARTFUN1:def 8;
+                x = q.(len f + 1) by A66,FINSEQ_1:59;
+                then q/.y = q/.(len f + 1) by A66,A105,A108,PARTFUN1:def 8;
+                hence contradiction by A48,A66,A102,A105,A106,A107;
               end;
-A108:         rng (f^<*x*>) = rng f \/ rng <*x*> by FINSEQ_1:44
+A109:         rng (f^<*x*>) = rng f \/ rng <*x*> by FINSEQ_1:44
                 .= rng f \/ {x} by FINSEQ_1:56;
               for z holds z in rng f \/ {x} \ {x} iff z in rng f
               proof
@@ -802,28 +792,28 @@ A108:         rng (f^<*x*>) = rng f \/ rng <*x*> by FINSEQ_1:44
                   hence z in rng f by XBOOLE_0:def 2;
                 end;
                 assume
-A109:           z in rng f;
+A110:           z in rng f;
                 then
-A110:           not z in {x} by A100,TARSKI:def 1;
-                z in rng f \/ {x} by A109,XBOOLE_0:def 2;
-                hence z in rng f \/ {x} \ {x} by A110,XBOOLE_0:def 4;
+A111:           not z in {x} by A101,TARSKI:def 1;
+                z in rng f \/ {x} by A110,XBOOLE_0:def 2;
+                hence z in rng f \/ {x} \ {x} by A111,XBOOLE_0:def 4;
               end;
-              hence rng f = rng p by A48,A65,A88,A108,TARSKI:2;
+              hence rng f = rng p by A48,A66,A89,A109,TARSKI:2;
             end;
-A111:       dom f c= dom q by A65,FINSEQ_1:39;
+A112:       dom f c= dom q by A66,FINSEQ_1:39;
             let l,m be Nat;
             assume
-A112:       l in dom f & m in dom f & l < m;
+A113:       l in dom f & m in dom f & l < m;
             then
-A113:       f.l = f/.l & q.l = q/.l & f.m = f/.m & q.m = q/.m
-            by A111,PARTFUN1:def 8;
-            l in Seg n & m in Seg n by A60,A112,FINSEQ_1:def 3;
-            then f/.l = q/.l & f/.m = q/.m by A60,A113;
-            hence thesis by A48,A111,A112;
+A114:       f.l = f/.l & q.l = q/.l & f.m = f/.m & q.m = q/.m
+            by A112,PARTFUN1:def 8;
+            l in Seg n & m in Seg n by A60,A113,FINSEQ_1:def 3;
+            then f/.l = q/.l & f/.m = q/.m by A60,A114,A61;
+            hence thesis by A48,A112,A113;
           end;
-          hence q'=p by A46,A84;
+          hence q'=p by A46,A85;
         end;
-        hence q = p^<*x*> by A65;
+        hence q = p^<*x*> by A66;
       end;
       for p be FinSequence of RelStr(#A',R|_2 A'#) holds
       X [p] from FINSEQ_2:sch 2(A44,A45);
@@ -1538,9 +1528,6 @@ A17:  y2 = y1 & dom y2 = Seg n & rng y2 c= Seg(n+1) by A16,FUNCT_2:def 2;
       reconsider y2 as FinSequence by A17,FINSEQ_1:def 2;
 A18:  len y2 = n by A17,FINSEQ_1:def 3;
       reconsider y2 as FinSequence of Seg(n+1) by A17,FINSEQ_1:def 4;
-      Seg(n+1) c= REAL by XBOOLE_1:1;
-      then rng y2 c= REAL by A17,XBOOLE_1:1;
-      then reconsider y3 = y2 as FinSequence of REAL by FINSEQ_1:def 4;
 A19:  y2 is one-to-one
       proof
         let a,b be set;

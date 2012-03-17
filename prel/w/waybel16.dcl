@@ -14,9 +14,9 @@
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -47,7 +47,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="176">
+<Func kind="K" nr="177">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -66,8 +66,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
-<Func kind="K" nr="176">
+<Func kind="K" nr="185">
+<Func kind="K" nr="177">
 <LocusVar nr="1"/>
 </Func>
 </Func>

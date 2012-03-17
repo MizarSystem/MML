@@ -11,8 +11,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="REAL_1"/>
 <ArticleID name="INT_1"/>
 </Signature>
@@ -114,7 +114,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -172,7 +172,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -217,13 +217,13 @@
 <Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="63">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

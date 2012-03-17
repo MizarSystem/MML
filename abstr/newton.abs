@@ -9,12 +9,13 @@ environ
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
       NAT_1, INT_1, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI, SQUARE_1,
-      XCMPLX_0, SEQ_1, COMPLEX1;
+      XCMPLX_0, SEQ_1, COMPLEX1, CQC_LANG;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
+      XREAL_0, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, FINSEQ_1,
+      FINSEQ_2, FUNCOP_1, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1,
+      XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, FINSEQ_4, FINSOP_1, SEQ_1, RVSUM_1;
+      FINSOP_1, SEQ_1, RVSUM_1, FUNCOP_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, RVSUM_1,
       VALUED_0;
@@ -63,6 +64,7 @@ definition
   let x be complex number, n be Nat;
   func x |^ n equals
 :: NEWTON:def 1
+
   Product (n |-> x);
 end;
 
@@ -129,6 +131,7 @@ definition
   let n be Nat;
   func n! -> Real equals
 :: NEWTON:def 2
+
   Product idseq n;
 end;
 
@@ -175,6 +178,7 @@ definition
   let k,n be Nat;
   func n choose k means
 :: NEWTON:def 3
+
   for l be Nat st l = n-k holds
   it = (n!)/((k!) * (l!)) if n >= k otherwise it = 0;
 end;
@@ -236,6 +240,7 @@ definition
   let n be Nat;
   func (a,b) In_Power n -> FinSequence of REAL means
 :: NEWTON:def 4
+
   len it = n+1 &
   (for i,l,m being Nat st i in dom it & m = i - 1 & l = n-m holds
   it.i = (n choose m)* a|^l * b|^m);
@@ -259,6 +264,7 @@ definition
   let n be Nat;
   func Newton_Coeff n -> FinSequence of REAL means
 :: NEWTON:def 5
+
   len it = n+1 &
   (for i,k be Nat st i in dom it & k = i-1 holds it.i = n choose k);
 end;
@@ -402,6 +408,7 @@ theorem :: NEWTON:81
 definition
   func SetPrimes -> Subset of NAT means
 :: NEWTON:def 6
+
   for n being Nat holds n in it iff n is prime;
 end;
 
@@ -420,6 +427,7 @@ definition
   let p be Nat;
   func SetPrimenumber p -> Subset of NAT means
 :: NEWTON:def 7
+
   for q being Nat holds q in it iff q < p & q is prime;
 end;
 
@@ -481,6 +489,7 @@ definition
   let n be Nat;
   func primenumber n -> prime Element of NAT means
 :: NEWTON:def 8
+
   n = card SetPrimenumber it;
 end;
 
@@ -535,3 +544,21 @@ theorem :: NEWTON:104
 theorem :: NEWTON:105
   2|^n > n;
 
+:: from AMI_4, 2008.02.14, A.T.
+
+reserve k,i for Element of NAT;
+
+scheme :: NEWTON:sch 1
+ Euklides' { F(Nat)->Element of NAT,G(Nat)->
+  Element of NAT,a()->Element of NAT,b()->Element of NAT } :
+  ex k st F(k) = a() hcf b() & G(k) = 0
+provided
+ 0 < b()
+and
+ b() < a()
+and
+ F(0) = a()
+and
+ G(0) = b()
+and
+ for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k);

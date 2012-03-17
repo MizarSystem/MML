@@ -6,10 +6,11 @@
 
 environ
 
- vocabularies BOOLE, TARSKI, RELAT_1, ZF_REFLE, FUNCT_1, MATRIX_1, COMPLEX1;
+ vocabularies BOOLE, TARSKI, RELAT_1, ZF_REFLE, FUNCT_1, MATRIX_1, COMPLEX1,
+      FUNCT_5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
  constructors TARSKI, SUBSET_1;
- registrations XBOOLE_0, SUBSET_1;
+ registrations XBOOLE_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, XBOOLE_1;
@@ -148,13 +149,13 @@ A6: x in A() & y in B() & P[x,y];
   end;
 end;
 
-Lm1: [x,y] in R implies x in union union R & y in union union R
+Lm1: [x,y] in X implies x in union union X & y in union union X
 proof
   assume
-A1: [x,y] in R;
+A1: [x,y] in X;
   {x,y} in [x,y] & { x } in [x,y] by TARSKI:def 2;
   then
-A2: {x,y} in union R & {x} in union R by A1,TARSKI:def 4;
+A2: {x,y} in union X & {x} in union X by A1,TARSKI:def 4;
   y in {x,y} & x in {x} by TARSKI:def 1,def 2;
   hence thesis by A2,TARSKI:def 4;
 end;
@@ -262,8 +263,8 @@ theorem
 ::             __________________
 
 definition
-  let R;
-  func dom R -> set means
+  let R be set;
+  func proj1 R -> set means
   :Def4:
   x in it iff ex y st [x,y] in R;
   existence
@@ -290,6 +291,11 @@ A2: (for x holds x in X1 iff ex y st [x,y] in R) &
     end;
     hence X1=X2 by TARSKI:2;
   end;
+end;
+
+notation
+  let R be Relation;
+  synonym dom R for proj1 R;
 end;
 
 canceled 2;
@@ -362,8 +368,8 @@ end;
 ::            ____________________
 
 definition
-  let R;
-  func rng R -> set means
+  let R be set;
+  func proj2 R -> set means
   :Def5:
   y in it iff ex x st [x,y] in R;
   existence
@@ -390,6 +396,11 @@ A2: (for y holds y in Y1 iff ex x st [x,y] in R) &
     end;
     hence Y1=Y2 by TARSKI:2;
   end;
+end;
+
+notation
+  let R be Relation;
+  synonym rng R for proj2 R;
 end;
 
 canceled 2;
@@ -2509,7 +2520,7 @@ A7: z in X by A5,Def13;
   hence thesis by TARSKI:2;
 end;
 
-theorem
+theorem Th160:
   rng(P*R) = R.:(rng P)
 proof
   z in rng(P*R) iff z in R.:(rng P)
@@ -2852,7 +2863,7 @@ A7: z in Y by A5,Def14;
   hence thesis by TARSKI:2;
 end;
 
-theorem
+theorem Th182:
   dom(P*R) = P"(dom R)
 proof
   z in dom(P*R) iff z in P"(dom R)
@@ -3092,5 +3103,66 @@ proof
   assume x in rng [:X,Y:];
   then ex y st [y,x] in [:X,Y:] by Def5;
   hence x in Y by ZFMISC_1:106;
+end;
+
+:: from FUNCOP_1, 2008.02.19, A.T.
+
+theorem
+  X <> {} & Y <> {} implies dom[:X,Y:] = X & rng[:X,Y:] = Y
+proof
+  assume X <> {};
+   then consider a such that
+W1: a in X by XBOOLE_0:def 1;
+  assume Y <> {};
+   then consider b such that
+W2: b in Y by XBOOLE_0:def 1;
+A: now let x;
+    assume x in X;
+     then [x,b] in [:X,Y:] by ZFMISC_1:106,W2;
+    hence ex y st [x,y] in [:X,Y:];
+   end;
+  (ex y st [x,y] in [:X,Y:]) implies x in X by ZFMISC_1:106;
+  hence dom[:X,Y:] = X by A,Def4;
+A: now let y;
+    assume y in Y;
+     then [a,y] in [:X,Y:] by ZFMISC_1:106,W1;
+    hence ex x st [x,y] in [:X,Y:];
+   end;
+  (ex x st [x,y] in [:X,Y:]) implies y in Y by ZFMISC_1:106;
+  hence rng[:X,Y:] = Y by Def5,A;
+end;
+
+theorem
+  dom R = {} & dom Q = {} implies R = Q
+proof
+  assume dom R = {} & dom Q = {};
+   then R = {} & Q = {} by Th64;
+  hence R = Q;
+end;
+
+theorem
+  rng R = {} & rng Q = {} implies R = Q
+proof
+  assume rng R = {} & rng Q = {};
+   then R = {} & Q = {} by Th64;
+  hence R = Q;
+end;
+
+theorem
+  dom R = dom Q implies dom(S*R) = dom (S*Q)
+proof
+  assume
+A1: dom R = dom Q;
+  thus dom(S*R) = S"dom R by Th182
+    .= dom (S*Q) by A1,Th182;
+end;
+
+theorem
+  rng R = rng Q implies rng(R*S) = rng (Q*S)
+proof
+  assume
+A1: rng R = rng Q;
+  thus rng(R*S) = S.:rng R by Th160
+    .= rng (Q*S) by A1,Th160;
 end;
 

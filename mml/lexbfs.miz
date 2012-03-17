@@ -17,23 +17,23 @@ environ
       FUNCT_2, BINARITH, PBOOLE, ORDINAL1, SEQM_3, POLYNOM1, FINSET_1,
       XCMPLX_0, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
       PRE_CIRC, GLIB_003, BAGORDER, TERMORD, UPROOTS, CHORD, FINSEQ_1,
-      FINSEQ_4, DOMAIN_1, ABIAN, RELSET_1;
+      DOMAIN_1, ABIAN, RELSET_1, RECDEF_1;
  constructors WELLORD1, DOMAIN_1, FUNCT_4, XXREAL_0, NAT_D, PRE_CIRC, BAGORDER,
-      TERMORD, UPROOTS, GLIB_002, GLIB_003, CHORD, VALUED_1, PARTFUN1, SEQ_1;
+      TERMORD, UPROOTS, GLIB_002, GLIB_003, CHORD, RECDEF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, PRE_CIRC,
       GLIB_000, ABIAN, POLYNOM1, HEYTING3, BAGORDER, TERMORD, CARD_FIN,
-      GLIB_001, GLIB_002, GLIB_003, CHORD, VALUED_0, VALUED_1, FUNCT_2;
+      GLIB_001, GLIB_002, GLIB_003, CHORD, VALUED_0;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
- definitions GLIB_000, GLIB_001, GLIB_003, FINSEQ_1, FUNCOP_1, VALUED_1;
+ definitions GLIB_000, GLIB_001, GLIB_003, FINSEQ_1, FUNCOP_1;
  theorems AXIOMS, CARD_1, CARD_2, CARD_4, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001,
       GLIB_002, GLIB_003, HEYTING3, INT_1, NAT_1, BAGORDER, TERMORD, ORDINAL1,
       PARTFUN1, PBOOLE, REAL_1, RELAT_1, RELSET_1, TARSKI, XBOOLE_0, XBOOLE_1,
-      XREAL_1, ZFMISC_1, PEPIN, ENUMSET1, SEQM_3, CHORD, BINARITH, NECKLACE,
-      FINSEQ_4, WELLORD1, UPROOTS, KNASTER, CARD_FIN, POLYNOM1, ORDINAL3,
-      TREES_1, PRE_CIRC, MEMBERED, NAT_2, XXREAL_0, NAT_D, VALUED_0;
- schemes BINARITH, NAT_1, FUNCT_1, RECDEF_1, FINSEQ_4, FRAENKEL;
+      XREAL_1, ZFMISC_1, PEPIN, ENUMSET1, CHORD, BINARITH, NECKLACE, FINSEQ_4,
+      WELLORD1, UPROOTS, CARD_FIN, POLYNOM1, ORDINAL3, TREES_1, PRE_CIRC,
+      NAT_2, XXREAL_0, NAT_D, VALUED_0;
+ schemes NAT_1, FUNCT_1, RECDEF_1, FINSEQ_4, FRAENKEL;
 
 begin :: Preliminaries
 
@@ -207,19 +207,10 @@ definition
   dom it = dom f \/ dom g &
   for x being set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
   existence
-  proof
-    deffunc A() = dom f \/ dom g;
-    defpred P[set,set] means f.$1 \/ g.$1 = $2;
-A1: for x,y1,y2 being set st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
-A2: for x being set st x in A() ex y being set st P[x,y];
-    ex f being Function st dom f = A() &
-    for x being set st x in A() holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
-    then consider IT being Function such that
-A3: dom IT = A() and
-A4: for x being set st x in A() holds P[x,IT.x];
-    take IT;
-    thus dom IT = dom f \/ dom g by A3;
-    thus for x being set st x in dom f \/ dom g holds IT.x = f.x \/ g.x by A4;
+  proof deffunc F(set) = f.$1 \/ g.$1;
+    thus ex IT being Function st dom IT = dom f \/ dom g &
+     for x being set st x in dom f \/ dom g holds IT.x=F(x)
+      from FUNCT_1:sch 3;
   end;
   uniqueness
   proof
@@ -269,8 +260,7 @@ A1: n <= m;
   suppose k < m;
     then
 A2: Seg (k -' m) = {} by FINSEQ_1:4,NAT_2:10;
-    for x be set st x in ((Seg k)\Seg(k-'n))holds x in Seg k by XBOOLE_0:def
-    4;
+    for x be set st x in ((Seg k)\Seg(k-'n))holds x in Seg k by XBOOLE_0:def 4;
     hence thesis by A2,TARSKI:def 3;
   end;
   suppose
@@ -443,7 +433,9 @@ A2: (a,1)-bag = (b,1)-bag;
   now
     let x be set;
     x in a iff (b,1)-bag.x = 1 by A2,UPROOTS:8,9;
+
     hence x in a iff x in b by UPROOTS:8,9;
+
   end;
   hence contradiction by A1,TARSKI:2;
 end;
@@ -469,6 +461,7 @@ A4:   x in rng H;
 A5:   y in dom H & H.y = x by A4,FUNCT_1:def 5;
       H.y = F.y + k by A1,A2,A5;
       hence x in NAT by A5;
+
     end;
     then rng H c= NAT by TARSKI:def 3;
     then
@@ -540,9 +533,9 @@ A1: rng p = B by FINSEQ_1:73;
     (ex a being Nat, A being bag of n st a in dom p & a <= $1 & p.a = A &
     (for c being Nat, C being bag of n st c in dom p & c <= $1 & p.c = C
     holds C <= A, T));
-    p <> {} by A1,FINSEQ_1:27;
+    p <> {} by A1,RELAT_1:60;
     then
-A2: 0 <> len p by FINSEQ_1:25;
+A2: 0 <> len p by CARD_2:59;
 A3: P[1]
     proof
 A4:   1 in dom p by A1,FINSEQ_3:34;
@@ -557,9 +550,9 @@ A5:     c in dom p & c <= 1 & p.c = C;
       end;
       hence P[1] by A4;
     end;
-A6: for k being non empty Element of NAT st P[k] holds P[k+1]
+A6: for k being non empty Nat st P[k] holds P[k+1]
     proof
-      let k be non empty Element of NAT such that
+      let k be non empty Nat such that
 A7:   P[k];
       per cases;
       suppose
@@ -617,8 +610,8 @@ A18:        c in dom p & c <= k+1 & p.c = C;
         hence P[k+1] by NAT_1:13;
       end;
     end;
-    for k being non empty Element of NAT holds P[k]
-    from BINARITH:sch 1(A3,A6);
+    for k being non empty Nat holds P[k]
+    from NAT_1:sch 10(A3,A6);
     then consider a being Nat, A being bag of n such that
 A19: a in dom p & a <= len p & p.a = A and
 A20: for c being Nat, C being bag of n st c in dom p & c <= len p & p.c = C
@@ -685,25 +678,21 @@ definition
   proof
     set tVG = the_Vertices_of G;
     set tEG = the_Edges_of G;
-    now
-      assume len V < 1;
-      then len V = 0 by NAT_1:14;
-      hence contradiction by FINSEQ_1:25;
-    end;
+    len V >= 1 by CARD_2:59,NAT_1:14;
     then
 A1: 2*len V >= 2*1 & 2>=1 by XREAL_1:66;
     then 2*len V >= 1 by XXREAL_0:2;
     then
 A2: 2*len V - 1 >= 1 - 1 by XREAL_1:15;
-    defpred P[Element of NAT,set] means
+    defpred P[Nat,set] means
     ($1 is odd implies $2 = V.(($1+1) div 2)) &
     ($1 is even implies $2 Joins V.($1 div 2),V.($1 div 2 + 1),G);
     deffunc N() = 2*len V -' 1;
     deffunc D() = the_Vertices_of G \/ the_Edges_of G;
-A3: for n being Element of NAT st n in Seg N()
+A3: for n being Nat st n in Seg N()
     ex d being Element of D() st P[n,d]
     proof
-      let n be Element of NAT such that
+      let n be Nat such that
 A4:   n in Seg N();
 A5:   1 <= n & n <= 2*len V -' 1 by A4,FINSEQ_1:3;
       2*len V -' 1 = 2*len V - 1 by A2,BINARITH:def 3;
@@ -711,7 +700,7 @@ A5:   1 <= n & n <= 2*len V -' 1 by A4,FINSEQ_1:3;
 A6:   n+1 <= 2*len V - 1 + 1 by A5,XREAL_1:9;
       per cases;
       suppose n is odd;
-        then reconsider n as odd Element of NAT;
+        then reconsider n as odd Element of NAT by ORDINAL1:def 13;
         set m = (n+1) div 2;
         2 divides n+1 by PEPIN:22;
         then
@@ -726,7 +715,7 @@ A7:     2*m = n+1 by NAT_D:3;
         thus thesis;
       end;
       suppose n is even;
-        then reconsider n as even Element of NAT;
+        then reconsider n as even Element of NAT by ORDINAL1:def 13;
         set m = n div 2;
         2 divides n by PEPIN:22;
         then
@@ -751,12 +740,12 @@ A10:    e Joins V.m,V.(m+1),G by A9,GLIB_001:def 1;
     end;
     consider f being FinSequence of D() such that
 A11: len f = N() and
-A12: for n being Element of NAT st n in Seg N() holds P[n,f/.n]
+A12: for n being Nat st n in Seg N() holds P[n,f/.n]
     from FINSEQ_4:sch 1(A3);
 A13: len f = 2*len V - 1 by A2,A11,BINARITH:def 3;
     len f <> 2*0 by A2,A11,BINARITH:def 3;
-    then f <> {} by FINSEQ_1:25;
-    then rng f <> {} by FINSEQ_1:27;
+    then f <> {} by CARD_1:47;
+    then rng f <> {} by RELAT_1:64;
     then
 A14: 1 in dom f by FINSEQ_3:34;
     then
@@ -786,8 +775,7 @@ A22:  n+2 in Seg len f;
 A23:  f/.(n+1) Joins V.((n+1) div 2), V.((n+1) div 2 + 1),G by A11,A12,A20;
       n+1 in dom f by A20,FINSEQ_1:def 3;
       then
-A24:  f.(n+1) Joins V.((n+1) div 2),V.((n+1) div 2 +1),G by A23,
-      PARTFUN1:def 8;
+A24:  f.(n+1) Joins V.((n+1) div 2),V.((n+1) div 2 +1),G by A23,PARTFUN1:def 8;
       f/.n = V.((n+1) div 2) & n in dom f by A11,A12,A21,FINSEQ_1:def 3;
       then
 A25:  f.n = V.((n+1) div 2) by PARTFUN1:def 8;
@@ -1642,8 +1630,8 @@ A1:     V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
         consider X being [VLabeled] [V2Labeled] inducedSubgraph of G,V,E;
         set VL = (the_VLabel_of G) | the_Vertices_of X;
         reconsider VL'=VL as PartFunc of dom VL, rng VL by PARTFUN1:24;
-        reconsider VL' as PartFunc of the_Vertices_of X, rng VL by PARTFUN1:28,
-        RELAT_1:87;
+        reconsider VL' as PartFunc of the_Vertices_of X, rng VL by PARTFUN1:28
+        ,RELAT_1:87;
         set G1 = X.set(VLabelSelector, VL');
 A2:     X == G1 by GLIB_003:8;
         set V2L = (the_V2Label_of G) | the_Vertices_of G1;
@@ -2423,7 +2411,6 @@ proof
   set CSN = GS.n;
   set VLN = the_VLabel_of CSN;
   set CSO = GS.GS.Lifespan();
-  set VLO = the_VLabel_of CSO;
   set GN = GS.Lifespan();
   defpred P[Nat] means $1 <= GN implies
   rng the_VLabel_of (GS.$1) = (Seg GN) \ Seg (GN-'$1);
@@ -2648,8 +2635,6 @@ proof
   set CSM = GS.m;
   set VLM = the_VLabel_of CSM;
   set j = GS.Lifespan() -' n;
-  set CSJ = GS.j;
-  set VLJ = the_VLabel_of CSJ;
   set CJ1 = GS.(j+1);
   set VJ1 = the_VLabel_of CJ1;
   assume
@@ -2724,7 +2709,6 @@ proof
   set CSM = GS.m;
   set VLM = the_VLabel_of (GS.m);
   set j = GS.Lifespan() -' VLM.v;
-  set CSJ = GS.j;
   set VLJ = the_VLabel_of (GS.j);
   assume
 A1: v in CSM.labeledV();
@@ -3065,7 +3049,6 @@ definition
   proof
     set VLG = the_VLabel_of G;
     set f = (G.AdjacentSet({v}) \ dom VLG) --> {k};
-    set H = G.set(V2LabelSelector, (the_V2Label_of G) .\/ f);
     set F = (the_V2Label_of G) .\/ f;
 A1: dom the_V2Label_of G c= the_Vertices_of G by Th11;
     G.AdjacentSet({v}) \ dom VLG c= the_Vertices_of G;
@@ -3200,7 +3183,6 @@ definition
   coherence
   proof
     set IT = LexBFS:LabelAdjacent(G, v, k);
-    set VL = the_VLabel_of IT;
     set V2 = the_V2Label_of IT;
     set VLG = the_VLabel_of G;
     set V2G = the_V2Label_of G;
@@ -3319,9 +3301,6 @@ A1:       x is finite natural-vlabeled finite-v2labeled
           natsubset-v2labeled VVGraph & n is Nat;
           then reconsider Gn=x as finite natural-vlabeled finite-v2labeled
           natsubset-v2labeled VVGraph;
-          reconsider nn = n as Nat by A1;
-          reconsider xx=x as finite natural-vlabeled finite-v2labeled
-          natsubset-v2labeled VVGraph by A1;
           consider SGn being finite natural-vlabeled finite-v2labeled
           natsubset-v2labeled VVGraph such that
 A2:       SGn = LexBFS:Step(Gn);
@@ -3437,8 +3416,8 @@ proof
 A1: G1 == G by GLIB_003:8;
 A2: dom g = the_Vertices_of G by FUNCOP_1:19;
   then dom g = the_Vertices_of G1 by A1,GLIB_000:def 36;
-  then reconsider f = g as PartFunc of the_Vertices_of G1, rng g by
-  PARTFUN1:24;
+
+then reconsider f = g as PartFunc of the_Vertices_of G1, rng g by PARTFUN1:24;
   set G2 = G1.set(V2LabelSelector, f);
 A3: now
     let x be set;
@@ -3656,7 +3635,6 @@ A3: for k being Nat st P[k] holds P[k+1]
 A4: P[k];
     set CSK = (LexBFS:CSeq(G)).k;
     set VLK = the_VLabel_of CSK;
-    set V2K = the_V2Label_of CSK;
     set CK1 = (LexBFS:CSeq(G)).(k+1);
     set V21 = the_V2Label_of CK1;
     set w = LexBFS:PickUnnumbered(CSK);
@@ -3758,7 +3736,6 @@ A4: V[k];
     set CSK = (LexBFS:CSeq(G)).(G.order()+k);
     set VLK = the_VLabel_of CSK;
     set CK1 = (LexBFS:CSeq(G)).(G.order()+k+1);
-    set VL1 = the_VLabel_of CK1;
     G == CSK by Th42;
     then
 A5: card dom VLK = CSK.order() by A4,GLIB_000:93;
@@ -3775,7 +3752,6 @@ A9: P[k];
     set CSK = (LexBFS:CSeq(G)).(G.order()+k);
     set VLK = the_VLabel_of CSK;
     set CK1 = (LexBFS:CSeq(G)).(G.order()+k+1);
-    set VL1 = the_VLabel_of CK1;
     G == CSK by Th42;
     then CSK.order() = G.order() by GLIB_000:93;
     then
@@ -3952,8 +3928,7 @@ A1: n < G.order();
   set VL1 = the_VLabel_of CS1;
 A2: GS.Lifespan() = G.order() by Th51;
   then
-A3: not PA in dom VLN & VL1 = VLN +* (PA .--> (GS.Lifespan()-'n)) by A1,
-  Def27;
+A3: not PA in dom VLN & VL1 = VLN +* (PA .--> (GS.Lifespan()-'n)) by A1,Def27;
   n = card dom VLN by A1,Th46;
   then
 A4: VL1 = VLN +* (PU .--> (GS.Lifespan()-'n)) by A1,A2,Th44;
@@ -3993,7 +3968,6 @@ A1: n < G.order();
   set VLN = the_VLabel_of CSN;
   set V2N = the_V2Label_of CSN;
   set CN1 = (LexBFS:CSeq(G)).(n+1);
-  set VN1 = the_VLabel_of CN1;
   set V21 = the_V2Label_of CN1;
   set w = LexBFS:PickUnnumbered(CSN);
   set k = G.order() -' n;
@@ -4186,14 +4160,12 @@ A2: n < m;
   set VLN = the_VLabel_of CSN;
   set V2N = the_V2Label_of CSN;
   set CSM = (LexBFS:CSeq(G)).m;
-  set VLM = the_VLabel_of CSM;
   set V2M = the_V2Label_of CSM;
   assume that
 A3: y = LexBFS:PickUnnumbered(CSN) and
 A4: not x in dom VLN and
 A5: x in G.AdjacentSet({y});
   set CN1 = (LexBFS:CSeq(G)).(n+1);
-  set VN1 = the_VLabel_of CN1;
   set V21 = the_V2Label_of CN1;
   consider w being Vertex of CSN such that
 A6: w = LexBFS:PickUnnumbered(CSN) and
@@ -4291,8 +4263,6 @@ A2: n <= m;
   set V2M = the_V2Label_of CSM;
   let x be set such that
 A3: not G.order() -' k in V2N.x;
-  set CSK = (LexBFS:CSeq(G)).k;
-  set V2K = the_V2Label_of CSK;
   set CK1 = (LexBFS:CSeq(G)).(k+1);
   set V21 = the_V2Label_of CK1;
   k+1 <= n by A1,NAT_1:13;
@@ -4316,7 +4286,6 @@ theorem Th60:
 proof
   let G be finite _Graph, m, n be Nat;
   set CSM = (LexBFS:CSeq(G)).m;
-  set VLM = the_VLabel_of CSM;
   set V2M = the_V2Label_of CSM;
   set CSN = (LexBFS:CSeq(G)).(G.order() -' n);
   set VLN = the_VLabel_of CSN;
@@ -4447,7 +4416,6 @@ A4: j = G.order() -' (the_VLabel_of ((LexBFS:CSeq(G)).i)).b;
   set CSJ = (LexBFS:CSeq(G)).j;
   set VLI = the_VLabel_of ((LexBFS:CSeq(G)).i);
   set VLJ = the_VLabel_of ((LexBFS:CSeq(G)).j);
-  set V2I = the_V2Label_of ((LexBFS:CSeq(G)).i);
   set V2J = the_V2Label_of ((LexBFS:CSeq(G)).j);
 A5: a in CSI.labeledV() by A1;
 A6: b in CSI.labeledV() by A2;
@@ -4456,7 +4424,7 @@ A7: G.order() = (LexBFS:CSeq(G)).Lifespan() by Th51;
   then
 A8: G.order() -' VLI.b = G.order() - VLI.b by BINARITH:50;
   then
-A9: G.order() -' j = G.order() - (G.order() - VLI.b) by A4,BINARITH:50, 52;
+A9: G.order() -' j = G.order() - (G.order() - VLI.b) by A4,BINARITH:50,52;
   (LexBFS:CSeq(G)).PickedAt(j) = b by A4,A6,A7,Th27;
   then
 A10: LexBFS:PickUnnumbered(CSJ) = b by A3,A4,A8,Th53,XREAL_1:46;
@@ -4551,7 +4519,7 @@ A2: CSi == G by Th42;
 A3: (LexBFS:CSeq(G)).Lifespan() = G.order() by Th51;
 A4: CSi.labeledV() <> {} by A1;
 A5: VLi.a < VLi.c by A1,XXREAL_0:2;
-    reconsider ag = a, bg = b, cg = c as Vertex of G by A2,GLIB_000:def 36;
+    reconsider cg = c as Vertex of G by A2,GLIB_000:def 36;
     now
       assume
 A6:   for d being Vertex of CSi st d in dom VLi & VLi.c < VLi.d &
@@ -4574,8 +4542,8 @@ A10:  sbb c= Seg G.order() by A9,XBOOLE_1:1;
       sba c= (Seg G.order()) \ Seg (G.order() -' k) by Th55;
       then
 A11:  sba c= Seg G.order() by A9,XBOOLE_1:1;
-A12:  not bb,cb are_adjacent & ab,cb are_adjacent by A1,A2,A7,CHORD:44,
-      GLIB_000:88;
+A12:  not bb,cb are_adjacent & ab,cb are_adjacent by A1,A2,A7,CHORD:44
+      ,GLIB_000:88;
       then not b in CSb.AdjacentSet({cb}) by CHORD:52;
       then
 A13:  not b in G.AdjacentSet({cg}) by Th42,CHORD:51;
@@ -4629,8 +4597,10 @@ A31:  (sbb,1)-bag <> (sba,1)-bag by A26,Th8;
 A32:  (sba,1)-bag <= (sbb,1)-bag, InvLexOrder NAT by A1,Th63;
       set j = (the_VLabel_of CSb).cb;
       (sbb,1)-bag.j = 0 by A27,UPROOTS:8;
+
       then
 A33:  (sbb,1)-bag.j < (sba,1)-bag.j by A26,UPROOTS:9;
+
       [(sbb,1)-bag,(sba,1)-bag] in InvLexOrder NAT
       proof
         per cases;
@@ -4638,6 +4608,7 @@ A33:  (sbb,1)-bag.j < (sba,1)-bag.j by A26,UPROOTS:9;
           holds (sbb,1)-bag.k = (sba,1)-bag.k;
 
 hence [(sbb,1)-bag,(sba,1)-bag] in InvLexOrder NAT by A33,BAGORDER:def 8;
+
         end;
         suppose not for k being Ordinal st j in k & k in NAT
           holds (sbb,1)-bag.k = (sba,1)-bag.k;
@@ -4645,7 +4616,6 @@ hence [(sbb,1)-bag,(sba,1)-bag] in InvLexOrder NAT by A33,BAGORDER:def 8;
 A34:      j in qq & qq in NAT and
 A35:      (sbb,1)-bag.qq <> (sba,1)-bag.qq;
           defpred M[Nat] means j in $1 & (sbb,1)-bag.$1 <> (sba,1)-bag.$1;
-          reconsider q = qq as Element of NAT by A34;
           ex k being Element of NAT st M[k] by A34,A35;
           then
 A36:      ex k being Nat st M[k];
@@ -4658,9 +4628,11 @@ A38:        M[k];
 A39:        ok = k and j in ok & ok in NAT and
 A40:        (sbb,1)-bag.ok <> (sba,1)-bag.ok by A38;
 A41:        (sba,1)-bag.k = 1 or (sba,1)-bag.k = 0 by UPROOTS:8,9;
+
             per cases;
             suppose not ok in sbb;
               then ok in sba by A39,A40,A41,UPROOTS:8;
+
               hence k <= G.order() by A11,A39,FINSEQ_1:3;
             end;
             suppose ok in sbb;
@@ -4675,10 +4647,12 @@ A43:      for i being Nat st M[i] holds i <= mm from NAT_1:sch 6(A37,A36);
           then consider jy being Element of NAT such that
 A44:      jy = j & jy < mm;
 A45:      (sbb,1)-bag.mm = 0 or (sbb,1)-bag.mm = 1 by UPROOTS:8,9;
+
           now
             assume
 A46:        (sbb,1)-bag.mm = 1;
             then mm in sbb by UPROOTS:8;
+
             then consider z being Vertex of CSb such that
 A47:        z in dom (the_VLabel_of CSb) and
 A48:        (the_VLabel_of CSb).z = mm and
@@ -4721,7 +4695,7 @@ A64:        kc < G.order() by A62,XREAL_1:46;
 A65:        kc < k by A59,A61,Th2;
             z = (LexBFS:CSeq(G)).PickedAt(kc) by A3,A60,Th27;
             then
-A66:        z = LexBFS:PickUnnumbered(CSc) by A62,A63,Th53, XREAL_1:46;
+A66:        z = LexBFS:PickUnnumbered(CSc) by A62,A63,Th53,XREAL_1:46;
 A67:        G.order() -' kc = G.order() - (G.order() - VLi.z)
             by A63,A64,BINARITH:50;
             now
@@ -4740,6 +4714,7 @@ A71:          VLi.a < VLi.z by A58,XXREAL_0:2;
             end;
             hence contradiction by A42,A46,A53,A57,A64,A65,A66,A67,Th57,
             UPROOTS:9;
+
           end;
           then
 A72:      (sbb,1)-bag.mm < (sba,1)-bag.mm by A42,A45;
@@ -4986,15 +4961,14 @@ A58: not c in P.vertices() by A44;
     then Qr is Path-like & Qr is open & Qr is chordless
     by A47,A50,A51,A58,CHORD:97;
     then
-A59: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:
-    121,149;
+A59: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121,149;
 A60: 1 in dom Qr & 3 in dom Qr & 5 in dom Qr & 7 in dom Qr by A53,FINSEQ_3:27;
 A61: Q.length() = (3+1)-1 by A52,Lm5;
 A62: dom Q = dom Qr & len Q = len Qr by GLIB_001:22;
     v = Q.(7-3+1) & a = Q.(7-5+1) & b = Q.(len Qr-1+1) &
     c = Q.(7-7+1) by A53,A54,A55,A60,GLIB_001:25;
     then
-A63: v = Q.(len Q-2) & a = Q.3 & b = Q.last() & c = Q.first() by A53, A62;
+A63: v = Q.(len Q-2) & a = Q.3 & b = Q.last() & c = Q.first() by A53,A62;
 A64: VLG.c > VLG.b & VLG.b > VLG.a & VLG.a > VLG.v
     by A18,A34,A36,A37,A38,A39,A40,A44;
     now
@@ -5081,8 +5055,7 @@ A92: not v5 in P.vertices() by A73,A79;
     then Qr is Path-like & Qr is open & Qr is chordless
     by A70,A86,A92,CHORD:97;
     then
-A93: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:
-    121,149;
+A93: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121,149;
 A94: Q.length() = (k+1)-1 by A87,Lm5;
 A95: len Q = len Qr by GLIB_001:22;
     then v2 = Q.(len Q-3+1) & v3 = Q.(len Q-(len Qr-2)+1)
@@ -5284,6 +5257,7 @@ A16:    not y in G.AdjacentSet({v}) or y in dom VLG;
           end;
         end;
         hence x in NAT by A15;
+
       end;
       suppose y in G.AdjacentSet({v}) & not y in dom VLG;
         then V2.y = V2G.y + 1 by A2,A9,A14;
@@ -5305,10 +5279,6 @@ definition
   coherence
   proof
     set IT = MCS:LabelAdjacent(G, v);
-    set VL = the_VLabel_of IT;
-    set V2 = the_V2Label_of IT;
-    set VLG = the_VLabel_of G;
-    set V2G = the_V2Label_of G;
     the_VLabel_of IT = the_VLabel_of G by GLIB_000:12;
     hence IT is finite natural-vlabeled natural-v2labeled VVGraph by Def7;
   end;
@@ -5367,7 +5337,6 @@ definition
 A1:       x is finite natural-vlabeled natural-v2labeled VVGraph & n is Nat;
           then reconsider Gn=x as finite natural-vlabeled natural-v2labeled
           VVGraph;
-          reconsider nn = n as Nat by A1;
           consider SGn being finite natural-vlabeled
           natural-v2labeled VVGraph such that
 A2:       SGn = MCS:Step(Gn);
@@ -5480,8 +5449,8 @@ proof
 A1: G1 == G by GLIB_003:8;
 A2: dom g = the_Vertices_of G by FUNCOP_1:19;
   then dom g = the_Vertices_of G1 by A1,GLIB_000:def 36;
-  then reconsider f = g as PartFunc of the_Vertices_of G1, rng g by
-  PARTFUN1:24;
+
+then reconsider f = g as PartFunc of the_Vertices_of G1, rng g by PARTFUN1:24;
   set G2 = G1.set(V2LabelSelector, f);
 A3: now
     let x be set;
@@ -5670,7 +5639,7 @@ A5: CK1 = MCS:Step(CSK) by Def40;
       then CK1 = MCS:Update(CSK, w, card (dom the_VLabel_of CSK))
       by A4,A5,Def39;
       then
-A6:   CK1 = MCS:LabelAdjacent(CSK.labelVertex(w,kk),w) by A3, GLIB_000:93;
+A6:   CK1 = MCS:LabelAdjacent(CSK.labelVertex(w,kk),w) by A3,GLIB_000:93;
       set CC = CSK.labelVertex(w,kk);
 A7:   CK1 == CC by A6,Th12;
       CC == CSK by GLIB_003:47;
@@ -5732,7 +5701,6 @@ A3: for k being Nat st P[k] holds P[k+1]
     let k be Nat such that
 A4: P[k];
     set CSK = (MCS:CSeq(G)).k;
-    set V2K = the_V2Label_of CSK;
     set CK1 = (MCS:CSeq(G)).(k+1);
     set V21 = the_V2Label_of CK1;
     set w = MCS:PickUnnumbered(CSK);
@@ -5748,7 +5716,7 @@ A8:   card (dom the_VLabel_of CSK) < G.order();
       then CK1 = MCS:Update(CSK, w, card (dom the_VLabel_of CSK))
       by A7,A8,Def39;
       then
-A9:   CK1 = MCS:LabelAdjacent(CSK.labelVertex(w,m),w) by A6,GLIB_000 :93;
+A9:   CK1 = MCS:LabelAdjacent(CSK.labelVertex(w,m),w) by A6,GLIB_000:93;
       set CSlv = CSK.labelVertex(w,m);
       set V2v = the_V2Label_of CSlv;
 A10:  CSlv == CSK by GLIB_003:47;
@@ -5876,7 +5844,6 @@ A9: P[k];
     set CSK = (MCS:CSeq(G)).(G.order()+k);
     set VLK = the_VLabel_of CSK;
     set CK1 = (MCS:CSeq(G)).(G.order()+k+1);
-    set VL1 = the_VLabel_of CK1;
     G == CSK by Th78;
     then CSK.order() = G.order() by GLIB_000:93;
     then
@@ -6032,8 +5999,7 @@ A1: n < G.order();
   set VL1 = the_VLabel_of CS1;
 A2: GS.Lifespan() = G.order() by Th87;
   then
-A3: not PA in dom VLN & VL1 = VLN +* (PA .--> (GS.Lifespan()-'n)) by A1,
-  Def27;
+A3: not PA in dom VLN & VL1 = VLN +* (PA .--> (GS.Lifespan()-'n)) by A1,Def27;
   n = card dom VLN by A1,Th82;
   then
 A4: VL1 = VLN +* (PU .--> (GS.Lifespan()-'n)) by A1,A2,Th81;
@@ -6071,7 +6037,6 @@ A1: n < G.order();
   set VLN = the_VLabel_of CSN;
   set V2N = the_V2Label_of CSN;
   set CN1 = (MCS:CSeq(G)).(n+1);
-  set VN1 = the_VLabel_of CN1;
   set V21 = the_V2Label_of CN1;
   set w = MCS:PickUnnumbered(CSN);
   set k = G.order() -' n;
@@ -6215,8 +6180,7 @@ A25:      now
             then w in GAS /\ {w} by TARSKI:def 1;
             hence contradiction by A23,XBOOLE_0:def 3;
           end;
-          GAS /\ dom VL1 = (GAS /\ dom VLK) \/ (GAS /\ {w}) by A11,
-          XBOOLE_1:23
+          GAS /\ dom VL1 = (GAS /\ dom VLK) \/ (GAS /\ {w}) by A11,XBOOLE_1:23
             .= (GAS /\ dom VLK) \/ {} by A24,A25,TARSKI:def 2
             .= GAS /\ dom VLK;
           hence card (G.AdjacentSet({x}) /\ dom VL1) = V12.x by A5,A13,A22;
@@ -6570,7 +6534,7 @@ A68:      D.f = d by A56,A58,A65,XXREAL_0:1;
         now
           let e,f be odd Element of NAT such that
 A69:      1 <= e & e < f & f <= j;
-          e <= j & D.e = C.e by A60,A69, XXREAL_0:2;
+          e <= j & D.e = C.e by A60,A69,XXREAL_0:2;
           then
 A70:      D.e = P.e by A45;
           D.f = C.f by A60,A69;
@@ -6755,13 +6719,11 @@ A114: V.va = a & V.vb = b & V.vc = c & va < vb & va < vc;
     assume
 A115: not b,c are_adjacent;
 A116: a = V.(VLG.a) & b = V.(VLG.b) & c = V.(VLG.c) by A2,A5,A6,FUNCT_1:56;
-    a in dom VLG & b in dom VLG & c in dom VLG by A111,A113,A114,
-    FUNCT_1:def 5;
-    then VLG.a in dom V & VLG.b in dom V & VLG.c in dom V by A111,
-    FUNCT_1:def 5;
+    a in dom VLG & b in dom VLG & c in dom VLG by A111,A113,A114,FUNCT_1:def 5;
+
+then VLG.a in dom V & VLG.b in dom V & VLG.c in dom V by A111,FUNCT_1:def 5;
     then
-A117: VLG.a = va & VLG.b = vb & VLG.c = vc by A4,A113,A114,A116,
-    FUNCT_1:def 8;
+A117: VLG.a = va & VLG.b = vb & VLG.c = vc by A4,A113,A114,A116,FUNCT_1:def 8;
     per cases by A112,A116,REAL_1:def 5;
     suppose
 A118: VLG.b < VLG.c;
@@ -6776,8 +6738,8 @@ A122: now
 A123:   3 <= j & j < k & k <= len P;
         j < 5 by A119,A123,XXREAL_0:2;
         then j = 1 or j = 3 or j = 5 by CHORD:8,XXREAL_0:2;
-        hence VLG.(P.j) < VLG.(P.k) by A114,A117,A119,A120,A123,CHORD:8,
-        XXREAL_0:2;
+        hence VLG.(P.j) < VLG.(P.k) by A114,A117,A119,A120,A123,CHORD:8
+        ,XXREAL_0:2;
       end;
 A124: now
         let j,k be odd Element of NAT such that
@@ -6803,8 +6765,8 @@ A130: now
 A131:   3 <= j & j < k & k <= len P;
         j < 5 by A127,A131,XXREAL_0:2;
         then j = 1 or j = 3 or j = 5 by CHORD:8,XXREAL_0:2;
-        hence VLG.(P.j) < VLG.(P.k) by A114,A117,A127,A128,A131,CHORD:8,
-        XXREAL_0:2;
+        hence VLG.(P.j) < VLG.(P.k) by A114,A117,A127,A128,A131,CHORD:8
+        ,XXREAL_0:2;
       end;
 A132: now
         let j,k be odd Element of NAT such that

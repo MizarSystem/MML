@@ -12,10 +12,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="PARTFUN1"/>
 </Signature>
@@ -30,7 +30,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="18">
+<Adjective nr="17">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
@@ -52,13 +52,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="96">
 <LocusVar nr="1"/>
 <Func kind="K" nr="47"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -69,13 +69,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="97">
 <LocusVar nr="1"/>
 <Func kind="K" nr="47"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -86,13 +86,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="60">
+<Func kind="K" nr="96">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -103,13 +103,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="97">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -146,12 +146,12 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="56">
+<Func kind="K" nr="92">
 <Func kind="K" nr="47"/>
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="17"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

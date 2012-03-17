@@ -35,6 +35,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="FRAENKEL"/>
@@ -48,31 +49,31 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="330">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="K" nr="24">
-<Func kind="K" nr="289">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="289">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="289">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="113">
-<Func kind="K" nr="289">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="114">
-<Func kind="K" nr="289">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -87,7 +88,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -103,7 +104,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -124,7 +125,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -142,7 +143,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="336">
+<Func kind="K" nr="347">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -158,7 +159,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="336">
+<Func kind="K" nr="347">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -179,7 +180,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="336">
+<Func kind="K" nr="347">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
