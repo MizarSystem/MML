@@ -40,7 +40,7 @@
 <CCluster aid="TOPREAL5" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="148"/>
+<Adjective nr="151"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -53,9 +53,9 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="148"/>
-<Adjective nr="149" value="false"/>
-<Adjective nr="150" value="false"/>
+<Adjective nr="151"/>
+<Adjective nr="152" value="false"/>
+<Adjective nr="153" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

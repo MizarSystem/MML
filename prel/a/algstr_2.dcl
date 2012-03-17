@@ -40,10 +40,10 @@
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
-<Adjective nr="100"/>
-<Adjective nr="102"/>
-<Adjective nr="107"/>
-<Adjective nr="108"/>
+<Adjective nr="103"/>
+<Adjective nr="105"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_2" nr="1">

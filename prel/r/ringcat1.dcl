@@ -44,7 +44,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="140"/>
+<Adjective nr="146"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="2">
@@ -53,8 +53,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="3">
@@ -66,9 +66,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="11">
@@ -78,9 +78,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -90,8 +90,8 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="4">
@@ -101,7 +101,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="142"/>
+<Adjective nr="148"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="5">
@@ -109,7 +109,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="142"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -124,9 +124,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="6">
@@ -136,7 +136,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="143"/>
+<Adjective nr="149"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="7">
@@ -144,7 +144,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="143"/>
+<Adjective nr="149"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -153,8 +153,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RINGCAT1" nr="8">
@@ -166,9 +166,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="11">
@@ -178,9 +178,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="29">
@@ -194,8 +194,8 @@
 <LocusVar nr="3"/>
 </Typ>
 <Cluster>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RINGCAT1" nr="1">
@@ -219,7 +219,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="139">
+<Adjective nr="145">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -234,9 +234,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="124"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
+<Adjective nr="127"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -244,8 +244,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="140"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINGCAT1" nr="3">
@@ -277,7 +277,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="142"/>
+<Adjective nr="148"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINGCAT1" nr="5">
@@ -295,7 +295,7 @@
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="45" value="false"/>
-<Adjective nr="106"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINGCAT1" nr="6">
@@ -311,7 +311,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <CCluster aid="RINGCAT1" nr="1">
@@ -337,7 +337,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="139">
+<Adjective nr="145">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -365,15 +365,15 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="116">
+<Adjective nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="127">
+<Adjective nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="129">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -402,15 +402,15 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="116">
+<Adjective nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="127">
+<Adjective nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="129">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -438,7 +438,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="139">
+<Adjective nr="145">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

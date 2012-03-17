@@ -48,7 +48,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="121">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -71,7 +71,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="121">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -94,7 +94,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="122">
+<Adjective nr="128">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -117,7 +117,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="122">
+<Adjective nr="128">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -192,8 +192,11 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="115"/>
-<Adjective nr="116"/>
+<Adjective nr="118"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CONVEX4" nr="5">
@@ -205,7 +208,10 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="116"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
+<Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="9">
@@ -233,7 +239,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="121">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -258,7 +264,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="121">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

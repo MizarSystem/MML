@@ -71,7 +71,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="126"/>
+<Adjective nr="129"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="3">

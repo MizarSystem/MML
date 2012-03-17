@@ -7,19 +7,19 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, XBOOLE_0, STRUCT_0, ZFMISC_1,
-      RLVECT_1, ALGSTR_0, ARYTM_3, SUPINF_2, VECTSP_1, RELAT_1, MESFUNC1,
-      FINSEQ_1, SCMFSA7B, BINOP_1, FUNCSDOM, FUNCT_1, CARD_3, AMI_1, NAT_1,
-      FUNCT_4, FUNCOP_1, MCART_1, PARTFUN1, ORDINAL1, ARYTM_1, FUNCT_2,
-      FUNCT_5, TARSKI, SCMRING1;
+      ARYTM_3, SUPINF_2, RELAT_1, FINSEQ_1, SCMFSA7B, FUNCSDOM, FUNCT_1,
+      CARD_3, AMI_1, NAT_1, FUNCT_4, FUNCOP_1, MCART_1, PARTFUN1, ORDINAL1,
+      ARYTM_1, FUNCT_2, FUNCT_5, TARSKI, SCMRING1, GROUP_9;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NAT_1, STRUCT_0, ALGSTR_0, RLVECT_1,
       VECTSP_1, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
       FUNCT_4, CAT_2, AMI_2;
- constructors PARTFUN1, XXREAL_0, FINSEQ_4, REALSET2, CAT_2, AMI_3, RELSET_1,
-      AMI_2;
+ constructors PARTFUN1, XXREAL_0, FINSEQ_4, REALSET2, CAT_2, RELSET_1, AMI_2,
+      FUNCOP_1, SETFAM_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FINSEQ_1,
       CARD_3, STRUCT_0, VECTSP_1, GR_CY_1, GCD_1, TOPGRP_1, AMI_2, AFINSQ_1,
-      CARD_1, ORDINAL2, ZFMISC_1, FUNCT_1, CARD_2;
+      CARD_1, ORDINAL2, ZFMISC_1, FUNCT_1, CARD_2, ALGSTR_0, ALGSTR_1,
+      FUNCSDOM;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
 
 
@@ -32,12 +32,6 @@ reserve i, j, k for Element of NAT,
   d1, d2, d3, d4 for Element of SCM-Data-Loc,
   S for non empty
   1-sorted;
-
-registration
-  cluster trivial -> Abelian add-associative right_zeroed right_complementable
-    (non empty addLoopStr);
-  cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
-end;
 
 registration
   cluster SCM-Instr -> non trivial;
@@ -70,18 +64,6 @@ end;
 
 registration
   cluster trivial -> good (non empty 1-sorted);
-end;
-
-registration
-  cluster trivial non empty 1-sorted;
-end;
-
-registration
-  cluster strict trivial non empty doubleLoopStr;
-end;
-
-registration
-  cluster strict trivial Ring;
 end;
 
 reserve G for good (non empty 1-sorted);
@@ -290,16 +272,20 @@ Element of NAT st x = [ 6, <*mk*>], SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x
   Element of R st x = [ 5, <*mk, r*>] otherwise s;
 end;
 
+definition
+  let A be set, B be non empty set;
+  mode Action of A,B is Function of A, Funcs(B,B);
+end;
+
 registration
-  let S be non empty 1-sorted, f be Function of SCM-Instr S, Funcs(product
-  SCM-OK S, product SCM-OK S), x be Element of SCM-Instr S;
+  let S be non empty 1-sorted, f be Action of SCM-Instr S, product SCM-OK S,
+      x be Element of SCM-Instr S;
   cluster f.x -> Function-like Relation-like;
 end;
 
 definition
   let R be good Ring;
-  func SCM-Exec R -> Function of SCM-Instr R, Funcs(product SCM-OK R, product
-  SCM-OK R) means
+  func SCM-Exec R -> Action of SCM-Instr R, product SCM-OK R means
 :: SCMRING1:def 15
   for x being Element of SCM-Instr R, y being SCM-State of R
   holds (it.x).y = SCM-Exec-Res (x,y);

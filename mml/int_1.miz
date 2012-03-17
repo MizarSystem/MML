@@ -1647,3 +1647,88 @@ A1: r+1 <= i+1 by XREAL_1:8;
   hence thesis;
 end;
 
+:: from POLYNOM2, 2010.02.13, A.T.
+
+scheme
+  FinInd{M, N() -> Element of NAT, P[Nat]} : for i being Element of NAT st M()
+  <= i & i <= N() holds P[i]
+provided
+A1: P[M()] and
+A2: for j being Element of NAT st M() <= j & j < N() holds P[j] implies
+P[j+1]
+proof
+  defpred Q[Nat] means M() <= $1 & $1 <= N() & not(P[$1]);
+  assume
+  not(for i being Element of NAT st M() <= i & i <= N() holds P[i]);
+  then
+A3: ex i being Nat st Q[i];
+  consider k being Nat such that
+A4: Q[k] & for k9 being Nat st Q[k9] holds k <= k9 from NAT_1:sch 5(A3);
+  per cases;
+  suppose
+    k = M();
+    hence thesis by A1,A4;
+  end;
+  suppose
+    k <> M();
+    then M() < k by A4,XXREAL_0:1;
+    then M() + 1 <= k by NAT_1:13;
+    then
+A5: (M() + 1) - 1 <= k - 1 by XREAL_1:11;
+    then reconsider k9 = k - 1 as Element of NAT by Th16;
+A6: k9 <> k9 + 1;
+    k9 <= k9 + 1 by NAT_1:11;
+    then
+A7: k9 < k by A6,XXREAL_0:1;
+    then
+A8: k9 < N() by A4,XXREAL_0:2;
+A9: (k - 1) + 1 = k + 0;
+    not(Q[k9]) by A4,A7;
+    hence thesis by A2,A4,A5,A9,A8;
+  end;
+end;
+
+scheme
+  FinInd2{M,N() -> Element of NAT, P[Nat]} : for i being Element of NAT st M()
+  <= i & i <= N() holds P[i]
+provided
+A1: P[M()] and
+A2: for j being Element of NAT st M() <= j & j < N() holds (for j9 being
+Element of NAT st M() <= j9 & j9 <= j holds P[j9]) implies P[j+1]
+proof
+  defpred Q[Element of NAT] means for j being Element of NAT st M() <= j & j
+  <= ($1) holds P[j];
+A3: for j being Element of NAT st M() <= j & j < N() holds Q[j] implies Q[j+
+  1]
+  proof
+    let j be Element of NAT;
+    assume that
+A4: M() <= j and
+A5: j < N();
+    assume
+A6: Q[j];
+    thus Q[j+1]
+    proof
+      let i be Element of NAT;
+      assume that
+A7:   M() <= i and
+A8:   i <= j + 1;
+      per cases;
+      suppose
+        i = j + 1;
+        hence thesis by A2,A4,A5,A6;
+      end;
+      suppose
+        i <> j + 1;
+        then i < j + 1 by A8,XXREAL_0:1;
+        then i <= j by NAT_1:13;
+        hence thesis by A6,A7;
+      end;
+    end;
+  end;
+A9: Q[M()] by A1,XXREAL_0:1;
+  for i being Element of NAT st M() <= i & i <= N() holds Q[i] from
+  FinInd(A9,A3);
+  hence thesis;
+end;
+

@@ -1,0 +1,199 @@
+:: Counting Derangements, Counting Non Bijective Functions and the Birthday 
+:: Problem
+::  by Cezary Kaliszyk
+:: 
+:: Received February 23, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, INT_1, ARYTM_1, ARYTM_3, CARD_1, FUNCT_2, NAT_1, CARD_3,
+      FINSET_1, ORDINAL2, RPR_1, CARDFIN2, ABIAN, POWER, COMPLEX1, AFINSQ_1,
+      RELAT_1, XCMPLX_0, SIN_COS, SERIES_1, TAYLOR_1, SUBSET_1, FDIFF_1,
+      FINSEQ_1, TARSKI, REAL_1, FINSOP_1, NEWTON, ORDINAL1, REALSET1, XXREAL_0,
+      XBOOLE_0, XXREAL_1, VALUED_1, NUMBERS, BINOP_2, XREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, RELSET_1,
+      PARTFUN1, FUNCT_2, BINOP_1, FINSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D, INT_1, COMPLEX1, BINOP_2,
+      VALUED_1, NEWTON, RCOMP_1, FCONT_1, POWER, SERIES_1, SEQFUNC, SIN_COS,
+      AFINSQ_1, ABIAN, TAYLOR_1, STIRL2_1, CARD_FIN, RPR_1, AFINSQ_2;
+ constructors REAL_1, SERIES_1, ABIAN, VALUED_1, CARD_FIN, RCOMP_1, SIN_COS,
+      TAYLOR_1, SEQ_1, FCONT_1, SEQFUNC, RELSET_1, STIRL2_1, SETWISEO,
+      YELLOW20, WELLORD2, NAT_D, BINARITH, RPR_1, AFINSQ_2, AFINSQ_1;
+ registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_1,
+      FINSET_1, NUMBERS, SIN_COS, RCOMP_1, VALUED_0, VALUED_1, FUNCT_2,
+      FCONT_3, FCONT_1, AFINSQ_1, POWER, FUNCT_1, BINOP_2, WSIERP_1, XCMPLX_0,
+      XBOOLE_0, RELAT_1, FRAENKEL, AFINSQ_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve x, y, z for set,
+  n for natural number;
+
+registration :: Could be moved to NEWTON
+  let n be Nat;
+  cluster n! -> natural;
+end;
+
+registration :: Could be moved to NEWTON
+  let n be natural number;
+  cluster n! -> positive;
+end;
+
+registration :: Could be moved to SIN_COS
+  let c be real number;
+  cluster exp_R(c) -> positive;
+end;
+
+registration :: TAYLOR_1
+  cluster number_e -> positive;
+end;
+
+theorem :: CARDFIN2:1
+  id {} has_no_fixpoint;
+
+theorem :: CARDFIN2:2
+  for c be real number st c < 0 holds
+  exp_R c < 1;
+
+begin :: Rounding
+
+definition
+  let n be real number;
+  func round n -> Integer equals
+:: CARDFIN2:def 1
+    [\ n + 1 / 2 /];
+end;
+
+theorem :: CARDFIN2:3
+  for a being Integer holds
+  round a = a;
+
+theorem :: CARDFIN2:4
+  for a being Integer
+  for b being real number st
+  |. a - b .| < 1/2 holds
+  a = round b;
+
+begin :: Counting derangements
+
+theorem :: CARDFIN2:5
+  for n be Nat
+  for a, b be real number st a < b holds
+  ex c be real number st c in ].a, b.[
+  & exp_R a = Partial_Sums(Taylor(exp_R, [#]REAL, b, a)).n
+            + exp_R c * (a-b) |^ (n+1) / ((n+1)!);
+
+theorem :: CARDFIN2:6
+  for n be positive Nat
+  for c be real number st c < 0 holds
+  |. -n! * (exp_R c * (-1) |^ (n+1) / ((n+1)!)) .| < 1/2;
+
+definition
+  let s be set;
+  func derangements (s) equals
+:: CARDFIN2:def 2
+    { f where f is Permutation of s : f has_no_fixpoint };
+end;
+
+registration
+  let s be finite set;
+  cluster derangements(s) -> finite;
+end;
+
+theorem :: CARDFIN2:7
+  for s being finite set holds
+  derangements s = {h where h is Function of
+    s, s: h is one-to-one & for x st x in s holds h.x<>x};
+
+theorem :: CARDFIN2:8
+  for s being non empty finite set
+  ex c being real number st c in ]. -1, 0 .[ &
+  card(derangements s) - (((card s)!) / number_e) =
+     -(card s)! * (exp_R c * (-1) |^ ((card s)+1) / (((card s)+1)!));
+
+theorem :: CARDFIN2:9
+  for s being non empty finite set
+  holds |. card(derangements s) - (((card s)!) / number_e) .| < 1/2;
+
+theorem :: CARDFIN2:10
+  for s being non empty finite set
+  holds card(derangements s) = round ((card s)! / number_e);
+
+theorem :: CARDFIN2:11
+  derangements {} = {{}};
+
+theorem :: CARDFIN2:12
+  derangements { x } = {};
+
+definition
+  func der_seq -> sequence of INT means
+:: CARDFIN2:def 3
+ it.0 = 1 &
+    it.1 = 0 &
+    for n being natural number
+    holds it.(n + 2) = (n + 1) * (it.n + it.(n + 1));
+end;
+
+registration
+  let c be Integer;
+  let F be XFinSequence of INT;
+  cluster c (#) F -> finite INT-valued T-Sequence-like;
+end;
+
+registration
+  let c be complex number;
+  let F be empty Function;
+  cluster c (#) F -> empty;
+end;
+
+theorem :: CARDFIN2:13
+  for F be XFinSequence of INT
+  for c be Integer holds
+  c * Sum F = Sum ((c (#) F) | (len F -' 1)) + c * F.(len F -' 1);
+
+:: This theorem is symmetric to the previous one. Since we use Integers
+:: we cannot divide and it has to be proved separately.
+theorem :: CARDFIN2:14
+  for X, N be XFinSequence of INT st len N = len X + 1
+  for c be Integer st (N | len X) = c (#) X
+  holds Sum N = c * Sum X + N.(len X);
+
+theorem :: CARDFIN2:15
+  for s being finite set
+  holds der_seq.(card s) = card (derangements s);
+
+begin :: Counting not-one-to-one functions and the birthday problem
+
+definition let s, t be set;
+  func not-one-to-one (s, t) -> Subset of Funcs(s, t) equals
+:: CARDFIN2:def 4
+    {f where f is Function of s, t : f is not one-to-one};
+end;
+
+registration let s, t be finite set;
+  cluster not-one-to-one (s, t) -> finite;
+end;
+
+scheme :: CARDFIN2:sch 1
+ FraenkelDiff {s, t() -> set, P[set]} :
+    {f where f is Function of s(), t() : not P[f]} =
+      Funcs(s(), t()) \ {f where f is Function of s(), t() : P[f]}
+  provided
+ t() = {} implies s() = {};
+
+theorem :: CARDFIN2:16
+  for s, t being finite set st card s <= card t
+  holds card (not-one-to-one (s, t)) =
+       (card t |^ card s) - ((card t)! / ((card t -' card s)!));
+
+theorem :: CARDFIN2:17
+  for s being finite set, t being non empty finite set
+  st card s = 23 & card t = 365
+  holds 2 * card (not-one-to-one (s, t)) > card Funcs (s, t);
+
+theorem :: CARDFIN2:18
+  for s, t being non empty finite set st card s = 23 & card t = 365
+  holds prob (not-one-to-one (s, t)) > 1/2;

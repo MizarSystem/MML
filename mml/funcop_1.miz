@@ -15,7 +15,7 @@ environ
  requirements SUBSET, BOOLE;
  definitions TARSKI, RELAT_1, BINOP_1, FUNCT_1, WELLORD1;
  theorems ZFMISC_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, FUNCT_3, TARSKI,
-      BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1, PARTFUN1;
+      BINOP_1, MCART_1, XBOOLE_0, XBOOLE_1, GRFUNC_1;
  schemes FUNCT_1;
 
 begin
@@ -785,7 +785,7 @@ definition
   coherence by Th47;
 end;
 
-reserve X,Y for non empty set,
+reserve Y for non empty set,
   F for BinOp of X,
   f,g,h for Function of Y,X,
   x,
@@ -898,8 +898,7 @@ end;
 theorem
   for A,X,x holds A --> x is Function of A, X;
 
-reserve X for non empty set,
-  Y for set,
+reserve Y for set,
   F for BinOp of X,
   f,g,h for Function
   of Y,X,
@@ -921,7 +920,7 @@ definition
   coherence by Th59;
 end;
 
-reserve X,Y for non empty set,
+reserve Y for non empty set,
   F for BinOp of X,
   f,g,h for Function of Y,X,
   x,
@@ -965,8 +964,7 @@ proof
     .= F.(x,x) by FUNCT_1:35;
 end;
 
-reserve X for non empty set,
-  Y for set,
+reserve Y for set,
   F for BinOp of X,
   f,g,h for Function
   of Y,X,
@@ -989,7 +987,7 @@ definition
   coherence by Th65;
 end;
 
-reserve X,Y for non empty set,
+reserve Y for non empty set,
   F for BinOp of X,
   f,g,h for Function of Y,X,
   x,
@@ -1017,8 +1015,7 @@ A1: for y being Element of Y holds g.y = F.(x,f.y);
   hence thesis by FUNCT_2:113;
 end;
 
-reserve X for non empty set,
-  Y for set,
+reserve Y for set,
   F for BinOp of X,
   f,g,h for Function
   of Y,X,
@@ -1305,7 +1302,7 @@ A3: Y <> {};
   end;
 end;
 
-reserve X,Y for non empty set,
+reserve Y for non empty set,
   F for BinOp of X,
   f for Function of Y,X,
   x for
@@ -1764,8 +1761,7 @@ registration let I be set;
  existence
   proof
    take I --> 1;
-    dom(I --> 1) = I by Th19;
-    hence thesis by PARTFUN1:def 4;
+    thus thesis;
   end;
 end;
 
@@ -1802,5 +1798,63 @@ theorem
 proof
   take f = x .--> y;
   thus thesis by Th10;
+end;
+
+registration
+  let I, A be set;
+  cluster I --> A -> total (I-defined Function);
+  coherence;
+end;
+
+theorem
+  for f being Function st x in dom f
+   holds x .--> f.x c= f
+proof
+  let f be Function;
+  assume x in dom f;
+  then [x, f.x] in f by FUNCT_1:8;
+  then {[x, f.x]} c= f by ZFMISC_1:37;
+  hence thesis by ZFMISC_1:35;
+end;
+
+registration let A be non empty set;
+ let x be set, i be Element of A;
+ cluster x .--> i -> A-valued;
+ coherence
+  proof
+    rng(x .--> i) = {i} by Th14;
+   hence rng(x .--> i) c= A by ZFMISC_1:37;
+  end;
+end;
+
+reserve Y for set,
+        f,g for Function of Y,X,
+        x for Element of X,
+        y for Element of Y;
+
+:: missing, 2010.02.10, A.T.
+
+theorem
+  F is associative implies F.:(F[;](x,f),g) = F[;](x,F.:(f,g))
+proof
+  assume
+A1: F is associative;
+  per cases;
+  suppose
+    Y = {};
+    hence thesis;
+  end;
+  suppose
+A2: Y <> {};
+    now
+      let y;
+      reconsider x1 = f.y, x2 = g.y as Element of X by A2,FUNCT_2:7;
+      thus (F[;](x,F.:(f,g))).y = F.(x,F.:(f,g).y) by A2,Th66
+        .= F.(x,F.(x1,x2)) by A2,Th48
+        .= F.(F.(x,x1),x2) by A1,BINOP_1:def 3
+        .= F.(F[;](x,f).y,g.y) by A2,Th66;
+    end;
+    hence thesis by A2,Th49;
+  end;
 end;
 

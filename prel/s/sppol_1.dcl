@@ -56,7 +56,7 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="150"/>
+<Adjective nr="153"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SPPOL_1" nr="2">
@@ -78,14 +78,14 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="151"/>
+<Adjective nr="154"/>
 </Cluster>
 </RCluster>
 <CCluster aid="SPPOL_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="150"/>
+<Adjective nr="153"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -98,14 +98,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="151" value="false"/>
+<Adjective nr="154" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SPPOL_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="151"/>
+<Adjective nr="154"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -118,7 +118,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="150" value="false"/>
+<Adjective nr="153" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

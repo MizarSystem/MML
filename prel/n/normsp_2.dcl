@@ -42,7 +42,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,7 +55,7 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="49"/>
-<Adjective nr="130"/>
+<Adjective nr="133"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="2">
@@ -65,7 +68,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,9 +86,12 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="3">
@@ -95,7 +104,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -105,7 +117,7 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="55"/>
-<Adjective nr="135"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="4">
@@ -118,7 +130,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -127,8 +142,8 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="123"/>
-<Adjective nr="135"/>
+<Adjective nr="126"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="5">
@@ -141,7 +156,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -150,8 +168,8 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="127"/>
-<Adjective nr="135"/>
+<Adjective nr="130"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="6">
@@ -164,7 +182,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -173,8 +194,8 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="129"/>
-<Adjective nr="135"/>
+<Adjective nr="132"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMSP_2" nr="7">
@@ -187,7 +208,10 @@
 <Adjective nr="113"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -196,8 +220,8 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="130"/>
-<Adjective nr="135"/>
+<Adjective nr="133"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -71,12 +71,12 @@
 <Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="163"/>
-<Adjective nr="164"/>
-<Adjective nr="165"/>
 <Adjective nr="166"/>
+<Adjective nr="167"/>
 <Adjective nr="168"/>
 <Adjective nr="169"/>
+<Adjective nr="171"/>
+<Adjective nr="172"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">

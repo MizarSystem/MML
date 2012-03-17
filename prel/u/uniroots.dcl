@@ -67,10 +67,10 @@
 <Adjective nr="127"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="155"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
+<Adjective nr="161"/>
 </Cluster>
 </RCluster>
 <RCluster aid="UNIROOTS" nr="2">
@@ -93,9 +93,9 @@
 <Adjective nr="127"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
 </Cluster>
 </RCluster>
 <FCluster aid="UNIROOTS" nr="1">
@@ -110,9 +110,9 @@
 <Adjective nr="120"/>
 <Adjective nr="127"/>
 <Adjective nr="128"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -187,10 +187,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="139">
+<Adjective nr="145">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="160">
+<Adjective nr="166">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

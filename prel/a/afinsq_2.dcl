@@ -59,7 +59,7 @@
 <Adjective nr="22"/>
 <Adjective nr="32"/>
 <Adjective nr="49"/>
-<Adjective nr="170"/>
+<Adjective nr="173"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFINSQ_2" nr="1">
@@ -1014,7 +1014,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="168"/>
+<Adjective nr="171"/>
 </Cluster>
 </CCluster>
 </Registrations>

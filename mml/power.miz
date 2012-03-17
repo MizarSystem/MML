@@ -31,15 +31,6 @@ reserve m, n, m1, m2 for Element of NAT;
 reserve k, l for Integer;
 reserve p for Rational;
 
-Lm1:
-    now
-      let n be Nat;
-      assume n is odd;
-      then ex m st n=2*m+1 by ABIAN:9;
-      then n>=0+1 by XREAL_1:8;
-      hence 1 <= n;
-    end;
-    
 theorem Th1:
   n is even implies (-a) |^ n = a |^ n
 proof
@@ -178,7 +169,7 @@ A10: now
 B1: n is odd;
     then
 A11: ex m st n=2*m+1 by ABIAN:9;
-A12: n>=1 by B1,Lm1;
+A12: n>=1 by B1,ABIAN:12;
 A13: now per cases;
       suppose a>=0;
         hence thesis by A2,A12;
@@ -252,7 +243,7 @@ proof
   assume
 A1: n is odd;
    then
-A2: n>=1 by Lm1;
+A2: n>=1 by ABIAN:12;
   thus
   n-root (-1) = - n -Root (-(-1)) by A1,Def1
     .= - 1 by A2,PREPOWER:29;
@@ -285,7 +276,7 @@ proof
 A0: n is odd;
     then
 A1: ex m st n = 2*m + 1 by ABIAN:9;
-A2: n>=1 by A0,Lm1;
+A2: n>=1 by A0,ABIAN:12;
 A3: now per cases;
     suppose
 A4:   a<0;
@@ -329,7 +320,7 @@ A6: now
     assume
 A7: n is odd;
     then
-A8: n>=1 by Lm1;
+A8: n>=1 by ABIAN:12;
 A9: now per cases;
       suppose
 A10:    a>=0 & b>=0;
@@ -385,7 +376,7 @@ A4: now
     assume that
 A5: a<>0 and
 A6: n is odd;
-A7: n>=1 by A6,Lm1;
+A7: n>=1 by A6,ABIAN:12;
 A8: now per cases by A5;
       suppose
 A9:     a>0;
@@ -557,7 +548,7 @@ A8: now
     assume
 A9: n is odd;
     then
-A10: n>=1 by Lm1;
+A10: n>=1 by ABIAN:12;
 A11: now per cases;
       suppose
 A12:    a>=0;
@@ -609,7 +600,7 @@ A8: now
     assume
 A9: n is odd;
     then
-A10: n>=1 by Lm1;
+A10: n>=1 by ABIAN:12;
 A11: now per cases;
       suppose
 A12:    a>=0;
@@ -659,7 +650,7 @@ proof
   assume that
 A1: a<=-1 and
 A2: n is odd;
-A3: n>=1 & -a>=1 by A1,A2,XREAL_1:27,Lm1;
+A3: n>=1 & -a>=1 by A1,A2,XREAL_1:27,ABIAN:12;
 A4: n-root (-a) >= 1 by A3,Th19;
 A5: -a >= n-root (-a) by A3,Th19;
 A6: - n-root (-a) <= -1 by A4,XREAL_1:26;
@@ -687,7 +678,7 @@ A2: a<=0;
   assume n is odd;
   then
 A3: ex m st n=2*m+1 by ABIAN:9;
-A4: n>=1 & -a<1 by A1,A3,XREAL_1:27,Lm1;
+A4: n>=1 & -a<1 by A1,A3,XREAL_1:27,ABIAN:12;
 A5: n-root (-a) < 1 by A2,A4,Th21;
 A6: -a <= n-root (-a) by A2,A4,Th21;
 A7: - n-root (-a) > -1 by A5,XREAL_1:26;
@@ -1009,7 +1000,14 @@ end;
 theorem
   for n be Nat holds a to_power n = a |^ n;
 
-canceled 3;
+canceled 2;
+
+theorem Th49:
+ k <> 0 implies 0 to_power k = 0
+ proof
+   0 to_power k = 0 #Z k by Def2;
+  hence thesis by PREPOWER:114;
+ end;
 
 theorem
   a to_power k = a #Z k by Def2;
@@ -1076,14 +1074,14 @@ A4:   a<0;
 end;
 
 theorem Th54:
-  a<>0 & k is even implies (-a) to_power k = a to_power k
+  k is even implies (-a) to_power k = a to_power k
 proof
-  assume
-A1: a<>0;
   given l such that
 A2: k=2*l;
-  reconsider l1=2 as Integer;
-A3: now per cases by A1;
+  per cases;
+    suppose a = 0;
+     hence thesis;
+    end;
     suppose
 A4:   a>0;
       thus
@@ -1091,9 +1089,9 @@ A4:   a>0;
         .= (a^2) to_power l by Th53
         .= ((-a)^2) to_power l
         .= ((-a) to_power 2) to_power l by Th53
-        .= ((-a) #Z l1) to_power l by Def2
-        .= ((-a) #Z l1) #Z l by Def2
-        .= (-a) #Z (l1*l) by PREPOWER:55
+        .= ((-a) #Z 2) to_power l by Def2
+        .= ((-a) #Z 2) #Z l by Def2
+        .= (-a) #Z (2*l) by PREPOWER:55
         .= (-a) to_power k by A2,Def2;
     end;
     suppose
@@ -1103,34 +1101,36 @@ A6:   -a>0 by A5,XREAL_1:60;
         .= ((-a)^2) to_power l by Th53
         .= (a^2) to_power l
         .= (a to_power 2) to_power l by Th53
-        .= (a #Z l1) to_power l by Def2
-        .= (a #Z l1) #Z l by Def2
-        .= a #Z (l1*l) by PREPOWER:55
+        .= (a #Z 2) to_power l by Def2
+        .= (a #Z 2) #Z l by Def2
+        .= a #Z (2*l) by PREPOWER:55
         .= a to_power k by A2,Def2;
     end;
-  end;
-  thus thesis by A3;
 end;
 
 theorem
-  a<>0 & k is odd implies (-a) to_power k = -(a to_power k)
+  k is odd implies (-a) to_power k = -(a to_power k)
 proof
   assume
-A1: a<>0;
-  assume k is odd;
+Z:  k is odd;
   then consider l such that
 A2: k=2*l + 1 by ABIAN:1;
-  reconsider l1=1 as Integer;
-A3: now per cases by A1;
+  per cases;
+    suppose
+S:    a = 0;
+A:   k <> 0 by Z;
+      then a to_power k = 0 by S,Th49;
+     hence thesis by A,S,PREPOWER:114;
+    end;
     suppose
 A4:   a>0;
 A5:   -a<>-0 by A4;
 A6:   a to_power k = a to_power (2*l) * a to_power 1 by A2,A4,Th32
         .= a to_power (2*l) * a by Th30
-        .= (-a) to_power (2*l) * a by A1,Th54
+        .= (-a) to_power (2*l) * a by A4,Th54
         .= - (-a) to_power (2*l) * (-a)
         .= - (-a) #Z (2*l) * (-a) by Def2
-        .= - (-a) #Z (2*l) * (-a) #Z l1 by PREPOWER:45
+        .= - (-a) #Z (2*l) * (-a) #Z 1 by PREPOWER:45
         .= - (-a) #Z k by A2,A5,PREPOWER:54
         .= - (-a) to_power k by Def2;
       thus thesis by A6;
@@ -1141,15 +1141,13 @@ A8:   -a>0 by A7,XREAL_1:60;
       thus (-a) to_power k = (-a) to_power (2*l) * (-a) to_power 1 by A2,A8,
       Th32
         .= (-a) to_power (2*l) * (-a) by Th30
-        .= a to_power (2*l) * (-a) by A1,Th54
+        .= a to_power (2*l) * (-a) by A7,Th54
         .= - a to_power (2*l) * a
         .= - a #Z (2*l) * a by Def2
-        .= - a #Z (2*l) * a #Z l1 by PREPOWER:45
+        .= - a #Z (2*l) * a #Z 1 by PREPOWER:45
         .= - a #Z k by A2,A7,PREPOWER:54
         .= - a to_power k by Def2;
     end;
-  end;
-  thus thesis by A3;
 end;
 
 theorem

@@ -102,9 +102,9 @@
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="169"/>
-<Adjective nr="170"/>
-<Adjective nr="172"/>
+<Adjective nr="175"/>
+<Adjective nr="176"/>
+<Adjective nr="178"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -140,7 +140,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="171">
+<Adjective nr="177">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -306,9 +306,9 @@
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="169"/>
-<Adjective nr="170"/>
-<Adjective nr="172"/>
+<Adjective nr="175"/>
+<Adjective nr="176"/>
+<Adjective nr="178"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -422,7 +422,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="171">
+<Adjective nr="177">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -754,7 +754,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="171">
+<Adjective nr="177">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

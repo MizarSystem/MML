@@ -67,7 +67,8 @@ end;
 
 registration
   let L be non empty doubleLoopStr;
-  cluster unital distributive VectSp-like mix-associative (non empty
+  cluster unital distributive vector-distributive scalar-distributive
+  scalar-associative scalar-unital mix-associative (non empty
     AlgebraStr over L);
   existence
   proof
@@ -96,10 +97,26 @@ A1: for x,y being Element of A holds x = y
       let x,y,z be Element of A;
       thus thesis by A1;
     end;
-    thus A is VectSp-like
+    thus A is vector-distributive
+    proof
+      let x be Element of L;
+      let v,w being Element of A;
+      thus thesis by A1;
+    end;
+    thus A is scalar-distributive
     proof
       let x,y be Element of L;
-      let v,w being Element of A;
+      let v being Element of A;
+      thus thesis by A1;
+    end;
+    thus A is scalar-associative
+    proof
+      let x,y be Element of L;
+      thus thesis by A1;
+    end;
+    thus A is scalar-unital
+    proof
+      let v being Element of A;
       thus thesis by A1;
     end;
     thus A is mix-associative
@@ -112,7 +129,8 @@ end;
 
 definition
   let L be non empty doubleLoopStr;
-  mode Algebra of L is unital distributive VectSp-like mix-associative (non
+  mode Algebra of L is unital distributive vector-distributive
+  scalar-distributive scalar-associative unital mix-associative (non
     empty AlgebraStr over L);
 end;
 
@@ -234,8 +252,7 @@ A12: for a being Element of L,x be Element of Ca holds P[a,x,lm.(a,x)]
       let p,q be sequence of L;
       assume
 A13:  x = p & y = q;
-      ex p1,q1 be sequence of L st p1 = x & q1 = y & Ad.(x,y) = p1+q1 by
-      A5;
+      ex p1,q1 be sequence of L st p1 = x & q1 = y & Ad.(x,y) = p1+q1 by A5;
       hence thesis by A13;
     end;
     thus for x,y be Element of P, p,q be sequence of L st x = p & y = q holds
@@ -245,8 +262,7 @@ A13:  x = p & y = q;
       let p,q be sequence of L;
       assume
 A14:  x = p & y = q;
-      ex p1,q1 be sequence of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1 by
-      A9;
+      ex p1,q1 be sequence of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1 by A9;
       hence thesis by A14;
     end;
     thus for a be Element of L, x be Element of P, p be sequence of L st x = p
@@ -441,9 +457,9 @@ A3: len (f/^1) = (i+1)-1 by A1,A2,RFINSEQ:def 2
 A4: 1 in dom f by FINSEQ_5:6;
     let k be Nat such that
 A5: 1 <=k & k <= len (f/^1);
-A6: k in dom (f/^1) by A5,FINSEQ_3:27;
+ k in dom (f/^1) by A5,FINSEQ_3:27;
     hence (f/^1).k= f.(k+1) by A2,RFINSEQ:def 2
-      .= Del(f,1).k by A1,A3,A5,A4,A6,FINSEQ_3:120;
+      .= Del(f,1).k by A1,A3,A5,A4,FINSEQ_3:120;
   end;
   hence thesis by FINSEQ_1:18;
 end;
@@ -646,13 +662,16 @@ end;
 registration
   let L be Abelian add-associative associative right_zeroed
   right_complementable well-unital distributive (non empty doubleLoopStr);
-  cluster Formal-Series L -> VectSp-like;
+  cluster Formal-Series L -> vector-distributive scalar-distributive
+  scalar-associative scalar-unital;
   coherence
-  proof
-    let x,y be Element of L;
+  proof set F = Formal-Series L;
+    thus F is vector-distributive
+     proof
+    let x be Element of L;
     let v,w being Element of Formal-Series L;
     reconsider p=v, q=w as sequence of L by Def2;
-    reconsider x9=x, y9=y as Element of L;
+    reconsider x9=x as Element of L;
     reconsider k=v+w as Element of Formal-Series L;
 A1: x*v = x*p by Def2;
     reconsider r=k as sequence of L by Def2;
@@ -661,13 +680,32 @@ A2: x*w = x*q by Def2;
     hence x*(v+w) = x*(p+q) by Def2
       .= x9*p + x9*q by Th6
       .= x*v + x*w by A1,A2,Def2;
+     end;
+    thus F is scalar-distributive
+     proof
+    let x,y be Element of L;
+    let v being Element of Formal-Series L;
+    reconsider p=v as sequence of L by Def2;
+    reconsider x9=x, y9=y as Element of L;
+A1: x*v = x*p by Def2;
 A3: y*v = y*p by Def2;
     thus (x+y)*v = (x9+y9)*p by Def2
       .= x9*p + y9*p by Th7
       .= x*v + y*v by A1,A3,Def2;
+     end;
+    thus F is scalar-associative
+    proof
+    let x,y be Element of L;
+    let v being Element of Formal-Series L;
+    reconsider p=v as sequence of L by Def2;
+    reconsider x9=x, y9=y as Element of L;
+A3: y*v = y*p by Def2;
     thus (x*y)*v = (x9*y9)*p by Def2
       .= x9*(y9*p) by Th8
       .= x*(y*v) by A3,Def2;
+    end;
+    let v be Element of F;
+    reconsider p=v as sequence of L by Def2;
     thus (1.L)*v = 1.L*p by Def2
       .= v by Th9;
   end;
@@ -808,8 +846,7 @@ A5: [:the carrier of L,the carrier of A:] c= [:the carrier of L,the carrier
   :] by A1,Def3
     .= ((the lmult of C)|[:the carrier of L,the carrier of B:])| [:the
   carrier of L,the carrier of A:] by A2,Def3
-    .= (the lmult of C)|[:the carrier of L,the carrier of A:] by A5,FUNCT_1:
-  82;
+    .= (the lmult of C)|[:the carrier of L,the carrier of A:] by A5,FUNCT_1:82;
 end;
 
 theorem
@@ -1030,11 +1067,11 @@ A7: x = [y,z] by A4,ZFMISC_1:def 2;
     hence thesis by A6,A3,VECTSP_4:def 1;
   end;
   [:the carrier of L,A:] c= [:the carrier of L,the carrier of B:] by
-  ZFMISC_1:119;
+ZFMISC_1:119;
   then [:the carrier of L,A:] c= dom the lmult of B by Th2;
   then dom f4 = [:the carrier of L,A:] by RELAT_1:91;
   then reconsider lm = f4 as Function of [:the carrier of L,A:],A by A2,
-  FUNCT_2:5;
+FUNCT_2:5;
   reconsider f1 = (the addF of B)||A as Function;
   reconsider f2 = (the multF of B)||A as Function;
 A8: for x being set st x in [:A,A:] holds f2.x in A
@@ -1146,8 +1183,8 @@ A13:  Y in X;
 A14:  Y = the carrier of C and
 A15:  A c= Y by A1;
       reconsider C as non empty Subalgebra of B by A14,A15;
-      reconsider x1 = x9, y1 = y9 as Element of C by A12,A13,A14,SETFAM_1:def
-      1;
+      reconsider x1 = x9, y1 = y9 as Element of C by A12,A13,A14,SETFAM_1:def 1
+;
       x*y = x1* y1 by Th16;
       hence x*y in Y by A14;
       consider a be set;
@@ -1213,8 +1250,8 @@ A3: M is opers_closed by Th21;
 A4: M = the carrier of C by Th20;
     reconsider C as non empty strict Subalgebra of B by A3,A4,Def4;
     take C;
-    B is Subalgebra of B & the carrier of B in bool the carrier of B by
-    Th11, ZFMISC_1:def 1;
+    B is Subalgebra of B & the carrier of B in bool the carrier of B by Th11,
+ZFMISC_1:def 1;
     then X <> {} by A1;
     hence A c= the carrier of C by A4,A2,SETFAM_1:6;
     let C1 be Subalgebra of B such that
@@ -1343,7 +1380,7 @@ A1: for a,b be Element of Polynom-Ring L ex x being Element of
         .= b by RLVECT_1:10;
     end;
 A2: for a,x,y be Element of Polynom-Ring L holds x+a=y+a implies x=y by
-    RLVECT_1:21;
+RLVECT_1:21;
     ( for a,b be Element of Polynom-Ring L ex x being Element of
 Polynom-Ring L st a+x=b)& for a,x,y be Element of Polynom-Ring L holds a+x=a +y
     implies x=y by RLVECT_1:20,21;
@@ -1409,10 +1446,10 @@ proof
 A1: ex A being non empty Subset of Formal-Series L st A = the carrier of
   Polynom-Ring L & Polynom-Algebra L = GenAlg A by Def6;
   then
-A2: the carrier of Polynom-Algebra L = the carrier of Polynom-Ring L by
-  Th22,Th23;
+A2: the carrier of Polynom-Algebra L = the carrier of Polynom-Ring L by Th22
+,Th23;
 A3: the carrier of Polynom-Algebra L c= the carrier of Formal-Series L by A1
-  ,Def3;
+,Def3;
 A4: for x being Element of Polynom-Algebra L for y being Element of
   Polynom-Ring L holds (the addF of Polynom-Algebra L).(x,y)=(the addF of
   Polynom-Ring L).(x,y)
@@ -1446,7 +1483,7 @@ A4: for x being Element of Polynom-Algebra L for y being Element of
   end;
   then
 A5: the multF of Polynom-Algebra L = the multF of Polynom-Ring L by A2,
-  BINOP_1:2;
+BINOP_1:2;
 A6: 1.Polynom-Algebra L = 1.Formal-Series L by A1,Def3
     .= 1_.(L) by Def2
     .= 1.Polynom-Ring L by POLYNOM3:def 12;

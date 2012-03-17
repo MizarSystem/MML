@@ -86,8 +86,8 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="101"/>
-<Adjective nr="106"/>
+<Adjective nr="104"/>
+<Adjective nr="112"/>
 </Cluster>
 </RCluster>
 <FCluster aid="REALSET2" nr="1">
@@ -104,7 +104,7 @@
 <Func kind="K" nr="191"/>
 <Cluster>
 <Adjective nr="86"/>
-<Adjective nr="101"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REALSET2" nr="3">
@@ -199,17 +199,17 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="93"/>
-<Adjective nr="95"/>
-<Adjective nr="100"/>
-<Adjective nr="101"/>
+<Adjective nr="96"/>
+<Adjective nr="98"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
 </Cluster>
 <Typ kind="G" nr="11">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="41" value="false"/>
-<Adjective nr="106"/>
+<Adjective nr="112"/>
 </Cluster>
 </CCluster>
 <CCluster aid="REALSET2" nr="3">
@@ -220,8 +220,8 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="101"/>
-<Adjective nr="106"/>
+<Adjective nr="104"/>
+<Adjective nr="112"/>
 </Cluster>
 <Typ kind="G" nr="11">
 <Cluster/>
@@ -229,9 +229,9 @@
 <Cluster>
 <Adjective nr="41" value="false"/>
 <Adjective nr="80"/>
-<Adjective nr="93"/>
-<Adjective nr="95"/>
-<Adjective nr="100"/>
+<Adjective nr="96"/>
+<Adjective nr="98"/>
+<Adjective nr="103"/>
 </Cluster>
 </CCluster>
 </Registrations>

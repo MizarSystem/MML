@@ -81,7 +81,7 @@
 <Func kind="K" nr="222"/>
 <Cluster>
 <Adjective nr="86"/>
-<Adjective nr="102"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="6">
@@ -95,10 +95,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="95"/>
-<Adjective nr="101"/>
-<Adjective nr="103"/>
+<Adjective nr="98"/>
 <Adjective nr="104"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 <CCluster aid="QUATERN2" nr="1">

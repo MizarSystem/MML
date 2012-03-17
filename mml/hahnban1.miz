@@ -16,18 +16,19 @@ environ
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, POWER, STRUCT_0,
       ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4, FUNCT_1,
       FUNCT_2, BINOP_1, RELSET_1, NATTRA_1, FUNCOP_1, HAHNBAN, COMPLFLD,
-      XXREAL_0;
+      XXREAL_0, GRCAT_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, BINOP_2, POWER, REALSET1,
       RLSUB_1, COMPLFLD, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN, SUPINF_1,
-      FUNCOP_1;
+      FUNCOP_1, GRCAT_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XCMPLX_0, XREAL_0,
       MEMBERED, STRUCT_0, RLVECT_1, VECTSP_1, COMPLFLD, HAHNBAN, ALGSTR_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RLSUB_1, HAHNBAN, SQUARE_1, BINOP_1, RLVECT_1, VECTSP_1,
-      COMPLEX1, STRUCT_0, ALGSTR_0;
+      COMPLEX1, STRUCT_0, ALGSTR_0, GRCAT_1;
  theorems TARSKI, ZFMISC_1, ABSVALUE, FUNCT_1, FUNCT_2, COMPLEX1, COMPLFLD,
       VECTSP_1, FUNCOP_1, RLVECT_1, BINOP_1, HAHNBAN, VECTSP_4, XBOOLE_0,
-      RELAT_1, XCMPLX_1, GROUP_1, XXREAL_0, XCMPLX_0, POWER, ALGSTR_0, XREAL_0;
+      RELAT_1, XCMPLX_1, GROUP_1, XXREAL_0, XCMPLX_0, POWER, ALGSTR_0, XREAL_0,
+      GRCAT_1;
  schemes FUNCT_2, BINOP_1, NAT_1;
 
 begin :: Preliminaries
@@ -43,9 +44,9 @@ proof
 
   let x,y be Element of F;
   x*y +x*(-y) = x*(y+(-y)) by VECTSP_1:def 11
-    .= x*(0.F) by RLVECT_1:def 11
+    .= x*(0.F) by RLVECT_1:def 13
     .= 0.F by VECTSP_1:36;
-  hence thesis by RLVECT_1:def 11;
+  hence thesis by RLVECT_1:def 13;
 end;
 
 theorem
@@ -75,7 +76,7 @@ A3: Im(z*z*') = 0 by COMPLEX1:126;
     then
 A4: Re |.z.| = |.z.| & Im |.z.| = 0 by COMPLEX1:28;
 A5: (z*'/|.z.|)*z = z*z*'/|.z.| & Re(z*z*') = (Re z)^2 + (Im z)^2 by
-    COMPLEX1:126,XCMPLX_1:75;
+COMPLEX1:126,XCMPLX_1:75;
     then
 A6: Im((z*'/|.z.|)*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.| ^2 +0^2
     ) by A3,A4,COMPLEX1:82;
@@ -273,19 +274,10 @@ definition
 end;
 
 definition
-  let K be non empty addLoopStr;
-  let V be non empty VectSpStr over K;
-  let F be Functional of V;
-  attr F is additive means
-  :Def11:
-  for x,y be Vector of V holds F.(x+y) = F.x+
-  F.y;
-end;
-
-definition
   let K be non empty multMagma;
   let V be non empty VectSpStr over K;
   let F be Functional of V;
+  canceled;
   attr F is homogeneous means
   :Def12:
   for x be Vector of V, r be Scalar of V
@@ -525,8 +517,8 @@ registration
   proof
     let x,y be Vector of V;
     thus (f+g).(x+y) = f.(x+y)+g.(x+y) by Def6
-      .= f.x+f.y+g.(x+y) by Def11
-      .= f.x+f.y+(g.x+g.y) by Def11
+      .= f.x+f.y+g.(x+y) by GRCAT_1:def 13
+      .= f.x+f.y+(g.x+g.y) by GRCAT_1:def 13
       .= f.x+(f.y+(g.x+g.y)) by RLVECT_1:def 6
       .= f.x+(g.x+(f.y+g.y)) by RLVECT_1:def 6
       .= f.x+g.x+(f.y+g.y) by RLVECT_1:def 6
@@ -545,7 +537,7 @@ registration
   proof
     let x,y be Vector of V;
     thus (-f).(x+y) = -f.(x+y) by Def7
-      .= -(f.x + f.y) by Def11
+      .= -(f.x + f.y) by GRCAT_1:def 13
       .= -f.x+-f.y by RLVECT_1:45
       .= (-f).x+-f.y by Def7
       .= (-f).x+(-f).y by Def7;
@@ -563,7 +555,7 @@ registration
   proof
     let x,y be Vector of V;
     thus (v*f).(x+y) = v*f.(x+y) by Def9
-      .= v*(f.x + f.y) by Def11
+      .= v*(f.x + f.y) by GRCAT_1:def 13
       .= v*f.x+v*f.y by VECTSP_1:def 11
       .= (v*f).x+v*f.y by Def9
       .= (v*f).x+(v*f).y by Def9;
@@ -815,10 +807,11 @@ registration
   let K be Abelian add-associative right_zeroed right_complementable
   left_unital distributive associative commutative (non empty doubleLoopStr);
   let V be non empty VectSpStr over K;
-  cluster V*' -> VectSp-like;
+  cluster V*' -> vector-distributive scalar-distributive
+  scalar-associative scalar-unital;
   coherence
   proof
-    let x,y be Element of K;
+   now let x,y be Element of K;
     let v,w be Element of V*';
     reconsider f=v,g=w as linear-Functional of V by Def14;
     thus x*(v+w) = (the lmult of V*').(x,f+g) by Def14
@@ -838,6 +831,9 @@ registration
       .= x*(y*v) by Def14;
     thus (1.K)*v = (1.K)*f by Def14
       .= v by Th28;
+   end;
+   hence thesis by
+    VECTSP_1:def 26,def 27,def 28,def 29;
   end;
 end;
 
@@ -880,18 +876,20 @@ definition
 end;
 
 theorem Th29:
-  for V be VectSp-like (non empty VectSpStr over F_Complex) for F
+  for V be vector-distributive scalar-distributive scalar-associative
+  scalar-unital (non empty VectSpStr over F_Complex) for F
 be RFunctional of V st F is Real_homogeneous for v be Vector of V for r be Real
   holds F.([**0,r**]*v) = r*F.(i_FC*v)
 proof
-  let V be VectSp-like (non empty VectSpStr over F_Complex);
+  let V be vector-distributive scalar-distributive scalar-associative
+  scalar-unital (non empty VectSpStr over F_Complex);
   let F be RFunctional of V;
   assume
 A1: F is Real_homogeneous;
   let v be Vector of V;
   let r be Real;
   thus F.([**0,r**]*v) = F.([**r,0**]*i_FC*v)
-    .= F.([**r,0**]*(i_FC*v)) by VECTSP_1:def 26
+    .= F.([**r,0**]*(i_FC*v)) by VECTSP_1:def 28,def 29
     .= r*F.(i_FC*v) by A1,Def18;
 end;
 
@@ -1120,8 +1118,10 @@ A2: v1 + w1 = 0.V by ALGSTR_0:def 11;
 end;
 
 registration
-  let V be VectSp-like (non empty VectSpStr over F_Complex);
-  cluster RealVS(V) -> RealLinearSpace-like;
+  let V be vector-distributive scalar-distributive scalar-associative
+  scalar-unital (non empty VectSpStr over F_Complex);
+  cluster RealVS(V) -> vector-distributive scalar-distributive
+  scalar-associative scalar-unital;
   coherence
   proof
     thus for a be real number for v,w be Element of RealVS(V) holds a * (v + w
@@ -1152,7 +1152,7 @@ A2:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       then reconsider v1=v as Element of V;
       [**a,0**] + [**b,0**] = [**a+b,0**];
       then (a + b) * v = ([**a,0**] + [**b,0**]) * v1 by Def22
-        .= a1 * v1 + b1 * v1 by VECTSP_1:def 26
+        .= a1 * v1 + b1 * v1 by VECTSP_1:def 27
         .= (the addF of RealVS(V)).[((the Mult of RealVS(V)).(a,v)), ([**b,0
       **]*v1)] by A2,Def22
         .= a * v + b * v by Def22;
@@ -1168,7 +1168,7 @@ A2:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       then reconsider v1=v as Element of V;
       [**a*b,0**] = [**a,0**]*[**b,0**];
       then (a * b) * v = ([**a,0**] * [**b,0**]) * v1 by Def22
-        .= [**a,0**] * ([**b,0**] * v1) by VECTSP_1:def 26
+        .= [**a,0**] * ([**b,0**] * v1) by VECTSP_1:def 28,def 29
         .= (the Mult of RealVS(V)).(a,([**b,0**] * v1)) by Def22
         .= a * (b * v) by Def22;
       hence thesis;
@@ -1177,7 +1177,7 @@ A2:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider v1=v as Element of V;
     thus 1 * v = [**1,0**] * v1 by Def22
-      .= v by COMPLFLD:10,VECTSP_1:def 26;
+      .= v by COMPLFLD:10,VECTSP_1:def 29;
   end;
 end;
 
@@ -1193,13 +1193,12 @@ A2: the lmult of M = (the lmult of V) | [:the carrier of F_Complex, the
 A3: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
 A4: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
   hence
-A5: the carrier of RealVS(M) c= the carrier of RealVS(V) by A3,
-  VECTSP_4:def 2;
+A5: the carrier of RealVS(M) c= the carrier of RealVS(V) by A3,VECTSP_4:def 2;
   then
   [:REAL,the carrier of RealVS(M):] c= [:REAL,the carrier of RealVS(V) :]
   by ZFMISC_1:118;
   then [:REAL,the carrier of RealVS(M):] c= dom (the Mult of RealVS(V)) by
-  FUNCT_2:def 1;
+FUNCT_2:def 1;
   then
 A6: dom((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):])= [:REAL
   ,the carrier of RealVS(M):] by RELAT_1:91;
@@ -1222,7 +1221,7 @@ A9: x = [a,b] by A7,RELAT_1:def 1;
     reconsider b1 = b as Element of M by A3;
     reconsider b2 = b1 as Element of V by A1,TARSKI:def 3;
     [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:] by
-    ZFMISC_1:106;
+ZFMISC_1:106;
     then [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:] & [
     [**a,0 **],b2] in dom (the lmult of V) by FUNCT_2:def 1,ZFMISC_1:106;
     then [[**a,0**],b2] in (dom (the lmult of V)) /\ [:the carrier of
@@ -1238,8 +1237,8 @@ A10: [[**a,0**],b2] in dom ((the lmult of V) | [:the carrier of F_Complex,
   end;
   then reconsider
   RM = (the Mult of RealVS(V)) | [: REAL,the carrier of RealVS(M)
-:] as Function of [:REAL,the carrier of RealVS(M):],the carrier of RealVS(M) by
-  A6,FUNCT_2:4;
+:] as Function of [:REAL,the carrier of RealVS(M):],the carrier of RealVS(M)
+by A6,FUNCT_2:4;
   thus 0.RealVS(M) = 0.M by A3
     .= 0.V by VECTSP_4:def 2
     .= 0.RealVS(V) by A4;
@@ -1250,7 +1249,7 @@ A10: [[**a,0**],b2] in dom ((the lmult of V) | [:the carrier of F_Complex,
     reconsider b1 = b as Element of M by A3;
     reconsider b2 = b1 as Element of V by A1,TARSKI:def 3;
     [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:] by
-    ZFMISC_1:106;
+ZFMISC_1:106;
     then [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:] & [
     [**a,0 **],b2] in dom (the lmult of V) by FUNCT_2:def 1,ZFMISC_1:106;
     then [[**a,0**],b2] in (dom (the lmult of V)) /\ [:the carrier of
@@ -1560,7 +1559,7 @@ A1: projRe(l) is homogeneous
 A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x, y1=y as Vector of V;
     thus (projRe(l)).(x+y) = Re(l.(x1+y1)) by A2,Def23
-      .= Re(l.x1+l.y1) by Def11
+      .= Re(l.x1+l.y1) by GRCAT_1:def 13
       .= Re(l.x1)+Re(l.y1) by COMPLEX1:19
       .= Re(l.x1)+(projRe(l)).y by Def23
       .= (projRe(l)).x+(projRe(l)).y by Def23;
@@ -1594,7 +1593,7 @@ A1: projIm(l) is homogeneous
 A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x, y1=y as Vector of V;
     thus (projIm(l)).(x+y) = Im(l.(x1+y1)) by A2,Def24
-      .= Im(l.x1+l.y1) by Def11
+      .= Im(l.x1+l.y1) by GRCAT_1:def 13
       .= Im(l.x1)+Im(l.y1) by COMPLEX1:19
       .= Im(l.x1)+(projIm(l)).y by Def24
       .= (projIm(l)).x+(projIm(l)).y by Def24;
@@ -1616,8 +1615,8 @@ A1: prodReIm(l) is homogeneous
     set a=Re r1,b=Im r1;
 A2: r1 = a+b*<i> by COMPLEX1:29;
 A3: -1_F_Complex = [**-1,0**] by COMPLFLD:4,10;
-    x = i_FC*(i_FC*(-1_F_Complex))*x by Th8,Th9,VECTSP_1:def 26
-      .= i_FC*((-1_F_Complex)*i_FC*x) by VECTSP_1:def 26;
+    x = i_FC*(i_FC*(-1_F_Complex))*x by Th8,Th9,VECTSP_1:def 29
+      .= i_FC*((-1_F_Complex)*i_FC*x) by VECTSP_1:def 28,def 29;
     then
 A4: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b = -a*(RtoC l).(i_FC*x)+b*(RtoC l
     ).(i_FC*((-1_F_Complex)*i_FC*x))
@@ -1626,26 +1625,25 @@ A4: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b = -a*(RtoC l).(i_FC*x)+b*(RtoC l
       .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*((-
     1_F_Complex)*i_FC*x)) by Th29
       .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*((-
-    1_F_Complex)*(i_FC*x))) by VECTSP_1:def 26
+    1_F_Complex)*(i_FC*x))) by VECTSP_1:def 28,def 29
       .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*(-1_F_Complex
-    )*(i_FC*x)) by VECTSP_1:def 26
-      .= -((RtoC l).([**a,0**]*(i_FC*x))+(RtoC l).([**0,b**]*(i_FC*x))) by
-    A3
+    )*(i_FC*x)) by VECTSP_1:def 28,def 29
+      .= -((RtoC l).([**a,0**]*(i_FC*x))+(RtoC l).([**0,b**]*(i_FC*x))) by A3
       .= -(RtoC l).([**a,0**]*(i_FC*x)+[**0,b**]*(i_FC*x)) by Def17
-      .= -(RtoC l).(([**a,0**]+[**0,b**])*(i_FC*x)) by VECTSP_1:def 26
-      .= -(RtoC l).(i_FC*r*x) by A2,VECTSP_1:def 26;
+      .= -(RtoC l).(([**a,0**]+[**0,b**])*(i_FC*x)) by VECTSP_1:def 27
+      .= -(RtoC l).(i_FC*r*x) by A2,VECTSP_1:def 28,def 29;
 A5: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
     i_FC*x)
       .= (RtoC l).([**a,0**]*x)+b*(RtoC l).(i_FC*x) by Def18
       .= (RtoC l).([**a,0**]*x)+(RtoC l).([**0,b**]*x) by Th29
       .= (RtoC l).([**a,0**]*x+[**0,b**]*x) by Def17
-      .= (RtoC l).(([**a,0**]+[**0,b**])*x) by VECTSP_1:def 26
+      .= (RtoC l).(([**a,0**]+[**0,b**])*x) by VECTSP_1:def 27
       .= (RtoC l).(r*x) by COMPLEX1:29;
     thus (prodReIm(l)).(r*x) = [**(RtoC l).(r*x),-(i-shift(RtoC l)).(r*x)**]
     by Def28
       .= [**(RtoC l).(r*x),-(RtoC l).(i_FC*(r*x))**] by Def27
       .= (RtoC l).(r*x)+(a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b)*<i> by A4,
-    VECTSP_1:def 26
+VECTSP_1:def 28,def 29
       .= r*[**(RtoC l).x,-(RtoC l).(i_FC*x)**] by A2,A5
       .= r*[**(RtoC l).x,-(i-shift(RtoC l)).x**] by Def27
       .= r*(prodReIm(l)).x by Def28;
@@ -1657,8 +1655,8 @@ A5: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
     by Def28
       .= [**(RtoC l).(x+y),-(RtoC l).(i_FC*(x+y))**] by Def27
       .= [**(RtoC l).x+(RtoC l).y,-(RtoC l).(i_FC*(x+y))**] by Def17
-      .= [**(RtoC l).x+(RtoC l).y, -(RtoC l).(i_FC*x+i_FC*y)**] by VECTSP_1:
-    def 26
+      .= [**(RtoC l).x+(RtoC l).y, -(RtoC l).(i_FC*x+i_FC*y)**] by
+VECTSP_1:def 26
       .= [**(RtoC l).x+(RtoC l).y, -((RtoC l).(i_FC*x)+(RtoC l).(i_FC*y))**]
     by Def17
       .= [**(RtoC l).x,-(RtoC l).(i_FC*x)**] + [**(RtoC l).y,-(RtoC l).(i_FC
@@ -1760,9 +1758,7 @@ A13: L1.Ledze = |.L.e.| by COMPLEX1:163;
 A14: |.Le.| = 0;
     |.L.e.| = |.[**(RtoC L1).e,-(i-shift(RtoC L1)).e**].| by Def28
       .= |.(RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i>.|;
-    then (RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i> = 0+0*<i> by A14,
-    COMPLEX1
-    :131;
+    then (RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i> = 0+0*<i> by A14,COMPLEX1:131;
     then L1.e1 = 0 by COMPLEX1:163;
     hence thesis by A6,A14;
   end;
@@ -1787,7 +1783,7 @@ A2: now
     P[n];
     then
     (power F_Complex).([**x,0**],n+1) = [**x to_power n,0**]*[**x,0**] by
-    GROUP_1:def 8
+GROUP_1:def 8
       .= [**(x to_power n)*(x to_power 1),0**] by POWER:30
       .= [**x to_power (n+1),0**] by A1,POWER:32;
     hence P[n+1];

@@ -1,0 +1,195 @@
+:: The Geometric Interior in Real Linear Spaces
+::  by Karol P\c{a}k
+::
+:: Received February 9, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, ARYTM_3, XBOOLE_0, CARD_1, CONVEX1, CONVEX2, CONVEX3,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, MEMBERED, ORDERS_1, RELAT_1, RLVECT_1, RLVECT_2, RUSUB_4,
+      SEMI_AF1, SETFAM_1, TARSKI, TOPS_1, RLAFFIN1, RLAFFIN2, ZFMISC_1, REAL_1,
+      CARD_3, XXREAL_0, NAT_1, SUBSET_1, NUMBERS, ORDINAL1, STRUCT_0, SUPINF_2,
+      ORDINAL4, VALUED_1, XREAL_0, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, NAT_1,
+      XCMPLX_0, XXREAL_0, ORDERS_1, CARD_1, XREAL_0, REAL_1, FINSET_1,
+      SETFAM_1, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, RELSET_1,
+      FINSEQ_1, STRUCT_0, FINSEQ_2, SEQ_1, FINSEQOP, RVSUM_1, RLVECT_1,
+      RLVECT_2, RUSUB_4, CONVEX1, CONVEX2, CONVEX3, RLAFFIN1, FUNCT_4,
+      FUNCOP_1, MEMBERED, XXREAL_2;
+ constructors BINOP_2, CONVEX1, CONVEX3, DOMAIN_1, FINSEQOP, REAL_1, RLVECT_3,
+      RVSUM_1, RUSUB_5, SEQ_1, SETFAM_1, RLAFFIN1, SIMPLEX0, XXREAL_2, FUNCT_4,
+      RELSET_1, PARTFUN1;
+ registrations CARD_1, FINSET_1, FINSEQ_2, FUNCT_2, MEMBERED, NAT_1, NUMBERS,
+      RELAT_1, RLVECT_1, RLVECT_3, STRUCT_0, SUBSET_1, VALUED_0, XCMPLX_0,
+      XREAL_0, XXREAL_0, XBOOLE_0, RLAFFIN1, SIMPLEX0, FUNCOP_1, XXREAL_3,
+      REALSET1, SETFAM_1, XXREAL_2, ABIAN, PARTFUN1, RVSUM_1, FINSEQ_1,
+      RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve x,y for set,
+        r,s for Real,
+        n for Nat,
+        V for RealLinearSpace,
+        v,v1,v2,u,w,p for VECTOR of V,
+        A,B for Subset of V,
+        Af for finite Subset of V,
+        I for affinely-independent Subset of V,
+        If for finite affinely-independent Subset of V,
+        F for Subset-Family of V,
+        L1,L2 for Linear_Combination of V;
+
+theorem :: RLAFFIN2:1
+  for L be Linear_Combination of A st L is convex & v <> Sum L & L.v <> 0
+   ex p st p in conv(A\{v}) & Sum L = L.v*v + (1-L.v)*p &
+           1/L.v*(Sum L) + (1-1/L.v)*p = v;
+
+theorem :: RLAFFIN2:2
+  for p1,p2,w1,w2 be Element of V st
+      v in conv I & u in conv I &
+      not u in conv(I\{p1}) & not u in conv(I\{p2}) &
+      w1 in conv(I\{p1}) & w2 in conv(I\{p2}) &
+      r*u+(1-r)*w1 = v & s*u + (1-s)*w2 = v & r < 1 & s < 1
+    holds w1 = w2 & r = s;
+
+theorem :: RLAFFIN2:3
+  for L be Linear_Combination of Af st Af c=conv If & sum L=1 holds
+     Sum L in Affin If
+   & for x be Element of V
+       ex F be FinSequence of REAL,G be FinSequence of V st
+          (Sum L|--If).x = Sum F & len G = len F & G is one-to-one &
+          rng G = Carrier L &
+          for n st n in dom F holds F.n = L.(G.n)*(G.n|--If).x;
+
+theorem :: RLAFFIN2:4
+  for Aff be Subset of V st Aff is Affine & conv A /\ conv B c= Aff &
+                            conv(A\{v}) c= Aff & not v in Aff
+    holds conv (A\{v}) /\ conv B = conv A /\ conv B;
+
+begin :: The Geometric Interior
+
+definition
+  let V be non empty RLSStruct;
+  let A be Subset of V;
+  func Int A -> Subset of V means
+:: RLAFFIN2:def 1
+    x in it iff x in conv A & not ex B be Subset of V st B c< A & x in conv B;
+end;
+
+registration
+  let V be non empty RLSStruct;
+  let A be empty Subset of V;
+  cluster Int A -> empty;
+end;
+
+theorem :: RLAFFIN2:5
+  for V be non empty RLSStruct for A be Subset of V holds Int A c= conv A;
+
+theorem :: RLAFFIN2:6
+  for V be vector-distributive scalar-distributive scalar-associative
+  scalar-unital(non empty RLSStruct)
+    for A be Subset of V holds Int A = A iff A is trivial;
+
+theorem :: RLAFFIN2:7
+  A c< B implies conv A misses Int B;
+
+theorem :: RLAFFIN2:8
+  conv A = union {Int B : B c= A};
+
+theorem :: RLAFFIN2:9
+  conv A = Int A \/ union{conv (A\{v}) : v in A};
+
+theorem :: RLAFFIN2:10
+  x in Int A implies ex L be Linear_Combination of A st L is convex & x = Sum L
+;
+
+theorem :: RLAFFIN2:11
+  for L be Linear_Combination of A st L is convex & Sum L in Int A
+    holds Carrier L = A;
+
+theorem :: RLAFFIN2:12
+  for L be Linear_Combination of I st L is convex & Carrier L = I holds
+    Sum L in Int I;
+
+theorem :: RLAFFIN2:13
+  Int A is non empty implies A is finite;
+
+theorem :: RLAFFIN2:14
+  v in I & u in Int I & p in conv(I\{v}) & r*v + (1-r)*p = u implies
+    p in Int (I\{v});
+
+begin :: The Center of Mass
+
+definition let V;
+  func center_of_mass V -> Function of BOOL the carrier of V,the carrier of V
+    means
+:: RLAFFIN2:def 2
+   (for A be non empty finite Subset of V holds it.A = 1/card A * Sum(A)) &
+    for A st A is infinite holds it.A = 0.V;
+end;
+
+theorem :: RLAFFIN2:15
+  ex L be Linear_Combination of Af st Sum L = r*Sum Af & sum L = r * card Af &
+                                      L = (ZeroLC V) +* (Af-->r);
+
+theorem :: RLAFFIN2:16
+  Af is non empty implies (center_of_mass V).Af in conv Af;
+
+theorem :: RLAFFIN2:17
+  union F is finite implies (center_of_mass V).:F c= conv union F;
+
+theorem :: RLAFFIN2:18
+  v in If implies ((center_of_mass V).If |-- If).v = 1/card If;
+
+theorem :: RLAFFIN2:19
+  (center_of_mass V).If in If iff card If=1;
+
+theorem :: RLAFFIN2:20
+  If is non empty implies (center_of_mass V).If in Int If;
+
+theorem :: RLAFFIN2:21
+  A c= If & (center_of_mass V).If in Affin A implies If = A;
+
+theorem :: RLAFFIN2:22
+  v in Af & Af\{v} is non empty implies
+   (center_of_mass V).Af =
+        (1-1/card Af) * (center_of_mass V)/.(Af\{v}) + 1/card Af*v;
+
+theorem :: RLAFFIN2:23
+  conv A c=conv If & If is non empty & conv A misses Int If implies
+    ex B be Subset of V st B c< If & conv A c= conv B;
+
+theorem :: RLAFFIN2:24
+  Sum L1 <> Sum L2 & sum L1 = sum L2 implies ex v st L1.v > L2.v;
+
+theorem :: RLAFFIN2:25
+  for p be Real st (r*L1+(1-r)*L2).v <= p & p <= (s*L1+(1-s)*L2).v
+     ex rs be Real st (rs*L1+(1-rs)*L2).v = p &
+                      (r <= s implies r <= rs & rs <= s) &
+                      (s <= r implies s <= rs & rs <= r);
+
+theorem :: RLAFFIN2:26
+  v in conv A & u in conv A & v <> u implies
+   ex p,w,r st p in A & w in conv(A\{p}) & 0<=r & r<1 & r*u+(1-r)*w = v;
+
+theorem :: RLAFFIN2:27
+  A\/{v} is affinely-independent iff
+     A is affinely-independent & (v in A or not v in Affin A);
+
+theorem :: RLAFFIN2:28
+  Af c= I & v in Af implies
+     I\{v}\/{(center_of_mass V).Af} is affinely-independent Subset of V;
+
+theorem :: RLAFFIN2:29
+  for F be c=-linear Subset-Family of V st
+      union F is finite affinely-independent
+    holds (center_of_mass V).:F is affinely-independent Subset of V;
+
+theorem :: RLAFFIN2:30
+  for F be c=-linear Subset-Family of V st
+      union F is affinely-independent finite
+    holds Int ((center_of_mass V).:F) c= Int union F;

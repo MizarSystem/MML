@@ -139,7 +139,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="49"/>
-<Adjective nr="170"/>
+<Adjective nr="173"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -162,7 +162,7 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="49"/>
-<Adjective nr="170"/>
+<Adjective nr="173"/>
 </Cluster>
 </CCluster>
 </Registrations>

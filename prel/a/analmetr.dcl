@@ -30,7 +30,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="98"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ANALMETR" nr="2">
@@ -49,8 +49,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ANALMETR" nr="4">
@@ -60,8 +60,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="95"/>
-<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ANALMETR" nr="1">
@@ -74,6 +74,9 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -96,7 +99,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="95"/>
+<Adjective nr="98"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ANALMETR" nr="2">
@@ -112,7 +115,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ANALMETR" nr="3">
@@ -120,7 +123,7 @@
 <Typ kind="G" nr="14">
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -129,8 +132,8 @@
 </Func>
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ANALMETR" nr="4">
@@ -138,7 +141,7 @@
 <Typ kind="G" nr="14">
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -147,23 +150,23 @@
 </Func>
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="93"/>
-<Adjective nr="94"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <CCluster aid="ANALMETR" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
 </Cluster>
 <Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="99"/>
 </Cluster>
 </CCluster>
 </Registrations>

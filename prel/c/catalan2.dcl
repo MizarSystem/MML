@@ -69,9 +69,9 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="51"/>
-<Adjective nr="168"/>
-<Adjective nr="170"/>
 <Adjective nr="171"/>
+<Adjective nr="173"/>
+<Adjective nr="174"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -97,9 +97,9 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="51"/>
-<Adjective nr="168"/>
-<Adjective nr="170"/>
 <Adjective nr="171"/>
+<Adjective nr="173"/>
+<Adjective nr="174"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">

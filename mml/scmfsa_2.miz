@@ -25,7 +25,7 @@ environ
       FINSET_1, CARD_2, FUNCT_4, RELSET_1, FUNCT_2, PBOOLE, GRFUNC_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, FUNCT_1, WELLORD2, XBOOLE_0, AMI_2, AMI_3,
-      STRUCT_0, SCMFSA_1, FUNCOP_1, CARD_1, NAT_1;
+      RELAT_1, STRUCT_0, SCMFSA_1, FUNCOP_1, CARD_1, NAT_1;
  theorems MCART_1, SCMFSA_1, AMI_1, TARSKI, INT_1, RELAT_1, AMI_5, FUNCT_2,
       FUNCT_4, CARD_3, FUNCOP_1, FUNCT_1, AMI_3, NAT_1, CARD_1, AMI_2, FUNCT_7,
       ZFMISC_1, ORDINAL1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, NUMBERS,
@@ -58,6 +58,16 @@ S:   SCM+FSA-Instr c= [: NAT,proj2 SCM+FSA-Instr:] by SCMFSA_1:34;
    end;
 end;
 
+registration
+ cluster NAT-defined -> (the carrier of SCM+FSA)-defined Function;
+ coherence
+  proof let F be Function;
+   assume
+Z:  dom F c= NAT;
+   thus dom F c= the carrier of SCM+FSA by Z,XBOOLE_1:1;
+  end;
+end;
+
 canceled 6;
 
 theorem Th7:
@@ -67,8 +77,7 @@ begin :: The Memory Structure
 
 reserve k for Element of NAT,
   J,K,L for Element of Segm 13,
-  O,P,R for Element
-  of Segm 9;
+  O,P,R for Element of Segm 9;
 
 definition
   func Int-Locations -> Subset of SCM+FSA equals
@@ -141,13 +150,6 @@ definition
     dl.k in SCM+FSA-Data-Loc by AMI_3:def 2;
     hence thesis by Def4;
   end;
-:::  func insloc k -> Instruction-Location of SCM+FSA equals
-:::  k;
-:::  coherence
-:::  proof
-:::    il.k in NAT;
-:::    hence thesis;
-:::  end;
   canceled;
   func fsloc k -> FinSeq-Location equals
   -(k+1);
@@ -1079,8 +1081,7 @@ A1: i in SCM-Instr \/ { [L,<*dB,fA,dA*>] : L in {9,10} } or i in { [K,<*dC
       reconsider S = s|SCM-Memory +* (NAT --> I) as State of SCM by Th73
 ;
       dom s = the carrier of SCM+FSA by PARTFUN1:def 4
-        .= {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ NAT by
-SCMFSA_1:8;
+        .= {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ NAT by SCMFSA_1:8;
       then dom(s|NAT)=dom s /\ NAT & l in dom s by RELAT_1:90,XBOOLE_0:def 3
 ;
       then
@@ -1343,8 +1344,7 @@ proof
 A1: a = A and
 A2: b = B and
 A3: AddTo(a,b) = AddTo(A,B) by Def12;
-  reconsider S = s|SCM-Memory +* (NAT --> AddTo(A,B)) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> AddTo(A,B)) as State of SCM by Th73;
 A4: Exec(AddTo(a,b), s)=s +* Exec(AddTo(A,B), S) +* s|NAT by A3,Th75;
   hence Exec(AddTo(a,b), s).IC SCM+FSA = Exec(AddTo(A,B), S).IC SCM by Th78
     .= succ IC S by AMI_3:9
@@ -1386,8 +1386,8 @@ proof
 A1: a = A and
 A2: b = B and
 A3: SubFrom(a,b) = SubFrom(A,B) by Def13;
-  reconsider S = s|SCM-Memory +* (NAT --> SubFrom(A,B)) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> SubFrom(A,B)) as State of SCM by Th73
+;
 A4: Exec(SubFrom(a,b), s)=s +* Exec(SubFrom(A,B), S) +* s|NAT by A3,Th75;
   hence Exec(SubFrom(a,b), s).IC SCM+FSA = Exec(SubFrom(A,B), S).IC SCM by Th78
     .= succ IC S by AMI_3:10
@@ -1430,8 +1430,7 @@ proof
 A1: a = A and
 A2: b = B and
 A3: MultBy(a,b) = MultBy(A,B) by Def14;
-  reconsider S = s|SCM-Memory +* (NAT --> MultBy(A,B)) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> MultBy(A,B)) as State of SCM by Th73;
 A4: Exec(MultBy(a,b), s)=s +* Exec(MultBy(A,B), S) +* s|NAT by A3,Th75;
   hence Exec(MultBy(a,b), s).IC SCM+FSA = Exec(MultBy(A,B), S).IC SCM by Th78
     .= succ IC S by AMI_3:11
@@ -1474,8 +1473,7 @@ proof
 A1: a = A and
 A2: b = B and
 A3: Divide(a,b) = Divide(A,B) by Def15;
-  reconsider S = s|SCM-Memory +* (NAT --> Divide(A,B)) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> Divide(A,B)) as State of SCM by Th73;
 A4: Exec(Divide(a,b), s)=s +* Exec(Divide(A,B), S) +* s|NAT by A3,Th75;
   hence Exec(Divide(a,b), s).IC SCM+FSA = Exec(Divide(A,B), S).IC SCM by Th78
     .= succ IC S by AMI_3:12
@@ -1524,8 +1522,7 @@ proof
   consider A,B such that
 A1: a = A and
 A2: a = B & Divide(a,a) = Divide(A,B) by Def15;
-  reconsider S = s|SCM-Memory +* (NAT --> Divide(A,A)) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> Divide(A,A)) as State of SCM by Th73;
 A3: Exec(Divide(a,a), s)=s +* Exec(Divide(A,A), S) +* s|NAT by A1,A2,Th75;
   hence Exec(Divide(a,a), s).IC SCM+FSA = Exec(Divide(A,A), S).IC SCM by Th78
     .= succ IC S by AMI_3:12
@@ -1565,8 +1562,7 @@ proof
   consider La such that
 A1: l = La and
 A2: goto l = SCM-goto La by Def16;
-  reconsider S = s|SCM-Memory +* (NAT --> SCM-goto La) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> SCM-goto La) as State of SCM by Th73;
 A3: Exec(goto l, s)=s +* Exec(SCM-goto La, S) +* s|NAT by A2,Th75;
   hence Exec(goto l, s).IC SCM+FSA = Exec(SCM-goto La, S).IC SCM by Th78
     .= l by A1,AMI_3:13;
@@ -1602,8 +1598,8 @@ proof
 A1: a = A and
 A2: l = La and
 A3: a =0_goto l = A =0_goto La by Def17;
-  reconsider S = s|SCM-Memory +* (NAT --> A =0_goto La) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> A =0_goto La) as State of SCM by Th73
+;
 A4: Exec(a =0_goto l, s)=s +* Exec(A =0_goto La, S) +* s|NAT by A3,Th75;
   hereby
     assume
@@ -1657,8 +1653,8 @@ proof
 A1: a = A and
 A2: l = La and
 A3: a >0_goto l = A >0_goto La by Def18;
-  reconsider S = s|SCM-Memory +* (NAT --> A >0_goto La) as State of SCM by
-Th73;
+  reconsider S = s|SCM-Memory +* (NAT --> A >0_goto La) as State of SCM by Th73
+;
 A4: Exec(a >0_goto l, s)=s +* Exec(A >0_goto La, S) +* s|NAT by A3,Th75;
   hereby
     assume
@@ -1981,8 +1977,7 @@ A8: dom t = dom s \/ dom (NAT.--> succ a3) by FUNCT_4:def 1
     .= SCM+FSA-Memory by A7,XBOOLE_1:12;
   dom f = SCM+FSA-Memory by FUNCT_2:def 1;
   then reconsider t as State of SCM+FSA
-   by A8,A5,PARTFUN1:def 4,FUNCT_1:def 20
-,RELAT_1:def 18;
+   by A8,A5,FUNCT_1:def 20,PARTFUN1:def 4,RELAT_1:def 18;
   reconsider w = t as SCM+FSA-State by PBOOLE:155;
   dom(NAT .--> la) = {NAT} by FUNCOP_1:19;
   then NAT in dom (NAT .--> la) by TARSKI:def 1;
@@ -2033,7 +2028,7 @@ A8: x in dom f;
     end;
   end;
   dom f = SCM+FSA-Memory by FUNCT_2:def 1;
-  then reconsider t as State of SCM+FSA by A3,A7,PARTFUN1:def 4,FUNCT_1:def 20
+  then reconsider t as State of SCM+FSA by A3,A7,FUNCT_1:def 20,PARTFUN1:def 4
 ,RELAT_1:def 18;
   reconsider w = t as SCM+FSA-State by PBOOLE:155;
   dom(NAT .--> la) = {NAT} by FUNCOP_1:19;
@@ -2100,7 +2095,7 @@ A8: x in dom f;
     end;
   end;
   dom f = SCM+FSA-Memory by FUNCT_2:def 1;
-  then reconsider t as State of SCM+FSA by A3,A7,PARTFUN1:def 4,FUNCT_1:def 20
+  then reconsider t as State of SCM+FSA by A3,A7,FUNCT_1:def 20,PARTFUN1:def 4
 ,RELAT_1:def 18;
   reconsider w = t as SCM+FSA-State by PBOOLE:155;
   dom(NAT .--> la) = {NAT} by FUNCOP_1:19;

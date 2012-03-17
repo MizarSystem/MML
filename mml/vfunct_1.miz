@@ -9,14 +9,15 @@ environ
  vocabularies XBOOLE_0, SUBSET_1, NORMSP_1, PARTFUN1, STRUCT_0, REAL_1,
       ARYTM_3, ARYTM_1, RELAT_1, NUMBERS, FUNCT_1, VALUED_1, SUPINF_2, CARD_1,
       TARSKI, COMPLEX1, XXREAL_0, XXREAL_2, XREAL_0, ORDINAL1, RLVECT_1,
-      VFUNCT_1;
+      VFUNCT_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, RLVECT_1, NORMSP_1,
+      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, ALGSTR_0,
+      RLVECT_1, NORMSP_1,
       VALUED_1, SEQ_1, SEQ_2, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, RFUNCT_1,
       NORMSP_1, SEQ_1, VALUED_1, SEQ_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
-      RFUNCT_1;
+      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1,
@@ -39,27 +40,23 @@ reserve r,r1,r2,p for Real;
 
 definition
   let C;
-  let V;
-  let f1,f2;
+  let V be non empty addLoopStr;
+  let f1,f2 be PartFunc of C,the carrier of V;
   deffunc F(Element of C) = (f1/.$1) + (f2/.$1);
   deffunc G(Element of C) = (f1/.$1) - (f2/.$1);
   defpred P[set] means $1 in dom f1 /\ dom f2;
   set X = dom f1 /\ dom f2;
   func f1+f2 -> PartFunc of C,the carrier of V means
   :Def1:
-  dom it = dom f1 /\
-  dom f2 & for c st c in dom it holds it/.c = (f1/.c) + (f2/.c);
+  dom it = dom f1 /\ dom f2 &
+  for c st c in dom it holds it/.c = (f1/.c) + (f2/.c);
   existence
   proof
     consider F be PartFunc of C,the carrier of V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
-    thus dom F = dom f1 /\ dom f2 by A1,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A2;
+    thus thesis by A1,A2,SUBSET_1:8;
   end;
   uniqueness
   proof
@@ -69,19 +66,15 @@ Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
   end;
   func f1-f2 -> PartFunc of C,the carrier of V means
   :Def2:
-  dom it = dom f1 /\
-  dom f2 & for c st c in dom it holds it/.c = (f1/.c) - (f2/.c);
+  dom it = dom f1 /\ dom f2 &
+  for c st c in dom it holds it/.c = (f1/.c) - (f2/.c);
   existence
   proof
     consider F be PartFunc of C,the carrier of V such that
 A3: for c holds c in dom F iff P[c] and
 A4: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
     take F;
-    thus dom F = dom f1 /\ dom f2 by A3,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A4;
+    thus thesis by A3,A4,SUBSET_1:8;
   end;
   uniqueness
   proof
@@ -93,27 +86,23 @@ end;
 
 definition
   let C;
-  let V;
+  let V be non empty RLSStruct;
   let f1 be PartFunc of C,REAL;
-  let f2;
+  let f2 be PartFunc of C,the carrier of V;
   deffunc F(Element of C) = (f1.$1) * (f2/.$1);
   defpred P[set] means $1 in dom f1 /\ dom f2;
   set X = dom f1 /\ dom f2;
   func f1(#)f2 -> PartFunc of C,the carrier of V means
   :Def3:
-  dom it = dom f1
-  /\ dom f2 & for c st c in dom it holds it/.c = f1.c * (f2/.c);
+  dom it = dom f1 /\ dom f2 &
+  for c st c in dom it holds it/.c = f1.c * (f2/.c);
   existence
   proof
     consider F be PartFunc of C,the carrier of V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
-    thus dom F = dom f1 /\ dom f2 by A1,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A2;
+    thus thesis by A1,A2,SUBSET_1:8;
   end;
   uniqueness
   proof
@@ -125,29 +114,25 @@ end;
 
 definition
   let C;
-  let V;
-  let f,r;
+  let V be non empty RLSStruct;
+  let f be PartFunc of C,the carrier of V;
+  let r;
   deffunc F(Element of C) = r * (f/.$1);
   defpred P[set] means $1 in dom f;
-  set X = dom f;
   func r(#)f -> PartFunc of C,the carrier of V means
   :Def4:
-  dom it = dom f &
-  for c st c in dom it holds it/.c = r * (f/.c);
+  dom it = dom f & for c st c in dom it holds it/.c = r * (f/.c);
   existence
   proof
     consider F be PartFunc of C,the carrier of V such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F/.c = F(c) from PARTFUN2:sch 2;
     take F;
-    thus dom F = dom f by A1,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A2;
+    thus thesis by A1,A2,SUBSET_1:8;
   end;
   uniqueness
   proof
+    set X = dom f;
     thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = F(c)) holds f = g from PARTFUN2:sch 3;
@@ -156,52 +141,50 @@ end;
 
 definition
   let C;
-  let V;
-  let f;
+  let V be non empty NORMSTR;
+  let f be PartFunc of C,the carrier of V;
   deffunc F(Element of C) = ||. f/.$1 .||;
-  deffunc G(Element of C) = - f/.$1;
   defpred P[set] means $1 in dom f;
-  set X = dom f;
   func ||.f.|| -> PartFunc of C,REAL means
   :Def5:
-  dom it = dom f & for c st c
-  in dom it holds it.c = ||. f/.c .||;
+  dom it = dom f & for c st c in dom it holds it.c = ||. f/.c .||;
   existence
   proof
     consider F be PartFunc of C,REAL such that
 A1: for c holds c in dom F iff P[c] and
 A2: for c st c in dom F holds F.c = F(c) from SEQ_1:sch 3;
     take F;
-    thus dom F = dom f by A1,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A2;
+    thus thesis by A1,A2,SUBSET_1:8;
   end;
   uniqueness
   proof
+    set X = dom f;
     thus for h,g being PartFunc of C, REAL st (dom h=X & for c be Element of C
 st c in dom h holds h.c = F(c)) & (dom g=X & for c be Element of C st c in dom
     g holds g.c = F(c)) holds h = g from SEQ_1:sch 4;
   end;
+end;
+
+definition
+  let C;
+  let V be non empty addLoopStr;
+  let f be PartFunc of C,the carrier of V;
+  deffunc G(Element of C) = - f/.$1;
+  defpred P[set] means $1 in dom f;
   func -f ->PartFunc of C,the carrier of V means
   :Def6:
-  dom it = dom f & for c
-  st c in dom it holds it/.c = -(f/.c);
+  dom it = dom f & for c st c in dom it holds it/.c = -(f/.c);
   existence
   proof
     consider F being PartFunc of C,the carrier of V such that
 A3: for c holds c in dom F iff P[c] and
 A4: for c st c in dom F holds F/.c = G(c) from PARTFUN2:sch 2;
     take F;
-    thus dom f = dom F by A3,SUBSET_1:8;
-    let c;
-    assume
-    c in dom F;
-    hence thesis by A4;
+    thus thesis by A3,A4,SUBSET_1:8;
   end;
   uniqueness
   proof
+    set X = dom f;
     thus for f,g being PartFunc of C, the carrier of V st (dom f=X & for c be
 Element of C st c in dom f holds f/.c = G(c)) & (dom g=X & for c be Element of
     C st c in dom g holds g/.c = G(c)) holds f = g from PARTFUN2:sch 3;
@@ -303,7 +286,7 @@ A4: c in (f)"{0.V};
 A5: c in dom (||.f.||) by Def5;
     f/.c in {0.V} by A4,PARTFUN2:44;
     then f/.c = 0.V by TARSKI:def 1;
-    then ||.f/.c.|| = 0 by NORMSP_1:def 2;
+    then ||.f/.c.|| = 0;
     then (||.f.||).c = 0 by A5,Def5;
     then (||.f.||).c in {0} by TARSKI:def 1;
     hence c in (||.f.||)"{0} by A5,FUNCT_1:def 13;
@@ -446,7 +429,7 @@ A2: c in dom (f1(#)f2(#)f3);
 A3: c in dom (f2 (#) f3) by XBOOLE_0:def 4;
     thus (f1 (#) f2 (#) f3)/.c = (f1 (#) f2).c * (f3/.c) by A2,Def3
       .= f1.c * f2.c * (f3/.c) by VALUED_1:5
-      .= f1.c * (f2.c * (f3/.c)) by RLVECT_1:def 9
+      .= f1.c * (f2.c * (f3/.c)) by RLVECT_1:def 9,def 10, def 11
       .= f1.c * ((f2 (#) f3)/.c) by A3,Def3
       .= (f1 (#) (f2 (#) f3))/.c by A1,A2,Def3;
   end;
@@ -512,7 +495,7 @@ A5: c in dom (f3(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (f3 (#) f2) by A4,XBOOLE_0:def 4;
     thus (f3 (#) (f1 + f2))/.c = f3.c * ((f1 + f2)/.c) by A2,Def3
       .= f3.c * ((f1/.c) + (f2/.c)) by A3,Def1
-      .= f3.c * (f1/.c) + f3.c * (f2/.c) by RLVECT_1:def 9
+      .= f3.c * (f1/.c) + f3.c * (f2/.c) by RLVECT_1:def 9, def 11, def 8
       .= ((f3 (#) f1)/.c) + f3.c* (f2/.c) by A5,Def3
       .= ((f3 (#) f1)/.c) + ((f3 (#) f2)/.c) by A6,Def3
       .= ((f3 (#) f1) + (f3 (#) f2))/.c by A1,A2,Def1;
@@ -539,7 +522,7 @@ A3: c in dom (f1(#)f2) by Def4;
 A4: c in dom (r(#)f1) by XBOOLE_0:def 4;
     thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Def4
       .= r*(f1.c * (f2/.c)) by A3,Def3
-      .= (r*f1.c) * (f2/.c) by RLVECT_1:def 9
+      .= (r*f1.c) * (f2/.c) by RLVECT_1:def 9,def 10, def 11
       .= (r(#)f1).c * (f2/.c) by A4,VALUED_1:def 5
       .= (r(#)f1 (#) f2)/.c by A1,A2,Def3;
   end;
@@ -565,8 +548,8 @@ A3: c in dom (f1(#)f2) by Def4;
 A4: c in dom (r(#)f2) by XBOOLE_0:def 4;
     thus (r(#)(f1(#)f2))/.c = r * (f1(#)f2)/.c by A2,Def4
       .= r * (f1.c * (f2/.c)) by A3,Def3
-      .= f1.c * r * (f2/.c) by RLVECT_1:def 9
-      .= f1.c * (r * (f2/.c)) by RLVECT_1:def 9
+      .= f1.c * r * (f2/.c) by RLVECT_1:def 9,def 10, def 11
+      .= f1.c * (r * (f2/.c)) by RLVECT_1:def 9,def 10, def 11
       .= f1.c * ((r(#)f2)/.c) by A4,Def4
       .= (f1(#)(r(#)f2))/.c by A1,A2,Def3;
   end;
@@ -659,7 +642,7 @@ A5: c in dom (r(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (r(#)f2) by A4,XBOOLE_0:def 4;
     thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Def4
       .= r * ((f1/.c) + (f2/.c)) by A3,Def1
-      .= r * (f1/.c) + r * (f2/.c) by RLVECT_1:def 9
+      .= r * (f1/.c) + r * (f2/.c) by RLVECT_1:def 9,def 10, def 11, def 8
       .= ((r(#)f1)/.c) + r * (f2/.c) by A5,Def4
       .= ((r(#)f1)/.c) + ((r(#)f2)/.c) by A6,Def4
       .= (r(#)f1 + r(#)f2)/.c by A1,A2,Def1;
@@ -680,7 +663,7 @@ A2: c in dom ((r*p)(#)f);
     then
 A3: c in dom (p(#)f) by A1,Def4;
     thus ((r*p)(#)f)/.c = r*p * f/.c by A2,Def4
-      .= r*(p * f/.c) by RLVECT_1:def 9
+      .= r*(p * f/.c) by RLVECT_1:def 9,def 10, def 11
       .= r * ((p(#)f)/.c) by A3,Def4
       .= (r(#)(p(#)f))/.c by A1,A2,Def4;
   end;
@@ -770,7 +753,7 @@ A1: now
     assume
     c in dom (1(#)f);
     hence (1(#)f)/.c = 1 * f/.c by Def4
-      .= f/.c by RLVECT_1:def 9;
+      .= f/.c by RLVECT_1:def 9,def 10, def 11;
   end;
   dom (1(#)f) = dom f by Def4;
   hence thesis by A1,PARTFUN2:3;
@@ -1403,12 +1386,12 @@ end;
 
 definition
   let C;
-  let V;
-  let f,Y;
+  let V be non empty NORMSTR;
+  let f be PartFunc of C,the carrier of V;
+  let Y;
   pred f is_bounded_on Y means
   :Def7:
-  ex r st for c st c in Y /\ dom f holds
-  ||.f/.c.|| <= r;
+  ex r st for c st c in Y /\ dom f holds ||.f/.c.|| <= r;
 end;
 
 canceled;
@@ -1423,8 +1406,7 @@ A2: f is_bounded_on X;
 A3: for c st c in X /\ dom f holds ||.f/.c.|| <= r by A2,Def7;
   take r;
   let c;
-  assume
-  c in Y /\ dom f;
+  assume c in Y /\ dom f;
   then c in Y & c in dom f by XBOOLE_0:def 4;
   then c in X /\ dom f by A1,XBOOLE_0:def 4;
   hence thesis by A3;

@@ -109,26 +109,24 @@ definition
   for u,v,w being Element of IT holds
   (u + v) + w = u + (v + w);
   attr IT is right_zeroed means
-  :Def7:
-  for v being Element of IT holds v + 0.
-  IT = v;
+:Def7: for v being Element of IT holds v + 0.IT = v;
 end;
 
 definition
   let IT be non empty RLSStruct;
-  canceled;
-  attr IT is RealLinearSpace-like means
-  :Def9:
-  (for a for v,w being VECTOR of
-IT holds a * (v + w) = a * v + a * w) & (for a,b for v being VECTOR of IT holds
-(a + b) * v = a * v + b * v) & (for a,b for v being VECTOR of IT holds (a * b)
-  * v = a * (b * v)) & for v being VECTOR of IT holds 1 * v = v;
+  attr IT is vector-distributive means
+:Def8: for a for v,w being VECTOR of IT holds a * (v + w) = a * v + a * w;
+  attr IT is scalar-distributive means
+:Def9: for a,b for v being VECTOR of IT holds (a + b) * v = a * v + b * v;
+  attr IT is scalar-associative means
+:Def10: for a,b for v being VECTOR of IT holds (a * b) * v = a * (b * v);
+  attr IT is scalar-unital means
+:Def11: for v being VECTOR of IT holds 1 * v = v;
 end;
 
 definition
   func Trivial-RLSStruct -> strict RLSStruct equals
-  RLSStruct(#1,op0,op2,pr2(
-    REAL,1)#);
+  RLSStruct(#1,op0,op2,pr2(REAL,1)#);
   coherence;
 end;
 
@@ -165,7 +163,8 @@ end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like (non empty RLSStruct);
+    scalar-distributive vector-distributive scalar-associative scalar-unital
+     (non empty RLSStruct);
   existence
   proof
     take S = Trivial-RLSStruct;
@@ -191,19 +190,21 @@ registration
       take x;
       thus thesis by STRUCT_0:def 10;
     end;
-    thus for a for v,w being VECTOR of S holds a * (v + w) = a * v + a * w by
-    STRUCT_0:def 10;
     thus for a,b for v being VECTOR of S holds (a + b) * v = a * v + b * v by
+    STRUCT_0:def 10;
+    thus for a for v,w being VECTOR of S holds a * (v + w) = a * v + a * w by
     STRUCT_0:def 10;
     thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v) by
     STRUCT_0:def 10;
-    thus thesis by STRUCT_0:def 10;
+    thus for v being VECTOR of S holds 1 * v = v by STRUCT_0:def 10;
   end;
 end;
 
 definition
   mode RealLinearSpace is Abelian add-associative right_zeroed
-    right_complementable RealLinearSpace-like (non empty RLSStruct);
+    right_complementable scalar-distributive vector-distributive
+    scalar-associative scalar-unital
+     (non empty RLSStruct);
 end;
 
 definition
@@ -282,7 +283,7 @@ definition
   assume
 A1: V is add-associative right_zeroed right_complementable;
   redefine func - v means
-  :Def11:
+  :Def13:
   v + it = 0.V;
   compatibility
   proof
@@ -323,7 +324,7 @@ proof
   let v,u be Element of V;
   take w = (- v) + u;
   thus v + w = (v + (- v)) + u by Def6
-    .= 0.V + u by Def11
+    .= 0.V + u by Def13
     .= u by Th10;
 end;
 
@@ -347,7 +348,7 @@ theorem Th16:
 proof
   let V be add-associative right_zeroed right_complementable (non empty
   addLoopStr), v be Element of V;
-  thus v + -v = 0.V by Def11;
+  thus v + -v = 0.V by Def13;
   hence thesis by Lm1;
 end;
 
@@ -363,7 +364,7 @@ proof
   assume
   v + w = 0.V;
   then w + v = 0.V by Lm1;
-  hence thesis by Def11;
+  hence thesis by Def13;
 end;
 
 theorem
@@ -424,15 +425,15 @@ A1: a = 0 or v = 0.V;
     per cases by A1;
     suppose
 A2:   a = 0;
-      v + 0 * v = 1 * v + 0 * v by Def9
+      v + 0 * v = 1 * v + 0 * v by Def11
         .= (1 + 0) * v by Def9
-        .= v by Def9
+        .= v by Def11
         .= v + 0.V by Th10;
       hence thesis by A2,Th21;
     end;
     suppose
 A3:   v = 0.V;
-      a * 0.V + a * 0.V = a * (0.V + 0.V) by Def9
+      a * 0.V + a * 0.V = a * (0.V + 0.V) by Def8
         .= a * 0.V by Th10
         .= a * 0.V + 0.V by Th10;
       hence thesis by A3,Th21;
@@ -447,9 +448,9 @@ proof
   assume that
 A1: a * v = 0.V and
 A2: a <> 0;
-  thus v = 1 * v by Def9
+  thus v = 1 * v by Def11
     .= (a" * a) * v by A2,XCMPLX_0:def 7
-    .= a" * 0.V by A1,Def9
+    .= a" * 0.V by A1,Def10
     .= 0.V by Th23;
 end;
 
@@ -459,7 +460,7 @@ theorem Th25:
 proof
   let V be add-associative right_zeroed right_complementable (non empty
   addLoopStr);
-  thus 0.V = 0.V + (- 0.V) by Def11
+  thus 0.V = 0.V + (- 0.V) by Def13
     .= - 0.V by Th10;
 end;
 
@@ -480,17 +481,17 @@ theorem
 
 theorem
   for V being add-associative right_zeroed right_complementable (non
-  empty addLoopStr), v being Element of V holds v - v = 0.V by Def11;
+  empty addLoopStr), v being Element of V holds v - v = 0.V by Def13;
 
 theorem Th29:
   - v = (- 1) * v
 proof
-  v + (- 1) * v = 1 * v + (- 1) * v by Def9
+  v + (- 1) * v = 1 * v + (- 1) * v by Def11
     .= (1 + (- 1)) * v by Def9
     .= 0.V by Th23;
   hence (- v) = (- v) + (v + (- 1) * v) by Th10
     .= ((- v) + v) + (- 1) * v by Def6
-    .= 0.V + (- 1) * v by Def11
+    .= 0.V + (- 1) * v by Def13
     .= (- 1) * v by Th10;
 end;
 
@@ -501,7 +502,7 @@ proof
   let V be add-associative right_zeroed right_complementable (non empty
   addLoopStr);
   let v be Element of V;
-  v + -v = 0.V by Def11;
+  v + -v = 0.V by Def13;
   hence thesis by Th19;
 end;
 
@@ -525,9 +526,9 @@ theorem Th33:
 proof
   assume
   v = - v;
-  then 0.V = v + v by Def11
-    .= 1 * v + v by Def9
-    .= 1 * v + 1 * v by Def9
+  then 0.V = v + v by Def13
+    .= 1 * v + v by Def11
+    .= 1 * v + 1 * v by Def11
     .= (1 + 1) * v by Def9
     .= 2 * v;
   hence thesis by Th24;
@@ -538,7 +539,7 @@ theorem
 proof
   assume
   v + v = 0.V;
-  then v = - v by Def11;
+  then v = - v by Def13;
   hence thesis by Th33;
 end;
 
@@ -551,7 +552,7 @@ proof
   let v,w be Element of V;
   assume
   v - w = 0.V;
-  then - v = - w by Def11;
+  then - v = - w by Def13;
   hence thesis by Th31;
 end;
 
@@ -585,7 +586,7 @@ theorem Th38:
   a * (- v) = (- a) * v
 proof
   thus a * (- v) = a * ((- 1) * v) by Th29
-    .= (a *(- 1)) * v by Def9
+    .= (a *(- 1)) * v by Def10
     .= (- a) * v;
 end;
 
@@ -594,7 +595,7 @@ theorem Th39:
 proof
   thus a * (- v) = (- (1 * a)) * v by Th38
     .= ((- 1) * a) * v
-    .= (- 1) * (a * v) by Def9
+    .= (- 1) * (a * v) by Def10
     .= - (a * v) by Th29;
 end;
 
@@ -615,10 +616,10 @@ proof
 
   u + w + (-w + -u) = u + (w + (-w + -u)) by Def6
     .= u + (w + -w + -u) by Def6
-    .= u + (0.V + -u) by Def11
+    .= u + (0.V + -u) by Def13
     .= u + -u by Th10
-    .= 0.V by Def11;
-  hence thesis by Def11;
+    .= 0.V by Def13;
+  hence thesis by Def13;
 end;
 
 theorem Th41:
@@ -689,7 +690,7 @@ end;
 theorem Th48:
   a * (v - w) = a * v - a * w
 proof
-  thus a * (v - w) = a * v + a * (- w) by Def9
+  thus a * (v - w) = a * v + a * (- w) by Def8
     .= a * v - a * w by Th39;
 end;
 
@@ -708,7 +709,7 @@ proof
   assume that
 A1: a <> 0 and
 A2: a * v = a * w;
-  0.V = a * v - a * w by A2,Def11
+  0.V = a * v - a * w by A2,Def13
     .= a * (v - w) by Th48;
   then v - w = 0.V by A1,Th24;
   hence thesis by Th35;
@@ -720,7 +721,7 @@ proof
   assume that
 A1: v <> 0.V and
 A2: a * v = b * v;
-  0.V = a * v - b * v by A2,Def11
+  0.V = a * v - b * v by A2,Def13
     .= (a - b) * v by Th49;
   then (- b) + a = 0 by A1,Th24;
   hence thesis;
@@ -762,7 +763,7 @@ definition
   let V;
   let F;
   func Sum(F) -> Element of V means
-  :Def13:
+  :Def15:
   ex f st it = f.(len F) & f.0 = 0.V
   & for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
   existence
@@ -921,7 +922,7 @@ proof
   set S = <*>(the carrier of V);
 
   ex f st Sum(S) = f.(len S) & f.0 = 0.V & for j,v st j < len S & v = S.(j
-  + 1) holds f.(j + 1) = f.j + v by Def13;
+  + 1) holds f.(j + 1) = f.j + v by Def15;
 
   hence thesis;
 end;
@@ -948,12 +949,12 @@ A3: v = F.(len F);
 A4: Sum(G) = g.(len G) and
 A5: g.0 = 0.V and
 A6: for j,v st j < len G & v = G.(j + 1) holds g.(j + 1) = g.j + v by
-  Def13;
+  Def15;
   consider f such that
 A7: Sum(F) = f.(len F) and
 A8: f.0 = 0.V and
 A9: for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v by
-  Def13;
+  Def15;
   defpred P[Element of NAT] means for H holds len H = $1 & H = F | (Seg $1) &
   len H <= len G implies f.(len H) = g.(len H);
   now
@@ -1051,7 +1052,7 @@ A15: dom q = Seg len q by FINSEQ_1:def 3;
     dom p = Seg len p by FINSEQ_1:def 3;
     hence Sum(H) = Sum(p) + v1 by A4,A8,Th55
       .= a * Sum(q) + a * v2 by A2,A8,A7,A9,A14
-      .= a * (Sum(q) + v2) by Def9
+      .= a * (Sum(q) + v2) by Def8
       .= a * Sum(I) by A3,A4,A7,A15,Th55;
   end;
   then
@@ -1292,7 +1293,7 @@ proof
 A1: Sum(S) = f.(len S) and
 
 A2: f.0 = 0.V & for j for v being Element of V st j < len S & v = S.(j +
-  1) holds f.(j + 1) = f.j + v by Def13;
+  1) holds f.(j + 1) = f.j + v by Def15;
 
   0 < 1;
   then consider j such that
@@ -1698,7 +1699,7 @@ theorem
 proof
   let V be RealLinearSpace, a be Real, v,u be VECTOR of V;
   thus a * Sum<* v,u *> = a * (v + u) by Th62
-    .= a * v + a * u by Def9;
+    .= a * v + a * u by Def8;
 end;
 
 theorem
@@ -1707,8 +1708,8 @@ theorem
 proof
   let V be RealLinearSpace, a be Real, v,u,w be VECTOR of V;
   thus a * Sum<* v,u,w *> = a * (v + u + w) by Th63
-    .= a * (v + u) + a * w by Def9
-    .= a * v + a * u + a * w by Def9;
+    .= a * (v + u) + a * w by Def8
+    .= a * v + a * u + a * w by Def8;
 end;
 
 theorem
@@ -1781,7 +1782,7 @@ end;
 theorem
   Sum<* v,- v *> = 0.V & Sum<* - v,v *> = 0.V
 proof
-A1: v + - v = 0.V by Def11;
+A1: v + - v = 0.V by Def13;
   hence Sum<* v,- v *> = 0.V by Th62;
   - v + v = 0.V by A1,Lm1;
   hence thesis by Th62;
@@ -1803,8 +1804,8 @@ theorem Th79:
 proof
   let V be RealLinearSpace, v be VECTOR of V;
   thus Sum<* v,v *> = v + v by Th62
-    .= 1 * v + v by Def9
-    .= 1 * v + 1 * v by Def9
+    .= 1 * v + v by Def11
+    .= 1 * v + 1 * v by Def11
     .= (1 + 1) * v by Def9
     .= 2 * v;
 end;
@@ -1818,7 +1819,7 @@ proof
     .= - Sum<* v,v *> by Th62
     .= - (2 * v) by Th79
     .= (- 1) * (2 * v) by Th29
-    .= ((- 1) * 2) * v by Def9
+    .= ((- 1) * 2) * v by Def10
     .= (- 2) * v;
 end;
 
@@ -1951,7 +1952,7 @@ proof
   let V be RealLinearSpace, v be VECTOR of V;
   thus Sum<* v,v,v *> = Sum<* v,v *> + v by Th84
     .= 2 * v + v by Th79
-    .= 2 * v + 1 * v by Def9
+    .= 2 * v + 1 * v by Def11
     .= (2 + 1) * v by Def9
     .= 3 * v;
 end;
@@ -1997,12 +1998,10 @@ begin :: Addenda
 :: from REALSET2, 2007.02.24, A.T
 
 definition
-  canceled;
   let L be non empty addLoopStr;
   attr L is zeroed means
-  :Def15:
-  for a being Element of L holds a+0.L = a & 0.
-  L+a = a;
+  :Def16:
+  for a being Element of L holds a+0.L = a & 0.L+a = a;
 end;
 
 registration
@@ -2012,7 +2011,7 @@ registration
     let L be non empty addLoopStr;
     assume
     L is zeroed;
-    hence for v being Element of L holds v + 0.L = v by Def15;
+    hence for v being Element of L holds v + 0.L = v by Def16;
   end;
 end;
 

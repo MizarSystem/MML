@@ -15,7 +15,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, REAL_1, STRUCT_0, ALGSTR_0, FUNCT_1, RLVECT_1,
       BINOP_1, GROUP_1, VECTSP_1, RELSET_1, FUNCT_2, SQUARE_1, COMPLEX1,
-      VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10, BILINEAR;
+      VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10, BILINEAR, GRCAT_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, BINOP_2, BORSUK_1, BILINEAR, FUNCOP_1,
       SUPINF_1, SIN_COS, HAHNBAN, NAT_1;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
@@ -23,11 +23,11 @@ environ
       BILINEAR;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
  definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP10, BILINEAR, FUNCT_1,
-      SQUARE_1, RLVECT_1, BINOP_1, COMPLEX1, VECTSP_1, ALGSTR_0;
+      SQUARE_1, RLVECT_1, BINOP_1, COMPLEX1, VECTSP_1, ALGSTR_0, GRCAT_1;
  theorems COMPLEX1, SQUARE_1, ABSVALUE, COMPLFLD, XREAL_0, FUNCT_2, HAHNBAN1,
       VECTSP_1, RLVECT_1, VECTSP_4, VECTSP_6, TARSKI, VECTSP10, BILINEAR,
       DOMAIN_1, ZFMISC_1, FUNCT_1, XCMPLX_1, XREAL_1, BINOP_1, XXREAL_0,
-      FUNCOP_1, STRUCT_0;
+      FUNCOP_1, STRUCT_0, GRCAT_1;
  schemes FUNCT_2, BINOP_1;
 
 begin :: Auxiliary Facts about Complex Numbers
@@ -271,7 +271,8 @@ A1: (0Functional(V)).x = 0.F_Complex by HAHNBAN1:22;
 end;
 
 registration
-  let V be add-associative right_zeroed right_complementable VectSp-like (non
+  let V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (non
   empty VectSpStr over F_Complex);
   cluster cmplxhomogeneous -> 0-preserving Functional of V;
   coherence
@@ -390,7 +391,7 @@ registration
   proof
     let v,w be Vector of V;
     thus f*'.(v+w) = (f.(v+w))*' by Def2
-      .= (f.v + f.w)*' by HAHNBAN1:def 11
+      .= (f.v + f.w)*' by GRCAT_1:def 13
       .= (f.v)*' + (f.w)*' by COMPLFLD:87
       .= (f*').v + (f.w)*' by Def2
       .= (f*').v + (f*').w by Def2;
@@ -443,9 +444,8 @@ A3: f.x <> f.y by FUNCT_1:def 16;
       then f.v = (f.w)*'*';
       hence contradiction by A3;
     end;
-    then dom (f*') = the carrier of V & (f*').x <> (f.w)*' by
-    Def2,FUNCT_2:
-    def 1;
+    then dom (f*') = the carrier of V & (f*').x <> (f.w)*' by Def2,
+FUNCT_2:def 1;
     hence thesis by A1,Def2;
   end;
 end;
@@ -590,11 +590,13 @@ A4: (f*').v = 0.F_Complex;
 end;
 
 theorem
-  for V be add-associative right_zeroed right_complementable VectSp-like
+  for V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital
 (non empty VectSpStr over F_Complex) for f be antilinear-Functional of V holds
   ker f is linearly-closed
 proof
-  let V be add-associative right_zeroed right_complementable VectSp-like (non
+  let V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (non
   empty VectSpStr over F_Complex), f be antilinear-Functional of V;
   ker f = ker f*' by Th26;
   hence thesis by VECTSP10:34;
@@ -805,8 +807,8 @@ registration
   cluster NulForm(V,V) -> hermitan;
   coherence
   proof
-    NulForm(V,V) = FormFunctional(0Functional(V),0Functional(V)) by
-    BILINEAR:23;
+    NulForm(V,V) = FormFunctional(0Functional(V),0Functional(V)) by BILINEAR:23
+;
     hence thesis by Lm3;
   end;
   cluster NulForm(V,V) -> diagReR+0valued;
@@ -875,7 +877,7 @@ A1: f is hermitan additiveFAF;
       thus F.(x+y) = f.(x+y,w) by BILINEAR:10
         .= (f.(w,x+y))*' by A1,Def5
         .= (F1.(x+y))*' by BILINEAR:9
-        .= (F1.x+ F1.y)*' by A1,HAHNBAN1:def 11
+        .= (F1.x+ F1.y)*' by A1,GRCAT_1:def 13
         .= (f.(w,x)+ F1.y)*' by BILINEAR:9
         .= (f.(w,x)+ f.(w,y))*' by BILINEAR:9
         .= (f.(w,x))*' + (f.(w,y))*' by COMPLFLD:87
@@ -884,7 +886,7 @@ A1: f is hermitan additiveFAF;
         .= F.x+f.(y,w) by BILINEAR:10
         .= F.x+F.y by BILINEAR:10;
     end;
-    hence thesis by HAHNBAN1:def 11;
+    hence thesis by GRCAT_1:def 13;
   end;
 end;
 
@@ -903,7 +905,7 @@ A1: f is hermitan additiveSAF;
       thus F.(x+y) = f.(v1,x+y) by BILINEAR:9
         .= (f.(x+y,v1))*' by A1,Def5
         .= (F2.(x+y))*' by BILINEAR:10
-        .= (F2.x+ F2.y)*' by A1,HAHNBAN1:def 11
+        .= (F2.x+ F2.y)*' by A1,GRCAT_1:def 13
         .= (f.(x,v1)+ F2.y)*' by BILINEAR:10
         .= (f.(x,v1)+ f.(y,v1))*' by BILINEAR:10
         .= (f.(x,v1))*' + (f.(y,v1))*' by COMPLFLD:87
@@ -912,7 +914,7 @@ A1: f is hermitan additiveSAF;
         .= F.x+f.(v1,y) by BILINEAR:9
         .= F.x+F.y by BILINEAR:9;
     end;
-    hence thesis by HAHNBAN1:def 11;
+    hence thesis by GRCAT_1:def 13;
   end;
 end;
 
@@ -1383,18 +1385,20 @@ end;
 
 theorem Th40:
   for V,W be add-associative right_zeroed right_complementable
-VectSp-like (non empty VectSpStr over F_Complex) for v,u be Vector of V, w,t be
+vector-distributive scalar-distributive scalar-associative scalar-unital
+ (non empty VectSpStr over F_Complex) for v,u be Vector of V, w,t be
   Vector of W for a,b be Element of F_Complex for f be sesquilinear-Form of V,W
 holds f.(v+a*u,w+b*t) = f.(v,w) + b*' * f.(v,t) + (a*f.(u,w) + a*(b*' *f.(u,t))
   )
 proof
-  let V,W be add-associative right_zeroed right_complementable VectSp-like (
+  let V,W be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (
   non empty VectSpStr over F_Complex);
   let v1,w1 be Vector of V, w,w2 be Vector of W, r,s be Element of F_Complex,
   f be sesquilinear-Form of V,W;
   set v3 = f.(v1,w), v4 = f.(v1,w2), v5 = f.(w1,w), v6 = f.(w1,w2);
   thus f.(v1+r*w1,w+s*w2) = v3 +f.(v1,s*w2) + (f.(r*w1,w) +f.(r*w1,s*w2)) by
-  BILINEAR:29
+BILINEAR:29
     .= v3 +s*'*v4 + (f.(r*w1,w) +f.(r*w1,s*w2)) by Th30
     .= v3 + s*'*v4 + (r*v5 + f.(r*w1,s*w2)) by BILINEAR:32
     .= v3 + s*'*v4 + (r*v5 + r*f.(w1,s*w2)) by BILINEAR:32
@@ -1410,7 +1414,7 @@ proof
   ,s be Element of F_Complex, f be sesquilinear-Form of V,W;
   set v3 = f.(v1,w), v4 = f.(v1,w2), v5 = f.(w1,w), v6 = f.(w1,w2);
   thus f.(v1-r*w1,w-s*w2) = v3 -f.(v1,s*w2) - (f.(r*w1,w) -f.(r*w1,s*w2)) by
-  Th39
+Th39
     .= v3 -s*'*v4 - (f.(r*w1,w) -f.(r*w1,s*w2)) by Th30
     .= v3 - s*'*v4 - (r*v5 - f.(r*w1,s*w2)) by BILINEAR:32
     .= v3 - s*'*v4 - (r*v5 - r*f.(w1,s*w2)) by BILINEAR:32
@@ -1419,10 +1423,12 @@ end;
 
 theorem Th42:
   for V be add-associative right_zeroed right_complementable
-  VectSp-like (non empty VectSpStr over F_Complex) for f be cmplxhomogeneousFAF
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+   (non empty VectSpStr over F_Complex) for f be cmplxhomogeneousFAF
   Form of V,V for v be Vector of V holds f.(v,0.V) = 0.F_Complex
 proof
-  let V be add-associative right_zeroed right_complementable VectSp-like (non
+  let V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (non
   empty VectSpStr over F_Complex);
   let f be cmplxhomogeneousFAF Form of V,V, v be Vector of V;
   set F=FunctionalFAF(f,v);
@@ -1460,8 +1466,8 @@ A1: f.(v1+w,v1+w) - f.(v1-w,v1-w) = v3 + v4 - (v3 - v4 - (w1 - w2)) + (w1 +
   then
 A2: i_FC *f.(v1+i_FC*w,v1+i_FC*w) = i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1
   + i_FC*' * w2)
-    .= i_FC * v3 + v4 -(w1 + i_FC*' * w2) by COMPLEX1:17,HAHNBAN1:8,VECTSP_6
-  :81;
+    .= i_FC * v3 + v4 -(w1 + i_FC*' * w2) by COMPLEX1:17,HAHNBAN1:8,VECTSP_6:81
+;
   f.(v1-i_FC * w,v1 - i_FC * w) = f.(v1,v1-i_FC*w) - f.(i_FC*w,v1-i_FC*w)
   by BILINEAR:36
     .= v3 - f.(v1,i_FC*w) - f.(i_FC*w,v1-i_FC*w) by Th38
@@ -1473,14 +1479,13 @@ A2: i_FC *f.(v1+i_FC*w,v1+i_FC*w) = i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1
   i_FC *f.(v1-i_FC*w,v1-i_FC*w) = i_FC * (v3 - i_FC*' * v4)- i_FC*(i_FC*(
   w1 - i_FC*' * w2)) by VECTSP_1:43
     .= i_FC * (v3 - i_FC*' * v4)- i_FC*i_FC*(w1 - i_FC*' * w2)
-    .= i_FC * (v3 - i_FC*' * v4)- -(w1 - i_FC*' * w2) by HAHNBAN1:8,VECTSP_6
-  :81
+    .= i_FC * (v3 - i_FC*' * v4)- -(w1 - i_FC*' * w2) by HAHNBAN1:8,VECTSP_6:81
     .= i_FC * (v3 - i_FC*' * v4) +(w1 - i_FC*' * w2) by COMPLFLD:35
     .= i_FC * v3 - i_FC *(i_FC*' * v4) +(w1 - i_FC*' * w2) by VECTSP_1:43
     .= i_FC * v3 - v4 +(w1 - i_FC*' * w2) by COMPLEX1:17;
   then i_FC *f.(v1+i_FC*w,v1+i_FC*w) - i_FC *f.(v1-i_FC*w,v1-i_FC*w) = i_FC *
   v3 + v4 -(w1 + i_FC*' * w2) - (i_FC * v3 - v4) - (w1 - i_FC*' * w2) by A2,
-  RLVECT_1:41
+RLVECT_1:41
     .= i_FC * v3 + v4 - (i_FC * v3 - v4) -(w1 + i_FC*' * w2) - (w1 - i_FC*'
   * w2)
     .= v4 + i_FC * v3 - i_FC * v3 + v4 -(w1 + i_FC*' * w2) - (w1 - i_FC*' *
@@ -1488,7 +1493,7 @@ A2: i_FC *f.(v1+i_FC*w,v1+i_FC*w) = i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1
     .= v4 + (i_FC * v3 - i_FC * v3) + v4 -(w1 + i_FC*' * w2) - (w1 - i_FC*'
   * w2)
     .= v4 + (0.F_Complex) + v4 -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by
-  RLVECT_1:28
+RLVECT_1:28
     .= v4 + v4 -(w1 + i_FC*' * w2) - (w1 - i_FC*' * w2) by RLVECT_1:def 7
     .= v4 + v4 -(w1 + i_FC*' * w2 + (w1 - i_FC*' * w2)) by RLVECT_1:41
     .= v4 + v4 -(w1 + w1 + (i_FC*' * w2 - i_FC*' * w2))
@@ -1513,11 +1518,13 @@ end;
 
 theorem Th44:
   for V be add-associative right_zeroed right_complementable
-  VectSp-like (non empty VectSpStr over F_Complex) for f be diagReR+0valued
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+   (non empty VectSpStr over F_Complex) for f be diagReR+0valued
 diagRvalued Form of V,V for v be Vector of V holds |. f.(v,v) .| = Re (f.(v,v))
   & signnorm (f,v) = |. f.(v,v) .|
 proof
-  let V be add-associative right_zeroed right_complementable VectSp-like (non
+  let V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (non
 empty VectSpStr over F_Complex), f be diagReR+0valued diagRvalued Form of V,V,
   v be Vector of V;
   set v1 = f.(v,v), s = signnorm(f,v);
@@ -1586,7 +1593,7 @@ A6: Re ([**r^2,0**]*w2) = r^2 * C by Th11;
   f.(v1-[**r,0**]*a*w,v1-[**r,0**]*a*w) = v3 - [**r,0**]*(a* w1) - [**r,0
   **]*(a*'*v4) + [**r^2,0**]*w2 by A1,Th45;
   then Re (f.(v1-[**r,0**]*a*w,v1-[**r,0**]*a*w)) = Re(v3 - [**r,0**]*(a* w1)
-  - [**r,0**]*(a*'*v4)) + C * r^2 by A6, HAHNBAN1:16
+  - [**r,0**]*(a*'*v4)) + C * r^2 by A6,HAHNBAN1:16
     .= Re(v3 - [**r,0**]*(a* w1)) - r*B + C * r^2 by A5,Th10
     .= A - r*B - r*B + C * r^2 by A4,Th10
     .= A -2*B*r + C * r^2;
@@ -1664,8 +1671,7 @@ A3: C > 0 implies B^2 <=A*C
   proof
     assume
 A4: C > 0;
-    A - 2*B *(B/C) + C*(B/C)^2 = A - (B*(2*B)/C) + C*(B/C)^2 by XCMPLX_1:
-    75
+    A - 2*B *(B/C) + C*(B/C)^2 = A - (B*(2*B)/C) + C*(B/C)^2 by XCMPLX_1:75
       .= A - (B^2*2)/C + C*(B/C)^2
       .= A - 2 *(B^2/C) + C*(B/C)^2 by XCMPLX_1:75
       .= A - 2 *(B^2/C) + C*(B^2/(C*C)) by XCMPLX_1:77
@@ -1718,16 +1724,14 @@ A3: 0 <= sw by Def7;
   0 <= |.v4.| by COMPLEX1:132;
   then sqrt(|.v4.|^2) <= sqrt(sv * sw) by Th48,SQUARE_1:94;
   then |.v4.| <= sqrt(sv * sw) by COMPLEX1:132,SQUARE_1:89;
-  then Re v4 <= |.v4.| & |.v4.| <= sqrt(sv) * sqrt(sw) by A1,A3,
-  COMPLEX1:140
-  ,SQUARE_1:97;
+  then Re v4 <= |.v4.| & |.v4.| <= sqrt(sv) * sqrt(sw) by A1,A3,COMPLEX1:140
+,SQUARE_1:97;
   then Re v4 <= sqrt(sv) * sqrt(sw) by XXREAL_0:2;
   then 2* (Re v4) <= 2*(sqrt(sv) * sqrt(sw)) by XREAL_1:66;
   then svw <= sv + sw + 2*(sqrt(sv) * sqrt(sw)) by A2,XREAL_1:8;
-  then svw <= (sqrt sv)^2 + sw + 2*(sqrt(sv) * sqrt(sw)) by A1, SQUARE_1:
-  def 4;
+  then svw <= (sqrt sv)^2 + sw + 2*(sqrt(sv) * sqrt(sw)) by A1,SQUARE_1:def 4;
   then svw <= (sqrt sv)^2 + (sqrt sw)^2 + 2*(sqrt(sv) * sqrt(sw)) by A3,
-  SQUARE_1:def 4;
+SQUARE_1:def 4;
   hence thesis;
 end;
 
@@ -1872,7 +1876,8 @@ begin
 :: Kernel of Hermitan Forms and Hermitan Forms in Quotinet Vector Spaces
 
 registration
-  let V be add-associative right_zeroed right_complementable VectSp-like (non
+  let V be add-associative right_zeroed right_complementable
+  vector-distributive scalar-distributive scalar-associative scalar-unital (non
   empty VectSpStr over F_Complex);
   let f be cmplxhomogeneousFAF Form of V,V;
   cluster diagker f -> non empty;
@@ -1908,7 +1913,7 @@ A5: f.(u,v) = 0.F_Complex by COMPLFLD:94;
     ex a be Vector of V st a = v & f.(a,a)= 0.F_Complex by A1;
     then
 A6: f.(v+u,v+u) = 0.F_Complex + f.(v,u) +(f.(u,v)+0.F_Complex) by A3,
-    BILINEAR:29
+BILINEAR:29
       .= f.(v,u) +(f.(u,v)+0.F_Complex) by RLVECT_1:10
       .= f.(v,u) +f.(u,v) by RLVECT_1:10;
     f.(v,u) = 0.F_Complex by A4,COMPLFLD:94;
@@ -2270,7 +2275,7 @@ A9:     b = b1 + ww by VECTSP_4:57;
 A10:    ex bb be Vector of W st bb=ww & for v0 be Vector of V holds f.(v0,
         bb) =0.K by A1;
         thus y = f.(a1,b1)+f.(a1,ww) + (f.(vv,b1)+f.(vv,ww)) by A6,A9,
-        BILINEAR:29
+BILINEAR:29
           .=f.(a1,b1)+0.K + (f.(vv,b1)+f.(vv,ww)) by A10
           .= f.(a1,b1) +0.K + (0.K+f.(vv,ww)) by A7
           .= f.(a1,b1) + (0.K+f.(vv,ww)) by RLVECT_1:def 7
@@ -2295,9 +2300,8 @@ A14:  ww= w+R by VECTSP10:23;
         let A be Vector of vq, r be Element of K;
         consider a be Vector of V such that
 A15:    A = a+L by VECTSP10:23;
-A16:    the lmult of vq = mCv & mCv.(r,A) =r*a+L by A12,A15
-        ,VECTSP10:def 5
-        ,def 6;
+A16:    the lmult of vq = mCv & mCv.(r,A) =r*a+L by A12,A15,VECTSP10:def 5
+,def 6;
         thus ffw.(r*A) = ff.((the lmult of vq).(r,A),ww) by BILINEAR:10
           .= f.(r*a,w) by A11,A14,A16
           .= r*f.(a,w) by BILINEAR:32
@@ -2316,9 +2320,8 @@ A19:  vv= v+L by VECTSP10:23;
         let A be Vector of wq, r be Element of K;
         consider a be Vector of W such that
 A20:    A = a+R by VECTSP10:23;
-A21:    the lmult of wq = mCw & mCw.(r,A) =r*a+R by A17,A20
-        ,VECTSP10:def 5
-        ,def 6;
+A21:    the lmult of wq = mCw & mCw.(r,A) =r*a+R by A17,A20,VECTSP10:def 5
+,def 6;
         thus ffv.(r*A) = ff.(vv,(the lmult of wq).(r,A)) by BILINEAR:9
           .= f.(v,r*a) by A11,A19,A21
           .= r*'*f.(v,a) by Th30
@@ -2338,8 +2341,8 @@ A23:  ww= w+R by VECTSP10:23;
 A24:    A = a+L by VECTSP10:23;
         consider b be Vector of V such that
 A25:    B = b+L by VECTSP10:23;
-A26:    the addF of vq = aCv & aCv.(A,B) =a+b+L by A12,A24,A25,VECTSP10:
-        def 3,def 6;
+A26:    the addF of vq = aCv & aCv.(A,B) =a+b+L by A12,A24,A25,VECTSP10:def 3
+,def 6;
         thus ffw.(A+B) = ff.((the addF of vq).(A,B),ww) by BILINEAR:10
           .= f.(a+b,w) by A11,A23,A26
           .= f.(a,w) + f.(b,w) by BILINEAR:27
@@ -2348,7 +2351,7 @@ A26:    the addF of vq = aCv & aCv.(A,B) =a+b+L by A12,A24,A25,VECTSP10:
           .= ffw.A + ff.(B,ww) by BILINEAR:10
           .= ffw.A + ffw.B by BILINEAR:10;
       end;
-      hence ffw is additive by HAHNBAN1:def 11;
+      hence ffw is additive by GRCAT_1:def 13;
     end;
     now
       let vv be Vector of vq;
@@ -2361,8 +2364,8 @@ A27:  vv= v+L by VECTSP10:23;
 A28:    A = a+R by VECTSP10:23;
         consider b be Vector of W such that
 A29:    B = b+R by VECTSP10:23;
-A30:    the addF of wq = aCw & aCw.(A,B) =a+b+R by A17,A28,A29,VECTSP10:
-        def 3,def 6;
+A30:    the addF of wq = aCw & aCw.(A,B) =a+b+R by A17,A28,A29,VECTSP10:def 3
+,def 6;
         thus ffv.(A+B) = ff.(vv,(the addF of wq).(A,B)) by BILINEAR:9
           .= f.(v,a+b) by A11,A27,A30
           .= f.(v,a) + f.(v,b) by BILINEAR:28
@@ -2371,10 +2374,10 @@ A30:    the addF of wq = aCw & aCw.(A,B) =a+b+R by A17,A28,A29,VECTSP10:
           .= ffv.A + ff.(vv,B) by BILINEAR:9
           .= ffv.A + ffv.B by BILINEAR:9;
       end;
-      hence ffv is additive by HAHNBAN1:def 11;
+      hence ffv is additive by GRCAT_1:def 13;
     end;
     then reconsider ff as sesquilinear-Form of vq,wq by A22,A13,A18,Def4,
-    BILINEAR:def 12,def 13,def 15;
+BILINEAR:def 12,def 13,def 15;
     take ff;
     thus thesis by A11;
   end;
@@ -2409,8 +2412,8 @@ registration
     set K = F_Complex;
     consider v be Vector of V, w be Vector of W such that
 A1: f.(v,w) <> 0.K by BILINEAR:41;
-    reconsider B=w + RKer(f*') as Vector of VectQuot(W,RKer(f*')) by VECTSP10:
-    24;
+    reconsider B=w + RKer(f*') as Vector of VectQuot(W,RKer(f*')) by
+VECTSP10:24;
     reconsider A = v +LKer f as Vector of VectQuot(V,LKer(f)) by VECTSP10:24;
     (Q*Form(f)).(A,B) = f.(v,w) by Def12;
     hence thesis by A1,BILINEAR:41;
@@ -2740,7 +2743,7 @@ registration
   proof
     rightker RQ*Form(f) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:def 25;
     then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by
-    BILINEAR:45;
+BILINEAR:45;
     hence thesis by BILINEAR:def 25;
   end;
 end;
@@ -2784,8 +2787,8 @@ A1: f is positivediagvalued additiveSAF;
     per cases;
     suppose
 A2:   v = 0.V;
-A3:   [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29 ,
-      COMPLFLD:9;
+A3:   [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29
+,COMPLFLD:9;
       f.(v,v) = 0.F_Complex by A1,A2,BILINEAR:31;
       hence thesis by A3,COMPLEX1:163;
     end;
@@ -2808,8 +2811,8 @@ A1: f is positivediagvalued additiveFAF;
     per cases;
     suppose
 A2:   v = 0.V;
-A3:   [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29 ,
-      COMPLFLD:9;
+A3:   [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29
+,COMPLFLD:9;
       f.(v,v) = 0.F_Complex by A1,A2,BILINEAR:30;
       hence thesis by A3,COMPLEX1:163;
     end;
@@ -2977,8 +2980,8 @@ A1: leftker qh = leftker Q*Form(f) by Th69
       .= {0.vr} by BILINEAR:def 25
       .= {0.vq} by Th59;
     hence
-A2: qh is non degenerated-on-left & qh is non degenerated-on-right by
-    A1,BILINEAR:def 24,def 25;
+A2: qh is non degenerated-on-left & qh is non degenerated-on-right by A1,
+BILINEAR:def 24,def 25;
     let A be Vector of vq;
     assume
     A <> 0.vq;

@@ -9,16 +9,16 @@ environ
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, INT_1, XBOOLE_0, FINSEQ_1,
       TARSKI, RELAT_1, ARYTM_3, FUNCT_1, CARD_3, AMI_1, NAT_1, FUNCT_4,
       FUNCOP_1, COMPLEX1, MCART_1, PARTFUN1, ORDINAL1, XXREAL_0, ARYTM_1,
-      FUNCT_2, ZFMISC_1, FUNCT_5, SCMPDS_1;
+      FUNCT_2, ZFMISC_1, FUNCT_5, SCMPDS_1, GROUP_9;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       CARD_1, PARTFUN1, FUNCT_2, BINOP_1, MCART_1, NUMBERS, XCMPLX_0, CARD_3,
       INT_1, NAT_1, FINSEQ_1, FINSEQ_4, FUNCOP_1, FUNCT_4, XXREAL_0, CAT_2,
-      AMI_2, INT_2;
- constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_1, AMI_2,
-      DOMAIN_1, RELSET_1;
+      AMI_2, INT_2, GROUP_9;
+ constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_2,
+      SETFAM_1, DOMAIN_1, RELSET_1, FUNCOP_1;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, GR_CY_1, AMI_2, AFINSQ_1,
-      ORDINAL2, XXREAL_0, FUNCT_1, CARD_2;
+      ORDINAL2, XXREAL_0, FUNCT_1, CARD_2, SCMFSA_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -132,6 +132,10 @@ theorem :: SCMPDS_1:21
 
 theorem :: SCMPDS_1:22
   SCMPDS-OK.i1 = SCMPDS-Instr;
+
+registration
+ cluster SCMPDS-OK -> non-empty;
+end;
 
 theorem :: SCMPDS_1:23
   pi(product SCMPDS-OK,NAT) = NAT;
@@ -379,15 +383,19 @@ Address_Add(s,x P42address,x P44const)), succ IC s) if ex d1,d2,k1,k2 st x = [
   12, <*d1,d2,k1,k2*>] otherwise s;
 end;
 
+definition
+  let A be set, B be non empty set;
+  mode Action of A,B is Function of A, Funcs(B,B);
+end;
+
 registration
-  let f be Function of SCMPDS-Instr, Funcs(product SCMPDS-OK, product
-  SCMPDS-OK ), x be Element of SCMPDS-Instr;
+  let f be Action of SCMPDS-Instr, product SCMPDS-OK,
+      x be Element of SCMPDS-Instr;
   cluster f.x -> Function-like Relation-like;
 end;
 
 definition
-  func SCMPDS-Exec -> Function of SCMPDS-Instr, Funcs(product SCMPDS-OK,
-  product SCMPDS-OK) means
+  func SCMPDS-Exec -> Action of SCMPDS-Instr, product SCMPDS-OK means
 :: SCMPDS_1:def 25
   for x being Element of SCMPDS-Instr, y being
   SCMPDS-State holds (it.x).y = SCM-Exec-Res (x,y);

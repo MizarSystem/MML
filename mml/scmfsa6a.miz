@@ -10,14 +10,14 @@ environ
       FUNCOP_1, RELAT_1, FUNCT_1, TARSKI, XBOOLE_0, CARD_1, CAT_1, NAT_1,
       ARYTM_3, FINSET_1, STRUCT_0, XXREAL_0, AMISTD_2, VALUED_1, FSM_1,
       GRAPHSP, FUNCT_7, ARYTM_1, INT_1, COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      TURING_1, SCMFSA6A, ORDINAL1;
+      TURING_1, SCMFSA6A, ORDINAL1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, VALUED_1, AFINSQ_1,
       STRUCT_0, AMI_1,
       SCMNORM, FUNCT_7, SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC,
-      SCMFSA_4, SCMFSA_5, SCMNORM, RELSET_1, SCMFSA_1;
+      SCMFSA_4, SCMFSA_5, SCMNORM, RELSET_1, SCMFSA_1, VALUED_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       FINSET_1, NUMBERS, XREAL_0, INT_1, CARD_3, STRUCT_0, AMI_1, SCMFSA_2,
       SCMNORM, FUNCT_4, RELAT_1, CARD_1, VALUED_1;
@@ -42,47 +42,8 @@ definition
   let P be preProgram of SCM+FSA;
   let l be Element of NAT;
   func Directed(P,l) -> preProgram of SCM+FSA equals
-  P +~ (halt SCM+FSA,goto l
-  );
-  coherence
-  proof
-    set Q = P +~ (halt SCM+FSA,goto l), PP = (halt SCM+FSA .--> goto l)*P;
-A1: dom Q = dom P by FUNCT_4:105;
-A2: for x being set st x in dom Q holds Q.x in (the Object-Kind of SCM+FSA
-    ).x
-    proof
-      let x being set such that
-A3:   x in dom Q;
-      per cases;
-      suppose
-A4:     x in dom PP;
-        then P.x in dom(halt SCM+FSA .--> goto l) by FUNCT_1:21;
-        then
-A5:     P.x = halt SCM+FSA by FUNCOP_1:90;
-        PP.x = (halt SCM+FSA .--> goto l).(P.x) by A4,FUNCT_1:22;
-        then
-A6:     PP.x = goto l by A5,FUNCOP_1:87;
-A7:     Q.x = PP.x by A4,FUNCT_4:14;
-        dom P c= NAT by RELAT_1:def 18;
-        then reconsider l=x as Element of NAT by A1,A3;
-        (the Object-Kind of SCM+FSA).l = the Instructions of SCM+FSA
-         by AMI_1:def 14;
-        hence thesis by A7,A6;
-      end;
-      suppose
-A8:     not x in dom PP;
-        dom Q = dom P \/ dom PP by FUNCT_4:def 1;
-        then
-A9:     x in dom P by A3,A8,XBOOLE_0:def 3;
-        Q.x = P.x by A8,FUNCT_4:12;
-        hence thesis by A9,FUNCT_1:def 20;
-      end;
-    end;
-    reconsider Q as FinPartState of SCM+FSA by A2,FUNCT_1:def 20
-;
-    dom Q c= NAT by RELAT_1:def 18;
-    hence thesis;
-  end;
+  P +~ (halt SCM+FSA,goto l);
+  coherence;
 end;
 
 definition
@@ -166,9 +127,9 @@ theorem Th16:
 proof
   assume
 A1: dom I meets dom ProgramPart Relocated(J, card I);
-  dom ProgramPart Relocated(J, card I) = dom IncAddr(Shift(ProgramPart J,
-  card I),card I) by SCMFSA_5:2
-    .= dom IncAddr(Shift(J,card I),card I) by AMI_1:105
+  dom ProgramPart Relocated(J, card I) = dom Reloc(ProgramPart J,
+  card I) by SCMFSA_5:2
+    .= dom Reloc(J,card I) by AMI_1:105
     .= dom Shift(J,card I) by SCMFSA_4:def 6
     .= { l+card I: l in dom J } by VALUED_1:def 12;
   then consider x being set such that
@@ -250,10 +211,10 @@ A9: dom Shift(I,m) = A by VALUED_1:def 12;
   C = A from FRAENKEL:sch 14;
   then
 A10: dom Shift(I,m),dom I are_equipotent by A4,A7,A8,A9,WELLORD2:22;
-  thus card ProgramPart Relocated(I, m) = card IncAddr(Shift(ProgramPart I,m)
-  ,m) by SCMFSA_5:2
-    .= card IncAddr(Shift(I,m),m) by AMI_1:105
-    .= card dom IncAddr(Shift(I,m),m) by CARD_1:104
+  thus card ProgramPart Relocated(I, m) = card Reloc(ProgramPart I,m)
+   by SCMFSA_5:2
+    .= card Reloc(I,m) by AMI_1:105
+    .= card dom Reloc(I,m) by CARD_1:104
     .= card dom Shift(I,m) by SCMFSA_4:def 6
     .= card dom I by A10,CARD_1:21
     .= card I by CARD_1:104;
@@ -300,14 +261,14 @@ RELAT_1:71;
 A5: f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA, goto  card
   I) by FUNCT_7:def 3;
 A6: ProgramPart I = I by AMI_1:105;
-A7: rng I c= the Instructions of SCM+FSA by AMI_1:118;
+A7: rng I c= the Instructions of SCM+FSA by RELAT_1:def 19;
   ProgramPart Directed I = Directed I by AMI_1:105
     .= f*I by A5,A7,FUNCT_7:118;
   hence ProgramPart Relocated(Directed I, m) =
-  IncAddr(Shift(f*I,m),m) by SCMFSA_5:2
+  Reloc(f*I,m) by SCMFSA_5:2
     .= IncAddr(f*Shift(I,m),m) by VALUED_1:23
     .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto (m
-  + card I)))* IncAddr(Shift(I,m),m) by A4,SCMFSA_4:26
+  + card I)))* Reloc(I,m) by A4,SCMFSA_4:26
     .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto (m
   + card I)))* ProgramPart Relocated(I, m) by A6,SCMFSA_5:2;
 end;
@@ -319,10 +280,10 @@ theorem Th21:
 Relocated(I +* J, n) = ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n)
 proof
   let I,J be FinPartState of SCM+FSA;
-A1: ProgramPart Relocated(I,n) = IncAddr(Shift(ProgramPart I,n),n) &
-ProgramPart Relocated(J,n) = IncAddr(Shift(ProgramPart J,n),n) by SCMFSA_5:2;
-  thus ProgramPart Relocated(I +* J, n) = IncAddr(Shift(ProgramPart(I +* J),n
-  ),n) by SCMFSA_5:2
+A1: ProgramPart Relocated(I,n) = Reloc(ProgramPart I,n) &
+ProgramPart Relocated(J,n) = Reloc(ProgramPart J,n) by SCMFSA_5:2;
+  thus ProgramPart Relocated(I +* J, n)
+     = Reloc(ProgramPart(I +* J),n) by SCMFSA_5:2
     .= IncAddr(Shift(ProgramPart I +* ProgramPart J,n),n) by FUNCT_4:75
     .= IncAddr(Shift(ProgramPart I,n) +* Shift(ProgramPart J,n),n) by
 VALUED_1:24
@@ -334,20 +295,19 @@ theorem Th22:
   ProgramPart Relocated(ProgramPart Relocated(I,m), n) =
   ProgramPart Relocated(I, m + n)
 proof
-  thus ProgramPart Relocated(ProgramPart Relocated(I,m), n) = IncAddr(Shift
-  (ProgramPart ProgramPart Relocated(I,m),n),n) by SCMFSA_5:2
-    .= IncAddr(Shift(ProgramPart Relocated(I,m),n),n) by AMI_1:105
-    .= IncAddr(Shift(IncAddr(Shift(ProgramPart I,m),m),n),n) by SCMFSA_5:2
+  thus ProgramPart Relocated(ProgramPart Relocated(I,m), n) = Reloc
+  (ProgramPart ProgramPart Relocated(I,m),n) by SCMFSA_5:2
+    .= Reloc(ProgramPart Relocated(I,m),n) by AMI_1:105
+    .= Reloc(Reloc(ProgramPart I,m),n) by SCMFSA_5:2
     .= IncAddr(IncAddr(Shift(Shift(ProgramPart I,m),n),m),n) by SCMFSA_4:35
     .= IncAddr(IncAddr(Shift(ProgramPart I,m+n),m),n) by VALUED_1:22
-    .= IncAddr(Shift(ProgramPart I,m+n),m+n) by SCMFSA_4:27
+    .= Reloc(ProgramPart I,m+n) by SCMFSA_4:27
     .= ProgramPart Relocated(I, m + n) by SCMFSA_5:2;
 end;
 
 reserve a,b for Int-Location,
   f for FinSeq-Location,
-  s,s1,s2 for State of
-  SCM+FSA;
+  s,s1,s2 for State of SCM+FSA;
 
 definition
   let I be FinPartState of SCM+FSA;
@@ -2094,8 +2054,7 @@ begin :: The composition of macroinstructions
 definition
   let I,J be Program of SCM+FSA;
   func I ';' J -> Program of SCM+FSA equals
-  Directed I +* ProgramPart
-  Relocated(J, card I);
+  Directed I +* ProgramPart Relocated(J, card I);
   coherence
   proof
     set P = Directed I +* ProgramPart Relocated(J, card I);
@@ -2153,8 +2112,7 @@ proof
   that
 A1: l in dom I and
 A2: I.l <> halt SCM+FSA;
-  ProgramPart Relocated(J, card I) = IncAddr(Shift(ProgramPart J,card I)
-  ,card I) by SCMFSA_5:2;
+  ProgramPart Relocated(J, card I) = Reloc(ProgramPart J,card I) by SCMFSA_5:2;
   then
 A3: dom ProgramPart Relocated(J, card I) = dom Shift(ProgramPart J,card I)
   by SCMFSA_4:def 6;
@@ -2310,7 +2268,7 @@ FUNCT_4:def 1
 end;
 
 theorem
-  ProgramPart Relocated(I,l) = IncAddr(Shift(I,l),l)
+  ProgramPart Relocated(I,l) = Reloc(I,l)
 proof
   ProgramPart I = I by AMI_1:105;
   hence
@@ -2326,7 +2284,7 @@ AMI_1:136
   by FUNCT_4:75
     .= {}+*ProgramPart(IncAddr(Shift(I,l),l)) by AMI_1:135
     .= ProgramPart(IncAddr(Shift(I,l),l)) by FUNCT_4:21
-    .= IncAddr(Shift(I,l),l) by AMI_1:105;
+    .= Reloc(I,l) by AMI_1:105;
 end;
 
 registration
@@ -2397,8 +2355,8 @@ A7: x = n + k and
 A8: n in dom I;
     dom Directed I = dom I by FUNCT_4:105;
     then reconsider i = (Directed I). n as Instruction of SCM+FSA by A8,
-AMI_1:126;
-    reconsider i0 = I. n as Instruction of SCM+FSA by A8,AMI_1:126;
+FUNCT_1:176;
+    reconsider i0 = I. n as Instruction of SCM+FSA by A8,FUNCT_1:176;
 A9: now
       per cases;
       suppose

@@ -30,7 +30,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRORT" nr="2">
@@ -40,11 +40,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRORT" nr="3">
@@ -54,11 +54,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
 <Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 </Registrations>

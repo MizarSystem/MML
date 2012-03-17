@@ -38,8 +38,8 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="105"/>
-<Adjective nr="109"/>
+<Adjective nr="111"/>
+<Adjective nr="115"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TDGROUP" nr="2">
@@ -50,8 +50,8 @@
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="43" value="false"/>
-<Adjective nr="106"/>
-<Adjective nr="110"/>
+<Adjective nr="112"/>
+<Adjective nr="116"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
@@ -59,8 +59,8 @@
 <Func kind="K" nr="155"/>
 <Cluster>
 <Adjective nr="56"/>
-<Adjective nr="105"/>
-<Adjective nr="109"/>
+<Adjective nr="111"/>
+<Adjective nr="115"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TDGROUP" nr="2">
@@ -76,7 +76,7 @@
 </Func>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="106"/>
+<Adjective nr="112"/>
 </Cluster>
 </FCluster>
 </Registrations>

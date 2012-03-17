@@ -74,10 +74,10 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="151"/>
-<Adjective nr="152"/>
-<Adjective nr="156"/>
-<Adjective nr="157"/>
+<Adjective nr="154"/>
+<Adjective nr="155"/>
+<Adjective nr="159"/>
+<Adjective nr="160"/>
 </Cluster>
 </RCluster>
 </Registrations>

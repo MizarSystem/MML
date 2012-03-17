@@ -130,8 +130,8 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="118"/>
-<Adjective nr="123"/>
+<Adjective nr="121"/>
+<Adjective nr="126"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPALG_1" nr="4">
@@ -179,8 +179,8 @@
 </Func>
 <Cluster>
 <Adjective nr="77"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPALG_1" nr="6">
@@ -189,7 +189,7 @@
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="48"/>
-<Adjective nr="175"/>
+<Adjective nr="178"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

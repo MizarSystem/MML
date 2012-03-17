@@ -25,6 +25,15 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCSDOM"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="CAT_1"/>
+<ArticleID name="CAT_2"/>
+<ArticleID name="GRCAT_1"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -34,7 +43,7 @@
 </Signature>
 <FCluster aid="LOPBAN_4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="19">
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="61"/>
@@ -42,12 +51,15 @@
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="99"/>
-<Adjective nr="106"/>
-<Adjective nr="110"/>
-<Adjective nr="112"/>
-<Adjective nr="123"/>
+<Adjective nr="95"/>
+<Adjective nr="102"/>
+<Adjective nr="136"/>
+<Adjective nr="140"/>
+<Adjective nr="142"/>
+<Adjective nr="156"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -57,7 +69,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="362">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -69,7 +81,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="125">
+<Adjective nr="158">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

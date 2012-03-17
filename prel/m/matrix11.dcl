@@ -129,7 +129,7 @@
 </Func>
 </Adjective>
 <Adjective nr="33"/>
-<Adjective nr="122" value="false">
+<Adjective nr="128" value="false">
 <Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <Num nr="2"/>
@@ -196,8 +196,8 @@
 <Adjective nr="102"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -239,8 +239,8 @@
 <Adjective nr="102"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
 </Cluster>
 </Typ>
 </ArgTypes>

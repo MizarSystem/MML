@@ -59,8 +59,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="122"/>
-<Adjective nr="132"/>
+<Adjective nr="128"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 </Registrations>

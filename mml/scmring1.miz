@@ -7,24 +7,25 @@
 environ
 
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, XBOOLE_0, STRUCT_0, ZFMISC_1,
-      RLVECT_1, ALGSTR_0, ARYTM_3, SUPINF_2, VECTSP_1, RELAT_1, MESFUNC1,
-      FINSEQ_1, SCMFSA7B, BINOP_1, FUNCSDOM, FUNCT_1, CARD_3, AMI_1, NAT_1,
+      ARYTM_3, SUPINF_2, RELAT_1,
+      FINSEQ_1, SCMFSA7B, FUNCSDOM, FUNCT_1, CARD_3, AMI_1, NAT_1,
       FUNCT_4, FUNCOP_1, MCART_1, PARTFUN1, ORDINAL1, ARYTM_1, FUNCT_2,
-      FUNCT_5, TARSKI, SCMRING1;
+      FUNCT_5, TARSKI, SCMRING1, GROUP_9;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NAT_1, STRUCT_0, ALGSTR_0, RLVECT_1,
       VECTSP_1, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
       FUNCT_4, CAT_2, AMI_2;
- constructors PARTFUN1, XXREAL_0, FINSEQ_4, REALSET2, CAT_2, AMI_3, RELSET_1,
-      AMI_2;
+ constructors PARTFUN1, XXREAL_0, FINSEQ_4, REALSET2, CAT_2, RELSET_1,
+      AMI_2, FUNCOP_1, SETFAM_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FINSEQ_1,
       CARD_3, STRUCT_0, VECTSP_1, GR_CY_1, GCD_1, TOPGRP_1, AMI_2, AFINSQ_1,
-      CARD_1, ORDINAL2, ZFMISC_1, FUNCT_1, CARD_2;
+      CARD_1, ORDINAL2, ZFMISC_1, FUNCT_1, CARD_2,
+      ALGSTR_0, ALGSTR_1, FUNCSDOM;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
  definitions TARSKI, FINSEQ_1, RLVECT_1, VECTSP_1, FUNCOP_1, CARD_1, AMI_2,
       ALGSTR_0;
  theorems AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
-      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, MCART_1, STRUCT_0, TARSKI, YELLOW_8,
+      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, MCART_1, TARSKI, YELLOW_8,
       ZFMISC_1, XBOOLE_0, XBOOLE_1, ORDINAL1, NAT_1, RELAT_1;
  schemes FUNCT_2, BINOP_1;
 
@@ -37,33 +38,6 @@ reserve i, j, k for Element of NAT,
   d1, d2, d3, d4 for Element of SCM-Data-Loc,
   S for non empty
   1-sorted;
-
-registration
-  cluster trivial -> Abelian add-associative right_zeroed right_complementable
-    (non empty addLoopStr);
-  coherence
-  proof
-    let S be non empty addLoopStr;
-    assume
-A1: S is trivial;
-    hence (for v, w being Element of S holds v + w = w + v) & (for u, v, w
-being Element of S holds u + v + w = u + (v + w)) & for v being Element of S
-    holds v + 0.S = v by STRUCT_0:def 10;
-    let v be Element of S;
-    take v;
-    thus thesis by A1,STRUCT_0:def 10;
-  end;
-  cluster trivial -> well-unital right-distributive (non empty doubleLoopStr);
-  coherence
-  proof
-    let S be non empty doubleLoopStr such that
-A2: S is trivial;
-    thus for x be Element of S holds x*(1.S) = x & (1.S)*x = x by A2,
-STRUCT_0:def 10;
-    let x, y, z be Element of S;
-    thus thesis by A2,STRUCT_0:def 10;
-  end;
-end;
 
 registration
   cluster SCM-Instr -> non trivial;
@@ -147,37 +121,6 @@ registration
 A1: the carrier of S = NAT or the carrier of S = SCM-Instr S by Def2;
     the carrier of T is trivial;
     hence thesis by A1;
-  end;
-end;
-
-registration
-  cluster trivial non empty 1-sorted;
-  existence
-  proof
-    consider A being trivial non empty 1-sorted;
-    take A;
-    thus thesis;
-  end;
-end;
-
-registration
-  cluster strict trivial non empty doubleLoopStr;
-  existence
-  proof
-    reconsider z = 0 as Element of {0} by TARSKI:def 1;
-    consider a being BinOp of {0};
-    take doubleLoopStr(#{0},a,a,z,z#);
-    thus thesis;
-  end;
-end;
-
-registration
-  cluster strict trivial Ring;
-  existence
-  proof
-    consider R being strict trivial non empty doubleLoopStr;
-    take R;
-    thus thesis;
   end;
 end;
 
@@ -826,17 +769,21 @@ Element of NAT st x = [ 6, <*mk*>], SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x
   consistency by ZFMISC_1:33;
 end;
 
+definition
+  let A be set, B be non empty set;
+  mode Action of A,B is Function of A, Funcs(B,B);
+end;
+
 registration
-  let S be non empty 1-sorted, f be Function of SCM-Instr S, Funcs(product
-  SCM-OK S, product SCM-OK S), x be Element of SCM-Instr S;
+  let S be non empty 1-sorted, f be Action of SCM-Instr S, product SCM-OK S,
+      x be Element of SCM-Instr S;
   cluster f.x -> Function-like Relation-like;
   coherence;
 end;
 
 definition
   let R be good Ring;
-  func SCM-Exec R -> Function of SCM-Instr R, Funcs(product SCM-OK R, product
-  SCM-OK R) means
+  func SCM-Exec R -> Action of SCM-Instr R, product SCM-OK R means
   for x being Element of SCM-Instr R, y being SCM-State of R
   holds (it.x).y = SCM-Exec-Res (x,y);
   existence
@@ -853,8 +800,7 @@ A1: for x being Element of SCM-Instr R, y being SCM-State of R holds f
   end;
   uniqueness
   proof
-    let f, g be Function of SCM-Instr R, Funcs(product SCM-OK R, product
-    SCM-OK R) such that
+    let f, g be Action of SCM-Instr R, product SCM-OK R such that
 A2: for x being Element of SCM-Instr R, y being SCM-State of R holds (
     f.x).y = SCM-Exec-Res(x,y) and
 A3: for x being Element of SCM-Instr R, y being SCM-State of R holds (
@@ -901,7 +847,7 @@ S:  u in { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
   suppose u in { [0,{}] };
    then
 W:  u = [0,{}] by TARSKI:def 1;
-   then 0 in NAT & {} in proj2 SCM-Instr S by RELAT_1:def 5,Z;
+   then 0 in NAT & {} in proj2 SCM-Instr S by Z,RELAT_1:def 5;
   hence u in [:NAT,X:] by W,ZFMISC_1:106;
   end;
   suppose u in { [I,<*a,b*>] where I is Element of Segm 8
@@ -909,14 +855,14 @@ W:  u = [0,{}] by TARSKI:def 1;
    then consider I being Element of Segm 8, a, b being Element of SCM-Data-Loc
    such that
 W: u = [I,<*a,b*>] & I in { 1,2,3,4 };
-   I in NAT & <*a,b*> in proj2 SCM-Instr S by W,RELAT_1:def 5,Z;
+   I in NAT & <*a,b*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
   hence u in [:NAT,X:] by W,ZFMISC_1:106;
   end;
   end;
   suppose u in { [6,<*i*>] where i is Element of NAT: not contradiction };
    then consider i being Element of NAT such that
 W:  u = [6,<*i*>];
-   6 in NAT & <*i*> in proj2 SCM-Instr S by W,RELAT_1:def 5,Z;
+   6 in NAT & <*i*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
   hence u in [:NAT,X:] by W,ZFMISC_1:106;
   end;
   end;
@@ -925,7 +871,7 @@ W:  u = [6,<*i*>];
    then consider i being Element of NAT, a being Element of SCM-Data-Loc
    such that
 W:  u = [7,<*i,a*>];
-   7 in NAT & <*i,a*> in proj2 SCM-Instr S by W,RELAT_1:def 5,Z;
+   7 in NAT & <*i,a*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
   hence u in [:NAT,X:] by W,ZFMISC_1:106;
   end;
  end;
@@ -933,7 +879,7 @@ W:  u = [7,<*i,a*>];
   Element of SCM-Data-Loc, r is Element of S: not contradiction };
   then consider a being Element of SCM-Data-Loc, r being Element of S such that
 W: u = [5,<*a,r*>];
-   5 in NAT & <*a,r*> in proj2 SCM-Instr S by W,RELAT_1:def 5,Z;
+   5 in NAT & <*a,r*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
   hence u in [:NAT,X:] by W,ZFMISC_1:106;
  end;
 end;

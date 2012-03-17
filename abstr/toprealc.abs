@@ -1,0 +1,612 @@
+:: On the Continuity of Some Functions
+::  by Artur Korni{\l}owicz
+::
+:: Received February 9, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, FUNCT_1, VALUED_0, TOPS_1, MEMBERED, XBOOLE_0, ARYTM_1,
+      COMPLEX1, ARYTM_3, XCMPLX_0, FINSEQ_1, EUCLID, PRE_TOPC, ORDINAL2,
+      TOPREALB, METRIC_1, XREAL_0, TOPMETR, RCOMP_1, PCOMPS_1, FUNCT_3,
+      FINSEQ_2, RLVECT_1, RVSUM_1, SQUARE_1, FUNCT_4, VALUED_2, ALGSTR_0,
+      SUBSET_1, FUNCOP_1, PARTFUN1, CARD_3, FINSET_1, ZFMISC_1, TARSKI, CARD_1,
+      TOPREALC, NAT_1, ORDINAL1, XXREAL_0, VALUED_1, NUMBERS, ORDINAL4,
+      STRUCT_0, XXREAL_1, SUPINF_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, ORDINAL1, NUMBERS, VALUED_0,
+      VALUED_1, WELLORD2, CARD_1, XCMPLX_0, XREAL_0, XXREAL_0, FUNCT_3,
+      MEMBERED, COMPLEX1, SQUARE_1, NAT_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
+      RCOMP_1, FUNCT_7, VALUED_2, STRUCT_0, RVSUM_1, PRE_TOPC, TOPS_1,
+      METRIC_1, PCOMPS_1, TOPMETR, T_0TOPSP, BORSUK_1, ALGSTR_0, RLVECT_1,
+      RLTOPSP1, EUCLID, WAYBEL18, BORSUK_4, TOPREAL9, TOPREALB;
+ constructors SEQ_1, MONOID_0, FUNCT_7, FINSEQOP, VALUED_2, TOPREAL9, TOPREALB,
+      TOPS_1, BORSUK_4, COMPLEX1, T_0TOPSP, SQUARE_1, TSP_1, FUNCT_4, FUNCSDOM,
+      CONVEX1, WAYBEL18, SETFAM_1, BINOP_2, EUCLID_7, EUCLID_9;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, MEMBERED,
+      XCMPLX_0, XREAL_0, VALUED_2, PRE_TOPC, STRUCT_0, EUCLID, MONOID_0,
+      TOPREALB, XXREAL_0, NAT_1, BORSUK_4, BORSUK_6, TOPMETR, FUNCT_2, RVSUM_1,
+      TOPREAL9, SQUARE_1, RCOMP_1, TOPS_1, FUNCT_7, NUMBERS, RLVECT_1,
+      FINSEQ_1, FUNCOP_1, WAYBEL18, BORSUK_1, PRE_POLY, JORDAN2B, ZFMISC_1,
+      FINSEQ_2, REALSET1, ORDINAL1, PARTFUN3, EUCLID_9;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve
+  x, y, A, X for set,
+  i, k, n, m for Nat,
+  r, s for real number,
+  c, c1, c2, d for complex number,
+  f, g for complex-valued Function,
+  g1 for n-long complex-valued FinSequence,
+  f1, f2 for n-long real-valued FinSequence,
+  T for non empty TopSpace,
+  p for Element of TOP-REAL n;
+
+registration
+  let R be Relation, X be empty set;
+  cluster R.:X -> empty;
+  cluster R"X -> empty;
+end;
+
+registration
+  let A be empty set;
+  cluster -> empty Element of A;
+end;
+
+theorem :: TOPREALC:1
+  for X being trivial set, Y being set st X,Y are_equipotent holds
+  Y is trivial;
+
+registration
+  let r be real number;
+  cluster r^2 -> non negative;
+end;
+
+registration
+  let r be positive (real number);
+  cluster r^2 -> positive;
+end;
+
+registration
+  cluster sqrt(0) -> zero;
+end;
+
+registration
+  let f be empty set;
+  cluster sqr(f) -> empty;
+  cluster |.f.| -> zero;
+end;
+
+theorem :: TOPREALC:2
+  f(#)(c1+c2) = f(#)c1 + f(#)c2;
+
+theorem :: TOPREALC:3
+  f(#)(c1-c2) = f(#)c1 - f(#)c2;
+
+theorem :: TOPREALC:4
+  f(/)c + g(/)c = (f+g)(/)c;
+
+theorem :: TOPREALC:5
+  f(/)c - g(/)c = (f-g)(/)c;
+
+theorem :: TOPREALC:6
+  c1 <> 0 & c2 <> 0 implies f(/)c1 - g(/)c2 = (f(#)c2-g(#)c1) (/) (c1*c2);
+
+theorem :: TOPREALC:7
+  c <> 0 implies f(/)c - g = (f-c(#)g) (/) c;
+
+theorem :: TOPREALC:8
+  (c-d)(#)f = c(#)f - d(#)f;
+
+theorem :: TOPREALC:9
+  (f-g)^2 = (g-f)^2;
+
+theorem :: TOPREALC:10
+  (f(/)c)^2 = f^2 (/) c^2;
+
+theorem :: TOPREALC:11
+  |. (n|->r) - (n|->s) .| = sqrt(n) * abs(r-s);
+
+registration
+  let f,x,c;
+  cluster f+*(x,c) -> complex-valued;
+end;
+
+theorem :: TOPREALC:12
+  ((0*n)+*(x,c))^2 = (0*n)+*(x,c^2);
+
+theorem :: TOPREALC:13
+  x in Seg n implies |.(0*n)+*(x,r).| = abs(r);
+
+theorem :: TOPREALC:14
+  (0.REAL n)+*(x,0) = 0.REAL n;
+
+theorem :: TOPREALC:15
+  mlt(f1,(0.REAL n)+*(x,r)) = (0.REAL n)+*(x,f1.x*r);
+
+theorem :: TOPREALC:16
+  |(f1,(0.REAL n)+*(x,r))| = f1.x * r;
+
+theorem :: TOPREALC:17
+  (g1+*(i,c)) - g1 = (0*n)+*(i,c-(g1.i));
+
+theorem :: TOPREALC:18
+  |.<*r*>.| = abs(r);
+
+theorem :: TOPREALC:19
+  for f being real-valued FinSequence holds f is FinSequence of REAL;
+
+theorem :: TOPREALC:20
+  for f being real-valued FinSequence st |.f.| <> 0
+  ex i being Nat st i in dom f & f.i <> 0;
+
+theorem :: TOPREALC:21
+  for f being real-valued FinSequence holds abs Sum f <= Sum abs f;
+
+theorem :: TOPREALC:22
+  for A being non empty 1-sorted, B being trivial non empty 1-sorted
+  for t being Point of B
+  for f being Function of A,B holds f = A --> t;
+
+registration
+  let n be non zero Nat, i be Element of Seg n;
+  let T be real-membered non empty TopSpace;
+  cluster proj(Seg n --> T,i) -> real-valued;
+end;
+
+definition
+  let n; let p be Element of REAL n; let r;
+  redefine func p(/)r -> Element of REAL n;
+end;
+
+theorem :: TOPREALC:23
+  for p, q being Point of TOP-REAL m holds
+  p in Ball(q,r) iff -p in Ball(-q,r);
+
+definition
+  let S be 1-sorted;
+  attr S is complex-functions-membered means
+:: TOPREALC:def 1
+
+  the carrier of S is complex-functions-membered;
+  attr S is real-functions-membered means
+:: TOPREALC:def 2
+
+  the carrier of S is real-functions-membered;
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n -> real-functions-membered;
+end;
+
+registration
+  cluster TOP-REAL 0 -> real-membered;
+end;
+
+registration
+  cluster TOP-REAL 0 -> trivial;
+end;
+
+registration
+  cluster real-functions-membered -> complex-functions-membered 1-sorted;
+end;
+
+registration
+  cluster strict non empty real-functions-membered 1-sorted;
+end;
+
+registration
+  let S be complex-functions-membered 1-sorted;
+  cluster the carrier of S -> complex-functions-membered;
+end;
+
+registration
+  let S be real-functions-membered 1-sorted;
+  cluster the carrier of S -> real-functions-membered;
+end;
+
+registration
+  cluster strict non empty real-functions-membered TopSpace;
+end;
+
+registration
+  let S be complex-functions-membered TopSpace;
+  cluster -> complex-functions-membered SubSpace of S;
+end;
+
+registration
+  let S be real-functions-membered TopSpace;
+  cluster -> real-functions-membered SubSpace of S;
+end;
+
+definition
+  let X be complex-functions-membered set;
+  func (-)X -> complex-functions-membered set means
+:: TOPREALC:def 3
+
+  for f being complex-valued Function holds -f in it iff f in X;
+  involutiveness;
+end;
+
+registration
+  let X be empty set;
+  cluster (-)X -> empty;
+end;
+
+registration
+  let X be non empty complex-functions-membered set;
+  cluster (-)X -> non empty;
+end;
+
+theorem :: TOPREALC:24
+  for X being complex-functions-membered set,
+      f being complex-valued Function holds
+  -f in X iff f in (-)X;
+
+registration
+  let X be real-functions-membered set;
+  cluster (-)X -> real-functions-membered;
+end;
+
+theorem :: TOPREALC:25
+  for X being Subset of TOP-REAL n holds -X = (-)X;
+
+definition
+  let n;
+  let X be Subset of TOP-REAL n;
+  redefine func (-)X -> Subset of TOP-REAL n;
+end;
+
+registration
+  let n;
+  let X be open Subset of TOP-REAL n;
+  cluster (-)X -> open Subset of TOP-REAL n;
+end;
+
+definition
+  let n, p, x;
+  redefine func p.x -> Element of REAL;
+end;
+
+definition
+  let R,S,T be non empty TopSpace, f be Function of [:R,S:],T;
+  let x be Point of [:R,S:];
+  redefine func f.x -> Point of T;
+end;
+
+definition
+  let R,S,T be non empty TopSpace, f be Function of [:R,S:],T;
+  let r be Point of R, s be Point of S;
+  redefine func f.(r,s) -> Point of T;
+end;
+
+definition
+  let n, p, r;
+  redefine func p + r -> Point of TOP-REAL n;
+end;
+
+definition
+  let n, p, r;
+  redefine func p - r -> Point of TOP-REAL n;
+end;
+
+definition
+  let n, p, r;
+  redefine func p (#) r -> Point of TOP-REAL n;
+end;
+
+definition
+  let n, p, r;
+  redefine func p (/) r -> Point of TOP-REAL n;
+end;
+
+definition
+  let n; let p1, p2 be Point of TOP-REAL n;
+  redefine func p1 (#) p2 -> Point of TOP-REAL n;
+  commutativity;
+end;
+
+definition
+  let n; let p be Point of TOP-REAL n;
+  redefine func sqr p -> Point of TOP-REAL n;
+end;
+
+definition
+  let n; let p1, p2 be Point of TOP-REAL n;
+  redefine func p1 /" p2 -> Point of TOP-REAL n;
+end;
+
+definition
+  let n, p, x, r;
+  redefine func p+*(x,r) -> Point of TOP-REAL n;
+end;
+
+theorem :: TOPREALC:26
+  for a, o being Point of TOP-REAL n holds
+  n <> 0 & a in Ball(o,r) implies abs Sum(a-o) < n*r;
+
+registration
+  let n;
+  cluster Euclid n -> real-functions-membered;
+end;
+
+theorem :: TOPREALC:27
+  for V being add-associative right_zeroed
+  right_complementable (non empty addLoopStr), v,u being Element of V
+  holds v + u - u = v;
+
+theorem :: TOPREALC:28
+  for V being Abelian add-associative right_zeroed
+  right_complementable (non empty addLoopStr), v,u being Element of V
+  holds v - u + u = v;
+
+theorem :: TOPREALC:29
+  for Y being complex-functions-membered set, f being PartFunc of X,Y holds
+  f[+]c = f<+>(dom f-->c);
+
+theorem :: TOPREALC:30
+  for Y being complex-functions-membered set, f being PartFunc of X,Y holds
+  f[-]c = f<->(dom f-->c);
+
+theorem :: TOPREALC:31
+  for Y being complex-functions-membered set, f being PartFunc of X,Y holds
+  f[#]c = f<#>(dom f-->c);
+
+theorem :: TOPREALC:32
+  for Y being complex-functions-membered set, f being PartFunc of X,Y holds
+  f[/]c = f</>(dom f-->c);
+
+registration
+  let D be complex-functions-membered set;
+  let f, g be FinSequence of D;
+  cluster f<++>g -> FinSequence-like;
+  cluster f<-->g -> FinSequence-like;
+  cluster f<##>g -> FinSequence-like;
+  cluster f<//>g -> FinSequence-like;
+end;
+
+theorem :: TOPREALC:33
+  for f being Function of X,TOP-REAL n holds <->f is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:34
+  for f being Function of TOP-REAL i,TOP-REAL n holds
+  f(-) is Function of TOP-REAL i,TOP-REAL n;
+
+theorem :: TOPREALC:35
+  for f being Function of X,TOP-REAL n holds
+  f[+]r is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:36
+  for f being Function of X,TOP-REAL n holds
+  f[-]r is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:37
+  for f being Function of X,TOP-REAL n holds
+  f[#]r is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:38
+  for f being Function of X,TOP-REAL n holds
+  f[/]r is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:39
+  for f, g being Function of X,TOP-REAL n holds
+  f<++>g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:40
+  for f, g being Function of X,TOP-REAL n holds
+  f<-->g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:41
+  for f, g being Function of X,TOP-REAL n holds
+  f<##>g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:42
+  for f, g being Function of X,TOP-REAL n holds
+  f<//>g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:43
+  for f being Function of X,TOP-REAL n, g being Function of X,R^1 holds
+  f<+>g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:44
+  for f being Function of X,TOP-REAL n, g being Function of X,R^1 holds
+  f<->g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:45
+  for f being Function of X,TOP-REAL n, g being Function of X,R^1 holds
+  f<#>g is Function of X,TOP-REAL n;
+
+theorem :: TOPREALC:46
+  for f being Function of X,TOP-REAL n, g being Function of X,R^1 holds
+  f</>g is Function of X,TOP-REAL n;
+
+definition
+  let n be Nat;
+  let T be non empty set;
+  let R be real-membered set;
+  let f be Function of T,R;
+  func incl(f,n) -> Function of T,TOP-REAL n means
+:: TOPREALC:def 4
+
+  for t being Element of T holds it.t = n |-> f.t;
+end;
+
+theorem :: TOPREALC:47
+  for R being real-membered set
+  for f being Function of T,R, t being Point of T
+  st x in Seg n holds incl(f,n).t.x = f.t;
+
+theorem :: TOPREALC:48
+  for T being non empty set, R being real-membered set, f being Function of T,R
+  holds incl(f,0) = T --> 0;
+
+theorem :: TOPREALC:49
+  for f being Function of T,TOP-REAL n, g being Function of T,R^1 holds
+  f<+>g = f<++>incl(g,n);
+
+theorem :: TOPREALC:50
+  for f being Function of T,TOP-REAL n, g being Function of T,R^1 holds
+  f<->g = f<-->incl(g,n);
+
+theorem :: TOPREALC:51
+  for f being Function of T,TOP-REAL n, g being Function of T,R^1 holds
+  f<#>g = f<##>incl(g,n);
+
+theorem :: TOPREALC:52
+  for f being Function of T,TOP-REAL n, g being Function of T,R^1 holds
+  f</>g = f<//>incl(g,n);
+
+definition
+  let n;
+  func TIMES(n) -> Function of [:TOP-REAL n,TOP-REAL n:],TOP-REAL n means
+:: TOPREALC:def 5
+
+  for x,y being Point of TOP-REAL n holds it.(x,y) = x(#)y;
+end;
+
+theorem :: TOPREALC:53
+  TIMES(0) = [:TOP-REAL 0,TOP-REAL 0:] --> 0.TOP-REAL 0;
+
+theorem :: TOPREALC:54
+  for f, g being Function of T,TOP-REAL n holds f <##> g = TIMES(n).:(f,g);
+
+definition
+  let m, n;
+  func PROJ(m,n) -> Function of TOP-REAL m,R^1 means
+:: TOPREALC:def 6
+
+  for p being Element of TOP-REAL m holds it.p = p/.n;
+end;
+
+theorem :: TOPREALC:55
+  for p being Point of TOP-REAL m st n in dom p holds
+  PROJ(m,n).:Ball(p,r) = ]. p/.n-r , p/.n+r .[;
+
+theorem :: TOPREALC:56
+  for m being non zero Nat
+  for f being Function of T,R^1 holds
+  f = PROJ(m,m) * incl(f,m);
+
+begin :: Continuity
+
+registration
+  let T;
+  cluster non-empty continuous Function of T,R^1;
+end;
+
+theorem :: TOPREALC:57
+  n in Seg m implies PROJ(m,n) is continuous;
+
+theorem :: TOPREALC:58
+  n in Seg m implies PROJ(m,n) is open;
+
+registration
+  let n,T;
+  let f be continuous Function of T,R^1;
+  cluster incl(f,n) -> continuous;
+end;
+
+registration
+  let n;
+  cluster TIMES(n) -> continuous;
+end;
+
+theorem :: TOPREALC:59
+  for f being Function of TOP-REAL m,TOP-REAL n st f is continuous holds
+  f(-) is continuous Function of TOP-REAL m,TOP-REAL n;
+
+registration
+  let T; let f be continuous Function of T,R^1;
+  cluster -f -> continuous Function of T,R^1;
+end;
+
+registration
+  let T; let f be non-empty continuous Function of T,R^1;
+  cluster f" -> continuous Function of T,R^1;
+end;
+
+registration
+  let T; let f be continuous Function of T,R^1; let r;
+  cluster f+r -> continuous Function of T,R^1;
+  cluster f-r -> continuous Function of T,R^1;
+  cluster f(#)r -> continuous Function of T,R^1;
+  cluster f(/)r -> continuous Function of T,R^1;
+end;
+
+registration
+  let T; let f, g be continuous Function of T,R^1;
+  cluster f+g -> continuous Function of T,R^1;
+  cluster f-g -> continuous Function of T,R^1;
+  cluster f(#)g -> continuous Function of T,R^1;
+end;
+
+registration
+  let T; let f be continuous Function of T,R^1;
+  let g be non-empty continuous Function of T,R^1;
+  cluster f /" g -> continuous Function of T,R^1;
+end;
+
+registration
+  let n,T;
+  let f, g be continuous Function of T,TOP-REAL n;
+  cluster f<++>g -> continuous Function of T,TOP-REAL n;
+  cluster f<-->g -> continuous Function of T,TOP-REAL n;
+  cluster f<##>g -> continuous Function of T,TOP-REAL n;
+end;
+
+registration
+  let n,T;
+  let f be continuous Function of T,TOP-REAL n;
+  let g be continuous Function of T,R^1;
+  cluster f<+>g -> continuous Function of T,TOP-REAL n;
+  cluster f<->g -> continuous Function of T,TOP-REAL n;
+  cluster f<#>g -> continuous Function of T,TOP-REAL n;
+end;
+
+registration
+  let n,T;
+  let f be continuous Function of T,TOP-REAL n;
+  let g be non-empty continuous Function of T,R^1;
+  cluster f</>g -> continuous Function of T,TOP-REAL n;
+end;
+
+registration
+  let n,T,r;
+  let f be continuous Function of T,TOP-REAL n;
+  cluster f[+]r -> continuous Function of T,TOP-REAL n;
+  cluster f[-]r -> continuous Function of T,TOP-REAL n;
+  cluster f[#]r -> continuous Function of T,TOP-REAL n;
+  cluster f[/]r -> continuous Function of T,TOP-REAL n;
+end;
+
+theorem :: TOPREALC:60
+  for r being non negative (real number)
+  for n being non zero Nat, p being Point of Tcircle(0.TOP-REAL n,r)
+  holds -p is Point of Tcircle(0.TOP-REAL n,r);
+
+theorem :: TOPREALC:61
+  for r being non negative (real number)
+  for f being Function of Tcircle(0.TOP-REAL(n+1),r),TOP-REAL n holds
+  f(-) is Function of Tcircle(0.TOP-REAL(n+1),r),TOP-REAL n;
+
+definition
+  let n be Nat, r be non negative (real number);
+  let X be Subset of Tcircle(0.TOP-REAL(n+1),r);
+  redefine func (-)X -> Subset of Tcircle(0.TOP-REAL(n+1),r);
+end;
+
+registration
+  let m;
+  let r be non negative (real number);
+  let X be open Subset of Tcircle(0.TOP-REAL(m+1),r);
+  cluster (-)X -> open Subset of Tcircle(0.TOP-REAL(m+1),r);
+end;
+
+theorem :: TOPREALC:62
+  for r being non negative (real number)
+  for f being continuous Function of Tcircle(0.TOP-REAL(m+1),r),TOP-REAL m
+  holds f(-) is continuous Function of Tcircle(0.TOP-REAL(m+1),r),TOP-REAL m;

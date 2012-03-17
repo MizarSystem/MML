@@ -25,12 +25,31 @@
 <ArticleID name="CSSPACE"/>
 <ArticleID name="CLVECT_2"/>
 </Signature>
+<RCluster aid="CSSPACE2" nr="1">
+<ArgTypes/>
+<Typ kind="G" nr="16">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="106"/>
+<Adjective nr="110"/>
+</Cluster>
+</RCluster>
 <FCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="175"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="100"/>
+<Adjective nr="106"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
@@ -38,7 +57,7 @@
 <Func kind="K" nr="175"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 </Registrations>

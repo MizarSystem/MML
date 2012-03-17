@@ -38,11 +38,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4" value="false">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="218"/>
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="256"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -50,11 +50,11 @@
 <Func kind="U" nr="7">
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="234">
+<Func kind="K" nr="233">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="256"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
@@ -62,11 +62,11 @@
 <Adjective nr="68">
 <Func kind="K" nr="43">
 <Func kind="K" nr="74"/>
-<Func kind="K" nr="234">
+<Func kind="K" nr="233">
 <Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="256"/>
 </Adjective>
 </Cluster>
 </RCluster>

@@ -1056,7 +1056,7 @@ A1: Seg M = Seg len M1 /\ Seg len M2 by FINSEQ_2:2
     .= dom M1 /\ dom M2 by FINSEQ_1:def 3
     .= dom (M1 ^^ M2) by PRE_POLY:def 4
     .= Seg len (M1 ^^ M2) by FINSEQ_1:def 3;
-A2: len (Sum M1 + Sum M2) = len (addreal.:(Sum M1,Sum M2)) by RVSUM_1:def 4
+A2: len (Sum M1 + Sum M2) = len (addreal.:(Sum M1,Sum M2))
     .= min(len Sum M1,len Sum M2) by FINSEQ_2:85
     .= min(len M1,len Sum M2) by Def1
     .= min(len M1,len M2) by Def1
@@ -1068,7 +1068,7 @@ A3: dom (Sum M1 + Sum M2) = Seg len (Sum M1 + Sum M2) by FINSEQ_1:def 3;
     assume
 A4: i in dom (Sum M1 + Sum M2);
     then
-A5: i in dom (addreal.:(Sum M1, Sum M2)) by RVSUM_1:def 4;
+A5: i in dom (addreal.:(Sum M1, Sum M2));
     i in Seg len (M1 ^^ M2) by A2,A3,A4,Def1;
     then
 A6: i in dom (M1 ^^ M2) by FINSEQ_1:def 3;
@@ -1086,7 +1086,7 @@ A8: i in dom Sum M1 by FINSEQ_1:def 3;
 A9: i in dom Sum M2 by FINSEQ_1:def 3;
 A10: i in dom Sum(M1 ^^ M2) by A2,A3,A4,FINSEQ_1:def 3;
 A11: ((M1.i) ^ (M2.i)) = (M1 ^^ M2).i by A6,PRE_POLY:def 4;
-    thus (Sum M1 + Sum M2).i = (addreal.:(Sum M1,Sum M2)).i by RVSUM_1:def 4
+    thus (Sum M1 + Sum M2).i = (addreal.:(Sum M1,Sum M2)).i
       .= (addreal).((Sum M1).i,(Sum M2).i) by A5,FUNCOP_1:28
       .= ((Sum M1).i) + ((Sum M2).i) by BINOP_2:def 9
       .= Sum (M1.i) + (Sum M2.i) by A8,Def1
@@ -1284,7 +1284,7 @@ end;
 
 theorem Th30:
   for x,y being FinSequence of REAL st len x = len y holds len mlt
-  (x,y)=len x by RVSUM_1:def 9,FINSEQ_2:86;
+  (x,y)=len x by FINSEQ_2:86;
 
 theorem Th31:
   for i for R being Element of i-tuples_on REAL holds mlt(i|->1,R)
@@ -1335,7 +1335,6 @@ A3: ( for i st i in dom x holds x.i >= 0)& for i st i in dom y holds y.i
     let k;
     assume
     k in dom mlt(x,y);
-    then
 A4: (mlt(x,y)).k = x.k * y.k by RVSUM_1:86;
     x.k >=0 & y.k >=0 by A3,A1;
     hence (mlt(x,y)).k >= 0 by A4,XREAL_1:129;
@@ -1361,7 +1360,7 @@ A2: dom (mlt(e1,e2)) = Seg len (mlt(e1,e2)) by FINSEQ_1:def 3
     let i be Nat such that
 A3: i in dom mlt(e1,e2);
     reconsider a1 = e1.i, a2 = e2.i as Element of F_Real by VECTSP_1:def 15;
-    thus (mlt(e1,e2)).i = a1 * a2 by A3,RVSUM_1:86
+    thus (mlt(e1,e2)).i = a1 * a2 by RVSUM_1:86
       .= (mlt(f1,f2)).i by A1,A2,A3,FVSUM_1:73;
   end;
   hence thesis by A2,FINSEQ_1:17;
@@ -1408,7 +1407,7 @@ A4: Sum e = e1.len e by Th7;
 A5: Sum f = f1.len f and
 A6: f1.0 = 0.F_Real and
 A7: for j for v being Element of F_Real st j < len f & v = f.(j + 1)
-  holds f1.(j + 1) = f1.j + v by RLVECT_1:def 13;
+  holds f1.(j + 1) = f1.j + v by RLVECT_1:def 15;
   for n holds n <= len e implies e1.n = f1.n
   proof
     defpred p[Nat] means $1 <= len e implies e1.$1 = f1.$1;
@@ -1827,12 +1826,9 @@ A17:  [i,j] in Indices M by A7,A13,A15,MATRIXC1:1;
       j in Seg len Line(Z,i) by A15,A16,FINSEQ_1:3;
       then
 A18:  j in Seg width Z by MATRIX_1:def 8;
-      then j in Seg len mlt(Line(M,i),y) by A4,A12,Th30;
-      then
-A19:  j in dom mlt(Line(M,i),y) by FINSEQ_1:def 3;
       thus ((x.i)*(mlt(Line(M,i),y))).j =(x.i)*((mlt(Line(M,i),y)).j) by
 RVSUM_1:66
-        .=(x.i)*((Line(M,i)).j*y.j) by A19,RVSUM_1:86
+        .=(x.i)*((Line(M,i)).j*y.j) by RVSUM_1:86
         .=(x.i)*(M*(i,j)*y.j) by A2,A4,A18,MATRIX_1:def 8
         .=(x.i)*(M*(i,j))*(y.j)
         .=Z*(i,j) by A1,A2,A17,Def4
@@ -1843,8 +1839,7 @@ A20: len Line(Z,i) = len y by A4,MATRIX_1:def 8;
     then len ((x.i)*(mlt(Line(M,i),y))) =len Line(Z,i) by A20,RVSUM_1:147;
     then
 A21: (x.i)*(mlt(Line(M,i),y)) = Line(Z,i) by A14,FINSEQ_1:18;
-    i in dom mlt(x,M*y) by A6,A9,FINSEQ_1:def 3;
-    then (mlt(x,M*y)).i = (x.i)*((M*y).i) by RVSUM_1:86
+    (mlt(x,M*y)).i = (x.i)*((M*y).i) by RVSUM_1:86
       .=(x.i)*(Line(M,i) "*" y) by A2,A3,A11,Th41
       .=Sum((x.i)*(mlt(Line(M,i),y))) by RVSUM_1:117;
     hence thesis by A5,A9,A21,Th20;
@@ -1898,13 +1893,10 @@ A16:  [j,i] in Indices M by A6,A12,A14,MATRIXC1:1;
 A17:  j in Seg len Z by MATRIX_1:def 9;
       then
 A18:  j in dom Z by FINSEQ_1:def 3;
-      j in Seg len mlt(x,Col(M,i)) by A3,A11,A17,Th30;
-      then
-A19:  j in dom mlt(x,Col(M,i)) by FINSEQ_1:def 3;
 A20:  j in dom M by A1,A3,A17,FINSEQ_1:def 3;
       thus ((y.i)*(mlt(x,Col(M,i)))).j =(y.i)*((mlt(x,Col(M,i))).j) by
 RVSUM_1:66
-        .=(y.i)*(x.j*(Col(M,i)).j) by A19,RVSUM_1:86
+        .=(y.i)*(x.j*(Col(M,i)).j) by RVSUM_1:86
         .=(y.i)*(x.j*(M*(j,i))) by A20,MATRIX_1:def 9
         .=Z*(j,i) by A1,A2,A16,Def4
         .=(Col(Z,i)).j by A18,MATRIX_1:def 9;
@@ -1914,8 +1906,7 @@ A21: len Col(Z,i) = len x by A3,MATRIX_1:def 9;
     then len ((y.i)*(mlt(x,Col(M,i)))) =len Col(Z,i) by A21,RVSUM_1:147;
     then
 A22: (y.i)*(mlt(x,Col(M,i))) = Col(Z,i) by A13,FINSEQ_1:18;
-    i in dom mlt(x*M,y) by A5,A8,FINSEQ_1:def 3;
-    then (mlt(x*M,y)).i = ((x*M).i)*(y.i) by RVSUM_1:86
+    (mlt(x*M,y)).i = ((x*M).i)*(y.i) by RVSUM_1:86
       .=(x "*" Col(M,i))*(y.i) by A1,A10,Th40
       .=Sum((y.i)* (mlt(x,Col(M,i)))) by RVSUM_1:117;
     hence thesis by A4,A8,A22,Def2;

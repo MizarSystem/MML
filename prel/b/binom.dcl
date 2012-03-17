@@ -38,9 +38,9 @@
 <Adjective nr="94"/>
 <Adjective nr="96"/>
 <Adjective nr="102"/>
-<Adjective nr="108"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </RCluster>
 <CCluster aid="BINOM" nr="1">
@@ -48,7 +48,7 @@
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="54"/>
-<Adjective nr="108"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -63,7 +63,7 @@
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="53"/>
-<Adjective nr="108"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -78,8 +78,8 @@
 <Cluster>
 <Adjective nr="38" value="false"/>
 <Adjective nr="61"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>

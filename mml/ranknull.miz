@@ -7,20 +7,21 @@
 environ
 
  vocabularies FUNCT_1, RELAT_1, TARSKI, STRUCT_0, SUBSET_1, XBOOLE_0, VECTSP_1,
-      RLVECT_5, FINSET_1, RLVECT_3, FDIFF_1, LOPBAN_1, ARYTM_3, SUPINF_2,
+      RLVECT_5, FINSET_1, RLVECT_3, LOPBAN_1, ARYTM_3, SUPINF_2,
       CARD_1, RLSUB_1, FUNCT_2, ARYTM_1, MESFUNC1, VECTSP10, RLVECT_2, FUNCT_4,
       REALSET1, FUNCOP_1, QC_LANG1, CARD_3, RLSUB_2, FINSEQ_1, VALUED_1, NAT_1,
-      XXREAL_0, PARTFUN1, NUMBERS, PBOOLE, RANKNULL;
+      XXREAL_0, PARTFUN1, NUMBERS, PBOOLE, RANKNULL, MSSUBFAM, UNIALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, RELAT_1, RELSET_1, FUNCT_1,
       NAT_1, NUMBERS, FUNCOP_1, PARTFUN1, FUNCT_2, FUNCT_4, XCMPLX_0, XXREAL_0,
       CARD_1, FINSET_1, FINSEQ_1, FINSEQOP, STRUCT_0, RLVECT_1, RLVECT_2,
       VECTSP_1, FUNCT_7, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, MOD_2,
-      MATRLIN, VECTSP_9, LOPBAN_1;
+      MATRLIN, VECTSP_9, GRCAT_1, LOPBAN_1;
  constructors NAT_1, FINSEQOP, HAHNBAN, VECTSP_6, VECTSP_7, MOD_2, VECTSP_9,
       REALSET1, RLVECT_2, WELLORD2, LOPBAN_1, VECTSP_5, FUNCT_7, FUNCT_4,
       XXREAL_0, MATRLIN, RELSET_1;
  registrations RELAT_1, FUNCT_1, STRUCT_0, CARD_1, FINSET_1, VECTSP_9,
-      XBOOLE_0, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0, SUBSET_1, FINSEQ_1;
+      XBOOLE_0, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0, SUBSET_1, FINSEQ_1,
+      MOD_2, GRCAT_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, FINSEQ_1, VECTSP_4, VECTSP_6, XBOOLE_0,
       RLVECT_1, STRUCT_0, MOD_2, MATRLIN, FUNCOP_1, LOPBAN_1, FUNCT_2;
@@ -28,7 +29,7 @@ environ
       VECTSP_9, CARD_2, XBOOLE_1, FUNCT_2, SUBSET_1, XBOOLE_0, VECTSP_1,
       RLVECT_1, VECTSP_4, VECTSP_6, STRUCT_0, RLVECT_2, MOD_2, MATRLIN, CARD_1,
       FUNCOP_1, VECTSP_5, FUNCT_7, FINSEQ_2, FUNCT_4, ENUMSET1, ORDINAL1,
-      PARTFUN1;
+      PARTFUN1, GRCAT_1;
  schemes CLASSES1;
 
 begin
@@ -72,8 +73,8 @@ A11: g.x1 in dom (f|(rng g)) by A4,A7,FUNCT_1:12;
     g.x2 in rng g by A4,A8,FUNCT_1:12;
     then
 A12: g.x2 in dom (f|(rng g)) by A3,RELAT_1:91;
-    f.(g.x1) = (f|(rng g)).(g.x1) & f.(g.x2) = (f|(rng g)).(g.x2) by A6,
-    A7,A8,FUNCT_1:12,72;
+    f.(g.x1) = (f|(rng g)).(g.x1) & f.(g.x2) = (f|(rng g)).(g.x2) by A6,A7,A8,
+FUNCT_1:12,72;
     then g.x1 = g.x2 by A2,A9,A10,A11,A12,FUNCT_1:def 8;
     hence thesis by A1,A4,A7,A8,FUNCT_1:def 8;
   end;
@@ -131,7 +132,7 @@ end;
 
 registration
   let F be Field, V,W be VectSp of F;
-  cluster linear Function of V,W;
+  cluster additive homogeneous Function of V,W;
   existence
   proof
     set f = FuncZero ([#]V,W);
@@ -150,7 +151,7 @@ A2:   f.y = 0.W by FUNCOP_1:13;
       f.(a*x) = 0.W & f.x = 0.W by FUNCOP_1:13;
       hence thesis by VECTSP_1:59;
     end;
-    hence thesis by A1,MOD_2:def 5;
+    hence f is additive homogeneous by A1,MOD_2:def 3, GRCAT_1:def 13;
   end;
 end;
 
@@ -262,7 +263,7 @@ begin :: Basic facts of linear transformations
 
 definition
   let F be Field, V,W be VectSp of F;
-  mode linear-transformation of V,W is linear Function of V,W;
+  mode linear-transformation of V,W is additive homogeneous Function of V,W;
 end;
 
 reserve T for linear-transformation of V,W;
@@ -280,8 +281,9 @@ theorem Th8:
   for x,y being Element of V holds T.x - T.y = T.(x - y)
 proof
   let x,y be Element of V;
-A1: T.((-1.F)*y) = (-1.F)*(T.y) by MOD_2:def 5;
-  T.(x - y) = T.x + T.(-y) & -y = (-1.F)*y by MOD_2:def 5,VECTSP_1:59;
+A1: T.((-1.F)*y) = (-1.F)*(T.y) by MOD_2:def 3, GRCAT_1:def 13;
+  T.(x - y) = T.x + T.(-y) & -y = (-1.F)*y by MOD_2:def 3,
+  GRCAT_1:def 13,VECTSP_1:59;
   hence thesis by A1,VECTSP_1:59;
 end;
 
@@ -289,7 +291,7 @@ theorem Th9:
   T.(0.V) = 0.W
 proof
   0.V = (0.F)*(0.V) by VECTSP_1:59;
-  then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 5
+  then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 3, GRCAT_1:def 13
     .= 0.W by VECTSP_1:59;
   hence thesis;
 end;
@@ -325,7 +327,7 @@ A1: for v being Element of V st v in K holds T.v = 0.W
       assume
       u in K;
       then T.u = 0.W by A1;
-      then T.(a*u) = a*(0.W) by MOD_2:def 5
+      then T.(a*u) = a*(0.W) by MOD_2:def 3, GRCAT_1:def 13
         .= 0.W by VECTSP_1:59;
       hence a*u in K;
     end;
@@ -340,7 +342,7 @@ A3: 0.V in K;
       assume
       u in K & v in K;
       then T.u = 0.W & T.v = 0.W by A1;
-      then T.(u+v) = 0.W + 0.W by MOD_2:def 5
+      then T.(u+v) = 0.W + 0.W by MOD_2:def 3, GRCAT_1:def 13
         .= 0.W by RLVECT_1:def 7;
       hence u+v in K;
     end;
@@ -425,7 +427,7 @@ A7:   v in U;
 A8:   T.x = u by A1,A6;
       consider y being Element of V such that
 A9:   T.y = v by A1,A7;
-      u+v = T.(x+y) by A8,A9,MOD_2:def 5;
+      u+v = T.(x+y) by A8,A9,MOD_2:def 3, GRCAT_1:def 13;
       hence u+v in U by A1;
     end;
     now
@@ -434,7 +436,7 @@ A9:   T.y = v by A1,A7;
       w in U;
       then consider v being Element of V such that
 A10:  T.v = w by A1;
-      T.(a*v) = a*w by A10,MOD_2:def 5;
+      T.(a*v) = a*w by A10,MOD_2:def 3, GRCAT_1:def 13;
       hence a*w in U by A1;
     end;
     then
@@ -453,7 +455,7 @@ theorem
   0.V in ker T
 proof
   0.V = (0.F)*(0.V) by VECTSP_1:59;
-  then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 5
+  then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 3, GRCAT_1:def 13
     .= 0.W by VECTSP_1:59;
   hence thesis by Th10;
 end;
@@ -910,8 +912,7 @@ A18:  f.x <> 0.F by A17,VECTSP_6:20;
         not x in A;
         then
 A19:    x in V \ A by XBOOLE_0:def 5;
-        then x in dom (l|A) \/ (dom ((V \ A) --> 0.F)) by A2,XBOOLE_0:def
-        3;
+        then x in dom (l|A) \/ (dom ((V \ A) --> 0.F)) by A2,XBOOLE_0:def 3;
         then f.x = ((V \ A) --> 0.F).x by A2,A19,FUNCT_4:def 1;
         hence contradiction by A18,A19,FUNCOP_1:13;
       end;
@@ -974,10 +975,8 @@ A1: rng ((V \ (Carrier l)) --> 0.F) c= {0.F}
     end;
   end;
 A2: l = l!(Carrier l) by Th24;
-  rng (l|Carrier l) = l .: Carrier l by RELAT_1:148;
 
-  then (rng (l|Carrier l)) \/ rng ((V \ (Carrier l)) --> 0.F) is finite by
-  A1;
+  (rng (l|Carrier l)) \/ rng ((V \ (Carrier l)) --> 0.F) is finite by A1;
 
   then rng l is finite by A2,FINSET_1:13,FUNCT_4:18;
   hence thesis by FINSET_1:13,RELAT_1:144;
@@ -1155,8 +1154,7 @@ A4: rng f c= [#]F
       then consider x being set such that
 A5:   x in dom f and
 A6:   f.x = y by FUNCT_1:def 5;
-      ex w being Element of W st x = w & f.x = Sum (l .: (T"{w} )) by A2,
-      A3,A5;
+      ex w being Element of W st x = w & f.x = Sum (l .: (T"{w} )) by A2,A3,A5;
       hence thesis by A6;
     end;
 A7: for w being Element of W holds f.w = Sum (l .: (T"{w}))
@@ -1239,8 +1237,7 @@ A17:    dom T = [#]V by Th7;
     for w being Element of W holds f.w = Sum (l .: (T"{w}))
     proof
       let w be Element of W;
-      ex w9 being Element of W st w = w9 & f.w = Sum (l .: (T"{ w9})) by
-      A3;
+      ex w9 being Element of W st w = w9 & f.w = Sum (l .: (T"{ w9})) by A3;
       hence thesis;
     end;
     hence thesis;
@@ -1392,15 +1389,14 @@ A6:   v = Sum l by VECTSP_7:12;
 A7:   v = Sum m by VECTSP_7:12;
 A8:   0.V = (Sum l) - (Sum m) by A6,A7,VECTSP_1:66
         .= Sum (l - m) by VECTSP_6:80;
-A9:   Carrier (l - m) c= (Carrier l) \/ (Carrier m) & A \/ (B \ A) = B by
-      A1, VECTSP_6:74,XBOOLE_1:45;
+A9:   Carrier (l - m) c= (Carrier l) \/ (Carrier m) & A \/ (B \ A) = B by A1,
+VECTSP_6:74,XBOOLE_1:45;
 A10:  Carrier l c= A & Carrier m c= B \ A by VECTSP_6:def 7;
       then (Carrier l) \/ (Carrier m) c= A \/ (B \ A) by XBOOLE_1:13;
       then Carrier (l - m) c= B by A9,XBOOLE_1:1;
       then reconsider n = l - m as Linear_Combination of B by VECTSP_6:def 7;
       A misses (B \ A) by XBOOLE_1:79;
-      then Carrier n = (Carrier l) \/ (Carrier m) by A10,
-      Th32,XBOOLE_1:64;
+      then Carrier n = (Carrier l) \/ (Carrier m) by A10,Th32,XBOOLE_1:64;
       then Carrier l = {} by A8,A4,VECTSP_7:def 1;
       then l = ZeroLC(V) by VECTSP_6:def 6;
       then Sum l = 0.V by VECTSP_6:41;
@@ -1604,7 +1600,7 @@ A22: l .: {v} = Im (l,v)
       .= {l.v} by A18,FUNCT_1:117;
     l .: T"{T.v} = (l .: {v}) \/ (l .: X) by A4,RELAT_1:153;
     then Sum (l .: T"{T.v}) = (Sum (l .: {v})) + (Sum (l .: X)) by A13,
-    RLVECT_2:18
+RLVECT_2:18
       .= l.v + (Sum ({0.F})) by A22,A21,RLVECT_2:15
       .= l.v + 0.F by RLVECT_2:15
       .= l.v by RLVECT_1:10;
@@ -1647,7 +1643,7 @@ A10: G.k = G/.k by PARTFUN1:def 8;
     (l (#) G).k = (l.gk)*gk by A8,VECTSP_6:def 8;
     then
 A11: L.k = T.((l.gk)*gk) by A8,FUNCT_1:23
-      .= (l.gk)*(T.gk) by MOD_2:def 5
+      .= (l.gk)*(T.gk) by MOD_2:def 3, GRCAT_1:def 13
       .= (l.Gk)*TGk by A9,A10,FUNCT_1:23;
     G.k in rng G & (T*G).k = T.(G.k) by A9,FUNCT_1:12,23;
     then
@@ -1870,7 +1866,7 @@ proof
   assume
   v in X & T|X is one-to-one;
   then ( not v in dom ((V \ X) --> 0.F))& T#l = (l*T) +* ((V \ X) --> 0.F) by
-  Def6,XBOOLE_0:def 5;
+Def6,XBOOLE_0:def 5;
   then
 A1: (T#l).v = (l*T).v by FUNCT_4:12;
   dom T = [#]V by Th7;
@@ -2003,8 +1999,8 @@ A7: l = T@m;
     then Sum m in Lin A9 by VECTSP_9:21;
     then consider n being Linear_Combination of A9 such that
 A8: Sum m = Sum n by VECTSP_7:12;
-A9: Carrier (m - n) c= (Carrier m) \/ (Carrier n) & (B \ A9) \/ A9 = B by
-    A1, VECTSP_6:74,XBOOLE_1:45;
+A9: Carrier (m - n) c= (Carrier m) \/ (Carrier n) & (B \ A9) \/ A9 = B by A1,
+VECTSP_6:74,XBOOLE_1:45;
 A10: Carrier m c= B \ A9 & Carrier n c= A by VECTSP_6:def 7;
     then (Carrier m) \/ (Carrier n) c= (B \ A9) \/ A by XBOOLE_1:13;
     then Carrier (m - n) c= B by A9,XBOOLE_1:1;
@@ -2015,8 +2011,7 @@ A11: B is linearly-independent by VECTSP_7:def 3;
     then
 A12: Carrier o = {} by A11,VECTSP_7:def 1;
     A9 misses B \ A9 by XBOOLE_1:79;
-    then Carrier (m - n) = (Carrier m) \/ (Carrier n) by A10,Th32,
-    XBOOLE_1:64;
+    then Carrier (m - n) = (Carrier m) \/ (Carrier n) by A10,Th32,XBOOLE_1:64;
     then Carrier m = {} by A12;
     then T .: (Carrier m) = {} by RELAT_1:149;
     hence thesis by A5,A7,Th30,XBOOLE_1:3;
@@ -2054,9 +2049,9 @@ A19: u2 = Sum l by A17,VECTSP_7:12;
 A20: T.u1 = 0.W by Th10;
     T@l is Linear_Combination of T .: (Carrier l) & Carrier l c= B \ A9
     by Th29,VECTSP_6:def 7;
-    then reconsider m = T@l as Linear_Combination of C9 by RELAT_1:156 ,
-    VECTSP_6:25;
-    T.u = T.u1 + T.u2 by A18,MOD_2:def 5;
+    then reconsider m = T@l as Linear_Combination of C9 by RELAT_1:156
+,VECTSP_6:25;
+    T.u = T.u1 + T.u2 by A18,MOD_2:def 3, GRCAT_1:def 13;
     then
 A21: T.u = T.u2 by A20,RLVECT_1:10;
     ex m being Linear_Combination of C9 st v = Sum m

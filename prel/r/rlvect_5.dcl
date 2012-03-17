@@ -36,7 +36,10 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 <Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RLVECT_5" nr="2">
@@ -49,6 +52,9 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -64,7 +70,10 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 <Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RLVECT_5" nr="3">
@@ -77,7 +86,10 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 <Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -93,7 +105,10 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 <Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <CCluster aid="RLVECT_5" nr="1">
@@ -106,7 +121,10 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 <Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -116,7 +134,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="91"/>
+<Adjective nr="94"/>
 </Cluster>
 </CCluster>
 </Registrations>

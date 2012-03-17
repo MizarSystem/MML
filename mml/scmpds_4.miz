@@ -13,7 +13,7 @@ environ
       TURING_1, AMISTD_2, SCMFSA6B, MSUALG_1, CIRCUIT2, GLIB_000, SCMPDS_4,
       ORDINAL1, PARTFUN1, AFINSQ_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1,
+      RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, VALUED_1,
       FUNCT_4, FUNCT_7, INT_1, NAT_1, INT_2,
       XXREAL_0, STRUCT_0, AMI_1, SCMNORM, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2,
       SCMPDS_3;
@@ -42,13 +42,7 @@ definition
   let i;
   func Load i -> preProgram of SCMPDS equals
     <%i%>;
-  coherence
-  proof
-    set I = <%i%>;
-    I = 0 .--> i;
-    then I is FinPartState of SCMPDS;
-    hence thesis;
-  end;
+  coherence;
   correctness;
 end;
 
@@ -244,8 +238,7 @@ theorem Th9:
   I c= Initialized I
 proof
   set A = NAT;
-A1: dom I c= A by RELAT_1:def 18;
-A2: not IC SCMPDS in dom I by A1,AMI_1:48;
+A2: not IC SCMPDS in dom I by AMI_1:48;
   dom Start-At( 0,SCMPDS) = { IC SCMPDS } by FUNCOP_1:19;
   then dom I misses dom (Start-At( 0,SCMPDS)) by A2,ZFMISC_1:56;
   hence thesis by FUNCT_4:33;
@@ -750,7 +743,7 @@ theorem
 proof
 A1: not IC SCMPDS in NAT by AMI_1:48;
   dom I c= NAT & dom Start-At( 0,SCMPDS) = { IC SCMPDS } by FUNCOP_1:19
-,RELAT_1:def 18;
+;
   hence thesis by A1,FUNCT_4:82,ZFMISC_1:56;
 end;
 
@@ -979,12 +972,10 @@ theorem
   for I,J being Program of SCMPDS holds I,J equal_outside NAT
 proof
   let I,J be Program of SCMPDS;
-  dom I c= NAT by RELAT_1:def 18;
-  then dom I \ NAT = {} by XBOOLE_1:37;
+  dom I \ NAT = {} by XBOOLE_1:37;
   then
 A1: dom (I | (dom I \ NAT)) = {};
-  dom J c= NAT by RELAT_1:def 18;
-  then dom J \ NAT = {} by XBOOLE_1:37;
+  dom J \ NAT = {} by XBOOLE_1:37;
   then
 A2: dom (J | (dom J \ NAT)) = {};
   for x be set st x in {} holds (I | (dom I \ NAT)).x = (J | (dom J \ NAT)
@@ -1043,8 +1034,7 @@ A1: a in dom I \/ {IC SCMPDS} by Th27;
   per cases by A1,XBOOLE_0:def 3;
   suppose
 A2: a in dom I;
-    dom I c= NAT by RELAT_1:def 18;
-    then reconsider l=a as Element of NAT by A2;
+    reconsider l=a as Element of NAT by A2;
     l=a;
     hence contradiction by SCMPDS_2:53;
   end;
@@ -1060,10 +1050,9 @@ reserve x for set;
 theorem Th32:
   x in dom I implies I.x = (I +* Start-At(n,SCMPDS)).x
 proof
-A1: dom I c= NAT by RELAT_1:def 18;
   assume
   x in dom I;
-  then reconsider l=x as Element of NAT by A1;
+  then reconsider l=x as Element of NAT;
   dom Start-At(n,SCMPDS) = {IC SCMPDS} & l <> IC SCMPDS
   by AMI_1:48,FUNCOP_1:19;
   then not x in dom Start-At(n,SCMPDS) by TARSKI:def 1;
@@ -1367,12 +1356,12 @@ theorem
 theorem Th45:
   card(I ';' J) = card I + card J
 proof
-A1: card dom(I ';' J) = card(I ';' J) & card dom I = card I by CARD_1:104;
+A1: card dom(I ';' J) = card(I ';' J) & card dom I = card I;
 A2: card dom J = card J & dom(I ';' J) = dom I \/ dom Shift(J, card I) by
-CARD_1:104,FUNCT_4:def 1;
+FUNCT_4:def 1;
   card dom Shift(J, card I) = card Shift(J, card I) by CARD_1:104
     .= card J by Th3
-    .= card dom J by CARD_1:104;
+    .= card dom J;
   hence thesis by A1,A2,Th2,CARD_2:53;
 end;
 
@@ -1416,7 +1405,7 @@ A1: dom Start-At(n,SCMPDS) = {IC SCMPDS} by FUNCOP_1:19;
   then consider x being set such that
 A2: x in dom I /\ dom (Start-At(n,SCMPDS)) by XBOOLE_0:def 1;
   x in dom I & x in dom (Start-At(n,SCMPDS)) by A2,XBOOLE_0:def 4;
-  then dom I c= NAT & IC SCMPDS in dom I by A1,RELAT_1:def 18,TARSKI:def 1;
+  then dom I c= NAT & IC SCMPDS in dom I by A1,TARSKI:def 1;
   then reconsider l=IC SCMPDS as Element of NAT;
   l=IC SCMPDS;
   hence contradiction by AMI_1:48;
@@ -1454,7 +1443,7 @@ A3: x is Element of NAT by A1;
     hence contradiction by A3,AMI_1:48;
   end;
   then dom I c= NAT & (I +* Start-At(n,SCMPDS))|NAT = I | NAT by FUNCT_4:76
-,RELAT_1:def 18;
+;
   hence thesis by RELAT_1:97;
 end;
 
@@ -1480,7 +1469,7 @@ proof
   then a in dom I \/ dom Start-At(l,SCMPDS) by FUNCT_4:def 1;
   then
 A1: a in dom I or a in dom Start-At(l,SCMPDS) by XBOOLE_0:def 3;
-  dom I c= NAT & a in SCM-Data-Loc by RELAT_1:def 18,SCMPDS_2:def 2;
+  dom I c= NAT & a in SCM-Data-Loc by SCMPDS_2:def 2;
   hence contradiction by A1,Th59,AMI_2:29,XBOOLE_0:3;
 end;
 
@@ -1588,13 +1577,13 @@ A9:  0 in dom m1 by FUNCT_4:13;
 u: Comput(ProgramPart(s),s,0) = s by AMI_1:13;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by AMI_1:150;
-   CurInstr(ProgramPart Comput(ProgramPart(s),s,0),Comput(ProgramPart(s),s,0))
+   CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,0))
     = CurInstr(ProgramPart s,s) by u
-    .= s.IC m1 by A1,A3,GRFUNC_1:8,Y
+    .= s.IC m1 by A1,A3,Y,GRFUNC_1:8
     .= m1. 0 by A1,A9,A4,GRFUNC_1:8
     .= m0. 0 by A6,A8,GRFUNC_1:8
     .= halt SCMPDS by A5,A7,Th37;
-  hence thesis by AMI_1:145;
+  hence thesis;
 end;
 
 registration
@@ -1669,14 +1658,14 @@ Y:  (ProgramPart Cn)/.IC Cn
     case
 A8:   IC Cn = IC s1;
       then
-A9:   CurInstr(ProgramPart Cn,Cn) = s1.IC s1 by AMI_1:54,Y
+A9:   CurInstr(ProgramPart Cn,Cn) = s1.IC s1 by Y,AMI_1:54
         .= goto 1 by A6,A2,A5,FUNCT_4:14;
 T: ProgramPart s1 = ProgramPart Cn
-by AMI_1:144;
+by AMI_1:123;
       thus IC (Comput(ProgramPart(s1),s1,n+1)) = IC Following(ProgramPart s1,Cn
 )
       by AMI_1:14
-        .= ICplusConst(Cn,1) by A9,SCMPDS_2:66,T
+        .= ICplusConst(Cn,1) by A9,T,SCMPDS_2:66
         .= succ IC s1 by A8,SCMPDS_3:20;
     end;
     case
@@ -1688,13 +1677,13 @@ Y:  (ProgramPart Comput(ProgramPart(s1),s1,n))/.IC Comput(ProgramPart(s1),s1,n)
  = Comput(ProgramPart(s1),s1,n).IC Comput(ProgramPart(s1),s1,n) by AMI_1:150;
 A12:  CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1),
 s1,n))
- = s1.(succ IC s1) by A10,AMI_1:54,Y
+ = s1.(succ IC s1) by A10,Y,AMI_1:54
         .= goto -1 by A4,A1,A5,FUNCT_4:14;
 T: ProgramPart s1 = ProgramPart Cn
-by AMI_1:144;
+by AMI_1:123;
       thus IC(Comput(ProgramPart(s1),s1,n+1)) = IC Following(ProgramPart s1,Cn)
        by AMI_1:14
-        .=abs(i+4 + -4 ) by A10,A12,A11,SCMPDS_2:66,T
+        .=abs(i+4 + -4 ) by A10,A12,A11,T,SCMPDS_2:66
         .=IC s1 by ABSVALUE:def 1;
     end;
   end;
@@ -1705,6 +1694,8 @@ A13: for n st X[n] holds X[n+1];
   assume IC Comput(ProgramPart(s1),s1,nn) in dom ProgramPart s1;
 A14: X[0] by AMI_1:13;
 A15: for n holds X[n] from NAT_1:sch 1(A14,A13);
+T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,n)
+by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,n))/.IC Comput(ProgramPart(s1),s1,n)
  = Comput(ProgramPart(s1),s1,n).IC Comput(ProgramPart(s1),s1,n) by AMI_1:150;
   per cases by A15;
@@ -1712,23 +1703,21 @@ Y:  (ProgramPart Comput(ProgramPart(s1),s1,n))/.IC Comput(ProgramPart(s1),s1,n)
     IC(Comput(ProgramPart(s1),s1,n)) = IC s1;
     then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(
 s1),s1,n))
-     = s1.IC s1 by AMI_1:54,Y
+     = s1.IC s1 by Y,AMI_1:54
       .= goto 1 by A6,A2,A5,FUNCT_4:14;
-   then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1
-),s1,n)) <>
-    halt SCMPDS by SCMPDS_2:85;
-   hence thesis by AMI_1:145;
+   then CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,n)) <>
+    halt SCMPDS by T,SCMPDS_2:85;
+   hence thesis;
   end;
   suppose
     IC(Comput(ProgramPart(s1),s1,n)) = succ IC s1;
     then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(
 s1),s1,n))
-     = s1.succ IC s1 by AMI_1:54,Y
+     = s1.succ IC s1 by Y,AMI_1:54
       .= goto -1 by A4,A1,A5,FUNCT_4:14;
-   then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,n),Comput(ProgramPart(s1
-),s1,n))
-    <> halt SCMPDS by SCMPDS_2:85;
-    hence thesis by AMI_1:145;
+   then CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,n))
+    <> halt SCMPDS by T,SCMPDS_2:85;
+    hence thesis;
   end;
 end;
 
@@ -1753,7 +1742,7 @@ A6: m <= n implies Comput(ProgramPart(s1),s1,m), Comput(ProgramPart(s2),s2,m)
 equal_outside
     NAT;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,m)
-by AMI_1:144;
+by AMI_1:123;
 A7: Comput(ProgramPart(s2),s2,m+1) =
 Following(ProgramPart s2,Comput(ProgramPart(s2),s2,m)
 )
@@ -1762,7 +1751,7 @@ Following(ProgramPart s2,Comput(ProgramPart(s2),s2,m)
 ProgramPart(s2),s2,m)),
       Comput(ProgramPart(s2),s2,m)) by T;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
 A8: Comput(ProgramPart(s1),s1,m+1) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,m)
 )
@@ -1784,12 +1773,12 @@ Z:  (ProgramPart Comput(ProgramPart(s2),s2,m))/.IC Comput(ProgramPart(s2),s2,m)
  = Comput(ProgramPart(s2),s2,m).IC Comput(ProgramPart(s2),s2,m) by AMI_1:150;
     CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(ProgramPart(s1),s1
 ,m))
-     = s1.IC(Comput(ProgramPart(s1),s1,m)) by AMI_1:54,Y
+     = s1.IC(Comput(ProgramPart(s1),s1,m)) by Y,AMI_1:54
       .= I.IC(Comput(ProgramPart(s1),s1,m)) by A2,A11,A10,GRFUNC_1:8
       .= s2.IC(Comput(ProgramPart(s2),s2,m)) by A3,A11,A10,GRFUNC_1:8
       .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,m),Comput(ProgramPart(
 s2),s2,m))
-       by AMI_1:54,Z;
+       by Z,AMI_1:54;
     hence thesis by A6,A8,A7,A9,Th15,NAT_1:13;
   end;
   Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
@@ -1866,18 +1855,19 @@ A7: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A5);
 A8: for m st m < n holds IC(Comput(ProgramPart(s),s,m)) in dom stop I by A7;
     set s2 = Comput(ProgramPart(s),s,n), Ig = ((IC s2,succ IC s2) --> (goto 1,
 goto -1))
-, s0 = s +* Ig, s1 = s2 +* Ig, t1= s +* (IC s2,goto 1), t2= t1 +* (succ IC s2,
-    goto -1), t3= s2 +* (IC s2,goto 1), t4= t3 +* (succ IC s2,goto -1);
+, s0 = s +* Ig, s1 = s2 +* Ig, t1= s +* (IC s2,goto 1),
+    t2= t1 +* (succ IC s2,goto -1),
+    t3= s2 +* (IC s2,goto 1), t4= t3 +* (succ IC s2,goto -1);
     (IAt) | NAT = stop I by Th58;
     then
 A9: dom stop (I) = dom(IAt) /\ NAT by RELAT_1:90;
-    s| NAT = s2 | NAT by AMI_1:123;
-    then t1 | NAT = t3 | NAT by FUNCT_7:95;
-    then t2 | NAT = t4 | NAT by FUNCT_7:95;
-    then s0 | NAT = t4 | NAT by Th69;
-    then s0 | NAT = s1 | NAT by Th69;
+    ProgramPart s = ProgramPart s2 by AMI_1:123;
+    then ProgramPart t1 = ProgramPart t3 by FUNCT_7:95;
+    then ProgramPart t2 = ProgramPart t4 by FUNCT_7:95;
+    then ProgramPart s0 = ProgramPart t4 by Th69;
+    then ProgramPart s0 = ProgramPart s1 by Th69;
     then
-A10: Comput(ProgramPart(s0),s0,n) | NAT = s1 | NAT by AMI_1:123;
+A10: ProgramPart Comput(ProgramPart(s0),s0,n) = ProgramPart s1 by AMI_1:123;
 A11: t1,t2 equal_outside NAT by FUNCT_7:93;
     not succ IC Comput(ProgramPart(s),s,n) in dom stop(I) by A6,Th71;
     then
@@ -1906,7 +1896,7 @@ A19: not ProgramPart s1 halts_on s1 by Th66;
     Initialized stop(I) = IAt;
     then ProgramPart s0 halts_on s0 by A1,A17,AMI_1:def 26;
     then ProgramPart s0 halts_on Comput(ProgramPart(s0),s0,n) by AMI_1:93;
-    hence contradiction by A18,A19,AMI_1:144;
+    hence contradiction by A18,A19,AMI_1:123;
   end;
 end;
 
@@ -2903,7 +2893,7 @@ A10: P[k];
     set i = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),
     Comput(ProgramPart(s1),s1,k));
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 A11: Comput(ProgramPart(s1),s1,k+1) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,k)
 )
@@ -2916,7 +2906,7 @@ A13: IC Comput(ProgramPart(s1),s1,k+1) in dom SI by A1,Def9;
     then
 A14: l+n in dom Shift(SI,n) by VALUED_1:25;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 A15: Comput(ProgramPart(s2),s2,k+1) =
 Following(ProgramPart s2,Comput(ProgramPart(s2),s2,k)
 )
@@ -2929,7 +2919,7 @@ A16: IC Comput(ProgramPart(s1),s1,k)
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
  = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by AMI_1:150;
 A17: i = s1.IC Comput(ProgramPart(s1),s1,k)
- by AMI_1:54,Y
+ by Y,AMI_1:54
       .= II.IC Comput(ProgramPart(s1),s1,k)
        by A1,A8,A16,GRFUNC_1:8
       .= SI.IC Comput(ProgramPart(s1),s1,k)
@@ -2939,19 +2929,18 @@ A18: InsCode i <> 1 & InsCode i <> 3 by A16,Def12;
 A19: i valid_at m by A16,A17,Def12;
     hence
 A20: IC Comput(ProgramPart(s1),s1,k+1) + n = IC Comput(ProgramPart(s2),s2,k+1)
-by A10,A11,A15,A18
-,Th83;
+by A10,A11,A15,A18,Th83;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,k+1))/.IC Comput(ProgramPart(s1),s1,
 k+1)
- = Comput(ProgramPart(s1),s1,k+1).IC Comput(ProgramPart(s1),s1,k+1) by AMI_1:
-150;
+ = Comput(ProgramPart(s1),s1,k+1).IC Comput(ProgramPart(s1),s1,k+1) by
+AMI_1:150;
 Z:  (ProgramPart Comput(ProgramPart(s2),s2,k+1))/.IC Comput(ProgramPart(s2),s2,
 k+1)
- = Comput(ProgramPart(s2),s2,k+1).IC Comput(ProgramPart(s2),s2,k+1) by AMI_1:
-150;
+ = Comput(ProgramPart(s2),s2,k+1).IC Comput(ProgramPart(s2),s2,k+1) by
+AMI_1:150;
     CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k+1),Comput(ProgramPart(s1),
 s1,k+1)) = s1.l
-     by AMI_1:54,Y
+     by Y,AMI_1:54
       .= II.l by A1,A8,A13,GRFUNC_1:8
       .= SI.l by A7,A13,GRFUNC_1:8;
     hence CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k+1),Comput(
@@ -2961,7 +2950,7 @@ ProgramPart(s1),s1,k+1))
       .= s2.IC Comput(ProgramPart(s2),s2,k+1) by A2,A20,A14,GRFUNC_1:8
       .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k+1),Comput(ProgramPart
 (s2),s2,k+1))
-       by AMI_1:54,Z;
+       by Z,AMI_1:54;
     thus thesis by A10,A11,A15,A18,A19,Th83;
   end;
 A21: IC SCMPDS in dom II by Th7;
@@ -2985,8 +2974,8 @@ Z:  (ProgramPart s1)/.IC s1
   CurInstr(ProgramPart Comput(ProgramPart(s1),s1,0),Comput(ProgramPart(s1),s1,0
 ))
    = CurInstr(ProgramPart s1,s1) by u
-    .= Shift(SI,n).( 0 + n) by A5,A22,VALUED_1:def 12,Z
-    .= CurInstr(ProgramPart s2,s2) by A2,A3,A6,GRFUNC_1:8,Y
+    .= Shift(SI,n).( 0 + n) by A5,A22,Z,VALUED_1:def 12
+    .= CurInstr(ProgramPart s2,s2) by A2,A3,A6,Y,GRFUNC_1:8
     .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,0),Comput(ProgramPart(s2)
 ,s2,0))
      by v;

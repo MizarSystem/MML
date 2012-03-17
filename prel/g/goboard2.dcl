@@ -99,9 +99,9 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="148"/>
 <Adjective nr="151"/>
-<Adjective nr="152"/>
+<Adjective nr="154"/>
+<Adjective nr="155"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GOBOARD2" nr="4">
@@ -126,9 +126,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="148"/>
-<Adjective nr="153"/>
-<Adjective nr="154"/>
+<Adjective nr="151"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GOBOARD2" nr="5">
@@ -166,11 +166,11 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="148"/>
 <Adjective nr="151"/>
-<Adjective nr="152"/>
-<Adjective nr="153"/>
 <Adjective nr="154"/>
+<Adjective nr="155"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </FCluster>
 </Registrations>

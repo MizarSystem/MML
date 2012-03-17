@@ -57,9 +57,9 @@
 <Adjective nr="94"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="102"/>
-<Adjective nr="103"/>
-<Adjective nr="104"/>
+<Adjective nr="105"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 <CCluster aid="COMPLFLD" nr="1">

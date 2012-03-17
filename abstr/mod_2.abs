@@ -8,16 +8,16 @@ environ
 
  vocabularies XBOOLE_0, FUNCSDOM, VECTSP_1, CLASSES2, FUNCT_5, MCART_1,
       STRUCT_0, VECTSP_2, SUPINF_2, ALGSTR_0, SUBSET_1, ARYTM_3, RLVECT_1,
-      RELAT_1, MESFUNC1, FUNCT_1, FDIFF_1, MSSUBFAM, GRCAT_1, GRAPH_1, CAT_1,
-      MIDSP_1, ORDINAL1, CARD_1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, ZFMISC_1,
-      MOD_2;
+      RELAT_1, MESFUNC1, FUNCT_1, MSSUBFAM, GRCAT_1, GRAPH_1, CAT_1, MIDSP_1,
+      ORDINAL1, CARD_1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, ZFMISC_1, MOD_2,
+      UNIALG_1;
  notations XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, BINOP_1, PARTFUN1, NUMBERS,
       FUNCT_2, FUNCT_5, STRUCT_0, ALGSTR_0, ORDINAL1, RLVECT_1, GROUP_1,
       VECTSP_1, FUNCSDOM, VECTSP_2, CLASSES2, GRCAT_1, FUNCT_3;
  constructors ENUMSET1, PARTFUN1, VECTSP_2, GRCAT_1, FUNCOP_1, ALGSTR_1,
-      RELSET_1;
+      RELSET_1, CLASSES1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_1,
-      ALGSTR_1, ALGSTR_0;
+      ALGSTR_1, ALGSTR_0, CLASSES2, GRCAT_1;
  requirements SUBSET, BOOLE, NUMERALS;
 
 
@@ -33,43 +33,34 @@ definition
   canceled;
   func TrivialLMod(R) -> strict LeftMod of R equals
 :: MOD_2:def 2
-  VectSpStr (#1,op2,op0,pr2(
-    the carrier of R,1)#);
+  VectSpStr (#1,op2,op0,pr2(the carrier of R,1)#);
 end;
 
 theorem :: MOD_2:1
   for x being Vector of TrivialLMod R holds x = 0.TrivialLMod R;
 
 definition
-  let R be non empty doubleLoopStr;
+  let R be non empty multMagma;
   let G,H be non empty VectSpStr over R;
   let f be Function of G,H;
-  canceled 2;
-  attr f is linear means
-:: MOD_2:def 5
+  attr f is homogeneous means
+:: MOD_2:def 3
 
-  (for x,y being Vector of G holds f.(x+y) = f.x
-  +f.y) & for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
+  for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
 end;
 
-canceled 2;
+canceled 3;
 
-theorem :: MOD_2:4
-  for f being Function of G,H st f is linear holds f is additive;
-
-canceled;
-
-theorem :: MOD_2:6
+theorem :: MOD_2:5
   for f being Function of G,H, g being Function of H,S st f is
-  linear & g is linear holds g*f is linear;
+  homogeneous & g is homogeneous holds g*f is homogeneous;
 
 reserve R for Ring;
 reserve G, H for LeftMod of R;
 
-canceled;
-
-theorem :: MOD_2:8
-  ZeroMap(G,H) is linear;
+registration let R,G,H;
+ cluster ZeroMap(G,H) -> homogeneous;
+end;
 
 ::
 ::  Morphisms of Left Modules
@@ -87,6 +78,7 @@ reserve f for LModMorphismStr over R;
 
 definition
   let R,f;
+ canceled 2;
   func dom(f) -> LeftMod of R equals
 :: MOD_2:def 6
   the Dom of f;
@@ -102,6 +94,8 @@ definition
   the Fun of f;
 end;
 
+canceled 3;
+
 theorem :: MOD_2:9
   for f0 being Function of G1,G2 st f = LModMorphismStr(#G1,G2,f0#)
   holds dom f = G1 & cod f = G2 & fun f = f0;
@@ -110,8 +104,7 @@ definition
   let R,G,H;
   func ZERO(G,H) -> strict LModMorphismStr over R equals
 :: MOD_2:def 9
-  LModMorphismStr(# G,H
-    ,ZeroMap(G,H)#);
+  LModMorphismStr(# G,H,ZeroMap(G,H)#);
 end;
 
 definition
@@ -120,7 +113,7 @@ definition
   attr IT is LModMorphism-like means
 :: MOD_2:def 10
 
-  fun(IT) is linear;
+  fun(IT) is additive homogeneous;
 end;
 
 registration
@@ -134,7 +127,7 @@ definition
 end;
 
 theorem :: MOD_2:10
-  for F being LModMorphism of R holds the Fun of F is linear;
+  for F being LModMorphism of R holds the Fun of F is additive homogeneous;
 
 registration
   let R,G,H;
@@ -146,8 +139,7 @@ definition
   mode Morphism of G,H -> LModMorphism of R means
 :: MOD_2:def 11
 
-    dom(it) = G & cod(it
-    ) = H;
+    dom(it) = G & cod(it) = H;
 end;
 
 registration
@@ -157,14 +149,16 @@ end;
 
 theorem :: MOD_2:11
   for f being LModMorphismStr over R holds dom(f) = G & cod(f) = H
-  & fun(f) is linear implies f is Morphism of G,H;
+  & fun(f) is additive homogeneous implies f is Morphism of G,H;
 
 theorem :: MOD_2:12
-  for f being Function of G,H st f is linear holds LModMorphismStr
+  for f being Function of G,H st f is additive homogeneous
+   holds LModMorphismStr
   (#G,H,f#) is strict Morphism of G,H;
 
-theorem :: MOD_2:13
-  id G is linear;
+registration let R,G;
+ cluster id G -> homogeneous;
+end;
 
 definition
   let R,G;
@@ -178,9 +172,11 @@ definition
   redefine func ZERO(G,H) -> strict Morphism of G,H;
 end;
 
+canceled;
+
 theorem :: MOD_2:14
   for F being Morphism of G,H ex f being Function of G,H st the
-  LModMorphismStr of F = LModMorphismStr(#G,H,f#) & f is linear;
+  LModMorphismStr of F = LModMorphismStr(#G,H,f#) & f is additive homogeneous;
 
 theorem :: MOD_2:15
   for F being strict Morphism of G,H ex f being Function of G,H st
@@ -192,7 +188,7 @@ theorem :: MOD_2:16
 theorem :: MOD_2:17
   for F being strict LModMorphism of R ex G,H being LeftMod of R, f
 being Function of G,H st F is strict Morphism of G,H & F = LModMorphismStr(#G,H
-    ,f#) & f is linear;
+    ,f#) & f is additive homogeneous;
 
 theorem :: MOD_2:18
   for g,f being LModMorphism of R st dom(g) = cod(f) ex G1,G2,G3

@@ -41,7 +41,15 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
+</Func>
+</Adjective>
+<Adjective nr="5">
+<Func kind="U" nr="6">
+<Func kind="K" nr="35">
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -50,12 +58,12 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="75"/>
-<Adjective nr="78"/>
+<Adjective nr="74"/>
+<Adjective nr="77"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -66,7 +74,15 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
+</Func>
+</Adjective>
+<Adjective nr="5">
+<Func kind="U" nr="6">
+<Func kind="K" nr="35">
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -75,15 +91,15 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="75"/>
-<Adjective nr="78"/>
+<Adjective nr="74"/>
+<Adjective nr="77"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="11">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -92,7 +108,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="273">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="1"/>
@@ -105,7 +121,15 @@
 </Adjective>
 <Adjective nr="4">
 <Func kind="U" nr="1">
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
+</Func>
+</Adjective>
+<Adjective nr="5">
+<Func kind="U" nr="6">
+<Func kind="K" nr="35">
+<Func kind="K" nr="47"/>
+</Func>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
@@ -114,12 +138,12 @@
 <Func kind="K" nr="35">
 <Func kind="K" nr="47"/>
 </Func>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
 </Func>
 </Adjective>
 <Adjective nr="27"/>
-<Adjective nr="75"/>
-<Adjective nr="78"/>
+<Adjective nr="74"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 </Registrations>

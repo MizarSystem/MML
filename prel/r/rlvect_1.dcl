@@ -66,6 +66,9 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RLVECT_1" nr="1">
@@ -146,7 +149,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
@@ -168,7 +171,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </CCluster>
 <CCluster aid="RLVECT_1" nr="3">

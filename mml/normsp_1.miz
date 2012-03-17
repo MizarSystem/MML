@@ -111,13 +111,15 @@ holds ( ||.x.|| = 0 iff x = 0.IT ) & ||.a * x.|| = abs(a) * ||.x.|| & ||.x + y
 end;
 
 registration
-  cluster RealNormSpace-like RealLinearSpace-like Abelian add-associative
+  cluster RealNormSpace-like vector-distributive scalar-distributive
+  scalar-associative scalar-unital Abelian add-associative
     right_zeroed right_complementable strict (non empty NORMSTR);
   existence
   proof
     take X;
     thus X is RealNormSpace-like by Def2,Lm5;
-    thus X is RealLinearSpace-like
+    thus X is vector-distributive scalar-distributive scalar-associative
+    scalar-unital
     proof
       thus for a being real number for v,w being VECTOR of X holds a * (v + w)
       = a * v + a * w
@@ -126,7 +128,7 @@ registration
         let v,w be VECTOR of X;
         reconsider v9= v, w9 = w as VECTOR of (0).V;
         thus a * (v + w) = a *( v9 + w9)
-          .= a * v9 + a * w9 by RLVECT_1:def 9
+          .= a * v9 + a * w9 by RLVECT_1:def 8
           .= a * v + a * w;
       end;
       thus for a,b being real number for v being VECTOR of X holds (a + b) * v
@@ -146,13 +148,13 @@ registration
         let v be VECTOR of X;
         reconsider v9= v as VECTOR of (0).V;
         thus (a * b) * v = (a * b) * v9
-          .= a * (b * v9) by RLVECT_1:def 9
+          .= a * (b * v9) by RLVECT_1:def 10,def 11
           .= a * (b * v);
       end;
       let v be VECTOR of X;
       reconsider v9= v as VECTOR of (0).V;
       thus 1 * v = 1 * v9
-        .= v by RLVECT_1:def 9;
+        .= v by RLVECT_1:def 11;
     end;
 A1: for x,y be VECTOR of X for x9,y9 be VECTOR of (0).V st x = x9 & y = y9
     holds x + y= x9 + y9 & for a holds a * x = a * x9;
@@ -193,7 +195,8 @@ A2:   v9 + w9 = 0.(0).V by ALGSTR_0:def 11;
 end;
 
 definition
-  mode RealNormSpace is RealNormSpace-like RealLinearSpace-like Abelian
+  mode RealNormSpace is RealNormSpace-like vector-distributive
+  scalar-distributive scalar-associative scalar-unital Abelian
     add-associative right_zeroed right_complementable (non empty NORMSTR);
 end;
 
@@ -683,8 +686,7 @@ A11: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) - g2
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
-  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by
-  A9,XREAL_1:10;
+  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:10;
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
@@ -726,8 +728,7 @@ A11: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
   m1 <= m1 + m2 by NAT_1:12;
   then m1 <= n by A8,XXREAL_0:2;
   then ||.(S1.n) - g1.|| < r/2 by A6;
-  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by
-  A9,XREAL_1:10;
+  then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A9,XREAL_1:10;
   hence thesis by A10,A11,XXREAL_0:2;
 end;
 
@@ -737,8 +738,7 @@ proof
   assume
   S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by
-  Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
   take h = g - x;
   let r;
   assume
@@ -765,8 +765,7 @@ proof
   assume
   S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by
-  Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
   take h = a * g;
 A2: now
 A3: 0/abs(a) =0;
@@ -778,8 +777,7 @@ A5: 0 < abs a by COMPLEX1:133;
     assume
     0 < r;
     then consider m1 such that
-A6: for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1,A5,
-    A3, XREAL_1:76;
+A6: for n st m1 <= n holds ||.(S.n) - g.|| < r/abs(a) by A1,A5,A3,XREAL_1:76;
     take k = m1;
     let n;
     assume
@@ -856,8 +854,7 @@ proof
   assume
   S is convergent;
   then consider g such that
-A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by
-  Def9;
+A1: for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r by Def9;
   now
     let r be real number;
     assume
@@ -1015,9 +1012,7 @@ A10: ||.(S1.n) - g1 + ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n) -
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
-    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by
-    A8, XREAL_1
-    :10;
+    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:10;
     hence ||.(S1 + S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
   S1 + S2 is convergent by A1,A2,Th34;
@@ -1061,9 +1056,7 @@ A10: ||.((S1.n) - g1) - ((S2.n) - g2).|| <= ||.(S1.n) - g1.|| + ||.(S2.n)
     m1 <= m1 + m2 by NAT_1:12;
     then m1 <= n by A7,XXREAL_0:2;
     then ||.(S1.n) - g1.|| < r/2 by A5;
-    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by
-    A8, XREAL_1
-    :10;
+    then ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2 by A8,XREAL_1:10;
     hence ||.(S1 - S2).n - g.|| < r by A9,A10,XXREAL_0:2;
   end;
   S1 - S2 is convergent by A1,A2,Th35;

@@ -73,7 +73,7 @@
 <Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="144">
+<Adjective nr="150">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -107,7 +107,7 @@
 <Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="145">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -121,7 +121,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="145">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -134,7 +134,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="144">
+<Adjective nr="150">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

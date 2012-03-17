@@ -40,6 +40,9 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ANPROJ_1" nr="1">
@@ -53,6 +56,9 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -74,6 +80,9 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -82,7 +91,7 @@
 </Func>
 <Cluster>
 <Adjective nr="45" value="false"/>
-<Adjective nr="98"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -52,20 +52,20 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="281"/>
 <Cluster>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

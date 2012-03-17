@@ -22,7 +22,7 @@ environ
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3, REALSET1,
       FUNCT_7, STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1,
-      FINSEQ_3, GRFUNC_1, FUNCT_2, ORDINAL1;
+      FINSEQ_3, GRFUNC_1, FUNCT_2, ORDINAL1, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FUNCT_7, AMI_1, YELLOW_8,
       AMISTD_1, XBOOLE_0, FUNCOP_1, CARD_3;
@@ -831,7 +831,8 @@ registration
   S be standard halting
   (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  cluster Stop S -> lower non empty NAT-defined trivial;
+  cluster Stop S ->
+   lower non empty NAT-defined (the Instructions of S)-valued trivial;
   coherence by AMISTD_1:48;
 end;
 
@@ -1339,17 +1340,18 @@ definition
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  p be NAT-defined FinPartState of S, k be natural number;
+  p be NAT-defined (the Instructions of S)-valued FinPartState of S,
+  k be natural number;
 A1: dom p c= NAT by RELAT_1:def 18;
   func IncAddr(p,k) -> FinPartState of S means
   :Def15:
   dom it = dom p &
   for m being natural number st il.(S,m) in dom p holds
-  it.il.(S,m) = IncAddr(pi(p,il.(S,m)),k);
+  it.il.(S,m) = IncAddr(p/.il.(S,m),k);
   existence
   proof
     defpred P[set,set] means ex m being Element of NAT st $1 = il.(S,m) &
-    $2 = IncAddr(pi(p,il.(S,m)),k);
+    $2 = IncAddr(p/.il.(S,m),k);
 A2: for e being set st e in dom p ex u being set st P[e,u]
     proof
       let e be set;
@@ -1357,7 +1359,7 @@ A2: for e being set st e in dom p ex u being set st P[e,u]
       then reconsider l=e as Element of NAT by A1;
       consider m being natural number such that
 A3:   l = il.(S,m) by AMISTD_1:26;
-      take IncAddr(pi(p,il.(S,m)),k);
+      take IncAddr(p/.il.(S,m),k);
       reconsider m as Element of NAT by ORDINAL1:def 13;
       e = il.(S,m) by A3;
       hence thesis;
@@ -1375,8 +1377,8 @@ A6: dom f c= the carrier of S by A4;
       assume
 A7:   x in dom f;
       then
-A8:   ex m being Element of NAT st x = il.(S,m) & f.x = IncAddr(pi
-      (p,il.(S,m)),k) by A4,A5;
+A8:   ex m being Element of NAT st x = il.(S,m) & f.x =
+       IncAddr(p/.il.(S,m),k) by A4,A5;
       reconsider y = x as Element of NAT by A1,A4,A7;
       (the Object-Kind of S).y
         = the Instructions of S by AMI_1:def 14;
@@ -1393,7 +1395,7 @@ A8:   ex m being Element of NAT st x = il.(S,m) & f.x = IncAddr(pi
     let m be natural number;
     assume il.(S,m) in dom p;
     then ex j being Element of NAT st il.(S,m) = il.(S,j) &
-    f.il.(S,m) = IncAddr(pi(p,il.(S,j)),k) by A5;
+    f.il.(S,m) = IncAddr(p/.il.(S,j),k) by A5;
     hence thesis;
   end;
   uniqueness
@@ -1401,10 +1403,10 @@ A8:   ex m being Element of NAT st x = il.(S,m) & f.x = IncAddr(pi
     let IT1,IT2 be FinPartState of S such that
 A9: dom IT1 = dom p and
 A10: for m being natural number st il.(S,m) in dom p holds
-    IT1.il.(S,m) = IncAddr(pi(p,il.(S,m)),k) and
+    IT1.il.(S,m) = IncAddr(p/.il.(S,m),k) and
 A11: dom IT2 = dom p and
 A12: for m being natural number st il.(S,m) in dom p holds
-    IT2.il.(S,m) = IncAddr(pi(p,il.(S,m)),k);
+    IT2.il.(S,m) = IncAddr(p/.il.(S,m),k);
     for x being set st x in dom p holds IT1.x = IT2.x
     proof
       let x be set;
@@ -1414,7 +1416,7 @@ A13:  x in dom p;
       consider m being natural number such that
 A14:  l = il.(S,m) by AMISTD_1:26;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-      thus IT1.x = IncAddr(pi(p,il.(S,m)),k) by A10,A13,A14
+      thus IT1.x = IncAddr(p/.il.(S,m),k) by A10,A13,A14
         .= IT2.x by A12,A13,A14;
     end;
     hence thesis by A9,A11,FUNCT_1:9;
@@ -1425,12 +1427,24 @@ registration
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be NAT-defined FinPartState of S, k be natural number;
-  cluster IncAddr(F,k) -> NAT-defined;
+  F be NAT-defined (the Instructions of S)-valued FinPartState of S,
+  k be natural number;
+  cluster IncAddr(F,k) -> NAT-defined (the Instructions of S)-valued;
   coherence
   proof
-    dom IncAddr(F,k) = dom F by Def15;
+E:   dom IncAddr(F,k) = dom F by Def15;
     hence dom IncAddr(F,k) c= NAT by RELAT_1:def 18;
+   let x be set;
+   assume x in rng IncAddr(F,k);
+    then consider y being set such that
+W1:  y in dom F and
+W2:  x = IncAddr(F,k).y by E,FUNCT_1:def 5;
+    dom F c= NAT by RELAT_1:def 18;
+    then y is Nat by W1;
+    then consider m being Nat such that
+W3:  y = il.(S,m) by AMISTD_1:26;
+    x = IncAddr(F/.il.(S,m),k) by W1,W2,Def15,W3;
+   hence x in the Instructions of S;
   end;
 end;
 
@@ -1450,7 +1464,8 @@ registration
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be empty NAT-defined FinPartState of S, k be natural number;
+  F be empty (the Instructions of S)-valued NAT-defined FinPartState of S,
+  k be natural number;
   cluster IncAddr(F,k) -> empty;
   coherence
   proof
@@ -1466,7 +1481,8 @@ registration
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be non empty NAT-defined FinPartState of S, k be natural number;
+  F be non empty (the Instructions of S)-valued NAT-defined FinPartState of S,
+  k be natural number;
   cluster IncAddr(F,k) -> non empty;
   coherence
   proof
@@ -1479,7 +1495,8 @@ registration
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be lower NAT-defined FinPartState of S, k be natural number;
+  F be lower NAT-defined (the Instructions of S)-valued FinPartState of S,
+  k be natural number;
   cluster IncAddr(F,k) -> lower;
   coherence
   proof
@@ -1491,17 +1508,18 @@ end;
 theorem Th38:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being NAT-defined FinPartState of S holds IncAddr(F,0) = F
+  F being NAT-defined (the Instructions of S)-valued FinPartState of S
+   holds IncAddr(F,0) = F
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be NAT-defined FinPartState of S;
+  F be NAT-defined (the Instructions of S)-valued FinPartState of S;
   for m being natural number st il.(S,m) in dom F holds
-  F.il.(S,m) = IncAddr(pi(F,il.(S,m)),0)
+  F.il.(S,m) = IncAddr(F/.il.(S,m),0)
   proof
     let m be natural number;
     assume il.(S,m) in dom F;
-    then pi(F,il.(S,m)) = F.il.(S,m) by AMI_1:def 47;
+    then F/.il.(S,m) = F.il.(S,m) by PARTFUN1:def 8;
     hence thesis by Th28;
   end;
   hence thesis by Def15;
@@ -1510,12 +1528,12 @@ end;
 theorem
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being lower NAT-defined FinPartState of S
+  F being lower NAT-defined (the Instructions of S)-valued FinPartState of S
   holds IncAddr(IncAddr(F,k),m) = IncAddr(F,k+m)
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be lower NAT-defined FinPartState of S;
+  F be lower NAT-defined (the Instructions of S)-valued FinPartState of S;
 A1: dom IncAddr(IncAddr(F,k),m) = dom IncAddr(F,k) by Def15
     .= dom F by Def15;
 A2: dom IncAddr(F,k+m) = dom F by Def15;
@@ -1529,12 +1547,12 @@ A3: x in dom F;
 A4: x = il.(S,locnum(x,S)) by AMISTD_1:def 13;
     then
 A5: il.(S,locnum(x,S)) in dom IncAddr(F,k) by A3,Def15;
-A6: IncAddr(pi(F,il.(S,locnum(x,S))),k) = IncAddr(F,k).il.(S,locnum(x,S))
+A6: IncAddr(F/.il.(S,locnum(x,S)),k) = IncAddr(F,k).il.(S,locnum(x,S))
     by A3,A4,Def15
-      .= pi(IncAddr(F,k),il.(S,locnum(x,S))) by A5,AMI_1:def 47;
+      .= IncAddr(F,k)/.il.(S,locnum(x,S)) by A5,PARTFUN1:def 8;
     IncAddr(IncAddr(F,k),m).il.(S,locnum(x,S))
-    = IncAddr(pi(IncAddr(F,k),il.(S,locnum(x,S))),m) by A5,Def15
-      .= IncAddr(pi(F,il.(S,locnum(x,S))),k+m) by A6,Th37
+    = IncAddr(IncAddr(F,k)/.il.(S,locnum(x,S)),m) by A5,Def15
+      .= IncAddr(F/.il.(S,locnum(x,S)),k+m) by A6,Th37
       .= IncAddr(F,k+m).il.(S,locnum(x,S)) by A3,A4,Def15;
     hence thesis by A4;
   end;
@@ -1653,13 +1671,27 @@ end;
 registration
   let N be with_non-empty_elements non empty set,
   S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)), F be FinPartState of S,
+  (non empty stored-program AMI-Struct over N)), F be
+      (the Instructions of S)-valued FinPartState of S,
   k be natural number;
-  cluster Shift(F,k) -> NAT-defined;
+  cluster Shift(F,k) -> (the Instructions of S)-valued NAT-defined;
   coherence
   proof
 A1: dom Shift(F,k) =
     { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom F } by Def16;
+    thus rng Shift(F,k) c= the Instructions of S
+     proof let x;
+      assume x in rng Shift(F,k);
+       then consider y being set such that
+W1:     y in dom Shift(F,k) and
+W2:     x = Shift(F,k).y by FUNCT_1:def 5;
+       consider m being Element of NAT such that
+W3:     y = il.(S,m+k) and
+W4:     il.(S,m) in dom F by W1,A1;
+       Shift(F,k).il.(S,m+k) = F.il.(S,m) by W4,Def16
+            .= F/.il.(S,m) by W4,PARTFUN1:def 8;
+      hence x in the Instructions of S by W2,W3;
+     end;
     let x be set;
     assume x in dom Shift(F,k);
     then ex m being Element of NAT st x = il.(S,m+k) & il.(S,m) in dom F by A1;
@@ -2367,13 +2399,15 @@ theorem Th50:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F being lower non empty NAT-defined FinPartState of S,
-  G being non empty NAT-defined FinPartState of S
+  G being non empty
+   NAT-defined (the Instructions of S)-valued FinPartState of S
   holds dom CutLastLoc F misses dom Shift(IncAddr(G,card F -' 1),card F -' 1)
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F be lower non empty NAT-defined FinPartState of S,
-  G be non empty NAT-defined FinPartState of S;
+  G be non empty NAT-defined
+    (the Instructions of S)-valued FinPartState of S;
   set k = card F -' 1;
   assume not thesis;
   then consider il being set such that
@@ -2430,7 +2464,8 @@ definition
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be non empty NAT-defined FinPartState of S;
+  F, G be non empty
+  (the Instructions of S)-valued NAT-defined FinPartState of S;
   func F ';' G -> FinPartState of S equals
   CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
   coherence;
@@ -2440,23 +2475,29 @@ registration
   let N be with_non-empty_elements non empty set,
   S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be non empty NAT-defined FinPartState of S;
-  cluster F ';' G -> non empty NAT-defined;
+  F, G be non empty
+  (the Instructions of S)-valued NAT-defined FinPartState of S;
+  cluster F ';' G -> non empty
+  (the Instructions of S)-valued NAT-defined;
   coherence;
 end;
 
 theorem Th52:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being lower non empty NAT-defined FinPartState of S,
-  G being non empty NAT-defined FinPartState of S
+  F being lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S,
+  G being non empty
+  (the Instructions of S)-valued NAT-defined FinPartState of S
   holds card (F ';' G) = card F + card G - 1 &
   card (F ';' G) = card F + card G -' 1
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be lower non empty NAT-defined FinPartState of S,
-  G be non empty NAT-defined FinPartState of S;
+  F be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S,
+  G be non empty
+  (the Instructions of S)-valued NAT-defined FinPartState of S;
   set k = card F -' 1;
   dom IncAddr(G,k),dom Shift(IncAddr(G,k),k) are_equipotent by Th43;
   then
@@ -2477,7 +2518,8 @@ registration
   let N be with_non-empty_elements non empty set;
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  let F, G be lower non empty NAT-defined FinPartState of S;
+  let F, G be lower non empty
+  (the Instructions of S)-valued NAT-defined FinPartState of S;
   cluster F ';' G -> lower;
   coherence
   proof
@@ -2546,12 +2588,14 @@ end;
 theorem Th53:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined FinPartState of S
+  F, G being lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S
   holds dom F c= dom (F ';' G)
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be lower non empty NAT-defined FinPartState of S;
+  F, G be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S;
   set P = F ';' G;
 A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,card F -' 1),card F -' 1)
   by FUNCT_4:def 1;
@@ -2582,12 +2626,14 @@ end;
 theorem Th54:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined FinPartState of S
+  F, G being lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S
   holds CutLastLoc F c= CutLastLoc (F ';' G)
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be lower non empty NAT-defined FinPartState of S;
+  F, G be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S;
   set k = card F -' 1;
   set P = F ';' G;
 A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
@@ -2661,12 +2707,14 @@ end;
 theorem Th55:
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined FinPartState of S
+  F, G being lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S
   holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).il.(S,0)
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be lower non empty NAT-defined FinPartState of S;
+  F, G be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S;
   set k = card F -' 1;
 A1: LastLoc F = il.(S,0+k) by AMISTD_1:55;
 A2: il.(S,0) in dom IncAddr(G,k) by AMISTD_1:49;
@@ -2681,13 +2729,15 @@ end;
 theorem
   for S being regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined FinPartState of S,
+  F, G being lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S,
   f being Element of NAT st locnum(f,S) < card F - 1
   holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f
 proof
   let S be regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G be lower non empty NAT-defined FinPartState of S,
+  F, G be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S,
   f be Element of NAT;
   set k = card F -' 1, P = F ';' G;
   assume locnum(f,S) < card F - 1;
@@ -2700,7 +2750,7 @@ A3: dom CutLastLoc F c= dom F by GRFUNC_1:8;
   then CutLastLoc F c= P by XBOOLE_1:1;
   then
 A4: dom CutLastLoc F c= dom P by GRFUNC_1:8;
-A5: F.il.(S,locnum(f,S)) = pi(F,il.(S,locnum(f,S))) by A1,A3,AMI_1:def 47;
+A5: F.il.(S,locnum(f,S)) = F/.il.(S,locnum(f,S)) by A1,A3,PARTFUN1:def 8;
   dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
   then dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by XBOOLE_0:def 7;
   then not il.(S,locnum(f,S)) in dom Shift(IncAddr(G,k),k)
@@ -2708,8 +2758,8 @@ A5: F.il.(S,locnum(f,S)) = pi(F,il.(S,locnum(f,S))) by A1,A3,AMI_1:def 47;
   then
 A6: P.il.(S,locnum(f,S)) = (CutLastLoc F).il.(S,locnum(f,S)) by FUNCT_4:12
     .= F.il.(S,locnum(f,S)) by A1,GRFUNC_1:8;
-  thus IncAddr(F,k).f = IncAddr(pi(F,il.(S,locnum(f,S))),k) by A1,A2,A3,Def15
-    .= IncAddr(pi(P,il.(S,locnum(f,S))),k) by A1,A4,A5,A6,AMI_1:def 47
+  thus IncAddr(F,k).f = IncAddr(F/.il.(S,locnum(f,S)),k) by A1,A2,A3,Def15
+    .= IncAddr(P/.il.(S,locnum(f,S)),k) by A1,A4,A5,A6,PARTFUN1:def 8
     .= IncAddr(P,k).f by A1,A2,A4,Def15;
 end;
 
@@ -2718,8 +2768,10 @@ registration
   let S be regular standard realistic halting steady-programmed
   without_implicit_jumps (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  let F be lower non empty NAT-defined FinPartState of S;
-  let G be halt-ending (lower non empty NAT-defined FinPartState of S);
+  let F be lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S;
+  let G be halt-ending (lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> halt-ending;
   coherence
   proof
@@ -2733,7 +2785,7 @@ A3: il.(S, card G -' 1) in dom G by AMISTD_1:51;
 A4: il.(S, card G -' 1) in dom IncAddr(G,k) by Def15;
     then
 A5: il.(S, k + (card G -' 1)) in dom Shift(IncAddr(G,k),k) by A1;
-A6: pi(G,il.(S,card G -' 1)) = G.il.(S,card G -' 1) by A3,AMI_1:def 47
+A6: G/.il.(S,card G -' 1) = G.il.(S,card G -' 1) by A3,PARTFUN1:def 8
       .= halt S by A2,AMISTD_1:def 22;
 A7: card G - 1 >= 0 by NAT_1:14,XREAL_1:50;
     then k + (card G - 1) >= k+0 by XREAL_1:8;
@@ -2746,7 +2798,7 @@ A8: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
       .= P.il.(S, k + card G -' 1) by NAT_1:14,NAT_D:38
       .= Shift(IncAddr(G,k),k).il.(S, k + (card G -' 1)) by A5,A8,FUNCT_4:14
       .= IncAddr(G,k).il.(S,card G -' 1) by A4,Def16
-      .= IncAddr(pi(G,il.(S,card G -' 1)),k) by A3,Def15
+      .= IncAddr(G/.il.(S,card G -' 1),k) by A3,Def15
       .= halt S by A6,Th29;
   end;
 end;
@@ -2757,7 +2809,8 @@ registration
   without_implicit_jumps (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   let F, G be halt-ending unique-halt
-  (lower non empty NAT-defined FinPartState of S);
+  (lower non empty NAT-defined
+  (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> unique-halt;
   coherence
   proof
@@ -2790,8 +2843,8 @@ A10:  f = il.(S,m+k) and
 A11:  il.(S,m) in dom IncAddr(G,k) by A2;
 A12:  il.(S,m) in dom G by A11,Def15;
       then
-A13:  pi(G,il.(S,m)) = G.il.(S,m) by AMI_1:def 47;
-      IncAddr(pi(G,il.(S,m)),k) = IncAddr(G,k).il.(S,m) by A12,Def15
+A13:  G/.il.(S,m) = G.il.(S,m) by PARTFUN1:def 8;
+      IncAddr(G/.il.(S,m),k) = IncAddr(G,k).il.(S,m) by A12,Def15
         .= Shift(IncAddr(G,k),k).il.(S,m+k) by A11,Def16
         .= halt S by A5,A9,A10,FUNCT_4:14;
       then G.il.(S,m) = halt S by A13,Th35;
@@ -2820,7 +2873,8 @@ registration
   S be realistic halting steady-programmed IC-good Exec-preserving
   (regular standard (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N))),
-  F, G be closed lower non empty (NAT-defined FinPartState of S);
+  F, G be closed lower non empty (NAT-defined
+  (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> closed;
   coherence
   proof
@@ -2836,24 +2890,24 @@ A5: dom Shift(IncAddr(G,k),k) =
     {il.(S,m+k) where m is Element of NAT: il.(S,m) in dom IncAddr(G,k)}
     by Def16;
     let x be set;
-    assume x in NIC(pi(P,f),f);
+    assume x in NIC(P/.f,f);
     then consider s2 being Element of product the Object-Kind of S
     such that
 A6: x = IC Following(ProgramPart s2,s2) and
 A7: IC s2 = f and
-A8: (ProgramPart s2)/.f = pi(P,f);
-A9: pi(P,f) = P.f by A1,AMI_1:def 47;
+A8: (ProgramPart s2)/.f = P/.f;
+A9: P/.f = P.f by A1,PARTFUN1:def 8;
     per cases by A1,A2,XBOOLE_0:def 3;
     suppose
 A10:  f in dom CutLastLoc F;
       then
-A11:  NIC(pi(F,f),f) c= dom F by A4,AMISTD_1:def 17;
+A11:  NIC(F/.f,f) c= dom F by A4,AMISTD_1:def 17;
 X:  (ProgramPart s2)/.f = s2.f by AMI_1:150;
       not f in dom Shift(IncAddr(G,k),k) by A3,A10,XBOOLE_0:def 4;
-      then s2.f = (CutLastLoc F).f by A8,A9,FUNCT_4:12,X
+      then s2.f = (CutLastLoc F).f by A8,A9,X,FUNCT_4:12
         .= F.f by A10,GRFUNC_1:8
-        .= pi(F,f) by A4,A10,AMI_1:def 47;
-      then IC Following(ProgramPart s2,s2) in NIC(pi(F,f),f) by A7,X;
+        .= F/.f by A4,A10,PARTFUN1:def 8;
+      then IC Following(ProgramPart s2,s2) in NIC(F/.f,f) by A7,X;
       then
 A12:  x in dom F by A6,A11;
       dom F c= dom P by Th53;
@@ -2866,12 +2920,12 @@ A14:  f = il.(S,m+k) and
 A15:  il.(S,m) in dom IncAddr(G,k) by A5;
 A16:  il.(S,m) in dom G by A15,Def15;
       then
-A17:  NIC(pi(G,il.(S,m)),il.(S,m)) c= dom G by AMISTD_1:def 17;
+A17:  NIC(G/.il.(S,m),il.(S,m)) c= dom G by AMISTD_1:def 17;
 A18:  ObjectKind IC S = NAT by AMI_1:def 11;
       reconsider v = IC S .--> il.(S,m) as FinPartState of S
       by A18,AMI_1:59;
       set s1 = s2 +* v;
-A19:  pi(P,f) = Shift(IncAddr(G,k),k).f by A9,A13,FUNCT_4:14
+A19:  P/.f = Shift(IncAddr(G,k),k).f by A9,A13,FUNCT_4:14
         .= IncAddr(G,k).il.(S,m) by A14,A15,Def16;
 A20:  (IC S .--> il.(S,m)).IC S = il.(S,m) by FUNCOP_1:87;
 A21:  IC S in {IC S} by TARSKI:def 1;
@@ -2907,13 +2961,13 @@ A28:      not a in dom (IC S .--> (IC s1 + (k,S))) by A25,TARSKI:def 1;
         end;
       end;
       then
-A29:  s2 = s1 +* (IC S .--> (IC s1 + (k,S))) by A24,FUNCT_1:9,X;
-      set s3 = s1 +* (il.(S,m) .--> pi(G,il.(S,m)));
-A30:  dom (il.(S,m) .--> pi(G,il.(S,m))) = {il.(S,m)} by FUNCOP_1:19;
+A29:  s2 = s1 +* (IC S .--> (IC s1 + (k,S))) by A24,X,FUNCT_1:9;
+      set s3 = s1 +* (il.(S,m) .--> G/.il.(S,m));
+A30:  dom (il.(S,m) .--> G/.il.(S,m)) = {il.(S,m)} by FUNCOP_1:19;
       then
-A31:  il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by TARSKI:def 1;
+A31:  il.(S,m) in dom (il.(S,m) .--> G/.il.(S,m)) by TARSKI:def 1;
       now
-        assume IC S in dom (il.(S,m) .--> pi(G,il.(S,m)));
+        assume IC S in dom (il.(S,m) .--> G/.il.(S,m));
         then reconsider l=IC S as Element of NAT
         by A30,TARSKI:def 1;
         l=IC S;
@@ -2922,37 +2976,37 @@ A31:  il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by TARSKI:def 1;
       then
 A32:  IC s3 = s1.IC S by FUNCT_4:12
         .= il.(S,m) by A20,A21,A22,FUNCT_4:14;
-A33:  s3.il.(S,m) = (il.(S,m) .--> pi(G,il.(S,m))).il.(S,m) by A31,FUNCT_4:14
-        .= pi(G,il.(S,m)) by FUNCOP_1:87;
+A33:  s3.il.(S,m) = (il.(S,m) .--> G/.il.(S,m)).il.(S,m) by A31,FUNCT_4:14
+        .= G/.il.(S,m) by FUNCOP_1:87;
 X:    (ProgramPart s3)/.il.(S,m) = s3.il.(S,m) by AMI_1:150;
 A34:  dom s1 = the carrier of S by PARTFUN1:def 4;
 A35:  dom s3 = the carrier of S by PARTFUN1:def 4;
       for x being set st x in dom s1 \ NAT holds s1.x = s3.x
       proof
         let x be set;
-A36:    dom (il.(S,m) .--> pi(G,il.(S,m))) c= NAT by RELAT_1:def 18;
+A36:    dom (il.(S,m) .--> G/.il.(S,m)) c= NAT by RELAT_1:def 18;
         assume x in dom s1 \ NAT;
-        then not x in dom (il.(S,m) .--> pi(G,il.(S,m)))
+        then not x in dom (il.(S,m) .--> G/.il.(S,m))
         by A36,XBOOLE_0:def 5;
         hence thesis by FUNCT_4:12;
       end;
       then s1|(dom s1 \ NAT) = s3|(dom s3 \ NAT) by A34,A35,FUNCT_1:165;
       then s1, s3 equal_outside NAT by FUNCT_7:def 2;
       then
-A37:  Exec(pi(G,il.(S,m)),s1), Exec(pi(G,il.(S,m)),s3)
+A37:  Exec(G/.il.(S,m),s1), Exec(G/.il.(S,m),s3)
       equal_outside NAT by Def19;
       reconsider s3 as Element of product the Object-Kind of S by PBOOLE:155;
       reconsider k,m as Element of NAT;
-A38:  x = IC Exec(IncAddr(pi(G,il.(S,m)),k),s2) by A6,A7,A8,A16,A19,Def15
-        .= IC Exec(pi(G,il.(S,m)), s1) + (k,S) by A29,Def17
-        .= il.(S,locnum(IC Exec(pi(G,il.(S,m)), s3),S) + k) by A37,AMI_1:121;
+A38:  x = IC Exec(IncAddr(G/.il.(S,m),k),s2) by A6,A7,A8,A16,A19,Def15
+        .= IC Exec(G/.il.(S,m), s1) + (k,S) by A29,Def17
+        .= il.(S,locnum(IC Exec(G/.il.(S,m), s3),S) + k) by A37,AMI_1:121;
       IC Following(ProgramPart s3,s3)
-       = il.(S,locnum(IC Exec(pi(G,il.(S,m)), s3),S))
-      by A32,A33,AMISTD_1:def 13,X;
-then il.(S,locnum(IC Exec(pi(G,il.(S,m)), s3),S)) in NIC(pi(G,il.(S,m)),il.(S
+       = il.(S,locnum(IC Exec(G/.il.(S,m), s3),S))
+      by A32,A33,X,AMISTD_1:def 13;
+then il.(S,locnum(IC Exec(G/.il.(S,m), s3),S)) in NIC(G/.il.(S,m),il.(S
       ,m)) by A32,A33,X;
-      then il.(S,locnum(IC Exec(pi(G,il.(S,m)), s3),S)) in dom G by A17;
-      then il.(S,locnum(IC Exec(pi(G,il.(S,m)), s3),S)) in dom IncAddr(G,k) by
+      then il.(S,locnum(IC Exec(G/.il.(S,m), s3),S)) in dom G by A17;
+      then il.(S,locnum(IC Exec(G/.il.(S,m), s3),S)) in dom IncAddr(G,k) by
 Def15;
       then x in dom Shift(IncAddr(G,k),k) by A5,A38;
       hence thesis by A2,XBOOLE_0:def 3;
@@ -2980,10 +3034,10 @@ A3: x in {il.(S,0)};
     then
 A4: x = il.(S,0) by TARSKI:def 1;
     then
-A5: pi(Stop S,il.(S,0)) = (Stop S).il.(S,0) by A2,A3,AMI_1:def 47
+A5: (Stop S)/.il.(S,0) = (Stop S).il.(S,0) by A2,A3,PARTFUN1:def 8
       .= halt S by FUNCOP_1:87;
     thus IncAddr(Stop S, k).x
-    = IncAddr(pi(Stop S,il.(S,0)),k) by A2,A3,A4,Def15
+    = IncAddr((Stop S)/.il.(S,0),k) by A2,A3,A4,Def15
       .= halt S by A5,Th29
       .= (Stop S).x by A4,FUNCOP_1:87;
   end;
@@ -3263,10 +3317,10 @@ A44:    card G - 1 > 1 - 1 by XREAL_1:11;
         card CutLastLoc G <> {} by A44,Th49;
         then
 A46:    il.(S,0) in dom CutLastLoc G by AMISTD_1:49,CARD_1:47;
-A47:    pi(G,il.(S,0)) = G.il.(S,0) by A35,AMI_1:def 47
+A47:    G/.il.(S,0) = G.il.(S,0) by A35,PARTFUN1:def 8
           .= (CutLastLoc G).il.(S,0) by A46,GRFUNC_1:8
           .= (G ';' H).il.(S,0) by A45,FUNCT_4:12
-          .= pi(G ';' H,il.(S,0)) by A36,AMI_1:def 47;
+          .= (G ';' H)/.il.(S,0) by A36,PARTFUN1:def 8;
         thus (F ';' G ';' H).x = ((F ';' G) \
         ( LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))).x by A31,
 FUNCT_4:12
@@ -3274,7 +3328,7 @@ FUNCT_4:12
 GRFUNC_1:93
           .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A40,FUNCT_4:14
           .= IncAddr(G,card F -' 1).il.(S,0) by A34,A38,A39,Def16
-          .= IncAddr(pi(G ';' H,il.(S,0)),card F -' 1) by A35,A47,Def15
+          .= IncAddr((G ';' H)/.il.(S,0),card F -' 1) by A35,A47,Def15
           .= IncAddr(G ';' H,card F -' 1).il.(S,0) by A36,Def15
           .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
         by A33,A38,A39,Def16
@@ -3367,9 +3421,9 @@ A68:      m = k -' (card F -' 1) - (card G -' 1)
           <= card F + card G - 3 - (card F + card G - 2) by A49,XREAL_1:11;
           hence contradiction by A68,Lm1;
         end;
-A69:    pi(G ';' H,il.(S,k -' (card F -' 1)))
+A69:    (G ';' H)/.il.(S,k -' (card F -' 1))
         = (CutLastLoc G +* Shift(IncAddr(H,card G -' 1),card G -' 1))
-        .il.(S,k -' (card F -' 1)) by A58,AMI_1:def 47
+        .il.(S,k -' (card F -' 1)) by A58,PARTFUN1:def 8
           .= (CutLastLoc G).il.(S,k -' (card F -' 1)) by A66,FUNCT_4:12
           .= G.il.(S,k -' (card F -' 1)) by A57,GRFUNC_1:8;
         thus (F ';' G ';' H).x
@@ -3379,10 +3433,10 @@ A69:    pi(G ';' H,il.(S,k -' (card F -' 1)))
 GRFUNC_1:93
           .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A65,FUNCT_4:14
           .= IncAddr(G,card F -' 1).il.(S,k -' (card F -' 1)) by A52,A64,Def16
-          .= IncAddr(pi(G,il.(S,k -' (card F -' 1))),card F -' 1)
+          .= IncAddr(G/.il.(S,k -' (card F -' 1)),card F -' 1)
         by A57,A63,Def15
-          .= IncAddr(pi(G ';' H,il.(S,k -' (card F -' 1))),card F -' 1)
-        by A57,A63,A69,AMI_1:def 47
+          .= IncAddr((G ';' H)/.il.(S,k -' (card F -' 1)),card F -' 1)
+        by A57,A63,A69,PARTFUN1:def 8
           .= IncAddr(G ';' H,card F -' 1).il.(S,k -' (card F -' 1))
         by A58,Def15
           .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A52,A59,Def16
@@ -3415,26 +3469,26 @@ A77:    il.(S,card G -' 1) in dom IncAddr(G ';' H,card F -' 1) by Def15;
         then
 A78:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A75;
 A79:    il.(S,0) in dom H by AMISTD_1:49;
-A80:    pi(G ';' H,il.(S,card G -' 1)) = (G ';' H).il.(S,card G -' 1)
-        by A76,AMI_1:def 47;
+A80:    (G ';' H)/.il.(S,card G -' 1) = (G ';' H).il.(S,card G -' 1)
+        by A76,PARTFUN1:def 8;
 A81:    il.(S,0) in dom IncAddr(H,card G -' 1) by AMISTD_1:49;
         then
-A82:    pi(IncAddr(H,card G -' 1),il.(S,0))
-        = IncAddr(H,card G -' 1).il.(S,0) by AMI_1:def 47
-          .= IncAddr(pi(H,il.(S,0)),(card G -' 1)) by A79,Def15;
-        pi(G ';' H,il.(S,card G -' 1))
+A82:    IncAddr(H,card G -' 1)/.il.(S,0)
+        = IncAddr(H,card G -' 1).il.(S,0) by PARTFUN1:def 8
+          .= IncAddr(H/.il.(S,0),(card G -' 1)) by A79,Def15;
+        (G ';' H)/.il.(S,card G -' 1)
         = (G ';' H).LastLoc G by A80,AMISTD_1:55
           .= IncAddr(H,card G -' 1).il.(S,0) by Th55
-          .= pi(IncAddr(H,card G -' 1),il.(S,0)) by A81,AMI_1:def 47;
+          .= IncAddr(H,card G -' 1)/.il.(S,0) by A81,PARTFUN1:def 8;
         then
-A83:    IncAddr(pi(G ';' H,il.(S,card G -' 1)),card F -' 1)
-        = IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A15,A82,Th37;
+A83:    IncAddr((G ';' H)/.il.(S,card G -' 1),card F -' 1)
+        = IncAddr(H/.il.(S,0),card (F ';' G) -' 1) by A15,A82,Th37;
         thus (F ';' G ';' H).x
         = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
         by A74,FUNCT_4:14
           .= IncAddr(H,card (F ';' G) -' 1).il.(S,k -' (card (F ';' G) -' 1))
         by A71,A73,Def16
-          .= IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A72,A79,Def15
+          .= IncAddr(H/.il.(S,0),card (F ';' G) -' 1) by A72,A79,Def15
           .= IncAddr(G ';' H,card F -' 1).il.(S,card G -' 1) by A76,A83,Def15
           .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A75,A77,Def16
           .= (F ';' (G ';' H)).x by A78,FUNCT_4:14;
@@ -3507,23 +3561,23 @@ A104:   k -' (card F -' 1) -' (card G -' 1)
 ,XXREAL_0:2
           .= k - ((card F -' 1) + (card G -' 1))
           .= k -' (card (F ';' G) -' 1) by A14,A15,A84,XREAL_1:235;
-A105:   pi(G ';' H,il.(S,k -' (card F -' 1)))
+A105:   (G ';' H)/.il.(S,k -' (card F -' 1))
         = ((CutLastLoc G) +* Shift(IncAddr(H,card G -' 1),card G -' 1)).
-        il.(S,k -' (card F -' 1)) by A95,AMI_1:def 47
+        il.(S,k -' (card F -' 1)) by A95,PARTFUN1:def 8
 .= Shift(IncAddr(H,card G -' 1),card G -' 1).il.(S,k -' (card F -' 1))
         by A103,FUNCT_4:14
 .= IncAddr(H,card G -' 1).il.(S,k -' (card (F ';' G) -' 1)) by A101,A102,A104
 ,Def16
-          .= IncAddr(pi(H,il.(S,k -' (card (F ';' G) -' 1))),card G -' 1)
+          .= IncAddr(H/.il.(S,k -' (card (F ';' G) -' 1)),card G -' 1)
         by A86,Def15;
         thus (F ';' G ';' H).x
         = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
         by A88,FUNCT_4:14
           .= IncAddr(H,card (F ';' G) -' 1).il.(S,k -' (card (F ';' G) -' 1))
         by A85,A87,Def16
-.= IncAddr(pi(H,il.(S,k -' (card (F ';' G) -' 1))),card (F ';' G) -' 1)
+.= IncAddr(H/.il.(S,k -' (card (F ';' G) -' 1)),card (F ';' G) -' 1)
         by A86,Def15
-          .= IncAddr(pi(G ';' H,il.(S,k -' (card F -' 1))),card F -' 1)
+          .= IncAddr((G ';' H)/.il.(S,k -' (card F -' 1)),card F -' 1)
         by A15,A105,Th37
           .= IncAddr(G ';' H,card F -' 1).il.(S,k -' (card F -' 1))
         by A95,Def15
@@ -3706,10 +3760,10 @@ A16: Exec(i,s), Exec(i,s+*p) equal_outside I by Def19;
 A17: (Exec(i,s) +* p) | (D \/ {IC S})
   = Exec(i,s) | (D \/ {IC S}) by A15,FUNCT_4:76
     .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A10,A16,FUNCT_7:def 2;
-A18: Exec (i, s +* p)|I = (s +* p)|I by AMI_1:117
-    .= s|I +* p|I by FUNCT_4:75
-    .= Exec (i,s)|I +* p|I by AMI_1:117
-    .= (Exec (i, s) +* p)|I by FUNCT_4:75;
+A18: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by AMI_1:117
+    .= ProgramPart s +* ProgramPart p by FUNCT_4:75
+    .= ProgramPart Exec (i,s) +* ProgramPart p by AMI_1:117
+    .= ProgramPart (Exec (i, s) +* p) by FUNCT_4:75;
   thus Exec (i, s +* p)
   = Exec (i, s +* p)| ({IC S} \/ D \/ I) by A5,A11,RELAT_1:98
     .= (Exec (i, s) +* p)| ({IC S} \/ D)
@@ -3892,11 +3946,11 @@ A4: not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
 end;
 
 theorem Th74:
-  for p being NAT-defined FinPartState of S,
+  for p being NAT-defined (the Instructions of S)-valued FinPartState of S,
   l being Element of NAT st l in dom p holds
-  IncAddr(p,k).l = IncAddr(pi(p,l),k)
+  IncAddr(p,k).l = IncAddr(p/.l,k)
 proof
-  let p be NAT-defined FinPartState of S,
+  let p be NAT-defined (the Instructions of S)-valued FinPartState of S,
   l be Element of NAT such that
 A1: l in dom p;
   ex m being natural number st l = il.(S,m) by AMISTD_1:26;
@@ -3904,10 +3958,10 @@ A1: l in dom p;
 end;
 
 theorem Th75:
-  for p being NAT-defined FinPartState of S holds
-  Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i)
+  for p being NAT-defined (the Instructions of S)-valued FinPartState of S
+  holds Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i)
 proof
-  let p be NAT-defined FinPartState of S;
+  let p be NAT-defined (the Instructions of S)-valued FinPartState of S;
   set f = Shift(IncAddr(p,i),i);
   set g = IncAddr(Shift(p,i),i);
   dom(IncAddr(p,i)) = dom p by Def15;
@@ -3935,12 +3989,12 @@ A7: il.(S,m) in dom p by A5,Def15;
     then
 A8: x9 in dom Shift(p,i) by A4,A7;
     reconsider mm=il.(S,m) as Element of NAT;
-A9: pi(p,mm) = p.(il.(S,m)) by A7,AMI_1:def 47
+A9: p/.mm = p.(il.(S,m)) by A7,PARTFUN1:def 8
       .= Shift(p,i).(il.(S,m)+(i,S)) by A7,Th65
       .= Shift(p,i).(il.(S,m+i)) by AMISTD_1:def 13
-      .= pi(Shift(p,i),xx) by A4,A8,AMI_1:def 47;
+      .= Shift(p,i)/.xx by A4,A8,PARTFUN1:def 8;
     thus f.x = IncAddr(p,i).(il.(S,m)) by A5,A6,Th65
-      .= IncAddr(pi(Shift(p,i),xx),i) by A7,A9,Th74
+      .= IncAddr(Shift(p,i)/.xx,i) by A7,A9,Th74
       .= g.x by A8,Th74;
   end;
   hence thesis by A1,FUNCT_1:9;
@@ -3976,8 +4030,8 @@ A8: I = (ProgramPart g).il by A2,A3,A4,GRFUNC_1:8;
     .= (IncAddr(Shift(ProgramPart(g),k),k)).(il+(k,S)) by A1,Th69
     .= (Shift(IncAddr(ProgramPart(g),k),k)).(il+(k,S)) by Th75
     .= (IncAddr(ProgramPart(g),k)).il by A7,Th65
-    .= IncAddr(pi(ProgramPart(g), ii),k) by A2,Th74
-    .= IncAddr(I,k) by A2,A8,AMI_1:def 47;
+    .= IncAddr((ProgramPart g)/.ii,k) by A2,Th74
+    .= IncAddr(I,k) by A2,A8,PARTFUN1:def 8;
 end;
 
 theorem

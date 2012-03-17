@@ -31,8 +31,8 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRAF" nr="2">
@@ -43,9 +43,9 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="93"/>
-<Adjective nr="94"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 <FCluster aid="DIRAF" nr="1">
@@ -61,7 +61,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 </Registrations>

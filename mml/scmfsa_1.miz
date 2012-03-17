@@ -8,21 +8,21 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, AMI_2, XBOOLE_0, TARSKI, CARD_1, FINSEQ_1,
       ZFMISC_1, RELAT_1, AMI_1, ORDINAL1, MCART_1, XXREAL_0, FUNCT_1, FUNCOP_1,
-      FUNCT_4, AMI_3, INT_1, CARD_3, PBOOLE, NAT_1, PARTFUN1, COMPLEX1,
-      FINSEQ_2, FUNCT_2, FUNCT_5, SCMFSA_1;
+      FUNCT_4, INT_1, CARD_3, PBOOLE, NAT_1, PARTFUN1, COMPLEX1,
+      FINSEQ_2, FUNCT_2, FUNCT_5, SCMFSA_1, GROUP_9;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       NAT_1, MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       BINOP_1, INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSEQ_2, CARD_3, FUNCOP_1,
-      FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7, XXREAL_0;
+      FINSEQ_4, AMI_2, FUNCT_7, XXREAL_0, GROUP_9;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, INT_2, FINSEQ_4, FINSOP_1, PBOOLE,
-      CAT_2, AMI_3, REAL_1, WELLORD2, RELSET_1, AMI_2;
+      CAT_2, REAL_1, WELLORD2, RELSET_1, AMI_2, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, PBOOLE, GR_CY_1, AMI_2, AMI_3,
-      AFINSQ_1, RELAT_1, FINSET_1, CARD_1, AMI_1, CARD_2;
+      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, PBOOLE, GR_CY_1, AMI_2,
+      AFINSQ_1, RELAT_1, FINSET_1, CARD_1, CARD_2, RELSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
- definitions TARSKI, FUNCOP_1, CARD_1, AMI_2, FINSEQ_1;
+ definitions TARSKI, FUNCOP_1, CARD_1, AMI_2, FINSEQ_1, RELAT_1;
  theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, INT_1, CARD_3, FINSEQ_1,
-      FINSEQ_4, MCART_1, FUNCT_4, RELAT_1, FUNCT_1, AMI_3, AMI_5, FINSEQ_2,
+      FINSEQ_4, MCART_1, FUNCT_4, RELAT_1, FUNCT_1, FINSEQ_2,
       PRE_CIRC, AMI_2, FUNCT_7, RELSET_1, ORDINAL1, XBOOLE_0, XBOOLE_1,
       NUMBERS, CARD_1, PARTFUN1, NAT_1, FUNCT_5;
  schemes BINOP_1;
@@ -144,7 +144,7 @@ W: x = [K,<*c1,f1*>] & K in {11,12};
 
 registration
   let I be Element of SCM+FSA-Instr;
-  cluster InsCode I -> natural;
+  cluster I`1 -> natural;
   coherence
   proof
 W: SCM+FSA-Instr c= [:NAT,proj2 SCM+FSA-Instr:] by LmX;
@@ -156,11 +156,11 @@ W: SCM+FSA-Instr c= [:NAT,proj2 SCM+FSA-Instr:] by LmX;
 end;
 
 theorem Th3:
-  for I being Element of SCM+FSA-Instr st InsCode I <= 8 holds I in
+  for I being Element of SCM+FSA-Instr st I`1 <= 8 holds I in
   SCM-Instr
 proof
   let I be Element of SCM+FSA-Instr such that
-A1: InsCode I <= 8;
+A1: I`1 <= 8;
 A2: now
     assume
     I in { [K,<*c1,f1*>] : K in {11,12} };
@@ -296,12 +296,11 @@ A18:      (SCM-OK|NAT).u = e by FUNCT_1:def 5;
         by RELAT_1:46
           .= NAT by A16,RELAT_1:91;
         then not z in NAT by A12,XBOOLE_0:def 5;
-        then z in {IC SCM} \/ SCM-Data-Loc by A15,AMI_3:def 1,AMI_5:23
-,XBOOLE_0:def 3;
+        then z in {NAT} \/ SCM-Data-Loc by A15,XBOOLE_0:def 3;
         then
-A19:    z in {IC SCM} or z in SCM-Data-Loc by XBOOLE_0:def 3;
+A19:    z in {NAT} or z in SCM-Data-Loc by XBOOLE_0:def 3;
         now
-          per cases by A19,AMI_3:4,TARSKI:def 1;
+          per cases by A19,TARSKI:def 1;
           suppose
             z = NAT;
             then y = NAT by A14,AMI_2:7,30;
@@ -429,12 +428,12 @@ end;
 theorem Th10:
   SCM+FSA-OK.b = INT
 proof
-A1: b in SCM-Data-Loc;
+ b in SCM-Data-Loc;
   then b in SCM-Memory;
   then
 A2: b in dom SCM-OK by FUNCT_2:def 1;
-  b is Data-Location by A1,AMI_3:def 1,def 2;
-  then b is not Element of NAT by AMI_5:22;
+    ex x,y being set st x in {1} & y in NAT & b = [x,y] by ZFMISC_1:103;
+  then b is not Element of NAT;
   then not b in dom((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|NAT)) by Lm1;
   hence SCM+FSA-OK.b = ((SCM+FSA-Memory --> INT*) +* SCM-OK).b by FUNCT_4:12
     .= SCM-OK.b by A2,FUNCT_4:14
@@ -615,6 +614,28 @@ XBOOLE_0:def 3;
   hence thesis by A2,XBOOLE_0:def 3;
 end;
 
+registration
+ cluster SCM-OK -> non-empty;
+ coherence
+  proof
+A:  rng SCM-OK c= {INT} \/ { SCM-Instr, NAT } by RELAT_1:def 19;
+   assume {} in rng SCM-OK;
+    then {} in {INT} or {} in { SCM-Instr, NAT } by A,XBOOLE_0:def 3;
+    then {} = INT or {} = SCM+FSA-Instr or {} = NAT by TARSKI:def 1,def 2;
+   hence contradiction;
+  end;
+ cluster SCM+FSA-OK -> non-empty;
+ coherence
+  proof
+A:  rng SCM+FSA-OK c= {INT,INT*} \/ { SCM+FSA-Instr, NAT } by RELAT_1:def 19;
+   assume {} in rng SCM+FSA-OK;
+    then {} in {INT,INT*} or {} in { SCM+FSA-Instr, NAT } by A,XBOOLE_0:def 3;
+    then {} = INT or {} = INT* or {} = SCM+FSA-Instr or {} = NAT
+         by TARSKI:def 2;
+   hence contradiction;
+  end;
+end;
+
 definition
   mode SCM+FSA-State is Element of product SCM+FSA-OK;
 end;
@@ -636,22 +657,21 @@ A4: NAT = dom(NAT --> I) by FUNCOP_1:19;
     then
 A5: x in SCM-Memory by FUNCT_2:def 1;
     then
-A6: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by AMI_3:def 1,AMI_5:23
-,XBOOLE_0:def 3;
+A6: x in {NAT} \/ SCM-Data-Loc or x in NAT by XBOOLE_0:def 3;
     per cases by A6,XBOOLE_0:def 3;
     suppose
-A7:   x in {IC SCM};
-      then not x in NAT by AMI_3:4,TARSKI:def 1;
+A7:   x in {NAT};
+      then not x in NAT by TARSKI:def 1;
       then
 A8:   (s|SCM-Memory +* (NAT --> I)).x = (s|SCM-Memory).x by A4,FUNCT_4:12
         .= s.x by A2,A5,FUNCT_1:70;
       reconsider a = x as Element of SCM+FSA-Memory by A5,Th1;
 A9:   s.a in pi(product SCM+FSA-OK,a) by CARD_3:def 6;
-A10:  x = IC SCM by A7,TARSKI:def 1;
+A10:  x = NAT by A7,TARSKI:def 1;
       dom SCM+FSA-OK = SCM+FSA-Memory by FUNCT_2:def 1;
-      then pi(product SCM+FSA-OK,a) = NAT by A10,Th9,AMI_3:4,CARD_3:22;
-      hence (s|SCM-Memory +* (NAT --> I)).x in SCM-OK.x by A10,A8,A9,AMI_2:7,30
-,AMI_3:4;
+      then pi(product SCM+FSA-OK,a) = NAT by A10,Th9,CARD_3:22;
+      hence (s|SCM-Memory +* (NAT --> I)).x in SCM-OK.x
+       by A10,A8,A9,AMI_2:7,30;
     end;
     suppose
 A11:  x in SCM-Data-Loc;
@@ -694,7 +714,7 @@ proof
 A1: dom SCM+FSA-OK = SCM+FSA-Memory by FUNCT_2:def 1;
   then reconsider
   f = SCM+FSA-OK as non-empty ManySortedSet of SCM+FSA-Memory by PARTFUN1:def 4
-,RELAT_1:def 18;
+;
 A2: dom s9 = dom SCM-OK by CARD_3:18
     .= SCM-Memory by FUNCT_2:def 1;
   now
@@ -702,18 +722,17 @@ A2: dom s9 = dom SCM-OK by CARD_3:18
     assume
 A3: x in dom s9;
     then
-A4: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by A2,AMI_3:def 1,AMI_5:23
-,XBOOLE_0:def 3;
+A4: x in {NAT} \/ SCM-Data-Loc or x in NAT by A2,XBOOLE_0:def 3;
     per cases by A4,XBOOLE_0:def 3;
     suppose
-A5:   x in {IC SCM};
+A5:   x in {NAT};
       reconsider a = x as Element of SCM-Memory by A2,A3;
 A6:   s9.a in pi(product SCM-OK,a) by CARD_3:def 6;
-A7:   x = IC SCM by A5,TARSKI:def 1;
+A7:   x = NAT by A5,TARSKI:def 1;
       dom SCM-OK = SCM-Memory by FUNCT_2:def 1;
       then pi(product SCM-OK,a) = SCM-OK.a by CARD_3:22
-        .= NAT by A7,AMI_2:7,AMI_3:4;
-      hence s9.x in f.x by A5,A6,Th9,AMI_3:4,TARSKI:def 1;
+        .= NAT by A7,AMI_2:7;
+      hence s9.x in f.x by A5,A6,Th9,TARSKI:def 1;
     end;
     suppose
 A8:   x in SCM-Data-Loc;
@@ -1023,20 +1042,20 @@ definition
   func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
   ex x9 being Element of
   SCM-Instr, s9 being SCM-State st x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
-it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if InsCode x <= 8, ex i being Integer, k
+it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if x`1 <= 8, ex i being Integer, k
   st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k & it = SCM+FSA-Chg(
-  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if InsCode x = 9, ex f being
+  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if x`1 = 9, ex f being
 FinSequence of INT,k st k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(
   x int_addr1)) & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s) if
-InsCode x = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
-)),succ IC s) if InsCode x = 11, ex f being FinSequence of INT,k st k = abs(s.(
+x`1 = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
+)),succ IC s) if x`1 = 11, ex f being FinSequence of INT,k st k = abs(s.(
   x int_addr3)) & f = k |-> 0 & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),
-  succ IC s) if InsCode x = 12 otherwise it = s;
+  succ IC s) if x`1 = 12 otherwise it = s;
   existence
   proof
     hereby
       assume
-      InsCode x <= 8;
+      x`1 <= 8;
       then reconsider x9 = x as Element of SCM-Instr by Th3;
       reconsider s9 = s|SCM-Memory +* (NAT --> x9) as SCM-State by Th18;
       reconsider s1 = s +* SCM-Exec-Res(x9,s9) +* s|NAT as SCM+FSA-State by
@@ -1049,7 +1068,7 @@ Th19;
     hereby
       reconsider k = abs(s.(x int_addr2)) as Element of NAT;
       assume
-      InsCode x = 9;
+      x`1 = 9;
       reconsider i = (s.(x coll_addr1))/.k as Integer;
       take s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr1,i),succ IC s);
       take i,k;
@@ -1059,7 +1078,7 @@ Th19;
     hereby
       reconsider k = abs(s.(x int_addr2)) as Element of NAT;
       assume
-      InsCode x = 10;
+      x`1 = 10;
       per cases;
       suppose
 A1:     k in dom( s.(x coll_addr1));
@@ -1097,12 +1116,12 @@ A3:     not k in dom( s.(x coll_addr1));
         thus s1 = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s);
       end;
     end;
-    thus InsCode x = 11 implies ex s1 being SCM+FSA-State st s1 = SCM+FSA-Chg(
+    thus x`1 = 11 implies ex s1 being SCM+FSA-State st s1 = SCM+FSA-Chg(
     SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2))),succ IC s);
     hereby
       reconsider k = abs(s.(x int_addr3)) as Element of NAT;
       assume
-      InsCode x = 12;
+      x`1 = 12;
       0 in INT by INT_1:def 2;
       then
 A4:   {0} c= INT by ZFMISC_1:37;
@@ -1122,11 +1141,14 @@ A4:   {0} c= INT by ZFMISC_1:37;
 end;
 
 definition
-  func SCM+FSA-Exec -> Function of SCM+FSA-Instr, Funcs(product SCM+FSA-OK,
-  product SCM+FSA-OK) means
+  let A be set, B be non empty set;
+  mode Action of A,B is Function of A, Funcs(B,B);
+end;
+
+definition
+  func SCM+FSA-Exec -> Action of SCM+FSA-Instr, product SCM+FSA-OK means
   for x being Element of SCM+FSA-Instr, y being
-  SCM+FSA-State holds (it.x qua Element of Funcs(product SCM+FSA-OK, product
-  SCM+FSA-OK)).y = SCM+FSA-Exec-Res(x,y);
+  SCM+FSA-State holds (it.x).y = SCM+FSA-Exec-Res(x,y);
   existence
   proof
     deffunc U(Element of SCM+FSA-Instr, SCM+FSA-State) = SCM+FSA-Exec-Res($1,

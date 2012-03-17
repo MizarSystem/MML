@@ -19,7 +19,7 @@ environ
       XREAL_0, INT_1, CARD_3, AMI_1, AMI_2, XXREAL_0, FUNCT_1, FINSEQ_1,
       FUNCT_2, RELSET_1, PBOOLE;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, FUNCOP_1, AMI_2, CARD_1, NAT_1, FINSEQ_1;
+ definitions RELAT_1, AMI_1, FUNCOP_1, AMI_2, CARD_1, NAT_1, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, AMI_2, FUNCOP_1, FUNCT_4, AMI_1, CARD_3,
       FUNCT_2, MCART_1, INT_1, STRUCT_0, ORDINAL1, XBOOLE_0,
       XBOOLE_1, FUNCT_7, ARYTM_3, XXREAL_0, NAT_1, RELAT_1, FINSEQ_1, FUNCT_1,
@@ -51,14 +51,17 @@ S:   SCM-Instr c= [: NAT,proj2 SCM-Instr:] by AMI_2:34;
   end;
 end;
 
-canceled;
-
-theorem Th2:
-  SCM is definite
-proof
-  let l be Element of NAT;
-  thus thesis by AMI_2:11;
+registration
+ cluster NAT-defined -> (the carrier of SCM)-defined Function;
+ coherence
+  proof let F be Function;
+   assume
+Z:  dom F c= NAT;
+   thus dom F c= the carrier of SCM by Z,XBOOLE_1:1;
+  end;
 end;
+
+canceled 2;
 
 registration
   cluster SCM -> IC-Ins-separated definite;
@@ -66,7 +69,9 @@ registration
   proof
     IC SCM = NAT by AMI_2:30,FUNCT_7:def 1;
     then ObjectKind IC SCM = NAT by AMI_2:def 5;
-    hence thesis by Th2,AMI_1:def 11;
+    hence SCM is IC-Ins-separated by AMI_1:def 11;
+  let l be Element of NAT;
+  thus thesis by AMI_2:11;
   end;
 end;
 
@@ -760,7 +765,6 @@ XBOOLE_0:def 3;
       I in { [Y,<*a3*>] : Y = 6 };
       then consider Y, a3 such that
 A2:   I = [Y,<*a3*>] & Y = 6;
-:::      reconsider loc = a3 as Element of NAT by AMI_1:def 4;
       I = SCM-goto a3 by A2;
       hence thesis;
     end;
@@ -1137,8 +1141,7 @@ theorem
 b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I = SubFrom(a,b)) or
   (ex a,b st I = MultBy(a,b)) or (ex a,b st I = Divide(a,b)) or (ex loc st I =
 SCM-goto loc) or (ex a,loc st I = a=0_goto loc) or
- ex a,loc st I = a>0_goto loc by
-Lm11;
+ ex a,loc st I = a>0_goto loc by Lm11;
 
 theorem
   for I being Instruction of SCM st I is halting holds I = halt SCM by Lm12

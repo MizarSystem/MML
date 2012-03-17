@@ -66,9 +66,9 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="150"/>
-<Adjective nr="156"/>
-<Adjective nr="157"/>
+<Adjective nr="153"/>
+<Adjective nr="159"/>
+<Adjective nr="160"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN8" nr="2">
@@ -81,8 +81,8 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="152" value="false"/>
-<Adjective nr="153" value="false"/>
+<Adjective nr="155" value="false"/>
+<Adjective nr="156" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
@@ -103,9 +103,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="150"/>
-<Adjective nr="158"/>
-<Adjective nr="159"/>
+<Adjective nr="153"/>
+<Adjective nr="161"/>
+<Adjective nr="162"/>
 </Cluster>
 </FCluster>
 </Registrations>

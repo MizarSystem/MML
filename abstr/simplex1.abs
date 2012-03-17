@@ -1,0 +1,468 @@
+:: Sperner's Lemma
+::  by Karol P\c{a}k
+::
+:: Received February 9, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, ARYTM_3, XBOOLE_0, CARD_1, CARD_2, CLASSES1, COHSP_1,
+      COMPLEX1, CONVEX1, CONVEX2, CONVEX3, FINSEQ_1, FINSET_1, FUNCT_1,
+      MATROID0, MCART_1, ORDERS_1, PARTFUN1, PRE_TOPC, QC_LANG1, RELAT_1,
+      RLVECT_1, RLVECT_2, SEMI_AF1, SETFAM_1, SGRAPH1, SUBSET_1, TARSKI,
+      TOPS_1, ZFMISC_1, RLAFFIN1, RLAFFIN2, SIMPLEX0, SIMPLEX1, REAL_1,
+      FUNCOP_1, NAT_1, FUNCT_2, STRUCT_0, XXREAL_0, NUMBERS, ORDINAL1, CARD_3,
+      GLIB_000, FINSEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, NAT_1,
+      XXREAL_3, XXREAL_0, ORDERS_1, CARD_1, REAL_1, FINSET_1, SETFAM_1,
+      DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, RELSET_1, FINSEQ_1, STRUCT_0,
+      CLASSES1, RVSUM_1, RLVECT_1, RLVECT_2, CONVEX1, CONVEX2, CONVEX3,
+      PRE_TOPC, RLAFFIN1, FUNCOP_1, PENCIL_1, MATROID0, MCART_1, CARD_2,
+      COHSP_1, SIMPLEX0, RLAFFIN2;
+ constructors BINOP_2, CONVEX1, CONVEX3, REAL_1, RVSUM_1, SEQ_1, SETFAM_1,
+      RLAFFIN1, SIMPLEX0, TOPS_2, LEXBFS, XXREAL_2, BORSUK_1, COHSP_1, CARD_2,
+      REARRAN1, RLAFFIN2;
+ registrations CARD_1, FINSET_1, FUNCT_1, MEMBERED, NAT_1, RELAT_1, RLVECT_1,
+      STRUCT_0, SUBSET_1, VALUED_0, XCMPLX_0, XREAL_0, XXREAL_0, XBOOLE_0,
+      RLAFFIN1, SIMPLEX0, FUNCOP_1, INT_1, XXREAL_3, MATROID0, REALSET1,
+      SETFAM_1, COHSP_1, RLAFFIN2, RELSET_1, ZFMISC_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve x,y,X for set,
+        r,s for Real,
+        n,k for Nat;
+
+theorem :: SIMPLEX1:1
+  for R be Relation, C be Cardinal st
+      for x st x in X holds card Im(R,x) = C
+    holds card R = card(R|(dom R\X)) +` C*`card X;
+
+theorem :: SIMPLEX1:2
+  for Y be non empty finite set st card X = card Y+1
+    for f be Function of X,Y st f is onto
+      ex y st y in Y & card(f"{y}) = 2 &
+              for x st x in Y & x <> y holds card (f"{x})=1;
+
+definition
+  let X be 1-sorted;
+  mode SimplicialComplexStr of X is SimplicialComplexStr of the carrier of X;
+  mode SimplicialComplex of X is SimplicialComplex of the carrier of X;
+end;
+
+definition
+  let X be 1-sorted;
+  let K be SimplicialComplexStr of X;
+  let A be Subset of K;
+  func @A -> Subset of X equals
+:: SIMPLEX1:def 1
+    A;
+end;
+
+definition
+  let X be 1-sorted;
+  let K be SimplicialComplexStr of X;
+  let A be Subset-Family of K;
+  func @A -> Subset-Family of X equals
+:: SIMPLEX1:def 2
+    A;
+end;
+
+theorem :: SIMPLEX1:3
+  for X be 1-sorted
+  for K be subset-closed SimplicialComplexStr of X st K is total
+  for S be finite Subset of K st S is simplex-like
+    holds Complex_of {@S} is SubSimplicialComplex of K;
+
+begin :: The Area of an Abstract Simplicial Complex
+
+reserve RLS for non empty RLSStruct,
+        Kr,K1r,K2r for SimplicialComplexStr of RLS,
+        V for RealLinearSpace,
+        Kv for non void SimplicialComplex of V;
+
+definition let RLS,Kr;
+  func |.Kr.| -> Subset of RLS means
+:: SIMPLEX1:def 3
+    x in it iff ex A be Subset of Kr st A is simplex-like & x in conv @A;
+end;
+
+theorem :: SIMPLEX1:4
+  the topology of K1r c= the topology of K2r implies |.K1r.| c= |.K2r.|;
+
+theorem :: SIMPLEX1:5
+  for A be Subset of Kr st A is simplex-like holds conv @A c= |.Kr.|;
+
+theorem :: SIMPLEX1:6
+  for K be subset-closed SimplicialComplexStr of V holds
+    x in |.K.| iff ex A be Subset of K st A is simplex-like & x in Int @A;
+
+theorem :: SIMPLEX1:7
+  |.Kr.| is empty iff Kr is empty-membered;
+
+theorem :: SIMPLEX1:8
+  for A be Subset of RLS holds |.Complex_of{A}.| = conv A;
+
+theorem :: SIMPLEX1:9
+  for A,B be Subset-Family of RLS holds
+    |.Complex_of (A\/B).| = |.Complex_of A.| \/ |.Complex_of B.|;
+
+begin :: The Subdivision of a Simplicial Complex
+
+definition let RLS,Kr;
+  mode SubdivisionStr of Kr -> SimplicialComplexStr of RLS means
+:: SIMPLEX1:def 4
+    |.Kr.| c= |.it.| &
+    for A be Subset of it st A is simplex-like
+      ex B be Subset of Kr st B is simplex-like & conv @A c= conv @B;
+end;
+
+theorem :: SIMPLEX1:10
+  for P be SubdivisionStr of Kr holds |.Kr.| = |.P.|;
+
+registration let RLS;
+  let Kr be with_non-empty_element SimplicialComplexStr of RLS;
+  cluster -> with_non-empty_element SubdivisionStr of Kr;
+end;
+
+theorem :: SIMPLEX1:11
+  Kr is SubdivisionStr of Kr;
+
+theorem :: SIMPLEX1:12
+  Complex_of the topology of Kr is SubdivisionStr of Kr;
+
+theorem :: SIMPLEX1:13
+  for K be subset-closed SimplicialComplexStr of V
+    for SF be Subset-Family of K st SF = Sub_of_Fin the topology of K
+  holds Complex_of SF is SubdivisionStr of K;
+
+theorem :: SIMPLEX1:14
+  for P1 be SubdivisionStr of Kr for P2 be SubdivisionStr of P1
+    holds P2 is SubdivisionStr of Kr;
+
+registration
+  let V;
+  let K be SimplicialComplexStr of V;
+  cluster finite-membered subset-closed SubdivisionStr of K;
+end;
+
+definition
+  let V;
+  let K be SimplicialComplexStr of V;
+  mode Subdivision of K is finite-membered subset-closed SubdivisionStr of K;
+end;
+
+theorem :: SIMPLEX1:15
+  for K be with_empty_element SimplicialComplex of V st |.K.| c= [#]K
+    for B be Function of BOOL the carrier of V,the carrier of V st
+      for S be Simplex of K st S is non empty holds B.S in conv @S
+    holds subdivision(B,K) is SubdivisionStr of K;
+
+registration let V,Kv;
+  cluster non void Subdivision of Kv;
+end;
+
+begin :: The Barycentric Subdivision
+
+definition
+  let V,Kv such that
+     |.Kv.| c= [#]Kv;
+  func BCS Kv -> non void Subdivision of Kv equals
+:: SIMPLEX1:def 5
+    subdivision(center_of_mass V,Kv);
+end;
+
+definition let n;
+  let V,Kv such that
+     |.Kv.| c= [#]Kv;
+  func BCS(n,Kv) -> non void Subdivision of Kv equals
+:: SIMPLEX1:def 6
+    subdivision(n,center_of_mass V,Kv);
+end;
+
+theorem :: SIMPLEX1:16
+  |.Kv.| c= [#]Kv implies BCS(0,Kv) = Kv;
+
+theorem :: SIMPLEX1:17
+  |.Kv.| c= [#]Kv implies BCS(1,Kv) = BCS Kv;
+
+theorem :: SIMPLEX1:18
+  |.Kv.| c= [#]Kv implies [#]BCS(n,Kv) = [#]Kv;
+
+theorem :: SIMPLEX1:19
+ |.Kv.| c= [#]Kv implies |.BCS(n,Kv).| = |.Kv.|;
+
+theorem :: SIMPLEX1:20
+  |.Kv.| c= [#]Kv implies BCS(n+1,Kv) = BCS BCS(n,Kv);
+
+theorem :: SIMPLEX1:21
+  |.Kv.| c= [#]Kv & degree Kv <= 0 implies the TopStruct of Kv = BCS Kv;
+
+theorem :: SIMPLEX1:22
+  n > 0 & |.Kv.| c= [#]Kv & degree Kv <= 0 implies
+   the TopStruct of Kv = BCS(n,Kv);
+
+theorem :: SIMPLEX1:23
+  for Sv be non void SubSimplicialComplex of Kv st
+      |.Kv.| c= [#]Kv & |.Sv.| c= [#]Sv
+    holds BCS(n,Sv) is SubSimplicialComplex of BCS(n,Kv);
+
+theorem :: SIMPLEX1:24
+  |.Kv.| c= [#]Kv implies Vertices Kv c= Vertices BCS(n,Kv);
+
+registration
+  let n,V;
+  let K be non void total SimplicialComplex of V;
+  cluster BCS(n,K) -> total;
+end;
+
+registration
+  let n,V;
+  let K be non void finite-vertices total SimplicialComplex of V;
+  cluster BCS(n,K) -> finite-vertices;
+end;
+
+begin :: Selected Properties of Simplicial Complexes
+
+definition
+  let V;
+  let K be SimplicialComplexStr of V;
+  attr K is affinely-independent means
+:: SIMPLEX1:def 7
+   for A be Subset of K st A is simplex-like holds @A is affinely-independent;
+end;
+
+definition
+  let RLS,Kr;
+  attr Kr is simplex-join-closed means
+:: SIMPLEX1:def 8
+   for A,B be Subset of Kr st A is simplex-like & B is simplex-like
+     holds conv @A /\ conv @B = conv @(A/\B);
+end;
+
+registration
+  let V;
+  cluster empty-membered -> affinely-independent SimplicialComplexStr of V;
+  let F be affinely-independent Subset-Family of V;
+  cluster Complex_of F -> affinely-independent;
+end;
+
+registration
+  let RLS;
+  cluster empty-membered -> simplex-join-closed SimplicialComplexStr of RLS;
+end;
+
+registration
+  let V;
+  let I be affinely-independent Subset of V;
+  cluster Complex_of{I} -> simplex-join-closed;
+end;
+
+registration let V;
+  cluster non empty trivial affinely-independent Subset of V;
+end;
+
+registration
+  let V;
+  cluster with_non-empty_element finite-vertices affinely-independent
+          simplex-join-closed total SimplicialComplex of V;
+end;
+
+registration
+  let V;
+  let K be affinely-independent SimplicialComplexStr of V;
+  cluster -> affinely-independent SubSimplicialComplex of K;
+end;
+
+registration
+  let V;
+  let K be simplex-join-closed SimplicialComplexStr of V;
+  cluster -> simplex-join-closed SubSimplicialComplex of K;
+end;
+
+theorem :: SIMPLEX1:25
+  for K be subset-closed SimplicialComplexStr of V holds
+    K is simplex-join-closed
+  iff
+    for A,B be Subset of K st A is simplex-like & B is simplex-like &
+                              Int @A meets Int @B
+      holds A=B;
+
+reserve Ks for simplex-join-closed SimplicialComplex of V,
+        As,Bs for Subset of Ks,
+        Ka for non void affinely-independent SimplicialComplex of V,
+        Kas for non void affinely-independent simplex-join-closed
+                 SimplicialComplex of V,
+        K for non void affinely-independent simplex-join-closed total
+                 SimplicialComplex of V;
+
+registration
+  let V,Ka;
+  let S be Simplex of Ka;
+  cluster @S -> affinely-independent;
+end;
+
+theorem :: SIMPLEX1:26
+  As is simplex-like & Bs is simplex-like & Int@As meets conv@Bs
+    implies As c= Bs;
+
+theorem :: SIMPLEX1:27
+  As is simplex-like & @As is affinely-independent & Bs is simplex-like
+    implies (Int@As c= conv @Bs iff As c= Bs);
+
+theorem :: SIMPLEX1:28
+  |.Ka.| c= [#]Ka implies BCS Ka is affinely-independent;
+
+registration
+  let V;
+  let Ka be non void affinely-independent total SimplicialComplex of V;
+  cluster BCS Ka -> affinely-independent;
+  let n;
+  cluster BCS(n,Ka) -> affinely-independent;
+end;
+
+registration
+  let V,Kas;
+  cluster (center_of_mass V)|the topology of Kas -> one-to-one;
+end;
+
+theorem :: SIMPLEX1:29
+  |.Kas.| c= [#]Kas implies BCS Kas is simplex-join-closed;
+
+registration
+  let V,K;
+  cluster BCS K -> simplex-join-closed;
+  let n;
+  cluster BCS(n,K) -> simplex-join-closed;
+end;
+
+theorem :: SIMPLEX1:30
+  |.Kv.| c= [#]Kv &
+  (for n st n <= degree Kv ex S be Simplex of Kv st
+     card S = n+1 & @S is affinely-independent)
+  implies degree Kv = degree BCS Kv;
+
+theorem :: SIMPLEX1:31
+  |.Ka.| c= [#]Ka implies degree Ka = degree BCS Ka;
+
+theorem :: SIMPLEX1:32
+  |.Ka.| c= [#]Ka implies degree Ka = degree BCS(n,Ka);
+
+theorem :: SIMPLEX1:33
+  for S be simplex-like Subset-Family of Kas st S is with_non-empty_elements
+    holds card S = card ((center_of_mass V).:S);
+
+reserve Aff for finite affinely-independent Subset of V,
+        Af,Bf for finite Subset of V,
+        B for Subset of V,
+        S,T for finite Subset-Family of V,
+        Sf for c=-linear finite finite-membered Subset-Family of V,
+        Sk,Tk for finite simplex-like Subset-Family of K,
+        Ak for Simplex of K;
+
+theorem :: SIMPLEX1:34
+  for S1,S2 be simplex-like Subset-Family of Kas st
+      |.Kas.|c=[#]Kas & S1 is with_non-empty_elements &
+      (center_of_mass V).:S2 is Simplex of BCS Kas &
+      (center_of_mass V).:S1 c= (center_of_mass V).:S2
+   holds S1 c= S2 & S2 is c=-linear;
+
+theorem :: SIMPLEX1:35
+  S is with_non-empty_elements & union S c= Aff & card S+n+1 <= card Aff
+implies (
+    Bf is Simplex of n+card S,BCS Complex_of{Aff} & (center_of_mass V).:S c=Bf
+iff
+    ex T st T misses S & T\/S is c=-linear with_non-empty_elements &
+            card T=n+1 & union T c= Aff &
+            Bf = (center_of_mass V).:S\/(center_of_mass V).:T);
+
+theorem :: SIMPLEX1:36
+  Sf is with_non-empty_elements & union Sf c=Aff implies
+   ((center_of_mass V).:Sf is Simplex of card union Sf-1,BCS Complex_of {Aff}
+iff
+   for n st 0 < n & n <= card union Sf ex x st x in Sf & card x = n);
+
+theorem :: SIMPLEX1:37
+  for S st S is c=-linear & S is with_non-empty_elements &
+           card S = card union S
+  for Af,Bf st Af is non empty & Af misses union S &
+               union S\/Af is affinely-independent & union S\/Af c=Bf
+   holds (center_of_mass V).:S \/ (center_of_mass V).:{union S\/Af}
+           is Simplex of card S,BCS Complex_of{Bf};
+
+theorem :: SIMPLEX1:38
+  for Sf st Sf is with_non-empty_elements & card Sf = card union Sf
+  for v be Element of V st not v in union Sf &
+                           union Sf\/{v} is affinely-independent
+  holds
+   {S1 where S1 is Simplex of card Sf,BCS Complex_of{union Sf\/{v}}:
+       (center_of_mass V).:Sf c= S1} =
+   {(center_of_mass V).:Sf\/(center_of_mass V).:{union Sf\/{v}}};
+
+theorem :: SIMPLEX1:39
+  for Sf st Sf is with_non-empty_elements & card Sf+1 = card union Sf &
+            union Sf is affinely-independent
+  holds card {S1 where S1 is Simplex of card Sf,BCS Complex_of{union Sf}:
+              (center_of_mass V).:Sf c= S1} = 2;
+
+theorem :: SIMPLEX1:40
+  Aff is Simplex of K implies
+    (B is Simplex of BCS Complex_of{Aff}
+iff
+     B is Simplex of BCS K & conv B c= conv Aff);
+
+theorem :: SIMPLEX1:41
+  Sk is with_non-empty_elements & card Sk+n <= degree K implies
+   (Af is Simplex of n+card Sk,BCS K & (center_of_mass V).:Sk c=Af
+iff
+   ex Tk st Tk misses Sk & Tk\/Sk is c=-linear with_non-empty_elements &
+            card Tk=n+1 & Af = (center_of_mass V).:Sk\/(center_of_mass V).:Tk);
+
+theorem :: SIMPLEX1:42
+  Sk is c=-linear with_non-empty_elements & card Sk = card union Sk &
+        union Sk c= Ak & card Ak = card Sk+1
+implies
+   {S1 where S1 is Simplex of card Sk,BCS K:
+        (center_of_mass V).:Sk c= S1 & conv @S1 c= conv @Ak}
+   = {(center_of_mass V).:Sk \/(center_of_mass V).:{Ak}};
+
+theorem :: SIMPLEX1:43
+  Sk is c=-linear with_non-empty_elements & card Sk+1 = card union Sk
+  implies card {S1 where S1 is Simplex of card Sk,BCS K:
+       (center_of_mass V).:Sk c= S1 & conv @S1 c= conv @union Sk} = 2;
+
+theorem :: SIMPLEX1:44
+  for Af st K is Subdivision of Complex_of{Af} & card Af = n+1 & degree K = n &
+  for S be Simplex of n-1,K,X st X = {S1 where S1 is Simplex of n,K: S c= S1}
+      holds (conv @S meets  Int Af implies card X = 2) &
+            (conv @S misses Int Af implies card X = 1)
+  holds
+    for S be Simplex of n-1,BCS K,X st
+        X = {S1 where S1 is Simplex of n,BCS K:S c= S1}
+    holds (conv @S meets  Int Af implies card X = 2) &
+          (conv @S misses Int Af implies card X = 1);
+
+theorem :: SIMPLEX1:45
+  for S be Simplex of n-1,BCS(k,Complex_of{Aff}) st
+      card Aff = n+1 &
+      X = {S1 where S1 is Simplex of n,BCS(k,Complex_of{Aff}): S c= S1}
+    holds (conv @S meets  Int Aff implies card X = 2) &
+          (conv @S misses Int Aff implies card X = 1);
+
+begin :: The Main Theorem
+
+reserve v for Vertex of BCS(k,Complex_of{Aff}),
+        F for Function of Vertices BCS(k,Complex_of{Aff}),Aff;
+
+theorem :: SIMPLEX1:46
+  for F st for v,B st B c= Aff & v in conv B holds F.v in B
+    ex n st card {S where S is Simplex of card Aff-1,BCS(k,Complex_of{Aff}):
+                  F.:S = Aff} = 2*n+1;
+
+::  Sperner's Lemma
+
+theorem :: SIMPLEX1:47
+  for F st for v,B st B c= Aff & v in conv B holds F.v in B
+    ex S be Simplex of card Aff-1,BCS(k,Complex_of{Aff}) st F.:S = Aff;

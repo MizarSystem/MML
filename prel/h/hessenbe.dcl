@@ -27,24 +27,24 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="93"/>
+<Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
+<Adjective nr="98"/>
 <Adjective nr="99"/>
+<Adjective nr="102"/>
 </Cluster>
 <Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="93"/>
+<Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="101"/>
 </Cluster>
 </CCluster>
 </Registrations>

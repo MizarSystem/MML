@@ -1,6 +1,6 @@
 :: On $L^p$ Space Formed by Real-valued Partial Functions
 ::  by Yasushige Watase , Noboru Endou and Yasunari Shidama
-:: 
+::
 :: Received February 4, 2010
 :: Copyright (c) 2010 Association of Mizar Users
 
@@ -25,7 +25,8 @@ environ
  constructors EXTREAL1, REAL_1, IDEAL_1, NEWTON, MEASURE3, MEASURE6, MESFUNC2,
       MESFUNC6, MESFUNC9, SEQ_1, MESFUN6C, MESFUN7C, MESFUN9C, RECDEF_1, SEQ_2,
       EXTREAL2, RINFSUP2, FUNCT_7, SERIES_1, PREPOWER, ASYMPT_0, LPSPACE1,
-      SUPINF_1, SEQFUNC, MESFUNC5, RSSPACE3, LOPBAN_1, MESFUNC1, RELSET_1;
+      SUPINF_1, SEQFUNC, MESFUNC5, RSSPACE3, LOPBAN_1, MESFUNC1, RELSET_1,
+      BINOP_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, MEMBERED, VALUED_0, NAT_1,
       SUBSET_1, PARTFUN1, RLVECT_1, STRUCT_0, NORMSP_1, MEASURE1, SEQ_4, SEQ_2,
       MESFUN6C, MESFUNC8, LPSPACE1, XCMPLX_0, XREAL_0, XXREAL_0, VALUED_1,
@@ -845,7 +846,8 @@ Th02Lp: RLSStruct (# Lp_Functions(M,k),
              In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
              add|(Lp_Functions(M,k),RLSp_PFunct X),
              Mult_(Lp_Functions(M,k)) #)
-  is Abelian add-associative right_zeroed RealLinearSpace-like
+  is Abelian add-associative right_zeroed vector-distributive
+  scalar-distributive scalar-associative scalar-unital
 proof
    0.(RLSp_PFunct X) in Lp_Functions(M,k) by LmDef1Lp;
    hence thesis by LPSPACE1:3;
@@ -858,7 +860,8 @@ registration
                      In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
                      add|(Lp_Functions(M,k),RLSp_PFunct X),
                      Mult_(Lp_Functions(M,k)) #)
-   -> Abelian add-associative right_zeroed RealLinearSpace-like;
+   -> Abelian add-associative right_zeroed vector-distributive
+   scalar-distributive scalar-associative scalar-unital;
   coherence by Th02Lp;
 end;
 
@@ -866,7 +869,8 @@ definition
   let X be non empty set, S be SigmaField of X,
       M be sigma_Measure of S, k be positive Real;
   func RLSp_LpFunct(M,k) -> strict Abelian add-associative right_zeroed
-        RealLinearSpace-like (non empty RLSStruct) equals
+        vector-distributive scalar-distributive scalar-associative
+        scalar-unital (non empty RLSStruct) equals
   RLSStruct (# Lp_Functions(M,k),
                In(0.(RLSp_PFunct X),Lp_Functions(M,k)),
                add|(Lp_Functions(M,k),RLSp_PFunct X),
@@ -1025,7 +1029,8 @@ registration
   let X be non empty set, S be SigmaField of X,
       M be sigma_Measure of S, k be positive Real;
   cluster RLSp_LpFunct(M,k) ->
-    strict Abelian add-associative right_zeroed RealLinearSpace-like;
+    strict Abelian add-associative right_zeroed vector-distributive
+    scalar-distributive scalar-associative scalar-unital;
   coherence;
 end;
 
@@ -1556,7 +1561,8 @@ end;
 registration let X be non empty set, S be SigmaField of X,
                M be sigma_Measure of S, k be positive Real;
   cluster Pre-Lp-Space(M,k) -> Abelian add-associative right_zeroed
-   right_complementable RealLinearSpace-like;
+   right_complementable vector-distributive scalar-distributive
+   scalar-associative scalar-unital;
 coherence
 proof
    set C = CosetSet(M,k), aC = addCoset(M,k), zC = zeroCoset(M,k),
@@ -1657,11 +1663,13 @@ A42:y(#)a = y*a1 & x(#)a = x*a1 & x(#)b = x*b1 &
     (x+y)(#)a = (x+y)*a1 & 1(#)a =1*a1 by ThB11;
    a+b = a1+b1 by ThB10; then
    x(#)(a+b) = x*(a1+b1) by ThB11; then
-   x(#)(a+b) = x*a1+x*b1 by RLVECT_1:def 9; then
+   x(#)(a+b) = x*a1+x*b1 by RLVECT_1:def 8; then
 A45:x(#)(a+b) = x(#)a + x(#)b by A42,ThB10;
    (x+y)(#)a = x*a1+y*a1 by A42,RLVECT_1:def 9; then
 A46:(x+y)(#)a = x(#)a + y(#)a by A42,ThB10;
-   x(#)(y(#)a) =x*(y*a1) by A42,ThB11 .= (x*y)*a1 by RLVECT_1:def 9; then
+   x(#)(y(#)a) =x*(y*a1) by A42,ThB11 .= (x*y)*a1
+   by RLVECT_1:def 10,def 11;
+   then
 A48:x(#)(y(#)a) = (x*y)(#)a by ThB11;
    lC.(x,A1) =a.e-eq-class_Lp(x(#)a,M,k) &
    lC.(x,A2) =a.e-eq-class_Lp(x(#)b,M,k) &
@@ -1673,10 +1681,10 @@ A49:x(#)a in x*A1 & x(#)b in x*A2 & y(#)a in y*A1 by A0,EQC01,Th01bLp,A35,A37;
    hence (x0+y0)*A1 = x0*A1+y0*A1 by A49,VSPDef3X,A0;
    (x0*y0)*A1 = a.e-eq-class_Lp(x(#)(y(#)a),M,k) by A0,A48,A36,VSPDef5X;
    hence (x0*y0)*A1 =x0*(y0*A1) by A49,VSPDef5X,A0;
-   1(#)a = a by A42,RLVECT_1:def 9;
+   1(#)a = a by A42,RLVECT_1:def 11;
    hence 1*A1 = A1 by A35,A36,VSPDef5X,A0;
    end;
-   hence thesis by RLVECT_1:def 9;
+   hence thesis by RLVECT_1:def 8,def 9,def 10,def 11;
 end;
 end;
 
@@ -2689,7 +2697,8 @@ end;
 
 Th003:
 for k be geq_than_1 Real holds
-  Lp-Space(M,k) is RealNormSpace-like RealLinearSpace-like Abelian
+  Lp-Space(M,k) is RealNormSpace-like vector-distributive scalar-distributive
+  scalar-associative scalar-unital Abelian
                add-associative right_zeroed right_complementable
 proof
    let k be geq_than_1 Real;
@@ -2770,7 +2779,8 @@ end;
 registration
   let k be geq_than_1 Real;
   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S;
-  cluster Lp-Space (M,k) -> RealNormSpace-like RealLinearSpace-like
+  cluster Lp-Space (M,k) -> RealNormSpace-like vector-distributive
+  scalar-distributive scalar-associative scalar-unital
       Abelian add-associative right_zeroed right_complementable;
   coherence by Th003;
 end;

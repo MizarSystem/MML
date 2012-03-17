@@ -30,6 +30,26 @@
 </Cluster>
 </FCluster>
 <FCluster aid="SCMPDS_1" nr="2">
+<ArgTypes/>
+<Func kind="K" nr="150"/>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="6"/>
+<Adjective nr="22">
+<Func kind="K" nr="134"/>
+<Func kind="K" nr="17">
+<Func kind="K" nr="42">
+<Func kind="K" nr="54"/>
+</Func>
+<Func kind="K" nr="43">
+<Func kind="K" nr="149"/>
+<Func kind="K" nr="136"/>
+</Func>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="SCMPDS_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>

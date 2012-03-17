@@ -60,33 +60,23 @@ proof
   set f = (NAT) --> I;
   set Ok = the Object-Kind of S;
 A1: dom f = NAT & NAT c= the carrier of S by AMI_1:def 3,FUNCOP_1:19;
- for x st x in dom f holds f.x in Ok.x
-  proof
-    let x;
-    assume
-A3: x in dom f;
-    then
-A4: f.x = I by FUNCOP_1:13;
-    reconsider x as Element of NAT by A3;
-    Ok.x = the Instructions of S by AMI_1:def 14;
-    hence thesis by A4;
-  end;
-  then f is Ok-compatible by FUNCT_1:def 20;
-  then f is PartState of S by A1,RELAT_1:def 18;
+  f is PartState of S by A1,RELAT_1:def 18;
   hence thesis;
 end;
 
 registration
   let N be set, S be AMI-Struct over N;
-  cluster empty -> NAT-defined FinPartState of S;
+  cluster empty -> (the Instructions of S)-valued
+   NAT-defined FinPartState of S;
   coherence
   proof
     let F be FinPartState of S;
     assume
-    F is empty;
-    then reconsider G = F as empty Function;
-    dom G c= NAT;
-    hence dom F c= NAT;
+Z:   F is empty;
+    then rng F = {};
+    hence rng F c= the Instructions of S by XBOOLE_1:2;
+     dom F = {} by Z;
+    hence dom F c= NAT by XBOOLE_1:2;
   end;
 end;
 
@@ -106,7 +96,8 @@ registration
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite (non
   empty stored-program AMI-Struct over N);
-  cluster non empty trivial NAT-defined FinPartState of S;
+  cluster non empty trivial NAT-defined
+    (the Instructions of S)-valued FinPartState of S;
   existence
   proof
     consider l being Element of NAT, I being Instruction of S;
@@ -191,7 +182,7 @@ A2: dom f = {IC S,l} by A1,FUNCT_4:65;
   then
 X:  l in dom f by TARSKI:def 2;
 A3: (ProgramPart t)/.l = t.l by AMI_1:150
-    .= f.l by FUNCT_4:14,X
+    .= f.l by X,FUNCT_4:14
     .= i by A1,FUNCT_4:66;
   IC S in dom f by A2,TARSKI:def 2;
   then IC t = f.IC S by FUNCT_4:14
@@ -322,7 +313,7 @@ A5: a.IC S = f.IC S by FUNCT_4:14
     .= il by AMI_1:48,FUNCT_4:66;
 Y: il in dom f by A4,TARSKI:def 2;
   (ProgramPart a)/.IC a = a.IC a by AMI_1:150
-    .= f.il by A5,FUNCT_4:14,Y
+    .= f.il by A5,Y,FUNCT_4:14
     .= i by FUNCT_4:66;
   then IC Following(ProgramPart a,a) = a.IC S by A1
     .= n by A3,A5,TARSKI:def 1;
@@ -1202,8 +1193,7 @@ A1: o <> IC M;
 A2: the Instruction-Counter of M = NAT by Def11;
   the carrier of M = NAT \/ {NAT} by Def11;
   then o in NAT or o in {NAT} by XBOOLE_0:def 3;
-  then reconsider l = o as Element of NAT by A2,A1
-,TARSKI:def 1;
+  then reconsider l = o as Element of NAT by A2,A1,TARSKI:def 1;
   Exec(i,s).l = s.l by AMI_1:def 13;
   hence thesis by AMI_1:def 13;
 end;
@@ -1238,7 +1228,7 @@ A5: dom f = NAT by FUNCOP_1:19;
     then
 X:    not l in dom u by A4,TARSKI:def 1;
 A6: (ProgramPart t)/.l = t.l by AMI_1:150
-      .= s.l by FUNCT_4:12,X
+      .= s.l by X,FUNCT_4:12
       .= f.l by A5,FUNCT_4:14
       .= i by FUNCOP_1:13;
     hereby
@@ -1296,8 +1286,7 @@ A3: x = 1 by TARSKI:def 1;
 A4: InsCode i = 0;
     reconsider i as Instruction of STC N;
 
-    for l being Element of NAT holds NIC(i,l)={l} by A4,Th15
-,Th20;
+    for l being Element of NAT holds NIC(i,l)={l} by A4,Th15,Th20;
 
     hence thesis by Th14;
   end;
@@ -1473,7 +1462,7 @@ proof let N,T;
 A1: f1 is bijective and
 A2: for m, n being Element of NAT holds m <= n iff f1.m <= f1.n, T and
   il.(T,0) = f1.0 by Def12;
-  l in NAT & rng f1 = NAT by A1,ORDINAL1:def 13,FUNCT_2:def 3;
+  l in NAT & rng f1 = NAT by A1,FUNCT_2:def 3,ORDINAL1:def 13;
   then consider k being set such that
 A3: k in dom f1 and
 A4: f1.k = l by FUNCT_1:def 5;
@@ -1743,7 +1732,7 @@ A4:   dom ((IC S, il)-->(il1, I)) = {IC S, il} by FUNCT_4:65;
       then
 X:     il in dom ((IC S, il)-->(il1, I)) by TARSKI:def 2;
 A5:   (ProgramPart u)/.il = u.il by AMI_1:150
-        .= ((IC S, il)-->(il1, I)).il by FUNCT_4:14,X
+        .= ((IC S, il)-->(il1, I)).il by X,FUNCT_4:14
         .= i by FUNCT_4:66;
       IC S in dom ((IC S, il)-->(il1, I)) by A4,TARSKI:def 2;
       then
@@ -1828,11 +1817,11 @@ definition
   let N be with_non-empty_elements non empty set;
   let S be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N);
-  let F be NAT-defined FinPartState of S;
+  let F be NAT-defined (the Instructions of S)-valued FinPartState of S;
   attr F is closed means
   :Def17:
   for l being Element of NAT st l in
-  dom F holds NIC (pi(F,l), l) c= dom F;
+  dom F holds NIC (F/.l, l) c= dom F;
   attr F is really-closed means
   for s being State of S st F c= s & IC s in dom
   F for k being Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F;
@@ -1850,12 +1839,15 @@ end;
 
 theorem Th44:
   for S being standard steady-programmed (IC-Ins-separated
-definite (non empty stored-program AMI-Struct over N)), F being NAT-defined
+definite (non empty stored-program AMI-Struct over N)),
+   F being NAT-defined (the Instructions of S)-valued
   FinPartState of S st F is really-closed & il.(S,0) in dom F holds F is
   para-closed
 proof
   let S be standard steady-programmed (IC-Ins-separated definite (non empty
-stored-program AMI-Struct over N)), F be NAT-defined FinPartState of S such
+stored-program AMI-Struct over N)),
+      F be NAT-defined (the Instructions of S)-valued
+FinPartState of S such
   that
 A1: ( for s being State of S st F c= s & IC s in dom F for k being
   Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F)& il.(S,0) in dom
@@ -1868,11 +1860,13 @@ end;
 
 theorem Th45:
   for S being IC-Ins-separated definite steady-programmed (non
-empty stored-program AMI-Struct over N), F being NAT-defined FinPartState of
+empty stored-program AMI-Struct over N),
+  F being NAT-defined (the Instructions of S)-valued FinPartState of
   S st F is closed holds F is really-closed
 proof
   let S be IC-Ins-separated definite steady-programmed (non empty
-  stored-program AMI-Struct over N), F be NAT-defined FinPartState of S such
+  stored-program AMI-Struct over N),
+  F be NAT-defined (the Instructions of S)-valued FinPartState of S such
   that
 A1: F is closed;
   let s be State of S such that
@@ -1885,14 +1879,14 @@ A5: P[k];
     reconsider t = Comput(ProgramPart(s),s,k)
      as Element of product the Object-Kind of S by PBOOLE:155;
     set l = IC Comput(ProgramPart(s),s,k);
-X:    pi(F,l) = F.l & F.l = s.l by A2,A5,AMI_1:def 47,GRFUNC_1:8;
+X:    F/.l = F.l & F.l = s.l by A2,A5,PARTFUN1:def 8,GRFUNC_1:8;
     (ProgramPart t)/.l = t.l by AMI_1:150
-       .= pi(F,l) by AMI_1:54,X;
+       .= F/.l by X,AMI_1:54;
     then
-A6: IC Following(ProgramPart t,t) in NIC(pi(F,l),l);
-T: ProgramPart s = ProgramPart t by AMI_1:144;
+A6: IC Following(ProgramPart t,t) in NIC(F/.l,l);
+T: ProgramPart s = ProgramPart t by AMI_1:123;
 A7: Comput(ProgramPart(s),s,k+1) = Following(ProgramPart s,t) by AMI_1:14;
-    NIC(pi(F,l), l) c= dom F by A1,A5,Def17;
+    NIC(F/.l, l) c= dom F by A1,A5,Def17;
     hence P[k+1] by A6,A7,T;
   end;
 A8: P[0] by A3,AMI_1:13;
@@ -1904,7 +1898,8 @@ registration
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite
   steady-programmed (non empty stored-program AMI-Struct over N);
-  cluster closed -> really-closed (NAT-defined FinPartState of S);
+  cluster closed -> really-closed
+   (NAT-defined (the Instructions of S)-valued FinPartState of S);
   coherence by Th45;
 end;
 
@@ -1912,19 +1907,21 @@ theorem Th46:
   for S being standard realistic halting (IC-Ins-separated
 definite steady-programmed
  (non empty stored-program AMI-Struct over N)) holds il.(S,0) .-->
-  halt S qua NAT-defined FinPartState of S is closed
+  halt S qua NAT-defined (the Instructions of S)-valued
+   FinPartState of S is closed
 proof
   let S be standard realistic halting (IC-Ins-separated definite
    steady-programmed (non empty
   stored-program AMI-Struct over N));
-  reconsider F = il.(S,0) .--> halt S as NAT-defined FinPartState of S;
+  reconsider F = il.(S,0) .--> halt S as
+   NAT-defined (the Instructions of S)-valued FinPartState of S;
   let l be Element of NAT;
   assume
 A1: l in dom(il.(S,0) .--> halt S);
 A2: dom F = {il.(S,0)} by FUNCOP_1:19;
   then
 A3: l = il.(S,0) by A1,TARSKI:def 1;
-  pi(F,l) = F.l by A1,AMI_1:def 47
+  F/.l = F.l by A1,PARTFUN1:def 8
     .= halt S by A3,FUNCOP_1:87;
   hence thesis by A2,A3,Th15;
 end;
@@ -1984,7 +1981,8 @@ registration
   let N be with_non-empty_elements non empty set;
   let S be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N));
-  cluster lower non empty trivial NAT-defined FinPartState of S;
+  cluster lower non empty trivial NAT-defined
+     (the Instructions of S)-valued FinPartState of S;
   existence
   proof
     consider i being Instruction of S;
@@ -2228,10 +2226,10 @@ registration
   S be standard steady-programmed (
   IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
   cluster really-closed lower non empty -> para-closed (NAT-defined
-    FinPartState of S);
+    (the Instructions of S)-valued FinPartState of S);
   coherence
   proof
-    let F be NAT-defined FinPartState of S;
+    let F be NAT-defined (the Instructions of S)-valued FinPartState of S;
     assume
 A1: F is really-closed;
     assume
@@ -2283,11 +2281,11 @@ registration
   let S be standard halting (IC-Ins-separated definite (non empty
   stored-program AMI-Struct over N));
   cluster halt-ending unique-halt trivial (lower non empty NAT-defined
-    FinPartState of S);
+    (the Instructions of S)-valued FinPartState of S);
   existence
   proof
     reconsider F = il.(S,0) .--> halt S as lower non empty NAT-defined
-    FinPartState of S by Th48;
+    (the Instructions of S)-valued FinPartState of S by Th48;
     take F;
     thus F.(LastLoc F) = halt S by Lm7;
     thus for f being Element of NAT st F.f = halt S & f in dom F
@@ -2301,11 +2299,12 @@ registration
   let S be standard halting realistic (IC-Ins-separated definite
    steady-programmed (non empty
   stored-program AMI-Struct over N));
-  cluster trivial closed lower non empty (NAT-defined FinPartState of S);
+  cluster trivial closed lower non empty
+  (NAT-defined (the Instructions of S)-valued FinPartState of S);
   existence
   proof
     reconsider F = il.(S,0) .--> halt S as lower non empty NAT-defined
-    FinPartState of S by Th48;
+    (the Instructions of S)-valued FinPartState of S by Th48;
     take F;
     thus thesis by Th46;
   end;
@@ -2317,11 +2316,11 @@ registration
    steady-programmed (non empty
   stored-program AMI-Struct over N));
   cluster halt-ending unique-halt trivial closed (lower non empty NAT-defined
-    FinPartState of S);
+    (the Instructions of S)-valued FinPartState of S);
   existence
   proof
     reconsider F = il.(S,0) .--> halt S as lower non empty NAT-defined
-    FinPartState of S by Th48;
+    (the Instructions of S)-valued FinPartState of S by Th48;
     take F;
     thus F.(LastLoc F) = halt S by Lm7;
     thus for f being Element of NAT st F.f = halt S & f in dom F
@@ -2335,7 +2334,7 @@ definition
   let S be standard halting (IC-Ins-separated definite (non empty
   stored-program AMI-Struct over N));
   mode pre-Macro of S is halt-ending unique-halt (lower non empty NAT-defined
-    FinPartState of S);
+    (the Instructions of S)-valued FinPartState of S);
 end;
 
 registration
@@ -2441,12 +2440,7 @@ A5:   n = 2;
   end;
   consider f being FinSequence of NAT such that
 A6: len f = 2 and
-A7: for n being Nat st n in Seg 2 holds P[n,f/.n] from FINSEQ_4:sch 1(A2
-  );
-:::  Sch1{D()->non empty set, N()->Nat, P[set,set]}: ex f being FinSequence of D(
-:::  ) st len f = N() & for n st n in Seg N() holds P[n,f/.n]
-:::provided
-::: for n st n in Seg N() ex d being Element of D() st P[n,d];
+A7: for n being Nat st n in Seg 2 holds P[n,f/.n] from FINSEQ_4:sch 1(A2);
 A8: 1 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
   then
 A9: f/.1 = l1 by A7;

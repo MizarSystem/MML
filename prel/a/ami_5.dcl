@@ -36,11 +36,11 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false">
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="231"/>
 </Adjective>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
@@ -49,7 +49,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="214"/>
 </Func>
 </Adjective>
 <Adjective nr="25"/>
@@ -58,13 +58,13 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="67"/>
 </Func>
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="214"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster aid="AMI_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="228"/>
 <Cluster>
 <Adjective nr="25" value="false"/>
 </Cluster>

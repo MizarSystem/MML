@@ -742,32 +742,9 @@ GRFUNC_1:90;
   end;
 end;
 
-theorem
-  for i being Instruction of SCMPDS,s being State of SCMPDS holds Exec (
-  i, s) | NAT = s | NAT
-proof
-  let i be Instruction of SCMPDS, s be State of SCMPDS;
-A1: for x being set st x in NAT holds (Exec (i, s) | NAT).x = (s | NAT).x
-  proof
-    let x be set;
-    assume
- x in NAT;
-    then reconsider l = x as Element of NAT;
-    thus (Exec (i, s) | NAT).x = (Exec (i, s)).l by FUNCT_1:72
-      .= s.l by AMI_1:def 13
-      .= (s | NAT).x by FUNCT_1:72;
-  end;
-  dom s = the carrier of SCMPDS by PARTFUN1:def 4;
-  then
-A3: dom (s | NAT) = NAT by RELAT_1:91;
-  dom Exec (i,s) = the carrier of SCMPDS by PARTFUN1:def 4;
-  then dom (Exec (i, s) | NAT) = NAT by RELAT_1:91;
-  hence thesis by A3,A1,FUNCT_1:9;
-end;
-
 begin :: Finite partial states of SCMPDS
 
-canceled 4;
+canceled 5;
 
 theorem
   for i being Instruction of SCMPDS, s being State of SCMPDS , p being
@@ -775,10 +752,10 @@ theorem
 proof
   let i be Instruction of SCMPDS, s be State of SCMPDS, p be preProgram of
   SCMPDS;
-A1: Exec (i, s +* p)|NAT = (s +* p)|NAT by AMI_1:117
-    .= s |(NAT ) +* p|NAT by FUNCT_4:75
-    .= Exec (i,s) |(NAT ) +* p|NAT by AMI_1:117
-    .= (Exec (i, s) +* p)|NAT by FUNCT_4:75;
+A1: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by AMI_1:117
+    .= ProgramPart s +* ProgramPart p by FUNCT_4:75
+    .= ProgramPart Exec (i,s) +* ProgramPart p by AMI_1:117
+    .= ProgramPart (Exec (i, s) +* p) by FUNCT_4:75;
   now
     assume
     {IC SCMPDS } meets NAT;
@@ -946,19 +923,19 @@ A18: Comput(ProgramPart(s2),s2,0+1).d1 =
 ))).d1
 by AMI_1:14
       .= (Following(ProgramPart s2,s2)).d1 by AMI_1:13
-      .= 1 by A15,A17,SCMPDS_2:57,Y;
+      .= 1 by A15,A17,Y,SCMPDS_2:57;
 X:  dom p c= the carrier of SCMPDS by RELAT_1:def 18;
-    dom (Comput(ProgramPart(s1),s1,1)) = the carrier of SCMPDS by PARTFUN1:def
-4;
+    dom (Comput(ProgramPart(s1),s1,1)) = the carrier of SCMPDS by
+PARTFUN1:def 4;
     then
-A19: dom (Comput(ProgramPart(s1),s1,1)|dom p) = dom p by RELAT_1:91,X;
+A19: dom (Comput(ProgramPart(s1),s1,1)|dom p) = dom p by X,RELAT_1:91;
     il <> IC SCMPDS by AMI_1:48;
     then
 A20: not il in dom (Start-At(il,SCMPDS)) by A6,TARSKI:def 1;
-    dom (Comput(ProgramPart(s2),s2,1)) = the carrier of SCMPDS by PARTFUN1:def
-4;
+    dom (Comput(ProgramPart(s2),s2,1)) = the carrier of SCMPDS by
+PARTFUN1:def 4;
     then
-A21: dom (Comput(ProgramPart(s2),s2,1)|dom p) = dom p by RELAT_1:91,X;
+A21: dom (Comput(ProgramPart(s2),s2,1)|dom p) = dom p by X,RELAT_1:91;
 A22: dom p1 = dom p \/ dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS))
 by FUNCT_4:def 1;
 A23: dom ((il .--> (d1:=0)) +* Start-At(il,SCMPDS)) =
@@ -994,7 +971,7 @@ Y:  (ProgramPart s1)/.IC s1
 s1,0))).d1
     by AMI_1:14
       .= (Following(ProgramPart s1,s1)).d1 by AMI_1:13
-      .= 0 by A25,A27,SCMPDS_2:57,Y;
+      .= 0 by A25,A27,Y,SCMPDS_2:57;
     then (Comput(ProgramPart(s1),s1,1)|dom p).d1 = 0 by A3,A28,A19,FUNCT_1:70;
     hence thesis by A3,A28,A21,A18,FUNCT_1:70;
   end;
@@ -1145,8 +1122,7 @@ Y:  (ProgramPart s2)/.IC s2
 x:  p c= s2 by A3,A11,XBOOLE_1:1;
     then
 A12: (Following(ProgramPart s2,s2)).IC SCMPDS = Exec (goto 1,s2).IC SCMPDS
-by A1,
-GRFUNC_1:8,X,Y
+by A1,X,Y,GRFUNC_1:8
       .= ICplusConst(s2,1) by SCMPDS_2:66;
     take 1;
     assume
@@ -1170,15 +1146,14 @@ Z:  (ProgramPart s1)/.IC s1
  = s1.IC s1 by AMI_1:150;
 y:  p c= s1 by A2,A10,XBOOLE_1:1;
     then (Following(ProgramPart s1,s1)).IC SCMPDS =
-    Exec (goto 0,s1).IC SCMPDS by A1,
-GRFUNC_1:8,Y,Z
+    Exec (goto 0,s1).IC SCMPDS by A1,Y,Z,GRFUNC_1:8
       .= ICplusConst(s1,0) by SCMPDS_2:66;
     then
 A15: ICplusConst(s1,0) = ((Following(ProgramPart s1,s1))|dom p).IC SCMPDS
 by A1,FUNCT_1:72
       .= ICplusConst(s2,1) by A1,A12,A14,FUNCT_1:72;
-    IC s2 = il by A1,GRFUNC_1:8,x
-      .= IC s1 by A1,GRFUNC_1:8,y;
+    IC s2 = il by A1,x,GRFUNC_1:8
+      .= IC s1 by A1,y,GRFUNC_1:8;
     hence contradiction by A15,Th19;
   end;
   hence contradiction;
@@ -1267,7 +1242,7 @@ A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,AMI_1:def 25;
     take k = i+1;
     set Cs2k = Comput(ProgramPart(s2),s2,k);
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A26: Cs2k = Following(ProgramPart s2,Cs2i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
 Y:  (ProgramPart Cs2i)/.IC Cs2i
@@ -1275,7 +1250,7 @@ Y:  (ProgramPart Cs2i)/.IC Cs2i
 A27: Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by Th17,FUNCT_1:72;
     then Cs2i.IC SCMPDS = loc by A24,A25,Th17,FUNCT_1:72;
     then
-A28: Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A26,A18,SCMPDS_2:66,Y;
+A28: Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A26,A18,Y,SCMPDS_2:66;
 A29: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS by Th17,FUNCT_1:72;
     then
 A30: IC Cs1i = IC Cs2i by A25,Th17,FUNCT_1:72;
@@ -1285,10 +1260,10 @@ A31: (Cs1k|dom p).IC SCMPDS = Cs1k.IC SCMPDS & (Cs2k|dom p).IC SCMPDS =
 Y:  (ProgramPart Cs1i)/.IC Cs1i
  = Cs1i.IC Cs1i by AMI_1:150;
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
     Cs1k = Following(ProgramPart s1,Cs1i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-    then Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) by A19,A24,A29,A27,SCMPDS_2:66,Y;
+    then Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) by A19,A24,A29,A27,Y,SCMPDS_2:66;
     hence thesis by A28,A30,A31,Th19;
   end;
   hence contradiction;
@@ -1376,14 +1351,14 @@ FUNCT_1:72;
 A5: Cs1i.a=Cs2i.a by A1,A3,AMI_1:def 25;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
   then
 A6: Cs1i1.DataLoc(Cs1i.a,k1) = Cs1i.DataLoc(Cs1i.b,k2) by A2,SCMPDS_2:59;
   set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A7: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
 A8: DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
@@ -1429,7 +1404,7 @@ A5: Cs1i.a=Cs2i.a by A1,A3,AMI_1:def 25;
   DataLoc(Cs1i.a,k1), C12=Cs1i.DataLoc(Cs1i.b,k2), C21=Cs2i.DataLoc(Cs2i.a,k1),
   C22=Cs2i.DataLoc(Cs2i.b,k2);
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
   DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
@@ -1438,7 +1413,7 @@ A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
   then
 A7: D11 = D21 by A1,A4,A5,AMI_1:def 25;
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
   then
@@ -1488,7 +1463,7 @@ A5: Cs1i.a=Cs2i.a by A1,A3,AMI_1:def 25;
   DataLoc(Cs1i.a,k1), C12=Cs1i.DataLoc(Cs1i.b,k2), C21=Cs2i.DataLoc(Cs2i.a,k1),
   C22=Cs2i.DataLoc(Cs2i.b,k2);
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
   DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
@@ -1497,7 +1472,7 @@ A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
   then
 A7: D11 = D21 by A1,A4,A5,AMI_1:def 25;
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
   then
@@ -1547,13 +1522,13 @@ A5: Cs1i.a=Cs2i.a by A1,A3,AMI_1:def 25;
   set Cs1i1 = Comput(ProgramPart(s1),s1,i+1);
   set D11=Cs1i1.DataLoc(Cs1i.a,k1), D21=Cs2i1.DataLoc(Cs2i.a,k1);
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
   then
 A6: D11 = Cs1i.DataLoc(Cs1i.a,k1) * Cs1i.DataLoc(Cs1i.b,k2) by A2,SCMPDS_2:63;
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A7: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
 A8: DataLoc(Cs1i.a,k1) in dom p implies (Cs1i1|dom p).DataLoc(Cs1i.a,k1) =
@@ -1591,14 +1566,14 @@ A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,AMI_1:def 25;
   set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
 s1),s1,i));
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
 A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
 A4: m+1>=0 by NAT_1:2;
 A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
   Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
   assume that
@@ -1652,14 +1627,14 @@ A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,AMI_1:def 25;
   set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
 s1),s1,i));
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
 A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
 A4: m+1>=0 by NAT_1:2;
 A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
   Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
   assume that
@@ -1713,14 +1688,14 @@ A2: IC Cs1i = IC Cs2i & (Cs1i1|dom p) = (Cs2i1|dom p) by A1,Th23,AMI_1:def 25;
   set I = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
 s1),s1,i));
 T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:144;
+by AMI_1:123;
 A3: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
 A4: m+1>=0 by NAT_1:2;
 A5: (Cs1i1|dom p).IC SCMPDS = Cs1i1.IC SCMPDS & (Cs2i1|dom p).IC SCMPDS =
   Cs2i1. IC SCMPDS by Th17,FUNCT_1:72;
 T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:144;
+by AMI_1:123;
 A6: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
     .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
   assume that

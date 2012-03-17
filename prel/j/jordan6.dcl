@@ -52,7 +52,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="150"/>
+<Adjective nr="153"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
@@ -80,7 +80,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="150"/>
+<Adjective nr="153"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">

@@ -166,6 +166,40 @@
 </Adjective>
 </Cluster>
 </RCluster>
+<RCluster aid="ABIAN" nr="7">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="33"/>
+<Adjective nr="66" value="false"/>
+</Cluster>
+</RCluster>
+<RCluster aid="ABIAN" nr="8">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="33"/>
+<Adjective nr="66"/>
+</Cluster>
+</RCluster>
 <FCluster aid="ABIAN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -578,6 +612,20 @@
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ABIAN" nr="2">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="33"/>
+<Adjective nr="66" value="false"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 </Registrations>

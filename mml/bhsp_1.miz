@@ -138,13 +138,15 @@ a holds ( x .|. x = 0 iff x = 0.IT ) & 0 <= x .|. x & x .|. y = y .|. x & (x+y)
 end;
 
 registration
-  cluster RealUnitarySpace-like RealLinearSpace-like Abelian add-associative
+  cluster RealUnitarySpace-like vector-distributive scalar-distributive
+  scalar-associative scalar-unital Abelian add-associative
     right_zeroed right_complementable strict (non empty UNITSTR);
   existence
   proof
     take X0;
     thus X0 is RealUnitarySpace-like by Def2,Lm6;
-    thus X0 is RealLinearSpace-like
+    thus X0 is vector-distributive scalar-distributive scalar-associative
+    scalar-unital
     proof
       thus for a being real number for v,w being VECTOR of X0 holds a * (v + w
       ) = a * v + a * w
@@ -153,7 +155,7 @@ registration
         let v,w be VECTOR of X0;
         reconsider v9= v, w9 = w as VECTOR of (0).V0;
         thus a * (v + w) = a *( v9 + w9)
-          .= a * v9 + a * w9 by RLVECT_1:def 9
+          .= a * v9 + a * w9 by RLVECT_1:def 8
           .= a * v + a * w;
       end;
       thus for a,b being real number for v being VECTOR of X0 holds (a + b) *
@@ -173,13 +175,13 @@ registration
         let v be VECTOR of X0;
         reconsider v9= v as VECTOR of (0).V0;
         thus (a * b) * v = (a * b) * v9
-          .= a * (b * v9) by RLVECT_1:def 9
+          .= a * (b * v9) by RLVECT_1:def 10,def 11
           .= a * (b * v);
       end;
       let v be VECTOR of X0;
       reconsider v9= v as VECTOR of (0).V0;
       thus 1 * v = 1 * v9
-        .= v by RLVECT_1:def 9;
+        .= v by RLVECT_1:def 11;
     end;
 A1: for x,y be VECTOR of X0 for x9,y9 be VECTOR of (0).V0 st x = x9 & y =
     y9 holds x + y= x9 + y9 & for a holds a * x = a * x9;
@@ -220,7 +222,8 @@ A2:   v9 + w9 = 0.(0).V0 by ALGSTR_0:def 11;
 end;
 
 definition
-  mode RealUnitarySpace is RealUnitarySpace-like RealLinearSpace-like Abelian
+  mode RealUnitarySpace is RealUnitarySpace-like vector-distributive
+  scalar-distributive scalar-associative scalar-unital Abelian
     add-associative right_zeroed right_complementable (non empty UNITSTR);
 end;
 
@@ -368,8 +371,7 @@ A2: for t be real number holds x .|. x * t^2 + (2 * x .|. y) * t + y .|.
       let t be real number;
       reconsider t as Real by XREAL_0:def 1;
       (t * x + y) .|. (t * x + y) >= 0 by Def2;
-      then (t * x) .|. (t * x) + 2 * (t * x) .|. y + y .|. y >= 0 by
-      Th21;
+      then (t * x) .|. (t * x) + 2 * (t * x) .|. y + y .|. y >= 0 by Th21;
       then t * x .|. (t * x) + 2 * (t * x) .|. y + y .|. y >= 0 by Def2;
       then t * ( t * x .|. x) + 2 * (t * x) .|. y + y .|. y >= 0 by Def2;
       then x .|. x * t^2 + 2 * (x .|. y * t) + y .|. y >= 0 by Def2;
@@ -385,12 +387,10 @@ A3: x .|. x >= 0 by Def2;
     then (x .|. y)^2 - x .|. x * y .|. y <= 0/4 by XREAL_1:79;
     then (x .|. y)^2 <= x .|. x * y .|. y by XREAL_1:52;
     then (abs(x .|. y))^2 >= 0 & (abs(x .|. y))^2 <= x .|. x * y .|. y by
-    COMPLEX1:161,XREAL_1:65;
-    then sqrt (abs(x .|. y))^2 <= sqrt (x .|. x * y .|. y) by
-    SQUARE_1:94;
+COMPLEX1:161,XREAL_1:65;
+    then sqrt (abs(x .|. y))^2 <= sqrt (x .|. x * y .|. y) by SQUARE_1:94;
     then
-A4: abs(x .|. y) <= sqrt (x .|. x * y .|. y) by COMPLEX1:132 ,
-    SQUARE_1:89;
+A4: abs(x .|. y) <= sqrt (x .|. x * y .|. y) by COMPLEX1:132,SQUARE_1:89;
     y .|. y >= 0 by Def2;
     hence thesis by A3,A4,SQUARE_1:97;
   end;
@@ -398,7 +398,7 @@ A4: abs(x .|. y) <= sqrt (x .|. x * y .|. y) by COMPLEX1:132 ,
   proof
     assume
     x = 09(X);
-    then x .|. y = 0 & sqrt (x .|. x) = 0 by Def2,Th19,SQUARE_1:82;
+    then x .|. y = 0 & sqrt (x .|. x) = 0 by Th19,SQUARE_1:82;
     hence thesis by ABSVALUE:7;
   end;
   hence thesis by A1;
@@ -531,14 +531,14 @@ A2: ||.x + y.||^2 = x .|. x + 2 * x .|. y + y .|. y by Th21;
   x .|. x >= 0 by Def2;
   then
 A3: ||.x + y.||^2 = (sqrt (x .|. x))^2 + 2 * x .|. y + y .|. y by A2,
-  SQUARE_1:def 4;
+SQUARE_1:def 4;
 A4: ||.x.|| >= 0 & ||.y.|| >= 0 by Th34;
   abs(x .|. y) <= ||.x.|| * ||.y.|| & x .|. y <= abs(x .|. y) by Th24,
-  ABSVALUE:11;
+ABSVALUE:11;
   then x .|. y <= ||.x.|| * ||.y.|| by XXREAL_0:2;
   then 2 * x .|. y <= 2 * (||.x.|| * ||.y.||) by XREAL_1:66;
   then ||.x.||^2 + 2 * x .|. y <= ||.x.||^2 + 2 * ||.x.|| * ||.y.|| by
-  XREAL_1:9;
+XREAL_1:9;
   then
 A5: ||.x.||^2 + 2 * x .|. y + ||.y.||^2 <= ||.x.||^2 + 2 * ||.x.|| * ||.y
   .|| + ||.y.||^2 by XREAL_1:8;
@@ -873,7 +873,7 @@ proof
     let n;
     thus (a * (seq1 + seq2)).n = a * (seq1 + seq2).n by NORMSP_1:def 8
       .= a * (seq1.n + seq2.n) by NORMSP_1:def 5
-      .= a * seq1.n + a * seq2.n by RLVECT_1:def 9
+      .= a * seq1.n + a * seq2.n by RLVECT_1:def 8
       .= (a * seq1).n + a * seq2.n by NORMSP_1:def 8
       .= (a * seq1).n + (a * seq2).n by NORMSP_1:def 8
       .= (a * seq1 + a * seq2).n by NORMSP_1:def 5;
@@ -901,7 +901,7 @@ proof
   now
     let n;
     thus ((a * b) * seq).n = (a * b) * seq.n by NORMSP_1:def 8
-      .= a * (b * seq.n) by RLVECT_1:def 9
+      .= a * (b * seq.n) by RLVECT_1:def 10,def 11
       .= a * (b * seq).n by NORMSP_1:def 8
       .= (a * (b * seq)).n by NORMSP_1:def 8;
   end;
@@ -914,7 +914,7 @@ proof
   now
     let n;
     thus (1 * seq).n = 1 * seq.n by NORMSP_1:def 8
-      .= seq.n by RLVECT_1:def 9;
+      .= seq.n by RLVECT_1:def 11;
   end;
   hence thesis by FUNCT_2:113;
 end;

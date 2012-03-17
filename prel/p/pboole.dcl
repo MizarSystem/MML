@@ -176,6 +176,34 @@
 </Adjective>
 </Cluster>
 </RCluster>
+<RCluster aid="PBOOLE" nr="7">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="7">
+<LocusVar nr="2"/>
+</Adjective>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="14">
+<LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+</RCluster>
 <FCluster aid="PBOOLE" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">

@@ -34,7 +34,7 @@
 <Adjective nr="25"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MATRIX_1" nr="2">
@@ -60,7 +60,7 @@
 <Adjective nr="25"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MATRIX_1" nr="3">
@@ -89,7 +89,7 @@
 <Adjective nr="25"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MATRIX_1" nr="4">
@@ -126,8 +126,8 @@
 <Adjective nr="25"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="90"/>
-<Adjective nr="91">
+<Adjective nr="93"/>
+<Adjective nr="94">
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>

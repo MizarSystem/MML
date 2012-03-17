@@ -30,7 +30,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="99"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CSSPACE" nr="2">
@@ -40,7 +40,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CSSPACE" nr="3">
@@ -54,9 +54,12 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="94"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
+<Adjective nr="105"/>
+<Adjective nr="106"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CSSPACE" nr="1">
@@ -69,7 +72,7 @@
 </Func>
 <Cluster>
 <Adjective nr="85"/>
-<Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE" nr="2">
@@ -81,8 +84,11 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE" nr="3">
@@ -169,7 +175,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE" nr="4">
@@ -192,7 +198,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE" nr="5">
@@ -204,7 +210,10 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="94"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -53,10 +53,10 @@
 <Adjective nr="28"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="100"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="2">
@@ -75,9 +75,9 @@
 <Adjective nr="28"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="3">
@@ -108,11 +108,11 @@
 <Adjective nr="28"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="92"/>
-<Adjective nr="151"/>
-<Adjective nr="152"/>
-<Adjective nr="153"/>
+<Adjective nr="95"/>
 <Adjective nr="154"/>
+<Adjective nr="155"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GOBOARD1" nr="1">
@@ -123,7 +123,7 @@
 <Func kind="K" nr="51"/>
 </Typ>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="99"/>
 </Cluster>
 </CCluster>
 </Registrations>

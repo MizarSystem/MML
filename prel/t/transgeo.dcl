@@ -31,8 +31,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="90"/>
-<Adjective nr="95"/>
+<Adjective nr="93"/>
+<Adjective nr="98"/>
 </Cluster>
 </RCluster>
 </Registrations>

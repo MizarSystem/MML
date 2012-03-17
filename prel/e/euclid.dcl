@@ -48,7 +48,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="38"/>
-<Adjective nr="131"/>
+<Adjective nr="134"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -117,7 +117,7 @@
 </Func>
 <Cluster>
 <Adjective nr="43" value="false"/>
-<Adjective nr="179"/>
+<Adjective nr="185"/>
 </Cluster>
 </FCluster>
 <FCluster aid="EUCLID" nr="5">
@@ -134,11 +134,14 @@
 <Cluster>
 <Adjective nr="55"/>
 <Adjective nr="90"/>
-<Adjective nr="170"/>
-<Adjective nr="171"/>
-<Adjective nr="172"/>
 <Adjective nr="173"/>
+<Adjective nr="174"/>
+<Adjective nr="175"/>
+<Adjective nr="176"/>
+<Adjective nr="177"/>
+<Adjective nr="178"/>
 <Adjective nr="179"/>
+<Adjective nr="185"/>
 </Cluster>
 </FCluster>
 <FCluster aid="EUCLID" nr="6">
@@ -153,8 +156,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="153"/>
-<Adjective nr="179"/>
+<Adjective nr="156"/>
+<Adjective nr="185"/>
 </Cluster>
 </FCluster>
 <CCluster aid="EUCLID" nr="1">
@@ -217,7 +220,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="131"/>
+<Adjective nr="134"/>
 </Cluster>
 </CCluster>
 <CCluster aid="EUCLID" nr="4">

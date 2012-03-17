@@ -14,6 +14,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -28,34 +29,44 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="NORMSP_2"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="CAT_1"/>
+<ArticleID name="CAT_2"/>
+<ArticleID name="GRCAT_1"/>
 <ArticleID name="LOPBAN_1"/>
 </Signature>
 <FCluster aid="LOPBAN_5" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="90"/>
-<Adjective nr="115"/>
-<Adjective nr="116"/>
-<Adjective nr="117"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="93"/>
 <Adjective nr="118"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
 <Adjective nr="121"/>
-<Adjective nr="136"/>
+<Adjective nr="122"/>
+<Adjective nr="123"/>
+<Adjective nr="124"/>
+<Adjective nr="127"/>
+<Adjective nr="166"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="67"/>
-<Adjective nr="71"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 </Registrations>

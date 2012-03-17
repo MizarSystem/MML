@@ -70,17 +70,17 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="152" value="false"/>
-<Adjective nr="153" value="false"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
+<Adjective nr="155" value="false"/>
+<Adjective nr="156" value="false"/>
+<Adjective nr="158"/>
+<Adjective nr="159"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN21" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -96,14 +96,14 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="156"/>
+<Adjective nr="159"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN21" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -119,13 +119,13 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="156"/>
+<Adjective nr="159"/>
 </Cluster>
 </FCluster>
 <CCluster aid="JORDAN21" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="156"/>
+<Adjective nr="159"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -144,7 +144,7 @@
 <CCluster aid="JORDAN21" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -157,8 +157,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
+<Adjective nr="158"/>
+<Adjective nr="159"/>
 </Cluster>
 </CCluster>
 </Registrations>

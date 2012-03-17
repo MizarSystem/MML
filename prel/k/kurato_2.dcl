@@ -153,7 +153,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="176"/>
+<Adjective nr="179"/>
 </Cluster>
 </FCluster>
 <FCluster aid="KURATO_2" nr="3">
@@ -167,8 +167,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="159"/>
-<Adjective nr="176"/>
+<Adjective nr="162"/>
+<Adjective nr="179"/>
 </Cluster>
 </FCluster>
 <CCluster aid="KURATO_2" nr="1">
@@ -245,7 +245,7 @@
 </Adjective>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="182">
+<Adjective nr="185">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

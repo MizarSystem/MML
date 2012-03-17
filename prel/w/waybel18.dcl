@@ -70,7 +70,7 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="235"/>
+<Adjective nr="238"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL18" nr="2">
@@ -91,8 +91,8 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="229"/>
-<Adjective nr="235"/>
+<Adjective nr="232"/>
+<Adjective nr="238"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL18" nr="1">
@@ -110,8 +110,8 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="229"/>
-<Adjective nr="235"/>
+<Adjective nr="232"/>
+<Adjective nr="238"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -140,8 +140,8 @@
 <Adjective nr="14">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="229"/>
-<Adjective nr="235"/>
+<Adjective nr="232"/>
+<Adjective nr="238"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -152,7 +152,7 @@
 <Cluster>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="183"/>
+<Adjective nr="186"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="3">
@@ -286,7 +286,7 @@
 <Func kind="K" nr="425"/>
 <Cluster>
 <Adjective nr="48"/>
-<Adjective nr="236"/>
+<Adjective nr="239"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="8">
@@ -305,7 +305,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="229"/>
+<Adjective nr="232"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="9">
@@ -322,7 +322,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="235"/>
+<Adjective nr="238"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="10">
@@ -422,8 +422,8 @@
 <Adjective nr="77"/>
 <Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="217"/>
-<Adjective nr="233"/>
+<Adjective nr="220"/>
+<Adjective nr="236"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -436,7 +436,7 @@
 </Func>
 <Cluster>
 <Adjective nr="73"/>
-<Adjective nr="233"/>
+<Adjective nr="236"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL18" nr="1">
@@ -444,7 +444,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="235"/>
+<Adjective nr="238"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -452,7 +452,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="214"/>
+<Adjective nr="217"/>
 </Cluster>
 </CCluster>
 </Registrations>

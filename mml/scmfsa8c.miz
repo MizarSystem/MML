@@ -8,10 +8,10 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, FSM_1, SCMFSA_2, CAT_1, AMI_1, SCMFSA8A,
       XXREAL_0, CIRCUIT2, FUNCT_4, CARD_1, RELAT_1, ARYTM_3, AMISTD_2, GRAPHSP,
-      AMI_3, SCMNORM, TARSKI, VALUED_1, CARD_3, FUNCT_1, ARYTM_1, TURING_1,
+      AMI_3, SCMNORM, TARSKI, VALUED_1, FUNCT_1, ARYTM_1, TURING_1,
       SCMFSA6C, FUNCOP_1, SCMFSA6A, SCMFSA6B, XBOOLE_0, MSUALG_1, UNIALG_2,
       SCMFSA7B, GLIB_000, SF_MASTR, STRUCT_0, NAT_1, SCMFSA8B, FUNCT_7,
-      SCMFSA8C, ORDINAL1, PARTFUN1;
+      SCMFSA8C, ORDINAL1, PARTFUN1, RELOC;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_4, FUNCT_7, CARD_3, VALUED_1, AFINSQ_1,
@@ -26,10 +26,10 @@ environ
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, ORDINAL1, XBOOLE_0, SCMNORM,
       AFINSQ_1, VALUED_1, FUNCT_4, RELAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_1, SCMFSA_2, SCMFSA8A, SCMFSA6A, SCMNORM;
+ definitions SCMFSA_5, FUNCOP_1, AMI_1, SCMFSA_2, SCMFSA8A, SCMFSA6A, SCMNORM;
  theorems FUNCT_4, SCMFSA_4, SCMFSA6A, SCMFSA8B, AMI_1, SCMFSA6C, SCMFSA7B,
       SCMFSA8A, SF_MASTR, NAT_1, SCMFSA6B, GRFUNC_1, SCMFSA_2, SCMFSA_5,
-      FUNCT_1, FUNCT_7, TARSKI, ENUMSET1, FUNCOP_1, RELAT_1, CARD_1, SCMFSA_3,
+      FUNCT_1, FUNCT_7, TARSKI, ENUMSET1, FUNCOP_1, RELAT_1, SCMFSA_3,
       INT_1, XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, XXREAL_0, VALUED_1,
       SCMNORM, AFINSQ_1, XREAL_0, PBOOLE, PARTFUN1;
  schemes NAT_1;
@@ -61,7 +61,7 @@ proof
 A1: not IC Comput(ProgramPart( (s +* (P +* Start-At( 0,SCM+FSA)))), (s +* (P +*
 Start-At( 0,SCM+FSA))),
  pseudo-LifeSpan(s,
-  P)) in dom ProgramPart P by AFINSQ_1:70;
+  P)) in dom ProgramPart P;
   let k be Element of NAT;
   assume
 A2: for n being Element of NAT st n <= k holds IC Comput(ProgramPart( (s +* (P
@@ -219,13 +219,13 @@ VALUED_1:def 12;
     then
 A11:  (n + 0) in dom Shift(ProgramPart P,0) by A3,A9;
     then
-A12: pi(Shift(ProgramPart P,0),n + 0) = Shift(ProgramPart P,0). (n
-    + 0) by AMI_1:def 47
+A12: Shift(ProgramPart P,0)/.(n+0) = Shift(ProgramPart P,0). (n
+    + 0) by PARTFUN1:def 8
       .= (ProgramPart P). n by A10,VALUED_1:def 12
       .= P. n by AMI_1:105;
     then consider i being Instruction of SCM+FSA such that
 A13: i = P. n;
-    thus (ProgramPart Relocated(P,0)).x = IncAddr(Shift(ProgramPart P,0),0).
+    thus (ProgramPart Relocated(P,0)).x = Reloc(ProgramPart P,0).
      (n + 0) by A8,SCMFSA_5:2
       .= IncAddr(i,0) by A11,A12,A13,SCMFSA_4:def 6
       .= P.x by A8,A13,Th8;
@@ -265,18 +265,18 @@ A9: m1 in dom ProgramPart P by A1;
 A10:  (m1 + k) in dom Shift(ProgramPart Q,k) by A6,A3,A9;
 A11:  (m1 + k) in dom Shift(ProgramPart P,k) by A2,A9;
     then
-A12: pi(Shift(ProgramPart P,k),m1 + k) = Shift(ProgramPart P,k). (
-    m1 + k) by AMI_1:def 47
+A12: Shift(ProgramPart P,k)/.(m1+k) = Shift(ProgramPart P,k). (
+    m1 + k) by PARTFUN1:def 8
       .= Shift(ProgramPart Q,k). (m1 + k) by A5,A11,GRFUNC_1:8
-      .= pi(Shift(ProgramPart Q,k),m1 + k) by A10,AMI_1:def 47;
-    thus (ProgramPart rP).x = IncAddr(Shift(ProgramPart P,k),k). (m1 +
-    k) by A8,SCMFSA_5:2
-      .= IncAddr(pi(Shift(ProgramPart Q,k),m1 + k),k) by A11,A12,SCMFSA_4:def 6
-      .= IncAddr(Shift(ProgramPart Q,k),k). (m1 + k) by A10,SCMFSA_4:def 6
+      .= Shift(ProgramPart Q,k)/.(m1+k) by A10,PARTFUN1:def 8;
+    thus (ProgramPart rP).x = Reloc(ProgramPart P,k). (m1 + k)
+     by A8,SCMFSA_5:2
+      .= IncAddr(Shift(ProgramPart Q,k)/.(m1+k),k) by A11,A12,SCMFSA_4:def 6
+      .= Reloc(ProgramPart Q,k).(m1 + k) by A10,SCMFSA_4:def 6
       .= (ProgramPart rQ).x by A8,SCMFSA_5:2;
   end;
-A13: ProgramPart rQ = IncAddr(Shift(ProgramPart Q,k),k) by SCMFSA_5:2;
-A14: ProgramPart rP = IncAddr(Shift(ProgramPart P,k),k) by SCMFSA_5:2;
+A13: ProgramPart rQ = Reloc(ProgramPart Q,k) by SCMFSA_5:2;
+A14: ProgramPart rP = Reloc(ProgramPart P,k) by SCMFSA_5:2;
 A15: dom Shift(ProgramPart P,k) c= dom Shift(ProgramPart Q,k) by A5,GRFUNC_1:8;
   now
     let x be set;
@@ -581,8 +581,7 @@ proof
   let x be set;
   assume
 A1: x in dom I;
-  dom I c= NAT by RELAT_1:def 18;
-  then reconsider y = x as Element of NAT by A1;
+  reconsider y = x as Element of NAT by A1;
 A2: not y in dom Start-At(l,SCM+FSA) by AMI_1:137;
   x in dom (I +* Start-At(l,SCM+FSA)) by A1,FUNCT_4:13;
   hence (s +* (I +* Start-At(l,SCM+FSA))).x = (I +* Start-At(l,SCM+FSA)).x
@@ -651,7 +650,7 @@ proof
   let l be Element of NAT;
   thus IC (s +* (I +* Start-At(l,SCM+FSA))) = IC (s +* I +*
   Start-At(l,SCM+FSA)) by FUNCT_4:15
-    .= l by AMI_1:111;
+    .= l by FUNCT_4:121;
 end;
 
 theorem Th32:
@@ -1020,7 +1019,7 @@ A16: dom J c= dom JAt by GRFUNC_1:8;
     let k be Element of NAT;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(
 s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 A17: Comput(ProgramPart(s1),s1,k+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,k)) by AMI_1:14
       .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(
@@ -1037,7 +1036,7 @@ k+1)
 AMI_1:150;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(
 s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 A18: Comput(ProgramPart(s2),s2,k+1) = Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,k)) by AMI_1:14
       .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(
@@ -1136,7 +1135,7 @@ A6: ProgramPart Relocated(J,0) c= s2 by A5,FUNCT_4:26;
 A7: IC Comput(ProgramPart( s1), s1,i) + 0 = IC Comput(ProgramPart( s1), s1,i);
 A8: IC s2 = IC (s2 +* (J +* Start-At( 0,SCM+FSA))) by A3,FUNCT_4:79
     .= IC (s2 +* J +* Start-At( 0,SCM+FSA)) by FUNCT_4:15
-    .=  0 by AMI_1:111;
+    .=  0 by FUNCT_4:121;
   IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(
 s1),s1,i)),0)
    = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1),
@@ -1166,9 +1165,9 @@ A6: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
 A7: now
     let k be Element of NAT;
 TX2: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
     CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,k)) = halt SCM+FSA;
     then CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
@@ -1177,11 +1176,11 @@ by AMI_1:144;
   end;
 TX1: ProgramPart s1 = ProgramPart
 Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1))
-by AMI_1:144;
+by AMI_1:123;
 TX2: ProgramPart s2 = ProgramPart
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)
 )
-by AMI_1:144;
+by AMI_1:123;
   CurInstr(ProgramPart s1,
 Comput(ProgramPart(s1),s1,LifeSpan(ProgramPart(s1),s1)))
    = halt SCM+FSA by A6,AMI_1:def 46;
@@ -1247,11 +1246,11 @@ A16: DataPart s11 = DataPart s21 by A10,A13,Th33;
 TX11: ProgramPart s11 = ProgramPart
 Comput(ProgramPart(s11),s11,LifeSpan(ProgramPart(
 s11),s11))
-by AMI_1:144;
+by AMI_1:123;
 TX21: ProgramPart s21 = ProgramPart
 Comput(ProgramPart(s21),s21,LifeSpan(ProgramPart(
 s11),s11))
-by AMI_1:144;
+by AMI_1:123;
 A17: ProgramPart s11 halts_on s11 by A7,A4,SCMFSA7B:def 8;
   then CurInstr(ProgramPart s11,
   Comput(ProgramPart(s11),s11,LifeSpan(ProgramPart(s11),s11)))
@@ -1263,15 +1262,14 @@ A17: ProgramPart s11 halts_on s11 by A7,A4,SCMFSA7B:def 8;
 A18: ProgramPart s21 halts_on s21 by AMI_1:146;
   I is_halting_on s11 by A6,A7,A5,SCMFSA8B:8;
   then
-A19: LifeSpan(ProgramPart(s11),s11) = LifeSpan(ProgramPart(s21),s21) by A8,A16,
-A2,A3,Th44;
-  thus DataPart IExec(I,s1) = DataPart Result(ProgramPart(s11),s11) by SCMFSA8B
-:35
+A19: LifeSpan(ProgramPart(s11),s11) = LifeSpan(ProgramPart(s21),s21) by A8,A16
+,A2,A3,Th44;
+  thus DataPart IExec(I,s1) = DataPart Result(ProgramPart(s11),s11) by
+SCMFSA8B:35
     .= DataPart Comput(ProgramPart( s11), s11,LifeSpan(ProgramPart(s11),s11))
 by A17,AMI_1:122
     .= DataPart Comput(ProgramPart( s21), s21,LifeSpan(ProgramPart(s11),s11))
-by A8,A16,A2,A3
-,Th43
+by A8,A16,A2,A3,Th43
     .= DataPart Result(ProgramPart(s21),s21) by A19,A18,AMI_1:122
     .= DataPart IExec(I,s2) by SCMFSA8B:35;
 end;
@@ -1310,11 +1308,11 @@ A11: I +* Start-At( 0,SCM+FSA) c= s21 by A9,XBOOLE_1:1;
 TX11: ProgramPart s11 = ProgramPart
 Comput(ProgramPart(s11),s11,LifeSpan(ProgramPart(
 s11),s11))
-by AMI_1:144;
+by AMI_1:123;
 TX21: ProgramPart s21 = ProgramPart
 Comput(ProgramPart(s21),s21,LifeSpan(ProgramPart(
 s11),s11))
-by AMI_1:144;
+by AMI_1:123;
 A12: ProgramPart s11 halts_on s11 by A3,A5,SCMFSA7B:def 8;
   then CurInstr(ProgramPart s11,
   Comput(ProgramPart(s11),s11,LifeSpan(ProgramPart(s11),s11)))
@@ -1326,15 +1324,14 @@ A12: ProgramPart s11 halts_on s11 by A3,A5,SCMFSA7B:def 8;
 A13: ProgramPart s21 halts_on s21 by AMI_1:146;
   I is_halting_on s11 by A2,A3,A6,SCMFSA8B:8;
   then
-A14: LifeSpan(ProgramPart(s11),s11) = LifeSpan(ProgramPart(s21),s21) by A7,A8,
-A10,A11,Th44;
-  thus DataPart IExec(I,s1) = DataPart Result(ProgramPart(s11),s11) by SCMFSA8B
-:35
+A14: LifeSpan(ProgramPart(s11),s11) = LifeSpan(ProgramPart(s21),s21) by A7,A8
+,A10,A11,Th44;
+  thus DataPart IExec(I,s1) = DataPart Result(ProgramPart(s11),s11) by
+SCMFSA8B:35
     .= DataPart Comput(ProgramPart( s11), s11,LifeSpan(ProgramPart(s11),s11))
 by A12,AMI_1:122
     .= DataPart Comput(ProgramPart( s21), s21,LifeSpan(ProgramPart(s11),s11))
-by A7,A8,A10,A11
-,Th43
+by A7,A8,A10,A11,Th43
     .= DataPart Result(ProgramPart(s21),s21) by A14,A13,AMI_1:122
     .= DataPart IExec(I,s2) by SCMFSA8B:35;
 end;
@@ -1426,8 +1423,7 @@ A5: I is_pseudo-closed_on Initialize s by A3,SCMFSA8A:def 3;
 
     hence
     pseudo-LifeSpan(s,Initialized I) =
-pseudo-LifeSpan(Initialize s,I) by A3,A5
-,SCMFSA8A:def 5;
+pseudo-LifeSpan(Initialize s,I) by A3,A5,SCMFSA8A:def 5;
 
   end;
 X:  s +* (Initialized I +* Start-At( 0,SCM+FSA)) =
@@ -1485,8 +1481,7 @@ A9: Initialized I is_pseudo-closed_on s by A7,SCMFSA8A:def 3;
   Start-At( 0,SCM+FSA))),n) in dom Initialized I holds k <= n by A8;
 
   hence pseudo-LifeSpan(s,Initialized I) =
-pseudo-LifeSpan(Initialize s,I) by
-A7,A9,SCMFSA8A:def 5;
+pseudo-LifeSpan(Initialize s,I) by A7,A9,SCMFSA8A:def 5;
 
 end;
 
@@ -1611,7 +1606,7 @@ AMI_1:150;
 A12:  k + 1 < pseudo-LifeSpan(s1,I);
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart
 (s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 A14:  Comput(ProgramPart(s1),s1,k+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,k)) by AMI_1:14
         .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,k),Comput(
@@ -1625,7 +1620,7 @@ A15:  IC Comput(ProgramPart(s1),s1,k+1) in dom I by A2,A12,SCMFSA8A:def 5;
 A16:  l in dom ProgramPart I by A15,XBOOLE_0:def 4;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart
 (s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 A17:  Comput(ProgramPart(s2),s2,k+1) = Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,k)) by AMI_1:14
         .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(
@@ -1669,7 +1664,7 @@ Start-At( 0,SCM+FSA))),0) =
 IC (s1 +* (I
       +* Start-At( 0,SCM+FSA))) by AMI_1:13
         .= IC (s1 +* I +* Start-At( 0,SCM+FSA)) by FUNCT_4:15
-        .=  0 by AMI_1:111;
+        .=  0 by FUNCT_4:121;
       assume
       0 < pseudo-LifeSpan(s1,I);
       then
@@ -1728,7 +1723,7 @@ A31: P[k];
 ProgramPart(s1),s1,k));
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(
 s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 A32: Comput(ProgramPart(s2),s2,k+1) = Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,k)) by AMI_1:14
       .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s2),s2,k),Comput(
@@ -1740,7 +1735,7 @@ A33: k + 1 <= pseudo-LifeSpan(s1,I);
 A34: k + 1 <= pseudo-LifeSpan(s1,I) + 1 by NAT_1:12;
 A35: k < pseudo-LifeSpan(s1,I) by A33,NAT_1:13;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 A36: Comput(ProgramPart(s1),s1,k+1) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,k)
 )
@@ -1791,7 +1786,7 @@ A1: I +* Start-At( 0,SCM+FSA) c= s1 +* (I +* Start-At( 0,SCM+FSA))
 A2: IC (s2 +* (I +* Start-At( 0,SCM+FSA))) = IC (s2 +* I +*
 Start-At( 0,SCM+FSA))
   by FUNCT_4:15
-    .=  0 by AMI_1:111;
+    .=  0 by FUNCT_4:121;
 A3: I c= I +* Start-At( 0,SCM+FSA) by SCMFSA8A:9;
   I +* Start-At( 0,SCM+FSA) c= s2 +* (I +* Start-At( 0,SCM+FSA))
   by FUNCT_4:26;
@@ -1834,8 +1829,7 @@ Start-At( 0,SCM+FSA)),I)) by A6,Th50
     s1 +* (I +*
     Start-At( 0,SCM+FSA)),I))
   + 0 by A5,A8,A1,A4,A2,Th51
-    .= IC Comput(ProgramPart(S1),S1,pseudo-LifeSpan(s1,I)) by
-A6,Th50;
+    .= IC Comput(ProgramPart(S1),S1,pseudo-LifeSpan(s1,I)) by A6,Th50;
   hence thesis by A7,A9,SCMFSA8A:def 3;
 end;
 
@@ -2067,7 +2061,7 @@ A8: dom I0 c= dom I1 by GRFUNC_1:8;
 A9: ProgramPart Relocated(I0,0) c= s10 by A6,XBOOLE_1:1;
   s10 = s +* I1 +* Start-At( 0,SCM+FSA) by FUNCT_4:15;
   then
-A10: IC s10 =  0 by AMI_1:111;
+A10: IC s10 =  0 by FUNCT_4:121;
 A11: I0 +* Start-At( 0,SCM+FSA) c= s00 by FUNCT_4:26;
 A12: now
     let n be Element of NAT;
@@ -2117,7 +2111,7 @@ s00,n)
  = Comput(ProgramPart(s00),s00,n).IC Comput(ProgramPart(s00),s00,n) by
 AMI_1:150;
 TX10: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,n)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A20: k > n;
     then
@@ -2128,7 +2122,7 @@ A21: l in dom I0 by A3,A14,SCMFSA8A:def 5;
 ),s00,n)) by A16,A20
       .= s00.l by Z,AMI_1:54
       .= I0.l by A21,Th26;
-    then halt SCM+FSA in rng I0 by A19,A21,FUNCT_1:def 5,TX10;
+    then halt SCM+FSA in rng I0 by A19,A21,TX10,FUNCT_1:def 5;
     hence contradiction by AMI_1:def 12;
   end;
 z: card Stop SCM+FSA = 1 by SCMNORM:3;
@@ -2136,7 +2130,7 @@ z: card Stop SCM+FSA = 1 by SCMNORM:3;
   then card I < card I1 by NAT_1:13;
   then
 A22:  card I in dom I1 by AFINSQ_1:70;
-  card I < card I + card Stop SCM+FSA by NAT_1:13,z;
+  card I < card I + card Stop SCM+FSA by z,NAT_1:13;
   then I1. card I = IncAddr(halt SCM+FSA,card I) by A1,Th13
     .= halt SCM+FSA by SCMFSA_4:8;
   then
@@ -2153,11 +2147,9 @@ AMI_1:150;
     assume
 A26: k <= n + 1;
 TX: ProgramPart s10 = ProgramPart Comput(ProgramPart( s10), s10,n+1)
-by AMI_1:144;
-T: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,n)
-by AMI_1:144;
+by AMI_1:123;
     thus
-K:   now
+   now
       per cases by A26,NAT_1:8;
       suppose
         k = n + 1;
@@ -2172,19 +2164,19 @@ A27:    k <= n;
         Comput(ProgramPart( s10), s10,n+1) = Following(ProgramPart s10,
         Comput(ProgramPart(s10),s10,n)) by AMI_1:14
           .= Exec(CurInstr(ProgramPart (s10),Comput(ProgramPart(s10),s10,n)),
-           Comput(ProgramPart( s10), s10,n)) by T;
+           Comput(ProgramPart( s10), s10,n));
         hence IC Comput(ProgramPart( s10), s10,n+1) =  card I by A25,A27,
 AMI_1:def 8;
       end;
     end;
-    hence thesis by A23,Z,AMI_1:54,TX,K;
+    hence thesis by A23,Z,TX,AMI_1:54;
   end;
 Y:  (ProgramPart Comput(ProgramPart(s10),s10,0))/.IC Comput(ProgramPart(s10),
 s10,0)
  = Comput(ProgramPart(s10),s10,0).IC Comput(ProgramPart(s10),s10,0) by
 AMI_1:150;
 TX0: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,0)
-by AMI_1:144;
+by AMI_1:123;
 A28: P[0]
   proof
     assume
@@ -2195,7 +2187,7 @@ s00,k) by A12
       .=  card ProgramPart I0 by A3,A14,SCMFSA8A:def 5
       .=  card I0 by AMI_1:105
       .=  card I by SCMFSA8A:34;
-    hence thesis by A23,Y,AMI_1:13,TX0;
+    hence thesis by A23,Y,TX0,AMI_1:13;
   end;
 A29: for n being Element of NAT holds P[n] from NAT_1:sch 1(A28,A24);
   now
@@ -2222,13 +2214,11 @@ A31: card ProgramPart I0 = card I0 by AMI_1:105
   then
 A32: ProgramPart s10 halts_on s10 by AMI_1:146;
   hence I1 is_halting_on s by SCMFSA7B:def 8;
-TX10: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,k)
-by AMI_1:144;
   CurInstr(ProgramPart s10,Comput(ProgramPart(s10),
 s10,k))
    = halt SCM+FSA by A29;
   then
-A33: LifeSpan(ProgramPart(s10),s10) = k by A32,A18,AMI_1:def 46,TX10;
+A33: LifeSpan(ProgramPart(s10),s10) = k by A32,A18,AMI_1:def 46;
   defpred P[Nat] means $1 < pseudo-LifeSpan(s,I0) implies IC
 Comput(ProgramPart( s1), s1,$1) in dom I & IC Comput(ProgramPart( s1), s1,$1) =
 IC Comput(ProgramPart( s10), s10,$1)
@@ -2273,7 +2263,7 @@ s00),s00,n))
         .= I0.l by A35,A36,A41,Th26,NAT_1:12
         .= goto  card I by A35,A36,A42,NAT_1:12,SCMFSA8A:30;
 T: ProgramPart s00 = ProgramPart Comput(ProgramPart(s00),s00,n)
-by AMI_1:144;
+by AMI_1:123;
 A44:  IC Comput(ProgramPart( s00), s00,n+1) =
 IC Following(ProgramPart s00,Comput(ProgramPart(s00)
 ,s00,n))
@@ -2281,7 +2271,7 @@ IC Following(ProgramPart s00,Comput(ProgramPart(s00)
         .=  card I by A43,T,SCMFSA_2:95
         .=  card I0 by SCMFSA8A:34;
       IC Comput(ProgramPart( s00), s00,n+1) in dom I0 by A3,A36,SCMFSA8A:31;
-      hence contradiction by A44,AFINSQ_1:70;
+      hence contradiction by A44;
     end;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,n))/.IC Comput(ProgramPart(s1),s1,n)
  = Comput(ProgramPart(s1),s1,n).IC Comput(ProgramPart(s1),s1,n) by AMI_1:150;
@@ -2300,7 +2290,7 @@ s1,n)) = s1.l
 (s10),s10,n))
        by U,AMI_1:54;
 T: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,n)
-by AMI_1:144;
+by AMI_1:123;
 A46: Comput(ProgramPart( s10), s10,n+1) =
 Following(ProgramPart s10,Comput(ProgramPart(s10),
 s10,n))
@@ -2314,7 +2304,7 @@ A47: IC Comput(ProgramPart( s00), s00,n+1) = IC Comput(ProgramPart( s10), s10,n
 +1) by A12,A36;
 A48: dom I0 = dom I by FUNCT_4:105;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,n)
-by AMI_1:144;
+by AMI_1:123;
 A49: Comput(ProgramPart( s1), s1,n+1) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,n)
 )
@@ -2349,7 +2339,7 @@ A52: P[0]
   proof
 A53: IC Comput(ProgramPart( s1), s1,0) = IC s1 by AMI_1:13
       .= IC (s +* I +* Start-At( 0,SCM+FSA)) by FUNCT_4:15
-      .=  0 by AMI_1:111;
+      .=  0 by FUNCT_4:121;
     assume
     0 < pseudo-LifeSpan(s,I0);
     then IC Comput(ProgramPart( (s +* (I0 +* Start-At( 0,SCM+FSA)))), (s +* (I0
@@ -2394,7 +2384,7 @@ A57:    n = 0;
 A58:    n = m + 1;
         reconsider m as Element of NAT by ORDINAL1:def 13;
 T: ProgramPart s10 = ProgramPart Comput(ProgramPart(s10),s10,m)
-by AMI_1:144;
+by AMI_1:123;
 A59:    Comput(ProgramPart( s10), s10,n) =
 Following(ProgramPart s10,Comput(ProgramPart(s10),
 s10,m))
@@ -2405,7 +2395,7 @@ ProgramPart(s10),s10,m)),
         set i = CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(
 ProgramPart(s1),s1,m));
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
 A60:    Comput(ProgramPart( s1), s1,n) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,m)
 )
@@ -2816,12 +2806,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1)
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1
 ) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 TX: ProgramPart s3
  = ProgramPart Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,I0) +
 1)
-by AMI_1:144;
+by AMI_1:123;
 A22: IC Comput(ProgramPart(s3),s3,pseudo-LifeSpan(s00,I0) +
 1) = IC Comput(
 ProgramPart( s3), s4,
@@ -2844,7 +2834,7 @@ A23: CurInstr(ProgramPart s3,
     .= if=0(a,I,J). (card I + card J + 3) by A10,A2,GRFUNC_1:8
     .= halt SCM+FSA by Th61;
   then
-A24: ProgramPart s3 halts_on s3 by TX,AMI_1:146;
+A24: ProgramPart s3 halts_on s3 by AMI_1:146;
   hence if=0(a,I,J) is_halting_on s by SCMFSA7B:def 8;
   now
     let k be Element of NAT;
@@ -2875,7 +2865,7 @@ A28:  k1 < pseudo-LifeSpan(s00,I0) by A25,A27,XREAL_1:8;
       then
 A29:  n + (card J + 3) < card if=0(a,I,J) by A26,XXREAL_0:2;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
       IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1)
 by A27,AMI_1:51
         .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A1,A21,A14
@@ -2897,7 +2887,7 @@ AMI_1:52;
     assume
 A30: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
     not pseudo-LifeSpan(s00,I0) + 1 <= k;
     then
@@ -2915,7 +2905,7 @@ Z:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
       .= s3. 0 by Th31,Y
       .= if=0(a,I,J). 0 by A32,Th26
       .= a =0_goto  (card J + 3) by Th55;
-    then k <> 0 by A30,A33,SCMFSA_2:124,TX3;
+    then k <> 0 by A30,A33,TX3,SCMFSA_2:124;
     then consider k1 being Nat such that
 A34: k1 + 1 = k by NAT_1:6;
     reconsider k1 as Element of NAT by ORDINAL1:def 13;
@@ -2930,7 +2920,7 @@ A35: k1 < pseudo-LifeSpan(s00,I0) by A31,XXREAL_0:2;
     then
 A36: n + (card J + 3) < card I + (card J + 3) by SCMFSA8A:34;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A37: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1) by
 A34,AMI_1:51
       .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A1,A21,A14,A18
@@ -2966,10 +2956,10 @@ s3,k))
     if=0(a,I,J).IC Comput(ProgramPart( s3), s3,k) = (Directed J1).IC Comput(
 ProgramPart( s3), s3,
     k) by A38,GRFUNC_1:8;
-    hence contradiction by A30,A39,A41,AMI_1:def 12,TX3;
+    hence contradiction by A30,A39,A41,TX3,AMI_1:def 12;
   end;
   then LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,
-I0) + 1 by A23,A24,TX,AMI_1:def 46;
+I0) + 1 by A23,A24,AMI_1:def 46;
   hence thesis by A19,A20,Th50;
 end;
 
@@ -3027,8 +3017,7 @@ A7: IC Comput(ProgramPart(s3),s3,1) =  (card J + 3) by A6,SCMFSA_2:96;
   then
 A8: I0 is_pseudo-closed_on s by A1,Th53;
   then
-A9: LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,I0) by
-Th58;
+A9: LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,I0) by Th58;
   DataPart s = DataPart s00 by SCMFSA8A:11;
   then
 A10: I0 is_pseudo-closed_on s00 by A8,Th52;
@@ -3087,11 +3076,11 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1)
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1
 ) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 TX3: ProgramPart s3 = ProgramPart
 Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,I0) +1)
-by AMI_1:144;
+by AMI_1:123;
   IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) +
 1) = IC Comput(
 ProgramPart( s3), s4,
@@ -3109,7 +3098,7 @@ by A8,Th50
   then
 A24: CurInstr(ProgramPart s3,
    Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1)) = s3. (card
-  I + card J + 3) by Y,AMI_1:54,TX3
+  I + card J + 3) by Y,TX3,AMI_1:54
     .= if=0(a,I,J). (card I + card J + 3) by A17,A14,GRFUNC_1:8
     .= halt SCM+FSA by Th61;
   then
@@ -3149,7 +3138,7 @@ A31: k1 < pseudo-LifeSpan(s00,I0) by A27,XXREAL_0:2;
     then
 A32: n + (card J + 3) < card I + (card J + 3) by SCMFSA8A:34;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A33: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1) by
 A30,AMI_1:51
       .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A20,A10,A23,A7
@@ -3179,9 +3168,9 @@ A36: IC Comput(ProgramPart( s3), s3,k) in dom if=0(a,I,J) by A33,AFINSQ_1:70;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
 A37: CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,k))
- = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+ = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if=0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A36,Th26;
     Directed J1 c= if=0(a,I,J) by A21,SCMFSA6A:55;
     then
@@ -3192,7 +3181,7 @@ ProgramPart( s3), s3,
   end;
   then
 A38: LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,I0)
-+ 1 by A24,A25,AMI_1:def 46,TX3;
++ 1 by A24,A25,AMI_1:def 46;
   s +* Initialized I1 = Initialize s +* (I1 +* Start-At( 0,SCM+FSA)) by
 SCMFSA8A:13;
   then
@@ -3202,26 +3191,22 @@ A40: I0 ';' Stop SCM+FSA = I1 by SCMFSA8A:41;
   then
 A41: DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s
 ,I0)) = DataPart
-Comput(ProgramPart( s1), s1,pseudo-LifeSpan(s,I0)) by A8,A40,
-Th58;
+Comput(ProgramPart( s1), s1,pseudo-LifeSpan(s,I0)) by A8,A40,Th58;
   I1 is_halting_on s by A8,Th58;
   then
 A42: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
   thus DataPart IExec(if=0(a,I,J),ss) = DataPart IExec(if=0(a,I,J),s) by Th17
     .= DataPart(Result(ProgramPart(s +* Initialized if=0(a,I,J)),s +*
-Initialized if=0(a,I,J)) +* s | A) by
-SCMFSA6B:def 1
+Initialized if=0(a,I,J)) +* s | A) by SCMFSA6B:def 1
     .= DataPart Result(ProgramPart(s3),s3) by A16,Th35
     .= DataPart Comput(ProgramPart( s3), s3,LifeSpan(ProgramPart(s3),s3)) by
 A25,AMI_1:122
     .= DataPart Comput(ProgramPart( s3), s4,pseudo-LifeSpan(
-s00,I0)) by A38,
-AMI_1:51
+s00,I0)) by A38,AMI_1:51
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s00,I0)) by A20
-,A10,A23,A7,A13,T,Th51
+s00,I0)) by A20,A10,A23,A7,A13,T,Th51
     .= DataPart Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)) by A8
 ,A9,A41,Th50
     .= DataPart Result(ProgramPart(s1),s1) by A42,AMI_1:122
@@ -3340,12 +3325,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1)
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1
 ) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 TX: ProgramPart s3 =
  ProgramPart Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,I0) +
 1)
-by AMI_1:144;
+by AMI_1:123;
 A22: IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0)
 + 1) = IC Comput(
 ProgramPart( s3), s4,
@@ -3368,7 +3353,7 @@ A23: CurInstr(ProgramPart s3,
     .= if>0(a,I,J). (card I + card J + 3) by A10,A2,GRFUNC_1:8
     .= halt SCM+FSA by Th62;
   then
-A24: ProgramPart s3 halts_on s3 by TX,AMI_1:146;
+A24: ProgramPart s3 halts_on s3 by AMI_1:146;
   hence if>0(a,I,J) is_halting_on s by SCMFSA7B:def 8;
   now
     let k be Element of NAT;
@@ -3398,8 +3383,6 @@ A28:  k1 < pseudo-LifeSpan(s00,I0) by A25,A27,XREAL_1:8;
       then n + (card J + 3) < card I + (card J + 3) by SCMFSA8A:34;
       then
 A29:  n + (card J + 3) < card if>0(a,I,J) by A26,XXREAL_0:2;
-S: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
       IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1)
 by A27,AMI_1:51
         .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A1,A21,A13
@@ -3419,7 +3402,7 @@ AMI_1:52;
     ';' I;
     let k be Element of NAT;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A30: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
     assume
@@ -3437,7 +3420,7 @@ Y:  (ProgramPart s3)/.IC s3
       .= s3. 0 by Th31,Y
       .= if>0(a,I,J). 0 by A32,Th26
       .= a >0_goto  (card J + 3) by Th55;
-    then k <> 0 by A30,A33,SCMFSA_2:124,TX3;
+    then k <> 0 by A30,A33,TX3,SCMFSA_2:124;
     then consider k1 being Nat such that
 A34: k1 + 1 = k by NAT_1:6;
     reconsider k1 as Element of NAT by ORDINAL1:def 13;
@@ -3451,8 +3434,6 @@ A35: k1 < pseudo-LifeSpan(s00,I0) by A31,XXREAL_0:2;
     then n + (card J + 3) < card I0 + (card J + 3) by XREAL_1:8;
     then
 A36: n + (card J + 3) < card I + (card J + 3) by SCMFSA8A:34;
-S: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
 A37: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1) by
 A34,AMI_1:51
       .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A1,A21,A13,A18
@@ -3482,19 +3463,19 @@ A40: IC Comput(ProgramPart( s3), s3,k) in dom if>0(a,I,J) by A37,AFINSQ_1:70;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
 A41: CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,k))
- = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+ = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if>0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A40,Th26;
     Directed J1 c= if>0(a,I,J) by A11,SCMFSA6A:55;
     then
     if>0(a,I,J).IC Comput(ProgramPart( s3), s3,k) = (Directed J1).IC Comput(
 ProgramPart( s3), s3,
     k) by A38,GRFUNC_1:8;
-    hence contradiction by A30,A39,A41,AMI_1:def 12,TX3;
+    hence contradiction by A30,A39,A41,AMI_1:def 12;
   end;
   then LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,
-I0) + 1 by A23,A24,TX,AMI_1:def 46,T;
+I0) + 1 by A23,A24,AMI_1:def 46;
   hence thesis by A19,A20,Th50;
 end;
 
@@ -3552,8 +3533,7 @@ A7: IC Comput(ProgramPart(s3),s3,1) =  (card J + 3) by A2,A6,SCMFSA_2:97;
   then
 A8: I0 is_pseudo-closed_on s by A1,Th53;
   then
-A9: LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,I0) by
-Th58;
+A9: LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,I0) by Th58;
   DataPart s = DataPart s00 by SCMFSA8A:11;
   then
 A10: I0 is_pseudo-closed_on s00 by A8,Th52;
@@ -3612,12 +3592,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1)
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1
 ) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 TX3: ProgramPart s3 = ProgramPart
 Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,I0) +
 1)
-by AMI_1:144;
+by AMI_1:123;
   IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) +
 1) = IC Comput(
 ProgramPart( s3), s4,
@@ -3635,7 +3615,7 @@ by A8,Th50
   then
 A24: CurInstr(ProgramPart s3,
    Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,I0) + 1))
-     = s3. (card I + card J + 3) by Y,AMI_1:54,TX3
+     = s3. (card I + card J + 3) by Y,TX3,AMI_1:54
     .= if>0(a,I,J). (card I + card J + 3) by A17,A14,GRFUNC_1:8
     .= halt SCM+FSA by Th62;
   then
@@ -3644,8 +3624,6 @@ A25: ProgramPart s3 halts_on s3 by AMI_1:146;
     set J1 = a >0_goto  (card J + 3) ';' J ';' Goto  (card I + 1)
     ';' I;
     let k be Element of NAT;
-TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
     assume
 A26: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
     assume
@@ -3657,8 +3635,6 @@ A29: InsCode (a >0_goto  (card J + 3)) = 8 by SCMFSA_2:49;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
 Y:  (ProgramPart s3)/.IC s3
  = s3.IC s3 by AMI_1:150;
-TX0: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,0)
-by AMI_1:144;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3
 ,0))
      = CurInstr(ProgramPart s3,s3) by u
@@ -3680,7 +3656,7 @@ A31: k1 < pseudo-LifeSpan(s00,I0) by A27,XXREAL_0:2;
     then
 A32: n + (card J + 3) < card I + (card J + 3) by SCMFSA8A:34;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A33: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s4,k1) by
 A30,AMI_1:51
       .= IC Comput(ProgramPart( s00), s00,k1) + (card J + 3) by A20,A10,A23,A7
@@ -3710,16 +3686,16 @@ A36: IC Comput(ProgramPart( s3), s3,k) in dom if>0(a,I,J) by A33,AFINSQ_1:70;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
 A37: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k))
- = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+ = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if>0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A36,Th26;
     Directed J1 c= if>0(a,I,J) by A21,SCMFSA6A:55;
     then
     if>0(a,I,J).IC Comput(ProgramPart( s3), s3,k) = (Directed J1).IC Comput(
 ProgramPart( s3), s3,
     k) by A34,GRFUNC_1:8;
-    hence contradiction by A26,A35,A37,AMI_1:def 12,TX0,TX3;
+    hence contradiction by A26,A35,A37,AMI_1:def 12;
   end;
   then
 A38: LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,I0)
@@ -3733,26 +3709,22 @@ A40: I0 ';' Stop SCM+FSA = I1 by SCMFSA8A:41;
   then
 A41: DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s
 ,I0)) = DataPart
-Comput(ProgramPart( s1), s1,pseudo-LifeSpan(s,I0)) by A8,A40,
-Th58;
+Comput(ProgramPart( s1), s1,pseudo-LifeSpan(s,I0)) by A8,A40,Th58;
   I1 is_halting_on s by A8,Th58;
   then
 A42: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
   thus DataPart IExec(if>0(a,I,J),ss) = DataPart IExec(if>0(a,I,J),s) by Th17
     .= DataPart(Result(ProgramPart(s +* Initialized if>0(a,I,J)),s +*
-Initialized if>0(a,I,J)) +* s | A) by
-SCMFSA6B:def 1
+Initialized if>0(a,I,J)) +* s | A) by SCMFSA6B:def 1
     .= DataPart Result(ProgramPart(s3),s3) by A16,Th35
     .= DataPart Comput(ProgramPart( s3), s3,LifeSpan(ProgramPart(s3),s3)) by
 A25,AMI_1:122
     .= DataPart Comput(ProgramPart( s3), s4,pseudo-LifeSpan(
-s00,I0)) by A38,
-AMI_1:51
+s00,I0)) by A38,AMI_1:51
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s00,I0)) by A20
-,A10,A23,A7,A13,T,Th51
+s00,I0)) by A20,A10,A23,A7,A13,T,Th51
     .= DataPart Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)) by A8
 ,A9,A41,Th50
     .= DataPart Result(ProgramPart(s1),s1) by A42,AMI_1:122
@@ -3877,7 +3849,7 @@ A23: IC s4 = succ IC s3 by A14,A22,SCMFSA_2:96
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A24: Comput(ProgramPart( s3), s3,1+1) = Following(ProgramPart s3,s4) by
 AMI_1:14
     .= Exec(goto  2,s4) by A23,A20,Y,T;
@@ -3901,13 +3873,11 @@ A28: DataPart s00 = DataPart s5 by A27,SCMFSA6A:38;
 Y:  (ProgramPart ss)/.IC ss
  = ss.IC ss by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A29: IC ss = IC Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
-s00,J0)) by
-AMI_1:51
+s00,J0)) by AMI_1:51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s00
-,J0)) + 2 by A1,A21
-,A12,A25,A28,T,Th51
+,J0)) + 2 by A1,A21,A12,A25,A28,T,Th51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s,J0)
 ) + 2 by A18,Th50
     .=  card ProgramPart J0 + 2 by A18,SCMFSA8A:def 5
@@ -3927,12 +3897,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
 + 1) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart ss
-by AMI_1:144;
+by AMI_1:123;
 TX: ProgramPart s3 =
  ProgramPart Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,J0) +
 2 + 1)
-by AMI_1:144;
+by AMI_1:123;
 A31: IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0)
 + 2 + 1) =
 IC Following(ProgramPart s3,ss)
@@ -3946,7 +3916,7 @@ A32: CurInstr(ProgramPart s3,
     .= if=0(a,I,J). (card I + card J + 3) by A17,A13,GRFUNC_1:8
     .= halt SCM+FSA by Th61;
   then
-A33: ProgramPart s3 halts_on s3 by TX,AMI_1:146;
+A33: ProgramPart s3 halts_on s3 by AMI_1:146;
   hence if=0(a,I,J) is_halting_on s by SCMFSA7B:def 8;
   now
     let k be Element of NAT;
@@ -3983,7 +3953,7 @@ A37:  k2 < pseudo-LifeSpan(s00,J0) by A34,A35,XREAL_1:8;
       then
 A38:  n + 2 < card if=0(a,I,J) by A36,XXREAL_0:2;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
       IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2)
 by A35,AMI_1:51
         .= IC Comput(ProgramPart( s00), s00,k2) + 2 by A1,A21,A12,A25,A28,A37
@@ -4002,8 +3972,7 @@ AFINSQ_1:70;
         end;
         suppose
           pseudo-LifeSpan(s00,J0) + 2 < k;
-          then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by
-INT_1:20;
+          then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by INT_1:20;
           hence IC Comput(ProgramPart( s3), s3,k) in dom if=0(a,I,J) by A13,A31
 ,A32,AMI_1:52;
         end;
@@ -4022,19 +3991,17 @@ A43: if=0(a,I,J). 2 <> halt SCM+FSA by A41,Th56;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,2))/.IC Comput(ProgramPart(s3),s3,2)
  = Comput(ProgramPart(s3),s3,2).IC Comput(ProgramPart(s3),s3,2) by AMI_1:150;
 TX2: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,2)
-by AMI_1:144;
+by AMI_1:123;
 A44: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),
 s3,2)) = s3. 2
- by A25,Y,AMI_1:54,TX2
+ by A25,Y,TX2,AMI_1:54
       .= if=0(a,I,J). 2 by A42,Th26;
     let k be Element of NAT;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
-TX0: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,0)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A45: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3
@@ -4042,8 +4009,8 @@ A45: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
      by A40,u;
     then
 A46: k <> 0 by A45,SCMFSA_2:48,124;
-xx:  k <> 1 by A23,A20,A45,Y,SCMFSA_2:47,124,TX0,TX3;
-    k <> 2 by A45,A43,A44,TX0,TX2;
+xx:  k <> 1 by A23,A20,A45,Y,TX3,SCMFSA_2:47,124;
+    k <> 2 by A45,A43,A44;
     then 2 < k by A46,xx,NAT_1:27;
     then consider k2 being Nat such that
 A47: 2 + k2 = k by NAT_1:10;
@@ -4085,21 +4052,21 @@ A53:    n + 2 < card J + 2 by SCMFSA8A:34;
     then
 A54:  (n + 2) in dom if=0(a,I,J) by Th56;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A55: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2) by
 A47,AMI_1:51
       .=  (n + 2) by A1,A21,A12,A25,A28,A48,Th51,T;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k))
-     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if=0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A55,A54,Th26;
     hence contradiction by A45,A55,A50,Th56;
   end;
   then LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,
-J0) + 3 by A32,A33,TX,AMI_1:def 46,TX;
+J0) + 3 by A32,A33,AMI_1:def 46;
   hence thesis by A18,A19,Th50;
 end;
 
@@ -4213,8 +4180,7 @@ A23: if=0(a,I,J) c= s3 by FUNCT_4:26,SCMFSA6B:5;
   set s9 = Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,
 J0) + 2);
 A24: J0 +* Start-At( 0,SCM+FSA) c= s00 by FUNCT_4:26;
-  LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,J0) by A16
-,Th58;
+  LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,J0) by A16,Th58;
   then
 A25: DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s
 ,J0)) = DataPart
@@ -4233,7 +4199,7 @@ A28: s4. 1 = s3. 1 by AMI_1:54
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A29: Comput(ProgramPart( s3), s3,1+1) = Following(ProgramPart s3,s4) by
 AMI_1:14
     .= Exec(goto  2,s4) by A27,A28,Y,T;
@@ -4257,13 +4223,11 @@ A33: DataPart s00 = DataPart s5 by A32,SCMFSA6A:38;
 Y:  (ProgramPart s9)/.IC s9
  = s9.IC s9 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A34: IC s9 = IC Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
-s00,J0)) by
-AMI_1:51
+s00,J0)) by AMI_1:51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s00
-,J0)) + 2 by A24,A18
-,A14,A30,A33,T,Th51
+,J0)) + 2 by A24,A18,A14,A30,A33,T,Th51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s,J0)
 ) + 2 by A16,Th50
     .=  card ProgramPart J0 + 2 by A16,SCMFSA8A:def 5
@@ -4283,12 +4247,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
 + 1) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s9
-by AMI_1:144;
+by AMI_1:123;
 TX3: ProgramPart s3 = ProgramPart
 Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,J0) +
 2 + 1)
-by AMI_1:144;
+by AMI_1:123;
   IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) +
 2 + 1) =
   IC Following(ProgramPart s3,s9)
@@ -4298,7 +4262,7 @@ by AMI_1:144;
 A36: CurInstr(ProgramPart s3,
    Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
 + 1)) = s3. (
-  card I + card J + 3) by Y,AMI_1:54,TX3
+  card I + card J + 3) by Y,TX3,AMI_1:54
     .= if=0(a,I,J). (card I + card J + 3) by A6,A22,GRFUNC_1:8
     .= halt SCM+FSA by Th61;
   then
@@ -4314,29 +4278,27 @@ A41: if=0(a,I,J). 2 <> halt SCM+FSA by A39,Th56;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,2))/.IC Comput(ProgramPart(s3),s3,2)
  = Comput(ProgramPart(s3),s3,2).IC Comput(ProgramPart(s3),s3,2) by AMI_1:150;
 TX2: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,2)
-by AMI_1:144;
+by AMI_1:123;
 A42: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),
 s3,2)) = s3. 2
- by A30,Y,AMI_1:54,TX2
+ by A30,Y,TX2,AMI_1:54
       .= if=0(a,I,J). 2 by A40,Th26;
     let k be Element of NAT;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A43: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),
 s3,k)) = halt SCM+FSA;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
-TX0: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,0)
-by AMI_1:144;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3
 ,0)) = i
      by A38,u;
     then
 A44: k <> 0 by A43,SCMFSA_2:48,124;
-xx:    k <> 1 by A27,A28,A43,Y,SCMFSA_2:47,124,TX0,TX3;
-    2 <> k by A43,A41,A42,TX0,TX2;
+xx:    k <> 1 by A27,A28,A43,Y,TX3,SCMFSA_2:47,124;
+    2 <> k by A43,A41,A42;
     then 2 < k by A44,xx,NAT_1:27;
     then consider k2 being Nat such that
 A45: 2 + k2 = k by NAT_1:10;
@@ -4378,16 +4340,16 @@ A51:    n + 2 < card J + 2 by SCMFSA8A:34;
     then
 A52:  (n + 2) in dom if=0(a,I,J) by Th56;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A53: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2) by
 A45,AMI_1:51
       .=  (n + 2) by A24,A18,A14,A30,A33,A46,Th51,T;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k))
-     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if=0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A53,A52,Th26;
     hence contradiction by A43,A53,A48,Th56;
   end;
@@ -4404,30 +4366,26 @@ Y:  (ProgramPart s9)/.IC s9
   then
 A55: DataPart s9 = DataPart Following(ProgramPart s9,s9) by Th32;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A56: DataPart s9 = DataPart Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
 s00,J0)
 ) by AMI_1:51
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s00,J0)) by A24
-,A18,A14,A30,T,A33,Th51;
+s00,J0)) by A24,A18,A14,A30,T,A33,Th51;
 T: ProgramPart s3 = ProgramPart s9
-by AMI_1:144;
+by AMI_1:123;
   thus DataPart IExec(if=0(a,I,J),ss) = DataPart IExec(if=0(a,I,J),s) by Th17
     .= DataPart(Result(ProgramPart(s +* Initialized if=0(a,I,J)),s +*
-Initialized if=0(a,I,J)) +* s | A) by
-SCMFSA6B:def 1
+Initialized if=0(a,I,J)) +* s | A) by SCMFSA6B:def 1
     .= DataPart Result(ProgramPart(s3),s3) by A5,Th35
     .= DataPart Comput(ProgramPart( s3), s3,LifeSpan(ProgramPart(s3),s3)) by
 A37,AMI_1:122
     .= DataPart Following(ProgramPart s3,s9) by A54,AMI_1:14
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s,J0)) by A16,A56
-,A55,Th50,T
+s,J0)) by A16,A56,A55,Th50,T
     .= DataPart Result(ProgramPart(s1),s1) by A17,A25,AMI_1:122
     .= DataPart(Result(ProgramPart(s +* Initialized (J ';' Stop SCM+FSA)),s +*
-Initialized (J ';' Stop SCM+FSA)) +* s | A) by A19
-,Th35
+Initialized (J ';' Stop SCM+FSA)) +* s | A) by A19,Th35
     .= DataPart IExec(J ';' Stop SCM+FSA,s) by SCMFSA6B:def 1
     .= DataPart IExec(J ';' Stop SCM+FSA,ss) by Th17;
 end;
@@ -4548,7 +4506,7 @@ A23: IC s4 = succ IC s3 by A14,A22,SCMFSA_2:97
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A24: Comput(ProgramPart( s3), s3,1+1) = Following(ProgramPart s3,s4) by
 AMI_1:14
     .= Exec(goto  2,s4) by A23,A20,Y,T;
@@ -4572,13 +4530,11 @@ A28: DataPart s00 = DataPart s5 by A27,SCMFSA6A:38;
 Y:  (ProgramPart ss)/.IC ss
  = ss.IC ss by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A29: IC ss = IC Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
-s00,J0)) by
-AMI_1:51
+s00,J0)) by AMI_1:51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s00
-,J0)) + 2 by A1,A21
-,A12,A25,A28,T,Th51
+,J0)) + 2 by A1,A21,A12,A25,A28,T,Th51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s,J0)
 ) + 2 by A18,Th50
     .=  card ProgramPart J0 + 2 by A18,SCMFSA8A:def 5
@@ -4598,12 +4554,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
 + 1) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart ss
-by AMI_1:144;
+by AMI_1:123;
 TX: ProgramPart s3 =
  ProgramPart Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,J0) +
 2 + 1)
-by AMI_1:144;
+by AMI_1:123;
 A31: IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0)
 + 2 + 1) =
 IC Following(ProgramPart s3,ss)
@@ -4617,7 +4573,7 @@ A32: CurInstr(ProgramPart s3,
     .= if>0(a,I,J). (card I + card J + 3) by A17,A13,GRFUNC_1:8
     .= halt SCM+FSA by Th62;
   then
-A33: ProgramPart s3 halts_on s3 by TX,AMI_1:146;
+A33: ProgramPart s3 halts_on s3 by AMI_1:146;
   hence if>0(a,I,J) is_halting_on s by SCMFSA7B:def 8;
   now
     let k be Element of NAT;
@@ -4654,7 +4610,7 @@ A37:  k2 < pseudo-LifeSpan(s00,J0) by A34,A35,XREAL_1:8;
       then
 A38:  n + 2 < card if>0(a,I,J) by A36,XXREAL_0:2;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
       IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2)
 by A35,AMI_1:51
         .= IC Comput(ProgramPart( s00), s00,k2) + 2 by A1,A21,A12,A25,A28,A37
@@ -4673,8 +4629,7 @@ AFINSQ_1:70;
         end;
         suppose
           pseudo-LifeSpan(s00,J0) + 2 < k;
-          then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by
-INT_1:20;
+          then pseudo-LifeSpan(s00,J0) + 2 + 1 <= k by INT_1:20;
           hence IC Comput(ProgramPart( s3), s3,k) in dom if>0(a,I,J) by A13,A31
 ,A32,AMI_1:52;
         end;
@@ -4698,21 +4653,19 @@ s3,2)) = s3. 2
       .= if>0(a,I,J). 2 by A42,Th26;
     let k be Element of NAT;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A45: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
 u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
 U:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
-TX0: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,0)
-by AMI_1:144;
     CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3
 ,0)) = i
      by A40,u;
     then
 A46: k <> 0 by A45,SCMFSA_2:49,124;
-xx:    k <> 1 by A23,A20,A45,U,SCMFSA_2:47,124,TX0,TX3;
-    2 <> k by A45,A43,A44,TX0,TX3;
+xx:    k <> 1 by A23,A20,A45,U,TX3,SCMFSA_2:47,124;
+    2 <> k by A45,A43,A44,TX3;
     then 2 < k by A46,xx,NAT_1:27;
     then consider k2 being Nat such that
 A47: 2 + k2 = k by NAT_1:10;
@@ -4754,21 +4707,21 @@ A53:    n + 2 < card J + 2 by SCMFSA8A:34;
     then
 A54:  (n + 2) in dom if>0(a,I,J) by Th57;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A55: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2) by
 A47,AMI_1:51
       .=  (n + 2) by A1,A21,A12,A25,A28,A48,Th51,T;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
  = Comput(ProgramPart(s3),s3,k).IC Comput(ProgramPart(s3),s3,k) by AMI_1:150;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     CurInstr(ProgramPart (s3),Comput(ProgramPart(s3),s3,k))
-     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,AMI_1:54,TX3
+     = s3.IC Comput(ProgramPart( s3), s3,k) by Y,TX3,AMI_1:54
       .= if>0(a,I,J).IC Comput(ProgramPart( s3), s3,k) by A55,A54,Th26;
-    hence contradiction by A45,A55,A50,Th57,TX3;
+    hence contradiction by A45,A55,A50,Th57;
   end;
   then LifeSpan(ProgramPart(s3),s3) = pseudo-LifeSpan(s00,
-J0) + 3 by A32,A33,TX,AMI_1:def 46;
+J0) + 3 by A32,A33,AMI_1:def 46;
   hence thesis by A18,A19,Th50;
 end;
 
@@ -4884,8 +4837,7 @@ A23: if>0(a,I,J) c= s3 by FUNCT_4:26,SCMFSA6B:5;
   set s9 = Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,
 J0) + 2);
 A24: J0 +* Start-At( 0,SCM+FSA) c= s00 by FUNCT_4:26;
-  LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,J0) by A16
-,Th58;
+  LifeSpan(ProgramPart(s1),s1) = pseudo-LifeSpan(s,J0) by A16,Th58;
   then
 A25: DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s
 ,J0)) = DataPart
@@ -4904,7 +4856,7 @@ A28: s4. 1 = s3. 1 by AMI_1:54
 Y:  (ProgramPart s4)/.IC s4
  = s4.IC s4 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s4
-by AMI_1:144;
+by AMI_1:123;
 A29: Comput(ProgramPart( s3), s3,1+1) = Following(ProgramPart s3,s4) by
 AMI_1:14
     .= Exec(goto  2,s4) by A27,A28,Y,T;
@@ -4928,13 +4880,11 @@ A33: DataPart s00 = DataPart s5 by A32,SCMFSA6A:38;
 Y:  (ProgramPart s9)/.IC s9
  = s9.IC s9 by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A34: IC s9 = IC Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
-s00,J0)) by
-AMI_1:51
+s00,J0)) by AMI_1:51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s00
-,J0)) + 2 by A24,A18
-,A14,A30,A33,T,Th51
+,J0)) + 2 by A24,A18,A14,A30,A33,T,Th51
     .= IC Comput(ProgramPart( s00), s00,pseudo-LifeSpan(s,J0)
 ) + 2 by A16,Th50
     .=  card ProgramPart J0 + 2 by A16,SCMFSA8A:def 5
@@ -4954,12 +4904,12 @@ IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
  IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2
 + 1) by AMI_1:150;
 T: ProgramPart s3 = ProgramPart s9
-by AMI_1:144;
+by AMI_1:123;
 TX3: ProgramPart s3 = ProgramPart
 Comput(ProgramPart( s3), s3,pseudo-LifeSpan(
 s00,J0) +
 2 + 1)
-by AMI_1:144;
+by AMI_1:123;
   IC Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) +
 2 + 1) =
   IC Following(ProgramPart s3,s9)
@@ -4969,7 +4919,7 @@ by AMI_1:144;
 A36: CurInstr(ProgramPart s3,
   Comput(ProgramPart( s3), s3,pseudo-LifeSpan(s00,J0) + 2 +
 1)) = s3. (
-  card I + card J + 3) by Y,AMI_1:54,TX3
+  card I + card J + 3) by Y,TX3,AMI_1:54
     .= if>0(a,I,J). (card I + card J + 3) by A6,A22,GRFUNC_1:8
     .= halt SCM+FSA by Th62;
   then
@@ -4985,13 +4935,13 @@ A41: if>0(a,I,J). 2 <> halt SCM+FSA by A39,Th57;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,2))/.IC Comput(ProgramPart(s3),s3,2)
  = Comput(ProgramPart(s3),s3,2).IC Comput(ProgramPart(s3),s3,2) by AMI_1:150;
 TX2: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,2)
-by AMI_1:144;
+by AMI_1:123;
 A42: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,2))
- = s3. 2 by A30,Y,AMI_1:54,TX2
+ = s3. 2 by A30,Y,TX2,AMI_1:54
       .= if>0(a,I,J). 2 by A40,Th26;
     let k be Element of NAT;
 TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A43: CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,k)) = halt SCM+FSA;
 Y:  (ProgramPart Comput(ProgramPart(s3),s3,k))/.IC Comput(ProgramPart(s3),s3,k)
@@ -5001,9 +4951,9 @@ u: Comput(ProgramPart(s3),s3,0) = s3 by AMI_1:13;
 ,0))
      = i by A38,u;
     then
-A44: k <> 0 by A43,SCMFSA_2:49,124,TX3;
-xx:    k <> 1 by A27,A28,A43,Y,SCMFSA_2:47,124,TX3;
-    2 <> k by A43,A41,A42,TX3;
+A44: k <> 0 by A43,TX3,SCMFSA_2:49,124;
+xx:    k <> 1 by A27,A28,A43,Y,TX3,SCMFSA_2:47,124;
+    2 <> k by A43,A41,A42;
     then 2 < k by A44,xx,NAT_1:27;
     then consider k2 being Nat such that
 A45: 2 + k2 = k by NAT_1:10;
@@ -5045,7 +4995,7 @@ A51:    n + 2 < card J + 2 by SCMFSA8A:34;
     then
 A52:  (n + 2) in dom if>0(a,I,J) by Th57;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A53: IC Comput(ProgramPart( s3), s3,k) = IC Comput(ProgramPart( s3), s5,k2) by
 A45,AMI_1:51
       .=  (n + 2) by A24,A18,A14,A30,A33,A46,Th51,T;
@@ -5070,30 +5020,26 @@ Y:  (ProgramPart s9)/.IC s9
   then
 A55: DataPart s9 = DataPart Following(ProgramPart s9,s9) by Th32;
 T: ProgramPart s3 = ProgramPart s5
-by AMI_1:144;
+by AMI_1:123;
 A56: DataPart s9 = DataPart Comput(ProgramPart( s3), s5,pseudo-LifeSpan(
 s00,J0)
 ) by AMI_1:51
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s00,J0)) by A24
-,A18,A14,A30,T,A33,Th51;
+s00,J0)) by A24,A18,A14,A30,T,A33,Th51;
 T: ProgramPart s3 = ProgramPart s9
-by AMI_1:144;
+by AMI_1:123;
   thus DataPart IExec(if>0(a,I,J),ss) = DataPart IExec(if>0(a,I,J),s) by Th17
     .= DataPart(Result(ProgramPart(s +* Initialized if>0(a,I,J)),s +*
-Initialized if>0(a,I,J)) +* s | A) by
-SCMFSA6B:def 1
+Initialized if>0(a,I,J)) +* s | A) by SCMFSA6B:def 1
     .= DataPart(Result(ProgramPart(s3),s3)) by A5,Th35
     .= DataPart Comput(ProgramPart( s3), s3,LifeSpan(ProgramPart(s3),s3)) by
 A37,AMI_1:122
     .= DataPart Following(ProgramPart s3,s9) by A54,AMI_1:14
     .= DataPart Comput(ProgramPart( s00), s00,pseudo-LifeSpan(
-s,J0)) by A16,A56
-,A55,Th50,T
+s,J0)) by A16,A56,A55,Th50,T
     .= DataPart Result(ProgramPart(s1),s1) by A17,A25,AMI_1:122
     .= DataPart(Result(ProgramPart(s +* Initialized (J ';' Stop SCM+FSA)),s +*
-Initialized (J ';' Stop SCM+FSA)) +* s | A) by A19
-,Th35
+Initialized (J ';' Stop SCM+FSA)) +* s | A) by A19,Th35
     .= DataPart IExec(J ';' Stop SCM+FSA,s) by SCMFSA6B:def 1
     .= DataPart IExec(J ';' Stop SCM+FSA,ss) by Th17;
 end;
@@ -5357,8 +5303,8 @@ A1: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
     then
 A3: not a in dom (s | A) by RELAT_1:90;
     s +* Initialized I = s1 by SCMFSA8A:13;
-    hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by SCMFSA6B:
-def 1
+    hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by
+SCMFSA6B:def 1
       .= (Result(ProgramPart(s1),s1)).a by A3,FUNCT_4:12
       .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A1,
 AMI_1:122;
@@ -5369,11 +5315,11 @@ AMI_1:122;
   then
 A5: not f in dom (s | A) by RELAT_1:90;
   s +* Initialized I = s1 by SCMFSA8A:13;
-  hence IExec(I,s).f = (Result(ProgramPart(s1),s1) +* s | A).f by SCMFSA6B:def
-1
+  hence IExec(I,s).f = (Result(ProgramPart(s1),s1) +* s | A).f by
+SCMFSA6B:def 1
     .= (Result(ProgramPart(s1),s1)).f by A5,FUNCT_4:12
-    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).f by A1,AMI_1:
-122;
+    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).f by A1,
+AMI_1:122;
 end;
 
 theorem Th88:
@@ -5420,11 +5366,11 @@ A4: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
   assume
 A5: I does_not_destroy a;
   s +* Initialized I = s0 +* (I +* Start-At( 0,SCM+FSA)) by SCMFSA8A:13;
-  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by SCMFSA6B:def
-1
+  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by
+SCMFSA6B:def 1
     .= (Result(ProgramPart(s1),s1)).a by A3,FUNCT_4:12
-    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A4,AMI_1:
-122
+    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A4,
+AMI_1:122
     .= s0.a by A1,A5,SCMFSA7B:27
     .= Comput(ProgramPart( (s0 +* (I +* Start-At( 0,SCM+FSA)))), (s0 +* (I +*
 Start-At( 0,SCM+FSA))),k).a
@@ -5508,11 +5454,11 @@ A5: not a in dom (s | A) by RELAT_1:90;
   then
 A6: ProgramPart s1 halts_on s1 by SCMFSA7B:def 8;
   s +* Initialized I = s1 by SCMFSA8A:13;
-  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by SCMFSA6B:def
-1
+  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by
+SCMFSA6B:def 1
     .= (Result(ProgramPart(s1),s1)).a by A5,FUNCT_4:12
-    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A6,AMI_1:
-122
+    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A6,
+AMI_1:122
     .= 1 by A3;
   let k be Element of NAT;
   thus thesis by A3;
@@ -5554,7 +5500,7 @@ s1,k)
  = Comput(ProgramPart( s1), s1,k).IC Comput(ProgramPart( s1), s1,k) by
 AMI_1:150;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
   thus Comput(ProgramPart( s1), s1,k + 1).a =
   (Following(ProgramPart s1,Comput(ProgramPart(s1),s1
 ,k))).a by AMI_1:14
@@ -5688,11 +5634,11 @@ A8: now
   then
 A10: not a in dom (s | A) by RELAT_1:90;
   s +* Initialized I = s1 by SCMFSA8A:13;
-  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by SCMFSA6B:def
-1
+  hence IExec(I,s).a = (Result(ProgramPart(s1),s1) +* s | A).a by
+SCMFSA6B:def 1
     .= (Result(ProgramPart(s1),s1)).a by A10,FUNCT_4:12
-    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A1,AMI_1:
-122
+    .= Comput(ProgramPart( s1), s1,LifeSpan(ProgramPart(s1),s1)).a by A1,
+AMI_1:122
     .= 1 by A8;
   thus thesis by A8;
 end;
@@ -5867,9 +5813,9 @@ A6: ProgramPart ss2 halts_on ss2 by SCMFSA7B:def 8;
 A7: now
     let l be Element of NAT;
 TX2: ProgramPart ss2 = ProgramPart Comput(ProgramPart(ss2),ss2,l)
-by AMI_1:144;
+by AMI_1:123;
 TX1: ProgramPart ss1 = ProgramPart Comput(ProgramPart(ss1),ss1,l)
-by AMI_1:144;
+by AMI_1:123;
     assume
 A8: CurInstr(ProgramPart ss2,Comput(ProgramPart(ss2),ss2,l)) = halt SCM+FSA;
     CurInstr(ProgramPart ss1,Comput(ProgramPart(ss1),ss1,l))
@@ -5880,19 +5826,19 @@ A8: CurInstr(ProgramPart ss2,Comput(ProgramPart(ss2),ss2,l)) = halt SCM+FSA;
 TX2: ProgramPart ss2 = ProgramPart
 Comput(ProgramPart(ss2),ss2,LifeSpan(ProgramPart(ss1),
 ss1))
-by AMI_1:144;
+by AMI_1:123;
 TX1: ProgramPart ss1 = ProgramPart
 Comput(ProgramPart(ss1),ss1,LifeSpan(ProgramPart(ss1)
 ,ss1))
-by AMI_1:144;
+by AMI_1:123;
   CurInstr(ProgramPart ss2,
   Comput(ProgramPart(ss2),ss2,LifeSpan(ProgramPart(ss1),ss1)))
    = CurInstr(ProgramPart ss1,
    Comput(ProgramPart(ss1),ss1,LifeSpan(ProgramPart(ss1),ss1)))
     by A1,A2,A5,Th100,TX1,TX2
     .= halt SCM+FSA by A3,AMI_1:def 46;
-  hence LifeSpan(ProgramPart(ss1),ss1) = LifeSpan(ProgramPart(ss2),ss2) by A7,
-A6,AMI_1:def 46;
+  hence LifeSpan(ProgramPart(ss1),ss1) = LifeSpan(ProgramPart(ss2),ss2) by A7
+,A6,AMI_1:def 46;
   then Result(ProgramPart(ss2),ss2) = Comput(ProgramPart( ss2), ss2,LifeSpan(
 ProgramPart(ss1),ss1)) by A6,AMI_1:122
 ;
@@ -5927,8 +5873,6 @@ A5: ProgramPart s1 halts_on s1 by A2,SCMFSA7B:def 8;
   then consider n being Element of NAT such that
 A6: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,n)) = halt SCM+FSA
  by AMI_1:146;
-TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,n)
-by AMI_1:144;
   assume
   I +* Start-At( 0,SCM+FSA) c= s2;
   then
@@ -5943,7 +5887,7 @@ A9: IC SCM+FSA in dom s3 by AMI_1:94;
 A10: I c= s3 by AMI_1:86;
   IC s3 = IC s2 by A8,SCMFSA8A:6
     .= IC (s2 +* I +* Start-At( 0,SCM+FSA)) by A7,FUNCT_4:15
-    .=  0 by AMI_1:111;
+    .=  0 by FUNCT_4:121;
   then IC SCM+FSA .-->  0 c= s3 by A9,FUNCOP_1:88;
   then I +* Start-At( 0,SCM+FSA) c= s3 by A10,FUNCT_4:92;
   then
@@ -5951,25 +5895,20 @@ A11: s3 = s3 +* (I +* Start-At( 0,SCM+FSA)) by FUNCT_4:79;
 A12: now
     let n be Element of NAT;
 T: ProgramPart s3 = ProgramPart s1
-by AMI_1:144;
+by AMI_1:123;
     IC Comput(ProgramPart( s1), s3,n) = IC Comput(ProgramPart( s1), s1,k + n)
 by AMI_1:51;
     hence IC Comput(ProgramPart( s3), s3,n) in dom I by A1,A4,T,SCMFSA7B:def 7;
   end;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),
 s1,k)
-by AMI_1:144;
+by AMI_1:123;
 x: Comput(ProgramPart(s1),s1,n+k)
  = Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,k),n) by AMI_1:51;
   n <= n + k by NAT_1:11;
  then
-yy:  Comput(ProgramPart(s1),s1,n+k) = Comput(ProgramPart(s1),s1,n) by A6,TX,
+yy:  Comput(ProgramPart(s1),s1,n+k) = Comput(ProgramPart(s1),s1,n) by A6,
 AMI_1:52;
-
-TX3: ProgramPart s3 = ProgramPart Comput(ProgramPart(s3),s3,n)
-by AMI_1:144;
-TX1k: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k+n)
-by AMI_1:144;
   CurInstr(ProgramPart s3,Comput(ProgramPart(s3),s3,n))
    = CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k+n)) by x,T
     .= CurInstr(ProgramPart (s1),Comput(ProgramPart(s1),s1,n))
@@ -5979,29 +5918,30 @@ by AMI_1:144;
 A13: I is_halting_on s3 by A11,SCMFSA7B:def 8;
 A14: DataPart s3 = DataPart s2 by A8,SCMFSA8A:6;
 TX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
   consider k being Element of NAT such that
 A15: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
  = halt SCM+FSA by A5,AMI_1:146;
 TTX: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
  = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by AMI_1:150;
-A16: s1.IC Comput(ProgramPart( s1), s1,k)
-      = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k)
-         by A15,Y,AMI_1:54,TX
+A16: (ProgramPart s1).IC Comput(ProgramPart( s1), s1,k)
+      = s1.IC Comput(ProgramPart( s1), s1,k) by AMI_1:15
+     .= Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k)
+         by AMI_1:54
      .= (ProgramPart Comput(ProgramPart(s1),s1,k))/.
            IC Comput(ProgramPart(s1),s1,k)
-         by A15,Y,AMI_1:54,TX
+         by Y
      .= (ProgramPart s1)/.IC Comput(ProgramPart(s1),s1,k)
-         by A15,Y,AMI_1:54,TTX
+         by TTX
      .= CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
      .= halt SCM+FSA
- by A15,Y,AMI_1:54,TX;
+ by A15;
   I is_closed_on s3 by A11,A12,SCMFSA7B:def 7;
-  then Result(ProgramPart(s3),s3),Result(ProgramPart(s2),s2) equal_outside A by
-A7,A14,A11,A13,Th101;
-  hence thesis by A16,AMI_1:57,TX3,TX;
+  then Result(ProgramPart(s3),s3),Result(ProgramPart(s2),s2) equal_outside A
+by A7,A14,A11,A13,Th101;
+  hence thesis by A16,TX,AMI_1:57;
 end;
 
 begin :: loop
@@ -6097,7 +6037,7 @@ Comput(ProgramPart(s2
     then
 A7: loop I c= Comput(ProgramPart(s2),s2,m) by AMI_1:81;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
 A8: Comput(ProgramPart(s1),s1,m+1) =
 Following(ProgramPart s1,Comput(ProgramPart(s1),s1,m)
 )
@@ -6106,7 +6046,7 @@ Following(ProgramPart s1,Comput(ProgramPart(s1),s1,m)
 ProgramPart(s1),s1,m)),
       Comput(ProgramPart(s1),s1,m)) by T;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,m)
-by AMI_1:144;
+by AMI_1:123;
 A9: Comput(ProgramPart(s2),s2,m+1) =
 Following(ProgramPart s2,Comput(ProgramPart(s2),s2,m)
 )
@@ -6118,13 +6058,13 @@ A10: IC Comput(ProgramPart(s1),s1,m) in dom I by A1,SCMFSA7B:def 7;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,m))/.IC Comput(ProgramPart(s1),s1,m)
  = Comput(ProgramPart(s1),s1,m).IC Comput(ProgramPart(s1),s1,m) by AMI_1:150;
 TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
     I +* Start-At( 0,SCM+FSA) c= s1 by FUNCT_4:26;
     then I c= s1 by A5,XBOOLE_1:1;
     then I c= Comput(ProgramPart(s1),s1,m) by AMI_1:81;
     then
 A11: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,m))
- = I.IC Comput(ProgramPart(s1),s1,m) by A10,Y,GRFUNC_1:8,TX1;
+ = I.IC Comput(ProgramPart(s1),s1,m) by A10,Y,TX1,GRFUNC_1:8;
     assume
 A12: m + 1 <= LifeSpan(ProgramPart(s1),s1);
     then
@@ -6140,7 +6080,7 @@ Z:  (ProgramPart Comput(ProgramPart(s2),s2,m))/.IC Comput(ProgramPart(s2),s2,m)
     then CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(ProgramPart(
 s1),s1,m))
      = Comput(ProgramPart(s2),s2,m).IC Comput(ProgramPart(s1),s1,m)
-    by A7,A11,A13,GRFUNC_1:8,TX1
+    by A7,A11,A13,TX1,GRFUNC_1:8
       .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,m),Comput(ProgramPart(
 s2),s2,m))
        by A6,A12,Z,AMI_1:121,NAT_1:13;
@@ -6150,8 +6090,8 @@ A14: X[0]
   proof
     assume
     0 <= LifeSpan(ProgramPart(s1),s1);
-A15: s,s +* loop I equal_outside A by AMI_1:120;
-    s +* I,s equal_outside A by AMI_1:120,FUNCT_7:28;
+A15: s,s +* loop I equal_outside A by FUNCT_7:132;
+    s +* I,s equal_outside A by FUNCT_7:28,132;
     then s +* I,s +* loop I equal_outside A by A15,FUNCT_7:29;
     then s +* I +* Start-At( 0,SCM+FSA),s +* loop I +*
     Start-At( 0,SCM+FSA)
@@ -6198,13 +6138,13 @@ A5: I c= I +* Start-At( 0,SCM+FSA) by SCMFSA8A:9;
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,m))/.IC Comput(ProgramPart(s1),s1,m)
  = Comput(ProgramPart(s1),s1,m).IC Comput(ProgramPart(s1),s1,m) by AMI_1:150;
 TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
   I +* Start-At( 0,SCM+FSA) c= s1 by FUNCT_4:26;
   then I c= s1 by A5,XBOOLE_1:1;
   then I c= Comput(ProgramPart(s1),s1,m) by AMI_1:81;
   then
 A6: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,m))
- = I.IC Comput(ProgramPart(s1),s1,m) by A3,Y,GRFUNC_1:8,TX1;
+ = I.IC Comput(ProgramPart(s1),s1,m) by A3,Y,TX1,GRFUNC_1:8;
 A7: loop I c= loop I +* Start-At( 0,SCM+FSA) by SCMFSA8A:9;
   loop I +* Start-At( 0,SCM+FSA) c= s2 by FUNCT_4:26;
   then loop I c= s2 by A7,XBOOLE_1:1;
@@ -6221,8 +6161,8 @@ Z:  (ProgramPart Comput(ProgramPart(s2),s2,m))/.IC Comput(ProgramPart(s2),s2,m)
 s1,m) by FUNCT_4:111;
   hence CurInstr(ProgramPart Comput(ProgramPart(s1),s1,m),Comput(ProgramPart(s1
 ),s1,m))
-   = Comput(ProgramPart(s2),s2,m).IC Comput(ProgramPart(s1),s1,m) by A8,A4,A6,
-GRFUNC_1:8,TX1
+   = Comput(ProgramPart(s2),s2,m).IC Comput(ProgramPart(s1),s1,m) by A8,A4,A6
+,TX1,GRFUNC_1:8
     .= CurInstr(ProgramPart Comput(ProgramPart(s2),s2,m),Comput(ProgramPart(s2)
 ,s2,m))
      by A1,A2,A9,Th109,Z,AMI_1:121;
@@ -6273,9 +6213,6 @@ by FUNCT_4:13;
   then
 A7: IC Comput(ProgramPart(s1),s1,k) in dom (loop I +* Start-At( 0,SCM+FSA))
 by A5,FUNCT_4:13;
-
-TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
 A8: ProgramPart s1 halts_on s1 by A3,SCMFSA7B:def 8;
   then
 A9: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
@@ -6283,13 +6220,13 @@ A9: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
 Y:  (ProgramPart Comput(ProgramPart(s1),s1,k))/.IC Comput(ProgramPart(s1),s1,k)
  = Comput(ProgramPart(s1),s1,k).IC Comput(ProgramPart(s1),s1,k) by AMI_1:150;
 TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
 A10: CurInstr(ProgramPart s1,Comput(ProgramPart(s1),s1,k))
- = s1.IC Comput(ProgramPart(s1),s1,k) by Y,AMI_1:54,TX1
+ = s1.IC Comput(ProgramPart(s1),s1,k) by Y,TX1,AMI_1:54
     .= (I +* Start-At( 0,SCM+FSA)).IC Comput(ProgramPart(s1),s1,k) by A6,
 FUNCT_4:14
     .= I.IC Comput(ProgramPart(s1),s1,k) by A4,FUNCT_4:12;
-A11: rng I c= the Instructions of SCM+FSA by AMI_1:118;
+A11: rng I c= the Instructions of SCM+FSA by RELAT_1:def 19;
 
 Y:  (ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)))/.IC
 Comput(ProgramPart
@@ -6300,12 +6237,12 @@ ProgramPart(s2),s2,LifeSpan
 TX2: ProgramPart s2 = ProgramPart
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1
 ))
-by AMI_1:144;
+by AMI_1:123;
   thus
 A12: CurInstr(ProgramPart s2,
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1))) = Comput(ProgramPart(
 s2),s2,k).IC
-  Comput(ProgramPart(s1),s1,k) by A2,A3,Th109,Y,AMI_1:121,TX2
+  Comput(ProgramPart(s1),s1,k) by A2,A3,Th109,Y,TX2,AMI_1:121
 
     .= s2.IC Comput(ProgramPart(s1),s1,k) by AMI_1:54
     .= (loop I +* Start-At( 0,SCM+FSA)).IC Comput(ProgramPart(s1),s1,k)
@@ -6316,14 +6253,14 @@ s2),s2,k).IC
   .IC Comput(ProgramPart(s1),s1,k) by A11,FUNCT_7:118
 
     .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA, goto  0)).
-  halt SCM+FSA by A9,A5,A10,FUNCT_1:23,TX2,TX1
+  halt SCM+FSA by A9,A5,A10,FUNCT_1:23
 
     .= goto  0 by A1,FUNCT_7:33;
   let m be Element of NAT;
   assume
 A13: m <= LifeSpan(ProgramPart(s1),s1);
 TX1: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,m)
-by AMI_1:144;
+by AMI_1:123;
   per cases by A13,XXREAL_0:1;
   suppose
 A14: m < LifeSpan(ProgramPart(s1),s1);
@@ -6333,7 +6270,7 @@ A14: m < LifeSpan(ProgramPart(s1),s1);
   end;
   suppose
     m = LifeSpan(ProgramPart(s1),s1);
-    hence thesis by A12,SCMFSA_2:47,124,TX1,TX2;
+    hence thesis by A12,TX2,SCMFSA_2:47,124;
   end;
 end;
 
@@ -6396,17 +6333,17 @@ A6: IC Comput(ProgramPart(s),s,m) in dom loop I by FUNCT_4:105;
 Y:  (ProgramPart Comput(ProgramPart(s),s,m))/.IC Comput(ProgramPart(s),s,m)
  = Comput(ProgramPart(s),s,m).IC Comput(ProgramPart(s),s,m) by AMI_1:150;
 TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
-by AMI_1:144;
+by AMI_1:123;
     dom I misses dom Start-At( 0,SCM+FSA) by SF_MASTR:64;
     then I c= I +* Start-At( 0,SCM+FSA) by FUNCT_4:33;
     then I c= s by A1,XBOOLE_1:1;
     then I c= Comput(ProgramPart(s),s,m) by AMI_1:81;
     then
 A7: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,m))
- = I.IC(Comput(ProgramPart(s),s,m)) by A5,Y,GRFUNC_1:8,TX;
+ = I.IC(Comput(ProgramPart(s),s,m)) by A5,Y,TX,GRFUNC_1:8;
 A8: loop I c= Comput(ProgramPart(sI),sI,m) by AMI_1:81,FUNCT_4:26;
 T: ProgramPart sI = ProgramPart Comput(ProgramPart(sI),sI,m)
-by AMI_1:144;
+by AMI_1:123;
 A9: Comput(ProgramPart(sI),sI,m+1) =
 Following(ProgramPart sI,Comput(ProgramPart(sI),sI,m)
 )
@@ -6415,7 +6352,7 @@ Following(ProgramPart sI,Comput(ProgramPart(sI),sI,m)
 ProgramPart(sI),sI,m))
       ,Comput(ProgramPart(sI),sI,m)) by T;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,m)
-by AMI_1:144;
+by AMI_1:123;
 A10: Comput(ProgramPart(s),s,m+1) =
 Following(ProgramPart s,Comput(ProgramPart(s),s,m))
  by AMI_1:14
@@ -6431,7 +6368,7 @@ A11: m+1 <= LifeSpan(ProgramPart(s),s);
 ;
     then
 CurInstr(ProgramPart Comput(ProgramPart(s),s,m),Comput(ProgramPart(s),s,m))
- = (loop I).IC(Comput(ProgramPart(s),s,m)) by A7,FUNCT_4:111,TX
+ = (loop I).IC(Comput(ProgramPart(s),s,m)) by A7,TX,FUNCT_4:111
       .= (Comput(ProgramPart(sI),sI,m)).IC(Comput(ProgramPart(s),s,m)) by A8,A6
 ,GRFUNC_1:8
       .= CurInstr(ProgramPart Comput(ProgramPart(sI),sI,m),Comput(ProgramPart(
@@ -6442,7 +6379,7 @@ sI),sI,m))
 A12: Comput(ProgramPart((s+*loop I)),(s+*loop I),0) = s+*loop I by AMI_1:13;
   Comput(ProgramPart( s), s,0) = s by AMI_1:13;
   then
-A13: X[0] by A12,AMI_1:120;
+A13: X[0] by A12,FUNCT_7:132;
   thus for m being Element of NAT holds X[m] from NAT_1:sch 1(A13, A3);
 end;
 
@@ -6608,7 +6545,7 @@ A5: ss.a = k + 1;
 A6: ss.a > 0;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(
 s1),s1))
-by AMI_1:144;
+by AMI_1:123;
 A7: Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1) =
 Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)))
@@ -6646,9 +6583,9 @@ A17:  IExec(P,ss).a = IExec(I1,ss).a by SCMFSA_3:11;
 A18:  card P = card Goto  2 + card I1 + 4 by SCMFSA8B:14
         .= card I1 + 1 + 4 by SCMFSA8A:29
         .= card I1 + 3 + 2;
-A19:  card loop P = card dom loop P by CARD_1:104
+A19:  card loop P = card dom loop P
         .= card dom P by FUNCT_4:105
-        .= card P by CARD_1:104;
+        .= card P;
       hereby
         thus  0 in dom loop P by A19,A18,AFINSQ_1:70;
         card I1 + 3 + (1 + 1) = (card I1 + 3 + 1) + 1;
@@ -6737,9 +6674,9 @@ A34:  card P = card Goto  2 + card I1 + 4 by SCMFSA8B:14
         .= card I1 + 1 + 4 by SCMFSA8A:29
         .= card I1 + 3 + 2;
       hence  0 in dom P by AFINSQ_1:70;
-      card loop P = card dom loop P by CARD_1:104
+      card loop P = card dom loop P
         .= card dom P by FUNCT_4:105
-        .= card P by CARD_1:104;
+        .= card P;
       then card ProgramPart loop P = card I1 + (3 + 2) by A34,AMI_1:105;
       hence P. (card I1 + 3) = goto  card ProgramPart loop P
       by Th116;
@@ -6773,15 +6710,14 @@ LifeSpan(ProgramPart(s1),s1)+1+1)
  by AMI_1:150;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(
 s1),s1)+1)
-by AMI_1:144;
+by AMI_1:123;
 A37:    Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1+1) =
 Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1)) by AMI_1:14
           .= Exec(i,Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1))
 by A36,T;
         then IC Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1+1) =
-(card I1 + 3) by
-A5,A15,A35,SCMFSA_2:96;
+(card I1 + 3) by A5,A15,A35,SCMFSA_2:96;
         then
 A38:    CurInstr(ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1)
 ,s1)+1+1),
@@ -6792,11 +6728,11 @@ A38:    CurInstr(ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1)
           .= goto  card ProgramPart loop P by A31,FUNCT_4:111;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(
 s1),s1)+1+1)
-by AMI_1:144;
+by AMI_1:123;
         Comput(ProgramPart(s2),s2,m) =
         Following(ProgramPart s2,
-        Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1+1)) by AMI_1:
-14
+        Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1+1)) by
+AMI_1:14
           .= Exec(goto  card ProgramPart loop P, Comput(ProgramPart(s2),s2,
         LifeSpan(ProgramPart(s1),s1)+1+1)) by A38,T;
         hence IC Comput(ProgramPart(s2),s2,m) =  card ProgramPart loop P by
@@ -6868,7 +6804,7 @@ A52:    for n being Element of NAT st n < m0 holds IC Comput(ProgramPart( (
         by A3,A45,A50;
         take m = LifeSpan(ProgramPart(s1),s1) + 1 + m0;
 T: ProgramPart s2 = ProgramPart s3
-by AMI_1:144;
+by AMI_1:123;
         IC SCM+FSA in dom s3 by AMI_1:94;
         then
 A53:    Initialize s3 +* (loop P +* Start-At( 0,SCM+FSA)) =
@@ -6906,7 +6842,7 @@ A61:        mm = n -' (LifeSpan(ProgramPart(s1),s1) + 1);
             then
 A62:        mm = n - (LifeSpan(ProgramPart(s1),s1) + 1) by A61,XREAL_0:def 2;
 T: ProgramPart s2 = ProgramPart s3
-by AMI_1:144;
+by AMI_1:123;
             mm + (LifeSpan(ProgramPart(s1),s1) + 1) = n by A60,A61,XREAL_1:237;
             then
 A63:        IC Comput(ProgramPart(s2),s2,n) = IC Comput(ProgramPart( s2), s3,mm
@@ -7139,7 +7075,7 @@ A17: P is_closed_on s by A7,A2,SCMFSA8B:18;
 A18: P is_halting_on s by A7,A16,A2,SCMFSA8B:18;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(
 s1),s1))
-by AMI_1:144;
+by AMI_1:123;
 A19: Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)+1) =
 Following(ProgramPart s2,
 Comput(ProgramPart(s2),s2,LifeSpan(ProgramPart(s1),s1)))
@@ -7236,9 +7172,9 @@ A31:  n = LifeSpan(ProgramPart(s1),s1) + 1;
 A32:  card P = card Goto  2 + card I1 + 4 by SCMFSA8B:14
         .= card I1 + 1 + 4 by SCMFSA8A:29
         .= card I1 + 3 + 2;
-      card loop P = card dom loop P by CARD_1:104
+      card loop P = card dom loop P
         .= card dom P by FUNCT_4:105
-        .= card P by CARD_1:104;
+        .= card P;
       hence IC Comput(ProgramPart( s2), s2,n) in dom loop P by A24,A31,A32,
 AFINSQ_1:70;
     end;
@@ -7396,9 +7332,9 @@ A29: P. (card I1 + 3) <> halt SCM+FSA by SCMFSA_2:47,124;
 A30: card I1 + (3 + 2) = card I1 + 1 + 4
       .= card Goto  2 + card I1 + 4 by SCMFSA8A:29
       .= card P by SCMFSA8B:14
-      .= card dom P by CARD_1:104
+      .= card dom P
       .= card dom loop P by FUNCT_4:105
-      .= card loop P by CARD_1:104;
+      .= card loop P;
     then card I1 + 3 + 0 < card loop P by XREAL_1:8;
     then
 A31:  (card I1 + 3) in dom loop P by AFINSQ_1:70;
@@ -7418,7 +7354,7 @@ ENUMSET1:def 2;
 Y:  (ProgramPart Comput(ProgramPart(s2),s2,k))/.IC Comput(ProgramPart(s2),s2,k)
  = Comput(ProgramPart(s2),s2,k).IC Comput(ProgramPart(s2),s2,k) by AMI_1:150;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k)
-by AMI_1:144;
+by AMI_1:123;
 A34: Comput(ProgramPart(s2),s2,k+1) =
 Following(ProgramPart s2,Comput(ProgramPart(s2),s2,k)
 )
@@ -7455,7 +7391,7 @@ k+1)
  = Comput(ProgramPart(s2),s2,k+1).IC Comput(ProgramPart(s2),s2,k+1) by
 AMI_1:150;
 T: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,k+1)
-by AMI_1:144;
+by AMI_1:123;
 A43: Comput(ProgramPart(s2),s2,k+(1+1)) = Comput(ProgramPart(s2),s2,k+1+1)
       .= Following(ProgramPart s2,Comput(
 ProgramPart(s2),s2,k+1))
@@ -7466,8 +7402,7 @@ s2),s2,k+1))
     then IC Comput(ProgramPart(s2),s2,k+2) =  (card I1 + 5) by A32,SCMFSA_2:95
       .=  card ProgramPart loop P by A30,AMI_1:105;
     then
-A44: k + 2 = pseudo-LifeSpan(s0,loop P) by A14,A11,A41,
-SCMFSA8A:def 5;
+A44: k + 2 = pseudo-LifeSpan(s0,loop P) by A14,A11,A41,SCMFSA8A:def 5;
     InsCode Comput(ProgramPart(s2),s2,k). 0 = 7 by A38,SCMFSA_2:48;
     then InsCode Comput(ProgramPart(s2),s2,k). 0 in {0,6,7,8} by ENUMSET1:def 2
 ;
@@ -7493,8 +7428,7 @@ A46: ss.a <> 0;
     then
 A47: ss.a > 0 by A22,A46,XREAL_1:21;
 A48: DataPart s0 = DataPart s21 by SCMFSA8A:11;
-A49: k < pseudo-LifeSpan(s0,loop P) by A3,A10,A9,A14,A20
-,Th2,Th117;
+A49: k < pseudo-LifeSpan(s0,loop P) by A3,A10,A9,A14,A20,Th2,Th117;
     then
 A50: DataPart Comput(ProgramPart( s21), s21,k) = DataPart ss by A14,A12,A13,A24
 ,Th58;
@@ -7527,7 +7461,7 @@ A54:      a is read-write Int-Location by SF_MASTR:def 5;
     IC Comput(ProgramPart( s21), s21,k) = IC Comput(ProgramPart(s2),s2,k) by
 A14,A12,A13,A49,Th58
       .= IC (ss0 +* (loop P ';' Stop SCM+FSA) +* Start-At( 0,SCM+FSA))
-      by A19,AMI_1:111
+      by A19,FUNCT_4:121
       .= IC s31 by FUNCT_4:15;
     then
 A55: Comput(ProgramPart( s21), s21,k),s31 equal_outside A by A51,SCMFSA6A:28;

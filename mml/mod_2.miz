@@ -8,16 +8,16 @@ environ
 
  vocabularies XBOOLE_0, FUNCSDOM, VECTSP_1, CLASSES2, FUNCT_5, MCART_1,
       STRUCT_0, VECTSP_2, SUPINF_2, ALGSTR_0, SUBSET_1, ARYTM_3, RLVECT_1,
-      RELAT_1, MESFUNC1, FUNCT_1, FDIFF_1, MSSUBFAM, GRCAT_1, GRAPH_1, CAT_1,
+      RELAT_1, MESFUNC1, FUNCT_1, MSSUBFAM, GRCAT_1, GRAPH_1, CAT_1,
       MIDSP_1, ORDINAL1, CARD_1, ARYTM_1, BINOP_1, LATTICES, FUNCT_2, ZFMISC_1,
-      MOD_2;
+      MOD_2, UNIALG_1;
  notations XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, BINOP_1, PARTFUN1, NUMBERS,
       FUNCT_2, FUNCT_5, STRUCT_0, ALGSTR_0, ORDINAL1, RLVECT_1, GROUP_1,
       VECTSP_1, FUNCSDOM, VECTSP_2, CLASSES2, GRCAT_1, FUNCT_3;
  constructors ENUMSET1, PARTFUN1, VECTSP_2, GRCAT_1, FUNCOP_1, ALGSTR_1,
-      RELSET_1;
+      RELSET_1, CLASSES1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_1,
-      ALGSTR_1, ALGSTR_0;
+      ALGSTR_1, ALGSTR_0, CLASSES2, GRCAT_1;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions RLVECT_1, STRUCT_0, GRCAT_1, VECTSP_1, ALGSTR_0;
  theorems BINOP_1, CLASSES2, ENUMSET1, GRCAT_1, FUNCT_2, ORDINAL1, VECTSP_1,
@@ -83,93 +83,59 @@ A4: (x*y)*v = a & (1.R)*v = a by GRCAT_1:8;
     v by A4,GRCAT_1:8;
 
   end;
-  hence thesis by A2,VECTSP_1:def 26;
+  hence thesis by A2,VECTSP_1:def 26,def 27,def 28,def 29;
 end;
 
 definition
   let R;
   canceled;
   func TrivialLMod(R) -> strict LeftMod of R equals
-  VectSpStr (#1,op2,op0,pr2(
-    the carrier of R,1)#);
+  VectSpStr (#1,op2,op0,pr2(the carrier of R,1)#);
   coherence by Lm1;
 end;
 
 theorem
-  for x being Vector of TrivialLMod R holds x = 0.TrivialLMod R by
-  GRCAT_1:8;
+  for x being Vector of TrivialLMod R holds x = 0.TrivialLMod R by GRCAT_1:8;
 
 definition
-  let R be non empty doubleLoopStr;
+  let R be non empty multMagma;
   let G,H be non empty VectSpStr over R;
   let f be Function of G,H;
-  canceled 2;
-  attr f is linear means
-  :Def5:
-  (for x,y being Vector of G holds f.(x+y) = f.x
-  +f.y) & for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
+  attr f is homogeneous means
+  :Def4:
+  for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x;
 end;
 
-canceled 2;
+canceled 3;
 
-theorem Th4:
-  for f being Function of G,H st f is linear holds f is additive
-proof
-  let f be Function of G,H;
-  assume
-  f is linear;
-  then for x,y be Element of G holds f.(x+y) = f.x+f.y by Def5;
-  hence thesis by GRCAT_1:def 13;
-end;
-
-canceled;
-
-theorem Th6:
+theorem Th5:
   for f being Function of G,H, g being Function of H,S st f is
-  linear & g is linear holds g*f is linear
+  homogeneous & g is homogeneous holds g*f is homogeneous
 proof
   let f be Function of G,H, g be Function of H,S;
   assume that
-A1: f is linear and
-A2: g is linear;
+A1: f is homogeneous and
+A2: g is homogeneous;
   set h = g*f;
-A3: f is additive & g is additive by A1,A2,Th4;
-A4: for x,y being Vector of G holds h.(x+y) = h.x+h.y
-  proof
-    let x,y be Vector of G;
-    h is additive by A3,GRCAT_1:14;
-    hence thesis by GRCAT_1:def 13;
-  end;
-  now
     let a be Scalar of R, x be Vector of G;
     thus h.(a*x) = g.(f.(a*x)) by FUNCT_2:21
-      .= g.(a*f.x) by A1,Def5
-      .= a*g.(f.x) by A2,Def5
+      .= g.(a*f.x) by A1,Def4
+      .= a*g.(f.x) by A2,Def4
       .= a*h.x by FUNCT_2:21;
-  end;
-  hence thesis by A4,Def5;
 end;
 
 reserve R for Ring;
 reserve G, H for LeftMod of R;
 
-canceled;
-
-theorem Th8:
-  ZeroMap(G,H) is linear
-proof
-  set f = ZeroMap(G,H);
-  reconsider G9=G, H9=H as AbGroup;
-A1: for a being Scalar of R, x being Vector of G holds f.(a*x) = a*f.x
+registration let R,G,H;
+ cluster ZeroMap(G,H) -> homogeneous;
+ coherence
   proof
-    let a be Scalar of R, x be Vector of G;
+   let a be Scalar of R, x be Vector of G;
+    set f = ZeroMap(G,H);
     f.(a*x) = 0.H & f.x = 0.H by FUNCOP_1:13;
-    hence thesis by VECTSP_1:59;
+   hence thesis by VECTSP_1:59;
   end;
-  ZeroMap( G9, H9 ) is additive by GRCAT_1:16;
-  then for x,y being Vector of G holds f.(x+y) = f.x+f.y by
-  GRCAT_1:def 13;
-  hence thesis by A1,Def5;
 end;
 
 ::
@@ -188,6 +154,7 @@ reserve f for LModMorphismStr over R;
 
 definition
   let R,f;
+ canceled 2;
   func dom(f) -> LeftMod of R equals
   the Dom of f;
   correctness;
@@ -203,6 +170,8 @@ definition
   coherence;
 end;
 
+canceled 3;
+
 theorem
   for f0 being Function of G1,G2 st f = LModMorphismStr(#G1,G2,f0#)
   holds dom f = G1 & cod f = G2 & fun f = f0;
@@ -210,8 +179,7 @@ theorem
 definition
   let R,G,H;
   func ZERO(G,H) -> strict LModMorphismStr over R equals
-  LModMorphismStr(# G,H
-    ,ZeroMap(G,H)#);
+  LModMorphismStr(# G,H,ZeroMap(G,H)#);
   correctness;
 end;
 
@@ -220,7 +188,7 @@ definition
   let IT be LModMorphismStr over R;
   attr IT is LModMorphism-like means
   :Def10:
-  fun(IT) is linear;
+  fun(IT) is additive homogeneous;
 end;
 
 registration
@@ -230,7 +198,7 @@ registration
   proof
     consider G,H;
     set z = ZERO(G,H);
-    fun(z) is linear by Th8;
+    fun(z) is additive homogeneous;
     then z is LModMorphism-like by Def10;
     hence thesis;
   end;
@@ -242,7 +210,7 @@ definition
 end;
 
 theorem Th10:
-  for F being LModMorphism of R holds the Fun of F is linear
+  for F being LModMorphism of R holds the Fun of F is additive homogeneous
 proof
   let F be LModMorphism of R;
   the Fun of F = fun(F);
@@ -255,7 +223,7 @@ registration
   coherence
   proof
     set z = ZERO(G,H);
-    fun(z) is linear by Th8;
+    fun(z) is additive homogeneous;
     hence thesis by Def10;
   end;
 end;
@@ -264,8 +232,7 @@ definition
   let R,G,H;
   mode Morphism of G,H -> LModMorphism of R means
     :Def11:
-    dom(it) = G & cod(it
-    ) = H;
+    dom(it) = G & cod(it) = H;
   existence
   proof
     take ZERO(G,H);
@@ -287,43 +254,38 @@ end;
 
 theorem Th11:
   for f being LModMorphismStr over R holds dom(f) = G & cod(f) = H
-  & fun(f) is linear implies f is Morphism of G,H
+  & fun(f) is additive homogeneous implies f is Morphism of G,H
 proof
   let f be LModMorphismStr over R;
   assume that
 A1: dom(f) = G & cod(f) = H and
-A2: fun(f) is linear;
+A2: fun(f) is additive homogeneous;
   reconsider f9 = f as LModMorphism of R by A2,Def10;
   f9 is Morphism of G,H by A1,Def11;
   hence thesis;
 end;
 
 theorem Th12:
-  for f being Function of G,H st f is linear holds LModMorphismStr
+  for f being Function of G,H st f is additive homogeneous
+   holds LModMorphismStr
   (#G,H,f#) is strict Morphism of G,H
 proof
   let f be Function of G,H such that
-A1: f is linear;
+A1: f is additive homogeneous;
   set F = LModMorphismStr (#G,H,f#);
   fun(F) = f;
   hence thesis by A1,Th11;
 end;
 
-theorem Th13:
-  id G is linear
-proof
-  set f = id G;
-A1: now
-    let x,y be Vector of G;
-    f.(x+y) = x+y & f.x = x by FUNCT_1:35;
-    hence f.(x+y) = f.x+f.y by FUNCT_1:35;
+registration let R,G;
+ cluster id G -> homogeneous;
+ coherence
+  proof
+   set f = id G;
+   let a be Scalar of R, x be Vector of G;
+   thus f.(a*x) = a*x by FUNCT_1:35
+     .= a*f.x by FUNCT_1:35;
   end;
-  now
-    let a be Scalar of R, x be Vector of G;
-    thus f.(a*x) = a*x by FUNCT_1:35
-      .= a*f.x by FUNCT_1:35;
-  end;
-  hence thesis by A1,Def5;
 end;
 
 definition
@@ -334,7 +296,7 @@ definition
   proof
     set i = LModMorphismStr(# G,G,id G#);
     fun(i) = id G;
-    hence thesis by Th11,Th13;
+    hence thesis by Th11;
   end;
 end;
 
@@ -345,13 +307,15 @@ definition
   proof
     set i = ZERO(G,H);
     fun(i) = ZeroMap(G,H);
-    hence thesis by Th8,Th11;
+    hence thesis by Th11;
   end;
 end;
 
+canceled;
+
 theorem Th14:
   for F being Morphism of G,H ex f being Function of G,H st the
-  LModMorphismStr of F = LModMorphismStr(#G,H,f#) & f is linear
+  LModMorphismStr of F = LModMorphismStr(#G,H,f#) & f is additive homogeneous
 proof
   let F be Morphism of G,H;
 A1: the Cod of F = cod(F)
@@ -370,7 +334,7 @@ proof
   let F be strict Morphism of G,H;
   consider f being Function of G,H such that
 A1: the LModMorphismStr of F = LModMorphismStr(#G,H,f#) and
-  f is linear by Th14;
+  f is additive homogeneous by Th14;
   take f;
   thus thesis by A1;
 end;
@@ -387,14 +351,15 @@ end;
 theorem
   for F being strict LModMorphism of R ex G,H being LeftMod of R, f
 being Function of G,H st F is strict Morphism of G,H & F = LModMorphismStr(#G,H
-    ,f#) & f is linear
+    ,f#) & f is additive homogeneous
 proof
   let F be strict LModMorphism of R;
   consider G,H such that
 A1: F is Morphism of G,H by Th16;
   reconsider F9 = F as Morphism of G,H by A1;
   consider f being Function of G,H such that
-A2: the LModMorphismStr of F9 = LModMorphismStr(#G,H,f#) & f is linear
+A2: the LModMorphismStr of F9 = LModMorphismStr(#G,H,f#) &
+f is additive homogeneous
   by Th14;
   take G,H,f;
   thus thesis by A2;
@@ -434,11 +399,11 @@ A2: G is Morphism of G2,G39 and
 A3: F is Morphism of G19,G2 by A1,Th18;
     consider f9 being Function of G19,G2 such that
 A4: the LModMorphismStr of F = LModMorphismStr(#G19,G2,f9#) and
-A5: f9 is linear by A3,Th14;
+A5: f9 is additive homogeneous by A3,Th14;
     consider g9 being Function of G2,G39 such that
 A6: the LModMorphismStr of G = LModMorphismStr(#G2,G39,g9#) and
-A7: g9 is linear by A2,Th14;
-    g9*f9 is linear by A7,A5,Th6;
+A7: g9 is additive homogeneous by A2,Th14;
+    g9*f9 is additive homogeneous by A7,A5,GRCAT_1:14,Th5;
     then reconsider
     T9 = (LModMorphismStr(#G19,G39,g9*f9#)) as strict LModMorphism
     of R by Th12;
@@ -456,7 +421,7 @@ A9: G is Morphism of G2,G39 by Th16;
     then reconsider F9 as Morphism of G19,G2 by A1,Def11;
     consider f9 being Function of G19,G2 such that
 A10: the LModMorphismStr of F9 = LModMorphismStr(#G19,G2,f9#) and
-    f9 is linear by Th14;
+    f9 is additive homogeneous by Th14;
     reconsider G9 = G as Morphism of G2,G39 by A9;
     let S1,S2 be strict LModMorphism of R such that
 A11: for G1,G2,G3 being LeftMod of R, g being Function of G2,G3, f
@@ -469,7 +434,7 @@ being Function of G1,G2 st the LModMorphismStr of G = LModMorphismStr(#G2,G3,g
     LModMorphismStr(#G1,G3,g*f#);
     consider g9 being Function of G2,G39 such that
 A13: the LModMorphismStr of G9 = LModMorphismStr(#G2,G39,g9#) and
-    g9 is linear by Th14;
+    g9 is additive homogeneous by Th14;
     thus S1 = (LModMorphismStr(#G19,G39,g9*f9#)) by A11,A13,A10
       .= S2 by A12,A13,A10;
   end;
@@ -484,10 +449,10 @@ proof
   let G be Morphism of G2,G3, F be Morphism of G1,G2;
   consider g being Function of G2,G3 such that
 A1: the LModMorphismStr of G = LModMorphismStr(#G2,G3,g#) and
-  g is linear by Th14;
+  g is additive homogeneous by Th14;
   consider f being Function of G1,G2 such that
 A2: the LModMorphismStr of F = LModMorphismStr(#G1,G2,f#) and
-  f is linear by Th14;
+  f is additive homogeneous by Th14;
   dom(G) = G2 by Def11
     .= cod(F) by Def11;
   then G*F = LModMorphismStr(#G1,G3,g*f#) by A1,A2,Def13;
@@ -1005,7 +970,7 @@ A2: Y=y;
   reconsider a = -X as Element of Z3;
   x + a = X + -X by A1,Def18
     .= 0.Z3 by Lm7;
-  hence thesis by RLVECT_1:def 11;
+  hence thesis by RLVECT_1:def 13;
 end;
 
 theorem Th34:
@@ -1300,8 +1265,8 @@ y*x & (x*y)*z = x*(y*z) & (1.F)*x = x & x*(1.F) = x & (x<>(0.F) implies ex y be
     take -v;
     thus thesis by A4;
   end;
-  hence thesis by A2,A4,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,
-  STRUCT_0:def 8 ,VECTSP_1:def 16,def 18,def 20;
+  hence thesis by A2,A4,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,STRUCT_0:def 8,VECTSP_1:def 16,def 18,def 20;
 end;
 
 theorem Th37:
@@ -1359,7 +1324,7 @@ A2:     X*Y = b by Th35;
   then reconsider F as Field by Th36;
   1.F + 1.F = b + b by Def18
     .= 2 by Def16;
-  hence thesis by Th32,VECTSP_1:def 29;
+  hence thesis by Th32,VECTSP_1:def 31;
 end;
 
 registration
@@ -1385,7 +1350,7 @@ proof
   then
 A1: Funcs(D,D9) in UN by CLASSES2:67;
   f in Funcs(D,D9) by FUNCT_2:11;
-  hence thesis by A1,GRCAT_1:4;
+  hence thesis by A1,ORDINAL1:19;
 end;
 
 Lm9: (for f being BinOp of D st D in UN holds f in UN) & for f being UnOp of D
@@ -1400,7 +1365,7 @@ A1: D in UN;
     then
 A2: Funcs([:D,D:],D) in UN by A1,CLASSES2:67;
     f in Funcs([:D,D:],D) by FUNCT_2:11;
-    hence f in UN by A2,GRCAT_1:4;
+    hence f in UN by A2,ORDINAL1:19;
   end;
   hence thesis by Th38;
 end;
@@ -1412,6 +1377,6 @@ theorem
   in UN & the multF of Z3 in UN & 1.Z3 in UN
 proof
   thus the carrier of Z3 in UN by Lm8;
-  hence thesis by Lm9,GRCAT_1:4;
+  hence thesis by Lm9,ORDINAL1:19;
 end;
 

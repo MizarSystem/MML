@@ -27,50 +27,6 @@
 <ArticleID name="AMI_2"/>
 <ArticleID name="SCMRING1"/>
 </Signature>
-<RCluster aid="SCMRING1" nr="1">
-<ArgTypes/>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42"/>
-</Cluster>
-</RCluster>
-<RCluster aid="SCMRING1" nr="2">
-<ArgTypes/>
-<Typ kind="G" nr="11">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="83"/>
-</Cluster>
-</RCluster>
-<RCluster aid="SCMRING1" nr="3">
-<ArgTypes/>
-<Typ kind="G" nr="11">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="60"/>
-<Adjective nr="83"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
-</Cluster>
-</RCluster>
 <FCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="177"/>
@@ -182,44 +138,12 @@
 <Adjective nr="37" value="false"/>
 <Adjective nr="42"/>
 </Cluster>
-<Typ kind="G" nr="7">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SCMRING1" nr="2">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42"/>
-</Cluster>
-<Typ kind="G" nr="11">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
-<Adjective nr="100"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SCMRING1" nr="3">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="42"/>
-</Cluster>
 <Typ kind="G" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="111"/>
+<Adjective nr="117"/>
 </Cluster>
 </CCluster>
 </Registrations>

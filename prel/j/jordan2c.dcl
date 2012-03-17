@@ -285,7 +285,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="169">
+<Adjective nr="172">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

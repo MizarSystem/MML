@@ -7,7 +7,7 @@
 environ
 
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, FINSEQ_1, RELAT_1, PARTFUN1, CARD_1,
-      FUNCT_1, TARSKI, XXREAL_0, ARYTM_1, ARYTM_3, REAL_1, NAT_1, ORDERS_1,
+      FUNCT_1, TARSKI, XXREAL_0, ARYTM_1, ARYTM_3, NAT_1, ORDERS_1,
       RELAT_2, GROUP_1, BINOP_1, ALGSTR_0, RLVECT_1, VECTSP_1, LATTICES,
       ZFMISC_1, FINSET_1, ALGSTR_1, STRUCT_0, SUPINF_2, CARD_3, FINSOP_1,
       ORDINAL4, PRE_POLY, FINSEQ_5, FUNCT_4, FUNCOP_1, ORDINAL1, WELLORD2,
@@ -34,326 +34,9 @@ environ
       PARTFUN2, CARD_1, RFINSEQ, FINSOP_1, FINSEQ_5, CARD_2, FINSEQ_2,
       ALGSTR_1, GROUP_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XREAL_1, GROUP_6,
       XXREAL_0, VALUED_0, PRE_POLY;
- schemes CLASSES1, FUNCT_2, NAT_1, RECDEF_1;
+ schemes FUNCT_2, NAT_1, RECDEF_1, INT_1;
 
-begin :: Preliminaries ------------------------------------------------------------
-
-scheme
-  SeqExD{D() -> non empty set, N() -> Element of NAT, P[set,set]}: ex p being
-FinSequence of D() st dom p = Seg N() & for k being Element of NAT st k in Seg
-  N() holds P[k,p/.k]
-provided
-A1: for k being Element of NAT st k in Seg N() ex x being Element of D()
-st P[k,x]
-proof
-  per cases;
-  suppose
-A2: N() = 0;
-    take <*>(D());
-    thus thesis by A2,RELAT_1:60;
-  end;
-  suppose
-A3: N() <> 0;
-    now
-      assume
-A4:   Seg N() = {};
-      now
-        per cases;
-        case
-          N() = 0;
-          hence contradiction by A3;
-        end;
-        case
-          N() <> 0;
-          hence contradiction by A4;
-        end;
-      end;
-      hence contradiction;
-    end;
-    then reconsider M = Seg N() as non empty set;
-A5: for x being Element of M ex y being Element of D() st P[x,y]
-    proof
-      let x be Element of M;
-      x in Seg N();
-      hence thesis by A1;
-    end;
-    consider f being Function of M,D() such that
-A6: for x being Element of M holds P[x,f.x] from FUNCT_2:sch 3(A5);
-    dom f = Seg N() by FUNCT_2:def 1;
-    then reconsider q = f as FinSequence by FINSEQ_1:def 2;
-    now
-      let u be set;
-A7:   rng q c= D() by RELAT_1:def 19;
-      assume
-      u in rng q;
-      hence u in D() by A7;
-    end;
-    then rng q c= D() by TARSKI:def 3;
-    then reconsider q as FinSequence of D() by FINSEQ_1:def 4;
-    take q;
-    now
-      let k be Element of NAT;
-      assume
-A8:   k in Seg N();
-      then k in dom q by FUNCT_2:def 1;
-      then q.k = q/.k by PARTFUN1:def 8;
-      hence P[k,q/.k] by A6,A8;
-    end;
-    hence thesis by FUNCT_2:def 1;
-  end;
-end;
-
-scheme
-  FinRecExD2{D() -> non empty set,A() -> (Element of D()), N() -> Element of
-NAT, P[set,set,set]}: ex p being FinSequence of D() st len p = N() & (p/.1 = A(
-) or N() = 0) & for n being Element of NAT st 1 <= n & n <= N()-1 holds P[n,p/.
-  n,p/.(n+1)]
-provided
-A1: for n being Element of NAT st 1 <= n & n <= N()-1 holds for x being
-Element of D() ex y being Element of D() st P[n,x,y]
-proof
-  consider 00 being Element of D();
-  defpred Q[Element of NAT,set,set] means (0 <= $1 & $1 <= N()-2 implies P[$1+
-  1,$2,$3]) & (not (0 <= $1 & $1 <= N()-2) implies $3=00);
-A2: for n be Element of NAT for x be Element of D() ex y be Element of D()
-  st Q[n,x,y]
-  proof
-    let n be Element of NAT,x be Element of D();
-    0 <= n & n <= N()-2 implies thesis
-    proof
-A3:   0+1 <= n+1 by XREAL_1:8;
-      assume that
-      0 <= n and
-A4:   n <= N()-2;
-      n+1 <= N()-2+1 by A4,XREAL_1:8;
-      then consider y being Element of D() such that
-A5:   P[n+1,x,y] by A1,A3;
-      take y;
-      thus 0 <= n & n <= N()-2 implies P[n+1,x,y] by A5;
-      thus thesis by A4;
-    end;
-    hence thesis;
-  end;
-  consider f being Function of NAT,D() such that
-A6: f.0 = A() & for n being Element of NAT holds Q[n,f.n,f.(n+1)] from
-  RECDEF_1:sch 2(A2);
-  defpred Q[set,set] means for r being Real st r = $1 holds $2 = f.(r-1);
-A7: for x being set st x in REAL ex y being set st Q[x,y]
-  proof
-    let x be set;
-    assume
-    x in REAL;
-    then reconsider r=x as Real;
-    take f.(r-1);
-    thus thesis;
-  end;
-  consider g being Function such that
-A8: dom g = REAL & for x being set st x in REAL holds Q[x,g.x] from
-  CLASSES1:sch 1(A7);
-A9: dom (g|Seg N()) = Seg N() by A8,RELAT_1:91,XBOOLE_1:1;
-  then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
-  now
-    let x be set;
-    assume
-    x in rng p;
-    then consider y being set such that
-A10: y in dom p and
-A11: x = p.y by FUNCT_1:def 5;
-    reconsider y as Element of NAT by A10;
-A12: f.(y-1) in D()
-    proof
-      y <> 0 by A9,A10,FINSEQ_1:3;
-      then consider k being Nat such that
-A13:  y = k+1 by NAT_1:6;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
-      f.k in D();
-      hence thesis by A13;
-    end;
-    p.y = g.y by A10,FUNCT_1:70;
-    hence x in D() by A8,A11,A12;
-  end;
-  then rng p c= D() by TARSKI:def 3;
-  then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
-  take p;
-  thus len p = N() by A9,FINSEQ_1:def 3;
-  N() <> 0 implies p/.1 = A()
-  proof
-    assume
-    N() <> 0;
-    then consider k being Nat such that
-A14: N() = k+1 by NAT_1:6;
-    0 + 1 <= k +1 by XREAL_1:9;
-    then
-A15: 1 in Seg N() by A14,FINSEQ_1:3;
-    then p/.1 = p.1 by A9,PARTFUN1:def 8
-      .= g.1 by A15,FUNCT_1:72
-      .= f.(1-1) by A8
-      .= A() by A6;
-    hence thesis;
-  end;
-  hence p/.1 = A() or N() = 0;
-  let n be Element of NAT;
-  assume that
-A16: 1 <= n and
-A17: n <= N()-1;
-  consider k being Nat such that
-A18: n = k+1 by A16,NAT_1:6;
-A19: for n being Element of NAT st n <= N()-1 holds p/.(n+1) = f.n
-  proof
-    let n be Element of NAT;
-    assume
-    n <= N() - 1;
-    then
-A20: n+1 <= N()-1+1 by XREAL_1:8;
-A21: g.(n+1) = f.(n+1-1) by A8
-      .= f.n;
-    1 <= n+1 by NAT_1:11;
-    then
-A22: n+1 in Seg N() by A20,FINSEQ_1:3;
-    then p/.(n+1) = p.(n+1) by A9,PARTFUN1:def 8;
-    hence thesis by A22,A21,FUNCT_1:72;
-  end;
-A23: k <= k+1 by NAT_1:11;
-A24: k in NAT by ORDINAL1:def 13;
-  k <= N()-1-1 by A17,A18,XREAL_1:21;
-  then P[k+1,f.k,f.(k+1)] by A6,A24;
-  then P[k+1,f.k,p/.(k+1+1)] by A19,A17,A18;
-  hence thesis by A19,A17,A18,A24,A23,XXREAL_0:2;
-end;
-
-scheme
-  FinRecUnD2{D() -> set, A() -> Element of D(), N() -> Element of NAT, F,G()
-  -> FinSequence of D(), P[set,set,set]}: F() = G()
-provided
-A1: for n being Element of NAT st 1 <= n & n <= N()-1 for x,y1,y2 being
-Element of D() st P[n,x,y1] & P[n,x,y2] holds y1 = y2 and
-A2: len F() = N() & (F()/.1 = A() or N() = 0) & for n being Element of
-NAT st 1 <= n & n <= N()-1 holds P[n,F()/.n,F()/.(n+1)] and
-A3: len G() = N() & (G()/.1 = A() or N() = 0) & for n being Element of
-NAT st 1 <= n & n <= N()-1 holds P[n,G()/.n,G()/.(n+1)]
-proof
-  assume
-A4: F() <> G();
-  dom F() = dom G() by A2,A3,FINSEQ_3:31;
-  then consider x being set such that
-A5: x in dom F() and
-A6: F().x <> G().x by A4,FUNCT_1:9;
-A7: x in Seg len F() by A5,FINSEQ_1:def 3;
-  dom F() = Seg N() by A2,FINSEQ_1:def 3
-    .= dom G() by A3,FINSEQ_1:def 3;
-  then
-A8: G()/.x = G().x by A5,PARTFUN1:def 8;
-  defpred Q[Nat] means 1 <= $1 & $1 <= N() & F()/.$1 <> G()/.$1;
-A9: F()/.x = F().x by A5,PARTFUN1:def 8;
-  reconsider x as Element of NAT by A5;
-A10: 1 <= x by A7,FINSEQ_1:3;
-  x <= N() by A2,A7,FINSEQ_1:3;
-  then
-A11: ex n being Nat st Q[n] by A6,A9,A8,A10;
-  consider n being Nat such that
-A12: Q[n] & for k being Nat st Q[k] holds n <= k from NAT_1:sch 5(A11);
-  consider k being Nat such that
-A13: n = k+1 by A12,NAT_1:6;
-  n <> 1 by A2,A3,A12;
-  then 1 < n by A12,XXREAL_0:1;
-  then
-A14: 1 <= k by A13,NAT_1:13;
-  k <= n by A13,NAT_1:11;
-  then
-A15: k <= N() by A12,XXREAL_0:2;
-  reconsider Fk = F()/.k, Fk1 = F()/.(k+1), Gk1 = G()/.(k+1) as Element of D();
-A16: k in NAT by ORDINAL1:def 13;
-A17: k <= N() - 1 by A12,A13,XREAL_1:21;
-  then
-A18: P[k,Fk,Fk1] by A2,A14,A16;
-  n > k by A13,NAT_1:13;
-  then F()/.k = G()/.k by A12,A14,A15;
-  then P[k,Fk,Gk1] by A3,A14,A16,A17;
-  hence contradiction by A1,A12,A13,A14,A16,A17,A18;
-end;
-
-scheme
-  FinInd{M, N() -> Element of NAT, P[Nat]} : for i being Element of NAT st M()
-  <= i & i <= N() holds P[i]
-provided
-A1: P[M()] and
-A2: for j being Element of NAT st M() <= j & j < N() holds P[j] implies
-P[j+1]
-proof
-  defpred Q[Nat] means M() <= $1 & $1 <= N() & not(P[$1]);
-  assume
-  not(for i being Element of NAT st M() <= i & i <= N() holds P[i]);
-  then
-A3: ex i being Nat st Q[i];
-  consider k being Nat such that
-A4: Q[k] & for k9 being Nat st Q[k9] holds k <= k9 from NAT_1:sch 5(A3);
-  per cases;
-  suppose
-    k = M();
-    hence thesis by A1,A4;
-  end;
-  suppose
-    k <> M();
-    then M() < k by A4,XXREAL_0:1;
-    then M() + 1 <= k by NAT_1:13;
-    then
-A5: (M() + 1) - 1 <= k - 1 by XREAL_1:11;
-    then reconsider k9 = k - 1 as Element of NAT by INT_1:16;
-A6: k9 <> k9 + 1;
-    k9 <= k9 + 1 by NAT_1:11;
-    then
-A7: k9 < k by A6,XXREAL_0:1;
-    then
-A8: k9 < N() by A4,XXREAL_0:2;
-A9: (k - 1) + 1 = k + 0;
-    not(Q[k9]) by A4,A7;
-    hence thesis by A2,A4,A5,A9,A8;
-  end;
-end;
-
-scheme
-  FinInd2{M,N() -> Element of NAT, P[Nat]} : for i being Element of NAT st M()
-  <= i & i <= N() holds P[i]
-provided
-A1: P[M()] and
-A2: for j being Element of NAT st M() <= j & j < N() holds (for j9 being
-Element of NAT st M() <= j9 & j9 <= j holds P[j9]) implies P[j+1]
-proof
-  defpred Q[Element of NAT] means for j being Element of NAT st M() <= j & j
-  <= ($1) holds P[j];
-A3: for j being Element of NAT st M() <= j & j < N() holds Q[j] implies Q[j+
-  1]
-  proof
-    let j be Element of NAT;
-    assume that
-A4: M() <= j and
-A5: j < N();
-    assume
-A6: Q[j];
-    thus Q[j+1]
-    proof
-      let i be Element of NAT;
-      assume that
-A7:   M() <= i and
-A8:   i <= j + 1;
-      per cases;
-      suppose
-        i = j + 1;
-        hence thesis by A2,A4,A5,A6;
-      end;
-      suppose
-        i <> j + 1;
-        then i < j + 1 by A8,XXREAL_0:1;
-        then i <= j by NAT_1:13;
-        hence thesis by A6,A7;
-      end;
-    end;
-  end;
-A9: Q[M()] by A1,XXREAL_0:1;
-  for i being Element of NAT st M() <= i & i <= N() holds Q[i] from
-  FinInd(A9,A3);
-  hence thesis;
-end;
+begin :: Preliminaries
 
 Lm1: for X being set, A being Subset of X, O being Order of X holds O
 is_reflexive_in A & O is_antisymmetric_in A & O is_transitive_in A
@@ -540,7 +223,7 @@ A2: for i9 being Element of NAT st i9 in dom p & i9 <> i holds p/.i9 =
 A3: Sum p = fp.(len p) and
 A4: fp.0 = 0.L and
 A5: for j being Element of NAT, v being Element of L st j < len p & v =
-  p.(j + 1) holds fp.(j + 1) = fp.j + v by RLVECT_1:def 13;
+  p.(j + 1) holds fp.(j + 1) = fp.j + v by RLVECT_1:def 15;
   defpred P[Element of NAT] means ($1 < i & fp.($1) = 0.L) or (i <= $1 & fp.(
   $1) = p/.i);
   consider l being Nat such that
@@ -613,7 +296,7 @@ A21:  j + 1 in dom p by A6,A19,FINSEQ_1:3;
   end;
 A22: P[0] by A4,A8;
   for j being Element of NAT st 0 <= j & j <= len p holds P[j] from
-  FinInd(A22,A9);
+  INT_1:sch 7(A22,A9);
   hence thesis by A3,A8,A7;
 end;
 
@@ -718,7 +401,7 @@ A28: P[0]
     assume
     len p = 0;
     then p = {};
-    hence thesis by RELAT_1:60;
+    hence thesis;
   end;
   for j being Element of NAT holds P[j] from NAT_1:sch 1(A28,A3);
   hence thesis by A1,A2,A27;
@@ -746,7 +429,7 @@ A5: for i9 being Element of NAT st i9 in dom p & i9 <> i holds q/.i9 = p
 A6: Sum q = fq.(len q) and
 A7: fq.0 = 0.L and
 A8: for j being Element of NAT, v being Element of L st j < len q & v =
-  q.(j + 1) holds fq.(j + 1) = fq.j + v by RLVECT_1:def 13;
+  q.(j + 1) holds fq.(j + 1) = fq.j + v by RLVECT_1:def 15;
   consider l being Nat such that
 A9: dom p = Seg l by FINSEQ_1:def 2;
   i in {z where z is Element of NAT : 1 <= z & z <= l} by A3,A9,FINSEQ_1:def 1;
@@ -759,7 +442,7 @@ A11: dom q = Seg l9 by FINSEQ_1:def 2;
 A12: Sum p = fp.(len p) and
 A13: fp.0 = 0.L and
 A14: for j being Element of NAT, v being Element of L st j < len p & v =
-  p.(j + 1) holds fp.(j + 1) = fp.j + v by RLVECT_1:def 13;
+  p.(j + 1) holds fp.(j + 1) = fp.j + v by RLVECT_1:def 15;
 A15: len p = l by A9,FINSEQ_1:def 3;
   defpred P[Element of NAT] means ($1 < i & fp.($1) = fq.($1)) or (i <= $1 &
   fq.($1) = a + fp.($1));
@@ -835,7 +518,7 @@ A32:  i < j + 1 by A28,NAT_1:13;
   end;
 A33: P[0] by A13,A7,A10;
   for j being Element of NAT st 0 <= j & j <= len p holds P[j] from
-  FinInd(A33,A17);
+  INT_1:sch 7(A33,A17);
   hence thesis by A1,A12,A6,A10,A15;
 end;
 
@@ -863,7 +546,7 @@ A7: Product q = (the multF of L) "**" q by GROUP_4:def 3;
   suppose
     len p = 0;
     then p = {};
-    hence thesis by A3,RELAT_1:60;
+    hence thesis by A3;
   end;
   suppose
 A8: len p <> 0;
@@ -985,7 +668,7 @@ A41:    1 < i;
     then
 A42: P[1];
     for j being Element of NAT st 1 <= j & j <= len p holds P[j] from
-    FinInd(A42,A23);
+    INT_1:sch 7(A42,A23);
     hence thesis by A9,A13,A16,A18,A19;
   end;
 end;
@@ -998,7 +681,7 @@ proof
   assume
   R linearly_orders A;
   then rng SgmX(R,A) = {} by PRE_POLY:def 2;
-  hence thesis by RELAT_1:64;
+  hence thesis;
 end;
 
 theorem Th10:
@@ -1215,7 +898,7 @@ A52: not(sga/.1) in A by A2,XBOOLE_0:def 3;
     sga/.1 in rng sga by A47,A45,FUNCT_1:def 5;
     hence thesis by A4,A52,PRE_POLY:def 2;
   end;
-  for j being Element of NAT st 1 <= j & j <= k9 holds P[j] from FinInd2
+  for j being Element of NAT st 1 <= j & j <= k9 holds P[j] from INT_1:sch 8
   (A41,A13);
   hence thesis by A38,A39;
 end;
@@ -1536,7 +1219,7 @@ PRE_POLY:def 2;
     end;
   end;
   for j being Element of NAT st k <= j & j <= len sga holds P[j] from
-  FinInd2(A63,A13);
+  INT_1:sch 8(A63,A13);
   hence thesis by A58,A59;
 end;
 
@@ -1775,7 +1458,7 @@ A1: for k being Element of NAT st k in Seg l ex x being Element of L st P[
     k,x];
     consider p being FinSequence of the carrier of L such that
 A2: dom p = Seg l & for k being Element of NAT st k in Seg l holds P[k
-    ,p/.k] from SeqExD(A1);
+    ,p/.k] from RECDEF_1:sch 17(A1);
     take Product p;
 A3: len p = l by A2,FINSEQ_1:def 3;
     now
@@ -2781,7 +2464,7 @@ A1: for k being Element of NAT st k in Seg l ex x being Element of L st P[
     k,x];
     consider q being FinSequence of the carrier of L such that
 A2: dom q = Seg l & for m being Element of NAT st m in Seg l holds P[m
-    ,q/.m] from SeqExD(A1 );
+    ,q/.m] from RECDEF_1:sch 17(A1 );
     take Sum q;
 A3: len q = l by A2,FINSEQ_1:def 3;
     now
@@ -2971,7 +2654,7 @@ A2: u in {EmptyBag n};
 A3: u = EmptyBag n by TARSKI:def 1;
     reconsider u as Element of Bags n by A2,TARSKI:def 1;
     1p.u = 1.L by A3,POLYNOM1:84;
-    then 1p.u <> 0.L by VECTSP_1:def 13, 36;
+    then 1p.u <> 0.L;
     hence thesis by POLYNOM1:def 9;
   end;
   reconsider s1p = Support 1p as finite Subset of Bags n;
@@ -3169,7 +2852,7 @@ A28: k in dom yp by A15,FINSEQ_1:def 3;
   hence eval(mp,x) = Sum((-1.L) * yp) by A5,A12,A13,A14,A15,A16,A18,FINSEQ_1:8
 ,18
     .= (-1.L) * Sum(yp) by POLYNOM1:28 :: Sum yp = eval(p,x)
-    .= (-1.L) * eval(p,x) by A8,POLYNOM1:28
+    .= (-1.L) * eval(p,x) by A8
     .= -(1.L * eval(p,x)) by VECTSP_1:41
     .= - eval(p,x) by VECTSP_1:def 16;
 end;

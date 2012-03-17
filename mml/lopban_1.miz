@@ -16,18 +16,19 @@ environ
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XXREAL_0,
       XCMPLX_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, XREAL_0, ORDINAL1,
       NUMBERS, MONOID_0, PSCOMP_1, RLVECT_1, RLSUB_1, NORMSP_1, RSSPACE,
-      RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM;
+      RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, GRCAT_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
       RLSUB_1, FUNCSDOM, MONOID_0, PSCOMP_1, RSSPACE3, SEQ_1, XXREAL_2,
-      NORMSP_1, SEQ_4, RELSET_1;
+      NORMSP_1, SEQ_4, RELSET_1, GRCAT_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, NORMSP_1, MONOID_0,
       RSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions RLVECT_1, SEQ_4, FUNCT_1, BINOP_1, STRUCT_0, ALGSTR_0;
+ definitions RLVECT_1, SEQ_4, FUNCT_1, BINOP_1, STRUCT_0, ALGSTR_0, GRCAT_1;
  theorems XBOOLE_0, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1, XREAL_0,
       XCMPLX_0, SEQ_1, SEQ_2, FUNCT_1, NAT_1, FUNCT_2, RLSUB_1, NORMSP_1,
-      SEQ_4, FUNCT_3, RSSPACE, RSSPACE3, MONOID_0, XREAL_1, COMPLEX1, XXREAL_0;
+      SEQ_4, FUNCT_3, RSSPACE, RSSPACE3, MONOID_0, XREAL_1, COMPLEX1, XXREAL_0,
+      GRCAT_1;
  schemes BINOP_1, SEQ_1, FUNCT_2, XBOOLE_0;
 
 begin :: Real Vector Space of Operators
@@ -44,7 +45,7 @@ A1: dom f = X by FUNCT_2:def 1;
     a in REAL by XREAL_0:def 1;
     then dom f --> a is Function of X,REAL by A1,FUNCOP_1:57;
     then reconsider g = <:dom f --> a, f:> as Function of X,[:REAL, Y:] by
-    FUNCT_3:78;
+FUNCT_3:78;
     F[;](a,f) = F * g by FUNCOP_1:def 5;
     hence thesis by FUNCT_2:11;
   end;
@@ -67,10 +68,11 @@ A1: for f,g being Element of Funcs(X,the carrier of Y) holds ADD.(f,g) =
 end;
 
 theorem Th2:
-  for X be non empty set, Y be RealLinearSpace ex MULT be Function
-  of [:REAL, Funcs(X,the carrier of Y):], Funcs(X,the carrier of Y) st for r be
-  Real, f be Element of Funcs(X,the carrier of Y) holds for s be Element of X
-  holds (MULT.[r,f]).s = r*(f.s)
+  for X be non empty set, Y be RealLinearSpace
+  ex MULT be Function of
+   [:REAL, Funcs(X,the carrier of Y):], Funcs(X,the carrier of Y) st
+  for r be Real, f be Element of Funcs(X,the carrier of Y)
+  for s be Element of X holds (MULT.[r,f]).s = r*(f.s)
 proof
   let X be non empty set;
   let Y be RealLinearSpace;
@@ -281,7 +283,7 @@ proof
   now
     let x be Element of X;
     thus ((FuncExtMult(X,Y)).[1 qua Real,f]).x = 1*(f.x) by Th5
-      .= f.x by RLVECT_1:def 9;
+      .= f.x by RLVECT_1:def 11;
   end;
   hence thesis by FUNCT_2:113;
 end;
@@ -295,7 +297,7 @@ proof
     thus ((FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]]).x = a*(((
     FuncExtMult(X,Y)).[b,f]).x) by Th5
       .= a*(b*(f.x)) by Th5
-      .= (a*b)*(f.x) by RLVECT_1:def 9
+      .= (a*b)*(f.x) by RLVECT_1:def 10,def 11
       .= ((FuncExtMult(X,Y)).[a*b,f]).x by Th5;
   end;
   hence thesis by FUNCT_2:113;
@@ -329,7 +331,7 @@ proof
 
       .= a*(f.x) + ((FuncExtMult(X,Y)).[a,g]).x by Th5
       .= a*(f.x) + a*(g.x) by Th5
-      .= a*(f.x + g.x) by RLVECT_1:def 9
+      .= a*(f.x + g.x) by RLVECT_1:def 8
       .= a*(((FuncAdd(X,Y)).(f,g)).x) by Th3
       .= ((FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(f,g)]).x by Th5;
   end;
@@ -380,7 +382,8 @@ A7: u+0.IT = u
       .= u by Th8;
   end;
   u+v = v+u by Th6;
-  hence thesis by A3,A7,A4,A5,A2,A1,A6,RLVECT_1:def 5,def 6,def 7,def 9;
+  hence thesis by A3,A7,A4,A5,A2,A1,A6,RLVECT_1:def 5,def 6,def 7,def 8,def 9
+,def 10,def 11;
 end;
 
 definition
@@ -443,15 +446,15 @@ definition
   let X be non empty RLSStruct;
   let Y be non empty addLoopStr;
   let IT be Function of X, Y;
-  attr IT is additive means
-  :Def5:
-  for x,y being VECTOR of X holds IT.(x+y) =
-  IT.x+IT.y;
+:::  attr IT is additive means
+:::  :Def5:
+:::  for x,y being VECTOR of X holds IT.(x+y) = IT.x+IT.y;
 end;
 
 definition
   let X, Y be non empty RLSStruct;
   let IT be Function of X,Y;
+ canceled;
   attr IT is homogeneous means
   :Def6:
   for x being VECTOR of X, r being Real
@@ -596,7 +599,7 @@ A6:     v9 is LinearOperator of X,Y by A2,Def7;
         thus f.(s*x) =u9.(s*x)+v9.(s*x) by Th3
           .=(s*(u9.x))+v9.(s*x) by A5,Def6
           .=s*u9.x+s*v9.x by A6,Def6
-          .=s*(u9.x+v9.x) by RLVECT_1:def 9
+          .=s*(u9.x+v9.x) by RLVECT_1:def 8
           .= s*f.x by Th3;
       end;
       f is additive
@@ -607,8 +610,8 @@ A6:     v9 is LinearOperator of X,Y by A2,Def7;
 A7:     u9 is LinearOperator of X,Y by A3,Def7;
 A8:     v9 is LinearOperator of X,Y by A2,Def7;
         thus f.(x+y) =u9.(x+y)+v9.(x+y) by Th3
-          .=(u9.x+u9.y)+v9.(x+y) by A7,Def5
-          .=u9.x+u9.y+(v9.x+v9.y) by A8,Def5
+          .=(u9.x+u9.y)+v9.(x+y) by A7,GRCAT_1:def 13
+          .=u9.x+u9.y+(v9.x+v9.y) by A8,GRCAT_1:def 13
           .=u9.x+u9.y+v9.x+v9.y by RLVECT_1:def 6
           .=u9.x+v9.x+u9.y+v9.y by RLVECT_1:def 6
           .= f.x+ u9.y+v9.y by Th3
@@ -636,8 +639,8 @@ A10:  f is homogeneous
 A11:    v9 is LinearOperator of X,Y by A9,Def7;
         thus f.(s*x) =a*v9.(s*x) by Th5
           .=a*(s*(v9.x)) by A11,Def6
-          .=a*s*v9.x by RLVECT_1:def 9
-          .=s*(a*v9.x) by RLVECT_1:def 9
+          .=a*s*v9.x by RLVECT_1:def 10,def 11
+          .=s*(a*v9.x) by RLVECT_1:def 10,def 11
           .=s*f.x by Th5;
       end;
       f is additive
@@ -647,8 +650,8 @@ A11:    v9 is LinearOperator of X,Y by A9,Def7;
         let x,y be VECTOR of X;
 A12:    v9 is LinearOperator of X,Y by A9,Def7;
         thus f.(x+y) = a*(v9.(x+y)) by Th5
-          .=a*(v9.x+v9.y) by A12,Def5
-          .=a*v9.x+a*v9.y by RLVECT_1:def 9
+          .=a*(v9.x+v9.y) by A12,GRCAT_1:def 13
+          .=a*v9.x+a*v9.y by RLVECT_1:def 8
           .=f.x+a*v9.y by Th5
           .=f.x+ f.y by Th5;
       end;
@@ -672,7 +675,7 @@ registration
 RealVectSpace(the carrier of X,Y)), Add_(LinearOperators(X,Y), RealVectSpace(
 the carrier of X,Y)), Mult_(LinearOperators(X,Y), RealVectSpace(the carrier of
       X,Y)) #) -> Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like;
+    vector-distributive scalar-distributive scalar-associative scalar-unital;
   coherence by Th17,RSSPACE:13;
 end;
 
@@ -723,12 +726,11 @@ proof
 A1: R_VectorSpace_of_LinearOperators(X,Y) is Subspace of RealVectSpace(the
   carrier of X,Y) by Th17,RSSPACE:13;
   then reconsider f1=f as VECTOR of RealVectSpace(the carrier of X,Y) by
-  RLSUB_1
-  :18;
-  reconsider h1=h as VECTOR of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1
-  :18;
-  reconsider g1=g as VECTOR of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1
-  :18;
+RLSUB_1:18;
+  reconsider h1=h as VECTOR of RealVectSpace(the carrier of X,Y) by A1,
+RLSUB_1:18;
+  reconsider g1=g as VECTOR of RealVectSpace(the carrier of X,Y) by A1,
+RLSUB_1:18;
 A2: now
     assume
 A3: h = f+g;
@@ -757,10 +759,9 @@ proof
 A1: R_VectorSpace_of_LinearOperators(X,Y) is Subspace of RealVectSpace(the
   carrier of X,Y) by Th17,RSSPACE:13;
   then reconsider f1=f as VECTOR of RealVectSpace(the carrier of X,Y) by
-  RLSUB_1
-  :18;
-  reconsider h1=h as VECTOR of RealVectSpace(the carrier of X,Y) by A1,RLSUB_1
-  :18;
+RLSUB_1:18;
+  reconsider h1=h as VECTOR of RealVectSpace(the carrier of X,Y) by A1,
+RLSUB_1:18;
 A2: now
     assume
 A3: h = a*f;
@@ -832,8 +833,8 @@ A3: now
 A4: r > 0;
     r is Real by XREAL_0:def 1;
     then consider m1 be Element of NAT such that
-A5: for n be Element of NAT st n >= m1 holds ||.(seq.n) - g.|| < r by
-    A1,A2,A4,NORMSP_1:def 11;
+A5: for n be Element of NAT st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2,A4,
+NORMSP_1:def 11;
     take k = m1;
     now
       let n be Element of NAT;
@@ -905,8 +906,8 @@ A1: for x being set holds x in IT iff x in LinearOperators(X,Y) & P[x]
     from XBOOLE_0:sch 1;
     take IT;
     for x be set st x in IT holds x in LinearOperators(X,Y) by A1;
-    hence IT is Subset of R_VectorSpace_of_LinearOperators(X,Y) by TARSKI:
-    def 3;
+    hence IT is Subset of R_VectorSpace_of_LinearOperators(X,Y) by TARSKI:def 3
+;
     let x be set;
     thus x in IT implies x is bounded LinearOperator of X,Y by A1;
     assume
@@ -988,8 +989,8 @@ A8:     ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by NORMSP_1:def 2;
 A9:     ||. v1.x .|| <= K2*||. x .|| by A5;
         ||. u1.x .|| <= K1*||. x .|| by A7;
         then
-A10:    ||. u1.x .|| + ||. v1.x .|| <= K1*||. x .|| +K2*||. x .|| by
-        A9,XREAL_1:9;
+A10:    ||. u1.x .|| + ||. v1.x .|| <= K1*||. x .|| +K2*||. x .|| by A9,
+XREAL_1:9;
         ||. f.x .|| =||. u1.x+v1.x .|| by Th20;
         hence ||. f.x .|| <= K3*||. x .|| by A8,A10,XXREAL_0:2;
       end;
@@ -1015,9 +1016,7 @@ A14:  now
         let x be VECTOR of X;
         0 <=abs(a) by COMPLEX1:132;
         then
-A15:    abs(a)* ||. v1.x .|| <= abs(a)* (K*||. x .||) by A13,
-        XREAL_1
-        :66;
+A15:    abs(a)* ||. v1.x .|| <= abs(a)* (K*||. x .||) by A13,XREAL_1:66;
         ||. a*v1.x .|| = abs(a)* ||. v1.x .|| by NORMSP_1:def 2;
         hence ||. f.x .|| <= abs(a)* K*||. x .|| by A15,Th21;
       end;
@@ -1042,7 +1041,8 @@ registration
 BoundedLinearOperators(X,Y), R_VectorSpace_of_LinearOperators(X,Y)), Add_(
 BoundedLinearOperators(X,Y), R_VectorSpace_of_LinearOperators(X,Y)), Mult_(
       BoundedLinearOperators(X,Y), R_VectorSpace_of_LinearOperators(X,Y)) #) ->
-Abelian add-associative right_zeroed right_complementable RealLinearSpace-like;
+Abelian add-associative right_zeroed right_complementable vector-distributive
+scalar-distributive scalar-associative scalar-unital;
   coherence by Th26,RSSPACE:13;
 end;
 
@@ -1094,11 +1094,11 @@ proof
 A1: R_VectorSpace_of_BoundedLinearOperators(X,Y) is Subspace of
   R_VectorSpace_of_LinearOperators(X,Y) by Th26,RSSPACE:13;
   then reconsider f1=f as VECTOR of R_VectorSpace_of_LinearOperators(X,Y) by
-  RLSUB_1:18;
+RLSUB_1:18;
   reconsider h1=h as VECTOR of R_VectorSpace_of_LinearOperators(X,Y) by A1,
-  RLSUB_1:18;
+RLSUB_1:18;
   reconsider g1=g as VECTOR of R_VectorSpace_of_LinearOperators(X,Y) by A1,
-  RLSUB_1:18;
+RLSUB_1:18;
   hereby
     assume
 A2: h = f+g;
@@ -1123,9 +1123,9 @@ proof
 A1: R_VectorSpace_of_BoundedLinearOperators(X,Y) is Subspace of
   R_VectorSpace_of_LinearOperators(X,Y) by Th26,RSSPACE:13;
   then reconsider f1=f as VECTOR of R_VectorSpace_of_LinearOperators(X,Y) by
-  RLSUB_1:18;
+RLSUB_1:18;
   reconsider h1=h as VECTOR of R_VectorSpace_of_LinearOperators(X,Y) by A1,
-  RLSUB_1:18;
+RLSUB_1:18;
   hereby
     assume
 A2: h = a*f;
@@ -1145,7 +1145,7 @@ theorem Th31:
 proof
   let X, Y be RealNormSpace;
 A1: 0.R_VectorSpace_of_LinearOperators(X,Y) =((the carrier of X) -->0.Y) by
-  Th22;
+Th22;
   R_VectorSpace_of_BoundedLinearOperators(X,Y) is Subspace of
   R_VectorSpace_of_LinearOperators(X,Y) by Th26,RSSPACE:13;
   hence thesis by A1,RLSUB_1:19;
@@ -1245,7 +1245,7 @@ A6:       ||.t.|| <> 0 by A5,NORMSP_1:def 2;
           then
 A7:       ||.t.|| > 0 by NORMSP_1:8;
 A8:       ||.g.t.||/||.t.||*||.t.|| = ||.g.t.||*||.t.||"*||.t.|| by
-          XCMPLX_0:def 9
+XCMPLX_0:def 9
             .=||.g.t.||*(||.t.||"*||.t.||)
             .=||.g.t.||*1 by A6,XCMPLX_0:def 7
             .=||.g.t.||;
@@ -1352,7 +1352,7 @@ proof
   reconsider f9=f as set;
   f in BoundedLinearOperators(X,Y) by Def10;
   hence BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(modetrans(f9,X,Y)) by
-  Def14
+Def14
     .= sup PreNorms(f) by Th35;
 end;
 
@@ -1420,12 +1420,11 @@ A9:     ||.g.t.||/||.t.|| = ||.g.t.||*||.t.||" by XCMPLX_0:def 9
         then ||.g.t.||/||.t.|| in {||.g.s.|| where s is VECTOR of X : ||.s.||
         <= 1 } by A9;
         then ||.g.t.||/||.t.|| <= sup PreNorms(g) by A2,SEQ_4:def 4;
-        then ||.g.t.||/||.t.|| <= BoundedLinearOperatorsNorm(X,Y).g by
-        Th36;
+        then ||.g.t.||/||.t.|| <= BoundedLinearOperatorsNorm(X,Y).g by Th36;
         then
 A10:    ||.g.t.||/||.t.|| <= ||.f.|| by A1,NORMSP_1:def 1;
         ||.g.t.||/||.t.||*||.t.|| = ||.g.t.||*||.t.||"*||.t.|| by
-        XCMPLX_0:def 9
+XCMPLX_0:def 9
           .=||.g.t.||*(||.t.||"*||.t.||)
           .=||.g.t.||*1 by A6,XCMPLX_0:def 7
           .=||.g.t.||;
@@ -1602,13 +1601,13 @@ A13:  ||.g.||*||.t.|| <= ||.g.||*1 by A12,XREAL_1:66;
       0 <= ||.f.|| by Th39;
       then ||.f.||*||.t.|| <= ||.f.||*1 by A12,XREAL_1:66;
       then
-A14:  ||.f.||*||.t.|| + ||.g.||*||.t.|| <= ||.f.||*1 + ||.g.||*1 by
-      A13,XREAL_1:9;
+A14:  ||.f.||*||.t.|| + ||.g.||*||.t.|| <= ||.f.||*1 + ||.g.||*1 by A13,
+XREAL_1:9;
 A15:  ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by NORMSP_1:def 2;
 A16:  ||.g1.t.||<= ||.g.||*||.t.|| by Th38;
       ||.f1.t.||<= ||.f.||*||.t.|| by Th38;
-      then ||.f1.t.||+||.g1.t.|| <= ||.f.||*||.t.|| + ||.g.||*||.t.|| by
-      A16,XREAL_1:9;
+      then ||.f1.t.||+||.g1.t.|| <= ||.f.||*||.t.|| + ||.g.||*||.t.|| by A16,
+XREAL_1:9;
       then
 A17:  ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A14,XXREAL_0:2;
       ||.h1.t.||= ||.f1.t+g1.t.|| by Th41;
@@ -1667,9 +1666,9 @@ A32:      ||.a*f.||*||.t.|| <= ||.a*f.||*1 by A31,XREAL_1:66;
 A33:      ||.h1.t.|| <= ||.a*f.|| by A32,XXREAL_0:2;
           h1.t=a*f1.t by Th42;
           then
-A34:      a"*h1.t =( a"* a)*f1.t by RLVECT_1:def 9
+A34:      a"*h1.t =( a"* a)*f1.t by RLVECT_1:def 10,def 11
             .=1*f1.t by A29,XCMPLX_0:def 7
-            .=f1.t by RLVECT_1:def 9;
+            .=f1.t by RLVECT_1:def 11;
 A35:      abs(a") =abs(1*a")
             .=abs( 1/a) by XCMPLX_0:def 9
             .=1/abs(a) by ABSVALUE:15
@@ -1677,8 +1676,7 @@ A35:      abs(a") =abs(1*a")
             .=abs(a)";
 A36:      0<= abs(a") by COMPLEX1:132;
           ||.a"*h1.t.|| =abs(a")*||.h1.t.|| by NORMSP_1:def 2;
-          hence ||.f1.t.|| <= abs(a)"*||.a*f.|| by A34,A33,A36,A35, XREAL_1
-          :66;
+          hence ||.f1.t.|| <= abs(a)"*||.a*f.|| by A34,A33,A36,A35,XREAL_1:66;
         end;
 A37:    now
           let r be Real;
@@ -1692,8 +1690,7 @@ A38:    ( for s be real number st s in PreNorms(f1) holds s <= abs(a)"*
 A39:    0 <= abs(a) by COMPLEX1:132;
         BoundedLinearOperatorsNorm(X,Y).(f) = sup PreNorms(f1) by Th36;
         then ||.f.|| <=abs(a)"*||.a*f.|| by A37,A38,NORMSP_1:def 1;
-        then abs(a)*||.f.|| <=abs(a)*(abs(a)"*||.a*f.||) by
-        A39,XREAL_1:66;
+        then abs(a)*||.f.|| <=abs(a)*(abs(a)"*||.a*f.||) by A39,XREAL_1:66;
         then
 A40:    abs(a)*||.f.|| <=(abs(a)*abs(a)")*||.a*f.||;
         abs(a) <>0 by A29,COMPLEX1:133;
@@ -1705,8 +1702,7 @@ A41:    a=0;
         reconsider fz=f as VECTOR of R_VectorSpace_of_BoundedLinearOperators(X
         ,Y);
 A42:    a*f =a*fz
-          .=0.R_VectorSpace_of_BoundedLinearOperators(X,Y) by A41,RLVECT_1:
-        23
+          .=0.R_VectorSpace_of_BoundedLinearOperators(X,Y) by A41,RLVECT_1:23
           .=0.R_NormSpace_of_BoundedLinearOperators(X,Y);
         thus abs(a)* ||.f.|| =0 * ||.f.|| by A41,ABSVALUE:7
           .=||.a*f.|| by A42,Th40;
@@ -1761,7 +1757,8 @@ end;
 registration
   let X, Y be RealNormSpace;
   cluster R_NormSpace_of_BoundedLinearOperators(X,Y) -> RealNormSpace-like
-RealLinearSpace-like Abelian add-associative right_zeroed right_complementable;
+vector-distributive scalar-distributive scalar-associative scalar-unital
+Abelian add-associative right_zeroed right_complementable;
   coherence by Th45;
 end;
 
@@ -1777,8 +1774,7 @@ proof
     assume
     h=f-g;
     then h+g=f-(g-g) by RLVECT_1:43;
-    then h+g=f-0.R_NormSpace_of_BoundedLinearOperators(X,Y) by
-    RLVECT_1:28;
+    then h+g=f-0.R_NormSpace_of_BoundedLinearOperators(X,Y) by RLVECT_1:28;
     then
 A1: h+g=f by RLVECT_1:26;
     now
@@ -1878,7 +1874,7 @@ A4: for n be Element of NAT st n >= k holds ||.seq.n - lim seq.|| < e
 A5:   ||.seq.m - lim seq.|| <e by A4;
       ||.seq.m.||= ||.seq.||.m by NORMSP_1:def 10;
       then abs( ||.seq.||.m - ||.lim seq.|| ) <= ||.seq.m - lim seq.|| by
-      NORMSP_1:13;
+NORMSP_1:13;
       hence abs( ||.seq.||.m - ||.lim seq.|| ) <e1 by A5,XXREAL_0:2;
     end;
     hence for m be Element of NAT st m >= k holds abs(||.seq.||.m - ||.lim seq
@@ -1969,14 +1965,13 @@ A15:        n >=k and
 A16:        m >= k;
             ||.(vseq.n) - (vseq.m).|| < e/||.x.|| by A14,A15,A16;
             then
-A17:        ||.(vseq.n) - (vseq.m).|| * ||.x.|| < e/||.x.|| * ||.x.|| by
-            A13,XREAL_1:70;
+A17:        ||.(vseq.n) - (vseq.m).|| * ||.x.|| < e/||.x.|| * ||.x.|| by A13,
+XREAL_1:70;
 A18:        e/||.x.|| * ||.x.|| = e*||.x.||"* ||.x.|| by XCMPLX_0:def 9
               .= e*(||.x.||"* ||.x.||)
               .= e*1 by A12,XCMPLX_0:def 7
               .=e;
-            ||.xseq.n-xseq.m.|| <= ||.(vseq.n) - (vseq.m).|| * ||.x.|| by
-            A5;
+            ||.xseq.n-xseq.m.|| <= ||.(vseq.n) - (vseq.m).|| * ||.x.|| by A5;
             hence thesis by A17,A18,XXREAL_0:2;
           end;
         end;
@@ -2009,7 +2004,8 @@ A28: tseq.y = lim yseq by A19;
     now
       let n be Element of NAT;
       thus zseq.n=modetrans((vseq.n),X,Y).(x+y) by A24
-        .= modetrans((vseq.n),X,Y).x+modetrans((vseq.n),X,Y).y by Def5
+        .= modetrans((vseq.n),X,Y).x+modetrans((vseq.n),X,Y).y
+         by GRCAT_1:def 13
         .= xseq.n + modetrans((vseq.n),X,Y).y by A21
         .= xseq.n +yseq.n by A26;
     end;
@@ -2037,7 +2033,7 @@ A33: tseq.(a*x) = lim zseq by A19;
     then zseq=a*xseq by NORMSP_1:def 8;
     hence tseq.(a*x)=a*tseq.x by A30,A31,A33,NORMSP_1:45;
   end;
-  then reconsider tseq as LinearOperator of X,Y by A20,Def5,Def6;
+  then reconsider tseq as LinearOperator of X,Y by A20,GRCAT_1:def 13,Def6;
   now
     let e1 be real number such that
 A34: e1 >0;
@@ -2055,8 +2051,8 @@ A36:  ||.(vseq.m) - (vseq.k).|| <e by A35;
 A37:  ||.vseq.m.||= ||.vseq.||.m by NORMSP_1:def 10;
 A38:  ||.vseq.k.||= ||.vseq.||.k by NORMSP_1:def 10;
       abs( ||.vseq.m.||- ||.vseq.k.|| ) <= ||.(vseq.m) - (vseq.k).|| by
-      NORMSP_1:13;
-      hence abs( ||.vseq.||.m - ||.vseq.||.k ) <e1 by A38,A37,A36, XXREAL_0:2;
+NORMSP_1:13;
+      hence abs( ||.vseq.||.m - ||.vseq.||.k ) <e1 by A38,A37,A36,XXREAL_0:2;
     end;
     hence
     for m be Element of NAT st m >= k holds abs(||.vseq.||.m - ||.vseq.||
@@ -2092,11 +2088,11 @@ A50:    ||.vseq.n.|| = ||.vseq.||.n by NORMSP_1:def 10;
         hence thesis by A49,A50,SEQ_1:13;
       end;
 A51:  ||.x.||(#)||.vseq.|| is convergent by A39,SEQ_2:21;
-A52:  lim ( ||.x.||(#)||.vseq.|| ) = lim (||.vseq.|| )* ||.x.|| by A39,
-      SEQ_2:22;
+A52:  lim ( ||.x.||(#)||.vseq.|| ) = lim (||.vseq.|| )* ||.x.|| by A39,SEQ_2:22
+;
       ||.xseq.|| is convergent by A43,A44,Th24;
       hence ||.tseq.x.|| <= lim (||.vseq.|| )* ||.x.|| by A45,A48,A51,A52,
-      SEQ_2:32;
+SEQ_2:32;
     end;
     now
       let n be Element of NAT;
@@ -2130,8 +2126,8 @@ A59:    for m,k be Element of NAT holds ||.xseq.m-xseq.k.|| <= ||.vseq.m
         - vseq.k.|| * ||.x.||
         proof
           let m,k be Element of NAT;
-          reconsider h1=vseq.m-vseq.k as bounded LinearOperator of X,Y by
-          Def10;
+          reconsider h1=vseq.m-vseq.k as bounded LinearOperator of X,Y by Def10
+;
 A60:      xseq.k =modetrans((vseq.k),X,Y).x by A56;
           vseq.m is bounded LinearOperator of X,Y by Def10;
           then
@@ -2153,8 +2149,7 @@ A63:    for m be Element of NAT st m >=k holds ||.xseq.n-xseq.m.|| <= e *
 A64:      ||.vseq.n - vseq.m.|| <e by A54,A55;
 A65:      ||.xseq.n-xseq.m.|| <= ||.vseq.n - vseq.m.|| * ||.x.|| by A59;
           0 <= ||.x.|| by NORMSP_1:8;
-          then ||.vseq.n - vseq.m.|| * ||.x.|| <= e* ||.x.|| by A64,
-          XREAL_1:66;
+          then ||.vseq.n - vseq.m.|| * ||.x.|| <= e* ||.x.|| by A64,XREAL_1:66;
           hence thesis by A65,XXREAL_0:2;
         end;
         ||.xseq.n-tseq.x.|| <= e * ||.x.||
@@ -2199,7 +2194,7 @@ A70:        m >=k;
   end;
   reconsider tseq as bounded LinearOperator of X,Y by A40;
   reconsider tv=tseq as Point of R_NormSpace_of_BoundedLinearOperators(X,Y) by
-  Def10;
+Def10;
 A71: for e be Real st e > 0 ex k be Element of NAT st for n be Element of
   NAT st n >= k holds ||.vseq.n - tv.|| <= e
   proof
@@ -2235,8 +2230,7 @@ A78:  now
       end;
 A79:  (for s be real number st s in PreNorms(h1) holds s <= e) implies
       sup PreNorms(h1) <=e by SEQ_4:62;
-      BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv) = sup PreNorms(h1) by
-      Th36;
+      BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv) = sup PreNorms(h1) by Th36;
       hence ||.vseq.n-tv.|| <=e by A78,A79,NORMSP_1:def 1;
     end;
     hence thesis;

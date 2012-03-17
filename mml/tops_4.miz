@@ -1,0 +1,1159 @@
+:: Miscellaneous Facts about Open Functions and Continuous Functions
+::  by Artur Korni{\l}owicz
+:: 
+:: Received February 9, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, FUNCT_1, TOPS_1, ARYTM_1, CONNSP_2, EUCLID, PRE_TOPC,
+      ORDINAL2, METRIC_1, TOPMETR, RCOMP_1, PCOMPS_1, TARSKI, XBOOLE_0,
+      NUMBERS, NAT_1, SUBSET_1, XXREAL_0, ARYTM_3, ORDINAL1, XREAL_0, CARD_1,
+      XXREAL_1;
+ notations TARSKI, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, XXREAL_0, MEMBERED, NAT_1, RCOMP_1, STRUCT_0,
+      PRE_TOPC, TOPS_1, CONNSP_2, METRIC_1, PCOMPS_1, TOPMETR, T_0TOPSP,
+      EUCLID, TOPREAL9, TOPREALB;
+ constructors TOPREAL9, TOPREALB, TOPS_1, BORSUK_4, T_0TOPSP, FUNCSDOM;
+ registrations XBOOLE_0, RELAT_1, MEMBERED, XREAL_0, PRE_TOPC, STRUCT_0,
+      EUCLID, TOPREALB, XXREAL_0, METRIC_1, BORSUK_6, TOPMETR, TOPREAL9,
+      PCOMPS_1, RCOMP_1, TOPGRP_1, EUCLID_9;
+ requirements SUBSET, REAL;
+ definitions TARSKI, T_0TOPSP, METRIC_1, PCOMPS_1, TOPMETR, BORSUK_4, TOPREALB;
+ theorems FUNCT_2, TOPMETR, TOPREAL9, EUCLID, JGRAPH_2, GOBOARD6, TOPS_1,
+      METRIC_1, XBOOLE_1, T_0TOPSP, XREAL_0, FRECHET, TOPREAL6, RELAT_1,
+      UNIFORM1, CONNSP_2, TOPGRP_1, ORDINAL1, TOPS_3, YELLOW12, TOPGEN_5;
+
+begin :: Open functions
+
+reserve
+  n, m for Nat,
+  T for non empty TopSpace,
+  M, M1, M2 for non empty MetrSpace;
+
+theorem Th1:
+  for A, B, S, T being TopSpace,
+      f being Function of A,S, g being Function of B,T st
+  the TopStruct of A = the TopStruct of B &
+  the TopStruct of S = the TopStruct of T &
+  f = g & f is open holds g is open
+  proof
+    let A, B, S, T be TopSpace;
+    let f be Function of A,S;
+    let g be Function of B,T;
+    assume that
+A1: the TopStruct of A = the TopStruct of B and
+A2: the TopStruct of S = the TopStruct of T and
+A3: f = g and
+A4: f is open;
+    let b be Subset of B;
+    assume
+A5: b is open;
+    reconsider a = b as Subset of A by A1;
+    a is open by A1,A5,TOPS_3:76;
+    then f.:a is open by A4,T_0TOPSP:def 2;
+    hence thesis by A2,A3,TOPS_3:76;
+  end;
+
+theorem
+  for P being Subset of TOP-REAL m holds P is open iff
+  for p being Point of TOP-REAL m st p in P
+  ex r being positive (real number) st Ball(p,r) c= P
+  proof
+    let P be Subset of TOP-REAL m;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then
+    reconsider P1 = P as Subset of TopSpaceMetr(Euclid m);
+A2: m in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A3:   P is open;
+      let p be Point of TOP-REAL m;
+      assume
+A4:   p in P;
+      reconsider e = p as Point of Euclid m by EUCLID:71;
+      P1 is open by A3,A1,TOPS_3:76;
+      then consider r being real number such that
+A5:   r > 0 and
+A6:   Ball(e,r) c= P1 by A4,TOPMETR:22;
+      reconsider r as positive (real number) by A5;
+      take r;
+      thus Ball(p,r) c= P by A2,A6,TOPREAL9:13;
+    end;
+    assume
+A7: for p being Point of TOP-REAL m st p in P
+    ex r being positive (real number) st Ball(p,r) c= P;
+    for p being Point of Euclid m st p in P1
+    ex r being real number st r > 0 & Ball(p,r) c= P1
+    proof
+      let p be Point of Euclid m;
+      assume
+A8:   p in P1;
+      reconsider e = p as Point of TOP-REAL m by EUCLID:71;
+      consider r being positive (real number) such that
+A9:   Ball(e,r) c= P1 by A7,A8;
+      take r;
+      thus thesis by A2,A9,TOPREAL9:13;
+    end;
+    then P1 is open by TOPMETR:22;
+    hence thesis by A1,TOPS_3:76;
+  end;
+
+theorem Th3:
+  for X, Y being non empty TopSpace, f being Function of X,Y
+  holds f is open iff for p being Point of X, V being open Subset of X
+  st p in V
+  ex W being open Subset of Y st f.p in W & W c= f.:V
+  proof
+    let X, Y be non empty TopSpace, f be Function of X,Y;
+    thus f is open implies for p being Point of X, V being open Subset of X
+    st p in V
+    ex W being open Subset of Y st f.p in W & W c= f.:V
+    proof
+      assume
+A1:   f is open;
+      let p be Point of X, V be open Subset of X such that
+A2:   p in V;
+      V is a_neighborhood of p by A2,CONNSP_2:5;
+      then consider W being open a_neighborhood of f.p such that
+A3:   W c= f.:V by A1,TOPGRP_1:22;
+      take W;
+      thus f.p in W by CONNSP_2:6;
+      thus thesis by A3;
+    end;
+    assume
+A4: for p being Point of X, V being open Subset of X st p in V
+    ex W being open Subset of Y st f.p in W & W c= f.:V;
+    for p being Point of X, P being open a_neighborhood of p
+    ex R being a_neighborhood of f.p st R c= f.:P
+    proof
+      let p be Point of X;
+      let P be open a_neighborhood of p;
+      consider W being open Subset of Y such that
+A5:   f.p in W and
+A6:   W c= f.:P by A4,CONNSP_2:6;
+      W is a_neighborhood of f.p by A5,CONNSP_2:5;
+      hence thesis by A6;
+    end;
+    hence thesis by TOPGRP_1:23;
+  end;
+
+theorem Th4:
+  for f being Function of T,TopSpaceMetr(M) holds
+  f is open iff
+  for p being Point of T, V being open Subset of T,
+      q being Point of M st q = f.p & p in V
+  ex r being positive (real number) st Ball(q,r) c= f.:V
+  proof
+    let f be Function of T,TopSpaceMetr(M);
+    thus f is open implies
+    for p being Point of T, V being open Subset of T,
+        q being Point of M st q = f.p & p in V
+    ex r being positive (real number) st Ball(q,r) c= f.:V
+    proof
+      assume
+A1:   f is open;
+      let p be Point of T, V be open Subset of T,
+          q be Point of M such that
+A2:   q = f.p;
+      assume p in V;
+      then consider W being open Subset of TopSpaceMetr(M) such that
+A3:   f.p in W and
+A4:   W c= f.:V by A1,Th3;
+      ex r being real number st r > 0 & Ball(q,r) c= W by A2,A3,TOPMETR:22;
+      hence thesis by A4,XBOOLE_1:1;
+    end;
+    assume
+A5: for p being Point of T, V being open Subset of T,
+        q being Point of M st q = f.p & p in V
+    ex r being positive (real number) st Ball(q,r) c= f.:V;
+    for p being Point of T, V being open Subset of T st p in V
+    ex W being open Subset of TopSpaceMetr(M) st f.p in W & W c= f.:V
+    proof
+      let p be Point of T;
+      let V be open Subset of T;
+      reconsider q = f.p as Point of M;
+      assume p in V;
+      then consider r being positive (real number) such that
+A6:   Ball(q,r) c= f.:V by A5;
+      reconsider W = Ball(q,r) as open Subset of TopSpaceMetr(M) by TOPMETR:21;
+      take W;
+      thus f.p in W by GOBOARD6:4;
+      thus W c= f.:V by A6;
+    end;
+    hence thesis by Th3;
+  end;
+
+theorem Th5:
+  for f being Function of TopSpaceMetr(M),T holds
+  f is open iff
+  for p being Point of M, r being positive (real number)
+  ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r)
+  proof
+    let f be Function of TopSpaceMetr(M),T;
+    hereby
+      assume
+A1:   f is open;
+      let p be Point of M, r be positive (real number);
+A2:   p in Ball(p,r) by GOBOARD6:4;
+      reconsider V = Ball(p,r) as Subset of TopSpaceMetr(M);
+      V is open by TOPMETR:21;
+      then consider W being open Subset of T such that
+A3:   f.p in W & W c= f.:V by A1,A2,Th3;
+      take W;
+      thus f.p in W & W c= f.:Ball(p,r) by A3;
+    end;
+    assume
+A4: for p being Point of M, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r);
+    for p being Point of TopSpaceMetr(M),
+        V being open Subset of TopSpaceMetr(M) st p in V
+    ex W being open Subset of T st f.p in W & W c= f.:V
+    proof
+      let p be Point of TopSpaceMetr(M);
+      let V be open Subset of TopSpaceMetr(M);
+      reconsider q = p as Point of M;
+      assume p in V;
+      then consider r being real number such that
+A5:   r > 0 and
+A6:   Ball(q,r) c= V by TOPMETR:22;
+      consider W being open Subset of T such that
+A7:   f.p in W and
+A8:   W c= f.:Ball(q,r) by A4,A5;
+      take W;
+      thus f.p in W by A7;
+      f.:Ball(q,r) c= f.:V by A6,RELAT_1:156;
+      hence thesis by A8,XBOOLE_1:1;
+    end;
+    hence thesis by Th3;
+end;
+
+theorem Th6:
+  for f being Function of TopSpaceMetr(M1),TopSpaceMetr(M2) holds
+  f is open iff
+  for p being Point of M1, q being Point of M2, r being positive (real number)
+  st q = f.p
+  ex s being positive (real number) st Ball(q,s) c= f.:Ball(p,r)
+  proof
+    let f be Function of TopSpaceMetr(M1),TopSpaceMetr(M2);
+    thus f is open implies
+    for p being Point of M1, q being Point of M2,
+        r being positive (real number) st q = f.p
+    ex s being positive (real number) st Ball(q,s) c= f.:Ball(p,r)
+    proof
+      assume
+A1:   f is open;
+      let p be Point of M1, q be Point of M2, r be positive (real number)
+      such that
+A2:   q = f.p;
+      reconsider V = Ball(p,r) as Subset of TopSpaceMetr(M1);
+A3:   p in V by GOBOARD6:4;
+      V is open by TOPMETR:21;
+      hence thesis by A1,A2,A3,Th4;
+    end;
+    assume
+A4: for p being Point of M1, q being Point of M2,
+    r being positive (real number) st q = f.p
+    ex s being positive (real number) st Ball(q,s) c= f.:Ball(p,r);
+    for p being Point of TopSpaceMetr(M1),
+        V being open Subset of TopSpaceMetr(M1),
+        q being Point of M2 st q = f.p & p in V
+    ex r being positive (real number) st Ball(q,r) c= f.:V
+    proof
+      let p be Point of TopSpaceMetr(M1), V be open Subset of TopSpaceMetr(M1),
+      q be Point of M2 such that
+A5:   q = f.p;
+      reconsider p1 = p as Point of M1;
+      assume p in V;
+      then consider r being real number such that
+A6:   r > 0 and
+A7:   Ball(p1,r) c= V by TOPMETR:22;
+A8:   f.:Ball(p1,r) c= f.:V by A7,RELAT_1:156;
+      ex s being positive (real number) st Ball(q,s) c= f.:Ball(p1,r)
+      by A4,A5,A6;
+      hence thesis by A8,XBOOLE_1:1;
+    end;
+    hence thesis by Th4;
+  end;
+
+theorem
+  for f being Function of T,TOP-REAL m holds
+  f is open iff
+  for p being Point of T, V being open Subset of T st p in V
+  ex r being positive (real number) st Ball(f.p,r) c= f.:V
+  proof
+    let f be Function of T,TOP-REAL m;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then reconsider f1 = f as Function of T,TopSpaceMetr Euclid m;
+A2: the TopStruct of T = the TopStruct of T;
+A3: m in NAT by ORDINAL1:def 13;
+    thus f is open implies
+    for p being Point of T, V being open Subset of T st p in V
+    ex r being positive (real number) st Ball(f.p,r) c= f.:V
+    proof
+      assume
+A4:   f is open;
+      let p be Point of T, V be open Subset of T;
+      assume
+A5:   p in V;
+      reconsider fp = f.p as Point of Euclid m by EUCLID:71;
+      f1 is open by A4,A1,A2,Th1;
+      then consider r being positive (real number) such that
+A6:   Ball(fp,r) c= f1.:V by A5,Th4;
+      Ball(f.p,r) = Ball(fp,r) by A3,TOPREAL9:13;
+      hence thesis by A6;
+    end;
+    assume
+A7: for p being Point of T, V being open Subset of T st p in V
+    ex r being positive (real number) st Ball(f.p,r) c= f.:V;
+    for p being Point of T, V being open Subset of T,
+    q being Point of Euclid m st q = f1.p & p in V
+    ex r being positive (real number) st Ball(q,r) c= f1.:V
+    proof
+      let p be Point of T, V be open Subset of T,
+          q be Point of Euclid m such that
+A8:   q = f1.p;
+      assume p in V;
+      then consider r being positive (real number) such that
+A9:   Ball(f.p,r) c= f.:V by A7;
+      Ball(f.p,r) = Ball(q,r) by A3,A8,TOPREAL9:13;
+      hence thesis by A9;
+    end;
+    then f1 is open by Th4;
+    hence thesis by A1,A2,Th1;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m,T holds
+  f is open iff
+  for p being Point of TOP-REAL m, r being positive (real number)
+  ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r)
+  proof
+    let f be Function of TOP-REAL m,T;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then reconsider f1 = f as Function of TopSpaceMetr Euclid m,T;
+A2: the TopStruct of T = the TopStruct of T;
+A3: m in NAT by ORDINAL1:def 13;
+    thus f is open implies
+    for p being Point of TOP-REAL m, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r)
+    proof
+      assume
+A4:   f is open;
+      let p be Point of TOP-REAL m, r be positive (real number);
+      reconsider q = p as Point of Euclid m by EUCLID:71;
+      f1 is open by A4,A1,A2,Th1;
+      then consider W be open Subset of T such that
+A5:   f1.p in W & W c= f1.:Ball(q,r) by Th5;
+      Ball(p,r) = Ball(q,r) by A3,TOPREAL9:13;
+      hence thesis by A5;
+    end;
+    assume
+A6: for p being Point of TOP-REAL m, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r);
+    for p being Point of Euclid m, r being positive (real number)
+    ex W being open Subset of T st f1.p in W & W c= f1.:Ball(p,r)
+    proof
+      let p be Point of Euclid m, r be positive (real number);
+      reconsider q = p as Point of TOP-REAL m by EUCLID:71;
+      consider W being open Subset of T such that
+A7:   f.q in W & W c= f.:Ball(q,r) by A6;
+      Ball(p,r) = Ball(q,r) by A3,TOPREAL9:13;
+      hence thesis by A7;
+    end;
+    then f1 is open by Th5;
+    hence thesis by A1,A2,Th1;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m,TOP-REAL n holds
+  f is open iff
+  for p being Point of TOP-REAL m, r being positive (real number)
+  ex s being positive (real number) st Ball(f.p,s) c= f.:Ball(p,r)
+  proof
+    let f be Function of TOP-REAL m,TOP-REAL n;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m &
+    the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider f1 = f as
+    Function of TopSpaceMetr Euclid m,TopSpaceMetr Euclid n;
+A2: m in NAT & n in NAT by ORDINAL1:def 13;
+    thus f is open implies
+    for p being Point of TOP-REAL m, r being positive (real number)
+    ex s being positive (real number) st Ball(f.p,s) c= f.:Ball(p,r)
+    proof
+      assume
+A3:   f is open;
+      let p be Point of TOP-REAL m, r be positive (real number);
+      reconsider p1 = p as Point of Euclid m by EUCLID:71;
+      reconsider q1 = f.p as Point of Euclid n by EUCLID:71;
+      f1 is open by A1,A3,Th1;
+      then consider s being positive (real number) such that
+A4:   Ball(q1,s) c= f1.:Ball(p1,r) by Th6;
+      Ball(p1,r) = Ball(p,r) & Ball(q1,s) = Ball(f.p,s) by A2,TOPREAL9:13;
+      hence thesis by A4;
+    end;
+    assume
+A5: for p being Point of TOP-REAL m, r being positive (real number)
+    ex s being positive (real number) st Ball(f.p,s) c= f.:Ball(p,r);
+    for p being Point of Euclid m, q being Point of Euclid n,
+    r being positive (real number) st q = f1.p
+    ex s being positive (real number) st Ball(q,s) c= f1.:Ball(p,r)
+    proof
+      let p be Point of Euclid m, q be Point of Euclid n,
+      r be positive (real number) such that
+A6:   q = f1.p;
+      reconsider p1 = p as Point of TOP-REAL m by EUCLID:71;
+      reconsider q1 = q as Point of TOP-REAL n by EUCLID:71;
+      consider s being positive (real number) such that
+A7:   Ball(q1,s) c= f.:Ball(p1,r) by A5,A6;
+      Ball(p1,r) = Ball(p,r) & Ball(q1,s) = Ball(q,s) by A2,TOPREAL9:13;
+      hence thesis by A7;
+    end;
+    then f1 is open by Th6;
+    hence thesis by A1,Th1;
+  end;
+
+theorem
+  for f being Function of T,R^1 holds
+  f is open iff
+  for p being Point of T, V being open Subset of T st p in V
+  ex r being positive (real number) st ].f.p-r,f.p+r.[ c= f.:V
+  proof
+    let f be Function of T,R^1;
+    thus f is open implies
+    for p being Point of T, V being open Subset of T st p in V
+    ex r being positive (real number) st ].f.p-r,f.p+r.[ c= f.:V
+    proof
+      assume
+A1:   f is open;
+      let p be Point of T, V be open Subset of T;
+      assume
+A2:   p in V;
+      reconsider fp = f.p as Point of RealSpace;
+      consider r being positive (real number) such that
+A3:   Ball(fp,r) c= f.:V by A1,A2,Th4;
+      r in REAL by XREAL_0:def 1;
+      then ].fp-r,fp+r.[ = Ball(fp,r) by FRECHET:7;
+      hence thesis by A3;
+    end;
+    assume
+A4: for p being Point of T, V being open Subset of T st p in V
+    ex r being positive (real number) st ].f.p-r,f.p+r.[ c= f.:V;
+    for p being Point of T, V being open Subset of T,
+    q being Point of RealSpace st q = f.p & p in V
+    ex r being positive (real number) st Ball(q,r) c= f.:V
+    proof
+      let p be Point of T, V be open Subset of T,
+          q be Point of RealSpace such that
+A5:   q = f.p;
+      assume p in V;
+      then consider r being positive (real number) such that
+A6:   ].f.p-r,f.p+r.[ c= f.:V by A4;
+      r in REAL by XREAL_0:def 1;
+      then ].q-r,q+r.[ = Ball(q,r) by FRECHET:7;
+      hence thesis by A5,A6;
+    end;
+    hence thesis by Th4;
+  end;
+
+theorem
+  for f being Function of R^1,T holds
+  f is open iff
+  for p being Point of R^1, r being positive (real number)
+  ex V being open Subset of T st f.p in V & V c= f.:].p-r,p+r.[
+  proof
+    let f be Function of R^1,T;
+    thus f is open implies
+    for p being Point of R^1, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:].p-r,p+r.[
+    proof
+      assume
+A1:   f is open;
+      let p be Point of R^1, r be positive (real number);
+      reconsider q = p as Point of RealSpace;
+      consider W be open Subset of T such that
+A2:   f.p in W & W c= f.:Ball(q,r) by A1,Th5;
+      r in REAL by XREAL_0:def 1;
+      then ].q-r,q+r.[ = Ball(q,r) by FRECHET:7;
+      hence thesis by A2;
+    end;
+    assume
+A3: for p being Point of R^1, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:].p-r,p+r.[;
+    for p being Point of RealSpace, r being positive (real number)
+    ex W being open Subset of T st f.p in W & W c= f.:Ball(p,r)
+    proof
+      let p be Point of RealSpace, r be positive (real number);
+      reconsider q = p as Point of R^1;
+      consider W being open Subset of T such that
+A4:   f.q in W & W c= f.:].p-r,p+r.[ by A3;
+      r in REAL by XREAL_0:def 1;
+      then ].p-r,p+r.[ = Ball(p,r) by FRECHET:7;
+      hence thesis by A4;
+    end;
+    hence thesis by Th5;
+  end;
+
+theorem
+  for f being Function of R^1,R^1 holds f is open iff
+  for p being Point of R^1, r being positive (real number)
+  ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:].p-r,p+r.[
+  proof
+    let f be Function of R^1,R^1;
+    thus f is open implies
+    for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:].p-r,p+r.[
+    proof
+      assume
+A1:   f is open;
+      let p be Point of R^1, r be positive (real number);
+      reconsider p1 = p, q1 = f.p as Point of RealSpace;
+      consider s being positive (real number) such that
+A2:   Ball(q1,s) c= f.:Ball(p1,r) by A1,Th6;
+      r in REAL & s in REAL by XREAL_0:def 1;
+      then ].p-r,p+r.[ = Ball(p1,r) & ].f.p-s,f.p+s.[ = Ball(q1,s)
+      by FRECHET:7;
+      hence thesis by A2;
+    end;
+    assume
+A3: for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:].p-r,p+r.[;
+    for p, q being Point of RealSpace, r being positive (real number)
+    st q = f.p
+    ex s being positive (real number) st Ball(q,s) c= f.:Ball(p,r)
+    proof
+      let p, q be Point of RealSpace,
+          r be positive (real number) such that
+A4:   q = f.p;
+      consider s being positive (real number) such that
+A5:   ].f.p-s,f.p+s.[ c= f.:].p-r,p+r.[ by A3;
+      r in REAL & s in REAL by XREAL_0:def 1;
+      then ].p-r,p+r.[ = Ball(p,r) & ].f.p-s,f.p+s.[ = Ball(q,s)
+      by A4,FRECHET:7;
+      hence thesis by A5;
+    end;
+    hence thesis by Th6;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m,R^1 holds f is open iff
+  for p being Point of TOP-REAL m, r being positive (real number)
+  ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:Ball(p,r)
+  proof
+    let f be Function of TOP-REAL m,R^1;
+A1: m in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A2:   f is open;
+      let p be Point of TOP-REAL m, r be positive (real number);
+      p in Ball(p,r) by A1,TOPGEN_5:17;
+      then
+A3:   f.p in f.:Ball(p,r) by FUNCT_2:43;
+      f.:Ball(p,r) is open by A2,T_0TOPSP:def 2;
+      then consider s being Element of REAL such that
+A4:   s > 0 and
+A5:   ].f.p-s,f.p+s.[ c= f.:Ball(p,r) by A3,FRECHET:8;
+      reconsider s as positive (real number) by A4;
+      take s;
+      thus ].f.p-s,f.p+s.[ c= f.:Ball(p,r) by A5;
+    end;
+    assume
+A6: for p being Point of TOP-REAL m, r being positive (real number)
+    ex s being positive (real number) st ].f.p-s,f.p+s.[ c= f.:Ball(p,r);
+    let A be Subset of TOP-REAL m such that
+A7: A is open;
+    for x being set holds x in f.:A iff ex Q being Subset of R^1
+    st Q is open & Q c= f.:A & x in Q
+    proof
+      let x be set;
+      hereby
+        assume x in f.:A;
+        then consider p being Point of TOP-REAL m such that
+A8:     p in A and
+A9:     x = f.p by FUNCT_2:116;
+        reconsider u = p as Point of Euclid m by EUCLID:71;
+        A = Int A by A7,TOPS_1:55;
+        then consider e being real number such that
+A10:     e > 0 and
+A11:     Ball(u,e) c= A by A1,A8,GOBOARD6:8;
+A12:     Ball(u,e) = Ball(p,e) by A1,TOPREAL9:13;
+        consider s being positive (real number) such that
+A13:     ].f.p-s,f.p+s.[ c= f.:Ball(p,e) by A6,A10;
+        take Q = R^1(].f.p-s,f.p+s.[);
+        thus Q is open;
+        f.:Ball(p,e) c= f.:A by A11,A12,RELAT_1:156;
+        hence Q c= f.:A by A13,XBOOLE_1:1;
+        thus x in Q by A9,TOPREAL6:20;
+      end;
+      thus thesis;
+    end;
+    hence f.:A is open by TOPS_1:57;
+  end;
+
+theorem
+  for f being Function of R^1,TOP-REAL m holds f is open iff
+  for p being Point of R^1, r being positive (real number)
+  ex s being positive (real number) st Ball(f.p,s) c= f.:].p-r,p+r.[
+  proof
+    let f be Function of R^1,TOP-REAL m;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then reconsider f1 = f as Function of R^1,TopSpaceMetr Euclid m;
+A2: m in NAT by ORDINAL1:def 13;
+    thus f is open implies
+    for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st Ball(f.p,s) c= f.:].p-r,p+r.[
+    proof
+      assume
+A3:   f is open;
+      let p be Point of R^1, r be positive (real number);
+      reconsider p1 = p as Point of RealSpace;
+      reconsider q1 = f.p as Point of Euclid m by EUCLID:71;
+      f1 is open by A1,A3,Th1;
+      then consider s being positive (real number) such that
+A4:   Ball(q1,s) c= f1.:Ball(p1,r) by Th6;
+      r in REAL by XREAL_0:def 1;
+      then ].p-r,p+r.[ = Ball(p1,r) & Ball(f.p,s) = Ball(q1,s)
+      by A2,FRECHET:7,TOPREAL9:13;
+      hence thesis by A4;
+    end;
+    assume
+A5: for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st Ball(f.p,s) c= f.:].p-r,p+r.[;
+    for p being Point of RealSpace, q being Point of Euclid m,
+        r being positive (real number) st q = f1.p
+    ex s being positive (real number) st Ball(q,s) c= f1.:Ball(p,r)
+    proof
+      let p be Point of RealSpace, q be Point of Euclid m,
+          r be positive (real number) such that
+A6:   q = f1.p;
+      reconsider p1 = p as Point of R^1;
+      consider s being positive (real number) such that
+A7:   Ball(f.p1,s) c= f.:].p1-r,p1+r.[ by A5;
+      r in REAL & s in REAL by XREAL_0:def 1;
+      then ].p1-r,p1+r.[ = Ball(p,r) & Ball(f.p1,s) = Ball(q,s)
+      by A2,A6,FRECHET:7,TOPREAL9:13;
+      hence thesis by A7;
+    end;
+    then f1 is open by Th6;
+    hence thesis by A1,Th1;
+  end;
+
+begin :: Continuous functions
+
+theorem
+  for f being Function of T,TopSpaceMetr(M) holds
+  f is continuous iff
+  for p being Point of T, q being Point of M, r being positive (real number)
+      st q = f.p
+  ex W being open Subset of T st p in W & f.:W c= Ball(q,r)
+  proof
+    let f be Function of T,TopSpaceMetr(M);
+    thus f is continuous implies
+    for p being Point of T, q being Point of M, r being positive (real number)
+    st q = f.p
+    ex W being open Subset of T st p in W & f.:W c= Ball(q,r)
+    proof
+      assume
+A1:   f is continuous;
+      let p be Point of T;
+      let q be Point of M;
+      let r be positive (real number);
+      assume
+A2:   f.p = q;
+      reconsider V = Ball(q,r) as Subset of TopSpaceMetr(M);
+A3:   q in Ball(q,r) by GOBOARD6:4;
+      V is open by TOPMETR:21;
+      then ex W being Subset of T st p in W & W is open & f.:W c= V
+      by A1,A2,A3,JGRAPH_2:20;
+      hence thesis;
+    end;
+    assume
+A4: for p being Point of T, q being Point of M,
+    r being positive (real number) st q = f.p
+    ex W being open Subset of T st p in W & f.:W c= Ball(q,r);
+    for p being Point of T, V being Subset of TopSpaceMetr(M)
+    st f.p in V & V is open holds
+    ex W being Subset of T st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of T, V be Subset of TopSpaceMetr(M) such that
+A5:   f.p in V;
+      reconsider u = f.p as Point of M;
+      assume V is open;
+      then Int V = V by TOPS_1:55;
+      then consider e being real number such that
+A6:   e > 0 & Ball(u,e) c= V by A5,GOBOARD6:7;
+      ex W being open Subset of T st p in W & f.:W c= Ball(u,e) by A4,A6;
+      hence thesis by A6,XBOOLE_1:1;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem
+  for f being Function of TopSpaceMetr(M),T holds
+  f is continuous iff
+  for p being Point of M, V being open Subset of T st f.p in V
+  ex s being positive (real number) st f.:Ball(p,s) c= V
+  proof
+    let f be Function of TopSpaceMetr(M),T;
+    hereby
+      assume
+A1:   f is continuous;
+      let p be Point of M;
+      let V be open Subset of T;
+      assume f.p in V;
+      then consider W being Subset of TopSpaceMetr(M) such that
+A2:   p in W and
+A3:   W is open and
+A4:   f.:W c= V by A1,JGRAPH_2:20;
+      Int W = W by A3,TOPS_1:55;
+      then consider s being real number such that
+A5:   s > 0 and
+A6:   Ball(p,s) c= W by A2,GOBOARD6:7;
+      reconsider s as positive (real number) by A5;
+      take s;
+      f.:Ball(p,s) c= f.:W by A6,RELAT_1:156;
+      hence f.:Ball(p,s) c= V by A4,XBOOLE_1:1;
+    end;
+    assume
+A7: for p being Point of M, V being open Subset of T st f.p in V
+    ex s being positive (real number) st f.:Ball(p,s) c= V;
+    for p being Point of TopSpaceMetr(M), V being Subset of T
+    st f.p in V & V is open holds
+    ex W being Subset of TopSpaceMetr(M) st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of TopSpaceMetr(M), V be Subset of T such that
+A8:   f.p in V and
+A9:   V is open;
+      reconsider u = p as Point of M;
+      consider s being positive (real number) such that
+A10:   f.:Ball(u,s) c= V by A7,A8,A9;
+      reconsider W = Ball(u,s) as Subset of TopSpaceMetr(M);
+      take W;
+      thus p in W by GOBOARD6:4;
+      thus W is open by TOPMETR:21;
+      thus thesis by A10;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem Th17:
+  for f being Function of TopSpaceMetr(M1),TopSpaceMetr(M2) holds
+  f is continuous iff
+  for p being Point of M1, q being Point of M2, r being positive (real number)
+      st q = f.p
+  ex s being positive (real number) st f.:Ball(p,s) c= Ball(q,r)
+  proof
+    let f be Function of TopSpaceMetr(M1),TopSpaceMetr(M2);
+    hereby
+      assume
+A1:   f is continuous;
+      let p be Point of M1;
+      let q be Point of M2;
+      let r be positive (real number);
+      assume that
+A2:   q = f.p;
+      r in REAL by XREAL_0:def 1;
+      then consider s being Element of REAL such that
+A3:   s > 0 and
+A4:   for w being Element of M1, w1 being Element of M2 st
+      w1 = f.w & dist(p,w) < s holds dist(q,w1) < r by A1,A2,UNIFORM1:5;
+      reconsider s as positive (real number) by A3;
+      take s;
+      thus f.:Ball(p,s) c= Ball(q,r)
+      proof
+        let y be set;
+        assume y in f.:Ball(p,s);
+        then consider x being Point of TopSpaceMetr(M1) such that
+A5:     x in Ball(p,s) and
+A6:     f.x = y by FUNCT_2:116;
+        reconsider x1 = x as Point of M1;
+        reconsider y1 = y as Point of M2 by A6;
+        dist(p,x1) < s by A5,METRIC_1:12;
+        then dist(q,y1) < r by A6,A4;
+        hence y in Ball(q,r) by METRIC_1:12;
+      end;
+    end;
+    assume
+A7: for p being Point of M1, q being Point of M2,
+        r being positive (real number) st q = f.p
+    ex s being positive (real number) st f.:Ball(p,s) c= Ball(q,r);
+    for r being real number, u being Element of M1, u1 being Element of M2
+    st r > 0 & u1 = f.u
+    ex s being real number st s > 0 & for w being Element of M1,
+    w1 being Element of M2 st w1 = f.w & dist(u,w)<s holds dist(u1,w1)<r
+    proof
+      let r be real number, u be Element of M1, u1 be Element of M2;
+      assume r > 0 & u1 = f.u;
+      then consider s being positive (real number) such that
+A8:   f.:Ball(u,s) c= Ball(u1,r) by A7;
+      take s;
+      thus s > 0;
+      let w be Element of M1, w1 be Element of M2 such that
+A9:   w1 = f.w;
+      assume dist(u,w) < s;
+      then w in Ball(u,s) by METRIC_1:12;
+      then f.w in f.:Ball(u,s) by FUNCT_2:43;
+      hence thesis by A8,A9,METRIC_1:12;
+    end;
+    hence thesis by UNIFORM1:4;
+  end;
+
+theorem
+  for f being Function of T,TOP-REAL m holds
+  f is continuous iff
+  for p being Point of T, r being positive (real number)
+  ex W being open Subset of T st p in W & f.:W c= Ball(f.p,r)
+  proof
+    let f be Function of T,TOP-REAL m;
+A1: m in NAT by ORDINAL1:def 13;
+    thus f is continuous implies
+    for p being Point of T, r being positive (real number)
+    ex W being open Subset of T st p in W & f.:W c= Ball(f.p,r)
+    proof
+      assume
+A2:   f is continuous;
+      let p be Point of T;
+      let r be positive (real number);
+      f.p in Ball(f.p,r) by A1,TOPGEN_5:17;
+      then ex W being Subset of T st p in W & W is open & f.:W c= Ball(f.p,r)
+      by A2,JGRAPH_2:20;
+      hence thesis;
+    end;
+    assume
+A3: for p being Point of T, r being positive (real number)
+    ex W being open Subset of T st p in W & f.:W c= Ball(f.p,r);
+    for p being Point of T, V being Subset of TOP-REAL m
+    st f.p in V & V is open holds
+    ex W being Subset of T st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of T, V be Subset of TOP-REAL m such that
+A4:   f.p in V;
+      reconsider u = f.p as Point of Euclid m by EUCLID:71;
+      assume V is open;
+      then Int V = V by TOPS_1:55;
+      then consider e being real number such that
+A5:   e > 0 and
+A6:   Ball(u,e) c= V by A1,A4,GOBOARD6:8;
+A7:   Ball(u,e) = Ball(f.p,e) by A1,TOPREAL9:13;
+      ex W being open Subset of T st p in W & f.:W c= Ball(f.p,e) by A3,A5;
+      hence thesis by A6,XBOOLE_1:1,A7;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m,T holds
+  f is continuous iff
+  for p being Point of TOP-REAL m, V being open Subset of T st f.p in V
+  ex s being positive (real number) st f.:Ball(p,s) c= V
+  proof
+    let f be Function of TOP-REAL m,T;
+A1: m in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A2:   f is continuous;
+      let p be Point of TOP-REAL m;
+      let V be open Subset of T;
+      assume f.p in V;
+      then consider W being Subset of TOP-REAL m such that
+A3:   p in W and
+A4:   W is open and
+A5:   f.:W c= V by A2,JGRAPH_2:20;
+      reconsider u = p as Point of Euclid m by EUCLID:71;
+      Int W = W by A4,TOPS_1:55;
+      then consider s being real number such that
+A6:   s > 0 and
+A7:   Ball(u,s) c= W by A1,A3,GOBOARD6:8;
+      reconsider s as positive (real number) by A6;
+      take s;
+      Ball(u,s) = Ball(p,s) by A1,TOPREAL9:13;
+      then f.:Ball(p,s) c= f.:W by A7,RELAT_1:156;
+      hence f.:Ball(p,s) c= V by A5,XBOOLE_1:1;
+    end;
+    assume
+A8: for p being Point of TOP-REAL m, V being open Subset of T st
+    f.p in V
+    ex s being positive (real number) st f.:Ball(p,s) c= V;
+    for p being Point of TOP-REAL m, V being Subset of T
+    st f.p in V & V is open holds
+    ex W being Subset of TOP-REAL m st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of TOP-REAL m, V be Subset of T such that
+A9:   f.p in V and
+A10:   V is open;
+      consider s being positive (real number) such that
+A11:   f.:Ball(p,s) c= V by A8,A9,A10;
+      take W = Ball(p,s);
+      thus p in W by A1,TOPGEN_5:17;
+      thus W is open;
+      thus thesis by A11;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m, TOP-REAL n holds
+  f is continuous iff
+  for p being Point of TOP-REAL m, r being positive (real number)
+  ex s being positive (real number) st f.:Ball(p,s) c= Ball(f.p,r)
+  proof
+    let f be Function of TOP-REAL m, TOP-REAL n;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m &
+    the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+    then reconsider f1 = f as Function of TopSpaceMetr Euclid m,
+    TopSpaceMetr Euclid n;
+A2: m in NAT & n in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A3:   f is continuous;
+      let p be Point of TOP-REAL m;
+      let r be positive (real number);
+      reconsider p1 = p as Point of Euclid m by EUCLID:71;
+      reconsider q1 = f.p as Point of Euclid n by EUCLID:71;
+      f1 is continuous by A1,A3,YELLOW12:36;
+      then consider s being positive (real number) such that
+A4:   f1.:Ball(p1,s) c= Ball(q1,r) by Th17;
+      take s;
+      Ball(p1,s) = Ball(p,s) & Ball(q1,r) = Ball(f.p,r) by A2,TOPREAL9:13;
+      hence f.:Ball(p,s) c= Ball(f.p,r) by A4;
+    end;
+    assume
+A5: for p being Point of TOP-REAL m, r being positive (real number)
+    ex s being positive (real number) st f.:Ball(p,s) c= Ball(f.p,r);
+    for p being Point of Euclid m, q being Point of Euclid n,
+    r being positive (real number) st q = f1.p
+    ex s being positive (real number) st f1.:Ball(p,s) c= Ball(q,r)
+    proof
+      let p be Point of Euclid m, q be Point of Euclid n,
+          r be positive (real number) such that
+A6:   q = f1.p;
+      reconsider p1 = p as Point of TOP-REAL m by EUCLID:71;
+      consider s being positive (real number) such that
+A7:   f.:Ball(p1,s) c= Ball(f.p1,r) by A5;
+      take s;
+      Ball(p1,s) = Ball(p,s) & Ball(f.p1,r) = Ball(q,r) by A2,A6,TOPREAL9:13;
+      hence thesis by A7;
+    end;
+    then f1 is continuous by Th17;
+    hence thesis by A1,YELLOW12:36;
+  end;
+
+theorem
+  for f being Function of T,R^1 holds f is continuous iff
+  for p being Point of T, r being positive (real number)
+  ex W being open Subset of T st p in W & f.:W c= ].f.p-r,f.p+r.[
+  proof
+    let f be Function of T,R^1;
+    thus f is continuous implies
+    for p being Point of T, r being positive (real number)
+    ex W being open Subset of T st p in W & f.:W c= ].f.p-r,f.p+r.[
+    proof
+      assume
+A1:   f is continuous;
+      let p be Point of T;
+      let r be positive (real number);
+A2:   f.p in ].f.p-r,f.p+r.[ by TOPREAL6:20;
+      R^1(].f.p-r,f.p+r.[) is open;
+      then ex W being Subset of T st p in W & W is open &
+      f.:W c= ].f.p-r,f.p+r.[ by A1,A2,JGRAPH_2:20;
+      hence thesis;
+    end;
+    assume
+A3: for p being Point of T, r being positive (real number)
+    ex W being open Subset of T st p in W & f.:W c= ].f.p-r,f.p+r.[;
+    for p being Point of T, V being Subset of R^1
+    st f.p in V & V is open holds
+    ex W being Subset of T st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of T, V be Subset of R^1 such that
+A4:   f.p in V;
+      assume V is open;
+      then consider r being Element of REAL such that
+A5:   r > 0 and
+A6:   ].f.p-r,f.p+r.[ c= V by A4,FRECHET:8;
+      ex W being open Subset of T st p in W & f.:W c= ].f.p-r,f.p+r.[ by A3,A5;
+      hence thesis by A6,XBOOLE_1:1;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem
+  for f being Function of R^1,T holds f is continuous iff
+  for p being Point of R^1, V being open Subset of T st f.p in V
+  ex s being positive (real number) st f.:].p-s,p+s.[ c= V
+  proof
+    let f be Function of R^1,T;
+    hereby
+      assume
+A1:   f is continuous;
+      let p be Point of R^1;
+      let V be open Subset of T;
+      assume f.p in V;
+      then consider W being Subset of R^1 such that
+A2:   p in W and
+A3:   W is open and
+A4:   f.:W c= V by A1,JGRAPH_2:20;
+      consider s being Element of REAL such that
+A5:   s > 0 and
+A6:   ].p-s,p+s.[ c= W by A2,A3,FRECHET:8;
+      reconsider s as positive (real number) by A5;
+      take s;
+      f.:].p-s,p+s.[ c= f.:W by A6,RELAT_1:156;
+      hence f.:].p-s,p+s.[ c= V by A4,XBOOLE_1:1;
+    end;
+    assume
+A7: for p being Point of R^1, V being open Subset of T st f.p in V
+    ex s being positive (real number) st f.:].p-s,p+s.[ c= V;
+    for p being Point of R^1, V being Subset of T
+    st f.p in V & V is open holds
+    ex W being Subset of R^1 st p in W & W is open & f.:W c= V
+    proof
+      let p be Point of R^1, V be Subset of T such that
+A8:   f.p in V and
+A9:   V is open;
+      consider s being positive (real number) such that
+A10:   f.:].p-s,p+s.[ c= V by A7,A8,A9;
+      take W = R^1(].p-s,p+s.[);
+      thus p in W by TOPREAL6:20;
+      thus W is open;
+      thus thesis by A10;
+    end;
+    hence thesis by JGRAPH_2:20;
+  end;
+
+theorem
+  for f being Function of R^1,R^1 holds f is continuous iff
+  for p being Point of R^1, r being positive (real number)
+  ex s being positive (real number) st f.:].p-s,p+s.[ c= ].f.p-r,f.p+r.[
+  proof
+    let f be Function of R^1,R^1;
+    hereby
+      assume
+A1:   f is continuous;
+      let p be Point of R^1;
+      let r be positive (real number);
+      reconsider p1 = p, q1 = f.p as Point of RealSpace;
+      consider s being positive (real number) such that
+A2:   f.:Ball(p1,s) c= Ball(q1,r) by A1,Th17;
+      take s;
+      p1 in REAL & q1 in REAL & r in REAL & s in REAL by XREAL_0:def 1;
+      then Ball(p1,s) = ].p1-s,p1+s.[ & Ball(q1,r) = ].q1-r,q1+r.[
+      by FRECHET:7;
+      hence f.:].p-s,p+s.[ c= ].f.p-r,f.p+r.[ by A2;
+    end;
+    assume
+A3: for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st f.:].p-s,p+s.[ c= ].f.p-r,f.p+r.[;
+    for p, q being Point of RealSpace, r being positive (real number)
+    st q = f.p
+    ex s being positive (real number) st f.:Ball(p,s) c= Ball(q,r)
+    proof
+      let p, q be Point of RealSpace,
+          r be positive (real number) such that
+A4:   q = f.p;
+      consider s being positive (real number) such that
+A5:   f.:].p-s,p+s.[ c= ].f.p-r,f.p+r.[ by A3;
+      take s;
+      p in REAL & q in REAL & r in REAL & s in REAL by XREAL_0:def 1;
+      then Ball(p,s) = ].p-s,p+s.[ & Ball(q,r) = ].q-r,q+r.[
+      by FRECHET:7;
+      hence thesis by A5,A4;
+    end;
+    hence f is continuous by Th17;
+  end;
+
+theorem
+  for f being Function of TOP-REAL m,R^1 holds f is continuous iff
+  for p being Point of TOP-REAL m, r being positive (real number)
+  ex s being positive (real number) st f.:Ball(p,s) c= ].f.p-r,f.p+r.[
+  proof
+    let f be Function of TOP-REAL m, R^1;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then reconsider f1 = f as Function of TopSpaceMetr Euclid m,R^1;
+A2: m in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A3:   f is continuous;
+      let p be Point of TOP-REAL m;
+      let r be positive (real number);
+      reconsider p1 = p as Point of Euclid m by EUCLID:71;
+      reconsider q1 = f.p as Point of RealSpace;
+      f1 is continuous by A1,A3,YELLOW12:36;
+      then consider s being positive (real number) such that
+A4:   f.:Ball(p1,s) c= Ball(q1,r) by A1,Th17;
+      take s;
+      q1 in REAL & r in REAL by XREAL_0:def 1;
+      then Ball(p1,s) = Ball(p,s) & Ball(q1,r) = ].f.p-r,f.p+r.[
+      by A2,TOPREAL9:13,FRECHET:7;
+      hence f.:Ball(p,s) c= ].f.p-r,f.p+r.[ by A4;
+    end;
+    assume
+A5: for p being Point of TOP-REAL m, r being positive (real number)
+    ex s being positive (real number) st f.:Ball(p,s) c= ].f.p-r,f.p+r.[;
+    for p being Point of Euclid m, q being Point of RealSpace,
+    r being positive (real number) st q = f1.p
+    ex s being positive (real number) st f1.:Ball(p,s) c= Ball(q,r)
+    proof
+      let p be Point of Euclid m, q be Point of RealSpace,
+          r be positive (real number) such that
+A6:   q = f1.p;
+      reconsider p1 = p as Point of TOP-REAL m by EUCLID:71;
+      consider s being positive (real number) such that
+A7:   f.:Ball(p1,s) c= ].f.p-r,f.p+r.[ by A5;
+      take s;
+      q in REAL & r in REAL by XREAL_0:def 1;
+      then Ball(p1,s) = Ball(p,s) & ].f.p-r,f.p+r.[ = Ball(q,r)
+      by A2,A6,TOPREAL9:13,FRECHET:7;
+      hence thesis by A7;
+    end;
+    then f1 is continuous by Th17;
+    hence thesis by A1,YELLOW12:36;
+  end;
+
+theorem
+  for f being Function of R^1,TOP-REAL m holds f is continuous iff
+  for p being Point of R^1, r being positive (real number)
+  ex s being positive (real number) st f.:].p-s,p+s.[ c= Ball(f.p,r)
+  proof
+    let f be Function of R^1, TOP-REAL m;
+A1: the TopStruct of TOP-REAL m = TopSpaceMetr Euclid m by EUCLID:def 8;
+    then reconsider f1 = f as Function of R^1,TopSpaceMetr Euclid m;
+A2: m in NAT by ORDINAL1:def 13;
+    hereby
+      assume
+A3:   f is continuous;
+      let p be Point of R^1;
+      let r be positive (real number);
+      reconsider p1 = p as Point of RealSpace;
+      reconsider q1 = f.p as Point of Euclid m by EUCLID:71;
+      f1 is continuous by A1,A3,YELLOW12:36;
+      then consider s being positive (real number) such that
+A4:   f1.:Ball(p1,s) c= Ball(q1,r) by Th17;
+      take s;
+      p in REAL & s in REAL by XREAL_0:def 1;
+      then Ball(p1,s) = ].p-s,p+s.[ & Ball(q1,r) = Ball(f.p,r)
+      by A2,TOPREAL9:13,FRECHET:7;
+      hence f.:].p-s,p+s.[ c= Ball(f.p,r) by A4;
+    end;
+    assume
+A5: for p being Point of R^1, r being positive (real number)
+    ex s being positive (real number) st f.:].p-s,p+s.[ c= Ball(f.p,r);
+    for p being Point of RealSpace, q being Point of Euclid m,
+    r being positive (real number) st q = f.p
+    ex s being positive (real number) st f.:Ball(p,s) c= Ball(q,r)
+    proof
+      let p be Point of RealSpace, q be Point of Euclid m,
+          r be positive (real number) such that
+A6:   q = f.p;
+      reconsider p1 = p as Point of R^1;
+      consider s being positive (real number) such that
+A7:   f.:].p-s,p+s.[ c= Ball(f.p1,r) by A5;
+      take s;
+      p in REAL & s in REAL by XREAL_0:def 1;
+      then ].p-s,p+s.[ = Ball(p,s) & Ball(f.p1,r) = Ball(q,r)
+      by A2,A6,TOPREAL9:13,FRECHET:7;
+      hence thesis by A7;
+    end;
+    then f1 is continuous by A1,Th17;
+    hence thesis by A1,YELLOW12:36;
+  end;

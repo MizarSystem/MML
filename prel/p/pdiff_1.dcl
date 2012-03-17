@@ -26,15 +26,23 @@
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="CAT_1"/>
+<ArticleID name="CAT_2"/>
+<ArticleID name="GRCAT_1"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
@@ -43,20 +51,20 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="337">
+<Func kind="K" nr="456">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="24">
-<Func kind="K" nr="311">
+<Func kind="K" nr="430">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>
 </Adjective>
 <Adjective nr="26">
-<Func kind="K" nr="311">
+<Func kind="K" nr="430">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>

@@ -8,20 +8,22 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, FINSEQ_1, XXREAL_0, FUNCT_1,
       RELAT_1, TARSKI, VALUED_0, CARD_1, ARYTM_3, ORDINAL1, CLASSES1, ZFMISC_1,
-      ORDINAL2, FUNCOP_1, MCART_1, NAT_1, ORDINAL4, ARYTM_1, REAL_1;
+      ORDINAL2, FUNCOP_1, MCART_1, NAT_1, ORDINAL4, ARYTM_1, REAL_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, NUMBERS, XXREAL_0,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCOP_1, ORDINAL1, ORDINAL2, CLASSES1,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCOP_1, ORDINAL1, ORDINAL2, CLASSES1,
       FINSEQ_1, FUNCT_2, BINOP_1, DOMAIN_1, VALUED_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_1,
-      VALUED_0, CLASSES1, ORDINAL2;
- registrations SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
+      VALUED_0, CLASSES1, ORDINAL2, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS, RELSET_1, INT_1, XCMPLX_0,
       FINSEQ_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, BINOP_1;
  theorems TARSKI, NAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, RELAT_1, XBOOLE_1,
       FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1, CLASSES1, ORDINAL2, XBOOLE_0,
-      ZFMISC_1, MCART_1;
- schemes NAT_1, FUNCT_1, FINSEQ_1, BINOP_1, CLASSES1, ORDINAL1;
+      ZFMISC_1, MCART_1, PARTFUN1;
+ schemes NAT_1, FUNCT_1, FINSEQ_1, BINOP_1, CLASSES1, ORDINAL1, FUNCT_2;
 
 begin
 
@@ -1657,5 +1659,190 @@ A1: ex p being FinSequence st x = p.(len p) & len p = len S() & p.1 = S(
 A2: ex p being FinSequence st y = p.(len p) & len p = len S() & p.1 = S(
   ).1 & for k st 1 <= k & k < len S() holds p.(k+1) = F(S().(k+1),p.k);
   thus x = y from LambdaSeqBinOpUn(A1,A2);
+end;
+
+:: from POLYNOM2, 2010.02.13, A.T.
+
+scheme
+  SeqExD{D() -> non empty set, N() -> Element of NAT, P[set,set]}: ex p being
+FinSequence of D() st dom p = Seg N() & for k being Element of NAT st k in Seg
+  N() holds P[k,p/.k]
+provided
+A1: for k being Element of NAT st k in Seg N() ex x being Element of D()
+st P[k,x]
+proof
+  per cases;
+  suppose
+A2: N() = 0;
+    take <*>(D());
+    thus thesis by A2;
+  end;
+  suppose
+A3: N() <> 0;
+    now
+      assume
+A4:   Seg N() = {};
+      now
+        per cases;
+        case
+          N() = 0;
+          hence contradiction by A3;
+        end;
+        case
+          N() <> 0;
+          hence contradiction by A4;
+        end;
+      end;
+      hence contradiction;
+    end;
+    then reconsider M = Seg N() as non empty set;
+A5: for x being Element of M ex y being Element of D() st P[x,y]
+    proof
+      let x be Element of M;
+      x in Seg N();
+      hence thesis by A1;
+    end;
+    consider f being Function of M,D() such that
+A6: for x being Element of M holds P[x,f.x] from FUNCT_2:sch 3(A5);
+    dom f = Seg N() by FUNCT_2:def 1;
+    then reconsider q = f as FinSequence by FINSEQ_1:def 2;
+    now
+      let u be set;
+A7:   rng q c= D() by RELAT_1:def 19;
+      assume
+      u in rng q;
+      hence u in D() by A7;
+    end;
+    then rng q c= D() by TARSKI:def 3;
+    then reconsider q as FinSequence of D() by FINSEQ_1:def 4;
+    take q;
+    now
+      let k be Element of NAT;
+      assume
+A8:   k in Seg N();
+      then k in dom q by FUNCT_2:def 1;
+      then q.k = q/.k by PARTFUN1:def 8;
+      hence P[k,q/.k] by A6,A8;
+    end;
+    hence thesis by FUNCT_2:def 1;
+  end;
+end;
+
+scheme
+  FinRecExD2{D() -> non empty set,A() -> (Element of D()), N() -> Element of
+NAT, P[set,set,set]}: ex p being FinSequence of D() st len p = N() & (p/.1 = A(
+) or N() = 0) & for n being Element of NAT st 1 <= n & n <= N()-1 holds P[n,p/.
+  n,p/.(n+1)]
+provided
+A1: for n being Element of NAT st 1 <= n & n <= N()-1 holds for x being
+Element of D() ex y being Element of D() st P[n,x,y]
+proof
+  consider 00 being Element of D();
+  defpred Q[Element of NAT,set,set] means (0 <= $1 & $1 <= N()-2 implies P[$1+
+  1,$2,$3]) & (not (0 <= $1 & $1 <= N()-2) implies $3=00);
+A2: for n be Element of NAT for x be Element of D() ex y be Element of D()
+  st Q[n,x,y]
+  proof
+    let n be Element of NAT,x be Element of D();
+    0 <= n & n <= N()-2 implies thesis
+    proof
+A3:   0+1 <= n+1 by XREAL_1:8;
+      assume that
+      0 <= n and
+A4:   n <= N()-2;
+      n+1 <= N()-2+1 by A4,XREAL_1:8;
+      then consider y being Element of D() such that
+A5:   P[n+1,x,y] by A1,A3;
+      take y;
+      thus 0 <= n & n <= N()-2 implies P[n+1,x,y] by A5;
+      thus thesis by A4;
+    end;
+    hence thesis;
+  end;
+  consider f being Function of NAT,D() such that
+A6: f.0 = A() & for n being Element of NAT holds Q[n,f.n,f.(n+1)]
+   from RecExD(A2);
+  defpred Q[set,set] means for r being Real st r = $1 holds $2 = f.(r-1);
+A7: for x being set st x in REAL ex y being set st Q[x,y]
+  proof
+    let x be set;
+    assume
+    x in REAL;
+    then reconsider r=x as Real;
+    take f.(r-1);
+    thus thesis;
+  end;
+  consider g being Function such that
+A8: dom g = REAL & for x being set st x in REAL holds Q[x,g.x] from
+  CLASSES1:sch 1(A7);
+A9: dom (g|Seg N()) = Seg N() by A8,RELAT_1:91,XBOOLE_1:1;
+  then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
+  now
+    let x be set;
+    assume
+    x in rng p;
+    then consider y being set such that
+A10: y in dom p and
+A11: x = p.y by FUNCT_1:def 5;
+    reconsider y as Element of NAT by A10;
+A12: f.(y-1) in D()
+    proof
+      y <> 0 by A9,A10,FINSEQ_1:3;
+      then consider k being Nat such that
+A13:  y = k+1 by NAT_1:6;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      f.k in D();
+      hence thesis by A13;
+    end;
+    p.y = g.y by A10,FUNCT_1:70;
+    hence x in D() by A8,A11,A12;
+  end;
+  then rng p c= D() by TARSKI:def 3;
+  then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
+  take p;
+  thus len p = N() by A9,FINSEQ_1:def 3;
+  N() <> 0 implies p/.1 = A()
+  proof
+    assume
+    N() <> 0;
+    then consider k being Nat such that
+A14: N() = k+1 by NAT_1:6;
+    0 + 1 <= k +1 by XREAL_1:9;
+    then
+A15: 1 in Seg N() by A14,FINSEQ_1:3;
+    then p/.1 = p.1 by A9,PARTFUN1:def 8
+      .= g.1 by A15,FUNCT_1:72
+      .= f.(1-1) by A8
+      .= A() by A6;
+    hence thesis;
+  end;
+  hence p/.1 = A() or N() = 0;
+  let n be Element of NAT;
+  assume that
+A16: 1 <= n and
+A17: n <= N()-1;
+  consider k being Nat such that
+A18: n = k+1 by A16,NAT_1:6;
+A19: for n being Element of NAT st n <= N()-1 holds p/.(n+1) = f.n
+  proof
+    let n be Element of NAT;
+    assume
+    n <= N() - 1;
+    then
+A20: n+1 <= N()-1+1 by XREAL_1:8;
+A21: g.(n+1) = f.(n+1-1) by A8
+      .= f.n;
+    1 <= n+1 by NAT_1:11;
+    then
+A22: n+1 in Seg N() by A20,FINSEQ_1:3;
+    then p/.(n+1) = p.(n+1) by A9,PARTFUN1:def 8;
+    hence thesis by A22,A21,FUNCT_1:72;
+  end;
+A23: k <= k+1 by NAT_1:11;
+A24: k in NAT by ORDINAL1:def 13;
+  k <= N()-1-1 by A17,A18,XREAL_1:21;
+  then P[k+1,f.k,f.(k+1)] by A6,A24;
+  then P[k+1,f.k,p/.(k+1+1)] by A19,A17,A18;
+  hence thesis by A19,A17,A18,A24,A23,XXREAL_0:2;
 end;
 

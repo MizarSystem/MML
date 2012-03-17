@@ -1,0 +1,2119 @@
+:: The Geometric Interior in Real Linear Spaces
+::  by Karol P\c{a}k
+::
+:: Received February 9, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, ARYTM_3, XBOOLE_0, CARD_1, CONVEX1, CONVEX2, CONVEX3,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2,
+      FUNCT_4, MEMBERED, ORDERS_1, RELAT_1, RLVECT_1, RLVECT_2, RUSUB_4,
+      SEMI_AF1, SETFAM_1, TARSKI, TOPS_1, RLAFFIN1, RLAFFIN2, ZFMISC_1, REAL_1,
+      CARD_3, XXREAL_0, NAT_1, SUBSET_1, NUMBERS, ORDINAL1, STRUCT_0, SUPINF_2,
+      ORDINAL4, VALUED_1, XREAL_0, PARTFUN1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, NAT_1,
+      XCMPLX_0, XXREAL_0, ORDERS_1, CARD_1, XREAL_0, REAL_1, FINSET_1,
+      SETFAM_1, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, RELSET_1,
+      FINSEQ_1, STRUCT_0, FINSEQ_2, SEQ_1, FINSEQOP, RVSUM_1, RLVECT_1,
+      RLVECT_2, RUSUB_4, CONVEX1, CONVEX2, CONVEX3, RLAFFIN1, FUNCT_4,
+      FUNCOP_1, MEMBERED, XXREAL_2;
+ constructors BINOP_2, CONVEX1, CONVEX3, DOMAIN_1, FINSEQOP, REAL_1, RLVECT_3,
+      RVSUM_1, RUSUB_5, SEQ_1, SETFAM_1, RLAFFIN1, SIMPLEX0, XXREAL_2, FUNCT_4,
+      RELSET_1, PARTFUN1;
+ registrations CARD_1, FINSET_1, FINSEQ_2, FUNCT_2, MEMBERED, NAT_1, NUMBERS,
+      RELAT_1, RLVECT_1, RLVECT_3, STRUCT_0, SUBSET_1, VALUED_0, XCMPLX_0,
+      XREAL_0, XXREAL_0, XBOOLE_0, RLAFFIN1, SIMPLEX0, FUNCOP_1, XXREAL_3,
+      REALSET1, SETFAM_1, XXREAL_2, ABIAN, PARTFUN1, RVSUM_1, FINSEQ_1,
+      RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions ORDERS_1, RLVECT_2, TARSKI, XBOOLE_0;
+ theorems BORSUK_4, CARD_1, CARD_2, CARD_FIN, CONVEX1, CONVEX3, FINSEQ_1,
+      FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, NAT_1,
+      MEMBERED, PARTFUN1, RELAT_1, RLAFFIN1, RLTOPSP1, RUSUB_4, RLVECT_2,
+      RLVECT_3, RLVECT_4, RVSUM_1, STIRL2_1, SIMPLEX0, TARSKI, WELLORD2,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_0, XREAL_1, XXREAL_0, XXREAL_2,
+      ZFMISC_1, RLVECT_1;
+ schemes FRAENKEL, FUNCT_2, NAT_1, RLVECT_4;
+
+begin :: Preliminaries
+
+reserve x,y for set,
+        r,s for Real,
+        n for Nat,
+        V for RealLinearSpace,
+        v,v1,v2,u,w,p for VECTOR of V,
+        A,B for Subset of V,
+        Af for finite Subset of V,
+        I for affinely-independent Subset of V,
+        If for finite affinely-independent Subset of V,
+        F for Subset-Family of V,
+        L1,L2 for Linear_Combination of V;
+
+Lm1: r<>1 & r*u+(1-r)*w=v implies w=(1/(1-r)*v)+(1-1/(1-r))*u
+  proof
+    assume that
+    A1: r<>1 and
+    A2: r*u+(1-r)*w=v;
+    A3: (1-r)*w = v-r*u by A2,RLVECT_4:1;
+    A4: 1-r<>1-1 by A1;
+    then A5: (1/(1-r))*(1-r)=1 by XCMPLX_1:107;
+    A6: 1/(1-r)*(r*u)=(1/(1-r)*r)*u by RLVECT_1:def 10,def 11
+                    .=((1-(1-r))/(1-r))*u by XCMPLX_1:100
+                    .=(1/(1-r)-(1-r)/(1-r))*u by XCMPLX_1:121
+                    .=(1/(1-r)-1)*u by A4,XCMPLX_1:60;
+    thus w=1*w by RLVECT_1:def 11
+         .=(1/(1-r))*((1-r)*w) by A5,RLVECT_1:def 10,def 11
+         .=(1/(1-r)*v)-1/(1-r)*(r*u) by A3,RLVECT_1:48
+         .=(1/(1-r)*v)+-(1/(1-r)-1)*u by A6,RLVECT_1:def 14
+         .=(1/(1-r)*v)+(1/(1-r)-1)*(-u) by RLVECT_1:39
+         .=(1/(1-r)*v)+(-(1/(1-r)-1))*u by RLVECT_1:38
+         .=(1/(1-r)*v)+(1-1/(1-r))*u;
+  end;
+
+theorem Th1:
+  for L be Linear_Combination of A st L is convex & v <> Sum L & L.v <> 0
+   ex p st p in conv(A\{v}) & Sum L = L.v*v + (1-L.v)*p &
+           1/L.v*(Sum L) + (1-1/L.v)*p = v
+  proof
+    let L be Linear_Combination of A such that
+    A1: L is convex and
+    A2: v<>Sum L and
+    A3: L.v<>0;
+    set Lv=L.v,1Lv=1-L.v;
+    A4: Carrier L c=A by RLVECT_2:def 8;
+    Carrier L<>{} by A1,CONVEX1:21;
+    then reconsider A1=A as non empty Subset of V by A4;
+    consider K be Linear_Combination of{v} such that
+    A5: K.v=Lv from RLVECT_4:sch 2;
+    A6: Lv<>1
+    proof
+      assume A7: Lv=1;
+      then Carrier L={v} by A1,RLAFFIN1:64;
+      then Sum L=1*v by A7,RLVECT_2:53
+               .=v by RLVECT_1:def 11;
+      hence contradiction by A2;
+    end;
+    Lv<=1 by A1,RLAFFIN1:63;
+    then Lv<1 by A6,XXREAL_0:1;
+    then A8: 1Lv>1-1 by XREAL_1:12;
+    v in Carrier L by A3;
+   then {v}c=A1 by A4,ZFMISC_1:37;
+    then K is Linear_Combination of A1 by RLVECT_2:33;
+    then reconsider LK=L-K as Linear_Combination of A1 by RLVECT_2:81;
+    1/1Lv*LK is Linear_Combination of A by RLVECT_2:67;
+    then A9: Carrier(1/1Lv*LK)c=A1 by RLVECT_2:def 8;
+    LK.v=Lv-Lv by A5,RLVECT_2:79;
+    then A10: (1/1Lv*LK).v=1/1Lv*(Lv-Lv) by RLVECT_2:def 13;
+    then not v in Carrier(1/1Lv*LK) by RLVECT_2:28;
+    then A11: Carrier(1/1Lv*LK)c=A\{v} by A9,ZFMISC_1:40;
+    A12: Carrier K c={v} by RLVECT_2:def 8;
+    A13: for w be Element of V holds(1/1Lv*LK).w>=0
+    proof
+      let w be Element of V;
+      A14: (1/1Lv*LK).w=(1/1Lv)*(LK.w) by RLVECT_2:def 13
+      .=(1/1Lv)*(L.w-K.w) by RLVECT_2:79;
+      per cases;
+      suppose w=v;
+        hence thesis by A10;
+      end;
+      suppose w<>v;
+        then not w in Carrier K by A12,TARSKI:def 1;
+        then A15: K.w=0;
+        L.w>=0 by A1,RLAFFIN1:62;
+        hence thesis by A8,A14,A15;
+      end;
+    end;
+    sum LK=sum L-sum K by RLAFFIN1:36
+    .=sum L-Lv by A5,A12,RLAFFIN1:32
+    .=1Lv by A1,RLAFFIN1:62;
+    then A16: sum(1/1Lv*LK)=1/1Lv*1Lv by RLAFFIN1:35
+    .=1 by A8,XCMPLX_1:107;
+    then 1/1Lv*LK is convex by A13,RLAFFIN1:62;
+    then Carrier(1/1Lv*LK)<>{} by CONVEX1:21;
+    then reconsider Av=A\{v} as non empty Subset of V by A11;
+    reconsider 1LK=1/1Lv*LK as Convex_Combination of Av
+      by A11,A13,A16,RLAFFIN1:62,RLVECT_2:def 8;
+    take p=Sum 1LK;
+    1LK in ConvexComb(V) by CONVEX3:def 1;
+    then p in {Sum(M) where M is Convex_Combination of Av:M in ConvexComb(V)};
+    hence p in conv(A\{v}) by CONVEX3:5;
+    A17: Sum(LK)=Sum L-Sum K by RLVECT_3:4
+               .=Sum L-Lv*v by A5,RLVECT_2:50;
+    then 1Lv*p=1Lv*(1/1Lv*(Sum L-Lv*v)) by RLVECT_3:2
+             .=(1Lv*(1/1Lv))*(Sum L-Lv*v) by RLVECT_1:def 10,def 11
+             .=1*(Sum L-Lv*v) by A8,XCMPLX_1:107
+             .=Sum L-Lv*v by RLVECT_1:def 11;
+    hence Sum L=Lv*v+1Lv*p by RLVECT_4:1;
+    1-1/Lv=Lv/Lv-1/Lv by A3,XCMPLX_1:60
+         .=(Lv-1)/Lv by XCMPLX_1:121
+         .=(-1Lv)/Lv
+         .=-1Lv/Lv by XCMPLX_1:188;
+    then (1-1/Lv)*Sum 1LK=(-1Lv/Lv)*(1/1Lv*(Sum L-Lv*v)) by A17,RLVECT_3:2
+                        .=((-1Lv/Lv)*(1/1Lv))*(Sum L-Lv*v) by RLVECT_1:
+def 10,def 11
+                        .=(-(1Lv/Lv)*(1/1Lv))*(Sum L-Lv*v)
+                        .=(-(1Lv/1Lv)*(1/Lv))*(Sum L-Lv*v) by XCMPLX_1:86
+                        .=(-1*(1/Lv))*(Sum L-Lv*v) by A8,XCMPLX_1:60
+                        .=(-(1/Lv))*(Sum L)-(-(1/Lv))*(Lv*v) by RLVECT_1:48
+                        .=(-(1/Lv))*(Sum L)+-(-(1/Lv))*(Lv*v)
+                           by RLVECT_1:def 14
+                        .=(-(1/Lv))*(Sum L)+(-(-(1/Lv)))*(Lv*v) by RLVECT_4:6
+                        .=(-(1/Lv))*(Sum L)+(1/Lv*Lv)*v by RLVECT_1:
+def 10,def 11
+                        .=(-(1/Lv))*(Sum L)+1*v by A3,XCMPLX_1:107
+                        .=(-(1/Lv))*(Sum L)+v by RLVECT_1:def 11
+                        .=-((1/Lv)*(Sum L))+v by RLVECT_4:6;
+    hence 1/Lv*(Sum L)+(1-1/Lv)*p =(1/Lv*Sum L+-(1/Lv)*(Sum L))+v
+                     by RLVECT_1:def 6
+                 .=(1/Lv*Sum L-(1/Lv)*(Sum L))+v by RLVECT_1:def 14
+                 .=v by RLVECT_4:1;
+  end;
+
+theorem
+  for p1,p2,w1,w2 be Element of V st
+      v in conv I & u in conv I &
+      not u in conv(I\{p1}) & not u in conv(I\{p2}) &
+      w1 in conv(I\{p1}) & w2 in conv(I\{p2}) &
+      r*u+(1-r)*w1 = v & s*u + (1-s)*w2 = v & r < 1 & s < 1
+    holds w1 = w2 & r = s
+  proof
+    let p1,p2,w1,w2 be Element of V;
+    assume that
+    A1: v in conv I and
+    A2: u in conv I and
+    A3: not u in conv(I\{p1}) and
+    A4: not u in conv(I\{p2}) and
+    A5: w1 in conv(I\{p1}) and
+    A6: w2 in conv(I\{p2}) and
+    A7: r*u+(1-r)*w1=v and
+    A8: s*u+(1-s)*w2=v and
+    A9: r<1 and
+    A10: s<1;
+    set Lu=u|--I,Lv=v|--I,Lw1=w1|--I,Lw2=w2|--I;
+    A11: conv I c=Affin I by RLAFFIN1:65;
+    A12: Lu.p2>0
+    proof
+      assume A13: Lu.p2<=0;
+      Lu.p2>=0 by A2,RLAFFIN1:71;
+      then for y st y in {p2} holds Lu.y=0 by A13,TARSKI:def 1;
+      hence contradiction by A2,A4,RLAFFIN1:76;
+    end;
+    conv(I\{p2})c=Affin(I\{p2}) by RLAFFIN1:65;
+    then Lw2=w2|--(I\{p2}) by A6,RLAFFIN1:77,XBOOLE_1:36;
+    then Carrier Lw2 c=I\{p2} by RLVECT_2:def 8;
+    then not p2 in Carrier Lw2 by ZFMISC_1:64;
+    then A14: Lw2.p2=0;
+    A15: Lu.p1>0
+    proof
+      assume A16: Lu.p1<=0;
+      Lu.p1>=0 by A2,RLAFFIN1:71;
+      then for y st y in {p1} holds Lu.y=0 by A16,TARSKI:def 1;
+      hence contradiction by A2,A3,RLAFFIN1:76;
+    end;
+    conv(I\{p1})c=Affin(I\{p1}) by RLAFFIN1:65;
+    then Lw1=w1|--(I\{p1}) by A5,RLAFFIN1:77,XBOOLE_1:36;
+    then Carrier Lw1 c=I\{p1} by RLVECT_2:def 8;
+    then not p1 in Carrier Lw1 by ZFMISC_1:64;
+    then A17: Lw1.p1=0;
+    A18: conv(I\{p2})c=conv I by RLAFFIN1:3,XBOOLE_1:36;
+    then w2 in conv I by A6;
+    then s*Lu+(1-s)*Lw2=Lv by A2,A8,A11,RLAFFIN1:70;
+    then Lv.p2=(s*Lu).p2+((1-s)*Lw2).p2 by RLVECT_2:def 12
+    .=s*(Lu.p2)+((1-s)*Lw2).p2 by RLVECT_2:def 13
+    .=s*(Lu.p2)+(1-s)*(Lw2.p2) by RLVECT_2:def 13
+    .=s*(Lu.p2) by A14;
+    then A19: Lv.p2<1*Lu.p2 by A10,A12,XREAL_1:70;
+    then A20: Lu.p2-Lv.p2>=Lv.p2-Lv.p2 by XREAL_1:11;
+    A21: conv(I\{p1})c=conv I by RLAFFIN1:3,XBOOLE_1:36;
+    then Lw1.p2>=0 by A5,RLAFFIN1:71;
+    then A22: 1/(1-s)-0>=1/(1-s)-Lw1.p2/(Lu.p2-Lv.p2) by A20,XREAL_1:12;
+    w1 in conv I by A5,A21;
+    then Lv=r*Lu+(1-r)*Lw1 by A2,A7,A11,RLAFFIN1:70;
+    then Lv.p1=(r*Lu).p1+((1-r)*Lw1).p1 by RLVECT_2:def 12
+    .=r*(Lu.p1)+((1-r)*Lw1).p1 by RLVECT_2:def 13
+    .=r*(Lu.p1)+(1-r)*(Lw1.p1) by RLVECT_2:def 13
+    .=r*(Lu.p1) by A17;
+    then A23: Lv.p1<1*Lu.p1 by A9,A15,XREAL_1:70;
+    then A24: Lu.p1-Lv.p1>=Lv.p1-Lv.p1 by XREAL_1:11;
+    w2=(1/(1-s)*v)+(1-1/(1-s))*u by A8,A10,Lm1;
+    then A25: Lw2=1/(1-s)*Lv+(1-1/(1-s))*Lu by A1,A2,A11,RLAFFIN1:70;
+    then A26: 1/(1-s)=(Lu.p2-0)/(Lu.p2-Lv.p2) by A14,A19,RLAFFIN1:81;
+    A27: w1=(1/(1-r)*v)+(1-1/(1-r))*u by A7,A9,Lm1;
+    then A28: Lw1=1/(1-r)*Lv+(1-1/(1-r))*Lu by A1,A2,A11,RLAFFIN1:70;
+    then A29: 1/(1-r)=(Lu.p2-Lw1.p2)/(Lu.p2-Lv.p2) by A19,RLAFFIN1:81
+    .=1/(1-s)-Lw1.p2/(Lu.p2-Lv.p2) by A26,XCMPLX_1:121;
+    Lw2.p1>=0 by A6,A18,RLAFFIN1:71;
+    then A30: 1/(1-r)-0>=1/(1-r)-Lw2.p1/(Lu.p1-Lv.p1) by A24,XREAL_1:12;
+    A31: 1/(1-r)=(Lu.p1-0)/(Lu.p1-Lv.p1) by A17,A23,A28,RLAFFIN1:81;
+    1/(1-s)=(Lu.p1-Lw2.p1)/(Lu.p1-Lv.p1) by A23,A25,RLAFFIN1:81
+    .=1/(1-r)-Lw2.p1/(Lu.p1-Lv.p1) by A31,XCMPLX_1:121;
+    then 1-r=1-s by A30,A22,A29,XCMPLX_1:59,XXREAL_0:1;
+    hence thesis by A8,A10,A27,Lm1;
+  end;
+
+theorem Th3:
+  for L be Linear_Combination of Af st Af c=conv If & sum L=1 holds
+     Sum L in Affin If
+   & for x be Element of V
+       ex F be FinSequence of REAL,G be FinSequence of V st
+          (Sum L|--If).x = Sum F & len G = len F & G is one-to-one &
+          rng G = Carrier L &
+          for n st n in dom F holds F.n = L.(G.n)*(G.n|--If).x
+  proof
+    defpred P[Nat] means
+    for B be finite Subset of V st card B=$1 & B c=conv If for L be
+    Linear_Combination of B st Carrier L=B & sum L=1 holds Sum L in Affin If &
+    for x be Element of V
+    ex F be FinSequence of REAL,G be FinSequence of V st
+      (Sum L|--If).x=Sum F & len G=len F & G is one-to-one & rng G=Carrier L &
+      for n st n in dom F holds F.n=L.(G.n)*(G.n|--If).x;
+    A1: for m be Nat st P[m] holds P[m+1]
+    proof
+      let m be Nat such that
+      A2: P[m];
+      let B be finite Subset of V such that
+      A3: card B=m+1 and
+      A4: B c=conv If;
+      conv If c=Affin If by RLAFFIN1:65;
+      then A5: B c=Affin If by A4,XBOOLE_1:1;
+      then A6: Affin B c=Affin If by RLAFFIN1:51;
+      let L be Linear_Combination of B such that
+      A7: Carrier L=B and
+      A8: sum L=1;
+      Sum L in {Sum K where K is Linear_Combination of B:sum K=1} by A8;
+      then Sum L in Affin B by RLAFFIN1:59;
+      hence Sum L in Affin If by A6;
+      per cases;
+      suppose A9: m=0;
+        let x be Element of V;
+        consider b be set such that
+        A10: B={b} by A3,A9,CARD_2:60;
+        b in B by A10,TARSKI:def 1;
+        then reconsider b as Element of V;
+        A11: sum L=L.b by A7,A10,RLAFFIN1:32;
+        set F=<*(b|--If).x*>,G=<*b*>;
+        take F,G;
+        Sum L=L.b*b by A10,RLVECT_2:50;
+        then len G=1 & Sum L=b by A8,A11,FINSEQ_1:56,RLVECT_1:def 11;
+        hence (Sum L|--If).x=Sum F & len G=len F & G is one-to-one & rng G=
+        Carrier L by A7,A10,FINSEQ_1:56,FINSEQ_3:102,RVSUM_1:103;
+        let n;
+        assume n in dom F;
+        then n in Seg 1 by FINSEQ_1:55;
+        then A12: n=1 by FINSEQ_1:4,TARSKI:def 1;
+        then G.n=b by FINSEQ_1:57;
+        hence thesis by A8,A11,A12,FINSEQ_1:57;
+      end;
+      suppose A13: m>0;
+        ex v be Element of V st L.v<>1 & v in Carrier L
+        proof
+          consider F be FinSequence of V such that
+          A14: F is one-to-one and
+          A15: rng F=Carrier L and
+          A16: 1=Sum(L*F) by A8,RLAFFIN1:def 3;
+          dom F,B are_equipotent by A7,A14,A15,WELLORD2:def 4;
+          then A17: card B=card dom F by CARD_1:21
+          .=card Seg len F by FINSEQ_1:def 3
+          .=len F by FINSEQ_1:78;
+          A18: len F=len(L*F) & len(len F|->1)=len F
+            by FINSEQ_1:def 18,FINSEQ_2:37;
+          Sum(len F|->1)=len F*1 by RVSUM_1:110;
+          then len F|->1<>L*F by A3,A13,A16,A17;
+          then consider k be Nat such that
+          A19: 1<=k & k<=len F and
+          A20: (len F|->1).k<>(L*F).k by A18,FINSEQ_1:18;
+          A21: k in Seg len F by A19,FINSEQ_1:3;
+          A22: k in dom F by A19,FINSEQ_3:27;
+          then A23: F.k in Carrier L by A15,FUNCT_1:def 5;
+          L.(F.k)=(L*F).k by A22,FUNCT_1:23;
+          then L.(F.k)<>1 by A20,A21,FINSEQ_2:71;
+          hence thesis by A23;
+        end;
+        then consider v be Element of V such that
+        A24: L.v<>1 and
+        A25: v in Carrier L;
+        set 1Lv=1-L.v;
+        consider K be Linear_Combination of{v} such that
+        A26: K.v=L.v from RLVECT_4:sch 2;
+        set LK=L-K;
+        A27: 1Lv<>0 by A24;
+        set 1LK=1/1Lv*LK;
+        A28: Carrier K c={v} by RLVECT_2:def 8;
+        then sum K=K.v by RLAFFIN1:32;
+        then sum LK=1Lv by A8,A26,RLAFFIN1:36;
+        then A29: sum 1LK=1/1Lv*1Lv by RLAFFIN1:35;
+        LK.v=L.v-K.v by RLVECT_2:79;
+        then A30: not v in Carrier LK by A26,RLVECT_2:28;
+        A31: card(B\{v})=m by A3,A7,A25,STIRL2_1:65;
+        A32: Sum K=L.v*v by A26,RLVECT_2:50;
+        B\{v}c=B by XBOOLE_1:36;
+        then A33: B\{v}c=conv If by A4,XBOOLE_1:1;
+        L.v<>0 by A25,RLVECT_2:28;
+        then v in Carrier K by A26;
+        then A34: Carrier K={v} by A28,ZFMISC_1:39;
+        A35: B\{v}c=Carrier LK
+        proof
+          let x;
+          assume A36: x in B\{v};
+          then reconsider u=x as Element of V;
+          u in B by A36,ZFMISC_1:64;
+          then A37: L.u<>0 by A7,RLVECT_2:28;
+          LK.u=L.u-K.u & not u in {v} by A36,RLVECT_2:79,XBOOLE_0:def 5;
+          then LK.u<>0 by A34,A37;
+          hence thesis;
+        end;
+        let x be Element of V;
+        A38: 1/1Lv*1Lv=(1*1Lv)/1Lv by XCMPLX_1:75
+        .=1 by A27,XCMPLX_1:60;
+        Sum 1LK=1/1Lv*Sum LK by RLVECT_3:2;
+        then 1Lv*Sum 1LK=(1Lv*(1/1Lv))*Sum LK by RLVECT_1:def 10
+,def 11
+        .=Sum LK by A38,RLVECT_1:def 11;
+        then A39: 1Lv*Sum 1LK+L.v*v=Sum L-L.v*v+L.v*v by A32,RLVECT_3:4
+        .=Sum L by RLVECT_4:1;
+        B\/{v}=B by A7,A25,ZFMISC_1:46;
+        then Carrier LK c=B\{v} by A7,A34,A30,RLVECT_2:80,ZFMISC_1:40;
+        then B\{v}=Carrier LK by A35,XBOOLE_0:def 10;
+        then A40: Carrier 1LK=B\{v} by A27,RLVECT_2:65;
+        then A41: 1LK is Linear_Combination of B\{v} by RLVECT_2:def 8;
+        then consider F be FinSequence of REAL,
+                      G be FinSequence of V such that
+        A42: (Sum 1LK|--If).x=Sum F and
+        A43: len G=len F and
+        A44: G is one-to-one and
+        A45: rng G=Carrier 1LK and
+        A46: for n st n in dom F holds F.n=1LK.(G.n)*(G.n|--If).x
+          by A2,A29,A38,A31,A33,A40;
+        Sum 1LK in Affin If by A2,A29,A38,A31,A33,A40,A41;
+        then A47: Sum L|--If=1Lv*(Sum 1LK|--If)+L.v*(v|--If)
+          by A5,A7,A25,A39,RLAFFIN1:70;
+        take F1=(1Lv*F)^<*L.v*(v|--If).x*>,G1=G^<*v*>;
+        thus Sum F1=Sum(1Lv*F)+L.v*(v|--If).x by RVSUM_1:104
+        .=1Lv*(Sum 1LK|--If).x+L.v*(v|--If).x by A42,RVSUM_1:117
+        .=(1Lv*(Sum 1LK|--If)).x+L.v*(v|--If).x by RLVECT_2:def 13
+        .=(1Lv*(Sum 1LK|--If)).x+(L.v*(v|--If)).x by RLVECT_2:def 13
+        .=(Sum L|--If).x by A47,RLVECT_2:def 12;
+        reconsider f=F as Element of len F-tuples_on REAL by FINSEQ_2:110;
+        A48: len F=len(1Lv*f) by FINSEQ_1:def 18;
+        then A49: len F1=len F+1 by FINSEQ_2:19;
+        hence len F1=len G1 by A43,FINSEQ_2:19;
+        A50: rng<*v*>={v} by FINSEQ_1:55;
+        then <*v*> is one-to-one & rng G misses rng<*v*>
+          by A40,A45,FINSEQ_3:102,XBOOLE_1:79;
+        hence G1 is one-to-one by A44,FINSEQ_3:98;
+        thus rng G1=B\{v}\/{v} by A40,A45,A50,FINSEQ_1:44
+        .=Carrier L by A7,A25,ZFMISC_1:140;
+        let n;
+        assume A51: n in dom F1;
+        then A52: n<=len F1 by FINSEQ_3:27;
+        per cases by A49,A51,A52,FINSEQ_3:27,NAT_1:8;
+        suppose A53: 1<=n & n<=len F;
+          then n in dom F by FINSEQ_3:27;
+          then A54: (1Lv*f).n=1Lv*f.n & F.n=1LK.(G.n)*(G.n|--If).x
+            by A46,RVSUM_1:67;
+          A55: n in dom G by A43,A53,FINSEQ_3:27;
+          then A56: G1.n=G.n by FINSEQ_1:def 7;
+          A57: G.n in B\{v} by A40,A45,A55,FUNCT_1:def 5;
+          then not G.n in {v} by XBOOLE_0:def 5;
+          then K.(G.n)=0 by A34,A57;
+          then LK.(G.n)=L.(G.n)-0 by A57,RLVECT_2:79;
+          then 1LK.(G.n)=(1/1Lv)*(L.(G.n)) by A57,RLVECT_2:def 13;
+          then 1Lv*1LK.(G1.n)=1Lv*(1/1Lv)*(L.(G.n)) by A56;
+          then A58: 1Lv*1LK.(G1.n)=L.(G.n) by A38;
+          n in dom(1Lv*F) by A48,A53,FINSEQ_3:27;
+          hence thesis by A54,A56,A58,FINSEQ_1:def 7;
+        end;
+        suppose A59: n=len F+1;
+          then G1.n=v by A43,FINSEQ_1:59;
+          hence thesis by A48,A59,FINSEQ_1:59;
+        end;
+      end;
+    end;
+    let L be Linear_Combination of Af such that
+    A60: Af c=conv If and
+    A61: sum L=1;
+    set C=Carrier L;
+    C c=Af by RLVECT_2:def 8;
+    then A62: C c=conv If by A60,XBOOLE_1:1;
+    reconsider L1=L as Linear_Combination of C by RLVECT_2:def 8;
+    A63: P[0 qua Nat]
+    proof
+      let B be finite Subset of V such that
+      A64: card B=0 and
+      B c=conv If;
+      let L be Linear_Combination of B such that
+      Carrier L=B and
+      A65: sum L=1;
+      B={}the carrier of V by A64;
+      then L=ZeroLC(V) by RLVECT_2:35;
+      hence thesis by A65,RLAFFIN1:31;
+    end;
+    for m be Nat holds P[m] from NAT_1:sch 2(A63,A1);
+    then sum L=sum L1 & P[card C];
+    hence thesis by A61,A62;
+  end;
+
+theorem
+  for Aff be Subset of V st Aff is Affine & conv A /\ conv B c= Aff &
+                            conv(A\{v}) c= Aff & not v in Aff
+    holds conv (A\{v}) /\ conv B = conv A /\ conv B
+  proof
+    let Aff be Subset of V;
+    assume that
+    A1: Aff is Affine and
+    A2: conv A/\conv B c=Aff and
+    A3: conv(A\{v})c=Aff and
+    A4: not v in Aff;
+    conv(A\{v})c=conv A by RLTOPSP1:21,XBOOLE_1:36;
+    hence conv(A\{v})/\conv B c=conv A/\conv B by XBOOLE_1:26;
+    let x;
+    assume A5: x in conv A/\conv B;
+    then reconsider A1=A as non empty Subset of V by XBOOLE_0:def 4;
+    A6: x in Aff by A2,A5;
+    conv A={Sum(L) where L is Convex_Combination of A1:L in ConvexComb(V)} &
+      x in conv A by A5,CONVEX3:5,XBOOLE_0:def 4;
+    then consider L be Convex_Combination of A1 such that
+    A7: x=Sum L and
+    L in ConvexComb(V);
+    set Lv=L.v,1Lv=1-L.v;
+    A8: Carrier L c=A by RLVECT_2:def 8;
+    A9: x in conv B by A5,XBOOLE_0:def 4;
+    per cases;
+    suppose Lv=0;
+      then not v in Carrier L by RLVECT_2:28;
+      then A10: Carrier L c=A\{v} by A8,ZFMISC_1:40;
+      then reconsider K=L as Linear_Combination of A\{v} by RLVECT_2:def 8;
+      Carrier L<>{} by CONVEX1:21;
+      then reconsider Av=A\{v} as non empty Subset of V by A10;
+      K in ConvexComb(V) by CONVEX3:def 1;
+      then Sum K in {Sum(M) where M is Convex_Combination of Av:
+        M in ConvexComb(V)};
+      then x in conv Av by A7,CONVEX3:5;
+      hence thesis by A9,XBOOLE_0:def 4;
+    end;
+    suppose Lv<>0;
+      then ex p be Element of V st p in conv(A\{v}) & Sum L=L.v*v+(1-L.v)*p &
+        1/L.v*(Sum L)+(1-1/L.v)*p=v by A4,A6,A7,Th1;
+      hence thesis by A1,A2,A3,A4,A5,A7,RUSUB_4:def 5;
+    end;
+  end;
+
+begin :: The Geometric Interior
+
+definition
+  let V be non empty RLSStruct;
+  let A be Subset of V;
+  func Int A -> Subset of V means :Def1:
+    x in it iff x in conv A & not ex B be Subset of V st B c< A & x in conv B;
+  existence
+  proof
+    set I={x where x is Element of V:x in conv A & not ex B be Subset of V st
+           B c< A & x in conv B};
+    now let x;
+      assume x in I;
+      then ex y be Element of V st x=y & y in conv A & not ex B be Subset of V
+        st B c<A & y in conv B;
+      hence x in the carrier of V;
+    end;
+    then reconsider I as Subset of V by TARSKI:def 3;
+    take I;
+    let x;
+    hereby assume x in I;
+      then ex y be Element of V st x=y & y in conv A &
+         not ex B be Subset of V st B c<A & y in conv B;
+      hence x in conv A & not ex B be Subset of V st B c<A & x in conv B;
+    end;
+    assume x in conv A & not ex B be Subset of V st B c<A & x in conv B;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let I1,I2 be Subset of V such that
+    A1: x in I1 iff x in conv A & not ex B be Subset of V st
+       B c<A & x in conv B and
+    A2: x in I2 iff x in conv A & not ex B be Subset of V st
+       B c<A & x in conv B;
+    now let x;
+      x in I1 iff x in conv A & not ex B be Subset of V st B c<A & x in conv B
+        by A1;
+      hence x in I1 iff x in I2 by A2;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+Lm2: for V be non empty RLSStruct for A be Subset of V holds Int A c=conv A
+  proof
+    let V be non empty RLSStruct;
+    let A be Subset of V;
+    let x;
+    assume x in Int A;
+    hence thesis by Def1;
+  end;
+
+registration
+  let V be non empty RLSStruct;
+  let A be empty Subset of V;
+  cluster Int A -> empty;
+  coherence
+  proof
+    Int A c=conv A by Lm2;
+    hence thesis;
+  end;
+end;
+
+theorem
+  for V be non empty RLSStruct for A be Subset of V holds Int A c= conv A
+   by Lm2;
+
+theorem
+  for V be vector-distributive scalar-distributive scalar-associative
+  scalar-unital(non empty RLSStruct)
+    for A be Subset of V holds Int A = A iff A is trivial
+  proof
+    let V be vector-distributive scalar-distributive scalar-associative
+    scalar-unital(non empty RLSStruct);
+    let A be Subset of V;
+    per cases;
+    suppose A is empty;
+      hence thesis;
+    end;
+    suppose A1: A is non empty;
+      hereby assume A2: Int A=A;
+        now let x,y;
+          assume that
+          A3: x in A and
+          A4: y in A;
+          A\{x}c=A & A\{x}<>A by A3,XBOOLE_1:36,ZFMISC_1:64;
+          then A\{x}c=conv(A\{x}) & A\{x}c<A by RLAFFIN1:2,XBOOLE_0:def 8;
+          then not y in A\{x} by A2,A4,Def1;
+          hence x=y by A4,ZFMISC_1:64;
+        end;
+        hence A is trivial by ZFMISC_1:def 10;
+      end;
+      assume A is trivial;
+      then consider v be Element of V such that
+      A5: A={v} by A1,BORSUK_4:2;
+      A6: not ex B be Subset of V st B c<A & v in conv B
+      proof
+        let B be Subset of V;
+        assume A7: B c<A;
+        then B c=A by XBOOLE_0:def 8;
+        then B is empty by A5,A7,ZFMISC_1:39;
+        hence thesis;
+      end;
+      A8: conv A=A by A5,RLAFFIN1:1;
+      then A9: Int A c=A by Lm2;
+      v in A by A5,TARSKI:def 1;
+      then v in Int A by A6,A8,Def1;
+      hence thesis by A5,A9,ZFMISC_1:39;
+    end;
+  end;
+
+theorem
+  A c< B implies conv A misses Int B
+  proof
+    assume A1: A c<B;
+    assume conv A meets Int B;
+    then ex x st x in conv A & x in Int B by XBOOLE_0:3;
+    hence contradiction by A1,Def1;
+  end;
+
+theorem Th8:
+  conv A = union {Int B : B c= A}
+  proof
+    defpred P[Nat] means
+    for S be finite Subset of V st card S<=$1 holds conv S=union{Int B:B c=S};
+    set I={Int B:B c=A};
+    A1: for A be Subset of V holds union{Int B:B c=A}c=conv A
+    proof
+      let A be Subset of V;
+      set I={Int B:B c=A};
+      let y;
+      assume y in union I;
+      then consider x such that
+      A2: y in x and
+      A3: x in I by TARSKI:def 4;
+      consider B be Subset of V such that
+      A4: x=Int B and
+      A5: B c=A by A3;
+      A6: conv B c=conv A by A5,RLAFFIN1:3;
+      y in conv B by A2,A4,Def1;
+      hence thesis by A6;
+    end;
+    A7: for n be Nat st P[n] holds P[n+1]
+    proof
+      let n be Nat such that
+      A8: P[n];
+      let S be finite Subset of V such that
+      A9: card S<=n+1;
+      per cases by A9,NAT_1:8;
+      suppose card S<=n;
+        hence thesis by A8;
+      end;
+      suppose A10: card S=n+1;
+        set I={Int B:B c=S};
+        A11: conv S c=union I
+        proof
+          let x such that
+          A12: x in conv S;
+          per cases;
+          suppose for A be Subset of V st A c<S holds not x in conv A;
+            then Int S in I & x in Int S by A12,Def1;
+            hence thesis by TARSKI:def 4;
+          end;
+          suppose ex A be Subset of V st A c<S & x in conv A;
+            then consider A be Subset of V such that
+            A13: A c<S and
+            A14: x in conv A;
+            A15: A c=S by A13,XBOOLE_0:def 8;
+            then reconsider A as finite Subset of V;
+            card A<n+1 by A10,A13,CARD_2:67;
+            then card A<=n by NAT_1:13;
+            then conv A=union{Int B:B c=A} by A8;
+            then consider Y be set such that
+            A16: x in Y and
+            A17: Y in {Int B:B c=A} by A14,TARSKI:def 4;
+            consider B be Subset of V such that
+            A18: Y=Int B and
+            A19: B c=A by A17;
+            B c=S by A15,A19,XBOOLE_1:1;
+            then Int B in I;
+            hence thesis by A16,A18,TARSKI:def 4;
+          end;
+        end;
+        union I c=conv S by A1;
+        hence thesis by A11,XBOOLE_0:def 10;
+      end;
+    end;
+    A20: P[0 qua Nat]
+    proof
+      let A be finite Subset of V;
+      set I={Int B:B c=A};
+      assume card A<=0;
+      then A is empty;
+      then A21: conv A is empty;
+      union I c=conv A by A1;
+      hence thesis by A21;
+    end;
+    A22: for n be Nat holds P[n] from NAT_1:sch 2(A20,A7);
+    hereby let x such that
+      A23: x in conv A;
+      reconsider A1=A as non empty Subset of V by A23;
+      conv A={Sum L where L is Convex_Combination of A1:L in ConvexComb(V)}
+        by CONVEX3:5;
+      then consider L be Convex_Combination of A1 such that
+      A24: x=Sum L & L in ConvexComb(V) by A23;
+      reconsider C=Carrier L as non empty finite Subset of V by CONVEX1:21;
+      reconsider K=L as Linear_Combination of C by RLVECT_2:def 8;
+      K is convex;
+      then x in {Sum M where M is Convex_Combination of C:M in ConvexComb(V)}
+        by A24;
+      then A25: x in conv C by CONVEX3:5;
+      P[card C] by A22;
+      then x in union{Int B:B c=C} by A25;
+      then consider y such that
+      A26: x in y and
+      A27: y in {Int B:B c=C} by TARSKI:def 4;
+      consider B be Subset of V such that
+      A28: y=Int B and
+      A29: B c=C by A27;
+      C c=A by RLVECT_2:def 8;
+      then B c=A by A29,XBOOLE_1:1;
+      then Int B in I;
+      hence x in union I by A26,A28,TARSKI:def 4;
+    end;
+    thus thesis by A1;
+  end;
+
+theorem
+  conv A = Int A \/ union{conv (A\{v}) : v in A}
+  proof
+    set I={conv(A\{v}):v in A};
+    hereby let x;
+      assume x in conv A;
+      then x in union{Int B:B c=A} by Th8;
+      then consider y such that
+      A1: x in y and
+      A2: y in {Int B:B c=A} by TARSKI:def 4;
+      consider B be Subset of V such that
+      A3: y=Int B and
+      A4: B c=A by A2;
+      per cases;
+      suppose A=B;
+        hence x in Int A\/union I by A1,A3,XBOOLE_0:def 3;
+      end;
+      suppose B<>A;
+        then B c<A by A4,XBOOLE_0:def 8;
+        then consider y such that
+        A5: y in A and
+        A6: not y in B by XBOOLE_0:6;
+        reconsider y as Element of V by A5;
+        A7: conv(A\{y}) in I by A5;
+        B c=A\{y} by A4,A6,ZFMISC_1:40;
+        then A8: conv B c=conv(A\{y}) by RLAFFIN1:3;
+        x in conv B by A1,A3,Def1;
+        then x in union I by A7,A8,TARSKI:def 4;
+        hence x in Int A\/union I by XBOOLE_0:def 3;
+      end;
+    end;
+    let x;
+    A9: now assume x in union I;
+          then consider y such that
+          A10: x in y and
+          A11: y in I by TARSKI:def 4;
+          consider v such that
+          A12: y=conv(A\{v}) and
+          v in A by A11;
+          conv(A\{v})c=conv A by RLAFFIN1:3,XBOOLE_1:36;
+          hence x in conv A by A10,A12;
+    end;
+    assume x in Int A\/union I;
+    then A13: x in Int A or x in union I by XBOOLE_0:def 3;
+    Int A c=conv A by Lm2;
+    hence thesis by A9,A13;
+  end;
+
+theorem Th10:
+  x in Int A implies ex L be Linear_Combination of A st L is convex & x = Sum L
+  proof
+    assume A1: x in Int A;
+    then reconsider A1=A as non empty Subset of V;
+    x in conv A by A1,Def1;
+    then x in {Sum L where L is Convex_Combination of A1:L in ConvexComb(V)}
+      by CONVEX3:5;
+    then ex L be Convex_Combination of A1 st x=Sum L & L in ConvexComb(V);
+    hence thesis;
+  end;
+
+theorem Th11:
+  for L be Linear_Combination of A st L is convex & Sum L in Int A
+    holds Carrier L = A
+  proof
+    let L be Linear_Combination of A such that
+    A1: L is convex and
+    A2: Sum L in Int A;
+    reconsider C=Carrier L as non empty Subset of V by A1,CONVEX1:21;
+    reconsider LC=L as Linear_Combination of C by RLVECT_2:def 8;
+    LC in ConvexComb(V) by A1,CONVEX3:def 1;
+    then Sum LC in {Sum M where M is Convex_Combination of C:
+      M in ConvexComb(V)} by A1;
+    then A3: Sum L in conv C by CONVEX3:5;
+    A4: Carrier L c=A by RLVECT_2:def 8;
+    assume Carrier L<>A;
+    then Carrier L c<A by A4,XBOOLE_0:def 8;
+    hence contradiction by A2,A3,Def1;
+  end;
+
+theorem Th12:
+  for L be Linear_Combination of I st L is convex & Carrier L = I holds
+    Sum L in Int I
+  proof
+    let L be Linear_Combination of I such that
+    A1: L is convex and
+    A2: Carrier L=I;
+    reconsider I1=I as non empty Subset of V by A1,A2,CONVEX1:21;
+    reconsider K=L as Linear_Combination of I1;
+    K in ConvexComb(V) by A1,CONVEX3:def 1;
+    then Sum K in {Sum M where M is Convex_Combination of I1:
+      M in ConvexComb(V)} by A1;
+    then A3: Sum K in conv I1 by CONVEX3:5;
+    A4: conv I1 c=Affin I1 & sum L=1 by A1,RLAFFIN1:62,65;
+    for A be Subset of V st A c<I holds not Sum K in conv A
+    proof
+      let A be Subset of V such that
+      A5: A c<I;
+      assume A6: Sum K in conv A;
+      conv A c=Affin A & A c=I by A5,RLAFFIN1:65,XBOOLE_0:def 8;
+      then (Sum K)|--A=(Sum K)|--I by A6,RLAFFIN1:77
+      .=K by A3,A4,RLAFFIN1:def 7;
+      then I c=A by A2,RLVECT_2:def 8;
+      hence thesis by A5,XBOOLE_0:def 8;
+    end;
+    hence thesis by A3,Def1;
+  end;
+
+theorem
+  Int A is non empty implies A is finite
+  proof
+    assume Int A is non empty;
+    then consider x such that
+    A1: x in Int A by XBOOLE_0:def 1;
+    consider L be Linear_Combination of A such that
+   A2: L is convex & x=Sum L by A1,Th10;
+   Carrier L=A by A1,A2,Th11;
+   hence A is finite;
+ end;
+
+theorem
+  v in I & u in Int I & p in conv(I\{v}) & r*v + (1-r)*p = u implies
+    p in Int (I\{v})
+  proof
+    assume that
+    A1: v in I and
+    A2: u in Int I and
+    A3: p in conv(I\{v}) and
+    A4: r*v+(1-r)*p=u;
+    A5: conv I c=Affin I by RLAFFIN1:65;
+    I c=conv I by RLAFFIN1:2;
+    then A6: v in conv I by A1;
+    conv(I\{v})c=conv I by RLAFFIN1:3,XBOOLE_1:36;
+    then p in conv I by A3;
+    then A7: u|--I=(1-r)*(p|--I)+r*(v|--I) by A4,A5,A6,RLAFFIN1:70;
+    A8: Carrier(v|--{v})c={v} by RLVECT_2:def 8;
+    A9: u in conv I by A2,Def1;
+    then Sum(u|--I)=u by A5,RLAFFIN1:def 7;
+    then A10: Carrier(u|--I)=I by A2,A9,Th11,RLAFFIN1:71;
+    A11: {v}c=Affin{v} & v in {v} by RLAFFIN1:49,TARSKI:def 1;
+    {v}c=I by A1,ZFMISC_1:37;
+    then A12: v|--I=v|--{v} by A11,RLAFFIN1:77;
+    A13: conv(I\{v})c=Affin(I\{v}) by RLAFFIN1:65;
+    then A14: p|--I=p|--(I\{v}) by A3,RLAFFIN1:77,XBOOLE_1:36;
+    A15: I\{v}c=Carrier(p|--(I\{v}))
+    proof
+      let x;
+      assume A16: x in I\{v};
+      then reconsider w=x as Element of V;
+      A17: w in I by A16,ZFMISC_1:64;
+      w<>v by A16,ZFMISC_1:64;
+      then not w in Carrier(v|--{v}) by A8,TARSKI:def 1;
+      then A18: (v|--I).w=0 by A12;
+      (u|--I).w=((1-r)*(p|--I)).w+(r*(v|--I)).w by A7,RLVECT_2:def 12
+      .=((1-r)*(p|--I)).w+r*((v|--I).w) by RLVECT_2:def 13
+      .=(1-r)*((p|--I).w) by A18,RLVECT_2:def 13;
+      then (p|--I).w<>0 by A10,A17,RLVECT_2:28;
+      hence thesis by A14;
+    end;
+    Carrier(p|--(I\{v}))c=I\{v} by RLVECT_2:def 8;
+    then A19: I\{v}=Carrier(p|--(I\{v})) by A15,XBOOLE_0:def 10;
+    A20: I\{v} is affinely-independent by RLAFFIN1:43,XBOOLE_1:36;
+    then Sum(p|--(I\{v}))=p by A3,A13,RLAFFIN1:def 7;
+    hence thesis by A3,A19,A20,Th12,RLAFFIN1:71;
+  end;
+
+begin :: The Center of Mass
+
+definition let V;
+  func center_of_mass V -> Function of BOOL the carrier of V,the carrier of V
+    means :Def2:
+   (for A be non empty finite Subset of V holds it.A = 1/card A * Sum(A)) &
+    for A st A is infinite holds it.A = 0.V;
+  existence
+  proof
+    defpred P[set,set] means
+    (for A be non empty finite Subset of V st A=$1 holds$2=1/card A*Sum(A)) &
+    for A be Subset of V st A is infinite & A=$1 holds$2=0.V;
+    set cV=the carrier of V;
+    A1: for x st x in BOOL cV ex y st y in cV & P[x,y]
+    proof
+      let x;
+      assume x in BOOL cV;
+      then reconsider A=x as Subset of V;
+      per cases;
+      suppose A is finite;
+        then reconsider A1=A as finite Subset of V;
+        take 1/card A1*Sum A1;
+        thus thesis;
+      end;
+      suppose A2: A is infinite;
+        take 0.V;
+        thus thesis by A2;
+      end;
+    end;
+    consider f be Function of BOOL cV,cV such that
+    A3: for x st x in BOOL cV holds P[x,f.x] from FUNCT_2:sch 1(A1);
+    take f;
+    hereby let A be non empty finite Subset of V;
+      A in BOOL cV by ZFMISC_1:64;
+      hence f.A=1/card A*Sum(A) by A3;
+    end;
+    let A be Subset of V;
+    assume A4: A is infinite;
+    then A in bool cV\{{}} by ZFMISC_1:64;
+    hence thesis by A3,A4;
+  end;
+  uniqueness
+  proof
+    set cV=the carrier of V;
+    let F1,F2 be Function of BOOL cV,cV such that
+    A5: for A be non empty finite Subset of V holds F1.A=1/card A*Sum(A) and
+    A6: for A be Subset of V st A is infinite holds F1.A=0.V and
+    A7: for A be non empty finite Subset of V holds F2.A=1/card A*Sum(A) and
+    A8: for A be Subset of V st A is infinite holds F2.A=0.V;
+    for x st x in BOOL cV holds F1.x=F2.x
+    proof
+      let x;
+      assume x in BOOL cV;
+      then reconsider A=x as non empty Subset of V by ZFMISC_1:64;
+      per cases;
+      suppose A is finite;
+        then reconsider A1=A as non empty finite Subset of V;
+        thus F1.x=1/card A1*Sum(A1) by A5
+        .=F2.x by A7;
+      end;
+      suppose A9: A is infinite;
+        hence F1.x=0.V by A6
+        .=F2.x by A8,A9;
+      end;
+    end;
+    hence thesis by FUNCT_2:18;
+  end;
+end;
+
+theorem Th15:
+  ex L be Linear_Combination of Af st Sum L = r*Sum Af & sum L = r * card Af &
+                                      L = (ZeroLC V) +* (Af-->r)
+  proof
+    set cV=the carrier of V;
+    set Ar=ZeroLC(V)+*(Af-->r);
+    A1: dom(Af-->r)=Af by FUNCOP_1:19;
+    dom ZeroLC(V)=cV by FUNCT_2:def 1;
+    then dom Ar=cV\/Af by A1,FUNCT_4:def 1;
+    then rng Ar c=rng(Af-->r)\/rng ZeroLC(V) & dom Ar=cV
+      by FUNCT_4:18,XBOOLE_1:12;
+    then Ar is Function of the carrier of V,REAL by FUNCT_2:4;
+    then reconsider Ar as Element of Funcs(the carrier of V,REAL)by FUNCT_2:11;
+    now take Af;
+      let v;
+      assume not v in Af;
+      hence Ar.v=ZeroLC(V).v by A1,FUNCT_4:12
+      .=0 by RLVECT_2:30;
+    end;
+    then reconsider Ar as Linear_Combination of V by RLVECT_2:def 5;
+    Carrier Ar c=Af
+    proof
+      let x be set;
+      assume A2: x in Carrier Ar;
+      then reconsider v=x as Element of V;
+      assume not x in Af;
+      then Ar.x=ZeroLC(V).v by A1,FUNCT_4:12
+      .=0 by RLVECT_2:30;
+      hence thesis by A2,RLVECT_2:28;
+    end;
+    then reconsider Ar=(ZeroLC V)+*(Af-->r) as Linear_Combination of Af
+      by RLVECT_2:def 8;
+    A3: Carrier Ar c=Af by RLVECT_2:def 8;
+    per cases;
+    suppose A4: r=0;
+      Carrier Ar={}
+      proof
+        assume Carrier Ar<>{};
+        then consider x such that
+        A5: x in Carrier Ar by XBOOLE_0:def 1;
+        Ar.x=(Af-->r).x & (Af-->r).x=0 by A1,A3,A4,A5,FUNCOP_1:13,FUNCT_4:14;
+        hence contradiction by A5,RLVECT_2:28;
+      end;
+      then Ar=ZeroLC(V) by RLVECT_2:def 7;
+      then A6: Sum Ar=0.V & sum Ar=0 by RLAFFIN1:31,RLVECT_2:48;
+      r*Sum Af=0.V by A4,RLVECT_1:23;
+      hence thesis by A4,A6;
+    end;
+    suppose A7: r<>0;
+      consider F be FinSequence of V such that
+      A8: F is one-to-one and
+      A9: rng F=Carrier(Ar) and
+      A10: Sum Ar=Sum(Ar(#)F) by RLVECT_2:def 10;
+      Af c=Carrier Ar
+      proof
+        let x;
+        assume A11: x in Af;
+        then Ar.x=(Af-->r).x by A1,FUNCT_4:14;
+        hence thesis by A7,A11;
+      end;
+      then A12: Af=Carrier Ar by A3,XBOOLE_0:def 10;
+      then dom F,Af are_equipotent by A8,A9,WELLORD2:def 4;
+      then A13: card Af=card dom F by CARD_1:21
+      .=card Seg len F by FINSEQ_1:def 3
+      .=len F by FINSEQ_1:78;
+      set L=len F|->r;
+      A14: len(Ar*F)=len F by FINSEQ_2:37;
+      then reconsider ArF=Ar*F as Element of len F-tuples_on REAL
+        by FINSEQ_2:110;
+      now let i be Nat;
+        assume A15: i in Seg len F;
+        then i in dom F by FINSEQ_1:def 3;
+        then A16: F.i in rng F by FUNCT_1:def 5;
+        then A17: (Af-->r).(F.i)=r by A3,A9,FUNCOP_1:13;
+        i in dom ArF by A14,A15,FINSEQ_1:def 3;
+        then ArF.i=Ar.(F.i) by FUNCT_1:22;
+        then ArF.i=(Af-->r).(F.i) by A1,A3,A9,A16,FUNCT_4:14;
+        hence ArF.i=L.i by A15,A17,FINSEQ_2:71;
+      end;
+      then ArF=L by FINSEQ_2:139;
+      then A18: sum Ar=Sum L by A8,A9,RLAFFIN1:def 3
+      .=(len F)*r by RVSUM_1:110;
+      set AF=Ar(#)F;
+      A19: len AF=len F by RLVECT_2:def 9;
+      then A20: dom AF=dom F by FINSEQ_3:31;
+      now let i be Element of NAT;
+        assume A21: i in dom F;
+        then F/.i=F.i & F.i in rng F by FUNCT_1:def 5,PARTFUN1:def 8;
+        then Ar.(F/.i)=(Af-->r).(F/.i) & (Af-->r).(F/.i)=r
+          by A1,A3,A9,FUNCOP_1:13,FUNCT_4:14;
+        hence AF.i=r*F/.i by A20,A21,RLVECT_2:def 9;
+      end;
+      then Sum Ar=r*Sum F by A10,A19,RLVECT_2:5
+      .=r*Sum Af by A8,A9,A12,RLVECT_2:def 4;
+      hence thesis by A13,A18;
+    end;
+  end;
+
+theorem Th16:
+  Af is non empty implies (center_of_mass V).Af in conv Af
+  proof
+    assume Af is non empty;
+    then reconsider a=Af as non empty finite Subset of V;
+    consider L be Linear_Combination of Af such that
+    A1: Sum L=1/card a*Sum a and
+    A2: sum L=1/card a*card a and
+    A3: L=(ZeroLC V)+*(Af-->1/card a) by Th15;
+    A4: dom(Af-->1/card a)=Af by FUNCOP_1:19;
+    A5: 0<=L.v
+    proof
+      per cases;
+      suppose A6: v in Af;
+        then L.v=(Af-->1/card a).v by A3,A4,FUNCT_4:14
+        .=1/card a by A6,FUNCOP_1:13;
+        hence thesis;
+      end;
+      suppose not v in Af;
+        then L.v=(ZeroLC V).v by A3,A4,FUNCT_4:12
+        .=0 by RLVECT_2:30;
+        hence thesis;
+      end;
+    end;
+    sum L=1 by A2,XCMPLX_1:88;
+    then A7: L is convex by A5,RLAFFIN1:62;
+    then L in ConvexComb(V) by CONVEX3:def 1;
+    then Sum L in {Sum K where K is Convex_Combination of a:K in ConvexComb(V)}
+      by A7;
+    then Sum L in conv Af by CONVEX3:5;
+    hence thesis by A1,Def2;
+  end;
+
+theorem Th17:
+  union F is finite implies (center_of_mass V).:F c= conv union F
+  proof
+    set B=center_of_mass V;
+    assume A1: union F is finite;
+    let y;
+    assume y in B.:F;
+    then consider x such that
+    A2: x in dom B and
+    A3: x in F and
+    A4: B.x=y by FUNCT_1:def 12;
+    reconsider x as non empty Subset of V by A2,ZFMISC_1:64;
+    x c=union F by A3,ZFMISC_1:92;
+    then A5: y in conv x by A1,A4,Th16;
+    conv x c=conv union F by A3,RLTOPSP1:21,ZFMISC_1:92;
+    hence thesis by A5;
+  end;
+
+theorem Th18:
+  v in If implies ((center_of_mass V).If |-- If).v = 1/card If
+  proof
+    consider L be Linear_Combination of If such that
+    A1: Sum L=1/card If*Sum If & sum L=1/card If*card If and
+    A2: L=(ZeroLC V)+*(If-->1/card If) by Th15;
+    assume A3: v in If;
+    then A4: conv If c=Affin If & (center_of_mass V).If in conv If
+      by Th16,RLAFFIN1:65;
+    (center_of_mass V).If=Sum L & sum L=1 by A1,A3,Def2,XCMPLX_1:88;
+    then dom(If-->1/card If)=If & L=(center_of_mass V).If|--If
+      by A4,FUNCOP_1:19,RLAFFIN1:def 7;
+    hence ((center_of_mass V).If|--If).v=(If-->1/card If).v by A2,A3,FUNCT_4:14
+    .=1/card If by A3,FUNCOP_1:13;
+  end;
+
+theorem Th19:
+  (center_of_mass V).If in If iff card If=1
+  proof
+    set B=center_of_mass V;
+    hereby assume A1: B.If in If;
+      then reconsider BA=B.If as Element of V;
+      B.If in conv If by A1,Th16;
+      then 1=(BA|--If).BA by A1,RLAFFIN1:72
+      .=1/card If by A1,Th18;
+      hence 1=card If by XCMPLX_1:58;
+    end;
+    assume A2: card If=1;
+    then consider x such that
+    A3: {x}=If by CARD_2:60;
+    x in If by A3,TARSKI:def 1;
+    then reconsider x as Element of V;
+    (center_of_mass V).If=1/card If*Sum If by A3,Def2
+    .=1/1*x by A2,A3,RLVECT_2:15
+    .=x by RLVECT_1:def 11;
+    hence thesis by A3,TARSKI:def 1;
+  end;
+
+theorem Th20:
+  If is non empty implies (center_of_mass V).If in Int If
+  proof
+    set BA=(center_of_mass V).If|--If;
+    A1: If c=Carrier BA
+    proof
+      let x;
+      assume A2: x in If;
+      then BA.x=1/card If by Th18;
+      hence thesis by A2;
+    end;
+    assume If is non empty;
+    then A3: (center_of_mass V).If in conv If by Th16;
+    Carrier BA c=If by RLVECT_2:def 8;
+    then Carrier BA=If & BA is convex
+      by A1,A3,RLAFFIN1:71,XBOOLE_0:def 10;
+    then conv If c=Affin If & Sum BA in Int If by Th12,RLAFFIN1:65;
+    hence thesis by A3,RLAFFIN1:def 7;
+  end;
+
+theorem
+  A c= If & (center_of_mass V).If in Affin A implies If = A
+  proof
+    set B=center_of_mass V;
+    assume that
+    A1: A c=If and
+    A2: B.If in Affin A;
+    A3: B.If|--If=B.If|--A by A1,A2,RLAFFIN1:77;
+    reconsider i=If as finite set;
+    assume If<>A;
+    then not If c=A by A1,XBOOLE_0:def 10;
+    then consider x such that
+    A4: x in If and
+    A5: not x in A by TARSKI:def 3;
+    reconsider x as Element of V by A4;
+    A6: (B.If|--If).x=1/(card i) by A4,Th18;
+    Carrier(B.If|--A)c=A by RLVECT_2:def 8;
+    then not x in Carrier(B.If|--A) by A5;
+    hence contradiction by A3,A4,A6;
+  end;
+
+theorem Th22:
+  v in Af & Af\{v} is non empty implies
+   (center_of_mass V).Af =
+        (1-1/card Af) * (center_of_mass V)/.(Af\{v}) + 1/card Af*v
+  proof
+    set Av=Af\{v};
+    assume that
+    A1: v in Af and
+    A2: Av is non empty;
+    consider L3 be Linear_Combination of{v} such that
+    A3: L3.v=1/card Af from RLVECT_4:sch 2;
+    consider L1 be Linear_Combination of Av such that
+    A4: Sum L1=1/card Av*Sum Av and
+    sum L1=1/card Av*card Av and
+    A5: L1=(ZeroLC V)+*(Av-->1/card Av) by Th15;
+    consider L2 be Linear_Combination of Af such that
+    A6: Sum L2=1/card Af*Sum Af and
+    sum L2=1/card Af*card Af and
+    A7: L2=(ZeroLC V)+*(Af-->1/card Af) by Th15;
+    A8: Sum L1=(center_of_mass V).Av by A2,A4,Def2;
+    for u be Element of V holds L2.u=((1-1/card Af)*L1+L3).u
+    proof
+      let u be Element of V;
+      A9: ((1-1/card Af)*L1+L3).u=((1-1/card Af)*L1).u+L3.u &
+        ((1-1/card Af)*L1).u=(1-1/card Af)*(L1.u) by RLVECT_2:def 12,def 13;
+      A10: ZeroLC(V).u=0 by RLVECT_2:30;
+      A11: Carrier L3 c={v} by RLVECT_2:def 8;
+      A12: dom(Af-->1/card Af)=Af by FUNCOP_1:19;
+      A13: dom(Av-->1/card Av)=Av by FUNCOP_1:19;
+      per cases;
+      suppose A14: not u in Af;
+        then not u in Carrier L3 by A1,A11,TARSKI:def 1;
+        then A15: L3.u=0;
+        not u in Av by A14,ZFMISC_1:64;
+        then L1.u=0 by A5,A10,A13,FUNCT_4:12;
+        hence thesis by A7,A9,A10,A12,A14,A15,FUNCT_4:12;
+      end;
+      suppose A16: v=u;
+        then not u in Av by ZFMISC_1:64;
+        then A17: L1.u=0 by A5,A10,A13,FUNCT_4:12;
+        L2.u=(Af-->1/card Af).v by A1,A7,A12,A16,FUNCT_4:14;
+        hence thesis by A1,A3,A9,A16,A17,FUNCOP_1:13;
+      end;
+      suppose A18: u in Af & u<>v;
+        then L2.u=(Af-->1/card Af).u by A7,A12,FUNCT_4:14;
+        then A19: L2.u=1/card Af by A18,FUNCOP_1:13;
+        not u in Carrier L3 by A11,A18,TARSKI:def 1;
+        then A20: L3.u=0;
+        (not v in Av) & Av\/{v}=Af by A1,ZFMISC_1:64,140;
+        then A21: card Af=card Av+1 by CARD_2:54;
+        1-1/card Af=card Af/card Af-1/card Af by A1,XCMPLX_1:60
+        .=(card Af-1)/card Af by XCMPLX_1:121
+        .=card Av/card Af by A21;
+        then A22: (1-1/card Af)*(1/card Av) = card Av/card Af/card Av
+             by XCMPLX_1:100
+          .=card Av/card Av/card Af by XCMPLX_1:48
+          .=1/card Af by A2,XCMPLX_1:60;
+        A23: u in Av by A18,ZFMISC_1:64;
+        then L1.u=(Av-->1/card Av).u by A5,A13,FUNCT_4:14;
+        hence thesis by A9,A19,A20,A22,A23,FUNCOP_1:13;
+      end;
+    end;
+    then A24: L2=(1-1/card Af)*L1+L3 by RLVECT_2:def 11;
+    dom(center_of_mass V)=BOOL the carrier of V by FUNCT_2:def 1;
+    then A25: Av in dom(center_of_mass V) by A2,ZFMISC_1:64;
+    Sum L2=(center_of_mass V).Af by A1,A6,Def2;
+    hence (center_of_mass V).Af=Sum((1-1/card Af)*L1)+Sum L3 by A24,RLVECT_3:1
+    .=(1-1/card Af)*Sum L1+Sum L3 by RLVECT_3:2
+    .=(1-1/card Af)*Sum L1+1/card Af*v by A3,RLVECT_2:50
+    .=(1-1/card Af)*(center_of_mass V)/.Av+1/card Af*v
+        by A8,A25,PARTFUN1:def 8;
+  end;
+
+theorem
+  conv A c=conv If & If is non empty & conv A misses Int If implies
+    ex B be Subset of V st B c< If & conv A c= conv B
+  proof
+    assume that
+    A1: conv A c=conv If and
+    A2: If is non empty and
+    A3: conv A misses Int If;
+    reconsider If as non empty finite affinely-independent Subset of V by A2;
+    per cases;
+    suppose A is empty;
+      then A c<If by XBOOLE_1:61;
+      hence thesis;
+    end;
+    suppose A is non empty;
+      set YY={B where B is Subset of V:B c=If & ex x st x in conv A &
+        x in Int B};
+      YY c=bool the carrier of V
+      proof
+        let x;
+        assume x in YY;
+        then ex B be Subset of V st B=x & B c=If &
+          ex y st y in conv A & y in Int B;
+        hence thesis;
+      end;
+      then reconsider YY as Subset-Family of V;
+      consider y;
+      take U=union YY;
+      A4: conv A c=conv U
+      proof
+        let v be set;
+        assume A5: v in conv A;
+        then v in conv If by A1;
+        then v in union{Int B where B is Subset of V:B c=If} by Th8;
+        then consider IB be set such that
+        A6: v in IB and
+        A7: IB in {Int B where B is Subset of V:B c=If} by TARSKI:def 4;
+        consider B be Subset of V such that
+        A8: IB=Int B and
+        A9: B c=If by A7;
+        Int B c=conv B by Lm2;
+        then A10: v in conv B by A6,A8;
+        B in YY by A5,A6,A8,A9;
+        then conv B c=conv U by RLAFFIN1:3,ZFMISC_1:92;
+        hence thesis by A10;
+      end;
+      A11: U c=If
+      proof
+        let x;
+        assume x in U;
+        then consider b be set such that
+        A12: x in b and
+        A13: b in YY by TARSKI:def 4;
+        ex B be Subset of V st b=B & B c=If & ex y st y in conv A &
+          y in Int B by A13;
+        hence thesis by A12;
+      end;
+      U<>If
+      proof
+        defpred P[set,set] means
+          for B be Subset of V st B=$2 holds$1 in B & ex x st x in conv A &
+            x in Int B;
+        assume A14: U=If;
+        A15: for x st x in If ex y st y in bool If & P[x,y]
+        proof
+          let x;
+          assume x in If;
+          then consider b be set such that
+          A16: x in b and
+          A17: b in YY by A14,TARSKI:def 4;
+          consider B be Subset of V such that
+          A18: b=B & B c=If & ex y st y in conv A & y in Int B by A17;
+          take B;
+          thus thesis by A16,A18;
+        end;
+        consider p be Function of If,bool If such that
+        A19: for x st x in If holds P[x,p.x] from FUNCT_2:sch 1(A15);
+        defpred Q[set,set] means
+        for B be Subset of V st B=p.$1 holds$2 in conv A & $2 in Int B;
+        A20: dom p=If by FUNCT_2:def 1;
+        A21: for x st x in If ex y st y in the carrier of V & Q[x,y]
+        proof
+          let x;
+          assume A22: x in If;
+          then p.x in rng p by A20,FUNCT_1:def 5;
+          then reconsider px=p.x as Subset of V by XBOOLE_1:1;
+          consider y such that
+          A23: y in conv A & y in Int px by A19,A22;
+          take y;
+          thus thesis by A23;
+        end;
+        consider q be Function of If,V such that
+        A24: for x st x in If holds Q[x,q.x] from FUNCT_2:sch 1(A21);
+        reconsider R=rng q as non empty finite Subset of V;
+        A25: R c=conv A
+        proof
+          let y;
+          assume y in R;
+          then consider x such that
+          A26: x in dom q and
+          A27: y=q.x by FUNCT_1:def 5;
+          p.x in rng p by A20,A26,FUNCT_1:def 5;
+          then reconsider px=p.x as Subset of V by XBOOLE_1:1;
+          px=p.x;
+          hence thesis by A24,A26,A27;
+        end;
+        then A28: R c=conv U by A4,XBOOLE_1:1;
+        A29: conv R c=conv A by A25,CONVEX1:30;
+        A30: dom q=If by FUNCT_2:def 1;
+        A31: 1/card R*card R=card R/card R by XCMPLX_1:100
+        .=1 by XCMPLX_1:60;
+        consider L be Linear_Combination of R such that
+        A32: Sum L=1/card R*Sum R and
+        A33: sum L=1/card R*card R and
+        A34: L=(ZeroLC V)+*(R-->1/card R) by Th15;
+        set SL=Sum L;
+        set SLIf=SL|--If;
+        Sum L=(center_of_mass V).R by A32,Def2;
+        then A35: Sum L in conv R by Th16;
+        A36: dom(R-->1/card R)=R by FUNCOP_1:19;
+        A37: now let x;
+               assume A38: x in R;
+               hence L.x=(R-->1/card R).x by A34,A36,FUNCT_4:14
+               .=1/card R by A38,FUNCOP_1:13;
+        end;
+        A39: R c=Carrier L
+        proof
+          let x;
+          assume A40: x in R;
+          then L.x<>0 by A37;
+          hence thesis by A40;
+        end;
+        A41: conv U c=conv If by A11,RLAFFIN1:3;
+        then A42: R c=conv If by A28,XBOOLE_1:1;
+        then A43: conv R c=conv If by CONVEX1:30;
+        then A44: SL in conv If by A35;
+        A45: R c=conv If by A28,A41,XBOOLE_1:1;
+        Carrier L c=R by RLVECT_2:def 8;
+        then A46: R=Carrier L by A39,XBOOLE_0:def 10;
+        A47: If c=Carrier SLIf
+        proof
+          let x;
+          assume A48: x in If;
+          then consider F be FinSequence of REAL,
+            G be FinSequence of V such that
+          A49: SLIf.x=Sum F and
+          A50: len G=len F and
+          G is one-to-one and
+          A51: rng G=Carrier L and
+          A52: for n st n in dom F holds F.n=L.(G.n)*(G.n|--If).x
+            by A31,A33,A42,Th3;
+          A53: p.x in rng p by A20,A48,FUNCT_1:def 5;
+          then reconsider px=p.x as Subset of V by XBOOLE_1:1;
+          A54: Int px c=conv px by Lm2;
+          A55: q.x in Int px by A24,A48;
+          then A56: q.x in conv px by A54;
+          A57: x in px by A19,A48;
+          A58: conv px c=Affin px by RLAFFIN1:65;
+          A59: px is affinely-independent by A53,RLAFFIN1:43;
+          then Sum(q.x|--px)=q.x by A56,A58,RLAFFIN1:def 7;
+          then A60: Carrier(q.x|--px)=px by A54,A55,A59,Th11,RLAFFIN1:71;
+          q.x|--px=q.x|--If by A53,A56,A58,RLAFFIN1:77;
+          then A61: (q.x|--If).x<>0 by A57,A60,RLVECT_2:28;
+          conv px c=conv If by A53,RLAFFIN1:3;
+          then A62: (q.x|--If).x>=0 by A48,A56,RLAFFIN1:71;
+          A63: q.x in R by A30,A48,FUNCT_1:def 5;
+          then A64: L.(q.x)=1/card R by A37;
+          A65: dom G=dom F by A50,FINSEQ_3:31;
+          A66: now let m be Nat;
+                  assume A67: m in dom F;
+                  then G.m in R by A46,A51,A65,FUNCT_1:def 5;
+                  then A68: L.(G.m)>0 & (G.m|--If).x>=0
+                    by A37,A45,A48,RLAFFIN1:71;
+                  F.m=L.(G.m)*(G.m|--If).x by A52,A67;
+                  hence 0<=F.m by A68;
+          end;
+          consider n be set such that
+          A69: n in dom G and
+          A70: G.n=q.x by A39,A51,A63,FUNCT_1:def 5;
+          F.n=L.(q.x)*(q.x|--If).x by A52,A65,A69,A70;
+          then SLIf.x>0 by A49,A61,A62,A64,A65,A66,A69,RVSUM_1:115;
+          hence thesis by A48;
+        end;
+        Carrier SLIf c=If by RLVECT_2:def 8;
+        then Carrier SLIf=If & SLIf is convex
+          by A47,A35,A43,RLAFFIN1:71,XBOOLE_0:def 10;
+        then conv If c=Affin If & Sum SLIf in Int If by Th12,RLAFFIN1:65;
+        then SL in Int If by A44,RLAFFIN1:def 7;
+        hence contradiction by A3,A29,A35,XBOOLE_0:3;
+      end;
+      hence thesis by A4,A11,XBOOLE_0:def 8;
+    end;
+  end;
+
+theorem Th24:
+  Sum L1 <> Sum L2 & sum L1 = sum L2 implies ex v st L1.v > L2.v
+  proof
+    assume that
+    A1: Sum L1<>Sum L2 and
+    A2: sum L1=sum L2;
+    consider F be FinSequence such that
+    A3: rng F=Carrier(L1)\/Carrier(L2) and
+    A4: F is one-to-one by FINSEQ_4:73;
+    reconsider F as FinSequence of V by A3,FINSEQ_1:def 4;
+    A5: len(L2*F)=len F by FINSEQ_2:37;
+    A6: len(L1*F)=len F by FINSEQ_2:37;
+    then reconsider L1F=L1*F,L2F=L2*F as Element of len F-tuples_on REAL
+      by A5,FINSEQ_2:110;
+    A7: len(L2F-L1F)=len F by FINSEQ_1:def 18;
+    assume A8: for v be Element of V holds L1.v<=L2.v;
+    A9: for i be Nat st i in dom(L2F-L1F) holds 0<=(L2F-L1F).i
+    proof
+      let i be Nat;
+      L2.(F/.i)>=L1.(F/.i) by A8;
+      then A10: L2.(F/.i)-L1.(F/.i)>=L1.(F/.i)-L1.(F/.i) by XREAL_1:11;
+      assume A11: i in dom(L2F-L1F);
+      then i in dom F by A7,FINSEQ_3:31;
+      then A12: F/.i=F.i by PARTFUN1:def 8;
+      i in dom L2F by A5,A7,A11,FINSEQ_3:31;
+      then A13: L2F.i=L2.(F.i) by FUNCT_1:22;
+      i in dom L1F by A6,A7,A11,FINSEQ_3:31;
+      then L1F.i=L1.(F.i) by FUNCT_1:22;
+      hence thesis by A10,A12,A13,RVSUM_1:48;
+    end;
+    A14: Sum(L2F-L1F)=Sum L2F-Sum L1F by RVSUM_1:120
+                    .=sum L2-Sum L1F by A3,A4,RLAFFIN1:30,XBOOLE_1:7
+                    .=sum L2-sum L1 by A3,A4,RLAFFIN1:30,XBOOLE_1:7
+                    .=0 by A2;
+    now let v be Element of V;
+      now per cases by A3,XBOOLE_0:def 3;
+        suppose A15: not v in Carrier(L1) & not v in Carrier(L2);
+          then L1.v=0;
+          hence L1.v=L2.v by A15;
+        end;
+        suppose v in rng F;
+          then consider i be set such that
+          A16: i in dom F and
+          A17: F.i=v by FUNCT_1:def 5;
+          reconsider i as Nat by A16;
+          i in dom L2F by A5,A16,FINSEQ_3:31;
+          then A18: (L2F-L1F).i=L2F.i-L1F.i & L2F.i=L2.v
+            by A17,FUNCT_1:22,RVSUM_1:48;
+          i in dom L1F by A6,A16,FINSEQ_3:31;
+          then A19: L1F.i=L1.v by A17,FUNCT_1:22;
+          A20: i in dom(L2F-L1F) by A7,A16,FINSEQ_3:31;
+          then L2.v-L1.v<=0 by A9,A14,A18,A19,RVSUM_1:115;
+          then L2.v-L1.v=0 by A9,A18,A19,A20;
+          hence L1.v=L2.v;
+        end;
+      end;
+      hence L1.v=L2.v;
+    end;
+    hence contradiction by A1,RLVECT_2:def 11;
+  end;
+
+Lm3: L1.v<>L2.v implies ((r*L1+(1-r)*L2).v = s iff r = (L2.v-s)/(L2.v-L1.v))
+  proof
+    set u1=L1.v,u2=L2.v;
+    A1: (r*L1+(1-r)*L2).v=(r*L1).v+((1-r)*L2).v by RLVECT_2:def 12
+    .=r*u1+((1-r)*L2).v by RLVECT_2:def 13
+    .=r*u1+(-r+1)*u2 by RLVECT_2:def 13
+    .=r*(u1-u2)+u2;
+    assume A2: u1<>u2;
+    then A3: u1-u2<>0;
+    A4: u2-u1<>0 by A2;
+    hereby assume(r*L1+(1-r)*L2).v=s;
+      then r*(u2-u1)=(u2-s)*1 by A1;
+      then r/1=(u2-s)/(u2-u1) by A4,XCMPLX_1:95;
+      hence r=(u2-s)/(u2-u1);
+    end;
+    assume r=(u2-s)/(u2-u1);
+    hence (r*L1+(1-r)*L2).v=(u2-s)/(-(u1-u2))*(u1-u2)+u2 by A1
+    .=(-(u2-s))/(u1-u2)*(u1-u2)+u2 by XCMPLX_1:193
+    .=-(u2-s)+u2 by A3,XCMPLX_1:88
+    .=s;
+  end;
+
+theorem Th25:
+  for p be Real st (r*L1+(1-r)*L2).v <= p & p <= (s*L1+(1-s)*L2).v
+     ex rs be Real st (rs*L1+(1-rs)*L2).v = p &
+                      (r <= s implies r <= rs & rs <= s) &
+                      (s <= r implies s <= rs & rs <= r)
+  proof
+    let p be Real;
+    set rv=(r*L1+(1-r)*L2).v,sv=(s*L1+(1-s)*L2).v;
+    set v1=L1.v,v2=L2.v;
+    A1: rv=(r*L1).v+((1-r)*L2).v by RLVECT_2:def 12
+    .=r*v1+((1-r)*L2).v by RLVECT_2:def 13
+    .=r*v1+(1-r)*v2 by RLVECT_2:def 13;
+    A2: sv=(s*L1).v+((1-s)*L2).v by RLVECT_2:def 12
+    .=s*v1+((1-s)*L2).v by RLVECT_2:def 13
+    .=s*v1+(1-s)*v2 by RLVECT_2:def 13;
+    assume that
+    A3: rv<=p and
+    A4: p<=sv;
+    per cases;
+    suppose A5: v1=v2;
+      take rs=r;
+      thus thesis by A1,A2,A3,A4,A5,XXREAL_0:1;
+    end;
+    suppose v1<>v2;
+      per cases;
+      suppose A6: rv=sv;
+        take rs=r;
+        thus thesis by A3,A4,A6,XXREAL_0:1;
+      end;
+      suppose rv<>sv;
+        then A7: sv-rv<>0;
+        set y=(p-rv)/(sv-rv);
+        set x=(sv-p)/(sv-rv);
+        take rs=r*x+s*y;
+        A8: r*x+r*y=r*(x+y) & s*x+s*y=s*(x+y);
+        A9: x+y=((sv-p)+(p-rv))/(sv-rv) by XCMPLX_1:63
+        .=1 by A7,XCMPLX_1:60;
+        A10: p-rv>=rv-rv by A3,XREAL_1:11;
+        thus p=p*(sv-rv)/(sv-rv) by A7,XCMPLX_1:90
+        .=(rv*(sv-p)+sv*(p-rv))/(sv-rv)
+        .=(rv*(sv-p))/(sv-rv)+(sv*(p-rv))/(sv-rv) by XCMPLX_1:63
+        .=(rv*(sv-p))/(sv-rv)+(p-rv)/(sv-rv)*sv by XCMPLX_1:75
+        .=x*(r*v1+(1-r)*v2)+y*(s*v1+(1-s)*v2) by A1,A2,XCMPLX_1:75
+        .=rs*v1+(x+y)*v2-rs*v2
+        .=rs*v1+1*v2-rs*v2 by A9
+        .=rs*v1+(1-rs)*v2
+        .=rs*v1+((1-rs)*L2).v by RLVECT_2:def 13
+        .=(rs*L1).v+((1-rs)*L2).v by RLVECT_2:def 13
+        .=(rs*L1+(1-rs)*L2).v by RLVECT_2:def 12;
+        A11: sv-rv>=sv-p & sv-p>=p-p by A3,A4,XREAL_1:11,12;
+        hereby assume r<=s;
+          then r*x<=s*x & r*y<=s*y by A10,A11,XREAL_1:66;
+          hence r<=rs & rs<=s by A8,A9,XREAL_1:8;
+        end;
+        assume A12: s<=r;
+        then A13: r*x>=s*x by A11,XREAL_1:66;
+        sv-rv>=p-rv by A4,XREAL_1:11;
+        then r*y>=s*y by A10,A12,XREAL_1:66;
+        hence thesis by A8,A9,A13,XREAL_1:8;
+      end;
+    end;
+  end;
+
+theorem
+  v in conv A & u in conv A & v <> u implies
+   ex p,w,r st p in A & w in conv(A\{p}) & 0<=r & r<1 & r*u+(1-r)*w = v
+  proof
+    reconsider Z=0 as Real by XREAL_0:def 1;
+    assume that
+    A1: v in conv A and
+    A2: u in conv A and
+    A3: v<>u;
+    reconsider A1=A as non empty Subset of V by A1;
+    A4: conv A1={Sum(L) where L is Convex_Combination of A1:L in ConvexComb(V)}
+      by CONVEX3:5;
+    then consider Lv be Convex_Combination of A1 such that
+    A5: v=Sum Lv and
+    A6: Lv in ConvexComb(V) by A1;
+    set Cv=Carrier(Lv);
+    A7: Cv c=A by RLVECT_2:def 8;
+    consider Lu be Convex_Combination of A1 such that
+    A8: u=Sum Lu and
+    Lu in ConvexComb(V) by A2,A4;
+    set Cu=Carrier(Lu);
+    A9: Cu c=A by RLVECT_2:def 8;
+    then A10: Cv\/Cu c=A by A7,XBOOLE_1:8;
+    per cases;
+    suppose not Cu c=Cv;
+      then consider p be set such that
+      A11: p in Cu and
+      A12: not p in Cv by TARSKI:def 3;
+      reconsider p as Element of V by A11;
+      Carrier Lv<>{} & Carrier(Lv)c=A\{p} by A7,A12,CONVEX1:21,ZFMISC_1:40;
+      then reconsider Ap=A\{p} as non empty Subset of V;
+      Carrier(Lv)c=Ap by A7,A12,ZFMISC_1:40;
+      then reconsider LV=Lv as Linear_Combination of Ap by RLVECT_2:def 8;
+      take p,w=v,Z;
+      A13: Z*u+(1-Z)*w=0.V+1*w by RLVECT_1:23
+      .=0.V+w by RLVECT_1:def 11
+      .=v by RLVECT_1:10;
+      Sum(LV) in {Sum(K) where K is Convex_Combination of Ap:
+        K in ConvexComb(V)} by A6;
+      hence thesis by A5,A9,A11,A13,CONVEX3:5;
+    end;
+    suppose A14: Cu c=Cv;
+      defpred P[set,set] means
+      for r for p be Element of V st r=$2 & p=$1 holds r<0 & Lv.p<>Lu.p &
+        (r*Lu+(1-r)*Lv).p=0;
+      set P = {r where r is Element of REAL:ex p be Element of V st
+               P[p,r] & p in Cv\/Cu};
+      A15: now let x;
+            assume x in P;
+            then ex r be Element of REAL st r=x & ex p be Element of V st
+              P[p,r] & p in Cv\/Cu;
+            hence x is real;
+      end;
+      A16: for p being Element of V,r,s being Element of REAL st
+            P[p,r] & P[p,s] holds r=s
+      proof
+        let p be Element of V,r,s be Element of REAL;
+        assume A17: P[p,r];
+        then A18: (r*Lu+(1-r)*Lv).p=0;
+        A19: Lv.p<>Lu.p by A17;
+        assume P[p,s];
+        then (s*Lu+(1-s)*Lv).p=0;
+        then s=(Lv.p-0)/(Lv.p-Lu.p) by A19,Lm3
+        .=r by A18,A19,Lm3;
+        hence thesis;
+      end;
+      sum Lu=1 & sum Lv=1 by RLAFFIN1:62;
+      then consider p be Element of V such that
+      A20: Lu.p>Lv.p by A3,A5,A8,Th24;
+      A21: Lv.p<>0
+      proof
+        assume A22: Lv.p=0;
+        then not p in Cu by A14,RLVECT_2:28;
+        hence contradiction by A20,A22;
+      end;
+      then p in Cv;
+      then A23: p in Cv\/Cu by XBOOLE_0:def 3;
+      set r=Lv.p/(Lv.p-Lu.p);
+      A24: r=(Lv.p-Z)/(Lv.p-Lu.p) & Lv.p-Lu.p<Lu.p-Lu.p by A20,XREAL_1:11;
+      Lv.p>0 by A21,RLAFFIN1:62;
+      then P[p,r] by A24,Lm3;
+      then A25: r in P by A23;
+      A26: Cv\/Cu is finite;
+      P is finite from FRAENKEL:sch 28(A26,A16);
+      then reconsider P as finite non empty real-membered set
+        by A15,A25,MEMBERED:def 3;
+      set M=max P;
+      M in P by XXREAL_2:def 8;
+      then consider r be Element of REAL such that
+      A27: M=r and
+      A28: ex p be Element of V st P[p,r] & p in Cv\/Cu;
+      set Lw=r*Lu+(1-r)*Lv;
+      consider p be Element of V such that
+      A29: P[p,r] and
+      A30: p in Cv\/Cu by A28;
+      set w=r*u+(1-r)*v,R=(-r)/(1-r);
+      A31: Sum Lw=Sum(r*Lu)+Sum((1-r)*Lv) by RLVECT_3:1
+      .=r*u+Sum((1-r)*Lv) by A8,RLVECT_3:2
+      .=w by A5,RLVECT_3:2;
+      A32: for z be Element of V holds 0<=Lw.z
+      proof
+        let z be Element of V;
+        A33: (Z*Lu+(1-Z)*Lv).z=(Z*Lu).z+((1-Z)*Lv).z by RLVECT_2:def 12
+        .=Z*(Lu.z)+((1-Z)*Lv).z by RLVECT_2:def 13
+        .=Z*(Lu.z)+(1-0)*(Lv.z) by RLVECT_2:def 13
+        .=Lv.z;
+        assume A34: 0>Lw.z;
+        A35: Lw.z=(r*Lu).z+((1-r)*Lv).z by RLVECT_2:def 12
+        .=r*(Lu.z)+((1-r)*Lv).z by RLVECT_2:def 13
+        .=r*(Lu.z)+(1-r)*(Lv.z) by RLVECT_2:def 13;
+        A36: Lv.z<>0
+        proof
+          assume A37: Lv.z=0;
+          then not z in Cu by A14,RLVECT_2:28;
+          then Lu.z=0;
+          hence contradiction by A34,A35,A37;
+        end;
+        then z in Cv;
+        then A38: z in Cv\/Cu by XBOOLE_0:def 3;
+        Lv.z>=0 by RLAFFIN1:62;
+        then consider rs be Real such that
+        A39: (rs*Lu+(1-rs)*Lv).z=0 and
+        A40: r<=0 implies r<=rs & rs<=0 and
+        0<=r implies 0<=rs & rs<=r by A33,A34,Th25;
+        rs<>0 by A33,A36,A39;
+        then P[z,rs] by A29,A34,A35,A39,A40,RLAFFIN1:62;
+        then rs in P by A38;
+        then rs<=r by A27,XXREAL_2:def 8;
+        then rs=r by A28,A40,XXREAL_0:1;
+        hence contradiction by A34,A39;
+      end;
+      r*Lu is Linear_Combination of A & (1-r)*Lv is Linear_Combination of A
+        by RLVECT_2:67;
+      then Lw is Linear_Combination of A by RLVECT_2:59;
+      then A41: Carrier Lw c=A by RLVECT_2:def 8;
+      Lw.p=0 by A29;
+      then not p in Carrier Lw by RLVECT_2:28;
+      then A42: Carrier Lw c=A\{p} by A41,ZFMISC_1:40;
+      A43: sum Lw=sum(r*Lu)+sum((1-r)*Lv) by RLAFFIN1:34
+                .=r*sum Lu+sum((1-r)*Lv) by RLAFFIN1:35
+                .=r*1+sum((1-r)*Lv) by RLAFFIN1:62
+                .=r*1+(1-r)*sum(Lv) by RLAFFIN1:35
+                .=r*1+(1-r)*1 by RLAFFIN1:62
+                .=1;
+      then Lw is convex by A32,RLAFFIN1:62;
+      then Carrier Lw<>{} by CONVEX1:21;
+      then reconsider Ap=A\{p} as non empty Subset of V by A42;
+      reconsider LW=Lw as Linear_Combination of Ap by A42,RLVECT_2:def 8;
+      A44: LW is convex by A32,A43,RLAFFIN1:62;
+      then LW in ConvexComb(V) by CONVEX3:def 1;
+      then A45: Sum(LW) in {Sum(K) where K is Convex_Combination of Ap:K in
+      ConvexComb(V)} by A44;
+      take p,w,R;
+      A46: 0>r by A29;
+      then A47: 1+-r>0+-r & (1+-r)/(1+-r)=1 by XCMPLX_1:60,XREAL_1:8;
+      R*u+(1-R)*w=(-r)/(1-r)*u+((1-r)/(1-r)-(-r)/(1-r))*w by A46,XCMPLX_1:60
+      .=(-r)/(1-r)*u+((1-r-(-r))/(1-r))*w by XCMPLX_1:121
+      .=(-r)/(1-r)*u+(1/(1-r)*(r*u)+(1/(1-r))*((1-r)*v)) by RLVECT_1:def 8
+
+      .=(-r)/(1-r)*u+((1/(1-r)*r)*u+(1/(1-r))*((1-r)*v)) by RLVECT_1:
+def 10,def 11
+      .=(-r)/(1-r)*u+((1/(1-r)*r)*u+(1/(1-r)*(1-r))*v) by RLVECT_1:
+def 10,def 11
+      .=(-r)/(1-r)*u+((r/(1-r)*1)*u+(1/(1-r)*(1-r))*v) by XCMPLX_1:76
+      .=(-r)/(1-r)*u+(r/(1-r)*u+1*v) by A46,XCMPLX_1:88
+      .=((-r)/(1-r)*u+r/(1-r)*u)+1*v by RLVECT_1:def 6
+      .=((-r)/(1-r)+r/(1-r))*u+1*v by RLVECT_1:def 9
+      .=(-r+r)/(1-r)*u+1*v by XCMPLX_1:63
+      .=0/(1-r)*u+v by RLVECT_1:def 11
+      .=0.V+v by RLVECT_1:23
+      .=v by RLVECT_1:def 7;
+      hence thesis by A10,A30,A31,A45,A46,A47,CONVEX3:5,XREAL_1:76;
+    end;
+  end;
+
+theorem Th27:
+  A\/{v} is affinely-independent iff
+     A is affinely-independent & (v in A or not v in Affin A)
+  proof
+    set Av=A\/{v};
+    v in {v} by TARSKI:def 1;
+    then A1: v in Av by XBOOLE_0:def 3;
+    A2: A c=Av by XBOOLE_1:7;
+    thus Av is affinely-independent implies  A is affinely-independent
+         & (v in A or not v in Affin A) by A1,A2,RLAFFIN1:58,69,82,ZFMISC_1:37;
+    assume that
+    A4: A is affinely-independent and
+    A5: v in A or not v in Affin A;
+    per cases by A5;
+    suppose v in A;
+      hence thesis by A4,ZFMISC_1:46;
+    end;
+    suppose A6: not v in Affin A & not v in A;
+      consider I be affinely-independent Subset of V such that
+      A7: A c=I and
+      A8: I c=Av and
+      A9: Affin I=Affin Av by A2,A4,RLAFFIN1:60;
+      assume A10: not Av is affinely-independent;
+      not v in I
+      proof
+        assume v in I;
+        then {v}c=I by ZFMISC_1:37;
+        hence contradiction by A7,A10,RLAFFIN1:43,XBOOLE_1:8;
+      end;
+      then A11: I c=Av\{v} by A8,ZFMISC_1:40;
+      Av\{v}=A by A6,ZFMISC_1:141;
+      then Av c=Affin Av & I=A by A7,A11,RLAFFIN1:49,XBOOLE_0:def 10;
+      hence contradiction by A1,A6,A9;
+    end;
+  end;
+
+theorem Th28:
+  Af c= I & v in Af implies
+     I\{v}\/{(center_of_mass V).Af} is affinely-independent Subset of V
+  proof
+    assume that
+    A1: Af c=I and
+    A2: v in Af;
+    set Iv=I\{v},Av=Af\{v};
+    A3: Iv\/{v}=I by A1,A2,ZFMISC_1:140;
+    set BA=(center_of_mass V)/.Af;
+    A4: (center_of_mass V).Af=1/card Af*Sum Af by A2,Def2;
+    A5: dom(center_of_mass V)=BOOL the carrier of V by FUNCT_2:def 1;
+    then Af in dom(center_of_mass V) by A2,ZFMISC_1:64;
+    then A6: (center_of_mass V).Af=(center_of_mass V)/.Af by PARTFUN1:def 8;
+    per cases;
+    suppose Af={v};
+      then Sum Af=v & card Af=1 by CARD_1:50,RLVECT_2:15;
+      hence thesis by A3,A4,RLVECT_1:def 11;
+    end;
+    suppose A7: Af<>{v};
+      A8: not BA in Affin Iv
+      proof
+        A9: Av is non empty
+        proof
+          assume Av is empty;
+          then Af c={v} by XBOOLE_1:37;
+          hence contradiction by A2,A7,ZFMISC_1:39;
+        end;
+        then Av in dom(center_of_mass V) by A5,ZFMISC_1:64;
+        then A10: (center_of_mass V).Av=(center_of_mass V)/.Av
+          by PARTFUN1:def 8;
+        Av c=Iv by A1,XBOOLE_1:33;
+        then A11: Affin Av c=Affin Iv by RLAFFIN1:52;
+        reconsider c =card Af as Real by XREAL_0:def 1;
+        A12: c/c =c*(1/c) by XCMPLX_1:100;
+        conv Av c=Affin Av & (center_of_mass V).Av in conv Av
+          by A9,Th16,RLAFFIN1:65;
+        then A13: (center_of_mass V).Av in Affin Av;
+        assume BA in Affin Iv;
+        then A14:not v in Iv &
+          (1-c)*(center_of_mass V)/.Av+c*((center_of_mass V)/.Af)
+          in Affin Iv by A10,A11,A13,RUSUB_4:def 5,ZFMISC_1:64;
+        (center_of_mass V)/.Af-(1-1/c)*(center_of_mass V)/.Av =
+          (1-1/c)*(center_of_mass V)/.Av+1/c*v-(1-1/c)*(center_of_mass V)/.Av
+            by A2,A6,A9,Th22;
+        then A15: 1/c*v=(center_of_mass V)/.Af-(1-1/c)*(center_of_mass V)/.Av
+                by RLVECT_4:1
+            .=(center_of_mass V)/.Af+-(1-1/c)*(center_of_mass V)/.Av
+                by RLVECT_1:def 14
+            .=(-(1-1/c))*(center_of_mass V)/.Av+(center_of_mass V)/.Af
+                by RLVECT_4:6;
+        A16: 1=c/c by A2,XCMPLX_1:60;
+        (1-c)*(center_of_mass V)/.Av+c*((center_of_mass V)/.Af)
+          =1*((1-c)*(center_of_mass V)/.Av+c*((center_of_mass V)/.Af))
+             by RLVECT_1:def 11
+         .=c*(1/c*((1-c)*(center_of_mass V)/.Av+c*(center_of_mass V)/.Af))
+            by A12,A16,RLVECT_1:def 10,def 11
+         .=c*(1/c*((1-c)*(center_of_mass V)/.Av)+
+              1/c*(c*(center_of_mass V)/.Af))
+            by RLVECT_1:def 8
+         .=c*(1/c*((1-c)*(center_of_mass V)/.Av)+1*(center_of_mass V)/.Af)
+            by A12,A16,RLVECT_1:def 10,def 11
+         .=c*(1/c*((1-c)*(center_of_mass V)/.Av)+(center_of_mass V)/.Af)
+            by RLVECT_1:def 11
+         .=c*(1/c*(1-c)*(center_of_mass V)/.Av+(center_of_mass V)/.Af)
+            by RLVECT_1:def 10,def 11
+         .=1*v by A16,A15,A12,RLVECT_1:def 10,def 11
+,XCMPLX_1:100
+         .=v by RLVECT_1:def 11;
+         hence contradiction by A3,A14,Th27;
+       end;
+       Iv is affinely-independent by RLAFFIN1:43,XBOOLE_1:36;
+       hence thesis by A6,A8,Th27;
+     end;
+   end;
+
+theorem Th29:
+  for F be c=-linear Subset-Family of V st
+      union F is finite affinely-independent
+    holds (center_of_mass V).:F is affinely-independent Subset of V
+  proof
+    set B=center_of_mass V;
+    defpred P[Nat] means
+    for k be Nat st k<=$1for S be c=-linear Subset-Family of V st
+        card union S=k & union S is finite affinely-independent
+      holds B.:S is affinely-independent Subset of V;
+    let S be c=-linear Subset-Family of V;
+    A1: dom B=BOOL the carrier of V by FUNCT_2:def 1;
+    A2: for n be Nat st P[n] holds P[n+1]
+    proof
+      let n be Nat such that
+      A3: P[n];
+      let k be Nat such that
+      A4: k<=n+1;
+      per cases by A4,NAT_1:8;
+      suppose k<=n;
+        hence thesis by A3;
+      end;
+      suppose A5: k=n+1;
+        let S be c=-linear Subset-Family of V such that
+        A6: card union S=k and
+        A7: union S is finite affinely-independent;
+        set U=union S;
+        A8: S c=bool U by ZFMISC_1:100;
+        set SU=S\{U};
+        A9: union SU c=U by XBOOLE_1:36,ZFMISC_1:95;
+        then reconsider Usu=union SU as finite set by A7;
+        A10: SU c=S by XBOOLE_1:36;
+        A11: union SU<>U
+        proof
+          assume A12: union SU=U;
+          then SU is non empty by A5,A6,ZFMISC_1:2;
+          then union SU in SU by A7,A10,A8,SIMPLEX0:9;
+          hence contradiction by A12,ZFMISC_1:64;
+        end;
+        then union SU c<U by A9,XBOOLE_0:def 8;
+        then consider v be set such that
+        A13: v in U and
+        A14: not v in union SU by XBOOLE_0:6;
+        reconsider v as Element of V by A13;
+        A15: (U\{v})\/{B.U} is affinely-independent Subset of V by A7,A13,Th28;
+        U is non empty by A5,A6;
+        then A16: U in dom B by A1,ZFMISC_1:64;
+        B.U in {B.U} by TARSKI:def 1;
+        then B.U in (U\{v})\/{B.U} by XBOOLE_0:def 3;
+        then reconsider BU=B.U as Element of V by A15;
+        S is non empty by A5,A6,ZFMISC_1:2;
+        then SU\/{U}=S by A7,A8,SIMPLEX0:9,ZFMISC_1:140;
+        then A17: B.:S=B.:SU\/B.:{U} by RELAT_1:153
+        .=B.:SU\/Im(B,U) by RELAT_1:def 16
+        .=B.:SU\/{BU} by A16,FUNCT_1:117;
+        A18: {v}c=U by A13,ZFMISC_1:37;
+        A19: card{v}=1 by CARD_1:50;
+        per cases;
+        suppose n=0;
+          then A20: U={v} by A5,A6,A7,A18,A19,CARD_FIN:1;
+          SU/\dom B={}
+          proof
+            assume SU/\dom B<>{};
+            then consider x such that
+            A21: x in SU/\dom B by XBOOLE_0:def 1;
+            x in SU by A21,XBOOLE_0:def 4;
+            then A22: x c=union SU by ZFMISC_1:92;
+            then x c=U by A9,XBOOLE_1:1;
+            then A23: x=U or x={} by A20,ZFMISC_1:39;
+            not v in x by A14,A22;
+            hence thesis by A20,A21,A23,TARSKI:def 1,ZFMISC_1:64;
+          end;
+          then B.:SU=B.:{} by RELAT_1:145
+          .={} by RELAT_1:149;
+          hence thesis by A17;
+        end;
+        suppose A24: n>0;
+          reconsider u=U as finite set by A7;
+          A25: Usu c=u by XBOOLE_1:36,ZFMISC_1:95;
+          then card Usu<=n+1 by A5,A6,NAT_1:44;
+          then card Usu<n+1 by A5,A6,A11,A25,CARD_FIN:1,XXREAL_0:1;
+          then A26: card Usu<=n by NAT_1:13;
+          union SU c=U\{v} & U\{v}c=(U\{v})\/{B.U}
+          by A9,A14,XBOOLE_1:7,ZFMISC_1:40;
+          then union SU is affinely-independent by A15,RLAFFIN1:43,XBOOLE_1:1;
+          then reconsider BSU=B.:SU as affinely-independent Subset of V
+          by A3,A10,A26;
+          BSU c=Affin(U\{v})
+          proof
+            let y;
+            assume y in BSU;
+            then consider x such that
+            A27: x in dom B and
+            A28: x in SU and
+            A29: B.x=y by FUNCT_1:def 12;
+            reconsider x as non empty Subset of V by A27,ZFMISC_1:64;
+            x in S by A28,XBOOLE_0:def 5;
+            then A30: x c=U by ZFMISC_1:92;
+            x c=union SU by A28,ZFMISC_1:92;
+            then not v in x by A14;
+            then x c=U\{v} by A30,ZFMISC_1:40;
+            then A31: conv x c=conv(U\{v}) by RLTOPSP1:21;
+            y in conv x by A7,A29,A30,Th16;
+            then A32: y in conv(U\{v}) by A31;
+            conv(U\{v})c=Affin(U\{v}) by RLAFFIN1:65;
+            hence thesis by A32;
+          end;
+          then A33: Affin BSU c=Affin(U\{v}) by RLAFFIN1:51;
+          card U<>1 by A5,A6,A24;
+          then not BU in U by A7,Th19;
+          then not BU in U\{v} by XBOOLE_0:def 5;
+          then not BU in Affin BSU by A15,A33,Th27;
+          hence thesis by A17,Th27;
+        end;
+      end;
+    end;
+    A34: P[0 qua Nat]
+    proof
+      let k be Nat;
+      assume A35: k<=0;
+      let S be c=-linear Subset-Family of V such that
+      A36: card union S=k and
+      union S is finite affinely-independent;
+      A37: union S={} by A35,A36;
+      S/\dom B={}
+      proof
+        assume S/\dom B<>{};
+        then consider x such that
+        A38: x in S/\dom B by XBOOLE_0:def 1;
+        x in S by A38,XBOOLE_0:def 4;
+        then A39: x c={} by A37,ZFMISC_1:92;
+        x<>{} by A38,ZFMISC_1:64;
+        hence contradiction by A39;
+      end;
+      then B.:S=B.:{} by RELAT_1:145
+      .={} by RELAT_1:149;
+      hence thesis;
+    end;
+    A40: for n be Nat holds P[n] from NAT_1:sch 2(A34,A2);
+    assume A41: union S is finite affinely-independent;
+    then card union S is Nat;
+    hence thesis by A40,A41;
+  end;
+
+theorem
+  for F be c=-linear Subset-Family of V st
+      union F is affinely-independent finite
+    holds Int ((center_of_mass V).:F) c= Int union F
+  proof
+    set B=center_of_mass V;
+    let S be c=-linear Subset-Family of V such that
+    A1: union S is affinely-independent finite;
+    reconsider BS=B.:S as affinely-independent Subset of V by A1,Th29;
+    set U=union S;
+    let x such that
+    A2: x in Int(B.:S);
+    BS is non empty by A2;
+    then consider y such that
+    A3: y in BS by XBOOLE_0:def 1;
+    consider X be set such that
+    A4: X in dom B and
+    A5: X in S and
+    B.X=y by A3,FUNCT_1:def 12;
+    X c=U & X is non empty by A4,A5,ZFMISC_1:64,92;
+    then reconsider U as non empty finite Subset of V by A1;
+    set xBS=x|--BS;
+    A6: Int BS c=conv BS by Lm2;
+    then A7: xBS is convex by A2,RLAFFIN1:71;
+    S c=bool U
+    proof
+      let s be set;
+      assume s in S;
+      then s c=U by ZFMISC_1:92;
+      hence thesis;
+    end;
+    then A8: U in S by A5,SIMPLEX0:9;
+    dom B=(bool the carrier of V)\{{}} by FUNCT_2:def 1;
+    then U in dom B by ZFMISC_1:64;
+    then A9: B.U in BS by A8,FUNCT_1:def 12;
+    then reconsider BU=B.U as Element of V;
+    conv BS c=Affin BS by RLAFFIN1:65;
+    then A10: Int BS c=Affin BS by A6,XBOOLE_1:1;
+    then A11: Sum xBS=x by A2,RLAFFIN1:def 7;
+    then Carrier xBS=BS by A2,A6,Th11,RLAFFIN1:71;
+    then A12: xBS.BU<>0 by A9,RLVECT_2:28;
+    then A13: xBS.BU>0 by A2,A6,RLAFFIN1:71;
+    set xU=x|--U;
+    A14: conv U c=Affin U by RLAFFIN1:65;
+    A15: conv(B.:S)c=conv U by Th17,CONVEX1:30;
+    then A16: Int BS c=conv U by A6,XBOOLE_1:1;
+    then Int BS c=Affin U by A14,XBOOLE_1:1;
+    then A17: Sum xU=x by A1,A2,RLAFFIN1:def 7;
+    BS c=conv BS by RLAFFIN1:2;
+    then A18: B.U in conv BS by A9;
+    per cases;
+    suppose x=B.U;
+      hence thesis by A1,Th20;
+    end;
+    suppose x<>BU;
+      then consider p be Element of V such that
+      A19: p in conv(BS\{BU}) and
+      A20: Sum xBS=xBS.BU*BU+(1-xBS.BU)*p and
+      1/xBS.BU*(Sum xBS)+(1-1/xBS.BU)*p=BU by A7,A11,A12,Th1;
+      A21: x=(1-xBS.BU)*p+xBS.BU*BU by A2,A10,A20,RLAFFIN1:def 7;
+      xBS.BU<=1 by A2,A6,RLAFFIN1:71;
+      then A22: 1-xBS.BU>=1-1 by XREAL_1:12;
+      A23: BU in conv U by A15,A18;
+      conv(BS\{BU})c=conv BS by RLAFFIN1:3,XBOOLE_1:36;
+      then A24: p in conv BS by A19;
+      then p in conv U by A15;
+      then A25: xU=(1-xBS.BU)*(p|--U)+xBS.BU*(BU|--U)
+        by A1,A14,A21,A23,RLAFFIN1:70;
+      A26: U c=Carrier xU
+      proof
+        let u be set;
+        assume A27: u in U;
+        then A28: xU.u=((1-xBS.BU)*(p|--U)).u+(xBS.BU*(BU|--U)).u
+          by A25,RLVECT_2:def 12
+        .=((1-xBS.BU)*(p|--U)).u+xBS.BU*((BU|--U).u) by A27,RLVECT_2:def 13
+        .=(1-xBS.BU)*((p|--U).u)+xBS.BU*((BU|--U).u) by A27,RLVECT_2:def 13;
+        (BU|--U).u=1/card U & (p|--U).u>=0 by A1,A15,A24,A27,Th18,RLAFFIN1:71;
+        hence thesis by A13,A22,A27,A28;
+      end;
+      Carrier xU c=U by RLVECT_2:def 8;
+      then Carrier xU=U by A26,XBOOLE_0:def 10;
+      hence thesis by A1,A2,A16,A17,Th12,RLAFFIN1:71;
+    end;
+  end;

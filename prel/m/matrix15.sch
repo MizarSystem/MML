@@ -64,9 +64,9 @@
 <Adjective nr="96"/>
 <Adjective nr="102"/>
 <Adjective nr="103"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -132,7 +132,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="29"/>
-<Adjective nr="169"/>
+<Adjective nr="175"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="90"/>
@@ -169,7 +169,7 @@
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
-<Pred kind="V" nr="116">
+<Pred kind="V" nr="122">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="446">
 <Func kind="U" nr="1">
@@ -464,9 +464,9 @@
 <Adjective nr="96"/>
 <Adjective nr="102"/>
 <Adjective nr="103"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -532,7 +532,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="29"/>
-<Adjective nr="169"/>
+<Adjective nr="175"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="90"/>

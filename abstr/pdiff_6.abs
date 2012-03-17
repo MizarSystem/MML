@@ -1,0 +1,323 @@
+:: Differentiation of Vector-Valued Functions on $n$-Dimensional Real Normed 
+:: Linear Spaces
+::  by Takao Inou\'e , Noboru Endou and Yasunari Shidama
+:: 
+:: Received February 23, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies PRE_TOPC, RLVECT_1, FUNCT_1, ARYTM_3, ARYTM_1, FINSEQ_1,
+      VALUED_1, MSSUBFAM, FINSEQ_2, CARD_3, RVSUM_1, RELAT_1, COMPLEX1,
+      SQUARE_1, RCOMP_1, PARTFUN1, NORMSP_1, XBOOLE_0, LOPBAN_1, FDIFF_1,
+      REAL_NS1, BORSUK_1, EUCLID, NUMBERS, FUNCOP_1, STRUCT_0, UNIALG_1,
+      EUCLID_7, MATRIXR2, RFINSEQ2, REAL_1, SUBSET_1, CARD_1, TARSKI, XXREAL_0,
+      XXREAL_2, NAT_1, ORDINAL4, SUPINF_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      SEQ_1, STRUCT_0, RLVECT_1, FINSEQ_1, FINSEQ_2, SQUARE_1, RVSUM_1,
+      GRCAT_1, PRE_TOPC, VFUNCT_1, NORMSP_1, EUCLID, LOPBAN_1, NFCONT_1,
+      NDIFF_1, REAL_NS1, PDIFF_1, INTEGR15, EUCLID_7, RFINSEQ2;
+ constructors REAL_1, SQUARE_1, RSSPACE3, FINSEQOP, VFUNCT_1, COMPLEX1,
+      NFCONT_1, NDIFF_1, SEQ_1, PDIFF_1, BINOP_2, MONOID_0, INTEGR15, RELSET_1,
+      EUCLID_7, RFINSEQ2, GRCAT_1, JORDAN2B;
+ registrations RELSET_1, STRUCT_0, XREAL_0, MEMBERED, LOPBAN_1, FUNCT_2, NAT_1,
+      REAL_NS1, NUMBERS, XBOOLE_0, XXREAL_0, VALUED_0, EUCLID, FINSEQ_2,
+      CARD_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin
+
+:: The Basic Properties for Differentiation of
+::      Functions from $ {\cal R}^m$ to $ {\cal R}^n$
+
+reserve i,n,m for Element of NAT;
+
+theorem :: PDIFF_6:1
+for f be set holds
+ f is PartFunc of REAL m,REAL n iff f is PartFunc of REAL-NS m,REAL-NS n;
+
+theorem :: PDIFF_6:2
+for n,m be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n,
+    g be PartFunc of REAL-NS m,REAL-NS n,
+    x be Element of REAL m, y be Point of REAL-NS m st
+  f=g & x=y holds f is_differentiable_in x iff g is_differentiable_in y;
+
+theorem :: PDIFF_6:3
+for n,m be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n,
+    g be PartFunc of REAL-NS m,REAL-NS n,
+    x be Element of REAL m, y be Point of REAL-NS m st
+ f=g & x=y & f is_differentiable_in x holds diff(f,x) = diff(g,y);
+
+theorem :: PDIFF_6:4
+for f1,f2 be PartFunc of REAL m,REAL n,
+    g1,g2 be PartFunc of REAL-NS m,REAL-NS n st
+ f1 = g1 & f2 = g2 holds f1 + f2 = g1 + g2;
+
+theorem :: PDIFF_6:5
+for f1,f2 be PartFunc of REAL m,REAL n,
+    g1,g2 be PartFunc of REAL-NS m,REAL-NS n st
+ f1 = g1 & f2 = g2 holds f1 - f2 = g1 - g2;
+
+theorem :: PDIFF_6:6
+for f be PartFunc of REAL m,REAL n,
+    g be PartFunc of REAL-NS m,REAL-NS n, a be Real st
+ f = g holds a(#)f = a(#)g;
+
+theorem :: PDIFF_6:7
+for f1,f2 be Function of REAL m,REAL n,
+    g1,g2 be Point of
+      R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n) st
+ f1 = g1 & f2 = g2 holds f1 + f2 = g1 + g2;
+
+theorem :: PDIFF_6:8
+for f1,f2 be Function of REAL m,REAL n,
+    g1,g2 be Point of
+       R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n) st
+f1 = g1 & f2 = g2 holds f1 - f2 = g1 - g2;
+
+theorem :: PDIFF_6:9
+for f be Function of REAL m,REAL n,
+    g be Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n),
+    r be Real st
+ f = g holds r(#)f = r*g;
+
+theorem :: PDIFF_6:10
+for m,n be non empty Element of NAT
+for f be PartFunc of REAL m,REAL n, x be Element of REAL m st
+ f is_differentiable_in x holds
+  diff(f,x) is
+    Point of R_NormSpace_of_BoundedLinearOperators(REAL-NS m,REAL-NS n);
+
+definition
+  let n,m be Nat;
+  let IT be Function of REAL m,REAL n;
+  attr IT is additive means
+:: PDIFF_6:def 1
+  for x,y being Element of REAL m holds IT.(x+y) = IT.x+IT.y;
+  attr IT is homogeneous means
+:: PDIFF_6:def 2
+  for x being Element of REAL m, r being Real holds IT.(r*x) = r*IT.x;
+end;
+
+theorem :: PDIFF_6:11
+for IT be Function of REAL m,REAL n st
+ IT is additive holds IT.(0*m) = 0*n;
+
+theorem :: PDIFF_6:12
+for f be Function of REAL m,REAL n,
+    g be Function of REAL-NS m,REAL-NS n st
+ f=g holds f is additive iff g is additive;
+
+theorem :: PDIFF_6:13
+for f be Function of REAL m,REAL n, g be Function of REAL-NS m,REAL-NS n st
+ f=g holds f is homogeneous iff g is homogeneous;
+
+registration
+  let n,m be Nat;
+  cluster (REAL m) --> 0*n -> additive homogeneous Function of REAL m,REAL n;
+end;
+
+registration
+  let n,m be Nat;
+  cluster additive homogeneous Function of REAL m,REAL n;
+end;
+
+definition let m,n be Nat;
+  mode LinearOperator of m,n
+    is additive homogeneous Function of REAL m,REAL n;
+end;
+
+theorem :: PDIFF_6:14
+for f be set holds
+ f is LinearOperator of m,n
+  iff f is LinearOperator of REAL-NS m,REAL-NS n;
+
+definition let m,n be Nat, IT be Function of REAL m,REAL n,
+               x be Element of REAL m;
+  redefine func IT.x -> Element of REAL n;
+end;
+
+definition let m,n be Nat, IT be Function of REAL m,REAL n;
+  attr IT is bounded means
+:: PDIFF_6:def 3
+    ex K being Real st 0 <= K &
+      for x being Element of REAL m holds |. IT.x .| <= K * |. x .|;
+end;
+
+theorem :: PDIFF_6:15
+for xseq,yseq be FinSequence of REAL m st
+ len xseq = len yseq + 1 & xseq| (len yseq) = yseq holds
+   ex v be Element of REAL m st v=xseq.(len xseq) & Sum xseq = Sum yseq + v;
+
+theorem :: PDIFF_6:16
+for f be LinearOperator of m,n,
+    xseq be FinSequence of REAL m,
+    yseq be FinSequence of REAL n st
+ len xseq = len yseq &
+ ( for i be Element of NAT st i in dom xseq holds yseq.i=f.(xseq.i) )
+holds Sum yseq=f.(Sum xseq);
+
+theorem :: PDIFF_6:17
+for xseq be FinSequence of REAL m,
+    yseq be FinSequence of REAL st
+ len xseq = len yseq &
+ ( for i be Element of NAT st i in dom xseq holds
+    ex v be Element of REAL m st v = xseq.i & yseq.i = |.v .| )
+  holds |.Sum xseq.| <= Sum yseq;
+
+registration
+  let m,n be Nat;
+  cluster -> bounded LinearOperator of m,n;
+end;
+
+registration
+  let m,n;
+  cluster -> bounded LinearOperator of REAL-NS m,REAL-NS n;
+end;
+
+theorem :: PDIFF_6:18
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n, x be Element of REAL m st
+  f is_differentiable_in x holds
+    diff(f,x) is LinearOperator of REAL-NS m,REAL-NS n;
+
+theorem :: PDIFF_6:19
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n, x be Element of REAL m st
+  f is_differentiable_in x holds
+    diff(f,x) is LinearOperator of m, n;
+
+theorem :: PDIFF_6:20
+for n,m be non empty Element of NAT,
+    g1,g2 be PartFunc of REAL m,REAL n,
+    y0 be Element of REAL m st
+  g1 is_differentiable_in y0 & g2 is_differentiable_in y0 holds
+    g1+g2 is_differentiable_in y0 &
+    diff(g1+g2,y0) = diff(g1,y0) + diff(g2,y0);
+
+theorem :: PDIFF_6:21
+for n,m be non empty Element of NAT,
+    g1,g2 be PartFunc of REAL m,REAL n,
+    y0 be Element of REAL m st
+  g1 is_differentiable_in y0 & g2 is_differentiable_in y0 holds
+    g1-g2 is_differentiable_in y0 &
+    diff(g1-g2,y0) = diff(g1,y0) - diff(g2,y0);
+
+theorem :: PDIFF_6:22
+for n,m be non empty Element of NAT,
+    g be PartFunc of REAL m,REAL n,
+    y0 be Element of REAL m, r be Real st
+  g is_differentiable_in y0 holds
+   r(#)g is_differentiable_in y0 & diff((r(#)g),y0) = r(#)diff(g,y0);
+
+theorem :: PDIFF_6:23
+for x0 be Element of REAL m, y0 be Point of REAL-NS m, r be Real st
+  x0=y0 holds
+  {y where y is Element of REAL m: |.y-x0.| < r}
+    = {z where z is Point of REAL-NS m: ||.z-y0.|| < r};
+
+theorem :: PDIFF_6:24
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n, x0 be Element of REAL m,
+    L,R be Function of REAL m,REAL n st
+  L is LinearOperator of m,n &
+  ex r0 be Real st
+    0 < r0 & {y where y is Element of REAL m: |.y-x0.| < r0} c= dom f &
+    (for r be Real st r > 0
+       ex d be Real st d > 0 &
+         (for z be Element of REAL m,w be Element of REAL n st
+            z <> 0*m & |.z.| < d & w = R.z holds (|.z.|"* |. w .|) < r) ) &
+    for x be Element of REAL m st|.x-x0.| < r0 holds
+      f/.x - f/.x0 = L.(x-x0) + R.(x-x0)
+holds
+  f is_differentiable_in x0 & diff(f,x0) = L;
+
+theorem :: PDIFF_6:25
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n, x0 be Element of REAL m holds
+  f is_differentiable_in x0
+iff
+  ex r0 be Real st 0 < r0 &
+    {y where y is Element of REAL m: |.y-x0.| < r0} c= dom f &
+    ex L,R be Function of REAL m,REAL n st
+      L is LinearOperator of m,n &
+      (for r be Real st r > 0
+         ex d be Real st d > 0 &
+           (for z be Element of REAL m,w be Element of REAL n st
+              z <> 0*m & |.z.| < d & w=R.z holds (|.z.|"* |. w .|) < r)) &
+      for x be Element of REAL m st |.x-x0.| < r0 holds
+        f/.x - f/.x0 = L.(x-x0) + R.(x-x0);
+
+begin
+
+::Differentiation of Functions from Normed Linear Spaces $ {\cal R}^m$ to
+::  Normed Linear Spaces $ {\cal R}^n$
+
+theorem :: PDIFF_6:26
+for y1,y2 be Point of REAL-NS n holds
+ Proj(i,n).(y1 + y2) = Proj(i,n).y1 + Proj(i,n).y2;
+
+theorem :: PDIFF_6:27
+for y1 be Point of REAL-NS n, r being Real holds
+ Proj(i,n).(r*y1) = r*(Proj(i,n).y1);
+
+theorem :: PDIFF_6:28
+for m,n be non empty Element of NAT,
+    g be PartFunc of REAL-NS m,REAL-NS n, x0 be Point of REAL-NS m,
+    i be Element of NAT st
+ 1 <= i & i <= n & g is_differentiable_in x0 holds
+   (Proj(i,n)*g) is_differentiable_in x0 &
+   Proj(i,n)*(diff(g,x0)) = diff((Proj(i,n)*g),x0);
+
+theorem :: PDIFF_6:29
+for m,n be non empty Element of NAT,
+    g be PartFunc of REAL-NS m,REAL-NS n,
+    x0 be Point of REAL-NS m holds
+g is_differentiable_in x0 iff
+(for i be Element of NAT st 1<=i & i <=n holds
+      Proj(i,n)*g is_differentiable_in x0);
+
+definition
+  let X be set;
+  let n,m be non empty Element of NAT;
+  let f be PartFunc of REAL m,REAL n;
+  pred f is_differentiable_on X means
+:: PDIFF_6:def 4
+  X c= dom f &
+  for x be Element of REAL m st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem :: PDIFF_6:30
+for X be set,
+    m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n,
+    g be PartFunc of REAL-NS m,REAL-NS n st f=g holds
+  f is_differentiable_on X iff g is_differentiable_on X;
+
+theorem :: PDIFF_6:31
+for X be set,
+    m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n holds
+  f is_differentiable_on X implies X is Subset of REAL m;
+
+theorem :: PDIFF_6:32
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n,
+    Z be Subset of REAL m st
+ ex Z0 be Subset of REAL-NS m st Z=Z0 & Z0 is open
+holds
+  ( f is_differentiable_on Z
+ iff
+    Z c=dom f &
+    for x be Element of REAL m st x in Z holds f is_differentiable_in x );
+
+theorem :: PDIFF_6:33
+for m,n be non empty Element of NAT,
+    f be PartFunc of REAL m,REAL n,
+    Z be Subset of REAL m st
+ f is_differentiable_on Z
+  ex Z0 be Subset of REAL-NS m st Z=Z0 & Z0 is open;

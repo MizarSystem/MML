@@ -100,9 +100,9 @@
 <Adjective nr="118"/>
 <Adjective nr="119"/>
 <Adjective nr="120"/>
-<Adjective nr="125"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
+<Adjective nr="128"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -114,7 +114,7 @@
 <Adjective nr="70" value="false"/>
 <Adjective nr="75" value="false"/>
 <Adjective nr="116"/>
-<Adjective nr="137"/>
+<Adjective nr="140"/>
 </Cluster>
 </FCluster>
 </Registrations>

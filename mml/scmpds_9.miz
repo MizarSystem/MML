@@ -126,8 +126,9 @@ A1: for s being State of SCMPDS st IC s = l & s.l = i
 A2: x = IC Following(ProgramPart s,s) and
 A3: IC s = l & (ProgramPart s)/.l = i;
 X:  (ProgramPart s)/.l = s.l by AMI_1:150;
-    x = Exec(s.IC s, s).IC SCMPDS by A2,AMI_1:131
-      .= succ l by A1,A3,X;
+Y:  (ProgramPart s).l = s.l by AMI_1:15;
+    x = Exec((ProgramPart s).IC s, s).IC SCMPDS by A2,AMI_1:131
+      .= succ l by A1,A3,X,Y;
     hence x in {succ l} by TARSKI:def 1;
   end;
   reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
@@ -198,10 +199,10 @@ A1: u.n = i by AMI_1:129;
 A3: x = IC Following(ProgramPart s,s) and
 A4: IC s = l and
 A5: (ProgramPart s)/.l = i;
-Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
 A6: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s,k ) = abs(m1+k)
     by SCMPDS_2:def 20;
-    x = Exec(i,s).IC SCMPDS by A3,A4,A5,AMI_1:131,Y
+    (ProgramPart s).l = i by A5,PBOOLE:158;
+    then x = Exec(i,s).IC SCMPDS by A3,A4,AMI_1:131
       .= t by A4,A6,SCMPDS_2:66;
     hence x in {t} by TARSKI:def 1;
   end;
@@ -211,11 +212,12 @@ A7: IC u = n by AMI_1:129;
 A8: m1 = IC u and
 A9: ICplusConst(u,k) = abs(m1+k) by SCMPDS_2:def 20;
 X:  (ProgramPart u)/.l = u.l by AMI_1:150;
+Y: (ProgramPart u).l = u.l by AMI_1:15;
   assume
   x in {t};
   then x = abs(m1+k) by A7,A8,TARSKI:def 1
     .= Exec(i,u).IC SCMPDS by A9,SCMPDS_2:66
-    .= IC Following(ProgramPart u,u) by A1,A7,AMI_1:131;
+    .= IC Following(ProgramPart u,u) by A1,A7,Y,AMI_1:131;
   hence thesis by A1,A7,X;
 end;
 
@@ -249,7 +251,8 @@ A3: x = k;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by AMI_1:150;
 A4: (abs(s.DataLoc(s.a,1)) )+2 >= 0+2 by XREAL_1:8;
-    x = Exec(i,s).IC SCMPDS by A1,A2,AMI_1:131,Y
+   (ProgramPart s).IC s = s.IC s by AMI_1:15;
+    then x = Exec(i,s).IC SCMPDS by A1,A2,Y,AMI_1:131
       .= (abs(s.DataLoc(s.a,1)) )+2 by SCMPDS_1:def 23,SCMPDS_2:70;
     then k >= 1+1 by A3,A4;
     then k > 1 by NAT_1:13;
@@ -301,10 +304,11 @@ A15: IC v = v.IC SCMPDS by AMI_1:def 15
     .= l by A7,A14,FUNCT_4:12;
 A16: v.t = k2 by A11,FUNCT_4:89;
 X:  (ProgramPart v)/.l = v.l by AMI_1:150;
+Y: (ProgramPart v).l = v.l by AMI_1:15;
   x = ((k2 ) + 2) by A5
     .= (abs(v.DataLoc(j,1)) ) + 2 by A16,A9,ABSVALUE:def 1
     .= Exec(i,v).IC SCMPDS by A12,SCMPDS_1:def 23,SCMPDS_2:70
-    .= IC Following(ProgramPart v,v) by A13,A15,AMI_1:131;
+    .= IC Following(ProgramPart v,v) by A13,A15,Y,AMI_1:131;
   hence thesis by A13,A15,X;
 end;
 
@@ -418,16 +422,17 @@ A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
     k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s)/.IC s
  = s.IC s by AMI_1:150;
+y: (ProgramPart s).IC s = s.IC s by AMI_1:15;
     per cases;
     suppose
 A6:   s.DataLoc(s.a,k1) <> 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= t by A3,A5,A6,SCMPDS_2:67;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
     suppose
 A7:   s.DataLoc(s.a,k1) = 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l by A3,A7,SCMPDS_2:67;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
@@ -454,6 +459,7 @@ A12: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= n by AMI_1:129;
 A13: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y: (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     u2.DataLoc(u2.a,k1) = 0
     proof
       per cases;
@@ -468,7 +474,7 @@ X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
       end;
     end;
     then x = Exec(i,u2).IC SCMPDS by A9,A12,SCMPDS_2:67
-      .= IC Following(ProgramPart u2,u2) by A11,A12,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A11,A12,Y,AMI_1:131;
     hence thesis by A11,A12,X;
   end;
   suppose
@@ -502,10 +508,11 @@ A19: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= IC u by AMI_1:def 15
       .= n by AMI_1:129;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y:  (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
     m1+k2) by SCMPDS_2:def 20;
     then x = Exec(i,u2).IC SCMPDS by A14,A19,A18,SCMPDS_2:67
-      .= IC Following(ProgramPart u2,u2) by A16,A19,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A16,A19,Y,AMI_1:131;
     hence thesis by A16,A19,X;
   end;
 end;
@@ -538,16 +545,17 @@ A4: (ProgramPart s)/.l = i;
 A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
     k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
+y:  (ProgramPart s).IC s = s.IC s by AMI_1:15;
     per cases;
     suppose
 A6:   s.DataLoc(s.a,k1) <= 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= t by A3,A5,A6,SCMPDS_2:68;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
     suppose
 A7:   s.DataLoc(s.a,k1) > 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l by A3,A7,SCMPDS_2:68;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
@@ -574,6 +582,7 @@ A12: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= n by AMI_1:129;
 A13: u2.DataLoc(u1.a,k1) = 1 by FUNCT_7:96;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y:  (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     u2.DataLoc(u2.a,k1) > 0
     proof
       per cases;
@@ -587,7 +596,7 @@ X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
       end;
     end;
     then x = Exec(i,u2).IC SCMPDS by A9,A12,SCMPDS_2:68
-      .= IC Following(ProgramPart u2,u2) by A11,A12,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A11,A12,Y,AMI_1:131;
     hence thesis by A11,A12,X;
   end;
   suppose
@@ -621,10 +630,11 @@ A19: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= IC u by AMI_1:def 15
       .= n by AMI_1:129;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y:  (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
     m1+k2) by SCMPDS_2:def 20;
     then x = Exec(i,u2).IC SCMPDS by A14,A19,A18,SCMPDS_2:68
-      .= IC Following(ProgramPart u2,u2) by A16,A19,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A16,A19,Y,AMI_1:131;
     hence thesis by A16,A19,X;
   end;
 end;
@@ -657,16 +667,17 @@ A4: (ProgramPart s)/.l = i;
 A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
     k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
+y:  (ProgramPart s).IC s = s.IC s by AMI_1:15;
     per cases;
     suppose
 A6:   s.DataLoc(s.a,k1) >= 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= t by A3,A5,A6,SCMPDS_2:69;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
     suppose
 A7:   s.DataLoc(s.a,k1) < 0;
-      x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+      x = Exec(i,s).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l by A3,A7,SCMPDS_2:69;
       hence x in {succ l,t} by TARSKI:def 2;
     end;
@@ -696,6 +707,7 @@ A13: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= n by AMI_1:129;
 A14: u2.DataLoc(u1.a,k1) = -1 by FUNCT_7:96;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y:  (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     u2.DataLoc(u2.a,k1) < 0
     proof
       per cases;
@@ -710,7 +722,7 @@ X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
       end;
     end;
     then x = Exec(i,u2).IC SCMPDS by A9,A13,SCMPDS_2:69
-      .= IC Following(ProgramPart u2,u2) by A12,A13,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A12,A13,Y,AMI_1:131;
     hence thesis by A12,A13,X;
   end;
   suppose
@@ -746,10 +758,11 @@ A20: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= IC u by AMI_1:def 15
       .= n by AMI_1:129;
 X:  (ProgramPart u2)/.IC u2 = u2.IC u2 by AMI_1:150;
+Y:  (ProgramPart u2).IC u2 = u2.IC u2 by AMI_1:15;
     ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
     m1+k2) by SCMPDS_2:def 20;
     then x = Exec(i,u2).IC SCMPDS by A15,A20,A19,SCMPDS_2:69
-      .= IC Following(ProgramPart u2,u2) by A17,A20,AMI_1:131;
+      .= IC Following(ProgramPart u2,u2) by A17,A20,Y,AMI_1:131;
     hence thesis by A17,A20,X;
   end;
 end;
@@ -819,10 +832,11 @@ A13: not IC SCMPDS in dom g by A11,TARSKI:def 2;
 A14: IC v = v.IC SCMPDS by AMI_1:def 15
       .= l by A7,A13,FUNCT_4:12;
 X:  (ProgramPart v)/.IC v = v.IC v by AMI_1:150;
+Y:  (ProgramPart v).IC v = v.IC v by AMI_1:15;
     x = ((k2 ) + 2) by A2
       .= (abs(v.DataLoc(j,1)) ) + 2 by A10,A5,ABSVALUE:def 1
       .= Exec(i,v).IC SCMPDS by A9,SCMPDS_1:def 23,SCMPDS_2:70
-      .= IC Following(ProgramPart v,v) by A12,A14,AMI_1:131;
+      .= IC Following(ProgramPart v,v) by A12,A14,Y,AMI_1:131;
     hence x in y by A6,A12,A14,X;
   end;
   hence thesis by SETFAM_1:def 1;
@@ -1068,13 +1082,15 @@ A10: m1 = IC s1 and
 A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A12:  s1.DataLoc(s1.a,k1) <> 0 and
 A13:  s2.DataLoc(s2.a,k1) <> 0;
-A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A13,SCMPDS_2:67;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A12,SCMPDS_2:67;
 
       then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A6,A10,A3,A8,A14,
@@ -1085,9 +1101,9 @@ ABSVALUE:45;
     suppose that
 A15:  s1.DataLoc(s1.a,k1) = 0 and
 A16:  s2.DataLoc(s2.a,k1) = 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l2 by A3,A16,SCMPDS_2:67;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A15,SCMPDS_2:67;
       hence x in {} by A17;
     end;
@@ -1096,9 +1112,9 @@ A18:  s1.DataLoc(s1.a,k1) = 0 and
 A19:  s2.DataLoc(s2.a,k1) <> 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A19,SCMPDS_2:67;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A18,SCMPDS_2:67
         .= n1 + 1;
       then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
@@ -1108,11 +1124,11 @@ A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
 A21:  s1.DataLoc(s1.a,k1) <> 0 and
 A22:  s2.DataLoc(s2.a,k1) = 0;
       reconsider n2 = l2 as Element of NAT;
-A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ n2 by A3,A22,SCMPDS_2:67
         .= n2 + 1;
       set w2 = n2;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A21,SCMPDS_2:67;
       then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
       hence x in {} by A6,A10;
@@ -1165,13 +1181,15 @@ A13: m2 = IC s2 and
 A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A15:  s1.DataLoc(s1.a,k1) <> 0 and
 A16:  s2.DataLoc(s2.a,k1) <> 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A16,SCMPDS_2:67;
-A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A15,SCMPDS_2:67;
       thus x in {}
       proof
@@ -1189,9 +1207,9 @@ A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
     suppose that
 A19:  s1.DataLoc(s1.a,k1) = 0 and
 A20:  s2.DataLoc(s2.a,k1) = 0;
-A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ l2 by A11,A20,SCMPDS_2:67;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A19,SCMPDS_2:67;
       hence x in {} by A3,A21,ABSVALUE:44;
     end;
@@ -1200,9 +1218,9 @@ A22:  s1.DataLoc(s1.a,k1) = 0 and
 A23:  s2.DataLoc(s2.a,k1) <> 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A23,SCMPDS_2:67;
-A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A22,SCMPDS_2:67
         .= n1 + 1;
       thus x in {}
@@ -1223,11 +1241,11 @@ A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
 A26:  s1.DataLoc(s1.a,k1) <> 0 and
 A27:  s2.DataLoc(s2.a,k1) = 0;
       reconsider n2 = l2 as Element of NAT;
-A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ n2 by A11,A27,SCMPDS_2:67
         .= n2 + 1;
       set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A26,SCMPDS_2:67;
       thus x in {}
       proof
@@ -1284,13 +1302,15 @@ A10: m1 = IC s1 and
 A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A12:  s1.DataLoc(s1.a,k1) <= 0 and
 A13:  s2.DataLoc(s2.a,k1) <= 0;
-A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A13,SCMPDS_2:68;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A12,SCMPDS_2:68;
 
       then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A6,A10,A3,A8,A14,
@@ -1301,9 +1321,9 @@ ABSVALUE:45;
     suppose that
 A15:  s1.DataLoc(s1.a,k1) > 0 and
 A16:  s2.DataLoc(s2.a,k1) > 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l2 by A3,A16,SCMPDS_2:68;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A15,SCMPDS_2:68;
       hence x in {} by A17;
     end;
@@ -1312,9 +1332,9 @@ A18:  s1.DataLoc(s1.a,k1) > 0 and
 A19:  s2.DataLoc(s2.a,k1) <= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A19,SCMPDS_2:68;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A18,SCMPDS_2:68
         .= n1 + 1;
       then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
@@ -1324,11 +1344,11 @@ A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
 A21:  s1.DataLoc(s1.a,k1) <= 0 and
 A22:  s2.DataLoc(s2.a,k1) > 0;
       reconsider n2 = l2 as Element of NAT;
-A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ n2 by A3,A22,SCMPDS_2:68
         .= n2 + 1;
       set w2 = n2;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A21,SCMPDS_2:68;
       then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
       hence x in {} by A6,A10;
@@ -1381,13 +1401,15 @@ A13: m2 = IC s2 and
 A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A15:  s1.DataLoc(s1.a,k1) <= 0 and
 A16:  s2.DataLoc(s2.a,k1) <= 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A16,SCMPDS_2:68;
-A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A15,SCMPDS_2:68;
       thus x in {}
       proof
@@ -1405,9 +1427,9 @@ A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
     suppose that
 A19:  s1.DataLoc(s1.a,k1) > 0 and
 A20:  s2.DataLoc(s2.a,k1) > 0;
-A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ l2 by A11,A20,SCMPDS_2:68;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A19,SCMPDS_2:68;
       hence x in {} by A3,A21,ABSVALUE:44;
     end;
@@ -1416,9 +1438,9 @@ A22:  s1.DataLoc(s1.a,k1) > 0 and
 A23:  s2.DataLoc(s2.a,k1) <= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A23,SCMPDS_2:68;
-A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A22,SCMPDS_2:68
         .= n1 + 1;
       thus x in {}
@@ -1439,11 +1461,11 @@ A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
 A26:  s1.DataLoc(s1.a,k1) <= 0 and
 A27:  s2.DataLoc(s2.a,k1) > 0;
       reconsider n2 = l2 as Element of NAT;
-A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ n2 by A11,A27,SCMPDS_2:68
         .= n2 + 1;
       set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A26,SCMPDS_2:68;
       thus x in {}
       proof
@@ -1500,13 +1522,15 @@ A10: m1 = IC s1 and
 A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A12:  s1.DataLoc(s1.a,k1) >= 0 and
 A13:  s2.DataLoc(s2.a,k1) >= 0;
-A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A13,SCMPDS_2:69;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A12,SCMPDS_2:69;
 
       then
@@ -1518,9 +1542,9 @@ A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
     suppose that
 A15:  s1.DataLoc(s1.a,k1) < 0 and
 A16:  s2.DataLoc(s2.a,k1) < 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ l2 by A3,A16,SCMPDS_2:69;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A15,SCMPDS_2:69;
       hence x in {} by A17;
     end;
@@ -1529,9 +1553,9 @@ A18:  s1.DataLoc(s1.a,k1) < 0 and
 A19:  s2.DataLoc(s2.a,k1) >= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= abs(m2+k2) by A9,A19,SCMPDS_2:69;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A18,SCMPDS_2:69
         .= n1 + 1;
       then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
@@ -1541,11 +1565,11 @@ A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
 A21:  s1.DataLoc(s1.a,k1) >= 0 and
 A22:  s2.DataLoc(s2.a,k1) < 0;
       reconsider n2 = l2 as Element of NAT;
-A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131,Y
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,Y,y,AMI_1:131
         .= succ n2 by A3,A22,SCMPDS_2:69
         .= n2 + 1;
       set w2 = n2;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A11,A21,SCMPDS_2:69;
       then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
       hence x in {} by A6,A10;
@@ -1598,13 +1622,15 @@ A13: m2 = IC s2 and
 A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
 Y:  (ProgramPart s2)/.IC s2 = s2.IC s2 by AMI_1:150;
 Z:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
+y:  (ProgramPart s2).IC s2 = s2.IC s2 by AMI_1:15;
+z:  (ProgramPart s1).IC s1 = s1.IC s1 by AMI_1:15;
     per cases;
     suppose that
 A15:  s1.DataLoc(s1.a,k1) >= 0 and
 A16:  s2.DataLoc(s2.a,k1) >= 0;
-A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A16,SCMPDS_2:69;
-A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A15,SCMPDS_2:69;
       thus x in {}
       proof
@@ -1622,9 +1648,9 @@ A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
     suppose that
 A19:  s1.DataLoc(s1.a,k1) < 0 and
 A20:  s2.DataLoc(s2.a,k1) < 0;
-A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ l2 by A11,A20,SCMPDS_2:69;
-      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ l1 by A6,A19,SCMPDS_2:69;
       hence x in {} by A3,A21,ABSVALUE:44;
     end;
@@ -1633,9 +1659,9 @@ A22:  s1.DataLoc(s1.a,k1) < 0 and
 A23:  s2.DataLoc(s2.a,k1) >= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= abs(m2+k2) by A14,A23,SCMPDS_2:69;
-A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= succ n1 by A6,A22,SCMPDS_2:69
         .= n1 + 1;
       thus x in {}
@@ -1656,11 +1682,11 @@ A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
 A26:  s1.DataLoc(s1.a,k1) >= 0 and
 A27:  s2.DataLoc(s2.a,k1) < 0;
       reconsider n2 = l2 as Element of NAT;
-A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131,Y
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,Y,y,AMI_1:131
         .= succ n2 by A11,A27,SCMPDS_2:69
         .= n2 + 1;
       set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131,Z
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,Z,z,AMI_1:131
         .= abs(m1+k2) by A9,A26,SCMPDS_2:69;
       thus x in {}
       proof

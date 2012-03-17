@@ -17,7 +17,8 @@ environ
       RELSET_1;
  registrations XBOOLE_0, RELSET_1, NUMBERS, VECTSP_1, CLVECT_1, ALGSTR_0;
  requirements SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, CLVECT_1, BINOP_1, ALGSTR_0;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, CLVECT_1, BINOP_1, ALGSTR_0,
+      VECTSP_1;
  theorems CLVECT_1, FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI,
       COMPLEX1, BINOP_2, GROUP_1, ALGSTR_0;
  schemes BINOP_1, FUNCT_2;
@@ -632,7 +633,8 @@ A5: a * (u + v) = a*u + a*v by Lm2;
 A6: 1r * v = v by Th14;
 A7: (a*b)*v = a*(b*v) by Th15;
   u+v = v+u by Th7;
-  hence thesis by A1,A3,A2,A5,A4,A7,A6,ALGSTR_0:def 16,CLVECT_1:def 2 ,
+  hence thesis by A1,A3,A2,A5,A4,A7,A6,ALGSTR_0:def 16,
+  CLVECT_1:def 2,def 3,def 4,def 5,
   RLVECT_1:def 5,def 6,def 7;
 end;
 
@@ -682,16 +684,15 @@ end;
 
 definition
   let A;
-  func CRing(A) -> strict doubleLoopStr equals
-  doubleLoopStr(#Funcs(A,COMPLEX)
-,ComplexFuncAdd(A),ComplexFuncMult(A), (ComplexFuncUnit(A)),(ComplexFuncZero(A)
-    )#);
+  func CRing(A) -> doubleLoopStr equals
+  doubleLoopStr(# Funcs(A,COMPLEX), ComplexFuncAdd A, ComplexFuncMult A,
+       ComplexFuncUnit A, ComplexFuncZero A #);
   correctness;
 end;
 
 registration
   let A;
-  cluster CRing A -> non empty;
+  cluster CRing A -> non empty strict;
   coherence;
 end;
 
@@ -812,7 +813,7 @@ registration
   end;
 end;
 
-theorem Th29:
+theorem
   for x,y,z being Element of CAlgebra(A), a,b holds x + y = y + x
   & (x + y) + z = x + (y + z) & x + (0.CAlgebra(A)) = x & x is
   right_complementable & x * y = y * x & (x * y) * z = x * (y * z) & x * (1.
@@ -848,48 +849,95 @@ end;
 
 definition
   let IT be non empty ComplexAlgebraStr;
-  attr IT is ComplexAlgebra-like means
-  :Def9:
-  for x,y,z being Element of IT
-for a,b holds a * (x * y) = (a * x) * y & a * (x + y) = a * x + a * y & (a + b)
-  * x = a * x + b * x & (a * b) * x = a * (b * x);
+  attr IT is vector-associative means
+ for x,y being Element of IT, a holds a * (x * y) = (a * x) * y;
+end;
+
+registration let A;
+ cluster CAlgebra A -> strict Abelian add-associative right_zeroed
+      right_complementable commutative associative right_unital
+      right-distributive vector-distributive scalar-distributive
+      scalar-associative vector-associative;
+ coherence
+  proof set C = CAlgebra A;
+   thus C is strict;
+   thus C is Abelian
+    proof let x,y be Element of C;
+     thus x+y = y+x by Th7;
+    end;
+   thus C is add-associative
+    proof let x,y,z be Element of C;
+     thus (x+y)+z = x+(y+z) by Th8;
+    end;
+   thus C is right_zeroed
+    proof let x be Element of C;
+      reconsider f=x as Element of Funcs(A,COMPLEX);
+     thus x+0.C = (ComplexFuncAdd A).(ComplexFuncZero A,f) by Th7
+         .= x by Th12;
+    end;
+   thus C is right_complementable
+    proof let x be Element of C;
+      reconsider f=x as Element of Funcs(A,COMPLEX);
+      reconsider t=(ComplexFuncExtMult A).[-1r,f] as Element of C;
+     take t;
+     thus thesis by Th13;
+    end;
+   thus C is commutative
+    proof let x,y be Element of C;
+     thus x*y = y*x by Th9;
+    end;
+   thus C is associative
+    proof let x,y,z be Element of C;
+     thus (x*y)*z = x*(y*z) by Th10;
+    end;
+   thus C is right_unital
+    proof let x be Element of C;
+      reconsider f=x as Element of Funcs(A,COMPLEX);
+     thus x* 1.C = (ComplexFuncMult A).(ComplexFuncUnit A,f) by Th9
+    .= x by Th11;
+    end;
+   thus C is right-distributive
+    proof let x,y,z be Element of C;
+     thus x*(y+z) = x*y + x*z by Th17;
+    end;
+   thus C is vector-distributive
+    proof let a; let x,y be Element of C;
+     thus a*(x+y) = (a*x) + (a*y) by Lm2;
+    end;
+   thus C is scalar-distributive
+    proof let a,b; let x be Element of C;
+     thus (a+b)*x = (a*x) + (b*x) by Th16;
+    end;
+   thus C is scalar-associative
+    proof let a,b; let x be Element of C;
+     thus a*(b*x) = (a*b)*x by Th15;
+    end;
+   let x,y be Element of C; let a;
+   thus thesis by Th18;
+  end;
 end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
-commutative associative right_unital right-distributive ComplexAlgebra-like (
-    non empty ComplexAlgebraStr);
+    commutative associative right_unital right-distributive vector-distributive
+    scalar-distributive scalar-associative vector-associative
+     (non empty ComplexAlgebraStr);
   existence
   proof
-    consider A;
-    for x,y,z being Element of CAlgebra(A) for a,b holds x+y = y+x & (x+y)
-+z = x+(y+z) & x+(0.CAlgebra(A)) = x & x is right_complementable & x*y = y*x &
-(x*y)*z = x*(y*z) & x*(1.CAlgebra(A)) = x & x*(y+z) = x*y + x*z & a*(x*y) = (a*
-x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) by Th29;
-    then CAlgebra(A) is Abelian add-associative right_zeroed
-    right_complementable right_unital right-distributive ComplexAlgebra-like
-    commutative associative by Def9,ALGSTR_0:def 16,GROUP_1:def 4,def 16,
-    RLVECT_1:def 5,def 6,def 7 ,VECTSP_1:def 11,def 13;
-    hence thesis;
+   take CAlgebra 1;
+   thus thesis;
   end;
 end;
 
 definition
   mode ComplexAlgebra is Abelian add-associative right_zeroed
-right_complementable commutative associative right_unital right-distributive
-    ComplexAlgebra-like (non empty ComplexAlgebraStr);
+    right_complementable commutative associative right_unital
+    right-distributive vector-distributive scalar-distributive
+    scalar-associative vector-associative (non empty ComplexAlgebraStr);
 end;
 
 theorem
-  CAlgebra(A) is ComplexAlgebra
-proof
-  for x,y,z being Element of CAlgebra(A) for a,b holds x+y = y+x & (x+y)+z
-= x+(y+z) & x+(0.CAlgebra(A)) = x & x is right_complementable & x*y = y*x & (x*
-y)*z = x*(y*z) & x*(1.CAlgebra(A)) = x & x*(y+z) = x*y + x*z & a*(x*y) = (a*x)*
-  y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) by Th29;
-  hence thesis by Def9,ALGSTR_0:def 16,GROUP_1:def 4,def 16,RLVECT_1:def 5,
-  def 6,def 7 ,VECTSP_1:def 11,def 13;
-end;
+  CAlgebra(A) is ComplexAlgebra;
 
 theorem
   1.CRing(A) = ComplexFuncUnit(A);

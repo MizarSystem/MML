@@ -24,10 +24,11 @@ environ
       MEMBERED, STRUCT_0, RLVECT_1, VECTSP_1, FUNCSDOM, RSSPACE3, LOPBAN_1,
       ALGSTR_0, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions STRUCT_0, GROUP_1, VECTSP_1, LOPBAN_1, RLVECT_1, ALGSTR_0;
+ definitions STRUCT_0, GROUP_1, VECTSP_1, LOPBAN_1, RLVECT_1, ALGSTR_0,
+      FUNCSDOM;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, FUNCSDOM, XCMPLX_0, SERIES_1,
       FUNCT_1, FUNCT_2, NORMSP_1, SEQ_4, RSSPACE, RSSPACE3, LOPBAN_1, PREPOWER,
-      STRUCT_0, GROUP_1, XREAL_1, XXREAL_0, ALGSTR_0, XREAL_0;
+      STRUCT_0, GROUP_1, XREAL_1, XXREAL_0, ALGSTR_0, XREAL_0, GRCAT_1;
  schemes BINOP_1, NAT_1;
 
 begin :: Banach Algebra of Bounded Linear Operators
@@ -49,12 +50,12 @@ A1: now
   now
     let v,w be VECTOR of X;
     thus (g*f).(v+w) =g.(f.(v+w)) by FUNCT_2:21
-      .=g.(f.v+f.w) by LOPBAN_1:def 5
-      .=g.(f.v)+g.(f.w) by LOPBAN_1:def 5
+      .=g.(f.v+f.w) by GRCAT_1:def 13
+      .=g.(f.v)+g.(f.w) by GRCAT_1:def 13
       .=(g*f).(v)+g.(f.w) by FUNCT_2:21
       .=(g*f).(v)+(g*f).(w) by FUNCT_2:21;
   end;
-  hence thesis by A1,LOPBAN_1:def 5,def 6;
+  hence thesis by A1,GRCAT_1:def 13,LOPBAN_1:def 6;
 end;
 
 theorem Th2:
@@ -69,23 +70,22 @@ proof
   let f be bounded LinearOperator of X,Y;
   let g be bounded LinearOperator of Y,Z;
   reconsider ff=f as Point of R_NormSpace_of_BoundedLinearOperators(X,Y) by
-  LOPBAN_1:def 10;
+LOPBAN_1:def 10;
   reconsider gg=g as Point of R_NormSpace_of_BoundedLinearOperators(Y,Z) by
-  LOPBAN_1:def 10;
+LOPBAN_1:def 10;
 A1: now
     let v be VECTOR of X;
     0 <= ||.gg.|| by NORMSP_1:8;
     then
-A2: ||.gg.|| * ||.f.(v).|| <=||.gg.|| * ( ||.ff.|| * ||.v.||) by
-    LOPBAN_1:38,XREAL_1:66;
+A2: ||.gg.|| * ||.f.(v).|| <=||.gg.|| * ( ||.ff.|| * ||.v.||) by LOPBAN_1:38
+,XREAL_1:66;
     ||.(g*f).v.|| = ||.g.(f.v).|| & ||.g.(f.(v)).|| <=||.gg.|| * ||.f.(v)
     .|| by FUNCT_2:21,LOPBAN_1:38;
     hence ||.(g*f).v.|| <=(||.gg.|| * ||.ff.||) * ||.v.|| by A2,XXREAL_0:2;
   end;
 A3: 0 <= ||.gg.|| & 0 <= ||.ff.|| by NORMSP_1:8;
-  then reconsider gf=g*f as bounded LinearOperator of X,Z by A1,
-  Th1,LOPBAN_1:def
-  9;
+  then reconsider gf=g*f as bounded LinearOperator of X,Z by A1,Th1,
+LOPBAN_1:def 9;
   set K = ||.gg.|| * ||.ff.||;
 A4: (BoundedLinearOperatorsNorm(X,Y).f) = ||.ff.|| & (
   BoundedLinearOperatorsNorm (Y,Z).g) = ||.gg.|| by NORMSP_1:def 1;
@@ -130,8 +130,7 @@ definition
   let X be RealNormSpace;
   let f,g be Element of BoundedLinearOperators(X,X);
   func g*f -> Element of BoundedLinearOperators(X,X) equals
-  modetrans(g,X,X)*
-  modetrans(f,X,X);
+  modetrans(g,X,X)*modetrans(f,X,X);
   correctness by LOPBAN_1:def 10;
 end;
 
@@ -195,8 +194,8 @@ A2: now
       .=a*(id (the carrier of X)).(v) by FUNCT_1:35;
   end;
   for v be VECTOR of X holds ||.id (the carrier of X).v.|| <=1* ||.v.|| by
-  FUNCT_1:35;
-  hence thesis by A1,A2,LOPBAN_1:def 5,def 6,def 9;
+FUNCT_1:35;
+  hence thesis by A1,A2,GRCAT_1:def 13,LOPBAN_1:def 6,def 9;
 end;
 
 definition
@@ -274,8 +273,7 @@ theorem Th7:
 proof
   let X be RealNormSpace;
   let f,g,h be Element of BoundedLinearOperators(X,X);
-  modetrans((g*h),X,X) =modetrans(g,X,X)*modetrans(h,X,X) by LOPBAN_1:def
-  12;
+  modetrans((g*h),X,X) =modetrans(g,X,X)*modetrans(h,X,X) by LOPBAN_1:def 12;
   then
   modetrans(f,X,X)*modetrans((g*h),X,X) =(modetrans(f,X,X)*modetrans(g,X,X
   ))*modetrans(h,X,X) by Th5;
@@ -290,10 +288,10 @@ proof
   let f be Element of BoundedLinearOperators(X,X);
   (id the carrier of X) is bounded LinearOperator of X,X by Th3;
   then (id the carrier of X) is Element of BoundedLinearOperators(X,X) by
-  LOPBAN_1:def 10;
+LOPBAN_1:def 10;
   then
 A1: modetrans( (id (the carrier of X)),X,X) = (id the carrier of X) by
-  LOPBAN_1:def 12;
+LOPBAN_1:def 12;
   hence f*FuncUnit(X) =modetrans(f,X,X) by Th6
     .=f by LOPBAN_1:def 12;
   thus FuncUnit(X)*f =modetrans(f,X,X) by A1,Th6
@@ -328,7 +326,7 @@ A1: gg=mg & hh=mh by LOPBAN_1:def 12;
       then
 A2:   mgh.x=mg.x+mh.x by A1,LOPBAN_1:41;
       thus (mf*mgh).x=mf.(mgh.x) by Th4
-        .=mf.(mg.x) +mf.(mh.x) by A2,LOPBAN_1:def 5
+        .=mf.(mg.x) +mf.(mh.x) by A2,GRCAT_1:def 13
         .=(mf*mg).x+mf.(mh.x) by Th4
         .=(mf*mg).x+ (mf*mh).x by Th4;
     end;
@@ -408,7 +406,7 @@ A3:   maf.y=a*mf.y by A2,LOPBAN_1:42;
 A4:   mbg.x=b*mg.x by A1,LOPBAN_1:42;
       thus (maf*mbg).x=maf.(mbg.x) by Th4
         .=a*(b*mf.(mg.x)) by A3,A4,LOPBAN_1:def 6
-        .=(a*b)*mf.(mg.x) by RLVECT_1:def 9
+        .=(a*b)*mf.(mg.x) by RLVECT_1:def 10,def 11
         .=(a*b)*(mf*mg).x by Th4;
     end;
     then k=(a*b)*fg by LOPBAN_1:42;
@@ -430,7 +428,7 @@ proof
     BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider gg=g as Element of RRL;
 A1: (1*g)=1*gg
-    .=g by RLVECT_1:def 9;
+    .=g by RLVECT_1:def 11;
   a*(f*g)=(a*1)*(f*g)
     .=(a*f)*(1*g) by Th11;
   hence thesis by A1;
@@ -550,8 +548,8 @@ Ring_of_BoundedLinearOperators(X) st x+t= 0.Ring_of_BoundedLinearOperators(X))
   & (x*y)*z = x*(y*z) & x*(1.Ring_of_BoundedLinearOperators(X)) = x & (1.
 Ring_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x = y*x
   + z*x by Th13;
-  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7 ,VECTSP_1:def
-  16,def 18;
+  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 16
+,def 18;
 end;
 
 registration
@@ -604,7 +602,7 @@ registration
   end;
 end;
 
-theorem Th15:
+theorem
   for X be RealNormSpace for x,y,z being Element of
 R_Algebra_of_BoundedLinearOperators(X) for a,b be Real holds x+y = y+x & (x+y)+
   z = x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x & (ex t being
@@ -666,13 +664,13 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
     .= (a*xx)*(yy) by Th12
     .=(a*x)*y by Def4;
   thus a*(x+y) =a*(f+g)
-    .=a*f+a*g by RLVECT_1:def 9
+    .=a*f+a*g by RLVECT_1:def 8
     .=a*x+a*y;
   thus (a+b)*x =(a+b)*f
     .=a*f+b*f by RLVECT_1:def 9
     .=a*x+b*x;
   thus (a*b)*x =(a*b)*f
-    .=a*(b*f) by RLVECT_1:def 9
+    .=a*(b*f) by RLVECT_1:def 10,def 11
     .=a*(b*x);
   thus (a*b)*(x*y) = (a*b)*(xx*yy) by Def4
     .= (a*xx)*(b*yy) by Th11
@@ -681,32 +679,127 @@ end;
 
 definition
   mode BLAlgebra is Abelian add-associative right_zeroed right_complementable
-associative right_unital right-distributive Algebra-like (non empty AlgebraStr)
-  ;
+associative right_unital right-distributive vector-distributive
+scalar-distributive scalar-associative vector-associative
+ (non empty AlgebraStr);
+end;
+
+registration let X be RealNormSpace;
+ cluster R_Algebra_of_BoundedLinearOperators X ->
+  Abelian add-associative right_zeroed right_complementable
+  associative right_unital right-distributive vector-distributive
+  scalar-distributive scalar-associative vector-associative strict;
+ coherence
+  proof set A = R_Algebra_of_BoundedLinearOperators X;
+  set BLOP=BoundedLinearOperators(X,X);
+  set RRL=RLSStruct (# BoundedLinearOperators(X,X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
+  set MULT= FuncMult(X);
+  set UNIT=FuncUnit(X);
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
+   thus A is Abelian
+    proof
+     let x,y be Element of A;
+      reconsider f=x, g=y as Element of RRL;
+     thus x+y = f+g .= y+x by RLVECT_1:5;
+    end;
+   thus A is add-associative
+    proof
+     let x,y,z be Element of A;
+      reconsider f=x, g=y, h=z as Element of RRL;
+     thus (x+y)+z =(f+g)+h
+       .=f+(g+h) by RLVECT_1:def 6
+       .= x+(y+z);
+    end;
+   thus A is right_zeroed
+    proof
+     let x be Element of A;
+      reconsider f=x as Element of RRL;
+     thus x+0.A = f + 0.RRL
+       .= x by RLVECT_1:def 7;
+    end;
+   thus A is right_complementable
+    proof
+     let x be Element of A;
+      reconsider f=x as Element of RRL;
+     consider s be Element of RRL such that
+A1:   f + s = 0.RRL by ALGSTR_0:def 11;
+     reconsider t=s as Element of A;
+     take t;
+     thus thesis by A1;
+    end;
+   thus A is associative
+    proof
+     let x,y,z be Element of A;
+      reconsider xx=x,yy=y,zz=z as Element of BLOP;
+     thus (x*y)*z = MULT.(xx*yy,zz) by Def4
+        .=(xx*yy)*zz by Def4
+        .=xx*(yy*zz) by Th7
+        .= MULT.(xx,yy*zz) by Def4
+        .=x*(y*z) by Def4;
+    end;
+   thus A is right_unital
+    proof
+     let x be Element of A;
+      reconsider xx=x as Element of BLOP;
+     thus x*1.A =xx*UNIT by Def4
+       .= x by Th8;
+    end;
+   thus A is right-distributive
+    proof
+     let x,y,z be Element of A;
+      reconsider xx=x,yy=y,zz=z as Element of BLOP;
+     thus x*(y+z) =xx*(yy+zz) by Def4
+       .=xx*yy + xx*zz by Th9
+       .= ADD.(xx*yy,MULT.(xx,zz)) by Def4
+       .= x*y + x*z by Def4;
+    end;
+   thus A is vector-distributive
+    proof
+     let a be real number;
+     let x,y be Element of A;
+      reconsider f=x, g=y as Element of RRL;
+     thus a*(x+y) =a*(f+g)
+      .=a*f+a*g by RLVECT_1:def 8
+      .=a*x+a*y;
+    end;
+   thus A is scalar-distributive
+    proof
+     let a,b be real number;
+     let x be Element of A;
+      reconsider f=x as Element of RRL;
+     thus (a+b)*x =(a+b)*f
+       .=a*f+b*f by RLVECT_1:def 9
+       .=a*x+b*x;
+    end;
+   thus A is scalar-associative
+    proof
+     let a,b be real number;
+     let x be Element of A;
+      reconsider f=x as Element of RRL;
+     thus (a*b)*x =(a*b)*f
+       .=a*(b*f) by RLVECT_1:def 10,def 11
+       .=a*(b*x);
+    end;
+   thus A is vector-associative
+    proof
+     let x,y be Element of A;
+     let a be Real;
+      reconsider xx=x,yy=y as Element of BLOP;
+     thus a*(x*y) = a*(xx*yy) by Def4
+       .= (a*xx)*yy by Th12
+       .=(a*x)*y by Def4;
+    end;
+   thus thesis;
+  end;
 end;
 
 theorem
   for X be RealNormSpace holds R_Algebra_of_BoundedLinearOperators(X) is
-  BLAlgebra
-proof
-  let X be RealNormSpace;
-  set R = R_Algebra_of_BoundedLinearOperators X;
-A1: R is right_complementable
-  proof
-    let x be Element of R;
-    thus ex t being Element of R st x+t= 0.R by Th15;
-  end;
-  for x,y,z being Element of R for a,b be Real holds x+y = y+x & (x+y)+z =
-  x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x & (ex t being
-  Element of R_Algebra_of_BoundedLinearOperators(X) st x+t= 0.
-  R_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) & x*(1.
-  R_Algebra_of_BoundedLinearOperators(X)) = x & (1.
-R_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x =
-y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*
-  b)*x = a*(b*x) by Th15;
-  hence thesis by A1,FUNCSDOM:def 20,GROUP_1:def 4,RLVECT_1:def 5,def 6 ,def
-  7,VECTSP_1:def 11,def 13;
-end;
+  BLAlgebra;
 
 registration
   cluster l1_Space -> complete;
@@ -931,23 +1024,25 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
     .= (a1*xx)*(b1*yy) by Th11
     .=(a*x)*(b*y) by Def4;
   thus a*(x+y) =a*(f+g)
-    .=a*f+a*g by RLVECT_1:def 9
+    .=a*f+a*g by RLVECT_1:def 8
     .=a*x+a*y;
   thus (a+b)*x =(a+b)*f
     .=a*f+b*f by RLVECT_1:def 9
     .=a*x+b*x;
   thus (a*b)*x =(a*b)*f
-    .=a*(b*f) by RLVECT_1:def 9
+    .=a*(b*f) by RLVECT_1:def 10,def 11
     .=a*(b*x);
   thus 1*x =1*f
-    .=x by RLVECT_1:def 9;
+    .=x by RLVECT_1:def 11;
 end;
 
 theorem Th20:
   for X be RealNormSpace holds
   R_Normed_Algebra_of_BoundedLinearOperators(X) is RealNormSpace-like Abelian
   add-associative right_zeroed right_complementable associative right_unital
-  right-distributive Algebra-like RealLinearSpace-like
+  right-distributive vector-distributive scalar-distributive scalar-associative
+  vector-associative vector-distributive scalar-distributive scalar-associative
+  scalar-unital
 proof
   let X be RealNormSpace;
   set RBLOP=R_Normed_Algebra_of_BoundedLinearOperators(X);
@@ -994,14 +1089,16 @@ R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y
 +z)*x = y*x + z*x & a*(x*y) = (a*x)*y & (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x
 + a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) & 1*x=x)& for a be real number
   for v,w being VECTOR of RBLOP holds a * (v + w) = a * v + a * w by Th19;
-  hence thesis by A4,A5,A1,FUNCSDOM:def 20,GROUP_1:def 4,NORMSP_1:def 2 ,
-  RLVECT_1:def 5,def 6,def 7,def 9,VECTSP_1:def 11,def 13;
+  hence thesis by A4,A5,A1,FUNCSDOM:def 20,GROUP_1:def 4,NORMSP_1:def 2
+,RLVECT_1:def 5,def 6,def 7,def 8,def 9,def 10,def 11,VECTSP_1:def 11,def 13;
 end;
 
 registration
   cluster RealNormSpace-like Abelian add-associative right_zeroed
-right_complementable associative right_unital right-distributive Algebra-like
-    RealLinearSpace-like strict (non empty Normed_AlgebraStr);
+right_complementable associative right_unital right-distributive
+vector-distributive scalar-distributive scalar-associative vector-associative
+    vector-distributive scalar-distributive scalar-associative
+    scalar-unital strict (non empty Normed_AlgebraStr);
   existence
   proof
     consider X be RealNormSpace;
@@ -1013,14 +1110,18 @@ end;
 definition
   mode Normed_Algebra is RealNormSpace-like Abelian add-associative
 right_zeroed right_complementable associative right_unital right-distributive
-    Algebra-like RealLinearSpace-like (non empty Normed_AlgebraStr);
+    vector-distributive scalar-distributive scalar-associative
+    vector-associative vector-distributive scalar-distributive
+    scalar-associative scalar-unital (non empty Normed_AlgebraStr);
 end;
 
 registration
   let X be RealNormSpace;
   cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> RealNormSpace-like
     Abelian add-associative right_zeroed right_complementable associative
-    right_unital right-distributive Algebra-like RealLinearSpace-like;
+    right_unital right-distributive vector-distributive scalar-distributive
+    scalar-associative vector-associative vector-distributive
+    scalar-distributive scalar-associative scalar-unital;
   correctness by Th20;
 end;
 
@@ -1124,7 +1225,7 @@ A3:     for n, m be Element of NAT st n >= k & m >= k holds ||.(seq.n)
           let n, m be Element of NAT such that
 A4:       n >= k & m >= k;
           ||.(seq1.n) - (seq1.m).|| = NRM.((seq1.n) +(- (seq1.m))) by
-          NORMSP_1:def 1
+NORMSP_1:def 1
             .= NRM. (ADD.(seq1.n,(-1)*(seq1.m))) by RLVECT_1:29
             .= NRM. (ADD.(seq.n,(-1)*(seq.m)))
             .= NRM.((seq.n) +(- (seq.m))) by RLVECT_1:29
@@ -1150,8 +1251,7 @@ A6:     for n be Element of NAT st m <= n holds ||.(seq1.n) - g1.|| <
         now
           let n be Element of NAT such that
 A7:       m <= n;
-          ||.(seq1.n) - (g1).|| = NRM.((seq1.n) +(- (g1))) by NORMSP_1:
-          def 1
+          ||.(seq1.n) - (g1).|| = NRM.((seq1.n) +(- (g1))) by NORMSP_1:def 1
             .= NRM. (ADD.(seq1.n,(-1)*(g1))) by RLVECT_1:29
             .= NRM. (ADD.(seq.n,(-1)*(g)))
             .= NRM.((seq.n) +(- (g))) by RLVECT_1:29

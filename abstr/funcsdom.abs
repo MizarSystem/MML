@@ -16,7 +16,8 @@ environ
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, BINOP_2, VECTSP_1, RLVECT_1,
       FUNCT_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, RLVECT_1, VECTSP_1,
-      ALGSTR_0, BINOP_2, FUNCOP_1, FUNCT_3, REAL_1, XREAL_0, ORDINAL1, RELAT_1;
+      ALGSTR_0, BINOP_2, FUNCOP_1, FUNCT_3, REAL_1, XREAL_0, ORDINAL1, RELAT_1,
+      VALUED_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -64,7 +65,7 @@ definition
 end;
 
 definition
-  let A;
+  let A be set;
   func RealFuncMult(A) -> BinOp of Funcs(A,REAL) means
 :: FUNCSDOM:def 3
 
@@ -84,14 +85,14 @@ end;
 
 definition
   let A be set;
-  func RealFuncZero(A) -> Element of Funcs(A,REAL) equals
+  func RealFuncZero A -> Element of Funcs(A,REAL) equals
 :: FUNCSDOM:def 5
   A --> 0;
 end;
 
 definition
-  let A;
-  func RealFuncUnit(A) -> Element of Funcs(A,REAL) equals
+  let A be set;
+  func RealFuncUnit A -> Element of Funcs(A,REAL) equals
 :: FUNCSDOM:def 6
   A --> 1;
 end;
@@ -130,13 +131,16 @@ RealFuncAdd A).(f,(RealFuncAdd A).(g,h)) = (RealFuncAdd A).((RealFuncAdd A).(f,
   g),h);
 
 theorem :: FUNCSDOM:18
-  (RealFuncMult(A)).(f,g) = (RealFuncMult(A)).(g,f);
+ for A be set, f,g be Element of Funcs(A,REAL) holds
+  (RealFuncMult A).(f,g) = (RealFuncMult A).(g,f);
 
 theorem :: FUNCSDOM:19
+ for A be set, f,g,h be Element of Funcs(A,REAL) holds
   (RealFuncMult(A)).(f,(RealFuncMult(A)).(g,h)) = (RealFuncMult(A)
   ).((RealFuncMult(A)).(f,g),h);
 
 theorem :: FUNCSDOM:20
+ for A being set, f being Element of Funcs(A,REAL) holds
   (RealFuncMult(A)).(RealFuncUnit(A),f) = f;
 
 theorem :: FUNCSDOM:21
@@ -161,12 +165,14 @@ theorem :: FUNCSDOM:25
   RealFuncExtMult A).(a+b,f);
 
 theorem :: FUNCSDOM:26
+ for A be set, f,g,h be Element of Funcs(A,REAL) holds
   (RealFuncMult(A)).(f,(RealFuncAdd A).(g,h)) = (RealFuncAdd A).((
   RealFuncMult(A)).(f,g),(RealFuncMult(A)).(f,h));
 
 theorem :: FUNCSDOM:27
-  (RealFuncMult(A)).((RealFuncExtMult A).[a,f],g) = (
-  RealFuncExtMult A).[a,(RealFuncMult(A)).(f,g)];
+ for A being set, f,g,h be Element of Funcs(A,REAL), a being Real holds
+  (RealFuncMult A).((RealFuncExtMult A).(a,f),g)
+   = (RealFuncExtMult A).(a,(RealFuncMult A).(f,g));
 
 theorem :: FUNCSDOM:28
   ex f,g st (for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1
@@ -271,9 +277,9 @@ registration
 end;
 
 definition
-  let A;
+  let A be set;
   canceled 6;
-  func RAlgebra(A) -> strict AlgebraStr equals
+  func RAlgebra A -> strict AlgebraStr equals
 :: FUNCSDOM:def 19
   AlgebraStr(#Funcs(A,REAL),
     RealFuncMult(A),RealFuncAdd(A), RealFuncExtMult(A),(RealFuncUnit(A)),(
@@ -293,36 +299,35 @@ end;
 theorem :: FUNCSDOM:44
   1.RAlgebra(A) = RealFuncUnit(A);
 
-canceled 4;
-
-theorem :: FUNCSDOM:49
-  for x,y,z being Element of RAlgebra(A) for a,b holds x+y = y+x &
-(x+y)+z = x+(y+z) & x+(0.RAlgebra(A)) = x & x*y = y*x & (x*y)*z = x*(y*z) & x*(
-1.RAlgebra(A)) = x & x*(y+z) = x*y + x*z & a*(x*y) = (a*x)*y & a*(x+y) = a*x +
-  a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x);
-
 definition
   let IT be non empty AlgebraStr;
-  attr IT is Algebra-like means
+  attr IT is vector-associative means
 :: FUNCSDOM:def 20
+ for x,y being Element of IT for a holds a*(x*y) = (a*x)*y;
+end;
 
-  for x,y,z being Element of IT for a,b
-holds a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*b)*x =
-  a*(b*x);
+registration let A be set;
+ cluster RAlgebra A -> non empty;
+end;
+
+registration let A be set;
+ cluster RAlgebra A -> strict Abelian add-associative right_zeroed
+    right_complementable commutative associative right_unital
+    right-distributive vector-associative scalar-associative
+    vector-distributive scalar-distributive;
 end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
-commutative associative right_unital right-distributive Algebra-like (non empty
+commutative associative right_unital right-distributive vector-associative
+scalar-associative vector-distributive scalar-distributive (non empty
     AlgebraStr);
 end;
 
 definition
   mode Algebra is Abelian add-associative right_zeroed right_complementable
-commutative associative right_unital right-distributive Algebra-like (non empty
+commutative associative right_unital right-distributive vector-associative
+scalar-associative vector-distributive scalar-distributive (non empty
     AlgebraStr);
 end;
-
-theorem :: FUNCSDOM:50
-  RAlgebra(A) is Algebra;
 

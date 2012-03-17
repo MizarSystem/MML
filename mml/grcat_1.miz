@@ -11,7 +11,8 @@ environ
       STRUCT_0, RELAT_1, GRAPH_1, VECTSP_1, PARTFUN1, REALSET1, MIDSP_1, CAT_2,
       FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
+      REALSET1, PARTFUN1, FUNCT_2, ORDINAL1,
+      CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
       ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1, CAT_2,
       ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
@@ -22,7 +23,7 @@ environ
  definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0, GRAPH_1;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
       VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, ORDINAL1, XBOOLE_0,
-      TOPS_2, BINOP_1, CARD_1;
+      TOPS_2, BINOP_1, CARD_1, SUBSET_1;
  schemes FUNCT_2, BINOP_1, TARSKI, XBOOLE_0;
 
 begin ::  0a. Auxiliary theorems: sets and universums
@@ -31,24 +32,7 @@ reserve x, y for set;
 reserve D for non empty set;
 reserve UN for Universe;
 
-canceled;
-
-theorem Th2:
-  for X,Y,A being set, z being set st z in A & A c= [:X,Y:] ex x
-  being Element of X, y being Element of Y st z = [x,y]
-proof
-  let X,Y,A be set, z be set;
-  assume
-  z in A & A c= [:X,Y:];
-  then consider x,y such that
-A1: x in X and
-A2: y in Y and
-A3: z = [x,y] by ZFMISC_1:103;
-  reconsider y as Element of Y by A2;
-  reconsider x as Element of X by A1;
-  take x,y;
-  thus thesis by A3;
-end;
+canceled 2;
 
 theorem Th3:
   for u1,u2,u3,u4 being Element of UN holds [u1,u2,u3] in UN & [u1,
@@ -60,18 +44,10 @@ proof
   hence thesis by CLASSES2:64;
 end;
 
-theorem Th4:
-  for x,y st x in y & y in UN holds x in UN
-proof
-  let x,y;
-  assume that
-A1: x in y and
-A2: y in UN;
-  y c= UN by A2,ORDINAL1:def 2;
-  hence thesis by A1;
-end;
 
 ::  0c. Auxiliary theorems: Trivial Group
+
+canceled;
 
 theorem Th5:
   op2.({},{}) = {} & op1.{} = {} & op0 = {}
@@ -94,16 +70,17 @@ A1: D in UN by CLASSES2:62,63;
 A2: op2 in Funcs([:D,D:],D) by CARD_1:87,FUNCT_2:11;
   thus [:D,D:] in UN by A1,CLASSES2:67;
   then Funcs([:D,D:],D) in UN by A1,CLASSES2:67;
-  hence op2 in UN by A2,Th4;
+  hence op2 in UN by A2,ORDINAL1:19;
 A3: op1 in Funcs(D,D) by CARD_1:87,FUNCT_2:11;
   Funcs(D,D) in UN by A1,CLASSES2:67;
-  hence thesis by A3,Th4;
+  hence thesis by A3,ORDINAL1:19;
 end;
 
-theorem Th7:
-  addLoopStr (# 1,op2,op0 #) is midpoint_operator
+registration
+  cluster Trivial-addLoopStr -> midpoint_operator;
+  coherence
 proof
-  set G = addLoopStr (# 1, op2, op0 #);
+  set G = Trivial-addLoopStr;
 A1: for a being Element of G ex x being Element of G st Double x = a
   proof
     consider x being Element of G;
@@ -116,11 +93,9 @@ A1: for a being Element of G ex x being Element of G st Double x = a
   TARSKI:def 1;
   hence thesis by A1,MIDSP_2:def 5;
 end;
-
-registration
-  cluster Trivial-addLoopStr -> midpoint_operator;
-  coherence by Th7;
 end;
+
+canceled;
 
 theorem
   (for x being Element of Trivial-addLoopStr holds x = {}) & (for x,y
@@ -192,30 +167,21 @@ theorem
 ::  1a. Maps of the carriers of groups
 
 definition
-  canceled;
-end;
-
-canceled;
-
-theorem
-  for G,H being 1-sorted, f being Function of G, H holds f*(id G) = f &
-  (id H)*f = f by FUNCT_2:23;
-
-definition
   let G be non empty 1-sorted, H be non empty ZeroStr;
+  canceled;
   func ZeroMap(G,H) -> Function of G,H equals
   (the carrier of G) --> 0.H;
   coherence;
 end;
 
 definition
-  let G,H be non empty addLoopStr;
+  let G,H be non empty addMagma;
   let f be Function of G,H;
   attr f is additive means
-  :Def13:
-  for x,y being Element of G holds f.(x+y) =
-  f.x+f.y;
+:Def13: for x,y being Element of G holds f.(x+y) = f.x+f.y;
 end;
+
+canceled 2;
 
 theorem Th13:
   comp Trivial-addLoopStr = op1
@@ -236,12 +202,35 @@ proof
   hence thesis by CARD_1:87,FUNCT_2:18;
 end;
 
+registration
+ let G be non empty addMagma, H being right_zeroed (non empty addLoopStr);
+ cluster ZeroMap(G,H) -> additive;
+ coherence
+proof
+  set f = ZeroMap(G,H);
+    let x,y be Element of G;
+A1: f.y = 0.H by FUNCOP_1:13;
+    f.(x+y) = 0.H & f.x = 0.H by FUNCOP_1:13;
+    hence thesis by A1,RLVECT_1:def 7;
+end;
+end;
+
+registration
+ let G be non empty addMagma, H be right_zeroed (non empty addLoopStr);
+ cluster additive Function of G,H;
+ existence
+  proof
+   take ZeroMap(G,H);
+   thus thesis;
+  end;
+end;
+
 theorem Th14:
-  for G1,G2,G3 being non empty addLoopStr, f being Function of G1,
+  for G1,G2,G3 being non empty addMagma, f being Function of G1,
   G2, g being Function of G2,G3 st f is additive & g is additive holds g*f is
   additive
 proof
-  let G1,G2,G3 be non empty addLoopStr, f be Function of G1,G2, g be Function
+  let G1,G2,G3 be non empty addMagma, f be Function of G1,G2, g be Function
   of G2,G3 such that
 A1: f is additive and
 A2: g is additive;
@@ -256,25 +245,16 @@ A3: g.(f.x) = h.x & g.(f.y) = h.y by FUNCT_2:21;
   hence thesis by Def13;
 end;
 
-canceled;
-
-theorem Th16:
-  for G being non empty addLoopStr, H being right_zeroed (non
-  empty addLoopStr) holds ZeroMap(G,H) is additive
-proof
-  let G be non empty addLoopStr, H be right_zeroed (non empty addLoopStr);
-  set f = ZeroMap(G,H);
-  for x,y being Element of G holds f.(x+y) = f.x+f.y
-  proof
-    let x,y be Element of G;
-A1: f.y = 0.H by FUNCOP_1:13;
-    f.(x+y) = 0.H & f.x = 0.H by FUNCOP_1:13;
-    hence thesis by A1,RLVECT_1:def 7;
-  end;
-  hence thesis by Def13;
+registration
+ let G1 be non empty addMagma,
+     G2,G3 being right_zeroed (non empty addLoopStr),
+     f being additive Function of G1, G2,
+     g being additive Function of G2, G3;
+ cluster g*f -> additive Function of G1, G3;
+ coherence by Th14;
 end;
 
-::  1b. carrier' of groups
+::  1b. carrier of groups
 
 reserve G,H for AddGroup;
 
@@ -300,6 +280,8 @@ definition
   coherence;
 end;
 
+canceled 2;
+
 theorem
   for f being GroupMorphismStr, G1,G2 being AddGroup, f0 being Function
   of G1,G2 st f = GroupMorphismStr(# G1,G2,f0#) holds dom f = G1 & cod f = G2 &
@@ -308,8 +290,7 @@ theorem
 definition
   let G,H;
   func ZERO(G,H) -> GroupMorphismStr equals
-  GroupMorphismStr(# G,H,ZeroMap(G,H
-    )#);
+  GroupMorphismStr(# G,H,ZeroMap(G,H)#);
   coherence;
 end;
 
@@ -332,7 +313,7 @@ registration
   proof
     consider G,H;
     set z = ZERO(G,H);
-    fun(z) is additive by Th16;
+    fun(z) is additive;
     then z is GroupMorphism-like by Def18;
     hence thesis;
   end;
@@ -356,7 +337,7 @@ registration
   coherence
   proof
     set z = ZERO(G,H);
-    fun(z) is additive by Th16;
+    fun(z) is additive;
     hence thesis by Def18;
   end;
 end;
@@ -365,8 +346,7 @@ definition
   let G,H;
   mode Morphism of G,H -> GroupMorphism means
     :Def19:
-    dom(it) = G & cod(it) =
-    H;
+    dom(it) = G & cod(it) = H;
   existence
   proof
     take ZERO(G,H);
@@ -409,18 +389,15 @@ A1: f is additive;
   hence thesis by A1,Th19;
 end;
 
-theorem Th21:
-  for G being non empty addLoopStr holds id G is additive
+registration let G be non empty addMagma;
+ cluster id G -> additive;
+ coherence
 proof
-  let G be non empty addLoopStr;
   set f = id G;
-  for x,y being Element of G holds f.(x+y) = f.x+f.y
-  proof
     let x,y be Element of G;
     f.(x+y) = x+y & f.x = x by FUNCT_1:35;
     hence thesis by FUNCT_1:35;
-  end;
-  hence thesis by Def13;
+end;
 end;
 
 definition
@@ -431,7 +408,7 @@ definition
   proof
     set i = GroupMorphismStr(# G,G,id G#);
     fun(i) = id G;
-    hence thesis by Th19,Th21;
+    hence thesis by Th19;
   end;
 end;
 
@@ -448,9 +425,11 @@ definition
   proof
     set i = ZERO(G,H);
     fun(i) = ZeroMap(G,H);
-    hence thesis by Th16,Th19;
+    hence thesis by Th19;
   end;
 end;
+
+canceled;
 
 theorem Th22:
   for F being Morphism of G,H ex f being Function of G,H st the
@@ -539,7 +518,7 @@ A5: f9 is additive by A3,Th22;
     consider g9 being Function of G29,G39 such that
 A6: the GroupMorphismStr of G = GroupMorphismStr(# G29,G39,g9#) and
 A7: g9 is additive by A2,Th22;
-    g9*f9 is additive by A7,A5,Th14;
+    g9*f9 is additive by A7,A5;
     then reconsider T9 = (GroupMorphismStr(# G19,G39,g9*f9#)) as strict
     GroupMorphism by Th20;
     take T9;
@@ -919,8 +898,8 @@ definition
     reconsider f0 = ZeroMap(G,H) as Element of Maps(G,H) by FUNCT_2:11;
     set D = { GroupMorphismStr(# G,H,f#) where f is Element of Maps(G,H) : f
     is additive };
-    f0 is additive by Th16;
-    then GroupMorphismStr(# G,H,f0#) in D;
+    f0 is additive;
+    GroupMorphismStr(# G,H,f0#) in D;
     then reconsider D as non empty set;
 A1: x in D implies x is strict Morphism of G,H
     proof
@@ -1378,7 +1357,7 @@ A7: dom c1 c= [:X,X:] by RELAT_1:def 18;
       assume
 A8:   x in dom c1;
       then consider g,f being Element of X such that
-A9:   x = [g,f] by A7,Th2;
+A9:   x = [g,f] by A7,SUBSET_1:65;
       P[g,f] by A3,A8,A9;
       hence x in dom c2 by A5,A9;
     end;
@@ -1399,7 +1378,7 @@ A12:  [x,y] in V9;
 A13:  x in dom c2;
       dom c2 c= [:X,X:] by RELAT_1:def 18;
       then consider g,f being Element of X such that
-A14:  x = [g,f] by A13,Th2;
+A14:  x = [g,f] by A13,SUBSET_1:65;
       P[g,f] by A5,A13,A14;
       hence x in dom c1 by A3,A14;
     end;
@@ -1637,8 +1616,7 @@ end;
 definition
   let UN;
   func AbGroupCat(UN) -> Subcategory of GroupCat(UN) equals
-  cat(AbGroupObjects
-  (UN));
+  cat(AbGroupObjects(UN));
   coherence;
 end;
 

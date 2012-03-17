@@ -9,27 +9,24 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2, CARD_1,
       GRAPHSP, ARYTM_3, XXREAL_0, SCMNORM, RELAT_1, FUNCT_1, CARD_3, TARSKI,
       STRUCT_0, FUNCT_4, XBOOLE_0, FUNCOP_1, FSM_1, CIRCUIT2, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1;
+      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1, FINSET_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
-      NAT_1, NAT_D, INT_1, INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
-      FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2, STRUCT_0, AMI_1, SCMNORM, AMI_3,
-      RELOC, SCMFSA_2, XXREAL_0;
+      NAT_1, NAT_D, FINSET_1, VALUED_1, INT_1, INT_2, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2,
+      STRUCT_0, AMI_1, SCMNORM, AMI_3, RELOC, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, AMI_5, PARTFUN1, RELOC,
-      SCMFSA_2, SCMNORM, NAT_D, RELSET_1, SCMFSA_1;
+      SCMFSA_2, SCMNORM, NAT_D, RELSET_1, SCMFSA_1, VALUED_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
       NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, SCMNORM, FINSET_1,
-      VALUED_1, FUNCT_4;
+      VALUED_1, FUNCT_4, RELAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Incrementing addresses
 
-reserve j, k, l, m, n, p, q for Element of NAT;
-
-reserve L for Element of NAT,
+reserve L, j, k, l, m, n, p, q for Element of NAT,
   A for Data-Location,
-  I for
-  Instruction of SCM;
+  I for Instruction of SCM;
 
 definition
   canceled 2;
@@ -115,32 +112,42 @@ begin :: Incrementing Addresses in a finite partial state
 
 definition
   canceled 2;
-  let p be preProgram of SCM+FSA, k be Element of NAT;
+  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
+      k be Element of NAT;
   func IncAddr(p,k) -> preProgram of SCM+FSA means
 :: SCMFSA_4:def 6
 
-  dom it = dom p & for
-  m st  m in dom p holds it. m = IncAddr(pi(p,m),k);
+  dom it = dom p & for m st m in dom p holds it. m = IncAddr(p/.m,k);
+end;
+
+registration
+  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
+      k be Element of NAT;
+  cluster IncAddr(p,k) -> (the Instructions of SCM+FSA)-valued;
 end;
 
 theorem :: SCMFSA_4:24
-  for p being preProgram of SCM+FSA , k being Element of NAT for l
-  being Element of NAT st l in dom p holds IncAddr (p,k).l = IncAddr(pi(p,l),k)
-;
+  for p being finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
+      k being Element of NAT for l
+  being Element of NAT st l in dom p holds IncAddr(p,k).l = IncAddr(p/.l,k);
 
 theorem :: SCMFSA_4:25
-  for I,J being preProgram of SCM+FSA holds IncAddr(I +* J, n) = IncAddr
+  for I,J being
+   finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+    holds IncAddr(I +* J, n) = IncAddr
   (I,n) +* IncAddr(J,n);
 
 theorem :: SCMFSA_4:26
   for f being Function of the Instructions of SCM+FSA, the Instructions
 of SCM+FSA st f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i) for
-  s being preProgram of SCM+FSA holds IncAddr(f*s,n) = ((id the Instructions of
+  s being finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+  holds IncAddr(f*s,n) = ((id the Instructions of
   SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))* IncAddr(s,n);
 
 theorem :: SCMFSA_4:27
-  for I being preProgram of SCM+FSA holds IncAddr(IncAddr(I,m),n) =
-  IncAddr(I,m+n);
+  for I being
+  finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+   holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n);
 
 theorem :: SCMFSA_4:28
   for p being (the Instructions of SCM+FSA)-valued Function
@@ -161,6 +168,9 @@ begin :: Shifting the finite partial state
 canceled 5;
 
 theorem :: SCMFSA_4:35
-  for i,j being Element of NAT, p being preProgram of SCM+FSA holds
+  for i,j being Element of NAT,
+      p being
+      finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+      holds
   Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
 

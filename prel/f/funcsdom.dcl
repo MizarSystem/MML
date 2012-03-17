@@ -40,9 +40,9 @@
 <Adjective nr="89"/>
 <Adjective nr="91"/>
 <Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="2">
@@ -51,7 +51,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="110"/>
+<Adjective nr="116"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="3">
@@ -75,11 +75,14 @@
 <Adjective nr="89"/>
 <Adjective nr="91"/>
 <Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="109"/>
 <Adjective nr="110"/>
 <Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUNCSDOM" nr="1">
@@ -127,7 +130,7 @@
 </Func>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="110"/>
+<Adjective nr="116"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="4">
@@ -143,7 +146,46 @@
 </Func>
 <Cluster>
 <Adjective nr="85"/>
+<Adjective nr="116"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FUNCSDOM" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="193">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="116"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FUNCSDOM" nr="6">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="193">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="61"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="91"/>
+<Adjective nr="93"/>
+<Adjective nr="108"/>
+<Adjective nr="109"/>
 <Adjective nr="110"/>
+<Adjective nr="111"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </FCluster>
 </Registrations>

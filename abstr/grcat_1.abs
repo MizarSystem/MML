@@ -11,9 +11,9 @@ environ
       STRUCT_0, RELAT_1, GRAPH_1, VECTSP_1, PARTFUN1, REALSET1, MIDSP_1, CAT_2,
       FUNCOP_1, MSSUBFAM, RLVECT_1, ENS_1, ALGSTR_1, GRCAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
-      REALSET1, PARTFUN1, FUNCT_2, CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
-      ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1, CAT_2,
-      ALGSTR_1, MIDSP_2;
+      REALSET1, PARTFUN1, FUNCT_2, ORDINAL1, CLASSES2, BINOP_1, FUNCT_5,
+      STRUCT_0, ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1,
+      CAT_2, ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
       ALGSTR_1, MIDSP_2, FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0, ALGSTR_1,
@@ -27,20 +27,16 @@ reserve x, y for set;
 reserve D for non empty set;
 reserve UN for Universe;
 
-canceled;
-
-theorem :: GRCAT_1:2
-  for X,Y,A being set, z being set st z in A & A c= [:X,Y:] ex x
-  being Element of X, y being Element of Y st z = [x,y];
+canceled 2;
 
 theorem :: GRCAT_1:3
   for u1,u2,u3,u4 being Element of UN holds [u1,u2,u3] in UN & [u1,
   u2,u3,u4] in UN;
 
-theorem :: GRCAT_1:4
-  for x,y st x in y & y in UN holds x in UN;
 
 ::  0c. Auxiliary theorems: Trivial Group
+
+canceled;
 
 theorem :: GRCAT_1:5
   op2.({},{}) = {} & op1.{} = {} & op0 = {};
@@ -49,12 +45,11 @@ theorem :: GRCAT_1:6
   {{}} in UN & [{{}},{{}}] in UN & [:{{}},{{}}:] in UN & op2 in UN
   & op1 in UN;
 
-theorem :: GRCAT_1:7
-  addLoopStr (# 1,op2,op0 #) is midpoint_operator;
-
 registration
   cluster Trivial-addLoopStr -> midpoint_operator;
 end;
+
+canceled;
 
 theorem :: GRCAT_1:8
   (for x being Element of Trivial-addLoopStr holds x = {}) & (for x,y
@@ -118,47 +113,50 @@ theorem :: GRCAT_1:10
 ::  1a. Maps of the carriers of groups
 
 definition
-  canceled;
-end;
-
-canceled;
-
-theorem :: GRCAT_1:12
-  for G,H being 1-sorted, f being Function of G, H holds f*(id G) = f &
-  (id H)*f = f;
-
-definition
   let G be non empty 1-sorted, H be non empty ZeroStr;
+  canceled;
   func ZeroMap(G,H) -> Function of G,H equals
 :: GRCAT_1:def 12
   (the carrier of G) --> 0.H;
 end;
 
 definition
-  let G,H be non empty addLoopStr;
+  let G,H be non empty addMagma;
   let f be Function of G,H;
   attr f is additive means
 :: GRCAT_1:def 13
-
-  for x,y being Element of G holds f.(x+y) =
-  f.x+f.y;
+ for x,y being Element of G holds f.(x+y) = f.x+f.y;
 end;
+
+canceled 2;
 
 theorem :: GRCAT_1:13
   comp Trivial-addLoopStr = op1;
 
+registration
+ let G be non empty addMagma, H being right_zeroed (non empty addLoopStr);
+ cluster ZeroMap(G,H) -> additive;
+end;
+
+registration
+ let G be non empty addMagma, H be right_zeroed (non empty addLoopStr);
+ cluster additive Function of G,H;
+end;
+
 theorem :: GRCAT_1:14
-  for G1,G2,G3 being non empty addLoopStr, f being Function of G1,
+  for G1,G2,G3 being non empty addMagma, f being Function of G1,
   G2, g being Function of G2,G3 st f is additive & g is additive holds g*f is
   additive;
 
-canceled;
+registration
+ let G1 be non empty addMagma,
+     G2,G3 being right_zeroed (non empty addLoopStr),
+     f being additive Function of G1, G2,
+     g being additive Function of G2, G3;
+ cluster g*f -> additive Function of G1, G3;
+end;
 
-theorem :: GRCAT_1:16
-  for G being non empty addLoopStr, H being right_zeroed (non
-  empty addLoopStr) holds ZeroMap(G,H) is additive;
-
-::  1b. carrier' of groups
+::  1b. carrier of groups
 
 reserve G,H for AddGroup;
 
@@ -184,6 +182,8 @@ definition
   the Fun of f;
 end;
 
+canceled 2;
+
 theorem :: GRCAT_1:17
   for f being GroupMorphismStr, G1,G2 being AddGroup, f0 being Function
   of G1,G2 st f = GroupMorphismStr(# G1,G2,f0#) holds dom f = G1 & cod f = G2 &
@@ -193,8 +193,7 @@ definition
   let G,H;
   func ZERO(G,H) -> GroupMorphismStr equals
 :: GRCAT_1:def 17
-  GroupMorphismStr(# G,H,ZeroMap(G,H
-    )#);
+  GroupMorphismStr(# G,H,ZeroMap(G,H)#);
 end;
 
 registration
@@ -231,8 +230,7 @@ definition
   mode Morphism of G,H -> GroupMorphism means
 :: GRCAT_1:def 19
 
-    dom(it) = G & cod(it) =
-    H;
+    dom(it) = G & cod(it) = H;
 end;
 
 registration
@@ -248,8 +246,9 @@ theorem :: GRCAT_1:20
   for f being Function of G,H st f is additive holds
   GroupMorphismStr (# G,H,f#) is strict Morphism of G,H;
 
-theorem :: GRCAT_1:21
-  for G being non empty addLoopStr holds id G is additive;
+registration let G be non empty addMagma;
+ cluster id G -> additive;
+end;
 
 definition
   let G;
@@ -267,6 +266,8 @@ definition
   let G,H;
   redefine func ZERO(G,H) -> strict Morphism of G,H;
 end;
+
+canceled;
 
 theorem :: GRCAT_1:22
   for F being Morphism of G,H ex f being Function of G,H st the
@@ -662,8 +663,7 @@ definition
   let UN;
   func AbGroupCat(UN) -> Subcategory of GroupCat(UN) equals
 :: GRCAT_1:def 38
-  cat(AbGroupObjects
-  (UN));
+  cat(AbGroupObjects(UN));
 end;
 
 registration

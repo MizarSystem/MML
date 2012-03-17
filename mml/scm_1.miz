@@ -48,14 +48,15 @@ proof
   given k being Element of NAT such that
 A1: s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
   take k;
+NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
+by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
  = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
    IC Comput(ProgramPart(s),s,k) in NAT;
   hence IC Comput(ProgramPart(s),s,k) in dom ProgramPart s by AMI_1:143;
-   CurInstr(ProgramPart Comput(ProgramPart(s),s,k),Comput(ProgramPart(s),s,k))
-    = halt SCM by A1,AMI_1:54,Y;
-  hence CurInstr(ProgramPart s, Comput(ProgramPart(s),s,k)) = halt SCM
-       by AMI_1:145;
+   CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,k))
+    = halt SCM by A1,Y,NX,AMI_1:54;
+  hence CurInstr(ProgramPart s, Comput(ProgramPart(s),s,k)) = halt SCM;
 end;
 
 theorem Th4:
@@ -65,7 +66,7 @@ Comput(ProgramPart(s),s,k)
 proof
   let s be State of SCM, k be Element of NAT;
 TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:144;
+by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
  = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
   assume
@@ -73,8 +74,8 @@ Z:  s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
   then
 X:  ProgramPart s halts_on s by Th3;
   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM
-   by Z,AMI_1:54,Y,TX;
-  hence thesis by AMI_1:def 22,X;
+   by Z,Y,TX,AMI_1:54;
+  hence thesis by X,AMI_1:def 22;
 end;
 
 canceled 2;
@@ -206,8 +207,7 @@ Z:     x in SCM-Memory;
       per cases;
       suppose
         x = NAT;
-        then s1.n = il & (the Object-Kind of SCM).x = NAT by A1,AMI_2:30
-,def 5;
+        then s1.n = il & (the Object-Kind of SCM).x = NAT by A1,AMI_2:30,def 5;
         hence s1.x in (the Object-Kind of SCM).x;
       end;
       suppose
@@ -277,8 +277,8 @@ X:       s3.n = s2.x by A17;
     then reconsider s3 as State of SCM by A17,FUNCT_1:def 20,PARTFUN1:def 4
 ,RELAT_1:def 18;
     take s3;
-    thus IC s3 = s2.NAT by A17,AMI_3:4,Th7
-      .= s1.NAT by A14,AMI_3:4,Th7
+    thus IC s3 = s2.NAT by A17,Th7,AMI_3:4
+      .= s1.NAT by A14,Th7,AMI_3:4
       .= il by A1,AMI_2:30;
     hereby
       let k be Element of NAT;
@@ -371,38 +371,36 @@ theorem Th16:
 proof
   let s be State of SCM, k be Element of NAT;
 TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:144;
+by AMI_1:123;
 TY: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k+1)
-by AMI_1:144;
+by AMI_1:123;
   hereby
     assume that
 A1: s.(IC Comput(ProgramPart(s),s,k)) <> halt SCM and
 A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150,TX;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,AMI_1:150;
 A3: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k))
 <> halt SCM
-by A1,AMI_1:54,Y;
+by A1,Y,AMI_1:54;
 A4: now
       let i be Element of NAT;
       assume that
 A5:   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,i)) = halt SCM and
 A6:   k+1 > i;
-T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,i)
-by AMI_1:144;
       i <= k by A6,NAT_1:13;
       then Comput(ProgramPart(s),s,k) = Comput(ProgramPart(s),s,i)
-       by AMI_1:52,A5,T;
-      hence contradiction by A3,A5,TX;
+       by A5,AMI_1:52;
+      hence contradiction by A3,A5;
     end;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
  = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-  by AMI_1:150,TY;
+  by TY,AMI_1:150;
     ProgramPart s halts_on s & CurInstr(ProgramPart s,
     Comput(ProgramPart(s),s,k+1)) = halt SCM
-     by A2,Th3,AMI_1:54,Y,TY;
+     by A2,Th3,Y,AMI_1:54;
     hence LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s by A4,
-AMI_1:def 46,TX,TY;
+AMI_1:def 46;
   end;
   assume
 A7: LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s;
@@ -413,13 +411,13 @@ A8: now
     hence contradiction by NAT_1:13;
   end;
 Z:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150,TX;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,AMI_1:150;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
  = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-    by AMI_1:150,TY;
+    by TY,AMI_1:150;
   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k+1))
-   = halt SCM by A7,AMI_1:def 46,TX;
-  hence thesis by A8,AMI_1:54,Y,Z;
+   = halt SCM by A7,AMI_1:def 46;
+  hence thesis by A8,Y,Z,AMI_1:54;
 end;
 
 theorem Th17:
@@ -436,11 +434,11 @@ Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
  = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
   now
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:144;
+by AMI_1:123;
     assume
     s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
     then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)) = halt SCM
-    by AMI_1:54,Y,T;
+    by Y,T,AMI_1:54;
     hence contradiction by A1,AMI_1:52,NAT_1:11;
   end;
   hence thesis by A2,Th16;
@@ -455,7 +453,7 @@ Comput(ProgramPart(s),s,k))
 proof
   let k be Element of NAT, s be State of SCM;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
-by AMI_1:144;
+by AMI_1:123;
   thus Comput(ProgramPart(s),s,k+1)
    = Following(ProgramPart s,Comput(ProgramPart(s),s,k
 ))
@@ -479,7 +477,7 @@ A2: s.n = a := b or s.n = AddTo(a,b) or s.n = SubFrom(a, b) or
 Y:  (ProgramPart csk)/.IC csk
  = csk.IC csk by AMI_1:150;
   thus csk1 = (Exec(CurInstr(ProgramPart csk,csk), csk)) by Lm3
-    .= (Exec(s.n, csk)) by A1,AMI_1:54,Y;
+    .= (Exec(s.n, csk)) by A1,Y,AMI_1:54;
   hence IC csk1 = succ IC csk by A2,AMI_3:8,9,10,11,12
     .= (n+1) by A1;
 end;
@@ -606,7 +604,7 @@ A1: IC Comput(ProgramPart(s),s,k) = n & s.n = SCM-goto il;
 Y:  (ProgramPart csk)/.IC csk
  = csk.IC csk by AMI_1:150;
 A2: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(SCM-goto il, csk) by A1,AMI_1:54,Y;
+    .= Exec(SCM-goto il, csk) by A1,Y,AMI_1:54;
   hence IC csk1 = il by AMI_3:13;
   thus thesis by A2,AMI_3:13;
 end;
@@ -631,7 +629,7 @@ A2: s.n = a =0_goto il;
 Y:  (ProgramPart csk)/.IC csk
  = csk.IC csk by AMI_1:150;
 A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(a =0_goto il, csk) by A1,A2,AMI_1:54,Y;
+    .= Exec(a =0_goto il, csk) by A1,A2,Y,AMI_1:54;
   hence csk.a = 0 implies IC csk1 = il by AMI_3:14;
   hereby
     assume
@@ -662,7 +660,7 @@ A2: s.n = a >0_goto il;
 Y:  (ProgramPart csk)/.IC csk
  = csk.IC csk by AMI_1:150;
 A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
-    .= Exec(a >0_goto il, csk) by A1,A2,AMI_1:54,Y;
+    .= Exec(a >0_goto il, csk) by A1,A2,Y,AMI_1:54;
   hence csk.a > 0 implies IC csk1 = il by AMI_3:15;
   hereby
     assume
@@ -701,13 +699,13 @@ A3: 0 < c;
   consider l being Nat such that
 A4: c = l+1 by A3,NAT_1:6;
   reconsider l as Element of NAT by ORDINAL1:def 13;
-T: ProgramPart s1 = ProgramPart s2 by A1,AMI_1:144;
+T: ProgramPart s1 = ProgramPart s2 by A1,AMI_1:123;
   s2.(IC Comput(ProgramPart(s2),s2,l+1)) = halt SCM by A2,A4,Th16;
-  then s2.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,AMI_1:51,T;
+  then s2.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,T,AMI_1:51;
   then
 A5: s1.(IC Comput(ProgramPart(s1),s1,k+(l+1))) = halt SCM by A1,AMI_1:54;
   s2.(IC Comput(ProgramPart(s2),s2,l)) <> halt SCM by A2,A4,Th16;
-  then s2.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,AMI_1:51,T;
+  then s2.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,T,AMI_1:51;
   then s1.(IC Comput(ProgramPart(s1),s1,k+l)) <> halt SCM by A1,AMI_1:54;
   hence LifeSpan(ProgramPart(s1),s1) = (k+l)+1 by A5,Th16
     .= k+c by A4;
@@ -723,17 +721,17 @@ proof
   set s2 = Comput(ProgramPart(s1),s1,k);
   assume
 A2: ProgramPart s1 halts_on s2;
-  then ProgramPart s2 halts_on s2 by AMI_1:144;
+  then ProgramPart s2 halts_on s2 by AMI_1:123;
   then consider l being Element of NAT such that
 A4: Result(ProgramPart(s2),s2) = Comput(ProgramPart(s2),s2,l) &
     CurInstr(ProgramPart s2,Result(ProgramPart(s2),s2)) = halt SCM
      by AMI_1:def 22;
 A3: ProgramPart s1 halts_on s1 by A2,AMI_1:93;
 T: ProgramPart s1 = ProgramPart Comput(ProgramPart(s1),s1,k)
-by AMI_1:144;
+by AMI_1:123;
   Comput(ProgramPart(s1),Comput(ProgramPart(s1),s1,k),l)
    = Comput(ProgramPart(s1),s1,k+l) by AMI_1:51;
-  hence thesis by A3,A4,AMI_1:def 22,T;
+  hence thesis by A3,A4,T,AMI_1:def 22;
 end;
 
 theorem
@@ -813,12 +811,12 @@ proof
 A1: s.(0+0) = <%halt SCM%>.0 by Def1
     .= halt SCM by AFINSQ_1:38;
 A2: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
-  then s.IC s = halt SCM by A1,Def1;
+  s.IC s = halt SCM by A1,Def1;
   hence
 A3: ProgramPart s halts_on s by Th3,A2;
 Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
-  CurInstr(ProgramPart s,s) = halt SCM by A1,A2,Def1,Y;
-  hence LifeSpan(ProgramPart(s),s) = 0 by A3,AMI_1:def 46,A2;
+  CurInstr(ProgramPart s,s) = halt SCM by A1,Def1,Y;
+  hence LifeSpan(ProgramPart(s),s) = 0 by A3,A2,AMI_1:def 46;
   IC s = 0 by Def1;
   hence thesis by A1,A2,Th4;
 end;

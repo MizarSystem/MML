@@ -100,7 +100,7 @@
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
+<Adjective nr="168"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INT_6" nr="4">
@@ -120,8 +120,8 @@
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
-<Adjective nr="172"/>
+<Adjective nr="168"/>
+<Adjective nr="175"/>
 </Cluster>
 </RCluster>
 <FCluster aid="INT_6" nr="1">
@@ -297,8 +297,8 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
-<Adjective nr="172"/>
+<Adjective nr="168"/>
+<Adjective nr="175"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -308,7 +308,7 @@
 <Cluster>
 <Adjective nr="24"/>
 <Adjective nr="35"/>
-<Adjective nr="170"/>
+<Adjective nr="173"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_6" nr="9">
@@ -346,8 +346,8 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
-<Adjective nr="172"/>
+<Adjective nr="168"/>
+<Adjective nr="175"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -359,8 +359,8 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
-<Adjective nr="172"/>
+<Adjective nr="168"/>
+<Adjective nr="175"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INT_6" nr="2">
@@ -392,8 +392,8 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="42"/>
-<Adjective nr="165"/>
-<Adjective nr="172"/>
+<Adjective nr="168"/>
+<Adjective nr="175"/>
 </Cluster>
 </Typ>
 </ArgTypes>

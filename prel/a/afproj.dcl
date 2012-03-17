@@ -34,13 +34,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="103"/>
-<Adjective nr="108"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="106"/>
+<Adjective nr="111"/>
 <Adjective nr="125"/>
 <Adjective nr="126"/>
+<Adjective nr="127"/>
+<Adjective nr="128"/>
+<Adjective nr="129"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFPROJ" nr="1">
@@ -49,7 +49,7 @@
 <Cluster>
 <Adjective nr="45" value="false"/>
 <Adjective nr="50" value="false"/>
-<Adjective nr="101"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,12 +57,12 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="103"/>
-<Adjective nr="108"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="106"/>
+<Adjective nr="111"/>
 <Adjective nr="125"/>
+<Adjective nr="126"/>
+<Adjective nr="127"/>
+<Adjective nr="128"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFPROJ" nr="2">
@@ -71,8 +71,8 @@
 <Cluster>
 <Adjective nr="45" value="false"/>
 <Adjective nr="50" value="false"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,8 +80,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="103"/>
-<Adjective nr="126"/>
+<Adjective nr="106"/>
+<Adjective nr="129"/>
 </Cluster>
 </FCluster>
 </Registrations>

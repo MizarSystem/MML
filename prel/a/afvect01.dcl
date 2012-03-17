@@ -31,8 +31,8 @@
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="42" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFVECT01" nr="1">
@@ -64,7 +64,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="90"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 </Registrations>

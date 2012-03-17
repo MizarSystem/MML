@@ -60,6 +60,49 @@
 </FCluster>
 <FCluster aid="SCMFSA_1" nr="5">
 <ArgTypes/>
+<Func kind="K" nr="143"/>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="6"/>
+<Adjective nr="34">
+<Func kind="K" nr="139"/>
+<Func kind="K" nr="17">
+<Func kind="K" nr="42">
+<Func kind="K" nr="74"/>
+</Func>
+<Func kind="K" nr="43">
+<Func kind="K" nr="142"/>
+<Func kind="K" nr="141"/>
+</Func>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="SCMFSA_1" nr="6">
+<ArgTypes/>
+<Func kind="K" nr="160"/>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="6"/>
+<Adjective nr="34">
+<Func kind="K" nr="155"/>
+<Func kind="K" nr="17">
+<Func kind="K" nr="43">
+<Func kind="K" nr="74"/>
+<Func kind="K" nr="122">
+<Func kind="K" nr="74"/>
+</Func>
+</Func>
+<Func kind="K" nr="43">
+<Func kind="K" nr="159"/>
+<Func kind="K" nr="158"/>
+</Func>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="SCMFSA_1" nr="7">
+<ArgTypes/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="159"/>
 </Func>

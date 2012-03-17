@@ -36,8 +36,8 @@
 <Cluster>
 <Adjective nr="47" value="false"/>
 <Adjective nr="53"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,8 +55,8 @@
 <Cluster>
 <Adjective nr="47" value="false"/>
 <Adjective nr="53"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -80,8 +80,8 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="47" value="false"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -111,9 +111,9 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="102"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="105"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -130,10 +130,10 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="102"/>
-<Adjective nr="104"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="105"/>
+<Adjective nr="107"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WEDDWITT" nr="5">
@@ -148,9 +148,9 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="102"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="105"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -174,9 +174,9 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="102"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
+<Adjective nr="105"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
 </Cluster>
 </FCluster>
 </Registrations>

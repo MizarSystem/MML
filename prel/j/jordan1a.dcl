@@ -52,14 +52,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="148"/>
-<Adjective nr="150">
+<Adjective nr="151"/>
+<Adjective nr="153">
 <Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="151" value="false"/>
-<Adjective nr="152" value="false"/>
+<Adjective nr="154" value="false"/>
+<Adjective nr="155" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

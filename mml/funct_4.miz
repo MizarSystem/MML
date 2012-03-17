@@ -2353,14 +2353,8 @@ definition let X,Y be set;
  coherence
   proof
 C:  dom(f+* g) c= dom f \/ dom g by Def1;
-    dom f c= X & dom g c= X by RELAT_1:def 18;
-    then dom f \/ dom g c= X \/ X by XBOOLE_1:13;
-    then
 A:  dom(f+* g) c= X by C,XBOOLE_1:1;
 D:  rng(f+* g) c= rng f \/ rng g by Th18;
-    rng f c= Y & rng g c= Y by RELAT_1:def 19;
-    then rng f \/ rng g c= Y \/ Y by XBOOLE_1:13;
-    then
     rng(f+* g) c= Y by D,XBOOLE_1:1;
     then f+* g is Relation of X,Y by A,RELSET_1:11;
    hence thesis;
@@ -2406,14 +2400,14 @@ registration let f,g be Function-yielding Function;
 pc:   x in dom f \/ dom g by Def1;
    per cases by pc,XBOOLE_0:def 3;
    suppose
-S:   x in dom g;
+   x in dom g;
     then (f+*g).x = g.x by Th14;
-   hence (f+*g).x is Function by S,FUNCOP_1:def 6;
+   hence (f+*g).x is Function;
    end;
    suppose
-S:   x in dom f & not x in dom g;
+   x in dom f & not x in dom g;
     then (f+*g).x = f.x by Th12;
-   hence (f+*g).x is Function by S,FUNCOP_1:def 6;
+   hence (f+*g).x is Function;
    end;
   end;
 end;
@@ -2443,7 +2437,7 @@ registration
   proof
 A1: dom g c= I by RELAT_1:def 18;
     dom f = I by PARTFUN1:def 4;
-    then dom (f+*g) = I \/ dom g by A1,Def1
+    then dom (f+*g) = I \/ dom g by Def1
       .= I by A1,XBOOLE_1:12;
     hence thesis by PARTFUN1:def 4;
   end;
@@ -2452,7 +2446,7 @@ A1: dom g c= I by RELAT_1:def 18;
   proof
 A1: dom g c= I by RELAT_1:def 18;
     dom f = I by PARTFUN1:def 4;
-    then dom (g+*f) = I \/ dom g by A1,Def1
+    then dom (g+*f) = I \/ dom g by Def1
       .= I by A1,XBOOLE_1:12;
     hence thesis by PARTFUN1:def 4;
   end;
@@ -2545,3 +2539,21 @@ A8: [a,z] in R by RELAT_1:def 4;
   hence thesis by RELAT_1:def 2;
 end;
 
+theorem
+  (f +* (x .-->y)).x = y
+proof
+A1: x in {x} by TARSKI:def 1;
+  then dom(x .--> y) = {x} & x in dom f \/ {x} by FUNCOP_1:19,XBOOLE_0:def 3;
+ hence (f +* (x .-->y) ).x = (x .-->y).x by A1,Def1
+    .= y by FUNCOP_1:87;
+end;
+
+theorem
+ f +* (x .--> z1) +* (x .--> z2) = f +* (x .--> z2)
+proof
+A1: dom (x .--> z1) = {x} by FUNCOP_1:19
+    .= dom (x .--> z2) by FUNCOP_1:19;
+  thus f +* (x .--> z1) +* (x .--> z2)
+   = f +* ((x .--> z1) +* (x .--> z2)) by Th15
+    .= f +* (x .--> z2) by A1,Th20;
+end;

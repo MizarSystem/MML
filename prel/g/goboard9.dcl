@@ -53,7 +53,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="11" value="false"/>
-<Adjective nr="149">
+<Adjective nr="152">
 <Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>

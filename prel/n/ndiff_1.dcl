@@ -24,6 +24,16 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="CAT_1"/>
+<ArticleID name="CAT_2"/>
+<ArticleID name="GRCAT_1"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="NDIFF_1"/>
 </Signature>
@@ -38,7 +48,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -74,7 +87,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -90,7 +103,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -140,7 +156,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="13">
@@ -152,7 +171,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -182,7 +204,7 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="100">
+<Adjective nr="133">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -199,7 +221,10 @@
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -211,7 +236,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -244,7 +269,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="99">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

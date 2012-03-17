@@ -56,7 +56,16 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="105">
+<Adjective nr="108">
+<Func kind="K" nr="322"/>
+</Adjective>
+<Adjective nr="109">
+<Func kind="K" nr="322"/>
+</Adjective>
+<Adjective nr="110">
+<Func kind="K" nr="322"/>
+</Adjective>
+<Adjective nr="111">
 <Func kind="K" nr="322"/>
 </Adjective>
 </Cluster>
@@ -104,7 +113,7 @@
 </Func>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="153">
+<Adjective nr="159">
 <Func kind="K" nr="322"/>
 </Adjective>
 </Cluster>
@@ -112,7 +121,7 @@
 <CCluster aid="BSPACE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="154"/>
+<Adjective nr="160"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -132,7 +141,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="154"/>
+<Adjective nr="160"/>
 </Cluster>
 </CCluster>
 </Registrations>

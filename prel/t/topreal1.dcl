@@ -49,7 +49,7 @@
 </Func>
 <Cluster>
 <Adjective nr="56"/>
-<Adjective nr="143"/>
+<Adjective nr="146"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPREAL1" nr="2">
@@ -156,7 +156,7 @@
 <CCluster aid="TOPREAL1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="152"/>
+<Adjective nr="155"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

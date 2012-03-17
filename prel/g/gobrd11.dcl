@@ -45,17 +45,17 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="11" value="false"/>
-<Adjective nr="150">
+<Adjective nr="153">
 <Func kind="U" nr="1">
 <Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="151"/>
-<Adjective nr="152"/>
-<Adjective nr="156"/>
-<Adjective nr="157"/>
+<Adjective nr="154"/>
+<Adjective nr="155"/>
+<Adjective nr="159"/>
+<Adjective nr="160"/>
 </Cluster>
 <Func kind="U" nr="1">
 <Func kind="K" nr="275">

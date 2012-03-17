@@ -38,11 +38,21 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PRE_POLY"/>
 <ArticleID name="MATRLIN"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
 <ArticleID name="VECTSP_4"/>
 <ArticleID name="MOD_2"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="GRAPH_1"/>
+<ArticleID name="CAT_1"/>
+<ArticleID name="CAT_2"/>
+<ArticleID name="GRCAT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
@@ -51,22 +61,22 @@
 </Signature>
 <RCluster aid="POLYFORM" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="15">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="162"/>
+<Adjective nr="199"/>
 </Cluster>
 </RCluster>
 <RCluster aid="POLYFORM" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="15">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="163"/>
-<Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="200"/>
+<Adjective nr="201"/>
+<Adjective nr="202"/>
 </Cluster>
 </RCluster>
 <FCluster aid="POLYFORM" nr="1">
@@ -91,18 +101,18 @@
 </FCluster>
 <FCluster aid="POLYFORM" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="15">
+<Typ kind="G" nr="18">
 <Cluster>
-<Adjective nr="163"/>
-<Adjective nr="164"/>
-<Adjective nr="165"/>
+<Adjective nr="200"/>
+<Adjective nr="201"/>
+<Adjective nr="202"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="422">
+<Func kind="K" nr="554">
 <LocusVar nr="1"/>
 <Func kind="K" nr="56">
-<Func kind="K" nr="421">
+<Func kind="K" nr="553">
 <LocusVar nr="1"/>
 </Func>
 <Num nr="1"/>
