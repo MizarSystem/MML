@@ -3,7 +3,7 @@
 ::
 :: Received April 6, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, RLVECT_1, ALGSTR_0, XBOOLE_0, CLVECT_1, NAT_1, SUBSET_1,
@@ -15,21 +15,21 @@ environ
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
       FUNCOP_1, XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0,
       ORDINAL1, NUMBERS, RLVECT_1, VECTSP_1, NORMSP_1, VALUED_1, SEQ_1,
-      VALUED_0, SEQ_2, SERIES_1, PREPOWER, POWER, CFUNCT_1, CLVECT_1, CSSPACE3,
-      BHSP_4, CLOPBAN1, CLOPBAN2, LOPBAN_3, RECDEF_1;
+      VALUED_0, SEQ_2, SERIES_1, PREPOWER, POWER, CFUNCT_1, NORMSP_0, CLVECT_1,
+      CSSPACE3, BHSP_4, CLOPBAN1, CLOPBAN2, LOPBAN_3, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PREPOWER,
       SERIES_1, BHSP_3, BHSP_4, LOPBAN_3, CSSPACE3, CLOPBAN2, SEQ_1, VALUED_1,
       PARTFUN1, RECDEF_1, RELSET_1, BINOP_2, RVSUM_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, STRUCT_0, CLOPBAN2, ALGSTR_0, VALUED_1, FUNCT_2,
-      VALUED_0, FUNCOP_1;
+      VALUED_0, FUNCOP_1, NORMSP_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions SEQ_2, SERIES_1, CLVECT_1, BHSP_3, RLVECT_1, BINOP_1, ALGSTR_0,
       VECTSP_1;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, NAT_1,
       INT_1, FUNCT_2, SEQ_4, PREPOWER, CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1,
       CFUNCDOM, CLOPBAN2, GROUP_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0, VALUED_0;
+      ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0, VALUED_0, NORMSP_0;
  schemes NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
@@ -111,7 +111,7 @@ proof
   let X be ComplexNormSpace;
   let seq be sequence of X;
   let m be Element of NAT;
-  ||.seq.||.m = ||.seq.m.|| by CLVECT_1:def 17;
+  ||.seq.||.m = ||.seq.m.|| by NORMSP_0:def 4;
   hence thesis by CLVECT_1:106;
 end;
 
@@ -134,25 +134,23 @@ theorem Th4:
 proof
   let X be ComplexNormSpace;
   let seq be sequence of X;
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider g1 be Element of X such that
 A1: for s be Real st 0<s ex n be Element of NAT st for m be Element of
   NAT st n<=m holds ||.seq.m -g1.||<s by CLVECT_1:def 16;
   let s be Real;
-  assume
-  0 < s;
+  assume 0 < s;
   then consider n be Element of NAT such that
 A2: for m be Element of NAT st n<=m holds ||.seq.m -g1.||<s/2 by A1,XREAL_1:217
 ;
   now
     let m be Element of NAT;
-    assume
-    n<=m;
+    assume n<=m;
     then
 A3: ||.seq.m -g1.||<s/2 by A2;
 A4: ||.seq.m -g1+(g1-seq.n).||<=||.seq.m -g1.||+||.g1-seq.n.|| & ||.seq.m
-    -g1+( g1-seq.n).|| = ||.seq.m -seq.n.|| by Th3,CLVECT_1:def 14;
+    -g1+( g1-seq.n).|| = ||.seq.m -seq.n.|| by Th3,CLVECT_1:def 14
+;
     ||.seq.n -g1.||<s/2 by A2;
     then ||.g1-seq.n.||<s/2 by CLVECT_1:109;
     then ||.seq.m -g1.||+||.g1-seq.n.||<s/2+s/2 by A3,XREAL_1:10;
@@ -174,8 +172,7 @@ A2: for p be Real st p > 0 holds ex n be Element of NAT st for m be
     Element of NAT st n <= m holds ||.seq.m-seq.n.||< p;
     now
       let s be Real;
-      assume
-      0<s;
+      assume 0<s;
       then consider k be Element of NAT such that
 A3:   for m be Element of NAT st k<=m holds ||.seq.m -seq.k.||<s/2 by A2,
 XREAL_1:217;
@@ -206,8 +203,7 @@ A8: seq is Cauchy_sequence_by_Norm;
     Element of NAT st n <= m holds ||.seq.m-seq.n.||< p
     proof
       let p be Real;
-      assume
-      p >0;
+      assume p >0;
       then consider n be Element of NAT such that
 A9:   for m,k be Element of NAT st n <= m & n <=k holds ||.seq.m-seq.k
       .||< p by A8,CSSPACE3:10;
@@ -233,17 +229,17 @@ A2: for k be Element of NAT st P[k] holds P[k+1]
     let k be Element of NAT such that
 A3: P[k];
     thus ||.seq.||.(k+1) =0 + ||.seq.||.(k+1)
-      .= ||.0.X.|| + ||.seq.||.(k+1) by CLVECT_1:103
+      .= ||.0.X.|| + ||.seq.||.(k+1)
       .= ||.seq.k.|| + ||.seq.||.(k+1) by A1
-      .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1) by A3,CLVECT_1:def 17
+      .= (Partial_Sums ||.seq.||).k + ||.seq.||.(k+1) by A3,NORMSP_0:def 4
       .= (Partial_Sums ||.seq.||).(k+1) by SERIES_1:def 1;
   end;
 A4: P[0] by SERIES_1:def 1;
   for n be Element of NAT holds P[n] from NAT_1:sch 1(A4,A2);
   hence (Partial_Sums ||.seq.||).m = ||.seq.||.m
-    .= ||.seq.m.|| by CLVECT_1:def 17
+    .= ||.seq.m.|| by NORMSP_0:def 4
     .= ||.0.X.|| by A1
-    .= 0 by CLVECT_1:103;
+    .= 0;
 end;
 
 canceled 3;
@@ -262,8 +258,7 @@ A3: for p be Real st 0<p ex n be Element of NAT st for m be Element of
   NAT st n<=m holds ||.(seq.m)-g1.||< p by A2,CLVECT_1:def 16;
   take g=g1;
   let p be Real;
-  assume
-  0<p;
+  assume 0<p;
   then consider n1 be Element of NAT such that
 A4: for m be Element of NAT st n1<=m holds ||.(seq.m)-g1.||<p by A3;
   take n=n1;
@@ -291,8 +286,7 @@ A2: seq is convergent;
 A3: seq1=seq*Nseq by A1,VALUED_0:def 17;
 A4: now
     let p be Real;
-    assume
-    0<p;
+    assume 0<p;
     then consider n1 be Element of NAT such that
 A5: for m be Element of NAT st n1<=m holds ||.(seq.m)-(lim seq).||<p
     by A2,CLVECT_1:def 18;
@@ -308,7 +302,7 @@ A7: n<=Nseq.m by A6,XXREAL_0:2;
   seq1 is convergent by A1,A2,Th10;
   hence thesis by A4,CLVECT_1:def 18;
 end;
-
+ 
 :: Norm Space versions of SEQ_4_33 - SEQ_4_39
 
 canceled;
@@ -335,8 +329,7 @@ A4: for p be Real st 0<p ex n be Element of NAT st for m be Element of
   NAT st n<=m holds ||.seq.m-g1.||<p by A1,CLVECT_1:def 16;
   take g=g1;
   let p be Real;
-  assume
-  0<p;
+  assume 0<p;
   then consider n1 be Element of NAT such that
 A5: for m be Element of NAT st n1<=m holds ||.seq.m-g1.||<p by A4;
   take n=n1+k;
@@ -350,8 +343,7 @@ A7: m=n1+k+l by NAT_1:10;
   then consider m1 be Element of NAT such that
 A8: m1=m-k;
   now
-    assume
-    not n1<=m1;
+    assume not n1<=m1;
     then m1+k<n1+k by XREAL_1:8;
     hence contradiction by A6,A8;
   end;
@@ -375,8 +367,7 @@ A2: ex k be Element of NAT st seq=seq1 ^\k;
 A3: seq=seq1 ^\k by A2;
 A4: now
     let p be Real;
-    assume
-    0<p;
+    assume 0<p;
     then consider n1 be Element of NAT such that
 A5: for m be Element of NAT st n1<=m holds ||.seq.m-(lim seq).||<p by A1,
 CLVECT_1:def 18;
@@ -391,8 +382,7 @@ A7: m=n1+k+l by NAT_1:10;
     then consider m1 be Element of NAT such that
 A8: m1=m-k;
     now
-      assume
-      not n1<=m1;
+      assume not n1<=m1;
       then m1+k<n1+k by XREAL_1:8;
       hence contradiction by A6,A8;
     end;
@@ -411,8 +401,7 @@ theorem Th16:
 proof
   let X be ComplexNormSpace;
   let seq be sequence of X;
-  assume
-  seq is constant;
+  assume seq is constant;
   then consider r be Element of X such that
 A1: for n be Nat holds seq.n=r by VALUED_0:def 18;
   take g=r;
@@ -423,7 +412,7 @@ A2: 0<p;
   n<=m;
   ||.(seq.m)-g.||=||.r-g.|| by A1
     .=||.0.X.|| by RLVECT_1:28
-    .=0 by CLVECT_1:103;
+    .=0;
   hence thesis by A2;
 end;
 
@@ -456,7 +445,7 @@ registration
     hence thesis by Th17;
   end;
 end;
-
+ 
 :: Norm Space versions of SERIES_1_7 - SERIES_1_16
 
 theorem Th18:
@@ -465,8 +454,7 @@ theorem Th18:
 proof
   let X be ComplexNormSpace;
   let s be sequence of X;
-  assume
-  s is summable;
+  assume s is summable;
   then
 A1: Partial_Sums(s) is convergent by Def2;
   then
@@ -559,7 +547,7 @@ end;
 registration
   let X be ComplexNormSpace;
   let seq be norm_summable sequence of X;
-  cluster ||.seq.|| -> summable;
+  cluster ||.seq.|| -> summable Real_Sequence;
   coherence by Def4;
 end;
 
@@ -576,8 +564,7 @@ summable & seq2 is summable holds seq1+seq2 is summable & Sum(seq1+seq2) = Sum(
 proof
   let X be ComplexNormSpace;
   let seq1,seq2 be sequence of X;
-  assume
-  seq1 is summable & seq2 is summable;
+  assume seq1 is summable & seq2 is summable;
   then
 A1: Partial_Sums(seq1) is convergent & Partial_Sums(seq2) is convergent by Def2
 ;
@@ -596,8 +583,7 @@ summable & seq2 is summable holds seq1-seq2 is summable & Sum(seq1-seq2)= Sum(
 proof
   let X be ComplexNormSpace;
   let seq1,seq2 be sequence of X;
-  assume
-  seq1 is summable & seq2 is summable;
+  assume seq1 is summable & seq2 is summable;
   then
 A1: Partial_Sums(seq1) is convergent & Partial_Sums(seq2) is convergent by Def2
 ;
@@ -722,8 +708,7 @@ A1: for n be Element of NAT st X[n] holds X[n+1]
     for k be Element of NAT holds s1.k = (s^\n).0 by FUNCOP_1:13;
     then
 A2: Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by Th25;
-    assume
-    s^\n is summable;
+    assume s^\n is summable;
     then Partial_Sums(s^\n) is convergent by Def2;
     then
 A3: Partial_Sums(s^\n)^\1 is convergent by Th10;
@@ -732,8 +717,7 @@ A3: Partial_Sums(s^\n)^\1 is convergent by Th10;
 CLVECT_1:116,NAT_1:49;
     hence thesis by Def2;
   end;
-  assume
-  s is summable;
+  assume s is summable;
   then
 A4: X[0] by NAT_1:48;
   thus for n be Element of NAT holds X[n] from NAT_1:sch 1(A4,A1);
@@ -773,8 +757,7 @@ proof
   let X be ComplexBanachSpace;
   let seq be sequence of X;
 A1: now
-    assume
-    for p be Real st 0<p holds ex n be Element of NAT st for m be
+    assume for p be Real st 0<p holds ex n be Element of NAT st for m be
 Element of NAT st n <= m holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||< p
     ;
     then Partial_Sums(seq) is Cauchy_sequence_by_Norm by Th5;
@@ -782,8 +765,7 @@ Element of NAT st n <= m holds ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||< p
     hence seq is summable by Def2;
   end;
   now
-    assume
-    seq is summable;
+    assume seq is summable;
     then Partial_Sums(seq) is convergent by Def2;
     hence
     for p be Real st 0<p holds ex n be Element of NAT st for m be Element
@@ -803,8 +785,7 @@ proof
   set s1=Partial_Sums(s);
   set s2=Partial_Sums(||.s.||);
   let n,m be Element of NAT;
-  assume
-  n<=m;
+  assume n<=m;
   then reconsider k=m-n as Element of NAT by INT_1:18;
   defpred X[Element of NAT] means ||.s1.(n+$1) - s1.n.|| <= abs(s2.(n+$1) - s2
   .n);
@@ -812,7 +793,7 @@ A1: n+k = m;
   now
     let k be Element of NAT;
     ||.s.k.|| >=0 by CLVECT_1:106;
-    hence ||.s.||.k >= 0 by CLVECT_1:def 17;
+    hence ||.s.||.k >= 0 by NORMSP_0:def 4;
   end;
   then
 A2: s2 is non-decreasing by SERIES_1:19;
@@ -821,7 +802,7 @@ A3: for k be Element of NAT st X[k] holds X[k+1]
     let k be Element of NAT;
 A4: abs(s2.(n+(k+1)) - s2.n) = abs(s2.(n+k) + ( ||.s.||).(n+k+1) - s2.n)
     by SERIES_1:def 1
-      .= abs(s2.(n+k) + ||.s.(n+k+1).||-s2.n) by CLVECT_1:def 17
+      .= abs(s2.(n+k) + ||.s.(n+k+1).||-s2.n) by NORMSP_0:def 4
       .= abs(||.s.(n+k+1).|| + (s2.(n+k) - s2.n));
     ||. s1.(n+(k+1)) - s1.n.|| = ||. s.(n+k+1) + s1.(n+k) - s1.n .|| by
 BHSP_4:def 1
@@ -832,8 +813,7 @@ CLVECT_1:def 14;
     s2.(n+k)>=s2.n by A2,SEQM_3:11;
     then
 A6: s2.(n+k) - s2.n >= 0 by XREAL_1:50;
-    assume
-    ||. s1.(n+k) - s1.n.|| <= abs(s2.(n+k) - s2.n);
+    assume ||. s1.(n+k) - s1.n.|| <= abs(s2.(n+k) - s2.n);
     then
     ||.s.(n+k+1).|| + ||. s1.(n+k) - s1.n.|| <= ||.s.(n+k+1).|| + abs(s2.
     (n+k) - s2.n) by XREAL_1:9;
@@ -846,7 +826,7 @@ ABSVALUE:def 1;
     hence thesis by A6,A7,A4,ABSVALUE:def 1;
   end;
   ||.s1.(n+0) - s1.n.|| = ||.0.X.|| by RLVECT_1:28
-    .= 0 by CLVECT_1:103;
+    .= 0;
   then
 A8: X[0] by COMPLEX1:132;
   for k be Element of NAT holds X[k] from NAT_1:sch 1(A8,A3);
@@ -859,14 +839,12 @@ theorem Th30:
 proof
   let X be ComplexBanachSpace;
   let seq be sequence of X;
-  assume
-  seq is norm_summable;
+  assume seq is norm_summable;
   then
 A1: Partial_Sums(||.seq.||) is convergent by SERIES_1:def 2;
   now
     let p be Real;
-    assume
-    0<p;
+    assume 0<p;
     then consider n be Element of NAT such that
 A2: for m be Element of NAT st n <= m holds abs(Partial_Sums(||.seq.||
     ).m-Partial_Sums(||.seq.||).n)< p by A1,SEQ_4:58;
@@ -899,15 +877,14 @@ A2: ex m be Element of NAT st for n be Element of NAT st m<=n holds ||.
 A3: for n be Element of NAT st m<=n holds ||.seq2.n.|| <= rseq1.n by A2;
 A4: now
     let n be Element of NAT;
-    ||.seq2.n.||=||.seq2.||.n by CLVECT_1:def 17;
+    ||.seq2.n.||=||.seq2.||.n by NORMSP_0:def 4;
     hence 0 <= ||.seq2.||.n by CLVECT_1:106;
   end;
   now
     let n be Element of NAT;
-    assume
-    m <= n;
+    assume m <= n;
     then ||.seq2.n.|| <= rseq1.n by A3;
-    hence ||.seq2.||.n <= rseq1.n by CLVECT_1:def 17;
+    hence ||.seq2.||.n <= rseq1.n by NORMSP_0:def 4;
   end;
   hence ||.seq2.|| is summable by A1,A4,SERIES_1:22;
 end;
@@ -920,8 +897,7 @@ is norm_summable implies seq1 is norm_summable & Sum ||.seq1.|| <= Sum ||.seq2
 proof
   let X be ComplexNormSpace;
   let seq1,seq2 be sequence of X;
-  assume
-  ( for n be Element of NAT holds 0 <= ||.seq1.||.n & ||.seq1.||.n <=
+  assume ( for n be Element of NAT holds 0 <= ||.seq1.||.n & ||.seq1.||.n <=
   ||. seq2.|| .n)& seq2 is norm_summable;
   hence ||.seq1.|| is summable & Sum(||.seq1.||) <=Sum(||.seq2.||) by
 SERIES_1:24;
@@ -988,8 +964,7 @@ proof
   let X be ComplexNormSpace;
   let seq be sequence of X;
   let rseq1 be Real_Sequence;
-  assume
-  ||.seq.|| is non-increasing & for n be Element of NAT holds rseq1.n
+  assume ||.seq.|| is non-increasing & for n be Element of NAT holds rseq1.n
   = 2 to_power n *||.seq.||.(2 to_power n);
   then
   for n be Element of NAT holds ||.seq.|| is non-increasing & ||.seq.||.n
@@ -1007,8 +982,7 @@ proof
   let seq be sequence of X;
   let p be Real;
   assume
-  p>1 & for n be Element of NAT st n >=1 holds ||. seq .|| .n = 1/n
-  to_power p;
+  p>1 & for n be Element of NAT st n >=1 holds ||. seq .|| .n = 1/n to_power p;
   then ||.seq.|| is summable by SERIES_1:36;
   hence thesis by Def4;
 end;
@@ -1037,11 +1011,11 @@ A3: 0 <=||.seq.||.n by Th2;
 A4: 0 <=||.seq.||.(n+1) by Th2;
 A5: abs((||.seq.||)).(n+1) =abs((||.seq.||).(n+1)) by SEQ_1:16
       .=||.seq.||.(n+1) by A4,ABSVALUE:def 1;
-A6: seq.n<>0.X & ||.seq.||.n =||.seq.n.|| by A1,CLVECT_1:def 17;
+A6: seq.n<>0.X & ||.seq.||.n =||.seq.n.|| by A1,NORMSP_0:def 4;
     abs((||.seq.||)).n =abs((||.seq.||).n) by SEQ_1:16
       .=||.seq.||.n by A3,ABSVALUE:def 1;
     hence (||.seq.||).n <>0 & rseq1.n=abs((||.seq.||)).(n+1)/abs((||.seq.||)).
-    n by A1,A5,A6,CLVECT_1:def 14;
+    n by A1,A5,A6,NORMSP_0:def 5;
   end;
   then ||.seq.|| is absolutely_summable by A2,SERIES_1:42;
   then
@@ -1085,8 +1059,8 @@ A8: abs((||.seq.||)).(n+1) =abs((||.seq.||).(n+1)) by SEQ_1:16
   now
     let n be Element of NAT;
     seq.n <> 0.X by A1;
-    then ||.seq.n.||<>0 by CLVECT_1:def 14;
-    hence ||.seq.||.n <>0 by CLVECT_1:def 17;
+    then ||.seq.n.||<>0 by NORMSP_0:def 5;
+    hence ||.seq.||.n <>0 by NORMSP_0:def 4;
   end;
   hence ||.seq.|| is not summable by A4,SERIES_1:44;
 end;
@@ -1128,7 +1102,7 @@ proof
 a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*
   x) by CFUNCDOM:def 9,CLVECT_1:def 2,def 3,def 4,VECTSP_1:def 11,def 12,def 13
 ,def 19;
-  thus (a*b)*(x*y) =a*(b*(x*y)) by CLVECT_1:def 2,def 3,def 4
+  thus (a*b)*(x*y) =a*(b*(x*y)) by CLVECT_1:def 4
     .=a*(x*(b*y) ) by CLOPBAN2:def 11
     .=(a*x)*(b*y) by CFUNCDOM:def 9;
   thus a*(x*y)=x*(a*y) by CLOPBAN2:def 11;
@@ -1177,7 +1151,7 @@ A3: (y-z)*x+z*x =((y-z)+z)*x by VECTSP_1:def 12
     .=x by RLVECT_1:10;
   thus ( ||.x.|| = 0 iff x = 0.X ) & ||.a * x.|| = |.a.| * ||.x.|| & ||.x + y
 .|| <= ||.x.|| + ||.y.|| & ||. x*y .|| <= ||.x.|| * ||.y.|| by CLOPBAN2:def 9
-,CLVECT_1:def 14;
+,CLVECT_1:def 14,NORMSP_0:def 5;
   thus ||. 1.X .|| = 1 by CLOPBAN2:def 10;
   thus thesis;
 end;
@@ -1198,8 +1172,7 @@ definition
   let a be Element of X;
   canceled 3;
   func a * S -> sequence of X means
-  for n be Element of NAT holds it.n = a * S
-  .n;
+  for n be Element of NAT holds it.n = a * S .n;
   existence
   proof
     deffunc F(Element of NAT) = a * S.$1;
@@ -1256,8 +1229,7 @@ definition
   let X be non empty Normed_Complex_AlgebraStr;
   let seq1,seq2 be sequence of X;
   func seq1 * seq2 -> sequence of X means
-  for n be Element of NAT holds it.n =
-  seq1.n * seq2.n;
+  for n be Element of NAT holds it.n = seq1.n * seq2.n;
   existence
   proof
     deffunc F(Element of NAT) = seq1.$1 * seq2.$1;
@@ -1287,8 +1259,7 @@ definition
   canceled;
   func z GeoSeq -> sequence of X means
   :Def12:
-  it.0 = 1.X & for n be Element
-  of NAT holds it.(n+1) = it.n * z;
+  it.0 = 1.X & for n be Element of NAT holds it.(n+1) = it.n * z;
   existence
   proof
     deffunc G(set,set)=(the multF of X).[$2,z];
@@ -1299,8 +1270,7 @@ A1: dom g = NAT & g.0 = 1.X & for n being Nat holds g.(n+1) = G(n,g.n)
 A2: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
-      assume
-      P[k];
+      assume P[k];
       then reconsider gk=g.k as Element of X;
       g.(k+1)=(the multF of X).[gk,z] by A1;
       hence thesis;
@@ -1324,8 +1294,7 @@ A7: for n be Element of NAT holds seq2.(n+1)=seq2.n * z;
 A8: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
-      assume
-      P[k];
+      assume P[k];
       hence seq1.(k+1) = seq2.k * z by A5
         .= seq2.(k+1) by A7;
     end;
@@ -1359,23 +1328,22 @@ A2: for n be Element of NAT holds 0 <= ||.z GeoSeq.||.n & ||.z GeoSeq.||.n
   proof
     defpred P[Element of NAT] means 0 <= ||.z GeoSeq.||.$1 & ||.z GeoSeq.||.$1
     <= ( ||.z.|| GeoSeq ).$1;
-A3: ||.(z GeoSeq).||.0 = ||.(z GeoSeq).0 .|| by CLVECT_1:def 17;
+A3: ||.(z GeoSeq).||.0 = ||.(z GeoSeq).0 .|| by NORMSP_0:def 4;
 A4: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
 A5:   0 <= ||.z.|| by CLVECT_1:106;
       ||.(z GeoSeq.k)*z.|| <= ||.(z GeoSeq.k).||*||.z.|| by CLOPBAN2:def 9;
       then
-A6:   ||. (z GeoSeq.k)*z .|| <= ||. z GeoSeq .||.k * ||.z.|| by CLVECT_1:def 17
+A6:   ||. (z GeoSeq.k)*z .|| <= ||. z GeoSeq .||.k * ||.z.|| by NORMSP_0:def 4
 ;
-      assume
-      P[k];
+      assume P[k];
       then ||. z GeoSeq.||.k * ||.z.|| <= (||.z.|| GeoSeq ).k * ||.z.|| by A5,
 XREAL_1:66;
       then
 A7:   ||.
  (z GeoSeq.k)*z .|| <= ( ||.z.|| GeoSeq ).k * ||.z.|| by A6,XXREAL_0:2;
-      ||.z GeoSeq.||.(k+1) = ||. (z GeoSeq).(k+1) .|| by CLVECT_1:def 17
+      ||.z GeoSeq.||.(k+1) = ||. (z GeoSeq).(k+1) .|| by NORMSP_0:def 4
         .= ||. (z GeoSeq).k * z .|| by Def12;
       hence thesis by A7,CLVECT_1:106,PREPOWER:4;
     end;
@@ -1387,8 +1355,7 @@ A8: P[0] by A3,CLVECT_1:106;
     for n be Element of NAT holds P[n] from NAT_1:sch 1(A8,A4);
     hence thesis;
   end;
-  assume
-  ||.z.|| < 1;
+  assume ||.z.|| < 1;
   then abs( ||.z.||) < 1 by A1,ABSVALUE:def 1;
   then ||.z.|| GeoSeq is summable by SERIES_1:28;
   then ||.z GeoSeq.|| is summable by A2,SERIES_1:24;
@@ -1402,15 +1369,13 @@ holds (1.X - x) GeoSeq is summable & (1.X - x) GeoSeq is norm_summable by Th44;
 
 Lm1: for X be ComplexNormSpace, x be Point of X st (for e be Real st e>0 holds
 ||.x.|| <e) holds x=0.X
-
 proof
   let X be ComplexNormSpace;
   let x be Point of X such that
 A1: for e be Real st e > 0 holds ||.x.|| <e;
   now
-    assume
-    x<>0.X;
-    then 0<> ||.x.|| by CLVECT_1:def 14;
+    assume x<>0.X;
+    then 0<> ||.x.|| by NORMSP_0:def 5;
     then 0< ||.x.|| by CLVECT_1:106;
     hence contradiction by A1;
   end;
@@ -1419,12 +1384,10 @@ end;
 
 Lm2: for X be ComplexNormSpace, x,y be Point of X st (for e be Real st e>0
 holds ||.x-y.|| <e) holds x=y
-
 proof
   let X be ComplexNormSpace;
   let x,y be Point of X;
-  assume
-  for e be Real st e > 0 holds ||.x-y.|| <e;
+  assume for e be Real st e > 0 holds ||.x-y.|| <e;
   then x-y = 0.X by Lm1;
   hence thesis by RLVECT_1:35;
 end;
@@ -1432,7 +1395,6 @@ end;
 Lm3: for X be ComplexNormSpace, x,y be Point of X, seq be Real_Sequence st (
 seq is convergent & lim seq=0 & for n be Element of NAT holds ||.x-y.|| <= seq.
 n) holds x=y
-
 proof
   let X be ComplexNormSpace;
   let x,y be Point of X;
@@ -1441,12 +1403,9 @@ A1: seq is convergent & lim seq=0 and
 A2: for n be Element of NAT holds ||.x-y.|| <= seq.n;
   now
     let e be Real;
-    assume
-    0 < e;
+    assume 0 < e;
     then consider n be Element of NAT such that
-
 A3: for m be Element of NAT st n<=m holds abs(seq.m - 0) < e by A1,SEQ_2:def 7;
-
 A4: seq.n <=abs( seq.n ) by ABSVALUE:11;
 A5: ||.x-y.|| <= seq.n by A2;
     abs(seq.n -0 ) < e by A3;
@@ -1485,7 +1444,7 @@ A8: ||. seq^\1 .|| + ||. x .|| (#) ||. Partial_Sums(seq)-y.|| is convergent
 A9: lim( ||. seq^\1 .|| + ||. x .|| (#) ||. Partial_Sums(seq)-y.||) = lim(
   ||. seq^\1 .||) + lim (||. x .||(#)||. Partial_Sums(seq)-y.||) by A7,A3,
 SEQ_2:20
-    .=0 by A5,A6,CLVECT_1:103;
+    .=0 by A5,A6;
 A10: for n be Element of NAT holds (1.X -x)*seq.n=seq.(n+1)
   proof
     defpred P[Element of NAT] means (1.X -x)*seq.$1=seq.($1+1);
@@ -1577,7 +1536,7 @@ A23: ||. (seq^\1).||.n + ||. x*(yn-y) .|| <= ||. (seq^\1).||.n + ||. x .||
     * ||. (yn-y).|| by XREAL_1:9;
     ||. (seq^\1).n+x*(yn-y) .|| <= ||. (seq^\1).n .|| + ||. x*(yn-y) .||
 & ||. ( seq^\1).n .|| + ||. x*(yn-y) .|| = ||. (seq^\1).||.n + ||. x*(yn-y) .||
-    by CLVECT_1:def 14,def 17;
+    by CLVECT_1:def 14,NORMSP_0:def 4;
     then
 A24: ||. (seq^\1).n+x*(yn-y) .|| <= ||. (seq^\1).||.n + ||. x .|| * ||. (
     yn-y).|| by A23,XXREAL_0:2;
@@ -1590,7 +1549,7 @@ A24: ||. (seq^\1).n+x*(yn-y) .|| <= ||. (seq^\1).||.n + ||. x .|| * ||. (
     ||. 1.X -x*y.|| <= ||. (seq^\1).||.n + ||. x .|| * ||. (Partial_Sums(
     seq)-y).n.|| by A22,A24,NORMSP_1:def 7;
     then ||. 1.X -x*y.|| <= ||. (seq^\1).||.n + ||. x .|| * ||. Partial_Sums(
-    seq)-y.||.n by CLVECT_1:def 17;
+    seq)-y.||.n by NORMSP_0:def 4;
     then ||. 1.X -x*y.|| <= ||. (seq^\1).||.n + ( ||. x .|| (#) ||.
     Partial_Sums(seq)-y.||).n by SEQ_1:13;
     hence
@@ -1669,7 +1628,7 @@ A34: ||. (seq^\1).||.n + ||. (yn-y)*x .|| <= ||. (seq^\1).||.n + ||. (yn-y
     ).|| * ||. x .|| by XREAL_1:9;
     ||. (seq^\1).n+(yn-y)*x .|| <= ||. (seq^\1).n .|| + ||. (yn-y)*x .||
 & ||. ( seq^\1).n .|| + ||. (yn-y)*x .|| = ||. (seq^\1).||.n + ||. (yn-y)*x .||
-    by CLVECT_1:def 14,def 17;
+    by CLVECT_1:def 14,NORMSP_0:def 4;
     then
 A35: ||. (seq^\1).n+(yn-y)*x .|| <= ||. (seq^\1).||.n + ||. (yn-y).|| *
     ||. x .|| by A34,XXREAL_0:2;
@@ -1681,7 +1640,7 @@ A35: ||. (seq^\1).n+(yn-y)*x .|| <= ||. (seq^\1).||.n + ||. (yn-y).|| *
     then ||. 1.X -y*x.|| <= ||.(seq^\1).||.n + ||.(Partial_Sums(seq)-y).n.||*
     ||.x.|| by A33,A35,NORMSP_1:def 7;
     then ||. 1.X -y*x.|| <= ||. (seq^\1).||.n + ||.Partial_Sums(seq)-y.||.n *
-    ||.x.|| by CLVECT_1:def 17;
+    ||.x.|| by NORMSP_0:def 4;
     then ||. 1.X -y*x.|| <= ||. (seq^\1).||.n + (||.x.|| (#) ||.Partial_Sums(
     seq)-y.||).n by SEQ_1:13;
     hence
@@ -1693,4 +1652,3 @@ A36: 1.X = y*x by A8,A9,Lm3;
   hence x is invertible by A25,LOPBAN_3:def 8;
   hence thesis by A36,A25,LOPBAN_3:def 12;
 end;
-

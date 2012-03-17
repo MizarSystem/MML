@@ -9,11 +9,12 @@ environ
  vocabularies RELAT_1, FUNCT_1, ARYTM_1, SIN_COS, INTEGRA1, FDIFF_1, XBOOLE_0,
       SQUARE_1, ARYTM_3, ORDINAL2, RCOMP_1, PREPOWER, LIMFUNC1, PARTFUN1,
       TAYLOR_1, SIN_COS9, SUBSET_1, TARSKI, NUMBERS, REAL_1, CARD_1, INTEGRA5,
-      XXREAL_2, ORDINAL4, VALUED_1, XXREAL_1, XXREAL_0;
+      XXREAL_2, ORDINAL4, VALUED_1, XXREAL_1, XXREAL_0, SEQ_4;
  notations TARSKI, XBOOLE_0, SEQ_1, SIN_COS, SUBSET_1, NUMBERS, VALUED_1,
       NAT_1, XXREAL_0, REAL_1, RELAT_1, RELSET_1, PARTFUN1, PARTFUN2, RCOMP_1,
       RFUNCT_1, MEASURE6, INTEGRA1, FCONT_1, SQUARE_1, INTEGRA5, PREPOWER,
-      TAYLOR_1, FDIFF_1, SEQ_2, SIN_COS9, BINOP_2, LIMFUNC1, XREAL_0, INT_1;
+      TAYLOR_1, FDIFF_1, SEQ_2, SIN_COS4, SIN_COS9, BINOP_2, LIMFUNC1, XREAL_0,
+      INT_1, SEQ_4;
  constructors SIN_COS, TAYLOR_1, SEQ_1, REAL_1, FDIFF_1, FCONT_1, MEASURE6,
       BINOP_2, SQUARE_1, PREPOWER, INTEGRA5, JORDAN16, SIN_COS2, SEQ_4, SEQ_2,
       SIN_COS9, PARTFUN1, PARTFUN2, FUNCT_1, RCOMP_1, RELAT_1, SIN_COS6,
@@ -27,51 +28,51 @@ environ
 
 begin
 
- reserve a,b,x for Real;
+ reserve a,x for Real;
  reserve n for Element of NAT;
  reserve A for closed-interval Subset of REAL;
- reserve f,g,h,f1,f2 for PartFunc of REAL,REAL;
+ reserve f,h,f1,f2 for PartFunc of REAL,REAL;
  reserve Z for open Subset of REAL;
 
 :: f.x = 1/(sin.x*cos.x)
 
 theorem :: INTEGR13:1
- A c= Z & f=(sin(#)cos)^
- & Z c= dom (ln*tan) & Z = dom f & f|A is continuous
- implies integral(f,A)=(ln*tan).(sup A)-(ln*tan).(inf A);
+ A c= Z & f=(sin(#)cos)^ & Z c= dom (ln*tan) & Z = dom f & f|A is continuous
+ implies integral(f,A)=(ln*tan).(upper_bound A)-(ln*tan).(lower_bound A);
 
 :: f.x = -1/(sin.x*cos.x)
 
 theorem :: INTEGR13:2
- A c= Z & f=-(sin(#)cos)^
- & Z c= dom (ln*cot) & Z = dom f & f|A is continuous
- implies integral(f,A)=(ln*cot).(sup A)-(ln*cot).(inf A);
+ A c= Z & f=-(sin(#)cos)^ & Z c= dom (ln*cot) & Z = dom f & f|A is continuous
+ implies integral(f,A)=(ln*cot).(upper_bound A)-(ln*cot).(lower_bound A);
 
 ::f.x=2 * exp_R.x * sin.x
 
 theorem :: INTEGR13:3
  A c= Z & f=2(#)(exp_R(#)sin)
  & Z c= dom (exp_R(#)(sin-cos)) & Z = dom f & f|A is continuous implies
- integral(f,A)=(exp_R(#)(sin-cos)).(sup A)-(exp_R(#)(sin-cos)).(inf A);
+ integral(f,A)=(exp_R(#)(sin-cos)).(upper_bound A)-
+ (exp_R(#)(sin-cos)).(lower_bound A);
 
 ::f.x=2 * exp_R.x * cos.x
 
 theorem :: INTEGR13:4
  A c= Z & f=2(#)(exp_R(#)cos)
  & Z c= dom (exp_R(#)(sin+cos)) & Z = dom f & f|A is continuous implies
- integral(f,A)=(exp_R(#)(sin+cos)).(sup A)-(exp_R(#)(sin+cos)).(inf A);
+ integral(f,A)=(exp_R(#)(sin+cos)).(upper_bound A)-
+ (exp_R(#)(sin+cos)).(lower_bound A);
 
 ::f.x=cos.x-sin.x
 
 theorem :: INTEGR13:5
  A c= Z & Z = dom (cos-sin) & (cos-sin)|A is continuous implies
- integral(cos-sin,A)=(sin+cos).(sup A)-(sin+cos).(inf A);
+ integral(cos-sin,A)=(sin+cos).(upper_bound A)-(sin+cos).(lower_bound A);
 
 ::f.x=cos.x+sin.x
 
 theorem :: INTEGR13:6
  A c= Z & Z = dom (cos+sin) & (cos+sin)|A is continuous implies
- integral(cos+sin,A)=(sin-cos).(sup A)-(sin-cos).(inf A);
+ integral(cos+sin,A)=(sin-cos).(upper_bound A)-(sin-cos).(lower_bound A);
 
 theorem :: INTEGR13:7
   Z c= dom ((-1/2)(#)((sin+cos)/exp_R)) implies
@@ -83,8 +84,8 @@ theorem :: INTEGR13:7
 theorem :: INTEGR13:8
  A c= Z & f=sin/exp_R
  & Z c= dom ((-1/2)(#)((sin+cos)/exp_R)) & Z = dom f & f|A is continuous
- implies integral(f,A)=((-1/2)(#)((sin+cos)/exp_R)).(sup A)
-                      -((-1/2)(#)((sin+cos)/exp_R)).(inf A);
+ implies integral(f,A)=((-1/2)(#)((sin+cos)/exp_R)).(upper_bound A)
+                      -((-1/2)(#)((sin+cos)/exp_R)).(lower_bound A);
 
 theorem :: INTEGR13:9
   Z c= dom ((1/2)(#)((sin-cos)/exp_R)) implies
@@ -96,29 +97,29 @@ theorem :: INTEGR13:9
 theorem :: INTEGR13:10
  A c= Z & f=cos/exp_R
  & Z c= dom ((1/2)(#)((sin-cos)/exp_R)) & Z = dom f & f|A is continuous
- implies integral(f,A)=((1/2)(#)((sin-cos)/exp_R)).(sup A)
-                     -((1/2)(#)((sin-cos)/exp_R)).(inf A);
+ implies integral(f,A)=((1/2)(#)((sin-cos)/exp_R)).(upper_bound A)
+                     -((1/2)(#)((sin-cos)/exp_R)).(lower_bound A);
 
 ::f.x=exp_R.x*(sin.x+cos.x)
 
 theorem :: INTEGR13:11
  A c= Z & f=exp_R(#)(sin+cos)
  & Z c= dom (exp_R(#)sin) & Z = dom f & f|A is continuous implies
- integral(f,A)=(exp_R(#)sin).(sup A)-(exp_R(#)sin).(inf A);
+ integral(f,A)=(exp_R(#)sin).(upper_bound A)-(exp_R(#)sin).(lower_bound A);
 
 ::f.x=exp_R.x*(cos.x-sin.x)
 
 theorem :: INTEGR13:12
 A c= Z & f=exp_R(#)(cos-sin)
 & Z c= dom (exp_R(#)cos) & Z = dom f & f|A is continuous implies
-integral(f,A)=(exp_R(#)cos).(sup A)-(exp_R(#)cos).(inf A);
+integral(f,A)=(exp_R(#)cos).(upper_bound A)-(exp_R(#)cos).(lower_bound A);
 
 ::f.x=-sin.x/cos.x/x^2+1/x/(cos.x)^2
 
 theorem :: INTEGR13:13
  A c= Z & f1=#Z 2 & f=-sin/cos/f1 + (id Z)^/cos^2
  & Z c= dom ((id Z)^(#)tan) & Z = dom f & f|A is continuous implies
- integral(f,A)=((id Z)^(#)tan).(sup A)-((id Z)^(#)tan).(inf A);
+ integral(f,A)=((id Z)^(#)tan).(upper_bound A)-((id Z)^(#)tan).(lower_bound A);
 
 ::f.x=-cos.x/sin.x/x^2-1/x/(sin.x)^2
 
@@ -126,61 +127,61 @@ theorem :: INTEGR13:14
  A c= Z & f=-cos/sin/f1-(id Z)^/sin^2 & f1=#Z 2
  & Z c= dom ((id Z)^(#)cot) & Z = dom f & f|A is continuous
  implies
- integral(f,A)=((id Z)^(#)cot).(sup A)-((id Z)^(#)cot).(inf A);
+ integral(f,A)=((id Z)^(#)cot).(upper_bound A)-((id Z)^(#)cot).(lower_bound A);
 
 ::f.x=sin.x/cos.x/x+ln.x/(cos.x)^2
 
 theorem :: INTEGR13:15
  A c= Z & f=sin/cos/(id Z)+ln/cos^2
  & Z c= dom (ln(#)tan) & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)tan).(sup A)-(ln(#)tan).(inf A);
+ integral(f,A)=(ln(#)tan).(upper_bound A)-(ln(#)tan).(lower_bound A);
 
 ::f.x=cos.x/sin.x/x-ln.x/(sin.x)^2
 
 theorem :: INTEGR13:16
  A c= Z & f=cos/sin/(id Z)-ln/sin^2
  & Z c= dom (ln(#)cot) & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)cot).(sup A)-(ln(#)cot).(inf A);
+ integral(f,A)=(ln(#)cot).(upper_bound A)-(ln(#)cot).(lower_bound A);
 
 ::f.x=tan.x/x+ln.x/(cos.x)^2
 
 theorem :: INTEGR13:17
  A c= Z & f=tan/(id Z)+ln/cos^2
  & Z c= dom (ln(#)tan) & Z c= dom tan & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)tan).(sup A)-(ln(#)tan).(inf A);
+ integral(f,A)=(ln(#)tan).(upper_bound A)-(ln(#)tan).(lower_bound A);
 
 ::f.x=cot.x/x-ln.x/(sin.x)^2
 
 theorem :: INTEGR13:18
  A c= Z & f=cot/(id Z)-ln/sin^2
  & Z c= dom (ln(#)cot) & Z c= dom cot & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)cot).(sup A)-(ln(#)cot).(inf A);
+ integral(f,A)=(ln(#)cot).(upper_bound A)-(ln(#)cot).(lower_bound A);
 
 ::f.x=arctan.x/x+ln.x/(1+x^2)
 
 theorem :: INTEGR13:19
  A c= Z & (for x st x in Z holds f1.x=1) & f=arctan/(id Z)+ln/(f1+( #Z 2))
  & Z c= ]. -1,1 .[ & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)arctan).(sup A)-(ln(#)arctan).(inf A);
+ integral(f,A)=(ln(#)arctan).(upper_bound A)-(ln(#)arctan).(lower_bound A);
 
 ::f.x=arccot.x/x-ln.x/(1+x^2)
 
 theorem :: INTEGR13:20
  A c= Z & (for x st x in Z holds f1.x=1) & f=arccot/(id Z)-ln/(f1+( #Z 2))
  & Z c= ]. -1,1 .[ & Z = dom f & f|A is continuous implies
- integral(f,A)=(ln(#)arccot).(sup A)-(ln(#)arccot).(inf A);
+ integral(f,A)=(ln(#)arccot).(upper_bound A)-(ln(#)arccot).(lower_bound A);
 
 ::f.x=exp_R.(tan.x)/(cos.x)^2
 
 theorem :: INTEGR13:21
  A c= Z & f=exp_R*tan/cos^2 & Z = dom f & f|A is continuous
- implies integral(f,A)=(exp_R*tan).(sup A)-(exp_R*tan).(inf A);
+ implies integral(f,A)=(exp_R*tan).(upper_bound A)-(exp_R*tan).(lower_bound A);
 
 ::f.x=-exp_R.(cot.x)/(sin.x)^2
 
 theorem :: INTEGR13:22
  A c= Z & f=-exp_R*cot/sin^2 & Z = dom f & f|A is continuous
- implies integral(f,A)=(exp_R*cot).(sup A)-(exp_R*cot).(inf A);
+ implies integral(f,A)=(exp_R*cot).(upper_bound A)-(exp_R*cot).(lower_bound A);
 
 theorem :: INTEGR13:23
   Z c= dom (exp_R*cot) implies -exp_R*cot is_differentiable_on Z &
@@ -190,21 +191,22 @@ theorem :: INTEGR13:23
 
 theorem :: INTEGR13:24
  A c= Z & f=exp_R*cot/sin^2 & Z = dom f & f|A is continuous
- implies integral(f,A)=(-exp_R*cot).(sup A)-(-exp_R*cot).(inf A);
+ implies integral(f,A)=(-exp_R*cot).(upper_bound A)-
+ (-exp_R*cot).(lower_bound A);
 
 ::f.x=1/(x*(cos.(ln.x))^2)
 
 theorem :: INTEGR13:25
  A c= Z & f=((id Z)(#)(cos*ln)^2)^
  & Z c= dom (tan*ln) & Z = dom f & f|A is continuous
- implies integral(f,A)=(tan*ln).(sup A)-(tan*ln).(inf A);
+ implies integral(f,A)=(tan*ln).(upper_bound A)-(tan*ln).(lower_bound A);
 
 ::f.x= -1/(x*(sin.(ln.x))^2)
 
 theorem :: INTEGR13:26
  A c= Z & f=-((id Z)(#)(sin*ln)^2)^
  & Z c= dom (cot*ln) & Z = dom f & f|A is continuous
- implies integral(f,A)=(cot*ln).(sup A)-(cot*ln).(inf A);
+ implies integral(f,A)=(cot*ln).(upper_bound A)-(cot*ln).(lower_bound A);
 
 theorem :: INTEGR13:27
 Z c= dom (cot*ln) implies -cot*ln is_differentiable_on Z &
@@ -215,21 +217,21 @@ for x st x in Z holds ((-cot*ln)`|Z).x = 1/(x*(sin.(ln.x))^2);
 theorem :: INTEGR13:28
  A c= Z & f=((id Z)(#)(sin*ln)^2)^
  & Z c= dom (cot*ln) & Z = dom f & f|A is continuous
- implies integral(f,A)=(-cot*ln).(sup A)-(-cot*ln).(inf A);
+ implies integral(f,A)=(-cot*ln).(upper_bound A)-(-cot*ln).(lower_bound A);
 
 ::f.x=exp_R.x/(cos.(exp_R.x))^2
 
 theorem :: INTEGR13:29
  A c= Z & f=exp_R/(cos*exp_R)^2
  & Z c= dom (tan*exp_R) & Z = dom f & f|A is continuous
- implies integral(f,A)=(tan*exp_R).(sup A)-(tan*exp_R).(inf A);
+ implies integral(f,A)=(tan*exp_R).(upper_bound A)-(tan*exp_R).(lower_bound A);
 
 ::f.x=-exp_R.x/(sin.(exp_R.x))^2
 
 theorem :: INTEGR13:30
  A c= Z & f=-exp_R/(sin*exp_R)^2
  & Z c= dom (cot*exp_R) & Z = dom f & f|A is continuous
- implies integral(f,A)=(cot*exp_R).(sup A)-(cot*exp_R).(inf A);
+ implies integral(f,A)=(cot*exp_R).(upper_bound A)-(cot*exp_R).(lower_bound A);
 
 theorem :: INTEGR13:31
  Z c= dom (cot*exp_R) implies -cot*exp_R is_differentiable_on Z &
@@ -240,18 +242,19 @@ theorem :: INTEGR13:31
 theorem :: INTEGR13:32
  A c= Z & f=exp_R/(sin*exp_R)^2
  & Z c= dom (cot*exp_R) & Z = dom f & f|A is continuous
- implies integral(f,A)=(-cot*exp_R).(sup A)-(-cot*exp_R).(inf A);
+ implies integral(f,A)=(-cot*exp_R).(upper_bound A)-
+ (-cot*exp_R).(lower_bound A);
 
 ::f.x=-1/(x^2*(cos.(1/x))^2)
 
 theorem :: INTEGR13:33
  A c= Z & (for x st x in Z holds f.x=-1/(x^2*(cos.(1/x))^2))
  & Z c= dom (tan*((id Z)^)) & Z = dom f & f|A is continuous
- implies integral(f,A)=(tan*((id Z)^)).(sup A)-(tan*((id Z)^)).(inf A);
+ implies integral(f,A)=(tan*((id Z)^)).(upper_bound A)-
+ (tan*((id Z)^)).(lower_bound A);
 
 theorem :: INTEGR13:34
-  Z c= dom (tan*((id Z)^))
-  implies (-tan*((id Z)^)) is_differentiable_on Z &
+  Z c= dom (tan*((id Z)^)) implies (-tan*((id Z)^)) is_differentiable_on Z &
   for x st x in Z holds ((-tan*((id Z)^))`|Z).x = 1/(x^2*(cos.(1/x))^2);
 
 ::f.x=1/(x^2*(cos.(1/x))^2)
@@ -259,23 +262,24 @@ theorem :: INTEGR13:34
 theorem :: INTEGR13:35
  A c= Z & (for x st x in Z holds f.x=1/(x^2*(cos.(1/x))^2))
  & Z c= dom (tan*((id Z)^)) & Z = dom f & f|A is continuous
- implies integral(f,A)=(-tan*((id Z)^)).(sup A) - (-tan*((id Z)^)).(inf A);
+ implies integral(f,A)=(-tan*((id Z)^)).(upper_bound A) -
+ (-tan*((id Z)^)).(lower_bound A);
 
 ::f.x=1/(x^2*(sin.(1/x))^2)
 
 theorem :: INTEGR13:36
  A c= Z & (for x st x in Z holds f.x=1/(x^2*(sin.(1/x))^2))
  & Z c= dom (cot*((id Z)^)) & Z = dom f & f|A is continuous
- implies integral(f,A)=(cot*((id Z)^)).(sup A) - (cot*((id Z)^)).(inf A);
+ implies integral(f,A)=(cot*((id Z)^)).(upper_bound A) -
+ (cot*((id Z)^)).(lower_bound A);
 
 ::f.x=1/((1+x^2)*arctan.x)
 
 theorem :: INTEGR13:37
- A c= Z & (for x st x in Z holds f1.x=1 & arctan.x>0)
- & f=((f1+#Z 2)(#)arctan)^
+ A c= Z & (for x st x in Z holds f1.x=1 & arctan.x>0) & f=((f1+#Z 2)(#)arctan)^
  & Z c= ]. -1,1 .[ & Z c= dom (ln*(arctan)) & Z = dom f
  & f|A is continuous implies
- integral(f,A)=(ln*(arctan)).(sup A)-(ln* (arctan)).(inf A);
+ integral(f,A)=(ln*(arctan)).(upper_bound A)-(ln* (arctan)).(lower_bound A);
 
 ::f.x=n*(arctan.x) #Z (n-1) / (1+x^2)
 
@@ -284,7 +288,8 @@ theorem :: INTEGR13:38
  & (for x st x in Z holds f1.x=1)
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z n)*(arctan)) & Z = dom f
  & f|A is continuous implies
- integral(f,A)=(( #Z n)*arctan).(sup A)-(( #Z n)*arctan).(inf A);
+ integral(f,A)=(( #Z n)*arctan).(upper_bound A)-
+ (( #Z n)*arctan).(lower_bound A);
 
 ::f.x=-n*(arccot.x) #Z (n-1) / (1+x^2)
 
@@ -293,7 +298,8 @@ theorem :: INTEGR13:39
  & f=-(n(#)((( #Z (n-1))*arccot)/(f1+#Z 2)))
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z n)*arccot) & Z = dom f
  & f|A is continuous implies
- integral(f,A)=(( #Z n)*arccot).(sup A)-(( #Z n)*arccot).(inf A);
+ integral(f,A)=(( #Z n)*arccot).(upper_bound A)-
+ (( #Z n)*arccot).(lower_bound A);
 
 theorem :: INTEGR13:40
   Z c= dom (( #Z n)*arccot) & Z c= ]. -1,1 .[ implies
@@ -307,7 +313,8 @@ theorem :: INTEGR13:41
  & f=n(#)((( #Z (n-1))*arccot)/(f1+#Z 2))
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z n)*arccot) & Z = dom f
  & f|A is continuous implies
- integral(f,A)=(-( #Z n)*arccot).(sup A)-(-( #Z n)*arccot).(inf A);
+ integral(f,A)=(-( #Z n)*arccot).(upper_bound A)-
+ (-( #Z n)*arccot).(lower_bound A);
 
 ::f.x=arctan.x / (1+x^2)
 
@@ -315,8 +322,8 @@ theorem :: INTEGR13:42
  A c= Z & (for x st x in Z holds f1.x=1) & f=arctan/(f1+#Z 2)
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z 2)*(arctan))
  & Z = dom f & f|A is continuous implies
- integral(f,A)=((1/2)(#)(( #Z 2)*(arctan))).(sup A)
-              -((1/2)(#)(( #Z 2)*(arctan))).(inf A);
+ integral(f,A)=((1/2)(#)(( #Z 2)*(arctan))).(upper_bound A)
+              -((1/2)(#)(( #Z 2)*(arctan))).(lower_bound A);
 
 ::f.x=-arccot.x / (1+x^2)
 
@@ -324,8 +331,8 @@ theorem :: INTEGR13:43
  A c= Z & (for x st x in Z holds f1.x=1) & f=-arccot/(f1+#Z 2)
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z 2)*(arccot))
  & Z = dom f & f|A is continuous implies
- integral(f,A)=((1/2)(#)(( #Z 2)*(arccot))).(sup A)
-              -((1/2)(#)(( #Z 2)*(arccot))).(inf A);
+ integral(f,A)=((1/2)(#)(( #Z 2)*(arccot))).(upper_bound A)
+              -((1/2)(#)(( #Z 2)*(arccot))).(lower_bound A);
 
 theorem :: INTEGR13:44
   Z c= dom (( #Z 2)*(arccot)) & Z c= ]. -1,1 .[ implies
@@ -338,36 +345,40 @@ theorem :: INTEGR13:45
  A c= Z & (for x st x in Z holds f1.x=1) & f=arccot/(f1+#Z 2)
  & Z c= ]. -1,1 .[ & Z c= dom (( #Z 2)*(arccot))
  & Z = dom f & f|A is continuous implies
- integral(f,A)=(-(1/2)(#)(( #Z 2)*(arccot))).(sup A)
-              -(-(1/2)(#)(( #Z 2)*(arccot))).(inf A);
+ integral(f,A)=(-(1/2)(#)(( #Z 2)*(arccot))).(upper_bound A)
+              -(-(1/2)(#)(( #Z 2)*(arccot))).(lower_bound A);
 
 ::f.x=arctan.x + x/(1+x^2)
 
 theorem :: INTEGR13:46
  A c= Z & (for x st x in Z holds f1.x=1) & f=arctan+(id Z)/(f1+#Z 2)
  & Z c= ]. -1,1 .[ & Z = dom f & f|A is continuous implies
- integral(f,A)=((id Z)(#)(arctan)).(sup A)-((id Z)(#)(arctan)).(inf A);
+ integral(f,A)=((id Z)(#)(arctan)).(upper_bound A)-
+ ((id Z)(#)(arctan)).(lower_bound A);
 
 ::f.x=arccot.x - x/(1+x^2)
 
 theorem :: INTEGR13:47
  A c= Z & (for x st x in Z holds f1.x=1) & f=arccot-(id Z)/(f1+#Z 2)
  & Z c= ]. -1,1 .[ & Z = dom f & f|A is continuous implies
- integral(f,A)=((id Z)(#)(arccot)).(sup A)-((id Z)(#)(arccot)).(inf A);
+ integral(f,A)=((id Z)(#)(arccot)).(upper_bound A)-
+ ((id Z)(#)(arccot)).(lower_bound A);
 
 ::f.x=exp_R.(arctan.x)/(1+x^2)
 
 theorem :: INTEGR13:48
  A c= Z & Z c= ]. -1,1 .[ & f=exp_R*arctan/(f1+#Z 2)
  & (for x st x in Z holds f1.x=1) & Z = dom f & f|A is continuous
- implies integral(f,A)=(exp_R*arctan).(sup A) - (exp_R*arctan).(inf A);
+ implies integral(f,A)=(exp_R*arctan).(upper_bound A) -
+ (exp_R*arctan).(lower_bound A);
 
 ::f.x=-exp_R.(arccot.x)/(1+x^2)
 
 theorem :: INTEGR13:49
  A c= Z & Z c= ]. -1,1 .[ & f=-exp_R*arccot/(f1+#Z 2)
  & (for x st x in Z holds f1.x=1) & Z = dom f & f|A is continuous
- implies integral(f,A)=(exp_R*arccot).(sup A) - (exp_R*arccot).(inf A);
+ implies integral(f,A)=(exp_R*arccot).(upper_bound A) -
+ (exp_R*arccot).(lower_bound A);
 
 theorem :: INTEGR13:50
  Z c= dom (exp_R*arccot) & Z c= ]. -1,1 .[ implies
@@ -379,8 +390,8 @@ theorem :: INTEGR13:50
 theorem :: INTEGR13:51
  A c= Z & Z c= ]. -1,1 .[ & f=exp_R*arccot/(f1+#Z 2)
  & (for x st x in Z holds f1.x=1) & Z = dom f & f|A is continuous
- implies integral(f,A)=(-exp_R*arccot).(sup A)
-                      -(-exp_R*arccot).(inf A);
+ implies integral(f,A)=(-exp_R*arccot).(upper_bound A)
+                      -(-exp_R*arccot).(lower_bound A);
 
 ::f.x=x/(1+x^2)
 
@@ -388,8 +399,8 @@ theorem :: INTEGR13:52
  A c= Z & Z c= dom (ln*(f1+f2)) & f=(id Z)/(f1+f2)
  & f2=#Z 2 & (for x st x in Z holds f1.x=1) & Z = dom f
  & f|A is continuous implies
- integral(f,A)=((1/2)(#)(ln*(f1+f2))).(sup A)
-              -((1/2)(#)(ln*(f1+f2))).(inf A);
+ integral(f,A)=((1/2)(#)(ln*(f1+f2))).(upper_bound A)
+              -((1/2)(#)(ln*(f1+f2))).(lower_bound A);
 
 ::f.x=x/(a*(1+(x/a)^2))
 
@@ -397,8 +408,8 @@ theorem :: INTEGR13:53
  A c= Z & Z c= dom (ln*(f1+f2)) & f=(id Z)/(a(#)(f1+f2))
  & (for x st x in Z holds h.x=x/a & f1.x=1)
  & a <> 0 & f2=( #Z 2)*h & Z = dom f & f|A is continuous
- implies integral(f,A)=((a/2)(#)(ln*(f1+f2))).(sup A)
-                      -((a/2)(#)(ln*(f1+f2))).(inf A);
+ implies integral(f,A)=((a/2)(#)(ln*(f1+f2))).(upper_bound A)
+                      -((a/2)(#)(ln*(f1+f2))).(lower_bound A);
 
 theorem :: INTEGR13:54
   Z c= dom ((id Z)^(#)arctan) & Z c= ]. -1,1 .[
@@ -419,7 +430,8 @@ theorem :: INTEGR13:56
  & f=arctan/( #Z 2)-((id Z)(#)(f1+#Z 2))^
  & Z c= dom ((id Z)^(#)arctan) & Z c= ]. -1,1 .[
  & Z = dom f & f|A is continuous implies
- integral(f,A)=(-(id Z)^(#)arctan).(sup A)-(-(id Z)^(#)arctan).(inf A);
+ integral(f,A)=(-(id Z)^(#)arctan).(upper_bound A)-
+ (-(id Z)^(#)arctan).(lower_bound A);
 
 ::f.x=arccot.x/(x^2)+1/(x*(1+x^2))
 
@@ -428,4 +440,5 @@ theorem :: INTEGR13:57
  & f=arccot/( #Z 2)+((id Z)(#)(f1+#Z 2))^
  & Z c= dom ((id Z)^(#)arccot) & Z c= ]. -1,1 .[
  & Z = dom f & f|A is continuous implies
- integral(f,A)=(-(id Z)^(#)arccot).(sup A)-(-(id Z)^(#)arccot).(inf A);
+ integral(f,A)=(-(id Z)^(#)arccot).(upper_bound A)-
+ (-(id Z)^(#)arccot).(lower_bound A);

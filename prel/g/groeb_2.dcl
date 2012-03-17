@@ -39,7 +39,6 @@
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>
 <ArticleID name="POLYNOM7"/>
-<ArticleID name="FVSUM_1"/>
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="GROEB_2"/>
 </Signature>
@@ -64,7 +63,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -85,7 +84,7 @@
 <Adjective nr="55"/>
 <Adjective nr="95"/>
 <Adjective nr="106"/>
-<Adjective nr="149"/>
+<Adjective nr="150"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -99,7 +98,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="179">
+<Adjective nr="180">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -138,7 +137,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="179">
+<Adjective nr="180">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -158,7 +157,7 @@
 <Adjective nr="95"/>
 <Adjective nr="106"/>
 <Adjective nr="112"/>
-<Adjective nr="149"/>
+<Adjective nr="150"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -172,11 +171,11 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="177">
+<Adjective nr="178">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="181">
+<Adjective nr="182">
 <Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
@@ -221,7 +220,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="177">
+<Adjective nr="178">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -276,7 +275,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="344">
+<Func kind="K" nr="330">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Func>
@@ -284,7 +283,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="348">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

@@ -18,7 +18,7 @@ environ
       PARTFUN3, POWER, LIMFUNC1, RCOMP_1, MATRPROB, FDIFF_1, TAYLOR_1, FCONT_1;
  constructors REAL_1, NAT_D, BINOP_2, MATRIX_3, MATRIXR1, MATRLIN, MATRPROB,
       PARTFUN3, PARTFUN2, FDIFF_1, FCONT_1, POWER, LIMFUNC1, SIN_COS, TAYLOR_1,
-      INTEGRA1, SEQ_1, XXREAL_2, RVSUM_1, RELSET_1;
+      INTEGRA1, SEQ_1, XXREAL_2, RVSUM_1, RELSET_1, NEWTON;
  registrations MATRPROB, RELSET_1, NAT_1, MEMBERED, ORDINAL1, XREAL_0, FCONT_3,
       RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0, FINSEQ_1, CARD_1,
       XXREAL_2, FINSEQ_2;
@@ -29,13 +29,11 @@ begin :: Preliminaries
 
 reserve D for non empty set,
   i,j,k,l for Element of NAT,
-  n,m for Nat,
-  x,y for
-  set,
-  a,b,c,b1,r,r1,r2 for Real,
+  n for Nat,
+  x for set,
+  a,b,c,r,r1,r2 for Real,
   p,q for FinSequence of REAL,
-  MR,MR1 for Matrix
-  of REAL;
+  MR,MR1 for Matrix of REAL;
 
 theorem :: ENTROPY1:1
   k <> 0 & i < l & l <= j & k divides l implies i div k < j div k;
@@ -55,8 +53,7 @@ theorem :: ENTROPY1:5
   a>0 & a<>1 & b>0 implies -log(a,b) = log(a,1/b);
 
 theorem :: ENTROPY1:6
-  a>0 & a<>1 & b>=0 & c>=0 implies b*c*log(a,b*c) = b*c*log(a,b)+b*
-  c*log(a,c);
+  a>0 & a<>1 & b>=0 & c>=0 implies b*c*log(a,b*c) = b*c*log(a,b)+b* c*log(a,c);
 
 theorem :: ENTROPY1:7
   for q,q1,q2 being FinSequence of REAL st len q1 = len q & len q1
@@ -82,8 +79,7 @@ definition
   redefine attr p is nonnegative means
 :: ENTROPY1:def 1
 
-  for i st i in dom p holds p.i >=
-  0;
+  for i st i in dom p holds p.i >= 0;
 end;
 
 registration
@@ -98,8 +94,7 @@ definition
   pred p has_onlyone_value_in k means
 :: ENTROPY1:def 2
 
-  k in dom p & for i st i in dom p
-  & i<>k holds p.i=0;
+  k in dom p & for i st i in dom p & i<>k holds p.i=0;
 end;
 
 theorem :: ENTROPY1:11
@@ -125,8 +120,8 @@ theorem :: ENTROPY1:15
   .k = 1 holds p has_onlyone_value_in k;
 
 theorem :: ENTROPY1:16
-  for i being non empty Nat holds (i |-> (1/i)) is ProbFinS
-  FinSequence of REAL;
+  for i being non empty Nat holds (i |-> (1/i)) is ProbFinS FinSequence of REAL
+;
 
 registration
   cluster with_sum=1 -> non empty-yielding Matrix of REAL;
@@ -141,8 +136,7 @@ theorem :: ENTROPY1:18
   = Seg width M;
 
 theorem :: ENTROPY1:19
-  MR is m-nonnegative iff for i st i in dom MR holds Line(MR,i) is
-  nonnegative;
+  MR is m-nonnegative iff for i st i in dom MR holds Line(MR,i) is nonnegative;
 
 begin :: Properties on Transformations between Vector and Matrix
 
@@ -171,8 +165,7 @@ definition
   attr MR is diagonal means
 :: ENTROPY1:def 3
 
-  for i,j st [i,j] in Indices MR & MR*(i,j)
-  <> 0 holds i=j;
+  for i,j st [i,j] in Indices MR & MR*(i,j) <> 0 holds i=j;
 end;
 
 registration
@@ -189,8 +182,7 @@ definition
   func Vec2DiagMx p -> diagonal Matrix of len p,REAL means
 :: ENTROPY1:def 4
 
-  for j st j
-  in dom p holds it*(j,j) = p.j;
+  for j st j in dom p holds it*(j,j) = p.j;
 end;
 
 theorem :: ENTROPY1:25
@@ -389,8 +381,7 @@ definition
 end;
 
 theorem :: ENTROPY1:55
-  for p being non empty ProbFinS FinSequence of REAL holds Entropy p >=
-  0;
+  for p being non empty ProbFinS FinSequence of REAL holds Entropy p >= 0;
 
 theorem :: ENTROPY1:56
   for p being non empty ProbFinS FinSequence of REAL st ex k st k in dom
@@ -434,8 +425,7 @@ definition
   func Entropy_of_Cond_Prob MR -> FinSequence of REAL means
 :: ENTROPY1:def 11
 
-  len it =
-  len MR & for k st k in dom it holds it.k = Entropy Line(MR,k);
+  len it = len MR & for k st k in dom it holds it.k = Entropy Line(MR,k);
 end;
 
 theorem :: ENTROPY1:62
@@ -459,4 +449,3 @@ theorem :: ENTROPY1:65
   empty-yielding Conditional_Probability Matrix of REAL st len p = len M holds
   Entropy_of_Joint_Prob ((Vec2DiagMx p) * M) = Entropy p + Sum mlt(p,
   Entropy_of_Cond_Prob M);
-

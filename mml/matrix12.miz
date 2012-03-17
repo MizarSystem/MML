@@ -13,7 +13,7 @@ environ
  notations MATRIX_1, XXREAL_0, MATRIX11, TARSKI, NUMBERS, NAT_1, FUNCT_1,
       FINSEQ_1, ZFMISC_1, BINOP_1, STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1,
       FVSUM_1, FINSEQ_2, MATRIX_3, MATRIX_6;
- constructors MATRIX_6, MATRIX11, CAT_2, ALGSTR_1, FVSUM_1, XXREAL_0;
+ constructors MATRIX_6, MATRIX11, CAT_2, ALGSTR_1, FVSUM_1, XXREAL_0, RELSET_1;
  registrations RELSET_1, STRUCT_0, FVSUM_1, VECTSP_1, ORDINAL1, XXREAL_0,
       NAT_1, FINSEQ_2, XBOOLE_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
@@ -24,21 +24,19 @@ environ
 
 begin
 
-reserve x, y, X for set,
-  i, j, k, l, n, m, t,i,j1,l1,k1 for Nat,
+reserve
+   j, k, l, n, m, t,i for Nat,
   K for Field,
-  a,b,a1,a2,g for Element of K,
-  M,M1,M2,M3 for Matrix of n,m,K,
-  N,N1,N2 for
-  Matrix of m,n,K,
+  a for Element of K,
+  M,M1,M2 for Matrix of n,m,K,
+
   pK,qK for FinSequence of K,
-  A,B for Matrix of n,K;
+  A for Matrix of n,K;
 
 Lm1: for k,l,M,M1,M2,pK,qK,i,j st i in Seg n & j in Seg width M & pK=Line(M,l)
 & qK=Line(M,k) & M1=RLine(M,k,pK) & M2=RLine(M1,l,qK) holds (i = l implies M2*(
 i,j) = M*(k,j)) & (i = k implies M2*(i,j) = M*(l,j)) & (i <> l & i <> k implies
 M2*(i,j) = M*(i,j))
-
 proof
   let k,l,M,M1,M2,pK,qK,i,j;
   assume that
@@ -145,8 +143,7 @@ i,j) = M*(k,j)) & (i = k implies M2*(i,j) = M*(l,j)) & (i <> l & i <> k implies
     proof
 A4:   Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A5:   i in dom M & j in Seg width M by A4,ZFMISC_1:106;
       then
@@ -270,7 +267,6 @@ end;
 Lm2: for a,l,M,M1,pK,i,j st i in Seg n & j in Seg width M & pK= Line(M,l) & M1
 =RLine(M,l,a*pK) holds (i = l implies M1*(i,j) = a*(M*(l,j))) & (i <> l implies
 M1*(i,j) = M*(i,j))
-
 proof
   let a,l,M,M1,pK,i,j;
   assume that
@@ -337,8 +333,7 @@ A3: for i,j st i in dom M & j in Seg width M holds (i = l implies M2*(
     proof
 A4:   Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A5:   i in dom M & j in Seg width M by A4,ZFMISC_1:106;
       then
@@ -399,7 +394,6 @@ end;
 Lm3: i in Seg n & j in Seg width M & k in dom M & pK= Line(M,l) & qK=Line(M,k)
 & M1=RLine(M,l,a*qK+pK) implies (i = l implies M1*(i,j) = a*(M*(k,j))+(M*(l,j))
 ) & (i <> l implies M1*(i,j) = M*(i,j))
-
 proof
   assume that
 A1: i in Seg n and
@@ -418,19 +412,14 @@ A8: i = l;
 A9: (Line(M,l)).j = M*(l,j) by A2,MATRIX_1:def 8;
     then consider a2 being Element of K such that
 A10: a2 = (Line(M,l)).j;
-
     a*qK is Element of (width M)-tuples_on the carrier of K by A5,FINSEQ_2:133;
-
     then a*qK+pK is Element of (width M)-tuples_on the carrier of K by A4,
 FINSEQ_2:140;
-
     then
 A11: len (a*qK+pK) = width M by FINSEQ_1:def 18;
     then j in dom (a*qK + pK) by A2,FINSEQ_1:def 3;
-
     then
 A12: ((a*qK) + pK).j = (the addF of K).(a1,a2) by A4,A5,A7,A10,FUNCOP_1:28
-
       .= a*(M*(k,j)) + M*(l,j) by A2,A3,A9,A7,A10,Th3;
     width M1 = width M by A6,A11,MATRIX11:def 3;
     then M1*(i,j) = (Line(M1,i)).j by A2,MATRIX_1:def 8
@@ -439,12 +428,9 @@ A12: ((a*qK) + pK).j = (the addF of K).(a1,a2) by A4,A5,A7,A10,FUNCOP_1:28
   end;
   assume
 A13: i <> l;
-
   a*qK is Element of (width M)-tuples_on the carrier of K by A5,FINSEQ_2:133;
-
   then a*qK+pK is Element of (width M)-tuples_on the carrier of K by A4,
 FINSEQ_2:140;
-
   then len (a*qK+pK) = width M by FINSEQ_1:def 18;
   then width M1 = width M by A6,MATRIX11:def 3;
   hence M1*(i,j) = Line(M1,i).j by A2,MATRIX_1:def 8
@@ -489,8 +475,7 @@ A3: for i,j st i in dom M & j in Seg width M holds (i = l implies M2*(
     proof
 A4:   Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A5:   i in dom M & j in Seg width M by A4,ZFMISC_1:106;
       then
@@ -880,8 +865,7 @@ A34: for i,j st [i,j] in Indices (B*A) holds (B*A)*(i,j) = (SXLine(A,l,a))*(
   i,j)
   proof
     let i,j;
-    assume
-    [i,j] in Indices (B*A);
+    assume [i,j] in Indices (B*A);
     then
 A35: i in Seg n & j in Seg n by A7,ZFMISC_1:106;
     dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
@@ -1055,8 +1039,7 @@ A49: for i,j st [i,j] in Indices (B*A) holds (B*A)*(i,j) = (RLineXS(A,l,k,a)
   )*(i,j)
   proof
     let i,j;
-    assume
-    [i,j] in Indices (B*A);
+    assume [i,j] in Indices (B*A);
     then
 A50: i in Seg n & j in Seg n by A14,ZFMISC_1:106;
     dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
@@ -1073,8 +1056,7 @@ proof
 A1: for i,j st [i,j] in Indices M holds ILine(M,k,k)*(i,j) = M*(i,j)
   proof
     let i,j;
-    assume
-    [i,j] in Indices M;
+    assume [i,j] in Indices M;
     then
 A2: i in dom M & j in Seg width M by ZFMISC_1:106;
     then i = k implies ILine(M,k,k)*(i,j) = M*(k,j) by Def1;
@@ -1093,8 +1075,7 @@ A2: for i,j st [i,j] in Indices (ILine(M,l,k)) holds ILine(M,l,k)*(i,j) =
   proof
     let i,j;
 A3: Indices (ILine(M,l,k)) = Indices M by MATRIX_1:27;
-    assume
-    [i,j] in Indices (ILine(M,l,k));
+    assume [i,j] in Indices (ILine(M,l,k));
     then
 A4: i in dom M & j in Seg width M by A3,ZFMISC_1:106;
     then
@@ -1144,8 +1125,7 @@ theorem Th12:
   l in dom (1.(K,n)) & k in dom (1.(K,n)) implies ILine((1.(K,n)),
   l,k) is invertible & (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k)
 proof
-  assume
-  l in dom (1.(K,n)) & k in dom (1.(K,n));
+  assume l in dom (1.(K,n)) & k in dom (1.(K,n));
   then
   ILine((1.(K,n)),l,k) * ILine((1.(K,n)),l,k) = ILine(ILine((1.(K,n)),l,k)
   ,l,k ) & ILine(ILine((1.(K,n)),l,k),l,k) = 1.(K,n) by Th6,Th11;
@@ -1158,7 +1138,6 @@ end;
 Lm4: for i,j,l,k,a st [i,j] in Indices (1.(K,n)) & l in dom (1.(K,n)) & k in
 dom (1.(K,n)) & k<>l holds (1.(K,n))*(i,j) = (RLineXS(RLineXS((1.(K,n)),l,k,-a)
 ,l,k,a))*(i,j)
-
 proof
   let i,j,l,k,a;
   assume that
@@ -1179,39 +1158,29 @@ A9: i in dom B by A1,ZFMISC_1:106;
     per cases;
     case
 A10:  i = l;
-
       reconsider p2=Line((1.(K,n)),i) as Element of (width B)-tuples_on the
       carrier of K by Th1;
-
       reconsider p1=Line((1.(K,n)),k) as Element of (width B)-tuples_on the
       carrier of K by Th1;
-
 A11:  Line(B,k) = Line((1.(K,n)),k) by A2,A3,A4,Th5;
-
       Line(RLineXS(B,l,k,a),i) = a*Line(B,k) + Line(B,i) by A2,A3,A8,A10,Th5;
-
       then Line(RLineXS(B,l,k,a),i) = a*p1 + ((-a)*p1 + p2) by A2,A3,A10,A11
 ,Th5
-
         .= a*p1 + (-a)*p1 + p2 by FINSEQOP:29
         .= (a+(-a))*p1 + p2 by FVSUM_1:68
         .= (0.K)*p1 + p2 by RLVECT_1:16
         .= (width B) |-> 0.K + p2 by FVSUM_1:71
         .= Line((1.(K,n)),i) by FVSUM_1:28;
-
       hence (RLineXS(B,l,k,a))*(i,j) = Line((1.(K,n)),i).j by A6,A7,
 MATRIX_1:def 8
-
         .= (1.(K,n))*(i,j) by A6,MATRIX_1:def 8;
     end;
     case
 A12:  i <> l;
       then
 A13:  Line(RLineXS(B,l,k,a),i) = Line(B,i) by A2,A3,A8,A9,Th5;
-
       thus (RLineXS(B,l,k,a))*(i,j) = Line(RLineXS(B,l,k,a),i).j by A6,A7,
 MATRIX_1:def 8
-
         .= Line((1.(K,n)),i).j by A2,A3,A5,A12,A13,Th5
         .= (1.(K,n))*(i,j) by A6,MATRIX_1:def 8;
     end;
@@ -1417,8 +1386,7 @@ A24: for i,j st i in dom M & j in Seg width M holds (j = l implies M2*
     proof
 A25:  Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A26:  i in dom M & j in Seg width M by A25,ZFMISC_1:106;
       then
@@ -1520,8 +1488,7 @@ A21: for i,j st i in dom M & j in Seg width M holds (j = l implies M2*
     proof
 A22:  Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A23:  i in dom M & j in Seg width M by A22,ZFMISC_1:106;
       then
@@ -1629,8 +1596,7 @@ A27: for i,j st i in dom M & j in Seg width M holds (j = l implies M2*
     proof
 A28:  Indices M = Indices M1 by MATRIX_1:27;
       let i,j;
-      assume
-      [i,j] in Indices M1;
+      assume [i,j] in Indices M1;
       then
 A29:  i in dom M & j in Seg width M by A28,ZFMISC_1:106;
       then
@@ -1742,8 +1708,7 @@ A24: j <> l & j <> k;
   proof
 A25: Indices M = Indices ICol(M,l,k) by MATRIX_1:27;
     let i,j;
-    assume
-    [i,j] in Indices ICol(M,l,k);
+    assume [i,j] in Indices ICol(M,l,k);
     then
 A26: i in dom M & j in Seg width M by A25,ZFMISC_1:106;
     then
@@ -1784,8 +1749,7 @@ A12: for i,j st i in dom M & j in Seg width M holds (j = l implies M2*(i,j)
   = a*(M*(i,l))) & (j <> l implies M2*(i,j) = M*(i,j))
   proof
     let i,j;
-    assume
-    i in dom M & j in Seg width M;
+    assume i in dom M & j in Seg width M;
     then
 A13: [i,j] in Indices M by ZFMISC_1:106;
     then
@@ -1818,8 +1782,7 @@ A18: j <> l;
   proof
 A19: Indices M = Indices SXCol(M,l,a) by MATRIX_1:27;
     let i,j;
-    assume
-    [i,j] in Indices SXCol(M,l,a);
+    assume [i,j] in Indices SXCol(M,l,a);
     then
 A20: i in dom M & j in Seg width M by A19,ZFMISC_1:106;
     then
@@ -1906,8 +1869,7 @@ A27:  j <> l;
   proof
 A28: Indices M = Indices RColXS(M,l,k,a) by MATRIX_1:27;
     let i,j;
-    assume
-    [i,j] in Indices RColXS(M,l,k,a);
+    assume [i,j] in Indices RColXS(M,l,k,a);
     then
 A29: i in dom M & j in Seg width M by A28,ZFMISC_1:106;
     then
@@ -1948,8 +1910,7 @@ A10: Seg width A = dom (1.(K,n)) by A3,FINSEQ_1:def 3;
 end;
 
 theorem
-  l in dom (1.(K,n)) & n>0 implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l,
-  a)
+  l in dom (1.(K,n)) & n>0 implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l, a)
 proof
   assume that
 A1: l in dom (1.(K,n)) and
@@ -2057,4 +2018,3 @@ A5: dom (1.(K,n)) = Seg width (1.(K,n)) by FINSEQ_1:def 3;
     .= (SXCol((1.(K,n)),l,a))~ by A1,A3,A5,Th16;
   hence thesis;
 end;
-

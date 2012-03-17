@@ -17,7 +17,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="STRUCT_0"/>
@@ -29,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="2">
@@ -38,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="3">
@@ -48,7 +47,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="4">
@@ -57,8 +56,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="61"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="5">
@@ -67,8 +66,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="42" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 </Registrations>

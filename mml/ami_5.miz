@@ -9,19 +9,22 @@ environ
  vocabularies NUMBERS, AMI_3, SUBSET_1, AMI_2, AMI_1, STRUCT_0, XBOOLE_0,
       FSM_1, RELAT_1, FUNCT_1, TARSKI, FINSET_1, QC_LANG1, CARD_1, XXREAL_0,
       FINSEQ_1, MCART_1, GRAPHSP, ARYTM_3, ARYTM_1, INT_1, FUNCT_4, FUNCOP_1,
-      CIRCUIT2, AMI_4, MSUALG_1, ORDINAL1, PARTFUN1, SCMNORM, TURING_1;
+      CIRCUIT2, AMI_4, MSUALG_1, ORDINAL1, PARTFUN1, SCMNORM, TURING_1,
+      RECDEF_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, XCMPLX_0, MCART_1, DOMAIN_1,
-      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FINSET_1,
-      FINSEQ_1, AMI_1, AMI_2, AMI_3, AMI_4, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, FINSEQ_4, AMI_4, AMI_2, PRE_POLY;
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, RECDEF_2,
+      STRUCT_0, FINSET_1,
+      FINSEQ_1, COMPOS_1, AMI_1, AMI_2, AMI_3, AMI_4, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, FINSEQ_4, AMI_4, AMI_2, PRE_POLY, RECDEF_2,
+      MCART_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XREAL_0, INT_1, CARD_3, AMI_1, AMI_2, AMI_3, FINSET_1, CARD_1, RELSET_1,
-      FUNCT_2;
+      FUNCT_2, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, TARSKI, AMI_3, FUNCOP_1, CARD_1, AMI_2, RELAT_1;
+ definitions AMI_1, TARSKI, AMI_3, FUNCOP_1, CARD_1, AMI_2, RELAT_1, COMPOS_1;
  theorems AMI_1, AMI_2, AMI_3, GRFUNC_1, NAT_1, TARSKI, FUNCOP_1, FUNCT_4,
       FUNCT_1, MCART_1, ZFMISC_1, AMI_4, ENUMSET1, RELAT_1, XBOOLE_0, XBOOLE_1,
-      SCMNORM, PBOOLE, PARTFUN1;
+      PBOOLE, PARTFUN1, RECDEF_2, COMPOS_1;
 
 begin
 
@@ -97,8 +100,7 @@ A5: dom s1 = the carrier of SCM by PARTFUN1:def 4;
 A7: dom s2 = the carrier of SCM by PARTFUN1:def 4;
 A8: now
     let x be set;
-    assume
-    x in SCM-Memory;
+    assume x in SCM-Memory;
     then
 A9: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by AMI_3:4,XBOOLE_0:def 3;
     per cases by A9,XBOOLE_0:def 3;
@@ -124,7 +126,7 @@ A9: x in {IC SCM} \/ SCM-Data-Loc or x in NAT by AMI_3:4,XBOOLE_0:def 3;
 end;
 
 theorem
-  for s being State of SCM holds SCM-Data-Loc c= dom s by AMI_3:72,SCMNORM:13;
+  for s being State of SCM holds SCM-Data-Loc c= dom s by AMI_3:72,COMPOS_1:49;
 
 theorem Th28:
   for s being State of SCM holds NAT c= dom s
@@ -182,37 +184,41 @@ theorem Th36:
   for l being Instruction of SCM holds InsCode(l) <= 8
 proof
   let l be Instruction of SCM;
-  l in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] : K
-  in { 7,8 } } or l in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  l in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } }
+    or l in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} }
+   by XBOOLE_0:def 3;
   then
-A1: l in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } or l in { [K,<*a1,b1*>]
-  : K in { 7,8 } } or l in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by
+A1: l in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+ or l in { [K,<*a1*>,<*b1*>]
+  : K in { 7,8 } } or l in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by
 XBOOLE_0:def 3;
   per cases by A1,XBOOLE_0:def 3;
   suppose
-    l in { [SCM-Halt,{}] };
-    then l = [SCM-Halt,{}] by TARSKI:def 1;
-    then l`1 = 0 by MCART_1:7;
+    l in { [SCM-Halt,{},{}] };
+    then l = [SCM-Halt,{},{}] by TARSKI:def 1;
+    then l`1_3 = 0 by RECDEF_2:def 1;
     hence thesis;
   end;
   suppose
-    l in { [J,<*a*>] : J = 6 };
-    then ex J,a st l = [J,<*a*>] & J = 6;
-    then l`1 = 6 by MCART_1:7;
+    l in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st l = [J,<*a*>,{}] & J = 6;
+    then l`1_3 = 6 by RECDEF_2:def 1;
     hence thesis;
   end;
   suppose
-    l in { [K,<*a1,b1*>] : K in { 7,8 } };
-    then ex K,a1,b1 st l = [K,<*a1,b1*>] & K in { 7,8 };
-    then l`1 in { 7,8 } by MCART_1:7;
-    then l`1 = 7 or l`1 = 8 by TARSKI:def 2;
+    l in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
+    then ex K,a1,b1 st l = [K,<*a1*>,<*b1*>] & K in { 7,8 };
+    then l`1_3 in { 7,8 } by RECDEF_2:def 1;
+    then l`1_3 = 7 or l`1_3 = 8 by TARSKI:def 2;
     hence thesis;
   end;
   suppose
-    l in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
-    then ex I,b,c st l = [I,<*b,c*>] & I in { 1,2,3,4,5};
-    then l`1 in { 1,2,3,4,5} by MCART_1:7;
-    then l`1 = 1 or l`1 = 2 or l`1 = 3 or l`1 = 4 or l`1 = 5 by ENUMSET1:def 3;
+    l in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+    then ex I,b,c st l = [I,{},<*b,c*>] & I in { 1,2,3,4,5};
+    then l`1_3 in { 1,2,3,4,5} by RECDEF_2:def 1;
+    then l`1_3 = 1 or l`1_3 = 2 or l`1_3 = 3 or l`1_3 = 4 or l`1_3 = 5
+     by ENUMSET1:def 3;
     hence thesis;
   end;
 end;
@@ -221,7 +227,7 @@ reserve a, b for Data-Location,
   loc for Element of NAT;
 
 theorem Th37:
-  InsCode (halt SCM) = 0 by AMI_3:71,MCART_1:7;
+  InsCode (halt SCM) = 0 by AMI_3:71,RECDEF_2:def 1;
 
 reserve I,J,K for Element of Segm 9,
   a,a1 for Element of NAT,
@@ -239,28 +245,27 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 0;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
   now
-    assume
-    ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
-    then ex I,b,c st ins = [I,<*b,c*>] & I in { 1,2,3,4,5};
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
+    then ex I,b,c st ins = [I,{},<*b,c*>] & I in { 1,2,3,4,5};
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
   then
-A3: ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] :
+A3: ins in { [SCM-Halt,{},{}] }
+ \/ { [J,<*a*>,{}] : J = 6 } \/ { [K,<*a1*>,<*b1*>] :
   K in { 7,8 } } by XBOOLE_0:def 3;
   now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
-    then ex K,a1,b1 st ins = [K,<*a1,b1*>] & K in { 7,8 };
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
+    then ex K,a1,b1 st ins = [K,<*a1*>,<*b1*>] & K in { 7,8 };
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
-  then ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A3,XBOOLE_0:def 3;
-  then ins in {[SCM-Halt,{}]} by A2,XBOOLE_0:def 3;
+  then ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+  by A3,XBOOLE_0:def 3;
+  then ins in {[SCM-Halt,{},{}]} by A2,XBOOLE_0:def 3;
   hence thesis by AMI_3:71,TARSKI:def 1;
 end;
 
@@ -271,33 +276,31 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 1;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
 A3: now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A4: ins = [K,<*a1,b1*>] and
+A4: ins = [K,<*a1*>,<*b1*>] and
 A5: K in { 7,8 };
-    InsCode ins = K by A4,MCART_1:7;
+    InsCode ins = K by A4,RECDEF_2:def 1;
     hence contradiction by A1,A5,TARSKI:def 2;
   end;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
   then
-  not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>
-  ] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
-  then ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
+  then ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
   then consider I,b,c such that
-A6: ins = [I,<*b,c*>] and
+A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
   reconsider da = b@ ,db = c@ as Data-Location;
   take da,db;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th48:
@@ -307,33 +310,31 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 2;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
 A3: now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A4: ins = [K,<*a1,b1*>] and
+A4: ins = [K,<*a1*>,<*b1*>] and
 A5: K in { 7,8 };
-    InsCode ins = K by A4,MCART_1:7;
+    InsCode ins = K by A4,RECDEF_2:def 1;
     hence contradiction by A1,A5,TARSKI:def 2;
   end;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
   then
-  not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>
-  ] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
-  then ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
+  then ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
   then consider I,b,c such that
-A6: ins = [I,<*b,c*>] and
+A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
   reconsider da = b@ ,db = c@ as Data-Location;
   take da,db;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th49:
@@ -343,33 +344,31 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 3;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
 A3: now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A4: ins = [K,<*a1,b1*>] and
+A4: ins = [K,<*a1*>,<*b1*>] and
 A5: K in { 7,8 };
-    InsCode ins = K by A4,MCART_1:7;
+    InsCode ins = K by A4,RECDEF_2:def 1;
     hence contradiction by A1,A5,TARSKI:def 2;
   end;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
   then
-  not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>
-  ] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
-  then ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
+  then ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
   then consider I,b,c such that
-A6: ins = [I,<*b,c*>] and
+A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
   reconsider da = b@ ,db = c@ as Data-Location;
   take da,db;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th50:
@@ -379,33 +378,31 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 4;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
 A3: now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A4: ins = [K,<*a1,b1*>] and
+A4: ins = [K,<*a1*>,<*b1*>] and
 A5: K in { 7,8 };
-    InsCode ins = K by A4,MCART_1:7;
+    InsCode ins = K by A4,RECDEF_2:def 1;
     hence contradiction by A1,A5,TARSKI:def 2;
   end;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
   then
-  not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>
-  ] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
-  then ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
+  then ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
   then consider I,b,c such that
-A6: ins = [I,<*b,c*>] and
+A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
   reconsider da = b@ ,db = c@ as Data-Location;
   take da,db;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th51:
@@ -415,33 +412,31 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 5;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
 A3: now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A4: ins = [K,<*a1,b1*>] and
+A4: ins = [K,<*a1*>,<*b1*>] and
 A5: K in { 7,8 };
-    InsCode ins = K by A4,MCART_1:7;
+    InsCode ins = K by A4,RECDEF_2:def 1;
     hence contradiction by A1,A5,TARSKI:def 2;
   end;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
   then
-  not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>
-  ] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
-  then ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+   \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A3,XBOOLE_0:def 3;
+  then ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} } by XBOOLE_0:def 3;
   then consider I,b,c such that
-A6: ins = [I,<*b,c*>] and
+A6: ins = [I,{},<*b,c*>] and
   I in { 1,2,3,4,5};
   reconsider da = b@ ,db = c@ as Data-Location;
   take da,db;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th52:
@@ -451,32 +446,32 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 6;
   now
-    assume
-    ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+    assume ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
     then consider I,b,c such that
-A2: ins = [I,<*b,c*>] and
+A2: ins = [I,{},<*b,c*>] and
 A3: I in { 1,2,3,4,5};
-    InsCode ins = I by A2,MCART_1:7;
+    InsCode ins = I by A2,RECDEF_2:def 1;
     hence contradiction by A1,A3,ENUMSET1:def 3;
   end;
   then
-A4: ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] :
+A4: ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+ \/ { [K,<*a1*>,<*b1*>] :
   K in { 7,8 } } by XBOOLE_0:def 3;
   now
-    assume
-    ins in { [K,<*a1,b1*>] : K in { 7,8 } };
+    assume ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } };
     then consider K,a1,b1 such that
-A5: ins = [K,<*a1,b1*>] and
+A5: ins = [K,<*a1*>,<*b1*>] and
 A6: K in { 7,8 };
-    InsCode ins = K by A5,MCART_1:7;
+    InsCode ins = K by A5,RECDEF_2:def 1;
     hence contradiction by A1,A6,TARSKI:def 2;
   end;
   then
-A7: ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A4,XBOOLE_0:def 3;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then ins in { [J,<*a*>] : J = 6 } by A7,XBOOLE_0:def 3;
+A7: ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+ by A4,XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then ins in { [J,<*a*>,{}] : J = 6 } by A7,XBOOLE_0:def 3;
   then consider J,a such that
-A8: ins = [J,<*a*>] & J = 6;
+A8: ins = [J,<*a*>,{}] & J = 6;
   reconsider loc = a as Element of NAT;
   take loc;
   thus thesis by A8;
@@ -489,34 +484,33 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 7;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
   now
-    assume
-    ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+    assume ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
     then consider I,b,c such that
-A3: ins = [I,<*b,c*>] and
+A3: ins = [I,{},<*b,c*>] and
 A4: I in { 1,2,3,4,5};
-    InsCode ins = I by A3,MCART_1:7;
+    InsCode ins = I by A3,RECDEF_2:def 1;
     hence contradiction by A1,A4,ENUMSET1:def 3;
   end;
   then
-A5: ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] :
+A5: ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+ \/ { [K,<*a1*>,<*b1*>] :
   K in { 7,8 } } by XBOOLE_0:def 3;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
-  then ins in { [K,<*a1,b1*>] : K in { 7,8 } } by A5,XBOOLE_0:def 3;
+  then ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A5,XBOOLE_0:def 3;
   then consider K,a1,b1 such that
-A6: ins = [K,<*a1,b1*>] and
+A6: ins = [K,<*a1*>,<*b1*>] and
   K in { 7,8 };
   reconsider da = b1@ as Data-Location;
   reconsider loc = a1 as Element of NAT;
   take loc,da;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem Th54:
@@ -526,34 +520,32 @@ proof
   let ins be Instruction of SCM such that
 A1: InsCode ins = 8;
 A2: now
-    assume
-    ins in { [J,<*a*>] : J = 6 };
-    then ex J,a st ins = [J,<*a*>] & J = 6;
-    hence contradiction by A1,MCART_1:7;
+    assume ins in { [J,<*a*>,{}] : J = 6 };
+    then ex J,a st ins = [J,<*a*>,{}] & J = 6;
+    hence contradiction by A1,RECDEF_2:def 1;
   end;
   now
-    assume
-    ins in { [I,<*b,c*>] : I in { 1,2,3,4,5} };
+    assume ins in { [I,{},<*b,c*>] : I in { 1,2,3,4,5} };
     then consider I,b,c such that
-A3: ins = [I,<*b,c*>] and
+A3: ins = [I,{},<*b,c*>] and
 A4: I in { 1,2,3,4,5};
-    InsCode ins = I by A3,MCART_1:7;
+    InsCode ins = I by A3,RECDEF_2:def 1;
     hence contradiction by A1,A4,ENUMSET1:def 3;
   end;
   then
-A5: ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } \/ { [K,<*a1,b1*>] :
-  K in { 7,8 } } by XBOOLE_0:def 3;
-  not ins in { [SCM-Halt,{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
-  then not ins in { [SCM-Halt,{}] } \/ { [J,<*a*>] : J = 6 } by A2,
+A5: ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 }
+    \/ { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by XBOOLE_0:def 3;
+  not ins in { [SCM-Halt,{},{}] } by A1,Th37,AMI_3:71,TARSKI:def 1;
+  then not ins in { [SCM-Halt,{},{}] } \/ { [J,<*a*>,{}] : J = 6 } by A2,
 XBOOLE_0:def 3;
-  then ins in { [K,<*a1,b1*>] : K in { 7,8 } } by A5,XBOOLE_0:def 3;
+  then ins in { [K,<*a1*>,<*b1*>] : K in { 7,8 } } by A5,XBOOLE_0:def 3;
   then consider K,a1,b1 such that
-A6: ins = [K,<*a1,b1*>] and
+A6: ins = [K,<*a1*>,<*b1*>] and
   K in { 7,8 };
   reconsider da = b1@ as Data-Location;
   reconsider loc = a1 as Element of NAT;
   take loc,da;
-  thus thesis by A1,A6,MCART_1:7;
+  thus thesis by A1,A6,RECDEF_2:def 1;
 end;
 
 theorem
@@ -563,7 +555,7 @@ proof
   reconsider roku=6 as Element of Segm 9 by NAT_1:45;
   let loc be Element of NAT;
   reconsider mk=loc as Element of NAT;
-  @(SCM-goto loc) = [ roku, <*mk*>];
+  @(SCM-goto loc) = [ roku, <*mk*>, {}];
   hence thesis by AMI_2:24;
 end;
 
@@ -575,7 +567,7 @@ proof
   let loc be Element of NAT, a be Data-Location;
   reconsider mk=loc as Element of NAT;
   reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
-  @(a=0_goto loc) = [ nana, <*mk,aa*>];
+  @(a=0_goto loc) = [ nana,<*mk*>,<*aa*>];
   hence thesis by AMI_2:25;
 end;
 
@@ -587,7 +579,7 @@ proof
   let loc be Element of NAT, a be Data-Location;
   reconsider mk=loc as Element of NAT;
   reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
-  @(a>0_goto loc) = [ hachi, <*mk,aa*>];
+  @(a>0_goto loc) = [ hachi,<*mk*>,<*aa*>];
   hence thesis by AMI_2:25;
 end;
 
@@ -1087,14 +1079,13 @@ A1: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by AMI_1:117
     .= ProgramPart Exec (i,s) +* ProgramPart p by AMI_1:117
     .= ProgramPart (Exec (i, s) +* p) by FUNCT_4:75;
   now
-    assume
-    {IC SCM} meets NAT;
+    assume {IC SCM} meets NAT;
     then consider x being set such that
 A2: x in {IC SCM} and
 A3: x in NAT by XBOOLE_0:3;
     reconsider l = x as Element of NAT by A3;
     l = IC SCM by A2,TARSKI:def 1;
-    hence contradiction by AMI_1:48;
+    hence contradiction by COMPOS_1:3;
   end;
   then dom p c= NAT & SCM-Data-Loc \/ {IC SCM} misses NAT by AMI_2:29
 ,RELAT_1:def 18,XBOOLE_1:70;
@@ -1143,8 +1134,7 @@ theorem Th83:
   holds IC SCM in dom p
 proof
   let p be autonomic FinPartState of SCM;
-  assume
-  DataPart p <> {};
+  assume DataPart p <> {};
   then
 A1: dom DataPart p <> {};
   assume
@@ -1235,7 +1225,7 @@ FUNCT_4:14
       .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A25,FUNCT_4:12
       .= (d2.--> 1).d2 by A27,FUNCT_4:14
       .= 1 by FUNCOP_1:87;
-    il <> IC SCM by AMI_1:48;
+    il <> IC SCM by COMPOS_1:3;
     then
 A30: not il in dom (Start-At(il,SCM)) by A21,TARSKI:def 1;
     il <> d2 by Th22;
@@ -1256,7 +1246,7 @@ FUNCT_4:14
       .= (il .--> (d1:=d2)).il by A31,FUNCT_4:12
       .=(d1:=d2) by FUNCOP_1:87;
 Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+ = s2.IC s2 by COMPOS_1:38;
 A34: Comput(ProgramPart(s2),s2,0+1).d1
  = (Following(ProgramPart s2,Comput(ProgramPart(s2),
 s2,0))).d1 by AMI_1:14
@@ -1337,7 +1327,7 @@ FUNCT_4:14
       .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A43,FUNCT_4:12
       .= (d2.--> 0).d2 by A45,FUNCT_4:14
       .= 0 by FUNCOP_1:87;
-    il <> IC SCM by AMI_1:48;
+    il <> IC SCM by COMPOS_1:3;
     then
 A48: not il in dom (Start-At(il,SCM)) by A39,TARSKI:def 1;
     il <> d2 by Th22;
@@ -1358,7 +1348,7 @@ FUNCT_4:14
       .= (il .--> (d1:=d2)).il by A49,FUNCT_4:12
       .=(d1:=d2) by FUNCOP_1:87;
 Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by AMI_1:150;
+ = s1.IC s1 by COMPOS_1:38;
     Comput(ProgramPart(s1),s1,0+1).d1
      = (Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0))).d1
      by AMI_1:14
@@ -1454,7 +1444,7 @@ X:   s2.il = p2.il by A3,GRFUNC_1:8
       .= ((il .--> SCM-goto 1)).il by A6,FUNCT_4:14
       .= SCM-goto 1 by FUNCOP_1:87;
 Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+ = s2.IC s2 by COMPOS_1:38;
     p c= s2 by A3,A8,XBOOLE_1:1;
     then
 A9: (Following(ProgramPart s2,s2)).IC SCM = Exec (SCM-goto 1,s2).IC SCM
@@ -1484,7 +1474,7 @@ X:    s1.il = p1.il by A2,GRFUNC_1:8
       .= ((il .--> SCM-goto 0)).il by A11,FUNCT_4:14
       .= SCM-goto 0 by FUNCOP_1:87;
 Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by AMI_1:150;
+ = s1.IC s1 by COMPOS_1:38;
     p c= s1 by A2,A12,XBOOLE_1:1;
     then (Following(ProgramPart s1,s1)).IC SCM
      = Exec (SCM-goto 0,s1).IC SCM by A1,X,Y,GRFUNC_1:8
@@ -1511,8 +1501,7 @@ A1: p c= s;
   reconsider ll = loc as Element of NAT;
   set loc1 = (ll+1);
 A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
-  assume
-  not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
+  assume not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
   then
 A4: not loc in dom p by A3,XBOOLE_0:def 4;
   set p2 = p +* (loc .--> SCM-goto loc1);
@@ -1584,7 +1573,7 @@ A25: (Cs1i|dom p) = (Cs2i|dom p) by A23,AMI_1:def 25;
 T: ProgramPart s1 = ProgramPart Cs1i
 by AMI_1:123;
 Y:  (ProgramPart Cs1i)/.IC Cs1i
- = Cs1i.IC Cs1i by AMI_1:150;
+ = Cs1i.IC Cs1i by COMPOS_1:38;
 A26: Cs1k = Following(ProgramPart s1,Cs1i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
 T: ProgramPart s2 = ProgramPart Cs2i
@@ -1597,7 +1586,7 @@ A28: Cs1k.IC SCM = loc by A26,A19,Y,AMI_3:13;
 A29: Cs2k = Following(ProgramPart s2,Cs2i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
 Y:  (ProgramPart Cs2i)/.IC Cs2i
- = Cs2i.IC Cs2i by AMI_1:150;
+ = Cs2i.IC Cs2i by COMPOS_1:38;
     Cs2i.IC SCM = loc by A24,A27,A25,Th84,FUNCT_1:72;
     then
 A30: Cs2k.IC SCM = loc1 by A29,A18,Y,AMI_3:13;
@@ -1654,10 +1643,10 @@ TY: ProgramPart s2 = ProgramPart Cs2i
 by AMI_1:123;
 Y:  (ProgramPart s2)/.IC Comput(ProgramPart(s2),s2,i)
  = Comput(ProgramPart(s2),s2,i).IC Comput(ProgramPart(s2),s2,i)
-  by TY,AMI_1:150;
+  by TY,COMPOS_1:38;
 Z:  (ProgramPart s1)/.IC Comput(ProgramPart(s1),s1,i)
  = Comput(ProgramPart(s1),s1,i).IC Comput(ProgramPart(s1),s1,i)
-       by TX,AMI_1:150;
+       by TX,COMPOS_1:38;
     assume
 ZZ:  I <> CurInstr(ProgramPart s2,Comput(ProgramPart(
 s2),s2,i));

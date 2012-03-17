@@ -50,7 +50,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="54"/>
 </Adjective>
 <Adjective nr="5">
 <Func kind="U" nr="4">
@@ -81,7 +81,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="54"/>
 </Adjective>
 <Adjective nr="5">
 <Func kind="U" nr="4">

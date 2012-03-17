@@ -17,20 +17,21 @@ environ
  constructors XXREAL_0, NAT_1, MEMBERED, REWRITE1, FLANG_1, XREAL_0, REWRITE3,
       RELSET_1;
  registrations CARD_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0, STRUCT_0,
-      SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FINSET_1, FINSEQ_1, REWRITE3;
+      SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FINSET_1, FINSEQ_1, REWRITE3,
+      CATALAN2, FUNCT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
-reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve x, y, X for set;
 reserve E for non empty set;
 reserve e for Element of E;
-reserve u, u9, u1, u2, v, v1, v2, w, w9, w1, w2 for Element of E^omega;
-reserve F, F1, F2 for Subset of E^omega;
-reserve i, j, k, l, n for Nat;
+reserve u, u1, v, v1, v2, w, w9, w1, w2 for Element of E^omega;
+reserve F for Subset of E^omega;
+reserve i, k, l for Nat;
 reserve TS for non empty transition-system over F;
-reserve s, s9, s1, s2, t, t9, t1, t2 for Element of TS;
+
 reserve S, T for Subset of TS;
 
 :: Preliminaries - Natural Numbers
@@ -57,8 +58,7 @@ theorem :: FSM_3:5
   <= k & u = v1^v2;
 
 theorem :: FSM_3:6
-  for p, q being XFinSequence st <%x%>^p = <%y%>^q holds x = y & p
-  = q;
+  for p, q being XFinSequence st <%x%>^p = <%y%>^q holds x = y & p = q;
 
 theorem :: FSM_3:7
   len u > 0 implies ex e, u1 st u = <%e%>^u1;
@@ -77,8 +77,7 @@ theorem :: FSM_3:9
   u in Lex(E) iff len u = 1;
 
 theorem :: FSM_3:10
-  u <> v & u in Lex(E) & v in Lex(E) implies not ex w st u^w = v
-  or w^u = v;
+  u <> v & u in Lex(E) & v in Lex(E) implies not ex w st u^w = v or w^u = v;
 
 :: Transition Systems over Lex(E)
 
@@ -113,12 +112,10 @@ registration
 end;
 
 theorem :: FSM_3:13
-  x, <%e%> ==>* y, <%>E, _bool TS implies x, <%e%> ==>. y, <%>E,
-  _bool TS;
+  x, <%e%> ==>* y, <%>E, _bool TS implies x, <%e%> ==>. y, <%>E, _bool TS;
 
 theorem :: FSM_3:14
-  len w = 1 implies (X = w-succ_of (S, TS) iff S, w ==>* X, _bool
-  TS);
+  len w = 1 implies (X = w-succ_of (S, TS) iff S, w ==>* X, _bool TS);
 
 :: Semiautomata
 
@@ -135,8 +132,7 @@ definition
   attr SA is deterministic means
 :: FSM_3:def 2
 
-  (the transition-system of SA) is
-  deterministic & card (the InitS of SA) = 1;
+  (the transition-system of SA) is deterministic & card (the InitS of SA) = 1;
 end;
 
 registration
@@ -205,8 +201,7 @@ definition
   attr A is deterministic means
 :: FSM_3:def 5
 
-  (the semiautomaton of A) is
-  deterministic;
+  (the semiautomaton of A) is deterministic;
 end;
 
 registration
@@ -216,7 +211,7 @@ end;
 
 reserve A for non empty automaton over F;
 reserve p, q for Element of A;
-reserve P, Q for Subset of A;
+
 
 registration
   let E, F, A;
@@ -276,8 +271,7 @@ theorem :: FSM_3:19
   FinalS of A & p, w ==>* q, A;
 
 theorem :: FSM_3:20
-  w in Lang(A) iff w-succ_of (the InitS of A, A) meets (the FinalS
-  of A);
+  w in Lang(A) iff w-succ_of (the InitS of A, A) meets (the FinalS of A);
 
 theorem :: FSM_3:21
   Lang(A) = left-Lang(the FinalS of A);
@@ -307,8 +301,7 @@ definition
   func chop(u, v) -> Element of E^omega means
 :: FSM_3:def 9
 
-  for w st w^v = u holds it
-  = w if ex w st w^v = u otherwise it = u;
+  for w st w^v = u holds it = w if ex w st w^v = u otherwise it = u;
 end;
 
 theorem :: FSM_3:26
@@ -334,14 +327,12 @@ theorem :: FSM_3:31
   _bool TS is non empty transition-system over Lex(E) \/ {<%>E};
 
 theorem :: FSM_3:32
-  w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X,
-  TS) };
+  w-succ_of ({ v-succ_of (X, TS) }, _bool TS) = { v^w-succ_of (X, TS) };
 
 reserve SA for non empty semiautomaton over Lex(E) \/ {<%>E};
 
 theorem :: FSM_3:33
-  w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) = { w-succ_of (X,
-  SA) };
+  w-succ_of ({ <%>E-succ_of (X, SA) }, _bool SA) = { w-succ_of (X, SA) };
 
 reserve A for non empty automaton over Lex(E) \/ {<%>E};
 reserve P for Subset of A;
@@ -356,12 +347,11 @@ theorem :: FSM_3:36
   the InitS of _bool A = { <%>E-succ_of (the InitS of A, A) };
 
 theorem :: FSM_3:37
-  w-succ_of ({ <%>E-succ_of (X, A) }, _bool A) = { w-succ_of (X, A
-  ) };
+  w-succ_of ({ <%>E-succ_of (X, A) }, _bool A) = { w-succ_of (X, A ) };
 
 theorem :: FSM_3:38
-  w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the
-  InitS of A, A) };
+  w-succ_of (the InitS of _bool A, _bool A) = { w-succ_of (the InitS of A, A) }
+;
 
 theorem :: FSM_3:39
   Lang(A) = Lang(_bool A);
@@ -374,4 +364,3 @@ theorem :: FSM_3:41
   for FA being non empty finite automaton over Lex(E) \/ {<%>E} ex DFA
 being non empty deterministic finite automaton over Lex(E) st Lang(FA) = Lang(
   DFA);
-

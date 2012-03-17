@@ -29,7 +29,7 @@
 </RCluster>
 <FCluster aid="QUATERNI" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="104"/>
+<Func kind="K" nr="103"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 </Cluster>
@@ -61,7 +61,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="105">
+<Func kind="K" nr="104">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -78,21 +78,21 @@
 </FCluster>
 <FCluster aid="QUATERNI" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="96"/>
+<Func kind="K" nr="95"/>
 <Cluster>
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERNI" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="107"/>
+<Func kind="K" nr="106"/>
 <Cluster>
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERNI" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="108"/>
+<Func kind="K" nr="107"/>
 <Cluster>
 <Adjective nr="27"/>
 </Cluster>
@@ -110,7 +110,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -131,7 +131,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -147,7 +147,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="116">
+<Func kind="K" nr="115">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -162,7 +162,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="117">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -177,7 +177,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -192,7 +192,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -203,7 +203,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="88"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -211,7 +211,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -223,27 +223,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="89"/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="128">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="27"/>
-</Cluster>
-</FCluster>
-<FCluster aid="QUATERNI" nr="14">
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="88"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -259,12 +239,32 @@
 <Adjective nr="27"/>
 </Cluster>
 </FCluster>
+<FCluster aid="QUATERNI" nr="14">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="88"/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="27"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="126">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="27"/>
+</Cluster>
+</FCluster>
 <CCluster aid="QUATERNI" nr="1">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="104"/>
+<Func kind="K" nr="103"/>
 </Typ>
 <Cluster>
 <Adjective nr="27"/>

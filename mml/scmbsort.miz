@@ -15,26 +15,29 @@ environ
       SCMBSORT, PBOOLE;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, NAT_1, INT_1, RELAT_1, FINSEQ_1, FUNCT_1, COMPLEX1, FUNCT_2,
-      PBOOLE, FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2,
-      FUNCOP_1, SCMFSA_4, FINSUB_1, CARD_3, PARTFUN1, SCMFSA6B, SCMFSA6C,
+      PBOOLE, FUNCT_4, FINSEQ_2, FUNCT_7, STRUCT_0, COMPOS_1, AMI_1, AMISTD_2,
+      SCMFSA_2,
+      FUNCOP_1, FINSUB_1, CARD_3, PARTFUN1, SCMFSA6B, SCMFSA6C,
       SCMFSA6A, SF_MASTR, SCMFSA8A, SCMFSA8B, SCMFSA8C, CLASSES1, RFINSEQ,
       SCMFSA7B, NAT_D, SCM_HALT, XXREAL_0;
  constructors SETWISEO, XXREAL_0, REAL_1, AMI_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
-      SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1, SCMNORM,
-      SCMFSA_4, NAT_D, CLASSES1, RELSET_1, DOMAIN_1;
+      SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT, SEQ_1,
+      AMISTD_2, NAT_D, CLASSES1, RELSET_1, DOMAIN_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, RFINSEQ, AMI_1,
       SCMFSA_2, SF_MASTR, SCMFSA6C, SCMFSA7B, FINSET_1, SCMFSA8A, SCMFSA8B,
       SCMFSA_9, SCM_HALT, STRUCT_0, VALUED_0, ORDINAL1, RELAT_1, FUNCT_2,
-      PBOOLE;
+      PBOOLE, SCMFSA10, AMISTD_2, SCMFSA6A, COMPOS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCOP_1, AMI_1, XBOOLE_0, SCMFSA_2, SCMFSA8C, SCMFSA6A;
+ definitions TARSKI, FUNCOP_1, COMPOS_1, AMI_1, XBOOLE_0, SCMFSA_2, SCMFSA8C,
+      SCMFSA6A;
  theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, FUNCT_2,
       ZFMISC_1, SCMFSA6A, FUNCT_4, FINSEQ_3, ENUMSET1, NAT_1, FINSEQ_1,
       RELSET_1, TARSKI, INT_1, PARTFUN1, GRFUNC_1, RFINSEQ, SCMFSA_2, SCMFSA6B,
       SCMFSA7B, SCMFSA8B, SCMFSA8A, SCMFSA8C, SCMFSA_4, SCMFSA6C, SCM_HALT,
       ABSVALUE, FINSEQ_4, XBOOLE_0, XBOOLE_1, SCMFSA9A, XREAL_1, ORDINAL1,
-      SCMFSA_1, XXREAL_0, AMI_3, NAT_D, CLASSES1, PBOOLE, SCMNORM, AFINSQ_1;
+      SCMFSA_1, XXREAL_0, AMI_3, NAT_D, CLASSES1, PBOOLE, AFINSQ_1,
+      COMPOS_1;
  schemes RELSET_1, FUNCT_1, NAT_1;
 
 begin :: Preliminaries
@@ -50,20 +53,20 @@ canceled 2;
 
 theorem Th3:
   for I being Program of SCM+FSA,a,b being Int-Location st
-  I does_not_destroy b & a<>b holds Times(a,I) does_not_destroy b
+  I does not destroy b & a<>b holds Times(a,I) does not destroy b
 proof
   let I be Program of SCM+FSA,a,b be Int-Location;
   assume that
-A1: I does_not_destroy b and
+A1: I does not destroy b and
 A2: a <> b;
   set Gi= Goto  2, Si= SubFrom(a,intloc 0), SS= Stop SCM+FSA,
   if0=if=0(a,Gi,I ';'Si);
-A3: Gi does_not_destroy b by SCMFSA8C:86;
-  I ';' Si does_not_destroy b by A1,A2,SCMFSA7B:14,SCMFSA8C:83;
-  then if0 does_not_destroy b by A3,SCMFSA8C:121;
+A3: Gi does not destroy b by SCMFSA8C:86;
+  I ';' Si does not destroy b by A1,A2,SCMFSA7B:14,SCMFSA8C:83;
+  then if0 does not destroy b by A3,SCMFSA8C:121;
   then
-A4: loop if0 does_not_destroy b by SCMFSA8C:105;
-  SS does_not_destroy b by SCMFSA8C:85;
+A4: loop if0 does not destroy b by SCMFSA8C:105;
+  SS does not destroy b by SCMFSA8C:85;
   hence thesis by A4,SCMFSA8C:121;
 end;
 
@@ -92,27 +95,27 @@ end;
 theorem Th10:
   for s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
   a be Int-Location
-  st m<>n+1 holds Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
+  st m<>n+1 holds Exec(intloc m:=(f,a), Initialized s).intloc (n+1)
   =s.intloc (n+1)
 proof
   let s be State of SCM+FSA,f be FinSeq-Location,m,n be Element of NAT,
   a be Int-Location;
   assume m<>n+1;
   then intloc m<>intloc (n+1) by AMI_3:52;
-  hence Exec(intloc m:=(f,a), Initialize s).intloc (n+1)
-  =(Initialize s).intloc (n+1) by SCMFSA_2:98
+  hence Exec(intloc m:=(f,a), Initialized s).intloc (n+1)
+  =(Initialized s).intloc (n+1) by SCMFSA_2:98
     .=s.intloc (n+1) by SCMFSA6C:3;
 end;
 
 theorem Th11:
   for s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location
-  st m<>n+1 holds Exec(intloc m:=a, Initialize s).intloc (n+1) =s.intloc (n+1)
+  st m<>n+1 holds Exec(intloc m:=a, Initialized s).intloc (n+1) =s.intloc (n+1)
 proof
   let s be State of SCM+FSA,m,n be Element of NAT,a be Int-Location;
   assume m<>n+1;
   then intloc m<>intloc (n+1) by AMI_3:52;
-  hence Exec(intloc m:=a, Initialize s).intloc (n+1)
-  =(Initialize s).intloc (n+1) by SCMFSA_2:89
+  hence Exec(intloc m:=a, Initialized s).intloc (n+1)
+  =(Initialized s).intloc (n+1) by SCMFSA_2:89
     .=s.intloc (n+1) by SCMFSA6C:3;
 end;
 
@@ -122,10 +125,10 @@ theorem Th12:
 proof
   let s be State of SCM+FSA,f be FinSeq-Location,a be read-write Int-Location;
   set SA0=Start-At( 0,SCM+FSA);
-A1: IExec(Stop SCM+FSA,s) = Initialize s +* SA0 by SCMFSA8C:38
-    .= s +* ((intloc 0) .--> 1) +* SA0 +* SA0 by SCMFSA6C:def 3
+A1: IExec(Stop SCM+FSA,s) = Initialized s +* SA0 by SCMFSA8C:38
+    .= s +* ((intloc 0) .--> 1) +* SA0 +* SA0 by SCMFSA6A:def 4
     .= s +* ((intloc 0) .--> 1) +*(SA0 +* SA0) by FUNCT_4:15
-    .=Initialize s by SCMFSA6C:def 3;
+    .=Initialized s by SCMFSA6A:def 4;
   hence IExec(Stop SCM+FSA,s).a =s.a by SCMFSA6C:3;
   thus thesis by A1,SCMFSA6C:3;
 end;
@@ -298,9 +301,9 @@ A14: P[m];
     set i2=CurInstr(ProgramPart sk2,sk2);
 A15: IC sk1 in dom p by A5;
 Y:  (ProgramPart sk2)/.IC sk2
- = sk2.IC sk2 by AMI_1:150;
+ = sk2.IC sk2 by COMPOS_1:38;
 Z:  (ProgramPart sk1)/.IC sk1
- = sk1.IC sk1 by AMI_1:150;
+ = sk1.IC sk1 by COMPOS_1:38;
 B5: IC Comput(ProgramPart(s1),s1,k+m) in dom p & IC Comput(ProgramPart(s2),s2,k
 +m) in
   dom p by A5;
@@ -1096,7 +1099,7 @@ definition
   proof
 A1: t is Element of INT* by FINSEQ_1:def 11;
     ObjectKind f = INT* by SCMFSA_2:27;
-    hence thesis by A1,AMI_1:59;
+    hence thesis by A1,COMPOS_1:5;
   end;
 end;
 
@@ -1158,8 +1161,8 @@ theorem
 proof
   let l be Element of NAT;
 A: (the Object-Kind of SCM+FSA).l = the Instructions of SCM+FSA
-         by AMI_1:def 14;
-   ObjectKind IC SCM+FSA = NAT by AMI_1:def 11;
+         by COMPOS_1:def 8;
+   ObjectKind IC SCM+FSA = NAT by COMPOS_1:def 6;
   hence thesis by A,SCMFSA_1:13;
 end;
 
@@ -1169,7 +1172,7 @@ theorem Th44:
 proof
   let a be Int-Location,I be Program of SCM+FSA;
   set g1=Goto  2, SF=SubFrom(a,intloc 0), if0=if=0(a,g1,I ';' SF);
-   card Stop SCM+FSA = 1 by SCMNORM:3;
+   card Stop SCM+FSA = 1 by COMPOS_1:46;
   hence card Times(a,I)= card (loop if0)+1+4 by SCMFSA8B:15
     .= card (loop if0)+(1+4)
     .= card if0 +5 by SCMFSA8A:33
@@ -1740,7 +1743,7 @@ A13:  u is FinSequence of INT
 A14:  q = fsloc 0 .--> u by A10,A12;
       reconsider u as FinSequence of INT by A13;
       fsloc 0 .--> u is FinPartState of SCM+FSA;
-      hence thesis by A14,AMI_1:147;
+      hence thesis by A14,COMPOS_1:35;
     end;
     then reconsider f as PartFunc of FinPartSt SCM+FSA, FinPartSt SCM+FSA
     by A11,RELSET_1:11;
@@ -1756,7 +1759,7 @@ A16: u is FinSequence of INT and
 A17: u is non-increasing and
 A18: p = fsloc 0 .--> t and
 A19: q = fsloc 0 .--> u;
-    p in FinPartSt SCM+FSA by AMI_1:147;
+    p in FinPartSt SCM+FSA by COMPOS_1:35;
     hence thesis by A10,A15,A16,A17,A18,A19;
   end;
   uniqueness
@@ -1777,14 +1780,14 @@ A21: for p,q being FinPartState of SCM+FSA holds [p,q] in IT2
 A22: for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT1 iff X[p,q]
     proof
       let p,q be Element of FinPartSt SCM+FSA;
-      reconsider p,q as FinPartState of SCM+FSA by AMI_1:125;
+      reconsider p,q as FinPartState of SCM+FSA by COMPOS_1:25;
       [p,q] in IT1 iff X[p,q] by A20;
       hence thesis;
     end;
 A23: for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT2 iff X[p,q]
     proof
       let p,q be Element of FinPartSt SCM+FSA;
-      reconsider p,q as FinPartState of SCM+FSA by AMI_1:125;
+      reconsider p,q as FinPartState of SCM+FSA by COMPOS_1:25;
       [p,q] in IT2 iff X[p,q] by A21;
       hence thesis;
     end;
@@ -1806,9 +1809,9 @@ A1: p in dom f;
 A2: [p,f.p] in f by FUNCT_1:8;
     dom f c=FinPartSt SCM+FSA by RELAT_1:def 18;
     then
-A3: p is FinPartState of SCM+FSA by A1,AMI_1:125;
+A3: p is FinPartState of SCM+FSA by A1,COMPOS_1:25;
     q in FinPartSt SCM+FSA by A1,PARTFUN1:27;
-    then q is FinPartState of SCM+FSA by AMI_1:125;
+    then q is FinPartState of SCM+FSA by COMPOS_1:25;
     then consider t be FinSequence of INT,u being FinSequence of REAL such that
     t,u are_fiberwise_equipotent
     and u is FinSequence of INT
@@ -1858,7 +1861,7 @@ proof
   i5= SubFrom(a6,a5), i6= ((f,a3):=a6), i7= ((f,a4):=a5),
   ifc=if>0(a6,i4 ';' i6 ';' i7,Stop SCM+FSA), Cif= card ifc,
   body2= i1 ';' i2 ';' i3 ';' i4 ';' i5 ';' ifc;
-   card Stop SCM+FSA = 1 by SCMNORM:3;
+   card Stop SCM+FSA = 1 by COMPOS_1:46;
    then
 A1: Cif=card (i4 ';' i6 ';' i7) + 1 + 4 by SCMFSA8B:15
     .=6 + 1 + 4 by Th45
@@ -2038,7 +2041,7 @@ proof
 A1: Bubble-Sort-Algorithm c= P;
 A3: Comput(P,s,0) = s by AMI_1:13;
   then
-A4: IC Comput(P,s,0) =  0 by AMI_1:def 28;
+A4: IC Comput(P,s,0) =  0 by COMPOS_1:def 16;
   then
 A5: Comput(P,s,0+1) =
     Exec((P). 0,Comput(P,s,0)) by AMI_1:55
@@ -2198,22 +2201,22 @@ s,10)
   thus thesis by A79,A80,Lm9,SCMFSA_2:100;
 end;
 
-Lm22: body2 does_not_destroy b2
+Lm22: body2 does not destroy b2
 proof
-A1: i1 does_not_destroy b2 by AMI_3:52,SCMFSA7B:12;
-A2: i2 does_not_destroy b2 by AMI_3:52,SCMFSA7B:14;
-A3: i3 does_not_destroy b2 by AMI_3:52,SCMFSA7B:20;
-A4: i4 does_not_destroy b2 by AMI_3:52,SCMFSA7B:20;
-A5: i6 does_not_destroy b2 by SCMFSA7B:21;
-A6: i7 does_not_destroy b2 by SCMFSA7B:21;
-A7: SS does_not_destroy b2 by SCMFSA8C:85;
-  i4 ';' i6 ';' i7 does_not_destroy b2 by A4,A5,A6,SCMFSA8C:83,84;
+A1: i1 does not destroy b2 by AMI_3:52,SCMFSA7B:12;
+A2: i2 does not destroy b2 by AMI_3:52,SCMFSA7B:14;
+A3: i3 does not destroy b2 by AMI_3:52,SCMFSA7B:20;
+A4: i4 does not destroy b2 by AMI_3:52,SCMFSA7B:20;
+A5: i6 does not destroy b2 by SCMFSA7B:21;
+A6: i7 does not destroy b2 by SCMFSA7B:21;
+A7: SS does not destroy b2 by SCMFSA8C:85;
+  i4 ';' i6 ';' i7 does not destroy b2 by A4,A5,A6,SCMFSA8C:83,84;
   then
-A8: ifc does_not_destroy b2 by A7,SCMFSA8C:121;
-  i1 ';' i2 ';' i3 does_not_destroy b2 by A1,A2,A3,SCMFSA8C:83,84;
-  then i1 ';' i2 ';' i3 ';' i4 does_not_destroy b2 by Lm13,SCMFSA7B:20
+A8: ifc does not destroy b2 by A7,SCMFSA8C:121;
+  i1 ';' i2 ';' i3 does not destroy b2 by A1,A2,A3,SCMFSA8C:83,84;
+  then i1 ';' i2 ';' i3 ';' i4 does not destroy b2 by Lm13,SCMFSA7B:20
 ,SCMFSA8C:83;
-  then i1 ';' i2 ';' i3 ';' i4 ';' i5 does_not_destroy b2
+  then i1 ';' i2 ';' i3 ';' i4 ';' i5 does not destroy b2
   by Lm13,SCMFSA7B:14,SCMFSA8C:83;
   hence thesis by A8,SCMFSA8C:81;
 end;
@@ -2224,33 +2227,33 @@ proof
   hence thesis by SCM_HALT:def 2;
 end;
 
-Lm24: body2 does_not_destroy b1
+Lm24: body2 does not destroy b1
 proof
-A1: i1 does_not_destroy b1 by AMI_3:52,SCMFSA7B:12;
-A2: i2 does_not_destroy b1 by AMI_3:52,SCMFSA7B:14;
-A3: i3 does_not_destroy b1 by AMI_3:52,SCMFSA7B:20;
-A4: i4 does_not_destroy b1 by AMI_3:52,SCMFSA7B:20;
-A5: i6 does_not_destroy b1 by SCMFSA7B:21;
-A6: i7 does_not_destroy b1 by SCMFSA7B:21;
-A7: SS does_not_destroy b1 by SCMFSA8C:85;
-  i4 ';' i6 ';' i7 does_not_destroy b1 by A4,A5,A6,SCMFSA8C:83,84;
+A1: i1 does not destroy b1 by AMI_3:52,SCMFSA7B:12;
+A2: i2 does not destroy b1 by AMI_3:52,SCMFSA7B:14;
+A3: i3 does not destroy b1 by AMI_3:52,SCMFSA7B:20;
+A4: i4 does not destroy b1 by AMI_3:52,SCMFSA7B:20;
+A5: i6 does not destroy b1 by SCMFSA7B:21;
+A6: i7 does not destroy b1 by SCMFSA7B:21;
+A7: SS does not destroy b1 by SCMFSA8C:85;
+  i4 ';' i6 ';' i7 does not destroy b1 by A4,A5,A6,SCMFSA8C:83,84;
   then
-A8: ifc does_not_destroy b1 by A7,SCMFSA8C:121;
-  i1 ';' i2 ';' i3 does_not_destroy b1 by A1,A2,A3,SCMFSA8C:83,84;
-  then i1 ';' i2 ';' i3 ';' i4 does_not_destroy b1 by Lm9,SCMFSA7B:20
+A8: ifc does not destroy b1 by A7,SCMFSA8C:121;
+  i1 ';' i2 ';' i3 does not destroy b1 by A1,A2,A3,SCMFSA8C:83,84;
+  then i1 ';' i2 ';' i3 ';' i4 does not destroy b1 by Lm9,SCMFSA7B:20
 ,SCMFSA8C:83;
-  then i1 ';' i2 ';' i3 ';' i4 ';' i5 does_not_destroy b1
+  then i1 ';' i2 ';' i3 ';' i4 ';' i5 does not destroy b1
   by Lm9,SCMFSA7B:14,SCMFSA8C:83;
   hence thesis by A8,SCMFSA8C:81;
 end;
 
-Lm25: body1 does_not_destroy b1
+Lm25: body1 does not destroy b1
 proof
-A1: j1 does_not_destroy b1 by AMI_3:52,SCMFSA7B:12;
-A2: j2 does_not_destroy b1 by AMI_3:52,SCMFSA7B:14;
-A3: j3 does_not_destroy b1 by AMI_3:52,SCMFSA7B:22;
-A4: T2 does_not_destroy b1 by Lm24,Th3,AMI_3:52;
-  j1 ';' j2 ';' j3 does_not_destroy b1 by A1,A2,A3,SCMFSA8C:83,84;
+A1: j1 does not destroy b1 by AMI_3:52,SCMFSA7B:12;
+A2: j2 does not destroy b1 by AMI_3:52,SCMFSA7B:14;
+A3: j3 does not destroy b1 by AMI_3:52,SCMFSA7B:22;
+A4: T2 does not destroy b1 by Lm24,Th3,AMI_3:52;
+  j1 ';' j2 ';' j3 does not destroy b1 by A1,A2,A3,SCMFSA8C:83,84;
   hence thesis by A4,SCMFSA8C:81;
 end;
 
@@ -2270,7 +2273,7 @@ s.f0+*(abs(s.b3),(s.f0)/.abs(s.b4)) +*(abs(s.b4),s.b5)) &
 (s.b6 <= 0 implies IExec(ifc,s).f0=s.f0)
 proof
   let s be State of SCM+FSA;
-  set s0=Initialize s, s1=Exec(i4, s0), s2=IExec(i4 ';' i6, s);
+  set s0=Initialized s, s1=Exec(i4, s0), s2=IExec(i4 ';' i6, s);
 A1: s0.f0=s.f0 by SCMFSA6C:3;
   s0.b4=s.b4 by SCMFSA6C:3;
   then
@@ -2301,7 +2304,7 @@ end;
 Lm28: for s be State of SCM+FSA holds IExec(ifc,s).b3 = s.b3
 proof
   let s be State of SCM+FSA;
-  set s1=Exec(i4, Initialize s), s2=IExec(i4 ';' i6, s);
+  set s1=Exec(i4, Initialized s), s2=IExec(i4 ';' i6, s);
 A1: s1.b3=s.b3 by Th10;
 A2: s2.b3=Exec(i6, s1).b3 by SCMFSA6C:9
     .=s.b3 by A1,SCMFSA_2:99;
@@ -2347,7 +2350,7 @@ A8: k1 in dom (s.f0) by A3,A5,FINSEQ_3:27;
   reconsider n1=s.f0.k1 as Integer;
 A9: k2 in dom (s.f0) by A1,A6,FINSEQ_3:27;
   reconsider n2=s.f0.k2 as Integer;
-  set s0=Initialize s, s1=Exec(i1, s0), s2=IExec(i1 ';' i2, s),
+  set s0=Initialized s, s1=Exec(i1, s0), s2=IExec(i1 ';' i2, s),
   s3=IExec(i1 ';' i2 ';' i3,s), s4=IExec(i1 ';' i2 ';' i3 ';' i4,s),
   s5=IExec(i1 ';' i2 ';' i3 ';' i4 ';'i5,s), s6=IExec(body2,s);
 A10: s1.b4=s0.b3 by SCMFSA_2:89
@@ -2499,7 +2502,7 @@ A11:  t.b3 <= len (t.f0);
 A12:  t1.b2= Exec(sb2, IB).b2 by SCM_HALT:33
         .=IB.b2-IB.a0 by SCMFSA_2:91
         .=IB.b2-1 by SCM_HALT:17
-        .=(Initialize t).b2-1 by Lm22,SCM_HALT:63
+        .=(Initialized t).b2-1 by Lm22,SCM_HALT:63
         .=t.b2-1 by SCMFSA6C:3;
 A13:  2 <= k+2 by NAT_1:11;
       k+1+1 <= t.b3 by A9,A10,INT_1:20;
@@ -2639,7 +2642,7 @@ A12:  t.b3 <= len (t.f0);
 A13:  t1.b2= Exec(sb2, IB).b2 by SCM_HALT:33
         .=IB.b2-IB.a0 by SCMFSA_2:91
         .=IB.b2-1 by SCM_HALT:17
-        .=(Initialize t).b2-1 by Lm22,SCM_HALT:63
+        .=(Initialized t).b2-1 by Lm22,SCM_HALT:63
         .=k+1-1 by A10,SCMFSA6C:3
         .=k;
 A14:  2 <= k+2 by NAT_1:11;
@@ -2851,7 +2854,7 @@ Lm32: for s be State of SCM+FSA holds IExec(Sb,s).b2=s.b1-1 &
 IExec(Sb,s).b3=len (s.f0) & IExec(Sb,s).f0=s.f0
 proof
   let s be State of SCM+FSA;
-  set s0=Initialize s, s1=Exec(j1,s0), s2=IExec(j1 ';'j2,s),
+  set s0=Initialized s, s1=Exec(j1,s0), s2=IExec(j1 ';'j2,s),
   s3=IExec(j1 ';' j2 ';' j3,s);
 A1: s1.b2=s0.b1 by SCMFSA_2:89
     .=s.b1 by SCMFSA6C:3;
@@ -2943,7 +2946,7 @@ A14:    t.b1<=len (t.f0);
 A15:    t1.b1= Exec(B11, IB).b1 by Lm23,SCM_HALT:33
           .=IB.b1-IB.a0 by SCMFSA_2:91
           .=IB.b1-1 by Lm23,SCM_HALT:17
-          .=(Initialize t).b1-1 by Lm23,Lm25,SCM_HALT:63
+          .=(Initialized t).b1-1 by Lm23,Lm25,SCM_HALT:63
           .=(k+1)+1-1 by A13,SCMFSA6C:3
           .=k+1;
         then t1.b1 < t.b1 by A13,XREAL_1:31;
@@ -3100,7 +3103,7 @@ theorem Th65:
   x2=IExec(bubble-sort (fsloc 0),s).(fsloc 0).j holds x1 >= x2
 proof
   let s be State of SCM+FSA;
-  set W27=w2 ';' w3 ';' w4 ';' w5 ';' w6 ';' w7, s0=Initialize s,
+  set W27=w2 ';' w3 ';' w4 ';' w5 ';' w6 ';' w7, s0=Initialized s,
   s1=Exec(w2, s0), s2=IExec(w2 ';' w3, s), s3=IExec(w2 ';' w3 ';' w4,s),
   s4=IExec(w2 ';' w3 ';' w4 ';' w5,s),
   s5=IExec(w2 ';' w3 ';' w4 ';' w5 ';' w6,s), s6=IExec(W27,s);
@@ -3214,19 +3217,19 @@ A3: p c= s2 and
 A4: i <= 10;
     q c= s1 by A2,Th53;
     then
-B2: q c= ProgramPart s1 by RELAT_1:209;
+B2: q c= ProgramPart s1 by RELAT_1:210;
     q c= s2 by A3,Th53;
     then
-B3: q c= ProgramPart s2 by RELAT_1:209;
+B3: q c= ProgramPart s2 by RELAT_1:210;
 A5: Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;
-A6: s1 is 0-started by A2,X,AMI_1:92;
-A7: s2 is 0-started by A3,X,AMI_1:92;
+A6: s1 is 0-started by A2,X,COMPOS_1:8;
+A7: s2 is 0-started by A3,X,COMPOS_1:8;
 A10: s1.intloc 0 =1 by A2,Th54
       .= s2.intloc 0 by A3,Th54;
 A11: s1.fsloc 0 =w by A2,Th54
       .=s2.fsloc 0 by A3,Th54;
-A12: IC s1 =  0 by A6,AMI_1:def 28
-      .= IC s2 by A7,AMI_1:def 28;
+A12: IC s1 =  0 by A6,COMPOS_1:def 16
+      .= IC s2 by A7,COMPOS_1:def 16;
     per cases by A4,NAT_1:35;
     suppose
 A13:  i = 0;
@@ -3372,14 +3375,14 @@ A29: p c= s1 and
 A30: p c= s2;
     set Cs11= Comput(ProgramPart( s1), s1,11), Cs21= Comput(ProgramPart( s2),
 s2,11);
-A31: s1 is 0-started by A29,X,AMI_1:92;
-A32: s2 is 0-started by A30,X,AMI_1:92;
+A31: s1 is 0-started by A29,X,COMPOS_1:8;
+A32: s2 is 0-started by A30,X,COMPOS_1:8;
 B33: q c= s1 by A29,Th53;
      then
-A33: q c= ProgramPart s1 by RELAT_1:209;
+A33: q c= ProgramPart s1 by RELAT_1:210;
 B34: q c= s2 by A30,Th53;
      then
-A34: q c= ProgramPart s2 by RELAT_1:209;
+A34: q c= ProgramPart s2 by RELAT_1:210;
 A35: s1.intloc 0 =1 by A29,Th54
       .= s2.intloc 0 by A30,Th54;
 A36: s1.fsloc 0 =w by A29,Th54
@@ -3580,8 +3583,8 @@ A: x is Element of NAT by W2;
    hence contradiction by A,SCMFSA_2:85;
   end;
   then dom d misses {IC SCM+FSA} \/ NAT by K,XBOOLE_1:70;
-  then d is data-only by AMI_1:def 51;
-  then dom d misses NAT by AMI_1:155;
+  then d is data-only by COMPOS_1:def 23;
+  then dom d misses NAT by COMPOS_1:40;
   then
 V:    ProgramPart(p +* d)= ProgramPart p by FUNCT_4:76;
  Result(ProgramPart(p +* d),p +* d) = (Result(ProgramPart(t),t))|dom(p +* d)

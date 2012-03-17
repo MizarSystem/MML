@@ -3,7 +3,7 @@
 ::
 :: Received July 8, 1993
 :: Copyright (c) 1993 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NAT_1, XBOOLE_0, SUBSET_1, FINSEQ_2, TARSKI, UNIALG_1, FUNCT_2,
@@ -12,98 +12,23 @@ environ
       UNIALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, STRUCT_0,
       RELAT_1, FUNCT_1, FINSEQ_1, SETFAM_1, FUNCOP_1, PARTFUN1, FINSEQ_2,
-      LATTICES, BINOP_1, UNIALG_1;
+      LATTICES, BINOP_1, UNIALG_1, MARGREL1;
  constructors SETFAM_1, BINOP_1, DOMAIN_1, FUNCOP_1, LATTICES, UNIALG_1,
-      MARGREL1;
+      MARGREL1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, FINSEQ_2, STRUCT_0,
-      LATTICES, UNIALG_1, ORDINAL1, FINSEQ_1, CARD_1;
+      LATTICES, UNIALG_1, ORDINAL1, FINSEQ_1, CARD_1, MARGREL1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, UNIALG_1, XBOOLE_0, SUBSET_1, FUNCOP_1, MARGREL1;
  theorems TARSKI, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2, UNIALG_1, ZFMISC_1,
       SETFAM_1, FUNCOP_1, BINOP_1, LATTICES, FINSEQ_3, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1;
+      XBOOLE_0, XBOOLE_1, MARGREL1;
  schemes FINSEQ_1, BINOP_1, XBOOLE_0;
 
 begin
 
-theorem Th1:
-  for n be Nat, D be non empty set, D1 be non empty Subset of D
-  holds n-tuples_on D /\ n-tuples_on D1 = n-tuples_on D1
-proof
-  let n be Nat,D be non empty set, D1 be non empty Subset of D;
-  n-tuples_on D1 c= n-tuples_on D
-  proof
-    let z be set;
-    assume
-    z in n-tuples_on D1;
-    then z is Tuple of n,D1 by FINSEQ_2:151;
-    then z is Element of n-tuples_on D by FINSEQ_2:129;
-    hence thesis;
-  end;
-  hence thesis by XBOOLE_1:28;
-end;
-
-theorem Th2:
-  for D being non empty set for h being homogeneous quasi_total non
-  empty PartFunc of D*,D holds dom h = (arity(h))-tuples_on D
-proof
-  let D be non empty set;
-  let f be homogeneous quasi_total non empty PartFunc of D*,D;
-A1: dom f <> {} by RELAT_1:64;
-  consider y be Element of dom f;
-A2: dom f c= D* by RELAT_1:def 18;
-  then
-A3: y in D* by A1,TARSKI:def 3;
-  thus dom f c= (arity(f))-tuples_on D
-  proof
-    let x be set;
-    assume
-A4: x in dom f;
-    then reconsider x9 = x as FinSequence of D by A2,FINSEQ_1:def 11;
-    len x9 = arity f by A4,UNIALG_1:def 10;
-    then x9 is Element of (arity(f))-tuples_on D by FINSEQ_2:110;
-    hence thesis;
-  end;
-  reconsider y as FinSequence of D by A3,FINSEQ_1:def 11;
-  let x be set;
-  assume
-  x in (arity(f))-tuples_on D;
-  then x in {s where s is Element of D* : len s = arity(f)} by
-  FINSEQ_2:def
-  4;
-  then
-A5: ex s being Element of D* st x = s & len s = arity(f);
-  len y = arity f by A1,UNIALG_1:def 10;
-  hence thesis by A5,A1,UNIALG_1:def 2;
-end;
-
 reserve U0,U1,U2,U3 for Universal_Algebra,
   n for Nat,
   x,y for set;
-
-definition
-  let D be non empty set;
-  mode PFuncsDomHQN of D -> non empty set means
-    :Def1:
-    for x be Element of it
-    holds x is homogeneous quasi_total non empty PartFunc of D*,D;
-  existence
-  proof
-    consider a be Element of D;
-    reconsider A = {{<*>D} -->a} as non empty set;
-    take A;
-    let x be Element of A;
-    x= <*>D .-->a by TARSKI:def 1;
-    hence thesis by UNIALG_1:2;
-  end;
-end;
-
-definition
-  let D be non empty set, P be PFuncsDomHQN of D;
-  redefine mode Element of P -> homogeneous quasi_total non empty PartFunc of
-    D*,D;
-  coherence by Def1;
-end;
 
 definition
   let U1;
@@ -116,6 +41,7 @@ definition
 end;
 
 definition
+ canceled;
   let U1,U2;
   pred U1,U2 are_similar means
   :Def2:
@@ -124,24 +50,23 @@ definition
   reflexivity;
 end;
 
+canceled 2;
+
 theorem
-  U1,U2 are_similar implies len the charact of(U1) = len the charact of(
-  U2)
+  U1,U2 are_similar implies len the charact of(U1) = len the charact of( U2)
 proof
 A1: len signature (U1) = len the charact of(U1) & len signature (U2) = len
   the charact of(U2) by UNIALG_1:def 11;
-  assume
-  U1,U2 are_similar;
+  assume U1,U2 are_similar;
   hence thesis by A1,Def2;
 end;
 
 theorem
   U1,U2 are_similar & U2,U3 are_similar implies U1,U3 are_similar
 proof
-  assume
-  U1,U2 are_similar & U2,U3 are_similar;
+  assume U1,U2 are_similar & U2,U3 are_similar;
   then signature (U1) = signature (U2) & signature (U2) = signature (U3) by
-  Def2;
+Def2;
   hence thesis by Def2;
 end;
 
@@ -162,11 +87,11 @@ definition
 A1:   i in dom(the charact of(U0)) and
 A2:   (the charact of(U0)).i = x by FINSEQ_2:11;
       reconsider p = (the charact of U0).i as PartFunc of U0 by A1,UNIALG_1:5;
-      p is homogeneous quasi_total non empty by A1,FUNCT_1:def 15,UNIALG_1
-      :def 5;
+      p is homogeneous quasi_total non empty by A1,FUNCT_1:def 15
+,MARGREL1:def 25;
       hence x is homogeneous quasi_total non empty PartFunc of U0 by A2;
     end;
-    hence thesis by Def1;
+    hence thesis by MARGREL1:def 27;
   end;
 end;
 
@@ -177,23 +102,20 @@ end;
 
 reserve A for non empty Subset of U0,
   o for operation of U0,
-  x1,y1 for
-  FinSequence of A;
+  x1,y1 for FinSequence of A;
 
 definition
   let U0 be Universal_Algebra, A be Subset of U0, o be operation of U0;
   pred A is_closed_on o means
   :Def4:
-  for s being FinSequence of A st len s =
-  arity o holds o.s in A;
+  for s being FinSequence of A st len s = arity o holds o.s in A;
 end;
 
 definition
   let U0 be Universal_Algebra, A be Subset of U0;
   attr A is opers_closed means
   :Def5:
-  for o be operation of U0 holds A
-  is_closed_on o;
+  for o be operation of U0 holds A is_closed_on o;
 end;
 
 definition
@@ -208,11 +130,9 @@ A1: A is_closed_on o;
 A2: (arity o)-tuples_on A c= (arity o)-tuples_on the carrier of U0
     proof
       let x;
-      assume
-      x in (arity o)-tuples_on A;
+      assume x in (arity o)-tuples_on A;
       then x in { s where s is Element of A* : len s =arity o} by
-      FINSEQ_2:
-      def 4;
+FINSEQ_2:def 4;
       then consider s be Element of A* such that
 A3:   x = s and
 A4:   len s = arity o;
@@ -229,18 +149,17 @@ A4:   len s = arity o;
 A5: dom ( o|((arity o)-tuples_on A))= (dom o) /\ ((arity o)-tuples_on A)
     by RELAT_1:90
       .=((arity o)-tuples_on the carrier of U0) /\ ((arity o)-tuples_on A)
-    by Th2
+    by MARGREL1:58
       .=(arity o)-tuples_on A by A2,XBOOLE_1:28;
 A6: rng (o|((arity o)-tuples_on A)) c= A
     proof
       let x;
-      assume
-      x in rng( o|((arity o)-tuples_on A));
+      assume x in rng( o|((arity o)-tuples_on A));
       then consider y such that
 A7:   y in dom ( o|((arity o)-tuples_on A)) and
 A8:   x = (o|((arity o)-tuples_on A)).y by FUNCT_1:def 5;
       y in { s where s is Element of A* : len s =arity o} by A5,A7,
-      FINSEQ_2:def 4;
+FINSEQ_2:def 4;
       then consider s be Element of A* such that
 A9:   y = s and
 A10:  len s = arity o;
@@ -253,7 +172,7 @@ A10:  len s = arity o;
     NAT: not contradiction} by ZFMISC_1:92;
     then dom ( o|((arity o)-tuples_on A)) c= A* by A5,FINSEQ_2:128;
     then reconsider oa = o|((arity o)-tuples_on A) as PartFunc of A*,A by A6,
-    RELSET_1:11;
+RELSET_1:11;
 A11: oa is homogeneous
     proof
       let x1,y1 be FinSequence;
@@ -261,11 +180,11 @@ A11: oa is homogeneous
 A12:  x1 in dom oa and
 A13:  y1 in dom oa;
       y1 in { s1 where s1 is Element of A* : len s1=arity o} by A5,A13,
-      FINSEQ_2:def 4;
+FINSEQ_2:def 4;
       then
 A14:  ex s1 be Element of A* st y1=s1 & len s1 = arity o;
       x1 in { s where s is Element of A* : len s =arity o} by A5,A12,
-      FINSEQ_2:def 4;
+FINSEQ_2:def 4;
       then ex s be Element of A* st x1 = s & len s = arity o;
       hence thesis by A14;
     end;
@@ -276,7 +195,7 @@ A14:  ex s1 be Element of A* st y1=s1 & len s1 = arity o;
 A15:  len x1 = len y1 and
 A16:  x1 in dom oa;
       x1 in { s where s is Element of A* : len s =arity o} by A5,A16,
-      FINSEQ_2:def 4;
+FINSEQ_2:def 4;
       then ex s be Element of A* st x1 = s & len s = arity o;
       then y1 is Element of (arity o)-tuples_on A by A15,FINSEQ_2:110;
       hence thesis by A5;
@@ -300,17 +219,14 @@ A1: for n being Nat st n in Seg len the charact of(U0) ex x being Element
     of PFuncs(A*,A) st P[n,x]
     proof
       let n be Nat;
-      assume
-      n in Seg len the charact of(U0);
+      assume n in Seg len the charact of(U0);
       then n in dom the charact of(U0) by FINSEQ_1:def 3;
       then reconsider o1 =(the charact of(U0)).n as operation of U0 by
-      FUNCT_1:
-      def 5;
+FUNCT_1:def 5;
       reconsider x = o1/.A as Element of PFuncs(A*,A) by PARTFUN1:119;
       take x;
       let o;
-      assume
-      o = (the charact of(U0)).n;
+      assume o = (the charact of(U0)).n;
       hence thesis;
     end;
     consider p being FinSequence of PFuncs(A*,A) such that
@@ -321,8 +237,7 @@ A3: for n being Nat st n in Seg len the charact of(U0) holds P[n,p.n]
     take p;
     thus dom p =dom the charact of(U0) by A2,FINSEQ_1:def 3;
     let n be set,o;
-    assume
-    n in dom p & o =(the charact of(U0)).n;
+    assume n in dom p & o =(the charact of(U0)).n;
     hence thesis by A2,A3;
   end;
   uniqueness
@@ -341,8 +256,7 @@ A7: for n being set,o st n in dom p2 & o = (the charact of(U0)).n
       assume
 A8:   n in dom the charact of(U0);
       then reconsider k =(the charact of(U0)).n as operation of U0 by
-      FUNCT_1:
-      def 5;
+FUNCT_1:def 5;
       p1.n =k/.A by A4,A5,A8;
       hence thesis by A6,A7,A8;
     end;
@@ -365,8 +279,8 @@ A2: for o holds B is_closed_on o
     let s be FinSequence of B;
     assume
 A3: len s = arity o;
-    dom o = (arity o)-tuples_on B & s is Element of (len s)-tuples_on B by
-    A1, Th2,FINSEQ_2:110;
+    dom o = (arity o)-tuples_on B & s is Element of (len s)-tuples_on B by A1
+,MARGREL1:58,FINSEQ_2:110;
     then
 A4: o.s in rng o by A3,FUNCT_1:def 5;
     rng o c= B by A1,RELAT_1:def 19;
@@ -375,8 +289,8 @@ A4: o.s in rng o by A3,FUNCT_1:def 5;
   for o holds o/.B = o
   proof
     let o;
-    dom o = (arity(o))-tuples_on B & o/.B =o|((arity(o))-tuples_on B) by
-    A1,A2, Def6,Th2;
+    dom o = (arity(o))-tuples_on B & o/.B =o|((arity(o))-tuples_on B) by A1,A2
+,Def6,MARGREL1:58;
     hence thesis by RELAT_1:97;
   end;
   hence thesis by A2,Def5;
@@ -388,15 +302,14 @@ theorem
 proof
   let U1 be Universal_Algebra, A be non empty Subset of U1, o be operation of
   U1;
-  assume
-  A is_closed_on o;
+  assume A is_closed_on o;
   then o/.A =o|((arity o)-tuples_on A) by Def6;
   then dom (o/.A) = dom o /\ ((arity o)-tuples_on A) by RELAT_1:90;
   then
 A1: dom (o/.A) = ((arity o)-tuples_on the carrier of U1) /\ ((arity o)
-  -tuples_on A) by Th2
-    .= (arity o)-tuples_on A by Th1;
-  dom (o/.A)=(arity (o/.A))-tuples_on A by Th2;
+  -tuples_on A) by MARGREL1:58
+    .= (arity o)-tuples_on A by MARGREL1:57;
+  dom (o/.A)=(arity (o/.A))-tuples_on A by MARGREL1:58;
   hence thesis by A1,FINSEQ_2:130;
 end;
 
@@ -424,8 +337,7 @@ A3:   dom the charact of(U0) = dom Opers(U0,B) by Def7;
         assume
 A4:     n in dom the charact of(U0);
         then reconsider o =(the charact of(U0)).n as operation of U0 by
-        FUNCT_1
-        :def 5;
+FUNCT_1:def 5;
         (Opers(U0,B)).n = o/.B by A3,A4,Def7;
         hence thesis by A2,Th7;
       end;
@@ -455,7 +367,7 @@ A3:   now
         assume
 A4:     n in dom the charact of (U0);
         then reconsider o = (the charact of(U0)).n as operation of U0 by
-        FUNCT_1:def 5;
+FUNCT_1:def 5;
         n in dom Opers(U0,B) by A4,Def7;
         hence Opers (U0,B).n = o/.B by Def7
           .= (the charact of(U0)).n by A2,Th7;
@@ -491,15 +403,14 @@ A4: A is_closed_on o1 by Def5;
   then dom o0 = dom o1 /\ ((arity o1)-tuples_on A) by RELAT_1:90;
   then
 A5: dom o0 = ((arity o1)-tuples_on the carrier of U1) /\ ((arity o1)
-  -tuples_on A) by Th2
-    .= (arity o1)-tuples_on A by Th1;
-  dom o0 =(arity o0)-tuples_on A by Th2;
+  -tuples_on A) by MARGREL1:58
+    .= (arity o1)-tuples_on A by MARGREL1:57;
+  dom o0 =(arity o0)-tuples_on A by MARGREL1:58;
   hence thesis by A5,FINSEQ_2:130;
 end;
 
 theorem Th10:
-  U0 is SubAlgebra of U1 implies dom the charact of(U0)=dom the
-  charact of(U1)
+  U0 is SubAlgebra of U1 implies dom the charact of(U0)=dom the charact of(U1)
 proof
   assume
 A1: U0 is SubAlgebra of U1;
@@ -525,8 +436,7 @@ A3: dom the charact of(U0) = dom Opers(U0,B) by Def7;
       assume
 A4:   n in dom the charact of(U0);
       then reconsider o =(the charact of(U0)).n as operation of U0 by
-      FUNCT_1:
-      def 5;
+FUNCT_1:def 5;
       (Opers(U0,B)).n = o/.B by A3,A4,Def7;
       hence thesis by A2,Th7;
     end;
@@ -564,32 +474,33 @@ A11: n in dom the charact of(U2) and
 A12: (the charact of(U2)).n = o2 by FINSEQ_2:11;
 A13: dom the charact of(U2) = dom Opers(U2,B2) by Def7;
     then reconsider o21 = (the charact of(U1)).n as operation of U1 by A4,A11,
-    FUNCT_1:def 5;
-A14: dom o21 = (arity o21)-tuples_on (the carrier of U1) by Th2;
+FUNCT_1:def 5;
+A14: dom o21 = (arity o21)-tuples_on (the carrier of U1) by MARGREL1:58;
 A15: dom the charact of(U1) = dom Opers(U1,B1) by Def7;
     then reconsider
-    o20 = (the charact of(U0)).n as operation of U0 by A6,A4,A11,
-    A13,FUNCT_1:def 5;
-A16: dom o20 = (arity o20)-tuples_on (the carrier of U0) by Th2;
+    o20 = (the charact of(U0)).n as operation of U0 by A6,A4,A11,A13,
+FUNCT_1:def 5;
+A16: dom o20 = (arity o20)-tuples_on (the carrier of U0) by MARGREL1:58;
 A17: dom o2 = (arity o2)-tuples_on (the carrier of U2) & dom(o2 | ((arity
-o2) -tuples_on B2)) = dom o2 /\ ((arity o2)-tuples_on B2) by Th2,RELAT_1:90;
+o2) -tuples_on B2)) = dom o2 /\ ((arity o2)-tuples_on B2)
+ by MARGREL1:58,RELAT_1:90;
 A18: B2 is_closed_on o2 by A7,Def5;
 A19: o21 = o2/.B2 by A4,A11,A12,A13,Def7;
     then o21 = o2 | ((arity o2)-tuples_on B2) by A18,Def6;
     then
-A20: arity o2 = arity o21 by A14,A17,Th1,FINSEQ_2:130;
+A20: arity o2 = arity o21 by A14,A17,MARGREL1:57,FINSEQ_2:130;
 A21: B1 is_closed_on o21 by A9,Def5;
 A22: o20 = o21 /. B1 by A6,A4,A11,A13,A15,Def7;
     then o20 = o21 | ((arity o21)-tuples_on B1) by A21,Def6;
     then (arity o20)-tuples_on B1 = (arity o21)-tuples_on (the carrier of U1)
     /\ (arity o21)-tuples_on B1 by A16,A14,RELAT_1:90;
     then
-A23: arity o20 = arity o21 by Th1,FINSEQ_2:130;
+A23: arity o20 = arity o21 by MARGREL1:57,FINSEQ_2:130;
     now
       let s be FinSequence of B;
       reconsider s1 = s as Element of B1* by A5,FINSEQ_1:def 11;
-      reconsider s0 = s as Element of (the carrier of U0)* by A5,FINSEQ_1:def
-      11;
+      reconsider s0 = s as Element of (the carrier of U0)* by A5,
+FINSEQ_1:def 11;
 A24:  rng o20 c= B by A5,RELAT_1:def 19;
       rng s c= B by FINSEQ_1:def 4;
       then rng s c= B2 by A3,A5,XBOOLE_1:1;
@@ -602,8 +513,7 @@ A25:  len s = arity o2;
 A26:  s2 in (arity o2)-tuples_on B2 by FINSEQ_2:def 4;
       s0 in {w where w is Element of (the carrier of U0)*: len w = arity
       o20 } by A23,A20,A25;
-      then s0 in (arity o20)-tuples_on (the carrier of U0) by FINSEQ_2:
-      def 4;
+      then s0 in (arity o20)-tuples_on (the carrier of U0) by FINSEQ_2:def 4;
       then
 A27:  o20.s0 in rng o20 by A16,FUNCT_1:def 5;
       s1 in {w where w is Element of B1*: len w = arity o21} by A20,A25;
@@ -626,16 +536,16 @@ A31: B = B1 by A5;
     assume
 A32: n in dom Opers(U2,B);
     then reconsider o2 = (the charact of(U2)).n as operation of U2 by A30,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
     reconsider o21 = (the charact of(U1)).n as operation of U1 by A8,A30,A32,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
 A33: B2 is_closed_on o2 by A7,Def5;
 A34: B1 is_closed_on o21 by A9,Def5;
     thus Opers(U2,B).n = o2/.B by A32,Def7
       .=o2|((arity o2)-tuples_on B) by A10,Def6
-      .=o2|((arity o2)-tuples_on B2 /\ (arity o2)-tuples_on B) by A31,Th1
-      .=(o2|((arity o2)-tuples_on B2))|((arity o2)-tuples_on B)by RELAT_1:
-    100
+      .=o2|((arity o2)-tuples_on B2 /\ (arity o2)-tuples_on B)
+       by A31,MARGREL1:57
+      .=(o2|((arity o2)-tuples_on B2))|((arity o2)-tuples_on B)by RELAT_1:100
       .=(o2/.B2)|((arity o2)-tuples_on B) by A33,Def6
       .=o21|((arity o2)-tuples_on B) by A4,A8,A30,A32,Def7
       .=o21|((arity o21)-tuples_on B1) by A2,A5,A8,A30,A32,Th9
@@ -647,8 +557,7 @@ A34: B1 is_closed_on o21 by A9,Def5;
 end;
 
 theorem Th13:
-  U1 is strict SubAlgebra of U2 & U2 is strict SubAlgebra of U1
-  implies U1 = U2
+  U1 is strict SubAlgebra of U2 & U2 is strict SubAlgebra of U1 implies U1 = U2
 proof
   assume that
 A1: U1 is strict SubAlgebra of U2 and
@@ -664,8 +573,7 @@ A4: for n being Nat st n in dom the charact of(U2) holds (the charact of(U2)
     assume
 A5: n in dom the charact of(U2);
     then reconsider o =(the charact of(U2)).n as operation of U2 by
-    FUNCT_1:def
-    5;
+FUNCT_1:def 5;
     (Opers(U2,B1)).n = o/.B1 by A3,A5,Def7
       .= o by Th7;
     hence thesis;
@@ -704,7 +612,7 @@ A9: B is opers_closed
 A10: n in dom the charact of(U2) and
 A11: (the charact of(U2)).n = o2 by FINSEQ_2:11;
     reconsider o0 = (the charact of(U0)).n as operation of U0 by A7,A10,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
 A12: arity o2 = arity o0 by A10,A11,Th9;
     rng s c= B by FINSEQ_1:def 4;
     then
@@ -713,8 +621,8 @@ A13: rng s c= B2 by XBOOLE_1:1;
     then reconsider s2 = s as Element of B2* by FINSEQ_1:def 11;
     rng s c= the carrier of U0 by A13,XBOOLE_1:1;
     then s is FinSequence of (the carrier of U0) by FINSEQ_1:def 4;
-    then reconsider s0 = s as Element of (the carrier of U0)* by FINSEQ_1:def
-    11;
+    then reconsider s0 = s as Element of (the carrier of U0)* by
+FINSEQ_1:def 11;
     reconsider s1 = s as Element of B1* by A3,FINSEQ_1:def 11;
     assume
 A14: arity o2 = len s;
@@ -724,8 +632,7 @@ A15: B2 is_closed_on o0 by A5,Def5;
 A16: o2 = o0/.B2 by A4,A10,A11,Def7
       .= o0 | tb2 by A15,Def6;
 A17: B1 is_closed_on o0 by A8,Def5;
-    tb2 = {w where w is Element of B2*: len w = arity o0} by FINSEQ_2:def
-    4;
+    tb2 = {w where w is Element of B2*: len w = arity o0} by FINSEQ_2:def 4;
     then s2 in tb2 by A14,A12;
     then o2.s = o0.s1 by A16,FUNCT_1:72;
     hence thesis by A3,A14,A17,A12,Def4;
@@ -736,10 +643,9 @@ A18: the charact of(U1) = Opers(U0,B1) by Def8;
     assume
 A19: n in dom the charact of(U0);
     then reconsider o0 = (the charact of(U0)).n as operation of U0 by
-    FUNCT_1:
-    def 5;
+FUNCT_1:def 5;
     reconsider o2 = (the charact of(U2)).n as operation of U2 by A7,A19,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
 A20: o2 = o0/.B2 & arity o2 = arity o0 by A4,A7,A19,Def7,Th9;
 A21: B is_closed_on o2 by A9,Def5;
 A22: B2 is_closed_on o0 by A5,Def5;
@@ -747,14 +653,14 @@ A23: B1 is_closed_on o0 by A8,Def5;
     thus (the charact of(U1)).n = o0/.B1 by A18,A1,A19,Def7
       .= o0 | (arity o0)-tuples_on B1 by A23,Def6
       .= o0 | (((arity o0)-tuples_on B2) /\ ((arity o0)-tuples_on B1)) by A2
-    ,Th1
+,MARGREL1:57
       .= (o0 | (arity o0)-tuples_on B2) | ((arity o0)-tuples_on B) by A3,
-    RELAT_1:100
+RELAT_1:100
       .= (o0 /. B2) | ((arity o0)-tuples_on B) by A22,Def6
       .= o2 /. B by A21,A20,Def6
       .= Opers(U2,B).n by A7,A6,A19,Def7;
     reconsider o1 = (the charact of(U1)).n as operation of U1 by A1,A19,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
   end;
   hence the charact of(U1) = Opers(U2,B) by A1,A7,A6,FINSEQ_1:17;
   thus thesis by A9;
@@ -765,10 +671,8 @@ theorem Th15:
   carrier of U2 holds U1 = U2
 proof
   let U1,U2 be strict SubAlgebra of U0;
-  assume
-  the carrier of U1 = the carrier of U2;
-  then U1 is strict SubAlgebra of U2 & U2 is strict SubAlgebra of U1 by
-  Th14;
+  assume the carrier of U1 = the carrier of U2;
+  then U1 is strict SubAlgebra of U2 & U2 is strict SubAlgebra of U1 by Th14;
   hence thesis by Th13;
 end;
 
@@ -798,10 +702,9 @@ A5: dom s1 c= dom s2 by A1,A3,Def7;
     assume
 A6: n in X;
     then reconsider o1=(the charact of(U1)).n as operation of U1 by A1,
-    FUNCT_1
-    :def 5;
+FUNCT_1:def 5;
     reconsider o2=(the charact of U2).n as operation of U2 by A3,A4,A6,
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
     s1.n = arity(o1) & s2.n = arity(o2) by A5,A6,UNIALG_1:def 11;
     hence thesis by A2,A1,A6,Th9;
   end;
@@ -823,8 +726,7 @@ A1: dom the charact of(C) = dom the charact of(U0) by Def7;
     assume
 A2: n in dom the charact of(C);
     then reconsider o = (the charact of U0).n as operation of U0 by A1,
-    FUNCT_1
-    :def 5;
+FUNCT_1:def 5;
     (the charact of C).n =o/.A by A2,Def7;
     hence thesis;
   end;
@@ -838,13 +740,13 @@ A3: the charact of(C) is non-empty by FUNCT_1:def 15;
     assume that
 A4: n in dom the charact of(C) and
 A5: h = (the charact of C).n;
-    reconsider o = (the charact of U0).n as operation of U0 by A1,A4, FUNCT_1:
-    def 5;
+    reconsider o = (the charact of U0).n as operation of U0 by A1,A4,
+FUNCT_1:def 5;
     h =o/.A by A4,A5,Def7;
     hence thesis;
   end;
   then
-A6: the charact of C is quasi_total by UNIALG_1:def 5;
+A6: the charact of C is quasi_total by MARGREL1:def 25;
   for n be Nat ,h be PartFunc of (the carrier of C)*,the carrier of C st n
   in dom the charact of(C) & h = (the charact of C).n holds h is homogeneous
   proof
@@ -853,13 +755,13 @@ A6: the charact of C is quasi_total by UNIALG_1:def 5;
     assume that
 A7: n in dom the charact of(C) and
 A8: h = (the charact of C).n;
-    reconsider o = (the charact of U0).n as operation of U0 by A1,A7, FUNCT_1:
-    def 5;
+    reconsider o = (the charact of U0).n as operation of U0 by A1,A7,
+FUNCT_1:def 5;
     h =o/.A by A7,A8,Def7;
     hence thesis;
   end;
   then
-A9: the charact of (C) is homogeneous by UNIALG_1:def 4;
+A9: the charact of (C) is homogeneous by MARGREL1:def 24;
   the charact of C <> {} by A1,RELAT_1:60,64;
   hence thesis by A9,A6,A3,UNIALG_1:def 7,def 8,def 9;
 end;
@@ -874,8 +776,8 @@ A1: A is opers_closed;
     Opers(U0,A) #);
   coherence
   proof
-    reconsider C = UAStr(# A,Opers(U0,A) #) as strict Universal_Algebra by
-    Th17;
+    reconsider C = UAStr(# A,Opers(U0,A) #) as strict Universal_Algebra by Th17
+;
     for B be non empty Subset of U0 st B =the carrier of C holds the
     charact of(C) = Opers(U0,B) & B is opers_closed by A1;
     hence thesis by Def8;
@@ -895,13 +797,13 @@ B=the carrier of it holds the charact of(it) = Opers(U0,B) & B is opers_closed;
   existence
   proof
 A2: (the carrier of U1) /\ (the carrier of U2)c= the carrier of U1 by
-    XBOOLE_1:17;
+XBOOLE_1:17;
     the carrier of U1 is Subset of U0 by Def8;
     then reconsider C =(the carrier of U1) /\ (the carrier of U2) as non empty
     Subset of U0 by A1,A2,XBOOLE_0:def 7,XBOOLE_1:1;
     set S =UAStr(#C,Opers(U0,C)#);
 A3: (the carrier of U1) /\ (the carrier of U2)c= the carrier of U2 by
-    XBOOLE_1:17;
+XBOOLE_1:17;
 A4: now
       let o be operation of U0;
       now
@@ -963,8 +865,7 @@ definition
     E c= the carrier of U0
     proof
       let x;
-      assume
-      x in E;
+      assume x in E;
       then
       ex w be Element of U0 st w=x & ex o be operation of U0 st arity o=0 &
       w in rng o;
@@ -978,8 +879,7 @@ definition
   let IT be Universal_Algebra;
   attr IT is with_const_op means
   :Def12:
-  ex o being operation of IT st arity o
-  =0;
+  ex o being operation of IT st arity o =0;
 end;
 
 registration
@@ -988,28 +888,27 @@ registration
   proof
     consider A be non empty set;
     consider a be Element of A;
-    reconsider w = <*>A .--> a as Element of PFuncs(A*,A) by UNIALG_1:3;
+    reconsider w = <*>A .--> a as Element of PFuncs(A*,A) by MARGREL1:55;
     set U0 = UAStr (# A, <*w*> #);
 A1: the charact of U0 is quasi_total & the charact of U0 is homogeneous by
-    UNIALG_1:4;
-    the charact of U0 is non-empty by UNIALG_1:4;
+MARGREL1:56;
+    the charact of U0 is non-empty by MARGREL1:56;
     then reconsider U0 as Universal_Algebra by A1,UNIALG_1:def 7,def 8,def 9;
     take U0;
     dom <*w*> ={1} & 1 in {1} by FINSEQ_1:4,55,TARSKI:def 1;
     then reconsider o= (the charact of U0).1 as operation of U0 by
-    FUNCT_1:def 5;
+FUNCT_1:def 5;
     o=w by FINSEQ_1:57;
     then
 A2: dom o = {<*>A} by FUNCOP_1:19;
 A3: now
       let x be FinSequence;
-      assume
-      x in dom o;
+      assume x in dom o;
       then x = <*>A by A2,TARSKI:def 1;
       hence len x = 0;
     end;
     <*>A in {<*>A} by TARSKI:def 1;
-    then arity o = 0 by A2,A3,UNIALG_1:def 10;
+    then arity o = 0 by A2,A3,MARGREL1:def 26;
     hence thesis by Def12;
   end;
 end;
@@ -1021,7 +920,7 @@ registration
   proof
     consider o being operation of U0 such that
 A1: arity o=0 by Def12;
-    dom o = 0-tuples_on the carrier of U0 by A1,Th2
+    dom o = 0-tuples_on the carrier of U0 by A1,MARGREL1:58
       .={<*>the carrier of U0} by FINSEQ_2:112;
     then <*>the carrier of U0 in dom o by TARSKI:def 1;
     then
@@ -1044,8 +943,7 @@ proof
   proof
     reconsider B =u1 as non empty Subset of U0 by Def8;
     let x be set;
-    assume
-    x in Constants(U0);
+    assume x in Constants(U0);
     then consider a be Element of U0 such that
 A1: a=x and
 A2: ex o be operation of U0 st arity o=0 & a in rng o;
@@ -1055,7 +953,7 @@ A4: a in rng o0 by A2;
     consider y be set such that
 A5: y in dom o0 and
 A6: a = o0.y by A4,FUNCT_1:def 5;
-    dom o0 = 0-tuples_on the carrier of U0 by A3,Th2
+    dom o0 = 0-tuples_on the carrier of U0 by A3,MARGREL1:58
       .= {<*>the carrier of U0} by FINSEQ_2:112;
     then y in {<*>B} by A5;
     then y in 0-tuples_on B by FINSEQ_2:112;
@@ -1066,8 +964,8 @@ A7: y in dom (o0 | (arity o0)-tuples_on B) by RELAT_1:90;
 A8: n in dom (the charact of U0) and
 A9: (the charact of U0).n=o0 by FINSEQ_2:11;
 A10: n in dom the charact of(U1) by A8,Th10;
-    then reconsider o1= (the charact of U1).n as operation of U1 by FUNCT_1:
-    def 5;
+    then reconsider o1= (the charact of U1).n as operation of U1 by
+FUNCT_1:def 5;
     the charact of(U1) =Opers(U0,B) by Def8;
     then
 A11: o1=o0/.B by A9,A10,Def7;
@@ -1098,8 +996,7 @@ proof
   Constants(U0) is non empty Subset of U1 & Constants(U0) is non empty
   Subset of U2 by Th18;
   then
-A1: Constants(U0) c= (the carrier of U1) /\ (the carrier of U2) by
-  XBOOLE_1:19;
+A1: Constants(U0) c= (the carrier of U1) /\ (the carrier of U2) by XBOOLE_1:19;
   a in Constants(U0);
   hence thesis by A1,XBOOLE_0:4;
 end;
@@ -1128,14 +1025,12 @@ A3: the carrier of U0 in X by A2;
 A4: P c= the carrier of U0
     proof
       let t be set;
-      assume
-      t in P;
+      assume t in P;
       hence thesis by A3,SETFAM_1:def 1;
     end;
     now
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then A c= x & Constants(U0) c= x by A2;
       hence A \/ Constants(U0) c= x by XBOOLE_1:8;
     end;
@@ -1179,8 +1074,7 @@ A12: Constants(U0) c= u1
     proof
       reconsider B =u1 as non empty Subset of U0 by Def8;
       let x be set;
-      assume
-      x in Constants(U0);
+      assume x in Constants(U0);
       then consider a be Element of U0 such that
 A13:  a=x and
 A14:  ex o be operation of U0 st arity o=0 & a in rng o;
@@ -1190,12 +1084,11 @@ A16:  a in rng o0 by A14;
       consider y be set such that
 A17:  y in dom o0 and
 A18:  a = o0.y by A16,FUNCT_1:def 5;
-      dom o0 = 0-tuples_on the carrier of U0 by A15,Th2
+      dom o0 = 0-tuples_on the carrier of U0 by A15,MARGREL1:58
         .= {<*>the carrier of U0} by FINSEQ_2:112;
       then y in {<*>B} by A17;
       then y in 0-tuples_on B by FINSEQ_2:112;
-      then y in dom o0 /\ (arity o0)-tuples_on B by A15,A17,
-      XBOOLE_0:def 4;
+      then y in dom o0 /\ (arity o0)-tuples_on B by A15,A17,XBOOLE_0:def 4;
       then
 A19:  y in dom (o0 | (arity o0)-tuples_on B) by RELAT_1:90;
       consider n being Nat such that
@@ -1203,8 +1096,7 @@ A20:  n in dom (the charact of(U0)) and
 A21:  (the charact of U0).n=o0 by FINSEQ_2:11;
 A22:  n in dom the charact of(U1) by A20,Th10;
       then reconsider o1= (the charact of U1).n as operation of U1 by
-      FUNCT_1:
-      def 5;
+FUNCT_1:def 5;
       the charact of(U1) =Opers(U0,B) by Def8;
       then
 A23:  o1=o0/.B by A21,A22,Def7;
@@ -1237,7 +1129,7 @@ A32: now
 A33:  n in dom the charact of(U1) and
 A34:  o1 = (the charact of U1).n by FINSEQ_2:11;
       reconsider o0 = (the charact of U0).n as operation of U0 by A29,A30,A33,
-      FUNCT_1:def 5;
+FUNCT_1:def 5;
 A35:  arity o0 =arity o1 by A33,A34,Th9;
 A36:  u11 is_closed_on o0 by A31,Def5;
       now
@@ -1249,14 +1141,13 @@ A37:    P is_closed_on o0 by A6,Def5;
 A38:    dom(o0|(arity o0)-tuples_on u11) = (dom o0) /\ (arity o0)
         -tuples_on u11 by RELAT_1:90
           .= (arity o0)-tuples_on (the carrier of U0) /\ (arity o0)
-        -tuples_on u11 by Th2
-          .= (arity o0)-tuples_on u11 by Th1;
+        -tuples_on u11 by MARGREL1:58
+          .= (arity o0)-tuples_on u11 by MARGREL1:57;
         assume
 A39:    len s = arity o1;
         then s1 in{q where q is Element of u11*: len q = arity o0} by A35;
         then
-A40:    s1 in dom(o0|(arity o0)-tuples_on u11) by A38,
-        FINSEQ_2:def 4;
+A40:    s1 in dom(o0|(arity o0)-tuples_on u11) by A38,FINSEQ_2:def 4;
         o1.s = (o0/.u11).s1 by A29,A33,A34,Def7
           .= (o0|(arity o0)-tuples_on u11).s1 by A36,Def6
           .= o0.sE by A40,FUNCT_1:70;
@@ -1272,17 +1163,17 @@ A43: P c= u1 by A27,SETFAM_1:4;
       assume
 A44:  n in dom the charact of(U0);
       then reconsider o0 = (the charact of U0).n as operation of U0 by
-      FUNCT_1
-      :def 5;
+FUNCT_1:def 5;
       reconsider o1 = (the charact of U1).n as operation of U1 by A29,A30,A44,
-      FUNCT_1:def 5;
+FUNCT_1:def 5;
 A45:  u11 is_closed_on o0 by A31,Def5;
 A46:  P is_closed_on o0 by A6,Def5;
       thus (the charact of E).n = o0/.P by A10,A42,A44,Def7
         .= o0|((arity o0)-tuples_on P) by A46,Def6
-        .= o0|((arity o0)-tuples_on u11 /\(arity o0)-tuples_on P)by A43,Th1
+        .= o0|((arity o0)-tuples_on u11 /\(arity o0)-tuples_on P)
+              by A43,MARGREL1:57
         .= (o0|((arity o0)-tuples_on u11))|((arity o0)-tuples_on P) by
-      RELAT_1:100
+RELAT_1:100
         .= (o0/.u11)|((arity o0)-tuples_on P) by A45,Def6
         .= o1|((arity o0)-tuples_on P) by A29,A30,A44,Def7
         .= o1|((arity o1)-tuples_on B) by A10,A28,A29,A30,A44,Th9
@@ -1294,8 +1185,7 @@ A46:  P is_closed_on o0 by A6,Def5;
   uniqueness
   proof
     let W1,W2 be strict SubAlgebra of U0;
-    assume
-    A c= the carrier of W1 & ( for U1 be SubAlgebra of U0 st A c= the
+    assume A c= the carrier of W1 & ( for U1 be SubAlgebra of U0 st A c= the
 carrier of U1 holds W1 is SubAlgebra of U1)& A c= the carrier of W2 & for U2 be
     SubAlgebra of U0 st A c= the carrier of U2 holds W2 is SubAlgebra of U2;
     then W1 is strict SubAlgebra of W2 & W2 is strict SubAlgebra of W1;
@@ -1322,8 +1212,7 @@ A3: for n being Nat st n in dom the charact of(U0) holds (the charact of(U0)
     assume
 A4: n in dom the charact of(U0);
     then reconsider o =(the charact of(U0)).n as operation of U0 by
-    FUNCT_1:def
-    5;
+FUNCT_1:def 5;
     (Opers(U0,B)).n = o/.B by A2,A4,Def7;
     hence thesis by A1,Th7;
   end;
@@ -1415,7 +1304,7 @@ A6:   Constants(U0) <> {};
     end;
   end;
   then (the carrier of GenUnivAlg(A)) meets (the carrier of GenUnivAlg(B)) by
-  XBOOLE_0:def 7;
+XBOOLE_0:def 7;
   then
 A7: the carrier of (GenUnivAlg(A) /\ GenUnivAlg(B)) = (the carrier of
   GenUnivAlg(A)) /\ (the carrier of GenUnivAlg(B)) by Def10;
@@ -1424,11 +1313,11 @@ A8: (the carrier of GenUnivAlg(A)) /\ (the carrier of GenUnivAlg(B)) c= a
   by XBOOLE_1:17;
   A c= (the carrier of GenUnivAlg(A)) /\ (the carrier of GenUnivAlg(B) )
   by A3,A5,XBOOLE_1:19;
-  then GenUnivAlg(A) is SubAlgebra of (GenUnivAlg(A) /\ GenUnivAlg(B)) by A1,
-  A7,Def13;
+  then GenUnivAlg(A) is SubAlgebra of (GenUnivAlg(A) /\ GenUnivAlg(B)) by A1,A7
+,Def13;
   then a is non empty Subset of (GenUnivAlg(A) /\ GenUnivAlg(B)) by Def8;
   then a= (the carrier of GenUnivAlg(A)) /\ (the carrier of GenUnivAlg(B)) by
-  A7,A8,XBOOLE_0:def 10;
+A7,A8,XBOOLE_0:def 10;
   then
 A9: a c= the carrier of GenUnivAlg(B) by XBOOLE_1:17;
   u1 c= B by A2,XBOOLE_1:7;
@@ -1441,8 +1330,7 @@ A11: (GenUnivAlg(A) "\/" U1) = GenUnivAlg(b) by Def14;
 A12: a \/ u1 c= the carrier of (GenUnivAlg(A)"\/"U1) by Def13;
   A \/ u1 c= a \/ u1 by A3,XBOOLE_1:13;
   then B c=the carrier of (GenUnivAlg(A)"\/"U1) by A2,A12,XBOOLE_1:1;
-  then GenUnivAlg(B) is strict SubAlgebra of (GenUnivAlg(A)"\/"U1) by A2,
-  Def13;
+  then GenUnivAlg(B) is strict SubAlgebra of (GenUnivAlg(A)"\/"U1) by A2,Def13;
   hence thesis by A11,A10,Th13;
 end;
 
@@ -1478,14 +1366,11 @@ A4: (the carrier of U1) meets (the carrier of (U1"\/"U2)) by Th20;
 A5: the carrier of (U1 /\(U1"\/"U2))=(the carrier of U1)/\ (the carrier of(
   U1 "\/" U2)) by Def10;
   then
-A6: the carrier of (U1 /\(U1"\/"U2)) c= the carrier of U1 by
-  XBOOLE_1:17;
+A6: the carrier of (U1 /\(U1"\/"U2)) c= the carrier of U1 by XBOOLE_1:17;
   the carrier of U1 c= A by XBOOLE_1:7;
   then the carrier of U1 c= the carrier of (U1"\/"U2) by A3,XBOOLE_1:1;
   then
-A7: the carrier of U1 c=the carrier of (U1 /\(U1"\/"U2)) by A5,
-  XBOOLE_1:
-  19;
+A7: the carrier of U1 c=the carrier of (U1 /\(U1"\/"U2)) by A5,XBOOLE_1:19;
 A8: dom Opers(U0,u112) = dom the charact of(U0) by Def7;
 A9: for n being Nat st n in dom the charact of (U0) holds (the charact of
   U1/\(U1"\/"U2)).n= (the charact of U1).n
@@ -1493,8 +1378,8 @@ A9: for n being Nat st n in dom the charact of (U0) holds (the charact of
     let n be Nat;
     assume
 A10: n in dom the charact of (U0);
-    then reconsider o0 = (the charact of U0).n as operation of U0 by FUNCT_1:
-    def 5;
+    then reconsider o0 = (the charact of U0).n as operation of U0 by
+FUNCT_1:def 5;
     thus (the charact of U1 /\ ( U1 "\/" U2)).n = Opers(U0,u112).n by A4,Def10
       .= o0/.u112 by A8,A10,Def7
       .=o0/.u1 by A7,A6,XBOOLE_0:def 10
@@ -1502,9 +1387,8 @@ A10: n in dom the charact of (U0);
       .= (the charact of U1).n by Def8;
   end;
   the charact of (U1/\(U1"\/"U2)) = Opers(U0,u112) by A4,Def10;
-  then the charact of (U1/\(U1"\/"U2))= the charact of (U1) by
-  A1,A8,A2,
-  A9,FINSEQ_1:17;
+  then the charact of (U1/\(U1"\/"U2))= the charact of (U1) by A1,A8,A2,A9,
+FINSEQ_1:17;
   hence thesis by A7,A6,XBOOLE_0:def 10;
 end;
 
@@ -1528,8 +1412,7 @@ definition
   let U0 be Universal_Algebra;
   func Sub(U0) -> set means
   :Def15:
-  for x holds x in it iff x is strict
-  SubAlgebra of U0;
+  for x holds x in it iff x is strict SubAlgebra of U0;
   existence
   proof
     reconsider X = { GenUnivAlg(A) where A is Subset of U0: A is non empty} as
@@ -1538,13 +1421,11 @@ definition
     let x;
     thus x in X implies x is strict SubAlgebra of U0
     proof
-      assume
-      x in X;
+      assume x in X;
       then ex A be Subset of U0 st x = GenUnivAlg(A) & A is non empty;
       hence thesis;
     end;
-    assume
-    x is strict SubAlgebra of U0;
+    assume x is strict SubAlgebra of U0;
     then reconsider a = x as strict SubAlgebra of U0;
     reconsider A = the carrier of a as non empty Subset of U0 by Def8;
     a = GenUnivAlg(A) by Th22;
@@ -1558,15 +1439,13 @@ A1: for x holds x in A iff x is strict SubAlgebra of U0 and
 A2: for y holds y in B iff y is strict SubAlgebra of U0;
     now
       let x;
-      assume
-      x in A;
+      assume x in A;
       then x is strict SubAlgebra of U0 by A1;
       hence x in B by A2;
     end;
     hence A c= B by TARSKI:def 3;
     let y;
-    assume
-    y in B;
+    assume y in B;
     then y is strict SubAlgebra of U0 by A2;
     hence thesis by A1;
   end;
@@ -1595,8 +1474,7 @@ Sub(U0) holds for U1,U2 be strict SubAlgebra of U0 st x = U1 & y = U2 holds it.
     defpred P[(Element of Sub(U0)),(Element of Sub(U0)),Element of Sub(U0)]
 means for U1,U2 be strict SubAlgebra of U0 st $1=U1 & $2=U2 holds $3=U1 "\/" U2
     ;
-A1: for x,y being Element of Sub(U0) ex z being Element of Sub(U0) st P[x,
-    y,z]
+A1: for x,y being Element of Sub(U0) ex z being Element of Sub(U0) st P[x, y,z]
     proof
       let x,y be Element of Sub(U0);
       reconsider U1=x, U2=y as strict SubAlgebra of U0 by Def15;
@@ -1641,8 +1519,7 @@ Sub(U0) holds for U1,U2 be strict SubAlgebra of U0 st x = U1 & y = U2 holds it.
   proof
     defpred P[(Element of Sub(U0)),(Element of Sub(U0)),Element of Sub(U0)]
 means for U1,U2 be strict SubAlgebra of U0 st $1=U1 & $2=U2 holds $3=U1 /\ U2;
-A1: for x,y being Element of Sub(U0) ex z being Element of Sub(U0) st P[x,
-    y,z]
+A1: for x,y being Element of Sub(U0) ex z being Element of Sub(U0) st P[x, y,z]
     proof
       let x,y be Element of Sub(U0);
       reconsider U1=x, U2=y as strict SubAlgebra of U0 by Def15;
@@ -1714,8 +1591,8 @@ A3: the carrier of U3 is Subset of U0 by Def8;
 A4: the carrier of U1 is Subset of U0 by Def8;
     then reconsider D=(the carrier of U1) \/ (the carrier of U2) as non empty
     Subset of U0 by A2,XBOOLE_1:8;
-    (the carrier of U2) \/ (the carrier of U3) c= the carrier of U0 by A2,
-    A3,XBOOLE_1:8;
+    (the carrier of U2) \/ (the carrier of U3) c= the carrier of U0 by A2,A3,
+XBOOLE_1:8;
     then reconsider B as non empty Subset of U0 by A4,XBOOLE_1:8;
 A5: B= D \/ (the carrier of U3) by XBOOLE_1:4;
 A6: (U1"\/"U2)"\/"U3 = GenUnivAlg(D)"\/" U3 by Def14
@@ -1776,8 +1653,8 @@ A4: (the carrier of U1) meets ((the carrier of U2)/\(the carrier of U3))
     by Th20;
     then
 A5: for B be non empty Subset of U0 st B=the carrier of (U1/\(U2/\U3))
-holds the charact of (U1/\(U2/\U3)) = Opers(U0,B) & B is opers_closed by A3,
-    Def10;
+holds the charact of (U1/\(U2/\U3)) = Opers(U0,B) & B is opers_closed by A3
+,Def10;
 A6: the carrier of (U1 /\ (U2 /\ U3)) =(the carrier of U1) /\ ((the
     carrier of U2)/\(the carrier of U3)) by A3,A4,Def10;
     then reconsider
@@ -1879,8 +1756,7 @@ A11:  UniAlg_join(U0) is commutative by Th27;
     end;
     then L is join-commutative join-associative meet-absorbing
     meet-commutative meet-associative join-absorbing by A1,A7,A3,A9,A5,
-    LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
     hence thesis;
   end;
 end;
-

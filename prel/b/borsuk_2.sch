@@ -27,7 +27,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="44">
+<Func kind="K" nr="43">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -47,7 +47,7 @@
 </And>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="44">
+<Func kind="K" nr="43">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

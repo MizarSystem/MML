@@ -33,6 +33,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="PRVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="MEMBERED"/>
@@ -56,7 +57,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="58"/>
-<Adjective nr="179"/>
+<Adjective nr="187"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRVECT_2" nr="2">
@@ -72,7 +73,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="58"/>
-<Adjective nr="180"/>
+<Adjective nr="188"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PRVECT_2" nr="1">
@@ -83,11 +84,11 @@
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="32"/>
-<Adjective nr="179"/>
+<Adjective nr="187"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="371">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -111,11 +112,11 @@
 <Adjective nr="6"/>
 <Adjective nr="11" value="false"/>
 <Adjective nr="32"/>
-<Adjective nr="180"/>
+<Adjective nr="188"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="375">
+<Func kind="K" nr="382">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -128,8 +129,10 @@
 <Adjective nr="131"/>
 <Adjective nr="132"/>
 <Adjective nr="133"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
+<Adjective nr="141"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PRVECT_2" nr="1">
@@ -163,7 +166,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="32"/>
-<Adjective nr="180"/>
+<Adjective nr="188"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -172,7 +175,7 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="32"/>
-<Adjective nr="179"/>
+<Adjective nr="187"/>
 </Cluster>
 </CCluster>
 </Registrations>

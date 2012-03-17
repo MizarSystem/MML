@@ -3,7 +3,7 @@
 ::
 :: Received July 14, 1993
 :: Copyright (c) 1993 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, PRE_TOPC, SUBSET_1, SETFAM_1, RCOMP_1, TARSKI,
@@ -17,13 +17,14 @@ environ
  constructors SETFAM_1, BINOP_1, SETWISEO, RFINSEQ, PRE_TOPC, LATTICE2,
       FILTER_1, CLASSES1, LATTICE4, RELSET_1, FILTER_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
-      FINSUB_1, STRUCT_0, LATTICES, PRE_TOPC, CARD_1, RELSET_1;
+      FINSUB_1, STRUCT_0, LATTICES, PRE_TOPC, CARD_1, RELSET_1, TOPS_1,
+      LATTICE2;
  requirements BOOLE, SUBSET;
  definitions TARSKI, LATTICES, BINOP_1, STRUCT_0, XBOOLE_0, SUBSET_1;
  theorems TARSKI, SETFAM_1, LATTICES, FINSUB_1, TOPS_1, PRE_TOPC, SUBSET_1,
-      LATTICE2, LATTICE4, FILTER_0, FUNCT_1, FUNCT_2, ZFMISC_1, BORSUK_1,
-      GROUP_6, SETWISEO, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, STRUCT_0,
-      CLASSES1;
+      LATTICE2, LATTICE4, FILTER_0, FUNCT_1, FUNCT_2, ZFMISC_1, GROUP_6,
+      SETWISEO, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, STRUCT_0, CLASSES1,
+      EQREL_1;
  schemes BINOP_1, FRAENKEL, FUNCT_1, SETWISEO, BINOP_2;
 
 begin
@@ -55,8 +56,7 @@ registration
   coherence
   proof
     set A= {x where x is Subset of T : x is open closed};
-    {} T is open by TOPS_1:52;
-    then {} T in A;
+    {} T in A;
     hence thesis;
   end;
 end;
@@ -95,8 +95,8 @@ A1: A is open by Th2;
 A2: B is open by Th2;
 A3: A is closed by Th3;
 A4: B is closed by Th3;
-    A \/ B is open by A1,A2,TOPS_1:37;
-    hence C \/ D is Element of OpenClosedSet(T) by A3,A4,Th4,TOPS_1:36;
+    A \/ B is open by A1,A2;
+    hence C \/ D is Element of OpenClosedSet(T) by A3,A4,Th4;
   end;
   redefine func C /\ D -> Element of OpenClosedSet(T);
   coherence
@@ -106,8 +106,8 @@ A5: A is open by Th2;
 A6: B is open by Th2;
 A7: A is closed by Th3;
 A8: B is closed by Th3;
-    A /\ B is open by A5,A6,TOPS_1:38;
-    hence C /\ D is Element of OpenClosedSet(T) by A7,A8,Th4,TOPS_1:35;
+    A /\ B is open by A5,A6;
+    hence C /\ D is Element of OpenClosedSet(T) by A7,A8,Th4;
   end;
 end;
 
@@ -168,10 +168,10 @@ theorem
   st x=x9 & y=y9 holds x"/\"y = x9 /\ y9 by Def3;
 
 theorem
-  {} T is Element of OpenClosedSet(T) by Th4,TOPS_1:52;
+  {} T is Element of OpenClosedSet(T) by Th4;
 
 theorem
-  [#] T is Element of OpenClosedSet(T) by Th4,TOPS_1:53;
+  [#] T is Element of OpenClosedSet(T) by Th4;
 
 theorem Th9:
   x` is Element of OpenClosedSet(T)
@@ -180,8 +180,8 @@ proof
 A1: y is open by Th2;
   y is closed by Th3;
   then
-A2: x` is open by TOPS_1:29;
-  x` is closed by A1,TOPS_1:30;
+A2: x` is open;
+  x` is closed by A1;
   hence thesis by A2,Th4;
 end;
 
@@ -283,8 +283,12 @@ theorem
 theorem
   the carrier of OpenClosedSetLatt(T) = OpenClosedSet(T);
 
-theorem Th14:
-  OpenClosedSetLatt(T) is Boolean
+canceled;
+
+registration
+  let T;
+  cluster OpenClosedSetLatt(T) -> Boolean;
+coherence
 proof
   set OCL=OpenClosedSetLatt(T);
 A1: for a,b,c being Element of OCL holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)
@@ -305,8 +309,8 @@ A8: a9 /\ c9= m by A2,A4,Def3;
       .= l9 \/ m9 by A2,A3,A6,A7,A8,Def3
       .= (a"/\"b)"\/"(a"/\"c) by A6,A7,Def2;
   end;
-  reconsider bot = {} T as Element of OCL by Th4,TOPS_1:52;
-  reconsider top = [#] T as Element of OCL by Th4,TOPS_1:53;
+  reconsider bot = {} T as Element of OCL by Th4;
+  reconsider top = [#] T as Element of OCL by Th4;
 A9: for a being Element of OCL holds top"\/"a =top & a "\/" top =top
   proof
     let a be Element of OCL;
@@ -346,12 +350,13 @@ A17: a"/\"b = c /\ c` by Def3
   end;
   hence thesis by A1,LATTICES:def 11,def 19;
 end;
+end;
 
 theorem
-  [#] T is Element of OpenClosedSetLatt(T) by Th4,TOPS_1:53;
+  [#] T is Element of OpenClosedSetLatt(T) by Th4;
 
 theorem
-  {} T is Element of OpenClosedSetLatt(T) by Th4,TOPS_1:52;
+  {} T is Element of OpenClosedSetLatt(T) by Th4;
 
 reserve x,y,X for set;
 
@@ -360,8 +365,8 @@ registration
   existence
   proof
     consider T;
-    reconsider E = OpenClosedSetLatt(T) as B_Lattice by Th14;
-    reconsider a = [#] T, b = {} T as Element of E by Th4,TOPS_1:52,53;
+    reconsider E = OpenClosedSetLatt(T) as B_Lattice;
+    reconsider a = [#] T, b = {} T as Element of E by Th4;
     take E,a,b;
     thus thesis;
   end;
@@ -427,8 +432,7 @@ definition
   let BL;
   func UFilter BL -> Function means
   :Def6:
-  dom it = the carrier of BL &
-  for a being Element of BL
+  dom it = the carrier of BL & for a being Element of BL
   holds it.a = {UF:  UF is being_ultrafilter & a in UF };
   existence
   proof
@@ -715,7 +719,7 @@ A8:     a c= the topology of TS;
         end;
         then reconsider BS=B as Subset-Family of StoneR BL;
 A9:     union union BS = union {union A where A
-        is Subset of StoneR BL :A in BS} by BORSUK_1:17;
+        is Subset of StoneR BL :A in BS} by EQREL_1:63;
 A10:    a c= {union A where A is Subset of StoneR BL :A in BS}
         proof
           let x;
@@ -731,18 +735,16 @@ A13:      C c= StoneR BL;
         {union A where A is Subset of StoneR BL :A in BS} c= a
         proof
           let x;
-          assume
-          x in {union A where A is Subset of StoneR BL :A in BS};
+          assume x in {union A where A is Subset of StoneR BL :A in BS};
           then consider C being Subset of StoneR BL such that
 A14:      union C= x and
 A15:      C in BS;
-          ex D being Subset of StoneR BL st ( D = C)&( union D in a)
-          by A15;
+          ex D being Subset of StoneR BL st ( D = C)&( union D in a) by A15;
           hence thesis by A14;
         end;
         then
 A16:    a = { union A where A is Subset of StoneR BL :A in BS} by A10,
-        XBOOLE_0:def 10;
+XBOOLE_0:def 10;
         union BS is Subset-Family of ultraset BL by XBOOLE_1:1;
         hence thesis by A9,A16;
       end;
@@ -898,8 +900,7 @@ definition
   coherence;
 end;
 
-Lm1: for p being Subset of StoneSpace BL holds
-p in StoneR BL implies p is open
+Lm1: for p being Subset of StoneSpace BL holds p in StoneR BL implies p is open
 proof
   let p be Subset of StoneSpace BL;
   assume
@@ -915,8 +916,12 @@ A3: {p} c= StoneR BL by A1,ZFMISC_1:37;
   hence thesis by PRE_TOPC:def 5;
 end;
 
-theorem Th29:
-  UFilter BL is one-to-one
+canceled;
+
+registration
+  let BL;
+  cluster UFilter BL -> one-to-one;
+  coherence
 proof
   now
     let a,b;
@@ -941,6 +946,7 @@ A4:     a in UF & not b in UF;
   end;
   hence thesis by GROUP_6:1;
 end;
+end;
 
 theorem
   union StoneR BL = ultraset BL
@@ -955,7 +961,7 @@ A2: X is closed by Th3;
   then consider B being Subset-Family of ultraset BL such that
 A3: union B = X and
 A4: B c= StoneR BL;
-  X` is open by A2,TOPS_1:29;
+  X` is open by A2;
   then X` in the topology of StoneSpace BL by PRE_TOPC:def 5;
   then X` in {union A where A is Subset-Family of ultraset BL :
   A c= StoneR BL} by Def8;
@@ -1052,8 +1058,7 @@ A20: C c= D and
 A21: C <> {} by A12;
     consider E being Element of Fin the carrier of L such that
 A22: d = FinMeet(E) and
-A23: E c= D
-    and E <> {} by A16;
+A23: E c= D and E <> {} by A16;
 A24: c "/\" d = FinMeet(C \/ E) by A19,A22,LATTICE4:30;
     C \/ E c= D by A20,A23,XBOOLE_1:8;
     then c "/\" d in A by A21,A24;
@@ -1083,9 +1088,8 @@ A29: x in D;
 A30: { x } c= D by ZFMISC_1:37;
     { x } c= the carrier of L by A29,ZFMISC_1:37;
 then reconsider C = { x } as Element of Fin the carrier of L by FINSUB_1:def 5;
-A31: the L_meet of L is commutative associative by LATTICE2:31,32;
 A32: x = (id the carrier of L).x by A29,FUNCT_1:35
-      .= (the L_meet of L)$$(C,id the carrier of L) by A29,A31,SETWISEO:26
+      .= (the L_meet of L)$$(C,id the carrier of L) by A29,SETWISEO:26
       .= FinMeet(C,id L) by LATTICE2:def 4
       .= FinMeet(C) by LATTICE4:def 13;
     reconsider a = FinMeet(C) as Element of L;
@@ -1186,8 +1190,6 @@ A15: now
       then ex F st F=x & F is being_ultrafilter & Bottom BL in F by Th20;
       hence contradiction by Th35;
     end;
-A16: the L_meet of BL is commutative associative idempotent
-    by LATTICE2:30,31,32;
     deffunc U(Subset of ultraset BL,Subset of ultraset BL) = $1 /\ $2;
     consider G being BinOp of bool ultraset BL such that
 A17: for x,y being Subset of ultraset BL holds
@@ -1232,7 +1234,7 @@ A22: UFilter BL.FinMeet B
       .= UFilter BL.((the L_meet of BL)$$(B,id the carrier of BL))
     by LATTICE2:def 4
       .= G$$(B,(UFilter BL)*(id the carrier of BL))
-    by A16,A18,A19,A20,A21,SETWISEO:39
+    by A18,A19,A20,A21,SETWISEO:39
       .= G$$(B,UFilter BL) by FUNCT_2:23
       .= G$$(B,(id bool ultraset BL)*UFilter BL) by FUNCT_2:23
       .= G$$(DD,id bool ultraset BL) by A18,A19,A20,SETWISEO:38;
@@ -1396,7 +1398,7 @@ A3: the topology of StoneSpace BL =
     by Def8;
 A4: X is open closed by A2,Th2,Th3;
     then
-A5: X` is open closed by TOPS_1:29,30;
+A5: X` is open closed;
     X in the topology of StoneSpace BL by A4,PRE_TOPC:def 5;
     then consider A1 being Subset-Family of ultraset BL such that
 A6: X = union A1 and
@@ -1452,10 +1454,9 @@ A23:  X = union D by A18,XBOOLE_0:def 10;
 A24:  D c= rng UFilter BL by A15,A21,XBOOLE_1:1;
 A25:  rng UFilter BL = dom id StoneR BL by FUNCT_2:def 1;
 A26:  dom UFilter BL = dom UFilter BL;
-A27:  UFilter BL is one-to-one by Th29;
       UFilter BL = id StoneR BL*UFilter BL by RELAT_1:80;
       then
-UFilter BL, id StoneR BL are_fiberwise_equipotent by A25,A26,A27,CLASSES1:85;
+UFilter BL, id StoneR BL are_fiberwise_equipotent by A25,A26,CLASSES1:85;
       then card(UFilter BL"D) = card((id StoneR BL)"D) by CLASSES1:86
         .= card D by A24,FUNCT_2:171;
       then UFilter BL"D is finite;
@@ -1464,9 +1465,6 @@ UFilter BL, id StoneR BL are_fiberwise_equipotent by A25,A26,A27,CLASSES1:85;
 A28:  D = UFilter BL.:B by A15,A21,FUNCT_1:147,XBOOLE_1:1;
       then
 A29:  B is non empty by RELAT_1:149;
-A30:  the L_join of BL is commutative by LATTICE2:27;
-A31:  the L_join of BL is associative by LATTICE2:29;
-A32:  the L_join of BL is idempotent by LATTICE2:26;
       deffunc U(Subset of ultraset BL,Subset of ultraset BL) = $1 \/ $2;
       consider G being BinOp of bool ultraset BL such that
 A33:  for x,y being Subset of ultraset BL holds
@@ -1512,7 +1510,7 @@ A38:  UFilter BL.FinJoin B
         .= UFilter BL.((the L_join of BL)$$(B,id the carrier of BL))
       by LATTICE2:def 3
         .= G$$(B,(UFilter BL)*(id the carrier of BL))
-      by A29,A30,A31,A32,A34,A35,A36,A37,SETWISEO:39
+      by A29,A34,A35,A36,A37,SETWISEO:39
         .= G$$(B,UFilter BL) by FUNCT_2:23
         .= G$$(B,(id bool ultraset BL)*UFilter BL) by FUNCT_2:23
         .= G$$(DD,id bool ultraset BL) by A28,A29,A34,A35,A36,SETWISEO:38;
@@ -1591,24 +1589,27 @@ end;
 theorem Th41:
   rng UFilter BL = the carrier of StoneBLattice BL
 proof
-  thus rng UFilter BL= StoneR BL
-    .= the carrier of StoneBLattice BL by Th40;
+  thus rng UFilter BL= StoneR BL .= the carrier of StoneBLattice BL by Th40;
 end;
 
-theorem Th42:
-  UFilter BL is bijective
+canceled;
+
+registration
+  let BL;
+  cluster UFilter BL -> bijective Function of BL,StoneBLattice BL;
+coherence
 proof
-A1: UFilter BL is one-to-one by Th29;
   rng UFilter BL = the carrier of StoneBLattice BL by Th41;
   then UFilter BL is onto by FUNCT_2:def 3;
-  hence thesis by A1;
+  hence thesis;
+end;
 end;
 
 theorem Th43:
   BL,StoneBLattice BL are_isomorphic
 proof
-  ex f being Homomorphism of BL,StoneBLattice BL st ( f=
-  UFilter BL)&( f is bijective) by Th42;
+  ex f being Homomorphism of BL,StoneBLattice BL st
+  f=UFilter BL & f is bijective;
   hence thesis by LATTICE4:def 5;
 end;
 
@@ -1622,4 +1623,3 @@ proof
   OpenClosedSetLatt(T) = StoneBLattice BL;
   hence thesis by Th43;
 end;
-

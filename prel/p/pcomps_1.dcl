@@ -31,7 +31,7 @@
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="45"/>
-<Adjective nr="69"/>
+<Adjective nr="72"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="2">
@@ -55,7 +55,7 @@
 <Adjective nr="33" value="false"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="70"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PCOMPS_1" nr="1">
@@ -64,7 +64,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -80,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="132">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

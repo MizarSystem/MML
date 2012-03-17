@@ -7,7 +7,6 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="CLASSES1"/>
 </Signature>
@@ -17,7 +16,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="44">
+<Func kind="K" nr="40">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -28,15 +27,15 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="11"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="47">
+<Func kind="K" nr="43">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="9"/>
 </Cluster>
 </FCluster>
 </Registrations>

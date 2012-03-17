@@ -12,18 +12,19 @@ environ
       CARD_1, INT_1, CIRCUIT2, ARYTM_1, ORDINAL1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, INT_2, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_4, INT_1, NAT_1, DOMAIN_1, STRUCT_0, FUNCOP_1,
-      FINSEQ_1, FINSEQ_2, SCMNORM, AMI_1, AMI_2, AMI_3, FUNCT_7, SCMFSA_2,
+      FINSEQ_1, FINSEQ_2, COMPOS_1,
+      AMI_1, AMI_2, AMI_3, FUNCT_7, SCMFSA_2,
       XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, INT_2, AMI_5, SCMFSA_2, SCMNORM, RELSET_1,
+ constructors DOMAIN_1, XXREAL_0, INT_2, AMI_5, SCMFSA_2, RELSET_1,
       PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMFSA_2, FINSET_1,
-      ORDINAL1, RELSET_1, FUNCT_2;
+      ORDINAL1, RELSET_1, FUNCT_2, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, AMI_3, FUNCOP_1, SCMFSA_2;
+ definitions COMPOS_1, AMI_1, AMI_3, FUNCOP_1, SCMFSA_2;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
       ZFMISC_1, INT_1, RELAT_1, AMI_5, SCMFSA_2, SCMFSA_1, ABSVALUE, FINSEQ_2,
-      XBOOLE_0, XBOOLE_1, AMI_2, NUMBERS, PBOOLE, PARTFUN1;
+      XBOOLE_0, XBOOLE_1, AMI_2, NUMBERS, PBOOLE, PARTFUN1, COMPOS_1;
 
 begin
 
@@ -34,21 +35,19 @@ reserve k for Element of NAT,
 theorem
   not IC SCM+FSA in Int-Locations
 proof
-  assume
-  IC SCM+FSA in Int-Locations;
+  assume IC SCM+FSA in Int-Locations;
   then IC SCM+FSA is Int-Location by SCMFSA_2:11;
   then ObjectKind IC SCM+FSA = INT by SCMFSA_2:26;
-  hence contradiction by AMI_1:def 11,NUMBERS:27;
+  hence contradiction by COMPOS_1:def 6,NUMBERS:27;
 end;
 
 theorem
   not IC SCM+FSA in FinSeq-Locations
 proof
-  assume
-  IC SCM+FSA in FinSeq-Locations;
+  assume IC SCM+FSA in FinSeq-Locations;
   then IC SCM+FSA is FinSeq-Location by SCMFSA_2:12;
   then ObjectKind IC SCM+FSA = INT* by SCMFSA_2:27;
-  hence contradiction by AMI_1:def 11,SCMFSA_1:13;
+  hence contradiction by COMPOS_1:def 6,SCMFSA_1:13;
 end;
 
 theorem
@@ -102,7 +101,7 @@ A12: Int-Locations \/ FinSeq-Locations c= (Int-Locations \/ FinSeq-Locations
     reconsider S1 = s1|(the carrier of SCM) +* ((NAT) --> I), S2 = s2|(the
     carrier of SCM) +* ((NAT) --> I) as State of SCM by SCMFSA_2:73;
 A13: SCM-Data-Loc c= Int-Locations \/ FinSeq-Locations by XBOOLE_1:7;
-    not IC SCM+FSA in NAT by AMI_1:48;
+    not IC SCM+FSA in NAT by COMPOS_1:3;
     then
 A14: NAT misses {IC SCM+FSA} by ZFMISC_1:56;
     (NAT) misses Int-Locations \/ FinSeq-Locations by SCMFSA_2:13,14
@@ -112,7 +111,7 @@ XBOOLE_1:70;
     then
 A15: (NAT) /\ (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) = {} by
 XBOOLE_0:def 7;
-    not IC SCM in NAT by AMI_1:48;
+    not IC SCM in NAT by COMPOS_1:3;
     then NAT misses {IC SCM} by ZFMISC_1:56;
     then dom((NAT) --> I) = NAT & NAT misses SCM-Data-Loc \/ {IC SCM} by
 AMI_2:29,FUNCOP_1:19,XBOOLE_1:70;
@@ -532,6 +531,12 @@ end;
 
 begin :: Finite partial states of SCM+FSA
 
+definition
+ let s be State of SCM+FSA, p be preProgram of SCM+FSA;
+ redefine func s +* p -> State of SCM+FSA;
+ coherence;
+end;
+
 canceled 5;
 
 theorem
@@ -541,14 +546,13 @@ proof
   let i be Instruction of SCM+FSA, s be State of SCM+FSA, p be preProgram of
   SCM+FSA;
 A1: now
-    assume
-    {IC SCM+FSA} meets NAT;
+    assume {IC SCM+FSA} meets NAT;
     then consider x being set such that
 A2: x in {IC SCM+FSA} and
 A3: x in NAT by XBOOLE_0:3;
     reconsider l = x as Element of NAT by A3;
     l = IC SCM+FSA by A2,TARSKI:def 1;
-    hence contradiction by AMI_1:48;
+    hence contradiction by COMPOS_1:3;
   end;
   Int-Locations \/ FinSeq-Locations misses NAT by SCMFSA_2:13,14,XBOOLE_1:70;
   then
@@ -565,8 +569,8 @@ Exec(i,s)|(Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by A4,FUNCT_4:76
     .= Exec(i,s +* p) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
   by A5,Th4;
 A7: ProgramPart Exec (i, s +* p) = ProgramPart (s +* p) by AMI_1:117
-    .= ProgramPart s +* ProgramPart p by FUNCT_4:75
-    .= ProgramPart Exec (i,s) +* ProgramPart p by AMI_1:117
+    .= ProgramPart s +* p|NAT by FUNCT_4:75
+    .= ProgramPart Exec (i,s) +* p|NAT by AMI_1:117
     .= ProgramPart (Exec (i, s) +* p) by FUNCT_4:75;
   thus Exec (i, s +* p) = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
     .= Exec (i, s +* p)| (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
@@ -621,7 +625,7 @@ definition
   coherence
   proof
     a is Element of INT & ObjectKind la = INT by INT_1:def 2,SCMFSA_2:26;
-    hence thesis by AMI_1:59;
+    hence thesis by COMPOS_1:5;
   end;
 end;
 
@@ -632,12 +636,10 @@ theorem Th14:
   {} holds IC SCM+FSA in dom p
 proof
   let p be autonomic FinPartState of SCM+FSA;
-  assume
-  DataPart p <> {};
+  assume DataPart p <> {};
   then
 A1: dom DataPart p <> {};
-  assume
-  not IC SCM+FSA in dom p;
+  assume not IC SCM+FSA in dom p;
   then
 A2: dom p misses {IC SCM+FSA} by ZFMISC_1:56;
   p is not autonomic
@@ -755,7 +757,7 @@ A19:  IC s1 = p1.IC SCM+FSA by A7,GRFUNC_1:8
          Start-At(il,SCM+FSA)).IC SCM+FSA by A18,FUNCT_4:14
         .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A17,FUNCT_4:14
         .= il by FUNCOP_1:87;
-      il <> IC SCM+FSA by AMI_1:48;
+      il <> IC SCM+FSA by COMPOS_1:3;
       then
 A20:  not il in dom (Start-At(il,SCM+FSA)) by A16,TARSKI:def 1;
 A21:  dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) = dom (il .--> (d1:=d2)) \/
@@ -834,7 +836,7 @@ A40:  s2.d2 = p2.d2 by A10,GRFUNC_1:8
         .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A36,FUNCT_4:12
         .= (d2.--> 1).d2 by A38,FUNCT_4:14
         .= 1 by FUNCOP_1:87;
-      il <> IC SCM+FSA by AMI_1:48;
+      il <> IC SCM+FSA by COMPOS_1:3;
       then
 A41:  not il in dom (Start-At(il,SCM+FSA)) by A32,TARSKI:def 1;
       il <> d2 by SCMFSA_2:84;
@@ -855,7 +857,7 @@ A44:  s2.il = p2.il by A10,GRFUNC_1:8
         .= (il .--> (d1:=d2)).il by A42,FUNCT_4:12
         .=(d1:=d2) by FUNCOP_1:87;
 Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+ = s2.IC s2 by COMPOS_1:38;
 A45:  Comput(ProgramPart(s2),s2,0+1).d1
  = (Following(ProgramPart s2,Comput(ProgramPart(s2),
 s2,0))).d1 by AMI_1:14
@@ -865,7 +867,7 @@ s2,0))).d1 by AMI_1:14
       then
 A46:  dom DataPart p c= dom p by RELAT_1:25;
 Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by AMI_1:150;
+ = s1.IC s1 by COMPOS_1:38;
       Comput(ProgramPart(s1),s1,0+1).d1 =
        (Following(ProgramPart s1,Comput(ProgramPart(s1),s1,0))).d1
        by AMI_1:14
@@ -915,7 +917,7 @@ A57:  IC s1 = p1.IC SCM+FSA by A47,GRFUNC_1:8
       SCM+FSA by A56,FUNCT_4:14
         .= (Start-At(il,SCM+FSA)).IC SCM+FSA by A55,FUNCT_4:14
         .= il by FUNCOP_1:87;
-      il <> IC SCM+FSA by AMI_1:48;
+      il <> IC SCM+FSA by COMPOS_1:3;
       then
 A58:  not il in dom (Start-At(il,SCM+FSA)) by A54,TARSKI:def 1;
       consider s2 being State of SCM+FSA such that
@@ -1057,7 +1059,7 @@ A82:  d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At(
       then
 A83:  k |-> 0 = 1 |-> 0 by A71,ABSVALUE:def 1
         .= <*0*> by FINSEQ_2:73;
-      il <> IC SCM+FSA by AMI_1:48;
+      il <> IC SCM+FSA by COMPOS_1:3;
       then
 A84:  not il in dom (Start-At(il,SCM+FSA)) by A75,TARSKI:def 1;
       il <> d2 by SCMFSA_2:84;
@@ -1079,7 +1081,7 @@ A87:  s2.il = p2.il by A59,GRFUNC_1:8
         .= (il .--> (d1:=<0,...,0>d2)).il by A85,FUNCT_4:12
         .=(d1:=<0,...,0>d2) by FUNCOP_1:87;
 Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+ = s2.IC s2 by COMPOS_1:38;
 A88:  Comput(ProgramPart(s2),s2,0+1).d1 =
  (Following(ProgramPart s2,Comput(ProgramPart(s2),s2,
 0))).d1
@@ -1092,7 +1094,7 @@ PARTFUN1:def 4;
       then
 A89:  dom ( Comput(ProgramPart(s2),s2,1)|dom p) = dom p by X,RELAT_1:91;
 Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by AMI_1:150;
+ = s1.IC s1 by COMPOS_1:38;
       DataPart p c= p by RELAT_1:88;
       then
 A90:  dom DataPart p c= dom p by RELAT_1:25;
@@ -1127,7 +1129,7 @@ A2:   dom P = { IC SCM+FSA, 0 } by FUNCT_4:65;
       then IC SCM+FSA in dom P by TARSKI:def 2;
       then reconsider l = IC SCM+FSA as Element of NAT by A1;
       l in dom P by A2,TARSKI:def 2;
-      hence contradiction by AMI_1:48;
+      hence contradiction by COMPOS_1:3;
     end;
     hence thesis by RELAT_1:def 18;
   end;
@@ -1194,7 +1196,7 @@ X:    s2.il = p2.il by A3,GRFUNC_1:8
       .= ((il .--> goto  1)).il by A6,FUNCT_4:14
       .= goto  1 by FUNCOP_1:87;
 Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+ = s2.IC s2 by COMPOS_1:38;
     p c= s2 by A3,A8,XBOOLE_1:1;
     then
 A9: (Following(ProgramPart s2,s2)).IC SCM+FSA
@@ -1223,7 +1225,7 @@ X:   s1.il = p1.il by A2,GRFUNC_1:8
       .= ((il .--> goto  0)).il by A11,FUNCT_4:14
       .= goto  0 by FUNCOP_1:87;
 Y:  (ProgramPart s1)/.IC s1
- = s1.IC s1 by AMI_1:150;
+ = s1.IC s1 by COMPOS_1:38;
     p c= s1 by A2,A12,XBOOLE_1:1;
     then
     (Following(ProgramPart s1,s1)).IC SCM+FSA = Exec (goto  0,s1).IC SCM+FSA
@@ -1251,8 +1253,7 @@ A1: p c= s;
   reconsider ll = loc as Element of NAT;
   set loc1 = (ll+1);
 A3: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
-  assume
-  not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
+  assume not IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p);
   then
 A4: not loc in dom p by A3,XBOOLE_0:def 4;
   set p2 = p +* (loc .--> goto loc1);
@@ -1326,7 +1327,7 @@ by AMI_1:123;
 A26: Cs1k = Following(ProgramPart s1,Cs1i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart s1, Cs1i), Cs1i);
 Y:  (ProgramPart s1)/.IC Cs1i
- = Cs1i.IC Cs1i by T,AMI_1:150;
+ = Cs1i.IC Cs1i by T,COMPOS_1:38;
 A27: Csi.IC SCM+FSA = (Csi|dom p).IC SCM+FSA by Th15,FUNCT_1:72;
     then Cs1i.IC SCM+FSA = loc by A24,Th15,FUNCT_1:72;
     then
@@ -1337,7 +1338,7 @@ by AMI_1:123;
 A29: Cs2k = Following(ProgramPart s2,Cs2i) by AMI_1:14
       .= Exec (CurInstr(ProgramPart s2, Cs2i), Cs2i);
 Z:  (ProgramPart s2)/.IC Cs2i
- = Cs2i.IC Cs2i by T,AMI_1:150;
+ = Cs2i.IC Cs2i by T,COMPOS_1:38;
     Cs2i.IC SCM+FSA = loc by A24,A27,A25,Th15,FUNCT_1:72;
     then
 A30: Cs2k.IC SCM+FSA = loc1 by A29,A18,Z,SCMFSA_2:95;
@@ -1389,10 +1390,10 @@ TY: ProgramPart s2 = ProgramPart Comput(ProgramPart(s2),s2,i)
 by AMI_1:123;
 Y:  (ProgramPart s2)/.IC Comput(ProgramPart(s2),s2,i)
  = Comput(ProgramPart(s2),s2,i).IC Comput(ProgramPart(s2),s2,i)
- by TY,AMI_1:150;
+ by TY,COMPOS_1:38;
 V:  (ProgramPart s1)/.IC Comput(ProgramPart(s1),s1,i)
  = Comput(ProgramPart(s1),s1,i).IC Comput(ProgramPart(s1),s1,i)
-    by TX,AMI_1:150;
+    by TX,COMPOS_1:38;
     assume
 Z:    I <> CurInstr(ProgramPart s2,Comput(ProgramPart(s2),s2,i));
    Comput(ProgramPart(s1),s1,i)|dom p = Comput(ProgramPart(s2),s2,i)|dom p by
@@ -1803,8 +1804,7 @@ A8: (ex k1 being Element of NAT st k1 = abs(Cs1i.db) & Exec(I, Cs1i).f =
 Cs1i.f +*(k1,Cs1i.da) )& ex k2 being Element of NAT st k2 = abs(Cs2i.db) & Exec
   (I, Cs2i).f = Cs2i.f+*(k2,Cs2i.da) by A6,SCMFSA_2:99;
   let i1, i2 be Element of NAT;
-  assume
-  i1 = abs(Cs1i.db) & i2 = abs(Cs2i.db) & Cs1i.f+*(i1,Cs1i.da) <> Cs2i
+  assume i1 = abs(Cs1i.db) & i2 = abs(Cs2i.db) & Cs1i.f+*(i1,Cs1i.da) <> Cs2i
   .f+* (i2,Cs2i.da);
   hence contradiction by A1,A3,A5,A4,A2,A7,A8,Th18;
 end;
@@ -1876,8 +1876,7 @@ A8: (ex k1 being Element of NAT st k1 = abs(Cs1i.da) & Exec(I, Cs1i).f = k1
 |->0 )& ex k2 being Element of NAT st k2 = abs(Cs2i.da) & Exec(I, Cs2i).f = k2
   |->0 by A6,SCMFSA_2:101;
   let i1, i2 be Element of NAT;
-  assume
-  i1 = abs(Cs1i.da) & i2 = abs(Cs2i.da) & i1 |-> 0 <> i2 |->0;
+  assume i1 = abs(Cs1i.da) & i2 = abs(Cs2i.da) & i1 |-> 0 <> i2 |->0;
   hence contradiction by A1,A3,A5,A4,A2,A7,A8,Th18;
 end;
 

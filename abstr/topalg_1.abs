@@ -12,7 +12,7 @@ environ
       FINSEQ_1, ARYTM_1, COMPLEX1, EUCLID, METRIC_1, FINSEQ_2, ORDINAL2,
       TOPS_1, SUPINF_2, ZFMISC_1, BORSUK_2, GRAPH_1, ALGSTR_1, EQREL_1,
       WAYBEL20, PARTFUN1, RELAT_2, ALGSTR_0, BINOP_1, WELLORD1, BORSUK_6,
-      TOPALG_1;
+      TOPALG_1, MSSUBFAM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, EQREL_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, RELAT_2, BINOP_1, NUMBERS, ORDINAL1, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, RCOMP_1, FINSEQ_1, VALUED_0,
@@ -32,8 +32,8 @@ reserve p, q, x, y for real number,
   n for Nat;
 
 theorem :: TOPALG_1:1
-  for G, H being Group, h being Homomorphism of G,H st
-  h * h" = id H & h" * h = id G holds h is bijective;
+  for G, H being set, g being Function of G,H, h being Function of H,G
+   st h * g = id G & g * h = id H holds h is bijective;
 
 theorem :: TOPALG_1:2
   for X being Subset of I[01], a being Point of I[01] st X = ]. a, 1 .]
@@ -61,15 +61,13 @@ theorem :: TOPALG_1:8
   for f being real-valued FinSequence holds (x-y) * f = x*f - y*f;
 
 theorem :: TOPALG_1:9
-  for f, g, h, k being real-valued FinSequence holds
-  (f+g)-(h+k) = (f-h)+(g-k);
+  for f, g, h, k being real-valued FinSequence holds (f+g)-(h+k) = (f-h)+(g-k);
 
 theorem :: TOPALG_1:10
   for f being Element of REAL n st 0 <= x & x <= 1 holds |.x*f.| <= |.f.|;
 
 theorem :: TOPALG_1:11
-  for f being Element of REAL n, p being Point of I[01] holds
-  |.p*f.| <= |.f.|;
+  for f being Element of REAL n, p being Point of I[01] holds |.p*f.| <= |.f.|;
 
 theorem :: TOPALG_1:12
   for e1, e2, e3, e4, e5, e6 being Point of Euclid n, p1, p2, p3, p4
@@ -113,8 +111,7 @@ begin :: Paths
 
 reserve X for non empty TopSpace,
   a, b, c, d, e, f for Point of X,
-  T for non
-  empty arcwise_connected TopSpace,
+  T for non empty pathwise_connected TopSpace,
   a1, b1, c1, d1, e1, f1 for Point of T;
 
 theorem :: TOPALG_1:20
@@ -248,8 +245,7 @@ definition
   func Paths(t1,t2) means
 :: TOPALG_1:def 1
 
-  for x being set holds x in it iff x is Path
-  of t1,t2;
+  for x being set holds x in it iff x is Path of t1,t2;
 end;
 
 registration
@@ -275,8 +271,7 @@ definition
   func EqRel(X,a,b) -> Relation of Paths(a,b) means
 :: TOPALG_1:def 3
 
-  for P, Q being Path
-  of a,b holds [P,Q] in it iff P,Q are_homotopic;
+  for P, Q being Path of a,b holds [P,Q] in it iff P,Q are_homotopic;
 end;
 
 theorem :: TOPALG_1:46
@@ -348,8 +343,7 @@ reserve x0, x1 for Point of X,
   R, V for Path of y0,y1;
 
 theorem :: TOPALG_1:49
-  x0,x1 are_connected & P,Q are_homotopic implies pi_1-iso(P) =
-  pi_1-iso(Q);
+  x0,x1 are_connected & P,Q are_homotopic implies pi_1-iso(P) = pi_1-iso(Q);
 
 theorem :: TOPALG_1:50
   R,V are_homotopic implies pi_1-iso(R) = pi_1-iso(V);
@@ -358,10 +352,10 @@ theorem :: TOPALG_1:51
   x0,x1 are_connected implies pi_1-iso(P) is Homomorphism of pi_1(
   X,x1), pi_1(X,x0);
 
-definition
-  let T be non empty arcwise_connected TopSpace, x0, x1 be Point of T, P be
-  Path of x0,x1;
-  redefine func pi_1-iso(P) -> Homomorphism of pi_1(T,x1), pi_1(T,x0);
+registration
+  let T be non empty pathwise_connected TopSpace, x0, x1 be Point of T,
+  P be Path of x0,x1;
+  cluster pi_1-iso(P) -> multiplicative;
 end;
 
 theorem :: TOPALG_1:52
@@ -371,8 +365,8 @@ theorem :: TOPALG_1:53
   x0,x1 are_connected implies pi_1-iso(P) is onto;
 
 registration
-  let T be non empty arcwise_connected TopSpace, x0, x1 be Point of T, P be
-  Path of x0,x1;
+  let T be non empty pathwise_connected TopSpace,
+      x0, x1 be Point of T, P be Path of x0,x1;
   cluster pi_1-iso(P) -> one-to-one onto;
 end;
 
@@ -432,8 +426,7 @@ Element of pi_1(S,s) for P, Q being Loop of s st x = Class(EqRel(S,s),P) & y =
 :: Added, AK 5.02.2007
 
 theorem :: TOPALG_1:63
-  for C being constant Loop of a holds 1_pi_1(X,a) = Class(EqRel(X
-  ,a),C);
+  for C being constant Loop of a holds 1_pi_1(X,a) = Class(EqRel(X ,a),C);
 
 theorem :: TOPALG_1:64
   for x, y being Element of pi_1(X,a), P being Loop of a st x = Class(
@@ -452,4 +445,3 @@ theorem :: TOPALG_1:65
 theorem :: TOPALG_1:66
   a,b are_connected implies EqRel(X,a,b) is non empty total symmetric
   transitive;
-

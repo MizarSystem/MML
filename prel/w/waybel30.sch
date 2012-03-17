@@ -27,8 +27,6 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="YELLOW_3"/>
-<ArticleID name="WAYBEL_2"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
@@ -43,7 +41,7 @@
 <Adjective nr="65"/>
 <Adjective nr="130"/>
 <Adjective nr="131"/>
-<Adjective nr="151"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

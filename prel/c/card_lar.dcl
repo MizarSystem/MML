@@ -4,8 +4,8 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -21,10 +21,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
-<Adjective nr="13"/>
-<Adjective nr="14"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
@@ -47,9 +47,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
-<Adjective nr="13"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
 </Cluster>
@@ -58,12 +58,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="8"/>
 <Adjective nr="18" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="54">
+<Func kind="K" nr="53">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -73,7 +73,7 @@
 <CCluster aid="CARD_LAR" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="8"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="25"/>
 </Cluster>
@@ -81,22 +81,22 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13"/>
-<Adjective nr="14"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_LAR" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="13"/>
-<Adjective nr="14"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
 <Adjective nr="18" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="8"/>
 <Adjective nr="21" value="false"/>
 </Cluster>
 </CCluster>

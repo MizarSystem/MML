@@ -23,7 +23,7 @@ environ
  definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, RELSET_1, FUNCOP_1, XBOOLE_1,
       CARD_1, RELAT_1, MCART_1, INT_1, FINSEQ_1, FUNCT_7, XBOOLE_0, TREES_2,
-      FINSEQ_3, ENUMSET1, ZFMISC_1, GRFUNC_1, PRE_CIRC, CARD_2, BAGORDER,
+      FINSEQ_3, ENUMSET1, ZFMISC_1, GRFUNC_1, PRE_CIRC, CARD_2, FINSEQ_2,
       FINSET_1, GRAPH_2, WELLORD2, FINSEQ_6, XREAL_1, XXREAL_0, ORDINAL1,
       PARTFUN1, VALUED_1;
  schemes NAT_1, FUNCT_1, FINSEQ_1, CLASSES1;
@@ -93,7 +93,7 @@ A3: i > 0 by NAT_1:13;
 A4: Seq q = q* Sgm(dom q) by FINSEQ_1:def 14;
   dom p = {i} by RELAT_1:23;
   then Seq p = {[i,x]}*<*i*> by A1,A3,A4,FINSEQ_3:50
-    .= <*{[i,x]}.i*> by A1,A2,BAGORDER:3
+    .= <*{[i,x]}.i*> by A1,A2,FINSEQ_2:38
     .= <*x*> by GRFUNC_1:16;
   hence thesis by A1;
 end;
@@ -273,22 +273,12 @@ A5: x in X;
   hence thesis;
 end;
 
-theorem Th8:
-  for P,R being Relation st dom P misses dom R holds P misses R
-proof
-  let P,R be Relation;
-  assume
-A1: dom P misses dom R;
-  now
-    given x such that
-A2: x in dom (P /\ R);
-    dom (P /\ R) c= dom P /\ dom R by RELAT_1:14;
-    hence contradiction by A1,A2,XBOOLE_0:def 7;
-  end;
-  hence P /\ R = {} by XBOOLE_0:def 1;
-end;
+canceled;
 
-theorem Th9:
+Th8:for P,R being Relation st dom P misses dom R holds P misses R
+      by RELAT_1:214;
+
+theorem Th9: ::: RELAT_1
   for X,Y being set, P,R being Relation st X misses Y holds P|X misses R|Y
 proof
   let X,Y be set, P,R be Relation;
@@ -347,7 +337,7 @@ A5:   [x,g.x] in g by FUNCT_1:def 4;
   hence thesis by Lm3;
 end;
 
-theorem
+theorem :: RELAT_1
   for Y being set, R being Relation holds Y|R c= R|(R"Y)
 proof
   let Y be set, R be Relation;
@@ -396,9 +386,9 @@ definition
   mode marking of P is Function of P,NAT;
 end;
 
-reserve P,p,x,y,x1,x2,y1,y2 for set,
+reserve P,p,x,y,x1,x2 for set,
   m1,m2,m3,m4,m for marking of P,
-  i,j,j1,j2,k,k1,k2,l,l1,l2 for Element of NAT;
+  i,j,j1,j2,k,k1,k2,l,l1 for Element of NAT;
 
 notation
   let P be set;
@@ -408,7 +398,8 @@ notation
 end;
 
 scheme MarkingLambda { P() -> set, F(set) -> Element of NAT }:
-  ex m being marking of P() st for p st p in P() holds m multitude_of p = F(p)
+  ex m being Function of P(),NAT st
+    for p st p in P() holds m.p = F(p)
 proof
   consider m being Function such that
 A1: dom m = P() and
@@ -461,16 +452,7 @@ definition
   reflexivity;
 end;
 
-Lm6: p in P implies {$}P multitude_of p = 0
-proof
-  assume
-A1: p in P;
-  then reconsider P as non empty set;
-  p in dom {$}P by A1,FUNCT_2:def 1;
-  then ({$}P).p in rng {$}P by FUNCT_1:def 5;
-  then ({$}P).p in {0} by FUNCOP_1:14;
-  hence thesis by TARSKI:def 1;
-end;
+Lm6: p in P implies ({$}P).p = 0 by FUNCOP_1:13;
 
 theorem Th13:
   {$}P c= m
@@ -841,7 +823,7 @@ definition
     ex m1,m2 st t = [m1,m2] by Def7;
     hence thesis by MCART_1:7;
   end;
-  func Post t -> marking of P;
+  redefine func Post t -> marking of P;
   coherence
   proof
     ex m1, m2 st t = [m1, m2] by Def7;
@@ -1037,7 +1019,7 @@ A15:  i in dom C;
     hence thesis by A6,A7,A9,A10,A12,A13,A14,FINSEQ_1:17;
   end;
 end;
-
+ 
 :: Firing of empty firing-sequence <*>N
 
 theorem
@@ -1051,7 +1033,7 @@ A2: len F = len <*>N and
   F = {} by A2;
   hence thesis by A1,FUNCT_7:41;
 end;
-
+ 
 :: Firing of firing-sequence with one translation <*e*>
 
 theorem Th37:
@@ -1084,7 +1066,7 @@ A1: compose(<*fire e*>, Funcs(P, NAT)) = (fire e)*id Funcs(P, NAT)
   dom fire e c= Funcs(P, NAT) by Def9;
   hence thesis by A1,FUNCT_7:48;
 end;
-
+ 
 :: Firing of firing-sequence with two translations <*e1,e2*>
 
 theorem
@@ -1187,7 +1169,7 @@ A23: dom C = Seg len C by FINSEQ_1:def 3;
   end;
   hence thesis by A17,A18,A19;
 end;
-
+ 
 :: Firing of compound firing-sequence
 
 theorem Th41:
@@ -2262,16 +2244,6 @@ A21: q1|rng((Sgm dom q1)|dom q3) \/ q1|rng((Sgm dom q1)|dom q4)
       .= q1|rng Sgm dom q1 by RELAT_1:98
       .= q1|dom q1 by FINSEQ_1:71
       .= q1 by RELAT_1:98;
-A22: dom (q1|rng((Sgm dom q1)|dom q3)) c= rng((Sgm dom q1)|dom q3) by
-    RELAT_1:87;
-A23: dom (q1|rng((Sgm dom q1)|dom q4)) c= rng((Sgm dom q1)|dom q4) by
-    RELAT_1:87;
-A24: rng((Sgm dom q1)|dom q3) c= rng Sgm dom q1 by RELAT_1:99;
-A25: rng((Sgm dom q1)|dom q4) c= rng Sgm dom q1 by RELAT_1:99;
-A26: rng((Sgm dom q1)|dom q3) c= dom q1 by A24,FINSEQ_1:71;
-A27: rng((Sgm dom q1)|dom q4) c= dom q1 by A25,FINSEQ_1:71;
-A28: dom (q1|rng((Sgm dom q1)|dom q3)) c= dom q1 by A22,A26,XBOOLE_1:1;
-A29: dom (q1|rng((Sgm dom q1)|dom q4)) c= dom q1 by A23,A27,XBOOLE_1:1;
 A32: q1 c= C1 by A3,XBOOLE_1:7;
 A33: q1|rng((Sgm dom q1)|dom q3) c= q1 by A21,XBOOLE_1:7;
 A34: q1|rng((Sgm dom q1)|dom q4) c= q1 by A21,XBOOLE_1:7;
@@ -2431,16 +2403,6 @@ A105: q2|rng((Sgm dom q2)|dom q3) \/ q2|rng((Sgm dom q2)|dom q4)
     .= q2|rng Sgm dom q2 by RELAT_1:98
     .= q2|dom q2 by FINSEQ_1:71
     .= q2 by RELAT_1:98;
-A106: dom (q2|rng((Sgm dom q2)|dom q3)) c= rng((Sgm dom q2)|dom q3) by
-  RELAT_1:87;
-A107: dom (q2|rng((Sgm dom q2)|dom q4)) c= rng ((Sgm dom q2)|dom q4) by
-  RELAT_1:87;
-A108: rng((Sgm dom q2)|dom q3) c= rng Sgm dom q2 by RELAT_1:99;
-A109: rng((Sgm dom q2)|dom q4) c= rng Sgm dom q2 by RELAT_1:99;
-A110: rng((Sgm dom q2)|dom q3) c= dom q2 by A108,FINSEQ_1:71;
-A111: rng((Sgm dom q2)|dom q4) c= dom q2 by A109,FINSEQ_1:71;
-A112: dom (q2|rng((Sgm dom q2)|dom q3)) c= dom q2 by A106,A110,XBOOLE_1:1;
-A113: dom (q2|rng((Sgm dom q2)|dom q4)) c= dom q2 by A107,A111,XBOOLE_1:1;
 A116: q2 c= C1 by A87,XBOOLE_1:7;
 A117: q2|rng((Sgm dom q2)|dom q3) c= q2 by A105,XBOOLE_1:7;
 A118: q2|rng((Sgm dom q2)|dom q4) c= q2 by A105,XBOOLE_1:7;
@@ -3009,7 +2971,6 @@ A4: dom (len p Shift q2) c= Seg (len p + k) by A3,Th78;
 end;
 
 Lm11: for p1,p2 being FinSequence, q1,q2 being FinSubsequence st
-
 q1 c= p1 & q2 c= p2 holds Sgm (dom q1 \/ dom (len p1 Shift q2))
 = (Sgm dom q1)^(Sgm dom (len p1 Shift q2))
 proof
@@ -3018,7 +2979,6 @@ proof
 A1: q1 c= p1 and
 A2: q2 c= p2;
 A3: ex k1 be Nat st ( dom q1 c= Seg k1) by FINSEQ_1:def 12;
-
 A4: ex k2 be Nat st ( dom (len p1 Shift q2) c= Seg k2) by FINSEQ_1:def 12;
   for m,n being Element of NAT
   st m in dom q1 & n in dom (len p1 Shift q2) holds m < n
@@ -3469,4 +3429,3 @@ A11: q1 in {<*>N} by TARSKI:def 1;
   q1 misses q2 by A7,XBOOLE_0:def 7;
   hence thesis by A6,A8,A9,A10,A11;
 end;
-

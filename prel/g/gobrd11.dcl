@@ -6,12 +6,12 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -21,6 +21,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
@@ -44,21 +44,21 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="11" value="false"/>
-<Adjective nr="153">
+<Adjective nr="20" value="false"/>
+<Adjective nr="157">
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="155"/>
+<Adjective nr="158"/>
 <Adjective nr="159"/>
-<Adjective nr="160"/>
+<Adjective nr="163"/>
+<Adjective nr="164"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -66,11 +66,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="300">
+<Func kind="K" nr="305">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

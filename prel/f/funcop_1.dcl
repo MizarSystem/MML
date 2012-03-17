@@ -548,4 +548,29 @@
 </Adjective>
 </Cluster>
 </FCluster>
+<FCluster aid="FUNCOP_1" nr="22">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<LocusVar nr="2"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="77">
+<LocusVar nr="1"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="5">
+<LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+</FCluster>
 </Registrations>

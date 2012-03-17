@@ -3,31 +3,31 @@
 ::
 :: Received February 14, 2001
 :: Copyright (c) 2001 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, SUBSET_1, FUNCT_2, MARGREL1, PARTIT1, EQREL_1, FUNCT_1,
       SETFAM_1, RELAT_1, ZFMISC_1, TARSKI, RELAT_2, XBOOLEAN, BVFUNC_2,
-      BVFUNC_1, FUNCT_4;
+      BVFUNC_1, FUNCT_4, FUNCT_5, OPOSET_1, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MARGREL1, RELAT_1,
-      RELAT_2, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4, EQREL_1, PARTIT1, BVFUNC_1,
-      BVFUNC_2;
- constructors SETFAM_1, FUNCT_4, XCMPLX_0, BVFUNC_1, BVFUNC_2, RELSET_1;
+      RELAT_2, FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_5, EQREL_1,
+      PARTIT1, BVFUNC_1, BVFUNC_2;
+ constructors SETFAM_1, FUNCT_4, XCMPLX_0, BVFUNC_1, BVFUNC_2, RELSET_1,
+      FUNCT_5, RELAT_2, DOMAIN_1, BINOP_1;
  registrations SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, EQREL_1, MARGREL1,
-      PARTIT1;
+      PARTIT1, RELSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE, ARITHM;
- definitions BVFUNC_1, TARSKI, RELAT_2, XBOOLE_0, XBOOLEAN, RELSET_1;
+ definitions BVFUNC_1, TARSKI, RELAT_2, XBOOLE_0, XBOOLEAN, RELSET_1, EQREL_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, BVFUNC_1, BVFUNC_2, RELSET_1, PARTIT1,
       SETFAM_1, SUBSET_1, FUNCT_4, RELAT_1, EQREL_1, RELAT_2, XBOOLE_0,
-      XBOOLE_1, PARTFUN1, ORDERS_1, XBOOLEAN, MARGREL1;
+      XBOOLE_1, PARTFUN1, ORDERS_1, XBOOLEAN, MARGREL1, CARD_1, ZFMISC_1;
  schemes FUNCT_2;
 
 begin :: Preliminaries
 
 reserve Y for non empty set,
   a for Element of Funcs(Y,BOOLEAN),
-  G for Subset
-  of PARTITIONS(Y),
+  G for Subset of PARTITIONS(Y),
   P,Q for a_partition of Y;
 
 definition
@@ -50,8 +50,7 @@ Subset-Family of Y st dom h={} PARTITIONS Y & rng h = F & (for d being set st d
     let x be set;
     hereby
       reconsider h = {} as Function;
-      assume
-      x in %O Y;
+      assume x in %O Y;
       then
 A1:   x in {Y} by PARTIT1:def 9;
       take h,F = {}bool Y;
@@ -95,13 +94,8 @@ A3: [x,y] in S;
   end;
 end;
 
-theorem Th3:
-  for R being Relation of Y holds R c= nabla Y
-proof
-  let R be Relation of Y;
-  nabla Y = [:Y,Y:] by EQREL_1:def 1;
-  hence thesis;
-end;
+theorem
+  for R being Relation of Y holds R c= nabla Y;
 
 theorem Th4:
   for R being Equivalence_Relation of Y holds (nabla Y)*R = nabla Y
@@ -109,15 +103,11 @@ theorem Th4:
 proof
   let R being Equivalence_Relation of Y;
   (nabla Y) \/ R c= (nabla Y)*R by Th2;
-  then
-A1: nabla Y c= (nabla Y)*R by EQREL_1:1;
-  (nabla Y)*R c= nabla Y by Th3;
-  hence (nabla Y)*R = nabla Y by A1,XBOOLE_0:def 10;
+  then nabla Y c= (nabla Y)*R by EQREL_1:1;
+  hence (nabla Y)*R = nabla Y by XBOOLE_0:def 10;
   (nabla Y) \/ R c= R*nabla Y by Th2;
-  then
-A2: nabla Y c= R*nabla Y by EQREL_1:1;
-  R*nabla Y c= nabla Y by Th3;
-  hence thesis by A2,XBOOLE_0:def 10;
+  then nabla Y c= R*nabla Y by EQREL_1:1;
+  hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem Th5:
@@ -126,8 +116,7 @@ theorem Th5:
 proof
   let P be a_partition of Y, x,y be Element of Y;
   hereby
-    assume
-    [x,y] in ERl P;
+    assume [x,y] in ERl P;
     then ex A being Subset of Y st A in P & x in A & y in A by
     PARTIT1:def 6;
     hence x in EqClass(y,P) by EQREL_1:def 8;
@@ -145,8 +134,7 @@ proof
 A1: ERl(R) = ERl(P)*ERl(Q);
   let x,y be Element of Y;
   hereby
-    assume
-    x in EqClass(y,R);
+    assume x in EqClass(y,R);
     then [x,y] in ERl R by Th5;
     then consider z being Element of Y such that
 A2: [x,z] in ERl P and
@@ -163,46 +151,42 @@ A4: x in EqClass(z,P) & z in EqClass(y,Q);
 end;
 
 theorem Th7:
-  for R,S being Relation, Y being set st R is_reflexive_in Y & S
-  is_reflexive_in Y holds R*S is_reflexive_in Y
+  for R,S being Relation, Y being set st R is_reflexive_in Y &
+  S is_reflexive_in Y holds R*S is_reflexive_in Y
 proof
   let R,S be Relation, Y be set such that
 A1: R is_reflexive_in Y & S is_reflexive_in Y;
   let x be set;
-  assume
-  x in Y;
+  assume x in Y;
   then [x,x] in R & [x,x] in S by A1,RELAT_2:def 1;
   hence thesis by RELAT_1:def 8;
 end;
 
 theorem Th8:
-  for R being Relation, Y being set st R is_reflexive_in Y holds Y
-  c= field R
+  for R being Relation, Y being set st R is_reflexive_in Y holds Y c= field R
 proof
   let R be Relation, Y be set such that
 A1: R is_reflexive_in Y;
   let x be set;
-  assume
-  x in Y;
+  assume x in Y;
   then [x,x] in R by A1,RELAT_2:def 1;
   hence thesis by RELAT_1:30;
 end;
 
-theorem
-  for Y being set, R being Relation of Y st R is_reflexive_in Y holds Y
-  = field R
+theorem Th9:
+  for Y being set, R being Relation of Y st R is_reflexive_in Y holds
+    Y = field R
 proof
   let Y be set, R be Relation of Y;
-  assume
-  R is_reflexive_in Y;
+  assume R is_reflexive_in Y;
   hence Y c= field R by Th8;
   field R c= Y \/ Y by RELSET_1:19;
   hence thesis;
 end;
 
 theorem
-  for R,S being Equivalence_Relation of Y st R*S = S*R holds R*S is
-  Equivalence_Relation of Y
+  for R,S being Equivalence_Relation of Y st R*S = S*R holds
+  R*S is Equivalence_Relation of Y
 proof
   let R,S be Equivalence_Relation of Y such that
 A1: R*S = S*R;
@@ -220,8 +204,7 @@ A7: S is_symmetric_in Y by A2,RELAT_2:def 11;
     let x,y be set such that
 A8: x in Y and
 A9: y in Y;
-    assume
-    [x,y] in R*S;
+    assume [x,y] in R*S;
     then consider z being set such that
 A10: [x,z] in R and
 A11: [z,y] in S by RELAT_1:def 8;
@@ -245,16 +228,15 @@ end;
 begin :: Boolean-valued Functions
 
 theorem Th11:
-  for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b holds 'not'
-  b '<' 'not' a
+  for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b holds
+  'not' b '<' 'not' a
 proof
   let a,b being Element of Funcs(Y,BOOLEAN) such that
 A1: a '<' b;
   let x be Element of Y;
   assume
 A2: ('not' b).x= TRUE;
-  b.x = ('not' 'not' b).x
-    .= 'not' TRUE by A2,MARGREL1:def 20
+  b.x = ('not' 'not' b).x .= 'not' TRUE by A2,MARGREL1:def 20
     .= FALSE;
   then a.x <> TRUE by A1,BVFUNC_1:def 15;
   then a.x = FALSE by XBOOLEAN:def 3;
@@ -265,9 +247,8 @@ end;
 canceled;
 
 theorem Th13:
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
-PARTITIONS(Y), P being a_partition of Y st a '<' b holds All(a,P,G) '<' All(b,P
-  ,G)
+  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(Y),
+      P being a_partition of Y st a '<' b holds All(a,P,G) '<' All(b,P,G)
 proof
   let a,b be Element of Funcs(Y,BOOLEAN), G be Subset of PARTITIONS(Y), P be
   a_partition of Y such that
@@ -279,8 +260,7 @@ A3: All(a,P,G) = B_INF(a,CompF(P,G)) by BVFUNC_2:def 9;
 A4: for y being Element of Y st y in EqClass(x,CompF(P,G)) holds b.y=TRUE
   proof
     let y be Element of Y;
-    assume
-    y in EqClass(x,CompF(P,G));
+    assume y in EqClass(x,CompF(P,G));
     then a.y=TRUE by A3,A2,BVFUNC_1:def 19;
     hence thesis by A1,BVFUNC_1:def 15;
   end;
@@ -291,21 +271,18 @@ end;
 canceled;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
-PARTITIONS(Y), P being a_partition of Y st a '<' b holds Ex(a,P,G) '<' Ex(b,P,G
-  )
+  for a,b being Element of Funcs(Y,BOOLEAN),
+      G being Subset of PARTITIONS(Y), P being a_partition of Y st
+    a '<' b holds Ex(a,P,G) '<' Ex(b,P,G)
 proof
   let a,b be Element of Funcs(Y,BOOLEAN), G be Subset of PARTITIONS(Y), P be
   a_partition of Y;
-A1: Ex(b,P,G) = Ex('not' 'not' b,P,G)
-    .= 'not' All('not' b,P,G) by BVFUNC_2:20;
-  assume
-  a '<' b;
+A1: Ex(b,P,G) = Ex('not' 'not' b,P,G) .= 'not' All('not' b,P,G) by BVFUNC_2:20;
+  assume a '<' b;
   then 'not' b '<' 'not' a by Th11;
   then
 A2: All('not' b,P,G) '<' All('not' a,P,G) by Th13;
-  Ex(a,P,G) = Ex('not' 'not' a,P,G)
-    .= 'not' All('not' a,P,G) by BVFUNC_2:20;
+  Ex(a,P,G) = Ex('not' 'not' a,P,G) .= 'not' All('not' a,P,G) by BVFUNC_2:20;
   hence thesis by A1,A2,Th11;
 end;
 
@@ -313,7 +290,6 @@ begin :: Independent Families of Partitions
 
 Lm1: G is independent implies for P,Q being Subset of PARTITIONS Y st P c= G &
 Q c= G holds ERl('/\'P)*ERl('/\'Q) c= ERl('/\'Q)*ERl('/\'P)
-
 proof
   assume
 A1: G is independent;
@@ -323,36 +299,24 @@ A3: Q c= G;
   per cases;
   suppose
     P = {};
-    then
-A4: P = {} PARTITIONS Y;
-    then
-A5: ERl('/\'Q)*ERl('/\'P) = ERl('/\'Q)*ERl(%O Y) by Th1
+    then P = {} PARTITIONS Y;
+    then ERl('/\'Q)*ERl('/\'P) = ERl('/\'Q)*ERl(%O Y) by Th1
       .= ERl('/\'Q)*nabla Y by PARTIT1:37
       .= nabla Y by Th4;
-    ERl('/\'P)*ERl('/\'Q)= ERl(%O Y)*ERl('/\'Q) by A4,Th1
-      .= (nabla Y)*ERl('/\'Q) by PARTIT1:37
-      .= nabla Y by Th4;
-    hence thesis by A5;
+    hence thesis;
   end;
-  suppose
-    Q = {};
-    then
-A6: Q = {} PARTITIONS Y;
-    then
-A7: ERl('/\'P)*ERl('/\'Q) = ERl('/\'P)*ERl(%O Y) by Th1
-      .= ERl('/\'P)*nabla Y by PARTIT1:37
-      .= nabla Y by Th4;
-    ERl('/\'Q)*ERl('/\'P)= ERl(%O Y)*ERl('/\'P) by A6,Th1
+  suppose Q = {}; then
+ Q = {} PARTITIONS Y;
+    then ERl('/\'Q)*ERl('/\'P)= ERl(%O Y)*ERl('/\'P) by Th1
       .= (nabla Y)*ERl('/\'P) by PARTIT1:37
       .= nabla Y by Th4;
-    hence thesis by A7;
+    hence thesis;
   end;
   suppose
 A8: P <> {} & Q <> {};
     then reconsider G9 = G as non empty Subset of PARTITIONS(Y) by A2;
     let x,y be Element of Y;
-    assume
-    [x,y] in ERl('/\'P)*ERl('/\'Q);
+    assume [x,y] in ERl('/\'P)*ERl('/\'Q);
     then consider z being Element of Y such that
 A9: [x,z] in ERl('/\'P) and
 A10: [z,y] in ERl('/\'Q) by RELSET_1:51;
@@ -389,10 +353,7 @@ A25: for d being Element of G9 holds bool Y meets P(d)
       hence bool Y meets d by XBOOLE_1:63;
     end;
     consider h9 being Function of G9, bool Y such that
-
-A26: for d being Element of G9 holds h9.d in P(d) from FUNCT_2:sch 11(
-    A25);
-
+A26: for d being Element of G9 holds h9.d in P(d) from FUNCT_2:sch 11(A25);
     set h = h9 +* hP9 +* hQ9;
 A27: dom hQ9 = Q by FUNCT_2:def 1;
 A28: dom hP9 = P by FUNCT_2:def 1;
@@ -406,13 +367,11 @@ A30:  d in P;
       suppose
 A31:    d in Q;
         then
-A32:    hQ.d in FQ by A17,FUNCT_1:def 5;
-        then
+A32:    hQ.d in FQ by A17,FUNCT_1:def 5; then
 A33:    y in hQ.d by A16,A19,SETFAM_1:58;
 A34:    z in hQ.d by A15,A19,A32,SETFAM_1:58;
 A35:    hQ.d in d by A18,A31;
-A36:    hP.d in FP by A20,A30,FUNCT_1:def 5;
-        then
+A36:    hP.d in FP by A20,A30,FUNCT_1:def 5; then
 A37:    x in hP.d by A12,A22,SETFAM_1:58;
 A38:    z in hP.d by A13,A22,A36,SETFAM_1:58;
 A39:    hP.d in d by A21,A30;
@@ -435,8 +394,7 @@ A39:    hP.d in d by A21,A30;
     for a being set st a in FP9 holds y in a
     proof
       let a be set;
-      assume
-      a in FP9;
+      assume a in FP9;
       then consider b being set such that
 A40:  b in dom hP9 and
 A41:  hP9.b = a by FUNCT_1:def 5;
@@ -449,8 +407,7 @@ A42: y in A9 by SETFAM_1:58;
     for a being set st a in FQ9 holds x in a
     proof
       let a be set;
-      assume
-      a in FQ9;
+      assume a in FQ9;
       then consider b being set such that
 A43:  b in dom hQ9 and
 A44:  hQ9.b = a by FUNCT_1:def 5;
@@ -463,18 +420,15 @@ A45: x in B9 by SETFAM_1:58;
 A46: for d being set st d in Q holds hQ9.d in d
     proof
       let d be set;
-      assume
-      d in Q;
+      assume d in Q;
       then reconsider d as Element of Q;
       hQ9.d = EqClass(x,d) by A24;
       hence thesis;
     end;
     rng(h9 +* hP9) c= rng h9 \/ rng hP9 by FUNCT_4:18;
     then rng(h9 +* hP9) c= bool Y by XBOOLE_1:1;
-
     then rng h c= rng(h9 +* hP9) \/ rng hQ9 & rng(h9 +* hP9) \/ rng hQ9 c=
     bool Y by FUNCT_4:18,XBOOLE_1:8;
-
     then reconsider F = rng h as Subset-Family of Y by XBOOLE_1:1;
 A47: dom h = dom(h9 +* hP9) \/ Q by A27,FUNCT_4:def 1
       .= dom h9 \/ P \/ Q by A28,FUNCT_4:def 1
@@ -484,8 +438,7 @@ A47: dom h = dom(h9 +* hP9) \/ Q by A27,FUNCT_4:def 1
 A48: for d being set st d in P holds hP9.d in d
     proof
       let d be set;
-      assume
-      d in P;
+      assume d in P;
       then reconsider d as Element of P;
       hP9.d = EqClass(y,d) by A23;
       hence thesis;
@@ -513,11 +466,8 @@ A52:    d in P;
       suppose
 A53:    d in G \ (P \/ Q);
         then not d in (P \/ Q) by XBOOLE_0:def 5;
-
         then h = h9 +* (hP9 +* hQ9) & not d in dom(hP9 +* hQ9) by A28,A27,
-        FUNCT_4:15 ,def 1;
-
-        then
+        FUNCT_4:15 ,def 1; then
 A54:    h.d = h9.d by FUNCT_4:12;
         d in G by A53,XBOOLE_0:def 5;
         hence thesis by A26,A54;
@@ -529,8 +479,7 @@ A55: t in Intersect F by SUBSET_1:10;
     for a being set st a in FP9 holds t in a
     proof
       let a be set;
-      assume
-      a in FP9;
+      assume a in FP9;
       then consider b being set such that
 A56:  b in dom hP9 and
 A57:  hP9.b = a by FUNCT_1:def 5;
@@ -546,8 +495,7 @@ A59: [t,y] in ERl('/\'P) by A42,A58,PARTIT1:def 6;
     for a being set st a in FQ9 holds t in a
     proof
       let a be set;
-      assume
-      a in FQ9;
+      assume a in FQ9;
       then consider b being set such that
 A60:  b in dom hQ9 and
 A61:  hQ9.b = a by FUNCT_1:def 5;
@@ -571,23 +519,20 @@ proof
   assume
 A1: G is independent;
   let P,Q be Subset of PARTITIONS Y;
-  assume
-  P c= G & Q c= G;
+  assume P c= G & Q c= G;
   then ERl('/\'P)*ERl('/\'Q) c= ERl('/\'Q)*ERl('/\'P) & ERl('/\'Q)*ERl('/\'P)
   c= ERl('/\'P)*ERl('/\'Q) by A1,Lm1;
   hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem Th17:
-  G is independent implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,
-  G)
+  G is independent implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,G)
 proof
   set A = G \ {P}, B = G \ {Q};
 A1: CompF(P,G) = '/\' A by BVFUNC_2:def 7;
 A2: A c= G & B c= G by XBOOLE_1:36;
 A3: CompF(Q,G) = '/\' B by BVFUNC_2:def 7;
-  assume
-  G is independent;
+  assume G is independent;
   then
 A4: ERl('/\'A)*ERl '/\'B = ERl ('/\'B)*ERl '/\'A by A2,Th16;
 A5: for y being Element of Y holds ( (for x being Element of Y st x in
@@ -605,16 +550,12 @@ A6:   for x being Element of Y st x in EqClass(y,CompF(Q,G)) holds
       ,CompF(Q,G)).x=TRUE
       proof
         let x be Element of Y;
-        assume
-        x in EqClass(y,CompF(P,G));
-        then
+        assume x in EqClass(y,CompF(P,G)); then
 A7:     [x,y] in ERl '/\' A by A1,Th5;
-        for z being Element of Y st z in EqClass(x,CompF(Q,G)) holds a.z=
-        TRUE
+        for z being Element of Y st z in EqClass(x,CompF(Q,G)) holds a.z= TRUE
         proof
           let z be Element of Y;
-          assume
-          z in EqClass(x,CompF(Q,G));
+          assume z in EqClass(x,CompF(Q,G));
           then [z,x] in ERl '/\' B by A3,Th5;
           then [z,y] in (ERl '/\' A)*ERl '/\' B by A4,A7,RELAT_1:def 8;
           then consider u being set such that
@@ -698,8 +639,7 @@ A7: for z being Element of Y st z in EqClass(x,CompF(P,G)) holds Ex(a,Q,G).
     consider y being Element of Y such that
 A8: y in EqClass(x,CompF(Q,G)) and
 A9: All(a,P,G).y=TRUE by A6,A4,BVFUNC_1:def 20;
-    assume
-    z in EqClass(x,CompF(P,G));
+    assume z in EqClass(x,CompF(P,G));
     then [z,x] in ERl '/\' A by A3,Th5;
     then
 A10: [x,z] in ERl '/\' A by EQREL_1:12;
@@ -723,3 +663,266 @@ A13: a.u=TRUE by A9,BVFUNC_1:def 19;
   hence thesis by A7,BVFUNC_1:def 19;
 end;
 
+begin :: Moved from OPOSET_1, 2010.03.11, A.T.
+
+reserve x,y,z for set,
+  S, X for non empty set,
+  R for Relation of X;
+
+notation
+  let A,B be set;
+  synonym [#](A,B) for [:A,B:];
+end;
+
+definition
+  let A,B be set;
+  func {}(A,B) -> Relation of A,B equals
+  {};
+  correctness by RELSET_1:25;
+  redefine func [#](A,B) -> Relation of A,B;
+  correctness
+  proof
+    [#](A,B) c= [:A,B:];
+    hence thesis;
+  end;
+end;
+
+registration let A,B be set;
+ cluster {}(A,B) -> empty;
+ coherence;
+end;
+
+theorem
+  field id X = X
+proof
+  dom id X = X & rng id X = X by RELAT_1:71;
+  then field id X = X \/ X by RELAT_1:def 6;
+  hence thesis;
+end;
+
+theorem
+  op1 = {[{},{}]}
+proof
+  {{}} = dom op1 by CARD_1:87,FUNCT_2:def 1;
+  then {} in dom op1 by TARSKI:def 1;
+  then [{},op1.{}] in op1 by FUNCT_1:def 4;
+  then
+A1: {[{},op1.{}]} c= op1 by ZFMISC_1:37;
+  rng op1 = {op1.{}} by CARD_1:87,FUNCT_2:62;
+  then
+A2: op1.{} = {} by CARD_1:87,ZFMISC_1:24;
+  op1 c= [:{{}},{{}}:] by CARD_1:87;
+  then op1 c= {[{},{}]} by ZFMISC_1:35;
+  hence thesis by A2,A1,XBOOLE_0:def 10;
+end;
+
+theorem
+  for A,B being set holds field {}(A,B) = {} by RELAT_1:63;
+
+theorem
+  R is_reflexive_in X implies R is reflexive & field R = X
+proof
+  assume
+A1: R is_reflexive_in X;
+  then X = field R by Th9;
+  hence thesis by A1,RELAT_2:def 9;
+end;
+
+theorem
+  R is_symmetric_in X implies R is symmetric
+proof
+  assume
+A1: R is_symmetric_in X;
+  let x,y be set;
+  field R c= X \/ X by RELSET_1:19;
+  hence thesis by A1,RELAT_2:def 3;
+end;
+
+theorem
+  R is symmetric implies R is_symmetric_in S
+proof
+  assume R is symmetric;
+  then
+A1: R is_symmetric_in field R by RELAT_2:def 11;
+  let x,y be set;
+  assume x in S & y in S;
+  assume
+A2: [x,y] in R;
+  then x in field R & y in field R by RELAT_1:30;
+  hence thesis by A1,A2,RELAT_2:def 3;
+end;
+
+theorem
+  R is antisymmetric implies R is_antisymmetric_in S
+proof
+  assume R is antisymmetric; then
+A1: R is_antisymmetric_in field R by RELAT_2:def 12;
+  let x,y be set;
+  assume x in S & y in S;
+  assume
+A2: [x,y] in R;
+  then x in field R & y in field R by RELAT_1:30;
+  hence thesis by A1,A2,RELAT_2:def 4;
+end;
+
+theorem
+  R is_antisymmetric_in X implies R is antisymmetric
+proof
+  assume
+A1: R is_antisymmetric_in X;
+  let x,y be set;
+  field R c= X \/ X by RELSET_1:19;
+  hence thesis by A1,RELAT_2:def 4;
+end;
+
+theorem
+  R is transitive implies R is_transitive_in S
+proof
+  assume R is transitive; then
+A1: R is_transitive_in field R by RELAT_2:def 16;
+  let x,y,z be set;
+  assume x in S & y in S & z in S;
+  assume
+A2: [x,y] in R; then
+A3: x in field R by RELAT_1:30;
+  assume
+A4: [y,z] in R;
+  then y in field R & z in field R by RELAT_1:30;
+  hence thesis by A1,A2,A4,A3,RELAT_2:def 8;
+end;
+
+theorem
+  R is_transitive_in X implies R is transitive
+proof
+  assume
+A1: R is_transitive_in X;
+  let x,y,z be set;
+  field R c= X \/ X by RELSET_1:19;
+  hence thesis by A1,RELAT_2:def 8;
+end;
+
+theorem
+  R is asymmetric implies R is_asymmetric_in S
+proof
+  assume R is asymmetric; then
+A1: R is_asymmetric_in field R by RELAT_2:def 13;
+  let x,y be set;
+  assume x in S & y in S;
+  assume
+A2: [x,y] in R;
+  then x in field R & y in field R by RELAT_1:30;
+  hence thesis by A1,A2,RELAT_2:def 5;
+end;
+
+theorem
+  R is_asymmetric_in X implies R is asymmetric
+proof
+  assume
+A1: R is_asymmetric_in X;
+  let x,y be set;
+  field R c= X \/ X by RELSET_1:19;
+  hence thesis by A1,RELAT_2:def 5;
+end;
+
+theorem
+  R is irreflexive & field R c= S implies R is_irreflexive_in S
+proof
+  assume that
+A1: R is irreflexive and
+A2: field R c= S;
+  let x be set;
+  S = field R \/ ( S \ (field R) ) by A2,XBOOLE_1:45;
+  then
+A3: x in S implies x in field R or x in S \ (field R) by
+  XBOOLE_0:def 3;
+A4: x in S \ (field R) implies not [x,x] in R
+  proof
+    assume x in S \ (field R);
+    then x in S \ (dom R \/ rng R) by RELAT_1:def 6;
+    then x in (S \ dom R) /\ (S \ rng R) by XBOOLE_1:53;
+    then x in (S \ rng R) by XBOOLE_0:def 4;
+    then not x in rng R by XBOOLE_0:def 5;
+    hence thesis by RELAT_1:def 5;
+  end;
+  R is_irreflexive_in field R by A1,RELAT_2:def 10;
+  hence thesis by A3,A4,RELAT_2:def 2;
+end;
+
+theorem
+  R is_irreflexive_in X implies R is irreflexive
+proof
+A1: field R c= X \/ X by RELSET_1:19;
+  assume R is_irreflexive_in X;
+  then for x being set holds x in field R implies not [x,x] in R by A1,
+  RELAT_2:def 2;
+  then R is_irreflexive_in field R by RELAT_2:def 2;
+  hence thesis by RELAT_2:def 10;
+end;
+ 
+:: Some existence conditions on non-empty relations
+
+registration
+  cluster empty -> irreflexive asymmetric transitive Relation;
+  coherence
+  proof let R be Relation;
+    assume
+X:  R is empty;
+    hence for x holds x in field R implies not [x,x] in R;
+    thus for x,y holds x in field R & y in field R & [x,y] in R implies
+  not [y,x] in R by X;
+    thus for x,y,z holds x in field R & y in field R & z in field R &
+     [x,y] in R & [y,z] in R implies [x,z] in R by X;
+  end;
+end;
+ 
+:: Double negation property of the internal Complement
+
+definition
+  let f be Function;
+  attr f is involutive means
+  :Def3:
+  for x being set st x in dom f holds f.(f.x) = x;
+end;
+
+definition
+  let X;
+  let f be UnOp of X;
+  redefine attr f is involutive means
+  for x being Element of X holds f.(f.x) = x;
+ compatibility
+  proof
+  dom f = X by PARTFUN1:def 4;
+   hence f is involutive implies for x being Element of X holds f.(f.x) = x
+                      by Def3;
+   assume
+Z:   for x being Element of X holds f.(f.x) = x;
+   let x be set;
+   assume x in dom f;
+   hence f.(f.x) = x by Z;
+  end;
+end;
+
+registration
+  cluster op1 -> involutive Function;
+  coherence
+ proof
+ op1 is involutive proof let a be Element of 1;
+  a = {} by CARD_1:87,TARSKI:def 1;
+  hence op1.(op1.a) = a by CARD_1:87,FUNCT_2:65;
+  end;
+ hence thesis;
+end;
+end;
+
+registration let X;
+  cluster id X -> involutive;
+  coherence
+proof
+  set f = id X;
+  let a be set;
+  assume a in dom f;
+  then a in X by RELAT_1:71;
+  then f.a = a by FUNCT_1:34;
+  hence thesis;
+end;
+end;

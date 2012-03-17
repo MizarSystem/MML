@@ -11,13 +11,12 @@ environ
       ORDINAL2, RCOMP_1, PSCOMP_1, PRE_TOPC, TREES_1, TARSKI, ARYTM_3,
       PARTFUN1, COMPLEX1, ARYTM_1, CARD_1, SPPOL_1, JORDAN1E, JORDAN9,
       FINSEQ_6, FINSEQ_5, FINSEQ_4, JORDAN6, TOPREAL2, RELAT_2, JORDAN8,
-      ORDINAL4, FUNCT_1, NAT_1, RFINSEQ, JORDAN1A;
+      ORDINAL4, FUNCT_1, NAT_1, RFINSEQ, JORDAN1A, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
       NAT_D, COMPLEX1, FUNCT_1, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQ_4,
-      FINSEQ_5, FINSEQ_6, MATRIX_1, STRUCT_0, PRE_TOPC, COMPTS_1, CONNSP_1,
-      RFINSEQ, RLTOPSP1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD1, SPPOL_1,
-      MEASURE6, PSCOMP_1,
-      JORDAN6, JORDAN8, JORDAN9, JORDAN1A, JORDAN1E;
+      FINSEQ_5, FINSEQ_6, MATRIX_1, SEQ_4, STRUCT_0, PRE_TOPC, COMPTS_1,
+      CONNSP_1, RFINSEQ, RLTOPSP1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD1,
+      SPPOL_1, PSCOMP_1, JORDAN6, JORDAN8, JORDAN9, JORDAN1A, JORDAN1E;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, NEWTON, RFINSEQ,
       BINARITH, FINSEQ_5, CONNSP_1, REALSET2, MEASURE6, JORDAN5C, JORDAN6,
       JORDAN8, GOBRD13, JORDAN9, JORDAN1A, JORDAN1E, NAT_D, SEQ_4, RELSET_1,
@@ -36,15 +35,14 @@ environ
 
 begin
 
-reserve i,j,k,m,n,l for Element of NAT,
-  f for FinSequence of the carrier of
-  TOP-REAL 2,
+reserve i,j,k,m,n for Element of NAT,
+  f for FinSequence of the carrier of TOP-REAL 2,
   G for Go-board;
 
 theorem Th1:
   f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f & [i,j] in
 Indices G & [i,k] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(i,
-  n)`2 = inf(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
+  n)`2 = lower_bound(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
 proof
   set X = LSeg(G*(i,j),G*(i,k)) /\ L~f;
   assume that
@@ -55,8 +53,8 @@ A4: [i,k] in Indices G and
 A5: j <= k;
 A6: 1 <= i & i <= len G by A3,MATRIX_1:39;
   ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2
+  by XBOOLE_0:def 4;
   consider p being set such that
 A7: p in S-most X1 by XBOOLE_0:def 1;
   reconsider p as Point of TOP-REAL 2 by A7;
@@ -65,11 +63,12 @@ A8: p in X by A7,XBOOLE_0:def 4;
 A9: p in LSeg(G*(i,j),G*(i,k)) by XBOOLE_0:def 4;
   proj2.:X = (proj2|X).:X by RELAT_1:162;
   then
-A10: inf(proj2.:X) = inf((proj2|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: lower_bound(proj2.:X) = lower_bound((proj2|X).: [#]((TOP-REAL 2)|X))
+by PRE_TOPC:def 10
     .= S-bound X;
 A11: 1 <= k by A4,MATRIX_1:39;
 A12: p`2 = (S-min X)`2 by A7,PSCOMP_1:118
-    .= inf(proj2.:X) by A10,EUCLID:56;
+    .= lower_bound(proj2.:X) by A10,EUCLID:56;
 A13: 1 <= i & i <= len G by A3,MATRIX_1:39;
 A14: 1 <= j by A3,MATRIX_1:39;
 A15: k <= width G by A4,MATRIX_1:39;
@@ -323,7 +322,7 @@ end;
 theorem
   f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f & [i,j] in
 Indices G & [i,k] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(i,
-  n)`2 = sup(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
+  n)`2 = upper_bound(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
 proof
   set X = LSeg(G*(i,j),G*(i,k)) /\ L~f;
   assume that
@@ -334,8 +333,8 @@ A4: [i,k] in Indices G and
 A5: j <= k;
 A6: 1 <= i & i <= len G by A3,MATRIX_1:39;
   ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2
+  by XBOOLE_0:def 4;
   consider p being set such that
 A7: p in N-most X1 by XBOOLE_0:def 1;
   reconsider p as Point of TOP-REAL 2 by A7;
@@ -356,7 +355,8 @@ A14: i1+1 <= len f by A11;
 A15: p in LSeg(f/.i1,f/.(i1+1)) by A10,A12,A13,A14,TOPREAL1:def 5;
   proj2.:X = (proj2|X).:X by RELAT_1:162;
   then
-A16: sup(proj2.:X) = sup((proj2|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A16: upper_bound(proj2.:X) = upper_bound((proj2|X).: [#]((TOP-REAL 2)|X))
+by PRE_TOPC:def 10
     .= N-bound X;
 A17: 1 <= k by A4,MATRIX_1:39;
 A18: 1 <= j by A3,MATRIX_1:39;
@@ -370,7 +370,7 @@ A21: f/.(i1+1) = G*(io,jo) by A1,GOBOARD1:def 11;
 A22: 1 <= io & io <= len G by A20,MATRIX_1:39;
 A23: 1 <= jo by A20,MATRIX_1:39;
 A24: p`2 = (N-min X)`2 by A7,PSCOMP_1:98
-    .= sup(proj2.:X) by A16,EUCLID:56;
+    .= upper_bound(proj2.:X) by A16,EUCLID:56;
 A25: 1 <= i & i <= len G by A3,MATRIX_1:39;
 A26: k <= width G by A4,MATRIX_1:39;
   then
@@ -602,7 +602,7 @@ end;
 theorem
   f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f & [j,i] in
 Indices G & [k,i] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(n,
-  i)`1 = inf(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
+  i)`1 = lower_bound(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
 proof
   set X = LSeg(G*(j,i),G*(k,i)) /\ L~f;
   assume that
@@ -613,8 +613,8 @@ A4: [k,i] in Indices G and
 A5: j <= k;
 A6: 1 <= j by A3,MATRIX_1:39;
   ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2
+  by XBOOLE_0:def 4;
   consider p being set such that
 A7: p in W-most X1 by XBOOLE_0:def 1;
   reconsider p as Point of TOP-REAL 2 by A7;
@@ -623,11 +623,12 @@ A8: p in X by A7,XBOOLE_0:def 4;
 A9: p in LSeg(G*(j,i),G*(k,i)) by XBOOLE_0:def 4;
   proj1.:X = (proj1|X).:X by RELAT_1:162;
   then
-A10: inf(proj1.:X) = inf((proj1|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: lower_bound(proj1.:X) = lower_bound((proj1|X).: [#]((TOP-REAL 2)|X))
+by PRE_TOPC:def 10
     .= W-bound X;
 A11: 1 <= k & 1 <= i by A4,MATRIX_1:39;
 A12: p`1 = (W-min X)`1 by A7,PSCOMP_1:88
-    .= inf(proj1.:X) by A10,EUCLID:56;
+    .= lower_bound(proj1.:X) by A10,EUCLID:56;
 A13: i <= width G by A3,MATRIX_1:39;
 A14: 1 <= i & i <= width G by A3,MATRIX_1:39;
 A15: k <= len G by A4,MATRIX_1:39;
@@ -881,7 +882,7 @@ end;
 theorem
   f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f & [j,i] in
 Indices G & [k,i] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(n,
-  i)`1 = sup(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
+  i)`1 = upper_bound(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
 proof
   set X = LSeg(G*(j,i),G*(k,i)) /\ L~f;
   assume that
@@ -892,8 +893,8 @@ A4: [k,i] in Indices G and
 A5: j <= k;
 A6: 1 <= j by A3,MATRIX_1:39;
   ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2
+  by XBOOLE_0:def 4;
   consider p being set such that
 A7: p in E-most X1 by XBOOLE_0:def 1;
   reconsider p as Point of TOP-REAL 2 by A7;
@@ -902,11 +903,12 @@ A8: p in X by A7,XBOOLE_0:def 4;
 A9: p in LSeg(G*(j,i),G*(k,i)) by XBOOLE_0:def 4;
   proj1.:X = (proj1|X).:X by RELAT_1:162;
   then
-A10: sup(proj1.:X) = sup((proj1|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: upper_bound(proj1.:X) = upper_bound((proj1|X).: [#]((TOP-REAL 2)|X))
+by PRE_TOPC:def 10
     .= E-bound X;
 A11: 1 <= i & i <= width G by A3,MATRIX_1:39;
 A12: p`1 = (E-min X)`1 by A7,PSCOMP_1:108
-    .= sup(proj1.:X) by A10,EUCLID:56;
+    .= upper_bound(proj1.:X) by A10,EUCLID:56;
 A13: 1 <= k by A4,MATRIX_1:39;
 A14: 1 <= i & i <= width G by A3,MATRIX_1:39;
 A15: k <= len G by A4,MATRIX_1:39;
@@ -1248,8 +1250,7 @@ end;
 reserve C for compact non vertical non horizontal non empty
   being_simple_closed_curve Subset of TOP-REAL 2,
   p for Point of TOP-REAL 2,
-  i1,
-  j1,i2,j2 for Element of NAT;
+  i1, j1,i2,j2 for Element of NAT;
 
 theorem Th10:
   for C being connected compact non vertical non horizontal Subset
@@ -1413,8 +1414,7 @@ FINSEQ_6:96,SPRECT_2:47;
 A17: (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <= len
     Rotate( Cage(C,n),W-min L~Cage(C,n)) by FINSEQ_4:31;
     now
-      assume
-      (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) = len
+      assume (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) = len
       (Rotate(Cage(C,n),W-min L~Cage(C,n)));
       then
       (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) = len Cage
@@ -1471,14 +1471,15 @@ A18: E1=Cage(C,n)/.(en+1) by A9,A16,A12,REVROT_1:13;
 end;
 
 theorem
-  p`1 = (W-bound C + E-bound C)/2 & p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(
+  p`1 = (W-bound C + E-bound C)/2 & p`2 = lower_bound(proj2.:(LSeg(Gauge(C,1)*(
   Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\
 Upper_Arc L~Cage(C,i+1))) implies ex j st 1 <= j & j <= width Gauge(C,i+1) & p
   = Gauge(C,i+1)*(Center Gauge(C,i+1),j)
 proof
   assume that
 A1: p`1 = (W-bound C + E-bound C)/2 and
-A2: p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*
+A2: p`2 = lower_bound(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+Gauge(C,1)*
   (Center Gauge(C,1),width Gauge(C,1))) /\ Upper_Arc L~Cage(C,i+1)));
   per cases by Th9;
   suppose
@@ -1553,7 +1554,8 @@ XBOOLE_0:def 10;
     LSeg(G*(l,1),G*(l,k)) meets L~f by A3,A6,A7,A5,JORDAN1B:13,32;
     then consider n such that
 A24: 1 <= n & n <= k and
-A25: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A7,A9,Th1,Th10;
+A25: G*(l,n)`2 = lower_bound(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f))
+by A7,A9,Th1,Th10;
     take n;
     thus 1 <= n & n <= width Gauge(C,i+1) by A24;
     len Gauge(C,1) >= 4 by JORDAN8:13;
@@ -1635,7 +1637,8 @@ XBOOLE_0:def 10;
     LSeg(G*(l,1),G*(l,k)) meets L~f by A27,A30,A31,A29,JORDAN1B:13,32;
     then consider n such that
 A48: 1 <= n & n <= k and
-A49: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A31,A33,Th1,Th12
+A49: G*(l,n)`2 = lower_bound(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f))
+by A31,A33,Th1,Th12
 ;
     take n;
     thus 1 <= n & n <= width Gauge(C,i+1) by A48;
@@ -1647,4 +1650,3 @@ A50: 1 <= len Gauge(C,1) by XXREAL_0:2;
     hence thesis by A2,A27,A49,A47,TOPREAL3:11;
   end;
 end;
-

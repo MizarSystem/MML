@@ -44,8 +44,6 @@
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="YELLOW_3"/>
-<ArticleID name="WAYBEL_2"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
@@ -66,7 +64,7 @@
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
-<Adjective nr="209"/>
+<Adjective nr="206"/>
 </Cluster>
 </RCluster>
 <RCluster aid="YELLOW_9" nr="2">
@@ -186,7 +184,7 @@
 <Cluster>
 <Adjective nr="55"/>
 <Adjective nr="103"/>
-<Adjective nr="209"/>
+<Adjective nr="206"/>
 </Cluster>
 </RCluster>
 <RCluster aid="YELLOW_9" nr="5">
@@ -220,8 +218,8 @@
 <Adjective nr="167"/>
 <Adjective nr="196"/>
 <Adjective nr="197"/>
-<Adjective nr="209"/>
-<Adjective nr="213"/>
+<Adjective nr="206"/>
+<Adjective nr="210"/>
 </Cluster>
 </RCluster>
 <RCluster aid="YELLOW_9" nr="6">
@@ -254,7 +252,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="405">
+<Func kind="K" nr="386">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -293,7 +291,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="406">
+<Func kind="K" nr="387">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -324,7 +322,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="407">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -355,7 +353,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="406">
+<Func kind="K" nr="387">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -386,7 +384,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="407">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -453,7 +451,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="406">
+<Func kind="K" nr="387">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -487,7 +485,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="396">
+<Func kind="K" nr="377">
 <Func kind="K" nr="349">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -525,7 +523,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="407">
+<Func kind="K" nr="388">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -637,7 +635,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="213"/>
+<Adjective nr="210"/>
 </Cluster>
 <Typ kind="M" nr="36">
 <Cluster/>

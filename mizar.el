@@ -179,6 +179,13 @@ This is used in the `mizar-it' function."
 :type 'string
 :group 'mizar-running)
 
+(defcustom mizar-parallel-options " -j2 -e1 "
+"*Options passed to the mizp.pl Mizar parallizer.
+This is used in the `mizar-it-parallel' function.
+Run mizp.pl --man to get overview of the options."
+:type 'string
+:group 'mizar-running)
+
 (defcustom mizfiles 
 (file-name-as-directory  (substitute-in-file-name "$MIZFILES"))
 "The directory where MML is installed."
@@ -374,7 +381,7 @@ MoMM should be installed for this."
 :group 'mizar-faces)
 
 (defcustom mizar-formula-keywords
-(list "for" "ex" "not" "&" "or" "implies" "iff" "st" "holds" "being")
+(list "for" "ex" "not" "&" "or" "implies" "iff" "st" "holds" "being" "does")
 "*Keywords for logical symbols in Mizar formulas."
 :type '(repeat string)
 :group 'mizar-faces)
@@ -479,6 +486,7 @@ common mizar editing functions."
     nil
   (setq mizar-mode-map (make-sparse-keymap))
   (define-key mizar-mode-map  "\C-c\C-m" 'mizar-it)
+  (define-key mizar-mode-map  "\C-cj" 'mizar-it-parallel)
   (define-key mizar-mode-map  "\C-cc" 'mizar-compile)
   (define-key mizar-mode-map  "\C-c\C-n" 'mizar-next-error)
   (define-key mizar-mode-map  "\C-c\C-p" 'mizar-previous-error)
@@ -834,6 +842,10 @@ Return list of the rest unparsed, with added car being the parsed first."
    (let ((cont (get-first-formula (cdr fla))))
      (cons (list 'not (car cont)) (cdr cont))))
 
+   ((and (eq 'does beg) (eq 'not (cadr fla)))
+   (let ((cont (get-first-formula (cddr fla))))
+     (cons (list 'does 'not (car cont)) (cdr cont))))
+
    ((eq 'ex beg)
    (let ((tmp (parse-formula (cdddr fla))))
      (cons (list 'ex (cadr fla) 'st (car tmp)) (cdr tmp))))
@@ -932,6 +944,9 @@ See `mizar-insert-skeleton' for more."
        
        ((eq 'not beg) 
 	(concat "not " (mizar-pp-parsed-fla (cadr fla))))
+
+       ((and (eq 'does beg) (eq 'not (cadr fla))) 
+	(concat "does not " (mizar-pp-parsed-fla (caddr fla))))
        
        ((memq beg mizar-logical-constants) (symbol-name beg))
        
@@ -5008,7 +5023,10 @@ If FORCEACC, run makeenv with the -a option."
 		   (save-excursion
 		     (message (concat "Running " util " on " fname " ..."))
 		     (if (get-buffer "*mizar-output*")
-			 (kill-buffer "*mizar-output*"))
+			 (progn 
+			   (if (get-buffer-window "*mizar-output*")
+			       (delete-window (get-buffer-window "*mizar-output*")))
+			   (kill-buffer "*mizar-output*")))
 		     (let* ((mizout (get-buffer-create "*mizar-output*"))
 			    (excode (mizar-accom makeenv forceacc mizout name)))
 		       (if (and (numberp excode) (= 0 excode))
@@ -5041,6 +5059,11 @@ If FORCEACC, run makeenv with the -a option."
 		   (mizar-show-errors)))
 	       )))))))
 
+(defun mizar-it-parallel ()
+"Call the mizp.pl parallel verifier on the article.
+Only usable on systems with Perl and libxml installed."
+  (interactive)
+(mizar-it "mizp.pl" nil nil nil nil mizar-parallel-options))
 
 (defun mizar-irrths ()
 "Call Irrelevant Theorems & Schemes Detector on the article."
@@ -5538,8 +5561,8 @@ file suffix to use."
 :type 'string
 :group 'mizar-proof-advisor)
 
-
-(defun mizar-post-to-ar4mizar (&optional suffix)
+;; this sucks - the article is encoded as cgi argument of http-get
+(defun mizar-post-to-ar4mizar-old (&optional suffix)
 "Browse in a HTML browser the article or an environment file.
 A XSLT-capable browser like Mozilla or IE has to be default in
 Emacs - you may need to customize the variable
@@ -5553,170 +5576,125 @@ file suffix to use."
 		 (buffer-file-name)))))
       (browse-url (concat ar4mizar-server ar4mizar-cgi "?Formula=" (query-handle-chars-cgi (buffer-string)) "&Name=" aname))))
 
-(defun mizar-post-to-ar4mizar-new ()
-"Sent the current Mizar buffer to the `ar4mizar-server' for processing"
-  (interactive)
-;  (url-auth-user-prompt  ar4mizar-server "")
-  (http-post-simple  
-   (concat ar4mizar-server ar4mizar-cgi)
-   (list 
-    (cons "ProblemSource" "Formula")
-    (cons "Formula" (buffer-string)))))
+;; borrowed from somewhere - http-post code
+;; the problem is to pass things to a browser
+(defun my-url-http-post (url args)
+      "Send ARGS to URL as a POST request."
+      (let ((url-request-method "POST")
+            (url-request-extra-headers
+             '(("Content-Type" . "application/x-www-form-urlencoded")))
+            (url-request-data
+             (mapconcat (lambda (arg)
+                          (concat (url-hexify-string (car arg))
+                                  "="
+                                  (url-hexify-string (cdr arg))))
+                        args
+                        "&")))
+        ;; if you want, replace `my-switch-to-url-buffer' with `my-kill-url-buffer'
+        (url-retrieve url 'my-switch-to-url-buffer)))
+
+    (defun my-kill-url-buffer (status)
+      "Kill the buffer returned by `url-retrieve'."
+      (kill-buffer (current-buffer)))
+
+    (defun my-switch-to-url-buffer (status)
+      "Switch to the buffer returned by `url-retreive'.
+    The buffer contains the raw HTTP response sent by the server."
+      (switch-to-buffer (current-buffer)))
 
 
-;;;;;;;;;;;;;;;;;;;;;; Borrowed from http-post-simple.el (not to have the file as dependency)
+;; this is good, but only for getting errors or other text info
+;; it does not launch browser
+(defun mizar-post-to-ar4mizar-new1 (&optional suffix)
+"Browse in a HTML browser the article or an environment file.
+A XSLT-capable browser like Mozilla or IE has to be default in
+Emacs - you may need to customize the variable
+`browse-url-browser-function' for this, and possibly (if 
+the previous is set to `browse-url-generic') also the variable 
+`browse-url-generic-program'.  Argument SUFFIX is a
+file suffix to use."
+(interactive)
+(let* ((aname (file-name-nondirectory
+		(file-name-sans-extension
+		 (buffer-file-name)))))
+(my-url-http-post (concat ar4mizar-server ar4mizar-cgi) `(("Formula" . ,(buffer-substring-no-properties (point-min) (point-max))) ("Name" . ,aname)))))
 
+;; the current version - creates a local html file with form
+;; that gts submitted on-load
+;; TODO: use mml.ini as additional argument selecting the library version
+(defun mizar-post-to-ar4mizar (&optional htmlonly)
+"Send the contents of the buffers to the MizAR service.
+With prefix argument, only htmlize, do not crete atp problems and links.
+Browse result in a HTML browser.
+A browser like Mozilla or IE has to be default in
+Emacs - you may need to customize the variable
+`browse-url-browser-function' for this, and possibly (if 
+the previous is set to `browse-url-generic') also the variable 
+`browse-url-generic-program'."
+(interactive "*P")
+(let* ((fname (buffer-file-name))
+       (aname (file-name-nondirectory
+		(file-name-sans-extension
+		 fname)))
+       (requestfile (concat fname ".html"))
+       (contents (htmlize-protect-string (buffer-substring-no-properties (point-min) (point-max))))
+       (htmlcontents (concat 
+		      mizar-ar4mizar-html-start contents 
+		      "</textarea><INPUT TYPE=\"hidden\" NAME=\"Name\" VALUE=\"" aname 
+		      "\"> <INPUT TYPE=\"submit\" VALUE=\"Send\">"
+		      (if htmlonly "" "<INPUT TYPE=\"hidden\" NAME=\"GenATP\" VALUE=\"1\">") 
+		      "</FORM> </body> </html>" 
+		      )))
+  (with-temp-buffer
+    (insert htmlcontents)
+    (write-region (point-min) (point-max) requestfile))
+(browse-url (concat "file:///" requestfile))))
 
-(defun http-post-simple (url fields &optional charset)
-  "Send FIELDS to URL as an HTTP POST request, returning the response
-and response headers.
-FIELDS is an alist, eg ((field-name . \"value\")); all values
-need to be strings, and they are encoded using CHARSET,
-which defaults to 'utf-8"
-  (or (and (require 'url nil t) (require 'url-http  nil t))
-      (error "Your Emacs lacks the url and url-http libraries, please upgrade"))
-  (http-post-simple-internal
-   url
-   (http-post-encode-fields fields charset)
-   charset
-   `(("Content-Type"
-      .
-      ,(http-post-content-type
-        "application/x-www-form-urlencoded"
-        charset)))))
+;; stolen from htmlize.el
+(defvar htmlize-basic-character-table
+  ;; Map characters in the 0-127 range to either one-character strings
+  ;; or to numeric entities.
+  (let ((table (make-vector 128 ?\0)))
+    ;; Map characters in the 32-126 range to themselves, others to
+    ;; &#CODE entities;
+    (dotimes (i 128)
+      (setf (aref table i) (if (and (>= i 32) (<= i 126))
+			       (char-to-string i)
+			     (format "&#%d;" i))))
+    ;; Set exceptions manually.
+    (setf
+     ;; Don't escape newline, carriage return, and TAB.
+     (aref table ?\n) "\n"
+     (aref table ?\r) "\r"
+     (aref table ?\t) "\t"
+     ;; Escape &, <, and >.
+     (aref table ?&) "&amp;"
+     (aref table ?<) "&lt;"
+     (aref table ?>) "&gt;"
+     ;; Not escaping '"' buys us a measurable speedup.  It's only
+     ;; necessary to quote it for strings used in attribute values,
+     ;; which htmlize doesn't do.
+     ;(aref table ?\") "&quot;"
+     )
+    table))
 
-(defun http-post-simple-multipart (url fields files &optional charset)
-  "Send FIELDS and FILES to URL as a multipart HTTP POST, returning the
-response and response headers.
-FIELDS is an alist, as for `http-post-simple', FILES is an a list of
-\(fieldname \"filename\" \"file MIME type\" \"file data\")*"
-(let ((boundary (http-post-multipart-boundary)))
-  (http-post-simple-internal
-   url
-   (http-post-encode-multipart-data fields files charset)
-   charset
-   `(("Content-Type"
-      .
-      ,(http-post-content-type
-        (format "multipart/form-data; boundary=%S" boundary)
-        charset))))))
+(defun htmlize-protect-string (string)
+  (mapconcat (lambda (char) (aref htmlize-basic-character-table char)) string ""))
 
-(defun http-post-content-type (content-type &optional charset)
-  (if charset
-      (format "%s; charset=%s" content-type (http-post-charset-name charset))
-      content-type))
-
-(defun http-post-charset-name (charset)
-  (symbol-name charset))
-
-;; based on `http-url-encode' from the from http-get package
-;; http://savannah.nongnu.org/projects/http-emacs
-(defun http-post-encode-string (str content-type)
-  "URL encode STR using CONTENT-TYPE as the coding system."
-  (apply 'concat
-	 (mapcar (lambda (c)
-		   (if (or (and (>= c ?a) (<= c ?z))
-			   (and (>= c ?A) (<= c ?Z))
-			   (and (>= c ?0) (<= c ?9)))
-		       (string c)
-		       (format "%%%02x" c)))
-		 (encode-coding-string str content-type))))
-
-
-(defun http-post-encode-fields (fields &optional charset)
-  "Encode FIELDS using `http-post-encode-string', where
-FIELDS is an alist of \(
-	\(field-name-as-symbol . \"field value as string\"\) |
-	\(field-name \"value1\" \"value2\" ...\)
-	\)*
-
-CHARSET defaults to 'utf-8"
-  (let ((charset (or charset 'utf-8)))
-    (mapconcat #'identity
-	       (mapcar '(lambda (field)
-			 (concat (symbol-name (car field))
-			  "="
-			  (http-post-encode-string (cdr field) charset)))
-		       (mapcan '(lambda (field)
-				 (if (atom (cdr field)) (list field)
-				     ;; unpack the list
-				     (mapcar '(lambda (value)
-					       `(,(car field) . ,value))
-					     (cdr field))))
-			       fields))
-	       "&")))
-
-
-(defun http-post-simple-internal (url data charset extra-headers)
-  (let ((url-request-method        "POST")
-	(url-request-data          data)
-	(url-request-extra-headers extra-headers)
-        (url-mime-charset-string   (http-post-charset-name charset)))
-    (let (header
-	  data
-	  status)
-      (with-current-buffer
-	  (url-retrieve-synchronously url)
-	;; status
-	(setq status url-http-response-status)
-	;; return the header and the data separately
-	(goto-char (point-min))
-	(if (search-forward-regexp "^$" nil t)
-	    (setq header (buffer-substring (point-min) (point))
-		  data   (buffer-substring (1+ (point)) (point-max)))
-	    ;; unexpected situation, return the whole buffer
-	    (setq data (buffer-string))))
-      (values data header status))))
-
-(defun http-post-multipart-boundary ()
-  "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-
-(defun http-post-bound-field (&rest parts)
-  (let ((boundary (format "--%s" (http-post-multipart-boundary))))
-    (http-post-join-lines  boundary parts)))
-
-(defun http-post-encode-multipart-data (fields files charset)
-  "Return FIELDS and FILES encoded for use as the data for a multipart HTTP POST request"
-  (http-post-join-lines
-   (mapcar '(lambda (field)
-	     (http-post-bound-field
-	      (format "Content-Disposition: form-data; name=%S" (symbol-name (car field)))
-	      ""
-	      (cdr field)))
-	   fields)
-   (mapcan '(lambda (file)
-	     (destructuring-bind (fieldname filename mime-type data) file
-	       (http-post-bound-field
-		(format "Content-Disposition: form-data; name=%S; filename=%S" fieldname filename)
-		(format "Content-type: %s" (http-post-content-type mime-type charset))
-		""
-		data)))
-	   files)
-   (format "--%s--" (http-post-multipart-boundary))))
-
-(defun http-post-join-lines (&rest bits)
-  (let ((sep "\r\n"))
-    (mapconcat (lambda (bit)
-		 (if (listp bit)
-		     (apply 'http-post-join-lines bit)
-		     bit))
-	       bits sep)))
-
-(defun http-post-finesse-code-100 ()
-  "Transforms response code 100 into 200, to avoid errors when the
-server sends code 100 in response to a POST request."
-  (defadvice url-http-parse-response (after url-http-parse-response-100 activate)
-    "Turns any HTTP 100 response code to 200, to avoid getting an error."
-    (declare (special url-http-response-status
-                      url-request-method))
-    (when (and (= 100               url-http-response-status)
-               (string-equal "POST" url-request-method)
-               (string-equal "1.1"  url-http-version))
-      (setf url-http-response-status 200))))
-
-
-;;;;;;;;;;;;;;;;;;;;;  End of http-post-simple.el
-
+(defvar  mizar-ar4mizar-html-start "
+<html> <head> <title>Automated Reasoning for Mizar</title>
+<script language=\"JavaScript\">
+function myfunc () {
+var frm = document.getElementById(\"myform\");
+frm.submit();
+}
+window.onload = myfunc;
+</script>
+  </head> <body>
+        <FORM ID=\"myform\" METHOD=\"POST\"  ACTION=\"http://mws.cs.ru.nl/~mptp/cgi-bin/MizAR.cgi\" enctype=\"multipart/form-data\">
+            <INPUT TYPE=\"hidden\" NAME=\"ProblemSource\" VALUE=\"Formula\">
+		<textarea name=\"Formula\" tabindex=\"3\"  rows=\"8\" cols=\"80\" id=\"FORMULAEProblemTextBox\">"
+)
 
 
 ;; Menu for the mizar editing buffers

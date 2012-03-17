@@ -7,15 +7,15 @@
 
 environ
 
- vocabularies XBOOLE_0, RELAT_1, SUBSET_1, ZFMISC_1, NET_1, MCART_1, ARYTM_3,
-      TARSKI, PETRI;
+ vocabularies XBOOLE_0, RELAT_1, SUBSET_1, ZFMISC_1, MCART_1, ARYTM_3, TARSKI,
+      PETRI, STRUCT_0, PNPROC_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, MCART_1,
-      DOMAIN_1;
- constructors RELSET_1, DOMAIN_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1;
+      DOMAIN_1, PARTIT_2, STRUCT_0;
+ constructors RELSET_1, DOMAIN_1, STRUCT_0, PARTIT_2;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, PARTIT_2, RELAT_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
- theorems RELSET_1, SUBSET_1, MCART_1, TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, STRUCT_0, PARTIT_2;
+ theorems SUBSET_1, MCART_1, TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0;
  schemes DOMAIN_1;
 
 begin
@@ -36,21 +36,69 @@ end;
 :: Place/Transition Net Structure
 
 definition
-  struct PT_net_Str (# Places, Transitions -> non empty set, S-T_Arcs -> non
-empty Relation of the Places, the Transitions, T-S_Arcs -> non empty Relation
-    of the Transitions, the Places #);
+  struct(2-sorted) PT_net_Str (# carrier, carrier' -> set,
+       S-T_Arcs -> Relation of the carrier, the carrier',
+       T-S_Arcs -> Relation of the carrier', the carrier #);
 end;
 
-reserve PTN for PT_net_Str;
+definition let N be PT_net_Str;
+ attr N is with_S-T_arc means
+:Def1: the S-T_Arcs of N is non empty;
+ attr N is with_T-S_arc means
+:Def2: the T-S_Arcs of N is non empty;
+end;
+
+definition
+ func TrivialPetriNet -> PT_net_Str equals
+  PT_net_Str (# {{}}, {{}}, [#]({{}},{{}}), [#]({{}},{{}}) #);
+ coherence;
+end;
+
+registration
+ cluster TrivialPetriNet ->
+  with_S-T_arc with_T-S_arc strict non empty non void;
+ coherence
+  proof set N = TrivialPetriNet;
+   thus the S-T_Arcs of N is non empty;
+   thus the T-S_Arcs of N is non empty;
+   thus thesis;
+  end;
+end;
+
+registration
+ cluster non empty non void with_S-T_arc with_T-S_arc strict PT_net_Str;
+ existence
+  proof
+   take TrivialPetriNet;
+   thus thesis;
+  end;
+end;
+
+registration let N be with_S-T_arc PT_net_Str;
+ cluster the S-T_Arcs of N -> non empty;
+ coherence by Def1;
+end;
+
+registration let N be with_T-S_arc PT_net_Str;
+ cluster the T-S_Arcs of N -> non empty;
+ coherence by Def2;
+end;
+
+definition
+ mode Petri_net
+  is non empty non void with_S-T_arc with_T-S_arc PT_net_Str;
+end;
+
+reserve PTN for Petri_net;
 
 :: Place, Transition, and Arc (s->t, t->s) Elements
 
 definition
   let PTN;
-  mode place of PTN is Element of the Places of PTN;
-  mode places of PTN is Element of the Places of PTN;
-  mode transition of PTN is Element of the Transitions of PTN;
-  mode transitions of PTN is Element of the Transitions of PTN;
+  mode place of PTN is Element of the carrier of PTN;
+  mode places of PTN is Element of the carrier of PTN;
+  mode transition of PTN is Element of the carrier' of PTN;
+  mode transitions of PTN is Element of the carrier' of PTN;
   mode S-T_arc of PTN is Element of the S-T_Arcs of PTN;
   mode T-S_arc of PTN is Element of the T-S_Arcs of PTN;
 end;
@@ -65,7 +113,7 @@ definition
   proof
     thus x`1 is place of PTN;
   end;
-  func x`2 -> transition of PTN;
+  redefine func x`2 -> transition of PTN;
   coherence
   proof
     thus x`2 is transition of PTN;
@@ -82,20 +130,20 @@ definition
   proof
     thus x`1 is transition of PTN;
   end;
-  func x`2 -> place of PTN;
+  redefine func x`2 -> place of PTN;
   coherence
   proof
     thus x`2 is place of PTN;
   end;
 end;
-
+ 
 :: *S, S* Definitions and Theorems
 
-reserve S0 for Subset of the Places of PTN;
+reserve S0 for Subset of the carrier of PTN;
 
 definition
   let PTN, S0;
-  func *'S0 -> Subset of the Transitions of PTN equals
+  func *'S0 -> Subset of the carrier' of PTN equals
   { t where t is
 transition of PTN : ex f being T-S_arc of PTN, s being place of PTN st s in S0
   & f = [t,s] };
@@ -103,12 +151,12 @@ transition of PTN : ex f being T-S_arc of PTN, s being place of PTN st s in S0
   proof
     defpred P[set] means ex f being T-S_arc of PTN, s being place of PTN st s
     in S0 & f = [$1,s];
-    { t where t is transition of PTN : P[t] } is Subset of the Transitions
+    { t where t is transition of PTN : P[t] } is Subset of the carrier'
     of PTN from DOMAIN_1:sch 7;
     hence thesis;
   end;
   correctness;
-  func S0*' -> Subset of the Transitions of PTN equals
+  func S0*' -> Subset of the carrier' of PTN equals
   { t where t is
 transition of PTN : ex f being S-T_arc of PTN, s being place of PTN st s in S0
   & f = [s,t] };
@@ -116,7 +164,7 @@ transition of PTN : ex f being S-T_arc of PTN, s being place of PTN st s in S0
   proof
     defpred P[set] means ex f being S-T_arc of PTN, s being place of PTN st s
     in S0 & f = [s,$1];
-    { t where t is transition of PTN : P[t] } is Subset of the Transitions
+    { t where t is transition of PTN : P[t] } is Subset of the carrier'
     of PTN from DOMAIN_1:sch 7;
     hence thesis;
   end;
@@ -129,12 +177,10 @@ proof
   thus *'S0 c= {f`1 where f is T-S_arc of PTN : f`2 in S0}
   proof
     let x be set;
-    assume
-    x in *'S0;
+    assume x in *'S0;
     then consider t being transition of PTN such that
 A1: x = t and
-A2: ex f being T-S_arc of PTN, s being place of PTN st s in S0 & f = [
-    t,s];
+A2: ex f being T-S_arc of PTN, s being place of PTN st s in S0 & f = [ t,s];
     consider f being T-S_arc of PTN, s being place of PTN such that
 A3: s in S0 and
 A4: f = [t,s] by A2;
@@ -142,8 +188,7 @@ A4: f = [t,s] by A2;
     hence thesis by A1,A3;
   end;
   let x be set;
-  assume
-  x in {f`1 where f is T-S_arc of PTN : f`2 in S0};
+  assume x in {f`1 where f is T-S_arc of PTN : f`2 in S0};
   then consider f being T-S_arc of PTN such that
 A5: x = f`1 & f`2 in S0;
   f = [f`1,f`2] by MCART_1:23;
@@ -158,12 +203,10 @@ proof
   thus x in *'S0 implies ex f being T-S_arc of PTN, s being place of PTN st s
   in S0 & f = [x,s]
   proof
-    assume
-    x in *'S0;
+    assume x in *'S0;
     then consider t being transition of PTN such that
 A1: x = t and
-A2: ex f being T-S_arc of PTN, s being place of PTN st s in S0 & f = [
-    t,s];
+A2: ex f being T-S_arc of PTN, s being place of PTN st s in S0 & f = [ t,s];
     consider f being T-S_arc of PTN, s being place of PTN such that
 A3: s in S0 & f = [t,s] by A2;
     take f, s;
@@ -182,12 +225,10 @@ proof
   thus S0*' c= {f`2 where f is S-T_arc of PTN : f`1 in S0}
   proof
     let x be set;
-    assume
-    x in S0*';
+    assume x in S0*';
     then consider t being transition of PTN such that
 A1: x = t and
-A2: ex f being S-T_arc of PTN, s being place of PTN st s in S0 & f = [
-    s,t];
+A2: ex f being S-T_arc of PTN, s being place of PTN st s in S0 & f = [ s,t];
     consider f being S-T_arc of PTN, s being place of PTN such that
 A3: s in S0 and
 A4: f = [s,t] by A2;
@@ -195,8 +236,7 @@ A4: f = [s,t] by A2;
     hence thesis by A1,A3;
   end;
   let x be set;
-  assume
-  x in {f`2 where f is S-T_arc of PTN : f`1 in S0};
+  assume x in {f`2 where f is S-T_arc of PTN : f`1 in S0};
   then consider f being S-T_arc of PTN such that
 A5: x = f`2 & f`1 in S0;
   f = [f`1,f`2] by MCART_1:23;
@@ -211,12 +251,10 @@ proof
   thus x in S0*' implies ex f being S-T_arc of PTN, s being place of PTN st s
   in S0 & f = [s,x]
   proof
-    assume
-    x in S0*';
+    assume x in S0*';
     then consider t being transition of PTN such that
 A1: x = t and
-A2: ex f being S-T_arc of PTN, s being place of PTN st s in S0 & f = [
-    s,t];
+A2: ex f being S-T_arc of PTN, s being place of PTN st s in S0 & f = [ s,t];
     consider f being S-T_arc of PTN, s being place of PTN such that
 A3: s in S0 & f = [s,t] by A2;
     take f, s;
@@ -228,14 +266,14 @@ A5: f = [s,x];
   x = f`2 by A5,MCART_1:7;
   hence thesis by A4,A5;
 end;
-
+ 
 :: *T, T* Definitions and Theorems
 
-reserve T0 for Subset of the Transitions of PTN;
+reserve T0 for Subset of the carrier' of PTN;
 
 definition
   let PTN, T0;
-  func *'T0 -> Subset of the Places of PTN equals
+  func *'T0 -> Subset of the carrier of PTN equals
   { s where s is place of PTN
 : ex f being S-T_arc of PTN, t being transition of PTN st t in T0 & f = [s,t] }
   ;
@@ -243,12 +281,12 @@ definition
   proof
     defpred P[set] means ex f being S-T_arc of PTN, t being transition of PTN
     st t in T0 & f = [$1,t];
-    { s where s is place of PTN : P[s] } is Subset of the Places of PTN
+    { s where s is place of PTN : P[s] } is Subset of the carrier of PTN
     from DOMAIN_1:sch 7;
     hence thesis;
   end;
   correctness;
-  func T0*' -> Subset of the Places of PTN equals
+  func T0*' -> Subset of the carrier of PTN equals
   { s where s is place of PTN
 : ex f being T-S_arc of PTN, t being transition of PTN st t in T0 & f = [t,s] }
   ;
@@ -256,7 +294,7 @@ definition
   proof
     defpred P[set] means ex f being T-S_arc of PTN, t being transition of PTN
     st t in T0 & f = [t,$1];
-    { s where s is place of PTN : P[s] } is Subset of the Places of PTN
+    { s where s is place of PTN : P[s] } is Subset of the carrier of PTN
     from DOMAIN_1:sch 7;
     hence thesis;
   end;
@@ -269,8 +307,7 @@ proof
   thus *'T0 c= {f`1 where f is S-T_arc of PTN : f`2 in T0}
   proof
     let x be set;
-    assume
-    x in *'T0;
+    assume x in *'T0;
     then consider s being place of PTN such that
 A1: x = s and
 A2: ex f being S-T_arc of PTN, t being transition of PTN st t in T0 &
@@ -282,8 +319,7 @@ A4: f = [s,t] by A2;
     hence thesis by A1,A3;
   end;
   let x be set;
-  assume
-  x in {f`1 where f is S-T_arc of PTN : f`2 in T0};
+  assume x in {f`1 where f is S-T_arc of PTN : f`2 in T0};
   then consider f being S-T_arc of PTN such that
 A5: x = f`1 & f`2 in T0;
   f = [f`1,f`2] by MCART_1:23;
@@ -298,8 +334,7 @@ proof
   thus x in *'T0 implies ex f being S-T_arc of PTN, t being transition of PTN
   st t in T0 & f = [x,t]
   proof
-    assume
-    x in *'T0;
+    assume x in *'T0;
     then consider s being place of PTN such that
 A1: x = s and
 A2: ex f being S-T_arc of PTN, t being transition of PTN st t in T0 &
@@ -322,8 +357,7 @@ proof
   thus T0*' c= {f`2 where f is T-S_arc of PTN : f`1 in T0}
   proof
     let x be set;
-    assume
-    x in T0*';
+    assume x in T0*';
     then consider s being place of PTN such that
 A1: x = s and
 A2: ex f being T-S_arc of PTN, t being transition of PTN st t in T0 &
@@ -335,8 +369,7 @@ A4: f = [t,s] by A2;
     hence thesis by A1,A3;
   end;
   let x be set;
-  assume
-  x in {f`2 where f is T-S_arc of PTN : f`1 in T0};
+  assume x in {f`2 where f is T-S_arc of PTN : f`1 in T0};
   then consider f being T-S_arc of PTN such that
 A5: x = f`2 & f`1 in T0;
   f = [f`1,f`2] by MCART_1:23;
@@ -351,8 +384,7 @@ proof
   thus x in T0*' implies ex f being T-S_arc of PTN, t being transition of PTN
   st t in T0 & f = [t,x]
   proof
-    assume
-    x in T0*';
+    assume x in T0*';
     then consider s being place of PTN such that
 A1: x = s and
 A2: ex f being T-S_arc of PTN, t being transition of PTN st t in T0 &
@@ -370,87 +402,80 @@ A5: f = [t,x];
 end;
 
 theorem
-  *'{}the Places of PTN = {}
+  *'{}the carrier of PTN = {}
 proof
-  consider x being Element of *'{}the Places of PTN;
-  assume
-  not thesis;
-  then x in *'{}the Places of PTN;
+  consider x being Element of *'{}the carrier of PTN;
+  assume not thesis;
+  then x in *'{}the carrier of PTN;
   then ex t being transition of PTN st x = t & ex f being T-S_arc of PTN, s
-  being place of PTN st s in {}the Places of PTN & f = [t,s];
+  being place of PTN st s in {}the carrier of PTN & f = [t,s];
   hence contradiction;
 end;
 
 theorem
-  ({}the Places of PTN)*' = {}
+  ({}the carrier of PTN)*' = {}
 proof
-  consider x being Element of ({}the Places of PTN)*';
-  assume
-  not thesis;
-  then x in ({}the Places of PTN)*';
+  consider x being Element of ({}the carrier of PTN)*';
+  assume not thesis;
+  then x in ({}the carrier of PTN)*';
   then ex t being transition of PTN st x = t & ex f being S-T_arc of PTN, s
-  being place of PTN st s in {}the Places of PTN & f = [s,t];
+  being place of PTN st s in {}the carrier of PTN & f = [s,t];
   hence contradiction;
 end;
 
 theorem
-  *'{}the Transitions of PTN = {}
+  *'{}the carrier' of PTN = {}
 proof
-  consider x being Element of *'{}the Transitions of PTN;
-  assume
-  not thesis;
-  then x in *'{}the Transitions of PTN;
+  consider x being Element of *'{}the carrier' of PTN;
+  assume not thesis;
+  then x in *'{}the carrier' of PTN;
   then ex s being place of PTN st x = s & ex f being S-T_arc of PTN, t being
-  transition of PTN st t in {}the Transitions of PTN & f = [s,t];
+  transition of PTN st t in {}the carrier' of PTN & f = [s,t];
   hence contradiction;
 end;
 
 theorem
-  ({}the Transitions of PTN)*' = {}
+  ({}the carrier' of PTN)*' = {}
 proof
-  consider x being Element of ({}the Transitions of PTN)*';
-  assume
-  not thesis;
-  then x in ({}the Transitions of PTN)*';
+  consider x being Element of ({}the carrier' of PTN)*';
+  assume not thesis;
+  then x in ({}the carrier' of PTN)*';
   then ex s being place of PTN st x = s & ex f being T-S_arc of PTN, t being
-  transition of PTN st t in {}the Transitions of PTN & f = [t,s];
+  transition of PTN st t in {}the carrier' of PTN & f = [t,s];
   hence contradiction;
 end;
 
 begin
-
+ 
 :: Deadlock-like Attribute for Place Sets
 
 definition
   let PTN;
-  let IT be Subset of the Places of PTN;
+  let IT be Subset of the carrier of PTN;
   attr IT is Deadlock-like means
   *'IT is Subset of IT*';
 end;
-
+ 
 :: With_Deadlocks Mode for Place\Transition Nets
 
 definition
-  let IT be PT_net_Str;
+  let IT be Petri_net;
   attr IT is With_Deadlocks means
-  ex S being Subset of the Places of IT st S
-  is Deadlock-like;
+  ex S being Subset of the carrier of IT st S is Deadlock-like;
 end;
 
 registration
-  cluster With_Deadlocks PT_net_Str;
+  cluster With_Deadlocks Petri_net;
   existence
   proof
-    {} in {{}} by TARSKI:def 1;
-    then reconsider f = {[{},{}]} as non empty Relation of {{}}, {{}} by
-    RELSET_1:8;
-    take PTN1 = PT_net_Str (# {{}}, {{}}, f, f #);
+    take PTN1 = TrivialPetriNet;
     reconsider s = {} as place of PTN1 by TARSKI:def 1;
     reconsider t = {} as transition of PTN1 by TARSKI:def 1;
-    reconsider stf = [{},{}] as S-T_arc of PTN1 by TARSKI:def 1;
-    reconsider tsf = [{},{}] as T-S_arc of PTN1 by TARSKI:def 1;
-    {{}} c= the Places of PTN1;
-    then reconsider S = {{}} as Subset of the Places of PTN1;
+A:  [#]({{}},{{}}) = {[{},{}]} by ZFMISC_1:35;
+    then reconsider stf = [{},{}] as S-T_arc of PTN1 by TARSKI:def 1;
+    reconsider tsf = [{},{}] as T-S_arc of PTN1 by TARSKI:def 1,A;
+    {{}} c= the carrier of PTN1;
+    then reconsider S = {{}} as Subset of the carrier of PTN1;
     take S;
     tsf = [t,s];
     then t in *'S;
@@ -464,39 +489,36 @@ A1: {t} = *'S by XBOOLE_0:def 10;
 end;
 
 begin
-
+ 
 :: Trap-like Attribute for Place Sets
 
 definition
   let PTN;
-  let IT be Subset of the Places of PTN;
+  let IT be Subset of the carrier of PTN;
   attr IT is Trap-like means
   IT*' is Subset of *'IT;
 end;
-
+ 
 :: With_Traps Mode for Place\Transition Nets
 
 definition
-  let IT be PT_net_Str;
+  let IT be Petri_net;
   attr IT is With_Traps means
-  ex S being Subset of the Places of IT st S is
-  Trap-like;
+  ex S being Subset of the carrier of IT st S is Trap-like;
 end;
 
 registration
-  cluster With_Traps PT_net_Str;
+  cluster With_Traps Petri_net;
   existence
   proof
-    {} in {{}} by TARSKI:def 1;
-    then reconsider f = {[{},{}]} as non empty Relation of {{}}, {{}} by
-    RELSET_1:8;
-    take PTN1 = PT_net_Str (# {{}}, {{}}, f, f #);
+    take PTN1 = TrivialPetriNet;
     reconsider s = {} as place of PTN1 by TARSKI:def 1;
     reconsider t = {} as transition of PTN1 by TARSKI:def 1;
-    reconsider stf = [{},{}] as S-T_arc of PTN1 by TARSKI:def 1;
-    reconsider tsf = [{},{}] as T-S_arc of PTN1 by TARSKI:def 1;
-    {{}} c= the Places of PTN1;
-    then reconsider S = {{}} as Subset of the Places of PTN1;
+A:  [#]({{}},{{}}) = {[{},{}]} by ZFMISC_1:35;
+    then reconsider stf = [{},{}] as S-T_arc of PTN1 by TARSKI:def 1;
+    reconsider tsf = [{},{}] as T-S_arc of PTN1 by TARSKI:def 1,A;
+    {{}} c= the carrier of PTN1;
+    then reconsider S = {{}} as Subset of the carrier of PTN1;
     take S;
     stf = [s,t];
     then t in S*';
@@ -524,29 +546,41 @@ A1: x = [y,z] by RELAT_1:def 1;
 end;
 
 begin
-
+ 
 :: Duality Definitions and Theorems for Place/Transition Nets
 
 definition
-  let PTN;
+  let PTN be PT_net_Str;
   func PTN.: -> strict PT_net_Str equals
-  PT_net_Str (# the Places of PTN, the
-    Transitions of PTN, (the T-S_Arcs of PTN)~, (the S-T_Arcs of PTN)~ #);
+  PT_net_Str(# the carrier of PTN, the
+    carrier' of PTN, (the T-S_Arcs of PTN)~, (the S-T_Arcs of PTN)~ #);
   correctness;
+end;
+
+registration let PTN be Petri_net;
+ cluster PTN.: -> with_S-T_arc with_T-S_arc non empty non void;
+ coherence
+  proof
+    (the T-S_Arcs of PTN)~ is non empty;
+   hence the S-T_Arcs of PTN.: is non empty;
+    (the S-T_Arcs of PTN)~ is non empty;
+   hence the T-S_Arcs of PTN.: is non empty;
+   thus thesis;
+  end;
 end;
 
 theorem
   PTN.:.: = the PT_net_Str of PTN;
 
 theorem
-  the Places of PTN = the Places of PTN.: & the Transitions of PTN = the
-  Transitions of PTN.: & (the S-T_Arcs of PTN)~ = the T-S_Arcs of PTN.: & (the
+  the carrier of PTN = the carrier of PTN.: & the carrier' of PTN = the
+  carrier' of PTN.: & (the S-T_Arcs of PTN)~ = the T-S_Arcs of PTN.: & (the
   T-S_Arcs of PTN)~ = the S-T_Arcs of PTN.:;
 
 definition
   let PTN;
-  let S0 be Subset of the Places of PTN;
-  func S0.: -> Subset of the Places of PTN.: equals
+  let S0 be Subset of the carrier of PTN;
+  func S0.: -> Subset of the carrier of PTN.: equals
   S0;
   coherence;
 end;
@@ -561,8 +595,8 @@ end;
 
 definition
   let PTN;
-  let S0 be Subset of the Places of PTN.:;
-  func .:S0 -> Subset of the Places of PTN equals
+  let S0 be Subset of the carrier of PTN.:;
+  func .:S0 -> Subset of the carrier of PTN equals
   S0;
   coherence;
 end;
@@ -577,8 +611,8 @@ end;
 
 definition
   let PTN;
-  let T0 be Subset of the Transitions of PTN;
-  func T0.: -> Subset of the Transitions of PTN.: equals
+  let T0 be Subset of the carrier' of PTN;
+  func T0.: -> Subset of the carrier' of PTN.: equals
   T0;
   coherence;
 end;
@@ -593,8 +627,8 @@ end;
 
 definition
   let PTN;
-  let T0 be Subset of the Transitions of PTN.:;
-  func .:T0 -> Subset of the Transitions of PTN equals
+  let T0 be Subset of the carrier' of PTN.:;
+  func .:T0 -> Subset of the carrier' of PTN equals
   T0;
   coherence;
 end;
@@ -607,7 +641,7 @@ definition
   coherence;
 end;
 
-reserve S for Subset of the Places of PTN;
+reserve S for Subset of the carrier of PTN;
 
 theorem Th15:
   S.:*' = *'S
@@ -615,8 +649,7 @@ proof
   thus S.:*' c= *'S
   proof
     let x be set;
-    assume
-    x in S.:*';
+    assume x in S.:*';
     then consider f being S-T_arc of PTN.:, s being place of PTN.: such that
 A1: s in S.: and
 A2: f = [s,x] by Th4;
@@ -624,8 +657,7 @@ A2: f = [s,x] by Th4;
     hence thesis by A1,Th2;
   end;
   let x be set;
-  assume
-  x in *'S;
+  assume x in *'S;
   then consider f being T-S_arc of PTN, s being place of PTN such that
 A3: s in S and
 A4: f = [x,s] by Th2;
@@ -639,8 +671,7 @@ proof
   thus *'(S.:) c= S*'
   proof
     let x be set;
-    assume
-    x in *'(S.:);
+    assume x in *'(S.:);
     then consider f being T-S_arc of PTN.:, s being place of PTN.: such that
 A1: s in S.: and
 A2: f = [x,s] by Th2;
@@ -648,8 +679,7 @@ A2: f = [x,s] by Th2;
     hence thesis by A1,Th4;
   end;
   let x be set;
-  assume
-  x in S*';
+  assume x in S*';
   then consider f being S-T_arc of PTN, s being place of PTN such that
 A3: s in S and
 A4: f = [s,x] by Th4;
@@ -663,12 +693,10 @@ proof
 A1: S.:*' = *'S by Th15;
   thus S is Deadlock-like implies S.: is Trap-like
   proof
-    assume
-    *'S is Subset of S*';
+    assume *'S is Subset of S*';
     hence S.:*' is Subset of *'(S.:) by A1,Th16;
   end;
-  assume
-  S.:*' is Subset of *'(S.:);
+  assume S.:*' is Subset of *'(S.:);
   hence *'S is Subset of S*' by A1,Th16;
 end;
 
@@ -678,26 +706,23 @@ proof
 A1: S.:*' = *'S by Th15;
   thus S is Trap-like implies S.: is Deadlock-like
   proof
-    assume
-    S*' is Subset of *'S;
+    assume S*' is Subset of *'S;
     hence *'(S.:) is Subset of S.:*' by A1,Th16;
   end;
-  assume
-  *'(S.:) is Subset of S.:*';
+  assume *'(S.:) is Subset of S.:*';
   hence S*' is Subset of *'S by A1,Th16;
 end;
 
 theorem
-  for PTN being PT_net_Str, t being transition of PTN, S0 being Subset
-  of the Places of PTN holds t in S0*' iff *'{t} meets S0
+  for PTN being Petri_net, t being transition of PTN, S0 being Subset
+  of the carrier of PTN holds t in S0*' iff *'{t} meets S0
 proof
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let t be transition of PTN;
-  let S0 be Subset of the Places of PTN;
+  let S0 be Subset of the carrier of PTN;
   thus t in S0*' implies *'{t} meets S0
   proof
-    assume
-    t in S0*';
+    assume t in S0*';
     then consider f being S-T_arc of PTN, s being place of PTN such that
 A1: s in S0 and
 A2: f = [s,t] by Th4;
@@ -705,8 +730,7 @@ A2: f = [s,t] by Th4;
     then s in *'{t} by A2;
     hence *'{t} /\ S0 <> {} by A1,XBOOLE_0:def 4;
   end;
-  assume
-  *'{t} /\ S0 <> {};
+  assume *'{t} /\ S0 <> {};
   then consider s being place of PTN such that
 A3: s in *'{t} /\ S0 by SUBSET_1:10;
 A4: s in S0 by A3,XBOOLE_0:def 4;
@@ -719,16 +743,15 @@ A6: f = [s,t0] by Th6;
 end;
 
 theorem
-  for PTN being PT_net_Str, t being transition of PTN, S0 being Subset
-  of the Places of PTN holds t in *'S0 iff {t}*' meets S0
+  for PTN being Petri_net, t being transition of PTN, S0 being Subset
+  of the carrier of PTN holds t in *'S0 iff {t}*' meets S0
 proof
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let t be transition of PTN;
-  let S0 be Subset of the Places of PTN;
+  let S0 be Subset of the carrier of PTN;
   thus t in *'S0 implies {t}*' meets S0
   proof
-    assume
-    t in *'S0;
+    assume t in *'S0;
     then consider f being T-S_arc of PTN, s being place of PTN such that
 A1: s in S0 and
 A2: f = [t,s] by Th2;
@@ -736,8 +759,7 @@ A2: f = [t,s] by Th2;
     then s in {t}*' by A2;
     hence {t}*' /\ S0 <> {} by A1,XBOOLE_0:def 4;
   end;
-  assume
-  {t}*' /\ S0 <> {};
+  assume {t}*' /\ S0 <> {};
   then consider s being place of PTN such that
 A3: s in {t}*' /\ S0 by SUBSET_1:10;
 A4: s in S0 by A3,XBOOLE_0:def 4;
@@ -748,4 +770,3 @@ A6: f = [t0,s] by Th8;
   t0 = t by A5,TARSKI:def 1;
   hence thesis by A4,A6;
 end;
-

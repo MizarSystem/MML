@@ -8,15 +8,15 @@ environ
 
  vocabularies NUMBERS, FINSEQ_1, ORDINAL1, XBOOLE_0, ARYTM_3, CARD_1, XXREAL_0,
       ARYTM_1, NAT_1, SUBSET_1, TARSKI, RELAT_1, ORDINAL4, FUNCT_1, FINSET_1,
-      FINSEQ_2, FUNCT_2, CARD_3, FUNCOP_1, FINSEQ_3;
+      FINSEQ_2, FUNCT_2, CARD_3, FUNCOP_1, FINSEQ_3, EQREL_1, ALG_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, ORDINAL1,
-      XCMPLX_0, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FUNCOP_1, FINSEQ_2,
-      FINSET_1, NAT_1, FINSEQOP, XXREAL_0, CARD_3;
+      XCMPLX_0, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, FINSEQ_2, FINSET_1, NAT_1, FINSEQOP, XXREAL_0, CARD_3, EQREL_1;
  constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
-      FINSEQOP, RELSET_1, CARD_3, DOMAIN_1, CARD_2;
+      FINSEQOP, RELSET_1, CARD_3, DOMAIN_1, CARD_2, EQREL_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1, FINSEQ_2, FUNCOP_1, CARD_3,
-      SUBSET_1, FUNCT_2, CARD_2;
+      SUBSET_1, FUNCT_2, CARD_2, EQREL_1, RELSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -299,8 +299,7 @@ theorem :: FINSEQ_3:89
   <* x,y *> - A = <* x,y *> iff not x in A & not y in A;
 
 theorem :: FINSEQ_3:90
-  len p = k + 1 & q = p | Seg k implies (p.(k + 1) in A iff p - A
-  = q - A);
+  len p = k + 1 & q = p | Seg k implies (p.(k + 1) in A iff p - A = q - A);
 
 theorem :: FINSEQ_3:91
   len p = k + 1 & q = p | Seg k implies (not p.(k + 1) in A iff p
@@ -367,7 +366,6 @@ theorem :: FINSEQ_3:110
   len p = 3;
 
 begin :: Addenda
-
 :: from FSM_1
 
 theorem :: FINSEQ_3:111
@@ -442,8 +440,8 @@ theorem :: FINSEQ_3:123
   F \ A)) is Permutation of dom F;
 
 theorem :: FINSEQ_3:124
-  for F being FinSequence, A be Subset of rng F st F is one-to-one ex p
-  being Permutation of dom F st (F-A`)^(F-A) = F*p;
+  for F being FinSequence, A be Subset of rng F
+  ex p being Permutation of dom F st (F-A`)^(F-A) = F*p;
 
 :: Moved from GRAPH_2 by AK on 27.12.2006
 
@@ -463,8 +461,7 @@ theorem :: FINSEQ_3:127
 :: from CATALG_1, 2009.09.08, A.T.
 
 theorem :: FINSEQ_3:128
-  for A being set, i being Nat holds i <> 0 & A = {} iff
-  i-tuples_on A = {};
+  for A being set, i being Nat holds i <> 0 & A = {} iff i-tuples_on A = {};
 
 :: from AMISTD_2, 2009.09.08, A.T.
 
@@ -477,3 +474,38 @@ registration
   let i be Nat, D be set;
   cluster i-tuples_on D -> product-like;
 end;
+
+begin :: Moved from ALG_1, 2010.03.17
+
+reserve
+  n for Element of NAT;
+
+theorem :: FINSEQ_3:129
+  for D1,D2 be non empty set, p be FinSequence of D1, f be Function
+  of D1,D2 holds dom(f*p) = dom p & len (f*p) = len p & for n being Nat st n in
+  dom (f*p) holds (f*p).n = f.(p.n);
+
+definition
+  let D be non empty set, R be Relation of D;
+  func ExtendRel(R) -> Relation of D* means
+:: FINSEQ_3:def 3
+
+  for x,y be FinSequence of D
+holds [x,y] in it iff len x = len y & for n st n in dom x holds [x.n,y.n] in R;
+end;
+
+theorem :: FINSEQ_3:130
+  for D be non empty set holds ExtendRel(id D) = id (D*);
+
+definition
+  let D be non empty set, R be Equivalence_Relation of D;
+  let y be FinSequence of Class(R), x be FinSequence of D;
+  pred x is_representatives_FS y means
+:: FINSEQ_3:def 4
+  len x = len y & for n st n in dom x holds Class(R,x.n) = y.n;
+end;
+
+theorem :: FINSEQ_3:131
+  for D be non empty set, R be Equivalence_Relation of D, y be
+  FinSequence of Class(R) ex x be FinSequence of D st x is_representatives_FS y
+;

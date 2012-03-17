@@ -18,9 +18,10 @@ environ
       BORSUK_1, T_0TOPSP, TOPMETR, BINOP_1, FUNCT_3;
  constructors SETFAM_1, FUNCT_3, FUNCT_4, REAL_1, MEMBERED, RCOMP_1, TOPS_1,
       CONNSP_1, TOPS_2, COMPTS_1, URYSOHN1, T_0TOPSP, TREAL_1, FUNCOP_1,
-      PCOMPS_1, XXREAL_2;
+      PCOMPS_1, XXREAL_2, COMPLEX1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, XREAL_0, MEMBERED,
-      STRUCT_0, PRE_TOPC, COMPTS_1, METRIC_1, BORSUK_1, RELAT_1, XXREAL_2;
+      STRUCT_0, PRE_TOPC, COMPTS_1, METRIC_1, BORSUK_1, RELAT_1, XXREAL_2,
+      TOPS_1, CONNSP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -71,8 +72,7 @@ definition
   pred a,b are_connected means
 :: BORSUK_2:def 1
 
-  ex f being Function of I[01], T st f is
-  continuous & f.0 = a & f.1 = b;
+  ex f being Function of I[01], T st f is continuous & f.0 = a & f.1 = b;
 end;
 
 definition
@@ -89,8 +89,7 @@ definition
   mode Path of a, b -> Function of I[01], T means
 :: BORSUK_2:def 2
 
-    it is continuous & it
-    .0 = a & it.1 = b;
+    it is continuous & it .0 = a & it.1 = b;
 end;
 
 registration
@@ -101,29 +100,27 @@ end;
 
 definition
   let T be TopStruct;
-  attr T is arcwise_connected means
+  attr T is pathwise_connected means
 :: BORSUK_2:def 3
 
-  for a, b being Point of T holds a,
-  b are_connected;
+  for a, b being Point of T holds a, b are_connected;
 end;
 
 registration
-  cluster arcwise_connected non empty TopSpace;
+  cluster strict pathwise_connected non empty TopSpace;
 end;
 
 definition
-  let T be arcwise_connected TopStruct;
+  let T be pathwise_connected TopStruct;
   let a, b be Point of T;
   redefine mode Path of a, b means
 :: BORSUK_2:def 4
 
-    it is continuous & it.0 = a & it.1 =
-    b;
+  it is continuous & it.0 = a & it.1 = b;
 end;
 
 registration
-  let T be arcwise_connected TopStruct;
+  let T be pathwise_connected TopStruct;
   let a, b be Point of T;
   cluster -> continuous Path of a, b;
 end;
@@ -132,11 +129,11 @@ reserve GY for non empty TopSpace,
   r,s for Real;
 
 theorem :: BORSUK_2:5
-  for GX being non empty TopSpace st GX is arcwise_connected holds
+  for GX being non empty TopSpace st GX is pathwise_connected holds
   GX is connected;
 
 registration
-  cluster arcwise_connected -> connected (non empty TopSpace);
+  cluster pathwise_connected -> connected (non empty TopSpace);
 end;
 
 begin
@@ -182,8 +179,7 @@ definition
   func - P -> Path of b, a means
 :: BORSUK_2:def 6
 
-  for t being Point of I[01] holds it.t
-  = P.(1-t);
+  for t being Point of I[01] holds it.t = P.(1-t);
 end;
 
 theorem :: BORSUK_2:8
@@ -217,10 +213,13 @@ theorem :: BORSUK_2:11
 Function of S1, T1, g be continuous Function of S2, T2, P2 being Subset of [:T1
   , T2:] holds (P2 is open implies [:f,g:]"P2 is open);
 
-theorem :: BORSUK_2:12
-  for S1, S2, T1, T2 be non empty TopSpace, f be continuous
-  Function of S1, T1, g be continuous Function of S2, T2 holds [:f,g:] is
-  continuous;
+canceled;
+
+registration
+  let S1, S2, T1, T2 be non empty TopSpace,
+      f be continuous Function of S1, T1, g be continuous Function of S2, T2;
+  cluster [:f,g:] -> continuous Function of [:S1,S2:], [:T1,T2:];
+end;
 
 registration
   cluster empty -> T_0 TopStruct;
@@ -268,7 +267,7 @@ theorem :: BORSUK_2:15
   Path of a, b st a,b are_connected holds P, P are_homotopic;
 
 definition
-  let T be non empty arcwise_connected TopSpace;
+  let T be non empty pathwise_connected TopSpace;
   let a, b be Point of T;
   let P, Q be Path of a, b;
   redefine pred P, Q are_homotopic;
@@ -299,6 +298,5 @@ theorem :: BORSUK_2:18
   being Function of I[01], T st g is continuous & g.0 = b & g.1 = a;
 
 registration
-  cluster I[01] -> arcwise_connected;
+  cluster I[01] -> pathwise_connected;
 end;
-

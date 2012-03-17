@@ -3,7 +3,7 @@
 ::
 :: Received July 30, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies STRUCT_0, BORSUK_1, ZFMISC_1, CARD_1, PRE_TOPC, FUNCT_1, FUNCT_4,
@@ -11,7 +11,7 @@ environ
       COMPTS_1, ORDINAL2, FUNCT_2, RCOMP_1, T_0TOPSP, BORSUK_2, TOPS_2, EUCLID,
       TOPREAL2, TOPREAL1, SETFAM_1, TAXONOM2, RLVECT_3, ALGSTR_1, GRAPH_1,
       BORSUK_6, ARYTM_3, XXREAL_0, ARYTM_1, TOPALG_1, EQREL_1, WAYBEL20,
-      GROUP_6, WELLORD1, TOPALG_3;
+      GROUP_6, WELLORD1, TOPALG_3, MSSUBFAM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, EQREL_1,
       NUMBERS, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, XCMPLX_0,
       FUNCOP_1, FUNCT_4, STRUCT_0, ALGSTR_0, PRE_TOPC, GROUP_6, BORSUK_1,
@@ -19,7 +19,7 @@ environ
       BORSUK_3, TAXONOM2, YELLOW_8, BORSUK_6, TOPALG_1, XXREAL_0;
  constructors XXREAL_0, REAL_1, CONNSP_1, TOPS_2, COMPTS_1, GRCAT_1, TDLAT_3,
       TEX_2, TOPREAL1, TOPREAL2, YELLOW_8, TAXONOM2, BORSUK_3, BORSUK_6,
-      TOPALG_1, FUNCOP_1;
+      TOPALG_1, FUNCOP_1, GROUP_6;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, XREAL_0,
       STRUCT_0, PRE_TOPC, TOPS_1, COMPTS_1, BORSUK_1, TEX_1, EUCLID, TOPREAL2,
       BORSUK_2, BORSUK_3, TOPALG_1, ORDINAL1, RELSET_1;
@@ -35,9 +35,11 @@ environ
  schemes FUNCT_2;
 
 begin :: Preliminaries
+
 set I = the carrier of I[01];
 
 Lm1: the carrier of [:I[01],I[01]:] = [:I,I:] by BORSUK_1:def 5;
+
 reconsider j0 = 0, j1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
 
 theorem
@@ -86,8 +88,7 @@ end;
 canceled;
 
 theorem Th4:
-  for X, a, b being set, f being Function of X,{a,b} holds X = f"{a
-  } \/ f"{b}
+  for X, a, b being set, f being Function of X,{a,b} holds X = f"{a } \/ f"{b}
 proof
   let X, a, b be set;
   let f be Function of X,{a,b};
@@ -99,7 +100,7 @@ end;
 theorem
   for S, T being non empty 1-sorted, s being Point of S, t being Point
   of T holds (S --> t).s = t by FUNCOP_1:13;
-
+ 
 :: Topological preliminaries
 
 theorem
@@ -127,13 +128,11 @@ A1: A = C & B = D;
   then
 A2: Cl A = Cl C & Cl B = Cl D by TOPS_3:80;
   hereby
-    assume
-    A,B are_separated;
+    assume A,B are_separated;
     then Cl A misses B & A misses Cl B by CONNSP_1:def 1;
     hence C,D are_separated by A1,A2,CONNSP_1:def 1;
   end;
-  assume
-  C,D are_separated;
+  assume C,D are_separated;
   then Cl C misses D & C misses Cl D by CONNSP_1:def 1;
   hence thesis by A1,A2,CONNSP_1:def 1;
 end;
@@ -172,8 +171,7 @@ A7: the carrier of T = A \/ B & A misses B by A1,Th4,FUNCT_1:141,ZFMISC_1
 A8: not ex f being Function of T,J st f is continuous onto;
   deffunc G(set) = j1;
   deffunc F(set) = j0;
-  assume
-  not thesis;
+  assume not thesis;
   then consider A, B being Subset of T such that
 A9: [#]T = A \/ B and
 A10: A <> {}T and
@@ -275,8 +273,7 @@ A1: T is empty;
 end;
 
 theorem
-  for T being TopSpace st the TopStruct of T is connected holds T is
-  connected
+  for T being TopSpace st the TopStruct of T is connected holds T is connected
 proof
   let T be TopSpace;
   set G = the TopStruct of T;
@@ -306,8 +303,8 @@ A1: [#]G = A \/ B & A,B are_separated;
 end;
 
 theorem
-  for S, T be non empty TopSpace st S,T are_homeomorphic & S is
-  arcwise_connected holds T is arcwise_connected
+  for S, T be non empty TopSpace st S,T are_homeomorphic &
+  S is pathwise_connected holds T is pathwise_connected
 proof
   let S, T be non empty TopSpace;
   given h being Function of S,T such that
@@ -335,7 +332,7 @@ A6: h is one-to-one & rng h = [#]T by A1,TOPS_2:def 5;
 end;
 
 registration
-  cluster trivial -> arcwise_connected (non empty TopSpace);
+  cluster trivial -> pathwise_connected (non empty TopSpace);
   coherence
   proof
     let T be non empty TopSpace;
@@ -351,7 +348,7 @@ end;
 
 theorem
   for T being SubSpace of TOP-REAL 2 st the carrier of T is
-  Simple_closed_curve holds T is arcwise_connected
+  Simple_closed_curve holds T is pathwise_connected
 proof
   let T be SubSpace of TOP-REAL 2;
   assume
@@ -389,10 +386,8 @@ A8: p1 = p2;
     reconsider f = I[01] --> a1 as Function of I[01],T;
     take f;
     thus f is continuous;
-    thus f.0 = f.j0
-      .= a by FUNCOP_1:13;
-    thus f.1 = f.j1
-      .= b by A8,FUNCOP_1:13;
+    thus f.0 = f.j0 .= a by FUNCOP_1:13;
+    thus f.1 = f.j1 .= b by A8,FUNCOP_1:13;
   end;
 end;
 
@@ -405,8 +400,7 @@ proof
   F c= bool the carrier of T
   proof
     let a be set;
-    assume
-    a in F;
+    assume a in F;
     then a = the carrier of T by TARSKI:def 1;
     hence thesis by ZFMISC_1:def 1;
   end;
@@ -429,8 +423,7 @@ registration
     F c= bool the carrier of T
     proof
       let a be set;
-      assume
-      a in F;
+      assume a in F;
       then a = {}T by TARSKI:def 1;
       hence thesis;
     end;
@@ -461,8 +454,7 @@ A2: X in D and
 A3: X meets A;
   consider x being set such that
 A4: x in X & x in A by A3,XBOOLE_0:3;
-  assume
-  D is Cover of A;
+  assume D is Cover of A;
   then
 A5: A c= union D by SETFAM_1:def 12;
   let a be set;
@@ -475,15 +467,13 @@ A8: Z in D by A5,TARSKI:def 4;
   D2 c= bool A
   proof
     let d be set;
-    assume
-    d in D2;
+    assume d in D2;
     then ex K1 being Subset of T st d = K1 /\ A & K1 in D & not a in K1;
     then d c= A by XBOOLE_1:17;
     hence thesis;
   end;
   then reconsider D2 as Subset-Family of T|A by PRE_TOPC:29;
-  assume
-  not a in X;
+  assume not a in X;
   then
 A9: X /\ A in D2 by A2;
   x in X /\ A by A4,XBOOLE_0:def 4;
@@ -493,8 +483,7 @@ A10: x in union D2 by A9,TARSKI:def 4;
   D1 c= bool A
   proof
     let d be set;
-    assume
-    d in D1;
+    assume d in D1;
     then ex K1 being Subset of T st d = K1 /\ A & K1 in D & a in K1;
     then d c= A by XBOOLE_1:17;
     hence thesis;
@@ -529,8 +518,7 @@ A17: [#](T|A) = A by PRE_TOPC:def 10;
   D1 is open
   proof
     let P be Subset of T|A;
-    assume
-    P in D1;
+    assume P in D1;
     then consider K1 being Subset of T such that
 A18: P = K1 /\ A and
 A19: K1 in D and
@@ -543,8 +531,7 @@ A20: union D1 is open by TOPS_2:26;
   D2 is open
   proof
     let P be Subset of T|A;
-    assume
-    P in D2;
+    assume P in D2;
     then consider K1 being Subset of T such that
 A21: P = K1 /\ A and
 A22: K1 in D and
@@ -600,8 +587,7 @@ A1: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:] by
     assume
 A2: C1 = C2;
     hereby
-      assume
-      C1 is open;
+      assume C1 is open;
       then consider A being Subset-Family of [:S,T:] such that
 A3:   C1 = union A and
 A4:   for e being set st e in A ex X1 being Subset of S, Y1 being
@@ -613,8 +599,7 @@ Y1 being Subset of the TopStruct of T st e = [:X1,Y1:] & X1 is open & Y1 is
       open
       proof
         let e be set;
-        assume
-        e in AA;
+        assume e in AA;
         then consider X1 being Subset of S, Y1 being Subset of T such that
 A5:     e = [:X1,Y1:] & X1 is open & Y1 is open by A4;
         reconsider Y2 = Y1 as Subset of the TopStruct of T;
@@ -624,8 +609,7 @@ A5:     e = [:X1,Y1:] & X1 is open & Y1 is open by A4;
       end;
       hence C2 is open by A2,A3,BORSUK_1:45;
     end;
-    assume
-    C2 is open;
+    assume C2 is open;
     then consider
     A being Subset-Family of [:the TopStruct of S,the TopStruct of T
     :] such that
@@ -638,8 +622,7 @@ S, Y1 being Subset of the TopStruct of T st e = [:X1,Y1:] & X1 is open & Y1 is
     of T st e = [:X1,Y1:] & X1 is open & Y1 is open
     proof
       let e be set;
-      assume
-      e in AA;
+      assume e in AA;
       then consider
       X1 being Subset of the TopStruct of S, Y1 being Subset of the
       TopStruct of T such that
@@ -673,8 +656,7 @@ A3: p = [p1,p2] by BORSUK_1:50;
     for G being Subset of T1 st G is open & p2 in G holds B meets G
     proof
       let G be Subset of T1;
-      assume
-      G is open & p2 in G;
+      assume G is open & p2 in G;
       then [p1,p2] in [:[#]S1,G:] & [:[#]S1,G:] is open by BORSUK_1:46 ,
       ZFMISC_1:106;
       then consider V being Subset of [:S1,T1:] such that
@@ -695,8 +677,7 @@ A7: p2 in Cl B by PRE_TOPC:def 13;
     for G being Subset of S1 st G is open & p1 in G holds A meets G
     proof
       let G be Subset of S1;
-      assume
-      G is open & p1 in G;
+      assume G is open & p1 in G;
       then [p1,p2] in [:G,[#]T1:] & [:G,[#]T1:] is open by BORSUK_1:46,
       ZFMISC_1:106;
       then consider V being Subset of [:S1,T1:] such that
@@ -716,8 +697,7 @@ A10:  a in [:A,B:] & a in V by XBOOLE_0:3;
     hence x in [:Cl A,Cl B:] by A3,A7,ZFMISC_1:106;
   end;
   let x be set;
-  assume
-  x in [:Cl A,Cl B:];
+  assume x in [:Cl A,Cl B:];
   then consider x1, x2 being set such that
 A11: x1 in Cl A and
 A12: x2 in Cl B and
@@ -933,8 +913,7 @@ proof
   let S, T be TopSpace;
   let A be Subset of S;
   let B be Subset of T;
-  assume
-  S|A is connected & T|B is connected;
+  assume S|A is connected & T|B is connected;
   then reconsider SA = S|A, TB = T|B as connected TopSpace;
   [:SA,TB:] is connected;
   hence [:S,T:] | [:A,B:] is connected by BORSUK_3:26;
@@ -1002,8 +981,7 @@ A4: F2 = [#]T2 and
 A5: ([#]T1) \/ ([#]T2) = [#]T and
 A6: f is continuous and
 A7: g is continuous and
-A8: for p being set st p in ([#][:Y,T1:]) /\ ([#][:Y,T2:]) holds f.p = g
-  .p;
+A8: for p being set st p in ([#][:Y,T1:]) /\ ([#][:Y,T2:]) holds f.p = g .p;
 A9: dom f = the carrier of [:Y,T1:] by FUNCT_2:def 1;
   set h = f+*g;
 A10: the carrier of [:Y,T2:] = [:the carrier of Y,the carrier of T2:] by
@@ -1147,8 +1125,7 @@ A4: F2 = [#]T2 and
 A5: ([#]T1) \/ ([#]T2) = [#]T and
 A6: f is continuous and
 A7: g is continuous and
-A8: for p being set st p in ([#][:T1,Y:]) /\ ([#][:T2,Y:]) holds f.p = g
-  .p;
+A8: for p being set st p in ([#][:T1,Y:]) /\ ([#][:T2,Y:]) holds f.p = g .p;
 A9: dom f = the carrier of [:T1,Y:] by FUNCT_2:def 1;
 A10: Y is SubSpace of Y by TSEP_1:2;
   then
@@ -1346,11 +1323,11 @@ A3: (f*P).0 = f.(P.j0) by FUNCT_2:21
 end;
 
 theorem Th26:
-  for S being non empty arcwise_connected TopSpace, T being non
+  for S being non empty pathwise_connected TopSpace, T being non
   empty TopSpace, f being continuous Function of S,T, a, b being Point of S, P
   being Path of a,b holds f*P is Path of f.a,f.b
 proof
-  let S be non empty arcwise_connected TopSpace;
+  let S be non empty pathwise_connected TopSpace;
   let T be non empty TopSpace;
   let f be continuous Function of S,T;
   let a, b be Point of S;
@@ -1365,7 +1342,7 @@ A3: (f*P).0 = f.(P.j0) by FUNCT_2:21
 end;
 
 definition
-  let S be non empty arcwise_connected TopSpace, T be non empty TopSpace, a, b
+  let S be non empty pathwise_connected TopSpace, T be non empty TopSpace, a, b
   be Point of S, P be Path of a,b, f be continuous Function of S,T;
   redefine func f*P -> Path of f.a,f.b;
   coherence by Th26;
@@ -1575,33 +1552,30 @@ A2: FundGrIso(f,s).x = Class(EqRel(T,f.s),f*ls1) by Def1;
   hence thesis by A2,TOPALG_1:47;
 end;
 
-definition
-  let S, T be non empty TopSpace, s be Point of S, f be continuous Function of
-  S,T;
-  redefine func FundGrIso(f,s) -> Homomorphism of pi_1(S,s),pi_1(T,f.s);
+registration
+  let S, T be non empty TopSpace, s be Point of S,
+  f be continuous Function of S,T;
+  cluster FundGrIso(f,s) -> multiplicative;
   coherence
   proof
     set h = FundGrIso(f,s);
     set pS = pi_1(S,s);
-    now
-      let a, b be Element of pS;
-      consider lsa being Loop of s such that
-A1:   a = Class(EqRel(S,s),lsa) and
-A2:   h.a = Class(EqRel(T,f.s),f*lsa) by Def1;
-      consider lsb being Loop of s such that
-A3:   b = Class(EqRel(S,s),lsb) and
-A4:   h.b = Class(EqRel(T,f.s),f*lsb) by Def1;
-A5:   f*lsa+f*lsb = f*(lsa+lsb) by Th30;
-      consider lsab being Loop of s such that
-A6:   a*b = Class(EqRel(S,s),lsab) and
-A7:   h.(a*b) = Class(EqRel(T,f.s),f*lsab) by Def1;
-      a*b = Class(EqRel(S,s),lsa+lsb) by A1,A3,TOPALG_1:62;
-      then lsab,lsa+lsb are_homotopic by A6,TOPALG_1:47;
-      then f*lsab,f*lsa+f*lsb are_homotopic by A5,Th28;
-      hence h.(a * b) = Class(EqRel(T,f.s),f*lsa+f*lsb) by A7,TOPALG_1:47
-        .= h.a * h.b by A2,A4,TOPALG_1:62;
-    end;
-    hence thesis by GROUP_6:def 7;
+    let a, b be Element of pS;
+    consider lsa being Loop of s such that
+A1: a = Class(EqRel(S,s),lsa) and
+A2: h.a = Class(EqRel(T,f.s),f*lsa) by Def1;
+    consider lsb being Loop of s such that
+A3: b = Class(EqRel(S,s),lsb) and
+A4: h.b = Class(EqRel(T,f.s),f*lsb) by Def1;
+A5: f*lsa+f*lsb = f*(lsa+lsb) by Th30;
+    consider lsab being Loop of s such that
+A6: a*b = Class(EqRel(S,s),lsab) and
+A7: h.(a*b) = Class(EqRel(T,f.s),f*lsab) by Def1;
+    a*b = Class(EqRel(S,s),lsa+lsb) by A1,A3,TOPALG_1:62;
+    then lsab,lsa+lsb are_homotopic by A6,TOPALG_1:47;
+    then f*lsab,f*lsa+f*lsb are_homotopic by A5,Th28;
+    hence h.(a * b) = Class(EqRel(T,f.s),f*lsa+f*lsb) by A7,TOPALG_1:47
+    .= h.a * h.b by A2,A4,TOPALG_1:62;
   end;
 end;
 
@@ -1629,8 +1603,7 @@ A8: rng h = the carrier of pT
   proof
     thus rng h c= the carrier of pT;
     let y be set;
-    assume
-    y in the carrier of pT;
+    assume y in the carrier of pT;
     then consider lt being Loop of f.s such that
 A9: y = Class(EqRel(T,f.s),lt) by TOPALG_1:48;
     reconsider ls = f"*lt as Loop of s by A4,A3,A6,Th27;
@@ -1651,19 +1624,16 @@ A14: dom f = [#]S by A1,TOPS_2:def 5;
   h is one-to-one
   proof
     let x1, x2 be set;
-    assume
-    x1 in dom h;
+    assume x1 in dom h;
     then consider ls1 being Loop of s such that
 A15: x1 = Class(EqRel(S,s),ls1) and
 A16: h.x1 = Class(EqRel(T,f.s),f*ls1) by Def1;
-    assume
-    x2 in dom h;
+    assume x2 in dom h;
     then consider ls2 being Loop of s such that
 A17: x2 = Class(EqRel(S,s),ls2) and
 A18: h.x2 = Class(EqRel(T,f.s),f*ls2) by Def1;
     reconsider a1 = f"*(f*ls1), a2 = f"*(f*ls2) as Loop of s by A4,A3,A6,Th27;
-    assume
-    h.x1 = h.x2;
+    assume h.x1 = h.x2;
     then f*ls1,f*ls2 are_homotopic by A16,A18,TOPALG_1:47;
     then
 A19: a1,a2 are_homotopic by A4,A3,A6,Th28;
@@ -1689,8 +1659,7 @@ proof
   let f be continuous Function of S,T;
   let P be Path of t,f.s;
   let h be Homomorphism of pi_1(S,s),pi_1(T,t);
-  assume
-  f is being_homeomorphism;
+  assume f is being_homeomorphism;
   then
 A1: FundGrIso(f,s) is bijective by Th33;
   assume that
@@ -1703,12 +1672,12 @@ A3: h = pi_1-iso(P) * FundGrIso(f,s);
 end;
 
 theorem
-  for S being non empty TopSpace, T being non empty arcwise_connected
+  for S being non empty TopSpace, T being non empty pathwise_connected
 TopSpace, s being Point of S, t being Point of T st S,T are_homeomorphic holds
   pi_1(S,s),pi_1(T,t) are_isomorphic
 proof
   let S be non empty TopSpace;
-  let T be non empty arcwise_connected TopSpace;
+  let T be non empty pathwise_connected TopSpace;
   let s be Point of S;
   let t be Point of T;
   given f being Function of S,T such that
@@ -1719,4 +1688,3 @@ A1: f is being_homeomorphism;
   FundGrIso(f,s) is bijective by A1,Th33;
   hence thesis by GROUP_6:74;
 end;
-

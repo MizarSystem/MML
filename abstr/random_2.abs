@@ -1,0 +1,235 @@
+:: Probability Measure on Discrete Spaces and Algebra of Real Valued Random
+:: Variables
+::  by Hiroyuki Okazaki and Yasunari Shidama
+::
+:: Received March 16, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, COMPLEX1, RELAT_1, ZFMISC_1, XXREAL_0, PARTFUN1,
+      ARYTM_1, XBOOLE_0, ORDINAL4, INT_1, SQUARE_1, ARYTM_3, RLVECT_1,
+      SUPINF_2, RSSPACE, FUNCOP_1, FINSOP_1, NAT_1, FUNCT_4, BINOP_2, PROB_1,
+      MEASURE6, MESFUNC1, TARSKI, MESFUNC5, IDEAL_1, SUBSET_1, RANDOM_1,
+      RANDOM_2, C0SP1, FINSET_1, FINSEQ_1, ORDINAL2, RPR_1, CARD_1, SEQ_2,
+      POWER, FUNCT_3, PROB_4, UPROOTS, FINSEQ_2, CARD_3, FUNCT_2, RFINSEQ,
+      XREAL_0, FUNCSDOM, POLYALG1, BHSP_5, NUMBERS, REAL_1, INTEGRA5, VALUED_1,
+      ORDINAL1, EQREL_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FINSEQ_1, ORDINAL1, REAL_1, NAT_1,
+      CARD_1, FINSET_1, NUMBERS, XREAL_0, XXREAL_0, NAT_D, COMPLEX1, VALUED_1,
+      RFINSEQ, FINSOP_1, STRUCT_0, ALGSTR_0, IDEAL_1, VECTSP_1, BINOP_1,
+      BINOP_2, RLVECT_1, FUNCSDOM, SUPINF_2, SEQ_1, SEQ_2, SQUARE_1, GROUP_1,
+      POWER, PROB_1, PROB_4, EXTREAL1, MESFUNC1, MEASURE6, MESFUNC5, MESFUNC6,
+      MESFUNC2, RVSUM_1, UPROOTS, MESFUN6C, C0SP1, RANDOM_1, BHSP_5;
+ constructors EXTREAL1, REAL_1, IDEAL_1, MEASURE6, MESFUNC2, MESFUNC5, SEQ_2,
+      MESFUNC6, SEQ_1, SUPINF_1, REALSET1, RVSUM_1, MESFUNC1, RELSET_1,
+      RANDOM_1, C0SP1, RFINSEQ, POWER, FINSOP_1, BINARITH, FINSEQOP, SEQ_4,
+      CONVFUN1, SEQFUNC, SETWISEO, FINSEQ_4, PARTFUN3, PROB_4, WELLORD2,
+      SQUARE_1, NAT_D, UPROOTS, MESFUN6C, BHSP_5;
+ registrations XBOOLE_0, ORDINAL1, NUMBERS, XREAL_0, MEMBERED, VALUED_0, NAT_1,
+      SUBSET_1, XCMPLX_0, RLVECT_1, XXREAL_0, MEASURE1, FINSEQ_1, RELAT_1,
+      XXREAL_3, C0SP1, FUNCT_2, CARD_1, FINSET_1, BINOP_2, FUNCT_1, UPROOTS,
+      MESFUN6C, FUNCSDOM, BHSP_5;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+
+
+begin
+
+ reserve Omega for non empty set;
+ reserve r for Real;
+ reserve Sigma for SigmaField of Omega;
+ reserve P for Probability of Sigma;
+
+theorem :: RANDOM_2:1
+  for f be one-to-one Function, A,B be Subset of dom f st A misses B holds
+  rng (f|A) misses rng (f|B);
+
+theorem :: RANDOM_2:2
+  for f,g be Function holds rng (f*g) c= rng (f|(rng g));
+
+registration let Omega,Sigma;
+  cluster nonnegative Real-Valued-Random-Variable of Sigma;
+end;
+
+registration let Omega,Sigma;
+  let X be Real-Valued-Random-Variable of Sigma;
+  cluster abs X -> nonnegative;
+end;
+
+theorem :: RANDOM_2:3
+  (Omega --> 1) = chi(Omega, Omega);
+
+theorem :: RANDOM_2:4
+  (Omega --> r) is Real-Valued-Random-Variable of Sigma;
+
+theorem :: RANDOM_2:5
+  for X be non empty set, f be PartFunc of X,REAL holds
+  f to_power 2 = (-f) to_power 2 &
+  f to_power 2 = (abs(f)) to_power 2;
+
+theorem :: RANDOM_2:6
+  for X be non empty set, f,g be PartFunc of X,REAL holds
+  (f+g) to_power 2 = (f to_power 2) + 2(#)(f(#)g) + (g to_power 2) &
+  (f-g) to_power 2 = (f to_power 2) - 2(#)(f(#)g) + (g to_power 2);
+
+definition let Omega,Sigma,P;
+  let X be Real-Valued-Random-Variable of Sigma;
+  assume  X is_integrable_on P
+  & (abs(X) to_power 2) is_integrable_on P2M(P);
+  func variance (X,P) -> Element of REAL means
+:: RANDOM_2:def 1
+  ex Y be Real-Valued-Random-Variable of Sigma,
+  E be Real-Valued-Random-Variable of Sigma
+  st E=(Omega --> expect(X,P)) & Y = X-E &
+  Y is_integrable_on P & abs(Y) to_power 2 is_integrable_on P2M(P) &
+  it=Integral(P2M(P),abs(Y) to_power 2);
+end;
+
+begin :: Chebyshev's inequality
+
+theorem :: RANDOM_2:7
+  for Omega,Sigma,P,r for X be Real-Valued-Random-Variable of Sigma st
+  0 < r & X is nonnegative & X is_integrable_on P &
+  (abs(X) to_power 2) is_integrable_on P2M(P) holds
+  P.({t where t is Element of Omega : r <= |. X.t - expect(X,P) .| })
+  <= variance(X,P)/( r to_power 2);
+
+begin :: Product Probability
+
+theorem :: RANDOM_2:8
+  for Omega be non empty finite set, f be Function of Omega,REAL,
+  P be Function of bool Omega, REAL st
+  (for x be set st x c= Omega holds 0 <= P.x & P.x <= 1) &
+  P.Omega = 1 & for z be finite Subset of Omega
+  holds P.z = setopfunc(z,Omega,REAL,f,addreal)
+  holds P is Probability of Trivial-SigmaField Omega;
+
+theorem :: RANDOM_2:9
+  for DX be non empty set, F be Function of DX,REAL,
+  Y be finite Subset of DX holds
+  ex p being FinSequence of DX st p is one-to-one &
+  rng p = Y & setopfunc(Y,DX,REAL,F,addreal)=Sum(Func_Seq(F,p));
+
+theorem :: RANDOM_2:10
+  for DX be non empty set, F be Function of DX,REAL, Y be finite Subset of DX,
+  p being FinSequence of DX
+  st p is one-to-one & rng p = Y holds
+  setopfunc(Y,DX,REAL,F,addreal)=Sum(Func_Seq(F,p));
+
+theorem :: RANDOM_2:11
+  for DX1,DX2 be non empty set, F1 be Function of DX1,REAL,
+  F2 be Function of DX2,REAL,
+  G be Function of [:DX1,DX2:], REAL,
+  Y1 be non empty finite Subset of DX1 holds
+  for p1 being FinSequence of DX1 st
+  p1 is one-to-one & rng p1 = Y1 holds
+  for p2 being FinSequence of DX2,
+  p3 being FinSequence of [:DX1,DX2:],
+  Y2 be non empty finite Subset of DX2,
+  Y3 be finite Subset of [:DX1,DX2:] st
+  p2 is one-to-one & rng p2 = Y2 &
+  p3 is one-to-one & rng p3 = Y3 & Y3= [:Y1,Y2:] &
+  for x,y be set st x in Y1 & y in Y2
+  holds G.(x,y)= (F1.x)*(F2.y) holds
+  Sum(Func_Seq(G,p3))= Sum(Func_Seq(F1,p1))*Sum(Func_Seq(F2,p2));
+
+theorem :: RANDOM_2:12
+  for DX1,DX2 be non empty set, F1 be Function of DX1,REAL,
+  F2 be Function of DX2,REAL,
+  G be Function of [:DX1,DX2:], REAL,
+  Y1 be non empty finite Subset of DX1,
+  Y2 be non empty finite Subset of DX2,
+  Y3 be finite Subset of [:DX1,DX2:] st Y3= [:Y1,Y2:] &
+  for x,y be set st x in Y1 & y in Y2 holds G.(x,y)= (F1.x)*(F2.y)
+  holds
+  setopfunc(Y3,[:DX1,DX2:],REAL,G,addreal)
+  =setopfunc(Y1,DX1,REAL,F1,addreal) * setopfunc(Y2,DX2,REAL,F2,addreal);
+
+theorem :: RANDOM_2:13
+  for DX be non empty set, F be Function of DX,REAL,
+  Y be finite Subset of DX st
+  for x be set st x in Y holds 0<= F.x holds
+  0 <= setopfunc(Y,DX,REAL,F,addreal);
+
+theorem :: RANDOM_2:14
+  for DX be non empty set, F be Function of DX,REAL,
+  Y1,Y2 be finite Subset of DX st
+  Y1 c= Y2 & for x be set st x in Y2 holds 0<= F.x holds
+  setopfunc(Y1,DX,REAL,F,addreal)
+  <= setopfunc(Y2,DX,REAL,F,addreal);
+
+theorem :: RANDOM_2:15
+  for Omega be non empty finite set,
+  P be Probability of Trivial-SigmaField (Omega),
+  Y be non empty finite Subset of Omega,
+  f be Function of Omega,REAL
+  ex G being FinSequence of REAL, s being FinSequence of Y
+  st
+  len G = card (Y) & s is one-to-one
+  & rng s = Y & len s = card (Y)
+  & (for n being Nat st n in dom G holds G.n
+  = (f.(s.n)) * P.{s.n})
+  & Integral(P2M(P),f|Y) = Sum G;
+
+definition
+  let Omega1, Omega2 be non empty finite set,
+      P1 be Probability of Trivial-SigmaField Omega1,
+      P2 be Probability of Trivial-SigmaField Omega2;
+  func Product-Probability (Omega1,Omega2,P1,P2)
+  -> Probability of Trivial-SigmaField ([:Omega1,Omega2:]) means
+:: RANDOM_2:def 2
+  ex Q be Function of [:Omega1,Omega2:],REAL st
+  (for x,y be set st x in Omega1 & y in Omega2
+  holds Q.(x,y) = (P1.{x})*(P2.{y}) ) &
+  (for z be finite Subset of [:Omega1,Omega2:]
+  holds it.z = setopfunc(z,[:Omega1,Omega2:],REAL,Q,addreal));
+end;
+
+theorem :: RANDOM_2:16
+  for Omega1, Omega2 be non empty finite set,
+  P1 be Probability of Trivial-SigmaField Omega1,
+  P2 be Probability of Trivial-SigmaField Omega2,
+  Y1 be non empty finite Subset of Omega1,
+  Y2 be non empty finite Subset of Omega2 holds
+  Product-Probability (Omega1,Omega2,P1,P2).([:Y1,Y2:]) = (P1.Y1)*(P2.Y2);
+
+theorem :: RANDOM_2:17
+  for Omega1, Omega2 be non empty finite set,
+  P1 be Probability of Trivial-SigmaField (Omega1),
+  P2 be Probability of Trivial-SigmaField (Omega2),
+  y1, y2 be set st y1 in Omega1 & y2 in Omega2 holds
+  Product-Probability (Omega1,Omega2,P1,P2).({[y1,y2]})
+  = (P1.{y1})*(P2.{y2});
+
+begin :: Algebra of Real Valued Random Variables
+
+definition
+  let Omega be non empty set;
+  let Sigma be SigmaField of Omega;
+  func Real-Valued-Random-Variables-Set Sigma
+    -> non empty Subset of RAlgebra Omega equals
+:: RANDOM_2:def 3
+  { f where f is Real-Valued-Random-Variable of Sigma : not contradiction };
+end;
+
+registration let Omega,Sigma;
+  cluster Real-Valued-Random-Variables-Set Sigma
+    -> additively-linearly-closed multiplicatively-closed;
+end;
+
+definition
+  let Omega,Sigma;
+  func R_Algebra_of_Real-Valued-Random-Variables Sigma -> Algebra equals
+:: RANDOM_2:def 4
+  AlgebraStr (# Real-Valued-Random-Variables-Set Sigma,
+     mult_(Real-Valued-Random-Variables-Set Sigma,RAlgebra Omega),
+     Add_(Real-Valued-Random-Variables-Set Sigma,RAlgebra Omega),
+     Mult_(Real-Valued-Random-Variables-Set Sigma,RAlgebra Omega),
+     One_(Real-Valued-Random-Variables-Set Sigma,RAlgebra Omega),
+     Zero_(Real-Valued-Random-Variables-Set Sigma,RAlgebra Omega) #);
+end;
+
+registration let Omega, Sigma;
+  cluster R_Algebra_of_Real-Valued-Random-Variables Sigma -> scalar-unital;
+end;

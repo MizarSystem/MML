@@ -19,11 +19,14 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQOP"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -47,22 +50,22 @@
 <Adjective nr="40" value="false"/>
 <Adjective nr="59"/>
 <Adjective nr="79"/>
-<Adjective nr="93"/>
-<Adjective nr="95"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
+<Adjective nr="105"/>
+<Adjective nr="107"/>
+<Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
+<Adjective nr="123"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="225">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="126">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

@@ -10,36 +10,39 @@ environ
       FUNCSDOM, AMI_3, AMI_1, FSM_1, STRUCT_0, AMI_2, FUNCT_1, AMISTD_1,
       TARSKI, RELAT_1, AMISTD_2, ARYTM_3, FUNCT_4, CIRCUIT2, CARD_1, GRAPHSP,
       ARYTM_1, SUPINF_2, FUNCOP_1, ZFMISC_1, GLIB_000, VALUED_1, MSUALG_1,
-      PARTFUN1, TURING_1, SCMNORM;
+      PARTFUN1, TURING_1, SCMNORM, FINSET_1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, RELAT_1,
-      NUMBERS, FUNCT_1, PARTFUN1, STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
-      XCMPLX_0, NAT_1, FUNCT_4, AMI_1, SCMNORM, AMI_2, AMI_3, SCMRING1,
+      NUMBERS, FUNCT_1, PARTFUN1, FINSET_1,
+      STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
+      XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1,
+      COMPOS_1, AMI_1, AMI_2, AMI_3, SCMRING1,
       SCMRING2, AMISTD_1, SCMRING3, AMISTD_2;
- constructors XXREAL_0, REALSET2, AMI_5, AMISTD_2, SCMRING3, SCMNORM, PRE_POLY;
+ constructors XXREAL_0, REALSET2, AMI_5, AMISTD_2, SCMRING3, PRE_POLY,
+      NAT_D;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, NAT_1,
       CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING2, AMISTD_2, SCMRING3,
-      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2;
+      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1,
+      COMPOS_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions AMI_1, FUNCOP_1, AMI_3, AMI_2, AMISTD_1, AMISTD_2;
+ definitions AMI_1, FUNCOP_1, AMI_3, AMI_2, AMISTD_1, AMISTD_2, NAT_1,
+      COMPOS_1;
  theorems TARSKI, NAT_1, AMI_1, SCMRING2, AMI_3, FUNCT_4, AMI_5, FUNCT_1,
       ZFMISC_1, FUNCOP_1, SCMRING1, AMI_2, STRUCT_0, XBOOLE_0, XBOOLE_1,
-      RELAT_1, GRFUNC_1, SCMRING3, AMISTD_1, AMISTD_2, SCMNORM, PBOOLE,
-      PARTFUN1;
+      RELAT_1, GRFUNC_1, SCMRING3, AMISTD_1, AMISTD_2, PBOOLE,
+      PARTFUN1, ORDINAL1, VALUED_1, NAT_D, COMPOS_1;
  schemes NAT_1;
 
 begin :: On the standard computers
 
-reserve i, j, k for natural number,
+reserve i, j, k for Element of NAT,
   n for Element of NAT,
-  IL for non empty set
-  ,
+  IL for non empty set,
   N for with_non-empty_elements set;
 
 Lm1: for a,A being set st A /\ {a} <> {} holds a in A
 proof
   let a,A be set;
-  assume
-  A /\ {a} <> {};
+  assume A /\ {a} <> {};
   then A meets {a} by XBOOLE_0:def 7;
   hence thesis by ZFMISC_1:56;
 end;
@@ -105,8 +108,7 @@ end;
 theorem Th7:
   a <> loc
 proof
-  assume
-  a = loc;
+  assume a = loc;
   then loc in (the carrier of SCM R) \ (NAT \/ {NAT}) by SCMRING2:def 2;
   then not loc in NAT \/ {NAT} by XBOOLE_0:def 5;
   hence thesis by XBOOLE_0:def 3;
@@ -122,21 +124,20 @@ theorem
   SCM-Data-Loc c= dom s
 proof
   Data-Locations SCM R = SCM-Data-Loc by SCMRING2:31;
-  hence thesis by SCMNORM:13;
+  hence thesis by COMPOS_1:49;
 end;
 
 theorem Th9:
   dom DataPart s = SCM-Data-Loc
 proof
   Data-Locations SCM R = SCM-Data-Loc by SCMRING2:31;
-  hence thesis by SCMNORM:14;
+  hence thesis by COMPOS_1:50;
 end;
 
 theorem
   p = q implies DataPart p = DataPart q
 proof
-  assume
-  p = q;
+  assume p = q;
   hence DataPart p = q | ((the carrier of SCM) \ ({IC SCM R} \/ NAT)) by Lm2
     .= DataPart q by AMI_3:4,SCMRING2:9;
 end;
@@ -147,7 +148,7 @@ theorem
   p is data-only iff dom p c= SCM-Data-Loc
 proof
   Data-Locations SCM R = SCM-Data-Loc by SCMRING2:31;
-  hence thesis by AMI_1:139;
+  hence thesis by COMPOS_1:31;
 end;
 
 theorem Th13:
@@ -173,10 +174,10 @@ theorem
 canceled;
 
 theorem
-  IncAddr(goto(loc,R),k) = goto(loc+(k,SCM R),R) by SCMRING3:69;
+  IncAddr(goto(loc,R),k) = goto(loc + k,R) by SCMRING3:69;
 
 theorem
-  IncAddr(a=0_goto loc,k) = a=0_goto (loc + (k,SCM R)) by SCMRING3:70;
+  IncAddr(a=0_goto loc,k) = a=0_goto (loc + k) by SCMRING3:70;
 
 theorem Th20:
   s.a = (s +* Start-At(loc,SCM R)).a
@@ -205,8 +206,7 @@ A7: dom s2 = the carrier of SCM R by PARTFUN1:def 4;
 A8: now
 A9: SCM-Memory = {IC SCM R} \/ SCM-Data-Loc \/ NAT by SCMRING2:def 1;
     let x be set;
-    assume
-    x in SCM-Memory;
+    assume x in SCM-Memory;
     then
 A10: x in {IC SCM R} \/ SCM-Data-Loc or x in NAT by A9,XBOOLE_0:def 3;
     per cases by A10,XBOOLE_0:def 3;
@@ -233,30 +233,26 @@ end;
 
 theorem Th22:
   Exec(IncAddr(CurInstr(ProgramPart s,s),k),s +*
-  Start-At(IC s +(k,SCM R),SCM R))
+  Start-At(IC s + k,SCM R))
    = Following(ProgramPart s,s) +*
-   Start-At(IC Following(ProgramPart s,s) +(k,SCM R),SCM R)
+   Start-At(IC Following(ProgramPart s,s) +k,SCM R)
 proof
   set INS = CurInstr(ProgramPart s,s);
   consider m being natural number such that
-A1: IC s = il.(SCM R,m) by AMISTD_1:26;
-A2: IC s + (k,SCM R) = il.(SCM R,m + k) by A1,AMISTD_1:def 13;
-A3: succ IC (s +* Start-At(IC s +(k,SCM R),SCM R)) = succ (IC s + (k,SCM R))
+A1: IC s = m;
+  reconsider m as Element of NAT by ORDINAL1:def 13;
+A3: succ IC (s +* Start-At(IC s + k,SCM R)) = succ (IC s + k)
          by FUNCT_4:121
-    .= il.(SCM R,(m + k) + 1) by A2,SCMRING3:67
-    .= il.(SCM R,m + 1 + k)
-    .= il.(SCM R,m + 1) + (k,SCM R) by AMISTD_1:def 13
-    .= (succ il.(SCM R,m)) + (k,SCM R) by SCMRING3:67
-    .= IC (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R))
-     by A1,FUNCT_4:121;
+    .= IC (Exec(INS, s) +* Start-At(succ IC s + k,SCM R))
+     by FUNCT_4:121;
 A4: now
     let d be Element of NAT;
-    thus Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-    (s +* Start-At(IC s +(k,SCM R),SCM R)).d
+    thus Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+    (s +* Start-At(IC s + k,SCM R)).d
     by AMI_1:def 13
-      .= s.d by AMI_1:112
+      .= s.d by COMPOS_1:20
       .= Exec(INS, s).d by AMI_1:def 13
-      .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by AMI_1:112;
+      .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by COMPOS_1:20;
   end;
   per cases by NAT_1:32,SCMRING3:71;
   suppose
@@ -266,12 +262,10 @@ A5: INS = halt SCM R by SCMRING3:16;
     then
 A6: Following(ProgramPart s,s) = s by AMI_1:def 8;
     thus Exec(IncAddr(CurInstr(ProgramPart s,s),k),s +*
-    Start-At(IC s +(k,SCM R),SCM R)) =
-    Exec(halt SCM
-    R, s +* Start-At(IC s +(k,SCM R),SCM R)) by A5,AMISTD_2:29
-      .= Following(ProgramPart s,s) +*
-      Start-At(IC Following(ProgramPart s,s) +(k,SCM R),SCM R)
-      by A6,AMI_1:def 8;
+    Start-At(IC s + k,SCM R))
+      = Following(ProgramPart s,s) +*
+      Start-At(IC Following(ProgramPart s,s) +k,SCM R)
+      by A6,A5,AMI_1:def 8;
   end;
   suppose
     InsCode INS = 1;
@@ -283,28 +277,28 @@ A8: now
       suppose
 A9:     da = d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).db by A7,SCMRING2:13
           .= s.db by Th20
           .= Exec(INS, s).d by A7,A9,SCMRING2:13
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
       suppose
 A10:    da <> d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).d by A7,SCMRING2:13
           .= s.d by Th20
           .= Exec(INS, s).d by A7,A10,SCMRING2:13
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
     end;
 A11: IncAddr(INS,k) = INS & IC Exec(INS, s) = succ IC s by A7,AMISTD_2:29
 ,SCMRING2:13;
-    IC Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)) = IC (Exec(INS, s) +*
-     Start-At(succ IC s +(k,SCM R),SCM R)) by A3,A7,SCMRING2:13;
+    IC Exec(INS, s +* Start-At(IC s + k,SCM R)) = IC (Exec(INS, s) +*
+     Start-At(succ IC s + k,SCM R)) by A3,A7,SCMRING2:13;
     hence thesis by A4,A11,A8,Th21;
   end;
   suppose
@@ -317,29 +311,29 @@ A13: now
       suppose
 A14:    da = d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
-        ).da + (s +* Start-At(IC s +(k,SCM R),SCM R)).db by A12,SCMRING2:14
-          .= s.da + (s +* Start-At(IC s +(k,SCM R),SCM R)).db by Th20
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
+        ).da + (s +* Start-At(IC s + k,SCM R)).db by A12,SCMRING2:14
+          .= s.da + (s +* Start-At(IC s + k,SCM R)).db by Th20
           .= s.da + s.db by Th20
           .= Exec(INS, s).d by A12,A14,SCMRING2:14
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
       suppose
 A15:    da <> d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).d by A12,SCMRING2:14
           .= s.d by Th20
           .= Exec(INS, s).d by A12,A15,SCMRING2:14
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
     end;
 A16: IncAddr(INS, k) = INS & IC Exec(INS, s) = succ IC s by A12,AMISTD_2:29
 ,SCMRING2:14;
-    IC Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)) = IC (Exec(INS, s) +*
-    Start-At(succ IC s +(k,SCM R),SCM R)) by A3,A12,SCMRING2:14;
+    IC Exec(INS, s +* Start-At(IC s + k,SCM R)) = IC (Exec(INS, s) +*
+    Start-At(succ IC s + k,SCM R)) by A3,A12,SCMRING2:14;
     hence thesis by A4,A16,A13,Th21;
   end;
   suppose
@@ -352,29 +346,29 @@ A18: now
       suppose
 A19:    da = d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
-        ).da - (s +* Start-At(IC s +(k,SCM R),SCM R)).db by A17,SCMRING2:15
-          .= s.da - (s +* Start-At(IC s +(k,SCM R),SCM R)).db by Th20
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
+        ).da - (s +* Start-At(IC s + k,SCM R)).db by A17,SCMRING2:15
+          .= s.da - (s +* Start-At(IC s + k,SCM R)).db by Th20
           .= s.da - s.db by Th20
           .= Exec(INS, s).d by A17,A19,SCMRING2:15
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
       suppose
 A20:    da <> d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).d by A17,SCMRING2:15
           .= s.d by Th20
           .= Exec(INS, s).d by A17,A20,SCMRING2:15
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
     end;
 A21: IncAddr(INS, k) = INS & IC Exec(INS, s) = succ IC s by A17,AMISTD_2:29
 ,SCMRING2:15;
-    IC Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)) = IC (Exec(INS, s) +*
-    Start-At(succ IC s +(k,SCM R),SCM R)) by A3,A17,SCMRING2:15;
+    IC Exec(INS, s +* Start-At(IC s + k,SCM R)) = IC (Exec(INS, s) +*
+    Start-At(succ IC s + k,SCM R)) by A3,A17,SCMRING2:15;
     hence thesis by A4,A21,A18,Th21;
   end;
   suppose
@@ -387,29 +381,29 @@ A23: now
       suppose
 A24:    da = d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
-        ).da * (s +* Start-At(IC s +(k,SCM R),SCM R)).db by A22,SCMRING2:16
-          .= s.da * (s +* Start-At(IC s +(k,SCM R),SCM R)).db by Th20
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
+        ).da * (s +* Start-At(IC s + k,SCM R)).db by A22,SCMRING2:16
+          .= s.da * (s +* Start-At(IC s + k,SCM R)).db by Th20
           .= s.da * s.db by Th20
           .= Exec(INS, s).d by A22,A24,SCMRING2:16
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
       suppose
 A25:    da <> d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).d by A22,SCMRING2:16
           .= s.d by Th20
           .= Exec(INS, s).d by A22,A25,SCMRING2:16
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
     end;
 A26: IncAddr(INS, k) = INS & IC Exec(INS, s) = succ IC s by A22,AMISTD_2:29
 ,SCMRING2:16;
-    IC Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)) = IC (Exec(INS, s) +*
-    Start-At(succ IC s +(k,SCM R),SCM R)) by A3,A22,SCMRING2:16;
+    IC Exec(INS, s +* Start-At(IC s + k,SCM R)) = IC (Exec(INS, s) +*
+    Start-At(succ IC s + k,SCM R)) by A3,A22,SCMRING2:16;
     hence thesis by A4,A26,A23,Th21;
   end;
   suppose
@@ -421,26 +415,26 @@ A28: now
       per cases;
       suppose
 A29:    da = d;
-        hence Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d = r
+        hence Exec(INS, s +* Start-At(IC s + k,SCM R)).d = r
         by A27,SCMRING2:19
           .= Exec(INS, s).d by A27,A29,SCMRING2:19
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
       suppose
 A30:    da <> d;
         hence
-        Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s +(k,SCM R),SCM R)
+        Exec(INS, s +* Start-At(IC s + k,SCM R)).d =
+        (s +* Start-At(IC s + k,SCM R)
         ).d by A27,SCMRING2:19
           .= s.d by Th20
           .= Exec(INS, s).d by A27,A30,SCMRING2:19
-          .= (Exec(INS, s) +* Start-At(succ IC s +(k,SCM R),SCM R)).d by Th20;
+          .= (Exec(INS, s) +* Start-At(succ IC s + k,SCM R)).d by Th20;
       end;
     end;
 A31: IncAddr(INS,k) = INS & IC Exec(INS, s) = succ IC s by A27,AMISTD_2:29
 ,SCMRING2:19;
-    IC Exec(INS, s +* Start-At(IC s +(k,SCM R),SCM R)) = IC (Exec(INS, s) +*
-    Start-At(succ IC s +(k,SCM R),SCM R)) by A3,A27,SCMRING2:19;
+    IC Exec(INS, s +* Start-At(IC s + k,SCM R)) = IC (Exec(INS, s) +*
+    Start-At(succ IC s + k,SCM R)) by A3,A27,SCMRING2:19;
     hence thesis by A4,A31,A28,Th21;
   end;
   suppose
@@ -450,29 +444,29 @@ A32: INS = goto(loc,R) by SCMRING3:22;
 A33: IC Exec(INS, s) = loc by A32,SCMRING2:17;
 A34: now
       let d be Element of NAT;
-      thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-      (s +* Start-At(IC s +(k,SCM R),SCM R)).d by AMI_1:def 13
-        .= s.d by AMI_1:112
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d =
+      (s +* Start-At(IC s + k,SCM R)).d by AMI_1:def 13
+        .= s.d by COMPOS_1:20
         .= Exec(INS, s).d by AMI_1:def 13
-        .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
-           by AMI_1:112;
+        .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
+           by COMPOS_1:20;
     end;
-A35: IncAddr(INS, k) = goto(loc+(k,SCM R),R) by A32,SCMRING3:69;
+A35: IncAddr(INS, k) = goto(loc + k,R) by A32,SCMRING3:69;
 A36: now
       let d be Data-Location of R;
-      thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d =
-      (s +* Start-At(IC s +(k,SCM R),SCM R)).d by A35,SCMRING2:17
+      thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d =
+      (s +* Start-At(IC s + k,SCM R)).d by A35,SCMRING2:17
         .= s.d by Th20
         .= Exec(INS, s).d by A32,SCMRING2:17
-        .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
+        .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
         by Th20;
     end;
-  set s1 = Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)),
-      s2 = (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R));
-    IC Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R))
-    = loc + (k,SCM R)
+  set s1 = Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)),
+      s2 = (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R));
+    IC Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R))
+    = loc + k
     by A35,SCMRING2:17
-      .= IC (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R))
+      .= IC (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R))
       by A33,FUNCT_4:121;
     hence thesis by A36,A34,Th21;
   end;
@@ -482,75 +476,75 @@ A36: now
     da being Data-Location of R, loc being Element of NAT
     such that
 A37: INS = da=0_goto loc by SCMRING3:23;
-A38: IncAddr(INS, k) = da=0_goto (loc + (k,SCM R)) by A37,SCMRING3:70;
+A38: IncAddr(INS, k) = da=0_goto (loc + k) by A37,SCMRING3:70;
     now
       per cases;
       suppose
 A39:    s.da = 0.R;
 A40:    now
           let d be Data-Location of R;
-          thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d
            = (s +*
-          Start-At(IC s +(k,SCM R),SCM R)).d by A38,SCMRING2:18
+          Start-At(IC s + k,SCM R)).d by A38,SCMRING2:18
             .= s.d by Th20
             .= Exec(INS, s).d by A37,SCMRING2:18
-            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
+            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
             by Th20;
         end;
 A41:    now
           let d be Element of NAT;
-          thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d
            = (s +*
-          Start-At(IC s +(k,SCM R),SCM R)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+          Start-At(IC s + k,SCM R)).d by AMI_1:def 13
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
-            by AMI_1:112;
+            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
+            by COMPOS_1:20;
         end;
 A42:    IC Exec(INS, s) = loc by A37,A39,SCMRING2:18;
-        (s +* Start-At(IC s +(k,SCM R),SCM R)).da=0.R by A39,Th20;
-        then IC Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)) =
-        loc + (k,SCM R) by A38,SCMRING2:18
-          .= IC (Exec(INS,s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R))
+        (s +* Start-At(IC s + k,SCM R)).da=0.R by A39,Th20;
+        then IC Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)) =
+        loc + k by A38,SCMRING2:18
+          .= IC (Exec(INS,s) +*Start-At(IC Exec(INS,s) +k,SCM R))
           by A42,FUNCT_4:121;
         hence
-        Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R))
+        Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R))
          = Exec(INS, s) +*
-       Start-At(IC Exec(INS,s) +(k,SCM R),SCM R) by A40,A41,Th21;
+       Start-At(IC Exec(INS,s) +k,SCM R) by A40,A41,Th21;
       end;
       suppose
 A43:    s.da <> 0.R;
 A44:    now
           let d be Element of NAT;
-          thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d
            = (s +*
-          Start-At(IC s +(k,SCM R),SCM R)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+          Start-At(IC s + k,SCM R)).d by AMI_1:def 13
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
-            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
-            by AMI_1:112;
+            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
+            by COMPOS_1:20;
         end;
 A45:    now
           let d be Data-Location of R;
-          thus Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)).d
+          thus Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)).d
            = (s +*
-          Start-At(IC s +(k,SCM R),SCM R)).d by A38,SCMRING2:18
+          Start-At(IC s + k,SCM R)).d by A38,SCMRING2:18
             .= s.d by Th20
             .= Exec(INS, s).d by A37,SCMRING2:18
-            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)).d
+            .= (Exec(INS, s) +*Start-At(IC Exec(INS,s) +k,SCM R)).d
             by Th20;
         end;
-        (s +* Start-At(IC s +(k,SCM R),SCM R)).da<>0.R & IC Exec(INS, s)
+        (s +* Start-At(IC s + k,SCM R)).da<>0.R & IC Exec(INS, s)
          = succ IC s
         by A37,A43,Th20,SCMRING2:18;
         then
-        IC Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R))
+        IC Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R))
          = IC (Exec(INS
-        , s) +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R))
+        , s) +*Start-At(IC Exec(INS,s) +k,SCM R))
         by A3,A38,SCMRING2:18;
-        hence Exec(IncAddr(INS, k), s +* Start-At(IC s +(k,SCM R),SCM R)) =
+        hence Exec(IncAddr(INS, k), s +* Start-At(IC s + k,SCM R)) =
         (Exec(INS, s)
-        +*Start-At(IC Exec(INS,s) +(k,SCM R),SCM R)) by A45,A44,Th21;
+        +*Start-At(IC Exec(INS,s) +k,SCM R)) by A45,A44,Th21;
       end;
     end;
     hence thesis;
@@ -558,43 +552,38 @@ A45:    now
 end;
 
 theorem Th23:
-  IC s = il.(SCM R,j+k) implies Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+  IC s = j+k implies Exec(I, s +* Start-At(IC s -' k,SCM R))
   = Exec(IncAddr(I, k), s) +*
-   Start-At (IC Exec(IncAddr(I,k), s) -' (k,SCM R),SCM R)
+   Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R)
 proof
 A1: now
     let d be Element of NAT;
-    thus Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-    (s +* Start-At(IC s -' (k,SCM R),SCM R)).d
+    thus Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+    (s +* Start-At(IC s -' k,SCM R)).d
     by AMI_1:def 13
-      .= s.d by AMI_1:112
+      .= s.d by COMPOS_1:20
       .= Exec(IncAddr(I, k), s).d by AMI_1:def 13
       .= (Exec(IncAddr(I, k), s) +*
-      Start-At (IC Exec(IncAddr(I,k), s) -' (k,SCM R),SCM R)
-    ).d by AMI_1:112;
+      Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R)
+    ).d by COMPOS_1:20;
   end;
   assume
-A2: IC s = il.(SCM R,j+k);
+A2: IC s = j+k;
   then
-A3: succ (IC s -' (k,SCM R)) = succ (il.(SCM R,j) + (k,SCM R) -' (k,SCM R))
-        by AMISTD_1:def 13
-    .= succ (il.(SCM R,j)) by AMISTD_1:61
-    .= il.(SCM R,j+1) by SCMRING3:67
-    .= il.(SCM R,j+1) + (k,SCM R) -' (k,SCM R) by AMISTD_1:61
-    .= il.(SCM R,j+1+k) -' (k,SCM R) by AMISTD_1:def 13
-    .= il.(SCM R,j+k+1) -' (k,SCM R)
-    .= (succ IC s) -' (k,SCM R) by A2,SCMRING3:67;
+A3: succ (IC s -' k) = succ j by NAT_D:34
+    .= j+1 + k -' k by NAT_D:34
+    .= (succ IC s) -' k by A2;
   per cases by NAT_1:32,SCMRING3:71;
   suppose
     InsCode I = 0;
     then
 A4: I = halt SCM R by SCMRING3:16;
-    hence Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) =
-    s +* Start-At(IC s -' (k,SCM R),SCM R) by AMI_1:def 8
-      .= s +* Start-At (IC Exec(IncAddr(I,k), s) -' (k,SCM R),SCM R)
+    hence Exec(I, s +* Start-At(IC s -' k,SCM R)) =
+    s +* Start-At(IC s -' k,SCM R) by AMI_1:def 8
+      .= s +* Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R)
       by A4,AMI_1:def 8
       .= Exec(IncAddr(I, k), s) +*
-      Start-At (IC Exec(IncAddr(I,k), s) -' (k,SCM R),SCM R) by A4,AMI_1:def 8;
+      Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R) by A4,AMI_1:def 8;
   end;
   suppose
     InsCode I = 1;
@@ -609,32 +598,32 @@ A8: now
       suppose
 A9:     da = d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).db by A5,SCMRING2:13
           .= s.db by Th20
           .= Exec(IncAddr(I,k), s).d by A6,A9,SCMRING2:13
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
       suppose
 A10:    da <> d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).d by A5,SCMRING2:13
           .= s.d by Th20
           .= Exec(IncAddr(I, k), s).d by A6,A10,SCMRING2:13
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R))
      = succ IC (s +* Start-At (IC s
-    -' (k,SCM R),SCM R)) by A5,SCMRING2:13
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A7,FUNCT_4:121
+    -' k,SCM R)) by A5,SCMRING2:13
+      .= IC Exec(IncAddr(I,k), s) -' k by A3,A7,FUNCT_4:121
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A8,Th21;
   end;
@@ -651,33 +640,33 @@ A14: now
       suppose
 A15:    da = d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
-        ).da + (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by A11,SCMRING2:14
-          .= s.da + (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by Th20
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
+        ).da + (s +* Start-At(IC s -' k,SCM R)).db by A11,SCMRING2:14
+          .= s.da + (s +* Start-At(IC s -' k,SCM R)).db by Th20
           .= s.da + s.db by Th20
           .= Exec(IncAddr(I,k), s).d by A12,A15,SCMRING2:14
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
       suppose
 A16:    da <> d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).d by A11,SCMRING2:14
           .= s.d by Th20
           .= Exec(IncAddr(I, k), s).d by A12,A16,SCMRING2:14
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R))
      = succ IC (s +* Start-At (IC s
-    -' (k,SCM R),SCM R)) by A11,SCMRING2:14
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A13,FUNCT_4:121
+    -' k,SCM R)) by A11,SCMRING2:14
+      .= IC Exec(IncAddr(I,k), s) -' k by A3,A13,FUNCT_4:121
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A14,Th21;
   end;
@@ -694,33 +683,33 @@ A20: now
       suppose
 A21:    da = d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
-        ).da - (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by A17,SCMRING2:15
-          .= s.da - (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by Th20
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
+        ).da - (s +* Start-At(IC s -' k,SCM R)).db by A17,SCMRING2:15
+          .= s.da - (s +* Start-At(IC s -' k,SCM R)).db by Th20
           .= s.da - s.db by Th20
           .= Exec(IncAddr(I,k), s).d by A18,A21,SCMRING2:15
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
       suppose
 A22:    da <> d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).d by A17,SCMRING2:15
           .= s.d by Th20
           .= Exec(IncAddr(I, k), s).d by A18,A22,SCMRING2:15
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R))
      = succ IC (s +* Start-At (IC s
-    -' (k,SCM R),SCM R)) by A17,SCMRING2:15
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A19,FUNCT_4:121
+    -' k,SCM R)) by A17,SCMRING2:15
+      .= IC Exec(IncAddr(I,k), s) -' k by A3,A19,FUNCT_4:121
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A20,Th21;
   end;
@@ -737,33 +726,33 @@ A26: now
       suppose
 A27:    da = d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
-        ).da * (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by A23,SCMRING2:16
-          .= s.da * (s +* Start-At(IC s -' (k,SCM R),SCM R)).db by Th20
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
+        ).da * (s +* Start-At(IC s -' k,SCM R)).db by A23,SCMRING2:16
+          .= s.da * (s +* Start-At(IC s -' k,SCM R)).db by Th20
           .= s.da * s.db by Th20
           .= Exec(IncAddr(I,k), s).d by A24,A27,SCMRING2:16
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
       suppose
 A28:    da <> d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).d by A23,SCMRING2:16
           .= s.d by Th20
           .= Exec(IncAddr(I, k), s).d by A24,A28,SCMRING2:16
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R))
      = succ IC (s +* Start-At (IC s
-    -' (k,SCM R),SCM R)) by A23,SCMRING2:16
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A25,FUNCT_4:121
+    -' k,SCM R)) by A23,SCMRING2:16
+      .= IC Exec(IncAddr(I,k), s) -' k by A3,A25,FUNCT_4:121
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A26,Th21;
   end;
@@ -779,30 +768,30 @@ A32: now
       per cases;
       suppose
 A33:    da = d;
-        hence Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d = r
+        hence Exec(I, s +* Start-At(IC s -' k,SCM R)).d = r
         by A29,SCMRING2:19
           .= Exec(IncAddr(I,k), s).d by A30,A33,SCMRING2:19
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
       suppose
 A34:    da <> d;
         hence
-        Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)
+        Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+        (s +* Start-At(IC s -' k,SCM R)
         ).d by A29,SCMRING2:19
           .= s.d by Th20
           .= Exec(IncAddr(I, k), s).d by A30,A34,SCMRING2:19
           .= (Exec(IncAddr(I,k), s) +* Start-At (IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)).d by Th20;
+        k,SCM R)).d by Th20;
       end;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R))
      = succ IC (s +* Start-At (IC s
-    -' (k,SCM R),SCM R)) by A29,SCMRING2:19
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A31,FUNCT_4:121
+    -' k,SCM R)) by A29,SCMRING2:19
+      .= IC Exec(IncAddr(I,k), s) -' k by A3,A31,FUNCT_4:121
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A32,Th21;
   end;
@@ -810,24 +799,24 @@ A34:    da <> d;
     InsCode I = 6;
     then consider loc being Element of NAT such that
 A35: I = goto(loc,R) by SCMRING3:22;
-A36: IncAddr(I, k) = goto(loc+(k,SCM R),R) by A35,SCMRING3:69;
+A36: IncAddr(I, k) = goto(loc + k,R) by A35,SCMRING3:69;
     then
-A37: IC Exec(IncAddr(I,k), s)= loc + (k,SCM R) by SCMRING2:17;
+A37: IC Exec(IncAddr(I,k), s)= loc + k by SCMRING2:17;
 A38: now
       let d be Data-Location of R;
-      thus Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-      (s +* Start-At(IC s -' (k,SCM R),SCM R)).
+      thus Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+      (s +* Start-At(IC s -' k,SCM R)).
       d by A35,SCMRING2:17
         .= s.d by Th20
         .= Exec(IncAddr(I,k), s).d by A36,SCMRING2:17
         .= (Exec(IncAddr(I,k), s) +*
-        Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+        Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
       ).d by Th20;
     end;
-    IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) = loc by A35,SCMRING2:17
-      .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A37,AMISTD_1:61
+    IC Exec(I, s +* Start-At(IC s -' k,SCM R)) = loc by A35,SCMRING2:17
+      .= IC Exec(IncAddr(I,k), s) -' k by A37,NAT_D:34
       .= IC (Exec(IncAddr(I,k),s) +*
-      Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+      Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
     ) by FUNCT_4:121;
     hence thesis by A1,A38,Th21;
   end;
@@ -837,48 +826,48 @@ A38: now
     da being Data-Location of R, loc being Element of NAT
     such that
 A39: I = da=0_goto loc by SCMRING3:23;
-A40: IncAddr(I, k) = da=0_goto (loc + (k,SCM R)) by A39,SCMRING3:70;
+A40: IncAddr(I, k) = da=0_goto (loc + k) by A39,SCMRING3:70;
 A41: now
       per cases;
       suppose
 A42:    s.da = 0.R;
         then
-A43:    IC Exec(IncAddr(I,k), s)= loc + (k,SCM R) by A40,SCMRING2:18;
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)).da = 0.R by A42,Th20;
-        then IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) = loc
+A43:    IC Exec(IncAddr(I,k), s)= loc + k by A40,SCMRING2:18;
+        (s +* Start-At(IC s -' k,SCM R)).da = 0.R by A42,Th20;
+        then IC Exec(I, s +* Start-At(IC s -' k,SCM R)) = loc
         by A39,SCMRING2:18
-          .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A43,AMISTD_1:61
+          .= IC Exec(IncAddr(I,k), s) -' k by A43,NAT_D:34
           .= IC (Exec(IncAddr(I,k),s) +* Start-At (IC Exec(IncAddr(I,k),s)
-        -' (k,SCM R),SCM R)) by FUNCT_4:121;
-        hence IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) =
+        -' k,SCM R)) by FUNCT_4:121;
+        hence IC Exec(I, s +* Start-At(IC s -' k,SCM R)) =
         IC(Exec(IncAddr(I,k),s)
-        +* Start-At(IC Exec(IncAddr(I,k),s)-'(k,SCM R),SCM R));
+        +* Start-At(IC Exec(IncAddr(I,k),s)-'k,SCM R));
       end;
       suppose
 A44:    s.da <> 0.R;
         then
 A45:    Exec(IncAddr(I,k), s).IC SCM R = succ IC s by A40,SCMRING2:18;
-        (s +* Start-At(IC s -' (k,SCM R),SCM R)).da <> 0.R by A44,Th20;
-        then IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) =
+        (s +* Start-At(IC s -' k,SCM R)).da <> 0.R by A44,Th20;
+        then IC Exec(I, s +* Start-At(IC s -' k,SCM R)) =
         succ IC (s +* Start-At (
-        IC s -' (k,SCM R),SCM R)) by A39,SCMRING2:18
-          .= IC Exec(IncAddr(I,k), s) -' (k,SCM R) by A3,A45,FUNCT_4:121
+        IC s -' k,SCM R)) by A39,SCMRING2:18
+          .= IC Exec(IncAddr(I,k), s) -' k by A3,A45,FUNCT_4:121
           .= IC(Exec(IncAddr(I,k),s) +* Start-At(IC Exec(IncAddr(I,k),s) -'
-        (k,SCM R),SCM R)) by FUNCT_4:121;
-        hence IC Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)) =
+        k,SCM R)) by FUNCT_4:121;
+        hence IC Exec(I, s +* Start-At(IC s -' k,SCM R)) =
         IC(Exec(IncAddr(I,k),s)
-        +* Start-At(IC Exec(IncAddr(I,k),s)-'(k,SCM R),SCM R));
+        +* Start-At(IC Exec(IncAddr(I,k),s)-'k,SCM R));
       end;
     end;
     now
       let d be Data-Location of R;
-      thus Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R)).d =
-      (s +* Start-At(IC s -' (k,SCM R),SCM R)).
+      thus Exec(I, s +* Start-At(IC s -' k,SCM R)).d =
+      (s +* Start-At(IC s -' k,SCM R)).
       d by A39,SCMRING2:18
         .= s.d by Th20
         .= Exec(IncAddr(I,k), s).d by A40,SCMRING2:18
         .= (Exec(IncAddr(I,k), s) +*
-        Start-At (IC Exec(IncAddr(I,k),s) -' (k,SCM R),SCM R)
+        Start-At (IC Exec(IncAddr(I,k),s) -' k,SCM R)
       ).d by Th20;
     end;
     hence thesis by A1,A41,Th21;
@@ -891,10 +880,7 @@ registration
   existence
   proof
     set P = (IC SCM R, 0) --> (0, halt SCM R);
-    il.(SCM R,0) = 0 by SCMRING3:66;
-    then
-    P = Start-At(il.(SCM R,0),SCM R)+*((il.(SCM R,0)) .--> halt SCM R) by
-FUNCT_4:def 4;
+    P = Start-At(0,SCM R)+*((0) .--> halt SCM R) by FUNCT_4:def 4;
     then reconsider P as FinPartState of SCM R;
     take P;
     thus P is autonomic by AMI_1:67;
@@ -902,11 +888,10 @@ FUNCT_4:def 4;
       dom P = { IC SCM R, 0 } by FUNCT_4:65;
       then
 A1:   IC SCM R in dom P by TARSKI:def 2;
-      assume
-      dom P c= NAT;
+      assume dom P c= NAT;
       then reconsider l = IC SCM R as Element of NAT by A1;
       l = IC SCM R;
-      hence contradiction by AMI_1:48;
+      hence contradiction by COMPOS_1:3;
     end;
     hence thesis by RELAT_1:def 18;
   end;
@@ -945,8 +930,7 @@ proof
   assume
 A1: R is non trivial;
   let p be autonomic FinPartState of SCM R;
-  assume
-  DataPart p <> {};
+  assume DataPart p <> {};
   then
 A2: dom DataPart p <> {};
   assume
@@ -995,7 +979,7 @@ A15: IC s1 = p1.IC SCM R by A10,GRFUNC_1:8
       by A14,FUNCT_4:14
       .= (Start-At(il,SCM R)).IC SCM R by A13,FUNCT_4:14
       .= il by FUNCOP_1:87;
-A16: il <> IC SCM R by AMI_1:48;
+A16: il <> IC SCM R by COMPOS_1:3;
     then
 A17: not il in dom (Start-At(il,SCM R)) by A12,TARSKI:def 1;
 A18: dom(Start-At(il,SCM R)) = {IC SCM R} by FUNCOP_1:19;
@@ -1147,13 +1131,13 @@ FUNCT_4:14
       .= ((il .--> (d1:=d2)) +* ( d2.--> e)).d2 by A22,FUNCT_4:12
       .= (d2.--> e).d2 by A47,FUNCT_4:14
       .= e by FUNCOP_1:87;
-X:  (ProgramPart s2)/.il = s2.il by AMI_1:150;
+X:  (ProgramPart s2)/.il = s2.il by COMPOS_1:38;
 A50: Comput(ProgramPart(s2),s2,0+1).d1 =
  (Following(ProgramPart s2,Comput(ProgramPart(s2),s2,
 0))).d1 by AMI_1:14
       .= (Following(ProgramPart s2,s2)).d1 by AMI_1:13
       .= e by A42,A46,A49,X,SCMRING2:13;
-X:  (ProgramPart s1)/.il = s1.il by AMI_1:150;
+X:  (ProgramPart s1)/.il = s1.il by COMPOS_1:38;
     Comput(ProgramPart(s1),s1,0+1).d1 =
      (Following(ProgramPart s1,Comput(ProgramPart(s1)
 ,s1,0))).d1
@@ -1204,8 +1188,8 @@ proof
   assume
 A1: IC SCM R in dom p;
   set il = IC p;
-  set p1 = p +* ((il .--> goto(il.(SCM R,0),R)));
-  set p2 = p +* ((il .--> goto(il.(SCM R,1),R)));
+  set p1 = p +* ((il .--> goto(0,R)));
+  set p2 = p +* ((il .--> goto(1,R)));
   consider s1 being State of SCM R such that
 A2: p1 c= s1 by PBOOLE:156;
   consider s2 being State of SCM R such that
@@ -1215,28 +1199,28 @@ A4: not IC p in dom p;
   p is not autonomic
   proof
     take s1,s2;
-A5: dom (il .--> (goto(il.(SCM R,1),R))) = {il} by FUNCOP_1:19;
+A5: dom (il .--> (goto(1,R))) = {il} by FUNCOP_1:19;
     then
-A6: il in dom (il .--> (goto(il.(SCM R,1),R))) by TARSKI:def 1;
+A6: il in dom (il .--> (goto(1,R))) by TARSKI:def 1;
 A7: dom p misses {il} by A4,ZFMISC_1:56;
     then
 A8: p c= p2 by A5,FUNCT_4:33;
-    dom p2 = dom p \/ dom ((il .--> goto(il.(SCM R,1),R))) by FUNCT_4:def 1;
+    dom p2 = dom p \/ dom ((il .--> goto(1,R))) by FUNCT_4:def 1;
     then il in dom p2 by A6,XBOOLE_0:def 3;
     then
 X:   s2.il = p2.il by A3,GRFUNC_1:8
-      .= ((il .--> goto(il.(SCM R,1),R))).il by A6,FUNCT_4:14
-      .= goto(il.(SCM R,1),R) by FUNCOP_1:87;
-Y:  (ProgramPart s2)/.il = s2.il by AMI_1:150;
+      .= ((il .--> goto(1,R))).il by A6,FUNCT_4:14
+      .= goto(1,R) by FUNCOP_1:87;
+Y:  (ProgramPart s2)/.il = s2.il by COMPOS_1:38;
     p c= s2 by A3,A8,XBOOLE_1:1;
     then
 A9: (Following(ProgramPart s2,s2)).IC SCM R =
-Exec (goto(il.(SCM R,1),R),s2).IC SCM R
+Exec (goto(1,R),s2).IC SCM R
 by A1,X,Y,GRFUNC_1:8
-      .= il.(SCM R,1) by SCMRING2:17;
-A10: dom (il .--> (goto(il.(SCM R,0),R))) = {il} by FUNCOP_1:19;
+      .= 1 by SCMRING2:17;
+A10: dom (il .--> (goto(0,R))) = {il} by FUNCOP_1:19;
     then
-A11: il in dom (il .--> (goto(il.(SCM R,0),R))) by TARSKI:def 1;
+A11: il in dom (il .--> (goto(0,R))) by TARSKI:def 1;
 A12: p c= p1 by A10,A7,FUNCT_4:33;
     hence p c= s1 & p c= s2 by A2,A3,A8,XBOOLE_1:1;
     take 1;
@@ -1251,23 +1235,23 @@ s1,0)))|dom p
 (s2),s2,0)))|dom p
       by A13,AMI_1:14
       .= (Following(ProgramPart s2,s2))|dom p by AMI_1:13;
-    dom p1 = dom p \/ dom ((il .--> goto(il.(SCM R,0),R))) by FUNCT_4:def 1;
+    dom p1 = dom p \/ dom ((il .--> goto(0,R))) by FUNCT_4:def 1;
     then il in dom p1 by A11,XBOOLE_0:def 3;
     then
 X:   s1.il = p1.il by A2,GRFUNC_1:8
-      .= ((il .--> goto(il.(SCM R,0),R))).il by A11,FUNCT_4:14
-      .= goto(il.(SCM R,0),R) by FUNCOP_1:87;
-Y:  (ProgramPart s1)/.il = s1.il by AMI_1:150;
+      .= ((il .--> goto(0,R))).il by A11,FUNCT_4:14
+      .= goto(0,R) by FUNCOP_1:87;
+Y:  (ProgramPart s1)/.il = s1.il by COMPOS_1:38;
     p c= s1 by A2,A12,XBOOLE_1:1;
     then
     (Following(ProgramPart s1,s1)).IC SCM R =
-    Exec (goto(il.(SCM R,0),R),s1).IC SCM R
+    Exec (goto(0,R),s1).IC SCM R
     by A1,X,Y,GRFUNC_1:8
-      .= il.(SCM R,0) by SCMRING2:17;
-    then il.(SCM R,0) = ((Following(ProgramPart s1,s1))|dom p).IC SCM R
+      .= 0 by SCMRING2:17;
+    then 0 = ((Following(ProgramPart s1,s1))|dom p).IC SCM R
     by A1,FUNCT_1:72
-      .= il.(SCM R,1) by A1,A9,A14,FUNCT_1:72;
-    hence contradiction by AMISTD_1:25;
+      .= 1 by A1,A9,A14,FUNCT_1:72;
+    hence contradiction;
   end;
   hence contradiction;
 end;
@@ -1284,23 +1268,16 @@ A1: R is non trivial;
 A2: p c= s;
   set loc = IC Csi;
   consider ll being natural number such that
-A3: loc = il.(SCM R,ll) by AMISTD_1:26;
-  set loc1 = il.(SCM R,ll+1);
-A4: loc <> loc1
-  proof
-    assume
-    loc = loc1;
-    then ll + 0 = ll + 1 by A3,AMISTD_1:25;
-    hence contradiction;
-  end;
+A3: loc = ll;
+  set loc1 = ll+1;
+A4: loc <> loc1 by A3;
   set p2 = p +* (loc .--> goto(loc1,R));
 A5: loc in dom ProgramPart p iff loc in dom p /\ NAT by RELAT_1:90;
   set p1 = p +* (loc .--> goto(loc,R));
 A7: dom (loc .--> goto(loc,R)) = {loc} by FUNCOP_1:19;
   then
 A8: loc in dom (loc .--> goto(loc,R)) by TARSKI:def 1;
-  assume
-  not IC Comput(ProgramPart(s),s,n) in dom ProgramPart(p);
+  assume not IC Comput(ProgramPart(s),s,n) in dom ProgramPart(p);
   then
 A9: not loc in dom p by A5,XBOOLE_0:def 4;
   consider s2 being State of SCM R such that
@@ -1364,21 +1341,17 @@ A27: (Cs1i|dom p) = (Csi|dom p) by A2,AMI_1:def 25;
 A28: (Cs1i|dom p) = (Cs2i|dom p) by A26,AMI_1:def 25;
     take k = n+1;
     set Cs1k = Comput(ProgramPart(s1),s1,k);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
 A29: Cs1k = Following(ProgramPart s1,Cs1i) by AMI_1:14
-      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-Y:  (ProgramPart Cs1i)/.loc = Cs1i.loc by AMI_1:150;
+      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
+Y:  (ProgramPart Cs1i)/.loc = Cs1i.loc by COMPOS_1:38;
 A30: Csi.IC SCM R = (Csi|dom p).IC SCM R by A1,Th25,FUNCT_1:72;
     then Cs1i.IC SCM R = loc by A1,A27,Th25,FUNCT_1:72;
     then
 A31: Cs1k.IC SCM R = loc by A29,A22,Y,SCMRING2:17;
     set Cs2k = Comput(ProgramPart(s2),s2,k);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A32: Cs2k = Following(ProgramPart s2,Cs2i) by AMI_1:14
-      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
-Y:  (ProgramPart Cs2i)/.loc = Cs2i.loc by AMI_1:150;
+      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
+Y:  (ProgramPart Cs2i)/.loc = Cs2i.loc by COMPOS_1:38;
     Cs2i.IC SCM R = loc by A1,A27,A30,A28,Th25,FUNCT_1:72;
     then
 A33: Cs2k.IC SCM R = loc1 by A32,A21,Y,SCMRING2:17;
@@ -1419,13 +1392,12 @@ A6: IC Cs1i <> IC Cs2i;
   IC Cs2i in dom ProgramPart p by A1,A3,Th27;
   then
 A7: (Cs2i|dom p).IC Cs2i = Cs2i.IC Cs2i by A4,FUNCT_1:72;
-Y:  (ProgramPart Cs1i)/.IC Cs1i = Cs1i.IC Cs1i by AMI_1:150;
-Z:  (ProgramPart Cs2i)/.IC Cs2i = Cs2i.IC Cs2i by AMI_1:150;
+Y:  (ProgramPart Cs1i)/.IC Cs1i = Cs1i.IC Cs1i by COMPOS_1:38;
+Z:  (ProgramPart Cs2i)/.IC Cs2i = Cs2i.IC Cs2i by COMPOS_1:38;
   IC Cs1i in dom ProgramPart p by A1,A2,Th27;
   then
 A8: (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i by A4,FUNCT_1:72;
-  assume
-  not thesis;
+  assume not thesis;
   hence contradiction by A2,A3,A5,A8,A7,Y,Z,AMI_1:def 25;
 end;
 
@@ -1449,18 +1421,14 @@ s1),s1,n));
 A2: p c= s1 & p c= s2;
 A3: a in dom p implies (Cs1i1|dom p).a = Cs1i1.a & (Cs2i1|dom p).a = Cs2i1.a
   by FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A4: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
   assume that
 A5: I = a := b and
 A6: a in dom p & Comput(ProgramPart(s1),s1,n).b <> Comput(ProgramPart(s2),s2,n)
 .b;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
   then
 A7: Cs1i1.a = Cs1i.b by A5,SCMRING2:13;
   I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2),
@@ -1490,19 +1458,15 @@ s1),s1,n));
 A2: p c= s1 & p c= s2;
 A3: a in dom p implies (Cs1i1|dom p).a = Cs1i1.a & (Cs2i1|dom p).a = Cs2i1.a
   by FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A4: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
   assume that
 A5: I = AddTo(a,b) and
 A6: a in dom p & Comput(ProgramPart(s1),s1,n).a + Comput(ProgramPart(s1),s1,n).
 b <>
   Comput(ProgramPart(s2),s2,n). a + Comput(ProgramPart(s2),s2,n).b;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
   then
 A7: Cs1i1.a = Cs1i.a + Cs1i.b by A5,SCMRING2:14;
   I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2),
@@ -1532,19 +1496,15 @@ s1),s1,n));
 A2: p c= s1 & p c= s2;
 A3: a in dom p implies (Cs1i1|dom p).a = Cs1i1.a & (Cs2i1|dom p).a = Cs2i1.a
   by FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A4: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
   assume that
 A5: I = SubFrom(a,b) and
 A6: a in dom p & Comput(ProgramPart(s1),s1,n).a - Comput(ProgramPart(s1),s1,n).
 b <>
   Comput(ProgramPart(s2),s2,n). a - Comput(ProgramPart(s2),s2,n).b;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
   then
 A7: Cs1i1.a = Cs1i.a - Cs1i.b by A5,SCMRING2:15;
   I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2),
@@ -1574,19 +1534,15 @@ s1),s1,n));
 A2: p c= s1 & p c= s2;
 A3: a in dom p implies (Cs1i1|dom p).a = Cs1i1.a & (Cs2i1|dom p).a = Cs2i1.a
   by FUNCT_1:72;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A4: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
   assume that
 A5: I = MultBy(a,b) and
 A6: a in dom p & Comput(ProgramPart(s1),s1,n).a * Comput(ProgramPart(s1),s1,n).
 b <>
   Comput(ProgramPart(s2),s2,n). a * Comput(ProgramPart(s2),s2,n).b;
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
   Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
   then
 A7: Cs1i1.a = Cs1i.a * Cs1i.b by A5,SCMRING2:16;
   I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2),
@@ -1617,14 +1573,10 @@ A3: I = CurInstr(ProgramPart Comput(ProgramPart(s2),s2,n),Comput(ProgramPart(s2
  by A1,A2,Th28;
   set Cs2i = Comput(ProgramPart(s2),s2,n);
   set Cs1i = Comput(ProgramPart(s1),s1,n);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
 A4: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
+    .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
 A5: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+    .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
 A6: (Cs1i1|dom p).IC SCM R = Cs1i1.IC SCM R & (Cs2i1|dom p).IC SCM R = Cs2i1
   .IC SCM R by A1,Th25,FUNCT_1:72;
   assume that
@@ -1675,8 +1627,7 @@ A9: x in {IC SCM R} \/ SCM-Data-Loc or x in NAT by A5,A8,XBOOLE_0:def 3;
 A10:  x in {IC SCM R};
       not IC SCM R in SCM-Data-Loc
       proof
-        assume
-        not thesis;
+        assume not thesis;
         then IC SCM R is Data-Location of R by SCMRING2:1;
         hence contradiction by SCMRING3:3;
       end;
@@ -1711,8 +1662,7 @@ A17:  DPp.x = p.x by A13,GRFUNC_1:8;
     suppose
 A18:  x in NAT;
       now
-        assume
-        x in dom s3;
+        assume x in dom s3;
         then x in dom s2 /\ SCM-Data-Loc by A1,RELAT_1:90;
         then x in SCM-Data-Loc by XBOOLE_0:def 4;
         hence contradiction by A18,AMI_2:29,XBOOLE_0:3;
@@ -1729,7 +1679,7 @@ theorem Th35:
   R is non trivial implies for p being autonomic FinPartState of
   SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2 & s = s1 +*
   DataPart s2 for i being Element of NAT
-   holds IC Comput(ProgramPart(s1),s1,i) + (k,SCM R) = IC
+   holds IC Comput(ProgramPart(s1),s1,i) + k = IC
   Comput(ProgramPart(s2),s2,i) & IncAddr(CurInstr(ProgramPart Comput(
 ProgramPart(s1),s1,i),
   Comput(ProgramPart(s1),s1,i)), k) =
@@ -1748,7 +1698,7 @@ A3: p c= s1 and
 A4: Relocated (p,k) c= s2 and
 A5: s = s1 +* DataPart s2;
   defpred P[Element of NAT] means
-   IC Comput(ProgramPart(s1),s1,$1) + (k,SCM R) = IC Comput(ProgramPart(
+   IC Comput(ProgramPart(s1),s1,$1) + k = IC Comput(ProgramPart(
 s2),
 s2,$1) &
 IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,$1),Comput(ProgramPart(
@@ -1759,7 +1709,7 @@ Comput(ProgramPart(s1),s1,$1)|dom (DataPart p) = Comput(ProgramPart(s2),s2,$1)|
 dom (DataPart (
   Relocated (p,k))) & DataPart Comput(ProgramPart(s),s,$1) = DataPart Comput(
 ProgramPart(s2),s2,$1);
-A6: p is non NAT-defined by A2,AMI_1:109;
+A6: p is non NAT-defined by A2,COMPOS_1:19;
 A7: IC p = IC s1 by A2,A3,GRFUNC_1:8;
   then IC p = IC Comput(ProgramPart(s1),s1,0) by AMI_1:13;
   then
@@ -1769,7 +1719,7 @@ A10: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
   proof
     set DPp = DataPart p;
     let i be Element of NAT such that
-A11: IC Comput(ProgramPart(s1),s1,i) + (k,SCM R) = IC Comput(ProgramPart(s2),s2
+A11: IC Comput(ProgramPart(s1),s1,i) + k = IC Comput(ProgramPart(s2),s2
 ,i) and
 A12:
 IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i),Comput(ProgramPart(s1
@@ -1784,10 +1734,8 @@ A14: DataPart Comput(ProgramPart(s),s,i) = DataPart Comput(ProgramPart(s2),s2,i
     set Cs2i1 = Comput(ProgramPart(s2),s2,i+1);
     set Cs3i = Comput(ProgramPart(s),s,i);
     set Cs2i = Comput(ProgramPart(s2),s2,i);
-T: ProgramPart s2 = ProgramPart Cs2i
-by AMI_1:123;
 A15: Cs2i1 = Following(ProgramPart s2,Cs2i) by AMI_1:14
-      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by T;
+      .= Exec (CurInstr(ProgramPart Cs2i,Cs2i), Cs2i) by AMI_1:123;
 A16: now
       let s be State of SCM R, d be Data-Location of R;
       d in SCM-Data-Loc by SCMRING2:1;
@@ -1805,31 +1753,26 @@ A18:  d in dom DataPart Cs3i by A16;
     then
 A19: dom Cs1i1 = {IC SCM R} \/ SCM-Data-Loc \/ NAT by Th1;
     consider j being natural number such that
-A20: IC Cs1i = il.(SCM R,j) by AMISTD_1:26;
-A21: succ (IC Cs1i + (k,SCM R)) = succ (il.(SCM R,j + k))
-by A20,AMISTD_1:def 13
-      .= il.(SCM R,j+k+1) by SCMRING3:67
-      .= il.(SCM R,j+1+k)
-      .= il.(SCM R,j+1) + (k,SCM R) by AMISTD_1:def 13
-      .= (succ IC Cs1i) + (k,SCM R) by A20,SCMRING3:67;
+A20: IC Cs1i = j;
+A21: succ (IC Cs1i + k) = (succ IC Cs1i) + k by A20;
 A22: now
       reconsider loc = IC Cs1i1 as Element of NAT;
       assume
-A23:  IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+A23:  IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1);
 A24:  loc in dom ProgramPart p by A1,A3,A6,Th27;
       ProgramPart p c= p by RELAT_1:88;
       then
 A25:  dom ProgramPart p c= dom p by GRFUNC_1:8;
-      then loc + (k,SCM R) in dom Relocated(p, k) by A24,AMISTD_2:71;
+      then loc + k in dom Relocated(p, k) by A24,AMISTD_2:71;
       then
-A26:  Relocated(p, k).(loc + (k,SCM R)) = s2.(loc+(k,SCM R)) by A4,GRFUNC_1:8
-        .= Cs2i1.(loc + (k,SCM R)) by AMI_1:54;
-Y:  (ProgramPart Cs1i1)/.loc = Cs1i1.loc by AMI_1:150;
+A26:  Relocated(p, k).(loc + k) = s2.(loc + k) by A4,GRFUNC_1:8
+        .= Cs2i1.(loc + k) by AMI_1:54;
+Y:  (ProgramPart Cs1i1)/.loc = Cs1i1.loc by COMPOS_1:38;
 Z:  (ProgramPart Comput(ProgramPart(s2),s2,i+1))/.IC Comput(ProgramPart(s2),s2,
 i+1)
  = Comput(ProgramPart(s2),s2,i+1).IC Comput(ProgramPart(s2),s2,i+1) by
-AMI_1:150;
+COMPOS_1:38;
       CurInstr(ProgramPart Cs1i1,Cs1i1) = s1.loc by Y,AMI_1:54
         .= p.loc by A3,A24,A25,GRFUNC_1:8;
       hence
@@ -1878,10 +1821,8 @@ A40: dom Cs1i = {IC SCM R} \/ SCM-Data-Loc \/ NAT by Th1;
     then
 A41: dom Cs2i1 = {IC SCM R} \/ SCM-Data-Loc \/ NAT by Th1;
     set I = CurInstr(ProgramPart Cs1i,Cs1i);
-T: ProgramPart s1 = ProgramPart Cs1i
-by AMI_1:123;
 A42: Cs1i1 = Following(ProgramPart s1,Cs1i) by AMI_1:14
-      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by T;
+      .= Exec (CurInstr(ProgramPart Cs1i,Cs1i), Cs1i) by AMI_1:123;
 A43: dom (Cs1i|dom DPp) = dom Cs1i /\ dom DPp by RELAT_1:90
       .= dom DPp by A40,A28,XBOOLE_1:10,28;
 A44: dom (Cs1i1|dom DPp) = dom Cs1i1 /\ dom DPp by RELAT_1:90
@@ -1922,8 +1863,8 @@ A57: Cs3i1 = Following(ProgramPart s,Cs3i) by AMI_1:14
       InsCode I = 0;
       then
 A58:  I = halt SCM R by SCMRING3:16;
-      hence IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R)
-       = IC Cs1i + (k,SCM R) by A42,AMI_1:def 8
+      hence IC Comput(ProgramPart(s1),s1,i+1) + k
+       = IC Cs1i + k by A42,AMI_1:def 8
         .= IC Comput(ProgramPart(s2),s2,i+1) by A11,A12,A15,A58,AMI_1:def 8;
       hence
       IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),Comput(
@@ -1943,7 +1884,7 @@ A60:  I = da := db by SCMRING3:17;
 A61:  IncAddr(I, k) = da := db by A60,AMISTD_2:29;
 A62:  Exec(I, Cs1i).IC SCM R = succ IC Cs1i by A60,SCMRING2:13;
       hence
-      IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+      IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1)
       by A11,A12,A42,A15,A21,A61,SCMRING2:13;
       thus IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),
@@ -2011,7 +1952,7 @@ A68:  I = AddTo(da, db) by SCMRING3:18;
 A69:  IncAddr(I, k) = AddTo(da, db) by A68,AMISTD_2:29;
 A70:  Exec(I, Cs1i).IC SCM R = succ IC Cs1i by A68,SCMRING2:14;
       hence
-      IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+      IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1)
       by A11,A12,A42,A15,A21,A69,SCMRING2:14;
       thus IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),
@@ -2078,7 +2019,7 @@ A76:  I = SubFrom(da, db) by SCMRING3:19;
 A77:  IncAddr(I, k) = SubFrom(da, db) by A76,AMISTD_2:29;
 A78:  Exec(I, Cs1i).IC SCM R = succ IC Cs1i by A76,SCMRING2:15;
       hence
-      IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+      IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1)
       by A11,A12,A42,A15,A21,A77,SCMRING2:15;
       thus IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),
@@ -2145,7 +2086,7 @@ A84:  I = MultBy(da, db) by SCMRING3:20;
 A85:  IncAddr(I, k) = MultBy(da, db) by A84,AMISTD_2:29;
 A86:  Exec(I, Cs1i).IC SCM R = succ IC Cs1i by A84,SCMRING2:16;
       hence
-      IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+      IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1)
       by A11,A12,A42,A15,A21,A85,SCMRING2:16;
       thus IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),
@@ -2213,7 +2154,7 @@ A92:  I = da:=r by SCMRING3:21;
 A93:  IncAddr(I, k) = da := r by A92,AMISTD_2:29;
 A94:  Exec(I, Cs1i).IC SCM R = succ IC Cs1i by A92,SCMRING2:19;
       hence
-      IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart(s2)
+      IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart(s2)
 ,s2,i+1)
       by A11,A12,A42,A15,A21,A93,SCMRING2:19;
       thus IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),
@@ -2272,9 +2213,9 @@ GRFUNC_1:8;
       InsCode I = 6;
       then consider loc being Element of NAT such that
 A98:  I = goto(loc,R) by SCMRING3:22;
-A99:  CurInstr(ProgramPart Cs2i,Cs2i) = goto (loc+(k,SCM R),R)
+A99:  CurInstr(ProgramPart Cs2i,Cs2i) = goto (loc + k,R)
 by A12,A98,SCMRING3:69;
-      thus IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = loc + (k,SCM R)
+      thus IC Comput(ProgramPart(s1),s1,i+1) + k = loc + k
        by A42,A98,SCMRING2:17
         .= IC Comput(ProgramPart(s2),s2,i+1) by A15,A99,SCMRING2:17;
       hence
@@ -2322,17 +2263,17 @@ SCMRING2:18;
         case
           Cs1i.da <> 0.R;
           hence
-          IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = succ (IC Cs2i)
+          IC Comput(ProgramPart(s1),s1,i+1) + k = succ (IC Cs2i)
           by A11,A42,A21,A102,SCMRING2:18;
         end;
       end;
 A104: CurInstr(ProgramPart Cs2i,Cs2i)
- = da=0_goto (loc+(k,SCM R)) by A12,A102,SCMRING3:70;
+ = da=0_goto (loc + k) by A12,A102,SCMRING3:70;
 A105: now
         per cases;
         case
           Cs2i.da = 0.R;
-          hence IC Comput(ProgramPart(s2),s2,i+1) = loc + (k,SCM R)
+          hence IC Comput(ProgramPart(s2),s2,i+1) = loc + k
           by A15,A104,SCMRING2:18;
         end;
         case
@@ -2346,19 +2287,19 @@ A106: Cs3i.da = Cs2i.da by A17;
         per cases;
         suppose
           loc <> succ IC Cs1i;
-          hence IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(
+          hence IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(
 ProgramPart(s2),s2,i+1)
           by A1,A3,A6,A9,A102,A106,A103,A105,Th33;
         end;
         suppose
           loc = succ IC Cs1i;
           hence
-          IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(ProgramPart
+          IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(ProgramPart
 (s2),s2,i+1)
-          by A11,A21,A103,A105;
+          by A11,A103,A105;
         end;
       end;
-      hence IC Comput(ProgramPart(s1),s1,i+1) + (k,SCM R) = IC Comput(
+      hence IC Comput(ProgramPart(s1),s1,i+1) + k = IC Comput(
 ProgramPart(s2),s2,i+1) &
       IncAddr(
       CurInstr(ProgramPart Comput(ProgramPart(s1),s1,i+1),Comput(ProgramPart(s1
@@ -2391,12 +2332,9 @@ GRFUNC_1:8;
       hence thesis by A30,A32,GRFUNC_1:9;
     end;
   end;
-Y:  (ProgramPart s1)/.IC s1 = s1.IC s1 by AMI_1:150;
 Comput(ProgramPart(s1),s1,0) = s1 by AMI_1:13;then
 A109: IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s1),s1,0),Comput(
-ProgramPart(s1),s1,0)), k)
-= IncAddr(CurInstr(ProgramPart s1,s1), k)
-    .= IncAddr(s1.IC s1, k) by Y;
+ProgramPart(s1),s1,0)), k) = IncAddr(s1.IC s1, k) by COMPOS_1:38;
 A110: DataPart (Relocated(p,k)) c= Relocated(p,k) by RELAT_1:88;
 A111: DataPart p c= p by RELAT_1:88;
 A112: DataPart p = DataPart (Relocated (p,k)) by AMISTD_2:68;
@@ -2411,10 +2349,9 @@ AMI_1:13
     .= DataPart s2 by PBOOLE:157
     .= DataPart Comput(ProgramPart(s2),s2,0) by AMI_1:13;
 A115: IC SCM R in dom Relocated(p,k) by AMISTD_2:72;
-A116: IC Comput(ProgramPart(s1),s1,0) + (k,SCM R) = IC s1 + (k,SCM R) by
-AMI_1:13
-    .= IC p + (k,SCM R) by A2,A3,GRFUNC_1:8
-    .= IC Relocated(p,k) by AMISTD_2:73
+A116: IC Comput(ProgramPart(s1),s1,0) + k = IC s1 + k by AMI_1:13
+    .= IC p + k by A2,A3,GRFUNC_1:8
+    .= IC Relocated(p,k) by A2,AMISTD_2:73
     .= IC s2 by A4,A115,GRFUNC_1:8
     .= IC Comput(ProgramPart(s2),s2,0) by AMI_1:13;
 A117: IC SCM R in dom Relocated (p, k) by AMISTD_2:72;
@@ -2422,17 +2359,16 @@ A117: IC SCM R in dom Relocated (p, k) by AMISTD_2:72;
   then
 A118: dom ProgramPart p c= dom p by GRFUNC_1:8;
   then
-A119: (IC p) + (k,SCM R) in dom Relocated(p,k) by A8,AMISTD_2:71;
+A119: (IC p) + k in dom Relocated(p,k) by A8,AMISTD_2:71;
 Y:  (ProgramPart s2)/.IC Relocated (p, k) = s2.IC Relocated (p, k)
- by AMI_1:150;
+ by COMPOS_1:38;
  Comput(ProgramPart(s2),s2,0) = s2 by AMI_1:13;
  then
 A120: CurInstr(ProgramPart Comput(ProgramPart(s2),s2,0),Comput(ProgramPart(s2),
 s2,0))
-= CurInstr(ProgramPart s2,s2)
-    .= s2.(IC Relocated (p, k)) by A4,A117,Y,GRFUNC_1:8
-    .= s2.((IC p) + (k,SCM R)) by AMISTD_2:73
-    .= (Relocated(p,k)).((IC p) + (k,SCM R)) by A4,A119,GRFUNC_1:8;
+     = s2.(IC Relocated (p, k)) by A4,A117,Y,GRFUNC_1:8
+    .= s2.((IC p) + k) by A2,AMISTD_2:73
+    .= (Relocated(p,k)).((IC p) + k) by A4,A119,GRFUNC_1:8;
   p.IC p = s1.IC s1 by A3,A7,A8,A118,GRFUNC_1:8;
   then
 A121: P[0 qua Element of NAT] by A116,A8,A109,A120,A113,A114,AMISTD_2:76;
@@ -2468,7 +2404,7 @@ TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,u)
 by AMI_1:123;
       take u;
      IC Comput(ProgramPart(t),t,u) in NAT;
-    hence IC Comput(ProgramPart(t),t,u) in dom ProgramPart t by AMI_1:143;
+    hence IC Comput(ProgramPart(t),t,u) in dom ProgramPart t by COMPOS_1:34;
 NX: ProgramPart t = ProgramPart Comput(ProgramPart(t),t,u)
 by AMI_1:123;
       s3 = s3;
@@ -2494,16 +2430,14 @@ by AMI_1:123;
 A10: p c= t;
   take u;
      IC Comput(ProgramPart(t),t,u) in NAT;
-    hence IC Comput(ProgramPart(t),t,u) in dom ProgramPart t by AMI_1:143;
+    hence IC Comput(ProgramPart(t),t,u) in dom ProgramPart t by COMPOS_1:34;
 NX: ProgramPart t = ProgramPart Comput(ProgramPart(t),t,u)
 by AMI_1:123;
   s3 = s3;
   then IncAddr(CurInstr(ProgramPart Comput(ProgramPart(t),t,u),Comput(
 ProgramPart(t),t,u)), k)
    = halt SCM R by A1,A2,A10,A8,A9,Th35,TX;
-  then CurInstr(ProgramPart (t),Comput(ProgramPart(t),t,u)) = halt SCM R
-  by NX,AMISTD_2:35;
-  hence thesis;
+  hence thesis by NX,AMISTD_2:35;
 end;
 
 theorem
@@ -2512,7 +2446,7 @@ st IC SCM R in dom p & p c= s for i being Element of NAT holds Comput(
 ProgramPart(s+*
   Relocated(p,k)),s+*
   Relocated(p,k),i) = Comput(ProgramPart(s),s,i) +*
-  Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R) +*
+  Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R) +*
   ProgramPart (Relocated (p,k))
 proof
   assume
@@ -2520,12 +2454,11 @@ A1: R is non trivial;
   let p being autonomic FinPartState of SCM R such that
 A2: IC SCM R in dom p and
 A3: p c= s;
-A4: IC p = p.IC SCM R
-    .= IC s by A2,A3,GRFUNC_1:8;
+A4: IC p = IC s by A2,A3,GRFUNC_1:8;
   defpred P[Element of NAT] means Comput(ProgramPart(s+*Relocated(p,k)),s+*
 Relocated(p,k),$1) =
-  Comput(ProgramPart(s),s,$1) +* Start-At(IC Comput(ProgramPart(s),s,$1) +(k,
-SCM R),SCM R)
+  Comput(ProgramPart(s),s,$1) +* Start-At(IC Comput(ProgramPart(s),s,$1)
+   +k,SCM R)
    +* ProgramPart (
   Relocated (p,k));
 A5: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
@@ -2533,27 +2466,27 @@ A5: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
     let i be Element of NAT such that
 A6: Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) = Comput(
 ProgramPart(s),s,i) +* Start-At (
-    IC Comput(ProgramPart(s),s,i) + (k,SCM R),SCM R) +* ProgramPart (Relocated
+    IC Comput(ProgramPart(s),s,i) + k,SCM R) +* ProgramPart (Relocated
 (p,k));
     reconsider ii = IC Comput(ProgramPart(s),s,i) as Element of NAT;
-    dom (Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R)) = {IC SCM R}
+    dom (Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R)) = {IC SCM R}
     by FUNCOP_1:19;
     then
-A7: IC SCM R in dom (Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R))
+A7: IC SCM R in dom (Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R))
 by TARSKI:def 1;
-    not IC SCM R in dom ProgramPart(Relocated (p,k)) by AMI_1:101;
+    not IC SCM R in dom ProgramPart(Relocated (p,k)) by COMPOS_1:12;
     then
-A8: IC (Comput(ProgramPart(s),s,i) +* Start-At(IC Comput(ProgramPart(s),s,i) +(
-k,SCM R),SCM R) +*
+A8: IC (Comput(ProgramPart(s),s,i) +*
+ Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R) +*
 ProgramPart Relocated (p,k)) = (Comput(ProgramPart(s),s,i) +* Start-At (IC
 Comput(ProgramPart(s
     ),s
-    ,i) + (k,SCM R),SCM R)).IC SCM R by FUNCT_4:12
-      .= (Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R)).IC SCM R
+    ,i) + k,SCM R)).IC SCM R by FUNCT_4:12
+      .= (Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R)).IC SCM R
       by A7,FUNCT_4:14
-      .= IC Comput(ProgramPart(s),s,i) + (k,SCM R) by FUNCOP_1:87;
+      .= IC Comput(ProgramPart(s),s,i) + k by FUNCOP_1:87;
 A9: ProgramPart p c= Comput(ProgramPart(s),s,i) by A3,AMI_1:99;
-    p is not NAT-defined by A2,AMI_1:109;
+    p is not NAT-defined by A2,COMPOS_1:19;
     then
 A10: IC Comput(ProgramPart(s),s,i) in dom ProgramPart(p) by A1,A3,Th27;
     then
@@ -2565,32 +2498,32 @@ GRFUNC_1:8;
 Y:  (ProgramPart Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i))/.
       IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)
  = Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i).
- IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) by AMI_1:150;
+ IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) by COMPOS_1:38;
 Z:  (ProgramPart Comput(ProgramPart(s),s,i))/.IC Comput(ProgramPart(s),s,i)
- = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by AMI_1:150;
+ = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by COMPOS_1:38;
     ProgramPart p c= p by RELAT_1:88;
     then dom ProgramPart p c= dom p by GRFUNC_1:8;
-    then (IC Comput(ProgramPart(s),s,i) + (k,SCM R)) in dom (Relocated (p,k))
+    then (IC Comput(ProgramPart(s),s,i) + k) in dom (Relocated (p,k))
     by A10,AMISTD_2:71;
-    then (IC Comput(ProgramPart(s),s,i) + (k,SCM R)) in dom (ProgramPart
-    (Relocated (p,k))) by AMI_1:106;
+    then (IC Comput(ProgramPart(s),s,i) + k) in dom (ProgramPart
+    (Relocated (p,k))) by COMPOS_1:16;
     then
 A13: CurInstr(ProgramPart Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,
 k),i),
 Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i))
 = (ProgramPart (Relocated
-    (p,k))).(IC Comput(ProgramPart(s),s,i) + (k,SCM R)) by A6,A8,Y,FUNCT_4:14
-      .= IncAddr(Shift(ProgramPart p,k),k).(IC Comput(ProgramPart(s),s,i) + (k,
-SCM R))
+    (p,k))).(IC Comput(ProgramPart(s),s,i) + k) by A6,A8,Y,FUNCT_4:14
+      .= IncAddr(Shift(ProgramPart p,k),k).
+      (IC Comput(ProgramPart(s),s,i) + k)
 by AMISTD_2:69
-      .= Shift(IncAddr(ProgramPart p,k),k).(IC Comput(ProgramPart(s),s,i) + (k,
-SCM R))
+      .= Shift(IncAddr(ProgramPart p,k),k).
+         (IC Comput(ProgramPart(s),s,i) + k)
 by AMISTD_2:75
       .= IncAddr(ProgramPart p,k).(IC Comput(ProgramPart(s),s,i)) by A11,
-AMISTD_2:65
+VALUED_1:def 12
       .= IncAddr (CurInstr(ProgramPart Comput(ProgramPart(s),s,i),Comput(
 ProgramPart(s),s,i)),k)
-      by A10,A12,Z,AMISTD_2:74;
+      by A10,A12,Z,AMISTD_2:def 15;
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s)
 ,s,i)
 by AMI_1:123;
@@ -2605,57 +2538,32 @@ by AMI_1:123;
      Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)) by AMI_1:14
       .= Exec(IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s),s,i),
       Comput(ProgramPart(s),s,i)),k), Comput(ProgramPart(s),s,i) +*
-Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R)) +*
+Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R)) +*
  ProgramPart (Relocated (p,k))
  by A6,A13,S,AMISTD_2:67
       .= Comput(ProgramPart(s),s,i+1) +*
-       Start-At (IC Comput(ProgramPart(s),s,i+1) + (k,SCM R),SCM R) +*
+       Start-At (IC Comput(ProgramPart(s),s,i+1) + k,SCM R) +*
     ProgramPart (Relocated (p,k)) by A14,Th22,T;
   end;
 A15: Comput(ProgramPart(s),s,0) = s by AMI_1:13;
-  NAT misses dom DataPart p by Th13,AMI_2:29,XBOOLE_1:63;
-  then dom DataPart p misses dom (ProgramPart (Relocated (p,k))) by RELAT_1:87
-,XBOOLE_1:63;
-  then
-A16: dom DataPart p /\ dom (ProgramPart (Relocated (p,k))) = {} by
-XBOOLE_0:def 7;
-  dom DataPart p /\ {IC SCM R} = {} by Lm1,AMI_1:100;
-  then
-  dom DataPart p /\ dom (Start-At ((IC p) + (k,SCM R),SCM R)) \/
-  dom DataPart p /\ dom (
-  ProgramPart (Relocated (p,k))) = {} by A16,FUNCOP_1:19;
-  then dom DataPart p /\ (dom (Start-At ((IC p) + (k,SCM R),SCM R)) \/
-  dom (ProgramPart (
-  Relocated (p,k)))) = {} by XBOOLE_1:23;
-  then dom DataPart p /\ dom (Start-At(IC p +(k,SCM R),SCM R) +*
-  ProgramPart (Relocated
-  (p,k))) = {} by FUNCT_4:def 1;
-  then
-A17: dom DataPart p misses dom (Start-At(IC p +(k,SCM R),SCM R) +*
-ProgramPart (
-  Relocated (p,k))) by XBOOLE_0:def 7;
   DataPart p c= p by RELAT_1:88;
   then
 A18: DataPart p c= s by A3,XBOOLE_1:1;
-  Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),0) = s +*
-   (Start-At(IC p +(k,SCM R),SCM R) +* IncAddr
-  (Shift(ProgramPart p,k),k)+*DataPart p) by AMI_1:13
-    .= s +* ((Start-At(IC p +(k,SCM R),SCM R) +*
-     ProgramPart (Relocated (p,k))) +*
-  DataPart p) by AMISTD_2:69
-    .= s +* (DataPart p +* (Start-At(IC p +(k,SCM R),SCM R) +*
-     ProgramPart (Relocated
-  (p,k)))) by A17,FUNCT_4:36
-    .= s +* DataPart p +* (Start-At(IC p +(k,SCM R),SCM R) +*
-     ProgramPart (Relocated (
-  p,k))) by FUNCT_4:15
-    .= s +* DataPart p +* Start-At(IC p +(k,SCM R),SCM R) +*
-     ProgramPart (Relocated (p
-  ,k)) by FUNCT_4:15
-    .= Comput(ProgramPart(s),s,0) +* Start-At(IC Comput(ProgramPart(s),s,0) +(k
-,SCM R),SCM R) +*
-    ProgramPart
-  (Relocated (p,k)) by A4,A18,A15,FUNCT_4:79;
+  Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),0)
+    = s +* (IncrIC(NPP p,k) +* Reloc(ProgramPart p,k)) by AMI_1:13
+   .= s +* (IncrIC(NPP p,k) +* ProgramPart Relocated(p,k)) by AMISTD_2:69
+   .= s +* (DataPart p +* Start-At ((IC p) +k,SCM R) +*
+         ProgramPart Relocated(p,k)) by A2,COMPOS_1:75
+   .= s +* (DataPart p +* (Start-At ((IC p) +k,SCM R) +*
+         ProgramPart Relocated(p,k))) by FUNCT_4:15
+   .= s +* DataPart p +* (Start-At ((IC p) +k,SCM R) +*
+         ProgramPart Relocated(p,k)) by FUNCT_4:15
+    .= s +* DataPart p +* Start-At ((IC p) +k,SCM R) +*
+       ProgramPart (Relocated (p,k)) by FUNCT_4:15
+    .= Comput(ProgramPart(s),s,0) +* Start-At(IC Comput(ProgramPart(s),s,0) +k,
+SCM R)
+     +* ProgramPart
+  (Relocated(p,k)) by A18,A4,A15,FUNCT_4:79;
   then
 A19: P[0 qua Element of NAT];
   for n holds P[n] from NAT_1:sch 1 (A19,A5);
@@ -2668,7 +2576,7 @@ theorem Th38:
 NAT holds Comput(ProgramPart(s),s,i) = Comput(ProgramPart(s+*p),s+*p,i) +*
 Start-At (IC Comput(ProgramPart(s
   +*p),s
-  +*p,i) + (k,SCM R),SCM R) +* s|dom ProgramPart p
+  +*p,i) + k,SCM R) +* s|dom ProgramPart p
    +* ProgramPart (Relocated (p,k))
 proof
   assume
@@ -2676,10 +2584,10 @@ A1: R is non trivial;
   let p be autonomic FinPartState of SCM R such that
 A2: IC SCM R in dom p and
 A3: Relocated (p,k) c= s;
-A4: Start-At(IC p +(k,SCM R),SCM R) c= Relocated (p,k) by AMISTD_2:77;
+A4: Start-At(IC p +k,SCM R) c= Relocated (p,k) by A2,AMISTD_2:77;
   defpred P[Element of NAT] means Comput(ProgramPart(s),s,$1) = Comput(
 ProgramPart(s+*p),s+*p,$1) +*
-Start-At (IC Comput(ProgramPart(s+*p),s+*p,$1) + (k,SCM R),SCM R) +* s|dom
+Start-At (IC Comput(ProgramPart(s+*p),s+*p,$1) + k,SCM R) +* s|dom
 ProgramPart p +*
 ProgramPart (
   Relocated (p,k));
@@ -2689,7 +2597,7 @@ A5: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
     let i be Element of NAT such that
 A6: Comput(ProgramPart(s),s,i) = Comput(ProgramPart(s+*p),s+*p,i) +* Start-At (
 IC
-Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R) +* s|dom ProgramPart p+*
+Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R) +* s|dom ProgramPart p+*
 ProgramPart (Relocated (p,k))
     ;
     dom ProgramPart p c= the carrier of SCM R by RELAT_1:def 18;
@@ -2702,18 +2610,18 @@ A7: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
     ;
     reconsider ii = IC Comput(ProgramPart(s+*p),s+*p,i) as Element of NAT;
 A8: ProgramPart p c= Comput(ProgramPart(s+*p),s+*p,i) by AMI_1:99,FUNCT_4:26;
-    dom (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R)) = {
+    dom (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R)) = {
 IC SCM R}
     by FUNCOP_1:19;
     then
-A9: IC SCM R in dom (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),
+A9: IC SCM R in dom (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + k,
 SCM R))
 by TARSKI:def 1;
     dom sdom = dom s /\ dom ProgramPart p & not IC SCM R in dom
-    ProgramPart p by AMI_1:101,RELAT_1:90;
+    ProgramPart p by COMPOS_1:12,RELAT_1:90;
     then
 A10: not IC SCM R in dom sdom by XBOOLE_0:def 4;
-    p is not NAT-defined by A2,AMI_1:109;
+    p is not NAT-defined by A2,COMPOS_1:19;
     then
 A11: IC Comput(ProgramPart(s+*p),s+*p,i) in dom ProgramPart p by A1,Th27,
 FUNCT_4:26;
@@ -2722,51 +2630,50 @@ A12: IC Comput(ProgramPart(s+*p),s+*p,i) in dom IncAddr(ProgramPart p,k) by
 AMISTD_2:def 15;
     ProgramPart p c= p by RELAT_1:88;
     then dom ProgramPart p c= dom p by GRFUNC_1:8;
-    then (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R)) in dom (Relocated (p
+    then (IC Comput(ProgramPart(s+*p),s+*p,i) + k) in dom (Relocated (p
 ,k)) by A11,AMISTD_2:71;
     then
-A13: (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R))
+A13: (IC Comput(ProgramPart(s+*p),s+*p,i) + k)
 in dom (ProgramPart (Relocated (p,k)))
-    by AMI_1:106;
+    by COMPOS_1:16;
 A14: (ProgramPart p)/.ii = (ProgramPart p).IC Comput(ProgramPart(s+*p),s+*p,i)
 by A11,PARTFUN1:def 8
       .= ( Comput(ProgramPart(s+*p),s+*p,i)).IC Comput(ProgramPart(s+*p),s+*p,i
 ) by A11,A8,GRFUNC_1:8;
 Y:  (ProgramPart Comput(ProgramPart(s),s,i))/.IC Comput(ProgramPart(s),s,i)
- = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by AMI_1:150;
+ = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by COMPOS_1:38;
 Z:  (ProgramPart Comput(ProgramPart(s+*p),s+*p,i))/.IC Comput(ProgramPart(s+*p)
 ,s+*p,i)
  = Comput(ProgramPart(s+*p),s+*p,i).IC Comput(ProgramPart(s+*p),s+*p,i) by
-AMI_1:150;
-    not IC SCM R in dom ProgramPart(Relocated (p,k)) by AMI_1:101;
+COMPOS_1:38;
+    not IC SCM R in dom ProgramPart(Relocated (p,k)) by COMPOS_1:12;
     then IC ( Comput(ProgramPart(s+*p),s+*p,i) +*
-    Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R) +*
+    Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R) +*
 sdom +* ProgramPart Relocated (p,k)) = ( Comput(ProgramPart(s+*p),s+*p,i) +*
 Start-At (IC
-    Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R) +* sdom).IC SCM R by
-FUNCT_4:12
+    Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R) +* sdom).IC SCM R by FUNCT_4:12
       .= ( Comput(ProgramPart(s+*p),s+*p,i) +*
-      Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R)).IC
+      Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R)).IC
     SCM R by A10,FUNCT_4:12
-      .= (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R),SCM R)).IC
+      .= (Start-At (IC Comput(ProgramPart(s+*p),s+*p,i) + k,SCM R)).IC
 SCM R
       by A9,FUNCT_4:14
-      .= IC Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R) by FUNCOP_1:87;
+      .= IC Comput(ProgramPart(s+*p),s+*p,i) + k by FUNCOP_1:87;
     then
 A15: CurInstr(ProgramPart Comput(ProgramPart(s),s,i),Comput(ProgramPart(s),s,i)
 )
  = (ProgramPart (Relocated (p,k))).(IC
-    Comput(ProgramPart(s+*p),s+*p,i) + (k,SCM R)) by A6,A13,Y,FUNCT_4:14
+    Comput(ProgramPart(s+*p),s+*p,i) + k) by A6,A13,Y,FUNCT_4:14
       .= IncAddr(Shift(ProgramPart p,k),k).(IC Comput(ProgramPart(s+*p),s+*p,i)
-+ (k,SCM R))
++ k)
       by AMISTD_2:69
       .= Shift(IncAddr(ProgramPart p,k),k).(IC Comput(ProgramPart(s+*p),s+*p,i)
-+ (k,SCM R))
++ k)
       by AMISTD_2:75
       .= IncAddr(ProgramPart p,k).(IC Comput(ProgramPart(s+*p),s+*p,i)) by A12,
-AMISTD_2:65
+VALUED_1:def 12
       .= IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s+*p),s+*p,i),
-      Comput(ProgramPart(s+*p),s+*p,i)),k) by A11,A14,Z,AMISTD_2:74;
+      Comput(ProgramPart(s+*p),s+*p,i)),k) by A11,A14,Z,AMISTD_2:def 15;
 T: ProgramPart(s+*p) = ProgramPart Comput(ProgramPart(s+*p),s+*p,i)
 by AMI_1:123;
 A16: Comput(ProgramPart(s+*p),s+*p,i+1)
@@ -2781,28 +2688,28 @@ by AMI_1:123;
       .= Exec(IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s+*p),s+*p,i),
       Comput(ProgramPart(s+*p),s+*p,i)),k), ( Comput(ProgramPart(s+*p
     ),s+*p
-    ,i)) +* Start-At (IC ( Comput(ProgramPart(s+*p),s+*p,i)) + (k,SCM R),SCM R)
+    ,i)) +* Start-At (IC ( Comput(ProgramPart(s+*p),s+*p,i)) + k,SCM R)
 +* sdom ) +*
     ProgramPart
     Relocated (p,k) by A6,A15,S,AMISTD_2:67
       .= Exec(IncAddr(CurInstr(ProgramPart Comput(ProgramPart(s+*p),s+*p,i),
       Comput(ProgramPart(s+*p),s+*p,i)),k), ( Comput(ProgramPart(s+*p
     ),s+*p
-    ,i)) +* Start-At (IC ( Comput(ProgramPart(s+*p),s+*p,i)) + (k,SCM R),SCM R)
+    ,i)) +* Start-At (IC ( Comput(ProgramPart(s+*p),s+*p,i)) + k,SCM R)
 ) +* sdom +*
     ProgramPart (
     Relocated (p,k)) by AMISTD_2:67
       .= Comput(ProgramPart(s+*p),s+*p,i+1) +*
-      Start-At (IC Comput(ProgramPart(s+*p),s+*p,i+1) + (k,SCM R),SCM R) +*
+      Start-At (IC Comput(ProgramPart(s+*p),s+*p,i+1) + k,SCM R) +*
     s|dom ProgramPart p +* ProgramPart (Relocated (p,k)) by A16,Th22,T;
   end;
   set SD = s|dom ProgramPart p;
-A17: dom DataPart p misses dom ProgramPart p by AMI_1:104;
+A17: dom DataPart p misses dom ProgramPart p by COMPOS_1:15;
   set PR = ProgramPart (Relocated (p,k));
   set IP = Start-At(IC p,SCM R);
 A18: s|dom ProgramPart p c= s by RELAT_1:88;
   set PP = ProgramPart p;
-A19: {IC SCM R} misses dom DataPart p by AMI_1:102;
+A19: {IC SCM R} misses dom DataPart p by COMPOS_1:13;
   ProgramPart (Relocated (p,k)) c= Relocated (p,k) by RELAT_1:88;
   then
 A20: ProgramPart (Relocated (p,k)) c= s by A3,XBOOLE_1:1;
@@ -2815,28 +2722,26 @@ A21: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
   then
 A22: DataPart p c= s by AMISTD_2:68;
   set DP = DataPart p;
-  set IS = Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + (k,SCM R),SCM R);
+  set IS = Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + k,SCM R);
 A23: dom Start-At(IC p,SCM R) = {IC SCM R} by FUNCOP_1:19;
   IC Comput(ProgramPart(s+*p),s+*p,0) = (s +* p).IC SCM R by AMI_1:13
-    .= p.IC SCM R by A2,FUNCT_4:14
-    .= IC p;
+    .= IC p by A2,FUNCT_4:14;
   then
-A24: Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + (k,SCM R),SCM R) c= s
+A24: Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + k,SCM R) c= s
 by A3,A4,XBOOLE_1:1;
-A25: dom Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + (k,SCM R),SCM R) = {IC
+A25: dom Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + k,SCM R) = {IC
 SCM R}
 by FUNCOP_1:19;
   then
 A26: dom Start-At(IC p,SCM R) =
- dom Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + (k,SCM R),SCM R) by
-FUNCOP_1:19;
+ dom Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + k,SCM R) by FUNCOP_1:19;
   Comput(ProgramPart(s),s,0) = s by AMI_1:13
     .= s +* PR by A20,FUNCT_4:79
     .= s +* SD +* PR by A18,FUNCT_4:79
     .= s +* PP +* SD +* PR by A21,FUNCT_4:78
     .= s +* IS +* PP +* SD +* PR by A24,FUNCT_4:79
     .= s +*(IS +* PP) +* SD +* PR by FUNCT_4:15
-    .= s +*(PP +* IS) +* SD +* PR by A25,AMI_1:103,FUNCT_4:36
+    .= s +*(PP +* IS) +* SD +* PR by A25,COMPOS_1:14,FUNCT_4:36
     .= s +* PP +* IS +* SD +* PR by FUNCT_4:15
     .= s +* DP +* PP +* IS +* SD +* PR by A22,FUNCT_4:79
     .= s +*(DP +* PP) +* IS +* SD +* PR by FUNCT_4:15
@@ -2848,10 +2753,10 @@ FUNCOP_1:19;
     .= s +*(PP +*(DP +* IP))+* IS +* SD +* PR by FUNCT_4:15
     .= s +*(PP +*(IP +* DP))+* IS +* SD +* PR by A23,A19,FUNCT_4:36
     .= s +*(PP +* IP +* DP) +* IS +* SD +* PR by FUNCT_4:15
-    .= s +*(IP +* PP +* DP) +* IS +* SD +* PR by A23,AMI_1:103,FUNCT_4:36
-    .= s +* p +* IS +* SD +* PR by A2,AMI_1:108
+    .= s +*(IP +* PP +* DP) +* IS +* SD +* PR by A23,COMPOS_1:14,FUNCT_4:36
+    .= s +* p +* IS +* SD +* PR by A2,COMPOS_1:18
     .= Comput(ProgramPart(s+*p),s+*p,0) +*
-     Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + (k,SCM R),SCM R)
+     Start-At (IC Comput(ProgramPart(s+*p),s+*p,0) + k,SCM R)
      +* s|dom
   ProgramPart p +* ProgramPart (Relocated (p,k)) by AMI_1:13;
   then
@@ -2866,7 +2771,7 @@ theorem Th39:
 ,i) =
 Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +* Start-At (IC
 Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),
-  i) -' (k,SCM R),SCM R) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p)
+  i) -' k,SCM R) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p)
 proof
   assume that
 A1: R is non trivial and
@@ -2879,7 +2784,7 @@ ProgramPart(s+*Relocated
   (p,k)),s+*Relocated
   (p,k),$1) +*
    Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),$1) -'
-(k,SCM R),SCM R) +*
+k,SCM R) +*
   s|(dom
   ProgramPart Relocated(p,k)) +* ProgramPart p;
 A6: for i being Element of NAT st P[i] holds P[i+1 qua Element of NAT]
@@ -2893,12 +2798,12 @@ i) as Element of NAT;
 A8: ProgramPart(Relocated(p,k)) c= Comput(ProgramPart(s+*Relocated(p,k)),s+*
 Relocated(p,k),i) by AMI_1:99,FUNCT_4:26;
     dom (Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i
-) -' (k,SCM R),SCM R))
+) -' k,SCM R))
      = {IC SCM R
     } by FUNCOP_1:19;
     then
 A9: IC SCM R in dom (Start-At
- (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' (k,SCM R),
+ (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' k,
 SCM R))
     by TARSKI:def 1;
     dom ProgramPart Relocated(p,k) c= the carrier of SCM R by RELAT_1:def 18;
@@ -2911,36 +2816,38 @@ A10: dom ProgramPart Relocated(p,k) = dom (s|(dom ProgramPart Relocated(p,
     then reconsider sdom as NAT-defined FinPartState of SCM R by RELAT_1:def 18
     ;
     consider jk being natural number such that
-A11: IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) = il.(SCM R,
-jk) by AMISTD_1:26;
+A11: IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) = jk;
     IC SCM R in dom Relocated(p,k) by AMISTD_2:72;
-    then Relocated(p,k) is not NAT-defined by AMI_1:109;
+    then Relocated(p,k) is not NAT-defined by COMPOS_1:19;
     then
 A12: IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) in dom
 ProgramPart(Relocated(p,k)
     ) by A1,A4,Th27,FUNCT_4:26;
+    then IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)
+     in dom Reloc(ProgramPart p,k) by AMISTD_2:69;
     then
-A13: il.(SCM R,jk) in { il.(SCM R,j+k) where j is Element of NAT: il.(SCM
-    R,j) in dom ProgramPart p } by A11,AMISTD_2:70;
+A13: jk in { j+k where j is Element of NAT: j in dom ProgramPart p }
+ by A11,AMISTD_2:70;
     dom sdom = dom s /\ dom ProgramPart Relocated(p,k) & not IC SCM R in
-    dom ProgramPart Relocated(p,k) by AMI_1:101,RELAT_1:90;
+    dom ProgramPart Relocated(p,k) by COMPOS_1:12,RELAT_1:90;
     then
 A14: not IC SCM R in dom sdom by XBOOLE_0:def 4;
     consider j being Element of NAT such that
-A15: il.(SCM R,jk) = il.(SCM R,j+k) and
-A16: il.(SCM R,j) in dom ProgramPart p by A13;
+A15: jk = j+k and
+A16: j in dom ProgramPart p by A13;
 Y:  (ProgramPart Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i))/.
 IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)
  = Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i).
- IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) by AMI_1:150;
-    dom Shift(pp, k) = { il.(SCM R,m+k) where m is Element of NAT: il.(
-    SCM R,m) in dom pp} by AMISTD_2:def 16;
+ IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) by COMPOS_1:38;
+ reconsider sh = Shift(ProgramPart p, k)
+  as NAT-defined (the Instructions of SCM R)-valued finite Function;
+    dom Shift(pp, k) = { m+k where m is Element of NAT: m in dom pp}
+     by VALUED_1:def 12;
     then
-A17: il.(SCM R,j+k) in dom Shift(ProgramPart p, k) by A16;
+A17: j+k in dom Shift(ProgramPart p, k) by A16;
     then
-A18: IncAddr(Shift(ProgramPart p, k)/.ii, k) = IncAddr(Shift(
-    ProgramPart p,k),k). (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated
-(p,k),i)) by A11,A15,AMISTD_2:74
+A18: IncAddr(Shift(ProgramPart p, k)/.ii, k)
+    = IncAddr(sh,k).ii by A11,A15,AMISTD_2:def 15
       .= (ProgramPart Relocated(p,k)).(IC Comput(ProgramPart(s+*Relocated(p,k))
 ,s+*Relocated(p,k),i))
     by AMISTD_2:69
@@ -2948,51 +2855,45 @@ A18: IncAddr(Shift(ProgramPart p, k)/.ii, k) = IncAddr(Shift(
 Relocated(p,k),i),
       Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i))
        by A12,A8,Y,GRFUNC_1:8;
-A19: il.(SCM R,j+k) -' (k,SCM R) + (k,SCM R)
- = il.(SCM R,j) + (k,SCM R) -'(k,SCM R) + (k,SCM R)
-by AMISTD_1:def 13
-      .= il.(SCM R,j) + (k,SCM R) by AMISTD_1:61
-      .= il.(SCM R,j+k) by AMISTD_1:def 13;
+A19: j+k -' k + k = j + k by NAT_D:34;
 Y:  (ProgramPart Comput(ProgramPart(s),s,i))/.IC Comput(ProgramPart(s),s,i)
- = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by AMI_1:150;
-A20: il.(SCM R,j+k) -' (k,SCM R) = il.(SCM R,j) + (k,SCM R) -' (k,SCM R)
- by AMISTD_1:def 13
-      .= il.(SCM R,j) by AMISTD_1:61;
+ = Comput(ProgramPart(s),s,i).IC Comput(ProgramPart(s),s,i) by COMPOS_1:38;
+A20: (j+k) -' k = j by NAT_D:34;
 T: ProgramPart(s+*Relocated(p,k)) =
  ProgramPart Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),
 i)
 by AMI_1:123;
 S: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,i)
 by AMI_1:123;
-    not IC SCM R in dom ProgramPart p by AMI_1:101;
+    not IC SCM R in dom ProgramPart p by COMPOS_1:12;
     then IC (Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s+*
 Relocated(p,k)),s+*
-Relocated(p,k),i) -' (k,SCM R),SCM R) +* sdom +* ProgramPart p) =
+Relocated(p,k),i) -' k,SCM R) +* sdom +* ProgramPart p) =
 (Comput(ProgramPart(s+*Relocated
 (p,k)),s+*Relocated
 (p,k),i) +*
 Start-At
- (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' (k,SCM R),
+ (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' k,
 SCM R) +* sdom).IC SCM
     R by FUNCT_4:12
       .= (Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s+*
     Relocated(p,k)),s+*
-    Relocated(p,k),i) -' (k,SCM R),SCM R)).IC SCM R by A14,FUNCT_4:12
+    Relocated(p,k),i) -' k,SCM R)).IC SCM R by A14,FUNCT_4:12
       .= (Start-At
-       (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' (k,SCM
-R),SCM R)).IC SCM R
+       (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)
+        -' k,SCM R)).IC SCM R
       by A9,FUNCT_4:14
-      .= IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' (k,
-SCM R) by FUNCOP_1:87;
+      .= IC Comput(ProgramPart(s+*Relocated(p,k)),
+      s+*Relocated(p,k),i) -' k by FUNCOP_1:87;
     then CurInstr(ProgramPart Comput(ProgramPart(s),s,i),Comput(ProgramPart(s),
 s,i))
      = (ProgramPart p). (IC Comput(ProgramPart(s+*
     Relocated(p,k)),s+*
-    Relocated(p,k),i) -' (k,SCM R)) by A7,A11,A15,A16,A20,Y,FUNCT_4:14
+    Relocated(p,k),i) -' k) by A7,A11,A15,A16,A20,Y,FUNCT_4:14
       .= Shift(ProgramPart p, k). (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*
-Relocated(p,k),i)) by A11,A15,A16,A19,A20,AMISTD_2:65
+Relocated(p,k),i)) by A11,A15,A16,A19,VALUED_1:def 12
       .= Shift(ProgramPart p, k)/.ii by A11,A15,A17,PARTFUN1:def 8;
     then
 A21: Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i+1) =
@@ -3003,14 +2904,14 @@ i),
 Comput(ProgramPart(s),s,i)), Comput(ProgramPart(s+*Relocated(
 p,k)),s+*Relocated(
 p,k),i) +* Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k)
-,i) -' (k,SCM R),SCM R)) =
+,i) -' k,SCM R)) =
 Following(ProgramPart Comput(ProgramPart(s +*Relocated(p,k)),s +*Relocated(p,k)
 ,i),
 Comput(ProgramPart(s +*Relocated(p,k)),s +*Relocated(p,k),i))
  +* Start-At ((IC
  Following(ProgramPart(s+*Relocated(p,k)) ,
  Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i)))
-  -' (k,SCM R),SCM R) by A11,A15,A18,Th23,T,AMI_1:14;
+  -' k,SCM R) by A11,A15,A18,Th23,T,AMI_1:14;
     thus Comput(ProgramPart(s),s,i+1)
      = Following(ProgramPart s,Comput(ProgramPart(s),s
 ,i))
@@ -3018,27 +2919,25 @@ Comput(ProgramPart(s +*Relocated(p,k)),s +*Relocated(p,k),i))
       .= Exec(CurInstr(ProgramPart Comput(ProgramPart(s),s,i),Comput(
 ProgramPart(s),s,i)),
       Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +*
-Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) -' (k,
-SCM R),SCM R) +* sdom ) +*
+Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),
+s+*Relocated(p,k),i) -' k,SCM R) +* sdom ) +*
 ProgramPart p
     by A7,S,AMISTD_2:67
       .= Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i+1) +*
 Start-At (IC Comput(ProgramPart(s+*
 Relocated(p,k)),s+*
-Relocated(p,k),i+1) -' (k,SCM R),SCM R) +* s|dom ProgramPart Relocated(p,k) +*
+Relocated(p,k),i+1) -' k,SCM R) +* s|dom ProgramPart Relocated(p,k) +*
 ProgramPart p
     by A21,T,AMISTD_2:67;
   end;
   set PR = ProgramPart Relocated (p,k);
-  set IP = Start-At(IC p +(k,SCM R),SCM R);
+  set IP = Start-At(IC p +k,SCM R);
   set IS = Start-At (IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k)
-,0) -' (k,SCM R),SCM R);
+,0) -' k,SCM R);
   set SD = s|(dom PR);
-A22: dom IP = {IC SCM R} by FUNCOP_1:19;
 A23: IC Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),0) = (s +*
 Relocated(p,k)).IC SCM R by AMI_1:13
-    .= Relocated(p,k).IC SCM R by A5,FUNCT_4:14
-    .= IC Relocated(p,k);
+    .= IC Relocated(p,k) by A5,FUNCT_4:14;
   set PP = ProgramPart p;
   PP c= p by RELAT_1:88;
   then
@@ -3050,8 +2949,7 @@ A25: Start-At(IC p,SCM R) c= s by A3,XBOOLE_1:1;
   DP c= p by RELAT_1:88;
   then
 A26: DP c= s by A3,XBOOLE_1:1;
-A27: {IC SCM R} misses dom DP by AMI_1:102;
-A28: {IC SCM R} misses dom PR by AMI_1:103;
+A28: {IC SCM R} misses dom PR by COMPOS_1:14;
   dom IS /\ dom (s|(dom PR)) = dom IS /\ (dom s /\ dom PR) by RELAT_1:90
     .= {IC SCM R} /\ (dom s /\ dom PR) by FUNCOP_1:19
     .= {IC SCM R} /\ dom PR /\ dom s by XBOOLE_1:16
@@ -3065,34 +2963,32 @@ A29: dom IS misses dom (s|(dom PR)) by XBOOLE_0:def 7;
 A30: dom PR = dom(s|(dom PR)) by RELAT_1:91;
   dom IS = {IC SCM R} by FUNCOP_1:19;
   then
-A31: dom Start-At(IC p +(k,SCM R),SCM R) = dom IS by FUNCOP_1:19;
-A32: dom DP misses dom PR by AMI_1:104;
+A31: dom Start-At(IC p +k,SCM R) = dom IS by FUNCOP_1:19;
+U2: dom Start-At((IC p)+k,SCM R) = {IC SCM R} by FUNCOP_1:19;
   Comput(ProgramPart(s),s,0) = s by AMI_1:13
     .= s +* PP by A24,FUNCT_4:79
     .= s +* Start-At(IC p,SCM R) +* PP by A25,FUNCT_4:79
-    .= s +* Start-At (IC p + (k,SCM R) -' (k,SCM R),SCM R) +* PP by AMISTD_1:61
-    .= s +* IS +* PP by A23,AMISTD_2:73
+    .= s +* Start-At (IC p + k -' k,SCM R) +* PP by NAT_D:34
+    .= s +* IS +* PP by A23,A2,AMISTD_2:73
     .= s +* SD +* IS +* PP by FUNCT_4:80
     .= s +* PR +* SD +* IS +* PP by A30,FUNCT_4:78
     .= s +* PR +* (SD +* IS) +* PP by FUNCT_4:15
     .= s +* PR +* (IS +* SD) +* PP by A29,FUNCT_4:36
     .= s +* PR +* IS +* SD +* PP by FUNCT_4:15
     .= s +* DP +* PR +* IS +* SD +* PP by A26,FUNCT_4:79
-    .= s +*(DP +* PR) +* IS +* SD +* PP by FUNCT_4:15
-    .= s +*(PR +* DP) +* IS +* SD +* PP by A32,FUNCT_4:36
-    .= s +* PR +* DP +* IS +* SD +* PP by FUNCT_4:15
-    .= s +* PR +* DP +* IP +* IS +* SD +* PP by A31,FUNCT_4:78
-    .= s +*(PR +* DP) +* IP +* IS +* SD +* PP by FUNCT_4:15
-    .= s +*(PR +* DP +* IP) +* IS +* SD +* PP by FUNCT_4:15
-    .= s +*(PR +* (DP +* IP))+* IS +* SD +* PP by FUNCT_4:15
-    .= s +*(PR +* (IP +* DP))+* IS +* SD +* PP by A22,A27,FUNCT_4:36
-    .= s +*(PR +* IP +* DP) +* IS +* SD +* PP by FUNCT_4:15
-    .= s +*(IP +* PR +* DP) +* IS +* SD +* PP by A22,AMI_1:103,FUNCT_4:36
+    .= s +* DP +* PR +* IP +* IS +* SD +* PP by A31,FUNCT_4:78
+    .= s +* (DP +* PR) +* IP +* IS +* SD +* PP by FUNCT_4:15
+    .= s +* (DP +* PR +* IP) +* IS +* SD +* PP by FUNCT_4:15
+    .= s +* (DP +* (PR +* IP)) +* IS +* SD +* PP by FUNCT_4:15
+    .= s +* (DP +* (IP +* PR)) +* IS +* SD +* PP by U2,COMPOS_1:14,FUNCT_4:36
+
+    .= s +* (DP +* IP +* PR) +* IS +* SD +* PP by FUNCT_4:15
+    .= s +* (IncrIC(NPP p,k) +* PR) +* IS +* SD +* PP by A2,COMPOS_1:75
     .= s +* Relocated(p,k) +* IS +* SD +* PP by AMISTD_2:69
     .= Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),0) +* Start-At (
 IC Comput(ProgramPart(s+*
 Relocated(p,k)),s+*
-Relocated(p,k),0) -' (k,SCM R),SCM R) +* s|(dom ProgramPart Relocated(p,k)) +*
+Relocated(p,k),0) -' k,SCM R) +* s|(dom ProgramPart Relocated(p,k)) +*
 ProgramPart p
   by AMI_1:13;
   then
@@ -3118,7 +3014,7 @@ A4:   Relocated (p,k) c= s1 and
 A5:   Relocated (p,k) c= s2;
       let i be Element of NAT;
 A6:   Comput(ProgramPart(s1),s1,i) = Comput(ProgramPart(s1+*p),s1+*p,i) +*
-Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R) +* s1|dom
+Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R) +* s1|dom
 ProgramPart p +*
 ProgramPart (Relocated (p,k))
 by A1,A2,A3,A4,Th38;
@@ -3130,22 +3026,22 @@ A7:   dom(s2|dom ProgramPart p) = dom ProgramPart p by RELAT_1:91;
       then dom ProgramPart p c= dom s1 by PARTFUN1:def 4;
       then
 A8:   dom(s1|dom ProgramPart p) = dom ProgramPart p by RELAT_1:91;
-A9:   dom (Start-At ((IC Comput(ProgramPart(s2+*p),s2+*p,i))+(k,SCM R),SCM R))
+A9:   dom (Start-At ((IC Comput(ProgramPart(s2+*p),s2+*p,i))+k,SCM R))
 = {IC SCM R}
 by FUNCOP_1:19;
       then
 A10:  dom(DataPart p) misses
- dom (Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R))
-      by AMI_1:102;
-A11:  dom (Start-At ((IC Comput(ProgramPart(s1+*p),s1+*p,i))+(k,SCM R),SCM R))
+ dom (Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R))
+      by COMPOS_1:13;
+A11:  dom (Start-At ((IC Comput(ProgramPart(s1+*p),s1+*p,i))+k,SCM R))
 = {IC SCM R}
 by FUNCOP_1:19;
       then
 A12:  dom(DataPart p) misses
-      dom (Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R))
-      by AMI_1:102;
+      dom (Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R))
+      by COMPOS_1:13;
 A13:  Comput(ProgramPart(s2),s2,i) = Comput(ProgramPart(s2+*p),s2+*p,i) +*
-Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R) +* s2|dom
+Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R) +* s2|dom
 ProgramPart p +*
 ProgramPart (Relocated (p,k))
 by A1,A2,A3,A5,Th38;
@@ -3164,93 +3060,86 @@ A15:  dom DataPart p c= dom p by GRFUNC_1:8;
       then
 A16:  Comput(ProgramPart(s1+*p),s1+*p,i)|dom (p ) = Comput(ProgramPart(s2+*p),
 s2+*p,i) |dom (p ) by A3,AMI_1:def 25;
-A17:  dom(DataPart p) misses dom(ProgramPart(Relocated (p,k)))by AMI_1:104;
+A17:  dom(DataPart p) misses dom(ProgramPart(Relocated (p,k)))by COMPOS_1:15;
       then
 A18:  Comput(ProgramPart(s1),s1,i)|dom (DataPart p) = ( Comput(ProgramPart(s1+*
 p),s1+*p,i) +*
-Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R) +* s1|dom
+Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R) +* s1|dom
 ProgramPart p) |
 dom(DataPart
       p) by A6,FUNCT_4:76
         .= ( Comput(ProgramPart(s1+*p),s1+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R))
-      | dom(DataPart p) by A8,AMI_1:104,FUNCT_4:76
+        Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R))
+      | dom(DataPart p) by A8,COMPOS_1:15,FUNCT_4:76
         .= ( Comput(ProgramPart(s1+*p),s1+*p,i)) | dom (DataPart p) by A12,
 FUNCT_4:76
         .= ( Comput(ProgramPart(s2+*p),s2+*p,i)) | dom (DataPart p) by A16,A15,
 RELAT_1:188
         .= ( Comput(ProgramPart(s2+*p),s2+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R))
+        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R))
       | dom(DataPart p) by A10,FUNCT_4:76
         .= ( Comput(ProgramPart(s2+*p),s2+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R)
-      +* s2|dom ProgramPart p) | dom(DataPart p) by A7,AMI_1:104,FUNCT_4:76
+        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R)
+      +* s2|dom ProgramPart p) | dom(DataPart p) by A7,COMPOS_1:15,FUNCT_4:76
         .= Comput(ProgramPart(s2),s2,i)|dom (DataPart p) by A13,A17,FUNCT_4:76;
 A19:  {IC SCM R} c= dom p by A2,ZFMISC_1:37;
 A20:  Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i),SCM R) = Comput(
 ProgramPart(s1+*p),s1+*p,i)|{IC SCM R
-      } by AMI_1:95
+      } by COMPOS_1:10
         .= Comput(ProgramPart(s2+*p),s2+*p,i)|{IC SCM R} by A16,A19,RELAT_1:188
-        .= Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i),SCM R) by AMI_1:95;
-A21:  dom (Start-At(IC p +(k,SCM R),SCM R)) = {IC SCM R} by FUNCOP_1:19;
+        .= Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i),SCM R) by
+COMPOS_1:10;
+A21:  dom (Start-At(IC p +k,SCM R)) = {IC SCM R} by FUNCOP_1:19;
       then
-A22:  dom (Start-At(IC p +(k,SCM R),SCM R)) misses
+A22:  dom (Start-At(IC p +k,SCM R)) misses
  dom ProgramPart (Relocated (p,k)
-      ) by AMI_1:103;
+      ) by COMPOS_1:14;
       then
-A23:  Comput(ProgramPart(s1),s1,i)|dom (Start-At(IC p +(k,SCM R),SCM R))
+A23:  Comput(ProgramPart(s1),s1,i)|dom (Start-At(IC p +k,SCM R))
  = ( Comput(ProgramPart(s1+*p),s1+*p,i
-) +* Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R) +*
+) +* Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R) +*
 s1|dom ProgramPart p) |
 dom (
-      Start-At(IC p +(k,SCM R),SCM R)) by A6,FUNCT_4:76
+      Start-At(IC p +k,SCM R)) by A6,FUNCT_4:76
         .= ( Comput(ProgramPart(s1+*p),s1+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R))
-      |dom (Start-At(IC p +(k,SCM R),SCM R)) by A21,A8,AMI_1:103,FUNCT_4:76
-        .= Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + (k,SCM R),SCM R)
+        Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R))
+      |dom (Start-At(IC p +k,SCM R)) by A21,A8,COMPOS_1:14,FUNCT_4:76
+        .= Start-At (IC Comput(ProgramPart(s1+*p),s1+*p,i) + k,SCM R)
         by A21,A11,FUNCT_4:24
-        .= Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R)
-        by A20,AMISTD_1:63
+        .= Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R)
+        by A20,COMPOS_1:43
         .= ( Comput(ProgramPart(s2+*p),s2+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R))
-      |dom (Start-At(IC p +(k,SCM R),SCM R)) by A21,A9,FUNCT_4:24
+        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R))
+      |dom (Start-At(IC p +k,SCM R)) by A21,A9,FUNCT_4:24
         .= ( Comput(ProgramPart(s2+*p),s2+*p,i) +*
-        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + (k,SCM R),SCM R)
-      +* s2|dom ProgramPart p) |dom (Start-At(IC p +(k,SCM R),SCM R))
-      by A21,A7,AMI_1:103,FUNCT_4:76
-        .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p +(k,SCM R),SCM R))
+        Start-At (IC Comput(ProgramPart(s2+*p),s2+*p,i) + k,SCM R)
+      +* s2|dom ProgramPart p) |dom (Start-At(IC p +k,SCM R))
+      by A21,A7,COMPOS_1:14,FUNCT_4:76
+        .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p +k,SCM R))
         by A13,A22,FUNCT_4:76;
-A24:  Comput(ProgramPart(s1),s1,i)|dom (Start-At(IC p +(k,SCM R),SCM R) +*
-IncAddr(Shift(
-ProgramPart p,k),k))
- = Comput(ProgramPart(s1),s1,i)|(dom (Start-At(IC p +(k,SCM R),SCM R)) \/
-dom (
-      IncAddr(Shift(ProgramPart p,k),k))) by FUNCT_4:def 1
-        .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p +(k,SCM R),SCM R))
-\/
-        Comput(ProgramPart(s2),s2,i)|
-      dom (IncAddr(Shift(ProgramPart p,k),k)) by A23,A14,RELAT_1:107
-        .= Comput(ProgramPart(s2),s2,i)|(dom (Start-At(IC p +(k,SCM R),SCM R))
-\/
-        dom (IncAddr(
-      Shift(ProgramPart p,k),k))) by RELAT_1:107
-        .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p +(k,SCM R),SCM R) +*
-        IncAddr(Shift(
-      ProgramPart p,k),k)) by FUNCT_4:def 1;
-      thus Comput(ProgramPart(s1),s1,i)|dom Relocated (p,k) = Comput(
-ProgramPart(s1),s1,i)|(dom (
-Start-At(IC p +(k,SCM R),SCM R) +* IncAddr(Shift(ProgramPart p,k),k)) \/
-dom (DataPart p)
-      ) by FUNCT_4:def 1
-        .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p +(k,SCM R),SCM R) +*
-        IncAddr(Shift(
-ProgramPart p,k),k)) \/ Comput(ProgramPart(s2),s2,i)|dom (DataPart p) by A18
-,A24,RELAT_1:107
-        .= Comput(ProgramPart(s2),s2,i)|(dom (Start-At(IC p +(k,SCM R),SCM R)
-+*
-        IncAddr(Shift(
-      ProgramPart p,k),k)) \/ dom (DataPart p)) by RELAT_1:107
-        .= Comput(ProgramPart(s2),s2,i)|dom Relocated (p,k) by FUNCT_4:def 1;
+U2: dom Start-At((IC p)+k,SCM R) = {IC SCM R} by FUNCOP_1:19;
+U:  dom NPP p = {IC SCM R} \/ dom DataPart p by A2,COMPOS_1:70;
+Y1: Comput(ProgramPart s1,s1,i)|dom NPP p
+       = Comput(ProgramPart s1,s1,i)|{IC SCM R}
+          \/ Comput(ProgramPart s1,s1,i)|dom DataPart p by U,RELAT_1:107
+       .= Comput(ProgramPart s2,s2,i)|dom NPP p by U,U2,A23,A18,RELAT_1:107;
+Y:  dom IncrIC(NPP p,k)
+      = dom NPP p \/ dom Start-At((IC NPP p)+k,SCM R) by FUNCT_4:def 1
+     .= dom NPP p \/ dom Start-At((IC p)+k,SCM R) by A2,COMPOS_1:72;
+X1: Comput(ProgramPart s1,s1,i)|dom IncrIC(NPP p,k)
+     = Comput(ProgramPart s1,s1,i)|dom NPP p
+        \/ Comput(ProgramPart s1,s1,i)|dom Start-At((IC p)+k,SCM R)
+                                                  by Y,RELAT_1:107
+    .= Comput(ProgramPart s2,s2,i)|dom IncrIC(NPP p,k)
+         by Y,Y1,A23,RELAT_1:107;
+X:    dom Relocated (p,k)
+       = dom IncrIC(NPP p,k) \/ dom Reloc(ProgramPart p,k) by FUNCT_4:def 1;
+     hence Comput(ProgramPart(s1),s1,i)|dom Relocated (p,k)
+        = Comput(ProgramPart(s1),s1,i)|dom IncrIC(NPP p,k)
+           \/ Comput(ProgramPart(s1),s1,i)|dom Reloc(ProgramPart p,k)
+                                                  by RELAT_1:107
+       .= Comput(ProgramPart(s2),s2,i)|dom Relocated (p,k)
+           by X1,A14,X,RELAT_1:107;
     end;
   end;
   assume
@@ -3261,7 +3150,7 @@ A27: p c= s2;
   let i be Element of NAT;
 A28: Comput(ProgramPart(s2),s2,i) = Comput(ProgramPart(s2+*Relocated(p,k)),s2+*
 Relocated(p,k),i) +* Start-At (IC
-Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) -' (k,SCM R),SCM R
+Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) -' k,SCM R
 ) +* s2|dom
 ProgramPart Relocated(p,k) +*
   ProgramPart (p) by A1,A2,A25,A27,Th39;
@@ -3270,14 +3159,14 @@ ProgramPart Relocated(p,k) +*
   then
 A29: dom (DataPart p) c= dom (Relocated(p,k)) by GRFUNC_1:8;
 A30: dom (Start-At
- ((IC Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i)) -' (k,SCM R
-),SCM R)) =
+ ((IC Comput(ProgramPart(s1+*Relocated(p,k)),
+ s1+*Relocated(p,k),i)) -' k,SCM R)) =
 {IC SCM
   R} by FUNCOP_1:19;
   then
 A31: dom(DataPart p) misses dom(Start-At (IC Comput(ProgramPart(s1+*Relocated(p
 ,k)),s1+*Relocated(p,k),
-  i) -' (k,SCM R),SCM R)) by AMI_1:102;
+  i) -' k,SCM R)) by COMPOS_1:13;
   dom ProgramPart Relocated(p,k) c= the carrier of SCM R by RELAT_1:def 18;
   then dom ProgramPart Relocated(p,k) c= dom s1 by PARTFUN1:def 4;
   then
@@ -3285,7 +3174,7 @@ A32: dom(s1|dom ProgramPart Relocated(p,k)) = dom ProgramPart Relocated(p,k)
   by RELAT_1:91;
 A33: Comput(ProgramPart(s1),s1,i) = Comput(ProgramPart(s1+*Relocated(p,k)),s1+*
 Relocated(p,k),i) +* Start-At (IC
-Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i) -' (k,SCM R),SCM R
+Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i) -' k,SCM R
 ) +* s1|dom ProgramPart
 Relocated(p,k) +*
   ProgramPart (p) by A1,A2,A25,A26,Th39;
@@ -3306,27 +3195,27 @@ Relocated (p,k)) = Comput(ProgramPart(
 A36: dom(s2|dom ProgramPart Relocated(p,k)) = dom ProgramPart Relocated(p,k)
   by RELAT_1:91;
 A37: dom (Start-At ((IC Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,
-k),i)) -' (k,SCM R),SCM R))
+k),i)) -' k,SCM R))
  =
  {IC SCM
   R} by FUNCOP_1:19;
   then
 A38: dom(DataPart p) misses dom(Start-At (IC Comput(ProgramPart(s2+*Relocated(p
 ,k)),s2+*Relocated(p,k),
-  i) -' (k,SCM R),SCM R)) by AMI_1:102;
-A39: dom (DataPart p) misses dom (ProgramPart p) by AMI_1:104;
+  i) -' k,SCM R)) by COMPOS_1:13;
+A39: dom (DataPart p) misses dom (ProgramPart p) by COMPOS_1:15;
   then
 A40: Comput(ProgramPart(s1),s1,i)|dom (DataPart p) = (Comput(ProgramPart(s1+*
 Relocated(p,k)),s1+*Relocated(p,k),i)
   +* Start-At (IC Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i)
--' (k,SCM R),SCM R) +* s1|
+-' k,SCM R) +* s1|
   dom ProgramPart
   Relocated(p,k)) | dom(DataPart p) by A33,FUNCT_4:76
     .= (Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s1+*
   Relocated(p,k)),s1+*
-  Relocated(p,k),i) -' (k,SCM R),SCM R)) | dom(DataPart p)
-  by A32,AMI_1:104,FUNCT_4:76
+  Relocated(p,k),i) -' k,SCM R)) | dom(DataPart p)
+  by A32,COMPOS_1:15,FUNCT_4:76
     .= (Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i)) | dom (
 DataPart p) by A31,FUNCT_4:76
     .= (Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i)) | dom (
@@ -3334,13 +3223,13 @@ DataPart p) by A35,A29,RELAT_1:188
     .= (Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s2+*
   Relocated(p,k)),s2+*
-  Relocated(p,k),i) -' (k,SCM R),SCM R)) | dom(DataPart p) by A38,FUNCT_4:76
+  Relocated(p,k),i) -' k,SCM R)) | dom(DataPart p) by A38,FUNCT_4:76
     .= (Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s2+*
 Relocated(p,k)),s2+*
-Relocated(p,k),i) -' (k,SCM R),SCM R) +* s2|dom ProgramPart Relocated(p,k)) |
+Relocated(p,k),i) -' k,SCM R) +* s2|dom ProgramPart Relocated(p,k)) |
 dom(DataPart p)
-  by A36,AMI_1:104,FUNCT_4:76
+  by A36,COMPOS_1:15,FUNCT_4:76
     .= Comput(ProgramPart(s2),s2,i)|dom (DataPart p) by A28,A39,FUNCT_4:76;
   IC SCM R in dom Relocated (p,k) by AMISTD_2:72;
   then
@@ -3348,44 +3237,44 @@ A41: {IC SCM R} c= dom Relocated (p,k) by ZFMISC_1:37;
 A42: Start-At (IC Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i),
 SCM R) = Comput(ProgramPart(s1+*
   Relocated(p,k)),s1+*
-  Relocated(p,k),i)|{IC SCM R} by AMI_1:95
+  Relocated(p,k),i)|{IC SCM R} by COMPOS_1:10
     .= Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i)|{IC SCM R}
 by A35,A41,RELAT_1:188
     .= Start-At (IC Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i
-),SCM R) by AMI_1:95;
+),SCM R) by COMPOS_1:10;
 A43: dom (Start-At(IC p,SCM R)) = {IC SCM R} by FUNCOP_1:19;
   then
-A44: dom (Start-At(IC p,SCM R)) misses dom (ProgramPart p) by AMI_1:103;
+A44: dom (Start-At(IC p,SCM R)) misses dom (ProgramPart p) by COMPOS_1:14;
   then
 A45: Comput(ProgramPart(s1),s1,i)|dom (Start-At(IC p,SCM R)) =
  (Comput(ProgramPart(s1+*Relocated(p,
   k)),s1+*Relocated(p,
   k),i) +* Start-At
-   (IC Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i) -' (k,SCM R
-),SCM R) +* s1|dom
+   (IC Comput(ProgramPart(s1+*Relocated(p,k)),
+   s1+*Relocated(p,k),i) -' k,SCM R) +* s1|dom
   ProgramPart Relocated(p,k)) |dom (Start-At(IC p,SCM R)) by A33,FUNCT_4:76
     .= (Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s1+*
 Relocated(p,k)),s1+*
-Relocated(p,k),i) -' (k,SCM R),SCM R)) |dom (Start-At(IC p,SCM R))
-by A43,A32,AMI_1:103,FUNCT_4:76
+Relocated(p,k),i) -' k,SCM R)) |dom (Start-At(IC p,SCM R))
+by A43,A32,COMPOS_1:14,FUNCT_4:76
     .= Start-At (IC Comput(ProgramPart(s1+*Relocated(p,k)),s1+*Relocated(p,k),i
-) -' (k,SCM R),SCM R)
+) -' k,SCM R)
     by A43,A30,FUNCT_4:24
     .= Start-At (IC Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i
-) -' (k,SCM R),SCM R)
-    by A42,AMISTD_1:64
+) -' k,SCM R)
+    by A42,COMPOS_1:44
     .= (Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s2+*
   Relocated(p,k)),s2+*
-  Relocated(p,k),i) -' (k,SCM R),SCM R)) |dom (Start-At(IC p,SCM R))
+  Relocated(p,k),i) -' k,SCM R)) |dom (Start-At(IC p,SCM R))
   by A43,A37,FUNCT_4:24
     .= (Comput(ProgramPart(s2+*Relocated(p,k)),s2+*Relocated(p,k),i) +*
 Start-At (IC Comput(ProgramPart(s2+*
 Relocated(p,k)),s2+*
-Relocated(p,k),i) -' (k,SCM R),SCM R) +* s2|dom ProgramPart Relocated(p,k)) |
+Relocated(p,k),i) -' k,SCM R) +* s2|dom ProgramPart Relocated(p,k)) |
 dom (Start-At (
-  IC p,SCM R)) by A43,A36,AMI_1:103,FUNCT_4:76
+  IC p,SCM R)) by A43,A36,COMPOS_1:14,FUNCT_4:76
     .= Comput(ProgramPart(s2),s2,i)|dom (Start-At(IC p,SCM R)) by A28,A44,
 FUNCT_4:76;
 A46: Comput(ProgramPart(s1),s1,i)|dom (Start-At(IC p,SCM R) +* ProgramPart p) =
@@ -3402,7 +3291,7 @@ by RELAT_1:107
 by FUNCT_4:def 1;
   thus Comput(ProgramPart(s1),s1,i)|dom p = Comput(ProgramPart(s1),s1,i)|dom (
 Start-At(IC p,SCM R) +*
-  ProgramPart p +* DataPart p ) by A2,AMI_1:108
+  ProgramPart p +* DataPart p ) by A2,COMPOS_1:18
     .= Comput(ProgramPart(s1),s1,i)|(dom (Start-At(IC p,SCM R) +* ProgramPart p
 ) \/ dom (
   DataPart p)) by FUNCT_4:def 1
@@ -3416,7 +3305,7 @@ Start-At(IC p,SCM R) +*
 +*
     DataPart p
   ) by FUNCT_4:def 1
-    .= Comput(ProgramPart(s2),s2,i)|dom p by A2,AMI_1:108;
+    .= Comput(ProgramPart(s2),s2,i)|dom p by A2,COMPOS_1:18;
 end;
 
 theorem Th41:
@@ -3443,11 +3332,11 @@ A8: Relocated(p,k) c= t by PBOOLE:156;
   reconsider s3 = s +* DataPart t as State of SCM R;
 A9: s3 = s3;
 Y:  (ProgramPart Comput(ProgramPart(t),t,j1))/.IC Comput(ProgramPart(t),t,j1)
-= Comput(ProgramPart(t),t,j1).IC Comput(ProgramPart(t),t,j1) by AMI_1:150;
+= Comput(ProgramPart(t),t,j1).IC Comput(ProgramPart(t),t,j1) by COMPOS_1:38;
 TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,j1)
 by AMI_1:123;
   (ProgramPart t).(IC ( Comput(ProgramPart(t),t,j1)))
-    = t.(IC ( Comput(ProgramPart(t),t,j1))) by AMI_1:15
+    = t.(IC ( Comput(ProgramPart(t),t,j1))) by COMPOS_1:2
    .= CurInstr(ProgramPart Comput(ProgramPart(t),t,j1),Comput(ProgramPart(t),t,
 j1))
    by Y,AMI_1:54
@@ -3497,10 +3386,10 @@ A6:   x = d1 and
 A7:   ProgramPart p +* p +* d1 is pre-program of SCM R and
 A8:   F.d1 c= Result(ProgramPart p,p +* d1) by A4,AMI_1:def 30;
       dom F c= FinPartSt SCM R by RELAT_1:def 18;
-      then reconsider d = x as FinPartState of SCM R by A5,AMI_1:125;
-      reconsider d as data-only FinPartState of SCM R by A3,A5,AMI_1:def 52;
-X:    Relocated(p +* d,k) = Relocated(p,k) +* d by A2,AMISTD_2:78;
-xx:   dom d misses NAT by AMI_1:155;
+      then reconsider d = x as FinPartState of SCM R by A5,COMPOS_1:25;
+      reconsider d as data-only FinPartState of SCM R by A3,A5,COMPOS_1:def 24;
+X:    Relocated(p +* d,k) = Relocated(p,k) +* d by AMISTD_2:78;
+xx:   dom d misses NAT by COMPOS_1:40;
       then
 x:    ProgramPart(p +* d)= ProgramPart p by FUNCT_4:76;
 y:    ProgramPart(Relocated(p,k) +* d) = ProgramPart Relocated(p,k)
@@ -3510,21 +3399,18 @@ y:    ProgramPart(Relocated(p,k) +* d) = ProgramPart Relocated(p,k)
 A9:   IC SCM R in dom(p +* d) by A2,XBOOLE_0:def 3;
       then
 A10:  DataPart(Result(ProgramPart p,p +* d1))
-       = DataPart(Result(ProgramPart(Relocated(p,k)),Relocated(p +* d,k)))
-      by A1,A6,A7,Th41,F1,x,X,y
-        .= DataPart(Result(ProgramPart Relocated(p,k),Relocated(p,k) +* d))
-         by X;
+        = DataPart(Result(ProgramPart Relocated(p,k),Relocated(p,k) +* d))
+         by A1,A6,A7,Th41,F1,x,X,y;
       reconsider Fd1 = F.d1 as FinPartState of SCM R by A8;
       take d;
       thus x=d;
-      Relocated(p,k) +* d = Relocated((p +* d) ,k) by A2,AMISTD_2:78;
+      Relocated(p,k) +* d = Relocated((p +* d) ,k) by AMISTD_2:78;
       hence ProgramPart Relocated(p,k) +* Relocated(p,k) +* d
        is pre-program of SCM R by A1,A6,A7,A9,Th36,F1,F2,Th40;
-A11:  Fd1 is data-only by A3,A5,A6,AMI_1:def 52;
-      then F.d1 c= DataPart(Result(ProgramPart p,p +* d1)) by A8,
-AMI_1:107;
+A11:  Fd1 is data-only by A3,A5,A6,COMPOS_1:def 24;
+      then F.d1 c= DataPart(Result(ProgramPart p,p +* d1)) by A8,COMPOS_1:17;
       hence F.d c= Result(ProgramPart Relocated(p,k),Relocated(p,k) +* d)
-by A6,A11,A10,AMI_1:107;
+by A6,A11,A10,COMPOS_1:17;
     end;
   end;
   assume
@@ -3539,34 +3425,33 @@ A15: ProgramPart Relocated (p,k) +* Relocated (p,k) +* d1
 A16: F.d1 c= Result(ProgramPart Relocated (p,k),Relocated (p,k) +* d1)
 by A12,AMI_1:def 30;
   dom F c= FinPartSt SCM R by RELAT_1:def 18;
-  then reconsider d = x as FinPartState of SCM R by A13,AMI_1:125;
-  reconsider d as data-only FinPartState of SCM R by A3,A13,AMI_1:def 52;
+  then reconsider d = x as FinPartState of SCM R by A13,COMPOS_1:25;
+  reconsider d as data-only FinPartState of SCM R by A3,A13,COMPOS_1:def 24;
   dom(p +* d) = dom p \/ dom d by FUNCT_4:def 1;
   then
 A17: IC SCM R in dom(p +* d) by A2,XBOOLE_0:def 3;
-A18: Relocated(p,k) +* d = Relocated((p +* d),k) by A2,AMISTD_2:78;
+A18: Relocated(p,k) +* d = Relocated((p +* d),k) by AMISTD_2:78;
   then
 A19: p +* d is autonomic by A1,A14,A15,A17,Th40,F2;
   then
 A20: p +* d is halting by A1,A14,A15,A18,A17,Th36,F2;
-X:    Relocated(p +* d,k) = Relocated(p,k) +* d by A2,AMISTD_2:78;
-xx:   dom d misses NAT by AMI_1:155;
+X:    Relocated(p +* d,k) = Relocated(p,k) +* d by AMISTD_2:78;
+xx:   dom d misses NAT by COMPOS_1:40;
       then
 x:    ProgramPart(p +* d)= ProgramPart p by FUNCT_4:76;
 y:    ProgramPart(Relocated(p,k) +* d) = ProgramPart Relocated(p,k)
                by xx,FUNCT_4:76;
 A21: DataPart(Result(ProgramPart Relocated(p,k),Relocated(p,k) +* d1))
-       = DataPart(Result(ProgramPart Relocated(p,k),Relocated(p +*d,k)))
-        by A14,X
-    .= DataPart(Result(ProgramPart p,p +* d)) by A1,A17,A19,A20,Th41,x,y,X;
+    = DataPart(Result(ProgramPart p,p +* d))
+     by A1,A17,A19,A20,Th41,x,y,X,A14;
   take d;
   thus x=d;
   thus ProgramPart p +* p +* d is
    pre-program of SCM R by A1,A14,A15,A18,A17,A19,Th36,F1,F2;
   reconsider Fd1 = F.d1 as FinPartState of SCM R by A16;
-A22: Fd1 is data-only by A3,A13,A14,AMI_1:def 52;
+A22: Fd1 is data-only by A3,A13,A14,COMPOS_1:def 24;
   then F.d1 c= DataPart(Result(ProgramPart Relocated(p,k),Relocated(p,k)
-+* d1)) by A16,AMI_1:107;
-  hence thesis by A14,A22,A21,AMI_1:107;
++* d1)) by A16,COMPOS_1:17;
+  hence thesis by A14,A22,A21,COMPOS_1:17;
 end;
 

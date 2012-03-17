@@ -1,0 +1,259 @@
+:: Riemann Integral of Functions from $\mathbbbR$ into Real Normed Space
+::  by Keiichi Miyajima , Takahiro Kato and Yasunari Shidama
+:: 
+:: Received May 20, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, INTEGRA2, FINSEQ_1, NORMSP_1, SEQ_2, TARSKI, STRUCT_0,
+      ORDINAL2, INTEGRA5, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_1,
+      NAT_1, MEASURE7, CARD_3, RELAT_1, FUNCT_1, REAL_1, XXREAL_0, XREAL_0,
+      XXREAL_1, VALUED_1, PARTFUN1, RLVECT_1, FUNCT_3, INTEGR15, PRE_TOPC,
+      ARYTM_3, CARD_1, SUPINF_2, SEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, PARTFUN1,
+      FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1, XXREAL_2,
+      FINSEQ_1, FINSEQ_2, SEQ_2, SEQ_4, RCOMP_1, INTEGRA1, INTEGRA2, INTEGRA3,
+      INTEGRA5, STRUCT_0, PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1,
+      PSCOMP_1, BINOM;
+ constructors REAL_1, SEQ_4, VFUNCT_1, RELSET_1, PDIFF_1, INTEGRA1, INTEGRA2,
+      INTEGRA5, INTEGRA3, SEQ_2, BINOM, PSCOMP_1, NORMSP_0;
+ registrations NUMBERS, XREAL_0, FINSEQ_2, STRUCT_0, RELSET_1, INTEGRA1,
+      INTEGRA2, FUNCT_2, MEMBERED, XXREAL_0, ORDINAL1, FUNCT_1, XXREAL_2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve X for RealNormSpace;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  let D be Division of A;
+  mode middle_volume of f,D -> FinSequence of X means
+:: INTEGR18:def 1
+  len it = len D & for i be Nat st i in dom D holds
+    ex c be Point of X st c in rng (f|divset(D,i)) &
+      it.i= (vol divset(D,i)) * c;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  let D be Division of A;
+  let F be middle_volume of f,D;
+  func middle_sum(f,F) -> Point of X equals
+:: INTEGR18:def 2
+    Sum(F);
+end;
+
+definition
+ let X be RealNormSpace;
+ let A be closed-interval Subset of REAL,
+     f be Function of A,the carrier of X,
+     T be DivSequence of A;
+ mode middle_volume_Sequence of f,T -> Function of NAT,(the carrier of X)*
+   means
+:: INTEGR18:def 3
+ for k be Element of NAT holds it.k is middle_volume of f,T.k;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL,
+      f be Function of A,the carrier of X,
+      T be DivSequence of A,
+      S be middle_volume_Sequence of f,T,
+      k be Element of NAT;
+  redefine func S.k -> middle_volume of f,T.k;
+end;
+
+definition
+ let X be RealNormSpace;
+ let A be closed-interval Subset of REAL,
+     f be Function of A,the carrier of X,
+     T be DivSequence of A,
+     S be middle_volume_Sequence of f,T;
+ func middle_sum(f,S) -> sequence of X means
+:: INTEGR18:def 4
+ for i be Element of NAT holds it.i = middle_sum(f,S.i);
+end;
+
+begin :: Definition of Riemann Integral on Functions from $\mathbbbR$ into Real Normed Space
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  attr f is integrable means
+:: INTEGR18:def 5
+  ex I be Point of X st for T being DivSequence of A,
+     S be middle_volume_Sequence of f,T st
+     delta(T) is convergent & lim delta(T) = 0 holds
+     middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = I;
+end;
+
+theorem :: INTEGR18:1
+  for X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X
+        st len R1 = len R2 & R3 = R1 + R2 holds Sum(R3) = Sum(R1) + Sum(R2);
+
+theorem :: INTEGR18:2
+  for X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X
+        st len R1 = len R2 & R3 = R1 - R2 holds Sum(R3) = Sum(R1) - Sum(R2);
+
+theorem :: INTEGR18:3
+  for X be RealNormSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL st R2 = a(#)R1 holds Sum(R2) = a * Sum(R1);
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  assume  f is integrable;
+  func integral(f) -> Point of X means
+:: INTEGR18:def 6
+  for T being DivSequence of A,
+      S be middle_volume_Sequence of f,T
+        st delta(T) is convergent & lim delta(T)=0 holds
+        middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = it;
+end;
+
+theorem :: INTEGR18:4
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      r be Real,
+      f, h be Function of A,the carrier of X
+        st h = r(#)f & f is integrable holds
+        h is integrable & integral(h) = r * integral(f);
+
+theorem :: INTEGR18:5
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, h be Function of A,the carrier of X
+        st h = -f & f is integrable holds
+        h is integrable & integral(h) = -integral(f);
+
+theorem :: INTEGR18:6
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X st
+      h = f + g & f is integrable & g is integrable holds
+        h is integrable & integral(h) = integral(f) + integral(g);
+
+theorem :: INTEGR18:7
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X
+        st h = f - g & f is integrable & g is integrable holds
+        h is integrable & integral(h) = integral(f) - integral(g);
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,the carrier of X;
+  pred f is_integrable_on A means
+:: INTEGR18:def 7
+  ex g be Function of A,the carrier of X st g = f|A & g is integrable;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,the carrier of X;
+  assume  A c= dom f;
+  func integral(f,A) -> Element of X means
+:: INTEGR18:def 8
+  ex g be Function of A,the carrier of X st g = f|A & it = integral(g);
+end;
+
+theorem :: INTEGR18:8
+  for A be closed-interval Subset of REAL,
+      f be PartFunc of REAL,the carrier of X,
+      g be Function of A,the carrier of X
+        st f|A = g holds f is_integrable_on A iff g is integrable;
+
+theorem :: INTEGR18:9
+  for A be closed-interval Subset of REAL,
+      f be PartFunc of REAL,the carrier of X,
+      g be Function of A,the carrier of X
+        st A c= dom f & f|A = g holds integral(f,A) = integral(g);
+
+theorem :: INTEGR18:10
+  for X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V
+        st g = g1 & f = f1 holds g1 + f1 = g + f;
+
+theorem :: INTEGR18:11
+  for X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V
+        st g = g1 & f = f1 holds g1 - f1 = g - f;
+
+theorem :: INTEGR18:12
+  for r be Real,
+      X, Y be non empty set,
+      V be RealNormSpace,
+      g be PartFunc of X,the carrier of V,
+      g1 be PartFunc of Y,the carrier of V
+        st g = g1 holds r(#)g1 = r(#)g;
+
+begin :: Linearity of the Integration Operator
+
+theorem :: INTEGR18:13
+  for r be Real
+  for A be closed-interval Subset of REAL
+  for f be PartFunc of REAL,the carrier of X
+    st A c= dom f & f is_integrable_on A holds
+    r(#)f is_integrable_on A & integral((r(#)f),A) = r * integral(f,A);
+
+theorem :: INTEGR18:14
+  for A be closed-interval Subset of REAL,
+      f1, f2 be PartFunc of REAL,the carrier of X
+        st f1 is_integrable_on A & f2 is_integrable_on A &
+        A c= dom f1 & A c= dom f2 holds
+        f1 + f2 is_integrable_on A &
+        integral(f1 + f2,A) = integral(f1,A) + integral(f2,A);
+
+theorem :: INTEGR18:15
+  for A be closed-interval Subset of REAL,
+      f1, f2 be PartFunc of REAL,the carrier of X
+        st f1 is_integrable_on A & f2 is_integrable_on A &
+        A c= dom f1 & A c= dom f2 holds
+        f1 - f2 is_integrable_on A &
+        integral(f1 - f2,A) = integral(f1,A) - integral(f2,A);
+
+definition
+  let X be RealNormSpace;
+  let f be PartFunc of REAL,the carrier of X;
+  let a, b be real number;
+  func integral(f,a,b) -> Element of X equals
+:: INTEGR18:def 9
+  integral(f,[' a,b ']) if a <= b otherwise -integral(f,[' b,a ']);
+end;
+
+theorem :: INTEGR18:16
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL,
+      a, b be Real
+        st A = [.a,b.] holds integral(f,A) = integral(f,a,b);
+
+theorem :: INTEGR18:17
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL
+        st vol(A) = 0 & A c= dom f holds
+        f is_integrable_on A & integral(f,A) = 0.X;
+
+theorem :: INTEGR18:18
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL,
+      a, b be Real
+        st A = [.b,a.] & A c= dom f holds -integral(f,A) = integral(f,a,b);

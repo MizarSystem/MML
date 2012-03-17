@@ -9,10 +9,12 @@ environ
  vocabularies NUMBERS, SEQ_1, COMSEQ_1, SUBSET_1, REAL_1, COMPLEX1, CARD_1,
       ARYTM_3, RELAT_1, XCMPLX_0, FUNCT_1, SERIES_1, XREAL_0, ORDINAL1,
       XXREAL_0, ARYTM_1, FUNCOP_1, SEQ_2, VALUED_0, ORDINAL2, NAT_1, PREPOWER,
-      NEWTON, SQUARE_1, VALUED_1, CARD_3, POWER, XXREAL_2, COMSEQ_3;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0, COMPLEX1,
-      REAL_1, NEWTON, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1,
-      SEQ_2, NAT_1, VALUED_0, SERIES_1, SQUARE_1, POWER, COMSEQ_1, COMSEQ_2;
+      NEWTON, SQUARE_1, VALUED_1, CARD_3, POWER, XXREAL_2, COMSEQ_3, PARTFUN1,
+      TARSKI, FUNCT_2;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0,
+      COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      VALUED_1, SEQ_1, SEQ_2, NAT_1, VALUED_0, SERIES_1, SQUARE_1, POWER,
+      COMSEQ_1, COMSEQ_2;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       SEQM_3, COMSEQ_2, NEWTON, SERIES_1, SEQ_1, RECDEF_1, SEQ_2, VALUED_1,
       SEQ_4, RELSET_1, BINOP_2, RVSUM_1;
@@ -33,8 +35,7 @@ theorem :: COMSEQ_3:1
   n+1 <> 0c & (n+1)*<i> <> 0c;
 
 theorem :: COMSEQ_3:2
-  (for n holds rseq.n = 0) implies for m holds (Partial_Sums abs(
-  rseq)).m = 0;
+  (for n holds rseq.n = 0) implies for m holds (Partial_Sums abs( rseq)).m = 0;
 
 theorem :: COMSEQ_3:3
   (for n holds rseq.n = 0) implies rseq is absolutely_summable;
@@ -91,8 +92,7 @@ definition
   func z GeoSeq -> Complex_Sequence means
 :: COMSEQ_3:def 1
 
-  it.0 = 1r & for n holds it.(n
-  +1) = it.n * z;
+  it.0 = 1r & for n holds it.(n+1) = it.n * z;
 end;
 
 notation
@@ -111,17 +111,37 @@ theorem :: COMSEQ_3:11
   z #N 0 = 1r;
 
 definition
-  let c be Complex_Sequence;
-  func Re c -> Real_Sequence means
+  let f be complex-valued Function;
+  func Re f -> Function means
 :: COMSEQ_3:def 3
 
-  for n holds it.n = Re(c.n);
+  dom it = dom f & for x be set st x in dom it holds it.x = Re(f.x);
+  func Im f -> Function means
+:: COMSEQ_3:def 4
+
+  dom it = dom f & for x be set st x in dom it holds it.x = Im(f.x);
+end;
+
+registration
+  let f be complex-valued Function;
+  cluster Re f -> real-valued;
+  cluster Im f -> real-valued;
+end;
+
+definition
+  let X be set, f be PartFunc of X,COMPLEX;
+  redefine func Re f -> PartFunc of X,REAL;
+  redefine func Im f -> PartFunc of X,REAL;
 end;
 
 definition
   let c be Complex_Sequence;
-  func Im c -> Real_Sequence means
-:: COMSEQ_3:def 4
+  redefine func Re c -> Real_Sequence means
+:: COMSEQ_3:def 5
+
+  for n holds it.n = Re(c.n);
+  redefine func Im c -> Real_Sequence means
+:: COMSEQ_3:def 6
 
   for n holds it.n = Im(c.n);
 end;
@@ -171,29 +191,18 @@ theorem :: COMSEQ_3:23
   (Re seq)^\k =Re (seq^\k) & (Im seq)^\k =Im (seq^\k);
 
 definition
-  let seq be Complex_Sequence;
-  canceled 2;
-  func Partial_Sums seq -> Complex_Sequence means
-:: COMSEQ_3:def 7
-
-  it.0 = seq.0 & for n
-  holds it.(n+1) = it.n + seq.(n+1);
-end;
-
-definition
+  canceled 3;
   let seq be Complex_Sequence;
   func Sum seq -> Element of COMPLEX equals
-:: COMSEQ_3:def 8
+:: COMSEQ_3:def 10
   lim Partial_Sums seq;
 end;
 
 theorem :: COMSEQ_3:24
-  (for n holds seq.n = 0c) implies for m holds (Partial_Sums seq).
-  m = 0c;
+  (for n holds seq.n = 0c) implies for m holds (Partial_Sums seq). m = 0c;
 
 theorem :: COMSEQ_3:25
-  (for n holds seq.n = 0c) implies for m holds (Partial_Sums |.seq
-  .|).m = 0;
+  (for n holds seq.n = 0c) implies for m holds (Partial_Sums |.seq .|).m = 0;
 
 theorem :: COMSEQ_3:26
   Partial_Sums Re seq = Re (Partial_Sums seq) & Partial_Sums Im
@@ -267,8 +276,8 @@ theorem :: COMSEQ_3:41
 
 registration
   let c be convergent Complex_Sequence;
-  cluster Re c -> convergent;
-  cluster Im c -> convergent;
+  cluster Re c -> convergent Real_Sequence;
+  cluster Im c -> convergent Real_Sequence;
 end;
 
 theorem :: COMSEQ_3:42
@@ -316,7 +325,7 @@ definition
   canceled;
   let seq be Complex_Sequence;
   attr seq is summable means
-:: COMSEQ_3:def 10
+:: COMSEQ_3:def 12
 
   Partial_Sums seq is convergent;
 end;
@@ -333,7 +342,7 @@ end;
 definition
   let seq;
   attr seq is absolutely_summable means
-:: COMSEQ_3:def 11
+:: COMSEQ_3:def 13
 
   |.seq.| is summable;
 end;
@@ -363,8 +372,8 @@ theorem :: COMSEQ_3:54
 
 registration
   let seq be summable Complex_Sequence;
-  cluster Re seq -> summable;
-  cluster Im seq -> summable;
+  cluster Re seq -> summable Real_Sequence;
+  cluster Im seq -> summable Real_Sequence;
 end;
 
 theorem :: COMSEQ_3:55
@@ -410,8 +419,7 @@ theorem :: COMSEQ_3:61
   Sum(seq^\(n+1));
 
 theorem :: COMSEQ_3:62
-  Partial_Sums |.seq.| is bounded_above iff seq is
-  absolutely_summable;
+  Partial_Sums |.seq.| is bounded_above iff seq is absolutely_summable;
 
 registration
   let seq be absolutely_summable Complex_Sequence;
@@ -434,8 +442,7 @@ registration
 end;
 
 theorem :: COMSEQ_3:65
-  |.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r-
-  z);
+  |.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r- z);
 
 theorem :: COMSEQ_3:66
   |.z.| < 1 & (for n holds seq.(n+1) = z * seq.n) implies seq is
@@ -486,4 +493,3 @@ theorem :: COMSEQ_3:76
 theorem :: COMSEQ_3:77
   (for n holds seq.n<>0c) & (ex m st for n st n>=m holds |.seq.|.(n+1)/
   |.seq.|.n >= 1) implies seq is not absolutely_summable;
-

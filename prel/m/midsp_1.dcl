@@ -49,7 +49,7 @@
 </RCluster>
 <FCluster aid="MIDSP_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="108"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="79"/>
@@ -75,7 +75,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -92,7 +92,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -108,7 +108,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -19,9 +19,10 @@ environ
       MATRIX13, LAPLACE, RFINSEQ, WSIERP_1;
  constructors XXREAL_0, GROUP_4, VECTSP_7, MATRIX11, MATRIX13, LAPLACE,
       RFINSEQ, POLYNOM1, WSIERP_1, SEQ_1, VALUED_0, VALUED_1, REAL_1, NAT_D,
-      BINARITH, RELSET_1;
+      BINARITH, RELSET_1, FVSUM_1;
  registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, ORDINAL1, XXREAL_0,
-      NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRIX13, XREAL_0, VALUED_0, CARD_1;
+      NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRIX13, XREAL_0, VALUED_0, CARD_1,
+      FVSUM_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
 
 
@@ -34,8 +35,7 @@ reserve i,j,m,n,k for Nat,
   D for non empty set,
   d,d1,d2 for Element of D,
   M,M1,M2 for (Matrix of D),
-  A,A1,
-  A2,B1,B2 for (Matrix of K),
+  A,A1,A2,B1,B2 for (Matrix of K),
   f,g for FinSequence of NAT;
 
 theorem :: MATRIXJ1:1
@@ -43,12 +43,10 @@ theorem :: MATRIXJ1:1
   st len f1 = len f2 holds (f1+f2)^(g1+g2)=(f1^g1)+(f2^g2);
 
 theorem :: MATRIXJ1:2
-  for f,g be FinSequence of D st i in dom f holds Del(f^g,i) = Del(
-  f,i)^g;
+  for f,g be FinSequence of D st i in dom f holds Del(f^g,i) = Del( f,i)^g;
 
 theorem :: MATRIXJ1:3
-  for f,g be FinSequence of D st i in dom g holds Del(f^g,i+len f)=
-  f^Del(g,i);
+  for f,g be FinSequence of D st i in dom g holds Del(f^g,i+len f)= f^Del(g,i);
 
 theorem :: MATRIXJ1:4
   i in Seg (n+1) implies Del((n+1) |->d,i)=n |-> d;
@@ -63,8 +61,7 @@ definition
   func min(f,i) -> Element of NAT means
 :: MATRIXJ1:def 1
 
-  i <= Sum(f|it) & it in dom f &
-  for j st i<=Sum (f|j) holds it <= j;
+  i <= Sum(f|it) & it in dom f & for j st i<=Sum (f|j) holds it <= j;
 end;
 
 theorem :: MATRIXJ1:6
@@ -97,8 +94,7 @@ definition
   attr F is Matrix-yielding means
 :: MATRIXJ1:def 2
 
-  for i st i in dom F holds F.i is
-  Matrix of D;
+  for i st i in dom F holds F.i is Matrix of D;
 end;
 
 registration
@@ -121,8 +117,7 @@ theorem :: MATRIXJ1:12
   {} is FinSequence_of_Matrix of D;
 
 reserve F,F1,F2 for FinSequence_of_Matrix of D,
-  G,G9,G1,G2 for
-  FinSequence_of_Matrix of K;
+  G,G9,G1,G2 for FinSequence_of_Matrix of K;
 
 definition
   let D,F,x;
@@ -154,13 +149,11 @@ definition
   func Len F -> FinSequence of NAT means
 :: MATRIXJ1:def 3
 
-  dom it = dom F & for i st i in
-  dom it holds it.i=len (F.i);
+  dom it = dom F & for i st i in dom it holds it.i=len (F.i);
   func Width F -> FinSequence of NAT means
 :: MATRIXJ1:def 4
 
-  dom it = dom F & for i st i
-  in dom it holds it.i=width (F.i);
+  dom it = dom F & for i st i in dom it holds it.i=width (F.i);
 end;
 
 definition
@@ -223,8 +216,7 @@ definition
 end;
 
 theorem :: MATRIXJ1:22
-  for F be FinSequence_of_Matrix of D st F={} holds block_diagonal(F,d)=
-  {};
+  for F be FinSequence_of_Matrix of D st F={} holds block_diagonal(F,d)= {};
 
 theorem :: MATRIXJ1:23
   for M be Matrix of Sum Len (<*M1,M2*>),Sum Width (<*M1,M2*>),D
@@ -239,8 +231,7 @@ implies Col(M,i) = Col(M1,i)^(len M2 |-> d)) & (i in Seg width M2 implies Col(M
   ,i+width M1)=(len M1|->d)^Col(M2,i));
 
 theorem :: MATRIXJ1:25
-  Indices block_diagonal(F1,d1) is Subset of Indices
-  block_diagonal(F1^F2,d2);
+  Indices block_diagonal(F1,d1) is Subset of Indices block_diagonal(F1^F2,d2);
 
 theorem :: MATRIXJ1:26
   [i,j] in Indices block_diagonal(F1,d) implies block_diagonal(F1,
@@ -282,12 +273,10 @@ theorem :: MATRIXJ1:34
   block_diagonal(<*M*>,d) = M;
 
 theorem :: MATRIXJ1:35
-  block_diagonal(F1^F2,d) = block_diagonal(<*block_diagonal(F1,d)
-  *>^F2,d);
+  block_diagonal(F1^F2,d) = block_diagonal(<*block_diagonal(F1,d) *>^F2,d);
 
 theorem :: MATRIXJ1:36
-  block_diagonal(F1^F2,d) = block_diagonal(F1^<*block_diagonal(F2,
-  d)*>,d);
+  block_diagonal(F1^F2,d) = block_diagonal(F1^<*block_diagonal(F2, d)*>,d);
 
 theorem :: MATRIXJ1:37
   i in Seg Sum Len F & m = min(Len F,i) implies Line(block_diagonal(F,d)
@@ -331,8 +320,7 @@ definition
   attr F is Square-Matrix-yielding means
 :: MATRIXJ1:def 6
 
-  for i st i in dom F ex n st F.
-  i is Matrix of n,D;
+  for i st i in dom F ex n st F. i is Matrix of n,D;
 end;
 
 registration
@@ -358,8 +346,7 @@ definition
 end;
 
 reserve S,S1,S2 for FinSequence_of_Square-Matrix of D,
-  R,R1,R2 for
-  FinSequence_of_Square-Matrix of K;
+  R,R1,R2 for FinSequence_of_Square-Matrix of K;
 
 theorem :: MATRIXJ1:45
   {} is FinSequence_of_Square-Matrix of D;
@@ -418,8 +405,7 @@ definition
   func Det R -> FinSequence of K means
 :: MATRIXJ1:def 7
 
-  dom it = dom R & for i st i in
-  dom it holds it.i = Det R.i;
+  dom it = dom R & for i st i in dom it holds it.i = Det R.i;
 end;
 
 definition
@@ -446,8 +432,7 @@ theorem :: MATRIXJ1:53
   Det block_diagonal(R,0.K) = Product (Det R);
 
 theorem :: MATRIXJ1:54
-  len A1 <> width A1 & N = block_diagonal(<*A1,A2*>,0.K) implies
-  Det N = 0.K;
+  len A1 <> width A1 & N = block_diagonal(<*A1,A2*>,0.K) implies Det N = 0.K;
 
 theorem :: MATRIXJ1:55
   Len G <> Width G implies for M be Matrix of n,K st M = block_diagonal(
@@ -461,8 +446,7 @@ definition
   func 1.(K,f) -> FinSequence_of_Square-Matrix of K means
 :: MATRIXJ1:def 8
 
-  dom it = dom
-  f & for i st i in dom it holds it.i = 1.(K,f.i);
+  dom it = dom f & for i st i in dom it holds it.i = 1.(K,f.i);
 end;
 
 theorem :: MATRIXJ1:56
@@ -483,7 +467,7 @@ theorem :: MATRIXJ1:60
 theorem :: MATRIXJ1:61
   block_diagonal(1.(K,f),0.K) = 1.(K,Sum f);
 
-reserve p,p1,p2 for FinSequence of K;
+reserve p,p1 for FinSequence of K;
 
 begin :: Operations On a Finite Sequence of Matrices
 
@@ -492,14 +476,13 @@ definition
   func mlt(p,G) -> FinSequence_of_Matrix of K means
 :: MATRIXJ1:def 9
 
-  dom it = dom G &
-  for i st i in dom it holds it.i = p/.i * G.i;
+  dom it = dom G & for i st i in dom it holds it.i = p/.i * G.i;
 end;
 
-definition
+registration
   let K;
   let R,p;
-  redefine func mlt(p,R) -> FinSequence_of_Square-Matrix of K;
+  cluster mlt(p,R) -> Square-Matrix-yielding;
 end;
 
 theorem :: MATRIXJ1:62
@@ -509,8 +492,8 @@ theorem :: MATRIXJ1:63
   mlt(p,<*A*>)=<*p/.1*A*>;
 
 theorem :: MATRIXJ1:64
-  len G = len p & len G1 <=len p1 implies mlt(p^p1,G^G1) = mlt(p,G
-  )^mlt(p1,G1);
+  len G = len p & len G1 <=len p1 implies mlt(p^p1,G^G1) = mlt(p,G )^mlt(p1,G1)
+;
 
 theorem :: MATRIXJ1:65
   a*block_diagonal(G,a1) = block_diagonal(mlt(len G|->a,G),a*a1);
@@ -521,14 +504,13 @@ definition
   func G1(+)G2 -> FinSequence_of_Matrix of K means
 :: MATRIXJ1:def 10
 
-  dom it = dom G1 &
-  for i st i in dom it holds it.i= G1.i + G2.i;
+  dom it = dom G1 & for i st i in dom it holds it.i= G1.i + G2.i;
 end;
 
-definition
+registration
   let K;
   let R,G;
-  redefine func R(+)G -> FinSequence_of_Square-Matrix of K;
+  cluster R(+)G -> Square-Matrix-yielding;
 end;
 
 theorem :: MATRIXJ1:66
@@ -561,8 +543,7 @@ definition
   func G1(#)G2 -> FinSequence_of_Matrix of K means
 :: MATRIXJ1:def 11
 
-  dom it = dom G1 &
-  for i st i in dom it holds it.i= G1.i * G2.i;
+  dom it = dom G1 & for i st i in dom it holds it.i= G1.i * G2.i;
 end;
 
 theorem :: MATRIXJ1:73
@@ -589,4 +570,3 @@ A1,A2*>,0.K)*block_diagonal(<*B1,B2*>,0.K) = block_diagonal(<*A1,A2*>(#)(<*B1,
 theorem :: MATRIXJ1:79
   Width R1 = Len R2 implies block_diagonal(R1,0.K)*block_diagonal(R2,0.K
   )= block_diagonal(R1(#)R2,0.K);
-

@@ -11,13 +11,13 @@ environ
       ORDINAL1, XXREAL_1, RELAT_2, CARD_1, ARYTM_3, XXREAL_0, REAL_1, ARYTM_1,
       LIMFUNC1, ZFMISC_1, TOPS_1, CONVEX1, RELAT_1, SETFAM_1, FINSET_1,
       ORDERS_1, WELLORD1, FINSEQ_1, PARTFUN1, WELLORD2, FUNCT_1, NAT_1,
-      RCOMP_3;
+      RCOMP_3, MEASURE5;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, RELAT_1, SETFAM_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, WELLORD1, ORDERS_1, WELLORD2,
       RELAT_2, CARD_1, MEMBERED, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, NAT_D, LIMFUNC1, XXREAL_2, SEQM_3, FINSEQ_1, SEQ_4, RCOMP_1,
-      STRUCT_0, PRE_TOPC, TOPS_1, METRIC_1, TOPS_2, COMPTS_1, CONNSP_1, TEX_2,
-      TOPMETR, MEASURE6, BORSUK_4, TOPALG_2, TOPREALB;
+      NAT_1, NAT_D, LIMFUNC1, XXREAL_1, XXREAL_2, SEQM_3, FINSEQ_1, SEQ_4,
+      RCOMP_1, STRUCT_0, PRE_TOPC, TOPS_1, METRIC_1, TOPS_2, COMPTS_1,
+      CONNSP_1, TEX_2, TOPMETR, MEASURE6, BORSUK_6, TOPALG_2, TOPREALB;
  constructors SETFAM_1, WELLORD1, WELLORD2, NAT_1, ORDERS_1, SEQM_3, PROB_1,
       LIMFUNC1, BINARITH, TOPS_1, CONNSP_1, COMPTS_1, REALSET2, MEASURE6,
       JCT_MISC, BORSUK_4, TOPREALB, SEQ_1, XXREAL_2, BORSUK_6, NAT_D, SEQ_4;
@@ -25,7 +25,7 @@ environ
       INT_1, MEMBERED, FINSEQ_1, RCOMP_1, FCONT_3, RFINSEQ, STRUCT_0, PRE_TOPC,
       TOPS_1, METRIC_1, TOPMETR, MEASURE6, BORSUK_2, SPRECT_1, TOPREAL6,
       BORSUK_4, TOPALG_2, TOPREALB, FINSET_1, VALUED_0, XXREAL_2, CARD_1,
-      ZFMISC_1;
+      ZFMISC_1, REAL_1, BORSUK_6;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
@@ -42,7 +42,7 @@ end;
 
 theorem :: RCOMP_3:1
   for X being non empty bounded_below (real-membered set), Y being
-  closed Subset of REAL st X c= Y holds inf X in Y;
+  closed Subset of REAL st X c= Y holds lower_bound X in Y;
 
 theorem :: RCOMP_3:2
   for X being non empty bounded_above (real-membered set), Y being
@@ -63,7 +63,7 @@ registration
 end;
 
 registration
-  cluster open bounded connected non empty Subset of REAL;
+  cluster open bounded interval non empty Subset of REAL;
 end;
 
 theorem :: RCOMP_3:4
@@ -88,11 +88,11 @@ theorem :: RCOMP_3:20
 
 registration
   let a;
-  cluster left_closed_halfline(a) -> non bounded_below bounded_above connected;
-  cluster left_open_halfline(a) -> non bounded_below bounded_above connected;
+  cluster left_closed_halfline(a) -> non bounded_below bounded_above interval;
+  cluster left_open_halfline(a) -> non bounded_below bounded_above interval;
   cluster right_closed_halfline(a) -> bounded_below non bounded_above
-    connected;
-  cluster right_open_halfline(a) -> bounded_below non bounded_above connected;
+    interval;
+  cluster right_open_halfline(a) -> bounded_below non bounded_above interval;
 end;
 
 theorem :: RCOMP_3:21
@@ -110,11 +110,11 @@ theorem :: RCOMP_3:24
 begin :: Connectedness
 
 registration
-  cluster [#]REAL -> connected non bounded_below non bounded_above;
+  cluster [#]REAL -> interval non bounded_below non bounded_above;
 end;
 
 theorem :: RCOMP_3:25
-  for X being bounded connected Subset of REAL st lower_bound X in
+  for X being bounded interval Subset of REAL st lower_bound X in
   X & upper_bound X in X holds X = [.lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:26
@@ -122,7 +122,7 @@ theorem :: RCOMP_3:26
   holds X c= ].lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:27
-  for X being bounded connected Subset of REAL st not lower_bound
+  for X being bounded interval Subset of REAL st not lower_bound
   X in X & upper_bound X in X holds X = ].lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:28
@@ -130,7 +130,7 @@ theorem :: RCOMP_3:28
   holds X c= [.lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:29
-  for X being bounded connected Subset of REAL st lower_bound X in
+  for X being bounded interval Subset of REAL st lower_bound X in
   X & not upper_bound X in X holds X = [.lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:30
@@ -138,7 +138,7 @@ theorem :: RCOMP_3:30
   not upper_bound X in X holds X c= ].lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:31
-  for X being non empty bounded connected Subset of REAL st not
+  for X being non empty bounded interval Subset of REAL st not
   lower_bound X in X & not upper_bound X in X holds X = ].lower_bound X,
   upper_bound X.[;
 
@@ -147,7 +147,7 @@ theorem :: RCOMP_3:32
   left_closed_halfline(upper_bound X);
 
 theorem :: RCOMP_3:33
-  for X being connected Subset of REAL st X is not bounded_below &
+  for X being interval Subset of REAL st X is not bounded_below &
   X is bounded_above & upper_bound X in X holds X = left_closed_halfline(
   upper_bound X);
 
@@ -156,7 +156,7 @@ theorem :: RCOMP_3:34
   upper_bound X in X holds X c= left_open_halfline(upper_bound X);
 
 theorem :: RCOMP_3:35
-  for X being non empty connected Subset of REAL st X is not
+  for X being non empty interval Subset of REAL st X is not
   bounded_below & X is bounded_above & not upper_bound X in X holds X =
   left_open_halfline(upper_bound X);
 
@@ -165,7 +165,7 @@ theorem :: RCOMP_3:36
   right_closed_halfline(lower_bound X);
 
 theorem :: RCOMP_3:37
-  for X being connected Subset of REAL st X is bounded_below & X
+  for X being interval Subset of REAL st X is bounded_below & X
   is not bounded_above & lower_bound X in X holds X = right_closed_halfline(
   lower_bound X);
 
@@ -174,16 +174,16 @@ theorem :: RCOMP_3:38
   lower_bound X in X holds X c= right_open_halfline(lower_bound X);
 
 theorem :: RCOMP_3:39
-  for X being non empty connected Subset of REAL st X is
+  for X being non empty interval Subset of REAL st X is
   bounded_below & X is not bounded_above & not lower_bound X in X holds X =
   right_open_halfline(lower_bound X);
 
 theorem :: RCOMP_3:40
-  for X being connected Subset of REAL st X is not bounded_above &
+  for X being interval Subset of REAL st X is not bounded_above &
   X is not bounded_below holds X = REAL;
 
 theorem :: RCOMP_3:41
-  for X being connected Subset of REAL holds X is empty or X =
+  for X being interval Subset of REAL holds X is empty or X =
   REAL or (ex a st X = left_closed_halfline(a)) or (ex a st X =
 left_open_halfline(a)) or (ex a st X = right_closed_halfline(a)) or (ex a st X
 = right_open_halfline(a)) or (ex a, b st a <= b & X = [.a,b.]) or (ex a, b st a
@@ -191,36 +191,33 @@ left_open_halfline(a)) or (ex a st X = right_closed_halfline(a)) or (ex a st X
   = ].a,b.[;
 
 theorem :: RCOMP_3:42
-  for X being non empty connected Subset of REAL st not r in X
+  for X being non empty interval Subset of REAL st not r in X
   holds r <= lower_bound X or upper_bound X <= r;
 
 theorem :: RCOMP_3:43
-  for X, Y being non empty bounded connected Subset of REAL st
+  for X, Y being non empty bounded interval Subset of REAL st
 lower_bound X <= lower_bound Y & upper_bound Y <= upper_bound X & (lower_bound
   X = lower_bound Y & lower_bound Y in Y implies lower_bound X in X) & (
 upper_bound X = upper_bound Y & upper_bound Y in Y implies upper_bound X in X)
   holds Y c= X;
 
 registration
-  cluster open closed connected non empty non bounded Subset of REAL;
+  cluster open closed interval non empty non bounded Subset of REAL;
 end;
 
 begin :: R^1
 
 theorem :: RCOMP_3:44
-  for X being Subset of R^1 st a <= b & X = [.a,b.] holds Fr X = {
-  a,b};
+  for X being Subset of R^1 st a <= b & X = [.a,b.] holds Fr X = { a,b};
 
 theorem :: RCOMP_3:45
   for X being Subset of R^1 st a < b & X = ].a,b.[ holds Fr X = {a,b};
 
 theorem :: RCOMP_3:46
-  for X being Subset of R^1 st a < b & X = [.a,b.[ holds Fr X = {a
-  ,b};
+  for X being Subset of R^1 st a < b & X = [.a,b.[ holds Fr X = {a ,b};
 
 theorem :: RCOMP_3:47
-  for X being Subset of R^1 st a < b & X = ].a,b.] holds Fr X = {a
-  ,b};
+  for X being Subset of R^1 st a < b & X = ].a,b.] holds Fr X = {a ,b};
 
 theorem :: RCOMP_3:48
   for X being Subset of R^1 st X = [.a,b.] holds Int X = ].a,b.[;
@@ -234,19 +231,19 @@ theorem :: RCOMP_3:50
 theorem :: RCOMP_3:51
   for X being Subset of R^1 st X = ].a,b.] holds Int X = ].a,b.[;
 
-registration
-  let X be convex Subset of R^1;
-  cluster R^1 | X -> convex;
+registration let T be real-membered TopStruct, X be interval Subset of T;
+ cluster T|X -> interval;
 end;
 
 registration
-  let A be connected Subset of REAL;
-  cluster R^1(A) -> convex;
+  let A be interval Subset of REAL;
+  cluster R^1(A) -> interval;
 end;
 
-theorem :: RCOMP_3:52
-  for X being Subset of R^1, Y being Subset of REAL st X = Y holds
-  X is connected iff Y is connected;
+registration
+ cluster connected -> interval Subset of R^1;
+ cluster interval -> connected Subset of R^1;
+end;
 
 begin :: Closed Interval TSpace
 
@@ -254,6 +251,8 @@ registration
   let r;
   cluster Closed-Interval-TSpace(r,r) -> trivial;
 end;
+
+canceled;
 
 theorem :: RCOMP_3:53
   r <= s implies for A being Subset of Closed-Interval-TSpace(r,s) holds
@@ -269,7 +268,7 @@ theorem :: RCOMP_3:55
 
 theorem :: RCOMP_3:56
   for X being Subset of Closed-Interval-TSpace(r,s), Y being
-  Subset of REAL st X = Y holds X is connected iff Y is connected;
+  Subset of REAL st X = Y holds X is connected iff Y is interval;
 
 registration
   let T be TopSpace;
@@ -290,9 +289,7 @@ a < s & X = ].a,s.]) or ex a, b being real number st r <= a & a < b & b <= s &
 
 begin
 
-theorem :: RCOMP_3:58
-  for T being 1-sorted, F being Subset-Family of T holds F is Cover of T
-  iff F is Cover of [#]T;
+canceled;
 
 theorem :: RCOMP_3:59
   for T being 1-sorted, F being finite Subset-Family of T for F1
@@ -308,8 +305,7 @@ definition
   attr F is connected means
 :: RCOMP_3:def 1
 
-  for X being Subset of T st X in F holds X
-  is connected;
+  for X being Subset of T st X in F holds X is connected;
 end;
 
 registration
@@ -318,8 +314,7 @@ registration
 end;
 
 reserve n, m for natural number,
-  F for Subset-Family of Closed-Interval-TSpace
-  (r,s);
+  F for Subset-Family of Closed-Interval-TSpace (r,s);
 
 theorem :: RCOMP_3:61
   for L being TopSpace, G, G1 being Subset-Family of L st G is
@@ -450,4 +445,3 @@ theorem :: RCOMP_3:79
 theorem :: RCOMP_3:80
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <=
   s & 1 <= n & n < len G implies [.G.n,G.(n+1).] c= C.n;
-

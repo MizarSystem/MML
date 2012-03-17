@@ -30,16 +30,15 @@ environ
       AXIOMS, MOEBIUS1, XBOOLE_0, NAT_3, NEWTON, INT_2, WSIERP_1, CARD_1,
       PEPIN, NAT_1, XCMPLX_1, XREAL_1, ORDINAL1, EULER_1, FINSEQ_1, XBOOLE_1,
       TARSKI, ZFMISC_1, RVSUM_1, INT_1, FUNCT_1, RADIX_1, XXREAL_0, NAT_D,
-      MEASURE6, XREAL_0, INTEGRA2, VALUED_0, FUNCT_2;
+      XREAL_0, INTEGRA2, VALUED_0, FUNCT_2, MEMBER_1, MEMBERED;
  schemes NAT_1, FINSEQ_1, FINSEQ_2, RELSET_1, GRAPH_5;
 
 begin
 
-reserve a,b,m,x,y,i1,i2,i3,d,i for Integer,
-  k,p,q,n,m1,m2 for Nat,
-  c,c1,c2 for
-  Element of NAT,
-  z,X,Y for set;
+reserve a,b,m,x,y,i1,i2,i3,i for Integer,
+  k,p,q,n for Nat,
+  c,c1,c2 for Element of NAT,
+  z for set;
 
 theorem Th1:
   for X being real-membered set, a being real number holds X, a ++
@@ -55,8 +54,7 @@ A2: rng f = a ++ X
     thus rng f c= a ++ X
     proof
       let z be set;
-      assume
-      z in rng f;
+      assume z in rng f;
       then consider x being set such that
 A3:   x in dom f and
 A4:   z = f.x by FUNCT_1:def 5;
@@ -65,16 +63,17 @@ A4:   z = f.x by FUNCT_1:def 5;
       a + x is real;
       then reconsider z9= z as Real by A1,A3,A4;
       z9 = a + x by A1,A3,A4;
-      hence thesis by A1,A3,MEASURE6:def 6;
+      hence thesis by A1,A3,MEMBER_1:141;
     end;
     let z;
     assume
 A5: z in (a ++ X);
     then reconsider z as Element of REAL;
-    consider x being Real such that
-A6: x in X and
-A7: z = a + x by A5,MEASURE6:def 6;
-    reconsider x as Element of REAL;
+    consider x being Element of COMPLEX such that
+A7: z = a + x and
+A6: x in X by A5,MEMBER_1:143;
+    X c= REAL by MEMBERED:3; then
+    reconsider x as Element of REAL by A6;
     f.x = z by A1,A6,A7;
     hence thesis by A1,A6,FUNCT_1:def 5;
   end;
@@ -116,9 +115,9 @@ proof
   assume
 A1: x in a ++ X;
   then reconsider x9 = x as Real;
-  consider y being Real such that
-A2: y in X and
-A3: x9 = a + y by A1,MEASURE6:def 6;
+  consider y being Element of COMPLEX such that
+A3: x9 = a + y and
+A2: y in X by A1,MEMBER_1:143;
   reconsider y9 = y as Integer by A2;
   x9 = a + y9 by A3;
   hence thesis by INT_1:def 2;
@@ -131,9 +130,9 @@ proof
   assume
 A1: x in a ** X;
   then reconsider x9 = x as Real;
-  consider y being Real such that
-A2: y in X and
-A3: x9 = a * y by A1,INTEGRA2:def 2;
+  consider y being Element of COMPLEX such that
+A3: x9 = a * y and
+A2: y in X by A1,MEMBER_1:195;
   reconsider y9 = y as Integer by A2;
   x9 = a * y9 by A3;
   hence thesis by INT_1:def 2;
@@ -141,15 +140,13 @@ end;
 
 Lm3: for X being Subset of INT, a being Integer holds x in a ** X iff ex y
 being Integer st y in X & x = a * y
-
 proof
   let X be Subset of INT, a be Integer;
   hereby
-    assume
-    x in a ** X;
-    then consider z being Real such that
-A1: z in X and
-A2: x = a * z by INTEGRA2:def 2;
+    assume x in a ** X;
+    then consider z being Element of COMPLEX such that
+A2: x = a * z and
+A1: z in X by MEMBER_1:195;
     reconsider z as Integer by A1;
     take z;
     thus z in X & x = a * z by A1,A2;
@@ -163,7 +160,7 @@ A3: y in X & x = a * y;
     take y;
     thus thesis by A3;
   end;
-  hence thesis by INTEGRA2:def 2;
+  hence thesis by MEMBER_1:193;
 end;
 
 theorem Th3:
@@ -193,22 +190,22 @@ A5: f.x = f.y;
     thus rng f c= a ** X
     proof
       let z be set;
-      assume
-      z in rng f;
+      assume z in rng f;
       then consider x being set such that
 A6:   x in dom f and
 A7:   z = f.x by FUNCT_1:def 5;
       reconsider x9 = x as Real by A1,A6,XREAL_0:def 1;
       z = a * x9 by A1,A6,A7;
-      hence thesis by A1,A6,INTEGRA2:def 2;
+      hence thesis by A1,A6,MEMBER_1:193;
     end;
     let z;
     assume
 A8: z in (a ** X);
     then reconsider z as Element of REAL;
-    consider x being Real such that
-A9: x in X and
-A10: z = a * x by A8,INTEGRA2:def 2;
+    consider x being Element of COMPLEX such that
+A10: z = a * x and
+A9: x in X by A8,MEMBER_1:195;
+    reconsider x as Real by A9,XREAL_0:def 1;
     f.x = z by A1,A9,A10;
     hence thesis by A1,A9,FUNCT_1:def 5;
   end;
@@ -231,7 +228,8 @@ A2: X is non empty;
       assume
 A3:   i in a ** X;
       then reconsider i as Real;
-      ex x being Real st x in X & i = a * x by A3,INTEGRA2:def 2;
+      ex x being Element of COMPLEX st
+      i = a * x & x in X by A3,MEMBER_1:195;
       hence thesis by A1,TARSKI:def 1;
     end;
     then a ** X = {} or a ** X = {0} by ZFMISC_1:39;
@@ -246,8 +244,7 @@ A6: X = {x} by A4,CARD_1:48;
 A7: x in X by A6,TARSKI:def 1;
   then reconsider x as real number;
   reconsider x9 = x as Real by XREAL_0:def 1;
-  a * x9 is Real;
-  then a * x in a ** X by A7,INTEGRA2:def 2;
+  a * x in a ** X by A7,MEMBER_1:193;
   then a * x = 0 by A4,TARSKI:def 1;
   hence thesis by A5,A6,XCMPLX_1:6;
 end;
@@ -282,8 +279,7 @@ theorem Th5:
   holds card X = card (a ** X)
 proof
   let X be real-membered set, a be real number;
-  assume
-  a <> 0;
+  assume a <> 0;
   then X, a ** X are_equipotent by Th3;
   hence thesis by CARD_1:21;
 end;
@@ -318,8 +314,7 @@ proof
   assume that
 A1: p is prime and
 A2: p,n are_relative_prime;
-  assume
-  p divides n;
+  assume p divides n;
   then n gcd p = p by NEWTON:62;
   then n gcd p >1 by A1,INT_2:def 5;
   hence contradiction by A2,INT_2:def 4;
@@ -330,8 +325,7 @@ Lm7: p>0 implies p >= 1+0 by NAT_1:13;
 theorem Th6:
   i divides i1 & i1<>0 implies abs i<=abs i1
 proof
-  assume
-  i divides i1 & i1<>0;
+  assume i divides i1 & i1<>0;
   then abs(i1)<>0 & abs(i) divides abs(i1) by ABSVALUE:7,INT_2:21;
   hence thesis by NAT_D:7;
 end;
@@ -344,15 +338,13 @@ proof
 A1: i3<>0;
   thus i1 divides i2 implies i1*i3 divides i2*i3
   proof
-    assume
-    i1 divides i2;
+    assume i1 divides i2;
     then consider i4 being Integer such that
 A2: i2=i1*i4 by INT_1:def 9;
     i2*i3=(i1*i3)*i4 by A2;
     hence thesis by INT_1:def 9;
   end;
-  assume
-  (i1*i3) divides (i2*i3);
+  assume (i1*i3) divides (i2*i3);
   then consider i5 being Integer such that
 A3: (i2*i3)=(i1*i3)*i5 by INT_1:def 9;
   i2*i3=(i1*i5)*i3 by A3;
@@ -402,27 +394,22 @@ A2: i,i3 are_relative_prime;
 end;
 
 theorem Th10:
-  i1,i2 are_congruent_mod i3 implies i1*k,i2*k are_congruent_mod
-  i3*k
+  i1,i2 are_congruent_mod i3 implies i1*k,i2*k are_congruent_mod i3*k
 proof
-  assume
-  i1,i2 are_congruent_mod i3;
+  assume i1,i2 are_congruent_mod i3;
   then consider i4 being Integer such that
 A1: i3*i4=i1-i2 by INT_1:def 3;
-  (i3*k)*i4=(i3*i4)*k
-    .=(i1+(-i2))*k by A1
+  (i3*k)*i4=(i3*i4)*k .=(i1+(-i2))*k by A1
     .=i1*k-i2*k;
   hence thesis by INT_1:def 3;
 end;
 
 theorem Th11:
-  i1,i2 are_congruent_mod i implies i1*i3,i2*i3 are_congruent_mod
-  i
+  i1,i2 are_congruent_mod i implies i1*i3,i2*i3 are_congruent_mod i
 proof
-  assume
-  i1,i2 are_congruent_mod i;
+  assume i1,i2 are_congruent_mod i;
   then i divides (i1-i2) by INT_2:19;
-  then i divides (i1-i2)*i3 by INT_2:12;
+  then i divides (i1-i2)*i3 by INT_2:2;
   then i divides (i1*i3-i2*i3);
   hence thesis by INT_2:19;
 end;
@@ -445,8 +432,7 @@ A1: i<>0;
 end;
 
 theorem Th13:
-  for b st b>0 for a ex q,r being Integer st a=(b*q)+r & r>=0 & r<
-  b
+  for b st b>0 for a ex q,r being Integer st a=(b*q)+r & r>=0 & r< b
 proof
   let b;
   assume
@@ -492,8 +478,7 @@ theorem
 proof
   set d=i2 gcd i3;
   reconsider d as Nat;
-  assume
-  i1,i2 are_congruent_mod i3;
+  assume i1,i2 are_congruent_mod i3;
   then i3 divides (i1-i2) by INT_2:19;
   then consider i being Integer such that
 A1: i1-i2=i3*i by INT_1:def 9;
@@ -503,8 +488,7 @@ A2: d = abs i2 gcd abs i3 by INT_2:51;
   then
 A3: d divides i2 by INT_2:21;
 A4: i2=i1-i3*i by A1;
-A5: for n being Nat st n divides abs i1 & n divides abs i3 holds n divides
-  d
+A5: for n being Nat st n divides abs i1 & n divides abs i3 holds n divides d
   proof
     let n be Nat;
     assume that
@@ -513,7 +497,7 @@ A7: n divides abs i3;
     abs n divides abs i3 by A7,ABSVALUE:def 1;
     then n divides i3 by INT_2:21;
     then
-A8: n divides i3*i by INT_2:12;
+A8: n divides i3*i by INT_2:2;
     abs n divides abs i1 by A6,ABSVALUE:def 1;
     then n divides i1 by INT_2:21;
     then n divides i2 by A4,A8,Lm4;
@@ -525,7 +509,7 @@ A9: d divides abs(i3) by A2,NAT_D:def 5;
   then abs(d) divides abs i3 by ABSVALUE:def 1;
   then d divides i3 by INT_2:21;
   then
-A10: d divides i3*i by INT_2:12;
+A10: d divides i3*i by INT_2:2;
   i1=i3*i+i2 by A1;
   then abs(d)=d & d divides i1 by A3,A10,ABSVALUE:def 1,WSIERP_1:9;
   then d divides abs(i1) by INT_2:21;
@@ -534,17 +518,14 @@ A10: d divides i3*i by INT_2:12;
 end;
 
 theorem Th15:
-  a,m are_relative_prime implies ex x being Integer st (a*x-b) mod
-  m = 0
+  a,m are_relative_prime implies ex x being Integer st (a*x-b) mod m = 0
 proof
-  assume
-  a,m are_relative_prime;
+  assume a,m are_relative_prime;
   then a gcd m = 1 by INT_2:def 4;
   then consider s,t being Integer such that
 A1: 1=s*a+t*m by INT_3:16;
   take x = b*s;
-  (a*b*s-b) mod m = ((a*s-1)*b) mod m
-    .= ((-(m*t))*b) mod m by A1
+  (a*b*s-b) mod m = ((a*s-1)*b) mod m .= ((-(m*t))*b) mod m by A1
     .= (0+m*((-t)*b)) mod m
     .= 0 mod m by INT_3:8
     .= 0 by Th12;
@@ -552,8 +533,7 @@ A1: 1=s*a+t*m by INT_3:16;
 end;
 
 theorem Th16:
-  m>0 & a,m are_relative_prime implies ex n being Nat st (a*n-b)
-  mod m = 0
+  m>0 & a,m are_relative_prime implies ex n being Nat st (a*n-b) mod m = 0
 proof
   assume that
 A1: m>0 and
@@ -589,13 +569,12 @@ A4: ex i being Integer st m=(a gcd m)*i by INT_1:def 9;
   then (a*y-b),0 are_congruent_mod (a gcd m) by A4,INT_1:41;
   then
 A5: (a gcd m) divides (a*y-b-0) by INT_2:19;
-  (a gcd m) divides a*y by INT_2:12,31;
+  (a gcd m) divides a*y by INT_2:2,31;
   hence contradiction by A2,A5,Lm5;
 end;
 
 theorem
-  m<>0 & (a gcd m) divides b implies ex x being Integer st (a*x-b) mod m
-  = 0
+  m<>0 & (a gcd m) divides b implies ex x being Integer st (a*x-b) mod m = 0
 proof
   assume that
 A1: m<>0 and
@@ -677,8 +656,7 @@ A3: p*q = p*(n * (q div n) + (q mod n)) by NAT_D:2
 end;
 
 theorem Th21:
-  n>0 & p is prime & p,q are_relative_prime implies not p divides
-  (q mod p|^n)
+  n>0 & p is prime & p,q are_relative_prime implies not p divides (q mod p|^n)
 proof
   assume that
 A1: n>0 and
@@ -694,16 +672,14 @@ A4: p divides p|^n*(q div p|^n) by NAT_D:9;
 end;
 
 theorem Th22:
-  for p,q,n being Nat st n>0 holds (p - q) mod n = 0 iff p mod n =
-  q mod n
+  for p,q,n being Nat st n>0 holds (p - q) mod n = 0 iff p mod n = q mod n
 proof
   let p,q,n be Nat;
   assume
 A1: n>0;
   thus (p - q) mod n = 0 implies p mod n = q mod n
   proof
-    assume
-    (p - q) mod n = 0;
+    assume (p - q) mod n = 0;
     then n divides (p - q) by A1,INT_1:89;
     then consider s being Integer such that
 A2: n * s = p - q by INT_1:def 9;
@@ -728,8 +704,7 @@ A4:   q - p = n * (-s) by A2;
       then (-s) in NAT by INT_1:16;
       then reconsider s9=(-s) as Nat;
       q - p = n * s9 by A4;
-      then q mod n = (n * s9 + p) mod n
-        .= p mod n by NAT_D:21;
+      then q mod n = (n * s9 + p) mod n .= p mod n by NAT_D:21;
       hence thesis;
     end;
   end;
@@ -743,21 +718,18 @@ A5: p mod n = q mod n;
 end;
 
 theorem
-  for a,b,m being Nat st m > 0 holds a mod m = b mod m iff m divides (a-
-  b)
+  for a,b,m being Nat st m > 0 holds a mod m = b mod m iff m divides (a- b)
 proof
   let a,b,m be Nat;
   assume
 A1: m > 0;
   thus a mod m = b mod m implies m divides (a-b)
   proof
-    assume
-    a mod m = b mod m;
+    assume a mod m = b mod m;
     then (a - b) mod m = 0 by A1,Th22;
     hence thesis by A1,INT_1:89;
   end;
-  assume
-  m divides (a - b);
+  assume m divides (a - b);
   then (a - b) mod m = 0 by A1,INT_1:89;
   hence thesis by A1,Th22;
 end;
@@ -805,7 +777,7 @@ A5: (p*x - q) mod p|^n = 0;
     then reconsider l=-x as Nat;
 A6: p divides p*l by NAT_D:9;
     p|^n divides (p*x - q) by A2,A5,INT_1:89;
-    then p|^n divides (-1)*(p*x - q) by INT_2:12;
+    then p|^n divides (-1)*(p*x - q) by INT_2:2;
     then consider k being Integer such that
 A7: (p*l + q) = (p|^n) * k by INT_1:def 9;
     k>=0 by A2,A7,XREAL_1:134;
@@ -829,8 +801,7 @@ definition
   let m be Integer;
   func Cong(m) -> Relation of INT means
   :Def1:
-  [x,y] in it iff x,y
-  are_congruent_mod m;
+  [x,y] in it iff x,y are_congruent_mod m;
   existence
   proof
     defpred Z[Element of INT,Element of INT] means $1,$2 are_congruent_mod m;
@@ -892,8 +863,7 @@ registration
     thus INT c= dom Cong(m)
     proof
       let x be set;
-      assume
-      x in INT;
+      assume x in INT;
       then reconsider x as Integer;
       x,x are_congruent_mod m by INT_1:32;
       then [x,x] in Cong(m) by Def1;
@@ -957,8 +927,7 @@ A4: (a*y-b) mod m = 0;
     then [x,y] in Cong(m) by Def1;
     hence y in Class(Cong(m),x) by EQREL_1:26;
   end;
-  assume
-  y in Class(Cong m,x);
+  assume y in Class(Cong m,x);
   then [x,y] in Cong(m) by EQREL_1:26;
   then x,y are_congruent_mod m by Def1;
   then
@@ -991,8 +960,7 @@ A4: 1=r*a+t*m by INT_3:16;
   then
 A5: x*(1-t*m)-b*r,0 are_congruent_mod m by A4;
   take s=r;
-  (x-x*t*m-b*r) mod m = ((x-b*r)+((-x)*t)*m) mod m
-    .= (x-b*r) mod m by INT_3:8;
+  (x-x*t*m-b*r) mod m = ((x-b*r)+((-x)*t)*m) mod m .= (x-b*r) mod m by INT_3:8;
   then (x-b*r) mod m = 0 mod m by A5,INT_3:12;
   then 0,x-b*r are_congruent_mod m by A1,INT_3:12;
   then 0+b*r,x are_congruent_mod m by INT_1:40;
@@ -1025,15 +993,13 @@ A4: (a|^Euler m)*x,1*x are_congruent_mod m by Th11;
     then m,1 are_relative_prime by INT_2:def 4;
     then
 A5: 1 in X by A2;
-    assume
-    Euler m = 0;
+    assume Euler m = 0;
     hence contradiction by A5;
   end;
   then
 A6: Euler m -'1+1 = Euler m-1+1 by NAT_1:14,XREAL_1:235
     .= Euler m;
-  assume
-  (a*x-b) mod m = 0;
+  assume (a*x-b) mod m = 0;
   then m divides ((a*x-b)-0) by A2,INT_1:89;
   then a*x-b,0 are_congruent_mod m by INT_2:19;
   then 0,a*x-b are_congruent_mod m by INT_1:35;
@@ -1075,8 +1041,7 @@ A8: len fp = l & for c being Nat st c in dom fp holds fp.c = P(c) from
   for c being Nat st c in dom fp holds fp.c in INT
   proof
     let c be Nat;
-    assume
-    c in dom fp;
+    assume c in dom fp;
     then fp.c = x1+(c-1)*m1 by A8;
     hence thesis by INT_1:def 2;
   end;
@@ -1127,8 +1092,7 @@ A23: (a*x1 - b) mod m = 0 mod m by A3,A4,A6,INT_3:12;
   for c st c in dom fp holds (a*(fp.c)-b) mod m = 0
   proof
     let c;
-    assume
-    c in dom fp;
+    assume c in dom fp;
     hence (a*(fp.c)-b) mod m = (a*(x1+(c-1)*m1)-b) mod m by A8
       .= ((a*x1-b)+a1*(c-1)*m) mod m by A3,A4
       .= (a*x1 - b) mod m by INT_3:8
@@ -1139,15 +1103,13 @@ end;
 
 begin
 
-reserve fp,fp1,fp2 for FinSequence of NAT,
-  fr for FinSequence of INT,
-  b,c,d,k,
-  n for Element of NAT,
+reserve fp,fp1 for FinSequence of NAT,
+
+  b,c,d, n for Element of NAT,
   a for Nat;
 
 theorem Th30:
-  for b,n st b in dom fp & len fp = n+1 holds Del(fp^<*d*>,b) =
-  Del(fp,b)^<*d*>
+  for b,n st b in dom fp & len fp = n+1 holds Del(fp^<*d*>,b) = Del(fp,b)^<*d*>
 proof
   let b,n such that
 A1: b in dom fp and
@@ -1240,8 +1202,7 @@ A8:       fp1=<*fp1.1,fp1.2*> by A6,FINSEQ_1:61;
           for b st b in dom fp1 holds Product Del(fp1,b) gcd fp1.b = 1
           proof
             let b;
-            assume
-            b in dom fp1;
+            assume b in dom fp1;
             then
 A9:         b in Seg len fp1 by FINSEQ_1:def 3;
             per cases by A6,A9,FINSEQ_1:4,TARSKI:def 2;
@@ -1335,8 +1296,7 @@ theorem Th32:
   for a st a in dom fp holds fp.a divides Product fp
 proof
   let a;
-  assume
-  a in dom fp;
+  assume a in dom fp;
   then fp.a in rng fp by FUNCT_1:12;
   hence thesis by NAT_3:7;
 end;
@@ -1426,14 +1386,13 @@ end;
 
 Lm9: for i1,i2 being Integer for n being Nat st n > 0 & i1 mod n = 0 holds i1*
 i2 mod n = 0
-
 proof
   let i1,i2 be Integer,n be Nat;
   assume that
 A1: n > 0 and
 A2: i1 mod n = 0;
   n divides i1 by A1,A2,INT_1:89;
-  then n divides i1*i2 by INT_2:12;
+  then n divides i1*i2 by INT_2:2;
   hence thesis by A1,INT_1:89;
 end;
 
@@ -1491,8 +1450,7 @@ A5: for a be Nat st a in Seg len fp ex n being Element of NAT st FF[a,n]
   proof
     let a be Nat;
     reconsider l=fp.a as Integer;
-    assume
-    a in Seg len fp;
+    assume a in Seg len fp;
     then
 A6: a in dom fp by FINSEQ_1:def 3;
     then Product Del(fp,a) gcd fp.a = 1 by A1,A2,Th31;
@@ -1721,8 +1679,7 @@ A6:   fp.b divides (y-fp1.b) by A5,INT_1:89;
 A7:   x-y=(fp.b)*i by INT_1:def 9;
       i>=0
       proof
-        assume
-        i<0;
+        assume i<0;
         then k<0 by A2,A4,A7,XREAL_1:134;
         hence contradiction;
       end;
@@ -1765,17 +1722,14 @@ A11:  y-x=(fp.b)*i by INT_1:def 9;
   end;
 end;
 
-reserve i,m,m1,m2,m3,r,s,a,b,c,c1,c2,x,y for Integer,
-  n1,n2,n3 for Nat;
+reserve i,m,m1,m2,m3,r,s,a,b,c,c1,c2,x,y for Integer;
 
 Lm10: ( x divides y implies y mod x = 0) & (x<>0 & y mod x = 0 implies x
 divides y)
-
 proof
 A1: x divides y implies y mod x = 0
   proof
-    assume
-    x divides y;
+    assume x divides y;
     then consider i such that
 A2: y = x * i by INT_1:def 9;
     y mod x = (x * i + 0) mod x by A2
@@ -1804,7 +1758,7 @@ A2: y mod x = 0 by Lm10;
   per cases;
   suppose
     x = 0;
-    hence thesis by A1,INT_2:10;
+    hence thesis by A1,INT_2:3;
   end;
   suppose
     x <> 0;
@@ -1813,14 +1767,12 @@ A2: y mod x = 0 by Lm10;
   end;
 end;
 
-Lm12: (x<>0 or y<>0) implies x div (x gcd y),y div (x gcd y)
-are_relative_prime
-
+Lm12: (x<>0 or y<>0) implies x div (x gcd y),y div (x gcd y) are_relative_prime
 proof
   assume
 A1: x<>0 or y<>0;
   then
-A2: x gcd y <> 0 by INT_2:35;
+A2: x gcd y <> 0 by INT_2:5;
 A3: y=(y div (x gcd y))*(x gcd y) by Lm11,INT_2:31;
   consider a,b being Integer such that
 A4: x = (x gcd y)*a and
@@ -1832,7 +1784,6 @@ end;
 
 Lm13: x divides i & y divides i & x,y are_relative_prime implies (x*y) divides
 i
-
 proof
   assume that
 A1: x divides i and
@@ -1879,7 +1830,7 @@ A8: y - r = m2 * t by INT_1:def 9;
     x = c1 + y * m1 by A7
       .= c1 + (r + m2 * t)* m1 by A8
       .= (c1 + r * m1) + (m1 * m2) * t;
-    then (m1 * m2) divides (x - (c1 + r * m1)) by INT_2:12;
+    then (m1 * m2) divides (x - (c1 + r * m1)) by INT_2:2;
     hence thesis by INT_2:19;
   end;
   hence thesis by A4;
@@ -1927,7 +1878,7 @@ A5: (d1 * r - d3) mod d2 = 0 by Th15;
   take r;
 A6: m1 = (m1 div (m1 gcd m2))*(m1 gcd m2) by Lm11,INT_2:31;
 A7: m2 = (m2 div (m1 gcd m2))*(m1 gcd m2) by Lm11,INT_2:31;
-A8: d <> 0 by A1,INT_2:35;
+A8: d <> 0 by A1,INT_2:5;
   for x st (x-c1) mod m1 = 0 & (x-c2) mod m2 = 0 holds x,(c1+m1*r)
   are_congruent_mod (m1 lcm m2)
   proof
@@ -1980,15 +1931,15 @@ A3: (a gcd m1) divides c1 and
 A4: (b gcd m2) divides c2 and
 A5: m1,m2 are_relative_prime;
   set d2 = b gcd m2;
-A6: d2 <> 0 by A2,INT_2:35;
+A6: d2 <> 0 by A2,INT_2:5;
   set d1 = a gcd m1;
-A7: d1 <> 0 by A1,INT_2:35;
+A7: d1 <> 0 by A1,INT_2:5;
 A8: (a div d1),(m1 div d1) are_relative_prime by A1,Lm12;
   then consider r such that
 A9: ((a div d1)*r - (c1 div d1)) mod (m1 div d1) = 0 by Th15;
 A10: c2 = (c2 div d2)*d2 by A4,Lm11;
 A11: b = (b div d2)*d2 by Lm11,INT_2:31;
-A12: m2 = (m2 div d2)*d2 by Lm11,INT_2:32;
+A12: m2 = (m2 div d2)*d2 by Lm11,INT_2:31;
   then
 A13: (m2 div d2) divides m2 by INT_1:def 9;
 A14: m2 div d2 <> 0 by A2,A12;
@@ -1997,15 +1948,14 @@ A16: a = (a div d1)*d1 by Lm11,INT_2:31;
 A17: (b div d2),(m2 div d2) are_relative_prime by A2,Lm12;
   then consider s being Integer such that
 A18: ((b div d2)*s - (c2 div d2)) mod (m2 div d2) = 0 by Th15;
-A19: m1 = (m1 div d1)*d1 by Lm11,INT_2:32;
+A19: m1 = (m1 div d1)*d1 by Lm11,INT_2:31;
   then
 A20: (m1 div d1) divides m1 by INT_1:def 9;
 A21: (m1 div d1),(m2 div d2) are_relative_prime
   proof
     reconsider e = (m1 div d1) gcd (m2 div d2) as Element of NAT by ORDINAL1:
     def 13;
-    assume
-    not (m1 div d1),(m2 div d2) are_relative_prime;
+    assume not (m1 div d1),(m2 div d2) are_relative_prime;
     then
 A22: (m1 div d1) gcd (m2 div d2) <> 1 by INT_2:def 4;
     e divides (m2 div d2) by INT_2:31;
@@ -2050,7 +2000,7 @@ A29: (m2 div d2) divides (x-s) by INT_2:19;
     then
 A30: (m2 div d2) divides ((x-s) - (((m1 div d1)*w + r) - s)) by A29,
     Lm4;
-    (m1 div d1) divides (m1 div d1)*w by INT_2:12;
+    (m1 div d1) divides (m1 div d1)*w by INT_2:2;
     then (m1 div d1) divides ((x - r) - (m1 div d1)*w) by A28,Lm4;
     then
     (m1 div d1)* (m2 div d2) divides (x - (r + (m1 div d1)*w)) by A21,A30,Lm13;
@@ -2229,8 +2179,7 @@ A35:  K.n > 0 by A30,NAT_3:34;
       are_relative_prime by A35,A34,EULER_2:32;
       hence thesis by A33,A32,INT_2:def 4;
     end;
-    for m being Element of NAT st m in dom f holds f.m divides (d1 lcm d2
-    )
+    for m being Element of NAT st m in dom f holds f.m divides (d1 lcm d2 )
     proof
       let m be Element of NAT;
       assume
@@ -2267,8 +2216,7 @@ proof
   set dd1 = n1 gcd n2;
   set K = n1 lcm n2;
 A1: n2 divides (n1 lcm n2) by NAT_D:def 4;
-  assume
-  (n1 gcd n2) divides (a-b);
+  assume (n1 gcd n2) divides (a-b);
   then d1 divides -(a-b) by INT_2:14;
   then consider r such that
 A2: for x st (x-a) mod n1=0 & (x-b) mod n2=0 holds x,(a+n1*r)
@@ -2308,13 +2256,13 @@ A14: d2 divides (x - c) by A10,INT_2:13;
 A15: (y-x) = n2 * t2 by INT_1:def 9;
     d3 divides n2 by NAT_D:def 5;
     then
-A16: d3 divides n2 * t2 by INT_2:12;
+A16: d3 divides n2 * t2 by INT_2:2;
     y - c = (x - c) + n2 * t2 by A15;
     then
 A17: d3 divides (y - c) by A16,A13,WSIERP_1:9;
     d2 divides n1 by NAT_D:def 5;
     then
-A18: d2 divides n1 * t1 by INT_2:12;
+A18: d2 divides n1 * t1 by INT_2:2;
     y - c = (x - c) + n1 * t1 by A12;
     then d2 divides (y - c) by A18,A14,WSIERP_1:9;
     then (d2 lcm d3) divides (y - c) by A17,INT_2:27;
@@ -2323,7 +2271,7 @@ A18: d2 divides n1 * t1 by INT_2:12;
   for x st (x-a) mod n1=0 & (x-b) mod n2=0 & (x-c) mod n3=0 holds x,(y +
   (n1 lcm n2)*s) are_congruent_mod ((n1 lcm n2) lcm n3)
   proof
-A19: K <> 0 by INT_2:34;
+A19: K <> 0 by INT_2:4;
     let x;
     assume that
 A20: (x-a) mod n1=0 & (x-b) mod n2=0 and
@@ -2335,7 +2283,7 @@ A22: for x st (x-y) mod K = 0 & (x-c) mod n3 = 0 holds x,(y + K*w)
     are_congruent_mod (K lcm n3) and
 A23: ((K div (K gcd n3))*w - ((c-y) div (K gcd n3))) mod (n3 div (K
     gcd n3)) = 0 by A19,Th42;
-A24: n3 = (n3 div (K gcd n3)) * (K gcd n3) by Lm11,INT_2:32;
+A24: n3 = (n3 div (K gcd n3)) * (K gcd n3) by Lm11,INT_2:31;
     then n3 div (K gcd n3) <> 0;
     then w in Class(Cong(n3 div (K gcd n3)),s) by A4,A5,A23,Th26;
     then [s,w] in Cong(n3 div (K gcd n3)) by EQREL_1:26;
@@ -2348,7 +2296,7 @@ A25: K*s,K*w are_congruent_mod K*(n3 div (K gcd n3)) by Th10;
     then K*s,K*w are_congruent_mod n3 by A25,INT_1:41;
     then
 A26: n3 divides (K*s - K*w) by INT_2:19;
-    K divides K*(s - w) by INT_2:12;
+    K divides K*(s - w) by INT_2:2;
     then (K lcm n3) divides ((K*s + y) - (K*w + y)) by A26,INT_2:27;
     then (K*s + y),(K*w + y) are_congruent_mod (K lcm n3) by INT_2:19;
     then
@@ -2364,18 +2312,16 @@ end;
 
 begin :: CRS
 
-reserve fp,fp1,fp2 for FinSequence of NAT,
-  fr for FinSequence of INT,
-  a,b,c,d,
-  k,m,n for Element of NAT;
+reserve
+
+  a,b,c,m for Element of NAT;
 
 definition
   let m be Nat, X be set;
   pred X is_CRS_of m means
   :Def2:
-  ex fp being FinSequence of INT st X = rng fp
-& len fp = m & for b being Nat st b in dom fp holds fp.b in Class(Cong m, b-'1)
-  ;
+  ex fp being FinSequence of INT st X = rng fp & len fp = m &
+  for b being Nat st b in dom fp holds fp.b in Class(Cong m, b-'1);
 end;
 
 theorem Th48:
@@ -2388,8 +2334,7 @@ A1: len fp=m & for a be Nat st a in dom fp holds fp.a=F(a) from FINSEQ_1
   for a being Nat st a in dom fp holds fp.a in INT
   proof
     let a be Nat;
-    assume
-    a in dom fp;
+    assume a in dom fp;
     then fp.a=F(a) by A1;
     hence thesis by INT_1:def 2;
   end;
@@ -2400,8 +2345,7 @@ A2: { a: a < m } = rng fp
 A3: rng fp c= A
     proof
       let b be set;
-      assume
-      b in rng fp;
+      assume b in rng fp;
       then consider k being set such that
 A4:   k in dom fp and
 A5:   b = fp.k by FUNCT_1:def 5;
@@ -2420,8 +2364,7 @@ A8:   k-'1<m by A7,XREAL_1:235;
     A c= rng fp
     proof
       let b be set;
-      assume
-      b in A;
+      assume b in A;
       then consider k being Element of NAT such that
 A9:   k = b and
 A10:  k < m;
@@ -2440,8 +2383,7 @@ A11:  k+1 in dom fp by A1,FINSEQ_3:27;
     (a-'1),(a-'1) are_congruent_mod m by INT_1:32;
     then
 A12: [a-'1,a-'1] in Cong(m) by Def1;
-    assume
-    a in dom fp;
+    assume a in dom fp;
     then fp.a = a-'1 by A1;
     hence thesis by A12,EQREL_1:26;
   end;
@@ -2453,15 +2395,13 @@ theorem Th49:
   ,y being Integer st x in X & y in X & x<>y holds not [x,y] in Cong m
 proof
   let X be finite set;
-  assume
-  X is_CRS_of m;
+  assume X is_CRS_of m;
   then consider fp being FinSequence of INT such that
 A1: X = rng fp and
 A2: len fp = m and
 A3: for b be Nat st b in dom fp holds fp.b in Class(Cong(m),b-'1) by
   Def2;
-A4: for x,y being Integer st x in X & y in X & x<>y holds not [x,y] in Cong
-  (m)
+A4: for x,y being Integer st x in X & y in X & x<>y holds not [x,y] in Cong (m)
   proof
     let x,y be Integer;
     assume that
@@ -2488,8 +2428,7 @@ A14: b>=1 by FINSEQ_1:3;
     then (b-'1),y are_congruent_mod m by Def1;
     then
 A15: y,(b-'1) are_congruent_mod m by INT_1:35;
-    assume
-    [x,y] in Cong(m);
+    assume [x,y] in Cong(m);
     then x,y are_congruent_mod m by Def1;
     then x,(b-'1) are_congruent_mod m by A15,INT_1:36;
     then (a-'1),(b-'1) are_congruent_mod m by A10,INT_1:36;
@@ -2512,8 +2451,7 @@ A21: (a-'1)-(b-'1) = (a-1)-(b-'1) by A18,XREAL_1:235
       .=(a-1)-(b-1) by A14,XREAL_1:235
       .= (a-b);
     now
-      assume
-      a<>b;
+      assume a<>b;
       then (a-b)<>0;
       hence contradiction by A16,A21,A20,Th6;
     end;
@@ -2560,8 +2498,7 @@ A32: abs(a-b) < abs(m) by ABSVALUE:def 1;
     then
 A33: m divides (a-b) by A30,INT_2:19;
     now
-      assume
-      a<>b;
+      assume a<>b;
       then (a-b)<>0;
       hence contradiction by A33,A32,Th6;
     end;
@@ -2576,12 +2513,10 @@ theorem Th50:
 proof
   set fp=<*>INT;
   thus {} is_CRS_of m implies m = 0 by Th49,CARD_1:47;
-  assume
-  m = 0;
+  assume m = 0;
   then
 A1: len fp = m;
-  {} = rng fp & for b be Nat st b in dom fp holds fp.b in Class(Cong(m),b
-  -'1);
+  {} = rng fp & for b be Nat st b in dom fp holds fp.b in Class(Cong(m),b -'1);
   hence thesis by A1,Def2;
 end;
 
@@ -2613,8 +2548,7 @@ A6: for a st a in dom fp1 holds fp1.a in Y and
 A7: fp1 is one-to-one by A2;
     set fp = fp1^<*x*>;
 A8: len fp = m + 1 by A5,FINSEQ_2:19;
-    for a,b being set st a in dom fp & b in dom fp & a<>b holds fp.a <>
-    fp.b
+    for a,b being set st a in dom fp & b in dom fp & a<>b holds fp.a <> fp.b
     proof
       let a,b be set;
       assume that
@@ -2659,14 +2593,12 @@ A20:    a = m + 1;
       end;
     end;
     then
-A21: for a,b being set st a in dom fp & b in dom fp & fp.a = fp.b holds a
-    = b;
+A21: for a,b being set st a in dom fp & b in dom fp & fp.a = fp.b holds a = b;
     take fp;
     for a st a in dom fp holds fp.a in X
     proof
       let a;
-      assume
-      a in dom fp;
+      assume a in dom fp;
       then
 A22:  a in Seg (m+1) by A8,FINSEQ_1:def 3;
       per cases by A22,FINSEQ_2:8;
@@ -2689,8 +2621,7 @@ A24: P[0]
   proof
     set fp = <*>NAT;
     let X be finite set;
-    assume
-    card X = 0;
+    assume card X = 0;
     take fp;
     thus len fp = 0;
     thus thesis;
@@ -2707,8 +2638,7 @@ proof
   let X be finite Subset of INT;
   assume that
 A1: card X = m and
-A2: for x,y being Integer st x in X & y in X & x<>y holds not [x,y] in
-  Cong(m);
+A2: for x,y being Integer st x in X & y in X & x<>y holds not [x,y] in Cong(m);
   per cases;
   suppose
     X is empty;
@@ -2737,8 +2667,7 @@ A9:   fp is one-to-one by A1,Th51;
 A10:  for c st c in Seg m ex r being Element of Y st PP[c,r]
       proof
         let c;
-        assume
-        c in Seg m;
+        assume c in Seg m;
         consider q,r being Integer such that
 A11:    fp.c = m * q + r and
 A12:    r >= 0 and
@@ -2809,8 +2738,7 @@ A30: dom fp = Seg m & for a be Nat st a in Seg m holds P[a,fp.a] from
     FINSEQ_1:sch 5(A4);
 A31: rng fp c= X by FINSEQ_1:def 4;
 A32: len fp = m by A30,FINSEQ_1:def 3;
-    for a,b being set st a in dom fp & b in dom fp & fp.a = fp.b holds a
-    = b
+    for a,b being set st a in dom fp & b in dom fp & fp.a = fp.b holds a = b
     proof
       let a,b be set;
       assume that
@@ -2847,8 +2775,7 @@ A41:  abs(a-b) < abs(m) by ABSVALUE:def 1;
       then
 A42:  m divides (a-b) by A38,INT_2:19;
       now
-        assume
-        a<>b;
+        assume a<>b;
         then a-b<>0;
         hence contradiction by A42,A41,Th6;
       end;
@@ -2864,8 +2791,7 @@ end;
 reserve a for Integer;
 
 theorem
-  for X being finite Subset of INT st X is_CRS_of m holds (a ++ X)
-  is_CRS_of m
+  for X being finite Subset of INT st X is_CRS_of m holds (a ++ X) is_CRS_of m
 proof
   let X be finite Subset of INT;
   assume
@@ -2881,15 +2807,14 @@ A3: for i,j being Integer st i in a++X & j in a++X & i<>j holds not [i,j] in
 A4: i in a++X and
 A5: j in a++X and
 A6: i<>j;
-    consider u being Real such that
-A7: u in X and
-A8: i=a+u by A4,MEASURE6:def 6;
-    consider w being Real such that
-A9: w in X and
-A10: j=a+w by A5,MEASURE6:def 6;
+    consider u being Element of COMPLEX such that
+A8: i=a+u and
+A7: u in X by A4,MEMBER_1:143;
+    consider w being Element of COMPLEX such that
+A10: j=a+w and
+A9: w in X by A5,MEMBER_1:143;
     reconsider u9=u, w9=w as Integer by A7,A9;
-    assume
-    [i,j] in Cong(m);
+    assume [i,j] in Cong(m);
     then i,j are_congruent_mod m by Def1;
     then m divides ((a+u9)-(a+w9)) by A8,A10,INT_2:19;
     then m divides (u9-w9);
@@ -2929,8 +2854,7 @@ A8: for x,y being Integer st x in a**X & y in a**X & x<>y holds not [x,y]
       assume that
 A9:   x in a**X and
 A10:  y in a**X & x<>y;
-      assume
-      [x,y] in Cong(m);
+      assume [x,y] in Cong(m);
       x = 0 by A7,A9,TARSKI:def 1;
       hence contradiction by A7,A10,TARSKI:def 1;
     end;
@@ -2956,8 +2880,7 @@ A19:  x = a * x1 by A13,Lm3;
       not [x1,y1] in Cong(m) by A2,A15,A18,A19,A16,A17,Th49;
       then
 A20:  not x1,y1 are_congruent_mod m by Def1;
-      assume
-      [x,y] in Cong(m);
+      assume [x,y] in Cong(m);
       then a*x1,a*y1 are_congruent_mod m by A19,A17,Def1;
       hence contradiction by A1,A20,Th9;
     end;
@@ -2965,4 +2888,3 @@ A20:  not x1,y1 are_congruent_mod m by Def1;
     hence thesis by A4,A12,Th52;
   end;
 end;
-

@@ -6,86 +6,25 @@
 
 environ
 
- vocabularies FINSEQ_1, PARTFUN1, RELAT_1, NAT_1, CARD_3, FUNCT_2, TARSKI,
-      XBOOLE_0, SUBSET_1, FUNCOP_1, CARD_1, FUNCT_1, STRUCT_0, NUMBERS,
-      INCPROJ, XXREAL_0, UNIALG_1;
+ vocabularies FINSEQ_1, PARTFUN1, RELAT_1, NAT_1, FUNCT_2, TARSKI, XBOOLE_0,
+      SUBSET_1, FUNCOP_1, FUNCT_1, STRUCT_0, NUMBERS, INCPROJ, XXREAL_0,
+      UNIALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
-      CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1, STRUCT_0, PARTFUN1, XXREAL_0;
- constructors PARTFUN1, FUNCOP_1, XXREAL_0, FINSEQ_2, STRUCT_0, CARD_3;
+      CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1, STRUCT_0, PARTFUN1, XXREAL_0,
+      MARGREL1;
+ constructors PARTFUN1, FUNCOP_1, XXREAL_0, FINSEQ_2, STRUCT_0, CARD_3,
+      MARGREL1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, PARTFUN1, FUNCOP_1, XXREAL_0,
-      STRUCT_0, FINSEQ_2, FUNCT_1, CARD_1, FINSEQ_1, CARD_3;
+      STRUCT_0, FINSEQ_2, FUNCT_1, CARD_1, FINSEQ_1, CARD_3, MARGREL1;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
 begin
 
-reserve A,z for set,
-  x,y for FinSequence of A,
-  h for PartFunc of A*,A,
-  n,m for
-  Nat;
+reserve
 
-definition
-  let IT be Relation;
-  attr IT is homogeneous means
-:: UNIALG_1:def 1
- dom IT is with_common_domain;
-end;
 
-definition
-  let A;
-  let IT be PartFunc of A*,A;
-  attr IT is quasi_total means
-:: UNIALG_1:def 2
-  for x,y st len x = len y & x in dom IT holds y
-  in dom IT;
-end;
-
-registration
-  let f be Relation;
-  let X be with_common_domain set;
-  cluster f|X -> homogeneous;
-end;
-
-registration
-  let A be non empty set, f be PartFunc of A*,A;
-  cluster dom f -> FinSequence-membered;
-end;
-
-registration
-  let A be non empty set;
-  cluster homogeneous quasi_total non empty PartFunc of A*,A;
-end;
-
-registration
-  cluster homogeneous non empty Function;
-end;
-
-registration let R be homogeneous Relation;
- cluster dom R -> with_common_domain;
-end;
-
-canceled;
-
-theorem :: UNIALG_1:2
-  for A being non empty set, a being Element of A holds <*>A .-->a
-  is homogeneous quasi_total non empty PartFunc of A*,A;
-
-theorem :: UNIALG_1:3
-  for A being non empty set, a being Element of A holds <*>A .-->a
-  is Element of PFuncs(A*,A);
-
-:: stolen from HILBERT3 and improved
-
-registration
-  let A be set, B be functional set;
-  cluster -> Function-yielding PartFunc of A,B;
-end;
-
-definition
-  let A;
-  mode PFuncFinSequence of A is FinSequence of PFuncs(A*,A);
-end;
+  n for Nat;
 
 definition
   struct (1-sorted) UAStr (# carrier -> set, charact -> PFuncFinSequence of
@@ -102,47 +41,8 @@ registration
 end;
 
 definition
-  let A;
-  let IT be PFuncFinSequence of A;
-  canceled;
-  attr IT is homogeneous means
-:: UNIALG_1:def 4
-
-  for n,h st n in dom IT & h = IT.n holds
-  h is homogeneous;
-end;
-
-definition
-  let A;
-  let IT be PFuncFinSequence of A;
-  attr IT is quasi_total means
-:: UNIALG_1:def 5
-
-  for n,h st n in dom IT & h = IT.n holds
-  h is quasi_total;
-end;
-
-definition
-  let A be non empty set;
-  let x be Element of PFuncs(A*,A);
-  redefine func <*x*> -> PFuncFinSequence of A;
-end;
-
-registration
-  let A be non empty set;
-  cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
-end;
-
-registration
-  let A be non empty set;
-  let f be homogeneous PFuncFinSequence of A;
-  let i be set;
-  cluster f.i -> homogeneous;
-end;
-
-definition
   let IT be UAStr;
-  canceled;
+  canceled 6;
   attr IT is partial means
 :: UNIALG_1:def 7
 
@@ -154,18 +54,10 @@ definition
   attr IT is non-empty means
 :: UNIALG_1:def 9
 
-  the charact of IT <> {} & the charact of
-  IT is non-empty;
+  the charact of IT <> {} & the charact of IT is non-empty;
 end;
 
-reserve A for non empty set,
-  h for PartFunc of A*,A,
-  x,y for FinSequence of A,
-  a for Element of A;
 
-theorem :: UNIALG_1:4
-  for x be Element of PFuncs(A*,A) st x = <*>A .--> a holds <*x*>
-  is homogeneous quasi_total non-empty;
 
 registration
   cluster quasi_total partial non-empty strict non empty UAStr;
@@ -192,24 +84,14 @@ end;
 
 reserve U1 for partial non-empty non empty UAStr;
 
-definition
-  let f be homogeneous Relation;
-  func arity(f) -> Nat means
-:: UNIALG_1:def 10
-  for x being FinSequence st x in dom f holds it =
-  len x if ex x being FinSequence st x in dom f otherwise it = 0;
-end;
-
-definition
-  let f be homogeneous Function;
-  redefine func arity(f) -> Element of NAT;
-end;
+canceled 4;
 
 theorem :: UNIALG_1:5
   n in dom the charact of U1 implies (the charact of U1).n is
   PartFunc of (the carrier of U1)*,the carrier of U1;
 
 definition
+ canceled;
   let U1;
   func signature U1 ->FinSequence of NAT means
 :: UNIALG_1:def 11
@@ -220,11 +102,9 @@ definition
 end;
 
 begin :: Addenda
-
 :: from MSSUBLAT, 2007.05.13, A.T.
 
 registration
   let U0 be Universal_Algebra;
   cluster the charact of U0 -> Function-yielding;
 end;
-

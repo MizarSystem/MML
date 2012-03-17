@@ -3,31 +3,39 @@
 ::
 :: Received September 27, 1990
 :: Copyright (c) 1990 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, METRIC_1, SUBSET_1, FUNCT_1, ZFMISC_1, MCART_1,
-      STRUCT_0, NUMBERS, ARYTM_3, CARD_1, XXREAL_0, REAL_1, METRIC_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, FUNCT_2,
-      BINOP_1, STRUCT_0, METRIC_1, MCART_1, XXREAL_0;
- constructors XXREAL_0, REAL_1, MEMBERED, METRIC_1;
+      STRUCT_0, NUMBERS, ARYTM_3, CARD_1, XXREAL_0, REAL_1, METRIC_3, SQUARE_1,
+      XREAL_0, ORDINAL1, RELAT_1, ARYTM_1, XCMPLX_0, COMPLEX1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, FUNCT_2, BINOP_1, STRUCT_0,
+      METRIC_1, MCART_1, XXREAL_0, SQUARE_1;
+ constructors XXREAL_0, REAL_1, MEMBERED, METRIC_1, SQUARE_1, DOMAIN_1,
+      COMPLEX1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, MEMBERED, STRUCT_0,
-      METRIC_1, RELAT_1;
- requirements SUBSET, BOOLE, ARITHM;
- theorems BINOP_1, DOMAIN_1, ZFMISC_1, METRIC_1, MCART_1, XREAL_1;
+      METRIC_1, RELAT_1, XCMPLX_0, XREAL_0, SQUARE_1;
+ requirements SUBSET, BOOLE, ARITHM, NUMERALS, REAL;
+ definitions SQUARE_1;
+ theorems BINOP_1, DOMAIN_1, ZFMISC_1, METRIC_1, MCART_1, XREAL_1, SQUARE_1,
+      COMPLEX1, XXREAL_0;
  schemes BINOP_1;
 
 begin
 
 reserve X, Y, Z, W for non empty MetrSpace;
 
-scheme
-  LambdaMCART { X, Y, Z() -> non empty set, F(set,set,set,set) -> Element of Z
-()}: ex f being Function of [:[:X(),Y():],[:X(),Y():]:],Z() st for x1,y1 being
-Element of X() for x2,y2 being Element of Y() for x,y being Element of [:X(),Y(
-  ):] st x = [x1,x2] & y = [y1,y2] holds f.(x,y) = F(x1,y1,x2,y2) proof
-  deffunc G(Element of [:X(),Y():],Element of [:X(),Y():]) = F($1`1,$2`1,$1`2,
-  $2`2);
+scheme LambdaMCART { X, Y, Z() -> non empty set,
+   F(set,set,set,set) -> Element of Z()} :
+   ex f being Function of [:[:X(),Y():],[:X(),Y():]:],Z() st
+   for x1,y1 being Element of X()
+   for x2,y2 being Element of Y()
+   for x,y being Element of [:X(),Y():] st
+     x = [x1,x2] & y = [y1,y2] holds f.(x,y) = F(x1,y1,x2,y2)
+proof
+  deffunc G(Element of [:X(),Y():],Element of [:X(),Y():]) =
+    F($1`1,$2`1,$1`2,$2`2);
   consider f being Function of [:[:X(),Y():],[:X(),Y():]:],Z() such that
 A1: for x,y being Element of [:X(),Y():] holds f.(x,y) = G(x,y) from
   BINOP_1:sch 4;
@@ -44,29 +52,27 @@ A4: y1 = y`1 & y2 = y`2 by A3,ZFMISC_1:33;
   hence thesis by A1,A4;
 end;
 
-definition
-  let X,Y;
+definition let X,Y;
   func dist_cart2(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:],
   [:the carrier of X,the carrier of Y:]:], REAL means
   :Def1:
-  for x1, y1 being
-Element of X, x2, y2 being Element of Y, x, y being Element of [:the carrier of
-X,the carrier of Y:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = dist(x1,y1)
-  + dist(x2,y2);
+  for x1, y1 being Element of X, x2, y2 being Element of Y,
+      x, y being Element of [:the carrier of X,the carrier of Y:] st
+      x = [x1,x2] & y = [y1,y2] holds it.(x,y) = dist(x1,y1) + dist(x2,y2);
   existence
   proof
     deffunc G(Element of X,Element of X, Element of Y,Element of Y) = dist($1,
     $2) + dist($3,$4);
     consider F being Function of [:[:the carrier of X,the carrier of Y:], [:
     the carrier of X,the carrier of Y:]:],REAL such that
-A1: for x1,y1 being Element of X for x2,y2 being Element of Y for x,y
-being Element of [:the carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1
-    ,y2] holds F.(x,y) = G(x1,y1,x2,y2) from LambdaMCART;
+A1: for x1,y1 being Element of X for x2,y2 being Element of Y
+    for x,y being Element of [:the carrier of X,the carrier of Y:] st
+    x = [x1,x2] & y = [y1,y2] holds F.(x,y) = G(x1,y1,x2,y2)
+      from LambdaMCART;
     take F;
     let x1,y1 be Element of X, x2,y2 be Element of Y, x,y be Element of [:the
     carrier of X,the carrier of Y:];
-    assume
-    x = [x1,x2] & y = [y1,y2];
+    assume x = [x1,x2] & y = [y1,y2];
     hence thesis by A1;
   end;
   uniqueness
@@ -95,8 +101,6 @@ A5:   y = [y1,y2] by DOMAIN_1:9;
   end;
 end;
 
-canceled 4;
-
 theorem Th5:
   for x, y being Element of [:the carrier of X,the carrier of Y:]
   holds dist_cart2(X,Y).(x,y) = 0 iff x = y
@@ -108,8 +112,7 @@ A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
   thus dist_cart2(X,Y).(x,y) = 0 implies x = y
   proof
     set d1 = dist(x1,y1), d2 = dist(x2,y2);
-    assume
-    dist_cart2(X,Y).(x,y) = 0;
+    assume dist_cart2(X,Y).(x,y) = 0;
     then
 A2: d1 + d2 = 0 by A1,Def1;
 A3: 0 <= d1 & 0 <= d2 by METRIC_1:5;
@@ -166,8 +169,7 @@ A5: d1 <= d2 + d3 & d4 <= d5 + d6 by METRIC_1:4;
   hence thesis by A5,A4,XREAL_1:9;
 end;
 
-definition
-  let X,Y;
+definition let X,Y;
   let x,y be Element of [:the carrier of X,the carrier of Y:];
   func dist2(x,y) -> Real equals
   dist_cart2(X,Y).(x,y);
@@ -183,8 +185,7 @@ end;
 definition
   let X,Y;
   func MetrSpaceCart2(X,Y) -> strict non empty MetrSpace equals
-  MetrStruct (#
-    [:the carrier of X,the carrier of Y:], dist_cart2(X,Y)#);
+  MetrStruct (#[:the carrier of X,the carrier of Y:], dist_cart2(X,Y)#);
   coherence
   proof
     set M = MetrStruct(#[:the carrier of X,the carrier of Y:],dist_cart2(X,Y)
@@ -202,7 +203,7 @@ A1:   dist(x,y) = dist_cart2(X,Y).(x,y) by METRIC_1:def 1;
     hence thesis by METRIC_1:6;
   end;
 end;
-
+ 
 :: Metrics in the Cartesian product of three sets
 
 scheme
@@ -257,8 +258,7 @@ of Y,the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds F.(x,y) = G(x1
     take F;
     let x1,y1 be Element of X, x2,y2 be Element of Y, x3,y3 be Element of Z, x
     ,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
-    assume
-    x = [x1,x2,x3] & y = [y1,y2,y3];
+    assume x = [x1,x2,x3] & y = [y1,y2,y3];
     hence thesis by A1;
   end;
   uniqueness
@@ -292,8 +292,6 @@ A5:   y = [y1,y2,y3] by DOMAIN_1:15;
   end;
 end;
 
-canceled 4;
-
 theorem Th12:
   for x,y being Element of [:the carrier of X,the carrier of Y,the
   carrier of Z:] holds dist_cart3(X,Y,Z).(x,y) = 0 iff x = y
@@ -309,8 +307,7 @@ A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
     set d2 = dist(x2,y2);
     set d1 = dist(x1,y1);
     set d4 = d1 + d2;
-    assume
-    dist_cart3(X,Y,Z).(x,y) = 0;
+    assume dist_cart3(X,Y,Z).(x,y) = 0;
     then
 A2: d4 + d3 = 0 by A1,Def4;
 A3: 0 <= d1 & 0 <= d2 by METRIC_1:5;
@@ -375,8 +372,7 @@ A4: d10 <= (d2 + d3) + (d5 + d6) by XREAL_1:9;
   d7 <= d8 + d9 by METRIC_1:4;
   then
 A5: d10 + d7 <= ((d2 + d3) + (d5 + d6)) + (d8 + d9) by A4,XREAL_1:9;
-  ((d2 + d3) + (d5 + d6)) + (d8 + d9) = ((d2 + d5) + d8) + ((d3 + d6) + d9
-  )
+  ((d2 + d3) + (d5 + d6)) + (d8 + d9) = ((d2 + d5) + d8) + ((d3 + d6) + d9)
     .= dist_cart3(X,Y,Z).(x,y) + ((d3 +d6) + d9) by A1,A3,Def4
     .= dist_cart3(X,Y,Z).(x,y) + dist_cart3(X,Y,Z).(y,z) by A3,A2,Def4;
   hence thesis by A1,A2,A5,Def4;
@@ -412,7 +408,7 @@ definition
   dist_cart3(X,Y,Z).(x,y);
   coherence;
 end;
-
+ 
 :: Metrics in the Cartesian product of four sets
 
 scheme
@@ -472,8 +468,7 @@ the carrier of X,the carrier of Y,the carrier of Z,the carrier of W:] st x = [
     let x1,y1 be Element of X, x2,y2 be Element of Y, x3,y3 be Element of Z,
 x4,y4 be Element of W, x,y be Element of [:the carrier of X,the carrier of Y,
     the carrier of Z,the carrier of W:];
-    assume
-    x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4];
+    assume x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4];
     hence thesis by A1;
   end;
   uniqueness
@@ -511,8 +506,6 @@ A5:   y = [y1,y2,y3,y4] by DOMAIN_1:31;
   end;
 end;
 
-canceled 4;
-
 theorem Th19:
   for x,y being Element of [:the carrier of X,the carrier of Y,the
   carrier of Z,the carrier of W:] holds dist_cart4(X,Y,Z,W).(x,y) = 0 iff x = y
@@ -531,8 +524,7 @@ A1: x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] by MCART_1:60;
 A2: 0 <= d3 & 0 <= d5 by METRIC_1:5;
     then
 A3: 0 + 0 <= d3 + d5 by XREAL_1:9;
-    assume
-    dist_cart4(X,Y,Z,W).(x,y) = 0;
+    assume dist_cart4(X,Y,Z,W).(x,y) = 0;
     then
 A4: d4 + d6 = 0 by A1,Def7;
 A5: 0 <= d1 & 0 <= d2 by METRIC_1:5;
@@ -643,8 +635,7 @@ A1:   dist(x,y) = dist_cart4(X,Y,Z,W).(x9,y9) by METRIC_1:def 1;
   end;
 end;
 
-definition
-  let X,Y,Z,W;
+definition let X,Y,Z,W;
   let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z,
   the carrier of W:];
   func dist4(x,y) -> Real equals
@@ -652,3 +643,1237 @@ definition
   coherence;
 end;
 
+begin :: Metrics in the Cartesian Product of Two Sets (METRIC_4)
+
+reserve X,Y for non empty MetrSpace;
+
+definition let X,Y;
+  func dist_cart2S(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:]
+  , [:the carrier of X,the carrier of Y:]:],REAL means
+  :Def1:
+  for x1,y1 being
+  Element of X for x2,y2 being Element of Y for x,y being Element of [:the
+  carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) =
+  sqrt((dist(x1,y1))^2 + (dist(x2,y2)^2));
+  existence
+  proof
+    deffunc G(Element of X,Element of X, Element of Y,Element of Y) = sqrt((
+    dist($1,$2))^2 + (dist($3,$4)^2));
+    consider F being Function of [:[:the carrier of X,the carrier of Y:], [:
+    the carrier of X,the carrier of Y:]:],REAL such that
+A1: for x1,y1 being Element of X for x2,y2 being Element of Y for x,y
+being Element of [:the carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1
+    ,y2] holds F.(x,y) = G(x1,y1,x2,y2) from LambdaMCART;
+    take F;
+    let x1,y1 be Element of X, x2,y2 be Element of Y, x,y be Element of [:the
+    carrier of X,the carrier of Y:];
+    assume x = [x1,x2] & y = [y1,y2];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:the carrier of X,the carrier of Y:], [:the
+    carrier of X,the carrier of Y:]:],REAL;
+    assume that
+A2: for x1,y1 being Element of X for x2,y2 being Element of Y for x,y
+being Element of [:the carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1
+    ,y2] holds f1.(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2)^2)) and
+A3: for x1,y1 being Element of X for x2,y2 being Element of Y for x,y
+being Element of [:the carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1
+    ,y2] holds f2.(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2);
+    for x,y being Element of [:the carrier of X,the carrier of Y:] holds
+    f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:the carrier of X,the carrier of Y:];
+      consider x1 be Element of X, x2 be Element of Y such that
+A4:   x = [x1,x2] by DOMAIN_1:9;
+      consider y1 be Element of X, y2 be Element of Y such that
+A5:   y = [y1,y2] by DOMAIN_1:9;
+      thus f1.(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2)^2)) by A2,A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+Th2:
+  for a,b being real number st 0 <= a & 0 <= b holds sqrt(a + b) =
+  0 iff a = 0 & b = 0 by SQUARE_1:100;
+
+theorem Th3:
+  for x,y being Element of [:the carrier of X,the carrier of Y:]
+  holds dist_cart2S(X,Y).(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  reconsider x1 = x`1, y1 = y`1 as Element of X by MCART_1:10;
+  reconsider x2 = x`2, y2 = y`2 as Element of Y by MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  thus dist_cart2S(X,Y).(x,y) = 0 implies x = y
+  proof
+    set d2 = dist(x2,y2);
+    set d1 = dist(x1,y1);
+    assume dist_cart2S(X,Y).(x,y) = 0;
+    then
+A2: sqrt(d1^2 + d2^2) = 0 by A1,Def1;
+A3: 0 <= d1^2 & 0 <= d2^2 by XREAL_1:65;
+    then d1 = 0 by A2,Th2;
+    then
+A4: x1 = y1 by METRIC_1:2;
+    d2 = 0 by A2,A3,Th2;
+    hence thesis by A1,A4,METRIC_1:2;
+  end;
+  assume x = y;
+  then
+A5: (dist(x1,y1))^2 = 0^2 & (dist(x2,y2))^2 = 0^2 by METRIC_1:1;
+  dist_cart2S(X,Y).(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2) by A1,
+  Def1
+    .= 0 by A5,Th2;
+  hence thesis;
+end;
+
+theorem Th4:
+  for x,y being Element of [:the carrier of X,the carrier of Y:]
+  holds dist_cart2S(X,Y).(x,y) = dist_cart2S(X,Y).(y,x)
+proof
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  reconsider x1 = x`1, y1 = y`1 as Element of X by MCART_1:10;
+  reconsider x2 = x`2, y2 = y`2 as Element of Y by MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  then dist_cart2S(X,Y).(x,y) = sqrt((dist(y1,x1))^2 + (dist(x2,y2))^2) by
+  Def1
+    .= dist_cart2S(X,Y).(y,x) by A1,Def1;
+  hence thesis;
+end;
+
+theorem Th5: :::
+  for a,b,c,d being real number st 0 <= a & 0 <= b & 0 <= c & 0 <= d holds
+    sqrt((a + c)^2 + (b + d)^2) <= sqrt(a^2 + b^2) + sqrt(c^2 + d^2)
+proof
+  let a,b,c,d be real number;
+  assume 0 <= a & 0 <= b & 0 <= c & 0 <= d;
+  then 0 <= a*c & 0 <= d*b by XREAL_1:129;
+  then
+A1: 0 + 0 <= a*c + d*b by XREAL_1:9;
+  0 <= d^2 & 0 <= c^2 by XREAL_1:65;
+  then
+A2: 0 + 0 <= c^2 + d^2 by XREAL_1:9;
+  then
+A3: 0 <= sqrt(c^2 + d^2) by SQUARE_1:def 4;
+  0 <= ((a*d) - (c*b))^2 by XREAL_1:65;
+  then 0 <= (a^2*d^2 + c^2*b^2) - 2*(a*d)*(c*b);
+  then 0 + 2*(a*d)*(c*b) <= (a^2*d^2 + c^2*b^2) by XREAL_1:21;
+  then (b^2*d^2) + 2*(a*d)*(c*b) <= (a^2*d^2 + c^2*b^2) + (b^2*d^2 ) by
+  XREAL_1:8;
+  then
+A4: (a^2*c^2) + ((b^2*d^2) + (2*(a*d)*(c*b))) <= (a^2*c^2) + ((b^2*d^2) + (a
+  ^2*d^2 + c^2*b^2)) by XREAL_1:8;
+  0 <= a^2 & 0 <= b^2 by XREAL_1:65;
+  then
+A5: 0 + 0 <= a^2 + b^2 by XREAL_1:9;
+  then 0 <= sqrt(a^2 + b^2) by SQUARE_1:def 4;
+  then
+A6: 0 + 0 <= sqrt(a^2 + b^2) + sqrt(c^2 + d^2) by A3,XREAL_1:9;
+  0 <= (a*c + d*b)^2 by XREAL_1:65;
+  then sqrt((a*c + d*b)^2) <= sqrt((a^2 + b^2)*(c^2 + d^2)) by A4,
+  SQUARE_1:94;
+  then 2*sqrt((a*c + d*b)^2) <= 2*(sqrt((a^2 + b^2)*(c^2 + d^2))) by
+  XREAL_1:66;
+  then 2*sqrt((a*c + d*b)^2) <= 2*(sqrt(a^2 + b^2)*sqrt(c^2 + d^2)) by
+  A5,A2,SQUARE_1:97;
+  then 2*(a*c + d*b) <= 2*(sqrt(a^2 + b^2)*sqrt(d^2 + c^2)) by A1,
+  SQUARE_1:89;
+  then b^2 + 2*(a*c + d*b) <= 2*(sqrt(a^2 + b^2)*sqrt(d^2 + c^2)) + b^2 by
+  XREAL_1:8;
+  then
+  d^2 + (b^2 + 2*(a*c + d*b)) <= d^2 + (b^2 + 2*(sqrt(a^2 + b^2)*sqrt(d^2
+  + c^2))) by XREAL_1:8;
+  then
+  c^2 + (d^2 + (b^2 + 2*(a*c + d*b))) <= (d^2 + (b^2 + 2*(sqrt(a^2 + b^2)
+  *sqrt(d^2 + c^2)))) + c^2 by XREAL_1:8;
+  then a^2 + (c^2 + (d^2 + ((b^2 + 2*(d*b)) + 2*(a*c)))) <= a^2 + (c^2 + (d^2
+  + (b^2 + 2*(sqrt(a^2 + b^2)*sqrt(d^2 + c^2))))) by XREAL_1:8;
+  then (a + c)^2 + (d + b)^2 <= (a^2 + b^2) + 2*(sqrt(a^2 + b^2)*sqrt(c^2 + d
+  ^2)) + (c^2 + d^2);
+  then
+  (a + c)^2 + (d + b)^2 <= (sqrt(a^2 + b^2))^2 + 2*(sqrt(a^2 + b^2)*sqrt(
+  c^2 + d^2)) + (c^2 + d^2) by A5,SQUARE_1:def 4;
+  then
+A7: (a + c)^2 + (d + b)^2 <= (sqrt(a^2 + b^2))^2 + 2*sqrt(a^2 + b^2)*sqrt(c
+  ^2 + d^2) + (sqrt(c^2 + d^2))^2 by A2,SQUARE_1:def 4;
+  0 <= (a + c)^2 & 0 <= (d + b)^2 by XREAL_1:65;
+  then 0 + 0 <= (a + c)^2 + (d + b)^2 by XREAL_1:9;
+  then
+  sqrt((a + c)^2 + (d + b)^2) <= sqrt((sqrt(a^2 + b^2) + sqrt(c^2 + d^2))
+  ^2) by A7,SQUARE_1:94;
+  hence thesis by A6,SQUARE_1:89;
+end;
+
+theorem Th6:
+  for x,y,z being Element of [:the carrier of X,the carrier of Y:]
+holds dist_cart2S(X,Y).(x,z) <= dist_cart2S(X,Y).(x,y) + dist_cart2S(X,Y).(y,z)
+proof
+  let x,y,z be Element of [:the carrier of X,the carrier of Y:];
+  reconsider x1 = x`1, y1 = y`1, z1 = z`1 as Element of X by MCART_1:10;
+  reconsider x2 = x`2, y2 = y`2, z2 = z`2 as Element of Y by MCART_1:10;
+A1: x = [x1,x2] by MCART_1:24;
+  set d5 = dist(x2,y2);
+  set d3 = dist(y1,z1);
+  set d1 = dist(x1,z1);
+A2: y = [y1,y2] by MCART_1:24;
+  set d6 = dist(y2,z2);
+  set d4 = dist(x2,z2);
+  set d2 = dist(x1,y1);
+A3: z = [z1,z2] by MCART_1:24;
+  0 <= d1^2 & 0 <= d4^2 by XREAL_1:65;
+  then
+A4: 0 + 0 <= d1^2 + d4^2 by XREAL_1:9;
+  d4 <= d5 + d6 & 0 <= d4 by METRIC_1:4,5;
+  then
+A5: d4^2 <= (d5 + d6)^2 by SQUARE_1:77;
+  d1 <= d2 + d3 & 0 <= d1 by METRIC_1:4,5;
+  then d1^2 <= (d2 + d3)^2 by SQUARE_1:77;
+  then d1^2 + d4^2 <= (d2 + d3)^2 + (d5 + d6)^2 by A5,XREAL_1:9;
+  then
+A6: sqrt(d1^2 + d4^2)<= sqrt((d2 + d3)^2 + (d5 + d6)^2) by A4,SQUARE_1:94;
+A7: 0 <= d5 & 0 <= d6 by METRIC_1:5;
+  0 <= d2 & 0 <= d3 by METRIC_1:5;
+  then
+  sqrt((d2 + d3)^2 + (d5 + d6)^2) <= sqrt(d2^2 + d5^2) + sqrt(d3^2+ d6^2)
+  by A7,Th5;
+  then sqrt(d1^2 + d4^2) <= sqrt(d2^2 + d5^2) + sqrt(d3^2 + d6^2) by A6,
+  XXREAL_0:2;
+  then
+  dist_cart2S(X,Y).(x,z) <= sqrt((d2)^2 + (d5)^2) + sqrt((d3)^2 + (d6)^2)
+  by A1,A3,Def1;
+  then
+  dist_cart2S(X,Y).(x,z) <= dist_cart2S(X,Y).(x,y) + sqrt((d3)^2 + (d6)^2
+  ) by A1,A2,Def1;
+  hence thesis by A2,A3,Def1;
+end;
+
+definition let X,Y;
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  func dist2S(x,y) -> Real equals
+  dist_cart2S(X,Y).(x,y);
+  coherence;
+end;
+
+definition let X,Y;
+  func MetrSpaceCart2S(X,Y) -> strict non empty MetrSpace equals
+  MetrStruct(#[:the carrier of X,the carrier of Y:],dist_cart2S(X,Y)#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:the carrier of X,the carrier of Y
+        :],dist_cart2S(X,Y)#);
+      reconsider x9 = x, y9 = y, z9 = z as Element of [:the carrier of X,the
+      carrier of Y:];
+A1:   dist(x,y) = dist_cart2S(X,Y).(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th3;
+      dist(y,x) = dist_cart2S(X,Y).(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th4;
+      dist(x,z) = dist_cart2S(X,Y).(x9,z9) & dist(y,z) = dist_cart2S(X,Y).
+      (y9,z9) by METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th6;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;
+
+begin :: Metrics in the Cartesian Product of Three Sets
+
+reserve Z for non empty MetrSpace;
+
+definition let X,Y,Z;
+  func dist_cart3S(X,Y,Z) -> Function of [:[:the carrier of X,the carrier of Y
+,the carrier of Z:], [:the carrier of X,the carrier of Y,the carrier of Z:]:],
+  REAL means
+  :Def4:
+  for x1,y1 being Element of X for x2,y2 being Element of Y
+  for x3,y3 being Element of Z
+  for x,y being Element of [:the carrier of X,the carrier of Y,
+    the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds
+    it.(x,y) =sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))^2);
+  existence
+  proof
+    deffunc G(Element of X,Element of X, Element of Y,Element of Y, Element of
+Z,Element of Z) = sqrt((dist($1,$2))^2 + (dist($3,$4))^2 + (dist($5,$6))^2);
+    consider F being Function of [:[:the carrier of X,the carrier of Y,the
+carrier of Z:], [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL
+    such that
+A1: for x1,y1 being Element of X for x2,y2 being Element of Y for x3,
+y3 being Element of Z for x,y being Element of [:the carrier of X,the carrier
+of Y,the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds F.(x,y) = G(x1
+    ,y1,x2,y2,x3,y3) from LambdaMCART1;
+    take F;
+    let x1,y1 be Element of X, x2,y2 be Element of Y, x3,y3 be Element of Z, x
+    ,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+    assume x = [x1,x2,x3] & y = [y1,y2,y3];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:the carrier of X,the carrier of Y,the carrier
+    of Z:], [:the carrier of X,the carrier of Y,the carrier of Z:]:],REAL;
+    assume that
+A2: for x1,y1 being Element of X for x2,y2 being Element of Y for x3,
+y3 being Element of Z for x,y being Element of [:the carrier of X,the carrier
+    of Y,the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f1.(x,y) =
+    sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))^2) and
+A3: for x1,y1 being Element of X for x2,y2 being Element of Y for x3,
+y3 being Element of Z for x,y being Element of [:the carrier of X,the carrier
+    of Y,the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f2.(x,y) =
+    sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))^2);
+    for x,y being Element of [:the carrier of X,the carrier of Y,the
+    carrier of Z:] holds f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of
+      Z:];
+      consider x1 be Element of X, x2 be Element of Y, x3 be Element of Z such
+      that
+A4:   x = [x1,x2,x3] by DOMAIN_1:15;
+      consider y1 be Element of X, y2 be Element of Y, y3 be Element of Z such
+      that
+A5:   y = [y1,y2,y3] by DOMAIN_1:15;
+      thus f1.(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))^2
+      ) by A2,A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th10:
+  for x,y being Element of [:the carrier of X,the carrier of Y,the
+  carrier of Z:] holds dist_cart3S(X,Y,Z).(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  reconsider x1 = x`1, y1 = y`1 as Element of X;
+  reconsider x2 = x`2, y2 = y`2 as Element of Y;
+  reconsider x3 = x`3, y3 = y`3 as Element of Z;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  thus dist_cart3S(X,Y,Z).(x,y) = 0 implies x = y
+  proof
+    set d3 = dist(x3,y3);
+    set d2 = dist(x2,y2);
+    set d1 = dist(x1,y1);
+A2: 0 <= d2^2 & 0 <= d3^2 by XREAL_1:65;
+    assume dist_cart3S(X,Y,Z).(x,y) = 0;
+    then sqrt(d1^2 + d2^2 + d3^2) = 0 by A1,Def4;
+    then
+A3: sqrt(d1^2 + (d2^2 + d3^2)) = 0;
+    0 <= d2^2 & 0 <= d3^2 by XREAL_1:65;
+    then
+A4: 0 <= d1^2 & 0 + 0 <= d2^2 + d3^2 by XREAL_1:9,65;
+    then d1 = 0 by A3,Th2;
+    then
+A5: x1 = y1 by METRIC_1:2;
+A6: d2^2 + d3^2 = 0 by A3,A4,Th2;
+    then d2 = 0 by A2,XREAL_1:29;
+    then
+A7: x2 = y2 by METRIC_1:2;
+    d3 = 0 by A6,A2,XREAL_1:29;
+    hence thesis by A1,A5,A7,METRIC_1:2;
+  end;
+  assume
+A8: x = y;
+  then
+A9: (dist(x1,y1))^2 = 0^2 & (dist(x2,y2))^2 = 0^2 by METRIC_1:1;
+  dist_cart3S(X,Y,Z).(x,y) = sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (
+  dist(x3,y3))^2) by A1,Def4
+    .= 0^2 by A8,A9,METRIC_1:1,SQUARE_1:82;
+  hence thesis;
+end;
+
+theorem Th11:
+  for x,y being Element of [:the carrier of X,the carrier of Y,the
+  carrier of Z:] holds dist_cart3S(X,Y,Z).(x,y) = dist_cart3S(X,Y,Z).(y,x)
+proof
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  reconsider x1 = x`1, y1 = y`1 as Element of X;
+  reconsider x2 = x`2, y2 = y`2 as Element of Y;
+  reconsider x3 = x`3, y3 = y`3 as Element of Z;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  then dist_cart3S(X,Y,Z).(x,y) = sqrt((dist(y1,x1))^2 + (dist(y2,x2))^2 + (
+  dist(y3,x3))^2) by Def4
+    .= dist_cart3S(X,Y,Z).(y,x) by A1,Def4;
+  hence thesis;
+end;
+
+theorem Th13: :::
+  for a,b,c,d,e,f being real number holds (2*(a*d)*(c*b) + 2*(a*f)
+*(e*c) + 2*(b*f)*(e*d)) <= (((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f)^2) +
+  (e*d)^2)
+proof
+  let a,b,c,d,e,f be real number;
+  0 <= ((a*f) - (e*c))^2 & 0 <= ((b*f) - (e*d))^2 by XREAL_1:65;
+  then
+  0 <= ((a*d) - (c*b))^2 & 0 + 0 <= ((a*f) - (e*c))^2 + ((b*f) - (e*d))^2
+  by XREAL_1:9,65;
+  then
+  0 + 0 <= ((a*d) - (c*b))^2 + (((a*f) - (e*c))^2 + ((b*f) - (e*d))^2) by
+  XREAL_1:9;
+  then
+  0 <= (((a*d)^2 + (c*b)^2) + ((a*f) - (e*c))^2 + ((b*f) - (e*d))^2) - 2*(
+  a*d)*(c*b);
+  then
+  0 + 2*(a*d)*(c*b) <= ((a*d)^2 + (c*b)^2) + ((a*f) - (e*c))^2 + ((b*f) -
+  (e*d))^2 by XREAL_1:21;
+  then
+  2*(a*d)*(c*b) <= ((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + ((b*f) - (e*d)
+  )^2) - 2*(a*f)*(e*c);
+  then
+  (2*(a*d)*(c*b) + 2*(a*f)*(e*c)) <= (((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)
+  ^2 + (b*f)^2) + (e*d)^2) - 2*(b*f)*(e*d) by XREAL_1:21;
+  hence thesis by XREAL_1:21;
+end;
+
+theorem Th15: :::
+  for a,b,c,d,e,f being real number holds ((a*c) + (b*d) + (e*f))
+  ^2 <= (a^2 + b^2 + e^2)*(c^2 + d^2 + f^2)
+proof
+  let a,b,c,d,e,f be real number;
+  (2*(a*d)*(c*b) + 2*(a*f)*(e*c) + 2*(b*f)*(e*d)) <= (((a*d)^2 + (c*b)^2 +
+  (a*f)^2 + (e*c)^2 + (b*f)^2) + (e*d)^2) by Th13;
+  then
+  (e*f)^2 + ((2*(a*b)*(c*d)) + (2*(a*c)*(e*f)) + (2*(b*d)*(e*f))) <= (((a*
+  d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f)^2) + (e*d)^2) + (e*f)^2 by
+  XREAL_1:8;
+  then
+  (b*d)^2 + ((e*f)^2 + ((2*(a*b)*(c*d)) + (2*(a*c)*(e*f)) + (2*(b*d)*(e*f)
+))) <= ((((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f)^2) + (e*d)^2) + (e*f)^2
+  ) + (b*d)^2 by XREAL_1:8;
+  then
+  (a*c)^2 + ((b*d)^2 + ((e*f)^2 + ((2*(a*b)*(c*d)) + (2*(a*c)*(e*f) ) + (2
+*(b*d)*(e*f))))) <= (((((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f) ^2) + (e*
+  d)^2) + (e*f)^2) + (b*d)^2) + (a*c)^2 by XREAL_1:8;
+  hence thesis;
+end;
+ 
+:::
+
+Lm1: for a,b,c,d,e,f being real number st 0 <= a & 0 <= b & 0 <= c & 0 <= d &
+0 <= e & 0 <= f holds sqrt((a + c)^2 + (b + d)^2 + (e + f)^2) <= sqrt(a^2 + b^2
++ e^2) + sqrt(c^2 + d^2 + f^2)
+proof
+  let a,b,c,d,e,f be real number;
+  assume that
+A1: 0 <= a and
+A2: 0 <= b and
+A3: 0 <= c and
+A4: 0 <= d & 0 <= e & 0 <= f;
+  0 <= b*d & 0 <= e*f by A2,A4,XREAL_1:129;
+  then
+A5: 0 + 0 <= b*d + e*f by XREAL_1:9;
+  0 <= c^2 & 0 <= d^2 by XREAL_1:65;
+  then
+A6: 0 + 0 <= c^2 + d^2 by XREAL_1:9;
+  0 <= f^2 by XREAL_1:65;
+  then
+A7: 0 + 0 <= (c^2 + d^2) + f^2 by A6,XREAL_1:9;
+  then
+A8: 0 <= sqrt(c^2 + d^2 + f^2) by SQUARE_1:def 4;
+  0 <= ((a*c) + (b*d) + (e*f))^2 by XREAL_1:65;
+  then
+A9: sqrt(((a*c) + (b*d) + (e*f))^2) <= sqrt((a^2 + b^2 + e^2)*(c^2 + d^2 + f
+  ^2)) by Th15,SQUARE_1:94;
+  0 <= a^2 & 0 <= b^2 by XREAL_1:65;
+  then
+A10: 0 + 0 <= a^2 + b^2 by XREAL_1:9;
+  0 <= e^2 by XREAL_1:65;
+  then
+A11: 0 + 0 <= (a^2 + b^2) + e^2 by A10,XREAL_1:9;
+  0 <= a*c by A1,A3,XREAL_1:129;
+  then 0 + 0 <= a*c + (b*d + e*f) by A5,XREAL_1:9;
+  then ((a*c) + (b*d) + (e*f)) <= sqrt((a^2 + b^2 + e^2)*(c^2 + d^2 + f ^2))
+  by A9,SQUARE_1:89;
+  then
+  ((a*c) + (b*d) + (e*f)) <= sqrt(a^2 + b^2 + e^2)*sqrt(c^2 + d^2 + f ^2)
+  by A11,A7,SQUARE_1:97;
+  then 2*((a*c) + (b*d) + (e*f)) <= 2*(sqrt(a^2 + b^2 + e^2)*sqrt(c^2 + d^2 +
+  f^2)) by XREAL_1:66;
+  then (2*((a*c) + (b*d)) + 2*(e*f)) + e^2 <= (2*sqrt(a^2 + b^2 + e^2)*sqrt(c
+  ^2 + d^2 + f^2)) + e^2 by XREAL_1:8;
+  then
+  ((2*((a*c) + (b*d))) + (e^2 + 2*(e*f))) + f^2 <= ((2*sqrt(a^2 + b^2 + e
+  ^2)*sqrt(c^2 + d^2 + f^2)) + e^2) + f^2 by XREAL_1:8;
+  then ((2*(a*c) + 2*(b*d)) + ((e + f)^2)) + b^2 <= (((e^2 + 2*sqrt(a^2 + b^2
+  + e^2)*sqrt(c^2 + d^2 + f^2))) + f^2) + b^2 by XREAL_1:8;
+  then ((2*(a*c) + (b^2 + 2*(b*d))) + (e + f)^2) + d^2 <= (b^2 + (((e^2 + 2*
+  sqrt(a^2 + b^2 + e^2)*sqrt(c^2 + d^2 + f^2))) + f^2 )) + d^2 by XREAL_1:8;
+  then a^2 + (2*(a*c) + ((b + d)^2 + (e + f)^2)) <= (b^2 + ((e^2 + 2*sqrt(a^2
+  + b^2 + e^2)*sqrt(c^2 + d^2 + f^2)) + (d^2 + f^2 ))) + a^2 by XREAL_1:8;
+  then
+  ((a^2 + 2*(a*c)) + ((b + d)^2 + (e + f)^2)) + c^2 <= (((a^2 + b^2 + e^2
+  ) + 2*sqrt(a^2 + b^2 + e^2)*sqrt(c^2 + d^2 + f^2)) + (d^2 + f^2 )) + c^2 by
+  XREAL_1:8;
+  then ((a + c)^2 + (b + d)^2 + (e + f)^2) <= ((a^2 + b^2 + e^2) + 2*sqrt(a^2
+  + b^2 + e^2)*sqrt(c^2 + d^2 + f^2)) + (c^2 + (d^2 + f^2));
+  then ((a + c)^2 + (b + d)^2 + (e + f)^2) <= (sqrt(a^2 + b^2 + e^2))^2 + 2*
+  sqrt(a^2 + b^2 + e^2)*sqrt(c^2 + d^2 + f^2) + (c^2 + d^2 + f^2) by A11,
+  SQUARE_1:def 4;
+  then
+A12: ((a + c)^2 + (b + d)^2 + (e + f)^2) <= (sqrt(a^2 + b^2 + e^2))^2 + 2*
+  sqrt(a^2 + b^2 + e^2)*(sqrt(c^2 + d^2 + f^2)) + (sqrt(c^2 + d^2 + f^2))^2 by
+  A7,SQUARE_1:def 4;
+  0 <= (a + c)^2 & 0 <= (b + d)^2 by XREAL_1:65;
+  then
+A13: 0 + 0 <= (a + c)^2 + (b + d)^2 by XREAL_1:9;
+  0 <= (e + f)^2 by XREAL_1:65;
+  then 0 + 0 <= ((a + c)^2 + (b + d)^2) + (e + f)^2 by A13,XREAL_1:9;
+  then
+A14: sqrt((a + c)^2 + (b + d)^2 + (e + f)^2) <= sqrt((sqrt(a^2 + b^2 + e ^2)
+  + sqrt(c^2 + d^2 + f^2))^2) by A12,SQUARE_1:94;
+  0 <= sqrt(a^2 + b^2 + e^2) by A11,SQUARE_1:def 4;
+  then 0 + 0 <= (sqrt(a^2 + b^2 + e^2) + sqrt(c^2 + d^2 + f^2 )) by A8,
+  XREAL_1:9;
+  hence thesis by A14,SQUARE_1:89;
+end;
+
+theorem Th16:
+  for x,y,z being Element of [:the carrier of X,the carrier of Y,
+the carrier of Z:] holds dist_cart3S(X,Y,Z).(x,z) <= dist_cart3S(X,Y,Z).(x,y) +
+  dist_cart3S(X,Y,Z).(y,z)
+proof
+  let x,y,z be Element of [:the carrier of X,the carrier of Y,the carrier of Z
+  :];
+  reconsider x1 = x`1, y1 = y`1, z1 = z`1 as Element of X;
+  reconsider x2 = x`2, y2 = y`2, z2 = z`2 as Element of Y;
+  reconsider x3 = x`3, y3 = y`3, z3 = z`3 as Element of Z;
+A1: x = [x1,x2,x3] by MCART_1:48;
+  set d7 = dist(x3,z3), d8 = dist(x3,y3), d9 = dist(y3,z3);
+  set d1 = dist(x1,z1), d2 = dist(x1,y1), d3 = dist(y1,z1);
+A2: y = [y1,y2,y3] by MCART_1:48;
+  d7 <= d8 + d9 & 0 <= d7 by METRIC_1:4,5;
+  then
+A3: d7^2 <= (d8 + d9)^2 by SQUARE_1:77;
+A4: 0 <= d8 & 0 <= d9 by METRIC_1:5;
+  set d4 = dist(x2,z2), d5 = dist(x2,y2), d6 = dist(y2,z2);
+A5: z = [z1,z2,z3] by MCART_1:48;
+  d4 <= d5 + d6 & 0 <= d4 by METRIC_1:4,5;
+  then
+A6: d4^2 <= (d5 + d6)^2 by SQUARE_1:77;
+A7: 0 <= d5 & 0 <= d6 by METRIC_1:5;
+  0 <= d1^2 & 0 <= d4^2 by XREAL_1:65;
+  then
+A8: 0 + 0 <= d1^2 + d4^2 by XREAL_1:9;
+  d1 <= d2 + d3 & 0 <= d1 by METRIC_1:4,5;
+  then d1^2 <= (d2 + d3)^2 by SQUARE_1:77;
+  then d1^2 + d4^2 <= (d2 + d3)^2 + (d5 + d6)^2 by A6,XREAL_1:9;
+  then
+A9: d1^2 + d4^2 + d7^2 <= (d2 + d3)^2 + (d5 + d6)^2 + (d8 + d9)^2 by A3,
+  XREAL_1:9;
+  0 <= d7^2 by XREAL_1:65;
+  then 0 + 0 <= (d1^2 + d4^2) + d7^2 by A8,XREAL_1:9;
+  then
+A10: sqrt(d1^2 + d4^2 + d7^2) <= sqrt((d2 + d3)^2 + (d5 + d6) ^2 + (d8 + d9)
+  ^2) by A9,SQUARE_1:94;
+  0 <= d2 & 0 <= d3 by METRIC_1:5;
+  then sqrt((d2 + d3)^2 + (d5 + d6)^2 + (d8 + d9)^2) <= sqrt(d2^2 + d5^2 + d8
+  ^2) + sqrt(d3^2 + d6^2 + d9^2) by A7,A4,Lm1;
+  then
+  sqrt(d1^2 + d4^2 + d7^2) <= sqrt(d2^2 + d5^2 + d8^2) + sqrt(d3^2 + d6^2
+  + d9^2) by A10,XXREAL_0:2;
+  then dist_cart3S(X,Y,Z).(x,z) <= sqrt(d2^2 + d5^2 + d8^2) + sqrt((d3)^2 + (
+  d6)^2 + d9^2 ) by A1,A5,Def4;
+  then dist_cart3S(X,Y,Z).(x,z) <= dist_cart3S(X,Y,Z).(x,y) + sqrt((d3)^2 + (
+  d6)^2 + d9^2) by A1,A2,Def4;
+  hence thesis by A2,A5,Def4;
+end;
+
+definition let X,Y,Z;
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  func dist3S(x,y) -> Real equals
+  dist_cart3S(X,Y,Z).(x,y);
+  coherence;
+end;
+
+definition let X,Y,Z;
+  func MetrSpaceCart3S(X,Y,Z) -> strict non empty MetrSpace equals
+  MetrStruct
+(#[:the carrier of X,the carrier of Y,the carrier of Z:], dist_cart3S(X,Y,Z)#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:the carrier of X,the carrier of Y,
+        the carrier of Z:], dist_cart3S(X,Y,Z)#);
+      reconsider x9 = x,y9 = y,z9 = z as Element of [:the carrier of X,the
+      carrier of Y,the carrier of Z:];
+A1:   dist(x,y) = dist_cart3S(X,Y,Z).(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th10;
+      dist(y,x) = dist_cart3S(X,Y,Z).(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th11;
+      dist(x,z) = dist_cart3S(X,Y,Z).(x9,z9) & dist(y,z) = dist_cart3S(X,Y
+      ,Z).(y9, z9) by METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th16;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;
+
+definition
+  func taxi_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+  :
+  Def7: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:REAL,
+  REAL:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = real_dist.(x1,y1) +
+  real_dist.(x2,y2);
+  existence
+  proof
+    deffunc G(Element of REAL,Element of REAL,Element of REAL,Element of REAL)
+    = real_dist.($1,$2) + real_dist.($3,$4);
+    consider F being Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL such
+    that
+A1: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds F.(x,y) = G(x1,y1,x2,y2) from
+    LambdaMCART;
+    take F;
+    let x1,y1,x2,y2 be Element of REAL, x,y be Element of [:REAL,REAL:];
+    assume x = [x1,x2] & y = [y1,y2];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL;
+    assume that
+A2: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds f1.(x,y) = real_dist.(x1,y1) +
+    real_dist.(x2,y2) and
+A3: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds f2.(x,y) = real_dist.(x1,y1) +
+    real_dist.(x2,y2);
+    for x,y being Element of [:REAL,REAL:] holds f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:REAL,REAL:];
+      consider x1,x2 be Element of REAL such that
+A4:   x = [x1,x2] by DOMAIN_1:9;
+      consider y1,y2 be Element of REAL such that
+A5:   y = [y1,y2] by DOMAIN_1:9;
+      thus f1.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) by A2,A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th19:
+  for x,y being Element of [:REAL,REAL:] holds taxi_dist2.(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Element of REAL by
+  MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  thus taxi_dist2.(x,y) = 0 implies x = y
+  proof
+    set d2 = real_dist.(x2,y2);
+    set d1 = real_dist.(x1,y1);
+    d1 = abs(x1 - y1) by METRIC_1:def 13;
+    then
+A2: 0 <= d1 by COMPLEX1:132;
+    d2 = abs(x2 - y2) by METRIC_1:def 13;
+    then
+A3: 0 <= d2 by COMPLEX1:132;
+    assume taxi_dist2.(x,y) = 0;
+    then
+A4: d1 + d2 = 0 by A1,Def7;
+    then d1 = 0 by A2,A3,XREAL_1:29;
+    then
+A5: x1 = y1 by METRIC_1:9;
+    d2 = 0 by A4,A2,A3,XREAL_1:29;
+    hence thesis by A1,A5,METRIC_1:9;
+  end;
+  assume
+A6: x = y;
+  then
+A7: real_dist.(x2,y2) = 0 by METRIC_1:9;
+  taxi_dist2.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) by A1,Def7
+    .= 0 by A6,A7,METRIC_1:9;
+  hence thesis;
+end;
+
+theorem Th20:
+  for x,y being Element of [:REAL,REAL:] holds taxi_dist2.(x,y) =
+  taxi_dist2.(y,x)
+proof
+  let x,y be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Element of REAL by
+  MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  then taxi_dist2.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) by Def7
+    .= real_dist.(y1,x1) + real_dist.(x2,y2) by METRIC_1:10
+    .= real_dist.(y1,x1) + real_dist.(y2,x2) by METRIC_1:10
+    .= taxi_dist2.(y,x) by A1,Def7;
+  hence thesis;
+end;
+
+theorem Th21:
+  for x,y,z being Element of [:REAL,REAL:] holds taxi_dist2.(x,z)
+  <= taxi_dist2.(x,y) + taxi_dist2.(y,z)
+proof
+  let x,y,z be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2, z1 = z`1, z2 = z`2 as
+  Element of REAL by MCART_1:10;
+A1: y = [y1,y2] by MCART_1:24;
+  set d5 = real_dist.(x2,y2), d6 = real_dist.(y2,z2);
+  set d3 = real_dist.(y1,z1), d4 = real_dist.(x2,z2);
+  set d1 = real_dist.(x1,z1), d2 = real_dist.(x1,y1);
+A2: z = [z1,z2] by MCART_1:24;
+A3: x = [x1,x2] by MCART_1:24;
+  then
+A4: taxi_dist2.(x,z) = d1 + d4 by A2,Def7;
+A5: d1 <= d2 + d3 & d4 <= d5 + d6 by METRIC_1:11;
+  (d2 + d3) + (d5 + d6) = (d2 + d5) + (d3 + d6)
+    .= taxi_dist2.(x,y) + (d3 +d6) by A3,A1,Def7
+    .= taxi_dist2.(x,y) + taxi_dist2.(y,z) by A1,A2,Def7;
+  hence thesis by A5,A4,XREAL_1:9;
+end;
+
+definition
+  func RealSpaceCart2 -> strict non empty MetrSpace equals
+  MetrStruct(#[:REAL,REAL:],taxi_dist2#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:REAL,REAL:],taxi_dist2#);
+      reconsider x9 = x,y9 = y,z9 = z as Element of [:REAL,REAL:];
+A1:   dist(x,y) = taxi_dist2.(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th19;
+      dist(y,x) = taxi_dist2.(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th20;
+      dist(x,z) = taxi_dist2.(x9,z9) & dist(y,z) = taxi_dist2.(y9,z9) by
+      METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th21;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;
+
+definition
+  func Eukl_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+  :
+  Def9: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:REAL,
+REAL:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = sqrt((real_dist.(x1,y1))^2
+  + (real_dist.(x2,y2)^2));
+  existence
+  proof
+    deffunc G(Element of REAL,Element of REAL,Element of REAL,Element of REAL)
+    = sqrt((real_dist.($1,$2))^2 + (real_dist.($3,$4)^2));
+    consider F being Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL such
+    that
+A1: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds F.(x,y) = G(x1,y1,x2,y2) from
+    LambdaMCART;
+    take F;
+    let x1,y1,x2,y2 be Element of REAL, x,y be Element of [:REAL,REAL:];
+    assume x = [x1,x2] & y = [y1,y2];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL;
+    assume that
+A2: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds f1.(x,y) = sqrt((real_dist.(x1,
+    y1))^2 + (real_dist.(x2,y2)^2)) and
+A3: for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:
+REAL,REAL:] st x = [x1,x2] & y = [y1,y2] holds f2.(x,y) = sqrt((real_dist.(x1,
+    y1))^2 + (real_dist.(x2,y2)^2));
+    for x,y being Element of [:REAL,REAL:] holds f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:REAL,REAL:];
+      consider x1,x2 be Element of REAL such that
+A4:   x = [x1,x2] by DOMAIN_1:9;
+      consider y1,y2 be Element of REAL such that
+A5:   y = [y1,y2] by DOMAIN_1:9;
+      thus f1.(x,y)=sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2)) by A2,
+      A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th22:
+  for x,y being Element of [:REAL,REAL:] holds Eukl_dist2.(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Element of REAL by
+  MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  thus Eukl_dist2.(x,y) = 0 implies x = y
+  proof
+    set d2 = real_dist.(x2,y2);
+    set d1 = real_dist.(x1,y1);
+    assume Eukl_dist2.(x,y) = 0;
+    then
+A2: sqrt(d1^2 + d2^2) = 0 by A1,Def9;
+A3: 0 <= d1^2 & 0 <= d2^2 by XREAL_1:65;
+    then d1 = 0 by A2,Th2;
+    then
+A4: x1 = y1 by METRIC_1:9;
+    d2 = 0 by A2,A3,Th2;
+    hence thesis by A1,A4,METRIC_1:9;
+  end;
+  assume x = y;
+  then
+A5: (real_dist.(x1,y1))^2 = 0^2 & (real_dist.(x2,y2))^2 = 0^2 by
+  METRIC_1:9;
+  Eukl_dist2.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2) ) ^2
+  ) by A1,Def9
+    .= 0 by A5,Th2;
+  hence thesis;
+end;
+
+theorem Th23:
+  for x,y being Element of [:REAL,REAL:] holds Eukl_dist2.(x,y) =
+  Eukl_dist2.(y,x)
+proof
+  let x,y be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Element of REAL by
+  MCART_1:10;
+A1: x = [x1,x2] & y = [y1,y2] by MCART_1:24;
+  then
+  Eukl_dist2.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2) ^2))
+  by Def9
+    .= sqrt((real_dist.(y1,x1))^2 + (real_dist.(x2,y2)^2)) by METRIC_1:10
+    .= sqrt((real_dist.(y1,x1))^2 + (real_dist.(y2,x2)^2)) by METRIC_1:10
+    .= Eukl_dist2.(y,x) by A1,Def9;
+  hence thesis;
+end;
+
+theorem Th24:
+  for x,y,z being Element of [:REAL,REAL:] holds Eukl_dist2.(x,z)
+  <= Eukl_dist2.(x,y) + Eukl_dist2.(y,z)
+proof
+  let x,y,z be Element of [:REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2, z1 = z`1, z2 = z`2 as
+  Element of REAL by MCART_1:10;
+A1: x = [x1,x2] by MCART_1:24;
+  set d5 = real_dist.(x2,y2);
+  set d3 = real_dist.(y1,z1);
+  set d1 = real_dist.(x1,z1);
+A2: y = [y1,y2] by MCART_1:24;
+  set d6 = real_dist.(y2,z2);
+  set d4 = real_dist.(x2,z2);
+  set d2 = real_dist.(x1,y1);
+A3: z = [z1,z2] by MCART_1:24;
+  d4 = abs(x2 - z2) by METRIC_1:def 13;
+  then 0 <= d4 by COMPLEX1:132;
+  then
+A4: d4^2 <= (d5 + d6)^2 by METRIC_1:11,SQUARE_1:77;
+  0 <= d1^2 & 0 <= d4^2 by XREAL_1:65;
+  then
+A5: 0 + 0 <= d1^2 + d4^2 by XREAL_1:9;
+  d1 = abs(x1 - z1) by METRIC_1:def 13;
+  then 0 <= d1 by COMPLEX1:132;
+  then d1^2 <= (d2 + d3)^2 by METRIC_1:11,SQUARE_1:77;
+  then d1^2 + d4^2 <= (d2 + d3)^2 + (d5 + d6)^2 by A4,XREAL_1:9;
+  then
+A6: sqrt(d1^2 + d4^2)<= sqrt((d2 + d3)^2 + (d5 + d6)^2) by A5,
+  SQUARE_1:94;
+  d6 = abs(y2 - z2) by METRIC_1:def 13;
+  then
+A7: 0 <= d6 by COMPLEX1:132;
+  d5 = abs(x2 - y2) by METRIC_1:def 13;
+  then
+A8: 0 <= d5 by COMPLEX1:132;
+  d3 = abs(y1 - z1) by METRIC_1:def 13;
+  then
+A9: 0 <= d3 by COMPLEX1:132;
+  d2 = abs(x1 - y1) by METRIC_1:def 13;
+  then 0 <= d2 by COMPLEX1:132;
+  then
+  sqrt((d2 + d3)^2 + (d5 + d6)^2) <= sqrt(d2^2 + d5^2) + sqrt(d3^2 + d6^2
+  ) by A9,A8,A7,Th5;
+  then sqrt(d1^2 + d4^2) <= sqrt(d2^2 + d5^2) + sqrt(d3^2 + d6^2) by A6,
+  XXREAL_0:2;
+  then Eukl_dist2.(x,z) <= sqrt(d2^2 + (d5)^2) + sqrt(d3^2 + d6^2) by A1,A3,
+  Def9;
+  then Eukl_dist2.(x,z) <= Eukl_dist2.(x,y) + sqrt(d3^2 + d6^2) by A1,A2,
+  Def9;
+  hence thesis by A2,A3,Def9;
+end;
+
+definition
+  func EuklSpace2 -> strict non empty MetrSpace equals
+  MetrStruct(#[:REAL,REAL:],Eukl_dist2#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:REAL,REAL:],Eukl_dist2#);
+      reconsider x9 = x,y9 = y,z9 = z as Element of [:REAL,REAL:];
+A1:   dist(x,y) = Eukl_dist2.(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th22;
+      dist(y,x) = Eukl_dist2.(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th23;
+      dist(x,z) = Eukl_dist2.(x9,z9) & dist(y,z) = Eukl_dist2.(y9,z9) by
+      METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th24;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;
+
+definition
+  func taxi_dist3 -> Function of [:[:REAL,REAL,REAL:], [:REAL,REAL,REAL:]:],
+  REAL means
+  :Def11:
+  for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being
+Element of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds it.(x,y)
+  = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3);
+  existence
+  proof
+    deffunc G(Element of REAL,Element of REAL,Element of REAL,Element of REAL,
+    Element of REAL,Element of REAL) = real_dist.($1,$2) + real_dist.($3,$4) +
+    real_dist.($5,$6);
+    consider F being Function of [:[:REAL,REAL,REAL:], [:REAL,REAL,REAL:]:],
+    REAL such that
+A1: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds F.(x,y) = G(x1,
+    y1,x2,y2,x3,y3) from LambdaMCART1;
+    take F;
+    let x1,y1,x2,y2,x3,y3 be Element of REAL, x,y be Element of [:REAL,REAL,
+    REAL:];
+    assume x = [x1,x2,x3] & y = [y1,y2,y3];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:REAL,REAL,REAL:],[:REAL,REAL,REAL:]:],REAL;
+    assume that
+A2: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+    of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f1.(x,y) =
+    real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3) and
+A3: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+    of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f2.(x,y) =
+    real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3);
+    for x,y being Element of [:REAL,REAL,REAL:] holds f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:REAL,REAL,REAL:];
+      consider x1,x2,x3 be Element of REAL such that
+A4:   x = [x1,x2,x3] by DOMAIN_1:15;
+      consider y1,y2,y3 be Element of REAL such that
+A5:   y = [y1,y2,y3] by DOMAIN_1:15;
+      thus f1.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3
+      ) by A2,A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th25:
+  for x,y being Element of [:REAL,REAL,REAL:] holds
+  taxi_dist3.(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3 as
+  Element of REAL;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  thus taxi_dist3.(x,y) = 0 implies x = y
+  proof
+    set d3 = real_dist.(x3,y3);
+    set d2 = real_dist.(x2,y2);
+    set d1 = real_dist.(x1,y1);
+    set d4 = d1 + d2;
+    d3 = abs(x3 - y3) by METRIC_1:def 13;
+    then
+A2: 0 <= d3 by COMPLEX1:132;
+    d1 = abs(x1 - y1) by METRIC_1:def 13;
+    then
+A3: 0 <= d1 by COMPLEX1:132;
+    assume taxi_dist3.(x,y) = 0;
+    then
+A4: d4 + d3 = 0 by A1,Def11;
+    d2 = abs(x2 - y2) by METRIC_1:def 13;
+    then
+A5: 0 <= d2 by COMPLEX1:132;
+    then
+A6: 0 + 0 <= d1 + d2 by A3,XREAL_1:9;
+    then
+A7: d4 = 0 by A4,A2,XREAL_1:29;
+    then d1 = 0 by A5,A3,XREAL_1:29;
+    then
+A8: x1 = y1 by METRIC_1:9;
+    d3 = 0 by A4,A2,A6,XREAL_1:29;
+    then
+A9: x3 = y3 by METRIC_1:9;
+    d2 = 0 by A5,A3,A7,XREAL_1:29;
+    hence thesis by A1,A9,A8,METRIC_1:9;
+  end;
+  assume
+A10: x = y;
+  then
+A11: real_dist.(x1,y1) = 0 & real_dist.(x2,y2) = 0 by METRIC_1:9;
+  taxi_dist3.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(
+  x3,y3) by A1,Def11
+    .= 0 by A10,A11,METRIC_1:9;
+  hence thesis;
+end;
+
+theorem Th26:
+  for x,y being Element of [:REAL,REAL,REAL:] holds taxi_dist3.(x,
+  y) = taxi_dist3.(y,x)
+proof
+  let x,y be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3 as
+  Element of REAL;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  then
+  taxi_dist3.(x,y) = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3
+  ,y3) by Def11
+    .= real_dist.(y1,x1) + real_dist.(x2,y2) + real_dist.(x3,y3) by METRIC_1
+  :10
+    .= real_dist.(y1,x1) + real_dist.(y2,x2) + real_dist.(x3,y3) by METRIC_1
+  :10
+    .= real_dist.(y1,x1) + real_dist.(y2,x2) + real_dist.(y3,x3) by METRIC_1
+  :10
+    .= taxi_dist3.(y,x) by A1,Def11;
+  hence thesis;
+end;
+
+theorem Th27:
+  for x,y,z being Element of [:REAL,REAL,REAL:] holds taxi_dist3.(
+  x,z) <= taxi_dist3.(x,y) + taxi_dist3.(y,z)
+proof
+  let x,y,z be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3, z1 =
+  z`1, z2 = z`2, z3 = z`3 as Element of REAL;
+A1: x = [x1,x2,x3] by MCART_1:48;
+  set d7 = real_dist.(x3,z3), d8 = real_dist.(x3,y3);
+  set d3 = real_dist.(y1,z1), d4 = real_dist.(x2,z2);
+A2: z = [z1,z2,z3] by MCART_1:48;
+  set d9 = real_dist.(y3,z3);
+  set d5 = real_dist.(x2,y2), d6 = real_dist.(y2,z2);
+  set d1 = real_dist.(x1,z1), d2 = real_dist.(x1,y1);
+A3: y = [y1,y2,y3] by MCART_1:48;
+  set d10 = d1 + d4;
+  d1 <= d2 + d3 & d4 <= d5 + d6 by METRIC_1:11;
+  then
+A4: d10 <= (d2 + d3) + (d5 + d6) by XREAL_1:9;
+  d7 <= d8 + d9 by METRIC_1:11;
+  then
+A5: d10 + d7 <= ((d2 + d3) + (d5 + d6)) + (d8 + d9) by A4,XREAL_1:9;
+  ((d2 + d3) + (d5 + d6)) + (d8 + d9) = ((d2 + d5) + d8) + ((d3 + d6) + d9)
+    .= taxi_dist3.(x,y) + ((d3 +d6) + d9) by A1,A3,Def11
+    .= taxi_dist3.(x,y) + taxi_dist3.(y,z) by A3,A2,Def11;
+  hence thesis by A1,A2,A5,Def11;
+end;
+
+definition
+  func RealSpaceCart3 -> strict non empty MetrSpace equals
+  MetrStruct(#[:REAL,REAL,REAL:],taxi_dist3#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:REAL,REAL,REAL:],taxi_dist3#);
+      reconsider x9 = x,y9 = y,z9 = z as Element of [:REAL,REAL,REAL:];
+A1:   dist(x,y) = taxi_dist3.(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th25;
+      dist(y,x) = taxi_dist3.(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th26;
+      dist(x,z) = taxi_dist3.(x9,z9) & dist(y,z) = taxi_dist3.(y9,z9) by
+      METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th27;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;
+
+definition
+  func Eukl_dist3 -> Function of [:[:REAL,REAL,REAL:], [:REAL,REAL,REAL:]:],
+  REAL means
+  :Def13:
+  for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being
+Element of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds it.(x,y)
+= sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2) + (real_dist.(x3,y3)^2));
+  existence
+  proof
+    deffunc G(Element of REAL,Element of REAL,Element of REAL,Element of REAL,
+Element of REAL,Element of REAL) = sqrt((real_dist.($1,$2))^2 + (real_dist.($3,
+    $4)^2) + (real_dist.($5,$6)^2));
+    consider F being Function of [:[:REAL,REAL,REAL:],[:REAL,REAL,REAL:]:],
+    REAL such that
+A1: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds F.(x,y) = G(x1,
+    y1,x2,y2,x3,y3) from LambdaMCART1;
+    take F;
+    let x1,y1,x2,y2,x3,y3 be Element of REAL, x,y be Element of [:REAL,REAL,
+    REAL:];
+    assume x = [x1,x2,x3] & y = [y1,y2,y3];
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of [:[:REAL,REAL,REAL:],[:REAL,REAL,REAL:]:],REAL;
+    assume that
+A2: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f1.(x,y) = sqrt(
+    (real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2) + (real_dist.(x3,y3)^2)) and
+A3: for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being Element
+of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds f2.(x,y) = sqrt(
+    (real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2) + (real_dist.(x3,y3)^2));
+    for x,y being Element of [:REAL,REAL,REAL:] holds f1.(x,y) = f2.(x,y)
+    proof
+      let x,y be Element of [:REAL,REAL,REAL:];
+      consider x1,x2,x3 be Element of REAL such that
+A4:   x = [x1,x2,x3] by DOMAIN_1:15;
+      consider y1, y2, y3 be Element of REAL such that
+A5:   y = [y1,y2,y3] by DOMAIN_1:15;
+      thus f1.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2) + (
+      real_dist.(x3,y3)^2)) by A2,A4,A5
+        .= f2.(x,y) by A3,A4,A5;
+    end;
+    hence thesis by BINOP_1:2;
+  end;
+end;
+
+theorem Th28:
+  for x,y being Element of [:REAL,REAL,REAL:] holds
+  Eukl_dist3.(x,y) = 0 iff x = y
+proof
+  let x,y be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3 as
+  Element of REAL;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  thus Eukl_dist3.(x,y) = 0 implies x = y
+  proof
+    set d3 = real_dist.(x3,y3);
+    set d2 = real_dist.(x2,y2);
+    set d1 = real_dist.(x1,y1);
+A2: 0 <= d2^2 & 0 <= d3^2 by XREAL_1:65;
+    assume Eukl_dist3.(x,y) = 0;
+    then sqrt(d1^2 + d2^2 + d3^2) = 0 by A1,Def13;
+    then
+A3: sqrt(d1^2 + (d2^2 + d3^2)) =0;
+    0 <= d2^2 & 0 <= d3^2 by XREAL_1:65;
+    then
+A4: 0 <= d1^2 & 0 + 0 <= d2^2 + d3^2 by XREAL_1:9,65;
+    then d1 = 0 by A3,Th2;
+    then
+A5: x1 = y1 by METRIC_1:9;
+A6: d2^2 + d3^2 = 0 by A3,A4,Th2;
+    then d2 = 0 by A2,XREAL_1:29;
+    then
+A7: x2 = y2 by METRIC_1:9;
+    d3 = 0 by A6,A2,XREAL_1:29;
+    hence thesis by A1,A5,A7,METRIC_1:9;
+  end;
+  assume
+A8: x = y;
+  then
+A9: (real_dist.(x1,y1))^2 = 0^2 & (real_dist.(x2,y2))^2 = 0^2 by
+  METRIC_1:9;
+  Eukl_dist3.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2))^2 +
+  (real_dist.(x3,y3))^2) by A1,Def13
+    .= 0^2 by A8,A9,METRIC_1:9,SQUARE_1:82;
+  hence thesis;
+end;
+
+theorem Th29:
+  for x,y being Element of [:REAL,REAL,REAL:] holds Eukl_dist3.(x,
+  y) = Eukl_dist3.(y,x)
+proof
+  let x,y be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3 as
+  Element of REAL;
+A1: x = [x1,x2,x3] & y = [y1,y2,y3] by MCART_1:48;
+  then
+  Eukl_dist3.(x,y) = sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2) ^2) +
+  (real_dist.(x3,y3)^2)) by Def13
+    .= sqrt((real_dist.(y1,x1))^2 + (real_dist.(x2,y2)^2) + (real_dist.(x3,
+  y3)^2)) by METRIC_1:10
+    .= sqrt((real_dist.(y1,x1))^2 + (real_dist.(y2,x2)^2) + (real_dist.(x3,
+  y3)^2)) by METRIC_1:10
+    .= sqrt((real_dist.(y1,x1))^2 + (real_dist.(y2,x2)^2) + (real_dist.(y3,
+  x3)^2)) by METRIC_1:10
+    .= Eukl_dist3.(y,x) by A1,Def13;
+  hence thesis;
+end;
+
+theorem Th30:
+  for x,y,z being Element of [:REAL,REAL,REAL:] holds Eukl_dist3.(
+  x,z) <= Eukl_dist3.(x,y) + Eukl_dist3.(y,z)
+proof
+  let x,y,z be Element of [:REAL,REAL,REAL:];
+  reconsider x1 = x`1, x2 = x`2, x3 = x`3, y1 = y`1, y2 = y`2, y3 = y`3, z1 =
+  z`1, z2 = z`2, z3 = z`3 as Element of REAL;
+A1: x = [x1,x2,x3] by MCART_1:48;
+  set d9 = real_dist.(y3,z3);
+  set d5 = real_dist.(x2,y2), d6 = real_dist.(y2,z2);
+  set d1 = real_dist.(x1,z1), d2 = real_dist.(x1,y1);
+A2: y = [y1,y2,y3] by MCART_1:48;
+  d9 = abs(y3 - z3) by METRIC_1:def 13;
+  then
+A3: 0 <= d9 by COMPLEX1:132;
+  d6 = abs(y2 - z2) by METRIC_1:def 13;
+  then
+A4: 0 <= d6 by COMPLEX1:132;
+  d5 = abs(x2 - y2) by METRIC_1:def 13;
+  then
+A5: 0 <= d5 by COMPLEX1:132;
+  set d7 = real_dist.(x3,z3), d8 = real_dist.(x3,y3);
+  set d3 = real_dist.(y1,z1), d4 = real_dist.(x2,z2);
+A6: z = [z1,z2,z3] by MCART_1:48;
+  d7 = abs(x3 - z3) by METRIC_1:def 13;
+  then 0 <= d7 by COMPLEX1:132;
+  then
+A7: d7^2 <= (d8 + d9)^2 by METRIC_1:11,SQUARE_1:77;
+  d4 = abs(x2 - z2) by METRIC_1:def 13;
+  then 0 <= d4 by COMPLEX1:132;
+  then
+A8: d4^2 <= (d5 + d6)^2 by METRIC_1:11,SQUARE_1:77;
+  d1 = abs(x1 - z1) by METRIC_1:def 13;
+  then 0 <= d1 by COMPLEX1:132;
+  then d1^2 <= (d2 + d3)^2 by METRIC_1:11,SQUARE_1:77;
+  then d1^2 + d4^2 <= (d2 + d3)^2 + (d5 + d6)^2 by A8,XREAL_1:9;
+  then
+A9: d1^2 + d4^2 + d7^2 <= (d2 + d3)^2 + (d5 + d6)^2 + (d8 + d9)^2 by A7,
+  XREAL_1:9;
+  0 <= d1^2 & 0 <= d4^2 by XREAL_1:65;
+  then
+A10: 0 + 0 <= d1^2 + d4^2 by XREAL_1:9;
+  0 <= d7^2 by XREAL_1:65;
+  then 0 + 0 <= (d1^2 + d4^2) + d7^2 by A10,XREAL_1:9;
+  then
+A11: sqrt(d1^2 + d4^2 + d7^2) <= sqrt((d2 + d3)^2 + (d5 + d6)^2 + (d8 + d9)
+  ^2) by A9,SQUARE_1:94;
+  d8 = abs(x3 - y3) by METRIC_1:def 13;
+  then
+A12: 0 <= d8 by COMPLEX1:132;
+  d3 = abs(y1 - z1) by METRIC_1:def 13;
+  then
+A13: 0 <= d3 by COMPLEX1:132;
+  d2 = abs(x1 - y1) by METRIC_1:def 13;
+  then 0 <= d2 by COMPLEX1:132;
+  then sqrt((d2 + d3)^2 + (d5 + d6)^2 + (d8 + d9)^2) <= sqrt(d2^2 + d5^2 + d8
+  ^2) + sqrt(d3^2 + d6^2 + d9^2) by A13,A5,A4,A12,A3,Lm1;
+  then
+  sqrt(d1^2 + d4^2 + d7^2) <= sqrt(d2^2 + d5^2 + d8^2) + sqrt(d3^2 + d6^2
+  + d9^2) by A11,XXREAL_0:2;
+  then
+  Eukl_dist3.(x,z) <= sqrt(d2^2 + d5^2 + d8^2) + sqrt(d3^2 + d6^2 + d9^2)
+  by A1,A6,Def13;
+  then Eukl_dist3.(x,z) <= Eukl_dist3.(x,y) + sqrt((d3)^2 + (d6)^2 + d9^2) by
+  A1,A2,Def13;
+  hence thesis by A2,A6,Def13;
+end;
+
+definition
+  func EuklSpace3 -> strict non empty MetrSpace equals
+  MetrStruct(#[:REAL,REAL,REAL:],Eukl_dist3#);
+  coherence
+  proof
+    now
+      let x,y,z be Element of MetrStruct(#[:REAL,REAL,REAL:],Eukl_dist3#);
+      reconsider x9 = x,y9 = y,z9 = z as Element of [:REAL,REAL,REAL:];
+A1:   dist(x,y) = Eukl_dist3.(x9,y9) by METRIC_1:def 1;
+      hence dist(x,y) = 0 iff x = y by Th28;
+      dist(y,x) = Eukl_dist3.(y9,x9) by METRIC_1:def 1;
+      hence dist(x,y) = dist(y,x) by A1,Th29;
+      dist(x,z) = Eukl_dist3.(x9,z9) & dist(y,z) = Eukl_dist3.(y9,z9) by
+      METRIC_1:def 1;
+      hence dist(x,z) <= dist(x,y) + dist(y,z) by A1,Th30;
+    end;
+    hence thesis by METRIC_1:6;
+  end;
+end;

@@ -3,28 +3,29 @@
 ::
 :: Received November 25, 1994
 :: Copyright (c) 1994 Association of Mizar Users
-:: wyrzucenie slownika daje runtimowke
 
 environ
 
  vocabularies XBOOLE_0, TREES_3, SUBSET_1, FINSET_1, TREES_2, TREES_1, CARD_1,
       ARYTM_3, NAT_1, ORDINAL4, FINSEQ_1, ARYTM_1, RELAT_1, FUNCT_1, TARSKI,
       ORDINAL1, NUMBERS, XXREAL_0, ZFMISC_1, TREES_4, FUNCT_6, TREES_A,
-      TREES_9;
+      TREES_9, MCART_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1,
-      FINSEQ_2, FUNCT_6, TREES_1, TREES_2, TREES_3, TREES_4;
- constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, RELSET_1;
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_6, NAT_1, BINOP_1, FINSET_1,
+      FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, TREES_3, TREES_4, MCART_1,
+      XXREAL_0;
+ constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, RELSET_1,
+      BINOP_1, FINSEQ_4;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XREAL_0,
       FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, CARD_1, ZFMISC_1,
-      REALSET1;
- requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3;
+      REALSET1, BINOP_1, SUBSET_1, RELSET_1, NAT_1, TREES_A;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, TREES_2, TREES_3, TREES_4, BINOP_1;
  theorems TARSKI, AXIOMS, ZFMISC_1, NAT_1, WELLORD2, FUNCT_1, FUNCT_2,
       FINSEQ_1, FINSEQ_3, CARD_1, CARD_2, FUNCT_6, TREES_1, TREES_2, TREES_3,
       TREES_4, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1,
-      XXREAL_0, ORDINAL1, FINSEQ_2, REALSET1;
- schemes NAT_1, FUNCT_1, FINSEQ_1, CLASSES1, WELLORD2;
+      XXREAL_0, ORDINAL1, FINSEQ_2, REALSET1, TREES_A, MCART_1, FINSEQ_6;
+ schemes NAT_1, FUNCT_1, FINSEQ_1, CLASSES1, WELLORD2, FUNCT_2, TREES_2;
 
 begin :: Root tree and successors of node in decorated tree
 
@@ -36,8 +37,7 @@ definition
   coherence
   proof
     let x be Element of Tset;
-    x in Tset;
-    hence thesis;
+    thus thesis;
   end;
 end;
 
@@ -46,8 +46,7 @@ registration
   coherence
   proof
     let t be Tree;
-    assume
-    t is finite;
+    assume t is finite;
     then reconsider s = t as finite Tree;
     take n = card s+1;
     let x be Element of t;
@@ -61,8 +60,7 @@ A3: x^<*n*> in t;
 A4: rng f c= succ x
     proof
       let y be set;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider i being set such that
 A5:   i in dom f and
 A6:   y = f.i by FUNCT_1:def 5;
@@ -107,7 +105,6 @@ end;
 
 Lm1: for n being set, p being FinSequence st n in dom p ex k being Element of
 NAT st n = k+1 & k < len p
-
 proof
   let n be set, p be FinSequence;
   assume
@@ -128,8 +125,7 @@ A1: len p = len q and
 A2: for i being Element of NAT st i < len p holds p.(i+1) = q.(i+1);
 A3: now
     let i be Nat;
-    assume
-    i in dom p;
+    assume i in dom p;
     then ex k being Element of NAT st i = k+1 & k < len p by Lm1;
     hence p.i = q.i by A2;
   end;
@@ -139,14 +135,12 @@ end;
 
 Lm3: for n being Element of NAT, p being FinSequence holds n < len p implies n
 +1 in dom p & p.(n+1) in rng p
-
 proof
   let n be Element of NAT, p be FinSequence;
   n >= 0 by NAT_1:2;
   then
 A1: n+1 >= 0+1 by XREAL_1:9;
-  assume
-  n < len p;
+  assume n < len p;
   then n+1 <= len p by NAT_1:13;
   then n+1 in dom p by A1,FINSEQ_3:27;
   hence thesis by FUNCT_1:def 5;
@@ -155,8 +149,7 @@ end;
 Lm4: now
   let p be FinSequence;
   let x be set;
-  assume
-  x in rng p;
+  assume x in rng p;
   then consider y being set such that
 A1: y in dom p and
 A2: x = p.y by FUNCT_1:def 5;
@@ -171,8 +164,7 @@ proof
 A1: dom (t|<*>NAT) = (dom t)|<*>NAT by TREES_2:def 11;
   now
     let p be FinSequence of NAT;
-    assume
-    p in dom (t|<*>NAT);
+    assume p in dom (t|<*>NAT);
     hence (t|<*>NAT).p = t.({}^p) by A1,TREES_2:def 11
       .= t.p by FINSEQ_1:47;
   end;
@@ -244,8 +236,7 @@ definition
       dom IT is not empty;
       then
 A1:   IT is not empty;
-      assume
-      IT is root;
+      assume IT is root;
       then consider x being set such that
 A2:   IT = {x} by A1,REALSET1:def 4;
       x in IT by A2,TARSKI:def 1;
@@ -264,8 +255,7 @@ proof
   let t be DecoratedTree;
   reconsider e = {} as Node of t by TREES_1:47;
   hereby
-    assume
-    t is root;
+    assume t is root;
     then dom t = elementary_tree 0 by Def1;
     then not e^<*0*> in dom t by TARSKI:def 1,TREES_1:56;
     hence {} in Leaves dom t by TREES_1:91;
@@ -285,8 +275,7 @@ A5: e^<*n*> = <*n*> by FINSEQ_1:47;
     <*n*> in dom t by A2,A4,TREES_1:46;
     hence contradiction by A1,A5,TREES_1:92;
   end;
-  assume
-  p in elementary_tree 0;
+  assume p in elementary_tree 0;
   then p = {} by TARSKI:def 1,TREES_1:56;
   hence thesis by TREES_1:47;
 end;
@@ -298,8 +287,7 @@ proof
   let t be Tree, p be Element of t;
 A1: not <*0*> in elementary_tree 0 by TARSKI:def 1,TREES_1:56;
   hereby
-    assume
-    t|p = elementary_tree 0;
+    assume t|p = elementary_tree 0;
     then not p^<*0*> in t by A1,TREES_1:def 9;
     hence p in Leaves t by TREES_1:91;
   end;
@@ -307,8 +295,7 @@ A1: not <*0*> in elementary_tree 0 by TARSKI:def 1,TREES_1:56;
 A2: p in Leaves t;
   let q be FinSequence of NAT;
   hereby
-    assume
-    q in t|p;
+    assume q in t|p;
     then p^q in t by TREES_1:def 9;
     then
 A3: not p is_a_proper_prefix_of p^q by A2,TREES_1:def 8;
@@ -318,8 +305,7 @@ A3: not p is_a_proper_prefix_of p^q by A2,TREES_1:def 8;
     then q = {} by FINSEQ_1:46;
     hence q in elementary_tree 0 by TREES_1:47;
   end;
-  assume
-  q in elementary_tree 0;
+  assume q in elementary_tree 0;
   then q = {} by TARSKI:def 1,TREES_1:56;
   hence thesis by TREES_1:47;
 end;
@@ -348,10 +334,9 @@ registration
     dom t = ^dom root-tree 0 by TREES_4:13
       .= elementary_tree 1 by TREES_3:70,TREES_4:3;
     hence t is finite by FINSET_1:29;
-    assume
-    dom t = elementary_tree 0;
+    assume dom t = elementary_tree 0;
     then root-tree (t.{}) = t by TREES_4:5
-      .= 0-tree <*root-tree 0*> by TREES_4:def 5;
+      .= 0-tree <*root-tree 0*>;
     hence contradiction by TREES_4:17;
   end;
 end;
@@ -370,8 +355,7 @@ definition
   let IT be Tree;
   attr IT is finite-branching means
   :Def2:
-  for x being Element of IT holds
-  succ x is finite;
+  for x being Element of IT holds succ x is finite;
 end;
 
 registration
@@ -379,8 +363,7 @@ registration
   coherence
   proof
     let t be Tree;
-    assume
-    t is finite-order;
+    assume t is finite-order;
     then reconsider a = t as finite-order Tree;
     let x be Element of t;
     reconsider x as Element of a;
@@ -404,16 +387,14 @@ registration
   coherence
   proof
     let t be DecoratedTree;
-    assume
-    t is finite;
+    assume t is finite;
     hence dom t is finite-order;
   end;
   cluster finite-order -> finite-branching DecoratedTree;
   coherence
   proof
     let t be DecoratedTree;
-    assume
-    dom t is finite-order;
+    assume dom t is finite-order;
     hence dom t is finite-branching;
   end;
 end;
@@ -442,8 +423,7 @@ scheme
   holds f(n) in X() iff n < card X()
 provided
 A1: for x being set st x in X() ex n being Element of NAT st x = f(n) and
-A2: for i,j being Element of NAT st i < j & f(j) in X() holds f(i) in X(
-) and
+A2: for i,j being Element of NAT st i < j & f(j) in X() holds f(i) in X( ) and
 A3: for i,j being Element of NAT st f(i) = f(j) holds i = j
 proof
   consider f being Function such that
@@ -465,8 +445,7 @@ A12: rng f = X()
     proof
       hereby
         let x be set;
-        assume
-        x in rng f;
+        assume x in rng f;
         then consider y being set such that
 A13:    y in n+1 and
 A14:    x = f.y by A9,FUNCT_1:def 5;
@@ -484,8 +463,7 @@ A17:  x in X();
       then consider k being Element of NAT such that
 A18:  x = f(k) by A1;
       now
-        assume
-        k >= n+1;
+        assume k >= n+1;
         then k = n+1 or k > n+1 by XXREAL_0:1;
         hence contradiction by A2,A8,A17,A18;
       end;
@@ -540,8 +518,7 @@ A33: f(card X()) in X() by A2,A32;
     rng f c= X() \ {f(card X())}
     proof
       let x be set;
-      assume
-      x in rng f;
+      assume x in rng f;
       then consider y being set such that
 A34:  y in card X() and
 A35:  x = f.y by A4,FUNCT_1:def 5;
@@ -550,8 +527,7 @@ A36:  y = k and
 A37:  k < card X() by A24,A34;
 A38:  f(k) = x by A4,A34,A35,A36;
 A39:  now
-        assume
-        x in {f(card X())};
+        assume x in {f(card X())};
         then f(k) = f(card X()) by A38,TARSKI:def 1;
         hence contradiction by A3,A37;
       end;
@@ -568,8 +544,7 @@ A40: card Y <= card ((X()) \ {f(card X())}) by NAT_1:44;
   end;
 A41: X[0]
   proof
-    assume
-    0 < card X();
+    assume 0 < card X();
     then reconsider X = X() as non empty set;
     consider x being Element of X;
     consider n being Element of NAT such that
@@ -590,25 +565,21 @@ proof
 A1: for x being set st x in succ p ex n being Element of NAT st x = U(n)
   proof
     let x be set;
-    assume
-    x in succ p;
+    assume x in succ p;
     then ex n being Element of NAT st x = U(n) & U(n) in t;
     hence thesis;
   end;
-A2: for i,j being Element of NAT st i < j & U(j) in succ p holds U(i) in
-  succ p
+A2: for i,j being Element of NAT st i < j & U(j) in succ p holds U(i) in succ p
   proof
     let i,j be Element of NAT;
-    assume
-    i < j & p^<*j*> in succ p;
+    assume i < j & p^<*j*> in succ p;
     then p^<*i*> in t by TREES_1:def 5;
     hence thesis;
   end;
 A3: for i,j being Element of NAT st U(i) = U(j) holds i = j
   proof
     let i,j be Element of NAT;
-    assume
-    p^<*i*> = p^<*j*>;
+    assume p^<*i*> = p^<*j*>;
     hence i = (p^<*j*>).(len p+1) by FINSEQ_1:59
       .= j by FINSEQ_1:59;
   end;
@@ -644,16 +615,14 @@ A4:   (p^<*i1-1*>).(len p+1) = i1-1 & (p^<*i2-1*>).(len p+1) = i2-1 by
 A5: for i being Element of NAT st i < len q holds q.(i+1) = p^<*i*>
     proof
       let i be Element of NAT;
-      assume
-      i < len q;
+      assume i < len q;
       then q.(i+1) = p^<*i+1-1*> by A1,Lm3;
       hence thesis;
     end;
 A6: rng q c= succ p
     proof
       let x be set;
-      assume
-      x in rng q;
+      assume x in rng q;
       then consider k being Element of NAT such that
 A7:   k < len q and
 A8:   x = q.(k+1) by Lm4;
@@ -690,8 +659,7 @@ A15: for i being Element of NAT st i < len q2 holds q2.(i+1) = p^<*i*>;
 A16: dom q1 = Seg card succ p by A12,FINSEQ_1:def 3;
 A17: now
       let k be Nat;
-      assume
-      k in Seg card succ p;
+      assume k in Seg card succ p;
       then consider n being Element of NAT such that
 A18:  k = n+1 & n < len q1 by A16,Lm1;
       thus q1.k = p^<*n*> by A13,A18
@@ -708,8 +676,7 @@ definition
 A1: p in dom t;
   func succ(t,p) -> FinSequence means
   : Def6:
-  ex q being Element of dom t st q
-  = p & it = t*(q succ);
+  ex q being Element of dom t st q = p & it = t*(q succ);
   existence
   proof
     reconsider q = p as Element of dom t by A1;
@@ -756,8 +723,7 @@ A5: for z being set st z in Seg card A holds X[z,p.z] from CLASSES1:sch
 A6: len p = card A by A4,FINSEQ_1:def 3;
 A7: now
     let x be set;
-    assume
-    x in dom p;
+    assume x in dom p;
     then ex n being Element of NAT st n+1 = x & p.x = t|<*n*> by A4,A5;
     hence p.x is DecoratedTree;
   end;
@@ -814,8 +780,7 @@ A19: dom t = tree doms p by TREES_3:def 15;
   take p;
   now
     let n be Element of NAT;
-    assume
-    n < len p;
+    assume n < len p;
     then ex m being Element of NAT st m+1 = n+1 & p.(n+1) = t|<*m *> by A4,A5,
     Lm3;
     hence t|<*n*> = p.(n+1);
@@ -833,8 +798,7 @@ end;
 canceled;
 
 theorem Th10:
-  for t being finite Tree, p being Element of t st t = t|p holds p
-  = {}
+  for t being finite Tree, p being Element of t st t = t|p holds p = {}
 proof
   let t be finite Tree, p be Element of t;
   p <> {} implies height t > height (t|p) by TREES_1:85;
@@ -869,8 +833,7 @@ registration
     S is constituted-DTrees
     proof
       let x be set;
-      assume
-      x in S;
+      assume x in S;
       then ex p being Node of t st x = t|p;
       hence thesis;
     end;
@@ -887,8 +850,7 @@ definition
     Subtrees t c= Trees D
     proof
       let x be set;
-      assume
-      x in Subtrees t;
+      assume x in Subtrees t;
       then ex p being Node of t st x = t|p;
       hence thesis by TREES_3:def 7;
     end;
@@ -905,8 +867,7 @@ definition
     Subtrees t c= FinTrees D
     proof
       let x be set;
-      assume
-      x in Subtrees t;
+      assume x in Subtrees t;
       then ex p being Node of t st x = (t qua DecoratedTree of D)|p;
       then reconsider x as finite DecoratedTree of D;
       dom x is finite;
@@ -968,8 +929,7 @@ theorem
 proof
   let n be Node of t;
   let x be set;
-  assume
-  x in Subtrees (t|n);
+  assume x in Subtrees (t|n);
   then consider p being Node of t|n such that
 A1: x = (t|n)|p;
   dom (t|n) = (dom t)|n by TREES_2:def 11;
@@ -989,8 +949,7 @@ definition
     S c= [:dom t, Subtrees t:]
     proof
       let x be set;
-      assume
-      x in S;
+      assume x in S;
       then consider p being Node of t such that
 A1:   x = [p,t|p];
       t|p in Subtrees t;
@@ -1026,8 +985,7 @@ end;
 theorem
   FixedSubtrees t1 = FixedSubtrees t2 implies t1 = t2
 proof
-  assume
-  FixedSubtrees t1 = FixedSubtrees t2;
+  assume FixedSubtrees t1 = FixedSubtrees t2;
   then [{},t1] in FixedSubtrees t2 by Th16;
   then consider n being Node of t2 such that
 A1: [{},t1] = [n,t2|n];
@@ -1047,11 +1005,9 @@ definition
     W c= Subtrees t
     proof
       let x be set;
-      assume
-      x in W;
+      assume x in W;
       then
-      ex p being Node of t st x = t|p & (not p in Leaves dom t or t.p in C
-      );
+      ex p being Node of t st x = t|p & (not p in Leaves dom t or t.p in C );
       hence thesis;
     end;
     hence thesis;
@@ -1069,8 +1025,7 @@ theorem
 proof
   reconsider e = {} as Node of t by TREES_1:47;
   hereby
-    assume
-    C-Subtrees t is empty;
+    assume C-Subtrees t is empty;
     then
 A1: not t|e in C-Subtrees t;
     then e in Leaves dom t;
@@ -1079,8 +1034,7 @@ A1: not t|e in C-Subtrees t;
   assume that
 A2: t is root and
 A3: not t.{} in C;
-  assume
-  C-Subtrees t is not empty;
+  assume C-Subtrees t is not empty;
   then reconsider S = C-Subtrees t as non empty Subset of Subtrees t;
   consider s being Element of S;
   consider n being Node of t such that
@@ -1102,12 +1056,10 @@ definition
   proof
     defpred X[set,set] means ex d being DecoratedTree, p being FinSequence of
     Subtrees t st p = $2 & d = $1 & d = (d.{})-tree p;
-A1: for x st x in C-Subtrees t ex y being set st y in (Subtrees t)* & X[x,
-    y]
+A1: for x st x in C-Subtrees t ex y being set st y in (Subtrees t)* & X[x, y]
     proof
       let x be set;
-      assume
-      x in C-Subtrees t;
+      assume x in C-Subtrees t;
       then reconsider s = x as Element of Subtrees t;
       reconsider d = s as DecoratedTree;
       consider sp being Node of t such that
@@ -1118,8 +1070,7 @@ A3:   s = z-tree p by Th8;
       proof
         let x be set;
 A4:     dom (t|sp) = (dom t)|sp by TREES_2:def 11;
-        assume
-        x in rng p;
+        assume x in rng p;
         then consider k being Element of NAT such that
 A5:     k < len p & x = p.(k+1) by Lm4;
         reconsider e = {} as Node of s|<*k*> by TREES_1:47;
@@ -1144,8 +1095,7 @@ A7: dom f = C-Subtrees t & rng f c= (Subtrees t)* & for x being set
     1,RELSET_1:11;
     take f;
     let d be DecoratedTree;
-    assume
-    d in C-Subtrees t;
+    assume d in C-Subtrees t;
     then
     ex d9 being DecoratedTree, p being FinSequence of Subtrees t st p = f
     .d & d9 = d & d9 = (d9.{})-tree p by A7;
@@ -1194,8 +1144,7 @@ registration
     S is constituted-DTrees
     proof
       let x be set;
-      assume
-      x in S;
+      assume x in S;
       then ex t being Element of X, p being Node of t st x = t|p;
       hence thesis;
     end;
@@ -1212,8 +1161,7 @@ definition
     Subtrees X c= Trees D
     proof
       let x be set;
-      assume
-      x in Subtrees X;
+      assume x in Subtrees X;
       then
       ex t being Element of X, p being Node of t st x = (t qua Element of
       Trees D)|p;
@@ -1232,8 +1180,7 @@ definition
     Subtrees X c= FinTrees D
     proof
       let x be set;
-      assume
-      x in Subtrees X;
+      assume x in Subtrees X;
       then
       ex t being Element of X, p being Node of t st x = ((t qua Element of
       FinTrees D) qua DecoratedTree of D)|p;
@@ -1248,14 +1195,12 @@ end;
 reserve X,Y for non empty constituted-DTrees set;
 
 theorem Th20:
-  x in Subtrees X iff ex t being Element of X, n being Node of t
-  st x = t|n;
+  x in Subtrees X iff ex t being Element of X, n being Node of t st x = t|n;
 
 theorem
   t in X implies t in Subtrees X
 proof
-  assume
-  t in X;
+  assume t in X;
   then reconsider t as Element of X;
   reconsider e = {} as Node of t by TREES_1:47;
   t|e = t by Th1;
@@ -1268,8 +1213,7 @@ proof
   assume
 A1: x in X implies x in Y;
   let x be set;
-  assume
-  x in Subtrees X;
+  assume x in Subtrees X;
   then consider t being Element of X, p being Node of t such that
 A2: x = t|p;
   reconsider t as Element of Y by A1;
@@ -1289,28 +1233,24 @@ theorem
 proof
   hereby
     let x;
-    assume
-    x in Subtrees {t};
+    assume x in Subtrees {t};
     then consider u being Element of {t}, p being Node of u such that
 A1: x = u|p;
     u = t by TARSKI:def 1;
     hence x in Subtrees t by A1;
   end;
   let x;
-  assume
-  x in Subtrees t;
+  assume x in Subtrees t;
   then t in {t} & ex p being Node of t st x = t|p by TARSKI:def 1;
   hence thesis;
 end;
 
 theorem
-  Subtrees X = union {Subtrees t where t is Element of X: not
-  contradiction }
+  Subtrees X = union {Subtrees t where t is Element of X: not contradiction }
 proof
   hereby
     let x;
-    assume
-    x in Subtrees X;
+    assume x in Subtrees X;
     then consider t being Element of X such that
 A1: ex p being Node of t st x = t|p;
     Subtrees t in {Subtrees s where s is Element of X: not contradiction}
@@ -1320,8 +1260,7 @@ A1: ex p being Node of t st x = t|p;
     TARSKI:def 4;
   end;
   let x;
-  assume
-  x in union {Subtrees s where s is Element of X: not contradiction};
+  assume x in union {Subtrees s where s is Element of X: not contradiction};
   then consider Y being set such that
 A2: x in Y and
 A3: Y in {Subtrees s where s is Element of X: not contradiction} by
@@ -1345,8 +1284,7 @@ definition
     W c= Subtrees X
     proof
       let x be set;
-      assume
-      x in W;
+      assume x in W;
       then ex t being Element of X, p being Node of t st x = t|p & (not p in
       Leaves dom t or t.p in C);
       hence thesis;
@@ -1374,8 +1312,7 @@ A2: not t|e in C-Subtrees X by A1;
   end;
   assume
 A3: for t being Element of X holds t is root & not t.{} in C;
-  assume
-  C-Subtrees X is not empty;
+  assume C-Subtrees X is not empty;
   then reconsider S = C-Subtrees X as non empty Subset of Subtrees X;
   consider s being Element of S;
   consider t being Element of X, n being Node of t such that
@@ -1395,16 +1332,14 @@ theorem
 proof
   hereby
     let x;
-    assume
-    x in C-Subtrees {t};
+    assume x in C-Subtrees {t};
     then consider u being Element of {t}, p being Node of u such that
 A1: x = u|p &( not p in Leaves dom u or u.p in C);
     u = t by TARSKI:def 1;
     hence x in C-Subtrees t by A1;
   end;
   let x;
-  assume
-  x in C-Subtrees t;
+  assume x in C-Subtrees t;
   then
   t in {t} & ex p being Node of t st x = t|p & (not p in Leaves dom t or t
   .p in C) by TARSKI:def 1;
@@ -1417,19 +1352,16 @@ theorem
 proof
   hereby
     let x;
-    assume
-    x in C-Subtrees X;
+    assume x in C-Subtrees X;
     then consider t being Element of X such that
-A1: ex n being Node of t st x = t|n & (not n in Leaves dom t or t.n in
-    C);
+A1: ex n being Node of t st x = t|n & (not n in Leaves dom t or t.n in C);
     C-Subtrees t in {C-Subtrees s where s is Element of X: not
     contradiction } & x in C-Subtrees t by A1;
     hence x in union {C-Subtrees s where s is Element of X: not contradiction}
     by TARSKI:def 4;
   end;
   let x;
-  assume
-  x in union {C-Subtrees s where s is Element of X: not contradiction};
+  assume x in union {C-Subtrees s where s is Element of X: not contradiction};
   then consider Y being set such that
 A2: x in Y and
 A3: Y in {C-Subtrees s where s is Element of X: not contradiction} by
@@ -1452,12 +1384,10 @@ A1: for t being Element of X holds t is finite;
   proof
     defpred X[set,set] means ex d being DecoratedTree, p being FinSequence of
     Subtrees X st p = $2 & d = $1 & d = (d.{})-tree p;
-A2: for x st x in C-Subtrees X ex y being set st y in (Subtrees X)* & X[x,
-    y]
+A2: for x st x in C-Subtrees X ex y being set st y in (Subtrees X)* & X[x, y]
     proof
       let x be set;
-      assume
-      x in C-Subtrees X;
+      assume x in C-Subtrees X;
       then reconsider s = x as Element of Subtrees X;
       reconsider d = s as DecoratedTree;
       consider t being Element of X, sp being Node of t such that
@@ -1469,8 +1399,7 @@ A4:   s = z-tree p by A3,Th8;
       proof
         let x be set;
 A5:     dom (t|sp) = (dom t)|sp by TREES_2:def 11;
-        assume
-        x in rng p;
+        assume x in rng p;
         then consider k being Element of NAT such that
 A6:     k < len p & x = p.(k+1) by Lm4;
         reconsider e = {} as Node of s|<*k*> by TREES_1:47;
@@ -1495,8 +1424,7 @@ A8: dom f = C-Subtrees X & rng f c= (Subtrees X)* & for x being set
     1,RELSET_1:11;
     take f;
     let d be DecoratedTree;
-    assume
-    d in C-Subtrees X;
+    assume d in C-Subtrees X;
     then
     ex d9 being DecoratedTree, p being FinSequence of Subtrees X st p = f
     .d & d9 = d & d9 = (d9.{})-tree p by A8;
@@ -1589,8 +1517,7 @@ A1: t = x-tree p;
 A2: len doms p = len p by TREES_3:40;
   now
     let x be set;
-    assume
-    x in dom doms p;
+    assume x in dom doms p;
     then consider i being Element of NAT such that
 A3: x = i+1 & i < len p by A2,Lm1;
 A4: p.x = t|<*i*> by A1,A3,TREES_4:def 4;
@@ -1675,3 +1602,1160 @@ A13: q^<*k*> in succ q by A7,A12,Th7;
   hence thesis by A9,A6,A4,FINSEQ_1:17;
 end;
 
+begin :: Moved from QC_LANG4, 2010.03.17, A.T
+
+theorem Th4:
+  for n being Element of NAT, r being FinSequence ex q being
+  FinSequence st q = r|Seg n & q is_a_prefix_of r
+proof
+  let n be Element of NAT, r be FinSequence;
+  r|Seg n is FinSequence by FINSEQ_1:19;
+  then consider q being FinSequence such that
+A1: q = r|Seg n;
+  q is_a_prefix_of r by A1,TREES_1:def 1;
+  hence thesis by A1;
+end;
+
+theorem Th6:
+  for D being non empty set, r being FinSequence of D, r1,r2 being
+FinSequence, k being Element of NAT st k+1 <= len r & r1 = r|Seg (k+1) & r2 = r
+  |Seg k holds ex x being Element of D st r1 = r2^<*x*>
+proof
+  let D be non empty set, r be FinSequence of D, r1,r2 be FinSequence, k be
+  Element of NAT;
+  assume that
+A1: k+1 <= len r and
+A2: r1 = r|Seg (k+1) and
+A3: r2 = r|Seg k;
+  k < len r by A1,NAT_1:13;
+  then
+A4: len r2 = k by A3,FINSEQ_1:21;
+  r2 is_a_prefix_of r by A3,TREES_1:def 1;
+  then
+A5: ex q2 being FinSequence st r = r2^q2 by TREES_1:8;
+  then reconsider r99 = r2 as FinSequence of D by FINSEQ_1:50;
+  r1 is_a_prefix_of r by A2,TREES_1:def 1;
+  then
+A6: ex q1 being FinSequence st r = r1^q1 by TREES_1:8;
+  then reconsider r9 = r1 as FinSequence of D by FINSEQ_1:50;
+A7: len r1 = k+1 by A1,A2,FINSEQ_1:21;
+A8: now
+    assume r9 is_a_prefix_of r99;
+    then k+1 <= k+0 by A7,A4,NAT_1:44;
+    hence contradiction by XREAL_1:8;
+  end;
+  r9,r99 are_c=-comparable by A6,A5,TREES_A:1;
+  then r99 is_a_prefix_of r9 by A8,XBOOLE_0:def 9;
+  then consider s being FinSequence such that
+A9: r9 = r99^s by TREES_1:8;
+  reconsider s as FinSequence of D by A9,FINSEQ_1:50;
+A10: len s = 1
+  proof
+    consider m being Element of NAT such that
+A11: m = len s;
+    k + 1 = k + m by A7,A4,A9,A11,FINSEQ_1:35;
+    hence thesis by A11;
+  end;
+  consider x being set such that
+A12: x = s.1;
+  1 in {1} by TARSKI:def 1;
+  then 1 in dom s by A10,FINSEQ_1:4,def 3;
+  then
+A13: x in rng s by A12,FUNCT_1:def 5;
+  s = <*x*> by A10,A12,FINSEQ_1:57;
+  hence thesis by A9,A13;
+end;
+
+theorem Th35:
+  for D being non empty set, r being FinSequence of D, r1 being
+FinSequence st 1 <= len r & r1 = r|Seg 1 holds ex x being Element of D st r1 =
+  <*x*>
+proof
+  let D be non empty set, r be FinSequence of D, r1 be FinSequence;
+  assume that
+A1: 1 <= len r and
+A2: r1 = r|Seg 1;
+  consider x being set such that
+A3: x = r1.1;
+  1 in {1} by TARSKI:def 1;
+  then 1 in dom r1 by A1,A2,FINSEQ_1:4,21;
+  then
+A4: x in rng r1 by A3,FUNCT_1:def 5;
+  len r1 = 1 by A1,A2,FINSEQ_1:21;
+  then
+A5: r1 = <*x*> by A3,FINSEQ_1:57;
+  r1 is_a_prefix_of r by A2,TREES_1:def 1;
+  then ex q1 being FinSequence st r = r1^q1 by TREES_1:8;
+  then reconsider r9 = r1 as FinSequence of D by FINSEQ_1:50;
+  rng r9 c= D;
+  hence thesis by A5,A4;
+end;
+
+reserve T for DecoratedTree,
+  p for FinSequence of NAT;
+
+theorem
+  T.p = (T|p).{}
+proof
+  <*>NAT in (dom T)|p by TREES_1:47;
+  then (T|p).<*>NAT = T.(p^<*>NAT) by TREES_2:def 11
+    .= T.p by FINSEQ_1:47;
+  hence thesis;
+end;
+
+reserve T for finite-branching DecoratedTree,
+  t for Element of dom T,
+  x for FinSequence,
+  n, m for Element of NAT;
+
+theorem Th9:
+  succ(T,t) = T*(t succ)
+proof
+  ex q being Element of dom T st q = t & succ(T,t) = T*(q succ) by Def6;
+  hence thesis;
+end;
+
+theorem Th10:
+  dom (T*(t succ)) = dom (t succ)
+proof
+  rng (t succ) c= dom T;
+  hence thesis by RELAT_1:46;
+end;
+
+theorem Th11:
+  dom succ(T,t) = dom (t succ)
+proof
+  thus dom succ(T,t) = dom (T*(t succ)) by Th9
+    .= dom (t succ) by Th10;
+end;
+
+theorem Th12:
+  t^<*n*> in dom T iff n+1 in dom (t succ)
+proof
+  now
+    assume t^<*n*> in dom T;
+    then t^<*n*> in succ t;
+    then n < card succ t by Th7;
+    then n < len (t succ) by Def5;
+    then
+A1: n+1 <= len (t succ) by NAT_1:13;
+    0 <= n by NAT_1:2;
+    then 0+1 <= n+1 by XREAL_1:8;
+    then n+1 in Seg len (t succ) by A1,FINSEQ_1:3;
+    hence n+1 in dom (t succ) by FINSEQ_1:def 3;
+  end;
+  hence t^<*n*> in dom T implies n+1 in dom (t succ);
+  assume n+1 in dom (t succ);
+  then n+1 in Seg len (t succ) by FINSEQ_1:def 3;
+  then n+1 <= len (t succ) by FINSEQ_1:3;
+  then n < len (t succ) by NAT_1:13;
+  then n < card succ t by Def5;
+  then t^<*n*> in succ t by Th7;
+  hence thesis;
+end;
+
+theorem Th13:
+  for T, x, n st x^<*n*> in dom T holds T.(x^<*n*>) = succ(T,x).(n +1)
+proof
+  let T, x, n;
+  assume
+A1: x^<*n*> in dom T;
+  x is_a_prefix_of x^<*n*> by TREES_1:8;
+  then x in dom T by A1,TREES_1:45;
+  then consider q being Element of dom T such that
+A2: q = x and
+A3: succ(T,x) = T*(q succ) by Def6;
+A4: n+1 in dom (q succ) by A1,A2,Th12;
+  then n+1 in Seg len (q succ) by FINSEQ_1:def 3;
+  then n+1 <= len (q succ) by FINSEQ_1:3;
+  then
+A5: n < len (q succ) by NAT_1:13;
+  n+1 in dom (T*(q succ)) by A4,Th10;
+  then succ(T,x).(n+1) = T.((q succ).(n+1)) by A3,FUNCT_1:22
+    .= T.(x^<*n*>) by A2,A5,Def5;
+  hence thesis;
+end;
+
+reserve x, x9 for Element of dom T,
+  y9 for set;
+
+theorem
+  x9 in succ x implies T.x9 in rng succ(T,x)
+proof
+  assume x9 in succ x;
+  then consider n such that
+A1: x9 = x^<*n*> and
+  x^<*n*> in dom T;
+A2: T.x9 = (succ(T,x)).(n+1) by A1,Th13;
+  dom (succ(T,x)) = dom (T*(x succ)) by Th9
+    .= dom (x succ) by Th10;
+  then n+1 in dom succ(T,x) by A1,Th12;
+  hence thesis by A2,FUNCT_1:def 5;
+end;
+
+theorem
+  y9 in rng succ(T,x) implies ex x9 st y9 = T.x9 & x9 in succ x
+proof
+  consider k be Nat such that
+A1: dom succ(T,x) = Seg k by FINSEQ_1:def 2;
+  assume y9 in rng succ(T,x);
+  then consider n9 being set such that
+A2: n9 in dom succ(T,x) and
+A3: y9 = (succ(T,x)).n9 by FUNCT_1:def 5;
+  Seg k = { m : 1 <= m & m <= k } by FINSEQ_1:def 1;
+  then consider m9 being Element of NAT such that
+A4: n9 = m9 and
+A5: 1 <= m9 and
+  m9 <= k by A2,A1;
+  m9 <> 0 by A5;
+  then consider n being Nat such that
+A6: n+1 = m9 by NAT_1:6;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+  n+1 in dom (x succ) by A2,A4,A6,Th11;
+  then x^<*n*> in dom T by Th12;
+  then consider x9 such that
+A7: x9 = x^<*n*>;
+A8: x9 in succ x by A7;
+  y9 = T.x9 by A3,A4,A6,A7,Th13;
+  hence thesis by A8;
+end;
+
+reserve n,k1,k2,l,k,m for Element of NAT,
+  x,y for set;
+
+scheme
+  ExDecTrees { D() -> non empty set, d() -> Element of D(), G(set) ->
+FinSequence of D() }: ex T being finite-branching DecoratedTree of D() st T.{}
+  = d() & for t being Element of dom T, w being Element of D() st w = T.t holds
+  succ(T,t) = G(w) proof
+  defpred P[set,set] means (len G($1) = 0 & $2 = {}) or len G($1) <> 0 & ex m
+  st m+1 = len G($1) & $2 = {0} \/ Seg m;
+A1: for x st x in D() ex y st P[x,y]
+  proof
+    let x such that
+    x in D();
+    per cases;
+    suppose
+      len G(x) = 0;
+      hence thesis;
+    end;
+    suppose
+      len G(x) <> 0;
+      then consider m being Nat such that
+A2:   m+1 = len G(x) by NAT_1:6;
+      reconsider m as Element of NAT by ORDINAL1:def 13;
+      ex y st y = {0} \/ Seg m;
+      hence thesis by A2;
+    end;
+  end;
+  ex F being Function st dom F = D() & for x st x in D() holds P[x,F.x]
+  from CLASSES1:sch 1(A1);
+  then consider F being Function such that
+A3: for x st x in D() holds len G(x) = 0 & F.x = {} or len G(x) <> 0 &
+  ex m st m+1 = len G(x) & F.x = {0} \/ Seg m;
+  deffunc F(set) = F.$1;
+A4: for k,x st x in D() holds k in F(x) iff k+1 in Seg len G(x)
+  proof
+    let k,x such that
+A5: x in D();
+    now
+      assume
+A6:   k in F(x);
+      then consider m such that
+A7:   m+1 = len G(x) and
+A8:   F.x = {0} \/ Seg m by A3,A5;
+      0 <= k & k <= m
+      proof
+        per cases by A6,A8,XBOOLE_0:def 3;
+        suppose
+          k in {0};
+          then k = 0 by TARSKI:def 1;
+          hence thesis by NAT_1:2;
+        end;
+        suppose
+A9:       k in Seg m;
+          then 0+1 <= k by FINSEQ_1:3;
+          hence thesis by A9,FINSEQ_1:3,NAT_1:13;
+        end;
+      end;
+      then 0+1 <= k+1 & k+1 <= m+1 by XREAL_1:8;
+      hence k+1 in Seg len G(x) by A7,FINSEQ_1:3;
+    end;
+    hence k in F(x) implies k+1 in Seg len G(x);
+    assume
+A10: k+1 in Seg len G(x);
+    then len G(x) <> 0;
+    then consider m such that
+A11: m+1 = len G(x) and
+A12: F.x = {0} \/ Seg m by A3,A5;
+    k in {0} \/ Seg m
+    proof
+      per cases;
+      suppose
+        k = 0;
+        then k in {0} by TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        k <> 0;
+        then 0 < k by NAT_1:3;
+        then
+A13:    0+1 <= k by NAT_1:13;
+        k+1 <= len G(x) by A10,FINSEQ_1:3;
+        then k <= m by A11,XREAL_1:8;
+        then k in Seg m by A13,FINSEQ_1:3;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    hence thesis by A12;
+  end;
+A14: for x being set, t being Element of dom T st x in D() holds { t^<*k*>:
+  k in F(x)} = { t^<*m*>: m+1 in Seg len G(x)}
+  proof
+    let x be set, t be Element of dom T such that
+A15: x in D();
+    thus { t^<*k*>: k in F(x)} c= { t^<*m*>: m+1 in Seg len G(x)}
+    proof
+      let y be set;
+      assume y in { t^<*k*>: k in F(x)};
+      then consider k such that
+A16:  y = t^<*k*> and
+A17:  k in F(x);
+      k+1 in Seg len G(x) by A4,A15,A17;
+      hence thesis by A16;
+    end;
+    thus { t^<*m*>: m+1 in Seg len G(x)} c= { t^<*k*>: k in F(x)}
+    proof
+      let y be set;
+      assume y in { t^<*m*>: m+1 in Seg len G(x)};
+      then consider m such that
+A18:  y = t^<*m*> and
+A19:  m+1 in Seg len G(x);
+      m in F(x) by A4,A15,A19;
+      hence thesis by A18;
+    end;
+  end;
+  defpred P[set,set] means ex x,n st x in D() & $1 = [x,n] & (n in F(x) & $2 =
+  G(x).(n+1) or not n in F(x) & $2 = d());
+A20: for c being Element of [:D(),NAT:] ex y being Element of D() st P[c,y]
+  proof
+    let c be Element of [:D(),NAT:];
+    c`1 in D() & c`2 in NAT by MCART_1:10;
+    then consider x being Element of D(), n being Element of NAT such that
+A21: x = c`1 & n = c`2;
+A22: c = [x,n] by A21,MCART_1:23;
+    per cases;
+    suppose
+A23:  n in F(x);
+      then n+1 in Seg len G(x) by A4;
+      then n+1 in dom G(x) by FINSEQ_1:def 3;
+      then
+A24:  G(x).(n+1) in rng G(x) by FUNCT_1:def 5;
+      thus thesis by A22,A23,A24;
+    end;
+    suppose
+      not n in F(x);
+      hence thesis by A22;
+    end;
+  end;
+  ex S being Function of [:D(),NAT:],D() st for c being Element of [:D(),
+  NAT:] holds P[c,S.c] from FUNCT_2:sch 3(A20);
+  then consider S being Function of [: D(), NAT :],D() such that
+A25: for c being Element of [: D(), NAT :] holds P[c,S.c];
+A26: for n,x,m st m+1 = len G(x) & x in D() holds n in F(x) iff 0 <= n & n <= m
+  proof
+    let n,x,m such that
+A27: m+1 = len G(x) and
+A28: x in D();
+    thus n in F(x) implies 0 <= n & n <= m
+    proof
+A29:  ex k st k+1 = len G(x) & F(x) = {0} \/ Seg k by A3,A27,A28;
+      assume
+A30:  n in F(x);
+      per cases by A27,A30,A29,XBOOLE_0:def 3;
+      suppose
+        n in {0};
+        then n = 0 by TARSKI:def 1;
+        hence thesis by NAT_1:2;
+      end;
+      suppose
+A31:    n in Seg m;
+        then 1 <= n by FINSEQ_1:3;
+        hence thesis by A31,FINSEQ_1:3,XXREAL_0:2;
+      end;
+    end;
+    thus 0 <= n & n <= m implies n in F(x)
+    proof
+      assume that
+      0 <= n and
+A32:  n <= m;
+A33:  ex k st k+1 = len G(x) & F(x) = {0} \/ Seg k by A3,A27,A28;
+      per cases;
+      suppose
+        n = 0;
+        then n in {0} by TARSKI:def 1;
+        hence thesis by A33,XBOOLE_0:def 3;
+      end;
+      suppose
+        n <> 0;
+        then 0 < n by NAT_1:3;
+        then 0+1 <= n by NAT_1:13;
+        then n in Seg m by A32,FINSEQ_1:3;
+        hence thesis by A27,A33,XBOOLE_0:def 3;
+      end;
+    end;
+  end;
+A34: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in
+  F(d)
+  proof
+    let d be Element of D(), k1,k2;
+    assume that
+A35: k1 <= k2 and
+A36: k2 in F(d);
+    ex m st m+1 = len G(d) & F.d = {0} \/ Seg m by A3,A36;
+    then consider m such that
+A37: m+1 = len G(d);
+    k2 <= m by A26,A36,A37;
+    then 0 <= k1 & k1 <= m by A35,NAT_1:2,XXREAL_0:2;
+    hence thesis by A26,A37;
+  end;
+  consider T being DecoratedTree of D() such that
+A38: T.{} = d() & for t being Element of dom T holds succ t = { t^<*k*>:
+k in F(T.t)} & for n st n in F(T.t) holds T.(t^<*n*>) = S.(T.t,n) from TREES_2:
+  sch 8(A34);
+  for t being Element of dom T holds succ t is finite
+  proof
+    let t be Element of dom T;
+    defpred P[set,set] means ex m st m+1 = $1 & $2 = t^<*m*>;
+A39: for k be Nat st k in Seg len G(T.t) ex x st P[k,x]
+    proof
+      let k be Nat;
+      assume k in Seg len G(T.t);
+      then k <> 0 by FINSEQ_1:3;
+      then consider m being Nat such that
+A40:  m+1 = k by NAT_1:6;
+      reconsider m as Element of NAT by ORDINAL1:def 13;
+      ex x st x = t^<*m*>;
+      hence thesis by A40;
+    end;
+    ex L being FinSequence st dom L = Seg len G(T.t) & for k be Nat st k
+    in Seg len G(T.t) holds P[k,L.k] from FINSEQ_1:sch 1(A39);
+    then consider L being FinSequence such that
+A41: dom L = Seg len G(T.t) and
+A42: for k be Nat st k in Seg len G(T.t) holds P[k,L.k];
+A43: for k st 1 <= k+1 & k+1 <= len G(T.t) holds L.(k+1) = t^<*k*>
+    proof
+      let k;
+      assume 1 <= k+1 & k+1 <= len G(T.t);
+      then k+1 in Seg len G(T.t) by FINSEQ_1:3;
+      then ex m st m+1 = k+1 & L.(k+1) = t^<*m*> by A42;
+      hence thesis;
+    end;
+A44: succ t = { t^<*k*>: k in F(T.t)} by A38;
+    succ t c= rng L
+    proof
+      let x;
+      assume x in succ t;
+      then consider k such that
+A45:  x = t^<*k*> and
+A46:  k in F(T.t) by A44;
+A47:  k+1 in Seg len G(T.t) by A4,A46;
+      then 1 <= k+1 & k+1 <= len G(T.t) by FINSEQ_1:3;
+      then L.(k+1) = t^<*k*> by A43;
+      hence thesis by A41,A45,A47,FUNCT_1:def 5;
+    end;
+    hence thesis;
+  end;
+  then dom T is finite-branching by Def2;
+  then reconsider T as finite-branching DecoratedTree of D() by Def4;
+A48: for n, x st x in D() & n in F(x) holds S.(x,n) = G(x).(n+1)
+  proof
+    let n, x such that
+A49: x in D() and
+A50: n in F(x);
+    [x,n]`1 = x & [x,n]`2 = n by MCART_1:def 1,def 2;
+    then [x,n] in [: D(), NAT :] by A49,MCART_1:11;
+    then consider c being Element of [:D(),NAT:] such that
+A51: c = [x,n];
+    consider x9 being set, n9 being Element of NAT such that
+    x9 in D() and
+A52: c = [x9,n9] and
+A53: n9 in F(x9) & S.c = G(x9).(n9+1) or not n9 in F(x9) & S.c = d() by A25;
+    x9 = x by A51,A52,ZFMISC_1:33;
+    hence thesis by A50,A51,A52,A53,ZFMISC_1:33;
+  end;
+  now
+    let t be Element of dom T, w be Element of D() such that
+A54: w = T . t;
+    succ t = { t^<*k*>: k in F(w)} by A38,A54;
+    then
+A55: succ t = { t^<*k*>: k+1 in Seg len G(w)} by A14;
+A56: dom G(w) = Seg len G(w) by FINSEQ_1:def 3;
+A57: dom (t succ) = Seg len (t succ) by FINSEQ_1:def 3;
+A58: dom (t succ) c= dom G(w)
+    proof
+      let n9 be set;
+A59:  Seg len (t succ) = { k : 1 <= k & k <= len (t succ)} by FINSEQ_1:
+      def 1;
+      assume n9 in dom (t succ);
+      then consider m such that
+A60:  n9 = m and
+A61:  1 <= m and
+A62:  m <= len (t succ) by A57,A59;
+      0 <> m by A61;
+      then consider n being Nat such that
+A63:  m = n+1 by NAT_1:6;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      n+1 in dom (t succ) by A57,A59,A61,A62,A63;
+      then t^<*n*> in dom T by Th12;
+      then t^<*n*> in succ t;
+      then consider k such that
+A64:  t^<*k*> = t^<*n*> and
+A65:  k+1 in Seg len G(w) by A55;
+      <*k*> = <*n*> by A64,FINSEQ_1:46;
+      hence thesis by A56,A60,A63,A65,TREES_1:23;
+    end;
+    dom G(w) c= dom (t succ)
+    proof
+      let n9 be set;
+A66:  Seg len G(w) = { k : 1 <= k & k <= len G(w)} by FINSEQ_1:def 1;
+      assume n9 in dom G(w);
+      then consider m such that
+A67:  n9 = m and
+A68:  1 <= m and
+A69:  m <= len G(w) by A56,A66;
+      0 <> m by A68;
+      then consider n being Nat such that
+A70:  m = n+1 by NAT_1:6;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      n+1 in Seg len G(w) by A66,A68,A69,A70;
+      then t^<*n*> in succ t by A55;
+      hence thesis by A67,A70,Th12;
+    end;
+    then
+A71: dom G(w) = dom (t succ) by A58,XBOOLE_0:def 10;
+    then
+A72: dom succ(T,t) = dom G(w) by Th11;
+    for m be Nat st m in dom succ(T,t) holds (succ(T,t)).m = G(w).m
+    proof
+      let m be Nat;
+A73:  Seg len G(w) = { k : 1 <= k & k <= len G(w)} by FINSEQ_1:def 1;
+      assume
+A74:  m in dom succ(T,t);
+      then
+A75:  m in Seg len G(w) by A72,FINSEQ_1:def 3;
+    then len G(w) <> 0;
+      then consider l such that
+A76:  l+1 = len G(T.t) and
+A77:  F.(T.t) = {0} \/ Seg l by A3,A54;
+      consider k such that
+A78:  m = k and
+A79:  1 <= k and
+A80:  k <= len G(w) by A75,A73;
+      0 <> k by A79;
+      then consider n being Nat such that
+A81:  m = n+1 by A78,NAT_1:6;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+A82:  n <= l by A54,A78,A80,A81,A76,XREAL_1:8;
+A83:  n in {0} \/ Seg l
+      proof
+        per cases;
+        suppose
+          n = 0;
+          then n in {0} by TARSKI:def 1;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+        suppose
+          n <> 0;
+          then 0 < n by NAT_1:3;
+          then 0+1 <= n by NAT_1:13;
+          then n in Seg l by A82,FINSEQ_1:3;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+      end;
+      n+1 in dom (t succ) by A74,A81,Th11;
+      then t^<*n*> in dom T by Th12;
+      then succ(T,t).(n+1) = T.(t^<*n*>) by Th13
+        .= S.(T.t,n) by A38,A77,A83
+        .= G(w).(n+1) by A48,A54,A77,A83;
+      hence thesis by A81;
+    end;
+    hence succ(T,t) = G(w) by A71,Th11,FINSEQ_1:17;
+  end;
+  hence thesis by A38;
+end;
+
+theorem Th16:
+  for T being Tree, t being Element of T holds ProperPrefixes t is
+  finite Chain of T
+proof
+  let T be Tree, t be Element of T;
+  ProperPrefixes t c= T & for p,q being FinSequence of NAT st p in
+ProperPrefixes t & q in ProperPrefixes t holds p,q are_c=-comparable by TREES_1
+  :42,def 5;
+  hence thesis by TREES_2:def 3;
+end;
+
+theorem Th17:
+  for T being Tree holds T-level 0 = {{}}
+proof
+  let T be Tree;
+A1: {{}} c= { w where w is Element of T : len w = 0 }
+  proof
+    let x;
+    assume x in {{}};
+    then
+A2: x = {} by TARSKI:def 1;
+    {} in T by TREES_1:47;
+    then consider t being Element of T such that
+A3: t = {};
+    len t = 0 by A3;
+    hence thesis by A2,A3;
+  end;
+  { w where w is Element of T : len w = 0 } c= {{}}
+  proof
+    let x;
+    assume x in { w where w is Element of T : len w = 0 };
+    then consider w being Element of T such that
+A4: w = x and
+A5: len w = 0;
+    w = {} by A5;
+    hence thesis by A4,TARSKI:def 1;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th18:
+  for T being Tree holds T-level (n+1) = union { succ w where w is
+  Element of T : len w = n }
+proof
+  let T be Tree;
+  thus T-level (n+1) c= union { succ w where w is Element of T : len w = n }
+  proof
+    let x;
+    assume
+A1: x in T-level (n+1);
+    then reconsider t = x as Element of T;
+    t|Seg n is FinSequence of NAT by FINSEQ_1:23;
+    then consider s being FinSequence of NAT such that
+A2: s = t|Seg n;
+    s is_a_prefix_of t by A2,TREES_1:def 1;
+    then reconsider s as Element of T by TREES_1:45;
+A3: ex w9 being Element of T st t = w9 & len w9 = n+1 by A1;
+    n+0 <= n+1 by XREAL_1:8;
+    then len s = n by A3,A2,FINSEQ_1:21;
+    then
+A4: succ s in { succ w where w is Element of T : len w = n };
+    Seg (n+1) = dom t by A3,FINSEQ_1:def 3;
+    then t = t|Seg (n+1) by RELAT_1:98;
+    then ex m st t = s^<*m*> by A3,A2,Th6;
+    then t in succ s;
+    hence thesis by A4,TARSKI:def 4;
+  end;
+  thus union { succ w where w is Element of T : len w = n } c= T-level (n+1)
+  proof
+    set X = { succ w where w is Element of T : len w = n };
+    let x;
+    assume x in union X;
+    then consider Y being set such that
+A5: x in Y and
+A6: Y in X by TARSKI:def 4;
+    consider w being Element of T such that
+A7: Y = succ w and
+A8: len w = n by A6;
+    reconsider t = x as Element of T by A5,A7;
+    consider k such that
+A9: t = w^<*k*> and
+    w^<*k*> in T by A5,A7;
+    len <*k*> = 1 by FINSEQ_1:57;
+    then len t = n+1 by A8,A9,FINSEQ_1:35;
+    hence thesis;
+  end;
+end;
+
+theorem Th19:
+  for T being finite-branching Tree, n being Element of NAT holds
+  T-level n is finite
+proof
+  let T be finite-branching Tree;
+  defpred Q[Element of NAT] means T-level $1 is finite;
+A1: for n st Q[n] holds Q[n+1]
+  proof
+    let n such that
+A2: T-level n is finite;
+    set X = { succ w where w is Element of T : len w = n };
+A3: X is finite
+    proof
+      defpred P[set,set] means ex w be Element of T st $1=w & $2=succ w;
+A4:   for x st x in T-level n ex y being set st P[x,y]
+      proof
+        let x;
+        assume x in T-level n;
+        then consider w being Element of T such that
+A5:     w = x;
+        consider y such that
+A6:     y = succ w;
+        take y,w;
+        thus thesis by A5,A6;
+      end;
+      consider f being Function such that
+A7:   dom f = T-level n & for x st x in T-level n holds P[x,f.x] from
+      CLASSES1:sch 1(A4);
+A8:   X c= rng f
+      proof
+        let x;
+        assume x in X;
+        then consider w being Element of T such that
+A9:     x = succ w and
+A10:    len w = n;
+A11:    w in T-level n by A10;
+        then ex w9 being Element of T st w = w9 & f.w = succ w9 by A7;
+        hence thesis by A7,A9,A11,FUNCT_1:def 5;
+      end;
+      card rng f c= card dom f by CARD_1:28;
+      then rng f is finite by A2,A7;
+      hence thesis by A8;
+    end;
+A12: for Y being set st Y in X holds Y is finite
+    proof
+      let Y be set;
+      assume Y in X;
+      then ex w being Element of T st Y = succ w & len w = n;
+      hence thesis;
+    end;
+    T-level (n+1) = union { succ w where w is Element of T : len w = n }
+    by Th18;
+    hence thesis by A3,A12,FINSET_1:25;
+  end;
+A13: Q[0] by Th17;
+  thus for n holds Q[n] from NAT_1:sch 1(A13,A1);
+end;
+
+theorem Th20:
+  for T being finite-branching Tree holds T is finite iff ex n
+  being Element of NAT st T-level n = {}
+proof
+  let T be finite-branching Tree;
+  deffunc F(Element of NAT) = T-level $1;
+  now
+    assume
+A1: T is finite;
+    now
+      assume
+A2:   not ex n being Element of NAT st T-level n = {};
+A3:   for n ex C being finite Chain of T st card C = n
+      proof
+        let n;
+        T-level n <> {} by A2;
+        then consider t being set such that
+A4:     t in T-level n by XBOOLE_0:def 1;
+        consider w being Element of T such that
+        t = w and
+A5:     len w = n by A4;
+        ProperPrefixes w is finite Chain of T by Th16;
+        then consider C being finite Chain of T such that
+A6:     C = ProperPrefixes w;
+        card C = n by A5,A6,TREES_1:68;
+        hence thesis;
+      end;
+      for t being Element of T holds succ t is finite;
+      then ex C being Chain of T st not C is finite by A3,TREES_2:31;
+      hence contradiction by A1;
+    end;
+    hence ex n being Element of NAT st T-level n = {};
+  end;
+  hence T is finite implies ex n being Element of NAT st T-level n = {};
+  given n such that
+A7: T-level n = {};
+  set X = { F(m) where m is Element of NAT : m <= n };
+A8: T c= union X
+  proof
+    let x;
+    assume x in T;
+    then reconsider t = x as Element of T;
+    consider m such that
+A9: m = len t;
+A10: t in F(m) by A9;
+    len t < n
+    proof
+      consider q being FinSequence such that
+A11:  q = t|Seg n and
+A12:  q is_a_prefix_of t by Th4;
+      assume n <= len t;
+      then
+A13:  len q = n by A11,FINSEQ_1:21;
+      reconsider q as Element of T by A12,TREES_1:45;
+      q in T-level n by A13;
+      hence contradiction by A7;
+    end;
+    then F(m) in X by A9;
+    hence thesis by A10,TARSKI:def 4;
+  end;
+A14: X is finite
+  proof
+    defpred P[set,set] means ex l,m st m = l+1 & $1 = m & F(l) = $2;
+A15: for k be Nat st k in Seg(n+1) ex x st P[k,x]
+    proof
+      let k be Nat;
+      assume k in Seg(n+1);
+      then 0 <> k by FINSEQ_1:3;
+      then consider l being Nat such that
+A16:  k = l+1 by NAT_1:6;
+      reconsider l as Element of NAT by ORDINAL1:def 13;
+      consider x such that
+A17:  x = F(l);
+      take x,l,l+1;
+      thus thesis by A16,A17;
+    end;
+    consider p being FinSequence such that
+A18: dom p = Seg(n+1) & for k be Nat st k in Seg(n+1) holds P[k,p.k]
+    from FINSEQ_1:sch 1(A15);
+A19: for k st k+1 in Seg (n+1) holds p.(k+1) = F(k)
+    proof
+      let k;
+      assume k+1 in Seg (n+1);
+      then ex l,m st m = l+1 & k+1 = m & F(l) = p.(k+1) by A18;
+      hence thesis;
+    end;
+    X c= rng p
+    proof
+      let y;
+      assume y in X;
+      then consider m such that
+A20:  y = F(m) and
+A21:  m <= n;
+      0 <= m by NAT_1:2;
+      then
+A22:  0+1 <= m+1 by XREAL_1:8;
+      m+1 <= n+1 by A21,XREAL_1:8;
+      then
+A23:  m+1 in Seg (n+1) by A22,FINSEQ_1:3;
+      then p.(m+1) = F(m) by A19;
+      hence thesis by A18,A20,A23,FUNCT_1:def 5;
+    end;
+    hence thesis;
+  end;
+  for Y being set st Y in X holds Y is finite
+  proof
+    let Y be set;
+    assume Y in X;
+    then ex m st Y = F(m) & m <= n;
+    hence thesis by Th19;
+  end;
+  then union X is finite by A14,FINSET_1:25;
+  hence thesis by A8;
+end;
+
+theorem Th21:
+  for T being finite-branching Tree st not T is finite ex C being
+  Chain of T st not C is finite
+proof
+  let T be finite-branching Tree such that
+A1: not T is finite;
+A2: for n ex C being finite Chain of T st card C = n
+  proof
+    let n;
+    T-level n <> {} by A1,Th20;
+    then consider t being set such that
+A3: t in T-level n by XBOOLE_0:def 1;
+A4: ex w being Element of T st t = w & len w = n by A3;
+    reconsider t as Element of T by A3;
+    ProperPrefixes t is finite Chain of T by Th16;
+    then consider C being finite Chain of T such that
+A5: C = ProperPrefixes t;
+    card C = n by A4,A5,TREES_1:68;
+    hence thesis;
+  end;
+  for t being Element of T holds succ t is finite;
+  hence thesis by A2,TREES_2:31;
+end;
+
+theorem Th22:
+  for T being finite-branching Tree st not T is finite ex B being
+  Branch of T st not B is finite
+proof
+  let T be finite-branching Tree;
+  assume not T is finite;
+  then consider C being Chain of T such that
+A1: not C is finite by Th21;
+  consider B being Branch of T such that
+A2: C c= B by TREES_2:30;
+  not B is finite by A1,A2;
+  hence thesis;
+end;
+
+theorem Th23:
+  for T being Tree, C being Chain of T, t being Element of T st t
+  in C & not C is finite ex t9 being Element of T st t9 in C & t
+  is_a_proper_prefix_of t9
+proof
+  let T be Tree, C be Chain of T, t be Element of T such that
+A1: t in C and
+A2: not C is finite;
+  now
+    assume
+A3: not ex t9 being Element of T st t9 in C & t is_a_proper_prefix_of t9;
+A4: for t9 being Element of T st t9 in C holds t9 is_a_prefix_of t
+    proof
+      let t9 be Element of T such that
+A5:   t9 in C;
+      now
+        assume
+A6:     not t9 is_a_prefix_of t;
+        t,t9 are_c=-comparable by A1,A5,TREES_2:def 3;
+        then t is_a_prefix_of t9 by A6,XBOOLE_0:def 9;
+        then t is_a_proper_prefix_of t9 by A6,XBOOLE_0:def 8;
+        hence contradiction by A3,A5;
+      end;
+      hence thesis;
+    end;
+    C c= ProperPrefixes t \/ {t}
+    proof
+      let x be set;
+      assume
+A7:   x in C;
+      then reconsider t9 = x as Element of T;
+A8:   t9 is_a_prefix_of t by A4,A7;
+      t9 in ProperPrefixes t \/ {t}
+      proof
+        per cases by A8,XBOOLE_0:def 8;
+        suppose
+          t9 is_a_proper_prefix_of t;
+          then t9 in ProperPrefixes t by TREES_1:36;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+        suppose
+          t9 = t;
+          then t9 in {t} by TARSKI:def 1;
+          hence thesis by XBOOLE_0:def 3;
+        end;
+      end;
+      hence thesis;
+    end;
+    hence contradiction by A2;
+  end;
+  hence thesis;
+end;
+
+theorem Th24:
+  for T being Tree, B being Branch of T, t being Element of T st t
+  in B & not B is finite ex t9 being Element of T st t9 in B & t9 in succ t
+proof
+  let T be Tree, B be Branch of T, t be Element of T;
+  assume t in B & not B is finite;
+  then consider t99 being Element of T such that
+A1: t99 in B and
+A2: t is_a_proper_prefix_of t99 by Th23;
+  t is_a_prefix_of t99 by A2,XBOOLE_0:def 8;
+  then consider r being FinSequence such that
+A3: t99 = t^r by TREES_1:8;
+  reconsider r as FinSequence of NAT by A3,FINSEQ_1:50;
+  r|Seg 1 is FinSequence of NAT by FINSEQ_1:23;
+  then consider r1 being FinSequence of NAT such that
+A4: r1 = r|Seg 1;
+  1 <= len r
+  proof
+    len t < len t99 by A2,TREES_1:24;
+    then consider m being Nat such that
+A5: (len t) + m = len t99 by NAT_1:10;
+    m <> 0 by A2,A5,TREES_1:24;
+    then 0 < m by NAT_1:3;
+    then
+A6: 0+1 <= m by NAT_1:13;
+    len t99 = (len t) + len r by A3,FINSEQ_1:35;
+    hence thesis by A5,A6;
+  end;
+  then consider n such that
+A7: r1 = <*n*> by A4,Th35;
+A8: r1 is_a_prefix_of r by A4,TREES_1:def 1;
+  then
+A9: t^r1 is_a_prefix_of t99 by A3,FINSEQ_6:15;
+  t^<*n*> in T by A3,A7,A8,FINSEQ_6:15,TREES_1:45;
+  then consider t9 being Element of T such that
+A10: t9 = t^<*n*>;
+  t9 in succ t by A10;
+  hence thesis by A1,A7,A9,A10,TREES_2:27;
+end;
+
+theorem Th25:
+  for f being Function of NAT,NAT st (for n holds f.(n+1) qua
+Element of NAT <= f.n qua Element of NAT) ex m st for n st m <= n holds f.n = f
+  .m
+proof
+  let f be Function of NAT,NAT such that
+A1: for n holds f.(n+1) qua Element of NAT <= f.n qua Element of NAT;
+A2: for m,k st m <= k holds f.k qua Element of NAT <= f.m qua Element of NAT
+  proof
+    defpred P[Element of NAT] means for m st m <= $1 holds f.$1 qua Element of
+    NAT <= f.m qua Element of NAT;
+A3: for k st P[k] holds P[k + 1]
+    proof
+      let k such that
+A4:   P[k];
+      now
+        let m;
+        assume
+A5:     m <= k+1;
+        per cases by A5,NAT_1:8;
+        suppose
+A6:       m <= k;
+          reconsider fk = f.k, fm = f.m, fk1 = f.(k+1) as Element of NAT;
+A7:       fk1 <= fk by A1;
+          fk <= fm by A4,A6;
+          hence f.(k+1) qua Element of NAT <= f.m qua Element of NAT by A7
+          ,XXREAL_0:2;
+        end;
+        suppose
+          m = k+1;
+          hence f.(k+1) qua Element of NAT <= f.m qua Element of NAT;
+        end;
+      end;
+      hence thesis;
+    end;
+A8: P[0]
+    proof
+      let m such that
+A9:   m <= 0;
+      0 <= m by NAT_1:2;
+      hence thesis by A9,XXREAL_0:1;
+    end;
+A10: for k holds P[k] from NAT_1:sch 1(A8,A3);
+    let m,k;
+    assume m <= k;
+    hence thesis by A10;
+  end;
+  defpred P[set] means $1 in rng f;
+A11: ex k be Nat st P[k]
+  proof
+    consider y such that
+A12: y = f.0;
+    reconsider k = y as Element of NAT by A12;
+    take k;
+    dom f = NAT by FUNCT_2:def 1;
+    hence thesis by A12,FUNCT_1:def 5;
+  end;
+  ex k be Nat st P[k] & for n be Nat st P[n] holds k <= n from NAT_1:sch
+  5(A11);
+  then consider l be Nat such that
+A13: l in rng f and
+A14: for n be Nat st n in rng f holds l <= n;
+  consider x such that
+A15: x in dom f and
+A16: l = f.x by A13,FUNCT_1:def 5;
+  reconsider m = x as Element of NAT by A15;
+A17: dom f = NAT by FUNCT_2:def 1;
+  for k st m <= k holds f.k = f.m
+  proof
+    let k such that
+A18: m <= k;
+    now
+      reconsider fk = f.k, fm = f.m as Element of NAT;
+      assume
+A19:  f.k <> f.m;
+      fk <= fm by A2,A18;
+      then
+A20:  fk < fm by A19,XXREAL_0:1;
+      f.k in rng f by A17,FUNCT_1:def 5;
+      hence contradiction by A14,A16,A20;
+    end;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+scheme
+  FinDecTree { D() -> non empty set,
+   T() -> (finite-branching DecoratedTree of D()),
+   F(Element of D()) -> Element of NAT }:
+   T() is finite
+provided
+A1: for t,t9 being Element of dom T(), d being Element of D() st t9 in
+succ t & d = T().t9 holds F(d) < F(T().t)
+proof
+  now
+    assume not T() is finite;
+    then not dom T() is finite by FINSET_1:29;
+    then consider B being Branch of dom T() such that
+A2: not B is finite by Th22;
+    defpred P[set,set] means ex t,t9 being Element of dom T() st t9 in succ t
+    & t in B & t9 in B & $1 = T().t & $2 = T().t9;
+    defpred Q[set] means ex t being Element of dom T() st t in B & $1 = T().t;
+A3: for x st x in D() & Q[x] ex y st y in D() & P[x,y] & Q[y]
+    proof
+      let x;
+      assume that
+      x in D() and
+A4:   Q[x];
+      consider t being Element of dom T() such that
+A5:   t in B and
+A6:   x = T() .t by A4;
+      consider t9 being Element of dom T() such that
+A7:   t9 in B & t9 in succ t by A2,A5,Th24;
+      ex y st y = T().t9;
+      hence thesis by A5,A6,A7;
+    end;
+    {} in B by TREES_2:28;
+    then Q[T().{}];
+    then
+A8: T().{} in D() & Q[T().{}];
+    ex g being Function st dom g = NAT & rng g c= D() & g.0 = T().{} &
+    for k holds P[g.k,g.(k+1)] & Q[g.k] from TREES_2:sch 5(A8,A3);
+    then consider g being Function such that
+    dom g = NAT and
+    rng g c= D() and
+    g.0 = T().{} and
+A9: for k holds (ex t,t9 being Element of dom T() st t9 in succ t & t
+in B & t9 in B & g.k = T().t & g.(k+1) = T().t9) & ex t being Element of dom T(
+    ) st t in B & g.k = T().t;
+    defpred P[set,set] means ex d being Element of D() st d = g.$1 & $2 = F(d);
+A10: for x st x in NAT ex y st y in NAT & P[x,y]
+    proof
+      let x;
+      assume x in NAT;
+      then reconsider k = x as Element of NAT;
+      consider t being Element of dom T() such that
+      t in B and
+A11:  g.k = T().t by A9;
+      ex y st y = F(T().t);
+      hence thesis by A11;
+    end;
+    ex f being Function of NAT,NAT st for x st x in NAT holds P[x,f.x]
+    from FUNCT_2:sch 1(A10);
+    then consider f being Function of NAT,NAT such that
+A12: for x st x in NAT ex d being Element of D() st d = g.x & f.x = F( d);
+A13: for k ex t,t9 being Element of dom T() st t9 in succ t & t in B & t9
+    in B & f.k = F(T().t) & f.(k+1) = F(T().t9)
+    proof
+      let k;
+A14:  ex t,t9 being Element of dom T() st t9 in succ t & t in B & t9 in B
+      & g.k = T().t & g.(k+1) = T().t9 by A9;
+      (ex d being Element of D() st d = g.k & f.k = F(d) )& ex d1 being
+      Element of D() st d1 = g.(k+1) & f.(k+1) = F (d1) by A12;
+      hence thesis by A14;
+    end;
+A15: for n ex t,t9 being Element of dom T() st t9 in succ t & f.n = F(T().
+t) & f.(n+1) = F(T().t9) & f.(n+1) qua Element of NAT < f.n qua Element of NAT
+    proof
+      let n;
+      ex t,t9 being Element of dom T() st t9 in succ t & t in B & t9 in B
+      & f.n = F(T().t) & f.(n+1) = F(T().t9) by A13;
+      hence thesis by A1;
+    end;
+    for n holds f.(n+1) qua Element of NAT <= f.n qua Element of NAT
+    proof
+      let n;
+      ex t,t9 being Element of dom T() st t9 in succ t & f.n = F(T().t) &
+f.(n+1) = F(T().t9) & f.(n+1) qua Element of NAT < f.n qua Element of NAT by
+      A15;
+      hence thesis;
+    end;
+    then consider m such that
+A16: for n st m <= n holds f.n = f.m by Th25;
+A17: m+0 <= m+1 by XREAL_1:8;
+    ex t,t9 being Element of dom T() st t9 in succ t & f.m = F(T().t) & f.
+(m+1) = F(T().t9) & f.(m+1) qua Element of NAT < f.m qua Element of NAT by A15;
+    hence contradiction by A16,A17;
+    consider k;
+  end;
+  hence thesis;
+end;

@@ -3,7 +3,7 @@
 ::
 :: Received October 27, 1992
 :: Copyright (c) 1992 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, SUBSET_1, NORMSP_1, PARTFUN1, STRUCT_0, REAL_1,
@@ -11,19 +11,18 @@ environ
       TARSKI, COMPLEX1, XXREAL_0, XXREAL_2, XREAL_0, ORDINAL1, RLVECT_1,
       VFUNCT_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, ALGSTR_0,
-      RLVECT_1, NORMSP_1,
-      VALUED_1, SEQ_1, SEQ_2, XXREAL_0;
+      REAL_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, ALGSTR_0, RLVECT_1,
+      VALUED_1, SEQ_1, SEQ_2, XXREAL_0, NORMSP_0, NORMSP_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, RFUNCT_1,
       NORMSP_1, SEQ_1, VALUED_1, SEQ_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
-      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1;
+      RFUNCT_1, NORMSP_1, ALGSTR_0, RLVECT_1, NORMSP_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1;
+ definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1, NORMSP_0;
  theorems TARSKI, SUBSET_1, FUNCT_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1,
       RLVECT_1, NORMSP_1, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1;
- schemes SEQ_1, PARTFUN2;
+      COMPLEX1, XXREAL_0, VALUED_1, NORMSP_0;
+ schemes PARTFUN2;
 
 begin
 
@@ -33,7 +32,7 @@ reserve c for Element of C;
 reserve V for RealNormSpace;
 reserve f,f1,f2,f3 for PartFunc of C,the carrier of V;
 reserve r,r1,r2,p for Real;
-
+ 
 ::
 ::OPERATIONS ON PARTIAL FUNCTIONS FROM A DOMAIN TO THE SET OF REAL NUMBERS
 ::
@@ -140,32 +139,7 @@ Element of C st c in dom f holds f/.c = F(c)) & (dom g=X & for c be Element of
 end;
 
 definition
-  let C;
-  let V be non empty NORMSTR;
-  let f be PartFunc of C,the carrier of V;
-  deffunc F(Element of C) = ||. f/.$1 .||;
-  defpred P[set] means $1 in dom f;
-  func ||.f.|| -> PartFunc of C,REAL means
-  :Def5:
-  dom it = dom f & for c st c in dom it holds it.c = ||. f/.c .||;
-  existence
-  proof
-    consider F be PartFunc of C,REAL such that
-A1: for c holds c in dom F iff P[c] and
-A2: for c st c in dom F holds F.c = F(c) from SEQ_1:sch 3;
-    take F;
-    thus thesis by A1,A2,SUBSET_1:8;
-  end;
-  uniqueness
-  proof
-    set X = dom f;
-    thus for h,g being PartFunc of C, REAL st (dom h=X & for c be Element of C
-st c in dom h holds h.c = F(c)) & (dom g=X & for c be Element of C st c in dom
-    g holds g.c = F(c)) holds h = g from SEQ_1:sch 4;
-  end;
-end;
-
-definition
+ canceled;
   let C;
   let V be non empty addLoopStr;
   let f be PartFunc of C,the carrier of V;
@@ -272,22 +246,22 @@ A1:   c in (||.f.||)"{0};
 A2:   c in dom (||.f.||) by FUNCT_1:def 13;
       (||.f.||).c in {0} by A1,FUNCT_1:def 13;
       then (||.f.||).c = 0 by TARSKI:def 1;
-      then ||.f/.c.|| = 0 by A2,Def5;
-      then f/.c = 0.V by NORMSP_1:def 2;
+      then ||.f/.c.|| = 0 by A2,NORMSP_0:def 3;
+      then f/.c = 0.V by NORMSP_0:def 5;
       then
 A3:   f/.c in {0.V} by TARSKI:def 1;
-      c in dom f by A2,Def5;
+      c in dom f by A2,NORMSP_0:def 3;
       hence thesis by A3,PARTFUN2:44;
     end;
     assume
 A4: c in (f)"{0.V};
     then c in dom f by PARTFUN2:44;
     then
-A5: c in dom (||.f.||) by Def5;
+A5: c in dom (||.f.||) by NORMSP_0:def 3;
     f/.c in {0.V} by A4,PARTFUN2:44;
     then f/.c = 0.V by TARSKI:def 1;
     then ||.f/.c.|| = 0;
-    then (||.f.||).c = 0 by A5,Def5;
+    then (||.f.||).c = 0 by A5,NORMSP_0:def 3;
     then (||.f.||).c in {0} by TARSKI:def 1;
     hence c in (||.f.||)"{0} by A5,FUNCT_1:def 13;
   end;
@@ -362,12 +336,12 @@ A6: c in dom (r(#)f) by Def4;
   end;
   hence thesis by SUBSET_1:8;
 end;
-
+ 
 ::
 :: BASIC PROPERTIES OF OPERATIONS
 ::
 
-theorem
+theorem Th:
   f1 + f2 = f2 + f1
 proof
 A1: dom (f1 + f2) = dom f2 /\ dom f1 by Def1
@@ -380,6 +354,12 @@ A2: c in dom (f1+f2);
       .= (f2 + f1)/.c by A1,A2,Def1;
   end;
   hence thesis by A1,PARTFUN2:3;
+end;
+
+definition
+  let C,V; let f1,f2;
+  redefine func f1+f2;
+  commutativity by Th;
 end;
 
 theorem
@@ -429,7 +409,7 @@ A2: c in dom (f1(#)f2(#)f3);
 A3: c in dom (f2 (#) f3) by XBOOLE_0:def 4;
     thus (f1 (#) f2 (#) f3)/.c = (f1 (#) f2).c * (f3/.c) by A2,Def3
       .= f1.c * f2.c * (f3/.c) by VALUED_1:5
-      .= f1.c * (f2.c * (f3/.c)) by RLVECT_1:def 9,def 10, def 11
+      .= f1.c * (f2.c * (f3/.c)) by RLVECT_1:def 10
       .= f1.c * ((f2 (#) f3)/.c) by A3,Def3
       .= (f1 (#) (f2 (#) f3))/.c by A1,A2,Def3;
   end;
@@ -437,8 +417,7 @@ A3: c in dom (f2 (#) f3) by XBOOLE_0:def 4;
 end;
 
 theorem
-  for f1,f2 be PartFunc of C,REAL holds (f1 + f2) (#) f3=f1 (#) f3 + f2
-  (#) f3
+  for f1,f2 be PartFunc of C,REAL holds (f1 + f2) (#) f3=f1 (#) f3 + f2 (#) f3
 proof
   let f1,f2 be PartFunc of C,REAL;
 A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Def3
@@ -495,7 +474,7 @@ A5: c in dom (f3(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (f3 (#) f2) by A4,XBOOLE_0:def 4;
     thus (f3 (#) (f1 + f2))/.c = f3.c * ((f1 + f2)/.c) by A2,Def3
       .= f3.c * ((f1/.c) + (f2/.c)) by A3,Def1
-      .= f3.c * (f1/.c) + f3.c * (f2/.c) by RLVECT_1:def 9, def 11, def 8
+      .= f3.c * (f1/.c) + f3.c * (f2/.c) by RLVECT_1:def 8
       .= ((f3 (#) f1)/.c) + f3.c* (f2/.c) by A5,Def3
       .= ((f3 (#) f1)/.c) + ((f3 (#) f2)/.c) by A6,Def3
       .= ((f3 (#) f1) + (f3 (#) f2))/.c by A1,A2,Def1;
@@ -522,7 +501,7 @@ A3: c in dom (f1(#)f2) by Def4;
 A4: c in dom (r(#)f1) by XBOOLE_0:def 4;
     thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Def4
       .= r*(f1.c * (f2/.c)) by A3,Def3
-      .= (r*f1.c) * (f2/.c) by RLVECT_1:def 9,def 10, def 11
+      .= (r*f1.c) * (f2/.c) by RLVECT_1:def 10
       .= (r(#)f1).c * (f2/.c) by A4,VALUED_1:def 5
       .= (r(#)f1 (#) f2)/.c by A1,A2,Def3;
   end;
@@ -548,8 +527,8 @@ A3: c in dom (f1(#)f2) by Def4;
 A4: c in dom (r(#)f2) by XBOOLE_0:def 4;
     thus (r(#)(f1(#)f2))/.c = r * (f1(#)f2)/.c by A2,Def4
       .= r * (f1.c * (f2/.c)) by A3,Def3
-      .= f1.c * r * (f2/.c) by RLVECT_1:def 9,def 10, def 11
-      .= f1.c * (r * (f2/.c)) by RLVECT_1:def 9,def 10, def 11
+      .= f1.c * r * (f2/.c) by RLVECT_1:def 10
+      .= f1.c * (r * (f2/.c)) by RLVECT_1:def 10
       .= f1.c * ((r(#)f2)/.c) by A4,Def4
       .= (f1(#)(r(#)f2))/.c by A1,A2,Def3;
   end;
@@ -642,7 +621,7 @@ A5: c in dom (r(#)f1) by XBOOLE_0:def 4;
 A6: c in dom (r(#)f2) by A4,XBOOLE_0:def 4;
     thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Def4
       .= r * ((f1/.c) + (f2/.c)) by A3,Def1
-      .= r * (f1/.c) + r * (f2/.c) by RLVECT_1:def 9,def 10, def 11, def 8
+      .= r * (f1/.c) + r * (f2/.c) by RLVECT_1:def 8
       .= ((r(#)f1)/.c) + r * (f2/.c) by A5,Def4
       .= ((r(#)f1)/.c) + ((r(#)f2)/.c) by A6,Def4
       .= (r(#)f1 + r(#)f2)/.c by A1,A2,Def1;
@@ -663,7 +642,7 @@ A2: c in dom ((r*p)(#)f);
     then
 A3: c in dom (p(#)f) by A1,Def4;
     thus ((r*p)(#)f)/.c = r*p * f/.c by A2,Def4
-      .= r*(p * f/.c) by RLVECT_1:def 9,def 10, def 11
+      .= r*(p * f/.c) by RLVECT_1:def 10
       .= r * ((p(#)f)/.c) by A3,Def4
       .= (r(#)(p(#)f))/.c by A1,A2,Def4;
   end;
@@ -750,10 +729,9 @@ theorem Th24:
 proof
 A1: now
     let c;
-    assume
-    c in dom (1(#)f);
+    assume c in dom (1(#)f);
     hence (1(#)f)/.c = 1 * f/.c by Def4
-      .= f/.c by RLVECT_1:def 9,def 10, def 11;
+      .= f/.c by RLVECT_1:def 11;
   end;
   dom (1(#)f) = dom f by Def4;
   hence thesis by A1,PARTFUN2:3;
@@ -817,9 +795,9 @@ theorem
   for f1 be PartFunc of C,REAL holds ||.f1(#)f2.|| = abs(f1)(#)||.f2.||
 proof
   let f1 be PartFunc of C,REAL;
-A1: dom (||.f1 (#) f2.||) = dom (f1 (#) f2) by Def5
+A1: dom (||.f1 (#) f2.||) = dom (f1 (#) f2) by NORMSP_0:def 3
     .= dom f1 /\ dom f2 by Def3
-    .= dom f1 /\ dom (||.f2.||) by Def5
+    .= dom f1 /\ dom (||.f2.||) by NORMSP_0:def 3
     .= dom (abs(f1)) /\ dom (||.f2.||) by VALUED_1:def 11
     .= dom (abs(f1)(#)||.f2.||) by VALUED_1:def 4;
   now
@@ -827,15 +805,15 @@ A1: dom (||.f1 (#) f2.||) = dom (f1 (#) f2) by Def5
     assume
 A2: c in dom (||.f1 (#) f2.||);
     then
-A3: c in dom (f1 (#) f2) by Def5;
+A3: c in dom (f1 (#) f2) by NORMSP_0:def 3;
     c in dom (abs(f1)) /\ dom (||.f2.||) by A1,A2,VALUED_1:def 4;
     then
 A4: c in dom (||.f2.||) by XBOOLE_0:def 4;
-    thus (||.f1(#)f2.||).c = ||.(f1(#)f2)/.c.|| by A2,Def5
+    thus (||.f1(#)f2.||).c = ||.(f1(#)f2)/.c.|| by A2,NORMSP_0:def 3
       .= ||.f1.c * (f2/.c).|| by A3,Def3
       .= abs(f1.c) * ||.(f2/.c).|| by NORMSP_1:def 2
       .= ((abs(f1)).c) * ||.(f2/.c).|| by VALUED_1:18
-      .= ((abs(f1)).c) * (||.f2.||).c by A4,Def5
+      .= ((abs(f1)).c) * (||.f2.||).c by A4,NORMSP_0:def 3
       .= (abs(f1)(#)||.f2.||).c by VALUED_1:5;
   end;
   hence thesis by A1,PARTFUN1:34;
@@ -844,9 +822,9 @@ end;
 theorem
   ||.r(#)f.|| = abs(r)(#)||.f.||
 proof
-A1: dom (||.r(#)f.||) = dom (r(#)f) by Def5
+A1: dom (||.r(#)f.||) = dom (r(#)f) by NORMSP_0:def 3
     .= dom f by Def4
-    .= dom (||.f.||) by Def5
+    .= dom (||.f.||) by NORMSP_0:def 3
     .= dom (abs(r)(#)||.f.||) by VALUED_1:def 5;
   now
     let c;
@@ -854,11 +832,11 @@ A1: dom (||.r(#)f.||) = dom (r(#)f) by Def5
 A2: c in dom (||.r(#)f.||);
     then
 A3: c in dom (||.f.||) by A1,VALUED_1:def 5;
-A4: c in dom (r(#)f) by A2,Def5;
-    thus (||.r(#)f.||).c = ||.(r(#)f)/.c.|| by A2,Def5
+A4: c in dom (r(#)f) by A2,NORMSP_0:def 3;
+    thus (||.r(#)f.||).c = ||.(r(#)f)/.c.|| by A2,NORMSP_0:def 3
       .=||.r*(f/.c).|| by A4,Def4
       .=abs(r)*||.f/.c.|| by NORMSP_1:def 2
-      .=abs(r)*(||.f.||.c) by A3,Def5
+      .=abs(r)*(||.f.||.c) by A3,NORMSP_0:def 3
       .=(abs(r)(#)||.f.||).c by A1,A2,VALUED_1:def 5;
   end;
   hence thesis by A1,PARTFUN1:34;
@@ -917,8 +895,7 @@ proof
 end;
 
 theorem Th33:
-  (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1
-  + f2|X
+  (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X
 proof
 A1: now
     let c;
@@ -1152,22 +1129,22 @@ A7: c in dom (-(f|X)) by Def6;
     .= dom (-(f|X)) by Def6;
   hence (-f)|X = -(f|X) by A1,PARTFUN2:3;
 A8: dom ((||.f.||)|X) = dom (||.f.||) /\ X by RELAT_1:90
-    .= dom f /\ X by Def5
+    .= dom f /\ X by NORMSP_0:def 3
     .= dom (f|X) by RELAT_1:90
-    .= dom (||.(f|X).||) by Def5;
+    .= dom (||.(f|X).||) by NORMSP_0:def 3;
   now
     let c;
     assume
 A9: c in dom ((||.f.||)|X);
     then
-A10: c in dom (f|X) by A8,Def5;
+A10: c in dom (f|X) by A8,NORMSP_0:def 3;
     c in dom (||.f.||) /\ X by A9,RELAT_1:90;
     then
 A11: c in dom (||.f.||) by XBOOLE_0:def 4;
     thus ((||.f.||)|X).c = (||.f.||).c by A9,FUNCT_1:70
-      .= ||.f/.c.|| by A11,Def5
+      .= ||.f/.c.|| by A11,NORMSP_0:def 3
       .= ||.(f|X)/.c.|| by A10,PARTFUN2:32
-      .= (||.(f|X).||).c by A8,A9,Def5;
+      .= (||.(f|X).||).c by A8,A9,NORMSP_0:def 3;
   end;
   hence thesis by A8,PARTFUN1:34;
 end;
@@ -1217,7 +1194,7 @@ A7: c in dom (r(#)(f|X)) by Def4;
     .= dom (r(#)(f|X)) by Def4;
   hence thesis by A1,PARTFUN2:3;
 end;
-
+ 
 ::
 :: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN TO REAL
 ::
@@ -1230,14 +1207,12 @@ proof
   proof
     thus f1 is total & f2 is total implies f1+f2 is total
     proof
-      assume
-      f1 is total & f2 is total;
+      assume f1 is total & f2 is total;
       then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
       hence dom (f1+f2) = C /\ C by Def1
         .= C;
     end;
-    assume
-    f1+f2 is total;
+    assume f1+f2 is total;
     then dom (f1+f2) = C by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = C by Def1;
     then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
@@ -1247,14 +1222,12 @@ proof
   proof
     thus f1 is total & f2 is total implies f1-f2 is total
     proof
-      assume
-      f1 is total & f2 is total;
+      assume f1 is total & f2 is total;
       then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
       hence dom (f1-f2) = C /\ C by Def2
         .= C;
     end;
-    assume
-    f1-f2 is total;
+    assume f1-f2 is total;
     then dom (f1-f2) = C by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = C by Def2;
     then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
@@ -1269,14 +1242,12 @@ proof
   let f1 be PartFunc of C,REAL;
   thus f1 is total & f2 is total implies f1(#)f2 is total
   proof
-    assume
-    f1 is total & f2 is total;
+    assume f1 is total & f2 is total;
     then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
     hence dom (f1(#)f2) = C /\ C by Def3
       .= C;
   end;
-  assume
-  f1(#)f2 is total;
+  assume f1(#)f2 is total;
   then dom (f1(#)f2) = C by PARTFUN1:def 4;
   then dom f1 /\ dom f2 = C by Def3;
   then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
@@ -1288,13 +1259,11 @@ theorem Th40:
 proof
   thus f is total implies r(#)f is total
   proof
-    assume
-    f is total;
+    assume f is total;
     then dom f = C by PARTFUN1:def 4;
     hence dom (r(#)f) = C by Def4;
   end;
-  assume
-  r(#)f is total;
+  assume r(#)f is total;
   then dom (r(#)f) = C by PARTFUN1:def 4;
   hence dom f = C by Def4;
 end;
@@ -1320,15 +1289,13 @@ theorem Th42:
 proof
   thus f is total implies ||.f.|| is total
   proof
-    assume
-    f is total;
+    assume f is total;
     then dom f = C by PARTFUN1:def 4;
-    hence dom (||.f.||) = C by Def5;
+    hence dom (||.f.||) = C by NORMSP_0:def 3;
   end;
-  assume
-  ||.f.|| is total;
+  assume ||.f.|| is total;
   then dom (||.f.||) = C by PARTFUN1:def 4;
-  hence dom f = C by Def5;
+  hence dom f = C by NORMSP_0:def 3;
 end;
 
 theorem
@@ -1350,8 +1317,7 @@ theorem
   f1(#)f2)/.c = f1.c * (f2/.c)
 proof
   let f1 be PartFunc of C,REAL;
-  assume
-  f1 is total & f2 is total;
+  assume f1 is total & f2 is total;
   then f1(#)f2 is total by Th39;
   then dom (f1(#)f2) = C by PARTFUN1:def 4;
   hence thesis by Def3;
@@ -1360,8 +1326,7 @@ end;
 theorem
   f is total implies (r(#)f)/.c = r * (f/.c)
 proof
-  assume
-  f is total;
+  assume f is total;
   then r(#)f is total by Th40;
   then dom (r(#)f) = C by PARTFUN1:def 4;
   hence thesis by Def4;
@@ -1377,9 +1342,9 @@ A1: f is total;
   hence (-f)/.c = - f/.c by Def6;
   ||.f.|| is total by A1,Th42;
   then dom (||.f.||) = C by PARTFUN1:def 4;
-  hence thesis by Def5;
+  hence thesis by NORMSP_0:def 3;
 end;
-
+ 
 ::
 :: BOUNDED AND CONSTANT PARTIAL FUNCTIONS FROM A DOMAIN TO A NORMED REAL SPACE
 ::
@@ -1415,8 +1380,7 @@ end;
 theorem
   X misses dom f implies f is_bounded_on X
 proof
-  assume
-  X /\ dom f = {};
+  assume X /\ dom f = {};
   then for c holds c in X /\ dom f implies ||.f/.c.|| <= 0;
   hence thesis by Def7;
 end;
@@ -1431,8 +1395,7 @@ proof
     then abs(0)*||.f/.c.|| <= 0 by ABSVALUE:7;
     then
 A1: ||.0*(f/.c).|| <= 0 by NORMSP_1:def 2;
-    assume
-    c in Y /\ dom (0(#)f);
+    assume c in Y /\ dom (0(#)f);
     then c in dom (0(#)f) by XBOOLE_0:def 4;
     hence ||.(0(#)f)/.c.|| <= p by A1,Def4;
   end;
@@ -1442,8 +1405,7 @@ end;
 theorem Th51:
   f is_bounded_on Y implies r(#)f is_bounded_on Y
 proof
-  assume
-  f is_bounded_on Y;
+  assume f is_bounded_on Y;
   then consider r1 such that
 A1: for c st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def7;
   take p = abs(r)*abs(r1);
@@ -1465,8 +1427,7 @@ A5: ||.f/.c.|| <= r1 by A1;
 end;
 
 theorem Th52:
-  f is_bounded_on Y implies ||.f.|||Y is bounded & -f
-  is_bounded_on Y
+  f is_bounded_on Y implies ||.f.|||Y is bounded & -f is_bounded_on Y
 proof
   assume
 A1: f is_bounded_on Y;
@@ -1479,11 +1440,11 @@ A3: c in Y /\ dom (||.f.||);
     then
 A4: c in Y by XBOOLE_0:def 4;
 A5: c in dom (||.f.||) by A3,XBOOLE_0:def 4;
-    then c in dom f by Def5;
+    then c in dom f by NORMSP_0:def 3;
     then c in Y /\ dom f by A4,XBOOLE_0:def 4;
     then ||.f/.c.|| >= 0 & ||.f/.c.|| <= r1 by A2,NORMSP_1:8;
     then abs(||.f/.c.||) <= r1 by ABSVALUE:def 1;
-    hence abs((||.f.||).c) <= r1 by A5,Def5;
+    hence abs((||.f.||).c) <= r1 by A5,NORMSP_0:def 3;
   end;
   hence ||.f.|||Y is bounded by RFUNCT_1:90;
   (-1)(#)f is_bounded_on Y by A1,Th51;
@@ -1491,8 +1452,7 @@ A5: c in dom (||.f.||) by A3,XBOOLE_0:def 4;
 end;
 
 theorem Th53:
-  f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2
-  is_bounded_on (X /\ Y)
+  f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2 is_bounded_on (X /\ Y)
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1521,7 +1481,8 @@ A11: c in X by A6,XBOOLE_0:def 4;
   then c in X /\ dom f1 by A11,XBOOLE_0:def 4;
   then ||.(f1/.c).|| <= r1 by A3;
   then ||.(f1/.c) + (f2/.c).|| <= ||.(f1/.c).|| + ||.f2/.c.|| & ||.(f1/.c).||
-  + ||. (f2/.c).|| <= r by A10,NORMSP_1:def 2,XREAL_1:9;
+  + ||. (f2/.c).|| <= r by A10,NORMSP_1:def 2
+,XREAL_1:9;
   then ||.(f1/.c) + (f2/.c).|| <= r by XXREAL_0:2;
   hence thesis by A8,Def1;
 end;
@@ -1535,8 +1496,8 @@ proof
 A1: f1|X is bounded and
 A2: f2 is_bounded_on Y;
   consider r1 be real number such that
-A3: for c being set st c in X /\ dom f1 holds abs(f1.c) <= r1 by A1,
-  RFUNCT_1:90;
+A3: for c being set st c in X /\ dom f1 holds abs(f1.c) <= r1 by A1,RFUNCT_1:90
+;
   consider r2 such that
 A4: for c st c in Y /\ dom f2 holds ||.(f2/.c).|| <= r2 by A2,Def7;
   reconsider r1 as Real by XREAL_0:def 1;
@@ -1570,8 +1531,7 @@ A12: ||.(f2/.c).|| <= r2 by A4;
 end;
 
 theorem
-  f1 is_bounded_on X & f2 is_bounded_on Y implies f1-f2 is_bounded_on X
-  /\ Y
+  f1 is_bounded_on X & f2 is_bounded_on Y implies f1-f2 is_bounded_on X /\ Y
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1725,8 +1685,7 @@ end;
 theorem Th59:
   f|Y is constant implies (p(#)f)|Y is constant
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
@@ -1746,11 +1705,9 @@ A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
 end;
 
 theorem Th60:
-  f|Y is constant implies ||.f.|||Y is constant & (-f)|Y is
-  constant
+  f|Y is constant implies ||.f.|||Y is constant & (-f)|Y is constant
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
@@ -1760,10 +1717,10 @@ A2: c in Y /\ dom (||.f.||);
     then
 A3: c in Y by XBOOLE_0:def 4;
 A4: c in dom (||.f.||) by A2,XBOOLE_0:def 4;
-    then c in dom f by Def5;
+    then c in dom f by NORMSP_0:def 3;
     then
 A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
-    thus (||.f.||).c = ||.f/.c.|| by A4,Def5
+    thus (||.f.||).c = ||.f/.c.|| by A4,NORMSP_0:def 3
       .= ||.r.|| by A1,A5;
   end;
   hence ||.f.|||Y is constant by PARTFUN2:76;
@@ -1784,15 +1741,13 @@ end;
 theorem Th61:
   f|Y is constant implies f is_bounded_on Y
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
     take p=||.r.||;
     let c;
-    assume
-    c in Y /\ dom f;
+    assume c in Y /\ dom f;
     hence ||.f/.c.|| <= p by A1;
   end;
   hence thesis by Def7;
@@ -1816,8 +1771,7 @@ A1: f|Y is constant;
 end;
 
 theorem
-  f1 is_bounded_on X & f2|Y is constant implies f1+f2 is_bounded_on (X
-  /\ Y)
+  f1 is_bounded_on X & f2|Y is constant implies f1+f2 is_bounded_on (X /\ Y)
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1841,4 +1795,3 @@ A4: f1+-f2 is_bounded_on X /\ Y by A1,Th53;
   then f2+-f1 is_bounded_on Y /\ X by A3,Th53;
   hence thesis by A4,Th31;
 end;
-

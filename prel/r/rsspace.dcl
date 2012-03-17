@@ -21,6 +21,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
@@ -72,7 +73,7 @@
 </FCluster>
 <FCluster aid="RSSPACE" nr="5">
 <ArgTypes/>
-<Func kind="G" nr="14">
+<Func kind="G" nr="16">
 <Func kind="K" nr="169"/>
 <Func kind="K" nr="168">
 <Func kind="K" nr="165"/>
@@ -90,7 +91,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE" nr="6">

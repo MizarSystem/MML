@@ -9,16 +9,17 @@ environ
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, ARYTM_3, CARD_1,
       FUNCT_1, POWER, SEQ_2, ORDINAL2, ARYTM_1, XXREAL_0, COMPLEX1, RELAT_1,
       INT_1, NAT_1, REAL_1, CARD_3, VALUED_1, FUNCOP_1, VALUED_0, XXREAL_2,
-      PREPOWER, NEWTON, SERIES_1, ABIAN;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, FUNCT_2, INT_1, NEWTON, ABIAN,
-      PREPOWER, POWER, FUNCOP_1, XXREAL_0;
+      PREPOWER, NEWTON, SERIES_1, ABIAN, MEMBERED, XBOOLE_0, IDEAL_1, XCMPLX_0;
+ notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1,
+      REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, SEQ_1,
+      SEQ_2, FUNCT_2, INT_1, NEWTON, ABIAN, PREPOWER, POWER, FUNCOP_1,
+      XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, SEQM_3, NEWTON,
       PREPOWER, POWER, PARTFUN1, SEQ_1, VALUED_1, SEQ_4, RELSET_1, ABIAN,
       BINOP_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER, FUNCOP_1,
-      SEQ_2, SEQ_4;
+      SEQ_2, SEQ_4, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
@@ -29,8 +30,8 @@ reserve a,p,r for real number;
 reserve s,s1,s2,s3 for Real_Sequence;
 
 theorem :: SERIES_1:1
-  0<a & a<1 & (for n holds s.n=a to_power (n+1)) implies s is
-  convergent & lim s = 0;
+  0<a & a<1 & (for n holds s.n=a to_power (n+1)) implies
+  s is convergent & lim s = 0;
 
 theorem :: SERIES_1:2
   for n being natural number holds abs(a) to_power n = abs(a to_power n);
@@ -40,12 +41,19 @@ theorem :: SERIES_1:3
   convergent & lim s = 0;
 
 definition
-  let s;
-  func Partial_Sums(s) -> Real_Sequence means
+  let X be non empty add-closed complex-membered set;
+  let s1, s2 be sequence of X;
+  redefine func s1+s2 -> sequence of X;
+end;
+
+definition
+  let X be complex-membered set;
+  let s be sequence of X such that
+ X is non empty add-closed;
+  func Partial_Sums(s) -> sequence of X means
 :: SERIES_1:def 1
 
-  it.0=s.0 & for n holds it
-  .(n+1) = it.n + s.(n+1);
+  it.0 = s.0 & for n holds it.(n+1) = it.n + s.(n+1);
 end;
 
 definition
@@ -65,14 +73,16 @@ theorem :: SERIES_1:7
   s is summable implies s is convergent & lim s = 0;
 
 theorem :: SERIES_1:8
+  for X being non empty add-closed (complex-membered set)
+  for s1,s2 being sequence of X holds
   Partial_Sums(s1) + Partial_Sums(s2) = Partial_Sums(s1+s2);
 
 theorem :: SERIES_1:9
   Partial_Sums(s1) - Partial_Sums(s2) = Partial_Sums(s1-s2);
 
 theorem :: SERIES_1:10
-  s1 is summable & s2 is summable implies s1+s2 is summable & Sum(s1+s2)
-  = Sum(s1) + Sum(s2);
+  s1 is summable & s2 is summable implies s1+s2 is summable &
+  Sum(s1+s2) = Sum(s1) + Sum(s2);
 
 theorem :: SERIES_1:11
   s1 is summable & s2 is summable implies s1-s2 is summable & Sum(s1-s2)
@@ -127,8 +137,7 @@ theorem :: SERIES_1:25
   Partial_Sums(s).m - Partial_Sums(s).n)<r;
 
 theorem :: SERIES_1:26
-  a <> 1 implies Partial_Sums(a GeoSeq).n = (1 - a to_power (n+1))
-  /(1-a);
+  a <> 1 implies Partial_Sums(a GeoSeq).n = (1 - a to_power (n+1)) /(1-a);
 
 theorem :: SERIES_1:27
   a <> 1 & (for n holds s.(n+1) = a * s.n) implies for n holds
@@ -179,8 +188,7 @@ theorem :: SERIES_1:36
   p>1 & (for n st n>=1 holds s.n = 1/n to_power p) implies s is summable;
 
 theorem :: SERIES_1:37
-  p<=1 & (for n st n>=1 holds s.n=1/n to_power p) implies s is not
-  summable;
+  p<=1 & (for n st n>=1 holds s.n=1/n to_power p) implies s is not summable;
 
 definition
   let s;
@@ -228,7 +236,6 @@ theorem :: SERIES_1:47
   implies s is not summable;
 
 begin :: Addenda
-
 :: from BHSP_4, 2006.03.04, A.T.
 
 definition
@@ -246,4 +253,3 @@ definition
 :: SERIES_1:def 7
   Sum(s, n) - Sum(s, m);
 end;
-

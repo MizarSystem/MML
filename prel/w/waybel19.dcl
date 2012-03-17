@@ -31,13 +31,12 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="YELLOW_3"/>
-<ArticleID name="WAYBEL_2"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
 <ArticleID name="YELLOW_9"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL19"/>
 </Signature>
 <RCluster aid="WAYBEL19" nr="1">
@@ -55,9 +54,9 @@
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
-<Adjective nr="148" value="false"/>
-<Adjective nr="159"/>
-<Adjective nr="166"/>
+<Adjective nr="156"/>
+<Adjective nr="163" value="false"/>
+<Adjective nr="164"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL19" nr="2">
@@ -75,8 +74,8 @@
 <Cluster>
 <Adjective nr="35" value="false"/>
 <Adjective nr="47"/>
-<Adjective nr="159"/>
-<Adjective nr="166"/>
+<Adjective nr="156"/>
+<Adjective nr="164"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL19" nr="3">
@@ -110,9 +109,9 @@
 <Adjective nr="110"/>
 <Adjective nr="146"/>
 <Adjective nr="147"/>
-<Adjective nr="148" value="false"/>
-<Adjective nr="159"/>
-<Adjective nr="167"/>
+<Adjective nr="156"/>
+<Adjective nr="163" value="false"/>
+<Adjective nr="165"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL19" nr="4">
@@ -129,9 +128,9 @@
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
-<Adjective nr="148" value="false"/>
-<Adjective nr="159"/>
-<Adjective nr="163"/>
+<Adjective nr="156"/>
+<Adjective nr="160"/>
+<Adjective nr="163" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL19" nr="5">
@@ -154,9 +153,9 @@
 <Adjective nr="119"/>
 <Adjective nr="146"/>
 <Adjective nr="147"/>
-<Adjective nr="148" value="false"/>
-<Adjective nr="159"/>
-<Adjective nr="167"/>
+<Adjective nr="156"/>
+<Adjective nr="163" value="false"/>
+<Adjective nr="165"/>
 </Cluster>
 </RCluster>
 <CCluster aid="WAYBEL19" nr="1">
@@ -174,7 +173,7 @@
 <Adjective nr="35" value="false"/>
 <Adjective nr="47"/>
 <Adjective nr="72"/>
-<Adjective nr="166"/>
+<Adjective nr="164"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WAYBEL19" nr="2">
@@ -185,7 +184,7 @@
 <Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="166"/>
+<Adjective nr="164"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -248,7 +247,7 @@
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
-<Adjective nr="167"/>
+<Adjective nr="165"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -262,7 +261,7 @@
 <Adjective nr="97"/>
 <Adjective nr="98"/>
 <Adjective nr="99"/>
-<Adjective nr="164"/>
+<Adjective nr="161"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WAYBEL19" nr="6">
@@ -276,7 +275,7 @@
 <Adjective nr="98"/>
 <Adjective nr="99"/>
 <Adjective nr="119"/>
-<Adjective nr="167"/>
+<Adjective nr="165"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>

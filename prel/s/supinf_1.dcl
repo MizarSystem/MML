@@ -2,8 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -19,97 +17,97 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="21">
+<Func kind="K" nr="6">
+<Func kind="K" nr="6">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SUPINF_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="67">
+<Func kind="K" nr="51">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUPINF_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="68">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUPINF_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="21">
-<Func kind="K" nr="21">
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="6">
+<Func kind="K" nr="34"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="69">
+<Func kind="K" nr="53">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SUPINF_1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="21">
-<Func kind="K" nr="21">
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="6">
+<Func kind="K" nr="34"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="70">
+<Func kind="K" nr="54">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 </Registrations>

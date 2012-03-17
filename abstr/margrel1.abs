@@ -8,11 +8,14 @@ environ
 
  vocabularies SUBSET_1, NUMBERS, XBOOLE_0, FUNCOP_1, FUNCT_2, RELAT_1, TARSKI,
       FINSEQ_1, CARD_3, FUNCT_1, ZFMISC_1, ORDINAL4, CARD_1, XBOOLEAN,
-      MARGREL1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FINSEQ_1,
-      RELAT_1, FUNCT_2, FUNCOP_1, XBOOLEAN, CARD_3;
- constructors FUNCOP_1, XCMPLX_0, FINSEQ_1, XBOOLEAN, RELSET_1, CARD_3;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XBOOLEAN, FINSEQ_1;
+      MARGREL1, PARTFUN1, NAT_1, UNIALG_1, FINSEQ_2, UNIALG_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, RELAT_1,
+      NAT_1, FUNCT_2, XBOOLEAN, CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1, PARTFUN1;
+ constructors FUNCOP_1, XCMPLX_0, FINSEQ_1, XBOOLEAN, RELSET_1, CARD_3,
+      FINSEQ_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XBOOLEAN, FINSEQ_1,
+      FINSEQ_2, ORDINAL1, RELSET_1, PARTFUN1, FUNCOP_1, XXREAL_0, CARD_1,
+      CARD_3;
  requirements SUBSET, BOOLE, ARITHM;
 
 
@@ -112,8 +115,7 @@ definition
   let X, k;
   mode relation of X,k -> relation means
 :: MARGREL1:def 7
-    it is relation of X & it is
-    relation_length of k;
+    it is relation of X & it is relation_length of k;
 end;
 
 definition
@@ -147,8 +149,7 @@ theorem :: MARGREL1:27
   {a} is Element of relations_on D;
 
 theorem :: MARGREL1:28
-  for x,y being Element of D holds {<*x,y*>} is Element of relations_on
-  D;
+  for x,y being Element of D holds {<*x,y*>} is Element of relations_on D;
 
 definition
   let D,p,r;
@@ -205,7 +206,7 @@ end;
 
 definition
   redefine func FALSE -> Element of BOOLEAN;
-  func TRUE -> Element of BOOLEAN;
+  redefine func TRUE -> Element of BOOLEAN;
 end;
 
 definition
@@ -223,13 +224,12 @@ end;
 reserve u,v,w for boolean set;
 
 definition
-  redefine
   let v be boolean set;
-  func 'not' v equals
+  redefine func 'not' v equals
 :: MARGREL1:def 14
   TRUE if v = FALSE otherwise FALSE;
   let w be boolean set;
-  func v '&' w equals
+  redefine func v '&' w equals
 :: MARGREL1:def 15
   TRUE if v = TRUE & w =TRUE otherwise FALSE;
 end;
@@ -238,7 +238,7 @@ definition
   let v be Element of BOOLEAN;
   redefine func 'not' v -> Element of BOOLEAN;
   let w be Element of BOOLEAN;
-  func v '&' w -> Element of BOOLEAN;
+  redefine func v '&' w -> Element of BOOLEAN;
 end;
 
 canceled 7;
@@ -291,7 +291,6 @@ theorem :: MARGREL1:53
   (not FALSE in X iff ALL(X) = TRUE) & (FALSE in X iff ALL(X) = FALSE);
 
 begin :: Addenda
-
 :: from VALUAT_1, 2007.03.15, A.T.
 
 definition
@@ -316,8 +315,7 @@ definition
   func 'not' p -> boolean-valued Function means
 :: MARGREL1:def 18
 
-  dom it = dom p & for x
-  being set st x in dom p holds it.x = 'not'(p.x);
+  dom it = dom p & for x being set st x in dom p holds it.x = 'not'(p.x);
   involutiveness;
   let q be boolean-valued Function;
   func p '&' q -> boolean-valued Function means
@@ -336,16 +334,163 @@ end;
 
 definition
   let A be non empty set;
-  redefine
   let p be Element of Funcs(A,BOOLEAN);
-  func 'not' p -> Element of Funcs(A,BOOLEAN) means
+  redefine func 'not' p -> Element of Funcs(A,BOOLEAN) means
 :: MARGREL1:def 20
-  for x being Element of A
-  holds it.x = 'not'(p.x);
+  for x being Element of A holds it.x = 'not'(p.x);
   let q be Element of Funcs(A,BOOLEAN);
-  func p '&' q -> Element of Funcs(A,BOOLEAN) means
+  redefine func p '&' q -> Element of Funcs(A,BOOLEAN) means
 :: MARGREL1:def 21
-  for x being Element of A
-  holds it.x = (p.x) '&' (q.x);
+  for x being Element of A holds it.x = (p.x) '&' (q.x);
 end;
 
+begin :: Moved from UNIALG_1, 2010.03.16, A.T.
+
+reserve A,z for set,
+  x,y for FinSequence of A,
+  h for PartFunc of A*,A,
+  n,m for Nat;
+
+definition
+  let IT be Relation;
+  attr IT is homogeneous means
+:: MARGREL1:def 22
+ dom IT is with_common_domain;
+end;
+
+definition
+  let A;
+  let IT be PartFunc of A*,A;
+  attr IT is quasi_total means
+:: MARGREL1:def 23
+ for x,y st len x = len y & x in dom IT holds y in dom IT;
+end;
+
+registration
+  let f be Relation;
+  let X be with_common_domain set;
+  cluster f|X -> homogeneous;
+end;
+
+registration
+  let A be non empty set, f be PartFunc of A*,A;
+  cluster dom f -> FinSequence-membered;
+end;
+
+registration
+  let A be non empty set;
+  cluster homogeneous quasi_total non empty PartFunc of A*,A;
+end;
+
+registration
+  cluster homogeneous non empty Function;
+end;
+
+registration let R be homogeneous Relation;
+ cluster dom R -> with_common_domain;
+end;
+
+theorem :: MARGREL1:54
+  for A being non empty set, a being Element of A holds <*>A .-->a
+  is homogeneous quasi_total non empty PartFunc of A*,A;
+
+theorem :: MARGREL1:55
+  for A being non empty set, a being Element of A holds <*>A .-->a
+  is Element of PFuncs(A*,A);
+
+:: stolen from HILBERT3 and improved
+
+registration
+  let A be set, B be functional set;
+  cluster -> Function-yielding PartFunc of A,B;
+end;
+
+definition
+  let A;
+  mode PFuncFinSequence of A is FinSequence of PFuncs(A*,A);
+end;
+
+definition
+  let A;
+  let IT be PFuncFinSequence of A;
+  attr IT is homogeneous means
+:: MARGREL1:def 24
+
+  for n,h st n in dom IT & h = IT.n holds h is homogeneous;
+end;
+
+definition
+  let A;
+  let IT be PFuncFinSequence of A;
+  attr IT is quasi_total means
+:: MARGREL1:def 25
+
+  for n,h st n in dom IT & h = IT.n holds h is quasi_total;
+end;
+
+definition
+  let A be non empty set;
+  let x be Element of PFuncs(A*,A);
+  redefine func <*x*> -> PFuncFinSequence of A;
+end;
+
+registration
+  let A be non empty set;
+  cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
+end;
+
+registration
+  let A be non empty set;
+  let f be homogeneous PFuncFinSequence of A;
+  let i be set;
+  cluster f.i -> homogeneous;
+end;
+
+reserve A for non empty set,
+  h for PartFunc of A*,A,
+
+  a for Element of A;
+
+theorem :: MARGREL1:56
+  for x be Element of PFuncs(A*,A) st x = <*>A .--> a holds <*x*>
+  is homogeneous quasi_total non-empty;
+
+definition
+  let f be homogeneous Relation;
+  func arity(f) -> Nat means
+:: MARGREL1:def 26
+  for x being FinSequence st x in dom f holds it =
+  len x if ex x being FinSequence st x in dom f otherwise it = 0;
+end;
+
+definition
+  let f be homogeneous Function;
+  redefine func arity(f) -> Element of NAT;
+end;
+
+begin :: Moved from UNIALG_2, 2010.03.17, A.T.
+
+theorem :: MARGREL1:57
+  for n be Nat, D be non empty set, D1 be non empty Subset of D
+  holds n-tuples_on D /\ n-tuples_on D1 = n-tuples_on D1;
+
+theorem :: MARGREL1:58
+  for D being non empty set for h being homogeneous quasi_total non
+  empty PartFunc of D*,D holds dom h = (arity(h))-tuples_on D;
+
+
+
+definition
+  let D be non empty set;
+  mode PFuncsDomHQN of D -> non empty set means
+:: MARGREL1:def 27
+
+    for x be Element of it
+    holds x is homogeneous quasi_total non empty PartFunc of D*,D;
+end;
+
+definition
+  let D be non empty set, P be PFuncsDomHQN of D;
+  redefine mode Element of P -> homogeneous quasi_total non empty PartFunc of
+    D*,D;
+end;

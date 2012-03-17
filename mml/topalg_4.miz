@@ -3,22 +3,23 @@
 ::
 :: Received August 20, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, ALGSTR_0, SUBSET_1, CARD_3, FINSEQ_1, STRUCT_0,
       RLVECT_2, FUNCT_1, RELAT_1, GROUP_1, GROUP_6, FUNCT_2, TARSKI, WELLORD1,
       BORSUK_1, CARD_1, PRE_TOPC, GRAPH_1, BORSUK_6, MCART_1, PARTFUN1,
       ZFMISC_1, ORDINAL2, RCOMP_1, BORSUK_2, ALGSTR_1, ARYTM_3, XXREAL_0,
-      ARYTM_1, TOPALG_1, EQREL_1, WAYBEL20, TOPALG_4;
+      ARYTM_1, TOPALG_1, EQREL_1, WAYBEL20, TOPALG_4, MSSUBFAM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, EQREL_1, MCART_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, BINOP_1, FINSEQ_1, CARD_3,
-      STRUCT_0, ALGSTR_0, PRALG_1, GROUP_1, GROUP_6, GROUP_7, PRE_TOPC,
-      BORSUK_1, BORSUK_2, BORSUK_6, TOPALG_1, XXREAL_0;
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1,
+      FINSEQ_1, CARD_3, STRUCT_0, ALGSTR_0, PRALG_1, GROUP_1, GROUP_6, GROUP_7,
+      PRE_TOPC, BORSUK_1, BORSUK_2, BORSUK_6, TOPALG_1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, REAL_1, MONOID_0, PRALG_1, PRALG_2, GROUP_7,
-      BORSUK_3, BORSUK_6, TOPALG_1;
+      BORSUK_3, BORSUK_6, TOPALG_1, GROUP_6;
  registrations RELSET_1, XREAL_0, FINSEQ_1, STRUCT_0, TOPS_1, BORSUK_1,
-      MONOID_0, BORSUK_2, GROUP_7, TOPALG_1, ORDINAL1, PRE_TOPC, RELAT_1;
+      MONOID_0, BORSUK_2, GROUP_7, TOPALG_1, ORDINAL1, PRE_TOPC, RELAT_1,
+      FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCT_2, BORSUK_2, BORSUK_6, GROUP_6,
       BINOP_1, STRUCT_0, TOPALG_1;
@@ -119,39 +120,35 @@ A2: Gr2Iso(f,g).<*x1,x2*> = <*f.y1,g.y2*> by Def1;
   hence thesis by A1,A2,FINSEQ_1:98;
 end;
 
-definition
-  let G1, G2, H1, H2 be Group, f be Homomorphism of G1,H1, g be Homomorphism
-  of G2,H2;
-  redefine func Gr2Iso(f,g) -> Homomorphism of product <*G1,G2*>, product <*H1
-  ,H2*>;
+registration
+  let G1, G2, H1, H2 be Group, f be Homomorphism of G1,H1,
+  g be Homomorphism of G2,H2;
+  cluster Gr2Iso(f,g) -> multiplicative;
   coherence
   proof
     set h = Gr2Iso(f,g);
-    now
-      let a, b be Element of product <*G1,G2*>;
-      consider a1 being Element of G1, a2 being Element of G2 such that
-A1:   a = <*a1,a2*> and
-A2:   h.a = <*f.a1,g.a2*> by Def1;
-      consider b1 being Element of G1, b2 being Element of G2 such that
-A3:   b = <*b1,b2*> and
-A4:   h.b = <*f.b1,g.b2*> by Def1;
-A5:   b.2 = b2 by A3,FINSEQ_1:61;
-      consider r1 being Element of G1, r2 being Element of G2 such that
-A6:   a*b = <*r1,r2*> and
-A7:   h.(a*b) = <*f.r1,g.r2*> by Def1;
-      G2 = <*G1,G2*>.2 & a.2 = a2 by A1,FINSEQ_1:61;
-      then a2*b2 = <*r1,r2*>.2 by A6,A5,Lm2,GROUP_7:4;
-      then
-A8:   g.r2 = g.(a2*b2) by FINSEQ_1:61
-        .= g.a2 * g.b2 by GROUP_6:def 7;
-A9:   b.1 = b1 by A3,FINSEQ_1:61;
-      G1 = <*G1,G2*>.1 & a.1 = a1 by A1,FINSEQ_1:61;
-      then a1*b1 = <*r1,r2*>.1 by A6,A9,Lm1,GROUP_7:4;
-      then f.r1 = f.(a1*b1) by FINSEQ_1:61
-        .= f.a1 * f.b1 by GROUP_6:def 7;
-      hence h.(a*b) = h.a * h.b by A2,A4,A7,A8,GROUP_7:32;
-    end;
-    hence thesis by GROUP_6:def 7;
+    let a, b be Element of product <*G1,G2*>;
+    consider a1 being Element of G1, a2 being Element of G2 such that
+A1: a = <*a1,a2*> and
+A2: h.a = <*f.a1,g.a2*> by Def1;
+    consider b1 being Element of G1, b2 being Element of G2 such that
+A3: b = <*b1,b2*> and
+A4: h.b = <*f.b1,g.b2*> by Def1;
+A5: b.2 = b2 by A3,FINSEQ_1:61;
+    consider r1 being Element of G1, r2 being Element of G2 such that
+A6: a*b = <*r1,r2*> and
+A7: h.(a*b) = <*f.r1,g.r2*> by Def1;
+    G2 = <*G1,G2*>.2 & a.2 = a2 by A1,FINSEQ_1:61;
+    then a2*b2 = <*r1,r2*>.2 by A6,A5,Lm2,GROUP_7:4;
+    then
+A8: g.r2 = g.(a2*b2) by FINSEQ_1:61
+    .= g.a2 * g.b2 by GROUP_6:def 7;
+A9: b.1 = b1 by A3,FINSEQ_1:61;
+    G1 = <*G1,G2*>.1 & a.1 = a1 by A1,FINSEQ_1:61;
+    then a1*b1 = <*r1,r2*>.1 by A6,A9,Lm1,GROUP_7:4;
+    then f.r1 = f.(a1*b1) by FINSEQ_1:61
+    .= f.a1 * f.b1 by GROUP_6:def 7;
+    hence h.(a*b) = h.a * h.b by A2,A4,A7,A8,GROUP_7:32;
   end;
 end;
 
@@ -166,13 +163,11 @@ A1: f is one-to-one and
 A2: g is one-to-one;
   let a, b be set;
   set h = Gr2Iso(f,g);
-  assume
-  a in dom h;
+  assume a in dom h;
   then consider a1 being Element of G1, a2 being Element of G2 such that
 A3: a = <*a1,a2*> and
 A4: h.a = <*f.a1,g.a2*> by Def1;
-  assume
-  b in dom h;
+  assume b in dom h;
   then consider b1 being Element of G1, b2 being Element of G2 such that
 A5: b = <*b1,b2*> and
 A6: h.b = <*f.b1,g.b2*> by Def1;
@@ -199,8 +194,7 @@ A2: rng g = the carrier of H2;
   set h = Gr2Iso(f,g);
   thus rng h c= the carrier of product <*H1,H2*>;
   let a be set;
-  assume
-  a in the carrier of product <*H1,H2*>;
+  assume a in the carrier of product <*H1,H2*>;
   then consider x being Element of H1, y being Element of H2 such that
 A3: a = <*x,y*> by Th1;
   consider a2 being set such that
@@ -222,9 +216,9 @@ A10: h.<*a1,a2*> = <*f.k1,g.k2*> by Def1;
 end;
 
 theorem Th5:
-  for G1, G2, H1, H2 being Group, f being Homomorphism of G1,H1, g
-being Homomorphism of G2,H2 st f is bijective & g is bijective holds Gr2Iso(f,g
-  ) is bijective
+  for G1, G2, H1, H2 being Group, f being Homomorphism of G1,H1,
+  g being Homomorphism of G2,H2 st f is bijective & g is bijective holds
+  Gr2Iso(f,g) is bijective
 proof
   let G1, G2, H1, H2 be Group, h1 be Homomorphism of G1,H1, h2 be Homomorphism
   of G2,H2 such that
@@ -258,16 +252,15 @@ A2: h2 is bijective;
 end;
 
 begin :: On the fundamental groups of products of topological spaces
+
 set I = the carrier of I[01];
 reconsider j0 = 0, j1 = 1 as Point of I[01] by BORSUK_1:def 17,def 18;
 
 reserve S, T, Y for non empty TopSpace,
   s, s1, s2, s3 for Point of S,
-  t, t1,
-  t2, t3 for Point of T,
+  t, t1, t2, t3 for Point of T,
   l1, l2 for Path of [s1,t1],[s2,t2],
-  H for Homotopy of l1
-  ,l2;
+  H for Homotopy of l1 ,l2;
 
 theorem Th7:
   for f, g being Function st dom f = dom g holds pr1 <:f,g:> = f
@@ -335,8 +328,7 @@ BORSUK_1:def 5;
 A3: rng pr1 f c= the carrier of S
     proof
       let y be set;
-      assume
-      y in rng pr1 f;
+      assume y in rng pr1 f;
       then consider x being set such that
 A4:   x in dom pr1 f and
 A5:   (pr1 f).x = y by FUNCT_1:def 5;
@@ -355,8 +347,7 @@ BORSUK_1:def 5;
 A8: rng pr2 f c= the carrier of T
     proof
       let y be set;
-      assume
-      y in rng pr2 f;
+      assume y in rng pr2 f;
       then consider x being set such that
 A9:   x in dom pr2 f and
 A10:  (pr2 f).x = y by FUNCT_1:def 5;
@@ -369,8 +360,7 @@ A10:  (pr2 f).x = y by FUNCT_1:def 5;
 end;
 
 theorem Th9:
-  for f being continuous Function of Y,[:S,T:] holds pr1 f is
-  continuous
+  for f being continuous Function of Y,[:S,T:] holds pr1 f is continuous
 proof
   let f be continuous Function of Y,[:S,T:];
   set g = pr1 f;
@@ -397,8 +387,7 @@ A8: f.:W c= [:V,[#]T:] by A3,JGRAPH_2:20;
     take W;
     thus p in W & W is open by A7;
     let y be set;
-    assume
-    y in g.:W;
+    assume y in g.:W;
     then consider x being Point of Y such that
 A9: x in W and
 A10: y = g.x by FUNCT_2:116;
@@ -410,8 +399,7 @@ A11: g.x = (f.x)`1 by A6,MCART_1:def 12;
 end;
 
 theorem Th10:
-  for f being continuous Function of Y,[:S,T:] holds pr2 f is
-  continuous
+  for f being continuous Function of Y,[:S,T:] holds pr2 f is continuous
 proof
   let f be continuous Function of Y,[:S,T:];
   set g = pr2 f;
@@ -438,8 +426,7 @@ A8: f.:W c= [:[#]S,V:] by A3,JGRAPH_2:20;
     take W;
     thus p in W & W is open by A7;
     let y be set;
-    assume
-    y in g.:W;
+    assume y in g.:W;
     then consider x being Point of Y such that
 A9: x in W and
 A10: y = g.x by FUNCT_2:116;
@@ -584,7 +571,7 @@ A6: <:L1,L2:>.j0 = [L1.j0,L2.j0] by A4,FUNCT_3:69
 end;
 
 definition
-  let S, T be non empty arcwise_connected TopSpace, s1, s2 be Point of S, t1,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2 be Point of S, t1,
   t2 be Point of T, L1 be Path of s1,s2, L2 be Path of t1,t2;
   redefine func <:L1,L2:> -> Path of [s1,t1],[s2,t2];
   coherence
@@ -602,8 +589,8 @@ definition
 end;
 
 registration
-  let S, T be non empty arcwise_connected TopSpace;
-  cluster [:S,T:] -> arcwise_connected;
+  let S, T be non empty pathwise_connected TopSpace;
+  cluster [:S,T:] -> pathwise_connected;
   coherence
   proof
     let a, b be Point of [:S,T:];
@@ -617,7 +604,7 @@ A2: b = [b1,b2] by BORSUK_1:50;
 end;
 
 definition
-  let S, T be non empty arcwise_connected TopSpace, s1, s2 be Point of S, t1,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2 be Point of S, t1,
   t2 be Point of T, L be Path of [s1,t1],[s2,t2];
   redefine func pr1 L -> Path of s1,s2;
   coherence
@@ -645,7 +632,6 @@ end;
 Lm3: l1,l2 are_homotopic implies pr1 H is continuous & for a being Point of
 I[01] holds pr1 H.(a,0) = pr1 l1.a & pr1 H.(a,1) = pr1 l2.a & for b being Point
 of I[01] holds pr1 H.(0,b) = s1 & pr1 H.(1,b) = s2
-
 proof
 A1: dom l1 = I by FUNCT_2:def 1;
 A2: dom l2 = I by FUNCT_2:def 1;
@@ -677,7 +663,6 @@ end;
 Lm4: l1,l2 are_homotopic implies pr2 H is continuous & for a being Point of
 I[01] holds pr2 H.(a,0) = pr2 l1.a & pr2 H.(a,1) = pr2 l2.a & for b being Point
 of I[01] holds pr2 H.(0,b) = t1 & pr2 H.(1,b) = t2
-
 proof
 A1: dom l1 = I by FUNCT_2:def 1;
 A2: dom l2 = I by FUNCT_2:def 1;
@@ -772,12 +757,9 @@ pr2 l2 & p,q are_homotopic & x,y are_homotopic holds <:f,g:> is continuous &
 for a being Point of I[01] holds <:f,g:>.(a,0) = l1.a & <:f,g:>.(a,1) = l2.a &
 for b being Point of I[01] holds <:f,g:>.(0,b) = [s1,t1] & <:f,g:>.(1,b) = [s2,
 t2]
-
 proof
-
   let p, q be Path of s1,s2, x, y be Path of t1,t2, f be Homotopy of p,q, g be
   Homotopy of x,y such that
-
 A1: p = pr1 l1 and
 A2: q = pr1 l2 and
 A3: x = pr2 l1 and
@@ -789,13 +771,10 @@ A6: x,y are_homotopic;
   hence h is continuous by YELLOW12:41;
   let a be Point of I[01];
 A7: dom l1 = I by FUNCT_2:def 1;
-
 A8: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:] by
 BORSUK_1:def 5;
-
 A9: dom f = the carrier of [:I[01],I[01]:] & dom g = the carrier of [:I[01],
   I[01]:] by FUNCT_2:def 1;
-
   hence h.(a,0) = [f. [a,j0], g. [a,j0]] by FUNCT_3:69
     .= [f.(a,j0), g.(a,j0)]
     .= [pr1 l1.a, g.(a,j0)] by A1,A5,BORSUK_6:def 13
@@ -905,11 +884,11 @@ A11:  2*x-1 is Point of I[01] by BORSUK_6:7;
 end;
 
 theorem
-  for S, T being non empty arcwise_connected TopSpace, s1, s2, s3 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2, s3 being
   Point of S, t1, t2, t3 being Point of T, l1 being Path of [s1,t1],[s2,t2], l2
   being Path of [s2,t2],[s3,t3] holds pr1 (l1+l2) = (pr1 l1) + (pr1 l2)
 proof
-  let S, T be non empty arcwise_connected TopSpace, s1, s2, s3 be Point of S,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2, s3 be Point of S,
 t1, t2, t3 be Point of T, l1 be Path of [s1,t1],[s2,t2], l2 be Path of [s2,t2],
   [s3,t3];
   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected by
@@ -958,11 +937,11 @@ A11:  2*x-1 is Point of I[01] by BORSUK_6:7;
 end;
 
 theorem
-  for S, T being non empty arcwise_connected TopSpace, s1, s2, s3 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2, s3 being
   Point of S, t1, t2, t3 being Point of T, l1 being Path of [s1,t1],[s2,t2], l2
   being Path of [s2,t2],[s3,t3] holds pr2 (l1+l2) = (pr2 l1) + (pr2 l2)
 proof
-  let S, T be non empty arcwise_connected TopSpace, s1, s2, s3 be Point of S,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2, s3 be Point of S,
 t1, t2, t3 be Point of T, l1 be Path of [s1,t1],[s2,t2], l2 be Path of [s2,t2],
   [s3,t3];
   [s1,t1],[s2,t2] are_connected & [s2,t2],[s3,t3] are_connected by
@@ -1051,8 +1030,7 @@ proof
 A1: x = Class(EqRel([:S,T:],[s,t]),l1) and
 A2: FGPrIso(s,t).x = <*Class(EqRel(S,s),pr1 l1),Class(EqRel(T,t),pr2 l1)
   *> by Def2;
-  assume
-  x = Class(EqRel([:S,T:],[s,t]),l);
+  assume x = Class(EqRel([:S,T:],[s,t]),l);
   then
 A3: l,l1 are_homotopic by A1,TOPALG_1:47;
   then pr2 l,pr2 l1 are_homotopic by Th20;
@@ -1084,13 +1062,11 @@ A1: the carrier of pT = product Carrier G by GROUP_7:def 2;
     thus F is one-to-one
     proof
       let a, b be set;
-      assume
-      a in dom F;
+      assume a in dom F;
       then consider la being Loop of [s,t] such that
 A2:   a = Class(EqRel([:S,T:],[s,t]),la) and
 A3:   F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by Def2;
-      assume
-      b in dom F;
+      assume b in dom F;
       then consider lb being Loop of [s,t] such that
 A4:   b = Class(EqRel([:S,T:],[s,t]),lb) and
 A5:   F.b = <*Class(EqRel(S,s),pr1 lb),Class(EqRel(T,t),pr2 lb)*> by Def2;
@@ -1108,8 +1084,7 @@ FINSEQ_1:98;
     end;
     thus rng F c= the carrier of pT;
     let y be set;
-    assume
-    y in the carrier of pT;
+    assume y in the carrier of pT;
     then consider g being Function such that
 A8: y = g and
 A9: dom g = dom Carrier G and
@@ -1143,45 +1118,41 @@ A18: x in dom F by TOPALG_1:48;
   end;
 end;
 
-definition
+registration
   let S, T be non empty TopSpace, s be Point of S, t be Point of T;
-  redefine func FGPrIso(s,t) -> Homomorphism of pi_1([:S,T:],[s,t]), product
-  <*pi_1(S,s),pi_1(T,t)*>;
+  cluster  FGPrIso(s,t) -> multiplicative;
   coherence
   proof
     set F = FGPrIso(s,t);
-    now
-      let a, b be Element of pi_1([:S,T:],[s,t]);
-      consider la being Loop of [s,t] such that
-A1:   a = Class(EqRel([:S,T:],[s,t]),la) and
-A2:   F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by Def2;
-      consider lb being Loop of [s,t] such that
-A3:   b = Class(EqRel([:S,T:],[s,t]),lb) and
-A4:   F.b = <*Class(EqRel(S,s),pr1 lb),Class(EqRel(T,t),pr2 lb)*> by Def2;
-      reconsider B1 = Class(EqRel(T,t),pr2 la), B2 = Class(EqRel(T,t),pr2 lb)
-      as Element of pi_1(T,t) by TOPALG_1:48;
-      reconsider A1 = Class(EqRel(S,s),pr1 la), A2 = Class(EqRel(S,s),pr1 lb)
-      as Element of pi_1(S,s) by TOPALG_1:48;
-      consider lab being Loop of [s,t] such that
-A5:   a*b = Class(EqRel([:S,T:],[s,t]),lab) and
-A6:   F .(a*b) = <*Class(EqRel(S,s),pr1 lab),Class(EqRel(T,t),pr2 lab)
-      *> by Def2;
-      a*b = Class(EqRel([:S,T:],[s,t]),la+lb) by A1,A3,TOPALG_1:62;
-      then
-A7:   lab,la+lb are_homotopic by A5,TOPALG_1:47;
-      then
-A8:   pr1 lab, pr1(la+lb) are_homotopic by Th19;
-A9:   pr2 lab, pr2(la+lb) are_homotopic by A7,Th20;
-A10:  B1*B2 = Class(EqRel(T,t),pr2 la + pr2 lb) by TOPALG_1:62
-        .= Class(EqRel(T,t),pr2 (la+lb)) by Th25
-        .= Class(EqRel(T,t),pr2 lab) by A9,TOPALG_1:47;
-      A1*A2 = Class(EqRel(S,s),pr1 la + pr1 lb) by TOPALG_1:62
-        .= Class(EqRel(S,s),pr1 (la+lb)) by Th23
-        .= Class(EqRel(S,s),pr1 lab) by A8,TOPALG_1:47;
-      hence F.(a*b) = F.a * F.b by A2,A4,A6,A10,GROUP_7:32;
-    end;
-    hence thesis by GROUP_6:def 7;
-  end;
+    let a, b be Element of pi_1([:S,T:],[s,t]);
+    consider la being Loop of [s,t] such that
+A1: a = Class(EqRel([:S,T:],[s,t]),la) and
+A2: F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by Def2;
+    consider lb being Loop of [s,t] such that
+A3: b = Class(EqRel([:S,T:],[s,t]),lb) and
+A4: F.b = <*Class(EqRel(S,s),pr1 lb),Class(EqRel(T,t),pr2 lb)*> by Def2;
+    reconsider B1 = Class(EqRel(T,t),pr2 la), B2 = Class(EqRel(T,t),pr2 lb)
+    as Element of pi_1(T,t) by TOPALG_1:48;
+    reconsider A1 = Class(EqRel(S,s),pr1 la), A2 = Class(EqRel(S,s),pr1 lb)
+    as Element of pi_1(S,s) by TOPALG_1:48;
+    consider lab being Loop of [s,t] such that
+A5: a*b = Class(EqRel([:S,T:],[s,t]),lab) and
+A6: F .(a*b) = <*Class(EqRel(S,s),pr1 lab),Class(EqRel(T,t),pr2 lab) *>
+    by Def2;
+    a*b = Class(EqRel([:S,T:],[s,t]),la+lb) by A1,A3,TOPALG_1:62;
+    then
+A7: lab,la+lb are_homotopic by A5,TOPALG_1:47;
+    then
+A8: pr1 lab, pr1(la+lb) are_homotopic by Th19;
+A9: pr2 lab, pr2(la+lb) are_homotopic by A7,Th20;
+A10: B1*B2 = Class(EqRel(T,t),pr2 la + pr2 lb) by TOPALG_1:62
+     .= Class(EqRel(T,t),pr2 (la+lb)) by Th25
+     .= Class(EqRel(T,t),pr2 lab) by A9,TOPALG_1:47;
+     A1*A2 = Class(EqRel(S,s),pr1 la + pr1 lb) by TOPALG_1:62
+     .= Class(EqRel(S,s),pr1 (la+lb)) by Th23
+     .= Class(EqRel(S,s),pr1 lab) by A8,TOPALG_1:47;
+     hence F.(a*b) = F.a * F.b by A2,A4,A6,A10,GROUP_7:32;
+   end;
 end;
 
 theorem Th29:
@@ -1193,8 +1164,7 @@ FUNCT_2:def 3;
 end;
 
 theorem Th30:
-  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*>
-  are_isomorphic
+  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> are_isomorphic
 proof
   take FGPrIso(s,t);
   thus thesis by Th29;
@@ -1207,8 +1177,7 @@ Homomorphism of pi_1(T,t1),pi_1(T,t2) st f is bijective & g is bijective holds
 proof
   let f be Homomorphism of pi_1(S,s1),pi_1(S,s2), g be Homomorphism of pi_1(T,
   t1),pi_1(T,t2);
-  assume
-  f is bijective & g is bijective;
+  assume f is bijective & g is bijective;
   then
 A1: Gr2Iso(f,g) is bijective by Th5;
   FGPrIso(s1,t1) is bijective by Th29;
@@ -1216,11 +1185,11 @@ A1: Gr2Iso(f,g) is bijective by Th5;
 end;
 
 theorem
-  for S, T being non empty arcwise_connected TopSpace, s1, s2 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2 being
 Point of S, t1, t2 being Point of T holds pi_1([:S,T:],[s1,t1]), product <*pi_1
   (S,s2),pi_1(T,t2)*> are_isomorphic
 proof
-  let S, T be non empty arcwise_connected TopSpace, s1, s2 be Point of S, t1,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2 be Point of S, t1,
   t2 be Point of T;
   pi_1(S,s1),pi_1(S,s2) are_isomorphic & pi_1(T,t1),pi_1(T,t2)
   are_isomorphic by TOPALG_3:35;
@@ -1231,4 +1200,3 @@ A1: product <*pi_1(S,s1),pi_1(T,t1)*>, product <*pi_1(S,s2),pi_1(T,t2)*>
   by Th30;
   hence thesis by A1,GROUP_6:78;
 end;
-

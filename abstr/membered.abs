@@ -7,11 +7,11 @@
 environ
 
  vocabularies XCMPLX_0, XXREAL_0, XREAL_0, RAT_1, INT_1, ORDINAL1, NUMBERS,
-      XBOOLE_0, SUBSET_1, TARSKI, SETFAM_1, MEMBERED;
+      XBOOLE_0, SUBSET_1, TARSKI, SETFAM_1, MEMBERED, IDEAL_1, ARYTM_3;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RAT_1, INT_1, ORDINAL1;
  constructors ENUMSET1, SETFAM_1, XCMPLX_0, XXREAL_0, RAT_1;
- registrations XREAL_0, INT_1, RAT_1, ORDINAL1;
+ registrations XREAL_0, INT_1, RAT_1, ORDINAL1, XCMPLX_0, NUMBERS, NAT_1;
  requirements BOOLE, SUBSET;
 
 
@@ -127,11 +127,9 @@ end;
 
 reserve c, c1, c2, c3 for complex number,
   e, e1, e2, e3 for ext-real number,
-  r
-  , r1, r2, r3 for real number,
+  r , r1, r2, r3 for real number,
   w, w1, w2, w3 for rational number,
-  i, i1, i2, i3
-  for integer number,
+  i, i1, i2, i3 for integer number,
   n, n1, n2, n3 for natural number;
 
 theorem :: MEMBERED:7
@@ -153,12 +151,10 @@ theorem :: MEMBERED:12
   for X being non empty natural-membered set ex n st n in X;
 
 theorem :: MEMBERED:13
-  for X being complex-membered set st for c holds c in X holds X =
-  COMPLEX;
+  for X being complex-membered set st for c holds c in X holds X = COMPLEX;
 
 theorem :: MEMBERED:14
-  for X being ext-real-membered set st for e holds e in X holds X =
-  ExtREAL;
+  for X being ext-real-membered set st for e holds e in X holds X = ExtREAL;
 
 theorem :: MEMBERED:15
   for X being real-membered set st for r holds r in X holds X = REAL;
@@ -173,27 +169,22 @@ theorem :: MEMBERED:18
   for X being natural-membered set st for n holds n in X holds X = NAT;
 
 theorem :: MEMBERED:19
-  for Y being complex-membered set st X c= Y holds X is
-  complex-membered;
+  for Y being complex-membered set st X c= Y holds X is complex-membered;
 
 theorem :: MEMBERED:20
-  for Y being ext-real-membered set st X c= Y holds X is
-  ext-real-membered;
+  for Y being ext-real-membered set st X c= Y holds X is ext-real-membered;
 
 theorem :: MEMBERED:21
   for Y being real-membered set st X c= Y holds X is real-membered;
 
 theorem :: MEMBERED:22
-  for Y being rational-membered set st X c= Y holds X is
-  rational-membered;
+  for Y being rational-membered set st X c= Y holds X is rational-membered;
 
 theorem :: MEMBERED:23
-  for Y being integer-membered set st X c= Y holds X is
-  integer-membered;
+  for Y being integer-membered set st X c= Y holds X is integer-membered;
 
 theorem :: MEMBERED:24
-  for Y being natural-membered set st X c= Y holds X is
-  natural-membered;
+  for Y being natural-membered set st X c= Y holds X is natural-membered;
 
 registration
   cluster empty -> natural-membered set;
@@ -586,8 +577,7 @@ theorem :: MEMBERED:26
   ext-real-membered;
 
 theorem :: MEMBERED:27
-  (for X st X in F holds X is real-membered) implies union F is
-  real-membered;
+  (for X st X in F holds X is real-membered) implies union F is real-membered;
 
 theorem :: MEMBERED:28
   (for X st X in F holds X is rational-membered) implies union F is
@@ -666,10 +656,28 @@ end;
 
 :: From REAL_2, AG, 19.12.2008
 
-reserve a,b,d,e for real number;
+reserve a,b,d for real number;
 
 theorem :: MEMBERED:37
   for X,Y being real-membered set st X<>{} & Y<>{} & for a,b st a in X &
 b in Y holds a<=b holds ex d st (for a st a in X holds a<=d) & for b st b in Y
   holds d<=b;
 
+:: Added, AK, 2010.04.23
+
+definition
+  let X be set;
+  attr X is add-closed means
+:: MEMBERED:def 25
+  for x, y being complex number st x in X & y in X holds x+y in X;
+end;
+
+registration
+  cluster empty -> add-closed set;
+  cluster COMPLEX -> add-closed;
+  cluster REAL -> add-closed;
+  cluster RAT -> add-closed;
+  cluster INT -> add-closed;
+  cluster NAT -> add-closed;
+  cluster non empty add-closed natural-membered set;
+end;

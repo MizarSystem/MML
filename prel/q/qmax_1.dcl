@@ -13,10 +13,10 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -30,30 +30,30 @@
 </Signature>
 <RCluster aid="QMAX_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="106"/>
-</Cluster>
-</RCluster>
-<RCluster aid="QMAX_1" nr="2">
-<ArgTypes/>
-<Typ kind="G" nr="13">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="106"/>
 <Adjective nr="107"/>
 </Cluster>
 </RCluster>
-<RCluster aid="QMAX_1" nr="3">
+<RCluster aid="QMAX_1" nr="2">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
+<Adjective nr="107"/>
 <Adjective nr="108"/>
+</Cluster>
+</RCluster>
+<RCluster aid="QMAX_1" nr="3">
+<ArgTypes/>
+<Typ kind="G" nr="15">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <FCluster aid="QMAX_1" nr="1">
@@ -90,7 +90,7 @@
 </FCluster>
 <FCluster aid="QMAX_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -103,7 +103,7 @@
 </FCluster>
 <FCluster aid="QMAX_1" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -116,9 +116,9 @@
 </FCluster>
 <FCluster aid="QMAX_1" nr="4">
 <ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="108"/>
 </Cluster>
 </Typ>
 </ArgTypes>

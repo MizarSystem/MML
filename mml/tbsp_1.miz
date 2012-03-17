@@ -3,7 +3,7 @@
 ::
 :: Received September 30, 1991
 :: Copyright (c) 1991 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, METRIC_1, SUBSET_1, SETFAM_1, RELAT_2,
@@ -33,49 +33,38 @@ begin
 
 reserve M for non empty MetrSpace,
   c,g1,g2 for Element of M;
-
 reserve N for non empty MetrStruct,
   w for Element of N,
-  G for Subset-Family of
-  N,
+  G for Subset-Family of N,
   C for Subset of N;
-
 reserve R for Reflexive (non empty MetrStruct);
-
 reserve T for Reflexive symmetric triangle (non empty MetrStruct),
-  t1 for
-  Element of T,
+  t1 for Element of T,
   Y for Subset-Family of T,
   P for Subset of T;
-
 reserve f for Function,
   n,m,p,n1,n2,k for Element of NAT,
   r,s,L for Real,
-  x,y
-  for set;
+  x,y for set;
 
 theorem Th1:
-  for L st 0<L & L<1 holds for n,m st n<=m holds L to_power m <= L
-  to_power n
+  for L st 0<L & L<1 holds for n,m st n<=m holds L to_power m <= L to_power n
 proof
   let L such that
 A1: 0<L & L<1;
   let n,m such that
 A2: n<=m;
   per cases by A2,XXREAL_0:1;
-  suppose
-    n<m;
+  suppose n<m;
     hence thesis by A1,POWER:45;
   end;
-  suppose
-    n=m;
+  suppose n=m;
     hence thesis;
   end;
 end;
 
 theorem Th2:
-  for L st 0<L & L<1 holds for k holds L to_power k <= 1 & 0 < L
-  to_power k
+  for L st 0<L & L<1 holds for k holds L to_power k <= 1 & 0 < L to_power k
 proof
   let L;
   assume that
@@ -130,19 +119,15 @@ reserve S1 for sequence of M,
 
 Lm1: f is sequence of N iff (dom f = NAT & for x st x in NAT holds f.x is
 Element of N)
-
 proof
-
   thus f is sequence of N implies (dom f = NAT & for x st x in NAT holds f.x
   is Element of N)
-
   proof
     assume
 A1: f is sequence of N;
     hence dom f = NAT by FUNCT_2:def 1;
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then x in dom f by A1,FUNCT_2:def 1;
     then
 A2: f.x in rng f by FUNCT_1:def 5;
@@ -154,8 +139,7 @@ A3: dom f = NAT and
 A4: for x st x in NAT holds f.x is Element of N;
   now
     let y;
-    assume
-    y in rng f;
+    assume y in rng f;
     then consider x such that
 A5: x in dom f and
 A6: y=f.x by FUNCT_1:def 5;
@@ -194,8 +178,7 @@ definition
   assume
 A1: S1 is convergent;
   func lim S1 -> Element of M means
-  for r st r>0 ex n st for m st m>=n holds
-  dist(S1.m,it)<r;
+  for r st r>0 ex n st for m st m>=n holds dist(S1.m,it)<r;
   existence by A1,Def3;
   uniqueness
   proof
@@ -224,19 +207,25 @@ definition
   let N,S2;
   attr S2 is Cauchy means
   :Def5:
-  for r st r>0 ex p st for n,m st p<=n & p<=m
-  holds dist(S2.n,S2.m)<r;
+  for r st r>0 ex p st for n,m st p<=n & p<=m holds dist(S2.n,S2.m)<r;
 end;
 
 definition
   let N;
   attr N is complete means
   :Def6:
-  for S2 st S2 is Cauchy holds S2 is
-  convergent;
+  for S2 st S2 is Cauchy holds S2 is convergent;
 end;
 
 canceled;
+
+definition let N,S2; let n be Element of NAT;
+ redefine func S2.n -> Element of N;
+ coherence
+  proof
+   thus S2.n is Element of N;  :: refreshment
+  end;
+end;
 
 theorem Th7:
   N is triangle symmetric & S2 is convergent implies S2 is Cauchy
@@ -244,13 +233,14 @@ proof
   assume that
 A1: N is triangle and
 A2: N is symmetric;
+   reconsider N as symmetric non empty MetrStruct by A2;
   assume
-  S2 is convergent;
-  then consider g being Element of N such that
-A3: for r st 0<r ex n st for m st n<=m holds dist(S2.m,g)<r by Def3;
+Z:  S2 is convergent;
+  reconsider S2 as sequence of N;
+  consider g being Element of N such that
+A3: for r st 0<r ex n st for m st n<=m holds dist(S2.m,g)<r by Z,Def3;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then consider n such that
 A4: for m st n<=m holds dist(S2.m,g)<r/2 by A3,XREAL_1:217;
   take n;
@@ -258,9 +248,7 @@ A4: for m st n<=m holds dist(S2.m,g)<r/2 by A3,XREAL_1:217;
   assume that
 A5: m>=n and
 A6: m9>=n;
-  dist(S2.m9,g)<r/2 by A4,A6;
-  then
-A7: dist(g,S2.m9)<r/2 by A2,METRIC_1:3;
+A7: dist(S2.m9,g)<r/2 by A4,A6;
   dist(S2.m,g)<r/2 by A4,A5;
   then
 A8: dist(S2.m,g)+dist(g,S2.m9)<r/2+r/2 by A7,XREAL_1:10;
@@ -275,19 +263,17 @@ registration
 end;
 
 theorem Th8:
-  N is symmetric implies (S2 is Cauchy iff for r st r>0 ex p st for
-  n,k st p<=n holds dist(S2.(n+k),S2.n)<r)
-proof
-  assume
-A1: N is symmetric;
+  for N being symmetric non empty MetrStruct, S2 being sequence of N
+   holds S2 is Cauchy iff for r st r>0 ex p st for
+         n,k st p<=n holds dist(S2.(n+k),S2.n)<r
+proof let N be symmetric non empty MetrStruct, S2 be sequence of N;
   thus S2 is Cauchy implies for r st r>0 ex p st for n,k st p<=n holds dist(S2
   .(n+k),S2.n)<r
   proof
     assume
 A2: S2 is Cauchy;
     let r;
-    assume
-    0<r;
+    assume 0<r;
     then consider p such that
 A3: for n,m st p<=n & p<=m holds dist(S2.n,S2.m)<r by A2,Def5;
     take p;
@@ -300,8 +286,7 @@ A4: p<=n;
   assume
 A5: for r st r>0 ex p st for n,k st p<=n holds dist(S2.(n+k),S2.n)<r;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then consider p such that
 A6: for n,k st p<=n holds dist(S2.(n+k),S2.n)<r by A5;
   take p;
@@ -316,7 +301,7 @@ A9: m=n+k by NAT_1:10;
     reconsider m9=m,n9=n,k as Element of NAT by ORDINAL1:def 13;
     m = n+k by A9;
     then dist(S2.m9,S2.n9)<r by A6,A7;
-    hence thesis by A1,METRIC_1:3;
+    hence thesis;
   end;
   suppose
     m<=n;
@@ -371,8 +356,7 @@ A11:  f.(S1.0) = S1.(0+1) by A6
         assume
 A12:    f.y=y;
 A13:    dist(y,S1.0)>=0 by METRIC_1:5;
-        assume
-        y<>S1.0;
+        assume y<>S1.0;
         then dist(y,S1.0)<>0 by METRIC_1:2;
         then L*dist(y,S1.0)<dist(y,S1.0) by A2,A13,XREAL_1:159;
         hence contradiction by A3,A11,A12;
@@ -387,8 +371,7 @@ A15:  for n holds dist(S1.(n+1),S1.n)<=r*L to_power n
 A16:    for k st X[k] holds X[k+1]
         proof
           let k be Element of NAT;
-          assume
-          dist(S1.(k+1),S1.k)<=r*L to_power k;
+          assume dist(S1.(k+1),S1.k)<=r*L to_power k;
           then
 A17:      L*dist(S1.(k+1),S1.k)<=L*(r*L to_power k) by A1,
           XREAL_1:66;
@@ -402,8 +385,7 @@ A18:      dist(S1.((k+1)+1),S1.(k+1)) <= L*dist(S1.(k+1),S1.k) by A3;
             .= r*L to_power (k+1) by A1,POWER:32;
           hence thesis by A18,A17,XXREAL_0:2;
         end;
-        dist(S1.(0+1),S1.0) = r*1
-          .= r*L to_power 0 by POWER:29;
+        dist(S1.(0+1),S1.0) = r*1 .= r*L to_power 0 by POWER:29;
         then
 A19:    X[0];
         thus for k holds X[k] from NAT_1:sch 1(A19,A16);
@@ -459,11 +441,9 @@ A27:  for n,k holds dist(S1.(n+k),S1.n)<=L to_power n*dist(S1.k,S1.0)
 A28:    for n st X[n] holds X[n+1]
         proof
           let n such that
-A29:      for k holds dist(S1.(n+k),S1.n)<=L to_power n*dist(S1.k,S1.
-          0);
+A29:      for k holds dist(S1.(n+k),S1.n)<=L to_power n*dist(S1.k,S1. 0);
           let k be Element of NAT;
-A30:      L*(L to_power n*dist(S1.k,S1.0)) = L*L to_power n*dist(S1.k,S1.
-          0)
+A30:      L*(L to_power n*dist(S1.k,S1.0)) = L*L to_power n*dist(S1.k,S1. 0)
             .= L to_power n*L to_power 1*dist(S1.k,S1.0) by POWER:30
             .= L to_power (n+1)*dist(S1.k,S1.0) by A1,POWER:32;
           dist(S1.((n+1)+k),S1.(n+1)) = dist(S1.((n+k)+1),S1.(n+1))
@@ -498,15 +478,13 @@ A34:    L
       proof
 A35:    (1-L)/r>0 by A4,A7,A14,XREAL_1:141;
         let s;
-        assume
-        s>0;
+        assume s>0;
         then (1-L)/r*s>0 by A35,XREAL_1:131;
         then consider p such that
 A36:    L to_power p<(1-L)/r*s by A1,A2,Th3;
         take p;
         let n,k be Element of NAT;
-        assume
-        p<=n;
+        assume p<=n;
         then L to_power n<=L to_power p by A1,A2,Th1;
         then
 A37:    L to_power n<(1-L)/r*s by A36,XXREAL_0:2;
@@ -530,8 +508,7 @@ A40:  for r st r>0 ex n st for m st n<=m holds dist(S1.m,x)<r by
 A41:  f.x = x
       proof
         set a = dist(x,f.x)/4;
-        assume
-        x <> f.x;
+        assume x <> f.x;
         then
 A42:    dist(x,f.x) <> 0 by METRIC_1:2;
 A43:    dist(x,f.x) >= 0 by METRIC_1:5;
@@ -557,8 +534,7 @@ A48:    dist(x,f.x)<=dist(x,S1.(n+1))+dist(S1.(n+1),f.x) & dist(x,f.x)/2
         assume
 A49:    f.y=y;
 A50:    dist(y,x)>=0 by METRIC_1:5;
-        assume
-        y<>x;
+        assume y<>x;
         then dist(y,x)<>0 by METRIC_1:2;
         then L*dist(y,x)<dist(y,x) by A2,A50,XREAL_1:159;
         hence contradiction by A3,A41,A49;
@@ -635,8 +611,7 @@ A22:        q<=p;
             thus V c= W
             proof
               let y be set;
-              assume
-              y in V;
+              assume y in V;
               then consider x being Point of T such that
 A23:          y = x and
 A24:          ex n st p<=n & x = S2.n by A18;
@@ -652,8 +627,7 @@ A27:        p<=q;
             thus W c= V
             proof
               let y be set;
-              assume
-              y in W;
+              assume y in W;
               then consider x being Point of T such that
 A28:          y = x and
 A29:          ex n st q<=n & x = S2.n by A21;
@@ -688,8 +662,7 @@ A37: c in meet G by SUBSET_1:10;
     reconsider c as Point of T by A1;
     take c;
     let r;
-    assume
-    0<r;
+    assume 0<r;
     then
 A38: 0<r/2 by XREAL_1:217;
     then consider p such that
@@ -723,8 +696,7 @@ A48: ex n st p<=n & x = S2.n by A45;
     consider n such that
 A49: p<=n and
 A50: x = S2.n by A48;
-    assume
-    p<=m;
+    assume p<=m;
     then
 A51: dist(S2.m,S2.n)<r/2 by A39,A49;
     dist(S2.n,c)<r/2 by A46,A47,A50,METRIC_1:12;
@@ -786,8 +758,7 @@ A11: H is Cover of TM and
 A12: H is finite by A3,A8,COMPTS_1:def 3;
   reconsider H as Subset-Family of N by A6;
   take H;
-  union H = [#] TM by A11,SETFAM_1:60
-    .= the carrier of TM;
+  union H = the carrier of TM by A11,SETFAM_1:60;
   hence thesis by A6,A5,A10,A12;
 end;
 
@@ -796,13 +767,11 @@ definition
   canceled;
   attr N is bounded means
   :Def8:
-  ex r st 0<r & for x,y being Point of N holds
-  dist(x,y)<=r;
+  ex r st 0<r & for x,y being Point of N holds dist(x,y)<=r;
   let C be Subset of N;
   attr C is bounded means
   :Def9:
-  ex r st 0<r & for x,y being Point of N st x
-  in C & y in C holds dist(x,y)<=r;
+  ex r st 0<r & for x,y being Point of N st x in C & y in C holds dist(x,y)<=r;
 end;
 
 registration
@@ -831,19 +800,19 @@ registration
   end;
 end;
 
-canceled;
-
-theorem Th14:
-  {}N is bounded
-proof
-  take 1;
-  thus thesis;
-end;
+canceled 2;
 
 registration
   let N;
-  cluster {}N -> bounded;
-  coherence by Th14;
+  cluster empty -> bounded Subset of N;
+  coherence
+  proof
+    let S be Subset of N;
+    assume
+X:  S is empty;
+    take 1;
+    thus thesis by X;
+  end;
 end;
 
 registration
@@ -870,8 +839,7 @@ proof
     assume
 A1: C <> {};
     then reconsider w as Point of N by TARSKI:def 3;
-    assume
-    C is bounded;
+    assume C is bounded;
     then consider r such that
 A2: 0<r and
 A3: for x,y being Point of N st x in C & y in C holds dist(x,y)<=r by
@@ -881,8 +849,7 @@ A3: for x,y being Point of N st x in C & y in C holds dist(x,y)<=r by
     thus 0<r by A2;
     thus w in C by A1;
     let z be Point of N;
-    assume
-    z in C;
+    assume z in C;
     hence thesis by A3;
   end;
   assume
@@ -893,8 +860,9 @@ A5: N is triangle;
 A6: 0<r and
 A7: for z being Point of N st z in C holds dist(w,z)<=r;
   set s = r+r;
-  ex s st 0<s & for x,y being Point of N st x in C & y in C holds dist(x,
-  y)<=s
+   reconsider N as symmetric MetrStruct by A4;
+   reconsider w as Element of N;
+  ex s st 0<s & for x,y being Point of N st x in C & y in C holds dist(x, y)<=s
   proof
     take s;
     thus 0<s by A6;
@@ -902,9 +870,7 @@ A7: for z being Point of N st z in C holds dist(w,z)<=r;
     assume that
 A8: x in C and
 A9: y in C;
-    dist(w,x)<=r by A7,A8;
-    then
-A10: dist(x,w)<=r by A4,METRIC_1:3;
+A10: dist(w,x)<=r by A7,A8;
     dist(w,y)<=r by A7,A9;
     then
 A11: dist(x,w)+dist(w,y)<=s by A10,XREAL_1:9;
@@ -915,16 +881,13 @@ A11: dist(x,w)+dist(w,y)<=s by A10,XREAL_1:9;
 end;
 
 theorem Th16:
-  for r being real number holds N is Reflexive & 0<r implies w in
-  Ball(w,r)
+  for r being real number holds N is Reflexive & 0<r implies w in Ball(w,r)
 proof
   let r be real number;
-  assume
-  N is Reflexive;
+  assume N is Reflexive;
   then
 A1: dist(w,w) = 0 by METRIC_1:1;
-  assume
-  0<r;
+  assume 0<r;
   hence thesis by A1,METRIC_1:12;
 end;
 
@@ -949,38 +912,35 @@ proof
 A1: 0<r;
   set P = Ball(t1,r);
   reconsider r as Real by XREAL_0:def 1;
-
   ex r,t1 st 0<r & t1 in P & for z being Point of T st z in P holds dist(
   t1,z)<=r
-
   proof
     take r,t1;
     thus 0<r by A1;
     thus t1 in P by A1,Th16;
     let z be Point of T;
-    assume
-    z in P;
+    assume z in P;
     hence thesis by METRIC_1:12;
   end;
   hence thesis by Th15;
 end;
 
-canceled;
+canceled 2;
 
-theorem Th19:
-  for r being real number holds Ball(t1,r) is bounded
+registration
+  let T,t1; let r be real number;
+  cluster Ball(t1,r) -> bounded;
+coherence
 proof
-  let r be real number;
   per cases;
-  suppose
-    r<=0;
+  suppose r<=0;
     then Ball(t1,r) = {}T by Th17;
     hence thesis;
   end;
-  suppose
-    0<r;
+  suppose 0<r;
     hence thesis by Lm2;
   end;
+end;
 end;
 
 theorem Th20:
@@ -1027,8 +987,7 @@ A10:    r<r+(dist(t1,d)+s) by A4,XREAL_1:31;
           thus 0<t by A6,A4,A9;
           thus t1 in P \/ Q by A7,XBOOLE_0:def 3;
           let z be Point of T;
-          assume
-          z in P \/ Q;
+          assume z in P \/ Q;
           then
 A11:      z in P or z in Q by XBOOLE_0:def 3;
           now
@@ -1057,8 +1016,7 @@ A12:          dist(t1,z)<=dist(t1,d)+s by XXREAL_0:2;
 end;
 
 theorem Th21:
-  for C, D being Subset of N holds C is bounded & D c= C implies D
-  is bounded
+  for C, D being Subset of N holds C is bounded & D c= C implies D is bounded
 proof
   let C, D be Subset of N;
   assume that
@@ -1068,14 +1026,12 @@ A2: D c= C;
 A3: 0<r and
 A4: for x,y being Point of N st x in C & y in C holds dist(x,y)<=r by A1
   ,Def9;
-  ex r st 0<r & for x,y being Point of N st x in D & y in D holds dist(x,y
-  )<=r
+  ex r st 0<r & for x,y being Point of N st x in D & y in D holds dist(x,y )<=r
   proof
     take r;
     thus 0<r by A3;
     let x,y be Point of N;
-    assume
-    x in D & y in D;
+    assume x in D & y in D;
     hence thesis by A2,A4;
   end;
   hence thesis by Def9;
@@ -1088,7 +1044,7 @@ proof
   assume
 A1: P = {t1};
   {t1} is Subset of Ball(t1,1) by Th16,SUBSET_1:63;
-  hence thesis by A1,Th19,Th21;
+  hence thesis by A1,Th21;
 end;
 
 theorem Th23:
@@ -1181,8 +1137,7 @@ theorem Th25:
 proof
   thus N is bounded implies [#]N is bounded
   proof
-    assume
-    N is bounded;
+    assume N is bounded;
     then consider r such that
 A1: 0<r and
 A2: for x,y being Point of N holds dist(x,y)<=r by Def8;
@@ -1190,8 +1145,7 @@ A2: for x,y being Point of N holds dist(x,y)<=r by Def8;
     r by A2;
     hence thesis by A1,Def9;
   end;
-  assume
-  [#]N is bounded;
+  assume [#]N is bounded;
   then consider r such that
 A3: 0<r and
 A4: for x,y being Point of N st x in [#]N & y in [#]N holds dist(x,y)<=r
@@ -1211,18 +1165,16 @@ end;
 theorem
   T is totally_bounded implies T is bounded
 proof
-  assume
-  T is totally_bounded;
+  assume T is totally_bounded;
   then consider Y such that
 A1: Y is finite & the carrier of T = union Y and
 A2: for P st P in Y ex x being Element of T st P = Ball(x,1) by Def1;
   for P being Subset of T st P in Y holds P is bounded
   proof
     let P be Subset of T;
-    assume
-    P in Y;
+    assume P in Y;
     then ex x being Element of T st P = Ball(x,1) by A2;
-    hence thesis by Th19;
+    hence thesis;
   end;
   then [#]T is bounded by A1,Th24;
   hence thesis by Th25;
@@ -1254,8 +1206,7 @@ C & y in C holds dist(x,y)<=r) & for s st for x,y being Point of N st x in C &
 A2:   for a,b being real number st a in J & b in I holds a<=b
       proof
         let a,b be real number;
-        assume
-        a in J & b in I;
+        assume a in J & b in I;
         then
         (ex t being Real st t = a & ex x,y being Point of N st x in C & y
 in C & t = dist(x,y) )& ex t9 being Real st t9=b & for x,y being Point of N st
@@ -1286,14 +1237,12 @@ A10:  for b being real number st b in I holds d<=b by A8,A5,A2,
       thus for x,y being Point of N st x in C & y in C holds dist(x,y)<=d
       proof
         let x,y be Point of N;
-        assume
-        x in C & y in C;
+        assume x in C & y in C;
         then dist(x,y) in J;
         hence thesis by A9;
       end;
       let s;
-      assume
-      for x,y being Point of N st x in C & y in C holds dist(x,y)<=s;
+      assume for x,y being Point of N st x in C & y in C holds dist(x,y)<=s;
       then s in I;
       hence thesis by A10;
     end;
@@ -1303,10 +1252,8 @@ A10:  for b being real number st b in I holds d<=b by A8,A5,A2,
   proof
     let r1,r2 be Real;
     hereby
-      assume
-      C <> {};
-      assume
-      ( for x,y being Point of N st x in C & y in C holds dist(x,y)<=
+      assume C <> {};
+      assume ( for x,y being Point of N st x in C & y in C holds dist(x,y)<=
 r1)&( ( for s st for x,y being Point of N st x in C & y in C holds dist(x,y)<=
 s holds r1<=s) & for x,y being Point of N st x in C & y in C holds dist(x,y)<=
 r2 ) & for s st for x,y being Point of N st x in C & y in C holds dist(x,y)<= s
@@ -1343,8 +1290,7 @@ A4:   y in P;
       hence thesis;
     end;
     let s;
-    assume
-    for x,y being Point of T st x in P & y in P holds dist(x,y)<=s;
+    assume for x,y being Point of T st x in P & y in P holds dist(x,y)<=s;
     then dist(t1,t1)<=s by A2;
     hence thesis by METRIC_1:1;
   end;
@@ -1360,7 +1306,7 @@ A1: S is bounded;
   per cases;
   suppose
     S = {};
-    hence thesis by A1,Def10;
+    hence thesis by Def10;
   end;
   suppose
 A2: S <> {};
@@ -1392,8 +1338,7 @@ A3: diameter A = 0;
       let x be Element of M;
       thus x in A implies x in Z
       proof
-        assume
-        x in A;
+        assume x in A;
         then dist(x,g)<=0 by A2,A3,Def10;
         then dist(x,g) = 0 by METRIC_1:5;
         then x = g by METRIC_1:2;
@@ -1415,20 +1360,16 @@ A1: for x,y being Point of T st x in Ball(t1,r) & y in Ball(t1,r) holds dist
   (x,y)<= 2*r
   proof
     let x,y be Point of T;
-    assume
-    x in Ball(t1,r) & y in Ball(t1,r);
+    assume x in Ball(t1,r) & y in Ball(t1,r);
     then dist(t1,x)<r & dist(t1,y)<r by METRIC_1:12;
     then
 A2: dist(t1,x)+dist(t1,y)<r+r by XREAL_1:10;
     dist(x,y)<=dist(x,t1)+dist(t1,y) by METRIC_1:4;
     hence thesis by A2,XXREAL_0:2;
   end;
-  assume
-  0<r;
-  then
-A3: t1 in Ball(t1,r) by Th16;
-  Ball(t1,r) is bounded by Th19;
-  hence thesis by A3,A1,Def10;
+  assume 0<r;
+  then t1 in Ball(t1,r) by Th16;
+  hence thesis by A1,Def10;
 end;
 
 theorem
@@ -1443,7 +1384,7 @@ A3: V is bounded by A1,A2,Th21;
   per cases;
   suppose
     V = {};
-    then diameter V = 0 by A3,Def10;
+    then diameter V = 0 by Def10;
     hence thesis by A1,Th29;
   end;
   suppose
@@ -1472,8 +1413,7 @@ A5: b<=s by A1,Th29,XREAL_1:33;
 A6: g in P by A3,XBOOLE_0:def 4;
   reconsider g as Element of T by A3,TARSKI:def 3;
 A7: a<=s by A2,Th29,XREAL_1:33;
-A8: for x,y being Point of T st x in P \/ Q & y in P \/ Q holds dist(x,y)<=
-  s
+A8: for x,y being Point of T st x in P \/ Q & y in P \/ Q holds dist(x,y)<= s
   proof
     let x,y be Point of T such that
 A9: x in P \/ Q and
@@ -1527,13 +1467,11 @@ A17:        dist(x,g)<=b by A2,A4,A15,Def10;
 end;
 
 theorem
-  for S1 being sequence of T holds S1 is Cauchy implies rng S1 is
-  bounded
+  for S1 being sequence of T holds S1 is Cauchy implies rng S1 is bounded
 proof
   let S1 be sequence of T;
   set A = rng S1;
-  assume
-  S1 is Cauchy;
+  assume S1 is Cauchy;
   then consider p such that
 A1: for n,m st p<=n & p<=m holds dist(S1.n,S1.m)<1 by Def5;
   defpred X[set] means ex n st p<=n & $1 = S1.n;
@@ -1551,8 +1489,7 @@ A2: C is finite
       let x;
       thus x in C implies x in S1.:J
       proof
-        assume
-        x in C;
+        assume x in C;
         then consider t1 such that
 A3:     x = t1 and
 A4:     ex n st n<=p & t1 = S1.n;
@@ -1581,8 +1518,7 @@ A7:     n in dom S1 by FUNCT_2:def 1;
         end;
         hence thesis;
       end;
-      assume
-      x in S1.:J;
+      assume x in S1.:J;
       then consider y such that
 A8:   y in dom S1 and
 A9:   y in J and
@@ -1617,8 +1553,7 @@ A13: A = B \/ C
     thus A c= B \/ C
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then consider y such that
 A14:  y in dom S1 and
 A15:  x = S1.y by FUNCT_1:def 5;
@@ -1678,8 +1613,7 @@ A22:  t1 = S1.n by A21;
       thus 0<1;
       thus x in B;
       let z be Point of T;
-      assume
-      z in B;
+      assume z in B;
       then ex t1 st z = t1 & ex n st p<=n & t1 = S1.n;
       hence thesis by A1;
     end;
@@ -1687,4 +1621,3 @@ A22:  t1 = S1.n by A21;
   end;
   hence thesis by A2,A13,Th20;
 end;
-

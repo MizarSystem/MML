@@ -3,7 +3,7 @@
 ::
 :: Received October 20, 1993
 :: Copyright (c) 1993 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SUBSET_1, XBOOLE_0, ARYTM_1, CARD_1, RELAT_1, FINSEQ_1,
@@ -13,23 +13,23 @@ environ
       QC_LANG1, FREEALG;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
       RELSET_1, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2, FUNCOP_1, FINSEQ_2,
-      CARD_3, TREES_2, TREES_3, TREES_4, STRUCT_0, UNIALG_1, UNIALG_2, LANG1,
-      DTCONSTR, PRE_POLY, ALG_1;
+      CARD_3, TREES_2, TREES_3, TREES_4, MARGREL1, STRUCT_0, UNIALG_1,
+      UNIALG_2, LANG1, DTCONSTR, PRE_POLY, ALG_1;
  constructors DOMAIN_1, XCMPLX_0, XXREAL_0, XREAL_0, FINSEQOP, DTCONSTR, ALG_1,
       RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, PARTFUN1, XREAL_0,
       FINSEQ_1, FINSEQ_2, TREES_3, STRUCT_0, UNIALG_1, UNIALG_2, DTCONSTR,
-      CARD_1, RELSET_1;
+      CARD_1, RELSET_1, MARGREL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, UNIALG_2, DTCONSTR, XBOOLE_0, FINSEQ_2, FUNCOP_1,
       MARGREL1;
  theorems FINSEQ_1, FINSEQ_2, PARTFUN1, FUNCT_1, FUNCT_2, NAT_1, ZFMISC_1,
       UNIALG_1, ALG_1, TARSKI, FUNCOP_1, UNIALG_2, LANG1, DTCONSTR, RELAT_1,
-      XBOOLE_0, XBOOLE_1, TREES_3;
+      XBOOLE_0, XBOOLE_1, TREES_3, MARGREL1, FINSEQ_3;
  schemes PARTFUN1, FINSEQ_1, RELSET_1, DTCONSTR;
 
 begin
-
+ 
 ::
 :: Preliminaries
 ::
@@ -51,8 +51,7 @@ registration
     take X = {-1};
     thus X is non empty;
     now
-      assume
-      X meets NAT;
+      assume X meets NAT;
       then consider x such that
 A1:   x in X and
 A2:   x in NAT by XBOOLE_0:3;
@@ -104,7 +103,7 @@ registration
 end;
 
 begin
-
+ 
 ::
 :: Free Universal Algebra - General Notions
 ::
@@ -136,19 +135,15 @@ end;
 
 Lm2: for A being Universal_Algebra for B being Subset of A st B is
 opers_closed holds Constants A c= B
-
 proof
   let A be Universal_Algebra;
   let B be Subset of A such that
 A1: B is opers_closed;
   let x be set;
-  assume
-  x in Constants A;
+  assume x in Constants A;
   then consider a being Element of A such that
 A2: x = a and
-
 A3: ex o being Element of Operations A st arity o = 0 & a in rng o;
-
   consider o being Element of Operations A such that
 A4: arity o = 0 and
 A5: a in rng o by A3;
@@ -157,7 +152,7 @@ A6: B is_closed_on o by A1,UNIALG_2:def 5;
 A7: s in dom o and
 A8: a = o.s by A5,FUNCT_1:def 5;
   reconsider s as Element of (the carrier of A)* by A7;
-A9: dom o = 0-tuples_on the carrier of A by A4,UNIALG_2:2;
+A9: dom o = 0-tuples_on the carrier of A by A4,MARGREL1:58;
   then s = {} by A7;
   then rng s c= B by RELAT_1:60,XBOOLE_1:2;
   then
@@ -169,26 +164,19 @@ end;
 Lm3: for A being Universal_Algebra for B being Subset of A st B <> {} or
 Constants A <> {} holds B is GeneratorSet of A iff the carrier of GenUnivAlg B
 = the carrier of A
-
 proof
   let A be Universal_Algebra;
   let G be Subset of A;
   assume
 A1: G <> {} or Constants A <> {};
-
   thus G is GeneratorSet of A implies the carrier of GenUnivAlg G = the
   carrier of A
-
   proof
-
     reconsider C = the carrier of GenUnivAlg G as non empty Subset of A by
 UNIALG_2:def 8;
-
     assume
-
 A2: for B being Subset of A st B is opers_closed & G c= B holds B =
     the carrier of A;
-
     G c= C & C is opers_closed by A1,UNIALG_2:def 8,def 13;
     hence thesis by A2;
   end;
@@ -200,10 +188,8 @@ A5: G c= B;
   reconsider C = B as non empty Subset of A by A1,A4,A5,Lm2,XBOOLE_1:3;
   thus B c= the carrier of A;
 A6: UniAlgSetClosed C = UAStr(#C,Opers(A,C)#) by A4,UNIALG_2:def 9;
-
   then GenUnivAlg G is SubAlgebra of UniAlgSetClosed C by A1,A5,UNIALG_2:def 13
 ;
-
   then the carrier of A is Subset of C by A3,A6,UNIALG_2:def 8;
   hence thesis;
 end;
@@ -232,12 +218,12 @@ registration
     consider x be set;
     reconsider A = {x} as non empty set;
     consider a be Element of A;
-    reconsider w = <*>A .--> a as Element of PFuncs(A*,A) by UNIALG_1:3;
+    reconsider w = <*>A .--> a as Element of PFuncs(A*,A) by MARGREL1:55;
     reconsider ww = <*w*> as PFuncFinSequence of A;
     set U0 = UAStr (# A, ww#);
 A1: the charact of(U0) is quasi_total & the charact of(U0) is homogeneous
-    by UNIALG_1:4;
-A2: the charact of(U0) is non-empty by UNIALG_1:4;
+    by MARGREL1:56;
+A2: the charact of(U0) is non-empty by MARGREL1:56;
 A3: len the charact of(U0) = 1 by FINSEQ_1:56;
     reconsider U0 as Universal_Algebra by A1,A2,UNIALG_1:def 7,def 8,def 9;
 A4: dom the charact of(U0) = {1} by A3,FINSEQ_1:4,def 3;
@@ -274,13 +260,12 @@ A10: dom o0 = {<*>A} by FUNCOP_1:19;
       <*>A in dom o0 by A10,TARSKI:def 1;
       hence ex x being FinSequence st x in dom o0;
       let x be FinSequence;
-      assume
-      x in dom o0;
+      assume x in dom o0;
       then x = <*>A by A10,TARSKI:def 1;
       hence len x = 0;
     end;
     then
-A11: arity o0 = 0 by UNIALG_1:def 10;
+A11: arity o0 = 0 by MARGREL1:def 26;
 A12: {} in {<*>A} by TARSKI:def 1;
     then o0.<*>A = a by A9,FUNCOP_1:13;
     then a in rng o0 by A10,A12,FUNCT_1:def 5;
@@ -314,8 +299,7 @@ A18:    len (signature U0) = len the charact of(U0) & dom (signature U0)
 A19:    arity o0 = arity o1 by A3,A13,A15,A18,FINSEQ_1:4,UNIALG_1:def 11;
         now
           let n be Element of NAT;
-          assume
-          n in dom the charact of(U0);
+          assume n in dom the charact of(U0);
           then
 A20:      n = 1 by A4,TARSKI:def 1;
           let 0o be operation of U0,1o be operation of U1;
@@ -328,7 +312,7 @@ A23:      y in dom 0o;
           then y = <*>the carrier of U0 by A10,A20,A21,TARSKI:def 1;
           then
 A24:      h*y = <*>the carrier of U1;
-          dom 1o = 0-tuples_on the carrier of U1 by A11,A19,A20,A22,UNIALG_2:2
+          dom 1o = 0-tuples_on the carrier of U1 by A11,A19,A20,A22,MARGREL1:58
             .= {<*>the carrier of U1} by FINSEQ_2:112;
           then
 A25:      1o.(h*y) = u1 by A17,A20,A22,A24,TARSKI:def 1;
@@ -360,20 +344,18 @@ proof
 A1: Constants U0 <> {} or A <> {};
   thus A is GeneratorSet of U0 implies GenUnivAlg(A) = U0
   proof
-    assume
-    A is GeneratorSet of U0;
+    assume A is GeneratorSet of U0;
     then
 A2: the carrier of GenUnivAlg(A) = the carrier of U0 by A1,Lm3;
     U0 is strict SubAlgebra of U0 by UNIALG_2:11;
     hence thesis by A2,UNIALG_2:15;
   end;
-  assume
-  GenUnivAlg(A) = U0;
+  assume GenUnivAlg(A) = U0;
   hence thesis by A1,Lm3;
 end;
 
 begin
-
+ 
 ::
 :: Construction of a Decorated Tree Structure for Free Universal Algebra
 ::
@@ -485,8 +467,7 @@ A6:   x in dom f;
   thus NonTerminals A c= dom f
   proof
     let x;
-    assume
-    x in NonTerminals A;
+    assume x in NonTerminals A;
     then x in {t where t is Symbol of A: ex n be FinSequence st t ==> n} by
 LANG1:def 3;
     then consider t be Symbol of A such that
@@ -529,8 +510,7 @@ proof
 A1: x in X;
 A2: NonTerminals A = dom f by Th2;
 A3: now
-    assume
-    x in NonTerminals A;
+    assume x in NonTerminals A;
     then X meets NAT by A2,A1,XBOOLE_0:3;
     hence contradiction by Def1;
   end;
@@ -584,8 +564,7 @@ A7:   s0-tree(e) in (TS A) by DTCONSTR:def 4;
 A8:   rng p c= TS A
       proof
         let y;
-        assume
-        y in rng p;
+        assume y in rng p;
         then
 A9:     ex n being Nat st n in dom p & p.n = y by FINSEQ_2:11;
         dom p = Seg len p by FINSEQ_1:def 3;
@@ -632,8 +611,7 @@ A6:   root-tree sd in TS(A) by A2,DTCONSTR:def 4;
 A7:   rng p c= TS A
       proof
         let y;
-        assume
-        y in rng p;
+        assume y in rng p;
         then consider n being Nat such that
 A8:     n in dom p and
 A9:     p.n = y by FINSEQ_2:11;
@@ -667,7 +645,7 @@ A1: n in dom f;
 end;
 
 begin
-
+ 
 ::
 :: Construction of Free Universal Algebra for Non Empty Set of Generators and
 ::                           Given Signature
@@ -735,15 +713,13 @@ A15: dom F = i-tuples_on (TS A)
       thus dom F c= i-tuples_on(TS A)
       proof
         let x;
-        assume
-        x in dom F;
+        assume x in dom F;
         then ex y st P[x,y] by A13;
         hence thesis;
       end;
       reconsider sm = smm as Symbol of A;
       let x;
-      assume
-      x in i-tuples_on(TS A);
+      assume x in i-tuples_on(TS A);
       then consider s be Element of (TS A)* such that
 A16:  s = x and
 A17:  len s = i;
@@ -771,20 +747,18 @@ X:   ex x being FinSequence st x in dom F
     dom F is with_common_domain
      proof
       let x,y be FinSequence;
-      assume
-      x in dom F & y in dom F;
+      assume x in dom F & y in dom F;
       then (ex sx be Element of (TS A)* st sx = x & len sx = f/.n )& ex sy be
       Element of (TS A)* st sy = y & len sy = f/.n by A15;
       hence thesis;
     end;
     then reconsider
     F as homogeneous quasi_total non empty PartFunc of (TS A)*, TS(
-    A) by A18,X,UNIALG_1:def 1,def 2;
+    A) by A18,X,MARGREL1:def 22,def 23;
     take F;
     thus dom F = i-tuples_on (TS A) by A15;
     let p be FinSequence of (TS A);
-    assume
-    p in dom F;
+    assume p in dom F;
     hence thesis by A14;
   end;
   uniqueness
@@ -796,8 +770,7 @@ A21: dom f1 = (f/.n)-tuples_on A and
 A22: for p be FinSequence of A st p in dom f1 holds f1.p = Sym(n,f,D)
     -tree(p) and
 A23: dom f2 = (f/.n)-tuples_on A and
-A24: for p be FinSequence of A st p in dom f2 holds f2.p = Sym(n,f,D)
-    -tree(p);
+A24: for p be FinSequence of A st p in dom f2 holds f2.p = Sym(n,f,D) -tree(p);
     now
       let x;
       assume
@@ -821,12 +794,10 @@ definition
   proof
     defpred P[Nat,set] means $2 = FreeOpNSG($1,f,D);
     set A = TS(DTConUA(f,D));
-A1: for n be Nat st n in Seg len f ex x be Element of PFuncs(A*,A) st P[n,
-    x]
+A1: for n be Nat st n in Seg len f ex x be Element of PFuncs(A*,A) st P[n, x]
     proof
       let n be Nat;
-      assume
-      n in Seg len f;
+      assume n in Seg len f;
       reconsider O=FreeOpNSG(n,f,D) as Element of PFuncs(A*,A) by PARTFUN1:119;
       take O;
       thus thesis;
@@ -838,8 +809,7 @@ A2: dom p = Seg len f & for n be Nat st n in Seg len f holds P[n,p.n]
     take p;
     thus len p = len f by A2,FINSEQ_1:def 3;
     let n;
-    assume
-    n in dom p;
+    assume n in dom p;
     hence thesis by A2;
   end;
   uniqueness
@@ -875,24 +845,22 @@ definition
     = (the charact of AA).n holds h is quasi_total
     proof
       let n be Nat,h be PartFunc of A*,A;
-      assume
-      n in dom the charact of(AA) & h = (the charact of AA).n;
+      assume n in dom the charact of(AA) & h = (the charact of AA).n;
       then h = FreeOpNSG(n,f,D) by Def12;
       hence thesis;
     end;
     then
-A1: the charact of(AA) is quasi_total by UNIALG_1:def 5;
+A1: the charact of(AA) is quasi_total by MARGREL1:def 25;
     for n be Nat,h be PartFunc of A*,A st n in dom the charact of(AA) & h
     = (the charact of AA).n holds h is homogeneous
     proof
       let n be Nat,h be PartFunc of A*,A;
-      assume
-      n in dom the charact of(AA) & h = (the charact of AA).n;
+      assume n in dom the charact of(AA) & h = (the charact of AA).n;
       then h = FreeOpNSG(n,f,D) by Def12;
       hence thesis;
     end;
     then
-A2: the charact of(AA) is homogeneous by UNIALG_1:def 4;
+A2: the charact of(AA) is homogeneous by MARGREL1:def 24;
     for n be set st n in dom the charact of(AA) holds (the charact of AA)
     .n is non empty
     proof
@@ -925,7 +893,7 @@ A3: dom (signature fa) = Seg len f by A1,FINSEQ_1:def 3;
     let n be Nat;
     reconsider h = FreeOpNSG(n,f,D) as homogeneous quasi_total non empty
     PartFunc of (the carrier of fa)*,(the carrier of fa);
-A4: dom h=(arity h)-tuples_on (the carrier of fa) by UNIALG_2:2;
+A4: dom h=(arity h)-tuples_on (the carrier of fa) by MARGREL1:58;
     assume
 A5: n in dom (signature fa);
     then
@@ -953,8 +921,7 @@ definition
     A c= the carrier of FreeUnivAlgNSG(f,D)
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then ex d be Symbol of X st x = root-tree d & d in Terminals X;
       hence thesis by DTCONSTR:def 4;
     end;
@@ -1035,7 +1002,7 @@ FUNCT_1:def 5;
         then
 A10:    B is_closed_on o by UNIALG_2:def 5;
 A11:    dom FreeOpNSG(ns,f,D) = (f/.ns)-tuples_on TS(A) by A7,Def11;
-        dom o = (arity o)-tuples_on the carrier of fua by UNIALG_2:2;
+        dom o = (arity o)-tuples_on the carrier of fua by MARGREL1:58;
         then
 A12:    arity o = f/.ns by A11,FINSEQ_2:130;
         dom (roots p) = dom p by TREES_3:def 18
@@ -1056,11 +1023,9 @@ A15:  x1 in TS A by A14;
 A16:  for s being Symbol of A st s in Terminals A holds P[root-tree s]
       proof
         let s be Symbol of A;
-        assume
-        s in Terminals A;
+        assume s in Terminals A;
         then
-A17:    root-tree s in {root-tree q where q is Symbol of A: q in Terminals
-        A};
+A17:    root-tree s in {root-tree q where q is Symbol of A: q in Terminals A};
         fgs <> {} by Th5;
         then fgs c= the carrier of GenUnivAlg(fgs) by UNIALG_2:def 13;
         hence thesis by A17;
@@ -1156,13 +1121,13 @@ A9: len (roots xa) = len xa by FINSEQ_1:def 3;
     reconsider xa as FinSequence of FinTrees the carrier of A;
     reconsider rxa = roots xa as FinSequence of ((dom f) \/ D);
     reconsider rxa as Element of ((dom f) \/ D)* by FINSEQ_1:def 11;
-    dom o1 = (arity o1)-tuples_on cf by UNIALG_2:2
+    dom o1 = (arity o1)-tuples_on cf by MARGREL1:58
       .= {w where w is Element of cf* : len w = arity o1};
     then
 A10: ex w be Element of cf* st x = w & len w = arity o1 by A8;
 A11: o1 = FreeOpNSG(n,f,D) by A5,A6,Def12;
     reconsider fx = ff*x as Element of c1*;
-A12: dom o2 = (arity o2)-tuples_on c1 by UNIALG_2:2
+A12: dom o2 = (arity o2)-tuples_on c1 by MARGREL1:58
       .= {v where v is Element of c1*: len v = arity o2};
 A13: len the charact of(fua) = len the charact of(U1) & Seg len the
     charact of( fua) = dom the charact of(fua) by A1,FINSEQ_1:def 3,UNIALG_2:3;
@@ -1184,7 +1149,7 @@ A19: ff.(nt-tree xa) = (oper(@nt,U1))/.(ff*x) by A3;
 A20: oper(@nt,U1) = o2 by A5,A7,A13,A4,Def4;
     signature fua = signature U1 by A1,UNIALG_2:def 2;
     then len (ff*x) = len x & arity o2 = len x by A5,A7,A15,A14,A16,A10,A17,
-ALG_1:1,UNIALG_1:def 11;
+FINSEQ_3:129,UNIALG_1:def 11;
     then
 A21: fx in {v where v is Element of c1*: len v = arity o2};
     reconsider xa as Element of (TS A)* by FINSEQ_1:def 11;
@@ -1228,7 +1193,7 @@ definition
 end;
 
 begin
-
+ 
 ::
 :: Construction of Free Universal Algebra for Given Signature
 ::  (with at Last One Zero Argument Operation) and Set of Generators
@@ -1297,15 +1262,13 @@ A15: dom F = i-tuples_on (TS A)
       thus dom F c= i-tuples_on(TS A)
       proof
         let x;
-        assume
-        x in dom F;
+        assume x in dom F;
         then ex y st P[x,y] by A13;
         hence thesis;
       end;
       reconsider sm = smm as Symbol of A;
       let x;
-      assume
-      x in i-tuples_on(TS A);
+      assume x in i-tuples_on(TS A);
       then consider s be Element of (TS A)* such that
 A16:  s = x and
 A17:  len s = i;
@@ -1333,20 +1296,18 @@ X:  ex x being FinSequence st x in dom F
     dom F is with_common_domain
     proof
       let x,y be FinSequence;
-      assume
-      x in dom F & y in dom F;
+      assume x in dom F & y in dom F;
       then (ex sx be Element of (TS A)* st sx = x & len sx = f/.n )& ex sy be
       Element of (TS A)* st sy = y & len sy = f/.n by A15;
       hence thesis;
     end;
     then reconsider
     F as homogeneous quasi_total non empty PartFunc of (TS A)*, TS(
-    A) by A18,X,UNIALG_1:def 1,def 2;
+    A) by A18,X,MARGREL1:def 22,def 23;
     take F;
     thus dom F = i-tuples_on (TS A) by A15;
     let p be FinSequence of (TS A);
-    assume
-    p in dom F;
+    assume p in dom F;
     hence thesis by A14;
   end;
   uniqueness
@@ -1358,8 +1319,7 @@ A21: dom f1 = (f/.n)-tuples_on A and
 A22: for p be FinSequence of A st p in dom f1 holds f1.p = Sym(n,f,D)
     -tree(p) and
 A23: dom f2 = (f/.n)-tuples_on A and
-A24: for p be FinSequence of A st p in dom f2 holds f2.p = Sym(n,f,D)
-    -tree(p);
+A24: for p be FinSequence of A st p in dom f2 holds f2.p = Sym(n,f,D) -tree(p);
     now
       let x;
       assume
@@ -1383,12 +1343,10 @@ definition
   proof
     defpred P[Nat,set] means $2 = FreeOpZAO($1,f,D);
     set A = TS(DTConUA(f,D));
-A1: for n be Nat st n in Seg len f ex x be Element of PFuncs(A*,A) st P[n,
-    x]
+A1: for n be Nat st n in Seg len f ex x be Element of PFuncs(A*,A) st P[n, x]
     proof
       let n be Nat;
-      assume
-      n in Seg len f;
+      assume n in Seg len f;
       reconsider O=FreeOpZAO(n,f,D) as Element of PFuncs(A*,A) by PARTFUN1:119;
       take O;
       thus thesis;
@@ -1400,8 +1358,7 @@ A2: dom p = Seg len f & for n be Nat st n in Seg len f holds P[n,p.n]
     take p;
     thus len p = len f by A2,FINSEQ_1:def 3;
     let n;
-    assume
-    n in dom p;
+    assume n in dom p;
     hence thesis by A2;
   end;
   uniqueness
@@ -1439,24 +1396,22 @@ definition
     = (the charact of AA).n holds h is quasi_total
     proof
       let n be Nat,h be PartFunc of A*,A;
-      assume
-      n in dom the charact of(AA) & h = (the charact of AA).n;
+      assume n in dom the charact of(AA) & h = (the charact of AA).n;
       then h = FreeOpZAO(n,f,D) by Def18;
       hence thesis;
     end;
     then
-A1: the charact of(AA) is quasi_total by UNIALG_1:def 5;
+A1: the charact of(AA) is quasi_total by MARGREL1:def 25;
     for n be Nat,h be PartFunc of A*,A st n in dom the charact of(AA) & h
     = (the charact of AA).n holds h is homogeneous
     proof
       let n be Nat,h be PartFunc of A*,A;
-      assume
-      n in dom the charact of(AA) & h = (the charact of AA).n;
+      assume n in dom the charact of(AA) & h = (the charact of AA).n;
       then h = FreeOpZAO(n,f,D) by Def18;
       hence thesis;
     end;
     then
-A2: the charact of(AA) is homogeneous by UNIALG_1:def 4;
+A2: the charact of(AA) is homogeneous by MARGREL1:def 24;
     for n be set st n in dom the charact of(AA) holds (the charact of AA)
     .n is non empty
     proof
@@ -1489,7 +1444,7 @@ A3: dom(signature fa) = Seg len f by A1,FINSEQ_1:def 3;
     let n be Nat;
     reconsider h = FreeOpZAO(n,f,D) as homogeneous quasi_total non empty
     PartFunc of (the carrier of fa)*,(the carrier of fa);
-A4: dom h = (arity h)-tuples_on (the carrier of fa) by UNIALG_2:2;
+A4: dom h = (arity h)-tuples_on (the carrier of fa) by MARGREL1:58;
     assume
 A5: n in dom(signature fa);
     then
@@ -1522,7 +1477,7 @@ A4: len FreeOpSeqZAO(f,D) = len f & dom FreeOpSeqZAO(f,D) = Seg len
   then reconsider o = FreeOpZAO(n,f,D) as operation of AA by A2,A4,A1,
 FUNCT_1:def 5;
   take o;
-A5: dom o = (arity o)-tuples_on (the carrier of AA) by UNIALG_2:2;
+A5: dom o = (arity o)-tuples_on (the carrier of AA) by MARGREL1:58;
   f/.n = f.n & dom(FreeOpZAO(n,f,D)) = (f/.n)-tuples_on (TS A) by A2,Def17,
 PARTFUN1:def 8;
   hence thesis by A3,A5,FINSEQ_2:130;
@@ -1553,7 +1508,7 @@ PARTFUN1:def 8;
 A6: o.(<*>(TS A)) in rng o by FUNCT_1:def 5;
   rng o c= ca by RELAT_1:def 19;
   then reconsider e = o.(<*>(TS A)) as Element of ca by A6;
-  dom o = (arity o)-tuples_on (the carrier of AA) by UNIALG_2:2;
+  dom o = (arity o)-tuples_on (the carrier of AA) by MARGREL1:58;
   then arity o = 0 by A3,A5,FINSEQ_2:130;
   then e in {a where a is Element of ca: ex o be operation of AA st arity o =
   0 & a in rng o} by A6;
@@ -1572,8 +1527,7 @@ definition
     A c= the carrier of FreeUnivAlgZAO(f,D)
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then ex d be Symbol of X st x = root-tree d & d in Terminals X;
       hence thesis by DTCONSTR:def 4;
     end;
@@ -1641,7 +1595,7 @@ FUNCT_1:def 5;
         then
 A10:    B is_closed_on o by UNIALG_2:def 5;
 A11:    dom FreeOpZAO(ns,f,D) = (f/.ns)-tuples_on TS(A) by A7,Def17;
-        dom o = (arity o)-tuples_on the carrier of fua by UNIALG_2:2;
+        dom o = (arity o)-tuples_on the carrier of fua by MARGREL1:58;
         then
 A12:    arity o = f/.ns by A11,FINSEQ_2:130;
         dom (roots p) = dom p by TREES_3:def 18
@@ -1662,11 +1616,9 @@ A15:  x1 in TS A by A14;
 A16:  for s being Symbol of A st s in Terminals A holds P[root-tree s]
       proof
         let s be Symbol of A;
-        assume
-        s in Terminals A;
+        assume s in Terminals A;
         then
-A17:    root-tree s in {root-tree q where q is Symbol of A: q in Terminals
-        A};
+A17:    root-tree s in {root-tree q where q is Symbol of A: q in Terminals A};
         Constants(fua) <> {} by Th9;
         then fgs c= the carrier of GenUnivAlg(fgs) by UNIALG_2:def 13;
         hence thesis by A17;
@@ -1742,13 +1694,13 @@ A9: len (roots xa) = len xa by FINSEQ_1:def 3;
     reconsider xa as FinSequence of FinTrees the carrier of A;
     reconsider rxa = roots xa as FinSequence of ((dom f) \/ D);
     reconsider rxa as Element of ((dom f) \/ D)* by FINSEQ_1:def 11;
-    dom o1 = (arity o1)-tuples_on cf by UNIALG_2:2
+    dom o1 = (arity o1)-tuples_on cf by MARGREL1:58
       .= {w where w is Element of cf* : len w = arity o1};
     then
 A10: ex w be Element of cf* st x = w & len w = arity o1 by A8;
 A11: o1 = FreeOpZAO(n,f,D) by A5,A6,Def18;
     reconsider fx = ff*x as Element of c1*;
-A12: dom o2 = (arity o2)-tuples_on c1 by UNIALG_2:2
+A12: dom o2 = (arity o2)-tuples_on c1 by MARGREL1:58
       .= {v where v is Element of c1*: len v = arity o2};
 A13: len the charact of(fua) = len the charact of(U1) & dom the charact of
     (fua) = Seg len the charact of(fua) by A1,FINSEQ_1:def 3,UNIALG_2:3;
@@ -1770,7 +1722,7 @@ A19: ff.(nt-tree xa) = (oper(@nt,U1))/.(ff*x) by A3;
 A20: oper(@nt,U1) = o2 by A5,A7,A13,A4,Def4;
     signature fua = signature U1 by A1,UNIALG_2:def 2;
     then len (ff*x) = len x & arity o2 = len x by A5,A7,A15,A14,A16,A10,A17,
-ALG_1:1,UNIALG_1:def 11;
+FINSEQ_3:129,UNIALG_1:def 11;
     then
 A21: fx in {v where v is Element of c1*: len v = arity o2};
     reconsider xa as Element of (TS A)* by FINSEQ_1:def 11;
@@ -1823,4 +1775,3 @@ registration
     thus thesis by Th8;
   end;
 end;
-

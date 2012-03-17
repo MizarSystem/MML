@@ -77,8 +77,8 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="65">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="64">
+<Func kind="K" nr="47"/>
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>
@@ -116,8 +116,8 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="65">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="64">
+<Func kind="K" nr="47"/>
 <Var nr="3"/>
 <Var nr="4"/>
 </Func>

@@ -3,7 +3,7 @@
 ::
 :: Received October 1, 1995
 :: Copyright (c) 1995 Association of Mizar Users
-
+ 
 environ
 
  vocabularies FINSEQ_1, FUNCT_1, RELAT_1, XBOOLE_0, TARSKI, SETFAM_1, UNIALG_1,
@@ -12,22 +12,22 @@ environ
       ORDINAL4, RELAT_2, NEWTON, MCART_1, MARGREL1, PUA2MSS1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, SETFAM_1,
       RELAT_1, STRUCT_0, FUNCT_1, PBOOLE, RELSET_1, PARTFUN1, MCART_1,
-      FINSEQ_1, FINSEQ_2, FUNCT_2, RELAT_2, EQREL_1, CARD_3, MSUALG_1,
-      UNIALG_1;
- constructors SETFAM_1, NAT_1, EQREL_1, CARD_3, MSUALG_1, RELSET_1;
+      FINSEQ_1, FINSEQ_2, FUNCT_2, RELAT_2, EQREL_1, CARD_3, MARGREL1,
+      MSUALG_1, UNIALG_1;
+ constructors SETFAM_1, NAT_1, EQREL_1, CARD_3, MSUALG_1, RELSET_1, DOMAIN_1,
+      MARGREL1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, NAT_1, FINSEQ_1, EQREL_1, FINSEQ_2, CARD_3, STRUCT_0, UNIALG_1,
-      MSUALG_1, ORDINAL1, CARD_1, RELSET_1, PBOOLE;
+      MSUALG_1, ORDINAL1, CARD_1, RELSET_1, PBOOLE, MARGREL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, XBOOLE_0, TARSKI, SETFAM_1, RELAT_2, EQREL_1, PBOOLE,
-      RELAT_1, FUNCT_1, UNIALG_1, MSUALG_1;
+      RELAT_1, FUNCT_1, UNIALG_1, MSUALG_1, MARGREL1;
  theorems TARSKI, ZFMISC_1, MCART_1, SETFAM_1, RELAT_1, RELSET_1, FUNCT_1,
       FINSEQ_1, FINSEQ_2, EQREL_1, CARD_3, FUNCT_2, PARTFUN1, CARD_5, PBOOLE,
       FUNCT_6, MSUALG_1, XBOOLE_0, XBOOLE_1, RELAT_2, ORDERS_1;
  schemes NAT_1, RELSET_1, PARTFUN1, WELLORD2, PBOOLE;
 
 begin :: Preliminary
-
 ::-------------------------------------------------------------------
 :: Acknowledgements:
 :: ================
@@ -380,8 +380,7 @@ proof
   proof
     let x be set;
     assume x in PQ;
-    then ex p being Element of P, q being Element of Q st ( x = [:p,q
-    :]);
+    then ex p being Element of P, q being Element of Q st ( x = [:p,q :]);
     hence thesis;
   end;
   then reconsider PQ as Subset-Family of [:X,Y:];
@@ -449,8 +448,7 @@ A1: x = product p;
       then consider f being Function such that
 A2:   y = f and
 A3:   dom f = dom p and
-A4:   for z being set st z in dom p holds f.z in p.z
-      by A1,CARD_3:def 5;
+A4:   for z being set st z in dom p holds f.z in p.z by A1,CARD_3:def 5;
       dom p = Seg len p by FINSEQ_1:def 3;
       then
 A5:   y is FinSequence by A2,A3,FINSEQ_1:def 2;
@@ -558,8 +556,7 @@ A1: x = product p;
       then consider f being Function such that
 A2:   y = f and
 A3:   dom f = dom p and
-A4:   for z being set st z in dom p holds f.z in p.z
-      by A1,CARD_3:def 5;
+A4:   for z being set st z in dom p holds f.z in p.z by A1,CARD_3:def 5;
 A5:   dom p = Seg len p by FINSEQ_1:def 3;
       then reconsider y as FinSequence by A2,A3,FINSEQ_1:def 2;
       rng f c= X
@@ -696,8 +693,7 @@ A9: p meets Y;
     let B be Subset of Y;
     assume B in Q;
     then consider p1 being Element of P such that
-A10: B = p1 /\ Y
-    and p1 meets Y;
+A10: B = p1 /\ Y and p1 meets Y;
     assume A <> B;
     then p misses p1 by A8,A10,EQREL_1:def 6;
     then A misses p1 by A8,XBOOLE_1:74;
@@ -917,8 +913,7 @@ theorem Th15:
 proof
   let X be set, P be non-empty Function such that
 A1: Union P = X and
-A2: for x,y being set st x in dom P & y in
-  dom P & x <> y holds P.x misses P.y;
+A2: for x,y being set st x in dom P & y in dom P & x <> y holds P.x misses P.y;
   rng P c= bool X
   proof
     let y be set;
@@ -980,8 +975,7 @@ proof
   deffunc G(set,set) = RR($2,$1);
   consider F being Function such that
 A1: dom F = NAT and
-A2: F.0 = R0() & for n being Nat holds F.(n+1) = G(n,F.n)
-  from NAT_1:sch 11;
+A2: F.0 = R0() & for n being Nat holds F.(n+1) = G(n,F.n) from NAT_1:sch 11;
   reconsider F as ManySortedSet of NAT by A1,PARTFUN1:def 4,RELAT_1:def 18;
   defpred P[Element of NAT] means F.$1 is Relation of A(),B();
 A3: P[ 0 ] by A2;
@@ -1248,8 +1242,7 @@ A2: now
     let j be Element of NAT;
     assume
 A3: P[j];
-    R|^(A,i+(j+1)) = R|^(A,(i+j)+1)
-      .= R|^(A,i+j)|^A by Th18
+    R|^(A,i+(j+1)) = R|^(A,(i+j)+1) .= R|^(A,i+j)|^A by Th18
       .= R|^(A,i)|^(A,j+1) by A3,Th18;
     hence P[j+1];
   end;
@@ -1274,8 +1267,7 @@ A2: [a,a] in R by EQREL_1:11;
     now
       let f be operation of A, p,q be FinSequence;
       assume that
-A3:   p^<*a*>^q in dom f
-      and p^<*a*>^q in dom f;
+A3:   p^<*a*>^q in dom f and p^<*a*>^q in dom f;
       f.(p^<*a*>^q) in rng f by A3,FUNCT_1:def 5;
       hence [f.(p^<*a*>^q), f.(p^<*a*>^q)] in R by EQREL_1:11;
     end;
@@ -1488,8 +1480,7 @@ definition
   let P be a_partition of X;
   pred f is_partitable_wrt P means
   : Def9:
-  for
-  p being FinSequence of P ex a being Element of P st f.:product p c= a;
+  for p being FinSequence of P ex a being Element of P st f.:product p c= a;
 end;
 
 definition
@@ -1562,8 +1553,7 @@ A5: Q[ 0 ]
     assume that
 A6: len x1 = 0 and
 A7: x() = x1^x2 and
-A8: len y1 = 0
-    and y() = y1^y2;
+A8: len y1 = 0 and y() = y1^y2;
 A9: x1 = {} by A6;
     y1 = {} by A8;
     hence thesis by A1,A7,A9;
@@ -2067,8 +2057,7 @@ A13: rng f c= rng f2 by RELAT_1:45;
   rng g c= rng g2 by RELAT_1:45;
   hence rng f c= the carrier of S3 & rng g c= the carrier' of S3
   by A9,A10,A13,XBOOLE_1:1;
-  thus f*the ResultSort of S1
-  = f2*((the ResultSort of S2)*g1) by A5,RELAT_1:55
+  thus f*the ResultSort of S1 = f2*((the ResultSort of S2)*g1) by A5,RELAT_1:55
     .= f2*(the ResultSort of S2)*g1 by RELAT_1:55
     .= (the ResultSort of S3)*g by A11,RELAT_1:55;
   let o be set, p be Function;
@@ -2119,8 +2108,7 @@ A6: rng g2 = the carrier' of S2;
   thus f,g form_morphism_between S3,S1 by A1,A4,Th30;
 A7: dom f1 = the carrier of S2 by A1,Def13;
   dom g1 = the carrier' of S2 by A1,Def13;
-  hence thesis
-  by A2,A3,A5,A6,A7,RELAT_1:47;
+  hence thesis by A2,A3,A5,A6,A7,RELAT_1:47;
 end;
 
 begin :: Manysorted signature of partital algebra
@@ -2147,8 +2135,7 @@ A1: for o being set st o in O ex p being set st p in P* & Q[o,p]
       let o be set;
       assume o in O;
       then consider f being OperSymbol of A, p being Element of P* such that
-A2:   o = [f,p]
-      and product p meets dom Den(f,A);
+A2:   o = [f,p] and product p meets dom Den(f,A);
       take p;
       thus thesis by A2;
     end;
@@ -2159,8 +2146,7 @@ A3: for o being set st o in O ex r being set st r in P & S[o,r]
       let o be set;
       assume o in O;
       then consider f being OperSymbol of A, p being Element of P* such that
-A4:   o = [f,p]
-      and product p meets dom Den(f,A);
+A4:   o = [f,p] and product p meets dom Den(f,A);
       Den(f,A) is_exactly_partitable_wrt P by Def11;
       then Den(f,A) is_partitable_wrt P by Def10;
       then ex a being Element of P st Den(f,A).:product p c= a by Def9;
@@ -2281,8 +2267,7 @@ definition
   let A be partial non-empty UAStr;
   let P be a_partition of A;
   let o be OperSymbol of MSSign(A,P);
-  redefine
-  func o`1 -> OperSymbol of A;
+  redefine func o`1 -> OperSymbol of A;
   coherence
   proof
 A1: o in the carrier' of MSSign(A,P);
@@ -2292,7 +2277,7 @@ A1: o in the carrier' of MSSign(A,P);
     o = [f,p] & product p meets dom Den(f, A) by A1;
     hence thesis by MCART_1:7;
   end;
-  func o`2 -> Element of P*;
+  redefine func o`2 -> Element of P*;
   coherence
   proof
 A2: o in the carrier' of MSSign(A,P);
@@ -2320,8 +2305,7 @@ definition
   let A be partial non-empty UAStr;
   let S be non void non empty ManySortedSign;
   pred A can_be_characterized_by S means
-  ex G being MSAlgebra over S,
-  P being IndexedPartition of the carrier' of S st
+  ex G being MSAlgebra over S, P being IndexedPartition of the carrier' of S st
   A can_be_characterized_by S,G,P;
 end;
 
@@ -2632,8 +2616,7 @@ A4: dom Q = dom the charact of A by A2,Def16;
 A5: dom R = the carrier of S2 by PARTFUN1:def 4;
   then reconsider SG = the Sorts of G as Function of the carrier of S2, rng R
   by RELSET_1:11;
-A6: the carrier' of S1 =
-  {[o,p] where o is OperSymbol of A, p is Element of P*:
+A6: the carrier' of S1 = {[o,p] where o is OperSymbol of A, p is Element of P*:
   product p meets dom Den(o,A)} by Def15;
 A7: the carrier of S1 = P by Def15;
   defpred Q[set,set] means $1 c= $2;
@@ -2799,8 +2782,7 @@ A53: f.(R-index_of a) in rng f by A5,A23,A49,FUNCT_1:def 5;
 A54: s1 = [o,p] and
 A55: product p meets dom Den(o,A) by A6;
     consider a being set such that
-A56: a in product p
-    and a in dom Den(o,A) by A55,XBOOLE_0:3;
+A56: a in product p and a in dom Den(o,A) by A55,XBOOLE_0:3;
     consider h being Function such that
 A57: a = h and
 A58: dom h = dom p and
@@ -2852,4 +2834,3 @@ A78: p = em*r by A11,A71,Th5;
     hence thesis by A22,A54,A74,A77,A78,FUNCT_1:def 5;
   end;
 end;
-

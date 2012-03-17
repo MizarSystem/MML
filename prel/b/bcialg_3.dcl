@@ -85,14 +85,14 @@
 </RCluster>
 <FCluster aid="BCIALG_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
@@ -100,21 +100,21 @@
 </FCluster>
 <FCluster aid="BCIALG_3" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="68"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="71"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="72"/>
 <Adjective nr="73"/>

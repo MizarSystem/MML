@@ -9,20 +9,21 @@ environ
  vocabularies NUMBERS, SUBSET_1, CARD_1, AMI_2, XBOOLE_0, STRUCT_0, ZFMISC_1,
       ARYTM_3, SUPINF_2, RELAT_1, FINSEQ_1, SCMFSA7B, FUNCSDOM, FUNCT_1,
       CARD_3, AMI_1, NAT_1, FUNCT_4, FUNCOP_1, MCART_1, PARTFUN1, ORDINAL1,
-      ARYTM_1, FUNCT_2, FUNCT_5, TARSKI, SCMRING1, GROUP_9;
+      ARYTM_1, FUNCT_2, FUNCT_5, TARSKI, SCMRING1, GROUP_9, RECDEF_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NAT_1, STRUCT_0, ALGSTR_0, FUNCSDOM,
+      PARTFUN1, FUNCT_2, BINOP_1, CARD_1, NAT_1, RECDEF_2,
+      STRUCT_0, ALGSTR_0, FUNCSDOM,
       MCART_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1, FUNCT_4, CAT_2, AMI_2;
  constructors XXREAL_0, FINSEQ_4, REALSET2, CAT_2, RELSET_1, AMI_2, FUNCOP_1,
-      SETFAM_1;
+      SETFAM_1, FINSEQ_2, RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FINSEQ_1,
       CARD_3, STRUCT_0, GR_CY_1, GCD_1, AMI_2, CARD_1, ORDINAL2, FUNCT_1,
       CARD_2, ALGSTR_0, ALGSTR_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
- definitions TARSKI, FINSEQ_1, FUNCOP_1, CARD_1, AMI_2;
+ definitions TARSKI, FINSEQ_1, FUNCOP_1, CARD_1, AMI_2, MCART_1;
  theorems AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, MCART_1, TARSKI, YELLOW_8, ZFMISC_1,
-      XBOOLE_0, XBOOLE_1, ORDINAL1, NAT_1, RELAT_1;
+      XBOOLE_0, XBOOLE_1, ORDINAL1, NAT_1, RELAT_1, FUNCT_7, RECDEF_2;
  schemes FUNCT_2, BINOP_1;
 
 begin  :: The construction of { \bf SCM } over ring
@@ -41,16 +42,18 @@ registration
   proof
     consider e, f being Element of SCM-Data-Loc;
     1 in {1,2,3,4,5} & 1 is Element of Segm 9 by ENUMSET1:def 3,NAT_1:45;
-    then [1,<*e,f*>] in { [K,<*b,c*>] where K is Element of Segm 9, b, c is
+    then [1,{},<*e,f*>] in { [K,{},<*b,c*>]
+     where K is Element of Segm 9, b, c is
     Element of SCM-Data-Loc : K in {1,2,3,4,5} };
     then
-A1: [1,<*e,f*>] in SCM-Instr by XBOOLE_0:def 3;
+A1: [1,{},<*e,f*>] in SCM-Instr by XBOOLE_0:def 3;
     2 in {1,2,3,4,5} & 2 is Element of Segm 9 by ENUMSET1:def 3,NAT_1:45;
-    then [2,<*e,f*>] in { [K,<*b,c*>] where K is Element of Segm 9, b, c is
+    then [2,{},<*e,f*>] in { [K,{},<*b,c*>]
+     where K is Element of Segm 9, b, c is
     Element of SCM-Data-Loc : K in {1,2,3,4,5} };
     then
-A2: [2,<*e,f*>] in SCM-Instr by XBOOLE_0:def 3;
-    [1,<*e,f*>] <> [2,<*e,f*>] by ZFMISC_1:33;
+A2: [2,{},<*e,f*>] in SCM-Instr by XBOOLE_0:def 3;
+    [1,{},<*e,f*>] <> [2,{},<*e,f*>] by MCART_1:28;
     hence thesis by A1,A2,YELLOW_8:def 1;
   end;
 end;
@@ -58,10 +61,13 @@ end;
 definition
   let S be non empty 1-sorted;
   func SCM-Instr S -> non empty set equals
-  { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
-, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is
-Element of NAT: not contradiction } \/ { [7,<*i,a*>] where i is Element of NAT,
-  a is Element of SCM-Data-Loc: not contradiction } \/ { [5,<*a,r*>] where a is
+  { [0,{},{}] }
+   \/ { [I,{},<*a,b*>] where I is Element of Segm 8,
+    a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+   \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction }
+   \/ { [7,<*i*>,<*a*>] where i is Element of NAT,a is Element of SCM-Data-Loc:
+        not contradiction }
+   \/ { [5,{},<*a,r*>] where a is
   Element of SCM-Data-Loc, r is Element of S: not contradiction };
   coherence;
 end;
@@ -72,25 +78,32 @@ registration
   coherence
   proof
     consider e1, e2 being Element of SCM-Data-Loc;
-A1: SCM-Instr S = ({ [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/ {
-[6,<*i1*>] : not contradiction }) \/ ({ [7,<*i2,d3*>] : not contradiction } \/
-    { [5,<*d4,r*>] where r is Element of S: not contradiction }) by XBOOLE_1:4
-      .= ({ [0,{}] } \/ { [I,<*d1,d2*>] : I in { 1,2,3,4 } }) \/ ({ [6,<*i1
-*>] : not contradiction } \/ ({ [7,<*i2,d3*>] : not contradiction } \/ { [5,<*
-    d4,r*>] where r is Element of S: not contradiction})) by XBOOLE_1:4
-      .= { [I,<*d1,d2*>] : I in { 1,2,3,4 } } \/ ({ [0,{}] } \/ (({ [6,<*i1
-*>] : not contradiction } \/ ({ [7,<*i2,d3*>] : not contradiction } \/ { [5,<*
-    d4,r*>] where r is Element of S: not contradiction})))) by XBOOLE_1:4;
+A1: SCM-Instr S = ({ [0,{},{}] } \/ { [I,{},<*d1,d2*>] : I in { 1,2,3,4 } }
+      \/ {[6,<*i1*>,{}] : not contradiction })
+      \/ ({ [7,<*i2*>,<*d3*>] : not contradiction }
+      \/ { [5,{},<*d4,r*>] where r is Element of S: not contradiction })
+       by XBOOLE_1:4
+      .= ({ [0,{},{}] } \/ { [I,{},<*d1,d2*>] : I in { 1,2,3,4 } })
+      \/ ({ [6,<*i1*>,{}] : not contradiction }
+      \/ ({ [7,<*i2*>,<*d3*>] : not contradiction }
+      \/ { [5,{},<*d4,r*>] where r is Element of S: not contradiction}))
+    by XBOOLE_1:4
+      .= { [I,{},<*d1,d2*>] : I in { 1,2,3,4 } } \/ ({ [0,{},{}] }
+      \/ (({ [6,<*i1*>,{}] : not contradiction }
+      \/ ({ [7,<*i2*>,<*d3*>] : not contradiction }
+      \/ { [5,{},<*d4,r*>] where r is Element of S: not contradiction}))))
+       by XBOOLE_1:4;
     2 in Segm 8 & 2 in {1,2,3,4} by ENUMSET1:def 2,NAT_1:45;
-    then [2,<*e1,e2*>] in { [I,<*d1,d2*>] where I is Element of Segm 8, d1,d2
+    then [2,{},<*e1,e2*>] in { [I,{},<*d1,d2*>] where
+     I is Element of Segm 8, d1,d2
     is Element of SCM-Data-Loc: I in { 1,2,3,4 } };
     then
-A2: [2,<*e1,e2*>] in SCM-Instr S by A1,XBOOLE_0:def 3;
-A3: [1,<*e1,e2*>] <> [2,<*e1,e2*>] by ZFMISC_1:33;
+A2: [2,{},<*e1,e2*>] in SCM-Instr S by A1,XBOOLE_0:def 3;
+A3: [1,{},<*e1,e2*>] <> [2,{},<*e1,e2*>] by MCART_1:28;
     1 in Segm 8 & 1 in {1,2,3,4} by ENUMSET1:def 2,NAT_1:45;
-    then [1,<*e1,e2*>] in { [I,<*d1,d2*>] where d1,d2 is Element of
+    then [1,{},<*e1,e2*>] in { [I,{},<*d1,d2*>] where d1,d2 is Element of
     SCM-Data-Loc : I in { 1,2,3,4 } };
-    then [1,<*e1,e2*>] in SCM-Instr S by A1,XBOOLE_0:def 3;
+    then [1,{},<*e1,e2*>] in SCM-Instr S by A1,XBOOLE_0:def 3;
     hence thesis by A2,A3,YELLOW_8:def 1;
   end;
 end;
@@ -108,11 +121,9 @@ registration
   coherence
   proof
     let S be non empty 1-sorted;
-    assume
-    S is trivial;
+    assume S is trivial;
     then reconsider T = S as trivial non empty 1-sorted;
-    assume
-    S is non good;
+    assume S is non good;
     then
 A1: the carrier of S = NAT or the carrier of S = SCM-Instr S by Def2;
     the carrier of T is trivial;
@@ -211,36 +222,50 @@ theorem Th1:
   NAT <> SCM-Instr S
 proof
   now
-    assume
-    2 in SCM-Instr S;
+    assume 2 in SCM-Instr S;
     then
-    2 in { [0,{}] } \/ { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc:
-I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is Element of NAT: not contradiction
-} \/ { [7,<*i,a*>] where i is Element of NAT, a is Element of SCM-Data-Loc: not
-contradiction } or 2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc, r is
+    2 in { [0,{},{}] }
+     \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc:
+        I in { 1,2,3,4 } }
+     \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction}
+     \/ { [7,<*i*>,<*a*>] where i is Element of NAT,
+         a is Element of SCM-Data-Loc: not contradiction } or
+     2 in { [5,{},<*i,r*>] where i is Element of SCM-Data-Loc, r is
     Element of S: not contradiction } by XBOOLE_0:def 3;
     then
-    2 in { [0,{}] } \/ { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc:
-I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is Element of NAT: not contradiction
-} or 2 in { [7,<*i,a*>] where i is Element of NAT, a is Element of SCM-Data-Loc
-: not contradiction } or 2 in { [5,<*i,r*>] where i is Element of SCM-Data-Loc,
+    2 in { [0,{},{}] }
+     \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc:
+I in { 1,2,3,4 } }
+ \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction
+} or 2 in { [7,<*i*>,<*a*>] where i is Element of NAT,
+a is Element of SCM-Data-Loc
+: not contradiction } or 2 in { [5,{},<*i,r*>]
+ where i is Element of SCM-Data-Loc,
     r is Element of S: not contradiction } by XBOOLE_0:def 3;
     then
-    2 in { [0,{}] } \/ { [I,<*a,b*>] where a,b is Element of SCM-Data-Loc:
-    I in { 1,2,3,4 } } or 2 in { [6,<*i*>] where i is Element of NAT: not
-contradiction } or 2 in { [7,<*i,a*>] where i is Element of NAT, a is Element
-of SCM-Data-Loc: not contradiction } or 2 in { [5,<*i,r*>] where i is Element
+    2 in { [0,{},{}] }
+     \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc:
+    I in { 1,2,3,4 } } or 2 in { [6,<*i*>,{}] where i is Element of NAT: not
+contradiction } or 2 in { [7,<*i*>,<*a*>]
+ where i is Element of NAT, a is Element
+of SCM-Data-Loc: not contradiction } or
+2 in { [5,{},<*i,r*>] where i is Element
     of SCM-Data-Loc, r is Element of S: not contradiction } by XBOOLE_0:def 3;
-    then 2 in { [0,{}] } or 2 in { [I,<*a,b*>] where a,b is Element of
-SCM-Data-Loc: I in { 1,2,3,4 } } or 2 in { [6,<*i*>] where i is Element of NAT:
-    not contradiction } or 2 in { [7,<*i,a*>] where i is Element of NAT, a is
-Element of SCM-Data-Loc: not contradiction } or 2 in { [5,<*i,r*>] where i is
+    then 2 in { [0,{},{}] } or 2 in { [I,{},<*a,b*>] where a,b is Element of
+SCM-Data-Loc: I in { 1,2,3,4 } } or
+ 2 in { [6,<*i*>,{}] where i is Element of NAT:
+    not contradiction } or 2 in { [7,<*i*>,<*a*>]
+     where i is Element of NAT, a is
+Element of SCM-Data-Loc: not contradiction } or
+2 in { [5,{},<*i,r*>] where i is
 Element of SCM-Data-Loc, r is Element of S: not contradiction } by
 XBOOLE_0:def 3;
     then
-    2 = [0,{}] or (ex I,d1,d2 st 2 = [I,<*d1,d2*>] & I in { 1,2,3,4 }) or
-(ex i1 st 2 = [6,<*i1*>] & not contradiction) or (ex i2,d3 st 2 = [7,<*i2,d3*>]
-& not contradiction) or ex d4 st ex r being Element of S st 2 = [5,<*d4,r*>] &
+    2 = [0,{},{}] or (ex I,d1,d2 st 2 = [I,{},<*d1,d2*>] & I in { 1,2,3,4 }) or
+(ex i1 st 2 = [6,<*i1*>,{}] & not contradiction) or
+ (ex i2,d3 st 2 = [7,<*i2*>,<*d3*>]
+& not contradiction) or
+ ex d4 st ex r being Element of S st 2 = [5,{},<*d4,r*>] &
     not contradiction by TARSKI:def 1;
     hence contradiction;
   end;
@@ -541,127 +566,124 @@ end;
 definition
   let S be non empty 1-sorted, x be Element of SCM-Instr S;
   given mk, ml being Element of SCM-Data-Loc, I such that
-A1: x = [ I, <*mk, ml*>];
+A1: x = [I,{},<*mk,ml*>];
   func x address_1 -> Element of SCM-Data-Loc means
   :Def7:
   ex f being
-  FinSequence of SCM-Data-Loc st f = x`2 & it = f/.1;
+  FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.1;
   existence
   proof
     take mk,<*mk, ml*>;
-    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+    thus thesis by A1,FINSEQ_4:26,RECDEF_2:def 3;
   end;
   uniqueness;
   func x address_2 -> Element of SCM-Data-Loc means
   :Def8:
   ex f being
-  FinSequence of SCM-Data-Loc st f = x`2 & it = f/.2;
+  FinSequence of SCM-Data-Loc st f = x`3_3 & it = f/.2;
   existence
   proof
     take ml,<*mk, ml*>;
-    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+    thus thesis by A1,FINSEQ_4:26,RECDEF_2:def 3;
   end;
   uniqueness;
 end;
 
 theorem
   for x being Element of SCM-Instr S, mk, ml being Element of
-SCM-Data-Loc st x = [ I, <*mk, ml*>] holds x address_1 = mk & x address_2 = ml
+SCM-Data-Loc st x = [I,{},<*mk,ml*>] holds x address_1 = mk & x address_2 = ml
 proof
   let x be Element of SCM-Instr S, mk,ml be Element of SCM-Data-Loc;
   assume
-A1: x = [ I, <*mk,ml*>];
+A1: x = [I,{},<*mk,ml*>];
   then consider f being FinSequence of SCM-Data-Loc such that
-A2: f = x`2 and
+A2: f = x`3_3 and
 A3: x address_1 = f/.1 by Def7;
-  f = <*mk,ml*> by A1,A2,MCART_1:7;
+  f = <*mk,ml*> by A1,A2,RECDEF_2:def 3;
   hence x address_1 = mk by A3,FINSEQ_4:26;
   consider f being FinSequence of SCM-Data-Loc such that
-A4: f = x`2 and
+A4: f = x`3_3 and
 A5: x address_2 = f/.2 by A1,Def8;
-  f = <*mk,ml*> by A1,A4,MCART_1:7;
+  f = <*mk,ml*> by A1,A4,RECDEF_2:def 3;
   hence thesis by A5,FINSEQ_4:26;
 end;
 
 definition
   let R be non empty 1-sorted, x be Element of SCM-Instr R;
   given mk being Element of NAT, I such that
-A1: x = [ I, <*mk*>];
+A1: x = [I,<*mk*>,{}];
   func x jump_address -> Element of NAT means
   :Def9:
   ex f being FinSequence of
-  NAT st f = x`2 & it = f/.1;
+  NAT st f = x`2_3 & it = f/.1;
   existence
   proof
     take mk,<*mk*>;
-    thus thesis by A1,FINSEQ_4:25,MCART_1:7;
+    thus thesis by A1,FINSEQ_4:25,RECDEF_2:def 2;
   end;
   uniqueness;
 end;
 
 theorem
-  for x being Element of SCM-Instr S, mk being Element of NAT st x = [ I
-  , <*mk*>] holds x jump_address = mk
+  for x being Element of SCM-Instr S, mk being Element of NAT
+   st x = [ I,<*mk*>,{}] holds x jump_address = mk
 proof
   let x be Element of SCM-Instr S, mk be Element of NAT;
   assume
-A1: x = [ I, <*mk*>];
+A1: x = [I,<*mk*>,{}];
   then consider f being FinSequence of NAT such that
-A2: f = x`2 and
+A2: f = x`2_3 and
 A3: x jump_address = f/.1 by Def9;
-  f = <*mk*> by A1,A2,MCART_1:7;
+  f = <*mk*> by A1,A2,RECDEF_2:def 2;
   hence thesis by A3,FINSEQ_4:25;
 end;
 
 definition
   let S be non empty 1-sorted, x be Element of SCM-Instr S;
   given mk being Element of NAT, ml being Element of SCM-Data-Loc, I such that
-A1: x = [ I, <*mk,ml*>];
+A1: x = [I,<*mk*>,<*ml*>];
   func x cjump_address -> Element of NAT means
   :Def10:
-  ex mk being Element of
-  NAT, ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk,ml*>/.1;
+  ex mk being Element of NAT st <*mk*> = x`2_3 & it = <*mk*>/.1;
   existence
   proof
-    take mk,mk,ml;
-    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+    take mk,mk;
+    thus thesis by A1,FINSEQ_4:25,RECDEF_2:def 2;
   end;
   uniqueness;
   func x cond_address -> Element of SCM-Data-Loc means
   :Def11:
-  ex mk being
-Element of NAT, ml being Element of SCM-Data-Loc st <*mk,ml*> = x`2 & it = <*mk
-  ,ml*>/.2;
+  ex ml being Element of SCM-Data-Loc st <*ml*> = x`3_3 & it = <*ml*>/.1;
   existence
   proof
-    take ml,mk,ml;
-    thus thesis by A1,FINSEQ_4:26,MCART_1:7;
+    take ml,ml;
+    thus thesis by A1,FINSEQ_4:25,RECDEF_2:def 3;
   end;
   uniqueness;
 end;
 
 theorem
   for x being Element of SCM-Instr S, mk being Element of NAT, ml being
-  Element of SCM-Data-Loc st x = [ I, <*mk,ml*>] holds x cjump_address = mk & x
+  Element of SCM-Data-Loc st x = [I,<*mk*>,<*ml*>]
+   holds x cjump_address = mk & x
   cond_address = ml
 proof
   let x be Element of SCM-Instr S, mk be Element of NAT, ml be Element of
   SCM-Data-Loc;
   assume
-A1: x = [ I, <*mk,ml*>];
-  then consider
-  mk9 being Element of NAT, ml9 being Element of SCM-Data-Loc such
+A1: x = [I,<*mk*>,<*ml*>];
+  then consider mk9 being Element of NAT such
   that
-A2: <*mk9,ml9*> = x`2 and
-A3: x cjump_address = <*mk9,ml9*>/.1 by Def10;
-  <*mk9,ml9*> = <*mk,ml*> by A1,A2,MCART_1:7;
-  hence x cjump_address = mk by A3,FINSEQ_4:26;
-  consider mk9 being Element of NAT, ml9 being Element of SCM-Data-Loc such
+A2: <*mk9*> = x`2_3 and
+A3: x cjump_address = <*mk9*>/.1 by Def10;
+  <*mk9*> = <*mk*> by A1,A2,RECDEF_2:def 2;
+  hence x cjump_address = mk by A3,FINSEQ_4:25;
+  consider ml9 being Element of SCM-Data-Loc such
   that
-A4: <*mk9,ml9*> = x`2 and
-A5: x cond_address = <*mk9,ml9*>/.2 by A1,Def11;
-  <*mk9,ml9*> = <*mk,ml*> by A1,A4,MCART_1:7;
-  hence thesis by A5,FINSEQ_4:26;
+A4: <*ml9*> = x`3_3 and
+A5: x cond_address = <*ml9*>/.1 by A1,Def11;
+  <*ml9*> = <*ml*> by A1,A4,RECDEF_2:def 3;
+  hence thesis by A5,FINSEQ_4:25;
 end;
 
 definition
@@ -671,8 +693,7 @@ definition
   proof
     let y be set;
 A1: dom <*d,s*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
-    assume
-    y in rng <*d,s*>;
+    assume y in rng <*d,s*>;
     then consider x being set such that
 A2: x in dom <*d,s*> and
 A3: <*d,s*>.x = y by FUNCT_1:def 5;
@@ -693,36 +714,36 @@ end;
 definition
   let S be non empty 1-sorted, x be Element of SCM-Instr S;
   given mk being Element of SCM-Data-Loc, r being Element of S, I such that
-A1: x = [ I, <*mk, r*>];
+A1: x = [I,{},<*mk,r*>];
   func x const_address -> Element of SCM-Data-Loc means
   :Def12:
   ex f being
-  FinSequence of SCM-Data-Loc \/ the carrier of S st f = x`2 & it = f/.1;
+  FinSequence of SCM-Data-Loc \/ the carrier of S st f = x`3_3 & it = f/.1;
   existence
   proof
     take mk,<*mk, r*>;
     mk is Element of SCM-Data-Loc \/ the carrier of S & r is Element of
     SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 3;
-    hence thesis by A1,FINSEQ_4:26,MCART_1:7;
+    hence thesis by A1,FINSEQ_4:26,RECDEF_2:def 3;
   end;
   uniqueness;
   func x const_value -> Element of S means
   :Def13:
   ex f being FinSequence of
-  SCM-Data-Loc \/ the carrier of S st f = x`2 & it = f/.2;
+  SCM-Data-Loc \/ the carrier of S st f = x`3_3 & it = f/.2;
   existence
   proof
     take r,<*mk, r*>;
     mk is Element of SCM-Data-Loc \/ the carrier of S & r is Element of
     SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 3;
-    hence thesis by A1,FINSEQ_4:26,MCART_1:7;
+    hence thesis by A1,FINSEQ_4:26,RECDEF_2:def 3;
   end;
   uniqueness;
 end;
 
 theorem
   for x being Element of SCM-Instr S, mk being Element of SCM-Data-Loc,
-  r being Element of S st x = [ I, <*mk, r*>] holds x const_address = mk & x
+  r being Element of S st x = [I,{},<*mk,r*>] holds x const_address = mk & x
   const_value = r
 proof
   let x be Element of SCM-Instr S, mk be Element of SCM-Data-Loc, r be Element
@@ -730,39 +751,42 @@ proof
 A1: mk is Element of SCM-Data-Loc \/ the carrier of S & r is Element of
   SCM-Data-Loc \/ the carrier of S by XBOOLE_0:def 3;
   assume
-A2: x = [ I, <*mk,r*>];
+A2: x = [ I,{}, <*mk,r*>];
   then consider
   f being FinSequence of SCM-Data-Loc \/ the carrier of S such that
-A3: f = x`2 and
+A3: f = x`3_3 and
 A4: x const_address = f/.1 by Def12;
-  f = <*mk,r*> by A2,A3,MCART_1:7;
+  f = <*mk,r*> by A2,A3,RECDEF_2:def 3;
   hence x const_address = mk by A4,A1,FINSEQ_4:26;
   consider f being FinSequence of SCM-Data-Loc \/ the carrier of S such that
-A5: f = x`2 and
+A5: f = x`3_3 and
 A6: x const_value = f/.2 by A2,Def13;
-  f = <*mk,r*> by A2,A5,MCART_1:7;
+  f = <*mk,r*> by A2,A5,RECDEF_2:def 3;
   hence thesis by A1,A6,FINSEQ_4:26;
 end;
 
 definition
   let R be good Ring, x be Element of SCM-Instr R, s be SCM-State of R;
   func SCM-Exec-Res (x,s) -> SCM-State of R equals
-  SCM-Chg(SCM-Chg(s, x
-  address_1, s.(x address_2)), succ IC s) if ex mk, ml being Element of
-  SCM-Data-Loc st x = [ 1, <*mk, ml*>], SCM-Chg(SCM-Chg(s, x address_1, s.(x
-  address_1)+s.(x address_2)), succ IC s) if ex mk, ml being Element of
-  SCM-Data-Loc st x = [ 2, <*mk, ml*>], SCM-Chg(SCM-Chg(s, x address_1, s.(x
-  address_1)-s.(x address_2)), succ IC s) if ex mk, ml being Element of
-  SCM-Data-Loc st x = [ 3, <*mk, ml*>], SCM-Chg(SCM-Chg(s, x address_1, s.(x
-  address_1)*s.(x address_2)), succ IC s) if ex mk, ml being Element of
-SCM-Data-Loc st x = [ 4, <*mk, ml*>], SCM-Chg(s, x jump_address) if ex mk being
-Element of NAT st x = [ 6, <*mk*>], SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x
-  cjump_address, succ IC s)) if ex mk being Element of NAT, ml being Element of
-  SCM-Data-Loc st x = [ 7, <*mk, ml*>], SCM-Chg(SCM-Chg(s, x const_address, x
-  const_value), succ IC s) if ex mk being Element of SCM-Data-Loc, r being
-  Element of R st x = [ 5, <*mk, r*>] otherwise s;
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_2)), succ IC s)
+   if ex mk, ml being Element of SCM-Data-Loc st x = [1,{},<*mk,ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)+s.(x address_2)), succ IC s)
+   if ex mk, ml being Element of SCM-Data-Loc st x = [2,{},<*mk,ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)-s.(x address_2)), succ IC s)
+   if ex mk, ml being Element of SCM-Data-Loc st x = [3,{},<*mk,ml*>],
+  SCM-Chg(SCM-Chg(s, x address_1, s.(x address_1)*s.(x address_2)), succ IC s)
+   if ex mk, ml being Element of SCM-Data-Loc st x = [4,{},<*mk,ml*>],
+  SCM-Chg(s, x jump_address)
+   if ex mk being Element of NAT st x = [6,<*mk*>,{}],
+  SCM-Chg(s, IFEQ(s.(x cond_address), 0.R, x cjump_address, succ IC s))
+   if ex mk being Element of NAT, ml being Element of SCM-Data-Loc
+    st x = [7,<*mk*>,<*ml*>],
+  SCM-Chg(SCM-Chg(s, x const_address, x const_value), succ IC s)
+   if ex mk being Element of SCM-Data-Loc, r being Element of R
+    st x = [5,{},<*mk,r*>]
+  otherwise s;
   coherence;
-  consistency by ZFMISC_1:33;
+  consistency by MCART_1:28;
 end;
 
 definition
@@ -818,65 +842,71 @@ end;
 
 theorem
  for S being non empty 1-sorted
-  holds  SCM-Instr S c= [:NAT,proj2 SCM-Instr S:]
+  holds  SCM-Instr S c= [:NAT,NAT*,proj2 SCM-Instr S:]
 proof let S be non empty 1-sorted;
  set X=proj2 SCM-Instr S;
  let u be set;
  assume
 Z: u in SCM-Instr S;
+X: {} in NAT* by FINSEQ_1:66;
  per cases by Z,XBOOLE_0:def 3;
  suppose
-S:  u in { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
-, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is
-Element of NAT: not contradiction } \/ { [7,<*i,a*>] where i is Element of NAT,
+S:  u in { [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
+, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+ \/ { [6,<*i*>,{}] where i is
+Element of NAT: not contradiction } \/ { [7,<*i*>,<*a*>]
+ where i is Element of NAT,
   a is Element of SCM-Data-Loc: not contradiction };
   per cases by S,XBOOLE_0:def 3;
   suppose
-S:  u in{ [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
-, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is
+S:  u in{ [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
+, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+ \/ { [6,<*i*>,{}] where i is
 Element of NAT: not contradiction };
   per cases by S,XBOOLE_0:def 3;
   suppose
-S:  u in { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
+S:  u in { [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
 , a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } };
   per cases by S,XBOOLE_0:def 3;
-  suppose u in { [0,{}] };
+  suppose u in { [0,{},{}] };
    then
-W:  u = [0,{}] by TARSKI:def 1;
+W:  u = [0,{},{}] by TARSKI:def 1;
    then 0 in NAT & {} in proj2 SCM-Instr S by Z,RELAT_1:def 5;
-  hence u in [:NAT,X:] by W,ZFMISC_1:106;
+  hence u in [:NAT,NAT*,X:] by W,MCART_1:73,X;
   end;
-  suppose u in { [I,<*a,b*>] where I is Element of Segm 8
+  suppose u in { [I,{},<*a,b*>] where I is Element of Segm 8
 , a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 }};
    then consider I being Element of Segm 8, a, b being Element of SCM-Data-Loc
    such that
-W: u = [I,<*a,b*>] & I in { 1,2,3,4 };
+W: u = [I,{},<*a,b*>] & I in { 1,2,3,4 };
    I in NAT & <*a,b*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
-  hence u in [:NAT,X:] by W,ZFMISC_1:106;
+  hence u in [:NAT,NAT*,X:] by W,MCART_1:73,X;
   end;
   end;
-  suppose u in { [6,<*i*>] where i is Element of NAT: not contradiction };
+  suppose u in { [6,<*i*>,{}] where i is Element of NAT: not contradiction };
    then consider i being Element of NAT such that
-W:  u = [6,<*i*>];
-   6 in NAT & <*i*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
-  hence u in [:NAT,X:] by W,ZFMISC_1:106;
+W:  u = [6,<*i*>,{}];
+X:  <*i*> in NAT* by FUNCT_7:20;
+   6 in NAT & {} in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
+  hence u in [:NAT,NAT*,X:] by W,MCART_1:73,X;
   end;
   end;
-  suppose u in { [7,<*i,a*>] where i is Element of NAT,
+  suppose u in { [7,<*i*>,<*a*>] where i is Element of NAT,
   a is Element of SCM-Data-Loc: not contradiction };
    then consider i being Element of NAT, a being Element of SCM-Data-Loc
    such that
-W:  u = [7,<*i,a*>];
-   7 in NAT & <*i,a*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
-  hence u in [:NAT,X:] by W,ZFMISC_1:106;
+W:  u = [7,<*i*>,<*a*>];
+X:  <*i*> in NAT* by FUNCT_7:20;
+   7 in NAT & <*a*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
+  hence u in [:NAT,NAT*,X:] by W,MCART_1:73,X;
   end;
  end;
- suppose u in { [5,<*a,r*>] where a is
+ suppose u in { [5,{},<*a,r*>] where a is
   Element of SCM-Data-Loc, r is Element of S: not contradiction };
   then consider a being Element of SCM-Data-Loc, r being Element of S such that
-W: u = [5,<*a,r*>];
+W: u = [5,{},<*a,r*>];
    5 in NAT & <*a,r*> in proj2 SCM-Instr S by W,Z,RELAT_1:def 5;
-  hence u in [:NAT,X:] by W,ZFMISC_1:106;
+  hence u in [:NAT,NAT*,X:] by W,MCART_1:73,X;
  end;
 end;
 
@@ -890,57 +920,79 @@ Z:   [y,f] in SCM-Instr S by RELAT_1:def 5;
     set u = [y,f];
  per cases by Z,XBOOLE_0:def 3;
  suppose
-S:  u in { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
-, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is
-Element of NAT: not contradiction } \/ { [7,<*i,a*>] where i is Element of NAT,
+S:  u in { [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
+, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+ \/ { [6,<*i*>,{}] where i is
+Element of NAT: not contradiction } \/ { [7,<*i*>,<*a*>]
+ where i is Element of NAT,
   a is Element of SCM-Data-Loc: not contradiction };
   per cases by S,XBOOLE_0:def 3;
   suppose
-S:  u in{ [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
-, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } } \/ { [6,<*i*>] where i is
+S:  u in{ [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
+, a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+ \/ { [6,<*i*>,{}] where i is
 Element of NAT: not contradiction };
   per cases by S,XBOOLE_0:def 3;
   suppose
-S:  u in { [0,{}] } \/ { [I,<*a,b*>] where I is Element of Segm 8
+S:  u in { [0,{},{}] } \/ { [I,{},<*a,b*>] where I is Element of Segm 8
 , a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 } };
   per cases by S,XBOOLE_0:def 3;
-  suppose u in { [0,{}] };
-   then u = [0,{}] by TARSKI:def 1;
+  suppose u in { [0,{},{}] };
+   then u = [0,{},{}] by TARSKI:def 1;
   then f = {} by ZFMISC_1:33;
   hence f is FinSequence;
   end;
-  suppose u in { [I,<*a,b*>] where I is Element of Segm 8
+  suppose u in { [I,{},<*a,b*>] where I is Element of Segm 8
 , a, b is Element of SCM-Data-Loc: I in { 1,2,3,4 }};
    then consider I being Element of Segm 8, a, b being Element of SCM-Data-Loc
    such that
-W: u = [I,<*a,b*>] & I in { 1,2,3,4 };
+W: u = [I,{},<*a,b*>] & I in { 1,2,3,4 };
   f = <*a,b*> by W,ZFMISC_1:33;
   hence f is FinSequence;
   end;
   end;
-  suppose u in { [6,<*i*>] where i is Element of NAT: not contradiction };
+  suppose u in { [6,<*i*>,{}] where i is Element of NAT: not contradiction };
    then consider i being Element of NAT such that
-W:  u = [6,<*i*>];
-  f = <*i*> by W,ZFMISC_1:33;
+W:  u = [6,<*i*>,{}];
+  f = {} by W,ZFMISC_1:33;
   hence f is FinSequence;
   end;
   end;
-  suppose u in { [7,<*i,a*>] where i is Element of NAT,
+  suppose u in { [7,<*i*>,<*a*>] where i is Element of NAT,
   a is Element of SCM-Data-Loc: not contradiction };
    then consider i being Element of NAT, a being Element of SCM-Data-Loc
    such that
-W:  u = [7,<*i,a*>];
-  f = <*i,a*> by W,ZFMISC_1:33;
+W:  u = [7,<*i*>,<*a*>];
+  f = <*a*> by W,ZFMISC_1:33;
   hence f is FinSequence;
   end;
  end;
- suppose u in { [5,<*a,r*>] where a is
+ suppose u in { [5,{},<*a,r*>] where a is
   Element of SCM-Data-Loc, r is Element of S: not contradiction };
   then consider a being Element of SCM-Data-Loc, r being Element of S such that
-W: u = [5,<*a,r*>];
+W: u = [5,{},<*a,r*>];
   f = <*a,r*> by W,ZFMISC_1:33;
   hence f is FinSequence;
  end;
 end;
+end;
+
+theorem
+  [0,{},{}] in SCM-Instr S
+proof
+  [0,{},{}] in {[0,{},{}]} by TARSKI:def 1;
+  then [0,{},{}] in { [0,{},{}] }
+   \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+    by XBOOLE_0:def 3;
+  then [0,{},{}] in { [0,{},{}] }
+   \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+   \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction }
+    by XBOOLE_0:def 3;
+  then [0,{},{}] in { [0,{},{}] }
+   \/ { [I,{},<*a,b*>] where a,b is Element of SCM-Data-Loc: I in { 1,2,3,4 } }
+   \/ { [6,<*i*>,{}] where i is Element of NAT: not contradiction }
+   \/ { [7,<*i*>,<*a*>] where i is Element of NAT, a is Element of
+  SCM-Data-Loc: not contradiction } by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
 end;
 

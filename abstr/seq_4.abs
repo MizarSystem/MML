@@ -3,7 +3,6 @@
 ::
 :: Received November 23, 1989
 :: Copyright (c) 1990 Association of Mizar Users
-::, XXREAL_1;
 
 environ
 
@@ -12,19 +11,19 @@ environ
       TARSKI, XBOOLE_0, SEQ_2, FUNCT_1, VALUED_0, RELAT_1, FUNCOP_1, VALUED_1,
       SQUARE_1, SEQM_3, SEQ_4, BINOP_1, BINOP_2, FINSEQOP, XCMPLX_0, COMPLSP1,
       FINSEQ_1, ZFMISC_1, FINSEQ_2, CARD_3, RVSUM_1, RCOMP_1, SETFAM_1,
-      METRIC_1, FINSET_1, ORDINAL4, PARTFUN1, GOBOARD2;
+      METRIC_1, FINSET_1, ORDINAL4, PARTFUN1, GOBOARD2, MEMBER_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, CARD_1, FINSET_1,
       MEMBERED, ORDINAL1, NUMBERS, XXREAL_2, XCMPLX_0, XXREAL_0, XREAL_0,
       SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, RELSET_1, PARTFUN1, SEQ_1,
       SEQ_2, SEQM_3, FUNCT_2, BINOP_1, BINOP_2, FINSEQ_1, FUNCOP_1, NAT_1,
-      VALUED_0, VALUED_1, RVSUM_1, FINSEQ_2, RECDEF_1, FINSEQOP;
+      VALUED_0, VALUED_1, MEMBER_1, RVSUM_1, FINSEQ_2, RECDEF_1, FINSEQOP;
  constructors FUNCOP_1, REAL_1, NAT_1, COMPLEX1, PARTFUN1, SEQ_2, SEQM_3,
       SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, FINSET_1, RELSET_1,
-      BINOP_1, BINOP_2, SETWISEO, FINSEQOP, ZFMISC_1, RVSUM_1;
+      BINOP_1, BINOP_2, SETWISEO, FINSEQOP, ZFMISC_1, RVSUM_1, MEMBER_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2, FUNCOP_1, SEQ_2,
       FINSET_1, BINOP_2, FUNCT_1, FINSEQ_2, SUBSET_1, NAT_1, RELAT_1, FINSEQ_1,
-      CARD_1, SEQM_3;
+      CARD_1, SEQM_3, MEMBER_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -50,25 +49,13 @@ theorem :: SEQ_4:9
 theorem :: SEQ_4:10
   for r ex n st r<n;
 
-definition
-  let X be real-membered set;
-  redefine attr X is bounded_above means
-:: SEQ_4:def 1
-
-  ex p st for r st r in X holds
-  r<=p;
-  attr X is bounded_below means
-:: SEQ_4:def 2
-
-  ex p st for r st r in X holds p<=r;
-end;
-
 canceled 3;
 
 theorem :: SEQ_4:14
   X is bounded iff ex s st 0<s & for r st r in X holds abs(r)<s;
 
 definition
+ canceled 2;
   let r;
   redefine func {r} -> Subset of REAL;
 end;
@@ -103,8 +90,7 @@ definition
   func upper_bound X -> real number means
 :: SEQ_4:def 4
 
-  (for r st r in X holds r<=it)
-  & for s st 0<s ex r st r in X & it-s<r;
+  (for r st r in X holds r<=it) & for s st 0<s ex r st r in X & it-s<r;
 end;
 
 definition
@@ -114,8 +100,7 @@ definition
   func lower_bound X -> real number means
 :: SEQ_4:def 5
 
-  (for r st r in X holds it<=r)
-  & for s st 0<s ex r st r in X & r<it+s;
+  (for r st r in X holds it<=r) & for s st 0<s ex r st r in X & r<it+s;
 end;
 
 registration
@@ -160,16 +145,13 @@ theorem :: SEQ_4:27
   seq is convergent implies lim abs seq = abs lim seq;
 
 theorem :: SEQ_4:28
-  abs seq is convergent & lim abs seq=0 implies seq is convergent & lim
-  seq=0;
+  abs seq is convergent & lim abs seq=0 implies seq is convergent & lim seq=0;
 
 theorem :: SEQ_4:29
-  seq1 is subsequence of seq & seq is convergent implies seq1 is
-  convergent;
+  seq1 is subsequence of seq & seq is convergent implies seq1 is convergent;
 
 theorem :: SEQ_4:30
-  seq1 is subsequence of seq & seq is convergent implies lim seq1=
-  lim seq;
+  seq1 is subsequence of seq & seq is convergent implies lim seq1= lim seq;
 
 theorem :: SEQ_4:31
   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
@@ -205,8 +187,7 @@ theorem :: SEQ_4:36
   seq^\k is convergent implies lim seq = lim (seq^\k);
 
 theorem :: SEQ_4:37
-  seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is
-  non-zero;
+  seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is non-zero;
 
 theorem :: SEQ_4:38
   seq is convergent & lim seq<>0 implies ex seq1 st seq1 is subsequence
@@ -234,8 +215,7 @@ theorem :: SEQ_4:45
   (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0;
 
 theorem :: SEQ_4:46
-  0<=r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq
-  =0;
+  0<=r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq =0;
 
 theorem :: SEQ_4:47
   0<=r & (for n holds seq.n=1/(n*n+r)) implies seq is convergent;
@@ -247,8 +227,7 @@ theorem :: SEQ_4:49
   (for n holds seq.n=1/(n*n+1)) implies seq is convergent & lim seq=0;
 
 theorem :: SEQ_4:50
-  0<=r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent & lim
-  seq=0;
+  0<=r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent & lim seq=0;
 
 registration
   cluster non-decreasing bounded_above -> convergent Real_Sequence;
@@ -292,8 +271,7 @@ lim seq1 & lim (seq-seq1) =(seq.0) - lim seq1 & lim (seq1-seq) =(lim seq1) -seq
   .0 & lim (seq(#)seq1) =(seq.0) * (lim seq1);
 
 begin :: Addenda
-
-:: from PSCOMP1
+:: from PSCOMP_1
 
 theorem :: SEQ_4:60
   for X being non empty real-membered set for t st for s st s in X
@@ -328,18 +306,9 @@ definition
   redefine func min A -> Element of NAT;
 end;
 
-:: from SCMFSA9A, 2007.07.26, A.T.
-
-scheme :: SEQ_4:sch 1
-
-  MinPred { F(Element of NAT)->Element of NAT, P[set]} : ex k st P[k] & for n
-  st P[n] holds k <= n
-provided
- for k holds F(k+1) < F(k) or P[k];
-
 begin :: moved from COMPLSP1, 2010.02.25
 
-reserve i,j,k,n for Element of NAT,
+reserve k,n for Element of NAT,
   r,r9,r1,r2 for Real,
   c,c9,c1,c2,c3 for Element of COMPLEX;
 
@@ -470,7 +439,7 @@ theorem :: SEQ_4:79
   z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1;
 
 theorem :: SEQ_4:80
-  --z = z;
+  -(-z) = z;
 
 theorem :: SEQ_4:81
   -z1 = -z2 implies z1 = z2;
@@ -623,16 +592,14 @@ definition
   attr A is open means
 :: SEQ_4:def 17
 
-  for x st x in A ex r st 0 < r & for z st |.z.|
-  < r holds x + z in A;
+  for x st x in A ex r st 0 < r & for z st |.z.| < r holds x + z in A;
 end;
 
 definition let n;
   let A be Subset of COMPLEX n;
   attr A is closed means
 :: SEQ_4:def 18
-  for x st for r st r > 0 ex z st |.z.| < r & x + z in
-  A holds x in A;
+  for x st for r st r > 0 ex z st |.z.| < r & x + z in A holds x in A;
 end;
 
 theorem :: SEQ_4:123
@@ -665,17 +632,6 @@ theorem :: SEQ_4:128
 
 theorem :: SEQ_4:129
   Ball(z1,r1) is open;
-
-scheme :: SEQ_4:sch 2
-
-  SubsetFD { A, D() -> non empty set, F(set) -> Element of D(), P[set] }: { F(
-  x) where x is Element of A(): P[x]} is Subset of D();
-
-scheme :: SEQ_4:sch 3
-
-  SubsetFD2 { A, B, D() -> non empty set, F(set,set) -> Element of D(), P[set,
-  set] }: { F(x,y) where x is Element of A(), y is Element of B(): P[x,y]} is
-  Subset of D();
 
 definition let n,x,A;
   func dist(x,A) -> Real means
@@ -732,28 +688,25 @@ definition
 end;
 
 definition
-  let X,Y be Subset of REAL;
-  func X + Y -> Subset of REAL equals
-:: SEQ_4:def 23
-  { r + r1 : r in X & r1 in Y};
+  canceled;
 end;
 
 theorem :: SEQ_4:140
-  for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X + Y <> {};
+  for X,Y being Subset of REAL holds X <> {} & Y <> {} implies X ++ Y <> {};
 
 theorem :: SEQ_4:141
-  for X,Y being Subset of REAL holds X is bounded_below & Y is
-  bounded_below implies X+Y is bounded_below;
+  for X,Y being Subset of REAL holds X is bounded_below &
+    Y is bounded_below implies X++Y is bounded_below;
 
 theorem :: SEQ_4:142
-  for X,Y being Subset of REAL st X <> {} & X is bounded_below & Y
-  <> {} & Y is bounded_below holds lower_bound (X + Y) = lower_bound X +
-  lower_bound Y;
+  for X,Y being Subset of REAL st
+  X <> {} & X is bounded_below & Y <> {} & Y is bounded_below holds
+  lower_bound (X ++ Y) = lower_bound X + lower_bound Y;
 
 theorem :: SEQ_4:143
   for X,Y being Subset of REAL st Y is bounded_below & X <> {} &
-for r st r in X ex r1 st r1 in Y & r1 <= r holds lower_bound X >= lower_bound Y
-;
+  for r st r in X ex r1 st r1 in Y & r1 <= r holds
+    lower_bound X >= lower_bound Y;
 
 theorem :: SEQ_4:144
   A <> {} & B <> {} implies dist(A,B) >= 0;
@@ -776,18 +729,16 @@ definition
 end;
 
 theorem :: SEQ_4:148
-  for A being Subset of COMPLEX n holds A in ComplexOpenSets n
-  iff A is open;
+  for A being Subset of COMPLEX n holds A in ComplexOpenSets n iff A is open;
 
 theorem :: SEQ_4:149
   for A being Subset of COMPLEX n holds A is closed iff A` is open;
 
-begin :: moved from GOBOARD2, 2010.03.001, A.T.
+begin :: moved from GOBOARD2, 2010.03.01, A.T.
 
-reserve r,s for Real,
+reserve
   v,v1,v2 for FinSequence of REAL,
-  n,m,i,j,k for
-  Element of NAT,
+  n,m,k for Element of NAT,
   x for set;
 
 theorem :: SEQ_4:150
@@ -830,12 +781,10 @@ definition
   func Incr(v) ->increasing FinSequence of REAL means
 :: SEQ_4:def 25
 
-  rng it = rng v &
-  len it = card rng v;
+  rng it = rng v & len it = card rng v;
 end;
 
 registration
   let v be non empty FinSequence of REAL;
   cluster Incr v -> non empty;
 end;
-

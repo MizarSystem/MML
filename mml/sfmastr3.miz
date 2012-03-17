@@ -14,18 +14,20 @@ environ
       AOFA_I00, FUNCT_2, FINSEQ_2, SFMASTR3, NAT_1, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, CARD_3,
       INT_2, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_7, GRAPH_2,
-      FINSEQ_1, FINSEQ_2, AMI_1, SCMNORM, SCMFSA_2, SCMFSA6A, SCMFSA6B,
+      FINSEQ_1, FINSEQ_2, COMPOS_1, AMI_1, SCMFSA_2, SCMFSA6A,
+      SCMFSA6B,
       SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
       SCMFSA9A, XXREAL_0, NAT_1;
  constructors SETWISEO, REAL_1, INT_2, MESFUNC1, SCMFSA6A, SCMFSA6B, SCMFSA6C,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, SCMNORM, RELSET_1,
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1, SCMFSA9A, RELSET_1,
       PBOOLE, GRAPH_2;
  registrations SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2,
       SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
-      SFMASTR1, XBOOLE_0, VALUED_0, AMI_1, AFINSQ_1, FUNCOP_1;
+      SFMASTR1, XBOOLE_0, VALUED_0, AMI_1, AFINSQ_1, FUNCOP_1, COMPOS_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, SCMFSA6A, SCMNORM, AMI_1;
+ definitions TARSKI, SCMFSA7B, SCMFSA9A, GRAPH_2, SCMFSA6A, COMPOS_1,
+      AMI_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, ABSVALUE, NAT_1, INT_1, RELAT_1, FUNCT_7,
       FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, GRAPH_2, AMI_1, SCMFSA_2,
       SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
@@ -48,24 +50,23 @@ reserve s for State of SCM+FSA,
 canceled 6;
 
 theorem Th7:
-  I is_closed_on Initialize s & I is_halting_on Initialize s & I
-  does_not_destroy aa implies IExec(I,s).aa = (Initialize s).aa
+  I is_closed_on Initialized s & I is_halting_on Initialized s & I
+  does not destroy aa implies IExec(I,s).aa = (Initialized s).aa
 proof
   set D = Int-Locations \/ FinSeq-Locations;
   set a = aa;
-A1: DataPart Initialize s = DataPart(Initialize s +*
+A1: DataPart Initialized s = DataPart(Initialized s +*
 (I +* Start-At( 0,SCM+FSA)
   )) by SCMFSA8A:11;
-  assume
-  I is_closed_on Initialize s & I is_halting_on Initialize s & I
-  does_not_destroy a;
+  assume I is_closed_on Initialized s & I is_halting_on Initialized s & I
+  does not destroy a;
   hence
-  IExec(I,s).a = Comput(ProgramPart((Initialize s +*
-  (I +* Start-At( 0,SCM+FSA)))),(Initialize s +*
+  IExec(I,s).a = Comput(ProgramPart((Initialized s +*
+  (I +* Start-At( 0,SCM+FSA)))),(Initialized s +*
   (I +* Start-At( 0,SCM+FSA))),0
   ).a by SCMFSA8C:89
-    .= (Initialize s +* (I +* Start-At( 0,SCM+FSA))).a by AMI_1:13
-    .= (Initialize s).a by A1,SCMFSA6A:38;
+    .= (Initialized s +* (I +* Start-At( 0,SCM+FSA))).a by AMI_1:13
+    .= (Initialized s).a by A1,SCMFSA6A:38;
 end;
 
 theorem Th8:
@@ -75,25 +76,24 @@ proof
   set D = Int-Locations \/ FinSeq-Locations;
   assume
 A1: s.intloc 0 = 1;
-  thus DataPart IExec(Stop SCM+FSA, s) = DataPart(Initialize s +* Start-At(
+  thus DataPart IExec(Stop SCM+FSA, s) = DataPart(Initialized s +* Start-At(
    0,SCM+FSA)) by SCMFSA8C:38
-    .= DataPart(Initialize s) by SCMFSA8A:10
+    .= DataPart(Initialized s) by SCMFSA8A:10
     .= DataPart s by A1,SCMFSA8C:27;
 end;
 
 theorem Th9:
-  Stop SCM+FSA does_not_refer aa
+  Stop SCM+FSA does not refer aa
 proof
 A1: rng Stop SCM+FSA = {halt SCM+FSA} by AFINSQ_1:36;
   let i be Instruction of SCM+FSA;
-  assume
-  i in rng Stop SCM+FSA;
+  assume i in rng Stop SCM+FSA;
   then i = halt SCM+FSA by A1,TARSKI:def 1;
   hence thesis by SCMFSA8C:78;
 end;
 
 theorem Th10:
-  aa <> bb implies cc := bb does_not_refer aa
+  aa <> bb implies cc := bb does not refer aa
 proof
   assume
 A1: aa <> bb;
@@ -160,30 +160,29 @@ proof
 end;
 
 theorem Th14:
-  I does_not_destroy aa implies while>0(bb, I) does_not_destroy aa
+  I does not destroy aa implies while>0(bb, I) does not destroy aa
 proof
   set J= (card I +4) .--> goto  0;
   set F=if>0(bb, I ';' Goto  0, Stop SCM+FSA);
-A1: Goto  0 does_not_destroy aa by SCMFSA8C:86;
-A2: Stop SCM+FSA does_not_destroy aa by SCMFSA8C:85;
-  assume
-  I does_not_destroy aa;
-  then I ';' Goto  0 does_not_destroy aa by A1,SCMFSA8C:81;
+A1: Goto  0 does not destroy aa by SCMFSA8C:86;
+A2: Stop SCM+FSA does not destroy aa by SCMFSA8C:85;
+  assume I does not destroy aa;
+  then I ';' Goto  0 does not destroy aa by A1,SCMFSA8C:81;
   then
-A3: F does_not_destroy aa by A2,SCMFSA8C:121;
-  J does_not_destroy aa & while>0(bb,I) = F+*J by SCMFSA_9:35,def 2;
+A3: F does not destroy aa by A2,SCMFSA8C:121;
+  J does not destroy aa & while>0(bb,I) = F+*J by SCMFSA_9:35,def 2;
   hence thesis by A3,SCMFSA8A:25;
 end;
 
 theorem Th15:
-  cc <> aa & I does_not_destroy cc & J does_not_destroy cc implies
-  if>0(aa, bb, I, J) does_not_destroy cc
+  cc <> aa & I does not destroy cc & J does not destroy cc implies
+  if>0(aa, bb, I, J) does not destroy cc
 proof
   assume that
 A1: cc <> aa and
-A2: I does_not_destroy cc & J does_not_destroy cc;
+A2: I does not destroy cc & J does not destroy cc;
   if>0(aa, bb, I, J) = SubFrom(aa,bb) ';' if>0(aa,I,J) & if>0(aa,I,J)
-  does_not_destroy cc by A2,SCMFSA8B:def 5,SCMFSA8C:121;
+  does not destroy cc by A2,SCMFSA8B:def 5,SCMFSA8C:121;
   hence thesis by A1,SCMFSA7B:14,SCMFSA8C:82;
 end;
 
@@ -207,8 +206,7 @@ proof
   set S = s+*(aux, s.cc-s.bb+1)+*(a, s.bb);
 A1: S.intloc 0 = (s+*(aux, s.cc-s.bb+1)).intloc 0 by FUNCT_7:34
     .= s.intloc 0 by FUNCT_7:34;
-  assume
-  s.intloc 0 = 1;
+  assume s.intloc 0 = 1;
   hence thesis by A1,SCMFSA_9:def 5;
 end;
 
@@ -231,8 +229,7 @@ proof
   then bb in {a, bb, cc} \/ UsedIntLoc I by XBOOLE_0:def 3;
   then
 A1: bb <> aux by SFMASTR1:21;
-  assume
-  a <> bb;
+  assume a <> bb;
   then S.bb = (s+*(aux, s.cc-s.bb+1)).bb by FUNCT_7:34
     .= s.bb by A1,FUNCT_7:34;
   hence thesis by SCMFSA_9:def 5;
@@ -247,8 +244,7 @@ proof
   then cc in {a, bb, cc} \/ UsedIntLoc I by XBOOLE_0:def 3;
   then
 A1: cc <> aux by SFMASTR1:21;
-  assume
-  a <> cc;
+  assume a <> cc;
   then S.cc = (s+*(aux, s.cc-s.bb+1)).cc by FUNCT_7:34
     .= s.cc by A1,FUNCT_7:34;
   hence thesis by SCMFSA_9:def 5;
@@ -291,7 +287,7 @@ proof
 A1: s.intloc 0 = 1;
   cc = intloc 0 or cc is read-write by SF_MASTR:def 5;
   then
-A2: (Initialize s).cc = s.cc by A1,SCMFSA6C:3;
+A2: (Initialized s).cc = s.cc by A1,SCMFSA6C:3;
   set i3 = a := bb;
   let aux be read-write Int-Location such that
 A3: aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
@@ -312,29 +308,30 @@ A7: s2.aux = (s+*(aux, s.cc-s.bb+1)).aux by FUNCT_7:34
   set i1 = SubFrom(aux, bb);
   set i0 = aux := cc;
   set s1 = IExec(i0 ';' i1 ';' i2 ';' i3, s);
-A8: IExec(i0 ';' i1, s).intloc 0 = Exec(i1, Exec(i0, Initialize s)).intloc 0
+A8: IExec(i0 ';' i1, s).intloc 0 = Exec(i1, Exec(i0, Initialized s)).intloc 0
   by SCMFSA6C:9
-    .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:91
-    .= (Initialize s).intloc 0 by SCMFSA_2:89
+    .= Exec(i0, Initialized s).intloc 0 by SCMFSA_2:91
+    .= (Initialized s).intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
 A9: a in dom (s+*(aux, s.cc-s.bb+1)) by SCMFSA_2:66;
   bb = intloc 0 or bb is read-write by SF_MASTR:def 5;
   then
-A10: (Initialize s).bb = s.bb by A1,SCMFSA6C:3;
+A10: (Initialized s).bb = s.bb by A1,SCMFSA6C:3;
 A11: s1.a = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).a by SCMFSA6C:7
     .= IExec(i0 ';' i1 ';' i2, s).bb by SCMFSA_2:89
     .= Exec(i2, IExec(i0 ';' i1, s)).bb by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).bb by A4,SCMFSA_2:90
-    .= Exec(i1, Exec(i0, Initialize s)).bb by SCMFSA6C:9
-    .= Exec(i0, Initialize s).bb by A4,SCMFSA_2:91
+    .= Exec(i1, Exec(i0, Initialized s)).bb by SCMFSA6C:9
+    .= Exec(i0, Initialized s).bb by A4,SCMFSA_2:91
     .= s.bb by A4,A10,SCMFSA_2:89;
 A12: s1.aux = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).aux by SCMFSA6C:7
     .= IExec(i0 ';' i1 ';' i2, s).aux by A6,SCMFSA_2:89
     .= Exec(i2, IExec(i0 ';' i1, s)).aux by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).aux + 1 by A8,SCMFSA_2:90
-    .= Exec(i1, Exec(i0, Initialize s)).aux +1 by SCMFSA6C:9
-    .= Exec(i0, Initialize s).aux - Exec(i0, Initialize s).bb +1 by SCMFSA_2:91
-    .= (Initialize s).cc - Exec(i0, Initialize s).bb +1 by SCMFSA_2:89
+    .= Exec(i1, Exec(i0, Initialized s)).aux +1 by SCMFSA6C:9
+    .= Exec(i0, Initialized s).aux - Exec(i0, Initialized s).bb +1
+    by SCMFSA_2:91
+    .= (Initialized s).cc - Exec(i0, Initialized s).bb +1 by SCMFSA_2:89
     .= s.cc-s.bb+1 by A4,A2,A10,SCMFSA_2:89;
   now
     hereby
@@ -358,9 +355,9 @@ A15:    x = intloc 0 or x is read-write by SF_MASTR:def 5;
           .= IExec(i0 ';' i1 ';' i2, s).x by A13,SCMFSA_2:89
           .= Exec(i2, IExec(i0 ';' i1, s)).x by SCMFSA6C:7
           .= IExec(i0 ';' i1, s).x by A13,SCMFSA_2:90
-          .= Exec(i1, Exec(i0, Initialize s)).x by SCMFSA6C:9
-          .= Exec(i0, Initialize s).x by A13,SCMFSA_2:91
-          .= (Initialize s).x by A13,SCMFSA_2:89
+          .= Exec(i1, Exec(i0, Initialized s)).x by SCMFSA6C:9
+          .= Exec(i0, Initialized s).x by A13,SCMFSA_2:91
+          .= (Initialized s).x by A13,SCMFSA_2:89
           .= s.x by A1,A15,SCMFSA6C:3;
         hence s1.x = s2.x by A14;
       end;
@@ -370,9 +367,9 @@ A15:    x = intloc 0 or x is read-write by SF_MASTR:def 5;
       .= IExec(i0 ';' i1 ';' i2, s).x by SCMFSA_2:89
       .= Exec(i2, IExec(i0 ';' i1, s)).x by SCMFSA6C:8
       .= IExec(i0 ';' i1, s).x by SCMFSA_2:90
-      .= Exec(i1, Exec(i0, Initialize s)).x by SCMFSA6C:10
-      .= Exec(i0, Initialize s).x by SCMFSA_2:91
-      .= (Initialize s).x by SCMFSA_2:89
+      .= Exec(i1, Exec(i0, Initialized s)).x by SCMFSA6C:10
+      .= Exec(i0, Initialized s).x by SCMFSA_2:91
+      .= (Initialized s).x by SCMFSA_2:89
       .= s.x by SCMFSA6C:3
       .= (s+*(aux, s.cc-s.bb+1)).x by FUNCT_7:34,SCMFSA_2:83
       .= s2.x by FUNCT_7:34,SCMFSA_2:83;
@@ -423,22 +420,22 @@ A3: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
   end;
   suppose
 A4: SW2.k.aux > 0;
-A5: I is_closed_on Initialize SW2.k & I is_halting_on Initialize SW2.k by A1,A2
-,SFMASTR2:5;
+A5: I is_closed_on Initialized SW2.k & I is_halting_on Initialized SW2.k
+by A1,A2,SFMASTR2:5;
 A6: AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) is_closed_on IExec(I,
     SW2.k) by SCMFSA7B:24;
     then AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) is_halting_on IExec(I,
-    SW2.k) & IB is_closed_on Initialize SW2.k by A3,A5,SCMFSA7B:25,SFMASTR1:3;
+    SW2.k) & IB is_closed_on Initialized SW2.k by A3,A5,SCMFSA7B:25,SFMASTR1:3;
     then
 A7: DataPart SW2.(k+1) = DataPart IExec(IB, SW2.k) by A1,A3,A4,A5,A6,
 SCMFSA9A:38,SFMASTR1:4;
     IExec(IB, SW2.k).intloc 0 = IExec(AddTo(a, intloc 0) ';' SubFrom(aux,
     intloc 0), IExec(I, SW2.k)).intloc 0 by A3,A5,SFMASTR1:8
-      .= Exec(SubFrom(aux, intloc 0), Exec(AddTo(a, intloc 0), Initialize
+      .= Exec(SubFrom(aux, intloc 0), Exec(AddTo(a, intloc 0), Initialized
     IExec(I, SW2.k))).intloc 0 by SCMFSA6C:9
-      .= Exec(AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).intloc 0 by
+      .= Exec(AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).intloc 0 by
 SCMFSA_2:91
-      .= (Initialize IExec(I, SW2.k)).intloc 0 by SCMFSA_2:90
+      .= (Initialized IExec(I, SW2.k)).intloc 0 by SCMFSA_2:90
       .= 1 by SCMFSA6C:3;
     hence thesis by A7,SCMFSA6A:38;
   end;
@@ -447,7 +444,7 @@ end;
 theorem Th25:
   s.intloc 0 = 1 & ProperForUpBody a, bb, cc, Ig, s implies for k
   st k <= s.cc-s.bb+1 holds StepForUp(a, bb, cc, Ig, s).k.intloc 0 = 1 & (Ig
-does_not_destroy a implies StepForUp(a, bb, cc, Ig, s).k.a = k+s.bb & StepForUp
+does not destroy a implies StepForUp(a, bb, cc, Ig, s).k.a = k+s.bb & StepForUp
 (a, bb, cc, Ig, s).k.a <= s.cc+1) & StepForUp(a, bb, cc, Ig, s).k.(1-stRWNotIn
   ({a, bb, cc} \/ UsedIntLoc Ig)) + k = s.cc-s.bb+1
 proof
@@ -464,7 +461,7 @@ A2: ProperForUpBody a, bb, cc, I, s;
   set SW2 = StepWhile>0(aux,IB,s2);
 A3: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) by SCMFSA6A:70;
   defpred P[Nat] means $1 <= scb1 implies SF.$1.intloc 0 = 1 & (I
-does_not_destroy a implies SF.$1.a = $1+s.bb & SF.$1.a <= s.cc+1) & SF.$1.aux +
+does not destroy a implies SF.$1.a = $1+s.bb & SF.$1.a <= s.cc+1) & SF.$1.aux +
   $1 = scb1;
   a in {a, bb, cc} by ENUMSET1:def 1;
   then a in {a, bb, cc} \/ UsedIntLoc I by XBOOLE_0:def 3;
@@ -478,8 +475,7 @@ A6: P[k];
     proof
 A7:   not aux in UsedIntLoc I
       proof
-        assume
-        not thesis;
+        assume not thesis;
         then aux in {a, bb, cc} \/ UsedIntLoc I by XBOOLE_0:def 3;
         hence contradiction by SFMASTR1:21;
       end;
@@ -493,35 +489,35 @@ A11:  k < scb1 by A8,A9,XXREAL_0:2;
       then
 A12:  I is_closed_on SF.k by A2,Def7;
       then
-A13:  I is_closed_on Initialize SW2.k by A6,A8,A9,SFMASTR2:4,XXREAL_0:2;
+A13:  I is_closed_on Initialized SW2.k by A6,A8,A9,SFMASTR2:4,XXREAL_0:2;
 A14:  I is_halting_on SF.k by A2,A11,Def7;
       then
-A15:  I is_halting_on Initialize SW2.k by A6,A8,A9,A12,SFMASTR2:5,XXREAL_0:2;
+A15:  I is_halting_on Initialized SW2.k by A6,A8,A9,A12,SFMASTR2:5,XXREAL_0:2;
       thus SF.k1.intloc 0 = 1 by A6,A8,A9,A12,A14,Th24,XXREAL_0:2;
 A16:  AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) is_closed_on IExec(I,
       SW2.k) by SCMFSA7B:24;
       then
-A17:  IB is_closed_on Initialize SW2.k by A3,A13,A15,SFMASTR1:3;
+A17:  IB is_closed_on Initialized SW2.k by A3,A13,A15,SFMASTR1:3;
       AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) is_halting_on IExec(I
       , SW2.k) by SCMFSA7B:25;
-      then IB is_halting_on Initialize SW2.k by A3,A13,A15,A16,SFMASTR1:4;
+      then IB is_halting_on Initialized SW2.k by A3,A13,A15,A16,SFMASTR1:4;
       then
 A18:  DataPart SW2.(k+1) = DataPart IExec(IB, SW2.k) by A6,A8,A9,A10,A17,
 SCMFSA9A:38,XXREAL_0:2;
       hereby
         assume
-A19:    I does_not_destroy a;
+A19:    I does not destroy a;
 A20:    IExec(IB, SW2.k).a = IExec(AddTo(a, intloc 0) ';' SubFrom(aux,
         intloc 0), IExec(I, SW2.k)).a by A3,A13,A15,SFMASTR1:8
           .= Exec(SubFrom(aux, intloc 0), Exec(AddTo(a, intloc 0),
-        Initialize IExec(I, SW2.k))).a by SCMFSA6C:9
-          .= Exec(AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).a by A4,
+        Initialized IExec(I, SW2.k))).a by SCMFSA6C:9
+          .= Exec(AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).a by A4,
 SCMFSA_2:91
-          .= (Initialize IExec(I, SW2.k)).a + (Initialize IExec(I, SW2.k)).
+          .= (Initialized IExec(I, SW2.k)).a + (Initialized IExec(I, SW2.k)).
         intloc 0 by SCMFSA_2:90
-          .= (Initialize IExec(I, SW2.k)).a +1 by SCMFSA6C:3
+          .= (Initialized IExec(I, SW2.k)).a +1 by SCMFSA6C:3
           .= IExec(I, SW2.k).a +1 by SCMFSA6C:3
-          .= (Initialize SW2.k).a +1 by A13,A15,A19,Th7
+          .= (Initialized SW2.k).a +1 by A13,A15,A19,Th7
           .= SW2.k.a +1 by SCMFSA6C:3;
         hence SF.k1.a = k1+s.bb by A6,A8,A9,A18,A19,SCMFSA6A:38,XXREAL_0:2;
         k1+s.bb <= s.cc+1-s.bb+s.bb by A8,XREAL_1:8;
@@ -529,17 +525,17 @@ SCMFSA_2:91
       end;
       IExec(IB, SW2.k).aux = IExec(AddTo(a, intloc 0) ';' SubFrom(aux,
       intloc 0), IExec(I, SW2.k)).aux by A3,A13,A15,SFMASTR1:8
-        .= Exec(SubFrom(aux, intloc 0), Exec(AddTo(a, intloc 0), Initialize
+        .= Exec(SubFrom(aux, intloc 0), Exec(AddTo(a, intloc 0), Initialized
       IExec(I, SW2.k))).aux by SCMFSA6C:9
-        .= Exec(AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).aux - Exec(
-      AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).intloc 0 by SCMFSA_2:91
-        .= Exec(AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).aux - (
-      Initialize IExec(I, SW2.k)).intloc 0 by SCMFSA_2:90
-        .= Exec(AddTo(a, intloc 0), Initialize IExec(I, SW2.k)).aux - 1 by
+        .= Exec(AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).aux - Exec(
+      AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).intloc 0 by SCMFSA_2:91
+        .= Exec(AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).aux - (
+      Initialized IExec(I, SW2.k)).intloc 0 by SCMFSA_2:90
+        .= Exec(AddTo(a, intloc 0), Initialized IExec(I, SW2.k)).aux - 1 by
 SCMFSA6C:3
-        .= (Initialize IExec(I, SW2.k)).aux -1 by A4,SCMFSA_2:90
+        .= (Initialized IExec(I, SW2.k)).aux -1 by A4,SCMFSA_2:90
         .= IExec(I, SW2.k).aux -1 by SCMFSA6C:3
-        .= (Initialize SW2.k).aux -1 by A13,A15,A7,Th7,SFMASTR1:1
+        .= (Initialized SW2.k).aux -1 by A13,A15,A7,Th7,SFMASTR1:1
         .= SW2.k.aux -1 by SCMFSA6C:3;
       hence SF.k1.aux + k1 = SW2.k.aux-1+k1 by A18,SCMFSA6A:38
         .= scb1 by A6,A8,A9,XXREAL_0:2;
@@ -555,8 +551,7 @@ A25: SW2.0 = s2 by SCMFSA_9:def 5;
     hence SF.0.intloc 0 = (s+*(aux, s.cc-s.bb+1)).intloc 0 by FUNCT_7:34
       .= 1 by A1,FUNCT_7:34;
     hereby
-      assume
-      I does_not_destroy a;
+      assume I does not destroy a;
       thus SF.0.a = 0+s.bb by A21,A25,FUNCT_7:33;
       0+s.bb <= s.cc+1-s.bb+s.bb by A24,XREAL_1:8;
       hence SF.0.a <= s.cc+1 by A21,A25,FUNCT_7:33;
@@ -596,8 +591,7 @@ A6:   SF.k.aux <= 0;
       hence contradiction by A4,A6,SCMFSA6A:38;
     end;
     then reconsider scb1 as Element of NAT by A3,INT_1:16;
-    assume
-    k+1 >= s.cc-s.bb+1;
+    assume k+1 >= s.cc-s.bb+1;
     then
 A7: SF.(k+1).aux+(k+1) > 0+scb1 by A4,XREAL_1:10;
     k+1 <= scb1 by A3,A5,NAT_1:13;
@@ -615,8 +609,7 @@ A10: P[0]
     then
 A11: SF.0.aux = (s+*(aux, s.cc-s.bb+1)).aux by A8,FUNCT_7:34
       .= scb1 by A9,FUNCT_7:33;
-    assume
-    SF.0.aux > 0;
+    assume SF.0.aux > 0;
     hence thesis by A11;
   end;
   for k holds P[k] from NAT_1:sch 1(A10, A2);
@@ -654,8 +647,7 @@ A4: SW2.k.intloc 0 = 1 by A1,A2,A3,Th25;
 A5: SF.k.aux+k = scb1 by A1,A2,A3,Th25;
 A6: SW2.k.aux > 0
   proof
-    assume
-    SW2.k.aux <= 0;
+    assume SW2.k.aux <= 0;
     then SW2.k.aux + k < 0+scb1 by A3,XREAL_1:10;
     hence contradiction by A5;
   end;
@@ -666,18 +658,17 @@ A6: SW2.k.aux > 0
 A7: Macro AddTo(a, intloc 0) is_closed_on IExec(I, SW2.k) by SCMFSA7B:24;
 A8: I is_closed_on SF.k by A2,A3,Def7;
   then
-A9: I is_closed_on Initialize SW2.k by A4,SFMASTR2:4;
+A9: I is_closed_on Initialized SW2.k by A4,SFMASTR2:4;
   I is_halting_on SF.k by A2,A3,Def7;
   then
-A10: I is_halting_on Initialize SW2.k by A8,A4,SFMASTR2:5;
+A10: I is_halting_on Initialized SW2.k by A8,A4,SFMASTR2:5;
   Macro AddTo(a, intloc 0) is_halting_on IExec(I, SW2.k) by SCMFSA7B:25;
   then
-A11: IB1 is_halting_on Initialize SW2.k by A9,A10,A7,SFMASTR1:4;
+A11: IB1 is_halting_on Initialized SW2.k by A9,A10,A7,SFMASTR1:4;
   now
     hereby
       let x be Int-Location;
-      assume
-      x in Iloc;
+      assume x in Iloc;
       then
 A12:  x <> aux by SFMASTR1:21;
       S2.x = Exec(SubFrom(aux, intloc 0), S1).x by A9,A10,A7,A11,SFMASTR1:3,12
@@ -695,7 +686,7 @@ A14: IB = I ';'(AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0)) & AddTo(a,
 intloc 0) ';' SubFrom(aux, intloc 0) is_closed_on IExec(I, SW2.k) by
 SCMFSA6A:70,SCMFSA7B:24;
   then AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0) is_halting_on IExec(I,
-  SW2.k) & IB is_closed_on Initialize SW2.k by A9,A10,SCMFSA7B:25,SFMASTR1:3;
+  SW2.k) & IB is_closed_on Initialized SW2.k by A9,A10,SCMFSA7B:25,SFMASTR1:3;
   then DataPart SW2.(k+1) = DataPart IExec(IB, SW2.k) by A4,A6,A9,A10,A14,
 SCMFSA9A:38,SFMASTR1:4;
   hence thesis by A13,RELAT_1:188,SCMFSA_2:127,XBOOLE_1:9;
@@ -745,8 +736,7 @@ A2: UsedIntLoc I4 = {aux} \/ UsedIntLoc (I ';' AddTo(aa, intloc 0) ';'
   UsedIntLoc SubFrom(aux, intloc 0))) by XBOOLE_1:4
     .= (UsedIntLoc I) \/ ({aux} \/ (UsedIntLoc AddTo(aa, intloc 0) \/
   UsedIntLoc SubFrom(aux, intloc 0))) by XBOOLE_1:4;
-  assume
-  x in {aa, bb, cc} \/ UsedIntLoc I;
+  assume x in {aa, bb, cc} \/ UsedIntLoc I;
   then
 A3: x in {aa, bb, cc} or x in UsedIntLoc I by XBOOLE_0:def 3;
 A4: UsedIntLoc for-up(aa, bb, cc, I) = (UsedIntLoc (i0 ';' i1 ';' i2 ';' i3)
@@ -789,29 +779,29 @@ end;
 
 theorem Th29:
   a <> aa & aa <> 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I) & I
-  does_not_destroy aa implies for-up(a, bb, cc, I) does_not_destroy aa
+  does not destroy aa implies for-up(a, bb, cc, I) does not destroy aa
 proof
   assume that
 A1: a <> aa and
 A2: aa <> 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I) and
-A3: I does_not_destroy aa;
+A3: I does not destroy aa;
   set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
   set i2 = AddTo(aux, intloc 0);
-A4: i2 does_not_destroy aa by A2,SCMFSA7B:13;
+A4: i2 does not destroy aa by A2,SCMFSA7B:13;
   set i3 = a := bb;
   set i1 = SubFrom(aux, bb);
   set i0 = aux := cc;
   set I03 = i0 ';' i1 ';' i2 ';' i3;
-  i0 does_not_destroy aa & i1 does_not_destroy aa by A2,SCMFSA7B:12,14;
-  then i0 ';' i1 ';' i2 does_not_destroy aa by A4,SCMFSA8C:83,84;
+  i0 does not destroy aa & i1 does not destroy aa by A2,SCMFSA7B:12,14;
+  then i0 ';' i1 ';' i2 does not destroy aa by A4,SCMFSA8C:83,84;
   then
-A5: I03 does_not_destroy aa by A1,SCMFSA7B:12,SCMFSA8C:83;
+A5: I03 does not destroy aa by A1,SCMFSA7B:12,SCMFSA8C:83;
   set IB = I ';' AddTo(a, intloc 0) ';' SubFrom(aux, intloc 0);
   set I4 = while>0( aux, IB);
-  I ';' AddTo(a, intloc 0) does_not_destroy aa by A1,A3,SCMFSA7B:13,SCMFSA8C:83
+  I ';' AddTo(a, intloc 0) does not destroy aa by A1,A3,SCMFSA7B:13,SCMFSA8C:83
 ;
-  then IB does_not_destroy aa by A2,SCMFSA7B:14,SCMFSA8C:83;
-  then I4 does_not_destroy aa by Th14;
+  then IB does not destroy aa by A2,SCMFSA7B:14,SCMFSA8C:83;
+  then I4 does not destroy aa by Th14;
   hence thesis by A5,SCMFSA8C:81;
 end;
 
@@ -826,7 +816,7 @@ A1: s.intloc 0 = 1 and
 A2: s.bb > s.cc;
   cc = intloc 0 or cc is read-write by SF_MASTR:def 5;
   then
-A3: (Initialize s).cc = s.cc by A1,SCMFSA6C:3;
+A3: (Initialized s).cc = s.cc by A1,SCMFSA6C:3;
   set MI = for-up(a, bb, cc, I);
   set i3 = a := bb;
   set aux = 1-stRWNotIn ({a, bb, cc} \/ UsedIntLoc I);
@@ -838,14 +828,14 @@ A3: (Initialize s).cc = s.cc by A1,SCMFSA6C:3;
   set I03 = i0 ';' i1 ';' i2 ';' i3;
   set s1 = IExec(I03, s);
   set s2 = s+*(aux, s.cc-s.bb+1)+*(a, s.bb);
-A4: IExec(i0 ';' i1, s).intloc 0 = Exec(i1, Exec(i0, Initialize s)).intloc 0
+A4: IExec(i0 ';' i1, s).intloc 0 = Exec(i1, Exec(i0, Initialized s)).intloc 0
   by SCMFSA6C:9
-    .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:91
-    .= (Initialize s).intloc 0 by SCMFSA_2:89
+    .= Exec(i0, Initialized s).intloc 0 by SCMFSA_2:91
+    .= (Initialized s).intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
   bb = intloc 0 or bb is read-write by SF_MASTR:def 5;
   then
-A5: (Initialize s).bb = s.bb by A1,SCMFSA6C:3;
+A5: (Initialized s).bb = s.bb by A1,SCMFSA6C:3;
 A6: s1.intloc 0 = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).intloc 0 by SCMFSA6C:7
     .= IExec(i0 ';' i1 ';' i2, s).intloc 0 by SCMFSA_2:89
     .= Exec(i2, IExec(i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
@@ -867,9 +857,10 @@ A10: s1.aux = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).aux by SCMFSA6C:7
     .= IExec(i0 ';' i1 ';' i2, s).aux by A8,SCMFSA_2:89
     .= Exec(i2, IExec(i0 ';' i1, s)).aux by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).aux + 1 by A4,SCMFSA_2:90
-    .= Exec(i1, Exec(i0, Initialize s)).aux +1 by SCMFSA6C:9
-    .= Exec(i0, Initialize s).aux - Exec(i0, Initialize s).bb +1 by SCMFSA_2:91
-    .= (Initialize s).cc - Exec(i0, Initialize s).bb +1 by SCMFSA_2:89
+    .= Exec(i1, Exec(i0, Initialized s)).aux +1 by SCMFSA6C:9
+    .= Exec(i0, Initialized s).aux - Exec(i0, Initialized s).bb +1
+    by SCMFSA_2:91
+    .= (Initialized s).cc - Exec(i0, Initialized s).bb +1 by SCMFSA_2:89
     .= s.cc-s.bb+1 by A9,A3,A5,SCMFSA_2:89;
   then I4 is_halting_on s1 & I4 is_closed_on s1 by A7,SCMFSA_9:43;
   then
@@ -928,8 +919,7 @@ A6: ProperBodyWhile>0 aux, IB, s2
   proof
     let k be Element of NAT;
 A7: IB2 is_closed_on IExec(I, SF.k) by SCMFSA7B:24;
-    assume
-    StepWhile>0(aux,IB,s2).k.aux > 0;
+    assume StepWhile>0(aux,IB,s2).k.aux > 0;
     then
 A8: k < scb1 by A1,A3,A4,Th26;
     then
@@ -937,13 +927,13 @@ A9: I is_closed_on SF.k by A3,Def7;
 A10: SF.k.intloc 0 = 1 by A1,A3,A8,Th25;
     I is_halting_on SF.k by A3,A8,Def7;
     then
-A11: I is_halting_on Initialize SF.k by A10,A9,SFMASTR2:5;
-A12: I is_closed_on Initialize SF.k by A10,A9,SFMASTR2:4;
+A11: I is_halting_on Initialized SF.k by A10,A9,SFMASTR2:5;
+A12: I is_closed_on Initialized SF.k by A10,A9,SFMASTR2:4;
     then
-A13: IB is_closed_on Initialize SF.k by A5,A11,A7,SFMASTR1:3;
+A13: IB is_closed_on Initialized SF.k by A5,A11,A7,SFMASTR1:3;
     hence IB is_closed_on SW2.k by A10,SFMASTR2:4;
     IB2 is_halting_on IExec(I, SF.k) by SCMFSA7B:25;
-    then IB is_halting_on Initialize SF.k by A5,A12,A11,A7,SFMASTR1:4;
+    then IB is_halting_on Initialized SF.k by A5,A12,A11,A7,SFMASTR1:4;
     hence thesis by A10,A13,SFMASTR2:5;
   end;
   set i3 = a := bb;
@@ -1060,17 +1050,17 @@ A5: s1.intloc 0 = Exec(i3, IExec(i0 ';' i1 ';' i2, s)).intloc 0 by SCMFSA6C:7
     .= IExec(i0 ';' i1 ';' i2, s).intloc 0 by SCMFSA_2:89
     .= Exec(i2, IExec(i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
     .= IExec(i0 ';' i1, s).intloc 0 by SCMFSA_2:90
-    .= Exec(i1, Exec(i0, Initialize s)).intloc 0 by SCMFSA6C:9
-    .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:91
-    .= (Initialize s).intloc 0 by SCMFSA_2:89
+    .= Exec(i1, Exec(i0, Initialized s)).intloc 0 by SCMFSA6C:9
+    .= Exec(i0, Initialized s).intloc 0 by SCMFSA_2:91
+    .= (Initialized s).intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
   then
-A6: DataPart Initialize s1 = DataPart s1 by SCMFSA8C:27;
-  set Ex1 = ExitsAtWhile>0(aux, IB, Initialize s1);
-  set SW1 = StepWhile>0(aux, IB, Initialize s1);
+A6: DataPart Initialized s1 = DataPart s1 by SCMFSA8C:27;
+  set Ex1 = ExitsAtWhile>0(aux, IB, Initialized s1);
+  set SW1 = StepWhile>0(aux, IB, Initialized s1);
 A7: ProperBodyWhile>0 aux, IB, s1 by A1,A3,Lm1;
   then
-A8: ProperBodyWhile>0 aux, IB, Initialize s1 by A6,SCMFSA9A:44;
+A8: ProperBodyWhile>0 aux, IB, Initialized s1 by A6,SCMFSA9A:44;
   set s2 = s+*(aux, s.cc-s.bb+1)+*(a, s.bb);
   set SW2 = StepWhile>0(aux,IB,s2);
 A9: DataPart s1 = DataPart s2 by A1,Th22;
@@ -1079,15 +1069,15 @@ A9: DataPart s1 = DataPart s2 by A1,Th22;
 A10: SW1.k.aux = SW2.k.aux by SCMFSA6A:38;
 A11: WithVariantWhile>0 aux, IB, s1 by A1,A3,Lm1;
   then
-A12: WithVariantWhile>0 aux, IB, Initialize s1 by A5,A6,A7,SCMFSA9A:47;
+A12: WithVariantWhile>0 aux, IB, Initialized s1 by A5,A6,A7,SCMFSA9A:47;
   then consider K being Element of NAT such that
 A13: Ex1 = K and
 A14: SW1.K.aux <= 0 and
 A15: for i being Element of NAT st SW1.i.aux <= 0 holds K <= i and
-  DataPart Comput(ProgramPart(((Initialize s1) +* (while>0(aux, IB) +* SAt))),(
-(Initialize s1) +* (while>0(aux, IB) +* SAt)), (
-  LifeSpan(ProgramPart((Initialize s1) +* (while>0(aux, IB) +* SAt)),(
-Initialize s1) +* (while>0(aux, IB) +* SAt)))) = DataPart SW1.K
+  DataPart Comput(ProgramPart(((Initialized s1) +* (while>0(aux, IB) +* SAt))),
+  ((Initialized s1) +* (while>0(aux, IB) +* SAt)), (
+  LifeSpan(ProgramPart((Initialized s1) +* (while>0(aux, IB) +* SAt)),(
+Initialized s1) +* (while>0(aux, IB) +* SAt)))) = DataPart SW1.K
 by A8,SCMFSA9A:def 6;
   DataPart SW1.K = DataPart SW2.K by A6,A8,A9,SCMFSA9A:40;
   then
@@ -1134,13 +1124,13 @@ A3: ProperBodyWhile>0 aux, IB, s1 & WithVariantWhile>0 aux, IB, s1 by A1,A2,Lm1
 A4: I4 is_closed_on s1 by SCMFSA9A:33;
   reconsider I03 as parahalting Program of SCM+FSA;
   set MI = for-up(a, bb, cc, I);
-A5: I03 is_closed_on Initialize s & I03 is_halting_on Initialize s by
+A5: I03 is_closed_on Initialized s & I03 is_halting_on Initialized s by
 SCMFSA7B:24,25;
   then
-A6: MI is_closed_on Initialize s by A4,SFMASTR1:3;
+A6: MI is_closed_on Initialized s by A4,SFMASTR1:3;
   hence MI is_closed_on s by A1,SFMASTR2:4;
   I4 is_halting_on s1 by A3,SCMFSA9A:33;
-  then MI is_halting_on Initialize s by A5,A4,SFMASTR1:4;
+  then MI is_halting_on Initialized s by A5,A4,SFMASTR1:4;
   hence thesis by A1,A6,SFMASTR2:5;
 end;
 
@@ -1169,7 +1159,7 @@ registration
 end;
 
 theorem Th33:
-  c <> aa implies FinSeqMin(f, aa, bb, c) does_not_destroy aa
+  c <> aa implies FinSeqMin(f, aa, bb, c) does not destroy aa
 proof
   set a = aa, b = bb;
   set aux1 = 1-stRWNotIn {a, b, c};
@@ -1180,27 +1170,27 @@ proof
   set I12 = if>0(aux2, aux1, Macro (c := cv), Stop SCM+FSA);
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
-A1: Stop SCM+FSA does_not_destroy a by SCMFSA8C:85;
+A1: Stop SCM+FSA does not destroy a by SCMFSA8C:85;
 A2: a in {a, b, c} by ENUMSET1:def 1;
   then aux1 <> a by SFMASTR1:21;
   then
-A3: i10 does_not_destroy a by SCMFSA7B:20;
+A3: i10 does not destroy a by SCMFSA7B:20;
 A4: aux2 <> a by A2,SFMASTR1:21;
-  then i11 does_not_destroy a by SCMFSA7B:20;
+  then i11 does not destroy a by SCMFSA7B:20;
   then
-A5: i10 ';' i11 does_not_destroy a by A3,SCMFSA8C:84;
+A5: i10 ';' i11 does not destroy a by A3,SCMFSA8C:84;
   assume
 A6: c <> aa;
-  then Macro (c := cv) does_not_destroy a by SCMFSA7B:12,SCMFSA8C:77;
-  then I12 does_not_destroy a by A4,A1,Th15;
+  then Macro (c := cv) does not destroy a by SCMFSA7B:12,SCMFSA8C:77;
+  then I12 does not destroy a by A4,A1,Th15;
   then
-A7: I1B does_not_destroy a by A5,SCMFSA8C:81;
+A7: I1B does not destroy a by A5,SCMFSA8C:81;
   a in {cv, a, b} by ENUMSET1:def 1;
   then a in {cv, a, b} \/ UsedIntLoc I1B by XBOOLE_0:def 3;
   then
 A8: a <> 1-stRWNotIn ({cv, a, b} \/ UsedIntLoc I1B) by SFMASTR1:21;
   cv <> a by A2,SFMASTR1:21;
-  then I1 does_not_destroy a by A7,A8,Th29;
+  then I1 does not destroy a by A7,A8,Th29;
   hence thesis by A6,SCMFSA7B:12,SCMFSA8C:82;
 end;
 
@@ -1259,18 +1249,18 @@ A1: s.intloc 0 = 1;
   set I1B = i10 ';' i11 ';' I12;
   set I1 = for-up ( cv, a, b, I1B);
   set s1 = IExec(Macro i0, s);
-A2: s1.intloc 0 = Exec(i0, Initialize s).intloc 0 by SCMFSA6C:6
-    .= (Initialize s). intloc 0 by SCMFSA_2:89
+A2: s1.intloc 0 = Exec(i0, Initialized s).intloc 0 by SCMFSA6C:6
+    .= (Initialized s). intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
   then
 A3: I1 is_closed_on s1 by Th32;
-A4: Macro i0 is_closed_on Initialize s & Macro i0 is_halting_on Initialize s
+A4: Macro i0 is_closed_on Initialized s & Macro i0 is_halting_on Initialized s
   by SCMFSA7B:24,25;
   then
-A5: FinSeqMin(f, aa, bb, c) is_closed_on Initialize s by A3,SFMASTR1:3;
+A5: FinSeqMin(f, aa, bb, c) is_closed_on Initialized s by A3,SFMASTR1:3;
   hence FinSeqMin(f, aa, bb, c) is_closed_on s by A1,SFMASTR2:4;
   I1 is_halting_on s1 by A2,Th32;
-  then FinSeqMin(f, aa, bb, c) is_halting_on Initialize s by A3,A4,SFMASTR1:4;
+  then FinSeqMin(f, aa, bb, c) is_halting_on Initialized s by A3,A4,SFMASTR1:4;
   hence thesis by A1,A5,SFMASTR2:5;
 end;
 
@@ -1286,10 +1276,10 @@ A2: bb <> c and
 A3: s.intloc 0 = 1;
   set a = aa, b = bb;
   set i0 = c := a;
-  set s1 = Exec(i0, Initialize s);
+  set s1 = Exec(i0, Initialized s);
 A4: a = intloc 0 or a is read-write by SF_MASTR:def 5;
 A5: b = intloc 0 or b is read-write by SF_MASTR:def 5;
-A6: s1.b = (Initialize s).b by A2,SCMFSA_2:89
+A6: s1.b = (Initialized s).b by A2,SCMFSA_2:89
     .= s.b by A3,A5,SCMFSA6C:3;
   set cv = 3-rdRWNotIn {a, b, c};
   set aux2 = 2-ndRWNotIn {a, b, c};
@@ -1309,7 +1299,7 @@ A10: b in {a, b, c} by ENUMSET1:def 1;
 A11: cv <> b by SFMASTR1:21;
 A12: aux1 <> b by A10,SFMASTR1:21;
 A13: aux2 <> b by A10,SFMASTR1:21;
-A14: s1.a = (Initialize s).a by A1,SCMFSA_2:89
+A14: s1.a = (Initialized s).a by A1,SCMFSA_2:89
     .= s.a by A3,A4,SCMFSA6C:3;
   b in {cv, a, b} by ENUMSET1:def 1;
   then
@@ -1319,7 +1309,7 @@ A16: a in {a, b, c} by ENUMSET1:def 1;
 A17: cv <> a by SFMASTR1:21;
 A18: aux1 <> a by A16,SFMASTR1:21;
 A19: aux2 <> a by A16,SFMASTR1:21;
-A20: s1.f = (Initialize s).f by SCMFSA_2:89
+A20: s1.f = (Initialized s).f by SCMFSA_2:89
     .= s.f by SCMFSA6C:3;
   a in {cv, a, b} by ENUMSET1:def 1;
   then
@@ -1327,7 +1317,7 @@ A21: a in {cv, a, b} \/ UsedIntLoc I1B by XBOOLE_0:def 3;
   c in {a, b, c} by ENUMSET1:def 1;
   then
 A22: cv <> c by SFMASTR1:21;
-A23: s1.intloc 0 = (Initialize s). intloc 0 by SCMFSA_2:89
+A23: s1.intloc 0 = (Initialized s). intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
   then
 A24: I1 is_closed_on s1 & I1 is_halting_on s1 by Th32;
@@ -1409,7 +1399,7 @@ SFMASTR2:7
         .= IExec(I1B, SF.n).cv+1 by SCMFSA6B:35
         .= IExec(I12, IExec(i10 ';' i11, SF.n)).cv+1 by SFMASTR1:8;
       set ss = IExec(i10 ';' i11, SF.n);
-      set S0 = Initialize (SF.n);
+      set S0 = Initialized (SF.n);
       set S1 = Exec(i10, S0);
       set S2 = Exec(i11, Exec(i10, S0));
 A42:  IExec(i10 ';' i11, SF.n).f = S2.f by SCMFSA6C:10
@@ -1431,7 +1421,7 @@ A46:  IExec(i10 ';' i11, SF.n).a = S2.a by SCMFSA6C:9
 A47:  IExec(i10 ';' i11, SF.n).cv = S2.cv by SCMFSA6C:9
         .= S1.cv by A7,SCMFSA_2:98
         .= S0.cv by A9,SCMFSA_2:98;
-A48:  Macro (c := cv) does_not_refer aux2 & Stop SCM+FSA does_not_refer
+A48:  Macro (c := cv) does not refer aux2 & Stop SCM+FSA does not refer
       aux2 by A7,Th9,Th10,SCMFSA8C:80;
       per cases;
       suppose
@@ -1471,28 +1461,28 @@ A55:          ss.aux2 > ss.aux1;
               hence
               SF.(n+1).cv = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.
               n)).cv+1 by A7,A48,A41,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).cv+1
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).cv+1
               by SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).cv+1 by A22,
+                .= (Initialized IExec(i10 ';' i11, SF.n)).cv+1 by A22,
 SCMFSA_2:89
                 .= (n+1)+s1.a by A14,A47,A49,A51,SCMFSA6C:3;
               thus SF.(n+1).f = IExec(Macro(c := cv), IExec(i10 ';' i11, SF.n)
               ).f by A48,A38,A55,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).f by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).f by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
                 .= s1.f by A20,A42,A50,SCMFSA6C:3;
               thus SF.(n+1).a = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n
               )).a by A19,A48,A40,A55,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).a by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).a by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).a by A1,SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).a by A1,SCMFSA_2:89
                 .= s1.a by A4,A43,A46,A53,SCMFSA6C:3;
               thus SF.(n+1).b = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n
               )).b by A13,A48,A39,A55,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).b by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).b by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).b by A2,SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).b by A2,SCMFSA_2:89
                 .= s1.b by A5,A43,A45,A52,SCMFSA6C:3;
             end;
           end;
@@ -1532,29 +1522,29 @@ A62:          ss.aux2 > ss.aux1;
               hence
               SF.(n+1).cv = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.
               n)).cv+1 by A7,A48,A41,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).cv+1
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).cv+1
               by SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).cv+1 by A22,
+                .= (Initialized IExec(i10 ';' i11, SF.n)).cv+1 by A22,
 SCMFSA_2:89
                 .= IExec(i10 ';' i11, SF.n).cv+1 by SCMFSA6C:3
                 .= (n+1)+s1.a by A34,A47,A57;
               thus SF.(n+1).f = IExec(Macro(c := cv), IExec(i10 ';' i11, SF.n)
               ).f by A48,A38,A62,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).f by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).f by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
                 .= s1.f by A20,A42,A60,SCMFSA6C:3;
               thus SF.(n+1).a = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n
               )).a by A19,A48,A40,A62,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).a by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).a by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).a by A1,SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).a by A1,SCMFSA_2:89
                 .= s1.a by A4,A43,A46,A58,SCMFSA6C:3;
               thus SF.(n+1).b = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n
               )).b by A13,A48,A39,A62,SCMFSA8B:43
-                .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).b by
+                .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).b by
 SCMFSA6C:6
-                .= (Initialize IExec(i10 ';' i11, SF.n)).b by A2,SCMFSA_2:89
+                .= (Initialized IExec(i10 ';' i11, SF.n)).b by A2,SCMFSA_2:89
                 .= s1.b by A5,A43,A45,A59,SCMFSA6C:3;
             end;
           end;
@@ -1595,13 +1585,13 @@ A5: b <> c and
 A6: s.intloc 0 = 1;
 A7: b = intloc 0 or b is read-write by SF_MASTR:def 5;
   set i0 = c := a;
-  set s1 = Exec(i0, Initialize s);
+  set s1 = Exec(i0, Initialized s);
 A8: a = intloc 0 or a is read-write by SF_MASTR:def 5;
   reconsider sa = abs(s.a) as Element of NAT;
 A9: s.a = sa by A1,ABSVALUE:def 1;
   s.a-s.a <= s.b-s.a by A2,XREAL_1:11;
   then reconsider sba = s.b-s.a as Element of NAT by INT_1:16;
-A10: s1.f = (Initialize s).f by SCMFSA_2:89
+A10: s1.f = (Initialized s).f by SCMFSA_2:89
     .= s.f by SCMFSA6C:3;
   set k = sba+1;
   set cv = 3-rdRWNotIn {a, b, c};
@@ -1628,16 +1618,16 @@ A16: cv in {cv, a, b} \/ (UsedIntLoc I1B) by XBOOLE_0:def 3;
 A17: ProperForUpBody cv, a, b, I1B, s1 by Th23;
 A18: aux1 <> c by A14,SFMASTR1:21;
 A19: aux2 <> c by A14,SFMASTR1:21;
-A20: s1.c = (Initialize s).a by SCMFSA_2:89
+A20: s1.c = (Initialized s).a by SCMFSA_2:89
     .= s.a by A6,A8,SCMFSA6C:3;
-A21: s1.a = (Initialize s).a by A4,SCMFSA_2:89
+A21: s1.a = (Initialized s).a by A4,SCMFSA_2:89
     .= s.a by A6,A8,SCMFSA6C:3;
 A22: s.a <= len (s.f) by A2,A3,XXREAL_0:2;
   then
 A23: sa in dom (s.f) by A1,A9,FINSEQ_3:27;
-A24: s1.b = (Initialize s).b by A5,SCMFSA_2:89
+A24: s1.b = (Initialized s).b by A5,SCMFSA_2:89
     .= s.b by A6,A7,SCMFSA6C:3;
-A25: s1.intloc 0 = (Initialize s). intloc 0 by SCMFSA_2:89
+A25: s1.intloc 0 = (Initialized s). intloc 0 by SCMFSA_2:89
     .= 1 by SCMFSA6C:3;
   then
 A26: DataPart IExec(I1, s1) = DataPart SF.k by A21,A24,Th31;
@@ -1676,7 +1666,7 @@ A34:    0 < n;
         hence thesis by A21,A24,A30,A34,NAT_1:13,XREAL_1:21;
       end;
     end;
-    set S0 = Initialize (SF.n);
+    set S0 = Initialized (SF.n);
     set S1 = Exec(i10, S0);
     set S2 = Exec(i11, Exec(i10, S0));
 A35: IExec(i10 ';' i11, SF.n).f = S2.f by SCMFSA6C:10
@@ -1711,7 +1701,7 @@ SFMASTR2:7
       .= IExec(I1B, SF.n).cv+IExec(I1B, SF.n).intloc 0 by SCMFSA_2:90
       .= IExec(I1B, SF.n).cv+1 by SCMFSA6B:35
       .= IExec(I12, IExec(i10 ';' i11, SF.n)).cv+1 by SFMASTR1:8;
-A41: Macro (c := cv) does_not_refer aux2 & Stop SCM+FSA does_not_refer
+A41: Macro (c := cv) does not refer aux2 & Stop SCM+FSA does not refer
     aux2 by A12,Th9,Th10,SCMFSA8C:80;
 A42: IExec(i10 ';' i11, SF.n).c = S2.c by SCMFSA6C:9
       .= S1.c by A19,SCMFSA_2:98
@@ -1818,16 +1808,16 @@ A71:        s.f.S0cv < s.f.SFnc;
             hence
             SF.(n+1).cv = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n)
             ).cv+1 by A12,A41,A40,A57,A66,SCMFSA8B:43
-              .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).cv+1 by
+              .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).cv+1 by
 SCMFSA6C:6
-              .= (Initialize IExec(i10 ';' i11, SF.n)).cv+1 by A15,SCMFSA_2:89
+              .= (Initialized IExec(i10 ';' i11, SF.n)).cv+1 by A15,SCMFSA_2:89
               .= IExec(i10 ';' i11, SF.n).cv+1 by SCMFSA6C:3
               .= (n+1)+s1.a by A32,A43,A53;
             thus SF.(n+1).f = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n))
             .f by A41,A38,A57,A66,A71,SCMFSA8B:43
-              .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).f by
+              .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).f by
 SCMFSA6C:6
-              .= (Initialize IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
+              .= (Initialized IExec(i10 ';' i11, SF.n)).f by SCMFSA_2:89
               .= s1.f by A10,A35,A55,SCMFSA6C:3;
             reconsider sa11 = (n+1)+sa-1 as Element of NAT by A69;
             take sa11;
@@ -1865,9 +1855,9 @@ GRAPH_2:63;
             end;
             SF.(n+1).c = IExec(Macro (c := cv), IExec(i10 ';' i11, SF.n))
             .c by A19,A41,A39,A57,A66,A71,SCMFSA8B:43
-              .= Exec(c := cv, Initialize IExec(i10 ';' i11, SF.n)).c by
+              .= Exec(c := cv, Initialized IExec(i10 ';' i11, SF.n)).c by
 SCMFSA6C:6
-              .= (Initialize IExec(i10 ';' i11, SF.n)).cv by SCMFSA_2:89
+              .= (Initialized IExec(i10 ';' i11, SF.n)).cv by SCMFSA_2:89
               .= S0cv by A43,SCMFSA6C:3;
             hence thesis by A1,A9,A21,A32,A53,A70,A68,A72,A75,GRAPH_2:63;
           end;
@@ -1949,18 +1939,17 @@ end;
 
 theorem Th38:
   cc <> 1-stRWNotIn {aa, bb} & cc <> 2-ndRWNotIn {aa, bb} implies
-  swap(f, aa, bb) does_not_destroy cc
+  swap(f, aa, bb) does not destroy cc
 proof
   set a = aa, b = bb;
   set aux1 = 1-stRWNotIn {a, b};
   set aux2 = 2-ndRWNotIn {a, b};
-  assume
-  cc <> 1-stRWNotIn {aa, bb} & cc <> 2-ndRWNotIn {aa, bb};
+  assume cc <> 1-stRWNotIn {aa, bb} & cc <> 2-ndRWNotIn {aa, bb};
   then
-A1: aux1 := (f,a) does_not_destroy cc & aux2 := (f,b) does_not_destroy cc by
+A1: aux1 := (f,a) does not destroy cc & aux2 := (f,b) does not destroy cc by
 SCMFSA7B:20;
-  (f,a) := aux2 does_not_destroy cc by SCMFSA7B:21;
-  then aux1 := (f,a) ';' (aux2 := (f,b)) ';' ((f,a) := aux2) does_not_destroy
+  (f,a) := aux2 does not destroy cc by SCMFSA7B:21;
+  then aux1 := (f,a) ';' (aux2 := (f,b)) ';' ((f,a) := aux2) does not destroy
   cc by A1,SCMFSA8C:83,84;
   hence thesis by SCMFSA7B:21,SCMFSA8C:83;
 end;
@@ -1979,7 +1968,7 @@ A4: s.b <= len (s.f) and
 A5: s.intloc 0 = 1;
   set aux1 = 1-stRWNotIn {a, b}, aux2 = 2-ndRWNotIn {a, b};
   set i0 = aux1 := (f,a), i1 = aux2 := (f,b), i2 = (f,a) := aux2;
-  set s0 = Initialize s, s1 = Exec(i0, s0), s2 = IExec(i0 ';' i1, s);
+  set s0 = Initialized s, s1 = Exec(i0, s0), s2 = IExec(i0 ';' i1, s);
 A6: b = intloc 0 or b is read-write by SF_MASTR:def 5;
   reconsider sa = s.a as Element of NAT by A1,INT_1:16;
   set s0a = abs(s0.a), s2a = abs(s2.a);
@@ -2156,16 +2145,16 @@ A1: S = IExec(Selection-sort f, s);
   set I21 = FinSeqMin(f, cv, finish, minpos);
   set I2B = I21 ';' I22;
   set I2 = for-up ( cv, intloc 0, finish, I2B );
-  set s1 = Exec(i1, Initialize s);
-A2: s1.intloc 0 = (Initialize s).intloc 0 by SCMFSA_2:100
+  set s1 = Exec(i1, Initialized s);
+A2: s1.intloc 0 = (Initialized s).intloc 0 by SCMFSA_2:100
     .= 1 by SCMFSA6C:3;
   cv in {cv, minpos} by TARSKI:def 2;
   then cv <> 1-stRWNotIn {cv, minpos} & cv <> 2-ndRWNotIn{cv, minpos} by
 SFMASTR1:21;
   then
-A3: swap(f, cv, minpos) does_not_destroy cv by Th38;
+A3: swap(f, cv, minpos) does not destroy cv by Th38;
   set SF = StepForUp(cv, intloc 0, finish, I2B, s1);
-A4: s1.finish = len ((Initialize s).f) by SCMFSA_2:100
+A4: s1.finish = len ((Initialized s).f) by SCMFSA_2:100
     .= len (s.f) by SCMFSA6C:3;
   then reconsider n = s1.finish-s1.intloc 0 +1 as Element of NAT by A2;
   defpred P[Element of NAT] means $1 <= n implies SF.$1.cv = $1+s1.intloc 0 &
@@ -2178,38 +2167,36 @@ A5: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT such that
 A6: Q[k];
-    assume
-    k+1 < n;
+    assume k+1 < n;
     hence
 A7: SF.(k+1).intloc 0 = 1 by A6,Th24,NAT_1:13;
-    (Initialize SF.(k+1)).intloc 0 = 1 by SCMFSA6C:3;
+    (Initialized SF.(k+1)).intloc 0 = 1 by SCMFSA6C:3;
     then
-A8: I21 is_closed_on Initialize SF.(k+1) & I21 is_halting_on Initialize
+A8: I21 is_closed_on Initialized SF.(k+1) & I21 is_halting_on Initialized
     SF.(k+1) by Th35;
 A9: I22 is_closed_on IExec(I21, SF.(k+1)) by SCMFSA7B:24;
     then
-A10: I2B is_closed_on Initialize SF.(k+1) by A8,SFMASTR1:3;
+A10: I2B is_closed_on Initialized SF.(k+1) by A8,SFMASTR1:3;
     hence I2B is_closed_on SF.(k+1) by A7,SFMASTR2:4;
     I22 is_halting_on IExec(I21, SF.(k+1)) by SCMFSA7B:25;
-    then I2B is_halting_on Initialize SF.(k+1) by A8,A9,SFMASTR1:4;
+    then I2B is_halting_on Initialized SF.(k+1) by A8,A9,SFMASTR1:4;
     hence thesis by A7,A10,SFMASTR2:5;
   end;
 A11: Q[0]
   proof
-    (Initialize SF.0).intloc 0 = 1 by SCMFSA6C:3;
+    (Initialized SF.0).intloc 0 = 1 by SCMFSA6C:3;
     then
-A12: I21 is_closed_on Initialize SF.0 & I21 is_halting_on Initialize SF.0
+A12: I21 is_closed_on Initialized SF.0 & I21 is_halting_on Initialized SF.0
     by Th35;
-    assume
-    0 < n;
+    assume 0 < n;
     thus
 A13: SF.0.intloc 0 = 1 by A2,Th16;
 A14: I22 is_closed_on IExec(I21, SF.0) by SCMFSA7B:24;
     then
-A15: I2B is_closed_on Initialize SF.0 by A12,SFMASTR1:3;
+A15: I2B is_closed_on Initialized SF.0 by A12,SFMASTR1:3;
     hence I2B is_closed_on SF.0 by A13,SFMASTR2:4;
     I22 is_halting_on IExec(I21, SF.0) by SCMFSA7B:25;
-    then I2B is_halting_on Initialize SF.0 by A12,A14,SFMASTR1:4;
+    then I2B is_halting_on Initialized SF.0 by A12,A14,SFMASTR1:4;
     hence thesis by A13,A15,SFMASTR2:5;
   end;
 A16: for k being Element of NAT holds Q[k] from NAT_1:sch 1(A11, A5);
@@ -2224,9 +2211,9 @@ A18: DataPart IExec(I2, s1) = DataPart SF.n by A2,Th31;
   then
 A19: S.f = IExec(I2, s1).f by A1,SFMASTR1:16
     .= SF.n.f by A18,SCMFSA6A:38;
-  FinSeqMin(f, cv, finish, minpos) does_not_destroy cv by Th33,SFMASTR1:22;
+  FinSeqMin(f, cv, finish, minpos) does not destroy cv by Th33,SFMASTR1:22;
   then
-A20: I2B does_not_destroy cv by A3,SCMFSA8C:81;
+A20: I2B does not destroy cv by A3,SCMFSA8C:81;
 A21: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
@@ -2237,9 +2224,9 @@ A24:  k < n;
       hence
 A25:  SF.k.intloc 0 = 1 by A16;
 A26:  I2B is_closed_on SF.k by A16,A24;
-      hence I2B is_closed_on Initialize SF.k by A25,SFMASTR2:4;
+      hence I2B is_closed_on Initialized SF.k by A25,SFMASTR2:4;
       I2B is_halting_on SF.k by A16,A24;
-      hence I2B is_halting_on Initialize SF.k by A25,A26,SFMASTR2:5;
+      hence I2B is_halting_on Initialized SF.k by A25,A26,SFMASTR2:5;
       thus SF.k.cv = k+s1.intloc 0 by A22,A24;
       thus SF.k.finish = s1.finish by A22,A24;
       thus SF.k.cv <= s1.finish by A2,A22,A24,NAT_1:13;
@@ -2253,8 +2240,8 @@ A27: k+1 <= n;
     then consider p being Permutation of dom(s.f) such that
 A28: F = (s.f) * p by A22,NAT_1:13;
     thus SF.(k+1).cv = (k+1)+s1.intloc 0 by A20,A2,A17,A27,Th25;
-A29: I22 is_closed_on Initialize IExec(I21, SF.k) & I22 is_halting_on
-    Initialize IExec(I21, SF.k) by SCMFSA7B:24,25;
+A29: I22 is_closed_on Initialized IExec(I21, SF.k) & I22 is_halting_on
+    Initialized IExec(I21, SF.k) by SCMFSA7B:24,25;
 A30: finish = 1-stRWNotIn UsedIntLoc I22 by SFMASTR1:def 4;
     set ma = min_at(F, k+1, len F);
 A31: dom(s.f) = Seg len(s.f) by FINSEQ_1:def 3;
@@ -2276,9 +2263,9 @@ A38: finish <> minpos by A30,A37,SFMASTR1:21;
     then
 A39: cv <> finish by A30,A37,SFMASTR1:21;
 A40: cv <> minpos by SFMASTR1:22;
-    (Initialize SF.k).intloc 0 = 1 by SCMFSA6C:3;
+    (Initialized SF.k).intloc 0 = 1 by SCMFSA6C:3;
     then
-A41: I21 is_closed_on Initialize SF.k & I21 is_halting_on Initialize SF.k
+A41: I21 is_closed_on Initialized SF.k & I21 is_halting_on Initialized SF.k
     by Th35;
 A42: F1 = F+*(k+1, F.ma)+*(ma, F.(k+1))
     proof
@@ -2318,7 +2305,8 @@ A23,A27,NAT_1:13,SFMASTR2:7
 ,SFMASTR1:12
       .= IExec(I2B, SF.k).finish by A39,SCMFSA_2:90
       .= IExec(I22, IExec(I21, SF.k)).finish by A41,SFMASTR1:8
-      .= (Initialize IExec(I21, SF.k)).finish by A30,A29,SFMASTR1:21,SFMASTR2:1
+      .= (Initialized IExec(I21, SF.k)).finish
+      by A30,A29,SFMASTR1:21,SFMASTR2:1
       .= IExec(I21, SF.k).finish by SCMFSA6C:3
       .= s1.finish by A23,A27,A38,A40,Th36,NAT_1:13;
     thus SF.(k+1).f is_split_at (k+1) by A2,A4,A22,A27,A32,A42,GRAPH_2:66
@@ -2339,8 +2327,7 @@ SFMASTR1:def 4;
 A52: cv <> finish by A51,SFMASTR1:21;
 A53: P[0]
   proof
-    assume
-    0 <= n;
+    assume 0 <= n;
     thus SF.0.cv = 0+s1.intloc 0 by Th17;
     thus SF.0.finish = s1.finish by A52,Th19;
     thus SF.0.f is_split_at 0
@@ -2365,7 +2352,7 @@ A55:  i <= j & j <= 0;
 FINSEQ_2:65;
     take p;
     SF.0.f = s1.f by Th21
-      .= (Initialize s).f by SCMFSA_2:100
+      .= (Initialized s).f by SCMFSA_2:100
       .= s.f by SCMFSA6C:3;
     hence thesis by FINSEQ_2:64;
   end;

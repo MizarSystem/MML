@@ -14,7 +14,7 @@ environ
       TARSKI, FINSEQ_1, FINSEQ_2, MATRIX_3, FVSUM_1, FUNCT_1, STRUCT_0,
       BINOP_1, XXREAL_0, MATRIX_2, FUNCOP_1, INT_1, NUMBERS, XCMPLX_0,
       MATRIX_6, RELAT_1, ALGSTR_0, PARTFUN1, MATRIX13;
- constructors REAL_1, MATRIX_6, XXREAL_0, MATRIX13, POLYNOM1, BINOP_2;
+ constructors REAL_1, MATRIX_6, XXREAL_0, MATRIX13, POLYNOM1, BINOP_2, FVSUM_1;
  registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, FINSEQ_2, XXREAL_0,
       FUNCOP_1, XREAL_0, XBOOLE_0, FUNCT_1, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -27,11 +27,10 @@ environ
 
 begin :: Basic Properties of Circulant Matrices
 
-reserve i,j,k,n,l,m for Element of NAT,
+reserve i,j,k,n,l for Element of NAT,
   K for Field,
   a,b,c for Element of K,
-  p
-  ,q,r for FinSequence of K,
+  p ,q for FinSequence of K,
   M1,M2,M3 for Matrix of n,K;
 
 Lm1: for k being Nat st k <= n & k >= 1 holds k-1 mod n=k-1
@@ -90,11 +89,9 @@ end;
 
 Lm3: for n,i,j be Nat holds ([i,j] in [:Seg n, Seg n:] or [j,i] in [:Seg n,
 Seg n:]) implies (j-i mod n)+1 in Seg n
-
 proof
   let n,i,j be Nat;
-  assume
-  [i,j] in [:Seg n, Seg n:] or [j,i] in [:Seg n, Seg n:];
+  assume [i,j] in [:Seg n, Seg n:] or [j,i] in [:Seg n, Seg n:];
   then i in Seg n & j in Seg n by ZFMISC_1:106;
   hence thesis by Lm2;
 end;
@@ -181,8 +178,7 @@ definition
   let M be Matrix of K;
   attr M is line_circulant means
   :Def2:
-  ex p being FinSequence of K st len p=
-  width M & M is_line_circulant_about p;
+  ex p being FinSequence of K st len p= width M & M is_line_circulant_about p;
 end;
 
 definition
@@ -190,8 +186,7 @@ definition
   let p be FinSequence of K;
   attr p is first-line-of-circulant means
   :Def3:
-  ex M being Matrix of len p,K
-  st M is_line_circulant_about p;
+  ex M being Matrix of len p,K st M is_line_circulant_about p;
 end;
 
 definition
@@ -209,8 +204,7 @@ definition
   let M be Matrix of K;
   attr M is col_circulant means
   :Def5:
-  ex p being FinSequence of K st len p =
-  len M & M is_col_circulant_about p;
+  ex p being FinSequence of K st len p = len M & M is_col_circulant_about p;
 end;
 
 definition
@@ -218,8 +212,7 @@ definition
   let p be FinSequence of K;
   attr p is first-col-of-circulant means
   :Def6:
-  ex M being Matrix of len p,K
-  st M is_col_circulant_about p;
+  ex M being Matrix of len p,K st M is_col_circulant_about p;
 end;
 
 definition
@@ -286,8 +279,7 @@ A1: 0.(K,1,1)=1 |-> (1 |-> 0.K);
     take p=1|->0.K;
 A2: len (1|-> 0.K)= 1 by FINSEQ_1:def 18;
 A3: Indices (0.(K,1)) = [:Seg 1, Seg 1:] by MATRIX_1:25;
-A4: for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len
-    p)+1)
+A4: for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len p)+1)
     proof
       let i,j be Nat;
       assume
@@ -296,8 +288,7 @@ A5:   [i,j] in Indices M1;
       then (Seg 1 --> 0.K).((i-j mod 1)+1)=0.K by FUNCOP_1:13;
       hence thesis by A2,A1,A5,MATRIX_3:3;
     end;
-A6: for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((j-i mod len p
-    )+1)
+A6: for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((j-i mod len p )+1)
     proof
       let i,j be Nat;
       assume
@@ -326,8 +317,7 @@ A2: 0.(K,n,n)=n |-> (n |-> 0.K);
     set M1=0.(K,n);
 A3: len (n|-> 0.K)= n by FINSEQ_1:def 18;
 A4: Indices (0.(K,n)) = [:Seg n, Seg n:] by MATRIX_1:25;
-    for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len
-    p)+1)
+    for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len p)+1)
     proof
       let i,j be Nat;
       assume
@@ -396,8 +386,7 @@ A3:   [i,j] in Indices ((n,n)-->a);
     set p=n|->a;
 A4: len ((n,n)-->a)=n & len p =n by FINSEQ_1:def 18,MATRIX_1:25;
 A5: Indices ((n,n)-->a)=[:Seg n, Seg n:] by MATRIX_1:25;
-    for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len
-    p)+1)
+    for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len p)+1)
     proof
       let i,j be Nat;
       assume
@@ -438,13 +427,11 @@ A4: A is_line_circulant_about p by A1,Def2;
   width A=n by MATRIX_1:25;
   then
 A5: len (A@)=len p by A2,A3,MATRIX_2:12;
-  for i,j be Nat st [i,j] in Indices A@ holds A@*(i,j)=p.((i-j mod len p)+
-  1)
+  for i,j be Nat st [i,j] in Indices A@ holds A@*(i,j)=p.((i-j mod len p)+ 1)
   proof
     let i,j be Nat;
 A6: Indices A = [:Seg n, Seg n:] by MATRIX_1:25;
-    assume
-    [i,j] in Indices A@;
+    assume [i,j] in Indices A@;
     then [i,j] in Indices A by MATRIX_1:27;
     then i in Seg n & j in Seg n by A6,ZFMISC_1:106;
     then
@@ -532,8 +519,7 @@ theorem Th6:
   M1 is line_circulant implies a*M1 is line_circulant
 proof
 A1: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is line_circulant;
+  assume M1 is line_circulant;
   then consider p being FinSequence of K such that
 A2: len p=width M1 and
 A3: M1 is_line_circulant_about p by Def2;
@@ -573,8 +559,7 @@ MATRIX_1:25;
 end;
 
 theorem Th7:
-  M1 is line_circulant & M2 is line_circulant implies M1+M2 is
-  line_circulant
+  M1 is line_circulant & M2 is line_circulant implies M1+M2 is line_circulant
 proof
   assume that
 A1: M1 is line_circulant and
@@ -637,8 +622,7 @@ theorem
   M1 is line_circulant & M2 is line_circulant implies a*M1+b*M2 is
   line_circulant
 proof
-  assume
-  M1 is line_circulant & M2 is line_circulant;
+  assume M1 is line_circulant & M2 is line_circulant;
   then a*M1 is line_circulant & b*M2 is line_circulant by Th6;
   hence thesis by Th7;
 end;
@@ -660,8 +644,7 @@ theorem Th11:
 proof
 A1: width M1=n by MATRIX_1:25;
 A2: Indices (-M1) = [:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is line_circulant;
+  assume M1 is line_circulant;
   then consider p being FinSequence of K such that
 A3: len p=width M1 and
 A4: M1 is_line_circulant_about p by Def2;
@@ -695,8 +678,7 @@ A10: len r =width (-M1) & -M1 is_line_circulant_about r by A3,A6,MATRIX_1:25;
 end;
 
 theorem
-  M1 is line_circulant & M2 is line_circulant implies M1 - M2 is
-  line_circulant
+  M1 is line_circulant & M2 is line_circulant implies M1 - M2 is line_circulant
 proof
   assume that
 A1: M1 is line_circulant and
@@ -752,8 +734,7 @@ theorem
   M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
   implies a*M1-b*M2+c*M3 is line_circulant
 proof
-  assume
-  M1 is line_circulant & M2 is line_circulant & M3 is line_circulant;
+  assume M1 is line_circulant & M2 is line_circulant & M3 is line_circulant;
   then c*M3 is line_circulant & a*M1 - b*M2 is line_circulant by Th6,Th13;
   hence thesis by Th7;
 end;
@@ -770,13 +751,11 @@ A4: A is_col_circulant_about p by A1,Def5;
   width A=n by MATRIX_1:25;
   then
 A5: width (A@)=len p by A2,A3,MATRIX_2:12;
-  for i,j be Nat st [i,j] in Indices A@ holds A@*(i,j)=p.((j-i mod len p)+
-  1)
+  for i,j be Nat st [i,j] in Indices A@ holds A@*(i,j)=p.((j-i mod len p)+ 1)
   proof
     let i,j be Nat;
 A6: Indices A = [:Seg n, Seg n:] by MATRIX_1:25;
-    assume
-    [i,j] in Indices A@;
+    assume [i,j] in Indices A@;
     then [i,j] in Indices A by MATRIX_1:27;
     then i in Seg n & j in Seg n by A6,ZFMISC_1:106;
     then
@@ -868,8 +847,7 @@ theorem Th20:
   M1 is col_circulant implies a*M1 is col_circulant
 proof
 A1: Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is col_circulant;
+  assume M1 is col_circulant;
   then consider p being FinSequence of K such that
 A2: len p=len M1 and
 A3: M1 is_col_circulant_about p by Def5;
@@ -882,8 +860,7 @@ A8: for i,j be Nat st [i,j] in Indices (a*M1) holds (a*M1)*(i,j)=(a*p).((i-
   j mod len p)+1)
   proof
     let i,j be Nat;
-    assume
-    [i,j] in Indices (a*M1);
+    assume [i,j] in Indices (a*M1);
     then
 A9: [i,j] in Indices M1 by MATRIX_1:27;
     then
@@ -910,8 +887,7 @@ MATRIX_1:25;
 end;
 
 theorem Th21:
-  M1 is col_circulant & M2 is col_circulant implies M1+M2 is
-  col_circulant
+  M1 is col_circulant & M2 is col_circulant implies M1+M2 is col_circulant
 proof
   assume that
 A1: M1 is col_circulant and
@@ -971,11 +947,9 @@ A2: M3 is col_circulant;
 end;
 
 theorem
-  M1 is col_circulant &M2 is col_circulant implies a*M1+b*M2 is
-  col_circulant
+  M1 is col_circulant &M2 is col_circulant implies a*M1+b*M2 is col_circulant
 proof
-  assume
-  M1 is col_circulant & M2 is col_circulant;
+  assume M1 is col_circulant & M2 is col_circulant;
   then a*M1 is col_circulant & b*M2 is col_circulant by Th20;
   hence thesis by Th21;
 end;
@@ -997,8 +971,7 @@ theorem Th25:
 proof
 A1: Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
 A2: Indices (-M1) = [:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is col_circulant;
+  assume M1 is col_circulant;
   then consider p being FinSequence of K such that
 A3: len p=len M1 and
 A4: M1 is_col_circulant_about p by Def5;
@@ -1033,8 +1006,7 @@ A11: len r =len (-M1) & -M1 is_col_circulant_about r by A3,A6,MATRIX_1:25;
 end;
 
 theorem
-  M1 is col_circulant & M2 is col_circulant implies M1 - M2 is
-  col_circulant
+  M1 is col_circulant & M2 is col_circulant implies M1 - M2 is col_circulant
 proof
   assume that
 A1: M1 is col_circulant and
@@ -1090,19 +1062,16 @@ theorem
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
   implies a*M1-b*M2+c*M3 is col_circulant
 proof
-  assume
-  M1 is col_circulant & M2 is col_circulant & M3 is col_circulant;
+  assume M1 is col_circulant & M2 is col_circulant & M3 is col_circulant;
   then c*M3 is col_circulant & a*M1 - b*M2 is col_circulant by Th20,Th27;
   hence thesis by Th21;
 end;
 
 theorem Th31:
-  p is first-line-of-circulant implies -p is
-  first-line-of-circulant
+  p is first-line-of-circulant implies -p is first-line-of-circulant
 proof
   set n=len p;
-  assume
-  p is first-line-of-circulant;
+  assume p is first-line-of-circulant;
   then consider M1 being Matrix of len p,K such that
 A1: M1 is_line_circulant_about p by Def3;
   set M2=-M1;
@@ -1271,8 +1240,7 @@ theorem Th35:
   p is first-col-of-circulant implies -p is first-col-of-circulant
 proof
   set n = len p;
-  assume
-  p is first-col-of-circulant;
+  assume p is first-col-of-circulant;
   then consider M1 being Matrix of n,K such that
 A1: M1 is_col_circulant_about p by Def6;
   set M2=-M1;
@@ -1454,8 +1422,7 @@ A3: len (1.(K,n))=n by MATRIX_1:25;
 A4: len p = n by MATRIX_1:def 9;
 A5: dom M1= Seg n by A3,FINSEQ_1:def 3;
 A6: width (1.(K,n))=n by MATRIX_1:25;
-  for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len p)+
-  1)
+  for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((i-j mod len p)+ 1)
   proof
     let i,j be Nat;
 A7: i-j mod n >=0 by A1,INT_3:9;
@@ -1568,8 +1535,7 @@ A2: Indices (1.(K,n))=[:Seg n, Seg n:] by MATRIX_1:25;
 A3: width (1.(K,n))=n by MATRIX_1:25;
   then
 A4: len p = n by MATRIX_1:def 8;
-  for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((j-i mod len p)+
-  1)
+  for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=p.((j-i mod len p)+ 1)
   proof
     let i,j be Nat;
 A5: j-i mod n >=0 by A1,INT_3:9;
@@ -1671,13 +1637,11 @@ A27: len p =width M1 & M1 is_line_circulant_about p by A3,A4;
 end;
 
 theorem Th41:
-  p is first-line-of-circulant implies a*p is
-  first-line-of-circulant
+  p is first-line-of-circulant implies a*p is first-line-of-circulant
 proof
   set n=len p;
 A1: len (a*p)=len p by MATRIXR1:16;
-  assume
-  p is first-line-of-circulant;
+  assume p is first-line-of-circulant;
   then consider M1 being Matrix of n,K such that
 A2: M1 is_line_circulant_about p by Def3;
 A3: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:25;
@@ -1750,8 +1714,7 @@ A11: len LCirc(p)= len p & width LCirc(p) = len p by MATRIX_1:25;
 end;
 
 theorem
-  p is first-line-of-circulant implies a*(LCirc p)+b*(LCirc p)=LCirc((a+
-  b)*p)
+  p is first-line-of-circulant implies a*(LCirc p)+b*(LCirc p)=LCirc((a+ b)*p)
 proof
   set n=len p;
 A1: len (b*p)=len p by MATRIXR1:16;
@@ -1799,13 +1762,11 @@ A5: len (b*q)=n by A3,MATRIXR1:16;
 end;
 
 theorem Th46:
-  p is first-col-of-circulant implies a*p is
-  first-col-of-circulant
+  p is first-col-of-circulant implies a*p is first-col-of-circulant
 proof
   set n=len p;
 A1: len (a*p)=len p by MATRIXR1:16;
-  assume
-  p is first-col-of-circulant;
+  assume p is first-col-of-circulant;
   then consider M1 being Matrix of n,K such that
 A2: M1 is_col_circulant_about p by Def6;
 A3: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:25;
@@ -1878,8 +1839,7 @@ A11: len CCirc(p)= len p & width CCirc(p) = len p by MATRIX_1:25;
 end;
 
 theorem
-  p is first-col-of-circulant implies a*(CCirc p)+b*(CCirc p)=CCirc((a+b
-  )*p)
+  p is first-col-of-circulant implies a*(CCirc p)+b*(CCirc p)=CCirc((a+b )*p)
 proof
   set n=len p;
 A1: len (b*p)=len p by MATRIXR1:16;
@@ -1952,8 +1912,7 @@ definition
   let M be Matrix of K;
   attr M is anti-circular means
   :Def10:
-  ex p being FinSequence of K st len p=
-  width M & M is_anti-circular_about p;
+  ex p being FinSequence of K st len p= width M & M is_anti-circular_about p;
 end;
 
 definition
@@ -1961,8 +1920,7 @@ definition
   let p be FinSequence of K;
   attr p is first-line-of-anti-circular means
   :Def11:
-  ex M being Matrix of len
-  p,K st M is_anti-circular_about p;
+  ex M being Matrix of len p,K st M is_anti-circular_about p;
 end;
 
 definition
@@ -2005,8 +1963,7 @@ theorem
   M1 is anti-circular implies a*M1 is anti-circular
 proof
 A1: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is anti-circular;
+  assume M1 is anti-circular;
   then consider p being FinSequence of K such that
 A2: len p=width M1 and
 A3: M1 is_anti-circular_about p by Def10;
@@ -2085,8 +2042,7 @@ MATRIX_1:25;
 end;
 
 theorem Th52:
-  M1 is anti-circular & M2 is anti-circular implies M1+M2 is
-  anti-circular
+  M1 is anti-circular & M2 is anti-circular implies M1+M2 is anti-circular
 proof
   assume that
 A1: M1 is anti-circular and
@@ -2283,8 +2239,7 @@ theorem Th55:
   M1 is anti-circular implies -M1 is anti-circular
 proof
 A1: Indices M1=[:Seg n, Seg n:] by MATRIX_1:25;
-  assume
-  M1 is anti-circular;
+  assume M1 is anti-circular;
   then consider p being FinSequence of K such that
 A2: len p=width M1 and
 A3: M1 is_anti-circular_about p by Def10;
@@ -2337,8 +2292,7 @@ MATRIX_1:25;
 end;
 
 theorem
-  M1 is anti-circular & M2 is anti-circular implies M1-M2 is
-  anti-circular
+  M1 is anti-circular & M2 is anti-circular implies M1-M2 is anti-circular
 proof
   assume that
 A1: M1 is anti-circular and
@@ -2382,12 +2336,10 @@ A10: k<=n by A3,A5,A7,FINSEQ_1:3;
 end;
 
 theorem Th58:
-  p is first-line-of-anti-circular implies -p is
-  first-line-of-anti-circular
+  p is first-line-of-anti-circular implies -p is first-line-of-anti-circular
 proof
   set n=len p;
-  assume
-  p is first-line-of-anti-circular;
+  assume p is first-line-of-anti-circular;
   then consider M1 being Matrix of len p,K such that
 A1: M1 is_anti-circular_about p by Def11;
   set M2=-M1;
@@ -2659,13 +2611,11 @@ A26: len ACirc(p)= len p & width ACirc(p) = len p by MATRIX_1:25;
 end;
 
 theorem Th62:
-  p is first-line-of-anti-circular implies a*p is
-  first-line-of-anti-circular
+  p is first-line-of-anti-circular implies a*p is first-line-of-anti-circular
 proof
   set n=len p;
 A1: dom p=Seg n by FINSEQ_1:def 3;
-  assume
-  p is first-line-of-anti-circular;
+  assume p is first-line-of-anti-circular;
   then consider M1 being Matrix of n,K such that
 A2: M1 is_anti-circular_about p by Def11;
 A3: Indices (a*M1)=[:Seg n, Seg n:] by MATRIX_1:25;
@@ -2905,4 +2855,3 @@ A9: len p =width M1 & M1 is_anti-circular_about p by A1,A3;
     thus thesis by A9;
   end;
 end;
-

@@ -7,8 +7,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="SETFAM_1"/>
@@ -31,8 +31,6 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="YELLOW_3"/>
-<ArticleID name="WAYBEL_2"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="YELLOW_9"/>
@@ -53,7 +51,7 @@
 <Adjective nr="142"/>
 <Adjective nr="143"/>
 <Adjective nr="144"/>
-<Adjective nr="160"/>
+<Adjective nr="157"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL33" nr="2">
@@ -82,8 +80,8 @@
 <Adjective nr="106"/>
 <Adjective nr="107"/>
 <Adjective nr="143"/>
-<Adjective nr="159"/>
-<Adjective nr="160"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL33" nr="1">
@@ -99,19 +97,19 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="248">
+<Func kind="K" nr="229">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="159"/>
-<Adjective nr="160"/>
+<Adjective nr="156"/>
+<Adjective nr="157"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL33" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="43" value="false"/>
-<Adjective nr="160"/>
+<Adjective nr="157"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -142,7 +140,7 @@
 <Adjective nr="73"/>
 <Adjective nr="142"/>
 <Adjective nr="143"/>
-<Adjective nr="160"/>
+<Adjective nr="157"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WAYBEL33" nr="3">

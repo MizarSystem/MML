@@ -16,8 +16,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
@@ -57,11 +57,11 @@
 <Adjective nr="6"/>
 <Adjective nr="23">
 <LocusVar nr="2"/>
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="56"/>
 </Adjective>
-<Adjective nr="68"/>
-<Adjective nr="80"/>
-<Adjective nr="85">
+<Adjective nr="69"/>
+<Adjective nr="81"/>
+<Adjective nr="86">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -69,12 +69,12 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="56"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -84,7 +84,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="84">
+<Adjective nr="85">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

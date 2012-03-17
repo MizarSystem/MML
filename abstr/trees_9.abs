@@ -3,22 +3,23 @@
 ::
 :: Received November 25, 1994
 :: Copyright (c) 1994 Association of Mizar Users
-:: wyrzucenie slownika daje runtimowke
 
 environ
 
  vocabularies XBOOLE_0, TREES_3, SUBSET_1, FINSET_1, TREES_2, TREES_1, CARD_1,
       ARYTM_3, NAT_1, ORDINAL4, FINSEQ_1, ARYTM_1, RELAT_1, FUNCT_1, TARSKI,
       ORDINAL1, NUMBERS, XXREAL_0, ZFMISC_1, TREES_4, FUNCT_6, TREES_A,
-      TREES_9;
+      TREES_9, MCART_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1,
-      FINSEQ_2, FUNCT_6, TREES_1, TREES_2, TREES_3, TREES_4;
- constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, RELSET_1;
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_6, NAT_1, BINOP_1, FINSET_1,
+      FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, TREES_3, TREES_4, MCART_1,
+      XXREAL_0;
+ constructors WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, TREES_4, RELSET_1,
+      BINOP_1, FINSEQ_4;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XREAL_0,
       FINSEQ_1, TREES_1, TREES_2, TREES_3, PRE_CIRC, CARD_1, ZFMISC_1,
-      REALSET1;
- requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+      REALSET1, BINOP_1, SUBSET_1, RELSET_1, NAT_1, TREES_A;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
 begin :: Root tree and successors of node in decorated tree
@@ -84,8 +85,7 @@ definition
   attr IT is finite-branching means
 :: TREES_9:def 2
 
-  for x being Element of IT holds
-  succ x is finite;
+  for x being Element of IT holds succ x is finite;
 end;
 
 registration
@@ -131,8 +131,7 @@ scheme :: TREES_9:sch 1
   holds f(n) in X() iff n < card X()
 provided
  for x being set st x in X() ex n being Element of NAT st x = f(n) and
- for i,j being Element of NAT st i < j & f(j) in X() holds f(i) in X(
-) and
+ for i,j being Element of NAT st i < j & f(j) in X() holds f(i) in X( ) and
  for i,j being Element of NAT st f(i) = f(j) holds i = j;
 
 theorem :: TREES_9:7
@@ -157,8 +156,7 @@ definition
   func succ(t,p) -> FinSequence means
 :: TREES_9:def 6
 
-  ex q being Element of dom t st q
-  = p & it = t*(q succ);
+  ex q being Element of dom t st q = p & it = t*(q succ);
 end;
 
 theorem :: TREES_9:8
@@ -174,8 +172,7 @@ end;
 canceled;
 
 theorem :: TREES_9:10
-  for t being finite Tree, p being Element of t st t = t|p holds p
-  = {};
+  for t being finite Tree, p being Element of t st t = t|p holds p = {};
 
 registration
   let D be non empty set;
@@ -308,8 +305,7 @@ end;
 reserve X,Y for non empty constituted-DTrees set;
 
 theorem :: TREES_9:20
-  x in Subtrees X iff ex t being Element of X, n being Node of t
-  st x = t|n;
+  x in Subtrees X iff ex t being Element of X, n being Node of t st x = t|n;
 
 theorem :: TREES_9:21
   t in X implies t in Subtrees X;
@@ -326,8 +322,7 @@ theorem :: TREES_9:23
   Subtrees {t} = Subtrees t;
 
 theorem :: TREES_9:24
-  Subtrees X = union {Subtrees t where t is Element of X: not
-  contradiction };
+  Subtrees X = union {Subtrees t where t is Element of X: not contradiction };
 
 definition
   let X be constituted-DTrees non empty set;
@@ -385,3 +380,114 @@ theorem :: TREES_9:32
   for t being finite DecoratedTree, p being Node of t, q being Node of t
   |p holds succ(t,p^q) = succ(t|p,q);
 
+begin :: Moved from QC_LANG4, 2010.03.17, A.T
+
+theorem :: TREES_9:33
+  for n being Element of NAT, r being FinSequence ex q being
+  FinSequence st q = r|Seg n & q is_a_prefix_of r;
+
+theorem :: TREES_9:34
+  for D being non empty set, r being FinSequence of D, r1,r2 being
+FinSequence, k being Element of NAT st k+1 <= len r & r1 = r|Seg (k+1) & r2 = r
+  |Seg k holds ex x being Element of D st r1 = r2^<*x*>;
+
+theorem :: TREES_9:35
+  for D being non empty set, r being FinSequence of D, r1 being
+FinSequence st 1 <= len r & r1 = r|Seg 1 holds ex x being Element of D st r1 =
+  <*x*>;
+
+reserve T for DecoratedTree,
+  p for FinSequence of NAT;
+
+theorem :: TREES_9:36
+  T.p = (T|p).{};
+
+reserve T for finite-branching DecoratedTree,
+  t for Element of dom T,
+  x for FinSequence,
+  n, m for Element of NAT;
+
+theorem :: TREES_9:37
+  succ(T,t) = T*(t succ);
+
+theorem :: TREES_9:38
+  dom (T*(t succ)) = dom (t succ);
+
+theorem :: TREES_9:39
+  dom succ(T,t) = dom (t succ);
+
+theorem :: TREES_9:40
+  t^<*n*> in dom T iff n+1 in dom (t succ);
+
+theorem :: TREES_9:41
+  for T, x, n st x^<*n*> in dom T holds T.(x^<*n*>) = succ(T,x).(n +1);
+
+reserve x, x9 for Element of dom T,
+  y9 for set;
+
+theorem :: TREES_9:42
+  x9 in succ x implies T.x9 in rng succ(T,x);
+
+theorem :: TREES_9:43
+  y9 in rng succ(T,x) implies ex x9 st y9 = T.x9 & x9 in succ x;
+
+reserve n,k1,k2,l,k,m for Element of NAT,
+  x,y for set;
+
+scheme :: TREES_9:sch 2
+
+  ExDecTrees { D() -> non empty set, d() -> Element of D(), G(set) ->
+FinSequence of D() }: ex T being finite-branching DecoratedTree of D() st T.{}
+  = d() & for t being Element of dom T, w being Element of D() st w = T.t holds
+  succ(T,t) = G(w);
+
+theorem :: TREES_9:44
+  for T being Tree, t being Element of T holds ProperPrefixes t is
+  finite Chain of T;
+
+theorem :: TREES_9:45
+  for T being Tree holds T-level 0 = {{}};
+
+theorem :: TREES_9:46
+  for T being Tree holds T-level (n+1) = union { succ w where w is
+  Element of T : len w = n };
+
+theorem :: TREES_9:47
+  for T being finite-branching Tree, n being Element of NAT holds
+  T-level n is finite;
+
+theorem :: TREES_9:48
+  for T being finite-branching Tree holds T is finite iff ex n
+  being Element of NAT st T-level n = {};
+
+theorem :: TREES_9:49
+  for T being finite-branching Tree st not T is finite ex C being
+  Chain of T st not C is finite;
+
+theorem :: TREES_9:50
+  for T being finite-branching Tree st not T is finite ex B being
+  Branch of T st not B is finite;
+
+theorem :: TREES_9:51
+  for T being Tree, C being Chain of T, t being Element of T st t
+  in C & not C is finite ex t9 being Element of T st t9 in C & t
+  is_a_proper_prefix_of t9;
+
+theorem :: TREES_9:52
+  for T being Tree, B being Branch of T, t being Element of T st t
+  in B & not B is finite ex t9 being Element of T st t9 in B & t9 in succ t;
+
+theorem :: TREES_9:53
+  for f being Function of NAT,NAT st (for n holds f.(n+1) qua
+Element of NAT <= f.n qua Element of NAT) ex m st for n st m <= n holds f.n = f
+  .m;
+
+scheme :: TREES_9:sch 3
+
+  FinDecTree { D() -> non empty set,
+   T() -> (finite-branching DecoratedTree of D()),
+   F(Element of D()) -> Element of NAT }:
+   T() is finite
+provided
+ for t,t9 being Element of dom T(), d being Element of D() st t9 in
+succ t & d = T().t9 holds F(d) < F(T().t);

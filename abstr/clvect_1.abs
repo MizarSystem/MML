@@ -10,16 +10,19 @@ environ
       FUNCT_1, ZFMISC_1, XBOOLE_0, CFUNCT_1, RELAT_1, ARYTM_3, COMPLEX1,
       FUNCT_5, MCART_1, CARD_1, SUPINF_2, ARYTM_1, CARD_3, FINSEQ_1, XXREAL_0,
       TARSKI, XCMPLX_0, RLSUB_1, REALSET1, NORMSP_1, PRE_TOPC, REAL_1,
-      FUNCOP_1, NAT_1, SEQ_2, SEQ_1, XREAL_0, ORDINAL1, ORDINAL2, CLVECT_1;
+      FUNCOP_1, NAT_1, SEQ_2, XREAL_0, ORDINAL1, ORDINAL2, CLVECT_1, NORMSP_0,
+      METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, DOMAIN_1, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
       FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
-      ALGSTR_0, PRE_TOPC, RLVECT_1, PARTFUN1, SEQ_1, SEQ_2, NORMSP_1, CFUNCT_1;
- constructors BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, COMPLEX1, SEQ_2, REALSET1,
-      NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1, ZFMISC_1,
-      CARD_1;
+      ALGSTR_0, PRE_TOPC, RLVECT_1, PARTFUN1, SEQ_1, SEQ_2, NORMSP_0, NORMSP_1,
+      CFUNCT_1;
+ constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
+      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1,
+      RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1,
+      ZFMISC_1, CARD_1, NORMSP_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -101,7 +104,7 @@ canceled;
 
 reserve V,X,Y for ComplexLinearSpace;
 reserve u,u1,u2,v,v1,v2 for VECTOR of V;
-reserve a,b,z,z1,z2 for Complex;
+reserve z,z1,z2 for Complex;
 
 theorem :: CLVECT_1:2
   z = 0 or v = 0.V implies z * v = 0.V;
@@ -282,12 +285,10 @@ theorem :: CLVECT_1:46
   & X is Subspace of V implies V = X;
 
 theorem :: CLVECT_1:47
-  V is Subspace of X & X is Subspace of Y implies V is Subspace of
-  Y;
+  V is Subspace of X & X is Subspace of Y implies V is Subspace of Y;
 
 theorem :: CLVECT_1:48
-  the carrier of W1 c= the carrier of W2 implies W1 is Subspace of
-  W2;
+  the carrier of W1 c= the carrier of W2 implies W1 is Subspace of W2;
 
 theorem :: CLVECT_1:49
   (for v st v in W1 holds v in W2) implies W1 is Subspace of W2;
@@ -459,12 +460,10 @@ theorem :: CLVECT_1:87
   v + W = u + W implies ex v1 st v1 in W & v - v1 = u;
 
 theorem :: CLVECT_1:88
-  for W1,W2 being strict Subspace of V holds v + W1 = v + W2 iff
-  W1 = W2;
+  for W1,W2 being strict Subspace of V holds v + W1 = v + W2 iff W1 = W2;
 
 theorem :: CLVECT_1:89
-  for W1,W2 being strict Subspace of V holds v + W1 = u + W2
-  implies W1 = W2;
+  for W1,W2 being strict Subspace of V holds v + W1 = u + W2 implies W1 = W2;
 
 :: Theorems concerning cosets of subspace
 :: regarded as subsets of the carrier.
@@ -512,45 +511,38 @@ theorem :: CLVECT_1:102
 begin :: Complex Normed Space
 
 definition
-  struct(CLSStruct) CNORMSTR (# carrier -> set, ZeroF -> Element of the
-    carrier, addF -> BinOp of the carrier, Mult -> Function of [:COMPLEX, the
-    carrier:], the carrier, norm -> Function of the carrier, REAL #);
+  struct(CLSStruct,N-ZeroStr) CNORMSTR (# carrier -> set,
+    ZeroF -> Element of the carrier,
+    addF -> BinOp of the carrier, Mult -> Function of [:COMPLEX, the
+    carrier:], the carrier, normF -> Function of the carrier, REAL #);
 end;
 
 registration
   cluster non empty CNORMSTR;
 end;
 
-reserve X for non empty CNORMSTR;
-reserve x for Point of X;
-
 definition
-  let X, x;
-  func ||.x.|| -> Real equals
-:: CLVECT_1:def 13
-  ( the norm of X ).x;
-end;
-
-definition
+ canceled;
   let IT be non empty CNORMSTR;
   attr IT is ComplexNormSpace-like means
 :: CLVECT_1:def 14
 
   for x, y being Point of IT, z
-  holds ( ||.x.|| = 0 iff x = 0.IT ) & ||.z * x.|| = |.z.| * ||.x.|| & ||.x + y
-  .|| <= ||.x.|| + ||.y.||;
+  holds ||.z * x.|| = |.z.| * ||.x.|| & ||.x + y .|| <= ||.x.|| + ||.y.||;
 end;
 
 registration
-  cluster ComplexNormSpace-like vector-distributive scalar-distributive
-  scalar-associative scalar-unital Abelian
-add-associative right_zeroed right_complementable strict (non empty CNORMSTR);
+  cluster reflexive discerning ComplexNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable
+  strict (non empty CNORMSTR);
 end;
 
 definition
-  mode ComplexNormSpace is ComplexNormSpace-like vector-distributive
-  scalar-distributive scalar-associative scalar-unital
-Abelian add-associative right_zeroed right_complementable (non empty CNORMSTR);
+  mode ComplexNormSpace is reflexive discerning ComplexNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable
+    (non empty CNORMSTR);
 end;
 
 reserve CNS for ComplexNormSpace;
@@ -609,19 +601,16 @@ definition
   attr S is convergent means
 :: CLVECT_1:def 16
 
-  ex g st for r st 0 < r ex m st for n st m
-  <= n holds ||.(S.n) - g.|| < r;
+  ex g st for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
 
 canceled;
 
 theorem :: CLVECT_1:115
-  S1 is convergent & S2 is convergent implies S1 + S2 is
-  convergent;
+  S1 is convergent & S2 is convergent implies S1 + S2 is convergent;
 
 theorem :: CLVECT_1:116
-  S1 is convergent & S2 is convergent implies S1 - S2 is
-  convergent;
+  S1 is convergent & S2 is convergent implies S1 - S2 is convergent;
 
 theorem :: CLVECT_1:117
   S is convergent implies S - x is convergent;
@@ -629,19 +618,11 @@ theorem :: CLVECT_1:117
 theorem :: CLVECT_1:118
   S is convergent implies z * S is convergent;
 
-definition
-  let CNS;
-  let S;
-  func ||.S.|| -> Real_Sequence means
-:: CLVECT_1:def 17
-
-  for n holds it.n =||.(S.n).||;
-end;
-
 theorem :: CLVECT_1:119
   S is convergent implies ||.S.|| is convergent;
 
 definition
+ canceled;
   let CNS;
   let S;
   assume
@@ -649,8 +630,7 @@ definition
   func lim S -> Point of CNS means
 :: CLVECT_1:def 18
 
-  for r st 0 < r ex m st for n st m
-  <= n holds ||.(S.n) - it.|| < r;
+  for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
 end;
 
 theorem :: CLVECT_1:120
@@ -670,4 +650,3 @@ theorem :: CLVECT_1:123
 
 theorem :: CLVECT_1:124
   S is convergent implies lim (z * S) = z * (lim S);
-

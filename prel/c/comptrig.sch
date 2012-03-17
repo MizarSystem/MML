@@ -2,8 +2,6 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
@@ -18,8 +16,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="8"/>
 </Cluster>
 </Typ>
 <Not>
@@ -32,8 +30,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="8"/>
 </Cluster>
 </Typ>
 <Not>
@@ -50,8 +48,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="18"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="8"/>
 </Cluster>
 </Typ>
 <Not>

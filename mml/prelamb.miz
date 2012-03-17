@@ -3,7 +3,7 @@
 ::
 :: Received February 13, 1991
 :: Copyright (c) 1991 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, STRUCT_0, BINOP_1, SUBSET_1, FINSEQ_1, FUNCT_1,
@@ -11,37 +11,34 @@ environ
       ORDINAL4, FUNCOP_1, TARSKI, ORDINAL1, XXREAL_0, ARYTM_3, CARD_3, NAT_1,
       REAL_1, FUNCT_5, PRELAMB;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, REAL_1,
-      BINOP_1, RELSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSET_1, MCART_1,
+      BINOP_1, RELSET_1, FINSEQ_1, FINSEQ_2, FINSET_1, MCART_1, STRUCT_0,
       RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FUNCT_5, RVSUM_1, XCMPLX_0, NAT_1,
       TREES_1, TREES_2, XXREAL_0;
  constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, RVSUM_1, TREES_2, MIDSP_1,
-      FUNCT_5, RELSET_1, BINOP_2;
+      FUNCT_5, RELSET_1, BINOP_2, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, MEMBERED, FINSEQ_1, TREES_2, STRUCT_0, VALUED_0, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, XBOOLE_0, BINOP_1;
  theorems FINSEQ_1, ZFMISC_1, TREES_2, FUNCOP_1, FUNCT_2, TARSKI, MCART_1,
-      CARD_1, TREES_1, NAT_1, CARD_2, RVSUM_1, RELAT_1, XBOOLE_1;
+      CARD_1, TREES_1, NAT_1, CARD_2, RVSUM_1, RELAT_1, XBOOLE_1, FINSEQ_2;
  schemes FUNCT_2, FINSEQ_2;
 
-begin
-
-:: PROOFS AND CUT-FREEDOM
-
-reserve D for non empty set;
+begin :: Proofs and cut-freedom
 
 definition
-  struct(1-sorted) typealg(#carrier->set,
-    left_quotient, right_quotient, inner_product->BinOp of the carrier #);
+  struct (1-sorted) typealg
+        (#carrier -> set,
+    left_quotient, right_quotient, inner_product -> BinOp of the carrier #);
 end;
 
 registration
   cluster non empty strict typealg;
   existence
-  proof consider D;
-    consider l,r,i being BinOp of D;
-    take typealg(#D,l,r,i#);
-    thus the carrier of typealg(#D,l,r,i#) is non empty;
+  proof
+    consider l,r,i being BinOp of {{}};
+    take typealg(#{{}},l,r,i#);
+    thus the carrier of typealg(#{{}},l,r,i#) is non empty;
     thus thesis;
   end;
 end;
@@ -52,26 +49,26 @@ definition
 end;
 
 reserve s for non empty typealg,
-  T,X,Y,T9,X9,Y9 for FinSequence of the carrier of s,
+  T,X,Y,T9,X9,Y9 for FinSequence of s,
   x,y,z,y9,z9 for type of s;
 
 definition
   let s,x,y;
   func x\y -> type of s equals
   (the left_quotient of s).(x,y);
-  correctness;
+  coherence;
   func x/"y -> type of s equals
   (the right_quotient of s).(x,y);
-  correctness;
+  coherence;
   func x*y -> type of s equals
   (the inner_product of s).(x,y);
-  correctness;
+  coherence;
 end;
 
 definition
   let s;
-  mode PreProof of s is finite DecoratedTree of [:[: (the carrier of s)*
-    , the carrier of s :], NAT :];
+  mode PreProof of s is finite DecoratedTree of [:[: (the carrier of s)*,
+    the carrier of s :], NAT :];
 end;
 
 reserve Tr for PreProof of s;
@@ -165,8 +162,8 @@ definition
   let s,x such that
 A1: s is free;
   func repr_of x -> finite DecoratedTree of the carrier of s means
-  for Tr being finite DecoratedTree of
-  the carrier of s holds Tr represents x iff it = Tr;
+  for Tr being finite DecoratedTree of the carrier of s holds
+    Tr represents x iff it = Tr;
   existence by A1,Def11;
   uniqueness
   proof
@@ -179,11 +176,12 @@ A3: for Tr being finite DecoratedTree of
     hence thesis by A3;
   end;
 end;
-deffunc PAIRSOF(typealg) =[: (the carrier of $1)*, the carrier of $1 :];
+
+deffunc PAIRSOF(typealg) = [: (the carrier of $1)*, the carrier of $1 :];
 
 definition
   let s;
-  let f be FinSequence of the carrier of s;
+  let f be FinSequence of s;
   let t be type of s;
   redefine func [f,t] -> Element of [:(the carrier of s)*, the carrier of s:];
   coherence
@@ -244,8 +242,7 @@ A1: succ v <> {} by CARD_1:47,TREES_2:def 13;
   x in succ v by A1;
   then x in {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
   by TREES_2:def 5;
-  then consider n being Element of NAT such that
-  x = v^<*n*> and
+  then consider n being Element of NAT such that x = v^<*n*> and
 A2: v^<*n*> in dom p;
   0 <= n by NAT_1:2;
   hence thesis by A2,TREES_1:def 5;
@@ -307,8 +304,7 @@ A1: v is correct by Def13;
   assume
 A2: (p.v)`2 = 2;
   then
-A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1,
-  Def5;
+A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1,Def5;
   branchdeg v = 1 by A1,A2,Def5;
   then v^<*0*> in dom p by Th1;
   hence thesis by A3;
@@ -428,48 +424,28 @@ definition
   uniqueness
   proof
     let f,g be Function of the carrier of s, NAT;
+    deffunc F(type of s) = card dom repr_of $1;
     assume that
-A1: f.x = card dom repr_of x and
-A2: g.x = card dom repr_of x;
+A1: f.x = F(x) and
+A2: g.x = F(x);
     now
       let c be Element of s;
-      thus f.c = card dom repr_of c by A1
+      thus f.c = F(c) by A1
         .= g.c by A2;
     end;
     hence f = g by FUNCT_2:113;
   end;
 end;
 
-Lm1: for D being non empty set, T being FinSequence of D,
-f being Function of D,NAT holds f*T is FinSequence of NAT
-proof
-  let D be non empty set, T be FinSequence of D;
-  let f be Function of D, NAT;
-A1: rng T c= D by FINSEQ_1:def 4;
-  dom f = D by FUNCT_2:def 1;
-  then
-A2: f*T is FinSequence by A1,FINSEQ_1:20;
-  rng (f*T) c= NAT by RELAT_1:def 19;
-  hence thesis by A2,FINSEQ_1:def 4;
-end;
-
-Lm2: for D being non empty set, T being FinSequence of D,
-f being Function of D,NAT holds f*T is FinSequence of REAL
-proof
-  let D be non empty set, T be FinSequence of D;
-  let f be Function of D, NAT;
-A1: rng T c= D by FINSEQ_1:def 4;
-  dom f = D by FUNCT_2:def 1;
-  then
-A2: f*T is FinSequence by A1,FINSEQ_1:20;
-  rng (f*T) c= REAL;
-  hence thesis by A2,FINSEQ_1:def 4;
-end;
-
 definition
   let D be non empty set, T be FinSequence of D, f be Function of D,NAT;
   redefine func f*T -> FinSequence of REAL;
-  coherence by Lm2;
+  coherence
+proof
+A1: f*T is FinSequence of NAT by FINSEQ_2:36;
+  rng (f*T) c= REAL;
+  hence thesis by A1,FINSEQ_1:def 4;
+end;
 end;
 
 Lm3: for D being non empty set, T being FinSequence of D
@@ -500,9 +476,8 @@ A6: rng <*x*> c= NAT by A4,XBOOLE_1:1;
     Sum(p^<*x*>) = s + n by RVSUM_1:104;
     hence thesis;
   end;
-A7: for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2
-  );
-  f*T is FinSequence of NAT by Lm1;
+A7: for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2);
+  f*T is FinSequence of NAT by FINSEQ_2:36;
   hence thesis by A7;
 end;
 
@@ -550,14 +525,12 @@ A7:   (p.u)`1 = [X^<*y*>^Y,z] by Th10;
       assume (p.{})`2 = 7;
       given T,X,Y,y,z such that
 A8:   (p.{})`1 = [X^T^Y,z] and
-A9:   (p.<*0*>)`1 = [T,y]
-      and (p.<*1*>)`1 = [X^<*y*>^Y,z] and
+A9:   (p.<*0*>)`1 = [T,y] and (p.<*1*>)`1 = [X^<*y*>^Y,z] and
 A10:  r1 = (size_w.r.t. s).y + (size_w.r.t. s).z + Sum((size_w.r.t. s)*(X
       ^T^Y));
       given T9,X9,Y9,y9,z9 such that
 A11:  (p.{})`1 = [X9^T9^Y9,z9] and
-A12:  (p.<*0*>)`1 = [T9,y9]
-      and (p.<*1*>)`1 = [X9^<*y9*>^Y9,z9] and
+A12:  (p.<*0*>)`1 = [T9,y9] and (p.<*1*>)`1 = [X9^<*y9*>^Y9,z9] and
 A13:  r2 = (size_w.r.t. s).y9 + (size_w.r.t. s).z9 + Sum((size_w.r.t. s)*
       (X9^T9^Y9));
 A14:  X^T^Y = [X^T^Y,z]`1 by MCART_1:7
@@ -572,8 +545,8 @@ A15:  y = [T,y]`2 by MCART_1:7
   end;
   consistency;
 end;
-
-::MODELS FOR THE LAMBEK CALCULUS
+ 
+:: Models for the Lambek calculus
 
 reserve A for non empty set,
   a,a1,a2,b for Element of A*;
@@ -611,8 +584,7 @@ A3: {} is Element of A* by FINSEQ_1:66;
       proof
         let t be set;
         assume t in f.(x*y);
-        then t = {} by A1;
-        then
+        then t = {} by A1; then
 A4:     t = {}^{};
 A5:     {} in f.x by A2;
         {} in f.y by A2;
@@ -685,22 +657,22 @@ A15:  for b st b in f.y holds b ^ a in f.x;
     end;
   end;
 end;
-
-::AXIOMS, RULES, AND SOME OF THEIR CONSEQUENCES
+ 
+:: Axioms, rules, and some of their consequences
 
 definition
-  struct(typealg) typestr (# carrier->set,
-    left_quotient, right_quotient, inner_product->BinOp of the carrier,
+  struct(typealg) typestr (# carrier -> set,
+    left_quotient, right_quotient, inner_product -> BinOp of the carrier,
     derivability -> Relation of (the carrier)*,the carrier #);
 end;
 
 registration
   cluster non empty strict typestr;
   existence
-  proof consider D;
-    consider l,r,i being BinOp of D, d being Relation of D*,D;
-    take typestr(#D,l,r,i,d#);
-    thus the carrier of typestr(#D,l,r,i,d#) is non empty;
+  proof
+    consider l,r,i being BinOp of {{}}, d being Relation of {{}}*,{{}};
+    take typestr(#{{}},l,r,i,d#);
+    thus the carrier of typestr(#{{}},l,r,i,d#) is non empty;
     thus thesis;
   end;
 end;
@@ -710,7 +682,7 @@ reserve s for non empty typestr,
 
 definition
   let s;
-  let f be FinSequence of the carrier of s, x;
+  let f be FinSequence of s, x;
   pred f ==>. x means
   :Def18:
   [f,x] in the derivability of s;
@@ -721,17 +693,17 @@ definition
   attr IT is SynTypes_Calculus-like means
   :Def19:
   (for x being type of IT holds <*x*> ==>. x) &
-  (for T being FinSequence of the carrier of IT, x,y being type of IT
+  (for T being FinSequence of IT, x,y being type of IT
   st T^<*y*> ==>. x holds T ==>. x/"y) &
-  (for T being FinSequence of the carrier of IT, x,y being type of IT
+  (for T being FinSequence of IT, x,y being type of IT
   st <*y*>^T ==>. x holds T ==>. y\x) &
-  (for T,X,Y being FinSequence of the carrier of IT, x,y,z being type of IT
+  (for T,X,Y being FinSequence of IT, x,y,z being type of IT
   st T ==>. y & X^<*x*>^Y ==>. z holds X^<*x/"y*>^T^Y ==>. z) &
-  (for T,X,Y being FinSequence of the carrier of IT, x,y,z being type of IT
+  (for T,X,Y being FinSequence of IT, x,y,z being type of IT
   st T ==>. y & X^<*x*>^Y ==>. z holds X^T^<*y\x*>^Y ==>. z) &
-  (for X,Y being FinSequence of the carrier of IT, x,y,z being type of IT
+  (for X,Y being FinSequence of IT, x,y,z being type of IT
   st X^<*x*>^<*y*>^Y ==>. z holds X^<*x*y*>^Y ==>.z) &
-  for X,Y being FinSequence of the carrier of IT, x,y being type of IT
+  for X,Y being FinSequence of IT, x,y being type of IT
   st X ==>. x & Y ==>. y holds X^Y ==>. x*y;
 end;
 
@@ -743,10 +715,9 @@ registration
     then reconsider DER = [:1*,1:] as non empty Relation of 1*,1;
     reconsider EM = typestr (#1,op2,op2,op2,DER#) as non empty typestr;
     take EM;
-A1: for x being type of EM, X being FinSequence of the carrier of EM
-    holds X ==>. x
+A1: for x being type of EM, X being FinSequence of EM holds X ==>. x
     proof
-      let x be type of EM, X be FinSequence of the carrier of EM;
+      let x be type of EM, X be FinSequence of EM;
       [X,x] in [:1*,1:];
       hence thesis by Def18;
     end;
@@ -760,8 +731,9 @@ definition
 end;
 
 reserve s for SynTypes_Calculus,
-  T,X,Y for FinSequence of the carrier of s,
+  T,X,Y for FinSequence of s,
   x,y,z for type of s;
+
 deffunc e(typestr) = <*>the carrier of $1;
 
 Lm4: T ==>. y & X^<*x*> ==>. z implies X^<*x/"y*>^T ==>. z
@@ -935,8 +907,8 @@ proof
 end;
 
 theorem
-  <*>the carrier of s ==>. (y/"(x\y))/"x & <*>the carrier of s ==>. x\((y/"x )
-  \ y )
+  <*>the carrier of s ==>. (y/"(x\y))/"x &
+  <*>the carrier of s ==>. x\((y/"x)\ y )
 proof
 A1: <*x*> ==>. y/"(x\y) by Th13;
   <*x*> ==>. (y/"x)\y by Th13;
@@ -983,14 +955,11 @@ definition
   pred x <==>. y means
   :Def20:
   <*x*> ==>. y & <*y*> ==>. x;
+  reflexivity by Def19;
+  symmetry;
 end;
 
-theorem
-  x <==>. x
-proof
-  <*x*> ==>. x by Def19;
-  hence thesis by Def20;
-end;
+canceled;
 
 theorem
   x/"y <==>. x/"((x/"y)\x)
@@ -1020,11 +989,10 @@ A4: <*x/"(z*y)*> ==>. (x/"y)/"z by Def19;
 end;
 
 theorem
-  <*x*(y/"z)*> ==>. (x*y)/"z ::and analogously <*z\y*x*> > z\(y*x)
+  <*x*(y/"z)*> ==>. (x*y)/"z :: and analogously <*z\y*x*> > z\(y*x)
 proof
 A1: <*x*> ==>. x by Def19;
-  <*y*> ==>. y by Def19;
-  then
+  <*y*> ==>. y by Def19; then
 A2: <*x*>^<*y*> ==>. x*y by A1,Def19;
   <*z*> ==>. z by Def19;
   then <*x*>^<*y/"z*>^<*z*> ==>. x*y by A2,Lm4;
@@ -1061,4 +1029,3 @@ A4: <*x*(y*z)*> ==>. (x*y)*z by Lm12;
   then <*x*y*z*> ==>. x*(y*z) by Lm12;
   hence thesis by A4,Def20;
 end;
-

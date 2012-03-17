@@ -14,13 +14,13 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       INT_1, FINSET_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2, FUNCT_4, FINSEQ_1,
       FINSEQ_2, FUNCOP_1, PARTFUN1, GR_CY_1, FINSEQ_4, RELAT_1, UNIALG_1,
-      COMPUT_1, XXREAL_0, REAL_1, NAT_1;
+      COMPUT_1, XXREAL_0, REAL_1, NAT_1, MARGREL1;
  constructors DOMAIN_1, REAL_1, BINOP_2, FINSEQ_4, FINSOP_1, GR_CY_1, COMPUT_1,
-      RECDEF_1, RELSET_1;
+      RECDEF_1, RELSET_1, UNIALG_1, MARGREL1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FINSET_1, NUMBERS, XREAL_0, INT_1, COMPUT_1;
+      FINSET_1, NUMBERS, XREAL_0, INT_1, COMPUT_1, MARGREL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions GR_CY_1, COMPUT_1, FUNCOP_1;
+ definitions GR_CY_1, COMPUT_1, FUNCOP_1, MARGREL1;
  theorems FUNCOP_1, FUNCT_4, ZFMISC_1, TARSKI, FUNCT_2, INT_1, MCART_1, NAT_1,
       RELSET_1, PARTFUN1, DOMAIN_1, CQC_THE1, ENUMSET1, FINSEQ_2, FINSEQ_1,
       FINSEQ_3, FUNCT_1, RELAT_1, FINSEQ_6, FINSEQ_7, COMPUT_1, FINSEQ_4,
@@ -105,13 +105,11 @@ theorem Th1: :: GR_CY 10
 proof
   thus k in SegM n implies k <= n
   proof
-    assume
-    k in SegM n;
+    assume k in SegM n;
     then ex i st k=i & i <= n;
     hence thesis;
   end;
-  assume
-  k <= n;
+  assume k <= n;
   hence thesis;
 end;
 
@@ -121,8 +119,7 @@ theorem Th2:
 proof
   let f be Function,x,y,z,u,v be set;
   set p=[x,y] .--> z;
-  assume
-  u <> x;
+  assume u <> x;
   then
 A1: [u,v]<>[x,y] by ZFMISC_1:33;
   dom p ={ [x,y] } by FUNCOP_1:19;
@@ -136,8 +133,7 @@ theorem Th3:
 proof
   let f be Function,x,y,z,u,v be set;
   set p=[x,y] .--> z;
-  assume
-  v <> y;
+  assume v <> y;
   then
 A1: [u,v]<>[x,y] by ZFMISC_1:33;
   dom p ={ [x,y] } by FUNCOP_1:19;
@@ -145,7 +141,7 @@ A1: [u,v]<>[x,y] by ZFMISC_1:33;
   hence thesis by FUNCT_4:12;
 end;
 
-reserve i1,i2,i3,i4 for Element of INT;
+
 
 canceled 3;
 
@@ -298,8 +294,7 @@ definition
 Funcs(INT,
   the Symbols of T) :] means
   :Def8:
-  it.0 = s & for i being Nat holds it.(i+1) =
-  Following(it.i);
+  it.0 = s & for i being Nat holds it.(i+1) = Following(it.i);
   existence
   proof
     deffunc U(set,All-State of T) = Following $2;
@@ -407,8 +402,7 @@ definition
   let T be TuringStr, s be All-State of T;
   attr s is Accept-Halt means
   :Def9:
-  ex k st ((Computation s).k)`1 = the
-  AcceptS of T;
+  ex k st ((Computation s).k)`1 = the AcceptS of T;
 end;
 
 definition
@@ -416,17 +410,14 @@ definition
 A1: s is Accept-Halt;
   func Result s -> All-State of T means
   :Def10:
-  ex k st it = (Computation s).k
-  & ((Computation s).k)`1 = the AcceptS of T;
+  ex k st it = (Computation s).k & ((Computation s).k)`1 = the AcceptS of T;
   uniqueness
   proof
     let s1,s2 be All-State of T;
     given k1 being Element of NAT such that
-A2: s1 = (Computation s).k1 & ((Computation s).k1)`1 = the AcceptS of
-    T;
+A2: s1 = (Computation s).k1 & ((Computation s).k1)`1 = the AcceptS of T;
     given k2 being Element of NAT such that
-A3: s2 = (Computation s).k2 & ((Computation s).k2)`1 = the AcceptS of
-    T;
+A3: s2 = (Computation s).k2 & ((Computation s).k2)`1 = the AcceptS of T;
     k1 <= k2 or k2 <= k1;
     hence thesis by A2,A3,Th15;
   end;
@@ -463,8 +454,7 @@ definition
   let A, B be non empty set, y be set such that
 A1: y in B;
   func id(A, B, y) -> Function of A, [: A, B :] means
-  for x be Element of A
-  holds it.x=[x,y];
+  for x be Element of A holds it.x=[x,y];
   existence
   proof
     reconsider yy=y as Element of B by A1;
@@ -578,8 +568,7 @@ definition
   let T be TuringStr, t be Tape of T, i,j be Integer;
   pred t is_1_between i,j means
   :Def13:
-  t.i=0 & t.j=0 & for k be Integer st i
-  < k & k < j holds t.k=1;
+  t.i=0 & t.j=0 & for k be Integer st i < k & k < j holds t.k=1;
 end;
 
 definition
@@ -633,8 +622,7 @@ t storeData <*s,n *> holds t.s=0 & t.(s+n+2)=0 & for i be Integer st s < i & i
   < s+n+2 holds t.i=1
 proof
   let T be TuringStr, t be Tape of T, s,n be Element of NAT;
-  assume
-  t storeData <*s,n*>;
+  assume t storeData <*s,n*>;
   then
 A1: t is_1_between s,s+n+2 by Th18;
   hence t.s=0 & t.(s+n+2)=0 by Def13;
@@ -664,8 +652,7 @@ i be Integer st s < i & i < s+n1+2 holds t.i=1) & for i be Integer st s+n1+2 <
   i & i < s+n1+n2+4 holds t.i=1
 proof
   let T be TuringStr, t be Tape of T, s,n1,n2 be Element of NAT;
-  assume
-  t storeData <*s,n1,n2 *>;
+  assume t storeData <*s,n1,n2 *>;
   then
 A1: t is_1_between s,s+n1+2 & t is_1_between s+n1+2,s+n1+n2+4 by Th21;
   hence t.s=0 & t.(s+n1+2)=0 & t.(s+n1+n2+4)=0 by Def13;
@@ -858,8 +845,7 @@ proof
 FUNCT_2:def 2;
   then
 A1: h in dom t by INT_1:def 2;
-  assume
-  t.h=s;
+  assume t.h=s;
   hence thesis by A1,FUNCT_7:98;
 end;
 
@@ -885,7 +871,6 @@ end;
 Lm3: for s being All-State of SumTuring, p,h,t be set st s=[p,h,t] & p <> 5
 holds Following s = [(TRAN(s))`1,Head(s)+ offset TRAN(s),Tape-Chg(s`3,Head(s),(
 TRAN(s))`2)]
-
 proof
   let s be All-State of SumTuring, p,h,t be set;
   assume
@@ -904,8 +889,7 @@ proof
   set t1=Tape-Chg(t,h,s), p=h .--> s;
   thus t1.h=s by FUNCT_7:96;
 A1: dom p ={ h } by FUNCOP_1:19;
-  assume
-  i <> h;
+  assume i <> h;
   then not i in dom p by A1,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
 end;
@@ -914,12 +898,9 @@ Lm4: for tm being TuringStr,s be All-State of tm, p be State of tm, h be
 Element of INT,t be Tape of tm, m,d be Element of NAT st d=h & 1 is Symbol of
 tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,1,1] & p <> the AcceptS of tm & (for
 i be Integer st d <= i & i < d+m holds t.i=1) holds (Computation s).m=[p,d+m,t]
-
 proof
-
   let tm be TuringStr,s be All-State of tm, p be State of tm, h be Element of
   INT,t be Tape of tm, m,d be Element of NAT;
-
   assume that
 A1: d=h and
 A2: 1 is Symbol of tm and
@@ -927,10 +908,8 @@ A3: s=[p,h,t] and
 A4: (the Tran of tm).[p,1]=[p,1,1] and
 A5: p <> the AcceptS of tm and
 A6: for i be Integer st d <= i & i < d+m holds t.i=1;
-
   defpred Q[Element of NAT] means $1 <= m implies (Computation s).$1=[p,d+$1,t
   ];
-
 A7: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT;
@@ -953,10 +932,8 @@ A11:  TRAN(sk) =(the Tran of tm).[p,tt.Head(sk)] by MCART_1:68
         .=[p,1,1] by A4,A10,MCART_1:68;
       then
 A12:  offset TRAN(sk)=1 by MCART_1:68;
-
 A13:  Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2)=Tape-Chg(t,Head(sk), (TRAN(sk
       ))`2) by MCART_1:68
-
         .=Tape-Chg(t,dk,(TRAN(sk))`2) by MCART_1:68
         .=Tape-Chg(t,dk,T) by A11,MCART_1:68
         .=t by A10,Th28;
@@ -1467,7 +1444,6 @@ end;
 Lm7: for s being All-State of SuccTuring, p,h,t be set st s=[p,h,t] & p <> 4
 holds Following s = [(TRAN(s))`1, Head(s)+ offset TRAN(s), Tape-Chg(s`3, Head(s
 ),(TRAN(s))`2)]
-
 proof
   let s be All-State of SuccTuring, p,h,t be set;
   assume
@@ -1781,7 +1757,7 @@ A2: s=[the InitS of SuccTuring,h,t] and
 A3: t storeData <*h*>^x;
 A4: s = [0,h,t] by A2,Def18;
 A5: dom sc = 1-tuples_on NAT by COMPUT_1:def 10;
-    x is Tuple of 1,NAT by A1,A5,FINSEQ_2:151;
+    then x is Tuple of 1,NAT by A1,FINSEQ_2:151;
     then consider i such that
 A6: x = <*i*> by FINSEQ_2:117;
 A7: <*h*>^x=<*h,i*> by A6,FINSEQ_1:def 9;
@@ -1854,7 +1830,7 @@ definition
   func ZeroTuring -> strict TuringStr means
   :Def20:
   the Symbols of it = { 0,1
-} & the FStates of it = SegM 4 & the Tran of it = Zero_Tran & the InitS of 
+} & the FStates of it = SegM 4 & the Tran of it = Zero_Tran & the InitS of
 it =
   0 & the AcceptS of it = 4;
   existence
@@ -1887,7 +1863,6 @@ end;
 Lm10: for s being All-State of ZeroTuring, p,h,t be set st s=[p,h,t] & p <> 4
 holds Following s = [(TRAN(s))`1, Head(s)+ offset TRAN(s), Tape-Chg(s`3, Head(s
 ),(TRAN(s))`2)]
-
 proof
   let s be All-State of ZeroTuring, p,h,t be set;
   assume
@@ -1942,8 +1917,7 @@ A13: h+1+1=h+0+2;
 A14: t3.(h+1)=1 by Th30;
 A15: now
     let k be Integer;
-    assume
-    h < k & k < h+0+2;
+    assume h < k & k < h+0+2;
     then h+1 <= k & k <= h+1 by A13,INT_1:20;
     hence t3.k=1 by A14,XXREAL_0:1;
   end;
@@ -2133,7 +2107,7 @@ definition
   func U3(n)Turing -> strict TuringStr means
   :Def22:
   the Symbols of it = { 0,1
-} & the FStates of it = SegM 3 & the Tran of it = U3(n)Tran & the InitS of 
+} & the FStates of it = SegM 3 & the Tran of it = U3(n)Tran & the InitS of
 it =
   0 & the AcceptS of it = 3;
   existence
@@ -2166,7 +2140,6 @@ end;
 Lm13: for s being All-State of U3(n)Turing, p,h,t be set st s=[p,h,t] & p <> 3
 holds Following s = [(TRAN(s))`1, Head(s)+ offset TRAN(s),Tape-Chg(s`3,Head(s),
 (TRAN(s))`2)]
-
 proof
   let s be All-State of U3(n)Turing, p,h,t be set;
   assume
@@ -2181,12 +2154,9 @@ tm & s=[p,h,t] & (the Tran of tm).[p,1]=[p,0,1] & p <> the AcceptS of tm & (for
 i be Integer st d <= i & i < d+m holds t.i=1) holds ex t1 being Tape of tm st (
 Computation s).m=[p,d+m,t1] & (for i be Integer st d <= i & i < d+m holds t1.i=
 0) & for i be Integer st d > i or i >= d+m holds t1.i=t.i
-
 proof
-
   let tm be TuringStr,s be All-State of tm, p be State of tm, h be Element of
   INT,t be Tape of tm, m,d be Element of NAT;
-
   assume that
 A1: d=h and
 A2: 0 is Symbol of tm and
@@ -2194,12 +2164,9 @@ A3: s=[p,h,t] and
 A4: (the Tran of tm).[p,1]=[p,0,1] and
 A5: p <> the AcceptS of tm and
 A6: for i be Integer st d <= i & i < d+m holds t.i=1;
-
   defpred Q[Element of NAT] means $1 <= m implies ex t1 being Tape of tm st (
-
 Computation s).$1=[p,d+$1,t1] & (for i be Integer st d <= i & i < d+$1 holds t1
   .i=0) & (for i be Integer st d > i or i >= d+$1 holds t1.i=t.i);
-
 A7: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT;
@@ -2214,9 +2181,7 @@ A9:   k+1 <= m;
       then consider t1 being Tape of tm such that
 A10:  (Computation s).k=[p,d+k,t1] and
 A11:  for i be Integer st d <= i & i < d+k holds t1.i=0 and
-
 A12:  for i be Integer st d > i or i >= d+k holds t1.i=t.i by A8,NAT_1:13;
-
       k < m by A9,NAT_1:13;
       then
 A13:  dk < d+m by XREAL_1:10;
@@ -2230,10 +2195,8 @@ A15:  TRAN(sk) =(the Tran of tm).[p,tt.Head(sk)] by MCART_1:68
         .=[p,0,1] by A4,A14,MCART_1:68;
       then
 A16:  offset TRAN(sk)=1 by MCART_1:68;
-
 A17:  Tape-Chg(sk`3, Head(sk),(TRAN(sk))`2) =Tape-Chg(t1,Head(sk),(TRAN(
       sk))`2) by MCART_1:68
-
         .=Tape-Chg(t1,dk,(TRAN(sk))`2) by MCART_1:68
         .=t2 by A15,MCART_1:68;
       thus (Computation s).(k+1)=Following sk by A10,Def8
@@ -2288,8 +2251,7 @@ A26:      i > d+k by A24,XXREAL_0:2;
   end;
 A27: Q[0]
   proof
-    assume
-    0 <= m;
+    assume 0 <= m;
     take t1=t;
     thus (Computation s).0=[p,d+0,t1] by A1,A3,Def8;
     thus for i be Integer st d <= i & i < d+0 holds t1.i=0;
@@ -2509,8 +2471,8 @@ t2 ] in UnionSt(t1,t2) & [ the AcceptS of t1,the AcceptS of t2 ] in UnionSt(t1,
 proof
   let t1,t2 be TuringStr;
   set p0=the InitS of t1, q0=the InitS of t2, p1=the AcceptS of t1, q1=the
-AcceptS of t2, A= [: the FStates of t1, { q0 } :], 
-   B= [: {p1}, the FStates 
+AcceptS of t2, A= [: the FStates of t1, { q0 } :],
+   B= [: {p1}, the FStates
 of t2
   :];
   reconsider q=q0 as Element of { q0 } by TARSKI:def 1;
@@ -2548,7 +2510,7 @@ theorem Th47:
   x1 be State of s, x2 be State of t st x=[x1, x2]
 proof
   let s,t be TuringStr,x be Element of UnionSt(s,t);
-  set q0=the InitS of t, p1=the AcceptS of s, 
+  set q0=the InitS of t, p1=the AcceptS of s,
   A= [: the FStates of s, { q0 } :]
   , B= [: { p1 }, the FStates of t :];
   per cases by XBOOLE_0:def 3;
@@ -2607,7 +2569,7 @@ definition
     ex x1 being State of s, x2 be State of t st x=[x1, x2] by Th47;
     hence thesis by MCART_1:def 1;
   end;
-  func x`2 -> State of t;
+  redefine func x`2 -> State of t;
   coherence
   proof
     ex x1 being State of s, x2 be State of t st x=[x1, x2] by Th47;
@@ -2722,8 +2684,7 @@ definition
   let T1,T2 be TuringStr;
   func T1 ';' T2 -> strict TuringStr means
   :Def32:
-  the Symbols of it = (the
-  Symbols of T1) \/ the Symbols of T2 & 
+  the Symbols of it = (the Symbols of T1) \/ the Symbols of T2 &
   the FStates of it = UnionSt(T1,T2) & the
 Tran of it = UnionTran(T1,T2) & the InitS of it = [the InitS of T1,the InitS of
   T2] & the AcceptS of it = [the AcceptS of T1,the AcceptS of T2];
@@ -2851,8 +2812,7 @@ A13:  i < k by A11,XXREAL_0:2;
 A14:  p <> pF by A8;
 A15:  s3i`1 <> the AcceptS of tm1 ';' tm2
       proof
-        assume
-        s3i`1 = the AcceptS of tm1 ';' tm2;
+        assume s3i`1 = the AcceptS of tm1 ';' tm2;
         then [p,q0] = [pF,qF] by A10,A12,A11,Def32,XXREAL_0:2;
         hence contradiction by A14,ZFMISC_1:33;
       end;
@@ -2882,8 +2842,7 @@ A19:  s1i1=Following s1i by Def8
 A20: s3=[[p0,q0],h,t] by A5,Def32;
 A21: P[0]
   proof
-    assume
-    0 <= k;
+    assume 0 <= k;
 A22: ((Computation s3).0)`1=s3`1 by Def8
       .=[p0,q0] by A20,MCART_1:68;
     ((Computation s1).0)`1=s1`1 by Def8
@@ -2936,8 +2895,7 @@ A33:  g`2=f`2 by MCART_1:def 6;
 A34:  q <> qF by A27;
 A35:  ski`1 <> the AcceptS of tm1 ';' tm2
       proof
-        assume
-        ski`1 = the AcceptS of tm1 ';' tm2;
+        assume ski`1 = the AcceptS of tm1 ';' tm2;
         then [pF,q] = [pF,qF] by A29,A31,A30,Def32,XXREAL_0:2;
         hence contradiction by A34,ZFMISC_1:33;
       end;
@@ -2965,8 +2923,7 @@ A39: (Computation s3).(k+m)=skm by Th13;
 A40: [s1k`1,q0]=s3k`1 by A23;
 A41: Q[0]
   proof
-    assume
-    0 <= m;
+    assume 0 <= m;
     thus [pF,((Computation s2).0)`1]=[pF,s2`1] by Def8
       .=[pF,q0] by A4,MCART_1:68
       .=((Computation s3k).0)`1 by A6,A40,Def8;
@@ -3025,8 +2982,7 @@ A2: t1 storeData f;
   now
     let i be Element of NAT;
     set m=Sum Prefix(f,i)+2*(i-1), n=Sum Prefix(f,i+1)+2*i;
-    assume
-    1 <= i & i < len f;
+    assume 1 <= i & i < len f;
     then
 A3: t1 is_1_between m,n by A2,Def14;
     then
@@ -3040,12 +2996,9 @@ end;
 Lm15: for s being All-State of ZeroTuring, t be Tape of ZeroTuring, head, n be
 Element of NAT st s=[0,head,t] & t storeData <*head,n*> holds s is Accept-Halt
 & (Result s)`2=head & (Result s)`3 storeData <*head,0*>
-
 proof
-
   let s be All-State of ZeroTuring, t be Tape of ZeroTuring, h,n be Element of
   NAT;
-
   assume that
 A1: s=[0,h,t] and
 A2: t storeData <*h,n*>;
@@ -3090,4 +3043,3 @@ A9: s2 is Accept-Halt by A7,A5,Th36;
   (Result s)`3=(Result s2)`3 by A4,A9,A6,Th50;
   hence thesis by A8,Th53;
 end;
-

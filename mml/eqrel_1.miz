@@ -8,23 +8,26 @@ environ
 
  vocabularies NUMBERS, SUBSET_1, RELAT_1, ZFMISC_1, SETFAM_1, TARSKI, PARTFUN1,
       RELAT_2, XBOOLE_0, FINSEQ_1, XXREAL_0, FUNCT_1, ARYTM_3, ORDINAL4,
-      ARYTM_1, NAT_1, CARD_1, EQREL_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, PARTFUN1;
+      ARYTM_1, NAT_1, CARD_1, EQREL_1, MCART_1, CARD_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, DOMAIN_1, SUBSET_1, XCMPLX_0,
+      XXREAL_0, RELAT_1, RELAT_2, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1,
+      FUNCT_3, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1;
  constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      RELSET_1;
+      RELSET_1, FUNCT_3, BINOP_1, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, PARTFUN1, XXREAL_0, XREAL_0, FINSEQ_1,
-      RELAT_1, ORDINAL1, RELSET_1;
+      RELAT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCT_3, ZFMISC_1, FUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, RELAT_1, RELAT_2, XBOOLE_0, PARTFUN1, SETFAM_1;
+ definitions TARSKI, RELAT_1, RELAT_2, XBOOLE_0, PARTFUN1, SETFAM_1, SUBSET_1,
+      BINOP_1;
  theorems RELAT_1, RELAT_2, RELSET_1, SETFAM_1, ZFMISC_1, TARSKI, FINSEQ_1,
-      NAT_1, XBOOLE_0, XBOOLE_1, ORDERS_1, PARTFUN1, XREAL_1, XXREAL_0;
- schemes SUBSET_1, RELSET_1, FINSEQ_1, NAT_1;
+      NAT_1, XBOOLE_0, XBOOLE_1, ORDERS_1, PARTFUN1, XREAL_1, XXREAL_0,
+      FUNCT_1, FUNCT_3, FUNCT_2, MCART_1, SUBSET_1, SETWISEO;
+ schemes SUBSET_1, RELSET_1, FINSEQ_1, NAT_1, FUNCT_2;
 
 begin
 
-reserve X,Y,Z,x,y,y1,y2,z for set;
-reserve i,j,k for Element of NAT;
+reserve X,Y,Z,x,y,z for set;
+reserve i,j for Element of NAT;
 reserve A,B,C for Subset of X;
 reserve R,R1,R2 for Relation of X;
 reserve AX for Subset of [:X,X:];
@@ -52,14 +55,12 @@ registration
     thus X c= dom nabla X
     proof
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then [x,x] in [:X,X:] by ZFMISC_1:106;
       hence thesis by RELAT_1:def 4;
     end;
     let x;
-    assume
-    x in field nabla X;
+    assume x in field nabla X;
     then x in dom nabla X \/ rng nabla X;
     hence thesis by ZFMISC_1:106;
   end;
@@ -74,7 +75,7 @@ definition
     R1 /\ R2 c= [:X,X:];
     hence thesis;
   end;
-  func R1 \/ R2 -> Relation of X;
+  redefine func R1 \/ R2 -> Relation of X;
   coherence
   proof
     R1 \/ R2 c= [:X,X:];
@@ -88,8 +89,7 @@ theorem
 canceled 2;
 
 theorem
-  id X is_reflexive_in X & id X is_symmetric_in X & id X
-  is_transitive_in X
+  id X is_reflexive_in X & id X is_symmetric_in X & id X is_transitive_in X
 proof
   thus for x st x in X holds [x,x] in id X by RELAT_1:def 10;
   thus for x,y st x in X & y in X & [x,y] in id X holds [y,x] in id X by
@@ -134,8 +134,7 @@ reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
 
 Lm1: [x,y] in R implies x in X & y in X
 proof
-  assume
-  [x,y] in R;
+  assume [x,y] in R;
   then x in dom R & y in rng R by RELAT_1:20;
   hence thesis;
 end;
@@ -143,8 +142,7 @@ end;
 canceled 3;
 
 theorem Th11:
-  for R being total reflexive Relation of X holds x in X implies [
-  x,x] in R
+  for R being total reflexive Relation of X holds x in X implies [ x,x] in R
 proof
   let R be total reflexive Relation of X;
   field R = X by ORDERS_1:97;
@@ -153,8 +151,7 @@ proof
 end;
 
 theorem Th12:
-  for R being total symmetric Relation of X holds [x,y] in R
-  implies [y,x] in R
+  for R being total symmetric Relation of X holds [x,y] in R implies [y,x] in R
 proof
   let R be total symmetric Relation of X;
   field R = X by ORDERS_1:97;
@@ -184,7 +181,7 @@ end;
 
 theorem
   for R being total reflexive Relation of X holds (ex x being set st x
-  in X) implies R <> {} by Th11;
+  in X) implies R <> {};
 
 canceled;
 
@@ -229,8 +226,7 @@ theorem
 proof
   now
     let x,y;
-    assume
-    [x,y] in id X;
+    assume [x,y] in id X;
     then x in X & x = y by RELAT_1:def 10;
     hence [x,y] in EqR by Th11;
   end;
@@ -257,8 +253,7 @@ A3: XX is_symmetric_in X
 A4: [x,y] in XX;
     now
       let Y;
-      assume
-      Y in SFXX;
+      assume Y in SFXX;
       then Y is Equivalence_Relation of X & [x,y] in Y by A2,A4,SETFAM_1:
       def 1;
       hence [y,x] in Y by Th12;
@@ -293,8 +288,7 @@ A10: x in X;
     for Y st Y in SFXX holds [x,x] in Y
     proof
       let Y;
-      assume
-      Y in SFXX;
+      assume Y in SFXX;
       then Y is Equivalence_Relation of X by A2;
       hence thesis by A10,Th11;
     end;
@@ -305,8 +299,7 @@ A10: x in X;
 end;
 
 theorem Th20:
-  for R holds ex EqR st R c= EqR & for EqR2 st R c= EqR2 holds EqR
-  c= EqR2
+  for R holds ex EqR st R c= EqR & for EqR2 st R c= EqR2 holds EqR c= EqR2
 proof
   let R;
   defpred P[set] means $1 is Equivalence_Relation of X & R c= $1;
@@ -319,8 +312,7 @@ A2: F <> {} by A1;
   then reconsider EqR = meet F as Equivalence_Relation of X by A2,Th19;
 A3: now
     let EqR2;
-    assume
-    R c= EqR2;
+    assume R c= EqR2;
     then EqR2 in F by A1;
     hence EqR c= EqR2 by SETFAM_1:4;
   end;
@@ -335,14 +327,12 @@ definition
   canceled;
   func EqR1 "\/" EqR2 -> Equivalence_Relation of X means
   :Def3:
-  EqR1 \/ EqR2
-  c= it & for EqR st EqR1 \/ EqR2 c= EqR holds it c= EqR;
+  EqR1 \/ EqR2 c= it & for EqR st EqR1 \/ EqR2 c= EqR holds it c= EqR;
   existence by Th20;
   uniqueness
   proof
     let R1,R2 be Equivalence_Relation of X;
-    assume
-    EqR1 \/ EqR2 c= R1 & ( for EqR st EqR1 \/ EqR2 c= EqR holds R1 c=
+    assume EqR1 \/ EqR2 c= R1 & ( for EqR st EqR1 \/ EqR2 c= EqR holds R1 c=
     EqR)& EqR1 \/ EqR2 c= R2 & for EqR st EqR1 \/ EqR2 c= EqR holds R2 c= EqR;
     then R1 c= R2 & R2 c= R1;
     hence thesis by XBOOLE_0:def 10;
@@ -359,8 +349,7 @@ proof
   proof
     let EqR4 be Equivalence_Relation of X;
 A1: EqR2 \/ EqR3 c= EqR2 "\/" EqR3 by Def3;
-    assume
-    EqR4 = EqR1 "\/" (EqR2 "\/" EqR3);
+    assume EqR4 = EqR1 "\/" (EqR2 "\/" EqR3);
     then
 A2: EqR1 \/ (EqR2 "\/" EqR3) c= EqR4 by Def3;
     EqR2 "\/" EqR3 c= EqR1 \/ (EqR2 "\/" EqR3) by XBOOLE_1:7;
@@ -387,8 +376,7 @@ A6: (EqR1 "\/" EqR2) "\/" EqR3 c= EqR1 "\/" (EqR2 "\/" EqR3);
   proof
     let EqR4 be Equivalence_Relation of X;
 A7: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Def3;
-    assume
-    EqR4 = (EqR1 "\/" EqR2) "\/" EqR3;
+    assume EqR4 = (EqR1 "\/" EqR2) "\/" EqR3;
     then
 A8: (EqR1 "\/" EqR2) \/ EqR3 c= EqR4 by Def3;
     EqR1 "\/" EqR2 c= (EqR1 "\/" EqR2) \/ EqR3 by XBOOLE_1:7;
@@ -507,14 +495,12 @@ proof
   let R be Relation;
   thus y in Class(R,x) implies [x,y] in R
   proof
-    assume
-    y in Class(R,x);
+    assume y in Class(R,x);
     then ex z being set st [z,y] in R & z in {x} by RELAT_1:def 13;
     hence thesis by TARSKI:def 1;
   end;
 A1: x in {x} by TARSKI:def 1;
-  assume
-  [x,y] in R;
+  assume [x,y] in R;
   hence thesis by A1,RELAT_1:def 13;
 end;
 
@@ -525,14 +511,12 @@ proof
   let R be total symmetric Relation of X;
   thus y in Class(R,x) implies [y,x] in R
   proof
-    assume
-    y in Class(R,x);
+    assume y in Class(R,x);
     then ex z being set st [z,y] in R & z in {x} by RELAT_1:def 13;
     then [x,y] in R by TARSKI:def 1;
     hence thesis by Th12;
   end;
-  assume
-  [y,x] in R;
+  assume [y,x] in R;
   then
 A1: [x,y] in R by Th12;
   x in {x} by TARSKI:def 1;
@@ -540,13 +524,11 @@ A1: [x,y] in R by Th12;
 end;
 
 theorem Th28:
-  for R being Tolerance of X holds for x st x in X holds x in
-  Class (R,x)
+  for R being Tolerance of X holds for x st x in X holds x in Class (R,x)
 proof
   let R be Tolerance of X;
   let x;
-  assume
-  x in X;
+  assume x in X;
   then [x,x] in R by Th11;
   hence thesis by Th27;
 end;
@@ -557,8 +539,7 @@ theorem
 proof
   let R be Tolerance of X;
   let x;
-  assume
-  x in X;
+  assume x in X;
   then x in Class(R,x) by Th28;
   hence thesis;
 end;
@@ -588,8 +569,7 @@ A1: x in X;
 A2: [x,y] in EqR;
     now
       let z;
-      assume
-      z in Class(EqR,y);
+      assume z in Class(EqR,y);
       then
 A3:   [z,y] in EqR by Th27;
       [y,x] in EqR by A2,Th12;
@@ -600,8 +580,7 @@ A3:   [z,y] in EqR by Th27;
 A4: Class(EqR,y) c= Class(EqR,x) by TARSKI:def 3;
     now
       let z;
-      assume
-      z in Class(EqR,x);
+      assume z in Class(EqR,x);
       then [z,x] in EqR by Th27;
       then [z,y] in EqR by A2,Th13;
       hence z in Class(EqR,y) by Th27;
@@ -609,28 +588,24 @@ A4: Class(EqR,y) c= Class(EqR,x) by TARSKI:def 3;
     then Class(EqR,x) c= Class(EqR,y) by TARSKI:def 3;
     hence thesis by A4,XBOOLE_0:def 10;
   end;
-  assume
-  Class(EqR,x) = Class(EqR,y);
+  assume Class(EqR,x) = Class(EqR,y);
   then x in Class(EqR,y) by A1,Th28;
   hence thesis by Th27;
 end;
 
 theorem Th31:
-  for x st x in X holds y in Class(EqR,x) iff Class(EqR,x) = Class
-  (EqR,y)
+  for x st x in X holds y in Class(EqR,x) iff Class(EqR,x) = Class (EqR,y)
 proof
   let x such that
 A1: x in X;
   thus y in Class(EqR,x) implies Class(EqR,x) = Class(EqR,y)
   proof
-    assume
-    y in Class(EqR,x);
+    assume y in Class(EqR,x);
     then [y,x] in EqR by Th27;
     then [x,y] in EqR by Th12;
     hence thesis by A1,Lm2;
   end;
-  assume
-  Class(EqR,x) = Class(EqR,y);
+  assume Class(EqR,x) = Class(EqR,y);
   then [x,y] in EqR by A1,Lm2;
   then [y,x] in EqR by Th12;
   hence thesis by Th27;
@@ -645,8 +620,7 @@ A1: not [x,y] in EqR implies Class(EqR,x) misses Class(EqR,y)
   proof
     assume
 A2: not [x,y] in EqR;
-    assume
-    Class(EqR,x) meets Class(EqR,y);
+    assume Class(EqR,x) meets Class(EqR,y);
     then consider z such that
 A3: z in Class(EqR,x) and
 A4: z in Class(EqR,y) by XBOOLE_0:3;
@@ -660,8 +634,7 @@ A5: [x,z] in EqR by Th12;
 A6: y in X;
   [x,y] in EqR implies Class(EqR,x) = Class(EqR,y)
   proof
-    assume
-    [x,y] in EqR;
+    assume [x,y] in EqR;
     then x in Class(EqR,y) by Th27;
     hence thesis by A6,Th31;
   end;
@@ -674,13 +647,11 @@ proof
   let x;
 A1: now
     let y;
-    assume
-    y in Class(id X,x);
+    assume y in Class(id X,x);
     then [y,x] in id X by Th27;
     hence y = x by RELAT_1:def 10;
   end;
-  assume
-  x in X;
+  assume x in X;
   then for y holds y in Class(id X,x) iff y = x by A1,Th28;
   hence thesis by TARSKI:def 1;
 end;
@@ -692,8 +663,7 @@ proof
 A1: x in X;
   now
     let y;
-    assume
-    y in X;
+    assume y in X;
     then [y,x] in nabla X by A1,ZFMISC_1:106;
     hence y in Class(nabla X,x) by Th27;
   end;
@@ -752,14 +722,12 @@ A8:   [y,z] in Y;
 A9:   1 <= len g and
 A10:  y = g.1 and
 A11:  z = g.(len g) and
-A12:  for i st 1 <= i & i < len g holds [g.i,g.(i+1)] in EqR1 \/ EqR2
-      by A2,A8;
+A12:  for i st 1 <= i & i < len g holds [g.i,g.(i+1)] in EqR1 \/ EqR2 by A2,A8;
       consider f being FinSequence such that
 A13:  1 <= len f and
 A14:  x = f.1 and
 A15:  y = f.(len f) and
-A16:  for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2
-      by A2,A7;
+A16:  for i st 1 <= i & i < len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2 by A2,A7;
       set h = f^g;
 A17:  len h = len f + len g by FINSEQ_1:35;
 A18:  len f + 1 <= len f + len g by A9,XREAL_1:9;
@@ -933,8 +901,7 @@ A60:  g.1 = x & g.(len g) = y by FINSEQ_1:61;
     then EqR1 \/ EqR2 c= R1 by RELAT_1:def 3;
     then
 A61: EqR1 "\/" EqR2 c= R1 by Def3;
-    assume
-    [x,y] in EqR1 "\/" EqR2;
+    assume [x,y] in EqR1 "\/" EqR2;
     then consider f being FinSequence such that
 A62: 1 <= len f & x = f.1 &( y = f.(len f) & for i st 1 <= i & i <
     len f holds [f.i,f.(i+1)] in EqR1 \/ EqR2 ) by A2,A61;
@@ -1026,8 +993,7 @@ A13: [z,x] in E by A9,Th27;
     then
 A14: [z,x] in EqR1 by A1,A13,XBOOLE_0:def 3;
 A15: now
-      assume
-      [y,z] in EqR1;
+      assume [y,z] in EqR1;
       then
 A16:  [z,y] in EqR1 by Th12;
       [x,z] in EqR1 by A14,Th12;
@@ -1070,8 +1036,7 @@ A3:   x in X;
       by A1,Th37;
       hence Class(EqR1,x) = X or Class(EqR2,x) = X by A3,Th34;
     end;
-    assume
-    X <> {};
+    assume X <> {};
     then Class(EqR1,y) = X or Class(EqR2,y) = X by A2;
     hence thesis by Th35;
   end;
@@ -1083,8 +1048,7 @@ definition
   let EqR;
   func Class EqR -> Subset-Family of X means
   :Def5:
-  A in it iff ex x st x in X
-  & A = Class(EqR,x);
+  A in it iff ex x st x in X & A = Class(EqR,x);
   existence
   proof
     defpred P[set] means ex x st x in X & $1 = Class(EqR,x);
@@ -1133,19 +1097,16 @@ definition
     defpred P[set] means ex x st x in X & $1 = {x};
     consider F being Subset-Family of X such that
 A1: for A being Subset of X holds A in F iff P[A] from SUBSET_1:sch 3;
-A2: for A st A in F holds A<>{} & for B st B in F holds A = B or A misses
-    B
+A2: for A st A in F holds A<>{} & for B st B in F holds A = B or A misses B
     proof
       let A;
-      assume
-      A in F;
+      assume A in F;
       then consider x such that
       x in X and
 A3:   A = {x} by A1;
       thus A <> {} by A3;
       let B;
-      assume
-      B in F;
+      assume B in F;
       then consider y such that
       y in X and
 A4:   B = {y} by A1;
@@ -1155,8 +1116,7 @@ A5:     not x = y;
         for z st z in A holds not z in B
         proof
           let z;
-          assume
-          z in A;
+          assume z in A;
           then not z = y by A3,A5,TARSKI:def 1;
           hence thesis by A4,TARSKI:def 1;
         end;
@@ -1185,8 +1145,7 @@ theorem Th41:
   for P being a_partition of {} holds P = {}
 proof
   let P be a_partition of {};
-  assume
-  not thesis;
+  assume not thesis;
   then consider Z being set such that
 A1: Z in P by XBOOLE_0:def 1;
   Z <> {} by A1,Def6;
@@ -1210,14 +1169,12 @@ A2:   x in X;
   end;
   hence union(Class EqR) = X by TARSKI:def 4;
   let A;
-  assume
-  A in Class EqR;
+  assume A in Class EqR;
   then
 A3: ex x st x in X & A = Class(EqR,x) by Def5;
   hence A <> {} by Th28;
   let B;
-  assume
-  B in Class EqR;
+  assume B in Class EqR;
   then ex y st y in X & B = Class(EqR,y) by Def5;
   hence thesis by A3,Th32;
 end;
@@ -1229,8 +1186,7 @@ proof
 A1: X <> {} implies ex EqR st P = Class EqR
   proof
     defpred P[set,set] means ex A st A in P & $1 in A & $2 in A;
-    assume
-    X <> {};
+    assume X <> {};
 A2: for x,y,z st P[x,y] & P[y,z] holds P[x,z]
     proof
       let x,y,z;
@@ -1247,8 +1203,7 @@ A7: union P = X by Def6;
 A8: for x st x in X holds P[x,x]
     proof
       let x;
-      assume
-      x in X;
+      assume x in X;
       then consider Z such that
 A9:   x in Z and
 A10:  Z in P by A7,TARSKI:def 4;
@@ -1274,8 +1229,7 @@ A16:    x in X by TARSKI:def 3;
         now
           let y;
 A17:      now
-            assume
-            y in Class(R,x);
+            assume y in Class(R,x);
             then [y,x] in R by Th27;
             then consider B such that
 A18:        B in P & y in B and
@@ -1284,8 +1238,7 @@ A19:        x in B by A12;
             hence y in A by A14,A18,Def6;
           end;
           now
-            assume
-            y in A;
+            assume y in A;
             then [y,x] in R by A12,A14,A16;
             hence y in Class(R,x) by Th27;
           end;
@@ -1295,8 +1248,7 @@ A19:        x in B by A12;
         hence A in Class R by A16,Def5;
       end;
       now
-        assume
-        A in Class R;
+        assume A in Class R;
         then consider x such that
 A20:    x in X and
 A21:    A = Class(R,x) by Def5;
@@ -1309,8 +1261,7 @@ A23:    x in B and
         now
           let y;
 A24:      now
-            assume
-            y in A;
+            assume y in A;
             then [y,x] in R by A21,Th27;
             then consider C such that
 A25:        C in P & y in C and
@@ -1319,8 +1270,7 @@ A26:        x in C by A12;
             hence y in B by A22,A25,Def6;
           end;
           now
-            assume
-            y in B;
+            assume y in B;
             then [y,x] in R by A12,A22,A23;
             hence y in A by A21,Th27;
           end;
@@ -1363,7 +1313,6 @@ A3: x = Class(EqR,y) by A1,Def5;
 end;
 
 begin :: Addenda
-
 :: from FSM_1, PARTIT1, 2005.02.06, A.T.
 
 registration
@@ -1378,6 +1327,7 @@ registration
     hence thesis;
   end;
 end;
+
 :: from PUA2MSS1
 
 registration
@@ -1386,8 +1336,7 @@ registration
   coherence
   proof
     let P be a_partition of X;
-    assume
-    {} in P;
+    assume {} in P;
     hence contradiction by Def6;
   end;
 end;
@@ -1443,8 +1392,7 @@ proof
   set Y = {{x} where x is Element of X: not contradiction};
   hereby
     let x be set;
-    assume
-    x in SmallestPartition X;
+    assume x in SmallestPartition X;
     then consider y being set such that
 A1: y in X and
 A2: x = Class(id X, y) by Def5;
@@ -1452,8 +1400,7 @@ A2: x = Class(id X, y) by Def5;
     hence x in Y by A1;
   end;
   let x be set;
-  assume
-  x in Y;
+  assume x in Y;
   then consider y being Element of X such that
 A3: x = {y};
   Class(id X, y) = x by A3,Th33;
@@ -1464,8 +1411,7 @@ end;
 :: Classes of partitions of a set
 
 reserve X for non empty set,
-  x for Element of X,
-  y,v,w for set;
+  x for Element of X;
 
 definition
   let X be non empty set,x be Element of X,S1 be a_partition of X;
@@ -1545,8 +1491,7 @@ A1: for A being Subset of X st A in A1 holds A <> {} & for B being Subset of
 A2: A in A1;
     hence A <> {} by TARSKI:def 1;
     let B be Subset of X;
-    assume
-    B in A1;
+    assume B in A1;
     then B = X by TARSKI:def 1;
     hence thesis by A2,TARSKI:def 1;
   end;
@@ -1565,8 +1510,7 @@ definition
   let F be Family-Class of X;
   attr F is partition-membered means
   :Def10:
-  for S being set st S in F holds S
-  is a_partition of X;
+  for S being set st S in F holds S is a_partition of X;
 end;
 
 registration
@@ -1577,8 +1521,7 @@ registration
     reconsider E = {} as Family-Class of X by XBOOLE_1:2;
     take E;
     let S be set;
-    assume
-    S in E;
+    assume S in E;
     hence thesis;
   end;
 end;
@@ -1601,13 +1544,12 @@ registration
 end;
 
 theorem Th49:
-  for X being set, p being a_partition of X holds {p} is
-  Part-Family of X
+  for X being set, p being a_partition of X holds {p} is Part-Family of X
 proof
   let X be set;
   let p be a_partition of X;
   for x be set st x in {p} holds x is a_partition of X by TARSKI:def 1;
-  hence thesis by Def10,ZFMISC_1:37;
+  hence thesis by Def10;
 end;
 
 registration
@@ -1638,18 +1580,15 @@ A4: x in Class(EQR,x) by Th28;
   Class(EQR,x) in S1 by A1,Def5;
   then
 A5: Class(EQR,x) = EqClass(x,S1) by A4,Def8;
-  assume
-  EqClass(x,S1) meets EqClass(y,S1);
+  assume EqClass(x,S1) meets EqClass(y,S1);
   hence thesis by A5,A3,Th32;
 end;
 
 Lm3: for A being set holds A in {EqClass(x,S) where S is a_partition of X : S
 in F} implies ex T being a_partition of X st T in F & A = EqClass(x,T)
-
 proof
   let A be set;
-  assume
-  A in {EqClass(x,S) where S is a_partition of X : S in F};
+  assume A in {EqClass(x,S) where S is a_partition of X : S in F};
   then consider S being a_partition of X such that
 A1: A = EqClass(x,S) & S in F;
   take S;
@@ -1702,8 +1641,7 @@ holds EqClass(x,G) = meet{EqClass(x,S) where S is a_partition of X : S in F}
       G c= bool X
       proof
         let y be set;
-        assume
-        y in G;
+        assume y in G;
         then consider x being Element of X such that
 A4:     y = meet{EqClass(x,S) where S is a_partition of X : S in F};
         y c= X
@@ -1719,8 +1657,7 @@ A6:       f in {EqClass(x,S) where S is a_partition of X : S in F};
           consider S being a_partition of X such that
 A7:       f = EqClass(x,S) and
           S in F by A6;
-          assume
-          e in y;
+          assume e in y;
           then e in EqClass(x,S) by A4,A6,A7,SETFAM_1:def 1;
           hence thesis;
         end;
@@ -1734,8 +1671,7 @@ A7:       f = EqClass(x,S) and
           let a be set;
           consider T being set such that
 A8:       T in F by XBOOLE_0:def 1;
-          assume
-          a in X;
+          assume a in X;
           then reconsider a1=a as Element of X;
           reconsider T as a_partition of X by A8,Def10;
 A9:       meet{EqClass(a1,S) where S is a_partition of X : S in F} in G;
@@ -1743,8 +1679,7 @@ A10:      for T being set st T in {EqClass(a1,S) where S is a_partition
           of X : S in F} holds a1 in T
           proof
             let T be set;
-            assume
-            T in {EqClass(a1,S) where S is a_partition of X : S in F};
+            assume T in {EqClass(a1,S) where S is a_partition of X : S in F};
             then ex A being a_partition of X st T = EqClass(a1,A) & A in F;
             hence thesis by Def8;
           end;
@@ -1768,8 +1703,7 @@ A14:    for Y being set st Y in {EqClass(x,S) where S is a_partition of X
         : S in F} holds x in Y
         proof
           let Y be set;
-          assume
-          Y in {EqClass(x,S) where S is a_partition of X : S in F};
+          assume Y in {EqClass(x,S) where S is a_partition of X : S in F};
           then ex T being a_partition of X st Y = EqClass(x,T) & T in F;
           hence thesis by Def8;
         end;
@@ -1777,17 +1711,14 @@ A14:    for Y being set st Y in {EqClass(x,S) where S is a_partition of X
         F} by A11;
         hence A<>{} by A13,A14,SETFAM_1:def 1;
         consider x being Element of X such that
-A15:    A = meet{EqClass(x,S) where S is a_partition of X : S in F}
-        by A12;
+A15:    A = meet{EqClass(x,S) where S is a_partition of X : S in F} by A12;
         let B be Subset of X;
-        assume
-        B in G;
+        assume B in G;
         then consider y being Element of X such that
 A16:    B = meet{EqClass(y,S) where S is a_partition of X : S in F};
         thus A = B or A misses B
         proof
-A17:      {EqClass(y,S) where S is a_partition of X : S in F} is non
-          empty
+A17:      {EqClass(y,S) where S is a_partition of X : S in F} is non empty
           proof
             consider T being set such that
 A18:        T in F by XBOOLE_0:def 1;
@@ -1796,8 +1727,7 @@ A18:        T in F by XBOOLE_0:def 1;
             in F} by A18;
             hence thesis;
           end;
-A19:      {EqClass(x,S) where S is a_partition of X : S in F} is non
-          empty
+A19:      {EqClass(x,S) where S is a_partition of X : S in F} is non empty
           proof
             consider T being set such that
 A20:        T in F by XBOOLE_0:def 1;
@@ -1807,8 +1737,7 @@ A20:        T in F by XBOOLE_0:def 1;
             hence thesis;
           end;
           now
-            assume
-            A meets B;
+            assume A meets B;
             then consider c being set such that
 A21:        c in A & c in B by XBOOLE_0:3;
             c in meet{EqClass(x,S) where S is a_partition of X : S in F}
@@ -1820,8 +1749,7 @@ A22:        c in meet({EqClass(x,S) where S is a_partition of X: S in F }
             :10;
 A23:        now
               let T be a_partition of X;
-              assume
-              T in F;
+              assume T in F;
               then
               EqClass(y,T) in {EqClass(y,S) where S is a_partition of X :
               S in F};
@@ -1833,8 +1761,7 @@ S in F} \/ {EqClass(y,S) where S is a_partition of X : S in F} by XBOOLE_0
             end;
 A24:        now
               let T be a_partition of X;
-              assume
-              T in F;
+              assume T in F;
               then
               EqClass(x,T) in {EqClass(x,S) where S is a_partition of X :
               S in F};
@@ -1857,8 +1784,7 @@ A27:        for T being a_partition of X st T in F holds (EqClass(x,T))
             meets (EqClass(y,T))
             proof
               let T be a_partition of X;
-              assume
-              T in F;
+              assume T in F;
               then ex A being set st A in EqClass(x,T) & A in EqClass(y,T) by
               A25;
               hence thesis by XBOOLE_0:3;
@@ -1867,9 +1793,7 @@ A28:        {EqClass(y,S) where S is a_partition of X : S in F} c= {
             EqClass(x,S) where S is a_partition of X : S in F}
             proof
               let A be set;
-              assume
-              A in {EqClass(y,S) where S is a_partition of X : S in F
-              };
+              assume A in {EqClass(y,S) where S is a_partition of X : S in F };
               then consider T being a_partition of X such that
 A29:          T in F and
 A30:          A = EqClass(y,T) by Lm3;
@@ -1880,9 +1804,7 @@ A30:          A = EqClass(y,T) by Lm3;
             EqClass(y,S) where S is a_partition of X : S in F}
             proof
               let A be set;
-              assume
-              A in {EqClass(x,S) where S is a_partition of X : S in F
-              };
+              assume A in {EqClass(x,S) where S is a_partition of X : S in F };
               then consider T being a_partition of X such that
 A31:          T in F and
 A32:          A = EqClass(x,T) by Lm3;
@@ -1902,8 +1824,7 @@ A32:          A = EqClass(x,T) by Lm3;
         let x be Element of X;
 A33:    now
           let Y be set;
-          assume
-          Y in {EqClass(x,S) where S is a_partition of X : S in F};
+          assume Y in {EqClass(x,S) where S is a_partition of X : S in F};
           then ex T being a_partition of X st Y = EqClass(x,T) & T in F;
           hence x in Y by Def8;
         end;
@@ -1950,8 +1871,7 @@ A3: z in S by TARSKI:def 4;
   thus union (S \ A) c= (union S) \ (union A)
   proof
     let y be set;
-    assume
-    y in union(S \ A);
+    assume y in union(S \ A);
     then consider z being set such that
 A4: y in z and
 A5: z in S \ A by TARSKI:def 4;
@@ -1966,8 +1886,7 @@ A9:   w in A;
       hence not y in w by A4,XBOOLE_0:3;
     end;
 A10: now
-      assume
-      y in union A;
+      assume y in union A;
       then ex v being set st y in v & v in A by TARSKI:def 4;
       hence contradiction by A8;
     end;
@@ -1988,8 +1907,7 @@ A1: A in S;
   {A} c= S
   proof
     let y be set;
-    assume
-    y in {A};
+    assume y in {A};
     hence thesis by A1,TARSKI:def 1;
   end;
   then reconsider AA = {A} as Subset of S;
@@ -2009,3 +1927,556 @@ proof
   hence thesis by Def6;
 end;
 
+begin :: Moved from BORSUK_1, 2010.03.15, A.T.
+
+reserve e,u,v,X,Y,X1 for set;
+
+theorem
+  for F being Function st X c= F"X1 holds F.:X c= X1
+proof
+  let F be Function;
+  assume X c= F"X1;
+  then
+A1: F.:X c= F.:F"X1 by RELAT_1:156;
+  F.:F"X1 c= X1 by FUNCT_1:145;
+  hence thesis by A1,XBOOLE_1:1;
+end;
+
+theorem Th9:
+  e c= [:X,Y:] implies (.:pr1(X,Y)).e = pr1(X,Y).:e
+proof
+  assume e c= [:X,Y:];
+  then e c= dom pr1(X,Y) by FUNCT_3:def 5;
+  hence thesis by FUNCT_3:def 1;
+end;
+
+theorem Th10:
+  e c= [:X,Y:] implies (.:pr2(X,Y)).e = pr2(X,Y).:e
+proof
+  assume e c= [:X,Y:];
+  then e c= dom pr2(X,Y) by FUNCT_3:def 6;
+  hence thesis by FUNCT_3:def 1;
+end;
+
+theorem Th12:
+  for X1 being Subset of X, Y1 being Subset of Y st [:X1,Y1:] <>
+  {} holds pr1(X,Y).:[:X1,Y1:] = X1 & pr2(X,Y).:[:X1,Y1:] = Y1
+proof
+  let X1 be Subset of X, Y1 be Subset of Y;
+  assume
+A1: [:X1,Y1:] <> {};
+  then
+A2: X1 <> {};
+A3: Y1 <> {} by A1;
+A4: X <> {} by A2;
+  now
+    consider y being Element of Y1;
+    let x be set;
+    thus x in pr1(X,Y).:[:X1,Y1:] implies x in X1
+    proof
+      assume x in pr1(X,Y).:[:X1,Y1:];
+      then consider u such that
+A5:   u in [:X,Y:] and
+A6:   u in [:X1,Y1:] & x = pr1(X,Y).u by FUNCT_2:115;
+A7:   u`2 in Y by A5,MCART_1:10;
+      u`1 in X1 & x = pr1(X,Y).(u`1,u`2) by A6,MCART_1:10,23;
+      hence thesis by A7,FUNCT_3:def 5;
+    end;
+    assume
+A8: x in X1;
+    y in Y by A3,TARSKI:def 3;
+    then
+A9: x = pr1(X,Y).(x,y) by A8,FUNCT_3:def 5;
+    [x,y] in [:X1,Y1:] by A3,A8,ZFMISC_1:106;
+    hence x in pr1(X,Y).:[:X1,Y1:] by A4,A9,FUNCT_2:43;
+  end;
+  hence pr1(X,Y).:[:X1,Y1:] = X1 by TARSKI:2;
+A10: Y <> {} by A3;
+  now
+    consider x being Element of X1;
+    let y be set;
+    thus y in pr2(X,Y).:[:X1,Y1:] implies y in Y1
+    proof
+      assume y in pr2(X,Y).:[:X1,Y1:];
+      then consider u such that
+A11:  u in [:X,Y:] and
+A12:  u in [:X1,Y1:] & y = pr2(X,Y).u by FUNCT_2:115;
+A13:  u`1 in X by A11,MCART_1:10;
+      u`2 in Y1 & y = pr2(X,Y).(u`1,u`2) by A12,MCART_1:10,23;
+      hence thesis by A13,FUNCT_3:def 6;
+    end;
+    assume
+A14: y in Y1;
+    x in X by A2,TARSKI:def 3;
+    then
+A15: y = pr2(X,Y).(x,y) by A14,FUNCT_3:def 6;
+    [x,y] in [:X1,Y1:] by A2,A14,ZFMISC_1:106;
+    hence y in pr2(X,Y).:[:X1,Y1:] by A10,A15,FUNCT_2:43;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem Th13:
+  for X1 being Subset of X, Y1 being Subset of Y st [:X1,Y1:] <>
+  {} holds .:pr1(X,Y). [:X1,Y1:] = X1 & .:pr2(X,Y). [:X1,Y1:] = Y1
+proof
+  let X1 be Subset of X, Y1 be Subset of Y;
+  assume
+A1: [:X1,Y1:] <> {};
+  thus .:pr1(X,Y). [:X1,Y1:] = pr1(X,Y).:[:X1,Y1:] by Th9
+    .= X1 by A1,Th12;
+  thus .:pr2(X,Y). [:X1,Y1:] = pr2(X,Y).:[:X1,Y1:] by Th10
+    .= Y1 by A1,Th12;
+end;
+
+theorem
+  for A being Subset of [:X,Y:], H being Subset-Family of [:X,Y:]
+st for e st e in H holds e c= A & ex X1 being Subset of X, Y1 being Subset of Y
+  st e =[:X1,Y1:] holds [:union(.:pr1(X,Y).:H), meet(.:pr2(X,Y).:H):] c= A
+proof
+  let A be Subset of [:X,Y:], H be Subset-Family of [:X,Y:] such that
+A1: for e st e in H holds e c= A & ex X1 being Subset of X, Y1 being
+  Subset of Y st e =[:X1,Y1:];
+  let u,v;
+  assume
+A2: [u,v] in [:union(.:pr1(X,Y).:H), meet(.:pr2(X,Y).:H):];
+  then
+A3: v in meet(.:pr2(X,Y).:H) by ZFMISC_1:106;
+  u in union(.:pr1(X,Y).:H) by A2,ZFMISC_1:106;
+  then consider x being set such that
+A4: u in x and
+A5: x in .:pr1(X,Y).:H by TARSKI:def 4;
+  consider y being set such that
+  y in dom .:pr1(X,Y) and
+A6: y in H and
+A7: x = .:pr1(X,Y).y by A5,FUNCT_1:def 12;
+  consider X1 being Subset of X, Y1 being Subset of Y such that
+A8: y =[:X1,Y1:] by A1,A6;
+A9: y <> {} by A4,A7,FUNCT_3:9;
+  y in bool[:X,Y:] by A6;
+  then y in bool dom pr2(X,Y) by FUNCT_3:def 6;
+  then y in dom .:pr2(X,Y) by FUNCT_3:def 1;
+  then .:pr2(X,Y).y in .:pr2(X,Y).:H by A6,FUNCT_1:def 12;
+  then Y1 in .:pr2(X,Y).:H by A8,A9,Th13;
+  then
+A10: v in Y1 by A3,SETFAM_1:def 1;
+  u in X1 by A4,A7,A8,A9,Th13;
+  then
+A11: [u,v] in y by A8,A10,ZFMISC_1:106;
+  y c= A by A1,A6;
+  hence thesis by A11;
+end;
+
+theorem
+  for A being Subset of [:X,Y:], H being Subset-Family of [:X,Y:] st for
+e st e in H holds e c= A & ex X1 being Subset of X, Y1 being Subset of Y st e =
+  [:X1,Y1:] holds [:meet(.:pr1(X,Y).:H), union(.:pr2(X,Y).:H):] c= A
+proof
+  let A be Subset of [:X,Y:], H be Subset-Family of [:X,Y:] such that
+A1: for e st e in H holds e c= A & ex X1 being Subset of X, Y1 being
+  Subset of Y st e =[:X1,Y1:];
+  let u,v;
+  assume
+A2: [u,v] in [:meet(.:pr1(X,Y).:H), union(.:pr2(X,Y).:H):];
+  then
+A3: u in meet(.:pr1(X,Y).:H) by ZFMISC_1:106;
+  v in union(.:pr2(X,Y).:H) by A2,ZFMISC_1:106;
+  then consider x being set such that
+A4: v in x and
+A5: x in .:pr2(X,Y).:H by TARSKI:def 4;
+  consider y being set such that
+  y in dom .:pr2(X,Y) and
+A6: y in H and
+A7: x = .:pr2(X,Y).y by A5,FUNCT_1:def 12;
+  consider X1 being Subset of X, Y1 being Subset of Y such that
+A8: y =[:X1,Y1:] by A1,A6;
+A9: y <> {} by A4,A7,FUNCT_3:9;
+  y in bool[:X,Y:] by A6;
+  then y in bool dom pr1(X,Y) by FUNCT_3:def 5;
+  then y in dom .:pr1(X,Y) by FUNCT_3:def 1;
+  then .:pr1(X,Y).y in .:pr1(X,Y).:H by A6,FUNCT_1:def 12;
+  then X1 in .:pr1(X,Y).:H by A8,A9,Th13;
+  then
+A10: u in X1 by A3,SETFAM_1:def 1;
+  v in Y1 by A4,A7,A8,A9,Th13;
+  then
+A11: [u,v] in y by A8,A10,ZFMISC_1:106;
+  y c= A by A1,A6;
+  hence thesis by A11;
+end;
+
+theorem
+  for X being set, Y being non empty set, f being Function of X,Y
+  for H being Subset-Family of X holds union(.:f.:H) = f.: union H
+proof
+  let X be set, Y be non empty set, f be Function of X,Y;
+  let H be Subset-Family of X;
+  dom f = X by FUNCT_2:def 1;
+  hence thesis by FUNCT_3:16;
+end;
+
+reserve X,Y,Z for non empty set;
+
+theorem
+  for X being set, a being Subset-Family of X holds union union a
+  = union { union A where A is Subset of X: A in a }
+proof
+  let X be set, a be Subset-Family of X;
+  thus union union a c= union { union A where A is Subset of X: A in a }
+  proof
+    let e;
+    assume e in union union a;
+    then consider B being set such that
+A1: e in B and
+A2: B in union a by TARSKI:def 4;
+    consider C being set such that
+A3: B in C and
+A4: C in a by A2,TARSKI:def 4;
+A5: union C in { union A where A is Subset of X: A in a } by A4;
+    e in union C by A1,A3,TARSKI:def 4;
+    hence thesis by A5,TARSKI:def 4;
+  end;
+  let e;
+  assume e in union { union A where A is Subset of X: A in a };
+  then consider c being set such that
+A6: e in c and
+A7: c in { union A where A is Subset of X: A in a } by TARSKI:def 4;
+  consider A being Subset of X such that
+A8: c = union A and
+A9: A in a by A7;
+  consider b being set such that
+A10: e in b and
+A11: b in A by A6,A8,TARSKI:def 4;
+  b in union a by A9,A11,TARSKI:def 4;
+  hence thesis by A10,TARSKI:def 4;
+end;
+
+theorem Th18:
+  for X being set for D being Subset-Family of X st union D = X
+for A being Subset of D, B being Subset of X st B = union A holds B` c= union A
+  `
+proof
+  let X be set;
+  let D be Subset-Family of X such that
+A1: union D = X;
+  let A be Subset of D, B be Subset of X such that
+A2: B = union A;
+  let e;
+  assume
+A3: e in B`;
+  then consider u such that
+A4: e in u and
+A5: u in D by A1,TARSKI:def 4;
+  not e in B by A3,XBOOLE_0:def 5;
+  then not u in A by A2,A4,TARSKI:def 4;
+  then u in A` by A5,SUBSET_1:50;
+  hence thesis by A4,TARSKI:def 4;
+end;
+
+theorem
+  for F being Function of X,Y, G being Function of X,Z st for x,x9
+being Element of X st F.x=F.x9 holds G.x=G.x9 ex H being Function of Y,Z st H*F
+  =G
+proof
+  let F be Function of X,Y, G be Function of X,Z;
+  defpred P[set,set] means not (ex x being Element of X st $1 = F.x) or for x
+  being Element of X st $1 = F.x holds $2 = G.x;
+  assume
+A1: for x,x9 being Element of X st F.x=F.x9 holds G.x=G.x9;
+A2: now
+    let e such that
+    e in Y;
+    now
+      per cases;
+      case
+        ex x being Element of X st e = F.x;
+        then consider x being Element of X such that
+A3:     e = F.x;
+        take u = G.x;
+        thus u in Z & ((ex x being Element of X st e = F.x) implies ex x being
+        Element of X st e = F.x & u = G.x) by A3;
+      end;
+      case
+A4:     not ex x being Element of X st e = F.x;
+        consider u being Element of Z;
+        u in Z;
+        hence
+        ex u st u in Z & ((ex x being Element of X st e = F.x) implies ex
+        x being Element of X st e = F.x & u = G.x) by A4;
+      end;
+    end;
+    then consider u such that
+A5: u in Z and
+A6: (ex x being Element of X st e = F.x) implies ex x being Element of
+    X st e = F.x & u = G.x;
+    take u;
+    thus u in Z by A5;
+    thus P[e,u] by A1,A6;
+  end;
+  consider H being Function of Y,Z such that
+A7: for e st e in Y holds P[e,H.e] from FUNCT_2:sch 1(A2);
+  take H;
+  now
+    let x be Element of X;
+    thus (H*F).x = H.(F.x) by FUNCT_2:21
+      .= G.x by A7;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+
+theorem
+  for X,Y,Z for y being Element of Y, F being (Function of X,Y), G
+  being Function of Y,Z holds F"{y} c= (G*F)"{G.y}
+proof
+  let X,Y,Z;
+  let y be Element of Y, F be (Function of X,Y), G be Function of Y,Z;
+  F"{y} c= (G*F)"Im(G,y) by FUNCT_2:53;
+  hence thesis by SETWISEO:13;
+end;
+
+theorem
+  for F being Function of X,Y, x being Element of X, z being
+  Element of Z holds [:F,id Z:].(x,z) = [F.x,z]
+proof
+  let F be Function of X,Y, x be Element of X, z be Element of Z;
+  thus [:F,id Z:].(x,z) = [F.x, (id Z).z] by FUNCT_3:96
+    .= [F.x,z] by FUNCT_1:35;
+end;
+
+theorem
+  for F being Function of X,Y, A being Subset of X, B being Subset
+  of Z holds [:F,id Z:].:[:A,B:] = [:F.:A,B:]
+proof
+  let F be Function of X,Y, A be Subset of X, B be Subset of Z;
+  thus [:F,id Z:].:[:A,B:] = [:F.:A, (id Z).:B:] by FUNCT_3:93
+    .= [:F.:A,B:] by FUNCT_1:162;
+end;
+
+theorem
+  for F being Function of X,Y, y being Element of Y, z being
+  Element of Z holds [:F,id Z:]"{[y,z]} = [:F"{y},{z}:]
+proof
+  let F be Function of X,Y, y be Element of Y, z be Element of Z;
+  thus [:F,id Z:]"{[y,z]} = [:F,id Z:]"[:{y},{z}:] by ZFMISC_1:35
+    .= [:F"{y},(id Z)"{z}:] by FUNCT_3:94
+    .= [:F"{y},{z}:] by FUNCT_2:171;
+end;
+
+theorem
+  for D being Subset-Family of X, A being Subset of D holds union
+  A is Subset of X
+proof
+  let D be Subset-Family of X, A be Subset of D;
+  union A c= X
+  proof
+    let e;
+    assume e in union A;
+    then ex u st e in u & u in A by TARSKI:def 4;
+    then e in union D by TARSKI:def 4;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for X being set, D being a_partition of X, A,B being Subset of D
+  holds union(A /\ B) = union A /\ union B
+proof
+  let X be set, D be a_partition of X, A,B be Subset of D;
+  thus union(A/\B) c= union A /\ union B by ZFMISC_1:97;
+  let e;
+  assume
+A1: e in union A /\ union B;
+  then e in union A by XBOOLE_0:def 4;
+  then consider a being set such that
+A2: e in a and
+A3: a in A by TARSKI:def 4;
+A4: a in D by A3;
+  e in union B by A1,XBOOLE_0:def 4;
+  then consider b being set such that
+A5: e in b and
+A6: b in B by TARSKI:def 4;
+A7: b in D by A6;
+  not a misses b by A2,A5,XBOOLE_0:3;
+  then a = b by A4,A7,Def6;
+  then a in A/\B by A3,A6,XBOOLE_0:def 4;
+  hence thesis by A2,TARSKI:def 4;
+end;
+
+theorem
+  for D being a_partition of X, A being Subset of D, B being
+  Subset of X st B = union A holds B` = union A`
+proof
+  let D be a_partition of X, A be Subset of D, B be Subset of X;
+  assume
+A1: B = union A;
+  union D = X by Def6;
+  hence B` c= union A` by A1,Th18;
+  let e;
+  assume e in union A`;
+  then consider u such that
+A2: e in u and
+A3: u in A` by TARSKI:def 4;
+A4: u in D by A3;
+  assume not e in B`;
+  then e in B by A2,A4,SUBSET_1:50;
+  then consider v being set such that
+A5: e in v and
+A6: v in A by A1,TARSKI:def 4;
+A7: v in D by A6;
+  not u misses v by A2,A5,XBOOLE_0:3;
+  then u = v by A4,A7,Def6;
+  hence contradiction by A3,A6,XBOOLE_0:def 5;
+end;
+
+theorem ::Class(id X) is non-empty
+  for E being Equivalence_Relation of X holds Class(E) is non empty;
+
+registration
+  let X be non empty set;
+  cluster non empty a_partition of X;
+  existence
+  proof
+    consider x being Element of X;
+    reconsider P = Class nabla X as a_partition of X;
+    take P;
+    thus thesis;
+  end;
+end;
+
+definition
+  let X;
+  let D be non empty a_partition of X;
+  func proj D -> Function of X, D means
+  :Def1:
+  for p being Element of X holds p in it.p;
+  existence
+  proof
+    defpred P[set,set] means $1 in $2;
+A1: now
+A2:   union D = X by Def6;
+      let e;
+      assume e in X;
+      then ex u st e in u & u in D by A2,TARSKI:def 4;
+      hence ex u st u in D & P[e,u];
+    end;
+    consider F being Function of X, D such that
+A3: for e st e in X holds P[e,F.e] from FUNCT_2:sch 1(A1);
+    take F;
+    let p be Element of X;
+    thus thesis by A3;
+  end;
+  correctness
+  proof
+    let F,G be Function of X,D such that
+A4: ( for p being Element of X holds p in F.p)& for p being Element of
+    X holds p in G.p;
+    now
+      let x be Element of X;
+      x in F.x & x in G.x by A4;
+      then
+A5:   not F.x misses G.x by XBOOLE_0:3;
+      F.x is Subset of X & G.x is Subset of X by TARSKI:def 3;
+      hence F.x = G.x by A5,Def6;
+    end;
+    hence F = G by FUNCT_2:113;
+  end;
+end;
+
+theorem Th29:
+  for D being non empty a_partition of X, p being Element of X, A
+  being Element of D st p in A holds A = (proj D).p
+proof
+  let D be non empty a_partition of X, p be Element of X, A be Element of D
+  such that
+A1: p in A;
+  p in (proj D).p by Def1;
+  then (proj D).p is Subset of X & not (proj D).p misses A by A1,
+  TARSKI:def
+  3 ,XBOOLE_0:3;
+  hence thesis by Def6;
+end;
+
+theorem
+  for D being non empty a_partition of X, p being Element of D
+  holds p = proj D " {p}
+proof
+  let D be non empty a_partition of X, p be Element of D;
+  thus p c= proj D " {p}
+  proof
+    let e;
+    assume
+A1: e in p;
+    then (proj D).e = p by Th29;
+    then (proj D).e in {p} by TARSKI:def 1;
+    hence thesis by A1,FUNCT_2:46;
+  end;
+  let e;
+  assume
+A2: e in proj D " {p};
+  then (proj D).e in {p} by FUNCT_1:def 13;
+  then (proj D).e = p by TARSKI:def 1;
+  hence e in p by A2,Def1;
+end;
+
+theorem
+  for D being non empty a_partition of X, A being Subset of D
+  holds (proj D)"A = union A
+proof
+  let D be non empty a_partition of X, A be Subset of D;
+  thus (proj D)"A c= union A
+  proof
+    let e;
+    assume e in (proj D)"A;
+    then (proj D).e in A & e in (proj D).e by Def1,FUNCT_2:46;
+    hence thesis by TARSKI:def 4;
+  end;
+  let e;
+  assume e in union A;
+  then consider u such that
+A1: e in u and
+A2: u in A by TARSKI:def 4;
+A3: u in D by A2;
+  then (proj D).e = u by A1,Th29;
+  hence thesis by A1,A2,A3,FUNCT_2:46;
+end;
+
+theorem
+  for D being non empty a_partition of X, W being Element of D ex
+  W9 being Element of X st proj(D).W9=W
+proof
+  let D be non empty a_partition of X, W be Element of D;
+  reconsider p = W as Subset of X;
+  p <> {} by Def6;
+  then consider W9 being Element of X such that
+A1: W9 in p by SUBSET_1:10;
+  take W9;
+  thus thesis by A1,Th29;
+end;
+
+theorem
+  for D being non empty a_partition of X, W being Subset of X st
+for B being Subset of X st B in D & B meets W holds B c= W holds W = proj D " (
+  proj D .: W)
+proof
+  let D be non empty a_partition of X, W be Subset of X such that
+A1: for B being Subset of X st B in D & B meets W holds B c= W;
+  W c= X;
+  then W c= dom proj D by FUNCT_2:def 1;
+  hence W c= proj D " (proj D .: W) by FUNCT_1:146;
+  let e;
+  assume
+A2: e in proj D " (proj D .: W);
+  then reconsider d = e as Element of X;
+  (proj D).e in proj D .: W by A2,FUNCT_1:def 13;
+  then consider c being Element of X such that
+A3: c in W and
+A4: (proj D).d = (proj D).c by FUNCT_2:116;
+  reconsider B = (proj D).c as Subset of X by TARSKI:def 3;
+  c in (proj D).c by Def1;
+  then B meets W by A3,XBOOLE_0:3;
+  then
+A5: B c= W by A1;
+  d in B by A4,Def1;
+  hence thesis by A5;
+end;

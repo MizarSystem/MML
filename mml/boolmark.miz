@@ -4,25 +4,25 @@
 ::
 :: Received October 8, 1993
 :: Copyright (c) 1993 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, FUNCT_1, SUBSET_1, FUNCT_4, FUNCOP_1, RELAT_1,
-      TARSKI, PETRI, FUNCT_2, NET_1, MARGREL1, ARYTM_3, XBOOLEAN, FINSEQ_1,
-      PARTFUN1, XXREAL_0, CARD_1, ORDINAL4, NAT_1, ARYTM_1, BOOLMARK;
+      TARSKI, PETRI, FUNCT_2, MARGREL1, ARYTM_3, XBOOLEAN, FINSEQ_1, PARTFUN1,
+      XXREAL_0, CARD_1, ORDINAL4, NAT_1, ARYTM_1, BOOLMARK, STRUCT_0, PNPROC_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, DOMAIN_1, FUNCOP_1, FINSEQ_1, FUNCT_4,
-      MARGREL1, PETRI, XXREAL_0;
+      MARGREL1, PETRI, XXREAL_0, STRUCT_0;
  constructors PARTFUN1, DOMAIN_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, MARGREL1,
-      FINSEQ_4, PETRI, RELSET_1;
+      FINSEQ_4, PETRI, RELSET_1, STRUCT_0;
  registrations SUBSET_1, XXREAL_0, XREAL_0, FINSEQ_1, MARGREL1, ORDINAL1,
-      CARD_1, RELSET_1;
+      CARD_1, RELSET_1, STRUCT_0, PETRI;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions PETRI, XBOOLE_0, XBOOLEAN, SUBSET_1;
+ definitions PETRI, XBOOLE_0, XBOOLEAN, SUBSET_1, STRUCT_0;
  theorems SUBSET_1, TARSKI, ZFMISC_1, PETRI, FUNCT_1, FUNCOP_1, FUNCT_2,
       FUNCT_4, FINSEQ_1, FINSEQ_4, NAT_1, FINSEQ_2, FINSEQ_3, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1,
-      PARTFUN1,SEQ_4;
+      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1,
+      SEQ_4;
  schemes FINSEQ_2, NAT_1;
 
 begin
@@ -57,8 +57,7 @@ proof
   let A, B be Subset of X;
   let f be Function of X,Y such that
 A1: f.:A /\ f.:B = {};
-  assume
-  A /\ B <> {};
+  assume A /\ B <> {};
   then consider x being Element of X such that
 A2: x in A /\ B by SUBSET_1:10;
   x in B by A2,XBOOLE_0:def 4;
@@ -114,18 +113,18 @@ A16:  y = (f +* (A --> x)).z by A4,A15,FUNCT_4:12;
   end;
   hence thesis;
 end;
-
+ 
 :: Main definitions, theorems block
 
 begin
-
+ 
 :: Boolean Markings of Place/Transition Net
 
 definition
   let PTN be PT_net_Str;
-  func Bool_marks_of PTN -> FUNCTION_DOMAIN of the Places of PTN, BOOLEAN
+  func Bool_marks_of PTN -> FUNCTION_DOMAIN of the carrier of PTN, BOOLEAN
   equals
-  Funcs(the Places of PTN, BOOLEAN);
+  Funcs(the carrier of PTN, BOOLEAN);
   correctness;
 end;
 
@@ -133,11 +132,11 @@ definition
   let PTN be PT_net_Str;
   mode Boolean_marking of PTN is Element of Bool_marks_of PTN;
 end;
-
+ 
 :: Firable and Firing Conditions for Transitions
 
 definition
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
   let t be transition of PTN;
   pred t is_firable_on M0 means
@@ -146,14 +145,14 @@ definition
 end;
 
 notation
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
   let t be transition of PTN;
   antonym t is_not_firable_on M0 for t is_firable_on M0;
 end;
 
 definition
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
   let t be transition of PTN;
   func Firing(t,M0) -> Boolean_marking of PTN equals
@@ -162,19 +161,19 @@ definition
   coherence
   proof
     set M1 = M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
-    M0 +* (*'{t}-->FALSE) is Function of the Places of PTN, BOOLEAN by Th1;
-    then M1 is Function of the Places of PTN, BOOLEAN by Th1;
+    M0 +* (*'{t}-->FALSE) is Function of the carrier of PTN, BOOLEAN by Th1;
+    then M1 is Function of the carrier of PTN, BOOLEAN by Th1;
     hence thesis by FUNCT_2:11;
   end;
   correctness;
 end;
-
+ 
 :: Firable and Firing Conditions for Transition Sequences
 
 definition
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
-  let Q be FinSequence of the Transitions of PTN;
+  let Q be FinSequence of the carrier' of PTN;
   pred Q is_firable_on M0 means
   :Def4:
   Q = {} or ex M being FinSequence of
@@ -184,16 +183,16 @@ Bool_marks_of PTN st len Q = len M & Q/.1 is_firable_on M0 & M/.1 = Firing(Q/.1
 end;
 
 notation
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
-  let Q be FinSequence of the Transitions of PTN;
+  let Q be FinSequence of the carrier' of PTN;
   antonym Q is_not_firable_on M0 for Q is_firable_on M0;
 end;
 
 definition
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
-  let Q be FinSequence of the Transitions of PTN;
+  let Q be FinSequence of the carrier' of PTN;
   func Firing(Q,M0) -> Boolean_marking of PTN means
   :Def5:
   it = M0 if Q = {}
@@ -203,7 +202,7 @@ otherwise ex M being FinSequence of Bool_marks_of PTN st len Q = len M & it = M
   existence
   proof
     defpred P2[Element of NAT] means for Q being FinSequence of the
-    Transitions of PTN st $1 = len Q holds (Q = {} implies ex M1 being
+    carrier' of PTN st $1 = len Q holds (Q = {} implies ex M1 being
     Boolean_marking of PTN st M1 = M0) & (Q <> {} implies ex M2 being
 Boolean_marking of PTN st ex M being FinSequence of Bool_marks_of PTN st len Q
 = len M & M2 = M/.len M & M/.1 = Firing(Q/.1,M0) & for i being Element of NAT
@@ -214,7 +213,7 @@ A1: now
 A2:   P2[n];
       thus P2[n+1]
       proof
-        let Q be FinSequence of the Transitions of PTN such that
+        let Q be FinSequence of the carrier' of PTN such that
 A3:     n+1=len Q;
         thus Q = {} implies ex M1 being Boolean_marking of PTN st M1 = M0;
         thus Q <> {} implies ex M2 being Boolean_marking of PTN, M being
@@ -222,11 +221,10 @@ FinSequence of Bool_marks_of PTN st len Q = len M & M2 = M/.len M & M/.1 =
 Firing(Q/.1,M0) & for i being Element of NAT st i < len Q & i > 0 holds M/.(i+1
         ) = Firing(Q/.(i+1),M/.i)
         proof
-          assume
-          Q <> {};
+          assume Q <> {};
           then len Q<>0;
           then consider
-          Q1 being FinSequence of the Transitions of PTN, t being
+          Q1 being FinSequence of the carrier' of PTN, t being
           transition of PTN such that
 A4:       Q=Q1^<*t*> by FINSEQ_2:22;
 A5:       n+1=len Q1+ 1 by A3,A4,FINSEQ_2:19;
@@ -244,8 +242,7 @@ A7:         len Q = len Q1 + len <*t*> by A4,FINSEQ_1:35
             then Q/.1 = t by FINSEQ_4:25;
             hence M/.1 = Firing(Q/.1,M0) by FINSEQ_4:25;
             let i be Element of NAT;
-            assume
-            i < len Q & i > 0;
+            assume i < len Q & i > 0;
             hence thesis by A7,NAT_1:13;
           end;
           suppose
@@ -328,8 +325,7 @@ A29: P2[0];
   proof
     let B1,B2 be Boolean_marking of PTN;
     thus Q = {} & B1 = M0 & B2 = M0 implies B1 = B2;
-    assume
-    Q <> {};
+    assume Q <> {};
     given M1 being FinSequence of Bool_marks_of PTN such that
 A30: len Q = len M1 and
 A31: B1 = M1/.len M1 and
@@ -398,8 +394,7 @@ proof
     let u be set;
     thus u in (f+*(A --> y)).:A implies u = y
     proof
-      assume
-      u in (f+*(A --> y)).:A;
+      assume u in (f+*(A --> y)).:A;
       then consider z being set such that
       z in dom(f+*(A --> y)) and
 A1:   z in A and
@@ -421,22 +416,22 @@ A5: x in dom(f+*(A --> y)) by FUNCT_4:13;
 end;
 
 theorem Th6:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+  for PTN being Petri_net, M0 being Boolean_marking of PTN, t
 being transition of PTN, s being place of PTN st s in {t}*' holds Firing(t,M0).
   s = TRUE
 proof
-  let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN,
+  let PTN be Petri_net, M0 be Boolean_marking of PTN, t be transition of PTN,
   s be place of PTN;
   set M = M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
-A1: [#]the Places of PTN = the Places of PTN;
-A2: dom M0 = the Places of PTN & dom (*'{t}-->FALSE) = (*'{t}) by FUNCT_2:def 1
-;
+A1: [#]the carrier of PTN = the carrier of PTN;
+A2: dom M0 = the carrier of PTN & dom (*'{t}-->FALSE) = (*'{t})
+ by FUNCT_2:def 1;
   dom ({t}*'-->TRUE) = ({t}*') by FUNCT_2:def 1;
   then
 A3: dom M = dom(M0 +* (*'{t}-->FALSE)) \/ {t}*' by FUNCT_4:def 1
-    .= (the Places of PTN) \/ (*'{t}) \/ ({t}*') by A2,FUNCT_4:def 1
-    .= (the Places of PTN) \/ ((*'{t}) \/ ({t}*')) by XBOOLE_1:4
-    .= the Places of PTN by A1,SUBSET_1:28;
+    .= (the carrier of PTN) \/ (*'{t}) \/ ({t}*') by A2,FUNCT_4:def 1
+    .= (the carrier of PTN) \/ ((*'{t}) \/ ({t}*')) by XBOOLE_1:4
+    .= the carrier of PTN by A1,SUBSET_1:28;
   assume
 A4: s in {t}*';
   then ((M0 +* (*'{t}-->FALSE)) +* ({t}*'-->TRUE)).:({t}*') = {TRUE} by Th5;
@@ -445,40 +440,31 @@ A4: s in {t}*';
 end;
 
 Lm1: now
-  let PTN be PT_net_Str;
-  let Sd be non empty Subset of the Places of PTN;
-  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
-A1: [#]the Places of PTN = the Places of PTN;
-
-  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN & dom
+  let PTN be Petri_net;
+  let Sd be non empty Subset of the carrier of PTN;
+  set M0 = ((the carrier of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
+A1: [#]the carrier of PTN = the carrier of PTN;
+  dom ((the carrier of PTN)-->TRUE qua Function) = the carrier of PTN & dom
   (Sd -->FALSE) = Sd by FUNCOP_1:19;
-
   then
-A2: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
-    .= the Places of PTN by A1,SUBSET_1:28;
-
-A3: rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
+A2: dom M0 = (the carrier of PTN) \/ Sd by FUNCT_4:def 1
+    .= the carrier of PTN by A1,SUBSET_1:28;
+A3: rng M0 c= rng ((the carrier of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
 FUNCT_4:18;
-
   rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
   then
 A4: rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
-  rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
-  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
-
-  then rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by A4,
+  rng ((the carrier of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
+  then rng ((the carrier of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
+  then rng ((the carrier of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by A4,
 XBOOLE_1:8;
-
   then rng M0 c= BOOLEAN by A3,XBOOLE_1:1;
   then reconsider M0 as Boolean_marking of PTN by A2,FUNCT_2:def 2;
   assume
-
 A5: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE} for t being
   transition of PTN st t is_firable_on M0 holds Firing(t,M0).:Sd = {FALSE};
-
-  assume
-  Sd is not Deadlock-like;
-  then not *'Sd c= Sd*' by PETRI:def 5;
+  assume Sd is not Deadlock-like;
+  then not *'Sd c= Sd*' by PETRI:def 8;
   then consider t being transition of PTN such that
 A6: t in *'Sd and
 A7: not t in Sd*' by SUBSET_1:7;
@@ -493,13 +479,11 @@ A9: Firing(t,M0).s = TRUE by Th6;
   then
 A10: Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
   Sd misses *'{t} by A7,PETRI:19;
-
   then
-A11: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
-
-  rng ((the Places of PTN)-->TRUE) c= {TRUE} & ((the Places of PTN)-->
-  TRUE).: *'{t} c= rng ((the Places of PTN)-->TRUE) by FUNCOP_1:19,RELAT_1:144;
-
+A11: ((the carrier of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
+  rng ((the carrier of PTN)-->TRUE) c= {TRUE} & ((the carrier of PTN)-->
+  TRUE).: *'{t} c= rng ((the carrier of PTN)-->TRUE)
+   by FUNCOP_1:19,RELAT_1:144;
   then M0.:*'{t} c= {TRUE} by A11,XBOOLE_1:1;
   then
 A12: t is_firable_on M0 by Def2;
@@ -508,25 +492,23 @@ A12: t is_firable_on M0 by Def2;
 end;
 
 theorem
-  for PTN being PT_net_Str, Sd being non empty Subset of the Places of
+  for PTN being Petri_net, Sd being non empty Subset of the carrier of
 PTN holds Sd is Deadlock-like iff for M0 being Boolean_marking of PTN st M0.:Sd
 = {FALSE} for t being transition of PTN st t is_firable_on M0 holds Firing(t,M0
   ).:Sd = {FALSE}
 proof
-  let PTN be PT_net_Str, Sd be non empty Subset of the Places of PTN;
+  let PTN be Petri_net, Sd be non empty Subset of the carrier of PTN;
   thus Sd is Deadlock-like implies for M0 being Boolean_marking of PTN st M0.:
 Sd = {FALSE} for t being transition of PTN st t is_firable_on M0 holds Firing(t
   ,M0).:Sd = {FALSE}
   proof
-    assume
-    Sd is Deadlock-like;
+    assume Sd is Deadlock-like;
     then
-A1: *'Sd is Subset of Sd*' by PETRI:def 5;
+A1: *'Sd is Subset of Sd*' by PETRI:def 8;
     let M0 be Boolean_marking of PTN such that
 A2: M0.:Sd = {FALSE};
     let t be transition of PTN;
-    assume
-    t is_firable_on M0;
+    assume t is_firable_on M0;
     then M0.:*'{t} c= {TRUE} by Def2;
     then
 A3: M0.:*'{t} misses {FALSE} by XBOOLE_1:63,ZFMISC_1:17;
@@ -562,13 +544,13 @@ end;
 canceled;
 
 theorem Th10:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, Q0,
-Q1 being FinSequence of the Transitions of PTN holds Firing(Q0^Q1,M0) = Firing(
+  for PTN being Petri_net, M0 being Boolean_marking of PTN, Q0,
+Q1 being FinSequence of the carrier' of PTN holds Firing(Q0^Q1,M0) = Firing(
   Q1,Firing(Q0,M0))
 proof
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
-  let Q0, Q1 be FinSequence of the Transitions of PTN;
+  let Q0, Q1 be FinSequence of the carrier' of PTN;
   now
     per cases;
     case
@@ -683,13 +665,13 @@ A36:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A35,A28);
 end;
 
 theorem Th11:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, Q0,
-Q1 being FinSequence of the Transitions of PTN st Q0^Q1 is_firable_on M0 holds
+  for PTN being Petri_net, M0 being Boolean_marking of PTN, Q0,
+Q1 being FinSequence of the carrier' of PTN st Q0^Q1 is_firable_on M0 holds
   Q1 is_firable_on Firing(Q0,M0) & Q0 is_firable_on M0
 proof
-  let PTN be PT_net_Str;
+  let PTN be Petri_net;
   let M0 be Boolean_marking of PTN;
-  let Q0, Q1 be FinSequence of the Transitions of PTN;
+  let Q0, Q1 be FinSequence of the carrier' of PTN;
   assume
 A1: Q0^Q1 is_firable_on M0;
   now
@@ -858,31 +840,28 @@ A17,A47,A53;
 end;
 
 theorem Th12:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+  for PTN being Petri_net, M0 being Boolean_marking of PTN, t
   being transition of PTN holds t is_firable_on M0 iff <*t*> is_firable_on M0
 proof
-  let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN;
+  let PTN be Petri_net, M0 be Boolean_marking of PTN, t be transition of PTN;
   hereby
     set M = <*Firing(<*t*>/.1,M0)*>;
 A1: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
 A2: now
 A3:   len <*t*> = 0 + 1 by FINSEQ_1:56;
       let i be Element of NAT;
-      assume
-      i < len <*t*> & i > 0;
+      assume i < len <*t*> & i > 0;
       hence <*t*>/.(i+1) is_firable_on M/.i & M/.(i+1) = Firing(<*t*>/.(i+1),M
       /.i) by A3,NAT_1:13;
     end;
-    assume
-    t is_firable_on M0;
+    assume t is_firable_on M0;
     then
 A4: <*t*>/.1 is_firable_on M0 by FINSEQ_4:25;
     len <*t*> = 1 by FINSEQ_1:56
       .= len M by FINSEQ_1:56;
     hence <*t*> is_firable_on M0 by A4,A1,A2,Def4;
   end;
-  assume
-  <*t*> is_firable_on M0;
+  assume <*t*> is_firable_on M0;
   then
   ex M being FinSequence of Bool_marks_of PTN st len <*t*> = len M & <*t*>
 /.1 is_firable_on M0 & M/.1 = Firing(<*t*>/.1,M0) & for i being Element of NAT
@@ -892,18 +871,17 @@ A4: <*t*>/.1 is_firable_on M0 by FINSEQ_4:25;
 end;
 
 theorem Th13:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+  for PTN being Petri_net, M0 being Boolean_marking of PTN, t
   being transition of PTN holds Firing(t,M0) = Firing(<*t*>,M0)
 proof
-  let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN;
+  let PTN be Petri_net, M0 be Boolean_marking of PTN, t be transition of PTN;
   set M = <*Firing(<*t*>/.1,M0)*>;
 A1: len <*t*> = 1 & <*t*>/.1 = t by FINSEQ_1:56,FINSEQ_4:25;
 A2: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
 A3: now
 A4: len <*t*> = 0 + 1 by FINSEQ_1:56;
     let i be Element of NAT;
-    assume
-    i < len <*t*> & i > 0;
+    assume i < len <*t*> & i > 0;
     hence M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by A4,NAT_1:13;
   end;
   len <*t*> = 1 by FINSEQ_1:56
@@ -912,35 +890,35 @@ A4: len <*t*> = 0 + 1 by FINSEQ_1:56;
 end;
 
 theorem
-  for PTN being PT_net_Str, Sd being non empty Subset of the Places of
+  for PTN being Petri_net, Sd being non empty Subset of the carrier of
 PTN holds Sd is Deadlock-like iff for M0 being Boolean_marking of PTN st M0.:Sd
-= {FALSE} for Q being FinSequence of the Transitions of PTN st Q is_firable_on
+= {FALSE} for Q being FinSequence of the carrier' of PTN st Q is_firable_on
   M0 holds Firing(Q,M0).:Sd = {FALSE}
 proof
-  let PTN be PT_net_Str, Sd be non empty Subset of the Places of PTN;
-  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
-A1: [#]the Places of PTN = the Places of PTN;
-  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN & dom
+  let PTN be Petri_net, Sd be non empty Subset of the carrier of PTN;
+  set M0 = ((the carrier of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
+A1: [#]the carrier of PTN = the carrier of PTN;
+  dom ((the carrier of PTN)-->TRUE qua Function) = the carrier of PTN & dom
   (Sd -->FALSE) = Sd by FUNCOP_1:19;
   then
-A2: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
-    .= the Places of PTN by A1,SUBSET_1:28;
+A2: dom M0 = (the carrier of PTN) \/ Sd by FUNCT_4:def 1
+    .= the carrier of PTN by A1,SUBSET_1:28;
   rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
   then
 A3: rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
   thus Sd is Deadlock-like implies for M0 being Boolean_marking of PTN st M0.:
-  Sd = {FALSE} for Q being FinSequence of the Transitions of PTN st Q
+  Sd = {FALSE} for Q being FinSequence of the carrier' of PTN st Q
   is_firable_on M0 holds Firing(Q,M0).:Sd = {FALSE}
   proof
     assume
 A4: Sd is Deadlock-like;
     let M0 be Boolean_marking of PTN such that
 A5: M0.:Sd = {FALSE};
-    defpred P[FinSequence of the Transitions of PTN] means $1 is_firable_on M0
+    defpred P[FinSequence of the carrier' of PTN] means $1 is_firable_on M0
     implies Firing($1,M0).:Sd = {FALSE};
-A6: *'Sd is Subset of Sd*' by A4,PETRI:def 5;
+A6: *'Sd is Subset of Sd*' by A4,PETRI:def 8;
 A7: now
-      let Q be FinSequence of the Transitions of PTN;
+      let Q be FinSequence of the carrier' of PTN;
       let x be transition of PTN;
       assume
 A8:   P[Q];
@@ -972,31 +950,30 @@ A12:    Firing(Q,M0).:*'{x} misses {FALSE} by XBOOLE_1:63,ZFMISC_1:17;
           .= {FALSE} by A8,A11,A12,Th2,Th3,Th11;
       end;
     end;
-A13: P[<*> the Transitions of PTN] by A5,Def5;
-    thus for Q0 being FinSequence of the Transitions of PTN holds P[Q0] from
+A13: P[<*> the carrier' of PTN] by A5,Def5;
+    thus for Q0 being FinSequence of the carrier' of PTN holds P[Q0] from
     FINSEQ_2:sch 2(A13,A7);
   end;
-A14: rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
+A14: rng M0 c= rng ((the carrier of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
 FUNCT_4:18;
-  rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
-  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
-  then rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by A3,
+  rng ((the carrier of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
+  then rng ((the carrier of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
+  then rng ((the carrier of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by A3,
 XBOOLE_1:8;
   then rng M0 c= BOOLEAN by A14,XBOOLE_1:1;
   then reconsider M0 as Boolean_marking of PTN by A2,FUNCT_2:def 2;
   assume
 A15: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE} for Q being
-FinSequence of the Transitions of PTN st Q is_firable_on M0 holds Firing(Q,M0)
+FinSequence of the carrier' of PTN st Q is_firable_on M0 holds Firing(Q,M0)
   .:Sd = {FALSE};
-  assume
-  *'Sd is not Subset of Sd*';
+  assume *'Sd is not Subset of Sd*';
   then consider t being transition of PTN such that
 A16: t in *'Sd and
 A17: not t in Sd*' by SUBSET_1:7;
   Sd misses *'{t} by A17,PETRI:19;
   then
-A18: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
-  reconsider Q = <*t*> as FinSequence of the Transitions of PTN;
+A18: ((the carrier of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
+  reconsider Q = <*t*> as FinSequence of the carrier' of PTN;
   {t}*' meets Sd by A16,PETRI:20;
   then consider s being set such that
 A19: s in {t}*' /\ Sd by XBOOLE_0:4;
@@ -1008,8 +985,9 @@ A20: Firing(t,M0).s = TRUE by Th6;
   then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
   then
 A21: Firing(Q,M0).:Sd <> {FALSE} by Th13;
-  rng ((the Places of PTN)-->TRUE) c= {TRUE} & ((the Places of PTN)-->
-TRUE).: *'{t} c= rng ((the Places of PTN)--> TRUE ) by FUNCOP_1:19,RELAT_1:144;
+  rng ((the carrier of PTN)-->TRUE) c= {TRUE} & ((the carrier of PTN)-->
+TRUE).: *'{t} c= rng ((the carrier of PTN)--> TRUE )
+ by FUNCOP_1:19,RELAT_1:144;
   then M0.:*'{t} c= {TRUE} by A18,XBOOLE_1:1;
   then t is_firable_on M0 by Def2;
   then
@@ -1017,4 +995,3 @@ A22: Q is_firable_on M0 by Th12;
   (M0).:(Sd) = {FALSE qua set} by Th5;
   hence contradiction by A15,A22,A21;
 end;
-

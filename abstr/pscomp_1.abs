@@ -22,16 +22,16 @@ environ
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCT_2,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_2, RCOMP_1,
       STRUCT_0, PRE_TOPC, COMPTS_1, EUCLID, SPPOL_2, VALUED_0, VALUED_1,
-      FUNCOP_1, SEQ_4, XXREAL_2, FINSET_1, FCONT_3, MEASURE6;
+      FUNCOP_1, SEQ_4, XXREAL_2, FINSET_1, FCONT_3, MEASURE6, TOPREAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Preliminaries
 
 reserve r, s, t, g for real number,
-        seq for Real_Sequence,
-        X, Y for Subset of REAL,
-        p, q, r3, r1, r2, q3, p3 for Real;
+
+
+          r3, r1, r2, q3, p3 for Real;
 
 canceled 46;
 
@@ -50,43 +50,44 @@ end;
 definition
   let T be 1-sorted, f be RealMap of T;
  canceled 19;
-  func inf f -> Real equals
+  func lower_bound f -> Real equals
 :: PSCOMP_1:def 20
   lower_bound (f.:the carrier of T);
-  func sup f -> Real equals
+  func upper_bound f -> Real equals
 :: PSCOMP_1:def 21
   upper_bound (f.:the carrier of T);
 end;
 
 theorem :: PSCOMP_1:47
   for T being non empty TopSpace, f being bounded_below RealMap of
-  T for p being Point of T holds f.p >= inf f;
+  T for p being Point of T holds f.p >= lower_bound f;
 
 theorem :: PSCOMP_1:48
   for T being non empty TopSpace, f being bounded_below RealMap of T for
-  s being Real st for t being Point of T holds f.t >= s holds inf f >= s;
+  s being Real st for t being Point of T holds f.t >= s
+  holds lower_bound f >= s;
 
 theorem :: PSCOMP_1:49
   for T being non empty TopSpace, f being RealMap of T st (for p being
   Point of T holds f.p >= r) & for t st for p being Point of T holds f.p >= t
-  holds r >= t holds r = inf f;
+  holds r >= t holds r = lower_bound f;
 
 theorem :: PSCOMP_1:50
   for T being non empty TopSpace, f being bounded_above RealMap of
-  T for p being Point of T holds f.p <= sup f;
+  T for p being Point of T holds f.p <= upper_bound f;
 
 theorem :: PSCOMP_1:51
   for T being non empty TopSpace, f being bounded_above RealMap of T for
-  t st for p being Point of T holds f.p <= t holds sup f <= t;
+  t st for p being Point of T holds f.p <= t holds upper_bound f <= t;
 
 theorem :: PSCOMP_1:52
   for T being non empty TopSpace, f being RealMap of T st (for p being
   Point of T holds f.p <= r) & (for t st for p being Point of T holds f.p <= t
-  holds r <= t) holds r = sup f;
+  holds r <= t) holds r = upper_bound f;
 
 theorem :: PSCOMP_1:53
   for T being non empty 1-sorted, f being bounded RealMap of T
-  holds inf f <= sup f;
+  holds lower_bound f <= upper_bound f;
 
 definition
   let T be TopStruct, f be RealMap of T;
@@ -94,8 +95,7 @@ definition
   attr f is continuous means
 :: PSCOMP_1:def 25
 
-  for Y being Subset of REAL st Y is closed
-  holds f"Y is closed;
+  for Y being Subset of REAL st Y is closed holds f"Y is closed;
 end;
 
 registration
@@ -112,8 +112,8 @@ reserve T for TopStruct,
   f for RealMap of T;
 
 theorem :: PSCOMP_1:54
-  f is continuous iff for Y being Subset of REAL st Y is open
-  holds f"Y is open;
+  f is continuous iff for Y being Subset of REAL st Y is open holds f"Y is open
+;
 
 theorem :: PSCOMP_1:55
   f is continuous implies -f is continuous;
@@ -165,8 +165,7 @@ definition
   attr T is pseudocompact means
 :: PSCOMP_1:def 27
 
-  for f being RealMap of T st f is
-  continuous holds f is bounded;
+  for f being RealMap of T st f is continuous holds f is bounded;
 end;
 
 registration
@@ -184,52 +183,52 @@ end;
 
 theorem :: PSCOMP_1:62
   for T being non empty TopSpace, X being non empty Subset of T, Y
-being compact Subset of T, f being continuous RealMap of T st X c= Y holds inf
-  (f|Y) <= inf (f|X);
+being compact Subset of T, f being continuous RealMap of T st X c= Y
+holds lower_bound
+  (f|Y) <= lower_bound (f|X);
 
 theorem :: PSCOMP_1:63
   for T being non empty TopSpace, X being non empty Subset of T, Y
-being compact Subset of T, f being continuous RealMap of T st X c= Y holds sup
-  (f|X) <= sup (f|Y);
+being compact Subset of T, f being continuous RealMap of T st X c= Y
+holds upper_bound
+  (f|X) <= upper_bound (f|Y);
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
 
-theorem :: PSCOMP_1:64
-  for n being Element of NAT, X, Y being compact Subset of
-  TOP-REAL n holds X /\ Y is compact;
+canceled;
+
+registration
+  let n be Element of NAT, X, Y be compact Subset of TOP-REAL n;
+  cluster X /\ Y -> compact Subset of TOP-REAL n;
+end;
 
 reserve p for Point of TOP-REAL 2,
   P for Subset of TOP-REAL 2,
-  Z for non empty
-  Subset of TOP-REAL 2,
+  Z for non empty Subset of TOP-REAL 2,
   X for non empty compact Subset of TOP-REAL 2;
 
 definition
   func proj1 -> RealMap of TOP-REAL 2 means
 :: PSCOMP_1:def 28
 
-  for p being Point of
-  TOP-REAL 2 holds it.p = p`1;
+  for p being Point of TOP-REAL 2 holds it.p = p`1;
   func proj2 -> RealMap of TOP-REAL 2 means
 :: PSCOMP_1:def 29
 
-  for p being Point of
-  TOP-REAL 2 holds it.p = p`2;
+  for p being Point of TOP-REAL 2 holds it.p = p`2;
 end;
 
 theorem :: PSCOMP_1:65
   proj1"].r,s.[ = {|[ r1, r2 ]| : r < r1 & r1 < s};
 
 theorem :: PSCOMP_1:66
-  for r3, q3 st P = {|[ r1, r2 ]| : r3 < r1 & r1 < q3} holds P is
-  open;
+  for r3, q3 st P = {|[ r1, r2 ]| : r3 < r1 & r1 < q3} holds P is open;
 
 theorem :: PSCOMP_1:67
   proj2"].r,s.[ = {|[ r1, r2 ]| : r < r2 & r2 < s};
 
 theorem :: PSCOMP_1:68
-  for r3, q3 st P = {|[ r1, r2 ]| : r3 < r2 & r2 < q3} holds P is
-  open;
+  for r3, q3 st P = {|[ r1, r2 ]| : r3 < r2 & r2 < q3} holds P is open;
 
 registration
   cluster proj1 -> continuous;
@@ -248,16 +247,16 @@ definition
   let X be Subset of TOP-REAL 2;
   func W-bound X -> Real equals
 :: PSCOMP_1:def 30
-  inf (proj1|X);
+  lower_bound (proj1|X);
   func N-bound X -> Real equals
 :: PSCOMP_1:def 31
-  sup (proj2|X);
+  upper_bound (proj2|X);
   func E-bound X -> Real equals
 :: PSCOMP_1:def 32
-  sup (proj1|X);
+  upper_bound (proj1|X);
   func S-bound X -> Real equals
 :: PSCOMP_1:def 33
-  inf (proj2|X);
+  lower_bound (proj2|X);
 end;
 
 theorem :: PSCOMP_1:71
@@ -326,28 +325,28 @@ definition
   let X be Subset of TOP-REAL 2;
   func W-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 42
-  |[W-bound X, inf (proj2|W-most X)]|;
+  |[W-bound X, lower_bound (proj2|W-most X)]|;
   func W-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 43
-  |[W-bound X, sup (proj2|W-most X)]|;
+  |[W-bound X, upper_bound (proj2|W-most X)]|;
   func N-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 44
-  |[inf (proj1|N-most X), N-bound X]|;
+  |[lower_bound (proj1|N-most X), N-bound X]|;
   func N-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 45
-  |[sup (proj1|N-most X), N-bound X]|;
+  |[upper_bound (proj1|N-most X), N-bound X]|;
   func E-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 46
-  |[E-bound X, sup (proj2|E-most X)]|;
+  |[E-bound X, upper_bound (proj2|E-most X)]|;
   func E-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 47
-  |[E-bound X, inf (proj2|E-most X)]|;
+  |[E-bound X, lower_bound (proj2|E-most X)]|;
   func S-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 48
-  |[sup (proj1|S-most X), S-bound X]|;
+  |[upper_bound (proj1|S-most X), S-bound X]|;
   func S-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 49
-  |[inf (proj1|S-most X), S-bound X]|;
+  |[lower_bound (proj1|S-most X), S-bound X]|;
 end;
 
 canceled;
@@ -520,4 +519,3 @@ theorem :: PSCOMP_1:131
 theorem :: PSCOMP_1:132
   for X be non empty Subset of TOP-REAL 2 for Y be compact Subset of
   TOP-REAL 2 st X c= Y holds W-bound X >= W-bound Y;
-

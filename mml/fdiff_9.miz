@@ -3,7 +3,7 @@
 ::
 :: Received July 9, 2007
 :: Copyright (c) 2007 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SIN_COS4, PARTFUN1, SIN_COS, ORDINAL4, REAL_1, ORDINAL1,
@@ -15,7 +15,7 @@ environ
       NEWTON, VALUED_1, SEQ_1, FDIFF_1, PREPOWER, LIMFUNC1;
  constructors REAL_1, PARTFUN1, PARTFUN2, NAT_1, LIMFUNC1, RCOMP_1, TAYLOR_1,
       SIN_COS, FDIFF_1, RFUNCT_1, SQUARE_1, PREPOWER, SEQ_1, VALUED_1,
-      RELSET_1;
+      RELSET_1, NEWTON;
  registrations RELSET_1, XREAL_0, MEMBERED, RCOMP_1, INT_1, XXREAL_0, NUMBERS,
       ORDINAL1, XBOOLE_0, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -38,12 +38,10 @@ end;
 reserve x,a,b,c for Real,
   n for natural number,
   Z for open Subset of REAL,
-  f,
-  f1,f2 for PartFunc of REAL,REAL;
+  f, f1,f2 for PartFunc of REAL,REAL;
 
 theorem Th1:
-  cos.x<>0 implies sec is_differentiable_in x & diff(sec, x) = sin.
-  x/(cos.x)^2
+  cos.x<>0 implies sec is_differentiable_in x & diff(sec, x) = sin. x/(cos.x)^2
 proof
 A1: cos is_differentiable_in x by SIN_COS:68;
   assume
@@ -73,31 +71,29 @@ proof
     .=1/x |^ n by PREPOWER:14;
   hence thesis by PREPOWER:46;
 end;
-
+ 
 :: f.x=sec.x
 
 theorem
   Z c= dom sec implies sec is_differentiable_on Z & for x st x in Z
   holds ( (sec)`|Z).x = sin.x/(cos.x)^2
 proof
-  assume
-  Z c= dom sec;
+  assume Z c= dom sec;
   then for x st x in Z holds cos.x<>0 by RFUNCT_1:13;
   hence thesis by FDIFF_4:39;
 end;
-
+ 
 :: f.x=cosec.x
 
 theorem
   Z c= dom cosec implies cosec is_differentiable_on Z & for x st x in Z
   holds ( (cosec)`|Z).x = -cos.x/(sin.x)^2
 proof
-  assume
-  Z c= dom cosec;
+  assume Z c= dom cosec;
   then for x st x in Z holds sin.x<>0 by RFUNCT_1:13;
   hence thesis by FDIFF_4:40;
 end;
-
+ 
 :: f.x=sec.(a*x+b)
 
 theorem Th6:
@@ -116,8 +112,7 @@ A4: f is_differentiable_on Z by A2,FDIFF_1:31;
 A5: for x st x in Z holds cos.(f.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -153,7 +148,7 @@ A12: cos.(f.x)<>0 by A5,A10;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x=cosec.(a*x+b)
 
 theorem Th7:
@@ -172,8 +167,7 @@ A4: f is_differentiable_on Z by A2,FDIFF_1:31;
 A5: for x st x in Z holds sin.(f.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -209,7 +203,7 @@ A12: sin.(f.x)<>0 by A5,A10;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(1/x)
 
 theorem
@@ -228,8 +222,7 @@ A4: Z c= dom (f^) by A2,XBOOLE_1:1;
 A5: for x st x in Z holds (cos.((f^).x))<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f^.x in dom sec by A2,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -246,8 +239,7 @@ A8: sec is_differentiable_in (f^).x by Th1;
   end;
   then
 A9: sec*(f^) is_differentiable_on Z by A2,FDIFF_1:16;
-  for x st x in Z holds ((sec*(f^))`|Z).x = -sin.(1/x)/(x^2*(cos.(1/x))^2
-  )
+  for x st x in Z holds ((sec*(f^))`|Z).x = -sin.(1/x)/(x^2*(cos.(1/x))^2 )
   proof
     let x;
     assume
@@ -274,7 +266,7 @@ A12: cos.((f^).x)<>0 by A5,A10;
   end;
   hence thesis by A2,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(1/x)
 
 theorem
@@ -293,8 +285,7 @@ A4: Z c= dom (f^) by A2,XBOOLE_1:1;
 A5: for x st x in Z holds (sin.((f^).x))<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f^.x in dom cosec by A2,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -311,8 +302,7 @@ A8: cosec is_differentiable_in (f^).x by Th2;
   end;
   then
 A9: cosec*(f^) is_differentiable_on Z by A2,FDIFF_1:16;
-  for x st x in Z holds ((cosec*(f^))`|Z).x = cos.(1/x)/(x^2*(sin.(1/x))
-  ^2)
+  for x st x in Z holds ((cosec*(f^))`|Z).x = cos.(1/x)/(x^2*(sin.(1/x)) ^2)
   proof
     let x;
     assume
@@ -339,7 +329,7 @@ A12: sin.((f^).x)<>0 by A5,A10;
   end;
   hence thesis by A2,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(a+b*x+c*x^2)
 
 theorem
@@ -362,8 +352,7 @@ A6: Z c= dom (c(#)f2) by XBOOLE_1:18;
 A7: for x st x in Z holds cos.((f1+c(#)f2).x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then (f1+c(#)f2).x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -409,7 +398,7 @@ A15: cos.((f1+c(#)f2).x)<>0 by A7,A12;
   end;
   hence thesis by A1,A8,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(a+b*x+c*x^2)
 
 theorem
@@ -432,8 +421,7 @@ A6: Z c= dom (c(#)f2) by XBOOLE_1:18;
 A7: for x st x in Z holds sin.((f1+c(#)f2).x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then (f1+c(#)f2).x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -478,7 +466,7 @@ A15: sin.((f1+c(#)f2).x)<>0 by A7,A12;
   end;
   hence thesis by A1,A8,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(exp_R.x)
 
 theorem
@@ -490,16 +478,14 @@ A1: Z c= dom (sec*exp_R);
 A2: for x st x in Z holds cos.(exp_R.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then exp_R.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds sec*exp_R is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.(exp_R.x)<>0 by A2;
     then exp_R is_differentiable_in x & sec is_differentiable_in exp_R.x by
     Th1, SIN_COS:70;
@@ -525,7 +511,7 @@ A6: cos.(exp_R.x)<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(exp_R.x)
 
 theorem
@@ -538,16 +524,14 @@ A1: Z c= dom (cosec*exp_R);
 A2: for x st x in Z holds sin.(exp_R.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then exp_R.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds cosec*exp_R is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.(exp_R.x)<>0 by A2;
     then exp_R is_differentiable_in x & cosec is_differentiable_in exp_R.x by
     Th2,SIN_COS:70;
@@ -575,7 +559,7 @@ A6: sin.(exp_R.x)<>0 by A2;
 end;
 
 Lm1: right_open_halfline 0 = {g where g is Real : 0<g} by XXREAL_1:230;
-
+ 
 :: f.x = sec.(ln.x)
 
 theorem
@@ -590,8 +574,7 @@ A2: Z c= dom ln by A1,XBOOLE_1:1;
 A3: for x st x in Z holds x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in right_open_halfline(0) by A2,TAYLOR_1:18;
     then ex g being Real st x=g & 0<g by Lm1;
     hence thesis;
@@ -599,8 +582,7 @@ A3: for x st x in Z holds x>0
 A4: for x st x in Z holds diff(ln,x) = 1/x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x>0 by A3;
     then x in right_open_halfline(0) by Lm1;
     hence thesis by TAYLOR_1:18;
@@ -608,8 +590,7 @@ A4: for x st x in Z holds diff(ln,x) = 1/x
 A5: for x st x in Z holds cos.(ln.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then ln.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -643,7 +624,7 @@ A12: cos.(ln.x)<>0 by A5,A10;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(ln.x)
 
 theorem
@@ -658,8 +639,7 @@ A2: Z c= dom ln by A1,XBOOLE_1:1;
 A3: for x st x in Z holds x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in right_open_halfline(0) by A2,TAYLOR_1:18;
     then ex g being Real st x=g & 0<g by Lm1;
     hence thesis;
@@ -667,8 +647,7 @@ A3: for x st x in Z holds x>0
 A4: for x st x in Z holds diff(ln,x) = 1/x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x>0 by A3;
     then x in right_open_halfline(0) by Lm1;
     hence thesis by TAYLOR_1:18;
@@ -676,8 +655,7 @@ A4: for x st x in Z holds diff(ln,x) = 1/x
 A5: for x st x in Z holds sin.(ln.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then ln.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -694,8 +672,7 @@ A8: cosec is_differentiable_in ln.x by Th2;
   end;
   then
 A9: cosec*ln is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((cosec*ln)`|Z).x = -cos.(ln.x)/(x*(sin.(ln.x))^2
-  )
+  for x st x in Z holds ((cosec*ln)`|Z).x = -cos.(ln.x)/(x*(sin.(ln.x))^2 )
   proof
     let x;
     assume
@@ -712,7 +689,7 @@ A12: sin.(ln.x)<>0 by A5,A10;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = exp_R.(sec.x)
 
 theorem
@@ -724,16 +701,14 @@ A1: Z c= dom (exp_R*sec);
 A2: for x st x in Z holds cos.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds exp_R*sec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A2;
     then
 A4: sec is_differentiable_in x by Th1;
@@ -742,8 +717,7 @@ A4: sec is_differentiable_in x by Th1;
   end;
   then
 A5: exp_R*sec is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((exp_R*sec)`|Z).x = exp_R.(sec.x)*sin.x/(cos.x)
-  ^2
+  for x st x in Z holds ((exp_R*sec)`|Z).x = exp_R.(sec.x)*sin.x/(cos.x) ^2
   proof
     let x;
 A6: exp_R is_differentiable_in sec.x by SIN_COS:70;
@@ -761,7 +735,7 @@ A8: cos.x<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = exp_R.(cosec.x)
 
 theorem
@@ -773,16 +747,14 @@ A1: Z c= dom (exp_R*cosec);
 A2: for x st x in Z holds sin.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds exp_R*cosec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A2;
     then
 A4: cosec is_differentiable_in x by Th2;
@@ -809,7 +781,7 @@ A8: sin.x<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = ln.(sec.x)
 
 theorem
@@ -821,8 +793,7 @@ A1: Z c= dom (ln*sec);
 A2: for x st x in Z holds sec.x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sec.x in right_open_halfline(0) by A1,FUNCT_1:21,TAYLOR_1:18;
     then ex g being Real st sec.x=g & 0<g by Lm1;
     hence thesis;
@@ -833,24 +804,21 @@ A3: Z c= dom sec by A1,XBOOLE_1:1;
 A4: for x st x in Z holds cos.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A5: for x st x in Z holds sec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A4;
     hence thesis by Th1;
   end;
 A6: for x st x in Z holds ln*sec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sec is_differentiable_in x & sec.x>0 by A2,A5;
     hence thesis by TAYLOR_1:20;
   end;
@@ -873,7 +841,7 @@ A9: cos.x<>0 by A4;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x = ln.(cosec.x)
 
 theorem
@@ -885,8 +853,7 @@ A1: Z c= dom (ln*cosec);
 A2: for x st x in Z holds cosec.x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cosec.x in right_open_halfline(0) by A1,FUNCT_1:21,TAYLOR_1:18;
     then ex g being Real st cosec.x=g & 0<g by Lm1;
     hence thesis;
@@ -897,24 +864,21 @@ A3: Z c= dom cosec by A1,XBOOLE_1:1;
 A4: for x st x in Z holds sin.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A5: for x st x in Z holds cosec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A4;
     hence thesis by Th2;
   end;
 A6: for x st x in Z holds ln*cosec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cosec is_differentiable_in x & cosec.x>0 by A2,A5;
     hence thesis by TAYLOR_1:20;
   end;
@@ -937,7 +901,7 @@ A9: sin.x<>0 by A4;
   end;
   hence thesis by A1,A6,FDIFF_1:16;
 end;
-
+ 
 :: f.x=(sec.x) #Z n
 
 theorem
@@ -953,16 +917,14 @@ A3: Z c= dom sec by A1,XBOOLE_1:1;
 A4: for x st x in Z holds cos.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A5: for x st x in Z holds ( #Z n)*sec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A4;
     then sec is_differentiable_in x by Th1;
     hence thesis by TAYLOR_1:3;
@@ -994,7 +956,7 @@ A10: sec is_differentiable_in x by Th1;
   end;
   hence thesis by A1,A5,FDIFF_1:16;
 end;
-
+ 
 :: f.x=(cosec.x) #Z n
 
 theorem
@@ -1011,24 +973,21 @@ A3: Z c= dom cosec by A1,XBOOLE_1:1;
 A4: for x st x in Z holds sin.x<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A5: for x st x in Z holds ( #Z n)*cosec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A4;
     then cosec is_differentiable_in x by Th2;
     hence thesis by TAYLOR_1:3;
   end;
   then
 A6: ( #Z n)*cosec is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((( #Z n)*cosec)`|Z).x = -n*cos.x/(sin.x) #Z (n+1
-  )
+  for x st x in Z holds ((( #Z n)*cosec)`|Z).x = -n*cos.x/(sin.x) #Z (n+1 )
   proof
     set m = n-1;
     let x;
@@ -1053,7 +1012,7 @@ A10: cosec is_differentiable_in x by Th2;
   end;
   hence thesis by A1,A5,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.x-x
 
 theorem
@@ -1073,8 +1032,7 @@ A6: id Z is_differentiable_on Z by A1,FDIFF_1:31;
   for x st x in Z holds sec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A4,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -1100,7 +1058,7 @@ A10: (cos.x)^2 >0 by SQUARE_1:74;
   end;
   hence thesis by A2,A6,A7,FDIFF_1:27;
 end;
-
+ 
 :: f.x = -cosec.x-x
 
 theorem
@@ -1120,8 +1078,7 @@ A5: Z c= dom cosec by VALUED_1:8;
   for x st x in Z holds cosec is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -1153,7 +1110,7 @@ A12: (sin.x)^2 >0 by SQUARE_1:74;
   end;
   hence thesis by A2,A9,A7,FDIFF_1:27;
 end;
-
+ 
 :: f.x = exp_R.x*sec.x
 
 theorem
@@ -1175,8 +1132,7 @@ A6: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A4,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -1199,7 +1155,7 @@ A8: x in Z;
   end;
   hence thesis by A2,A5,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = exp_R.x*cosec.x
 
 theorem
@@ -1221,8 +1177,7 @@ A6: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   .x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A4,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -1244,7 +1199,7 @@ A8: x in Z;
   end;
   hence thesis by A2,A5,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = (1/a)*sec.(a*x)-x
 
 theorem
@@ -1273,8 +1228,7 @@ A11: id Z is_differentiable_on Z by A9,FDIFF_1:31;
 A12: for x st x in Z holds cos.(f.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f.x in dom sec by A5,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -1305,7 +1259,7 @@ A15: (cos.(a*x))^2>0 by A14,SQUARE_1:74;
   end;
   hence thesis by A1,A8,A11,FDIFF_1:27;
 end;
-
+ 
 :: f.x = (-1/a)*cosec.(a*x)-x
 
 theorem
@@ -1334,8 +1288,7 @@ A11: id Z is_differentiable_on Z by A9,FDIFF_1:31;
 A12: for x st x in Z holds sin.(f.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then f.x in dom cosec by A5,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -1369,7 +1322,7 @@ A15: (sin.(a*x))^2>0 by A14,SQUARE_1:74;
   end;
   hence thesis by A1,A8,A11,FDIFF_1:27;
 end;
-
+ 
 :: f.x = (a*x+b)*sec.x
 
 theorem
@@ -1390,16 +1343,14 @@ A7: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A4,RFUNCT_1:13;
     hence thesis by Th1;
   end;
   then for x st x in Z holds sec is_differentiable_in x;
   then
 A8: sec is_differentiable_on Z by A4,FDIFF_1:16;
-  for x st x in Z holds ((f(#)sec)`|Z).x = a/cos.x+(a*x+b)*sin.x/(cos.x)
-  ^2
+  for x st x in Z holds ((f(#)sec)`|Z).x = a/cos.x+(a*x+b)*sin.x/(cos.x) ^2
   proof
     let x;
     assume
@@ -1415,7 +1366,7 @@ A9: x in Z;
   end;
   hence thesis by A1,A6,A8,FDIFF_1:29;
 end;
-
+ 
 :: f.x = (a*x+b)*cosec.x
 
 theorem
@@ -1436,16 +1387,14 @@ A7: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   .x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A4,RFUNCT_1:13;
     hence thesis by Th2;
   end;
   then for x st x in Z holds cosec is_differentiable_in x;
   then
 A8: cosec is_differentiable_on Z by A4,FDIFF_1:16;
-  for x st x in Z holds ((f(#)cosec)`|Z).x = a/sin.x-(a*x+b)*cos.x/(sin.x
-  )^2
+  for x st x in Z holds ((f(#)cosec)`|Z).x = a/sin.x-(a*x+b)*cos.x/(sin.x )^2
   proof
     let x;
     assume
@@ -1462,7 +1411,7 @@ A9: x in Z;
   end;
   hence thesis by A1,A6,A8,FDIFF_1:29;
 end;
-
+ 
 :: f.x = ln.x*sec.x
 
 theorem
@@ -1479,8 +1428,7 @@ A4: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A3,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -1491,8 +1439,7 @@ A6: Z c= dom ln by A2,XBOOLE_1:18;
 A7: for x st x in Z holds x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in right_open_halfline(0) by A6,TAYLOR_1:18;
     then ex g being Real st x=g & 0<g by Lm1;
     hence thesis;
@@ -1503,14 +1450,12 @@ A8: ln is_differentiable_on Z by A6,FDIFF_1:16;
 A9: for x st x in Z holds diff(ln,x) = 1/x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x>0 by A7;
     then x in right_open_halfline(0) by Lm1;
     hence thesis by TAYLOR_1:18;
   end;
-  for x st x in Z holds ((ln(#)sec)`|Z).x = 1/cos.x/x+ln.x*sin.x/(cos.x)
-  ^2
+  for x st x in Z holds ((ln(#)sec)`|Z).x = 1/cos.x/x+ln.x*sin.x/(cos.x) ^2
   proof
     let x;
     assume
@@ -1524,7 +1469,7 @@ A10: x in Z;
   end;
   hence thesis by A1,A8,A5,FDIFF_1:29;
 end;
-
+ 
 :: f.x = ln.x*cosec.x
 
 theorem
@@ -1541,8 +1486,7 @@ A4: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-
   cos.x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A3,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -1553,8 +1497,7 @@ A6: Z c= dom ln by A2,XBOOLE_1:18;
 A7: for x st x in Z holds x>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x in right_open_halfline(0) by A6,TAYLOR_1:18;
     then ex g being Real st x=g & 0<g by Lm1;
     hence thesis;
@@ -1565,14 +1508,12 @@ A8: ln is_differentiable_on Z by A6,FDIFF_1:16;
 A9: for x st x in Z holds diff(ln,x) = 1/x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then x>0 by A7;
     then x in right_open_halfline(0) by Lm1;
     hence thesis by TAYLOR_1:18;
   end;
-  for x st x in Z holds ((ln(#)cosec)`|Z).x = 1/sin.x/x-ln.x*cos.x/(sin.x
-  )^2
+  for x st x in Z holds ((ln(#)cosec)`|Z).x = 1/sin.x/x-ln.x*cos.x/(sin.x )^2
   proof
     let x;
     assume
@@ -1587,7 +1528,7 @@ A10: x in Z;
   end;
   hence thesis by A1,A8,A5,FDIFF_1:29;
 end;
-
+ 
 :: f.x = 1/x*sec.x
 
 theorem
@@ -1607,8 +1548,7 @@ A6: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -1635,7 +1575,7 @@ A9: x in Z;
   end;
   hence thesis by A2,A3,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = 1/x*cosec.x
 
 theorem
@@ -1655,8 +1595,7 @@ A6: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   .x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -1664,8 +1603,7 @@ A6: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   then
 A7: cosec is_differentiable_on Z by A5,FDIFF_1:16;
 A8: Z c= dom (f^) by A4,XBOOLE_1:18;
-  for x st x in Z holds ((f^(#)cosec)`|Z).x = -1/sin.x/x^2-cos.x/x/(sin.x
-  )^2
+  for x st x in Z holds ((f^(#)cosec)`|Z).x = -1/sin.x/x^2-cos.x/x/(sin.x )^2
   proof
     let x;
     assume
@@ -1684,7 +1622,7 @@ A9: x in Z;
   end;
   hence thesis by A2,A3,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = sec.(sin.x)
 
 theorem
@@ -1696,16 +1634,14 @@ A1: Z c= dom (sec*sin);
 A2: for x st x in Z holds cos.(sin.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds sec*sin is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.(sin.x)<>0 by A2;
     then sin is_differentiable_in x & sec is_differentiable_in sin.x by
     Th1,
@@ -1714,8 +1650,7 @@ A3: for x st x in Z holds sec*sin is_differentiable_in x
   end;
   then
 A4: sec*sin is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((sec*sin)`|Z).x = cos.x*sin.(sin.x)/(cos.(sin.x)
-  )^2
+  for x st x in Z holds ((sec*sin)`|Z).x = cos.x*sin.(sin.x)/(cos.(sin.x) )^2
   proof
     let x;
     assume
@@ -1731,7 +1666,7 @@ A6: cos.(sin.x)<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(cos.x)
 
 theorem
@@ -1743,16 +1678,14 @@ A1: Z c= dom (sec*cos);
 A2: for x st x in Z holds cos.(cos.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds sec*cos is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.(cos.x)<>0 by A2;
     then cos is_differentiable_in x & sec is_differentiable_in cos.x by
     Th1,
@@ -1761,8 +1694,7 @@ A3: for x st x in Z holds sec*cos is_differentiable_in x
   end;
   then
 A4: sec*cos is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((sec*cos)`|Z).x = -sin.x*sin.(cos.x)/(cos.(cos.x
-  ))^2
+  for x st x in Z holds ((sec*cos)`|Z).x = -sin.x*sin.(cos.x)/(cos.(cos.x ))^2
   proof
     let x;
     assume
@@ -1778,7 +1710,7 @@ A6: cos.(cos.x)<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(sin.x)
 
 theorem
@@ -1790,16 +1722,14 @@ A1: Z c= dom (cosec*sin);
 A2: for x st x in Z holds sin.(sin.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds cosec*sin is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.(sin.x)<>0 by A2;
     then sin is_differentiable_in x & cosec is_differentiable_in sin.x by
     Th2, SIN_COS:69;
@@ -1824,7 +1754,7 @@ A6: sin.(sin.x)<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(cos.x)
 
 theorem
@@ -1836,16 +1766,14 @@ A1: Z c= dom (cosec*cos);
 A2: for x st x in Z holds sin.(cos.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
 A3: for x st x in Z holds cosec*cos is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.(cos.x)<>0 by A2;
     then cos is_differentiable_in x & cosec is_differentiable_in cos.x by
     Th2, SIN_COS:68;
@@ -1853,8 +1781,7 @@ A3: for x st x in Z holds cosec*cos is_differentiable_in x
   end;
   then
 A4: cosec*cos is_differentiable_on Z by A1,FDIFF_1:16;
-  for x st x in Z holds ((cosec*cos)`|Z).x = sin.x*cos.(cos.x)/(sin.(cos.
-  x))^2
+  for x st x in Z holds ((cosec*cos)`|Z).x = sin.x*cos.(cos.x)/(sin.(cos. x))^2
   proof
     let x;
     assume
@@ -1870,7 +1797,7 @@ A6: sin.(cos.x)<>0 by A2;
   end;
   hence thesis by A1,A3,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(tan.x)
 
 theorem
@@ -1882,8 +1809,7 @@ A1: Z c= dom (sec*tan);
 A2: for x st x in Z holds cos.(tan.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then tan.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -1924,7 +1850,7 @@ A11: cos.(tan.x)<>0 by A2,A8;
   end;
   hence thesis by A1,A4,FDIFF_1:16;
 end;
-
+ 
 :: f.x = sec.(cot.x)
 
 theorem
@@ -1936,8 +1862,7 @@ A1: Z c= dom (sec*cot);
 A2: for x st x in Z holds cos.(cot.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cot.x in dom sec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -1978,7 +1903,7 @@ A11: cos.(cot.x)<>0 by A2,A8;
   end;
   hence thesis by A1,A4,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(tan.x)
 
 theorem
@@ -1990,8 +1915,7 @@ A1: Z c= dom (cosec*tan);
 A2: for x st x in Z holds sin.(tan.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then tan.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -2033,7 +1957,7 @@ A11: sin.(tan.x)<>0 by A2,A8;
   end;
   hence thesis by A1,A4,FDIFF_1:16;
 end;
-
+ 
 :: f.x = cosec.(cot.x)
 
 theorem
@@ -2045,8 +1969,7 @@ A1: Z c= dom (cosec*cot);
 A2: for x st x in Z holds sin.(cot.x)<>0
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cot.x in dom cosec by A1,FUNCT_1:21;
     hence thesis by RFUNCT_1:13;
   end;
@@ -2088,7 +2011,7 @@ A11: sin.(cot.x)<>0 by A2,A8;
   end;
   hence thesis by A1,A4,FDIFF_1:16;
 end;
-
+ 
 :: f.x = tan.x*sec.x
 
 theorem
@@ -2104,8 +2027,7 @@ A3: Z c= dom (tan) by XBOOLE_1:18;
   for x st x in Z holds tan is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A3,FDIFF_8:1;
     hence thesis by FDIFF_7:46;
   end;
@@ -2116,8 +2038,7 @@ A6: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -2141,7 +2062,7 @@ A9: cos.x<>0 by A3,FDIFF_8:1;
   end;
   hence thesis by A1,A4,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = cot.x*sec.x
 
 theorem
@@ -2157,8 +2078,7 @@ A3: Z c= dom (cot) by XBOOLE_1:18;
   for x st x in Z holds cot is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A3,FDIFF_8:2;
     hence thesis by FDIFF_7:47;
   end;
@@ -2169,8 +2089,7 @@ A6: for x st x in Z holds sec is_differentiable_in x & diff(sec, x)=sin.x/(
   cos.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th1;
   end;
@@ -2194,7 +2113,7 @@ A9: sin.x<>0 by A3,FDIFF_8:2;
   end;
   hence thesis by A1,A4,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = tan.x*cosec.x
 
 theorem
@@ -2211,8 +2130,7 @@ A3: Z c= dom (tan) by XBOOLE_1:18;
   for x st x in Z holds tan is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then cos.x<>0 by A3,FDIFF_8:1;
     hence thesis by FDIFF_7:46;
   end;
@@ -2223,8 +2141,7 @@ A6: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   .x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -2249,7 +2166,7 @@ A9: cos.x<>0 by A3,FDIFF_8:1;
   end;
   hence thesis by A1,A4,A7,FDIFF_1:29;
 end;
-
+ 
 :: f.x = cot.x*cosec.x
 
 theorem
@@ -2266,8 +2183,7 @@ A3: Z c= dom (cot) by XBOOLE_1:18;
   for x st x in Z holds cot is_differentiable_in x
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A3,FDIFF_8:2;
     hence thesis by FDIFF_7:47;
   end;
@@ -2278,8 +2194,7 @@ A6: for x st x in Z holds cosec is_differentiable_in x & diff(cosec, x)=-cos
   .x/(sin.x)^2
   proof
     let x;
-    assume
-    x in Z;
+    assume x in Z;
     then sin.x<>0 by A5,RFUNCT_1:13;
     hence thesis by Th2;
   end;
@@ -2304,4 +2219,3 @@ A9: sin.x<>0 by A3,FDIFF_8:2;
   end;
   hence thesis by A1,A4,A7,FDIFF_1:29;
 end;
-

@@ -1,6 +1,6 @@
 :: Basic Properties of Periodic Functions
 ::  by Bo Li , Yanhong Men , Dailu Li and Xiquan Liang
-:: 
+::
 :: Received October 10, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -14,7 +14,7 @@ environ
       REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, SIN_COS, VALUED_0,
       VALUED_1, NAT_1, SQUARE_1, FDIFF_9;
  constructors REAL_1, SEQ_1, EUCLID, SQUARE_1, PBOOLE, RFUNCT_1, SIN_COS,
-      FDIFF_9, RELSET_1;
+      FDIFF_9, RELSET_1, COMPLEX1;
  registrations XXREAL_0, MEMBERED, XCMPLX_0, NUMBERS, VALUED_0, RELAT_1,
       VALUED_1, NAT_1, SIN_COS6, FUNCOP_1, XREAL_0;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
@@ -25,16 +25,15 @@ environ
 
 begin :: The Basic Properties of period function
 
-reserve x,s,t,t1,t2,r,a,b for real number;
+reserve x,t,t1,t2,r,a,b for real number;
 reserve F,G for real-valued Function;
-reserve i,j,k for Nat;
+reserve k for Nat;
 
 definition
   let t be real number;
   let F be Function;
   attr F is t-periodic means :Def1:
-  t <> 0 &
-  for x holds (x in dom F iff x+t in dom F) &
+  t <> 0 & for x holds (x in dom F iff x+t in dom F) &
               (x in dom F implies F.x = F.(x+t));
 end;
 
@@ -165,8 +164,7 @@ A6:     dom F /\ dom G c= dom F & dom F /\ dom G c= dom G by XBOOLE_1:17;
         then
 A7:     x+t in dom F & x-t in dom F by A1,Th1,A5;
         x+t in dom G & x-t in dom G by A2,Th1,A5,A6; then
-A8:    x+t in dom F /\ dom G & x-t in dom F /\ dom G
-       by A7,XBOOLE_0:def 4; then
+A8:    x+t in dom F /\ dom G & x-t in dom F /\ dom G by A7,XBOOLE_0:def 4; then
 A9:    x+t in dom (F (#) G) & x-t in dom (F (#) G) by VALUED_1:def 4;
         (F (#) G).x=F.x * G.x by B1,VALUED_1:def 4
                  .=F.(x+t)*G.x by A1,Th1,A5,A6
@@ -235,8 +233,8 @@ theorem Th7:
 proof
 assume
 A1: F is t-periodic;
-A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by A1,Th1;
+then A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
     for x st x in dom (r (#) F) holds (x+t in dom (r (#) F)
     & x-t in dom (r (#) F)) & (r (#) F).x=(r (#) F).(x+t)
       proof
@@ -259,8 +257,8 @@ theorem Th8:
 proof
 assume
 A1: F is t-periodic;
-A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by A1,Th1;
+then A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
    for x st x in dom (r+F) holds (x+t in dom (r+F) & x-t in dom (r+F)) &
    (r+F).x=(r+F).(x+t)
       proof
@@ -286,8 +284,8 @@ theorem Th10:
 proof
     assume
 A1: F is t-periodic;
-A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by A1,Th1;
+then A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
    for x st x in dom |. F .| holds (x+t in dom |. F .| & x-t in dom |. F .|) &
    |. F .|.x=|. F .|.(x+t)
     proof
@@ -310,8 +308,8 @@ theorem Th11:
 proof
 assume
 A1: F is t-periodic;
-A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by A1,Th1;
+then A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
    for x st x in dom (F") holds (x+t in dom (F") & x-t in dom (F")) &
    (F").x=(F").(x+t)
       proof
@@ -335,8 +333,8 @@ theorem Th12:
 proof
 assume
 A1: F is t-periodic;
-A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
-    & F.x=F.(x+t) by A1,Th1;
+then A3: t<>0 & for x st x in dom F holds (x+t in dom F & x-t in dom F)
+    & F.x=F.(x+t) by Th1;
    for x st x in dom F^2 holds (x+t in dom F^2 & x-t in dom F^2) &
    (F^2).x=(F^2).(x+t)
       proof
@@ -370,9 +368,8 @@ theorem
 proof
 assume
 A1:  F is t-periodic;
-B1:  -t<>0 by A1,Th1;
- for x st x in dom F holds
- (x+(-t) in dom F & x-(-t) in dom F) & F.x=F.(x+(-t))
+then B1:  -t<>0 by Th1;
+ for x st x in dom F holds (x+(-t) in dom F & x-(-t) in dom F) & F.x=F.(x+(-t))
    proof
    let x;
        assume
@@ -431,15 +428,13 @@ proof
 assume that
 A1: t<>0 and
 A2: for x st x in dom F holds (x+t in dom F & x-t in dom F & F.(x+t)=F.(x-t));
- for x st x in dom F
-holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
+ for x st x in dom F holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
   proof
   let x;
   assume x in dom F; then
 A3: x+t in dom F & x-t in dom F by A2; then
 A4: x+t+t in dom F & x-t-t in dom F by A2;
-   F.(x+2*t)=F.(x+t+t)
-               .=F.(x+t-t) by A2,A3
+   F.(x+2*t)=F.(x+t+t) .=F.(x+t-t) by A2,A3
                .=F.x;
   hence thesis by A4;
   end;
@@ -464,8 +459,7 @@ holds (x+(t1+t2) in dom F & x-(t1+t2) in dom F) & F.x=F.(x+(t1+t2))
 A3: x+t1 in dom F & x-t1 in dom F & x+t2 in dom F & x-t2 in dom F by A2;
   then
 A4: x+t1+t2 in dom F & x-t1-t2 in dom F by A2;
-   F.(x+(t1+t2))=F.(x+t2+t1)
-               .=F.(x+t2-t2) by A2,A3
+   F.(x+(t1+t2))=F.(x+t2+t1) .=F.(x+t2-t2) by A2,A3
                .=F.x;
   hence thesis by A4;
   end;
@@ -490,8 +484,7 @@ holds (x+(t1-t2) in dom F & x-(t1-t2) in dom F) & F.x=F.(x+(t1-t2))
 A3: x+t1 in dom F & x-t1 in dom F & x+t2 in dom F & x-t2 in dom F by A2;
   then
 A4: x+t1-t2 in dom F & x-t1+t2 in dom F by A2;
-  F.(x+(t1-t2))=F.(x-t2+t1)
-               .=F.(x-t2+t2) by A2,A3
+  F.(x+(t1-t2))=F.(x-t2+t1) .=F.(x-t2+t2) by A2,A3
                .=F.x;
   hence thesis by A4;
   end;
@@ -506,16 +499,14 @@ theorem
 assume that
 A1: t<>0 and
 A2: for x st x in dom F holds (x+t in dom F & x-t in dom F & F.(x+t)=(F.x)");
- for x st x in dom F
-holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
+ for x st x in dom F holds (x+2*t in dom F & x-2*t in dom F) & F.x=F.(x+2*t)
   proof
   let x;
   assume
 A0:x in dom F; then
 A3: x+t in dom F & x-t in dom F by A2; then
 A4: x+t+t in dom F & x-t-t in dom F by A2;
-   F.(x+2*t)=F.(x+t+t)
-               .=(F.(x+t))" by A2,A3
+   F.(x+2*t)=F.(x+t+t) .=(F.(x+t))" by A2,A3
                .=((F.x)")" by A2,A0
                .=F.x;
   hence thesis by A4;
@@ -639,7 +630,7 @@ A2: for k being Nat st X[k] holds X[k+1]
 A3: sin is 2*PI*(k+1) -periodic;
     sin is 2*PI*(k+1+1) -periodic
     proof
-A7:   for x st x in dom sin holds sin.x=sin.(x+2*PI*(k+1+1))
+   for x st x in dom sin holds sin.x=sin.(x+2*PI*(k+1+1))
       proof
         let x;
         assume
@@ -647,9 +638,9 @@ A8:     x in dom sin;
         sin.(x+2*PI*(k+1))=sin.(x+2*PI*(k+1)+2*PI) by SIN_COS:83;
         hence thesis by A3,Th1,A8;
       end;
-    2*PI*(k+1+1)<>0 & for x st x in dom sin holds
+    then 2*PI*(k+1+1)<>0 & for x st x in dom sin holds
     (x+2*PI*(k+1+1) in dom sin & x-2*PI*(k+1+1) in dom sin)
-    & sin.x=sin.(x+2*PI*(k+1+1)) by  SIN_COS:27,A7;
+    & sin.x=sin.(x+2*PI*(k+1+1)) by  SIN_COS:27;
   hence thesis by Th1;
     end;
     hence thesis;
@@ -669,7 +660,7 @@ A2: for k being Nat st X[k] holds X[k+1]
 A3: cos is 2*PI*(k+1) -periodic;
     cos is 2*PI*(k+1+1) -periodic
     proof
-A7:   for x st x in dom cos holds cos.x=cos.(x+2*PI*(k+1+1))
+   for x st x in dom cos holds cos.x=cos.(x+2*PI*(k+1+1))
       proof
         let x;
         assume
@@ -677,9 +668,9 @@ A8:     x in dom cos;
         cos.(x+2*PI*(k+1))=cos.(x+2*PI*(k+1)+2*PI) by SIN_COS:83;
         hence thesis by A3,Th1,A8;
       end;
-  2*PI*(k+1+1)<>0 & for x st x in dom cos holds
+  then 2*PI*(k+1+1)<>0 & for x st x in dom cos holds
     (x+2*PI*(k+1+1) in dom cos & x-2*PI*(k+1+1) in dom cos) &
-    cos.x=cos.(x+2*PI*(k+1+1)) by  SIN_COS:27,A7;
+    cos.x=cos.(x+2*PI*(k+1+1)) by  SIN_COS:27;
   hence thesis by Th1;
     end;
     hence thesis;
@@ -710,8 +701,8 @@ A3: x+2 * PI in dom sin \ sin"{0} by XBOOLE_0:def 5;
      then x-2 * PI in dom sin & not x-2 * PI in sin"{0}
     by A2,FUNCT_1:def 13,SIN_COS:27; then
 A4: x-2 * PI in dom sin \ sin"{0} by XBOOLE_0:def 5; then
-A5: x+2 * PI in dom cosec & x-2 * PI in dom cosec by A3,RFUNCT_1:def 8;
-    cosec.(x+2 * PI)=(sin.(x+2 * PI))" by A5,RFUNCT_1:def 8
+ x+2 * PI in dom cosec & x-2 * PI in dom cosec by A3,RFUNCT_1:def 8;
+    then cosec.(x+2 * PI)=(sin.(x+2 * PI))" by RFUNCT_1:def 8
                    .=(sin.x)" by SIN_COS:83
                    .=cosec.x by A1,RFUNCT_1:def 8;
     hence thesis by A3,A4,RFUNCT_1:def 8;
@@ -741,8 +732,8 @@ A3: x+2 * PI in dom cos \ cos"{0} by XBOOLE_0:def 5;
      then x-2 * PI in dom cos & not x-2 * PI in cos"{0}
     by A2,FUNCT_1:def 13,SIN_COS:27; then
 A4: x-2 * PI in dom cos \ cos"{0} by XBOOLE_0:def 5; then
-A5: x+2 * PI in dom sec & x-2 * PI in dom sec by A3,RFUNCT_1:def 8;
-    sec.(x+2 * PI)=(cos.(x+2 * PI))" by A5,RFUNCT_1:def 8
+ x+2 * PI in dom sec & x-2 * PI in dom sec by A3,RFUNCT_1:def 8;
+    then sec.(x+2 * PI)=(cos.(x+2 * PI))" by RFUNCT_1:def 8
                    .=(cos.x)" by SIN_COS:83
                    .=sec.x by A1,RFUNCT_1:def 8;
     hence thesis by A3,A4,RFUNCT_1:def 8;
@@ -793,9 +784,8 @@ B3: x+2*PI*(k+1+1) in dom cos \ cos"{0} by XBOOLE_0:def 5;
      then x-2*PI*(k+1+1) in dom cos & not x-2*PI*(k+1+1) in cos"{0}
     by B2,FUNCT_1:def 13,SIN_COS:27; then
 B4: x-2*PI*(k+1+1) in dom cos \ cos"{0} by XBOOLE_0:def 5; then
-B5: x+2*PI*(k+1+1) in dom sec & x-2*PI*(k+1+1) in dom sec
-  by B3,RFUNCT_1:def 8;
-sec.(x+2*PI*(k+1+1))=(cos.(x+2*PI*(k+1)+2*PI))" by B5,RFUNCT_1:def 8
+ x+2*PI*(k+1+1) in dom sec & x-2*PI*(k+1+1) in dom sec by B3,RFUNCT_1:def 8;
+then sec.(x+2*PI*(k+1+1))=(cos.(x+2*PI*(k+1)+2*PI))" by RFUNCT_1:def 8
                    .=(cos.(x+2*PI*(k+1)))" by SIN_COS:83
                    .=sec.x by A9,RFUNCT_1:def 8;
        hence thesis by B3,RFUNCT_1:def 8,B4;
@@ -844,9 +834,9 @@ B3: x+2*PI*(k+1+1) in dom sin \ sin"{0} by XBOOLE_0:def 5;
      then x-2*PI*(k+1+1) in dom sin & not x-2*PI*(k+1+1) in sin"{0}
     by B2,FUNCT_1:def 13,SIN_COS:27; then
 B4: x-2*PI*(k+1+1) in dom sin \ sin"{0} by XBOOLE_0:def 5; then
-B5: x+2*PI*(k+1+1) in dom cosec & x-2*PI*(k+1+1) in dom cosec
+ x+2*PI*(k+1+1) in dom cosec & x-2*PI*(k+1+1) in dom cosec
   by B3,RFUNCT_1:def 8;
-cosec.(x+2*PI*(k+1+1))=(sin.(x+2*PI*(k+1)+2*PI))" by B5,RFUNCT_1:def 8
+then cosec.(x+2*PI*(k+1+1))=(sin.(x+2*PI*(k+1)+2*PI))" by RFUNCT_1:def 8
                      .=(sin.(x+2*PI*(k+1)))" by SIN_COS:83
                      .=cosec.x by A9,RFUNCT_1:def 8;
        hence thesis by B3,RFUNCT_1:def 8,B4;
@@ -869,8 +859,7 @@ L5: tan is PI -periodic
 A1: x in dom tan;
      then x in dom sin /\ (dom cos \ cos"{0}) by RFUNCT_1:def 4;
      then x in dom sin & x in dom cos \ cos"{0} by XBOOLE_0:def 4;
-     then x in dom sin & x in dom cos & not x in cos"{0}
-    by XBOOLE_0:def 5;
+     then x in dom sin & x in dom cos & not x in cos"{0} by XBOOLE_0:def 5;
      then not cos.x in {0} by FUNCT_1:def 13; then
 B1: cos.x<>0 by TARSKI:def 1;
 B2: cos.(x+PI)=-cos.x by SIN_COS:83;
@@ -888,8 +877,8 @@ A3: x+PI in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4;
     then x-PI in dom sin & x-PI in dom cos \ cos"{0} by XBOOLE_0:def 5;
     then
 A4: x-PI in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4; then
-A5: x+PI in dom tan & x-PI in dom tan by A3,RFUNCT_1:def 4;
-    tan.(x+PI)=(sin.(x+PI))/(cos.(x+PI)) by A5,RFUNCT_1:def 4
+ x+PI in dom tan & x-PI in dom tan by A3,RFUNCT_1:def 4;
+    then tan.(x+PI)=(sin.(x+PI))/(cos.(x+PI)) by RFUNCT_1:def 4
                    .=(-sin.x)/(cos.(x+PI)) by SIN_COS:83
                    .=(-sin.x)/(-cos.x) by SIN_COS:83
                    .=sin.x/cos.x by XCMPLX_1:192
@@ -909,8 +898,7 @@ L6: cot is PI -periodic
 A1: x in dom cot;
      then x in dom cos /\ (dom sin \ sin"{0}) by RFUNCT_1:def 4;
      then x in dom cos & x in dom sin \ sin"{0} by XBOOLE_0:def 4;
-     then x in dom cos & x in dom sin & not x in sin"{0}
-    by XBOOLE_0:def 5;
+     then x in dom cos & x in dom sin & not x in sin"{0} by XBOOLE_0:def 5;
      then not sin.x in {0} by FUNCT_1:def 13; then
 B1: sin.x<>0 by TARSKI:def 1;
 B2: sin.(x+PI)=-sin.x by SIN_COS:83;
@@ -926,8 +914,8 @@ A3:  x+PI in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4;
     by FUNCT_1:def 13,SIN_COS:27;
     then x-PI in dom cos & x-PI in dom sin \ sin"{0} by XBOOLE_0:def 5;then
 A4: x-PI in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4; then
-A5: x+PI in dom cot & x-PI in dom cot by A3,RFUNCT_1:def 4;
-    cot.(x+PI)=(cos.(x+PI))/(sin.(x+PI)) by A5,RFUNCT_1:def 4
+ x+PI in dom cot & x-PI in dom cot by A3,RFUNCT_1:def 4;
+    then cot.(x+PI)=(cos.(x+PI))/(sin.(x+PI)) by RFUNCT_1:def 4
                    .=(-cos.x)/(sin.(x+PI)) by SIN_COS:83
                    .=(-cos.x)/(-sin.x) by SIN_COS:83
                    .=cos.x/sin.x by XCMPLX_1:192
@@ -990,10 +978,9 @@ then not cos.(x-PI*(k+1+1)) in {0} by B1,TARSKI:def 1;
     then x-PI*(k+1+1) in dom sin & x-PI*(k+1+1) in dom cos \ cos"{0}
    by XBOOLE_0:def 5; then
 B3:x-PI*(k+1+1) in dom sin /\ (dom cos \ cos"{0}) by XBOOLE_0:def 4; then
-B5: x+PI*(k+1+1) in dom tan & x-PI*(k+1+1) in dom tan
-  by B2,RFUNCT_1:def 4;
-        tan.(x+PI*(k+1+1))
-      =(sin.(x+PI*(k+1)+PI))/(cos.(x+PI*(k+1)+PI)) by B5,RFUNCT_1:def 4
+ x+PI*(k+1+1) in dom tan & x-PI*(k+1+1) in dom tan by B2,RFUNCT_1:def 4;
+        then tan.(x+PI*(k+1+1))
+      =(sin.(x+PI*(k+1)+PI))/(cos.(x+PI*(k+1)+PI)) by RFUNCT_1:def 4
       .=(-sin.(x+PI*(k+1)))/(cos.(x+PI*(k+1)+PI)) by SIN_COS:83
       .=(-sin.(x+PI*(k+1)))/(-cos.(x+PI*(k+1))) by SIN_COS:83
       .=sin.(x+PI*(k+1))/cos.(x+PI*(k+1)) by XCMPLX_1:192
@@ -1051,12 +1038,10 @@ then not sin.(x-PI*(k+1+1)) in {0} by B1,TARSKI:def 1;
      not x-PI*(k+1+1) in sin"{0} by FUNCT_1:def 13,SIN_COS:27;
     then x-PI*(k+1+1) in dom cos & x-PI*(k+1+1) in dom sin \ sin"{0}
    by XBOOLE_0:def 5; then
-B3:x-PI*(k+1+1) in dom cos /\ (dom sin \ sin"{0})
-   by XBOOLE_0:def 4; then
-B5: x+PI*(k+1+1) in dom cot & x-PI*(k+1+1) in dom cot
-  by B2,RFUNCT_1:def 4;
-        cot.(x+PI*(k+1+1))
-      =(cos.(x+PI*(k+1)+PI))/(sin.(x+PI*(k+1)+PI)) by B5,RFUNCT_1:def 4
+B3:x-PI*(k+1+1) in dom cos /\ (dom sin \ sin"{0}) by XBOOLE_0:def 4; then
+ x+PI*(k+1+1) in dom cot & x-PI*(k+1+1) in dom cot by B2,RFUNCT_1:def 4;
+        then cot.(x+PI*(k+1+1))
+      =(cos.(x+PI*(k+1)+PI))/(sin.(x+PI*(k+1)+PI)) by RFUNCT_1:def 4
       .=(-cos.(x+PI*(k+1)))/(sin.(x+PI*(k+1)+PI)) by SIN_COS:83
       .=(-cos.(x+PI*(k+1)))/(-sin.(x+PI*(k+1))) by SIN_COS:83
       .=cos.(x+PI*(k+1))/sin.(x+PI*(k+1)) by XCMPLX_1:192
@@ -1080,8 +1065,8 @@ proof
      assume
 A1: x in dom |. sin .|;
 A2: x+PI in dom sin & x-PI in dom sin by SIN_COS:27; then
-A3: x+PI in dom |. sin .| & x-PI in dom |. sin .| by VALUED_1:def 11;
-    |. sin .|.(x+PI)=|. sin(x+PI) .| by A3,VALUED_1:def 11
+ x+PI in dom |. sin .| & x-PI in dom |. sin .| by VALUED_1:def 11;
+    then |. sin .|.(x+PI)=|. sin(x+PI) .| by VALUED_1:def 11
                    .=|. -sin.x .| by SIN_COS:83
                    .=|. sin.x .| by COMPLEX1:138
                    .=|. sin .|.x by A1,VALUED_1:def 11;
@@ -1098,8 +1083,8 @@ proof
      let x; assume
 A1: x in dom |. cos .|;
 A2: x+PI in dom cos & x-PI in dom cos by SIN_COS:27; then
-A3: x+PI in dom |. cos .| & x-PI in dom |. cos .| by VALUED_1:def 11;
-    |. cos .|.(x+PI)=|. cos(x+PI) .| by A3,VALUED_1:def 11
+ x+PI in dom |. cos .| & x-PI in dom |. cos .| by VALUED_1:def 11;
+    then |. cos .|.(x+PI)=|. cos(x+PI) .| by VALUED_1:def 11
                    .=|. -cos.x .| by SIN_COS:83
                    .=|. cos.x .| by COMPLEX1:138
                    .=|. cos .|.x by A1,VALUED_1:def 11;
@@ -1194,8 +1179,9 @@ A3:   dom(|. sin .| + |. cos .|)=dom |. sin .| /\ dom |. cos .|
       dom |. sin .|=REAL & dom |. cos .|=REAL by SIN_COS:27,VALUED_1:def 11;
       hence thesis by A3;
       end;
-      (|. sin .| + |. cos .|).(x+PI/2)=|. sin .|.(x+PI/2)+|. cos .|.(x+PI/2)
-  by A2,VALUED_1:def 1
+      then
+(|. sin .| + |. cos .|).(x+PI/2)=|. sin .|.(x+PI/2)+|. cos .|.(x+PI/2)
+  by VALUED_1:def 1
    .=|. sin.(x+PI/2) .|+|. cos .|.(x+PI/2) by VALUED_1:def 11,A2
    .=|. sin.(x+PI/2) .|+|. cos.(x+PI/2) .| by VALUED_1:def 11,A2
    .=|. cos.x .|+|. cos.(x+PI/2) .| by SIN_COS:83
@@ -1366,10 +1352,9 @@ proof
      let x;
      assume
 A1: x in dom(sin (#) cos);
-A2: x+PI in dom sin /\ dom cos & x-PI in dom sin /\ dom cos
-      by SIN_COS:27; then
-A3: x+PI in dom(sin (#) cos) & x-PI in dom(sin (#) cos) by VALUED_1:def 4;
-    (sin (#) cos).(x+PI)=sin.(x+PI) * cos.(x+PI) by A3,VALUED_1:def 4
+A2: x+PI in dom sin /\ dom cos & x-PI in dom sin /\ dom cos by SIN_COS:27; then
+ x+PI in dom(sin (#) cos) & x-PI in dom(sin (#) cos) by VALUED_1:def 4;
+    then (sin (#) cos).(x+PI)=sin.(x+PI) * cos.(x+PI) by VALUED_1:def 4
                    .=(-sin.x) * cos.(x+PI) by SIN_COS:83
                    .=(-sin.x) * (-cos.x) by SIN_COS:83
                    .=sin.x * cos.x
@@ -1397,8 +1382,7 @@ A3: sin (#) cos is PI*(k+1) -periodic;
        let x;
        assume
 A7:    x in dom(sin (#) cos); then
-A8:x+PI*(k+1) in dom(sin (#) cos) & x-PI*(k+1) in dom(sin (#) cos)
-     by A3,Th1;
+A8:x+PI*(k+1) in dom(sin (#) cos) & x-PI*(k+1) in dom(sin (#) cos) by A3,Th1;
 A9:x+PI*(k+1+1) in dom cos /\ dom sin &
    x-PI*(k+1+1) in dom cos /\ dom sin by SIN_COS:27;
 then x+PI*(k+1+1) in dom(sin (#) cos) &
@@ -1435,10 +1419,10 @@ A1: x in dom(b + a (#) sin) & x in dom(b + a (#) sin) by VALUED_1:def 2;
     x+2*PI in dom sin & x-2*PI in dom sin by SIN_COS:27; then
 A3: x+2*PI in dom(a (#) sin) & x-2*PI in dom(a (#) sin) by VALUED_1:def 5;
 then
-A4: x+2*PI in dom(b + a (#) sin) & x-2*PI in dom(b + a (#) sin)
+ x+2*PI in dom(b + a (#) sin) & x-2*PI in dom(b + a (#) sin)
     by VALUED_1:def 2;
-    (b + a (#) sin).(x+2*PI)
-    =b + (a (#) sin).(x+2*PI) by VALUED_1:def 2,A4
+    then
+(b + a (#) sin).(x+2*PI) =b + (a (#) sin).(x+2*PI) by VALUED_1:def 2
    .=b + a * sin.(x+2*PI) by VALUED_1:def 5,A3
    .=b + a * sin.x by SIN_COS:83
    .=b + (a (#) sin).x by VALUED_1:def 5,A0
@@ -1462,10 +1446,10 @@ A1: x in dom(b + a (#) cos) & x in dom(b + a (#) cos) by VALUED_1:def 2;
     x+2*PI in dom cos & x-2*PI in dom cos by SIN_COS:27; then
 A3: x+2*PI in dom(a (#) cos) & x-2*PI in dom(a (#) cos) by VALUED_1:def 5;
 then
-A4: x+2*PI in dom(b + a (#) cos) & x-2*PI in dom(b + a (#) cos)
+ x+2*PI in dom(b + a (#) cos) & x-2*PI in dom(b + a (#) cos)
     by VALUED_1:def 2;
-    (b + a (#) cos).(x+2*PI)
-    =b + (a (#) cos).(x+2*PI) by VALUED_1:def 2,A4
+    then
+(b + a (#) cos).(x+2*PI) =b + (a (#) cos).(x+2*PI) by VALUED_1:def 2
    .=b + a * cos.(x+2*PI) by VALUED_1:def 5,A3
    .=b + a * cos.x by SIN_COS:83
    .=b + (a (#) cos).x by VALUED_1:def 5,A0

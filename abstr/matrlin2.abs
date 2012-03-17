@@ -18,13 +18,14 @@ environ
       ALGSTR_0, XXREAL_0, NAT_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FINSEQ_1, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_2,
       MATRIX_1, FVSUM_1, MATRIX_3, MATRIX_6, DOMAIN_1, VECTSP_4, VECTSP_6,
-      VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13, MATRLIN, MATRIX15, RFINSEQ,
-      WSIERP_1, GRCAT_1, MOD_2, VECTSP_5, RANKNULL, MATRIXJ1;
+      VECTSP_7, VECTSP_9, FINSEQOP, PRVECT_1, MATRIX13, MATRLIN, MATRIX15,
+      RFINSEQ, WSIERP_1, GRCAT_1, MOD_2, VECTSP_5, RANKNULL, MATRIXJ1;
  constructors FVSUM_1, VECTSP_9, MATRIX_6, LAPLACE, MATRIX15, RANKNULL,
-      VECTSP10, MATRIXJ1, XXREAL_0, REALSET1, BINARITH, RELSET_1, FINSOP_1;
+      VECTSP10, MATRIXJ1, XXREAL_0, REALSET1, BINARITH, RELSET_1, FINSOP_1,
+      MATRIX13;
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
       ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRLIN,
-      MATRIX13, XREAL_0, VECTSP_9, CARD_1, MOD_2, GRCAT_1;
+      MATRIX13, XREAL_0, VECTSP_9, CARD_1, MOD_2, GRCAT_1, PRVECT_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
 
 
@@ -33,8 +34,7 @@ begin :: Preliminaries
 reserve i, j, m, n, k for Nat,
   x, y for set,
   K for Field,
-  a,a1,a2 for Element
-  of K;
+  a,a1 for Element of K;
 
 theorem :: MATRLIN2:1
   for V be VectSp of K for W1,W2,W12 be Subspace of V for U1,U2 be
@@ -59,25 +59,21 @@ theorem :: MATRLIN2:5
   card A holds A is linearly-independent;
 
 theorem :: MATRLIN2:6
-  for V be VectSp of K for A be finite Subset of V holds dim Lin A <=
-  card A;
+  for V be VectSp of K for A be finite Subset of V holds dim Lin A <= card A;
 
 begin :: More on the Product of Finite Sequence of Scalars and Vectors
 
 reserve V1,V2,V3 for finite-dimensional VectSp of K,
-  f,f1,f2 for Function of
-  V1,V2,
-  g for Function of V2,V3,
+  f for Function of V1,V2,
+
   b1,b19 for OrdBasis of V1,
-  B1 for FinSequence
-  of V1,
+  B1 for FinSequence of V1,
   b2 for OrdBasis of V2,
   B2 for FinSequence of V2,
-  b3 for OrdBasis of V3,
+
   B3 for FinSequence of V3,
   v1,w1 for Element of V1,
-  R,R1,R2 for FinSequence of
-  V1,
+  R,R1,R2 for FinSequence of V1,
   p,p1,p2 for FinSequence of K;
 
 theorem :: MATRLIN2:7
@@ -227,10 +223,10 @@ theorem :: MATRLIN2:33
   for M be Matrix of len b1,len B2,K st len b1 = 0 holds Mx2Tran(M
   ,b1,B2).v1 = 0.V2;
 
-definition
+registration
   let K,V1,V2,b1,B2;
   let M be Matrix of len b1,len B2,K;
-  redefine func Mx2Tran(M,b1,B2) -> linear-transformation of V1, V2;
+  cluster Mx2Tran(M,b1,B2) -> homogeneous additive;
 end;
 
 theorem :: MATRLIN2:34
@@ -241,8 +237,7 @@ theorem :: MATRLIN2:35
   LineVec2Mx(Line(A,i)) * B = LineVec2Mx(Line(A*B,i));
 
 theorem :: MATRLIN2:36
-  for M be Matrix of len b1,len b2,K holds AutMt(Mx2Tran(M,b1,b2),
-  b1,b2) = M;
+  for M be Matrix of len b1,len b2,K holds AutMt(Mx2Tran(M,b1,b2), b1,b2) = M;
 
 definition
   let n,m,K;
@@ -279,24 +274,18 @@ theorem :: MATRLIN2:43
   for V1,V2 be VectSp of K for f be linear-transformation of V1,V2
   holds f is one-to-one iff ker f = (0).V1;
 
-definition
-  let K;
-  let V1 be VectSp of K;
-  redefine func id V1 -> linear-transformation of V1,V1;
-end;
-
-definition
+registration
   let K;
   let V1,V2 be VectSp of K;
   let f,g be linear-transformation of V1,V2;
-  redefine func f+g -> linear-transformation of V1,V2;
+  cluster f+g -> homogeneous additive;
 end;
 
-definition
+registration
   let K;
   let V1,V2 be VectSp of K;
   let f be linear-transformation of V1,V2,a;
-  redefine func a*f -> linear-transformation of V1,V2;
+  cluster a*f -> homogeneous additive;
 end;
 
 definition
@@ -362,4 +351,3 @@ theorem :: MATRLIN2:51
   for f be linear-transformation of V1,V2, g be linear-transformation of
   V2,V3 st g|im f is one-to-one holds rank (g*f) = rank f & nullity (g*f) =
   nullity f;
-

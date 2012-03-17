@@ -1,0 +1,354 @@
+:: Some Properties of $p$-Groups and Commutative $p$-Groups
+::  by Xiquan Liang and Dailu Li
+::
+:: Received April 29, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_3, RELAT_1, FUNCT_1, SUBSET_1, BINOP_1, GROUP_1, NAT_1,
+      CARD_1, GROUP_2, FUNCT_2, FINSET_1, GRAPH_1, NEWTON, XBOOLE_0, NAT_3,
+      GROUP_10, ALGSTR_0, NUMBERS, INT_2, ORDINAL1, XXREAL_0, GROUP_6,
+      PRE_TOPC, STRUCT_0, GROUP_5, QC_LANG1, CQC_SIM1, WELLORD1, MOEBIUS1,
+      GROUPP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      INT_2, NAT_1, NAT_D, FINSET_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
+      FINSEQ_1, RVSUM_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3,
+      EQREL_1, FUNCOP_1, NEWTON, DOMAIN_1, GR_CY_1, ORDINAL1, GROUP_4,
+      CARD_FIN, PARTFUN1, NAT_3, TOPGRP_1, GROUP_10, REAL_1, BINOP_2, BINOP_1,
+      MOEBIUS1, GROUP_5, GROUP_6, GRSOLV_1, RLVECT_1, INT_1, FINSEQOP,
+      SETWISEO;
+ constructors SETFAM_1, WELLORD2, XXREAL_0, NAT_D, EQREL_1, BINARITH, WSIERP_1,
+      REALSET2, UPROOTS, GR_CY_1, GROUP_4, CARD_FIN, NAT_3, TOPGRP_1, SEQ_1,
+      GROUP_2, DYNKIN, RELSET_1, GROUP_10, BINOP_1, SETWISEO, REAL_1, NAT_1,
+      BINOP_2, GRSOLV_1, GRNILP_1, GROUP_5, FINSOP_1, SETWOP_2, RVSUM_1,
+      FINSEQOP, INT_1, RLVECT_1, NEWTON, MOEBIUS1, GROUP_6, INT_2, ORDINAL1,
+      GROUP_3, REALSET1, FUNCOP_1, ZFMISC_1, ALGSTR_0;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON, STRUCT_0,
+      GROUP_2, GROUP_1, GROUP_3, GROUP_4, GR_CY_1, FUNCT_2, NAT_3, REALSET1,
+      VALUED_0, DYNKIN, GROUP_10, NUMBERS, ALGSTR_0, GRSOLV_1, GRNILP_1,
+      RELAT_1, BINOP_2, MEMBERED, FINSEQ_2, REAL_1, MOEBIUS1, GROUP_6;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin :: $p$-Groups
+
+reserve G for Group,
+  a,b for Element of G,
+  m, n for Nat,
+  p for prime (natural number);
+
+theorem :: GROUPP_1:1
+  (for r being natural number holds n <> p |^ r) implies
+  ex s being Element of NAT st s is prime & s divides n & s <> p;
+
+theorem :: GROUPP_1:2
+  for n,m being natural number holds n divides p |^ m implies
+  ex r be natural number st n = p |^ r & r <= m;
+
+theorem :: GROUPP_1:3
+  a |^ n = 1_G implies a" |^ n = 1_G;
+
+theorem :: GROUPP_1:4
+  a" |^ n = 1_G implies a |^ n = 1_G;
+
+theorem :: GROUPP_1:5
+  ord (a") = ord a;
+
+theorem :: GROUPP_1:6
+  ord (a |^ b) = ord a;
+
+theorem :: GROUPP_1:7
+  for G being Group, N being Subgroup of G
+  for a,b being Element of G holds
+  N is normal & b in N implies
+  for n ex g being Element of G st g in N & (a * b)|^ n = a |^ n * g;
+
+theorem :: GROUPP_1:8
+  for G being Group, N being normal Subgroup of G,
+      a being Element of G, S being Element of G./.N holds
+      S = a * N implies
+  for n holds S |^ n = (a |^ n) * N;
+
+theorem :: GROUPP_1:9
+  for G being Group, H being Subgroup of G, a,b being Element of G
+  holds a * H = b * H implies ex h being Element of G st a = b * h & h in H;
+
+theorem :: GROUPP_1:10
+  for G being finite Group, N being normal Subgroup of G holds
+  N is Subgroup of center G & G./.N is cyclic
+  implies G is commutative;
+
+theorem :: GROUPP_1:11
+  for G being finite Group, N being normal Subgroup of G holds
+  N = center G & G./.N is cyclic implies G is commutative;
+
+theorem :: GROUPP_1:12
+  for G being finite Group, H being Subgroup of G holds
+  card H <> card G implies ex a being Element of G st not a in H;
+
+definition
+  let p be natural number;
+  let G be Group;
+  let a be Element of G;
+  attr a is p-element means
+:: GROUPP_1:def 1
+  ex r being natural number st ord a = p |^ r;
+end;
+
+theorem :: GROUPP_1:13
+  1_G is m-element;
+
+registration
+  let G,m;
+  cluster m-element Element of G;
+end;
+
+registration
+  let p,G;
+  let a be p-element Element of G;
+  cluster a" -> p-element;
+end;
+
+theorem :: GROUPP_1:14
+  a |^ b is p-element implies a is p-element;
+
+registration
+  let p,G,b;
+  let a be p-element Element of G;
+  cluster a |^ b -> p-element;
+end;
+
+registration
+  let p;
+  let G be commutative Group, a,b be p-element Element of G;
+  cluster a * b -> p-element;
+end;
+
+registration
+  let p;
+  let G be finite p-group Group;
+  cluster -> p-element Element of G;
+end;
+
+theorem :: GROUPP_1:15
+  for G being finite Group,H being Subgroup of G
+  for a being Element of G st H is p-group & a in H
+  holds a is p-element;
+
+registration
+  let p;
+  let G be finite p-group Group;
+  cluster -> p-group Subgroup of G;
+end;
+
+theorem :: GROUPP_1:16
+  (1).G is p-group;
+
+registration
+  let p;
+  let G be Group;
+  cluster p-group Subgroup of G;
+end;
+
+registration
+  let p;
+  let G be finite Group, G1 be p-group Subgroup of G, G2 be Subgroup of G;
+  cluster G1 /\ G2 -> p-group;
+  cluster G2 /\ G1 -> p-group;
+end;
+
+theorem :: GROUPP_1:17
+  for G being finite Group st for a being Element of G holds a is p-element
+  holds G is p-group;
+
+registration
+  let p;
+  let G be finite p-group Group, N being normal Subgroup of G;
+  cluster G./.N -> p-group;
+end;
+
+theorem :: GROUPP_1:18
+  for G being finite Group, N being normal Subgroup of G
+  st N is p-group & G./.N is p-group holds
+  G is p-group;
+
+theorem :: GROUPP_1:19
+  for G being finite commutative Group,H,H1,H2 being Subgroup of G st
+  H1 is p-group & H2 is p-group &
+  the carrier of H = H1 * H2 holds H is p-group;
+
+theorem :: GROUPP_1:20
+  for G being finite Group, H,N being Subgroup of G holds
+  N is normal Subgroup of G &
+  H is p-group & N is p-group
+  implies ex P being strict Subgroup of G st the carrier of P = H * N &
+  P is p-group;
+
+theorem :: GROUPP_1:21
+  for G being finite Group,N1,N2 being normal Subgroup of G
+  holds N1 is p-group &
+  N2 is p-group implies ex N being strict normal Subgroup of G
+  st the carrier of N = N1 * N2 & N is p-group;
+
+registration
+  let p;
+  let G be p-group finite Group, H be finite Group, g be Homomorphism of G,H;
+  cluster Image g -> p-group;
+end;
+
+theorem :: GROUPP_1:22
+  for G,H being strict Group holds G,H are_isomorphic &
+  G is p-group implies H is p-group;
+
+definition
+  let p be prime (natural number);
+  let G be Group such that
+ G is p-group;
+  func expon (G,p) -> Nat means
+:: GROUPP_1:def 2
+
+  card G = p |^ it;
+end;
+
+definition
+  let p be prime (natural number);
+  let G be Group;
+  redefine func expon (G,p) -> Element of NAT;
+end;
+
+theorem :: GROUPP_1:23
+  for G being finite Group, H being Subgroup of G st
+  G is p-group holds expon (H,p) <= expon (G,p);
+
+theorem :: GROUPP_1:24
+  for G being strict finite Group st G is p-group & expon (G,p) = 0 holds
+  G = (1).G;
+
+theorem :: GROUPP_1:25
+  for G being strict finite Group holds G is p-group &
+  expon (G,p) = 1 implies G is cyclic;
+
+theorem :: GROUPP_1:26
+  for G being finite Group,p being prime (natural number)
+  for a being Element of G holds G is p-group & expon (G,p) = 2 &
+  ord a = p |^2 implies G is commutative;
+
+begin :: Commutative $p$-Groups
+
+definition
+  let p be natural number;
+  let G be Group;
+  attr G is p-commutative-group-like means
+:: GROUPP_1:def 3
+
+  for a,b be Element of G holds (a * b) |^ p = a |^ p * (b |^ p);
+end;
+
+definition
+  let p be natural number;
+  let G be Group;
+  attr G is p-commutative-group means
+:: GROUPP_1:def 4
+
+  G is p-group p-commutative-group-like;
+end;
+
+registration
+  let p be natural number;
+  cluster p-commutative-group -> p-group p-commutative-group-like Group;
+  cluster p-group p-commutative-group-like -> p-commutative-group Group;
+end;
+
+theorem :: GROUPP_1:27
+  (1).G is p-commutative-group-like;
+
+registration
+  let p;
+  cluster p-commutative-group finite cyclic commutative Group;
+end;
+
+registration
+  let p;
+  let G be p-commutative-group-like finite Group;
+  cluster -> p-commutative-group-like Subgroup of G;
+end;
+
+registration
+  let p;
+  cluster p-group finite commutative -> p-commutative-group Group;
+end;
+
+theorem :: GROUPP_1:28
+  for G being strict finite Group st card G = p holds
+  G is p-commutative-group;
+
+registration
+  let p,G;
+  cluster p-commutative-group finite Subgroup of G;
+end;
+
+registration
+  let p;
+  let G be finite Group, H1 be p-commutative-group-like Subgroup of G,
+  H2 be Subgroup of G;
+  cluster H1 /\ H2 -> p-commutative-group-like;
+  cluster H2 /\ H1 -> p-commutative-group-like;
+end;
+
+registration
+  let p;
+  let G be finite p-commutative-group-like Group,
+      N be normal Subgroup of G;
+  cluster G./.N -> p-commutative-group-like;
+end;
+
+theorem :: GROUPP_1:29
+  for G being finite Group,a,b being Element of G st
+  G is p-commutative-group-like
+  holds for n holds (a * b) |^ (p |^n) = a |^ (p |^n) * (b |^ (p |^n));
+
+theorem :: GROUPP_1:30
+  for G being finite commutative Group,H,H1,H2 being Subgroup of G st
+  H1 is p-commutative-group & H2 is p-commutative-group &
+  the carrier of H = H1 * H2 holds H is p-commutative-group;
+
+theorem :: GROUPP_1:31
+  for G being finite Group, H being Subgroup of G,
+    N being strict normal Subgroup of G holds
+    N is Subgroup of center G &
+    H is p-commutative-group &
+    N is p-commutative-group implies
+  ex P being strict Subgroup of G st the carrier of P = H * N &
+  P is p-commutative-group;
+
+theorem :: GROUPP_1:32
+  for G being finite Group,N1,N2 being normal Subgroup of G holds
+  N2 is Subgroup of center G & N1 is p-commutative-group &
+  N2 is p-commutative-group implies
+  ex N being strict normal Subgroup of G
+  st the carrier of N = N1 * N2 & N is p-commutative-group;
+
+theorem :: GROUPP_1:33
+  for G,H being Group holds G,H are_isomorphic &
+  G is p-commutative-group-like implies H is p-commutative-group-like;
+
+theorem :: GROUPP_1:34
+  for G,H being strict Group holds G,H are_isomorphic &
+  G is p-commutative-group implies H is p-commutative-group;
+
+registration
+  let p;
+  let G be p-commutative-group-like finite Group, H be finite Group;
+  let g be Homomorphism of G,H;
+  cluster Image g -> p-commutative-group-like;
+end;
+
+theorem :: GROUPP_1:35
+  for G being strict finite Group st G is p-group &
+  expon (G,p) = 0 holds G is p-commutative-group;
+
+theorem :: GROUPP_1:36
+  for G being strict finite Group st G is p-group &
+  expon (G,p) = 1 holds G is p-commutative-group;

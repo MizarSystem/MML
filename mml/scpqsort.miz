@@ -12,24 +12,25 @@ environ
       SCMFSA_9, ARYTM_1, VALUED_1, TARSKI, GRAPHSP, SCMFSA6A, CIRCUIT2,
       MSUALG_1, NAT_1, FUNCOP_1, FUNCT_7, XBOOLE_0, CARD_3, SCMPDS_8, FINSEQ_1,
       GRAPH_2, SCPISORT, SCMP_GCD, CLASSES1, SCPQSORT, ORDINAL1, PARTFUN1,
-      SCMNORM;
+      SCMNORM, SCMFSA6C;
  notations TARSKI, XBOOLE_0, FUNCT_2, SUBSET_1, CARD_1, NUMBERS, XXREAL_0,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, VALUED_1, XCMPLX_0, RECDEF_1, INT_1,
-      NAT_1, AMI_1, SCMNORM, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_4, SCMPDS_5,
+      NAT_1, COMPOS_1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_4,
+      SCMPDS_5,
       SCMPDS_6, SCMP_GCD, CARD_3, FINSEQ_1, SCMPDS_8, GRAPH_2, CLASSES1,
       SCPISORT;
  constructors REAL_1, RECDEF_1, NEWTON, MESFUNC1, SCM_1, SCMPDS_4, SCMPDS_5,
-      SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, SCMNORM, CLASSES1, GRAPH_2,
+      SCMPDS_6, SCMP_GCD, SCMPDS_8, SCPISORT, CLASSES1, GRAPH_2,
       VALUED_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_8,
-      ORDINAL1, VALUED_0, SCMNORM, VALUED_1, AMI_1, RELAT_1;
+      ORDINAL1, VALUED_0, VALUED_1, AMI_1, RELAT_1, COMPOS_1, AFINSQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SCMPDS_2, SCMP_GCD, AMI_1;
+ definitions SCMPDS_2, SCMP_GCD, COMPOS_1, AMI_1;
  theorems AMI_1, AMI_3, NAT_1, TARSKI, FUNCT_4, SCMPDS_2, FUNCT_7, GRFUNC_1,
       SCMPDS_4, SCMPDS_5, SCMPDS_7, SCMPDS_8, FINSEQ_1, FINSEQ_2, RFINSEQ,
       RELAT_1, SCPISORT, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, GRAPH_2, AMI_2,
-      ORDINAL1, CLASSES1, SCMPDS_6, SCMP_GCD, INT_1;
+      ORDINAL1, CLASSES1, SCMPDS_6, SCMP_GCD, INT_1, COMPOS_1, AFINSQ_1;
  schemes NAT_1, SCMPDS_8;
 
 begin :: The Several Properties of "while" Program and Finite Sequence
@@ -111,28 +112,31 @@ theorem Th2:
   for s,sm be State of SCMPDS,I be halt-free shiftable Program of
   SCMPDS, a be Int_position,i be Integer, m be Element of NAT st card I>0 & I
   is_closed_on s & I is_halting_on s & s.DataLoc(s.a,i) > 0 & m=LifeSpan(
-ProgramPart(s +*
-Initialized stop I),s +*
-Initialized stop I)+2 & sm=Comput(ProgramPart((s +* Initialized stop while>0(a,
-i,I))),(s +* Initialized stop while>0(a,i,I)),m
-) holds DataPart sm = DataPart IExec(I,s) & sm +*Initialized stop while>0(a,i,I
-  )=sm
+ProgramPart(Initialize s +* stop I),Initialize s +* stop I)+2 &
+ sm=Comput(ProgramPart((Initialize s +* stop while>0(a,i,I))),
+   (Initialize s +* stop while>0(a,i,I)),m)
+ holds DataPart sm = DataPart IExec(I,s) &
+   Initialize sm +*stop while>0(a,i,I)=sm
 proof
   let s,sm be State of SCMPDS,I be halt-free shiftable Program of SCMPDS, a
   be Int_position,i be Integer,m be Element of NAT;
   set b=DataLoc(s.a,i);
-  set WH =while>0(a,i,I), iWH=Initialized stop WH, IsI=Initialized stop I;
+  set WH =while>0(a,i,I), iWH=Initialize stop WH, IsI=Initialize stop I;
   set i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
-  set s2 = s +* IsI, s3 = s +* iWH, s4 = Comput(ProgramPart(s3),s3,1);
+  set s2 = Initialize s +* stop I,
+  s3 = Initialize s +* stop WH,
+  s4 = Comput(ProgramPart(s3),s3,1);
+I1: s3 = s +* iWH by SCMPDS_4:5;
+I2: s2 = s +* IsI by SCMPDS_4:5;
   assume that
 A1: card I>0 and
 A2: I is_closed_on s and
 A3: I is_halting_on s and
 A4: s.b > 0 and
 A5: m=LifeSpan(ProgramPart(s2),s2)+2 and
-A6: sm= Comput(ProgramPart((s +* iWH)),(s +* iWH),m);
-A7: IsI c= s2 by FUNCT_4:26;
-A8: iWH c= s3 by FUNCT_4:26;
+A6: sm= Comput(ProgramPart s3,s3,m);
+A7: IsI c= s2 by I2,FUNCT_4:26;
+A8: iWH c= s3 by I1,FUNCT_4:26;
   WH c= iWH by SCMPDS_6:17;
   then
 A9: WH c= s3 by A8,XBOOLE_1:1;
@@ -140,13 +144,11 @@ A9: WH c= s3 by A8,XBOOLE_1:1;
   then Shift(I,1) c= s3 by A9,XBOOLE_1:1;
   then
 A10: Shift(I,1) c= s4 by AMI_1:81;
-  WH = i1 ';' (I ';' i2) by Lm2;
-  then
-A11: CurInstr(ProgramPart s3,s3) = i1 by SCMPDS_6:22;
+B11: WH = i1 ';' (I ';' i2) by Lm2;
 A12: Comput(ProgramPart(s3),s3,0+1) = Following(ProgramPart s3,
 Comput(ProgramPart(s3),s3,0)) by AMI_1:14
     .= Following(ProgramPart s3,s3) by AMI_1:13
-    .= Exec(i1,s3) by A11;
+    .= Exec(i1,s3) by B11,I1,SCMPDS_6:22;
   set m2=LifeSpan(ProgramPart(s2),s2), s5= Comput(ProgramPart( s4), s4,m2), l1=
 (card I + 1);
 A13: IC s3 = 0 by SCMPDS_6:21;
@@ -162,9 +164,9 @@ A15: s6=s5 by AMI_1:51;
   card I + 1 < card I + 2 by XREAL_1:8;
   then
 A16: l1 in dom WH by SCMPDS_8:18;
-A17: dom ProgramPart s = A by AMI_1:143;
+A17: dom ProgramPart s = A by COMPOS_1:34;
 A18: I is_closed_on s2 by A2,SCMPDS_6:38;
-A19: DataPart s2 = DataPart s3 by SCMPDS_4:24,36;
+A19: DataPart s2 = DataPart s3 by FUNCT_7:134,SCMPDS_4:24;
   now
     let x;
     thus s2.x = s3.x by A19,SCMPDS_4:23
@@ -173,13 +175,15 @@ A19: DataPart s2 = DataPart s3 by SCMPDS_4:24,36;
   then
 A20: DataPart s2 = DataPart s4 by SCMPDS_4:23;
 A21: ProgramPart s2 halts_on s2 by A3,SCMPDS_6:def 3;
-  s2 = s2+*IsI by A7,FUNCT_4:79;
-  then ProgramPart(s2+*IsI) halts_on s2+*IsI by A21;
+I5: s2+*Initialize stop I = Initialize s2+*stop I by SCMPDS_4:5;
+  s2 = Initialize s2+*stop I by A7,I5,FUNCT_4:79;
+  then ProgramPart(Initialize s2+*stop I) halts_on Initialize s2+*stop I
+     by A3,SCMPDS_6:def 3;
   then
 A22: I is_halting_on s2 by SCMPDS_6:def 3;
 A23: IC s4 = s4.IC SCMPDS
     .= succ  0 by A4,A13,A12,A14,SCMPDS_2:68
-    .= (0+1);
+    .= 0+1;
   then DataPart Comput(ProgramPart( s2), s2,m2) = DataPart s5 by A1,A7,A22,A18
 ,A20,A10,SCMPDS_7:36;
   then
@@ -187,19 +191,15 @@ A24: DataPart s5 = DataPart(Result(ProgramPart(s2),s2)) by A21,AMI_1:122
     .= DataPart(Result(ProgramPart(s2),s2) +* s | A) by A17,AMI_2:29,FUNCT_4:76
 ,SCMPDS_2:100
     .= DataPart IExec(I,s) by SCMPDS_4:def 8;
-Y:  (ProgramPart s6)/.IC s6
- = s6.IC s6 by AMI_1:150;
 A25: IC s5=l1 by A1,A7,A22,A18,A23,A20,A10,SCMPDS_7:36;
   then
-A26: CurInstr(ProgramPart s6,s6)=s5.l1 by A15,Y
+A26: CurInstr(ProgramPart s6,s6)=s5.l1 by A15,COMPOS_1:38
     .=s4.l1 by AMI_1:54
     .=s3.l1 by AMI_1:54
     .=WH.l1 by A16,A9,GRFUNC_1:8
     .=i2 by SCMPDS_8:19;
-T: ProgramPart s3 = ProgramPart s6
-by AMI_1:123;
 A27: s7 = Following(ProgramPart s3,s6) by AMI_1:14
-    .= Exec(i2,s6) by A26,T;
+    .= Exec(i2,s6) by A26,AMI_1:123;
   now
     let x;
 s: ProgramPart s4 = ProgramPart s3
@@ -223,11 +223,11 @@ proof
   assume
 A1: for t be State of SCMPDS st DataPart t = DataPart s holds I
   is_halting_on t;
-  set pI=stop I, II=Initialized pI, sI=s +* II;
+  set pI=stop I, sI=Initialize s +* pI;
   defpred X[Nat] means not IC Comput(ProgramPart(sI),sI,$1) in dom pI;
 A2: for a be Int_position holds s.a = sI.a by SCMPDS_5:19;
-  assume
-  not I is_closed_on s;
+I1: Initialize s +* pI = s +* Initialize pI by SCMPDS_4:5;
+  assume not I is_closed_on s;
   then ex k be Element of NAT st X[k] by SCMPDS_6:def 2;
   then
 A3: ex k be Nat st X[k];
@@ -262,39 +262,42 @@ A13: for m be Element of NAT st m < n holds IC( Comput(ProgramPart( sI), sI,m))
 in dom
   pI by A5;
   set IAt = pI +* Start-At( 0,SCMPDS);
-A14: II = IAt by SCMPDS_4:def 2;
+A14: Initialize pI = IAt by COMPOS_1:def 31;
   (IAt) | NAT = pI by SCMPDS_4:58;
   then
 A15: dom stop (I) = dom(IAt) /\ NAT by RELAT_1:90;
-  not succ IC Comput(ProgramPart(sI),sI,n) in dom pI by A4,SCMPDS_4:71;
+  not succ IC Comput(ProgramPart(sI),sI,n) in dom pI by A4,AFINSQ_1:77;
   then
 A16: not succ IC s2 in dom IAt by A15,XBOOLE_0:def 4;
   dom stop(I) misses dom Start-At( 0,SCMPDS) by SCMPDS_4:54;
   then
 A17: pI c= IAt by FUNCT_4:33;
-  II c= sI by FUNCT_4:26;
+  Initialize pI c= sI by I1,FUNCT_4:26;
   then
 A18: stop I c= sI by A17,A14,XBOOLE_1:1;
   not IC s2 in dom IAt by A4,A15,XBOOLE_0:def 4;
-  then IAt c= t1 by A14,FUNCT_4:26,FUNCT_7:91;
+  then IAt c= t1 by A14,I1,FUNCT_4:26,FUNCT_7:91;
   then IAt c= t2 by A16,FUNCT_7:91;
   then
 A19: IAt c= s0 by SCMPDS_4:69;
   then stop I c= s0 by A17,XBOOLE_1:1;
   then Comput(ProgramPart(s0),s0,n),s2 equal_outside NAT by A11,A18,A13,
 SCMPDS_4:67;
-  then Comput(ProgramPart(s0),s0,n), s1 equal_outside NAT by A12,FUNCT_7:29;
+  then
+     Comput(ProgramPart(s0),s0,n), s1 equal_outside NAT by A12,FUNCT_7:29;
   then
 A20: Comput(ProgramPart(s0),s0,n) = s1 by A7,FUNCT_7:92;
   DataPart s0 = DataPart sI by A10,SCMPDS_4:24
     .= DataPart s by A2,SCMPDS_4:23;
   then I is_halting_on s0 by A1;
   then
-A21: ProgramPart(s0+*II) halts_on s0+*II by SCMPDS_6:def 3;
+A21: ProgramPart(Initialize s0+*pI) halts_on Initialize s0+*pI
+   by SCMPDS_6:def 3;
 A22: not ProgramPart s1 halts_on s1 by SCMPDS_4:66;
-  s0 +* II=s0 by A14,A19,FUNCT_4:79;
+I2: Initialize s0 +* pI = s0 +* Initialize pI by SCMPDS_4:5;
+  Initialize s0 +* pI=s0 by A14,A19,I2,FUNCT_4:79;
    then ProgramPart s0 halts_on s1 by A21,A20,AMI_1:93;
-  hence contradiction by A20,A22,AMI_1:123;
+  hence contradiction by A22,A7,AMI_1:123;
 end;
 
 theorem Th4:
@@ -323,8 +326,7 @@ proof
   set b=DataLoc(s.a,i);
   assume
 A1: card I > 0;
-  assume
-  s.x1 >= c+s.b;
+  assume s.x1 >= c+s.b;
   then
 A2: for x st x in {x1} holds s.x >= c+s.b by TARSKI:def 1;
   assume
@@ -392,13 +394,11 @@ A3: for t be State of SCMPDS holds F(Dstate t)=0 iff t.b <= 0
     proof
       assume
 A4:   F(Dstate t)=0;
-      assume
-      t.b > 0;
+      assume t.b > 0;
       then (Dstate t).b > 0 by SCMPDS_8:4;
       hence contradiction by A2,A4;
     end;
-    assume
-    t.b <= 0;
+    assume t.b <= 0;
     then (Dstate t).b <= 0 by SCMPDS_8:4;
     hence thesis by A2;
   end;
@@ -494,13 +494,11 @@ A5: for t be State of SCMPDS holds F(Dstate t)=0 iff t.b <= 0
     proof
       assume
 A6:   F(Dstate t)=0;
-      assume
-      t.b > 0;
+      assume t.b > 0;
       then (Dstate t).b > 0 by SCMPDS_8:4;
       hence contradiction by A4,A6;
     end;
-    assume
-    t.b <= 0;
+    assume t.b <= 0;
     then (Dstate t).b <= 0 by SCMPDS_8:4;
     hence thesis by A4;
   end;
@@ -696,7 +694,7 @@ A1: card I>0 and
 A2: s.a=c and
 A3: len f=n and
 A4: len g=n;
-  set WH =while>0(a,i,I), sWH=stop WH, iWH=Initialized sWH;
+  set WH =while>0(a,i,I), sWH=stop WH, iWH=Initialize sWH;
   assume
 A5: f is_FinSequence_on s,m;
 
@@ -706,9 +704,12 @@ of INT, k1,k2,y1,yn be Element of NAT st t.a=c & 2*k1+1=t.b & k2=m+n+2*k1+1 & (
 
 1 <= y1 & yn <= n or y1 >= yn) & m+y1=t.intpos k2 & m+yn=t.intpos(k2+1) & yn-y1
   <=$1 & f1 is_FinSequence_on t,m & len f1=n holds ex k be Element of NAT,f2 be
-  FinSequence of INT st Comput(ProgramPart(t+*iWH),t+*iWH,k)+*iWH= Comput(
-ProgramPart(t+*iWH),t+*iWH,k) & f2
-  is_FinSequence_on Comput(ProgramPart(t+*iWH),t+*iWH,k),m & len f2=n & f1,f2
+  FinSequence of INT st
+   Initialize Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k)+*sWH
+  = Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k) & f2
+  is_FinSequence_on
+   Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k),m &
+   len f2=n & f1,f2
 
 are_fiberwise_equipotent & f2 is_non_decreasing_on y1,yn & (for j be Element of
 
@@ -716,12 +717,12 @@ NAT st y1<yn & (1<=j & j<y1 or yn<j & j<= n) holds f2.j= t.intpos(m+j)) & (for
 
 j be Element of NAT st y1>=yn & 1<=j & j<= n holds f2.j= t.intpos(m+j)) & (for
 
-j be Element of NAT st (1<=j & j<2*k1+1) holds Comput(ProgramPart(t+*iWH),t+*
-iWH,k).intpos(m+n
+j be Element of NAT st (1<=j & j<2*k1+1)
+holds Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k).intpos(m+n
 
-+j)=t.intpos(m+n+j)) & Comput(ProgramPart(t+*iWH),t+*iWH,k).b=t.b-2 & Comput(
-ProgramPart(t+*iWH),t+*iWH,k).a=
-  c;
++j)=t.intpos(m+n+j)) &
+Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k).b=t.b-2 &
+ Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k).a=c;
 
   assume
 A6: g is_FinSequence_on IExec(while>0(a,i,I),s),m;
@@ -777,9 +778,9 @@ A20: yn-y1<=0 and
 A21: f1 is_FinSequence_on t,m and
 A22: len f1=n;
 A23: I is_halting_on t by A12,A14,A15,A16,A17,A18,A19;
-    take k=LifeSpan(ProgramPart(t +* Initialized stop I),t +* Initialized stop
-I)+2;
-    set tk= Comput(ProgramPart(t+*iWH),t+*iWH,k);
+    take k=LifeSpan(ProgramPart(Initialize t +* stop I),
+           Initialize t +* stop I)+2;
+    set tk= Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,k);
 A24: I is_closed_on t by A12,A14,A15,A16,A17,A18,A19;
     then
 A25: DataPart tk = DataPart IExec(I,t) by A1,A14,A15,A23,Th2;
@@ -790,7 +791,7 @@ A27: for i be Element of NAT st 1<=i & i <= len f2 holds f2.i=IExec(I,
     t) .intpos(m+i) by SCPISORT:2;
 
     take f2;
-    thus tk+*iWH =tk by A1,A14,A15,A24,A23,Th2;
+    thus Initialize tk+*sWH =tk by A1,A14,A15,A24,A23,Th2;
     now
       let i be Element of NAT;
       assume that
@@ -862,17 +863,13 @@ A45:  len f1=n;
         yn-y1<=0;
 
         hence
-        ex kk be Element of NAT,f2 be FinSequence of INT st Comput(ProgramPart(
-t
-
-+*iWH),t
-
-+*iWH,kk)+*iWH= Comput(ProgramPart(t+*iWH),t+*iWH,kk) & f2 is_FinSequence_on
-Comput(ProgramPart(t+*
-
-iWH),t+*
-
-iWH,kk),m & len f2=n & f1,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on
+        ex kk be Element of NAT,f2 be FinSequence of INT st
+         Initialize Comput(ProgramPart(Initialize t+* sWH),
+           Initialize t+*sWH,kk)+*sWH
+    = Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,kk) &
+    f2 is_FinSequence_on
+     Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,kk),m &
+    len f2=n & f1,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on
 
 y1,yn & (for j be Element of NAT st y1<yn & (1<=j & j<y1 or yn<j & j<= n) holds
 
@@ -880,18 +877,18 @@ f2.j= t.intpos(m+j)) & (for j be Element of NAT st y1>=yn & 1<=j & j<= n holds
 
 f2.j= t.intpos(m+j)) & (for j be Element of NAT st (1<=j & j<2*k1+1) holds
 
-Comput(ProgramPart(t+*iWH),t+*iWH,kk).intpos(m+n+j)=t.intpos(m+n+j)) & Comput(
-ProgramPart(t+*iWH),t+*iWH,kk).
-
-b=t.b-2 & Comput(ProgramPart(t+*iWH),t+*iWH,kk).a=c by A13,A37,A38,A39,A40,A41
-,A42,A44,A45;
+Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,kk).intpos(m+n+j)
+=t.intpos(m+n+j)) &
+ Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,kk).b=
+ t.b-2 & Comput(ProgramPart(Initialize t+*sWH),Initialize t+*sWH,kk).a=c
+  by A13,A37,A38,A39,A40,A41,A42,A44,A45;
 
       end;
       suppose
 A46:    yn-y1>0;
-        set m1=LifeSpan(ProgramPart(t +* Initialized stop I),t +* Initialized
-stop I)+2;
-        set t1= Comput(ProgramPart((t +* iWH)),(t +* iWH),m1);
+        set m1=LifeSpan(ProgramPart(Initialize t +* stop I),
+                 Initialize t +* stop I)+2;
+        set t1= Comput(ProgramPart(Initialize t +*sWH),Initialize t +*sWH,m1);
 A47:    I is_halting_on t by A12,A37,A38,A39,A40,A41,A42;
         y1-1 >= 0 by A40,A46,XREAL_1:49,50;
         then reconsider y0=y1-1 as Element of NAT by INT_1:16;
@@ -961,9 +958,11 @@ A73:    t1.intpos(k3+1)=m+yn by A39,A63,A59,SCMPDS_4:23;
 A74:    yn-yd<=k by XREAL_1:22;
         t1.intpos k3=m+yd by A39,A63,A58,SCMPDS_4:23;
         then consider kl be Element of NAT,f3 be FinSequence of INT such that
-A75:    Comput(ProgramPart(t1+*iWH),t1+*iWH,kl)+*iWH= Comput(ProgramPart(t1+*
-iWH),t1+*iWH,kl) and
-A76:    f3 is_FinSequence_on Comput(ProgramPart(t1+*iWH),t1+*iWH,kl),m and
+A75:    Initialize Comput(ProgramPart(Initialize t1+*sWH),
+             Initialize t1+*sWH,kl)+*sWH
+        = Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl) and
+A76:    f3 is_FinSequence_on Comput(ProgramPart(Initialize t1+*sWH),
+             Initialize t1+*sWH,kl),m and
 A77:    len f3=n and
 A78:    f2,f3 are_fiberwise_equipotent and
 A79:    f3 is_non_decreasing_on yd,yn and
@@ -975,17 +974,21 @@ A81:    for j be Element of NAT st yd>=yn & 1<=j & j<= n holds f3.j=
         t1. intpos(m+j) and
 
 A82:    for j be Element of NAT st 1<=j & j<2*(k1+1)+1 holds
-        Comput(ProgramPart(t1+*iWH),t1+*iWH,kl).intpos(m+n+j)=t1.intpos(m+n+j)
+        Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl).
+               intpos(m+n+j)
+        =t1.intpos(m+n+j)
 and
-A83:    Comput(ProgramPart(t1+*iWH),t1+*iWH,kl).b=t1.b-2 and
+A83:    Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl).b=t1.b-2
+ and
 
-A84:    Comput(ProgramPart(t1+*iWH),t1+*iWH,kl).a=c by A36,A40,A46,A69,A68,A72
-,A73,A74,A50,A52,XREAL_1:49;
-TT: ProgramPart(Comput(ProgramPart(t1+*iWH),t1+*iWH,kl)+*iWH) =
-   ProgramPart (t1+* iWH)
+A84:    Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl).a
+       =c by A36,A40,A46,A69,A68,A72,A73,A74,A50,A52,XREAL_1:49;
+TT: ProgramPart(Initialize Comput(ProgramPart(Initialize t1+*sWH),
+Initialize t1+*sWH,kl)+*sWH) =
+   ProgramPart (Initialize t1+* sWH)
 by A75,AMI_1:123;
 
-        set t2= Comput(ProgramPart(t1+*iWH),t1+*iWH,kl);
+        set t2= Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl);
 A85:    2*k1+3=2*(k1+1)+1;
         then jj < 2*(k1+1)+1 by XREAL_1:8;
         then
@@ -1036,9 +1039,11 @@ A96:    jj >= 1 by XXREAL_0:2;
         then t2.intpos (k2+1)=t1.intpos(m+n+jj) by A39,A82,A96
           .=m+yc by A39,A63,A57,SCMPDS_4:23;
         then consider km be Element of NAT,f4 be FinSequence of INT such that
-A97:    Comput(ProgramPart(t2+*iWH),t2+*iWH,km)+*iWH= Comput(ProgramPart(t2+*
-iWH),t2+*iWH,km) and
-A98:    f4 is_FinSequence_on Comput(ProgramPart(t2+*iWH),t2+*iWH,km),m and
+A97:    Initialize Comput(ProgramPart(Initialize t2+*sWH),
+          Initialize t2+*sWH,km)+*sWH
+        = Comput(ProgramPart(Initialize t2+*sWH),Initialize t2+*sWH,km) and
+A98:    f4 is_FinSequence_on
+ Comput(ProgramPart(Initialize t2+*sWH),Initialize t2+*sWH,km),m and
 A99:    len f4=n and
 A100:   f3,f4 are_fiberwise_equipotent and
 A101:   f4 is_non_decreasing_on y1,yc and
@@ -1049,12 +1054,14 @@ A102:   for j be Element of NAT st y1<yc & (1<=j & j<y1 or yc<j & j
 A103:   for j be Element of NAT st y1>=yc & 1<=j & j<= n holds f4.j=
         t2. intpos(m+j) and
 
-A104:   for j be Element of NAT st 1<=j & j<2*k1+1 holds Comput(ProgramPart(t2
-+*iWH),t2 +*iWH,km).intpos(m+n+j)=t2.intpos(m+n+j) and
-A105:   Comput(ProgramPart(t2+*iWH),t2+*iWH,km).b=t2.b-2 and
+A104:   for j be Element of NAT st 1<=j & j<2*k1+1
+ holds Comput(ProgramPart(Initialize t2+*sWH),Initialize t2 +*sWH,km).
+            intpos(m+n+j)=t2.intpos(m+n+j) and
+A105:   Comput(ProgramPart(Initialize t2+*sWH),Initialize t2+*sWH,km).
+              b=t2.b-2 and
 
-A106:   Comput(ProgramPart(t2+*iWH),t2+*iWH,km).a=c by A36,A39,A40,A46,A64,A76
-,A77,A83,A84,A67,A86,A94,XREAL_1:49;
+A106:   Comput(ProgramPart(Initialize t2+*sWH),Initialize t2+*sWH,km).a
+       =c by A36,A39,A40,A46,A64,A76,A77,A83,A84,A67,A86,A94,XREAL_1:49;
 
 A107:   now
           let i be Element of NAT;
@@ -1180,16 +1187,18 @@ A143:     j < ym by A137,XREAL_1:148,XXREAL_0:2;
           hence f4.i <= f4.ym by A60,A111,A143,A142;
         end;
         take mm=m1+(kl+km);
-        set tm= Comput(ProgramPart((t +* iWH)),(t +* iWH),mm);
+        set tm=Comput(ProgramPart(Initialize t +* sWH),Initialize t +* sWH,mm);
         take f4;
-t: ProgramPart t1 = ProgramPart (t +* iWH)
+t: ProgramPart t1 = ProgramPart (Initialize t +* sWH)
 by AMI_1:123;
 
-        t1+*iWH =t1 by A1,A37,A38,A62,A47,Th2;
+        Initialize t1+*sWH =t1 by A1,A37,A38,A62,A47,Th2;
         then
-A144:   tm= Comput(ProgramPart(t1+*iWH),t1+*iWH,kl+km) by t,AMI_1:51
-          .= Comput(ProgramPart(t2+*iWH),t2+*iWH,km) by A75,TT,AMI_1:51;
-        hence tm+*iWH =tm by A97;
+A144:   tm= Comput(ProgramPart(Initialize t1+*sWH),Initialize t1+*sWH,kl+km)
+            by t,AMI_1:51
+          .= Comput(ProgramPart(Initialize t2+*sWH),Initialize t2+*sWH,km)
+          by A75,TT,AMI_1:51;
+        hence Initialize tm+*sWH =tm by A97;
         thus f4 is_FinSequence_on tm,m by A98,A144;
         thus len f4=n by A99;
         now
@@ -1341,24 +1350,23 @@ A167:     j < 2*(k1+1)+1 by A166,XXREAL_0:2;
   end;
 A168: for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A35);
 
-  ex k be Element of NAT,f2 be FinSequence of INT st Comput(ProgramPart(s+*iWH)
-,s+*iWH,
-
-k)+*iWH= Comput(ProgramPart(s+*iWH),s+*iWH,k) & f2 is_FinSequence_on Comput(
-ProgramPart(s+*iWH),s+*iWH,k),m &
+  ex k be Element of NAT,f2 be FinSequence of INT st
+   Initialize Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k)+*sWH
+   = Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k) &
+   f2 is_FinSequence_on Comput(
+ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k),m &
 
 len f2=n & f,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,n & (for j
 
 be Element of NAT st 1<n & (1<=j & j<1 or n<j & j<= n) holds f2.j= s.intpos(m+j
 
 )) & (for j be Element of NAT st 1>=n & 1<=j & j<= n holds f2.j= s.intpos(m+j))
-  & (for j be Element of NAT st (1<=j & j<2*0+1) holds Comput(ProgramPart(s+*
-iWH),s+*iWH,k).
+  & (for j be Element of NAT st (1<=j & j<2*0+1) holds
+   Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k).
 
-intpos(m+n+j)=s.intpos(m+n+j)) & Comput(ProgramPart(s+*iWH),s+*iWH,k).b=s.b-2 &
-Comput(ProgramPart(s
-  +*iWH),s
-  +*iWH,k).a=c
+intpos(m+n+j)=s.intpos(m+n+j)) &
+Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k).b=s.b-2 &
+Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k).a=c
 
   proof
     per cases;
@@ -1374,58 +1382,61 @@ Comput(ProgramPart(s
     end;
   end;
   then consider k be Element of NAT,f2 be FinSequence of INT such that
-A169: Comput(ProgramPart(s+*iWH),s+*iWH,k)+*iWH= Comput(ProgramPart(s+*iWH),s+*
-iWH,k) and
-A170: f2 is_FinSequence_on Comput(ProgramPart(s+*iWH),s+*iWH,k),m and
+A169: Initialize Comput(ProgramPart(Initialize s+*sWH),
+       Initialize s+*sWH,k)+*sWH
+= Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k) and
+A170: f2 is_FinSequence_on
+    Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k),m and
 A171: len f2=n and
 A172: f,f2 are_fiberwise_equipotent and
 A173: f2 is_non_decreasing_on 1,n and
-A174: Comput(ProgramPart(s+*iWH),s+*iWH,k).b=s.b-2 and
-A175: Comput(ProgramPart(s+*iWH),s+*iWH,k).a=c;
-  set sk= Comput(ProgramPart(s+*iWH),s+*iWH,k), s1 = sk +* iWH, s2 = Comput(
-ProgramPart(s1),s1,1);
+A174: Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k).b=s.b-2 and
+A175: Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k).a=c;
+  set sk= Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k),
+      s1 = Initialize sk +* sWH,
+      s2 = Comput(ProgramPart(s1),s1,1);
+I1:   s1 = sk +* Initialize sWH by SCMPDS_4:5;
 A176: IC s1 = 0 by SCMPDS_6:21;
   set i1=(a,i)<=0_goto (card I+2), i2=goto -(card I+1);
 A177: card WH=card I+2 by SCMPDS_8:17;
   then
 A178: (card I+2) in dom sWH by SCMPDS_6:25;
 A179: dom g = Seg n by A4,FINSEQ_1:def 3;
-  iWH c= s1 by FUNCT_4:26;
+  iWH c= s1 by I1,FUNCT_4:26;
   then sWH c= s2 by AMI_1:81,SCMPDS_4:57;
   then
 A180: s2.(card I+2) = sWH.(card I+2) by A178,GRFUNC_1:8
     .=halt SCMPDS by A177,SCMPDS_6:25;
-  WH = i1 ';' (I ';' i2 ) by Lm2;
-  then
-A181: CurInstr(ProgramPart s1,s1) = i1 by SCMPDS_6:22;
+B181: WH = i1 ';' (I ';' i2 ) by Lm2;
 A182: Comput(ProgramPart(s1),s1,0+1) = Following(ProgramPart s1,
 Comput(ProgramPart(s1),s1,0)) by AMI_1:14
     .= Following(ProgramPart s1,s1) by AMI_1:13
-    .= Exec(i1,s1) by A181;
-Y:  (ProgramPart s2)/.IC s2
- = s2.IC s2 by AMI_1:150;
+    .= Exec(i1,s1) by B181,I1,SCMPDS_6:22;
+I4: s+*Initialize sWH = Initialize s+*sWH by SCMPDS_4:5;
   IC s2 = s2.IC SCMPDS
     .= ICplusConst(s1,(card I+2)) by A7,A169,A174,A175,A182,SCMPDS_2:68
     .= (0+(card I+2)) by A176,SCMPDS_6:23;
   then
-A183: CurInstr(ProgramPart s2,s2) = halt SCMPDS by A180,Y;
- ProgramPart(Comput(ProgramPart(s+*iWH),s+*iWH,k)+*iWH)
- = ProgramPart (s+*iWH)
-by A169,AMI_1:123;
+A183: CurInstr(ProgramPart s2,s2) = halt SCMPDS by A180,COMPOS_1:38;
+ ProgramPart(Initialize Comput(ProgramPart(Initialize s+*sWH),
+        s+*Initialize sWH,k)+*sWH)
+ = ProgramPart (Initialize s+*sWH) by A169,I4,AMI_1:123;
  then
-A184: s2= Comput(ProgramPart(s+*iWH),s+*iWH,k+1) by A169,AMI_1:51;
+A184: s2= Comput(ProgramPart(Initialize s+*sWH),Initialize s+*sWH,k+1)
+ by A169,I4,AMI_1:51;
   then
-TX:   ProgramPart(s+*iWH) = ProgramPart s2 by AMI_1:123;
+TX:   ProgramPart(Initialize s+*sWH) = ProgramPart s2 by AMI_1:123;
   then
-A185: ProgramPart(s+*iWH) halts_on s+*iWH by A183,A184,AMI_1:146;
+A185: ProgramPart(Initialize s+*sWH) halts_on Initialize s+*sWH
+ by A183,A184,AMI_1:146;
   hence WH is_halting_on s by SCMPDS_6:def 3;
-A186: Result(ProgramPart(s +* iWH),s +* iWH)=s2
+A186: Result(ProgramPart(Initialize s +* sWH),Initialize s +* sWH)=s2
  by A183,A184,A185,TX,AMI_1:def 22;
   now
     let i be Nat;
     reconsider a = i as Element of NAT by ORDINAL1:def 13;
     set xi=intpos (m+a);
-A187: dom ProgramPart s = A by AMI_1:143;
+A187: dom ProgramPart s = A by COMPOS_1:34;
 A188: not xi in dom (s | A) by A187,SCMPDS_2:53;
     assume
 A189: i in dom g;
@@ -1491,8 +1502,7 @@ A9: g is_FinSequence_on ss,m by A8,SCPISORT:def 1;
 A10: m1=m+n+1 and
 A11: m+1=s.intpos m1 and
 A12: m+n=s.intpos(m1+1);
-  assume
-
+  assume 
   for t be State of SCMPDS,f1,f2 be FinSequence of INT, k1,k2,y1,yn be
 
 Element of NAT st t.a=c & 2*k1+1=t.b & k2=m+n+2*k1+1 & m+y1=t.intpos k2 & m+yn=
@@ -1681,7 +1691,7 @@ A3: md >= 8 and
 A4: me >= 8 and
 A5: s.a=0;
 
-  set t0=Initialized s, t1=IExec(i1 ';' i2 ';' i3 ';' i4,s), t2=IExec(i1 ';'
+  set t0=Initialize s, t1=IExec(i1 ';' i2 ';' i3 ';' i4,s), t2=IExec(i1 ';'
   i2 ';' i3,s), t3=IExec(i1 ';' i2,s), t4=Exec(i1, t0);
 
 A6: t0.a=0 by A5,SCMPDS_5:40;
@@ -1710,7 +1720,7 @@ A16: t3.a2 =Exec(i2, t4).a2 by SCMPDS_5:47
 A17: t0.a5=s.a5 by SCMPDS_5:40;
   then
 A18: t4.a5 =s.a5 by A7,AMI_3:52,SCMPDS_2:59;
-  set t01=Initialized t1, ii7= (GBP,5):=0, t5=Exec(i5,t01);
+  set t01=Initialize t1, ii7= (GBP,5):=0, t5=Exec(i5,t01);
 A19: t2.a2 =Exec(i3, t3).a2 by SCMPDS_5:46
     .=md by A16,A14,AMI_3:52,SCMPDS_2:59;
 A20: t2.a =Exec(i3, t3).a by SCMPDS_5:46
@@ -1734,8 +1744,7 @@ A25: t01.a7=s.a5 by SCMPDS_5:40;
 A26: t01.a2=s.a2 by A1,SCMPDS_5:40;
 A27: now
     let i be Element of NAT;
-    assume
-    i>=8;
+    assume i>=8;
     then i > 7 by XXREAL_0:2;
     hence t4.intpos i=t0.intpos i by A7,AMI_3:52,SCMPDS_2:59
       .=s.intpos i by SCMPDS_5:40;
@@ -2423,7 +2432,7 @@ A3: md >= 8 and
 A4: me >= 8 and
 A5: s.a=0;
 
-  set t0=Initialized s, t1=IExec(j1 ';' j2 ';' j3 ';' j4,s), t2=IExec(j1 ';'
+  set t0=Initialize s, t1=IExec(j1 ';' j2 ';' j3 ';' j4,s), t2=IExec(j1 ';'
   j2 ';' j3,s), t3=IExec(j1 ';' j2,s), t4=Exec(j1, t0);
 
 A6: t0.a=0 by A5,SCMPDS_5:40;
@@ -2452,7 +2461,7 @@ A16: t3.a3 =Exec(j2, t4).a3 by SCMPDS_5:47
 A17: t0.a7=s.a7 by SCMPDS_5:40;
   then
 A18: t4.a7 =s.a7 by A7,AMI_3:52,SCMPDS_2:59;
-  set t01=Initialized t1, jj7= (GBP,7):=0, t5=Exec(j5,t01);
+  set t01=Initialize t1, jj7= (GBP,7):=0, t5=Exec(j5,t01);
 A19: t2.a3 =Exec(j3, t3).a3 by SCMPDS_5:46
     .=me by A16,A14,AMI_3:52,SCMPDS_2:59;
 A20: t2.a =Exec(j3, t3).a by SCMPDS_5:46
@@ -2517,8 +2526,7 @@ A41: t5.a=0 by A31,SCMPDS_2:60;
 A42: DataLoc(t5.a,5)=intpos(0+5) by SCMP_GCD:5;
 A43: now
     let i be Element of NAT;
-    assume
-    i>=8;
+    assume i>=8;
     then i > 5 by XXREAL_0:2;
     hence t4.intpos i=t0.intpos i by A7,AMI_3:52,SCMPDS_2:59
       .=s.intpos i by SCMPDS_5:40;
@@ -3151,7 +3159,7 @@ A5: m3 > 6 and
 A6: m4 > 6;
 A7: m4 > 3 by A6,XXREAL_0:2;
 
-  set x=intpos m3, y=intpos m4, t0=Initialized s, t1=IExec(k5 ';' k6 ';' k7
+  set x=intpos m3, y=intpos m4, t0=Initialize s, t1=IExec(k5 ';' k6 ';' k7
 
 ';' k8 ';' k9 ';' k0,s), t2=IExec(k5 ';' k6 ';' k7 ';' k8 ';' k9,s), t3=IExec(
 
@@ -4740,11 +4748,10 @@ proof
   set a=GBP;
   let s be State of SCMPDS;
 
-  set t0=Initialized s, t1=IExec(k1 ';' k2 ';' k3 ';' k4,s), t2=IExec(k1 ';'
+  set t0=Initialize s, t1=IExec(k1 ';' k2 ';' k3 ';' k4,s), t2=IExec(k1 ';'
   k2 ';' k3,s), t3=IExec(k1 ';' k2,s), t4=Exec(k1, t0);
 
-  assume
-  s.a=0;
+  assume s.a=0;
   then
 A1: t0.a=0 by SCMPDS_5:40;
   then
@@ -4808,8 +4815,7 @@ A22: t2.a2 =Exec(k3, t3).a2 by SCMPDS_5:46
     .=s.a4-s.a2 by A15,A20,AMI_3:52,SCMPDS_2:60;
 A23: now
     let i be Element of NAT;
-    assume
-    i>=8;
+    assume i>=8;
     then i > 5 by XXREAL_0:2;
     hence t4.intpos i=t0.intpos i by A2,AMI_3:52,SCMPDS_2:59
       .=s.intpos i by SCMPDS_5:40;
@@ -5039,8 +5045,7 @@ A70: s1.intpos md=Exec(j0,t2).intpos md by A63,SCMPDS_7:50
     .=s4.intpos m4 by A68,A67,SCMP_GCD:5;
 A71: now
     let i be Element of NAT;
-    assume
-    i >= 8;
+    assume i >= 8;
     then
 A72: i > 6 by XXREAL_0:2;
     thus t3.intpos i =Exec(j8,s3).intpos i by A49,A27,SCMPDS_7:50
@@ -5251,7 +5256,7 @@ IExec(l3 ';' l4, t).a2=t.intpos(m1+pn) & IExec(l3 ';' l4, t).a4=t.intpos(m1+pn+
 
   proof
     let t be State of SCMPDS,m1 be Element of NAT;
-    set t0=Initialized t, t2=IExec(l3 ';' l4, t), t3=Exec(l3, t0), mp=m1+pn;
+    set t0=Initialize t, t2=IExec(l3 ';' l4, t), t3=Exec(l3, t0), mp=m1+pn;
     assume that
 A7: t.a=0 and
 A8: t.SBP=m1;
@@ -5305,7 +5310,7 @@ A19: t.a=0 and
 A20: t.SBP=m1 and
 A21: m1=m+1;
 
-    set t0=Initialized t, t1=IExec(L5,t), t2=IExec(l5 ';' l6 ';' l7 ';' l8 ';'
+    set t0=Initialize t, t1=IExec(L5,t), t2=IExec(l5 ';' l6 ';' l7 ';' l8 ';'
 
 l9,t), t3=IExec(l5 ';' l6 ';' l7 ';' l8,t), t4=IExec(l5 ';' l6 ';' l7, t), t5=
     IExec(l5 ';' l6, t), t6=Exec(l5, t0), mp=m1+pn;
@@ -5327,8 +5332,7 @@ A30: t0.SBP =m1 by A20,SCMPDS_5:40;
 A31: DataLoc(t0.SBP,pn+3)=intpos (mp+3) by SCMP_GCD:5;
 A32: now
       let i be Element of NAT;
-      assume
-      i<>mp+3;
+      assume i<>mp+3;
       hence t6.intpos i=t0.intpos i by A31,AMI_3:52,SCMPDS_2:59
         .=t.intpos i by SCMPDS_5:40;
     end;
@@ -5414,8 +5418,7 @@ A62: DataLoc(t2.a,1)=intpos (0+1) by SCMP_GCD:5;
 A63: t2.SBP=m1 by A55,A57;
 A64: now
       let i be Element of NAT;
-      assume
-      i<>1;
+      assume i<>1;
       then
 A65:  intpos i <> DataLoc(t2.a,1) by A61,AMI_3:52,SCMP_GCD:5;
       thus t1.intpos i=Exec(l0, t2).intpos i by SCMPDS_5:46
@@ -5755,7 +5758,7 @@ A168: for t be State of SCMPDS,m be Element of NAT st t.a=0 & t.SBP=m holds
     assume that
 A169: t.a=0 and
 A170: t.SBP=m;
-    set t0=Initialized t, t1=IExec(l1 ';' l2, t), t2=Exec(l1, t0), mp=m+pn;
+    set t0=Initialize t, t1=IExec(l1 ';' l2, t), t2=Exec(l1, t0), mp=m+pn;
 A171: t0.a =0 by A169,SCMPDS_5:40;
     then
 A172: DataLoc(t0.a,2)=intpos (0+2) by SCMP_GCD:5;
@@ -5806,7 +5809,7 @@ A184: t1.a1=m by A168,A181,A182;
 A185: t1.a2=t.intpos (mp+1)-t.intpos mp by A168,A181,A182;
     then
 A186: t1.a2 <= 0 by A183,XREAL_1:49;
-    set li=AddTo(GBP,1,-2), t0=Initialized t1;
+    set li=AddTo(GBP,1,-2), t0=Initialize t1;
 A187: lb is_halting_on t1 by SCMPDS_6:35;
 A188: t1.a=0 by A168,A181,A182;
     then
@@ -5826,8 +5829,7 @@ A195: now
     end;
 A196: now
       let i be Element of NAT;
-      assume
-      i <> 1;
+      assume i <> 1;
       then
 A197: intpos i <> DataLoc(t0.a,1) by A190,AMI_3:52,SCMP_GCD:5;
       thus IExec(WB4,t).intpos i=Exec(li,t0).intpos i by A195
@@ -6099,7 +6101,7 @@ A267: s1.a=0 & s1.a1=1 & s1.intpos(pn+1)=p0+1 & s1.intpos(pn+2)=pn & for i
 
   proof
 
-    set t0=Initialized s, t2=IExec(m1 ';' m2 ';' m3,s), t3=IExec(m1 ';' m2,s),
+    set t0=Initialize s, t2=IExec(m1 ';' m2 ';' m3,s), t3=IExec(m1 ';' m2,s),
     t4=Exec(m1, t0);
 
 A268: t4.a =0 by SCMPDS_2:57;
@@ -6130,8 +6132,7 @@ A278: pn+2 > pn+1 by XREAL_1:8;
       .=pn by A277,SCMPDS_2:58;
 A279: now
       let i be Element of NAT;
-      assume
-      i >= 8;
+      assume i >= 8;
       hence t4.intpos i =t0.intpos i by AMI_3:52,SCMPDS_2:57
         .=s.intpos i by SCMPDS_5:40;
     end;
@@ -6307,8 +6308,7 @@ IExec(WB4,t).intpos(pn+j)=t.intpos(pn+j) by A215,A298,A320,A321,A322,A324,A326
       end;
     end;
     hereby
-      assume
-      y1>=yn;
+      assume y1>=yn;
       then
 A336: t.intpos (mp+1) <= t.intpos mp by A322,A323,A324,XREAL_1:8;
       hence IExec(WB4,t).b1=2*k1+1-2 by A180,A298,A320,A321
@@ -6353,8 +6353,7 @@ holds IExec(WB4,t).intpos j = t.intpos j by A215,A298,A320,A321,A322,A323,A324
 
       hereby
         let j be Element of NAT;
-        assume
-        1<=j & j<y1 or yn<j & j <= n;
+        assume 1<=j & j<y1 or yn<j & j <= n;
 
         then p0+1<=p0+j & p0+j<md or n4<p0+j & p0+j <= p0+n by XREAL_1:8;
 
@@ -6472,8 +6471,7 @@ theorem
   parahalting
 proof
   let p0,n be Element of NAT;
-  assume
-  p0 >= 7;
+  assume p0 >= 7;
   then for s be State of SCMPDS holds QuickSort(n,p0) is_halting_on s by Lm29;
   hence thesis by SCMPDS_6:35;
 end;

@@ -12,13 +12,14 @@ environ
       ALGSTR_0, FUNCSDOM, REAL_1, FUNCT_2, C0SP1, IDEAL_1, VALUED_1, MESFUNC1,
       RSSPACE, POLYALG1, BINOP_1, VECTSP_1, SUPINF_2, GROUP_1, REALSET1,
       ZFMISC_1, RSSPACE4, XXREAL_2, XXREAL_0, LOPBAN_2, NORMSP_1, REWRITE1,
-      NAT_1, RSSPACE3, SEQ_2, PARTFUN1, SEQFUNC, C0SP2, LOPBAN_1;
+      NAT_1, RSSPACE3, SEQ_2, PARTFUN1, SEQFUNC, C0SP2, LOPBAN_1, METRIC_1,
+      RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, XXREAL_0, REALSET1, FUNCT_1,
       FUNCT_2, STRUCT_0, ALGSTR_0, IDEAL_1, BINOP_1, DOMAIN_1, RELSET_1,
       PRE_TOPC, COMPTS_1, PSCOMP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
-      PARTFUN1, SEQFUNC, RSSPACE3, RCOMP_1, SEQ_2, NORMSP_1, NFCONT_1,
-      LOPBAN_1, LOPBAN_2, C0SP1, CONNSP_2, FUNCOP_1, PARTFUN3;
+      PARTFUN1, SEQFUNC, RSSPACE3, RCOMP_1, SEQ_2, NORMSP_0, NORMSP_1,
+      NFCONT_1, LOPBAN_1, LOPBAN_2, C0SP1, CONNSP_2, FUNCOP_1, PARTFUN3;
  constructors REAL_1, REALSET1, RSSPACE3, COMPLEX1, RCOMP_1, IDEAL_1, COMPTS_1,
       SEQ_1, C0SP1, NFCONT_1, SEQFUNC, JORDAN_A, PARTFUN3, BINOP_2, SEQ_2,
       MEASURE6;
@@ -27,12 +28,13 @@ environ
       VECTSP_2, VALUED_0, LOPBAN_2, PSCOMP_1, RCOMP_1, C0SP1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PSCOMP_1, REALSET1, ALGSTR_0, TARSKI, XCMPLX_0, NORMSP_1, RCOMP_1,
-      FUNCSDOM, RLVECT_1, VECTSP_1, STRUCT_0, GROUP_1, BINOP_1, C0SP1;
+      FUNCSDOM, RLVECT_1, VECTSP_1, STRUCT_0, GROUP_1, BINOP_1, C0SP1,
+      NORMSP_0;
  theorems RFUNCT_1, FUNCT_1, NFCONT_1, PARTFUN1, SEQ_2, ABSVALUE, ALGSTR_0,
       COMPLEX1, ZFMISC_1, TARSKI, RCOMP_1, XBOOLE_1, PSCOMP_1, IDEAL_1,
       RSSPACE3, RELAT_1, XREAL_0, XXREAL_0, FUNCSDOM, NORMSP_1, LOPBAN_1,
       FUNCT_2, XREAL_1, RLVECT_1, TOPS_1, FUNCOP_1, VECTSP_1, GROUP_1,
-      LOPBAN_2, VALUED_1, C0SP1, CONNSP_2, XXREAL_1;
+      LOPBAN_2, VALUED_1, C0SP1, CONNSP_2, XXREAL_1, NORMSP_0;
 
 begin
 
@@ -70,8 +72,7 @@ registration
 end;
 
 theorem LMcont:
-for X being non empty TopSpace, f be RealMap of X holds
-  f is continuous iff
+for X being non empty TopSpace, f be RealMap of X holds f is continuous iff
    for x being Point of X,V being Subset of REAL st
     f.x in V & V is open holds
      ex W being Subset of X st x in W & W is open & f.:W c= V
@@ -97,8 +98,7 @@ A2: 0<r0 & ].r-r0,r+r0.[ c= V by RCOMP_1:40;
        ex W being Subset of X st x in W & W is open & f.:W c= V;
    end;
    assume
-A3: for x being Point of X,V being Subset of REAL st
-     f.x in V & V is open holds
+A3: for x being Point of X,V being Subset of REAL st f.x in V & V is open holds
       ex W being Subset of X st x in W & W is open & f.:W c= V;
    now let Y be Subset of REAL;
     assume Y is closed; then
@@ -249,15 +249,6 @@ A19: dom v1 /\ dom u1 = (the carrier of X) /\ (the carrier of X)
  end;
 end;
 
-theorem
-AlgebraStr (# ContinuousFunctions X,
-mult_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Add_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Mult_(ContinuousFunctions X,RAlgebra the carrier of X),
-    One_(ContinuousFunctions X,RAlgebra the carrier of X),
-    Zero_(ContinuousFunctions X,RAlgebra the carrier of X)
-  #) is Subalgebra of RAlgebra (the carrier of X) by C0SP1:6;
-
 definition let X be non empty TopSpace;
   func R_Algebra_of_ContinuousFunctions X -> AlgebraStr equals
   AlgebraStr (# ContinuousFunctions X, mult_(ContinuousFunctions X,
@@ -270,6 +261,10 @@ definition let X be non empty TopSpace;
   coherence;
 end;
 
+theorem
+  R_Algebra_of_ContinuousFunctions X
+   is Subalgebra of RAlgebra the carrier of X by C0SP1:6;
+
 registration let X;
   cluster R_Algebra_of_ContinuousFunctions X -> strict non empty;
   coherence;
@@ -278,8 +273,10 @@ end;
 registration let X;
   cluster R_Algebra_of_ContinuousFunctions X -> Abelian add-associative
     right_zeroed right_complementable vector-distributive scalar-distributive
-    scalar-associative scalar-unital commutative associative
-    right_unital right-distributive vector-associative;
+    scalar-associative scalar-unital
+    commutative associative right_unital right-distributive
+    vector-distributive scalar-distributive scalar-associative
+    vector-associative;
   coherence
   proof
 A1: R_Algebra_of_ContinuousFunctions X is Algebra by C0SP1:6;
@@ -299,8 +296,7 @@ reserve f,g,h for RealMap of X;
 reserve a for Real;
 
 theorem ThB10:
-f=F & g=G & h=H implies
-  ( H = F+G iff (for x be Element of the carrier of X
+f=F & g=G & h=H implies ( H = F+G iff (for x be Element of the carrier of X
   holds h.x = f.x + g.x) )
 proof
    assume A1: f=F & g=G & h=H;
@@ -319,8 +315,7 @@ A2:R_Algebra_of_ContinuousFunctions X is
 end;
 
 theorem ThB11:
-f=F & g=G implies
-  ( G = a*F iff for x be Element of X holds g.x = a*f.x )
+f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x )
 proof
    assume A1: f=F & g=G;
 A2:R_Algebra_of_ContinuousFunctions X is
@@ -338,8 +333,7 @@ A2:R_Algebra_of_ContinuousFunctions X is
 end;
 
 theorem ThB12:
-f=F & g=G & h=H implies
-  ( H = F*G iff (for x be Element of the carrier of X
+f=F & g=G & h=H implies ( H = F*G iff (for x be Element of the carrier of X
   holds h.x = f.x * g.x) )
 proof
    assume A1: f=F & g=G & h=H;
@@ -376,7 +370,7 @@ is Subalgebra of RAlgebra the carrier of X by C0SP1:6;
 end;
 
 reserve X for compact non empty TopSpace;
-reserve F,G,H for VECTOR of R_Algebra_of_ContinuousFunctions X;
+
 reserve f,g,h for RealMap of X;
 
 theorem subalgebra:
@@ -397,7 +391,6 @@ L3:the addF of A1 = (the addF of A2)||the carrier of A1
     [:CA1,CA1:] c= [:CA2,CA2:] by L1,C0SP1:def 9,ZFMISC_1:119;
     hence thesis by FUNCT_1:82;
    end;
-
 L4:the multF of A1 = (the multF of A2)||the carrier of A1
    proof
     the multF of A1 = mA||CA1 & the multF of A2 = mA||CA2 &
@@ -603,7 +596,7 @@ L8:W is right-distributive
       let x,y being Element of W;
       reconsider x1 = x, y1 = y as Element of V by A1;
       a*(x+y) = a*(x1+y1) by A1; then
-      a*(x+y) = a*x1 + a*y1 by RLVECT_1:def 8,def 9,def 10;
+      a*(x+y) = a*x1 + a*y1 by RLVECT_1:def 8;
       hence a*(x+y) = a*x + a*y by A1;
      end;
     thus W is scalar-distributive
@@ -612,7 +605,7 @@ L8:W is right-distributive
       let x being Element of W;
       reconsider x1 = x as Element of V by A1;
       (a+b)*x = (a+b)*x1 by A1; then
-      (a+b)*x = a*x1 + b*x1 by RLVECT_1:def 8,def 9,def 10;
+      (a+b)*x = a*x1 + b*x1 by RLVECT_1:def 9;
       hence (a+b)*x =a*x + b*x by A1;
      end;
     thus W is scalar-associative
@@ -621,7 +614,7 @@ L8:W is right-distributive
       let x being Element of W;
       reconsider x1 = x as Element of V by A1;
       (a*b)*x = (a*b)*x1 by A1; then
-      (a*b)*x = a*(b*x1) by RLVECT_1:def 8,def 9,def 10;
+      (a*b)*x = a*(b*x1) by RLVECT_1:def 10;
       hence (a*b)*x = a*(b*x) by A1;
      end;
     let x,y being Element of W;
@@ -741,8 +734,7 @@ LMX06:
 0.R_Normed_Algebra_of_ContinuousFunctions X
   = 0.R_Normed_Algebra_of_BoundedFunctions the carrier of X
 proof
-   thus 0.R_Normed_Algebra_of_ContinuousFunctions X
-     = X-->0 by ThB18
+   thus 0.R_Normed_Algebra_of_ContinuousFunctions X = X-->0 by ThB18
     .= 0.R_Normed_Algebra_of_BoundedFunctions the carrier of X by C0SP1:26;
 end;
 
@@ -824,15 +816,17 @@ A3: ||.F+G.|| =||.F1+G1.|| by LMX03,LMX02;
 end;
 
 registration let X;
-  cluster R_Normed_Algebra_of_ContinuousFunctions X -> RealNormSpace-like;
+  cluster R_Normed_Algebra_of_ContinuousFunctions X ->
+   reflexive discerning RealNormSpace-like;
   coherence
-  proof
+  proof set R = R_Normed_Algebra_of_ContinuousFunctions X;
+   thus ||.0.R.|| = 0 by ThB24;
    for x,y being Point of R_Normed_Algebra_of_ContinuousFunctions X
    for a be Real holds
      ( ||.x.|| = 0 iff x = 0.R_Normed_Algebra_of_ContinuousFunctions(X) ) &
     ||.a*x.|| = abs(a) * ||.x.|| &
     ||.x+y.|| <= ||.x.|| + ||.y.|| by ThB24;
-   hence thesis by NORMSP_1:def 2;
+   hence thesis by NORMSP_0:def 5,NORMSP_1:def 2;
  end;
 end;
 
@@ -905,8 +899,7 @@ proof
 AS2: f=lim seq & f|(the carrier of X) is bounded;
     now let z be set;
      assume z in BoundedFunctions (the carrier of X); then
-     ex f be RealMap of X st
-      f=z & f|(the carrier of X) is bounded;
+     ex f be RealMap of X st f=z & f|(the carrier of X) is bounded;
      hence z in PFuncs(the carrier of X,REAL) by PARTFUN1:119;
     end; then
     BoundedFunctions (the carrier of X) c= PFuncs(the carrier of X,REAL)
@@ -951,8 +944,7 @@ A7:  g.x0= s.x0-f.x0 by A5,A6,AS2,C0SP1:35;
       consider r0 being real number such that
 A8:  0<r0 & ].r-r0,r+r0.[ c= V by RCOMP_1:40;
       consider k being Element of NAT such that
-A9:   for n be Element of NAT,x be set st
-         n>=k & x in the carrier of X holds
+A9:   for n be Element of NAT,x be set st n>=k & x in the carrier of X holds
            abs((H.n).x  - f.x) < r0/3 by A1,A8,XREAL_1:224;
 A10:  abs((H.k).x - f.x) < r0/3 by A9;
       k in NAT; then
@@ -1103,7 +1095,7 @@ A8: R_Normed_Algebra_of_BoundedFunctions the carrier of X is
     a*(f*g) =f1*(a*g1) by A8,LOPBAN_2:def 11;
     hence a*(f*g) =f*(a*g) by A6,LMX05;
    end;
-A9:now let f,g,h be Element of B;
+now let f,g,h be Element of B;
     reconsider f1=f, g1=g, h1=h as Point of
       R_Normed_Algebra_of_BoundedFunctions the carrier of X by LMX01;
 A10: g+h = g1+h1 by LMX03;
@@ -1114,9 +1106,9 @@ A12: R_Normed_Algebra_of_BoundedFunctions the carrier of X is
                 .= g1*f1 + h1*f1 by A12,VECTSP_1:def 12
                 .= g*f + h*f by LMX03,A11;
    end;
-   B is Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
+   then B is Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
      left-distributive left_unital complete Normed_Algebra
-       by A1,A4,A5,A9,LOPBAN_2:def 9,def 10,def 11,VECTSP_1:def 12;
+       by A1,A4,A5,LOPBAN_2:def 9,def 10,def 11,VECTSP_1:def 12;
    hence thesis;
 end;
 end;

@@ -3,7 +3,7 @@
 ::
 :: Received February 24, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, FUNCT_1, ZFMISC_1, XCMPLX_0, ORDINAL1,
@@ -11,13 +11,14 @@ environ
       CFUNCT_1, RLVECT_1, LOPBAN_1, SUPINF_2, ARYTM_3, ARYTM_1, COMPLEX1,
       ALGSTR_0, MONOID_0, TARSKI, MSSUBFAM, UNIALG_1, RLSUB_1, RSSPACE, NAT_1,
       PRE_TOPC, SEQ_2, ORDINAL2, NORMSP_1, XREAL_0, XXREAL_0, CARD_1, REAL_1,
-      XXREAL_2, SEQ_4, REWRITE1, RSSPACE3, CSSPACE3, SEQ_1, VALUED_1, CLOPBAN1;
+      XXREAL_2, SEQ_4, REWRITE1, RSSPACE3, CSSPACE3, SEQ_1, VALUED_1, CLOPBAN1,
+      METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XCMPLX_0,
-      XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, MONOID_0,
-      ORDINAL1, NUMBERS, MEASURE6, RLVECT_1, NORMSP_1, VALUED_1, SEQ_1, SEQ_2,
-      SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1,
-      GRCAT_1;
+      XXREAL_0, XXREAL_2, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0,
+      MONOID_0, ORDINAL1, NUMBERS, MEASURE6, RLVECT_1, NORMSP_0, NORMSP_1,
+      VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE,
+      CSSPACE3, LOPBAN_1, GRCAT_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
       FUNCSDOM, MONOID_0, MEASURE6, LOPBAN_1, CSSPACE3, SEQ_1, XXREAL_2, SEQ_4,
       RELSET_1, BINOP_2, RVSUM_1, SEQ_2;
@@ -25,11 +26,12 @@ environ
       XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, MONOID_0,
       CLVECT_1, CSSPACE3, VALUED_1, VALUED_0, FUNCOP_1, SEQ_4, FUNCT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SEQ_4, RLVECT_1, FUNCT_1, BINOP_1, STRUCT_0, ALGSTR_0, GRCAT_1;
+ definitions SEQ_4, RLVECT_1, FUNCT_1, BINOP_1, STRUCT_0, ALGSTR_0, GRCAT_1,
+      NORMSP_0, XXREAL_2;
  theorems ALGSTR_0, XBOOLE_0, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1,
       XREAL_0, XCMPLX_0, SEQ_1, SEQ_2, FUNCT_1, NAT_1, FUNCT_2, SEQ_4, FUNCT_3,
       CLVECT_1, LOPBAN_1, CSSPACE, COMPLEX1, CSSPACE3, MONOID_0, XREAL_1,
-      XXREAL_0, NORMSP_1, GRCAT_1;
+      XXREAL_0, NORMSP_1, GRCAT_1, NORMSP_0;
  schemes SEQ_1, FUNCT_2, XBOOLE_0, BINOP_1;
 
 begin :: Complex Vector Space of Operators
@@ -210,15 +212,14 @@ proof
 end;
 
 theorem Th9:
-  (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] = (FuncExtMult(X,
-  Y)).[a*b,f]
+  (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] = (FuncExtMult(X, Y)).[a*b,f]
 proof
   now
     let x be Element of X;
     thus ((FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]]).x = a*(((
     FuncExtMult(X,Y)).[b,f]).x) by Th3
       .= a*(b*(f.x)) by Th3
-      .= (a*b)*(f.x) by CLVECT_1:def 4,def 5
+      .= (a*b)*(f.x) by CLVECT_1:def 4
       .= ((FuncExtMult(X,Y)).[a*b,f]).x by Th3;
   end;
   hence thesis by FUNCT_2:113;
@@ -242,15 +243,11 @@ end;
 
 Lm1: (FuncAdd(X,Y)).((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[a,g]) = (
 FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(f,g)]
-
 proof
   now
     let x be Element of X;
-
     thus ((FuncAdd(X,Y)). ((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[a,g]))
-
 .x = ((FuncExtMult(X,Y)).[a,f]).x + ((FuncExtMult(X,Y)).[a,g]).x by LOPBAN_1:3
-
       .= a*(f.x) + ((FuncExtMult(X,Y)).[a,g]).x by Th3
       .= a*(f.x) + a*(g.x) by Th3
       .= a*(f.x + g.x) by CLVECT_1:def 2
@@ -406,8 +403,7 @@ definition
  canceled;
   attr IT is homogeneous means
   :Def4:
-  for x being VECTOR of X, r being Complex
-  holds IT.(r*x) = r*IT.x;
+  for x being VECTOR of X, r being Complex holds IT.(r*x) = r*IT.x;
 end;
 
 registration
@@ -473,8 +469,7 @@ A4: for x being set holds x in X2 iff x is LinearOperator of X,Y;
     for x being set st x in X2 holds x in X1
     proof
       let x be set;
-      assume
-      x in X2;
+      assume x in X2;
       then x is LinearOperator of X,Y by A4;
       hence thesis by A3;
     end;
@@ -483,8 +478,7 @@ A5: X2 c= X1 by TARSKI:def 3;
     for x being set st x in X1 holds x in X2
     proof
       let x be set;
-      assume
-      x in X1;
+      assume x in X1;
       then x is LinearOperator of X,Y by A3;
       hence thesis by A4;
     end;
@@ -523,8 +517,7 @@ end;
 canceled;
 
 theorem Th15:
-  for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is
-  linearly-closed
+  for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is linearly-closed
 proof
   let X, Y be ComplexLinearSpace;
   set W = LinearOperators(X,Y);
@@ -546,8 +539,8 @@ A4:     v9 is LinearOperator of X,Y by A2,Def5;
 A5:     f= (FuncExtMult(the carrier of X,Y)).[c,v9] by CLVECT_1:def 1;
         hence f.(s*x) =c*v9.(s*x) by Th3
           .=c*(s*(v9.x)) by A4,Def4
-          .=c*s*v9.x by CLVECT_1:def 4,def 5
-          .=s*(c*v9.x) by CLVECT_1:def 4,def 5
+          .=c*s*v9.x by CLVECT_1:def 4
+          .=s*(c*v9.x) by CLVECT_1:def 4
           .=s*f.x by A5,Th3;
       end;
       f is additive
@@ -794,7 +787,7 @@ CLVECT_1:def 18;
 A6:   ||.(seq.n) - g.|| < r by A5;
       abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.|| by CLVECT_1:111;
       then abs(||.(seq.n).|| - ||.g.||) < r by A6,XXREAL_0:2;
-      hence abs(||.seq.||.n - ||.g.||) < r by CLVECT_1:def 17;
+      hence abs(||.seq.||.n - ||.g.||) < r by NORMSP_0:def 4;
     end;
     hence for n be Element of NAT st k <= n holds abs(||.seq.||.n - ||.g.||) <
     r;
@@ -846,8 +839,7 @@ definition
   func BoundedLinearOperators(X,Y) -> Subset of
   C_VectorSpace_of_LinearOperators(X,Y) means
   :Def8:
-  for x being set holds x in
-  it iff x is bounded LinearOperator of X,Y;
+  for x being set holds x in it iff x is bounded LinearOperator of X,Y;
   existence
   proof
     defpred P[set] means $1 is bounded LinearOperator of X,Y;
@@ -869,10 +861,8 @@ A2: x is bounded LinearOperator of X,Y;
   proof
     let X1,X2 be Subset of C_VectorSpace_of_LinearOperators(X,Y);
     assume that
-A3: for x being set holds x in X1 iff x is bounded LinearOperator of X
-    ,Y and
-A4: for x being set holds x in X2 iff x is bounded LinearOperator of X
-    ,Y;
+A3: for x being set holds x in X1 iff x is bounded LinearOperator of X ,Y and
+A4: for x being set holds x in X2 iff x is bounded LinearOperator of X ,Y;
     for x being set st x in X2 holds x in X1
     proof
       let x be set;
@@ -933,7 +923,8 @@ A7:   for x be VECTOR of X holds ||. u1.x .|| <= K1*||.x.|| by Def7;
       take K3=K1+K2;
       now
         let x be VECTOR of X;
-A8:     ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by CLVECT_1:def 14;
+A8:     ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by CLVECT_1:def 14
+;
 A9:     ||. v1.x .|| <= K2*||. x .|| by A5;
         ||. u1.x .|| <= K1*||. x .|| by A7;
         then
@@ -1135,7 +1126,7 @@ end;
 
 theorem Th30:
   for X,Y be ComplexNormSpace, g be bounded LinearOperator of X,Y
-  holds PreNorms(g) is non empty bounded_above
+  holds PreNorms(g) is bounded_above
 proof
   let X,Y be ComplexNormSpace;
   let g be bounded LinearOperator of X,Y;
@@ -1145,18 +1136,14 @@ proof
 A1: 0 <= K and
 A2: for x be VECTOR of X holds ||. g.x .|| <= K*||. x .|| by Def7;
     take K;
-    now
-      let r be Real;
-      assume
-      r in PreNorms(g);
+      let r be ext-real number;
+      assume r in PreNorms(g);
       then consider t be VECTOR of X such that
 A3:   r=||.g.t.|| and
 A4:   ||.t.|| <= 1;
 A5:   ||.g.t.|| <= K*||. t .|| by A2;
       K*||. t .|| <= K *1 by A1,A4,XREAL_1:66;
       hence r <=K by A3,A5,XXREAL_0:2;
-    end;
-    hence thesis;
   end;
   hence thesis;
 end;
@@ -1178,18 +1165,18 @@ A2: now
         case
 A3:       t = 0.X;
           then
-A4:       ||.t.|| = 0 by CLVECT_1:def 14;
+A4:       ||.t.|| = 0 by NORMSP_0:def 6;
           g.t = g.(0c*0.X) by A3,CLVECT_1:2
             .=0c*g.(0.X) by Def4
             .=0.Y by CLVECT_1:2;
-          hence ||.g.t.|| <= K*||.t.|| by A4,CLVECT_1:def 14;
+          hence ||.g.t.|| <= K*||.t.|| by A4,NORMSP_0:def 6;
         end;
         case
 A5:       t <> 0.X;
           reconsider t0 = ||.t.||"+0*<i> as Element of COMPLEX by
 XCMPLX_0:def 2;
           reconsider t1= t0 * t as VECTOR of X;
-A6:       ||.t.|| <> 0 by A5,CLVECT_1:def 14;
+A6:       ||.t.|| <> 0 by A5,NORMSP_0:def 5;
           then
 A7:       ||.t.|| > 0 by CLVECT_1:106;
 A8:       |. ||.t.||"+0*<i> .| =abs( 1*||.t.||" )
@@ -1225,8 +1212,7 @@ A11:  r0 in PreNorms(g) by XBOOLE_0:def 1;
       reconsider r0 as Real by A11;
       now
         let r be Real;
-        assume
-        r in PreNorms(g);
+        assume r in PreNorms(g);
         then ex t be VECTOR of X st r=||.g.t.|| & ||.t.|| <= 1;
         hence 0 <= r by CLVECT_1:106;
       end;
@@ -1241,7 +1227,7 @@ end;
 theorem Th32:
   for X,Y be ComplexNormSpace ex NORM be Function of
 BoundedLinearOperators(X,Y),REAL st for f be set st f in BoundedLinearOperators
-  (X,Y) holds NORM.f = sup PreNorms(modetrans(f,X,Y))
+  (X,Y) holds NORM.f = upper_bound PreNorms(modetrans(f,X,Y))
 proof
   let X,Y be ComplexNormSpace;
   deffunc F(set) = upper_bound PreNorms(modetrans($1,X,Y));
@@ -1258,21 +1244,20 @@ definition
   ,Y), REAL means
   :Def12:
   for x be set st x in BoundedLinearOperators(X,Y) holds
-  it.x = sup PreNorms(modetrans(x,X,Y));
+  it.x = upper_bound PreNorms(modetrans(x,X,Y));
   existence by Th32;
   uniqueness
   proof
     let NORM1,NORM2 be Function of BoundedLinearOperators(X,Y), REAL such that
 A1: for x be set st x in BoundedLinearOperators(X,Y) holds NORM1.x =
-    sup PreNorms(modetrans(x,X,Y)) and
+    upper_bound PreNorms(modetrans(x,X,Y)) and
 A2: for x be set st x in BoundedLinearOperators(X,Y) holds NORM2.x =
-    sup PreNorms(modetrans(x,X,Y));
-A3: for z be set st z in BoundedLinearOperators(X,Y) holds NORM1.z = NORM2
-    .z
+    upper_bound PreNorms(modetrans(x,X,Y));
+A3: for z be set st z in BoundedLinearOperators(X,Y) holds NORM1.z = NORM2 .z
     proof
       let z be set such that
 A4:   z in BoundedLinearOperators(X,Y);
-      NORM1.z = sup PreNorms(modetrans(z,X,Y)) by A1,A4;
+      NORM1.z = upper_bound PreNorms(modetrans(z,X,Y)) by A1,A4;
       hence thesis by A2,A4;
     end;
 A5: dom NORM2 = BoundedLinearOperators(X,Y) by FUNCT_2:def 1;
@@ -1293,15 +1278,16 @@ end;
 
 theorem Th34:
   for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y
-  holds BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(f)
+  holds BoundedLinearOperatorsNorm(X,Y).f = upper_bound PreNorms(f)
 proof
   let X,Y be ComplexNormSpace;
   let f be bounded LinearOperator of X,Y;
   reconsider f9=f as set;
   f in BoundedLinearOperators(X,Y) by Def8;
-  hence BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(modetrans(f9,X,Y)) by
+  hence BoundedLinearOperatorsNorm(X,Y).f =
+   upper_bound PreNorms(modetrans(f9,X,Y)) by
 Def12
-    .= sup PreNorms(f) by Th33;
+    .= upper_bound PreNorms(f) by Th33;
 end;
 
 definition
@@ -1342,21 +1328,20 @@ A2: PreNorms(g) is non empty bounded_above by Th30;
       case
 A3:     t = 0.X;
         then
-A4:     ||.t.|| = 0 by CLVECT_1:def 14;
+A4:     ||.t.|| = 0 by NORMSP_0:def 6;
         g.t =g.(0c * 0.X) by A3,CLVECT_1:2
           .=0c * g.(0.X) by Def4
           .=0.Y by CLVECT_1:2;
-        hence ||.g.t.|| <= ||.f.||*||.t.|| by A4,CLVECT_1:def 14;
+        hence ||.g.t.|| <= ||.f.||*||.t.|| by A4,NORMSP_0:def 6;
       end;
       case
 A5:     t <> 0.X;
         reconsider t0 = ||.t.||"+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
         reconsider t1= t0*t as VECTOR of X;
-A6:     ||.t.|| <> 0 by A5,CLVECT_1:def 14;
+A6:     ||.t.|| <> 0 by A5,NORMSP_0:def 5;
         then
 A7:     ||.t.|| > 0 by CLVECT_1:106;
-A8:     |. t0 .| =abs( 1*||.t.||" )
-          .=abs( 1/||.t.||) by XCMPLX_0:def 9
+A8:     |. t0 .| =abs( 1*||.t.||" ) .=abs( 1/||.t.||) by XCMPLX_0:def 9
           .=1/abs( ||.t.||) by ABSVALUE:15
           .=1/||.t.|| by A7,ABSVALUE:def 1
           .=1*||.t.||" by XCMPLX_0:def 9
@@ -1369,10 +1354,10 @@ A9:     ||.g.t.||/||.t.|| =||.g.t.|| * |. t0 .| by XCMPLX_0:def 9
           .=1 by A6,A8,XCMPLX_0:def 7;
         then ||.g.t.||/||.t.|| in {||.g.s.|| where s is VECTOR of X : ||.s.||
         <= 1 } by A9;
-        then ||.g.t.||/||.t.|| <= sup PreNorms(g) by A2,SEQ_4:def 4;
+        then ||.g.t.||/||.t.|| <= upper_bound PreNorms(g) by A2,SEQ_4:def 4;
         then ||.g.t.||/||.t.|| <= BoundedLinearOperatorsNorm(X,Y).g by Th34;
         then
-A10:    ||.g.t.||/||.t.|| <= ||.f.|| by A1,CLVECT_1:def 13;
+A10:    ||.g.t.||/||.t.|| <= ||.f.|| by A1;
         ||.g.t.||/||.t.||*||.t.|| = ||.g.t.||*||.t.||"*||.t.|| by
 XCMPLX_0:def 9
           .=||.g.t.||*(||.t.||"*||.t.||)
@@ -1397,17 +1382,16 @@ proof
 A1: r0 in PreNorms(g) by XBOOLE_0:def 1;
   reconsider r0 as Real by A1;
 A2: PreNorms(g) is non empty bounded_above by Th30;
-A3: BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(g) by Th34;
+A3: BoundedLinearOperatorsNorm(X,Y).f = upper_bound PreNorms(g) by Th34;
   now
     let r be Real;
-    assume
-    r in PreNorms(g);
+    assume r in PreNorms(g);
     then ex t be VECTOR of X st r=||.g.t.|| & ||.t.|| <= 1;
     hence 0 <= r by CLVECT_1:106;
   end;
   then 0 <= r0 by A1;
-  then 0 <=sup PreNorms(g) by A2,A1,SEQ_4:def 4;
-  hence thesis by A3,CLVECT_1:def 13;
+  then 0 <=upper_bound PreNorms(g) by A2,A1,SEQ_4:def 4;
+  hence thesis by A3;
 end;
 
 theorem Th38:
@@ -1426,25 +1410,24 @@ A1: f = 0.C_NormSpace_of_BoundedLinearOperators(X,Y);
     consider r0 be set such that
 A2: r0 in PreNorms(g) by XBOOLE_0:def 1;
     reconsider r0 as Real by A2;
-A3: (for s be real number st s in PreNorms(g) holds s <= 0) implies sup
+A3: (for s be real number st s in PreNorms(g) holds s <= 0) implies upper_bound
     PreNorms(g) <= 0 by SEQ_4:62;
 A4: PreNorms(g) is non empty bounded_above by Th30;
 A5: z=g by A1,Th35;
 A6: now
       let r be Real;
-      assume
-      r in PreNorms(g);
+      assume r in PreNorms(g);
       then consider t be VECTOR of X such that
 A7:   r=||.g.t.|| and
       ||.t.|| <= 1;
       ||.g.t.|| = ||.0.Y.|| by A5,FUNCOP_1:13
-        .= 0 by CLVECT_1:def 14;
+        .= 0 by NORMSP_0:def 6;
       hence 0 <= r & r <=0 by A7;
     end;
     then 0 <= r0 by A2;
-    then sup PreNorms(g) = 0 by A6,A4,A2,A3,SEQ_4:def 4;
+    then upper_bound PreNorms(g) = 0 by A6,A4,A2,A3,SEQ_4:def 4;
     then BoundedLinearOperatorsNorm(X,Y).f=0 by Th34;
-    hence thesis by CLVECT_1:def 13;
+    hence thesis;
   end;
 end;
 
@@ -1492,16 +1475,14 @@ proof
   reconsider f1=f as VECTOR of C_VectorSpace_of_BoundedLinearOperators(X,Y);
   reconsider h1=h as VECTOR of C_VectorSpace_of_BoundedLinearOperators(X,Y);
 A1: now
-    assume
-    h1=c*f1;
+    assume h1=c*f1;
     hence
     h=Mult_(BoundedLinearOperators(X,Y), C_VectorSpace_of_LinearOperators
     (X,Y)).[c,f1] by CLVECT_1:def 1
       .=c*f by CLVECT_1:def 1;
   end;
   now
-    assume
-    h=c*f;
+    assume h=c*f;
     hence h1=Mult_(BoundedLinearOperators(X,Y),
     C_VectorSpace_of_LinearOperators(X,Y)).[c,f] by CLVECT_1:def 1
       .=c*f1 by CLVECT_1:def 1;
@@ -1529,32 +1510,32 @@ A2: f = 0.C_NormSpace_of_BoundedLinearOperators(X,Y);
       consider r0 be set such that
 A3:   r0 in PreNorms(g) by XBOOLE_0:def 1;
       reconsider r0 as Real by A3;
-A4:   (for s be real number st s in PreNorms(g) holds s <= 0) implies sup
+A4:   (for s be real number st s in PreNorms(g) holds s <= 0)
+ implies upper_bound
       PreNorms(g) <= 0 by SEQ_4:62;
 A5:   PreNorms(g) is non empty bounded_above by Th30;
 A6:   z=g by A2,Th35;
 A7:   now
         let r be Real;
-        assume
-        r in PreNorms(g);
+        assume r in PreNorms(g);
         then consider t be VECTOR of X such that
 A8:     r=||.g.t.|| and
         ||.t.|| <= 1;
         ||.g.t.|| = ||.0.Y.|| by A6,FUNCOP_1:13
-          .= 0 by CLVECT_1:def 14;
+          .= 0 by NORMSP_0:def 6;
         hence 0 <= r & r <=0 by A8;
       end;
       then 0<=r0 by A3;
-      then sup PreNorms(g) = 0 by A7,A5,A3,A4,SEQ_4:def 4;
+      then upper_bound PreNorms(g) = 0 by A7,A5,A3,A4,SEQ_4:def 4;
       then BoundedLinearOperatorsNorm(X,Y).f =0 by Th34;
-      hence thesis by CLVECT_1:def 13;
+      hence thesis;
     end;
   end;
 A9: ||.f+g.|| <= ||.f.|| + ||.g.||
   proof
     reconsider f1=f, g1=g, h1=f+g as bounded LinearOperator of X,Y by Def8;
 A10: (for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g
-    .||) implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
+    .||) implies upper_bound PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
 A11: now
       let t be VECTOR of X such that
 A12:  ||.t.|| <= 1;
@@ -1578,24 +1559,22 @@ A17:  ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A14,XXREAL_0:2;
     end;
 A18: now
       let r be Real;
-      assume
-      r in PreNorms(h1);
+      assume r in PreNorms(h1);
       then ex t be VECTOR of X st r=||.h1.t.|| & ||.t.|| <= 1;
       hence r <= ||.f.|| + ||.g.|| by A11;
     end;
-    BoundedLinearOperatorsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th34;
-    hence thesis by A18,A10,CLVECT_1:def 13;
+    BoundedLinearOperatorsNorm(X,Y).(f+g) = upper_bound PreNorms(h1) by Th34;
+    hence thesis by A18,A10;
   end;
 A19: ||.c*f.|| = |.c.| * ||.f.||
   proof
     reconsider f1=f, h1=c*f as bounded LinearOperator of X,Y by Def8;
 A20: (for s be real number st s in PreNorms(h1) holds s <= |.c.|*||.f.|| )
-    implies sup PreNorms(h1) <= |.c.|*||.f.|| by SEQ_4:62;
+    implies upper_bound PreNorms(h1) <= |.c.|*||.f.|| by SEQ_4:62;
 A21: now
 A22:  0 <= ||.f.|| by Th37;
       let t be VECTOR of X;
-      assume
-      ||.t.|| <= 1;
+      assume ||.t.|| <= 1;
       then
 A23:  ||.f.||*||.t.|| <= ||.f.||*1 by A22,XREAL_1:66;
       ||.f1.t.||<= ||.f.||*||.t.|| by Th36;
@@ -1608,8 +1587,7 @@ A26:  0<= |.c.| by COMPLEX1:132;
     end;
 A27: now
       let r be Real;
-      assume
-      r in PreNorms(h1);
+      assume r in PreNorms(h1);
       then ex t be VECTOR of X st r=||.h1.t.|| & ||.t.|| <= 1;
       hence r <= |.c.|*||.f.|| by A21;
     end;
@@ -1620,8 +1598,7 @@ A29:    c <> 0c;
 A30:    now
 A31:      0 <= ||.c*f.|| by Th37;
           let t be VECTOR of X;
-          assume
-          ||.t.|| <= 1;
+          assume ||.t.|| <= 1;
           then
 A32:      ||.c*f.||*||.t.|| <= ||.c*f.||*1 by A31,XREAL_1:66;
           ||.h1.t.||<= ||.c*f.||*||.t.|| by Th36;
@@ -1629,7 +1606,7 @@ A32:      ||.c*f.||*||.t.|| <= ||.c*f.||*1 by A31,XREAL_1:66;
 A33:      ||.h1.t.|| <= ||.c*f.|| by A32,XXREAL_0:2;
           h1.t=c*f1.t by Th40;
           then
-A34:      c"*h1.t =( c"* c)*f1.t by CLVECT_1:def 4,def 5
+A34:      c"*h1.t =( c"* c)*f1.t by CLVECT_1:def 4
             .=1r*f1.t by A29,COMPLEX1:def 7,XCMPLX_0:def 7
             .=f1.t by CLVECT_1:def 5;
 A35:      |.c".| =|.c.|" by COMPLEX1:152;
@@ -1639,16 +1616,16 @@ A36:      0<= |.c".| by COMPLEX1:132;
         end;
 A37:    now
           let r be Real;
-          assume
-          r in PreNorms(f1);
+          assume r in PreNorms(f1);
           then ex t be VECTOR of X st r=||.f1.t.|| & ||.t.|| <= 1;
           hence r <= |.c.|"*||.c*f.|| by A30;
         end;
 A38:    (for s be real number st s in PreNorms(f1) holds s <= |.c.|"*||.c
-        *f.|| ) implies sup PreNorms(f1) <= |.c.|"*||.c*f.|| by SEQ_4:62;
+        *f.|| ) implies upper_bound PreNorms(f1) <= |.c.|"*||.c*f.||
+        by SEQ_4:62;
 A39:    0 <= |.c.| by COMPLEX1:132;
-        BoundedLinearOperatorsNorm(X,Y).(f) = sup PreNorms(f1) by Th34;
-        then ||.f.|| <=|.c.|"*||.c*f.|| by A37,A38,CLVECT_1:def 13;
+        BoundedLinearOperatorsNorm(X,Y).(f) = upper_bound PreNorms(f1) by Th34;
+        then ||.f.|| <=|.c.|"*||.c*f.|| by A37,A38;
         then |.c.|*||.f.|| <=|.c.|*(|.c.|"*||.c*f.||) by A39,XREAL_1:66;
         then
 A40:    |.c.|*||.f.|| <=(|.c.|*|.c.|")*||.c*f.||;
@@ -1668,8 +1645,8 @@ A41:    c = 0c;
         hence thesis by A41,Th38,COMPLEX1:130;
       end;
     end;
-    BoundedLinearOperatorsNorm(X,Y).(c*f) = sup PreNorms(h1) by Th34;
-    then ||.c*f.|| <= |.c.|*||.f.|| by A27,A20,CLVECT_1:def 13;
+    BoundedLinearOperatorsNorm(X,Y).(c*f) = upper_bound PreNorms(h1) by Th34;
+    then ||.c*f.|| <= |.c.|*||.f.|| by A27,A20;
     hence thesis by A28,XXREAL_0:1;
   end;
   now
@@ -1682,7 +1659,7 @@ A42: ||.f.|| = 0;
       let t be VECTOR of X;
       ||.g.t.|| <= ||.f.|| *||.t.|| by Th36;
       then ||.g.t.|| = 0 by A42,CLVECT_1:106;
-      hence g.t =0.Y by CLVECT_1:def 14
+      hence g.t =0.Y by NORMSP_0:def 5
         .=z.t by FUNCOP_1:13;
     end;
     then g=z by FUNCT_2:113;
@@ -1693,13 +1670,18 @@ end;
 
 theorem Th42:
   for X,Y be ComplexNormSpace holds
-  C_NormSpace_of_BoundedLinearOperators(X,Y) is ComplexNormSpace-like
+  C_NormSpace_of_BoundedLinearOperators(X,Y) is
+   reflexive discerning ComplexNormSpace-like
 proof
   let X,Y be ComplexNormSpace;
+  thus C_NormSpace_of_BoundedLinearOperators(X,Y) is reflexive
+   proof
+    thus ||.0.C_NormSpace_of_BoundedLinearOperators(X,Y).|| = 0 by Th41;
+   end;
   for x, y being Point of C_NormSpace_of_BoundedLinearOperators(X,Y) for c
 be Complex holds ( ||.x.|| = 0 iff x = 0.C_NormSpace_of_BoundedLinearOperators(
 X,Y) ) & ||.c*x.|| = |.c.| * ||.x.|| & ||.x+y.|| <= ||.x.|| + ||.y.|| by Th41;
-  hence thesis by CLVECT_1:def 14;
+  hence thesis by CLVECT_1:def 14,NORMSP_0:def 5;
 end;
 
 theorem Th43:
@@ -1716,9 +1698,11 @@ end;
 
 registration
   let X,Y be ComplexNormSpace;
-  cluster C_NormSpace_of_BoundedLinearOperators(X,Y) -> ComplexNormSpace-like
+  cluster C_NormSpace_of_BoundedLinearOperators(X,Y) ->
+    reflexive discerning ComplexNormSpace-like
     vector-distributive scalar-distributive scalar-associative scalar-unital
-    Abelian add-associative right_zeroed right_complementable;
+    Abelian add-associative right_zeroed
+    right_complementable;
   coherence by Th43;
 end;
 
@@ -1731,8 +1715,7 @@ proof
   let f,g,h be Point of C_NormSpace_of_BoundedLinearOperators(X,Y);
   reconsider f9=f,g9=g,h9=h as bounded LinearOperator of X,Y by Def8;
   hereby
-    assume
-    h=f-g;
+    assume h=f-g;
     then h+g=f-(g-g) by RLVECT_1:43;
     then h+g=f-0.C_NormSpace_of_BoundedLinearOperators(X,Y) by RLVECT_1:28;
     then
@@ -1787,15 +1770,12 @@ end;
 Lm2: for e be Real, seq be Real_Sequence st ( seq is convergent & ex k be
 Element of NAT st for i be Element of NAT st k <= i holds seq.i <=e ) holds lim
 seq <=e
-
 proof
   let e be Real;
   let seq be Real_Sequence such that
 A1: seq is convergent and
-
 A2: ex k be Element of NAT st for i be Element of NAT st k <= i holds
   seq.i <=e;
-
   consider k be Element of NAT such that
 A3: for i be Element of NAT st k <= i holds seq.i <=e by A2;
   reconsider cseq = NAT --> e as Real_Sequence;
@@ -1828,11 +1808,10 @@ A4: for n be Element of NAT st n >= k holds ||.seq.n - lim seq.|| < e
     take k;
     now
       let m be Element of NAT;
-      assume
-      m >= k;
+      assume m >= k;
       then
 A5:   ||.seq.m - lim seq.|| <e by A4;
-      ||.seq.m.||= ||.seq.||.m by CLVECT_1:def 17;
+      ||.seq.m.||= ||.seq.||.m by NORMSP_0:def 4;
       then abs( ||.seq.||.m - ||.lim seq.|| ) <= ||.seq.m - lim seq.|| by
 CLVECT_1:111;
       hence abs( ||.seq.||.m - ||.lim seq.|| ) <e1 by A5,XXREAL_0:2;
@@ -1902,14 +1881,14 @@ A11:        xseq.m=modetrans((vseq.m),X,Y).x by A4
               .=0c * modetrans((vseq.n),X,Y).x by Def4
               .=0.Y by CLVECT_1:2;
             then ||.xseq.n -xseq.m.|| = ||.0.Y.|| by A11,RLVECT_1:26
-              .=0 by CLVECT_1:def 14;
+              .=0 by NORMSP_0:def 6;
             hence thesis by A9;
           end;
         end;
         case
           x <>0.X;
           then
-A12:      ||.x.|| <> 0 by CLVECT_1:def 14;
+A12:      ||.x.|| <> 0 by NORMSP_0:def 5;
           then
 A13:      ||.x.|| > 0 by CLVECT_1:106;
           then consider k be Element of NAT such that
@@ -1952,8 +1931,7 @@ A21: for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x and
 A22: xseq is convergent and
 A23: tseq.x = lim xseq by A19;
     consider zseq be sequence of Y such that
-A24: for n be Element of NAT holds zseq.n=modetrans((vseq.n),X,Y).(x+y
-    ) and
+A24: for n be Element of NAT holds zseq.n=modetrans((vseq.n),X,Y).(x+y ) and
     zseq is convergent and
 A25: tseq.(x+y) = lim zseq by A19;
     consider yseq be sequence of Y such that
@@ -1979,8 +1957,7 @@ A29: for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x and
 A30: xseq is convergent and
 A31: tseq.x = lim xseq by A19;
     consider zseq be sequence of Y such that
-A32: for n be Element of NAT holds zseq.n=modetrans((vseq.n),X,Y).(c*x
-    ) and
+A32: for n be Element of NAT holds zseq.n=modetrans((vseq.n),X,Y).(c*x ) and
     zseq is convergent and
 A33: tseq.(c*x) = lim zseq by A19;
     now
@@ -1992,7 +1969,7 @@ A33: tseq.(c*x) = lim zseq by A19;
     then zseq=c*xseq by CLVECT_1:def 15;
     hence tseq.(c*x)=c*tseq.x by A30,A31,A33,CLVECT_1:124;
   end;
-  then reconsider tseq as LinearOperator of X,Y by A20,GRCAT_1:def 13,Def4;
+  then reconsider tseq as LinearOperator of X,Y by A20,Def4,GRCAT_1:def 13;
   now
     let e1 be real number such that
 A34: e1 >0;
@@ -2003,12 +1980,11 @@ A35: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
     take k;
     now
       let m be Element of NAT;
-      assume
-      m >= k;
+      assume m >= k;
       then
 A36:  ||.(vseq.m) - (vseq.k).|| <e by A35;
-A37:  ||.vseq.m.||= ||.vseq.||.m by CLVECT_1:def 17;
-A38:  ||.vseq.k.||= ||.vseq.||.k by CLVECT_1:def 17;
+A37:  ||.vseq.m.||= ||.vseq.||.m by NORMSP_0:def 4;
+A38:  ||.vseq.k.||= ||.vseq.||.k by NORMSP_0:def 4;
       abs( ||.vseq.m.||- ||.vseq.k.|| ) <= ||.(vseq.m) - (vseq.k).|| by
 CLVECT_1:111;
       hence abs( ||.vseq.||.m - ||.vseq.||.k ) <e1 by A38,A37,A36,XXREAL_0:2;
@@ -2029,20 +2005,18 @@ A42:  for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x and
 A43:  xseq is convergent and
 A44:  tseq.x = lim xseq by A19;
 A45:  ||.tseq.x.|| = lim ||.xseq.|| by A43,A44,Th22;
-A46:  for m be Element of NAT holds ||.xseq.m.|| <= ||.vseq.m.|| * ||.x
-      .||
+A46:  for m be Element of NAT holds ||.xseq.m.|| <= ||.vseq.m.|| * ||.x .||
       proof
         let m be Element of NAT;
 A47:    xseq.m =modetrans((vseq.m),X,Y).x by A42;
         vseq.m is bounded LinearOperator of X,Y by Def8;
         hence thesis by A47,Th33,Th36;
       end;
-A48:  for n be Element of NAT holds ||.xseq.||.n <=( ||.x.||(#)||.vseq.||
-      ).n
+A48:  for n be Element of NAT holds ||.xseq.||.n <=( ||.x.||(#)||.vseq.|| ).n
       proof
         let n be Element of NAT;
-A49:    ||.xseq.||.n = ||.(xseq.n).|| by CLVECT_1:def 17;
-A50:    ||.vseq.n.|| = ||.vseq.||.n by CLVECT_1:def 17;
+A49:    ||.xseq.||.n = ||.(xseq.n).|| by NORMSP_0:def 4;
+A50:    ||.vseq.n.|| = ||.vseq.||.n by NORMSP_0:def 4;
         ||.(xseq.n).|| <= ||.vseq.n.|| * ||.x.|| by A46;
         hence thesis by A49,A50,SEQ_1:13;
       end;
@@ -2056,7 +2030,7 @@ SEQ_2:32;
     now
       let n be Element of NAT;
       ||.vseq.n.|| >=0 by CLVECT_1:106;
-      hence ||.vseq.||.n >=0 by CLVECT_1:def 17;
+      hence ||.vseq.||.n >=0 by NORMSP_0:def 4;
     end;
     hence thesis by A39,A41,SEQ_2:31;
   end;
@@ -2065,8 +2039,7 @@ A53: for e be Real st e > 0 ex k be Element of NAT st for n be Element of
   tseq.x.|| <= e* ||.x.||
   proof
     let e be Real;
-    assume
-    e > 0;
+    assume e > 0;
     then consider k be Element of NAT such that
 A54: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
     (vseq.m).|| < e by A2,CSSPACE3:10;
@@ -2077,8 +2050,7 @@ A55:  n >= k;
       now
         let x be VECTOR of X;
         consider xseq be sequence of Y such that
-A56:    for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).
-        x and
+A56:    for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y). x and
 A57:    xseq is convergent and
 A58:    tseq.x = lim xseq by A19;
 A59:    for m,k be Element of NAT holds ||.xseq.m-xseq.k.|| <= ||.vseq.m
@@ -2101,8 +2073,7 @@ A63:    for m be Element of NAT st m >=k holds ||.xseq.n-xseq.m.|| <= e *
         ||.x.||
         proof
           let m be Element of NAT;
-          assume
-          m >=k;
+          assume m >=k;
           then
 A64:      ||.vseq.n - vseq.m.|| <e by A54,A55;
 A65:      ||.xseq.n-xseq.m.|| <= ||.vseq.n - vseq.m.|| * ||.x.|| by A59;
@@ -2118,12 +2089,11 @@ A66:      for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch
           1;
           now
             let x be set;
-            assume
-            x in NAT;
+            assume x in NAT;
             then reconsider k=x as Element of NAT;
             thus rseq.x = ||.xseq.k - xseq.n.|| by A66
               .= ||.(xseq - xseq.n).k.|| by NORMSP_1:def 7
-              .= ||.(xseq - xseq.n).||.x by CLVECT_1:def 17;
+              .= ||.(xseq - xseq.n).||.x by NORMSP_0:def 4;
           end;
           then
 A67:      rseq = ||.xseq - xseq.n.|| by FUNCT_2:18;
@@ -2169,8 +2139,7 @@ A74:  n >= k;
       set f1=modetrans((vseq.n),X,Y);
 A75:  now
         let t be VECTOR of X;
-        assume
-        ||.t.|| <= 1;
+        assume ||.t.|| <= 1;
         then
 A76:    e*||.t.|| <= e*1 by A72,XREAL_1:66;
 A77:    ||.f1.t-g1.t.|| <=e* ||.t.|| by A73,A74;
@@ -2181,15 +2150,15 @@ A77:    ||.f1.t-g1.t.|| <=e* ||.t.|| by A73,A74;
       end;
 A78:  now
         let r be Real;
-        assume
-        r in PreNorms(h1);
+        assume r in PreNorms(h1);
         then ex t be VECTOR of X st r=||.h1.t.|| & ||.t.|| <= 1;
         hence r <=e by A75;
       end;
 A79:  (for s be real number st s in PreNorms(h1) holds s <= e) implies
-      sup PreNorms(h1) <=e by SEQ_4:62;
-      BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv) = sup PreNorms(h1) by Th34;
-      hence ||.vseq.n-tv.|| <=e by A78,A79,CLVECT_1:def 13;
+      upper_bound PreNorms(h1) <=e by SEQ_4:62;
+      BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv) =
+       upper_bound PreNorms(h1) by Th34;
+      hence ||.vseq.n-tv.|| <=e by A78,A79;
     end;
     hence thesis;
   end;
@@ -2204,8 +2173,7 @@ A81: for n be Element of NAT st n >= m holds ||.(vseq.n) - tv.|| <= e
 A82: e/2<e by A80,XREAL_1:218;
     now
       let n be Element of NAT;
-      assume
-      n >= m;
+      assume n >= m;
       then ||.(vseq.n) - tv.|| <= e/2 by A81;
       hence ||.(vseq.n) - tv.|| < e by A82,XXREAL_0:2;
     end;
@@ -2231,4 +2199,3 @@ registration
   cluster C_NormSpace_of_BoundedLinearOperators (X,Y) -> complete;
   coherence by Th47;
 end;
-

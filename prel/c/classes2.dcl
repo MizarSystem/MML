@@ -8,8 +8,8 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="CLASSES1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
@@ -49,7 +49,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="53">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -65,11 +65,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="50">
+<Func kind="K" nr="46">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="14"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLASSES2" nr="3">
@@ -81,7 +81,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="53">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -92,11 +92,11 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="53">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,37 +109,37 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="57">
+<Func kind="K" nr="56">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLASSES2" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="53">
+<Func kind="K" nr="52">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLASSES2" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -168,14 +168,14 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="12"/>
 <Adjective nr="25"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CLASSES2" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="12"/>
 <Adjective nr="25"/>
 </Cluster>
 <Typ kind="M" nr="1">

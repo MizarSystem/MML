@@ -3,7 +3,7 @@
 ::
 :: Received September 25, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SUBSET_1, CQC_LANG, QC_LANG1, XBOOLE_0, VALUAT_1,
@@ -33,16 +33,13 @@ begin :: Preliminaries
 
 reserve a,b,c,d for set,
   i,j,k,m,n for Element of NAT,
-  p,q,r for Element of
-  CQC-WFF,
+  p,q,r for Element of CQC-WFF,
   x,y,y0 for bound_QC-variable,
   X for Subset of CQC-WFF,
-  A for non empty
-  set,
+  A for non empty set,
   J for interpretation of A,
   v,w for Element of Valuations_in A,
-  Sub for
-  CQC_Substitution,
+  Sub for CQC_Substitution,
   f,f1,g,h,h1 for FinSequence of CQC-WFF;
 
 registration :: wyrzucic !!!!!!!!!!
@@ -55,15 +52,13 @@ definition
   let D be non empty set, f be FinSequence of D;
   func Ant(f) -> FinSequence of D means
   :Def1:
-  for i st len f = i+1 holds it =
-  f|(Seg i) if len f > 0 otherwise it = {};
+  for i st len f = i+1 holds it = f|(Seg i) if len f > 0 otherwise it = {};
   existence
   proof
 A1: len f > 0 implies ex g being FinSequence of D st for i st len f = i+1
     holds g = f|(Seg i)
     proof
-      assume
-      len f > 0;
+      assume len f > 0;
       then consider j being Nat such that
 A2:   len f = j+1 by NAT_1:6;
       reconsider j as Element of NAT by ORDINAL1:def 13;
@@ -72,8 +67,7 @@ A2:   len f = j+1 by NAT_1:6;
       now
 A3:     rng g c= rng f by RELAT_1:99;
         let a;
-        assume
-        a in rng g;
+        assume a in rng g;
         then a in rng f by A3;
         hence a in D;
       end;
@@ -123,26 +117,44 @@ A1: len f > 0;
 end;
 
 definition
-  let D be non empty set, p be Element of D, f be FinSequence of D;
+  let f be Relation, p be set;
   pred p is_tail_of f means
   :Def3:
-  ex i st i in dom f & f.i = p;
+  p in rng f;
+end;
+
+LL1: now
+  let f be FinSequence, p be set;
+  assume p is_tail_of f;
+  then p in rng f by Def3;
+  then consider i being set such that
+A1: i in dom f and
+A2: f.i = p by FUNCT_1:def 5;
+  ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
+  then reconsider i as Element of NAT by A1;
+  take i;
+  thus i in dom f & f.i = p by A1,A2;
+end;
+
+LL: now
+  let f be FinSequence, p be set;
+  assume ex i being Element of NAT st i in dom f & f.i = p;
+  then p in rng f by FUNCT_1:def 5;
+  hence p is_tail_of f by Def3;
 end;
 
 definition
   let f,g;
   pred f is_Subsequence_of g means
   :Def4:
-  ex N being Subset of NAT st f c= Seq
-  (g|N);
+  ex N being Subset of NAT st f c= Seq (g|N);
 end;
 
 theorem Th1:
   f is_Subsequence_of g implies rng f c= rng g & ex N being Subset
   of NAT st rng f c= rng (g|N)
 proof
-  assume
-  f is_Subsequence_of g;
+  assume f is_Subsequence_of g;
   then consider N being Subset of NAT such that
 A1: f c= Seq (g|N) by Def4;
 A2: rng (g|N) c= rng g by RELAT_1:99;
@@ -151,8 +163,7 @@ A3: now
     then
 A4: rng (Seq (g|N)) c= rng (g|N) by RELAT_1:45;
     let a be set;
-    assume
-    a in rng f;
+    assume a in rng f;
     then consider n being Nat such that
 A5: n in dom f and
 A6: f.n = a by FINSEQ_2:11;
@@ -172,8 +183,7 @@ end;
 theorem Th2:
   len f > 0 implies len Ant(f)+1 = len f & len Ant(f) < len f
 proof
-  assume
-  len f > 0;
+  assume len f > 0;
   then consider i being Nat such that
 A1: len f = i+1 by NAT_1:6;
   reconsider i as Element of NAT by ORDINAL1:def 13;
@@ -191,8 +201,7 @@ A3: Seg i c= Seg (len f) by FINSEQ_1:7;
 end;
 
 theorem Th3:
-  len f > 0 implies f = Ant(f)^<*Suc(f)*> & rng f = rng Ant(f) \/ {
-  Suc(f)}
+  len f > 0 implies f = Ant(f)^<*Suc(f)*> & rng f = rng Ant(f) \/ { Suc(f)}
 proof
   assume
 A1: len f > 0;
@@ -204,8 +213,7 @@ A4: now
 A5: j in dom f;
 A6: 1 <= j by A3,A5,FINSEQ_1:3;
 A7: now
-      assume
-      j <= len Ant(f);
+      assume j <= len Ant(f);
       then
 A8:   j in dom Ant(f) by A6,FINSEQ_3:27;
       Ant(f) = f|Seg len Ant(f) by A2,Def1;
@@ -238,8 +246,7 @@ end;
 theorem Th4:
   len f > 1 implies len Ant(f) > 0
 proof
-  assume
-  len f > 1;
+  assume len f > 1;
   then len Ant(f)+1 > 1 by Th2;
   hence thesis by NAT_1:13;
 end;
@@ -256,8 +263,7 @@ A1: len fin = len f + 1 by FINSEQ_2:19;
     set fin = f^<*p*>;
     now
       let a be set;
-      assume
-      a in f;
+      assume a in f;
       then consider k being Nat such that
 A2:   k in dom f and
 A3:   a = [k,f.k] by FINSEQ_1:16;
@@ -279,8 +285,7 @@ theorem Th6:
 proof
   len (fin^fin1) = len fin + len fin1 by FINSEQ_1:35;
   hence len fin <= len (fin^fin1) & len fin1 <= len (fin^fin1) by NAT_1:12;
-  assume
-  fin <> {};
+  assume fin <> {};
   then
 A1: 0+1 <= len fin by NAT_1:13;
   then len fin1 + 1 <= len fin + len fin1 by XREAL_1:8;
@@ -347,8 +352,7 @@ end;
 theorem Th12:
   0 < m implies dom (Sgm (Seg n \/ {n+m})) = Seg (n+1)
 proof
-  assume
-  0 < m;
+  assume 0 < m;
   then len (Sgm (Seg n \/ {n+m})) = n+1 by Th11;
   hence thesis by FINSEQ_1:def 3;
 end;
@@ -370,8 +374,7 @@ A1: 0 < len f;
 A2:   b in N;
       reconsider i = b as Element of NAT by A2;
 A3:   now
-        assume
-        i in {n+(m+1)};
+        assume i in {n+(m+1)};
         then
 A4:     i = (n+m)+1 by TARSKI:def 1;
         then
@@ -509,8 +512,7 @@ definition
   let f;
   func still_not-bound_in f -> Subset of bound_QC-variables means
   :Def5:
-  a in
-  it iff ex i,p st i in dom f & p = f.i & a in still_not-bound_in p;
+  a in it iff ex i,p st i in dom f & p = f.i & a in still_not-bound_in p;
   existence
   proof
     defpred P[set] means ex i,p st i in dom f & p = f.i & $1 in
@@ -615,8 +617,7 @@ definition
   let p,X;
   pred p is_formal_provable_from X means
   :Def10:
-  ex f st rng Ant(f) c= X & Suc
-  (f) = p & |- f;
+  ex f st rng Ant(f) c= X & Suc (f) = p & |- f;
 end;
 
 definition
@@ -658,14 +659,12 @@ end;
 theorem Th15:
   Suc(f) is_tail_of Ant(f) implies Ant(f) |= Suc(f)
 proof
-  assume
-  Suc(f) is_tail_of Ant(f);
-  then ex i st i in dom Ant(f) & (Ant(f)).i = Suc(f) by Def3;
+  assume Suc(f) is_tail_of Ant(f);
+  then ex i st i in dom Ant(f) & (Ant(f)).i = Suc(f) by LL1;
   then
 A1: Suc(f) in rng(Ant(f)) by FUNCT_1:12;
   let A,J,v;
-  assume
-  J,v |= rng(Ant(f));
+  assume J,v |= rng(Ant(f));
   hence thesis by A1,Def11;
 end;
 
@@ -701,8 +700,7 @@ A1: len f > 0;
 A2: J,v |= Ant(f) and
 A3: J,v |= Suc(f);
     let p;
-    assume
-    p in rng(f);
+    assume p in rng(f);
     then p in rng(Ant(f)) \/ {Suc(f)} by A1,Th3;
     then
 A4: p in rng(Ant(f)) or p in {Suc(f)} by XBOOLE_0:def 3;
@@ -717,8 +715,7 @@ A5: J,v |= rng(f);
     proof
 A6:   rng(Ant(f)) c= rng(Ant(f)) \/ {Suc(f)} by XBOOLE_1:7;
       let p;
-      assume
-      p in rng(Ant(f));
+      assume p in rng(Ant(f));
       then p in rng(Ant(f)) \/ {Suc(f)} by A6;
       then p in rng(f) by A1,Th3;
       hence thesis by A5,Def11;
@@ -749,16 +746,14 @@ A7: Ant(g) |= Suc(g);
 A8: J,v |= Ant(Ant(f));
 A9: len Ant(g) > 0 by A2,Th4;
 A10: now
-    assume
-    not J,v |= Suc(Ant(f));
+    assume not J,v |= Suc(Ant(f));
     then J,v |= Suc(Ant(g)) by A4,VALUAT_1:28;
     then J,v |= Ant(g) by A3,A9,A8,Th17;
     hence thesis by A5,A7,Def15;
   end;
 A11: len Ant(f) > 0 by A1,Th4;
   now
-    assume
-    J,v |= Suc(Ant(f));
+    assume J,v |= Suc(Ant(f));
     then J,v |= Ant(f) by A11,A8,Th17;
     hence thesis by A6,Def15;
   end;
@@ -784,8 +779,7 @@ A7: J,v |= Ant(f);
   let A,J,v such that
 A8: J,v |= Ant(Ant(f));
   now
-    assume
-    J,v |= Suc(Ant(f));
+    assume J,v |= Suc(Ant(f));
     then J,v |= Ant(f) by A5,A8,Th17;
     hence contradiction by A6;
   end;
@@ -799,8 +793,7 @@ proof
   assume
 A1: Ant(f) = Ant(g) & Ant(f) |= Suc(f) & Ant(g) |= Suc(g);
   let A,J,v;
-  assume
-  J,v |= Ant(f);
+  assume J,v |= Ant(f);
   then J,v |= Suc(f) & J,v |= Suc(g) by A1,Def15;
   hence thesis by VALUAT_1:29;
 end;
@@ -811,8 +804,7 @@ proof
   assume
 A1: Ant(f) |= p '&' q;
   let A,J,v;
-  assume
-  J,v |= Ant(f);
+  assume J,v |= Ant(f);
   then J,v |= p '&' q by A1,Def15;
   hence thesis by VALUAT_1:29;
 end;
@@ -823,8 +815,7 @@ proof
   assume
 A1: Ant(f) |= p '&' q;
   let A,J,v;
-  assume
-  J,v |= Ant(f);
+  assume J,v |= Ant(f);
   then J,v |= p '&' q by A1,Def15;
   hence thesis by VALUAT_1:29;
 end;
@@ -856,14 +847,12 @@ A3: Val_S(v,[p,Sbst(x,y)]) = v*(x .--> y) by SUBSTUT1:def 2;
 end;
 
 theorem Th25:
-  Suc(f) = All(x,p) & Ant(f) |= Suc(f) implies for y holds Ant(f)
-  |= p.(x,y)
+  Suc(f) = All(x,p) & Ant(f) |= Suc(f) implies for y holds Ant(f) |= p.(x,y)
 proof
   assume
 A1: Suc(f) = All(x,p) & Ant(f) |= Suc(f);
   let y,A,J,v;
-  assume
-  J,v |= Ant(f);
+  assume J,v |= Ant(f);
   then
 A2: J,v |= All(x,p) by A1,Def15;
   ex a st v.y = a & J,v.(x|a) |= p
@@ -902,8 +891,7 @@ theorem Th27:
 proof
   let v,w such that
 A1: v|still_not-bound_in f = w|still_not-bound_in f;
-  assume
-  J,v |= f;
+  assume J,v |= f;
   then
 A2: J,v |= rng(f) by Def14;
   let p such that
@@ -985,8 +973,7 @@ or (PR.n)`2 = 1 or (PR.n)`2 = 2 or (PR.n)`2 = 3 or (PR.n)`2 = 4 or (PR.n)`2 = 5
   or (PR.n)`2 = 6 or (PR.n)`2 = 7 or (PR.n)`2 = 8 or (PR.n)`2 = 9
 proof
   let n be Nat;
-  assume
-  1 <= n & n <= len PR;
+  assume 1 <= n & n <= len PR;
   then n in dom PR by FINSEQ_3:27;
   then PR.n in rng PR by FUNCT_1:def 5;
   then (PR.n)`2 in {k: k <= 9} by CQC_THE1:def 3,MCART_1:10;
@@ -996,21 +983,19 @@ end;
 
 Lm1: 1 <= n & n <= len PR implies (PR.n)`1 is FinSequence of CQC-WFF
 proof
-  assume
-  1 <= n & n <= len PR;
+  assume 1 <= n & n <= len PR;
   then n in dom PR by FINSEQ_3:27;
   then PR.n in rng PR by FUNCT_1:def 5;
   then (PR.n)`1 in set_of_CQC-WFF-seq by MCART_1:10;
   hence thesis by Def6;
 end;
-
+ 
 :: Theorem on the Correctness (Ebb et al, Chapter IV, Theorem 6.2)
 
 theorem
   p is_formal_provable_from X implies X |= p
 proof
-  assume
-  p is_formal_provable_from X;
+  assume p is_formal_provable_from X;
   then consider f such that
 A1: rng Ant(f) c= X and
 A2: Suc(f) = p and
@@ -1195,8 +1180,7 @@ A67: P[0];
 A68: g = (PR.(len PR))`1 and
 A69: Ant(g) |= Suc(g) by A6;
   let A,J,v;
-  assume
-  J,v |= X;
+  assume J,v |= X;
   then for p st p in rng(Ant(f)) holds J,v |= p by A1,Def11;
   then J,v |= rng(Ant(f)) by Def11;
   then J,v |= Ant(g) by A5,A68,Def14;
@@ -1212,8 +1196,7 @@ proof
 A1: rng PR = {[f,0]} by FINSEQ_1:55;
   now
     let a be set;
-    assume
-    a in rng PR;
+    assume a in rng PR;
     then
 A2: a = [f,0] by A1,TARSKI:def 1;
     f in set_of_CQC-WFF-seq by Def6;
@@ -1688,8 +1671,7 @@ A52: PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
 end;
 
 theorem Th36:
-  Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) & |- f implies
-  |- g
+  Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) & |- f implies |- g
 proof
   assume that
 A1: Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) and
@@ -1700,8 +1682,7 @@ A4: (PR.(len PR))`1 = f by A2,Def9;
 A5: g in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[g,2]*>;
+    assume a in rng <*[g,2]*>;
     then a in {[g,2]} by FINSEQ_1:55;
     then a = [g,2] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:43 ,
@@ -1720,8 +1701,7 @@ A6: 1 in dom PR1 by FINSEQ_1:55;
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR2;
+    assume 1 <= n & n <= len PR2;
     then
 A8: n in dom PR2 by FINSEQ_3:27;
 A9: now
@@ -1747,8 +1727,7 @@ A17:  (PR2.n)`2 = 2 by A12,A13,FINSEQ_1:def 7;
       hence PR2,n is_a_correct_step by A1,A16,A17,A10,A11,Def7;
     end;
     now
-      assume
-      n in dom PR;
+      assume n in dom PR;
       then
 A18:  1 <= n & n <= len PR by FINSEQ_3:27;
       then PR,n is_a_correct_step by A3,Def8;
@@ -1785,8 +1764,7 @@ A7: f = (PR.(len PR))`1 by A2,Def9;
 A8: Ant(Ant(f))^<*Suc(f)*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(Ant(f))^<*Suc(f)*>,3]*>;
+    assume a in rng <*[Ant(Ant(f))^<*Suc(f)*>,3]*>;
     then a in {[Ant(Ant(f))^<*Suc(f)*>,3]} by FINSEQ_1:55;
     then a = [Ant(Ant(f))^<*Suc(f)*>,3] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:43 ,
@@ -1804,8 +1782,7 @@ A9: 1 in dom PR2 by FINSEQ_1:55;
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR3;
+    assume 1 <= n & n <= len PR3;
     then
 A11: n in dom PR3 by FINSEQ_3:27;
 A12: now
@@ -1876,8 +1853,7 @@ A38:    n <= len (PR^PR1) by A37,XXREAL_0:2;
         then PR^PR1,n is_a_correct_step by A36,A37,Th34;
         hence PR3,n is_a_correct_step by A36,A38,Th34;
       end;
-      assume
-      n in dom (PR^PR1);
+      assume n in dom (PR^PR1);
       hence PR3,n is_a_correct_step by A34,A27,FINSEQ_1:38;
     end;
     hence PR3,n is_a_correct_step by A11,A12,FINSEQ_1:38;
@@ -1910,8 +1886,7 @@ A7: f = (PR.(len PR))`1 by A2,Def9;
 A8: Ant(Ant(f))^<*p*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(Ant(f))^<*p*>,4]*>;
+    assume a in rng <*[Ant(Ant(f))^<*p*>,4]*>;
     then a in {[Ant(Ant(f))^<*p*>,4]} by FINSEQ_1:55;
     then a = [Ant(Ant(f))^<*p*>,4] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:43 ,
@@ -1929,8 +1904,7 @@ A9: 1 in dom PR2 by FINSEQ_1:55;
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR3;
+    assume 1 <= n & n <= len PR3;
     then
 A11: n in dom PR3 by FINSEQ_3:27;
 A12: now
@@ -2001,8 +1975,7 @@ A38:    n <= len (PR^PR1) by A37,XXREAL_0:2;
         then PR^PR1,n is_a_correct_step by A36,A37,Th34;
         hence PR3,n is_a_correct_step by A36,A38,Th34;
       end;
-      assume
-      n in dom (PR^PR1);
+      assume n in dom (PR^PR1);
       hence PR3,n is_a_correct_step by A34,A27,FINSEQ_1:38;
     end;
     hence PR3,n is_a_correct_step by A11,A12,FINSEQ_1:38;
@@ -2018,8 +1991,7 @@ A39: PR3 is a_proof by Def8;
 end;
 
 theorem Th39:
-  Ant(f) = Ant(g) & |- f & |- g implies |- Ant(f)^<*(Suc(f)) '&' (
-  Suc(g))*>
+  Ant(f) = Ant(g) & |- f & |- g implies |- Ant(f)^<*(Suc(f)) '&' ( Suc(g))*>
 proof
   assume that
 A1: Ant(f) = Ant(g) and
@@ -2034,8 +2006,7 @@ A7: f = (PR.(len PR))`1 by A2,Def9;
 A8: Ant(f)^<*(Suc(f)) '&' (Suc(g))*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*>;
+    assume a in rng <*[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]*>;
     then a in {[Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5]} by FINSEQ_1:55;
     then a = [Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A8,CQC_THE1:43 ,
@@ -2054,8 +2025,7 @@ A9: 1 in dom PR2 by FINSEQ_1:55;
 A10: PR <> {} by A6,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR3;
+    assume 1 <= n & n <= len PR3;
     then
 A11: n in dom PR3 by FINSEQ_3:27;
 A12: now
@@ -2127,8 +2097,7 @@ A38:    n <= len (PR^PR1) by A37,XXREAL_0:2;
         then PR^PR1,n is_a_correct_step by A36,A37,Th34;
         hence PR3,n is_a_correct_step by A36,A38,Th34;
       end;
-      assume
-      n in dom (PR^PR1);
+      assume n in dom (PR^PR1);
       hence PR3,n is_a_correct_step by A34,A27,FINSEQ_1:38;
     end;
     hence PR3,n is_a_correct_step by A11,A12,FINSEQ_1:38;
@@ -2156,8 +2125,7 @@ A4: (PR.(len PR))`1 = f by A2,Def9;
 A5: Ant(f)^<*p*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(f)^<*p*>,6]*>;
+    assume a in rng <*[Ant(f)^<*p*>,6]*>;
     then a in {[Ant(f)^<*p*>,6]} by FINSEQ_1:55;
     then a = [Ant(f)^<*p*>,6] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:43 ,
@@ -2176,8 +2144,7 @@ A6: 1 in dom PR1 by FINSEQ_1:55;
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR2;
+    assume 1 <= n & n <= len PR2;
     then
 A8: n in dom PR2 by FINSEQ_3:27;
 A9: now
@@ -2203,8 +2170,7 @@ A17:  (PR2.n)`2 = 6 by A12,A13,FINSEQ_1:def 7;
       hence PR2,n is_a_correct_step by A1,A16,A17,A10,A11,Def7;
     end;
     now
-      assume
-      n in dom PR;
+      assume n in dom PR;
       then
 A18:  1 <= n & n <= len PR by FINSEQ_3:27;
       then PR,n is_a_correct_step by A3,Def8;
@@ -2234,8 +2200,7 @@ A4: (PR.(len PR))`1 = f by A2,Def9;
 A5: Ant(f)^<*q*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(f)^<*q*>,7]*>;
+    assume a in rng <*[Ant(f)^<*q*>,7]*>;
     then a in {[Ant(f)^<*q*>,7]} by FINSEQ_1:55;
     then a = [Ant(f)^<*q*>,7] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:43 ,
@@ -2254,8 +2219,7 @@ A6: 1 in dom PR1 by FINSEQ_1:55;
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR2;
+    assume 1 <= n & n <= len PR2;
     then
 A8: n in dom PR2 by FINSEQ_3:27;
 A9: now
@@ -2281,8 +2245,7 @@ A17:  (PR2.n)`2 = 7 by A12,A13,FINSEQ_1:def 7;
       hence PR2,n is_a_correct_step by A1,A16,A17,A10,A11,Def7;
     end;
     now
-      assume
-      n in dom PR;
+      assume n in dom PR;
       then
 A18:  1 <= n & n <= len PR by FINSEQ_3:27;
       then PR,n is_a_correct_step by A3,Def8;
@@ -2312,8 +2275,7 @@ A4: (PR.(len PR))`1 = f by A2,Def9;
 A5: Ant(f)^<*p.(x,y)*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(f)^<*p.(x,y)*>,8]*>;
+    assume a in rng <*[Ant(f)^<*p.(x,y)*>,8]*>;
     then a in {[Ant(f)^<*p.(x,y)*>,8]} by FINSEQ_1:55;
     then a = [Ant(f)^<*p.(x,y)*>,8] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:43 ,
@@ -2332,8 +2294,7 @@ A6: 1 in dom PR1 by FINSEQ_1:55;
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR2;
+    assume 1 <= n & n <= len PR2;
     then
 A8: n in dom PR2 by FINSEQ_3:27;
 A9: now
@@ -2359,8 +2320,7 @@ A17:  (PR2.n)`2 = 8 by A12,A13,FINSEQ_1:def 7;
       hence PR2,n is_a_correct_step by A1,A16,A17,A10,A11,Def7;
     end;
     now
-      assume
-      n in dom PR;
+      assume n in dom PR;
       then
 A18:  1 <= n & n <= len PR by FINSEQ_3:27;
       then PR,n is_a_correct_step by A3,Def8;
@@ -2392,8 +2352,7 @@ A4: (PR.(len PR))`1 = f by A2,Def9;
 A5: Ant(f)^<*All(x,p)*> in set_of_CQC-WFF-seq by Def6;
   now
     let a be set;
-    assume
-    a in rng <*[Ant(f)^<*All(x,p)*>,9]*>;
+    assume a in rng <*[Ant(f)^<*All(x,p)*>,9]*>;
     then a in {[Ant(f)^<*All(x,p)*>,9]} by FINSEQ_1:55;
     then a = [Ant(f)^<*All(x,p)*>,9] by TARSKI:def 1;
     hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A5,CQC_THE1:43 ,
@@ -2411,8 +2370,7 @@ A6: 1 in dom PR1 by FINSEQ_1:55;
 A7: PR <> {} by A3,Def8;
   now
     let n be Nat;
-    assume
-    1 <= n & n <= len PR2;
+    assume 1 <= n & n <= len PR2;
     then
 A8: n in dom PR2 by FINSEQ_3:27;
 A9: now
@@ -2438,8 +2396,7 @@ A17:  (PR2.n)`2 = 9 by A12,A13,FINSEQ_1:def 7;
       hence PR2,n is_a_correct_step by A1,A16,A17,A10,A11,Def7;
     end;
     now
-      assume
-      n in dom PR;
+      assume n in dom PR;
       then
 A18:  1 <= n & n <= len PR by FINSEQ_3:27;
       then PR,n is_a_correct_step by A3,Def8;
@@ -2501,7 +2458,7 @@ A5: len Ant(f2) in dom Ant(f2) by Th10;
   then (Ant(f2)).(len Ant(f) + 1) = 'not' Suc(f) by Th5;
   then (Ant(f2)).(len Ant(f) + 1) = Suc(f2) by Th5;
   then (Ant(f2)).(len Ant(f2)) = Suc(f2) by A4,FINSEQ_2:19;
-  then Suc(f2) is_tail_of Ant(f2) by A5,Def3;
+  then Suc(f2) is_tail_of Ant(f2) by A5,LL;
   then
 A6: |- f2 by Th33;
   set f4 = Ant(f1)^<*p*>;
@@ -2574,7 +2531,7 @@ A12: |- f2 by A1,A10,A9,Th13,Th36;
   1 in dom <*'not' q,p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A3,A7,FINSEQ_1:41;
   then
-A13: Suc(f3) is_tail_of Ant(f3) by A8,Def3;
+A13: Suc(f3) is_tail_of Ant(f3) by A8,LL;
   Suc(f2) = q & Ant(f2) = Ant(Ant(f1))^<*'not' q*>^<*p*> by Th5;
   then |- Ant(f2)^<*'not' Suc(f2)*> by A13,Th33;
   then
@@ -2588,7 +2545,7 @@ A16: Ant(f4) = Ant(Ant(f1))^<*'not' q,'not' p*> by FINSEQ_1:def 9;
 A17: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*'not' q,'not' p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A3,A16,FINSEQ_1:41;
-  then Suc(f4) is_tail_of Ant(f4) by A17,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A17,LL;
   then
 A18: |- f4 by Th33;
 A19: Ant(Ant(f2)^<* 'not' p*>) = Ant(Ant(f1))^<*'not' q*>^<*p*> by A10,Th5;
@@ -2631,7 +2588,7 @@ A10: Ant(f3) = Ant(Ant(f1))^<*q,'not' p*> by FINSEQ_1:def 9;
 A11: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*q,'not' p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A5,A10,FINSEQ_1:41;
-  then Suc(f3) is_tail_of Ant(f3) by A11,Def3;
+  then Suc(f3) is_tail_of Ant(f3) by A11,LL;
   then
 A12: |- f3 by Th33;
 A13: Suc(Ant(f3)^<*p*>) = p by Th5;
@@ -2652,7 +2609,7 @@ A18: Ant(f4) = Ant(Ant(f1))^<*q,p*> by FINSEQ_1:def 9;
 A19: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*q,p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A5,A18,FINSEQ_1:41;
-  then Suc(f4) is_tail_of Ant(f4) by A19,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A19,LL;
   then
 A20: |- f4 by Th33;
 A21: Ant(Ant(f3)^<*p*>) = Ant(Ant(f1))^<*q*>^<*'not' p*> by A8,Th5;
@@ -2691,7 +2648,7 @@ A6: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*'not' q,'not' p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A3,A5,FINSEQ_1:41;
   then
-A7: Suc(f3) is_tail_of Ant(f3) by A6,Def3;
+A7: Suc(f3) is_tail_of Ant(f3) by A6,LL;
   Suc(f1) = q by Th5;
   then
 A8: Suc(f1) = Suc(f2) by Th5;
@@ -2714,7 +2671,7 @@ A14: Ant(f4) = Ant(Ant(f1))^<*'not' q,p*> by FINSEQ_1:def 9;
 A15: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*'not' q,p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A3,A14,FINSEQ_1:41;
-  then Suc(f4) is_tail_of Ant(f4) by A15,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A15,LL;
   then
 A16: |- f4 by Th33;
 A17: Ant(Ant(f2)^<*p*>) = Ant(Ant(f1))^<*'not' q*>^<*'not' p*> by A9,Th5;
@@ -2761,7 +2718,7 @@ A10: Ant(f3) = Ant(Ant(f1))^<*q,p*> by FINSEQ_1:def 9;
 A11: (Ant(f3)).(len f+1) = Suc(f3) by Th5;
   1 in dom <*q,p*> by Th14;
   then len f+1 in dom (Ant(f3)) by A5,A10,FINSEQ_1:41;
-  then Suc(f3) is_tail_of Ant(f3) by A11,Def3;
+  then Suc(f3) is_tail_of Ant(f3) by A11,LL;
   then
 A12: |- f3 by Th33;
 A13: Suc(Ant(f3)^<*'not' p*>) = 'not' p by Th5;
@@ -2782,7 +2739,7 @@ A18: Ant(f4) = Ant(Ant(f1))^<*q,'not' p*> by FINSEQ_1:def 9;
 A19: (Ant(f4)).(len f+2) = Suc(f4) by Th5;
   2 in dom <*q,'not' p*> by Th14;
   then len f+2 in dom (Ant(f4)) by A5,A18,FINSEQ_1:41;
-  then Suc(f4) is_tail_of Ant(f4) by A19,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A19,LL;
   then
 A20: |- f4 by Th33;
 A21: Ant(Ant(f3)^<*'not' p*>) = Ant(Ant(f1))^<*q*>^<*p*> by A8,Th5;
@@ -2804,8 +2761,7 @@ proof
   set f1 = f^<*'not' r*>^<*'not' p*>;
   set f2 = f^<*'not' r*>^<*'not' q*>;
 A1: Suc(f1) = 'not' p & Suc(f2) = 'not' q by Th5;
-  assume
-  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*>;
+  assume |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*>;
   then
 A2: |- f1 & |- f2 by Th46;
 A3: Ant(f1) = f^<*'not' r*> by Th5;
@@ -2828,7 +2784,7 @@ A2: Ant(f1) = f^<*'not' p '&' 'not' q*> by Th5;
 A3: len f+1 in dom Ant(f1) by A2,Th10;
 A4: Suc(f1) = 'not' p '&' 'not' q by Th5;
   (Ant(f1)).(len f+1) = 'not' p '&' 'not' q by A2,FINSEQ_1:59;
-  then Suc(f1) is_tail_of Ant(f1) by A4,A3,Def3;
+  then Suc(f1) is_tail_of Ant(f1) by A4,A3,LL;
   then |- f^<*'not' p '&' 'not' q*>^<*'not' p*> by A2,A4,Th33,Th40;
   then |- f^<*p*>^<*'not' ('not' p '&' 'not' q)*> by Th49;
   then
@@ -2851,7 +2807,7 @@ A2: Ant(f1) = f^<*'not' p '&' 'not' q*> by Th5;
 A3: len f+1 in dom Ant(f1) by A2,Th10;
 A4: Suc(f1) = 'not' p '&' 'not' q by Th5;
   (Ant(f1)).(len f+1) = 'not' p '&' 'not' q by A2,FINSEQ_1:59;
-  then Suc(f1) is_tail_of Ant(f1) by A4,A3,Def3;
+  then Suc(f1) is_tail_of Ant(f1) by A4,A3,LL;
   then |- f^<*'not' p '&' 'not' q*>^<*'not' q*> by A2,A4,Th33,Th41;
   then |- f^<*q*>^<*'not' ('not' p '&' 'not' q)*> by Th49;
   then
@@ -2862,15 +2818,13 @@ A5: |- f^<*q*>^<*p 'or' q*> by QC_LANG2:def 3;
 end;
 
 theorem Th53:
-  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*> implies |- f^<*p 'or' q*>^<*
-  r*>
+  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*> implies |- f^<*p 'or' q*>^<* r*>
 proof
   set f1 = f^<*'not' r*>^<*'not' p*>;
   set f2 = f^<*'not' r*>^<*'not' q*>;
 A1: Ant(f1) = f^<*'not' r*> by Th5;
 A2: Suc(f2) = 'not' q by Th5;
-  assume
-  |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*>;
+  assume |- f^<*p*>^<*r*> & |- f^<*q*>^<*r*>;
   then
 A3: |- f^<*'not' r*>^<*'not' p*> & |- f^<*'not' r*>^<*'not' q*> by
   Th46;
@@ -2911,7 +2865,7 @@ A9: Ant(f1) = f^<*p,'not' p *> by FINSEQ_1:def 9;
   then
 A10: len f+1 in dom Ant(f1) by FINSEQ_3:27;
   (Ant(f1)).(len f+1) = p by A9,Th14;
-  then Suc(f1) is_tail_of Ant(f1) by A2,A10,Def3;
+  then Suc(f1) is_tail_of Ant(f1) by A2,A10,LL;
   then
 A11: |- f1 by Th33;
 A12: 1 < len f4 by Th9;
@@ -2935,14 +2889,14 @@ A19: Suc(f2) = 'not' p by Th5;
   then
 A20: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+2) = 'not' p by A17,Th14;
-  then Suc(f2) is_tail_of Ant(f2) by A19,A18,Def3;
+  then Suc(f2) is_tail_of Ant(f2) by A19,A18,LL;
   then
 A21: |- f2 by Th33;
 A22: Suc(f4) = 'not' 'not' p by Th5;
   then
 A23: Suc(f3) = Suc(f4) by Th5;
   (Ant(f4)).(len f+2) = 'not' 'not' p by A6,Th14;
-  then Suc(f4) is_tail_of Ant(f4) by A22,A15,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A22,A15,LL;
   then
 A24: |- f4 by Th33;
   Ant(f1) = Ant(f2) by A16,Th5;
@@ -2978,7 +2932,7 @@ A5: Ant(f1) = f^<*'not' 'not' p,'not' p *> by FINSEQ_1:def 9;
   then
 A6: len f+2 in dom Ant(f1) by A3,Th10;
   (Ant(f1)).(len f+2) = 'not' p by A5,Th14;
-  then Suc(f1) is_tail_of Ant(f1) by A2,A6,Def3;
+  then Suc(f1) is_tail_of Ant(f1) by A2,A6,LL;
   then
 A7: |- f1 by Th33;
 A8: 1 < len f4 by Th9;
@@ -3011,14 +2965,14 @@ A19: Suc(f2) = 'not' 'not' p by Th5;
   then
 A20: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+1) = 'not' 'not' p by A10,Th14;
-  then Suc(f2) is_tail_of Ant(f2) by A19,A11,Def3;
+  then Suc(f2) is_tail_of Ant(f2) by A19,A11,LL;
   then
 A21: |- f2 by Th33;
 A22: Suc(f4) = p by Th5;
   then
 A23: Suc(f3) = Suc(f4) by Th5;
   (Ant(f4)).(len f+2) = p by A15,Th14;
-  then Suc(f4) is_tail_of Ant(f4) by A22,A18,Def3;
+  then Suc(f4) is_tail_of Ant(f4) by A22,A18,LL;
   then
 A24: |- f4 by Th33;
   Ant(f1) = Ant(f2) by A9,Th5;
@@ -3054,7 +3008,7 @@ A7: (Ant(f3)).(len f+1) = q by FINSEQ_1:59;
   then
 A8: len f+1 in dom Ant(f3) by A6,Th10;
   Suc(f3) = q by Th5;
-  then Suc(f3) is_tail_of Ant(f3) by A7,A8,Def3;
+  then Suc(f3) is_tail_of Ant(f3) by A7,A8,LL;
   then
 A9: |- f3 by Th33;
 A10: Ant(f2) = f^<*'not' p*> by Th5;
@@ -3066,7 +3020,7 @@ A12: Suc(f2) = 'not' p by Th5;
   then
 A13: 'not' Suc(f1) = Suc(f2) by Th5;
   (Ant(f2)).(len f+1) = 'not' p by A10,FINSEQ_1:59;
-  then Suc(f2) is_tail_of Ant(f2) by A12,A11,Def3;
+  then Suc(f2) is_tail_of Ant(f2) by A12,A11,LL;
   then
 A14: |- f2 by Th33;
   Ant(f1) = Ant(f2) by A10,Th5;
@@ -3123,7 +3077,7 @@ A2: Ant(f1) = f^<*All(x,'not' p)*> by Th5;
 A3: len f+1 in dom Ant(f1) by A2,Th10;
 A4: Suc(f1) = All(x,'not' p) by Th5;
   (Ant(f1)).(len f+1) = All(x,'not' p) by A2,FINSEQ_1:59;
-  then Suc(f1) is_tail_of Ant(f1) by A4,A3,Def3;
+  then Suc(f1) is_tail_of Ant(f1) by A4,A3,LL;
   then |- f^<*All(x,'not' p)*>^<*('not' p).(x,y)*> by A2,A4,Th33,Th42;
   then |- f^<*All(x,'not' p)*>^<*'not' (p.(x,y))*> by Th57;
   then |- f^<*p.(x,y)*>^<*'not' All(x,'not' p)*> by Th49;
@@ -3135,15 +3089,12 @@ A5: |- f^<*p.(x,y)*>^<*Ex(x,p)*> by QC_LANG2:def 5;
 end;
 
 theorem Th59:
-  still_not-bound_in (f^g) = still_not-bound_in f \/
-  still_not-bound_in g
+  still_not-bound_in (f^g) = still_not-bound_in f \/ still_not-bound_in g
 proof
-  thus still_not-bound_in (f^g) c= still_not-bound_in f \/ still_not-bound_in
-  g
+  thus still_not-bound_in (f^g) c= still_not-bound_in f \/ still_not-bound_in g
   proof
     let b;
-    assume
-    b in still_not-bound_in (f^g);
+    assume b in still_not-bound_in (f^g);
     then consider i,p such that
 A1: i in dom (f^g) and
 A2: p = (f^g).i & b in still_not-bound_in p by Def5;
@@ -3176,8 +3127,7 @@ A8:   b in still_not-bound_in f by A2,A7,Def5;
     let b such that
 A9: b in still_not-bound_in f \/ still_not-bound_in g;
 A10: now
-      assume
-      b in still_not-bound_in g;
+      assume b in still_not-bound_in g;
       then consider i,p such that
 A11:  i in dom g & p = g.i and
 A12:  b in still_not-bound_in p by Def5;
@@ -3186,8 +3136,7 @@ A12:  b in still_not-bound_in p by Def5;
       hence thesis by A12,Def5;
     end;
     now
-      assume
-      b in still_not-bound_in f;
+      assume b in still_not-bound_in f;
       then consider i,p such that
 A13:  i in dom f and
 A14:  p = f.i and
@@ -3208,14 +3157,12 @@ A1: now
 A2: 1 in dom <*p*> by FINSEQ_1:55;
 A3: p = <*p*>.1 by FINSEQ_1:57;
     let b;
-    assume
-    b in still_not-bound_in p;
+    assume b in still_not-bound_in p;
     hence b in still_not-bound_in <*p*> by A2,A3,Def5;
   end;
   now
     let b;
-    assume
-    b in still_not-bound_in <*p*>;
+    assume b in still_not-bound_in <*p*>;
     then consider i,q such that
 A4: i in dom <*p*> and
 A5: q = <*p*>.i & b in still_not-bound_in q by Def5;
@@ -3276,8 +3223,7 @@ proof
   set X = {still_not-bound_in p : ex i st i in dom f & p = f.i};
 A1: now
     let b;
-    assume
-    b in union X;
+    assume b in union X;
     then consider Y being set such that
 A2: b in Y and
 A3: Y in X by TARSKI:def 4;
@@ -3286,8 +3232,7 @@ A3: Y in X by TARSKI:def 4;
   end;
   now
     let b;
-    assume
-    b in still_not-bound_in f;
+    assume b in still_not-bound_in f;
     then consider i,p such that
 A4: i in dom f & p = f.i and
 A5: b in still_not-bound_in p by Def5;
@@ -3309,16 +3254,14 @@ A2: rng F1 = Seg n and
 A3: dom F1 in omega by FINSET_1:def 1;
 A4: now
     let b;
-    assume
-    b in X;
+    assume b in X;
     then ex p st b = still_not-bound_in p & ex i st i in dom f & p = f.i;
     hence b is finite by CQC_SIM1:20;
   end;
 A5: for a being set st a in dom f ex b st P[a,b]
   proof
     let a be set;
-    assume
-    a in dom f;
+    assume a in dom f;
     then f.a in rng f by FUNCT_1:12;
     then reconsider p = f.a as Element of CQC-WFF;
     take b = still_not-bound_in p;
@@ -3330,8 +3273,7 @@ A6: dom F2 = dom f & for b st b in dom f holds P[b,F2.b] from CLASSES1:
   set F = F2*F1;
 A7: now
     let b;
-    assume
-    b in X;
+    assume b in X;
     then consider p such that
 A8: b = still_not-bound_in p and
 A9: ex i st i in dom f & p = f.i;
@@ -3344,8 +3286,7 @@ A11: p = f.i by A9;
   end;
   now
     let b;
-    assume
-    b in rng F;
+    assume b in rng F;
     then b in rng F2 by A6,A1,A2,RELAT_1:47;
     then consider a being set such that
 A12: a in dom F2 and
@@ -3363,8 +3304,7 @@ A14: rng F = X by A7,TARSKI:2;
 end;
 
 theorem Th64:
-  card bound_QC-variables = omega & not bound_QC-variables is
-  finite
+  card bound_QC-variables = omega & not bound_QC-variables is finite
 proof
   card bound_QC-variables = card [:NAT,{4}:] by CARD_2:11,QC_LANG1:def 2;
   hence thesis by CARD_1:84,CARD_4:81;
@@ -3448,16 +3388,20 @@ theorem
 proof
   thus |- f^<*All(x,p)*> implies |- f^<*'not' Ex(x,'not' p)*>
   proof
-    assume
-    |- f^<*All(x,p)*>;
+    assume |- f^<*All(x,p)*>;
     then |- f^<*All(x,'not' 'not' p)*> by Th66;
     then |- f^<*'not' 'not' All(x,'not' 'not' p)*> by Th54;
     hence thesis by QC_LANG2:def 5;
   end;
-  assume
-  |- f^<*'not' Ex(x,'not' p)*>;
+  assume |- f^<*'not' Ex(x,'not' p)*>;
   then |- f^<*'not' 'not' All(x,'not' 'not' p)*> by QC_LANG2:def 5;
   then |- f^<*All(x,'not' 'not' p)*> by Th55;
   hence thesis by Th67;
 end;
 
+definition
+  let f be FinSequence, p be set;
+  redefine pred p is_tail_of f means
+  ex i being Element of NAT st i in dom f & f.i =  p;
+  compatibility by LL1,LL;
+end;

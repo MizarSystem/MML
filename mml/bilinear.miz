@@ -3,7 +3,7 @@
 ::
 :: Received November 5, 2002
 :: Copyright (c) 2002 Association of Mizar Users
-
+ 
 environ
 
  vocabularies STRUCT_0, VECTSP_1, FUNCT_1, ZFMISC_1, XBOOLE_0, FUNCOP_1,
@@ -16,16 +16,17 @@ environ
       FUNCT_2, FUNCOP_1, FUNCT_5, VECTSP_4, HAHNBAN1, VECTSP10, GRCAT_1;
  constructors BORSUK_1, VECTSP10, FUNCOP_1;
  registrations SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_4, HAHNBAN1,
-      VECTSP10, FUNCT_2;
+      VECTSP10, FUNCT_2, ZFMISC_1;
  requirements SUBSET, BOOLE;
- definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, BINOP_1, STRUCT_0, GRCAT_1;
+ definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, BINOP_1, STRUCT_0, GRCAT_1,
+      FUNCT_2;
  theorems FUNCT_5, XBOOLE_1, FUNCT_2, HAHNBAN1, VECTSP_1, FUNCOP_1, RLVECT_1,
       VECTSP_4, TARSKI, FUNCT_1, REALSET1, ZFMISC_1, DOMAIN_1, VECTSP10,
       GROUP_1, BINOP_1, STRUCT_0, VECTSP_2, GRCAT_1;
  schemes BINOP_1;
 
 begin
-
+ 
 :: Two Form on Vector Spaces and Operations on Them.
 
 definition
@@ -51,8 +52,7 @@ definition
   let f,g be Form of V,W;
   func f+g -> Form of V,W means
   :Def3:
-  for v be Vector of V, w be Vector of W
-  holds it.(v,w) = f.(v,w)+g.(v,w);
+  for v be Vector of V, w be Vector of W holds it.(v,w) = f.(v,w)+g.(v,w);
   existence
   proof
     set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
@@ -67,10 +67,8 @@ A1: for x be Element of X for y be Element of Y holds ff.(x,y)=F(x,y)
   uniqueness
   proof
     let F,G be Form of V, W such that
-A2: for v be Vector of V, w be Vector of W holds F.(v,w) = f.(v,w)+g.(
-    v,w) and
-A3: for v be Vector of V, w be Vector of W holds G.(v,w) = f.(v,w)+g.(
-    v,w);
+A2: for v be Vector of V, w be Vector of W holds F.(v,w) = f.(v,w)+g.( v,w) and
+A3: for v be Vector of V, w be Vector of W holds G.(v,w) = f.(v,w)+g.( v,w);
     now
       let v be Vector of V, w be Vector of W;
       thus F.(v,w) = f.(v,w)+g.(v,w) by A2
@@ -87,8 +85,7 @@ definition
   let a be Element of K;
   func a*f -> Form of V,W means
   :Def4:
-  for v be Vector of V, w be Vector of W
-  holds it.(v,w) = a*f.(v,w);
+  for v be Vector of V, w be Vector of W holds it.(v,w) = a*f.(v,w);
   existence
   proof
     set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
@@ -120,8 +117,7 @@ definition
   let f be Form of V,W;
   func -f -> Form of V,W means
   :Def5:
-  for v be Vector of V, w be Vector of W
-  holds it.(v,w) = -f.(v,w);
+  for v be Vector of V, w be Vector of W holds it.(v,w) = -f.(v,w);
   existence
   proof
     set X = the carrier of V, Y = the carrier of W, Z = the carrier of K;
@@ -152,9 +148,8 @@ definition
   left_unital (non empty doubleLoopStr);
   let V,W be non empty VectSpStr over K;
   let f be Form of V,W;
-  redefine func -f -> Form of V,W equals
+  redefine func -f equals
   (- 1.K) *f;
-  coherence;
   compatibility
   proof
     let g be Form of V,W;
@@ -195,11 +190,9 @@ definition
   let K be non empty addLoopStr;
   let V,W be non empty VectSpStr over K;
   let f,g be Form of V,W;
-  redefine func f - g -> Form of V,W means
+  redefine func f - g means
   :Def8:
-  for v be Vector of V, w be
-  Vector of W holds it.(v,w) = f.(v,w) - g.(v,w);
-  coherence;
+  for v be Vector of V, w be Vector of W holds it.(v,w) = f.(v,w) - g.(v,w);
   compatibility
   proof
     let h be Form of V,W;
@@ -214,8 +207,7 @@ A1:   h = f-g;
         .= f.(v,w) -g.(v,w) by RLVECT_1:def 14;
     end;
     assume
-A2: for v be Vector of V, w be Vector of W holds h.(v,w) = f.(v,w) - g
-    .(v,w);
+A2: for v be Vector of V, w be Vector of W holds h.(v,w) = f.(v,w) - g .(v,w);
     now
       let v be Vector of V, w be Vector of W;
       thus h.(v,w) = f.(v,w) - g.(v,w) by A2
@@ -227,25 +219,21 @@ A2: for v be Vector of V, w be Vector of W holds h.(v,w) = f.(v,w) - g
   end;
 end;
 
-Lm1: now
-
-  let K be Abelian (non empty addLoopStr), V,W be non empty VectSpStr over K,
-  f,g be Form of V,W;
-
-  now
-    let v be Vector of V,w be Vector of W;
-    thus (f+g).(v,w) = f.(v,w) + g.(v,w) by Def3
-      .= (g+f).(v,w) by Def3;
-  end;
-  hence f+g=g+f by BINOP_1:2;
-end;
-
 definition
   let K be Abelian (non empty addLoopStr);
   let V,W be non empty VectSpStr over K;
   let f,g be Form of V,W;
   redefine func f+g;
-  commutativity by Lm1;
+  commutativity
+   proof
+    let f,g be Form of V,W;
+    now
+      let v be Vector of V,w be Vector of W;
+      thus (f+g).(v,w) = f.(v,w) + g.(v,w) by Def3
+        .= (g+f).(v,w) by Def3;
+    end;
+    hence f+g=g+f by BINOP_1:2;
+   end;
 end;
 
 canceled;
@@ -368,37 +356,29 @@ proof
 end;
 
 Lm2: now
-
   let K be non empty 1-sorted, V,W be non empty VectSpStr over K, f be Form of
   V,W, v be Element of (the carrier of V), y be Element of W;
-
 A1: dom f = [:the carrier of V,the carrier of W:] by FUNCT_2:def 1;
   then consider g be Function such that
 A2: (curry f).v = g and
 A3: dom g = the carrier of W & rng g c= rng f and
-
   for y be set st y in the carrier of W holds g.y = f.(v,y) by FUNCT_5:36;
-
   reconsider g as Function of the carrier of W,the carrier of K by A3,FUNCT_2:4
 ,XBOOLE_1:1;
-
   g = (curry f).v by A2;
   hence (curry f).v is Functional of W;
   consider h be Function such that
 A4: (curry' f).y = h and
 A5: dom h = the carrier of V & rng h c= rng f and
-
   for x be set st x in the carrier of V holds h.x = f.(x,y) by A1,FUNCT_5:39;
-
   reconsider h as Function of the carrier of V,the carrier of K by A5,FUNCT_2:4
 ,XBOOLE_1:1;
-
   h =(curry' f).y by A4;
   hence (curry' f).y is Functional of V;
 end;
 
 begin
-
+ 
 :: Functional generated by Two Form when the One of Arguments is Fixed.
 
 definition
@@ -634,7 +614,7 @@ proof
 end;
 
 begin
-
+ 
 :: Two Form generated by Functionals.
 
 definition
@@ -644,8 +624,7 @@ definition
   let g be Functional of W;
   func FormFunctional(f,g) -> Form of V,W means
   :Def11:
-  for v be Vector of V,
-  w be Vector of W holds it.(v,w)= f.v * g.w;
+  for v be Vector of V, w be Vector of W holds it.(v,w)= f.v * g.w;
   existence
   proof
     deffunc F(Vector of V, Vector of W) = (f.$1) * (g.$2);
@@ -773,7 +752,7 @@ proof
 end;
 
 begin
-
+ 
 ::Bilinear Forms and Their Properties
 
 definition
@@ -782,12 +761,10 @@ definition
   let f be Form of V,W;
   attr f is additiveFAF means
   :Def12:
-  for v be Vector of V holds FunctionalFAF
-  (f,v) is additive;
+  for v be Vector of V holds FunctionalFAF (f,v) is additive;
   attr f is additiveSAF means
   :Def13:
-  for w be Vector of W holds FunctionalSAF
-  (f,w) is additive;
+  for w be Vector of W holds FunctionalSAF (f,w) is additive;
 end;
 
 definition
@@ -796,12 +773,10 @@ definition
   let f be Form of V,W;
   attr f is homogeneousFAF means
   :Def14:
-  for v be Vector of V holds
-  FunctionalFAF(f,v) is homogeneous;
+  for v be Vector of V holds FunctionalFAF(f,v) is homogeneous;
   attr f is homogeneousSAF means
   :Def15:
-  for w be Vector of W holds
-  FunctionalSAF(f,w) is homogeneous;
+  for w be Vector of W holds FunctionalSAF(f,w) is homogeneous;
 end;
 
 registration
@@ -1409,8 +1384,7 @@ proof
   let V,W be non empty VectSpStr over K;
   let v,w be Vector of V, y be Vector of W, f be Form of V,W;
   set F=FunctionalSAF(f,y);
-  assume
-  f is additiveSAF;
+  assume f is additiveSAF;
   then
 A1: F is additive by Def13;
   thus f.(v+w,y) = F.(v+w) by Th10
@@ -1428,8 +1402,7 @@ proof
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y,z be Vector of W, f be Form of V,W;
   set F=FunctionalFAF(f,v);
-  assume
-  f is additiveFAF;
+  assume f is additiveFAF;
   then
 A1: F is additive by Def12;
   thus f.(v,y+z) = F.(y+z) by Th9
@@ -1491,8 +1464,7 @@ proof
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y be Vector of W, r be Element of K, f be Form of V,W;
   set F=FunctionalSAF(f,y);
-  assume
-  f is homogeneousSAF;
+  assume f is homogeneousSAF;
   then
 A1: F is homogeneous by Def15;
   thus f.(r*v,y) = F.(r*v) by Th10
@@ -1509,8 +1481,7 @@ proof
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y be Vector of W, r be Element of K, f be Form of V,W;
   set F=FunctionalFAF(f,v);
-  assume
-  f is homogeneousFAF;
+  assume f is homogeneousFAF;
   then
 A1: F is homogeneous by Def14;
   thus f.(v,r*y) = F.(r*y) by Th9
@@ -1702,7 +1673,7 @@ A10:  y = [s,t] by A8,DOMAIN_1:9;
 end;
 
 begin
-
+ 
 :: Left and Right Kernel of Form. "Diagonal" Kernel of Form
 
 definition
@@ -1719,8 +1690,7 @@ definition
     A c= the carrier of V
     proof
       let x be set;
-      assume
-      x in A;
+      assume x in A;
       then ex v be Vector of V st v=x & for w be Vector of W holds f.(v,w)=0.K;
       hence thesis;
     end;
@@ -1742,8 +1712,7 @@ definition
     A c= the carrier of W
     proof
       let x be set;
-      assume
-      x in A;
+      assume x in A;
       then
       ex w be Vector of W st w=x & for v be Vector of V holds f.(v,w) = 0.K;
       hence thesis;
@@ -1765,8 +1734,7 @@ definition
     A c= the carrier of V
     proof
       let x be set;
-      assume
-      x in A;
+      assume x in A;
       then ex v be Vector of V st v=x & f.(v,v)=0.K;
       hence thesis;
     end;
@@ -1923,8 +1891,7 @@ proof
   thus leftker f c= diagker f
   proof
     let x be set;
-    assume
-    x in leftker f;
+    assume x in leftker f;
     then consider v be Vector of V such that
 A1: v=x and
 A2: for w be Vector of V holds f.(v,w)=0.K;
@@ -1932,8 +1899,7 @@ A2: for w be Vector of V holds f.(v,w)=0.K;
     hence thesis by A1;
   end;
   let x be set;
-  assume
-  x in rightker f;
+  assume x in rightker f;
   then consider v be Vector of V such that
 A3: v=x and
 A4: for w be Vector of V holds f.(w,v)=0.K;
@@ -1974,8 +1940,7 @@ A6: for w be Vector of W holds f.(v1,w)=0.K by A1;
     hence thesis;
   end;
   let a be Element of K, v be Vector of V;
-  assume
-  v in V1;
+  assume v in V1;
   then consider v1 be Vector of V such that
 A7: v1= v and
 A8: for w be Vector of W holds f.(v1,w)=0.K;
@@ -2021,8 +1986,7 @@ A6: for w be Vector of V holds f.(w,v1)=0.K by A1;
     hence thesis;
   end;
   let a be Element of K, v be Vector of W;
-  assume
-  v in V1;
+  assume v in V1;
   then consider v1 be Vector of W such that
 A7: v1= v and
 A8: for w be Vector of V holds f.(w,v1)=0.K;
@@ -2042,8 +2006,7 @@ definition
   let f be additiveSAF homogeneousSAF Form of V,W;
   func LKer f -> strict non empty Subspace of V means
   :Def19:
-  the carrier of
-  it = leftker f;
+  the carrier of it = leftker f;
   existence by Th43,VECTSP_4:42;
   uniqueness by VECTSP_4:37;
 end;
@@ -2055,8 +2018,7 @@ definition
   let f be additiveFAF homogeneousFAF Form of V,W;
   func RKer f -> strict non empty Subspace of W means
   :Def20:
-  the carrier of
-  it = rightker f;
+  the carrier of it = rightker f;
   existence by Th44,VECTSP_4:42;
   uniqueness by VECTSP_4:37;
 end;
@@ -2084,8 +2046,7 @@ A2:   A = a+L by VECTSP10:23;
       take y = f.(a,w0);
       now
         let a1 be Vector of V;
-        assume
-        A = a1+L;
+        assume A = a1+L;
         then a in a1+L by A2,VECTSP_4:59;
         then consider w be Vector of V such that
 A3:     w in L and
@@ -2192,8 +2153,7 @@ A2:   A = a+L by VECTSP10:23;
       take y = f.(v0,a);
       now
         let a1 be Vector of W;
-        assume
-        A = a1+L;
+        assume A = a1+L;
         then a in a1+L by A2,VECTSP_4:59;
         then consider w be Vector of W such that
 A3:     w in L and
@@ -2372,8 +2332,7 @@ A3:   B = b+R by VECTSP10:23;
       now
         let a1 be Vector of V;
         let b1 be Vector of W;
-        assume
-        A = a1+L;
+        assume A = a1+L;
         then a in a1+L by A2,VECTSP_4:59;
         then consider vv be Vector of V such that
 A4:     vv in L and
@@ -2383,8 +2342,7 @@ A5:     a = a1 + vv by VECTSP_4:57;
         then
 A6:     ex aa be Vector of V st aa=vv & for w0 be Vector of W holds f.(aa,
         w0) =0.K;
-        assume
-        B = b1+R;
+        assume B = b1+R;
         then b in b1+R by A3,VECTSP_4:59;
         then consider ww be Vector of W such that
 A7:     ww in R and
@@ -2536,8 +2494,7 @@ proof
   thus rightker f c= rightker (LQForm f)
   proof
     let x be set;
-    assume
-    x in rightker f;
+    assume x in rightker f;
     then consider w be Vector of W such that
 A1: x=w and
 A2: for v be Vector of V holds f.(v,w) = 0.K;
@@ -2551,8 +2508,7 @@ A3:   A = v+LKer f by VECTSP10:23;
     hence thesis by A1;
   end;
   let x be set;
-  assume
-  x in rightker lf;
+  assume x in rightker lf;
   then consider w be Vector of W such that
 A4: x=w and
 A5: for A be Vector of qv holds lf.(A,w) = 0.K;
@@ -2579,8 +2535,7 @@ proof
   thus leftker f c= leftker (RQForm f)
   proof
     let x be set;
-    assume
-    x in leftker f;
+    assume x in leftker f;
     then consider v be Vector of V such that
 A1: x=v and
 A2: for w be Vector of W holds f.(v,w) = 0.K;
@@ -2594,8 +2549,7 @@ A3:   A = w+RKer f by VECTSP10:23;
     hence thesis by A1;
   end;
   let x be set;
-  assume
-  x in leftker rf;
+  assume x in leftker rf;
   then consider v be Vector of V such that
 A4: x=v and
 A5: for A be Vector of qw holds rf.(v,A) = 0.K;
@@ -2651,8 +2605,7 @@ RKer(LQForm(f)), wqr = VectQuot(W,RL), LR = LKer(RQForm(f)), vql = VectQuot(V,
 A1: dom QForm(f) = [:the carrier of vq, the carrier of wq:] by FUNCT_2:def 1;
 A2: now
     let x be set;
-    assume
-    x in dom QForm(f);
+    assume x in dom QForm(f);
     then consider A be Vector of vq, B be Vector of wq such that
 A3: x=[A,B] by DOMAIN_1:9;
     consider w be Vector of W such that
@@ -2671,8 +2624,7 @@ A6: A = v + L by VECTSP10:23;
   hence QForm(f) = RQForm(LQForm(f)) by A1,A2,FUNCT_1:9;
 A7: now
     let x be set;
-    assume
-    x in dom QForm(f);
+    assume x in dom QForm(f);
     then consider A be Vector of vq, B be Vector of wq such that
 A8: x=[A,B] by DOMAIN_1:9;
     consider w be Vector of W such that
@@ -2708,8 +2660,7 @@ proof
   thus leftker qf c= leftker rlf
   proof
     let x be set;
-    assume
-    x in leftker qf;
+    assume x in leftker qf;
     then consider vv be Vector of vq such that
 A1: x=vv and
 A2: for ww be Vector of wq holds qf.(vv,ww)=0.K;
@@ -2724,8 +2675,7 @@ A2: for ww be Vector of wq holds qf.(vv,ww)=0.K;
   thus leftker rlf c= leftker qf
   proof
     let x be set;
-    assume
-    x in leftker rlf;
+    assume x in leftker rlf;
     then consider vv be Vector of vq such that
 A3: x=vv and
 A4: for ww be Vector of wqr holds rlf.(vv,ww)=0.K;
@@ -2740,8 +2690,7 @@ A4: for ww be Vector of wqr holds rlf.(vv,ww)=0.K;
   thus rightker qf c= rightker rlf
   proof
     let x be set;
-    assume
-    x in rightker qf;
+    assume x in rightker qf;
     then consider ww be Vector of wq such that
 A5: x=ww and
 A6: for vv be Vector of vq holds qf.(vv,ww)=0.K;
@@ -2756,8 +2705,7 @@ A6: for vv be Vector of vq holds qf.(vv,ww)=0.K;
   thus rightker rlf c= rightker qf
   proof
     let x be set;
-    assume
-    x in rightker rlf;
+    assume x in rightker rlf;
     then consider ww be Vector of wqr such that
 A7: x=ww and
 A8: for vv be Vector of vq holds rlf.(vv,ww)=0.K;
@@ -2772,8 +2720,7 @@ A8: for vv be Vector of vq holds rlf.(vv,ww)=0.K;
   thus leftker qf c= leftker lrf
   proof
     let x be set;
-    assume
-    x in leftker qf;
+    assume x in leftker qf;
     then consider vv be Vector of vq such that
 A9: x=vv and
 A10: for ww be Vector of wq holds qf.(vv,ww)=0.K;
@@ -2788,8 +2735,7 @@ A10: for ww be Vector of wq holds qf.(vv,ww)=0.K;
   thus leftker lrf c= leftker qf
   proof
     let x be set;
-    assume
-    x in leftker lrf;
+    assume x in leftker lrf;
     then consider vv be Vector of vql such that
 A11: x=vv and
 A12: for ww be Vector of wq holds lrf.(vv,ww)=0.K;
@@ -2804,8 +2750,7 @@ A12: for ww be Vector of wq holds lrf.(vv,ww)=0.K;
   thus rightker qf c= rightker lrf
   proof
     let x be set;
-    assume
-    x in rightker qf;
+    assume x in rightker qf;
     then consider ww be Vector of wq such that
 A13: x=ww and
 A14: for vv be Vector of vq holds qf.(vv,ww)=0.K;
@@ -2818,8 +2763,7 @@ A14: for vv be Vector of vq holds qf.(vv,ww)=0.K;
     hence thesis by A13;
   end;
   let x be set;
-  assume
-  x in rightker lrf;
+  assume x in rightker lrf;
   then consider ww be Vector of wq such that
 A15: x=ww and
 A16: for vv be Vector of vql holds lrf.(vv,ww)=0.K;
@@ -2844,8 +2788,7 @@ empty doubleLoopStr), V, W be non empty VectSpStr over K, f be Functional of V,
   set fg = FormFunctional(f,g);
 A1: ker f = {v where v is Vector of V : f.v = 0.K} by VECTSP10:def 9;
   let x be set;
-  assume
-  x in ker f;
+  assume x in ker f;
   then consider v be Vector of V such that
 A2: x=v and
 A3: f.v=0.K by A1;
@@ -2875,13 +2818,11 @@ A2: ker f = {v where v is Vector of V : f.v = 0.K} by VECTSP10:def 9;
   thus leftker fg c= ker f
   proof
     let x be set;
-    assume
-    x in leftker fg;
+    assume x in leftker fg;
     then consider v be Vector of V such that
 A3: x=v and
 A4: for w be Vector of W holds fg.(v,w) = 0.K;
-    assume
-    not x in ker f;
+    assume not x in ker f;
     then
 A5: f.v <> 0.K by A2,A3;
     now
@@ -2908,8 +2849,7 @@ empty doubleLoopStr), V, W be non empty VectSpStr over K, f be Functional of V,
   set fg = FormFunctional(f,g);
 A1: ker g = {w where w is Vector of W : g.w = 0.K} by VECTSP10:def 9;
   let x be set;
-  assume
-  x in ker g;
+  assume x in ker g;
   then consider w be Vector of W such that
 A2: x=w and
 A3: g.w=0.K by A1;
@@ -2939,13 +2879,11 @@ A2: ker g = {w where w is Vector of W : g.w = 0.K} by VECTSP10:def 9;
   thus rightker fg c= ker g
   proof
     let x be set;
-    assume
-    x in rightker fg;
+    assume x in rightker fg;
     then consider w be Vector of W such that
 A3: x=w and
 A4: for v be Vector of V holds fg.(v,w) = 0.K;
-    assume
-    not x in ker g;
+    assume not x in ker g;
     then
 A5: g.w <> 0.K by A2,A3;
     now
@@ -2974,8 +2912,7 @@ Abelian associative well-unital distributive almost_left_invertible (non empty
   linear-Functional of V, g be Functional of W;
   set fg = FormFunctional(f,g), cf = CQFunctional(f), fcfg = FormFunctional(
   CQFunctional(f),g), vql = VectQuot(V, LKer fg), vq =VectQuot(V, Ker f);
-  assume
-  g <> 0Functional(W);
+  assume g <> 0Functional(W);
   then
 A1: leftker fg = ker f by Th52;
   the carrier of LKer fg = leftker fg by Def19;
@@ -2983,8 +2920,7 @@ A1: leftker fg = ker f by Th52;
 A2: LKer fg = Ker f by A1,VECTSP10:def 11;
 A3: now
     let x be set;
-    assume
-    x in dom fcfg;
+    assume x in dom fcfg;
     then consider A be Vector of vq, B be Vector of W such that
 A4: x=[A,B] by DOMAIN_1:9;
     consider v be Vector of V such that
@@ -3015,8 +2951,7 @@ Abelian associative well-unital distributive almost_left_invertible (non empty
   Functional of V, g be linear-Functional of W;
   set fg = FormFunctional(f,g), cg = CQFunctional(g), fcfg = FormFunctional(f,
   CQFunctional(g)), wqr = VectQuot(W, RKer fg), wq =VectQuot(W, Ker g);
-  assume
-  f <> 0Functional(V);
+  assume f <> 0Functional(V);
   then
 A1: rightker fg = ker g by Th54;
   the carrier of RKer fg = rightker fg by Def20;
@@ -3024,8 +2959,7 @@ A1: rightker fg = ker g by Th54;
 A2: RKer fg = Ker g by A1,VECTSP10:def 11;
 A3: now
     let x be set;
-    assume
-    x in dom fcfg;
+    assume x in dom fcfg;
     then consider A be Vector of V, B be Vector of wq such that
 A4: x=[A,B] by DOMAIN_1:9;
     consider w be Vector of W such that
@@ -3082,8 +3016,7 @@ registration
     thus leftker qf c= {0.qV}
     proof
       let x be set;
-      assume
-      x in leftker qf;
+      assume x in leftker qf;
       then consider vv be Vector of qV such that
 A1:   x= vv and
 A2:   for w be Vector of W holds qf.(vv,w)=0.K;
@@ -3103,8 +3036,7 @@ A3:   vv = v + L by VECTSP10:23;
       hence thesis by A1,A3,TARSKI:def 1;
     end;
     let x be set;
-    assume
-    x in {0.qV};
+    assume x in {0.qV};
     then
 A4: x = 0.qV by TARSKI:def 1;
     for w be Vector of W holds qf.(0.qV,w) = 0.K by Th31;
@@ -3124,8 +3056,7 @@ registration
     thus rightker qf c= {0.qW}
     proof
       let x be set;
-      assume
-      x in rightker qf;
+      assume x in rightker qf;
       then consider ww be Vector of qW such that
 A1:   x= ww and
 A2:   for v be Vector of V holds qf.(v,ww)=0.K;
@@ -3145,8 +3076,7 @@ A3:   ww = w + R by VECTSP10:23;
       hence thesis by A1,A3,TARSKI:def 1;
     end;
     let x be set;
-    assume
-    x in {0.qW};
+    assume x in {0.qW};
     then
 A4: x = 0.qW by TARSKI:def 1;
     for v be Vector of V holds qf.(v,0.qW) = 0.K by Th30;
@@ -3214,7 +3144,7 @@ A1: f.(v,w) <> 0.K by Th41;
 end;
 
 begin
-
+ 
 :: Bilinear Symmetric and Alternating Forms
 
 definition
@@ -3223,8 +3153,7 @@ definition
   let f be Form of V,V;
   attr f is symmetric means
   :Def26:
-  for v,w be Vector of V holds f.(v,w) = f.(
-  w,v);
+  for v,w be Vector of V holds f.(v,w) = f.( w,v);
 end;
 
 definition
@@ -3439,8 +3368,7 @@ right-distributive (non empty doubleLoopStr), V be non empty VectSpStr over K,
   thus leftker f c= rightker f
   proof
     let x be set;
-    assume
-    x in leftker f;
+    assume x in leftker f;
     then consider v be Vector of V such that
 A1: v = x and
 A2: for w be Vector of V holds f.(v,w)=0.K;
@@ -3452,8 +3380,7 @@ A2: for w be Vector of V holds f.(v,w)=0.K;
     hence thesis by A1;
   end;
   let x be set;
-  assume
-  x in rightker f;
+  assume x in rightker f;
   then consider w be Vector of V such that
 A3: w = x and
 A4: for v be Vector of V holds f.(v,w)=0.K;
@@ -3488,8 +3415,7 @@ definition
   let V be non empty VectSpStr over K;
   let f be additiveSAF additiveFAF Form of V,V;
   redefine attr f is alternating means
-  for v,w be Vector of V holds f.(v,w) =
-  -f.(w,v);
+  for v,w be Vector of V holds f.(v,w) = -f.(w,v);
   compatibility
   proof
     thus f is alternating implies for v,w be Vector of V holds f.(v,w) = -f.(w
@@ -3514,8 +3440,7 @@ right-distributive (non empty doubleLoopStr), V be non empty VectSpStr over K,
   thus leftker f c= rightker f
   proof
     let x be set;
-    assume
-    x in leftker f;
+    assume x in leftker f;
     then consider v be Vector of V such that
 A1: v = x and
 A2: for w be Vector of V holds f.(v,w)=0.K;
@@ -3528,8 +3453,7 @@ A2: for w be Vector of V holds f.(v,w)=0.K;
     hence thesis by A1;
   end;
   let x be set;
-  assume
-  x in rightker f;
+  assume x in rightker f;
   then consider w be Vector of V such that
 A3: w = x and
 A4: for v be Vector of V holds f.(v,w)=0.K;
@@ -3541,4 +3465,3 @@ A4: for v be Vector of V holds f.(v,w)=0.K;
   end;
   hence thesis by A3;
 end;
-

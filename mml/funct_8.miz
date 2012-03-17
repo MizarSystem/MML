@@ -3,7 +3,7 @@
 ::
 :: Received May 25, 2009
 :: Copyright (c) 2009 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, REAL_1, XCMPLX_0, ORDINAL1, ARYTM_1, SUBSET_1, RELAT_1,
@@ -12,10 +12,11 @@ environ
       SIN_COS, SIN_COS2, XXREAL_1, SIN_COS9, SIN_COS4, FUNCT_8;
  notations COMPLEX1, XCMPLX_0, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, REAL_1,
       MEMBERED, ABSVALUE, PARTFUN1, TARSKI, XBOOLE_0, SUBSET_1, EUCLID,
-      RELAT_1, FUNCT_1, FUNCT_2, SIN_COS2, SIN_COS, VALUED_1, RCOMP_1,
-      SQUARE_1, SIN_COS9, RELSET_1, FDIFF_9;
+      RELAT_1, FUNCT_1, FUNCT_2, SIN_COS, SIN_COS2, VALUED_1, RCOMP_1,
+      SIN_COS4, SQUARE_1, SIN_COS9, RELSET_1, FDIFF_9;
  constructors REAL_1, RCOMP_1, SEQ_1, EUCLID, SQUARE_1, ABSVALUE, SIN_COS2,
-      RFUNCT_1, RELSET_1, SIN_COS9, BINOP_2, SIN_COS, FDIFF_9;
+      RFUNCT_1, RELSET_1, SIN_COS9, BINOP_2, SIN_COS, FDIFF_9, SIN_COS4,
+      NEWTON;
  registrations XXREAL_0, XREAL_0, XBOOLE_0, MEMBERED, XCMPLX_0, NUMBERS,
       VALUED_0, FUNCT_1, RELAT_1, FUNCT_2, RELSET_1;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
@@ -35,8 +36,7 @@ definition
   let A be set;
   attr A is symmetrical means
   :Def1:
-  for x being complex number st x in A
-  holds -x in A;
+  for x being complex number st x in A holds -x in A;
 end;
 
 registration
@@ -75,8 +75,7 @@ registration
   proof
 A1: {} is symmetrical
     proof
-      assume
-      not {} is symmetrical;
+      assume not {} is symmetrical;
       then ex x being complex number st x in {} & not -x in {} by Def1;
       hence contradiction;
     end;
@@ -96,8 +95,7 @@ definition
   let F be PartFunc of X, Y;
   attr F is quasi_even means
   :Def3:
-  for x st x in dom F & -x in dom F holds F.
-  (-x)=F.x;
+  for x st x in dom F & -x in dom F holds F. (-x)=F.x;
 end;
 
 definition
@@ -130,8 +128,7 @@ definition
   let F be PartFunc of X, Y;
   attr F is quasi_odd means
   :Def6:
-  for x st x in dom F & -x in dom F holds F.(
-  -x)=-F.x;
+  for x st x in dom F & -x in dom F holds F.( -x)=-F.x;
 end;
 
 definition
@@ -173,8 +170,7 @@ A4: dom(F|A) = A by A2,RELAT_1:91;
 A5: for x st x in A holds F.(-x)=-F.x
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then F.x+F.(-x)=0 by A3;
       hence thesis;
     end;
@@ -231,8 +227,7 @@ end;
 theorem
   F is_even_on A iff (A c= dom F & for x st x in A holds F.x-F.(-x)=0)
 proof
-A1: (A c= dom F & for x st x in A holds F.x-F.(-x)=0) implies F is_even_on
-  A
+A1: (A c= dom F & for x st x in A holds F.x-F.(-x)=0) implies F is_even_on A
   proof
     assume that
 A2: A c= dom F and
@@ -241,8 +236,7 @@ A4: dom(F|A) = A by A2,RELAT_1:91;
 A5: for x st x in A holds F.(-x)=F.x
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then F.x-F.(-x)=0 by A3;
       hence thesis;
     end;
@@ -333,8 +327,7 @@ A9: -x in dom(F|A) by A3,RELAT_1:91;
 end;
 
 theorem
-  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1) implies F
-  is_odd_on A
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=-1) implies F is_odd_on A
 proof
   assume that
 A1: A c= dom F and
@@ -343,8 +336,7 @@ A3: dom(F|A) = A by A1,RELAT_1:91;
 A4: for x st x in A holds F.(-x)=-F.x
   proof
     let x;
-    assume
-    x in A;
+    assume x in A;
     then F.x / F.(-x)=-1 by A2;
     hence thesis by XCMPLX_1:196;
   end;
@@ -403,8 +395,7 @@ A9: -x in dom(F|A) by A3,RELAT_1:91;
 end;
 
 theorem
-  (A c= dom F & for x st x in A holds F.x / F.(-x)=1) implies F
-  is_even_on A
+  (A c= dom F & for x st x in A holds F.x / F.(-x)=1) implies F is_even_on A
 proof
   assume that
 A1: A c= dom F and
@@ -413,8 +404,7 @@ A3: dom(F|A) = A by A1,RELAT_1:91;
 A4: for x st x in A holds F.(-x)=F.x
   proof
     let x;
-    assume
-    x in A;
+    assume x in A;
     then F.x / F.(-x)=1 by A2;
     hence thesis by XCMPLX_1:58;
   end;
@@ -503,8 +493,7 @@ A7: -x in dom(F|A) by A2,RELAT_1:91;
 end;
 
 theorem
-  (A c= dom F & for x st x in A holds F.x = F.(abs x)) implies F
-  is_even_on A
+  (A c= dom F & for x st x in A holds F.x = F.(abs x)) implies F is_even_on A
 proof
   assume that
 A1: A c= dom F and
@@ -868,8 +857,7 @@ A3: A c= dom (-F) by VALUED_1:8;
   then
 A4: dom((-F)|A) = A by RELAT_1:91;
 A5: F|A is odd by A1,Def8;
-  for x st x in dom((-F)|A) & -x in dom((-F)|A) holds (-F)|A.(-x)=-(-F)|A.
-  x
+  for x st x in dom((-F)|A) & -x in dom((-F)|A) holds (-F)|A.(-x)=-(-F)|A. x
   proof
     let x;
     assume that
@@ -951,8 +939,7 @@ A3: A c= dom (F") by VALUED_1:def 7;
   then
 A4: dom((F")|A) = A by RELAT_1:91;
 A5: F|A is odd by A1,Def8;
-  for x st x in dom((F")|A) & -x in dom((F")|A) holds (F")|A.(-x)=-(F")|A.
-  x
+  for x st x in dom((F")|A) & -x in dom((F")|A) holds (F")|A.(-x)=-(F")|A. x
   proof
     let x;
     assume that
@@ -1284,8 +1271,7 @@ A3: A c= dom (r+F) by VALUED_1:def 2;
   then
 A4: dom((r+F)|A) = A by RELAT_1:91;
 A5: F|A is even by A1,Def5;
-  for x st x in dom((r+F)|A) & -x in dom((r+F)|A) holds (r+F)|A.(-x)=(r+F)
-  |A.x
+  for x st x in dom((r+F)|A) & -x in dom((r+F)|A) holds (r+F)|A.(-x)=(r+F) |A.x
   proof
     let x;
     assume that
@@ -1326,8 +1312,7 @@ A3: A c= dom (F-r) by VALUED_1:3;
   then
 A4: dom((F-r)|A) = A by RELAT_1:91;
 A5: F|A is even by A1,Def5;
-  for x st x in dom((F-r)|A) & -x in dom((F-r)|A) holds (F-r)|A.(-x)=(F-r)
-  |A.x
+  for x st x in dom((F-r)|A) & -x in dom((F-r)|A) holds (F-r)|A.(-x)=(F-r) |A.x
   proof
     let x;
     assume that
@@ -1840,8 +1825,7 @@ A4: -x in dom(r (#) F);
 end;
 
 theorem
-  F is odd & G is odd & dom F /\ dom G is symmetrical implies F + G is
-  odd
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies F + G is odd
 proof
   assume that
 A1: F is odd and
@@ -1851,8 +1835,7 @@ A4: dom F /\ dom G=dom (F + G) by VALUED_1:def 1;
   then
 A5: dom (F + G) c= dom G by XBOOLE_1:17;
 A6: dom (F + G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F + G) & -x in dom(F + G) holds (F + G).(-x)=-(F + G).
-  x
+  for x st x in dom(F + G) & -x in dom(F + G) holds (F + G).(-x)=-(F + G). x
   proof
     let x;
     assume that
@@ -1870,8 +1853,7 @@ A8: -x in dom(F + G);
 end;
 
 theorem
-  F is even & G is even & dom F /\ dom G is symmetrical implies F + G is
-  even
+  F is even & G is even & dom F /\ dom G is symmetrical implies F + G is even
 proof
   assume that
 A1: F is even and
@@ -1898,8 +1880,7 @@ A8: -x in dom(F + G);
 end;
 
 theorem
-  F is odd & G is odd & dom F /\ dom G is symmetrical implies F - G is
-  odd
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies F - G is odd
 proof
   assume that
 A1: F is odd and
@@ -1909,8 +1890,7 @@ A4: dom F /\ dom G=dom (F - G) by VALUED_1:12;
   then
 A5: dom (F - G) c= dom G by XBOOLE_1:17;
 A6: dom (F - G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F - G) & -x in dom(F - G) holds (F - G).(-x)=-(F - G).
-  x
+  for x st x in dom(F - G) & -x in dom(F - G) holds (F - G).(-x)=-(F - G). x
   proof
     let x;
     assume that
@@ -1928,8 +1908,7 @@ A8: -x in dom(F - G);
 end;
 
 theorem
-  F is even & G is even & dom F /\ dom G is symmetrical implies F - G is
-  even
+  F is even & G is even & dom F /\ dom G is symmetrical implies F - G is even
 proof
   assume that
 A1: F is even and
@@ -1956,8 +1935,7 @@ A8: -x in dom(F - G);
 end;
 
 theorem
-  F is odd & G is odd & dom F /\ dom G is symmetrical implies F (#) G is
-  even
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies F (#) G is even
 proof
   assume that
 A1: F is odd and
@@ -1987,8 +1965,7 @@ A8: -x in dom(F (#) G);
 end;
 
 theorem
-  F is even & G is even & dom F /\ dom G is symmetrical implies F (#) G
-  is even
+  F is even & G is even & dom F /\ dom G is symmetrical implies F (#) G is even
 proof
   assume that
 A1: F is even and
@@ -2017,8 +1994,7 @@ A8: -x in dom(F (#) G);
 end;
 
 theorem
-  F is even & G is odd & dom F /\ dom G is symmetrical implies F (#) G
-  is odd
+  F is even & G is odd & dom F /\ dom G is symmetrical implies F (#) G is odd
 proof
   assume that
 A1: F is even and
@@ -2047,8 +2023,7 @@ A8: -x in dom(F (#) G);
 end;
 
 theorem
-  F is odd & G is odd & dom F /\ dom G is symmetrical implies F /" G is
-  even
+  F is odd & G is odd & dom F /\ dom G is symmetrical implies F /" G is even
 proof
   assume that
 A1: F is odd and
@@ -2058,8 +2033,7 @@ A4: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
   then
 A5: dom (F /" G) c= dom G by XBOOLE_1:17;
 A6: dom (F /" G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=(F /"
-  G).x
+  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=(F /" G).x
   proof
     let x;
     assume
@@ -2076,8 +2050,7 @@ A7: x in dom(F /" G) & -x in dom(F /" G);
 end;
 
 theorem
-  F is even & G is even & dom F /\ dom G is symmetrical implies F /" G
-  is even
+  F is even & G is even & dom F /\ dom G is symmetrical implies F /" G is even
 proof
   assume that
 A1: F is even and
@@ -2087,8 +2060,7 @@ A4: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
   then
 A5: dom (F /" G) c= dom G by XBOOLE_1:17;
 A6: dom (F /" G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=(F /"
-  G).x
+  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=(F /" G).x
   proof
     let x;
     assume
@@ -2104,8 +2076,7 @@ A7: x in dom(F /" G) & -x in dom(F /" G);
 end;
 
 theorem
-  F is odd & G is even & dom F /\ dom G is symmetrical implies F /" G is
-  odd
+  F is odd & G is even & dom F /\ dom G is symmetrical implies F /" G is odd
 proof
   assume that
 A1: F is odd and
@@ -2115,8 +2086,7 @@ A4: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
   then
 A5: dom (F /" G) c= dom G by XBOOLE_1:17;
 A6: dom (F /" G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=-(F /"
-  G).x
+  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=-(F /" G).x
   proof
     let x;
     assume
@@ -2133,8 +2103,7 @@ A7: x in dom(F /" G) & -x in dom(F /" G);
 end;
 
 theorem
-  F is even & G is odd & dom F /\ dom G is symmetrical implies F /" G is
-  odd
+  F is even & G is odd & dom F /\ dom G is symmetrical implies F /" G is odd
 proof
   assume that
 A1: F is even and
@@ -2144,8 +2113,7 @@ A4: dom F /\ dom G=dom (F /" G) by VALUED_1:16;
   then
 A5: dom (F /" G) c= dom G by XBOOLE_1:17;
 A6: dom (F /" G) c= dom F by A4,XBOOLE_1:17;
-  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=-(F /"
-  G).x
+  for x st x in dom(F /" G) & -x in dom(F /" G) holds (F /" G).(-x)=-(F /" G).x
   proof
     let x;
     assume
@@ -2166,8 +2134,7 @@ begin :: Examples
 definition
   func signum -> Function of REAL, REAL means
   :Def9:
-  for x being Real holds it
-  .x = sgn x;
+  for x being Real holds it .x = sgn x;
   existence
   proof
     deffunc U(Element of REAL) = sgn$1;
@@ -2423,8 +2390,7 @@ proof
 A1: dom sinh = REAL by FUNCT_2:def 1;
   then
 A2: dom(sinh|A) = A by RELAT_1:91;
-  for x st x in dom(sinh|A) & -x in dom(sinh|A) holds sinh|A.(-x)=-sinh|A.
-  x
+  for x st x in dom(sinh|A) & -x in dom(sinh|A) holds sinh|A.(-x)=-sinh|A. x
   proof
     let x;
     assume that
@@ -2618,8 +2584,7 @@ A3: dom(arctan|A) = A by A1,RELAT_1:91,SIN_COS9:23,XBOOLE_1:1;
 A4: for x st x in A holds arctan.(-x) = -arctan.x
   proof
     let x;
-    assume
-    x in A;
+    assume x in A;
     then -1 <= x & x <= 1 by A1,XXREAL_1:1;
     then arctan x = -arctan (-x) by SIN_COS9:67;
     hence thesis;
@@ -2750,8 +2715,7 @@ A6: -x in dom(sec|B);
 end;
 
 theorem
-  (for x being real number st x in B holds cos.x<>0) implies sec
-  is_even_on B
+  (for x being real number st x in B holds cos.x<>0) implies sec is_even_on B
 proof
   assume
 A1: for x being real number st x in B holds cos.x<>0;
@@ -2809,8 +2773,7 @@ A6: -x in dom(cosec|B);
 end;
 
 theorem
-  (for x being real number st x in B holds sin.x<>0) implies cosec
-  is_odd_on B
+  (for x being real number st x in B holds sin.x<>0) implies cosec is_odd_on B
 proof
   assume
 A1: for x being real number st x in B holds sin.x<>0;
@@ -2827,4 +2790,3 @@ A2: x in B;
   end;
   hence thesis by Th83;
 end;
-

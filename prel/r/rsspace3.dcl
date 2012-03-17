@@ -21,6 +21,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
@@ -108,7 +109,7 @@
 <Adjective nr="6"/>
 <Adjective nr="15">
 <Func kind="K" nr="22">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -117,7 +118,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <Func kind="K" nr="22">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -129,18 +130,18 @@
 <Adjective nr="6"/>
 <Adjective nr="15">
 <LocusVar nr="1"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="13">
+<Func kind="G" nr="15">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -149,7 +150,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="94"/>
+<Adjective nr="98"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE3" nr="5">
@@ -165,7 +166,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 </Registrations>

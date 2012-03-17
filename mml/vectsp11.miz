@@ -12,22 +12,22 @@ environ
       XXREAL_0, POLYNOM1, POLYNOM2, MATRIX_3, CARD_3, AFINSQ_1, ORDINAL4,
       POLYNOM3, STRUCT_0, PARTFUN1, RANKNULL, RLSUB_1, RLVECT_5, PRVECT_1,
       RLVECT_3, ALGSTR_0, VECTSP10, MATRLIN, MATRLIN2, POLYNOM5, NEWTON,
-      MONOID_0, BINOP_1, RLVECT_1, LATTICES, RLSUB_2, FINSEQ_4,
-      MCART_1, RLVECT_2, VALUED_1, FUNCT_2, VECTSP11, MSSUBFAM, UNIALG_1;
+      MONOID_0, BINOP_1, RLVECT_1, LATTICES, RLSUB_2, FINSEQ_4, MCART_1,
+      RLVECT_2, VALUED_1, FUNCT_2, VECTSP11, MSSUBFAM, UNIALG_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
       ALGSTR_0, XXREAL_0, NAT_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FINSEQ_1, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_2,
       MATRIX_1, MATRIX_2, NAT_D, GROUP_4, MATRIX_3, DOMAIN_1, MEASURE6,
-      VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13,
-      MATRLIN, LAPLACE, MOD_2, RANKNULL, POLYNOM3, MONOID_0, ALGSEQ_1,
-      POLYNOM4, POLYNOM5, MATRLIN2, GRCAT_1;
+      PRVECT_1, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP,
+      MATRIX13, MATRLIN, LAPLACE, MOD_2, RANKNULL, POLYNOM3, MONOID_0,
+      ALGSEQ_1, POLYNOM4, POLYNOM5, MATRLIN2, GRCAT_1;
  constructors FINSOP_1, XXREAL_0, GROUP_4, VECTSP_7, VECTSP_9, MATRIX13,
       REALSET1, LAPLACE, VECTSP_5, RANKNULL, MONOID_0, POLYNOM1, POLYNOM4,
       POLYNOM5, SEQ_1, MATRLIN2, BINOP_2, NAT_D, RELSET_1, GRCAT_1, MEASURE6;
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
       ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, SEQM_3, MATRIX13,
       XREAL_0, VECTSP_9, RANKNULL, POLYNOM3, POLYNOM5, MONOID_0, CARD_1,
-      RELSET_1, MOD_2, GRCAT_1;
+      RELSET_1, MOD_2, GRCAT_1, PRVECT_1, MATRLIN2;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions STRUCT_0, TARSKI, XBOOLE_0, RLVECT_1, FINSEQ_1, VECTSP_4, FVSUM_1,
       LAPLACE, MATRIX13, RANKNULL, VECTSP_6, MATRLIN2;
@@ -46,7 +46,7 @@ begin :: Preliminaries
 reserve i,j,m,n,k for Nat,
   x,y for set,
   K for Field,
-  a,a1,a2 for Element of K;
+  a for Element of K;
 
 theorem Th1:
   for A,B be Matrix of K for nt be Element of n-tuples_on NAT, mt
@@ -250,8 +250,7 @@ A19:  DA+x*DB = DA+Delete(x*B,n1,m1) by A3,A9,Th5
     end;
 A20: Q[0]
     proof
-      assume
-      0<=n1;
+      assume 0<=n1;
       take P=0_.(K);
       thus len P <=n1+1 by POLYNOM4:6;
       let x be Element of K;
@@ -262,8 +261,7 @@ A20: Q[0]
     for m holds Q[m] from NAT_1:sch 2(A20,A4);
     then consider P be Polynomial of K such that
 A21: len P <= n1+1 and
-A22: for x be Element of K holds eval(P,x)=Sum (LaplaceExpL(A+x*B,n1)|
-    n1);
+A22: for x be Element of K holds eval(P,x)=Sum (LaplaceExpL(A+x*B,n1)| n1);
     take P;
     thus len P <= n1+1 by A21;
     let x be Element of K;
@@ -439,7 +437,6 @@ end;
 Lm1: for V1,V2 be VectSp of K, f be linear-transformation of V1,V2 for W1 be
 Subspace of V1,W2 be Subspace of V2 for F be Function of W1,W2 st F=f|W1 holds
 F is linear-transformation of W1,W2
-
 proof
   let V1,V2 be VectSp of K,f be linear-transformation of V1,V2;
   let W1 be Subspace of V1;
@@ -448,16 +445,16 @@ proof
 A1: F=f|W1;
 A2: now
     let a be Scalar of K,w be Vector of W1;
-    thus F.(a*w) = a*(f|W1).w by A1,MOD_2:def 3, GRCAT_1:def 13
+    thus F.(a*w) = a*(f|W1).w by A1,MOD_2:def 3
       .= a*(F.w) by A1,VECTSP_4:22;
   end;
   now
     let w1,w2 be Vector of W1;
-    thus F.(w1+w2) = (f|W1).w1+(f|W1).w2 by A1,MOD_2:def 3, GRCAT_1:def 13
+    thus F.(w1+w2) = (f|W1).w1+(f|W1).w2 by A1, GRCAT_1:def 13
       .= F.w1+F.w2 by A1,VECTSP_4:21;
   end;
    then F is additive homogeneous by A2,MOD_2:def 3, GRCAT_1:def 13;
-  hence thesis by A2,MOD_2:def 3, GRCAT_1:def 13;
+  hence thesis;
 end;
 
 registration
@@ -480,18 +477,15 @@ definition
   let IT be Function of V,V;
   attr IT is with_eigenvalues means
   :Def1:
-  ex v be Vector of V, a be Scalar of
-  R st v <> 0.V & IT.v = a*v;
+  ex v be Vector of V, a be Scalar of R st v <> 0.V & IT.v = a*v;
 end;
 
 reserve V for non trivial VectSp of K,
   V1,V2 for VectSp of K,
-  f for
-  linear-transformation of V1,V1,
+  f for linear-transformation of V1,V1,
   v,w for Vector of V,
-  v1,w1 for Vector of V1,
-  L
-  for Scalar of K;
+  v1 for Vector of V1,
+  L for Scalar of K;
 
 Lm2: id V is with_eigenvalues & ex v st v<>0.V & id V.v=1_K*v
 proof
@@ -519,8 +513,7 @@ definition
 A1: f is with_eigenvalues;
   mode eigenvalue of f -> Element of R means
     :Def2:
-    ex v be Vector of V st v
-    <> 0.V & f.v = it * v;
+    ex v be Vector of V st v <> 0.V & f.v = it * v;
   existence
   proof
     ex v be Vector of V, a be Scalar of R st v <> 0.V & f.v = a*v by A1,Def1;
@@ -557,7 +550,7 @@ A1: a<>0.K;
 A2: v <> 0.V and
 A3: f.v = L * v by Def2;
 A4: (a*f).v = a*(L*v) by A3,MATRLIN:def 6
-    .= (a*L)*v by VECTSP_1:def 28,def 29;
+    .= (a*L)*v by VECTSP_1:def 28;
   hence
 A5: a*f is with_eigenvalues by A2,Def1;
   hence
@@ -567,14 +560,14 @@ A6: a*L is eigenvalue of a*f by A2,A4,Def2;
 A7: w is eigenvector of f,L;
     (a*f).w = a*(f.w) by MATRLIN:def 6
       .= a*(L*w) by A7,Def3
-      .= (a*L)*w by VECTSP_1:def 28,def 29;
+      .= (a*L)*w by VECTSP_1:def 28;
     hence w is eigenvector of a*f,a*L by A5,A6,Def3;
   end;
   assume
 A8: w is eigenvector of a*f,a*L;
   a*f.w = (a*f).w by MATRLIN:def 6
     .= (a*L)*w by A5,A6,A8,Def3
-    .= a*(L*w) by VECTSP_1:def 28,def 29;
+    .= a*(L*w) by VECTSP_1:def 28;
   then 0.V = a*f.w+-a*(L*w) by VECTSP_1:63
     .= a*f.w+a*(-(L*w)) by VECTSP_1:69
     .= a*(f.w-(L*w)) by VECTSP_1:def 26;
@@ -648,11 +641,9 @@ A2: id V.v = L*v by Def2;
 end;
 
 theorem
-  ker f is non trivial implies f is with_eigenvalues & 0.K is eigenvalue
-  of f
+  ker f is non trivial implies f is with_eigenvalues & 0.K is eigenvalue of f
 proof
-  assume
-  ker f is non trivial;
+  assume ker f is non trivial;
   then consider v be Vector of ker f such that
 A1: v<>0.ker f by STRUCT_0:def 19;
   reconsider v as Vector of V1 by VECTSP_4:18;
@@ -668,8 +659,7 @@ theorem Th14:
   V1) is non trivial
 proof
   hereby
-    assume
-    f is with_eigenvalues & L is eigenvalue of f;
+    assume f is with_eigenvalues & L is eigenvalue of f;
     then consider v1 such that
 A1: v1<>0.V1 and
 A2: f.v1=L*v1 by Def2;
@@ -685,8 +675,7 @@ A3: v1 is Element of ker (f+(-L)*id V1) by STRUCT_0:def 5;
     v1<>0.ker (f+(-L)*id V1) by A1,VECTSP_4:19;
     hence ker (f+(-L)*id V1) is non trivial by A3,STRUCT_0:def 19;
   end;
-  assume
-  ker (f+(-L)*id V1) is non trivial;
+  assume ker (f+(-L)*id V1) is non trivial;
   then consider v be Vector of ker (f+(-L)*id V1) such that
 A4: v<>0.ker (f+(-L)*id V1) by STRUCT_0:def 19;
 A5: v in ker (f+(-L)*id V1) by STRUCT_0:def 5;
@@ -713,13 +702,11 @@ proof
   let f be linear-transformation of V1,V1;
 A1: dim V1=dim V1;
   hereby
-    assume
-    f is with_eigenvalues & L is eigenvalue of f;
+    assume f is with_eigenvalues & L is eigenvalue of f;
     then ker (f+(-L)*id V1) is non trivial by Th14;
     hence Det AutEqMt(f+(-L)*id V1,b1,b19) =0.K by A1,MATRLIN2:50;
   end;
-  assume
-  Det AutEqMt(f+(-L)*id V1,b1,b19) =0.K;
+  assume Det AutEqMt(f+(-L)*id V1,b1,b19) =0.K;
   then ker (f+(-L)*id V1) is non trivial by A1,MATRLIN2:50;
   hence thesis by Th14;
 end;
@@ -761,8 +748,7 @@ proof
   let f,L such that
 A1: f is with_eigenvalues & L is eigenvalue of f;
   hereby
-    assume
-    v1 is eigenvector of f,L;
+    assume v1 is eigenvector of f,L;
     then
 A2: f.v1=L*v1 by A1,Def3;
     (f+(-L)*id V1).v1 = f.v1+((-L)*id V1).v1 by MATRLIN:def 5
@@ -773,8 +759,7 @@ A2: f.v1=L*v1 by A1,Def3;
       .= 0.V1 by VECTSP_1:60;
     hence v1 in ker (f+(-L)*id V1) by RANKNULL:10;
   end;
-  assume
-  v1 in ker (f+(-L)*id V1);
+  assume v1 in ker (f+(-L)*id V1);
   then 0.V1 = (f+(-L)*id V1).v1 by RANKNULL:10
     .= f.v1+((-L)*id V1).v1 by MATRLIN:def 5
     .= f.v1+(-L)*(id V1.v1) by MATRLIN:def 6
@@ -930,19 +915,18 @@ A6: P[0];
   hence thesis;
 end;
 
-definition
+registration
   let K,V1;
   let f be linear-transformation of V1,V1;
   let n be Nat;
-  redefine func f |^ n -> linear-transformation of V1,V1;
+  cluster f |^ n ->  homogeneous additive;
   coherence
   proof
     defpred P[Nat] means f|^ $1 is linear-transformation of V1,V1;
 A1: for k st P[k] holds P[k+1]
     proof
       let k;
-      assume
-      P[k];
+      assume P[k];
       then reconsider fk=f|^k as linear-transformation of V1,V1;
       f|^(k+1) = fk * f|^1 by Th20
         .= fk*f by Th19;
@@ -973,16 +957,14 @@ definition
   let K,V1,f;
   func UnionKers f -> strict Subspace of V1 means
   :Def5:
-  the carrier of it = {
-  v where v is Vector of V1:ex n st (f|^n).v = 0.V1};
+  the carrier of it = { v where v is Vector of V1:ex n st (f|^n).v = 0.V1};
   existence
   proof
     set S={v where v is Vector of V1:ex n st (f|^n).v=0.V1};
     S c= the carrier of V1
     proof
       let x;
-      assume
-      x in S;
+      assume x in S;
       then ex v be Vector of V1 st x=v & ex n st (f|^n).v=0.V1;
       hence thesis;
     end;
@@ -1006,7 +988,7 @@ A6:   (f|^m).u=0.V1;
         suppose
           m<=n;
           then reconsider i=n-m as Nat by NAT_1:21;
-          (f|^n).(v+u) = (f|^n).v +(f|^(m+i)).u by MOD_2:def 3, GRCAT_1:def 13
+          (f|^n).(v+u) = (f|^n).v +(f|^(m+i)).u by  GRCAT_1:def 13
             .= 0.V1+0.V1 by A5,A6,Th23
             .= 0.V1 by RLVECT_1:def 7;
           hence v+u in S;
@@ -1014,7 +996,7 @@ A6:   (f|^m).u=0.V1;
         suppose
           m>n;
           then reconsider i=m-n as Nat by NAT_1:21;
-          (f|^m).(v+u) = (f|^m).v +(f|^(n+i)).u by MOD_2:def 3, GRCAT_1:def 13
+          (f|^m).(v+u) = (f|^m).v +(f|^(n+i)).u by  GRCAT_1:def 13
             .= 0.V1+0.V1 by A5,A6,Th23
             .= 0.V1 by RLVECT_1:def 7;
           hence v+u in S;
@@ -1024,12 +1006,11 @@ A6:   (f|^m).u=0.V1;
     end;
     now
       let a be Element of K,v be Element of V1;
-      assume
-      v in S;
+      assume v in S;
       then ex v9 be Vector of V1 st v9=v & ex n st (f|^n).v9=0.V1;
       then consider n such that
 A7:   (f|^n).v=0.V1;
-      (f|^n).(a*v) = a*0.V1 by A7,MOD_2:def 3, GRCAT_1:def 13
+      (f|^n).(a*v) = a*0.V1 by A7,MOD_2:def 3
         .= 0.V1 by VECTSP_1:59;
       hence a * v in S;
     end;
@@ -1043,15 +1024,13 @@ theorem Th24:
   v1 in UnionKers f iff ex n st (f|^n).v1 = 0.V1
 proof
   hereby
-    assume
-    v1 in UnionKers f;
+    assume v1 in UnionKers f;
     then v1 in the carrier of UnionKers f by STRUCT_0:def 5;
     then v1 in {w where w is Vector of V1:ex n st (f|^n).w = 0.V1} by Def5;
     then ex w be Vector of V1 st v1=w & ex m st (f|^m).w=0.V1;
     hence ex n st (f|^n).v1=0.V1;
   end;
-  assume
-  ex n st (f|^n).v1=0.V1;
+  assume ex n st (f|^n).v1=0.V1;
   then v1 in {w where w is Vector of V1:ex n st (f|^n).w = 0.V1};
   then v1 in the carrier of UnionKers f by Def5;
   hence thesis by STRUCT_0:def 5;
@@ -1063,8 +1042,7 @@ proof
   the carrier of ker (f|^i) c= the carrier of UnionKers f
   proof
     let x;
-    assume
-    x in the carrier of ker (f|^i);
+    assume x in the carrier of ker (f|^i);
     then reconsider v=x as Element of ker (f|^i);
     (f|^i).v=0.V1 & v is Vector of V1 by RANKNULL:14,VECTSP_4:18;
     then x in UnionKers f by Th24;
@@ -1138,8 +1116,7 @@ A8: v in UnionKers f by STRUCT_0:def 5;
 A9: (f|^i).v=0.V by A8,Th24;
   i>m
   proof
-    assume
-    i<=m;
+    assume i<=m;
     then reconsider j=m-i as Element of NAT by NAT_1:21;
     (f|^(j+i)).v=0.V by A9,Th23;
     hence thesis by A7,RANKNULL:10;
@@ -1161,8 +1138,7 @@ proof
   rng (f|KER)c= the carrier of KER
   proof
     let y;
-    assume
-    y in rng (f|KER);
+    assume y in rng (f|KER);
     then consider x such that
 A1: x in dom (f|KER) and
 A2: (f|KER).x=y by FUNCT_1:def 5;
@@ -1195,8 +1171,7 @@ proof
   rng (f|KER) c= the carrier of KER
   proof
     let y;
-    assume
-    y in rng (f|KER);
+    assume y in rng (f|KER);
     then consider x such that
 A1: x in dom (f|KER) and
 A2: (f|KER).x=y by FUNCT_1:def 5;
@@ -1227,15 +1202,13 @@ A7: fid.v + (-L)*v = f.v + (L*v+ (-L)*v) by RLVECT_1:def 6
 end;
 
 theorem Th30:
-  f|(UnionKers f) is linear-transformation of UnionKers f,
-  UnionKers f
+  f|(UnionKers f) is linear-transformation of UnionKers f, UnionKers f
 proof
   set U=UnionKers f;
   rng (f|U)c= the carrier of U
   proof
     let y;
-    assume
-    y in rng (f|U);
+    assume y in rng (f|U);
     then consider x such that
 A1: x in dom (f|U) and
 A2: (f|U).x=y by FUNCT_1:def 5;
@@ -1269,8 +1242,7 @@ proof
   rng (f|U) c= the carrier of U
   proof
     let y;
-    assume
-    y in rng (f|U);
+    assume y in rng (f|U);
     then consider x such that
 A1: x in dom (f|U) and
 A2: (f|U).x=y by FUNCT_1:def 5;
@@ -1307,8 +1279,7 @@ proof
   rng(f|IM) c= the carrier of IM
   proof
     let y;
-    assume
-    y in rng (f|IM);
+    assume y in rng (f|IM);
     then consider x such that
 A1: x in dom (f|IM) and
 A2: (f|IM).x=y by FUNCT_1:def 5;
@@ -1343,8 +1314,7 @@ proof
   rng (f|IM) c= the carrier of IM
   proof
     let y;
-    assume
-    y in rng (f|IM);
+    assume y in rng (f|IM);
     then consider x such that
 A1: x in dom (f|IM) and
 A2: (f|IM).x=y by FUNCT_1:def 5;
@@ -1375,8 +1345,7 @@ A7: fid.v + (-L)*v = f.v + (L*v+ (-L)*v) by RLVECT_1:def 6
 end;
 
 theorem Th34:
-  UnionKers f = ker (f|^n) implies ker (f|^n) /\ im (f|^n) = (0).
-  V1
+  UnionKers f = ker (f|^n) implies ker (f|^n) /\ im (f|^n) = (0). V1
 proof
   set KER=ker (f|^n);
   set IM = im (f|^n);
@@ -1385,8 +1354,7 @@ A1: UnionKers f = ker (f|^n);
   the carrier of KER /\ IM c= {0.V1}
   proof
     let x;
-    assume
-    x in the carrier of KER/\IM;
+    assume x in the carrier of KER/\IM;
     then
 A2: x in KER/\IM by STRUCT_0:def 5;
     then x in V1 by VECTSP_4:17;
@@ -1439,8 +1407,7 @@ proof
   the carrier of ker fI c= {0.I}
   proof
     let x;
-    assume
-    x in the carrier of ker fI;
+    assume x in the carrier of ker fI;
     then
 A1: x in ker fI by STRUCT_0:def 5;
     then
@@ -1501,11 +1468,10 @@ proof
   let a,b be Scalar of K;
 A1: now
     let x;
-    assume
-    x in dom ((a*b)*f);
+    assume x in dom ((a*b)*f);
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus ((a*b)*f).x = (a*b)*(f.v) by MATRLIN:def 6
-      .= a*(b*f.v) by VECTSP_1:def 28,def 29
+      .= a*(b*f.v) by VECTSP_1:def 28
       .= a*(b*f).v by MATRLIN:def 6
       .= (a*(b*f)).x by MATRLIN:def 6;
   end;
@@ -1520,8 +1486,7 @@ A1: dom ((L*f)*g)=[#]V1 by FUNCT_2:def 1;
 A2: dom g=[#]V1 by FUNCT_2:def 1;
 A3: now
     let x;
-    assume
-    x in dom (L*(f*g));
+    assume x in dom (L*(f*g));
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus (L*(f*g)).x = L* (f*g).v by MATRLIN:def 6
       .= L*(f.(g.v)) by A2,FUNCT_1:23
@@ -1541,12 +1506,11 @@ A2: dom (f*(L*g))=[#]V1 by FUNCT_2:def 1;
 A3: dom g=[#]V1 by FUNCT_2:def 1;
 A4: now
     let x;
-    assume
-    x in dom (L*(f*g));
+    assume x in dom (L*(f*g));
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus (L*(f*g)).x = L* (f*g).v by MATRLIN:def 6
       .= L*(f.(g.v)) by A3,FUNCT_1:23
-      .= f.(L*(g.v)) by A1,MOD_2:def 3, GRCAT_1:def 13
+      .= f.(L*(g.v)) by A1,MOD_2:def 3
       .= f.((L*g).v) by MATRLIN:def 6
       .= (f*(L*g)).x by A2,FUNCT_1:22;
   end;
@@ -1561,8 +1525,7 @@ A1: dom g=[#]V1 by FUNCT_2:def 1;
 A2: dom ((f1+f2)*g)=[#]V1 by FUNCT_2:def 1;
 A3: now
     let x;
-    assume
-    x in dom g;
+    assume x in dom g;
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus ((f1+f2)*g).x = (f1+f2).(g.v) by A2,FUNCT_1:22
       .= f1.(g.v)+f2.(g.v) by MATRLIN:def 5
@@ -1577,7 +1540,6 @@ end;
 Lm7: for f1,f2,g be Function of V1,V1 st g is additive homogeneous
 holds g*(f1+f2)=(g*f1)+(g*
 f2)
-
 proof
   let f1,f2,g be Function of V1,V1 such that
 A1: g is additive homogeneous;
@@ -1586,12 +1548,11 @@ A3: dom f2 = [#]V1 by FUNCT_2:def 1;
 A4: dom f1 = [#]V1 by FUNCT_2:def 1;
 A5: now
     let x;
-    assume
-    x in dom (g*(f1+f2));
+    assume x in dom (g*(f1+f2));
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus (g*(f1+f2)).x = g.((f1+f2).v) by A2,FUNCT_1:22
       .= g.(f1.v+f2.v) by MATRLIN:def 5
-      .= g.(f1.v)+g.(f2.v) by A1,MOD_2:def 3, GRCAT_1:def 13
+      .= g.(f1.v)+g.(f2.v) by A1, GRCAT_1:def 13
       .= (g*f1).v+g.(f2.v) by A4,FUNCT_1:23
       .= (g*f1).v+(g*f2).v by A3,FUNCT_1:23
       .= ((g*f1)+(g*f2)).x by MATRLIN:def 5;
@@ -1605,8 +1566,7 @@ proof
   let f1,f2,f3 be Function of V1,V1;
 A1: now
     let x;
-    assume
-    x in dom (f1+f2+f3);
+    assume x in dom (f1+f2+f3);
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus (f1+f2+f3).x = (f1+f2).v+f3.v by MATRLIN:def 5
       .= (f1.v+f2.v)+f3.v by MATRLIN:def 5
@@ -1624,8 +1584,7 @@ proof
 A1: dom id V1 = [#]V1 & dom (1_K*id V1)=[#]V1 by FUNCT_2:def 1;
 A2: now
     let x;
-    assume
-    x in [#]V1;
+    assume x in [#]V1;
     then reconsider v=x as Vector of V1;
     (id V1).x=v & 1_K*v=v by FUNCT_1:35,VECTSP_1:def 29;
     hence (id V1).x=(1_K*id V1).x by MATRLIN:def 6;
@@ -1635,10 +1594,8 @@ A3: for n st P[n] holds P[n+1]
     let n such that
 A4: P[n];
 A5: n in NAT by ORDINAL1:def 13;
-
     thus (L*id V1) |^ (n+1) = ((L*id V1) |^ 1)*((power K).(L,n)*id V1) by A4
 ,Th20
-
       .= L*(id V1)*((power K).(L,n)*id V1) by Th19
       .= (power K).(L,n)*(L*(id V1)*(id V1)) by Lm5
       .= (power K).(L,n)*(L*((id V1)*(id V1))) by Lm4
@@ -1658,8 +1615,7 @@ proof
   let a,b be Scalar of K;
 A1: now
     let x;
-    assume
-    x in dom ((a+b)*f);
+    assume x in dom ((a+b)*f);
     then reconsider v=x as Element of V1 by FUNCT_2:def 1;
     thus ((a+b)*f).x = (a+b)*(f.v) by MATRLIN:def 6
       .= a*f.v+b*f.v by VECTSP_1:def 27
@@ -1683,8 +1639,7 @@ A1: for n st 1<=n holds P[n] implies P[n+1]
   proof
     let n such that
     1<=n;
-    assume
-    P[n];
+    assume P[n];
     then consider h be linear-transformation of V1,V1 such that
 A2: (f+g)|^n = f * h + (g|^n) and
 A3: for i holds (f |^i) * h = h * (f|^i);
@@ -1769,8 +1724,7 @@ A5: f.v = L2 * v by A1,A3,Def2;
 A6: fI = f|I;
 A7: now
     let v be Vector of V;
-    assume
-    v in UnionKers f2;
+    assume v in UnionKers f2;
     then consider m such that
 A8: (f2|^m).v =0.V by Th24;
     set v1=v|--(I,U);
@@ -1822,7 +1776,7 @@ A21:  dom (f2|^n) = [#]V by FUNCT_2:def 1;
       hence thesis by A17,A20,VECTSP_4:28;
     end;
 A22: 0.V+0.V = 0.V by RLVECT_1:def 7
-      .= (f2|^m).i1 +(f2|^m).u1 by A10,A8,MOD_2:def 3, GRCAT_1:def 13;
+      .= (f2|^m).i1 +(f2|^m).u1 by A10,A8, GRCAT_1:def 13;
 A23: u1 in U by A9,VECTSP_5:def 6;
     then consider n such that
 A24: (f1|^n).u1 =0.V by Th24;
@@ -1851,15 +1805,13 @@ A32: for n st P[n] holds MIN <= n from NAT_1:sch 5(A30);
 A33: not v is Vector of I;
 A34: u1 <>0.V
     proof
-      assume
-      u1=0.V;
+      assume u1=0.V;
       then v =i1 by A10,RLVECT_1:def 7;
       hence thesis by A29,A33,STRUCT_0:def 5;
     end;
     n<>0
     proof
-      assume
-      n=0;
+      assume n=0;
       then 0.V = (id V).u1 by A24,Th18
         .= u1 by FUNCT_1:35;
       hence thesis by A34;
@@ -1870,8 +1822,7 @@ A36: for i holds (f2 |^ i) * h = h * (f2 |^ i) by Th38,NAT_1:14;
 A37: dom (f21|^n)=[#]V by FUNCT_2:def 1;
     MIN <>0
     proof
-      assume
-      MIN=0;
+      assume MIN=0;
       then 0.V = (id V).u1 by A31,Th18
         .= u1 by FUNCT_1:35;
       hence thesis by A34;
@@ -1888,11 +1839,10 @@ A39: ((f2|^M1) * ((L21*id V) |^ n)).u1 = (f2|^M1).(((L21*id V) |^ n).u1)
       .= (f2|^M1).(((power K).(L21,n) * id V).u1) by Lm9
       .= (f2|^M1).((power K).(L21,n)*((id V).u1)) by MATRLIN:def 6
       .= (f2|^M1).( (power K).(L21,n)*u1) by FUNCT_1:35
-      .= (power K).(L21,n) * ((f2|^M1).u1) by MOD_2:def 3, GRCAT_1:def 13;
+      .= (power K).(L21,n) * ((f2|^M1).u1) by MOD_2:def 3;
 A40: (power K).(L21,n) <>0.K
     proof
-      assume
-      0.K=(power K).(L21,n);
+      assume 0.K=(power K).(L21,n);
       then 0.K = Product (n|->L21) by MATRIXJ1:5;
       then
 A41:  ex k be Element of NAT st k in dom (n|->L21) & (n|->L21) .k=0.K by
@@ -1931,8 +1881,7 @@ A44: f.v=fI.vI by A6,FUNCT_1:72;
 A45: fI is with_eigenvalues by A4,A5,A43,Def1;
   not L1 is eigenvalue of fI
   proof
-    assume
-    L1 is eigenvalue of fI;
+    assume L1 is eigenvalue of fI;
     then consider w be Vector of I such that
 A46: w<>0.I and
 A47: fI.w = L1 * w by A45,Def2;
@@ -1945,8 +1894,7 @@ A47: fI.w = L1 * w by A45,Def2;
   the carrier of UnionKers f2 c= the carrier of I
   proof
     let x;
-    assume
-    x in the carrier of UnionKers f2;
+    assume x in the carrier of UnionKers f2;
     then
 A48: x in UnionKers f2 by STRUCT_0:def 5;
     then x in V by VECTSP_4:17;
@@ -1956,7 +1904,7 @@ A48: x in UnionKers f2 by STRUCT_0:def 5;
   end;
   hence thesis by VECTSP_4:35;
 end;
-
+ 
 :: Main Lemmas for Expansion of Matrices of Nilpotent Linear Transformations
 
 theorem
@@ -2043,8 +1991,7 @@ A19: (U\{u})\/{u+Sum(LLxX)} is linearly-independent by A4;
 A20: u+Sum(LLxX) in (U\{u})\/{u+Sum(LLxX)} by XBOOLE_0:def 3;
 A21: not u+Sum(L) in U\{u}
     proof
-      assume
-      u+Sum(L) in U\{u};
+      assume u+Sum(L) in U\{u};
       then
 A22:  u+Sum(L) in Lin(U\{u}) by VECTSP_7:13;
 A23:  (u+Sum(L))-Sum(L) = u+(Sum(L)-Sum(L)) by RLVECT_1:def 6
@@ -2066,8 +2013,7 @@ A24: card ((U\{u})\/{ u+Sum L}) =C+1 by A21,CARD_2:54;
 A25: u+Sum(LLxX)+Lx*x = u +Sum L by RLVECT_1:def 6;
 A26: not u+Sum(LLxX) in U\{u}
     proof
-      assume
-      u+Sum(LLxX) in U\{u};
+      assume u+Sum(LLxX) in U\{u};
       then
 A27:  u+Sum(LLxX) in Lin(U\{u}) by VECTSP_7:13;
 A28:  (u+Sum(LLxX))-Sum(LLxX) = u+(Sum(LLxX)-Sum(LLxX)) by RLVECT_1:def 6
@@ -2085,8 +2031,7 @@ A29: ((U\{u})\/{u+Sum(LLxX)}) \ {u+Sum(LLxX)} = U\{u} by ZFMISC_1:141;
 A30: P[0]
   proof
     let L be Linear_Combination of U\{u};
-    assume
-    card Carrier(L)=0;
+    assume card Carrier(L)=0;
     then Carrier L = {};
     then u+Sum L = u+0.V by VECTSP_6:45
       .= u by RLVECT_1:def 7;
@@ -2116,8 +2061,7 @@ A4: Sum L = Sum(L (#) F) by VECTSP_6:def 9;
 A5: for x st x in D ex y st y in the carrier of V1 & P[x,y]
   proof
     let x;
-    assume
-    x in D;
+    assume x in D;
     then F.x in rng F by FUNCT_1:def 5;
     then consider y such that
     y in dom f and
@@ -2147,8 +2091,7 @@ A13: p is one-to-one by FUNCT_1:def 8;
 A14: for x st x in the carrier of V1 ex y st y in the carrier of K & Q[x,y]
   proof
     let x;
-    assume
-    x in the carrier of V1;
+    assume x in the carrier of V1;
     then reconsider v1=x as Vector of V1;
     per cases;
     suppose
@@ -2197,8 +2140,7 @@ A24: L.(F.x)<>0.K by VECTSP_6:20;
   RNG c= A
   proof
     let y;
-    assume
-    y in RNG;
+    assume y in RNG;
     then ex x st x in D & p.x=y by A9,FUNCT_1:def 5;
     hence thesis by A7;
   end;
@@ -2220,7 +2162,7 @@ A30: M.(p.i)=L.(F.i) by A18,A28;
 A31: p/.i=p.i & f.(p.i)=F.i by A7,A9,A28,PARTFUN1:def 8;
     thus (f*(M(#)p)).x = f.((M(#)p).i) by A25,A28,FUNCT_1:23
       .= f.(M.(p/.i)*p/.i) by A25,A28,VECTSP_6:def 8
-      .= L.(F/.i) *F/.i by A31,A29,A30,MOD_2:def 3, GRCAT_1:def 13
+      .= L.(F/.i) *F/.i by A31,A29,A30,MOD_2:def 3
       .= (L(#)F).x by A26,A28,VECTSP_6:def 8;
   end;
   take M;
@@ -2242,8 +2184,7 @@ A2: f.:A = B;
   thus f.:(the carrier of Lin A) c= the carrier of Lin B
   proof
     let y;
-    assume
-    y in f.:(the carrier of Lin A);
+    assume y in f.:(the carrier of Lin A);
     then consider x such that
     x in dom f and
 A3: x in the carrier of Lin A and
@@ -2287,8 +2228,8 @@ A19:  L.(F/.N1)*f.(F/.N1) in Lin B by VECTSP_4:29,VECTSP_7:13;
       LF.N1=L.(F/.N1)*(F/.N1) by A12,A18,VECTSP_6:def 8;
       then g.N1=gn+L.(F/.N1)*(F/.N1) by A11,A10,A16;
       then f.(g.(n+1)) = f.(gn)+f.(L.(F/.N1)*(F/.N1))
-       by MOD_2:def 3, GRCAT_1:def 13
-        .= f.(gn)+L.(F/.N1)*f.(F/.N1) by MOD_2:def 3, GRCAT_1:def 13;
+       by  GRCAT_1:def 13
+        .= f.(gn)+L.(F/.N1)*f.(F/.N1) by MOD_2:def 3;
       hence thesis by A14,A15,A19,NAT_1:13,VECTSP_4:28;
     end;
     f.(0.V1)=0.V2 by RANKNULL:9;
@@ -2299,8 +2240,7 @@ A20: P[0] by A9,VECTSP_4:25;
     hence thesis by A4,A11,A8,STRUCT_0:def 5;
   end;
   let x;
-  assume
-  x in the carrier of Lin B;
+  assume x in the carrier of Lin B;
   then x in Lin B by STRUCT_0:def 5;
   then consider L be Linear_Combination of B such that
 A21: x=Sum L by VECTSP_7:12;
@@ -2419,7 +2359,7 @@ A30: F.k in C/\R by A2,XBOOLE_0:def 4;
 A31: L.(F/.k)=Lf.((f*F)/.k) by A14,A28,A29,A27,A30;
     thus (f*(L(#)F)).x = f.((L(#)F).k) by A22,A26,FUNCT_1:23
       .= f.(L.(F/.k)* F/.k) by A22,A26,VECTSP_6:def 8
-      .= Lf.((f*F)/.k) * (f*F)/.k by A29,A27,A31,MOD_2:def 3, GRCAT_1:def 13
+      .= Lf.((f*F)/.k) * (f*F)/.k by A29,A27,A31,MOD_2:def 3
       .= (Lf(#)(f*F)).x by A24,A23,A26,VECTSP_6:def 8;
   end;
   rng (L(#)F) c= [#]V1 by RELAT_1:def 19;
@@ -2481,8 +2421,7 @@ A17: rng Sgm FA =FA by A10,FINSEQ_1:def 13;
 FINSEQ_1:def 4;
     A misses B
     proof
-      assume
-      A meets B;
+      assume A meets B;
       then consider x such that
 A18:  x in A and
 A19:  x in B by XBOOLE_0:3;
@@ -2530,8 +2469,7 @@ A27:  z in dom SB & SB.z=x by A15,FUNCT_1:def 5;
     rng FSB c= C/\B
     proof
       let y;
-      assume
-      y in rng FSB;
+      assume y in rng FSB;
       then consider x such that
 A28:  x in dom FSB and
 A29:  FSB.x=y by FUNCT_1:def 5;
@@ -2566,7 +2504,7 @@ A37:  F.(SA.k) in C/\A by FUNCT_1:def 13;
 A38:  f.(FSA/.k)=0.V2 by A8,TARSKI:def 1;
       thus (f*(L(#)FSA)).k = f.((L(#)FSA).k) by A36,FUNCT_1:22
         .= f.(L.(FSA/.k)*(FSA/.k)) by A36,A35,VECTSP_6:def 8
-        .= L.(FSA/.k) * 0.V2 by A38,MOD_2:def 3, GRCAT_1:def 13
+        .= L.(FSA/.k) * 0.V2 by A38,MOD_2:def 3
         .= 0.V2 by VECTSP_1:59
         .= 0.K*v by VECTSP_1:59;
     end;
@@ -2617,4 +2555,3 @@ A51:  L.v1 = Lf.(f.v1) by A44;
     end;
   end;
 end;
-

@@ -24,10 +24,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="122">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -36,14 +36,14 @@
 </FCluster>
 <FCluster aid="URYSOHN1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="123"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="URYSOHN1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

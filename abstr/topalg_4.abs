@@ -10,15 +10,16 @@ environ
       RLVECT_2, FUNCT_1, RELAT_1, GROUP_1, GROUP_6, FUNCT_2, TARSKI, WELLORD1,
       BORSUK_1, CARD_1, PRE_TOPC, GRAPH_1, BORSUK_6, MCART_1, PARTFUN1,
       ZFMISC_1, ORDINAL2, RCOMP_1, BORSUK_2, ALGSTR_1, ARYTM_3, XXREAL_0,
-      ARYTM_1, TOPALG_1, EQREL_1, WAYBEL20, TOPALG_4;
+      ARYTM_1, TOPALG_1, EQREL_1, WAYBEL20, TOPALG_4, MSSUBFAM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, EQREL_1, MCART_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, BINOP_1, FINSEQ_1, CARD_3,
-      STRUCT_0, ALGSTR_0, PRALG_1, GROUP_1, GROUP_6, GROUP_7, PRE_TOPC,
-      BORSUK_1, BORSUK_2, BORSUK_6, TOPALG_1, XXREAL_0;
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1,
+      FINSEQ_1, CARD_3, STRUCT_0, ALGSTR_0, PRALG_1, GROUP_1, GROUP_6, GROUP_7,
+      PRE_TOPC, BORSUK_1, BORSUK_2, BORSUK_6, TOPALG_1, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, REAL_1, MONOID_0, PRALG_1, PRALG_2, GROUP_7,
-      BORSUK_3, BORSUK_6, TOPALG_1;
+      BORSUK_3, BORSUK_6, TOPALG_1, GROUP_6;
  registrations RELSET_1, XREAL_0, FINSEQ_1, STRUCT_0, TOPS_1, BORSUK_1,
-      MONOID_0, BORSUK_2, GROUP_7, TOPALG_1, ORDINAL1, PRE_TOPC, RELAT_1;
+      MONOID_0, BORSUK_2, GROUP_7, TOPALG_1, ORDINAL1, PRE_TOPC, RELAT_1,
+      FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -43,11 +44,10 @@ theorem :: TOPALG_4:2
   H1, g being Function of G2,H2, x1 being Element of G1, x2 being Element of G2
   holds Gr2Iso(f,g).<*x1,x2*> = <*f.x1,g.x2*>;
 
-definition
-  let G1, G2, H1, H2 be Group, f be Homomorphism of G1,H1, g be Homomorphism
-  of G2,H2;
-  redefine func Gr2Iso(f,g) -> Homomorphism of product <*G1,G2*>, product <*H1
-  ,H2*>;
+registration
+  let G1, G2, H1, H2 be Group, f be Homomorphism of G1,H1,
+  g be Homomorphism of G2,H2;
+  cluster Gr2Iso(f,g) -> multiplicative;
 end;
 
 theorem :: TOPALG_4:3
@@ -61,9 +61,9 @@ G1,H1, g being Function of G2,H2 st f is onto & g is onto holds Gr2Iso(f,g) is
   onto;
 
 theorem :: TOPALG_4:5
-  for G1, G2, H1, H2 being Group, f being Homomorphism of G1,H1, g
-being Homomorphism of G2,H2 st f is bijective & g is bijective holds Gr2Iso(f,g
-  ) is bijective;
+  for G1, G2, H1, H2 being Group, f being Homomorphism of G1,H1,
+  g being Homomorphism of G2,H2 st f is bijective & g is bijective holds
+  Gr2Iso(f,g) is bijective;
 
 theorem :: TOPALG_4:6
   for G1, G2, H1, H2 being Group st G1,H1 are_isomorphic & G2,H2
@@ -73,11 +73,9 @@ begin
 
 reserve S, T, Y for non empty TopSpace,
   s, s1, s2, s3 for Point of S,
-  t, t1,
-  t2, t3 for Point of T,
+  t, t1, t2, t3 for Point of T,
   l1, l2 for Path of [s1,t1],[s2,t2],
-  H for Homotopy of l1
-  ,l2;
+  H for Homotopy of l1 ,l2;
 
 theorem :: TOPALG_4:7
   for f, g being Function st dom f = dom g holds pr1 <:f,g:> = f;
@@ -100,12 +98,10 @@ definition
 end;
 
 theorem :: TOPALG_4:9
-  for f being continuous Function of Y,[:S,T:] holds pr1 f is
-  continuous;
+  for f being continuous Function of Y,[:S,T:] holds pr1 f is continuous;
 
 theorem :: TOPALG_4:10
-  for f being continuous Function of Y,[:S,T:] holds pr2 f is
-  continuous;
+  for f being continuous Function of Y,[:S,T:] holds pr2 f is continuous;
 
 theorem :: TOPALG_4:11
   [s1,t1],[s2,t2] are_connected implies s1,s2 are_connected;
@@ -131,7 +127,7 @@ Path of s1,s2, L2 being Path of t1,t2 holds <:L1,L2:> is Path of [s1,t1],[s2,t2
   ];
 
 definition
-  let S, T be non empty arcwise_connected TopSpace, s1, s2 be Point of S, t1,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2 be Point of S, t1,
   t2 be Point of T, L1 be Path of s1,s2, L2 be Path of t1,t2;
   redefine func <:L1,L2:> -> Path of [s1,t1],[s2,t2];
 end;
@@ -143,12 +139,12 @@ definition
 end;
 
 registration
-  let S, T be non empty arcwise_connected TopSpace;
-  cluster [:S,T:] -> arcwise_connected;
+  let S, T be non empty pathwise_connected TopSpace;
+  cluster [:S,T:] -> pathwise_connected;
 end;
 
 definition
-  let S, T be non empty arcwise_connected TopSpace, s1, s2 be Point of S, t1,
+  let S, T be non empty pathwise_connected TopSpace, s1, s2 be Point of S, t1,
   t2 be Point of T, L be Path of [s1,t1],[s2,t2];
   redefine func pr1 L -> Path of s1,s2;
   redefine func pr2 L -> Path of t1,t2;
@@ -195,7 +191,7 @@ are_connected & [s2,t2],[s3,t3] are_connected & p1 = pr1 l1 & p2 = pr1 l2 holds
   pr1 (l1+l2) = p1 + p2;
 
 theorem :: TOPALG_4:24
-  for S, T being non empty arcwise_connected TopSpace, s1, s2, s3 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2, s3 being
   Point of S, t1, t2, t3 being Point of T, l1 being Path of [s1,t1],[s2,t2], l2
   being Path of [s2,t2],[s3,t3] holds pr1 (l1+l2) = (pr1 l1) + (pr1 l2);
 
@@ -206,7 +202,7 @@ are_connected & [s2,t2],[s3,t3] are_connected & p1 = pr2 l1 & p2 = pr2 l2 holds
   pr2 (l1+l2) = p1 + p2;
 
 theorem :: TOPALG_4:26
-  for S, T being non empty arcwise_connected TopSpace, s1, s2, s3 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2, s3 being
   Point of S, t1, t2, t3 being Point of T, l1 being Path of [s1,t1],[s2,t2], l2
   being Path of [s2,t2],[s3,t3] holds pr2 (l1+l2) = (pr2 l1) + (pr2 l2);
 
@@ -235,18 +231,16 @@ registration
   cluster FGPrIso(s,t) -> one-to-one onto;
 end;
 
-definition
+registration
   let S, T be non empty TopSpace, s be Point of S, t be Point of T;
-  redefine func FGPrIso(s,t) -> Homomorphism of pi_1([:S,T:],[s,t]), product
-  <*pi_1(S,s),pi_1(T,t)*>;
+  cluster  FGPrIso(s,t) -> multiplicative;
 end;
 
 theorem :: TOPALG_4:29
   FGPrIso(s,t) is bijective;
 
 theorem :: TOPALG_4:30
-  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*>
-  are_isomorphic;
+  pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> are_isomorphic;
 
 theorem :: TOPALG_4:31
   for f being Homomorphism of pi_1(S,s1),pi_1(S,s2), g being
@@ -254,7 +248,6 @@ Homomorphism of pi_1(T,t1),pi_1(T,t2) st f is bijective & g is bijective holds
   Gr2Iso(f,g) * FGPrIso(s1,t1) is bijective;
 
 theorem :: TOPALG_4:32
-  for S, T being non empty arcwise_connected TopSpace, s1, s2 being
+  for S, T being non empty pathwise_connected TopSpace, s1, s2 being
 Point of S, t1, t2 being Point of T holds pi_1([:S,T:],[s1,t1]), product <*pi_1
   (S,s2),pi_1(T,t2)*> are_isomorphic;
-

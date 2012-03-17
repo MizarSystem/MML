@@ -1,0 +1,211 @@
+:: Preliminaries to Normed Spaces
+::  by Andrzej Trybulec
+::
+:: Received March 23, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies SUBSET_1, STRUCT_0, NORMSP_1, FUNCT_1, NUMBERS, REAL_1, XBOOLE_0,
+      FUNCT_5, FUNCOP_1, CARD_1, METRIC_1, RELAT_2, SUPINF_2, XCMPLX_0, NAT_1,
+      SEQ_1, RELAT_1, TARSKI, PARTFUN1, NORMSP_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, FUNCT_5, NUMBERS, XCMPLX_0, REAL_1, NAT_1, SEQ_1, STRUCT_0;
+ constructors FUNCT_2, NUMBERS, STRUCT_0, FUNCT_5, FUNCOP_1, XCMPLX_0;
+ registrations STRUCT_0, RELSET_1, XBOOLE_0, REAL_1, NUMBERS, FUNCOP_1,
+      XREAL_0, NAT_1, ORDINAL1, XCMPLX_0, FUNCT_1, FUNCT_2;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, FUNCT_5, FUNCOP_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0;
+ theorems CARD_1, FUNCOP_1, TARSKI, FUNCT_1, RELAT_1, RELSET_1, PARTFUN1,
+      FUNCT_2;
+ schemes FUNCT_1;
+
+begin
+
+definition
+  struct(1-sorted) N-Str (# carrier -> set,
+    normF -> Function of the carrier, REAL #);
+end;
+
+ op1 = 1 --> 0 by CARD_1:87;
+
+ then reconsider f = op1 as Function of 1, REAL by FUNCOP_1:58;
+ reconsider z = 0 as Element of 1 by CARD_1:87,TARSKI:def 1;
+
+registration
+  cluster non empty strict N-Str;
+  existence
+  proof
+    take N-Str(#1,f#);
+    thus thesis;
+  end;
+end;
+
+definition    :: NORMSP_1:def 1, CLVECT_1:def 13
+  let X be non empty N-Str, x be Element of X;
+  func ||.x.|| -> Real equals
+  (the normF of X).x;
+  coherence;
+end;
+
+reserve X for non empty N-Str;
+
+definition
+ let X; let f be (the carrier of X)-valued Function;
+  func ||.f.|| -> Function means
+:Def1:  dom it = dom f &
+  for e being set st e in dom it holds it.e = ||. f/.e .||;
+  existence
+   proof
+     deffunc F(set) = ||. f/.$1 .||;
+     consider g being Function such that
+W1:   dom g = dom f and
+W2:   for x being set st x in dom f holds g.x = F(x) from FUNCT_1:sch 3;
+    take g;
+    thus thesis by W1,W2;
+   end;
+  uniqueness
+   proof let f1,f2 be Function such that
+Z1: dom f1 = dom f and
+Z2: for e being set st e in dom f1 holds f1.e = ||. f/.e .|| and
+Z3: dom f2 = dom f and
+Z4: for e being set st e in dom f2 holds f2.e = ||. f/.e .||;
+    thus dom f1 = dom f2 by Z1,Z3;
+    let e be set;
+    assume
+Z5:   e in dom f1;
+    hence f1.e = ||.f/.e .|| by Z2 .= f2.e by Z1,Z3,Z4,Z5;
+   end;
+end;
+
+registration
+  let X; let f be (the carrier of X)-valued Function;
+  cluster ||.f.|| -> REAL-valued;
+  coherence
+   proof let u be set;
+    assume u in rng ||.f.||;
+     then consider e being set such that
+W1:   e in dom ||.f.|| and
+W2:   u = ||.f.||.e by FUNCT_1:def 5;
+     ||.f.||.e = ||. f/.e .|| by W1,Def1;
+    hence u in REAL by W2;
+   end;
+end;
+
+definition let C be non empty set, X;
+ 
+:: VFUNCT_1:def 5, VFUNCT_2:def 5, NCFCONT1:def 2, def 3, def 4
+:: NFCONT_1:def 2
+ let f be PartFunc of C, the carrier of X;
+ redefine func ||.f.|| -> PartFunc of C, REAL means
+ dom it = dom f &
+  for c being Element of C st c in dom it holds it.c = ||. f/.c .||;
+ coherence
+  proof
+    dom ||.f.|| = dom f by Def1;
+    then
+A:  dom ||.f.|| c= C by RELAT_1:def 18;
+    rng ||.f.|| c= REAL proof let e be set;
+      assume e in rng ||.f.||;
+       then consider u being set such that
+W1:     u in dom ||.f.|| and
+W2:     e = ||.f.||.u by FUNCT_1:def 5;
+        e = ||.f/.u.|| by W1,W2,Def1;
+      hence e in REAL;
+     end;
+   hence ||.f.|| is PartFunc of C, REAL by A,RELSET_1:11;
+  end;
+ compatibility
+  proof let F be PartFunc of C, REAL;
+   thus F = ||.f.|| implies dom F = dom f &
+     for c being Element of C st c in dom F holds F.c = ||. f/.c .|| by Def1;
+   assume that
+Z1: dom F = dom f and
+Z2: for c being Element of C st c in dom F holds F.c = ||. f/.c .||;
+    for e being set st e in dom F holds F.e = ||. f/.e .|| proof let e be set;
+      assume
+Z3:    e in dom F;
+       dom F c= C by RELAT_1:def 18;
+       then reconsider c = e as Element of C by Z3;
+      thus F.e = ||. f/.c .|| by Z3,Z2 .= ||. f/.e .||;
+     end;
+   hence F = ||.f.|| by Z1,Def1;
+  end;
+end;
+
+definition    :: NORMSP_1:def 10, CLVECT_1:def 17
+  let X; let s be sequence of X;
+  redefine func ||.s.|| -> Real_Sequence means
+  for n being Element of NAT holds it.n = ||. s.n .||;
+  coherence
+   proof
+A:   dom ||.s.|| = dom s by Def1
+        .= NAT by PARTFUN1:def 4;
+     rng ||.s.|| c= REAL by RELAT_1:def 19;
+    hence ||.s.|| is Real_Sequence by A,FUNCT_2:4;
+   end;
+  compatibility
+   proof let S be Real_Sequence;
+E1:  dom S = NAT by PARTFUN1:def 4;
+E2:  dom s = NAT by PARTFUN1:def 4;
+    thus S = ||.s.|| implies for n being Element of NAT holds S.n = ||. s.n .||
+     proof assume
+Z:     S = ||.s.||;
+      let n be Element of NAT;
+       ||.s.||.n = ||. s/.n .|| by Def1,E1,Z;
+      hence S.n = ||. s.n .|| by Z;
+     end;
+    assume
+Z:   for n being Element of NAT holds S.n = ||. s.n .||;
+     for e being set st e in dom s holds S.e = ||. s/.e .|| proof let e be set;
+       assume
+Z1:     e in dom s;
+        then reconsider n = e as Element of NAT by PARTFUN1:def 4;
+       thus S.e = ||. s.n .|| by Z .= ||. s/.e .|| by Z1, PARTFUN1:def 8;
+      end;
+    hence S = ||.s.|| by E1,E2,Def1;
+   end;
+end;
+
+definition
+  struct(N-Str, ZeroStr) N-ZeroStr (# carrier -> set,
+    ZeroF -> Element of the carrier,
+    normF -> Function of the carrier, REAL #);
+end;
+
+registration
+  cluster non empty strict N-ZeroStr;
+  existence
+  proof
+    take N-ZeroStr(#1,z,f#);
+    thus thesis;
+  end;
+end;
+
+reserve X for non empty N-ZeroStr, x for Element of X;
+
+definition let X;
+  attr X is discerning means
+    ||.x.|| = 0 implies x = 0.X;
+  attr X is reflexive means
+:Def2: ||.0.X.|| = 0;
+end;
+
+registration
+ cluster reflexive discerning (non empty strict N-ZeroStr);
+ existence
+  proof
+    reconsider S = N-ZeroStr(#1,z,f#)as non empty strict N-ZeroStr;
+   take S;
+    ||.0.S.|| = 0 by CARD_1:87,FUNCOP_1:13;
+   hence S is reflexive by Def2;
+   let x be Element of S;
+   thus thesis by CARD_1:87,TARSKI:def 1;
+  end;
+end;
+
+registration
+  let X be reflexive (non empty N-ZeroStr);
+  cluster ||.0.X.|| -> zero;
+  coherence by Def2;
+end;

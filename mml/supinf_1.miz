@@ -3,19 +3,19 @@
 ::
 :: Received September 27, 1990
 :: Copyright (c) 1990 Association of Mizar Users
-
+ 
 environ
 
- vocabularies SUBSET_1, NUMBERS, XXREAL_0, MEMBERED, XXREAL_2, XREAL_0,
-      ORDINAL1, XBOOLE_0, TARSKI, ORDINAL2, SETFAM_1, SUPINF_1;
+ vocabularies SUBSET_1, NUMBERS, XXREAL_0, MEMBERED, XXREAL_2, ORDINAL1,
+      XBOOLE_0, TARSKI, ORDINAL2, SETFAM_1, SUPINF_1;
  notations XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, NUMBERS, MEMBERED,
-      XXREAL_0, XREAL_0, XXREAL_2;
+      XXREAL_0, XXREAL_2;
  constructors NUMBERS, XXREAL_0, XREAL_0, MEMBERED, SETFAM_1, DOMAIN_1,
       XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XXREAL_0, MEMBERED, SUBSET_1, SETFAM_1, XXREAL_2;
- theorems TARSKI, XREAL_0, XXREAL_0, SETFAM_1, XXREAL_2;
+ theorems TARSKI, XXREAL_0, SETFAM_1, XXREAL_2;
  schemes MEMBERED;
 
 begin
@@ -30,67 +30,17 @@ definition
   redefine func -infty -> R_eal;
   coherence by XXREAL_0:def 1;
 end;
-
-::
-::       Bounded above, bounded below and bounded sets of r_eal numbers
-::
-
-definition
-  canceled 10;
-  let X be ext-real-membered set;
-  redefine attr X is bounded_above means
-  ex UB being UpperBound of X st UB in
-  REAL;
-  compatibility
-  proof
-    thus X is bounded_above implies ex UB being UpperBound of X st UB in REAL
-    proof
-      given r being real number such that
-A1:   r is UpperBound of X;
-      r in REAL by XREAL_0:def 1;
-      hence thesis by A1;
-    end;
-    given UB being UpperBound of X such that
-A2: UB in REAL;
-    reconsider UB as real number by A2;
-    take UB;
-    thus thesis;
-  end;
-end;
-
-definition
-  let X be ext-real-membered set;
-  redefine attr X is bounded_below means
-  ex LB being LowerBound of X st LB in
-  REAL;
-  compatibility
-  proof
-    thus X is bounded_below implies ex UB being LowerBound of X st UB in REAL
-    proof
-      given r being real number such that
-A1:   r is LowerBound of X;
-      r in REAL by XREAL_0:def 1;
-      hence thesis by A1;
-    end;
-    given UB being LowerBound of X such that
-A2: UB in REAL;
-    reconsider UB as real number by A2;
-    take UB;
-    thus thesis;
-  end;
-end;
-
+ 
 ::
 ::       Set of UpperBound and set of LowerBound of X being a subset of ExtREAL
 ::
 
 definition
-  canceled;
+  canceled 13;
   let X be ext-real-membered set;
   func SetMajorant(X) -> ext-real-membered set means
   :Def14:
-  for x being
-  ext-real number holds x in it iff x is UpperBound of X;
+  for x being ext-real number holds x in it iff x is UpperBound of X;
   existence
   proof
     defpred P[ext-real number] means $1 is UpperBound of X;
@@ -132,8 +82,7 @@ proof
   assume
 A1: X c= Y;
   let x be ext-real number;
-  assume
-  x in SetMajorant(Y);
+  assume x in SetMajorant(Y);
   then x is UpperBound of Y by Def14;
   then x is UpperBound of X by A1,XXREAL_2:6;
   hence thesis by Def14;
@@ -143,8 +92,7 @@ definition
   let X be ext-real-membered set;
   func SetMinorant(X) -> ext-real-membered set means
   :Def15:
-  for x being
-  ext-real number holds x in it iff x is LowerBound of X;
+  for x being ext-real number holds x in it iff x is LowerBound of X;
   existence
   proof
     defpred P[ext-real number] means $1 is LowerBound of X;
@@ -186,13 +134,12 @@ proof
   assume
 A1: X c= Y;
   let x be ext-real number;
-  assume
-  x in SetMinorant(Y);
+  assume x in SetMinorant(Y);
   then x is LowerBound of Y by Def15;
   then x is LowerBound of X by A1,XXREAL_2:5;
   hence thesis by Def15;
 end;
-
+ 
 ::
 ::       sup X, inf X least upper bound and greatest lower bound of set X
 ::
@@ -207,8 +154,7 @@ proof
   for y being ext-real number st y in SetMajorant X holds sup X <= y
   proof
     let y be ext-real number;
-    assume
-    y in SetMajorant X;
+    assume y in SetMajorant X;
     then y is UpperBound of X by Def14;
     hence thesis by XXREAL_2:def 3;
   end;
@@ -220,8 +166,7 @@ A2: inf X in SetMinorant X by Def15;
   for y being ext-real number st y in SetMinorant X holds y <= inf X
   proof
     let y be ext-real number;
-    assume
-    y in SetMinorant X;
+    assume y in SetMinorant X;
     then y is LowerBound of X by Def15;
     hence thesis by XXREAL_2:def 4;
   end;
@@ -241,8 +186,7 @@ registration
   proof
     take {[#]X};
     thus {[#]X} is non empty;
-    assume
-    {} in {[#]X};
+    assume {} in {[#]X};
     hence contradiction by TARSKI:def 1;
   end;
 end;
@@ -281,15 +225,13 @@ A3: for a being ext-real number holds a in S2 iff ex A being non empty
     ext-real-membered set st A in F & a = sup A;
     let a be ext-real number;
     hereby
-      assume
-      a in S1;
+      assume a in S1;
       then
       ex A being non empty ext-real-membered set st A in F & a = sup A by
       A2;
       hence a in S2 by A3;
     end;
-    assume
-    a in S2;
+    assume a in S2;
     then
     ex A being non empty ext-real-membered set st A in F & a = sup A by A3;
     hence thesis by A2;
@@ -320,16 +262,14 @@ A1: S = union F;
   for x being ext-real number st x in SUP(F) holds x <= sup S
   proof
     let x be ext-real number;
-    assume
-    x in SUP(F);
+    assume x in SUP(F);
     then consider A being non empty ext-real-membered set such that
 A2: A in F and
 A3: x = sup A by Def19;
     A c= S
     proof
       let a be ext-real number;
-      assume
-      a in A;
+      assume a in A;
       hence thesis by A1,A2,TARSKI:def 4;
     end;
     hence thesis by A3,XXREAL_2:59;
@@ -347,8 +287,7 @@ A1: S = union F;
   for x being ext-real number st x in S holds x <= sup SUP(F)
   proof
     let x be ext-real number;
-    assume
-    x in S;
+    assume x in S;
     then consider Z being set such that
 A2: x in Z and
 A3: Z in F by A1,TARSKI:def 4;
@@ -453,16 +392,14 @@ A1: S = union F;
   for x being ext-real number st x in INF(F) holds inf S <= x
   proof
     let x be ext-real number;
-    assume
-    x in INF(F);
+    assume x in INF(F);
     then consider A being non empty ext-real-membered set such that
 A2: A in F and
 A3: x = inf A by Def20;
     A c= S
     proof
       let a be ext-real number;
-      assume
-      a in A;
+      assume a in A;
       hence thesis by A1,A2,TARSKI:def 4;
     end;
     hence thesis by A3,XXREAL_2:60;
@@ -480,8 +417,7 @@ A1: S = union F;
   for x being ext-real number st x in S holds inf INF(F) <= x
   proof
     let x be ext-real number;
-    assume
-    x in S;
+    assume x in S;
     then consider Z being set such that
 A2: x in Z and
 A3: Z in F by A1,TARSKI:def 4;
@@ -511,4 +447,3 @@ A2: a <= b by XXREAL_2:def 4;
   then b <= a by XXREAL_2:def 4;
   hence thesis by A2,XXREAL_0:1;
 end;
-

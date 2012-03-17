@@ -24,6 +24,12 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="RECDEF_2"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="ORDINAL4"/>
+<ArticleID name="AFINSQ_1"/>
+<ArticleID name="COMPOS_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_2"/>
 <ArticleID name="FINSEQ_2"/>
@@ -38,35 +44,35 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="287"/>
 </Adjective>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="325"/>
 </Func>
 </Adjective>
 <Adjective nr="9"/>
 <Adjective nr="13">
-<Func kind="U" nr="7">
+<Func kind="U" nr="8">
 <Func kind="K" nr="2">
-<Func kind="K" nr="67"/>
-<Func kind="K" nr="234">
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="66"/>
+<Func kind="K" nr="302">
+<Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="325"/>
 </Func>
 </Adjective>
 <Adjective nr="23"/>
 <Adjective nr="57"/>
-<Adjective nr="68">
+<Adjective nr="81">
 <Func kind="K" nr="2">
-<Func kind="K" nr="67"/>
-<Func kind="K" nr="234">
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="66"/>
+<Func kind="K" nr="302">
+<Func kind="K" nr="66"/>
 </Func>
 </Func>
-<Func kind="K" nr="257"/>
+<Func kind="K" nr="325"/>
 </Adjective>
 </Cluster>
 </RCluster>

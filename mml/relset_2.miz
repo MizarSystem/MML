@@ -10,7 +10,7 @@ environ
       FUNCT_1, RELSET_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       RELSET_1, FUNCT_2, EQREL_1;
- constructors SETFAM_1, FUNCT_2, EQREL_1, RELSET_1;
+ constructors SETFAM_1, FUNCT_2, EQREL_1, RELSET_1, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions XBOOLE_0, TARSKI, EQREL_1, SUBSET_1, RELAT_1;
@@ -19,7 +19,6 @@ environ
  schemes CLASSES1, DOMAIN_1;
 
 begin :: Preliminaries
-
 :: Formalisation of first paragraph from the article:
 :: "Relations binaries, fermetures, correspondances de Galois" (1948),
 :: Prof. Jacques Riguet,
@@ -231,7 +230,6 @@ A5: [x,y] in P*R by A2,A3,RELAT_1:def 8;
 end;
 
 begin :: The first order cutting of binary relation of two sets A,B
-
 :: under a subset of the set A
 
 definition
@@ -475,8 +473,7 @@ A7: y in R.:{x} by A1,A3,A5,RELAT_1:def 13;
   assume a in union {Class(R,x) where x is Element of A: x in X};
   then consider Y being set such that
 A8: a in Y and
-A9: Y in {Class(R,x) where x is Element of A: x in X}
-  by TARSKI:def 4;
+A9: Y in {Class(R,x) where x is Element of A: x in X} by TARSKI:def 4;
   consider x being Element of A such that
 A10: Y = Class(R,x) and
 A11: x in X by A9;
@@ -557,8 +554,7 @@ theorem Th19:
 proof
   let A,B be set;
   let R be Subset of [:A,B:];
-  assume
-  X in dom (.:R);
+  assume X in dom (.:R);
   then X in bool A by Def3;
   hence thesis by Def3;
 end;
@@ -626,19 +622,19 @@ A7: x in X by RELAT_1:def 13;
 end;
 
 begin :: The second order cutting of binary relation of two sets A,B
-
 :: under a subset of the set A
 
 reserve X,X1,X2 for Subset of A;
 reserve Y for Subset of B;
 reserve R,R1,R2 for Subset of [:A,B:];
-reserve F for Subset-Family of A;
+
 reserve FR for Subset-Family of [:A,B:];
 
 definition
   let A,B be set, X be Subset of A, R be Subset of [:A,B:];
   func R.:^X equals
   Intersect(.:R.:{_{X}_});
+ 
 :: R[X] - original counterpart. The Second Order Cutting.
   correctness;
 end;
@@ -774,7 +770,7 @@ A2: (.:R).:{_{X1}_} = {};
     .= R.:^X2 by A2;
   hence thesis;
 end;
-
+ 
 :: ksiazka S o R = SR a w MML jest to R*S
 :: (1) S .:(R.:X) = (S o R).:X
 :: w notacji uzytej w MML:  S.:(R.:X) = (R*S).:X
@@ -876,8 +872,7 @@ A11:    Z3 in F by A1;
         for x being set st x in Z3 holds a in Im(R,x)
         proof
           let x be set;
-          assume
-          x in Z3;
+          assume x in Z3;
           then x in union F by A11,TARSKI:def 4;
           hence thesis by A9,Th24;
         end;
@@ -1130,8 +1125,7 @@ A5:   a in P by A2,A3,RELAT_1:def 13;
   assume a in union {R.:X where R is Subset of [:A,B:]: R in FR};
   then consider P being set such that
 A6: a in P and
-A7: P in {R.:X where R is Subset of [:A,B:]: R in FR}
-  by TARSKI:def 4;
+A7: P in {R.:X where R is Subset of [:A,B:]: R in FR} by TARSKI:def 4;
   consider R being Subset of [:A,B:] such that
 A8: P = R.:X and
 A9: R in FR by A7;
@@ -1145,7 +1139,7 @@ A11: x in X by A6,A8,RELAT_1:def 13;
   end;
   hence thesis by RELAT_1:def 13;
 end;
-
+ 
 :: (7.1.2) - RELAT_1:150
 
 theorem
@@ -1159,7 +1153,7 @@ proof
   set G = { F(R) where R is Subset of [:A,B:]: P[R]};
   thus G is Subset-Family of B from DOMAIN_1:sch 8;
 end;
-
+ 
 :: (11.2) theorem TH40.
 
 theorem Th37: :: (11.1)
@@ -1284,16 +1278,14 @@ A13:        Intersect G = meet G by SETFAM_1:def 10;
             for Y being set holds Y in G implies a in Y
             proof
               let Y be set;
-              assume
-              Y in G;
+              assume Y in G;
               then consider R being Subset of [:A,B:] such that
 A14:          Y = R.:^X and
 A15:          R in FR by A1;
               for x being set st x in X holds a in Im(R,x)
               proof
                 let x be set;
-                assume
-                x in X;
+                assume x in X;
                 then a in Im(Intersect FR,x) by A10,Th24;
                 then [x,a] in Intersect FR by Th9;
                 then [x,a] in meet FR by A8,SETFAM_1:def 10;
@@ -1656,17 +1648,15 @@ A9: not thesis;
     hence contradiction by A4,A5;
   end;
 end;
-
+ 
 :: (12) - FUNCT_5:20, RELAT_1:37
 
 theorem Th51:
   proj1 R = (R~).:B & proj2 R = R.:A
 proof
-  thus proj1 R = dom R
-    .= rng (R~) by RELAT_1:37
+  thus proj1 R = dom R .= rng (R~) by RELAT_1:37
     .= (R~).:B by RELSET_1:38;
-  thus proj2 R = rng R
-    .= R.:A by RELSET_1:38;
+  thus proj2 R = rng R .= R.:A by RELSET_1:38;
 end;
 
 theorem :: (13.1)
@@ -1823,8 +1813,7 @@ theorem :: (18)
 proof
   (S.:^(R.:X))` = S`.:(R.:X) by Th49
     .= ((R*(S`)).:X) by RELAT_1:159;
-  then S.:^(R.:X) = ((R*(S`)).:X)`
-    .= (R*S`)`.:^X by Th50;
+  then S.:^(R.:X) = ((R*(S`)).:X)` .= (R*S`)`.:^X by Th50;
   hence thesis;
 end;
 
@@ -1881,7 +1870,7 @@ proof
     .= R*(id B) by FUNCT_2:23;
   hence thesis;
 end;
-
+ 
 :: (24.1) - RELAT_1:40 
 :: (24.2) - RELAT_1:39 
 :: (24.4) - RELAT_1:54 
@@ -1893,4 +1882,3 @@ end;
 :: (27.1) - RELAT_1:52 
 :: (28.1) and (28.2) - RELAT_1:62 
 :: (29.1) and (29.2) - FUNCT_2:23 
-

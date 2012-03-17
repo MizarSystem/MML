@@ -3,7 +3,7 @@
 ::
 :: Received October 9, 2007
 :: Copyright (c) 2007 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SEQ_1, REAL_1, XXREAL_2, CARD_1, XXREAL_0, ORDINAL2,
@@ -14,25 +14,26 @@ environ
       NFCONT_1, CFCONT_1, FCONT_1, RLVECT_1, PARTFUN1, ZFMISC_1, CARD_3,
       SUPINF_2, PBOOLE, TOPS_1;
  notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      PARTFUN1,
-      PRE_TOPC, TOPS_1, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ORDINAL1, CARD_3,
-      NUMBERS, XREAL_0, RINFSUP1, XXREAL_0, VALUED_1, SEQ_1, SEQ_2, SEQ_4,
-      MEASURE6, RLVECT_1, TBSP_1, METRIC_1, PCOMPS_1, NORMSP_1, NORMSP_2,
-      RSSPACE3, LOPBAN_1, NFCONT_1, INTEGRA2, KURATO_2;
+      PARTFUN1, PRE_TOPC, TOPS_1, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ORDINAL1,
+      CARD_3, NUMBERS, XREAL_0, RINFSUP1, XXREAL_0, VALUED_1, SEQ_1, SEQ_2,
+      SEQ_4, XXREAL_2, MEASURE6, RLVECT_1, TBSP_1, METRIC_1, PCOMPS_1,
+      NORMSP_0, NORMSP_1, NORMSP_2, RSSPACE3, LOPBAN_1, NFCONT_1, INTEGRA2,
+      KURATO_2;
  constructors REAL_1, COMPLEX1, SEQ_1, SETFAM_1, TOPS_1, TBSP_1, NFCONT_1,
       FRECHET2, NAT_1, MEASURE6, PARTFUN1, RINFSUP1, INTEGRA2, PROB_1,
       NORMSP_2, RSSPACE3, LOPBAN_1, XXREAL_2, RVSUM_1, SEQ_4, SEQM_3, RELSET_1,
       BINOP_2, SEQ_2, PCOMPS_1;
  registrations NUMBERS, XREAL_0, XBOOLE_0, XXREAL_0, ORDINAL1, RELSET_1,
       STRUCT_0, MEMBERED, SUBSET_1, NAT_1, NORMSP_1, NORMSP_2, FUNCT_2,
-      LOPBAN_1, VALUED_0, VALUED_1, SEQ_2;
+      LOPBAN_1, VALUED_0, VALUED_1, SEQ_2, NORMSP_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RLVECT_1, METRIC_1, PCOMPS_1, NORMSP_2, RSSPACE3,
-      LOPBAN_1, RINFSUP1, CARD_3, XCMPLX_0, NORMSP_1;
+      LOPBAN_1, RINFSUP1, CARD_3, XCMPLX_0, NORMSP_1, NORMSP_0, XXREAL_2;
  theorems TARSKI, XBOOLE_1, SEQ_1, SEQ_2, RLVECT_1, FUNCT_2, XBOOLE_0, XREAL_1,
       XCMPLX_1, NORMSP_1, TBSP_1, PRE_TOPC, TOPS_1, NFCONT_1, XXREAL_0,
       FUNCT_1, NORMSP_2, RINFSUP1, ABSVALUE, XCMPLX_0, SEQM_3, INTEGRA2, SEQ_4,
-      RSSPACE2, LOPBAN_1, LOPBAN_3, PROB_1, RSSPACE3, NAT_1, RELSET_1, GRCAT_1;
+      RSSPACE2, LOPBAN_1, LOPBAN_3, PROB_1, RSSPACE3, NAT_1, RELSET_1, GRCAT_1,
+      NORMSP_0, XXREAL_2;
  schemes FUNCT_2, FRAENKEL;
 
 begin :: Uniform Boundedness Principle
@@ -69,10 +70,11 @@ FUNCT_2:def 2;
     then seq ^\n is bounded by A4,SEQ_2:15;
     then
 A6: Y1 is bounded_below by RINFSUP1:6;
-    (inferior_realsequence (r(#)seq)).n = inf((r(#)seq)^\n) by RINFSUP1:38
-      .= inf(r(#)(seq^\n)) by SEQM_3:44
+    (inferior_realsequence (r(#)seq)).n = lower_bound((r(#)seq)^\n)
+    by RINFSUP1:38
+      .= lower_bound(r(#)(seq^\n)) by SEQM_3:44
       .= lower_bound(r**Y1) by INTEGRA2:17
-      .= r * inf(seq ^\n) by A2,A6,INTEGRA2:15
+      .= r * lower_bound(seq ^\n) by A2,A6,INTEGRA2:15
       .= r * (inferior_realsequence seq).n by RINFSUP1:38;
     hence
     (inferior_realsequence (r (#) seq)).n = (r (#) (inferior_realsequence
@@ -120,11 +122,11 @@ FUNCT_2:def 2;
     then seq ^\n is bounded by A4,SEQ_2:15;
     then
 A6: Y1 is bounded_above by RINFSUP1:5;
-    (superior_realsequence (r (#) seq)).n = sup ((r (#) seq) ^\n) by
+    (superior_realsequence (r (#) seq)).n = upper_bound ((r (#) seq) ^\n) by
 RINFSUP1:39
-      .= sup (r (#) (seq^\n)) by SEQM_3:44
-      .= sup (r ** Y1) by INTEGRA2:17
-      .= r * sup (seq ^\n) by A2,A6,INTEGRA2:13
+      .= upper_bound (r (#) (seq^\n)) by SEQM_3:44
+      .= upper_bound (r ** Y1) by INTEGRA2:17
+      .= r * upper_bound (seq ^\n) by A2,A6,INTEGRA2:13
       .= r * (superior_realsequence seq).n by RINFSUP1:39;
     hence
     (superior_realsequence (r (#) seq)).n = (r (#) (superior_realsequence
@@ -152,15 +154,13 @@ A1:   S1 is Cauchy;
       S2 is Cauchy_sequence_by_Norm
       proof
         let r be Real;
-        assume
-        r > 0;
+        assume r > 0;
         then consider p be Element of NAT such that
 A2:     for n,m be Element of NAT st p<=n & p<=m holds dist(S1.n,S1.m)
         < r by A1,TBSP_1:def 5;
         now
           let n,m be Element of NAT;
-          assume
-          p<=n & p<=m;
+          assume p<=n & p<=m;
           then dist(S1.n,S1.m) < r by A2;
           hence dist(S2.n,S2.m) < r by NORMSP_2:def 1;
         end;
@@ -188,6 +188,7 @@ definition
 end;
 
 theorem Th3:
+ 
 :: Baire category theorem - Banach space version
   for X be RealBanachSpace, Y be SetSequence of X st union rng Y =
 the carrier of X & (for n be Element of NAT holds Y.n is closed) holds ex n0 be
@@ -277,8 +278,7 @@ A3: for x be Point of X ex y be Element of bool REAL st P[x,y]
       take y = {||. f.x .|| where f is bounded LinearOperator of X,Y :f in T};
       now
         let z be set;
-        assume
-        z in y;
+        assume z in y;
         then
         ex f be bounded LinearOperator of X,Y st z=||. f.x .|| & f in T;
         hence z in REAL;
@@ -291,18 +291,18 @@ A3: for x be Point of X ex y be Element of bool REAL st P[x,y]
 A4: for x be Point of X holds Ta.x = {||. f.x .|| where f is bounded
     LinearOperator of X,Y :f in T};
     defpred P[Element of NAT,set] means $2={x where x is Point of X: Ta.x is
-    bounded_above & sup(Ta.x) <= $1};
-A5: for n be Element of NAT ex y be Element of bool the carrier of X st P
-    [n,y]
+    bounded_above & upper_bound(Ta.x) <= $1};
+A5: for n be Element of NAT ex y be Element of bool the carrier of X st P [n,y]
     proof
       let n be Element of NAT;
-      take y = {x where x is Point of X: Ta.x is bounded_above & sup(Ta.x) <=
+      take y = {x where x is Point of X: Ta.x is bounded_above &
+      upper_bound(Ta.x) <=
       n};
       now
         let z be set;
-        assume
-        z in y;
-        then ex x be Point of X st z=x & Ta.x is bounded_above & sup(Ta.x) <=
+        assume z in y;
+        then ex x be Point of X st z=x & Ta.x is bounded_above &
+        upper_bound(Ta.x) <=
         n;
         hence z in the carrier of X;
       end;
@@ -312,13 +312,12 @@ A5: for n be Element of NAT ex y be Element of bool the carrier of X st P
     NAT holds P[n,Xn.n] from FUNCT_2:sch 3(A5);
     then consider Xn be Function of NAT, bool the carrier of X such that
 A6: for n be Element of NAT holds Xn.n = {x where x is Point of X: Ta
-    .x is bounded_above & sup(Ta.x) <= n};
+    .x is bounded_above & upper_bound(Ta.x) <= n};
     reconsider Xn as SetSequence of X;
 A7: the carrier of X c= union rng Xn
     proof
       let x be set;
-      assume
-      x in the carrier of X;
+      assume x in the carrier of X;
       then reconsider x1=x as Point of X;
       consider KTx1 be real number such that
       0 <= KTx1 and
@@ -329,14 +328,21 @@ A9:   Ta.x1 = {||. f.x1 .|| where f is bounded LinearOperator of X,Y :f
 A10:  for p be real number st p in Ta.x1 holds p <= KTx1
       proof
         let p be real number;
-        assume
-        p in Ta.x1;
+        assume p in Ta.x1;
+        then ex f be bounded LinearOperator of X,Y st p=||. f.x1 .|| & f in T
+        by A9;
+        hence thesis by A8;
+      end;
+   KTx1 is UpperBound of Ta.x1
+      proof
+        let p be ext-real number;
+        assume p in Ta.x1;
         then ex f be bounded LinearOperator of X,Y st p=||. f.x1 .|| & f in T
         by A9;
         hence thesis by A8;
       end;
       then
-A11:  Ta.x1 is bounded_above by SEQ_4:def 1;
+A11:  Ta.x1 is bounded_above by XXREAL_2:def 10;
       consider n be Element of NAT such that
 A12:  KTx1 <n by SEQ_4:10;
       consider f be set such that
@@ -346,7 +352,8 @@ A13:  f in T by A2,XBOOLE_0:def 1;
       then upper_bound (Ta.x1) <= KTx1 by A10,SEQ_4:62;
       then upper_bound (Ta.x1) <= n by A12,XXREAL_0:2;
       then
-      x1 in {z1 where z1 is Point of X : Ta.z1 is bounded_above & sup (Ta
+      x1 in {z1 where z1 is Point of X : Ta.z1 is bounded_above &
+      upper_bound (Ta
       .z1) <= n} by A11;
       then x1 in Xn.n by A6;
       then x1 in Union Xn by PROB_1:25;
@@ -378,8 +385,7 @@ A19:    Ta.(lim s1) = {||. f.(lim s1) .|| where f is bounded
 A20:    for y be real number st y in Ta.(lim s1) holds y <= n
         proof
           let y be real number;
-          assume
-          y in Ta.(lim s1);
+          assume y in Ta.(lim s1);
           then consider f be bounded LinearOperator of X,Y such that
 A21:      y=||. f.(lim s1) .|| and
 A22:      f in T by A19;
@@ -392,7 +398,7 @@ A26:      f/*s1 is convergent by A18,A23,NFCONT_1:def 9;
           for k be Element of NAT holds ||. f/*s1 .||.k <= n
           proof
             let k be Element of NAT;
-            ||. f/*s1 .||.k = ||. (f/*s1).k .|| by NORMSP_1:def 10;
+            ||. f/*s1 .||.k = ||. (f/*s1).k .|| by NORMSP_0:def 4;
             then
 A27:        ||. f/*s1 .||.k =||. f/.(s1.k) .|| by A17,A24,FUNCT_2:186
 ,XBOOLE_1:1;
@@ -400,15 +406,16 @@ A27:        ||. f/*s1 .||.k =||. f/.(s1.k) .|| by A17,A24,FUNCT_2:186
             then s1.k in rng s1 by FUNCT_1:12;
             then s1.k in Xn.n by A17;
             then s1.k in {x where x is Point of X : Ta.x is bounded_above &
-            sup (Ta.x) <= n} by A6;
+            upper_bound (Ta.x) <= n} by A6;
             then consider x be Point of X such that
 A28:        x=s1.k and
 A29:        Ta.x is bounded_above and
-A30:        sup(Ta.x) <=n;
+A30:        upper_bound(Ta.x) <=n;
             Ta.x = {||. g.x .|| where g is bounded LinearOperator of X,Y
             :g in T} by A4;
             then ||. f.(s1.k) .|| in Ta.(s1.k) by A22,A28;
-            then ||. f.(s1.k) .|| <= sup (Ta.(s1.k)) by A28,A29,SEQ_4:def 4;
+            then ||. f.(s1.k) .|| <= upper_bound (Ta.(s1.k))
+            by A28,A29,SEQ_4:def 4;
             hence thesis by A27,A28,A30,XXREAL_0:2;
           end;
           then
@@ -417,12 +424,16 @@ A31:      for i being Element of NAT st 0 <= i holds ||. f/*s1 .||.i <=n;
           then lim (||. f/*s1 .||) = ||. f/.(lim s1) .|| by A26,LOPBAN_1:24;
           hence thesis by A21,A26,A31,NORMSP_1:39,RSSPACE2:6;
         end;
+        then for y be ext-real number st y in Ta.(lim s1) holds y <= n;
+        then
+B20:    n is UpperBound of Ta.(lim s1) by XXREAL_2:def 1;
         Ta.(lim s1) is non empty by A14;
         then
-A32:    sup(Ta.(lim s1)) <= n by A20,SEQ_4:62;
-A33:    Xn.n = {x where x is Point of X : Ta.x is bounded_above & sup (Ta
+A32:    upper_bound(Ta.(lim s1)) <= n by A20,SEQ_4:62;
+A33:    Xn.n = {x where x is Point of X : Ta.x is bounded_above &
+upper_bound (Ta
         .x) <= n} by A6;
-        Ta.(lim s1) is bounded_above by A20,SEQ_4:def 1;
+        Ta.(lim s1) is bounded_above by B20,XXREAL_2:def 10;
         hence thesis by A32,A33;
       end;
       hence thesis by NFCONT_1:def 5;
@@ -438,27 +449,28 @@ A36: S0(x0,r) c= Xn.n0 by A16,Th3;
     ||.x0-x0.||=||.0.X.|| by RLVECT_1:16;
     then x0 in S0(x0,r) by A35;
     then x0 in Xn.n0 by A36;
-    then x0 in {x1 where x1 is Point of X : Ta.x1 is bounded_above & sup (Ta.
+    then x0 in {x1 where x1 is Point of X : Ta.x1 is bounded_above &
+    upper_bound (Ta.
     x1) <= n0} by A6;
     then consider xx1 be Point of X such that
 A37: xx1=x0 and
 A38: Ta.xx1 is bounded_above and
-    sup (Ta.xx1) <= n0;
+    upper_bound (Ta.xx1) <= n0;
     Ta.xx1 = {||. g.xx1 .|| where g is bounded LinearOperator of X,Y :g
     in T } by A4;
     then ||. f.x0 .|| in Ta.x0 by A37,A34;
-    then ||. f.x0 .|| <= sup(Ta.x0) by A37,A38,SEQ_4:def 4;
+    then ||. f.x0 .|| <= upper_bound(Ta.x0) by A37,A38,SEQ_4:def 4;
     then
-A39: 0<= sup (Ta.x0) by NORMSP_1:8;
+A39: 0<= upper_bound (Ta.x0) by NORMSP_1:8;
 A40: for x be Point of X st x <> 0.X holds r/(2*||.x.||)*x+x0 in S0(x0,r)
     proof
       let x be Point of X;
       reconsider x1= (||.x.||")*x as Point of X;
-A41:  ||.(r/2)*x1.|| = abs(r/2)*||.x1.|| by NORMSP_1:def 2;
-      assume
-      x <> 0.X;
+A41:  ||.(r/2)*x1.|| = abs(r/2)*||.x1.|| by NORMSP_1:def 2
+;
+      assume x <> 0.X;
       then
-A42:  ||.x.|| <> 0 by NORMSP_1:def 2;
+A42:  ||.x.|| <> 0 by NORMSP_0:def 5;
       ||. r/(2*||.x.||)*x+x0-x0.|| =||.r/(2*||.x.||)*x+(x0+-x0).|| by
 RLVECT_1:def 6;
       then ||. r/(2*||.x.||)*x+x0-x0.|| =||.r/(2*||.x.||)*x+0.X.|| by
@@ -467,7 +479,7 @@ RLVECT_1:16;
 RLVECT_1:def 7;
       then ||. r/(2*||.x.||)*x+x0-x0.|| =||.r/2/(||.x.||)*x.|| by XCMPLX_1:79;
       then
-A43:  ||. r/(2*||.x.||)*x+x0-x0.|| =||.(r/2)*x1.|| by RLVECT_1:def 10,def 11;
+A43:  ||. r/(2*||.x.||)*x+x0-x0.|| =||.(r/2)*x1.|| by RLVECT_1:def 10;
       ||.x.|| >=0 by NORMSP_1:8;
       then
 A44:  abs( ||.x.||") =||.x.||" by ABSVALUE:def 1;
@@ -488,20 +500,20 @@ A46: for f be bounded LinearOperator of X,Y st f in T for x be Point of X
       assume
 A47:  f in T;
       let x be Point of X;
-      assume
-      x in S0(x0,r);
+      assume x in S0(x0,r);
       then x in Xn.n0 by A36;
       then
-      x in {x1 where x1 is Point of X : Ta.x1 is bounded_above & sup (Ta.
+      x in {x1 where x1 is Point of X : Ta.x1 is bounded_above &
+      upper_bound (Ta.
       x1) <= n0} by A6;
       then consider x1 be Point of X such that
 A48:  x1=x and
 A49:  Ta.x1 is bounded_above and
-A50:  sup(Ta.x1) <= n0;
+A50:  upper_bound(Ta.x1) <= n0;
       Ta.x1 = {||. g.x1 .|| where g is bounded LinearOperator of X,Y :g
       in T} by A4;
       then ||. f.x .|| in Ta.x by A47,A48;
-      then ||. f.x .|| <= sup (Ta.x) by A48,A49,SEQ_4:def 4;
+      then ||. f.x .|| <= upper_bound (Ta.x) by A48,A49,SEQ_4:def 4;
       hence thesis by A48,A50,XXREAL_0:2;
     end;
 A51: now
@@ -514,7 +526,8 @@ A53:  for x be Point of X st x <> 0.X holds ||.f.x.|| <= KT*||.x.||
         then x0 in S0(x0,r) by A35;
         then x0 in Xn.n0 by A36;
         then
-A54:    x0 in {x1 where x1 is Point of X : Ta.x1 is bounded_above & sup(
+A54:    x0 in {x1 where x1 is Point of X : Ta.x1 is bounded_above &
+upper_bound(
         Ta.x1) <= n0} by A6;
         set nr3=||.f.x0.||;
         let x be Point of X;
@@ -532,14 +545,14 @@ A57:    ||. f.(r/(2*||.x.||)*x+x0) .|| <= n0 by A46,A40,A52;
         consider x1 be Point of X such that
 A58:    x1=x0 and
 A59:    Ta.x1 is bounded_above and
-        sup (Ta.x1) <= n0 by A54;
+        upper_bound (Ta.x1) <= n0 by A54;
         Ta.x1 = {||. g.x1 .|| where g is bounded LinearOperator of X,Y :
         g in T } by A4;
         then ||. f.x0 .|| in Ta.x0 by A52,A58;
-        then ||. f.x0 .|| <= sup (Ta.x0) by A58,A59,SEQ_4:def 4;
+        then ||. f.x0 .|| <= upper_bound (Ta.x0) by A58,A59,SEQ_4:def 4;
         then
 A60:    nrp1*||.f.x.|| - M <= nrp1*||.f.x.|| - nr3 by XREAL_1:12;
-        ||.x.|| <> 0 by A56,NORMSP_1:def 2;
+        ||.x.|| <> 0 by A56,NORMSP_0:def 5;
         then
 A61:    ||.x.|| >0 by NORMSP_1:8;
         ||. f.(r/(2*||.x.||)*x).|| =||.(r/(2*||.x.||))*f.x.|| by LOPBAN_1:def 6
@@ -579,8 +592,7 @@ A65:      f.x =0.Y by RLVECT_1:23;
       ||.x1.|| <= 1 } holds k <= KT
       proof
         let k be real number;
-        assume
-        k in {||.f.x1.|| where x1 is Point of X : ||.x1.|| <= 1};
+        assume k in {||.f.x1.|| where x1 is Point of X : ||.x1.|| <= 1};
         then consider x be Point of X such that
 A66:    k=||.f.x.|| & ||.x.|| <= 1;
         k <= KT*||.x.|| & KT*||.x.|| <=KT by A35,A39,A63,A66,XREAL_1:155;
@@ -592,11 +604,10 @@ A66:    k=||.f.x.|| & ||.x.|| <= 1;
     proof
       let f be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
       reconsider f1=f as bounded LinearOperator of X,Y by LOPBAN_1:def 10;
-      assume
-      f in T;
+      assume f in T;
       then
 A67:  for k be real number st k in PreNorms(f1) holds k <= KT by A51;
-      ||. f .|| = sup PreNorms(f1) by LOPBAN_1:36;
+      ||. f .|| = upper_bound PreNorms(f1) by LOPBAN_1:36;
       hence thesis by A67,SEQ_4:62;
     end;
     hence thesis by A35,A39;
@@ -613,8 +624,7 @@ definition
   R_NormSpace_of_BoundedLinearOperators(X,Y), x be Point of X;
   func H # x -> sequence of Y means
   :Def2:
-  for n be Element of NAT holds it.n
-  = (H.n).x;
+  for n be Element of NAT holds it.n = (H.n).x;
   existence
   proof
     deffunc U(Element of NAT) = (H.$1).x;
@@ -649,8 +659,7 @@ proof
   set T=rng vseq;
   set RNS=R_NormSpace_of_BoundedLinearOperators(X,Y);
   assume
-A1: for x be Point of X holds vseq#x is convergent & tseq.x = lim(vseq#x
-  );
+A1: for x be Point of X holds vseq#x is convergent & tseq.x = lim(vseq#x );
 A2: for x,y be Point of X holds tseq.(x+y)= tseq.x + tseq.y
   proof
     let x,y be Point of X;
@@ -681,18 +690,17 @@ A8: for n be Element of NAT holds ||. vseq#x .||.n< K by SEQ_2:def 3;
 A9: for f be Point of RNS st f in T holds ||. f.x .|| <= K
     proof
       let f be Point of RNS;
-      assume
-      f in T;
+      assume f in T;
       then consider n be set such that
 A10:  n in NAT and
 A11:  f=vseq.n by FUNCT_2:17;
       reconsider n as Element of NAT by A10;
       (vseq.n).x = (vseq#x).n by Def2;
-      then ||. f.x .|| = ||. vseq#x .||.n by A11,NORMSP_1:def 10;
+      then ||. f.x .|| = ||. vseq#x .||.n by A11,NORMSP_0:def 4;
       hence thesis by A8;
     end;
     ||. vseq#x .||.0< K by A8;
-    then ||. (vseq#x).0 .|| < K by NORMSP_1:def 10;
+    then ||. (vseq#x).0 .|| < K by NORMSP_0:def 4;
     then 0 <= K by NORMSP_1:8;
     hence thesis by A9;
   end;
@@ -708,22 +716,20 @@ A14: L + 0 < 1+ L by XREAL_1:10;
   proof
     let n be Element of NAT;
     ||.vseq.n.|| <= L by A13,FUNCT_2:6;
-    then ||.vseq.||.n <= L by NORMSP_1:def 10;
+    then ||.vseq.||.n <= L by NORMSP_0:def 4;
     then
 A15: ||.vseq.||.n <(1+L) by A14,XXREAL_0:2;
     0<=||.vseq.n.|| by NORMSP_1:8;
-    then 0<=||.vseq.||.n by NORMSP_1:def 10;
+    then 0<=||.vseq.||.n by NORMSP_0:def 4;
     hence thesis by A15,ABSVALUE:def 1;
   end;
   then
 A16: ||.vseq.|| is bounded by A12,SEQ_2:15;
-A17: for x be Point of X holds ||.tseq.x.|| <=( lim_inf ||.vseq.|| ) * ||.x
-  .||
+A17: for x be Point of X holds ||.tseq.x.|| <=( lim_inf ||.vseq.|| ) * ||.x .||
   proof
     let x be Point of X;
 A18: ||.x.|| (#) ||.vseq .|| is bounded by A16,SEQM_3:70;
-A19: for n be Element of NAT holds ||.(vseq#x).n.|| <= ||.vseq.n.|| * ||.x
-    .||
+A19: for n be Element of NAT holds ||.(vseq#x).n.|| <= ||.vseq.n.|| * ||.x .||
     proof
       let n be Element of NAT;
       (vseq.n).x = (vseq#x).n & vseq.n is bounded LinearOperator of X,Y
@@ -734,9 +740,9 @@ A20: for n be Element of NAT holds ||. vseq#x .||.n <= (||.x.|| (#) ||.
     vseq .||).n
     proof
       let n be Element of NAT;
-A21:  ||.vseq.n.|| = ||.vseq.||.n by NORMSP_1:def 10;
+A21:  ||.vseq.n.|| = ||.vseq.||.n by NORMSP_0:def 4;
       ||. vseq#x .||.n = ||.(vseq#x).n .|| & ||.(vseq#x).n .|| <= ||.vseq
-      .n.|| * ||.x.|| by A19,NORMSP_1:def 10;
+      .n.|| * ||.x.|| by A19,NORMSP_0:def 4;
       hence thesis by A21,SEQ_1:13;
     end;
 A22: lim_inf (||.x.|| (#) ||.vseq .||) = ( lim_inf ||.vseq.|| ) * ||.x.||
@@ -757,7 +763,7 @@ A25: 0<s;
     for k be Element of NAT holds 0-s < ||.vseq.||.(0+k)
     proof
       let k be Element of NAT;
-      ||.vseq.k.||=||.vseq.||.k by NORMSP_1:def 10;
+      ||.vseq.k.||=||.vseq.||.k by NORMSP_0:def 4;
       then 0<=||.vseq.||.k by NORMSP_1:8;
       hence thesis by A25;
     end;
@@ -790,8 +796,7 @@ GRCAT_1:def 13,LOPBAN_1:def 6,def 9;
     ||.x1.|| <= 1 } holds k <= ( lim_inf ||.vseq.|| )
     proof
       let k be real number;
-      assume
-      k in {||.tseq.x1.|| where x1 is Point of X : ||.x1.|| <= 1 };
+      assume k in {||.tseq.x1.|| where x1 is Point of X : ||.x1.|| <= 1 };
       then consider x be Point of X such that
 A30:  k=||.tseq.x.|| & ||.x.|| <= 1;
       k <= (lim_inf ||.vseq.||) * ||.x.|| & (lim_inf ||.vseq.||) * ||.x
@@ -799,10 +804,9 @@ A30:  k=||.tseq.x.|| & ||.x.|| <= 1;
       hence thesis by XXREAL_0:2;
     end;
     then
-A31: sup PreNorms(tseq1) <=lim_inf ||.vseq.|| by SEQ_4:62;
+A31: upper_bound PreNorms(tseq1) <=lim_inf ||.vseq.|| by SEQ_4:62;
     let ttseq be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
-    assume
-    ttseq=tseq;
+    assume ttseq=tseq;
     hence thesis by A31,LOPBAN_1:36;
   end;
   hence thesis by A2,A27,A17,A26,GRCAT_1:def 13,LOPBAN_1:def 6,def 9;
@@ -845,8 +849,7 @@ A5: for n be Element of NAT holds ||.(vseq#x).n.|| <=K by A3;
     take K;
     now
       let f be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
-      assume
-      f in T;
+      assume f in T;
       then consider n be set such that
 A6:   n in NAT and
 A7:   f=vseq.n by FUNCT_2:17;
@@ -868,8 +871,7 @@ A11: for f be bounded LinearOperator of X,Y st f in T holds for x,y be Point
     let f be bounded LinearOperator of X,Y;
     reconsider f1=f as Point of R_NormSpace_of_BoundedLinearOperators(X,Y) by
 LOPBAN_1:def 10;
-    assume
-    f in T;
+    assume f in T;
     then ||.f1.|| <= L by A9;
     then
 A12: ||.f1.|| < M by A10,XXREAL_0:2;
@@ -896,8 +898,7 @@ A15:  0<TK1/3 by A14,XREAL_1:224;
       V c= the carrier of X
       proof
         let s be set;
-        assume
-        s in V;
+        assume s in V;
         then ex z be Point of X st s=z & ||.x-z.|| <TK1/(3*M);
         hence thesis;
       end;
@@ -935,8 +936,7 @@ LOPBAN_1:def 10;
 A21:    ||. (vseq#x).n - (vseq#y).m .|| + ||. (vseq#y).m - (vseq#x ).m
 .|| <= ||. (vseq#x).n - (vseq#y).n .|| + ||. (vseq#y).n - (vseq#y).m .|| + ||.
         (vseq#y).m - (vseq#x).m .|| by XREAL_1:8;
-        assume
-        n >= n0 & m >= n0;
+        assume n >= n0 & m >= n0;
         then ||. (vseq#y).n - (vseq#y).m .|| < TK1/3 by A20;
         then
         ||. (vseq#x).n - (vseq#y).n .|| + ||. (vseq#y).n - (vseq#y).m .||
@@ -1007,8 +1007,7 @@ A1: X0 is dense;
 A2: for x be Point of X st x in X0 holds vseq#x is convergent;
   consider tseq be Function of X,Y such that
 A3: for x be Point of X holds tseq.x=F(x) from FUNCT_2:sch 4;
-  assume
-  for x be Point of X ex K be real number st 0<=K & for n be Element
+  assume for x be Point of X ex K be real number st 0<=K & for n be Element
   of NAT holds ||.(vseq#x).n.|| <= K;
   then
 A4: for x be Point of X holds vseq#x is convergent by A1,A2,Th7;
@@ -1018,4 +1017,3 @@ LOPBAN_1:def 10;
   take tseq;
   thus thesis by A4,A3,Th6;
 end;
-

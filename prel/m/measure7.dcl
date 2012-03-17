@@ -16,21 +16,21 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="FINSUB_1"/>
+<ArticleID name="MEASURE2"/>
+<ArticleID name="MEASURE4"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
-<ArticleID name="MEASURE2"/>
-<ArticleID name="MEASURE4"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="MEASURE7"/>
 </Signature>
 <FCluster aid="MEASURE7" nr="1">
@@ -38,11 +38,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="21">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

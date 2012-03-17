@@ -28,7 +28,7 @@ environ
 
 begin :: Basic properties of the membership function
 
-reserve a,c,c1,c2,x,y,z,z1,z2 for set;
+reserve c,c1,c2,x,y,z,z1,z2 for set;
 reserve C1,C2,C3 for non empty set;
 
 registration
@@ -47,28 +47,27 @@ end;
 
 theorem Th1:
   for F be Membership_Func of C1 holds rng F is bounded & (for x st
-x in dom F holds F.x <= sup rng F) & for x st x in dom F holds F.x >= inf rng F
+x in dom F holds F.x <= upper_bound rng F) & for x st x in dom F
+holds F.x >= lower_bound rng F
 proof
   let F be Membership_Func of C1;
 A1: [.0,1.] is closed-interval Subset of REAL by INTEGRA1:def 1;
 A2: rng F c= [.0,1.] by RELAT_1:def 19;
   then
 A3: rng F is bounded by A1,XXREAL_2:45;
-A4: for x st x in dom F holds F.x >= inf rng F
+A4: for x st x in dom F holds F.x >= lower_bound rng F
   proof
     let x;
-    assume
-    x in dom F;
+    assume x in dom F;
     then
 A5: F.x in rng F by FUNCT_1:def 5;
     rng F is bounded_below by A3,XXREAL_2:def 11;
     hence thesis by A5,SEQ_4:def 5;
   end;
-  for x st x in dom F holds F.x <= sup rng F
+  for x st x in dom F holds F.x <= upper_bound rng F
   proof
     let x;
-    assume
-    x in dom F;
+    assume x in dom F;
     then
 A6: F.x in rng F by FUNCT_1:def 5;
     rng F is bounded_above by A3,XXREAL_2:def 11;
@@ -79,7 +78,7 @@ end;
 
 theorem
   for F,G be Membership_Func of C1 holds (for x st x in C1 holds F.x <=
-  G.x) implies sup rng F <= sup rng G
+  G.x) implies upper_bound rng F <= upper_bound rng G
 proof
   let F,G be Membership_Func of C1;
   rng F is bounded by Th1;
@@ -87,39 +86,38 @@ proof
 A1: rng F is bounded_above by XXREAL_2:def 11;
   assume
 A2: for c st c in C1 holds F.c <= G.c;
-A3: for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.y
+A3: for s being real number st 0<s ex y st y in dom F &
+upper_bound rng F - s <= G.y
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A4: r in rng F and
-A5: sup rng F-s<r by A1,SEQ_4:def 4;
+A5: upper_bound rng F-s<r by A1,SEQ_4:def 4;
     consider y being set such that
 A6: y in dom F and
 A7: r = F.y by A4,FUNCT_1:def 5;
     r <= G.y by A2,A6,A7;
     hence thesis by A5,A6,XXREAL_0:2;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng G
+  for s being real number st 0<s
+  holds upper_bound rng F - s <= upper_bound rng G
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A8: y in dom F and
-A9: sup rng F - s <= G.y by A3;
+A9: upper_bound rng F - s <= G.y by A3;
     y in C1 by A8;
     then y in dom G by FUNCT_2:def 1;
-    then G.y <= sup rng G by Th1;
+    then G.y <= upper_bound rng G by Th1;
     hence thesis by A9,XXREAL_0:2;
   end;
   hence thesis by XREAL_1:59;
 end;
 
 theorem Th3:
-  for f be RMembership_Func of C1,C2, c be set holds 0 <= f.c & f.c
-  <= 1
+  for f be RMembership_Func of C1,C2, c be set holds 0 <= f.c & f.c <= 1
 proof
   let f being RMembership_Func of C1,C2;
   let c be set;
@@ -155,7 +153,7 @@ theorem
   <= 1 by Th3;
 
 begin
-
+ 
 :: Definition and properties of converse fuzzy relation
 
 notation
@@ -169,8 +167,7 @@ definition
   let h be RMembership_Func of C2,C1;
   redefine func converse h -> RMembership_Func of C1,C2 means
   :Def1:
-  for x,y
-  st [x,y] in [:C1,C2:] holds it.(x,y) = h.(y,x);
+  for x,y st [x,y] in [:C1,C2:] holds it.(x,y) = h.(y,x);
   coherence
   proof
     set IT = converse h;
@@ -196,8 +193,7 @@ A4: dom h = [:C2,C1:] by FUNCT_2:def 1;
       assume
 A5:   IT = ~h;
       let x,y;
-      assume
-      [x,y] in [:C1,C2:];
+      assume [x,y] in [:C1,C2:];
       then [y,x] in dom h by A4,ZFMISC_1:107;
       hence thesis by A5,FUNCT_4:def 2;
     end;
@@ -207,8 +203,7 @@ A7: for x holds x in dom IT iff ex y,z st x = [z,y] & [y,z] in dom h
       let x;
       thus x in dom IT implies ex y,z st x = [z,y] & [y,z] in dom h
       proof
-        assume
-        x in dom IT;
+        assume x in dom IT;
         then consider z,y such that
 A8:     z in C1 and
 A9:     y in C2 and
@@ -218,8 +213,7 @@ A10:    x = [z,y] by ZFMISC_1:def 2;
       end;
       thus thesis by A6,ZFMISC_1:107;
     end;
-    assume
-    for x,y st [x,y] in [:C1,C2:] holds IT.(x,y) = h.(y,x);
+    assume for x,y st [x,y] in [:C1,C2:] holds IT.(x,y) = h.(y,x);
     then for y,z st [y,z] in dom h holds IT.(z,y) = h.(y,z) by ZFMISC_1:
     107;
     hence thesis by A7,FUNCT_4:def 2;
@@ -235,8 +229,7 @@ A2: for c being Element of [:C1,C2:] st c in [:C1,C2:] holds (converse
   converse f).c = f.c
   proof
     let c being Element of [:C1,C2:];
-    assume
-    c in [:C1,C2:];
+    assume c in [:C1,C2:];
     consider x,y being set such that
 A3: x in C1 and
 A4: y in C2 and
@@ -260,8 +253,7 @@ A2: for c being Element of [:C2,C1:] st c in [:C2,C1:] holds (1_minus(
   converse f)).c = (converse(1_minus f)).c
   proof
     let c being Element of [:C2,C1:];
-    assume
-    c in [:C2,C1:];
+    assume c in [:C2,C1:];
     consider y,x being set such that
 A3: y in C2 and
 A4: x in C1 and
@@ -287,8 +279,7 @@ A2: for c being Element of [:C2,C1:] st c in [:C2,C1:] holds (converse max(f
   ,g)).c = max(converse f,converse g).c
   proof
     let c being Element of [:C2,C1:];
-    assume
-    c in [:C2,C1:];
+    assume c in [:C2,C1:];
     consider y,x such that
 A3: y in C2 and
 A4: x in C1 and
@@ -315,8 +306,7 @@ A2: for c being Element of [:C2,C1:] st c in [:C2,C1:] holds (converse min(f
   ,g)).c = min(converse f,converse g).c
   proof
     let c being Element of [:C2,C1:];
-    assume
-    c in [:C2,C1:];
+    assume c in [:C2,C1:];
     consider y,x such that
 A3: y in C2 and
 A4: x in C1 and
@@ -395,7 +385,7 @@ proof
 end;
 
 begin
-
+ 
 :: Definition and properties of the composition
 
 definition
@@ -408,8 +398,7 @@ A1: x in C1 and
 A2: z in C3;
   func min(h,g,x,z) -> Membership_Func of C2 means
   :Def2:
-  for y being Element
-  of C2 holds it.y = min(h. [x,y],g. [y,z]);
+  for y being Element of C2 holds it.y = min(h. [x,y],g. [y,z]);
   existence
   proof
     defpred P[set,set] means $2 = min(h. [x,$1],g. [$1,z]);
@@ -424,16 +413,14 @@ A6: dom IT = C2 & rng IT c= [.0,1.]
       proof
         let y being set;
 A7:     ex c st c = min(h. [x,y],g. [y,z]);
-        assume
-        y in C2;
+        assume y in C2;
         hence thesis by A5,A7;
       end;
       hence dom IT = C2 by XBOOLE_0:def 10;
       reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
       let c being set;
 A8:   rng h c= [.0,1.] by RELAT_1:def 19;
-      assume
-      c in rng IT;
+      assume c in rng IT;
       then consider y being Element of C2 such that
 A9:   y in dom IT and
 A10:  c = IT.y by PARTFUN1:26;
@@ -446,10 +433,10 @@ A12:  h. [x,y] in rng h by FUNCT_1:def 5;
       then [y,z] in dom g by FUNCT_2:def 1;
       then
 A13:  g. [y,z] in rng g by FUNCT_1:def 5;
-A14:  A = [. inf A, sup A .] by INTEGRA1:5;
+A14:  A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
       then
-A15:  0=inf A by INTEGRA1:6;
-A16:  1=sup A by A14,INTEGRA1:6;
+A15:  0=lower_bound A by INTEGRA1:6;
+A16:  1=upper_bound A by A14,INTEGRA1:6;
       then h. [x,y] <= 1 by A8,A12,INTEGRA2:1;
       then min(h. [x,y],g. [y,z]) <= 1 by A11,XXREAL_0:2;
       then
@@ -493,7 +480,7 @@ definition
   func h(#)g -> RMembership_Func of C1,C3 means
   :Def3:
   for x,z st [x,z] in [:
-  C1,C3:] holds it.(x,z) = sup(rng(min(h,g,x,z)));
+  C1,C3:] holds it.(x,z) = upper_bound(rng(min(h,g,x,z)));
   existence
   proof
     defpred P[set,set,set] means $3 = upper_bound(rng(min(h,g,$1,$2)));
@@ -506,7 +493,7 @@ A3: (for x,z holds [x,z] in dom IT iff x in C1 & z in C3 & ex c st P[x
 A4: [:C1,C3:] c= dom IT
     proof
       let x,z being set;
-A5:   ex c st c = sup(rng(min(h,g,x,z)));
+A5:   ex c st c = upper_bound(rng(min(h,g,x,z)));
       assume
 A6:   [x,z] in [:C1,C3:];
       then
@@ -521,34 +508,34 @@ A9: dom IT = [:C1,C3:] by A4,XBOOLE_0:def 10;
     proof
       reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
       let c being set;
-      assume
-      c in rng IT;
+      assume c in rng IT;
       then consider a being Element of [:C1,C3:] such that
       a in dom IT and
 A10:  c = IT.a by PARTFUN1:26;
-A11:  A = [. inf A, sup A .] by INTEGRA1:5;
+A11:  A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
       then
-A12:  0=inf A by INTEGRA1:6;
-A13:  0 <= sup(rng(min(h,g,x,z))) & sup(rng(min(h,g,x,z))) <= 1
+A12:  0=lower_bound A by INTEGRA1:6;
+A13:  0 <= upper_bound(rng(min(h,g,x,z))) & upper_bound(rng(min(h,g,x,z))) <= 1
       proof
 A14:    rng(min(h,g,x,z)) c= A by RELAT_1:def 19;
         A is bounded_below by INTEGRA1:3;
         then
-A15:    inf A <= inf(rng(min (h,g,x,z))) by A14,SEQ_4:64;
+A15:    lower_bound A <= lower_bound(rng(min (h,g,x,z))) by A14,SEQ_4:64;
         A is bounded_above by INTEGRA1:3;
         then
-A16:    sup(rng(min(h,g,x,z))) <= sup A by A14,SEQ_4:65;
-        inf(rng(min(h,g,x,z))) <= sup(rng(min(h,g,x,z))) by Th1,SEQ_4:24;
+A16:    upper_bound(rng(min(h,g,x,z))) <= upper_bound A by A14,SEQ_4:65;
+        lower_bound(rng(min(h,g,x,z))) <= upper_bound(rng(min(h,g,x,z)))
+        by Th1,SEQ_4:24;
         hence thesis by A11,A16,A15,INTEGRA1:6;
       end;
       consider x,z being set such that
       x in C1 and
       z in C3 and
 A17:  a = [x,z] by ZFMISC_1:def 2;
-A18:  IT.(x,z) = sup(rng(min(h,g,x,z))) by A3,A9,A17;
+A18:  IT.(x,z) = upper_bound(rng(min(h,g,x,z))) by A3,A9,A17;
       then
 A19:  IT.a <= 1 by A13,A17;
-A20:  1=sup A by A11,INTEGRA1:6;
+A20:  1=upper_bound A by A11,INTEGRA1:6;
       0 <= IT.a by A13,A17,A18;
       hence thesis by A10,A12,A20,A19,INTEGRA2:1;
     end;
@@ -561,9 +548,9 @@ A20:  1=sup A by A11,INTEGRA1:6;
   proof
     let F,G be RMembership_Func of C1,C3;
     assume that
-A21: for x,z st [x,z] in [:C1,C3:] holds F.(x,z) = sup(rng(min(h,g,x,z
+A21: for x,z st [x,z] in [:C1,C3:] holds F.(x,z) = upper_bound(rng(min(h,g,x,z
     ))) and
-A22: for x,z st [x,z] in [:C1,C3:] holds G.(x,z) = sup(rng(min(h,g,x,z
+A22: for x,z st [x,z] in [:C1,C3:] holds G.(x,z) = upper_bound(rng(min(h,g,x,z
     )));
 A23: for c being Element of [:C1,C3:] st c in [:C1,C3:] holds F.c = G.c
     proof
@@ -572,8 +559,8 @@ A23: for c being Element of [:C1,C3:] st c in [:C1,C3:] holds F.c = G.c
       x in C1 and
       z in C3 and
 A24:  c = [x,z] by ZFMISC_1:def 2;
-A25:  G.(x,z) = sup(rng(min(h,g,x,z))) by A22,A24;
-      F.(x,z) = sup(rng(min(h,g,x,z))) by A21,A24;
+A25:  G.(x,z) = upper_bound(rng(min(h,g,x,z))) by A22,A24;
+      F.(x,z) = upper_bound(rng(min(h,g,x,z))) by A21,A24;
       hence thesis by A24,A25;
     end;
 A26: dom G = [:C1,C3:] by FUNCT_2:def 1;
@@ -583,30 +570,23 @@ A26: dom G = [:C1,C3:] by FUNCT_2:def 1;
 end;
 
 Lm1: for f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3, x,z
-be set st x in C1 & z in C3 holds sup(rng(min(f,max(g,h),x,z))) = max(sup rng(
-min(f,g,x,z)),sup rng(min(f,h,x,z)))
-
+be set st x in C1 & z in C3
+ holds upper_bound(rng(min(f,max(g,h),x,z))) = max(upper_bound rng(
+min(f,g,x,z)),upper_bound rng(min(f,h,x,z)))
 proof
-
   let f being RMembership_Func of C1,C2, g,h being RMembership_Func of C2,C3,x
   ,z being set;
-
   assume that
 A1: x in C1 and
 A2: z in C3;
-
 A3: for y be Element of C2 st y in C2 holds max(min(f,g,x,z),min(f,h,x,z)).y
   =min(f,max(g,h),x,z).y
-
   proof
     let y being Element of C2;
-    assume
-    y in C2;
+    assume y in C2;
 A4: [y,z] in [:C2,C3:] by A2,ZFMISC_1:106;
-
     max(min(f,g,x,z),min(f,h,x,z)).y =max(min(f,g,x,z).y,min(f,h,x,z).y)
     by FUZZY_1:def 5
-
       .=max(min(f,g,x,z).y,min(f. [x,y],h. [y,z])) by A1,A2,Def2
       .=max( min(f. [x,y],g. [y,z]),min(f. [x,y],h. [y,z]) ) by A1,A2,Def2
       .=min(f. [x,y],max(g. [y,z],h. [y,z])) by XXREAL_0:38
@@ -619,36 +599,30 @@ A5: dom min(f,max(g,h),x,z) = C2 by FUNCT_2:def 1;
   rng max(F,G) is bounded by Th1;
   then
 A6: rng max(F,G) is bounded_above by XXREAL_2:def 11;
-
-A7: for s being real number st 0<s ex y st y in dom max(F,G) & sup rng max(
+A7: for s being real number st 0<s
+ ex y st y in dom max(F,G) & upper_bound rng max(
   F,G) - s < max(F,G).y
-
   proof
     let s being real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then consider r being real number such that
 A8: r in rng max(F,G) and
-A9: sup rng max(F,G) - s < r by A6,SEQ_4:def 4;
-
+A9: upper_bound rng max(F,G) - s < r by A6,SEQ_4:def 4;
     ex y being set st y in dom max(F,G) & r = max(F,G).y by A8,
     FUNCT_1:def 5;
-
     hence thesis by A9;
   end;
-
-  for s being real number st 0<s holds sup rng max(F,G) - s < max(sup rng
-  F,sup rng G)
-
+  for s being real number st 0<s
+   holds upper_bound rng max(F,G) - s < max(upper_bound rng
+  F,upper_bound rng G)
   proof
     let s being real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then consider y such that
 A10: y in dom max(F,G) and
-A11: sup rng max(F,G) - s < max(F,G).y by A7;
+A11: upper_bound rng max(F,G) - s < max(F,G).y by A7;
 A12: max(F,G).y = max(F.y,G.y) by A10,FUZZY_1:def 5;
-A13: for y st y in C2 holds F.y <= sup rng F & G.y <= sup rng G
+A13: for y st y in C2 holds F.y <= upper_bound rng F & G.y <= upper_bound rng G
     proof
       let y;
       assume
@@ -667,22 +641,22 @@ A17:  rng F is bounded_above by XXREAL_2:def 11;
       hence thesis by A15,A17,A16,SEQ_4:def 4;
     end;
     then
-A18: G.y <= sup rng G by A10;
-    F.y <= sup rng F by A10,A13;
-    then max(F,G).y <= max(sup rng F,sup rng G) by A12,A18,XXREAL_0:26;
+A18: G.y <= upper_bound rng G by A10;
+    F.y <= upper_bound rng F by A10,A13;
+    then max(F,G).y <= max(upper_bound rng F,upper_bound rng G)
+    by A12,A18,XXREAL_0:26;
     hence thesis by A11,XXREAL_0:2;
   end;
-
-  then for s being real number st 0<s holds sup rng max(F,G) - s <= max(sup
-  rng F,sup rng G);
-
+  then for s being real number st 0<s
+   holds upper_bound rng max(F,G) - s <= max(upper_bound
+  rng F,upper_bound rng G);
   then
-A19: sup rng max(F,G) <= max(sup rng F, sup rng G) by XREAL_1:59;
-A20: for y st y in C2 holds max(F,G).y <= sup rng max(F,G)
+A19: upper_bound rng max(F,G) <= max(upper_bound rng F, upper_bound rng G)
+ by XREAL_1:59;
+A20: for y st y in C2 holds max(F,G).y <= upper_bound rng max(F,G)
   proof
     let y;
-    assume
-    y in C2;
+    assume y in C2;
     then y in dom max(F,G) by FUNCT_2:def 1;
     then
 A21: max(F,G).y in rng max(F,G) by FUNCT_1:def 5;
@@ -693,67 +667,69 @@ A21: max(F,G).y in rng max(F,G) by FUNCT_1:def 5;
   rng G is bounded by Th1;
   then
 A22: rng G is bounded_above by XXREAL_2:def 11;
-A23: for s being real number st 0<s ex y st y in dom G & sup rng G - s < G.y
+A23: for s being real number st 0<s
+ ex y st y in dom G & upper_bound rng G - s < G.y
   proof
     let s being real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then consider r being real number such that
 A24: r in rng G and
-A25: sup rng G - s < r by A22,SEQ_4:def 4;
+A25: upper_bound rng G - s < r by A22,SEQ_4:def 4;
     ex y being set st y in dom G & r = G.y by A24,FUNCT_1:def 5;
     hence thesis by A25;
   end;
-  for s being real number st 0<s holds sup rng G - s <= sup rng max(F,G)
+  for s being real number st 0<s
+   holds upper_bound rng G - s <= upper_bound rng max(F,G)
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A26: y in dom G and
-A27: sup rng G - s < G.y by A23;
+A27: upper_bound rng G - s < G.y by A23;
     G.y <= max(F.y,G.y) by XXREAL_0:25;
     then G.y <= max(F,G).y by A26,FUZZY_1:def 5;
     then
-A28: sup rng G - s < max(F,G).y by A27,XXREAL_0:2;
-    max(F,G).y <= sup rng max(F,G) by A20,A26;
+A28: upper_bound rng G - s < max(F,G).y by A27,XXREAL_0:2;
+    max(F,G).y <= upper_bound rng max(F,G) by A20,A26;
     hence thesis by A28,XXREAL_0:2;
   end;
   then
-A29: sup rng G <= sup rng max(F,G) by XREAL_1:59;
+A29: upper_bound rng G <= upper_bound rng max(F,G) by XREAL_1:59;
   rng F is bounded by Th1;
   then
 A30: rng F is bounded_above by XXREAL_2:def 11;
-A31: for s being real number st 0<s ex y st y in dom F & sup rng F - s < F.y
+A31: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F - s < F.y
   proof
     let s being real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then consider r being real number such that
 A32: r in rng F and
-A33: sup rng F - s < r by A30,SEQ_4:def 4;
+A33: upper_bound rng F - s < r by A30,SEQ_4:def 4;
     ex y being set st y in dom F & r = F.y by A32,FUNCT_1:def 5;
     hence thesis by A33;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng max(F,G)
+  for s being real number st 0<s
+   holds upper_bound rng F - s <= upper_bound rng max(F,G)
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A34: y in dom F and
-A35: sup rng F - s < F.y by A31;
+A35: upper_bound rng F - s < F.y by A31;
     F.y <= max(F.y,G.y) by XXREAL_0:25;
     then F.y <= max(F,G).y by A34,FUZZY_1:def 5;
     then
-A36: sup rng F - s < max(F,G).y by A35,XXREAL_0:2;
-    max(F,G).y <= sup rng max(F,G) by A20,A34;
+A36: upper_bound rng F - s < max(F,G).y by A35,XXREAL_0:2;
+    max(F,G).y <= upper_bound rng max(F,G) by A20,A34;
     hence thesis by A36,XXREAL_0:2;
   end;
-  then sup rng F <= sup rng max(F,G) by XREAL_1:59;
-  then max(sup rng F, sup rng G) <= sup rng max(F,G) by A29,XXREAL_0:28;
+  then upper_bound rng F <= upper_bound rng max(F,G) by XREAL_1:59;
+  then max(upper_bound rng F, upper_bound rng G)
+   <= upper_bound rng max(F,G) by A29,XXREAL_0:28;
   then
-A37: sup rng max(F,G) = max(sup rng F, sup rng G) by A19,XXREAL_0:1;
+A37: upper_bound rng max(F,G) = max(upper_bound rng F, upper_bound rng G)
+by A19,XXREAL_0:1;
   dom max(min(f,g,x,z),min(f,h,x,z)) = C2 by FUNCT_2:def 1;
   hence thesis by A5,A3,A37,PARTFUN1:34;
 end;
@@ -773,9 +749,10 @@ A3: x in C1 and
 A4: z in C3 and
 A5: c = [x,z] by ZFMISC_1:def 2;
     (f(#)(max(g,h))).c = (f(#)(max(g,h))).(x,z) by A5
-      .= sup(rng(min(f,max(g,h),x,z))) by A5,Def3
-      .= max(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A3,A4,Lm1
-      .= max((f(#)g).(x,z),sup rng(min(f,h,x,z))) by A5,Def3
+      .= upper_bound(rng(min(f,max(g,h),x,z))) by A5,Def3
+      .= max(upper_bound rng(min(f,g,x,z)),upper_bound rng(min(f,h,x,z)))
+      by A3,A4,Lm1
+      .= max((f(#)g).(x,z),upper_bound rng(min(f,h,x,z))) by A5,Def3
       .= max((f(#)g).(x,z),(f(#)h).(x,z)) by A5,Def3
       .= max(f(#)g,f(#)h).c by A5,FUZZY_1:def 5;
     hence thesis;
@@ -785,25 +762,20 @@ A5: c = [x,z] by ZFMISC_1:def 2;
 end;
 
 Lm2: for f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3, x,z
-be set st x in C1 & z in C3 holds sup(rng(min(max(f,g),h,x,z))) = max(sup rng(
-min(f,h,x,z)),sup rng(min(g,h,x,z)))
-
+be set st x in C1 & z in C3
+ holds upper_bound(rng(min(max(f,g),h,x,z))) = max(upper_bound rng(
+min(f,h,x,z)),upper_bound rng(min(g,h,x,z)))
 proof
-
   let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3, x,z be
   set;
-
   assume that
 A1: x in C1 and
 A2: z in C3;
-
 A3: for y being Element of C2 st y in C2 holds min(max(f,g),h,x,z).y = max(
   min(f,h,x,z),min(g,h,x,z)).y
-
   proof
     let y being Element of C2;
-    assume
-    y in C2;
+    assume y in C2;
 A4: [x,y] in [:C1,C2:] by A1,ZFMISC_1:106;
     min(max(f,g),h,x,z).y = min(max(f,g). [x,y],h. [y,z]) by A1,A2,Def2
       .= min(max(f. [x,y],g. [x,y]),h. [y,z]) by A4,FUZZY_1:def 5
@@ -817,36 +789,32 @@ A5: dom max(min(f,h,x,z),min(g,h,x,z)) = C2 by FUNCT_2:def 1;
   rng max(F,G) is bounded by Th1;
   then
 A6: rng max(F,G) is bounded_above by XXREAL_2:def 11;
-A7: for y st y in dom max(F,G) holds max(F,G).y <= sup rng(max(F,G))
+A7: for y st y in dom max(F,G) holds max(F,G).y <= upper_bound rng(max(F,G))
   proof
     let y;
-    assume
-    y in dom max(F,G);
+    assume y in dom max(F,G);
     then max(F,G).y in rng max(F,G) by FUNCT_1:def 5;
     hence thesis by A6,SEQ_4:def 4;
   end;
   rng G is bounded by Th1;
   then
 A8: rng G is bounded_above by XXREAL_2:def 11;
-A9: for y st y in dom G holds G.y <= sup rng G
+A9: for y st y in dom G holds G.y <= upper_bound rng G
   proof
     let y;
-    assume
-    y in dom G;
+    assume y in dom G;
     then G.y in rng G by FUNCT_1:def 5;
     hence thesis by A8,SEQ_4:def 4;
   end;
-
-A10: for s being real number st 0<s ex y st y in dom G & sup rng G-s <= max(
+A10: for s being real number st 0<s
+ ex y st y in dom G & upper_bound rng G-s <= max(
   F,G).y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A11: r in rng G and
-A12: sup rng G-s<r by A8,SEQ_4:def 4;
+A12: upper_bound rng G-s<r by A8,SEQ_4:def 4;
     consider y being set such that
 A13: y in dom G and
 A14: r = G.y by A11,FUNCT_1:def 5;
@@ -854,35 +822,33 @@ A14: r = G.y by A11,FUNCT_1:def 5;
     then r <= max(F,G).y by A13,A14,FUZZY_1:def 5;
     hence thesis by A12,A13,XXREAL_0:2;
   end;
-  for s being real number st 0<s holds sup rng G-s <= sup rng max(F,G)
+  for s being real number st 0<s
+   holds upper_bound rng G-s <= upper_bound rng max(F,G)
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A15: y in dom G and
-A16: sup rng G - s <= max(F,G).y by A10;
+A16: upper_bound rng G - s <= max(F,G).y by A10;
     y in C2 by A15;
     then y in dom max(F,G) by FUNCT_2:def 1;
-    then max(F,G).y <= sup rng max(F,G) by A7;
+    then max(F,G).y <= upper_bound rng max(F,G) by A7;
     hence thesis by A16,XXREAL_0:2;
   end;
   then
-A17: sup rng G <= sup rng(max(F,G)) by XREAL_1:59;
+A17: upper_bound rng G <= upper_bound rng(max(F,G)) by XREAL_1:59;
   rng F is bounded by Th1;
   then
 A18: rng F is bounded_above by XXREAL_2:def 11;
-
-A19: for s being real number st 0<s ex y st y in dom F & sup rng F-s <= max(
+A19: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F-s <= max(
   F,G).y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A20: r in rng F and
-A21: sup rng F-s<r by A18,SEQ_4:def 4;
+A21: upper_bound rng F-s<r by A18,SEQ_4:def 4;
     consider y being set such that
 A22: y in dom F and
 A23: r = F.y by A20,FUNCT_1:def 5;
@@ -890,62 +856,60 @@ A23: r = F.y by A20,FUNCT_1:def 5;
     then r <= max(F,G).y by A22,A23,FUZZY_1:def 5;
     hence thesis by A21,A22,XXREAL_0:2;
   end;
-  for s being real number st 0<s holds sup rng F-s <= sup rng max(F,G)
+  for s being real number st 0<s
+   holds upper_bound rng F-s <= upper_bound rng max(F,G)
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A24: y in dom F and
-A25: sup rng F - s <= max(F,G).y by A19;
+A25: upper_bound rng F - s <= max(F,G).y by A19;
     y in C2 by A24;
     then y in dom max(F,G) by FUNCT_2:def 1;
-    then max(F,G).y <= sup rng max(F,G) by A7;
+    then max(F,G).y <= upper_bound rng max(F,G) by A7;
     hence thesis by A25,XXREAL_0:2;
   end;
-  then sup rng F <= sup rng(max(F,G)) by XREAL_1:59;
+  then upper_bound rng F <= upper_bound rng(max(F,G)) by XREAL_1:59;
   then
-A26: sup rng(max(F,G)) >= max(sup rng F,sup rng G) by A17,XXREAL_0:28;
-A27: for y st y in dom F holds F.y <= sup rng F
+A26: upper_bound rng(max(F,G)) >=
+ max(upper_bound rng F,upper_bound rng G) by A17,XXREAL_0:28;
+A27: for y st y in dom F holds F.y <= upper_bound rng F
   proof
     let y;
-    assume
-    y in dom F;
+    assume y in dom F;
     then F.y in rng F by FUNCT_1:def 5;
     hence thesis by A18,SEQ_4:def 4;
   end;
-
-  for s being real number st 0<s holds sup rng max(F,G) - s <= max(sup
-  rng F,sup rng G)
-
+  for s being real number st 0<s
+   holds upper_bound rng max(F,G) - s <= max(upper_bound
+  rng F,upper_bound rng G)
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A28: r in rng max(F,G) and
-A29: sup rng max(F,G)-s<r by A6,SEQ_4:def 4;
+A29: upper_bound rng max(F,G)-s<r by A6,SEQ_4:def 4;
     consider y be set such that
 A30: y in dom max(F,G) and
 A31: r = max(F,G).y by A28,FUNCT_1:def 5;
 A32: y in C2 by A30;
     then y in dom G by FUNCT_2:def 1;
     then
-A33: G.y <= sup rng G by A9;
+A33: G.y <= upper_bound rng G by A9;
     y in dom F by A32,FUNCT_2:def 1;
-    then F.y <= sup rng F by A27;
+    then F.y <= upper_bound rng F by A27;
     then
-A34: max(F.y,G.y) <= max(sup rng F,sup rng G) by A33,XXREAL_0:26;
-    sup rng max(F,G)-s<=max(F.y,G.y) by A29,A30,A31,FUZZY_1:def 5;
+A34: max(F.y,G.y) <=
+ max(upper_bound rng F,upper_bound rng G) by A33,XXREAL_0:26;
+    upper_bound rng max(F,G)-s<=max(F.y,G.y) by A29,A30,A31,FUZZY_1:def 5;
     hence thesis by A34,XXREAL_0:2;
   end;
   then
-A35: sup rng(max(F,G)) <= max(sup rng F,sup rng G) by XREAL_1:59;
+A35: upper_bound rng(max(F,G)) <=
+ max(upper_bound rng F,upper_bound rng G) by XREAL_1:59;
   dom min(max(f,g),h,x,z) = C2 by FUNCT_2:def 1;
-
   then min(max(f,g),h,x,z) = max(min(f,h,x,z),min(g,h,x,z)) by A5,A3,
   PARTFUN1:34;
-
   hence thesis by A35,A26,XXREAL_0:1;
 end;
 
@@ -964,9 +928,10 @@ A3: x in C1 and
 A4: z in C3 and
 A5: c = [x,z] by ZFMISC_1:def 2;
     ((max(f,g))(#)h).c = ((max(f,g))(#)h).(x,z) by A5
-      .= sup(rng(min(max(f,g),h,x,z))) by A5,Def3
-      .= max(sup rng(min(f,h,x,z)),sup rng(min(g,h,x,z))) by A3,A4,Lm2
-      .= max((f(#)h).(x,z),sup rng(min(g,h,x,z))) by A5,Def3
+      .= upper_bound(rng(min(max(f,g),h,x,z))) by A5,Def3
+      .= max(upper_bound rng(min(f,h,x,z)),upper_bound rng(min(g,h,x,z)))
+       by A3,A4,Lm2
+      .= max((f(#)h).(x,z),upper_bound rng(min(g,h,x,z))) by A5,Def3
       .= max((f(#)h).(x,z),(g(#)h).(x,z)) by A5,Def3
       .= max(f(#)h,g(#)h).c by A5,FUZZY_1:def 5;
     hence thesis;
@@ -976,14 +941,12 @@ A5: c = [x,z] by ZFMISC_1:def 2;
 end;
 
 Lm3: for f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3, x,z
-be set st x in C1 & z in C3 holds sup(rng(min(f,min(g,h),x,z))) <= min(sup rng(
-min(f,g,x,z)),sup rng(min(f,h,x,z)))
-
+be set st x in C1 & z in C3
+ holds upper_bound(rng(min(f,min(g,h),x,z))) <= min(upper_bound rng(
+min(f,g,x,z)),upper_bound rng(min(f,h,x,z)))
 proof
-
   let f be RMembership_Func of C1,C2, g,h be RMembership_Func of C2,C3, x,z be
   set;
-
   assume that
 A1: x in C1 and
 A2: z in C3;
@@ -991,17 +954,15 @@ A2: z in C3;
   rng F is bounded by Th1;
   then
 A3: rng F is bounded_above by XXREAL_2:def 11;
-
-A4: for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.
+A4: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F - s <= G.
   y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A5: r in rng F and
-A6: sup rng F-s<r by A3,SEQ_4:def 4;
+A6: upper_bound rng F-s<r by A3,SEQ_4:def 4;
     consider y being set such that
 A7: y in dom F and
 A8: r = F.y by A5,FUNCT_1:def 5;
@@ -1013,17 +974,15 @@ A9: [y,z] in [:C2,C3:] by A2,A7,ZFMISC_1:106;
     then r <= G.y by A8,XXREAL_0:17;
     hence thesis by A6,A7,XXREAL_0:2;
   end;
-
-A10: for s being real number st 0<s ex y st y in dom F & sup rng F - s <= H.
+A10: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F - s <= H.
   y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A11: r in rng F and
-A12: sup rng F-s<r by A3,SEQ_4:def 4;
+A12: upper_bound rng F-s<r by A3,SEQ_4:def 4;
     consider y being set such that
 A13: y in dom F and
 A14: r = F.y by A11,FUNCT_1:def 5;
@@ -1038,54 +997,52 @@ A15: [y,z] in [:C2,C3:] by A2,A13,ZFMISC_1:106;
   rng H is bounded by Th1;
   then
 A16: rng H is bounded_above by XXREAL_2:def 11;
-A17: for y st y in dom H holds H.y <= sup rng H
+A17: for y st y in dom H holds H.y <= upper_bound rng H
   proof
     let y;
-    assume
-    y in dom H;
+    assume y in dom H;
     then H.y in rng H by FUNCT_1:def 5;
     hence thesis by A16,SEQ_4:def 4;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng H
+  for s being real number st 0<s
+   holds upper_bound rng F - s <= upper_bound rng H
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A18: y in dom F and
-A19: sup rng F - s <= H.y by A10;
+A19: upper_bound rng F - s <= H.y by A10;
     y in C2 by A18;
     then y in dom H by FUNCT_2:def 1;
-    then H.y <= sup rng H by A17;
+    then H.y <= upper_bound rng H by A17;
     hence thesis by A19,XXREAL_0:2;
   end;
   then
-A20: sup rng F <= sup rng H by XREAL_1:59;
+A20: upper_bound rng F <= upper_bound rng H by XREAL_1:59;
   rng G is bounded by Th1;
   then
 A21: rng G is bounded_above by XXREAL_2:def 11;
-A22: for y st y in dom G holds G.y <= sup rng G
+A22: for y st y in dom G holds G.y <= upper_bound rng G
   proof
     let y;
-    assume
-    y in dom G;
+    assume y in dom G;
     then G.y in rng G by FUNCT_1:def 5;
     hence thesis by A21,SEQ_4:def 4;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng G
+  for s being real number st 0<s
+   holds upper_bound rng F - s <= upper_bound rng G
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A23: y in dom F and
-A24: sup rng F - s <= G.y by A4;
+A24: upper_bound rng F - s <= G.y by A4;
     y in C2 by A23;
     then y in dom G by FUNCT_2:def 1;
-    then G.y <= sup rng G by A22;
+    then G.y <= upper_bound rng G by A22;
     hence thesis by A24,XXREAL_0:2;
   end;
-  then sup rng F <= sup rng G by XREAL_1:59;
+  then upper_bound rng F <= upper_bound rng G by XREAL_1:59;
   hence thesis by A20,XXREAL_0:20;
 end;
 
@@ -1099,23 +1056,22 @@ proof
 A1: x in C1 and
 A2: z in C3 and
 A3: c = [x,z] by ZFMISC_1:def 2;
-A4: (f(#)(min(g,h))).(x,z) = sup(rng(min(f,min(g,h),x,z))) by A3,Def3;
+A4: (f(#)(min(g,h))).(x,z) = upper_bound(rng(min(f,min(g,h),x,z))) by A3,Def3;
   min(f(#)g,f(#)h).(x,z) = min((f(#)g).(x,z),(f(#)h).(x,z)) by A3,FUZZY_1:
   def 4
-    .= min((f(#)g).(x,z),sup rng(min(f,h,x,z))) by A3,Def3
-    .= min(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A3,Def3;
+    .= min((f(#)g).(x,z),upper_bound rng(min(f,h,x,z))) by A3,Def3
+    .= min(upper_bound rng(min(f,g,x,z)),
+    upper_bound rng(min(f,h,x,z))) by A3,Def3;
   hence thesis by A1,A2,A3,A4,Lm3;
 end;
 
 Lm4: for f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3, x,z
-be set st x in C1 & z in C3 holds sup(rng(min(min(f,g),h,x,z))) <= min(sup(rng(
-min(f,h,x,z))),sup(rng(min(g,h,x,z))))
-
+be set st x in C1 & z in C3
+ holds upper_bound(rng(min(min(f,g),h,x,z))) <= min(upper_bound(rng(
+min(f,h,x,z))),upper_bound(rng(min(g,h,x,z))))
 proof
-
   let f,g be RMembership_Func of C1,C2, h be RMembership_Func of C2,C3, x,z be
   set;
-
   assume that
 A1: x in C1 and
 A2: z in C3;
@@ -1123,17 +1079,15 @@ A2: z in C3;
   rng F is bounded by Th1;
   then
 A3: rng F is bounded_above by XXREAL_2:def 11;
-
-A4: for s being real number st 0<s ex y st y in dom F & sup rng F - s <= G.
+A4: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F - s <= G.
   y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A5: r in rng F and
-A6: sup rng F-s<r by A3,SEQ_4:def 4;
+A6: upper_bound rng F-s<r by A3,SEQ_4:def 4;
     consider y being set such that
 A7: y in dom F and
 A8: r = F.y by A5,FUNCT_1:def 5;
@@ -1145,17 +1099,15 @@ A9: [x,y] in [:C1,C2:] by A1,A7,ZFMISC_1:106;
     then r <= G.y by A8,XXREAL_0:17;
     hence thesis by A6,A7,XXREAL_0:2;
   end;
-
-A10: for s being real number st 0<s ex y st y in dom F & sup rng F - s <= H.
+A10: for s being real number st 0<s
+ ex y st y in dom F & upper_bound rng F - s <= H.
   y
-
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider r being real number such that
 A11: r in rng F and
-A12: sup rng F-s<r by A3,SEQ_4:def 4;
+A12: upper_bound rng F-s<r by A3,SEQ_4:def 4;
     consider y being set such that
 A13: y in dom F and
 A14: r = F.y by A11,FUNCT_1:def 5;
@@ -1170,54 +1122,52 @@ A15: [x,y] in [:C1,C2:] by A1,A13,ZFMISC_1:106;
   rng H is bounded by Th1;
   then
 A16: rng H is bounded_above by XXREAL_2:def 11;
-A17: for y st y in dom H holds H.y <= sup rng H
+A17: for y st y in dom H holds H.y <= upper_bound rng H
   proof
     let y;
-    assume
-    y in dom H;
+    assume y in dom H;
     then H.y in rng H by FUNCT_1:def 5;
     hence thesis by A16,SEQ_4:def 4;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng H
+  for s being real number st 0<s
+   holds upper_bound rng F - s <= upper_bound rng H
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A18: y in dom F and
-A19: sup rng F - s <= H.y by A10;
+A19: upper_bound rng F - s <= H.y by A10;
     y in C2 by A18;
     then y in dom H by FUNCT_2:def 1;
-    then H.y <= sup rng H by A17;
+    then H.y <= upper_bound rng H by A17;
     hence thesis by A19,XXREAL_0:2;
   end;
   then
-A20: sup rng F <= sup rng H by XREAL_1:59;
+A20: upper_bound rng F <= upper_bound rng H by XREAL_1:59;
   rng G is bounded by Th1;
   then
 A21: rng G is bounded_above by XXREAL_2:def 11;
-A22: for y st y in dom G holds G.y <= sup rng G
+A22: for y st y in dom G holds G.y <= upper_bound rng G
   proof
     let y;
-    assume
-    y in dom G;
+    assume y in dom G;
     then G.y in rng G by FUNCT_1:def 5;
     hence thesis by A21,SEQ_4:def 4;
   end;
-  for s being real number st 0<s holds sup rng F - s <= sup rng G
+  for s being real number st 0<s
+   holds upper_bound rng F - s <= upper_bound rng G
   proof
     let s being real number;
-    assume
-    0<s;
+    assume 0<s;
     then consider y such that
 A23: y in dom F and
-A24: sup rng F - s <= G.y by A4;
+A24: upper_bound rng F - s <= G.y by A4;
     y in C2 by A23;
     then y in dom G by FUNCT_2:def 1;
-    then G.y <= sup rng G by A22;
+    then G.y <= upper_bound rng G by A22;
     hence thesis by A24,XXREAL_0:2;
   end;
-  then sup rng F <= sup rng G by XREAL_1:59;
+  then upper_bound rng F <= upper_bound rng G by XREAL_1:59;
   hence thesis by A20,XXREAL_0:20;
 end;
 
@@ -1231,51 +1181,47 @@ proof
 A1: x in C1 and
 A2: z in C3 and
 A3: c = [x,z] by ZFMISC_1:def 2;
-A4: (min(f,g)(#)h).(x,z) = sup(rng(min(min(f,g),h,x,z))) by A3,Def3;
+A4: (min(f,g)(#)h).(x,z) = upper_bound(rng(min(min(f,g),h,x,z))) by A3,Def3;
   min(f(#)h,g(#)h).(x,z) = min((f(#)h).(x,z),(g(#)h).(x,z)) by A3,FUZZY_1:
   def 4
-    .= min(sup(rng(min(f,h,x,z))),(g(#)h).(x,z)) by A3,Def3
-    .= min(sup(rng(min(f,h,x,z))),sup(rng(min(g,h,x,z)))) by A3,Def3;
+    .= min(upper_bound(rng(min(f,h,x,z))),(g(#)h).(x,z)) by A3,Def3
+    .= min(upper_bound(rng(min(f,h,x,z))),
+    upper_bound(rng(min(g,h,x,z)))) by A3,Def3;
   hence thesis by A1,A2,A3,A4,Lm4;
 end;
 
 Lm5: for f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3, x,z
-be set st x in C1 & z in C3 holds sup rng min(converse g,converse f,z,x) = sup
+be set st x in C1 & z in C3
+ holds upper_bound rng min(converse g,converse f,z,x) = upper_bound
 rng min(f,g,x,z)
-
 proof
-
   let f be RMembership_Func of C1,C2, g be RMembership_Func of C2,C3, x,z be
   set;
-
   assume that
 A1: x in C1 and
 A2: z in C3;
   rng min(f,g,x,z) is bounded by Th1;
   then
 A3: rng min(f,g,x,z) is bounded_above by XXREAL_2:def 11;
-
-  for s being real number st 0<s holds sup rng min(f,g,x,z) - s <= sup
+  for s being real number st 0<s
+   holds upper_bound rng min(f,g,x,z) - s <= upper_bound
   rng min(converse g,converse f,z,x)
-
   proof
     let s being real number;
-    assume
-    s>0;
+    assume s>0;
     then consider r being real number such that
 A4: r in rng min(f,g,x,z) and
-A5: sup rng min(f,g,x,z) - s < r by A3,SEQ_4:def 4;
+A5: upper_bound rng min(f,g,x,z) - s < r by A3,SEQ_4:def 4;
     consider y be set such that
 A6: y in dom min(f,g,x,z) and
 A7: r = min(f,g,x,z).y by A4,FUNCT_1:def 5;
 A8: [z,y] in [:C3,C2:] by A2,A6,ZFMISC_1:106;
     y in C2 by A6;
     then y in dom min(converse g,converse f,z,x) by FUNCT_2:def 1;
-
     then
-A9: min(converse g,converse f,z,x).y <= sup rng min(converse g,converse f
+A9: min(converse g,converse f,z,x).y <=
+ upper_bound rng min(converse g,converse f
     ,z,x) by Th1;
-
 A10: [y,x] in [:C2,C1:] by A1,A6,ZFMISC_1:106;
     r = min(f.(x,y),g.(y,z)) by A1,A2,A6,A7,Def2
       .= min((converse f).(y,x),g.(y,z)) by A10,Def1
@@ -1283,31 +1229,25 @@ A10: [y,x] in [:C2,C1:] by A1,A6,ZFMISC_1:106;
       .= min(converse g,converse f,z,x).y by A1,A2,A6,Def2;
     hence thesis by A5,A9,XXREAL_0:2;
   end;
-
   then
-A11: sup rng min(converse g,converse f,z,x) >= sup rng min(f,g,x,z) by
+A11: upper_bound rng min(converse g,converse f,z,x) >=
+ upper_bound rng min(f,g,x,z) by
   XREAL_1:59;
-
   rng min(converse g,converse f,z,x) is bounded by Th1;
-
   then
 A12: rng min(converse g,converse f,z,x) is bounded_above by
   XXREAL_2:def
   11;
-
-  for s being real number st 0<s holds sup rng min(converse g,converse f,z
-  ,x) - s <= sup rng min(f,g,x,z)
-
+  for s being real number st 0<s
+   holds upper_bound rng min(converse g,converse f,z
+  ,x) - s <= upper_bound rng min(f,g,x,z)
   proof
     let s being real number;
-    assume
-    s>0;
+    assume s>0;
     then consider r being real number such that
 A13: r in rng min(converse g,converse f,z,x) and
-
-A14: sup rng min(converse g,converse f,z,x) - s < r by A12,SEQ_4:def
+A14: upper_bound rng min(converse g,converse f,z,x) - s < r by A12,SEQ_4:def
     4;
-
     consider y be set such that
 A15: y in dom min(converse g,converse f,z,x) and
 A16: r = min(converse g,converse f,z,x).y by A13,FUNCT_1:def 5;
@@ -1315,7 +1255,7 @@ A17: [z,y] in [:C3,C2:] by A2,A15,ZFMISC_1:106;
     y in C2 by A15;
     then y in dom min(f,g,x,z ) by FUNCT_2:def 1;
     then
-A18: min(f,g,x,z).y <= sup rng min(f,g,x,z) by Th1;
+A18: min(f,g,x,z).y <= upper_bound rng min(f,g,x,z) by Th1;
 A19: [y,x] in [:C2,C1:] by A1,A15,ZFMISC_1:106;
     r = min((converse g).(z,y),(converse f).(y,x)) by A1,A2,A15,A16,Def2
       .= min(g.(y,z),(converse f).(y,x)) by A17,Def1
@@ -1323,10 +1263,9 @@ A19: [y,x] in [:C2,C1:] by A1,A15,ZFMISC_1:106;
       .= min(f,g,x,z).y by A1,A2,A15,Def2;
     hence thesis by A14,A18,XXREAL_0:2;
   end;
-
-  then sup rng min(converse g,converse f,z,x) <= sup rng min(f,g,x,z) by
+  then upper_bound rng min(converse g,converse f,z,x) <=
+   upper_bound rng min(f,g,x,z) by
   XREAL_1:59;
-
   hence thesis by A11,XXREAL_0:1;
 end;
 
@@ -1340,17 +1279,17 @@ A2: for c being Element of [:C3,C1:] st c in [:C3,C1:] holds (converse(f(#)g
   )).c = ((converse g)(#)(converse f)).c
   proof
     let c being Element of [:C3,C1:];
-    assume
-    c in [:C3,C1:];
+    assume c in [:C3,C1:];
     consider z,x be set such that
 A3: z in C3 and
 A4: x in C1 and
 A5: c =[z,x] by ZFMISC_1:def 2;
 A6: [x,z] in [:C1,C3:] by A3,A4,ZFMISC_1:106;
-A7: ((converse g)(#)(converse f)).(z,x) = sup rng min(converse g,converse
+A7: ((converse g)(#)(converse f)).(z,x) =
+ upper_bound rng min(converse g,converse
     f,z,x) by A5,Def3;
     (converse(f(#)g)).(z,x) = (f(#)g).(x,z) by A5,Def1
-      .= sup rng min(f,g,x,z) by A6,Def3;
+      .= upper_bound rng min(f,g,x,z) by A6,Def3;
     hence thesis by A3,A4,A5,A7,Lm5;
   end;
   dom converse(f(#)g) = [:C3,C1:] by FUNCT_2:def 1;
@@ -1367,23 +1306,22 @@ proof
   assume that
 A1: x in C1 and
 A2: z in C3 and
-A3: for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,
-  z];
+A3: for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y, z];
 A4: [x,z] in [:C1,C3:] by A1,A2,ZFMISC_1:106;
   then
-A5: (g(#)k).(x,z) = sup rng min(g,k,x,z) by Def3;
+A5: (g(#)k).(x,z) = upper_bound rng min(g,k,x,z) by Def3;
   rng min(f,h,x,z) is bounded by Th1;
   then
 A6: rng min(f,h,x,z) is bounded_above by XXREAL_2:def 11;
-A7: for s being real number st s>0 holds sup (rng (min(f,h,x,z))) - s <= sup
+A7: for s being real number st s>0
+ holds upper_bound (rng (min(f,h,x,z))) - s <= upper_bound
   rng min(g,k,x,z)
   proof
     let s being real number;
-    assume
-    s>0;
+    assume s>0;
     then consider r be real number such that
 A8: r in rng min(f,h,x,z) and
-A9: sup rng min(f,h,x,z)-s<r by A6,SEQ_4:def 4;
+A9: upper_bound rng min(f,h,x,z)-s<r by A6,SEQ_4:def 4;
     consider y being set such that
 A10: y in dom min(f,h,x,z) and
 A11: r=min(f,h,x,z).y by A8,FUNCT_1:def 5;
@@ -1398,11 +1336,11 @@ A13: min(f,h,x,z).y <= min(g. [x,y],k. [y,z]) by A1,A2,A10,Def2;
     then
 A14: y in dom min(g,k,x,z) by FUNCT_2:def 1;
     min(g. [x,y],k. [y,z]) = min(g,k,x,z).y by A1,A2,A10,Def2;
-    then min(g. [x,y],k. [y,z]) <= sup rng min(g,k,x,z) by A14,Th1;
-    then min(f,h,x,z).y <= sup rng min(g,k,x,z) by A13,XXREAL_0:2;
+    then min(g. [x,y],k. [y,z]) <= upper_bound rng min(g,k,x,z) by A14,Th1;
+    then min(f,h,x,z).y <= upper_bound rng min(g,k,x,z) by A13,XXREAL_0:2;
     hence thesis by A9,A11,XXREAL_0:2;
   end;
-  (f(#)h).(x,z) = sup (rng (min(f,h,x,z))) by A4,Def3;
+  (f(#)h).(x,z) = upper_bound (rng (min(f,h,x,z))) by A4,Def3;
   hence thesis by A5,A7,XREAL_1:59;
 end;
 
@@ -1433,7 +1371,7 @@ A7: [y,z] in [:C2,C3:] by A4,ZFMISC_1:106;
 end;
 
 begin
-
+ 
 :: Definition of identity relation
 :: and properties of universe relation and zero relation
 
@@ -1456,8 +1394,7 @@ A3: (for x,y holds [x,y] in dom IT iff x in C1 & y in C2 & ex z st P[x
     [:C1,C2:] c= dom IT
     proof
       let x,y be set;
-A4:   not x=y implies ex z st (x=y implies z = 1) & (not x=y implies z = 0
-      );
+A4:   not x=y implies ex z st (x=y implies z = 1) & (not x=y implies z = 0 );
       assume
 A5:   [x,y] in [:C1,C2:];
       then
@@ -1470,8 +1407,7 @@ A7: dom IT = [:C1,C2:] by XBOOLE_0:def 10;
     rng IT c= [.0,1.]
     proof
       let c being set;
-      assume
-      c in rng IT;
+      assume c in rng IT;
       then consider z being Element of [:C1,C2:] such that
 A8:   z in dom IT and
 A9:   c = IT.z by PARTFUN1:26;
@@ -1483,10 +1419,10 @@ A11:  1 in [.0,1.] & 0 in [.0,1.]
       proof
         reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def
         1;
-A12:    A = [. inf A, sup A .] by INTEGRA1:5;
+A12:    A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
         then
-A13:    1=sup A by INTEGRA1:6;
-        0=inf A by A12,INTEGRA1:6;
+A13:    1=upper_bound A by INTEGRA1:6;
+        0=lower_bound A by A12,INTEGRA1:6;
         hence thesis by A13,INTEGRA2:1;
       end;
       then
@@ -1533,8 +1469,7 @@ theorem
   C2)). [x,y] = 1 by FUNCT_3:def 3;
 
 Lm6: for f be RMembership_Func of C2,C3, x,z be set st x in C1 & z in C3 holds
-sup rng min(Zmf(C1,C2),f,x,z) = Zmf(C1,C3). [x,z]
-
+upper_bound rng min(Zmf(C1,C2),f,x,z) = Zmf(C1,C3). [x,z]
 proof
   let f be RMembership_Func of C2,C3, x,z be set;
   assume that
@@ -1543,17 +1478,15 @@ A2: z in C3;
   rng min(Zmf(C1,C2),f,x,z) is bounded by Th1;
   then
 A3: rng min(Zmf(C1,C2),f,x,z) is bounded_above by XXREAL_2:def 11;
-
-  for s being real number st 0<s holds sup rng min(Zmf(C1,C2),f,x,z) - s
+  for s being real number st 0<s
+   holds upper_bound rng min(Zmf(C1,C2),f,x,z) - s
   <= Zmf(C1,C3). [x,z]
-
   proof
     let s being real number;
-    assume
-    s>0;
+    assume s>0;
     then consider r being real number such that
 A4: r in rng min(Zmf(C1,C2),f,x,z) and
-A5: sup rng min(Zmf(C1,C2),f,x,z) - s < r by A3,SEQ_4:def 4;
+A5: upper_bound rng min(Zmf(C1,C2),f,x,z) - s < r by A3,SEQ_4:def 4;
     consider y be set such that
 A6: y in dom min(Zmf(C1,C2),f,x,z) and
 A7: r = min(Zmf(C1,C2),f,x,z).y by A4,FUNCT_1:def 5;
@@ -1567,21 +1500,20 @@ A10: 0 <= f. [y,z] by Th3;
     hence thesis by A5;
   end;
   then
-A11: sup rng min(Zmf(C1,C2),f,x,z) <= Zmf(C1,C3). [x,z] by XREAL_1:59;
-  sup rng min(Zmf(C1,C2),f,x,z) >= Zmf(C1,C3). [x,z]
+A11: upper_bound rng min(Zmf(C1,C2),f,x,z) <= Zmf(C1,C3). [x,z] by XREAL_1:59;
+  upper_bound rng min(Zmf(C1,C2),f,x,z) >= Zmf(C1,C3). [x,z]
   proof
     reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
 A12: A is bounded_below by INTEGRA1:3;
     rng min(Zmf(C1,C2),f,x,z) c= [.0,1.] by RELAT_1:def 19;
     then
-A13: inf A <= inf rng min(Zmf(C1,C2),f,x,z) by A12,SEQ_4:64;
-    A = [. inf A, sup A .] by INTEGRA1:5;
+A13: lower_bound A <= lower_bound rng min(Zmf(C1,C2),f,x,z) by A12,SEQ_4:64;
+    A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
     then
-A14: 0=inf A by INTEGRA1:6;
-
-A15: inf rng min(Zmf(C1,C2),f,x,z) <= sup rng min(Zmf(C1,C2),f,x,z) by Th1
+A14: 0=lower_bound A by INTEGRA1:6;
+A15: lower_bound rng min(Zmf(C1,C2),f,x,z) <=
+ upper_bound rng min(Zmf(C1,C2),f,x,z) by Th1
     ,SEQ_4:24;
-
     [x,z] in [:C1,C3:] by A1,A2,ZFMISC_1:106;
     hence thesis by A14,A13,A15,FUNCT_3:def 3;
   end;
@@ -1589,8 +1521,7 @@ A15: inf rng min(Zmf(C1,C2),f,x,z) <= sup rng min(Zmf(C1,C2),f,x,z) by Th1
 end;
 
 theorem Th22:
-  for f be RMembership_Func of C2,C3 holds Zmf(C1,C2)(#)f = Zmf(C1
-  ,C3)
+  for f be RMembership_Func of C2,C3 holds Zmf(C1,C2)(#)f = Zmf(C1 ,C3)
 proof
   let f be RMembership_Func of C2,C3;
 A1: dom(Zmf(C1,C3)) = [:C1,C3:] by FUNCT_2:def 1;
@@ -1603,7 +1534,7 @@ A3: x in C1 and
 A4: z in C3 and
 A5: c = [x,z] by ZFMISC_1:def 2;
     (Zmf(C1,C2)(#)f).c = (Zmf(C1,C2)(#)f).(x,z) by A5
-      .= sup rng min(Zmf(C1,C2),f,x,z) by A5,Def3
+      .= upper_bound rng min(Zmf(C1,C2),f,x,z) by A5,Def3
       .= Zmf(C1,C3).c by A3,A4,A5,Lm6;
     hence thesis;
   end;
@@ -1612,8 +1543,7 @@ A5: c = [x,z] by ZFMISC_1:def 2;
 end;
 
 Lm7: for f be RMembership_Func of C1,C2, x,z be set st x in C1 & z in C3 holds
-sup rng min(f,Zmf(C2,C3),x,z) = Zmf(C1,C3). [x,z]
-
+upper_bound rng min(f,Zmf(C2,C3),x,z) = Zmf(C1,C3). [x,z]
 proof
   let f be RMembership_Func of C1,C2, x,z be set;
   assume that
@@ -1622,17 +1552,15 @@ A2: z in C3;
   rng min(f,Zmf(C2,C3),x,z) is bounded by Th1;
   then
 A3: rng min(f,Zmf(C2,C3),x,z) is bounded_above by XXREAL_2:def 11;
-
-  for s being real number st 0<s holds sup rng min(f,Zmf(C2,C3),x,z) - s
+  for s being real number st 0<s
+   holds upper_bound rng min(f,Zmf(C2,C3),x,z) - s
   <= Zmf(C1,C3). [x,z]
-
   proof
     let s being real number;
-    assume
-    s>0;
+    assume s>0;
     then consider r being real number such that
 A4: r in rng min(f,Zmf(C2,C3),x,z) and
-A5: sup rng min(f,Zmf(C2,C3),x,z) - s < r by A3,SEQ_4:def 4;
+A5: upper_bound rng min(f,Zmf(C2,C3),x,z) - s < r by A3,SEQ_4:def 4;
     consider y be set such that
 A6: y in dom min(f,Zmf(C2,C3),x,z) and
 A7: r = min(f,Zmf(C2,C3),x,z).y by A4,FUNCT_1:def 5;
@@ -1646,21 +1574,20 @@ A10: 0 <= f. [x,y] by Th3;
     hence thesis by A5;
   end;
   then
-A11: sup rng min(f,Zmf(C2,C3),x,z) <= Zmf(C1,C3). [x,z] by XREAL_1:59;
-  sup rng min(f,Zmf(C2,C3),x,z) >= Zmf(C1,C3). [x,z]
+A11: upper_bound rng min(f,Zmf(C2,C3),x,z) <= Zmf(C1,C3). [x,z] by XREAL_1:59;
+  upper_bound rng min(f,Zmf(C2,C3),x,z) >= Zmf(C1,C3). [x,z]
   proof
     reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
 A12: A is bounded_below by INTEGRA1:3;
     rng min(f,Zmf(C2,C3),x,z) c= [.0,1.] by RELAT_1:def 19;
     then
-A13: inf A <= inf rng min(f,Zmf(C2,C3),x,z) by A12,SEQ_4:64;
-    A = [. inf A, sup A .] by INTEGRA1:5;
+A13: lower_bound A <= lower_bound rng min(f,Zmf(C2,C3),x,z) by A12,SEQ_4:64;
+    A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
     then
-A14: 0=inf A by INTEGRA1:6;
-
-A15: inf rng min(f,Zmf(C2,C3),x,z) <= sup rng min(f,Zmf(C2,C3),x,z) by Th1
+A14: 0=lower_bound A by INTEGRA1:6;
+A15: lower_bound rng min(f,Zmf(C2,C3),x,z) <=
+ upper_bound rng min(f,Zmf(C2,C3),x,z) by Th1
     ,SEQ_4:24;
-
     [x,z] in [:C1,C3:] by A1,A2,ZFMISC_1:106;
     hence thesis by A14,A13,A15,FUNCT_3:def 3;
   end;
@@ -1668,8 +1595,7 @@ A15: inf rng min(f,Zmf(C2,C3),x,z) <= sup rng min(f,Zmf(C2,C3),x,z) by Th1
 end;
 
 theorem Th23:
-  for f be RMembership_Func of C1,C2 holds f(#)Zmf(C2,C3) = Zmf(C1
-  ,C3)
+  for f be RMembership_Func of C1,C2 holds f(#)Zmf(C2,C3) = Zmf(C1 ,C3)
 proof
   let f be RMembership_Func of C1,C2;
 A1: dom(Zmf(C1,C3)) = [:C1,C3:] by FUNCT_2:def 1;
@@ -1682,7 +1608,7 @@ A3: x in C1 and
 A4: z in C3 and
 A5: c = [x,z] by ZFMISC_1:def 2;
     (f(#)Zmf(C2,C3)).c = (f(#)Zmf(C2,C3)).(x,z) by A5
-      .= sup rng min(f,Zmf(C2,C3),x,z) by A5,Def3
+      .= upper_bound rng min(f,Zmf(C2,C3),x,z) by A5,Def3
       .= Zmf(C1,C3).c by A3,A4,A5,Lm7;
     hence thesis;
   end;
@@ -1691,8 +1617,7 @@ A5: c = [x,z] by ZFMISC_1:def 2;
 end;
 
 theorem
-  for f be RMembership_Func of C1,C1 holds f(#)Zmf(C1,C1) = Zmf(C1,C1)
-  (#)f
+  for f be RMembership_Func of C1,C1 holds f(#)Zmf(C1,C1) = Zmf(C1,C1) (#)f
 proof
   let f be RMembership_Func of C1,C1;
   f(#)Zmf(C1,C1) = Zmf(C1,C1) by Th23;
@@ -1700,7 +1625,6 @@ proof
 end;
 
 begin :: Addenda
-
 :: missing, 2006.12.03, AT
 
 theorem
@@ -1724,4 +1648,3 @@ proof
   [y,x] in [:Y,X:] by ZFMISC_1:106;
   hence thesis by Def1;
 end;
-

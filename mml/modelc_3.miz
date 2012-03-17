@@ -14,12 +14,12 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, FINSET_1, CARD_1,
       NUMBERS, XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, NAT_1, RELAT_1, FUNCT_1,
       RELSET_1, FINSEQ_1, ORDERS_1, FUNCT_2, INT_1, SEQ_1, SERIES_1, PARTFUN1,
-      MODELC_1, MODELC_2, RFINSEQ2;
+      STRUCT_0, MODELC_1, MODELC_2, RFINSEQ2;
  constructors KNASTER, MODELC_2, SERIES_1, REAL_1, NEWTON, RFINSEQ2, SEQ_1,
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, ORDERS_1, FINSET_1, MODELC_2, FINSEQ_1, NUMBERS,
-      VALUED_0, MEMBERED, CARD_1;
+      VALUED_0, MEMBERED, STRUCT_0, MODELC_1, CARD_1;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
  definitions TARSKI, MODELC_2, SERIES_1;
  theorems XBOOLE_0, ZFMISC_1, XBOOLE_1, TARSKI, FUNCT_1, FUNCT_2, FUNCT_7,
@@ -30,15 +30,13 @@ environ
 
 begin
 
-reserve k,k1,n,n1,m,m1,m0,m01,h,i,i1,j,j1 for Nat,
-  a,b,x,y,X,X1,X2,X3,X4,Y,Z
-  for set,
-  D,D1,D2,S for non empty set;
-reserve L,L9,L1,L2 for FinSequence;
+reserve k,n,n1,m,m1,m0,h,i,j for Nat,
+  a,x,y,X,X1,X2,X3,X4,Y for set;
+reserve L,L1,L2 for FinSequence;
 reserve F,F1,G,G1,H for LTL-formula;
 reserve W,W1,W2 for Subset of Subformulae H;
 reserve v for LTL-formula;
-reserve r,r1,r2 for real number;
+
 
 Lm1: a in (X1 \/ X2) \/ X3 iff a in X1 or a in X2 or a in X3
 proof
@@ -48,12 +46,9 @@ end;
 
 Lm2: a in (X1 \ X2) \/ (X3\ X4) iff a in X1 & not a in X2 or a in X3 & not a
 in X4
-
 proof
-
   a in (X1 \ X2) \/ (X3 \ X4) iff a in X1 \ X2 or a in X3 \ X4 by XBOOLE_0
   :def 3;
-
   hence thesis by XBOOLE_0:def 5;
 end;
 
@@ -72,8 +67,7 @@ proof
     assume
 A1: r1<=r2;
     now
-      assume
-      [\ r2 /] < [\ r1 /];
+      assume [\ r2 /] < [\ r1 /];
       then
 A2:   [\ r2 /] +1 <= [\ r1 /] by INT_1:20;
       [\ r1 /] <= r1 by INT_1:def 4;
@@ -90,8 +84,7 @@ proof
   let r1,r2 be real number;
   r1<=r2-1 implies [\ r1 /] <= [\ r2 /]-1
   proof
-    assume
-    r1<=r2-1;
+    assume r1<=r2-1;
     then r1+1<=r2-1 +1 by XREAL_1:8;
     then [\ r1+1 /] <= [\ r2 /] by Lm4;
     then [\ r1 /] +1 <= [\ r2 /] by INT_1:51;
@@ -110,8 +103,7 @@ end;
 Lm7: (H is negative or H is next) implies the_argument_of H is_subformula_of H
 proof
   set G = the_argument_of H;
-  assume
-  H is negative or H is next;
+  assume H is negative or H is next;
   then G is_immediate_constituent_of H by MODELC_2:20,21;
   then G is_proper_subformula_of H by MODELC_2:29;
   hence thesis by MODELC_2:def 23;
@@ -120,7 +112,6 @@ end;
 Lm8: (H is conjunctive or H is disjunctive or H is Until or H is Release)
 implies the_left_argument_of H is_subformula_of H & the_right_argument_of H
 is_subformula_of H
-
 proof
   set G1 = the_left_argument_of H;
   set G2 = the_right_argument_of H;
@@ -137,19 +128,16 @@ end;
 Lm9: F is_subformula_of H implies {F} is Subset of Subformulae H
 proof
   set E = Subformulae H;
-  assume
-  F is_subformula_of H;
+  assume F is_subformula_of H;
   then F in E by MODELC_2:45;
   hence thesis by SUBSET_1:63;
 end;
 
 Lm10: F is_subformula_of H & G is_subformula_of H implies {F,G} is Subset of
 Subformulae H
-
 proof
   set E = Subformulae H;
-  assume
-  F is_subformula_of H & G is_subformula_of H;
+  assume F is_subformula_of H & G is_subformula_of H;
   then F in E & G in E by MODELC_2:45;
   hence thesis by SUBSET_1:56;
 end;
@@ -157,28 +145,20 @@ end;
 Lm11: H is disjunctive or H is conjunctive or H is Until or H is Release
 implies {the_left_argument_of H,the_right_argument_of H } is Subset of
 Subformulae H
-
 proof
-  assume
-  H is disjunctive or H is conjunctive or H is Until or H is Release;
-
+  assume H is disjunctive or H is conjunctive or H is Until or H is Release;
   then the_left_argument_of H is_subformula_of H & the_right_argument_of H
   is_subformula_of H by Lm8;
-
   hence thesis by Lm10;
 end;
 
 Lm12: H is disjunctive or H is conjunctive or H is Until or H is Release
 implies {the_left_argument_of H} is Subset of Subformulae H & {
 the_right_argument_of H} is Subset of Subformulae H
-
 proof
-  assume
-  H is disjunctive or H is conjunctive or H is Until or H is Release;
-
+  assume H is disjunctive or H is conjunctive or H is Until or H is Release;
   then the_left_argument_of H is_subformula_of H & the_right_argument_of H
   is_subformula_of H by Lm8;
-
   hence thesis by Lm9;
 end;
 
@@ -186,10 +166,8 @@ Lm13: {H} is Subset of Subformulae H by Lm9,MODELC_2:27;
 
 Lm14: H is negative or H is next implies {the_argument_of H} is Subset of
 Subformulae H
-
 proof
-  assume
-  H is negative or H is next;
+  assume H is negative or H is next;
   then the_argument_of H is_subformula_of H by Lm7;
   hence thesis by Lm9;
 end;
@@ -319,8 +297,7 @@ definition
   let N1,N2 be LTLnode over v;
   pred N2 is_succ1_of N1 means
   :Def7:
-  ex H st H in the LTLnew of N1 & N2 =
-  SuccNode1(H,N1);
+  ex H st H in the LTLnew of N1 & N2 = SuccNode1(H,N1);
   pred N2 is_succ2_of N1 means
   :Def8:
   ex H st H in the LTLnew of N1 & (H is
@@ -419,7 +396,7 @@ end;
 
 :: Some properties of basic operations to build an automaton for LTL.
 
-reserve N,N1,N2,N3,N10,N20,M,M1,M2 for strict LTLnode over v;
+reserve N,N1,N2,N10,N20,M for strict LTLnode over v;
 reserve w for Element of Inf_seq(AtomicFamily);
 
 definition
@@ -433,7 +410,6 @@ end;
 Lm15: L is_Finseq_for v & 1<= m & m<=len(L) implies ex L1,L2 st L2
 is_Finseq_for v & L = L1^L2 & L2.1=L.m &1<=len(L2) & len(L2) =len(L)-(m-1) & L2
 .(len(L2)) = L.(len(L))
-
 proof
   assume that
 A1: L is_Finseq_for v and
@@ -448,8 +424,7 @@ A4: m-1<=len(L)-0 by A3,XREAL_1:15;
 A5: L = L1^L2 by FINSEQ_1:101;
   len(L)=len(L1)+len(L2) by A5,FINSEQ_1:35;
   then
-A6: len(L2) = len(L)-len(L1)
-    .= len(L)-m1 by A4,FINSEQ_1:21;
+A6: len(L2) = len(L)-len(L1) .= len(L)-m1 by A4,FINSEQ_1:21;
   m-m<=len(L)-m by A3,XREAL_1:11;
   then
 A7: 0+1<=(len(L)-m)+1 by XREAL_1:8;
@@ -459,10 +434,8 @@ A8: L2.1 = L.(len(L1) + 1) by A5,FINSEQ_1:def 7
     .= L.(m1+1) by A4,FINSEQ_1:21
     .=L.m;
 A9: len(L1) = m1 by A4,FINSEQ_1:21;
-
   for k st 1 <= k & k < len(L2) holds ex N,M st N = L2.k & M=L2.(k+1) & M
   is_succ_of N
-
   proof
     let k such that
 A10: 1 <= k & k < len(L2);
@@ -525,7 +498,6 @@ end;
 
 Lm16: H in the LTLnew of N & (H is atomic or H is negative) implies *N = *
 SuccNode1(H,N)
-
 proof
   set N1 = SuccNode1(H,N);
   assume that
@@ -560,12 +532,10 @@ A13: a in NO \/ NN implies a in N1O \/ N1N
     assume
 A14: a in NO \/ NN;
     a in NN implies not a in {H} & a in NN or a in {H} & a in NN;
-
     then
 A15: a in NN implies a in NN \ {H} or a in NO \/{H} by
     XBOOLE_0:def 3,
     def 5;
-
     a in NO implies a in N1O by A5,XBOOLE_0:def 3;
     hence thesis by A8,A5,A9,A14,A15,XBOOLE_0:def 3;
   end;
@@ -575,7 +545,6 @@ end;
 
 Lm17: H in the LTLnew of N & (H is conjunctive or H is next ) implies (w |= *N
 iff w |= *SuccNode1(H,N))
-
 proof
   assume that
 A1: H in the LTLnew of N and
@@ -595,7 +564,7 @@ A4: w |= *N implies w |= *SN
     assume
 A5: w |= *N;
     then
-A6: w |= H by A3,MODELC_2:def 66;
+A6: w |= H by A3,MODELC_2:def 68;
     for F being LTL-formula st F in *SN holds w|= F
     proof
       let F be LTL-formula such that
@@ -611,12 +580,12 @@ A8:       F in NO \/ {H} by A1,Def4;
             suppose
               F in NO;
               then F in *N by Lm1;
-              hence thesis by A5,MODELC_2:def 66;
+              hence thesis by A5,MODELC_2:def 68;
             end;
             suppose
               F in {H};
               then F in *N by A3,TARSKI:def 1;
-              hence thesis by A5,MODELC_2:def 66;
+              hence thesis by A5,MODELC_2:def 68;
             end;
           end;
           hence thesis;
@@ -630,7 +599,7 @@ A9:       F in (NN \ {H})\/ (LTLNew1 H \ NO) by A1,Def4;
             suppose
               F in NN;
               then F in (NO \/ NN) \/ XNX by Lm1;
-              hence thesis by A5,MODELC_2:def 66;
+              hence thesis by A5,MODELC_2:def 68;
             end;
             suppose
 A10:          F in (LTLNew1 H);
@@ -638,18 +607,14 @@ A10:          F in (LTLNew1 H);
                 per cases by A2;
                 suppose
 A11:              H is conjunctive;
-
                   then
                   F in {the_left_argument_of H, the_right_argument_of H }
                   by A10,Def1;
-
                   then
 A12:              F = the_left_argument_of H or F = the_right_argument_of
                   H by TARSKI:def 2;
-
                   H =(the_left_argument_of H) '&' (the_right_argument_of
                   H) by A11,MODELC_2:6;
-
                   hence thesis by A6,A12,MODELC_2:65;
                 end;
                 suppose
@@ -678,7 +643,7 @@ A18:      SN1 = NX \/ LTLNext H by A1,Def4;
               G1 in NX;
               then F in XNX by A14,A17;
               then F in (NO \/ NN) \/ XNX by Lm1;
-              hence thesis by A5,MODELC_2:def 66;
+              hence thesis by A5,MODELC_2:def 68;
             end;
             suppose
 A19:          G1 in LTLNext H;
@@ -703,7 +668,7 @@ A20:              H is next;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   w |= *SN implies w |= *N
   proof
@@ -720,7 +685,7 @@ A22:  F in *N;
           then F in NO \/ {H} by XBOOLE_0:def 3;
           then F in SNO by A1,Def4;
           then F in *SN by Lm1;
-          hence thesis by A21,MODELC_2:def 66;
+          hence thesis by A21,MODELC_2:def 68;
         end;
         suppose
 A23:      F in NN;
@@ -732,7 +697,7 @@ A23:      F in NN;
               then F in NO \/ {H} by XBOOLE_0:def 3;
               then F in SNO by A1,Def4;
               then F in *SN by Lm1;
-              hence thesis by A21,MODELC_2:def 66;
+              hence thesis by A21,MODELC_2:def 68;
             end;
             suppose
               not F=H;
@@ -741,7 +706,7 @@ A23:      F in NN;
               then F in (NN \ {H}) \/(LTLNew1 H \ NO) by XBOOLE_0:def 3;
               then F in SNN by A1,Def4;
               then F in *SN by Lm1;
-              hence thesis by A21,MODELC_2:def 66;
+              hence thesis by A21,MODELC_2:def 68;
             end;
           end;
           hence thesis;
@@ -763,12 +728,12 @@ A28:      G ='X' G1 by A26;
           then F in 'X' SN1 by A25,A28;
           then F in XSNX by A1,Def4;
           then F in *SN by Lm1;
-          hence thesis by A21,MODELC_2:def 66;
+          hence thesis by A21,MODELC_2:def 68;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   hence thesis by A4;
 end;
@@ -780,7 +745,6 @@ conjunctive or H is next ) implies (w |= *N iff w |= *SuccNode1(H,N)) by Lm16,
 
 Lm18: H in the LTLnew of N & H is disjunctive implies (w |= *N iff (w |= *
 SuccNode1(H,N) or w |= *SuccNode2(H,N)))
-
 proof
   assume that
 A1: H in the LTLnew of N and
@@ -871,28 +835,26 @@ A15: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A16: w |= *N;
     now
-      per cases by A3,A14,A16,MODELC_2:def 66;
+      per cases by A3,A14,A16,MODELC_2:def 68;
       suppose
 A17:    w|= H1;
         F in *SN1 implies w|= F
         proof
-          assume
-          F in *SN1;
+          assume F in *SN1;
           then F in *N or F=H1 by A7;
-          hence thesis by A16,A17,MODELC_2:def 66;
+          hence thesis by A16,A17,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
       suppose
 A18:    w|= H2;
         F in *SN2 implies w|= F
         proof
-          assume
-          F in *SN2;
+          assume F in *SN2;
           then F in *N or F=H2 by A12;
-          hence thesis by A16,A18,MODELC_2:def 66;
+          hence thesis by A16,A18,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
     end;
     hence thesis;
@@ -951,23 +913,22 @@ A26:  F in *SN1 by A19,A24;
         per cases by A23;
         suppose
           w |= *SN1;
-          hence thesis by A26,MODELC_2:def 66;
+          hence thesis by A26,MODELC_2:def 68;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A25,MODELC_2:def 66;
+          hence thesis by A25,MODELC_2:def 68;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   hence thesis by A15;
 end;
 
 Lm19: H in the LTLnew of N & H is Until implies (w |= *N iff (w |= *SuccNode1(
 H,N) or w |= *SuccNode2(H,N)))
-
 proof
   assume that
 A1: H in the LTLnew of N and
@@ -1077,28 +1038,26 @@ A20: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A21: w |= *N;
     now
-      per cases by A3,A19,A21,MODELC_2:65,def 66;
+      per cases by A3,A19,A21,MODELC_2:65,def 68;
       suppose
 A22:    w|=H1 & w|='X' H;
         F in *SN1 implies w|= F
         proof
-          assume
-          F in *SN1;
+          assume F in *SN1;
           then F in *N or F=H1 or F='X' H by A8;
-          hence thesis by A21,A22,MODELC_2:def 66;
+          hence thesis by A21,A22,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
       suppose
 A23:    w|= H2;
         F in *SN2 implies w|= F
         proof
-          assume
-          F in *SN2;
+          assume F in *SN2;
           then F in *N or F=H2 by A17;
-          hence thesis by A21,A23,MODELC_2:def 66;
+          hence thesis by A21,A23,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
     end;
     hence thesis;
@@ -1166,23 +1125,22 @@ A35:  F in *SN1 by A24,A33;
         per cases by A32;
         suppose
           w |= *SN1;
-          hence thesis by A35,MODELC_2:def 66;
+          hence thesis by A35,MODELC_2:def 68;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A34,MODELC_2:def 66;
+          hence thesis by A34,MODELC_2:def 68;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   hence thesis by A20;
 end;
 
 Lm20: H in the LTLnew of N & H is Release implies (w |= *N iff (w |= *
 SuccNode1(H,N) or w |= *SuccNode2(H,N)))
-
 proof
   assume that
 A1: H in the LTLnew of N and
@@ -1272,10 +1230,8 @@ A18: F in *SN2;
       end;
       suppose
         F in SN2N;
-
         then F in (NN \ {H}) or F in ({H1,H2} \ NO) by A5,
         XBOOLE_0:def 3;
-
         then F in NN or F in {H1,H2} by XBOOLE_0:def 5;
         hence thesis by Lm1,TARSKI:def 2;
       end;
@@ -1295,28 +1251,26 @@ A20: w |= *N implies (w |= *SN1 or w |= *SN2)
     assume
 A21: w |= *N;
     now
-      per cases by A3,A19,A21,MODELC_2:65,def 66;
+      per cases by A3,A19,A21,MODELC_2:65,def 68;
       suppose
 A22:    w|=H2 & w|='X' H;
         F in *SN1 implies w|= F
         proof
-          assume
-          F in *SN1;
+          assume F in *SN1;
           then F in *N or F=H2 or F='X' H by A8;
-          hence thesis by A21,A22,MODELC_2:def 66;
+          hence thesis by A21,A22,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
       suppose
 A23:    w|=H1 & w|=H2;
         F in *SN2 implies w|= F
         proof
-          assume
-          F in *SN2;
+          assume F in *SN2;
           then F in *N or F=H1 or F=H2 by A17;
-          hence thesis by A21,A23,MODELC_2:def 66;
+          hence thesis by A21,A23,MODELC_2:def 68;
         end;
-        hence thesis by MODELC_2:def 66;
+        hence thesis by MODELC_2:def 68;
       end;
     end;
     hence thesis;
@@ -1384,16 +1338,16 @@ A35:  F in *SN1 by A24,A33;
         per cases by A32;
         suppose
           w |= *SN1;
-          hence thesis by A35,MODELC_2:def 66;
+          hence thesis by A35,MODELC_2:def 68;
         end;
         suppose
           w |= *SN2;
-          hence thesis by A34,MODELC_2:def 66;
+          hence thesis by A34,MODELC_2:def 68;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   hence thesis by A20;
 end;
@@ -1405,7 +1359,6 @@ theorem
 
 Lm21: (H is negative or H is next) implies Subformulae H = (Subformulae
 the_argument_of H) \/ {H}
-
 proof
   set H1 = the_argument_of H;
   H is_subformula_of H by MODELC_2:27;
@@ -1424,8 +1377,7 @@ A3: Subformulae H1 \/ {H} c= Subformulae H by A1,XBOOLE_1:8;
   proof
     x in Subformulae H implies x in Subformulae H1 \/ {H}
     proof
-      assume
-      x in Subformulae H;
+      assume x in Subformulae H;
       then consider F such that
 A4:   F = x and
 A5:   F is_subformula_of H by MODELC_2:def 24;
@@ -1454,14 +1406,11 @@ end;
 Lm22: (H is conjunctive or H is disjunctive or H is Until or H is Release)
 implies Subformulae H = ((Subformulae the_left_argument_of H) \/ (Subformulae
 the_right_argument_of H) ) \/ {H}
-
 proof
   set H1 = the_left_argument_of H;
   set H2 = the_right_argument_of H;
-
   set SUBF = (Subformulae the_left_argument_of H) \/ (Subformulae
   the_right_argument_of H);
-
   H is_subformula_of H by MODELC_2:27;
   then H in Subformulae H by MODELC_2:def 24;
   then
@@ -1484,8 +1433,7 @@ A4: SUBF \/ {H} c= Subformulae H by A1,XBOOLE_1:8;
   proof
     x in Subformulae H implies x in SUBF \/ {H}
     proof
-      assume
-      x in Subformulae H;
+      assume x in Subformulae H;
       then consider F such that
 A5:   F = x and
 A6:   F is_subformula_of H by MODELC_2:def 24;
@@ -1499,10 +1447,8 @@ A6:   F is_subformula_of H by MODELC_2:def 24;
         suppose
           F <> H;
           then F is_proper_subformula_of H by A6,MODELC_2:def 23;
-
           then F is_subformula_of H1 or F is_subformula_of H2 by A2,
           MODELC_2:38;
-
           then F in Subformulae H1 or F in Subformulae H2 by MODELC_2:45;
           then F in SUBF by XBOOLE_0:def 3;
           hence thesis by A5,XBOOLE_0:def 3;
@@ -1517,21 +1463,18 @@ end;
 
 Lm23: H is atomic implies Subformulae H ={H}
 proof
-  assume
-  H is atomic;
+  assume H is atomic;
   then ex n st H = atom.n by MODELC_2:def 11;
   then
 A1: len H =1 by FINSEQ_1:57;
 A2: x in Subformulae H implies x in {H}
   proof
-    assume
-    x in Subformulae H;
+    assume x in Subformulae H;
     then consider G such that
 A3: G = x and
 A4: G is_subformula_of H by MODELC_2:def 24;
     now
-      assume
-      G <> H;
+      assume G <> H;
       then G is_proper_subformula_of H by A4,MODELC_2:def 23;
       then len G < 1 by A1,MODELC_2:32;
       hence contradiction by MODELC_2:3;
@@ -1540,8 +1483,7 @@ A4: G is_subformula_of H by MODELC_2:def 24;
   end;
   x in {H} implies x in Subformulae H
   proof
-    assume
-    x in {H};
+    assume x in {H};
     then
 A5: x = H by TARSKI:def 1;
     H is_subformula_of H by MODELC_2:27;
@@ -1552,8 +1494,7 @@ end;
 
 Lm24: not {} in W
 proof
-  assume
-  {} in W;
+  assume {} in W;
   then ex F st F = {} & F is_subformula_of H by MODELC_2:def 24;
   hence contradiction by CARD_1:47,MODELC_2:3;
 end;
@@ -1580,8 +1521,7 @@ A5: for H st (H is conjunctive or H is disjunctive or H is Until or H is
   Release ) & P[the_left_argument_of H] & P[the_right_argument_of H] holds P[H]
   proof
     let H such that
-A6: H is conjunctive or H is disjunctive or H is Until or H is
-    Release and
+A6: H is conjunctive or H is disjunctive or H is Until or H is Release and
 A7: P[the_left_argument_of H] and
 A8: P[the_right_argument_of H];
     consider L1 such that
@@ -1688,8 +1628,7 @@ A8:   for k holds (L.k in W implies R2.k = len CastLTL(L.k)) & (not L
       for x st x in NAT holds R1.x = R2.x
       proof
         let x;
-        assume
-        x in NAT;
+        assume x in NAT;
         then reconsider x as Nat;
         now
           per cases;
@@ -1712,7 +1651,7 @@ A10:        not L.x in W;
   end;
 end;
 
-reserve R,R1,R2 for Real_Sequence;
+reserve R1,R2 for Real_Sequence;
 
 definition
   let H, W, L;
@@ -1724,10 +1663,8 @@ end;
 Lm25: (for i st i<=n holds R1.i = R2.i) implies Sum(R1, n) = Sum(R2, n)
 proof
 A1: CastNat(n)=n by MODELC_2:def 1;
-
   defpred P[Nat] means (for i st i<=$1 holds R1.i = R2.i) implies Sum(R1,
   CastNat($1)) = Sum(R2, CastNat($1));
-
 A2: for k being Nat st P[k] holds P[k + 1]
   proof
     let k be Nat such that
@@ -1743,8 +1680,7 @@ A6:   for i st i<=k holds R1.i = R2.i
       proof
 A7:     k<=k+1 by NAT_1:11;
         let i;
-        assume
-        i<= k;
+        assume i<= k;
         hence thesis by A4,A7,XXREAL_0:2;
       end;
       reconsider k as Element of NAT by ORDINAL1:def 13;
@@ -1771,13 +1707,10 @@ end;
 
 Lm26: (for i st ( i<=n) & not (i=j) holds R1.i = R2.i) & j<=n implies Sum(R1,
 n) - R1.j = Sum(R2, n) - R2.j
-
 proof
 A1: CastNat(n)=n by MODELC_2:def 1;
-
   defpred P[Nat] means (for i st i<=$1 & not (i=j) holds R1.i = R2.i) & (j<=$1
   ) implies Sum(R1, CastNat($1)) - R1.j= Sum(R2, CastNat($1))- R2.j;
-
 A2: for k being Nat st P[k] holds P[k + 1]
   proof
     let k be Nat such that
@@ -1796,10 +1729,8 @@ A6:   j <= k+1;
 A7:       j <= k;
           then
 A8:       j < m by NAT_1:13;
-
           Sum(R1, CastNat(m)) - R1.j = Sum(R1, m) - R1.j by MODELC_2:def
           1
-
             .= (Sum(R1, k) + R1.m) - R1.j by SERIES_1:def 1
             .= (Sum(R1, k)- R1.j) + R1.m
             .= (Sum(R2, k)- R2.j) + R2.m by A3,A5,A4,A7,A8,NAT_1:12
@@ -1816,10 +1747,8 @@ A11:        i<=k;
             i < j by A9,A11,NAT_1:13;
             hence thesis by A5,A11,NAT_1:12;
           end;
-
           Sum(R1, CastNat(m)) - R1.j = Sum(R1, m) - R1.j by MODELC_2:def
           1
-
             .= (Sum(R1, k) + R1.m) - R1.j by SERIES_1:def 1
             .= (Sum(R2, k) + R2.m) - R2.j by A9,A10,Lm25
             .= Sum(R2, m) - R2.j by SERIES_1:def 1;
@@ -1969,15 +1898,13 @@ A2: not F in W and
 A3: W1 = W \/ {F};
 A4: x in W1\{F} implies x in W
   proof
-    assume
-    x in W1\{F};
+    assume x in W1\{F};
     then x in W1 & not x in {F} by XBOOLE_0:def 5;
     hence thesis by A3,XBOOLE_0:def 3;
   end;
   x in W implies x in W1\{F}
   proof
-    assume
-    x in W;
+    assume x in W;
     then (not x in {F})& x in W1 by A2,A3,TARSKI:def 1,XBOOLE_0:def 3;
     hence thesis by XBOOLE_0:def 5;
   end;
@@ -2046,8 +1973,7 @@ A9:         len(L1,W1) = (len(L1,W1) - len F) + len F
 A10: P[0]
   proof
     let W1;
-    assume
-    card W1 <=0;
+    assume card W1 <=0;
     then
 A11: W1 = {} H;
     then len(L1,W1) = 0 by Th4;
@@ -2062,8 +1988,7 @@ definition
   let H, W;
   func len(W) -> Real means
   :Def26:
-  ex L st rng L = Subformulae H & L is
-  one-to-one & it = len(L,W);
+  ex L st rng L = Subformulae H & L is one-to-one & it = len(L,W);
   existence
   proof
     consider L such that
@@ -2149,8 +2074,7 @@ A1: W = {F};
   then
 A2: F in W by TARSKI:def 1;
   now
-    assume
-    ex x st x in W\{F};
+    assume ex x st x in W\{F};
     then consider x such that
 A3: x in W\{F};
     x in W by A3,XBOOLE_0:def 5;
@@ -2158,8 +2082,7 @@ A3: x in W\{F};
   end;
   then
 A4: W\{F}={}H by XBOOLE_0:def 1;
-  len(W) = (len(W) - len F) + len F
-    .= len(W\{F}) + len F by A2,Th10
+  len(W) = (len(W) - len F) + len F .= len(W\{F}) + len F by A2,Th10
     .= 0 + len F by A4,Th13;
   hence thesis;
 end;
@@ -2170,13 +2093,10 @@ proof
 A1: W c= W1;
   not W = W1 implies ex x st x in W1 & W c= W1\{x}
   proof
-    assume
-    not W = W1;
+    assume not W = W1;
     then consider x such that
-
 A2: not (x in W implies x in W1) or not (x in W1 implies x in W) by
     TARSKI:2;
-
     take x;
 A3: y in W implies y in W \ {x}
     proof
@@ -2245,8 +2165,7 @@ A7:         len(W) <= len(W1) - len x by A5,Th10;
 A8: P[0]
   proof
     let W1;
-    assume
-    card W1 <=0;
+    assume card W1 <=0;
     then W1 = {} H;
     hence thesis;
   end;
@@ -2261,8 +2180,7 @@ proof
   assume
 A1: len(W)<1;
   now
-    assume
-    W <> {}H;
+    assume W <> {}H;
     then consider x such that
 A2: x in W by XBOOLE_0:def 1;
     x in Subformulae H by A2;
@@ -2356,8 +2274,7 @@ A7:         len(Z) + len x <= len(W1) + len(W2) by XREAL_1:21;
 A8: P[0]
   proof
     let W,W1,W2;
-    assume
-    card W1 <=0;
+    assume card W1 <=0;
     then
 A9: W1 = {} H;
     then len(W1) = 0 by Th13;
@@ -2412,34 +2329,26 @@ A4:   H is conjunctive;
       then reconsider Right as Subset of Subformulae v by A3,XBOOLE_1:1;
       Left is Subset of Subformulae H by A4,Lm12;
       then reconsider Left as Subset of Subformulae v by A3,XBOOLE_1:1;
-
       New = {the_left_argument_of H,the_right_argument_of H } by A2,A4,
       Def1;
-
       then New = Left \/ Right by ENUMSET1:41;
       then
 A5:   len(New) <= len(Left) + len(Right) by Th18;
-
 A6:   len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A4,MODELC_2:11;
-
       len(Left) = len(the_left_argument_of H) & len(Right) = len(
       the_right_argument_of H) by Th14;
-
       hence thesis by A6,A5;
     end;
     suppose
 A7:   H is disjunctive or H is Until;
       then New = Left by A2,Def1;
       then len(New) = len(the_left_argument_of H) by Th14;
-
       then
 A8:   len(New) +0 <= len(the_left_argument_of H) + len(
       the_right_argument_of H) by XREAL_1:9;
-
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A7,MODELC_2:11;
-
       hence thesis by A8;
     end;
     suppose
@@ -2454,21 +2363,16 @@ A10:  1-1 <= len(H)-1 by XREAL_1:11;
 A11:  H is Release;
       then New = Right by A2,Def1;
       then len(New) = len(the_right_argument_of H) by Th14;
-
       then
 A12:  len(New)+0 <= len(the_left_argument_of H) + len(
       the_right_argument_of H) by XREAL_1:9;
-
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A11,MODELC_2:11;
-
       hence thesis by A12;
     end;
     suppose
-
 A13:  not (H is conjunctive or H is disjunctive or H is next or H is
       Until or H is Release);
-
       1<=len(H) by MODELC_2:3;
       then
 A14:  1-1 <= len(H)-1 by XREAL_1:11;
@@ -2499,34 +2403,26 @@ A4:   H is Release;
       then reconsider Right as Subset of Subformulae v by A3,XBOOLE_1:1;
       Left is Subset of Subformulae H by A4,Lm12;
       then reconsider Left as Subset of Subformulae v by A3,XBOOLE_1:1;
-
       New = {the_left_argument_of H,the_right_argument_of H } by A2,A4,
       Def2;
-
       then New = Left \/ Right by ENUMSET1:41;
       then
 A5:   len(New) <= len(Left) + len(Right) by Th18;
-
 A6:   len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A4,MODELC_2:11;
-
       len(Left) = len(the_left_argument_of H) & len(Right) = len(
       the_right_argument_of H) by Th14;
-
       hence thesis by A6,A5;
     end;
     suppose
 A7:   H is disjunctive or H is Until;
       then New = Right by A2,Def2;
       then len(New) = len(the_right_argument_of H) by Th14;
-
       then
 A8:   len(New)+0 <= len(the_left_argument_of H) + len(
       the_right_argument_of H) by XREAL_1:9;
-
       len(H) = 1+len(the_left_argument_of H) + len(the_right_argument_of H
       ) by A7,MODELC_2:11;
-
       hence thesis by A8;
     end;
     suppose
@@ -2538,10 +2434,8 @@ A10:  1-1 <= len(H)-1 by XREAL_1:11;
       hence thesis by A10,Th13;
     end;
     suppose
-
 A11:  not (H is conjunctive or H is disjunctive or H is next or H is
       Until or H is Release);
-
       1<=len(H) by MODELC_2:3;
       then
 A12:  1-1 <= len(H)-1 by XREAL_1:11;
@@ -2553,13 +2447,11 @@ A12:  1-1 <= len(H)-1 by XREAL_1:11;
 end;
 
 theorem Th19:
-  N2 is_succ1_of N1 implies len(the LTLnew of N2) <= len(the
-  LTLnew of N1) - 1
+  N2 is_succ1_of N1 implies len(the LTLnew of N2) <= len(the LTLnew of N1) - 1
 proof
   set NN1 = the LTLnew of N1;
   set NN2 = the LTLnew of N2;
-  assume
-  N2 is_succ1_of N1;
+  assume N2 is_succ1_of N1;
   then consider H such that
 A1: H in NN1 and
 A2: N2 = SuccNode1(H,N1) by Def7;
@@ -2583,13 +2475,11 @@ A5: len(M1) + len(M2) <= len(M1) + (len(H) -1) by XREAL_1:8;
 end;
 
 theorem Th20:
-  N2 is_succ2_of N1 implies len(the LTLnew of N2) <= len(the
-  LTLnew of N1) - 1
+  N2 is_succ2_of N1 implies len(the LTLnew of N2) <= len(the LTLnew of N1) - 1
 proof
   set NN1 = the LTLnew of N1;
   set NN2 = the LTLnew of N2;
-  assume
-  N2 is_succ2_of N1;
+  assume N2 is_succ2_of N1;
   then consider H such that
 A1: H in NN1 and
   H is disjunctive or H is Until or H is Release and
@@ -2629,8 +2519,7 @@ theorem Th21:
 proof
   set r1 = len(the LTLnew of N1);
   set r2 = len(the LTLnew of N2);
-  assume
-  N2 is_succ_of N1;
+  assume N2 is_succ_of N1;
   then N2 is_succ1_of N1 or N2 is_succ2_of N1 by Def9;
   then r2 <= r1-1 by Th19,Th20;
   hence thesis by Lm5;
@@ -2652,8 +2541,7 @@ proof
   assume
 A1: len(N) >0;
   now
-    assume
-    the LTLnew of N = {}v;
+    assume the LTLnew of N = {}v;
     then len (the LTLnew of N) = 0 by Th13;
     hence contradiction by A1,INT_1:47;
   end;
@@ -2717,8 +2605,7 @@ A14:          L1 is_Finseq_for v
 A15:            1 <= k and
 A16:            k < len(L1);
 A17:            k+1<=len(L1) by A16,NAT_1:13;
-                ex N1,N2 st L1.k = N1 & L1.(k + 1) = N2 & N2 is_succ_of
-                N1
+                ex N1,N2 st L1.k = N1 & L1.(k + 1) = N2 & N2 is_succ_of N1
                 proof
                   set N2 = L1.(k+1);
                   set N1 = L1.k;
@@ -2842,8 +2729,7 @@ A4:   N2 = SuccNode2(H,N1) by Def8;
 end;
 
 theorem Th26:
-  L is_Finseq_for v & m<= len(L) & L1 = L|Seg m implies L1
-  is_Finseq_for v
+  L is_Finseq_for v & m<= len(L) & L1 = L|Seg m implies L1 is_Finseq_for v
 proof
   assume that
 A1: L is_Finseq_for v and
@@ -2966,8 +2852,7 @@ A25:                1<k
                       set a=k-1;
 A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:11;
                       now
-                        assume
-                        k<=1;
+                        assume k<=1;
                         then 1-1<=1-k by XREAL_1:12;
                         then a=0 by A26;
                         hence contradiction by A7,A24;
@@ -3153,8 +3038,7 @@ A25:                1<k
                       set a=k-1;
 A26:                  a+b=0 & 1-1<=k-1 by A22,XREAL_1:11;
                       now
-                        assume
-                        k<=1;
+                        assume k<=1;
                         then 1-1<=1-k by XREAL_1:12;
                         then a=0 by A26;
                         hence contradiction by A7,A24;
@@ -3446,8 +3330,7 @@ theorem Th35:
   L is_Finseq_for v & 1<= k & k<len(L) implies CastNode(L.(k+1),v)
   is_succ_of CastNode(L.k,v)
 proof
-  assume
-  L is_Finseq_for v & 1<= k & k<len(L);
+  assume L is_Finseq_for v & 1<= k & k<len(L);
   then consider N,M such that
 A1: N = L.k and
 A2: M=L.(k+1) & M is_succ_of N by Def19;
@@ -3487,8 +3370,7 @@ A10:    dom L1 = Seg n by A8,FINSEQ_1:21;
 A11:    for m st 1<= m & m<=n holds L1.m = L.m
         proof
           let m;
-          assume
-          1<= m & m<=n;
+          assume 1<= m & m<=n;
           then m in dom L1 by A10,FINSEQ_1:3;
           hence thesis by FUNCT_1:70;
         end;
@@ -3556,15 +3438,14 @@ A18: P[0];
   hence thesis;
 end;
 
-reserve s,s0,s1,s2,t,t0,t1,t2 for elementary strict LTLnode over v;
+reserve s,s0,s1,s2 for elementary strict LTLnode over v;
 
 theorem Th37:
   s2 is_next_of s1 implies the LTLnext of s1 c= the LTLold of s2
 proof
   set N1 = 'X' s1;
 A1: the LTLnew of s2 = {} v by Def11;
-  assume
-  s2 is_next_of s1;
+  assume s2 is_next_of s1;
   then consider L such that
 A2: 1<=len(L) and
 A3: L is_Finseq_for v and
@@ -4074,7 +3955,6 @@ end;
 Lm30: s1 is_next_of s0 & s2 is_next_of s1 & F 'U' G in the LTLold of s1
 implies G in the LTLold of s1 or F in the LTLold of s1 & F 'U' G in the LTLold
 of s2
-
 proof
   assume that
 A1: s1 is_next_of s0 and
@@ -4092,10 +3972,8 @@ A9: CastNode(L.n,v) = s1 by A7,Def16;
   1<n by A3,A4,A6,A7,XXREAL_0:1;
   then consider m such that
 A10: 1<= m & m<n and
-
 A11: ( not F1 in the LTLold of CastNode(L.m,v))& F1 in the LTLold of
   CastNode(L.(m+ 1),v) by A3,A5,A9,A8,Th27;
-
   consider N1,N2 such that
 A12: N1 = L.m and
 A13: N2 = L.(m+1) and
@@ -4121,10 +3999,8 @@ A23: the LTLnext of N2 c= the LTLnext of s1 by A5,A9,A15,Th31;
   then
 A24: the LTLnew of N2 c= the LTLold of s1 by A5,A9,A15,A22,Th34;
 A25: N2 is_succ_of N1,F1 by A11,A14,A20,A15,Th28;
-
   not G in the LTLold of s1 implies F in the LTLold of s1 & F 'U' G in
   the LTLold of s2
-
   proof
     assume
 A26: not G in the LTLold of s1;
@@ -4132,14 +4008,11 @@ A26: not G in the LTLold of s1;
       per cases by A25,Def6;
       suppose
 A27:    F1 in the LTLnew of N1 & N2 = SuccNode1(F1,N1);
-
         then the LTLnew of N2 = ((the LTLnew of N1) \ {F1}) \/ (LTLNew1 F1 \
         the LTLold of N1) by Def4;
-
         then
 A28:    (LTLNew1 F1 \ the LTLold of N1) c= the LTLnew of N2 by
         XBOOLE_1:7;
-
 A29:    F in the LTLold of s1
         proof
           now
@@ -4151,19 +4024,15 @@ A29:    F in the LTLold of s1
             suppose
 A30:          not F in the LTLold of N1;
               F in LTLNew1 F1 by A19,TARSKI:def 1;
-
               then F in LTLNew1 F1 \ the LTLold of N1 by A30,XBOOLE_0:def
               5;
-
               then F in the LTLnew of N2 by A28;
               hence thesis by A24;
             end;
           end;
           hence thesis;
         end;
-
         the LTLnext of N2 = (the LTLnext of N1) \/ LTLNext F1 by A27,Def4;
-
         then
 A31:    LTLNext F1 c= the LTLnext of N2 by XBOOLE_1:7;
         F1 in LTLNext F1 by A17,TARSKI:def 1;
@@ -4174,17 +4043,13 @@ A32:    F1 in the LTLnext of s1 by A23;
         hence thesis by A29,A32;
       end;
       suppose
-
         F1 in the LTLnew of N1 & (F1 is disjunctive or F1 is Until or
         F1 is Release) & N2=SuccNode2(F1,N1);
-
         then the LTLnew of N2 = ((the LTLnew of N1) \ {F1}) \/ (LTLNew2 F1 \
         the LTLold of N1) by Def5;
-
         then
 A33:    (LTLNew2 F1 \ the LTLold of N1) c= the LTLnew of N2 by
         XBOOLE_1:7;
-
         G in the LTLold of s1
         proof
           now
@@ -4196,10 +4061,8 @@ A33:    (LTLNew2 F1 \ the LTLold of N1) c= the LTLnew of N2 by
             suppose
 A34:          not G in the LTLold of N1;
               G in LTLNew2 F1 by A18,TARSKI:def 1;
-
               then G in LTLNew2 F1 \ the LTLold of N1 by A34,XBOOLE_0:def
               5;
-
               then G in the LTLnew of N2 by A33;
               hence thesis by A24;
             end;
@@ -4232,8 +4095,7 @@ definition
   let v;
   func LTLNodes(v) -> non empty set means
   :Def30:
-  x in it iff ex N being
-  strict LTLnode over v st x=N;
+  x in it iff ex N being strict LTLnode over v st x=N;
   existence
   proof
     set T= bool Subformulae v;
@@ -4277,8 +4139,7 @@ A10: for x holds x in IT iff ex y st y in Y & P[y,x] from TARSKI:sch 1(
     then reconsider IT as non empty set;
 A11: (ex N being strict LTLnode over v st x=N) implies x in IT
     proof
-      assume
-      ex N being strict LTLnode over v st x=N;
+      assume ex N being strict LTLnode over v st x=N;
       then consider N being strict LTLnode over v such that
 A12:  x = N;
       set y3 = the LTLnext of N;
@@ -4293,8 +4154,7 @@ A12:  x = N;
     take IT;
     x in IT implies ex N being strict LTLnode over v st x=N
     proof
-      assume
-      x in IT;
+      assume x in IT;
       then ex y st y in Y & P[y,x] by A10;
       hence thesis;
     end;
@@ -4337,8 +4197,7 @@ A1: for x st x in LN holds F(x) in Y
       set N1 = the LTLold of CastNode(x,v);
       set N2 = the LTLnew of CastNode(x,v);
       set N3 = the LTLnext of CastNode(x,v);
-      assume
-      x in LN;
+      assume x in LN;
       then ex N being strict LTLnode over v st x=N by Def30;
       then reconsider x as strict LTLnode over v;
       set M1 = [N1,N2];
@@ -4411,8 +4270,7 @@ registration
     LTLStates(v) c= LTLNodes(v)
     proof
       let a;
-      assume
-      a in LTLStates(v);
+      assume a in LTLStates(v);
       then ex x being Element of LTLNodes(v) st a=x & x is elementary strict
       LTLnode over v;
       hence thesis;
@@ -4442,8 +4300,7 @@ theorem Th45:
 proof
   x is Element of LTLStates(v) implies ex s st s=x
   proof
-    assume
-    x is Element of LTLStates(v);
+    assume x is Element of LTLStates(v);
     then x in LTLStates(v);
     then consider y be Element of LTLNodes(v) such that
 A1: y=x and
@@ -4457,12 +4314,9 @@ end;
 
 Lm31: X<>{} & X c= Seg n implies ex k st 1<=k & k<=n & k in X & for i st 1<=i &
 i<k holds not i in X
-
 proof
-
   defpred P[Nat] means for X st X<>{} & X c= Seg $1 holds ex k st 1<=k & k<=$1
   & k in X & for i st 1<=i & i<k holds not i in X;
-
 A1: for m st P[m] holds P[m + 1]
   proof
     let m such that
@@ -4480,10 +4334,8 @@ A5:   not m1 in Y;
         assume
 A6:     x in Y;
         then x in Seg m1 by A4;
-
         then x in { j where j is Element of NAT :1 <= j & j <= m1 } by
         FINSEQ_1:def 1;
-
         then consider j being Element of NAT such that
 A7:     x=j and
 A8:     1 <= j and
@@ -4494,10 +4346,8 @@ A9:     j <= m1;
       end;
       hence thesis;
     end;
-
     for X st X<>{} & X c= Seg m1 holds ex k st 1<=k & k<=m1 & k in X &
     for i st 1<=i & i<k holds not i in X
-
     proof
       let X such that
 A10:  X<>{} and
@@ -4510,9 +4360,7 @@ A11:  X c= Seg m1;
           then consider k such that
 A12:      1<=k and
 A13:      k<= m and
-
 A14:      k in X & for i st 1<=i & i<k holds not i in X by A2,A10;
-
           m<=m1 by NAT_1:11;
           then k <= m1 by A13,XXREAL_0:2;
           hence thesis by A12,A14;
@@ -4540,8 +4388,7 @@ A23:          k <= m1 by A20,XXREAL_0:2;
               for i st 1<=i & i<k holds not i in X
               proof
                 let i;
-                assume
-                1<=i & i<k;
+                assume 1<=i & i<k;
                 then (not i in {m1})& not i in X1 by A22,A23,
                 TARSKI:def 1;
                 hence thesis by XBOOLE_0:def 5;
@@ -4551,11 +4398,9 @@ A23:          k <= m1 by A20,XXREAL_0:2;
             suppose
               X1 = {};
               then X c= {m1} by XBOOLE_1:37;
-
               then 1<=m1 & for i st 1<=i & i<m1 holds not i in X by
               NAT_1:
               11,TARSKI:def 1;
-
               hence thesis by A15;
             end;
           end;
@@ -4592,8 +4437,7 @@ theorem Th46:
 proof
   set LN = LTLNodes(v);
   let f be Function of LN,LN;
-  assume
-  f is_succ_homomorphism v,w;
+  assume f is_succ_homomorphism v,w;
   then
   for y st y in LN & CastNode(y,v) is non elementary & w |= *CastNode(y,v)
   holds w |= *CastNode(f.y,v) by Def32;
@@ -4608,8 +4452,7 @@ elementary & w |= *CastNode(x,v) holds for k st (for i st i<=k holds CastNode((
 proof
   set LN = LTLNodes(v);
   let f be Function of LN,LN;
-  assume
-  f is_homomorphism v,w;
+  assume f is_homomorphism v,w;
   then
 A1: for y st y in LN & CastNode(y,v) is non elementary & w |= *CastNode(y,v)
   holds w |= *CastNode(f.y,v) by Def33;
@@ -4637,9 +4480,7 @@ A5:     P[m];
 A6:       m<=m+1 by NAT_1:13;
 A7:       (f|**(m+1)).x = (f*(f|**m)).x by FUNCT_7:73
             .= f.y by A2,FUNCT_2:21;
-          assume
-          for i st i<=m+1 holds CastNode((f|**i).x,v) is non
-          elementary;
+          assume for i st i<=m+1 holds CastNode((f|**i).x,v) is non elementary;
           then CastNode(y,v) is non elementary & w |= *CastNode(y,v) by A5,
           A6, XXREAL_0:2;
           hence thesis by A1,A2,A7,FUNCT_2:7;
@@ -4648,15 +4489,13 @@ A7:       (f|**(m+1)).x = (f*(f|**m)).x by FUNCT_7:73
       end;
 A8:   P[0]
       proof
-        assume
-        for i st i<=0 holds CastNode((f|**i).x,v) is non elementary;
+        assume for i st i<=0 holds CastNode((f|**i).x,v) is non elementary;
         f|**0 = id LN by FUNCT_7:86;
         hence thesis by A2,A3,FUNCT_1:35;
       end;
 A9:   for m holds P[m] from NAT_1:sch 2 (A8,A4);
       let k;
-      assume
-      for i st i<=k holds CastNode((f|**i).x,v) is non elementary;
+      assume for i st i<=k holds CastNode((f|**i).x,v) is non elementary;
       hence thesis by A9;
     end;
     hence thesis;
@@ -4737,8 +4576,7 @@ A7: Seg len1 = dom L by A6,FINSEQ_1:def 3;
 A8: for k st 1<= k & k<=len(L) holds L.k= (f|**k).x
     proof
       let k;
-      assume
-      1<= k & k<=len(L);
+      assume 1<= k & k<=len(L);
       then k in Seg len1 by A6,FINSEQ_1:3;
       then L.k = (f|**CastNat(k)).x by A6,A7;
       hence thesis by MODELC_2:def 1;
@@ -4746,8 +4584,7 @@ A8: for k st 1<= k & k<=len(L) holds L.k= (f|**k).x
 A9: now
       assume
 A10:  X = {};
-A11:  for k st 1<=k & k<=len(L) holds CastNode((f|**k).x,v) is non
-      elementary
+A11:  for k st 1<=k & k<=len(L) holds CastNode((f|**k).x,v) is non elementary
       proof
         let k such that
 A12:    1<=k & k<=len(L);
@@ -4764,8 +4601,7 @@ A14:    k<len(L);
         for i st i<=k holds CastNode((f|**i).x,v) is non elementary
         proof
           let i;
-          assume
-          i<=k;
+          assume i<=k;
           then
 A15:      i < len(L) by A14,XXREAL_0:2;
           now
@@ -4822,8 +4658,7 @@ A20:    ex N1 being strict LTLnode over v st N=N1 by Def30;
     X c= Seg len1
     proof
       let y;
-      assume
-      y in X;
+      assume y in X;
       then
       ex m being Element of NAT st y = m & 1<=m & m<=len1 & CastNode((f|**
       m).x,v) is elementary;
@@ -4893,8 +4728,7 @@ A2: x in LN and
     |**k).x,v) holds w |= *CastNode((f|**(k+1)).x,v)
     proof
       let k such that
-A3:   CastNode((f|**k).x,v) is non elementary & w |= *CastNode((f|**k)
-      .x,v);
+A3:   CastNode((f|**k).x,v) is non elementary & w |= *CastNode((f|**k) .x,v);
       set y = (f|**k).x;
 A4:   (f|**(k+1)).x = (f*(f|**k)).x by FUNCT_7:73
         .= f.y by A2,FUNCT_2:21;
@@ -4945,8 +4779,7 @@ A8:   i<n;
       for j st j<=i holds CastNode((f|**j).x,v) is non elementary
       proof
         let j;
-        assume
-        j<=i;
+        assume j<=i;
         then j<n by A8,XXREAL_0:2;
         hence thesis by A6;
       end;
@@ -4976,8 +4809,7 @@ A14:    CastNode((f|**m).x,v) is non elementary by A6;
           w |= *CastNode((f|**m).x,v) by A11,A12,NAT_1:13;
           then
 A15:      w |= *CastNode((f|**(m+1)).x,v) by A2,A3,A4,A14,Th50;
-          assume
-          i<=m+1;
+          assume i<=m+1;
           hence thesis by A11,A13,A15,NAT_1:8;
         end;
         hence thesis;
@@ -4986,13 +4818,11 @@ A15:      w |= *CastNode((f|**(m+1)).x,v) by A2,A3,A4,A14,Th50;
     end;
 A16: P[0]
     proof
-      assume
-      0<=n;
+      assume 0<=n;
       for i st i<=0 holds w |= *CastNode((f|**i).x,v)
       proof
         let i;
-        assume
-        i<=0;
+        assume i<=0;
         then i=0;
         then f|**i = id LN by FUNCT_7:86;
         hence thesis by A3,A5,FUNCT_1:35;
@@ -5006,7 +4836,7 @@ A16: P[0]
   hence thesis;
 end;
 
-reserve q,q1,q2 for sequence of LTLStates(v);
+reserve q for sequence of LTLStates(v);
 
 theorem Th52:
   ex s st s = CastNode(q.n,v)
@@ -5022,29 +4852,22 @@ Lm32: F 'U' G in the LTLold of CastNode(q.1,v) & (for i holds CastNode(q.(i+1)
 ,v) is_next_of CastNode(q.i,v)) implies ((for i st 1<=i & i<n holds not G in
 the LTLold of CastNode(q.i,v)) implies for i st 1<=i & i<n holds F in the
 LTLold of CastNode(q.i,v) & F 'U' G in the LTLold of CastNode(q.i,v) )
-
 proof
   deffunc Node(Nat) = CastNode(q.$1,v);
   assume that
 A1: F 'U' G in the LTLold of Node(1) and
 A2: for i holds Node(i+1) is_next_of Node(i);
-
   defpred P[Nat] means (for i st 1<=i & i<$1 holds not G in the LTLold of Node
-
 (i)) implies (for i st 1<=i & i<$1 holds (F in the LTLold of Node(i)) & (F 'U'
   G in the LTLold of Node(i)));
-
 A3: for k st P[k] holds P[k + 1]
   proof
     let k such that
 A4: P[k];
     set k1=k+1;
-
     (for i st 1<=i & i<k1 holds not G in the LTLold of Node(i)) implies
-
 for i st 1<=i & i<k1 holds F in the LTLold of Node(i) & F 'U' G in the LTLold
     of Node(i)
-
     proof
       assume
 A5:   for i st 1<=i & i<k1 holds not G in the LTLold of Node(i);
@@ -5057,10 +4880,8 @@ A9:     i<k;
         i<k1 by A6,A9,XXREAL_0:2;
         hence thesis by A5,A8;
       end;
-
       for i st 1<=i & i<k1 holds F in the LTLold of Node(i) & F 'U' G in
       the LTLold of Node(i)
-
       proof
         let i such that
 A10:    1<=i and
@@ -5078,10 +4899,8 @@ A13:        i = k;
               per cases by A10,A13,XXREAL_0:1;
               suppose
 A14:            k=1;
-
 A15:            Node(0+1) is_next_of Node(0) & Node(1+1) is_next_of Node(
                 1) by A2;
-
 A16:            (ex s0 st s0 = Node(0) )& ex s2 st s2 = Node(2) by Th52;
                 consider s1 such that
 A17:            s1 = Node(1) by Th52;
@@ -5103,23 +4922,18 @@ A21:            m < m+1 by NAT_1:19;
                 then m<k1 by A6,XXREAL_0:2;
                 then
 A22:            not G in the LTLold of sm by A5,A19,A20;
-
 A23:            (ex sk1 be elementary strict LTLnode over v st sk1 = Node
                 ( k1) )& Node(m+1) is_next_of Node(m) by A2,Th52;
-
 A24:            (ex sm1 be elementary strict LTLnode over v st sm1 = Node
                 ( m1) )& Node(m1+1) is_next_of Node(m1) by A2,Th52;
-
 A25:            Node(m+1) is_next_of Node(m) by A2;
 A26:            Node(k+1) is_next_of Node(k) by A2;
                 consider sk be elementary strict LTLnode over v such that
 A27:            sk = Node(k) by Th52;
 A28:            not G in the LTLold of sk by A5,A10,A11,A13,A27;
                 F 'U' G in the LTLold of sm by A4,A7,A19,A20,A21;
-
                 then F 'U' G in the LTLold of sk by A20,A27,A22,A24,A25,
                 Lm30;
-
                 hence thesis by A13,A20,A27,A28,A23,A26,Lm30;
               end;
             end;
@@ -5147,8 +4961,7 @@ proof
   deffunc Node(Nat) = CastNode(q.$1,v);
   assume that
 A1: H is Until and
-A2: H in the LTLold of Node(1) & for i holds Node(i+1) is_next_of Node(i
-  );
+A2: H in the LTLold of Node(1) & for i holds Node(i+1) is_next_of Node(i );
   set G = the_right_argument_of H;
   set F = the_left_argument_of H;
   H = F 'U' G by A1,MODELC_2:8;
@@ -5161,41 +4974,29 @@ LTLold of CastNode(q.i,v)) & (F in the LTLold of CastNode(q.i,v)) & not ( G in
 the LTLold of CastNode(q.i,v))) or ex j st j>=1 & G in the LTLold of CastNode(q
 .j,v) & for i st 1<=i & i<j holds F 'U' G in the LTLold of CastNode(q.i,v) & F
 in the LTLold of CastNode(q.i,v)
-
 proof
   deffunc Node(Nat) = CastNode(q.$1,v);
   assume
-
 A1: F 'U' G in the LTLold of Node(1) & for i holds Node(i+1) is_next_of
   Node(i);
-
   not (for i st i>=1 holds F 'U' G in the LTLold of Node(i) & F in the
   LTLold of Node(i) & not G in the LTLold of Node(i) ) implies ex j st j>=1 & G
   in the LTLold of Node(j) & for i st 1<=i & i<j holds F 'U' G in the LTLold of
   Node(i) & F in the LTLold of Node(i)
-
   proof
-    assume
-
-    not (for i st i>=1 holds F 'U' G in the LTLold of Node(i) & F in
+    assume not (for i st i>=1 holds F 'U' G in the LTLold of Node(i) & F in
     the LTLold of Node(i) & not G in the LTLold of Node(i) );
-
     then consider k such that
 A2: k>=1 and
-
 A3: not (F 'U' G in the LTLold of Node(k) & F in the LTLold of Node(k)
     ) or G in the LTLold of Node(k);
-
     set k1=k+1;
     ex m st 1<=m & m<=k & G in the LTLold of Node(m)
     proof
       now
         per cases by A3;
         suppose
-
-A4:       not (F 'U' G in the LTLold of Node(k) & F in the LTLold of
-          Node(k) );
-
+A4:       not (F 'U' G in the LTLold of Node(k) & F in the LTLold of Node(k) );
           now
             assume
 A5:         not ex m st 1<=m & m<=k & G in the LTLold of Node(m);
@@ -5221,19 +5022,14 @@ A8:           m<k1;
     end;
     then consider m0 such that
 A9: 1<=m0 & m0<=k & G in the LTLold of Node(m0);
-
     set X = {m where m is Element of NAT :1<=m & m<=k & G in the LTLold of
     Node(m)};
-
 A10: X c= Seg k
     proof
       let x;
-      assume
-      x in X;
-
+      assume x in X;
       then ex m being Element of NAT st x = m & 1<=m & m<=k & G in the LTLold
       of Node(m);
-
       hence thesis by FINSEQ_1:3;
     end;
     reconsider m0 as Element of NAT by ORDINAL1:def 13;
@@ -5253,17 +5049,13 @@ A16:  i<k by A11,A15,XXREAL_0:2;
       not i in X by A13,A14,A15;
       hence thesis by A14,A16;
     end;
-
     then
 A17: for i st 1<=i & i<j holds F 'U' G in the LTLold of Node(i) & F in the
     LTLold of Node(i) by A1,Lm32;
-
     j>=1 & G in the LTLold of Node(j)
     proof
-
       ex m being Element of NAT st j = m & 1<=m & m<=k & G in the LTLold
       of Node(m) by A12;
-
       hence thesis;
     end;
     hence thesis by A17;
@@ -5283,8 +5075,7 @@ proof
   deffunc Node(Nat) = CastNode(q.$1,v);
   assume that
 A1: H is Until and
-A2: H in the LTLold of Node(1) & for i holds Node(i+1) is_next_of Node(i
-  );
+A2: H in the LTLold of Node(1) & for i holds Node(i+1) is_next_of Node(i );
   set G = the_right_argument_of H;
   set F = the_left_argument_of H;
   H = F 'U' G by A1,MODELC_2:8;
@@ -5317,8 +5108,7 @@ theorem Th56:
   of N in BOOL Subformulae v
 proof
   set x = the LTLnew of N;
-  assume
-  N is non elementary;
+  assume N is non elementary;
   then x <> {} by Def11;
   hence thesis by ORDERS_1:5;
 end;
@@ -5383,8 +5173,7 @@ A1: N is non elementary;
 end;
 
 theorem Th58:
-  N is non elementary implies chosen_formula(U,N) in the LTLnew of
-  N
+  N is non elementary implies chosen_formula(U,N) in the LTLnew of N
 proof
   set x = the LTLnew of N;
   set X = BOOL Subformulae v;
@@ -5456,7 +5245,7 @@ A11:          not w |= *SN;
               then not H2 in the LTLold of N implies H2 in the LTLnew of N2 by
               A10,XBOOLE_0:def 3;
               then H2 in *N2 by A9,Lm1;
-              hence contradiction by A7,A8,A11,MODELC_2:def 66;
+              hence contradiction by A7,A8,A11,MODELC_2:def 68;
             end;
             hence thesis;
           end;
@@ -5467,8 +5256,7 @@ A11:          not w |= *SN;
       hence thesis by A6,Def9;
     end;
     suppose
-A12:  not ( not H is Until & w |= *SuccNode1(H,N) or H is Until & w
-      |/= H2 );
+A12:  not ( not H is Until & w |= *SuccNode1(H,N) or H is Until & w |/= H2 );
       set N1 = SuccNode1(H,N);
 A13:  SN = SuccNode2(H,N) by A12,Def35;
       w|=*SN & SN is_succ_of N
@@ -5502,32 +5290,31 @@ A20:          G in *SN;
                 suppose
                   G in SNO;
                   then G in *N by A17,XBOOLE_0:def 3;
-                  hence thesis by A1,MODELC_2:def 66;
+                  hence thesis by A1,MODELC_2:def 68;
                 end;
                 suppose
                   G in SNN;
                   then G in NN or G in {H2} by A16,XBOOLE_0:def 3;
                   then G in *N or G = H2 by Lm1,TARSKI:def 1;
-                  hence thesis by A1,A14,MODELC_2:def 66;
+                  hence thesis by A1,A14,MODELC_2:def 68;
                 end;
                 suppose
                   G in 'X' CastLTL(SNX);
                   then G in *N by A18,Lm1;
-                  hence thesis by A1,MODELC_2:def 66;
+                  hence thesis by A1,MODELC_2:def 68;
                 end;
               end;
               hence thesis;
             end;
             SN is_succ2_of N by A3,A13,A14,Def8;
-            hence thesis by A19,Def9,MODELC_2:def 66;
+            hence thesis by A19,Def9,MODELC_2:def 68;
           end;
           suppose
 A21:        not w |=*N1;
             now
               per cases by MODELC_2:2;
               suppose
-                H is atomic or H is negative or H is conjunctive or H
-                is next;
+                H is atomic or H is negative or H is conjunctive or H is next;
                 hence thesis by A1,A3,A21,Lm16,Lm17;
               end;
               suppose
@@ -5563,8 +5350,7 @@ proof
   set NO = the LTLold of N;
   set NN = the LTLnew of N;
   set NX = the LTLnext of N;
-  assume
-  N is non elementary;
+  assume N is non elementary;
   then
 A1: H in the LTLnew of N by Th58;
   H is Until & w |= H2 implies (H2 in SNN or H2 in NO) & H in SNO
@@ -5600,8 +5386,7 @@ theorem
   w|=*N & N is non elementary implies the LTLold of N c= the LTLold of
 chosen_succ(w,v,U,N) & the LTLnext of N c= the LTLnext of chosen_succ(w,v,U,N)
 proof
-  assume
-  w|=*N & N is non elementary;
+  assume w|=*N & N is non elementary;
   then chosen_succ(w,v,U,N) is_succ_of N by Th59;
   hence thesis by Th25;
 end;
@@ -5629,8 +5414,7 @@ A2: for x st x in LTLNodes(v) holds IT.x = F(x) from FUNCT_2:sch 2 (A1
     let f1,f2 being Function of LTLNodes(v),LTLNodes(v) such that
 A3: for x st x in LTLNodes(v) holds f1.x = chosen_succ(w,v,U,CastNode(
     x,v)) and
-A4: for x st x in LTLNodes(v) holds f2.x = chosen_succ(w,v,U,CastNode(
-    x,v));
+A4: for x st x in LTLNodes(v) holds f2.x = chosen_succ(w,v,U,CastNode( x,v));
     for x st x in LTLNodes(v) holds f1.x = f2.x
     proof
       let x;
@@ -5685,8 +5469,7 @@ A1: a is atomic by MODELC_2:def 11;
     implies the_argument_of G is atomic
     proof
       let G being LTL-formula;
-      assume
-      G is_subformula_of a;
+      assume G is_subformula_of a;
       then consider n,L such that
 A2:   1 <= n and
       len L = n and
@@ -5699,8 +5482,7 @@ A5:   for k st 1 <= k & k < n ex H1,G1 being LTL-formula st L.k = H1 &
         set k = n-1;
         reconsider k as Nat by A2,NAT_1:21;
         now
-          assume
-          not n=1;
+          assume not n=1;
           then 1<1+k by A2,XXREAL_0:1;
           then
 A6:       1<=k by NAT_1:19;
@@ -5721,13 +5503,11 @@ definition
   let H;
   attr H is Sub_atomic means
   :Def38:
-  H is atomic or ex G being LTL-formula st G
-  is atomic & H = 'not' G;
+  H is atomic or ex G being LTL-formula st G is atomic & H = 'not' G;
 end;
 
 theorem Th63:
-  H is neg-inner-most & F is_subformula_of H implies F is
-  neg-inner-most
+  H is neg-inner-most & F is_subformula_of H implies F is neg-inner-most
 proof
   assume that
 A1: H is neg-inner-most and
@@ -5736,8 +5516,7 @@ A2: F is_subformula_of H;
   implies the_argument_of G is atomic
   proof
     let G be LTL-formula;
-    assume
-    G is_subformula_of F;
+    assume G is_subformula_of F;
     then G is_subformula_of H by A2,MODELC_2:35;
     hence thesis by A1,Def37;
   end;
@@ -5810,8 +5589,7 @@ A3: G is atomic by A1,A2,Def37;
 end;
 
 theorem
-  H is next & H is neg-inner-most implies the_argument_of H is
-  neg-inner-most
+  H is next & H is neg-inner-most implies the_argument_of H is neg-inner-most
 proof
   assume that
 A1: H is next and
@@ -5822,8 +5600,7 @@ A3: F is_subformula_of H by A1,MODELC_2:30;
   implies the_argument_of G is atomic
   proof
     let G be LTL-formula;
-    assume
-    G is_subformula_of F;
+    assume G is_subformula_of F;
     then G is_subformula_of H by A3,MODELC_2:35;
     hence thesis by A2,Def37;
   end;
@@ -5844,8 +5621,7 @@ A4: for G being LTL-formula st G is_subformula_of F2 holds G is negative
   implies the_argument_of G is atomic
   proof
     let G be LTL-formula;
-    assume
-    G is_subformula_of F2;
+    assume G is_subformula_of F2;
     then G is_subformula_of H by A3,MODELC_2:35;
     hence thesis by A2,Def37;
   end;
@@ -5855,8 +5631,7 @@ A5: F1 is_subformula_of H by A1,MODELC_2:31;
   implies the_argument_of G is atomic
   proof
     let G be LTL-formula;
-    assume
-    G is_subformula_of F1;
+    assume G is_subformula_of F1;
     then G is_subformula_of H by A5,MODELC_2:35;
     hence thesis by A2,Def37;
   end;
@@ -5867,8 +5642,9 @@ begin :: Definition of Buchi Automaton (finite state & infinite word ) .
 
 definition
   let W be non empty set;
-  struct BuchiAutomaton over W (# carrier -> set, Tran -> Relation of [:the
-    carrier,W :], the carrier, InitS -> Element of bool the carrier, FinalS ->
+  struct(1-sorted) BuchiAutomaton over W (# carrier -> set,
+    Tran -> Relation of [:the carrier,W :], the carrier,
+    InitS -> Element of bool the carrier, FinalS ->
     Subset of bool the carrier #);
 end;
 
@@ -5888,8 +5664,8 @@ end;
 
 reserve v for neg-inner-most LTL-formula;
 reserve U for Choice_Function of BOOL Subformulae v;
-reserve N,N1,N2,M,M1,M2 for strict LTLnode over v;
-reserve s,s0,s1,s2 for elementary strict LTLnode over v;
+reserve N,N1,N2,M1 for strict LTLnode over v;
+reserve s,s1 for elementary strict LTLnode over v;
 
 definition
   let v;
@@ -5903,8 +5679,7 @@ definition
     X c= LTL_WFF
     proof
       let y;
-      assume
-      y in X;
+      assume y in X;
       then ex x being LTL-formula st y=x & x is atomic & x in the LTLold of N;
       hence thesis by MODELC_2:1;
     end;
@@ -5920,8 +5695,7 @@ definition
     X c= LTL_WFF
     proof
       let y;
-      assume
-      y in X;
+      assume y in X;
       then ex x being LTL-formula st y=x & x is atomic & ('not' x) in the
       LTLold of N;
       hence thesis by MODELC_2:1;
@@ -5952,8 +5726,7 @@ definition
     X c= [: LTLStates(v),AtomicFamily,LTLStates(v) :]
     proof
       let a;
-      assume
-      a in X;
+      assume a in X;
       then ex y being Element of [: LTLStates(v),AtomicFamily, LTLStates(v) :]
       st a=y & ex s,s1,x st y=[[s,x],s1] & s1 is_next_of s & x in Label_(s1);
       hence thesis;
@@ -5974,8 +5747,7 @@ A1: y is Element of LTLNodes(v) by Def30;
     {y} c= LTLStates(v)
     proof
       let x;
-      assume
-      x in {y};
+      assume x in {y};
       then x = y by TARSKI:def 1;
       hence thesis by A1;
     end;
@@ -5997,8 +5769,7 @@ definition
     X c= LTLStates(v)
     proof
       let y be set;
-      assume
-      y in X;
+      assume y in X;
       then ex x being Element of LTLStates(v) st y = x & (not F in the LTLold
 of CastNode(x,v) or the_right_argument_of F in the LTLold of CastNode(x,v));
       hence thesis;
@@ -6020,8 +5791,7 @@ definition
     X c= bool LTLStates(v)
     proof
       let y;
-      assume
-      y in X;
+      assume y in X;
       then ex x being Element of bool LTLStates(v) st y = x & ex F st F
       is_subformula_of v & F is Until & x= FinalS_LTL(F,v);
       hence thesis;
@@ -6037,7 +5807,7 @@ definition
   (# LTLStates(v), Tran_LTL(v), InitS_LTL(v), FinalS_LTL(v) #);
   correctness;
 end;
-
+ 
 ::************
 ::  verification of the main theorem
 ::************
@@ -6046,8 +5816,7 @@ theorem Th68:
   w is-accepted-by BAutomaton(v) implies w |= v
 proof
   deffunc Gzai(Nat) = CastSeq(w,AtomicFamily).$1;
-  assume
-  w is-accepted-by BAutomaton(v);
+  assume w is-accepted-by BAutomaton(v);
   then consider run being sequence of LTLStates(v) such that
 A1: run.0 in InitS_LTL(v) and
 A2: for i holds [[run.i,Gzai(i)],run.(i+1)] in Tran_LTL(v) and
@@ -6099,16 +5868,14 @@ A13: for FSet be set st FSet in FinalS_LTL(v) holds {k where k is Element of
 A14: X c= Y
     proof
       let x;
-      assume
-      x in X;
+      assume x in X;
       then consider k being Element of NAT such that
 A15:  x=k and
 A16:  run.k in FSet;
       Run(k) in FSet by A12,A16;
       hence thesis by A15;
     end;
-    assume
-    FSet in FinalS_LTL(v);
+    assume FSet in FinalS_LTL(v);
     hence thesis by A3,A14;
   end;
 A17: for n st P[n] holds P[n + 1]
@@ -6134,7 +5901,7 @@ A23:      F is Sub_atomic;
           CastSeq(zeta,AtomicFamily) = Gi9 by MODELC_2:81;
           then
 A24:      CastSeq(zeta,AtomicFamily).0 = CastSeq(w,AtomicFamily).(0+i) by
-          MODELC_2:def 43
+          MODELC_2:def 45
             .= Gi;
           Gi in Label_(Run(i+1)) by A4;
           then consider X being Subset of atomic_LTL such that
@@ -6240,8 +6007,7 @@ A46:      F is Until;
 A47:      for x st x in NAT holds Fun(x) in LTLStates(v)
           proof
             let x;
-            assume
-            x in NAT;
+            assume x in NAT;
             set y = CastNat(x)+i;
             reconsider y as Element of NAT by ORDINAL1:def 13;
             Fun(x) = run.y;
@@ -6278,8 +6044,7 @@ A53:      FRunQ is infinite
 A54:        FRun1 c= Seg i \/ {0}
             proof
               let x;
-              assume
-              x in FRun1;
+              assume x in FRun1;
               then consider k being Element of NAT such that
 A55:          x = k and
 A56:          k<=i and
@@ -6309,8 +6074,7 @@ A58:          dom fun = FRunQ & for x st x in FRunQ holds fun.x =
               Fun(x) from FUNCT_1:sch 3;
 A59:          x in FRun2 implies CastNat(x)-i in FRunQ
               proof
-                assume
-                x in FRun2;
+                assume x in FRun2;
                 then consider k being Element of NAT such that
 A60:            x = k and
 A61:            i< k and
@@ -6341,8 +6105,7 @@ A69:            x = k1 by A66,MODELC_2:def 1;
                   .= y by A66;
                 hence thesis by A68;
               end;
-              assume
-              FRunQ is finite;
+              assume FRunQ is finite;
               then rng fun is finite by A58,FINSET_1:26;
               hence thesis by A64,FINSET_1:13,FUNCT_1:19;
             end;
@@ -6382,8 +6145,7 @@ LTLold of RunQ(m) & not (h2 in the LTLold of RunQ(m))) implies FRunQ is finite
 A73:        for m st m>=1 holds F in the LTLold of RunQ(m) & h1 in
             the LTLold of RunQ(m) & not h2 in the LTLold of RunQ(m);
             now
-              assume
-              not FRunQ c= {0};
+              assume not FRunQ c= {0};
               then consider x such that
 A74:          x in FRunQ and
 A75:          not x in {0} by TARSKI:def 3;
@@ -6470,8 +6232,7 @@ A98:          for k st k<j holds Shift(zeta,k) |= 'not' h1
               proof
 A99:            j <= j+1 by NAT_1:11;
                 let k;
-                assume
-                k<j;
+                assume k<j;
                 then k<j+1 by A99,XXREAL_0:2;
                 hence thesis by A97;
               end;
@@ -6489,8 +6250,7 @@ A101:         Run2 is_next_of Run1 by A4;
               then
 A102:         Shift(zeta,j) |= 'not' h1 by A97;
 A103:         now
-                assume
-                h1 in the LTLold of Run1;
+                assume h1 in the LTLold of Run1;
                 then Shift(w,i1) |= h1 by A18,A20,A94,A92, MODELC_2:35;
                 then Shift(Shift(w,i),j) |= h1 by MODELC_2:80;
                 hence contradiction by A102,MODELC_2:64;
@@ -6512,8 +6272,7 @@ A105:         Shift(w,i+(j+1)) |= h2 by A18,A20,A91,A93, MODELC_2
 A106:     F = h1 'R' h2 by A90,MODELC_2:9;
 A107:     (for j holds M[j]) implies zeta |= F
           proof
-            assume
-            for j holds M[j];
+            assume for j holds M[j];
             then for j holds ((for k st k<j holds Shift(zeta,k) |= 'not' h1)
             implies Shift(zeta,j) |= h2);
             hence thesis by A106,MODELC_2:69;
@@ -6525,8 +6284,7 @@ A108:     M[0]
 A109:       Run1 is_next_of Run0 by A4;
             then reconsider Run1 as elementary strict LTLnode over v by Def20;
             reconsider Run0 as elementary strict LTLnode over v by A109,Def20;
-            assume
-            for k st k < 0 holds Shift(zeta,k) |= 'not' h1;
+            assume for k st k < 0 holds Shift(zeta,k) |= 'not' h1;
 A110:       Shift(zeta,0) = Shift(w,i) by MODELC_2:79;
             Run1 is_next_of Run0 & F in the LTLold of Run1 implies (F is
             Release implies h2 in the LTLold of Run1) by Th41;
@@ -6671,8 +6429,7 @@ A6:   Seg n1 = dom L by A4,FINSEQ_1:def 3;
 A7:   for k st 1<=k & k<=n1 holds L.k = CastNode((f|**CastNat(k-1)).N,v)
       proof
         let k;
-        assume
-        1<=k & k<=n1;
+        assume 1<=k & k<=n1;
         then k in Seg n1 by FINSEQ_1:3;
         then L.k=CastNode((f|**CastNat(CastNat(k)-1)).N,v) by A5,A6;
         hence thesis by MODELC_2:def 1;
@@ -6724,8 +6481,7 @@ A17:  Seg 1 = dom L by FINSEQ_1:55;
 A18:  for n be Nat st n in dom L holds L.n = N
       proof
         let n be Nat;
-        assume
-        n in dom L;
+        assume n in dom L;
         then n = 1 by A17,FINSEQ_1:4,TARSKI:def 1;
         hence thesis by FINSEQ_1:57;
       end;
@@ -6781,8 +6537,7 @@ A5: for n being Nat holds IT.(n+1) = chosen_next(Shift(w,n),v,U,CastNode(IT
     for x st x in NAT holds IT.x in LS
     proof
       let x;
-      assume
-      x in NAT;
+      assume x in NAT;
       then reconsider x as Nat;
 A6:   x=0 or 0<0+x;
       now
@@ -6799,8 +6554,7 @@ A8:       1<=x;
           set x1 = x-1;
           reconsider x1 as Nat by A8,NAT_1:21;
           set y = IT.x;
-A9:       y = IT.(x1+1)
-            .= G(x1,IT.x1) by A4;
+A9:       y = IT.(x1+1) .= G(x1,IT.x1) by A4;
           then reconsider y as Element of LTLNodes(v) by Def30;
           IT.x = y;
           hence thesis by A9;
@@ -6830,8 +6584,7 @@ A14:  for n being Nat holds g.(n+1) = G(n,g.n);
 A15:  for k being Element of NAT st P[k] holds P[k + 1]
       proof
         let k be Element of NAT;
-        assume
-        P[k];
+        assume P[k];
         then f.(k+1) = G(k,g.k) by A12
           .= g.(k+1) by A14;
         hence thesis;
@@ -6873,14 +6626,11 @@ end;
 Lm34: 'X' CastLTL({} v)= {}
 proof
   now
-    assume
-    'X' CastLTL({} v) <> {};
+    assume 'X' CastLTL({} v) <> {};
     then consider y such that
 A1: y in 'X' CastLTL({} v) by XBOOLE_0:def 1;
-
     ex x being LTL-formula st y=x & ex u being LTL-formula st u in CastLTL(
     {} v) & x='X' u by A1;
-
     hence contradiction;
   end;
   hence thesis;
@@ -6895,13 +6645,12 @@ A1: w |= *N;
   for H be LTL-formula st H in 'X' CastLTL(the LTLnext of N) holds w|= H
   proof
     let H be LTL-formula;
-    assume
-    H in 'X' CastLTL(the LTLnext of N);
+    assume H in 'X' CastLTL(the LTLnext of N);
     then H in *N by Lm1;
-    hence thesis by A1,MODELC_2:def 66;
+    hence thesis by A1,MODELC_2:def 68;
   end;
   then
-A2: w |='X' CastLTL(the LTLnext of N) by MODELC_2:def 66;
+A2: w |='X' CastLTL(the LTLnext of N) by MODELC_2:def 68;
   *XN = CastLTL(the LTLnext of N) by Lm34;
   hence thesis by A2,MODELC_2:77;
 end;
@@ -6915,14 +6664,13 @@ A1: w |= 'X' v;
   for H be LTL-formula st H in 'X' CastLTL(Seed v) holds w|= H
   proof
     let H being LTL-formula;
-    assume
-    H in 'X' CastLTL(Seed v);
+    assume H in 'X' CastLTL(Seed v);
     then
     ex x being LTL-formula st H=x & ex u being LTL-formula st u in CastLTL(
     Seed v) & x='X' u;
     hence thesis by A1,TARSKI:def 1;
   end;
-  hence thesis by MODELC_2:def 66;
+  hence thesis by MODELC_2:def 68;
 end;
 
 theorem Th72:
@@ -6936,14 +6684,13 @@ A2: w |= *M implies w |= v
     assume
 A3: w |= *M;
     v in *M by A1,TARSKI:def 1;
-    hence thesis by A3,MODELC_2:def 66;
+    hence thesis by A3,MODELC_2:def 68;
   end;
   w |= v implies w |= *M
   proof
-    assume
-    w |= v;
+    assume w |= v;
     then for H be LTL-formula st H in *M holds w|= H by A1,TARSKI:def 1;
-    hence thesis by MODELC_2:def 66;
+    hence thesis by MODELC_2:def 68;
   end;
   hence thesis by A2;
 end;
@@ -6956,8 +6703,7 @@ proof
   set s = init v;
   deffunc R(Nat) = CastNode(chosen_run(w,v,U).$1,v);
   defpred P[Nat] means R($1+1) is_next_of R($1) & Shift(w,$1) |= *('X' R($1));
-  assume
-  w |= v;
+  assume w |= v;
   then
 A1: w |= *('X' s) by Th72;
 A2: CastNode(chosen_run(w,v,U).0,v) = CastNode(s,v) by Def50
@@ -7004,8 +6750,7 @@ A5: s2 = CastNode( chosen_next (w1,v,U, CastNode(chosen_run(w,v,U).n,v) ),
 A6: s3 = CastNode( chosen_next (w2,v,U, CastNode(chosen_run(w,v,U).n1,v) )
     ,v) by Def50
       .= chosen_next(w2,v,U,s2) by Def16;
-    assume
-    P[n];
+    assume P[n];
     then w2 = Shift(w1,1) & w1 |= *chosen_next(w1,v,U,s1) by
     Th69,MODELC_2
     :80;
@@ -7060,8 +6805,7 @@ A7:     Seg n1 = dom L by A5,FINSEQ_1:def 3;
 A8:     for k st 1<=k & k<=n1 holds L.k = CastNode((f|**CastNat(k-1)).N,v)
         proof
           let k;
-          assume
-          1<=k & k<=n1;
+          assume 1<=k & k<=n1;
           then k in Seg n1 by FINSEQ_1:3;
           then L.k=CastNode((f|**CastNat(CastNat(k)-1)).N,v) by A6,A7;
           hence thesis by MODELC_2:def 1;
@@ -7141,7 +6885,7 @@ A32:      N2 = CastNode((f|**CastNat(m1-1)).N,v) by A8,A28
             .= CastNode(f.((f|**mm1).N),v) by A3,FUNCT_2:21
             .= CastNode(chosen_succ(w0,v,U,CastNode(Nm1,v)),v) by A26,Def36
             .= chosen_succ(w0,v,U,N1) by A30,Def16;
-A33:      m-1<n1-1 by A24,XREAL_1:16;
+          m-1<n1-1 by A24,XREAL_1:16;
           then
 A34:      N1 is non elementary by A2,A4,A30,Def48;
           chosen_formula(U,N1) = H
@@ -7174,8 +6918,7 @@ A38:              not ( not G is Until & w0 |= *SuccNode1(G,N1) or G
             end;
 A41:        ( not H in M1)& H in M2 by A25,A27,A28,Def16;
             now
-              assume
-              H <> G;
+              assume H <> G;
               then not H in {G} by TARSKI:def 1;
               hence contradiction by A41,A37,XBOOLE_0:def 3;
             end;
@@ -7312,11 +7055,10 @@ A11: for n holds CastSeq(w,AtomicFamily).n in Label_(Run(n+1))
       MODELC_2:81;
       then
 A12:  CastSeq(w1,AtomicFamily).0 = CastSeq(w,AtomicFamily).(0+n) by
-      MODELC_2:def 43;
+      MODELC_2:def 45;
 A13:  w1 |= * Rn1 by A8;
 A14:  now
-        assume
-        not Neg_atomic_LTL(Rn1) misses X;
+        assume not Neg_atomic_LTL(Rn1) misses X;
         then Neg_atomic_LTL(Rn1) /\ X <> {} by XBOOLE_0:def 7;
         then consider a such that
 A15:    a in Neg_atomic_LTL(Rn1) /\ X by XBOOLE_0:def 1;
@@ -7325,7 +7067,7 @@ A15:    a in Neg_atomic_LTL(Rn1) /\ X by XBOOLE_0:def 1;
 A16:    x = a & x is atomic and
 A17:    ('not' x) in the LTLold of Rn1;
         ('not' x) in * Rn1 by A17,Lm1;
-        then w1 |= ('not' x) by A13,MODELC_2:def 66;
+        then w1 |= ('not' x) by A13,MODELC_2:def 68;
         then
 A18:    w1 |/= x by MODELC_2:64;
         a in X by A15,XBOOLE_0:def 4;
@@ -7334,13 +7076,12 @@ A18:    w1 |/= x by MODELC_2:64;
       atomic_LTL(Rn1) c= X
       proof
         let a;
-        assume
-        a in atomic_LTL(Rn1);
+        assume a in atomic_LTL(Rn1);
         then consider x being LTL-formula such that
 A19:    x = a & x is atomic and
 A20:    x in the LTLold of Rn1;
         x in * Rn1 by A20,Lm1;
-        then w1 |= x by A13,MODELC_2:def 66;
+        then w1 |= x by A13,MODELC_2:def 68;
         hence thesis by A12,A19,MODELC_2:63;
       end;
       hence thesis by A14;
@@ -7383,8 +7124,7 @@ A25: for FSet be set st FSet in FS holds {k where k is Element of NAT:run.
     proof
       let FSet be set;
       set FK = {k where k is Element of NAT:run.k in FSet};
-      assume
-      FSet in FS;
+      assume FSet in FS;
       then consider x being Element of bool LS such that
 A26:  FSet = x and
 A27:  ex F st F is_subformula_of v & F is Until & x= FinalS_LTL(F,v);
@@ -7396,8 +7136,7 @@ A29:  x= FinalS_LTL(F,v) by A27;
       set F1 = the_left_argument_of F;
 A30:  F = F1 'U' F2 by A28,MODELC_2:8;
       now
-        assume
-        not FK is infinite set;
+        assume not FK is infinite set;
         then consider L such that
 A31:    FK = rng L by FINSEQ_1:73;
         ex m st for k st m<=k holds not k in FK
@@ -7411,8 +7150,7 @@ A33:          1<=len L;
               FK c= REAL
               proof
                 let a;
-                assume
-                a in FK;
+                assume a in FK;
                 then ex k being Element of NAT st a=k & run.k in FSet;
                 hence thesis;
               end;
@@ -7438,8 +7176,7 @@ A33:          1<=len L;
                 assume
 A34:            natMAX <= k;
                 now
-                  assume
-                  k in FK;
+                  assume k in FK;
                   then consider i1 being set such that
 A35:              i1 in dom L and
 A36:              k = L.i1 by A31,FUNCT_1:def 5;
@@ -7468,16 +7205,14 @@ A38:    for k st m<=k holds F in the LTLold of Run(k) & not F2 in the
         LTLold of Run(k)
         proof
           let k;
-          assume
-          m<=k;
+          assume m<=k;
           then
 A39:      not k in FK by A37;
           reconsider k as Element of NAT by ORDINAL1:def 13;
           set r = run.k;
           reconsider r as elementary strict LTLnode over v by A4;
           now
-            assume
-            not (F in the LTLold of CastNode(r,v) & not F2 in the
+            assume not (F in the LTLold of CastNode(r,v) & not F2 in the
             LTLold of CastNode(r,v));
             then r in FSet by A26,A29;
             hence contradiction by A39;
@@ -7490,7 +7225,7 @@ A40:    w1 |= * Run(m1) by A8;
         m<=m1 by NAT_1:11;
         then F in the LTLold of Run(m1) by A38;
         then F in * Run(m1) by Lm1;
-        then w1 |= F by A40,MODELC_2:def 66;
+        then w1 |= F by A40,MODELC_2:def 68;
         then consider h such that
         for j being Nat st j<h holds Shift(w1,j) |= F1 and
 A41:    Shift(w1,h) |= F2 by A30,MODELC_2:68;
@@ -7516,4 +7251,3 @@ end;
 
 theorem
   w is-accepted-by BAutomaton(v) iff w |= v by Th68,Th75;
-

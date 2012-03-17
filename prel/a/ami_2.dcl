@@ -23,36 +23,78 @@
 </Signature>
 <FCluster aid="AMI_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="134"/>
+<Func kind="K" nr="133"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="133"/>
+<Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="137"/>
+<Func kind="K" nr="136"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="4">
 <ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="41">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="23"/>
+</Cluster>
+</FCluster>
+<FCluster aid="AMI_2" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="41">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="20" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="AMI_2" nr="6">
+<ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="123">
-<Func kind="K" nr="138"/>
+<Func kind="K" nr="122">
+<Func kind="K" nr="137"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="135"/>
+<Func kind="K" nr="134"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="36">
@@ -63,10 +105,10 @@
 <Adjective nr="22"/>
 </Cluster>
 </FCluster>
-<FCluster aid="AMI_2" nr="5">
+<FCluster aid="AMI_2" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="25">
-<Func kind="K" nr="137"/>
+<Func kind="K" nr="136"/>
 </Func>
 <Cluster>
 <Adjective nr="32"/>

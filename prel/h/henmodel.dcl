@@ -16,6 +16,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="QC_LANG2"/>
@@ -31,11 +32,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="175"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 </Registrations>

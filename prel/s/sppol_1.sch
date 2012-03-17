@@ -6,11 +6,11 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -34,8 +34,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="44"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="28"/>
+<Func kind="K" nr="32"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
@@ -44,7 +44,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="65">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -74,8 +74,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="44"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="28"/>
+<Func kind="K" nr="32"/>
 </Typ>
 <Func kind="F" nr="3">
 <Func kind="F" nr="2"/>
@@ -88,7 +88,7 @@
 </Pred>
 <Pred kind="R" nr="16">
 <Var nr="1"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="64">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

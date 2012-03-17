@@ -254,21 +254,6 @@
 <FCluster aid="ORDERS_2" nr="9">
 <ArgTypes>
 <Typ kind="G" nr="6">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="89">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="59">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="ORDERS_2" nr="10">
-<ArgTypes>
-<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="43" value="false"/>
 <Adjective nr="56"/>
@@ -285,7 +270,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -303,6 +288,29 @@
 </Typ>
 <Cluster>
 <Adjective nr="55"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ORDERS_2" nr="2">
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="21">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="59">
+<LocusVar nr="1"/>
+</Adjective>
 </Cluster>
 </CCluster>
 </Registrations>

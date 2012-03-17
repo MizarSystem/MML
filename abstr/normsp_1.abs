@@ -9,73 +9,62 @@ environ
  vocabularies NUMBERS, RLVECT_1, STRUCT_0, SUBSET_1, ALGSTR_0, BINOP_1,
       FUNCT_1, ZFMISC_1, XBOOLE_0, REAL_1, PRE_TOPC, SUPINF_2, RLSUB_1,
       FUNCOP_1, CARD_1, RELAT_1, COMPLEX1, ARYTM_3, XXREAL_0, XREAL_0,
-      ORDINAL1, XCMPLX_0, ARYTM_1, NAT_1, TARSKI, SEQ_2, SEQ_1, ORDINAL2,
-      NORMSP_1;
+      ORDINAL1, ARYTM_1, NAT_1, TARSKI, SEQ_2, ORDINAL2, NORMSP_1, NORMSP_0,
+      RELAT_2, METRIC_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, FUNCOP_1, FUNCT_2, BINOP_1,
       RELAT_1, SEQ_1, SEQ_2, DOMAIN_1, STRUCT_0, ALGSTR_0, PRE_TOPC, RLVECT_1,
-      RLSUB_1, XXREAL_0;
+      RLSUB_1, XXREAL_0, NORMSP_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
-      SEQ_2, RLSUB_1, SEQ_1, VALUED_1, RELSET_1;
+      SEQ_2, RLSUB_1, SEQ_1, VALUED_1, RELSET_1, NORMSP_0;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, STRUCT_0, RLVECT_1, ALGSTR_0;
+      MEMBERED, STRUCT_0, RLVECT_1, ALGSTR_0, NORMSP_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
 definition
-  struct(RLSStruct) NORMSTR (# carrier -> set, ZeroF -> Element of the carrier
-, addF -> BinOp of the carrier, Mult -> Function of [:REAL, the carrier:], the
-    carrier, norm -> Function of the carrier, REAL #);
+  struct(RLSStruct, N-ZeroStr) NORMSTR (# carrier -> set,
+   ZeroF -> Element of the carrier,
+   addF -> BinOp of the carrier, Mult -> Function of [:REAL, the carrier:], the
+    carrier, normF -> Function of the carrier, REAL #);
 end;
 
 registration
   cluster non empty strict NORMSTR;
 end;
 
-reserve X for non empty NORMSTR;
+
 reserve a, b for Real;
-reserve x for Point of X;
 
 definition
-  let X, x;
-  func ||.x.|| -> Real equals
-:: NORMSP_1:def 1
-  (the norm of X).x;
-end;
-
-definition
+ canceled;
   let IT be non empty NORMSTR;
   attr IT is RealNormSpace-like means
 :: NORMSP_1:def 2
 
-  for x, y being Point of IT, a
-holds ( ||.x.|| = 0 iff x = 0.IT ) & ||.a * x.|| = abs(a) * ||.x.|| & ||.x + y
+  for x, y being Point of IT, a holds ||.a * x.|| = abs(a) * ||.x.|| & ||.x + y
   .|| <= ||.x.|| + ||.y.||;
 end;
 
 registration
-  cluster RealNormSpace-like vector-distributive scalar-distributive
-  scalar-associative scalar-unital Abelian add-associative
+  cluster reflexive discerning RealNormSpace-like vector-distributive
+  scalar-distributive scalar-associative scalar-unital Abelian add-associative
     right_zeroed right_complementable strict (non empty NORMSTR);
 end;
 
 definition
-  mode RealNormSpace is RealNormSpace-like vector-distributive
-  scalar-distributive scalar-associative scalar-unital Abelian
-    add-associative right_zeroed right_complementable (non empty NORMSTR);
+  mode RealNormSpace is reflexive discerning RealNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable
+   (non empty NORMSTR);
 end;
 
 reserve RNS for RealNormSpace;
 reserve x, y, z, g, g1, g2 for Point of RNS;
 
 canceled 4;
-
-registration
-  let RNS;
-  cluster ||.0.RNS.|| -> zero;
-end;
 
 theorem :: NORMSP_1:5
   ||.0.RNS.|| = 0;
@@ -88,6 +77,11 @@ theorem :: NORMSP_1:7
 
 theorem :: NORMSP_1:8
   0 <= ||.x.||;
+
+registration
+  let RNS,x;
+  cluster ||.x.|| -> non negative;
+end;
 
 theorem :: NORMSP_1:9
   ||.a * x + b * y.|| <= abs(a) * ||.x.|| + abs(b) * ||.y.||;
@@ -204,19 +198,16 @@ definition
   attr S is convergent means
 :: NORMSP_1:def 9
 
-  ex g st for r st 0 < r ex m st for n st m
-  <= n holds ||.(S.n) - g.|| < r;
+  ex g st for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
 
 canceled 6;
 
 theorem :: NORMSP_1:34
-  S1 is convergent & S2 is convergent implies S1 + S2 is
-  convergent;
+  S1 is convergent & S2 is convergent implies S1 + S2 is convergent;
 
 theorem :: NORMSP_1:35
-  S1 is convergent & S2 is convergent implies S1 - S2 is
-  convergent;
+  S1 is convergent & S2 is convergent implies S1 - S2 is convergent;
 
 theorem :: NORMSP_1:36
   S is convergent implies S - x is convergent;
@@ -224,29 +215,20 @@ theorem :: NORMSP_1:36
 theorem :: NORMSP_1:37
   S is convergent implies a * S is convergent;
 
-definition
-  let RNS be non empty NORMSTR, S be sequence of RNS;
-  func ||.S.|| -> Real_Sequence means
-:: NORMSP_1:def 10
-
-  for n holds it.n = ||. S.n .||;
-end;
-
 canceled;
 
 theorem :: NORMSP_1:39
   S is convergent implies ||.S.|| is convergent;
 
 definition
-  let RNS;
-  let S;
+ canceled;
+  let RNS, S;
   assume
  S is convergent;
   func lim S -> Point of RNS means
 :: NORMSP_1:def 11
 
-  for r st 0 < r ex m st for n st m
-  <= n holds ||.(S.n) - it.|| < r;
+  for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
 end;
 
 canceled;
@@ -268,4 +250,3 @@ theorem :: NORMSP_1:44
 
 theorem :: NORMSP_1:45
   S is convergent implies lim (a * S) = a * (lim S);
-

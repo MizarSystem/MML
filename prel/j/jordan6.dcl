@@ -2,8 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -12,6 +10,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
@@ -51,25 +51,25 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="153"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="157"/>
 </Cluster>
-<Func kind="K" nr="21">
+<Func kind="K" nr="6">
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="369">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 <Adjective nr="58">
-<Func kind="K" nr="276">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -79,25 +79,25 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="153"/>
+<Adjective nr="1" value="false"/>
+<Adjective nr="157"/>
 </Cluster>
-<Func kind="K" nr="21">
+<Func kind="K" nr="6">
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="368">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 <Adjective nr="58">
-<Func kind="K" nr="276">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -109,11 +109,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="358"/>
+<Func kind="K" nr="363"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="12"/>
 </Cluster>
 </CCluster>
 </Registrations>

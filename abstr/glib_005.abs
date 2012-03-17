@@ -55,6 +55,7 @@ definition
   let G be _Graph;
   mode FF:ELabeling of G is natural-valued ManySortedSet of the_Edges_of G;
 end;
+
 :: NAT can be replaced by RAT but then we can convert it to the NAT case
 :: as the graphs are finite
 
@@ -85,8 +86,7 @@ definition
   pred EL has_maximum_flow_from source,sink means
 :: GLIB_005:def 4
 
-  EL
-  has_valid_flow_from source,sink & for E2 being FF:ELabeling of G st E2
+  EL has_valid_flow_from source,sink & for E2 being FF:ELabeling of G st E2
   has_valid_flow_from source,sink holds E2.flow(source,sink) <= EL.flow(source,
   sink);
 end;
@@ -99,6 +99,7 @@ definition
 
     not contradiction;
 end;
+
 :: 1 used to mark source at the sart
 
 definition
@@ -125,6 +126,7 @@ definition
 end;
 
 :: attribute with alternative structures
+
 definition
   let G be real-weighted WGraph, EL be FF:ELabeling of G, W be Walk of G;
   pred W is_augmenting_wrt EL means
@@ -181,8 +183,7 @@ definition
   mode AP:VLabelingSeq of EL -> ManySortedSet of NAT means
 :: GLIB_005:def 11
 
-    for n being
-    Nat holds it.n is AP:VLabeling of EL;
+    for n being Nat holds it.n is AP:VLabeling of EL;
 end;
 
 definition
@@ -197,8 +198,7 @@ definition
   func AP:CompSeq(EL,source) -> AP:VLabelingSeq of EL means
 :: GLIB_005:def 12
 
-  it.0 =
-  source .--> 1 & for n being Nat holds it.(n+1) = AP:Step(it.n);
+  it.0 = source .--> 1 & for n being Nat holds it.(n+1) = AP:Step(it.n);
 end;
 
 theorem :: GLIB_005:4
@@ -313,13 +313,22 @@ definition
   mode FF:ELabelingSeq of G -> ManySortedSet of NAT means
 :: GLIB_005:def 19
 
-    for n being
-    Nat holds it.n is FF:ELabeling of G;
+    for n being Nat holds it.n is FF:ELabeling of G;
 end;
 
-definition
+registration
   let G be _Graph, ES be FF:ELabelingSeq of G, n be Nat;
-  redefine func ES.n -> FF:ELabeling of G;
+  cluster ES.n -> Function-like Relation-like;
+end;
+
+registration
+  let G be _Graph, ES be FF:ELabelingSeq of G, n be Nat;
+  cluster ES.n -> the_Edges_of G -defined;
+end;
+
+registration
+  let G be _Graph, ES be FF:ELabelingSeq of G, n be Nat;
+  cluster ES.n -> natural-valued total;
 end;
 
 definition
@@ -336,8 +345,7 @@ definition
   let G be finite natural-weighted WGraph, sink,source be Vertex of G;
   func FF:MaxFlow(G,source, sink) -> FF:ELabeling of G equals
 :: GLIB_005:def 21
-  FF:CompSeq(G,
-  source,sink).Result();
+  FF:CompSeq(G,source,sink).Result();
 end;
 
 begin :: Ford Fulkerson Maximum Flow Theorems
@@ -392,4 +400,3 @@ theorem :: GLIB_005:19
   for G being finite natural-weighted WGraph, source, sink being Vertex
   of G st sink <> source holds FF:MaxFlow(G,source,sink) has_maximum_flow_from
   source,sink;
-

@@ -10,37 +10,37 @@ environ
       CARD_3, XBOOLE_0, FUNCT_3, ZFMISC_1, XXREAL_0, REAL_1, SUBSET_1,
       FINSEQ_2, RFINSEQ, JORDAN3, SEQ_4, CARD_1, INTEGRA1, FUNCOP_1, VALUED_0,
       NUMBERS, ORDINAL1, MEASURE7, ORDINAL4, XXREAL_1, XXREAL_2, NAT_1,
-      XREAL_0, ARYTM_3, TARSKI;
+      XREAL_0, ARYTM_3, TARSKI, MEMBERED, MEMBER_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XREAL_0, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, RELSET_1, VALUED_0,
-      VALUED_1, SEQ_1, SEQ_4, XXREAL_0, XXREAL_2, SEQ_2, RCOMP_1, MEASURE6,
-      FINSEQ_2, PARTFUN2, RFUNCT_1, RVSUM_1, RFINSEQ, FINSEQ_6, PARTFUN1,
-      FINSEQ_1, FUNCT_2;
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, RELSET_1,
+      VALUED_0, MEMBERED, MEMBER_1, VALUED_1, SEQ_1, SEQ_4, XXREAL_2, SEQ_2,
+      RCOMP_1, FINSEQ_2, PARTFUN2, RFUNCT_1, RVSUM_1, RFINSEQ, FINSEQ_6,
+      PARTFUN1, FINSEQ_1, FUNCT_2, MEASURE6;
  constructors PARTFUN1, REAL_1, NAT_1, RCOMP_1, FINSOP_1, PARTFUN2, RFUNCT_1,
       REALSET1, RFINSEQ, BINARITH, FINSEQ_5, SEQM_3, MEASURE6, FINSEQ_6, SEQ_1,
-      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, SEQ_4, RELSET_1, SEQ_2;
+      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, SEQ_4, RELSET_1, SEQ_2, MEMBER_1,
+      XXREAL_3;
  registrations SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, SEQM_3, MEASURE6, VALUED_0,
-      VALUED_1, FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1;
+      VALUED_1, FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1, MEMBER_1, SEQ_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Definition of closed interval and its properties
 
-reserve a,a1,b,b1,x,y,z for Real,
+reserve a,a1,b,b1,x,y for Real,
   F,G,H for FinSequence of REAL,
-  i,j,k,n,m for
-  Element of NAT,
+  i,j,k,n,m for Element of NAT,
   I for Subset of REAL,
   X for non empty set,
   x1,R,s for set;
 
 definition
-  let IT be Subset of REAL;
+  let IT be set;
   attr IT is closed-interval means
 :: INTEGRA1:def 1
 
-  ex a,b being Real st a <= b & IT=[.a,b.];
+  ex a,b being Real st a <= b & IT = [.a,b.];
 end;
 
 registration
@@ -60,7 +60,7 @@ registration
 end;
 
 theorem :: INTEGRA1:3
-  A is bounded_below & A is bounded_above;
+  A is bounded_below bounded_above;
 
 registration
   cluster closed-interval -> bounded Subset of REAL;
@@ -73,7 +73,7 @@ end;
 reserve A, B for closed-interval Subset of REAL;
 
 theorem :: INTEGRA1:4
-  ex a,b st a<=b & a=lower_bound A & b=upper_bound A;
+  lower_bound A <= upper_bound A;
 
 theorem :: INTEGRA1:5
   A = [. lower_bound A, upper_bound A .];
@@ -125,8 +125,7 @@ theorem :: INTEGRA1:8
   i in dom D implies D.i in A;
 
 theorem :: INTEGRA1:9
-  i in dom D & i<>1 implies i-1 in dom D & D.(i-1) in A & i-1 in
-  NAT;
+  i in dom D & i<>1 implies i-1 in dom D & D.(i-1) in A & i-1 in NAT;
 
 definition
   canceled;
@@ -138,9 +137,8 @@ definition
   func divset(D,i) -> closed-interval Subset of REAL means
 :: INTEGRA1:def 5
 
-  lower_bound
-it = lower_bound A & upper_bound it = D.i if i=1 otherwise lower_bound it = D.(
-  i-1) & upper_bound it = D.i;
+  lower_bound it = lower_bound A & upper_bound it = D.i if i=1
+  otherwise lower_bound it = D.(i-1) & upper_bound it = D.i;
 end;
 
 theorem :: INTEGRA1:10
@@ -194,13 +192,13 @@ definition
   func upper_sum_set(f) -> PartFunc of divs A,REAL means
 :: INTEGRA1:def 11
 
-  dom it = divs
-  A & for D be Division of A st D in dom it holds it.D=upper_sum(f,D);
+  dom it = divs A &
+  for D be Division of A st D in dom it holds it.D=upper_sum(f,D);
   func lower_sum_set(f) -> PartFunc of divs A,REAL means
 :: INTEGRA1:def 12
 
-  dom it = divs
-  A & for D be Division of A st D in dom it holds it.D=lower_sum(f,D);
+  dom it = divs A &
+  for D be Division of A st D in dom it holds it.D=lower_sum(f,D);
 end;
 
 definition
@@ -209,13 +207,11 @@ definition
   attr f is upper_integrable means
 :: INTEGRA1:def 13
 
-  rng upper_sum_set(f) is
-  bounded_below;
+  rng upper_sum_set(f) is bounded_below;
   attr f is lower_integrable means
 :: INTEGRA1:def 14
 
-  rng lower_sum_set(f) is
-  bounded_above;
+  rng lower_sum_set(f) is bounded_above;
 end;
 
 definition
@@ -240,8 +236,8 @@ definition
   attr f is integrable means
 :: INTEGRA1:def 17
 
-  f is upper_integrable & f is
-  lower_integrable & upper_integral(f) = lower_integral(f);
+  f is upper_integrable lower_integrable &
+  upper_integral(f) = lower_integral(f);
 end;
 
 definition
@@ -255,27 +251,27 @@ end;
 begin :: Real function's properties
 
 theorem :: INTEGRA1:12
-  for f,g be PartFunc of X,REAL holds rng(f+g) c= rng f + rng g;
+  for f,g be PartFunc of X,REAL holds rng(f+g) c= rng f ++ rng g;
 
 theorem :: INTEGRA1:13
   for f be PartFunc of X,REAL holds f|X is bounded_below implies
   rng f is bounded_below;
 
 theorem :: INTEGRA1:14
-  for f be PartFunc of X,REAL st rng f is bounded_below holds f|X is
-  bounded_below;
+  for f be PartFunc of X,REAL st rng f is bounded_below holds
+    f|X is bounded_below;
 
 theorem :: INTEGRA1:15
-  for f be PartFunc of X,REAL st f|X is bounded_above holds rng f
-  is bounded_above;
+  for f be PartFunc of X,REAL st f|X is bounded_above holds
+    rng f is bounded_above;
 
 theorem :: INTEGRA1:16
-  for f be PartFunc of X,REAL st rng f is bounded_above holds f|X is
-  bounded_above;
+  for f be PartFunc of X,REAL st rng f is bounded_above holds
+    f|X is bounded_above;
 
 theorem :: INTEGRA1:17
-  for f be PartFunc of X,REAL holds f|X is bounded implies rng f is
-  bounded;
+  for f be PartFunc of X,REAL holds f|X is bounded implies
+    rng f is bounded;
 
 begin :: Characteristic function's properties
 
@@ -311,18 +307,12 @@ theorem :: INTEGRA1:26
 
 begin :: Some properties of Darboux sum
 
-definition
+registration
   let A be closed-interval Subset of REAL;
   let f be PartFunc of A,REAL;
   let D be Division of A;
-  redefine func upper_volume(f,D) -> non empty FinSequence of REAL;
-end;
-
-definition
-  let A be closed-interval Subset of REAL;
-  let f be PartFunc of A,REAL;
-  let D be Division of A;
-  redefine func lower_volume(f,D) -> non empty FinSequence of REAL;
+  cluster upper_volume(f,D) -> non empty;
+  cluster lower_volume(f,D) -> non empty;
 end;
 
 theorem :: INTEGRA1:27
@@ -341,18 +331,12 @@ theorem :: INTEGRA1:30
   f|A is bounded implies lower_sum(f,D) <= upper_sum(f,D);
 
 definition
-  let A, D;
-  func delta(D) -> Real equals
-:: INTEGRA1:def 19
-  max rng upper_volume(chi(A,A),D);
-end;
-
-definition
   let D1, D2 be FinSequence;
+  canceled;
   pred D1 <= D2 means
 :: INTEGRA1:def 20
-
   len D1 <= len D2 & rng D1 c= rng D2;
+  reflexivity;
 end;
 
 notation
@@ -364,16 +348,16 @@ theorem :: INTEGRA1:31
   len D1 = 1 implies D1 <= D2;
 
 theorem :: INTEGRA1:32
-  f|A is bounded_above & len D1 = 1 implies upper_sum(f,D1) >=
-  upper_sum(f,D2);
+  f|A is bounded_above & len D1 = 1 implies
+    upper_sum(f,D1) >= upper_sum(f,D2);
 
 theorem :: INTEGRA1:33
-  f|A is bounded_below & len D1 = 1 implies lower_sum(f,D1) <=
-  lower_sum(f,D2);
+  f|A is bounded_below & len D1 = 1 implies
+    lower_sum(f,D1) <= lower_sum(f,D2);
 
 theorem :: INTEGRA1:34
-  i in dom D implies ex A1,A2 be closed-interval Subset of REAL st A1=[.
-  lower_bound A,D.i .] & A2=[. D.i,upper_bound A.] & A=A1 \/ A2;
+  i in dom D implies ex A1,A2 be closed-interval Subset of REAL
+  st A1=[.lower_bound A,D.i .] & A2=[. D.i,upper_bound A.] & A=A1 \/ A2;
 
 theorem :: INTEGRA1:35
   i in dom D1 & D1 <= D2 implies ex j st j in dom D2 & D1.i=D2.j;
@@ -413,8 +397,7 @@ definition
   func PartSums(p) -> FinSequence of REAL means
 :: INTEGRA1:def 22
 
-  len it = len p & for i
-  be Nat st i in dom p holds it.i=Sum(p|i);
+  len it = len p & for i be Nat st i in dom p holds it.i=Sum(p|i);
 end;
 
 theorem :: INTEGRA1:40
@@ -424,8 +407,8 @@ theorem :: INTEGRA1:40
 
 theorem :: INTEGRA1:41
   D1 <= D2 & f|A is bounded_below implies for i be non empty
-  Element of NAT holds (i in dom D1 implies Sum(lower_volume(f,D1)|i) <= Sum(
-  lower_volume(f,D2)|indx(D2,D1,i)));
+  Element of NAT holds (i in dom D1 implies
+  Sum(lower_volume(f,D1)|i) <= Sum(lower_volume(f,D2)|indx(D2,D1,i)));
 
 theorem :: INTEGRA1:42
   D1 <= D2 & i in dom D1 & f|A is bounded_above implies (PartSums(
@@ -464,15 +447,16 @@ theorem :: INTEGRA1:51
   f|A is bounded implies upper_integral(f) >= lower_integral(f);
 
 theorem :: INTEGRA1:52
-  for X,Y be Subset of REAL holds (-X)+(-Y)=-(X+Y);
+  for X,Y be Subset of REAL holds (--X)++(--Y)=--(X++Y);
 
 theorem :: INTEGRA1:53
-  for X,Y being Subset of REAL holds X is bounded_above & Y is
-  bounded_above implies X+Y is bounded_above;
+  for X,Y being Subset of REAL st X is bounded_above & Y is
+  bounded_above holds X++Y is bounded_above;
 
 theorem :: INTEGRA1:54
-  for X,Y be non empty Subset of REAL st X is bounded_above & Y is
-  bounded_above holds upper_bound(X+Y) = upper_bound X + upper_bound Y;
+  for X,Y be non empty Subset of REAL st
+  X is bounded_above & Y is bounded_above holds
+  upper_bound(X++Y) = upper_bound X + upper_bound Y;
 
 theorem :: INTEGRA1:55
   i in dom D & f|A is bounded_above & g|A is bounded_above implies

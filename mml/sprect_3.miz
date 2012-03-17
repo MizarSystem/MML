@@ -17,11 +17,10 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, CARD_1, RFINSEQ,
       FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_4, FINSEQ_5, MATRIX_1, MATRIX_2,
-      SEQM_3, SEQ_4, FINSEQ_6,
-      STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, COMPTS_1, CONNSP_1,
-      PCOMPS_1, RLVECT_1, RLTOPSP1, EUCLID, TOPREAL1, TOPREAL4, PSCOMP_1,
-      GOBOARD1, GOBOARD2, SPPOL_1, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN3,
-      JORDAN5C, JORDAN5D, SPRECT_1, SPRECT_2, XXREAL_0;
+      SEQM_3, SEQ_4, FINSEQ_6, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_1, COMPTS_1,
+      CONNSP_1, PCOMPS_1, RLVECT_1, RLTOPSP1, EUCLID, TOPREAL1, TOPREAL4,
+      PSCOMP_1, GOBOARD1, GOBOARD2, SPPOL_1, SPPOL_2, GOBOARD5, GOBOARD9,
+      JORDAN3, JORDAN5C, JORDAN5D, SPRECT_1, SPRECT_2, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, FINSEQ_4, REALSET1, RFINSEQ,
       NAT_D, TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, MATRIX_2, TOPMETR, TOPREAL2,
       TOPREAL4, GOBOARD2, SPPOL_1, JORDAN1, PSCOMP_1, GOBOARD9, JORDAN3,
@@ -29,7 +28,7 @@ environ
       PCOMPS_1, BINARITH, FUNCSDOM, CONVEX1, SEQ_4, RVSUM_1;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, REALSET1, STRUCT_0, EUCLID, GOBOARD2, SPPOL_2, SPRECT_1,
-      SPRECT_2, VALUED_0, CARD_1, FUNCT_1, SEQ_4;
+      SPRECT_2, VALUED_0, CARD_1, FUNCT_1, SEQ_4, SPPOL_1, TOPS_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLTOPSP1, SPRECT_2, JORDAN1, TOPREAL4, GOBOARD1, XBOOLE_0,
       PSCOMP_1, SEQM_3;
@@ -45,7 +44,7 @@ environ
 
 begin :: Preliminaries
 
-reserve i,j,k for Nat;
+
 
 canceled 10;
 
@@ -61,8 +60,7 @@ A1: len f >= 1 by NAT_1:14;
 end;
 
 theorem Th12:
-  for a,b,c,d being set holds Indices (a,b)][(c,d) = {[1,1],[1,2],
-  [2,1],[2,2]}
+  for a,b,c,d being set holds Indices (a,b)][(c,d) = {[1,1],[1,2], [2,1],[2,2]}
 proof
   let a,b,c,d be set;
   thus Indices (a,b)][(c,d) = [:Seg 2,Seg 2:] by MATRIX_2:3
@@ -113,8 +111,7 @@ theorem
   for p,q being Point of TOP-REAL n st p = 1/2*(p+q) holds p = q
 proof
   let p,q be Point of TOP-REAL n;
-  assume
-  p = 1/2*(p+q);
+  assume p = 1/2*(p+q);
   then p = (1 - 1/2)*p + 1/2*q by EUCLID:36;
   hence thesis by Th13;
 end;
@@ -124,14 +121,12 @@ theorem Th16:
   LSeg(p,q) holds q = r
 proof
   let p,q,r be Point of TOP-REAL n;
-  assume
-  q in LSeg(p,r);
+  assume q in LSeg(p,r);
   then consider r1 being Real such that
 A1: q = (1-r1)*p+r1*r and
 A2: 0<=r1 and
 A3: r1<=1;
-  assume
-  r in LSeg(p,q);
+  assume r in LSeg(p,q);
   then consider r2 being Real such that
 A4: r = (1-r2)*p+r2*q and
   0<=r2 and
@@ -228,8 +223,7 @@ proof
   let p,q,r,s be Point of TOP-REAL 2 such that
 A1: LSeg(p,q) is horizontal and
 A2: LSeg(r,s) is horizontal;
-  assume
-  LSeg(p,q) meets LSeg(r,s);
+  assume LSeg(p,q) meets LSeg(r,s);
   then LSeg(p,q) /\ LSeg(r,s) <> {} by XBOOLE_0:def 7;
   then consider x being Point of TOP-REAL 2 such that
 A3: x in LSeg(p,q) /\ LSeg(r,s) by SUBSET_1:10;
@@ -380,15 +374,18 @@ A1: N-most C c= LSeg(NW-corner C,NE-corner C) by XBOOLE_1:17;
   hence thesis by A1;
 end;
 
-theorem
-  LSeg(NW-corner C,NE-corner C) is horizontal
+registration
+  let C;
+  cluster LSeg(NW-corner C,NE-corner C) -> horizontal;
+coherence  
 proof
   (NW-corner C)`2 = N-bound C by EUCLID:56
     .= (NE-corner C)`2 by EUCLID:56;
   hence thesis by SPPOL_1:36;
 end;
+end;
 
-canceled;
+canceled 2;
 
 theorem
   for g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2 st
@@ -475,8 +472,7 @@ A4: A = B \/ {LSeg(f,i)}
     thus A c= B \/ {LSeg(f,i)}
     proof
       let e be set;
-      assume
-      e in A;
+      assume e in A;
       then consider k such that
 A5:   e = LSeg(f,k) and
 A6:   i <= k and
@@ -531,8 +527,7 @@ A6: A = B \/ {LSeg(f,j -' 1)}
     thus A c= B \/ {LSeg(f,j -' 1)}
     proof
       let e be set;
-      assume
-      e in A;
+      assume e in A;
       then consider k such that
 A7:   e = LSeg(f,k) and
 A8:   i <= k and
@@ -728,15 +723,13 @@ A33:    j <= i1 by A31,NAT_1:13;
       end;
 A34:  j in dom f by A1,A2,FINSEQ_3:27;
 A35:  now
-        assume
-        f/.(j+1)=f/.j;
+        assume f/.(j+1)=f/.j;
         then j = j+1 by A12,A34,PARTFUN2:17;
         hence contradiction;
       end;
 A36:  now
 A37:    j+(1+1) = j+1+1;
-        assume
-        i1 = j + 1;
+        assume i1 = j + 1;
         then q in {f/.(j+1)} by A1,A15,A20,A37,TOPREAL1:def 8;
         then q = f/.(j+1) by TARSKI:def 1;
         hence contradiction by A3,A4,A6,A7,A11,A35,SPPOL_1:24,TOPREAL1:12;
@@ -764,8 +757,6 @@ theorem Th41:
   holds LeftComp f is open & RightComp f is open
 proof
   let f be non constant standard special_circular_sequence;
-  L~f is closed by SPPOL_1:49;
-  then
 A1: (L~f)` is open by TOPS_1:29;
   LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
   hence LeftComp f is open by A1,Th18;
@@ -790,7 +781,7 @@ registration
     LeftComp f is_a_component_of (L~f)` by GOBOARD9:def 1;
     then consider A being Subset of (TOP-REAL 2)|(L~f)` such that
 A1: A = LeftComp f and
-A2: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
+A2: A is a_component by CONNSP_1:def 6;
     A is connected by A2,CONNSP_1:def 5;
     hence thesis by A1,CONNSP_1:24;
   end;
@@ -801,7 +792,7 @@ A2: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
     RightComp f is_a_component_of (L~f)` by GOBOARD9:def 2;
     then consider A being Subset of (TOP-REAL 2)|(L~f)` such that
 A3: A = RightComp f and
-A4: A is_a_component_of (TOP-REAL 2)|(L~f)` by CONNSP_1:def 6;
+A4: A is a_component by CONNSP_1:def 6;
     A is connected by A4,CONNSP_1:def 5;
     hence thesis by A3,CONNSP_1:24;
   end;
@@ -903,8 +894,7 @@ GOBOARD5:2
   then
 A21: j1 = width GoB f by A16,XXREAL_0:1;
 A22: now
-    assume
-    i > i1;
+    assume i > i1;
     then (f/.2)`1 < (N-min L~f)`1 by A2,A3,A14,A4,A15,A17,A21,GOBOARD5:4;
     hence contradiction by A10,PSCOMP_1:98;
   end;
@@ -975,8 +965,7 @@ A3: j <= len f;
   1+1 <= len f by GOBOARD7:36,XXREAL_0:2;
   then
 A4: f/.1 in LSeg(f,1) by TOPREAL1:27;
-  assume
-  f/.1 in L~mid(f,i,j);
+  assume f/.1 in L~mid(f,i,j);
   then consider n such that
 A5: 1 <= n and
 A6: n+1 <= len mid(f,i,j) and
@@ -1020,8 +1009,7 @@ A18: n+i-'1+1 >= len f;
     n <= n+i by NAT_1:11;
     then
 A19: len f <= n+i by A5,A18,XREAL_1:237,XXREAL_0:2;
-    j-'i+1+i = j-'i+i+1
-      .= j+1 by A2,XREAL_1:237;
+    j-'i+1+i = j-'i+i+1 .= j+1 by A2,XREAL_1:237;
     then n+i < j+1 by A8,XREAL_1:8;
     then
 A20: n+i <= j by NAT_1:13;
@@ -1134,8 +1122,7 @@ A4: LeftComp f meets L~g by XBOOLE_0:4;
   then
 A5: RightComp f meets L~g by XBOOLE_0:4;
 A6: LeftComp f misses RightComp f by SPRECT_1:96;
-  assume
-  L~f misses L~g;
+  assume L~f misses L~g;
   then L~g c= (L~f)` by SUBSET_1:43;
   then
 A7: L~g c= LeftComp f \/ RightComp f by GOBRD12:11;
@@ -1146,8 +1133,7 @@ A9: RightComp f is open by Th41;
 end;
 
 theorem Th51:
-  for f being rectangular special_circular_sequence holds SpStSeq
-  L~f = f
+  for f being rectangular special_circular_sequence holds SpStSeq L~f = f
 proof
   let f be rectangular special_circular_sequence;
   set C = L~f, g = SpStSeq C;
@@ -1255,8 +1241,7 @@ ex p st x = p & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C by A1,A2
     hence thesis;
   end;
   let x be set;
-  assume
-  x in { p where p is Point of TOP-REAL 2: p`1 = W-bound C & p`2 <=
+  assume x in { p where p is Point of TOP-REAL 2: p`1 = W-bound C & p`2 <=
   N-bound C & p`2 >= S-bound C or p`1 <= E-bound C & p`1 >= W-bound C & p`2 =
   N-bound C or p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C or p`1 =
   E-bound C & p`2 <= N-bound C & p`2 >= S-bound C};
@@ -1454,14 +1439,12 @@ A58:  n=3;
     end;
     suppose
 A59:  n=4;
-      hence h.n = h.(3+1)
-        .= <*(f/.4)`2,(f/.5)`2*>.1 by A52,A42,FINSEQ_1:86
+      hence h.n = h.(3+1) .= <*(f/.4)`2,(f/.5)`2*>.1 by A52,A42,FINSEQ_1:86
         .= (f/.n)`2 by A59,FINSEQ_1:61;
     end;
     suppose
 A60:  n=5;
-      hence h.n = h.(2+3)
-        .= <*(f/.4)`2,(f/.5)`2*>.2 by A52,A42,FINSEQ_1:86
+      hence h.n = h.(2+3) .= <*(f/.4)`2,(f/.5)`2*>.2 by A52,A42,FINSEQ_1:86
         .= (f/.n)`2 by A60,FINSEQ_1:61;
     end;
   end;
@@ -1507,8 +1490,7 @@ A68: (f/.1)`1 = (f/.4)`1 by A35,A23,PSCOMP_1:85;
 A69: for n,m st [n,m] in Indices G holds G*(n,m) = |[v1.n,v2.m]|
   proof
     let n,m;
-    assume
-    [n,m] in Indices G;
+    assume [n,m] in Indices G;
     then
 A70: [n,m]in { [1,1], [1,2],[2,1], [2,2]} by Th12;
     per cases by A70,ENUMSET1:def 2;
@@ -1583,7 +1565,7 @@ A5: W-bound L~f < E-bound L~f by SPRECT_1:33;
   reconsider Lc, Rc as Subset of (TOP-REAL 2)|Lf`;
 A6: 1/2*(S-bound L~f) + 1/2*(S-bound L~f) = (S-bound L~f);
   Rc = Rc9;
-  then Lc is_a_component_of (TOP-REAL 2)|Lf` by A5,A1,JORDAN1:41;
+  then Lc is a_component by A5,A1,JORDAN1:41;
   then
 A7: Lc9 is_a_component_of Lf` by CONNSP_1:def 6;
   set p = 1/2*((GoB f)*(1,width GoB f)+(GoB f)*(1+1,width GoB f))+|[0,1]|, q =
@@ -1650,7 +1632,7 @@ A31: p`2 = 1/2*(f/.4+f/.2)`2 by A24,TOPREAL3:9
     .= 1/2*((f/.4)`2+(f/.2)`2) by TOPREAL3:7
     .= 1/2*(f/.4)`2+ 1/2*(f/.2)`2;
   Lc = Lc9;
-  then Rc is_a_component_of (TOP-REAL 2)|Lf` by A5,A1,JORDAN1:41;
+  then Rc is a_component by A5,A1,JORDAN1:41;
   then
 A32: Rc9 is_a_component_of Lf` by CONNSP_1:def 6;
 A33: (f/.2)`2 = (N-max L~f)`2 by SPRECT_1:92
@@ -1704,14 +1686,10 @@ proof
 A1: g/.1 in LeftComp f and
 A2: g/.len g in RightComp f;
 A3: L~f meets L~g by A1,A2,Th50;
-A4: L~g is closed by SPPOL_1:49;
-  L~f is closed by SPPOL_1:49;
-  then
-A5: L~f /\ L~g is closed by A4,TOPS_1:35;
+A5: L~f /\ L~g is closed by TOPS_1:35;
   assume
 A6: Last_Point(L~g,g/.1,g/.len g,L~f) = NW-corner L~f;
   set nw = NW-corner L~f, inw = Index(nw,g);
-A7: L~f is closed by SPPOL_1:49;
 A8: len g in dom g by FINSEQ_5:6;
   then
 A9: g.len g = g/.len g by PARTFUN1:def 8;
@@ -1732,8 +1710,7 @@ A17: inw+1 in dom g by A10,FINSEQ_3:27;
 A18: L~f misses RightComp f by Th42;
 A19: now
 A20: len g >= 1 by A16,A10,XXREAL_0:2;
-    assume
-    nw <> g.(inw+1);
+    assume nw <> g.(inw+1);
     then
 A21: nw <> g/.(inw+1) by A17,PARTFUN1:def 8;
     per cases;
@@ -1744,7 +1721,7 @@ A22:  g/.(inw+1) in L~f;
       then
 A23:  inw+1+1 <= len g by NAT_1:13;
       then g/.(inw+1) in LSeg(g,inw+1) by A10,TOPREAL1:27;
-      then inw >= inw+1 by A3,A7,A6,A13,A16,A14,A10,A21,A22,A23,JORDAN5C:28;
+      then inw >= inw+1 by A3,A6,A13,A16,A14,A10,A21,A22,A23,JORDAN5C:28;
       hence contradiction by XREAL_1:31;
     end;
     suppose
@@ -1782,8 +1759,7 @@ A33:  1 <= i and
 A34:  i+1 <= len m and
 A35:  q in LSeg(m,i) by A32,SPPOL_2:13;
       set j = i+(inw+1)-'1;
-A36:  j = i+inw+1-'1
-        .= i+inw by NAT_D:34;
+A36:  j = i+inw+1-'1 .= i+inw by NAT_D:34;
 A37:  len m = len g-'(inw+1)+1 by A16,A10,JORDAN4:20;
       then len m = len g -' inw by A12,JORDAN3:41,NAT_2:9;
       then len m + inw = len g by A15,XREAL_1:237;
@@ -1795,8 +1771,7 @@ A38:  j + 1 <= len g by A36;
 A39:  LSeg(m,i)=LSeg(g,i+(inw+1)-'1) by A10,A29,A33,A37,JORDAN4:31;
 A40:  j >= inw+1 by A33,A36,XREAL_1:8;
 A41:  now
-        assume
-        nw = q;
+        assume nw = q;
         then
 A42:    nw in LSeg(g,inw) /\ LSeg(g,j) by A14,A35,A39,XBOOLE_0:def 4;
         then
@@ -1817,7 +1792,7 @@ TOPREAL1:def 8;
       end;
       inw >= 0 by NAT_1:2;
       then 0+1 <= j by A33,A36,XREAL_1:9;
-      then inw >= j by A3,A7,A6,A13,A16,A14,A31,A35,A39,A38,A41,JORDAN5C:28;
+      then inw >= j by A3,A6,A13,A16,A14,A31,A35,A39,A38,A41,JORDAN5C:28;
       then inw >= inw+1 by A40,XXREAL_0:2;
       hence contradiction by XREAL_1:31;
     end;
@@ -1849,7 +1824,7 @@ A54: nw <> g/.(inw+1+1) by A50,A51,PARTFUN1:def 8;
     then
 A55: inw+1+1+1 <= len g by NAT_1:13;
     then g/.(inw+1+1) in LSeg(g,inw+1+1) by A48,TOPREAL1:27;
-    then inw+1 >= inw+1+1 by A3,A7,A6,A10,A46,A48,A47,A53,A55,A54,JORDAN5C:28;
+    then inw+1 >= inw+1+1 by A3,A6,A10,A46,A48,A47,A53,A55,A54,JORDAN5C:28;
     hence contradiction by XREAL_1:31;
   end;
   suppose
@@ -1896,14 +1871,12 @@ A69: i+ 1 + inw +1 <= len g;
     i < len m by A66,NAT_1:13;
     then
 A70: LSeg(m,i)=LSeg(g,i+(inw+1+1)-'1) by A48,A61,A65,A68,JORDAN4:31;
-A71: j = i+inw+1+1-'1
-      .= i+inw+1 by NAT_D:34;
+A71: j = i+inw+1+1-'1 .= i+inw+1 by NAT_D:34;
     then j = i+(inw+1);
     then
 A72: j >= inw+1+1 by A65,XREAL_1:8;
 A73: now
-      assume
-      nw = q;
+      assume nw = q;
       then
 A74:  nw in LSeg(g,inw+1) /\ LSeg(g,j) by A47,A67,A70,XBOOLE_0:def 4;
       then
@@ -1923,7 +1896,7 @@ TOPREAL1:def 8;
       end;
     end;
     0+1 <= j by A71,NAT_1:11;
-    then inw+1 >= j by A3,A7,A6,A10,A46,A47,A63,A67,A70,A71,A69,A73,JORDAN5C:28
+    then inw+1 >= j by A3,A6,A10,A46,A47,A63,A67,A70,A71,A69,A73,JORDAN5C:28
 ;
     then inw+1 >= inw+1+1 by A72,XXREAL_0:2;
     hence contradiction by XREAL_1:31;
@@ -1940,14 +1913,10 @@ proof
 A1: g/.1 in LeftComp f and
 A2: g/.len g in RightComp f;
 A3: L~f meets L~g by A1,A2,Th50;
-A4: L~g is closed by SPPOL_1:49;
-  L~f is closed by SPPOL_1:49;
-  then
-A5: L~f /\ L~g is closed by A4,TOPS_1:35;
+A5: L~f /\ L~g is closed by TOPS_1:35;
   assume
 A6: Last_Point(L~g,g/.1,g/.len g,L~f) = SE-corner L~f;
   set se = SE-corner L~f, ise = Index(se,g);
-A7: L~f is closed by SPPOL_1:49;
 A8: len g in dom g by FINSEQ_5:6;
   then
 A9: g.len g = g/.len g by PARTFUN1:def 8;
@@ -1968,8 +1937,7 @@ A17: ise+1 in dom g by A10,FINSEQ_3:27;
 A18: L~f misses RightComp f by Th42;
 A19: now
 A20: len g >= 1 by A16,A10,XXREAL_0:2;
-    assume
-    se <> g.(ise+1);
+    assume se <> g.(ise+1);
     then
 A21: se <> g/.(ise+1) by A17,PARTFUN1:def 8;
     per cases;
@@ -1980,7 +1948,7 @@ A22:  g/.(ise+1) in L~f;
       then
 A23:  ise+1+1 <= len g by NAT_1:13;
       then g/.(ise+1) in LSeg(g,ise+1) by A10,TOPREAL1:27;
-      then ise >= ise+1 by A3,A7,A6,A13,A16,A14,A10,A21,A22,A23,JORDAN5C:28;
+      then ise >= ise+1 by A3,A6,A13,A16,A14,A10,A21,A22,A23,JORDAN5C:28;
       hence contradiction by XREAL_1:31;
     end;
     suppose
@@ -2018,8 +1986,7 @@ A33:  1 <= i and
 A34:  i+1 <= len m and
 A35:  q in LSeg(m,i) by A32,SPPOL_2:13;
       set j = i+(ise+1)-'1;
-A36:  j = i+ise+1-'1
-        .= i+ise by NAT_D:34;
+A36:  j = i+ise+1-'1 .= i+ise by NAT_D:34;
 A37:  len m = len g-'(ise+1)+1 by A16,A10,JORDAN4:20;
       then len m = len g -' ise by A12,JORDAN3:41,NAT_2:9;
       then len m + ise = len g by A15,XREAL_1:237;
@@ -2031,8 +1998,7 @@ A38:  j + 1 <= len g by A36;
 A39:  LSeg(m,i)=LSeg(g,i+(ise+1)-'1) by A10,A29,A33,A37,JORDAN4:31;
 A40:  j >= ise+1 by A33,A36,XREAL_1:8;
 A41:  now
-        assume
-        se = q;
+        assume se = q;
         then
 A42:    se in LSeg(g,ise) /\ LSeg(g,j) by A14,A35,A39,XBOOLE_0:def 4;
         then
@@ -2053,7 +2019,7 @@ TOPREAL1:def 8;
       end;
       ise >= 0 by NAT_1:2;
       then 0+1 <= j by A33,A36,XREAL_1:9;
-      then ise >= j by A3,A7,A6,A13,A16,A14,A31,A35,A39,A38,A41,JORDAN5C:28;
+      then ise >= j by A3,A6,A13,A16,A14,A31,A35,A39,A38,A41,JORDAN5C:28;
       then ise >= ise+1 by A40,XXREAL_0:2;
       hence contradiction by XREAL_1:31;
     end;
@@ -2085,7 +2051,7 @@ A54: se <> g/.(ise+1+1) by A50,A51,PARTFUN1:def 8;
     then
 A55: ise+1+1+1 <= len g by NAT_1:13;
     then g/.(ise+1+1) in LSeg(g,ise+1+1) by A48,TOPREAL1:27;
-    then ise+1 >= ise+1+1 by A3,A7,A6,A10,A46,A48,A47,A53,A55,A54,JORDAN5C:28;
+    then ise+1 >= ise+1+1 by A3,A6,A10,A46,A48,A47,A53,A55,A54,JORDAN5C:28;
     hence contradiction by XREAL_1:31;
   end;
   suppose
@@ -2132,14 +2098,12 @@ A69: i+ 1 + ise +1 <= len g;
     i < len m by A66,NAT_1:13;
     then
 A70: LSeg(m,i)=LSeg(g,i+(ise+1+1)-'1) by A48,A61,A65,A68,JORDAN4:31;
-A71: j = i+ise+1+1-'1
-      .= i+ise+1 by NAT_D:34;
+A71: j = i+ise+1+1-'1 .= i+ise+1 by NAT_D:34;
     then j = i+(ise+1);
     then
 A72: j >= ise+1+1 by A65,XREAL_1:8;
 A73: now
-      assume
-      se = q;
+      assume se = q;
       then
 A74:  se in LSeg(g,ise+1) /\ LSeg(g,j) by A47,A67,A70,XBOOLE_0:def 4;
       then
@@ -2159,7 +2123,7 @@ TOPREAL1:def 8;
       end;
     end;
     0+1 <= j by A71,NAT_1:11;
-    then ise+1 >= j by A3,A7,A6,A10,A46,A47,A63,A67,A70,A71,A69,A73,JORDAN5C:28
+    then ise+1 >= j by A3,A6,A10,A46,A47,A63,A67,A70,A71,A69,A73,JORDAN5C:28
 ;
     then ise+1 >= ise+1+1 by A72,XXREAL_0:2;
     hence contradiction by XREAL_1:31;
@@ -2197,8 +2161,7 @@ A2: W-bound L~SpStSeq L~f = W-bound L~f by SPRECT_1:66;
   for p st p in P2 holds p`2 > (GoB f)*(1, width GoB f)`2
   proof
     let p;
-    assume
-    p in P2;
+    assume p in P2;
     then ex q st p = q & q`2 > N-bound L~f;
     hence thesis by JORDAN5D:42;
   end;
@@ -2251,8 +2214,7 @@ A21: S-bound L~SpStSeq L~f = S-bound L~f by SPRECT_1:67;
   for p st p in P4 holds p`1 < (GoB f)*(1,1)`1
   proof
     let p;
-    assume
-    p in P4;
+    assume p in P4;
     then ex q st p = q & q`1 < W-bound L~f;
     hence thesis by JORDAN5D:39;
   end;
@@ -2261,8 +2223,7 @@ A22: P4 misses L~f by GOBOARD8:21;
   for p st p in P3 holds p`1 > (GoB f)*(len GoB f,1)`1
   proof
     let p;
-    assume
-    p in P3;
+    assume p in P3;
     then ex q st p = q & q`1 > E-bound L~f;
     hence thesis by JORDAN5D:41;
   end;
@@ -2272,7 +2233,7 @@ A23: P3 \/ P4 misses L~f by A22,XBOOLE_1:70;
   LeftComp SpStSeq L~f is_a_component_of (L~SpStSeq L~f)` by GOBOARD9:def 1;
   then consider B1 being Subset of (TOP-REAL 2)|(L~SpStSeq L~f)` such that
 A24: B1 = LeftComp SpStSeq L~f and
-A25: B1 is_a_component_of (TOP-REAL 2)|(L~SpStSeq L~f)` by CONNSP_1:def 6;
+A25: B1 is a_component by CONNSP_1:def 6;
   B1 is connected by A25,CONNSP_1:def 5;
   then
 A26: LeftComp SpStSeq L~f is connected by A24,CONNSP_1:24;
@@ -2283,8 +2244,7 @@ A29: LeftComp SpStSeq L~f = P1 \/ P2 \/ (P3 \/ P4)
     thus LeftComp SpStSeq L~f c= P1 \/ P2 \/ (P3 \/ P4)
     proof
       let x be set;
-      assume
-      x in LeftComp SpStSeq L~f;
+      assume x in LeftComp SpStSeq L~f;
       then
       x in { p : not(W-bound L~f <= p`1 & p`1 <= E-bound L~f & S-bound L~
       f <= p`2 & p`2 <= N-bound L~f)} by A28,A2,A21,A27,Th54;
@@ -2295,8 +2255,7 @@ A29: LeftComp SpStSeq L~f = P1 \/ P2 \/ (P3 \/ P4)
       hence thesis by XBOOLE_0:def 3;
     end;
     let x be set;
-    assume
-    x in P1 \/ P2 \/ (P3 \/ P4);
+    assume x in P1 \/ P2 \/ (P3 \/ P4);
     then
 A30: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 3;
     per cases by A30,XBOOLE_0:def 3;
@@ -2324,8 +2283,7 @@ A30: x in P1 \/ P2 or x in P3 \/ P4 by XBOOLE_0:def 3;
   for p st p in P1 holds p`2 < (GoB f)*(1,1)`2
   proof
     let p;
-    assume
-    p in P1;
+    assume p in P1;
     then ex q st p = q & q`2 < S-bound L~f;
     hence thesis by JORDAN5D:40;
   end;
@@ -2363,15 +2321,13 @@ A8: W-bound L~f <= p`1 by A3,A2,A4,SPRECT_2:def 1;
     thus <*p*> is_in_the_area_of f
     proof
       let i;
-      assume
-      i in dom<*p*>;
+      assume i in dom<*p*>;
       then i in {1} by FINSEQ_1:4,55;
       then i = 1 by TARSKI:def 1;
       hence thesis by A8,A5,A7,A6,FINSEQ_4:25;
     end;
     let i;
-    assume
-    i in dom<*q*>;
+    assume i in dom<*q*>;
     then i in {1} by FINSEQ_1:4,55;
     then
 A9: i = 1 by TARSKI:def 1;
@@ -2404,8 +2360,7 @@ A23: <*q*> is_in_the_area_of f;
 A24: W-bound L~f <= q`1 by A16,A22,SPRECT_2:def 1;
 A25: q`1 <= E-bound L~f by A23,A16,A22,SPRECT_2:def 1;
   let i;
-  assume
-  i in dom<*p,q*>;
+  assume i in dom<*p,q*>;
   then i in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
   then
 A26: i =1 or i =2 by TARSKI:def 2;
@@ -2536,8 +2491,7 @@ A15: ((1-r)*p+r*q)`1 = ((1-r)*p)`1+(r*q)`1 by TOPREAL3:7
 A16: (1-r)*p`2 <= (1-r)*N-bound L~f by A10,XREAL_1:66;
   let n;
 A17: dom <*(1-r)*p+r*q*> = {1} by FINSEQ_1:4,55;
-  assume
-  n in dom <*(1-r)*p+r*q*>;
+  assume n in dom <*(1-r)*p+r*q*>;
   then
 A18: n = 1 by A17,TARSKI:def 1;
   (1-r)*W-bound L~f+r*W-bound L~f = 1*W-bound L~f;
@@ -2572,8 +2526,7 @@ A1: g is_in_the_area_of f and
 A2: i in dom g;
   let n;
 A3: dom <*g/.i*> = {1} by FINSEQ_1:4,55;
-  assume
-  n in dom <*g/.i*>;
+  assume n in dom <*g/.i*>;
   then n = 1 by A3,TARSKI:def 1;
   then <*g/.i*>/.n = g/.i by FINSEQ_4:25;
   hence thesis by A1,A2,SPRECT_2:def 1;
@@ -2585,8 +2538,7 @@ TOP-REAL 2 st g is_in_the_area_of f & p in L~g holds <*p*> is_in_the_area_of f
 proof
   let f, g be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2 such that
 A1: g is_in_the_area_of f;
-  assume
-  p in L~g;
+  assume p in L~g;
   then consider i such that
 A2: 1 <= i and
 A3: i+1 <= len g and
@@ -2737,8 +2689,7 @@ A12: j = width G or j < width G by A4,XXREAL_0:1;
 A13: i = len G or i < len G by A2,XXREAL_0:1;
   let n;
   set p = (GoB f)*(i,j);
-  assume
-  n in dom<*(GoB f)*(i,j)*>;
+  assume n in dom<*(GoB f)*(i,j)*>;
   then n in {1} by FINSEQ_1:4,55;
   then n = 1 by TARSKI:def 1;
   then
@@ -2865,10 +2816,7 @@ A3: L~g meets L~f by A1,A2,Th50;
 A4: len g >= 1 by FINSEQ_3:27;
   set lp = Last_Point(L~g,g/.1,g/.len g,L~f), ilp = Index(lp,g), h = L_Cut(g,
   lp);
-A5: L~f is closed by SPPOL_1:49;
-  L~g is closed by SPPOL_1:49;
-  then
-A6: L~g /\ L~f is closed by A5,TOPS_1:35;
+A6: L~g /\ L~f is closed by TOPS_1:35;
   L~g is_an_arc_of g/.1,g/.len g by TOPREAL1:31;
   then
 A7: lp in L~g /\ L~f by A3,A6,JORDAN5C:def 2;
@@ -2990,8 +2938,7 @@ A56: j + 1 <= len g by A50,A54,XREAL_1:237,XXREAL_0:2;
 A57: ilp +1 <= j by A36,XXREAL_0:2;
 A58: lp <> g/.(ilp+1) by A19,A37,PARTFUN1:def 8;
 A59: now
-      assume
-      lp = q;
+      assume lp = q;
       then
 A60:  lp in LSeg(g,ilp) /\ LSeg(g,j) by A10,A52,A55,XBOOLE_0:def 4;
       then
@@ -3009,7 +2956,7 @@ A62:    ilp+1 = j;
       end;
     end;
     1 <= j by A18,A57,XXREAL_0:2;
-    then ilp >= j by A3,A5,A10,A12,A9,A48,A52,A55,A56,A59,JORDAN5C:28;
+    then ilp >= j by A3,A10,A12,A9,A48,A52,A55,A56,A59,JORDAN5C:28;
     then ilp >= ilp+1 by A57,XXREAL_0:2;
     hence contradiction by XREAL_1:31;
   end;
@@ -3059,14 +3006,13 @@ A79: LSeg(m,i) = LSeg(g,i+(ilp+n)-'1) by A66,A72,A77,JORDAN4:31;
   then
 A80: j > ilp+1 by A76,XXREAL_0:2;
 A81: now
-    assume
-    lp = q;
+    assume lp = q;
     then lp in LSeg(g,ilp) /\ LSeg(g,j) by A10,A74,A79,XBOOLE_0:def 4;
     then LSeg(g,ilp) meets LSeg(g,j) by XBOOLE_0:4;
     hence contradiction by A80,TOPREAL1:def 9;
   end;
   1 <= j by A66,A76,XXREAL_0:2;
-  then ilp >= j by A3,A5,A10,A12,A9,A70,A74,A79,A81,A78,JORDAN5C:28;
+  then ilp >= j by A3,A10,A12,A9,A70,A74,A79,A81,A78,JORDAN5C:28;
   then ilp >= ilp+1 by A80,XXREAL_0:2;
   hence contradiction by XREAL_1:31;
 end;
@@ -3092,8 +3038,7 @@ A9: <*(GoB f)*(i,1)*> is_in_the_area_of f by A1,A2,Th66;
   1 <= i+1 by A1,NAT_1:13;
   then
 A10: <*(GoB f)*(i+1,1)*> is_in_the_area_of f by A8,A5,Th66;
-  assume
-  Int cell(GoB f,i,j) meets L~SpStSeq L~f;
+  assume Int cell(GoB f,i,j) meets L~SpStSeq L~f;
   then consider x being set such that
 A11: x in Int cell(GoB f,i,j) and
 A12: x in L~SpStSeq L~f by XBOOLE_0:3;
@@ -3169,8 +3114,7 @@ A3: g is being_S-Seq;
   then 1 <= len g by XXREAL_0:2;
   then
 A4: len g in dom g by FINSEQ_3:27;
-  assume
-  p in L~g;
+  assume p in L~g;
   then Index(p,g) < len g by JORDAN3:41;
   then
 A5: Index(p,g)+1 <= len g by NAT_1:13;
@@ -3191,4 +3135,3 @@ A7: L_Cut(g,p) = <*p*>^mid(g,Index(p,g)+1,len g) by JORDAN3:def 4;
     hence thesis by A1,A4,A6,SPRECT_2:26;
   end;
 end;
-

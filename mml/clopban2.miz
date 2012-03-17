@@ -3,7 +3,7 @@
 ::
 :: Received March 18, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, CLVECT_1, LOPBAN_1, RELAT_1, RLVECT_1, CFUNCT_1,
@@ -12,26 +12,25 @@ environ
       BINOP_1, STRUCT_0, COMPLEX1, ALGSTR_0, XBOOLE_0, GROUP_1, SUPINF_2,
       MESFUNC1, FUNCSDOM, VECTSP_1, LATTICES, CFUNCDOM, CSSPACE3, REWRITE1,
       NAT_1, RSSPACE3, SEQ_2, ZFMISC_1, XCMPLX_0, PREPOWER, COMSEQ_1, SERIES_1,
-      CSSPACE, ARYTM_1, CLOPBAN2;
+      CSSPACE, ARYTM_1, CLOPBAN2, NORMSP_0, METRIC_1, RELAT_2, SEQ_4;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
       BINOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1,
-      NUMBERS, REAL_1,
-      MEASURE6, PSCOMP_1, RLVECT_1, VALUED_1, SEQ_4, FUNCSDOM, COMPLEX1,
-      GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1, COMSEQ_1, COMSEQ_3, CLVECT_1,
-      CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM, PREPOWER;
+      NUMBERS, XXREAL_2, REAL_1, PSCOMP_1, RLVECT_1, VALUED_1, SEQ_4, FUNCSDOM,
+      COMPLEX1, GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1, COMSEQ_1, COMSEQ_3,
+      NORMSP_0, CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM, PREPOWER;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, PREPOWER, COMSEQ_3,
       PSCOMP_1, CSSPACE3, CLOPBAN1, CFUNCDOM, VECTSP_1, SEQ_1, XXREAL_2,
       SERIES_1, SEQ_4, RELSET_1, BINOP_2, RVSUM_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, CLVECT_1, CSSPACE3,
-      CLOPBAN1, CFUNCDOM, ALGSTR_0, VALUED_1, VALUED_0;
+      CLOPBAN1, CFUNCDOM, ALGSTR_0, VALUED_1, VALUED_0, NORMSP_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions STRUCT_0, GROUP_1, VECTSP_1, CLOPBAN1, BINOP_1, RLVECT_1,
-      ALGSTR_0, CLVECT_1, CFUNCDOM;
+      ALGSTR_0, CLVECT_1, CFUNCDOM, NORMSP_0;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, XCMPLX_0, SERIES_1, FUNCT_1,
       FUNCT_2, SEQ_4, PREPOWER, STRUCT_0, CLOPBAN1, CLVECT_1, COMPLEX1,
       CFUNCDOM, CSSPACE3, COMSEQ_3, CSSPACE, GROUP_1, XREAL_1, XXREAL_0,
-      ALGSTR_0, VALUED_1, GRCAT_1;
+      ALGSTR_0, VALUED_1, GRCAT_1, NORMSP_0;
  schemes BINOP_1;
 
 begin :: Banach Algebra of Bounded Complex Linear Operators
@@ -58,7 +57,7 @@ A1: now
       .=(g*f).(v)+g.(f.w) by FUNCT_2:21
       .=(g*f).(v)+(g*f).(w) by FUNCT_2:21;
   end;
-  hence thesis by A1,GRCAT_1:def 13,CLOPBAN1:def 4;
+  hence thesis by A1,CLOPBAN1:def 4,GRCAT_1:def 13;
 end;
 
 theorem Th2:
@@ -92,8 +91,7 @@ A3: 0 <= ||.gg.|| & 0 <= ||.ff.|| by CLVECT_1:106;
 CLOPBAN1:def 7;
 A4: now
     let t be VECTOR of X;
-    assume
-    ||.t.|| <= 1;
+    assume ||.t.|| <= 1;
     then
 A5: K*||.t.|| <=K*1 by A3,XREAL_1:66;
     ||.(g*f).t.|| <=K* ||.t.|| by A1;
@@ -101,12 +99,11 @@ A5: K*||.t.|| <=K*1 by A3,XREAL_1:66;
   end;
 A6: now
     let r be Real;
-    assume
-    r in PreNorms(gf);
+    assume r in PreNorms(gf);
     then ex t be VECTOR of X st r=||.gf.t.|| & ||.t.|| <= 1;
     hence r <=K by A4;
   end;
-  (for s be real number st s in PreNorms(gf) holds s <=K) implies sup
+  (for s be real number st s in PreNorms(gf) holds s <=K) implies upper_bound
   PreNorms(gf) <=K by SEQ_4:62;
   hence thesis by A1,A6,CLOPBAN1:34;
 end;
@@ -150,8 +147,7 @@ definition
   let X be ComplexNormSpace;
   func FuncMult(X) -> BinOp of BoundedLinearOperators(X,X) means
   :Def4:
-  for f,
-  g being Element of BoundedLinearOperators(X,X) holds it.(f,g) = f*g;
+  for f, g being Element of BoundedLinearOperators(X,X) holds it.(f,g) = f*g;
   existence
   proof
     deffunc F(Element of BoundedLinearOperators(X,X), Element of
@@ -197,7 +193,7 @@ A2: now
   end;
   for v be VECTOR of X holds ||.id (the carrier of X).v.|| <=1* ||.v.|| by
 FUNCT_1:35;
-  hence thesis by A1,A2,GRCAT_1:def 13,CLOPBAN1:def 4,def 7;
+  hence thesis by A1,A2,CLOPBAN1:def 4,def 7,GRCAT_1:def 13;
 end;
 
 definition
@@ -256,14 +252,12 @@ proof
   let f be bounded LinearOperator of X,X;
 A1: now
     let x be VECTOR of X;
-    thus ( (id the carrier of X)*f).x =( ii*f).x
-      .=ii.(f.x) by Th4
+    thus ( (id the carrier of X)*f).x =( ii*f).x .=ii.(f.x) by Th4
       .=f.x by FUNCT_1:35;
   end;
   now
     let x be VECTOR of X;
-    thus ( f*(id the carrier of X)).x =( f*ii).x
-      .=f.(ii.x) by Th4
+    thus ( f*(id the carrier of X)).x =( f*ii).x .=f.(ii.x) by Th4
       .=f.x by FUNCT_1:35;
   end;
   hence thesis by A1,FUNCT_2:113;
@@ -408,7 +402,7 @@ A3:   maf.y=a*mf.y by A2,CLOPBAN1:40;
 A4:   mbg.x=b*mg.x by A1,CLOPBAN1:40;
       thus (maf*mbg).x=maf.(mbg.x) by Th4
         .=a*(b*mf.(mg.x)) by A3,A4,CLOPBAN1:def 4
-        .=(a*b)*mf.(mg.x) by CLVECT_1:def 4,def 5
+        .=(a*b)*mf.(mg.x) by CLVECT_1:def 4
         .=(a*b)*(mf*mg).x by Th4;
     end;
     then k=(a*b)*fg by CLOPBAN1:40;
@@ -429,8 +423,7 @@ proof
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Mult_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider gg=g as Element of RRL;
-A1: (1r*g)=1r*gg
-    .=g by CLVECT_1:def 5;
+A1: (1r*g)=1r*gg .=g by CLVECT_1:def 5;
   a*(f*g)=(a*1r)*(f*g) by COMPLEX1:def 7
     .=(a*f)*(1r*g) by Th11;
   hence thesis by A1;
@@ -497,13 +490,10 @@ proof
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Mult_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
-  thus x+y =f+g
-    .= y+x by RLVECT_1:5;
-  thus (x+y)+z =(f+g)+h
-    .=f+(g+h) by RLVECT_1:def 6
+  thus x+y =f+g .= y+x by RLVECT_1:5;
+  thus (x+y)+z =(f+g)+h .=f+(g+h) by RLVECT_1:def 6
     .= x+(y+z);
-  thus x+(0.RBLOP) = f + 0.RRL
-    .= x by RLVECT_1:def 7;
+  thus x+(0.RBLOP) = f + 0.RRL .= x by RLVECT_1:def 7;
   thus ex t being Element of RBLOP st x+t=(0.RBLOP)
   proof
     consider s be Element of RRL such that
@@ -533,8 +523,7 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
 end;
 
 theorem Th14:
-  for X be ComplexNormSpace holds Ring_of_BoundedLinearOperators(X
-  ) is Ring
+  for X be ComplexNormSpace holds Ring_of_BoundedLinearOperators(X) is Ring
 proof
   let X be ComplexNormSpace;
   for x,y,z being Element of Ring_of_BoundedLinearOperators(X) holds x+y =
@@ -595,7 +584,7 @@ registration
   end;
 end;
 
-theorem Th15:
+theorem
   for X be ComplexNormSpace for x,y,z being Element of
 C_Algebra_of_BoundedLinearOperators(X) for a,b be Complex holds x+y = y+x & (x+
   y)+z = x+(y+z) & x+(0.C_Algebra_of_BoundedLinearOperators(X)) = x & x is
@@ -619,13 +608,10 @@ proof
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Mult_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
-  thus x+y =f+g
-    .= y+x by RLVECT_1:5;
-  thus (x+y)+z =(f+g)+h
-    .=f+(g+h) by RLVECT_1:def 6
+  thus x+y =f+g .= y+x by RLVECT_1:5;
+  thus (x+y)+z =(f+g)+h .=f+(g+h) by RLVECT_1:def 6
     .= x+(y+z);
-  thus x+(0.RBLOP) = f + 0.RRL
-    .= x by RLVECT_1:def 7;
+  thus x+(0.RBLOP) = f + 0.RRL .= x by RLVECT_1:def 7;
   thus ex t being Element of RBLOP st x+t=(0.RBLOP)
   proof
     consider s be Element of RRL such that
@@ -655,14 +641,11 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
   thus a*(x*y) = a*(xx*yy) by Def4
     .= (a*xx)*(yy) by Th12
     .=(a*x)*y by Def4;
-  thus a*(x+y) =a*(f+g)
-    .=a*f+a*g by CLVECT_1:def 2
+  thus a*(x+y) =a*(f+g) .=a*f+a*g by CLVECT_1:def 2
     .=a*x+a*y;
-  thus (a+b)*x =(a+b)*f
-    .=a*f+b*f by CLVECT_1:def 3
+  thus (a+b)*x =(a+b)*f .=a*f+b*f by CLVECT_1:def 3
     .=a*x+b*x;
-  thus (a*b)*x =(a*b)*f
-    .=a*(b*f) by CLVECT_1:def 4,def 5
+  thus (a*b)*x =(a*b)*f .=a*(b*f) by CLVECT_1:def 4
     .=a*(b*x);
   thus (a*b)*(x*y) = (a*b)*(xx*yy) by Def4
     .= (a*xx)*(b*yy) by Th11
@@ -693,27 +676,20 @@ registration let X be ComplexNormSpace;
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Add_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Mult_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)) #);
-   thus A is Abelian
-    proof let x,y be Element of A;
+   thus A is Abelian proof let x,y be Element of A;
      reconsider f=x, g=y as Element of RRL;
-     thus x+y =f+g
-       .= y+x by RLVECT_1:5;
+     thus x+y =f+g .= y+x by RLVECT_1:5;
     end;
-   thus A is add-associative
-    proof let x,y,z be Element of A;
+   thus A is add-associative proof let x,y,z be Element of A;
      reconsider f=x, g=y, h=z as Element of RRL;
-     thus (x+y)+z =(f+g)+h
-       .=f+(g+h) by RLVECT_1:def 6
+     thus (x+y)+z =(f+g)+h .=f+(g+h) by RLVECT_1:def 6
        .= x+(y+z);
     end;
-   thus A is right_zeroed
-    proof let x be Element of A;
+   thus A is right_zeroed proof let x be Element of A;
       reconsider f=x as Element of RRL;
-     thus x+ 0.A = f + 0.RRL
-       .= x by RLVECT_1:def 7;
+     thus x+ 0.A = f + 0.RRL .= x by RLVECT_1:def 7;
     end;
-   thus A is right_complementable
-    proof let x be Element of A;
+   thus A is right_complementable proof let x be Element of A;
      reconsider f=x as Element of RRL;
      consider s be Element of RRL such that
  A1: f + s = 0.RRL by ALGSTR_0:def 11;
@@ -721,8 +697,7 @@ registration let X be ComplexNormSpace;
      take t;
      thus thesis by A1;
    end;
-   thus A is associative
-    proof let x,y,z be Element of A;
+   thus A is associative proof let x,y,z be Element of A;
       reconsider xx=x,yy=y,zz=z as Element of BLOP;
      thus (x*y)*z = MULT.(xx*yy,zz) by Def4
        .=(xx*yy)*zz by Def4
@@ -730,14 +705,12 @@ registration let X be ComplexNormSpace;
        .= MULT.(xx,yy*zz) by Def4
        .=x*(y*z) by Def4;
     end;
-   thus A is right_unital
-    proof let x be Element of A;
+   thus A is right_unital proof let x be Element of A;
       reconsider xx=x as Element of BLOP;
      thus x*1.A =xx*UNIT by Def4
        .= x by Th8;
     end;
-   thus A is right-distributive
-    proof let x,y,z be Element of A;
+   thus A is right-distributive proof let x,y,z be Element of A;
       reconsider xx=x,yy=y,zz=z as Element of BLOP;
      thus x*(y+z) =xx*(yy+zz) by Def4
        .=xx*yy + xx*zz by Th9
@@ -747,22 +720,19 @@ registration let X be ComplexNormSpace;
    thus A is vector-distributive
     proof let a be Complex; let x,y be Element of A;
       reconsider f=x, g=y as Element of RRL;
-     thus a*(x+y) =a*(f+g)
-       .=a*f+a*g by CLVECT_1:def 2
+     thus a*(x+y) =a*(f+g) .=a*f+a*g by CLVECT_1:def 2
        .=a*x+a*y;
     end;
    thus A is scalar-distributive
     proof let a,b be Complex; let x be Element of A;
       reconsider f=x as Element of RRL;
-     thus (a+b)*x =(a+b)*f
-       .=a*f+b*f by CLVECT_1:def 3
+     thus (a+b)*x =(a+b)*f .=a*f+b*f by CLVECT_1:def 3
        .=a*x+b*x;
     end;
    thus A is scalar-associative
     proof let a,b be Complex; let x be Element of A;
       reconsider f=x as Element of RRL;
-     thus (a*b)*x =(a*b)*f
-       .=a*(b*f) by CLVECT_1:def 4,def 5
+     thus (a*b)*x =(a*b)*f .=a*(b*f) by CLVECT_1:def 4
        .=a*(b*x);
     end;
    let x,y be Element of A; let a be Complex;
@@ -804,7 +774,7 @@ A1: for m be Element of NAT holds (|.x.|).(m+1) = (|.x.|).m * |.a.|
       .= 1 by COMPLEX1:134,COMSEQ_3:def 1;
     then |.a.| = 1/2 & |.x.| = |.a.| GeoSeq by A1,ABSVALUE:def 1,PREPOWER:4;
     then |.x.| is summable by SERIES_1:28;
-    then x is absolutely_summable by COMSEQ_3:def 11;
+    then x is absolutely_summable by COMSEQ_3:def 13;
     then seq_id(x) is absolutely_summable by CSSPACE:3;
     then reconsider v=x as VECTOR of Complex_l1_Space by CSSPACE3:8;
     (seq_id v).0 = x.0 by CSSPACE:3
@@ -824,15 +794,14 @@ registration
 end;
 
 theorem Th17:
-  for X be non trivial ComplexNormSpace ex w be VECTOR of X st ||.
-  w .|| = 1
+  for X be non trivial ComplexNormSpace ex w be VECTOR of X st ||. w .|| = 1
 proof
   let X be non trivial ComplexNormSpace;
   consider v be VECTOR of X such that
 A1: v <> 0.X by STRUCT_0:def 19;
   reconsider a= ||. v .||+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
   take w=a"*v;
-A2: ||. v .|| <> 0 by A1,CLVECT_1:def 14;
+A2: ||. v .|| <> 0 by A1,NORMSP_0:def 5;
   then
 A3: 0 < ||. v .|| by CLVECT_1:106;
 A4: |.a".| = |.(1r*a").| by COMPLEX1:def 7
@@ -854,8 +823,7 @@ A1: ||.v.|| = 1 by Th17;
   reconsider ii=(id the carrier of X) as bounded LinearOperator of X,X by Th3;
 A2: now
     let r be Real;
-    assume
-    r in PreNorms(ii);
+    assume r in PreNorms(ii);
     then ex t be VECTOR of X st r=||.ii.t.|| & ||.t.|| <= 1;
     hence r <=1 by FUNCT_1:35;
   end;
@@ -864,17 +832,17 @@ A2: now
 A3: 1 in {||.ii.t.|| where t is VECTOR of X : ||.t.|| <= 1 } by A1;
   PreNorms(ii) is non empty bounded_above by CLOPBAN1:30;
   then
-A4: 1 <=sup PreNorms(ii) by A3,SEQ_4:def 4;
-  (for s be real number st s in PreNorms(ii) holds s <= 1) implies sup
+A4: 1 <=upper_bound PreNorms(ii) by A3,SEQ_4:def 4;
+  (for s be real number st s in PreNorms(ii) holds s <= 1) implies upper_bound
   PreNorms(ii) <= 1 by SEQ_4:62;
-  then sup PreNorms(ii) =1 by A2,A4,XXREAL_0:1;
+  then upper_bound PreNorms(ii) =1 by A2,A4,XXREAL_0:1;
   hence thesis by CLOPBAN1:34;
 end;
 
 definition
   struct(ComplexAlgebraStr,CNORMSTR) Normed_Complex_AlgebraStr (# carrier ->
 set, multF,addF -> (BinOp of the carrier), Mult -> (Function of [:COMPLEX,the
-carrier:],the carrier), OneF,ZeroF -> Element of the carrier, norm -> Function
+carrier:],the carrier), OneF,ZeroF -> Element of the carrier, normF -> Function
     of the carrier, REAL#);
 end;
 
@@ -959,13 +927,10 @@ proof
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)), Mult_(
     BoundedLinearOperators(X,X), C_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
-  thus x+y =f+g
-    .= y+x by RLVECT_1:5;
-  thus (x+y)+z =(f+g)+h
-    .=f+(g+h) by RLVECT_1:def 6
+  thus x+y =f+g .= y+x by RLVECT_1:5;
+  thus (x+y)+z =(f+g)+h .=f+(g+h) by RLVECT_1:def 6
     .= x+(y+z);
-  thus x+(0.RBLOP) = f + 0.RRL
-    .= x by RLVECT_1:def 7;
+  thus x+(0.RBLOP) = f + 0.RRL .= x by RLVECT_1:def 7;
   thus ex t being Element of RBLOP st x+t=(0.RBLOP)
   proof
     consider s be Element of RRL such that
@@ -998,37 +963,46 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
   thus (a*b)*(x*y) = (a*b)*(xx*yy) by Def4
     .= (a*xx)*(b*yy) by Th11
     .=(a*x)*(b*y) by Def4;
-  thus a*(x+y) =a*(f+g)
-    .=a*f+a*g by CLVECT_1:def 2
+  thus a*(x+y) =a*(f+g) .=a*f+a*g by CLVECT_1:def 2
     .=a*x+a*y;
-  thus (a+b)*x =(a+b)*f
-    .=a*f+b*f by CLVECT_1:def 3
+  thus (a+b)*x =(a+b)*f .=a*f+b*f by CLVECT_1:def 3
     .=a*x+b*x;
-  thus (a*b)*x =(a*b)*f
-    .=a*(b*f) by CLVECT_1:def 4,def 5
+  thus (a*b)*x =(a*b)*f .=a*(b*f) by CLVECT_1:def 4
     .=a*(b*x);
-  thus 1r*x =1r*f
-    .=x by CLVECT_1:def 5;
+  thus 1r*x =1r*f .=x by CLVECT_1:def 5;
 end;
 
 theorem Th20:
   for X be ComplexNormSpace holds
-C_Normed_Algebra_of_BoundedLinearOperators(X) is ComplexNormSpace-like Abelian
+C_Normed_Algebra_of_BoundedLinearOperators(X) is
+  reflexive discerning ComplexNormSpace-like Abelian
   add-associative right_zeroed right_complementable associative right_unital
   right-distributive vector-distributive scalar-distributive
-  scalar-associative vector-associative vector-distributive scalar-unital
+  scalar-associative vector-associative vector-distributive
+  scalar-distributive scalar-associative scalar-unital
 proof
   let X be ComplexNormSpace;
   set C = C_Normed_Algebra_of_BoundedLinearOperators X;
   set BS=C_NormSpace_of_BoundedLinearOperators(X,X);
+  thus C is reflexive
+  proof
+    thus ||.0.C.|| = ||.0.BS.|| .= 0;
+  end;
+  thus C is discerning
+  proof
+    let x be Point of C;
+     reconsider y =x as Point of BS;
+    assume ||.x.|| = 0;
+     then ||.y.|| = 0;
+     then y= 0.BS by NORMSP_0:def 5;
+    hence x= 0.C;
+  end;
   thus C is ComplexNormSpace-like
   proof
     let x,y be Point of C;
     let a be Complex;
     reconsider x1 =x, y1 =y as Point of BS;
 A1: ||.x1.|| = ||.x.||;
-    0.BS=0.C;
-    hence ||.x.|| = 0 iff x= 0.C by A1,CLVECT_1:def 14;
     thus ||.a*x.|| = ||.a*x1.||
       .=|.a.|* ||.x.|| by A1,CLVECT_1:def 14;
     ||.x + y.|| = ||.x1 + y1.|| & ||.x1.|| + ||. y1.|| = ||.x.|| + ||.y.||;
@@ -1054,11 +1028,11 @@ x*(1.C) = x & (1.C)*x = x & x*(y+z) = x*y + x*z & (y+z)*x = y*x + z*x & a*(x*y)
 end;
 
 registration
-  cluster ComplexNormSpace-like Abelian add-associative right_zeroed
-    right_complementable associative right_unital right-distributive
-    vector-distributive vector-associative scalar-distributive
-    scalar-associative scalar-unital strict
-      (non empty Normed_Complex_AlgebraStr);
+  cluster reflexive discerning ComplexNormSpace-like Abelian add-associative
+    right_zeroed right_complementable associative right_unital
+    right-distributive vector-distributive scalar-distributive
+    scalar-associative vector-associative scalar-unital strict (non empty
+    Normed_Complex_AlgebraStr);
   existence
   proof
     consider X be ComplexNormSpace;
@@ -1068,33 +1042,33 @@ registration
 end;
 
 definition
-  mode Normed_Complex_Algebra is ComplexNormSpace-like Abelian add-associative
-right_zeroed right_complementable associative right_unital right-distributive
-    vector-distributive scalar-distributive scalar-associative
-    vector-associative scalar-unital (non empty Normed_Complex_AlgebraStr);
+  mode Normed_Complex_Algebra is
+    reflexive discerning ComplexNormSpace-like Abelian add-associative
+    right_zeroed right_complementable associative right_unital
+    right-distributive vector-distributive vector-associative
+    scalar-distributive scalar-associative scalar-unital (non empty
+    Normed_Complex_AlgebraStr);
 end;
 
 registration
   let X be ComplexNormSpace;
   cluster C_Normed_Algebra_of_BoundedLinearOperators(X) ->
-    ComplexNormSpace-like Abelian add-associative right_zeroed
-    right_complementable associative right_unital right-distributive
-    scalar-distributive scalar-associative vector-associative
-    vector-distributive scalar-unital;
+    reflexive discerning ComplexNormSpace-like Abelian add-associative
+    right_zeroed right_complementable associative right_unital
+    right-distributive vector-distributive scalar-associative
+    vector-associative scalar-distributive scalar-unital;
   correctness by Th20;
 end;
 
 definition
   let X be non empty Normed_Complex_AlgebraStr;
   attr X is Banach_Algebra-like_1 means
-  for x,y being Element of X holds ||. x
-  *y .|| <= ||.x.|| * ||.y.||;
+  for x,y being Element of X holds ||. x*y .|| <= ||.x.|| * ||.y.||;
   attr X is Banach_Algebra-like_2 means
   :Def10:
   ||. 1.X .|| = 1;
   attr X is Banach_Algebra-like_3 means
-  for a being Complex for x,y being
-  Element of X holds a*(x*y)=x*(a*y);
+  for a being Complex for x,y being Element of X holds a*(x*y)=x*(a*y);
 end;
 
 definition
@@ -1173,8 +1147,7 @@ A2:   seq is Cauchy_sequence_by_Norm;
       reconsider seq1=seq as sequence of BS;
       now
         let r be Real;
-        assume
-        r > 0;
+        assume r > 0;
         then consider k be Element of NAT such that
 A3:     for n, m be Element of NAT st n >= k & m >= k holds ||.(seq.n)
         - (seq.m).|| < r by A2,CSSPACE3:10;
@@ -1198,11 +1171,9 @@ Element of NAT st m <= n holds ||.(seq1.n) - g1.|| < r by CLVECT_1:def 16;
       reconsider g=g1 as Point of RBLOP;
       now
         let r be Real;
-        assume
-        0 < r;
+        assume 0 < r;
         then consider m be Element of NAT such that
-A6:     for n be Element of NAT st m <= n holds ||.(seq1.n) - g1.|| <
-        r by A5;
+A6:     for n be Element of NAT st m <= n holds ||.(seq1.n) - g1.|| < r by A5;
         now
           let n be Element of NAT such that
 A7:       m <= n;
@@ -1246,4 +1217,3 @@ theorem
 theorem
   for X being ComplexNormSpace holds 1.
   C_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
-

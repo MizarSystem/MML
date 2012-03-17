@@ -9,16 +9,17 @@ environ
  vocabularies NUMBERS, NAT_1, ARYTM_3, XXREAL_0, SUBSET_1, CARD_1, FUNCT_1,
       RELAT_1, XBOOLEAN, TARSKI, XBOOLE_0, FINSEQ_1, ZF_LANG, ORDINAL4,
       PARTFUN1, ZFMISC_1, BINOP_1, FUNCOP_1, FUNCT_2, FUNCT_7, ORDERS_1,
-      MARGREL1, ZF_MODEL, ARYTM_1, FUNCT_3, COHSP_1, ABIAN, KNASTER, MODELC_1;
+      MARGREL1, ZF_MODEL, ARYTM_1, FUNCT_3, COHSP_1, ABIAN, KNASTER, MODELC_1,
+      STRUCT_0, ORDERS_2, FUNCT_5, ROBBINS1, LATTICES;
  notations RELSET_1, RELAT_1, TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
       XCMPLX_0, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_7, BINOP_1, FINSEQ_1,
       PARTFUN1, KNASTER, XXREAL_0, ABIAN, ORDERS_1, FUNCOP_1, ZF_LANG,
-      MARGREL1;
+      MARGREL1, FUNCT_5, STRUCT_0, ORDERS_2, LATTICES, ROBBINS1;
  constructors BINOP_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, MARGREL1, ABIAN,
-      ZF_LANG, KNASTER, RELSET_1;
+      ZF_LANG, KNASTER, RELSET_1, FUNCT_5, ROBBINS1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, PARTFUN1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, ORDERS_1, XBOOLEAN, MARGREL1, KNASTER, CARD_1,
-      RELSET_1;
+      RELSET_1, STRUCT_0;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
 
 
@@ -70,8 +71,7 @@ end;
 reserve k,n for Element of NAT,
   a,Y for set,
   D,D1,D2 for non empty set,
-  p,q
-  for FinSequence of NAT;
+  p,q for FinSequence of NAT;
 
 :: The operations to make CTL-formulae
 
@@ -224,13 +224,11 @@ definition
   func the_left_argument_of H -> CTL-formula means
 :: MODELC_1:def 22
 
-  ex H1 st it '&' H1
-  = H if H is conjunctive otherwise ex H1 st it EU H1 = H;
+  ex H1 st it '&' H1 = H if H is conjunctive otherwise ex H1 st it EU H1 = H;
   func the_right_argument_of H -> CTL-formula means
 :: MODELC_1:def 23
 
-  ex H1 st H1 '&' it
-  = H if H is conjunctive otherwise ex H1 st H1 EU it = H;
+  ex H1 st H1 '&' it = H if H is conjunctive otherwise ex H1 st H1 EU it = H;
 end;
 
 definition
@@ -250,21 +248,22 @@ end;
 
 definition
   let Prop be set;
-  struct KripkeStr over Prop (# Worlds -> set, Starts -> Subset of the Worlds,
-Possibles -> total Relation of the Worlds, the Worlds, Label -> Function of the
-    Worlds, bool Prop #);
+  struct(RelStr) KripkeStr over Prop (# carrier -> set,
+    Starts -> Subset of the carrier,
+    InternalRel -> Relation of the carrier, the carrier,
+    Label -> Function of the carrier, bool Prop #);
 end;
 
 definition
-  struct CTLModelStr (# Assignations -> non empty set, BasicAssign -> non
-empty Subset of the Assignations, And -> BinOp of the Assignations, Not -> UnOp
-of the Assignations, EneXt -> UnOp of the Assignations, EGlobal -> UnOp of the
-    Assignations, EUntill -> BinOp of the Assignations #);
+  struct(ComplULattStr) CTLModelStr (# carrier -> set, BasicAssign ->
+ Subset of the carrier, L_meet -> BinOp of the carrier, Compl -> UnOp
+of the carrier, EneXt -> UnOp of the carrier, EGlobal -> UnOp of the
+    carrier, EUntill -> BinOp of the carrier #);
 end;
 
 definition
   let V be CTLModelStr;
-  mode Assign of V is Element of the Assignations of V;
+  mode Assign of V is Element of the carrier of V;
 end;
 
 ::  Preparation to define semantics for CTL-language
@@ -280,13 +279,14 @@ end;
 definition
   let V be CTLModelStr;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
-  let f be Function of CTL_WFF,the Assignations of V;
+  let f be Function of CTL_WFF,the carrier of V;
   pred f is-Evaluation-for Kai means
 :: MODELC_1:def 26
 
-  for H being CTL-formula holds (H
-is atomic implies f.H = Kai.H) & (H is negative implies f.H = (the Not of V).(f
-  .(the_argument_of H))) & (H is conjunctive implies f.H = (the And of V).(f.(
+  for H being CTL-formula holds (H is atomic implies f.H = Kai.H) &
+  (H is negative implies f.H = (the Compl of V).(f
+  .(the_argument_of H))) &
+   (H is conjunctive implies f.H = (the L_meet of V).(f.(
   the_left_argument_of H), f.(the_right_argument_of H))) & (H is ExistNext
   implies f.H = (the EneXt of V).(f.(the_argument_of H))) & (H is ExistGlobal
   implies f.H = (the EGlobal of V).(f.(the_argument_of H))) & (H is ExistUntill
@@ -297,15 +297,17 @@ end;
 definition
   let V be CTLModelStr;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
-  let f be Function of CTL_WFF,the Assignations of V;
+  let f be Function of CTL_WFF,the carrier of V;
   let n be Element of NAT;
   pred f is-PreEvaluation-for n,Kai means
 :: MODELC_1:def 27
 
   for H being CTL-formula st
 len(H) <= n holds (H is atomic implies f.H = Kai.H) & (H is negative implies f.
-H = (the Not of V).(f.(the_argument_of H))) & (H is conjunctive implies f.H = (
-  the And of V).(f.(the_left_argument_of H), f.(the_right_argument_of H))) & (H
+H = (the Compl of V).(f.(the_argument_of H))) &
+(H is conjunctive implies f.H = (
+  the L_meet of V).(f.(the_left_argument_of H), f.(the_right_argument_of H))) &
+   (H
   is ExistNext implies f.H = (the EneXt of V).(f.(the_argument_of H))) & (H is
   ExistGlobal implies f.H = (the EGlobal of V).(f.(the_argument_of H))) & (H is
   ExistUntill implies f.H = (the EUntill of V).(f.(the_left_argument_of H), f.(
@@ -315,15 +317,16 @@ end;
 definition
   let V be CTLModelStr;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
-  let f,h be Function of CTL_WFF,the Assignations of V;
+  let f,h be Function of CTL_WFF,the carrier of V;
   let n be Element of NAT;
   let H be CTL-formula;
   func GraftEval(V,Kai,f,h,n,H) -> set equals
 :: MODELC_1:def 28
 
   f.H if len(H) > n+1, Kai
-.H if len(H)=n+1 & H is atomic, (the Not of V).(h.(the_argument_of H)) if len(H
-  )=n+1 & H is negative, (the And of V).(h.(the_left_argument_of H), h.(
+.H if len(H)=n+1 & H is atomic, (the Compl of V).(h.(the_argument_of H))
+ if len(H
+  )=n+1 & H is negative, (the L_meet of V).(h.(the_left_argument_of H), h.(
 the_right_argument_of H)) if len(H)=n+1 & H is conjunctive, (the EneXt of V).(h
 .(the_argument_of H)) if len(H)=n+1 & H is ExistNext , (the EGlobal of V).(h.(
   the_argument_of H)) if len(H)=n+1 & H is ExistGlobal, (the EUntill of V).(h.(
@@ -331,39 +334,71 @@ the_right_argument_of H)) if len(H)=n+1 & H is conjunctive, (the EneXt of V).(h
   ExistUntill, h.H if len(H)<n+1 otherwise {};
 end;
 
-reserve V for CTLModelStr;
-reserve Kai for Function of atomic_WFF,the BasicAssign of V;
-reserve f,f1,f2 for Function of CTL_WFF,the Assignations of V;
+definition let C be CTLModelStr;
+ attr C is with_basic means
+:: MODELC_1:def 29
+ the BasicAssign of C is non empty;
+end;
 
 definition
-  let V be CTLModelStr;
+ func TrivialCTLModel -> CTLModelStr equals
+:: MODELC_1:def 30
+   CTLModelStr(# 1, [#]1, op2, op1, op1, op1, op2#);
+end;
+
+registration
+ cluster TrivialCTLModel -> with_basic strict non empty;
+end;
+
+registration
+ cluster non empty CTLModelStr;
+end;
+
+registration
+ cluster with_basic (non empty CTLModelStr);
+end;
+
+definition
+ mode CTLModel is with_basic (non empty CTLModelStr);
+end;
+
+registration let C be CTLModel;
+ cluster the BasicAssign of C -> non empty;
+end;
+
+reserve V for CTLModel;
+reserve Kai for Function of atomic_WFF,the BasicAssign of V;
+reserve f,f1,f2 for Function of CTL_WFF,the carrier of V;
+
+definition
+  let V be CTLModel;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
   let n be Element of NAT;
   func EvalSet(V,Kai,n) ->non empty set equals
-:: MODELC_1:def 29
+:: MODELC_1:def 31
   {h where h is Function of
-  CTL_WFF,the Assignations of V : h is-PreEvaluation-for n,Kai};
+  CTL_WFF,the carrier of V : h is-PreEvaluation-for n,Kai};
 end;
 
 definition
-  let V be CTLModelStr;
-  let v0 be Element of the Assignations of V;
+  let V be CTLModel;
+  let v0 be Element of the carrier of V;
   let x be set;
-  func CastEval(V,x,v0) ->Function of CTL_WFF,the Assignations of V equals
-:: MODELC_1:def 30
+  func CastEval(V,x,v0) ->Function of CTL_WFF,the carrier of V equals
+:: MODELC_1:def 32
 
    x
- if x in Funcs(CTL_WFF,the Assignations of V) otherwise CTL_WFF --> v0;
+ if x in Funcs(CTL_WFF,the carrier of V) otherwise CTL_WFF --> v0;
 end;
 
 definition
-  let V be CTLModelStr;
+  let V be CTLModel;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
   func EvalFamily(V,Kai) -> non empty set means
-:: MODELC_1:def 31
+:: MODELC_1:def 33
 
   for p being set holds
-p in it iff p in bool Funcs(CTL_WFF,the Assignations of V) & ex n being Element
+p in it iff p in bool Funcs(CTL_WFF,the carrier of V) & ex n being Element
   of NAT st p=EvalSet(V,Kai,n);
 end;
 
@@ -371,55 +406,47 @@ theorem :: MODELC_1:3
   ex f st f is-Evaluation-for Kai;
 
 theorem :: MODELC_1:4
-  f1 is-Evaluation-for Kai & f2 is-Evaluation-for Kai implies f1 =
-  f2;
+  f1 is-Evaluation-for Kai & f2 is-Evaluation-for Kai implies f1 = f2;
 
 definition
-  let V be CTLModelStr;
+  let V be CTLModel;
   let Kai be Function of atomic_WFF,the BasicAssign of V;
   let H be CTL-formula;
   func Evaluate(H,Kai) -> Assign of V means
-:: MODELC_1:def 32
+:: MODELC_1:def 34
 
   ex f being Function of
-  CTL_WFF,the Assignations of V st f is-Evaluation-for Kai & it = f.H;
+  CTL_WFF,the carrier of V st f is-Evaluation-for Kai & it = f.H;
 end;
 
-definition
-  let V be CTLModelStr;
+notation
+  let V be CTLModel;
   let f be Assign of V;
-  func 'not' f -> Assign of V equals
-:: MODELC_1:def 33
-  (the Not of V).f;
+  synonym 'not' f for f`;
+  let g be Assign of V;
+  synonym f '&' g for f "/\" g;
 end;
 
 definition
-  let V be CTLModelStr;
-  let f,g be Assign of V;
-  func f '&' g -> Assign of V equals
-:: MODELC_1:def 34
-  (the And of V).(f,g);
-end;
-
-definition
-  let V be CTLModelStr;
+ canceled 2;
+  let V be CTLModel;
   let f be Assign of V;
   func EX(f) -> Assign of V equals
-:: MODELC_1:def 35
+:: MODELC_1:def 37
   (the EneXt of V).f;
   func EG(f) -> Assign of V equals
-:: MODELC_1:def 36
+:: MODELC_1:def 38
   (the EGlobal of V).f;
 end;
 
 definition
-  let V be CTLModelStr;
+  let V be CTLModel;
   let f,g be Assign of V;
   func f EU g -> Assign of V equals
-:: MODELC_1:def 37
+:: MODELC_1:def 39
   (the EUntill of V).(f,g);
   func f 'or' g -> Assign of V equals
-:: MODELC_1:def 38
+:: MODELC_1:def 40
   'not'('not'(f) '&' 'not'(g));
 end;
 
@@ -441,8 +468,7 @@ theorem :: MODELC_1:9
   Evaluate(H1 EU H2,Kai) = Evaluate(H1,Kai) EU Evaluate(H2,Kai);
 
 theorem :: MODELC_1:10
-  Evaluate(H1 'or' H2,Kai) = Evaluate(H1,Kai) 'or' Evaluate(H2,Kai
-  );
+  Evaluate(H1 'or' H2,Kai) = Evaluate(H1,Kai) 'or' Evaluate(H2,Kai );
 
 ::  definition of iteration of function: f|**n
 
@@ -481,24 +507,23 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   mode inf_path of R -> Function of NAT,S means
-:: MODELC_1:def 39
+:: MODELC_1:def 41
 
-    for n being Element of
-    NAT holds [it.n,it.(n+1)] in R;
+    for n being Element of NAT holds [it.n,it.(n+1)] in R;
 end;
 
 ::definition of concrete object of CTL model
 
 definition
   let S be non empty set;
-  func ModelSP(S) -> non empty set equals
-:: MODELC_1:def 40
+  func ModelSP(S) -> set equals
+:: MODELC_1:def 42
   Funcs(S,BOOLEAN);
 end;
 
 registration
   let S be non empty set;
-  cluster ModelSP(S) -> non empty Subset of Funcs(S,BOOLEAN);
+  cluster ModelSP(S) -> non empty;
 end;
 
 :: definition Fid:ModelSP(S) -> Function of S,BOOLEAN
@@ -507,7 +532,7 @@ definition
   let S be non empty set;
   let f be set;
   func Fid(f,S) -> Function of S,BOOLEAN equals
-:: MODELC_1:def 41
+:: MODELC_1:def 43
 
   f if f in ModelSP(S)
   otherwise S --> FALSE;
@@ -566,7 +591,7 @@ definition
   let S be non empty set;
   let f be set;
   func Not_0(f,S) -> Element of ModelSP(S) means
-:: MODELC_1:def 42
+:: MODELC_1:def 44
 
   for s being set st s
   in S holds 'not' (Castboolean (Fid(f,S)).s) = TRUE iff (Fid(it,S)).s = TRUE;
@@ -575,10 +600,9 @@ end;
 definition
   let S be non empty set;
   func Not_(S) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 43
+:: MODELC_1:def 45
 
-  for f being set st f in
-  ModelSP(S) holds it.f = Not_0(f,S);
+  for f being set st f in ModelSP(S) holds it.f = Not_0(f,S);
 end;
 
 :: definition of EneXt_  unary operation of Model Space.
@@ -589,7 +613,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EneXt_univ(x,f,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 44
+:: MODELC_1:def 46
 
   TRUE if x in S &
   ex pai being inf_path of R st pai.0 = x & f.(pai.1) =TRUE otherwise FALSE;
@@ -600,7 +624,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EneXt_0(f,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 45
+:: MODELC_1:def 47
 
   for s being set st
   s in S holds EneXt_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
@@ -610,10 +634,9 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EneXt_(R) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 46
+:: MODELC_1:def 48
 
-  for f being set st f in
-  ModelSP(S) holds it.f = EneXt_0(f,R);
+  for f being set st f in ModelSP(S) holds it.f = EneXt_0(f,R);
 end;
 
 :: definition of EGlobal_  unary operation of Model Space.
@@ -624,7 +647,7 @@ definition
   let f be Function of S,BOOLEAN;
   let x be set;
   func EGlobal_univ(x,f,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 47
+:: MODELC_1:def 49
 
   TRUE if x in S
 & ex pai being inf_path of R st (pai.0 = x & for n being Element of NAT holds f
@@ -636,7 +659,7 @@ definition
   let R be total Relation of S,S;
   let f be set;
   func EGlobal_0(f,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 48
+:: MODELC_1:def 50
 
   for s being set
   st s in S holds EGlobal_univ(s,Fid(f,S),R)=TRUE iff (Fid(it,S)).s=TRUE;
@@ -646,10 +669,9 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EGlobal_(R) -> UnOp of ModelSP(S) means
-:: MODELC_1:def 49
+:: MODELC_1:def 51
 
-  for f being set st f in
-  ModelSP(S) holds it.f = EGlobal_0(f,R);
+  for f being set st f in ModelSP(S) holds it.f = EGlobal_0(f,R);
 end;
 
 :: definition of And_ Binary Operation of Model Space.
@@ -658,7 +680,7 @@ definition
   let S be non empty set;
   let f,g be set;
   func And_0(f,g,S) -> Element of ModelSP(S) means
-:: MODELC_1:def 50
+:: MODELC_1:def 52
 
   for s being set st
 s in S holds (Castboolean (Fid(f,S)).s ) '&' (Castboolean (Fid(g,S)).s ) =TRUE
@@ -668,7 +690,7 @@ end;
 definition
   let S be non empty set;
   func And_(S) -> BinOp of ModelSP(S) means
-:: MODELC_1:def 51
+:: MODELC_1:def 53
 
   for f,g being set st f in
   ModelSP(S) & g in ModelSP(S) holds it.(f,g) = And_0(f,g,S);
@@ -682,7 +704,7 @@ definition
   let f,g be Function of S,BOOLEAN;
   let x be set;
   func EUntill_univ(x,f,g,R) -> Element of BOOLEAN equals
-:: MODELC_1:def 52
+:: MODELC_1:def 54
 
   TRUE if x in
   S & ex pai being inf_path of R st (pai.0 = x & ex m being Element of NAT st (
@@ -695,7 +717,7 @@ definition
   let R be total Relation of S,S;
   let f,g be set;
   func EUntill_0(f,g,R) -> Element of ModelSP(S) means
-:: MODELC_1:def 53
+:: MODELC_1:def 55
 
   for s being set
 st s in S holds EUntill_univ(s,Fid(f,S),Fid(g,S),R)=TRUE iff (Fid(it,S)).s=TRUE
@@ -706,7 +728,7 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   func EUntill_(R) -> BinOp of ModelSP(S) means
-:: MODELC_1:def 54
+:: MODELC_1:def 56
 
   for f,g being set st f
   in ModelSP(S) & g in ModelSP(S) holds it.(f,g) = EUntill_0(f,g,R);
@@ -719,7 +741,7 @@ definition
   let X be non empty Subset of ModelSP(S);
   let s be set;
   func F_LABEL(s,X) -> Subset of X means
-:: MODELC_1:def 55
+:: MODELC_1:def 57
 
   for x being set holds x in it
   iff x in X & ex f being Function of S,BOOLEAN st f=x & f.s=TRUE;
@@ -729,10 +751,9 @@ definition
   let S be non empty set;
   let X be non empty Subset of ModelSP(S);
   func Label_(X) -> Function of S,bool X means
-:: MODELC_1:def 56
+:: MODELC_1:def 58
 
-  for x being set st x in
-  S holds it.x = F_LABEL(x,X);
+  for x being set st x in S holds it.x = F_LABEL(x,X);
 end;
 
 definition
@@ -741,7 +762,7 @@ definition
   let R be total Relation of S,S;
   let Prop be non empty Subset of ModelSP(S);
   func KModel(R,S0,Prop) -> KripkeStr over Prop equals
-:: MODELC_1:def 57
+:: MODELC_1:def 59
   KripkeStr (# S, S0, R,
     Label_(Prop) #);
 end;
@@ -751,7 +772,7 @@ registration
   let S0 be Subset of S;
   let R be total Relation of S,S;
   let Prop be non empty Subset of ModelSP(S);
-  cluster the Worlds of KModel(R,S0,Prop) -> non empty;
+  cluster the carrier of KModel(R,S0,Prop) -> non empty;
 end;
 
 registration
@@ -759,33 +780,40 @@ registration
   let S0 be Subset of S;
   let R be total Relation of S,S;
   let Prop be non empty Subset of ModelSP(S);
-  cluster ModelSP(the Worlds of KModel(R,S0,Prop)) -> non empty Subset of
-    Funcs(the Worlds of KModel(R,S0,Prop),BOOLEAN);
+  cluster ModelSP(the carrier of KModel(R,S0,Prop)) -> non empty Subset of
+    Funcs(the carrier of KModel(R,S0,Prop),BOOLEAN);
 end;
 
 definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  func CTLModel(R,BASSIGN) -> CTLModelStr equals
-:: MODELC_1:def 58
+  func BASSModel(R,BASSIGN) -> CTLModelStr equals
+:: MODELC_1:def 60
   CTLModelStr(# ModelSP(S),
     BASSIGN, And_(S), Not_(S), EneXt_(R), EGlobal_(R), EUntill_(R) #);
 end;
 
-reserve BASSIGN for non empty Subset of ModelSP(S);
-reserve kai for Function of atomic_WFF,the BasicAssign of CTLModel(R,BASSIGN);
+registration
+  let S be non empty set;
+  let R be total Relation of S,S;
+  let BASSIGN be non empty Subset of ModelSP(S);
+  cluster BASSModel(R,BASSIGN) -> with_basic non empty;
+end;
 
-:: definition of correctness of Assign of CTLModel(R,BASSIGN)
+reserve BASSIGN for non empty Subset of ModelSP(S);
+reserve kai for Function of atomic_WFF,the BasicAssign of BASSModel(R,BASSIGN);
+
+:: definition of correctness of Assign of BASSModel(R,BASSIGN)
 
 definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
   let s be Element of S;
-  let f be Assign of CTLModel(R,BASSIGN);
+  let f be Assign of BASSModel(R,BASSIGN);
   pred s |= f means
-:: MODELC_1:def 59
+:: MODELC_1:def 61
 
   (Fid(f,S)).s=TRUE;
 end;
@@ -795,38 +823,37 @@ notation
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
   let s be Element of S;
-  let f be Assign of CTLModel(R,BASSIGN);
+  let f be Assign of BASSModel(R,BASSIGN);
   antonym s |/= f for s |= f;
 end;
 
 theorem :: MODELC_1:11
-  for a being Assign of CTLModel(R,BASSIGN) st a in BASSIGN holds
+  for a being Assign of BASSModel(R,BASSIGN) st a in BASSIGN holds
   s |= a iff a in (Label_(BASSIGN)).s;
 
 theorem :: MODELC_1:12
-  for f being Assign of CTLModel(R,BASSIGN) holds s |= 'not'(f)
-  iff s |/= f;
+  for f being Assign of BASSModel(R,BASSIGN) holds s |= 'not'(f) iff s |/= f;
 
 theorem :: MODELC_1:13
-  for f,g being Assign of CTLModel(R,BASSIGN) holds s |= f '&' g
+  for f,g being Assign of BASSModel(R,BASSIGN) holds s |= f '&' g
   iff s|=f & s|=g;
 
 theorem :: MODELC_1:14
-  for f being Assign of CTLModel(R,BASSIGN) holds s |= EX(f) iff
+  for f being Assign of BASSModel(R,BASSIGN) holds s |= EX(f) iff
   ex pai being inf_path of R st pai.0 = s & (pai.1) |= f;
 
 theorem :: MODELC_1:15
-  for f being Assign of CTLModel(R,BASSIGN) holds s |= EG(f) iff
+  for f being Assign of BASSModel(R,BASSIGN) holds s |= EG(f) iff
 ex pai being inf_path of R st pai.0 = s & for n being Element of NAT holds (pai
   .n) |= f;
 
 theorem :: MODELC_1:16
-  for f,g being Assign of CTLModel(R,BASSIGN) holds s |= f EU g
+  for f,g being Assign of BASSModel(R,BASSIGN) holds s |= f EU g
 iff ex pai being inf_path of R st pai.0 = s & ex m being Element of NAT st (for
   j being Element of NAT st j<m holds pai.j |= f) & pai.m |= g;
 
 theorem :: MODELC_1:17
-  for f,g being Assign of CTLModel(R,BASSIGN) holds s |= f 'or' g
+  for f,g being Assign of BASSModel(R,BASSIGN) holds s |= f 'or' g
   iff (s|= f or s|= g);
 
 :: definition of correctness of CTL-formula & its basic properties.
@@ -835,11 +862,11 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let kai being Function of atomic_WFF,the BasicAssign of CTLModel(R,BASSIGN);
+  let kai being Function of atomic_WFF,the BasicAssign of BASSModel(R,BASSIGN);
   let s be Element of S;
   let H be CTL-formula;
   pred s,kai|= H means
-:: MODELC_1:def 60
+:: MODELC_1:def 62
 
   s|= Evaluate(H,kai);
 end;
@@ -848,7 +875,7 @@ notation
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let kai being Function of atomic_WFF,the BasicAssign of CTLModel(R,BASSIGN);
+  let kai being Function of atomic_WFF,the BasicAssign of BASSModel(R,BASSIGN);
   let s be Element of S;
   let H be CTL-formula;
   antonym s,kai|/= H for s,kai|= H;
@@ -867,8 +894,7 @@ theorem :: MODELC_1:21
   s,kai|= H1 'or' H2 iff s,kai|= H1 or s,kai|= H2;
 
 theorem :: MODELC_1:22
-  s,kai|= EX H iff ex pai being inf_path of R st pai.0 = s & (pai.1),kai
-  |= H;
+  s,kai|= EX H iff ex pai being inf_path of R st pai.0 = s & (pai.1),kai |= H;
 
 theorem :: MODELC_1:23
   s,kai|= EG H iff ex pai being inf_path of R st pai.0 = s & for n being
@@ -905,18 +931,17 @@ definition
   let pai be inf_path of R;
   let n be set;
   func PrePath(n,s0,pai) -> Element of S equals
-:: MODELC_1:def 61
+:: MODELC_1:def 63
 
   s0 if n=0 otherwise
   pai.(k_nat(k_nat(n)-1));
 end;
 
 theorem :: MODELC_1:27
-  [s0,s1] in R implies ex pai being inf_path of R st pai.0 = s0 &
-  pai.1=s1;
+  [s0,s1] in R implies ex pai being inf_path of R st pai.0 = s0 & pai.1=s1;
 
 theorem :: MODELC_1:28
-  for f being Assign of CTLModel(R,BASSIGN) holds s |= EX(f) iff
+  for f being Assign of BASSModel(R,BASSIGN) holds s |= EX(f) iff
   ex s1 being Element of S st [s,s1] in R & s1 |= f;
 
 ::   definition of predecessor
@@ -926,7 +951,7 @@ definition
   let R be total Relation of S,S;
   let H be Subset of S;
   func Pred(H,R) -> Subset of S equals
-:: MODELC_1:def 62
+:: MODELC_1:def 64
   { s where s is Element of S : ex t
   being Element of S st t in H & [s,t] in R };
 end;
@@ -937,16 +962,16 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f be Assign of CTLModel(R,BASSIGN);
+  let f be Assign of BASSModel(R,BASSIGN);
   func SIGMA(f) -> Subset of S equals
-:: MODELC_1:def 63
+:: MODELC_1:def 65
   { s where s is Element of S : s|= f };
 end;
 
 ::   SIGMA is one to one.
 
 theorem :: MODELC_1:29
-  for f, g being Assign of CTLModel(R,BASSIGN) holds SIGMA(f) = SIGMA(g)
+  for f, g being Assign of BASSModel(R,BASSIGN) holds SIGMA(f) = SIGMA(g)
   implies f=g;
 
 ::   definition of Tau (inverse of SIGMA).
@@ -956,11 +981,10 @@ definition
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
   let T be Subset of S;
-  func Tau(T,R,BASSIGN) -> Assign of CTLModel(R,BASSIGN) means
-:: MODELC_1:def 64
+  func Tau(T,R,BASSIGN) -> Assign of BASSModel(R,BASSIGN) means
+:: MODELC_1:def 66
 
-  for s
-  being set st s in S holds (Fid(it,S)).s = chi(T,S).s;
+  for s being set st s in S holds (Fid(it,S)).s = chi(T,S).s;
 end;
 
 ::   Tau is one to one.
@@ -972,8 +996,8 @@ theorem :: MODELC_1:30
 ::   Tau is on to.
 
 theorem :: MODELC_1:31
-  for f being Assign of CTLModel(R,BASSIGN) holds Tau(SIGMA(f),R,
-  BASSIGN) = f;
+  for f being Assign of BASSModel(R,BASSIGN) holds Tau(SIGMA(f),R, BASSIGN) = f
+;
 
 ::   SIGMA is on to.
 
@@ -983,7 +1007,7 @@ theorem :: MODELC_1:32
 ::   SIGMA is homomorphism .
 
 theorem :: MODELC_1:33
-  for f,g being Assign of CTLModel(R,BASSIGN) holds SIGMA('not' f)
+  for f,g being Assign of BASSModel(R,BASSIGN) holds SIGMA('not' f)
   = S \ SIGMA(f) & SIGMA(f '&' g) = SIGMA(f) /\ SIGMA(g) & SIGMA(f 'or' g) =
   SIGMA(f) \/ SIGMA(g);
 
@@ -996,7 +1020,7 @@ theorem :: MODELC_1:34
 ::   SIGMA is monotonic.
 
 theorem :: MODELC_1:35
-  for f1,f2 being Assign of CTLModel(R,BASSIGN) holds (for s being
+  for f1,f2 being Assign of BASSModel(R,BASSIGN) holds (for s being
   Element of S holds s|= f1 implies s|= f2) implies SIGMA(f1) c= SIGMA(f2);
 
 ::   theorems for translation
@@ -1004,22 +1028,22 @@ theorem :: MODELC_1:35
 ::          (1)find status s st s |= EG(f)
 ::          (2)find status s st s |= f EU g
 ::        to "find fixpoint of some function of bool S -> bool S".
-:: definition Fax(f,*):Assignations ->Assignations
+:: definition Fax(f,*):carrier ->carrier
 
 definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f,g be Assign of CTLModel(R,BASSIGN);
-  func Fax(f,g) -> Assign of CTLModel(R,BASSIGN) equals
-:: MODELC_1:def 65
+  let f,g be Assign of BASSModel(R,BASSIGN);
+  func Fax(f,g) -> Assign of BASSModel(R,BASSIGN) equals
+:: MODELC_1:def 67
   f '&' EX(g);
 end;
 
 ::   Fax(f,*) is monotonic.
 
 theorem :: MODELC_1:36
-  for f,g1,g2 being Assign of CTLModel(R,BASSIGN) holds (for s
+  for f,g1,g2 being Assign of BASSModel(R,BASSIGN) holds (for s
 being Element of S holds s|= g1 implies s|= g2) implies for s being Element of
   S holds s|= Fax(f,g1) implies s|= Fax(f,g2);
 
@@ -1037,10 +1061,10 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f be Assign of CTLModel(R,BASSIGN);
+  let f be Assign of BASSModel(R,BASSIGN);
   let G be Subset of S;
   func SigFaxTau(f,G,R,BASSIGN) -> Subset of S equals
-:: MODELC_1:def 66
+:: MODELC_1:def 68
   SIGMA(Fax(f,Tau(G,R,
   BASSIGN)));
 end;
@@ -1048,7 +1072,7 @@ end;
 ::   SigFaxTau(f,*) is monotonic.
 
 theorem :: MODELC_1:37
-  for f being Assign of CTLModel(R,BASSIGN), G1,G2 being Subset of
+  for f being Assign of BASSModel(R,BASSIGN), G1,G2 being Subset of
 S holds G1 c= G2 implies SigFaxTau(f,G1,R,BASSIGN) c= SigFaxTau(f,G2,R,BASSIGN)
 ;
 
@@ -1060,10 +1084,9 @@ definition
   let pai be inf_path of R;
   let k be Element of NAT;
   func PathShift(pai,k) -> inf_path of R means
-:: MODELC_1:def 67
+:: MODELC_1:def 69
 
-  for n being Element of
-  NAT holds it.n = pai.(n+k);
+  for n being Element of NAT holds it.n = pai.(n+k);
 end;
 
 definition
@@ -1072,7 +1095,7 @@ definition
   let pai1,pai2 be inf_path of R;
   let n,k be Element of NAT;
   func PathChange(pai1,pai2,k,n) -> set equals
-:: MODELC_1:def 68
+:: MODELC_1:def 70
 
   pai1.n if n<k otherwise
   pai2.(n-k);
@@ -1084,10 +1107,9 @@ definition
   let pai1,pai2 be inf_path of R;
   let k be Element of NAT;
   func PathConc(pai1,pai2,k) -> Function of NAT,S means
-:: MODELC_1:def 69
+:: MODELC_1:def 71
 
-  for n being
-  Element of NAT holds it.n = PathChange(pai1,pai2,k,n);
+  for n being Element of NAT holds it.n = PathChange(pai1,pai2,k,n);
 end;
 
 theorem :: MODELC_1:38
@@ -1097,13 +1119,13 @@ theorem :: MODELC_1:38
 ::   EG(f) is fixpoint of Fax(f,*).
 
 theorem :: MODELC_1:39
-  for f being Assign of CTLModel(R,BASSIGN), s being Element of S
+  for f being Assign of BASSModel(R,BASSIGN), s being Element of S
   holds s|= EG(f) iff s|= Fax(f,EG(f));
 
 ::   Existence path for fixpoint of Fax(f,*).
 
 theorem :: MODELC_1:40
-  for g being Assign of CTLModel(R,BASSIGN), s0 being Element of S
+  for g being Assign of BASSModel(R,BASSIGN), s0 being Element of S
   st s0 |= g holds (for s being Element of S holds s|= g implies s|= EX(g))
   implies ex pai being inf_path of R st pai.0= s0 & for n being Element of NAT
   holds pai.n |= g;
@@ -1111,7 +1133,7 @@ theorem :: MODELC_1:40
 ::   EG(f) is the maximum fixpoint of Fax(f,*)
 
 theorem :: MODELC_1:41
-  for f,g being Assign of CTLModel(R,BASSIGN) holds (for s being
+  for f,g being Assign of BASSModel(R,BASSIGN) holds (for s being
   Element of S holds s|= g iff s|= Fax(f,g)) implies for s being Element of S
   holds s|= g implies s|= EG(f);
 
@@ -1121,41 +1143,40 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f be Assign of CTLModel(R,BASSIGN);
+  let f be Assign of BASSModel(R,BASSIGN);
   func TransEG(f) -> c=-monotone Function of bool S, bool S means
-:: MODELC_1:def 70
+:: MODELC_1:def 72
 
-  for
-  G being Subset of S holds it.G = SigFaxTau(f,G,R,BASSIGN);
+  for G being Subset of S holds it.G = SigFaxTau(f,G,R,BASSIGN);
 end;
 
 ::   fixpoint of TransEG(f)
 
 theorem :: MODELC_1:42
-  for f,g being Assign of CTLModel(R,BASSIGN) holds (for s being
+  for f,g being Assign of BASSModel(R,BASSIGN) holds (for s being
   Element of S holds s|= g iff s|= Fax(f,g)) iff SIGMA(g) is_a_fixpoint_of
   TransEG(f);
 
 theorem :: MODELC_1:43
-  for f being Assign of CTLModel(R,BASSIGN) holds SIGMA(EG(f)) = gfp(S,
+  for f being Assign of BASSModel(R,BASSIGN) holds SIGMA(EG(f)) = gfp(S,
   TransEG(f));
 
-:: definition Foax(g,f,*):Assignations ->Assignations
+:: definition Foax(g,f,*):carrier ->carrier
 
 definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f,g,h be Assign of CTLModel(R,BASSIGN);
-  func Foax(g,f,h) -> Assign of CTLModel(R,BASSIGN) equals
-:: MODELC_1:def 71
+  let f,g,h be Assign of BASSModel(R,BASSIGN);
+  func Foax(g,f,h) -> Assign of BASSModel(R,BASSIGN) equals
+:: MODELC_1:def 73
   g 'or' Fax(f,h);
 end;
 
 ::   Foax(g,f,*) is monotonic.
 
 theorem :: MODELC_1:44
-  for f,g,h1,h2 being Assign of CTLModel(R,BASSIGN) holds (for s
+  for f,g,h1,h2 being Assign of BASSModel(R,BASSIGN) holds (for s
 being Element of S holds s|= h1 implies s|= h2) implies for s being Element of
   S holds s|= Foax(g,f,h1) implies s|= Foax(g,f,h2);
 
@@ -1173,10 +1194,10 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f,g be Assign of CTLModel(R,BASSIGN);
+  let f,g be Assign of BASSModel(R,BASSIGN);
   let H be Subset of S;
   func SigFoaxTau(g,f,H,R,BASSIGN) -> Subset of S equals
-:: MODELC_1:def 72
+:: MODELC_1:def 74
   SIGMA(Foax(g,f,Tau(H,
   R,BASSIGN)));
 end;
@@ -1184,20 +1205,20 @@ end;
 ::   SigFoaxTau(g,f,*) is monotonic.
 
 theorem :: MODELC_1:45
-  for f,g being Assign of CTLModel(R,BASSIGN), H1,H2 being Subset
+  for f,g being Assign of BASSModel(R,BASSIGN), H1,H2 being Subset
 of S holds H1 c= H2 implies SigFoaxTau(g,f,H1,R,BASSIGN) c= SigFoaxTau(g,f,H2,R
   ,BASSIGN);
 
 ::    f EU g is fixpoint of Foax(g,f,*).
 
 theorem :: MODELC_1:46
-  for f,g being Assign of CTLModel(R,BASSIGN), s being Element of
+  for f,g being Assign of BASSModel(R,BASSIGN), s being Element of
   S holds s|= f EU g iff s|= Foax(g,f,f EU g);
 
 ::   f EU g is the minimum fixpoint of Foax(g,f,*)
 
 theorem :: MODELC_1:47
-  for f,g,h being Assign of CTLModel(R,BASSIGN) holds (for s being
+  for f,g,h being Assign of BASSModel(R,BASSIGN) holds (for s being
 Element of S holds s|= h iff s|= Foax(g,f,h)) implies for s being Element of S
   holds s|= f EU g implies s|= h;
 
@@ -1207,9 +1228,9 @@ definition
   let S be non empty set;
   let R be total Relation of S,S;
   let BASSIGN be non empty Subset of ModelSP(S);
-  let f,g be Assign of CTLModel(R,BASSIGN);
+  let f,g be Assign of BASSModel(R,BASSIGN);
   func TransEU(f,g) -> c=-monotone Function of bool S, bool S means
-:: MODELC_1:def 73
+:: MODELC_1:def 75
 
   for H being Subset of S holds it.H = SigFoaxTau(g,f,H,R,BASSIGN);
 end;
@@ -1217,25 +1238,24 @@ end;
 ::   fixpoint of TransEU(f,g)
 
 theorem :: MODELC_1:48
-  for f,g,h being Assign of CTLModel(R,BASSIGN) holds (for s being
+  for f,g,h being Assign of BASSModel(R,BASSIGN) holds (for s being
   Element of S holds s|= h iff s|= Foax(g,f,h)) iff SIGMA(h) is_a_fixpoint_of
   TransEU(f,g);
 
 theorem :: MODELC_1:49
-  for f,g being Assign of CTLModel(R,BASSIGN) holds SIGMA(f EU g) = lfp(
+  for f,g being Assign of BASSModel(R,BASSIGN) holds SIGMA(f EU g) = lfp(
   S,TransEU(f,g));
 
 :: Solver for EX and TransEG,TransEU
 
 theorem :: MODELC_1:50
-  for f being Assign of CTLModel(R,BASSIGN) holds SIGMA(EX(f)) =
+  for f being Assign of BASSModel(R,BASSIGN) holds SIGMA(EX(f)) =
   Pred(SIGMA(f),R);
 
 theorem :: MODELC_1:51
-  for f being Assign of CTLModel(R,BASSIGN), X being Subset of S holds (
+  for f being Assign of BASSModel(R,BASSIGN), X being Subset of S holds (
   TransEG(f)).X = SIGMA(f) /\ Pred(X,R);
 
 theorem :: MODELC_1:52
-  for f,g being Assign of CTLModel(R,BASSIGN), X being Subset of S holds
+  for f,g being Assign of BASSModel(R,BASSIGN), X being Subset of S holds
   (TransEU(f,g)).X = SIGMA(g) \/ (SIGMA(f) /\ Pred(X,R));
-

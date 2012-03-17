@@ -3,7 +3,7 @@
 ::
 :: Received January 29, 1997
 :: Copyright (c) 1997 Association of Mizar Users
-
+ 
 environ
 
  vocabularies ORDERS_2, SUBSET_1, XXREAL_0, XBOOLE_0, TARSKI, REWRITE1,
@@ -22,10 +22,12 @@ environ
       YELLOW_8;
  constructors DOMAIN_1, CLASSES1, CLASSES2, TOPS_1, CONNSP_2, TDLAT_3,
       T_0TOPSP, CANTOR_1, PRALG_1, PRALG_2, ORDERS_3, WAYBEL_1, YELLOW_4,
-      WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_9, YELLOW_8, RELSET_1, TOPS_2;
+      WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_9, YELLOW_8, RELSET_1, TOPS_2,
+      WAYBEL_2;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSET_1,
       CARD_3, CLASSES2, PBOOLE, STRUCT_0, LATTICE3, YELLOW_0, TDLAT_3,
-      WAYBEL_0, YELLOW_1, WAYBEL_3, YELLOW_6, WAYBEL_5, WAYBEL_9, RELSET_1;
+      WAYBEL_0, YELLOW_1, WAYBEL_3, YELLOW_6, WAYBEL_5, WAYBEL_9, RELSET_1,
+      TOPS_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, XBOOLE_0, TARSKI, SUBSET_1, PRE_TOPC, WAYBEL_0,
       LATTICE3, YELLOW_0, RELAT_1, YELLOW_6, YELLOW_4, WAYBEL_1, WAYBEL_3,
@@ -217,11 +219,14 @@ end;
 
 registration
   let R be RelStr;
-  cluster {}R -> lower upper;
+  cluster empty -> lower upper Subset of R;
   coherence
-  proof
-    thus for x,y being Element of R st x in {}R & y <= x holds y in {}R;
-    thus for x,y being Element of R st x in {}R & x <= y holds y in {}R;
+  proof let S be Subset of R;
+    assume S is empty;
+    then
+X:  S = {}R;
+    hence for x,y being Element of R st x in S & y <= x holds y in S;
+    thus for x,y being Element of R st x in S & x <= y holds y in S by X;
   end;
 end;
 
@@ -290,16 +295,18 @@ end;
 
 registration
   let T be non empty reflexive RelStr;
-  cluster {}T -> property(S) directly_closed;
+  cluster empty -> property(S) directly_closed Subset of T;
   coherence
-  proof
+  proof let S be Subset of T;
+    assume S is empty;
+    then
+X:  S = {}T;
     for D being non empty directed Subset of T st sup D in {}T
     ex y being Element of T st y in D &
     for x being Element of T st x in D & x >= y holds x in {}T;
-    hence {}T is property(S) by Def3;
+    hence S is property(S) by X,Def3;
     thus
-    for D being non empty directed Subset of T st D c= {}T holds sup D in
-    {} T;
+    for D being non empty directed Subset of T st D c= S holds sup D in S by X;
   end;
 end;
 
@@ -337,8 +344,7 @@ definition
   let T be reflexive non empty TopRelStr;
   attr T is Scott means
   :Def4:
-  for S being Subset of T holds
-  S is open iff S is inaccessible upper;
+  for S being Subset of T holds S is open iff S is inaccessible upper;
 end;
 
 registration
@@ -640,6 +646,7 @@ end;
 
 registration
   let T be complete TopLattice;
+ 
 :: p. 100, Remark 1.4 (vi)
   cluster lower -> property(S) Subset of T;
   coherence
@@ -668,8 +675,7 @@ proof
 A1: y in D by SUBSET_1:10;
   take y;
   thus y in D by A1;
-  let x be Element of T such that x in D
-  and x >= y;
+  let x be Element of T such that x in D and x >= y;
   thus thesis;
 end;
 
@@ -833,7 +839,7 @@ A12: N = x and the carrier of N in the_universe_of the carrier of R by
     hence thesis by A3,A11,A12;
   end;
 end;
-
+ 
 :: remarks, p.98
 
 theorem
@@ -904,11 +910,9 @@ end;
 
 definition
   let R be reflexive non empty RelStr, N be non empty NetStr over R;
-  redefine
-  attr N is monotone means
+  redefine attr N is monotone means
   :Def9:
-  for i,j being Element of N st i <= j
-  holds N.i <= N.j;
+  for i,j being Element of N st i <= j holds N.i <= N.j;
   compatibility
   proof
     hereby
@@ -944,8 +948,7 @@ definition
   proof
     defpred P[Element of S, Element of S] means f.$1 <= f.$2;
     consider R being Relation of S,S such that
-A1: for x,y being Element of S holds [x,y] in R iff P[x,y]
-    from RELSET_1:sch 2;
+A1: for x,y being Element of S holds [x,y] in R iff P[x,y] from RELSET_1:sch 2;
     take N = NetStr(#S,R,f#);
     thus the carrier of N = S;
     thus the mapping of N = f;
@@ -1310,8 +1313,7 @@ A1: [e,e] in the InternalRel of N by TARSKI:def 1;
     end;
     thus N is transitive
     proof
-      let x,y,z be Element of N such that x <= y
-      and y <= z;
+      let x,y,z be Element of N such that x <= y and y <= z;
 A2:   x = e by Th25;
       z = e by Th25;
       hence thesis by A1,A2,ORDERS_2:def 9;
@@ -1324,8 +1326,7 @@ A3:   x = e by Th25;
       y = e by Th25;
       hence thesis by A1,A3,ORDERS_2:def 9;
     end;
-    let x,y be Element of N such that x <= y
-    and y <= x;
+    let x,y be Element of N such that x <= y and y <= x;
     x = e by Th25;
     hence thesis by Th25;
   end;
@@ -1594,8 +1595,7 @@ A2: e in the topology of CSC;
     then A is open by Def4;
     hence thesis by PRE_TOPC:def 5;
   end;
-  hence thesis
-  by YELLOW_6:def 27;
+  hence thesis by YELLOW_6:def 27;
 end;
 
 theorem Th33:
@@ -1718,12 +1718,12 @@ proof
   let T be complete TopLattice;
   assume the TopStruct of T = ConvergenceSpace Scott-Convergence T;
   hence
-  for S being Subset of T holds S is open iff S is inaccessible upper
-  by Th33;
+  for S being Subset of T holds S is open iff S is inaccessible upper by Th33;
 end;
 
 registration
   let R be complete LATTICE;
+ 
 :: 1.6. Proposition (i)
   cluster Scott-Convergence R -> (CONSTANTS);
   coherence
@@ -1741,6 +1741,7 @@ end;
 
 registration
   let R be complete LATTICE;
+ 
 :: 1.6. Proposition (i)
   cluster Scott-Convergence R -> (SUBNETS);
   coherence
@@ -1864,7 +1865,7 @@ proof
   TopStruct(#the carrier of CSC, the topology of CSC#) by YELLOW_6:def 27;
   hence thesis by Th34;
 end;
-
+ 
 :: non automated structural loci :
 
 Lm3: for T1,T2 being TopStruct
@@ -1897,8 +1898,7 @@ A2: now
       assume x in NetUniv S1;
       then consider N being strict net of S1 such that
 A3:   N = x and
-A4:   the carrier of N in the_universe_of the carrier of S1
-      by YELLOW_6:def 14;
+A4:   the carrier of N in the_universe_of the carrier of S1 by YELLOW_6:def 14;
       reconsider N as strict net of S2 by A1;
       thus P[x]
       proof
@@ -2397,7 +2397,6 @@ proof
 A1: the RelStr of R1 = the RelStr of R2;
 A2: Scott-Convergence R1 c= [:NetUniv R1,the carrier of R1:]
   by YELLOW_6:def 21;
-
   for e being set st e in Scott-Convergence R1 holds e in Scott-Convergence R2
   proof
     let e be set;
@@ -2407,7 +2406,6 @@ A3: e in Scott-Convergence R1;
     p1 being Element of R1 such that
 A4: e = [N1,p1] by A2,DOMAIN_1:9;
 A5: N1 in NetUniv R1;
-
 A6: ex N being strict net of R1 st ( N1 = N)&( the carrier of N
     in the_universe_of the carrier of R1) by YELLOW_6:def 14;
     then reconsider N2 = N1 as strict net of R2 by A1,Lm4;
@@ -2558,6 +2556,7 @@ end;
 
 registration
   let R be continuous complete LATTICE;
+ 
 :: 1.6. Proposition (ii)
   cluster Scott-Convergence R -> topological;
   coherence
@@ -2633,8 +2632,7 @@ A16:  u <= d by A5,WAYBEL_3:def 1;
 A17:  d = "/\"({Z.k where k is Element of Z: k >= j},R) by A15;
       reconsider j9 = j as Element of Z;
       consider i being Element of Z such that
-A18:  i >= j9
-      and i >= j9 by YELLOW_6:def 5;
+A18:  i >= j9 and i >= j9 by YELLOW_6:def 5;
       consider f being Function of Z, Y such that
 A19:  the mapping of Z = (the mapping of Y)*f and
       for m being Element of Y ex n being Element of Z st
@@ -2681,6 +2679,7 @@ A28:    the carrier of R = the carrier of ConvergenceSpace C
         reconsider T as continuous complete TopLattice by A27,Lm23;
         the topology of T = sigma T by A27,Lm21;
         then reconsider T as continuous complete Scott TopLattice by Th37;
+ 
 :: we now move all to T setting
         reconsider XX = X as net of T;
         reconsider JJ = J as net_set of the carrier of XX,T by A27,Lm18;
@@ -2774,8 +2773,7 @@ A6: for i,j being Element of X holds i <= j
     end;
 A7: X is transitive
     proof
-      let x,y,z be Element of X such that x <= y
-      and y <= z;
+      let x,y,z be Element of X such that x <= y and y <= z;
       thus thesis by A6;
     end;
     X is directed
@@ -2990,8 +2988,7 @@ A46:      J.k = N by A8;
           reconsider g9k =g9.k, f9k = f9.k as Element of N by A8;
 A47:      b = N.(f9k) by A42,A44,A46,YELLOW_6:36;
           reconsider kg = [k,g] as Element of Iterated J by A11,YELLOW_6:35;
-A48:      a = (Iterated J).kg
-            .= N.(g9k) by A46,YELLOW_6:36;
+A48:      a = (Iterated J).kg .= N.(g9k) by A46,YELLOW_6:36;
           g9 <= f9 by A45,YELLOW_3:11;
           then g9.k <= f9.k by WAYBEL_3:28;
           hence a <= b by A46,A47,A48,Def10;
@@ -3309,7 +3306,7 @@ A1: y in Int uparrow p;
     reconsider S = Int uparrow p as Subset of T;
     consider u being Element of T such that
 A2: u << q and
-A3: u in S by A1,Th43,TOPS_1:51;
+A3: u in S by A1,Th43;
     S c= uparrow p by TOPS_1:44;
     then p <= u by A3,WAYBEL_0:18;
     then p << q by A2,WAYBEL_3:2;
@@ -3351,4 +3348,3 @@ A6: wayabove x c= S;
   B is Basis of T by Th45;
   hence thesis by A1,YELLOW_8:20;
 end;
-

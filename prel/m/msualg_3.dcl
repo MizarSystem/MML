@@ -46,7 +46,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="36"/>
-<Adjective nr="92"/>
+<Adjective nr="88"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MSUALG_3" nr="1">
@@ -59,7 +59,7 @@
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="87">
+<Adjective nr="83">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -72,7 +72,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="181">
+<Func kind="K" nr="177">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>

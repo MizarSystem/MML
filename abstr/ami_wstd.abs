@@ -1,0 +1,474 @@
+:: Weakly Standard Ordering of Instruction Locations
+::  by Andrzej Trybulec , Piotr Rudnicki and Artur Korni{\l}owicz
+::
+:: Received April 22, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies NUMBERS, XBOOLE_0, SUBSET_1, ORDINAL1, SETFAM_1, AMI_1, FSM_1,
+      FUNCT_4, FUNCOP_1, RELAT_1, TARSKI, FUNCT_1, CARD_3, ZFMISC_1, CIRCUIT2,
+      NAT_1, GLIB_000, XXREAL_0, PARTFUN1, FINSEQ_1, ARYTM_3, GRAPH_2, CARD_1,
+      FUNCT_2, FINSEQ_4, ARYTM_1, FINSET_1, FRECHET, RCOMP_1, WAYBEL_0,
+      MEMBERED, AMISTD_1, SCMNORM, AMI_WSTD;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
+      CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, FUNCT_1, RELSET_1,
+      PARTFUN1, MCART_1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
+      FINSET_1, FUNCT_4, AFINSQ_1, STRUCT_0, GRAPH_2, NAT_D, XXREAL_2,
+      COMPOS_1, AMI_1, FUNCT_2, AMISTD_1;
+ constructors WELLORD2, REAL_1, FINSEQ_4, REALSET1, NAT_D, AMI_1, XXREAL_2,
+      RELSET_1, PRE_POLY, GRAPH_2, AFINSQ_1, MCART_1, AMISTD_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, FINSET_1, NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3,
+      REALSET1, FUNCT_7, STRUCT_0, AMI_1, JORDAN1J, CARD_1, XXREAL_2, RELSET_1,
+      FUNCT_4, AFINSQ_1, ORDINAL1, ZFMISC_1, SUBSET_1, AMISTD_1, COMPOS_1;
+ requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
+
+
+begin :: Ami-Struct
+
+reserve x for set,
+  D for non empty set,
+  k, n for Element of NAT,
+  z for natural number;
+reserve N for with_non-empty_elements non empty set,
+  S for
+    IC-Ins-separated definite (non empty stored-program AMI-Struct over N),
+  i for Element of the Instructions of S,
+  l, l1, l2, l3 for Element of NAT,
+  s for State of S;
+reserve ss for Element of product the Object-Kind of S;
+
+begin :: Ordering of Instruction Locations
+
+definition
+  canceled 7;
+  let N,S; let l1,l2 be Nat;
+  pred l1 <= l2, S means
+:: AMI_WSTD:def 8
+
+  ex f being non empty FinSequence of NAT st f/.1
+= l1 & f/.len f = l2 & for n st 1 <= n & n < len f
+ holds f/.(n+1) in SUCC(f/.n,S);
+end;
+
+canceled 15;
+
+theorem :: AMI_WSTD:16
+ for N,S for l1,l2 being Nat holds
+  l1 <= l2,S & l2 <= l3, S implies l1 <= l3, S;
+
+definition
+  let N, S;
+  attr S is InsLoc-antisymmetric means
+:: AMI_WSTD:def 9
+  for l1, l2 st l1 <= l2, S & l2 <= l1, S holds
+  l1 = l2;
+end;
+
+definition
+  let N, S;
+  attr S is weakly_standard means
+:: AMI_WSTD:def 10
+
+  ex f being Function of NAT, NAT st f is
+  bijective & for m, n being Element of NAT holds m <= n iff f.m <= f.n, S;
+end;
+
+theorem :: AMI_WSTD:17
+  for f1, f2 being Function of NAT, NAT st f1 is bijective & (for
+m, n being Element of NAT holds m <= n iff f1.m <= f1.n,S) & f2 is bijective &
+ (for m, n being Element of NAT holds m <= n iff f2.m <= f2.n, S) holds f1 = f2
+;
+
+theorem :: AMI_WSTD:18
+  for f being Function of NAT, NAT st f is bijective holds
+  (for m, n being Element of NAT holds m <= n iff f.m <= f.n, S)
+   iff for k being Element of NAT holds f.(k+1) in SUCC(f.k,S) &
+    for j being Element of NAT st f.j in SUCC(f.k,S) holds k <= j;
+
+theorem :: AMI_WSTD:19
+  S is weakly_standard iff ex f being Function of NAT, NAT st f is
+  bijective & for k being Element of NAT holds f.(k+1) in SUCC(f.k,S) & for j
+  being Element of NAT st f.j in SUCC(f.k,S) holds k <= j;
+
+begin
+
+canceled 5;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  cluster STC N -> weakly_standard;
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  cluster weakly_standard halting realistic steady-programmed
+standard-ins (IC-Ins-separated definite (non empty stored-program AMI-Struct
+    over N));
+end;
+
+reserve T for weakly_standard
+ (IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N));
+
+definition
+ canceled;
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over N)), k be natural number;
+  func il.(S,k) -> Element of NAT means
+:: AMI_WSTD:def 12
+
+  ex f being
+Function of NAT, NAT st f is bijective & (for m, n being Element of NAT holds
+  m <= n iff f.m <= f.n, S) & it = f.k;
+end;
+
+theorem :: AMI_WSTD:25
+  for N,T
+  for k1, k2 being natural number st il.(T,k1) = il.(T,k2) holds
+  k1 = k2;
+
+theorem :: AMI_WSTD:26
+  for l being Nat ex k being natural number st l = il.(T,k);
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)), l be Nat;
+  func locnum(l,S) -> natural number means
+:: AMI_WSTD:def 13
+
+  il.(S,it) = l;
+end;
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)), l be Nat;
+  redefine func locnum(l,S) -> Element of NAT;
+end;
+
+theorem :: AMI_WSTD:27
+  for l1, l2 being Element of NAT holds locnum(l1,T) =
+  locnum(l2,T) implies l1 = l2;
+
+theorem :: AMI_WSTD:28
+  for N,T
+  for k1, k2 being natural number holds il.(T,k1) <= il.(T,k2), T iff
+  k1 <= k2;
+
+theorem :: AMI_WSTD:29
+  for N,T
+  for l1, l2 being Element of NAT holds locnum(l1,T) <=
+  locnum(l2,T) iff l1 <= l2, T;
+
+theorem :: AMI_WSTD:30
+  for N,T holds T is InsLoc-antisymmetric;
+
+registration
+  let N;
+  cluster weakly_standard -> InsLoc-antisymmetric
+   (IC-Ins-separated definite (non
+    empty stored-program AMI-Struct over N));
+end;
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)), f be
+  Element of NAT, k be natural number;
+  func f +(k,S) -> Element of NAT equals
+:: AMI_WSTD:def 14
+  il.(S,locnum(f,S) + k);
+end;
+
+theorem :: AMI_WSTD:31
+  for f being Element of NAT holds f + (0,T) = f;
+
+theorem :: AMI_WSTD:32
+  for f, g being Element of NAT st f + (z,T) = g + (z,T)
+   holds f = g;
+
+theorem :: AMI_WSTD:33
+  for f being Element of NAT
+   holds locnum(f,T) + z = locnum(f+(z,T),T);
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)), f be
+  Element of NAT;
+  func NextLoc(f,S) -> Element of NAT equals
+:: AMI_WSTD:def 15
+  f + (1,S);
+end;
+
+theorem :: AMI_WSTD:34
+  for f being Element of NAT
+   holds NextLoc(f,T) = il.(T,locnum(f,T)+ 1);
+
+theorem :: AMI_WSTD:35
+  for f being Element of NAT holds f <> NextLoc(f,T);
+
+theorem :: AMI_WSTD:36
+  for f, g being Element of NAT st NextLoc(f,T) = NextLoc(g,T)
+  holds f = g;
+
+theorem :: AMI_WSTD:37
+  il.(STC N, z) = z;
+
+theorem :: AMI_WSTD:38
+  for i being Instruction of STC N, s being State of STC N st InsCode i
+  = 1 holds Exec(i,s).IC STC N = NextLoc(IC s,STC N);
+
+theorem :: AMI_WSTD:39
+  for l being Element of NAT, i being Element of the
+  Instructions of STC N st InsCode i = 1 holds NIC(i, l) = {NextLoc(l,STC N)};
+
+theorem :: AMI_WSTD:40
+  for l being Element of NAT holds SUCC(l,STC N) = {l, NextLoc(l,STC N)};
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)), i be Instruction of
+  S;
+  attr i is sequential means
+:: AMI_WSTD:def 16
+  for s being State of S holds Exec(i, s).IC S = NextLoc(IC s,S);
+end;
+
+theorem :: AMI_WSTD:41
+  for S being weakly_standard realistic
+   (IC-Ins-separated definite steady-programmed
+   (non empty stored-program AMI-Struct over N)), il being Element of NAT,
+  i being Instruction of S st i is sequential holds NIC(i,il)
+   = {NextLoc(il,S)};
+
+theorem :: AMI_WSTD:42
+  for S being realistic weakly_standard (IC-Ins-separated definite
+   steady-programmed (non
+empty stored-program AMI-Struct over N)), i being Instruction of S st i is
+  sequential holds i is non halting;
+
+registration
+  let N;
+  let S be realistic weakly_standard (IC-Ins-separated definite
+   steady-programmed (non empty stored-program AMI-Struct over N));
+  cluster sequential -> non halting Instruction of S;
+  cluster halting -> non sequential Instruction of S;
+end;
+
+canceled;
+
+begin :: Closedness of finite partial states
+
+definition
+ canceled 2;
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard (IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N));
+  let F be FinPartState of S;
+  attr F is para-closed means
+:: AMI_WSTD:def 19
+  for s being State of S st F c= s & IC s = il.(S,0)
+   for k being Element of NAT holds IC Comput(ProgramPart(s),s,k) in dom F;
+end;
+
+theorem :: AMI_WSTD:44
+  for S being weakly_standard steady-programmed (IC-Ins-separated
+definite (non empty stored-program AMI-Struct over N)),
+   F being NAT-defined (the Instructions of S)-valued
+  FinPartState of S st F is really-closed & il.(S,0) in dom F holds F is
+  para-closed;
+
+canceled;
+
+theorem :: AMI_WSTD:46
+  for S being weakly_standard realistic halting (IC-Ins-separated
+definite steady-programmed
+ (non empty stored-program AMI-Struct over N)) holds il.(S,0) .-->
+  halt S qua NAT-defined (the Instructions of S)-valued
+   FinPartState of S is closed;
+
+definition
+
+  let N be with_non-empty_elements non empty set;
+  let S be IC-Ins-separated definite (non empty stored-program AMI-Struct over
+  N);
+  let F be FinPartState of S;
+  attr F is lower means
+:: AMI_WSTD:def 20
+
+  for l being Element of NAT st l in
+  dom F holds for m being Element of NAT st m <= l, S
+   holds m in dom F;
+end;
+
+theorem :: AMI_WSTD:47
+  for F being empty FinPartState of S holds F is lower;
+
+registration
+  let N be with_non-empty_elements non empty set,
+  S be IC-Ins-separated definite (non
+  empty stored-program AMI-Struct over N);
+  cluster empty -> lower FinPartState of S;
+end;
+
+theorem :: AMI_WSTD:48
+  for i being Element of the Instructions of T holds il.(T,0) .-->
+  i is lower;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard (IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N));
+  cluster lower non empty trivial NAT-defined
+     (the Instructions of S)-valued FinPartState of S;
+end;
+
+theorem :: AMI_WSTD:49
+  for F being lower non empty NAT-defined FinPartState of T holds
+  il.(T,0) in dom F;
+
+theorem :: AMI_WSTD:50
+  for P being lower NAT-defined FinPartState of T holds z < card P
+  iff il.(T,z) in dom P;
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard (IC-Ins-separated definite (non empty stored-program
+  AMI-Struct over N));
+  let F be non empty NAT-defined FinPartState of S;
+  func LastLoc F -> Element of NAT means
+:: AMI_WSTD:def 21
+
+  ex M being finite
+  non empty natural-membered set st M = { locnum(l,S) where l is
+  Element of NAT : l in dom F } & it = il.(S, max M);
+end;
+
+theorem :: AMI_WSTD:51
+  for F being non empty NAT-defined FinPartState of T holds
+  LastLoc F in dom F;
+
+theorem :: AMI_WSTD:52
+  for F, G being non empty NAT-defined FinPartState of T st F c= G holds
+  LastLoc F <= LastLoc G, T;
+
+theorem :: AMI_WSTD:53
+  for F being non empty NAT-defined FinPartState of T, l being
+  Element of NAT st l in dom F holds l <= LastLoc F, T;
+
+theorem :: AMI_WSTD:54
+  for F being lower non empty NAT-defined FinPartState of T, G being non
+  empty NAT-defined FinPartState of T holds F c= G & LastLoc F = LastLoc G
+  implies F = G;
+
+theorem :: AMI_WSTD:55
+  for F being lower non empty NAT-defined FinPartState of T holds
+  LastLoc F = il.(T, card F -' 1);
+
+registration
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard steady-programmed (
+  IC-Ins-separated definite (non empty stored-program AMI-Struct over N));
+  cluster really-closed lower non empty -> para-closed (NAT-defined
+    (the Instructions of S)-valued FinPartState of S);
+end;
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard halting (
+IC-Ins-separated definite (non empty stored-program AMI-Struct over N)), F
+  be non empty NAT-defined FinPartState of S;
+  attr F is halt-ending means
+:: AMI_WSTD:def 22
+
+  F.(LastLoc F) = halt S;
+  attr F is unique-halt means
+:: AMI_WSTD:def 23
+
+  for f being Element of NAT st
+  F.f = halt S & f in dom F holds f = LastLoc F;
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard halting (IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N));
+  cluster halt-ending unique-halt trivial (lower non empty NAT-defined
+    (the Instructions of S)-valued FinPartState of S);
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard halting realistic (IC-Ins-separated definite
+   steady-programmed (non empty
+  stored-program AMI-Struct over N));
+  cluster trivial closed lower non empty
+  (NAT-defined (the Instructions of S)-valued FinPartState of S);
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard halting realistic (IC-Ins-separated definite
+   steady-programmed (non empty
+  stored-program AMI-Struct over N));
+  cluster halt-ending unique-halt trivial closed (lower non empty NAT-defined
+    (the Instructions of S)-valued FinPartState of S);
+end;
+
+definition
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard halting (IC-Ins-separated definite (non empty
+  stored-program AMI-Struct over N));
+  mode pre-Macro of S is halt-ending unique-halt (lower non empty NAT-defined
+    (the Instructions of S)-valued FinPartState of S);
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be weakly_standard realistic halting (IC-Ins-separated definite
+   steady-programmed(non empty
+  stored-program AMI-Struct over N));
+  cluster closed pre-Macro of S;
+end;
+
+canceled 3;
+
+theorem :: AMI_WSTD:59
+  for N being with_non-empty_elements non empty set,
+      S being IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over N),
+  l1, l2 being Element of NAT st SUCC(l1,S) = NAT
+   holds l1 <= l2, S;
+
+:: from SCMRING4, 2008.03.13, A.T.
+
+reserve i, j, k for natural number,
+  n for Element of NAT,
+  N for with_non-empty_elements non empty set,
+  S for weakly_standard (IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)),
+  l for Element of NAT,
+  f for FinPartState of S;
+
+definition
+  let N be with_non-empty_elements non empty set,
+  S be weakly_standard (IC-Ins-separated
+  definite (non empty stored-program AMI-Struct over N)), loc be
+  Element of NAT, k be natural number;
+  func loc -' (k,S) -> Element of NAT equals
+:: AMI_WSTD:def 24
+  il.(S, (locnum(loc,S)) -' k);
+end;
+
+theorem :: AMI_WSTD:60
+  l -' (0,S) = l;
+
+theorem :: AMI_WSTD:61
+  l + (k,S) -' (k,S) = l;
+

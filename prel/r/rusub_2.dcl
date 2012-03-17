@@ -21,6 +21,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RUSUB_1"/>
@@ -28,7 +29,7 @@
 </Signature>
 <RCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="17">
+<Typ kind="G" nr="19">
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="81"/>
@@ -39,7 +40,7 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="118"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="8">
@@ -62,13 +63,13 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="117"/>
-<Adjective nr="118"/>
+<Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="17">
+<Typ kind="G" nr="19">
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="81"/>
@@ -79,7 +80,7 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="118"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -92,7 +93,7 @@
 </FCluster>
 <FCluster aid="RUSUB_2" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="17">
+<Typ kind="G" nr="19">
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="81"/>
@@ -103,7 +104,7 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="118"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -125,7 +126,7 @@
 </FCluster>
 <FCluster aid="RUSUB_2" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="17">
+<Typ kind="G" nr="19">
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="81"/>
@@ -136,7 +137,7 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="112"/>
-<Adjective nr="118"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 </ArgTypes>

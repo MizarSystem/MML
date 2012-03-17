@@ -1,6 +1,6 @@
 :: Riemann Integral of Functions $\mathbbbR$ into $\mathbbbC$
 ::  by Keiichi Miyajima , Takahiro Kato and Yasunari Shidama
-:: 
+::
 :: Received February 23, 2010
 :: Copyright (c) 2010 Association of Mizar Users
 
@@ -10,15 +10,16 @@ environ
       RELAT_1, FUNCT_1, PARTFUN1, XBOOLE_0, FUNCT_3, INTEGR15, REALSET1,
       XCMPLX_0, COMPLEX1, COMSEQ_1, SETWISEO, SUBSET_1, NUMBERS, ORDINAL1,
       CARD_1, ORDINAL4, NAT_1, TARSKI, CARD_3, MEASURE7, ARYTM_3, XREAL_0,
-      BINOP_2, XXREAL_0, XXREAL_2, INTEGRA5, VALUED_1, REAL_1, XXREAL_1;
+      BINOP_2, XXREAL_0, XXREAL_2, INTEGRA5, VALUED_1, REAL_1, XXREAL_1,
+      FUNCT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, NAT_1, FUNCT_1, FUNCT_2, REAL_1, RCOMP_1, VALUED_1, RELSET_1,
-      PARTFUN1, SEQ_1, SEQ_2, FINSEQ_1, FINSEQ_2, BINOP_2, BINOP_1, SETWOP_2,
-      RVSUM_1, XXREAL_0, INTEGRA1, INTEGRA2, INTEGRA5, INTEGR15, MESFUN6C,
-      COMSEQ_1, COMSEQ_2, COMSEQ_3;
+      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, REAL_1, RCOMP_1, VALUED_1,
+      RELSET_1, PARTFUN1, SEQ_1, SEQ_2, FINSEQ_1, FINSEQ_2, BINOP_2, BINOP_1,
+      SETWOP_2, RVSUM_1, XXREAL_0, INTEGRA1, INTEGRA2, INTEGRA3, INTEGRA5,
+      INTEGR15, MESFUN6C, COMSEQ_1, COMSEQ_2, COMSEQ_3;
  constructors REAL_1, MONOID_0, MEASURE6, BINOP_2, SEQ_1, INTEGRA5, RELSET_1,
       INTEGR15, FINSOP_1, SETWISEO, COMSEQ_2, COMSEQ_3, MESFUN6C, SQUARE_1,
-      SEQ_2;
+      SEQ_2, INTEGRA3;
  registrations NUMBERS, XREAL_0, INTEGRA1, FUNCT_2, BINOP_2, MEMBERED,
       ORDINAL1, VALUED_0, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -27,28 +28,29 @@ environ
 begin :: Preliminaries
 
 theorem :: INTEGR16:1
-for z being complex number, r be real number
-  holds Re(r * z) = r* Re (z)
+for z being complex number, r be real number holds Re(r * z) = r* Re (z)
       & Im(r * z) = r* Im (z);
 
-definition
+registration
   let S be FinSequence of COMPLEX;
-  func Re S -> FinSequence of REAL equals
-:: INTEGR16:def 1
-    Re (S qua PartFunc of NAT,COMPLEX);
-  func Im S -> FinSequence of REAL equals
-:: INTEGR16:def 2
-    Im (S qua PartFunc of NAT,COMPLEX);
+  cluster Re S -> FinSequence-like;
+  cluster Im S -> FinSequence-like;
 end;
 
 definition
+  let S be FinSequence of COMPLEX;
+  redefine func Re S -> FinSequence of REAL;
+  redefine func Im S -> FinSequence of REAL;
+end;
+
+definition
+  canceled 2;
   let A be closed-interval Subset of REAL;
   let f be Function of A,COMPLEX;
   let D be Division of A;
   mode middle_volume of f,D -> FinSequence of COMPLEX means
 :: INTEGR16:def 3
-    len it = len D
-    & for i be Nat st i in dom D holds
+    len it = len D & for i be Nat st i in dom D holds
       ex c be Element of COMPLEX st c in rng (f|divset(D,i))
       & it.i = c * vol divset(D,i);
 end;
@@ -92,6 +94,7 @@ definition
     for i be Element of NAT holds it.i = middle_sum(f,S.i);
 end;
 
+
 begin :: Definition of Riemann Integral on Functions $\mathbbbR$ into $\mathbbbC$
 
 theorem :: INTEGR16:2
@@ -102,21 +105,15 @@ theorem :: INTEGR16:3
 for f be PartFunc of REAL,COMPLEX,
     A be Subset of REAL holds Im (f|A) = (Im f)|A;
 
-definition
-  let A be closed-interval  Subset of REAL;
-  let f be Function of A,COMPLEX;
-  redefine func Re f -> Function of A,REAL;
-end;
-
-definition
+registration
   let A be closed-interval Subset of REAL;
   let f be Function of A,COMPLEX;
-  redefine func Im f -> Function of A,REAL;
+  cluster Re f -> quasi_total PartFunc of A,REAL;
+  cluster Im f -> quasi_total PartFunc of A,REAL;
 end;
 
 theorem :: INTEGR16:4
-for A be closed-interval Subset of REAL,
-    f be Function of A,COMPLEX,
+for A be closed-interval Subset of REAL, f be Function of A,COMPLEX,
     D be Division of A,
     S be middle_volume of f,D
   holds
@@ -124,29 +121,23 @@ for A be closed-interval Subset of REAL,
   & Im S is middle_volume of (Im f),D;
 
 theorem :: INTEGR16:5
-for F be FinSequence of COMPLEX,
-    x be Element of COMPLEX holds
+for F be FinSequence of COMPLEX, x be Element of COMPLEX holds
     Re (F^<* x *>) = (Re F)^<* Re x *>;
 
 theorem :: INTEGR16:6
-for F be FinSequence of COMPLEX,
-    x be Element of COMPLEX holds
+for F be FinSequence of COMPLEX, x be Element of COMPLEX holds
     Im (F^<* x *>) = (Im F)^<* Im x *>;
 
 theorem :: INTEGR16:7
-for F be FinSequence of COMPLEX,
-    Fr be FinSequence of REAL
-    st Fr=Re F
+for F be FinSequence of COMPLEX, Fr be FinSequence of REAL st Fr=Re F
   holds Sum(Fr) = Re Sum(F);
 
 theorem :: INTEGR16:8
-for F be FinSequence of COMPLEX,
-    Fi be FinSequence of REAL st Fi=Im F
+for F be FinSequence of COMPLEX, Fi be FinSequence of REAL st Fi=Im F
   holds Sum(Fi) = Im Sum(F);
 
 theorem :: INTEGR16:9
-for A be closed-interval Subset of REAL,
-    f be Function of A,COMPLEX,
+for A be closed-interval Subset of REAL, f be Function of A,COMPLEX,
     D be Division of A,
     F be middle_volume of f,D,
    Fr be middle_volume of (Re f),D
@@ -154,8 +145,7 @@ for A be closed-interval Subset of REAL,
   holds Re middle_sum(f,F) = middle_sum((Re f),Fr);
 
 theorem :: INTEGR16:10
-for A be closed-interval Subset of REAL,
-    f be Function of A,COMPLEX,
+for A be closed-interval Subset of REAL, f be Function of A,COMPLEX,
     D be Division of A,
     F be middle_volume of f,D,
    Fi be middle_volume of (Im f),D
@@ -175,16 +165,13 @@ for f be PartFunc of REAL,COMPLEX holds
     f is bounded iff (Re f is bounded & Im f is bounded);
 
 theorem :: INTEGR16:12
-for A be non empty Subset of REAL,
-    f be PartFunc of REAL,COMPLEX,
+for A be non empty Subset of REAL, f be PartFunc of REAL,COMPLEX,
     g be Function of A,COMPLEX
       st f = g
   holds Re f = Re g & Im f = Im g;
 
 theorem :: INTEGR16:13
-for A be closed-interval Subset of REAL,
-    f be Function of A,COMPLEX
-  holds
+for A be closed-interval Subset of REAL, f be Function of A,COMPLEX holds
     f is bounded iff (Re f is bounded & Im f is bounded);
 
 definition
@@ -196,8 +183,7 @@ definition
 end;
 
 theorem :: INTEGR16:14
-for A be closed-interval Subset of REAL,
-    f being Function of A,COMPLEX,
+for A be closed-interval Subset of REAL, f being Function of A,COMPLEX,
     T being DivSequence of A,
     S be middle_volume_Sequence of f,T
       st f is bounded & f is integrable
@@ -206,8 +192,7 @@ for A be closed-interval Subset of REAL,
     middle_sum(f,S) is convergent & lim (middle_sum(f,S))=integral(f);
 
 theorem :: INTEGR16:15
-for A be closed-interval Subset of REAL,
-    f being Function of A,COMPLEX
+for A be closed-interval Subset of REAL, f being Function of A,COMPLEX
       st f is bounded
   holds
     f is integrable iff
@@ -222,8 +207,7 @@ definition
   let f be PartFunc of REAL,COMPLEX;
   pred f is_integrable_on A means
 :: INTEGR16:def 9
-  (Re f) is_integrable_on A &
-  (Im f) is_integrable_on A;
+  (Re f) is_integrable_on A & (Im f) is_integrable_on A;
 end;
 
 definition
@@ -235,14 +219,12 @@ definition
 end;
 
 theorem :: INTEGR16:16
-for A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,COMPLEX,
+for A be closed-interval Subset of REAL, f be PartFunc of REAL,COMPLEX,
     g be Function of A,COMPLEX st f|A = g
   holds f is_integrable_on A iff g is integrable;
 
 theorem :: INTEGR16:17
-for A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,COMPLEX,
+for A be closed-interval Subset of REAL, f be PartFunc of REAL,COMPLEX,
     g be Function of A,COMPLEX st f|A = g holds
   integral(f,A) = integral(g);
 
@@ -257,14 +239,12 @@ end;
 begin :: Linearity of the Integration Operator
 
 theorem :: INTEGR16:18
-for c be complex number,
-    f be PartFunc of REAL, COMPLEX holds
+for c be complex number, f be PartFunc of REAL, COMPLEX holds
   Re (c(#)f) = (Re c)(#)(Re f) - (Im c)(#)(Im f)
 & Im (c(#)f) = (Re c)(#)(Im f) + (Im c)(#)(Re f);
 
 theorem :: INTEGR16:19
-for A be closed-interval Subset of REAL,
-f1,f2 be PartFunc of REAL, COMPLEX
+for A be closed-interval Subset of REAL, f1,f2 be PartFunc of REAL, COMPLEX
   st f1 is_integrable_on A & f2 is_integrable_on A
    & A c= dom f1 & A c= dom f2 & (f1|A) is bounded & (f2|A) is bounded
    holds f1+f2 is_integrable_on A
@@ -273,8 +253,7 @@ f1,f2 be PartFunc of REAL, COMPLEX
        & integral(f1-f2,A)=integral(f1,A)-integral(f2,A);
 
 theorem :: INTEGR16:20
-for r be Real
-for A be closed-interval Subset of REAL
+for r be Real for A be closed-interval Subset of REAL
 for f be PartFunc of REAL, COMPLEX
   st A c= dom f & f is_integrable_on A
   & f|A is bounded holds
@@ -282,20 +261,17 @@ for f be PartFunc of REAL, COMPLEX
   & integral((r(#)f),A) = r * integral(f,A);
 
 theorem :: INTEGR16:21
-for c be complex number,
-    A be closed-interval Subset of REAL,
+for c be complex number, A be closed-interval Subset of REAL,
     f be PartFunc of REAL, COMPLEX
  st A c= dom f & f is_integrable_on A & f|A is bounded holds
   c(#)f is_integrable_on A & integral((c(#)f),A) = c * integral(f,A);
 
 theorem :: INTEGR16:22
-for f being PartFunc of REAL,COMPLEX,
-    A being closed-interval Subset of REAL,
+for f being PartFunc of REAL,COMPLEX, A being closed-interval Subset of REAL,
   a,b be Real st A=[.a,b.]
   holds integral(f,A) = integral(f,a,b);
 
 theorem :: INTEGR16:23
-for f being PartFunc of REAL,COMPLEX,
-    A being closed-interval Subset of REAL,
+for f being PartFunc of REAL,COMPLEX, A being closed-interval Subset of REAL,
   a,b be Real st A=[.b,a.]
   holds -integral(f,A) = integral(f,a,b);

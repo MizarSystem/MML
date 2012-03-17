@@ -4,7 +4,7 @@
 ::
 :: Received October 6, 2000
 :: Copyright (c) 2000 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, RCOMP_1, SPPOL_1, SUBSET_1, EUCLID, RELAT_2, GOBOARD1,
@@ -13,7 +13,7 @@ environ
       ORDINAL2, ARYTM_1, PARTFUN1, CARD_1, NAT_1, RLTOPSP1, MCART_1, SPRECT_2,
       FINSEQ_6, FINSEQ_4, ZFMISC_1, JORDAN1A, INT_1, JORDAN8, NEWTON, TARSKI,
       GOBOARD5, TREES_1, REAL_1, JORDAN2C, JORDAN9, JORDAN6, COMPLEX1,
-      CONNSP_1;
+      CONNSP_1, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1,
       COMPLEX1, INT_1, NAT_1, NAT_D, SQUARE_1, FUNCT_1, PARTFUN1, FINSEQ_1,
       FINSEQ_4, NEWTON, FINSEQ_5, MATRIX_1, REALSET1, FINSEQ_6, STRUCT_0,
@@ -25,7 +25,7 @@ environ
       JORDAN3, JORDAN6, JORDAN2C, JORDAN8, JORDAN9, JORDAN1A, CONVEX1;
  registrations XBOOLE_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
       FINSEQ_5, STRUCT_0, MONOID_0, EUCLID, TOPREAL2, TOPREAL5, SPRECT_2,
-      TOPREAL6, JORDAN8, FUNCT_1, RELAT_1, RLTOPSP1;
+      TOPREAL6, JORDAN8, FUNCT_1, RELAT_1, RLTOPSP1, SPPOL_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI;
  theorems EUCLID, GOBRD11, JORDAN8, NEWTON, PSCOMP_1, JORDAN1A, NAT_1,
@@ -38,10 +38,8 @@ environ
 begin
 
 reserve E for compact non vertical non horizontal Subset of TOP-REAL 2,
-  C for
-  compact connected non vertical non horizontal Subset of TOP-REAL 2,
-  G for
-  Go-board,
+  C for compact connected non vertical non horizontal Subset of TOP-REAL 2,
+  G for Go-board,
   i, j, m, n for Element of NAT,
   p for Point of TOP-REAL 2;
 
@@ -52,8 +50,7 @@ theorem
 proof
   let f be FinSequence;
   thus f is empty implies Rev f is empty;
-  assume
-  Rev f is empty;
+  assume Rev f is empty;
   then reconsider g=Rev f as empty FinSequence;
   Rev g is empty;
   hence thesis by FINSEQ_6:29;
@@ -115,12 +112,12 @@ proof
   let p be Point of TOP-REAL 2 such that
 A1: f is being_S-Seq and
 A2: p in L~f;
-  Rev f is being_S-Seq by A1,SPPOL_2:47;
+  Rev f is being_S-Seq by A1;
   then
 A3: 2 <= len Rev f by TOPREAL1:def 10;
 A4: Rev Rev f = f by FINSEQ_6:29;
 A5: p in L~Rev f by A2,SPPOL_2:22;
-  then L_Cut(Rev Rev f,p) = Rev R_Cut(Rev f,p) by A1,JORDAN3:57,SPPOL_2:47;
+  then L_Cut(Rev Rev f,p) = Rev R_Cut(Rev f,p) by A1,JORDAN3:57;
   hence L_Cut(f,p).(len L_Cut(f,p)) = Rev R_Cut(Rev f,p).(len R_Cut(Rev f,p))
   by A4,FINSEQ_5:def 3
     .= R_Cut(Rev f,p).1 by FINSEQ_5:65
@@ -133,10 +130,9 @@ theorem
 proof
   let P be Simple_closed_curve;
   now
-A1: |[E-bound P, sup (proj2|E-most P)]|=E-max(P) by PSCOMP_1:def 46;
-A2: |[W-bound P, sup (proj2|W-most P)]|=W-max(P) by PSCOMP_1:def 43;
-    assume
-    W-max(P) = E-max(P);
+A1: |[E-bound P, upper_bound (proj2|E-most P)]|=E-max(P) by PSCOMP_1:def 46;
+A2: |[W-bound P, upper_bound (proj2|W-most P)]|=W-max(P) by PSCOMP_1:def 43;
+    assume W-max(P) = E-max(P);
     then W-bound P= E-bound P by A2,A1,SPPOL_2:1;
     hence contradiction by TOPREAL5:23;
   end;
@@ -255,8 +251,7 @@ A1: p is_in_the_area_of q;
 A2: v in rng p;
     now
       let n;
-      assume
-      n in dom Rotate(p,v);
+      assume n in dom Rotate(p,v);
       then n in dom p by REVROT_1:15;
       then
 A3:   n in Seg len p by FINSEQ_1:def 3;
@@ -330,8 +325,7 @@ theorem
   for f be FinSequence st len f >= 1 holds Center f <= len f
 proof
   let f be FinSequence;
-  assume
-  len f >= 1;
+  assume len f >= 1;
   then 0 + len f < len f + len f by XREAL_1:8;
   then len f+1 <= 2*len f by NAT_1:13;
   then (len f+1+1) div 2 <= len f by NAT_2:27;
@@ -354,8 +348,7 @@ theorem Th15:
   for f be FinSequence st len f >= 2 holds Center f > 1
 proof
   let f be FinSequence;
-  assume
-  len f >= 2;
+  assume len f >= 2;
   then len f div 2 >= 1 by NAT_2:15;
   then len f div 2 + 1 > 1 by NAT_1:13;
   hence thesis by JORDAN1A:def 1;
@@ -365,8 +358,7 @@ theorem Th16:
   for f be FinSequence st len f >= 3 holds Center f < len f
 proof
   let f be FinSequence;
-  assume
-  len f >= 3;
+  assume len f >= 3;
   then len f+(2+1) <= len f+len f by XREAL_1:8;
   then len f+2+1 <= 2*len f;
   then (len f+2+1+1) div 2 <= len f by NAT_2:27;
@@ -1116,8 +1108,7 @@ A7: cell(Gauge(C,n),0,j) c= W by A5,A2,A4,GOBOARD9:5;
 end;
 
 theorem Th39:
-  j <= len Gauge(E,n) implies cell(Gauge(E,n),len Gauge(E,n),j) c=
-  UBD E
+  j <= len Gauge(E,n) implies cell(Gauge(E,n),len Gauge(E,n),j) c= UBD E
 proof
 A1: E` is non empty by JORDAN2C:73,74;
   assume
@@ -1164,7 +1155,6 @@ end;
 
 Lm5: j <= width Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C implies i <> len
 Gauge(C,n)
-
 proof
   assume that
 A1: j <= width Gauge(C,n) and
@@ -1179,7 +1169,6 @@ end;
 
 Lm6: i <= len Gauge(C,n) & cell(Gauge(C,n),i,j) c= BDD C implies j <> width
 Gauge(C,n)
-
 proof
   assume that
 A1: i <= len Gauge(C,n) and
@@ -1282,8 +1271,7 @@ A1: i <= len Gauge(C,n) and
 A2: j <= width Gauge(C,n) and
 A3: cell(Gauge(C,n),i,j) c= BDD C;
 A4: j < width Gauge(C,n) or j = width Gauge(C,n) by A2,XXREAL_0:1;
-  assume
-  j + 1 >= width Gauge(C,n);
+  assume j + 1 >= width Gauge(C,n);
   then
 A5: j + 1 > width Gauge(C,n) or j + 1 = width Gauge(C,n) by XXREAL_0:1;
   per cases by A5,A4,NAT_1:13;
@@ -1334,8 +1322,7 @@ A1: i <= len Gauge(C,n) and
 A2: j <= width Gauge(C,n) and
 A3: cell(Gauge(C,n),i,j) c= BDD C;
 A4: i < len Gauge(C,n) or i = len Gauge(C,n) by A1,XXREAL_0:1;
-  assume
-  i + 1 >= len Gauge(C,n);
+  assume i + 1 >= len Gauge(C,n);
   then
 A5: i + 1 > len Gauge(C,n) or i + 1 = len Gauge(C,n) by XXREAL_0:1;
   per cases by A5,A4,NAT_1:13;
@@ -1417,4 +1404,3 @@ A9: width Gauge(C,n) = 1 + 3 by A1,A7,NAT_1:14;
     hence thesis by A5,A6,A9,A8;
   end;
 end;
-

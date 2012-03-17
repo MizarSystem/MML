@@ -9,21 +9,26 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2, CARD_1,
       GRAPHSP, ARYTM_3, XXREAL_0, SCMNORM, RELAT_1, FUNCT_1, CARD_3, TARSKI,
       STRUCT_0, FUNCT_4, XBOOLE_0, FUNCOP_1, FSM_1, CIRCUIT2, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1, FINSET_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
+      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1, FINSET_1,
+      NAT_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3,
+      XXREAL_0, XCMPLX_0, MCART_1,
       NAT_1, NAT_D, FINSET_1, VALUED_1, INT_1, INT_2, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2,
-      STRUCT_0, AMI_1, SCMNORM, AMI_3, RELOC, SCMFSA_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, AMI_5, RELOC, SCMFSA_2, SCMNORM, NAT_D,
-      RELSET_1, VALUED_1;
+      STRUCT_0, COMPOS_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2;
+ constructors DOMAIN_1, XXREAL_0, AMI_5, SCMFSA_2, NAT_D,
+      RELSET_1, VALUED_1, AMISTD_2;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      NUMBERS, XREAL_0, INT_1, CARD_3, SCMFSA_2, SCMNORM, FINSET_1, VALUED_1,
-      FUNCT_4, RELAT_1;
+      NUMBERS, XREAL_0, INT_1, CARD_3, SCMFSA_2, FINSET_1, VALUED_1,
+      FUNCT_4, RELAT_1, AMI_1, AMI_3, AMI_6, RELOC, XXREAL_0, SCMFSA10,
+      AMISTD_2, VALUED_0, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, AMI_1, SCMFSA_2, FUNCOP_1, RELAT_1;
+ definitions TARSKI, COMPOS_1, AMI_1, AMI_3,
+      SCMFSA_2, FUNCOP_1, RELAT_1, AMISTD_2, FUNCT_1;
  theorems SCMFSA_2, ZFMISC_1, RELOC, ENUMSET1, NAT_1, FUNCOP_1, RELAT_1,
       FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1, SCMFSA_3, RELSET_1,
-      XBOOLE_0, XBOOLE_1, CARD_3, VALUED_1, NAT_D, PARTFUN1;
+      XBOOLE_0, XBOOLE_1, CARD_3, VALUED_1, NAT_D, PARTFUN1, AMISTD_2, AMI_5,
+      RECDEF_2, SCMFSA10, FINSEQ_1, ORDINAL1, COMPOS_1;
  schemes CLASSES1;
 
 begin :: Incrementing addresses
@@ -32,120 +37,138 @@ reserve L, j, k, l, m, n, p, q for Element of NAT,
   A for Data-Location,
   I for Instruction of SCM;
 
-definition
-  canceled 2;
-  let i be Instruction of SCM+FSA , k be Element of NAT;
-  func IncAddr (i,k) -> Instruction of SCM+FSA means
-  :Def3:
-  ex I being
-  Instruction of SCM st I = i & it = IncAddr(I,k) if InsCode i in {6,7,8}
-  otherwise it = i;
-  existence
+registration
+ let a,b be Int-Location;
+ cluster a:=b -> ins-loc-free;
+ coherence
   proof
-    hereby
-      assume
-      InsCode i in {6,7,8};
-      then InsCode i = 6 or InsCode i = 7 or InsCode i = 8 by ENUMSET1:def 1;
-      then reconsider I = i as Instruction of SCM by SCMFSA_2:34;
-      reconsider ii = IncAddr(I,k) as Instruction of SCM+FSA by SCMFSA_2:38;
-      take ii,I;
-      thus I = i & ii = IncAddr(I,k);
-    end;
-    thus thesis;
+     a := b = [1,{},<*a,b*>] by SCMFSA10:9;
+   hence JumpPart(a:=b) is empty by RECDEF_2:def 2;
   end;
-  correctness;
+ cluster AddTo(a,b) -> ins-loc-free;
+ coherence
+  proof
+    AddTo(a,b) = [2,{},<*a,b*>] by SCMFSA10:10;
+   hence JumpPart AddTo(a,b) is empty by RECDEF_2:def 2;
+  end;
+ cluster SubFrom(a,b) -> ins-loc-free;
+ coherence
+  proof
+    SubFrom(a,b) = [3,{},<*a,b*>] by SCMFSA10:11;
+   hence JumpPart SubFrom(a,b) is empty by RECDEF_2:def 2;
+  end;
+ cluster MultBy(a,b) -> ins-loc-free;
+ coherence
+  proof
+    MultBy(a,b) = [4,{},<*a,b*>] by SCMFSA10:12;
+   hence JumpPart MultBy(a,b) is empty by RECDEF_2:def 2;
+  end;
+ cluster Divide(a,b) -> ins-loc-free;
+ coherence
+  proof
+    Divide(a,b) = [5,{},<*a,b*>] by SCMFSA10:13;
+   hence JumpPart Divide(a,b) is empty by RECDEF_2:def 2;
+  end;
 end;
 
 canceled 7;
 
 theorem Th8:
   for k being Element of NAT holds IncAddr(halt SCM+FSA,k) = halt
-  SCM+FSA
-proof
-  not 0 in {6,7,8};
-  hence thesis by Def3,SCMFSA_2:124;
-end;
+  SCM+FSA by AMISTD_2:30;
 
 theorem Th9:
-  for k being Element of NAT, a,b being Int-Location holds IncAddr(
-  a:=b,k) = a:=b
-proof
-  let k be Element of NAT, a,b be Int-Location;
-  InsCode (a := b) = 1 & not 1 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:42;
-  hence thesis by Def3;
-end;
+  for k being Element of NAT, a,b being Int-Location
+   holds IncAddr(a:=b,k) = a:=b by AMISTD_2:29;
 
 theorem Th10:
   for k being Element of NAT, a,b being Int-Location holds IncAddr
-  (AddTo(a,b),k) = AddTo(a,b)
-proof
-  let k be Element of NAT, a,b be Int-Location;
-  InsCode (AddTo(a,b)) = 2 & not 2 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:43;
-  hence thesis by Def3;
-end;
+  (AddTo(a,b),k) = AddTo(a,b) by AMISTD_2:29;
 
 theorem Th11:
   for k being Element of NAT, a,b being Int-Location holds IncAddr
-  (SubFrom(a,b),k) = SubFrom(a,b)
-proof
-  let k be Element of NAT, a,b be Int-Location;
-  InsCode (SubFrom(a,b)) = 3 & not 3 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:44;
-  hence thesis by Def3;
-end;
+  (SubFrom(a,b),k) = SubFrom(a,b) by AMISTD_2:29;
 
 theorem Th12:
   for k being Element of NAT, a,b being Int-Location holds IncAddr
-  (MultBy(a,b),k) = MultBy(a,b)
-proof
-  let k be Element of NAT, a,b be Int-Location;
-  InsCode (MultBy(a,b)) = 4 & not 4 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:45;
-  hence thesis by Def3;
-end;
+  (MultBy(a,b),k) = MultBy(a,b) by AMISTD_2:29;
 
 theorem Th13:
   for k being Element of NAT, a,b being Int-Location holds IncAddr
-  (Divide(a,b),k) = Divide(a,b)
-proof
-  let k be Element of NAT, a,b be Int-Location;
-  InsCode (Divide(a,b)) = 5 & not 5 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:46;
-  hence thesis by Def3;
-end;
+  (Divide(a,b),k) = Divide(a,b) by AMISTD_2:29;
 
 theorem Th14:
   for k being Element of NAT,loc being Element of NAT
   holds IncAddr(goto loc,k) = goto (loc + k)
 proof
   let k be Element of NAT, loc be Element of NAT;
-  consider L such that
-A1: loc = L and
-A2: goto loc = SCM-goto L by SCMFSA_2:def 16;
-  reconsider i = SCM-goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
-  InsCode (goto loc) = 6 by SCMFSA_2:47;
-  then InsCode (goto loc) in {6,7,8} by ENUMSET1:def 1;
-  then ex I being Instruction of SCM st I = goto loc &
-   IncAddr( goto loc,k) = IncAddr(I,k) by Def3;
-  hence IncAddr(goto loc,k) = i by A2,RELOC:10
-    .= goto (loc + k) by A1,SCMFSA_2:def 16;
+U: goto loc = [6,<* loc *>,{}];
+V: goto(loc + k) = [6,<* loc + k *>,{}];
+A: InsCode IncAddr(goto loc,k) = InsCode goto loc by AMISTD_2:def 14
+     .= 6 by U,RECDEF_2:def 1
+     .= InsCode goto (loc + k) by V,RECDEF_2:def 1;
+B: AddressPart IncAddr(goto loc,k) = AddressPart goto loc
+           by AMISTD_2:def 14
+     .= {} by U,RECDEF_2:def 3
+     .= AddressPart goto (loc + k) by V,RECDEF_2:def 3;
+X1: JumpPart IncAddr(goto loc,k) = k + JumpPart goto loc
+                   by AMISTD_2:def 14;
+  JumpPart IncAddr(goto loc,k) = JumpPart goto (loc + k)
+   proof
+    thus
+K:   dom JumpPart IncAddr(goto loc,k)
+     = dom JumpPart goto (loc + k) by A,AMISTD_2:def 4;
+A1: JumpPart goto loc = <*loc*> by U,RECDEF_2:def 2;
+A2: JumpPart goto(loc+k) = <*loc+k*> by V,RECDEF_2:def 2;
+    let x be set;
+    assume
+Z:   x in dom JumpPart IncAddr(goto loc,k);
+     dom <*loc+k*> = {1} by FINSEQ_1:4,55;
+     then
+C:   x = 1 by Z,K,A2,TARSKI:def 1;
+    thus (JumpPart IncAddr(goto loc,k)).x
+      = k + (JumpPart goto loc).x by X1,Z,VALUED_1:def 2
+     .= loc + k by A1,C,FINSEQ_1:57
+     .= (JumpPart goto(loc + k)).x by A2,C,FINSEQ_1:57;
+   end;
+ hence thesis by A,B,COMPOS_1:7;
 end;
 
 theorem Th15:
-  for k being Element of NAT,loc being Element of NAT
-, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
-  )
+  for k being Element of NAT,loc being Element of NAT, a being Int-Location
+   holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k)
 proof
-  let k be Element of NAT, loc be Element of NAT, a be
-  Int-Location;
-  consider A,L such that
-A1: a = A & loc = L and
-A2: a=0_goto loc = A=0_goto L by SCMFSA_2:def 17;
-  reconsider i = A=0_goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
-  InsCode (a=0_goto loc) = 7 by SCMFSA_2:48;
-  then InsCode (a=0_goto loc) in {6,7,8} by ENUMSET1:def 1;
-  then
-  ex I being Instruction of SCM st I = a=0_goto loc & IncAddr(a=0_goto loc,
-  k) = IncAddr(I,k) by Def3;
-  hence IncAddr(a=0_goto loc,k) = i by A2,RELOC:11
-    .= a=0_goto (loc + k) by A1,SCMFSA_2:def 17;
+  let k be Element of NAT, loc be Element of NAT, a be Int-Location;
+U: a=0_goto loc = [7,<* loc *>,<*a*>] by SCMFSA10:15;
+V: a=0_goto (loc + k) = [7,<* loc + k *>,<*a*>] by SCMFSA10:15;
+A: InsCode IncAddr(a=0_goto loc,k) = InsCode(a=0_goto loc) by AMISTD_2:def 14
+     .= 7 by U,RECDEF_2:def 1
+     .= InsCode(a=0_goto(loc + k)) by V,RECDEF_2:def 1;
+B: AddressPart IncAddr(a=0_goto loc,k) = AddressPart(a=0_goto loc)
+           by AMISTD_2:def 14
+     .= <*a*> by U,RECDEF_2:def 3
+     .= AddressPart(a=0_goto (loc + k)) by V,RECDEF_2:def 3;
+X1: JumpPart IncAddr(a=0_goto loc,k) = k + JumpPart(a=0_goto loc)
+                   by AMISTD_2:def 14;
+  JumpPart IncAddr(a=0_goto loc,k) = JumpPart(a=0_goto (loc + k))
+   proof
+    thus
+K:   dom JumpPart IncAddr(a=0_goto loc,k)
+     = dom JumpPart(a=0_goto (loc + k)) by A,AMISTD_2:def 4;
+A1: JumpPart(a=0_goto loc) = <*loc*> by U,RECDEF_2:def 2;
+A2: JumpPart(a=0_goto (loc+k)) = <*loc+k*> by V,RECDEF_2:def 2;
+    let x be set;
+    assume
+Z:   x in dom JumpPart IncAddr(a=0_goto loc,k);
+     dom <*loc+k*> = {1} by FINSEQ_1:4,55;
+     then
+C:   x = 1 by Z,K,A2,TARSKI:def 1;
+    thus (JumpPart IncAddr(a=0_goto loc,k)).x
+      = k + (JumpPart(a=0_goto loc)).x by X1,Z,VALUED_1:def 2
+     .= loc + k by A1,C,FINSEQ_1:57
+     .= (JumpPart(a=0_goto(loc + k))).x by A2,C,FINSEQ_1:57;
+   end;
+ hence thesis by A,B,COMPOS_1:7;
 end;
 
 theorem Th16:
@@ -153,274 +176,117 @@ theorem Th16:
 , a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
   )
 proof
-  let k be Element of NAT, loc be Element of NAT, a be
-  Int-Location;
-  consider A,L such that
-A1: a = A & loc = L and
-A2: a>0_goto loc = A>0_goto L by SCMFSA_2:def 18;
-  reconsider i = A>0_goto(L+k) as Instruction of SCM+FSA by SCMFSA_2:38;
-  InsCode (a>0_goto loc) = 8 by SCMFSA_2:49;
-  then InsCode (a>0_goto loc) in {6,7,8} by ENUMSET1:def 1;
-  then
-  ex I being Instruction of SCM st I = a>0_goto loc & IncAddr(a>0_goto loc,
-  k) = IncAddr(I,k) by Def3;
-  hence IncAddr(a>0_goto loc,k) = i by A2,RELOC:12
-    .= a>0_goto (loc + k) by A1,SCMFSA_2:def 18;
+  let k be Element of NAT, loc be Element of NAT, a be Int-Location;
+U: a>0_goto loc = [8,<* loc *>,<*a*>] by SCMFSA10:16;
+V: a>0_goto (loc + k) = [8,<* loc + k *>,<*a*>] by SCMFSA10:16;
+A: InsCode IncAddr(a>0_goto loc,k) = InsCode(a>0_goto loc) by AMISTD_2:def 14
+     .= 8 by U,RECDEF_2:def 1
+     .= InsCode(a>0_goto(loc + k)) by V,RECDEF_2:def 1;
+B: AddressPart IncAddr(a>0_goto loc,k) = AddressPart(a>0_goto loc)
+           by AMISTD_2:def 14
+     .= <*a*> by U,RECDEF_2:def 3
+     .= AddressPart(a>0_goto (loc + k)) by V,RECDEF_2:def 3;
+X1: JumpPart IncAddr(a>0_goto loc,k) = k + JumpPart(a>0_goto loc)
+                   by AMISTD_2:def 14;
+  JumpPart IncAddr(a>0_goto loc,k) = JumpPart(a>0_goto (loc + k))
+   proof
+    thus
+K:   dom JumpPart IncAddr(a>0_goto loc,k)
+     = dom JumpPart(a>0_goto (loc + k)) by A,AMISTD_2:def 4;
+A1: JumpPart(a>0_goto loc) = <*loc*> by U,RECDEF_2:def 2;
+A2: JumpPart(a>0_goto (loc+k)) = <*loc+k*> by V,RECDEF_2:def 2;
+    let x be set;
+    assume
+Z:   x in dom JumpPart IncAddr(a>0_goto loc,k);
+     dom <*loc+k*> = {1} by FINSEQ_1:4,55;
+     then
+C:   x = 1 by Z,K,A2,TARSKI:def 1;
+    thus (JumpPart IncAddr(a>0_goto loc,k)).x
+      = k + (JumpPart(a>0_goto loc)).x by X1,Z,VALUED_1:def 2
+     .= loc + k by A1,C,FINSEQ_1:57
+     .= (JumpPart(a>0_goto(loc + k))).x by A2,C,FINSEQ_1:57;
+   end;
+ hence thesis by A,B,COMPOS_1:7;
+end;
+
+registration
+ let a,b be Int-Location; let f be FinSeq-Location;
+ cluster b:=(f,a) -> ins-loc-free;
+ coherence
+  proof
+     b:=(f,a) = [9,{},<*b,f,a*>] by SCMFSA_2:def 19;
+   hence JumpPart(b:=(f,a)) is empty by RECDEF_2:def 2;
+  end;
+ cluster (f,a):=b -> ins-loc-free;
+ coherence
+  proof
+    (f,a):=b = [10,{},<*b,f,a*>] by SCMFSA_2:def 20;
+   hence JumpPart((f,a):=b) is empty by RECDEF_2:def 2;
+  end;
 end;
 
 theorem Th17:
   for k being Element of NAT, a,b being Int-Location, f being
-  FinSeq-Location holds IncAddr(b:=(f,a),k) = b:=(f,a)
-proof
-  let k be Element of NAT, a,b be Int-Location, f be FinSeq-Location;
-  InsCode (b:=(f,a)) = 9 & not 9 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:50;
-  hence thesis by Def3;
-end;
+  FinSeq-Location holds IncAddr(b:=(f,a),k) = b:=(f,a) by AMISTD_2:29;
 
 theorem Th18:
   for k being Element of NAT, a,b being Int-Location, f being
-  FinSeq-Location holds IncAddr((f,a):=b,k) = (f,a):=b
-proof
-  let k be Element of NAT, a,b be Int-Location, f be FinSeq-Location;
-  InsCode ((f,a):=b) = 10 & not 10 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:51;
-  hence thesis by Def3;
+  FinSeq-Location holds IncAddr((f,a):=b,k) = (f,a):=b by AMISTD_2:29;
+
+registration
+ let a be Int-Location; let f be FinSeq-Location;
+ cluster a:=len f -> ins-loc-free;
+ coherence
+  proof
+    a:=len f = [11,{},<*a,f*>] by SCMFSA_2:def 21;
+   hence JumpPart(a:=len f) is empty by RECDEF_2:def 2;
+  end;
+ cluster f:=<0,...,0>a -> ins-loc-free;
+ coherence
+  proof
+    f:=<0,...,0>a = [12,{},<*a,f*>] by SCMFSA_2:def 22;
+   hence JumpPart(f:=<0,...,0>a)  is empty by RECDEF_2:def 2;
+  end;
 end;
 
 theorem Th19:
   for k being Element of NAT, a being Int-Location, f being
-  FinSeq-Location holds IncAddr(a:=len f,k) = a:=len f
-proof
-  let k be Element of NAT, a be Int-Location, f be FinSeq-Location;
-  InsCode (a:=len f) = 11 & not 11 in {6,7,8} by ENUMSET1:def 1,SCMFSA_2:52;
-  hence thesis by Def3;
-end;
+  FinSeq-Location holds IncAddr(a:=len f,k) = a:=len f by AMISTD_2:29;
 
 theorem Th20:
   for k being Element of NAT, a being Int-Location, f being
   FinSeq-Location holds IncAddr(f:=<0,...,0>a,k) = f:=<0,...,0>a
-proof
-  let k be Element of NAT, a be Int-Location, f be FinSeq-Location;
-  InsCode (f:=<0,...,0>a) = 12 & not 12 in {6,7,8} by ENUMSET1:def 1
-,SCMFSA_2:53;
-  hence thesis by Def3;
-end;
+   by AMISTD_2:29;
 
-theorem Th21:
-  for i being Instruction of SCM+FSA, I st i = I holds IncAddr(i,k
-  ) = IncAddr(I,k)
-proof
-  let i be Instruction of SCM+FSA, I;
-  assume
-A1: i = I;
-  per cases;
-  suppose
-    InsCode i in {6,7,8};
-    then ex I being Instruction of SCM st I = i & IncAddr(i,k) = IncAddr(I,k)
-    by Def3;
-    hence thesis by A1;
-  end;
-  suppose
-A2: not InsCode i in {6,7,8};
-    then
-A3: InsCode I <> 8 by A1,ENUMSET1:def 1;
-A4: InsCode I <> 6 & InsCode I <> 7 by A1,A2,ENUMSET1:def 1;
-    thus IncAddr(i,k) = i by A2,Def3
-      .= IncAddr(I,k) by A1,A4,A3,RELOC:def 3;
-  end;
-end;
+canceled;
 
 theorem Th22:
   for I being Instruction of SCM+FSA, k being Element of NAT holds
-  InsCode (IncAddr (I, k)) = InsCode I
-proof
-  let I be Instruction of SCM+FSA, k be Element of NAT;
-A1: InsCode I <= 11+1 by SCMFSA_2:35;
-A2: InsCode I <= 10+1 implies InsCode I <= 10 or InsCode I = 11 by NAT_1:8;
-A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:8;
-  per cases by A1,A2,A3,NAT_1:8;
-  suppose
-    InsCode I <= 8;
-    then reconsider i = I as Instruction of SCM by SCMFSA_2:34;
-    IncAddr (I, k) = IncAddr (i, k) by Th21;
-    hence thesis by RELOC:13;
-  end;
-  suppose
-    InsCode I=9 or InsCode I=10 or InsCode I=11 or InsCode I=12;
-    then not InsCode I in {6,7,8} by ENUMSET1:def 1;
-    hence thesis by Def3;
-  end;
-end;
+  InsCode (IncAddr (I, k)) = InsCode I by AMISTD_2:def 14;
 
 reserve i for Instruction of SCM+FSA;
 
 theorem Th23:
-  IncAddr(IncAddr(i,m),n) = IncAddr(i,m+n)
-proof
-  per cases by ENUMSET1:def 1;
-  suppose
-    InsCode i = 6;
-    then consider l being Element of NAT such that
-A1: i = goto l by SCMFSA_2:59;
-    IncAddr(i,m) = goto(l+m) by A1,Th14;
-    hence IncAddr(IncAddr(i,m),n) = goto(l+m+n) by Th14
-      .= goto (l+(m+n))
-      .= IncAddr(i,m+n) by A1,Th14;
-  end;
-  suppose
-    InsCode i = 7;
-    then consider
-    l being Element of NAT, a being Int-Location
-    such that
-A2: i = a=0_goto l by SCMFSA_2:60;
-    IncAddr(i,m) = a=0_goto(l+m) by A2,Th15;
-    hence IncAddr(IncAddr(i,m),n) = a=0_goto(l+m+n) by Th15
-      .= a=0_goto (l+(m+n))
-      .= IncAddr(i,m+n) by A2,Th15;
-  end;
-  suppose
-    InsCode i = 8;
-    then consider
-    l being Element of NAT, a being Int-Location
-    such that
-A3: i = a>0_goto l by SCMFSA_2:61;
-    IncAddr(i,m) = a>0_goto(l+m) by A3,Th16;
-    hence IncAddr(IncAddr(i,m),n) = a>0_goto(l+m+n) by Th16
-      .= a>0_goto (l+(m+n))
-      .= IncAddr(i,m+n) by A3,Th16;
-  end;
-  suppose
-A4: not InsCode i in {6,7,8};
-    then not InsCode IncAddr(i,m) in {6,7,8} by Th22;
-    then IncAddr(IncAddr(i,m),n) = IncAddr(i,m) by Def3
-      .= i by A4,Def3
-      .= IncAddr(i,m+n) by A4,Def3;
-    hence thesis;
-  end;
-end;
+  IncAddr(IncAddr(i,m),n) = IncAddr(i,m+n) by AMISTD_2:37;
 
 begin :: Incrementing Addresses in a finite partial state
-
-definition
-  canceled 2;
-  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
-      k be Element of NAT;
-  func IncAddr(p,k) -> preProgram of SCM+FSA means
-  :Def6:
-  dom it = dom p & for m st m in dom p holds it. m = IncAddr(p/.m,k);
-  existence
-  proof
-    defpred P [set,set] means ex m st $1 = m & $2 = IncAddr(p/.m,k);
-A1: for e being set st e in dom p ex u being set st P[e,u]
-    proof
-      let e be set;
-A2:   dom p c= NAT by RELAT_1:def 18;
-      assume
-      e in dom p;
-      then reconsider e as Element of NAT by A2;
-      reconsider m = e as Element of NAT;
-      take IncAddr(p/.m,k);
-      thus thesis;
-    end;
-    consider f being Function such that
-A3: dom f = dom p and
-A4: for e being set st e in dom p holds P[e,f.e] from CLASSES1:sch 1(
-    A1);
-A5: dom p c= NAT by RELAT_1:def 18;
-    then dom p c= the carrier of SCM+FSA by XBOOLE_1:1;
-    then
-A6: dom f c= dom the Object-Kind of SCM+FSA by A3,FUNCT_2:def 1;
-    for x being set st x in dom f holds f.x in (the Object-Kind of SCM+FSA
-    ).x
-    proof
-      let x be set;
-      assume
-A7:   x in dom f;
-      then reconsider y = x as Element of NAT by A3,A5;
-A8:   (the Object-Kind of SCM+FSA).y
-        = the Instructions of SCM+FSA by AMI_1:def 14;
-      ex m st x = m & f.x = IncAddr(p/.m,k) by A3,A4,A7;
-      hence thesis by A8;
-    end;
-    then reconsider f as Element of sproduct the Object-Kind of SCM+FSA by A6,
-CARD_3:def 9;
-    reconsider f as FinPartState of SCM+FSA by A3,FINSET_1:29;
-B:  f is (the Instructions of SCM+FSA)-valued
-    proof
-      let x be set;
-      assume x in rng f;
-       then consider y being set such that
-W1:     y in dom f and
-W2:     f.y = x by FUNCT_1:def 5;
-       reconsider y as Element of NAT by W1,A3,A5;
-       y in dom p by A3,W1;
-       then P[y,x] by A4,W2;
-       then consider m such that
-W3:     y = m & x = IncAddr(p/.m,k);
-       x = IncAddr(p/.m,k) by W3;
-      hence x in the Instructions of SCM+FSA;
-    end;
-    f is NAT-defined
-    proof
-      let x be set;
-      assume
-      x in dom f;
-      hence x in NAT by A3,A5;
-    end;
-    then reconsider IT = f as preProgram of SCM+FSA by B;
-    take IT;
-    thus dom IT = dom p by A3;
-    let m;
-    assume
-     m in dom p;
-    then ex j st  m = j & f. m = IncAddr(p/.j,k) by A4;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-    let IT1,IT2 be preProgram of SCM+FSA such that
-A9: dom IT1 = dom p and
-A10: for m st  m in dom p holds IT1. m = IncAddr(p/.m ,k) and
-A11: dom IT2 = dom p and
-A12: for m st  m in dom p holds IT2. m = IncAddr(p/.m ,k);
-    for x being set st x in dom p holds IT1.x = IT2.x
-    proof
-      let x be set;
-      assume
-A13:  x in dom p;
-      dom p c= NAT by RELAT_1:def 18;
-      then reconsider l = x as Element of NAT by A13;
-      reconsider m = l as Element of NAT;
-      thus IT1.x = IncAddr(p/.m,k) by A10,A13
-        .= IT2.x by A12,A13;
-    end;
-    hence thesis by A9,A11,FUNCT_1:9;
-  end;
-end;
-
-registration
-  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
-      k be Element of NAT;
-  cluster IncAddr(p,k) -> (the Instructions of SCM+FSA)-valued;
-  coherence by Def6,FUNCT_1:def 5,RELAT_1:def 18;
-end;
 
 theorem Th24:
   for p being finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
       k being Element of NAT for l
   being Element of NAT st l in dom p holds IncAddr(p,k).l = IncAddr(p/.l,k)
-             by Def6;
+             by AMISTD_2:def 15;
 
 theorem
   for I,J being
    finite NAT-defined (the Instructions of SCM+FSA)-valued Function
-    holds IncAddr(I +* J, n) = IncAddr
-  (I,n) +* IncAddr(J,n)
+    holds IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n)
 proof
   let I,J be
    finite NAT-defined (the Instructions of SCM+FSA)-valued Function;
-A1: dom IncAddr(J,n) = dom J by Def6;
+A1: dom IncAddr(J,n) = dom J by AMISTD_2:def 15;
 A2: now
-    let m such that
+    let m be Nat such that
 A3:  m in dom(I +* J);
     per cases;
     suppose
@@ -430,7 +296,7 @@ A5:   (I+*J)/.m = (I +* J). m by A3,PARTFUN1:def 8
         .= J/.m by A4,PARTFUN1:def 8;
       thus (IncAddr(I,n) +* IncAddr(J,n)). m = IncAddr(J,n). m by A1,A4,
 FUNCT_4:14
-        .= IncAddr((I+*J)/.m,n) by A4,A5,Def6;
+        .= IncAddr((I+*J)/.m,n) by A4,A5,AMISTD_2:def 15;
     end;
     suppose
 A6:   not  m in dom J;
@@ -442,13 +308,14 @@ A8:   (I+*J)/.m = (I +* J). m by A3,PARTFUN1:def 8
         .= I/.m by A7,PARTFUN1:def 8;
       thus (IncAddr(I,n) +* IncAddr(J,n)). m = IncAddr(I,n). m by A1,A6,
 FUNCT_4:12
-        .= IncAddr((I+*J)/.m,n) by A7,A8,Def6;
+        .= IncAddr((I+*J)/.m,n) by A7,A8,AMISTD_2:def 15;
     end;
   end;
-  dom IncAddr(I,n) = dom I by Def6;
+  dom IncAddr(I,n) = dom I by AMISTD_2:def 15;
   then dom(IncAddr(I,n) +* IncAddr(J,n)) = dom I \/ dom J by A1,FUNCT_4:def 1
     .= dom(I +* J) by FUNCT_4:def 1;
-  hence thesis by A2,Def6;
+  hence IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n)
+   by A2,AMISTD_2:def 15;
 end;
 
 theorem
@@ -481,11 +348,11 @@ A5: dom(halt SCM+FSA .--> IncAddr(i,n)) = {halt SCM+FSA} by FUNCOP_1:19;
   then reconsider g = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .-->
   IncAddr(i,n)) as Function of the Instructions of SCM+FSA,the Instructions of
   SCM+FSA by A3,A4,FUNCT_2:def 1,RELSET_1:11;
-A6: dom IncAddr(s,n) = dom s by Def6
+A6: dom IncAddr(s,n) = dom s by AMISTD_2:def 15
     .= dom(f*s) by FUNCT_2:200;
 A7: dom(halt SCM+FSA .--> i) = {halt SCM+FSA} by FUNCOP_1:19;
 A8: now
-    let m;
+    let m be Nat;
     assume
 A9:  m in dom(f*s);
     then
@@ -493,7 +360,8 @@ A10:  m in dom s by FUNCT_2:200;
     per cases;
     suppose
 A11:  s. m = halt SCM+FSA;
-A12:  IncAddr(s,n). m = IncAddr(s/.m,n) by A10,Th24
+     reconsider mm = m as Element of NAT by ORDINAL1:def 13;
+A12:  IncAddr(s,n). m = IncAddr(s/.mm,n) by A10,Th24
         .= IncAddr(halt SCM+FSA,n) by A10,A11,PARTFUN1:def 8
         .= halt SCM+FSA by Th8;
 A13:  halt SCM+FSA in {halt SCM+FSA} by TARSKI:def 1;
@@ -521,36 +389,19 @@ A20:  (f*s)/.m = (f*s). m by A9,PARTFUN1:def 8
         .= (id the Instructions of SCM+FSA).(s/.m) by A2,A7,A17,A18,FUNCT_4:12
         .= s/.m by FUNCT_1:35;
       thus (g*IncAddr(s,n)). m = g.(IncAddr(s,n). m) by A6,A9,FUNCT_1:23
-        .= g.IncAddr(s/.m,n) by A10,Def6
+        .= g.IncAddr(s/.m,n) by A10,AMISTD_2:def 15
         .= (id the Instructions of SCM+FSA).IncAddr(s/.m,n) by A5,A19,
 FUNCT_4:12
         .= IncAddr((f*s)/.m,n) by A20,FUNCT_1:35;
     end;
   end;
   dom(g*IncAddr(s,n)) = dom IncAddr(s,n) by FUNCT_2:200;
-  hence thesis by A6,A8,Def6;
+  hence thesis by A6,A8,AMISTD_2:def 15;
 end;
 
 theorem
-  for I being
-  finite NAT-defined (the Instructions of SCM+FSA)-valued Function
-   holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n)
-proof
-  let I be
-  finite NAT-defined (the Instructions of SCM+FSA)-valued Function;
-A1: dom IncAddr(I,m) = dom I by Def6;
-A2: now
-    let l;
-    assume
-A3:  l in dom I;
-    then IncAddr(I,m)/.l = IncAddr(I,m). l by A1,PARTFUN1:def 8
-      .= IncAddr(I/.l,m) by A3,Th24;
-    hence IncAddr(IncAddr(I,m),n). l = IncAddr(IncAddr(I/.l,m),n) by A1,A3,Th24
-      .= IncAddr(I/.l,m+n) by Th23;
-  end;
-  dom IncAddr(IncAddr(I,m),n) = dom IncAddr(I,m) by Def6;
-  hence thesis by A1,A2,Def6;
-end;
+  for I being finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+   holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n) by AMISTD_2:39;
 
 theorem
   for p being (the Instructions of SCM+FSA)-valued Function
@@ -566,7 +417,7 @@ proof
 A1: succ IC (s +* Start-At(IC s+k,SCM+FSA)) = succ ((m + k)) by FUNCT_4:121
     .= ((m + k) + 1) by NAT_1:39
     .= (m + 1 + k)
-    .= (m + 1) + k
+:::    .= (m + 1) + k
     .= ((succ IC s) qua Element of NAT) + k by NAT_1:39
     .= IC (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)) by FUNCT_4:121;
 A2: InsCode INS <= 9+1 implies InsCode INS <= 8+1 or InsCode INS = 10 by
@@ -579,9 +430,9 @@ A5: now
     thus Exec(INS, s +* Start-At(IC s+k,SCM+FSA)).d
      = (s +* Start-At(IC s+k,SCM+FSA)).d
     by AMI_1:def 13
-      .= s.d by AMI_1:112
+      .= s.d by COMPOS_1:20
       .= Exec(INS, s).d by AMI_1:def 13
-      .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by AMI_1:112;
+      .= (Exec(INS, s) +* Start-At(succ IC s+k,SCM+FSA)).d by COMPOS_1:20;
   end;
   per cases by A4,A3,A2,NAT_1:8,33;
   suppose
@@ -887,9 +738,10 @@ A47: now
       thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d =
        (s +* Start-At
       (IC s +k,SCM+FSA)).d by AMI_1:def 13
-        .= s.d by AMI_1:112
+        .= s.d by COMPOS_1:20
         .= Exec(INS, s).d by AMI_1:def 13
-        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by AMI_1:112;
+        .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
+COMPOS_1:20;
     end;
 A48: now
       let d be FinSeq-Location;
@@ -941,10 +793,10 @@ A55:    now
           let d be Element of NAT;
           thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
           Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
             .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
-AMI_1:112;
+COMPOS_1:20;
         end;
         (s +* Start-At(IC s+k,SCM+FSA)).da=0 by A51,SCMFSA_3:11;
         then IC Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA))
@@ -961,10 +813,10 @@ A57:    now
           let d be Element of NAT;
           thus Exec(IncAddr(INS, k), s +* Start-At(IC s+k,SCM+FSA)).d = (s +*
           Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
             .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
-AMI_1:112;
+COMPOS_1:20;
         end;
 A58:    now
           let d be Int-Location;
@@ -1032,10 +884,10 @@ A65:    now
           thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
            = (s +*
           Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
             .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
-AMI_1:112;
+COMPOS_1:20;
         end;
         (s +* Start-At(IC s+k,SCM+FSA)).da > 0 by A61,SCMFSA_3:11;
         then IC Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA))
@@ -1054,10 +906,10 @@ A67:    now
           thus Exec(da>0_goto (loc + k), s +* Start-At(IC s+k,SCM+FSA)).d
            = (s +*
           Start-At(IC s+k,SCM+FSA)).d by AMI_1:def 13
-            .= s.d by AMI_1:112
+            .= s.d by COMPOS_1:20
             .= Exec(INS, s).d by AMI_1:def 13
             .= (Exec(INS, s) +* Start-At(IC Exec(INS,s)+k,SCM+FSA)).d by
-AMI_1:112;
+COMPOS_1:20;
         end;
 A68:    now
           let d be Int-Location;
@@ -1296,10 +1148,10 @@ A1: now
     thus Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)).d =
      (s +* Start-At(IC s -'k,SCM+FSA)).
     d by AMI_1:def 13
-      .= s.d by AMI_1:112
+      .= s.d by COMPOS_1:20
       .= Exec(IncAddr(INS, k), s).d by AMI_1:def 13
       .= (Exec(IncAddr(INS, k), s) +* Start-At (IC Exec(IncAddr(INS,k), s)
-    -'k,SCM+FSA)).d by AMI_1:112;
+    -'k,SCM+FSA)).d by COMPOS_1:20;
   end;
 A2: InsCode INS <= 9+1 implies InsCode INS <= 8+1 or InsCode INS = 10 by
 NAT_1:8;
@@ -1993,50 +1845,70 @@ A95:    f <> d;
   end;
 end;
 
-begin :: Shifting the finite partial state
-
-canceled 5;
-
 theorem
-  for i,j being Element of NAT,
-      p being
-      finite NAT-defined (the Instructions of SCM+FSA)-valued Function
-      holds
-  Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i)
+ not InsCode i in {6,7,8} implies IncAddr(i,k) = i
 proof
-  let i,j be Element of NAT, p be
-      finite NAT-defined (the Instructions of SCM+FSA)-valued Function;
-  dom(IncAddr(p,i)) = dom p by Def6;
+ assume not InsCode i in {6,7,8};
   then
-A1: dom(Shift(p,j)) = { m+j: m in dom (IncAddr(p,i)) } by VALUED_1:def 12
-    .= dom (Shift(IncAddr(p,i),j)) by VALUED_1:def 12;
-A2: now
-    let x be set;
-    assume
-A3: x in dom (Shift(IncAddr(p,i),j));
-    then
-A4: x in { m+j where m is Element of NAT: m in dom IncAddr(p,i) } by
-VALUED_1:def 12;
-    dom (Shift(IncAddr(p,i),j)) c= NAT by RELAT_1:def 18;
-    then reconsider x9=x as Element of NAT by A3;
-    reconsider xx=x9 as Element of NAT;
-    consider m being Element of NAT such that
-A5: x = m+j and
-A6: m in dom IncAddr(p,i) by A4;
-A7:  m in dom p by A6,Def6;
-    dom Shift(p,j) = { mm+j where mm is Element of NAT : mm in dom p} by
-VALUED_1:def 12;
-    then
-A8: x9 in dom Shift(p,j) by A5,A7;
-A9: p/.m = p.( m) by A7,PARTFUN1:def 8
-      .= Shift(p,j).(( m)+j) by A7,VALUED_1:def 12
-      .= Shift(p,j).((m+j))
-      .= Shift(p,j)/.xx by A5,A8,PARTFUN1:def 8;
-    thus Shift(IncAddr(p,i),j).x = IncAddr(p,i).( m) by A5,A6,VALUED_1:def 12
-      .= IncAddr(Shift(p,j)/.xx,i) by A7,A9,Th24
-      .= IncAddr(Shift(p,j),i).x by A8,Th24;
+Z: InsCode i <> 6 & InsCode i <> 7 & InsCode i <> 8 by ENUMSET1:def 1;
+A4: InsCode i <= 12 by SCMFSA_2:35;
+  per cases by Z,A4,NAT_1:37;
+  suppose InsCode i = 0;
+    then i = halt SCM+FSA by SCMFSA_2:122;
+   hence thesis by AMISTD_2:30;
   end;
-  dom(IncAddr(Shift(p,j),i)) = dom (Shift(p,j)) by Def6;
-  hence thesis by A1,A2,FUNCT_1:9;
-end;
-
+  suppose
+    InsCode i = 1;
+    then consider da,db being Int-Location such that
+A8: i = da := db by SCMFSA_2:54;
+   thus thesis by A8,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 2;
+    then consider da,db being Int-Location such that
+A14: i = AddTo(da, db) by SCMFSA_2:55;
+    thus thesis by A14,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 3;
+    then consider da,db being Int-Location such that
+A20: i = SubFrom(da, db) by SCMFSA_2:56;
+    thus thesis by A20,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 4;
+    then consider da,db being Int-Location such that
+A26: i = MultBy(da, db) by SCMFSA_2:57;
+    thus thesis by A26,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 5;
+    then consider da,db being Int-Location such that
+A32: i = Divide(da, db) by SCMFSA_2:58;
+    thus thesis by A32,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 9;
+    then consider db,da being Int-Location, f being FinSeq-Location such that
+A70: i = da :=(f, db) by SCMFSA_2:62;
+    thus thesis by A70,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 10;
+    then consider db,da being Int-Location, f being FinSeq-Location such that
+A79: i = (f, db):=da by SCMFSA_2:63;
+    thus thesis by A79,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 11;
+    then consider da being Int-Location, f being FinSeq-Location such that
+A88: i = da :=len f by SCMFSA_2:64;
+    thus thesis by A88,AMISTD_2:29;
+  end;
+  suppose
+    InsCode i = 12;
+    then consider da being Int-Location, f being FinSeq-Location such that
+A94: i = f:=<0,...,0>da by SCMFSA_2:65;
+   thus thesis by A94,AMISTD_2:29;
+  end;
+ end;

@@ -11,10 +11,11 @@ environ
       WELLORD1, FINSEQ_2, GROUP_6, EQREL_1, FUNCT_2, CARD_3, RELAT_2, ALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, RELAT_2,
       FUNCT_1, RELSET_1, FINSEQ_1, PARTFUN1, EQREL_1, FINSEQ_2, FUNCT_2,
-      STRUCT_0, MARGREL1, UNIALG_1, FINSEQOP, UNIALG_2;
- constructors EQREL_1, FINSEQOP, UNIALG_2, RELSET_1, CARD_3;
+      STRUCT_0, MARGREL1, UNIALG_1, FINSEQOP, FINSEQ_3, UNIALG_2;
+ constructors EQREL_1, FINSEQOP, UNIALG_2, RELSET_1, CARD_3, FINSEQ_3;
  registrations RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, EQREL_1, FINSEQ_2,
-      STRUCT_0, UNIALG_1, UNIALG_2, ORDINAL1, FINSEQ_1, CARD_1, RELSET_1;
+      STRUCT_0, UNIALG_1, UNIALG_2, ORDINAL1, FINSEQ_1, CARD_1, RELSET_1,
+      MARGREL1;
  requirements BOOLE, SUBSET;
 
 
@@ -22,16 +23,12 @@ begin
 
 reserve U1,U2,U3 for Universal_Algebra,
   n,m for Element of NAT,
-  o1 for
-  operation of U1,
+  o1 for operation of U1,
   o2 for operation of U2,
   o3 for operation of U3,
   x,y for set;
 
-theorem :: ALG_1:1
-  for D1,D2 be non empty set, p be FinSequence of D1, f be Function
-  of D1,D2 holds dom(f*p) = dom p & len (f*p) = len p & for n being Nat st n in
-  dom (f*p) holds (f*p).n = f.(p.n);
+canceled;
 
 theorem :: ALG_1:2
   for B be non empty Subset of U1 st B = the carrier of U1 holds
@@ -65,13 +62,11 @@ definition
   pred f is_monomorphism U1,U2 means
 :: ALG_1:def 2
 
-  f is_homomorphism U1,U2 & f is
-  one-to-one;
+  f is_homomorphism U1,U2 & f is one-to-one;
   pred f is_epimorphism U1,U2 means
 :: ALG_1:def 3
 
-  f is_homomorphism U1,U2 & rng f =
-  the carrier of U2;
+  f is_homomorphism U1,U2 & rng f = the carrier of U2;
 end;
 
 definition
@@ -79,8 +74,7 @@ definition
   pred f is_isomorphism U1,U2 means
 :: ALG_1:def 4
 
-  f is_monomorphism U1,U2 & f
-  is_epimorphism U1,U2;
+  f is_monomorphism U1,U2 & f is_epimorphism U1,U2;
 end;
 
 definition
@@ -127,8 +121,7 @@ theorem :: ALG_1:14
   U1,U2 are_isomorphic implies U2,U1 are_isomorphic;
 
 theorem :: ALG_1:15
-  U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3
-  are_isomorphic;
+  U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3 are_isomorphic;
 
 definition
   let U1,U2,f;
@@ -137,8 +130,7 @@ definition
   func Image f -> strict SubAlgebra of U2 means
 :: ALG_1:def 6
 
-  the carrier of it = f
-  .: (the carrier of U1);
+  the carrier of it = f .: (the carrier of U1);
 end;
 
 theorem :: ALG_1:16
@@ -162,22 +154,9 @@ definition
 end;
 
 definition
-  let D be non empty set, R be Relation of D;
-  canceled 2;
-  func ExtendRel(R) -> Relation of D* means
-:: ALG_1:def 9
-
-  for x,y be FinSequence of D
-holds [x,y] in it iff len x = len y & for n st n in dom x holds [x.n,y.n] in R;
-end;
-
-theorem :: ALG_1:18
-  for D be non empty set holds ExtendRel(id D) = id (D*);
-
-definition
   let U1;
   mode Congruence of U1 -> Equivalence_Relation of U1 means
-:: ALG_1:def 10
+:: ALG_1:def 7
 
     for n,o1
     st n in dom the charact of(U1) & o1 = (the charact of U1).n for x,y be
@@ -188,21 +167,7 @@ end;
 reserve E for Congruence of U1;
 
 definition
-  let D be non empty set, R be Equivalence_Relation of D;
-  let y be FinSequence of Class(R), x be FinSequence of D;
-  pred x is_representatives_FS y means
-:: ALG_1:def 11
-
-  len x = len y & for n st n in
-  dom x holds Class(R,x.n) = y.n;
-end;
-
-theorem :: ALG_1:19
-  for D be non empty set, R be Equivalence_Relation of D, y be
-  FinSequence of Class(R) ex x be FinSequence of D st x is_representatives_FS y
-;
-
-definition
+ canceled 4;
   let U1 be Universal_Algebra, E be Congruence of U1, o be operation of U1;
   func QuotOp(o,E) -> homogeneous quasi_total non empty PartFunc of (Class E)*
   ,(Class E) means
@@ -223,16 +188,11 @@ len the charact of(U1) & for n st n in dom it for o1 st (the charact of(U1)).n
   = o1 holds it.n = QuotOp(o1,E);
 end;
 
-theorem :: ALG_1:20
-  for U1,E holds UAStr (# Class(E),QuotOpSeq(U1,E) #) is strict
-  Universal_Algebra;
-
 definition
   let U1,E;
   func QuotUnivAlg(U1,E) -> strict Universal_Algebra equals
 :: ALG_1:def 14
-  UAStr (# Class(E),
-    QuotOpSeq(U1,E) #);
+  UAStr (# Class(E),QuotOpSeq(U1,E) #);
 end;
 
 definition
@@ -240,13 +200,13 @@ definition
   func Nat_Hom(U1,E) -> Function of U1,QuotUnivAlg(U1,E) means
 :: ALG_1:def 15
 
-  for u
-  be Element of U1 holds it.u = Class(E,u);
+  for u be Element of U1 holds it.u = Class(E,u);
 end;
 
+canceled 3;
+
 theorem :: ALG_1:21
-  for U1,E holds Nat_Hom(U1,E) is_homomorphism U1,QuotUnivAlg(U1,E
-  );
+  for U1,E holds Nat_Hom(U1,E) is_homomorphism U1,QuotUnivAlg(U1,E);
 
 theorem :: ALG_1:22
   for U1,E holds Nat_Hom(U1,E) is_epimorphism U1,QuotUnivAlg(U1,E);
@@ -259,8 +219,7 @@ definition
   func Cng(f) -> Congruence of U1 means
 :: ALG_1:def 16
 
-  for a,b be Element of U1 holds
-  [a,b] in it iff f.a = f.b;
+  for a,b be Element of U1 holds [a,b] in it iff f.a = f.b;
 end;
 
 definition
@@ -270,8 +229,7 @@ definition
   func HomQuot(f) -> Function of QuotUnivAlg(U1,Cng(f)),U2 means
 :: ALG_1:def 17
 
-  for a
-  be Element of U1 holds it.(Class(Cng f,a)) = f.a;
+  for a be Element of U1 holds it.(Class(Cng f,a)) = f.a;
 end;
 
 theorem :: ALG_1:23
@@ -284,6 +242,4 @@ theorem :: ALG_1:24
   QuotUnivAlg(U1,Cng(f)),U2;
 
 theorem :: ALG_1:25
-  f is_epimorphism U1,U2 implies QuotUnivAlg(U1,Cng(f)),U2
-  are_isomorphic;
-
+  f is_epimorphism U1,U2 implies QuotUnivAlg(U1,Cng(f)),U2 are_isomorphic;

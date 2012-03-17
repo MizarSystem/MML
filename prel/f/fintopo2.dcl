@@ -19,6 +19,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -32,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="76"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
@@ -41,8 +42,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 </Registrations>

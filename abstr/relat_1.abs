@@ -37,27 +37,9 @@ reserve P,P1,P2,Q,R,S for Relation;
 
 canceled 2;
 
-theorem :: RELAT_1:3
-  A c= R implies A is Relation-like;
-
-theorem :: RELAT_1:4
-  {[x,y]} is Relation-like;
-
-theorem :: RELAT_1:5
-  {[a,b],[c,d]} is Relation-like;
-
-theorem :: RELAT_1:6
-  [:X,Y:] is Relation-like;
-
 registration
-  let a, b be set;
-  cluster {[a,b]} -> Relation-like;
-  cluster [:a,b:] -> Relation-like;
-end;
-
-registration
-  let a, b, c, d be set;
-  cluster {[a,b],[c,d]} -> Relation-like;
+  let R be Relation;
+  cluster -> Relation-like Subset of R;
 end;
 
 scheme :: RELAT_1:sch 1
@@ -87,6 +69,19 @@ registration
   let R,S be Relation;
   cluster R \+\ S -> Relation-like;
 end;
+
+registration
+  let a, b be set;
+  cluster {[a,b]} -> Relation-like;
+  cluster [:a,b:] -> Relation-like;
+end;
+
+registration
+  let a, b, c, d be set;
+  cluster {[a,b],[c,d]} -> Relation-like;
+end;
+
+canceled 4;
 
 definition
   let P,A;
@@ -397,7 +392,7 @@ theorem :: RELAT_1:81
   id {} = {};
 
 theorem :: RELAT_1:82
-  rng P2 c= X & P2*R = id(dom P1) & R*P1 = id X implies P1 =P2;
+  rng P2 c= X & P2*R = id dom P1 & R*P1 = id X implies P1 = P2;
 
 definition
   let R,X;
@@ -797,11 +792,6 @@ end;
 
 :: missing, 2007.04.13, A.T.
 
-registration
-  let R be Relation;
-  cluster -> Relation-like Subset of R;
-end;
-
 :: from YELLOW_3, 2007.06.13, A.T.
 
 scheme :: RELAT_1:sch 2
@@ -950,21 +940,21 @@ theorem :: RELAT_1:206
 :: 2009.10.02, A.T.
 
 registration
- cluster empty -> non-empty Relation;
+  cluster empty -> non-empty Relation;
 end;
 
 registration let X be set, R be X-defined Relation;
- cluster -> X-defined Subset of R;
+  cluster -> X-defined Subset of R;
 end;
 
 registration let X be set, R be X-valued Relation;
- cluster -> X-valued Subset of R;
+  cluster -> X-valued Subset of R;
 end;
 
 :: missing, 2010.01.02, A.T
 
 theorem :: RELAT_1:207
- X misses Y implies R|X|Y = {};
+  X misses Y implies R|X|Y = {};
 
 :: from AMISTD_3, 2010.01.10, A.T.
 
@@ -972,6 +962,27 @@ theorem :: RELAT_1:208
   field {[x,x]} = {x};
 
 theorem :: RELAT_1:209
-  for S being Relation, R being X-defined Relation st R c= S
-   holds R c= S|X;
+  for R being X-defined Relation holds R = R|X;
 
+theorem :: RELAT_1:210
+  for S being Relation, R being X-defined Relation st R c= S holds R c= S|X;
+
+:: missing, 2010.04.07, A.T.
+
+theorem :: RELAT_1:211
+  dom R c= X implies R \ (R|A) = R|(X\A);
+
+theorem :: RELAT_1:212
+  dom(R \ (R|A)) = dom R \ A;
+
+theorem :: RELAT_1:213
+  dom R \ dom(R|A) = dom(R \ (R|A));
+
+theorem :: RELAT_1:214
+  dom R misses dom S implies R misses S;
+
+theorem :: RELAT_1:215
+  rng R misses rng S implies R misses S;
+
+theorem :: RELAT_1:216
+  X c= Y implies (R \ R|Y)|X = {};

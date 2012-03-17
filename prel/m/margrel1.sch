@@ -19,6 +19,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <Scheme>
@@ -112,10 +113,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="115">
+<Func kind="K" nr="114">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="115">
+<Func kind="K" nr="114">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -137,7 +138,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="160">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -199,10 +200,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="115">
+<Func kind="K" nr="114">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="115">
+<Func kind="K" nr="114">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -221,14 +222,14 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="102"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="156">
+<Func kind="K" nr="160">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -241,7 +242,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="115">
+<Func kind="K" nr="114">
 <Var nr="2"/>
 </Func>
 <Func kind="F" nr="2"/>

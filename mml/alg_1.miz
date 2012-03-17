@@ -3,7 +3,7 @@
 ::
 :: Received October 12, 1993
 :: Copyright (c) 1993 Association of Mizar Users
-
+ 
 environ
 
  vocabularies UNIALG_1, SUBSET_1, NUMBERS, UNIALG_2, XBOOLE_0, FINSEQ_1,
@@ -11,42 +11,29 @@ environ
       WELLORD1, FINSEQ_2, GROUP_6, EQREL_1, FUNCT_2, CARD_3, RELAT_2, ALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, RELAT_2,
       FUNCT_1, RELSET_1, FINSEQ_1, PARTFUN1, EQREL_1, FINSEQ_2, FUNCT_2,
-      STRUCT_0, MARGREL1, UNIALG_1, FINSEQOP, UNIALG_2;
- constructors EQREL_1, FINSEQOP, UNIALG_2, RELSET_1, CARD_3;
+      STRUCT_0, MARGREL1, UNIALG_1, FINSEQOP, FINSEQ_3, UNIALG_2;
+ constructors EQREL_1, FINSEQOP, UNIALG_2, RELSET_1, CARD_3, FINSEQ_3;
  registrations RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, EQREL_1, FINSEQ_2,
-      STRUCT_0, UNIALG_1, UNIALG_2, ORDINAL1, FINSEQ_1, CARD_1, RELSET_1;
+      STRUCT_0, UNIALG_1, UNIALG_2, ORDINAL1, FINSEQ_1, CARD_1, RELSET_1,
+      MARGREL1;
  requirements BOOLE, SUBSET;
- definitions UNIALG_2, RELAT_2, TARSKI, FUNCT_1, XBOOLE_0, FUNCT_2, MARGREL1;
+ definitions UNIALG_2, RELAT_2, TARSKI, FUNCT_1, XBOOLE_0, FUNCT_2, MARGREL1,
+      FINSEQ_3;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, FUNCT_2, PARTFUN1, UNIALG_1, UNIALG_2,
       RELAT_1, RELSET_1, EQREL_1, ZFMISC_1, FINSEQ_3, XBOOLE_0, RELAT_2,
-      ORDERS_1;
+      ORDERS_1, MARGREL1;
  schemes FINSEQ_1, RELSET_1, FUNCT_2, WELLORD2;
 
 begin
 
 reserve U1,U2,U3 for Universal_Algebra,
   n,m for Element of NAT,
-  o1 for
-  operation of U1,
+  o1 for operation of U1,
   o2 for operation of U2,
   o3 for operation of U3,
   x,y for set;
 
-theorem Th1:
-  for D1,D2 be non empty set, p be FinSequence of D1, f be Function
-  of D1,D2 holds dom(f*p) = dom p & len (f*p) = len p & for n being Nat st n in
-  dom (f*p) holds (f*p).n = f.(p.n)
-proof
-  let D1,D2 be non empty set, p be FinSequence of D1, f be Function of D1,D2;
-A1: rng p c= D1 & dom f = D1 by FUNCT_2:def 1;
-  hence dom(f*p) = dom p by RELAT_1:46;
-  dom(f*p) = dom p by A1,RELAT_1:46;
-  hence len(f*p) = len p by FINSEQ_3:31;
-  let n be Nat;
-  assume
-  n in dom (f*p);
-  hence thesis by FUNCT_1:22;
-end;
+canceled;
 
 theorem Th2:
   for B be non empty Subset of U1 st B = the carrier of U1 holds
@@ -61,8 +48,7 @@ A2: B = the carrier of U1;
     assume
 A3: n in dom the charact of(U1);
     then reconsider o = (the charact of U1).n as operation of U1 by
-    FUNCT_1:def
-    5;
+FUNCT_1:def 5;
     thus Opers(U1,B).n = o/.B by A1,A3,UNIALG_2:def 7
       .= (the charact of U1).n by A2,UNIALG_2:7;
   end;
@@ -79,16 +65,16 @@ theorem Th4:
   (id the carrier of U1)*a = a
 proof
   set f = id the carrier of U1;
-A1: dom (f*a) = dom a by Th1;
+A1: dom (f*a) = dom a by FINSEQ_3:129;
 A2: now
     let n be Nat;
     assume
 A3: n in dom(f*a);
     then reconsider u = a.n as Element of U1 by A1,FINSEQ_2:13;
     f.u = u by FUNCT_1:35;
-    hence (f*a).n = a.n by A3,Th1;
+    hence (f*a).n = a.n by A3,FINSEQ_3:129;
   end;
-  len (f*a) = len a by Th1;
+  len (f*a) = len a by FINSEQ_3:129;
   hence thesis by A2,FINSEQ_2:10;
 end;
 
@@ -98,24 +84,24 @@ theorem Th5:
 proof
   let h1 be Function of U1,U2, h2 be Function of U2,U3,a be FinSequence of U1;
 A1: dom a = Seg len a by FINSEQ_1:def 3;
-A2: dom (h2*(h1*a)) = dom(h1*a) by Th1;
-  dom (h1*a) = dom a by Th1;
+A2: dom (h2*(h1*a)) = dom(h1*a) by FINSEQ_3:129;
+  dom (h1*a) = dom a by FINSEQ_3:129;
   then
 A3: dom (h2*(h1*a)) = Seg len a by A2,FINSEQ_1:def 3;
 A4: len a = len((h2 * h1 qua Function of the carrier of U1, the carrier of
-  U3) *(a qua FinSequence of the carrier of U1)) by Th1;
+  U3) *(a qua FinSequence of the carrier of U1)) by FINSEQ_3:129;
   then
 A5: dom ((h2 * h1)*a) = Seg len a by FINSEQ_1:def 3;
 A6: now
     let n be Nat;
     assume
 A7: n in dom(h2*(h1*a));
-    hence (h2*(h1*a)).n = h2.((h1*a).n) by Th1
-      .= h2.(h1.(a.n)) by A2,A7,Th1
+    hence (h2*(h1*a)).n = h2.((h1*a).n) by FINSEQ_3:129
+      .= h2.(h1.(a.n)) by A2,A7,FINSEQ_3:129
       .= (h2*h1).(a.n) by A1,A3,A7,FINSEQ_2:13,FUNCT_2:21
-      .= ((h2 * h1)*a).n by A3,A5,A7,Th1;
+      .= ((h2 * h1)*a).n by A3,A5,A7,FINSEQ_3:129;
   end;
-  len(h2*(h1*a)) = len(h1*a) & len(h1*a) = len a by Th1;
+  len(h2*(h1*a)) = len(h1*a) & len(h1*a) = len a by FINSEQ_3:129;
   hence thesis by A4,A6,FINSEQ_2:10;
 end;
 
@@ -132,20 +118,17 @@ definition
   let U1,U2,f;
   pred f is_monomorphism U1,U2 means
   :Def2:
-  f is_homomorphism U1,U2 & f is
-  one-to-one;
+  f is_homomorphism U1,U2 & f is one-to-one;
   pred f is_epimorphism U1,U2 means
   :Def3:
-  f is_homomorphism U1,U2 & rng f =
-  the carrier of U2;
+  f is_homomorphism U1,U2 & rng f = the carrier of U2;
 end;
 
 definition
   let U1,U2,f;
   pred f is_isomorphism U1,U2 means
   :Def4:
-  f is_monomorphism U1,U2 & f
-  is_epimorphism U1,U2;
+  f is_monomorphism U1,U2 & f is_epimorphism U1,U2;
 end;
 
 definition
@@ -160,15 +143,13 @@ theorem Th6:
 proof
   thus U1,U1 are_similar;
   let n;
-  assume
-  n in dom the charact of(U1);
+  assume n in dom the charact of(U1);
   let o1,o2 be operation of U1;
   assume
 A1: o1=(the charact of U1).n & o2=(the charact of U1).n;
   set f = id the carrier of U1;
   let x be FinSequence of U1;
-  assume
-  x in dom o1;
+  assume x in dom o1;
   then o1.x in rng o1 by FUNCT_1:def 5;
   then reconsider u = o1.x as Element of U1;
   f.u = u by FUNCT_1:35;
@@ -203,7 +184,7 @@ A6: o3=(the charact of U3).n;
 A7: a in dom o1;
   then
 A8: o1.a in rng o1 by FUNCT_1:def 5;
-  dom o1 = (arity o1)-tuples_on (the carrier of U1) by UNIALG_2:2;
+  dom o1 = (arity o1)-tuples_on (the carrier of U1) by MARGREL1:58;
   then a in {w where w is Element of (the carrier of U1)*: len w = arity o1}
   by A7,FINSEQ_2:def 4;
   then
@@ -213,14 +194,14 @@ A10: len s1 = len the charact of(U1) & dom the charact of(U1) = Seg len the
 A11: len s2 = len the charact of(U2) & dom the charact of(U2) = Seg len the
   charact of(U2) by FINSEQ_1:def 3,UNIALG_1:def 11;
   then reconsider o2 = (the charact of U2).n as operation of U2 by A3,A10,A4,
-  FUNCT_1:def 5;
+FUNCT_1:def 5;
 A12: dom s1 = Seg len s1 by FINSEQ_1:def 3;
   then
 A13: s2.n = arity o2 by A3,A10,A4,UNIALG_1:def 11;
   s1.n = arity o1 by A10,A12,A4,A5,UNIALG_1:def 11;
-  then len(h1*a) = arity o2 by A3,A13,A9,Th1;
+  then len(h1*a) = arity o2 by A3,A13,A9,FINSEQ_3:129;
   then dom o2 = (arity o2)-tuples_on (the carrier of U2) & b in {s where s is
-  Element of (the carrier of U2)*: len s = arity o2} by UNIALG_2:2;
+  Element of (the carrier of U2)*: len s = arity o2} by MARGREL1:58;
   then h1*a in dom o2 by FINSEQ_2:def 4;
   then
 A14: h2.(o2.(h1*a)) = o3.(h2*(h1*a)) by A2,A3,A10,A11,A4,A6,Def1;
@@ -236,14 +217,11 @@ proof
   thus f is_isomorphism U1,U2 implies f is_homomorphism U1,U2 & rng f = the
   carrier of U2 & f is one-to-one
   proof
-    assume
-    f is_isomorphism U1,U2;
+    assume f is_isomorphism U1,U2;
     then f is_monomorphism U1,U2 & f is_epimorphism U1,U2 by Def4;
     hence thesis by Def2,Def3;
   end;
-  assume
-  f is_homomorphism U1,U2 & rng f = the carrier of U2 & f is
-  one-to-one;
+  assume f is_homomorphism U1,U2 & rng f = the carrier of U2 & f is one-to-one;
   then f is_monomorphism U1,U2 & f is_epimorphism U1,U2 by Def2,Def3;
   hence thesis by Def4;
 end;
@@ -252,8 +230,7 @@ theorem Th9:
   f is_isomorphism U1,U2 implies dom f = the carrier of U1 & rng f
   = the carrier of U2
 proof
-  assume
-  f is_isomorphism U1,U2;
+  assume f is_isomorphism U1,U2;
   then f is_epimorphism U1,U2 by Def4;
   hence thesis by Def3,FUNCT_2:def 1;
 end;
@@ -291,8 +268,7 @@ A13: dom x = Seg len x by FINSEQ_1:def 3;
 A14: for m be Nat st m in Seg len x ex a being Element of U1 st P[m,a]
     proof
       let m be Nat;
-      assume
-      m in Seg len x;
+      assume m in Seg len x;
       then m in dom x by FINSEQ_1:def 3;
       then x.m in the carrier of U2 by FINSEQ_2:13;
       then consider a be set such that
@@ -305,20 +281,19 @@ A16:  h.a = x.m by A10,FUNCT_1:def 5;
     consider p being FinSequence of U1 such that
 A17: dom p = Seg len x & for m be Nat st m in Seg len x holds P[m,p.m]
     from FINSEQ_1:sch 5(A14);
-A18: dom (h*p) = dom p by Th1;
+A18: dom (h*p) = dom p by FINSEQ_3:129;
     now
       let n be Nat;
       assume
 A19:  n in dom x;
       hence x.n = h.(p.n) by A17,A13
-        .= (h*p).n by A17,A13,A18,A19,Th1;
+        .= (h*p).n by A17,A13,A18,A19,FINSEQ_3:129;
     end;
     then
 A20: x = h*p by A17,A13,A18,FINSEQ_1:17;
 A21: len p = len x by A17,FINSEQ_1:def 3;
-    assume
-    x in dom o2;
-    then x in (arity o2)-tuples_on the carrier of U2 by UNIALG_2:2;
+    assume x in dom o2;
+    then x in (arity o2)-tuples_on the carrier of U2 by MARGREL1:58;
     then x in {s where s is Element of (the carrier of U2)*: len s = arity o2
     } by FINSEQ_2:def 4;
     then
@@ -329,14 +304,14 @@ A23: (h1 * h) = (id dom h) by A2,A3,FUNCT_1:61
 A24: h1*x = (id the carrier of U1)*p by A20,Th5
       .=p by Th4;
     reconsider p as Element of (the carrier of U1)* by FINSEQ_1:def 11;
-    (signature U1).n = arity o1 & (signature U2).n = arity o2 by A6,A8,
-    A9,A11,A12,UNIALG_1:def 11;
+    (signature U1).n = arity o1 & (signature U2).n = arity o2 by A6,A8,A9,A11
+,A12,UNIALG_1:def 11;
     then
     p in {w where w is Element of (the carrier of U1)*: len w = arity o1}
     by A6,A22,A21;
     then p in (arity o1)-tuples_on the carrier of U1 by FINSEQ_2:def 4;
     then
-A25: p in dom o1 by UNIALG_2:2;
+A25: p in dom o1 by MARGREL1:58;
     then
 A26: h1.(o2.x) = h1.(h.(o1.p)) by A4,A6,A7,A9,A11,A12,A20,Def1;
 A27: o1.p in the carrier of U1 by A25,PARTFUN1:27;
@@ -372,7 +347,7 @@ proof
 A1: h is_isomorphism U1,U2 and
 A2: h1 is_isomorphism U2,U3;
   dom h1 = the carrier of U2 & rng h = the carrier of U2 by A1,Th9,
-  FUNCT_2:def 1;
+FUNCT_2:def 1;
   then
 A3: rng (h1 * h) = rng h1 by RELAT_1:47
     .= the carrier of U3 by A2,Th9;
@@ -395,8 +370,7 @@ end;
 theorem
   U1,U2 are_isomorphic implies U2,U1 are_isomorphic
 proof
-  assume
-  U1,U2 are_isomorphic;
+  assume U1,U2 are_isomorphic;
   then consider f such that
 A1: f is_isomorphism U1,U2 by Def5;
   f is_monomorphism U1,U2 by A1,Def4;
@@ -414,15 +388,12 @@ A4: f is_epimorphism U1,U2 by A1,Def4;
 end;
 
 theorem
-  U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3
-  are_isomorphic
+  U1,U2 are_isomorphic & U2,U3 are_isomorphic implies U1,U3 are_isomorphic
 proof
-  assume
-  U1,U2 are_isomorphic;
+  assume U1,U2 are_isomorphic;
   then consider f such that
 A1: f is_isomorphism U1,U2 by Def5;
-  assume
-  U2,U3 are_isomorphic;
+  assume U2,U3 are_isomorphic;
   then consider g be Function of U2,U3 such that
 A2: g is_isomorphism U2,U3 by Def5;
   g * f is_isomorphism U1,U3 by A1,A2,Th12;
@@ -435,8 +406,7 @@ definition
 A1: f is_homomorphism U1,U2;
   func Image f -> strict SubAlgebra of U2 means
   :Def6:
-  the carrier of it = f
-  .: (the carrier of U1);
+  the carrier of it = f .: (the carrier of U1);
   existence
   proof
 A2: dom f = the carrier of U1 by FUNCT_2:def 1;
@@ -483,32 +453,29 @@ A16:  len (signature U2) = len the charact of(U2) & dom the charact of(U2)
       = Seg len the charact of(U2) by FINSEQ_1:def 3,UNIALG_1:def 11;
       then
 A17:  (signature U2).n = arity o2 by A3,A4,A12,UNIALG_1:def 11;
-A18:  len (f*s1) = len s1 by Th1;
-A19:  dom (f*s1) = Seg len (f*s1) & dom s = Seg len s1 by A10,FINSEQ_1:
-      def 3;
+A18:  len (f*s1) = len s1 by FINSEQ_3:129;
+A19:  dom (f*s1) = Seg len (f*s1) & dom s = Seg len s1 by A10,FINSEQ_1:def 3;
       now
         let m be Nat;
         assume
 A20:    m in dom s;
         then f.(s1.m) = s.m by A10;
-        hence (f*s1).m = s.m by A18,A19,A20,Th1;
+        hence (f*s1).m = s.m by A18,A19,A20,FINSEQ_3:129;
       end;
       then
 A21:  s = f*s1 by A11,A18,FINSEQ_2:10;
 A22:  dom (signature U1) = Seg len (signature U1) by FINSEQ_1:def 3;
 A23:  len (signature U1) = len the charact of(U1) & dom the charact of(U1)
       = Seg len the charact of(U1) by FINSEQ_1:def 3,UNIALG_1:def 11;
-      then reconsider o1 = (the charact of U1).n as operation of U1 by A3,
-      A16,A22
-      ,A15,A12,FUNCT_1:def 5;
+      then reconsider o1 = (the charact of U1).n as operation of U1 by A3,A16
+,A22,A15,A12,FUNCT_1:def 5;
       (signature U1).n = arity o1 by A3,A16,A15,A12,UNIALG_1:def 11;
       then
       s1 in {w where w is Element of (the carrier of U1)* : len w = arity
       o1 } by A14,A5,A17,A11;
-      then s1 in (arity o1)-tuples_on the carrier of U1 by
-      FINSEQ_2:def 4;
+      then s1 in (arity o1)-tuples_on the carrier of U1 by FINSEQ_2:def 4;
       then
-A24:  s1 in dom o1 by UNIALG_2:2;
+A24:  s1 in dom o1 by MARGREL1:58;
       then
 A25:  o1.s1 in rng o1 by FUNCT_1:def 5;
       f.(o1.s1) = o2.(f*s1) by A1,A3,A4,A23,A16,A22,A15,A12,A24,Def1;
@@ -523,8 +490,7 @@ A25:  o1.s1 in rng o1 by FUNCT_1:def 5;
     reconsider A1 = the carrier of A, B1 = the carrier of B as non empty
     Subset of U2 by UNIALG_2:def 8;
 A26: the charact of(A) = Opers(U2,A1) by UNIALG_2:def 8;
-    assume
-    the carrier of A = f .: (the carrier of U1) & the carrier of B =
+    assume the carrier of A = f .: (the carrier of U1) & the carrier of B =
     f .: (the carrier of U1);
     hence thesis by A26,UNIALG_2:def 8;
   end;
@@ -538,8 +504,7 @@ proof
   dom h = the carrier of U1 by FUNCT_2:def 1;
   then
 A1: rng h = h.:(the carrier of U1) by RELAT_1:146;
-  assume
-  h is_homomorphism U1,U2;
+  assume h is_homomorphism U1,U2;
   hence thesis by A1,Def6;
 end;
 
@@ -554,9 +519,8 @@ A1: f is_homomorphism U1,U2;
   thus f is_epimorphism U1,U2 implies Image f = U2
   proof
     reconsider B = the carrier of Image f as non empty Subset of U2 by
-    UNIALG_2:def 8;
-    assume
-    f is_epimorphism U1,U2;
+UNIALG_2:def 8;
+    assume f is_epimorphism U1,U2;
     then
 A2: the carrier of U2 = rng f by Def3
       .= f.:(dom f) by RELAT_1:146
@@ -565,8 +529,7 @@ A2: the carrier of U2 = rng f by Def3
     the charact of(Image f) = Opers(U2,B) by UNIALG_2:def 8;
     hence thesis by A2,Th2;
   end;
-  assume
-  Image f = U2;
+  assume Image f = U2;
   then the carrier of U2 = f.:(the carrier of U1) by A1,Def6
     .= f.:(dom f) by FUNCT_2:def 1
     .= rng f by RELAT_1:146;
@@ -574,7 +537,7 @@ A2: the carrier of U2 = rng f by Def3
 end;
 
 begin
-
+ 
 ::
 :: Quotient Universal Algebra
 ::
@@ -583,104 +546,6 @@ definition
   let U1 be 1-sorted;
   mode Relation of U1 is Relation of the carrier of U1;
   mode Equivalence_Relation of U1 is Equivalence_Relation of the carrier of U1;
-end;
-
-definition
-  let D be non empty set, R be Relation of D;
-  canceled 2;
-  func ExtendRel(R) -> Relation of D* means
-  :Def9:
-  for x,y be FinSequence of D
-holds [x,y] in it iff len x = len y & for n st n in dom x holds [x.n,y.n] in R;
-  existence
-  proof
-    defpred P[set,set] means for a,b be FinSequence of D st a = $1 & b = $2
-    holds len a = len b & for n st n in dom a holds [a.n,b.n] in R;
-    consider P be Relation of D*,D* such that
-A1: for x,y be set holds [x,y] in P iff x in D* & y in D* & P[x,y]
-    from RELSET_1:sch 1;
-    take P;
-    let a,b be FinSequence of D;
-    thus [a,b] in P implies len a = len b & for n st n in dom a holds [a.n,b.n
-    ] in R by A1;
-    assume
-    len a = len b & for n st n in dom a holds [a.n,b.n] in R;
-    then
-A2: P[a,b];
-    a in D* & b in D* by FINSEQ_1:def 11;
-    hence thesis by A1,A2;
-  end;
-  uniqueness
-  proof
-    let P,Q be Relation of D*;
-    assume that
-A3: for x,y be FinSequence of D holds [x,y] in P iff len x = len y &
-    for n st n in dom x holds [x.n,y.n] in R and
-A4: for x,y be FinSequence of D holds [x,y] in Q iff len x = len y &
-    for n st n in dom x holds [x.n,y.n] in R;
-    for a,b be set holds [a,b] in P iff [a,b] in Q
-    proof
-      let a,b be set;
-      thus [a,b] in P implies [a,b] in Q
-      proof
-        assume
-A5:     [a,b] in P;
-        then reconsider a1 = a, b1 = b as Element of D* by ZFMISC_1:106;
-        len a1 = len b1 & for n st n in dom a1 holds [a1.n,b1.n] in R by
-        A3,A5;
-        hence thesis by A4;
-      end;
-      assume
-A6:   [a,b] in Q;
-      then reconsider a1 = a, b1 = b as Element of D* by ZFMISC_1:106;
-      len a1 = len b1 & for n st n in dom a1 holds [a1.n,b1.n] in R by A4
-      ,A6;
-      hence thesis by A3;
-    end;
-    hence thesis by RELAT_1:def 2;
-  end;
-end;
-
-theorem Th18:
-  for D be non empty set holds ExtendRel(id D) = id (D*)
-proof
-  let D be non empty set;
-  set P = ExtendRel(id D), Q = id(D*);
-  for a,b be set holds [a,b] in P iff [a,b] in Q
-  proof
-    let a,b be set;
-    thus [a,b] in P implies [a,b] in Q
-    proof
-      assume
-A1:   [a,b] in P;
-      then reconsider a1 = a, b1 = b as Element of D* by ZFMISC_1:106;
-A2:   now
-        let n be Nat;
-        assume
-        n in dom a1;
-        then [a1.n,b1.n] in id D by A1,Def9;
-        hence a1.n = b1.n by RELAT_1:def 10;
-      end;
-      len a1 = len b1 by A1,Def9;
-      then a1 = b1 by A2,FINSEQ_2:10;
-      hence thesis by RELAT_1:def 10;
-    end;
-    assume
-A3: [a,b] in Q;
-    then reconsider a1 = a, b1 = b as Element of D* by ZFMISC_1:106;
-A4: a1 = b1 by A3,RELAT_1:def 10;
-A5: for n st n in dom a1 holds [a1.n,b1.n] in id D
-    proof
-      let n;
-      assume
-      n in dom a1;
-      then a1.n in D by FINSEQ_2:13;
-      hence thesis by A4,RELAT_1:def 10;
-    end;
-    len a1 = len b1 by A3,RELAT_1:def 10;
-    hence thesis by A5,Def9;
-  end;
-  hence thesis by RELAT_1:def 2;
 end;
 
 definition
@@ -704,7 +569,7 @@ FinSequence of U1 st x in dom o1 & y in dom o1 & [x,y] in ExtendRel(it) holds [
 A1: x in dom o1 and
     y in dom o1 and
 A2: [x,y] in ExtendRel(P);
-    [x,y] in id ((the carrier of U1)*) by A2,Th18;
+    [x,y] in id ((the carrier of U1)*) by A2,FINSEQ_3:130;
     then
 A3: x = y by RELAT_1:def 10;
     o1.x in rng o1 by A1,FUNCT_1:def 5;
@@ -715,56 +580,7 @@ end;
 reserve E for Congruence of U1;
 
 definition
-  let D be non empty set, R be Equivalence_Relation of D;
-  let y be FinSequence of Class(R), x be FinSequence of D;
-  pred x is_representatives_FS y means
-  :Def11:
-  len x = len y & for n st n in
-  dom x holds Class(R,x.n) = y.n;
-end;
-
-theorem Th19:
-  for D be non empty set, R be Equivalence_Relation of D, y be
-  FinSequence of Class(R) ex x be FinSequence of D st x is_representatives_FS y
-proof
-  let D be non empty set, R be Equivalence_Relation of D, y be FinSequence of
-  Class(R);
-  defpred P[set,set] means for u be Element of D st $2 = u holds Class(R,u) =
-  y.$1;
-A1: for e be set st e in dom y ex u be set st u in D & P[e,u]
-  proof
-    let e be set;
-    assume
-    e in dom y;
-    then y.e in rng y by FUNCT_1:def 5;
-    then consider a be Element of D such that
-A2: y.e = Class(R,a) by EQREL_1:45;
-    reconsider b = a as set;
-    take b;
-    thus b in D;
-    let u be Element of D;
-    assume
-    b = u;
-    hence thesis by A2;
-  end;
-  consider f being Function such that
-A3: dom f = dom y & rng f c= D & for e be set st e in dom y holds P[e,f.
-  e] from WELLORD2:sch 1(A1);
-  dom f = Seg len y by A3,FINSEQ_1:def 3;
-  then reconsider f as FinSequence by FINSEQ_1:def 2;
-  reconsider f as FinSequence of D by A3,FINSEQ_1:def 4;
-  take f;
-  thus len f = len y by A3,FINSEQ_3:31;
-  let n;
-  assume
-A4: n in dom f;
-  then f.n in rng f by FUNCT_1:def 5;
-  then reconsider u = f.n as Element of D;
-  Class(R,u) = y.n by A3,A4;
-  hence thesis;
-end;
-
-definition
+ canceled 4;
   let U1 be Universal_Algebra, E be Congruence of U1, o be operation of U1;
   func QuotOp(o,E) -> homogeneous quasi_total non empty PartFunc of (Class E)*
   ,(Class E) means
@@ -781,20 +597,19 @@ for x be FinSequence of the carrier of U1 st x is_representatives_FS y holds $2
 A1: for e be set st e in X ex u be set st u in Class(E) & P[e,u]
     proof
       let e be set;
-A2:   dom o = (arity o)-tuples_on the carrier of U1 by UNIALG_2:2
+A2:   dom o = (arity o)-tuples_on the carrier of U1 by MARGREL1:58
         .={q where q is Element of (the carrier of U1)*: len q = arity o} by
-      FINSEQ_2:def 4;
-      assume
-      e in X;
+FINSEQ_2:def 4;
+      assume e in X;
       then e in {s where s is Element of (Class E)*: len s = arity o} by
-      FINSEQ_2:def 4;
+FINSEQ_2:def 4;
       then consider s be Element of (Class E)* such that
 A3:   s = e and
 A4:   len s = arity o;
       consider x be FinSequence of the carrier of U1 such that
-A5:   x is_representatives_FS s by Th19;
+A5:   x is_representatives_FS s by FINSEQ_3:131;
       take y = Class(E,o.x);
-A6:   len x = arity o by A4,A5,Def11;
+A6:   len x = arity o by A4,A5,FINSEQ_3:def 4;
       x is Element of (the carrier of U1)* by FINSEQ_1:def 11;
       then
 A7:   x in dom o by A2,A6;
@@ -808,21 +623,21 @@ A9:   a = e;
       assume
 A10:  b is_representatives_FS a;
       then
-A11:  len b = arity o by A3,A4,A9,Def11;
+A11:  len b = arity o by A3,A4,A9,FINSEQ_3:def 4;
       for m st m in dom x holds [x.m,b.m] in E
       proof
         let m;
         assume
 A12:    m in dom x;
         then
-A13:    Class(E,x.m) = s.m & x.m in rng x by A5,Def11,FUNCT_1:def 5;
+A13:    Class(E,x.m) = s.m & x.m in rng x by A5,FINSEQ_3:def 4,FUNCT_1:def 5;
         dom x = Seg arity o by A6,FINSEQ_1:def 3
           .= dom b by A11,FINSEQ_1:def 3;
-        then Class(E,b.m) = s.m by A3,A9,A10,A12,Def11;
+        then Class(E,b.m) = s.m by A3,A9,A10,A12,FINSEQ_3:def 4;
         hence thesis by A13,EQREL_1:44;
       end;
       then
-A14:  [x,b] in ExtendRel(E) by A6,A11,Def9;
+A14:  [x,b] in ExtendRel(E) by A6,A11,FINSEQ_3:def 3;
       b is Element of (the carrier of U1)* by FINSEQ_1:def 11;
       then
       (ex n being Nat st n in dom the charact of(U1) & (the charact of U1
@@ -834,12 +649,11 @@ A14:  [x,b] in ExtendRel(E) by A6,A11,Def9;
 A15: dom F = X & rng F c= Class(E) & for e be set st e in X holds P[e,
     F.e] from WELLORD2:sch 1(A1);
     X in {m-tuples_on Class E: not contradiction};
-    then X c= union {m-tuples_on Class E: not contradiction} by ZFMISC_1:
-    92;
+    then X c= union {m-tuples_on Class E: not contradiction} by ZFMISC_1:92;
     then X c= (Class E)* by FINSEQ_2:128;
     then reconsider F as PartFunc of (Class E)*,Class E by A15,RELSET_1:11;
 A16: dom F = {t where t is Element of (Class E)*: len t = arity o} by A15,
-    FINSEQ_2:def 4;
+FINSEQ_2:def 4;
 A17: for x,y be FinSequence of Class E st len x = len y & x in dom F holds
     y in dom F
     proof
@@ -848,8 +662,7 @@ A17: for x,y be FinSequence of Class E st len x = len y & x in dom F holds
 A18:  len x = len y and
 A19:  x in dom F;
 A20:  y is Element of (Class E)* by FINSEQ_1:def 11;
-      ex t1 be Element of (Class E)* st x = t1 & len t1 = arity o by A16,
-      A19;
+      ex t1 be Element of (Class E)* st x = t1 & len t1 = arity o by A16,A19;
       hence thesis by A16,A18,A20;
     end;
 X:  ex x being FinSequence st x in dom F
@@ -861,23 +674,21 @@ X:  ex x being FinSequence st x in dom F
     dom F is with_common_domain
     proof
       let x,y be FinSequence;
-      assume
-      x in dom F & y in dom F;
+      assume x in dom F & y in dom F;
       then (ex t1 be Element of (Class E)* st x = t1 & len t1 = arity o )& ex
       t2 be Element of (Class E)* st y = t2 & len t2 = arity o by A16;
       hence thesis;
     end;
     then reconsider
     F as homogeneous quasi_total non empty PartFunc of (Class E)*,
-    Class E by A17,UNIALG_1:def 1,def 2,X;
+    Class E by A17,X,MARGREL1:def 22,def 23;
     take F;
     thus dom F = (arity o)-tuples_on (Class E) by A15;
     let y be FinSequence of (Class E);
     assume
 A21: y in dom F;
     let x be FinSequence of the carrier of U1;
-    assume
-    x is_representatives_FS y;
+    assume x is_representatives_FS y;
     hence thesis by A15,A21;
   end;
   uniqueness
@@ -900,7 +711,7 @@ FinSequence of the carrier of U1 st x is_representatives_FS y holds G.y = Class
 A26:  a in dom F;
       then reconsider b = a as FinSequence of Class(E) by FINSEQ_1:def 11;
       consider x be FinSequence of the carrier of U1 such that
-A27:  x is_representatives_FS b by Th19;
+A27:  x is_representatives_FS b by FINSEQ_3:131;
       F.b = Class(E,o.x) by A23,A26,A27;
       hence thesis by A22,A24,A25,A26,A27;
     end;
@@ -923,14 +734,12 @@ A1: for n be Nat st n in Seg len the charact of(U1) ex x be Element of
     PFuncs((Class E)*,(Class E)) st P[n,x]
     proof
       let n be Nat;
-      assume
-      n in Seg len the charact of(U1);
+      assume n in Seg len the charact of(U1);
       then n in dom the charact of(U1) by FINSEQ_1:def 3;
       then reconsider o = (the charact of(U1)).n as operation of U1 by
-      FUNCT_1:
-      def 5;
+FUNCT_1:def 5;
       reconsider x = QuotOp(o,E) as Element of PFuncs((Class E)*,(Class E)) by
-      PARTFUN1:119;
+PARTFUN1:119;
       take x;
       thus thesis;
     end;
@@ -941,8 +750,7 @@ A2: dom p = Seg len the charact of(U1) & for n be Nat st n in Seg len
     take p;
     thus len p = len the charact of(U1) by A2,FINSEQ_1:def 3;
     let n;
-    assume
-    n in dom p;
+    assume n in dom p;
     hence thesis by A2;
   end;
   uniqueness
@@ -962,10 +770,9 @@ A7:   n in dom F;
       dom F = Seg len the charact of(U1) by A3,FINSEQ_1:def 3;
       then n in dom the charact of(U1) by A7,FINSEQ_1:def 3;
       then reconsider o1 = (the charact of U1).n as operation of U1 by
-      FUNCT_1
-      :def 5;
-A8:   dom F = dom the charact of(U1) & dom G = dom the charact of(U1) by
-      A3,A5, FINSEQ_3:31;
+FUNCT_1:def 5;
+A8:   dom F = dom the charact of(U1) & dom G = dom the charact of(U1) by A3,A5,
+FINSEQ_3:31;
       F.n = QuotOp(o1,E) by A4,A7;
       hence F.n = G.n by A6,A8,A7;
     end;
@@ -973,11 +780,12 @@ A8:   dom F = dom the charact of(U1) & dom G = dom the charact of(U1) by
   end;
 end;
 
-theorem Th20:
-  for U1,E holds UAStr (# Class(E),QuotOpSeq(U1,E) #) is strict
-  Universal_Algebra
-proof
+definition
   let U1,E;
+  func QuotUnivAlg(U1,E) -> strict Universal_Algebra equals
+  UAStr (# Class(E),QuotOpSeq(U1,E) #);
+  coherence
+proof
   set UU = UAStr (# Class(E),QuotOpSeq(U1,E) #);
   for n be Nat,h be PartFunc of (Class E)*,(Class E) st n in dom QuotOpSeq
   (U1,E) & h = QuotOpSeq(U1,E).n holds h is homogeneous
@@ -990,13 +798,12 @@ A2: h = QuotOpSeq(U1,E).n;
     then n in Seg len the charact of U1 by Def13;
     then n in dom the charact of U1 by FINSEQ_1:def 3;
     then reconsider o = (the charact of U1).n as operation of U1 by
-    FUNCT_1:def
-    5;
+FUNCT_1:def 5;
     QuotOpSeq(U1,E).n = QuotOp(o,E) by A1,Def13;
     hence thesis by A2;
   end;
   then
-A3: the charact of UU is homogeneous by UNIALG_1:def 4;
+A3: the charact of UU is homogeneous by MARGREL1:def 24;
   for n be Nat ,h be PartFunc of (Class E)*,(Class E) st n in dom
   QuotOpSeq(U1,E) & h = QuotOpSeq(U1,E).n holds h is quasi_total
   proof
@@ -1007,15 +814,14 @@ A5: h = QuotOpSeq(U1,E).n;
     n in Seg len QuotOpSeq(U1,E) by A4,FINSEQ_1:def 3;
     then n in Seg len the charact of(U1) by Def13;
     then n in dom the charact of U1 by FINSEQ_1:def 3;
-    then reconsider o = (the charact of U1).n as operation of U1 by FUNCT_1:
-    def 5;
+    then reconsider o = (the charact of U1).n as operation of U1 by
+FUNCT_1:def 5;
     QuotOpSeq(U1,E).n = QuotOp(o,E) by A4,Def13;
     hence thesis by A5;
   end;
   then
-A6: the charact of UU is quasi_total by UNIALG_1:def 5;
-  for n be set st n in dom QuotOpSeq(U1,E) holds QuotOpSeq(U1,E).n is non
-  empty
+A6: the charact of UU is quasi_total by MARGREL1:def 25;
+  for n be set st n in dom QuotOpSeq(U1,E) holds QuotOpSeq(U1,E).n is non empty
   proof
     let n be set;
     assume
@@ -1025,8 +831,8 @@ A7: n in dom QuotOpSeq(U1,E);
     then
 A8: n in dom the charact of U1 by FINSEQ_1:def 3;
     reconsider n as Element of NAT by A7;
-    reconsider o = (the charact of U1).n as operation of U1 by A8,FUNCT_1:def
-    5;
+    reconsider o = (the charact of U1).n as operation of U1 by A8,FUNCT_1:def 5
+;
     QuotOpSeq(U1,E).n = QuotOp(o,E) by A7,Def13;
     hence thesis;
   end;
@@ -1041,21 +847,13 @@ A10: the charact of UU = {};
   end;
   hence thesis by A3,A6,A9,UNIALG_1:def 7,def 8,def 9;
 end;
-
-definition
-  let U1,E;
-  func QuotUnivAlg(U1,E) -> strict Universal_Algebra equals
-  UAStr (# Class(E),
-    QuotOpSeq(U1,E) #);
-  coherence by Th20;
 end;
 
 definition
   let U1,E;
   func Nat_Hom(U1,E) -> Function of U1,QuotUnivAlg(U1,E) means
   :Def15:
-  for u
-  be Element of U1 holds it.u = Class(E,u);
+  for u be Element of U1 holds it.u = Class(E,u);
   existence
   proof
     defpred P[Element of U1,set] means $2 = Class(E,$1);
@@ -1063,8 +861,8 @@ A1: for x being Element of U1 ex y being Element of QuotUnivAlg(U1,E) st P
     [x,y]
     proof
       let x be Element of U1;
-      reconsider y = Class(E,x) as Element of QuotUnivAlg(U1,E) by EQREL_1:def
-      5;
+      reconsider y = Class(E,x) as Element of QuotUnivAlg(U1,E) by
+EQREL_1:def 5;
       take y;
       thus thesis;
     end;
@@ -1088,9 +886,10 @@ A4: for u be Element of U1 holds g.u = Class(E,u);
   end;
 end;
 
+canceled 3;
+
 theorem Th21:
-  for U1,E holds Nat_Hom(U1,E) is_homomorphism U1,QuotUnivAlg(U1,E
-  )
+  for U1,E holds Nat_Hom(U1,E) is_homomorphism U1,QuotUnivAlg(U1,E)
 proof
   let U1,E;
   set f = Nat_Hom(U1,E), u1 = the carrier of U1, qu = the carrier of
@@ -1105,8 +904,8 @@ A4: len (signature QuotUnivAlg(U1,E)) = len the charact of(QuotUnivAlg(U1,E)
     assume
 A5: n in dom (signature U1);
     then n in dom the charact of(U1) by A1,A2,FINSEQ_1:def 3;
-    then reconsider o1 = (the charact of U1).n as operation of U1 by FUNCT_1:
-    def 5;
+    then reconsider o1 = (the charact of U1).n as operation of U1 by
+FUNCT_1:def 5;
     n in dom QuotOpSeq(U1,E) by A3,A1,A2,A5,FINSEQ_1:def 3;
     then
 A6: QuotOpSeq(U1,E).n = QuotOp(o1,E) by Def13;
@@ -1116,60 +915,58 @@ A6: QuotOpSeq(U1,E).n = QuotOp(o1,E) by Def13;
 A7: b in dom cl by XBOOLE_0:def 1;
     reconsider b as Element of qu* by A7;
     dom QuotOp(o1,E) = (arity o1)-tuples_on Class(E) by Def12;
-    then b in {w where w is Element of (Class(E))*: len w = arity o1} by
-    A7,FINSEQ_2:def 4;
+    then b in {w where w is Element of (Class(E))*: len w = arity o1} by A7,
+FINSEQ_2:def 4;
     then ex w be Element of (Class(E))* st w = b & len w = arity o1;
     then
-A8: arity cl = arity o1 by A7,UNIALG_1:def 10;
+A8: arity cl = arity o1 by A7,MARGREL1:def 26;
     n in dom (signature QuotUnivAlg(U1,E)) & (signature U1).n = arity o1
     by A3,A4,A1,A2,A5,FINSEQ_1:def 3,UNIALG_1:def 11;
     hence (signature U1).n = (signature QuotUnivAlg(U1,E)).n by A6,A8,
-    UNIALG_1:def 11;
+UNIALG_1:def 11;
   end;
   hence signature U1 = signature QuotUnivAlg(U1,E) by A3,A4,A1,FINSEQ_2:10;
   let n;
-  assume
-  n in dom the charact of(U1);
+  assume n in dom the charact of(U1);
   then n in Seg len the charact of(U1) by FINSEQ_1:def 3;
   then
 A9: n in dom QuotOpSeq(U1,E) by A3,FINSEQ_1:def 3;
   let o1 be operation of U1, o2 be operation of QuotUnivAlg(U1,E);
   assume
-  (the charact of U1).n = o1 & o2 = (the charact of QuotUnivAlg(U1,E)
-  ).n;
+  (the charact of U1).n = o1 & o2 = (the charact of QuotUnivAlg(U1,E) ).n;
   then
 A10: o2 = QuotOp(o1,E) by A9,Def13;
   let x be FinSequence of U1;
   reconsider x1 = x as Element of u1* by FINSEQ_1:def 11;
   reconsider fx = f*x as FinSequence of Class(E);
   reconsider fx as Element of (Class(E))* by FINSEQ_1:def 11;
-A11: len (f*x) = len x by Th1;
+A11: len (f*x) = len x by FINSEQ_3:129;
   now
     let m;
     assume
 A12: m in dom x;
     then
-A13: m in dom(f*x) by Th1;
+A13: m in dom(f*x) by FINSEQ_3:129;
     x.m in rng x by A12,FUNCT_1:def 5;
     then reconsider xm = x.m as Element of u1;
     thus Class(E,x.m) = f.xm by Def15
-      .= fx.m by A13,Th1;
+      .= fx.m by A13,FINSEQ_3:129;
   end;
   then
-A14: x is_representatives_FS fx by A11,Def11;
+A14: x is_representatives_FS fx by A11,FINSEQ_3:def 4;
   assume
 A15: x in dom o1;
   then o1.x in rng o1 by FUNCT_1:def 5;
   then reconsider ox = o1.x as Element of u1;
-  dom o1 = (arity o1)-tuples_on u1 by UNIALG_2:2
+  dom o1 = (arity o1)-tuples_on u1 by MARGREL1:58
     .= {p where p is Element of u1* : len p = arity o1} by FINSEQ_2:def 4;
   then
 A16: ex p be Element of u1* st p = x1 & len p = arity o1 by A15;
 A17: f.(o1.x) = Class(E,ox) by Def15
     .= Class(E,o1.x);
   dom QuotOp(o1,E) = (arity o1)-tuples_on Class(E) by Def12
-    .= {q where q is Element of (Class(E))*: len q = arity o1} by FINSEQ_2:
-  def 4;
+    .= {q where q is Element of (Class(E))*: len q = arity o1} by
+FINSEQ_2:def 4;
   then fx in dom QuotOp(o1,E) by A16,A11;
   hence thesis by A17,A10,A14,Def12;
 end;
@@ -1202,8 +999,7 @@ definition
 A1: f is_homomorphism U1,U2;
   func Cng(f) -> Congruence of U1 means
   :Def16:
-  for a,b be Element of U1 holds
-  [a,b] in it iff f.a = f.b;
+  for a,b be Element of U1 holds [a,b] in it iff f.a = f.b;
   existence
   proof
     defpred P[set,set] means f.$1 = f.$2;
@@ -1214,8 +1010,7 @@ A2: for x,y being Element of u1 holds [x,y] in R iff P[x,y] from
     R is_reflexive_in u1
     proof
       let x;
-      assume
-      x in u1;
+      assume x in u1;
       then reconsider x1 = x as Element of u1;
       f.x1 =f.x1;
       hence thesis by A2;
@@ -1242,8 +1037,8 @@ A8:   [x,y] in R;
       f.x1 = f.y1 by A2,A8;
       hence thesis by A2;
     end;
-    then reconsider R as Equivalence_Relation of U1 by A3,A4,PARTFUN1:def 4,
-    RELAT_2:def 11,def 16;
+    then reconsider R as Equivalence_Relation of U1 by A3,A4,PARTFUN1:def 4
+,RELAT_2:def 11,def 16;
     now
       U1,U2 are_similar by A1,Def1;
       then
@@ -1254,21 +1049,20 @@ A10:  n in dom the charact of(U1) and
 A11:  o = (the charact of U1).n;
       len (signature U1) = len the charact of(U1) & len (signature U2) =
       len the charact of(U2) by UNIALG_1:def 11;
-      then dom the charact of(U2) = dom the charact of(U1) by A9,
-      FINSEQ_3:31;
+      then dom the charact of(U2) = dom the charact of(U1) by A9,FINSEQ_3:31;
       then reconsider o2 = (the charact of U2).n as operation of U2 by A10,
-      FUNCT_1:def 5;
+FUNCT_1:def 5;
       let x,y be FinSequence of U1;
       assume that
 A12:  x in dom o & y in dom o and
 A13:  [x,y] in ExtendRel(R);
       o.x in rng o & o.y in rng o by A12,FUNCT_1:def 5;
       then reconsider ox = o.x, oy = o.y as Element of u1;
-A14:  len x = len y by A13,Def9;
-A15:  len (f*y) = len y by Th1;
+A14:  len x = len y by A13,FINSEQ_3:def 3;
+A15:  len (f*y) = len y by FINSEQ_3:129;
       then
 A16:  dom (f*y) = Seg len x by A14,FINSEQ_1:def 3;
-A17:  len (f*x) = len x by Th1;
+A17:  len (f*x) = len x by FINSEQ_3:129;
 A18:  now
         let m be Nat;
         assume
@@ -1279,12 +1073,12 @@ A20:    y.m in rng y by FUNCT_1:def 5;
 A21:    m in dom x by A16,A19,FINSEQ_1:def 3;
         then x.m in rng x by FUNCT_1:def 5;
         then reconsider xm = x.m, ym = y.m as Element of u1 by A20;
-        [x.m,y.m] in R by A13,A21,Def9;
+        [x.m,y.m] in R by A13,A21,FINSEQ_3:def 3;
         then
 A22:    f.xm = f.ym by A2
-          .= (f*y).m by A19,Th1;
+          .= (f*y).m by A19,FINSEQ_3:129;
         m in dom (f*x) by A17,A16,A19,FINSEQ_1:def 3;
-        hence (f*y).m = (f*x).m by A22,Th1;
+        hence (f*y).m = (f*x).m by A22,FINSEQ_3:129;
       end;
       f.(o.x) = o2.(f*x) & f.(o.y) = o2.(f*y) by A1,A10,A11,A12,Def1;
       then f.(ox) = f.(oy) by A14,A17,A15,A18,FINSEQ_2:10;
@@ -1294,8 +1088,7 @@ A22:    f.xm = f.ym by A2
     take R;
     let a,b be Element of u1;
     thus [a,b] in R implies f.a = f.b by A2;
-    assume
-    f.a = f.b;
+    assume f.a = f.b;
     hence thesis by A2;
   end;
   uniqueness
@@ -1332,8 +1125,7 @@ definition
 A1: f is_homomorphism U1,U2;
   func HomQuot(f) -> Function of QuotUnivAlg(U1,Cng(f)),U2 means
   :Def17:
-  for a
-  be Element of U1 holds it.(Class(Cng f,a)) = f.a;
+  for a be Element of U1 holds it.(Class(Cng f,a)) = f.a;
   existence
   proof
     set qa = QuotUnivAlg(U1,Cng(f)), cqa = the carrier of qa, u1 = the carrier
@@ -1353,8 +1145,7 @@ A5:   x1 = Class(Cng f,a) by A3,EQREL_1:def 5;
       take y = f.a;
       thus y in u2;
       let b be Element of u1;
-      assume
-      x = Class(Cng f,b);
+      assume x = Class(Cng f,b);
       then b in Class(Cng f,a) by A5,EQREL_1:31;
       then [b,a] in Cng(f) by EQREL_1:27;
       hence thesis by A1,Def16;
@@ -1412,10 +1203,9 @@ A5: len (signature U1) = len the charact of(U1) & len (signature qa) =
     len the charact of(qa) by UNIALG_1:def 11;
 A6: dom the charact of(qa) = Seg len (the charact of qa) & dom the
     charact of(U1 ) = Seg len (the charact of U1) by FINSEQ_1:def 3;
-    then reconsider o1 = (the charact of U1).n as operation of U1 by A3,A4,
-    A5,
-    FUNCT_1:def 5;
-A7: dom o1 = (arity o1)-tuples_on u1 by UNIALG_2:2
+    then reconsider o1 = (the charact of U1).n as operation of U1 by A3,A4,A5,
+FUNCT_1:def 5;
+A7: dom o1 = (arity o1)-tuples_on u1 by MARGREL1:58
       .= {p where p is Element of u1* : len p = arity o1} by FINSEQ_2:def 4;
     let oq be operation of qa, o2 be operation of U2;
     assume that
@@ -1427,12 +1217,12 @@ A10: x in dom oq;
     reconsider x1 = x as FinSequence of Class(Cng f);
     reconsider x1 as Element of (Class(Cng f))* by FINSEQ_1:def 11;
     consider y be FinSequence of U1 such that
-A11: y is_representatives_FS x1 by Th19;
+A11: y is_representatives_FS x1 by FINSEQ_3:131;
     reconsider y as Element of u1* by FINSEQ_1:def 11;
-A12: len x1 = len y by A11,Def11;
+A12: len x1 = len y by A11,FINSEQ_3:def 4;
     then
-A13: len (F*x) = len y by Th1;
-A14: len y = len (f*y) by Th1;
+A13: len (F*x) = len y by FINSEQ_3:129;
+A14: len y = len (f*y) by FINSEQ_3:129;
 A15: now
       let m be Nat;
       assume
@@ -1442,10 +1232,10 @@ A17:  m in dom (F*x) by A13,FINSEQ_1:def 3;
 A18:  m in dom(f*y) by A14,A16,FINSEQ_1:def 3;
 A19:  m in dom y by A16,FINSEQ_1:def 3;
       then reconsider ym = y.m as Element of u1 by FINSEQ_2:13;
-      x1.m = Class(Cng f,y.m) by A11,A19,Def11;
-      hence (F*x).m = F.(Class(Cng f,ym)) by A17,Th1
+      x1.m = Class(Cng f,y.m) by A11,A19,FINSEQ_3:def 4;
+      hence (F*x).m = F.(Class(Cng f,ym)) by A17,FINSEQ_3:129
         .= f.(y.m) by A1,Def17
-        .= (f*y).m by A18,Th1;
+        .= (f*y).m by A18,FINSEQ_3:129;
     end;
     dom(F*x) = Seg len y by A13,FINSEQ_1:def 3;
     then
@@ -1453,9 +1243,9 @@ A20: o2.(F*x) = o2.(f*y) by A13,A14,A15,FINSEQ_2:10;
 A21: oq = QuotOp(o1,Cng f) by A4,A8,Def13;
     then dom oq = (arity o1)-tuples_on Class(Cng f) by Def12
       .= {w where w is Element of (Class(Cng f))*: len w = arity o1} by
-    FINSEQ_2:def 4;
-    then ex w be Element of (Class(Cng f))* st w = x1 & len w = arity o1 by
-    A10;
+FINSEQ_2:def 4;
+    then ex w be Element of (Class(Cng f))* st w = x1 & len w = arity o1 by A10
+;
     then
 A22: y in dom o1 by A12,A7;
     then o1.y in rng o1 by FUNCT_1:def 5;
@@ -1507,15 +1297,14 @@ A5: rng F = u2
   proof
     thus rng F c= u2;
     let x;
-    assume
-    x in u2;
+    assume x in u2;
     then consider y such that
 A6: y in dom f and
 A7: f.y = x by A4,FUNCT_1:def 5;
     reconsider y as Element of u1 by A6;
     set u = Class(Cng f,y);
-A8: dom F = the carrier of qa & u in Class(Cng f) by EQREL_1:def 5 ,
-    FUNCT_2:def 1;
+A8: dom F = the carrier of qa & u in Class(Cng f) by EQREL_1:def 5
+,FUNCT_2:def 1;
     F.u = x by A2,A7,Def17;
     hence thesis by A8,FUNCT_1:def 5;
   end;
@@ -1524,12 +1313,10 @@ A8: dom F = the carrier of qa & u in Class(Cng f) by EQREL_1:def 5 ,
 end;
 
 theorem
-  f is_epimorphism U1,U2 implies QuotUnivAlg(U1,Cng(f)),U2
-  are_isomorphic
+  f is_epimorphism U1,U2 implies QuotUnivAlg(U1,Cng(f)),U2 are_isomorphic
 proof
   assume
 A1: f is_epimorphism U1,U2;
   take HomQuot(f);
   thus thesis by A1,Th24;
 end;
-

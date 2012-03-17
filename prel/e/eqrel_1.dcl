@@ -11,6 +11,8 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="EQREL_1"/>
 </Signature>
 <RCluster aid="EQREL_1" nr="1">
@@ -30,7 +32,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="26">
+<Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -43,7 +45,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -70,9 +72,26 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="26">
+<Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
+</Cluster>
+</RCluster>
+<RCluster aid="EQREL_1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="7">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="4"/>
 </Cluster>
 </RCluster>
 <FCluster aid="EQREL_1" nr="1">
@@ -81,7 +100,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="55">
+<Func kind="K" nr="85">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -97,7 +116,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="55">
+<Func kind="K" nr="85">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -131,7 +150,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -162,7 +181,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="61">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -179,7 +198,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -194,7 +213,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

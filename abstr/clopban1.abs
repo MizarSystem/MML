@@ -11,13 +11,14 @@ environ
       CFUNCT_1, RLVECT_1, LOPBAN_1, SUPINF_2, ARYTM_3, ARYTM_1, COMPLEX1,
       ALGSTR_0, MONOID_0, TARSKI, MSSUBFAM, UNIALG_1, RLSUB_1, RSSPACE, NAT_1,
       PRE_TOPC, SEQ_2, ORDINAL2, NORMSP_1, XREAL_0, XXREAL_0, CARD_1, REAL_1,
-      XXREAL_2, SEQ_4, REWRITE1, RSSPACE3, CSSPACE3, SEQ_1, VALUED_1, CLOPBAN1;
+      XXREAL_2, SEQ_4, REWRITE1, RSSPACE3, CSSPACE3, SEQ_1, VALUED_1, CLOPBAN1,
+      METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XCMPLX_0,
-      XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, MONOID_0,
-      ORDINAL1, NUMBERS, MEASURE6, RLVECT_1, NORMSP_1, VALUED_1, SEQ_1, SEQ_2,
-      SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1,
-      GRCAT_1;
+      XXREAL_0, XXREAL_2, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0,
+      MONOID_0, ORDINAL1, NUMBERS, MEASURE6, RLVECT_1, NORMSP_0, NORMSP_1,
+      VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE,
+      CSSPACE3, LOPBAN_1, GRCAT_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
       FUNCSDOM, MONOID_0, MEASURE6, LOPBAN_1, CSSPACE3, SEQ_1, XXREAL_2, SEQ_4,
       RELSET_1, BINOP_2, RVSUM_1, SEQ_2;
@@ -87,8 +88,8 @@ theorem :: CLOPBAN1:8
   (FuncExtMult(X,Y)).[1r,f] = f;
 
 theorem :: CLOPBAN1:9
-  (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] = (FuncExtMult(X,
-  Y)).[a*b,f];
+  (FuncExtMult(X,Y)).[a,(FuncExtMult(X,Y)).[b,f]] = (FuncExtMult(X, Y)).[a*b,f]
+;
 
 theorem :: CLOPBAN1:10
   (FuncAdd(X,Y)).((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[b,f
@@ -146,8 +147,7 @@ definition
   attr IT is homogeneous means
 :: CLOPBAN1:def 4
 
-  for x being VECTOR of X, r being Complex
-  holds IT.(r*x) = r*IT.x;
+  for x being VECTOR of X, r being Complex holds IT.(r*x) = r*IT.x;
 end;
 
 registration
@@ -178,8 +178,7 @@ end;
 canceled;
 
 theorem :: CLOPBAN1:15
-  for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is
-  linearly-closed;
+  for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is linearly-closed;
 
 theorem :: CLOPBAN1:16
   for X,Y be ComplexLinearSpace holds CLSStruct (# LinearOperators(X,Y),
@@ -276,8 +275,7 @@ definition
   C_VectorSpace_of_LinearOperators(X,Y) means
 :: CLOPBAN1:def 8
 
-  for x being set holds x in
-  it iff x is bounded LinearOperator of X,Y;
+  for x being set holds x in it iff x is bounded LinearOperator of X,Y;
 end;
 
 registration
@@ -372,7 +370,7 @@ end;
 
 theorem :: CLOPBAN1:30
   for X,Y be ComplexNormSpace, g be bounded LinearOperator of X,Y
-  holds PreNorms(g) is non empty bounded_above;
+  holds PreNorms(g) is bounded_above;
 
 theorem :: CLOPBAN1:31
   for X,Y be ComplexNormSpace, g be LinearOperator of X,Y holds g is
@@ -381,7 +379,7 @@ theorem :: CLOPBAN1:31
 theorem :: CLOPBAN1:32
   for X,Y be ComplexNormSpace ex NORM be Function of
 BoundedLinearOperators(X,Y),REAL st for f be set st f in BoundedLinearOperators
-  (X,Y) holds NORM.f = sup PreNorms(modetrans(f,X,Y));
+  (X,Y) holds NORM.f = upper_bound PreNorms(modetrans(f,X,Y));
 
 definition
   let X, Y be ComplexNormSpace;
@@ -390,7 +388,7 @@ definition
 :: CLOPBAN1:def 12
 
   for x be set st x in BoundedLinearOperators(X,Y) holds
-  it.x = sup PreNorms(modetrans(x,X,Y));
+  it.x = upper_bound PreNorms(modetrans(x,X,Y));
 end;
 
 theorem :: CLOPBAN1:33
@@ -399,7 +397,7 @@ theorem :: CLOPBAN1:33
 
 theorem :: CLOPBAN1:34
   for X,Y be ComplexNormSpace, f be bounded LinearOperator of X,Y
-  holds BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(f);
+  holds BoundedLinearOperatorsNorm(X,Y).f = upper_bound PreNorms(f);
 
 definition
   let X,Y be ComplexNormSpace;
@@ -460,7 +458,8 @@ theorem :: CLOPBAN1:41
 
 theorem :: CLOPBAN1:42
   for X,Y be ComplexNormSpace holds
-  C_NormSpace_of_BoundedLinearOperators(X,Y) is ComplexNormSpace-like;
+  C_NormSpace_of_BoundedLinearOperators(X,Y) is
+   reflexive discerning ComplexNormSpace-like;
 
 theorem :: CLOPBAN1:43
   for X,Y be ComplexNormSpace holds
@@ -468,9 +467,11 @@ theorem :: CLOPBAN1:43
 
 registration
   let X,Y be ComplexNormSpace;
-  cluster C_NormSpace_of_BoundedLinearOperators(X,Y) -> ComplexNormSpace-like
+  cluster C_NormSpace_of_BoundedLinearOperators(X,Y) ->
+    reflexive discerning ComplexNormSpace-like
     vector-distributive scalar-distributive scalar-associative scalar-unital
-    Abelian add-associative right_zeroed right_complementable;
+    Abelian add-associative right_zeroed
+    right_complementable;
 end;
 
 theorem :: CLOPBAN1:44
@@ -515,4 +516,3 @@ registration
   let Y be ComplexBanachSpace;
   cluster C_NormSpace_of_BoundedLinearOperators (X,Y) -> complete;
 end;
-

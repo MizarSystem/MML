@@ -9,7 +9,7 @@ environ
  vocabularies NUMBERS, SUBSET_1, REAL_1, PARTFUN1, SEQFUNC, XREAL_0, ORDINAL1,
       VALUED_1, RELAT_1, ARYTM_1, MEMBER_1, FUNCT_1, ARYTM_3, TARSKI, XBOOLE_0,
       CARD_1, NAT_1, VALUED_0, ZFMISC_1, SEQ_1, FUNCOP_1, XXREAL_0, CARD_3,
-      SERIES_1, DIFF_1;
+      SERIES_1, DIFF_1, FUNCT_2;
  notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
       TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
       VALUED_0, VALUED_1, SEQ_1, FUNCOP_1, NAT_D, NEWTON, MEASURE6, FUNCT_2,
@@ -29,7 +29,7 @@ begin
 
 reserve n,m,k,i for Element of NAT,
   h,r,r1,r2,x0,x1,x2,x for Real,
-  f for PartFunc of REAL,REAL,
+
   S for Functional_Sequence of REAL,REAL,
   y for set;
 
@@ -38,8 +38,7 @@ definition
   let h be real number;
   func Shift(f,h) -> PartFunc of REAL,REAL means
   :Def1:
-  dom it = -h ++ dom f &
-  for x st x in (-h ++ dom f) holds it.x = f.(x+h);
+  dom it = -h ++ dom f & for x st x in (-h ++ dom f) holds it.x = f.(x+h);
   existence
   proof
     deffunc F(Real) = f.($1+h);
@@ -57,8 +56,7 @@ A2: X c= dom F by TARSKI:def 3;
     hence dom F = X by A2,XBOOLE_0:def 10;
     now
       let x;
-      assume
-      x in X;
+      assume x in X;
       then x in dom F by A1;
       hence F.x = f.(x+h) by A1;
     end;
@@ -139,9 +137,9 @@ definition
   coherence;
 end;
 
-definition
+registration
   let f be Function of REAL,REAL, h be real number;
-  redefine func fD(f,h) -> Function of REAL,REAL;
+  cluster fD(f,h) -> quasi_total;
   coherence
   proof
     dom fD(f,h) = dom Shift(f,h) /\ dom f by VALUED_1:12
@@ -159,9 +157,9 @@ definition
   coherence;
 end;
 
-definition
+registration
   let f be Function of REAL,REAL, h be real number;
-  redefine func bD(f,h) -> Function of REAL,REAL;
+  cluster bD(f,h) -> quasi_total;
   coherence
   proof
     dom bD(f,h) = dom Shift(f,-h) /\ dom f by VALUED_1:12
@@ -181,9 +179,9 @@ definition
   coherence;
 end;
 
-definition
+registration
   let f be Function of REAL,REAL, h be real number;
-  redefine func cD(f,h) -> Function of REAL,REAL;
+  cluster cD(f,h) -> quasi_total;
   coherence
   proof
     dom cD(f,h) = dom Shift(f,h/2) /\ dom Shift(f,-h/2) by VALUED_1:12
@@ -219,7 +217,6 @@ A1: for n be Element of NAT
     consider g be Function of NAT, PFuncs (REAL,REAL) such that
 A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     RECDEF_1:sch 2(A1);
-    defpred P[Nat] means g.$1 is PartFunc of REAL,REAL;
     reconsider g as Functional_Sequence of REAL,REAL;
     take g;
     thus g.0 = f by A2;
@@ -259,8 +256,6 @@ end;
 
 reserve f,f1,f2 for Function of REAL,REAL;
 
-Lm1: fD(f,h) is Function of REAL,REAL;
-
 theorem Th2:
   for n be Nat holds fdif(f,h).n is Function of REAL,REAL
 proof
@@ -269,7 +264,7 @@ A1: for k be Nat st X[k] holds X[k+1]
   proof
     let k be Nat;
     assume fdif(f,h).k is Function of REAL,REAL;
-    then fD(fdif(f,h).k,h) is Function of REAL,REAL by Lm1;
+    then fD(fdif(f,h).k,h) is Function of REAL,REAL;
     hence thesis by Def6;
   end;
 A2: X[0] by Def6;
@@ -521,8 +516,7 @@ theorem
   (fdif(f,h).1).x = Shift(f,h).x - f.x
 proof
   set f1 = Shift(f,h);
-  (fdif(f,h).1).x = fdif(f,h).(0+1).x
-    .= fD(fdif(f,h).0,h).x by Def6
+  (fdif(f,h).1).x = fdif(f,h).(0+1).x .= fD(fdif(f,h).0,h).x by Def6
     .= fD(f,h).x by Def6
     .= f.(x+h) - f.x by Th3
     .= f1.x - f.x by Def2;
@@ -552,7 +546,6 @@ A1: for n for x being Element of PFuncs(REAL,REAL) ex y being Element of
     consider g be Function of NAT, PFuncs (REAL,REAL) such that
 A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     RECDEF_1:sch 2(A1);
-    defpred P[Nat] means g.$1 is PartFunc of REAL,REAL;
     reconsider g as Functional_Sequence of REAL,REAL;
     take g;
     thus g.0 = f by A2;
@@ -590,8 +583,6 @@ notation
   synonym bdif(f,h) for backward_difference(f,h);
 end;
 
-Lm2: bD(f,h) is Function of REAL,REAL;
-
 theorem Th12:
   for n be Nat holds bdif(f,h).n is Function of REAL,REAL
 proof
@@ -600,7 +591,7 @@ A1: for k be Nat st X[k] holds X[k+1]
   proof
     let k be Nat;
     assume bdif(f,h).k is Function of REAL,REAL;
-    then bD(bdif(f,h).k,h) is Function of REAL,REAL by Lm2;
+    then bD(bdif(f,h).k,h) is Function of REAL,REAL;
     hence thesis by Def7;
   end;
 A2: X[0] by Def7;
@@ -827,8 +818,7 @@ theorem
   (bdif(f,h).1).x = f.x - Shift(f,-h).x
 proof
   set f2 = Shift(f,-h);
-  (bdif(f,h).1).x = bdif(f,h).(0+1).x
-    .= bD(bdif(f,h).0,h).x by Def7
+  (bdif(f,h).1).x = bdif(f,h).(0+1).x .= bD(bdif(f,h).0,h).x by Def7
     .= bD(f,h).x by Def7
     .= f.x - f.(x-h) by Th4
     .= f.x - f.(x+-h)
@@ -860,7 +850,6 @@ A1: for n for x being Element of PFuncs(REAL,REAL) ex y being Element of
     consider g be Function of NAT, PFuncs (REAL,REAL) such that
 A2: g.0 = fZ & for n being Element of NAT holds R[n,g.n,g.(n+1)] from
     RECDEF_1:sch 2(A1);
-    defpred P[Nat] means g.$1 is PartFunc of REAL,REAL;
     reconsider g as Functional_Sequence of REAL,REAL;
     take g;
     thus g.0 = f by A2;
@@ -898,8 +887,6 @@ notation
   synonym cdif(f,h) for central_difference(f,h);
 end;
 
-Lm3: cD(f,h) is Function of REAL,REAL;
-
 theorem Th19:
   for n being Nat holds cdif(f,h).n is Function of REAL,REAL
 proof
@@ -907,9 +894,8 @@ proof
 A1: for k be Nat st X[k] holds X[k+1]
   proof
     let k be Nat;
-    assume
-    cdif(f,h).k is Function of REAL,REAL;
-    then cD(cdif(f,h).k,h) is Function of REAL,REAL by Lm3;
+    assume cdif(f,h).k is Function of REAL,REAL;
+    then cD(cdif(f,h).k,h) is Function of REAL,REAL;
     hence thesis by Def8;
   end;
 A2: X[0] by Def8;
@@ -1137,8 +1123,7 @@ theorem
 proof
   set f2 = Shift(f,-h/2);
   set f1 = Shift(f,h/2);
-  (cdif(f,h).1).x = cdif(f,h).(0+1).x
-    .= cD(cdif(f,h).0,h).x by Def8
+  (cdif(f,h).1).x = cdif(f,h).(0+1).x .= cD(cdif(f,h).0,h).x by Def8
     .= cD(f,h).x by Def8
     .= f.(x+h/2) - f.(x-h/2) by Th5
     .= f1.x - f.(x+-h/2) by Def2
@@ -1329,8 +1314,7 @@ end;
 theorem
   [!f,x0,x1!] = [!f,x1,x0!]
 proof
-  thus [!f,x0,x1!] = (-(f.x1-f.x0))/(-(x1-x0))
-    .= [!f,x1,x0!] by XCMPLX_1:192;
+  thus [!f,x0,x1!] = (-(f.x1-f.x0))/(-(x1-x0)) .= [!f,x1,x0!] by XCMPLX_1:192;
 end;
 
 theorem
@@ -1342,8 +1326,7 @@ A1: x0 in dom f by FUNCT_2:def 1;
   x1 in REAL;
   then
 A2: x1 in dom f by FUNCT_2:def 1;
-  assume
-  f is constant;
+  assume f is constant;
   then f.x0 = f.x1 by A1,A2,FUNCT_1:def 16;
   hence thesis;
 end;
@@ -1395,8 +1378,7 @@ A1: x0,x1,x2 are_mutually_different;
   then
 A2: x1-x2<>0 by ZFMISC_1:def 5;
 A3: x1-x0<>0 by A1,ZFMISC_1:def 5;
-A4: [!f,x0,x1,x2!] = ((f.x0-f.x1)/(-(x1-x0)) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0
-  ))
+A4: [!f,x0,x1,x2!] = ((f.x0-f.x1)/(-(x1-x0)) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0 ))
     .= (-(f.x0-f.x1)/(x1-x0) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0)) by XCMPLX_1:
   189
     .= (-((f.x0-f.x1)/(x1-x0) + (f.x1-f.x2)/(x1-x2)))/(-(x2-x0))
@@ -1404,8 +1386,7 @@ A4: [!f,x0,x1,x2!] = ((f.x0-f.x1)/(-(x1-x0)) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0
     .= (((f.x0-f.x1)*x12 + (f.x1-f.x2)*x10)/(x10*x12))/x20 by A2,A3,
   XCMPLX_1:117
     .= (f.x0*x12 + f.x1*x20 - f.x2*x10)/(x10*x12*x20) by XCMPLX_1:79;
-A5: [!f,x2,x1,x0!] = ((-(f.x1-f.x2))/(-(x1-x2)) - (f.x1-f.x0)/(x1-x0))/(x2-
-  x0)
+A5: [!f,x2,x1,x0!] = ((-(f.x1-f.x2))/(-(x1-x2)) - (f.x1-f.x0)/(x1-x0))/(x2- x0)
     .= ((f.x1-f.x2)/(x1-x2) - (f.x1-f.x0)/(x1-x0))/(x2-x0) by XCMPLX_1:192
     .= (((f.x1-f.x2)*x10 - (f.x1-f.x0)*x12)/(x12*x10))/x20 by A2,A3,
   XCMPLX_1:131
@@ -1615,4 +1596,3 @@ A16: (S.2).0 = (2 choose 0) * (fdif(f1,h).0).x * fdif(f2,h).(2-'0).(x+0*h)
     .= fdif(f1(#)f2,h).2.x by A13,A16,A8,A15,SERIES_1:def 1;
   hence thesis by A11;
 end;
-

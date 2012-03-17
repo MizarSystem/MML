@@ -2,8 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -12,6 +10,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
@@ -42,20 +42,20 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
-<Func kind="K" nr="291"/>
-<Func kind="K" nr="283">
+<Func kind="K" nr="51">
+<Func kind="K" nr="296"/>
+<Func kind="K" nr="288">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN18" nr="2">
@@ -63,20 +63,20 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
-<Func kind="K" nr="291"/>
-<Func kind="K" nr="285">
+<Func kind="K" nr="51">
+<Func kind="K" nr="296"/>
+<Func kind="K" nr="290">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN18" nr="3">
@@ -84,20 +84,20 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
-<Func kind="K" nr="290"/>
-<Func kind="K" nr="286">
+<Func kind="K" nr="51">
+<Func kind="K" nr="295"/>
+<Func kind="K" nr="291">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN18" nr="4">
@@ -105,20 +105,20 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
-<Func kind="K" nr="290"/>
-<Func kind="K" nr="284">
+<Func kind="K" nr="51">
+<Func kind="K" nr="295"/>
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN18" nr="5">
@@ -126,18 +126,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="283">
+<Func kind="K" nr="288">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -148,18 +148,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="285">
+<Func kind="K" nr="290">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -170,18 +170,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="284">
+<Func kind="K" nr="289">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -192,18 +192,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="286">
+<Func kind="K" nr="291">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="48">
-<Func kind="K" nr="275">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -14,16 +14,17 @@ environ
       SCMNORM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, TREES_2, TREES_3, TREES_4,
-      ORDINAL1, FINSET_1, AFINSQ_1, STRUCT_0, AMI_1, AMI_2, AMI_3, SCM_1,
+      ORDINAL1, FINSET_1, AFINSQ_1, STRUCT_0,
+      COMPOS_1, AMI_1, AMI_2, AMI_3, SCM_1,
       FINSEQ_1, FINSEQ_2, LANG1, BINTREE1, DTCONSTR, LIMFUNC1, PARTFUN1,
       PRE_POLY;
  constructors LIMFUNC1, DTCONSTR, BINTREE1, SCM_1, DOMAIN_1, PRE_POLY,
-      ORDINAL4, SCMNORM;
+      ORDINAL4, AFINSQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCT_2, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, TREES_3, STRUCT_0,
-      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, AMI_1;
+      DTCONSTR, BINTREE1, AMI_2, AMI_3, AFINSQ_1, AMI_1, COMPOS_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, RELAT_1, AMI_2, AMI_3, FUNCT_1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, AMI_2, AMI_3, FUNCT_1, AFINSQ_1;
  theorems AXIOMS, TARSKI, ZFMISC_1, NAT_1, INT_1, FINSEQ_1, FINSEQ_2, MCART_1,
       AMI_1, AMI_3, TREES_4, SCM_1, LANG1, DTCONSTR, BINTREE1, XBOOLE_0,
       TREES_3, FUNCT_1, XREAL_1, XXREAL_0, CARD_1, AFINSQ_1, FUNCT_2;
@@ -46,8 +47,7 @@ A1: IC s = il by SCM_1:def 1;
 A2: len (I1^I2) = len I1 + len I2 by AFINSQ_1:20;
 A3: now
     let k be Element of NAT;
-    assume
-    k < len I2;
+    assume k < len I2;
     then
 A5: len I1 + k < len (I1^I2) by A2,XREAL_1:8;
 A6: s.(ps + len I1 + k) = s.(ps+(len I1 + k))
@@ -91,8 +91,7 @@ A2: il1 = IC u;
 A3: len (I1^I2) = len I1 + len I2 by AFINSQ_1:20;
 A4: now
     let k be Element of NAT;
-    assume
-    k < len I2;
+    assume k < len I2;
     then
 A6: len I1 + k < len (I1^I2) by A3,XREAL_1:8;
 A7: s.(ps + len I1 + k) = s.(ps+(len I1 + k))
@@ -136,8 +135,7 @@ A4: NonTerminals G = [:1, 5:]
       thus NonTerminals G c= [:1, 5:]
       proof
         let x be set;
-        assume
-        x in NonTerminals G;
+        assume x in NonTerminals G;
         then consider t being Symbol of G such that
 A5:     x = t and
 A6:     ex tnt being FinSequence st t ==> tnt by A3;
@@ -162,13 +160,11 @@ A11: Terminals G = SCM-Data-Loc
       thus Terminals G c= SCM-Data-Loc
       proof
         let x be set;
-        assume
-        x in Terminals G;
+        assume x in Terminals G;
         then consider t be Symbol of G such that
 A12:    x = t and
 A13:    not ex tnt being FinSequence st t ==> tnt by A10;
-        assume
-        not x in SCM-Data-Loc;
+        assume not x in SCM-Data-Loc;
         then t in [:1, 5:] by A1,A12,XBOOLE_0:def 3;
         then t ==> <*t, t*> by A2;
         hence contradiction by A13;
@@ -179,8 +175,7 @@ A14:  x in SCM-Data-Loc;
       then
 A15:  ex y,z being set st y in {1} & z in NAT & x = [y,z] by ZFMISC_1:103;
       reconsider t = x as Symbol of G by A1,A14,XBOOLE_0:def 3;
-      assume
-      not x in Terminals G;
+      assume not x in Terminals G;
       then consider tnt being FinSequence such that
 A16:  t ==> tnt by A10;
       ex x1, x2 being Symbol of G st tnt = <*x1, x2*> by A16,BINTREE1:def 4;
@@ -459,24 +454,27 @@ definition
     hence thesis;
   end;
 end;
-set i2i = id INT;
 
-definition
+set i2i = id INT;
   deffunc U(NonTerminal of SCM-AE,set,set,Integer,Integer) = i2i.($1
   -Meaning_on ($4, $5));
+
+definition
   let s be State of SCM;
   let term be bin-term;
-  deffunc V(Terminal of SCM-AE) = i2i.(s.$1);
   func term @ s -> Integer means
   :Def9:
   ex f being Function of TS SCM-AE, INT
-st it = f.term & (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
-  for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
-Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
-  rtr *> for xl, xr being Element of INT st xl = f.tl & xr = f.tr holds f.(nt
-  -tree (tl, tr)) = nt-Meaning_on (xl, xr);
+  st it = f.term &
+  (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
+  for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl,
+      rtr being Symbol of SCM-AE st
+    rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
+    for xl, xr being Element of INT st xl = f.tl & xr = f.tr holds
+    f.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr);
   existence
   proof
+    deffunc V(Terminal of SCM-AE) = i2i.(s.$1);
     consider f being Function of TS SCM-AE, INT such that
 A1: (for t being Terminal of SCM-AE holds f.(root-tree t) = V(t)) &
     for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
@@ -503,6 +501,7 @@ A2: rtl = root-label tl & rtr = root-label tr & nt ==> <*rtl, rtr*>;
   end;
   uniqueness
   proof
+    deffunc V(Terminal of SCM-AE) = i2i.(s.$1);
     let it1, it2 be Integer;
     given f1 being Function of TS SCM-AE, INT such that
 A3: it1 = f1.term and
@@ -558,8 +557,8 @@ A14:  xl = f2.tl & xr = f2.tr;
 end;
 
 theorem Th6:
-  for s being State of SCM, t being Terminal of SCM-AE holds (
-  root-tree t)@s = s.t
+  for s being State of SCM, t being Terminal of SCM-AE holds
+  (root-tree t)@s = s.t
 proof
   let s be State of SCM, t be Terminal of SCM-AE;
   ex f being Function of TS SCM-AE, INT st (root-tree t)@s = f.(root-tree
@@ -589,9 +588,10 @@ A4: nt ==> <* root-label tl, root-label tr *> by Def1,Lm3;
 end;
 
 theorem :: PRE_COMP_8:
-  for s being State of SCM, tl, tr being bin-term holds (tl+tr)@s = (tl@
-s)+(tr@s) & (tl-tr)@s = (tl@s)-(tr@s) & (tl*tr)@s = (tl@s)*(tr@s) & (tl div tr)
-  @s = (tl@s) div (tr@s) & (tl mod tr)@s = (tl@s) mod (tr@s)
+  for s being State of SCM, tl, tr being bin-term holds
+  (tl+tr)@s = (tl@s)+(tr@s) & (tl-tr)@s = (tl@s)-(tr@s) &
+  (tl*tr)@s = (tl@s)*(tr@s) & (tl div tr)@s = (tl@s) div (tr@s) &
+  (tl mod tr)@s = (tl@s) mod (tr@s)
 proof
   let s be State of SCM, tl, tr be bin-term;
   thus (tl+tr)@s = nt0-Meaning_on (tl@s, tr@s) by Th7
@@ -608,8 +608,7 @@ end;
 
 definition
   let nt be NonTerminal of SCM-AE, n be Element of NAT;
-  func Selfwork(nt, n) -> XFinSequence of the Instructions of SCM
-  equals
+  func Selfwork(nt, n) -> XFinSequence of the Instructions of SCM equals
   :Def10:
   <%AddTo(dl.n, dl.(n+1))%> if nt = [0,0],
   <%SubFrom(dl.n, dl.(n+1))%> if nt = [0,1],
@@ -625,51 +624,8 @@ A1: [0,2]`2 = 2 & [0,3]`2 = 3 by MCART_1:7;
   end;
 end;
 
-registration let D be set;
- cluster D^omega -> functional;
- coherence
-  proof
-   let x be set;
-   assume x in D^omega;
-   hence x is Function by AFINSQ_1:def 8;
-  end;
-end;
-
-registration let D be set;
- cluster -> finite T-Sequence-like Element of D^omega;
- coherence by AFINSQ_1:def 8;
-end;
-
-definition let D be set;
- let f be XFinSequence of D;
- func Down f -> Element of D^omega
-  equals f;
- coherence by AFINSQ_1:def 8;
-end;
-
-definition let D be set;
- let f be XFinSequence of D, g be Element of D^omega;
- redefine func f^g -> Element of D^omega;
- coherence
-  proof
-    reconsider g as XFinSequence of D by AFINSQ_1:def 8;
-    f^g is XFinSequence of D;
-   hence thesis by AFINSQ_1:def 8;
-  end;
-end;
-
-definition let D be set;
- let f, g be Element of D^omega;
- redefine func f^g -> Element of D^omega;
- coherence
-  proof
-    reconsider f,g as XFinSequence of D by AFINSQ_1:def 8;
-    f^g is XFinSequence of D;
-   hence thesis by AFINSQ_1:def 8;
-  end;
-end;
-
 definition
+ canceled 2;
   deffunc V(NonTerminal of SCM-AE,
     Function of NAT, (the Instructions of SCM)^omega,
     Function of NAT, (the Instructions of SCM)^omega, Element of
@@ -1061,8 +1017,7 @@ A3: for dn being Element of NAT st dn <= max_Data-Loc_in (nt-tree (tl,
       set ml = max_Data-Loc_in tl, mr = max_Data-Loc_in tr;
       let dn be Element of NAT;
 A4:   ml <= max(ml, mr) by XXREAL_0:25;
-      assume
-      dn <= max_Data-Loc_in tl;
+      assume dn <= max_Data-Loc_in tl;
       then dn <= max(ml, mr) by A4,XXREAL_0:2;
       then dn <= max_Data-Loc_in (nt-tree (tl, tr)) by Th12;
       hence s1.dl.dn = s2.dl.dn by A3;
@@ -1073,8 +1028,7 @@ A5: tl@s1 = tl@s2 by A1;
       set ml = max_Data-Loc_in tl, mr = max_Data-Loc_in tr;
       let dn be Element of NAT;
 A6:   mr <= max(ml, mr) by XXREAL_0:25;
-      assume
-      dn <= max_Data-Loc_in tr;
+      assume dn <= max_Data-Loc_in tr;
       then dn <= max(ml, mr) by A6,XXREAL_0:2;
       then dn <= max_Data-Loc_in (nt-tree (tl, tr)) by Th12;
       hence s1.dl.dn = s2.dl.dn by A3;
@@ -1169,8 +1123,7 @@ by A12,AMI_1:123;
 A22: u2 = Comput(ProgramPart(s),s,((i1+1)+(i2+1))) by A12,A17,AMI_1:51;
 A23: now
       let n be Element of NAT;
-      assume
-      n <= max_Data-Loc_in tr;
+      assume n <= max_Data-Loc_in tr;
       then n < aux by A8,XXREAL_0:2;
       hence s.dl.n = u1.dl.n by A16;
     end;
@@ -1370,8 +1323,7 @@ A74: for t being Terminal of SCM-AE holds P[root-tree t]
   proof
     let t be Terminal of SCM-AE, aux, n, k be Element of NAT, s be
     State-consisting of n, n, k, SCM-Compile(root-tree t, aux), D;
-    assume
-    aux > max_Data-Loc_in root-tree t;
+    assume aux > max_Data-Loc_in root-tree t;
     take i = 0, u = Comput(ProgramPart(s),s,0+1);
     thus u = Comput(ProgramPart(s),s,i+1);
 A75: <%dl.aux:=@t%>.0 = dl.aux:=@t by AFINSQ_1:38;
@@ -1386,8 +1338,7 @@ A78: IC s = n & s.n = dl.aux:=@t by A76,A75,SCM_1:def 1;
     thus u.dl.aux = s.t by A77,A78,SCM_1:18
       .= (root-tree t)@s by Th6;
     let dn be Element of NAT;
-    assume
-    dn < aux;
+    assume dn < aux;
     then dl.dn <> dl.aux by AMI_3:52;
     hence thesis by A77,A78,SCM_1:18;
   end;

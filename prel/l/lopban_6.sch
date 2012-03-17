@@ -4,9 +4,9 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="TARSKI"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -36,15 +36,15 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="7"/>
+<Adjective nr="14"/>
 <Adjective nr="23">
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="91"/>
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="36">
 <Func kind="K" nr="37">
-<Func kind="K" nr="38">
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="91"/>
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -52,15 +52,15 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="92"/>
 </Func>
 <Func kind="F" nr="2"/>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Num nr="1"/>
@@ -70,27 +70,27 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="91"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="95">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="95">
 <Var nr="2"/>
 <Num nr="2"/>
 </Func>
@@ -104,7 +104,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="91"/>
 </Typ>
 <For>
 <Typ kind="M" nr="2">

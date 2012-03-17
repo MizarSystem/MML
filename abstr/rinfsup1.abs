@@ -9,14 +9,16 @@ environ
  vocabularies NUMBERS, SUBSET_1, XREAL_0, ORDINAL1, SEQ_1, CARD_1, ARYTM_3,
       XXREAL_0, ARYTM_1, COMPLEX1, ORDINAL2, REAL_1, SEQ_4, RELAT_1, FUNCT_1,
       TARSKI, XXREAL_2, XBOOLE_0, SUPINF_2, PARTFUN3, NAT_1, VALUED_1,
-      VALUED_0, SEQ_2, RINFSUP1;
+      VALUED_0, SEQ_2, RINFSUP1, MEMBER_1;
  notations ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
       COMPLEX1, TARSKI, XXREAL_2, VALUED_0, SEQ_4, XBOOLE_0, SUBSET_1, SEQ_2,
-      RELSET_1, FUNCT_2, LIMFUNC1, MEASURE6, VALUED_1, SEQ_1, PARTFUN3;
+      RELSET_1, FUNCT_2, LIMFUNC1, MEASURE6, VALUED_1, SEQ_1, PARTFUN3,
+      MEMBER_1;
  constructors REAL_1, NAT_1, COMPLEX1, SEQM_3, LIMFUNC1, PARTFUN3, PARTFUN1,
-      SEQ_1, XXREAL_2, SEQ_4, RELSET_1, BINOP_2, SEQ_2, MEASURE6;
+      SEQ_1, XXREAL_2, SEQ_4, RELSET_1, BINOP_2, SEQ_2, MEASURE6, MEMBER_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, VALUED_0, VALUED_1, FUNCT_2, SEQ_2, SEQ_4, RFUNCT_1, MEASURE6;
+      MEMBERED, VALUED_0, VALUED_1, FUNCT_2, SEQ_2, SEQ_4, RFUNCT_1, MEASURE6,
+      MEMBER_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -32,14 +34,14 @@ theorem :: RINFSUP1:1
 
 definition
   let seq be Real_Sequence;
-  func sup seq -> Real equals
+  func upper_bound seq -> Real equals
 :: RINFSUP1:def 1
   upper_bound rng seq;
 end;
 
 definition
   let seq be Real_Sequence;
-  func inf seq -> Real equals
+  func lower_bound seq -> Real equals
 :: RINFSUP1:def 2
   lower_bound rng seq;
 end;
@@ -51,7 +53,7 @@ theorem :: RINFSUP1:3
   r in rng seq iff -r in rng(-seq);
 
 theorem :: RINFSUP1:4
-  rng (-seq) = - rng seq;
+  rng (-seq) = -- rng seq;
 
 theorem :: RINFSUP1:5
   seq is bounded_above iff rng seq is bounded_above;
@@ -60,18 +62,18 @@ theorem :: RINFSUP1:6
   seq is bounded_below iff rng seq is bounded_below;
 
 theorem :: RINFSUP1:7
-  seq is bounded_above implies ( r = sup seq iff (for n holds seq.n
+  seq is bounded_above implies ( r = upper_bound seq iff (for n holds seq.n
   <= r) & for s st 0<s holds ex k st r-s < seq.k );
 
 theorem :: RINFSUP1:8
-  seq is bounded_below implies (r = inf seq iff (for n holds r <=
+  seq is bounded_below implies (r = lower_bound seq iff (for n holds r <=
   seq.n) & for s st 0<s holds ex k st seq.k < r+s );
 
 theorem :: RINFSUP1:9
-  (for n holds seq.n <= r) iff seq is bounded_above & sup seq <= r;
+  (for n holds seq.n <= r) iff seq is bounded_above & upper_bound seq <= r;
 
 theorem :: RINFSUP1:10
-  (for n holds r <= seq.n) iff seq is bounded_below & r <= inf seq;
+  (for n holds r <= seq.n) iff seq is bounded_below & r <= lower_bound seq;
 
 theorem :: RINFSUP1:11
   seq is bounded_above iff -seq is bounded_below;
@@ -80,18 +82,18 @@ theorem :: RINFSUP1:12
   seq is bounded_below iff -seq is bounded_above;
 
 theorem :: RINFSUP1:13
-  seq is bounded_above implies sup seq = -inf (-seq);
+  seq is bounded_above implies upper_bound seq = -lower_bound (-seq);
 
 theorem :: RINFSUP1:14
-  seq is bounded_below implies inf seq = -sup (-seq);
+  seq is bounded_below implies lower_bound seq = -upper_bound (-seq);
 
 theorem :: RINFSUP1:15
-  seq1 is bounded_below & seq2 is bounded_below implies inf (seq1
-  + seq2) >= inf seq1 + inf seq2;
+  seq1 is bounded_below & seq2 is bounded_below implies lower_bound (seq1
+  + seq2) >= lower_bound seq1 + lower_bound seq2;
 
 theorem :: RINFSUP1:16
-  seq1 is bounded_above & seq2 is bounded_above implies sup (seq1
-  + seq2) <= sup seq1 + sup seq2;
+  seq1 is bounded_above & seq2 is bounded_above implies upper_bound (seq1
+  + seq2) <= upper_bound seq1 + upper_bound seq2;
 
 notation
   let f be Real_Sequence;
@@ -110,20 +112,22 @@ theorem :: RINFSUP1:17
   seq is nonnegative implies seq ^\k is nonnegative;
 
 theorem :: RINFSUP1:18
-  seq is bounded_below nonnegative implies inf seq >= 0;
+  seq is bounded_below nonnegative implies lower_bound seq >= 0;
 
 theorem :: RINFSUP1:19
-  seq is bounded_above nonnegative implies sup seq >= 0;
+  seq is bounded_above nonnegative implies upper_bound seq >= 0;
 
 theorem :: RINFSUP1:20
   seq1 is bounded_below nonnegative & seq2 is bounded_below
-  nonnegative implies (seq1(#)seq2) is bounded_below & inf (seq1 (#) seq2) >= (
-  inf seq1) * (inf seq2);
+  nonnegative implies (seq1(#)seq2) is bounded_below &
+  lower_bound (seq1 (#) seq2) >= (
+  lower_bound seq1) * (lower_bound seq2);
 
 theorem :: RINFSUP1:21
   seq1 is bounded_above nonnegative & seq2 is bounded_above
-  nonnegative implies (seq1(#)seq2) is bounded_above & sup (seq1 (#) seq2) <= (
-  sup seq1) * (sup seq2);
+  nonnegative implies (seq1(#)seq2) is bounded_above &
+  upper_bound (seq1 (#) seq2) <= (
+  upper_bound seq1) * (upper_bound seq2);
 
 theorem :: RINFSUP1:22
   seq is non-decreasing bounded_above implies seq is bounded;
@@ -132,10 +136,10 @@ theorem :: RINFSUP1:23
   seq is non-increasing bounded_below implies seq is bounded;
 
 theorem :: RINFSUP1:24
-  seq is non-decreasing bounded_above implies lim seq = sup seq;
+  seq is non-decreasing bounded_above implies lim seq = upper_bound seq;
 
 theorem :: RINFSUP1:25
-  seq is non-increasing bounded_below implies lim seq = inf seq;
+  seq is non-increasing bounded_below implies lim seq = lower_bound seq;
 
 theorem :: RINFSUP1:26
   seq is bounded_above implies seq ^\k is bounded_above;
@@ -166,19 +170,19 @@ theorem :: RINFSUP1:33
 
 theorem :: RINFSUP1:34
   seq is non-decreasing implies for n for R being Subset of REAL
-  st R = {seq.k : n <= k} holds inf R = seq.n;
+  st R = {seq.k : n <= k} holds lower_bound R = seq.n;
 
 theorem :: RINFSUP1:35
   seq is non-increasing implies for n for R being Subset of REAL
-  st R = {seq.k : n <= k} holds sup R = seq.n;
+  st R = {seq.k : n <= k} holds upper_bound R = seq.n;
 
 theorem :: RINFSUP1:36
   for seq holds ex f being Function of NAT,REAL st for n for Y
-  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = sup Y;
+  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = upper_bound Y;
 
 theorem :: RINFSUP1:37
   for seq holds ex f being Function of NAT,REAL st for n for Y
-  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = inf Y;
+  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = lower_bound Y;
 
 definition
   let seq be Real_Sequence;
@@ -199,18 +203,16 @@ definition
 end;
 
 theorem :: RINFSUP1:38
-  (inferior_realsequence seq).n = inf (seq ^\n);
+  (inferior_realsequence seq).n = lower_bound (seq ^\n);
 
 theorem :: RINFSUP1:39
-  (superior_realsequence seq).n = sup (seq ^\n);
+  (superior_realsequence seq).n = upper_bound (seq ^\n);
 
 theorem :: RINFSUP1:40
-  seq is bounded_below implies (inferior_realsequence seq).0 = inf
-  seq;
+  seq is bounded_below implies (inferior_realsequence seq).0 = lower_bound seq;
 
 theorem :: RINFSUP1:41
-  seq is bounded_above implies (superior_realsequence seq).0 = sup
-  seq;
+  seq is bounded_above implies (superior_realsequence seq).0 = upper_bound seq;
 
 theorem :: RINFSUP1:42
   seq is bounded_below implies (r = (inferior_realsequence seq).n
@@ -253,27 +255,25 @@ theorem :: RINFSUP1:51
   <= (superior_realsequence seq).n;
 
 theorem :: RINFSUP1:52
-  seq is bounded_below implies inferior_realsequence seq is
-  non-decreasing;
+  seq is bounded_below implies inferior_realsequence seq is non-decreasing;
 
 theorem :: RINFSUP1:53
-  seq is bounded_above implies superior_realsequence seq is
-  non-increasing;
+  seq is bounded_above implies superior_realsequence seq is non-increasing;
 
 theorem :: RINFSUP1:54
   seq is bounded implies (inferior_realsequence seq).n <= (
   superior_realsequence seq).n;
 
 theorem :: RINFSUP1:55
-  seq is bounded implies (inferior_realsequence seq).n <= inf (
+  seq is bounded implies (inferior_realsequence seq).n <= lower_bound (
   superior_realsequence seq);
 
 theorem :: RINFSUP1:56
-  seq is bounded implies sup(inferior_realsequence seq) <= (
+  seq is bounded implies upper_bound(inferior_realsequence seq) <= (
   superior_realsequence seq).n;
 
 theorem :: RINFSUP1:57
-  seq is bounded implies sup(inferior_realsequence seq) <= inf(
+  seq is bounded implies upper_bound(inferior_realsequence seq) <= lower_bound(
   superior_realsequence seq);
 
 theorem :: RINFSUP1:58
@@ -282,11 +282,11 @@ theorem :: RINFSUP1:58
 
 theorem :: RINFSUP1:59
   seq is bounded implies inferior_realsequence seq is convergent &
-  lim inferior_realsequence seq = sup inferior_realsequence seq;
+  lim inferior_realsequence seq = upper_bound inferior_realsequence seq;
 
 theorem :: RINFSUP1:60
   seq is bounded implies superior_realsequence seq is convergent &
-  lim superior_realsequence seq = inf superior_realsequence seq;
+  lim superior_realsequence seq = lower_bound superior_realsequence seq;
 
 theorem :: RINFSUP1:61
   seq is bounded_below implies (inferior_realsequence seq).n = - (
@@ -305,8 +305,7 @@ theorem :: RINFSUP1:64
   inferior_realsequence(-seq));
 
 theorem :: RINFSUP1:65
-  seq is non-decreasing implies seq.n <= (inferior_realsequence seq).(n+
-  1);
+  seq is non-decreasing implies seq.n <= (inferior_realsequence seq).(n+ 1);
 
 theorem :: RINFSUP1:66
   seq is non-decreasing implies inferior_realsequence seq = seq;
@@ -321,16 +320,17 @@ theorem :: RINFSUP1:68
 
 theorem :: RINFSUP1:69
   seq is non-decreasing bounded_above implies (
-  superior_realsequence seq).n = sup seq & (superior_realsequence seq) is
+  superior_realsequence seq).n = upper_bound seq & (superior_realsequence seq)
+   is
   constant;
 
 theorem :: RINFSUP1:70
-  seq is non-decreasing bounded_above implies inf (superior_realsequence
-  seq) = sup seq;
+  seq is non-decreasing bounded_above implies
+  lower_bound (superior_realsequence
+  seq) = upper_bound seq;
 
 theorem :: RINFSUP1:71
-  seq is non-increasing implies (superior_realsequence seq).(n+1) <= seq
-  .n;
+  seq is non-increasing implies (superior_realsequence seq).(n+1) <= seq .n;
 
 theorem :: RINFSUP1:72
   seq is non-increasing implies superior_realsequence seq = seq;
@@ -345,12 +345,13 @@ theorem :: RINFSUP1:74
 
 theorem :: RINFSUP1:75
   seq is non-increasing & seq is bounded_below implies (
-  inferior_realsequence seq).n = inf seq & (inferior_realsequence seq) is
+  inferior_realsequence seq).n = lower_bound seq &
+  (inferior_realsequence seq) is
   constant;
 
 theorem :: RINFSUP1:76
-  seq is non-increasing bounded_below implies sup inferior_realsequence
-  seq = inf seq;
+  seq is non-increasing bounded_below implies upper_bound inferior_realsequence
+  seq = lower_bound seq;
 
 theorem :: RINFSUP1:77
   seq1 is bounded & seq2 is bounded & (for n holds seq1.n <= seq2.
@@ -387,14 +388,14 @@ definition
   let seq be Real_Sequence;
   func lim_sup seq -> Element of REAL equals
 :: RINFSUP1:def 6
-  inf superior_realsequence seq;
+  lower_bound superior_realsequence seq;
 end;
 
 definition
   let seq be Real_Sequence;
   func lim_inf seq -> Element of REAL equals
 :: RINFSUP1:def 7
-  sup inferior_realsequence seq;
+  upper_bound inferior_realsequence seq;
 end;
 
 theorem :: RINFSUP1:83
@@ -428,8 +429,7 @@ theorem :: RINFSUP1:90
   seq is bounded & lim_sup seq = lim_inf seq iff seq is convergent;
 
 theorem :: RINFSUP1:91
-  seq is convergent implies lim seq = lim_sup seq & lim seq = lim_inf
-  seq;
+  seq is convergent implies lim seq = lim_sup seq & lim seq = lim_inf seq;
 
 theorem :: RINFSUP1:92
   seq is bounded implies lim_sup -seq = - lim_inf seq & lim_inf -
@@ -452,4 +452,3 @@ theorem :: RINFSUP1:95
   seq1 is bounded nonnegative & seq2 is bounded nonnegative implies (
   lim_inf seq1) * (lim_inf seq2) <= lim_inf(seq1(#)seq2) & lim_sup(seq1(#)seq2)
   <= (lim_sup seq1) * (lim_sup seq2);
-

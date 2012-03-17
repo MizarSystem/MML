@@ -31,13 +31,13 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>

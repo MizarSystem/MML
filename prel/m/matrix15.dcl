@@ -22,7 +22,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="FINSEQ_3"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -37,17 +37,10 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="PRE_POLY"/>
-<ArticleID name="MATRLIN"/>
-<ArticleID name="FINSEQOP"/>
-<ArticleID name="MATRIX_2"/>
-<ArticleID name="MATRIX_3"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="PRVECT_1"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="MATRIX13"/>
 <ArticleID name="MATRIX15"/>
 </Signature>
 <FCluster aid="MATRIX15" nr="1">
@@ -58,20 +51,20 @@
 <Adjective nr="44" value="false"/>
 <Adjective nr="63"/>
 <Adjective nr="83"/>
-<Adjective nr="91"/>
-<Adjective nr="93"/>
 <Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="109"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="101"/>
+<Adjective nr="107"/>
+<Adjective nr="108"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="119"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="119"/>
+<Adjective nr="127"/>
 </Cluster>
-<Func kind="K" nr="120">
+<Func kind="K" nr="119">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -79,28 +72,28 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="431">
+<Func kind="K" nr="361">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="337">
+<Func kind="K" nr="339">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="3"/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="117">
+<Adjective nr="125">
 <LocusVar nr="1"/>
-<Func kind="K" nr="426">
+<Func kind="K" nr="342">
 <LocusVar nr="1"/>
-<Func kind="K" nr="207">
+<Func kind="K" nr="203">
 <LocusVar nr="2"/>
 </Func>
 </Func>
@@ -110,9 +103,9 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="426">
+<Func kind="K" nr="342">
 <LocusVar nr="1"/>
-<Func kind="K" nr="207">
+<Func kind="K" nr="203">
 <LocusVar nr="2"/>
 </Func>
 </Func>

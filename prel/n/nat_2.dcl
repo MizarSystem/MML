@@ -3,8 +3,6 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -23,12 +21,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="15" value="false"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
+<Adjective nr="5" value="false"/>
+<Adjective nr="9"/>
+<Adjective nr="13"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </RCluster>
 </Registrations>

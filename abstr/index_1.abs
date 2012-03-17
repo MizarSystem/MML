@@ -44,8 +44,7 @@ definition
   attr IT is Category-yielding means
 :: INDEX_1:def 1
 
-  for x being set st x in dom IT
-  holds IT.x is Category;
+  for x being set st x in dom IT holds IT.x is Category;
 end;
 
 registration
@@ -114,11 +113,18 @@ set st x in dom F for C being Category st C = F.x holds it.x = the carrier' of
   C;
 end;
 
-definition
+registration
   let A be non empty set;
   let F be ManySortedCategory of A;
-  redefine func Objs F -> non-empty ManySortedSet of A;
-  func Mphs F -> non-empty ManySortedSet of A;
+  cluster Objs F -> A-defined;
+  cluster Mphs F -> A-defined;
+end;
+
+registration
+  let A be non empty set;
+  let F be ManySortedCategory of A;
+  cluster Objs F -> total;
+  cluster Mphs F -> total;
 end;
 
 theorem :: INDEX_1:3
@@ -132,8 +138,7 @@ definition
   mode ManySortedSet of A,B means
 :: INDEX_1:def 4
 
-    ex f being (ManySortedSet of A), g
-    being ManySortedSet of B st it = [f,g];
+    ex f being (ManySortedSet of A), g being ManySortedSet of B st it = [f,g];
 end;
 
 definition
@@ -170,13 +175,11 @@ definition
   attr IT is Category-yielding_on_first means
 :: INDEX_1:def 5
 
-  IT`1 is
-  Category-yielding;
+  IT`1 is Category-yielding;
   attr IT is Function-yielding_on_second means
 :: INDEX_1:def 6
 
-  IT`2 is
-  Function-yielding;
+  IT`2 is Function-yielding;
 end;
 
 registration
@@ -185,16 +188,16 @@ registration
     of A,B;
 end;
 
-definition
+registration
   let A, B be set;
   let X be Category-yielding_on_first ManySortedSet of A,B;
-  redefine func X`1 -> ManySortedCategory of A;
+  cluster X`1 -> Category-yielding;
 end;
 
-definition
+registration
   let A, B be set;
   let X be Function-yielding_on_second ManySortedSet of A,B;
-  redefine func X`2 -> ManySortedFunction of B;
+  cluster X`2 ->  Function-yielding;
 end;
 
 registration
@@ -216,8 +219,7 @@ definition
   mode ManySortedFunctor of F,G -> ManySortedFunction of A means
 :: INDEX_1:def 7
 
-    for a
-    being Element of A holds it.a is Functor of F.a, G.a;
+    for a being Element of A holds it.a is Functor of F.a, G.a;
 end;
 
 scheme :: INDEX_1:sch 1
@@ -285,6 +287,7 @@ registration
 end;
 
 definition
+
 :: This is very technical definition made for having the indexing and
 :: coindexing as the same mode.
   let A,B be non empty set;
@@ -342,8 +345,7 @@ definition
   func I-functor(C,T) -> Functor of C,T means
 :: INDEX_1:def 11
 
-  for f being Morphism of
-  C holds it.f = [[I`1.dom f, I`1.cod f], I`2.f];
+  for f being Morphism of C holds it.f = [[I`1.dom f, I`1.cod f], I`2.f];
 end;
 
 theorem :: INDEX_1:11
@@ -365,8 +367,7 @@ definition
   func rng I -> strict TargetCat of I means
 :: INDEX_1:def 12
 
-  for T being TargetCat of
-  I holds it = Image (I-functor(C,T));
+  for T being TargetCat of I holds it = Image (I-functor(C,T));
 end;
 
 theorem :: INDEX_1:14
@@ -556,5 +557,3 @@ theorem :: INDEX_1:38
   for C being Category, I being Indexing of C for D being TargetCat of I
 , J being Indexing of D for E being TargetCat of J, K being Indexing of E holds
   (K*J)*I = K*(J*I);
-
-

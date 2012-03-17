@@ -23,6 +23,8 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="XBOOLEAN"/>
+<ArticleID name="MARGREL1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="ORDERS_1"/>
@@ -81,7 +83,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="125">
+<Adjective nr="127">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

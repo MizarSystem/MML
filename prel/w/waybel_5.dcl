@@ -7,9 +7,9 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -77,7 +77,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
@@ -116,7 +116,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -126,7 +126,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL_5" nr="3">
@@ -142,7 +142,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
@@ -188,7 +188,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
@@ -239,7 +239,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>
@@ -250,7 +250,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </FCluster>
@@ -271,7 +271,7 @@
 <Adjective nr="7">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="9"/>
+<Adjective nr="19"/>
 <Adjective nr="24">
 <LocusVar nr="1"/>
 </Adjective>

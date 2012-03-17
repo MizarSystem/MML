@@ -16,7 +16,8 @@ environ
  constructors XXREAL_0, NAT_1, FSM_1, MEMBERED, REWRITE1, FLANG_1, XREAL_0,
       RELSET_1;
  registrations CARD_1, RELSET_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0,
-      STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1, FINSEQ_1;
+      STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1, FINSEQ_1,
+      CATALAN2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0;
  theorems AFINSQ_1, CALCUL_1, FLANG_1, FLANG_2, FUNCT_1, NAT_1, RELAT_1,
@@ -26,16 +27,15 @@ environ
 
 begin :: Preliminaries - FinSequences
 
-reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2 for set;
 reserve E for non empty set;
 reserve e for Element of E;
-reserve u, u9, u1, u2, v, v1, v2, w, w9, w1, w2 for Element of E^omega;
+reserve u, u9, u1, u2, v, v1, v2, w, w1, w2 for Element of E^omega;
 reserve F, F1, F2 for Subset of E^omega;
-reserve i, j, k, l, n for Nat;
+reserve i, k, l, n for Nat;
 
 theorem Th1:
-  for p being FinSequence st k in dom p holds (<*x*>^p).(k + 1) = p
-  .k
+  for p being FinSequence st k in dom p holds (<*x*>^p).(k + 1) = p.k
 proof
   let p be FinSequence such that
 A1: k in dom p;
@@ -57,8 +57,7 @@ theorem Th2:
   FinSequence, x st p = q^<*x*> & len p = len q + 1
 proof
   let p be FinSequence;
-  assume
-  p <> {};
+  assume p <> {};
   then consider q being FinSequence, x such that
 A1: p = q^<*x*> by FINSEQ_1:63;
   take q, x;
@@ -68,8 +67,7 @@ A1: p = q^<*x*> by FINSEQ_1:63;
 end;
 
 theorem Th3:
-  for p being FinSequence st k in dom p & not k + 1 in dom p holds
-  len p = k
+  for p being FinSequence st k in dom p & not k + 1 in dom p holds len p = k
 proof
   let p be FinSequence such that
 A1: k in dom p and
@@ -181,8 +179,7 @@ being RedSequence of R st len Q + 1 = len P & for k st k in dom Q holds Q.k = P
   .(k + 1)
 proof
   let R be Relation, P be RedSequence of R;
-  assume
-  len P > 1;
+  assume len P > 1;
   then consider Q being RedSequence of R such that
 A1: P = <*P.1*>^Q & len Q + 1 = len P by Th5;
   take Q;
@@ -190,8 +187,7 @@ A1: P = <*P.1*>^Q & len Q + 1 = len P by Th5;
 end;
 
 theorem Th8:
-  for R being Relation holds <*x, y*> is RedSequence of R implies [
-  x, y] in R
+  for R being Relation holds <*x, y*> is RedSequence of R implies [ x, y] in R
 proof
   let R be Relation;
   set P = <*x, y*>;
@@ -199,8 +195,7 @@ A1: P.1 = x & P.2 = y by FINSEQ_1:61;
   len P = 2 by FINSEQ_1:61;
   then
 A2: 1 in dom P & 1 + 1 in dom P by FINSEQ_3:27;
-  assume
-  <*x, y*> is RedSequence of R;
+  assume <*x, y*> is RedSequence of R;
   hence thesis by A1,A2,REWRITE1:def 2;
 end;
 
@@ -209,8 +204,7 @@ begin :: Preliminaries - XFinSequences
 theorem Th9:
   w = u^v implies len u <= len w & len v <= len w
 proof
-  assume
-  w = u^v;
+  assume w = u^v;
   then len w = len u + len v by AFINSQ_1:20;
   then
   len w + len u >= len u + len v + 0 & len w + len v >= len u + len v + 0
@@ -219,8 +213,7 @@ proof
 end;
 
 theorem Th10:
-  w = u^v & u <> <%>E & v <> <%>E implies len u < len w & len v <
-  len w
+  w = u^v & u <> <%>E & v <> <%>E implies len u < len w & len v < len w
 proof
   assume that
 A1: w = u^v and
@@ -276,8 +269,7 @@ theorem Th13:
   w2^u = w1 & v2 = u^v1
 proof
 A1: len w1 < len w2 or len w1 >= len w2;
-  assume
-  w1^v1 = w2^v2;
+  assume w1^v1 = w2^v2;
   hence thesis by A1,Th12;
 end;
 
@@ -308,8 +300,7 @@ theorem Th14:
   = {} implies TS is deterministic
 proof
   let TS be transition-system over F;
-  assume
-  dom (the Tran of TS) = {};
+  assume dom (the Tran of TS) = {};
   then
   (the Tran of TS) = {} & for s being Element of TS, u, v st u <> v & [s,
 u] in dom (the Tran of TS) & [s, v] in dom (the Tran of TS) holds not ex w st u
@@ -349,8 +340,7 @@ theorem Th15:
   dom (the Tran of TS) & z in rng (the Tran of TS)
 proof
   let TS be transition-system over X;
-  assume
-  x, y -->. z, TS;
+  assume x, y -->. z, TS;
   then
 A1: [[x, y], z] in the Tran of TS by Def2;
   then [x, y] in [: the carrier of TS, X :] by ZFMISC_1:106;
@@ -370,8 +360,7 @@ proof
   let TS1 be transition-system over X1, TS2 be transition-system over X2 such
   that
 A1: the Tran of TS1 = the Tran of TS2;
-  assume
-  x, y -->. z, TS1;
+  assume x, y -->. z, TS1;
   then [[x, y], z] in the Tran of TS1 by Def2;
   hence thesis by A1,Def2;
 end;
@@ -382,8 +371,7 @@ theorem Th17:
 proof
   let TS be transition-system over F such that
 A1: the Tran of TS is Function;
-  assume
-  x, y -->. z1, TS & x, y -->. z2, TS;
+  assume x, y -->. z1, TS & x, y -->. z2, TS;
   then [[x, y], z1] in the Tran of TS & [[x, y], z2] in the Tran of TS by
   Def2;
   hence thesis by A1,FUNCT_1:def 1;
@@ -395,8 +383,7 @@ theorem
 proof
   let TS be transition-system over F such that
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  x, <%>E -->. y, TS;
+  assume x, <%>E -->. y, TS;
   then [[x, <%>E], y] in the Tran of TS by Def2;
   then [x, <%>E] in dom (the Tran of TS) by RELAT_1:20;
   hence contradiction by A1,RELAT_1:20;
@@ -429,8 +416,7 @@ definition
   let x1, x2, y1, y2;
   pred x1, x2 ==>. y1, y2, TS means
   :Def3:
-  ex v, w st v = y2 & x1, w -->. y1,
-  TS & x2 = w^v;
+  ex v, w st v = y2 & x1, w -->. y1, TS & x2 = w^v;
 end;
 
 theorem Th20:
@@ -439,8 +425,7 @@ TS implies x1 in TS & y1 in TS & x2 in E^omega & y2 in E^omega & x1 in dom dom
   (the Tran of TS) & y1 in rng (the Tran of TS)
 proof
   let TS be transition-system over F;
-  assume
-  x1, x2 ==>. y1, y2, TS;
+  assume x1, x2 ==>. y1, y2, TS;
   then ex v, w st v = y2 & x1, w -->. y1, TS & x2 = w^v by Def3;
   hence thesis by Th15;
 end;
@@ -465,8 +450,7 @@ theorem Th22:
   implies ex w st x, w -->. y, TS & u = w^v
 proof
   let TS be transition-system over F;
-  assume
-  x, u ==>. y, v, TS;
+  assume x, u ==>. y, v, TS;
   then consider v1, w such that
 A1: v1 = v & x, w -->. y, TS & u = w^v1 by Def3;
   take w;
@@ -487,8 +471,7 @@ A1: x, y -->. z, TS;
     w = w^(<%>E) by AFINSQ_1:32;
     hence thesis by A1,Def3;
   end;
-  assume
-  x, y ==>. z, <%>E, TS;
+  assume x, y ==>. z, <%>E, TS;
   then ex v, w st v = <%>E & x, w -->. z, TS & y = w^v by Def3;
   hence thesis by AFINSQ_1:32;
 end;
@@ -499,8 +482,7 @@ theorem Th24:
 proof
   let TS be transition-system over F;
   thus x, v -->. y, TS implies x, v^w ==>. y, w, TS by Def3;
-  assume
-  x, v^w ==>. y, w, TS;
+  assume x, v^w ==>. y, w, TS;
   then ex u st x, u -->. y, TS & v^w = u^w by Th22;
   hence thesis by AFINSQ_1:31;
 end;
@@ -510,8 +492,7 @@ theorem Th25:
   implies x, u^w ==>. y, v^w, TS
 proof
   let TS be transition-system over F;
-  assume
-  x, u ==>. y, v, TS;
+  assume x, u ==>. y, v, TS;
   then consider u1 such that
 A1: x, u1 -->. y, TS and
 A2: u = u1^v by Th22;
@@ -524,8 +505,7 @@ theorem Th26:
   implies len u >= len v
 proof
   let TS be transition-system over F;
-  assume
-  x, u ==>. y, v, TS;
+  assume x, u ==>. y, v, TS;
   then ex w st x, w -->. y, TS & u = w^v by Th22;
   hence thesis by Th9;
 end;
@@ -557,8 +537,7 @@ theorem Th28:
 proof
   let TS be transition-system over F such that
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  x, z ==>. y, z, TS;
+  assume x, z ==>. y, z, TS;
   then consider v, w such that
 A2: v = z and
 A3: x, w -->. y, TS and
@@ -623,8 +602,8 @@ begin :: ==>.-relation is introduced to define transitions
 :: using reduction relations from REWRITE1
 
 reserve TS for non empty transition-system over F;
-reserve s, s9, s1, s2, t, t9, t1, t2 for Element of TS;
-reserve S, T for Subset of TS;
+reserve s, s9, s1, s2, t, t1, t2 for Element of TS;
+reserve S for Subset of TS;
 
 definition
   let E, F, TS;
@@ -703,8 +682,7 @@ A19:  t = [y, v] by ZFMISC_1:def 2;
 end;
 
 theorem Th31:
-  [x, y] in ==>.-relation(TS) implies ex s, v, t, w st x = [s, v]
-  & y = [t, w]
+  [x, y] in ==>.-relation(TS) implies ex s, v, t, w st x = [s, v] & y = [t, w]
 proof
   assume
 A1: [x, y] in ==>.-relation(TS);
@@ -723,15 +701,13 @@ theorem Th32:
 in TS & x2 in E^omega & y2 in E^omega & x1 in dom dom (the Tran of TS) & y1 in
   rng (the Tran of TS)
 proof
-  assume
-  [[x1, x2], [y1, y2]] in ==>.-relation(TS);
+  assume [[x1, x2], [y1, y2]] in ==>.-relation(TS);
   then x1, x2 ==>. y1, y2, TS by Def4;
   hence thesis by Th20;
 end;
 
 theorem Th33:
-  x in ==>.-relation(TS) implies ex s, t, v, w st x = [[s, v], [t,
-  w]]
+  x in ==>.-relation(TS) implies ex s, t, v, w st x = [[s, v], [t, w]]
 proof
   assume
 A1: x in ==>.-relation(TS);
@@ -780,8 +756,7 @@ theorem Th35:
   [[x1, x2], [y1, y2]] in ==>.-relation(TS) implies ex v, w st v =
   y2 & x1, w -->. y1, TS & x2 = w^v
 proof
-  assume
-  [[x1, x2], [y1, y2]] in ==>.-relation(TS);
+  assume [[x1, x2], [y1, y2]] in ==>.-relation(TS);
   then x1, x2 ==>. y1, y2, TS by Def4;
   hence thesis by Def3;
 end;
@@ -790,8 +765,7 @@ theorem Th36:
   [[x, u], [y, v]] in ==>.-relation(TS) implies ex w st x, w -->.
   y, TS & u = w^v
 proof
-  assume
-  [[x, u], [y, v]] in ==>.-relation(TS);
+  assume [[x, u], [y, v]] in ==>.-relation(TS);
   then x, u ==>. y, v, TS by Def4;
   hence thesis by Th22;
 end;
@@ -801,13 +775,11 @@ theorem Th37:
 proof
   thus x, y -->. z, TS implies [[x, y], [z, <%>E]] in ==>.-relation(TS)
   proof
-    assume
-    x, y -->. z, TS;
+    assume x, y -->. z, TS;
     then x, y ==>. z, <%>E, TS by Th23;
     hence thesis by Def4;
   end;
-  assume
-  [[x, y], [z, <%>E]] in ==>.-relation(TS);
+  assume [[x, y], [z, <%>E]] in ==>.-relation(TS);
   then x, y ==>. z, <%>E, TS by Def4;
   hence thesis by Th23;
 end;
@@ -817,13 +789,11 @@ theorem Th38:
 proof
   thus x, v -->. y, TS implies [[x, v^w], [y, w]] in ==>.-relation(TS)
   proof
-    assume
-    x, v -->. y, TS;
+    assume x, v -->. y, TS;
     then x, v^w ==>. y, w, TS by Th24;
     hence thesis by Def4;
   end;
-  assume
-  [[x, v^w], [y, w]] in ==>.-relation(TS);
+  assume [[x, v^w], [y, w]] in ==>.-relation(TS);
   then x, v^w ==>. y, w, TS by Def4;
   hence thesis by Th24;
 end;
@@ -832,8 +802,7 @@ theorem
   [[x, u], [y, v]] in ==>.-relation(TS) implies [[x, u^w], [y, v^w]] in
   ==>.-relation(TS)
 proof
-  assume
-  [[x, u], [y, v]] in ==>.-relation(TS);
+  assume [[x, u], [y, v]] in ==>.-relation(TS);
   then x, u ==>. y, v, TS by Def4;
   then x, u^w ==>. y, v^w, TS by Th25;
   hence thesis by Def4;
@@ -842,8 +811,7 @@ end;
 theorem
   [[x, u], [y, v]] in ==>.-relation(TS) implies len u >= len v
 proof
-  assume
-  [[x, u], [y, v]] in ==>.-relation(TS);
+  assume [[x, u], [y, v]] in ==>.-relation(TS);
   then x, u ==>. y, v, TS by Def4;
   hence thesis by Th26;
 end;
@@ -870,8 +838,7 @@ theorem
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  [[x, u], [y, v]] in ==>.-relation(TS);
+  assume [[x, u], [y, v]] in ==>.-relation(TS);
   then x, u ==>. y, v, TS by Def4;
   hence thesis by A1,Th29;
 end;
@@ -880,8 +847,7 @@ theorem Th43:
   not <%>E in rng dom (the Tran of TS) implies not [[x, z], [y, z]
   ] in ==>.-relation(TS)
 proof
-  assume
-  not <%>E in rng dom (the Tran of TS);
+  assume not <%>E in rng dom (the Tran of TS);
   then not x, z ==>. y, z, TS by Th28;
   hence thesis by Def4;
 end;
@@ -914,8 +880,7 @@ proof
   assume
 A1: TS is deterministic;
   assume
-  [x, [y1, z1]] in ==>.-relation(TS) & [x, [y2, z2]] in ==>.-relation(
-  TS);
+  [x, [y1, z1]] in ==>.-relation(TS) & [x, [y2, z2]] in ==>.-relation( TS);
   then [y1, z1] = [y2, z2] by A1,Th44;
   hence thesis by ZFMISC_1:33;
 end;
@@ -923,8 +888,7 @@ end;
 theorem
   TS is deterministic implies ==>.-relation(TS) is Function-like
 proof
-  assume
-  TS is deterministic;
+  assume TS is deterministic;
   then
   for x, y, z st [x, y] in ==>.-relation(TS) & [x, z] in ==>.-relation(TS)
   holds y = z by Th44;
@@ -954,8 +918,7 @@ theorem Th47:
   k + 1 in dom P holds ex s, v, t, w st P.k = [s, v] & P.(k + 1) = [t, w]
 proof
   let P be RedSequence of ==>.-relation(TS), k;
-  assume
-  k in dom P & k + 1 in dom P;
+  assume k in dom P & k + 1 in dom P;
   then [P.k, P.(k + 1)] in ==>.-relation(TS) by REWRITE1:def 2;
   hence thesis by Th31;
 end;
@@ -966,8 +929,7 @@ k + 1 in dom P holds P.k = [(P.k)`1, (P.k)`2] & P.(k + 1) = [(P.(k + 1))`1, (P.
   (k + 1))`2]
 proof
   let P be RedSequence of ==>.-relation(TS), k;
-  assume
-  k in dom P & k + 1 in dom P;
+  assume k in dom P & k + 1 in dom P;
   then ex s, v, t, w st P.k = [s, v] & P.(k + 1) = [t, w] by Th47;
   hence thesis by MCART_1:8;
 end;
@@ -979,8 +941,7 @@ k + 1 in dom P holds (P.k)`1 in TS & (P.k)`2 in E^omega & (P.(k + 1))`1 in TS &
   in rng (the Tran of TS)
 proof
   let P be RedSequence of ==>.-relation(TS), k;
-  assume
-  k in dom P & k + 1 in dom P;
+  assume k in dom P & k + 1 in dom P;
   then
 A1: [P.k, P.(k + 1)] in ==>.-relation(TS) by REWRITE1:def 2;
   then consider s, v, t, w such that
@@ -1004,8 +965,7 @@ A1: the carrier of TS1 = the carrier of TS2 & the Tran of TS1 = the Tran
   let P be RedSequence of ==>.-relation(TS1);
 A2: now
     let i be Element of NAT;
-    assume
-    i in dom P & i + 1 in dom P;
+    assume i in dom P & i + 1 in dom P;
     then [P.i, P.(i + 1)] in ==>.-relation(TS1) by REWRITE1:def 2;
     hence [P.i, P.(i + 1)] in ==>.-relation(TS2) by A1,Th34;
   end;
@@ -1056,8 +1016,7 @@ theorem Th52:
   holds for k st k in dom P ex u st (P.k)`2 = u^w
 proof
   let P be RedSequence of ==>.-relation(TS);
-  assume
-  P.len P = [y, w];
+  assume P.len P = [y, w];
   then (P.len P)`2 = w by MCART_1:7;
   then
 A1: (P.len P)`2 = <%>E^w by AFINSQ_1:32;
@@ -1155,8 +1114,7 @@ A5:   len P = k + 1;
 A6:     k = 0;
         hereby
           let l;
-          assume
-          l in dom P;
+          assume l in dom P;
           then l <= 1 & 1 <= l by A5,A6,FINSEQ_3:27;
           then l = 1 by XXREAL_0:1;
           hence (P.l)`2 = u by A3,MCART_1:7;
@@ -1264,44 +1222,37 @@ in dom P & P.k = [x, u] & P.(k + 1) = [y, v] holds ex w st x, w -->. y, TS & u
   = w^v
 proof
   let P be RedSequence of ==>.-relation(TS), k;
-  assume
-  k in dom P & k + 1 in dom P & P.k = [x, u] & P.(k + 1) = [y, v];
+  assume k in dom P & k + 1 in dom P & P.k = [x, u] & P.(k + 1) = [y, v];
   then [[x, u], [y, v]] in ==>.-relation(TS) by REWRITE1:def 2;
   hence thesis by Th36;
 end;
 
 theorem Th57:
-  x, y -->. z, TS iff <*[x, y], [z, <%>E]*> is RedSequence of
-  ==>.-relation(TS)
+  x, y -->. z, TS iff <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS)
 proof
   thus x, y -->. z, TS implies <*[x, y], [z, <%>E]*> is RedSequence of
   ==>.-relation(TS)
   proof
-    assume
-    x, y -->. z, TS;
+    assume x, y -->. z, TS;
     then [[x, y], [z, <%>E]] in ==>.-relation(TS) by Th37;
     hence thesis by REWRITE1:8;
   end;
-  assume
-  <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS);
+  assume <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS);
   then [[x, y], [z, <%>E]] in ==>.-relation(TS) by Th8;
   hence thesis by Th37;
 end;
 
 theorem Th58:
-  x, v -->. y, TS iff <*[x, v^w], [y, w]*> is RedSequence of
-  ==>.-relation(TS)
+  x, v -->. y, TS iff <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS)
 proof
   thus x, v -->. y, TS implies <*[x, v^w], [y, w]*> is RedSequence of
   ==>.-relation(TS)
   proof
-    assume
-    x, v -->. y, TS;
+    assume x, v -->. y, TS;
     then [[x, v^w], [y, w]] in ==>.-relation(TS) by Th38;
     hence thesis by REWRITE1:8;
   end;
-  assume
-  <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS);
+  assume <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS);
   then [[x, v^w], [y, w]] in ==>.-relation(TS) by Th8;
   hence thesis by Th38;
 end;
@@ -1311,8 +1262,7 @@ theorem Th59:
   .len P = [y, w] holds len v >= len w
 proof
   let P be RedSequence of ==>.-relation(TS);
-  assume
-  P.1 = [x, v] & P.len P = [y, w];
+  assume P.1 = [x, v] & P.len P = [y, w];
   then ex u st v = u^w by Th53;
   hence thesis by Th9;
 end;
@@ -1328,8 +1278,7 @@ proof
 A1: not <%>E in rng dom (the Tran of TS);
 A2: now
     let k;
-    assume
-    P[k];
+    assume P[k];
     now
       let P be RedSequence of ==>.-relation(TS), x, y such that
 A3:   P.1 = [x, u] and
@@ -1432,8 +1381,7 @@ A6:   P.len P = [y, <%>E];
 A7:     len u >= 1;
 A8:     len P <> 1
         proof
-          assume
-          len P = 1;
+          assume len P = 1;
           then u = <%>E by A5,A6,ZFMISC_1:33;
           hence contradiction by A7;
         end;
@@ -1731,8 +1679,7 @@ begin :: Reductions
 theorem Th70:
   ==>.-relation(TS) reduces [x, v], [y, w] implies ex u st v = u^w
 proof
-  assume
-  ==>.-relation(TS) reduces [x, v], [y, w];
+  assume ==>.-relation(TS) reduces [x, v], [y, w];
   then
   ex P being RedSequence of ==>.-relation(TS) st P.1 = [x, v] & P.len P = [
   y, w] by REWRITE1:def 3;
@@ -1743,8 +1690,7 @@ theorem Th71:
   ==>.-relation(TS) reduces [x, u], [y, v] implies ==>.-relation(
   TS) reduces [x, u^w], [y, v^w]
 proof
-  assume
-  ==>.-relation(TS) reduces [x, u], [y, v];
+  assume ==>.-relation(TS) reduces [x, u], [y, v];
   then consider P being RedSequence of ==>.-relation(TS) such that
 A1: P.1 = [x, u] and
 A2: P.len P = [y, v] by REWRITE1:def 3;
@@ -1807,33 +1753,27 @@ A13: dim2(P.1, E) = (P.1)`2 by A1,Th51
 end;
 
 theorem Th72:
-  x, y -->. z, TS implies ==>.-relation(TS) reduces [x, y], [z,
-  <%>E]
+  x, y -->. z, TS implies ==>.-relation(TS) reduces [x, y], [z, <%>E]
 proof
-  assume
-  x, y -->. z, TS;
+  assume x, y -->. z, TS;
   then <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS) by Th57;
   then [[x, y], [z, <%>E]] in ==>.-relation(TS) by Th8;
   hence thesis by REWRITE1:16;
 end;
 
 theorem Th73:
-  x, v -->. y, TS implies ==>.-relation(TS) reduces [x, v^w], [y,
-  w]
+  x, v -->. y, TS implies ==>.-relation(TS) reduces [x, v^w], [y, w]
 proof
-  assume
-  x, v -->. y, TS;
+  assume x, v -->. y, TS;
   then <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS) by Th58;
   then [[x, v^w], [y, w]] in ==>.-relation(TS) by Th8;
   hence thesis by REWRITE1:16;
 end;
 
 theorem Th74:
-  x1, x2 ==>. y1, y2, TS implies ==>.-relation(TS) reduces [x1, x2
-  ], [y1, y2]
+  x1, x2 ==>. y1, y2, TS implies ==>.-relation(TS) reduces [x1, x2 ], [y1, y2]
 proof
-  assume
-  x1, x2 ==>. y1, y2, TS;
+  assume x1, x2 ==>. y1, y2, TS;
   then [[x1, x2], [y1, y2]] in ==>.-relation(TS) by Def4;
   hence thesis by REWRITE1:16;
 end;
@@ -1841,8 +1781,7 @@ end;
 theorem Th75:
   ==>.-relation(TS) reduces [x, v], [y, w] implies len v >= len w
 proof
-  assume
-  ==>.-relation(TS) reduces [x, v], [y, w];
+  assume ==>.-relation(TS) reduces [x, v], [y, w];
   then
   ex P being RedSequence of ==>.-relation(TS) st P.1 = [x, v] & P.len P = [
   y, w] by REWRITE1:def 3;
@@ -1852,8 +1791,7 @@ end;
 theorem
   ==>.-relation(TS) reduces [x, w], [y, v^w] implies v = <%>E
 proof
-  assume
-  ==>.-relation(TS) reduces [x, w], [y, v^w];
+  assume ==>.-relation(TS) reduces [x, w], [y, v^w];
   then len w >= len(v^w) by Th75;
   then len v + len w <= 0 + len w by AFINSQ_1:20;
   hence thesis by XREAL_1:8;
@@ -1865,8 +1803,7 @@ theorem Th77:
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  ==>.-relation(TS) reduces [x, v], [y, w];
+  assume ==>.-relation(TS) reduces [x, v], [y, w];
   then
   ex P being RedSequence of ==>.-relation(TS) st P.1 = [x, v] & P.len P = [
   y, w] by REWRITE1:def 3;
@@ -1879,8 +1816,7 @@ theorem
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  ==>.-relation(TS) reduces [x, u], [y, u];
+  assume ==>.-relation(TS) reduces [x, u], [y, u];
   then len u > len u or x = y by A1,Th77;
   hence thesis;
 end;
@@ -1892,8 +1828,7 @@ reduces [x, <%e%>], [y, <%>E] implies [[x, <%e%>], [y, <%>E]] in ==>.-relation(
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  ==>.-relation(TS) reduces [x, <%e%>], [y, <%>E];
+  assume ==>.-relation(TS) reduces [x, <%e%>], [y, <%>E];
   then consider P being RedSequence of ==>.-relation(TS) such that
 A2: P.1 = [x, <%e%>] & P.len P = [y, <%>E] by REWRITE1:def 3;
 A3: len P = 1 + 1 by A1,A2,Th63;
@@ -1928,8 +1863,7 @@ definition
   let E, F, TS, x1, x2, y1, y2;
   pred x1, x2 ==>* y1, y2, TS means
   :Def6:
-  ==>.-relation(TS) reduces [x1, x2],
-  [y1, y2];
+  ==>.-relation(TS) reduces [x1, x2], [y1, y2];
 end;
 
 theorem Th81:
@@ -1942,8 +1876,7 @@ proof
   transition-system over F2 such that
 A1: the carrier of TS1 = the carrier of TS2 & the Tran of TS1 = the Tran
   of TS2;
-  assume
-  x1, x2 ==>* y1, y2, TS1;
+  assume x1, x2 ==>* y1, y2, TS1;
   then ==>.-relation(TS1) reduces [x1, x2], [y1, y2] by Def6;
   then ==>.-relation(TS2) reduces [x1, x2], [y1, y2] by A1,Th34;
   hence thesis by Def6;
@@ -1960,8 +1893,7 @@ theorem Th83:
   x1, x2 ==>* y1, y2, TS & y1, y2 ==>* z1, z2, TS implies x1, x2
   ==>* z1, z2, TS
 proof
-  assume
-  x1, x2 ==>* y1, y2, TS & y1, y2 ==>* z1, z2, TS;
+  assume x1, x2 ==>* y1, y2, TS & y1, y2 ==>* z1, z2, TS;
   then
   ==>.-relation(TS) reduces [x1, x2], [y1, y2] & ==>.-relation(TS) reduces
   [y1, y2], [z1, z2] by Def6;
@@ -1972,8 +1904,7 @@ end;
 theorem Th84:
   x, y -->. z, TS implies x, y ==>* z, <%>E, TS
 proof
-  assume
-  x, y -->. z, TS;
+  assume x, y -->. z, TS;
   then ==>.-relation(TS) reduces [x, y], [z, <%>E] by Th72;
   hence thesis by Def6;
 end;
@@ -1981,8 +1912,7 @@ end;
 theorem
   x, v -->. y, TS implies x, v^w ==>* y, w, TS
 proof
-  assume
-  x, v -->. y, TS;
+  assume x, v -->. y, TS;
   then ==>.-relation(TS) reduces [x, v^w], [y, w] by Th73;
   hence thesis by Def6;
 end;
@@ -1990,8 +1920,7 @@ end;
 theorem Th86:
   x, u ==>* y, v, TS implies x, u^w ==>* y, v^w, TS
 proof
-  assume
-  x, u ==>* y, v, TS;
+  assume x, u ==>* y, v, TS;
   then ==>.-relation(TS) reduces [x, u], [y, v] by Def6;
   then ==>.-relation(TS) reduces [x, u^w], [y, v^w] by Th71;
   hence thesis by Def6;
@@ -2000,8 +1929,7 @@ end;
 theorem Th87:
   x1, x2 ==>. y1, y2, TS implies x1, x2 ==>* y1, y2, TS
 proof
-  assume
-  x1, x2 ==>. y1, y2, TS;
+  assume x1, x2 ==>. y1, y2, TS;
   then ==>.-relation(TS) reduces [x1, x2], [y1, y2] by Th74;
   hence thesis by Def6;
 end;
@@ -2009,8 +1937,7 @@ end;
 theorem Th88:
   x, v ==>* y, w, TS implies ex u st v = u^w
 proof
-  assume
-  x, v ==>* y, w, TS;
+  assume x, v ==>* y, w, TS;
   then ==>.-relation(TS) reduces [x, v], [y, w] by Def6;
   hence thesis by Th70;
 end;
@@ -2018,8 +1945,7 @@ end;
 theorem Th89:
   x, v ==>* y, w, TS implies len w <= len v
 proof
-  assume
-  x, v ==>* y, w, TS;
+  assume x, v ==>* y, w, TS;
   then ex u st v = u^w by Th88;
   hence thesis by Th9;
 end;
@@ -2027,31 +1953,27 @@ end;
 theorem
   x, w ==>* y, v^w, TS implies v = <%>E
 proof
-  assume
-  x, w ==>* y, v^w, TS;
+  assume x, w ==>* y, v^w, TS;
   then len(v^w) <= len w by Th89;
   then len v + len w <= 0 + len w by AFINSQ_1:20;
   hence thesis by XREAL_1:8;
 end;
 
 theorem Th91:
-  not <%>E in rng dom (the Tran of TS) implies (x, u ==>* y, u, TS
-  iff x = y)
+  not <%>E in rng dom (the Tran of TS) implies (x, u ==>* y, u, TS iff x = y)
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
   thus x, u ==>* y, u, TS implies x = y
   proof
-    assume
-    x, u ==>* y, u, TS;
+    assume x, u ==>* y, u, TS;
     then ==>.-relation(TS) reduces [x, u], [y, u] by Def6;
     then
     ex p being RedSequence of ==>.-relation(TS) st p.1 = [x, u] & p.len p =
     [y, u] by REWRITE1:def 3;
     hence thesis by A1,Th60;
   end;
-  assume
-  x = y;
+  assume x = y;
   hence thesis by Th82;
 end;
 
@@ -2061,8 +1983,7 @@ theorem Th92:
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  x, <%e%> ==>* y, <%>E, TS;
+  assume x, <%e%> ==>* y, <%>E, TS;
   then ==>.-relation(TS) reduces [x, <%e%>], [y, <%>E] by Def6;
   then [[x, <%e%>], [y, <%>E]] in ==>.-relation(TS) by A1,Th79;
   hence thesis by Def4;
@@ -2074,8 +1995,7 @@ theorem Th93:
 proof
   assume
 A1: TS is deterministic;
-  assume
-  x1, x2 ==>* y1, z, TS & x1, x2 ==>* y2, z, TS;
+  assume x1, x2 ==>* y1, z, TS & x1, x2 ==>* y2, z, TS;
   then
   ==>.-relation(TS) reduces [x1, x2], [y1, z] & ==>.-relation(TS) reduces
   [x1, x2], [y2, z] by Def6;
@@ -2101,8 +2021,7 @@ proof
   transition-system over F2 such that
 A1: the carrier of TS1 = the carrier of TS2 & the Tran of TS1 = the Tran
   of TS2;
-  assume
-  x, y ==>* z, TS1;
+  assume x, y ==>* z, TS1;
   then x, y ==>* z, <%>E, TS1 by Def7;
   then x, y ==>* z, <%>E, TS2 by A1,Th81;
   hence thesis by Def7;
@@ -2118,8 +2037,7 @@ end;
 theorem Th96:
   x, u ==>* y, TS implies x, u^v ==>* y, v, TS
 proof
-  assume
-  x, u ==>* y, TS;
+  assume x, u ==>* y, TS;
   then x, u ==>* y, <%>E, TS by Def7;
   then x, u^v ==>* y, <%>E^v, TS by Th86;
   hence thesis by AFINSQ_1:32;
@@ -2128,8 +2046,7 @@ end;
 theorem
   x, y -->. z, TS implies x, y ==>* z, TS
 proof
-  assume
-  x, y -->. z, TS;
+  assume x, y -->. z, TS;
   then x, y ==>* z, <%>E, TS by Th84;
   hence thesis by Def7;
 end;
@@ -2137,8 +2054,7 @@ end;
 theorem
   x1, x2 ==>. y, <%>E, TS implies x1, x2 ==>* y, TS
 proof
-  assume
-  x1, x2 ==>. y, <%>E, TS;
+  assume x1, x2 ==>. y, <%>E, TS;
   then x1, x2 ==>* y, <%>E, TS by Th87;
   hence thesis by Def7;
 end;
@@ -2161,20 +2077,17 @@ A3: x, u^v^<%>E ==>* y, v^<%>E, TS by AFINSQ_1:32;
 end;
 
 theorem Th100:
-  not <%>E in rng dom (the Tran of TS) implies (x, <%>E ==>* y,
-  TS iff x = y)
+  not <%>E in rng dom (the Tran of TS) implies (x, <%>E ==>* y, TS iff x = y)
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
   thus x, <%>E ==>* y, TS implies x = y
   proof
-    assume
-    x, <%>E ==>* y, TS;
+    assume x, <%>E ==>* y, TS;
     then x, <%>E ==>* y, <%>E, TS by Def7;
     hence thesis by A1,Th91;
   end;
-  assume
-  x = y;
+  assume x = y;
   hence thesis by Th95;
 end;
 
@@ -2184,8 +2097,7 @@ theorem
 proof
   assume
 A1: not <%>E in rng dom (the Tran of TS);
-  assume
-  x, <%e%> ==>* y, TS;
+  assume x, <%e%> ==>* y, TS;
   then x, <%e%> ==>* y, <%>E, TS by Def7;
   hence thesis by A1,Th92;
 end;
@@ -2196,8 +2108,7 @@ theorem
 proof
   assume
 A1: TS is deterministic;
-  assume
-  x1, x2 ==>* y1, TS & x1, x2 ==>* y2, TS;
+  assume x1, x2 ==>* y1, TS & x1, x2 ==>* y2, TS;
   then x1, x2 ==>* y1, <%>E, TS & x1, x2 ==>* y2, <%>E, TS by Def7;
   hence thesis by A1,Th93;
 end;
@@ -2215,8 +2126,7 @@ definition
     Y c= the carrier of TS
     proof
       let y;
-      assume
-      y in Y;
+      assume y in Y;
       then ex s st s = y & ex t st t in X & t, x ==>* s, TS;
       hence thesis;
     end;
@@ -2229,8 +2139,7 @@ theorem Th103:
 proof
   thus s in x-succ_of (X, TS) implies ex t st t in X & t, x ==>* s, TS
   proof
-    assume
-    s in x-succ_of (X, TS);
+    assume s in x-succ_of (X, TS);
     then ex s9 st s9 = s & ex t st t in X & t, x ==>* s9, TS;
     hence thesis;
   end;
@@ -2244,8 +2153,7 @@ proof
 A1: not <%>E in rng dom (the Tran of TS);
 A2: now
     let x;
-    assume
-    x in <%>E-succ_of (S, TS);
+    assume x in <%>E-succ_of (S, TS);
     then ex s st s in S & s, <%>E ==>* x, TS by Th103;
     hence x in S by A1,Th100;
   end;
@@ -2296,4 +2204,3 @@ A9: p, x ==>* q, TS1 by A7,Th103;
   end;
   hence thesis by A3,TARSKI:2;
 end;
-

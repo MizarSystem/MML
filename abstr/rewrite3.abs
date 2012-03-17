@@ -16,30 +16,29 @@ environ
  constructors XXREAL_0, NAT_1, FSM_1, MEMBERED, REWRITE1, FLANG_1, XREAL_0,
       RELSET_1;
  registrations CARD_1, RELSET_1, NAT_1, XREAL_0, XBOOLE_0, MEMBERED, XXREAL_0,
-      STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1, FINSEQ_1;
+      STRUCT_0, SUBSET_1, REWRITE1, AFINSQ_1, RELAT_1, FUNCT_1, FINSEQ_1,
+      CATALAN2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Preliminaries - FinSequences
 
-reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2, Y, Z for set;
+reserve x, x1, x2, y, y1, y2, z, z1, z2, X, X1, X2 for set;
 reserve E for non empty set;
 reserve e for Element of E;
-reserve u, u9, u1, u2, v, v1, v2, w, w9, w1, w2 for Element of E^omega;
+reserve u, u9, u1, u2, v, v1, v2, w, w1, w2 for Element of E^omega;
 reserve F, F1, F2 for Subset of E^omega;
-reserve i, j, k, l, n for Nat;
+reserve i, k, l, n for Nat;
 
 theorem :: REWRITE3:1
-  for p being FinSequence st k in dom p holds (<*x*>^p).(k + 1) = p
-  .k;
+  for p being FinSequence st k in dom p holds (<*x*>^p).(k + 1) = p.k;
 
 theorem :: REWRITE3:2
   for p being FinSequence holds p <> {} implies ex q being
   FinSequence, x st p = q^<*x*> & len p = len q + 1;
 
 theorem :: REWRITE3:3
-  for p being FinSequence st k in dom p & not k + 1 in dom p holds
-  len p = k;
+  for p being FinSequence st k in dom p & not k + 1 in dom p holds len p = k;
 
 begin :: Preliminaries - RedSequences
 
@@ -62,8 +61,7 @@ being RedSequence of R st len Q + 1 = len P & for k st k in dom Q holds Q.k = P
   .(k + 1);
 
 theorem :: REWRITE3:8
-  for R being Relation holds <*x, y*> is RedSequence of R implies [
-  x, y] in R;
+  for R being Relation holds <*x, y*> is RedSequence of R implies [ x, y] in R;
 
 begin :: Preliminaries - XFinSequences
 
@@ -71,8 +69,7 @@ theorem :: REWRITE3:9
   w = u^v implies len u <= len w & len v <= len w;
 
 theorem :: REWRITE3:10
-  w = u^v & u <> <%>E & v <> <%>E implies len u < len w & len v <
-  len w;
+  w = u^v & u <> <%>E & v <> <%>E implies len u < len w & len v < len w;
 
 theorem :: REWRITE3:11
   w1^v1 = w2^v2 & ( len w1 = len w2 or len v1 = len v2 ) implies w1 = w2
@@ -161,8 +158,7 @@ definition
   pred x1, x2 ==>. y1, y2, TS means
 :: REWRITE3:def 3
 
-  ex v, w st v = y2 & x1, w -->. y1,
-  TS & x2 = w^v;
+  ex v, w st v = y2 & x1, w -->. y1, TS & x2 = w^v;
 end;
 
 theorem :: REWRITE3:20
@@ -215,8 +211,8 @@ begin :: ==>.-relation is introduced to define transitions
 :: using reduction relations from REWRITE1
 
 reserve TS for non empty transition-system over F;
-reserve s, s9, s1, s2, t, t9, t1, t2 for Element of TS;
-reserve S, T for Subset of TS;
+reserve s, s9, s1, s2, t, t1, t2 for Element of TS;
+reserve S for Subset of TS;
 
 definition
   let E, F, TS;
@@ -227,8 +223,7 @@ definition
 end;
 
 theorem :: REWRITE3:31
-  [x, y] in ==>.-relation(TS) implies ex s, v, t, w st x = [s, v]
-  & y = [t, w];
+  [x, y] in ==>.-relation(TS) implies ex s, v, t, w st x = [s, v] & y = [t, w];
 
 theorem :: REWRITE3:32
   [[x1, x2], [y1, y2]] in ==>.-relation(TS) implies x1 in TS & y1
@@ -236,8 +231,7 @@ in TS & x2 in E^omega & y2 in E^omega & x1 in dom dom (the Tran of TS) & y1 in
   rng (the Tran of TS);
 
 theorem :: REWRITE3:33
-  x in ==>.-relation(TS) implies ex s, t, v, w st x = [[s, v], [t,
-  w]];
+  x in ==>.-relation(TS) implies ex s, t, v, w st x = [[s, v], [t, w]];
 
 theorem :: REWRITE3:34
   for TS1 being non empty transition-system over F1, TS2 being non
@@ -348,12 +342,11 @@ in dom P & P.k = [x, u] & P.(k + 1) = [y, v] holds ex w st x, w -->. y, TS & u
   = w^v;
 
 theorem :: REWRITE3:57
-  x, y -->. z, TS iff <*[x, y], [z, <%>E]*> is RedSequence of
-  ==>.-relation(TS);
+  x, y -->. z, TS iff <*[x, y], [z, <%>E]*> is RedSequence of ==>.-relation(TS)
+;
 
 theorem :: REWRITE3:58
-  x, v -->. y, TS iff <*[x, v^w], [y, w]*> is RedSequence of
-  ==>.-relation(TS);
+  x, v -->. y, TS iff <*[x, v^w], [y, w]*> is RedSequence of ==>.-relation(TS);
 
 theorem :: REWRITE3:59
   for P being RedSequence of ==>.-relation(TS) st P.1 = [x, v] & P
@@ -416,16 +409,13 @@ theorem :: REWRITE3:71
   TS) reduces [x, u^w], [y, v^w];
 
 theorem :: REWRITE3:72
-  x, y -->. z, TS implies ==>.-relation(TS) reduces [x, y], [z,
-  <%>E];
+  x, y -->. z, TS implies ==>.-relation(TS) reduces [x, y], [z, <%>E];
 
 theorem :: REWRITE3:73
-  x, v -->. y, TS implies ==>.-relation(TS) reduces [x, v^w], [y,
-  w];
+  x, v -->. y, TS implies ==>.-relation(TS) reduces [x, v^w], [y, w];
 
 theorem :: REWRITE3:74
-  x1, x2 ==>. y1, y2, TS implies ==>.-relation(TS) reduces [x1, x2
-  ], [y1, y2];
+  x1, x2 ==>. y1, y2, TS implies ==>.-relation(TS) reduces [x1, x2 ], [y1, y2];
 
 theorem :: REWRITE3:75
   ==>.-relation(TS) reduces [x, v], [y, w] implies len v >= len w;
@@ -457,8 +447,7 @@ definition
   pred x1, x2 ==>* y1, y2, TS means
 :: REWRITE3:def 6
 
-  ==>.-relation(TS) reduces [x1, x2],
-  [y1, y2];
+  ==>.-relation(TS) reduces [x1, x2], [y1, y2];
 end;
 
 theorem :: REWRITE3:81
@@ -496,8 +485,7 @@ theorem :: REWRITE3:90
   x, w ==>* y, v^w, TS implies v = <%>E;
 
 theorem :: REWRITE3:91
-  not <%>E in rng dom (the Tran of TS) implies (x, u ==>* y, u, TS
-  iff x = y);
+  not <%>E in rng dom (the Tran of TS) implies (x, u ==>* y, u, TS iff x = y);
 
 theorem :: REWRITE3:92
   not <%>E in rng dom (the Tran of TS) implies (x, <%e%> ==>* y,
@@ -539,8 +527,7 @@ theorem :: REWRITE3:99
   x, u ==>* y, TS & y, v ==>* z, TS implies x, u^v ==>* z, TS;
 
 theorem :: REWRITE3:100
-  not <%>E in rng dom (the Tran of TS) implies (x, <%>E ==>* y,
-  TS iff x = y);
+  not <%>E in rng dom (the Tran of TS) implies (x, <%>E ==>* y, TS iff x = y);
 
 theorem :: REWRITE3:101
   not <%>E in rng dom (the Tran of TS) implies (x, <%e%> ==>* y, TS
@@ -570,4 +557,3 @@ theorem :: REWRITE3:105
   for TS1 being non empty transition-system over F1, TS2 being non empty
 transition-system over F2 st the carrier of TS1 = the carrier of TS2 & the Tran
   of TS1 = the Tran of TS2 holds x-succ_of (X, TS1) = x-succ_of (X, TS2);
-

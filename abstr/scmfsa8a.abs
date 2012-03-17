@@ -13,13 +13,14 @@ environ
       TURING_1, SCMFSA_7, FINSEQ_1, UNIALG_2, SCMFSA8A, PARTFUN1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, NAT_1, FUNCOP_1,
       RELAT_1, FUNCT_1, PARTFUN1, AFINSQ_1, FUNCT_4, FUNCT_7, FINSEQ_1,
-      VALUED_1, STRUCT_0, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5,
-      SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
-      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMNORM, SCMFSA_4, RELSET_1, PRE_POLY;
+      VALUED_1, STRUCT_0, COMPOS_1, AMI_1, AMISTD_2, SCMFSA_2, SCMFSA_7,
+      SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B,
+      SCMFSA6C, SCMFSA7B, AMISTD_2, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, FUNCOP_1, NUMBERS, XXREAL_0,
       MEMBERED, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, AFINSQ_1, SCMFSA7B,
-      FINSET_1, SCMNORM, FINSEQ_1;
+      FINSET_1, FINSEQ_1, SCMFSA10, AMISTD_2, VALUED_1, SCMFSA_4, SCMFSA6C,
+      COMPOS_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -54,7 +55,7 @@ theorem :: SCMFSA8A:7
 
 theorem :: SCMFSA8A:8
   for s being State of SCM+FSA, I being Program of SCM+FSA holds
-  Initialize s +* Initialized I = s +* Initialized I;
+  Initialized s +* Initialized I = s +* Initialized I;
 
 theorem :: SCMFSA8A:9
   for I being Program of SCM+FSA, l being Element of NAT
@@ -75,7 +76,7 @@ theorem :: SCMFSA8A:12
 
 theorem :: SCMFSA8A:13
   for s being State of SCM+FSA, I being Program of SCM+FSA holds s
-  +* Initialized I = Initialize s +* (I +* Start-At( 0,SCM+FSA));
+  +* Initialized I = Initialized s +* (I +* Start-At( 0,SCM+FSA));
 
 theorem :: SCMFSA8A:14
   for s being State of SCM+FSA, I1,I2 being Program of SCM+FSA, l
@@ -92,13 +93,13 @@ theorem :: SCMFSA8A:21
 
 theorem :: SCMFSA8A:22
   for i being Instruction of SCM+FSA, a being Int-Location, n
-  being Element of NAT holds i does_not_destroy a implies IncAddr(i,n)
-  does_not_destroy a;
+  being Element of NAT holds i does not destroy a implies IncAddr(i,n)
+  does not destroy a;
 
 theorem :: SCMFSA8A:23
   for P being preProgram of SCM+FSA, n being Element of NAT, a
-being Int-Location holds P does_not_destroy a implies ProgramPart Relocated(P,
-  n) does_not_destroy a;
+being Int-Location holds P does not destroy a implies ProgramPart Relocated(P,
+  n) does not destroy a;
 
 theorem :: SCMFSA8A:24
   for P being good preProgram of SCM+FSA, n being Element of NAT
@@ -106,7 +107,7 @@ theorem :: SCMFSA8A:24
 
 theorem :: SCMFSA8A:25
   for I,J being preProgram of SCM+FSA, a being Int-Location holds
-  I does_not_destroy a & J does_not_destroy a implies I +* J does_not_destroy a
+  I does not destroy a & J does not destroy a implies I +* J does not destroy a
 ;
 
 theorem :: SCMFSA8A:26
@@ -114,8 +115,8 @@ theorem :: SCMFSA8A:26
 
 theorem :: SCMFSA8A:27
   for I being preProgram of SCM+FSA, l being Element of NAT
-, a being Int-Location holds I does_not_destroy a implies Directed(I,
-  l) does_not_destroy a;
+, a being Int-Location holds I does not destroy a implies Directed(I,
+  l) does not destroy a;
 
 registration
   let I be good preProgram of SCM+FSA;
@@ -336,7 +337,7 @@ Start-At( 0,SCM+FSA))) + 1)) = IC Comput(ProgramPart( (s +* ((I ';' J) +*
 
 theorem :: SCMFSA8A:43
   for s being State of SCM+FSA, I,J being Program of SCM+FSA st I
-  is_closed_on Initialize s & I is_halting_on Initialize s holds (for k being
+  is_closed_on Initialized s & I is_halting_on Initialized s holds (for k being
   Element of NAT st k <= LifeSpan(ProgramPart(s +* Initialized I),s +*
 Initialized I)
  holds IC Comput(ProgramPart(s+* Initialized Directed I),
@@ -367,7 +368,7 @@ CurInstr(ProgramPart(s +* Initialized Directed I),
 
 theorem :: SCMFSA8A:44
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-  is_closed_on Initialize s & I is_halting_on Initialize s holds for k being
+  is_closed_on Initialized s & I is_halting_on Initialized s holds for k being
   Element of NAT st k <= LifeSpan(ProgramPart(s +* Initialized I),s +*
 Initialized I) holds
 Comput(ProgramPart(s +*Initialized I),
@@ -382,7 +383,7 @@ Comput(ProgramPart(s +*Initialized I),
 
 theorem :: SCMFSA8A:45
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds IC Comput(
+is_closed_on Initialized s & I is_halting_on Initialized s holds IC Comput(
 ProgramPart(
   (s +* Initialized Directed I)),
   (s +* Initialized Directed I), (LifeSpan(ProgramPart(s +* Initialized I),s +*
@@ -408,7 +409,7 @@ canceled 5;
 
 theorem :: SCMFSA8A:53
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds IC Comput(
+is_closed_on Initialized s & I is_halting_on Initialized s holds IC Comput(
 ProgramPart(
 (s +* Initialized (I ';' Stop SCM+FSA))),
 (s +* Initialized (I ';' Stop SCM+FSA)), (LifeSpan(ProgramPart(s +* Initialized
@@ -417,7 +418,7 @@ I),s +* Initialized I) + 1)) =
 
 theorem :: SCMFSA8A:54
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on Initialize s & I is_halting_on Initialize s holds DataPart
+  is_closed_on Initialized s & I is_halting_on Initialized s holds DataPart
   Comput(ProgramPart( (s +* Initialized I)), (s +* Initialized I),LifeSpan(
 ProgramPart(s
 +* Initialized I),s
@@ -429,13 +430,13 @@ Initialized (I ';' Stop SCM+FSA)), (LifeSpan(ProgramPart(s +*
 
 theorem :: SCMFSA8A:55
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s
+is_closed_on Initialized s & I is_halting_on Initialized s
  holds ProgramPart(s +* Initialized(I ';' Stop SCM+FSA))
   halts_on s +* Initialized(I ';' Stop SCM+FSA);
 
 theorem :: SCMFSA8A:56
   for I being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on Initialize s & I is_halting_on Initialize s holds LifeSpan(
+  is_closed_on Initialized s & I is_halting_on Initialized s holds LifeSpan(
 ProgramPart(s +*
   Initialized (I ';' Stop SCM+FSA)),s +*
   Initialized (I ';' Stop SCM+FSA)) = LifeSpan(ProgramPart(s +* Initialized I),
@@ -443,7 +444,8 @@ s +* Initialized I) + 1;
 
 theorem :: SCMFSA8A:57
   for s being State of SCM+FSA, I being Program of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds IExec(I ';' Stop
+is_closed_on Initialized s & I is_halting_on Initialized s
+holds IExec(I ';' Stop
   SCM+FSA,s) = IExec(I,s) +* Start-At( card I,SCM+FSA);
 
 theorem :: SCMFSA8A:58
@@ -462,7 +464,7 @@ theorem :: SCMFSA8A:59
 
 theorem :: SCMFSA8A:60
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s
+is_closed_on Initialized s & I is_halting_on Initialized s
  holds ProgramPart(s +* Initialized
   (I ';' Goto  (card J + 1) ';' J ';' Stop SCM+FSA))
    halts_on s +* Initialized
@@ -470,13 +472,15 @@ is_closed_on Initialize s & I is_halting_on Initialize s
 
 theorem :: SCMFSA8A:61
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-  is_closed_on Initialize s & I is_halting_on Initialize s holds IC IExec(I ';'
+  is_closed_on Initialized s & I is_halting_on Initialized s
+  holds IC IExec(I ';'
 Goto  (card J + 1) ';' J ';' Stop SCM+FSA,s) =  (card I + card J +
   1);
 
 theorem :: SCMFSA8A:62
   for I,J being Program of SCM+FSA, s being State of SCM+FSA st I
-is_closed_on Initialize s & I is_halting_on Initialize s holds IExec(I ';' Goto
+is_closed_on Initialized s & I is_halting_on Initialized s
+holds IExec(I ';' Goto
  (card J + 1) ';' J ';' Stop SCM+FSA,s) = IExec(I,s) +* Start-At( (
   card I + card J + 1),SCM+FSA);
 

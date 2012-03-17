@@ -3,15 +3,15 @@
 ::
 :: Received April 25, 1994
 :: Copyright (c) 1994 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, MSUALG_1, CARD_3, FUNCT_1, SUBSET_1, PBOOLE, RELAT_1,
       FUNCT_6, TARSKI, FUNCOP_1, FINSEQ_4, FUNCT_5, ZFMISC_1, PRALG_1, MCART_1,
-      COMPLEX1, STRUCT_0, MARGREL1, RLVECT_2, FUNCT_2, PRALG_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, MCART_1, STRUCT_0, FUNCOP_1, FINSEQ_2, FUNCT_5, FUNCT_6, CARD_3,
-      PBOOLE, PRALG_1, MSUALG_1;
+      COMPLEX1, STRUCT_0, MARGREL1, RLVECT_2, FUNCT_2, PRALG_2, PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, BINOP_1, MCART_1, STRUCT_0, FUNCOP_1, FINSEQ_2, FUNCT_5,
+      FUNCT_6, CARD_3, PBOOLE, PRALG_1, MSUALG_1;
  constructors BINOP_1, FUNCT_6, PRALG_1, MSUALG_1, RELSET_1, FUNCT_5;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, CARD_3, PBOOLE, STRUCT_0,
       MSUALG_1, RELSET_1;
@@ -26,24 +26,35 @@ begin
 
 reserve I,J,i,j,x for set,
   S for non empty ManySortedSign;
-
+ 
 ::
 :: Preliminaries
 ::
 
-definition
+registration
   let X be with_common_domain functional non empty set;
-  redefine mode Element of X -> ManySortedSet of (DOM X);
+  cluster -> DOM X -defined Element of X;
   coherence
   proof
     let x be Element of X;
     DOM X = dom x by CARD_3:def 12;
-    hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
+    hence thesis by RELAT_1:def 18;
+  end;
+end;
+
+registration
+  let X be with_common_domain functional non empty set;
+  cluster -> total Element of X;
+  coherence
+  proof
+    let x be Element of X;
+    DOM X = dom x by CARD_3:def 12;
+    hence thesis by PARTFUN1:def 4;
   end;
 end;
 
 begin
-
+ 
 :: Operations on Functions
 
 definition
@@ -65,8 +76,7 @@ A2: for x holds x in X iff ex y being set st y in dom F & P[y,x] from
     f;
 A3: now
       let x;
-      assume
-      x in X;
+      assume x in X;
       then ex y being set st y in dom F & ex f being Function st y = f & x =
       commute f by A2;
       then reconsider f = x as Function;
@@ -80,8 +90,7 @@ A5: for x st x in X holds P[x,G.x] from CLASSES1:sch 1(A3);
     hereby
       let x;
       hereby
-        assume
-        x in dom G;
+        assume x in dom G;
         then consider y being set such that
 A6:     y in dom F and
 A7:     ex f being Function st y = f & x = commute f by A2,A4;
@@ -138,15 +147,13 @@ A2: dom (Commute F) = {{}}
     thus dom (Commute F) c= {{}}
     proof
       let x;
-      assume
-      x in dom (Commute F);
+      assume x in dom (Commute F);
       then ex f be Function st f in dom F & x = commute f by Def6;
       then x = {} by A1,FUNCT_6:88,TARSKI:def 1;
       hence thesis by TARSKI:def 1;
     end;
     let x;
-    assume
-    x in {{}};
+    assume x in {{}};
     then
 A3: x = {} by TARSKI:def 1;
     {} in dom F by A1,TARSKI:def 1;
@@ -192,8 +199,7 @@ for x st x in dom h holds h.x = (uncurry f).(x,g.x) by A1,A2,FUNCT_6:def 7;
       let y be set;
       y in rng f implies y is Function
       proof
-        assume
-        y in rng f;
+        assume y in rng f;
         then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
         hence thesis;
       end;
@@ -308,8 +314,7 @@ definition
   Element of I, f be Function of A#.pj,A.rj, g be Function of B#.pj,B.rj;
   canceled;
   func [[:f,g:]] -> Function of [|A,B|]#.pj,[|A,B|].rj means
-  for h be Function
-  st h in [|A,B|]#.pj holds it.h = [f.(pr1 h),g.(pr2 h)];
+  for h be Function st h in [|A,B|]#.pj holds it.h = [f.(pr1 h),g.(pr2 h)];
   existence
   proof
     defpred P[set,set] means for h be Function st h = $1 holds $2 = [f.(pr1 h)
@@ -320,8 +325,7 @@ A2: for x be set st x in X ex y be set st y in Y & P[x,y]
     proof
       let x be set;
 A3:   rng pj c= I by FINSEQ_1:def 4;
-      assume
-      x in X;
+      assume x in X;
       then consider h1 be Function such that
 A4:   h1 = x and
 A5:   dom h1 = dom ([|A,B|]*pj) and
@@ -397,8 +401,7 @@ A24:    h1.z = [a,b] by ZFMISC_1:def 2;
       then [f.(pr1 h1),g.(pr2 h1)] in [:A.rj,B.rj:] by A16;
       hence y in Y by PBOOLE:def 21;
       let h be Function;
-      assume
-      x = h;
+      assume x = h;
       hence thesis by A4;
     end;
     consider F being Function of X,Y such that
@@ -411,8 +414,7 @@ A25: for x be set st x in X holds P[x,F.x] from FUNCT_2:sch 1(A2);
     let x,y be Function of [|A,B|]#.pj,[|A,B|].rj such that
 A26: for h be Function st h in [|A,B|]#.pj holds x.h = [f.(pr1 h),g.(
     pr2 h)] and
-A27: for h be Function st h in [|A,B|]#.pj holds y.h = [f.(pr1 h),g.(
-    pr2 h)];
+A27: for h be Function st h in [|A,B|]#.pj holds y.h = [f.(pr1 h),g.( pr2 h)];
     let h be Element of [|A,B|]#.pj;
     h in [|A,B|]#.pj;
     then h in product ([|A,B|]*pj) by PBOOLE:def 19;
@@ -552,7 +554,7 @@ A26:  j in dom p by A22,FUNCT_2:def 1;
 end;
 
 begin
-
+ 
 ::
 :: Family of Many Sorted Universal Algebras
 ::
@@ -561,8 +563,7 @@ definition
   let I,S;
   mode MSAlgebra-Family of I,S -> ManySortedSet of I means
     :Def12:
-    for i st i
-    in I holds it.i is non-empty MSAlgebra over S;
+    for i st i in I holds it.i is non-empty MSAlgebra over S;
   existence
   proof
     consider A be non-empty MSAlgebra over S;
@@ -570,8 +571,7 @@ definition
     reconsider f as ManySortedSet of I;
     take f;
     let i;
-    assume
-    i in I;
+    assume i in I;
     hence thesis by FUNCOP_1:13;
   end;
 end;
@@ -629,7 +629,7 @@ registration
 end;
 
 begin
-
+ 
 ::
 :: Product of Many Sorted Universal Algebras
 ::
@@ -701,8 +701,7 @@ I ex U0 being MSAlgebra over S st U0 = A.i & it.i = (the Sorts of U0).s if I <>
   existence
   proof
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       then reconsider I9 = I as non empty set;
       reconsider A9 = A as MSAlgebra-Family of I9,S;
       deffunc F(Element of I9) = (the Sorts of (A9.$1)).s;
@@ -712,8 +711,7 @@ A1:   dom f = I9 & for i be Element of I9 holds f.i = F(i) from
       reconsider f as ManySortedSet of I by A1,PARTFUN1:def 4,RELAT_1:def 18;
       take f;
       let i be set;
-      assume
-      i in I;
+      assume i in I;
       then reconsider i9 = i as Element of I9;
       reconsider U0 = A9.i9 as MSAlgebra over S;
       take U0;
@@ -728,8 +726,7 @@ A2: I = {};
   proof
     let f,g be ManySortedSet of I;
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       assume
 A3:   ( for i be set st i in I ex U0 being MSAlgebra over S st U0 = A.
 i & f.i = (the Sorts of U0).s)& for i be set st i in I ex U0 being MSAlgebra
@@ -774,8 +771,7 @@ definition
   let A be MSAlgebra-Family of I,S;
   func SORTS(A) -> ManySortedSet of the carrier of S means
   :Def17:
-  for s be
-  SortSymbol of S holds it.s = product Carrier(A,s);
+  for s be SortSymbol of S holds it.s = product Carrier(A,s);
   existence
   proof
     deffunc F(SortSymbol of S) = product Carrier(A,$1);
@@ -796,8 +792,7 @@ A3: for s be SortSymbol of S holds g.s = product Carrier(A,s);
     for x be set st x in the carrier of S holds f.x = g.x
     proof
       let x be set;
-      assume
-      x in the carrier of S;
+      assume x in the carrier of S;
       then reconsider x1 = x as SortSymbol of S;
       f.x1= product Carrier(A,x1) by A2;
       hence thesis by A3;
@@ -813,8 +808,7 @@ registration
   coherence
   proof
     let x be set;
-    assume
-    x in the carrier of S;
+    assume x in the carrier of S;
     then reconsider s = x as SortSymbol of S;
     (SORTS A).s = product Carrier(A,s) by Def17;
     hence thesis;
@@ -833,8 +827,7 @@ ex U0 being MSAlgebra over S st U0 = A.i & it.i = the Charact of U0 if I <> {}
   proof
     reconsider f = [[0]]I as ManySortedFunction of I;
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       then reconsider I9 = I as non empty set;
       reconsider A9 = A as MSAlgebra-Family of I9,S;
       deffunc F(Element of I9) = the Charact of A9.$1;
@@ -843,8 +836,7 @@ A1:   for i be Element of I9 holds X.i = F(i) from PBOOLE:sch 5;
       for x st x in dom X holds X.x is Function
       proof
         let x;
-        assume
-        x in dom X;
+        assume x in dom X;
         then reconsider i = x as Element of I9 by PARTFUN1:def 4;
         X.i = the Charact of A9.i by A1;
         hence thesis;
@@ -852,8 +844,7 @@ A1:   for i be Element of I9 holds X.i = F(i) from PBOOLE:sch 5;
       then reconsider X as ManySortedFunction of I by FUNCOP_1:def 6;
       take X;
       let i be set;
-      assume
-      i in I;
+      assume i in I;
       then reconsider i9 = i as Element of I9;
       reconsider U0 = A9.i9 as MSAlgebra over S;
       take U0;
@@ -868,8 +859,7 @@ A2: I = {};
   proof
     let f,g be ManySortedFunction of I;
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       assume
 A3:   ( for i be set st i in I ex U0 being MSAlgebra over S st U0 = A.
 i & f.i = the Charact of U0)& for i be set st i in I ex U0 being MSAlgebra over
@@ -903,8 +893,7 @@ A1: I <> {};
     thus dom uncurry (OPER A) c= [:I,the carrier' of S:]
     proof
       let t be set;
-      assume
-      t in dom uncurry (OPER A);
+      assume t in dom uncurry (OPER A);
       then consider x be set,g be Function,y be set such that
 A2:   t = [x,y] and
 A3:   x in dom (OPER A) and
@@ -978,8 +967,7 @@ A5:   dom g = I and
       for x st x in dom g holds g.x is Function
       proof
         let x;
-        assume
-        x in dom g;
+        assume x in dom g;
         then reconsider i = x as Element of I by A5;
 A6:     [i,o]`1 = i & [i,o]`2 = o by MCART_1:def 1,def 2;
         consider U0 being MSAlgebra over S such that
@@ -1038,8 +1026,7 @@ MSAlgebra-Family of I,S, o be OperSymbol of S, x be set st x in rng (Frege (A?.
 proof
   let I be non empty set, S be non void non empty ManySortedSign, A be
   MSAlgebra-Family of I,S, o be OperSymbol of S, x be set;
-  assume
-  x in rng (Frege (A?.o));
+  assume x in rng (Frege (A?.o));
   then ex y be set st y in dom (Frege (A?.o)) & (Frege (A?.o)).y = x by
   FUNCT_1:def 5;
   hence thesis;
@@ -1063,8 +1050,7 @@ A3: x in rng (A?.o);
     then ex j st j in dom (A?.o) & x = (A?.o).j by FUNCT_1:def 5;
     hence thesis by A3,FUNCT_6:def 1;
   end;
-  assume
-  f in rng (Frege (A?.o));
+  assume f in rng (Frege (A?.o));
   then consider y be set such that
 A4: y in dom (Frege (A?.o)) and
 A5: (Frege (A?.o)).y = f by FUNCT_1:def 5;
@@ -1125,8 +1111,7 @@ A7: for i be Element of I holds f.i in Args(o,A.i)
     hence thesis by FUNCT_2:def 1;
   end;
   let x;
-  assume
-  x in rng f;
+  assume x in rng f;
   then consider y be set such that
 A8: y in dom f and
 A9: x = f.y by FUNCT_1:def 5;
@@ -1153,8 +1138,7 @@ A17: dom (So * a) = dom a by RELAT_1:46;
 A18: rng g c= |.A.y.|
   proof
     let i;
-    assume
-    i in rng g;
+    assume i in rng g;
     then consider j such that
 A19: j in dom g and
 A20: g.j = i by FUNCT_1:def 5;
@@ -1219,13 +1203,11 @@ definition
 A1: for x st x in X ex y be set st P[x,y]
     proof
       let x;
-      assume
-      x in X;
+      assume x in X;
       then reconsider o = x as OperSymbol of S;
       take IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege (A?.o));
       let o1 be OperSymbol of S;
-      assume
-      x = o1;
+      assume x = o1;
       hence thesis;
     end;
     consider f being Function such that
@@ -1234,36 +1216,31 @@ A2: dom f = X & for x st x in X holds P[x,f.x] from CLASSES1:sch 1(A1);
     for x st x in dom f holds f.x is Function
     proof
       let x;
-      assume
-      x in dom f;
+      assume x in dom f;
       then reconsider o = x as OperSymbol of S by A2;
       per cases;
       suppose
 A3:     the_arity_of o = {};
-        f.x = IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege(A?.o))
-        by A2
+        f.x = IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege(A?.o)) by A2
           .= commute(A?.o) by A3,FUNCOP_1:def 8;
         hence thesis;
       end;
       suppose
 A4:     the_arity_of o <> {};
-        f.x = IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege (A?.o))
-        by A2
+        f.x = IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege (A?.o)) by A2
           .= Commute Frege (A?.o) by A4,FUNCOP_1:def 8;
         hence thesis;
       end;
     end;
     then reconsider f as ManySortedFunction of X by FUNCOP_1:def 6;
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       then reconsider I9 = I as non empty set;
       reconsider A9 = A as MSAlgebra-Family of I9,S;
       for x st x in X holds f.x is Function of AS.x,RS.x
       proof
         let x;
-        assume
-        x in X;
+        assume x in X;
         then reconsider o = x as OperSymbol of S;
         set ar = the_arity_of o;
         set C = Commute Frege (A?.o), F = Frege (A?.o), Ar = the Arity of S,
@@ -1293,8 +1270,7 @@ A11:      the_arity_of o = {};
 A12:      rng (A?.o) c= Funcs({{}},|.A9.|)
           proof
             let j;
-            assume
-            j in rng (A?.o);
+            assume j in rng (A?.o);
             then consider a be set such that
 A13:        a in dom (A?.o) and
 A14:        (A?.o).a = j by FUNCT_1:def 5;
@@ -1342,8 +1318,7 @@ A26:        for b be set st b in dom Carrier(A,rs) holds h.b in Carrier(A
             ,rs).b
             proof
               let b be set;
-              assume
-              b in dom Carrier(A,rs);
+              assume b in dom Carrier(A,rs);
               then reconsider i = b as Element of I9 by PARTFUN1:def 4;
 A27:          ex U0 being MSAlgebra over S st U0 = A.i & (Carrier(A,rs)).
               i = (the Sorts of U0).rs by Def16;
@@ -1377,8 +1352,7 @@ A32:      dom C = AS.o
             thus dom C c= AS.o
             proof
               let j;
-              assume
-              j in dom C;
+              assume j in dom C;
               then consider g be Function such that
 A33:          g in dom F and
 A34:          j = commute g by Def6;
@@ -1410,8 +1384,7 @@ A42:            for z be set st z in dom Carrier(A,s) holds h.z in (
                 Carrier(A,s)).z
                 proof
                   let z be set;
-                  assume
-                  z in dom Carrier(A,s);
+                  assume z in dom Carrier(A,s);
                   then reconsider i = z as Element of I9 by PARTFUN1:def 4;
 A43:              dom ((the Sorts of A9.i)# * Ar) = X by PARTFUN1:def 4;
 A44:              Args(o,A9.i) = ((the Sorts of A9.i)# * Ar).o by
@@ -1449,8 +1422,7 @@ A49:            dom Carrier(A,s) = I by PARTFUN1:def 4;
               hence thesis by A7,A10,A34,A38,CARD_3:18;
             end;
             let i;
-            assume
-            i in AS.o;
+            assume i in AS.o;
             then consider g be Function such that
 A50:        g = i and
 A51:        dom g = dom ((SORTS A)*ar) and
@@ -1459,8 +1431,7 @@ A52:        for x st x in dom ((SORTS A)*ar) holds g.x in ((SORTS A)*
 A53:        rng g c= Funcs(I,|.A9.|)
             proof
               let a be set;
-              assume
-              a in rng g;
+              assume a in rng g;
               then consider b be set such that
 A54:          b in dom g and
 A55:          g.b = a by FUNCT_1:def 5;
@@ -1477,8 +1448,7 @@ A59:          for j st j in dom Carrier (A,cr) holds h.j in (Carrier
 A60:          rng h c= |.A9.|
               proof
                 let j;
-                assume
-                j in rng h;
+                assume j in rng h;
                 then consider c be set such that
 A61:            c in dom h and
 A62:            h.c = j by FUNCT_1:def 5;
@@ -1509,13 +1479,11 @@ A66:        commute (commute g) = g by A31,FUNCT_6:87;
             then
 A67:        ex h be Function st h = commute g & dom h = I & rng h c=
             Funcs(dom ar,|.A9.|) by FUNCT_2:def 2;
-A68:        for j st j in dom doms (A?.o) holds (commute g).j in doms(A
-            ?.o).j
+A68:        for j st j in dom doms (A?.o) holds (commute g).j in doms(A ?.o).j
             proof
               set cg = commute g;
               let j;
-              assume
-              j in dom doms (A?.o);
+              assume j in dom doms (A?.o);
               then reconsider ii = j as Element of I9 by Th18;
               set So = the Sorts of A9.ii;
               reconsider h = cg.ii as Function;
@@ -1561,8 +1529,7 @@ A77:      rng C c= RS.o
           proof
             let x;
 A78:        dom CA = I by PARTFUN1:def 4;
-            assume
-            x in rng C;
+            assume x in rng C;
             then consider g be set such that
 A79:        g in dom C and
 A80:        C.g = x by FUNCT_1:def 5;
@@ -1582,8 +1549,7 @@ A84:        F.f in rng F by A81,FUNCT_1:def 5;
 A85:        for j st j in dom CA holds h.j in CA.j
             proof
               let j;
-              assume
-              j in dom CA;
+              assume j in dom CA;
               then reconsider i = j as Element of I9 by PARTFUN1:def 4;
 A86:          dom ((the Sorts of A9.i) * Rs) = dom Rs by A8,PARTFUN1:
               def 4;
@@ -1609,8 +1575,7 @@ A87:          ex U0 being MSAlgebra over S st U0 = A9.i & CA.i = (the
       let o be OperSymbol of S;
       thus f.o=IFEQ(the_arity_of o,{},commute(A?.o),Commute Frege(A?.o)) by A2;
     end;
-    assume
-    I = {};
+    assume I = {};
     consider f being ManySortedFunction of (SORTS A)# * the Arity of S, (SORTS
     A) * the ResultSort of S;
     take f;
@@ -1620,8 +1585,7 @@ A87:          ex U0 being MSAlgebra over S st U0 = A9.i & CA.i = (the
     let f,g be ManySortedFunction of (SORTS A)# * the Arity of S, (SORTS A) *
     the ResultSort of S;
     hereby
-      assume
-      I <> {};
+      assume I <> {};
       assume that
 A88:  for o be OperSymbol of S holds f.o = IFEQ(the_arity_of o,{},
       commute(A?.o), Commute Frege (A?.o)) and
@@ -1630,8 +1594,7 @@ A89:  for o be OperSymbol of S holds g.o = IFEQ(the_arity_of o,{},
       for i st i in the carrier' of S holds f.i = g.i
       proof
         let i;
-        assume
-        i in the carrier' of S;
+        assume i in the carrier' of S;
         then reconsider o = i as Element of the carrier' of S;
         f.o = IFEQ(the_arity_of o,{},commute(A?.o), Commute Frege (A?.o)
         ) by A88;
@@ -1685,4 +1648,3 @@ canceled;
 theorem
   for S be non void non empty ManySortedSign, A be MSAlgebra-Family of I
   ,S holds the Sorts of product A = SORTS A & the Charact of product A = OPS A;
-

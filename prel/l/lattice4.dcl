@@ -17,6 +17,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="FILTER_0"/>
 <ArticleID name="LATTICE4"/>
 </Signature>
 <RCluster aid="LATTICE4" nr="1">
@@ -52,6 +54,31 @@
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="56"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="107">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="11" value="false"/>
+<Adjective nr="65">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="66">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="77">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="LATTICE4" nr="2">
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="36" value="false"/>
+<Adjective nr="56"/>
 <Adjective nr="63"/>
 </Cluster>
 </Typ>
@@ -66,7 +93,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

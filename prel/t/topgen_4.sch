@@ -23,10 +23,10 @@
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="90"/>
 </Typ>
 <Func kind="K" nr="72">
-<Func kind="K" nr="91"/>
+<Func kind="K" nr="90"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">

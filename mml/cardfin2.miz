@@ -1,7 +1,7 @@
-:: Counting Derangements, Counting Non Bijective Functions and the Birthday 
+:: Counting Derangements, Counting Non Bijective Functions and the Birthday
 :: Problem
 ::  by Cezary Kaliszyk
-:: 
+::
 :: Received February 23, 2010
 :: Copyright (c) 2010 Association of Mizar Users
 
@@ -19,24 +19,23 @@ environ
       AFINSQ_1, ABIAN, TAYLOR_1, STIRL2_1, CARD_FIN, RPR_1, AFINSQ_2;
  constructors REAL_1, SERIES_1, ABIAN, VALUED_1, CARD_FIN, RCOMP_1, SIN_COS,
       TAYLOR_1, SEQ_1, FCONT_1, SEQFUNC, RELSET_1, STIRL2_1, SETWISEO,
-      YELLOW20, WELLORD2, NAT_D, BINARITH, RPR_1, AFINSQ_2, AFINSQ_1;
+      YELLOW20, WELLORD2, NAT_D, BINARITH, RPR_1, AFINSQ_2, AFINSQ_1, NEWTON;
  registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_1,
       FINSET_1, NUMBERS, SIN_COS, RCOMP_1, VALUED_0, VALUED_1, FUNCT_2,
       FCONT_3, FCONT_1, AFINSQ_1, POWER, FUNCT_1, BINOP_2, WSIERP_1, XCMPLX_0,
-      XBOOLE_0, RELAT_1, FRAENKEL, AFINSQ_2;
+      XBOOLE_0, RELAT_1, FRAENKEL, AFINSQ_2, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, XCMPLX_0, SUBSET_1, SIN_COS, RELAT_1;
  theorems CARD_2, CARD_FIN, FUNCT_2, XBOOLE_0, NEWTON, XREAL_0, XCMPLX_1,
       RPR_1, XREAL_1, XCMPLX_0, INT_1, ORDINAL1, CARD_1, TAYLOR_1, SIN_COS,
       TAYLOR_2, XXREAL_1, ABIAN, STIRL2_1, SERIES_1, SEQ_1, SIN_COS2, NAT_1,
       TARSKI, BINOP_2, IRRAT_1, SEQ_2, FIB_NUM2, SIN_COS7, XXREAL_0, ALTCAT_1,
-      RELAT_1, VALUED_1, VALUED_0, FUNCT_1, AFINSQ_2, FUNCT_5, XBOOLE_1, POWER;
+      RELAT_1, VALUED_1, VALUED_0, FUNCT_1, AFINSQ_2, XBOOLE_1, POWER;
  schemes RECDEF_2, FIB_NUM, NAT_1;
 
 begin :: Preliminaries
 
-reserve x, y, z for set,
-  n for natural number;
+reserve x, y for set;
 
 registration :: Could be moved to NEWTON
   let n be Nat;
@@ -72,8 +71,7 @@ A1: y is_a_fixpoint_of (id {}) by ABIAN:def 5;
   end;
 
 theorem SINCOS59ADD:
-  for c be real number st c < 0 holds
-  exp_R c < 1
+  for c be real number st c < 0 holds exp_R c < 1
   proof
     let c be real number;
     assume c < 0;
@@ -91,8 +89,7 @@ definition
 end;
 
 theorem
-  for a being Integer holds
-  round a = a
+  for a being Integer holds round a = a
   proof
     let a be Integer;
     a - 1/2 < a - 0 by XREAL_1:8; then
@@ -101,9 +98,7 @@ theorem
   end;
 
 theorem RoundCorrect:
-  for a being Integer
-  for b being real number st
-  |. a - b .| < 1/2 holds
+  for a being Integer for b being real number st |. a - b .| < 1/2 holds
   a = round b
   proof
     let a be Integer;
@@ -123,8 +118,7 @@ A2: a - b + b < 1/2 + b by XREAL_1:10;
 begin :: Counting derangements
 
 theorem TaylorExp:
-  for n be Nat
-  for a, b be real number st a < b holds
+  for n be Nat for a, b be real number st a < b holds
   ex c be real number st c in ].a, b.[
   & exp_R a = Partial_Sums(Taylor(exp_R, [#]REAL, b, a)).n
             + exp_R c * (a-b) |^ (n+1) / ((n+1)!)
@@ -151,8 +145,7 @@ A7: exp_R . a = Partial_Sums(Taylor(exp_R, Z, b, a)).n
   end;
 
 theorem TaylorExpRest:
-  for n be positive Nat
-  for c be real number st c < 0 holds
+  for n be positive Nat for c be real number st c < 0 holds
   |. -n! * (exp_R c * (-1) |^ (n+1) / ((n+1)!)) .| < 1/2
   proof
     let n be positive Nat;
@@ -168,16 +161,14 @@ A3: |. exp_R c * ((-1) |^ n) / (n+1) .| < 1/2
       per cases;
       suppose
 A4:     n is even;
-A5:     (-1) |^ n = (-1) to_power n
-           .= 1 to_power n by POWER:54, A4
+A5:     (-1) |^ n = (-1) to_power n .= 1 to_power n by POWER:54, A4
            .= 1 by NEWTON:15;
         -1/2 < exp_R c / (n+1);
         hence thesis by SEQ_2:9, A5, A2;
       end;
       suppose
 A6:     n is odd;
-A7:     (-1) |^ n = (-1) to_power n
-                 .= -1 by FIB_NUM2:3, A6;
+A7:     (-1) |^ n = (-1) to_power n .= -1 by FIB_NUM2:3, A6;
         -1/2 < -(exp_R c / (n+1)) by A2, XREAL_1:26;
         hence thesis by A7, SEQ_2:9;
       end;
@@ -211,8 +202,7 @@ A1: card{F where F is Function of s, s:F is Permutation of s}=card s!
     proof
       let x be set;
       assume x in derangements(s);
-      then ex f be Permutation of s st
-      x = f & f has_no_fixpoint;
+      then ex f be Permutation of s st x = f & f has_no_fixpoint;
       hence thesis;
     end;
     then card derangements(s) c= (card s)! by CARD_1:27, A1;
@@ -221,8 +211,7 @@ A1: card{F where F is Function of s, s:F is Permutation of s}=card s!
 end;
 
 theorem Th1:
-  for s being finite set holds
-  derangements s = {h where h is Function of
+  for s being finite set holds derangements s = {h where h is Function of
     s, s: h is one-to-one & for x st x in s holds h.x<>x}
   proof
     let s be finite set;
@@ -255,8 +244,7 @@ A3: h is onto by A2, STIRL2_1:70;
   end;
 
 theorem Th2:
-  for s being non empty finite set
-  ex c being real number st c in ]. -1, 0 .[ &
+  for s being non empty finite set ex c being real number st c in ]. -1, 0 .[ &
   card(derangements s) - (((card s)!) / number_e) =
      -(card s)! * (exp_R c * (-1) |^ ((card s)+1) / (((card s)+1)!))
   proof
@@ -266,8 +254,7 @@ theorem Th2:
 A1: Sum XF=card {h where h is Function of s, s: h is one-to-one
       & for x st x in s holds h.x<>x} and
 A2: dom XF = n+1 and
-A3: for m be Nat st m in dom XF
-    holds XF.m=((-1)|^m)*(n!)/(m!) by CARD_FIN:74;
+A3: for m be Nat st m in dom XF holds XF.m=((-1)|^m)*(n!)/(m!) by CARD_FIN:74;
 A4: Sum XF = card (derangements s) by A1, Th1;
     set T = Taylor(exp_R, [#]REAL, 0, -1);
     consider c be real number such that
@@ -277,7 +264,7 @@ A5: c in ]. -1, 0 .[
     Partial_Sums(n!(#)T) = n!(#)Partial_Sums(T) by SERIES_1:12;
     then
 A6: Partial_Sums(n!(#)T) . n = n! * (Partial_Sums(T) . n) by SEQ_1:13;
-A7: Partial_Sums(n!(#)T) . n = Sum (XF)
+ Partial_Sums(n!(#)T) . n = Sum (XF)
     proof
       consider f be Function of NAT, INT such that
 A8:   f.0 = XF . 0 and
@@ -322,8 +309,8 @@ A18:    j < n + 1 by NAT_1:13;
       for j be Element of NAT holds P[j] from NAT_1:sch 1(A12, A14);
       hence thesis by A11, A2, NAT_1:46;
     end;
-A19:card (derangements s) + n! * (exp_R c * (-1) |^ (n+1) / ((n+1)!))
-           = n! * exp_R (-1)  by A7, A4, A5, A6
+then A19:card (derangements s) + n! * (exp_R c * (-1) |^ (n+1) / ((n+1)!))
+           = n! * exp_R (-1)  by  A4, A5, A6
           .= n! * (1 / exp_R 1) by TAYLOR_1:4
           .= n! / number_e by IRRAT_1:def 7;
     take c;
@@ -382,16 +369,15 @@ A1: card { x } = 1 by CARD_1:50;
     then card(derangements { x }) = 0 by Th4, A1, NEWTON:19;
     hence thesis;
   end;
-
+ 
 :: Needed in both proofs of the following definition
+
 reconsider j = 1, z = 0 as Element of INT by INT_1:def 2;
 deffunc F(Element of NAT, Integer, Integer) = ($1 + 1) * ($2 + $3);
 
 definition
   func der_seq -> sequence of INT means
-:Def3: it.0 = 1 &
-    it.1 = 0 &
-    for n being natural number
+:Def3: it.0 = 1 & it.1 = 0 & for n being natural number
     holds it.(n + 2) = (n + 1) * (it.n + it.(n + 1));
   existence
     proof
@@ -412,14 +398,12 @@ A1:   f.0 = j & f.1 = z
 A2:   f.0 = j & f.1 = z;
       assume for n being natural number
         holds f.(n+2) = (n + 1) * (f.n + f.(n + 1)); then
-A3:   for n being Element of NAT
-        holds f.(n+2) = F(n, f.n, f.(n+1));
+A3:   for n being Element of NAT holds f.(n+2) = F(n, f.n, f.(n+1));
       assume g.0 = 1 & g.1 = 0; then
 A4:   g.0 = j & g.1 = z;
       assume for n being natural number
         holds g.(n+2) = (n + 1) * (g.n + g.(n + 1)); then
-A5:   for n being Element of NAT
-        holds g.(n+2) = F(n, g.n, g.(n+1));
+A5:   for n being Element of NAT holds g.(n+2) = F(n, g.n, g.(n+1));
       thus f = g from RECDEF_2:sch 7(A2, A3, A4, A5);
     end;
 end;
@@ -449,8 +433,7 @@ registration
 end;
 
 theorem
-  for F be XFinSequence of INT
-  for c be Integer holds
+  for F be XFinSequence of INT for c be Integer holds
   c * Sum F = Sum ((c (#) F) | (len F -' 1)) + c * F.(len F -' 1)
   proof
     let F be XFinSequence of INT;
@@ -472,9 +455,10 @@ Y:    Sum (c (#) F) = Sum((c (#) F) | len F) by RELAT_1:98, F;
       hence thesis by VALUED_1:6, Z, Y, B;
     end;
   end;
-
+ 
 :: This theorem is symmetric to the previous one. Since we use Integers
 :: we cannot divide and it has to be proved separately.
+
 theorem Th7:
   for X, N be XFinSequence of INT st len N = len X + 1
   for c be Integer st (N | len X) = c (#) X
@@ -492,8 +476,7 @@ Z1: (N | len X) = c (#) X;
   end;
 
 theorem
-  for s being finite set
-  holds der_seq.(card s) = card (derangements s)
+  for s being finite set holds der_seq.(card s) = card (derangements s)
   proof
     let s be finite set;
     defpred P[finite set] means
@@ -525,12 +508,12 @@ Z0:   P[n];
 Z1:   P[n+1];
       set n1 = n + 1;
 Z2:   card n = n & card n1 = n + 1 by CARD_1:def 5;
-      consider XFn be XFinSequence of INT such that
+      then consider XFn be XFinSequence of INT such that
 B1:   Sum XFn=card {h where h is Function of n, n: h is one-to-one
       & for x st x in n holds h.x<>x} and
 B2:   dom XFn = n+1 and
 B3:   for m be Nat st m in dom XFn
-      holds XFn.m=((-1)|^m)*(n!)/(m!) by CARD_FIN:74, Z2;
+      holds XFn.m=((-1)|^m)*(n!)/(m!) by CARD_FIN:74;
       consider XFn1 be XFinSequence of INT such that
 B4:   Sum XFn1=card {h where h is Function of n1, n1: h is one-to-one
       & for x st x in n1 holds h.x<>x} and
@@ -542,14 +525,13 @@ B7:   der_seq.n = Sum XFn by Z0, Z2;
       Sum XFn1=card(derangements n1) by B4, Th1; then
 B8:   der_seq.(n + 1) = Sum XFn1 by Z1, Z2;
       let sn2 be finite set;
-      assume
-Z3:   card sn2 = n + 2;
-      consider XFn2 be XFinSequence of INT such that
+      assume card sn2 = n + 2;
+      then consider XFn2 be XFinSequence of INT such that
 B9:   Sum XFn2=card {h where h is Function of sn2, sn2: h is one-to-one
       & for x st x in sn2 holds h.x<>x} and
 BA:   dom XFn2 = (n+2)+1 and
 BB:   for m be Nat st m in dom XFn2
-      holds XFn2.m=((-1)|^m)*((n+2)!)/(m!) by CARD_FIN:74, Z3;
+      holds XFn2.m=((-1)|^m)*((n+2)!)/(m!) by CARD_FIN:74;
 BC:   Sum XFn2=card(derangements sn2) by B9, Th1;
 CA:   len XFn1 = len XFn + 1 by B2, B5;
 CAA:  len XFn2 = len XFn1 + 1 by B5, BA;
@@ -601,9 +583,9 @@ CF:     m in dom XFn1 by CD, RELAT_1:86;
       n + 2 < n + 3 by XREAL_1:10; then
       len XFn1 c= dom XFn2 by B5, BA, NAT_1:40; then
 EB:   dom (XFn2 | len XFn1) = len XFn1 by RELAT_1:91;
-EC:   dom ((n + 2) (#) XFn1) = len XFn1 by VALUED_1:def 5;
-      Sum XFn2 = (n + 2) * (Sum XFn1) + XFn2 . (len XFn1)
-                                            by Th7, CAA, EB, EC, FUNCT_1:9, E0
+   dom ((n + 2) (#) XFn1) = len XFn1 by VALUED_1:def 5;
+      then Sum XFn2 = (n + 2) * (Sum XFn1) + XFn2 . (len XFn1)
+                                            by Th7, CAA, EB, FUNCT_1:9, E0
               .= (n + 2) * (Sum XFn1) + ((-1)|^(n + 2)) *((n+2)!)/((n+2)!)
                                                                  by BB, D4, B5
               .= (n + 2) * (Sum XFn1) + (-a) * (((n+2)!)/((n+2)!)) by D21
@@ -627,27 +609,13 @@ definition let s, t be set;
       {f where f is Function of s, t : f is not one-to-one} c= Funcs (s,t)
       proof
         let x;
-        assume x in
-        {f where f is Function of s, t : f is not one-to-one};
+        assume x in {f where f is Function of s, t : f is not one-to-one};
         then ex f being Function of s, t st x = f & f is not one-to-one;
         hence thesis by A1,FUNCT_2:11;
       end;
       hence thesis;
       end;
       suppose A2: t is empty;
-        per cases;
-        suppose A3: s is empty;
-        {f where f is Function of s, t : f is not one-to-one} c= {{}}
-        proof
-          let x;
-          assume x in
-          {f where f is Function of s, t : f is not one-to-one};
-          then ex f being Function of s, t st x = f & f is not one-to-one;
-          hence thesis by A3;
-        end;
-        hence thesis by A3,FUNCT_5:64;
-        end;
-        suppose A3: s is non empty;
         {f where f is Function of s, t : f is not one-to-one} = {}
         proof
           assume {f where f is Function of s, t : f is not one-to-one} <> {};
@@ -658,7 +626,6 @@ definition let s, t be set;
           hence thesis by A2;
         end;
         hence thesis by XBOOLE_1:2;
-      end;
     end;
   end;
 end;
@@ -761,12 +728,12 @@ Z19: (346 + 1)! = 346! * (346 + 1) by NEWTON:21;
 Z20: (345 + 1)! = 345! * (345 + 1) by NEWTON:21;
 Z21: (344 + 1)! = 344! * (344 + 1) by NEWTON:21;
 Z22: (343 + 1)! = 343! * (343 + 1) by NEWTON:21;
-Z23: (342 + 1)! = 342! * (342 + 1) by NEWTON:21;
-    365! = (365 * 364 * 363 * 362 * 361 * 360)
+ (342 + 1)! = 342! * (342 + 1) by NEWTON:21;
+    then 365! = (365 * 364 * 363 * 362 * 361 * 360)
           * (359 * 358 * 357 * 356 * 355 * 354 * 353)
           * (352 * 351 * 350 * 349 * 348 * 347 * 346 * 345 * 344 * 343)
           * (342!) by Z01,Z02,Z03,Z04,Z05,Z06,Z07,Z08,Z09,Z10,Z11,Z12,Z13,Z14,
-                                          Z15,Z16,Z17,Z18,Z19,Z20,Z21,Z22,Z23;
+                                          Z15,Z16,Z17,Z18,Z19,Z20,Z21,Z22;
     then
 A4: (365!) / (342!) = (365 * 364 * 363 * 362 * 361 * 360)
            * (359 * 358 * 357 * 356 * 355 * 354 * 353)
@@ -781,9 +748,9 @@ P4: 365 |^ (3 + 2) = 365 |^ 3 * 365 |^ 2 by NEWTON:13;
 P5: 365 |^ (3 + 3) = 365 |^ 3 * 365 |^ 3 by NEWTON:13;
 P6: 365 |^ (6 + 5) = 365 |^ 6 * 365 |^ 5 by NEWTON:13;
 P7: 365 |^ (6 + 6) = 365 |^ 6 * 365 |^ 6 by NEWTON:13;
-P8: 365 |^ (12 + 11) = 365 |^ 12 * 365 |^ 11 by NEWTON:13;
-P9: 2 * ((365 |^ 23) - (365! / (342!))) > 365 |^ 23
-                         by P6, A4, P7, P4, P2, P3, P5, P8;
+ 365 |^ (12 + 11) = 365 |^ 12 * 365 |^ 11 by NEWTON:13;
+then P9: 2 * ((365 |^ 23) - (365! / (342!))) > 365 |^ 23
+                         by P6, A4, P7, P4, P2, P3, P5;
     365 - 23 >= 0;
     hence 2 * ((365 |^ 23) - (365! / ((365 -' 23)!))) >
                                365 |^ 23 by P9, XREAL_0:def 2;
@@ -797,8 +764,8 @@ theorem Th9:
     let s be finite set, t be non empty finite set;
     assume Z0: card s = 23;
     assume Z1: card t = 365;
-    card (not-one-to-one (s, t)) = (365 |^ 23) - (365! / ((365 -' 23)!))
-                                                               by Th8, Z0, Z1;
+    then card (not-one-to-one (s, t)) = (365 |^ 23) - (365! / ((365 -' 23)!))
+                                                               by Th8, Z0;
     hence 2 * card (not-one-to-one (s, t)) > card Funcs (s, t)
       by birthdaycomputation, CARD_FIN:4, Z0, Z1;
   end;

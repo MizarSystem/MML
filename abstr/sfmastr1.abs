@@ -11,19 +11,19 @@ environ
       AMISTD_2, RELAT_1, TARSKI, XXREAL_0, ARYTM_3, FSM_1, XBOOLE_0, FUNCT_4,
       NUMBERS, SCMFSA6C, UNIALG_2, CIRCUIT2, FUNCT_1, MSUALG_1, SUBSET_1,
       NAT_1, FUNCT_7, STRUCT_0, FINSET_1, SCMFSA_1, ZFMISC_1, SCMNORM, PRE_FF,
-      ARYTM_1, SFMASTR1, PARTFUN1;
+      ARYTM_1, SFMASTR1, PARTFUN1, RELOC;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4,
-      FUNCT_7, PRE_FF, STRUCT_0, AMI_1, SCMNORM, SCMFSA_1, SCMFSA_2, SCMFSA_4,
-      SCMFSA_5, SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
- constructors DOMAIN_1, SETWISEO, SEQ_4, PRE_FF, SCM_1, SCMFSA_5, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMNORM,
-      SCMFSA_4, RELSET_1, PRE_POLY;
+      FUNCT_7, PRE_FF, STRUCT_0, COMPOS_1, AMI_1, AMISTD_2, SCMFSA_1, SCMFSA_2,
+      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA8C, XXREAL_0, SEQ_4;
+ constructors DOMAIN_1, SETWISEO, SEQ_4, PRE_FF, SCM_1, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, RELSET_1, PRE_POLY,
+      AMISTD_2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, AMI_5, SCMFSA_2, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C, SCMFSA_9, XXREAL_2,
-      RELAT_1, AMI_1;
+      RELAT_1, AMI_1, SCMFSA10, AMISTD_2, COMPOS_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -114,7 +114,7 @@ end;
 
 theorem :: SFMASTR1:1
   for a being Int-Location, I being Program of SCM+FSA st not a in
-  UsedIntLoc I holds I does_not_destroy a;
+  UsedIntLoc I holds I does not destroy a;
 
 begin :: Composition of non parahalting macro instructions
 
@@ -138,13 +138,13 @@ theorem :: SFMASTR1:2
   DataPart(I +* Start-At( 0,SCM+FSA)) = {};
 
 theorem :: SFMASTR1:3
-  I is_halting_on Initialize S & I is_closed_on Initialize S & J
-  is_closed_on IExec(I, S) implies I ';' J is_closed_on Initialize S;
+  I is_halting_on Initialized S & I is_closed_on Initialized S & J
+  is_closed_on IExec(I, S) implies I ';' J is_closed_on Initialized S;
 
 theorem :: SFMASTR1:4  :: SCMFSA6B:27
-  I is_halting_on Initialize S & J is_halting_on IExec(I, S) & I
-  is_closed_on Initialize S & J is_closed_on IExec(I, S) implies I ';' J
-  is_halting_on Initialize S;
+  I is_halting_on Initialized S & J is_halting_on IExec(I, S) & I
+  is_closed_on Initialized S & J is_closed_on IExec(I, S) implies I ';' J
+  is_halting_on Initialized S;
 
 theorem :: SFMASTR1:5  :: SCMFSA6B:27
   I is_closed_on s & I +* Start-At( 0,SCM+FSA) c= s &
@@ -155,8 +155,8 @@ s), s,m),
   Comput(ProgramPart((s+*(I ';' J))),(s+*(I ';' J)),m) equal_outside NAT;
 
 theorem :: SFMASTR1:6
-  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
-is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies LifeSpan(
+  Ig is_halting_on Initialized s & J is_halting_on IExec(Ig, s) & Ig
+is_closed_on Initialized s & J is_closed_on IExec(Ig, s) implies LifeSpan(
 ProgramPart(s +*
 Initialized (Ig ';' J)),s +*
 Initialized (Ig ';' J)) = LifeSpan(ProgramPart(s +* Initialized Ig),s +*
@@ -165,63 +165,67 @@ Ig),s +* Initialized Ig) +* Initialized J),Result(ProgramPart(s +* Initialized
 Ig),s +* Initialized Ig) +* Initialized J);
 
 theorem :: SFMASTR1:7  :: Main theorem
-  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
-is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies IExec(Ig ';' J,
+  Ig is_halting_on Initialized s & J is_halting_on IExec(Ig, s) & Ig
+is_closed_on Initialized s & J is_closed_on IExec(Ig, s)
+implies IExec(Ig ';' J,
   s) = IExec(J, IExec(Ig, s))+*
   Start-At(IC IExec(J, IExec(Ig, s))+card Ig,SCM+FSA);
 
 theorem :: SFMASTR1:8
-  (Ig is parahalting or Ig is_halting_on Initialize s & Ig
-is_closed_on Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s)
+  (Ig is parahalting or Ig is_halting_on Initialized s & Ig
+is_closed_on Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s)
 & J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).a = IExec(J, IExec(Ig
   , s)).a;
 
 theorem :: SFMASTR1:9
-  (Ig is parahalting or Ig is_halting_on Initialize s & Ig
-is_closed_on Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s)
+  (Ig is parahalting or Ig is_halting_on Initialized s & Ig
+is_closed_on Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s)
 & J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).f = IExec(J, IExec(Ig
   , s)).f;
 
 theorem :: SFMASTR1:10
-  (Ig is parahalting or Ig is_halting_on Initialize s & Ig is_closed_on
-  Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s) & J
+  (Ig is parahalting or Ig is_halting_on Initialized s & Ig is_closed_on
+  Initialized s) & (J is parahalting or J is_halting_on IExec(Ig, s) & J
 is_closed_on IExec(Ig, s)) implies DataPart IExec(Ig ';' J, s) = DataPart IExec
   (J, IExec(Ig, s));
 
 theorem :: SFMASTR1:11
-  Ig is parahalting or Ig is_closed_on Initialize s & Ig
-is_halting_on Initialize s implies DataPart Initialize IExec(Ig, s) = DataPart
+  Ig is parahalting or Ig is_closed_on Initialized s & Ig
+is_halting_on Initialized s implies DataPart Initialized IExec(Ig, s)
+= DataPart
   IExec(Ig, s);
 
 theorem :: SFMASTR1:12
-  Ig is parahalting or Ig is_halting_on Initialize s & Ig
-is_closed_on Initialize s implies IExec(Ig ';' j, s).a = Exec(j, IExec(Ig, s)).
-  a;
+  Ig is parahalting or Ig is_halting_on Initialized s & Ig
+is_closed_on Initialized s implies IExec(Ig ';' j, s).a
+= Exec(j, IExec(Ig, s)).a;
 
 theorem :: SFMASTR1:13
-  Ig is parahalting or Ig is_halting_on Initialize s & Ig
-is_closed_on Initialize s implies IExec(Ig ';' j, s).f = Exec(j, IExec(Ig, s)).
-  f;
+  Ig is parahalting or Ig is_halting_on Initialized s & Ig
+is_closed_on Initialized s implies IExec(Ig ';' j, s).f
+= Exec(j, IExec(Ig, s)).f;
 
 theorem :: SFMASTR1:14
-  Ig is parahalting or Ig is_halting_on Initialize s & Ig is_closed_on
-Initialize s implies DataPart IExec(Ig ';' j, s) = DataPart Exec(j, IExec(Ig, s
-  ));
+  Ig is parahalting or Ig is_halting_on Initialized s & Ig is_closed_on
+Initialized s implies DataPart IExec(Ig ';' j, s) =
+DataPart Exec(j, IExec(Ig, s));
 
 theorem :: SFMASTR1:15
-  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
-is_closed_on Exec(i, Initialize s) implies IExec(i ';' J, s).a = IExec(J, Exec(
-  i, Initialize s)).a;
+  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
+is_closed_on Exec(i, Initialized s) implies IExec(i ';' J, s).a
+= IExec(J, Exec(
+  i, Initialized s)).a;
 
 theorem :: SFMASTR1:16
-  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
-is_closed_on Exec(i, Initialize s) implies IExec(i ';' J, s).f = IExec(J, Exec(
-  i, Initialize s)).f;
+  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
+is_closed_on Exec(i, Initialized s) implies IExec(i ';' J, s).f
+= IExec(J, Exec(
+  i, Initialized s)).f;
 
 theorem :: SFMASTR1:17
-  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
-  is_closed_on Exec(i, Initialize s) implies DataPart IExec(i ';' J, s) =
-  DataPart IExec(J, Exec(i, Initialize s));
+  J is parahalting or J is_halting_on Exec(i, Initialized s) & J
+  is_closed_on Exec(i, Initialized s) implies DataPart IExec(i ';' J, s) =
+  DataPart IExec(J, Exec(i, Initialized s));
 
 begin :: Memory allocation
 

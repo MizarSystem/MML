@@ -13,7 +13,7 @@ environ
       T_0TOPSP, TOPS_2, SETFAM_1, RCOMP_1, ZFMISC_1, STRUCT_0, FUNCOP_1,
       SUPINF_2, MCART_1, RLTOPSP1, PSCOMP_1, SPPOL_1, TOPREAL4, CONVEX1,
       TOPREAL1, TOPREAL2, SPRECT_1, PCOMPS_1, JORDAN2C, SEQ_1, SEQ_2, TOPMETR,
-      PARTFUN1, CONNSP_2, TOPS_1, BORSUK_1;
+      PARTFUN1, CONNSP_2, TOPS_1, BORSUK_1, SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FINSET_1, ORDINAL1,
       NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, SQUARE_1, NAT_1, NAT_D,
@@ -32,7 +32,8 @@ environ
       NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, FINSEQ_1, RCOMP_1,
       STRUCT_0, PRE_TOPC, TOPS_1, COMPTS_1, METRIC_1, PCOMPS_1, BORSUK_1,
       TEX_4, MONOID_0, EUCLID, TOPMETR, JORDAN1, PSCOMP_1, GOBOARD9, WAYBEL_2,
-      TOPGRP_1, JORDAN2C, VALUED_0, XXREAL_2, RLTOPSP1, MEASURE6;
+      TOPGRP_1, JORDAN2C, VALUED_0, XXREAL_2, RLTOPSP1, MEASURE6, TBSP_1,
+      SPRECT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -41,15 +42,13 @@ begin  :: Real numbers
 reserve a, b for real number,
   r for Real,
   i, j, n for Element of NAT,
-  M for
-  non empty MetrSpace,
+  M for non empty MetrSpace,
   p, q, s for Point of TOP-REAL 2,
   e for Point of Euclid 2,
   w for Point of Euclid n,
   z for Point of M,
   A, B for Subset of TOP-REAL n,
-  P for
-  Subset of TOP-REAL 2,
+  P for Subset of TOP-REAL 2,
   D for non empty Subset of TOP-REAL 2;
 
 canceled 5;
@@ -108,13 +107,14 @@ theorem :: TOPREAL6:21
   for a, r being real number holds r >= 0 implies a in [.a-r,a+r.];
 
 theorem :: TOPREAL6:22
-  for a, b being real number holds a < b implies inf ].a,b.[ = a &
-  sup ].a,b.[ = b;
+  for a, b being real number holds a < b implies lower_bound ].a,b.[ = a &
+  upper_bound ].a,b.[ = b;
 
 canceled;
 
 theorem :: TOPREAL6:24
-  for A being bounded Subset of REAL holds A c= [.inf A,sup A.];
+  for A being bounded Subset of REAL holds A c= [.lower_bound A,upper_bound A.]
+;
 
 begin  :: Topological preliminaries
 
@@ -169,12 +169,10 @@ theorem :: TOPREAL6:36
   s = (1-r)*p + r*q & s <> q & r <= 1 implies r < 1;
 
 theorem :: TOPREAL6:37
-  s in LSeg(p,q) & s <> p & s <> q & p`1 < q`1 implies p`1 < s`1 & s`1 <
-  q`1;
+  s in LSeg(p,q) & s <> p & s <> q & p`1 < q`1 implies p`1 < s`1 & s`1 < q`1;
 
 theorem :: TOPREAL6:38
-  s in LSeg(p,q) & s <> p & s <> q & p`2 < q`2 implies p`2 < s`2 & s`2 <
-  q`2;
+  s in LSeg(p,q) & s <> p & s <> q & p`2 < q`2 implies p`2 < s`2 & s`2 < q`2;
 
 theorem :: TOPREAL6:39
   for p being Point of TOP-REAL 2 ex q being Point of TOP-REAL 2 st q`1
@@ -301,8 +299,7 @@ theorem :: TOPREAL6:64
   cl_Ball(z,0) = {z};
 
 theorem :: TOPREAL6:65
-  for A being Subset of TopSpaceMetr M st A = cl_Ball(z,r) holds A
-  is closed;
+  for A being Subset of TopSpaceMetr M st A = cl_Ball(z,r) holds A is closed;
 
 theorem :: TOPREAL6:66
   A = cl_Ball(w,r) implies A is closed;
@@ -312,8 +309,7 @@ theorem :: TOPREAL6:67
   non empty MetrStruct for x be Element of M holds cl_Ball(x,r) is bounded;
 
 theorem :: TOPREAL6:68
-  for A being Subset of TopSpaceMetr M st A = Sphere(z,r) holds A
-  is closed;
+  for A being Subset of TopSpaceMetr M st A = Sphere(z,r) holds A is closed;
 
 theorem :: TOPREAL6:69
   A = Sphere(w,r) implies A is closed;
@@ -360,12 +356,12 @@ registration
 end;
 
 theorem :: TOPREAL6:77
-  for D being non empty bounded_below Subset of REAL holds inf D =
-  inf Cl D;
+  for D being non empty bounded_below Subset of REAL holds lower_bound D =
+  lower_bound Cl D;
 
 theorem :: TOPREAL6:78
-  for D being non empty bounded_above Subset of REAL holds sup D =
-  sup Cl D;
+  for D being non empty bounded_above Subset of REAL holds upper_bound D =
+  upper_bound Cl D;
 
 registration
   cluster R^1 -> T_2;
@@ -376,8 +372,7 @@ theorem :: TOPREAL6:79
   A is closed iff B is closed;
 
 theorem :: TOPREAL6:80
-  for A being Subset of REAL, B being Subset of R^1 st A = B holds Cl A
-  = Cl B;
+  for A being Subset of REAL, B being Subset of R^1 st A = B holds Cl A = Cl B;
 
 theorem :: TOPREAL6:81
   for A being Subset of REAL, B being Subset of R^1 st A = B holds
@@ -463,7 +458,6 @@ theorem :: TOPREAL6:99
   Bounded implies A \ B is not Bounded;
 
 begin :: Addenda
-
 ::form GOBRD14, 2006.03.26, A.T.
 
 definition
@@ -471,8 +465,7 @@ definition
   func dist(a,b) -> Real means
 :: TOPREAL6:def 1
 
-  ex p, q being Point of Euclid n st p = a
-  & q = b & it = dist(p,q);
+  ex p, q being Point of Euclid n st p = a & q = b & it = dist(p,q);
   commutativity;
 end;
 
@@ -496,4 +489,3 @@ theorem :: TOPREAL6:104
   for x1, x2, y1, y2 being real number, a, b being Point of TOP-REAL 2
   st x1 <= a`1 & a`1 <= x2 & y1 <= a`2 & a`2 <= y2 & x1 <= b`1 & b`1 <= x2 & y1
   <= b`2 & b`2 <= y2 holds dist(a,b) <= (x2-x1) + (y2-y1);
-

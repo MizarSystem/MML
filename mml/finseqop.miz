@@ -10,10 +10,10 @@ environ
       FUNCOP_1, TARSKI, NAT_1, FINSEQ_1, FINSEQ_2, ORDINAL4, ARYTM_3, CARD_1,
       BINOP_1, SETWISEO, FINSEQOP;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-      RELAT_1, FUNCT_1, FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3,
-      FUNCOP_1, FINSEQ_2, SETWISEO;
+      RELAT_1, EQREL_1, FUNCT_1, FINSEQ_1, RELSET_1, PARTFUN1, FUNCT_2,
+      BINOP_1, FUNCT_3, FUNCOP_1, FINSEQ_2, SETWISEO;
  constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCOP_1, SETWISEO, NAT_1, FINSEQ_2,
-      RELSET_1;
+      RELSET_1, EQREL_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1,
       FINSEQ_2, ORDINAL1, XCMPLX_0, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -78,8 +78,7 @@ proof
 end;
 
 theorem Th7:
-  for X being set, x1,x2 being set holds <:X-->x1,X-->x2:> = X -->[
-  x1,x2]
+  for X being set, x1,x2 being set holds <:X-->x1,X-->x2:> = X -->[ x1,x2]
 proof
   let X be set, x1,x2 be set;
   set f = X-->x1, g = X-->x2;
@@ -93,8 +92,7 @@ A1:   X = {};
     end;
     suppose
 A2:   X <> {};
-      then rng f = {x1} & rng g = {x2} by FUNCOP_1:14;
-      then rng fg c= [:{x1},{x2}:] by FUNCT_3:71;
+      rng fg c= [:{x1},{x2}:];
       then
 A3:   rng fg c= {[x1,x2]} by ZFMISC_1:35;
       consider x being Element of X;
@@ -221,8 +219,8 @@ end;
 
 reserve T,T1,T2,T3 for Tuple of i,D;
 reserve T9 for Tuple of i, D9;
-reserve S,S1 for Tuple of j, D;
-reserve S9,S19 for Tuple of j, D9;
+reserve S for Tuple of j, D;
+reserve S9 for Tuple of j, D9;
 
 Lm1: for T being Tuple of 0, D holds F.:(T,T9) = <*>E
 proof
@@ -508,7 +506,7 @@ end;
 theorem
   F[;](d,T9) = F[;](d,id D9)*T9
 proof
-  rng T9 c= D9 by FINSEQ_1:def 4;
+  rng T9 c= D9;
   hence F[;](d,T9) = F[;](d,(id D9)*T9) by RELAT_1:79
     .= F[;](d,(id D9))*T9 by FUNCOP_1:44;
 end;
@@ -516,11 +514,11 @@ end;
 theorem
   F[:](T,d) = F[:](id D,d)*T
 proof
-  rng T c= D by FINSEQ_1:def 4;
+  rng T c= D;
   hence F[:](T,d) = F[:]((id D)*T,d) by RELAT_1:79
     .= F[:]((id D),d)*T by FUNCOP_1:37;
 end;
-
+ 
 :: Binary Operations
 
 reserve F,G for BinOp of D;
@@ -535,8 +533,7 @@ proof
 end;
 
 theorem Th25:
-  F is associative implies F[;](d,id D)*(F.:(f,f9)) = F.:(F[;](d,
-  id D)*f,f9)
+  F is associative implies F[;](d,id D)*(F.:(f,f9)) = F.:(F[;](d, id D)*f,f9)
 proof
   assume
 A1: F is associative;
@@ -556,8 +553,7 @@ A1: F is associative;
 end;
 
 theorem Th26:
-  F is associative implies F[:](id D,d)*(F.:(f,f9)) = F.:(f,F[:](
-  id D,d)*f9)
+  F is associative implies F[:](id D,d)*(F.:(f,f9)) = F.:(f,F[:]( id D,d)*f9)
 proof
   assume
 A1: F is associative;
@@ -846,24 +842,21 @@ end;
 theorem
   u is_distributive_wrt F implies u*(F.:(f,f9)) = F.:(u*f,u*f9)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th38;
 end;
 
 theorem
   u is_distributive_wrt F implies u*(F[;](d,f)) = F[;](u.d,u*f)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th39;
 end;
 
 theorem
   u is_distributive_wrt F implies u*(F[:](f,d)) = F[:](u*f,u.d)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th40;
 end;
 
@@ -1031,30 +1024,26 @@ end;
 theorem
   u is_distributive_wrt F implies u*(F.:(T1,T2)) = F.:(u*T1,u*T2)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th49;
 end;
 
 theorem
   u is_distributive_wrt F implies u*(F[;](d,T)) = F[;](u.d,u*T)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th50;
 end;
 
 theorem
   u is_distributive_wrt F implies u*(F[:](T,d)) = F[:](u*T,u.d)
 proof
-  assume
-  for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
+  assume for d1,d2 holds u.(F.(d1,d2)) = F.(u.d1,u.d2);
   hence thesis by Th51;
 end;
 
 theorem
-  G is_distributive_wrt F & u = G[;](d,id D) implies u
-  is_distributive_wrt F
+  G is_distributive_wrt F & u = G[;](d,id D) implies u is_distributive_wrt F
 proof
   assume that
 A1: G is_distributive_wrt F and
@@ -1070,8 +1059,7 @@ A2: u = G[;](d,id D);
 end;
 
 theorem
-  G is_distributive_wrt F & u = G[:](id D,d) implies u
-  is_distributive_wrt F
+  G is_distributive_wrt F & u = G[:](id D,d) implies u is_distributive_wrt F
 proof
   assume that
 A1: G is_distributive_wrt F and
@@ -1149,8 +1137,7 @@ definition
   let D,u,F;
   pred u is_an_inverseOp_wrt F means
   :Def1:
-  for d holds F.(d,u.d) =
-  the_unity_wrt F & F.(u.d,d) = the_unity_wrt F;
+  for d holds F.(d,u.d) = the_unity_wrt F & F.(u.d,d) = the_unity_wrt F;
 end;
 
 definition
@@ -1196,8 +1183,7 @@ theorem Th63:
 having_an_inverseOp implies F.((the_inverseOp_wrt F).d,d) = the_unity_wrt F & F
   .(d,(the_inverseOp_wrt F).d) = the_unity_wrt F
 proof
-  assume
-  F is having_a_unity & F is associative & F is having_an_inverseOp;
+  assume F is having_a_unity & F is associative & F is having_an_inverseOp;
   then the_inverseOp_wrt F is_an_inverseOp_wrt F by Def3;
   hence thesis by Def1;
 end;
@@ -1311,8 +1297,7 @@ proof
 A1: F is having_a_unity and
 A2: F is associative & F is having_an_inverseOp;
   set e = the_unity_wrt F;
-  assume
-  F.(d1,d2) = d2 or F.(d2,d1) = d2;
+  assume F.(d1,d2) = d2 or F.(d2,d1) = d2;
   then F.(d1,d2) = F.(e,d2) or F.(d2,d1) = F.(d2,e) by A1,SETWISEO:23;
   hence thesis by A1,A2,Th68;
 end;
@@ -1735,4 +1720,3 @@ A5: u is_distributive_wrt F by A1,A2,A3,Th67;
     .= F.(F.(d1,d3),u.(F.(d2,d4))) by A5,BINOP_1:def 12
     .= G.(F.(d1,d3),F.(d2,d4)) by A4,Th87;
 end;
-

@@ -3,7 +3,7 @@
 ::
 :: Received December 30, 2003
 :: Copyright (c) 2003 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, FINSEQ_1, SUBSET_1, RELAT_1, FUNCT_1, CARD_1, CARD_3,
@@ -23,12 +23,12 @@ environ
  constructors WELLORD2, SETWISEO, REAL_1, FINSEQOP, FINSOP_1, NAT_D, WSIERP_1,
       VECTSP_2, REALSET2, ALGSTR_1, GROUP_4, BHSP_1, MATRIX_2, MONOID_0,
       GOBOARD1, POLYNOM2, POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2,
-      CLASSES1, XXREAL_2, RELSET_1, FUNCT_7;
+      CLASSES1, XXREAL_2, RELSET_1, FUNCT_7, FVSUM_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1,
       MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1, COMPLFLD, ALGSTR_1, MONOID_0,
       PRE_POLY, POLYNOM3, POLYNOM4, POLYNOM5, FINSEQ_2, VALUED_0, XXREAL_2,
-      FUNCT_2, RELSET_1;
+      FUNCT_2, RELSET_1, GROUP_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, VECTSP_2, FUNCT_1, POLYNOM3, POLYNOM5, FINSEQ_2, RVSUM_1,
       GROUP_4, RLVECT_1, FUNCOP_1, RELAT_1, STRUCT_0;
@@ -36,10 +36,10 @@ environ
       RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, VECTSP_1, POLYNOM5, INT_1, AXIOMS,
       RVSUM_1, FVSUM_1, FINSEQ_3, FINSEQ_2, POLYNOM4, POLYNOM3, FUNCT_7,
       ALGSEQ_1, RLVECT_1, PBOOLE, FUNCOP_1, MATRIX_3, VECTSP_2, CARD_2,
-      FINSEQ_5, GRAPH_5, QC_LANG4, BAGORDER, RFINSEQ, WELLORD2, CARD_3,
-      ORDINAL1, FSM_1, FINSOP_1, MONOID_0, INTEGRA1, FUNCT_4, MCART_1, XREAL_1,
-      GROUP_4, XXREAL_0, PARTFUN1, XXREAL_2, NAT_D, FINSEQ_4, CLASSES1,
-      PRE_POLY;
+      FINSEQ_5, GRAPH_5, BAGORDER, RFINSEQ, WELLORD2, CARD_3, ORDINAL1,
+      FINSOP_1, MONOID_0, INTEGRA1, FUNCT_4, MCART_1, XREAL_1, GROUP_4,
+      XXREAL_0, PARTFUN1, XXREAL_2, NAT_D, FINSEQ_4, CLASSES1, PRE_POLY,
+      TREES_9;
  schemes NAT_1, FUNCT_1, FUNCT_2, FRAENKEL, ALGSEQ_1, FINSEQ_1, RECDEF_1,
       CLASSES1, INT_1;
 
@@ -87,8 +87,7 @@ A11: g is FinSequence of REAL by FINSEQ_2:27;
       reconsider g1=g as Element of (len g)-tuples_on REAL by A11,FINSEQ_2:110;
       assume
 A12:  Sum f = len f;
-A13:  Sum g = Sum g +a -a
-        .= n+1 -a by A3,A5,A12,RVSUM_1:104;
+A13:  Sum g = Sum g +a -a .= n+1 -a by A3,A5,A12,RVSUM_1:104;
 A14:  now
         let j be Nat;
         reconsider a = j as Element of NAT by ORDINAL1:def 13;
@@ -111,8 +110,7 @@ A17:  a = 1 by A10,XXREAL_0:1;
       then g = (len g) |-> 1 by A2,A9,A6,A13;
       hence f = (len f) |-> 1 by A3,A5,A9,A17,FINSEQ_2:74;
     end;
-    assume
-    f = (len f) |-> 1;
+    assume f = (len f) |-> 1;
     then
 A18: f = (n |-> 1)^(1 |-> 1) by A3,FINSEQ_2:143
       .= (n |-> 1)^<*1*> by FINSEQ_2:73;
@@ -128,20 +126,18 @@ A21: P[ 0 ]
 A22: len f = 0 and
     for i being Element of NAT st i in dom f holds f.i <> 0;
     hereby
-      assume
-      Sum f = len f;
+      assume Sum f = len f;
       thus f = {} by A22
         .= (len f) |-> 1 by A22;
     end;
-    assume
-    f = (len f) |-> 1;
+    assume f = (len f) |-> 1;
     f = {} by A22;
     hence thesis by RVSUM_1:102;
   end;
   for n being Element of NAT holds P[n] from NAT_1:sch 1(A21, A1);
   hence thesis;
 end;
-
+ 
 :: Stolen from POLYNOM2
 
 scheme
@@ -149,12 +145,10 @@ scheme
   1 <= i & i <= k() holds P[i]
 provided
 A1: P[1] and
-A2: for i being Element of NAT st 1 <= i & i < k() holds P[i] implies P[
-i+1]
+A2: for i being Element of NAT st 1 <= i & i < k() holds P[i] implies P[ i+1]
 proof
   defpred Q[Nat] means 1 <= $1 & $1 <= k() & not P[$1];
-  assume
-  not for i being Element of NAT st 1 <= i & i <= k() holds P[i];
+  assume not for i being Element of NAT st 1 <= i & i <= k() holds P[i];
   then
 A3: ex k being Nat st Q[k];
   consider k being Nat such that
@@ -203,8 +197,7 @@ A8: r.2 = r1.(2-1) by A1,A6,FINSEQ_1:37
     .= r1.1;
 A9: len r = 1 + len r1 by A6,A7,FINSEQ_1:35;
   now
-    assume
-    r1 is empty;
+    assume r1 is empty;
     then len r1 = 0;
     hence contradiction by A1,A9;
   end;
@@ -267,8 +260,7 @@ A12:  (f.i)`2 = ba by A11,MCART_1:7;
       then
 A13:  (f.i)`2 \ {choose (f.i)`2} c= A by A10,XBOOLE_1:1;
 A14:  now
-        assume
-        choose (f.i)`2 in (f.i)`2 \ {choose (f.i)`2};
+        assume choose (f.i)`2 in (f.i)`2 \ {choose (f.i)`2};
         then not choose (f.i)`2 in {choose (f.i)`2} by XBOOLE_0:def 5;
         hence contradiction by TARSKI:def 1;
       end;
@@ -291,8 +283,7 @@ A18: R[1]
     proof
       reconsider X = A \ {choose A} as finite set;
 A19:  now
-        assume
-        choose A in A \ {choose A};
+        assume choose A in A \ {choose A};
         then not choose A in {choose A} by XBOOLE_0:def 5;
         hence contradiction by TARSKI:def 1;
       end;
@@ -312,8 +303,7 @@ A21: for i being Element of NAT st 1<=i & i <= len f holds R[i] from
     rng f c= [: A, bool A :]
     proof
       let y be set;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider i being Nat such that
 A22:  i in dom f and
 A23:  y = f.i by FINSEQ_2:11;
@@ -330,8 +320,7 @@ A26: dom p = dom f by A2,A24,FINSEQ_3:31;
     rng p c= A
     proof
       let y be set;
-      assume
-      y in rng p;
+      assume y in rng p;
       then consider i being Nat such that
 A27:  i in dom p and
 A28:  p.i = y by FINSEQ_2:11;
@@ -351,8 +340,7 @@ A29: rng p = A
 A30:    A <> {};
         defpred P[Element of NAT] means rng (F| Seg $1) \/ (f.$1)`2 = A & ex X
         being finite set st X = (f.$1)`2 & card X +$1 = cA;
-A31:    for i being Element of NAT st 1 <= i & i < len f & P[i] holds P[i
-        +1]
+A31:    for i being Element of NAT st 1 <= i & i < len f & P[i] holds P[i +1]
         proof
           let i be Element of NAT such that
 A32:      1 <= i and
@@ -373,7 +361,7 @@ XBOOLE_1:45;
 FINSEQ_1:23;
 A39:      i+1 <= len F by A2,A24,A33,NAT_1:13;
           then consider a being Element of A such that
-A40:      Fi1 = Fi^<*a*> by A30,QC_LANG4:6;
+A40:      Fi1 = Fi^<*a*> by A30,TREES_9:34;
           1 <= i+1 by NAT_1:12;
           then
 A41:      i+1 in dom F by A39,FINSEQ_3:27;
@@ -391,8 +379,7 @@ XBOOLE_1:4;
           take XX;
           thus XX = (f.(i+1))`2 by A35,MCART_1:7;
           now
-            assume
-            choose (f.i)`2 in (f.i)`2 \ {choose (f.i)`2};
+            assume choose (f.i)`2 in (f.i)`2 \ {choose (f.i)`2};
             then not choose (f.i)`2 in {choose (f.i)`2} by XBOOLE_0:def 5;
             hence contradiction by TARSKI:def 1;
           end;
@@ -407,8 +394,7 @@ A46:    P[1]
           reconsider X = A \ {choose A} as finite set;
           reconsider F1 = (F | Seg 1) as FinSequence of A by FINSEQ_1:23;
 A47:      now
-            assume
-            choose A in A \ {choose A};
+            assume choose A in A \ {choose A};
             then not choose A in {choose A} by XBOOLE_0:def 5;
             hence contradiction by TARSKI:def 1;
           end;
@@ -417,7 +403,7 @@ A47:      now
 A48:      F1.1 = F.1 by FUNCT_1:72
             .= (f.1)`1 by A25,A45
             .= choose A by A3,A30,MCART_1:7;
-          ex a being Element of A st F1 = <* a *> by A30,A44,QC_LANG4:7;
+          ex a being Element of A st F1 = <* a *> by A30,A44,TREES_9:35;
           then F | Seg 1 = <* choose A *> by A48,FINSEQ_1:57;
           then
 A49:      rng (F| Seg 1) = {choose A} by FINSEQ_1:56;
@@ -494,8 +480,7 @@ A1: rng canFS({a}) = {a} by FUNCT_2:def 3;
 end;
 
 theorem Th7:
-  for A being finite set holds (canFS A)" is Function of A, Seg
-  card A
+  for A being finite set holds (canFS A)" is Function of A, Seg card A
 proof
   let A be finite set;
   len canFS A = card A by Th5;
@@ -520,8 +505,7 @@ A1: EmptyBag X = (X --> 0) by PRE_POLY:def 13;
 A2: dom (S --> n) = S by FUNCOP_1:19;
 A3: now
       let i be set;
-      assume
-      not i in S;
+      assume not i in S;
       hence b.i = (EmptyBag X).i by A2,FUNCT_4:12
         .= 0 by PRE_POLY:52;
     end;
@@ -537,8 +521,7 @@ A6: support b is finite
       suppose
 A7:     S is empty;
         now
-          assume
-          support b is non empty;
+          assume support b is non empty;
           then consider x being set such that
 A8:       x in support b by XBOOLE_0:def 1;
           b.x <> 0 by A8,PRE_POLY:def 7;
@@ -549,8 +532,7 @@ A8:       x in support b by XBOOLE_0:def 1;
       suppose
 A9:     S is non empty & n = 0;
         now
-          assume
-          support b is non empty;
+          assume support b is non empty;
           then consider x being set such that
 A10:      x in support b by XBOOLE_0:def 1;
 A11:      b.x <> 0 by A10,PRE_POLY:def 7;
@@ -605,8 +587,7 @@ theorem Th10:
   NAT st n <> 0 holds support (S, n)-bag = S
 proof
   let X be set, S be finite Subset of X, n be Element of NAT;
-  assume
-  n <> 0;
+  assume n <> 0;
   then for x being set holds x in S iff (S, n)-bag.x <> 0 by Th8,Th9;
   hence thesis by PRE_POLY:def 7;
 end;
@@ -619,8 +600,7 @@ proof
 A1: S is empty or n = 0;
   now
     let i be set;
-    assume
-    i in X;
+    assume i in X;
     per cases;
     suppose
       i in S;
@@ -641,8 +621,7 @@ theorem Th12:
   of NAT st S misses T holds (S \/ T, n)-bag = (S,n)-bag + (T,n)-bag
 proof
   let X be set, S, T be finite Subset of X, n be Element of NAT;
-  assume
-  S misses T;
+  assume S misses T;
   then
 A1: S /\ T = {} by XBOOLE_0:def 7;
   now
@@ -692,8 +671,7 @@ definition
   let A be set, b be Rbag of A;
   func Sum b -> real number means
   :Def3:
-  ex f being FinSequence of REAL st it
-  = Sum f & f = b*canFS(support b);
+  ex f being FinSequence of REAL st it = Sum f & f = b*canFS(support b);
   existence
   proof
     set cS = canFS(support b);
@@ -719,8 +697,7 @@ definition
   let A be set, b be bag of A;
   redefine func degree b -> Element of NAT means
   :Def4:
-  ex f being FinSequence
-  of NAT st it = Sum f & f = b*canFS(support b);
+  ex f being FinSequence of NAT st it = Sum f & f = b*canFS(support b);
   coherence
   proof
     consider f being FinSequence of REAL such that
@@ -729,8 +706,7 @@ A2: f = b*canFS(support b) by Def3;
     rng f c= NAT
     proof
       let y be set;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider x being set such that
 A3:   x in dom f and
 A4:   y = f.x by FUNCT_1:def 5;
@@ -752,8 +728,7 @@ A6:   f = b*canFS(support b) by Def3;
 A7:   rng f c= NAT
       proof
         let y be set;
-        assume
-        y in rng f;
+        assume y in rng f;
         then consider x being set such that
 A8:     x in dom f and
 A9:     y = f.x by FUNCT_1:def 5;
@@ -776,21 +751,18 @@ A11: n = Sum f & f = b*cS;
 end;
 
 theorem Th13:
-  for A being set, b being Rbag of A st b = EmptyBag A holds Sum b
-  = 0
+  for A being set, b being Rbag of A st b = EmptyBag A holds Sum b = 0
 proof
   let A be set, b be Rbag of A;
   set cS = canFS(support b);
-  assume
-  b = EmptyBag A;
+  assume b = EmptyBag A;
   then support b = {} by BAGORDER:19;
   then b*cS = <*>NAT;
   hence thesis by Def3,RVSUM_1:102;
 end;
 
 theorem Th14:
-  for A being set, b being bag of A st Sum b = 0 holds b =
-  EmptyBag A
+  for A being set, b being bag of A st Sum b = 0 holds b = EmptyBag A
 proof
   let A be set, b be bag of A;
   set cS = canFS(support b);
@@ -849,8 +821,7 @@ A8: degree b = Sum F and
 A9: F = b*cS by A6,Def4;
     now
       let i be Element of NAT;
-      assume
-      i in dom F;
+      assume i in dom F;
       then F.i = b.(cS.i) & cS.i in rng cS by A4,A9,FUNCT_1:12,22;
       hence F.i <> 0 by A6,PRE_POLY:def 7;
     end;
@@ -860,8 +831,7 @@ A11: support b = support sb by A6,Th10;
     now
       thus dom b = dom sb by A1,PARTFUN1:def 4;
       let x be set;
-      assume
-      x in dom b;
+      assume x in dom b;
       per cases;
       suppose
 A12:    x in support b;
@@ -886,8 +856,7 @@ A15:    not x in support b;
   rng f c= NAT
   proof
     let y be set;
-    assume
-    y in rng f;
+    assume y in rng f;
     then consider x being set such that
 A16: x in dom f and
 A17: y = f.x by FUNCT_1:def 5;
@@ -972,15 +941,14 @@ A17:  cS.j = x by A1,A11,A15,FUNCT_1:def 5;
 A18: dd c= dom f
     proof
       let x be set;
-      assume
-      x in dd;
+      assume x in dd;
       then ex j being Element of NAT st x = j & j in dom f & f.j = 0;
       hence thesis;
     end;
     then reconsider dd as finite non empty set by A14;
     consider d being Element of NAT such that
 A19: card S = (card support b) + d and
-    1 <= d by A13,FSM_1:1;
+    1 <= d by A13,FINSEQ_4:99;
     set h = d |-> (0 qua Real);
     set F = gr^h;
     rng canFS(dd) = dd & dd c= NAT by A18,FUNCT_2:def 3,XBOOLE_1:1;
@@ -998,8 +966,7 @@ A22: dom cdi = dd by FUNCT_2:def 1;
     now
       let y be set;
       hereby
-        assume
-        y in rng cSr;
+        assume y in rng cSr;
         then consider x being set such that
 A23:    x in dom cSr and
 A24:    y = cSr.x by FUNCT_1:def 5;
@@ -1019,8 +986,7 @@ A28:  y in support b;
 A29:  x in dom cS and
 A30:  y = cS.x by A1,A11,FUNCT_1:def 5;
       now
-        assume
-        x in dd;
+        assume x in dd;
         then consider j being Element of NAT such that
 A31:    j = x and
 A32:    j in dom f & f.j = 0;
@@ -1043,8 +1009,7 @@ A34: card support b = card (dom f \ dd) by CARD_1:21;
 A35: card support b + card dd = card S by A12,A34,FINSEQ_1:78;
 A36: now
 A37:  dom (cs") = support b by A3,FUNCT_1:55;
-      assume
-      dom (cs"*cS) /\ dom z <> {};
+      assume dom (cs"*cS) /\ dom z <> {};
       then consider x being set such that
 A38:  x in dom (cs"*cS) /\ dom z by XBOOLE_0:def 1;
       x in dom z by A38,XBOOLE_0:def 4;
@@ -1107,8 +1072,7 @@ A49: rng cdi = Seg d by FUNCT_1:55;
 A50: rng z c= Seg card S
     proof
       let y be set;
-      assume
-      y in rng z;
+      assume y in rng z;
       then consider x being set such that
 A51:  x in dom z and
 A52:  y = z.x by FUNCT_1:def 5;
@@ -1154,8 +1118,7 @@ A63: rng cdd = dd by FUNCT_2:def 3;
     now
       let x be set;
       hereby
-        assume
-        x in rng p;
+        assume x in rng p;
         then consider a being set such that
 A64:    a in dom p and
 A65:    x = p.a by FUNCT_1:def 5;
@@ -1190,8 +1153,7 @@ A71:    cs.j in support b by A5,A3,A9,FUNCT_1:12;
         then
 A72:    cS".(cs.j) in Seg card S by A1,A4,A11,FUNCT_1:54;
         now
-          assume
-          cS".(cs.j) in dom z;
+          assume cS".(cs.j) in dom z;
           then
 A73:      ex k being Element of NAT st k = cS".(cs.j) & k in dom f & f.k
           = 0 by A20;
@@ -1256,8 +1218,7 @@ A86:    cS.x in rng cs by FUNCT_2:def 3;
         then
 A87:    cs".(cS.x) in dom cs by FUNCT_1:54;
         now
-          assume
-          x in dd;
+          assume x in dd;
           then ex j being Element of NAT st j=x & j in dom f & f.j = 0;
           hence contradiction by A85;
         end;
@@ -1356,8 +1317,7 @@ A109:   p.c = z.c by A107,FUNCT_4:14
     reconsider cadd = card dd as non empty Element of NAT;
     Sum h = 0 by RVSUM_1:111;
     then
-A110: Sum gr = Sum gr + Sum h
-      .= Sum F by RVSUM_1:105;
+A110: Sum gr = Sum gr + Sum h .= Sum F by RVSUM_1:105;
     p is onto by A77,FUNCT_2:def 3;
     hence thesis by A6,A90,A89,A110,FINSOP_1:8;
   end;
@@ -1425,8 +1385,8 @@ proof
   FinSequence of L, p be Permutation of dom f such that
 A1: g = f * p;
   set mL = (the multF of L);
-  mL is commutative & mL is associative by GROUP_1:31,MONOID_0:def 11;
-  hence thesis by A1,FINSOP_1:8,GROUP_1:34;
+  mL is commutative & mL is associative by MONOID_0:def 11;
+  hence thesis by A1,FINSOP_1:8;
 end;
 
 begin :: More on polynomials
@@ -1444,14 +1404,12 @@ theorem Th19:
 proof
   let L be non empty ZeroStr, p be Polynomial of L;
   hereby
-    assume
-    p is non-zero;
+    assume p is non-zero;
     then p <> 0_. L by Def5;
     then len p <> 0 by POLYNOM4:8;
     hence len p > 0;
   end;
-  assume
-  len p > 0;
+  assume len p > 0;
   then p <> 0_. L by POLYNOM4:6;
   hence thesis by Def5;
 end;
@@ -1486,8 +1444,7 @@ theorem Th20:
   > 0 holds p.(len p -'1) <> 0.L
 proof
   let L be non empty ZeroStr, p be Polynomial of L;
-  assume
-  len p > 0;
+  assume len p > 0;
   then ex k being Nat st len p = k+1 by NAT_1:6;
   then len p = (len p -'1)+1 by NAT_D:34;
   hence thesis by ALGSEQ_1:25;
@@ -1519,8 +1476,7 @@ A2: for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * (0_.
     L).(i+1-'k) by POLYNOM3:def 11;
     now
       let k be Element of NAT;
-      assume
-      k in dom r;
+      assume k in dom r;
       hence r.k = p.(k-'1) * (0_. L).(i+1-'k) by A2
         .= p.(k-'1) * 0.L by FUNCOP_1:13
         .= 0.L by VECTSP_1:36;
@@ -1568,8 +1524,7 @@ A9: len r = lpq+1 and
 A10: (p*'q).lpq = Sum r and
 A11: for k be Element of NAT st k in dom r holds r.k=p.(k-'1)*q.(lpq+1-'
   k) by POLYNOM3:def 11;
-A12: lpq+1-'len p = lq1+(lp1+1)-'len p
-    .= lq1 by A4,NAT_D:34;
+A12: lpq+1-'len p = lq1+(lp1+1)-'len p .= lq1 by A4,NAT_D:34;
   len p <= lp1+1+lq1 by A4,NAT_1:12;
   then
 A13: len p in dom r by A9,A5,FINSEQ_3:27;
@@ -1584,7 +1539,7 @@ A16: r.k1 = p.(k1-'1) * q.(lpq+1-'k1) by A11,A14;
       k < len p;
       then consider d being Element of NAT such that
 A17:  len p = k1+d and
-A18:  1 <= d by FSM_1:1;
+A18:  1 <= d by FINSEQ_4:99;
 A19:  len q <= lq1+d by A6,A18,XREAL_1:8;
       lpq+1-'k = lq1+d+k-'k by A4,A17
         .= lq1+d by NAT_D:34;
@@ -1617,8 +1572,7 @@ registration
     let x, y be Element of PRL;
     reconsider xp = x, yp = y as Polynomial of L by POLYNOM3:def 12;
 A1: 0_. L = 0.PRL by POLYNOM3:def 12;
-    assume
-    x*y = 0.PRL;
+    assume x*y = 0.PRL;
     then xp*'yp = 0_. L by A1,POLYNOM3:def 12;
     hence thesis by A1,Th23;
   end;
@@ -1733,8 +1687,7 @@ empty doubleLoopStr), p be (Polynomial of L), pc be (Element of Polynom-Ring L)
 A1: p = pc;
   set PRL = Polynom-Ring L;
   reconsider mpc = -p as Element of PRL by POLYNOM3:def 12;
-  p+-p = p-p
-    .= 0_. L by POLYNOM3:30;
+  p+-p = p-p .= 0_. L by POLYNOM3:30;
   then pc + mpc = 0_. L by A1,POLYNOM3:def 12
     .= 0.PRL by POLYNOM3:def 12;
   hence thesis by RLVECT_1:def 13;
@@ -1796,8 +1749,7 @@ distributive domRing-like (non empty doubleLoopStr), p, q, r be Polynomial of L
   ;
   assume
 A1: p <> 0_. L;
-  assume
-  p*'q = p*'r;
+  assume p*'q = p*'r;
   then p*'q-p*'r = 0_. L by POLYNOM3:30;
   then p*'(q-r) = 0_. L by Th28;
   then q-r = 0_. L by A1,Th23;
@@ -1857,8 +1809,7 @@ proof
 A1: dom 0_.(L) = NAT by FUNCT_2:def 1;
   now
     let x be set;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider n = x as Element of NAT;
     per cases;
     suppose
@@ -1940,8 +1891,7 @@ proof
   assume
 A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
   now
-    assume
-    len q <= 0;
+    assume len q <= 0;
     then len q = 0;
     then q = 0_. L by POLYNOM4:8;
     then q.(len q -'1) = 0.L by FUNCOP_1:13;
@@ -1950,8 +1900,7 @@ A1: p.(len p -'1) * q.(len q -'1) <> 0.L;
   then
 A2: 0 qua Nat+1 <= len q by NAT_1:13;
   now
-    assume
-    len p <= 0;
+    assume len p <= 0;
     then len p = 0;
     then p = 0_. L by POLYNOM4:8;
     then p.(len p -'1) = 0.L by FUNCOP_1:13;
@@ -2139,8 +2088,7 @@ A1: p = <%x, 1.L%>*'q and
 A2: p.(len p -'1) = 1.L;
   set lp1 = len p -'1;
 A3: now
-    assume
-    q = 0_. L;
+    assume q = 0_. L;
     then p = 0_. L by A1,POLYNOM3:35;
     hence contradiction by A2,FUNCOP_1:13;
   end;
@@ -2166,8 +2114,7 @@ definition
   let n be Nat;
   func poly_shift(p,n) -> Polynomial of L means
   :Def6:
-  for i being Nat holds
-  it.i = p.(n + i);
+  for i being Nat holds it.i = p.(n + i);
   existence
   proof
     deffunc F(Nat) = p.(n+$1);
@@ -2194,8 +2141,7 @@ A4: for i being Nat holds it1.i = p.(n + i) and
 A5: for i being Nat holds it2.i = p.(n + i);
     now
       let x be set;
-      assume
-      x in NAT;
+      assume x in NAT;
       then reconsider i = x as Element of NAT;
       thus it1.x = p.(n+i) by A4
         .= it2.x by A5;
@@ -2212,8 +2158,7 @@ proof
   set ps = poly_shift(p,0);
   now
     let x be set;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider i = x as Element of NAT;
     thus ps.x = p.(0 qua Nat+i) by Def6
       .= p.x;
@@ -2231,8 +2176,7 @@ proof
 A1: n >= len p;
 A2: now
     let z be set;
-    assume
-    z in dom ps;
+    assume z in dom ps;
     then reconsider i = z as Element of NAT;
     thus ps.z = p.(n+i) by Def6
       .= 0.L by A1,ALGSEQ_1:22,NAT_1:12;
@@ -2268,8 +2212,7 @@ A6: p.(n+lpn1) <> 0.L by ALGSEQ_1:25;
   end;
   now
     let i be Nat;
-    assume
-    i >= lpn;
+    assume i >= lpn;
     then
 A7: i+n >= len p by XREAL_1:22;
     thus ps.i = p.(n+i) by Def6
@@ -2307,8 +2250,7 @@ A8: x*f1 = (x multfield)*f1 & dom ((x multfield)*f1) = dom f1 by FVSUM_1:def 6
 A9: 1_L = 1.L;
   now
 A10: n+1 <= len p by A1,NAT_1:13;
-A11: len ps1 +1+n = len ps1 + (n+1)
-      .= len p by A10,Th46
+A11: len ps1 +1+n = len ps1 + (n+1) .= len p by A10,Th46
       .= len ps + n by A1,Th46;
     thus len f = len f;
 A12: len <*p.n*> = 1 by FINSEQ_1:57;
@@ -2367,12 +2309,10 @@ theorem Th48:
   len p = 1 holds Roots p = {}
 proof
   let L be non degenerated comRing, p be Polynomial of L;
-  assume
-  len p = 1;
+  assume len p = 1;
   then
 A1: p =<%p.0%> & p.0 <> 0.L by Th21;
-  assume
-  Roots p <> {};
+  assume Roots p <> {};
   then consider x being set such that
 A2: x in Roots p by XBOOLE_0:def 1;
   reconsider x as Element of L by A2;
@@ -2413,8 +2353,7 @@ A7:   lq < len p by A5,NAT_1:13;
 A8:   lq = lq1 + 1 by A5,A6,A2,NAT_1:6;
 A9:   now
         let i be Nat;
-        assume
-        i >= lq;
+        assume i >= lq;
         then i >= p1 by A5,NAT_D:34;
         then
 A10:    i+1 >= len p by A5,XREAL_1:8;
@@ -2460,8 +2399,7 @@ A16:    lq = lq1 + 1 by NAT_1:6;
   proof
     let it1, it2 be Polynomial of L;
     hereby
-      assume
-      len p > 0;
+      assume len p > 0;
       assume that
 A17:  len it1 + 1 = len p and
 A18:  for i being Nat holds it1.i = eval(poly_shift(p, i+1),r) and
@@ -2488,8 +2426,7 @@ proof
   let L be non degenerated comRing, r be Element of L, p be non-zero
   Polynomial of L such that
 A1: r is_a_root_of p;
-  assume
-  len poly_quotient(p,r) <= 0;
+  assume len poly_quotient(p,r) <= 0;
   then
 A2: len poly_quotient(p,r) = 0;
   len p > 0 by Th19;
@@ -2521,8 +2458,7 @@ A1:   a in Roots <%-x, 1.L%>;
       .= 0.L by RLVECT_1:16;
     then
 A2: x is_a_root_of <%-x, 1.L%> by POLYNOM5:def 6;
-    assume
-    a = x;
+    assume a = x;
     hence a in Roots <%-x, 1.L%> by A2,POLYNOM5:def 9;
   end;
   hence thesis by TARSKI:def 1;
@@ -2569,8 +2505,7 @@ A4: len pq > 0 by A1,Th49;
       hence len p = len (r *' pq);
       defpred P[Nat] means p.$1 = (r*'pq).$1;
       let k be Nat;
-      assume
-      k < len p;
+      assume k < len p;
 A5:   0.L = eval(p,x) by A1,POLYNOM5:def 6
         .= eval(poly_shift(p,0),x) by Th44
         .= x*eval(poly_shift(p,0 qua Nat+1),x) + p.0 by A2,Th47;
@@ -2585,8 +2520,7 @@ A6:   (-x)*eval(poly_shift(p, 0 qua Nat+1),x) = (-x)*eval(poly_shift(p, 0
 A7:   for k being Nat st P[k] holds P[k+1]
       proof
         let k be Nat;
-        assume
-        P[k];
+        assume P[k];
 A8:     pq.(k+1) = eval(poly_shift(p, k+1+1),x) by A1,A2,Def7;
 A9:     pq.k = eval(poly_shift(p, k+1),x) by A1,A2,Def7;
         per cases;
@@ -2637,8 +2571,7 @@ theorem :: Factor theorem (Bezout)
   Polynomial of L st p = <%-r,1.L%>*'q holds r is_a_root_of p
 proof
   let L be non degenerated comRing, r be Element of L, p, q be Polynomial of L;
-  assume
-  p = <%-r,1.L%>*'q;
+  assume p = <%-r,1.L%>*'q;
   then eval(p,r) = eval(<%-r,1.L%>,r) * eval(q,r) by POLYNOM4:27
     .= (-r+r) * eval(q,r) by POLYNOM5:48
     .= 0.L * eval(q,r) by RLVECT_1:def 13
@@ -2648,10 +2581,8 @@ end;
 
 Lm1: now
   let L be domRing, p be non-zero Polynomial of L;
-
   defpred P[Nat] means for p being Polynomial of L st len p = $1 holds Roots p
   is finite & ex n being Element of NAT st n = card Roots p & n < len p;
-
   p <> 0_. L by Def5;
   then len p <> 0 by POLYNOM4:8;
   then
@@ -2694,8 +2625,7 @@ A12:  card Rp <= k + 1 by A10,CARD_2:62;
     suppose
 A13:  not p is with_roots;
 A14:  now
-        assume
-        Roots p <> {};
+        assume Roots p <> {};
         then consider x being set such that
 A15:    x in Roots p by XBOOLE_0:def 1;
         reconsider x as Element of L by A15;
@@ -2719,11 +2649,9 @@ A17: len p = 1;
     thus thesis by A17;
   end;
   for n being Nat st n >= 1 holds P[n] from NAT_1:sch 8(A16,A2);
-
   hence
   Roots p is finite & ex n being Element of NAT st n = card Roots p & n <
   len p by A1;
-
 end;
 
 begin :: Polynomials defined by roots
@@ -2757,24 +2685,21 @@ A3: len p > 0 by Th19;
     F c= len p
     proof
       let a be set;
-      assume
-      a in F;
+      assume a in F;
       then consider k being Element of NAT such that
 A4:   a = k and
 A5:   P[k];
       consider q being Polynomial of L such that
 A6:   p = (r`^k) *' q by A5;
 A7:   now
-        assume
-        len q = 0;
+        assume len q = 0;
         then q = 0_. L by POLYNOM4:8;
         then p = 0_. L by A6,POLYNOM4:5;
         hence contradiction by A3,POLYNOM4:6;
       end;
       then reconsider q as non-zero Polynomial of L by Th19;
       now
-        assume
-        k >= len p;
+        assume k >= len p;
         then k+len q > len p + (0 qua Nat) by A7,XREAL_1:10;
         hence contradiction by A6,Th42;
       end;
@@ -2808,8 +2733,7 @@ A2: m = max F by Def8;
 A3: m = k and
 A4: ex q being Polynomial of L st p = (r`^k) *' q by A1;
   hereby
-    assume
-    x is_a_root_of p;
+    assume x is_a_root_of p;
     then
 A5: p = r*'poly_quotient(p,x) by Th52;
     r`^1 = r by POLYNOM5:17;
@@ -2818,8 +2742,7 @@ A5: p = r*'poly_quotient(p,x) by Th52;
   end;
   consider q being Polynomial of L such that
 A6: p = (r`^k) *' q by A4;
-  assume
-  multiplicity(p,x) >= 1;
+  assume multiplicity(p,x) >= 1;
   then consider k1 being Nat such that
 A7: k = k1+1 by A3,NAT_1:6;
   reconsider k1 as Element of NAT by ORDINAL1:def 13;
@@ -2847,8 +2770,7 @@ A4: ex q being Polynomial of L st r = (r`^k) *' q by A1;
 A5: r = (r`^k) *' q by A4;
 A6: len r = 2 by POLYNOM5:41;
 A7: now
-    assume
-    len q = 0;
+    assume len q = 0;
     then q = 0_. L by POLYNOM4:8;
     then r = 0_. L by A5,POLYNOM4:5;
     hence contradiction by A6,POLYNOM4:6;
@@ -2856,8 +2778,7 @@ A7: now
   then
 A8: q is non-zero by Th19;
 A9: now
-    assume
-    k > 1;
+    assume k > 1;
     then k >= 1+1 by NAT_1:13;
     then k+len q > 2+(0 qua Nat) by A7,XREAL_1:10;
     hence contradiction by A6,A5,A8,Th42;
@@ -2918,8 +2839,7 @@ A7: for x being Element of L holds it1.x = multiplicity(p,x) and
 A8: for x being Element of L holds it2.x = multiplicity(p,x);
     now
       let x be set;
-      assume
-      x in the carrier of L;
+      assume x in the carrier of L;
       then reconsider xx = x as Element of L;
       thus it1.x = multiplicity(p,xx) by A7
         .= it2.x by A8;
@@ -2940,8 +2860,7 @@ A1: support BRoots r = {x} by Def9;
 A2: x in {x} by TARSKI:def 1;
   now
     let i be set;
-    assume
-    i in the carrier of L;
+    assume i in the carrier of L;
     then reconsider i1 = i as Element of L;
     per cases;
     suppose
@@ -3003,8 +2922,7 @@ A16: p*'q = (r`^i) *' pq *' (r`^j) *' qq by A7,A15,POLYNOM3:34
     .= (r`^(i+j)) *' pq *' qq by Th32
     .= (r`^(i+j)) *' (pq *' qq) by POLYNOM3:34;
 A17: now
-    assume
-    i+j < k;
+    assume i+j < k;
     then 0 qua Nat+(i+j) < k;
     then
 A18: 0 < k-(i+j) by XREAL_1:22;
@@ -3062,8 +2980,7 @@ proof
   let L be domRing, p, q being non-zero Polynomial of L;
   now
     let i be set;
-    assume
-    i in the carrier of L;
+    assume i in the carrier of L;
     then reconsider x = i as Element of L;
     thus (BRoots(p*'q)).i = multiplicity(p*'q, x) by Def9
       .= multiplicity(p,x) + multiplicity(q,x) by Th57
@@ -3085,8 +3002,7 @@ theorem Th59:
   1 holds degree BRoots p = 0
 proof
   let L be domRing, p being non-zero Polynomial of L;
-  assume
-  len p = 1;
+  assume len p = 1;
   then Roots p = {} by Th48;
   then support BRoots p = {} by Def9;
   then BRoots p = EmptyBag the carrier of L by BAGORDER:20;
@@ -3229,8 +3145,7 @@ definition
     thus
 A1: len f = n by FINSEQ_1:def 18;
     let i be Element of NAT;
-    assume
-    i in dom f;
+    assume i in dom f;
     then i in Seg n by A1,FINSEQ_1:def 3;
     hence thesis by FUNCOP_1:13;
   end;
@@ -3238,11 +3153,9 @@ A1: len f = n by FINSEQ_1:def 18;
   proof
     let it1, it2 be FinSequence of Polynom-Ring L such that
 A2: len it1 = n and
-A3: for i being Element of NAT st i in dom it1 holds it1.i = <% -c, 1.
-    L%> and
+A3: for i being Element of NAT st i in dom it1 holds it1.i = <% -c, 1. L%> and
 A4: len it2 = n and
-A5: for i being Element of NAT st i in dom it2 holds it2.i = <% -c, 1.
-    L%>;
+A5: for i being Element of NAT st i in dom it2 holds it2.i = <% -c, 1. L%>;
 A6: dom it1 = dom it2 by A2,A4,FINSEQ_3:31;
     now
       let x be Nat;
@@ -3278,8 +3191,7 @@ A2: for k being Nat st k in dom f holds f.k = F(k) from FINSEQ_1:sch 2;
     rng f c= (the carrier of Polynom-Ring L)*
     proof
       let x be set;
-      assume
-      x in rng f;
+      assume x in rng f;
       then consider i being Nat such that
 A3:   i in dom f & f.i = x by FINSEQ_2:11;
       x = F(i) by A2,A3;
@@ -3419,8 +3331,7 @@ A7: now
 A8: rng s c= dom b
     proof
       let x be set;
-      assume
-      x in rng s;
+      assume x in rng s;
       then
 A9:   x in support b by A2,FUNCT_2:def 3;
       support b c= dom b by PRE_POLY:37;
@@ -3429,8 +3340,7 @@ A9:   x in support b by A2,FUNCT_2:def 3;
     thus dom Card f = dom f by CARD_3:def 2
       .= dom g by A2,A6,A5,A8,RELAT_1:46;
     let i be Nat;
-    assume
-    i in dom Card f;
+    assume i in dom Card f;
     then
 A10: i in dom f by CARD_3:def 2;
     then
@@ -3468,8 +3378,7 @@ A5: dom f = dom s by FINSEQ_3:31;
     set X = { k where k is Element of NAT : k < b.c };
     set ff = FlattenSeq f;
     set Y = ff"{<% -c, 1.L%>};
-    assume
-    c in support b;
+    assume c in support b;
     then c in rng s by A2,FUNCT_2:def 3;
     then consider i being Nat such that
 A6: i in dom s and
@@ -3479,8 +3388,7 @@ A7: s.i = c by FINSEQ_2:11;
 A8: for x being set st x in X ex y being set st P[x,y]
     proof
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then consider k being Element of NAT such that
 A9:   x = k and
       k < b.c;
@@ -3495,8 +3403,7 @@ A12: s/.i = c by A6,A7,PARTFUN1:def 8;
       let y be set;
 A13:  <% -c, 1.L%>.0 = -c by POLYNOM5:39;
       hereby
-        assume
-        y in rng g;
+        assume y in rng g;
         then consider x being set such that
 A14:    x in dom g and
 A15:    y = g.x by FUNCT_1:def 5;
@@ -3678,8 +3585,7 @@ A31:    card(ff2"{x}) = b2.(s/.i) by A2,A3,A4,A19,A22,A23,Th65;
     suppose
 A32:  not x in rng ff;
       now
-        assume
-        x in rng g;
+        assume x in rng g;
         then
 A33:    x in (rng ff1 \/ rng ff2) by FINSEQ_1:44;
         per cases by A33,XBOOLE_0:def 3;
@@ -3859,8 +3765,7 @@ FinSequence of cPRL st t = rng (cs | Seg $1) & g = f | Seg $1 & poly_with_roots
 A4: len cs = card s by Th5;
   then
 A5: dom f = dom cs by A1,FINSEQ_3:31;
-A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j
-  +1]
+A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j +1]
   proof
     let j be Element of NAT such that
 A7: 1 <= j and
@@ -3905,8 +3810,7 @@ A19: pj1 = epj1 by Th63;
     thus t1 = rng (cs | Seg (j+1)) & g1 = f | Seg (j+1);
     t misses {csj1}
     proof
-      assume
-      not thesis;
+      assume not thesis;
       then t /\ {csj1} <> {} by XBOOLE_0:def 7;
       then consider x being set such that
 A20:  x in t /\ {csj1} by XBOOLE_0:def 1;
@@ -3950,11 +3854,11 @@ A32: cs1a.1 = cs1 by FUNCT_1:72;
     reconsider t = {cs1} as finite Subset of cL;
     take t, g;
     consider s1 being Element of s such that
-A33: cs1a = <* s1 *> by A1,A4,A28,QC_LANG4:7;
+A33: cs1a = <* s1 *> by A1,A4,A28,TREES_9:35;
     cs1a.1 = s1 by A33,FINSEQ_1:57;
     hence t = rng (cs | Seg 1) & g = f | Seg 1 by A33,A32,FINSEQ_1:56;
     consider p1 being Element of cPRL such that
-A34: g = <* p1 *> by A28,QC_LANG4:7;
+A34: g = <* p1 *> by A28,TREES_9:35;
 A35: g.1 = p1 & Product(g) = p1 by A34,FINSEQ_1:57,FINSOP_1:12;
 A36: 1 in dom f by A28,FINSEQ_3:27;
     then reconsider f1 = f.1 as Element of cPRL by FINSEQ_2:13;
@@ -3992,8 +3896,7 @@ A3: rng cs = s by FUNCT_2:def 3;
 A4: len cs = card s by Th5;
   then
 A5: dom f = dom cs by A1,FINSEQ_3:31;
-A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j
-  +1]
+A6: for j being Element of NAT st 1 <= j & j < len f holds P[j] implies P[j +1]
   proof
     let j be Element of NAT such that
 A7: 1 <= j and
@@ -4037,8 +3940,7 @@ A18: t1 = t \/ {csj1} by A13,A17,RELAT_1:26;
 A19: pj1 = <% -csj1, 1.L %> by Th63;
     t misses {csj1}
     proof
-      assume
-      not thesis;
+      assume not thesis;
       then t /\ {csj1} <> {} by XBOOLE_0:def 7;
       then consider x being set such that
 A20:  x in t /\ {csj1} by XBOOLE_0:def 1;
@@ -4084,11 +3986,11 @@ A32: cs1a.1 = cs1 by FUNCT_1:72;
     reconsider t = {cs1} as finite Subset of cL;
     take t, g;
     consider s1 being Element of s such that
-A33: cs1a = <* s1 *> by A1,A4,A28,QC_LANG4:7;
+A33: cs1a = <* s1 *> by A1,A4,A28,TREES_9:35;
     cs1a.1 = s1 by A33,FINSEQ_1:57;
     hence t = rng (cs | Seg 1) & g = f | Seg 1 by A33,A32,FINSEQ_1:56;
     consider p1 being Element of cL such that
-A34: g = <* p1 *> by A28,QC_LANG4:7;
+A34: g = <* p1 *> by A28,TREES_9:35;
 A35: g.1 = p1 & Product(g) = p1 by A34,FINSEQ_1:57,FINSOP_1:12;
 A36: 1 in dom f by A28,FINSEQ_3:27;
     then reconsider f1 = f.1 as Element of cL by FINSEQ_2:13;
@@ -4104,4 +4006,3 @@ A37: g.1 = f1 by A31,FUNCT_1:72;
   Product(g) by A28;
   hence thesis by A1,A4,A27,A3,FINSEQ_2:23;
 end;
-

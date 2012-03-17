@@ -31,8 +31,7 @@ begin :: Preliminaries
 canceled;
 
 theorem :: BORSUK_5:2
-  for A, B, a being set st A c= B & B c= A \/ {a} holds A \/ {a} =
-  B or A = B;
+  for A, B, a being set st A c= B & B c= A \/ {a} holds A \/ {a} = B or A = B;
 
 theorem :: BORSUK_5:3
   for x1, x2, x3, x4, x5, x6 being set holds { x1, x2, x3, x4, x5, x6 }
@@ -74,7 +73,7 @@ theorem :: BORSUK_5:10
   x3, x6, x7, x4 are_mutually_different;
 
 registration
-  cluster R^1 -> arcwise_connected;
+  cluster R^1 -> pathwise_connected;
 end;
 
 registration
@@ -114,12 +113,10 @@ theorem :: BORSUK_5:33
 iff for r being real number st r > 0 holds Ball (p, r) meets A;
 
 theorem :: BORSUK_5:34
-  for p, q being Element of RealSpace st q >= p holds dist (p, q)
-  = q - p;
+  for p, q being Element of RealSpace st q >= p holds dist (p, q) = q - p;
 
 theorem :: BORSUK_5:35
-  for A being Subset of R^1 st A = RAT holds Cl A = the carrier of
-  R^1;
+  for A being Subset of R^1 st A = RAT holds Cl A = the carrier of R^1;
 
 theorem :: BORSUK_5:36
   for A being Subset of R^1, a, b being real number st A = ]. a, b
@@ -158,12 +155,29 @@ registration
   cluster IRRAT -> non empty;
 end;
 
+registration
+  let a be rational number, b be irrational (real number);
+  cluster a + b -> irrational;
+  cluster b + a -> irrational;
+end;
+
 theorem :: BORSUK_5:38
   for a being rational number, b being irrational (real number)
   holds a + b is irrational;
 
+registration
+  let a be irrational (real number);
+  cluster -a -> irrational;
+end;
+
 theorem :: BORSUK_5:39
   for a being irrational (real number) holds -a is irrational;
+
+registration
+  let a be rational number, b be irrational (real number);
+  cluster a - b -> irrational;
+  cluster b - a -> irrational;
+end;
 
 theorem :: BORSUK_5:40
   for a being rational number, b being irrational (real number)
@@ -189,26 +203,13 @@ theorem :: BORSUK_5:44
   for a being rational number, b being irrational (real number) st
   a <> 0 holds a / b is irrational;
 
-theorem :: BORSUK_5:45
-  for r being irrational (real number) holds frac r is irrational;
-
 registration
   let r be irrational (real number);
   cluster frac r -> irrational;
 end;
 
-registration
-  let a be irrational (real number);
-  cluster -a -> irrational;
-end;
-
-registration
-  let a be rational number, b be irrational (real number);
-  cluster a + b -> irrational;
-  cluster b + a -> irrational;
-  cluster a - b -> irrational;
-  cluster b - a -> irrational;
-end;
+theorem :: BORSUK_5:45
+  for r being irrational (real number) holds frac r is irrational;
 
 registration
   cluster non zero (rational number);
@@ -235,8 +236,7 @@ theorem :: BORSUK_5:50
   number) st a < p & p < b;
 
 theorem :: BORSUK_5:51
-  for A being Subset of R^1 st A = IRRAT holds Cl A = the carrier
-  of R^1;
+  for A being Subset of R^1 st A = IRRAT holds Cl A = the carrier of R^1;
 
 theorem :: BORSUK_5:52
   for a, b, c being real number holds c in RAT (a,b) iff c is
@@ -259,8 +259,7 @@ theorem :: BORSUK_5:56
   holds A = {} or A = [#]T;
 
 theorem :: BORSUK_5:57
-  for A being Subset of R^1 st A is closed open holds A = {} or A
-  = REAL;
+  for A being Subset of R^1 st A is closed open holds A = {} or A = REAL;
 
 begin :: Topological Properties of Intervals
 
@@ -277,8 +276,7 @@ theorem :: BORSUK_5:60
   \/ ]. b, c .] & a < b & b < c holds Cl A = [. a, c .];
 
 theorem :: BORSUK_5:61
-  for A being Subset of R^1, a being real number st A = {a} holds
-  Cl A = {a};
+  for A being Subset of R^1, a being real number st A = {a} holds Cl A = {a};
 
 theorem :: BORSUK_5:62
   for A being Subset of REAL, B being Subset of R^1 st A = B holds
@@ -305,12 +303,10 @@ theorem :: BORSUK_5:66
   +infty .[ holds A is closed;
 
 theorem :: BORSUK_5:67
-  for a being real number holds [. a,+infty .[ = {a} \/ ]. a,
-  +infty .[;
+  for a being real number holds [. a,+infty .[ = {a} \/ ]. a, +infty .[;
 
 theorem :: BORSUK_5:68
-  for a being real number holds ]. -infty,a.] = {a} \/ ]. -infty,a
-  .[;
+  for a being real number holds ]. -infty,a.] = {a} \/ ]. -infty,a .[;
 
 registration
   let a be real number;
@@ -430,8 +426,7 @@ theorem :: BORSUK_5:104
   for a, b being real number holds ]. -infty, a .] \/ {b} <> REAL;
 
 theorem :: BORSUK_5:105
-  for TS being TopStruct, A, B being Subset of TS st A <> B holds A` <>
-  B`;
+  for TS being TopStruct, A, B being Subset of TS st A <> B holds A` <> B`;
 
 theorem :: BORSUK_5:106
   for A being Subset of R^1 st REAL = A` holds A = {};
@@ -444,12 +439,13 @@ theorem :: BORSUK_5:107
 
 theorem :: BORSUK_5:108
   for X being compact Subset of R^1, X9 being Subset of REAL, x
-  being real number st x in X9 & X9 = X holds inf X9 <= x & x <= sup X9;
+  being real number st x in X9 & X9 = X holds lower_bound X9 <= x &
+   x <= upper_bound X9;
 
 theorem :: BORSUK_5:109
   for C being non empty compact connected Subset of R^1, C9 being
-  Subset of REAL st C = C9 & [. inf C9, sup C9 .] c= C9 holds [. inf C9, sup C9
-  .] = C9;
+  Subset of REAL st C = C9 & [. lower_bound C9, upper_bound C9 .] c= C9
+   holds [. lower_bound C9, upper_bound C9.] = C9;
 
 theorem :: BORSUK_5:110
   for A being connected Subset of R^1, a, b, c being real number
@@ -471,4 +467,3 @@ registration
   let T be TopSpace;
   cluster open closed non empty Subset-Family of T;
 end;
-

@@ -18,6 +18,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="MARGREL1"/>

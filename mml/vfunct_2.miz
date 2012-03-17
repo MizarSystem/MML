@@ -3,7 +3,7 @@
 ::
 :: Received August 20, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, CLVECT_1, PARTFUN1, STRUCT_0, CFUNCT_1, SUBSET_1,
@@ -12,7 +12,7 @@ environ
       XREAL_0, ORDINAL1, RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, FUNCT_1, STRUCT_0, RELSET_1, PARTFUN1, RLVECT_1, VALUED_1, SEQ_2,
-      COMPLEX1, CFUNCT_1, CLVECT_1, XXREAL_0;
+      COMPLEX1, CFUNCT_1, NORMSP_0, CLVECT_1, XXREAL_0;
  constructors XXREAL_0, REAL_1, COMPLEX1, CLVECT_1, VALUED_1, SEQ_2, RELSET_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, STRUCT_0, VALUED_0,
       RFUNCT_1;
@@ -20,8 +20,8 @@ environ
  definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1, VALUED_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1,
       RLVECT_1, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, CLVECT_1, COMPLEX1,
-      CFUNCT_1, XREAL_1, XXREAL_0, VALUED_1;
- schemes SEQ_1, PARTFUN2;
+      CFUNCT_1, XREAL_1, XXREAL_0, VALUED_1, NORMSP_0;
+ schemes PARTFUN2;
 
 begin
 
@@ -29,7 +29,7 @@ reserve M for non empty set;
 reserve V for ComplexNormSpace;
 reserve f,f1,f2,f3 for PartFunc of M,the carrier of V;
 reserve z,z1,z2 for Complex;
-
+ 
 ::
 ::OPERATIONS ON PARTIAL FUNCTIONS FROM A DOMAIN TO THE SET OF COMPLEX NUMBERS
 ::
@@ -55,8 +55,7 @@ A2: for c be Element of M st c in dom F holds F/.c = F(c) from
     take F;
     thus dom F = dom f1 /\ dom f2 by A1,SUBSET_1:8;
     let c be Element of M;
-    assume
-    c in dom F;
+    assume c in dom F;
     hence thesis by A2;
   end;
   uniqueness
@@ -78,8 +77,7 @@ A4: for c be Element of M st c in dom F holds F/.c = G(c) from
     take F;
     thus dom F = dom f1 /\ dom f2 by A3,SUBSET_1:8;
     let c be Element of M;
-    assume
-    c in dom F;
+    assume c in dom F;
     hence thesis by A4;
   end;
   uniqueness
@@ -112,8 +110,7 @@ A2: for c be Element of M st c in dom F holds F/.c = F(c) from
     take F;
     thus dom F = dom f1 /\ dom f2 by A1,SUBSET_1:8;
     let c be Element of M;
-    assume
-    c in dom F;
+    assume c in dom F;
     hence thesis by A2;
   end;
   uniqueness
@@ -145,8 +142,7 @@ A2: for x be Element of X st x in dom F holds F/.x = F(x) from
     take F;
     thus dom F = dom f by A1,SUBSET_1:8;
     let x be Element of X;
-    assume
-    x in dom F;
+    assume x in dom F;
     hence thesis by A2;
   end;
   uniqueness
@@ -161,37 +157,13 @@ definition
   let X be non empty set;
   let V be ComplexNormSpace;
   let f be PartFunc of X, the carrier of V;
-  deffunc F(Element of X) = ||. f/.$1 .||;
   deffunc G(Element of X) = - f/.$1;
   defpred P[set] means $1 in dom f;
   set M = dom f;
-  func ||.f.|| -> PartFunc of X,REAL means
-  :Def5:
-  dom it = dom f & for x be
-  Element of X st x in dom it holds it.x = ||. f/.x .||;
-  existence
-  proof
-    consider F be PartFunc of X,REAL such that
-A1: for x be Element of X holds x in dom F iff P[x] and
-A2: for x be Element of X st x in dom F holds F.x = F(x) from SEQ_1:
-    sch 3;
-    take F;
-    thus dom F = dom f by A1,SUBSET_1:8;
-    let x be Element of X;
-    assume
-    x in dom F;
-    hence thesis by A2;
-  end;
-  uniqueness
-  proof
-    thus for h,g being PartFunc of X, REAL st (dom h=M & for x be Element of X
-st x in dom h holds h.x = F(x)) & (dom g=M & for x be Element of X st x in dom
-    g holds g.x = F(x)) holds h = g from SEQ_1:sch 4;
-  end;
+  canceled;
   func -f ->PartFunc of X,the carrier of V means
   :Def6:
-  dom it = dom f & for x
-  be Element of X st x in dom it holds it/.x = -(f/.x);
+  dom it = dom f & for x be Element of X st x in dom it holds it/.x = -(f/.x);
   existence
   proof
     consider F being PartFunc of X,the carrier of V such that
@@ -201,8 +173,7 @@ A4: for x be Element of X st x in dom F holds F/.x = G(x) from
     take F;
     thus dom f = dom F by A3,SUBSET_1:8;
     let x be Element of X;
-    assume
-    x in dom F;
+    assume x in dom F;
     hence thesis by A4;
   end;
   uniqueness
@@ -298,22 +269,22 @@ A1:   c in (||.f.||)"{0};
 A2:   c in dom (||.f.||) by FUNCT_1:def 13;
       (||.f.||).c in {0} by A1,FUNCT_1:def 13;
       then (||.f.||).c = 0 by TARSKI:def 1;
-      then ||.f/.c.|| = 0 by A2,Def5;
-      then f/.c = 0.V by CLVECT_1:def 14;
+      then ||.f/.c.|| = 0 by A2,NORMSP_0:def 3;
+      then f/.c = 0.V by NORMSP_0:def 5;
       then
 A3:   f/.c in {0.V} by TARSKI:def 1;
-      c in dom f by A2,Def5;
+      c in dom f by A2,NORMSP_0:def 3;
       hence thesis by A3,PARTFUN2:44;
     end;
     assume
 A4: c in (f)"{0.V};
     then c in dom f by PARTFUN2:44;
     then
-A5: c in dom (||.f.||) by Def5;
+A5: c in dom (||.f.||) by NORMSP_0:def 3;
     f/.c in {0.V} by A4,PARTFUN2:44;
     then f/.c = 0.V by TARSKI:def 1;
-    then ||.f/.c.|| = 0 by CLVECT_1:def 14;
-    then (||.f.||).c = 0 by A5,Def5;
+    then ||.f/.c.|| = 0 by NORMSP_0:def 6;
+    then (||.f.||).c = 0 by A5,NORMSP_0:def 3;
     then (||.f.||).c in {0} by TARSKI:def 1;
     hence c in (||.f.||)"{0} by A5,FUNCT_1:def 13;
   end;
@@ -388,12 +359,12 @@ A6: x in dom (z(#)f) by Def4;
   end;
   hence thesis by SUBSET_1:8;
 end;
-
+ 
 ::
 :: BASIC PROPERTIES OF OPERATIONS
 ::
 
-theorem
+theorem aa:
   f1 + f2 = f2 + f1
 proof
 A1: dom (f1 + f2) = dom f2 /\ dom f1 by Def1
@@ -406,6 +377,12 @@ A2: x in dom (f1+f2);
       .= (f2 + f1)/.x by A1,A2,Def1;
   end;
   hence thesis by A1,PARTFUN2:3;
+end;
+
+definition
+  let M,V; let f1,f2;
+  redefine func f1+f2;
+  commutativity by aa;
 end;
 
 theorem
@@ -466,7 +443,7 @@ A7: (f1 (#) f2)/.x = (f1 (#) f2).x by A3,PARTFUN1:def 8
     then
 A8: x in dom (f2 (#) f3) by XBOOLE_0:def 4;
     thus (f1 (#) f2 (#) f3)/.x = (f1 (#) f2)/.x * (f3/.x) by A2,Def3
-      .= f1/.x * (f2/.x * (f3/.x)) by A7,CLVECT_1:def 4,def 5
+      .= f1/.x * (f2/.x * (f3/.x)) by A7,CLVECT_1:def 4
       .= f1/.x * ((f2 (#) f3)/.x) by A8,Def3
       .= (f1 (#) (f2 (#) f3))/.x by A1,A2,Def3;
   end;
@@ -517,8 +494,7 @@ A10: x in dom (f2 (#) f3) by A4,XBOOLE_0:def 4;
 end;
 
 theorem
-  for f3 be PartFunc of M,COMPLEX holds f3(#)(f1 + f2) = f3(#)f1 + f3(#)
-  f2
+  for f3 be PartFunc of M,COMPLEX holds f3(#)(f1 + f2) = f3(#)f1 + f3(#) f2
 proof
   let f3 be PartFunc of M,COMPLEX;
 A1: dom (f3 (#) (f1 + f2)) = dom f3 /\ dom (f1 + f2) by Def3
@@ -551,8 +527,7 @@ A6: x in dom (f3 (#) f2) by A4,XBOOLE_0:def 4;
 end;
 
 theorem
-  for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = z (#) f1 (#)
-  f2
+  for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = z (#) f1 (#) f2
 proof
   let f1 be PartFunc of M,COMPLEX;
 A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def3;
@@ -573,7 +548,7 @@ A5: x in dom (f1(#)f2) by A3,Def4;
 A6: f1/.x = f1.x by PARTFUN1:def 8;
     thus (z(#)(f1(#)f2))/.x = z * ((f1(#)f2)/.x) by A3,Def4
       .= z*(f1/.x * (f2/.x)) by A5,Def3
-      .= (z*f1/.x) * (f2/.x) by CLVECT_1:def 4,def 5
+      .= (z*f1/.x) * (f2/.x) by CLVECT_1:def 4
       .= (z(#)f1)/.x * (f2/.x) by A4,A6,VALUED_1:6
       .= (z(#)f1 (#) f2)/.x by A2,A3,Def3;
   end;
@@ -581,8 +556,7 @@ A6: f1/.x = f1.x by PARTFUN1:def 8;
 end;
 
 theorem
-  for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = f1 (#) (z
-  (#) f2)
+  for f1 be PartFunc of M,COMPLEX holds z (#) (f1 (#) f2) = f1 (#) (z (#) f2)
 proof
   let f1 be PartFunc of M,COMPLEX;
 A1: dom (z(#)(f1 (#) f2)) = dom (f1 (#) f2) by Def4
@@ -600,8 +574,8 @@ A3: x in dom (f1(#)f2) by Def4;
 A4: x in dom (z(#)f2) by XBOOLE_0:def 4;
     thus (z(#)(f1(#)f2))/.x = z * (f1(#)f2)/.x by A2,Def4
       .= z * (f1/.x * (f2/.x)) by A3,Def3
-      .= f1/.x * z * (f2/.x) by CLVECT_1:def 4,def 5
-      .= f1/.x * (z * (f2/.x)) by CLVECT_1:def 4,def 5
+      .= f1/.x * z * (f2/.x) by CLVECT_1:def 4
+      .= f1/.x * (z * (f2/.x)) by CLVECT_1:def 4
       .= f1/.x * ((z(#)f2)/.x) by A4,Def4
       .= (f1(#)(z(#)f2))/.x by A1,A2,Def3;
   end;
@@ -609,8 +583,7 @@ A4: x in dom (z(#)f2) by XBOOLE_0:def 4;
 end;
 
 theorem
-  for f1,f2 be PartFunc of M,COMPLEX holds (f1 - f2) (#) f3 = f1(#)f3 -
-  f2(#)f3
+  for f1,f2 be PartFunc of M,COMPLEX holds (f1 - f2) (#) f3 = f1(#)f3 - f2(#)f3
 proof
   let f1,f2 be PartFunc of M,COMPLEX;
 A1: dom ((f1 - f2) (#) f3) = dom (f1 + -f2) /\ dom f3 by Def3
@@ -659,8 +632,7 @@ A11: x in dom (f2 (#) f3) by A3,XBOOLE_0:def 4;
 end;
 
 theorem
-  for f3 be PartFunc of M,COMPLEX holds f3(#)f1 - f3(#)f2 = f3(#)(f1 -
-  f2)
+  for f3 be PartFunc of M,COMPLEX holds f3(#)f1 - f3(#)f2 = f3(#)(f1 - f2)
 proof
   let f3 be PartFunc of M,COMPLEX;
 A1: dom (f3 (#) f1 - f3 (#) f2) = dom (f3 (#) f1) /\ dom (f3 (#) f2) by Def2
@@ -733,7 +705,7 @@ A2: x in dom ((z1*z2)(#)f);
     then
 A3: x in dom (z2(#)f) by A1,Def4;
     thus ((z1*z2)(#)f)/.x = z1*z2 * f/.x by A2,Def4
-      .= z1*(z2 * f/.x) by CLVECT_1:def 4,def 5
+      .= z1*(z2 * f/.x) by CLVECT_1:def 4
       .= z1 * ((z2(#)f)/.x) by A3,Def4
       .= (z1(#)(z2(#)f))/.x by A1,A2,Def4;
   end;
@@ -820,8 +792,7 @@ theorem Th18:
 proof
 A1: now
     let c be Element of M;
-    assume
-    c in dom (1r(#)f);
+    assume c in dom (1r(#)f);
     hence (1r(#)f)/.c = 1r * f/.c by Def4
       .= f/.c by CLVECT_1:def 5;
   end;
@@ -884,15 +855,14 @@ A4: c in dom (f1 + f2) by XBOOLE_0:def 4;
 end;
 
 theorem
-  for f1 be PartFunc of M,COMPLEX holds ||.f1(#)f2.|| = |.f1.|(#)||.f2
-  .||
+  for f1 be PartFunc of M,COMPLEX holds ||.f1(#)f2.|| = |.f1.|(#)||.f2 .||
 proof
   let f1 be PartFunc of M,COMPLEX;
 A1: dom (f1 (#) f2) = dom f1 /\ dom f2 by Def3;
-A2: dom f1 /\ dom f2 = dom f1 /\ dom (||.f2.||) by Def5
+A2: dom f1 /\ dom f2 = dom f1 /\ dom (||.f2.||) by NORMSP_0:def 3
     .= dom (|.f1.|) /\ dom (||.f2.||) by VALUED_1:def 11
     .= dom (|.f1.|(#)||.f2.||) by VALUED_1:def 4;
-A3: dom (||.f1 (#) f2.||) = dom (f1 (#) f2) by Def5;
+A3: dom (||.f1 (#) f2.||) = dom (f1 (#) f2) by NORMSP_0:def 3;
   now
     let c be Element of M;
     assume
@@ -900,15 +870,15 @@ A4: c in dom (||.f1 (#) f2.||);
     then c in dom (|.f1.|) /\ dom (||.f2.||) by A3,A1,A2,VALUED_1:def 4;
     then
 A5: c in dom (||.f2.||) by XBOOLE_0:def 4;
-A6: c in dom (f1 (#) f2) by A4,Def5;
+A6: c in dom (f1 (#) f2) by A4,NORMSP_0:def 3;
     then c in dom f1 by A1,XBOOLE_0:def 4;
     then
 A7: f1/.c = f1.c by PARTFUN1:def 8;
-    thus (||.f1(#)f2.||).c = ||.(f1(#)f2)/.c.|| by A4,Def5
+    thus (||.f1(#)f2.||).c = ||.(f1(#)f2)/.c.|| by A4,NORMSP_0:def 3
       .= ||.f1/.c * (f2/.c).|| by A6,Def3
       .= |.(f1/.c).| * ||.(f2/.c).|| by CLVECT_1:def 14
       .= ((|.f1.|).c) * ||.(f2/.c).|| by A7,VALUED_1:18
-      .= ((|.f1.|).c) * (||.f2.||).c by A5,Def5
+      .= ((|.f1.|).c) * (||.f2.||).c by A5,NORMSP_0:def 3
       .= (|.f1.|(#)||.f2.||).c by VALUED_1:5;
   end;
   hence thesis by A3,A1,A2,PARTFUN1:34;
@@ -917,9 +887,9 @@ end;
 theorem
   ||.z(#)f.|| = |.z.|(#)||.f.||
 proof
-A1: dom (||.z(#)f.||) = dom (z(#)f) by Def5
+A1: dom (||.z(#)f.||) = dom (z(#)f) by NORMSP_0:def 3
     .= dom f by Def4
-    .= dom (||.f.||) by Def5
+    .= dom (||.f.||) by NORMSP_0:def 3
     .= dom (|.z.|(#)||.f.||) by VALUED_1:def 5;
   now
     let c be Element of M;
@@ -927,11 +897,11 @@ A1: dom (||.z(#)f.||) = dom (z(#)f) by Def5
 A2: c in dom (||.z(#)f.||);
     then
 A3: c in dom (||.f.||) by A1,VALUED_1:def 5;
-A4: c in dom (z(#)f) by A2,Def5;
-    thus (||.z(#)f.||).c = ||.(z(#)f)/.c.|| by A2,Def5
+A4: c in dom (z(#)f) by A2,NORMSP_0:def 3;
+    thus (||.z(#)f.||).c = ||.(z(#)f)/.c.|| by A2,NORMSP_0:def 3
       .=||.z*(f/.c).|| by A4,Def4
       .=|.z.|*||.f/.c.|| by CLVECT_1:def 14
-      .=|.z.|*(||.f.||.c) by A3,Def5
+      .=|.z.|*(||.f.||.c) by A3,NORMSP_0:def 3
       .=(|.z.|(#)||.f.||).c by A1,A2,VALUED_1:def 5;
   end;
   hence thesis by A1,PARTFUN1:34;
@@ -992,8 +962,7 @@ end;
 reserve X,Y for set;
 
 theorem Th27:
-  (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1
-  + f2|X
+  (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X
 proof
 A1: now
     let c be Element of M;
@@ -1235,22 +1204,22 @@ A7: c in dom (-(f|X)) by Def6;
     .= dom (-(f|X)) by Def6;
   hence (-f)|X = -(f|X) by A1,PARTFUN2:3;
 A8: dom ((||.f.||)|X) = dom (||.f.||) /\ X by RELAT_1:90
-    .= dom f /\ X by Def5
+    .= dom f /\ X by NORMSP_0:def 3
     .= dom (f|X) by RELAT_1:90
-    .= dom (||.(f|X).||) by Def5;
+    .= dom (||.(f|X).||) by NORMSP_0:def 3;
   now
     let c be Element of M;
     assume
 A9: c in dom ((||.f.||)|X);
     then
-A10: c in dom (f|X) by A8,Def5;
+A10: c in dom (f|X) by A8,NORMSP_0:def 3;
     c in dom (||.f.||) /\ X by A9,RELAT_1:90;
     then
 A11: c in dom (||.f.||) by XBOOLE_0:def 4;
     thus ((||.f.||)|X).c = (||.f.||).c by A9,FUNCT_1:70
-      .= ||.f/.c.|| by A11,Def5
+      .= ||.f/.c.|| by A11,NORMSP_0:def 3
       .= ||.(f|X)/.c.|| by A10,PARTFUN2:32
-      .= (||.(f|X).||).c by A8,A9,Def5;
+      .= (||.(f|X).||).c by A8,A9,NORMSP_0:def 3;
   end;
   hence thesis by A8,PARTFUN1:34;
 end;
@@ -1300,7 +1269,7 @@ A7: c in dom (z(#)(f|X)) by Def4;
     .= dom (z(#)(f|X)) by Def4;
   hence thesis by A1,PARTFUN2:3;
 end;
-
+ 
 ::
 :: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN TO COMPLEX
 ::
@@ -1313,14 +1282,12 @@ proof
   proof
     thus f1 is total & f2 is total implies f1+f2 is total
     proof
-      assume
-      f1 is total & f2 is total;
+      assume f1 is total & f2 is total;
       then dom f1 = M & dom f2 = M by PARTFUN1:def 4;
       hence dom (f1+f2) = M /\ M by Def1
         .= M;
     end;
-    assume
-    f1+f2 is total;
+    assume f1+f2 is total;
     then dom (f1+f2) = M by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = M by Def1;
     then M c= dom f1 & M c= dom f2 by XBOOLE_1:17;
@@ -1330,14 +1297,12 @@ proof
   proof
     thus f1 is total & f2 is total implies f1-f2 is total
     proof
-      assume
-      f1 is total & f2 is total;
+      assume f1 is total & f2 is total;
       then dom f1 = M & dom f2 = M by PARTFUN1:def 4;
       hence dom (f1-f2) = M /\ M by Def2
         .= M;
     end;
-    assume
-    f1-f2 is total;
+    assume f1-f2 is total;
     then dom (f1-f2) = M by PARTFUN1:def 4;
     then dom f1 /\ dom f2 = M by Def2;
     then M c= dom f1 & M c= dom f2 by XBOOLE_1:17;
@@ -1352,14 +1317,12 @@ proof
   let f1 be PartFunc of M,COMPLEX;
   thus f1 is total & f2 is total implies f1(#)f2 is total
   proof
-    assume
-    f1 is total & f2 is total;
+    assume f1 is total & f2 is total;
     then dom f1 = M & dom f2 = M by PARTFUN1:def 4;
     hence dom (f1(#)f2) = M /\ M by Def3
       .= M;
   end;
-  assume
-  f1(#)f2 is total;
+  assume f1(#)f2 is total;
   then dom (f1(#)f2) = M by PARTFUN1:def 4;
   then dom f1 /\ dom f2 = M by Def3;
   then M c= dom f1 & M c= dom f2 by XBOOLE_1:17;
@@ -1371,13 +1334,11 @@ theorem Th34:
 proof
   thus f is total implies z(#)f is total
   proof
-    assume
-    f is total;
+    assume f is total;
     then dom f = M by PARTFUN1:def 4;
     hence dom (z(#)f) = M by Def4;
   end;
-  assume
-  z(#)f is total;
+  assume z(#)f is total;
   then dom (z(#)f) = M by PARTFUN1:def 4;
   hence dom f = M by Def4;
 end;
@@ -1403,15 +1364,13 @@ theorem Th36:
 proof
   thus f is total implies ||.f.|| is total
   proof
-    assume
-    f is total;
+    assume f is total;
     then dom f = M by PARTFUN1:def 4;
-    hence dom (||.f.||) = M by Def5;
+    hence dom (||.f.||) = M by NORMSP_0:def 3;
   end;
-  assume
-  ||.f.|| is total;
+  assume ||.f.|| is total;
   then dom (||.f.||) = M by PARTFUN1:def 4;
-  hence dom f = M by Def5;
+  hence dom f = M by NORMSP_0:def 3;
 end;
 
 theorem
@@ -1435,8 +1394,7 @@ theorem
 proof
   let f1 be PartFunc of M,COMPLEX;
   let x be Element of M;
-  assume
-  f1 is total & f2 is total;
+  assume f1 is total & f2 is total;
   then f1(#)f2 is total by Th33;
   then dom (f1(#)f2) = M by PARTFUN1:def 4;
   hence thesis by Def3;
@@ -1446,8 +1404,7 @@ theorem
   for x be Element of M st f is total holds (z(#)f)/.x = z * (f/.x)
 proof
   let x be Element of M;
-  assume
-  f is total;
+  assume f is total;
   then z(#)f is total by Th34;
   then dom (z(#)f) = M by PARTFUN1:def 4;
   hence thesis by Def4;
@@ -1465,9 +1422,9 @@ A1: f is total;
   hence (-f)/.x = - f/.x by Def6;
   ||.f.|| is total by A1,Th36;
   then dom (||.f.||) = M by PARTFUN1:def 4;
-  hence thesis by Def5;
+  hence thesis by NORMSP_0:def 3;
 end;
-
+ 
 ::
 :: BOUNDED AND CONSTANT PARTIAL FUNCTIONS
 ::   FROM A DOMAIN TO A NORMED COMPLEX SPACE
@@ -1493,8 +1450,7 @@ A2: f is_bounded_on X;
 A3: for x be Element of M st x in X /\ dom f holds ||.f/.x.|| <= r by A2,Def7;
   take r;
   let x be Element of M;
-  assume
-  x in Y /\ dom f;
+  assume x in Y /\ dom f;
   then x in Y & x in dom f by XBOOLE_0:def 4;
   then x in X /\ dom f by A1,XBOOLE_0:def 4;
   hence thesis by A3;
@@ -1503,8 +1459,7 @@ end;
 theorem
   X misses dom f implies f is_bounded_on X
 proof
-  assume
-  X /\ dom f = {};
+  assume X /\ dom f = {};
   then for x be Element of M holds x in X /\ dom f implies ||.f/.x.|| <= 0;
   hence thesis by Def7;
 end;
@@ -1518,8 +1473,7 @@ proof
     |.0c.|*||.f/.c.|| <= 0 by COMPLEX1:130;
     then
 A1: ||.0c*(f/.c).|| <= 0 by CLVECT_1:def 14;
-    assume
-    c in Y /\ dom (0c(#)f);
+    assume c in Y /\ dom (0c(#)f);
     then c in dom (0c(#)f) by XBOOLE_0:def 4;
     hence ||.(0c(#)f)/.c.|| <= p by A1,Def4;
   end;
@@ -1529,8 +1483,7 @@ end;
 theorem Th44:
   f is_bounded_on Y implies z(#)f is_bounded_on Y
 proof
-  assume
-  f is_bounded_on Y;
+  assume f is_bounded_on Y;
   then consider r1 be Real such that
 A1: for c be Element of M st c in Y /\ dom f holds ||.f/.c.|| <= r1 by Def7;
   take p = |.z.|*abs(r1);
@@ -1552,8 +1505,7 @@ A5: ||.f/.c.|| <= r1 by A1;
 end;
 
 theorem Th45:
-  f is_bounded_on Y implies ||.f.|||Y is bounded & -f
-  is_bounded_on Y
+  f is_bounded_on Y implies ||.f.|||Y is bounded & -f is_bounded_on Y
 proof
   assume
 A1: f is_bounded_on Y;
@@ -1566,11 +1518,11 @@ A3: c in Y /\ dom (||.f.||);
     then
 A4: c in Y by XBOOLE_0:def 4;
 A5: c in dom (||.f.||) by A3,XBOOLE_0:def 4;
-    then c in dom f by Def5;
+    then c in dom f by NORMSP_0:def 3;
     then c in Y /\ dom f by A4,XBOOLE_0:def 4;
     then ||.f/.c.|| >= 0 & ||.f/.c.|| <= r1 by A2,CLVECT_1:106;
     then abs(||.f/.c.||) <= r1 by ABSVALUE:def 1;
-    hence abs((||.f.||).c) <= r1 by A5,Def5;
+    hence abs((||.f.||).c) <= r1 by A5,NORMSP_0:def 3;
   end;
   hence ||.f.|||Y is bounded by RFUNCT_1:90;
   (-1r)(#)f is_bounded_on Y by A1,Th44;
@@ -1578,8 +1530,7 @@ A5: c in dom (||.f.||) by A3,XBOOLE_0:def 4;
 end;
 
 theorem Th46:
-  f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2
-  is_bounded_on (X /\ Y)
+  f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2 is_bounded_on (X /\ Y)
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1660,8 +1611,7 @@ A12: ||.(f2/.c).|| <= r2 by A4;
 end;
 
 theorem
-  f1 is_bounded_on X & f2 is_bounded_on Y implies f1-f2 is_bounded_on X
-  /\ Y
+  f1 is_bounded_on X & f2 is_bounded_on Y implies f1-f2 is_bounded_on X /\ Y
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1822,8 +1772,7 @@ end;
 theorem Th52:
   f|Y is constant implies (z(#)f)|Y is constant
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
@@ -1843,11 +1792,9 @@ A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
 end;
 
 theorem Th53:
-  f|Y is constant implies ||.f.|||Y is constant & (-f)|Y is
-  constant
+  f|Y is constant implies ||.f.|||Y is constant & (-f)|Y is constant
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
@@ -1857,10 +1804,10 @@ A2: c in Y /\ dom (||.f.||);
     then
 A3: c in Y by XBOOLE_0:def 4;
 A4: c in dom (||.f.||) by A2,XBOOLE_0:def 4;
-    then c in dom f by Def5;
+    then c in dom f by NORMSP_0:def 3;
     then
 A5: c in Y /\ dom f by A3,XBOOLE_0:def 4;
-    thus (||.f.||).c = ||.f/.c.|| by A4,Def5
+    thus (||.f.||).c = ||.f/.c.|| by A4,NORMSP_0:def 3
       .= ||.r.|| by A1,A5;
   end;
   hence ||.f.|||Y is constant by PARTFUN2:76;
@@ -1881,15 +1828,13 @@ end;
 theorem Th54:
   f|Y is constant implies f is_bounded_on Y
 proof
-  assume
-  f|Y is constant;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
 A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
     take p=||.r.||;
     let c be Element of M;
-    assume
-    c in Y /\ dom f;
+    assume c in Y /\ dom f;
     hence ||.f/.c.|| <= p by A1;
   end;
   hence thesis by Def7;
@@ -1913,8 +1858,7 @@ A1: f|Y is constant;
 end;
 
 theorem
-  f1 is_bounded_on X & f2|Y is constant implies f1+f2 is_bounded_on (X
-  /\ Y)
+  f1 is_bounded_on X & f2|Y is constant implies f1+f2 is_bounded_on (X /\ Y)
 proof
   assume that
 A1: f1 is_bounded_on X and
@@ -1938,4 +1882,3 @@ A4: f1+-f2 is_bounded_on X /\ Y by A1,Th46;
   then f2+-f1 is_bounded_on Y /\ X by A3,Th46;
   hence thesis by A4,Th25;
 end;
-

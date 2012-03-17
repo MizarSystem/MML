@@ -22,6 +22,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RSSPACE"/>
@@ -45,7 +46,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -56,7 +57,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -84,7 +87,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="134">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -137,7 +140,7 @@
 </FCluster>
 <FCluster aid="RSSPACE4" nr="4">
 <ArgTypes/>
-<Func kind="G" nr="13">
+<Func kind="G" nr="15">
 <Func kind="K" nr="340"/>
 <Func kind="K" nr="177">
 <Func kind="K" nr="174"/>
@@ -162,7 +165,7 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="97"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE4" nr="5">
@@ -178,7 +181,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE4" nr="6">
@@ -188,7 +193,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -199,7 +204,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -218,7 +225,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -229,7 +236,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -288,7 +297,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -299,7 +308,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -327,7 +338,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -338,7 +349,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -356,7 +369,9 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE4" nr="10">
@@ -366,7 +381,7 @@
 <Adjective nr="11" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -377,8 +392,10 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="98"/>
-<Adjective nr="133"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="102"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -388,7 +405,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="133"/>
+<Adjective nr="137"/>
 </Cluster>
 </FCluster>
 </Registrations>

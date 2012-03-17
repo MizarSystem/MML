@@ -11,19 +11,20 @@ environ
       REAL_1, CARD_1, COMPLEX1, CFUNCT_1, VALUED_1, XBOOLE_0, RLSUB_1,
       RLVECT_1, CLVECT_1, ALGSTR_0, SEQ_4, STRUCT_0, SUPINF_2, ARYTM_1,
       NORMSP_1, ZFMISC_1, REALSET1, PRE_TOPC, MEMBER_1, NAT_1, RSSPACE3, SEQ_2,
-      CLOPBAN1, FUNCOP_1, FUNCT_2, LOPBAN_1, REWRITE1, CSSPACE4;
+      CLOPBAN1, FUNCOP_1, FUNCT_2, LOPBAN_1, REWRITE1, CSSPACE4, NORMSP_0,
+      METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, PRE_TOPC, DOMAIN_1,
       RELAT_1, FUNCOP_1, REALSET1, XXREAL_0, XREAL_0, XXREAL_2, COMPLEX1,
       REAL_1, NAT_1, STRUCT_0, ALGSTR_0, ORDINAL1, NUMBERS, FUNCT_1, RELSET_1,
       FUNCT_2, INTEGRA2, MEASURE6, RLVECT_1, VALUED_1, COMSEQ_1, CFUNCT_1,
-      COMSEQ_2, NORMSP_1, SEQ_1, SEQ_2, CLVECT_1, SEQ_4, PARTFUN1, CSSPACE,
-      CSSPACE3, CLOPBAN1;
+      COMSEQ_2, NORMSP_0, NORMSP_1, SEQ_1, SEQ_2, CLVECT_1, SEQ_4, PARTFUN1,
+      CSSPACE, CSSPACE3, CLOPBAN1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQM_3, COMSEQ_2, REALSET1,
       MEASURE6, INTEGRA2, LOPBAN_1, CSSPACE3, CLOPBAN1, SEQ_1, XXREAL_2,
-      RVSUM_1, SEQ_4, RELSET_1, BINOP_2, SEQ_2;
+      RVSUM_1, SEQ_4, RELSET_1, BINOP_2, SEQ_2, SERIES_1;
  registrations SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, REALSET1, STRUCT_0, CLVECT_1, CSSPACE3, VALUED_0,
-      CSSPACE, VALUED_1, FUNCOP_1, SEQ_2, SEQ_4, RFUNCT_1;
+      CSSPACE, VALUED_1, FUNCOP_1, SEQ_2, SEQ_4, RFUNCT_1, NORMSP_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -58,13 +59,14 @@ definition
 :: CSSPACE4:def 2
 
   for x be set st x in the_set_of_BoundedComplexSequences holds
-  it.x = sup rng |.seq_id x.|;
+  it.x = upper_bound rng |.seq_id x.|;
 end;
 
 canceled;
 
 theorem :: CSSPACE4:2
-  for seq be Complex_Sequence holds seq is bounded & sup rng |.seq.| = 0
+  for seq be Complex_Sequence holds seq is bounded &
+  upper_bound rng |.seq.| = 0
   iff for n be Element of NAT holds seq.n = 0c;
 
 registration
@@ -98,7 +100,7 @@ holds c*u =c(#)seq_id(u) ) & ( for u be VECTOR of Complex_linfty_Space holds -u
   = -seq_id u & seq_id(-u) = -seq_id u ) & ( for u,v be VECTOR of
   Complex_linfty_Space holds u-v =seq_id(u)-seq_id(v) ) & ( for v be VECTOR of
   Complex_linfty_Space holds seq_id v is bounded ) & for v be VECTOR of
-  Complex_linfty_Space holds ||.v.|| = sup rng |.seq_id v.|;
+  Complex_linfty_Space holds ||.v.|| = upper_bound rng |.seq_id v.|;
 
 theorem :: CSSPACE4:4
   for x, y being Point of Complex_linfty_Space, c be Complex holds
@@ -106,7 +108,8 @@ theorem :: CSSPACE4:4
   ||.x.|| + ||.y.|| & ||. c*x .|| = |.c.| * ||.x.||;
 
 registration
-  cluster Complex_linfty_Space -> ComplexNormSpace-like
+  cluster Complex_linfty_Space ->
+    reflexive discerning ComplexNormSpace-like
     vector-distributive scalar-distributive scalar-associative scalar-unital
     Abelian add-associative right_zeroed
     right_complementable;
@@ -128,8 +131,7 @@ definition
   attr IT is bounded means
 :: CSSPACE4:def 4
 
-  ex K being Real st 0 <= K & for x being
-  Element of X holds ||. IT.x .|| <= K;
+  ex K being Real st 0 <= K & for x being Element of X holds ||. IT.x .|| <= K;
 end;
 
 theorem :: CSSPACE4:7
@@ -240,7 +242,7 @@ end;
 
 theorem :: CSSPACE4:14
   for X be non empty set for Y be ComplexNormSpace, g be bounded
-  Function of X,the carrier of Y holds PreNorms(g) is non empty bounded_above;
+  Function of X,the carrier of Y holds PreNorms(g) is bounded_above;
 
 theorem :: CSSPACE4:15
   for X be non empty set for Y be ComplexNormSpace, g be Function of X,
@@ -249,7 +251,8 @@ theorem :: CSSPACE4:15
 theorem :: CSSPACE4:16
   for X be non empty set, Y be ComplexNormSpace ex NORM be
   Function of ComplexBoundedFunctions(X,Y),REAL st for f be set st f in
-  ComplexBoundedFunctions(X,Y) holds NORM.f = sup PreNorms(modetrans(f,X,Y));
+  ComplexBoundedFunctions(X,Y) holds NORM.f =
+  upper_bound PreNorms(modetrans(f,X,Y));
 
 definition
   let X be non empty set;
@@ -259,7 +262,7 @@ definition
 :: CSSPACE4:def 9
 
   for x be set st x in ComplexBoundedFunctions(X,Y)
-  holds it.x = sup PreNorms(modetrans(x,X,Y));
+  holds it.x = upper_bound PreNorms(modetrans(x,X,Y));
 end;
 
 theorem :: CSSPACE4:17
@@ -268,7 +271,8 @@ theorem :: CSSPACE4:17
 
 theorem :: CSSPACE4:18
   for X be non empty set, Y be ComplexNormSpace, f be bounded
-  Function of X,the carrier of Y holds ComplexBoundedFunctionsNorm(X,Y).f = sup
+  Function of X,the carrier of Y holds ComplexBoundedFunctionsNorm(X,Y).f
+   = upper_bound
   PreNorms(f);
 
 definition
@@ -320,7 +324,8 @@ of C_NormSpace_of_BoundedFunctions(X,Y), c be Complex holds ( ||.f.|| = 0 iff f
 
 theorem :: CSSPACE4:26
   for X be non empty set, Y be ComplexNormSpace holds
-  C_NormSpace_of_BoundedFunctions(X,Y) is ComplexNormSpace-like;
+  C_NormSpace_of_BoundedFunctions(X,Y) is
+   reflexive discerning ComplexNormSpace-like;
 
 theorem :: CSSPACE4:27
   for X be non empty set, Y be ComplexNormSpace holds
@@ -329,7 +334,8 @@ theorem :: CSSPACE4:27
 registration
   let X be non empty set;
   let Y be ComplexNormSpace;
-  cluster C_NormSpace_of_BoundedFunctions(X,Y) -> ComplexNormSpace-like
+  cluster C_NormSpace_of_BoundedFunctions(X,Y) ->
+    reflexive discerning ComplexNormSpace-like
     vector-distributive scalar-distributive scalar-associative scalar-unital
     Abelian add-associative right_zeroed
     right_complementable;
@@ -373,4 +379,3 @@ theorem :: CSSPACE4:33
 theorem :: CSSPACE4:34
   for seq1,seq2,seq3 be Complex_Sequence holds seq1 = seq2 - seq3 iff
   for n be Element of NAT holds seq1.n = seq2.n - seq3.n;
-

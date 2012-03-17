@@ -26,7 +26,10 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
@@ -35,7 +38,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="PRE_POLY"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="VECTSP_6"/>
@@ -47,23 +49,23 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="327">
+<Func kind="K" nr="350">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
 <Adjective nr="61"/>
 <Adjective nr="98">
-<Func kind="K" nr="322"/>
+<Func kind="K" nr="345"/>
 </Adjective>
 <Adjective nr="99">
-<Func kind="K" nr="322"/>
+<Func kind="K" nr="345"/>
 </Adjective>
 <Adjective nr="100">
-<Func kind="K" nr="322"/>
+<Func kind="K" nr="345"/>
 </Adjective>
 <Adjective nr="101">
-<Func kind="K" nr="322"/>
+<Func kind="K" nr="345"/>
 </Adjective>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
@@ -78,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="328">
+<Func kind="K" nr="351">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -93,7 +95,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="328">
+<Func kind="K" nr="351">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -108,20 +110,20 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="327">
+<Func kind="K" nr="350">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="159">
-<Func kind="K" nr="322"/>
+<Adjective nr="164">
+<Func kind="K" nr="345"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <CCluster aid="BSPACE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="160"/>
+<Adjective nr="165"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -141,7 +143,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="160"/>
+<Adjective nr="165"/>
 </Cluster>
 </CCluster>
 </Registrations>

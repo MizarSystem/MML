@@ -25,6 +25,8 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="XBOOLEAN"/>
+<ArticleID name="MARGREL1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_0"/>
@@ -49,8 +51,8 @@
 <Adjective nr="14">
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="106"/>
-<Adjective nr="109"/>
+<Adjective nr="108"/>
+<Adjective nr="111"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -59,7 +61,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="210">
+<Func kind="K" nr="236">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -72,7 +74,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="212">
+<Func kind="K" nr="238">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -94,7 +96,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="211">
+<Func kind="K" nr="237">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

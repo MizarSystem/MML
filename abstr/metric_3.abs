@@ -7,13 +7,16 @@
 environ
 
  vocabularies XBOOLE_0, METRIC_1, SUBSET_1, FUNCT_1, ZFMISC_1, MCART_1,
-      STRUCT_0, NUMBERS, ARYTM_3, CARD_1, XXREAL_0, REAL_1, METRIC_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, FUNCT_2,
-      BINOP_1, STRUCT_0, METRIC_1, MCART_1, XXREAL_0;
- constructors XXREAL_0, REAL_1, MEMBERED, METRIC_1;
+      STRUCT_0, NUMBERS, ARYTM_3, CARD_1, XXREAL_0, REAL_1, METRIC_3, SQUARE_1,
+      XREAL_0, ORDINAL1, RELAT_1, ARYTM_1, XCMPLX_0, COMPLEX1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, FUNCT_2, BINOP_1, STRUCT_0,
+      METRIC_1, MCART_1, XXREAL_0, SQUARE_1;
+ constructors XXREAL_0, REAL_1, MEMBERED, METRIC_1, SQUARE_1, DOMAIN_1,
+      COMPLEX1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, MEMBERED, STRUCT_0,
-      METRIC_1, RELAT_1;
- requirements SUBSET, BOOLE, ARITHM;
+      METRIC_1, RELAT_1, XCMPLX_0, XREAL_0, SQUARE_1;
+ requirements SUBSET, BOOLE, ARITHM, NUMERALS, REAL;
 
 
 begin
@@ -21,40 +24,37 @@ begin
 reserve X, Y, Z, W for non empty MetrSpace;
 
 scheme :: METRIC_3:sch 1
+ LambdaMCART { X, Y, Z() -> non empty set,
+   F(set,set,set,set) -> Element of Z()} :
+   ex f being Function of [:[:X(),Y():],[:X(),Y():]:],Z() st
+   for x1,y1 being Element of X()
+   for x2,y2 being Element of Y()
+   for x,y being Element of [:X(),Y():] st
+     x = [x1,x2] & y = [y1,y2] holds f.(x,y) = F(x1,y1,x2,y2);
 
-  LambdaMCART { X, Y, Z() -> non empty set, F(set,set,set,set) -> Element of Z
-()}: ex f being Function of [:[:X(),Y():],[:X(),Y():]:],Z() st for x1,y1 being
-Element of X() for x2,y2 being Element of Y() for x,y being Element of [:X(),Y(
-  ):] st x = [x1,x2] & y = [y1,y2] holds f.(x,y) = F(x1,y1,x2,y2);
-
-definition
-  let X,Y;
+definition let X,Y;
   func dist_cart2(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:],
   [:the carrier of X,the carrier of Y:]:], REAL means
 :: METRIC_3:def 1
 
-  for x1, y1 being
-Element of X, x2, y2 being Element of Y, x, y being Element of [:the carrier of
-X,the carrier of Y:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = dist(x1,y1)
-  + dist(x2,y2);
+  for x1, y1 being Element of X, x2, y2 being Element of Y,
+      x, y being Element of [:the carrier of X,the carrier of Y:] st
+      x = [x1,x2] & y = [y1,y2] holds it.(x,y) = dist(x1,y1) + dist(x2,y2);
 end;
 
-canceled 4;
-
-theorem :: METRIC_3:5
+theorem :: METRIC_3:1
   for x, y being Element of [:the carrier of X,the carrier of Y:]
   holds dist_cart2(X,Y).(x,y) = 0 iff x = y;
 
-theorem :: METRIC_3:6
+theorem :: METRIC_3:2
   for x,y being Element of [:the carrier of X,the carrier of Y:]
   holds dist_cart2(X,Y).(x,y) = dist_cart2(X,Y).(y,x);
 
-theorem :: METRIC_3:7
+theorem :: METRIC_3:3
   for x,y,z being Element of [:the carrier of X,the carrier of Y:]
   holds dist_cart2(X,Y).(x,z) <= dist_cart2(X,Y).(x,y) + dist_cart2(X,Y).(y,z);
 
-definition
-  let X,Y;
+definition let X,Y;
   let x,y be Element of [:the carrier of X,the carrier of Y:];
   func dist2(x,y) -> Real equals
 :: METRIC_3:def 2
@@ -70,8 +70,7 @@ definition
   let X,Y;
   func MetrSpaceCart2(X,Y) -> strict non empty MetrSpace equals
 :: METRIC_3:def 3
-  MetrStruct (#
-    [:the carrier of X,the carrier of Y:], dist_cart2(X,Y)#);
+  MetrStruct (#[:the carrier of X,the carrier of Y:], dist_cart2(X,Y)#);
 end;
 
 :: Metrics in the Cartesian product of three sets
@@ -97,17 +96,15 @@ carrier of Y,the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds it.(x,
   y) = (dist(x1,y1) + dist(x2,y2)) + dist(x3,y3);
 end;
 
-canceled 4;
-
-theorem :: METRIC_3:12
+theorem :: METRIC_3:4
   for x,y being Element of [:the carrier of X,the carrier of Y,the
   carrier of Z:] holds dist_cart3(X,Y,Z).(x,y) = 0 iff x = y;
 
-theorem :: METRIC_3:13
+theorem :: METRIC_3:5
   for x,y being Element of [:the carrier of X,the carrier of Y,the
   carrier of Z:] holds dist_cart3(X,Y,Z).(x,y) = dist_cart3(X,Y,Z).(y,x);
 
-theorem :: METRIC_3:14
+theorem :: METRIC_3:6
   for x,y,z being Element of [:the carrier of X,the carrier of Y,
   the carrier of Z:] holds dist_cart3(X,Y,Z).(x,z) <= dist_cart3(X,Y,Z).(x,y) +
   dist_cart3(X,Y,Z).(y,z);
@@ -153,19 +150,17 @@ carrier of Z,the carrier of W:] st x = [x1,x2,x3,x4] & y = [y1,y2,y3,y4] holds
   it.(x,y) = (dist(x1,y1) + dist(x2,y2)) + (dist(x3,y3) + dist(x4,y4));
 end;
 
-canceled 4;
-
-theorem :: METRIC_3:19
+theorem :: METRIC_3:7
   for x,y being Element of [:the carrier of X,the carrier of Y,the
   carrier of Z,the carrier of W:] holds dist_cart4(X,Y,Z,W).(x,y) = 0 iff x = y
 ;
 
-theorem :: METRIC_3:20
+theorem :: METRIC_3:8
   for x,y being Element of [:the carrier of X,the carrier of Y,the
 carrier of Z,the carrier of W:] holds dist_cart4(X,Y,Z,W).(x,y) = dist_cart4(X,
   Y,Z,W).(y,x);
 
-theorem :: METRIC_3:21
+theorem :: METRIC_3:9
   for x,y,z being Element of [:the carrier of X,the carrier of Y,
   the carrier of Z,the carrier of W:] holds dist_cart4(X,Y,Z,W).(x,z) <=
   dist_cart4(X,Y,Z,W).(x,y) + dist_cart4(X,Y,Z,W).(y,z);
@@ -179,8 +174,7 @@ definition
     dist_cart4(X,Y,Z,W)#);
 end;
 
-definition
-  let X,Y,Z,W;
+definition let X,Y,Z,W;
   let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z,
   the carrier of W:];
   func dist4(x,y) -> Real equals
@@ -188,3 +182,208 @@ definition
   dist_cart4(X,Y,Z,W).(x,y);
 end;
 
+begin :: Metrics in the Cartesian Product of Two Sets (METRIC_4)
+
+reserve X,Y for non empty MetrSpace;
+
+definition let X,Y;
+  func dist_cart2S(X,Y) -> Function of [:[:the carrier of X,the carrier of Y:]
+  , [:the carrier of X,the carrier of Y:]:],REAL means
+:: METRIC_3:def 10
+
+  for x1,y1 being
+  Element of X for x2,y2 being Element of Y for x,y being Element of [:the
+  carrier of X,the carrier of Y:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) =
+  sqrt((dist(x1,y1))^2 + (dist(x2,y2)^2));
+end;
+
+theorem :: METRIC_3:10
+  for x,y being Element of [:the carrier of X,the carrier of Y:]
+  holds dist_cart2S(X,Y).(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:11
+  for x,y being Element of [:the carrier of X,the carrier of Y:]
+  holds dist_cart2S(X,Y).(x,y) = dist_cart2S(X,Y).(y,x);
+
+theorem :: METRIC_3:12  :::
+  for a,b,c,d being real number st 0 <= a & 0 <= b & 0 <= c & 0 <= d holds
+    sqrt((a + c)^2 + (b + d)^2) <= sqrt(a^2 + b^2) + sqrt(c^2 + d^2);
+
+theorem :: METRIC_3:13
+  for x,y,z being Element of [:the carrier of X,the carrier of Y:]
+holds dist_cart2S(X,Y).(x,z) <= dist_cart2S(X,Y).(x,y) + dist_cart2S(X,Y).(y,z)
+;
+
+definition let X,Y;
+  let x,y be Element of [:the carrier of X,the carrier of Y:];
+  func dist2S(x,y) -> Real equals
+:: METRIC_3:def 11
+  dist_cart2S(X,Y).(x,y);
+end;
+
+definition let X,Y;
+  func MetrSpaceCart2S(X,Y) -> strict non empty MetrSpace equals
+:: METRIC_3:def 12
+  MetrStruct(#[:the carrier of X,the carrier of Y:],dist_cart2S(X,Y)#);
+end;
+
+begin :: Metrics in the Cartesian Product of Three Sets
+
+reserve Z for non empty MetrSpace;
+
+definition let X,Y,Z;
+  func dist_cart3S(X,Y,Z) -> Function of [:[:the carrier of X,the carrier of Y
+,the carrier of Z:], [:the carrier of X,the carrier of Y,the carrier of Z:]:],
+  REAL means
+:: METRIC_3:def 13
+
+  for x1,y1 being Element of X for x2,y2 being Element of Y
+  for x3,y3 being Element of Z
+  for x,y being Element of [:the carrier of X,the carrier of Y,
+    the carrier of Z:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds
+    it.(x,y) =sqrt((dist(x1,y1))^2 + (dist(x2,y2))^2 + (dist(x3,y3))^2);
+end;
+
+theorem :: METRIC_3:14
+  for x,y being Element of [:the carrier of X,the carrier of Y,the
+  carrier of Z:] holds dist_cart3S(X,Y,Z).(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:15
+  for x,y being Element of [:the carrier of X,the carrier of Y,the
+  carrier of Z:] holds dist_cart3S(X,Y,Z).(x,y) = dist_cart3S(X,Y,Z).(y,x);
+
+theorem :: METRIC_3:16  :::
+  for a,b,c,d,e,f being real number holds (2*(a*d)*(c*b) + 2*(a*f)
+*(e*c) + 2*(b*f)*(e*d)) <= (((a*d)^2 + (c*b)^2 + (a*f)^2 + (e*c)^2 + (b*f)^2) +
+  (e*d)^2);
+
+theorem :: METRIC_3:17  :::
+  for a,b,c,d,e,f being real number holds ((a*c) + (b*d) + (e*f))
+  ^2 <= (a^2 + b^2 + e^2)*(c^2 + d^2 + f^2);
+
+theorem :: METRIC_3:18
+  for x,y,z being Element of [:the carrier of X,the carrier of Y,
+the carrier of Z:] holds dist_cart3S(X,Y,Z).(x,z) <= dist_cart3S(X,Y,Z).(x,y) +
+  dist_cart3S(X,Y,Z).(y,z);
+
+definition let X,Y,Z;
+  let x,y be Element of [:the carrier of X,the carrier of Y,the carrier of Z:];
+  func dist3S(x,y) -> Real equals
+:: METRIC_3:def 14
+  dist_cart3S(X,Y,Z).(x,y);
+end;
+
+definition let X,Y,Z;
+  func MetrSpaceCart3S(X,Y,Z) -> strict non empty MetrSpace equals
+:: METRIC_3:def 15
+  MetrStruct
+(#[:the carrier of X,the carrier of Y,the carrier of Z:], dist_cart3S(X,Y,Z)#);
+end;
+
+definition
+  func taxi_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+:: METRIC_3:def 16
+
+   for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:REAL,
+  REAL:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = real_dist.(x1,y1) +
+  real_dist.(x2,y2);
+end;
+
+theorem :: METRIC_3:19
+  for x,y being Element of [:REAL,REAL:] holds taxi_dist2.(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:20
+  for x,y being Element of [:REAL,REAL:] holds taxi_dist2.(x,y) =
+  taxi_dist2.(y,x);
+
+theorem :: METRIC_3:21
+  for x,y,z being Element of [:REAL,REAL:] holds taxi_dist2.(x,z)
+  <= taxi_dist2.(x,y) + taxi_dist2.(y,z);
+
+definition
+  func RealSpaceCart2 -> strict non empty MetrSpace equals
+:: METRIC_3:def 17
+  MetrStruct(#[:REAL,REAL:],taxi_dist2#);
+end;
+
+definition
+  func Eukl_dist2 -> Function of [:[:REAL,REAL:],[:REAL,REAL:]:],REAL means
+:: METRIC_3:def 18
+
+   for x1,y1,x2,y2 being Element of REAL for x,y being Element of [:REAL,
+REAL:] st x = [x1,x2] & y = [y1,y2] holds it.(x,y) = sqrt((real_dist.(x1,y1))^2
+  + (real_dist.(x2,y2)^2));
+end;
+
+theorem :: METRIC_3:22
+  for x,y being Element of [:REAL,REAL:] holds Eukl_dist2.(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:23
+  for x,y being Element of [:REAL,REAL:] holds Eukl_dist2.(x,y) =
+  Eukl_dist2.(y,x);
+
+theorem :: METRIC_3:24
+  for x,y,z being Element of [:REAL,REAL:] holds Eukl_dist2.(x,z)
+  <= Eukl_dist2.(x,y) + Eukl_dist2.(y,z);
+
+definition
+  func EuklSpace2 -> strict non empty MetrSpace equals
+:: METRIC_3:def 19
+  MetrStruct(#[:REAL,REAL:],Eukl_dist2#);
+end;
+
+definition
+  func taxi_dist3 -> Function of [:[:REAL,REAL,REAL:], [:REAL,REAL,REAL:]:],
+  REAL means
+:: METRIC_3:def 20
+
+  for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being
+Element of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds it.(x,y)
+  = real_dist.(x1,y1) + real_dist.(x2,y2) + real_dist.(x3,y3);
+end;
+
+theorem :: METRIC_3:25
+  for x,y being Element of [:REAL,REAL,REAL:] holds
+  taxi_dist3.(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:26
+  for x,y being Element of [:REAL,REAL,REAL:] holds taxi_dist3.(x,
+  y) = taxi_dist3.(y,x);
+
+theorem :: METRIC_3:27
+  for x,y,z being Element of [:REAL,REAL,REAL:] holds taxi_dist3.(
+  x,z) <= taxi_dist3.(x,y) + taxi_dist3.(y,z);
+
+definition
+  func RealSpaceCart3 -> strict non empty MetrSpace equals
+:: METRIC_3:def 21
+  MetrStruct(#[:REAL,REAL,REAL:],taxi_dist3#);
+end;
+
+definition
+  func Eukl_dist3 -> Function of [:[:REAL,REAL,REAL:], [:REAL,REAL,REAL:]:],
+  REAL means
+:: METRIC_3:def 22
+
+  for x1,y1,x2,y2,x3,y3 being Element of REAL for x,y being
+Element of [:REAL,REAL,REAL:] st x = [x1,x2,x3] & y = [y1,y2,y3] holds it.(x,y)
+= sqrt((real_dist.(x1,y1))^2 + (real_dist.(x2,y2)^2) + (real_dist.(x3,y3)^2));
+end;
+
+theorem :: METRIC_3:28
+  for x,y being Element of [:REAL,REAL,REAL:] holds
+  Eukl_dist3.(x,y) = 0 iff x = y;
+
+theorem :: METRIC_3:29
+  for x,y being Element of [:REAL,REAL,REAL:] holds Eukl_dist3.(x,
+  y) = Eukl_dist3.(y,x);
+
+theorem :: METRIC_3:30
+  for x,y,z being Element of [:REAL,REAL,REAL:] holds Eukl_dist3.(
+  x,z) <= Eukl_dist3.(x,y) + Eukl_dist3.(y,z);
+
+definition
+  func EuklSpace3 -> strict non empty MetrSpace equals
+:: METRIC_3:def 23
+  MetrStruct(#[:REAL,REAL,REAL:],Eukl_dist3#);
+end;

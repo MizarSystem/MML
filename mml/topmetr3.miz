@@ -3,7 +3,7 @@
 ::
 :: Received September 11, 2002
 :: Copyright (c) 2002 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, XXREAL_0, SEQ_4,
@@ -12,10 +12,10 @@ environ
       SEQ_1, COMPLEX1, XXREAL_1, TOPMETR, VALUED_0, BORSUK_1, EUCLID, TOPREAL1,
       TOPREAL2, PSCOMP_1, JORDAN6, TOPS_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      BINOP_1, NAT_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1,
-      RCOMP_1, EUCLID, PSCOMP_1, TOPMETR, SEQ_1, SEQ_2, SEQM_3, SEQ_4, TBSP_1,
-      JORDAN6, TOPREAL1, TOPREAL2;
+      XXREAL_2, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, BINOP_1, NAT_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_2,
+      COMPTS_1, PCOMPS_1, RCOMP_1, EUCLID, PSCOMP_1, TOPMETR, SEQ_1, SEQ_2,
+      SEQM_3, SEQ_4, TBSP_1, JORDAN6, TOPREAL1, TOPREAL2;
  constructors REAL_1, NAT_1, COMPLEX1, SEQM_3, RCOMP_1, TOPS_2, COMPTS_1,
       TBSP_1, TOPMETR, TOPREAL1, PSCOMP_1, JORDAN5C, JORDAN6, SEQ_1, XXREAL_2,
       SEQ_4, BINOP_2, RVSUM_1, SEQ_2, PCOMPS_1;
@@ -23,12 +23,12 @@ environ
       MEMBERED, STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1, EUCLID, TOPMETR,
       COMPTS_1, VALUED_0, SEQ_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0;
+ definitions TARSKI, STRUCT_0, XXREAL_2;
  theorems PRE_TOPC, TOPMETR, XREAL_0, TBSP_1, XBOOLE_0, METRIC_1, FUNCT_1,
       XBOOLE_1, FUNCT_2, JGRAPH_2, GOBOARD6, SEQ_2, TREAL_1, SEQ_4, NAT_1,
       SEQM_3, UNIFORM1, BORSUK_1, JORDAN6, TOPREAL1, TOPS_2, TARSKI, RELAT_1,
       TOPREAL3, JORDAN5B, PREPOWER, XCMPLX_1, XREAL_1, XXREAL_0, XXREAL_1,
-      EUCLID;
+      EUCLID, XXREAL_2;
  schemes FUNCT_2, RECDEF_1, NAT_1;
 
 begin
@@ -40,16 +40,16 @@ proof
   let R be non empty Subset of REAL,r0 be real number;
   assume
 A1: for r being real number st r in R holds r<=r0;
+  then for r being ext-real number st r in R holds r<=r0;
+  then r0 is UpperBound of R by XXREAL_2:def 1;
   then
-A2: R is bounded_above by SEQ_4:def 1;
+A2: R is bounded_above by XXREAL_2:def 10;
   now
     set r1=(upper_bound R) -r0;
-    assume
-    upper_bound R >r0;
+    assume upper_bound R >r0;
     then r1>0 by XREAL_1:52;
     then ex r being real number st r in R & (upper_bound R)-r1<r by A2,
-    SEQ_4:
-    def 4;
+SEQ_4:def 4;
     hence contradiction by A1;
   end;
   hence thesis;
@@ -73,15 +73,14 @@ A4: for G being Subset of TopSpaceMetr(X) st G is open holds lim S in G
     assume
 A5: G is open;
     now
-      assume
-      lim S in G;
+      assume lim S in G;
       then consider r1 being real number such that
 A6:   r1>0 and
 A7:   Ball(lim S,r1) c= G by A5,TOPMETR:22;
       reconsider r2=r1 as Real by XREAL_0:def 1;
       consider n being Element of NAT such that
-A8:   for m being Element of NAT st m>=n holds dist(S.m,lim S)<r2 by
-      A1,A6,TBSP_1:def 4;
+A8:   for m being Element of NAT st m>=n holds dist(S.m,lim S)<r2 by A1,A6,
+TBSP_1:def 4;
       dist(S.n,lim S)<r2 by A8;
       then
 A9:   S.n in Ball(lim S,r1) by METRIC_1:12;
@@ -134,8 +133,7 @@ A4: dom f=the carrier of TopSpaceMetr(X) by FUNCT_2:def 1
   proof
     let r be Real;
     reconsider V=Ball(x0,r) as Subset of TopSpaceMetr(Y) by TOPMETR:16;
-    assume
-    r>0;
+    assume r>0;
     then V is open & x0 in V by GOBOARD6:4,TOPMETR:21;
     then consider W being Subset of TopSpaceMetr(X) such that
 A5: p in W & W is open and
@@ -145,13 +143,12 @@ A7: r0>0 and
 A8: Ball(z0,r0) c= W by A5,TOPMETR:22;
     reconsider r00=r0 as Real by XREAL_0:def 1;
     consider n0 being Element of NAT such that
-A9: for m being Element of NAT st n0<=m holds dist(S.m,z0)<r00 by A1,
-    A7,TBSP_1:def 4;
+A9: for m being Element of NAT st n0<=m holds dist(S.m,z0)<r00 by A1,A7,
+TBSP_1:def 4;
     for m being Element of NAT st n0<=m holds dist(T.m,x0)<r
     proof
       let m be Element of NAT;
-      assume
-      n0<=m;
+      assume n0<=m;
       then dist(S.m,z0)<r0 by A9;
       then S.m in Ball(z0,r0) by METRIC_1:12;
       then
@@ -177,8 +174,7 @@ proof
 A1: s=S;
 A2: s is convergent implies S is convergent
   proof
-    assume
-    s is convergent;
+    assume s is convergent;
     then consider g being real number such that
 A3: for p being real number st 0<p ex n being Element of NAT st for m
     being Element of NAT st n<=m holds abs (s.m-g) < p by SEQ_2:def 6;
@@ -188,8 +184,7 @@ A3: for p being real number st 0<p ex n being Element of NAT st for m
     Element of NAT st n<=m holds dist(S.m,x0)<r
     proof
       let r be Real;
-      assume
-      r>0;
+      assume r>0;
       then consider n0 being Element of NAT such that
 A4:   for m being Element of NAT st n0<=m holds abs (s.m-g) < r by A3;
       for m being Element of NAT st n0<=m holds dist(S.m,x0)<r
@@ -208,8 +203,7 @@ A5:     n0<=m;
   end;
   S is convergent implies s is convergent
   proof
-    assume
-    S is convergent;
+    assume S is convergent;
     then consider x being Element of RealSpace such that
 A6: for r being Real st r>0 ex n being Element of NAT st for m being
     Element of NAT st n<=m holds dist(S.m,x)<r by TBSP_1:def 3;
@@ -219,8 +213,7 @@ A6: for r being Real st r>0 ex n being Element of NAT st for m being
     proof
       let p be real number;
       reconsider p0=p as Real by XREAL_0:def 1;
-      assume
-      0<p;
+      assume 0<p;
       then consider n0 being Element of NAT such that
 A7:   for m being Element of NAT st n0<=m holds dist(S.m,x)<p0 by A6;
       for m being Element of NAT st n0<=m holds abs (s.m-g0) < p
@@ -248,11 +241,10 @@ A9: s is convergent;
     proof
       let r be real number;
       reconsider r0=r as Real by XREAL_0:def 1;
-      assume
-      0 < r;
+      assume 0 < r;
       then consider m0 being Element of NAT such that
-A10:  for n being Element of NAT st m0<=n holds dist(S.n,lim S)<r0 by
-      A2,A9,TBSP_1:def 4;
+A10:  for n being Element of NAT st m0<=n holds dist(S.n,lim S)<r0 by A2,A9,
+TBSP_1:def 4;
       for n being Element of NAT st m0 <= n holds abs(s.n -g0) < r
       proof
         let n be Element of NAT;
@@ -279,8 +271,8 @@ A1: rng s c= [.a,b.];
 A2: dom s=NAT by FUNCT_2:def 1;
   then s.0 in rng s by FUNCT_1:def 5;
   then a<=t & t<=b by A1,XXREAL_1:1;
-  then the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by TOPMETR:14 ,
-  XXREAL_0:2;
+  then the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by TOPMETR:14
+,XXREAL_0:2;
   hence thesis by A1,A2,FUNCT_2:4;
 end;
 
@@ -289,11 +281,10 @@ theorem Th8:
   Closed-Interval-MSpace(a,b) st a<=b holds S is sequence of RealSpace
 proof
   let a,b be real number, S be sequence of Closed-Interval-MSpace(a,b);
-  assume
-  a<=b;
+  assume a<=b;
   then the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by TOPMETR:14;
-  then dom S=NAT & rng S c= the carrier of RealSpace by FUNCT_2:def 1 ,
-  METRIC_1:def 14,XBOOLE_1:1;
+  then dom S=NAT & rng S c= the carrier of RealSpace by FUNCT_2:def 1
+,METRIC_1:def 14,XBOOLE_1:1;
   hence thesis by FUNCT_2:4;
 end;
 
@@ -325,15 +316,13 @@ A7: S is convergent;
 A8: for r being Real st r>0 ex n being Element of NAT st for m being
     Element of NAT st n<=m holds dist(S.m,x0)<r by TBSP_1:def 3;
     x0=lim S by A7,A8,TBSP_1:def 4;
-    then reconsider x1=x0 as Element of Closed-Interval-MSpace(a,b) by A3,A7,
-    A5,
-    A6,Th2,TOPMETR:def 7;
+    then reconsider x1=x0 as Element of Closed-Interval-MSpace(a,b) by A3,A7,A5
+,A6,Th2,TOPMETR:def 7;
     for r being Real st r>0 ex n being Element of NAT st for m being
     Element of NAT st n<=m holds dist(S1.m,x1)<r
     proof
       let r be Real;
-      assume
-      r>0;
+      assume r>0;
       then consider n0 being Element of NAT such that
 A9:   for m being Element of NAT st n0<=m holds dist(S.m,x0)<r by A8;
       for m being Element of NAT st n0<=m holds dist(S1.m,x1)<r
@@ -353,8 +342,7 @@ A10:    n0<=m;
   end;
   S1 is convergent implies S is convergent
   proof
-    assume
-    S1 is convergent;
+    assume S1 is convergent;
     then consider x0 being Element of Closed-Interval-MSpace(a,b) such that
 A11: for r being Real st r>0 ex n being Element of NAT st for m being
     Element of NAT st n<=m holds dist(S1.m,x0)<r by TBSP_1:def 3;
@@ -364,11 +352,9 @@ A11: for r being Real st r>0 ex n being Element of NAT st for m being
     Element of NAT st n<=m holds dist(S.m,x1)<r
     proof
       let r be Real;
-      assume
-      r>0;
+      assume r>0;
       then consider n0 being Element of NAT such that
-A12:  for m being Element of NAT st n0<=m holds dist(S1.m,x0)<r by
-      A11;
+A12:  for m being Element of NAT st n0<=m holds dist(S1.m,x0)<r by A11;
       for m being Element of NAT st n0<=m holds dist(S.m,x1)<r
       proof
         let m be Element of NAT;
@@ -395,8 +381,7 @@ A14: S is convergent;
     being Element of NAT st m1 <= n1 holds dist(S.n1,t0) < r1
     proof
       let r1 being Real;
-      assume
-      0<r1;
+      assume 0<r1;
       then consider m1 being Element of NAT such that
 A15:  for n1 being Element of NAT st m1 <= n1 holds dist(S1.n1,lim S1
       ) < r1 by A4,A14,TBSP_1:def 4;
@@ -570,8 +555,7 @@ A11: rng s2 c= REAL
   proof
     defpred X[Nat] means s2.$1 in REAL;
     let y be set;
-    assume
-    y in rng s2;
+    assume y in rng s2;
     then consider x being set such that
 A12: x in dom s2 and
 A13: y=s2.x by FUNCT_1:def 5;
@@ -607,8 +591,7 @@ A16: X[0] by A9;
 A17: for k being Element of NAT st X[k] holds X[k+1]
   proof
     let k be Element of NAT;
-    assume
-    s1.k<=s3.k;
+    assume s1.k<=s3.k;
     reconsider r2=s1.(k+1) as real number;
     s2.k in rng s2 by A8,FUNCT_1:def 5;
     then reconsider r1=s2.k as real number by A11;
@@ -653,8 +636,7 @@ A21: for k being Element of NAT st X[k] holds X[k+1]
     assume
 A22: 0<=k implies s3.0<=s3.k;
     now
-      assume
-      0<=k+1;
+      assume 0<=k+1;
 A23:  s3.k<=s3.(k+1) by A20;
       now
         per cases;
@@ -676,8 +658,7 @@ A23:  s3.k<=s3.(k+1) by A20;
 A24: for k being Element of NAT st Y[k] holds Y[k+1]
   proof
     let k be Element of NAT;
-    assume
-    for n5 being Element of NAT st k<=n5 holds s3.k<=s3.n5;
+    assume for n5 being Element of NAT st k<=n5 holds s3.k<=s3.n5;
     defpred Z[Nat] means k+1<=$1 implies s3.(k+1)<=s3.$1;
 A25: for i being Element of NAT st Z[i] holds Z[i+1]
     proof
@@ -733,8 +714,7 @@ A33: rng s3 c= R
   proof
     defpred X[set] means s3.$1 in R;
     let y be set;
-    assume
-    y in rng s3;
+    assume y in rng s3;
     then
 A34: ex x being set st x in dom s3 & y=s3.x by FUNCT_1:def 5;
 A35: for k being Element of NAT st X[k] holds X[k+1]
@@ -797,8 +777,7 @@ A44: s3.n2<=lim s3 by A32,A39,SEQ_4:54;
   end;
 A45: now
     reconsider r=upper_bound R -lim s3 as Real;
-    assume
-    upper_bound R>lim s3;
+    assume upper_bound R>lim s3;
     then r>0 by XREAL_1:52;
     then upper_bound R -r<lim s3 by A40;
     hence contradiction;
@@ -813,8 +792,7 @@ A46: for n being Element of NAT holds s3.n <=upper_bound R
   for n being Element of NAT holds s3.n < upper_bound R +1
   proof
     let n be Element of NAT;
-    upper_bound R<upper_bound R +1 & s3.n<=upper_bound R by A46,XREAL_1:
-    31;
+    upper_bound R<upper_bound R +1 & s3.n<=upper_bound R by A46,XREAL_1:31;
     hence thesis by XXREAL_0:2;
   end;
   then
@@ -904,8 +882,7 @@ A11: rng s2 c= REAL
   proof
     defpred X[Nat] means s2.$1 in REAL;
     let y be set;
-    assume
-    y in rng s2;
+    assume y in rng s2;
     then consider x being set such that
 A12: x in dom s2 and
 A13: y=s2.x by FUNCT_1:def 5;
@@ -941,8 +918,7 @@ A16: X[0] by A9;
 A17: for k being Element of NAT st X[k] holds X[k+1]
   proof
     let k be Element of NAT;
-    assume
-    s1.k>=s3.k;
+    assume s1.k>=s3.k;
     reconsider r2=s1.(k+1) as real number;
     s2.k in rng s2 by A8,FUNCT_1:def 5;
     then reconsider r1=s2.k as real number by A11;
@@ -987,8 +963,7 @@ A21: for k being Element of NAT st X[k] holds X[k+1]
     assume
 A22: 0<=k implies s3.0>=s3.k;
     now
-      assume
-      0<=k+1;
+      assume 0<=k+1;
 A23:  s3.k>=s3.(k+1) by A20;
       now
         per cases;
@@ -1010,8 +985,7 @@ A23:  s3.k>=s3.(k+1) by A20;
 A24: for k being Element of NAT st Y[k] holds Y[k+1]
   proof
     let k be Element of NAT;
-    assume
-    for n5 being Element of NAT st k<=n5 holds s3.k>=s3.n5;
+    assume for n5 being Element of NAT st k<=n5 holds s3.k>=s3.n5;
     defpred X[Nat] means k+1<=$1 implies s3.(k+1)>=s3.$1;
 A25: for i being Element of NAT st X[i] holds X[i+1]
     proof
@@ -1066,8 +1040,7 @@ A33: rng s3 c= R
   proof
     defpred Z[Nat] means s3.$1 in R;
     let y be set;
-    assume
-    y in rng s3;
+    assume y in rng s3;
     then
 A34: ex x being set st x in dom s3 & y=s3.x by FUNCT_1:def 5;
 A35: for k being Element of NAT st Z[k] holds Z[k+1]
@@ -1131,8 +1104,7 @@ A44: s3.n2>=lim s3 by A32,A39,SEQ_4:55;
   end;
 A45: now
     reconsider r=(lim s3) -lower_bound R as Real;
-    assume
-    lower_bound R<lim s3;
+    assume lower_bound R<lim s3;
     then r>0 by XREAL_1:52;
     then lower_bound R +((lim s3)+-lower_bound R)>lim s3 by A40;
     hence contradiction;
@@ -1182,8 +1154,7 @@ A9: r1 in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} by A3;
   {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} c= REAL
   proof
     let x be set;
-    assume
-    x in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
+    assume x in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
     then ex r3 being Real st r3=x & r1<=r3 & r3<=r2 & f.r3 in F1;
     hence thesis;
   end;
@@ -1192,13 +1163,19 @@ A9: r1 in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} by A3;
 A10: for r being real number st r in R holds r<=r2
   proof
     let r be real number;
-    assume
-    r in R;
+    assume r in R;
+    then ex r3 being Real st r3=r & r1<=r3 & r3<=r2 & f.r3 in F1;
+    hence thesis;
+  end;
+ r2 is UpperBound of R
+  proof
+    let r be ext-real number;
+    assume r in R;
     then ex r3 being Real st r3=r & r1<=r3 & r3<=r2 & f.r3 in F1;
     hence thesis;
   end;
   then
-A11: R is bounded_above by SEQ_4:def 1;
+A11: R is bounded_above by XXREAL_2:def 10;
   then consider s1 being Real_Sequence such that
 A12: s1 is non-decreasing convergent and
 A13: rng s1 c= R and
@@ -1206,8 +1183,7 @@ A14: lim s1=upper_bound R by Th15;
   {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1} c= [.0,1.]
   proof
     let x be set;
-    assume
-    x in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
+    assume x in {r3 where r3 is Real: r1<=r3 & r3<=r2 & f.r3 in F1};
     then consider r3 being Real such that
 A15: r3=x & r1<=r3 and
 A16: r3<=r2 and
@@ -1216,7 +1192,7 @@ A16: r3<=r2 and
     hence thesis by A1,A15,XXREAL_1:1;
   end;
   then reconsider S1=s1 as sequence of Closed-Interval-MSpace(0,1) by A13,Th7,
-  XBOOLE_1:1;
+XBOOLE_1:1;
 A17: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
   then reconsider S00=f*S1 as sequence of X by Th3;
 A18: S00 is convergent by A7,A12,A17,Th4,Th10;
@@ -1234,24 +1210,22 @@ A21: for r being Real st r>0 ex n being Element of NAT st for m being
   Element of NAT st m>=n holds dist(S00.m,t1)<r
   proof
     let r be Real;
-    assume
-    r>0;
+    assume r>0;
     then consider r7 being Real such that
 A22: r7>0 and
 A23: for w being Point of Closed-Interval-MSpace(0,1), w1 being Point
     of X st w1=f.w & dist(lim S1,w)<r7 holds dist(t1,w1)<r by A7,A17,UNIFORM1:5
     ;
     consider n0 being Element of NAT such that
-A24: for m being Element of NAT st m>=n0 holds dist(S1.m,lim S1)<r7 by
-    A19,A22,TBSP_1:def 4;
+A24: for m being Element of NAT st m>=n0 holds dist(S1.m,lim S1)<r7 by A19,A22,
+TBSP_1:def 4;
     for m being Element of NAT st m>=n0 holds dist(S00.m,t1)<r
     proof
       let m be Element of NAT;
       dom S00=NAT by TBSP_1:5;
       then
 A25:  S00.m=f.(S1.m) by FUNCT_1:22;
-      assume
-      m>=n0;
+      assume m>=n0;
       then dist(lim S1,S1.m)<r7 by A24;
       hence thesis by A23,A25;
     end;
@@ -1264,9 +1238,7 @@ A27: r2 in {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2 & f.r3 in F2}
   {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2} c= REAL
   proof
     let x be set;
-    assume
-    x in {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in
-    F2};
+    assume x in {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2};
     then ex r3 being Real st r3=x & upper_bound R<=r3 & r3<=r2 & f.r3 in F2;
     hence thesis;
   end;
@@ -1276,25 +1248,28 @@ A27: r2 in {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2 & f.r3 in F2}
 A28: for r being real number st r in R2 holds r>=upper_bound R
   proof
     let r be real number;
-    assume
-    r in R2;
+    assume r in R2;
+    then ex r3 being Real st r3=r & upper_bound R<=r3 & r3<=r2 & f.r3 in F2;
+    hence thesis;
+  end;
+  upper_bound R is LowerBound of R2
+  proof
+    let r be ext-real number;
+    assume r in R2;
     then ex r3 being Real st r3=r & upper_bound R<=r3 & r3<=r2 & f.r3 in F2;
     hence thesis;
   end;
   then
-A29: R2 is bounded_below by SEQ_4:def 2;
+A29: R2 is bounded_below by XXREAL_2:def 9;
   then consider s2 being Real_Sequence such that
 A30: s2 is non-increasing convergent and
 A31: rng s2 c= R2 and
 A32: lim s2=lower_bound R2 by Th16;
 A33: 0<=upper_bound R by A1,A9,A11,SEQ_4:def 4;
-  {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2 & f.r3 in F2} c= [.0,
-  1.]
+  {r3 where r3 is Real: upper_bound R <=r3 & r3<=r2 & f.r3 in F2} c= [.0, 1.]
   proof
     let x be set;
-    assume
-    x in {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in
-    F2};
+    assume x in {r3 where r3 is Real: upper_bound R<=r3 & r3<=r2 & f.r3 in F2};
     then consider r3 being Real such that
 A34: r3=x & upper_bound R<=r3 and
 A35: r3<=r2 and
@@ -1303,7 +1278,7 @@ A35: r3<=r2 and
     hence thesis by A33,A34,XXREAL_1:1;
   end;
   then reconsider S1=s2 as sequence of Closed-Interval-MSpace(0,1) by A31,Th7,
-  XBOOLE_1:1;
+XBOOLE_1:1;
   reconsider S2=s2 as sequence of RealSpace by METRIC_1:def 14;
 A36: S1 is convergent by A30,Th10;
   then S2 is convergent by Th9;
@@ -1333,13 +1308,12 @@ A40: for r being Real st r>0 ex n being Element of NAT st for m being
   Element of NAT st m>=n holds dist(S00.m,t1)<r
   proof
     let r be Real;
-    assume
-    r>0;
+    assume r>0;
     then consider r7 being Real such that
 A41: r7>0 and
 A42: for w being Point of Closed-Interval-MSpace(0,1), w1 being Point
-    of X st w1=f.w & dist(lim S1,w)<r7 holds dist(t1,w1)<r by A7,A39,UNIFORM1
-    :5;
+    of X st w1=f.w & dist(lim S1,w)<r7 holds dist(t1,w1)<r by A7,A39,UNIFORM1:5
+;
     consider n0 being Element of NAT such that
 A43: for m being Element of NAT st m>=n0 holds dist(S1.m,lim S1)<r7
     by A36,A41,TBSP_1:def 4;
@@ -1349,8 +1323,7 @@ A43: for m being Element of NAT st m>=n0 holds dist(S1.m,lim S1)<r7
       dom S00=NAT by TBSP_1:5;
       then
 A44:  S00.m=f.(S1.m) by FUNCT_1:22;
-      assume
-      m>=n0;
+      assume m>=n0;
       then dist(lim S1,S1.m)<r7 by A43;
       hence thesis by A42,A44;
     end;
@@ -1381,15 +1354,13 @@ A49:      rs0>0 by A46,A48,XXREAL_0:21;
 A50:      upper_bound R<r0 by XREAL_1:31,217;
           rs0<=r2-upper_bound R by XXREAL_0:17;
           then
-A51:      upper_bound R +rs0<=upper_bound R +(r2-upper_bound R) by
-          XREAL_1:9;
+A51:      upper_bound R +rs0<=upper_bound R +(r2-upper_bound R) by XREAL_1:9;
 A52:      rs0/2<rs0 by A49,XREAL_1:218;
           then upper_bound R +rs0/2<upper_bound R +rs0 by XREAL_1:10;
           then
 A53:      r0<=r2 by A51,XXREAL_0:2;
           then r0<=1 by A2,XXREAL_0:2;
-          then r0 in the carrier of I[01] by A1,A45,A49,BORSUK_1:83 ,
-          XXREAL_1:1;
+          then r0 in the carrier of I[01] by A1,A45,A49,BORSUK_1:83,XXREAL_1:1;
           then r0 in dom f by FUNCT_2:def 1;
           then f.r0 in rng f by FUNCT_1:def 5;
           then f.r0 in the carrier of TopSpaceMetr(X);
@@ -1429,8 +1400,7 @@ A58: f.(lim S1)=lim S00 by A40,TBSP_1:def 4;
     hence thesis by FUNCT_1:22;
   end;
   then lim S00 in F2 by A6,A7,A36,A39,Th2,Th4;
-  then f.(lim s1) in F1 /\ F2 by A57,A14,A38,A32,A37,A58,XBOOLE_0:def
-  4;
+  then f.(lim s1) in F1 /\ F2 by A57,A14,A38,A32,A37,A58,XBOOLE_0:def 4;
   hence thesis by A26,A45,A14;
 end;
 
@@ -1460,10 +1430,8 @@ A1: P is being_simple_closed_curve and
 A2: P1 is_an_arc_of W-min(P),E-max(P) and
 A3: P1 c= P;
 A4: Upper_Arc(P) is_an_arc_of W-min(P),E-max(P) by A1,JORDAN6:def 8;
-A5: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
-    .=P by PRE_TOPC:def 10;
-  then reconsider U2=Upper_Arc(P) as Subset of (TOP-REAL 2)|P by A1,
-  JORDAN6:76;
+A5: the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P) .=P by PRE_TOPC:def 10;
+  then reconsider U2=Upper_Arc(P) as Subset of (TOP-REAL 2)|P by A1,JORDAN6:76;
   reconsider U3=Lower_Arc(P) as Subset of (TOP-REAL 2)|P by A1,A5,JORDAN6:76;
 A6: Lower_Arc(P) is_an_arc_of E-max(P),W-min(P) by A1,JORDAN6:def 9;
   U2=Upper_Arc(P) /\ P by A1,JORDAN6:76,XBOOLE_1:28;
@@ -1493,8 +1461,7 @@ A20:  for r being Real st 0<r & r<1 holds f.r in Lower_Arc(P);
       P1 c= Lower_Arc(P)
       proof
         let y be set;
-        assume
-        y in P1;
+        assume y in P1;
         then consider x being set such that
 A21:    x in dom f and
 A22:    y=f.x by A18,FUNCT_1:def 5;
@@ -1528,8 +1495,7 @@ A25:      for r being Real st 0<r & r<1 holds f.r in Upper_Arc(P);
           P1 c= Upper_Arc(P)
           proof
             let y be set;
-            assume
-            y in P1;
+            assume y in P1;
             then consider x being set such that
 A26:        x in dom f and
 A27:        y=f.x by A18,FUNCT_1:def 5;
@@ -1581,37 +1547,33 @@ A38:          r1<=r2;
                 per cases by A38,XXREAL_0:1;
                 case
                   r1=r2;
-                  hence contradiction by A3,A8,A18,A31,A35,A36, XBOOLE_0:
-                  def 3;
+                  hence contradiction by A3,A8,A18,A31,A35,A36,XBOOLE_0:def 3;
                 end;
                 case
 A39:              r1<r2;
-                  reconsider Q=P as non empty Subset of Euclid 2 by TOPREAL3:
-                  13;
+                  reconsider Q=P as non empty Subset of Euclid 2 by TOPREAL3:13
+;
 A40:              the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
                     .=P1 by PRE_TOPC:def 10;
                   the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
                     .=P by PRE_TOPC:def 10;
                   then rng f c= the carrier of (TOP-REAL 2)|P by A3,A40,
-                  XBOOLE_1:1;
+XBOOLE_1:1;
                   then reconsider
-                  g=f as Function of I[01],(TOP-REAL 2)|P by A17,
-                  FUNCT_2:4;
+                  g=f as Function of I[01],(TOP-REAL 2)|P by A17,FUNCT_2:4;
                   P=P1 \/ P by A3,XBOOLE_1:12;
                   then
-A41:              (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by
-                  TOPMETR:5;
+A41:              (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
                   U2 \/ U3 =the carrier of ((Euclid 2)|Q) & (TOP-REAL 2)|
                   P=TopSpaceMetr(( Euclid 2)|Q) by A8,EUCLID:67,TOPMETR:def 2;
                   then consider r0 being Real such that
 A42:              r1<=r0 and
 A43:              r0<=r2 and
-A44:              g.r0 in U2 /\ U3 by A19,A7,A9,A30,A33,A32,A37,A39
-                  ,A41,Th17,PRE_TOPC:56;
+A44:              g.r0 in U2 /\ U3 by A19,A7,A9,A30,A33,A32,A37,A39,A41,Th17,
+PRE_TOPC:56;
                   r0<1 by A30,A43,XXREAL_0:2;
                   then
-A45:              r0 in dom f by A17,A33,A42,
-                  BORSUK_1:83 ,XXREAL_1:1;
+A45:              r0 in dom f by A17,A33,A42,BORSUK_1:83,XXREAL_1:1;
 A46:              1 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
 A47:              0 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
                   now
@@ -1619,12 +1581,12 @@ A47:              0 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
                     case
                       g.r0=W-min(P);
                       hence contradiction by A14,A16,A33,A42,A45,A47,
-                      FUNCT_1:def 8;
+FUNCT_1:def 8;
                     end;
                     case
                       g.r0=E-max(P);
                       hence contradiction by A15,A16,A30,A43,A45,A46,
-                      FUNCT_1:def 8;
+FUNCT_1:def 8;
                     end;
                   end;
                   hence contradiction;
@@ -1639,37 +1601,33 @@ A49:          the carrier of (TOP-REAL 2)|P1=[#]((TOP-REAL 2)|P1)
                 .=P1 by PRE_TOPC:def 10;
               the carrier of (TOP-REAL 2)|P=[#]((TOP-REAL 2)|P)
                 .=P by PRE_TOPC:def 10;
-              then rng f c= the carrier of (TOP-REAL 2)|P by A3,A49,
-              XBOOLE_1:1;
+              then rng f c= the carrier of (TOP-REAL 2)|P by A3,A49,XBOOLE_1:1;
               then reconsider g=f as Function of I[01],(TOP-REAL 2)|P by A17,
-              FUNCT_2:4;
+FUNCT_2:4;
               P=P1 \/ P by A3,XBOOLE_1:12;
               then
-A50:          (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by
-              TOPMETR:5;
+A50:          (TOP-REAL 2)|P1 is SubSpace of (TOP-REAL 2)|P by TOPMETR:5;
               U2 \/ U3 =the carrier of ((Euclid 2)|Q) & (TOP-REAL 2)|P=
               TopSpaceMetr(( Euclid 2)|Q) by A8,EUCLID:67,TOPMETR:def 2;
               then consider r0 being Real such that
 A51:          r2<=r0 and
 A52:          r0<=r1 and
-A53:          g.r0 in U2 /\ U3 by A19,A7,A9,A29,A34,A32,A37,A48,A50
-              ,Th17,PRE_TOPC:56;
+A53:          g.r0 in U2 /\ U3 by A19,A7,A9,A29,A34,A32,A37,A48,A50,Th17,
+PRE_TOPC:56;
               r0<1 by A34,A52,XXREAL_0:2;
               then
-A54:          r0 in dom f by A17,A29,A51,BORSUK_1:83 ,XXREAL_1:1;
+A54:          r0 in dom f by A17,A29,A51,BORSUK_1:83,XXREAL_1:1;
 A55:          1 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
 A56:          0 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
               now
                 per cases by A10,A53,TARSKI:def 2;
                 case
                   g.r0=W-min(P);
-                  hence contradiction by A14,A16,A29,A51,A54,A56, FUNCT_1:
-                  def 8;
+                  hence contradiction by A14,A16,A29,A51,A54,A56,FUNCT_1:def 8;
                 end;
                 case
                   g.r0=E-max(P);
-                  hence contradiction by A15,A16,A34,A52,A54,A55, FUNCT_1:
-                  def 8;
+                  hence contradiction by A15,A16,A34,A52,A54,A55,FUNCT_1:def 8;
                 end;
               end;
               hence contradiction;
@@ -1683,4 +1641,3 @@ A56:          0 in dom f by A17,BORSUK_1:83,XXREAL_1:1;
   end;
   hence thesis;
 end;
-

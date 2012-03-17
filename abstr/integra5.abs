@@ -17,10 +17,10 @@ environ
       RELAT_1, COMPLEX1, XXREAL_2, REALSET1, RELSET_1, FUNCT_2, RCOMP_1,
       PARTFUN1, MEASURE6, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1, RFUNCT_1,
       FINSEQ_2, SEQ_2, SEQ_4, BINOP_2, REAL_1, NAT_1, FDIFF_1, RVSUM_1,
-      INTEGRA1, INTEGRA2, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
+      INTEGRA1, INTEGRA2, INTEGRA3, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FCONT_2, FDIFF_1, REALSET1, MEASURE6, INTEGRA2, SEQ_1, XXREAL_2,
-      RVSUM_1, SEQ_4, RELSET_1, FUNCOP_1, SEQ_2;
+      RVSUM_1, SEQ_4, RELSET_1, FUNCOP_1, SEQ_2, INTEGRA3;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, VALUED_0, VALUED_1, FUNCT_2,
       FINSET_1, XXREAL_2, CARD_1, SEQ_2, RELSET_1;
@@ -116,12 +116,13 @@ theorem :: INTEGRA5:11
 theorem :: INTEGRA5:12
   for f being PartFunc of REAL,REAL, D being Division of A st A c=
 X & f is_differentiable_on X & (f`|X)|A is bounded holds lower_sum((f`|X)||A,D)
-  <= f.(sup A)-f.(inf A) & f.(sup A)-f.(inf A)<=upper_sum((f`|X)||A,D);
+  <= f.(upper_bound A)-f.(lower_bound A) & f.(upper_bound A)-f.(lower_bound A)
+  <=upper_sum((f`|X)||A,D);
 
 theorem :: INTEGRA5:13
   for f being PartFunc of REAL,REAL st A c= X & f
   is_differentiable_on X & f`|X is_integrable_on A & (f`|X)|A is bounded holds
-  integral(f`|X,A) = f.(sup A)-f.(inf A);
+  integral(f`|X,A) = f.(upper_bound A)-f.(lower_bound A);
 
 theorem :: INTEGRA5:14
   for f being PartFunc of REAL,REAL st f|A is non-decreasing & A
@@ -129,7 +130,8 @@ theorem :: INTEGRA5:14
 
 theorem :: INTEGRA5:15
   for f being PartFunc of REAL,REAL st f|A is non-decreasing & A
-  c= dom f holds inf rng (f|A) = f.(inf A) & sup rng (f|A) = f.(sup A);
+  c= dom f holds lower_bound rng (f|A) = f.(lower_bound A) &
+  upper_bound rng (f|A) = f.(upper_bound A);
 
 theorem :: INTEGRA5:16
   for f being PartFunc of REAL,REAL st f|A is monotone & A c= dom f
@@ -141,8 +143,10 @@ theorem :: INTEGRA5:17
 
 theorem :: INTEGRA5:18
   for f being PartFunc of REAL,REAL, A,B,C being closed-interval Subset
-of REAL, X st A c= X & f is_differentiable_on X & (f`|X)|A is continuous &inf A
-= inf B & sup B = inf C & sup C = sup A holds B c= A & C c= A & integral(f`|X,A
+of REAL, X st A c= X & f is_differentiable_on X & (f`|X)|A is continuous
+ &lower_bound A
+= lower_bound B & upper_bound B = lower_bound C & upper_bound C = upper_bound A
+ holds B c= A & C c= A & integral(f`|X,A
   )=integral(f`|X,B)+integral(f`|X,C);
 
 definition
@@ -177,6 +181,6 @@ theorem :: INTEGRA5:21
   for f,g being PartFunc of REAL,REAL, X being open Subset of REAL st f
   is_differentiable_on X & g is_differentiable_on X & A c= X & f`|X
   is_integrable_on A & (f`|X)|A is bounded & g`|X is_integrable_on A & (g`|X)|A
-is bounded holds integral((f`|X)(#)g,A) =f.(sup A)*g.(sup A)-f.(inf A)*g.(inf A
+is bounded holds integral((f`|X)(#)g,A) =
+f.(upper_bound A)*g.(upper_bound A)-f.(lower_bound A)*g.(lower_bound A
   )-integral(f(#)(g`|X),A);
-

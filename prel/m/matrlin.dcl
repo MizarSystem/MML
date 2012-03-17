@@ -26,7 +26,10 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="CARD_3"/>
@@ -35,7 +38,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="WELLORD1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="PRE_POLY"/>
 <ArticleID name="MATRLIN"/>
 </Signature>
@@ -82,7 +84,7 @@
 <Adjective nr="105"/>
 <Adjective nr="106"/>
 <Adjective nr="107"/>
-<Adjective nr="159">
+<Adjective nr="164">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -96,17 +98,17 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="117"/>
+<Adjective nr="129"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="176">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="117"/>
-<Adjective nr="157"/>
+<Adjective nr="129"/>
+<Adjective nr="162"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -4,8 +4,8 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -34,7 +34,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -48,10 +48,10 @@
 </For>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="6">
-<Func kind="K" nr="25"/>
-<Func kind="K" nr="34">
-<Func kind="K" nr="127">
-<Func kind="K" nr="25"/>
+<Func kind="K" nr="24"/>
+<Func kind="K" nr="33">
+<Func kind="K" nr="126">
+<Func kind="K" nr="24"/>
 </Func>
 </Func>
 </Func>
@@ -69,7 +69,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="127">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -91,7 +91,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="G" nr="6">
-<Func kind="K" nr="26">
+<Func kind="K" nr="25">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -99,9 +99,9 @@
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="34">
-<Func kind="K" nr="127">
-<Func kind="K" nr="26">
+<Func kind="K" nr="33">
+<Func kind="K" nr="126">
+<Func kind="K" nr="25">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -134,7 +134,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="127">
+<Func kind="K" nr="126">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -151,8 +151,8 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="30">
-<Func kind="K" nr="127">
+<Func kind="K" nr="29">
+<Func kind="K" nr="126">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -163,7 +163,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="26">
+<Func kind="K" nr="25">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>

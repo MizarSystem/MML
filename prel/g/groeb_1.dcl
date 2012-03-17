@@ -40,7 +40,6 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="PRE_POLY"/>
-<ArticleID name="FVSUM_1"/>
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="GROEB_1"/>
 </Signature>
@@ -48,14 +47,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="316">
+<Func kind="K" nr="317">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="352">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 </Func>
 </Func>

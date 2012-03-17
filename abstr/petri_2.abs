@@ -1,5 +1,6 @@
 :: Cell Petri Net Concepts
-::  by Mitsuru Jitsukawa , Pauline N. Kawamoto , Yasunari Shidama and Yatsuka Nakamura
+::  by Mitsuru Jitsukawa, Pauline N. Kawamoto, Yasunari Shidama,
+::   and Yatsuka Nakamura
 ::
 :: Received October 14, 2008
 :: Copyright (c) 2008 Association of Mizar Users
@@ -7,22 +8,23 @@
 environ
 
  vocabularies PETRI, FUNCT_1, XBOOLE_0, TARSKI, SUBSET_1, FUNCT_2, RELAT_1,
-      FUNCOP_1, FUNCT_4, FINSET_1, SETFAM_1, ZFMISC_1, PARTFUN1, NET_1,
-      ARYTM_3, CARD_1, PETRI_2;
+      FUNCOP_1, FUNCT_4, FINSET_1, SETFAM_1, ZFMISC_1, PARTFUN1, ARYTM_3,
+      CARD_1, PETRI_2, STRUCT_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ZFMISC_1, SETFAM_1, RELAT_1,
       RELSET_1, DOMAIN_1, PETRI, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, RELSET_2,
-      FINSET_1, FUNCOP_1, CARD_1;
- constructors RELSET_1, DOMAIN_1, PETRI, RELSET_2, FUNCOP_1, FUNCT_4, CARD_1;
+      FINSET_1, FUNCOP_1, CARD_1, PARTIT_2, STRUCT_0;
+ constructors RELSET_1, DOMAIN_1, PETRI, RELSET_2, FUNCOP_1, FUNCT_4, CARD_1,
+      STRUCT_0, PARTIT_2;
  registrations SUBSET_1, RELAT_1, PARTFUN1, RELSET_1, XBOOLE_0, FUNCT_2,
-      FINSET_1, REALSET1;
+      FINSET_1, REALSET1, STRUCT_0, PARTIT_2, FUNCT_1, PETRI;
  requirements SUBSET, BOOLE;
 
 
 begin :: Preliminaries: thin cylinder, locus
 
-reserve PTN for PT_net_Str;
-reserve y for Function;
-reserve z for set;
+
+
+
 
 definition
   let A be non empty set, B be set;
@@ -32,8 +34,7 @@ definition
   func cylinder0(A,B,Bo,yo) -> non empty Subset of Funcs(B,A) equals
 :: PETRI_2:def 1
 
-  {
-  y where y is Function of B,A : y|Bo = yo };
+  { y where y is Function of B,A : y|Bo = yo };
 end;
 
 definition
@@ -133,36 +134,57 @@ definition
 end;
 
 definition
-  struct (PT_net_Str) Colored_PT_net_Str (# Places, Transitions -> non empty
-set, S-T_Arcs -> non empty Relation of the Places,the Transitions, T-S_Arcs ->
-    non empty Relation of the Transitions, the Places, ColoredSet -> non empty
+  struct (PT_net_Str) Colored_PT_net_Str (# carrier, carrier' ->
+set, S-T_Arcs ->  Relation of the carrier,the carrier', T-S_Arcs ->
+     Relation of the carrier', the carrier, ColoredSet -> non empty
     finite set, firing-rule -> Function #);
 end;
 
 definition
-  let CPNT be Colored_PT_net_Str;
+ func TrivialColoredPetriNet -> Colored_PT_net_Str equals
+:: PETRI_2:def 8
+  Colored_PT_net_Str (# {{}}, {{}}, [#]({{}},{{}}), [#]({{}},
+       {{}}), {{}}, {} #);
+end;
+
+registration
+ cluster TrivialColoredPetriNet
+  -> with_S-T_arc with_T-S_arc non empty non void;
+end;
+
+registration
+ cluster non empty non void with_S-T_arc with_T-S_arc Colored_PT_net_Str;
+end;
+
+definition
+ mode Colored_Petri_net
+  is non empty non void with_S-T_arc with_T-S_arc Colored_PT_net_Str;
+end;
+
+definition
+  let CPNT be Colored_Petri_net;
   let t0 be transition of CPNT;
   attr t0 is outbound means
-:: PETRI_2:def 8
+:: PETRI_2:def 9
 
   {t0}*' = {};
 end;
 
 definition
-  let CPNT1 be Colored_PT_net_Str;
-  func Outbds(CPNT1) -> Subset of the Transitions of CPNT1 equals
-:: PETRI_2:def 9
+  let CPNT1 be Colored_Petri_net;
+  func Outbds(CPNT1) -> Subset of the carrier' of CPNT1 equals
+:: PETRI_2:def 10
   {x where x
   is transition of CPNT1 : x is outbound };
 end;
 
 definition
-  let CPNT be Colored_PT_net_Str;
+  let CPNT be Colored_Petri_net;
   attr CPNT is Colored-PT-net-like means
-:: PETRI_2:def 10
+:: PETRI_2:def 11
 
   dom (the firing-rule of CPNT)
-c= (the Transitions of CPNT) \ Outbds(CPNT) & for t being transition of CPNT st
+c= (the carrier' of CPNT) \ Outbds(CPNT) & for t being transition of CPNT st
   t in dom (the firing-rule of CPNT) holds ex CS be non empty Subset of the
   ColoredSet of CPNT, I be Subset of *'{t}, O be Subset of {t}*' st (the
 firing-rule of CPNT ).t is Function of thin_cylinders(CS,I), thin_cylinders(CS,
@@ -170,37 +192,38 @@ firing-rule of CPNT ).t is Function of thin_cylinders(CS,I), thin_cylinders(CS,
 end;
 
 theorem :: PETRI_2:6
-  for CPNT be Colored_PT_net_Str, t being transition of CPNT st CPNT is
+  for CPNT be Colored_Petri_net, t being transition of CPNT st CPNT is
   Colored-PT-net-like & t in dom (the firing-rule of CPNT) holds ex CS be non
 empty Subset of the ColoredSet of CPNT, I be Subset of *'{t}, O be Subset of {t
   }*' st (the firing-rule of CPNT ).t is Function of thin_cylinders(CS,I),
   thin_cylinders(CS,O);
 
 theorem :: PETRI_2:7
-  for CPNT1,CPNT2 be Colored_PT_net_Str, t1 be transition of CPNT1,
-  t2 be transition of CPNT2 st the Places of CPNT1 c= the Places of CPNT2 & the
+  for CPNT1,CPNT2 be Colored_Petri_net, t1 be transition of CPNT1,
+  t2 be transition of CPNT2 st the carrier of CPNT1 c= the carrier of CPNT2
+   & the
   S-T_Arcs of CPNT1 c= the S-T_Arcs of CPNT2 & the T-S_Arcs of CPNT1 c= the
   T-S_Arcs of CPNT2 & t1=t2 holds *'{t1} c= *'{t2} & {t1}*' c= {t2}*';
 
 registration
-  cluster strict Colored-PT-net-like Colored_PT_net_Str;
+  cluster strict Colored-PT-net-like Colored_Petri_net;
 end;
 
 definition
-  mode Colored-PT-net is Colored-PT-net-like Colored_PT_net_Str;
+  mode Colored-PT-net is Colored-PT-net-like Colored_Petri_net;
 end;
 
-reserve CPNT for Colored-PT-net;
+
 
 begin :: Outbound transitions of CPNT
 
 definition
-  let CPNT1, CPNT2 be Colored_PT_net_Str;
+  let CPNT1, CPNT2 be Colored_Petri_net;
   pred CPNT1 misses CPNT2 means
-:: PETRI_2:def 11
+:: PETRI_2:def 12
 
-  (the Places of CPNT1) /\ (the Places
-of CPNT2 ) = {} & (the Transitions of CPNT1) /\ (the Transitions of CPNT2) = {}
+  (the carrier of CPNT1) /\ (the carrier
+of CPNT2 ) = {} & (the carrier' of CPNT1) /\ (the carrier' of CPNT2) = {}
   ;
   symmetry;
 end;
@@ -208,14 +231,14 @@ end;
 begin :: Connecting mapping for CPNT1,CPNT2
 
 definition
-  let CPNT1 be Colored_PT_net_Str;
-  let CPNT2 be Colored_PT_net_Str;
+  let CPNT1 be Colored_Petri_net;
+  let CPNT2 be Colored_Petri_net;
   mode connecting-mapping of CPNT1,CPNT2 means
-:: PETRI_2:def 12
+:: PETRI_2:def 13
 
     ex O12 be Function of
-    Outbds(CPNT1), the Places of CPNT2, O21 be Function of Outbds(CPNT2), the
-    Places of CPNT1 st it=[O12,O21];
+    Outbds(CPNT1), the carrier of CPNT2, O21 be Function of Outbds(CPNT2), the
+    carrier of CPNT1 st it=[O12,O21];
 end;
 
 begin :: Connecting firing rule for CPNT1,CPNT2
@@ -224,11 +247,12 @@ definition
   let CPNT1, CPNT2 be Colored-PT-net;
   let O be connecting-mapping of CPNT1,CPNT2;
   mode connecting-firing-rule of CPNT1,CPNT2,O means
-:: PETRI_2:def 13
+:: PETRI_2:def 14
 
     ex q12,q21 be
-    Function, O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-Function of Outbds(CPNT2), the Places of CPNT1 st O=[O12,O21] & dom q12=Outbds(
+    Function, O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+Function of Outbds(CPNT2), the carrier of CPNT1 st O=[O12,O21] &
+ dom q12=Outbds(
     CPNT1) & dom q21=Outbds(CPNT2) & ( for t01 be transition of CPNT1 st t01 is
 outbound holds q12.t01 is Function of thin_cylinders ( the ColoredSet of CPNT1,
 *'{t01}), thin_cylinders ( the ColoredSet of CPNT1, Im(O12,t01) ) ) & ( for t02
@@ -246,21 +270,21 @@ definition
   assume
  CPNT1 misses CPNT2;
   func synthesis(CPNT1, CPNT2,O,q) -> strict Colored-PT-net means
-:: PETRI_2:def 14
+:: PETRI_2:def 15
   ex q12,q21
-  be Function, O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-Function of Outbds(CPNT2), the Places of CPNT1 st O=[O12,O21] & dom q12=Outbds(
+  be Function, O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+Function of Outbds(CPNT2), the carrier of CPNT1 st O=[O12,O21] &
+ dom q12=Outbds(
   CPNT1) & dom q21=Outbds(CPNT2) & ( for t01 be transition of CPNT1 st t01 is
 outbound holds q12.t01 is Function of thin_cylinders ( the ColoredSet of CPNT1,
 *'{t01}), thin_cylinders ( the ColoredSet of CPNT1, Im(O12,t01) ) ) & ( for t02
   be transition of CPNT2 st t02 is outbound holds q21.t02 is Function of
   thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders ( the
-  ColoredSet of CPNT2, Im(O21,t02) ) ) & q=[q12,q21] & the Places of it = (the
-  Places of CPNT1) \/ (the Places of CPNT2) & the Transitions of it = (the
-Transitions of CPNT1) \/ (the Transitions of CPNT2) & the S-T_Arcs of it = (the
+  ColoredSet of CPNT2, Im(O21,t02) ) ) & q=[q12,q21] & the carrier of it = (the
+  carrier of CPNT1) \/ (the carrier of CPNT2) & the carrier' of it = (the
+carrier' of CPNT1) \/ (the carrier' of CPNT2) & the S-T_Arcs of it = (the
   S-T_Arcs of CPNT1) \/ (the S-T_Arcs of CPNT2) & the T-S_Arcs of it = (the
 T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) \/ O12 \/ O21 & the ColoredSet of
   it = (the ColoredSet of CPNT1) \/ (the ColoredSet of CPNT2) & the firing-rule
 of it = (the firing-rule of CPNT1) +* (the firing-rule of CPNT2) +* q12 +* q21;
 end;
-

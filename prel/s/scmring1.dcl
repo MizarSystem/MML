@@ -4,8 +4,8 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -29,7 +29,7 @@
 </Signature>
 <FCluster aid="SCMRING1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="177"/>
+<Func kind="K" nr="175"/>
 <Cluster>
 <Adjective nr="18" value="false"/>
 <Adjective nr="19" value="false"/>
@@ -43,7 +43,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="189">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -60,38 +60,38 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="13"/>
 <Adjective nr="32">
-<Func kind="K" nr="189">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="111">
-<Func kind="K" nr="163">
-<Func kind="K" nr="190">
+<Func kind="K" nr="110">
+<Func kind="K" nr="161">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="163">
-<Func kind="K" nr="190">
+<Func kind="K" nr="161">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="29">
 <Func kind="K" nr="30">
-<Func kind="K" nr="31">
-<Func kind="K" nr="189">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="111">
-<Func kind="K" nr="163">
-<Func kind="K" nr="190">
+<Func kind="K" nr="110">
+<Func kind="K" nr="161">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="163">
-<Func kind="K" nr="190">
+<Func kind="K" nr="161">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -101,18 +101,18 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="189">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="17">
+<Func kind="K" nr="21">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="6"/>
+<Adjective nr="13"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMRING1" nr="4">
@@ -124,7 +124,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="2">
-<Func kind="K" nr="189">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 </Func>
 </Func>

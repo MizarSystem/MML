@@ -3,7 +3,7 @@
 ::
 :: Received April 17, 2000
 :: Copyright (c) 2000 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, RLVECT_1, ALGSTR_0, XBOOLE_0, FINSEQ_1, STRUCT_0,
@@ -15,15 +15,16 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       RELAT_1, RELAT_2, FUNCT_1, ORDERS_1, XXREAL_0, NAT_1, NAT_D, CLASSES1,
       STRUCT_0, ALGSTR_0, RELSET_1, PARTFUN1, FINSET_1, FUNCT_2, FUNCOP_1,
-      FINSEQ_1, PRE_POLY, FINSEQ_2, FINSEQ_5, BINOP_1, RVSUM_1, FVSUM_1,
-      TREES_4, WSIERP_1, MATRLIN, GROUP_1, RLVECT_1, VECTSP_1, NORMSP_1,
-      POLYNOM1, ALGSEQ_1, BHSP_1, FUNCT_7, RECDEF_1;
- constructors BINOP_1, SQUARE_1, FINSEQOP, REALSET1, NAT_D, FINSEQ_5, WSIERP_1,
-      ALGSEQ_1, BHSP_1, TRIANG_1, POLYNOM1, RECDEF_1, BINARITH, CLASSES1,
-      RELSET_1, FUNCT_7, MATRLIN;
+      FINSEQ_1, PRE_POLY, FINSEQ_2, FINSEQ_5, FINSEQOP, BINOP_1, RVSUM_1,
+      FVSUM_1, TREES_4, WSIERP_1, MATRLIN, BINARITH, GROUP_1, RLVECT_1,
+      VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, BHSP_1, FUNCT_7, RECDEF_1;
+ constructors BINOP_1, SQUARE_1, FINSEQOP, REALSET1, RFINSEQ, NAT_D, FINSEQ_5,
+      WSIERP_1, ALGSEQ_1, BHSP_1, DTCONSTR, TRIANG_1, POLYNOM1, SEQ_1,
+      RECDEF_1, SEQ_2, SEQM_3, REAL_1, BINARITH, CLASSES1, RELSET_1, RELAT_1,
+      FUNCT_7, MATRLIN, PRE_POLY, FVSUM_1;
  registrations RELAT_1, ORDINAL1, FUNCT_2, FUNCOP_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, FINSEQ_5, STRUCT_0,
-      VECTSP_1, VALUED_0, FINSET_1, RELSET_1, PRE_POLY;
+      XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, REALSET1, FINSEQ_5,
+      STRUCT_0, VECTSP_1, VALUED_0, FINSET_1, RELSET_1, PRE_POLY;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, PRE_POLY, RLVECT_1, GROUP_1,
       VECTSP_1, ALGSEQ_1, FINSEQ_2, FUNCT_2, STRUCT_0, CARD_1, ALGSTR_0;
@@ -197,8 +198,7 @@ definition
     rng (p^^q) c= (k+n)-tuples_on D
     proof
       let y be set;
-      assume
-      y in rng (p^^q);
+      assume y in rng (p^^q);
       then consider x be set such that
 A1:   x in dom (p^^q) and
 A2:   y = (p^^q).x by FUNCT_1:def 5;
@@ -223,12 +223,10 @@ p = A() & for k be Element of NAT st k in Seg A() holds len (p/.k) = T(k) & for
   n be Element of NAT st n in dom (p/.k) holds (p/.k).n = F(k,n) proof
   defpred P[Element of NAT,Element of D()*] means len $2 = T($1) & for n be
   Element of NAT st n in dom $2 holds $2.n = F($1,n);
-A1: for k be Element of NAT st k in Seg A() ex d be Element of D()* st P[k,d
-  ]
+A1: for k be Element of NAT st k in Seg A() ex d be Element of D()* st P[k,d ]
   proof
     let k be Element of NAT;
-    assume
-    k in Seg A();
+    assume k in Seg A();
     deffunc G(Nat) = F(k,$1);
     consider d be FinSequence of D() such that
 A2: len d = T(k) and
@@ -237,8 +235,7 @@ A3: for n be Nat st n in dom d holds d.n = G(n) from FINSEQ_2:sch 1;
     take d;
     thus len d = T(k) by A2;
     let n be Element of NAT;
-    assume
-    n in dom d;
+    assume n in dom d;
     hence thesis by A3;
   end;
   consider p be FinSequence of D()* such that
@@ -248,8 +245,7 @@ A5: for k be Element of NAT st k in Seg A() holds P[k,p/.k] from
   take p;
   thus len p = A() by A4,FINSEQ_1:def 3;
   let k be Element of NAT;
-  assume
-  k in Seg A();
+  assume k in Seg A();
   hence thesis by A5;
 end;
 
@@ -485,8 +481,7 @@ definition
   let n be Element of NAT;
   func TuplesOrder n -> Order of n-tuples_on NAT means
   :Def3:
-  for p,q be
-  Element of n-tuples_on NAT holds [p,q] in it iff p <= q;
+  for p,q be Element of n-tuples_on NAT holds [p,q] in it iff p <= q;
   existence
   proof
     defpred P[Element of n-tuples_on NAT,Element of n-tuples_on NAT] means $1
@@ -498,8 +493,7 @@ A2: R is_transitive_in n-tuples_on NAT
     proof
       let x,y,z be set;
       assume that
-A3:   x in n-tuples_on NAT & y in n-tuples_on NAT & z in n-tuples_on
-      NAT and
+A3:   x in n-tuples_on NAT & y in n-tuples_on NAT & z in n-tuples_on NAT and
 A4:   [x,y] in R & [y,z] in R;
       reconsider x1=x, y1=y, z1=z as Element of n-tuples_on NAT by A3;
       x1 <= y1 & y1 <= z1 by A1,A4;
@@ -509,8 +503,7 @@ A4:   [x,y] in R & [y,z] in R;
 A5: R is_reflexive_in n-tuples_on NAT
     proof
       let x be set;
-      assume
-      x in n-tuples_on NAT;
+      assume x in n-tuples_on NAT;
       then reconsider x1=x as Element of n-tuples_on NAT;
       x1 <= x1;
       hence thesis by A1;
@@ -539,10 +532,8 @@ A10:  x1 < y1 or x1 = y1 by Def2;
   uniqueness
   proof
     let T1,T2 be Order of n-tuples_on NAT such that
-A11: for p,q be Element of n-tuples_on NAT holds [p,q] in T1 iff p <=
-    q and
-A12: for p,q be Element of n-tuples_on NAT holds [p,q] in T2 iff p <=
-    q;
+A11: for p,q be Element of n-tuples_on NAT holds [p,q] in T1 iff p <= q and
+A12: for p,q be Element of n-tuples_on NAT holds [p,q] in T2 iff p <= q;
     let x,y be set;
     thus [x,y] in T1 implies [x,y] in T2
     proof
@@ -714,8 +705,7 @@ A6:   p = <*k*> by FINSEQ_2:117;
       hence thesis by A5,A6,TARSKI:def 1;
     end;
     let y be set;
-    assume
-    y in {<*n*>};
+    assume y in {<*n*>};
     then
 A7: y = <*n*> by TARSKI:def 1;
 X:  <*n*> is Element of 1-tuples_on NAT by FINSEQ_2:151;
@@ -798,8 +788,7 @@ A20: rng q1 = {<*i,n-'i*> where i is Element of NAT : i <= n}
     thus rng q1 c= {<*i,n-'i*> where i is Element of NAT : i <= n}
     proof
       let x be set;
-      assume
-      x in rng q1;
+      assume x in rng q1;
       then consider j be Nat such that
 A21:  j in dom q1 and
 A22:  q1.j = x by FINSEQ_2:11;
@@ -826,8 +815,7 @@ A25:      q1.j = q.j by A3,FINSEQ_1:def 7;
       hence thesis;
     end;
     let x be set;
-    assume
-    x in {<*i,n-'i*> where i is Element of NAT : i <= n};
+    assume x in {<*i,n-'i*> where i is Element of NAT : i <= n};
     then consider i be Element of NAT such that
 A26: x = <*i,n-'i*> and
 A27: i <= n;
@@ -872,8 +860,7 @@ A38:  d2 = n-'d1 by A37,XREAL_0:def 2;
       hence thesis by A36,A38;
     end;
     let x be set;
-    assume
-    x in { <*i,n-'i*> where i is Element of NAT : i <= n };
+    assume x in { <*i,n-'i*> where i is Element of NAT : i <= n };
     then consider i be Element of NAT such that
 A39: x = <*i,n-'i*> and
 A40: i <= n;
@@ -910,8 +897,7 @@ A6:   p = <*k*> by FINSEQ_2:117;
       hence thesis by A5,A6,TARSKI:def 1;
     end;
     let y be set;
-    assume
-    y in {<*n*>};
+    assume y in {<*n*>};
     then
 A7: y = <*n*> by TARSKI:def 1;
 X:  <*n*> is Element of 1-tuples_on NAT by FINSEQ_2:151;
@@ -958,8 +944,7 @@ A9: i<j;
 PRE_POLY:def 2;
     then
 A10: <*k1,n-'k1*> <= <*k2,n-'k2*> by Def3;
-    <*k1,n-'k1*> <> <*k2,n-'k2*>
-     by A5,A6,A1,A2,A7,A3,A8,A4,A9,PRE_POLY:def 2;
+    <*k1,n-'k1*> <> <*k2,n-'k2*> by A5,A6,A1,A2,A7,A3,A8,A4,A9,PRE_POLY:def 2;
     then <*k1,n-'k1*> < <*k2,n-'k2*> by A10,Def2;
     then consider t be Element of NAT such that
 A11: t in Seg 2 and
@@ -1002,8 +987,7 @@ A20: j<i;
 PRE_POLY:def 2;
     then
 A21: <*k2,n-'k2*> <= <*k1,n-'k1*> by Def3;
-    <*k2,n-'k2*> <> <*k1,n-'k1*>
-     by A5,A6,A1,A2,A7,A3,A8,A4,A20,PRE_POLY:def 2;
+    <*k2,n-'k2*> <> <*k1,n-'k1*> by A5,A6,A1,A2,A7,A3,A8,A4,A20,PRE_POLY:def 2;
     hence contradiction by A18,A21,Def2;
   end;
 end;
@@ -1036,8 +1020,7 @@ A8: rng Decomp(n,2) = A by A6,PRE_POLY:def 2;
     Sum <*k2,n-'k2*> = k2 + (n-'k2) by RVSUM_1:107;
     then
 A9: Sum <*k2,n-'k2*> >= k2 by NAT_1:11;
-    assume
-    k1 >= n;
+    assume k1 >= n;
     then k2 > n by A4,XXREAL_0:2;
     then not Decomp(n,2).(i+1) in rng Decomp(n,2) by A7,A8,A2,A9;
     then not i+1 in dom Decomp(n,2) by FUNCT_1:def 5;
@@ -1069,8 +1052,7 @@ A3: now
     let y be Element of 2-tuples_on NAT;
     consider d1,d2 be Element of NAT such that
 A4: y = <*d1,d2*> by FINSEQ_2:120;
-    assume
-    y in A;
+    assume y in A;
     then Sum <*d1,d2*> = n by A2,A4;
     then
 A5: d1 + d2 = n by RVSUM_1:107;
@@ -1113,8 +1095,7 @@ theorem Th14:
 proof
   let n,i be Element of NAT;
   defpred P[Nat] means $1 <= n+1 implies Decomp(n,2).$1 = <*$1-'1,n+1-'$1*>;
-  assume
-  i in Seg (n+1);
+  assume i in Seg (n+1);
   then
 A1: 1 <= i & i <= n+1 by FINSEQ_1:3;
   consider A be finite Subset of 2-tuples_on NAT such that
@@ -1171,8 +1152,7 @@ A16: n-(j-'1) >= 0 by A10,XREAL_0:def 2;
   end;
 A17: P[1]
   proof
-    assume
-    1 <= n+1;
+    assume 1 <= n+1;
     thus Decomp(n,2).1 = <*0,n*> by Th13
       .= <*1-'1,n*> by XREAL_1:234
       .= <*1-'1,n+1-'1*> by NAT_D:34;
@@ -1201,8 +1181,7 @@ A3: dom p1 = Seg len t by A1,FINSEQ_1:def 3;
     take p1;
     thus len p1 = len t by A1;
     let k be Element of NAT;
-    assume
-    k in dom t;
+    assume k in dom t;
     then k in Seg len t by FINSEQ_1:def 3;
     hence thesis by A2,A3;
   end;
@@ -1218,8 +1197,7 @@ A7: for k be Element of NAT st k in dom t holds p2.k = (p.((t/.k)/.1))
 A8: dom p1 = Seg len t by A4,FINSEQ_1:def 3;
     now
       let i be Nat;
-      assume
-      i in dom p1;
+      assume i in dom p1;
       then
 A9:   i in dom t by A8,FINSEQ_1:def 3;
       hence p1.i = (p.((t/.i)/.1))*(q.((t/.i)/.2))*(r.((t/.i)/.3)) by A5
@@ -1428,8 +1406,7 @@ theorem Th20:
 proof
   let p be FinSequence of REAL;
   let i be Element of NAT;
-  assume
-  i < len p;
+  assume i < len p;
   then p|(i+1) = p|i ^ <*p.(i+1)*> by FINSEQ_5:86;
   hence thesis by RVSUM_1:104;
 end;
@@ -1555,12 +1532,10 @@ proof
     assume
 A1: n >= len p;
     let i be Nat;
-    assume
-    i >= n;
+    assume i >= n;
     hence p.i = 0.L by A1,ALGSEQ_1:22,XXREAL_0:2;
   end;
-  assume
-  n is_at_least_length_of p;
+  assume n is_at_least_length_of p;
   hence thesis by ALGSEQ_1:def 4;
 end;
 
@@ -1630,8 +1605,7 @@ proof
   assume
 A1: n is_at_least_length_of p & n is_at_least_length_of q;
   let i be Nat;
-  assume
-  i>=n;
+  assume i>=n;
   then
 A2: p.i = 0.L & q.i = 0.L by A1,ALGSEQ_1:def 3;
   i in NAT by ORDINAL1:def 13;
@@ -1652,8 +1626,7 @@ A1: x in support (p+q);
 A2: x1 < len (p+q) by A1,ALGSEQ_1:10;
   x1 < len p or x1 < len q
   proof
-    assume
-    ( not x1 < len p)& not x1 < len q;
+    assume ( not x1 < len p)& not x1 < len q;
     then x1 is_at_least_length_of p & x1 is_at_least_length_of q by Th23;
     then x1 is_at_least_length_of p+q by Th24;
     hence contradiction by A2,Th23;
@@ -1758,8 +1731,7 @@ registration
   proof
     take 0;
     let i be Nat;
-    assume
-    i >= 0;
+    assume i >= 0;
     i in NAT by ORDINAL1:def 13;
     hence thesis by FUNCOP_1:13;
   end;
@@ -1813,8 +1785,7 @@ registration
     take 1;
     let i be Nat;
 A1: i in NAT by ORDINAL1:def 13;
-    assume
-    i >= 1;
+    assume i >= 1;
     hence (1_.(L)).i = (0_.(L)).i by FUNCT_7:34
       .= 0.L by A1,FUNCOP_1:13;
   end;
@@ -1830,8 +1801,7 @@ proof
   hence (1_.(L)).0 = 1.L by FUNCT_7:33;
   let n be Nat;
 A1: n in NAT by ORDINAL1:def 13;
-  assume
-  n <> 0;
+  assume n <> 0;
   hence (1_.(L)).n = (0_.(L)).n by FUNCT_7:34
     .= 0.L by A1,FUNCOP_1:13;
 end;
@@ -1861,8 +1831,7 @@ A3:   for k be Nat st k in dom r holds r.k = F(k) from FINSEQ_2:sch 1;
       thus len r = i+1 by A2;
       thus v = Sum r;
       let k be Element of NAT;
-      assume
-      k in dom r;
+      assume k in dom r;
       hence thesis by A3;
     end;
     consider f be Function of NAT,the carrier of L such that
@@ -1921,8 +1890,7 @@ A1: len r = i+1 and
 A2: (p*'q).i = Sum r and
 A3: for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * q.(i+
     1-'k) by Def11;
-    assume
-    i >= s;
+    assume i >= s;
     then len p <= i - len q by XREAL_1:21;
     then
 A4: -len p >= -(i - len q) by XREAL_1:26;
@@ -2175,8 +2143,7 @@ A34: Seg len FlattenSeq f2 = dom FlattenSeq f2 by FINSEQ_1:def 3;
       let y be set;
       thus y in rng FlattenSeq f2 implies y in rng FlattenSeq g2
       proof
-        assume
-        y in rng FlattenSeq f2;
+        assume y in rng FlattenSeq f2;
         then consider x be Nat such that
 A35:    x in dom FlattenSeq f2 and
 A36:    (FlattenSeq f2).x = y by FINSEQ_2:11;
@@ -2257,8 +2224,7 @@ A60:    (Sum Card (g2|(i2-'1))) + j2 in dom FlattenSeq g2 & (g2.i2).j2 =
           .= <*j1-'1,i1-'j1,i+1-'i1*> by FINSEQ_1:60;
         hence thesis by A59,A60,FUNCT_1:def 5;
       end;
-      assume
-      y in rng FlattenSeq g2;
+      assume y in rng FlattenSeq g2;
       then consider x be Nat such that
 A61:  x in dom FlattenSeq g2 and
 A62:  (FlattenSeq g2).x = y by FINSEQ_2:11;
@@ -2840,8 +2806,7 @@ A2: for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * (0_.(
     L)).(i+1-'k) by Def11;
     now
       let k be Element of NAT;
-      assume
-      k in dom r;
+      assume k in dom r;
       hence r.k = p.(k-'1) * (0_.(L)).(i+1-'k) by A2
         .= p.(k-'1) * 0.L by FUNCOP_1:13
         .= 0.L by VECTSP_1:36;
@@ -2872,8 +2837,7 @@ A3: for k be Element of NAT st k in dom r holds r.k = p.(k-'1) * (1_.(
 A4: i+1 in dom r by FINSEQ_1:def 3;
     now
       let k be Element of NAT;
-      assume
-      k in dom Del(r,i+1);
+      assume k in dom Del(r,i+1);
       then
 A5:   k in Seg len Del(r,i+1) by FINSEQ_1:def 3;
       then k in Seg i by A1,PRE_POLY:12;
@@ -2979,8 +2943,7 @@ A9: for x,y be Element of Ca holds P[x,y,Mu.(x,y)] from BINOP_1:sch 3
       let x be set;
       thus x in the carrier of P implies x is Polynomial of L
       proof
-        assume
-        x in the carrier of P;
+        assume x in the carrier of P;
         then ex p be Polynomial of L st x=p;
         hence thesis;
       end;
@@ -2993,8 +2956,7 @@ A9: for x,y be Element of Ca holds P[x,y,Mu.(x,y)] from BINOP_1:sch 3
       let p,q be sequence of L;
       assume
 A10:  x = p & y = q;
-      ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Ad.(x, y) = p1+q1
-      by A5;
+      ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Ad.(x, y) = p1+q1 by A5;
       hence thesis by A10;
     end;
     thus for x,y be Element of P, p,q be sequence of L st x = p & y = q holds
@@ -3004,8 +2966,7 @@ A10:  x = p & y = q;
       let p,q be sequence of L;
       assume
 A11:  x = p & y = q;
-      ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1
-      by A9;
+      ex p1,q1 be Polynomial of L st p1 = x & q1 = y & Mu.(x,y) = p1*'q1 by A9;
       hence thesis by A11;
     end;
     thus 0.P = 0_.(L);
@@ -3014,15 +2975,13 @@ A11:  x = p & y = q;
   uniqueness
   proof
     let P1,P2 be strict non empty doubleLoopStr such that
-A12: for x be set holds x in the carrier of P1 iff x is Polynomial of
-    L and
+A12: for x be set holds x in the carrier of P1 iff x is Polynomial of L and
 A13: for x,y be Element of P1, p,q be sequence of L st x = p & y = q
     holds x+y = p+q and
 A14: for x,y be Element of P1, p,q be sequence of L st x = p & y = q
     holds x*y = p*'q and
 A15: 0.P1 = 0_.(L) & 1.P1 = 1_.(L) and
-A16: for x be set holds x in the carrier of P2 iff x is Polynomial of
-    L and
+A16: for x be set holds x in the carrier of P2 iff x is Polynomial of L and
 A17: for x,y be Element of P2, p,q be sequence of L st x = p & y = q
     holds x+y = p+q and
 A18: for x,y be Element of P2, p,q be sequence of L st x = p & y = q
@@ -3041,8 +3000,7 @@ A22: now
       reconsider x1=x as Element of P2 by A20;
       reconsider p=x as sequence of L by A12;
       reconsider q=y as sequence of L by A16;
-      thus (the multF of P1).(x,y) = x*y1
-        .= p*'q by A14
+      thus (the multF of P1).(x,y) = x*y1 .= p*'q by A14
         .= x1*y by A18
         .= (the multF of P2).(x,y);
     end;
@@ -3052,8 +3010,7 @@ A22: now
       reconsider x1=x as Element of P2 by A20;
       reconsider p=x as sequence of L by A12;
       reconsider q=y as sequence of L by A16;
-      thus (the addF of P1).(x,y) = x+y1
-        .= p+q by A13
+      thus (the addF of P1).(x,y) = x+y1 .= p+q by A13
         .= x1+y by A17
         .= (the addF of P2).(x,y);
     end;
@@ -3141,10 +3098,8 @@ A1: q * r = q1 *' r1 by Def12;
 end;
 
 Lm2: now
-
   let L be add-associative right_zeroed right_complementable well-unital
   Abelian commutative distributive (non empty doubleLoopStr);
-
   set Pm = Polynom-Ring L;
   let x, e be Element of Pm;
   reconsider p = x as Polynomial of L by Def12;
@@ -3193,4 +3148,3 @@ theorem
   for L being add-associative right_zeroed right_complementable
 well-unital Abelian commutative distributive (non empty doubleLoopStr) holds 1.
   Polynom-Ring L = 1_.L by Def12;
-

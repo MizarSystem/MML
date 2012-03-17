@@ -11,13 +11,13 @@ environ
       ZFMISC_1, PRE_TOPC, RCOMP_1, TARSKI, STRUCT_0, SETFAM_1, SEQ_1, RELAT_1,
       VALUED_0, SEQ_2, ORDINAL2, RELAT_2, PSCOMP_1, LIMFUNC1, CONNSP_1,
       METRIC_1, SEQ_4, XXREAL_2, TOPMETR, INTEGRA1, NAT_1, VALUED_1, EUCLID,
-      JORDAN2C;
+      JORDAN2C, MEASURE5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, FUNCT_1, COMPLEX1,
       RELSET_1, FUNCT_2, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, REAL_1, XXREAL_2, NAT_1, VALUED_1, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
-      STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, MEASURE6, PSCOMP_1,
-      VALUED_0, METRIC_1,
-      TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C, EUCLID, RECDEF_1;
+      XREAL_0, REAL_1, XXREAL_1, XXREAL_2, NAT_1, VALUED_1, SEQ_1, SEQ_2,
+      SEQ_4, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, MEASURE6, PSCOMP_1,
+      VALUED_0, METRIC_1, TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C,
+      EUCLID, RECDEF_1, RCOMP_1;
  constructors SETFAM_1, REAL_1, COMPLEX1, NAT_1, SEQM_3, PROB_1, LIMFUNC1,
       BINARITH, CONNSP_1, COMPTS_1, TBSP_1, TSP_1, TOPMETR, MEASURE6, JORDAN2C,
       INTEGRA1, SEQ_1, RECDEF_1, XXREAL_2, SEQ_4, SEQ_2, PSCOMP_1;
@@ -47,7 +47,7 @@ A1: a0 in A() by XBOOLE_0:def 1;
   hence thesis;
 end;
 
-reserve i,j,m,n for Element of NAT,
+reserve
   r,s,r0,s0,t for real number;
 
 canceled 8;
@@ -151,8 +151,7 @@ being Subset of T st GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G;
   A c= bool the carrier of [:S,T:]
   proof
     let e be set;
-    assume
-    e in A;
+    assume e in A;
     then
     ex GS being Subset of S, GT being Subset of T st e = [:GS, GT:] & GS
     is open & GT is open & [:GS,GT:] c= G;
@@ -165,8 +164,7 @@ being Subset of T st GS is open & GT is open & x in [:GS,GT:] & [:GS,GT:] c= G;
     let x be set;
     thus x in G implies ex Y being set st x in Y & Y in A
     proof
-      assume
-      x in G;
+      assume x in G;
       then consider GS being Subset of S, GT being Subset of T such that
 A2:   GS is open and
 A3:   GT is open and
@@ -188,8 +186,7 @@ A8: G = union A by TARSKI:def 4;
   st e = [:X1,Y1:] & X1 is open & Y1 is open
   proof
     let e be set;
-    assume
-    e in A;
+    assume e in A;
     then ex GS being Subset of S, GT being Subset of T st e = [:GS,GT:] & GS
     is open & GT is open & [:GS,GT:] c= G;
     hence thesis;
@@ -226,36 +223,16 @@ A8: lim s3 in B by RCOMP_1:def 3;
   hence thesis by A5,A8,XBOOLE_0:def 4;
 end;
 
-definition
-  let A be Subset of REAL;
-  redefine attr A is connected means
-  :Def1:
-  for r,s being real number st r in
-  A & s in A holds [.r,s.] c= A;
-  compatibility
-  proof
-    thus A is connected implies for r,s being real number st r in A & s in A
-    holds [.r,s.] c= A by XXREAL_2:def 12;
-    assume
-A1: for r,s being real number st r in A & s in A holds [.r,s.] c= A;
-    let r,s be ext-real number;
-    assume that
-A2: r in A and
-A3: s in A;
-    thus thesis by A1,A2,A3;
-  end;
-end;
-
 theorem
   for T being non empty TopSpace for f being continuous RealMap of T for
-  A being Subset of T st A is connected holds f.:A is connected
+  A being Subset of T st A is connected holds f.:A is interval
 proof
   let T be non empty TopSpace;
   let f be continuous RealMap of T;
   let A be Subset of T;
   assume
 A1: A is connected;
-  let r,s;
+  let r,s be ext-real number;
 A2: A c= f"(f.:A) by FUNCT_2:50;
   assume
 A3: r in f.:A;
@@ -268,11 +245,12 @@ A6: s in f.:A;
 A7: q in A and
 A8: s = f.q by FUNCT_2:116;
   assume
-  not [.r,s.] c= f.:A;
-  then consider t being Real such that
+Z: not [.r,s.] c= f.:A;
+  reconsider r,s as Real by A3,A6;
+  consider t being Real such that
 A9: t in [.r,s.] and
-A10: not t in f.:A by SUBSET_1:7;
-  reconsider r,s,t as Real by XREAL_0:def 1;
+A10: not t in f.:A by Z,SUBSET_1:7;
+  reconsider r,s,t as Real;
   set P1 = f"left_open_halfline t, Q1 = f"right_open_halfline t, P = P1 /\ A,
   Q = Q1 /\ A, X = left_open_halfline t \/ right_open_halfline t;
 A11: Q1 is open by PSCOMP_1:54;
@@ -319,6 +297,7 @@ A20: Q c= Q1 by XBOOLE_1:17;
 end;
 
 definition
+ canceled;
   let A,B be Subset of REAL;
   func dist(A,B) -> real number means
   :Def2:
@@ -332,8 +311,7 @@ definition
     Y c= REAL
     proof
       let e be set;
-      assume
-      e in Y;
+      assume e in Y;
       then ex r,s being Element of REAL st e = abs(r - s) & r in A & s in B;
       hence thesis;
     end;
@@ -354,8 +332,7 @@ A2: IT = lower_bound X0;
     Y c= REAL
     proof
       let e be set;
-      assume
-      e in Y;
+      assume e in Y;
       then ex r,s being Element of REAL st e = abs(r - s) & r in B & s in A;
       hence thesis;
     end;
@@ -368,8 +345,7 @@ A2: IT = lower_bound X0;
       thus X0 c= Y0
       proof
         let x be set;
-        assume
-        x in X0;
+        assume x in X0;
         then consider r,s being Element of REAL such that
 A3:     x = abs(r - s) and
 A4:     r in A and
@@ -378,8 +354,7 @@ A5:     s in B by A1;
         hence thesis by A4,A5;
       end;
       let x be set;
-      assume
-      x in Y0;
+      assume x in Y0;
       then consider r,s being Element of REAL such that
 A6:   x = abs(r - s) and
 A7:   r in B and
@@ -405,8 +380,7 @@ A2: s in B;
   Y c= REAL
   proof
     let e be set;
-    assume
-    e in Y;
+    assume e in Y;
     then ex r,s being Real st e = abs(r - s) & r in A & s in B;
     hence thesis;
   end;
@@ -415,8 +389,7 @@ A3: Y0 is bounded_below
   proof
     take 0;
     let r0 be ext-real number;
-    assume
-    r0 in Y0;
+    assume r0 in Y0;
     then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
     hence thesis by COMPLEX1:132;
   end;
@@ -441,8 +414,7 @@ A4: r0 in C by XBOOLE_0:def 1;
 A5: Y c= REAL
   proof
     let e be set;
-    assume
-    e in Y;
+    assume e in Y;
     then ex r,s being Real st e = abs(r - s) & r in C & s in D;
     hence thesis;
   end;
@@ -454,8 +426,7 @@ A5: Y c= REAL
   X c= REAL
   proof
     let e be set;
-    assume
-    e in X;
+    assume e in X;
     then ex r,s being Real st e = abs(r - s) & r in A & s in B;
     hence thesis;
   end;
@@ -463,8 +434,7 @@ A5: Y c= REAL
 A6: Y c= X
   proof
     let x be set;
-    assume
-    x in Y;
+    assume x in Y;
     then ex r,s being Real st x = abs(r - s) & r in C & s in D;
     hence thesis by A1,A2;
   end;
@@ -472,8 +442,7 @@ A7: X is bounded_below
   proof
     take 0;
     let r0 be ext-real number;
-    assume
-    r0 in X;
+    assume r0 in X;
     then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
     hence thesis by COMPLEX1:132;
   end;
@@ -519,8 +488,7 @@ being Subset of R^1|Bt st YS is open & YT is open & x in [:YS,YT:] & [:YS,YT:]
       consider r,s being Real such that
 A9:   x = [r,s] and
 A10:  f.x = abs(r-s) by A7;
-      assume
-      x in f"Y;
+      assume x in f"Y;
       then f.x in Y by FUNCT_1:def 13;
       then consider N being Neighbourhood of f.x such that
 A11:  N c= Y by A8,RCOMP_1:39;
@@ -546,8 +514,7 @@ A18:  s in YT by A14,XBOOLE_0:def 4;
       f.:[:YS,YT:] c= N
       proof
         let e be set;
-        assume
-        e in f.:[:YS,YT:];
+        assume e in f.:[:YS,YT:];
         then consider y being Element of AB such that
 A19:    y in [:YS,YT:] and
 A20:    e = f.y by FUNCT_2:116;
@@ -579,11 +546,12 @@ A26:  f.:[:YS,YT:] c= Y by A11,XBOOLE_1:1;
     hence thesis by Th13;
   end;
   then reconsider f as continuous RealMap of AB by PSCOMP_1:54;
-  f.:the carrier of AB is with_min by MEASURE6:def 20;
-  then inf(f.:the carrier of AB) in f.:the carrier of AB by MEASURE6:def 10;
+  f.:the carrier of AB is with_min by MEASURE6:def 17;
+  then lower_bound(f.:the carrier of AB) in f.:the carrier of AB
+   by MEASURE6:def 9;
   then consider x being Element of AB such that
 A27: x in the carrier of AB and
-A28: inf(f.:the carrier of AB) = f.x by FUNCT_2:116;
+A28: lower_bound(f.:the carrier of AB) = f.x by FUNCT_2:116;
 A29: x in [:A,B:] by A2,A1,A27,BORSUK_1:def 5;
   then consider r1,s1 being set such that
 A30: r1 in REAL and
@@ -594,8 +562,7 @@ A33: f.:the carrier of AB = {abs(r - s) where r is Element of REAL, s is
   proof
     hereby
       let x be set;
-      assume
-      x in f.:the carrier of AB;
+      assume x in f.:the carrier of AB;
       then consider y being Element of AB such that
 A34:  y in the carrier of AB and
 A35:  x = f.y by FUNCT_2:116;
@@ -611,8 +578,7 @@ A39:  s1 in B by ZFMISC_1:106;
       r in A & s in B} by A35,A37,A39;
     end;
     let x be set;
-    assume
-    x in {abs(r - s) where r is Element of REAL, s is Element of REAL
+    assume x in {abs(r - s) where r is Element of REAL, s is Element of REAL
     : r in A & s in B};
     then consider r,s being Real such that
 A40: x = abs(r - s) and
@@ -639,8 +605,7 @@ A48: s1 = s by A32,A46,ZFMISC_1:33;
 end;
 
 theorem Th19:
-  for A, B being non empty compact Subset of REAL holds dist(A,B)
-  >= 0
+  for A, B being non empty compact Subset of REAL holds dist(A,B) >= 0
 proof
   let A, B be non empty compact Subset of REAL;
   set X = {abs(r - s) where r is Element of REAL, s is Element of REAL : r in
@@ -650,8 +615,7 @@ A1: r0 in A by XBOOLE_0:def 1;
 A2: X c= REAL
   proof
     let e be set;
-    assume
-    e in X;
+    assume e in X;
     then ex r,s being Real st e = abs(r - s) & r in A & s in B;
     hence thesis;
   end;
@@ -663,8 +627,7 @@ A3: s0 in B by XBOOLE_0:def 1;
 A4: for t being real number st t in X holds t >= 0
   proof
     let t be real number;
-    assume
-    t in X;
+    assume t in X;
     then ex r,s being Real st t = abs(r - s) & r in A & s in B;
     hence thesis by COMPLEX1:132;
   end;
@@ -683,8 +646,7 @@ A2: r0 in A and
 A3: s0 in B and
 A4: dist(A,B) = abs(r0 - s0) by Th18;
   reconsider r0,s0 as Real by XREAL_0:def 1;
-  assume
-  dist(A,B) <= 0;
+  assume dist(A,B) <= 0;
   then abs(r0 - s0) = 0 by A4,Th19;
   then r0 = s0 by GOBOARD7:2;
   hence contradiction by A1,A2,A3,XBOOLE_0:3;
@@ -693,7 +655,7 @@ end;
 theorem
   for e,f being real number, A,B being compact Subset of REAL st A
   misses B & A c= [.e,f.] & B c= [.e,f.] for S being Function of NAT, bool REAL
-st for i being Element of NAT holds S.i is connected & S.i meets A & S.i meets
+st for i being Element of NAT holds S.i is interval & S.i meets A & S.i meets
   B ex r being real number st r in [.e,f.] & not r in A \/ B & for i being
   Element of NAT ex k being Element of NAT st i <= k & r in S.k
 proof
@@ -702,14 +664,14 @@ A1: A misses B and
 A2: A c= [.e,f.] and
 A3: B c= [.e,f.];
   let S be Function of NAT, bool REAL such that
-A4: for i being Element of NAT holds S.i is connected & S.i meets A & S.
+A4: for i being Element of NAT holds S.i is interval & S.i meets A & S.
   i meets B;
   defpred P[set,Subset of REAL] means $2 is closed-interval & $2 meets A & $2
   meets B & $2 c= S.$1;
 A5: for i being Element of NAT ex u being Subset of REAL st P[i,u]
   proof
     let i be Element of NAT;
-A6: S.i is connected by A4;
+A6: S.i is interval by A4;
     S.i meets B by A4;
     then consider y being set such that
 A7: y in S.i and
@@ -729,7 +691,7 @@ A11:  x <= y;
       hence [.x,y.] meets A by A10,XBOOLE_0:3;
       y in [.x,y.] by A11;
       hence [.x,y.] meets B by A8,XBOOLE_0:3;
-      thus [.x,y.] c= S.i by A9,A7,A6,Def1;
+      thus [.x,y.] c= S.i by A9,A7,A6,XXREAL_2:def 12;
     end;
     suppose
 A12:  y <= x;
@@ -739,7 +701,7 @@ A12:  y <= x;
       hence [.y,x.] meets A by A10,XBOOLE_0:3;
       y in [.y,x.] by A12;
       hence [.y,x.] meets B by A8,XBOOLE_0:3;
-      thus [.y,x.] c= S.i by A9,A7,A6,Def1;
+      thus [.y,x.] c= S.i by A9,A7,A6,XXREAL_2:def 12;
     end;
   end;
   consider T be Function of NAT, bool REAL such that
@@ -780,8 +742,7 @@ A24: for i being Element of NAT holds P[i,sa.i,sb.i] from DoubleChoice(
   rng sa c= [.e,f.]
   proof
     let u be set;
-    assume
-    u in rng sa;
+    assume u in rng sa;
     then consider x being set such that
 A25: x in dom sa and
 A26: u = sa.x by FUNCT_1:def 5;
@@ -801,8 +762,7 @@ A30: ga = sa*Nseq by A27,VALUED_0:def 17;
   rng gb c= [.e,f.]
   proof
     let u be set;
-    assume
-    u in rng gb;
+    assume u in rng gb;
     then consider x being set such that
 A31: x in dom gb and
 A32: u = gb.x by FUNCT_1:def 5;
@@ -831,8 +791,7 @@ A39: ff is convergent by SEQ_2:21;
   then d0 > 0 by A1,A14,Th20;
   then
 A40: d0/2 > 0 by XREAL_1:141;
-  r = (1/2)*(lim fa + lim fb)
-    .= (1/2)*lim(fa+fb) by A34,A37,SEQ_2:20
+  r = (1/2)*(lim fa + lim fb) .= (1/2)*lim(fa+fb) by A34,A37,SEQ_2:20
     .= lim ff by A38,SEQ_2:22;
   then consider k0 being Element of NAT such that
 A41: for i being Element of NAT st k0 <= i holds abs(ff.i - r) < d0/2 by A39
@@ -1041,7 +1000,7 @@ A103: r in [.sb.j,sa.j.] by RCOMP_1:9;
   T.j c= S.j by A13;
   hence thesis by A99;
 end;
-
+ 
 :: Moved from JORDAN1A, AK, 23.02.2006
 
 theorem Th22:
@@ -1049,20 +1008,17 @@ theorem Th22:
   proj2.:S is closed
 proof
   let S be closed Subset of TOP-REAL 2;
-  assume
-  S is Bounded;
+  assume S is Bounded;
   then Cl(proj2.:S) = proj2.:Cl S by TOPREAL6:93
     .= proj2.:S by PRE_TOPC:52;
   hence thesis;
 end;
 
 theorem Th23:
-  for S being Subset of TOP-REAL 2 st S is Bounded holds proj2.:S
-  is bounded
+  for S being Subset of TOP-REAL 2 st S is Bounded holds proj2.:S is bounded
 proof
   let S be Subset of TOP-REAL 2;
-  assume
-  S is Bounded;
+  assume S is Bounded;
   then reconsider C = S as bounded Subset of Euclid 2 by JORDAN2C:def 2;
   consider r being Real, x being Point of Euclid 2 such that
 A1: 0 < r and
@@ -1100,4 +1056,3 @@ proof
   proj2.:S is closed by Th22;
   hence thesis by Th23,RCOMP_1:29;
 end;
-

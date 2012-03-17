@@ -10,14 +10,16 @@ environ
       FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_7, TARSKI, RELAT_1, ZFMISC_1, FSM_1,
       FUNCT_1, CAT_1, FINSEQ_1, GRAPHSP, FUNCT_2, CARD_3, ORDINAL1, ARYTM_3,
       ARYTM_1, SUPINF_2, FUNCOP_1, SCMRING1, GLIB_000, MCART_1, FUNCT_4,
-      ALGSTR_0;
+      ALGSTR_0, RECDEF_2, COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_1, FUNCT_2, STRUCT_0, ALGSTR_0, FUNCSDOM, MCART_1, CARD_3, FINSEQ_1,
-      FUNCOP_1, FUNCT_4, FUNCT_7, AMI_1, AMI_2, AMI_3, SCMRING1;
- constructors XXREAL_0, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1, PRE_POLY;
+      CARD_1, FUNCT_2, RECDEF_2, STRUCT_0, ALGSTR_0, FUNCSDOM, MCART_1, CARD_3,
+      FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, COMPOS_1, AMI_1, AMI_2, AMI_3,
+      SCMRING1;
+ constructors XXREAL_0, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1, PRE_POLY,
+      RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_1,
       CARD_3, STRUCT_0, AMI_1, AMI_3, SCMRING1, AMI_2, FUNCT_1, FUNCT_2,
-      ALGSTR_0, ALGSTR_1, GCD_1;
+      ALGSTR_0, ALGSTR_1, GCD_1, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -38,8 +40,9 @@ definition
   func SCM R -> strict AMI-Struct over { the carrier of R } means
 :: SCMRING2:def 1
 
-  the carrier of it = SCM-Memory & the Instruction-Counter of it = NAT & the
-  Instructions of it = SCM-Instr R & the Object-Kind of it = SCM-OK R & the
+  the carrier of it = SCM-Memory & the Instruction-Counter of it = NAT &
+  the Instructions of it = SCM-Instr R & the haltF of it = [0,{},{}] &
+  the Object-Kind of it = SCM-OK R & the
   Execution of it = SCM-Exec R;
 end;
 
@@ -76,52 +79,51 @@ definition
   redefine func s.a -> Element of R;
 end;
 
-theorem :: SCMRING2:2
-  [0,{}] in SCM-Instr S;
+canceled;
 
 theorem :: SCMRING2:3
-  [0,{}] is Instruction of SCM R;
+  [0,{},{}] is Instruction of SCM R;
 
 theorem :: SCMRING2:4
-  x in {1,2,3,4} implies [x,<*d1,d2*>] in SCM-Instr S;
+  x in {1,2,3,4} implies [x,{},<*d1,d2*>] in SCM-Instr S;
 
 theorem :: SCMRING2:5
-  [5,<*d1,t*>] in SCM-Instr S;
+  [5,{},<*d1,t*>] in SCM-Instr S;
 
 theorem :: SCMRING2:6
-  [6,<*i1*>] in SCM-Instr S;
+  [6,<*i1*>,{}] in SCM-Instr S;
 
 theorem :: SCMRING2:7
-  [7,<*i1,d1*>] in SCM-Instr S;
+  [7,<*i1*>,<*d1*>] in SCM-Instr S;
 
 definition
   let R be good Ring, a, b be Data-Location of R;
   func a := b -> Instruction of SCM R equals
 :: SCMRING2:def 3
-  [ 1, <*a, b*>];
+  [1,{},<*a,b*>];
   func AddTo(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 4
-  [ 2, <*a, b*>];
+  [2,{},<*a,b*>];
   func SubFrom(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 5
-  [ 3, <*a, b*>];
+  [3,{},<*a,b*>];
   func MultBy(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 6
-  [ 4, <*a, b*>];
+  [4,{},<*a,b*>];
 end;
 
 definition
   let R be good Ring, a be Data-Location of R, r be Element of R;
   func a := r -> Instruction of SCM R equals
 :: SCMRING2:def 7
-  [ 5, <*a,r*>];
+  [5,{},<*a,r*>];
 end;
 
 definition
   let R be good Ring, l be Element of NAT;
   func goto(l,R) -> Instruction of SCM R equals
 :: SCMRING2:def 8
-  [ 6, <*l*>];
+  [6,<*l*>,{}];
 end;
 
 definition
@@ -129,11 +131,11 @@ definition
   of R;
   func a=0_goto l -> Instruction of SCM R equals
 :: SCMRING2:def 9
-  [ 7, <*l,a*>];
+  [7,<*l*>,<*a*>];
 end;
 
 theorem :: SCMRING2:8
-  for I being set holds I is Instruction of SCM R iff I = [0,{}] or
+  for I being set holds I is Instruction of SCM R iff I = [0,{},{}] or
 (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I = SubFrom(a,
 b)) or (ex a,b st I = MultBy(a,b)) or (ex i1 st I = goto(i1,R)) or
  (ex a,i1 st I =
@@ -196,7 +198,7 @@ theorem :: SCMRING2:20
   succ IC s holds I is non halting;
 
 theorem :: SCMRING2:21
-  for I being Instruction of SCM R st I = [0,{}] holds I is
+  for I being Instruction of SCM R st I = [0,{},{}] holds I is
   halting;
 
 registration
@@ -234,7 +236,7 @@ theorem :: SCMRING2:29
   SCM R;
 
 theorem :: SCMRING2:30
-  halt SCM R = [0,{}];
+  halt SCM R = [0,{},{}];
 
 theorem :: SCMRING2:31
   Data-Locations SCM R = SCM-Data-Loc;

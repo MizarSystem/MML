@@ -2,8 +2,6 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -21,10 +19,10 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="49"/>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="33"/>
+<Func kind="K" nr="37"/>
 </Typ>
 <Not>
 <Pred kind="P" nr="1">
@@ -36,10 +34,10 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="49"/>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="33"/>
+<Func kind="K" nr="37"/>
 </Typ>
 <Not>
 <And>
@@ -55,10 +53,10 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="1" value="false"/>
 </Cluster>
-<Func kind="K" nr="49"/>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="33"/>
+<Func kind="K" nr="37"/>
 </Typ>
 <Not>
 <And>

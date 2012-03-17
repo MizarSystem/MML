@@ -4,11 +4,11 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="PARTFUN1"/>
@@ -21,23 +21,23 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="16"/>
 <Adjective nr="22">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="67"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="30">
-<Func kind="K" nr="31">
+<Func kind="K" nr="26">
+<Func kind="K" nr="27">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="67"/>
 </Func>
 </Func>
 </Typ>
@@ -54,7 +54,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="17">
+<Func kind="K" nr="40">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

@@ -33,14 +33,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="84"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="85"/>
+<Func kind="K" nr="84"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="186">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -56,14 +56,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="191">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="85"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="84"/>
+<Func kind="K" nr="81"/>
 </Adjective>
 <Adjective nr="54"/>
 </Cluster>
@@ -76,7 +76,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="205">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -91,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="208">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,7 +106,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="212">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -115,36 +115,36 @@
 </FCluster>
 <FCluster aid="SIN_COS" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="203"/>
+<Func kind="K" nr="204"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="81"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="206"/>
+<Func kind="K" nr="207"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="81"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="211"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
-<Func kind="K" nr="81"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 <Adjective nr="39"/>
 </Cluster>

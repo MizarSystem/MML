@@ -9,17 +9,18 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, RELAT_1, TARSKI, XBOOLE_0, FUNCOP_1,
       PBOOLE, ZFMISC_1, FUNCT_4, FINSEQ_1, ARYTM_3, CARD_1, NAT_1, XXREAL_0,
       FINSET_1, SETFAM_1, FINSEQ_2, ORDINAL4, MCART_1, PARTFUN1, REWRITE1,
-      FUNCT_2, ARYTM_1, RFINSEQ, CLASSES1, FUNCT_7;
+      FUNCT_2, ARYTM_1, RFINSEQ, CLASSES1, FUNCT_7, VALUED_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, CARD_1, WELLORD2,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, RELAT_1,
       FUNCT_1, RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2,
-      FINSEQ_1, FINSEQ_2, FUNCT_4, CLASSES1, RFINSEQ, NAT_D, REWRITE1;
+      FINSEQ_1, FINSEQ_2, FUNCT_4, CLASSES1, RFINSEQ, NAT_D, REWRITE1,
+      VALUED_1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, PBOOLE, RFINSEQ, NAT_D, REWRITE1, RELAT_2,
-      REAL_1, CLASSES1, RELSET_1;
+      REAL_1, CLASSES1, RELSET_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2,
-      RELSET_1, XXREAL_0;
+      RELSET_1, XXREAL_0, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2,
       FUNCT_4;
@@ -27,7 +28,7 @@ environ
       FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CARD_1, NAT_1, FUNCT_2, FUNCOP_1,
       SETFAM_1, MCART_1, FINSEQ_3, ENUMSET1, REWRITE1, FINSEQ_4, RELSET_1,
       XBOOLE_0, XBOOLE_1, PARTFUN1, GRFUNC_1, XREAL_1, XXREAL_0, ORDINAL1,
-      RFINSEQ, FINSEQ_5, NAT_D;
+      RFINSEQ, FINSEQ_5, NAT_D, WELLORD2, VALUED_1;
  schemes NAT_1, DOMAIN_1, CLASSES1, FRAENKEL, FINSEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Preliminaries
@@ -39,8 +40,7 @@ theorem
   for f being Function, X being set st rng f c= X holds (id X)*f = f
 proof
   let f be Function, X be set;
-  assume
-  rng f c= X;
+  assume rng f c= X;
   then reconsider g = f as Function of dom f, X by FUNCT_2:4;
   (id X)*g = g by FUNCT_2:23;
   hence thesis;
@@ -54,8 +54,7 @@ proof
   let X be set, Y be non empty set, f be Function of X,Y such that
 A1: f is one-to-one;
   let B be Subset of X, C be Subset of Y;
-  assume
-  C c= f.:B;
+  assume C c= f.:B;
   then
 A2: f"C c= f"(f.:B) by RELAT_1:178;
   f"(f.:B) c= B by A1,FUNCT_1:152;
@@ -70,8 +69,7 @@ proof
   let X,Y be non empty set, f be Function of X,Y such that
 A1: f is one-to-one;
   let x be Element of X, A be Subset of X;
-  assume
-  f.x in f.:A;
+  assume f.x in f.:A;
   then ex y be Element of X st y in A & f.y = f.x by FUNCT_2:116;
   hence thesis by A1,FUNCT_2:25;
 end;
@@ -87,8 +85,7 @@ A1: f is one-to-one;
   assume
 A2: f.x in f.:A \ B;
 A3: now
-    assume
-    x in f"B;
+    assume x in f"B;
     then f.x in B by FUNCT_1:def 13;
     hence contradiction by A2,XBOOLE_0:def 5;
   end;
@@ -121,8 +118,7 @@ theorem Th6:
   .--> f.a
 proof
   let f be Function, a be set;
-  assume
-  a in dom f;
+  assume a in dom f;
   hence f|{a} = {[a,f.a]} by GRFUNC_1:89
     .= a .--> f.a by ZFMISC_1:35;
 end;
@@ -144,8 +140,7 @@ theorem Th7:
   in I holds i.--> (M.i) = M|{i}
 proof
   let I be set, M be ManySortedSet of I, i be set;
-  assume
-  i in I;
+  assume i in I;
   then i in dom M by PARTFUN1:def 4;
   hence thesis by Th6;
 end;
@@ -156,8 +151,7 @@ theorem
 proof
   let I,J be set, M be ManySortedSet of [:I,J:];
   let i,j be set;
-  assume
-  i in I & j in J;
+  assume i in I & j in J;
   then
 A1: [i,j] in [:I,J:] by ZFMISC_1:106;
   thus (i,j):-> (M.(i,j)) = [i,j].--> (M.[i,j])
@@ -217,8 +211,7 @@ A12:  x in dom h by A10,FUNCT_1:21;
 A13:  not x in dom(f*h);
       x in dom h implies h.x in dom f
       proof
-        assume
-        x in dom h;
+        assume x in dom h;
         then h.x in rng h by FUNCT_1:12;
         hence thesis by A1;
       end;
@@ -236,8 +229,7 @@ A14:  (g +* h).x = g.x by FUNCT_4:12;
 A15: x in dom(f*g) \/ dom(f*h);
     thus x in dom(f*h) implies (f*(g +* h)).x = (f*h).x
     proof
-      assume
-      x in dom(f*h);
+      assume x in dom(f*h);
       then
 A16:  x in dom h by FUNCT_1:21;
       hence (f*(g +* h)).x = f.((g +* h).x) by A2,FUNCT_1:23
@@ -248,8 +240,7 @@ A16:  x in dom h by FUNCT_1:21;
 A17: not x in dom(f*h);
     x in dom h implies h.x in dom f
     proof
-      assume
-      x in dom h;
+      assume x in dom h;
       then h.x in rng h by FUNCT_1:12;
       hence thesis by A1;
     end;
@@ -285,8 +276,7 @@ A3:   f.x in dom g or f.x in dom h by XBOOLE_0:def 3;
       hence thesis by XBOOLE_0:def 3;
     end;
     let x be set;
-    assume
-    x in dom(g*f) \/ dom(h*f);
+    assume x in dom(g*f) \/ dom(h*f);
     then
 A4: x in dom(g*f) or x in dom(h*f) by XBOOLE_0:def 3;
     then f.x in dom g or f.x in dom h by FUNCT_1:21;
@@ -298,8 +288,7 @@ A5: f.x in dom(g +* h) by FUNCT_4:def 1;
   end;
   now
     let x be set;
-    assume
-    x in dom(g*f) \/ dom(h*f);
+    assume x in dom(g*f) \/ dom(h*f);
     then x in dom(g*f) or x in dom(h*f) by XBOOLE_0:def 3;
     then
 A6: x in dom f by FUNCT_1:21;
@@ -312,8 +301,7 @@ A8:   f.x in dom h by FUNCT_1:21;
         .= h.(f.x) by A8,FUNCT_4:14
         .= (h*f).x by A7,FUNCT_1:22;
     end;
-    assume
-    not x in dom(h*f);
+    assume not x in dom(h*f);
     then
 A9: not f.x in dom h by A6,FUNCT_1:21;
     thus ((g +* h)*f).x = (g +* h).(f.x) by A6,FUNCT_1:23
@@ -339,8 +327,7 @@ theorem Th13:
   y in A
 proof
   let A,B be set, y be set;
-  assume
-  A meets rng(id B +* (A --> y));
+  assume A meets rng(id B +* (A --> y));
   then consider x being set such that
 A1: x in A and
 A2: x in rng(id B +* (A --> y)) by XBOOLE_0:3;
@@ -370,8 +357,7 @@ theorem
   y))
 proof
   let x,y be set, A be set;
-  assume
-  x <> y;
+  assume x <> y;
   then not y in {x} by TARSKI:def 1;
   then {x} misses rng(id A +* ({x} --> y)) by Th13;
   hence thesis by ZFMISC_1:54;
@@ -405,8 +391,7 @@ A3: dom ((f+*(X-->y))+*(X-->z)) = (dom f \/ X) \/ X by A1,FUNCT_4:def 1
     .= dom f \/ X;
 A4: now
     let x be set;
-    assume
-    x in dom f \/ X;
+    assume x in dom f \/ X;
     per cases;
     suppose
 A5:   x in X;
@@ -431,8 +416,7 @@ theorem
 proof
   now
 A1: {} in 1 by CARD_1:87,TARSKI:def 1;
-    assume
-    1 in INT*;
+    assume 1 in INT*;
     then ex x,y st {} = [x,y] by A1,RELAT_1:def 1;
     hence contradiction;
   end;
@@ -445,20 +429,17 @@ proof
   thus {}* c= {{}}
   proof
     let x;
-    assume
-    x in {}*;
+    assume x in {}*;
     then reconsider f = x as FinSequence of {} by FINSEQ_1:def 11;
     now
-      assume
-      x <> {};
+      assume x <> {};
       then ex x st x in dom f;
       hence contradiction;
     end;
     hence thesis by ZFMISC_1:37;
   end;
   let x;
-  assume
-  x in {{}};
+  assume x in {{}};
   then
 A1: x = {} by TARSKI:def 1;
   rng {} = {};
@@ -480,8 +461,7 @@ proof
   assume
 A1: A* c= B*;
   let x;
-  assume
-  x in A;
+  assume x in A;
   then <*x*> in A* by Th20;
   hence thesis by A1,Th20;
 end;
@@ -522,8 +502,7 @@ A8:     x in A;
         hence thesis;
       end;
       let x be set;
-      assume
-      x in { l : l < m+1 };
+      assume x in { l : l < m+1 };
       then consider l being Element of NAT such that
 A9:   x = l and
 A10:  l < m+1;
@@ -538,8 +517,7 @@ A11: for m being Nat ex n being Nat st n in A & n > m;
     NAT c= A
     proof
       let x be set;
-      assume
-      x in NAT;
+      assume x in NAT;
       then reconsider m = x as Element of NAT;
       ex n being Nat st n in A & n > m by A11;
       hence thesis by A1;
@@ -607,14 +585,12 @@ A1: dom p = {1} & p.1 = <*0*> by FINSEQ_1:4,55,57;
     thus p is Function-yielding
     proof
       let x be set;
-      assume
-      x in dom p;
+      assume x in dom p;
       hence thesis by A1,TARSKI:def 1;
     end;
     thus p is non empty;
     let x be set;
-    assume
-    x in dom p;
+    assume x in dom p;
     hence thesis by A1,TARSKI:def 1;
   end;
 end;
@@ -633,8 +609,7 @@ A1: F is empty;
   coherence
   proof
     let x be set;
-    assume
-    x in dom <*f*>;
+    assume x in dom <*f*>;
     then x in {1} by FINSEQ_1:4,55;
     then x = 1 by TARSKI:def 1;
     hence thesis by FINSEQ_1:57;
@@ -644,8 +619,7 @@ A1: F is empty;
   coherence
   proof
     let x be set;
-    assume
-    x in dom <*f,g*>;
+    assume x in dom <*f,g*>;
     then x in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
     then x = 1 or x = 2 by TARSKI:def 2;
     hence thesis by FINSEQ_1:61;
@@ -655,8 +629,7 @@ A1: F is empty;
   coherence
   proof
     let x be set;
-    assume
-    x in dom <*f,g,h*>;
+    assume x in dom <*f,g,h*>;
     then x in {1,2,3} by FINSEQ_3:1,30;
     then x = 1 or x = 2 or x = 3 by ENUMSET1:def 1;
     hence thesis by FINSEQ_1:62;
@@ -750,8 +723,7 @@ A3: A() = {};
     now
       consider a being Element of { F(d) where d is Element of D() : G(d) in A
       () };
-      assume
-      { F(d) where d is Element of D() : G(d) in A() } <> {};
+      assume { F(d) where d is Element of D() : G(d) in A() } <> {};
       then a in { F(d) where d is Element of D() : G(d) in A() };
       then ex d being Element of D() st a = F(d) & G(d) in A();
       hence contradiction by A3;
@@ -771,8 +743,7 @@ A4: { F(d) where d is Element of D() : G(d) in A() } = { F(d) where d is
       is Element of D(): d in B}
       proof
         let x be set;
-        assume
-        x in { F(d) where d is Element of D() : G(d) in A() };
+        assume x in { F(d) where d is Element of D() : G(d) in A() };
         then consider d9 being Element of D() such that
 A5:     x = F(d9) and
 A6:     G(d9) in A();
@@ -780,8 +751,7 @@ A6:     G(d9) in A();
         hence thesis by A5;
       end;
       let x be set;
-      assume
-      x in { F(d) where d is Element of D(): d in B};
+      assume x in { F(d) where d is Element of D(): d in B};
       then consider d1 being Element of D() such that
 A7:   x = F(d1) and
 A8:   d1 in B;
@@ -793,8 +763,7 @@ A9: C,B are_equipotent
       take Z = { [G(d),d] where d is Element of D(): not contradiction };
       hereby
         let x be set;
-        assume
-        x in C;
+        assume x in C;
         then consider a being Element of D such that
 A10:    a = x and
 A11:    ex d being Element of D() st a = G(d);
@@ -806,8 +775,7 @@ A12:    a = G(d) by A11;
       end;
       hereby
         let y be set;
-        assume
-        y in B;
+        assume y in B;
         then consider d being Element of D() such that
 A13:    d = y & G(d) in D;
         reconsider x = G(d) as set;
@@ -815,12 +783,10 @@ A13:    d = y & G(d) in D;
         thus x in C & [x,y] in Z by A13;
       end;
       let x,y,z,u be set;
-      assume
-      [x,y] in Z;
+      assume [x,y] in Z;
       then consider d1 being Element of D() such that
 A14:  [x,y] = [G(d1),d1];
-      assume
-      [z,u] in Z;
+      assume [z,u] in Z;
       then consider d2 being Element of D() such that
 A15:  [z,u] = [G(d2),d2];
 A16:  z = G(d2) & u = d2 by A15,ZFMISC_1:33;
@@ -850,8 +816,7 @@ proof
 A3: A() = {};
     now
       consider a being Element of D;
-      assume
-      D <> {};
+      assume D <> {};
       then a in D;
       then ex d being Element of D() st a = d & G(d) in A();
       hence contradiction by A3;
@@ -877,8 +842,7 @@ A5:     x = G(d) by A1;
       end;
       hereby
         let y be set;
-        assume
-        y in D;
+        assume y in D;
         then consider d being Element of D() such that
 A6:     d = y & G(d) in A;
         reconsider x = G(d) as set;
@@ -886,12 +850,10 @@ A6:     d = y & G(d) in A;
         thus x in A & [x,y] in Z by A6;
       end;
       let x,y,z,u be set;
-      assume
-      [x,y] in Z;
+      assume [x,y] in Z;
       then consider d1 being Element of D() such that
 A7:   [x,y] = [G(d1),d1];
-      assume
-      [z,u] in Z;
+      assume [z,u] in Z;
       then consider d2 being Element of D() such that
 A8:   [z,u] = [G(d2),d2];
 A9:   z = G(d2) & u = d2 by A8,ZFMISC_1:33;
@@ -915,8 +877,7 @@ A3: A() = {};
     now
       consider a being Element of { G(d) where d is Element of D() : d in A()
       };
-      assume
-      { G(d) where d is Element of D() : d in A() } <> {};
+      assume { G(d) where d is Element of D() : d in A() } <> {};
       then a in { G(d) where d is Element of D() : d in A() };
       then ex d being Element of D() st a = G(d) & d in A();
       hence contradiction by A3;
@@ -941,8 +902,7 @@ A4:     x in A;
       end;
       hereby
         let y be set;
-        assume
-        y in D;
+        assume y in D;
         then consider d being Element of D() such that
 A5:     G(d) = y & d in A;
         reconsider d as set;
@@ -950,12 +910,10 @@ A5:     G(d) = y & d in A;
         thus d in A & [d,y] in Z by A5;
       end;
       let x,y,z,u be set;
-      assume
-      [x,y] in Z;
+      assume [x,y] in Z;
       then consider d1 being Element of D() such that
 A6:   [x,y] = [d1,G(d1)];
-      assume
-      [z,u] in Z;
+      assume [z,u] in Z;
       then consider d2 being Element of D() such that
 A7:   [z,u] = [d2,G(d2)];
 A8:   z = d2 & u = G(d2) by A7,ZFMISC_1:33;
@@ -1032,8 +990,7 @@ theorem Th28:
   equal_outside A
 proof
   let f,g be Function, A be set;
-  assume
-  f|(dom f \ A) = g|(dom g \ A);
+  assume f|(dom f \ A) = g|(dom g \ A);
   hence g|(dom g \ A) = f|(dom f \ A);
 end;
 
@@ -1042,8 +999,7 @@ theorem Th29:
   equal_outside A holds f,h equal_outside A
 proof
   let f,g,h be Function, A be set;
-  assume
-  f|(dom f \ A) = g|(dom g \ A) & g|(dom g \ A) = h|(dom h \ A);
+  assume f|(dom f \ A) = g|(dom g \ A) & g|(dom g \ A) = h|(dom h \ A);
   hence f|(dom f \ A) = h|(dom h \ A);
 end;
 
@@ -1113,8 +1069,7 @@ proof
   dom(i.-->d) = {i} by FUNCOP_1:19;
   then
 A1: i in dom(i.-->d) by TARSKI:def 1;
-  assume
-  i in dom f;
+  assume i in dom f;
   hence (f+*(i,d)).i = (f+*(i.-->d)).i by Def3
     .= (i.-->d).i by A1,FUNCT_4:14
     .= d by FUNCOP_1:87;
@@ -1382,8 +1337,7 @@ A16: for i being Element of NAT st P[i] holds P[i+1]
     proof
       let i be Element of NAT;
       reconsider h = p.(i+1) as Function;
-      assume
-      f.i is Function;
+      assume f.i is Function;
       then reconsider g = f.i as Function;
       f.(i+1) = h*g by A15;
       hence thesis;
@@ -1394,8 +1348,7 @@ A18: for i being Element of NAT holds P[i] from NAT_1:sch 1(A17,A16);
     f is Function-yielding
     proof
       let x be set;
-      assume
-      x in dom f;
+      assume x in dom f;
       hence thesis by A14,A18;
     end;
     then reconsider f as ManySortedFunction of NAT by A14,PARTFUN1:def 4
@@ -1424,8 +1377,7 @@ A1: for i being Element of NAT st 1 <= i & i < len p+1 for x being set ex
     y being set st P[i,x,y]
     proof
       let i be Element of NAT;
-      assume
-      1 <= i;
+      assume 1 <= i;
       assume
       i < len p+1;
       reconsider f = p.i as Function;
@@ -1587,8 +1539,7 @@ A16: (p^<*f*>).(len p+1) = f & len p+1 in dom (p^<*f*>) by A14,FINSEQ_1:59
 A17: len p+1 in dom apply(p,x) by A1,A15,FINSEQ_3:27;
 A18: now
     let i be Nat;
-    assume
-    i in dom <*f.(apply(p,x).(len p+1))*>;
+    assume i in dom <*f.(apply(p,x).(len p+1))*>;
     then i in Seg 1 by FINSEQ_1:55;
     then
 A19: i = 1 by FINSEQ_1:4,TARSKI:def 1;
@@ -1905,11 +1856,9 @@ A1: for p being Function-yielding FinSequence st P[p] for f being Function
   holds P[p^<*f*>]
   proof
     let q;
-    assume
-    q <> {} implies rng compose(q,X) c= lastrng q;
+    assume q <> {} implies rng compose(q,X) c= lastrng q;
     let f;
-    assume
-    q^<*f*> <> {};
+    assume q^<*f*> <> {};
     compose(q^<*f*>,X) = f*compose(q,X) by Th43;
     then rng compose(q^<*f*>,X) c= rng f by RELAT_1:45;
     hence thesis by Th60;
@@ -2023,8 +1972,7 @@ registration
     thus len q = 1+1 by FINSEQ_1:61
       .= len p+1 by FINSEQ_1:57;
     let i be Element of NAT;
-    assume
-    i in dom p;
+    assume i in dom p;
     then i in {1} by FINSEQ_1:4,55;
     then
 A1: i = 1 by TARSKI:def 1;
@@ -2044,8 +1992,7 @@ registration
     thus p is FuncSeq-like;
     thus p is non empty;
     let x be set;
-    assume
-    x in dom p;
+    assume x in dom p;
     then x in {1} by FINSEQ_1:4,55;
     then x = 1 by TARSKI:def 1;
     hence thesis by FINSEQ_1:57;
@@ -2399,8 +2346,7 @@ definition
   proof
 A1: firstdom F = X by Def9;
     now
-      assume
-      F = {};
+      assume F = {};
       then X = {} & compose(F,X) = id X by A1,Def6,Th41;
       hence rng compose(F,X) = {};
     end;
@@ -2455,8 +2401,7 @@ A8: for x being set st x in Seg n holds P[x,f.x] from CLASSES1:sch 1(
     take f;
     thus len f+1 = len q by A1,A7,FINSEQ_1:def 3;
     let i be Element of NAT;
-    assume
-    i in dom f;
+    assume i in dom f;
     then
     ex j being Element of NAT st j = i & f.i in Funcs(q.j,q.(j+1)) by A7,A8;
     hence thesis;
@@ -2628,8 +2573,7 @@ end;
 
 Lm4: rng f c= dom f implies iter (f,0) = id(dom f)
 proof
-  assume
-  rng f c= dom f;
+  assume rng f c= dom f;
   then dom f \/ rng f = dom f by XBOOLE_1:12;
   hence thesis by Th70;
 end;
@@ -2693,8 +2637,7 @@ A2: dom iter(f,k+1) c= dom iter(f,k) by RELAT_1:44;
     iter(f,k+1) = iter(f,k)*f by Th71;
     then
 A3: rng iter(f,k+1) c= rng iter(f,k) by RELAT_1:45;
-    assume
-    dom iter(f,k) c= dom f \/ rng f & rng iter(f,k) c= dom f \/ rng f;
+    assume dom iter(f,k) c= dom f \/ rng f & rng iter(f,k) c= dom f \/ rng f;
     hence thesis by A2,A3,XBOOLE_1:1;
   end;
   iter(f,0) = id(dom f \/ rng f) by Th70;
@@ -2708,8 +2651,7 @@ theorem
   n <> 0 implies dom iter(f,n) c= dom f & rng iter(f,n) c= rng f
 proof
   defpred P[Nat] means dom iter(f,$1+1) c= dom f & rng iter(f,$1+1) c= rng f;
-  assume
-  n <> 0;
+  assume n <> 0;
   then
 A1: ex k be Nat st n = k+1 by NAT_1:6;
 A2: for k be Nat st P[k] holds P[k+1]
@@ -2743,8 +2685,7 @@ A3: rng iter(f,k+1) c= rng iter(f,k) by RELAT_1:45;
     iter(f,k+1) = f*iter(f,k) by Th73;
     hence thesis by A2,A3,RELAT_1:46,XBOOLE_1:1;
   end;
-  assume
-  rng f c= dom f;
+  assume rng f c= dom f;
   then iter(f,0) = id dom f by Lm4;
   then
 A4: P[ 0] by RELAT_1:71;
@@ -2805,8 +2746,7 @@ proof
 A1: P[k] implies P[k+1] by Lm5;
 A2: P[ 0] by Th72;
 A3: P[k] from NAT_1:sch 1(A2,A1);
-  assume
-  n <> 0;
+  assume n <> 0;
   then consider k be Nat such that
 A4: n = k+1 by NAT_1:6;
   reconsider k as Element of NAT by ORDINAL1:def 13;
@@ -2838,8 +2778,7 @@ proof
   defpred P[Element of NAT] means iter({},$1) = {};
 A1: P[k] implies P[k+1]
   proof
-    assume
-    iter({},k) = {};
+    assume iter({},k) = {};
     thus iter({},k+1) = iter({},k)*{} by Th71
       .= {};
   end;
@@ -2970,8 +2909,7 @@ proof
   defpred P[Element of NAT] means iter(f,$1) = compose($1|->f,dom f \/ rng f);
 A1: now
     let n be Element of NAT;
-    assume
-    P[n];
+    assume P[n];
     then iter(f,n+1) = f*compose(n|->f,dom f \/ rng f) by Th73
       .= compose((n|->f)^<*f*>,dom f \/ rng f) by Th43
       .= compose((n+1)|->f,dom f \/ rng f) by FINSEQ_2:74;
@@ -3031,8 +2969,7 @@ proof
   per cases;
   suppose
 A1: a in dom f;
-    assume
-    a in A;
+    assume a in A;
     then {a} c= A by ZFMISC_1:37;
     then
 A2: dom(a.-->b) c= A by FUNCOP_1:19;
@@ -3054,8 +2991,7 @@ proof
   per cases;
   suppose
 A1: a in dom f;
-    assume
-    not a in A;
+    assume not a in A;
     then {a} misses A by ZFMISC_1:56;
     then
 A2: dom (a.-->b) misses A by FUNCOP_1:19;
@@ -3079,8 +3015,7 @@ A1: f|A = g|A;
 A2: a in A and
 A3: a in dom g;
     now
-      assume
-      not a in dom f;
+      assume not a in dom f;
       then not a in dom f /\ A by XBOOLE_0:def 4;
       then not a in dom(g|A) by A1,RELAT_1:90;
       then not a in dom g /\ A by RELAT_1:90;
@@ -3095,8 +3030,7 @@ A3: a in dom g;
 A4: a in A and
 A5: not a in dom g;
     now
-      assume
-      a in dom f;
+      assume a in dom f;
       then a in dom f /\ A by A4,XBOOLE_0:def 4;
       then a in dom(g|A) by A1,RELAT_1:90;
       then a in dom g /\ A by RELAT_1:90;
@@ -3139,8 +3073,7 @@ A3: <*a*> +* (1,b) = <*a*> +* (1 .--> b) by Def3;
 A4: for x being set st x in {1} holds (<*a*> +* (1,b)).x = <*b*>.x
   proof
     let x be set;
-    assume
-    x in {1};
+    assume x in {1};
     then
 A5: x = 1 by TARSKI:def 1;
     hence (<*a*> +* (1,b)).x = b by A3,Th96
@@ -3159,8 +3092,7 @@ theorem
 proof
   let f be Function;
   let x be set;
-  assume
-  x in dom f;
+  assume x in dom f;
   hence f +* (x .--> f.x) = f +*(x,f.x) by Def3
     .= f by Th37;
 end;
@@ -3335,8 +3267,7 @@ theorem Th103:
   rng F c= rng(F+*(x,y)) \/ {F.x}
 proof
   let z;
-  assume
-  z in rng F;
+  assume z in rng F;
   then consider e such that
 A1: e in dom F and
 A2: z = F.e by FUNCT_1:def 5;
@@ -3358,8 +3289,7 @@ end;
 theorem Th104:
   x in dom F implies y in rng(F+*(x,y))
 proof
-  assume
-  x in dom F;
+  assume x in dom F;
   then x in dom (F+*(x,y)) & (F+*(x,y)).x = y by Th32,Th33;
   hence thesis by FUNCT_1:12;
 end;
@@ -3444,14 +3374,12 @@ proof
 A3: now
       let x be set;
       hereby
-        assume
-        x in X;
+        assume x in X;
         then ex d being Element of D st G(d) = x & d in A();
         hence x in Y by A1;
       end;
       hereby
-        assume
-        x in Y;
+        assume x in Y;
         then ex d being Element of D() st G(d) = x & d in A();
         hence x in X;
       end;
@@ -3460,8 +3388,7 @@ A4: now
       let d1,d2 be Element of D;
       d1 in A() & d2 in A();
       then reconsider d = d1, dd = d2 as Element of D() by A1;
-      assume
-      G(d1) = G(d2);
+      assume G(d1) = G(d2);
       then d = dd by A2;
       hence d1 = d2;
     end;
@@ -3474,8 +3401,7 @@ A6: A() = {};
     now
       consider a being Element of { G(d) where d is Element of D() : d in A()
       };
-      assume
-      { G(d) where d is Element of D() : d in A() } <> {};
+      assume { G(d) where d is Element of D() : d in A() } <> {};
       then a in { G(d) where d is Element of D() : d in A() };
       then ex d being Element of D() st a = G(d) & d in A();
       hence contradiction by A6;
@@ -3495,8 +3421,7 @@ proof
 A1: dom ((f +* h) | (dom (f +* h) \ A)) = dom (f +* h) \ A by RELAT_1:191
     .= (dom f \/ dom h) \ A by FUNCT_4:def 1
     .= (dom f \ A) \/ (dom h \ A) by XBOOLE_1:42;
-  assume
-  f,g equal_outside A;
+  assume f,g equal_outside A;
   then
 A2: f|(dom f \ A) = g|(dom g \ A) by Def2;
   then
@@ -3546,8 +3471,7 @@ theorem
 proof
   let f,g,h be Function;
   let A be set;
-  assume
-  f,g equal_outside A;
+  assume f,g equal_outside A;
   then
 A1: f | (dom f \ A) = g | (dom g \ A) by Def2;
   then
@@ -3601,8 +3525,7 @@ proof
   let f,g,h be Function;
   thus f +* h = g +* h implies f,g equal_outside dom h
   proof
-    assume
-    f +* h = g +* h;
+    assume f +* h = g +* h;
     then
 A1: f +* h,g equal_outside dom h by Th28,Th31;
     f, f +* h equal_outside dom h by Th31;
@@ -3670,8 +3593,7 @@ A5: g1.x = y by A2,A3,Th33;
       suppose
 A6:     a in dom f;
         now
-          assume
-          a <> x;
+          assume a <> x;
           then g1.a = (id dom f).a by Th34
             .= a by A6,FUNCT_1:35;
           hence thesis by A4,A6,FUNCT_1:23;
@@ -3712,8 +3634,7 @@ A4: dom g1 = dom f by A2,Th32;
       rng g1 c= dom f
       proof
         let b be set;
-        assume
-        b in rng g1;
+        assume b in rng g1;
         then consider a being set such that
 A5:     a in dom g1 and
 A6:     b = g1.a by FUNCT_1:def 5;
@@ -3730,8 +3651,7 @@ A6:     b = g1.a by FUNCT_1:def 5;
       end;
       hence dom f = dom g by A4,RELAT_1:46;
       let a be set;
-      assume
-      a in dom f;
+      assume a in dom f;
       thus f.a = g.a by A1,A3,Th109;
     end;
     hence thesis by FUNCT_1:9;
@@ -3745,8 +3665,7 @@ theorem
 proof
   let f be Function;
   let x be set;
-  assume
-  x in dom f;
+  assume x in dom f;
   hence f +* (x .--> f.x) = f +*(x,f.x) by Def3
     .= f by Th37;
 end;
@@ -3802,8 +3721,7 @@ A14:    p2.y = p.x by A2,A4,A5,Th33;
 A15:    now
           let pz be set;
           hereby
-            assume
-            pz in rng p2;
+            assume pz in rng p2;
             then consider z being set such that
 A16:        z in dom p2 and
 A17:        pz = p2.z by FUNCT_1:def 5;
@@ -3822,8 +3740,7 @@ A18:        p.z in X by A1,A2,A6,A16,FUNCT_1:def 5;
               hence pz in X by A1,A2,A11,A16,A17,A18;
             end;
           end;
-          assume
-          pz in X;
+          assume pz in X;
           then consider z being set such that
 A19:      z in dom p and
 A20:      pz = p.z by A6,FUNCT_1:def 5;
@@ -4030,8 +3947,7 @@ theorem
   holds ( f +* (a .--> A) +* (b .--> B) +* (c .--> C) ).a = A
 proof
   let f be Function, a, A, b, B, c, C be set;
-  assume
-  a <> b & a <> c;
+  assume a <> b & a <> c;
   hence
   ( f +* (a .--> A) +* (b .--> B) +* (c .--> C) ).a = ( f +* (a .--> A) )
   .a by FUNCT_4:97
@@ -4159,8 +4075,7 @@ theorem Th122:
 proof
   let n;
 A1: n in NAT by ORDINAL1:def 13;
-  assume
-  n > 0;
+  assume n > 0;
   hence (a followed_by b).n = (NAT --> b).n by Th34
     .= b by A1,FUNCOP_1:13;
 end;
@@ -4235,8 +4150,7 @@ A1: dom(a followed_by c) = NAT by Th120;
 A2: dom f = NAT by Th123;
   hence dom f = dom g by A1,Th32;
   let x be set;
-  assume
-  x in dom f;
+  assume x in dom f;
   then reconsider n=x as Nat by A2;
   per cases by NAT_1:26;
   suppose
@@ -4311,8 +4225,7 @@ A4: b in rng (a,b) followed_by c by A2,FUNCT_1:12;
   ((a,b) followed_by c).0 = a by Th124;
   then
 A5: a in rng (a,b) followed_by c by A2,FUNCT_1:12;
-  assume
-  x in {a,b,c};
+  assume x in {a,b,c};
   hence thesis by A5,A4,A3,ENUMSET1:def 1;
 end;
 
@@ -4380,14 +4293,12 @@ A3: dom f = A by FUNCT_2:def 1
 A4: e in dom g \/ dom (x.-->f.x);
     thus e in dom(x.-->f.x) implies f.e = (x.-->f.x).e
     proof
-      assume
-      e in dom(x.-->f.x);
+      assume e in dom(x.-->f.x);
       then e in {x} by FUNCOP_1:19;
       then e = x by TARSKI:def 1;
       hence thesis by FUNCOP_1:87;
     end;
-    assume
-    not e in dom(x.-->f.x);
+    assume not e in dom(x.-->f.x);
     then not e in {x} by FUNCOP_1:19;
     then e <> x by TARSKI:def 1;
     hence thesis by A1,A3,A4;
@@ -4396,12 +4307,108 @@ A4: e in dom g \/ dom (x.-->f.x);
     .= g+*(x,f.x) by A2,Def3;
 end;
 
-theorem
+theorem Th132:
  for g being A-defined Function holds f,f+*g equal_outside A
 proof
  let g be A-defined Function;
   dom g c= A by RELAT_1:def 18;
   hence thesis by Th31;
+end;
+
+theorem
+ for f,g being A-defined Function holds f,g equal_outside A
+proof
+ let f,g be A-defined Function;
+  dom g c= A by RELAT_1:def 18;
+  then
+A: dom g \ A = {} by XBOOLE_1:37;
+  dom f c= A by RELAT_1:def 18;
+  then dom f \ A = {} by XBOOLE_1:37;
+  hence f|(dom f \ A) = {}
+       .= g|(dom g \ A) by A;
+end;
+
+theorem
+ for f,g being A-defined Function, h being Function
+  holds h+*f, h+*g equal_outside A
+proof
+ let f,g be A-defined Function, h be Function;
+   h, h+*f equal_outside A by Th132;
+   then
+A: h+*f,h equal_outside A by Th28;
+   h, h+*g equal_outside A by Th132;
+ hence thesis by A,Th29;
+end;
+
+reserve n for Element of NAT;
+
+theorem
+  for I being NAT-defined Function holds card Shift(I,m) = card I
+proof
+  defpred NC[set] means not contradiction;
+  deffunc U(Element of NAT) = $1;
+  let I be NAT-defined Function;
+A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
+  proof
+    let x be set;
+    assume
+A2: x in dom I;
+    dom I c= NAT by RELAT_1:def 18;
+    then reconsider l=x as Element of NAT by A2;
+    reconsider l as Element of NAT;
+    take l;
+    thus thesis;
+  end;
+  defpred X[Element of NAT] means $1 in dom I;
+  deffunc V(Element of NAT) = $1+m;
+  set B = { l: U(l) in dom I }, C = { V(l): l in { n: X[n] } & NC[l] }, D = {
+  V(l): l in B }, E = { l+m: l in dom I };
+A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1=d2;
+A4: dom I,B are_equipotent from CardMono(A1,A3);
+A5: C c= E
+  proof
+    let e be set;
+    assume e in C;
+    then consider l such that
+A6: e =V(l) and
+A7: l in { n: X[n] } & NC[l];
+    ex n st n=l & X[n] by A7;
+    hence thesis by A6;
+  end;
+  set B = { l: X[l] };
+  B is Subset of NAT from DOMAIN_1:sch 7;
+  then
+A8: B c= NAT;
+  set B = { l: l in dom I };
+A9: for d1,d2 be Element of NAT st V(d1) = V(d2) holds d1 = d2;
+A10: B,D are_equipotent from CardMono9(A8,A9);
+A11: E c= D
+  proof
+    let e be set;
+    assume e in E;
+    then consider l such that
+A12: e = l+m and
+A13: l in dom I;
+    l in B by A13;
+    hence thesis by A12;
+  end;
+A14: dom Shift(I,m) = E by VALUED_1:def 12;
+A15: D c= C
+  proof
+    let e be set;
+    assume e in D;
+    then ex l st e = V(l) & l in B;
+    hence thesis;
+  end;
+  then E c= C by A11,XBOOLE_1:1;
+  then
+A16: C = E by A5,XBOOLE_0:def 10;
+  then C = D by A11,A15,XBOOLE_0:def 10;
+  then
+A17: dom Shift(I,m),dom I are_equipotent by A4,A16,A10,A14,WELLORD2:22;
+  thus card Shift(I,m) = card dom Shift(I,m) by CARD_1:104
+    .= card dom I by A17,CARD_1:21
+    .= card I by CARD_1:104;
 end;
 
 

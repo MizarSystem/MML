@@ -27,7 +27,7 @@ environ
  registrations REALSET1, TOPMETR, PRE_TOPC, PCOMPS_1, NAT_1, TBSP_1, XREAL_0,
       RELSET_1, SUBSET_1, STRUCT_0, TOPS_1, METRIC_1, HAUSDORF, MEMBERED,
       XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, VALUED_1, FUNCT_2, NUMBERS,
-      FINSET_1, SEQ_4;
+      FINSET_1, SEQ_4, WELLFND1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, TOPS_2, SUBSET_1, STRUCT_0, TBSP_1, PCOMPS_1, COMPTS_1,
       METRIC_1;
@@ -43,7 +43,7 @@ environ
 
 begin :: Preliminaries
 
-reserve i,j,n,m for natural number,
+reserve i,n,m for natural number,
   x,y,X,Y for set,
   r,s for Real;
 
@@ -89,16 +89,14 @@ definition
   let S be SetSequence of M;
   func diameter S -> Real_Sequence means
   :Def2:
-  for i holds it.i = diameter S.
-  i;
+  for i holds it.i = diameter S. i;
   existence
   proof
     defpred P[set,set] means for i st i=$1 holds $2=diameter (S.i);
 A1: for x st x in NAT ex y st y in REAL & P[x,y]
     proof
       let x;
-      assume
-      x in NAT;
+      assume x in NAT;
       then reconsider i=x as Element of NAT;
       take diameter (S.i);
       thus thesis;
@@ -211,8 +209,7 @@ A4: d is bounded_below by Th1;
   let F be sequence of M such that
 A5: for i holds F.i in S.i;
   let r;
-  assume
-  r>0;
+  assume r>0;
   then consider n be Element of NAT such that
 A6: for m be Element of NAT st n <= m holds abs(d.m-0) < r by A2,A4,A3,
 SEQ_2:def 7;
@@ -241,8 +238,7 @@ proof
   let M be Reflexive symmetric triangle non empty MetrStruct;
   let p be Point of M;
 A1: dist(p,p)=0 by METRIC_1:1;
-  assume
-  0 <= r;
+  assume 0 <= r;
   then
 A2: p in cl_Ball(p,r) by A1,METRIC_1:13;
 A3: now
@@ -282,8 +278,7 @@ registration
   proof
     let S be Subset of M;
 A1: TopSpaceMetr(M) = TopStruct (#the carrier of M,Family_open_set M#);
-    assume
-    S is empty;
+    assume S is empty;
     then S in Family_open_set M by A1,PRE_TOPC:5;
     hence thesis by Def3;
   end;
@@ -291,8 +286,7 @@ A1: TopSpaceMetr(M) = TopStruct (#the carrier of M,Family_open_set M#);
   coherence
   proof
     let S be Subset of M;
-    assume
-    S is empty;
+    assume S is empty;
     then
 A2: [#]M = S`;
     [#]M in Family_open_set M by PCOMPS_1:34;
@@ -329,29 +323,25 @@ proof
 A1: A9 = A;
   thus A is open implies A9 is open
   proof
-    assume
-    A is open;
+    assume A is open;
     then A in Family_open_set M by Def3;
     hence thesis by A1,PRE_TOPC:def 5;
   end;
   thus A9 is open implies A is open
   proof
-    assume
-    A9 is open;
+    assume A9 is open;
     then A9 in Family_open_set M by PRE_TOPC:def 5;
     hence thesis by A1,Def3;
   end;
   thus A is closed implies A9 is closed
   proof
-    assume
-    A is closed;
+    assume A is closed;
     then A` is open by Def4;
     then A` in Family_open_set M by Def3;
     then A9` is open by A1,PRE_TOPC:def 5;
     hence thesis by TOPS_1:29;
   end;
-  assume
-  A9 is closed;
+  assume A9 is closed;
   then A` in Family_open_set M by A1,PRE_TOPC:def 5;
   then A` is open by Def3;
   hence thesis by Def4;
@@ -370,7 +360,6 @@ end;
 
 Lm1: for T be TopSpace ex S be SetSequence of T st S is open & S is closed & (
 T is non empty implies S is non-empty)
-
 proof
   let T be TopSpace;
   take S = NAT --> [#]T;
@@ -385,8 +374,7 @@ A1: now
     hence S.i is open by FUNCOP_1:13;
   end;
   hence S is open & S is closed by A1,Def5,Def6;
-  assume
-  T is non empty;
+  assume T is non empty;
   then for x st x in dom S holds S.x is non empty by FUNCOP_1:13;
   hence thesis by FUNCT_1:def 15;
 end;
@@ -450,8 +438,7 @@ A1: x in the carrier of M by XBOOLE_0:def 1;
     take S = NAT --> B;
 A2: now
       let y;
-      assume
-      y in dom S;
+      assume y in dom S;
       then reconsider n=y as Element of NAT;
 A3:   B=S.n by FUNCOP_1:13;
       dist(x,x)=0 by METRIC_1:1;
@@ -468,7 +455,7 @@ A5:   S.i=B by FUNCOP_1:13;
     now
       let i;
 A6:   i in NAT by ORDINAL1:def 13;
-      B is bounded by TBSP_1:19;
+      B is bounded;
       hence S.i is bounded by A6,FUNCOP_1:13;
     end;
     hence thesis by A2,A4,Def1,Def7,FUNCT_1:def 15;
@@ -483,8 +470,7 @@ A7: x in the carrier of M by XBOOLE_0:def 1;
     take S = NAT --> B;
 A8: now
       let y;
-      assume
-      y in dom S;
+      assume y in dom S;
       then reconsider n=y as Element of NAT;
 A9:   B=S.n by FUNCOP_1:13;
       dist(x,x)=0 by METRIC_1:1;
@@ -575,8 +561,7 @@ A7:   y in CL;
       set Bx=Ball(x,dd2);
       set By=Ball(y,dd2);
       reconsider BX=Bx,BY=By as Subset of T;
-      assume
-      dist(x,y) > d;
+      assume dist(x,y) > d;
       then dd > d-d by XREAL_1:16;
       then
 A8:   dd2>0/2 by XREAL_1:76;
@@ -656,15 +641,13 @@ proof
 A1: for x st x in NAT ex y st y in bool(the carrier of M) & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider x9=x as Element of NAT;
     set S={C.j where j is Element of NAT: j >= x9};
     S c= the carrier of T
     proof
       let y;
-      assume
-      y in S;
+      assume y in S;
       then ex j be Element of NAT st C.j=y & j>=x9;
       hence thesis;
     end;
@@ -676,8 +659,7 @@ A1: for x st x in NAT ex y st y in bool(the carrier of M) & P[x,y]
 A2: for x st x in NAT holds P[x,S.x] from FUNCT_2:sch 1(A1);
 A3: now
     let x;
-    assume
-    x in dom S;
+    assume x in dom S;
     then reconsider i=x as Element of NAT;
     consider U be Subset of T such that
 A4: U={C.j where j is Element of NAT: j >= i} and
@@ -708,8 +690,7 @@ A10: S.(i+1)=Cl U1 by A2;
     U1 c= U
     proof
       let x;
-      assume
-      x in U1;
+      assume x in U1;
       then consider j be Element of NAT such that
 A11:  x=C.j and
 A12:  j>=i+1 by A9;
@@ -734,8 +715,7 @@ A17:  S.i=Cl U by A2;
       U c= rng C
       proof
         let x;
-        assume
-        x in U;
+        assume x in U;
         then
 A18:    ex j be Element of NAT st x=C.j & j>=i by A16;
         dom C=NAT by FUNCT_2:def 1;
@@ -781,8 +761,7 @@ A32:    i>=m by A23,A26;
 A33:  U c= rng C
       proof
         let x;
-        assume
-        x in U;
+        assume x in U;
         then
 A34:    ex j be Element of NAT st x=C.j & j>=m by A23;
         dom C=NAT by FUNCT_2:def 1;
@@ -860,8 +839,7 @@ A9: F is_convergent_in_metrspace_to x by METRIC_6:22;
 A10:  rng F1 c= Si
       proof
         let x;
-        assume
-        x in rng F1;
+        assume x in rng F1;
         then consider y such that
 A11:    y in dom F1 and
 A12:    F1.y=x by FUNCT_1:def 5;
@@ -903,15 +881,13 @@ A22: d is bounded_below by A16,A18,Th1;
   reconsider x as Point of M by A21;
   take x;
   let r;
-  assume
-  r>0;
+  assume r>0;
   then consider n be Element of NAT such that
 A23: for m be Element of NAT st n<=m holds abs(d.m-0)<r by A16,A18,A22,A20,
 SEQ_2:def 7;
   take n;
   let m be Element of NAT;
-  assume
-  n<=m;
+  assume n<=m;
   then
 A24: abs(d.m-0)<r by A23;
 A25: S.m is bounded by A16,A18,Def1;
@@ -948,8 +924,7 @@ A6: G is finite;
 A7: for x st x in G ex y st y in NAT & P[x,y]
     proof
       let x;
-      assume
-      x in G;
+      assume x in G;
       then ex y st y in dom S & S.y=x by A2,A5,FUNCT_1:def 5;
       hence thesis;
     end;
@@ -997,8 +972,7 @@ A1: F = rng S;
     assume
 A2: S is open;
     let P be Subset of T;
-    assume
-    P in F;
+    assume P in F;
     then consider x such that
 A3: x in dom S and
 A4: S.x=P by A1,FUNCT_1:def 5;
@@ -1009,8 +983,7 @@ A4: S.x=P by A1,FUNCT_1:def 5;
   assume
 A5: S is closed;
   let P be Subset of T;
-  assume
-  P in F;
+  assume P in F;
   then consider x such that
 A6: x in dom S and
 A7: S.x=P by A1,FUNCT_1:def 5;
@@ -1034,8 +1007,7 @@ A2: for i holds {S.j where j is Element of NAT: j <= i} c= F
   proof
     let i;
     let x;
-    assume
-    x in {S.j where j is Element of NAT : j <= i};
+    assume x in {S.j where j is Element of NAT : j <= i};
     then
 A3: ex j be Element of NAT st x=S.j & j<=i;
     dom S=NAT by FUNCT_2:def 1;
@@ -1047,8 +1019,7 @@ A3: ex j be Element of NAT st x=S.j & j<=i;
 A4: for x st x in NAT ex y st y in bool(the carrier of T) & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider i=x as Element of NAT;
     set SS={S.j where j is Element of NAT:j<=i};
     SS c= F by A2;
@@ -1066,8 +1037,7 @@ A5: for x st x in NAT holds P[x,R.x] from FUNCT_2:sch 1(A4);
 A6: SS c= S1
     proof
       let x;
-      assume
-      x in SS;
+      assume x in SS;
       then consider j be Element of NAT such that
 A7:   x=S.j and
 A8:   j<=i;
@@ -1088,8 +1058,7 @@ A10: for i holds {S.j where j is Element of NAT:j<=i} is finite
 A11: SS c= {F(j)where j is Element of NAT:j in i+1}
     proof
       let x;
-      assume
-      x in SS;
+      assume x in SS;
       then consider j be Element of NAT such that
 A12:  x=S.j and
 A13:  j<=i;
@@ -1108,8 +1077,7 @@ A14: i+1 is finite;
 A15: F is centered;
     now
       let x;
-      assume
-      x in dom R;
+      assume x in dom R;
       then reconsider i=x as Element of NAT;
       set SS={S.j where j is Element of NAT:j<=i};
 A16:  S.0 in SS;
@@ -1173,8 +1141,7 @@ A2: for n be Element of NAT holds seq.n=F(n) from SEQ_1:sch 1;
     let F be Subset-Family of T such that
 A3: F is closed and
 A4: F is centered and
-A5: for r st r>0 ex A be Subset of M st A in F & A is bounded &
-    diameter A<r;
+A5: for r st r>0 ex A be Subset of M st A in F & A is bounded & diameter A<r;
 A6: for n be Element of NAT holds seq.n=1/(n+1) by A2;
     then
 A7: Ns is convergent by SEQ_2:21,SEQ_4:45;
@@ -1183,8 +1150,7 @@ A7: Ns is convergent by SEQ_2:21,SEQ_4:45;
 A8: for x st x in NAT ex y st y in bool(the carrier of M) & P[x,y]
     proof
       let x;
-      assume
-      x in NAT;
+      assume x in NAT;
       then reconsider i=x as Element of NAT;
       consider A be Subset of M such that
 A9:   A in F and
@@ -1198,8 +1164,7 @@ A12: for x st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A8);
     rng f c= F
     proof
       let x;
-      assume
-      x in rng f;
+      assume x in rng f;
       then consider y such that
 A13:  y in dom f and
 A14:  f.y=x by FUNCT_1:def 5;
@@ -1258,12 +1223,10 @@ A32: now
 A33:  y in F;
       then reconsider Y=y as Subset of T;
       defpred P9[set,set] means for i st i=$1 holds $2=R.i/\Y;
-A34:  for x st x in NAT ex z be set st z in bool(the carrier of M) & P9[x
-      ,z]
+A34:  for x st x in NAT ex z be set st z in bool(the carrier of M) & P9[x ,z]
       proof
         let x;
-        assume
-        x in NAT;
+        assume x in NAT;
         then reconsider i=x as Element of NAT;
         take R.i/\Y;
         thus thesis;
@@ -1273,16 +1236,14 @@ A35:  for x st x in NAT holds P9[x,f9.x] from FUNCT_2:sch 1(A34);
 A36:  now
         deffunc F(set)=f.$1;
         let x;
-        assume
-        x in dom f9;
+        assume x in dom f9;
         then reconsider i=x as Element of NAT;
         set SS={f.j where j is Element of NAT:j<=i};
 A37:    f.i in SS;
 A38:    SS c= {F(j) where j is Element of NAT:j in i+1}
         proof
           let x;
-          assume
-          x in SS;
+          assume x in SS;
           then consider j be Element of NAT such that
 A39:      x=f.j and
 A40:      j<=i;
@@ -1367,8 +1328,7 @@ A56:  z in meet f9 by XBOOLE_0:def 1;
       reconsider z as Point of M by A56;
 A57:  x0 = z
       proof
-        assume
-        x0<>z;
+        assume x0<>z;
         then dist(x0,z)<>0 by METRIC_1:2;
         then dist(x0,z)>0 by METRIC_1:5;
         then consider i be Element of NAT such that
@@ -1409,8 +1369,7 @@ A68:  dom S=NAT by FUNCT_2:def 1;
 A69:  d is bounded_below by Th1;
 A70:  d is non-increasing by A65,Th2;
       let r;
-      assume
-      r > 0;
+      assume r > 0;
       then consider n be Element of NAT such that
 A71:  for m be Element of NAT st n<=m holds abs(d.m-0)<r by A66,A69,A70,
 SEQ_2:def 7;
@@ -1526,8 +1485,7 @@ A1: S = S9;
     assume
 A2: S9 is Cauchy;
     let r;
-    assume
-    r>0;
+    assume r>0;
     then consider p be Element of NAT such that
 A3: for n,m be Element of NAT st p<=n & p<=m holds dist(S9.n,S9.m)<r
     by A2,TBSP_1:def 5;
@@ -1541,8 +1499,7 @@ A5: p<=m;
   assume
 A6: S is Cauchy;
   let r;
-  assume
-  r>0;
+  assume r>0;
   then consider p be Element of NAT such that
 A7: for n,m be Element of NAT st p<=n & p<=m holds dist(S.n,S.m)<r by A6,
 TBSP_1:def 5;
@@ -1579,8 +1536,7 @@ A5:   p in Cl A9;
 A6:   for x st x in NAT ex y st y in bool(the carrier of MA) & P[x,y]
       proof
         let x;
-        assume
-        x in NAT;
+        assume x in NAT;
         then reconsider i=x as Element of NAT;
         take A/\cl_Ball(p,1/(i+1));
         A/\cl_Ball(p,1/(i+1)) c= A by XBOOLE_1:17;
@@ -1591,8 +1547,7 @@ A6:   for x st x in NAT ex y st y in bool(the carrier of MA) & P[x,y]
 A7:   for x st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A6);
 A8:   now
         let x;
-        assume
-        x in dom f;
+        assume x in dom f;
         then reconsider i=x as Element of NAT;
         reconsider B=Ball(p,1/(i+1)) as Subset of T;
         Ball(p,1/(i+1)) in Family_open_set M by PCOMPS_1:33;
@@ -1703,8 +1658,7 @@ A37:  q in meet f by XBOOLE_0:def 1;
 A38:  seq is convergent by A22,SEQ_4:45;
       p = q
       proof
-        assume
-        p <> q;
+        assume p <> q;
         then dist(p,q)<>0 by METRIC_1:2;
         then dist(p,q)>0 by METRIC_1:5;
         then consider n be Element of NAT such that
@@ -1745,8 +1699,7 @@ A46: now
   then reconsider limS=lim S9 as Point of (M|A) by A43,A45,A46,TOPMETR3:2;
   take limS;
   let r;
-  assume
-  r>0;
+  assume r>0;
   then consider n be Element of NAT such that
 A47: for m be Element of NAT st m>=n holds dist(S9.m,lim S9)<r by A45,
 TBSP_1:def 4;
@@ -1882,8 +1835,7 @@ A2: S is non-ascending;
 A3: rngS is countable by CARD_3:127;
     now
       let D be Subset of T;
-      assume
-      D in rngS;
+      assume D in rngS;
       then ex x st x in dom S & S.x=D by FUNCT_1:def 5;
       hence D is closed by Def6;
     end;
@@ -1931,8 +1883,7 @@ A16:    for i holds R.i=meet{s.j where j is Element of NAT:j<=i}by A12,Th13;
 A17:    x in meet R by XBOOLE_0:def 1;
 A18:    now
           let y;
-          assume
-          y in F;
+          assume y in F;
           then consider z be set such that
 A19:      z in dom s and
 A20:      s.z=y by A12,FUNCT_1:def 5;
@@ -1975,15 +1926,13 @@ A2: S is non-empty;
 A3: for x st x in NAT ex y st y in bool(the carrier of T) & r[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider x9=x as Element of NAT;
     set SS={S.j where j is Element of NAT:j >= x9};
     SS c= bool(the carrier of T)
     proof
       let y;
-      assume
-      y in SS;
+      assume y in SS;
       then ex j be Element of NAT st S.j=y & j>=x9;
       hence thesis;
     end;
@@ -1992,8 +1941,7 @@ A3: for x st x in NAT ex y st y in bool(the carrier of T) & r[x,y]
     SS c= F
     proof
       let y;
-      assume
-      y in SS;
+      assume y in SS;
       then
 A4:   ex j be Element of NAT st S.j=y & j>=x9;
       dom S=NAT by FUNCT_2:def 1;
@@ -2006,8 +1954,7 @@ A4:   ex j be Element of NAT st S.j=y & j>=x9;
 A5: for x st x in NAT holds r[x,R.x] from FUNCT_2:sch 1(A3);
 A6: now
     let n be set;
-    assume
-    n in dom R;
+    assume n in dom R;
     then reconsider n9=n as Element of NAT;
 A7: S.n9 c= Cl(S.n9) by PRE_TOPC:48;
     consider SS be Subset-Family of T such that
@@ -2043,8 +1990,7 @@ A14: R.(n+1)=Cl(union Sn1) by A5;
     Sn1 c= Sn
     proof
       let y;
-      assume
-      y in Sn1;
+      assume y in Sn1;
       then consider j be Element of NAT such that
 A15:  y=S.j and
 A16:  j>=n+1 by A13;
@@ -2066,8 +2012,7 @@ A19: S is one-to-one;
     reconsider S9=Sp" as Function;
     reconsider S9 as Function of rngS,NAT by A19,FUNCT_2:31;
     deffunc s9(Element of rngS)=S9.$1;
-    assume
-    meet R <> {};
+    assume meet R <> {};
     then consider x such that
 A20: x in meet R by XBOOLE_0:def 1;
     reconsider x as Point of T by A20;
@@ -2083,8 +2028,7 @@ A24: Y is finite from FRAENKEL:sch 21(A23);
     Y c= NAT
     proof
       let y;
-      assume
-      y in Y;
+      assume y in Y;
       then ex z be Element of rngS st y =s9(z) & z in X;
       hence thesis;
     end;
@@ -2127,7 +2071,6 @@ end;
 Lm2: for T being non empty TopSpace st T is countably_compact for F be
 Subset-Family of T st F is locally_finite & F is with_non-empty_elements holds
 F is finite
-
 proof
   let T be non empty TopSpace such that
 A1: T is countably_compact;
@@ -2141,19 +2084,15 @@ A6: rng f c= F;
   reconsider f as SetSequence of T by A4,FUNCT_2:9;
   now
     let x;
-    assume
-    x in dom f;
+    assume x in dom f;
     then f.x in rng f by FUNCT_1:def 5;
     hence f.x is non empty by A3,A6,SETFAM_1:def 9;
   end;
   then f is non-empty by FUNCT_1:def 15;
-
   then ex R be non-empty closed SetSequence of T st R is non-ascending & ( F
   is locally_finite & f is one-to-one implies meet R = {})& for i ex fi be
-
 Subset-Family of T st R.i = Cl union fi & fi = {f.j where j is Element of NAT:
   j >= i} by A6,Th23;
-
   hence thesis by A1,A2,A5,Th22;
 end;
 
@@ -2161,13 +2100,10 @@ Lm3: for T be non empty TopSpace st for F be Subset-Family of T st F is
 locally_finite & F is with_non-empty_elements holds F is finite for F be
 Subset-Family of T st F is locally_finite & for A be Subset of T st A in F
 holds card A = 1 holds F is finite
-
 proof
   let T be non empty TopSpace such that
-
 A1: for F be Subset-Family of T st F is locally_finite & F is
   with_non-empty_elements holds F is finite;
-
   let F be Subset-Family of T such that
 A2: F is locally_finite and
 A3: for A be Subset of T st A in F holds card A = 1;
@@ -2179,14 +2115,11 @@ end;
 Lm4: for T be non empty TopSpace st for F be Subset-Family of T st F is
 locally_finite & for A be Subset of T st A in F holds card A = 1 holds F is
 finite for A be Subset of T st A is infinite holds Der A is non empty
-
 proof
   deffunc P(set)=meet $1;
   let T be non empty TopSpace such that
-
 A1: for F be Subset-Family of T st F is locally_finite & for A be Subset
   of T st A in F holds card A = 1 holds F is finite;
-
   let A be Subset of T such that
 A2: A is infinite;
   set F={{x} where x is Element of T: x in A};
@@ -2208,17 +2141,14 @@ A6: F is locally_finite
     let x be Point of T;
     consider U be open Subset of T such that
 A7: x in U and
-
 A8: for y being Point of T st y in A /\ U holds x = y by A5,TOPGEN_1:19;
-
     set M={ V where V is Subset of T: V in F & V meets U};
     take U;
     M c= {{x}}
     proof
 A9:   {x} in {{x}} by TARSKI:def 1;
       let v be set;
-      assume
-      v in M;
+      assume v in M;
       then consider V be Subset of T such that
 A10:  v=V and
 A11:  V in F and
@@ -2234,8 +2164,7 @@ A14:  y in A by A11;
   end;
   now
     let a be Subset of T;
-    assume
-    a in F;
+    assume a in F;
     then ex y be Point of T st a={y} & y in A;
     hence card a = 1 by CARD_1:50;
   end;
@@ -2292,8 +2221,7 @@ A1: F is non-ascending;
   let S be Function of NAT,X such that
 A2: for n holds S.n in F.n;
 A3: dom S=NAT by FUNCT_2:def 1;
-  assume
-  rng S is finite;
+  assume rng S is finite;
   then consider x such that
   x in rng S and
 A4: S"{x} is infinite by A3,Th24;
@@ -2329,15 +2257,10 @@ end;
 
 Lm5: for T be T_1 non empty TopSpace st for A be Subset of T st A is infinite
 countable holds Der A is non empty holds T is countably_compact
-
 proof
   let T be T_1 non empty TopSpace such that
-
-A1: for A be Subset of T st A is infinite countable holds Der A is non
-  empty;
-
-  assume
-  not T is countably_compact;
+A1: for A be Subset of T st A is infinite countable holds Der A is non empty;
+  assume not T is countably_compact;
   then consider S be non-empty closed SetSequence of T such that
 A2: S is non-ascending and
 A3: meet S = {} by Th22;
@@ -2345,8 +2268,7 @@ A3: meet S = {} by Th22;
 A4: for x st x in NAT ex y st y in the carrier of T & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider x9=x as Element of NAT;
     dom S=NAT by FUNCT_2:def 1;
     then S.x9 is non empty by FUNCT_1:def 15;
@@ -2377,8 +2299,7 @@ A10: p in (S.n)` by A9,XBOOLE_0:def 5;
 A11: F1n c= the carrier of T
   proof
     let x;
-    assume
-    x in F1n;
+    assume x in F1n;
     then ex i be Element of NAT st x=F.i & i in n+1;
     hence thesis;
   end;
@@ -2425,16 +2346,12 @@ end;
 Lm6: for T being non empty TopSpace st for F be Subset-Family of T st F is
 locally_finite & for A be Subset of T st A in F holds card A = 1 holds F is
 finite holds T is countably_compact
-
 proof
   deffunc P(set)=meet $1;
   let T being non empty TopSpace such that
-
 A1: for F be Subset-Family of T st F is locally_finite & for A be Subset
   of T st A in F holds card A = 1 holds F is finite;
-
-  assume
-  not T is countably_compact;
+  assume not T is countably_compact;
   then consider S be non-empty closed SetSequence of T such that
 A2: S is non-ascending and
 A3: meet S = {} by Th22;
@@ -2442,8 +2359,7 @@ A3: meet S = {} by Th22;
 A4: for x st x in NAT ex y st y in the carrier of T & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider x9=x as Element of NAT;
     dom S=NAT by FUNCT_2:def 1;
     then S.x9 is non empty by FUNCT_1:def 15;
@@ -2471,8 +2387,7 @@ A8: not x in S.i by A3,KURATO_2:6;
 A9: meetS c= SI
     proof
       let v be set;
-      assume
-      v in meetS;
+      assume v in meetS;
       then consider V be Subset of T such that
 A10:  V=v and
 A11:  V in A and
@@ -2486,8 +2401,7 @@ A16:  y=F.z by A14,FUNCT_1:def 5;
       reconsider z as Element of NAT by A15;
       z in i
       proof
-        assume
-        not z in i;
+        assume not z in i;
         then z>=i by NAT_1:45;
         then
 A17:    S.z c= S.i by A2,PROB_1:def 6;
@@ -2518,8 +2432,7 @@ A22: now
   end;
   now
     let a be Subset of T;
-    assume
-    a in A;
+    assume a in A;
     then ex y be Point of T st a={y} & y in rngF;
     hence card a = 1 by CARD_1:50;
   end;
@@ -2537,8 +2450,7 @@ proof
   let T be non empty TopSpace;
   thus T is countably_compact implies for F be Subset-Family of T st F is
   locally_finite & F is with_non-empty_elements holds F is finite by Lm2;
-  assume
-  for F be Subset-Family of T st F is locally_finite & F is
+  assume for F be Subset-Family of T st F is locally_finite & F is
   with_non-empty_elements holds F is finite;
   then
   for F be Subset-Family of T st F is locally_finite & for A be Subset of
@@ -2556,8 +2468,7 @@ proof
   locally_finite & for A be Subset of T st A in F holds card A=1 holds F is
   finite
   proof
-    assume
-    T is countably_compact;
+    assume T is countably_compact;
     then for F be Subset-Family of T st F is locally_finite & F is
     with_non-empty_elements holds F is finite by Th26;
     hence thesis by Lm3;
@@ -2573,14 +2484,12 @@ proof
   thus T is countably_compact implies for A be Subset of T st A is infinite
   holds Der A is non empty
   proof
-    assume
-    T is countably_compact;
+    assume T is countably_compact;
     then for F be Subset-Family of T st F is locally_finite & for A be Subset
     of T st A in F holds card A=1 holds F is finite by Th27;
     hence thesis by Lm4;
   end;
-  assume
-  for A be Subset of T st A is infinite holds Der A is non empty;
+  assume for A be Subset of T st A is infinite holds Der A is non empty;
   then
   for A be Subset of T st A is infinite countable holds Der A is non empty;
   hence thesis by Lm5;
@@ -2657,8 +2566,7 @@ A16: for y be Element of RS st y <> x & [y,x] in IRS holds S[y];
 A17: union rng fIx c= IRS-Seg x
     proof
       let y be set;
-      assume
-      y in union rng fIx;
+      assume y in union rng fIx;
       then consider z be set such that
 A18:  y in z and
 A19:  z in rng fIx by TARSKI:def 4;
@@ -2690,8 +2598,7 @@ A30:  f.x=union(rng fIx)\/{x} by A9,A28,A27;
       thus x in f.x implies for r be Element of X() st r in union(rng (f|IRS
       -Seg x)) holds P[x,r] by A29;
 A31:  x in {x} by TARSKI:def 1;
-      assume
-      not x in f.x;
+      assume not x in f.x;
       hence thesis by A30,A31,XBOOLE_0:def 3;
     end;
     suppose
@@ -2708,8 +2615,7 @@ A34: for x being Element of RS holds S[x] from WELLFND1:sch 3(A15,A11);
   proof
 A35: now
       let x be Element of X();
-      assume
-      x in A;
+      assume x in A;
       then consider y such that
 A36:  x in y and
 A37:  y in rng f by TARSKI:def 4;
@@ -2733,15 +2639,13 @@ A45:    p<>x;
         now
           per cases;
           suppose
-A46:        for q be Element of X() st q in union(rng fIp) holds P[p,
-            q];
+A46:        for q be Element of X() st q in union(rng fIp) holds P[p, q];
 A47:        not x in {p} by A45,TARSKI:def 1;
             f.p=union(rng fIp)\/{p} by A9,A44,A43,A46;
             hence x in union(rng fIp) by A41,A47,XBOOLE_0:def 3;
           end;
           suppose
-            ex q be Element of X() st q in union (rng fIp) & not P[p,
-            q];
+            ex q be Element of X() st q in union (rng fIp) & not P[p, q];
             hence x in union(rng fIp) by A9,A41,A44,A43;
           end;
         end;
@@ -2805,8 +2709,7 @@ A69: not x in A;
       dom f=cRS by FUNCT_2:def 1;
       then
 A70:  f.x in rng f by FUNCT_1:def 5;
-      assume
-      x in f.x;
+      assume x in f.x;
       hence thesis by A69,A70,TARSKI:def 4;
     end;
     then consider r be Element of X() such that
@@ -2866,8 +2769,7 @@ for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >= r holds A
 A1: M is totally_bounded;
     let r be Real,A be Subset of M such that
 A2: r>0 and
-A3: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q)
-    >=r;
+A3: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >=r;
     r/2>0 by A2,XREAL_1:217;
     then consider G be Subset-Family of M such that
 A4: G is finite and
@@ -2878,8 +2780,7 @@ A6: for C be Subset of M st C in G ex w be Point of M st C = Ball(w,r/
 A7: for x st x in A ex y st y in bool(the carrier of M) & f[x,y]
     proof
       let x;
-      assume
-      x in A;
+      assume x in A;
       then consider y such that
 A8:   x in y and
 A9:   y in G by A5,TARSKI:def 4;
@@ -2913,8 +2814,7 @@ A17: F is one-to-one by FUNCT_2:25;
 A18: rng F c= G
     proof
       let x;
-      assume
-      x in rng F;
+      assume x in rng F;
       then ex y st y in dom F & x=F.y by FUNCT_1:def 5;
       hence thesis by A10;
     end;
@@ -2928,8 +2828,7 @@ A19: for r be Real,A be Subset of M st r>0 & for p,q be Point of M st p
   let r such that
 A20: r>0;
   consider A be Subset of M such that
-A21: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q)
-  >= r and
+A21: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >= r and
 A22: for p be Point of M ex q be Point of M st q in A& p in Ball(q,r) by A20
 ,Th30;
   deffunc B(Point of M)=Ball($1,r);
@@ -2939,8 +2838,7 @@ A24: BA is finite from FRAENKEL:sch 21(A23);
   BA c= bool the carrier of M
   proof
     let x;
-    assume
-    x in BA;
+    assume x in BA;
     then ex p be Point of M st x = B(p) & p in A;
     hence thesis;
   end;
@@ -2949,8 +2847,7 @@ A24: BA is finite from FRAENKEL:sch 21(A23);
   the carrier of M c= union BA
   proof
     let x;
-    assume
-    x in the carrier of M;
+    assume x in the carrier of M;
     then reconsider p=x as Point of M;
     consider q be Point of M such that
 A25: q in A and
@@ -2960,8 +2857,7 @@ A26: p in B(q) by A22;
   end;
   hence BA is finite & union BA = the carrier of M by A24,XBOOLE_0:def 10;
   let C be Subset of M;
-  assume
-  C in BA;
+  assume C in BA;
   then ex p be Point of M st C=B(p) & p in A;
   hence thesis;
 end;
@@ -2970,16 +2866,12 @@ Lm7: for M be Reflexive symmetric triangle non empty MetrStruct for r be Real,
 A be Subset of M st r>0 & for p,q be Point of M st p <> q & p in A & q in A
 holds dist(p,q) >= r for F be Subset-Family of TopSpaceMetr M st F={{x} where x
 is Element of TopSpaceMetr M: x in A} holds F is locally_finite
-
 proof
   let M be Reflexive symmetric triangle non empty MetrStruct;
   set T=TopSpaceMetr M;
   let r be Real, A be Subset of M such that
 A1: r>0 and
-
-A2: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >=
-  r;
-
+A2: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >= r;
 A3: r/2>0 by A1,XREAL_1:217;
   let F be Subset-Family of T such that
 A4: F={{x} where x is Element of T: x in A};
@@ -2996,8 +2888,7 @@ A5: dist(x9,x9)=0 by METRIC_1:1;
 A6: for p be Point of M st p in A holds dist(p,x9) >= r/2;
     VV is empty
     proof
-      assume
-      VV is non empty;
+      assume VV is non empty;
       then consider v be set such that
 A7:   v in VV by XBOOLE_0:def 1;
       consider V be Subset of T such that
@@ -3022,8 +2913,7 @@ A13: dist(p,x9) < r/2;
     VV c= {{p}}
     proof
       let v be set;
-      assume
-      v in VV;
+      assume v in VV;
       then consider V be Subset of T such that
 A14:  v=V and
 A15:  V in F and
@@ -3053,20 +2943,17 @@ proof
   let M be Reflexive symmetric triangle non empty MetrStruct such that
 A1: TopSpaceMetr M is countably_compact;
   set T=TopSpaceMetr M;
-  assume
-  not M is totally_bounded;
+  assume not M is totally_bounded;
   then consider r be Real, A be Subset of M such that
 A2: r>0 and
-A3: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >=
-  r and
+A3: for p,q be Point of M st p <> q & p in A & q in A holds dist(p,q) >= r and
 A4: A is infinite by Th31;
   reconsider A as Subset of T;
   set F={{x} where x is Element of T: x in A};
   reconsider F as Subset-Family of T by RELSET_2:16;
 A5: now
     let a be Subset of T;
-    assume
-    a in F;
+    assume a in F;
     then ex y be Point of T st a={y} & y in A;
     hence card a = 1 by CARD_1:50;
   end;
@@ -3100,8 +2987,7 @@ holds G is finite & the carrier of M = union G & for C be Subset of M st C in G
 A2: for x st x in NAT ex y st y in bool bool(the carrier of T) & F[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider i=x as Element of NAT;
     1/(i+1)>0 by XREAL_1:141;
     then consider G be Subset-Family of T such that
@@ -3163,8 +3049,7 @@ A21: dist(q9,w)+dist(w,p9)<1/n+1/n by A20,XREAL_1:10;
   U c= the topology of T
   proof
     let x;
-    assume
-    x in U;
+    assume x in U;
     then x in union rng f by CARD_3:def 4;
     then consider y such that
 A22: x in y and
@@ -3182,8 +3067,7 @@ A25: f.z=y by A23,FUNCT_1:def 5;
 A26: card U in CB;
   now
     let x;
-    assume
-    x in dom f;
+    assume x in dom f;
     then reconsider i=x as Element of NAT;
     reconsider fx=f.i as Subset-Family of T;
     fx is finite by A6;
@@ -3204,8 +3088,7 @@ theorem Th34:
   Subset-Family of T st G c= F & G is Cover of T & G is countable
 proof
   let T be non empty TopSpace;
-  assume
-  T is second-countable;
+  assume T is second-countable;
   then consider B being Basis of T such that
 A1: B is countable by TOPGEN_4:60;
 A2: card B c= omega by A1,CARD_3:def 15;
@@ -3218,8 +3101,7 @@ A4: F is open;
 A5: for x st x in B ex y st y in bool(the carrier of T) & P[x,y]
   proof
     let x;
-    assume
-    x in B;
+    assume x in B;
     then reconsider b=x as Subset of T;
     per cases;
     suppose
@@ -3257,8 +3139,7 @@ A13: p.z=y by FUNCT_1:def 5;
   the carrier of T c= union RNG
   proof
     let y;
-    assume
-    y in the carrier of T;
+    assume y in the carrier of T;
     then reconsider q=y as Point of T;
     consider W be Subset of T such that
 A14: q in W and
@@ -3413,7 +3294,7 @@ A13:    Y /\ X is infinite by A9,A10,Th36;
         set YX=Y/\X;
 A14:    ex w be Point of M st Y = Ball(w,d/4) by A11,A12;
         then
-A15:    Y is bounded by TBSP_1:19;
+A15:    Y is bounded;
         then
 A16:    diameter YX <=diameter Y by TBSP_1:32,XBOOLE_1:17;
         diameter Y<=2*( d /4) by A8,A14,TBSP_1:31,XREAL_1:226;
@@ -3437,8 +3318,7 @@ A22: the carrier of M = union G and
 A23: for C be Subset of M st C in G ex w be Point of M st C = Ball(w,1/
     2) by A1,TBSP_1:def 1;
     let A be Subset of T;
-    assume
-    A is infinite;
+    assume A is infinite;
     then consider X be Subset of M such that
 A24: X in G and
 A25: X /\ A is infinite by A21,A22,Th36;
@@ -3450,7 +3330,7 @@ A26: XA is bounded & diameter XA <=1
 A27:  ex w be Point of M st X = Ball(w,1/2) by A23,A24;
       then
 A28:  diameter X<=2*(1/2) by TBSP_1:31;
-A29:  X is bounded by A27,TBSP_1:19;
+A29:  X is bounded by A27;
       then diameter XA <=diameter X by TBSP_1:32,XBOOLE_1:17;
       hence thesis by A29,A28,TBSP_1:21,XBOOLE_1:17,XXREAL_0:2;
     end;
@@ -3473,8 +3353,7 @@ A35: now
     end;
 A36: now
       let x;
-      assume
-      x in dom f;
+      assume x in dom f;
       then reconsider i=x as Element of NAT;
       f.i is infinite by A34;
       hence f.x is non empty;
@@ -3495,8 +3374,7 @@ A38: f is non-ascending by KURATO_2:def 5;
 A39: for n be Element of NAT st N[n] holds N[n+1]
     proof
       let n be Element of NAT;
-      assume
-      N[n];
+      assume N[n];
       then df.n<=F(n) by A3;
       then
 A40:  (df.n)/2<=F(n)/2 by XREAL_1:74;
@@ -3539,8 +3417,7 @@ A55: p in meet f by XBOOLE_0:def 1;
 A56: df is convergent by A48,A52,A51,A53,A50,SEQ_2:33;
     now
       let U be open Subset of T;
-      assume
-      p in U;
+      assume p in U;
       then consider r be real number such that
 A57:  r>0 and
 A58:  Ball(p9,r) c= U by TOPMETR:22;
@@ -4023,7 +3900,6 @@ WellSpace(a,X) is Reflexive) & (M is symmetric implies WellSpace(a,X) is
 symmetric) & (M is triangle symmetric Reflexive implies WellSpace(a,X) is
 triangle)& (M is triangle symmetric Reflexive discerning implies WellSpace(a,X)
 is discerning)
-
 proof
   let M be MetrStruct,a be Point of M,X;
   set XX=[:X,(the carrier of M)\{a}:]\/{[X,a]};
@@ -4046,8 +3922,9 @@ A2:   A=[y,b] and
   end;
   thus M is symmetric implies W is symmetric
   proof
-    assume
-A3: M is symmetric;
+    assume M is symmetric;
+    then reconsider M as symmetric MetrStruct;
+    reconsider a as Point of M;
     now
       let A,B be Element of XX;
       consider y1 be set,b1 be Point of M such that
@@ -4065,14 +3942,14 @@ A7:   y2 in X & b2<>a or y2 = X & b2 = a by Th38;
         suppose
 A8:       y1 <>y2;
           hence w.(A,B) = dist(b1,a)+dist(a,b2) by A4,A6,Def10
-            .= dist(a,b1)+dist(a,b2) by A3,METRIC_1:3
-            .= dist(a,b1)+dist(b2,a) by A3,METRIC_1:3
+            .= dist(a,b1)+dist(a,b2)
+            .= dist(a,b1)+dist(b2,a)
             .= w.(B,A) by A4,A6,A8,Def10;
         end;
         suppose
 A9:       b1<>a & b2<>a & y1=y2;
           hence w.(A,B) = dist(b1,b2) by A4,A6,Def10
-            .= dist(b2,b1) by A3,METRIC_1:3
+            .= dist(b2,b1)
             .=w.(B,A) by A4,A6,A9,Def10;
         end;
       end;
@@ -4113,10 +3990,8 @@ A18:      dist(b2,a)+dist(a,b3)=w.(B,C) by A12,A13,Def10;
 A19:      dist(b1,b2)<=dist(b1,a)+dist(a,b2) by A10,METRIC_1:4;
 A20:      dist(b2,b3)<=dist(b2,a)+dist(a,b3) by A10,METRIC_1:4;
           dist(b1,a)+dist(a,b2)=w.(A,B) by A11,A12,A17,Def10;
-
           then
 A21:      dist(b1,b2)+dist(b2,b3)<=w.(A,B)+w.(B,C) by A18,A19,A20,XREAL_1:9;
-
 A22:      dist(b1,b3)<= dist(b1,b2)+dist(b2,b3) by A10,METRIC_1:4;
           dist(b1,b3)=w.(A,C) by A11,A13,A17,Def10;
           hence w.(A,C)<=w.(A,B)+w.(B,C) by A21,A22,XXREAL_0:2;
@@ -4148,10 +4023,8 @@ A31:      dist(b1,a)+0<=w.(A,B) by A30,XREAL_1:8;
 A32:      y1<>y2 & y1<>y3 & y2=y3;
 A33:      dist(a,b3)<=dist(a,b2)+dist(b2,b3) by A10,METRIC_1:4;
           dist(b1,a)+dist(a,b3)=w.(A,C) by A11,A13,A32,Def10;
-
           then
 A34:      w.(A,C)<=dist(b1,a)+(dist(a,b2)+dist(b2,b3)) by A33,XREAL_1:9;
-
 A35:      dist(b2,b3)=w.(B,C) by A12,A13,A32,Def10;
           dist(b1,a)+dist(a,b2)= w.( A,B) by A11,A12,A32,Def10;
           hence w.(A,C)<=w.(A,B)+w.(B,C) by A35,A34;
@@ -4248,8 +4121,7 @@ A3: S is Cauchy;
 A4: for x st x in NAT ex y st y in the carrier of W & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider i=x as Element of NAT;
     per cases;
     suppose
@@ -4268,8 +4140,7 @@ A7: for x st x in NAT holds P[x,S9.x] from FUNCT_2:sch 1(A4);
   S9 is Cauchy
   proof
     let r;
-    assume
-    r>0;
+    assume r>0;
     then consider p be Element of NAT such that
 A8: for n,m be Element of NAT st p<=n & p<=m holds dist(S.n,S.m)<r by A3,
 TBSP_1:def 5;
@@ -4324,8 +4195,7 @@ A24: L=[L1,L2] and
   L1 in X & L2<>a or L1 = X & L2 = a by Th38;
   take L2;
   let r;
-  assume
-  r>0;
+  assume r>0;
   then consider n be Element of NAT such that
 A25: for m be Element of NAT st n<=m holds dist(S9.m,L)<r by A23;
   take n;
@@ -4413,8 +4283,7 @@ A12:    dist(a,a)=0 by METRIC_1:1;
 ,Def10;
         then
 A13:    dist(y,a)+dist(a,z)>=r+0 by A6,A11,XREAL_1:9;
-        assume
-        Y<>Z;
+        assume Y<>Z;
         then
 A14:    dist(S.p9,S.m)>=r by A7,A9,A13,Def10;
 A15:    m in NAT by ORDINAL1:def 13;
@@ -4443,8 +4312,7 @@ A2: S9 is Cauchy;
 A3: for x st x in NAT ex y st y in the carrier of M & P[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then reconsider i=x as Element of NAT;
     consider s1 be set,s2 be Point of M such that
 A4: S9.i=[s1,s2] and
@@ -4457,8 +4325,7 @@ A5: for x st x in NAT holds P[x,S.x] from FUNCT_2:sch 1(A3);
   S is Cauchy
   proof
     let r;
-    assume
-    r>0;
+    assume r>0;
     then consider p be Element of NAT such that
 A6: for n,m be Element of NAT st p<=n & p<=m holds dist(S9.n,S9.m)<r
     by A2,TBSP_1:def 5;
@@ -4494,8 +4361,7 @@ A15: L=a;
     take Xa;
 A16: dist(a,a)=0 by METRIC_1:1;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider n be Element of NAT such that
 A17: for m be Element of NAT st n<=m holds dist(S.m,L)<r by A14;
     take n;
@@ -4513,20 +4379,17 @@ A20: for Xa be Point of W st Xa=[X,a] for r st r > 0 ex n st for m st
     m >= n holds dist(S9.m,Xa) < r;
     take Xa;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider n such that
 A21: for m st m >= n holds dist(S9.m,Xa) < r by A20;
     reconsider n as Element of NAT by ORDINAL1:def 13;
     take n;
     let m be Element of NAT;
-    assume
-    m >= n;
+    assume m >= n;
     hence dist(S9.m,Xa) < r by A21;
   end;
   suppose
-A22: a<>L & ex n,Y st for m st m >= n ex p be Point of M st S9.m = [Y,
-    p];
+A22: a<>L & ex n,Y st for m st m >= n ex p be Point of M st S9.m = [Y, p];
     then consider n,Y such that
 A23: for m st m >= n ex p be Point of M st S9.m = [Y,p];
 A24: ex s3 be Point of M st S9.n = [Y,s3] by A23;
@@ -4538,8 +4401,7 @@ A25: ex s1 be set,s2 be Point of M st S9.n=[s1,s2] &( s1 in X & s2<>a or
       then reconsider YL=[Y,L] as Point of W by A22,Th38;
       take YL;
       let r;
-      assume
-      r > 0;
+      assume r > 0;
       then consider p be Element of NAT such that
 A26:  for m be Element of NAT st p<=m holds dist(S.m,L)<r by A14;
       reconsider mm=max(p,n) as Element of NAT by ORDINAL1:def 13;
@@ -4565,8 +4427,7 @@ A30:  Y=X;
 A31:  r > 0;
       take n;
       let m be Element of NAT;
-      assume
-      m >= n;
+      assume m >= n;
       then
 A32:  ex t3 be Point of M st S9.m = [Y,t3] by A23;
       consider t1 be set,t2 be Point of M such that
@@ -4588,8 +4449,7 @@ proof
   let M be symmetric triangle Reflexive non empty MetrStruct such that
 A1: M is complete;
   let a be Point of M;
-  assume
-  ex b be Point of M st dist(a,b) <> 0;
+  assume ex b be Point of M st dist(a,b) <> 0;
   then consider b be Point of M such that
 A2: dist(a,b)<>0;
   let X be infinite set;
@@ -4603,8 +4463,7 @@ A4: b<>a by A2,METRIC_1:1;
 A5: for x st x in NAT ex y st y in the carrier of TW & p[x,y]
   proof
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then x in dom f by FUNCT_2:def 1;
     then
 A6: f.x in rng f by FUNCT_1:def 5;
@@ -4618,8 +4477,7 @@ A8: for x st x in NAT holds P(x) in bool(the carrier of TW)
   proof
 A9: dom s=NAT by FUNCT_2:def 1;
     let x;
-    assume
-    x in NAT;
+    assume x in NAT;
     then s.x in rng s by A9,FUNCT_1:def 5;
     then P(x) is Subset of W by SUBSET_1:55;
     hence thesis;
@@ -4649,8 +4507,7 @@ A19: 2*dist(a,b)>0 by XREAL_1:131;
 A20: rng S c= F
   proof
     let x;
-    assume
-    x in rng S;
+    assume x in rng S;
     then consider y such that
 A21: y in dom S and
 A22: S.y=x by FUNCT_1:def 5;
@@ -4662,8 +4519,7 @@ A23: s.y in rngs by A21,FUNCT_1:def 5;
   end;
   now
     let x be set;
-    assume
-    x in dom S;
+    assume x in dom S;
     then S.x={s.x} by A10;
     hence S.x is non empty;
   end;
@@ -4751,4 +4607,3 @@ A3: ex S be non-empty bounded SetSequence of WellSpace(a,NAT) st S is closed
   WellSpace(a,NAT) is complete by A2,A1,Th43;
   hence thesis by A3;
 end;
-

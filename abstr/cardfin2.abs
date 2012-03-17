@@ -1,7 +1,7 @@
-:: Counting Derangements, Counting Non Bijective Functions and the Birthday 
+:: Counting Derangements, Counting Non Bijective Functions and the Birthday
 :: Problem
 ::  by Cezary Kaliszyk
-:: 
+::
 :: Received February 23, 2010
 :: Copyright (c) 2010 Association of Mizar Users
 
@@ -19,18 +19,17 @@ environ
       AFINSQ_1, ABIAN, TAYLOR_1, STIRL2_1, CARD_FIN, RPR_1, AFINSQ_2;
  constructors REAL_1, SERIES_1, ABIAN, VALUED_1, CARD_FIN, RCOMP_1, SIN_COS,
       TAYLOR_1, SEQ_1, FCONT_1, SEQFUNC, RELSET_1, STIRL2_1, SETWISEO,
-      YELLOW20, WELLORD2, NAT_D, BINARITH, RPR_1, AFINSQ_2, AFINSQ_1;
+      YELLOW20, WELLORD2, NAT_D, BINARITH, RPR_1, AFINSQ_2, AFINSQ_1, NEWTON;
  registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_1,
       FINSET_1, NUMBERS, SIN_COS, RCOMP_1, VALUED_0, VALUED_1, FUNCT_2,
       FCONT_3, FCONT_1, AFINSQ_1, POWER, FUNCT_1, BINOP_2, WSIERP_1, XCMPLX_0,
-      XBOOLE_0, RELAT_1, FRAENKEL, AFINSQ_2;
+      XBOOLE_0, RELAT_1, FRAENKEL, AFINSQ_2, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin :: Preliminaries
 
-reserve x, y, z for set,
-  n for natural number;
+reserve x, y for set;
 
 registration :: Could be moved to NEWTON
   let n be Nat;
@@ -55,8 +54,7 @@ theorem :: CARDFIN2:1
   id {} has_no_fixpoint;
 
 theorem :: CARDFIN2:2
-  for c be real number st c < 0 holds
-  exp_R c < 1;
+  for c be real number st c < 0 holds exp_R c < 1;
 
 begin :: Rounding
 
@@ -68,27 +66,22 @@ definition
 end;
 
 theorem :: CARDFIN2:3
-  for a being Integer holds
-  round a = a;
+  for a being Integer holds round a = a;
 
 theorem :: CARDFIN2:4
-  for a being Integer
-  for b being real number st
-  |. a - b .| < 1/2 holds
+  for a being Integer for b being real number st |. a - b .| < 1/2 holds
   a = round b;
 
 begin :: Counting derangements
 
 theorem :: CARDFIN2:5
-  for n be Nat
-  for a, b be real number st a < b holds
+  for n be Nat for a, b be real number st a < b holds
   ex c be real number st c in ].a, b.[
   & exp_R a = Partial_Sums(Taylor(exp_R, [#]REAL, b, a)).n
             + exp_R c * (a-b) |^ (n+1) / ((n+1)!);
 
 theorem :: CARDFIN2:6
-  for n be positive Nat
-  for c be real number st c < 0 holds
+  for n be positive Nat for c be real number st c < 0 holds
   |. -n! * (exp_R c * (-1) |^ (n+1) / ((n+1)!)) .| < 1/2;
 
 definition
@@ -104,13 +97,11 @@ registration
 end;
 
 theorem :: CARDFIN2:7
-  for s being finite set holds
-  derangements s = {h where h is Function of
+  for s being finite set holds derangements s = {h where h is Function of
     s, s: h is one-to-one & for x st x in s holds h.x<>x};
 
 theorem :: CARDFIN2:8
-  for s being non empty finite set
-  ex c being real number st c in ]. -1, 0 .[ &
+  for s being non empty finite set ex c being real number st c in ]. -1, 0 .[ &
   card(derangements s) - (((card s)!) / number_e) =
      -(card s)! * (exp_R c * (-1) |^ ((card s)+1) / (((card s)+1)!));
 
@@ -131,9 +122,7 @@ theorem :: CARDFIN2:12
 definition
   func der_seq -> sequence of INT means
 :: CARDFIN2:def 3
- it.0 = 1 &
-    it.1 = 0 &
-    for n being natural number
+ it.0 = 1 & it.1 = 0 & for n being natural number
     holds it.(n + 2) = (n + 1) * (it.n + it.(n + 1));
 end;
 
@@ -150,20 +139,19 @@ registration
 end;
 
 theorem :: CARDFIN2:13
-  for F be XFinSequence of INT
-  for c be Integer holds
+  for F be XFinSequence of INT for c be Integer holds
   c * Sum F = Sum ((c (#) F) | (len F -' 1)) + c * F.(len F -' 1);
 
 :: This theorem is symmetric to the previous one. Since we use Integers
 :: we cannot divide and it has to be proved separately.
+
 theorem :: CARDFIN2:14
   for X, N be XFinSequence of INT st len N = len X + 1
   for c be Integer st (N | len X) = c (#) X
   holds Sum N = c * Sum X + N.(len X);
 
 theorem :: CARDFIN2:15
-  for s being finite set
-  holds der_seq.(card s) = card (derangements s);
+  for s being finite set holds der_seq.(card s) = card (derangements s);
 
 begin :: Counting not-one-to-one functions and the birthday problem
 

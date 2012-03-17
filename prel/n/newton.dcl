@@ -33,7 +33,7 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="54"/>
 </Typ>
 <Cluster>
 <Adjective nr="15"/>
@@ -90,7 +90,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="163">
+<Func kind="K" nr="162">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -114,7 +114,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -135,7 +135,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -156,7 +156,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -172,7 +172,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -187,7 +187,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -207,7 +207,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -228,7 +228,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -244,7 +244,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="181">
+<Func kind="K" nr="180">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -253,16 +253,23 @@
 </FCluster>
 <FCluster aid="NEWTON" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="181">
+<Func kind="K" nr="179"/>
+<Cluster>
+<Adjective nr="11" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="NEWTON" nr="11">
+<ArgTypes/>
+<Func kind="K" nr="180">
 <Num nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="11"/>
 </Cluster>
 </FCluster>
-<FCluster aid="NEWTON" nr="11">
+<FCluster aid="NEWTON" nr="12">
 <ArgTypes/>
-<Func kind="K" nr="180"/>
+<Func kind="K" nr="179"/>
 <Cluster>
 <Adjective nr="11" value="false"/>
 <Adjective nr="33" value="false"/>

@@ -17,13 +17,13 @@ environ
  constructors PARTFUN1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, CARD_3, PBOOLE,
       TREES_4, TREES_9, HILBERT1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XREAL_0, NAT_1, FINSEQ_1, TREES_2, TREES_3, HILBERT1;
+      XREAL_0, NAT_1, FINSEQ_1, TREES_2, TREES_3, HILBERT1, TREES_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, HILBERT1, PARTFUN1, FUNCOP_1;
  theorems PBOOLE, ZFMISC_1, FUNCT_1, HILBERT1, ORDERS_1, SUBSET_1, TARSKI,
-      FUNCT_4, FUNCOP_1, WELLFND1, BORSUK_1, CARD_3, GRFUNC_1, NAT_1, FINSEQ_1,
-      TREES_1, TREES_4, TREES_2, TREES_9, FINSEQ_2, TREES_3, RELAT_1, ORDINAL1,
-      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, CARD_1, PARTFUN1;
+      FUNCT_4, FUNCOP_1, WELLFND1, CARD_3, GRFUNC_1, NAT_1, FINSEQ_1, TREES_1,
+      TREES_4, TREES_2, TREES_9, FINSEQ_2, TREES_3, RELAT_1, ORDINAL1,
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, CARD_1, PARTFUN1, EQREL_1;
  schemes PBOOLE, NAT_1, FINSEQ_1;
 
 begin :: Preliminaries
@@ -38,8 +38,7 @@ proof
   let Z be set, M be ManySortedSet of Z such that
 A1: for x being set st x in Z holds M.x is ManySortedSet of x;
   let f be Function;
-  assume
-  f = Union M;
+  assume f = Union M;
   then
 A2: f = union rng M by CARD_3:def 4;
   for x being set holds x in dom f iff ex Y being set st x in Y & Y in Z
@@ -47,8 +46,7 @@ A2: f = union rng M by CARD_3:def 4;
     let x be set;
     thus x in dom f implies ex Y being set st x in Y & Y in Z
     proof
-      assume
-      x in dom f;
+      assume x in dom f;
       then [x,f.x] in f by FUNCT_1:def 4;
       then consider g being set such that
 A3:   [x,f.x] in g and
@@ -78,8 +76,7 @@ A10: [x,g.x] in g by A8,FUNCT_1:8;
 end;
 
 theorem Th2:
-  for x,y being set, f,g being FinSequence st <*x*>^f = <*y*>^g
-  holds f = g
+  for x,y being set, f,g being FinSequence st <*x*>^f = <*y*>^g holds f = g
 proof
   let x,y be set, f,g be FinSequence;
   assume
@@ -93,8 +90,7 @@ theorem Th3:
   <*x*> is FinSequence of X implies x in X
 proof
 A1: rng<*x*> = {x} by FINSEQ_1:55;
-  assume
-  <*x*> is FinSequence of X;
+  assume <*x*> is FinSequence of X;
   then {x} c= X by A1,FINSEQ_1:def 4;
   hence thesis by ZFMISC_1:37;
 end;
@@ -104,8 +100,7 @@ theorem Th4:
   FinSequence of X, d being Element of X st f = g^<*d*>
 proof
   let X be set, f be FinSequence of X;
-  assume
-  f <> {};
+  assume f <> {};
   then consider q being FinSequence, x being set such that
 A1: f = q^<*x*> by FINSEQ_1:63;
   reconsider q as FinSequence of X by A1,FINSEQ_1:50;
@@ -118,8 +113,7 @@ end;
 
 reserve k,m,n for Element of NAT,
   p,q,r,s,r9,s9 for Element of HP-WFF,
-  T1,T2
-  for Tree;
+  T1,T2 for Tree;
 
 theorem Th5:
   <*x*> in tree(T1,T2) iff x=0 or x=1
@@ -128,8 +122,7 @@ A1: len<*T1,T2*> = 2 & tree(T1,T2) = tree<*T1,T2*> by FINSEQ_1:61
 ,TREES_3:def 17;
   thus <*x*> in tree(T1,T2) implies x=0 or x=1
   proof
-    assume
-    <*x*> in tree(T1,T2);
+    assume <*x*> in tree(T1,T2);
     then consider n being Element of NAT, q being FinSequence such that
 A2: n < 2 and
     q in <*T1,T2*>.(n+1) and
@@ -219,8 +212,7 @@ registration
   cluster x-tree p -> non root;
   coherence
   proof
-    assume
-    x-tree p is root;
+    assume x-tree p is root;
     then
 A1: dom(x-tree p) = tree{} by TREES_3:55,TREES_9:def 1;
     ex q being DTree-yielding FinSequence st p = q & dom(x-tree p) = tree
@@ -263,7 +255,7 @@ definition
   :Def2:
   VERUM in D;
   compatibility by HILBERT1:def 1;
-  attr D is with_propositional_variables means
+  redefine attr D is with_propositional_variables means
   for n holds prop n in D;
   compatibility
   proof
@@ -280,8 +272,7 @@ end;
 definition
   let D be Subset of HP-WFF;
   redefine attr D is with_implication means
-  for p, q st p in D & q in D holds
-  p => q in D;
+  for p, q st p in D & q in D holds p => q in D;
   compatibility
   proof
     thus D is with_implication implies for p, q st p in D & q in D holds p =>
@@ -295,9 +286,8 @@ A2: p in D & q in D;
     p9 => q9 in D by A1,A2;
     hence thesis;
   end;
-  attr D is with_conjunction means
-  for p, q st p in D & q in D holds p '&' q
-  in D;
+  redefine attr D is with_conjunction means
+  for p, q st p in D & q in D holds p '&' q in D;
   compatibility
   proof
     thus D is with_conjunction implies for p, q st p in D & q in D holds p '&'
@@ -339,8 +329,7 @@ proof
   X c= HP-WFF
   proof
     let x be set;
-    assume
-    x in X;
+    assume x in X;
     then ex p being Element of HP-WFF st x = p & P[p];
     hence thesis;
   end;
@@ -356,12 +345,10 @@ A5: X is with_propositional_variables
 A6: X is with_implication
   proof
     let p, q;
-    assume
-    p in X;
+    assume p in X;
     then
 A7: ex x being Element of HP-WFF st p = x & P[x];
-    assume
-    q in X;
+    assume q in X;
     then ex x being Element of HP-WFF st q = x & P[x];
     then P[p => q] by A3,A7;
     hence thesis;
@@ -370,20 +357,17 @@ A8: HP-WFF c= NAT* by HILBERT1:def 5;
 A9: X c= NAT*
   proof
     let x be set;
-    assume
-    x in X;
+    assume x in X;
     then x in HP-WFF;
     hence thesis by A8;
   end;
 A10: X is with_conjunction
   proof
     let p, q;
-    assume
-    p in X;
+    assume p in X;
     then
 A11: ex x being Element of HP-WFF st p = x & P[x];
-    assume
-    q in X;
+    assume q in X;
     then ex x being Element of HP-WFF st q = x & P[x];
     then P[p '&' q] by A3,A11;
     hence thesis;
@@ -742,8 +726,7 @@ end;
 theorem Th19:
   p '&' q = r '&' s implies p = r & s = q
 proof
-  assume
-  p '&' q = r '&' s;
+  assume p '&' q = r '&' s;
   then <*2*>^(p^q) = r '&' s by FINSEQ_1:45
     .= <*2*>^(r^s) by FINSEQ_1:45;
   then p^q = r^s by Th2;
@@ -753,8 +736,7 @@ end;
 theorem Th20:
   p => q = r => s implies p = r & s = q
 proof
-  assume
-  p => q = r => s;
+  assume p => q = r => s;
   then <*1*>^(p^q) = r => s by FINSEQ_1:45
     .= <*1*>^(r^s) by FINSEQ_1:45;
   then p^q = r^s by Th2;
@@ -764,8 +746,7 @@ end;
 theorem Th21:
   prop n = prop m implies n = m
 proof
-  assume
-  prop n = prop m;
+  assume prop n = prop m;
   then 3+n = 3+m by FINSEQ_1:97;
   hence thesis;
 end;
@@ -790,8 +771,7 @@ theorem Th24:
   p '&' q <> prop n
 proof
 A1: now
-    assume
-    2 = 2+1+n;
+    assume 2 = 2+1+n;
     then 2+0 = 2+(1+n);
     hence contradiction;
   end;
@@ -812,8 +792,7 @@ theorem Th26:
   p => q <> prop n
 proof
 A1: now
-    assume
-    1 = 1+2+n;
+    assume 1 = 1+2+n;
     then 1+0 = 1+(2+n);
     hence contradiction;
   end;
@@ -857,8 +836,7 @@ A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c] and
 A2: for p,q for a,b being set ex d being set st I[p,q,a,b,d] and
 A3: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c
 = d and
-A4: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c
-= d
+A4: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d
 proof
   defpred P[set,set] means ($1 = VERUM implies $2 = V()) & for n st $1 = prop
   n holds $2 = P(n);
@@ -872,8 +850,7 @@ q) holds C[p,q,a,b,c] ) & for p,q st p => q in Y for a,b,c being set st a = M.p
 A5: Pn c= HP-WFF
   proof
     let x be set;
-    assume
-    x in Pn;
+    assume x in Pn;
     then ex n st x = prop n;
     hence thesis;
   end;
@@ -892,8 +869,7 @@ A8:   x = prop n;
       take P(n);
       thus x = VERUM implies P(n) = V() by A8,Th29;
       let k;
-      assume
-      x = prop k;
+      assume x = prop k;
       hence thesis by A8,Th21;
     end;
     suppose
@@ -960,8 +936,7 @@ A20: Z is c=-linear;
 A21: X c= bool HP-WFF
     proof
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then ex Y being Subset of HP-WFF st x = Y & VERUM in Y & (for n holds
 prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
 ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
@@ -970,14 +945,13 @@ ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
       M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
       hence thesis;
     end;
-    then reconsider uZ = union Z as Subset of HP-WFF by A19,BORSUK_1:25;
+    then reconsider uZ = union Z as Subset of HP-WFF by A19,EQREL_1:70;
     consider Z0 being set such that
 A22: Z0 in Z by A18,XBOOLE_0:def 1;
 A23: for x being set st x in Z ex y being set st P[x,y]
     proof
       let x be set;
-      assume
-      x in Z;
+      assume x in Z;
       then x in X by A19;
       then consider Y being Subset of HP-WFF such that
 A24:  Y = x and
@@ -1001,8 +975,7 @@ A27: for x being set st x in Z holds P[x,MM.x] from PBOOLE:sch 3(A23);
     rng MM is functional
     proof
       let y be set;
-      assume
-      y in rng MM;
+      assume y in rng MM;
       then consider x being set such that
 A28:  x in dom MM and
 A29:  y = MM.x by FUNCT_1:def 5;
@@ -1015,8 +988,7 @@ A30: for f, g being Function st f in rr & g in rr & dom f c= dom g holds f
     tolerates g
     proof
       let f, g be Function;
-      assume
-      f in rr;
+      assume f in rr;
       then consider x1 being set such that
 A31:  x1 in dom MM and
 A32:  f = MM.x1 by FUNCT_1:def 5;
@@ -1029,8 +1001,7 @@ for x,y,z being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z]
 by A27,A32;
       then
 A35:  x1 = dom f by PARTFUN1:def 4;
-      assume
-      g in rr;
+      assume g in rr;
       then consider x2 being set such that
 A36:  x2 in dom MM and
 A37:  g = MM.x2 by FUNCT_1:def 5;
@@ -1065,24 +1036,21 @@ st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z])& x1 c= x2 by A39,A38
 A44:    ( r in x1 implies f.r = g.r)&( s in x1 implies f.s = g.s);
         thus r '&' s in x1 implies f.(r '&' s) = g.(r '&' s)
         proof
-          assume
-          r '&' s in x1;
+          assume r '&' s in x1;
           then ( C[r,s,g.r,g.s,f.(r '&' s)])& C[r,s,g.r,g.s,g.(r '&' s)] by A34
 ,A39,A44,A43;
           hence thesis by A3;
         end;
         thus r => s in x1 implies f.(r => s) = g.(r => s)
         proof
-          assume
-          r => s in x1;
+          assume r => s in x1;
           then ( I[r,s,g.r,g.s,f.(r => s)])& I[r,s,g.r,g.s,g.(r => s)] by A34
 ,A39,A44,A43;
           hence thesis by A4;
         end;
       end;
       let x be set;
-      assume
-      x in dom f /\ dom g;
+      assume x in dom f /\ dom g;
       then
 A45:  x in x1 by A38,A35,XBOOLE_1:28;
 A46:  P[VERUM] by A34,A39;
@@ -1127,8 +1095,7 @@ by A27,A54,A55;
     for x being set st x in Z holds MM.x is ManySortedSet of x
     proof
       let x be set;
-      assume
-      x in Z;
+      assume x in Z;
       then P[x,MM.x] by A27;
       hence thesis;
     end;
@@ -1139,8 +1106,7 @@ A58: for p,q st p '&' q in uZ for x,y,z being set st x = M.p & y = M.q &
     z = M.(p '&' q) holds C[p,q,x,y,z]
     proof
       let p,q;
-      assume
-      p '&' q in uZ;
+      assume p '&' q in uZ;
       then consider Z1 being set such that
 A59:  p '&' q in Z1 and
 A60:  Z1 in Z by TARSKI:def 4;
@@ -1230,8 +1196,7 @@ A79: for p,q st p => q in uZ for x,y,z being set st x = M.p & y = M.q & z
     = M.(p => q) holds I[p,q,x,y,z]
     proof
       let p,q;
-      assume
-      p => q in uZ;
+      assume p => q in uZ;
       then consider Z1 being set such that
 A80:  p => q in Z1 and
 A81:  Z1 in Z by TARSKI:def 4;
@@ -1392,8 +1357,7 @@ A124:     N.p = M.p by A118,FUNCT_4:12;
 A125:     N.q = M.q by A118,FUNCT_4:12;
 A126:     N.(p => q) = M.(p => q) by A118,A122,FUNCT_4:12;
           let x,y,z be set;
-          assume
-          x = N.p & y = N.q & z = N.(p => q);
+          assume x = N.p & y = N.q & z = N.(p => q);
           hence thesis by A110,A123,A124,A125,A126;
         end;
 A127:   for n holds N.prop n = P(n)
@@ -1520,8 +1484,7 @@ A154:     N.p = M.p by A148,FUNCT_4:12;
 A155:     N.q = M.q by A148,FUNCT_4:12;
 A156:     N.(p '&' q) = M.(p '&' q) by A148,A152,FUNCT_4:12;
           let x,y,z be set;
-          assume
-          x = N.p & y = N.q & z = N.(p '&' q);
+          assume x = N.p & y = N.q & z = N.(p '&' q);
           hence thesis by A109,A153,A154,A155,A156;
         end;
 A157:   for n holds N.prop n = P(n)
@@ -1685,8 +1648,7 @@ A3:     b is DecoratedTree of HP-WFF;
         thus thesis;
       end;
       suppose
-        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of
-        HP-WFF;
+        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of HP-WFF;
         hence thesis;
       end;
     end;
@@ -1704,15 +1666,12 @@ A6:     b is DecoratedTree of HP-WFF;
         thus thesis;
       end;
       suppose
-        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of
-        HP-WFF;
+        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of HP-WFF;
         hence thesis;
       end;
     end;
-A7: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c
-    = d;
-A8: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c =
-    d;
+A7: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
+A8: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d;
     consider M being ManySortedSet of HP-WFF such that
 A9: M.VERUM = root-tree VERUM and
 A10: for n holds M.prop n = P(n) and
@@ -1816,8 +1775,7 @@ theorem
   Subformulae prop n = root-tree prop n by Def9;
 
 theorem Th32:
-  Subformulae(p '&' q) = (p '&' q)-tree(Subformulae p,Subformulae
-  q)
+  Subformulae(p '&' q) = (p '&' q)-tree(Subformulae p,Subformulae q)
 proof
   ex p9,q9 being DecoratedTree of HP-WFF st p9 = HP-Subformulae.p & q9 =
   HP-Subformulae.q & HP-Subformulae.(p '&' q) = (p '&' q)-tree(p9,q9) &
@@ -1967,8 +1925,7 @@ end;
 theorem
   p in Leaves Subformulae q implies p = VERUM or p is simple
 proof
-  assume
-  p in Leaves Subformulae q;
+  assume p in Leaves Subformulae q;
   then p in (Subformulae q).:Leaves dom Subformulae q by TREES_2:def 10;
   then consider x being set such that
 A1: x in dom Subformulae q and
@@ -1978,8 +1935,7 @@ A3: p = (Subformulae q).x by FUNCT_1:def 12;
 A4: (Subformulae q)|f = Subformulae p by A3,Th35;
 A5: p is not conditional
   proof
-    assume
-    not thesis;
+    assume not thesis;
     then consider r,s such that
 A6: p = r => s by Def7;
     Subformulae p = p-tree(Subformulae r,Subformulae s) by A6,Th33;
@@ -1987,8 +1943,7 @@ A6: p = r => s by Def7;
   end;
   p is not conjunctive
   proof
-    assume
-    not thesis;
+    assume not thesis;
     then consider r,s such that
 A7: p = r '&' s by Def6;
     Subformulae p = p-tree(Subformulae r,Subformulae s) by A7,Th32;
@@ -1996,4 +1951,3 @@ A7: p = r '&' s by Def6;
   end;
   hence thesis by A5,Th9;
 end;
-

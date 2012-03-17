@@ -8,41 +8,31 @@ environ
 
  vocabularies NUMBERS, ORDINAL1, SETFAM_1, ARYTM_1, ARYTM_3, CARD_1, SUBSET_1,
       XXREAL_0, AMI_1, XBOOLE_0, RELAT_1, TARSKI, FUNCOP_1, GLIB_000, GOBOARD5,
-      WAYBEL_0, AMISTD_1, MCART_1, FINSEQ_1, ZFMISC_1, UNIALG_1, FUNCT_1,
-      CARD_3, CARD_5, FRECHET, RCOMP_1, NAT_1, STRUCT_0, FINSET_1, VALUED_1,
-      FSM_1, FUNCT_4, FUNCT_7, MEMBERED, TURING_1, CIRCUIT2, AMISTD_2,
-      PARTFUN1;
+      AMISTD_1, FINSEQ_1, ZFMISC_1, UNIALG_1, FUNCT_1, VALUED_0, CARD_3,
+      CARD_5, FRECHET, RCOMP_1, NAT_1, STRUCT_0, FINSET_1, VALUED_1, FSM_1,
+      FUNCT_4, FUNCT_7, TURING_1, CIRCUIT2, AMISTD_2, PARTFUN1, CAT_1, RELOC,
+      SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, MCART_1, SETFAM_1,
       MEMBERED, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, CARD_1,
       NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FUNCOP_1, NAT_D,
-      FUNCT_7, XXREAL_2, STRUCT_0, AMI_1, AMISTD_1;
- constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY;
+      FUNCT_7, XXREAL_2, VALUED_0, VALUED_1, AFINSQ_1, STRUCT_0, COMPOS_1,
+      AMI_1, AMISTD_1;
+ constructors WELLORD2, REALSET1, NAT_D, AMISTD_1, XXREAL_2, PRE_POLY,
+      AFINSQ_1, ORDINAL4, RECDEF_2, VALUED_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_3, REALSET1, FUNCT_7,
       STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1, GRFUNC_1,
-      FUNCT_2;
+      FUNCT_2, ORDINAL1, AFINSQ_1, VALUED_1, VALUED_0, COMPOS_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
 begin
 
 reserve k, m for natural number,
-  x, X for set,
+  x, x1, x2, x3, y, y1, y2, y3, X,Y,Z for set,
   N for with_non-empty_elements non empty set;
 
 begin  :: Properties of AMI-Struct
-
-canceled 10;
-
-theorem :: AMISTD_2:11
-  for N being set, S being AMI-Struct over NAT,N,
-  F being FinPartState of S holds F \ X is FinPartState of S;
-
-theorem :: AMISTD_2:12
-  for S being IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N),
-  F being NAT-defined FinPartState of S
-  holds F \ X is NAT-defined FinPartState of S;
 
 definition
   canceled 2;
@@ -61,38 +51,29 @@ registration
   cluster halting Instruction of S;
 end;
 
-theorem :: AMISTD_2:13
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being lower NAT-defined FinPartState of S,
-  G being NAT-defined FinPartState of S st dom F = dom G holds G is lower;
-
-theorem :: AMISTD_2:14
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being lower NAT-defined FinPartState of S,
-  f being Element of NAT st f in dom F holds locnum(f,S) < card F;
-
-theorem :: AMISTD_2:15
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being lower NAT-defined FinPartState of S
-  holds dom F = { il.(S,k) where k is Element of NAT: k < card F };
-
-definition
-  let N be set;
-  let S be AMI-Struct over N;
-  let I be Element of the Instructions of S;
-  func AddressPart I equals
-:: AMISTD_2:def 3
-  I`2;
-end;
-
 definition
   let N be set;
   let S be standard-ins AMI-Struct over N;
+  let T be InsType of S;
+  func JumpParts T equals
+:: AMISTD_2:def 3
+  { JumpPart I where I is Instruction of S: InsCode I = T };
+end;
+
+registration
+  let N be set;
+  let S be standard-ins AMI-Struct over N;
   let I be Element of the Instructions of S;
-  redefine func AddressPart I -> FinSequence;
+  cluster AddressPart I -> Function-like Relation-like;
+  cluster JumpPart I -> Function-like Relation-like;
+end;
+
+registration
+  let N be set;
+  let S be standard-ins AMI-Struct over N;
+  let I be Element of the Instructions of S;
+  cluster AddressPart I -> FinSequence-like;
+  cluster JumpPart I -> FinSequence-like;
 end;
 
 definition
@@ -102,13 +83,13 @@ definition
 :: AMISTD_2:def 4
 
   for I, J being Instruction of S st InsCode I = InsCode J holds
-  dom AddressPart I = dom AddressPart J;
+  dom JumpPart I = dom JumpPart J;
 end;
 
-canceled;
+canceled 16;
 
 theorem :: AMISTD_2:17
-  for I being Instruction of STC N holds AddressPart I = 0;
+  for I being Instruction of STC N holds JumpPart I = 0;
 
 definition
   let N be set;
@@ -124,40 +105,31 @@ registration
   let S be standard-ins AMI-Struct over N;
   let T be InsType of S;
   cluster AddressParts T -> functional;
+  cluster JumpParts T -> non empty functional;
 end;
 
 definition
-
   let N be with_non-empty_elements non empty set,
   S be IC-Ins-separated definite standard-ins
   (non empty stored-program AMI-Struct over N), I be Instruction of S;
   attr I is with_explicit_jumps means
 :: AMISTD_2:def 6
-
-  for f being set st f in JUMP I holds
-  ex k being set st k in dom AddressPart I & f = (AddressPart I).k &
-  (product" AddressParts InsCode I).k = NAT;
+ JUMP I c= rng JumpPart I;
   attr I is without_implicit_jumps means
 :: AMISTD_2:def 7
-
-  for f being set st
-  ex k being set st k in dom AddressPart I & f = (AddressPart I).k &
-  (product" AddressParts InsCode I).k = NAT holds f in JUMP I;
+ rng JumpPart I c= JUMP I;
 end;
 
 definition
-
   let N be with_non-empty_elements non empty set,
   S be standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N);
   attr S is with_explicit_jumps means
 :: AMISTD_2:def 8
-
-  for I being Instruction of S holds I is with_explicit_jumps;
+ for I being Instruction of S holds I is with_explicit_jumps;
   attr S is without_implicit_jumps means
 :: AMISTD_2:def 9
-
-  for I being Instruction of S holds I is without_implicit_jumps;
+ for I being Instruction of S holds I is without_implicit_jumps;
 end;
 
 registration
@@ -175,7 +147,7 @@ end;
 theorem :: AMISTD_2:18
   for S being standard (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), I being Instruction of S
-  st for f being Element of NAT holds NIC(I,f)={NextLoc(f,S)}
+  st for f being Element of NAT holds NIC(I,f)={succ f}
   holds JUMP I is empty;
 
 registration
@@ -191,48 +163,67 @@ definition
   attr S is regular means
 :: AMISTD_2:def 11
 
-  for T being InsType of S holds AddressParts T is product-like;
-end;
-
-registration
-  let N be set;
-  cluster regular -> homogeneous (standard-ins AMI-Struct over N);
+  for I being Instruction of S, k being set st k in dom JumpPart I
+   holds (product" JumpParts InsCode I).k = NAT;
+  attr S is J/A-independent means
+:: AMISTD_2:def 12
+ for T being InsType of S, f1,f2 being Function,
+     p being set
+    st f1 in JumpParts T & f2 in product product" JumpParts T &
+    [T,f1,p] in the Instructions of S
+    holds [T,f2,p] in the Instructions of S;
 end;
 
 theorem :: AMISTD_2:19
-  for T being InsType of STC N holds AddressParts T = {0};
+  for T being InsType of STC N holds JumpParts T = {0};
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster STC N -> with_explicit_jumps without_implicit_jumps regular;
+  cluster STC N ->
+   with_explicit_jumps without_implicit_jumps homogeneous
+    regular J/A-independent;
 end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster standard regular halting realistic steady-programmed
+  cluster standard regular J/A-independent homogeneous
+   halting realistic steady-programmed
     with_explicit_jumps without_implicit_jumps
     (IC-Ins-separated definite standard-ins
     (non empty stored-program AMI-Struct over N));
 end;
 
 registration
-
-  let N be with_non-empty_elements non empty set;
-  cluster Trivial-AMI N -> regular;
+ let N be with_non-empty_elements non empty set;
+ let S be regular homogeneous (standard-ins AMI-Struct over N);
+ let T being InsType of S;
+ cluster JumpParts T ->  with_common_domain;
 end;
 
 registration
-
-  let N be with_non-empty_elements non empty set;
-  cluster regular (standard-ins AMI-Struct over N);
+ let N be with_non-empty_elements non empty set;
+ let S be regular homogeneous (standard-ins AMI-Struct over N);
+ let I be Instruction of S;
+ cluster JumpPart I -> NAT-valued Function;
 end;
 
 registration
-
   let N be with_non-empty_elements non empty set;
-  let S be regular (standard-ins AMI-Struct over N);
+  let S be regular J/A-independent homogeneous
+   (standard-ins AMI-Struct over N);
   let T be InsType of S;
-  cluster AddressParts T -> product-like;
+  cluster JumpParts T -> product-like;
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  cluster Trivial-AMI N -> regular J/A-independent;
+end;
+
+registration
+
+  let N be with_non-empty_elements non empty set;
+  cluster regular J/A-independent (standard-ins AMI-Struct over N);
 end;
 
 registration
@@ -240,7 +231,7 @@ registration
   let N be with_non-empty_elements non empty set;
   let S be homogeneous (standard-ins AMI-Struct over N);
   let T be InsType of S;
-  cluster AddressParts T -> with_common_domain;
+  cluster JumpParts T -> with_common_domain;
 end;
 
 registration
@@ -251,24 +242,22 @@ registration
 end;
 
 registration
-
   let N be with_non-empty_elements non empty set;
   cluster Trivial-AMI N
-    -> with_explicit_jumps without_implicit_jumps regular;
+    -> with_explicit_jumps without_implicit_jumps;
 end;
 
 registration
   let N;
-  cluster regular
+  cluster regular J/A-independent
     (non empty stored-program standard-ins AMI-Struct over N);
 end;
 
 theorem :: AMISTD_2:20
-  for S being homogeneous
+  for S being homogeneous regular
   (non empty stored-program standard-ins AMI-Struct over N),
-  I being Instruction of S, x being set st x in dom AddressPart I holds
-  (product" AddressParts InsCode I).x = NAT implies
-  (AddressPart I).x is Element of NAT;
+  I being Instruction of S, x being set st x in dom JumpPart I holds
+  (JumpPart I).x is Element of NAT;
 
 registration
 
@@ -329,23 +318,23 @@ definition
   let S be standard-ins AMI-Struct over N;
   let I be Instruction of S;
   attr I is ins-loc-free means
-:: AMISTD_2:def 12
-
-  for x being set st x in dom AddressPart I
-  holds (product" AddressParts InsCode I).x <> NAT;
+:: AMISTD_2:def 13
+   JumpPart I is empty;
 end;
+
+::registration
+::  let N be set;
+::  let S be standard-ins AMI-Struct over N;
+::  let I be ins-loc-free Instruction of S;
+::  cluster JumpPart I -> empty;
+::  coherence by Def12;
+::end;
 
 theorem :: AMISTD_2:22
   for S being halting with_explicit_jumps
   realistic (IC-Ins-separated definite
   (standard-ins non empty stored-program AMI-Struct over N)),
   I being Instruction of S st I is ins-loc-free holds JUMP I is empty;
-
-theorem :: AMISTD_2:23
-  for S being without_implicit_jumps steady-programmed
-  realistic (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  I being Instruction of S st I is halting holds I is ins-loc-free;
 
 registration
 
@@ -356,27 +345,11 @@ registration
   cluster halting -> ins-loc-free Instruction of S;
 end;
 
-theorem :: AMISTD_2:24
-  for S being standard without_implicit_jumps standard-ins
-  (IC-Ins-separated definite
-  (standard-ins non empty stored-program AMI-Struct over N)),
-  I being Instruction of S st I is sequential holds I is ins-loc-free;
-
 registration
   let N be with_non-empty_elements non empty set,
   S be standard without_implicit_jumps standard-ins (IC-Ins-separated definite
   (standard-ins non empty stored-program AMI-Struct over N));
   cluster sequential -> ins-loc-free Instruction of S;
-end;
-
-definition
-  let N be with_non-empty_elements non empty non empty set,
-  S be standard halting
-  (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  func Stop S -> FinPartState of S equals
-:: AMISTD_2:def 13
-  il.(S,0) .--> halt S;
 end;
 
 registration
@@ -385,7 +358,7 @@ registration
   (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   cluster Stop S ->
-   lower non empty NAT-defined (the Instructions of S)-valued trivial;
+   initial non empty NAT-defined (the Instructions of S)-valued trivial;
 end;
 
 registration
@@ -395,6 +368,8 @@ registration
   (non empty stored-program AMI-Struct over N));
   cluster Stop S -> closed;
 end;
+
+canceled 2;
 
 theorem :: AMISTD_2:25
   for S being standard halting (IC-Ins-separated definite
@@ -408,7 +383,7 @@ theorem :: AMISTD_2:26
 theorem :: AMISTD_2:27
   for S being standard halting (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N))
-  holds LastLoc Stop S = il.(S,0);
+  holds LastLoc Stop S = 0;
 
 registration
   let N be with_non-empty_elements non empty set,
@@ -417,18 +392,21 @@ registration
   cluster Stop S -> halt-ending unique-halt;
 end;
 
-definition
-  let N be with_non-empty_elements non empty set,
-  S be standard halting (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  redefine func Stop S -> pre-Macro of S;
-end;
-
 begin  :: On the composition of macro instructions
+
+registration
+  let N be with_non-empty_elements non empty set;
+  let S be regular J/A-independent homogeneous standard
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N));
+  let I be Element of the Instructions of S;
+ cluster JumpPart I -> natural-valued Function;
+end;
 
 definition
   let N be with_non-empty_elements non empty set;
-  let S be regular standard (standard-ins IC-Ins-separated definite
+  let S be regular J/A-independent homogeneous standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   let I be Element of the Instructions of S;
   let k be natural number;
@@ -436,118 +414,111 @@ definition
 :: AMISTD_2:def 14
 
   InsCode it = InsCode I &
-  dom AddressPart it = dom AddressPart I &
-  for n being set st n in dom AddressPart I holds
-  ((product" AddressParts InsCode I).n = NAT implies
-  ex f being Element of NAT st
-  f = (AddressPart I).n & (AddressPart it).n = il.(S,k + locnum(f,S))) &
-  ((product" AddressParts InsCode I).n <> NAT implies
-  (AddressPart it).n = (AddressPart I).n);
+  AddressPart it = AddressPart I &
+  JumpPart it = k + JumpPart I;
 end;
 
 theorem :: AMISTD_2:28
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I being Element of the Instructions of S holds IncAddr(I, 0) = I;
 
 theorem :: AMISTD_2:29
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I being Instruction of S st I is ins-loc-free holds IncAddr(I, k) = I;
 
 theorem :: AMISTD_2:30
   for S being halting standard without_implicit_jumps realistic
-  regular (standard-ins IC-Ins-separated definite steady-programmed
+  regular homogeneous J/A-independent
+  (standard-ins IC-Ins-separated definite steady-programmed
   (non empty stored-program AMI-Struct over N))
   holds IncAddr(halt S, k) = halt S;
 
 registration
   let N be with_non-empty_elements non empty set,
   S be halting standard without_implicit_jumps steady-programmed
-  realistic regular (standard-ins IC-Ins-separated definite
+  realistic regular homogeneous J/A-independent
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I be halting Instruction of S, k be natural number;
   cluster IncAddr(I,k) -> halting;
 end;
 
 theorem :: AMISTD_2:31
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), I being Instruction of S
-  holds AddressParts InsCode I = AddressParts InsCode IncAddr(I,k);
+  holds JumpParts InsCode I = JumpParts InsCode IncAddr(I,k);
 
-theorem :: AMISTD_2:32
-  for S being regular standard (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  I, J being Instruction of S st
-  (ex k being natural number st IncAddr(I,k) = IncAddr(J,k)) holds
-  (product" AddressParts InsCode I).x = NAT implies
-  (product" AddressParts InsCode J).x = NAT;
-
-theorem :: AMISTD_2:33
-  for S being regular standard (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  I, J being Instruction of S st
-  (ex k being natural number st IncAddr(I,k) = IncAddr(J,k)) holds
-  (product" AddressParts InsCode I).x <> NAT implies
-  (product" AddressParts InsCode J).x <> NAT;
+canceled 2;
 
 theorem :: AMISTD_2:34
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I, J being Instruction of S st
   ex k being natural number st IncAddr(I,k) = IncAddr(J,k) holds I = J;
 
 theorem :: AMISTD_2:35
-  for S being regular standard halting without_implicit_jumps steady-programmed
+  for S being regular homogeneous J/A-independent standard halting
+   without_implicit_jumps steady-programmed
   realistic (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I being Instruction of S st IncAddr(I,k) = halt S holds I = halt S;
 
 theorem :: AMISTD_2:36
-  for S being regular standard halting without_implicit_jumps
+  for S being regular homogeneous J/A-independent standard halting
+  without_implicit_jumps
   realistic (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   I being Instruction of S st I is sequential
   holds IncAddr(I,k) is sequential;
 
 theorem :: AMISTD_2:37
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), I being Instruction of S
   holds IncAddr(IncAddr(I,k),m) = IncAddr(I,k+m);
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  p be NAT-defined (the Instructions of S)-valued FinPartState of S,
+  p be NAT-defined (the Instructions of S)-valued finite Function,
   k be natural number;
   func IncAddr(p,k) -> FinPartState of S means
 :: AMISTD_2:def 15
 
   dom it = dom p &
-  for m being natural number st il.(S,m) in dom p holds
-  it.il.(S,m) = IncAddr(p/.il.(S,m),k);
+  for m being natural number st m in dom p holds it.m = IncAddr(p/.m,k);
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be NAT-defined (the Instructions of S)-valued FinPartState of S,
+  F be NAT-defined (the Instructions of S)-valued finite Function,
   k be natural number;
   cluster IncAddr(F,k) -> NAT-defined (the Instructions of S)-valued;
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   cluster empty NAT-defined FinPartState of S;
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F be empty (the Instructions of S)-valued NAT-defined FinPartState of S,
   k be natural number;
@@ -556,7 +527,8 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F be non empty (the Instructions of S)-valued NAT-defined FinPartState of S,
   k be natural number;
@@ -565,159 +537,105 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F be lower NAT-defined (the Instructions of S)-valued FinPartState of S,
+  F be initial NAT-defined (the Instructions of S)-valued FinPartState of S,
   k be natural number;
-  cluster IncAddr(F,k) -> lower;
+  cluster IncAddr(F,k) -> initial;
 end;
 
 theorem :: AMISTD_2:38
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F being NAT-defined (the Instructions of S)-valued FinPartState of S
    holds IncAddr(F,0) = F;
 
 theorem :: AMISTD_2:39
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being lower NAT-defined (the Instructions of S)-valued FinPartState of S
+  F being NAT-defined (the Instructions of S)-valued finite Function
   holds IncAddr(IncAddr(F,k),m) = IncAddr(F,k+m);
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)), p be FinPartState of S,
-  k be natural number;
-  func Shift(p,k) -> FinPartState of S means
+  S be regular homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N));
+ let p be finite NAT-defined (the Instructions of S)-valued Function,
+     k be Element of NAT;
+ func Reloc(p,k) ->
+   finite NAT-defined (the Instructions of S)-valued Function
+   equals
 :: AMISTD_2:def 16
-
-  dom it = { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p } &
-  for m being Element of NAT st il.(S,m) in dom p
-  holds it.il.(S,m+k) = p.il.(S,m);
+IncAddr(Shift(p,k),k);
 end;
-
-registration
-  let N be with_non-empty_elements non empty set,
-  S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)), F be
-      (the Instructions of S)-valued FinPartState of S,
-  k be natural number;
-  cluster Shift(F,k) -> (the Instructions of S)-valued NAT-defined;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set,
-  S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F be empty FinPartState of S, k be natural number;
-  cluster Shift(F,k) -> empty;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set,
-  S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F be non empty NAT-defined FinPartState of S, k be natural number;
-  cluster Shift(F,k) -> non empty;
-end;
-
-theorem :: AMISTD_2:40
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being NAT-defined FinPartState of S holds Shift(F,0) = F;
-
-theorem :: AMISTD_2:41
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being FinPartState of S, k being natural number st k > 0
-  holds not il.(S,0) in dom Shift(F,k);
-
-theorem :: AMISTD_2:42
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)), F being FinPartState of S
-  holds Shift(Shift(F,m),k) = Shift(F,m+k);
-
-theorem :: AMISTD_2:43
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being NAT-defined FinPartState of S
-  holds dom F,dom Shift(F,k) are_equipotent;
 
 definition
+ canceled;
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard halting realistic
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), I be Instruction of S;
   attr I is IC-good means
-:: AMISTD_2:def 17
+:: AMISTD_2:def 18
 
-  for k being natural number,
-  s1, s2 being State of S st s2 = s1 +* (IC S .--> (IC s1 + (k,S)))
-  holds IC Exec(I,s1) + (k,S) = IC Exec(IncAddr(I,k), s2);
+  for k being natural number, s1 being State of S
+  holds IC Exec(I,s1) + k = IC Exec(IncAddr(I,k),IncrIC(s1,k));
 end;
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard halting realistic
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   attr S is IC-good means
-:: AMISTD_2:def 18
+:: AMISTD_2:def 19
 
   for I being Instruction of S holds I is IC-good;
 end;
 
 definition
-
   let N be with_non-empty_elements set,
   S be stored-program AMI-Struct over N, I be Instruction of S;
   attr I is Exec-preserving means
-:: AMISTD_2:def 19
+:: AMISTD_2:def 20
 
   for s1, s2 being State of S
   st s1, s2 equal_outside NAT holds Exec(I,s1), Exec(I,s2) equal_outside NAT;
 end;
 
 definition
-
   let N be with_non-empty_elements set,
   S be stored-program AMI-Struct over N;
   attr S is Exec-preserving means
-:: AMISTD_2:def 20
+:: AMISTD_2:def 21
 
   for I being Instruction of S holds I is Exec-preserving;
 end;
 
-theorem :: AMISTD_2:44
-  for S being regular standard without_implicit_jumps
-  (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  I being Instruction of S st I is sequential holds I is IC-good;
+canceled 4;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard without_implicit_jumps
-  (standard-ins IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard without_implicit_jumps
+  (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N));
   cluster sequential -> IC-good Instruction of S;
 end;
 
-theorem :: AMISTD_2:45
-  for S being regular standard without_implicit_jumps realistic
-  (standard-ins IC-Ins-separated definite steady-programmed
-  (non empty stored-program AMI-Struct over N)),
-  I being Instruction of S st I is halting holds I is IC-good;
-
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard without_implicit_jumps realistic
-  (standard-ins IC-Ins-separated definite steady-programmed
+  S be regular homogeneous J/A-independent standard
+  without_implicit_jumps realistic
+  (standard-ins IC-Ins-separated definite steady-programmed halting realistic
   (non empty stored-program AMI-Struct over N));
   cluster halting -> IC-good Instruction of S;
 end;
 
-theorem :: AMISTD_2:46
-  for S being stored-program AMI-Struct over N,
-  I being Instruction of S st I is halting holds I is Exec-preserving;
+canceled 2;
 
 registration
 
@@ -726,6 +644,10 @@ registration
   cluster halting -> Exec-preserving Instruction of S;
 end;
 
+theorem :: AMISTD_2:46
+  for S being stored-program AMI-Struct over N,
+  I being Instruction of S st I is halting holds I is Exec-preserving;
+
 registration
   let N be with_non-empty_elements non empty set;
   cluster STC N -> IC-good Exec-preserving;
@@ -733,16 +655,23 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster halting realistic steady-programmed
-    with_explicit_jumps without_implicit_jumps IC-good Exec-preserving
-    (regular standard (standard-ins IC-Ins-separated definite
+  cluster homogeneous realistic steady-programmed halting
+    with_explicit_jumps without_implicit_jumps Exec-preserving
+    (regular J/A-independent standard (standard-ins IC-Ins-separated definite
     (non empty stored-program AMI-Struct over N)));
 end;
 
 registration
-
   let N be with_non-empty_elements non empty set;
-  cluster regular (standard-ins IC-Ins-separated definite
+  cluster IC-good (homogeneous realistic steady-programmed
+    with_explicit_jumps without_implicit_jumps Exec-preserving halting
+    (regular J/A-independent standard (standard-ins IC-Ins-separated definite
+    (non empty stored-program AMI-Struct over N))));
+end;
+
+registration
+  let N be with_non-empty_elements non empty set;
+  cluster J/A-independent regular (standard-ins IC-Ins-separated definite
     (non empty stored-program AMI-Struct over N));
 end;
 
@@ -757,81 +686,31 @@ registration
   let N be with_non-empty_elements non empty set;
   cluster halting realistic steady-programmed
     with_explicit_jumps without_implicit_jumps Exec-preserving
-    (regular (standard-ins IC-Ins-separated definite
+    (regular J/A-independent (standard-ins IC-Ins-separated definite
     (non empty stored-program AMI-Struct over N)));
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be IC-good (regular standard
-  (standard-ins IC-Ins-separated definite
+  S be IC-good (regular homogeneous J/A-independent standard
+  (standard-ins IC-Ins-separated definite halting realistic
   (non empty stored-program AMI-Struct over N)));
   cluster -> IC-good Instruction of S;
 end;
 
 registration
-
   let N be with_non-empty_elements non empty set,
   S be Exec-preserving (stored-program AMI-Struct over N);
   cluster -> Exec-preserving Instruction of S;
 end;
 
-definition
-  let N be with_non-empty_elements non empty set;
-  let S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  let F be non empty NAT-defined FinPartState of S;
-  func CutLastLoc F -> FinPartState of S equals
-:: AMISTD_2:def 21
-  F \ ( LastLoc F .--> F.LastLoc F );
-end;
-
-theorem :: AMISTD_2:47
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being non empty NAT-defined FinPartState of S
-  holds dom CutLastLoc F = (dom F) \ {LastLoc F};
-
-theorem :: AMISTD_2:48
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being non empty NAT-defined FinPartState of S
-  holds dom F = dom CutLastLoc F \/ {LastLoc F};
-
-registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  let F be non empty trivial NAT-defined FinPartState of S;
-  cluster CutLastLoc F -> empty;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  let F be non empty NAT-defined FinPartState of S;
-  cluster CutLastLoc F -> NAT-defined;
-end;
-
-registration
-  let N be with_non-empty_elements non empty set;
-  let S be standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N));
-  let F be lower non empty NAT-defined FinPartState of S;
-  cluster CutLastLoc F -> lower;
-end;
-
-theorem :: AMISTD_2:49
-  for S being standard (IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N)),
-  F being non empty NAT-defined FinPartState of S
-  holds card CutLastLoc F = card F - 1;
+canceled 3;
 
 theorem :: AMISTD_2:50
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being lower non empty NAT-defined FinPartState of S,
+  F being initial non empty NAT-defined FinPartState of S,
   G being non empty
    NAT-defined (the Instructions of S)-valued FinPartState of S
   holds dom CutLastLoc F misses dom Shift(IncAddr(G,card F -' 1),card F -' 1);
@@ -839,24 +718,27 @@ theorem :: AMISTD_2:50
 theorem :: AMISTD_2:51
   for S being standard halting (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being unique-halt (lower non empty NAT-defined FinPartState of S),
+  F being unique-halt (initial non empty NAT-defined FinPartState of S),
   I being Element of NAT st I in dom CutLastLoc F
   holds (CutLastLoc F).I <> halt S;
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F, G be non empty
   (the Instructions of S)-valued NAT-defined FinPartState of S;
-  func F ';' G -> FinPartState of S equals
+  func F ';' G -> (the Instructions of S)-valued NAT-defined FinPartState of S
+   equals
 :: AMISTD_2:def 22
   CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
 end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be regular standard (standard-ins IC-Ins-separated definite
+  S be regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
   F, G be non empty
   (the Instructions of S)-valued NAT-defined FinPartState of S;
@@ -865,9 +747,10 @@ registration
 end;
 
 theorem :: AMISTD_2:52
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F being lower non empty NAT-defined
+  F being initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S,
   G being non empty
   (the Instructions of S)-valued NAT-defined FinPartState of S
@@ -876,68 +759,76 @@ theorem :: AMISTD_2:52
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be regular standard (standard-ins IC-Ins-separated definite
+  let S be regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  let F, G be lower non empty
+  let F, G be initial non empty
   (the Instructions of S)-valued NAT-defined FinPartState of S;
-  cluster F ';' G -> lower;
+  cluster F ';' G -> initial;
 end;
 
 theorem :: AMISTD_2:53
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined
+  F, G being initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S
   holds dom F c= dom (F ';' G);
 
 theorem :: AMISTD_2:54
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined
+  F, G being initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S
   holds CutLastLoc F c= CutLastLoc (F ';' G);
 
 theorem :: AMISTD_2:55
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined
+  F, G being initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S
-  holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).il.(S,0);
+  holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).0;
 
 theorem :: AMISTD_2:56
-  for S being regular standard (standard-ins IC-Ins-separated definite
+  for S being regular  homogeneous J/A-independent standard
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)),
-  F, G being lower non empty NAT-defined
+  F, G being initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S,
-  f being Element of NAT st locnum(f,S) < card F - 1
+  f being Element of NAT st f < card F - 1
   holds IncAddr(F,card F -' 1).f = IncAddr(F ';' G, card F -' 1).f;
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be regular standard realistic halting steady-programmed
+  let S be regular  homogeneous J/A-independent standard realistic halting
+  steady-programmed
   without_implicit_jumps (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
-  let F be lower non empty NAT-defined
+  let F be initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S;
-  let G be halt-ending (lower non empty NAT-defined
+  let G be halt-ending (initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> halt-ending;
 end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  let S be regular standard realistic halting steady-programmed
+  let S be regular  homogeneous J/A-independent standard realistic halting
+  steady-programmed
   without_implicit_jumps (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   let F, G be halt-ending unique-halt
-  (lower non empty NAT-defined
+  (initial non empty NAT-defined
   (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> unique-halt;
 end;
 
 definition
   let N be with_non-empty_elements non empty set;
-  let S be regular standard realistic halting steady-programmed
+  let S be regular homogeneous J/A-independent standard realistic halting
+  steady-programmed
   without_implicit_jumps (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N));
   let F, G be pre-Macro of S;
@@ -946,53 +837,59 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set,
-  S be realistic halting steady-programmed IC-good Exec-preserving
-  (regular standard (standard-ins IC-Ins-separated definite
-  (non empty stored-program AMI-Struct over N))),
-  F, G be closed lower non empty (NAT-defined
+  S be IC-good (homogeneous steady-programmed Exec-preserving
+  (regular J/A-independent standard realistic halting (standard-ins
+  IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over N)))),
+  F, G be closed initial non empty (NAT-defined
   (the Instructions of S)-valued FinPartState of S);
   cluster F ';' G -> closed;
 end;
 
 theorem :: AMISTD_2:57
-  for S being regular standard halting without_implicit_jumps
+  for S being regular homogeneous J/A-independent standard halting
+  without_implicit_jumps
   realistic (standard-ins IC-Ins-separated definite steady-programmed
   (non empty stored-program AMI-Struct over N))
   holds IncAddr(Stop S, k) = Stop S;
 
 theorem :: AMISTD_2:58
+  for k being Element of NAT
   for S being standard halting (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N))
-  holds Shift(Stop S, k) = il.(S,k) .--> halt S;
+  holds Shift(Stop S, k) = k .--> halt S;
 
 theorem :: AMISTD_2:59
-  for S being regular standard halting without_implicit_jumps
+  for S being regular homogeneous J/A-independent standard halting
+  without_implicit_jumps
   realistic (standard-ins IC-Ins-separated definite steady-programmed
   (non empty stored-program AMI-Struct over N)), F being pre-Macro of S
   holds F ';' Stop S = F;
 
 theorem :: AMISTD_2:60
-  for S being regular standard halting (standard-ins IC-Ins-separated definite
+  for S being regular homogeneous J/A-independent standard halting
+   (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over N)), F being pre-Macro of S
   holds Stop S ';' F = F;
 
 theorem :: AMISTD_2:61
-  for S being regular standard realistic halting steady-programmed
+  for S being regular homogeneous J/A-independent standard realistic halting
+  steady-programmed
   without_implicit_jumps (standard-ins IC-Ins-separated
   definite (non empty stored-program AMI-Struct over N)),
   F, G, H being pre-Macro of S holds F ';' G ';' H = F ';' (G ';' H);
 
 theorem :: AMISTD_2:62
-  for S being regular
+  for S being regular homogeneous
   (standard-ins non empty stored-program AMI-Struct over N),
-  I being Instruction of S, x being set st x in dom AddressPart I holds
-  (AddressPart I).x in (product" AddressParts InsCode I).x;
+  I being Instruction of S, x being set st x in dom JumpPart I holds
+  (JumpPart I).x in (product" JumpParts InsCode I).x;
 
 theorem :: AMISTD_2:63
-  for I being Instruction of Trivial-AMI N holds AddressPart I = 0;
+  for I being Instruction of Trivial-AMI N holds JumpPart I = 0;
 
 theorem :: AMISTD_2:64
-  for T being InsType of Trivial-AMI N holds AddressParts T = {0};
+  for T being InsType of Trivial-AMI N holds JumpParts T = {0};
 
 begin :: Addenda
 
@@ -1006,12 +903,7 @@ reserve i, j, k for natural number,
   l for Element of NAT,
   f for FinPartState of S;
 
-theorem :: AMISTD_2:65
-  l in dom f implies Shift(f,k).(l + (k,S)) = f.l;
-
-theorem :: AMISTD_2:66
-  dom Shift(f,k)
-   = { il+(k,S) where il is Element of NAT: il in dom f};
+canceled 2;
 
 theorem :: AMISTD_2:67
   for S being Exec-preserving IC-Ins-separated definite realistic
@@ -1022,59 +914,66 @@ theorem :: AMISTD_2:67
 
 definition
   let N be with_non-empty_elements non empty set,
-  S be regular standard (IC-Ins-separated definite
+  S be regular homogeneous J/A-independent standard (IC-Ins-separated definite
+  halting realistic
   (standard-ins non empty stored-program AMI-Struct over N)),
-  k be natural number, p be FinPartState of S;
+  k be Element of NAT, p be FinPartState of S;
   func Relocated (p,k) -> FinPartState of S equals
 :: AMISTD_2:def 23
-  Start-At((IC p)+(k,S),S) +*
-   IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p;
+   IncrIC(NPP p,k) +* Reloc(ProgramPart p,k);
 end;
 
-reserve S for regular standard (IC-Ins-separated definite
+reserve S for regular homogeneous J/A-independent standard (IC-Ins-separated
+definite halting realistic
   (standard-ins non empty stored-program AMI-Struct over N)),
   g for FinPartState of S,
   il for Element of NAT;
 
 theorem :: AMISTD_2:68
+ for k being Element of NAT holds
   DataPart(Relocated(g,k)) = DataPart(g);
 
 theorem :: AMISTD_2:69
-  S is realistic implies
-  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k);
+  for k being Element of NAT holds
+  ProgramPart(Relocated(g,k)) = Reloc(ProgramPart(g),k);
 
 theorem :: AMISTD_2:70
-  S is realistic implies dom ProgramPart(Relocated(g,k))
-  = { il.(S,j+k) where j is Element of NAT : il.(S,j) in dom ProgramPart(g) };
+  for k being Element of NAT holds
+  for p being finite NAT-defined (the Instructions of S)-valued Function
+   holds dom Reloc(p,k) =
+    { j+k where j is Element of NAT:j in dom p };
 
 theorem :: AMISTD_2:71
-  S is realistic implies (il in dom g iff il+(k,S) in dom Relocated(g,k));
+  for k being Element of NAT holds
+  il in dom g iff il + k in dom Relocated(g,k);
 
 theorem :: AMISTD_2:72
+  for k being Element of NAT holds
   IC S in dom Relocated (g,k);
 
 theorem :: AMISTD_2:73
-  S is realistic implies IC Relocated (g,k) = (IC g) + (k,S);
+  for k being Element of NAT st IC S in dom g
+   holds IC Relocated (g,k) = IC g + k;
 
-theorem :: AMISTD_2:74
-  for p being NAT-defined (the Instructions of S)-valued FinPartState of S,
-  l being Element of NAT st l in dom p holds
-  IncAddr(p,k).l = IncAddr(p/.l,k);
+canceled;
 
 theorem :: AMISTD_2:75
+  for i,j being Element of NAT holds
   for p being NAT-defined (the Instructions of S)-valued FinPartState of S
-  holds Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i);
+  holds Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
 
 theorem :: AMISTD_2:76
-  S is realistic implies
+  for k being Element of NAT holds
   for I being Instruction of S holds
   il in dom ProgramPart g & I = g.il implies
-  IncAddr(I, k) = (Relocated (g, k)).(il + (k,S));
+  IncAddr(I, k) = (Relocated (g, k)).(il + k);
 
 theorem :: AMISTD_2:77
-  S is realistic implies Start-At (IC g + (k,S),S) c= Relocated (g,k);
+  for k being Element of NAT st IC S in dom g
+  holds Start-At (IC g + k,S) c= Relocated (g,k);
 
 theorem :: AMISTD_2:78
-  for q being data-only FinPartState of S st IC S in dom g holds
-  Relocated((g +* q), k) = Relocated (g,k) +* q;
+  for k being Element of NAT holds
+  for q being data-only FinPartState of S
+   holds Relocated((g +* q), k) = Relocated (g,k) +* q;
 

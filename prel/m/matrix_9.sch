@@ -3,6 +3,7 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
@@ -22,6 +23,8 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -33,14 +36,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="90"/>
+<Func kind="K" nr="89"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="19" value="false"/>
 </Cluster>
 <Func kind="K" nr="80">
-<Func kind="K" nr="198">
+<Func kind="K" nr="219">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -50,9 +53,9 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="13">
 <Cluster/>
-<Func kind="K" nr="198">
+<Func kind="K" nr="219">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -73,19 +76,19 @@
 </Not>
 </For>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="13">
 <Cluster/>
-<Func kind="K" nr="198">
+<Func kind="K" nr="219">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="11" value="false"/>
+<Adjective nr="19" value="false"/>
 </Cluster>
 <Func kind="K" nr="80">
-<Func kind="K" nr="198">
+<Func kind="K" nr="219">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -96,7 +99,7 @@
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="R" nr="16">
+<Pred kind="R" nr="24">
 <Var nr="2"/>
 <Func kind="F" nr="2"/>
 </Pred>

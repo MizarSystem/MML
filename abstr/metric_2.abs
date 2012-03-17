@@ -7,10 +7,9 @@
 environ
 
  vocabularies NUMBERS, XBOOLE_0, METRIC_1, SUBSET_1, PARTFUN1, CARD_1, RELAT_2,
-      TARSKI, STRUCT_0, SUB_METR, XXREAL_0, ARYTM_3, ZFMISC_1, FUNCT_1,
-      METRIC_2;
+      TARSKI, STRUCT_0, XXREAL_0, ARYTM_3, ZFMISC_1, FUNCT_1, METRIC_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, FUNCT_2,
-      DOMAIN_1, STRUCT_0, METRIC_1, MCART_1, SUB_METR, XXREAL_0;
+      DOMAIN_1, STRUCT_0, METRIC_1, MCART_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, MEMBERED, METRIC_1;
  registrations SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
       METRIC_1, XBOOLE_0;
@@ -43,8 +42,7 @@ definition
   let M be non empty MetrStruct, x be Element of M;
   func x-neighbour -> Subset of M equals
 :: METRIC_2:def 2
-  {y where y is Element of M: x
-  tolerates y};
+  {y where y is Element of M: x tolerates y};
 end;
 
 definition
@@ -52,8 +50,7 @@ definition
   mode equivalence_class of M -> Subset of M means
 :: METRIC_2:def 3
 
-    ex x being Element
-    of M st it=x-neighbour;
+    ex x being Element of M st it=x-neighbour;
 end;
 
 canceled 5;
@@ -67,16 +64,15 @@ theorem :: METRIC_2:7
   -neighbour iff y tolerates x;
 
 theorem :: METRIC_2:8
-  for M being PseudoMetricSpace,x,p,q being Element of M holds p in x
-  -neighbour & q in x-neighbour implies p tolerates q;
+  for M being PseudoMetricSpace,x,p,q being Element of M st
+  p in x-neighbour & q in x-neighbour holds p tolerates q;
 
 theorem :: METRIC_2:9
-  for M being PseudoMetricSpace, x being Element of M holds x in x
-  -neighbour;
+  for M being PseudoMetricSpace, x being Element of M holds x in x-neighbour;
 
 theorem :: METRIC_2:10
-  for M being PseudoMetricSpace, x,y being Element of M holds x in y
-  -neighbour implies y in x-neighbour;
+  for M being PseudoMetricSpace, x,y being Element of M holds
+  x in y-neighbour implies y in x-neighbour;
 
 theorem :: METRIC_2:11
   for M being PseudoMetricSpace, p,x,y being Element of M holds p in x
@@ -94,11 +90,7 @@ theorem :: METRIC_2:14
   for M being PseudoMetricSpace, x,y being Element of M holds x
   -neighbour meets y-neighbour iff x tolerates y;
 
-canceled;
-
-theorem :: METRIC_2:16
-  for M being PseudoMetricSpace, V being equivalence_class of M
-  holds V is non empty set;
+canceled 2;
 
 registration
   let M be PseudoMetricSpace;
@@ -109,8 +101,6 @@ theorem :: METRIC_2:17
   for M being PseudoMetricSpace, x,p,q being Element of M holds p
   in x-neighbour & q in x-neighbour implies dist(p,q)=0;
 
-::----------------------------------------------------------------------------
-
 theorem :: METRIC_2:18
   for M being Reflexive discerning (non empty MetrStruct), x,y
   being Element of M holds x tolerates y iff x = y;
@@ -120,8 +110,8 @@ theorem :: METRIC_2:19
   in x-neighbour iff y = x;
 
 theorem :: METRIC_2:20
-  for M being non empty MetrSpace,x being Element of M holds x
-  -neighbour = {x};
+  for M being non empty MetrSpace,x being Element of M holds x -neighbour = {x}
+;
 
 theorem :: METRIC_2:21
   for M being non empty MetrSpace, V being Subset of M holds (V is
@@ -133,8 +123,7 @@ definition
   let M be non empty MetrStruct;
   func M-neighbour -> set equals
 :: METRIC_2:def 4
-  {s where s is Subset of M: ex x being Element
-  of M st x-neighbour = s};
+  {s where s is Subset of M: ex x being Element of M st x-neighbour = s};
 end;
 
 registration
@@ -161,8 +150,8 @@ theorem :: METRIC_2:26
   equivalence_class of M;
 
 theorem :: METRIC_2:27
-  for M being non empty MetrSpace, x being Element of M holds {x} in M
-  -neighbour;
+  for M being non empty MetrSpace, x being Element of M holds
+  {x} in M-neighbour;
 
 theorem :: METRIC_2:28
   for M being non empty MetrSpace holds V in M-neighbour iff ex x being
@@ -174,13 +163,12 @@ for p1,p2,q1,q2 being Element of M holds ( p1 in V & q1 in Q & p2 in V & q2 in
   Q implies dist(p1,q1)=dist(p2,q2));
 
 definition
-  let M be non empty MetrStruct, V, Q be Element of M-neighbour, v be Element
-  of REAL;
+  let M be non empty MetrStruct, V, Q be Element of M-neighbour,
+      v be Element of REAL;
   pred V,Q is_dst v means
 :: METRIC_2:def 5
 
-  for p,q being Element of M st p in V & q in Q
-  holds dist(p,q)=v;
+  for p,q being Element of M st p in V & q in Q holds dist(p,q)=v;
 end;
 
 canceled;
@@ -326,8 +314,7 @@ definition
   func nbourdist M -> Function of [:M-neighbour,M-neighbour:],REAL means
 :: METRIC_2:def 13
 
-   for
- V,Q being Element of M-neighbour for p,q being Element of M st p in
+  for V,Q being Element of M-neighbour for p,q being Element of M st p in
   V & q in Q holds it.(V,Q)=dist(p,q);
 end;
 
@@ -350,12 +337,10 @@ definition
   let M be PseudoMetricSpace;
   func Eq_classMetricSpace M -> MetrSpace equals
 :: METRIC_2:def 14
-  MetrStruct(#M-neighbour,
-    nbourdist M#);
+  MetrStruct(#M-neighbour, nbourdist M#);
 end;
 
 registration
   let M be PseudoMetricSpace;
   cluster Eq_classMetricSpace M -> strict non empty;
 end;
-

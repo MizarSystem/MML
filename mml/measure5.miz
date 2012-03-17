@@ -21,10 +21,10 @@ environ
 
 begin  :: Some theorems about R_eal numbers
 
-reserve x,y,a,b,a1,b1,a2,b2 for R_eal;
+reserve a,b for R_eal;
 
 canceled 8;
-
+ 
 :: PROPERTIES OF THE INTERVALS
 
 scheme
@@ -57,8 +57,7 @@ definition
   canceled;
   let a,b be R_eal;
   redefine func ].a,b.[ -> Subset of REAL means
-  for x being R_eal holds x in
-  it iff a < x & x < b;
+  for x being R_eal holds x in it iff a < x & x < b;
   coherence
   proof
     for x being set st x in ]. a,b .[ holds x in REAL;
@@ -83,8 +82,7 @@ A2:   x in X;
     end;
     let x be real number;
     reconsider t=x as R_eal by XXREAL_0:def 1;
-    assume
-    x in ].a,b.[;
+    assume x in ].a,b.[;
     then a < t & t < b by XXREAL_1:4;
     hence thesis by A1;
   end;
@@ -95,28 +93,28 @@ definition
   let IT be Subset of REAL;
   attr IT is open_interval means
   :Def5:
-  ex a,b being R_eal st a <= b & IT = ].
-  a,b.[;
+  ex a,b being R_eal st IT = ].a,b.[;
   attr IT is closed_interval means
   :Def6:
-  ex a,b being real number st a <= b &
-  IT = [.a,b.];
+  ex a,b being real number st IT = [.a,b.];
 end;
 
 registration
-  cluster open_interval Subset of REAL;
+  cluster non empty open_interval Subset of REAL;
   existence
   proof
-    consider a,b being R_eal such that
-A1: a = -infty & b = +infty;
-    take ].a,b.[, a,b;
-    thus thesis by A1;
+    take ].-infty,+infty.[;
+     0 in ].-infty,+infty.[ by XXREAL_1:224;
+    hence ].-infty,+infty.[ is non empty;
+    take -infty,+infty;
+    thus thesis;
   end;
-  cluster closed_interval Subset of REAL;
+  cluster non empty closed_interval Subset of REAL;
   existence
   proof
-    take [.0,1.],0,1;
-    consider a,b being R_eal;
+    take [.0,1.];
+     thus [.0,1.] is non empty by XXREAL_1:30;
+    take 0,1;
     thus thesis;
   end;
 end;
@@ -125,8 +123,7 @@ definition
   let IT be Subset of REAL;
   attr IT is right_open_interval means
   :Def7:
-  ex a being real number, b being
-  R_eal st a <= b & IT = [.a,b.[;
+  ex a being real number, b being R_eal st IT = [.a,b.[;
 end;
 
 notation
@@ -138,8 +135,7 @@ definition
   let IT be Subset of REAL;
   attr IT is left_open_interval means
   :Def8:
-  ex a being R_eal,b being real
-  number st a <= b & IT = ].a,b.];
+  ex a being R_eal,b being real number st IT = ].a,b.];
 end;
 
 notation
@@ -148,102 +144,23 @@ notation
 end;
 
 registration
-  cluster right_open_interval Subset of REAL;
+  cluster non empty right_open_interval Subset of REAL;
   existence
   proof
-    take [.0,+infty.[,0,+infty;
-    consider a,b being R_eal;
+    take [.0,+infty.[;
+      0 in [.0,+infty.[ by XXREAL_1:236;
+    hence [.0,+infty.[ is non empty;
+    take 0,+infty;
     thus thesis;
   end;
-  cluster left_open_interval Subset of REAL;
+  cluster non empty left_open_interval Subset of REAL;
   existence
   proof
-    consider a,b being R_eal such that
-A1: a = -infty and
-    b = +infty;
-    take ].a,1.],a,1;
-    thus thesis by A1;
-  end;
-end;
-
-notation
-  let IT be Subset of REAL;
-  synonym IT is interval for IT is connected;
-end;
-
-definition
-  let IT be Subset of REAL;
-  redefine attr IT is interval means
-  :Def9:
-  IT is open_interval or IT is
-  closed_interval or IT is right_open_interval or IT is left_open_interval;
-  compatibility
-  proof
-    thus IT is interval implies IT is open_interval or IT is closed_interval
-    or IT is right_open_interval or IT is left_open_interval
-    proof
-      assume
-A1:   IT is interval;
-      per cases;
-      suppose
-A2:     IT is left_end right_end;
-        reconsider a = inf IT,b = sup IT as R_eal;
-A3:     a in IT & IT = [.a,b.] by A1,A2,XXREAL_2:79,def 5;
-        then a <= b by XXREAL_1:1;
-        hence thesis by A2,A3,Def6;
-      end;
-      suppose
-A4:     IT is non left_end right_end;
-        set a = inf IT, b = sup IT;
-A5:     IT = ].a,b.] by A1,A4,XXREAL_2:80;
-A6:     b in IT by A4,XXREAL_2:def 6;
-        then a <= b by XXREAL_2:40;
-        hence thesis by A6,A5,Def8;
-      end;
-      suppose
-A7:     IT is left_end non right_end;
-        set a = inf IT, b = sup IT;
-A8:     IT = [.a,b.[ by A1,A7,XXREAL_2:81;
-A9:     a in IT by A7,XXREAL_2:def 5;
-        then a <= b by XXREAL_2:40;
-        hence thesis by A9,A8,Def7;
-      end;
-      suppose
-        IT is non left_end non right_end;
-        then consider a,b being ext-real number such that
-A10:    a <= b and
-A11:    IT = ].a,b.[ by A1,XXREAL_2:83;
-        reconsider a,b as R_eal by XXREAL_0:def 1;
-        a <= b by A10;
-        hence thesis by A11,Def5;
-      end;
-    end;
-    assume
-A12: IT is open_interval or IT is closed_interval or IT is
-    right_open_interval or IT is left_open_interval;
-    per cases by A12;
-    suppose
-      IT is open_interval;
-      then ex a,b being R_eal st a <= b & IT = ].a,b.[ by Def5;
-      hence thesis;
-    end;
-    suppose
-      IT is closed_interval;
-      then ex a,b being real number st a <= b & IT = [.a,b.] by Def6;
-      hence thesis;
-    end;
-    suppose
-      IT is left_open_interval;
-      then ex a being R_eal,b being real number st a <= b & IT = ].a,b.] by
-      Def8;
-      hence thesis;
-    end;
-    suppose
-      IT is right_open_interval;
-      then ex a being real number, b being R_eal st a <= b & IT = [. a,b.[ by
-      Def7;
-      hence thesis;
-    end;
+    take ].-infty,1.];
+     1 in ].-infty,1.] by XXREAL_1:234;
+    hence ].-infty,1.] is non empty;
+    take -infty,1;
+    thus thesis;
   end;
 end;
 
@@ -255,20 +172,72 @@ reserve A,B for Interval;
 
 registration
   cluster open_interval -> interval Subset of REAL;
-  coherence by Def9;
+  coherence
+   proof let I be Subset of REAL;
+     assume ex a,b being R_eal st I = ].a,b.[;
+    hence thesis;
+   end;
   cluster closed_interval -> interval Subset of REAL;
-  coherence by Def9;
+  coherence
+   proof let I be Subset of REAL;
+     assume ex a,b being real number st I = [.a,b.];
+    hence thesis;
+   end;
   cluster right_open_interval -> interval Subset of REAL;
-  coherence by Def9;
+  coherence
+   proof let I be Subset of REAL;
+     assume ex a being real number, b being R_eal st I = [. a,b.[;
+    hence thesis;
+   end;
   cluster left_open_interval -> interval Subset of REAL;
-  coherence by Def9;
+  coherence
+   proof let I be Subset of REAL;
+    assume ex a being R_eal, b being real number st I = ]. a,b.];
+    hence thesis;
+   end;
 end;
 
-canceled 8;
+theorem
+  for I being interval Subset of REAL holds
+  I is open_interval or I is closed_interval or
+  I is right_open_interval or I is left_open_interval
+    proof let I be interval Subset of REAL;
+      per cases;
+      suppose
+A2:     I is left_end right_end;
+        reconsider a = inf I,b = sup I as R_eal;
+A3:     a in I & I = [.a,b.] by A2,XXREAL_2:79,def 5;
+        thus thesis by A2,A3,Def6;
+      end;
+      suppose
+A4:     I is non left_end right_end;
+        set a = inf I, b = sup I;
+A5:     I = ].a,b.] by A4,XXREAL_2:80;
+A6:     b in I by A4,XXREAL_2:def 6;
+        thus thesis by A6,A5,Def8;
+      end;
+      suppose
+A7:     I is left_end non right_end;
+        set a = inf I, b = sup I;
+A8:     I = [.a,b.[ by A7,XXREAL_2:81;
+A9:     a in I by A7,XXREAL_2:def 5;
+        thus thesis by A9,A8,Def7;
+      end;
+      suppose
+        I is non left_end non right_end;
+        then consider a,b being ext-real number such that
+A10:    a <= b and
+A11:    I = ].a,b.[ by XXREAL_2:83;
+        reconsider a,b as R_eal by XXREAL_0:def 1;
+        a <= b by A10;
+        hence thesis by A11,Def5;
+      end;
+    end;
+
+canceled 7;
 
 theorem Th17:
-  for a,b being R_eal st a < b ex x being R_eal st a < x & x < b &
-  x in REAL
+  for a,b being R_eal st a < b ex x being R_eal st a < x & x < b & x in REAL
 proof
   let a,b be R_eal;
 A1: a in REAL or a in {-infty,+infty} by XBOOLE_0:def 3,XXREAL_0:def 4;
@@ -332,8 +301,7 @@ A1: min(b,c) = min{b,c} by XXREAL_2:14;
   then
 A2: min(b,c) <= c by A1,XXREAL_2:62;
   reconsider m = min(b,c) as R_eal by XXREAL_0:def 1;
-  assume
-  a < b & a < c;
+  assume a < b & a < c;
   then a < min(b,c) by XXREAL_0:def 9;
   then consider x being R_eal such that
 A3: a < x & x < m & x in REAL by Th17;
@@ -354,8 +322,7 @@ proof
   let a,b,c be R_eal;
   reconsider m = max(a,b) as R_eal by XXREAL_0:def 1;
 A1: b in {a,b} by TARSKI:def 2;
-  assume
-  a < c & b < c;
+  assume a < c & b < c;
   then max(a,b) < c by XXREAL_0:def 10;
   then consider x being R_eal such that
 A2: m < x & x < c & x in REAL by Th17;
@@ -365,6 +332,7 @@ A2: m < x & x < c & x in REAL by Th17;
 end;
 
 definition
+ canceled;
   let A be ext-real-membered set;
   func diameter A -> R_eal equals
   :Def10:
@@ -389,8 +357,7 @@ A2: sup ].a,b.[ = b by XXREAL_2:32;
     ].a,b.[ <> {} & inf ].a,b.[ = a by A1,XXREAL_1:33,XXREAL_2:28;
     hence diameter ].a,b.[ = b - a by A2,Def10;
   end;
-  assume
-  b <= a;
+  assume b <= a;
   then ].a,b.[ = {} by XXREAL_1:28;
   hence thesis by Def10;
 end;
@@ -408,8 +375,7 @@ A2: sup [.a,b.] = b by XXREAL_2:29;
     [.a,b.] <> {} & inf [.a,b.] = a by A1,XXREAL_1:30,XXREAL_2:25;
     hence diameter [.a,b.] = b - a by A2,Def10;
   end;
-  assume
-  b < a;
+  assume b < a;
   then [.a,b.] = {} by XXREAL_1:29;
   hence thesis by Def10;
 end;
@@ -427,8 +393,7 @@ A2: sup [.a,b.[ = b by XXREAL_2:31;
     [.a,b.[ <> {} & inf [.a,b.[ = a by A1,XXREAL_1:31,XXREAL_2:26;
     hence diameter [.a,b.[ = b - a by A2,Def10;
   end;
-  assume
-  b <= a;
+  assume b <= a;
   then [.a,b.[ = {} by XXREAL_1:27;
   hence thesis by Def10;
 end;
@@ -446,8 +411,7 @@ A2: sup ].a,b.] = b by XXREAL_2:30;
     ].a,b.] <> {} & inf ].a,b.] = a by A1,XXREAL_1:32,XXREAL_2:27;
     hence diameter ].a,b.] = b - a by A2,Def10;
   end;
-  assume
-  b <= a;
+  assume b <= a;
   then ].a,b.] = {} by XXREAL_1:26;
   hence thesis by Def10;
 end;
@@ -475,8 +439,7 @@ registration
   coherence
   proof
     let S be Subset of REAL;
-    assume
-    S is empty;
+    assume S is empty;
     then S = ].0.,0..[;
     hence thesis by Def5;
   end;
@@ -522,8 +485,7 @@ A4: sup A <= sup B & inf B <= inf A by A1,XXREAL_2:59,60;
 end;
 
 theorem
-  A c= B & B =[.a,b.] & b <= a implies diameter(A) = 0. & diameter(B) =
-  0.
+  A c= B & B =[.a,b.] & b <= a implies diameter(A) = 0. & diameter(B) = 0.
 proof
   assume that
 A1: A c= B and
@@ -554,4 +516,3 @@ theorem
 
 theorem
   0. <= diameter A by Lm1;
-

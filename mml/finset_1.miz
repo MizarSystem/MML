@@ -35,7 +35,7 @@ notation
   antonym IT is infinite for IT is finite;
 end;
 
-reserve A, B, C, D, X, Y, Z, x, y for set;
+reserve A, B, X, Y, Z, x, y for set;
 reserve f for Function;
 
 Lm1: {x} is finite
@@ -67,8 +67,8 @@ end;
 registration
   cluster non empty finite set;
   existence
-  proof consider x;
-    {x} is finite by Lm1;
+  proof
+    {the set} is finite by Lm1;
     hence thesis;
   end;
 end;
@@ -313,7 +313,7 @@ end;
 
 canceled 12;
 
-theorem Th13:
+theorem
   A c= B & B is finite implies A is finite;
 
 theorem
@@ -322,7 +322,11 @@ theorem
 registration
   let A be set, B be finite set;
   cluster A /\ B -> finite;
-  coherence by Th13,XBOOLE_1:17;
+  coherence
+  proof
+    A /\ B c= B by XBOOLE_1:17;
+    hence thesis;
+  end;
 end;
 
 registration
@@ -339,12 +343,13 @@ theorem
 theorem
   A is finite implies A \ B is finite;
 
-theorem Th17:
-  A is finite implies f.:A is finite
+registration
+  let f be Function, A be finite set;
+  cluster f.:A -> finite;
+  coherence 
 proof
   set B = dom f /\ A;
-  assume A is finite;
-  then consider p be Function such that
+  consider p be Function such that
 A1: rng p=B and
 A2: dom p in omega by Def1;
   take f*p;
@@ -352,19 +357,17 @@ A2: dom p in omega by Def1;
   hence rng (f*p) = f.:A by RELAT_1:145;
   thus thesis by A1,A2,RELAT_1:46,XBOOLE_1:17;
 end;
-
-registration
-  let f be Function, A be finite set;
-  cluster f.:A -> finite;
-  coherence by Th17;
 end;
+
+theorem
+  A is finite implies f.:A is finite;
 
 reserve O for Ordinal;
 
 theorem Th18:
   A is finite implies for X being Subset-Family of A st X <> {}
-  ex x being set st
-  x in X & for B being set st B in X holds x c= B implies B = x
+  ex x being set st x in X &
+    for B being set st B in X holds x c= B implies B = x
 proof
   assume
 A1: A is finite;
@@ -441,8 +444,7 @@ A18:  not O in O;
       then X2 <> {} by A13,A14;
       then consider Z such that
 A19:  Z in X2 and
-A20:  for B being set st B in X2 holds Z c= B implies B = Z
-      by A11,A12,A17;
+A20:  for B being set st B in X2 holds Z c= B implies B = Z by A11,A12,A17;
       consider X1 being set such that
 A21:  X1 in X and
 A22:  Z=X1 \ {O} by A14,A19;
@@ -555,8 +557,7 @@ A48: O in omega;
   P[O] from ORDINAL2:sch 1(A8,A10,A45);
   then consider g being set such that
 A49: g in GX and
-A50: for B being set st B in GX holds g c= B implies B=g
-  by A4,A7;
+A50: for B being set st B in GX holds g c= B implies B=g by A4,A7;
   take p.:g;
   for B st B in X holds p.:g c= B implies B = p.:g
   proof
@@ -892,9 +893,12 @@ proof
   proof
     assume
 A1: union A is finite;
-    then bool union A is finite;
-    hence A is finite by Th13,ZFMISC_1:100;
-    thus thesis by A1,Th13,ZFMISC_1:92;
+    A c= bool union A by ZFMISC_1:100;
+    hence A is finite by A1;
+    let X;
+    assume X in A;
+    then X c= union A by ZFMISC_1:92;
+    hence thesis by A1;
   end;
 end;
 
@@ -909,11 +913,9 @@ end;
 theorem
   Y c= rng f & f"Y is finite implies Y is finite
 proof
-  assume that
-A1: Y c= rng f and
-A2: f"Y is finite;
-  f.:(f"Y) = Y by A1,FUNCT_1:147;
-  hence thesis by A2;
+  assume Y c= rng f;
+  then f.:(f"Y) = Y by FUNCT_1:147;
+  hence thesis;
 end;
 
 registration
@@ -926,14 +928,13 @@ registration
   let X be non empty set;
   cluster finite non empty Subset of X;
   existence
-  proof consider x being Element of X;
-    take {x};
+  proof
+    take {the Element of X};
     thus thesis;
   end;
 end;
 
 begin :: Addenda
-
 :: from AMI_1
 
 canceled;
@@ -946,14 +947,15 @@ proof
   proof
     assume
 A1: dom f is finite;
-    then rng f is finite by Th26;
-    then [:dom f, rng f:] is finite by A1;
-    hence thesis by Th13,RELAT_1:21;
+    then
+A2: rng f is finite by Th26;
+    f c= [:dom f, rng f:] by RELAT_1:21;    
+    hence thesis by A1,A2;
   end;
   pr1(dom f,rng f).:f = dom f by FUNCT_3:100;
   hence thesis;
 end;
-
+ 
 :: from ALI2
 
 theorem
@@ -1012,7 +1014,7 @@ A15:    m c= x by A12,XBOOLE_1:1;
   P[F] from Finite(A1,A4,A5);
   hence thesis by A2;
 end;
-
+ 
 :: from FIN_TOPO
 
 theorem
@@ -1071,7 +1073,7 @@ A15:    x c= m by A12,XBOOLE_1:1;
   P[F] from Finite(A1,A4,A5);
   hence thesis by A2;
 end;
-
+ 
 :: 2006.08.25, A.T.
 
 definition
@@ -1080,10 +1082,11 @@ definition
   :Def2:
   for x st x in rng R holds x is finite;
 end;
-
+ 
 :: from CQC_THE1, 2007.03.15, A.T.
 
 reserve a for set;
+
 deffunc F(set) = $1`1;
 
 theorem
@@ -1111,8 +1114,7 @@ A6: for a st a in X holds g.a = G(a) from FUNCT_1:sch 3;
 A7: x in dom f and
 A8: f.x = a by FUNCT_1:def 5;
     consider y,z being set such that
-A9: y in Y
-    and z in Z and
+A9: y in Y and z in Z and
 A10: x = [y,z] by A2,A3,A7,ZFMISC_1:def 2;
     f.x = x`1 by A3,A4,A7
       .= y by A10,MCART_1:7;
@@ -1140,8 +1142,7 @@ A14: x = [y,z] by A2,A5,A11,ZFMISC_1:def 2;
     assume
 A15: a in X;
     then consider x,y being set such that
-    x in Y
-    and y in Z and
+    x in Y and y in Z and
 A16: a=[x,y] by A2,ZFMISC_1:def 2;
 A17: g.a = a`2 by A6,A15
       .= y by A16,MCART_1:7;
@@ -1155,8 +1156,7 @@ A18: x in A by A3,A15,FUNCT_1:def 5;
 end;
 
 theorem
-  X is finite
-  & X c= [:Y,Z:] implies
+  X is finite & X c= [:Y,Z:] implies
   ex A being set st A is finite & A c= Y & X c= [:A,Z:]
 proof
   assume that
@@ -1175,8 +1175,7 @@ A4: for a st a in X holds f.a = F(a) from FUNCT_1:sch 3;
 A5: x in dom f and
 A6: f.x = a by FUNCT_1:def 5;
     consider y,z being set such that
-A7: y in Y
-    and z in Z and
+A7: y in Y and z in Z and
 A8: x = [y,z] by A2,A3,A5,ZFMISC_1:def 2;
     f.x = x`1 by A3,A4,A5
       .= y by A8,MCART_1:7;
@@ -1197,7 +1196,7 @@ A11: a=[x,y] by A2,ZFMISC_1:def 2;
     hence thesis by A10,A11,ZFMISC_1:106;
   end;
 end;
-
+ 
 :: restored, 2007.07.22, A.T.
 
 registration
@@ -1240,18 +1239,18 @@ A6:   [x,y] in R;
     hence thesis by A1,Th26;
   end;
 end;
-
+ 
 :: from SCMFSA_4, 2007.07.22, A.T.
 
 registration
   let f be Function, g be finite Function;
-  cluster f*g ->finite;
+  cluster f*g -> finite;
   coherence
   proof dom(f*g) c= dom g by RELAT_1:44;
     hence thesis by Th29;
   end;
 end;
-
+ 
 :: from SF_MASTR, 2007.07.25, A.T.
 
 registration
@@ -1264,7 +1263,7 @@ registration
     hence thesis by Th29;
   end;
 end;
-
+ 
 :: from GLIB_000, 2007.10.24, A.T.
 
 registration
@@ -1272,7 +1271,7 @@ registration
   cluster x .--> y -> finite;
   coherence;
 end;
-
+ 
 :: from FINSEQ_1, 2008.02.19, A.T.
 
 registration
@@ -1306,7 +1305,7 @@ A6:   [x,y] in R;
     hence thesis by A1,Th26;
   end;
 end;
-
+ 
 :: from FINSEQ_1, 2008.05.06, A.T.
 
 registration
@@ -1328,7 +1327,7 @@ registration
     hence thesis by Th29;
   end;
 end;
-
+ 
 :: from COMPTS_1, 2008.07.16, A.T
 
 definition
@@ -1337,7 +1336,7 @@ definition
   F <> {} &
   for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
 end;
-
+ 
 :: from PRE_CIRC, 2009.03.04, A.T.
 
 definition
@@ -1369,18 +1368,18 @@ A3: for i being set st i in I holds IT.i is finite;
     hence thesis by A1,A3;
   end;
 end;
-
+ 
 :: new, 2009.08.26, A.T
 
 theorem
- B is infinite implies not B in [:A,B:]
-proof assume that
+  B is infinite implies not B in [:A,B:]
+  proof assume that
 Z1: B is infinite and
 Z2: B in [:A,B:];
   ex x st x in A & B = [x,{x}] by Z2,ZFMISC_1:154;
  hence thesis by Z1;
 end;
-
+ 
 :: new, 2009.09.30, A.T.
 
 registration
@@ -1406,13 +1405,21 @@ end;
 registration
   let A be set, F be finite Relation;
   cluster A|F -> finite;
-  coherence by Th13,RELAT_1:117;
+  coherence
+  proof
+    A|F c= F by RELAT_1:117;
+    hence thesis;
+  end;
 end;
 
 registration
   let A be set, F be finite Relation;
   cluster F|A -> finite;
-  coherence by Th13,RELAT_1:88;
+  coherence
+  proof
+    F|A c= F by RELAT_1:88;
+    hence thesis;
+  end;
 end;
 
 registration
@@ -1420,7 +1427,7 @@ registration
   cluster F|A -> finite;
   coherence
   proof
-    dom(F|A) is finite by Th13,RELAT_1:87;
+    dom(F|A) c= A by RELAT_1:87;
     hence thesis by Th29;
   end;
 end;
@@ -1430,4 +1437,3 @@ registration
   cluster field R -> finite;
   coherence;
 end;
-

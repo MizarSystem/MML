@@ -13,10 +13,10 @@ environ
       BORSUK_1, TOPS_2, ORDINAL2, MCART_1, ZFMISC_1, PARTFUN1, SETFAM_1,
       SPPOL_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, SEQ_4, FUNCT_1, PARTFUN1,
-      PRE_TOPC, BORSUK_1, FINSET_1, FINSEQ_1, DOMAIN_1, STRUCT_0, METRIC_1,
-      PCOMPS_1, TOPS_2, REALSET1, COMPTS_1, RLVECT_1, RLTOPSP1, EUCLID, TEX_2,
-      TOPREAL1;
+      XXREAL_2, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, SEQ_4, FUNCT_1,
+      PARTFUN1, PRE_TOPC, BORSUK_1, FINSET_1, FINSEQ_1, DOMAIN_1, STRUCT_0,
+      METRIC_1, PCOMPS_1, TOPS_2, REALSET1, COMPTS_1, RLVECT_1, RLTOPSP1,
+      EUCLID, TEX_2, TOPREAL1;
  constructors SETFAM_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_4, FINSEQ_4,
       TOPS_2, COMPTS_1, REALSET2, TDLAT_3, TEX_2, MONOID_0, TOPMETR, TOPREAL1,
       PCOMPS_1, XXREAL_2, FUNCSDOM, CONVEX1, BINOP_2;
@@ -25,18 +25,18 @@ environ
       TOPREAL1, FINSET_1, VALUED_0, RLTOPSP1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPREAL1, SEQ_4, EUCLID, COMPTS_1, SUBSET_1, VALUED_1,
-      STRUCT_0, ALGSTR_0, RLTOPSP1;
+      STRUCT_0, ALGSTR_0, RLTOPSP1, XXREAL_2;
  theorems TARSKI, NAT_1, INT_1, ABSVALUE, SUBSET_1, FINSET_1, FINSEQ_1,
       PRE_TOPC, METRIC_1, TOPS_1, TOPS_2, SEQ_4, EUCLID, TOPMETR, TOPREAL1,
-      TOPREAL3, PCOMPS_1, COMPTS_1, TEX_2, FINSEQ_3, REALSET1, HEINE,
-      TDLAT_3, PARTFUN2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0, RLTOPSP1;
+      TOPREAL3, PCOMPS_1, COMPTS_1, TEX_2, FINSEQ_3, REALSET1, HEINE, TDLAT_3,
+      PARTFUN2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, COMPLEX1,
+      XXREAL_0, RLTOPSP1;
  schemes FRAENKEL;
 
 begin :: Preliminaires
 
-reserve n,i,j,k,m for Element of NAT;
-reserve r,r1,r2,s,s1,s2 for real number;
+reserve n,i,k,m for Element of NAT;
+
 
 canceled 5;
 
@@ -44,8 +44,7 @@ theorem
   for n,k being Nat holds n<k implies n<=k-1
 proof
   let n,k be Nat;
-  assume
-  n<k;
+  assume n<k;
   then n+1<=k by NAT_1:13;
   then n+1-1<=k-1 by XREAL_1:11;
   hence thesis;
@@ -69,8 +68,7 @@ scheme
 A1: F c= F9
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then ex i st x = F(f(),i) & i in dom f() & P[i];
     hence thesis;
   end;
@@ -88,8 +86,7 @@ proof
 A1: F c= F9
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then consider i such that
 A2: x = F(f(),i) and
 A3: 1<=i & i<=len f() and
@@ -127,7 +124,7 @@ proof
 end;
 
 begin
-
+ 
 :: Extremal properties of endpoints of line segments in n-dimensional
 :: Euclidean space
 
@@ -141,8 +138,7 @@ theorem Th20:
   st v1=u1 & v2=u2 holds dist(u1,u2) = |.v1-v2.|
 proof
   let u1,u2 be Point of Euclid n, v1,v2 be Element of REAL n;
-  assume
-  v1=u1 & v2=u2;
+  assume v1=u1 & v2=u2;
   hence dist(u1,u2) = (Pitag_dist n).(v1,v2) by METRIC_1:def 1
     .= |.v1-v2.| by EUCLID:def 6;
 end;
@@ -159,8 +155,7 @@ proof
   W c= REAL
   proof
     let x be set;
-    assume
-    x in W;
+    assume x in W;
     then ex r st r=x & 0<=r & r<=1 & (1-r)*p1+r*p2 in P;
     hence thesis;
   end;
@@ -172,9 +167,8 @@ A2: P c= LSeg(p1,p2);
 A3: W is bounded_below
   proof
     take 0;
-    let r be real number;
-    assume
-    r in W;
+    let r be ext-real number;
+    assume r in W;
     then ex s st s = r & 0<=s & s<=1 & (1-s)*p1+s*p2 in P;
     hence thesis;
   end;
@@ -259,8 +253,7 @@ A23:  ex q1 being Point of TOP-REAL n st q1 in P by SUBSET_1:10;
     end;
   end;
   let r;
-  assume
-  0<=r & r<=1 & (1-r)*p1+r*p2 in P;
+  assume 0<=r & r<=1 & (1-r)*p1+r*p2 in P;
   then r in W;
   hence thesis by A3,SEQ_4:def 5;
 end;
@@ -278,8 +271,7 @@ A1: LSeg(q1,q2) c= LSeg(p1,p2);
 A2: q2=(1-s2)*p1+s2*p2 and
 A3: 0<=s2 and
   s2<=1;
-  assume
-  p1 in LSeg(q1,q2);
+  assume p1 in LSeg(q1,q2);
   then consider r1 such that
 A4: p1=(1-r1)*q1+r1*q2 and
 A5: 0<=r1 & r1<=1;
@@ -379,13 +371,12 @@ A5: p1=q2 & p2=q2;
   end;
 end;
 
-theorem
-  TOP-REAL n is T_2;
+canceled 4;
 
-canceled;
-
-theorem Th28:
-  LSeg(p1,p2) is compact
+registration
+  let n,p1,p2;
+  cluster LSeg(p1,p2) -> compact;
+coherence
 proof
   set P = LSeg(p1,p2), T = (TOP-REAL n)|P;
   now
@@ -414,17 +405,16 @@ A3:   I[01] is compact by HEINE:11,TOPMETR:27;
   end;
   hence thesis by COMPTS_1:12;
 end;
-
-theorem
-  LSeg(p1,p2) is closed by Th28,COMPTS_1:16;
+ cluster LSeg(p1,p2) -> closed;
+ coherence by COMPTS_1:16;
+end;
 
 definition
   let n,p;
   let P be Subset of TOP-REAL n;
   pred p is_extremal_in P means
   :Def1:
-  p in P & for p1,p2 st p in LSeg(p1,p2)
-  & LSeg(p1,p2) c= P holds p=p1 or p=p2;
+  p in P & for p1,p2 st p in LSeg(p1,p2) & LSeg(p1,p2) c= P holds p=p1 or p=p2;
 end;
 
 theorem
@@ -435,14 +425,12 @@ proof
   assume that
 A1: p is_extremal_in P and
 A2: Q c= P;
-  assume
-  p in Q;
+  assume p in Q;
   hence p in Q;
   let p1,p2;
   assume
 A3: p in LSeg(p1,p2);
-  assume
-  LSeg(p1,p2) c= Q;
+  assume LSeg(p1,p2) c= Q;
   then LSeg(p1,p2) c= P by A2,XBOOLE_1:1;
   hence thesis by A1,A3,Def1;
 end;
@@ -480,12 +468,11 @@ A1: p is_extremal_in LSeg(p1,p2);
 end;
 
 begin
-
+ 
 :: Extremal properties of vertices of special polygons
 
 reserve P,Q for Subset of TOP-REAL 2,
-  f,f1,f2 for FinSequence of the carrier
-  of TOP-REAL 2,
+  f,f1,f2 for FinSequence of the carrier of TOP-REAL 2,
   p,p1,p2,p3,q,q3 for Point of TOP-REAL 2;
 
 theorem Th35:
@@ -547,10 +534,8 @@ Lm1: P is non trivial & P is horizontal implies P is non vertical
 proof
   assume that
 A1: P is non trivial and
-
 A2: ( for p,q st p in P & q in P holds p`2=q`2)& for p,q st p in P & q
   in P holds p`1=q`1;
-
   consider p,q such that
 A3: p in P & q in P and
 A4: p <> q by A1,REALSET1:15;
@@ -576,8 +561,7 @@ A1: p`2=q`2;
     let p1,p2;
     assume
 A2: p1 in P;
-    assume
-    p2 in P;
+    assume p2 in P;
     then
 A3: p`2 <= p2`2 & p2`2 <= p`2 by A1,TOPREAL1:10;
     p`2 <= p1`2 & p1`2 <= p`2 by A1,A2,TOPREAL1:10;
@@ -599,8 +583,7 @@ A1: p`1=q`1;
     let p1,p2;
     assume
 A2: p1 in P;
-    assume
-    p2 in P;
+    assume p2 in P;
     then
 A3: p`1 <= p2`1 & p2`1 <= p`1 by A1,TOPREAL1:9;
     p`1 <= p1`1 & p1`1 <= p`1 by A1,A2,TOPREAL1:9;
@@ -615,14 +598,12 @@ theorem
   p1 in LSeg(p,q) & p2 in LSeg(p,q) & p1`1<>p2`1 & p1`2=p2`2 implies
   LSeg(p,q) is horizontal
 proof
-  assume
-  p1 in LSeg(p,q);
+  assume p1 in LSeg(p,q);
   then consider r1 such that
 A1: p1 = (1-r1)*p+r1*q and
   0<=r1 and
   r1<=1;
-  assume
-  p2 in LSeg(p,q);
+  assume p2 in LSeg(p,q);
   then consider r2 such that
 A2: p2 = (1-r2)*p+r2*q and
   0<=r2 and
@@ -649,14 +630,12 @@ theorem
   p1 in LSeg(p,q) & p2 in LSeg(p,q) & p1`2<>p2`2 & p1`1=p2`1 implies
   LSeg(p,q) is vertical
 proof
-  assume
-  p1 in LSeg(p,q);
+  assume p1 in LSeg(p,q);
   then consider r1 such that
 A1: p1 = (1-r1)*p+r1*q and
   0<=r1 and
   r1<=1;
-  assume
-  p2 in LSeg(p,q);
+  assume p2 in LSeg(p,q);
   then consider r2 such that
 A2: p2 = (1-r2)*p+r2*q and
   0<=r2 and
@@ -679,14 +658,18 @@ A5: (r1-r2)*(p`1)=(r1-r2)*(q`1);
   hence thesis by Th37;
 end;
 
-theorem Th40:
-  LSeg(f,i) is closed
+canceled;
+
+registration
+  let f,i;
+  cluster LSeg(f,i) -> closed;
+  coherence
 proof
   per cases;
   suppose
     1<=i & i+1<=len f;
     then LSeg(f,i) = LSeg(f/.i,f/.(i+1)) by TOPREAL1:def 5;
-    hence thesis by Th28,COMPTS_1:16;
+    hence thesis by COMPTS_1:16;
   end;
   suppose
 A1: not (1<=i & i+1<=len f);
@@ -694,10 +677,10 @@ A1: not (1<=i & i+1<=len f);
     hence thesis by A1,TOPREAL1:def 5;
   end;
 end;
+end;
 
 theorem Th41:
-  f is special implies LSeg(f,i) is vertical or LSeg(f,i) is
-  horizontal
+  f is special implies LSeg(f,i) is vertical or LSeg(f,i) is horizontal
 proof
   assume
 A1: for j be Nat st 1 <= j & j+1 <= len f holds (f/.j)`1 = (f/.(j+1))`1
@@ -719,8 +702,7 @@ A3: p1`2=p2`2 implies LSeg(p1,p2) is horizontal by Th36;
 end;
 
 theorem Th42:
-  f is one-to-one & 1 <= i & i+1 <= len f implies LSeg(f,i) is non
-  trivial
+  f is one-to-one & 1 <= i & i+1 <= len f implies LSeg(f,i) is non trivial
 proof
   assume
 A1: f is one-to-one;
@@ -753,13 +735,11 @@ A1: for e being set holds e in X iff e in Y
     let e be set;
     thus e in X implies e in Y
     proof
-      assume
-      e in X;
+      assume e in X;
       then ex i st e = U(f,i) & 1<=i & i<=len f & X[i];
       hence thesis;
     end;
-    assume
-    e in Y;
+    assume e in Y;
     then ex i st e = LSeg(f,i) & 1<=i & i<=len f;
     hence thesis;
   end;
@@ -775,8 +755,7 @@ proof
   F c= F9
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then consider i such that
 A1: x = LSeg(f,i) & 1<=i and
 A2: i+1<=len f;
@@ -795,8 +774,7 @@ proof
   F c= F1
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then ex i st LSeg(f,i) = x & 1<=i & i+1<=len f & i<>k & i<>k+1;
     hence thesis;
   end;
@@ -804,16 +782,14 @@ proof
 end;
 
 theorem
-  for f holds {LSeg(f,i): 1<=i & i<=len f} is Subset-Family of TOP-REAL
-  2
+  for f holds {LSeg(f,i): 1<=i & i<=len f} is Subset-Family of TOP-REAL 2
 proof
   let f;
   set F = {LSeg(f,i): 1<=i & i<=len f};
   F c= bool (REAL 2)
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then ex i st LSeg(f,i)=x & 1<=i & i<=len f;
     then x is Subset of REAL 2 by EUCLID:25;
     hence thesis;
@@ -822,16 +798,14 @@ proof
 end;
 
 theorem Th47:
-  for f holds {LSeg(f,i): 1<=i & i+1<=len f} is Subset-Family of
-  TOP-REAL 2
+  for f holds {LSeg(f,i): 1<=i & i+1<=len f} is Subset-Family of TOP-REAL 2
 proof
   let f;
   set F = {LSeg(f,i): 1<=i & i+1<=len f};
   F c= bool (REAL 2)
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then ex i st LSeg(f,i)=x & 1<=i & i+1<=len f;
     then x is Subset of REAL 2 by EUCLID:25;
     hence thesis;
@@ -841,15 +815,13 @@ end;
 
 Lm3: for f,k holds {LSeg(f,i): 1<=i & i+1<=len f & i<>k & i<>k+1} is
 Subset-Family of TOP-REAL 2
-
 proof
   let f,k;
   set F = {LSeg(f,i): 1<=i & i+1<=len f & i<>k & i<>k+1};
   F c= bool (REAL 2)
   proof
     let x be set;
-    assume
-    x in F;
+    assume x in F;
     then ex i st LSeg(f,i)=x & 1<=i & i+1<=len f & i<>k & i<>k+ 1;
     then x is Subset of REAL 2 by EUCLID:25;
     hence thesis;
@@ -858,18 +830,16 @@ proof
 end;
 
 theorem Th48:
-  for f st Q = union{LSeg(f,i): 1<=i & i+1<=len f} holds Q is
-  closed
+  for f st Q = union{LSeg(f,i): 1<=i & i+1<=len f} holds Q is closed
 proof
   let f;
   reconsider F = {LSeg(f,i): 1<=i & i+1<=len f} as Subset-Family of TOP-REAL 2
   by Th47;
   now
     let P;
-    assume
-    P in F;
+    assume P in F;
     then ex i st LSeg(f,i)=P & 1<=i & i+1<=len f;
-    hence P is closed by Th40;
+    hence P is closed;
   end;
   then
 A1: F is closed by TOPS_2:def 2;
@@ -877,24 +847,25 @@ A1: F is closed by TOPS_2:def 2;
   hence thesis by A1,TOPS_2:28;
 end;
 
-theorem
-  L~f is closed by Th48;
+canceled;
+
+registration
+  let f;
+  cluster L~f -> closed;
+  coherence by Th48;
+end;
 
 Lm4: for f,Q,k st Q = union{LSeg(f,i):1<=i & i+1<=len f & i<>k & i<>k+1} holds
 Q is closed
-
 proof
   let f,Q,k;
-
   reconsider F = {LSeg(f,i): 1<=i & i+1<=len f & i<>k & i<>k+1} as
   Subset-Family of TOP-REAL 2 by Lm3;
-
   now
     let P;
-    assume
-    P in F;
+    assume P in F;
     then ex i st LSeg(f,i)=P & 1<=i & i+1<=len f & i<>k & i<>k+1;
-    hence P is closed by Th40;
+    hence P is closed;
   end;
   then
 A1: F is closed by TOPS_2:def 2;
@@ -976,11 +947,9 @@ end;
 
 Lm5: for f,i,p1,p2 st f is alternating & 1<=i & i+2<=len f & p1=f/.i & p2=f/.(
 i+2) ex p st p in LSeg(p1,p2) & p`1<>p1`1 & p`1<>p2`1 & p`2<>p1`2 & p`2<>p2`2
-
 proof
   let f,i,p1,p2;
-  assume
-  f is alternating & 1<=i & i+2<=len f & p1=f/.i & p2=f/.(i+2);
+  assume f is alternating & 1<=i & i+2<=len f & p1=f/.i & p2=f/.(i+2);
   then p1`1<>p2`1 & p1`2<>p2`2 by Def4;
   hence thesis by Th35;
 end;
@@ -1731,8 +1700,7 @@ f2 is alternating being_S-Seq & f1/.1 = f2/.1 & f1/.len f1 = f2/.len f2 & <*f1
 end;
 
 theorem
-  f1,f2 are_generators_of P & 1<i & i<len f1 implies f1/.i
-  is_extremal_in P
+  f1,f2 are_generators_of P & 1<i & i<len f1 implies f1/.i is_extremal_in P
 proof
   set p0=f1/.i;
   set q1 = f1/.1, q2 = f1/.len f1;
@@ -1851,8 +1819,7 @@ A35: j+2 <= len f1 by A12;
   now
     let y be set;
     hereby
-      assume
-      y in P1 \/ LSeg(f1,j) \/ LSeg(f1,i);
+      assume y in P1 \/ LSeg(f1,j) \/ LSeg(f1,i);
       then
 A36:  y in P1 \/ LSeg(f1,j) or y in LSeg(f1,i) by XBOOLE_0:def 3;
       per cases by A36,XBOOLE_0:def 3;
@@ -1876,8 +1843,7 @@ A39:    y in LSeg(f1,j);
         hence y in PP by A13,TARSKI:def 4;
       end;
     end;
-    assume
-    y in PP;
+    assume y in PP;
     then consider Z2 being set such that
 A40: y in Z2 and
 A41: Z2 in F1 by TARSKI:def 4;
@@ -1936,8 +1902,7 @@ A52:  LSeg(p,q) = LSeg(p,p8)\/ LSeg(p8,q) by A50,TOPREAL1:11;
         suppose
 A53:      p0 in LSeg(p,p8);
           now
-            assume
-            f1/.i<>p;
+            assume f1/.i<>p;
             then consider q3 such that
 A54:        not q3 in LSeg(f1,j) \/ LSeg(f1,i) and
 A55:        q3 in LSeg(p8,p) and
@@ -1960,8 +1925,7 @@ A59:        LSeg(p8,p) c= P by A48,XBOOLE_1:1;
         suppose
 A60:      p0 in LSeg(p8,q);
           now
-            assume
-            f1/.i<>q;
+            assume f1/.i<>q;
             then consider q3 such that
 A61:        not q3 in LSeg(f1,j) \/ LSeg(f1,i) and
 A62:        q3 in LSeg(p8,q) and
@@ -1989,7 +1953,7 @@ A66:        LSeg(p8,q) c= P by A48,XBOOLE_1:1;
   then p0 in P by A8,XBOOLE_0:def 3;
   hence thesis by A46,Def1;
 end;
-
+ 
 :: Moved from KURATO_2, AK, 22.02.2006
 
 theorem
@@ -2002,7 +1966,7 @@ A1: p = p9 & q = q9;
   dist(p9, q9) = |. pp - qq .| by A1,Th20;
   hence thesis by EUCLID:73;
 end;
-
+ 
 :: Moved from SPRECT_3, AK, 22.02.2006
 
 theorem
@@ -2010,18 +1974,15 @@ theorem
   LSeg(p,q) holds p`2 = r`2
 proof
   let p,q,r be Point of TOP-REAL 2;
-  assume
-  LSeg(p,q) is horizontal;
+  assume LSeg(p,q) is horizontal;
   then
 A1: p`2 = q`2 by Th36;
-  assume
-  r in LSeg(p,q);
+  assume r in LSeg(p,q);
   then consider t being Real such that
 A2: r = (1-t)*p+t*q and
   0 <= t and
   t <= 1;
-  thus p`2 = (1-t)*p`2+t*p`2
-    .= ((1-t)*p)`2+t*q`2 by A1,TOPREAL3:9
+  thus p`2 = (1-t)*p`2+t*p`2 .= ((1-t)*p)`2+t*q`2 by A1,TOPREAL3:9
     .= ((1-t)*p)`2+(t*q)`2 by TOPREAL3:9
     .= r`2 by A2,TOPREAL3:7;
 end;
@@ -2031,18 +1992,15 @@ theorem
   LSeg(p,q) holds p`1 = r`1
 proof
   let p,q,r be Point of TOP-REAL 2;
-  assume
-  LSeg(p,q) is vertical;
+  assume LSeg(p,q) is vertical;
   then
 A1: p`1 = q`1 by Th37;
-  assume
-  r in LSeg(p,q);
+  assume r in LSeg(p,q);
   then consider t being Real such that
 A2: r = (1-t)*p+t*q and
   0 <= t and
   t <= 1;
-  thus p`1 = (1-t)*p`1+t*p`1
-    .= ((1-t)*p)`1+t*q`1 by A1,TOPREAL3:9
+  thus p`1 = (1-t)*p`1+t*p`1 .= ((1-t)*p)`1+t*q`1 by A1,TOPREAL3:9
     .= ((1-t)*p)`1+(t*q)`1 by TOPREAL3:9
     .= r`1 by A2,TOPREAL3:7;
 end;
@@ -2053,14 +2011,13 @@ registration
   proof
     take LSeg(|[ 0,0 ]|,|[ 1,0 ]|);
     |[ 0,0 ]|`2 = 0 & |[ 1,0 ]|`2 = 0 by EUCLID:56;
-    hence thesis by Th28,Th36;
+    hence thesis by Th36;
   end;
   cluster compact non empty vertical Subset of TOP-REAL 2;
   existence
   proof
     take LSeg(|[ 0,0 ]|,|[ 0,1 ]|);
     |[ 0,0 ]|`1 = 0 & |[ 0,1 ]|`1 = 0 by EUCLID:56;
-    hence thesis by Th28,Th37;
+    hence thesis by Th37;
   end;
 end;
-

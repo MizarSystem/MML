@@ -20,13 +20,14 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RUSUB_1"/>
 </Signature>
 <RCluster aid="RUSUB_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="16">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="60"/>
@@ -37,7 +38,7 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="97"/>
+<Adjective nr="101"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,8 +56,8 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 </Registrations>

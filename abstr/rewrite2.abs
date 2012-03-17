@@ -8,14 +8,15 @@ environ
 
  vocabularies NUMBERS, NAT_1, FINSEQ_1, RELAT_1, ARYTM_3, CARD_1, XXREAL_0,
       ORDINAL4, REWRITE1, TARSKI, SUBSET_1, FUNCT_1, AFINSQ_1, XBOOLE_0,
-      ORDINAL2, RELAT_2, PRELAMB, FINSEQ_5, LANG1, CIRCTRM1, REWRITE2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, DOMAIN_1, NAT_1,
-      FINSEQ_5, FUNCT_1, RELSET_1, XXREAL_0, AFINSQ_1, CATALAN2, RELAT_2,
-      FINSEQ_1, REWRITE1, FLANG_1, LANG1, OPOSET_1;
+      ORDINAL2, RELAT_2, PRELAMB, FINSEQ_5, LANG1, CIRCTRM1, REWRITE2,
+      ORDINAL1, FINSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ORDINAL1, FINSET_1, RELAT_1,
+      DOMAIN_1, NAT_1, FINSEQ_5, FUNCT_1, RELSET_1, XXREAL_0, AFINSQ_1,
+      CATALAN2, RELAT_2, FINSEQ_1, REWRITE1, FLANG_1, LANG1, PARTIT_2;
  constructors NAT_1, FINSEQ_5, REWRITE1, FLANG_1, LANG1, OPOSET_1, XREAL_0,
-      RELSET_1;
+      RELSET_1, PARTIT_2;
  registrations NAT_1, AFINSQ_1, REWRITE1, FINSEQ_1, XXREAL_0, XBOOLE_0,
-      RELAT_1, FUNCT_1, XREAL_0, ORDINAL1;
+      RELAT_1, FUNCT_1, XREAL_0, ORDINAL1, CATALAN2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -54,8 +55,7 @@ definition
   attr f is XFinSequence-yielding means
 :: REWRITE2:def 1
 
-  x in dom f implies f.x is
-  XFinSequence;
+  x in dom f implies f.x is XFinSequence;
 end;
 
 registration
@@ -67,10 +67,16 @@ registration
   cluster <*f*> -> XFinSequence-yielding;
 end;
 
-definition
+registration
   let p be XFinSequence-yielding Function;
   let x;
-  redefine func p.x -> XFinSequence;
+  cluster p.x -> finite Function-like Relation-like;
+end;
+
+registration
+  let p be XFinSequence-yielding Function;
+  let x;
+  cluster p.x -> T-Sequence-like;
 end;
 
 registration
@@ -98,13 +104,11 @@ definition
   func s ^+ p -> XFinSequence-yielding Function means
 :: REWRITE2:def 2
 
-  dom it = dom p &
-  for x st x in dom p holds it.x = s^(p.x);
+  dom it = dom p & for x st x in dom p holds it.x = s^(p.x);
   func p +^ s -> XFinSequence-yielding Function means
 :: REWRITE2:def 3
 
-  dom it = dom p &
-  for x st x in dom p holds it.x = (p.x)^s;
+  dom it = dom p & for x st x in dom p holds it.x = (p.x)^s;
 end;
 
 registration
@@ -184,7 +188,7 @@ begin
 :: Direct derivations.
 
 reserve s, t, s1, t1, u, v, u1, v1, w for Element of E^omega;
-reserve p, q for FinSequence of E^omega;
+reserve p for FinSequence of E^omega;
 
 definition
   let E, S, s, t;
@@ -199,8 +203,7 @@ definition
   pred s ==>. t, S means
 :: REWRITE2:def 5
 
-  ex v, w, s1, t1 st s = v^s1^w & t = v^t1^w &
-  s1 -->. t1, S;
+  ex v, w, s1, t1 st s = v^s1^w & t = v^t1^w & s1 -->. t1, S;
 end;
 
 theorem :: REWRITE2:10
@@ -254,8 +257,7 @@ definition
   func ==>.-relation(S) -> Relation of E^omega means
 :: REWRITE2:def 6
 
-  [s, t] in it iff s
-  ==>. t, S;
+  [s, t] in it iff s ==>. t, S;
 end;
 
 theorem :: REWRITE2:22
@@ -270,8 +272,7 @@ theorem :: REWRITE2:24
   RedSequence of ==>.-relation(S);
 
 theorem :: REWRITE2:25
-  S is Thue-system of E implies ==>.-relation(S) = (==>.-relation(
-  S))~;
+  S is Thue-system of E implies ==>.-relation(S) = (==>.-relation( S))~;
 
 theorem :: REWRITE2:26
   S c= T implies ==>.-relation(S) c= ==>.-relation(T);
@@ -280,8 +281,7 @@ theorem :: REWRITE2:27
   ==>.-relation(id (E^omega)) = id (E^omega);
 
 theorem :: REWRITE2:28
-  ==>.-relation(S \/ id (E^omega)) = ==>.-relation(S) \/ id (E
-  ^omega);
+  ==>.-relation(S \/ id (E^omega)) = ==>.-relation(S) \/ id (E ^omega);
 
 theorem :: REWRITE2:29
   ==>.-relation({}(E^omega, E^omega)) = {}(E^omega, E^omega);
@@ -423,4 +423,3 @@ theorem :: REWRITE2:61
 
 theorem :: REWRITE2:62
   s ==>* t, S implies S, (S \/ {[s, t]}) are_equivalent_wrt w;
-

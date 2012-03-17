@@ -12,14 +12,15 @@ environ
       CARD_1, XBOOLE_0, ORDINAL4, FINSEQ_5, RFINSEQ, JORDAN3, CARD_3, XCMPLX_0,
       AFINSQ_2, BINOP_1, SETWISEO, FINSOP_1, FUNCOP_1, BINOP_2, VALUED_0,
       FUNCT_2, INT_1, PRGCOR_2, XREAL_0, SEQ_1, SERIES_1, VALUED_1, RAT_1,
-      SQUARE_1, COMPLEX1, PARTFUN3;
+      SQUARE_1, COMPLEX1, PARTFUN3, PRE_POLY;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, XREAL_0, NUMBERS, RELAT_1,
       FUNCT_1, XCMPLX_0, NAT_1, FINSET_1, ORDINAL1, XXREAL_0, NAT_D, AFINSQ_1,
       SEQ_1, MEMBERED, VALUED_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, INT_1,
       BINOP_1, BINOP_2, SETWISEO, FINSOP_1, FINSEQ_1, RECDEF_1, VALUED_0,
       SERIES_1, RAT_1, PARTFUN3;
  constructors SERIES_1, PARTFUN3, WELLORD2, SETWISEO, REAL_1, FINSOP_1, NAT_D,
-      RECDEF_1, BINOP_2, RELSET_1, ORDINAL4, AFINSQ_1, MATRIX_7, SQUARE_1;
+      RECDEF_1, BINOP_2, RELSET_1, ORDINAL4, AFINSQ_1, MATRIX_7, SQUARE_1,
+      FINSEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, BINOP_2, CARD_1,
       FINSEQ_1, AFINSQ_1, RELSET_1, ORDINAL3, VALUED_1, VALUED_0, MEMBERED;
@@ -366,20 +367,20 @@ definition
 it = f.(len F-1);
 end;
 
-theorem :: AFINSQ_2:49   :: STIRL2_1:44
+theorem :: AFINSQ_2:49
   b "**" <%d%> = d;
 
-theorem :: AFINSQ_2:50   :: STIRL2_1:48
+theorem :: AFINSQ_2:50
   b "**" <%d1,d2%> = b.(d1,d2);
 
-theorem :: AFINSQ_2:51  :: STIRL2_1:49
+theorem :: AFINSQ_2:51
   b "**" <%d,d1,d2%> = b.(b.(d,d1),d2);
 
 theorem :: AFINSQ_2:52   :: STIRL2_1:45
   b is having_a_unity or len F > 0 implies b "**" (F ^ <% d %>) =
   b.(b "**" F,d);
 
-theorem :: AFINSQ_2:53  :: STIRL2_1:46
+theorem :: AFINSQ_2:53
   b is associative & (b is having_a_unity or len F >= 1 & len G >= 1)
   implies b "**" (F ^ G) = b.(b "**" F,b "**" G);
 
@@ -539,3 +540,37 @@ theorem :: AFINSQ_2:83
   for B1,B2 being finite natural-membered set st
      B1 <N< B2 holds
 Sum (SubXFinS(cF,B1\/B2))=Sum (SubXFinS(cF,B1))+Sum(SubXFinS(cF,B2));
+
+:: missing, 2010.05.15, A.T.
+
+theorem :: AFINSQ_2:84
+ b is having_a_unity implies b "**" <%>D = the_unity_wrt b;
+
+
+definition
+  let D be set, F be XFinSequence of D^omega;
+  func FlattenSeq F -> Element of D^omega means
+:: AFINSQ_2:def 11
+
+  ex g being BinOp of D^omega st
+  (for p, q being Element of D^omega holds g.(p,q) = p^q) & it = g "**" F;
+end;
+
+theorem :: AFINSQ_2:85
+  for D being set, d be Element of D^omega holds FlattenSeq <%d%> = d;
+
+theorem :: AFINSQ_2:86
+  for D being set holds FlattenSeq <%>(D^omega) = <%>D;
+
+theorem :: AFINSQ_2:87
+  for D being set, F,G be XFinSequence of D^omega holds
+  FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G;
+
+theorem :: AFINSQ_2:88
+  for D being set, p,q be Element of D^omega holds FlattenSeq <% p,q %> = p ^ q
+;
+
+theorem :: AFINSQ_2:89
+  for D being set, p,q,r be Element of D^omega holds
+  FlattenSeq <% p,q,r %> = p ^ q ^ r;
+

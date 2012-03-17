@@ -9,12 +9,12 @@ environ
  vocabularies NUMBERS, STRUCT_0, FUNCT_1, ZFMISC_1, XBOOLE_0, PARTFUN1,
       SUBSET_1, REAL_1, RELAT_1, CARD_1, FUNCT_5, TARSKI, VALUED_0, ORDINAL1,
       XXREAL_0, ARYTM_3, RELAT_2, FUNCT_3, COMPLEX1, ARYTM_1, XREAL_0,
-      METRIC_1;
+      METRIC_1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, COMPLEX1, REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1,
-      RELAT_1, FUNCT_5, VALUED_0, STRUCT_0, XXREAL_0;
+      XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCOP_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCT_5, VALUED_0, STRUCT_0;
  constructors BINOP_1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, STRUCT_0, VALUED_1,
-      FUNCT_5, PARTFUN1, RELSET_1;
+      FUNCT_5, PARTFUN1, RELSET_1, FUNCOP_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, MEMBERED,
       STRUCT_0, VALUED_0, FUNCT_2, PARTFUN1, RELSET_1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
@@ -23,8 +23,9 @@ environ
 begin
 
 definition
-  struct(1-sorted) MetrStruct (# carrier -> set, distance -> Function of [:the
-    carrier,the carrier:],REAL #);
+  struct(1-sorted) MetrStruct
+   (# carrier -> set,
+     distance -> Function of [:the carrier,the carrier:],REAL #);
 end;
 
 registration
@@ -75,18 +76,15 @@ definition
   attr f is discerning means
 :: METRIC_1:def 4
 
-  for a, b being Element of A holds f.(a,b)
-  = 0 implies a = b;
+  for a, b being Element of A st f.(a,b) = 0 holds a = b;
   attr f is symmetric means
 :: METRIC_1:def 5
 
-  for a, b being Element of A holds f.(a,b) =
-  f.(b,a);
+  for a, b being Element of A holds f.(a,b) = f.(b,a);
   attr f is triangle means
 :: METRIC_1:def 6
 
-  for a, b, c being Element of A holds f.(a,c)
-  <= f.(a,b) + f.(b,c);
+  for a, b, c being Element of A holds f.(a,c) <= f.(a,b) + f.(b,c);
 end;
 
 definition
@@ -122,12 +120,14 @@ theorem :: METRIC_1:1
   dist(a,a) = 0 ) iff M is Reflexive;
 
 theorem :: METRIC_1:2
-  for M being MetrStruct holds ( for a, b being Element of M st dist(a,b
-  ) = 0 holds a = b ) iff M is discerning;
+  for M being MetrStruct holds
+  ( for a, b being Element of M st dist(a,b) = 0 holds a = b ) iff
+  M is discerning;
 
 theorem :: METRIC_1:3
-  for M being MetrStruct holds ( for a, b being Element of M holds
-  dist(a,b) = dist(b,a) ) iff M is symmetric;
+  for M being MetrStruct st
+   for a, b being Element of M holds dist(a,b) = dist(b,a) holds
+  M is symmetric;
 
 theorem :: METRIC_1:4
   for M being MetrStruct holds ( for a, b, c being Element of M
@@ -141,29 +141,32 @@ definition
 end;
 
 theorem :: METRIC_1:5
-  for M being symmetric triangle Reflexive MetrStruct, a, b being
-  Element of M holds 0 <= dist(a,b);
+  for M being symmetric triangle Reflexive MetrStruct,
+      a, b being Element of M holds 0 <= dist(a,b);
 
 theorem :: METRIC_1:6
-  for M being MetrStruct st (for a, b, c being Element of M holds (
-dist(a,b) = 0 iff a=b) & dist(a,b) = dist(b,a) & dist(a,c) <= dist(a,b) + dist(
-  b,c)) holds M is MetrSpace;
+  for M being MetrStruct st (for a, b, c being Element of M holds
+  (dist(a,b) = 0 iff a=b) &
+  dist(a,b) = dist(b,a) &
+  dist(a,c) <= dist(a,b) + dist(b,c)) holds M is MetrSpace;
+
+theorem :: METRIC_1:7
+  for M being MetrSpace, x,y being Element of M st x <> y holds 0 < dist(x,y);
 
 definition
   let A be set;
   func discrete_dist A -> Function of [:A,A:], REAL means
 :: METRIC_1:def 11
 
-  for x,y
-  being Element of A holds it.(x,x) = 0 & (x <> y implies it.(x,y) = 1);
+  for x,y being Element of A holds it.(x,x) = 0 &
+  (x <> y implies it.(x,y) = 1);
 end;
 
 definition
   let A be set;
   func DiscreteSpace A -> strict MetrStruct equals
 :: METRIC_1:def 12
-  MetrStruct (#A,
-    discrete_dist A#);
+  MetrStruct (#A,discrete_dist A#);
 end;
 
 registration
@@ -180,18 +183,16 @@ definition
   func real_dist -> Function of [:REAL,REAL:], REAL means
 :: METRIC_1:def 13
 
-  for x,y
-  being Element of REAL holds it.(x,y) = abs(x-y);
+  for x,y being Element of REAL holds it.(x,y) = abs(x-y);
 end;
 
-canceled 2;
+canceled;
 
 theorem :: METRIC_1:9
   for x,y being Element of REAL holds real_dist.(x,y) = 0 iff x = y;
 
 theorem :: METRIC_1:10
-  for x,y being Element of REAL holds real_dist.(x,y) = real_dist.
-  (y,x);
+  for x,y being Element of REAL holds real_dist.(x,y) = real_dist.(y,x);
 
 theorem :: METRIC_1:11
   for x,y,z being Element of REAL holds real_dist.(x,y) <=
@@ -226,9 +227,9 @@ definition
   func cl_Ball(p,r) -> Subset of M means
 :: METRIC_1:def 16
 
-  ex M9 being non empty
-  MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & it = {q where q is
-  Element of M9 : dist(p9,q) <= r} if M is non empty otherwise it is empty;
+  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p &
+     it = {q where q is Element of M9 : dist(p9,q) <= r} if
+       M is non empty otherwise it is empty;
 end;
 
 definition
@@ -236,16 +237,16 @@ definition
   func Sphere(p,r) -> Subset of M means
 :: METRIC_1:def 17
 
-  ex M9 being non empty
-  MetrStruct, p9 being Element of M9 st M9 = M & p9 = p & it = {q where q is
-  Element of M9 : dist(p9,q) = r} if M is non empty otherwise it is empty;
+  ex M9 being non empty MetrStruct, p9 being Element of M9 st M9 = M & p9 = p &
+   it = {q where q is Element of M9 : dist(p9,q) = r} if M is non empty
+   otherwise it is empty;
 end;
 
 reserve r for real number;
 
 theorem :: METRIC_1:12
-  for M being MetrStruct, p, x being Element of M holds x in Ball(
-  p,r) iff M is non empty & dist(p,x) < r;
+  for M being MetrStruct, p, x being Element of M holds x in Ball(p,r)
+    iff M is non empty & dist(p,x) < r;
 
 theorem :: METRIC_1:13
   for M being MetrStruct, p, x being Element of M holds x in
@@ -256,16 +257,15 @@ theorem :: METRIC_1:14
   Sphere(p,r) iff M is non empty & dist(p,x) = r;
 
 theorem :: METRIC_1:15
-  for M being MetrStruct, p being Element of M holds Ball(p,r) c=
-  cl_Ball(p,r);
+  for M being MetrStruct, p being Element of M holds Ball(p,r) c= cl_Ball(p,r);
 
 theorem :: METRIC_1:16
   for M being MetrStruct, p being Element of M holds Sphere(p,r)
   c= cl_Ball(p,r);
 
 theorem :: METRIC_1:17
-  for M being MetrStruct, p being Element of M holds Sphere(p,r) \/ Ball
-  (p,r) = cl_Ball(p,r);
+  for M being MetrStruct, p being Element of M holds
+  Sphere(p,r) \/ Ball(p,r) = cl_Ball(p,r);
 
 theorem :: METRIC_1:18
   for M being non empty MetrStruct, p being Element of M holds Ball(p,r)
@@ -279,3 +279,160 @@ theorem :: METRIC_1:20
   for M being non empty MetrStruct, p being Element of M holds Sphere(p,
   r) = {q where q is Element of M: dist(p,q) = r};
 
+begin
+
+theorem :: METRIC_1:21
+  for x being set holds Empty^2-to-zero.(x,x) = 0;
+
+theorem :: METRIC_1:22
+  for x,y being Element of 1 st x <> y holds 0 < Empty^2-to-zero.(x,y);
+
+theorem :: METRIC_1:23
+  for x,y being Element of 1 holds
+    Empty^2-to-zero.(x,y) = Empty^2-to-zero.(y,x);
+
+theorem :: METRIC_1:24
+  for x,y,z being Element of 1 holds Empty^2-to-zero.(x,z) <=
+  Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z);
+
+theorem :: METRIC_1:25
+  for x,y,z being Element of 1 holds
+  Empty^2-to-zero.(x,z) <= max(Empty^2-to-zero.(x,y),Empty^2-to-zero.(y,z));
+
+definition
+  let A be non empty set;
+  let f be Function of [:A,A:], REAL;
+  attr f is Discerning means
+:: METRIC_1:def 18
+
+  for a, b being Element of A holds a <> b implies 0 < f.(a,b);
+end;
+
+definition
+  let M be non empty MetrStruct;
+  attr M is Discerning means
+:: METRIC_1:def 19
+
+  the distance of M is Discerning;
+end;
+
+theorem :: METRIC_1:26
+  for M being non empty MetrStruct holds
+  ( for a, b being Element of M holds a <> b implies 0 < dist(a,b)) iff
+  M is Discerning;
+
+registration
+  cluster MetrStruct(#1,Empty^2-to-zero#) -> non empty;
+end;
+
+registration
+  cluster MetrStruct(#1,Empty^2-to-zero#) -> Reflexive symmetric Discerning
+    triangle;
+end;
+
+definition
+  let M be non empty MetrStruct;
+  attr M is ultra means
+:: METRIC_1:def 20
+  for a, b, c being Element of M holds dist(a,c) <= max (dist(a,b),dist(b,c));
+end;
+
+registration
+  cluster strict ultra Reflexive symmetric Discerning triangle
+    (non empty MetrStruct);
+end;
+
+theorem :: METRIC_1:27
+  for M being Reflexive Discerning (non empty MetrStruct),
+      a,b being Element of M holds 0 <= dist(a,b);
+
+definition
+  mode PseudoMetricSpace is Reflexive symmetric triangle
+    (non empty MetrStruct);
+  mode SemiMetricSpace is Reflexive Discerning symmetric
+    (non empty MetrStruct);
+  mode NonSymmetricMetricSpace is Reflexive Discerning triangle
+    (non empty MetrStruct);
+  mode UltraMetricSpace is ultra Reflexive symmetric Discerning
+    (non empty MetrStruct);
+end;
+
+registration
+  cluster -> Discerning (non empty MetrSpace);
+end;
+
+registration
+  cluster -> triangle discerning UltraMetricSpace;
+end;
+
+definition
+  func Set_to_zero -> Function of [:2,2:],REAL equals
+:: METRIC_1:def 21
+  [:2,2:] --> 0;
+end;
+
+theorem :: METRIC_1:28
+  for x,y being Element of 2 holds Set_to_zero.(x,y) = 0;
+
+theorem :: METRIC_1:29
+  for x,y being Element of 2 holds Set_to_zero.(x,y) = Set_to_zero.(y,x);
+
+theorem :: METRIC_1:30
+  for x,y,z being Element of 2 holds
+  Set_to_zero.(x,z) <= Set_to_zero.(x,y) + Set_to_zero.(y,z);
+
+definition
+  func ZeroSpace -> MetrStruct equals
+:: METRIC_1:def 22
+  MetrStruct(#2, Set_to_zero#);
+end;
+
+registration
+  cluster ZeroSpace -> strict non empty;
+end;
+
+registration
+  cluster ZeroSpace -> Reflexive symmetric triangle;
+end;
+
+definition
+  let S be MetrStruct, p,q,r be Element of S;
+  pred q is_between p,r means
+:: METRIC_1:def 23
+  p <> q & p <> r & q <> r & dist(p,r) = dist(p,q) + dist(q,r);
+end;
+
+theorem :: METRIC_1:31
+  for S being symmetric triangle Reflexive (non empty MetrStruct),
+      p, q, r being Element of S holds
+    q is_between p,r implies q is_between r,p;
+
+theorem :: METRIC_1:32
+  for S being MetrSpace, p,q,r being Element of S st q is_between p,r
+  holds (not p is_between q,r) & not r is_between p,q;
+
+theorem :: METRIC_1:33
+  for S being MetrSpace, p,q,r,s being Element of S st q is_between p,r
+  & r is_between p,s holds q is_between p,s & r is_between q,s;
+
+definition
+  let M be non empty MetrStruct, p,r be Element of M;
+  func open_dist_Segment(p,r) -> Subset of M equals
+:: METRIC_1:def 24
+  {q where q is Element of M : q is_between p,r};
+end;
+
+theorem :: METRIC_1:34
+  for M being non empty MetrSpace, p,r,x being Element of M holds
+  x in open_dist_Segment(p,r) iff x is_between p,r;
+
+definition
+  let M be non empty MetrStruct, p,r be Element of M;
+  func close_dist_Segment(p,r) -> Subset of M equals
+:: METRIC_1:def 25
+  {q where q is Element of M : q is_between p,r} \/ {p,r};
+end;
+
+theorem :: METRIC_1:35
+  for M being non empty MetrStruct, p,r,x being Element of M holds
+  x in close_dist_Segment(p,r) iff (x is_between p,r or x = p or x = r);

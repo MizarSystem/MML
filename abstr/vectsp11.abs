@@ -18,16 +18,16 @@ environ
       ALGSTR_0, XXREAL_0, NAT_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       FINSEQ_1, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_2,
       MATRIX_1, MATRIX_2, NAT_D, GROUP_4, MATRIX_3, DOMAIN_1, MEASURE6,
-      VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13,
-      MATRLIN, LAPLACE, MOD_2, RANKNULL, POLYNOM3, MONOID_0, ALGSEQ_1,
-      POLYNOM4, POLYNOM5, MATRLIN2, GRCAT_1;
+      PRVECT_1, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP,
+      MATRIX13, MATRLIN, LAPLACE, MOD_2, RANKNULL, POLYNOM3, MONOID_0,
+      ALGSEQ_1, POLYNOM4, POLYNOM5, MATRLIN2, GRCAT_1;
  constructors FINSOP_1, XXREAL_0, GROUP_4, VECTSP_7, VECTSP_9, MATRIX13,
       REALSET1, LAPLACE, VECTSP_5, RANKNULL, MONOID_0, POLYNOM1, POLYNOM4,
       POLYNOM5, SEQ_1, MATRLIN2, BINOP_2, NAT_D, RELSET_1, GRCAT_1, MEASURE6;
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
       ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, SEQM_3, MATRIX13,
       XREAL_0, VECTSP_9, RANKNULL, POLYNOM3, POLYNOM5, MONOID_0, CARD_1,
-      RELSET_1, MOD_2, GRCAT_1;
+      RELSET_1, MOD_2, GRCAT_1, PRVECT_1, MATRLIN2;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
 
 
@@ -36,7 +36,7 @@ begin :: Preliminaries
 reserve i,j,m,n,k for Nat,
   x,y for set,
   K for Field,
-  a,a1,a2 for Element of K;
+  a for Element of K;
 
 theorem :: VECTSP11:1
   for A,B be Matrix of K for nt be Element of n-tuples_on NAT, mt
@@ -86,18 +86,15 @@ definition
   attr IT is with_eigenvalues means
 :: VECTSP11:def 1
 
-  ex v be Vector of V, a be Scalar of
-  R st v <> 0.V & IT.v = a*v;
+  ex v be Vector of V, a be Scalar of R st v <> 0.V & IT.v = a*v;
 end;
 
 reserve V for non trivial VectSp of K,
   V1,V2 for VectSp of K,
-  f for
-  linear-transformation of V1,V1,
+  f for linear-transformation of V1,V1,
   v,w for Vector of V,
-  v1,w1 for Vector of V1,
-  L
-  for Scalar of K;
+  v1 for Vector of V1,
+  L for Scalar of K;
 
 registration
   let K,V;
@@ -112,8 +109,7 @@ definition
   mode eigenvalue of f -> Element of R means
 :: VECTSP11:def 2
 
-    ex v be Vector of V st v
-    <> 0.V & f.v = it * v;
+    ex v be Vector of V st v <> 0.V & f.v = it * v;
 end;
 
 definition
@@ -148,8 +144,7 @@ theorem :: VECTSP11:12
   for L be eigenvalue of id V holds L = 1_K;
 
 theorem :: VECTSP11:13
-  ker f is non trivial implies f is with_eigenvalues & 0.K is eigenvalue
-  of f;
+  ker f is non trivial implies f is with_eigenvalues & 0.K is eigenvalue of f;
 
 theorem :: VECTSP11:14
   f is with_eigenvalues & L is eigenvalue of f iff ker (f+(-L)*id
@@ -204,11 +199,11 @@ theorem :: VECTSP11:22
   VectSpStr over K) for W be Subspace of V1, f be Function of V1,V1, fW be
   Function of W,W st fW=f|W holds (f|^n)|W=fW|^n;
 
-definition
+registration
   let K,V1;
   let f be linear-transformation of V1,V1;
   let n be Nat;
-  redefine func f |^ n -> linear-transformation of V1,V1;
+  cluster f |^ n ->  homogeneous additive;
 end;
 
 theorem :: VECTSP11:23
@@ -221,8 +216,7 @@ definition
   func UnionKers f -> strict Subspace of V1 means
 :: VECTSP11:def 5
 
-  the carrier of it = {
-  v where v is Vector of V1:ex n st (f|^n).v = 0.V1};
+  the carrier of it = { v where v is Vector of V1:ex n st (f|^n).v = 0.V1};
 end;
 
 theorem :: VECTSP11:24
@@ -246,8 +240,7 @@ theorem :: VECTSP11:29
   ), ker ((f+L*id V1)|^n);
 
 theorem :: VECTSP11:30
-  f|(UnionKers f) is linear-transformation of UnionKers f,
-  UnionKers f;
+  f|(UnionKers f) is linear-transformation of UnionKers f, UnionKers f;
 
 theorem :: VECTSP11:31
   f|(UnionKers (f+L*id V1)) is linear-transformation of UnionKers
@@ -261,8 +254,7 @@ theorem :: VECTSP11:33
   im ((f+L*id V1)|^n);
 
 theorem :: VECTSP11:34
-  UnionKers f = ker (f|^n) implies ker (f|^n) /\ im (f|^n) = (0).
-  V1;
+  UnionKers f = ker (f|^n) implies ker (f|^n) /\ im (f|^n) = (0). V1;
 
 theorem :: VECTSP11:35
   for V be finite-dimensional VectSp of K, f be linear-transformation of
@@ -319,4 +311,3 @@ c= A\/B & Sum L = 0.V1 for f be additive homogeneous Function of V1,V2
 st f|B is one-to-one &
 f.:B is linearly-independent Subset of V2 & f.:A c= {0.V2} holds Carrier L c= A
 ;
-

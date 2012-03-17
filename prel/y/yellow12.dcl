@@ -31,11 +31,11 @@
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="YELLOW_8"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="YELLOW_3"/>
-<ArticleID name="WAYBEL_2"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="YELLOW_9"/>
+<ArticleID name="YELLOW_3"/>
+<ArticleID name="WAYBEL_2"/>
 </Signature>
 <RCluster aid="YELLOW12" nr="1">
 <ArgTypes>
@@ -152,14 +152,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="219">
+<Func kind="K" nr="241">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="26">
 <Func kind="U" nr="1">
-<Func kind="K" nr="205">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -169,7 +169,7 @@
 </Func>
 </Adjective>
 <Adjective nr="136">
-<Func kind="K" nr="205">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -189,14 +189,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="220">
+<Func kind="K" nr="242">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="26">
 <Func kind="U" nr="1">
-<Func kind="K" nr="205">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
@@ -206,7 +206,7 @@
 </Func>
 </Adjective>
 <Adjective nr="137">
-<Func kind="K" nr="205">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>

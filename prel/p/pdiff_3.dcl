@@ -2,8 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -11,6 +9,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -19,22 +19,22 @@
 <CCluster aid="PDIFF_3" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="17"/>
 <Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="22">
-<Func kind="K" nr="44"/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="6">
+<Func kind="K" nr="7">
+<Func kind="K" nr="28"/>
+<Func kind="K" nr="28"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="17"/>
 <Adjective nr="22">
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="28"/>
 </Adjective>
 <Adjective nr="27"/>
 </Cluster>

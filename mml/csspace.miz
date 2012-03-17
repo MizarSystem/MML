@@ -17,14 +17,15 @@ environ
       XXREAL_0, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, ZFMISC_1, NUMBERS, SQUARE_1,
       COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3, SERIES_1, RLVECT_1,
       NORMSP_1, BHSP_1, CLVECT_1;
- constructors BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, SEQ_1, COMSEQ_2, COMSEQ_3,
-      REALSET1, BHSP_1, CLVECT_1, VALUED_1, SERIES_1, RELSET_1;
+ constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, SEQ_1,
+      COMSEQ_2, COMSEQ_3, REALSET1, BHSP_1, CLVECT_1, VALUED_1, SERIES_1,
+      RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       NUMBERS, XCMPLX_0, XXREAL_0, MEMBERED, COMSEQ_2, REALSET1, STRUCT_0,
       CLVECT_1, ALGSTR_0, VALUED_1, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, REALSET1, SQUARE_1, BINOP_1,
-      ALGSTR_0, VALUED_0;
+ definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, NORMSP_1, REALSET1,
+      SQUARE_1, BINOP_1, ALGSTR_0, VALUED_0;
  theorems XBOOLE_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1, SEQ_1,
       SERIES_1, COMSEQ_3, FUNCT_1, FUNCT_2, RLVECT_1, BINOP_1, XCMPLX_0,
       COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, NORMSP_1, FUNCOP_1, XREAL_1,
@@ -36,8 +37,7 @@ begin
 definition
   func the_set_of_ComplexSequences -> non empty set means
   :Def1:
-  for x being
-  set holds x in it iff x is Complex_Sequence;
+  for x being set holds x in it iff x is Complex_Sequence;
   existence
   proof
     defpred P[set] means $1 is Complex_Sequence;
@@ -71,16 +71,14 @@ A4: for x being set holds x in X2 iff x is Complex_Sequence;
 A5: X2 c= X1
     proof
       let x be set;
-      assume
-      x in X2;
+      assume x in X2;
       then x is Complex_Sequence by A4;
       hence thesis by A3;
     end;
     X1 c= X2
     proof
       let x be set;
-      assume
-      x in X1;
+      assume x in X1;
       then x is Complex_Sequence by A3;
       hence thesis by A4;
     end;
@@ -210,8 +208,7 @@ end;
 definition
   func CZeroseq -> Element of the_set_of_ComplexSequences means
   :Def6:
-  for n
-  be Element of NAT holds (seq_id it).n=0c;
+  for n be Element of NAT holds (seq_id it).n=0c;
   existence
   proof
     reconsider zeroseq = NAT --> 0c as Complex_Sequence;
@@ -257,8 +254,7 @@ proof
   let z be Complex;
   let v be VECTOR of CLSStruct(# the_set_of_ComplexSequences,CZeroseq, l_add,
     l_mult #);
-  thus z*v = l_mult.(z,v)
-    .= C_id(z)(#)seq_id(v) by Def5
+  thus z*v = l_mult.(z,v) .= C_id(z)(#)seq_id(v) by Def5
     .= z(#)seq_id(v) by Def3;
 end;
 
@@ -678,8 +674,7 @@ A11:  2(#)q is summable by SERIES_1:13;
   proof
     let z be Complex;
     let v be VECTOR of Linear_Space_of_ComplexSequences;
-    assume
-    v in W;
+    assume v in W;
     then
 A12: |.seq_id(v).|(#)|.seq_id(v).| is summable by Def11;
     seq_id(z*v)=seq_id(z(#)seq_id(v)) by Th5
@@ -751,6 +746,7 @@ end;
 reserve X for non empty CUNITSTR;
 reserve a, b for Complex;
 reserve x, y for Point of X;
+
 deffunc 09(CUNITSTR) = 0.$1;
 
 definition
@@ -760,6 +756,7 @@ definition
   (the scalar of X).(x,y);
   correctness;
 end;
+
 consider V0 being ComplexLinearSpace;
 
 Lm1: the carrier of (0).V0 = {0.V0} by CLVECT_1:def 9;
@@ -768,8 +765,10 @@ reconsider nilfunc = [: the carrier of (0).V0, the carrier of (0).V0 :] --> 0c
 as Function of [: the carrier of (0).V0, the carrier of (0).V0 :], COMPLEX;
 
 Lm2: for x, y being VECTOR of (0).V0 holds nilfunc.[x,y] = 0c by FUNCOP_1:13;
+
 0.V0 in the carrier of (0).V0 by Lm1,TARSKI:def 1;
 then
+
 Lm3: nilfunc.[0.V0,0.V0] = 0c by Lm2;
 
 Lm4: for u being VECTOR of (0).V0 holds 0 <= Re(nilfunc.[u,u]) & Im(nilfunc.[u
@@ -785,7 +784,6 @@ end;
 
 Lm6: for u, v, w being VECTOR of (0).V0 holds nilfunc.[u+v,w] = nilfunc.[u,w]
 + nilfunc.[v,w]
-
 proof
   let u, v, w be VECTOR of (0).V0;
 A1: v = 0.V0 by Lm1,TARSKI:def 1;
@@ -796,7 +794,6 @@ end;
 
 Lm7: for u,v being VECTOR of (0).V0, a holds nilfunc.[a*u,v] = a * nilfunc.[u,
 v]
-
 proof
   let u, v be VECTOR of (0).V0;
   let a;
@@ -855,8 +852,7 @@ add-associative right_zeroed right_complementable strict (non empty CUNITSTR);
         let a;
         let v,w be VECTOR of X0;
         reconsider v9= v, w9 = w as VECTOR of (0).V0;
-        thus a * (v + w) = a *( v9 + w9)
-          .= a * v9 + a * w9 by CLVECT_1:def 2
+        thus a * (v + w) = a *( v9 + w9) .= a * v9 + a * w9 by CLVECT_1:def 2
           .= a * v + a * w;
       end;
       thus for a,b for v being VECTOR of X0 holds (a+ b) * v = a* v + b * v
@@ -864,8 +860,7 @@ add-associative right_zeroed right_complementable strict (non empty CUNITSTR);
         let a,b;
         let v be VECTOR of X0;
         reconsider v9= v as VECTOR of (0).V0;
-        thus (a + b) * v = (a + b) * v9
-          .= a * v9 + b * v9 by CLVECT_1:def 3
+        thus (a + b) * v = (a + b) * v9 .= a * v9 + b * v9 by CLVECT_1:def 3
           .= a * v + b * v;
       end;
       thus for a,b for v being VECTOR of X0 holds (a * b) * v = a * (b * v)
@@ -873,14 +868,12 @@ add-associative right_zeroed right_complementable strict (non empty CUNITSTR);
         let a,b;
         let v be VECTOR of X0;
         reconsider v9= v as VECTOR of (0).V0;
-        thus (a * b) * v = (a * b) * v9
-          .= a * (b * v9) by CLVECT_1:def 4,def 5
+        thus (a * b) * v = (a * b) * v9 .= a * (b * v9) by CLVECT_1:def 4
           .= a * (b * v);
       end;
       let v be VECTOR of X0;
       reconsider v9= v as VECTOR of (0).V0;
-      thus 1r * v = 1r * v9
-        .= v by CLVECT_1:def 5;
+      thus 1r * v = 1r * v9 .= v by CLVECT_1:def 5;
     end;
 A1: for x,y be VECTOR of X0 for x9,y9 be VECTOR of (0).V0 st x = x9 & y =
     y9 holds x + y = x9 + y9 & for a holds a * x = a * x9;
@@ -895,16 +888,14 @@ A1: for x,y be VECTOR of X0 for x9,y9 be VECTOR of (0).V0 st x = x9 & y =
     proof
       let u,v,w be VECTOR of X0;
       reconsider u9= u, v9= v, w9= w as VECTOR of (0).V0;
-      thus (u + v) + w = (u9 + v9) + w9
-        .= u9 + (v9 + w9) by RLVECT_1:def 6
+      thus (u + v) + w = (u9 + v9) + w9 .= u9 + (v9 + w9) by RLVECT_1:def 6
         .= u + (v + w);
     end;
     thus for v being VECTOR of X0 holds v + 0.X0 = v
     proof
       let v be VECTOR of X0;
       reconsider v9= v as VECTOR of (0).V0;
-      thus v + 0.X0 = v9+ 0.(0).V0
-        .=v by RLVECT_1:10;
+      thus v + 0.X0 = v9+ 0.(0).V0 .=v by RLVECT_1:10;
     end;
     thus X0 is right_complementable
     proof
@@ -1085,18 +1076,13 @@ end;
 
 Lm9: for p,q being Complex, x,y being Point of X holds (p*x + q*y).|.(p*x + q
 *y) = p*p*' *(x.|.x) + p*q*' *(x.|.y) + p*' *q*(y.|.x) + q*q*' *(y.|.y)
-
 proof
   let p,q be Complex;
   let x,y being Point of X;
-
   (p*x+q*y).|.(p*x+q*y) = p * (x.|.(p*x + q*y)) + q * (y.|.(p*x + q*y)) by Th22
-
     .= p * (p*' *(x.|.x) + q*' *(x.|.y)) + q * (y.|.(p*x + q*y)) by Th23
-
     .= p*p*' *(x.|.x) + p*q*' *(x.|.y) + (q * (p*' *(y.|.x) + q*' *(y.|.y)))
   by Th23
-
     .= p*p*' *(x.|.x) + p*q*' *(x.|.y) + (q*p*' *(y.|.x) + q*q*' *(y.|.y));
   hence thesis;
 end;
@@ -1115,8 +1101,7 @@ theorem Th37: ::Schwarz's inequality
 proof
 A1: y <> 09(X) implies |.(x.|.y).| <= sqrt|.(x.|.x).| * sqrt|.(y.|.y).|
   proof
-    assume
-    y <> 09(X);
+    assume y <> 09(X);
     then y.|.y <> 0c by Def13;
     then
 A2: |.(y.|.y).| <> 0 by COMPLEX1:131;
@@ -1205,8 +1190,7 @@ end;
 theorem
   x, y are_orthogonal implies x, - y are_orthogonal
 proof
-  assume
-  x, y are_orthogonal;
+  assume x, y are_orthogonal;
   then - x .|. y = - 0 by Def14;
   then x .|. (-y) = 0 by Th26;
   hence thesis by Def14;
@@ -1215,8 +1199,7 @@ end;
 theorem
   x, y are_orthogonal implies -x, y are_orthogonal
 proof
-  assume
-  x, y are_orthogonal;
+  assume x, y are_orthogonal;
   then - x .|. y = - 0 by Def14;
   then (-x) .|. y = 0 by Th25;
   hence thesis by Def14;
@@ -1225,8 +1208,7 @@ end;
 theorem
   x, y are_orthogonal implies -x, -y are_orthogonal
 proof
-  assume
-  x, y are_orthogonal;
+  assume x, y are_orthogonal;
   then x .|. y = 0 by Def14;
   then (-x) .|. (-y) = 0 by Th27;
   hence thesis by Def14;
@@ -1278,14 +1260,12 @@ proof
     0 <= Re (x.|.x) by Def13;
     then
 A1: 0 <= |.(x.|.x).| by Th36;
-    assume
-    ||.x.|| = 0;
+    assume ||.x.|| = 0;
     then |.(x.|.x).| = 0 by A1,SQUARE_1:92;
     then x.|.x = 0c by COMPLEX1:131;
     hence thesis by Def13;
   end;
-  assume
-  x = 09(X);
+  assume x = 09(X);
   hence thesis by Def13,COMPLEX1:130,SQUARE_1:82;
 end;
 
@@ -1417,18 +1397,17 @@ definition
   correctness;
 end;
 
-theorem Th52:
-  dist(x,y) = dist(y,x)
-proof
-  thus dist(x,y) = ||.-(y-x).|| by RLVECT_1:47
-    .= dist(y,x) by Th49;
-end;
-
 definition
   let X, x, y;
   redefine func dist(x,y);
-  commutativity by Th52;
+  commutativity
+proof let x,y;
+  thus dist(x,y) = ||.-(y-x).|| by RLVECT_1:47
+    .= dist(y,x) by Th49;
 end;
+end;
+
+canceled;
 
 theorem Th53:
   dist(x,x) = 0
@@ -1471,8 +1450,7 @@ theorem
 proof
   thus x <> y implies dist(x,y) > 0
   proof
-    assume
-    x <> y;
+    assume x <> y;
     then dist(x,y) <> 0 by Th55;
     hence thesis by Th46;
   end;
@@ -1525,15 +1503,17 @@ proof
 end;
 
 reserve seq, seq1, seq2, seq3 for sequence of X;
-reserve k, n, m for Element of NAT;
+reserve  n for Element of NAT;
 
 definition
   canceled 2;
 end;
 
-theorem Th63:
-  seq1 + seq2 = seq2 + seq1
-proof
+definition
+  let X, seq1, seq2;
+  redefine func seq1 + seq2;
+  commutativity
+proof let seq1, seq2;
   now
     let n;
     thus (seq1 + seq2).n = seq2.n + seq1.n by NORMSP_1:def 5
@@ -1541,12 +1521,9 @@ proof
   end;
   hence thesis by FUNCT_2:113;
 end;
-
-definition
-  let X, seq1, seq2;
-  redefine func seq1 + seq2;
-  commutativity by Th63;
 end;
+
+canceled;
 
 theorem
   seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3
@@ -1677,7 +1654,7 @@ proof
   now
     let n;
     thus ((a * b) * seq).n = (a * b) * seq.n by CLVECT_1:def 15
-      .= a * (b * seq.n) by CLVECT_1:def 4,def 5
+      .= a * (b * seq.n) by CLVECT_1:def 4
       .= a * (b * seq).n by CLVECT_1:def 15
       .= (a * (b * seq)).n by CLVECT_1:def 15;
   end;
@@ -1887,8 +1864,7 @@ A2: l is Abelian
     let v,w be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
     reconsider w1=w as VECTOR of l0;
-    thus v+w =v1+w1
-      .= w1+v1
+    thus v+w =v1+w1 .= w1+v1
       .= w +v;
   end;
 A3: l is add-associative
@@ -1897,8 +1873,7 @@ A3: l is add-associative
     reconsider u1=u as VECTOR of l0;
     reconsider v1=v as VECTOR of l0;
     reconsider w1=w as VECTOR of l0;
-    thus (u + v) + w = (u1+v1)+w1
-      .= u1+(v1+w1) by RLVECT_1:def 6
+    thus (u + v) + w = (u1+v1)+w1 .= u1+(v1+w1) by RLVECT_1:def 6
       .= u+(v+w);
   end;
 A4: l is vector-distributive scalar-distributive scalar-associative
@@ -1910,8 +1885,7 @@ scalar-unital
       let z be Complex;
       let v,w be VECTOR of l;
       reconsider v1=v, w1=w as VECTOR of l0;
-      thus z*(v+w) =z*(v1+w1)
-        .=z*v1+z*w1 by CLVECT_1:def 2
+      thus z*(v+w) =z*(v1+w1) .=z*v1+z*w1 by CLVECT_1:def 2
         .= z*v +z*w;
     end;
     thus for z1,z2 being Complex, v being VECTOR of l holds (z1 + z2) * v = z1
@@ -1920,8 +1894,7 @@ scalar-unital
       let z1,z2 be Complex;
       let v be VECTOR of l;
       reconsider v1=v as VECTOR of l0;
-      thus (z1+z2)*v =(z1+z2)*v1
-        .=z1*v1+z2*v1 by CLVECT_1:def 3
+      thus (z1+z2)*v =(z1+z2)*v1 .=z1*v1+z2*v1 by CLVECT_1:def 3
         .= z1*v +z2*v;
     end;
     thus for z1,z2 being Complex, v being VECTOR of l holds (z1 * z2) * v = z1
@@ -1930,14 +1903,12 @@ scalar-unital
       let z1,z2 be Complex;
       let v be VECTOR of l;
       reconsider v1=v as VECTOR of l0;
-      thus (z1*z2)*v =(z1*z2)*v1
-        .=z1*(z2*v1) by CLVECT_1:def 4,def 5
+      thus (z1*z2)*v =(z1*z2)*v1 .=z1*(z2*v1) by CLVECT_1:def 4
         .= z1*(z2*v);
     end;
     let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
-    thus 1r*v= 1r*v1
-      .= v by CLVECT_1:def 5;
+    thus 1r*v= 1r*v1 .= v by CLVECT_1:def 5;
   end;
 A5: l is right_complementable
   proof
@@ -1953,8 +1924,7 @@ A6: v1 + w1 = 0.l0 by ALGSTR_0:def 11;
   proof
     let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
-    thus v+0.l= v1 + 0.l0
-      .= v by RLVECT_1:def 7;
+    thus v+0.l= v1 + 0.l0 .= v by RLVECT_1:def 7;
   end;
   hence thesis by A2,A3,A5,A4;
 end;
@@ -1973,14 +1943,12 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT such that
 A4:   seq.k = (Partial_Sums (seq)).k;
-      thus seq.(k+1) = 0c + (seq).(k+1)
-        .= seq.k + seq.(k+1) by A1
-        .= (Partial_Sums seq).(k+1) by A4,COMSEQ_3:def 7;
+      thus seq.(k+1) = 0c + (seq).(k+1) .= seq.k + seq.(k+1) by A1
+        .= (Partial_Sums seq).(k+1) by A4,SERIES_1:def 1;
     end;
-A5: P[0] by COMSEQ_3:def 7;
+A5: P[0] by SERIES_1:def 1;
     for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A3);
-    hence (Partial_Sums (seq)).m = seq.m
-      .= 0c by A1;
+    hence (Partial_Sums (seq)).m = seq.m .= 0c by A1;
   end;
 A6: for p be Real st 0<p ex n be Element of NAT st for m be Element of NAT
   st n<=m holds |.((Partial_Sums seq).m-0c).|<p
@@ -1995,7 +1963,7 @@ A7: 0<p;
   then
 A8: Partial_Sums (seq) is convergent by COMSEQ_2:def 4;
   then lim (Partial_Sums (seq)) = 0c by A6,COMSEQ_2:def 5;
-  hence thesis by A8,COMSEQ_3:def 8,def 10;
+  hence thesis by A8,COMSEQ_3:def 10,def 12;
 end;
 
 registration
@@ -2004,4 +1972,3 @@ registration
     scalar-associative scalar-unital;
   coherence by Th16,Th87;
 end;
-

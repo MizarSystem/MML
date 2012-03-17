@@ -3,7 +3,7 @@
 ::
 :: Received September 15, 2005
 :: Copyright (c) 2005 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, PRE_TOPC, EUCLID, TOPREAL2, SUBSET_1, METRIC_1,
@@ -20,7 +20,7 @@ environ
       TMAP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, SIN_COS, COMPTRIG, COMPLEX2, TOPS_1,
       CONNSP_1, TOPS_2, COMPTS_1, TMAP_1, TOPREAL2, JORDAN1, WEIERSTR,
-      TOPGRP_1, VECTMETR, TOPREAL6, JGRAPH_2, FUNCSDOM;
+      TOPGRP_1, VECTMETR, TOPREAL6, JGRAPH_2, FUNCSDOM, NEWTON;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, XCMPLX_0, XXREAL_0, XREAL_0,
       SQUARE_1, MEMBERED, STRUCT_0, PRE_TOPC, PCOMPS_1, EUCLID, TOPREAL2,
       TOPGRP_1, VECTMETR, INT_1, SIN_COS6, TMAP_1;
@@ -39,8 +39,7 @@ begin
 
 reserve p1, p2 for Point of TOP-REAL 2,
   C for Simple_closed_curve,
-  P for
-  Subset of TOP-REAL 2;
+  P for Subset of TOP-REAL 2;
 
 definition
   let n be Element of NAT, A be Subset of TOP-REAL n, a, b be Point of
@@ -50,6 +49,7 @@ definition
   a in A & b in A & for x, y being
   Point of TOP-REAL n st x in A & y in A holds dist(a,b) >= dist(x,y);
 end;
+
 set rl = -1;
 set rp = 1;
 set a = |[rl,0]|;
@@ -88,10 +88,10 @@ end;
 
 registration
   let M be non empty MetrStruct;
-  cluster isometric Function of TopSpaceMetr M, TopSpaceMetr M;
+  cluster onto isometric Function of TopSpaceMetr M, TopSpaceMetr M;
   existence
   proof
-    consider f being isometric Function of M,M;
+    consider f being onto isometric Function of M,M;
     reconsider f as Function of TopSpaceMetr M,TopSpaceMetr M;
     take f;
     thus thesis by Def2;
@@ -104,8 +104,7 @@ registration
   coherence
   proof
     let f be Function of TopSpaceMetr M, TopSpaceMetr M;
-    assume
-    f is isometric;
+    assume f is isometric;
     then consider g being isometric Function of M,M such that
 A1: g=f by Def2;
     let W be Point of TopSpaceMetr M;
@@ -120,8 +119,7 @@ A3: Ball(fw,r) c= G by GOBOARD6:7;
     thus f.:H c= G
     proof
       let a be set;
-      assume
-      a in f.:H;
+      assume a in f.:H;
       then consider b being set such that
 A4:   b in dom f and
 A5:   b in H and
@@ -138,25 +136,24 @@ end;
 
 registration
   let M be non empty MetrSpace;
-  cluster isometric -> being_homeomorphism Function of TopSpaceMetr M,
+  cluster onto isometric -> being_homeomorphism Function of TopSpaceMetr M,
     TopSpaceMetr M;
   coherence
   proof
     let f be Function of TopSpaceMetr M, TopSpaceMetr M;
     assume
-A1: f is isometric;
+A1: f is onto isometric;
     then reconsider
-    f1=f as isometric Function of TopSpaceMetr M,TopSpaceMetr M;
+    f1=f as onto isometric Function of TopSpaceMetr M,TopSpaceMetr M;
     thus dom f = [#]TopSpaceMetr M by FUNCT_2:def 1;
     consider g being isometric Function of M,M such that
 A2: g=f by A1,Def2;
-    thus rng f = [#]TopSpaceMetr M by A2,VECTMETR:def 3;
+    g is onto by A1,A2;
+    hence rng f = [#]TopSpaceMetr M by A2,FUNCT_2:def 3;
     thus f is one-to-one by A2;
     f1 is continuous;
     hence f is continuous;
-    g" is isometric Function of M,M by VECTMETR:3;
-    then f" is isometric Function of TopSpaceMetr M,TopSpaceMetr M by A2,
-    Def2;
+    f" is isometric Function of TopSpaceMetr M,TopSpaceMetr M by A1,A2,Def2;
     hence thesis;
   end;
 end;
@@ -217,7 +214,7 @@ end;
 
 theorem Th2:
   for a being Real for f being Function of TopSpaceMetr Euclid 2,
-  TopSpaceMetr Euclid 2 st f = Rotate a holds f is isometric
+  TopSpaceMetr Euclid 2 st f = Rotate a holds f is onto isometric
 proof
   let a be Real;
   consider A being real number such that
@@ -229,14 +226,13 @@ A3: A < 2*PI by COMPLEX2:2;
 A4: f = Rotate a;
   reconsider g=f as Function of Euclid 2,Euclid 2;
 A5: Rotate A = Rotate a by A1,Lm3;
-  g is isometric
+  g is onto isometric
   proof
     thus rng g = the carrier of Euclid 2
     proof
       thus rng g c= the carrier of Euclid 2;
       let o be set;
-      assume
-      o in the carrier of Euclid 2;
+      assume o in the carrier of Euclid 2;
       then reconsider p=o as Point of TOP-REAL 2 by EUCLID:71;
       set pz=p`1+(p`2)*<i>;
       reconsider pz as Element of COMPLEX by XCMPLX_0:def 2;
@@ -397,15 +393,13 @@ A2: a,b realize-max-dist-in C;
   b in C by A2,Def1;
   hence AffineMap(A,B,A,D).b in AffineMap(A,B,A,D).:C by A1,FUNCT_1:def 12;
   let x, y be Point of TOP-REAL 2;
-  assume
-  x in AffineMap(A,B,A,D).:C;
+  assume x in AffineMap(A,B,A,D).:C;
   then consider X being set such that
 A3: X in dom AffineMap(A,B,A,D) and
 A4: X in C and
 A5: AffineMap(A,B,A,D).X=x by FUNCT_1:def 12;
   reconsider X as Point of TOP-REAL 2 by A3;
-  assume
-  y in AffineMap(A,B,A,D).:C;
+  assume y in AffineMap(A,B,A,D).:C;
   then consider Y being set such that
 A6: Y in dom AffineMap(A,B,A,D) and
 A7: Y in C and
@@ -523,19 +517,14 @@ end;
 Lm4: for T1,T2 being TopSpace, f being Function of T1,T2, g being Function of
 the TopStruct of T1, the TopStruct of T2 st g=f & g is being_homeomorphism
 holds f is being_homeomorphism
-
 proof
-
   let T1,T2 be TopSpace, f be Function of T1,T2, g be Function of the
   TopStruct of T1, the TopStruct of T2;
-
   assume that
 A1: g=f and
 A2: g is being_homeomorphism;
-
   dom f = [#]the TopStruct of T1 & rng f = [#]the TopStruct of T2 by A1,A2
   , TOPS_2:def 5;
-
   hence dom f = [#]T1 & rng f = [#]T2;
   thus f is one-to-one by A1,A2;
   thus f is continuous by A1,A2,PRE_TOPC:64;
@@ -565,8 +554,8 @@ A5: h=Rotate(2*PI-arg) by Th6;
   then
 A6: (Rotate(2*PI-arg)).q1,(Rotate(2*PI-arg)).q2 realize-max-dist-in (Rotate
   (2*PI-arg)).:D by Th4;
-  reconsider h0=h as isometric Function of TopSpaceMetr Euclid 2, TopSpaceMetr
-  Euclid 2 by Lm1,Th2;
+  reconsider h0=h as onto isometric Function of TopSpaceMetr Euclid 2,
+  TopSpaceMetr Euclid 2 by Lm1,Th2;
 A7: Rotate(z,-arg) = 0 by COMPLEX2:66;
   h0 is being_homeomorphism;
   then reconsider
@@ -632,12 +621,10 @@ definition
   let T1,T2 be TopStruct;
   let f be Function of T1,T2;
   attr f is closed means
-  for A being Subset of T1 st A is closed holds f.:A is
-  closed;
+  for A being Subset of T1 st A is closed holds f.:A is closed;
 end;
+ 
 ::<DESC name="przekszta/lcenie domkni/ete" monograph="topology"/>
-
-
 ::<DESC name="1.4.18 Twierdzenie o homeomorfizmie (cz/e/s/c): (a) iff (b)" monograph="topology"/>
 
 theorem
@@ -662,8 +649,7 @@ A4: [#] X = the carrier of X & [#] Y = the carrier of Y;
 A5: dom f = the carrier of X by FUNCT_2:def 1;
 A6: now
     let A be Subset of X;
-    assume
-    f.:A is closed;
+    assume f.:A is closed;
     then f"(f.:A) is closed by PRE_TOPC:def 12;
     hence A is closed by A1,A5,FUNCT_1:164;
   end;
@@ -686,8 +672,8 @@ theorem
 
 theorem Th11:
   for T1,T2 being non empty TopSpace, f being Function of T1,T2 st
-  f is being_homeomorphism for A being Subset of T1 st A is_a_component_of T1
-  holds f.:A is_a_component_of T2
+  f is being_homeomorphism for A being Subset of T1 st A is a_component
+  holds f.:A is a_component
 proof
   let T1,T2 be non empty TopSpace, f be Function of T1,T2;
   assume
@@ -695,8 +681,7 @@ A1: f is being_homeomorphism;
   let A be Subset of T1;
   assume that
 A2: A is connected and
-A3: for B being Subset of T1 st B is connected holds A c= B implies A =
-  B;
+A3: for B being Subset of T1 st B is connected holds A c= B implies A = B;
   thus f.:A is connected by A1,A2,TOPS_2:75;
   let B be Subset of T2;
   [#] T2 = the carrier of T2;
@@ -801,7 +786,7 @@ A1: f is being_homeomorphism;
   let A,B be Subset of T1;
   given A1 being Subset of T1|B such that
 A2: A1 = A and
-A3: A1 is_a_component_of T1|B;
+A3: A1 is a_component;
 A4: [#](T2|(f.:B)) = f.:B by PRE_TOPC:def 10;
 A5: dom f = the carrier of T1 by FUNCT_2:def 1;
 A6: [#](T1|B) = B by PRE_TOPC:def 10;
@@ -843,8 +828,7 @@ A4: (Cl A1) \ A1 = (Cl A2) \ A2 and
 A5: A1 is_a_component_of S` & A2 is_a_component_of S`;
 A6: not s in S by A1,XBOOLE_0:def 5;
   hereby
-    assume
-    (f.:S)` = {};
+    assume (f.:S)` = {};
     then f.:S = the carrier of TOP-REAL 2 by Th9;
     then ex s9 being Element of TOP-REAL 2 st s9 in S & f.s = f. s9 by
     FUNCT_2:116;
@@ -861,4 +845,3 @@ A6: not s in S by A1,XBOOLE_0:def 5;
   f.:(S`) = (f.:S)` by JORDAN1K:5;
   hence thesis by A5,Th15;
 end;
-

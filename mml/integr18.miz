@@ -1,0 +1,1070 @@
+:: Riemann Integral of Functions from $\mathbbbR$ into Real Normed Space
+::  by Keiichi Miyajima , Takahiro Kato and Yasunari Shidama
+:: 
+:: Received May 20, 2010
+:: Copyright (c) 2010 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, INTEGRA2, FINSEQ_1, NORMSP_1, SEQ_2, TARSKI, STRUCT_0,
+      ORDINAL2, INTEGRA5, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_1,
+      NAT_1, MEASURE7, CARD_3, RELAT_1, FUNCT_1, REAL_1, XXREAL_0, XREAL_0,
+      XXREAL_1, VALUED_1, PARTFUN1, RLVECT_1, FUNCT_3, INTEGR15, PRE_TOPC,
+      ARYTM_3, CARD_1, SUPINF_2, SEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, PARTFUN1,
+      FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1, XXREAL_2,
+      FINSEQ_1, FINSEQ_2, SEQ_2, SEQ_4, RCOMP_1, INTEGRA1, INTEGRA2, INTEGRA3,
+      INTEGRA5, STRUCT_0, PRE_TOPC, RLVECT_1, VFUNCT_1, NORMSP_0, NORMSP_1,
+      PSCOMP_1, BINOM;
+ constructors REAL_1, SEQ_4, VFUNCT_1, RELSET_1, PDIFF_1, INTEGRA1, INTEGRA2,
+      INTEGRA5, INTEGRA3, SEQ_2, BINOM, PSCOMP_1, NORMSP_0;
+ registrations NUMBERS, XREAL_0, FINSEQ_2, STRUCT_0, RELSET_1, INTEGRA1,
+      INTEGRA2, FUNCT_2, MEMBERED, XXREAL_0, ORDINAL1, FUNCT_1, XXREAL_2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions XBOOLE_0, EUCLID, INTEGRA1, PARTFUN1, NORMSP_1, BINOM, VFUNCT_1;
+ theorems XBOOLE_0, XBOOLE_1, INTEGRA1, INTEGRA2, INTEGRA4, RELSET_1, BINOM,
+      XXREAL_0, RELAT_1, FINSEQ_1, FUNCT_1, FUNCT_2, PARTFUN1, INTEGRA5,
+      NORMSP_1, VFUNCT_1, RLVECT_1, RLVECT_2, FINSEQ_3;
+ schemes FUNCT_2, FINSEQ_1;
+
+begin :: Preliminaries
+
+reserve X for RealNormSpace;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  let D be Division of A;
+  mode middle_volume of f,D -> FinSequence of X means  :Def5:
+  len it = len D & for i be Nat st i in dom D holds
+    ex c be Point of X st c in rng (f|divset(D,i)) &
+      it.i= (vol divset(D,i)) * c;
+correctness
+  proof
+    defpred P1[Nat, set] means ex c be Point of X st
+      c in rng (f|divset(D,$1)) & $2= (vol divset(D,$1)) * c;
+A1: Seg len D = dom D by FINSEQ_1:def 3;
+A2: for k being Nat st k in Seg len D holds
+      ex x being Element of the carrier of X st P1[k,x]
+    proof
+      let k be Nat;
+      assume k in Seg len D; then
+A21:  k in dom D by FINSEQ_1:def 3;
+      dom f = A by FUNCT_2:def 1; then
+      dom (f|divset(D,k)) = divset(D,k) by A21,INTEGRA1:10,RELAT_1:91; then
+      rng (f|divset(D,k)) is non empty by RELAT_1:65; then
+      consider c be set such that
+A22:    c in rng (f|divset(D,k)) by XBOOLE_0:def 1;
+      reconsider c as Point of X by A22;
+      (vol divset(D,k)) * c is Element of the carrier of X;
+      hence thesis by A22;
+    end;
+    consider p being FinSequence of the carrier of X such that
+A3:   dom p = Seg len D & for k being Nat st k in Seg len D holds P1[k,p.k]
+      from FINSEQ_1:sch 5(A2);
+    len p = len D by A3,FINSEQ_1:def 3;
+    hence thesis by A3,A1;
+    end;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  let D be Division of A;
+  let F be middle_volume of f,D;
+  func middle_sum(f,F) -> Point of X equals
+    Sum(F);
+  coherence;
+end;
+
+definition
+ let X be RealNormSpace;
+ let A be closed-interval Subset of REAL,
+     f be Function of A,the carrier of X,
+     T be DivSequence of A;
+ mode middle_volume_Sequence of f,T -> Function of NAT,(the carrier of X)*
+   means :Def7:
+ for k be Element of NAT holds it.k is middle_volume of f,T.k;
+correctness
+  proof
+    defpred P[Element of NAT,set] means $2 is middle_volume of f,T.$1;
+A1: for x being Element of NAT
+      ex y being Element of (the carrier of X)* st P[x, y]
+    proof
+      let x be Element of NAT;
+      consider y be middle_volume of f,T.x;
+      reconsider y as Element of (the carrier of X)* by FINSEQ_1:def 11;
+      y is middle_volume of f,T.x;
+      hence thesis;
+    end;
+    ex f being Function of NAT,(the carrier of X)*
+      st for x being Element of NAT holds P[x, f.x] from FUNCT_2:sch 10(A1);
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL,
+      f be Function of A,the carrier of X,
+      T be DivSequence of A,
+      S be middle_volume_Sequence of f,T,
+      k be Element of NAT;
+  redefine func S.k -> middle_volume of f,T.k;
+  coherence by Def7;
+end;
+
+definition
+ let X be RealNormSpace;
+ let A be closed-interval Subset of REAL,
+     f be Function of A,the carrier of X,
+     T be DivSequence of A,
+     S be middle_volume_Sequence of f,T;
+ func middle_sum(f,S) -> sequence of X means  :Def8:
+ for i be Element of NAT holds it.i = middle_sum(f,S.i);
+existence
+  proof
+    deffunc H1(Element of NAT) = middle_sum(f,S.$1);
+    thus ex IT being sequence of the carrier of X
+      st for i being Element of NAT holds IT.i = H1(i) from FUNCT_2:sch 4;
+  end;
+uniqueness
+  proof
+    let F1, F2 be sequence of X;
+    assume that
+A1: for i being Element of NAT holds F1.i = middle_sum(f,S.i) and
+A2: for i being Element of NAT holds F2.i = middle_sum(f,S.i);
+    for i being Element of NAT holds F1.i = F2.i
+    proof
+      let i be Element of NAT;
+      F1.i = middle_sum(f,S.i) by A1
+          .= F2.i by A2;
+      hence F1.i = F2.i;
+    end;
+    hence F1 = F2 by FUNCT_2:113;
+  end;
+end;
+
+begin :: Definition of Riemann Integral on Functions from $\mathbbbR$ into Real Normed Space
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  attr f is integrable means  :Def13:
+  ex I be Point of X st for T being DivSequence of A,
+     S be middle_volume_Sequence of f,T st
+     delta(T) is convergent & lim delta(T) = 0 holds
+     middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = I;
+end;
+
+theorem SM1:
+  for X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X
+        st len R1 = len R2 & R3 = R1 + R2 holds Sum(R3) = Sum(R1) + Sum(R2)
+proof
+  let X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X;
+  assume AS: len R1 = len R2 & R3 = R1 + R2; then
+  dom R1 = dom R2 by FINSEQ_3:31;
+  hence Sum(R3) = Sum(R1) + Sum(R2) by BINOM:7,AS;
+end;
+
+theorem
+  for X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X
+        st len R1 = len R2 & R3 = R1 - R2 holds Sum(R3) = Sum(R1) - Sum(R2)
+proof
+  let X be RealNormSpace,
+      R1, R2, R3 be FinSequence of X;
+  assume AS: len R1 = len R2 & R3 = R1 - R2; then
+P0: dom R1 = dom R2 by FINSEQ_3:31;
+P1: dom R3 = dom R1 /\ dom R2 by AS,VFUNCT_1:def 2
+          .= dom R1 by P0; then
+P2: len R3 = len R1 by FINSEQ_3:31;
+P3: for k be Element of NAT st k in dom R1 holds R3.k = R1/.k - R2/.k
+  proof
+    let k be Element of NAT;
+    assume P31: k in dom R1;
+    thus R3.k = R3/.k by P31,P1,PARTFUN1:def 8
+             .= R1/.k - R2/.k by AS,VFUNCT_1:def 2,P31,P1;
+  end;
+  thus thesis by AS,P2,P3,RLVECT_2:7;
+end;
+
+theorem SM3:
+  for X be RealNormSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL st R2 = a(#)R1 holds Sum(R2) = a * Sum(R1)
+proof
+  let X be RealNormSpace,
+      R1, R2 be FinSequence of X,
+      a be Element of REAL;
+  assume AS: R2 = a(#)R1;
+  dom R2 = dom R1 by VFUNCT_1:def 4,AS; then
+P1: len R2 = len R1 by FINSEQ_3:31;
+P2: for k be Element of NAT st k in dom R1 holds R2.k = a * R1/.k
+  proof
+    let k be Element of NAT;
+    assume k in dom R1; then
+P21: k in dom R2 by VFUNCT_1:def 4,AS;
+    thus R2.k = R2/.k by PARTFUN1:def 8,P21
+             .= a * R1/.k by P21,AS,VFUNCT_1:def 4;
+  end;
+  thus thesis by P1,P2,RLVECT_2:5;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,the carrier of X;
+  assume AS: f is integrable;
+  func integral(f) -> Point of X means   :Def14:
+  for T being DivSequence of A,
+      S be middle_volume_Sequence of f,T
+        st delta(T) is convergent & lim delta(T)=0 holds
+        middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = it;
+existence by AS,Def13;
+uniqueness
+  proof
+    let I1, I2 be Point of X;
+    assume
+A1: for T being DivSequence of A,
+        S be middle_volume_Sequence of f,T
+          st delta(T) is convergent & lim (delta(T)) = 0 holds
+          middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = I1;
+    assume
+A2: for T being DivSequence of A,
+        S be middle_volume_Sequence of f,T
+          st delta(T) is convergent & lim delta(T) = 0 holds
+          middle_sum(f,S) is convergent & lim (middle_sum(f,S)) = I2;
+    consider T being DivSequence of A such that
+A3: delta(T) is convergent & lim delta(T) = 0 by INTEGRA4:11;
+    consider S be middle_volume_Sequence of f,T;
+    thus I1 = lim (middle_sum(f,S)) by A1,A3
+           .= I2 by A2,A3;
+  end;
+end;
+
+theorem LMth03:
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      r be Real,
+      f, h be Function of A,the carrier of X
+        st h = r(#)f & f is integrable holds
+        h is integrable & integral(h) = r * integral(f)
+proof
+  let X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      r be Real,
+      f, h be Function of A,the carrier of X;
+  assume AS: h = r(#)f & f is integrable;
+P01: dom h = A & dom f = A by FUNCT_2:def 1;
+P0: now let T be DivSequence of A, S be middle_volume_Sequence of h,T;
+    assume AS1: delta(T) is convergent & lim delta(T) = 0;
+    defpred P[Element of NAT, set] means ex p being FinSequence of REAL st
+      p = $2 & len p = len (T.$1) & for i be Nat st i in dom (T.$1) holds
+      (p.i) in dom (h|divset((T.$1),i)) & ex z be Point of X st
+      z = (h|divset((T.$1),i)).(p.i) &
+      (S.$1).i = (vol divset((T.$1),i)) * z;
+P1: for k being Element of NAT ex p being Element of (REAL)* st P[k, p]
+    proof
+      let k being Element of NAT;
+      defpred P1[ Nat, set] means $2 in dom (h|divset((T.k),$1)) &
+        ex c be Point of X st c = (h|divset((T.k),$1)).($2) &
+        (S.k).$1 = (vol divset((T.k),$1)) * c;
+A1:   Seg len ((T.k)) = dom (T.k) by FINSEQ_1:def 3;
+A2:   for i being Nat st i in Seg len (T.k) holds
+        ex x being Element of REAL st P1[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+        i in dom (T.k) by FINSEQ_1:def 3; then
+        consider c be Point  of X such that
+A21:      c in rng (h|divset((T.k),i)) &
+          (S.k).i = (vol divset((T.k),i)) * c by Def5;
+        consider x be set such that
+A22:      x in dom (h|divset((T.k),i)) &
+          c = (h|divset((T.k),i)).x by A21,FUNCT_1:def 5;
+        x in (dom h) & x in (divset((T.k),i)) by A22,RELAT_1:86; then
+        reconsider x as Element of REAL;
+        take x;
+        thus thesis by A21,A22;
+      end;
+      consider p being FinSequence of REAL such that
+A3:     dom p = Seg len (T.k) & for i being Nat st i in Seg len (T.k) holds
+        P1[i,p.i] from FINSEQ_1:sch 5(A2);
+      take p;
+      len p = len (T.k) by A3,FINSEQ_1:def 3;
+      hence thesis by A3,A1,FINSEQ_1:def 11;
+    end;
+    consider F being Function of NAT,(REAL)* such that
+P2:   for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(P1);
+    defpred P1[Element of NAT,set] means ex q be middle_volume of f,T.$1
+      st q = $2 & for i be Nat st i in dom (T.$1) holds ex z be Point of X st
+      (F.$1).i in dom (f|divset((T.$1),i)) &
+      z = (f|divset((T.$1),i)).((F.$1).i) &
+      q.i = (vol divset((T.$1),i)) * z;
+P3: for k being Element of NAT
+      ex y being Element of (the carrier of X)* st P1[k, y]
+    proof
+      let k being Element of NAT;
+      defpred P11[ Nat, set] means ex c be Point of X st
+        (F.k).$1 in dom (f|divset((T.k),$1)) &
+        c = (f|divset((T.k),$1)).((F.k).$1) &
+        $2 = (vol divset((T.k),$1)) * c;
+A1:   Seg len (T.k) = dom (T.k) by FINSEQ_1:def 3;
+A2:   for i being Nat st i in Seg len (T.k) holds ex
+        x being Element of the carrier of X st P11[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+A21:    i in dom (T.k) by FINSEQ_1:def 3;
+        consider p being FinSequence of REAL such that
+A22:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
+          p.i in dom (h|divset((T.k),i)) & ex z be Point of X st
+          z = (h|divset((T.k),i)).(p.i) &
+          (S.k).i = (vol divset((T.k),i)) * z by P2;
+        p.i in dom (h|divset((T.k),i)) by A21,A22; then
+A23:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
+        p.i in dom (f|divset((T.k),i)) by RELAT_1:86,P01; then
+        (f|divset((T.k),i)).(p.i) in rng (f|divset((T.k),i))
+          by FUNCT_1:12; then
+        reconsider x = (f|divset((T.k),i)).(p.i)
+          as Element of the carrier of X;
+A24:    (F.k).i in dom (f|divset((T.k),i)) by A22,A23,RELAT_1:86,P01;
+        (vol divset((T.k),i)) * x is Element of the carrier of X;
+        hence thesis by A22,A24;
+      end;
+      consider q being FinSequence of the carrier of X such that
+A3:     dom q = Seg len (T.k) & for i being Nat st i in Seg len (T.k) holds
+        P11[i,q.i] from FINSEQ_1:sch 5(A2);
+A4:   len q = len (T.k) by A3,FINSEQ_1:def 3;
+      now let i be Nat;
+        assume i in dom (T.k); then
+        i in Seg len (T.k) by FINSEQ_1:def 3; then
+        consider c be Point of X such that
+A41:      (F.k).i in dom (f|divset((T.k),i)) &
+          c = (f|divset((T.k),i)).((F.k).i) &
+          q.i = (vol divset((T.k),i)) * c by A3;
+        thus ex c be Point of X st c in rng (f|divset((T.k),i)) &
+          q.i = (vol divset((T.k),i)) * c by A41,FUNCT_1:12;
+      end;
+      then reconsider q as middle_volume of f,T.k by A4,Def5;
+      q is Element of (the carrier of X)* by FINSEQ_1:def 11;
+      hence thesis by A1,A3;
+    end;
+    consider Sf being Function of NAT,(the carrier of X)* such that
+P4:   for x being Element of NAT holds P1[x, Sf.x] from FUNCT_2:sch 10(P3);
+    now let k be Element of NAT;
+      ex q be middle_volume of f,T.k st q = Sf.k &
+        for i be Nat st i in dom (T.k) holds ex z be Point of X st
+        (F.k).i in dom (f|divset((T.k),i)) &
+        z = (f|divset((T.k),i)).((F.k).i) &
+        q.i = (vol divset((T.k),i)) * z by P4;
+      hence Sf.k is middle_volume of f,T.k;
+    end;
+    then reconsider Sf as middle_volume_Sequence of f,T by Def7;
+    integral(f) is Point of X; then
+P5: middle_sum(f,Sf) is convergent by Def14,AS,AS1;
+P6: r * middle_sum(f,Sf) = middle_sum(h,S)
+    proof
+      now let n be Element of NAT;
+        consider p being FinSequence of REAL such that
+A01:      p = F.n & len  p = len (T.n) & for i be Nat st i in dom (T.n) holds
+          (p.i) in dom (h|divset((T.n),i)) & ex z be Point of X st
+          z = (h|divset((T.n),i)).(p.i) &
+          (S.n).i = (vol divset((T.n),i)) * z by P2;
+        consider q be middle_volume of f,T.n such that
+A02:      q = Sf.n & for i be Nat st i in dom (T.n) holds ex z be Point of X st
+          (F.n).i in dom (f|divset((T.n),i)) &
+          z = (f|divset((T.n),i)).((F.n).i) &
+          q.i = (vol divset((T.n),i)) * z by P4;
+        len (Sf.n) = len (T.n) & len (S.n) = len (T.n) by Def5; then
+A04:    dom (Sf.n) = dom (T.n) & dom (S.n) = dom (T.n) by FINSEQ_3:31;
+        now let x be Element of NAT;
+          assume K715: x in dom (S.n);
+          reconsider i = x as Nat;
+          consider t be Point of X such that
+K001:       t = (h|divset((T.n),i)).((F.n).i) &
+            (S.n).i = (vol divset((T.n),i)) * t by K715,A04,A01;
+          consider z be Point of X such that
+K002:       (F.n).i in dom (f|divset((T.n),i)) &
+            z = (f|divset((T.n),i)).((F.n).i) &
+            q.i = (vol divset((T.n),i)) * z by A02,K715,A04;
+K003:     (F.n).i in divset((T.n),i) by K002,RELAT_1:86;
+          (F.n).i in A by K002; then
+K004:     (F.n).i in dom h by FUNCT_2:def 1;
+K005:     (F.n).i in dom f by K002,RELAT_1:86;
+K006:     f/.((F.n).i) = f.((F.n).i) by PARTFUN1:def 8,K005
+                      .= z by K002,K003,FUNCT_1:72;
+K007:     t = (h|divset((T.n),i)).((F.n).i) by K001
+           .= h.((F.n).i) by K003,FUNCT_1:72
+           .= h/.((F.n).i) by PARTFUN1:def 8,K004
+           .= r * (f/.((F.n).i) ) by VFUNCT_1:def 4,K004,AS
+           .= r * z by K006;
+K008:     (vol divset((T.n),i)) * z = (Sf.n).x by K002,A02
+                                   .= (Sf.n)/.x by K715,A04,PARTFUN1:def 8;
+          thus (S.n)/.x = (S.n).x by K715,PARTFUN1:def 8
+                       .= (vol divset((T.n),i)) * t by K001
+                       .= (vol divset((T.n),i)) * (r * z) by K007
+                       .= ((vol divset((T.n),i))*r) * z by RLVECT_1:def 10
+                       .= r * ((vol divset((T.n),i))*z) by RLVECT_1:def 10
+                       .= r * ((Sf.n)/.x) by K008;
+        end; then
+A05:    r(#)(Sf.n) = S.n by VFUNCT_1:def 4,A04;
+        thus r * (middle_sum(f,Sf)).n = r * (middle_sum(f,Sf.n) ) by Def8
+                                     .= r * Sum(Sf.n)
+                                     .= Sum(S.n) by A05,SM3
+                                     .= middle_sum(h,S.n)
+                                     .= middle_sum(h,S).n by Def8;
+      end;
+      hence thesis by NORMSP_1:def 8;
+    end;
+P7: lim (r * middle_sum(f,Sf)) = r * lim (middle_sum(f,Sf)) by NORMSP_1:45,P5
+                              .= r * integral(f) by Def14,AS,AS1;
+    thus middle_sum(h,S) is convergent by P5,P6,NORMSP_1:37;
+    thus lim (middle_sum(h,S)) = r * integral(f) by P6,P7;
+  end;
+  hence h is integrable by Def13;
+  hence integral(h) = r * integral(f) by Def14,P0;
+end;
+
+theorem LMth03a:
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, h be Function of A,the carrier of X
+        st h = -f & f is integrable holds
+        h is integrable & integral(h) = -integral(f)
+proof
+  let X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+   f, h be Function of A,the carrier of X;
+  assume AS: h = -f & f is integrable; then
+A1: h = (-1)(#)f by VFUNCT_1:29;
+  hence  h is integrable by AS,LMth03;
+  integral(h) = (-1)*integral(f) by AS,A1,LMth03;
+  hence integral(h) = -integral(f) by RLVECT_1:29;
+end;
+
+theorem LMth01:
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X st
+      h = f + g & f is integrable & g is integrable holds
+        h is integrable & integral(h) = integral(f) + integral(g)
+proof
+  let X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X;
+  assume AS: h = f + g & f is integrable & g is integrable;
+P01: dom h = A & dom f = A & dom g = A by FUNCT_2:def 1;
+P0: now let T be DivSequence of A, S be middle_volume_Sequence of h,T;
+    assume AS1: delta(T) is convergent & lim delta(T)=0;
+    defpred P[Element of NAT, set] means ex p being FinSequence of REAL st
+      p = $2 & len p = len (T.$1) & for i be Nat st i in dom (T.$1) holds
+      (p.i) in dom (h|divset((T.$1),i)) & ex z be Point of X st
+      z = (h|divset((T.$1),i)).(p.i) & (S.$1).i = (vol divset((T.$1),i)) * z;
+P1: for k being Element of NAT ex p being Element of (REAL)* st P[k, p]
+    proof
+      let k being Element of NAT;
+      defpred P1[ Nat, set] means $2 in dom (h|divset((T.k),$1)) &
+      ex c be Point of X st
+      c = (h|divset((T.k),$1)).($2) & (S.k).$1 = (vol divset((T.k),$1)) * c;
+A1:   Seg len ((T.k)) = dom (T.k) by FINSEQ_1:def 3;
+A2:   for i being Nat st i in Seg len (T.k) holds
+        ex x being Element of REAL st P1[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+        i in dom (T.k) by FINSEQ_1:def 3; then
+        consider c be Point of X such that
+A21:    c in rng (h|divset((T.k),i)) &
+          (S.k).i = (vol divset((T.k),i)) * c by Def5;
+        consider x be set such that
+A22:      x in dom (h|divset((T.k),i)) &
+          c = (h|divset((T.k),i)).x by A21,FUNCT_1:def 5;
+        x in (dom h) & x in (divset((T.k),i)) by A22,RELAT_1:86; then
+        reconsider x as Element of REAL;
+        take x;
+        thus thesis by A21,A22;
+      end;
+      consider p being FinSequence of REAL such that
+A3:     dom p = Seg len (T.k) & for i being Nat st
+      i in Seg len (T.k) holds P1[i,p.i] from FINSEQ_1:sch 5(A2);
+      take p;
+      len p = len (T.k) by A3,FINSEQ_1:def 3;
+      hence thesis by A3,A1,FINSEQ_1:def 11;
+    end;
+    consider F being Function of NAT,(REAL)* such that
+P2:   for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(P1);
+    defpred P1[Element of NAT,set] means ex q be middle_volume of f,T.$1
+      st q = $2 & for i be Nat st i in dom (T.$1) holds ex z be Point of X st
+      (F.$1).i in dom (f|divset((T.$1),i)) &
+      z = (f|divset((T.$1),i)).((F.$1).i) &
+      q.i = (vol divset((T.$1),i)) * z;
+P3: for k being Element of NAT ex
+      y being Element of (the carrier of X)* st P1[k, y]
+    proof
+      let k being Element of NAT;
+      defpred P11[ Nat, set] means ex c be Point of X st
+      (F.k).$1 in dom (f|divset((T.k),$1)) &
+      c = (f|divset((T.k),$1)).((F.k).$1) &
+      $2 = (vol divset((T.k),$1)) * c;
+A1:   Seg len (T.k) = dom (T.k) by FINSEQ_1:def 3;
+A2:   for i being Nat st i in Seg len (T.k) holds ex
+        x being Element of the carrier of X st P11[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+A21:    i in dom (T.k) by FINSEQ_1:def 3;
+        consider p being FinSequence of REAL such that
+A22:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
+          p.i in dom (h|divset((T.k),i)) & ex z be Point of X st
+          z = (h|divset((T.k),i)).(p.i) &
+          (S.k).i = (vol divset((T.k),i)) * z by P2;
+        p.i in dom (h|divset((T.k),i)) by A21,A22; then
+A23:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
+        p.i in dom(f|divset((T.k),i)) by RELAT_1:86,P01; then
+        (f|divset((T.k),i)).(p.i) in rng (f|divset((T.k),i))
+          by FUNCT_1:12; then
+        reconsider x = (f|divset((T.k),i)).(p.i)
+          as Element of the carrier of X;
+A24:    (F.k).i in dom (f|divset((T.k),i)) by A22,A23,RELAT_1:86,P01;
+        (vol divset((T.k),i)) * x is Element of the carrier of X;
+        hence thesis by A22,A24;
+      end;
+      consider q being FinSequence of the carrier of X such that
+A3:     dom q = Seg len (T.k) & for i being Nat st i in Seg len (T.k) holds
+        P11[i,q.i] from FINSEQ_1:sch 5(A2);
+A4:   len q = len (T.k) by A3,FINSEQ_1:def 3;
+      now let i be Nat;
+        assume i in dom (T.k); then
+        i in Seg len (T.k) by FINSEQ_1:def 3; then
+        consider c be Point of X such that
+A41:      (F.k).i in dom (f|divset((T.k),i)) &
+          c = (f|divset((T.k),i)).((F.k).i) &
+          q.i = (vol divset((T.k),i)) * c by A3;
+        thus ex c be Point of X st c in rng (f|divset((T.k),i)) &
+          q.i = (vol divset((T.k),i)) * c by A41,FUNCT_1:12;
+      end;
+      then reconsider q as middle_volume of f,T.k by A4,Def5;
+      q is Element of (the carrier of X)* by FINSEQ_1:def 11;
+      hence thesis by A1,A3;
+    end;
+    consider Sf being Function of NAT,(the carrier of X)* such that
+P4:   for x being Element of NAT holds P1[x, Sf.x] from FUNCT_2:sch 10(P3);
+    now let k be Element of NAT;
+      ex q be middle_volume of f,T.k st q = Sf.k &
+        for i be Nat st i in dom (T.k) holds ex z be Point of X st
+        (F.k).i in dom (f|divset((T.k),i)) &
+        z = (f|divset((T.k),i)).((F.k).i) &
+        q.i = (vol divset((T.k),i)) * z by P4;
+      hence Sf.k is middle_volume of f,T.k;
+    end;
+    then reconsider Sf as middle_volume_Sequence of f,T by Def7;
+    defpred Q1[Element of NAT,set] means ex q be middle_volume of g,T.$1
+      st q = $2 & for i be Nat st i in dom (T.$1) holds ex z be Point of X st
+      (F.$1).i in dom (g|divset((T.$1),i)) &
+      z = (g|divset((T.$1),i)).((F.$1).i) &
+      q.i = (vol divset((T.$1),i)) * z;
+P5: for k being Element of NAT
+      ex y being Element of (the carrier of X)* st Q1[k, y]
+    proof
+      let k being Element of NAT;
+      defpred Q11[Nat, set] means ex c be Point of X st
+        (F.k).$1 in dom (g|divset((T.k),$1)) &
+        c = (g|divset((T.k),$1)).((F.k).$1) &
+        $2 = (vol divset((T.k),$1)) * c;
+A1:   Seg len (T.k) = dom (T.k) by FINSEQ_1:def 3;
+A2:   for i being Nat st i in Seg len (T.k) holds ex
+        x being Element of the carrier of X st Q11[i,x]
+      proof
+        let i be Nat;
+        assume i in Seg len (T.k); then
+A21:    i in dom (T.k) by FINSEQ_1:def 3;
+        consider p being FinSequence of REAL such that
+A22:      p = F.k & len p = len (T.k) & for i be Nat st i in dom (T.k) holds
+          p.i in dom (h|divset((T.k),i)) & ex z be Point of X st
+          z = (h|divset((T.k),i)).(p.i) &
+          (S.k).i = (vol divset((T.k),i)) * z by P2;
+        p.i in dom (h|divset((T.k),i)) by A21,A22; then
+A23:    p.i in dom h & p.i in (divset((T.k),i)) by RELAT_1:86; then
+        p.i in dom(g|divset((T.k),i)) by RELAT_1:86,P01; then
+        (g|divset((T.k),i)).(p.i) in rng (g|divset((T.k),i))
+          by FUNCT_1:12; then
+        reconsider x = (g|divset((T.k),i)).(p.i)
+          as Element of the carrier of X;
+A24:    (F.k).i in dom (g|divset((T.k),i)) by A22,A23,RELAT_1:86,P01;
+        (vol divset((T.k),i)) * x is Element of the carrier of X;
+        hence thesis by A22,A24;
+      end;
+      consider q being FinSequence of the carrier of X such that
+A3:     dom q = Seg len (T.k) & for i being Nat
+        st i in Seg len (T.k) holds Q11[i,q.i] from FINSEQ_1:sch 5(A2);
+A4:   len q = len (T.k) by A3,FINSEQ_1:def 3;
+      now let i be Nat;
+        assume i in dom (T.k); then
+        i in Seg len (T.k) by FINSEQ_1:def 3; then
+        consider c be Point of X such that
+A41:      (F.k).i in dom (g|divset((T.k),i)) &
+          c = (g|divset((T.k),i)).((F.k).i) &
+          q.i = (vol divset((T.k),i)) * c by A3;
+        thus ex c be Point of X st c in rng (g|divset((T.k),i)) &
+          q.i = (vol divset((T.k),i)) * c by A41,FUNCT_1:12;
+      end;
+      then reconsider q as middle_volume of g,T.k by A4,Def5;
+      q is Element of (the carrier of X)* by FINSEQ_1:def 11;
+      hence thesis by A1,A3;
+    end;
+    consider Sg being Function of NAT,(the carrier of X)* such that
+P6:   for x being Element of NAT holds Q1[x, Sg.x] from FUNCT_2:sch 10(P5);
+    now let k be Element of NAT;
+      ex q be middle_volume of g,T.k st q = Sg.k & for i be Nat st
+        i in dom (T.k) holds ex z be Point of X st
+        (F.k).i in dom (g|divset((T.k),i)) &
+        z = (g|divset((T.k),i)).((F.k).i) &
+        q.i = (vol divset((T.k),i)) * z by P6;
+      hence Sg.k is middle_volume of g,T.k;
+    end;
+    then reconsider Sg as middle_volume_Sequence of g,T by Def7;
+    integral(f) is Point of X; then
+P7: middle_sum(f,Sf) is convergent &
+      lim (middle_sum(f,Sf)) = integral(f) by Def14,AS,AS1;
+    integral(g) is Point of X; then
+P8: middle_sum(g,Sg) is convergent &
+      lim (middle_sum(g,Sg)) = integral(g) by Def14,AS,AS1;
+P9: middle_sum(f,Sf) + middle_sum(g,Sg) = middle_sum(h,S)
+    proof
+      now let n be Element of NAT;
+        consider p being FinSequence of REAL such that
+A01:      p = F.n & len  p = len (T.n) & for i be Nat st i in dom (T.n) holds
+          (p.i) in dom (h|divset((T.n),i)) & ex z be Point of X st
+          z = (h|divset((T.n),i)).(p.i) &
+          (S.n).i = (vol divset((T.n),i)) * z by P2;
+        consider q be middle_volume of f,T.n such that
+A02:      q = Sf.n & for i be Nat st i in dom (T.n) holds ex z be Point of X st
+          (F.n).i in dom (f|divset((T.n),i)) &
+          z = (f|divset((T.n),i)).((F.n).i) &
+          q.i = (vol divset((T.n),i)) * z by P4;
+        consider r be middle_volume of g,T.n such that
+A03:      r = Sg.n & for i be Nat st i in dom (T.n) holds ex z be Point of X st
+          (F.n).i in dom (g|divset((T.n),i)) &
+          z = (g|divset((T.n),i)).((F.n).i) &
+          r.i = (vol divset((T.n),i)) * z by P6;
+A04:    len (Sf.n) = len (T.n) & len (Sg.n) = len (T.n) &
+          len (S.n) = len (T.n) by Def5;
+A05:    dom (Sf.n) = dom (T.n) & dom (Sg.n) = dom (T.n) &
+          dom (S.n) = dom (T.n) by A04,FINSEQ_3:31;
+        now let i be Nat;
+          assume 1 <= i & i <= len (S.n); then
+          i in Seg (len (S.n)) by FINSEQ_1:3; then
+K001:     i in dom (S.n) by FINSEQ_1:def 3;
+          consider t be Point of X such that
+K002:       t = (h|divset((T.n),i)).((F.n).i) &
+            (S.n).i = (vol divset((T.n),i)) * t by K001,A05,A01;
+          consider z be Point of X such that
+K003:       (F.n).i in dom (f|divset((T.n),i)) &
+            z = (f|divset((T.n),i)).((F.n).i) &
+            q.i = (vol divset((T.n),i)) * z by A02,K001,A05;
+          consider w be Point of X such that
+K004:       (F.n).i in dom (g|divset((T.n),i)) &
+            w = (g|divset((T.n),i)).((F.n).i) &
+            r.i = (vol divset((T.n),i)) * w by A03,K001,A05;
+K005:     (F.n).i in divset((T.n),i) by K004,RELAT_1:86;
+K006:     (F.n).i in dom g by K004,RELAT_1:86;
+K007:     (F.n).i in A by K004; then
+K008:     (F.n).i in dom h by FUNCT_2:def 1;
+K009:     (F.n).i in dom f by K007,FUNCT_2:def 1;
+K010:     f/.((F.n).i) = f.((F.n).i) by PARTFUN1:def 8,K009
+                      .= z by K003,K005,FUNCT_1:72;
+K011:     g/.((F.n).i) = g.((F.n).i) by PARTFUN1:def 8,K006
+                      .= w by K004,K005,FUNCT_1:72;
+K012:     t = (h|divset((T.n),i)).((F.n).i) by K002
+           .= h.((F.n).i) by K005,FUNCT_1:72
+           .= h/.((F.n).i) by PARTFUN1:def 8,K008
+           .= f/.((F.n).i) + g/.((F.n).i) by VFUNCT_1:def 1,K008,AS
+           .= z + w by K010,K011;
+K013:     (vol divset((T.n),i)) * z = (Sf.n).i by K003,A02
+                                   .= (Sf.n)/.i by K001,A05,PARTFUN1:def 8;
+K014:     (vol divset((T.n),i)) * w = (Sg.n).i by K004,A03
+                                   .= (Sg.n)/.i by K001,A05,PARTFUN1:def 8;
+          thus (S.n)/.i = (S.n).i by K001,PARTFUN1:def 8
+                       .= (vol divset((T.n),i)) * t by K002
+                       .= (vol divset((T.n),i)) * z + (vol divset((T.n),i)) * w
+                         by K012,RLVECT_1:def 8
+                       .= (Sf.n)/.i + (Sg.n)/.i by K013,K014;
+        end; then
+A06:    Sf.n + Sg.n = S.n by BINOM:def 4,A05;
+        thus middle_sum(f,Sf).n + middle_sum(g,Sg).n
+           = middle_sum(f,Sf.n) + middle_sum(g,Sg).n by Def8
+          .= middle_sum(f,Sf.n) + middle_sum(g,Sg.n) by Def8
+          .= Sum(Sf.n) + middle_sum(g,Sg.n)
+          .= Sum(Sf.n) + Sum(Sg.n)
+          .= Sum(S.n) by A06,A04,SM1
+          .= middle_sum(h,S.n)
+          .= middle_sum(h,S).n by Def8;
+      end;
+      hence thesis by NORMSP_1:def 5;
+    end;
+    hence middle_sum(h,S) is convergent by P7,P8,NORMSP_1:34;
+    thus lim (middle_sum(h,S)) = integral(f) + integral(g)
+      by P7,P8,P9,NORMSP_1:42;
+  end;
+  hence h is integrable by Def13;
+  hence integral(h) = integral(f) + integral(g) by Def14,P0;
+end;
+
+theorem
+  for X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X
+        st h = f - g & f is integrable & g is integrable holds
+        h is integrable & integral(h) = integral(f) - integral(g)
+proof
+  let X be RealNormSpace,
+      A be closed-interval Subset of REAL,
+      f, g, h be Function of A,the carrier of X;
+  assume AS: h = f - g & f is integrable & g is integrable; then
+A1: h = f + (-g) by VFUNCT_1:31;
+  dom (-g) = dom g by VFUNCT_1:def 6
+          .= A by FUNCT_2:def 1; then
+  reconsider gg = -g as Function of A,the carrier of X by FUNCT_2:def 1;
+A2: gg is integrable by AS,LMth03a;
+  hence h is integrable by AS,A1,LMth01;
+  integral(h) = integral(f) + integral(gg) by AS,A1,A2,LMth01; then
+  integral(h) = integral(f) + -integral(g) by AS,LMth03a;
+  hence integral(h) = integral(f) - integral(g) by RLVECT_1:def 14;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,the carrier of X;
+  pred f is_integrable_on A means :Def16:
+  ex g be Function of A,the carrier of X st g = f|A & g is integrable;
+end;
+
+definition
+  let X be RealNormSpace;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,the carrier of X;
+  assume AS: A c= dom f;
+  func integral(f,A) -> Element of X means :Def17:
+  ex g be Function of A,the carrier of X st g = f|A & it = integral(g);
+correctness
+  proof
+L1: dom (f|A) = A by AS,RELAT_1:91;
+    rng (f|A) c= the carrier of X; then
+    reconsider g = f|A as Function of A,the carrier of X by L1,FUNCT_2:4;
+    integral(g) is Point of X;
+    hence thesis;
+  end;
+end;
+
+theorem Th01:
+  for A be closed-interval Subset of REAL,
+      f be PartFunc of REAL,the carrier of X,
+      g be Function of A,the carrier of X
+        st f|A = g holds f is_integrable_on A iff g is integrable
+proof
+  let A be closed-interval Subset of REAL,
+      f be PartFunc of REAL,the carrier of X,
+      g be Function of A,the carrier of X;
+  assume AS: f|A = g;
+  hereby
+    assume f is_integrable_on A; then
+    ex g be Function of A,the carrier of X st
+      g = f|A & g is integrable by Def16;
+    hence g is integrable by AS;
+  end;
+  assume g is integrable;
+  hence f is_integrable_on A by AS,Def16;
+end;
+
+theorem
+  for A be closed-interval Subset of REAL,
+      f be PartFunc of REAL,the carrier of X,
+      g be Function of A,the carrier of X
+        st A c= dom f & f|A = g holds integral(f,A) = integral(g) by Def17;
+
+theorem Th03A:
+  for X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V
+        st g = g1 & f = f1 holds g1 + f1 = g + f
+proof
+  let X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V;
+  assume AS: g = g1 & f = f1;
+P0: dom (g + f) = (dom g) /\ (dom f) by VFUNCT_1:def 1
+               .= (dom g1) /\ (dom f1) by AS;
+P1: g + f is PartFunc of Y,the carrier of V by RELSET_1:13,P0;
+  for c be Element of Y st c in dom (g + f) holds
+    (g + f)/.c = g1/.c + f1/.c by VFUNCT_1:def 1,AS;
+  hence thesis by P1,P0,VFUNCT_1:def 1;
+end;
+
+theorem
+  for X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V
+        st g = g1 & f = f1 holds g1 - f1 = g - f
+proof
+  let X, Y be non empty set,
+      V be RealNormSpace,
+      g, f be PartFunc of X,the carrier of V,
+      g1, f1 be PartFunc of Y,the carrier of V;
+  assume AS: g = g1 & f = f1;
+P0: dom (g - f) = (dom g) /\ (dom f) by VFUNCT_1:def 2
+               .= (dom g1) /\ (dom f1) by AS;
+P1: g - f is PartFunc of Y,the carrier of V by RELSET_1:13,P0;
+  for c be Element of Y st c in dom (g - f) holds
+    (g - f)/.c = g1/.c - f1/.c by VFUNCT_1:def 2,AS;
+  hence thesis by P1,P0,VFUNCT_1:def 2;
+end;
+
+theorem Th03C:
+  for r be Real,
+      X, Y be non empty set,
+      V be RealNormSpace,
+      g be PartFunc of X,the carrier of V,
+      g1 be PartFunc of Y,the carrier of V
+        st g = g1 holds r(#)g1 = r(#)g
+proof
+  let r be Real,
+      X, Y be non empty set,
+      V be RealNormSpace,
+      g be PartFunc of X,the carrier of V,
+      g1 be PartFunc of Y,the carrier of V;
+  assume AS: g = g1;
+P0: dom (r(#)g) = dom (g) by VFUNCT_1:def 4
+               .= dom (g1) by AS;
+P1: r(#)g is PartFunc of Y,the carrier of V by RELSET_1:13,P0;
+  for c be Element of Y st c in dom (r(#)g) holds
+    (r(#)g)/.c = r * (g1/.c) by VFUNCT_1:def 4,AS;
+  hence thesis by P1,P0,VFUNCT_1:def 4;
+end;
+
+begin :: Linearity of the Integration Operator
+
+theorem th001:
+  for r be Real
+  for A be closed-interval Subset of REAL
+  for f be PartFunc of REAL,the carrier of X
+    st A c= dom f & f is_integrable_on A holds
+    r(#)f is_integrable_on A & integral((r(#)f),A) = r * integral(f,A)
+proof
+  let r be Real;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,the carrier of X;
+  assume AS: A c= dom f & f is_integrable_on A;
+P0: A c= dom(r(#)f) by VFUNCT_1:def 4,AS;
+  consider g be Function of A,the carrier of X such that
+P1: g = f|A & g is integrable by AS,Def16;
+P2: (r(#)f)|A = r(#)(f|A) by VFUNCT_1:37
+             .= r(#)g by P1,Th03C;
+  r(#)g is total by VFUNCT_1:40;then
+  reconsider gg = r(#)g as Function of A,the carrier of X;
+  gg is integrable & integral(gg) = r * integral(g) by P1,LMth03;
+  hence r(#)f is_integrable_on A by P2,Th01;
+  thus integral((r(#)f),A) = integral(gg) by P2,P0,Def17
+                          .= r * integral(g) by P1,LMth03
+                          .= r * integral(f,A) by P1,AS,Def17;
+end;
+
+theorem th002:
+  for A be closed-interval Subset of REAL,
+      f1, f2 be PartFunc of REAL,the carrier of X
+        st f1 is_integrable_on A & f2 is_integrable_on A &
+        A c= dom f1 & A c= dom f2 holds
+        f1 + f2 is_integrable_on A &
+        integral(f1 + f2,A) = integral(f1,A) + integral(f2,A)
+proof
+  let A be closed-interval Subset of REAL;
+  let f1, f2 be PartFunc of REAL,the carrier of X;
+  assume that
+A1: f1 is_integrable_on A &
+    f2 is_integrable_on A and
+A2: A c= dom f1 & A c= dom f2;
+  A c= dom f1 /\ dom f2 by A2,XBOOLE_1:19; then
+P0: A c= dom(f1 + f2) by VFUNCT_1:def 1;
+  consider g1 be Function of A,the carrier of X such that
+P11: g1 = f1|A & g1 is integrable by A1,Def16;
+  consider g2 be Function of A,the carrier of X such that
+P12: g2 = f2|A & g2 is integrable by A1,Def16;
+  (f1 + f2)|A = f1|A + f2|A by VFUNCT_1:33; then
+P1: (f1 + f2)|A = g1 + g2 by P11,P12,Th03A;
+  g1 + g2 is total by VFUNCT_1:38; then
+  reconsider g = g1 + g2 as Function of A,the carrier of X;
+  g is integrable by LMth01,P11,P12;
+  hence (f1 + f2) is_integrable_on A by P1,Th01;
+  thus integral(f1 + f2,A) = integral(g) by Def17,P1,P0
+                          .= integral(g1) + integral(g2) by LMth01,P11,P12
+                          .= integral(f1,A) + integral(g2) by A2,P11,Def17
+                          .= integral(f1,A) + integral(f2,A) by A2,P12,Def17;
+end;
+
+theorem
+  for A be closed-interval Subset of REAL,
+      f1, f2 be PartFunc of REAL,the carrier of X
+        st f1 is_integrable_on A & f2 is_integrable_on A &
+        A c= dom f1 & A c= dom f2 holds
+        f1 - f2 is_integrable_on A &
+        integral(f1 - f2,A) = integral(f1,A) - integral(f2,A)
+proof
+  let A be closed-interval Subset of REAL;
+  let f1, f2 be PartFunc of REAL,the carrier of X;
+  assume that
+A1: f1 is_integrable_on A &
+    f2 is_integrable_on A and
+A2: A c= dom f1 & A c= dom f2;
+Q1: f1 - f2 = f1 + -f2 by VFUNCT_1:31;
+Q2: dom (-f2) = dom f2 by VFUNCT_1:def 6;
+Q3: -f2 = (-1)(#)f2 by VFUNCT_1:29; then
+Q4: -f2 is_integrable_on A by A1,A2,th001;
+  hence (f1 - f2) is_integrable_on A by A1,A2,Q1,Q2,th002;
+  thus integral(f1 - f2,A) = integral(f1 + -f2,A) by VFUNCT_1:31
+    .= integral(f1,A) + integral(-f2,A) by A1,A2,Q2,Q4,th002
+    .= integral(f1,A) + (-1) * integral(f2,A) by A1,A2,Q3,th001
+    .= integral(f1,A) + -integral(f2,A) by RLVECT_1:29
+    .= integral(f1,A) - integral(f2,A) by RLVECT_1:def 14;
+end;
+
+definition
+  let X be RealNormSpace;
+  let f be PartFunc of REAL,the carrier of X;
+  let a, b be real number;
+  func integral(f,a,b) -> Element of X equals   :Def18:
+  integral(f,[' a,b ']) if a <= b otherwise -integral(f,[' b,a ']);
+  correctness;
+end;
+
+theorem th100:
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL,
+      a, b be Real
+        st A = [.a,b.] holds integral(f,A) = integral(f,a,b)
+proof
+  let f be PartFunc of REAL,the carrier of X;
+  let A be closed-interval Subset of REAL;
+  let a, b be Real;
+  consider a1, b1 being Real such that
+A1: a1 <= b1 and
+A2: A = [.a1,b1.] by INTEGRA1:def 1;
+  assume A = [.a,b.]; then
+A3: a1 = a & b1 = b by A2,INTEGRA1:6; then
+  integral(f,a,b) = integral(f,[' a,b ']) by A1,Def18;
+  hence thesis by A1,A2,A3,INTEGRA5:def 4;
+end;
+
+theorem th46C:
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL
+        st vol(A) = 0 & A c= dom f holds
+        f is_integrable_on A & integral(f,A) = 0.X
+proof
+  let f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL;
+  assume AS: vol(A) = 0 & A c= dom f;
+  f is Function of dom f, rng f by FUNCT_2:3; then
+  f is Function of dom f,the carrier of X by FUNCT_2:4; then
+  reconsider g = f|A as Function of A,the carrier of X by AS,FUNCT_2:38;
+P1: for T being DivSequence of A,
+    S be middle_volume_Sequence of g,T st
+    delta(T) is convergent & lim delta(T) = 0 holds
+    middle_sum(g,S) is convergent & lim (middle_sum(g,S)) = 0.X
+    proof
+      let T being DivSequence of A,
+          S be middle_volume_Sequence of g,T;
+      assume delta(T) is convergent & lim delta(T) = 0;
+P11:  for i be Element of NAT holds middle_sum(g,S.i) = 0.X
+      proof
+        let i be Element of NAT;
+A1:     len (S.i) = len (S.i);
+        now let k be Element of NAT, v be Element of X;
+          assume P214: k in dom (S.i) & v = (S.i).k; then
+          k in Seg (len (S.i)) by FINSEQ_1:def 3; then
+          k in Seg (len (T.i)) by Def5; then
+A11:      k in dom (T.i) by FINSEQ_1:def 3; then
+          consider c be VECTOR of X such that
+A12:        c in rng (g|divset((T.i),k)) &
+            (S.i).k = (vol divset((T.i),k)) * c by Def5;
+          0 <= vol divset((T.i),k) & vol divset((T.i),k) <= 0
+            by AS,INTEGRA1:11,INTEGRA2:40,A11,INTEGRA1:10; then
+A13:      vol divset((T.i),k) = 0;
+          (S.i).k = 0.X by A13,A12,RLVECT_1:23;
+          hence (S.i).k = -v by RLVECT_1:25,P214;
+        end;
+        then Sum((S.i)) = -Sum((S.i)) by A1,RLVECT_1:57;
+        hence thesis by RLVECT_1:33;
+      end;
+P12:  for i be Element of NAT holds (middle_sum(g,S)).i = 0.X
+      proof
+        let i be Element of NAT;
+        thus (middle_sum(g,S)).i = middle_sum(g,S.i) by Def8
+                                .= 0.X by P11;
+      end;
+P13:  for r be Real st 0 < r ex m be Element of NAT st for n be Element of NAT
+        st m <= n holds ||.((middle_sum(g,S)).n) - 0.X.|| < r
+      proof
+        let r be Real;
+        assume AS: 0 < r;
+        take m = 0;
+        let n be Element of NAT;
+        assume m <= n;
+        ||.((middle_sum(g,S)).n) - 0.X.|| = ||.0.X - 0.X.|| by P12
+                                         .= 0 by NORMSP_1:10;
+        hence ||.((middle_sum(g,S)).n) - 0.X.|| < r by AS;
+      end;
+    hence (middle_sum(g,S)) is convergent by NORMSP_1:def 9;
+    hence lim (middle_sum(g,S)) = 0.X by P13,NORMSP_1:def 11;
+  end; then
+P2: g is integrable by Def13;
+  hence f is_integrable_on A by Def16;
+  integral(g) = 0.X by P2,P1,Def14;
+  hence integral(f,A) = 0.X by Def17,AS;
+end;
+
+theorem
+  for f being PartFunc of REAL,the carrier of X,
+      A being closed-interval Subset of REAL,
+      a, b be Real
+        st A = [.b,a.] & A c= dom f holds -integral(f,A) = integral(f,a,b)
+proof
+  let f be PartFunc of REAL,the carrier of X;
+  let A be closed-interval Subset of REAL;
+  let a, b be Real;
+  consider a1, b1 being Real such that
+A1: a1 <= b1 and
+A2: A = [.a1,b1.] by INTEGRA1:def 1;
+  assume
+A3: A = [.b,a.] & A c= dom f; then
+A4: a1 = b & b1 = a by A2,INTEGRA1:6;
+  now
+    per cases by A1,A4,XXREAL_0:1;
+    suppose
+A5:   b < a; then
+      integral(f,a,b) = -integral(f,[' b,a ']) by Def18;
+      hence thesis by A3,A5,INTEGRA5:def 4;
+    end;
+    suppose
+A6:   b = a;
+      A = [. lower_bound A,upper_bound A .] by INTEGRA1:5; then
+      lower_bound A = b & upper_bound A = a by A3,INTEGRA1:6; then
+A7:   vol(A) = upper_bound A - upper_bound A by A6
+            .= 0;
+A8:   integral(f,a,b) = integral(f,A) by A3,A6,th100;
+A9:   -integral(f,a,b) = -integral(f,A) by A3,A6,th100;
+      integral(f,a,b) = 0.X by A7,A3,th46C,A8;
+      hence thesis by A9,RLVECT_1:25;
+    end;
+  end;
+  hence thesis;
+end;

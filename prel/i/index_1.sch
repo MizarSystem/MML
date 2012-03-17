@@ -104,12 +104,12 @@
 </Func>
 <Typ kind="M" nr="12">
 <Cluster/>
-<Func kind="K" nr="251">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="251">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>

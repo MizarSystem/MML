@@ -1,31 +1,33 @@
 :: Cell Petri Net Concepts
-::  by Mitsuru Jitsukawa , Pauline N. Kawamoto , Yasunari Shidama and Yatsuka Nakamura
+::  by Mitsuru Jitsukawa, Pauline N. Kawamoto, Yasunari Shidama,
+::   and Yatsuka Nakamura
 ::
 :: Received October 14, 2008
 :: Copyright (c) 2008 Association of Mizar Users
 
 environ
 
- vocabularies PETRI, FUNCT_1, XBOOLE_0, TARSKI, SUBSET_1, FUNCT_2,
-      RELAT_1, FUNCOP_1, FUNCT_4, FINSET_1, SETFAM_1, ZFMISC_1, PARTFUN1,
-      NET_1, ARYTM_3, CARD_1, PETRI_2;
+ vocabularies PETRI, FUNCT_1, XBOOLE_0, TARSKI, SUBSET_1, FUNCT_2, RELAT_1,
+      FUNCOP_1, FUNCT_4, FINSET_1, SETFAM_1, ZFMISC_1, PARTFUN1, ARYTM_3,
+      CARD_1, PETRI_2, STRUCT_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ZFMISC_1, SETFAM_1, RELAT_1,
       RELSET_1, DOMAIN_1, PETRI, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, RELSET_2,
-      FINSET_1, FUNCOP_1, CARD_1;
- constructors RELSET_1, DOMAIN_1, PETRI, RELSET_2, FUNCOP_1, FUNCT_4, CARD_1;
+      FINSET_1, FUNCOP_1, CARD_1, PARTIT_2, STRUCT_0;
+ constructors RELSET_1, DOMAIN_1, PETRI, RELSET_2, FUNCOP_1, FUNCT_4, CARD_1,
+      STRUCT_0, PARTIT_2;
  registrations SUBSET_1, RELAT_1, PARTFUN1, RELSET_1, XBOOLE_0, FUNCT_2,
-      FINSET_1, REALSET1;
+      FINSET_1, REALSET1, STRUCT_0, PARTIT_2, FUNCT_1, PETRI;
  requirements SUBSET, BOOLE;
- definitions TARSKI, PETRI;
+ definitions TARSKI, PETRI, STRUCT_0, PARTIT_2;
  theorems RELSET_1, PARTFUN1, TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, PETRI,
       FUNCT_1, FUNCT_2, XBOOLE_1, FUNCT_4, FUNCOP_1, RELSET_2;
  schemes FUNCT_2;
 
 begin :: Preliminaries: thin cylinder, locus
 
-reserve PTN for PT_net_Str;
-reserve y for Function;
-reserve z for set;
+
+
+
 
 definition
   let A be non empty set, B be set;
@@ -34,8 +36,7 @@ definition
 A1: Bo c= B;
   func cylinder0(A,B,Bo,yo) -> non empty Subset of Funcs(B,A) equals
   :Def1:
-  {
-  y where y is Function of B,A : y|Bo = yo };
+  { y where y is Function of B,A : y|Bo = yo };
   correctness
   proof
     set D = { y where y is Function of B,A : y|Bo = yo };
@@ -44,8 +45,7 @@ A2: now
       suppose
 A3:     Bo = {};
         consider f being Function of B,A;
-        f|{} = {}
-          .= yo by A3;
+        f|{} = {} .= yo by A3;
         then f in D by A3;
         hence D is non empty;
       end;
@@ -75,8 +75,7 @@ A9:     dom f = dom(B --> yo.b0) \/ Bo by FUNCT_4:def 1
     end;
     now
       let z be set;
-      assume
-      z in D;
+      assume z in D;
       then ex y be Function of B,A st z=y & y|Bo = yo;
       hence z in Funcs(B,A) by FUNCT_2:11;
     end;
@@ -128,8 +127,7 @@ A3: A1 c= A2;
   set D2= { y where y is Function of B,A2: y|Bo = yo2 };
 A4: now
     let x be set;
-    assume
-    x in D1;
+    assume x in D1;
     then consider y1 be Function of B,A1 such that
 A5: x=y1 and
 A6: y1|Bo = yo1 by A2;
@@ -154,8 +152,7 @@ definition
 A1: now
       let z be set;
       assume
-      z in {D where D is Subset of Funcs(B,A) : D is thin_cylinder of
-      A,B};
+      z in {D where D is Subset of Funcs(B,A) : D is thin_cylinder of A,B};
       then ex D be Subset of Funcs(B,A) st z=D & D is thin_cylinder of A,B;
       hence z in bool Funcs(B,A);
     end;
@@ -166,11 +163,9 @@ end;
 
 Lm1: for A be non empty set, B,C be set st B c= C holds thin_cylinders(A,B) c=
 bool PFuncs(C,A)
-
 proof
   let A be non empty set, B,C be set;
-  assume
-  B c= C;
+  assume B c= C;
   then
 A1: PFuncs(B,A) c= PFuncs(C,A) by PARTFUN1:128;
   Funcs(B,A) c= PFuncs(B,A) by FUNCT_2:141;
@@ -178,8 +173,7 @@ A1: PFuncs(B,A) c= PFuncs(C,A) by PARTFUN1:128;
   then
 A2: bool Funcs(B,A) c= bool PFuncs(C,A) by ZFMISC_1:79;
   let x be set;
-  assume
-  x in thin_cylinders(A,B);
+  assume x in thin_cylinders(A,B);
   then consider D be Subset of Funcs(B,A) such that
 A3: x=D and
   D is thin_cylinder of A,B;
@@ -190,16 +184,12 @@ end;
 Lm2: for A be non trivial set,B be set, Bo1,Bo2 be Subset of B,yo1 be Function
 of Bo1,A, yo2 be Function of Bo2,A st not Bo2 c= Bo1 holds ex f be Function of
 B,A st f|Bo1 = yo1 & f|Bo2 <> yo2
-
 proof
-
   let A be non trivial set, B be set, Bo1,Bo2 be Subset of B,yo1 be Function
   of Bo1,A, yo2 be Function of Bo2,A;
-
   defpred C[set] means $1 in Bo1;
   deffunc F(set) = yo1.$1;
-  assume
-  not Bo2 c= Bo1;
+  assume not Bo2 c= Bo1;
   then consider x0 be set such that
 A1: x0 in Bo2 and
 A2: not x0 in Bo1 by TARSKI:def 3;
@@ -226,19 +216,14 @@ A8:   yo2.x0 <> x;
 A9: y0 in A and
 A10: y0 <> yo2.x0;
   deffunc G(set) = y0;
-
 A11: for x be set st x in B holds (C[ x] implies F(x) in A) & (not C[ x]
   implies G(x) in A) by A9,FUNCT_2:7;
-
   consider f be Function of B, A such that
-
 A12: for x be set st x in B holds (C[ x] implies f.x = F(x)) & (not C[ x
   ] implies f.x = G(x)) from FUNCT_2:sch 5(A11);
-
 A13: now
     let z be set;
-    assume
-    z in dom yo1;
+    assume z in dom yo1;
     then z in Bo1;
     hence yo1.z = f.z by A12;
   end;
@@ -255,12 +240,9 @@ end;
 Lm3: for A be non trivial set, B be set, Bo1,Bo2 be Subset of B,yo1 be
 Function of Bo1,A, yo2 be Function of Bo2,A st Bo1 <> Bo2 & Bo2 c= Bo1 holds ex
 f be Function of B,A st f|Bo2 = yo2 & f|Bo1 <> yo1
-
 proof
-
   let A be non trivial set, B be set, Bo1,Bo2 be Subset of B,yo1 be Function
   of Bo1,A, yo2 be Function of Bo2,A;
-
   assume that
 A1: Bo1 <> Bo2 and
 A2: Bo2 c= Bo1;
@@ -293,19 +275,14 @@ A10:  yo1.x0 <> x;
 A11: y0 in A and
 A12: y0 <> yo1.x0;
   deffunc G(set) = y0;
-
 A13: for x be set st x in B holds (C[ x] implies F(x) in A) & (not C[ x]
   implies G(x) in A) by A11,FUNCT_2:7;
-
   consider f be Function of B, A such that
-
 A14: for x be set st x in B holds (C[ x] implies f.x = F(x)) & (not C[ x
   ] implies f.x = G(x)) from FUNCT_2:sch 5(A13);
-
 A15: now
     let z be set;
-    assume
-    z in dom yo2;
+    assume z in dom yo2;
     then z in Bo2;
     hence yo2.z = f.z by A14;
   end;
@@ -322,12 +299,9 @@ end;
 Lm4: for A be non trivial set,B be set, Bo1,Bo2 be Subset of B,yo1 be Function
 of Bo1,A, yo2 be Function of Bo2,A st Bo1 <> Bo2 holds { y where y is Function
 of B,A : y|Bo1 = yo1 } <> { y where y is Function of B,A : y|Bo2 = yo2 }
-
 proof
-
   let A be non trivial set, B be set, Bo1,Bo2 be Subset of B,yo1 be Function
   of Bo1,A, yo2 be Function of Bo2,A;
-
   assume
 A1: Bo1 <> Bo2;
   per cases;
@@ -338,8 +312,7 @@ A2: f|Bo1 = yo1 and
 A3: f|Bo2 <> yo2 by Lm2;
     not f in { y where y is Function of B,A : y|Bo2 = yo2 }
     proof
-      assume
-      f in { y where y is Function of B,A : y|Bo2 = yo2 };
+      assume f in { y where y is Function of B,A : y|Bo2 = yo2 };
       then ex y be Function of B,A st f=y & y|Bo2 = yo2;
       hence contradiction by A3;
     end;
@@ -352,8 +325,7 @@ A4: f|Bo2 = yo2 and
 A5: f|Bo1 <> yo1 by A1,Lm3;
     not f in { y where y is Function of B,A : y|Bo1 = yo1 }
     proof
-      assume
-      f in { y where y is Function of B,A : y|Bo1 = yo1 };
+      assume f in { y where y is Function of B,A : y|Bo1 = yo1 };
       then ex y be Function of B,A st f=y & y|Bo1 = yo1;
       hence contradiction by A5;
     end;
@@ -401,8 +373,7 @@ A1, yo2 being Function of Bo,A2 st Bo is finite & yo1=yo2 & $1=cylinder0(A1,B1,
   Bo,yo1) & $2=cylinder0(A2,B2,Bo,yo2);
 A3: now
     let x be set;
-    assume
-    x in thin_cylinders(A1,B1);
+    assume x in thin_cylinders(A1,B1);
     then
     ex D be Subset of Funcs(B1,A1) st x=D & D is thin_cylinder of A1,B1;
     then reconsider D1=x as thin_cylinder of A1,B1;
@@ -441,8 +412,7 @@ Bo2 is finite & Bo1=B1 /\ Bo2 /\ (yo2"A1) & yo1=yo2 | Bo1 & $1=cylinder0(A2,B2,
   Bo2,yo2) & $2=cylinder0(A1,B1,Bo1,yo1);
 A1: now
     let x be set;
-    assume
-    x in thin_cylinders(A2,B2);
+    assume x in thin_cylinders(A2,B2);
     then
     ex D be Subset of Funcs(B2,A2) st x=D & D is thin_cylinder of A2,B2;
     then reconsider D2=x as thin_cylinder of A2,B2;
@@ -610,14 +580,46 @@ definition
 end;
 
 definition
-  struct (PT_net_Str) Colored_PT_net_Str (# Places, Transitions -> non empty
-set, S-T_Arcs -> non empty Relation of the Places,the Transitions, T-S_Arcs ->
-    non empty Relation of the Transitions, the Places, ColoredSet -> non empty
+  struct (PT_net_Str) Colored_PT_net_Str (# carrier, carrier' ->
+set, S-T_Arcs ->  Relation of the carrier,the carrier', T-S_Arcs ->
+     Relation of the carrier', the carrier, ColoredSet -> non empty
     finite set, firing-rule -> Function #);
 end;
 
 definition
-  let CPNT be Colored_PT_net_Str;
+ func TrivialColoredPetriNet -> Colored_PT_net_Str equals
+  Colored_PT_net_Str (# {{}}, {{}}, [#]({{}},{{}}), [#]({{}},
+       {{}}), {{}}, {} #);
+ coherence;
+end;
+
+registration
+ cluster TrivialColoredPetriNet
+  -> with_S-T_arc with_T-S_arc non empty non void;
+ coherence
+  proof set N = TrivialColoredPetriNet;
+   thus the S-T_Arcs of N is non empty;
+   thus the T-S_Arcs of N is non empty;
+   thus thesis;
+  end;
+end;
+
+registration
+ cluster non empty non void with_S-T_arc with_T-S_arc Colored_PT_net_Str;
+ existence
+  proof
+   take TrivialColoredPetriNet;
+   thus thesis;
+  end;
+end;
+
+definition
+ mode Colored_Petri_net
+  is non empty non void with_S-T_arc with_T-S_arc Colored_PT_net_Str;
+end;
+
+definition
+  let CPNT be Colored_Petri_net;
   let t0 be transition of CPNT;
   attr t0 is outbound means
   :Def8:
@@ -625,18 +627,17 @@ definition
 end;
 
 definition
-  let CPNT1 be Colored_PT_net_Str;
-  func Outbds(CPNT1) -> Subset of the Transitions of CPNT1 equals
+  let CPNT1 be Colored_Petri_net;
+  func Outbds(CPNT1) -> Subset of the carrier' of CPNT1 equals
   {x where x
   is transition of CPNT1 : x is outbound };
   coherence
   proof
-    {x where x is transition of CPNT1 : x is outbound } c= the Transitions
+    {x where x is transition of CPNT1 : x is outbound } c= the carrier'
     of CPNT1
     proof
       let z be set;
-      assume
-      z in {x where x is transition of CPNT1 : x is outbound };
+      assume z in {x where x is transition of CPNT1 : x is outbound };
       then ex x be transition of CPNT1 st z=x & x is outbound;
       hence thesis;
     end;
@@ -645,11 +646,11 @@ definition
 end;
 
 definition
-  let CPNT be Colored_PT_net_Str;
+  let CPNT be Colored_Petri_net;
   attr CPNT is Colored-PT-net-like means
   :Def10:
   dom (the firing-rule of CPNT)
-c= (the Transitions of CPNT) \ Outbds(CPNT) & for t being transition of CPNT st
+c= (the carrier' of CPNT) \ Outbds(CPNT) & for t being transition of CPNT st
   t in dom (the firing-rule of CPNT) holds ex CS be non empty Subset of the
   ColoredSet of CPNT, I be Subset of *'{t}, O be Subset of {t}*' st (the
 firing-rule of CPNT ).t is Function of thin_cylinders(CS,I), thin_cylinders(CS,
@@ -657,22 +658,23 @@ firing-rule of CPNT ).t is Function of thin_cylinders(CS,I), thin_cylinders(CS,
 end;
 
 theorem
-  for CPNT be Colored_PT_net_Str, t being transition of CPNT st CPNT is
+  for CPNT be Colored_Petri_net, t being transition of CPNT st CPNT is
   Colored-PT-net-like & t in dom (the firing-rule of CPNT) holds ex CS be non
 empty Subset of the ColoredSet of CPNT, I be Subset of *'{t}, O be Subset of {t
   }*' st (the firing-rule of CPNT ).t is Function of thin_cylinders(CS,I),
   thin_cylinders(CS,O) by Def10;
 
 theorem Th7:
-  for CPNT1,CPNT2 be Colored_PT_net_Str, t1 be transition of CPNT1,
-  t2 be transition of CPNT2 st the Places of CPNT1 c= the Places of CPNT2 & the
+  for CPNT1,CPNT2 be Colored_Petri_net, t1 be transition of CPNT1,
+  t2 be transition of CPNT2 st the carrier of CPNT1 c= the carrier of CPNT2
+   & the
   S-T_Arcs of CPNT1 c= the S-T_Arcs of CPNT2 & the T-S_Arcs of CPNT1 c= the
   T-S_Arcs of CPNT2 & t1=t2 holds *'{t1} c= *'{t2} & {t1}*' c= {t2}*'
 proof
-  let CPNT1,CPNT2 be Colored_PT_net_Str, t1 be transition of CPNT1,t2 be
+  let CPNT1,CPNT2 be Colored_Petri_net, t1 be transition of CPNT1,t2 be
   transition of CPNT2;
   assume that
-A1: the Places of CPNT1 c= the Places of CPNT2 and
+A1: the carrier of CPNT1 c= the carrier of CPNT2 and
 A2: the S-T_Arcs of CPNT1 c= the S-T_Arcs of CPNT2 and
 A3: the T-S_Arcs of CPNT1 c= the T-S_Arcs of CPNT2 and
 A4: t1=t2;
@@ -712,7 +714,6 @@ Lm5: for f1,f2,f3,f4,g be Function st dom f1 /\ dom f2 = {} & dom f1 /\ dom f3
 dom f3 /\ dom f4 = {} & g=f1+*f2+*f3+*f4 holds (for x be set st x in dom f1
 holds g.x=f1.x) & (for x be set st x in dom f2 holds g.x=f2.x) & (for x be set
 st x in dom f3 holds g.x=f3.x) & for x be set st x in dom f4 holds g.x=f4.x
-
 proof
   let f1,f2,f3,f4,g be Function;
   assume that
@@ -765,7 +766,6 @@ end;
 Lm6: for A,B,C,D,X1,X2,X3,X4 be set st A /\ B = {} & C c= A & D c= B & X1 c= A
 \ C & X2 c= B \ D & X3=C & X4= D holds X1 /\ X2 = {} & X1 /\ X3 = {} & X1 /\ X4
 = {} & X2 /\ X3 = {} & X2 /\ X4 = {} & X3 /\ X4 = {}
-
 proof
   let A,B,C,D,X1,X2,X3,X4 be set;
   assume that
@@ -795,7 +795,7 @@ A10: B /\ D c= D by XBOOLE_1:17;
 end;
 
 registration
-  cluster strict Colored-PT-net-like Colored_PT_net_Str;
+  cluster strict Colored-PT-net-like Colored_Petri_net;
   existence
   proof
     set PLA={0};
@@ -810,13 +810,16 @@ registration
     set CS = {red,yellow,blue};
     consider fa be Function of thin_cylinders(CS,{0}), thin_cylinders(CS,{0});
     set f= ({a} --> fa);
-    take CPNT = Colored_PT_net_Str (# PLA,TRA,STA,TSA, CS,f #);
+    set CPNT = Colored_PT_net_Str(# PLA,TRA,STA,TSA, CS,f #);
+A:   CPNT is with_S-T_arc by PETRI:def 1;
+     CPNT is with_T-S_arc by PETRI:def 2;
+     then reconsider CPNT as Colored_Petri_net by A;
+    take CPNT;
 A1: now
       CS c= CS;
       then reconsider CS1= CS as non empty Subset of the ColoredSet of CPNT;
       let t be transition of CPNT;
-      assume
-      t in dom (the firing-rule of CPNT);
+      assume t in dom (the firing-rule of CPNT);
 A2:   t= a by TARSKI:def 1;
 A3:   a in TRA by TARSKI:def 1;
 A4:   0 in PLA by TARSKI:def 1;
@@ -842,37 +845,35 @@ A6: dom f = {a} by FUNCOP_1:19;
 A7:   not {a1}*' = {} by PETRI:8;
 A8:   not a1 in Outbds(CPNT)
       proof
-        assume
-        a1 in Outbds(CPNT);
+        assume a1 in Outbds(CPNT);
         then ex x be transition of CPNT st a1=x & x is outbound;
         hence contradiction by A7,Def8;
       end;
-      assume
-      x in dom (the firing-rule of CPNT);
+      assume x in dom (the firing-rule of CPNT);
       then x=a by A6,TARSKI:def 1;
-      hence x in (the Transitions of CPNT) \ Outbds(CPNT) by A8, XBOOLE_0:
+      hence x in (the carrier' of CPNT) \ Outbds(CPNT) by A8, XBOOLE_0:
       def 5;
     end;
-    then dom (the firing-rule of CPNT) c= (the Transitions of CPNT) \ Outbds(
+    then dom (the firing-rule of CPNT) c= (the carrier' of CPNT) \ Outbds(
     CPNT) by TARSKI:def 3;
     hence thesis by A1,Def10;
   end;
 end;
 
 definition
-  mode Colored-PT-net is Colored-PT-net-like Colored_PT_net_Str;
+  mode Colored-PT-net is Colored-PT-net-like Colored_Petri_net;
 end;
 
-reserve CPNT for Colored-PT-net;
+
 
 begin :: Outbound transitions of CPNT
 
 definition
-  let CPNT1, CPNT2 be Colored_PT_net_Str;
+  let CPNT1, CPNT2 be Colored_Petri_net;
   pred CPNT1 misses CPNT2 means
   :Def11:
-  (the Places of CPNT1) /\ (the Places
-of CPNT2 ) = {} & (the Transitions of CPNT1) /\ (the Transitions of CPNT2) = {}
+  (the carrier of CPNT1) /\ (the carrier
+of CPNT2 ) = {} & (the carrier' of CPNT1) /\ (the carrier' of CPNT2) = {}
   ;
   symmetry;
 end;
@@ -880,17 +881,17 @@ end;
 begin :: Connecting mapping for CPNT1,CPNT2
 
 definition
-  let CPNT1 be Colored_PT_net_Str;
-  let CPNT2 be Colored_PT_net_Str;
+  let CPNT1 be Colored_Petri_net;
+  let CPNT2 be Colored_Petri_net;
   mode connecting-mapping of CPNT1,CPNT2 means
     :Def12:
     ex O12 be Function of
-    Outbds(CPNT1), the Places of CPNT2, O21 be Function of Outbds(CPNT2), the
-    Places of CPNT1 st it=[O12,O21];
+    Outbds(CPNT1), the carrier of CPNT2, O21 be Function of Outbds(CPNT2), the
+    carrier of CPNT1 st it=[O12,O21];
   correctness
   proof
-    consider O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-    Function of Outbds(CPNT2), the Places of CPNT1;
+    consider O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+    Function of Outbds(CPNT2), the carrier of CPNT1;
     set Z = [O12,O21];
     take Z;
     thus thesis;
@@ -905,8 +906,9 @@ definition
   mode connecting-firing-rule of CPNT1,CPNT2,O means
     :Def13:
     ex q12,q21 be
-    Function, O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-Function of Outbds(CPNT2), the Places of CPNT1 st O=[O12,O21] & dom q12=Outbds(
+    Function, O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+Function of Outbds(CPNT2), the carrier of CPNT1 st O=[O12,O21] &
+ dom q12=Outbds(
     CPNT1) & dom q21=Outbds(CPNT2) & ( for t01 be transition of CPNT1 st t01 is
 outbound holds q12.t01 is Function of thin_cylinders ( the ColoredSet of CPNT1,
 *'{t01}), thin_cylinders ( the ColoredSet of CPNT1, Im(O12,t01) ) ) & ( for t02
@@ -915,16 +917,16 @@ outbound holds q12.t01 is Function of thin_cylinders ( the ColoredSet of CPNT1,
     ColoredSet of CPNT2, Im(O21,t02) ) ) & it=[q12,q21];
   correctness
   proof
-    set L2=bool PFuncs(the Places of CPNT1, the ColoredSet of CPNT2);
-    set L1=bool PFuncs(the Places of CPNT2, the ColoredSet of CPNT2);
-    set K2=bool PFuncs(the Places of CPNT2, the ColoredSet of CPNT1);
-    set K1=bool PFuncs(the Places of CPNT1, the ColoredSet of CPNT1);
+    set L2=bool PFuncs(the carrier of CPNT1, the ColoredSet of CPNT2);
+    set L1=bool PFuncs(the carrier of CPNT2, the ColoredSet of CPNT2);
+    set K2=bool PFuncs(the carrier of CPNT2, the ColoredSet of CPNT1);
+    set K1=bool PFuncs(the carrier of CPNT1, the ColoredSet of CPNT1);
     set TO2 = Outbds(CPNT2);
     set TO1 = Outbds(CPNT1);
     set Y1= PFuncs(K1,K2);
     set Y2= PFuncs(L1,L2);
-    consider O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-    Function of Outbds(CPNT2), the Places of CPNT1 such that
+    consider O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+    Function of Outbds(CPNT2), the carrier of CPNT1 such that
 A1: O = [O12,O21] by Def12;
     defpred R[set,set] means ex t02 be transition of CPNT2 st $1=t02 & $2 is
 Function of thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders
@@ -935,8 +937,7 @@ Function of thin_cylinders (the ColoredSet of CPNT1, *'{t01}), thin_cylinders (
 A2: for x be set st x in TO1 ex y be set st y in Y1 & P[x,y]
     proof
       let x be set;
-      assume
-      x in TO1;
+      assume x in TO1;
       then consider t01 be transition of CPNT1 such that
 A3:   x=t01 and
       t01 is outbound;
@@ -948,9 +949,9 @@ A3:   x=t01 and
       set H1= thin_cylinders ( the ColoredSet of CPNT1, t1);
       set H2= thin_cylinders ( the ColoredSet of CPNT1, t2);
 A4:   Funcs(H1,H2) c= PFuncs(H1,H2) by FUNCT_2:141;
-A5:   H2 c= bool PFuncs(the Places of CPNT2, the ColoredSet of CPNT1) by
+A5:   H2 c= bool PFuncs(the carrier of CPNT2, the ColoredSet of CPNT1) by
       Lm1;
-      H1 c= bool PFuncs(the Places of CPNT1, the ColoredSet of CPNT1) by
+      H1 c= bool PFuncs(the carrier of CPNT1, the ColoredSet of CPNT1) by
       Lm1;
       then
 A6:   PFuncs(H1,H2) c= PFuncs(K1,K2) by A5,PARTFUN1:128;
@@ -962,8 +963,7 @@ A6:   PFuncs(H1,H2) c= PFuncs(K1,K2) by A5,PARTFUN1:128;
 A7: for x be set st x in TO1 holds P[x,q12.x] from FUNCT_2:sch 1(A2);
 A8: now
       let tt01 be transition of CPNT1;
-      assume
-      tt01 is outbound;
+      assume tt01 is outbound;
       then tt01 in TO1;
       then
       ex t01 be transition of CPNT1 st tt01=t01 & q12.tt01 is Function of
@@ -975,8 +975,7 @@ A8: now
 A9: for x be set st x in TO2 ex y be set st y in Y2 & R[x,y]
     proof
       let x be set;
-      assume
-      x in TO2;
+      assume x in TO2;
       then consider t02 be transition of CPNT2 such that
 A10:  x=t02 and
       t02 is outbound;
@@ -988,9 +987,9 @@ A10:  x=t02 and
       set H1= thin_cylinders ( the ColoredSet of CPNT2, t1);
       set H2= thin_cylinders ( the ColoredSet of CPNT2, t2);
 A11:  Funcs(H1,H2) c= PFuncs(H1,H2) by FUNCT_2:141;
-A12:  H2 c= bool PFuncs(the Places of CPNT1, the ColoredSet of CPNT2) by
+A12:  H2 c= bool PFuncs(the carrier of CPNT1, the ColoredSet of CPNT2) by
       Lm1;
-      H1 c= bool PFuncs(the Places of CPNT2, the ColoredSet of CPNT2) by
+      H1 c= bool PFuncs(the carrier of CPNT2, the ColoredSet of CPNT2) by
       Lm1;
       then
 A13:  PFuncs(H1,H2) c= PFuncs(L1,L2) by A12,PARTFUN1:128;
@@ -1002,8 +1001,7 @@ A13:  PFuncs(H1,H2) c= PFuncs(L1,L2) by A12,PARTFUN1:128;
 A14: for x be set st x in TO2 holds R[x,q21.x] from FUNCT_2:sch 1(A9);
 A15: now
       let tt02 be transition of CPNT2;
-      assume
-      tt02 is outbound;
+      assume tt02 is outbound;
       then tt02 in TO2;
       then
       ex t02 be transition of CPNT2 st tt02=t02 & q21.tt02 is Function of
@@ -1029,16 +1027,17 @@ definition
 A1: CPNT1 misses CPNT2;
   func synthesis(CPNT1, CPNT2,O,q) -> strict Colored-PT-net means
   ex q12,q21
-  be Function, O12 be Function of Outbds(CPNT1), the Places of CPNT2, O21 be
-Function of Outbds(CPNT2), the Places of CPNT1 st O=[O12,O21] & dom q12=Outbds(
+  be Function, O12 be Function of Outbds(CPNT1), the carrier of CPNT2, O21 be
+Function of Outbds(CPNT2), the carrier of CPNT1 st O=[O12,O21] &
+ dom q12=Outbds(
   CPNT1) & dom q21=Outbds(CPNT2) & ( for t01 be transition of CPNT1 st t01 is
 outbound holds q12.t01 is Function of thin_cylinders ( the ColoredSet of CPNT1,
 *'{t01}), thin_cylinders ( the ColoredSet of CPNT1, Im(O12,t01) ) ) & ( for t02
   be transition of CPNT2 st t02 is outbound holds q21.t02 is Function of
   thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders ( the
-  ColoredSet of CPNT2, Im(O21,t02) ) ) & q=[q12,q21] & the Places of it = (the
-  Places of CPNT1) \/ (the Places of CPNT2) & the Transitions of it = (the
-Transitions of CPNT1) \/ (the Transitions of CPNT2) & the S-T_Arcs of it = (the
+  ColoredSet of CPNT2, Im(O21,t02) ) ) & q=[q12,q21] & the carrier of it = (the
+  carrier of CPNT1) \/ (the carrier of CPNT2) & the carrier' of it = (the
+carrier' of CPNT1) \/ (the carrier' of CPNT2) & the S-T_Arcs of it = (the
   S-T_Arcs of CPNT1) \/ (the S-T_Arcs of CPNT2) & the T-S_Arcs of it = (the
 T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) \/ O12 \/ O21 & the ColoredSet of
   it = (the ColoredSet of CPNT1) \/ (the ColoredSet of CPNT2) & the firing-rule
@@ -1047,26 +1046,26 @@ of it = (the firing-rule of CPNT1) +* (the firing-rule of CPNT2) +* q12 +* q21;
   proof
     reconsider CS12 = (the ColoredSet of CPNT1) \/ (the ColoredSet of CPNT2)
     as non empty finite set;
-    reconsider T12 = (the Transitions of CPNT1) \/ (the Transitions of CPNT2)
+    reconsider T12 = (the carrier' of CPNT1) \/ (the carrier' of CPNT2)
     as non empty set;
-    reconsider P12 = (the Places of CPNT1) \/ (the Places of CPNT2) as non
+    reconsider P12 = (the carrier of CPNT1) \/ (the carrier of CPNT2) as non
     empty set;
-A2: (the Transitions of CPNT1) c= T12 by XBOOLE_1:7;
-    (the Places of CPNT1) c= P12 by XBOOLE_1:7;
+A2: (the carrier' of CPNT1) c= T12 by XBOOLE_1:7;
+    (the carrier of CPNT1) c= P12 by XBOOLE_1:7;
     then reconsider E1=(the S-T_Arcs of CPNT1) as Relation of P12,T12 by A2,
     RELSET_1:17;
-A3: (the Places of CPNT2) c= P12 by XBOOLE_1:7;
-    (the Transitions of CPNT2) c= T12 by XBOOLE_1:7;
+A3: (the carrier of CPNT2) c= P12 by XBOOLE_1:7;
+    (the carrier' of CPNT2) c= T12 by XBOOLE_1:7;
     then reconsider E22=(the T-S_Arcs of CPNT2) as Relation of T12,P12 by A3,
     RELSET_1:17;
     set R1=the firing-rule of CPNT1;
-A4: (the Transitions of CPNT2) c= T12 by XBOOLE_1:7;
-    (the Places of CPNT2) c= P12 by XBOOLE_1:7;
+A4: (the carrier' of CPNT2) c= T12 by XBOOLE_1:7;
+    (the carrier of CPNT2) c= P12 by XBOOLE_1:7;
     then reconsider E2=(the S-T_Arcs of CPNT2) as Relation of P12,T12 by A4,
     RELSET_1:17;
     set R2=the firing-rule of CPNT2;
-A5: (the Places of CPNT1) c= P12 by XBOOLE_1:7;
-    (the Transitions of CPNT1) c= T12 by XBOOLE_1:7;
+A5: (the carrier of CPNT1) c= P12 by XBOOLE_1:7;
+    (the carrier' of CPNT1) c= T12 by XBOOLE_1:7;
     then reconsider E21=(the T-S_Arcs of CPNT1) as Relation of T12,P12 by A5,
     RELSET_1:17;
 A6: (the T-S_Arcs of CPNT1) c= (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs
@@ -1081,8 +1080,8 @@ A7: (the T-S_Arcs of CPNT2) c= (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs
     then reconsider
     TTS12= (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) as
     non empty Relation of T12,P12;
-    consider q12,q21 be Function, O12 be Function of Outbds(CPNT1), the Places
-    of CPNT2, O21 be Function of Outbds(CPNT2), the Places of CPNT1 such that
+    consider q12,q21 be Function, O12 be Function of Outbds(CPNT1), the carrier
+    of CPNT2, O21 be Function of Outbds(CPNT2), the carrier of CPNT1 such that
 A8: O=[O12,O21] and
 A9: dom q12=Outbds(CPNT1) and
 A10: dom q21=Outbds(CPNT2) and
@@ -1093,17 +1092,17 @@ A12: for t02 be transition of CPNT2 st t02 is outbound holds q21.t02 is
 Function of thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders
     ( the ColoredSet of CPNT2, Im(O21,t02) ) and
 A13: q=[q12,q21] by Def13;
-A14: dom (the firing-rule of CPNT2) c= (the Transitions of CPNT2) \ (dom
+A14: dom (the firing-rule of CPNT2) c= (the carrier' of CPNT2) \ (dom
     q21) by A10,Def10;
-    (the Transitions of CPNT2) c= T12 by XBOOLE_1:7;
+    (the carrier' of CPNT2) c= T12 by XBOOLE_1:7;
     then
 A15: Outbds(CPNT2) c= T12 by XBOOLE_1:1;
-    (the Transitions of CPNT1) c= T12 by XBOOLE_1:7;
+    (the carrier' of CPNT1) c= T12 by XBOOLE_1:7;
     then
 A16: Outbds(CPNT1) c= T12 by XBOOLE_1:1;
-A17: (the Transitions of CPNT1) /\ (the Transitions of CPNT2) = {} by A1,
+A17: (the carrier' of CPNT1) /\ (the carrier' of CPNT2) = {} by A1,
     Def11;
-A18: dom (the firing-rule of CPNT1) c= (the Transitions of CPNT1) \ (dom
+A18: dom (the firing-rule of CPNT1) c= (the carrier' of CPNT1) \ (dom
     q12) by A9,Def10;
     then
 A19: dom (the firing-rule of CPNT1) /\ dom (the firing-rule of CPNT2) = {}
@@ -1117,24 +1116,27 @@ A23: dom (the firing-rule of CPNT1) /\ dom q21 = {} by A9,A10,A17,A18,A14,
     Lm6;
 A24: dom (the firing-rule of CPNT1) /\ dom q12 = {} by A9,A10,A17,A18,A14,
     Lm6;
-    the Places of CPNT1 c= P12 by XBOOLE_1:7;
+    the carrier of CPNT1 c= P12 by XBOOLE_1:7;
     then reconsider E32=O21 as Relation of T12,P12 by A15,RELSET_1:17;
-    the Places of CPNT2 c= P12 by XBOOLE_1:7;
+    the carrier of CPNT2 c= P12 by XBOOLE_1:7;
     then reconsider E31=O12 as Relation of T12,P12 by A16,RELSET_1:17;
     set R4=q21;
     set R3=q12;
     set CR12= (the firing-rule of CPNT1) +* (the firing-rule of CPNT2) +* q12
     +* q21;
     reconsider TS12= TTS12 \/ (E31 \/ E32) as non empty Relation of T12,P12;
-    set CPNT12=Colored_PT_net_Str (# P12,T12, ST12,TS12,CS12,CR12 #);
-A25: the Places of CPNT1 c= the Places of CPNT12 by XBOOLE_1:7;
+    set CPNT12=Colored_PT_net_Str(# P12,T12, ST12,TS12,CS12,CR12 #);
+A:   CPNT12 is with_S-T_arc by PETRI:def 1;
+     CPNT12 is with_T-S_arc by PETRI:def 2;
+    then reconsider CPNT12 as Colored_Petri_net by A;
+A25: the carrier of CPNT1 c= the carrier of CPNT12 by XBOOLE_1:7;
 A26: the S-T_Arcs of CPNT1 c= the S-T_Arcs of CPNT12 by XBOOLE_1:7;
     (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) c= the T-S_Arcs of
     CPNT12 by XBOOLE_1:7;
     then
 A27: the T-S_Arcs of CPNT1 c= the T-S_Arcs of CPNT12 by
     A6,XBOOLE_1:1;
-A28: the Places of CPNT2 c= the Places of CPNT12 by XBOOLE_1:7;
+A28: the carrier of CPNT2 c= the carrier of CPNT12 by XBOOLE_1:7;
     (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) c= the T-S_Arcs of
     CPNT12 by XBOOLE_1:7;
     then
@@ -1143,8 +1145,7 @@ A29: the T-S_Arcs of CPNT2 c= the T-S_Arcs of CPNT12 by
 A30: the S-T_Arcs of CPNT2 c= the S-T_Arcs of CPNT12 by XBOOLE_1:7;
 A31: now
       let x be set;
-      assume
-      x in dom CR12;
+      assume x in dom CR12;
       then x in dom ( R1 +* R2 +* R3) or x in dom R4 by FUNCT_4:13;
       then x in dom ( R1 +* R2 ) or x in dom R3 or x in dom R4 by
       FUNCT_4:
@@ -1164,7 +1165,7 @@ A33:  t in dom (the firing-rule of CPNT12);
         per cases by A31,A33;
         suppose
 A34:      t in dom the firing-rule of CPNT1;
-          dom ( the firing-rule of CPNT1) c= (the Transitions of CPNT1) \
+          dom ( the firing-rule of CPNT1) c= (the carrier' of CPNT1) \
           Outbds(CPNT1) by Def10;
           then reconsider t1 =t as transition of CPNT1 by A34,TARSKI:def 3;
           consider CS1 be non empty Subset of the ColoredSet of CPNT1, I1 be
@@ -1186,7 +1187,7 @@ A35:      (the firing-rule of CPNT1).t1 is Function of thin_cylinders
         end;
         suppose
 A36:      t in dom ( the firing-rule of CPNT2);
-          dom ( the firing-rule of CPNT2) c= (the Transitions of CPNT2) \
+          dom ( the firing-rule of CPNT2) c= (the carrier' of CPNT2) \
           Outbds(CPNT2) by Def10;
           then reconsider t1 = t as transition of CPNT2 by A36,TARSKI:def 3;
           consider CS1 be non empty Subset of the ColoredSet of CPNT2, I1 be
@@ -1223,11 +1224,11 @@ A41:        [t1,s] in O12 by A40,RELSET_2:9;
             O12 c= E31 \/ E32 by XBOOLE_1:7;
             then O12 c= the T-S_Arcs of CPNT12 by A39,XBOOLE_1:1;
             then reconsider f= [t,s] as T-S_arc of CPNT12 by A41;
-A42:        the Places of CPNT2 c= (the Places of CPNT1) \/ (the Places of
+A42:        the carrier of CPNT2 c= (the carrier of CPNT1) \/ (the carrier of
             CPNT2) by XBOOLE_1:7;
 A43:        f=[t,s];
 A44:        t in {t} by TARSKI:def 1;
-            s in the Places of CPNT2;
+            s in the carrier of CPNT2;
             hence thesis by A42,A44,A43;
           end;
           then reconsider O = Im(O12,t1) as Subset of {t}*';
@@ -1258,11 +1259,11 @@ A48:        E31 \/ E32 c= the T-S_Arcs of CPNT12 by XBOOLE_1:7;
             then reconsider f= [t,s] as T-S_arc of CPNT12 by
             A46,A48,TARSKI:def
             3;
-A49:        the Places of CPNT1 c= (the Places of CPNT1) \/ (the Places
+A49:        the carrier of CPNT1 c= (the carrier of CPNT1) \/ (the carrier
             of CPNT2) by XBOOLE_1:7;
 A50:        f=[t,s];
 A51:        t in {t} by TARSKI:def 1;
-            s in the Places of CPNT1;
+            s in the carrier of CPNT1;
             hence thesis by A49,A51,A50;
           end;
           then reconsider O = Im(O21,t1) as Subset of {t}*';
@@ -1281,27 +1282,26 @@ A52: TS12= (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) \/ O12 \/O21
     by XBOOLE_1:4;
 A53: now
       let x be set;
-      dom ( the firing-rule of CPNT1) c= (the Transitions of CPNT1) \
+      dom ( the firing-rule of CPNT1) c= (the carrier' of CPNT1) \
       Outbds(CPNT1) by Def10;
       then
-A54:  dom ( the firing-rule of CPNT1) c= the Transitions of CPNT1 by
+A54:  dom ( the firing-rule of CPNT1) c= the carrier' of CPNT1 by
       XBOOLE_1:1;
-      dom ( the firing-rule of CPNT2) c= (the Transitions of CPNT2) \
+      dom ( the firing-rule of CPNT2) c= (the carrier' of CPNT2) \
       Outbds(CPNT2) by Def10;
       then
-A55:  dom ( the firing-rule of CPNT2) c= the Transitions of CPNT2 by
+A55:  dom ( the firing-rule of CPNT2) c= the carrier' of CPNT2 by
       XBOOLE_1:1;
-      assume
-      x in dom CR12;
+      assume x in dom CR12;
       then x in dom R1 or x in dom R2 or x in dom R3 or x in dom R4 by A31;
       hence
-      x in (the Transitions of CPNT1) \/ (the Transitions of CPNT2) by A9
+      x in (the carrier' of CPNT1) \/ (the carrier' of CPNT2) by A9
       ,A10,A54,A55,XBOOLE_0:def 3;
     end;
     then
-A56: dom (the firing-rule of CPNT12) c= the Transitions of CPNT12 by
+A56: dom (the firing-rule of CPNT12) c= the carrier' of CPNT12 by
     TARSKI:def 3;
-    dom (the firing-rule of CPNT12) c= (the Transitions of CPNT12) \
+    dom (the firing-rule of CPNT12) c= (the carrier' of CPNT12) \
     Outbds(CPNT12)
     proof
       set RR4=q21;
@@ -1316,7 +1316,7 @@ A57:  x in dom (the firing-rule of CPNT12);
         per cases by A31,A57;
         suppose
 A58:      t in dom RR1;
-A59:      dom ( the firing-rule of CPNT1) c= (the Transitions of CPNT1)
+A59:      dom ( the firing-rule of CPNT1) c= (the carrier' of CPNT1)
           \ Outbds(CPNT1) by Def10;
           then reconsider t1 =t as transition of CPNT1 by A58,XBOOLE_0:def 5;
           not t in Outbds(CPNT1) by A58,A59,XBOOLE_0:def 5;
@@ -1331,7 +1331,7 @@ A60:      ex g be set st g in {t1}*' by XBOOLE_0:def 1;
         end;
         suppose
 A61:      t in dom RR2;
-A62:      dom ( the firing-rule of CPNT2) c= (the Transitions of CPNT2) \
+A62:      dom ( the firing-rule of CPNT2) c= (the carrier' of CPNT2) \
           Outbds(CPNT2) by Def10;
           then reconsider t1 =t as transition of CPNT2 by A61,XBOOLE_0:def 5;
           not t in Outbds(CPNT2) by A61,A62,XBOOLE_0:def 5;
@@ -1354,11 +1354,11 @@ A65:      E31 \/ E32 c= the T-S_Arcs of CPNT12 by XBOOLE_1:7;
           O12 c= E31 \/ E32 by XBOOLE_1:7;
           then O12 c= the T-S_Arcs of CPNT12 by A65,XBOOLE_1:1;
           then reconsider f= [t,s] as T-S_arc of CPNT12 by A64;
-A66:      the Places of CPNT2 c= (the Places of CPNT1) \/ (the Places of
+A66:      the carrier of CPNT2 c= (the carrier of CPNT1) \/ (the carrier of
           CPNT2) by XBOOLE_1:7;
 A67:      f=[t,s];
 A68:      t in {t} by TARSKI:def 1;
-          s in the Places of CPNT2;
+          s in the carrier of CPNT2;
           then s in {t}*' by A66,A68,A67;
           then not (ex w be transition of CPNT12 st t=w & w is outbound) by
           Def8;
@@ -1374,11 +1374,11 @@ A70:      E31 \/ E32 c= the T-S_Arcs of CPNT12 by XBOOLE_1:7;
           O21 c= E31 \/ E32 by XBOOLE_1:7;
           then O21 c= the T-S_Arcs of CPNT12 by A70,XBOOLE_1:1;
           then reconsider f= [t,s] as T-S_arc of CPNT12 by A69;
-A71:      the Places of CPNT1 c= (the Places of CPNT1) \/ (the Places of
+A71:      the carrier of CPNT1 c= (the carrier of CPNT1) \/ (the carrier of
           CPNT2) by XBOOLE_1:7;
 A72:      f=[t,s];
 A73:      t in {t} by TARSKI:def 1;
-          s in the Places of CPNT1;
+          s in the carrier of CPNT1;
           then s in {t}*' by A71,A73,A72;
           then not (ex w be transition of CPNT12 st t=w & w is outbound) by
           Def8;
@@ -1393,17 +1393,18 @@ A73:      t in {t} by TARSKI:def 1;
   uniqueness
   proof
     let CA,CB be strict Colored-PT-net;
-    assume
-    ex q12A,q21A be Function, O12A be Function of Outbds(CPNT1), the
-Places of CPNT2, O21A be Function of Outbds(CPNT2), the Places of CPNT1 st O=[
+    assume ex q12A,q21A be Function, O12A be Function of Outbds(CPNT1), the
+carrier of CPNT2, O21A be Function of Outbds(CPNT2), the carrier of CPNT1
+ st O=[
     O12A,O21A] &dom q12A=Outbds(CPNT1) & dom q21A=Outbds(CPNT2) & ( for t01 be
     transition of CPNT1 st t01 is outbound holds q12A.t01 is Function of
     thin_cylinders (the ColoredSet of CPNT1, *'{t01}), thin_cylinders (the
 ColoredSet of CPNT1, Im(O12A,t01) ) ) & (for t02 be transition of CPNT2 st t02
 is outbound holds q21A.t02 is Function of thin_cylinders ( the ColoredSet of
 CPNT2, *'{t02}), thin_cylinders ( the ColoredSet of CPNT2, Im(O21A,t02) ) ) & q
-=[q12A,q21A] & the Places of CA = (the Places of CPNT1) \/ (the Places of CPNT2
-) & the Transitions of CA = (the Transitions of CPNT1) \/ (the Transitions of
+=[q12A,q21A] & the carrier of CA
+ = (the carrier of CPNT1) \/ (the carrier of CPNT2
+) & the carrier' of CA = (the carrier' of CPNT1) \/ (the carrier' of
 CPNT2) & the S-T_Arcs of CA = (the S-T_Arcs of CPNT1) \/ (the S-T_Arcs of CPNT2
 ) & the T-S_Arcs of CA = (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) \/
     O12A \/ O21A & the ColoredSet of CA = (the ColoredSet of CPNT1) \/ (the
@@ -1411,7 +1412,7 @@ ColoredSet of CPNT2) & the firing-rule of CA = (the firing-rule of CPNT1) +* (
     the firing-rule of CPNT2) +* q12A +* q21A;
     then consider
     q12A,q21A be Function, O12A be Function of Outbds(CPNT1), the
-Places of CPNT2, O21A be Function of Outbds(CPNT2), the Places of CPNT1 such
+carrier of CPNT2, O21A be Function of Outbds(CPNT2), the carrier of CPNT1 such
     that
 A74: O=[O12A,O21A] and
     dom q12A=Outbds(CPNT1) and
@@ -1423,10 +1424,9 @@ Function of thin_cylinders ( the ColoredSet of CPNT1, *'{t01}), thin_cylinders
 Function of thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders
     ( the ColoredSet of CPNT2, Im(O21A,t02)) and
 A75: q=[q12A,q21A] and
-A76: the Places of CA = (the Places of CPNT1) \/ (the Places of CPNT2
-    ) and
-A77: the Transitions of CA = (the Transitions of CPNT1) \/ (the
-    Transitions of CPNT2) and
+A76: the carrier of CA = (the carrier of CPNT1) \/ (the carrier of CPNT2 ) and
+A77: the carrier' of CA = (the carrier' of CPNT1) \/ (the
+    carrier' of CPNT2) and
 A78: the S-T_Arcs of CA = (the S-T_Arcs of CPNT1) \/ (the S-T_Arcs of
     CPNT2) and
 A79: the T-S_Arcs of CA = (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of
@@ -1435,17 +1435,18 @@ A80: the ColoredSet of CA = (the ColoredSet of CPNT1) \/ (the
     ColoredSet of CPNT2) and
 A81: the firing-rule of CA = (the firing-rule of CPNT1) +* (the
     firing-rule of CPNT2) +* q12A +* q21A;
-    assume
-    ex q12B,q21B be Function, O12B be Function of Outbds(CPNT1), the
-Places of CPNT2, O21B be Function of Outbds(CPNT2), the Places of CPNT1 st O=[
+    assume ex q12B,q21B be Function, O12B be Function of Outbds(CPNT1), the
+carrier of CPNT2, O21B be Function of Outbds(CPNT2), the carrier of CPNT1
+ st O=[
     O12B,O21B] & dom q12B=Outbds(CPNT1) & dom q21B=Outbds(CPNT2) & ( for t01 be
     transition of CPNT1 st t01 is outbound holds q12B.t01 is Function of
     thin_cylinders ( the ColoredSet of CPNT1, *'{t01}), thin_cylinders ( the
 ColoredSet of CPNT1, Im(O12B,t01) ) ) & ( for t02 be transition of CPNT2 st t02
 is outbound holds q21B.t02 is Function of thin_cylinders ( the ColoredSet of
 CPNT2, *'{t02}), thin_cylinders ( the ColoredSet of CPNT2, Im(O21B,t02) ) ) & q
-=[q12B,q21B] & the Places of CB = (the Places of CPNT1) \/ (the Places of CPNT2
-) & the Transitions of CB = (the Transitions of CPNT1) \/ (the Transitions of
+=[q12B,q21B] & the carrier of CB
+ = (the carrier of CPNT1) \/ (the carrier of CPNT2
+) & the carrier' of CB = (the carrier' of CPNT1) \/ (the carrier' of
 CPNT2) & the S-T_Arcs of CB = (the S-T_Arcs of CPNT1) \/ (the S-T_Arcs of CPNT2
 ) & the T-S_Arcs of CB = (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of CPNT2) \/
     O12B \/ O21B & the ColoredSet of CB = (the ColoredSet of CPNT1) \/ (the
@@ -1453,7 +1454,7 @@ ColoredSet of CPNT2) & the firing-rule of CB = (the firing-rule of CPNT1) +* (
     the firing-rule of CPNT2) +* q12B +* q21B;
     then consider
     q12B,q21B be Function, O12B be Function of Outbds(CPNT1), the
-Places of CPNT2, O21B be Function of Outbds(CPNT2), the Places of CPNT1 such
+carrier of CPNT2, O21B be Function of Outbds(CPNT2), the carrier of CPNT1 such
     that
 A82: O=[O12B,O21B] and
     dom q12B=Outbds(CPNT1) and
@@ -1465,10 +1466,9 @@ Function of thin_cylinders ( the ColoredSet of CPNT1, *'{t01}), thin_cylinders
 Function of thin_cylinders ( the ColoredSet of CPNT2, *'{t02}), thin_cylinders
     ( the ColoredSet of CPNT2, Im(O21B,t02)) and
 A83: q=[q12B,q21B] and
-A84: the Places of CB = (the Places of CPNT1) \/ (the Places of CPNT2
-    ) and
-A85: the Transitions of CB = (the Transitions of CPNT1) \/ (the
-    Transitions of CPNT2) and
+A84: the carrier of CB = (the carrier of CPNT1) \/ (the carrier of CPNT2 ) and
+A85: the carrier' of CB = (the carrier' of CPNT1) \/ (the
+    carrier' of CPNT2) and
 A86: the S-T_Arcs of CB = (the S-T_Arcs of CPNT1) \/ (the S-T_Arcs of
     CPNT2) and
 A87: the T-S_Arcs of CB = (the T-S_Arcs of CPNT1) \/ (the T-S_Arcs of
@@ -1485,4 +1485,3 @@ A91: O12A=O12B by A74,A82,ZFMISC_1:33;
     ,A88,A89,A90,A91,ZFMISC_1:33;
   end;
 end;
-

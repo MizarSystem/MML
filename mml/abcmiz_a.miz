@@ -24,7 +24,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, FUNCT_1, FINSET_1,
       STRUCT_0, PBOOLE, MSUALG_2, FINSEQ_1, NAT_1, CARD_1, MSAFREE, TREES_3,
       TREES_2, FUNCOP_1, RELAT_1, INDEX_1, INSTALG1, MSAFREE3, WAYBEL26,
-      FACIRC_1, ABCMIZ_1, REALSET1;
+      FACIRC_1, ABCMIZ_1, REALSET1, MSATERM;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, SUBSET_1, FINSEQ_1, MSAFREE,
       MSAFREE3, PBOOLE, MSUALG_1, ABCMIZ_1;
@@ -53,8 +53,7 @@ scheme MinimalElement{X() -> finite non empty set, R[set,set]}:
   ex x being set st x in X() &
   for y being set st y in X() holds not R[y,x]
   provided
-P1: for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
-  and
+P1: for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x] and
 P2: for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
     holds R[x,z]
   proof
@@ -66,8 +65,7 @@ A0: for x being set st x in X() ex y being set st y in X() & R[y,x];
 B0: for m being Element of NAT st 1 <= m & m < n+1
     for x being set ex y being set st P[m,x,y]
     proof
-      let m be Element of NAT; assume
-      1 <= m & m < n+1;
+      let m be Element of NAT; assume 1 <= m & m < n+1;
       let x be set;
       per cases;
       suppose
@@ -92,8 +90,7 @@ B2: for i being Element of NAT st 1 <= i & i < n+1 holds P[i, p.i, p.(i+1)]
 S0: Q[ 0] by FINSEQ_3:27;
 S1: now let i be Nat; assume
 S2:   Q[i];
-      thus Q[i+1]
-      proof assume
+      thus Q[i+1] proof assume
         i+1 in dom p; then i+1 <= n+1 by B1,FINSEQ_3:27; then
 S4:     i < n+1 by NAT_1:13;
         per cases by NAT_1:3;
@@ -126,17 +123,14 @@ Z1:   j = i+1+k by NAT_1:10;
 Z2:   j <= n+1; then i <= n+1 by Z3,XXREAL_0:2; then
 Z4:   i in dom p by Z0,B1,FINSEQ_3:27;
       defpred S[Nat] means i+1+$1 <= n+1 implies R[p.(i+1+$1), p.i];
-R0:   S[ 0]
-      proof assume
-        i+1+0 <= n+1; then
+R0:   S[ 0] proof assume i+1+0 <= n+1; then
 G1:     i < n+1 by NAT_1:13;
         p.i in X() & i is Element of NAT by SK,Z4;
         hence R[p.(i+1+0), p.i] by B2,Z0,G1;
       end;
 R1:   now let k be Nat; assume
 G2:     S[k];
-        thus S[k+1]
-        proof assume
+        thus S[k+1] proof assume
 G0:       i+1+(k+1) <= n+1;
 G4:       i+1+(k+1) = i+1+k+1; then
 G1:       i+1+k < n+1 by G0,NAT_1:13;
@@ -171,9 +165,7 @@ D3: p.i in X() by C0;
 scheme FiniteC{X() -> finite set, P[set]}:
   P[X()]
   provided
-P: for A being Subset of X()
-   st for B being set st B c< A holds P[B]
-   holds P[A]
+P: for A being Subset of X() st for B being set st B c< A holds P[B] holds P[A]
   proof
     defpred Q[Nat] means for A being Subset of X() st card A = $1 holds P[A];
 A1: for n being Nat st for i being Nat st i < n holds Q[i] holds Q[n]
@@ -201,8 +193,7 @@ scheme Numeration{X() -> finite set, R[set, set]}:
   ex s being one-to-one FinSequence st rng s = X() &
   for i,j st i in dom s & j in dom s & R[s.i, s.j] holds i < j
   provided
-P1: for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
-  and
+P1: for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x] and
 P2: for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
     holds R[x,z]
   proof
@@ -214,8 +205,7 @@ A2: P[{}]
       reconsider s = {} as one-to-one FinSequence;
       take s; thus thesis;
     end;
-AA: for A being Subset of X()
-    st for B being set st B c< A holds P[B]
+AA: for A being Subset of X() st for B being set st B c< A holds P[B]
     holds P[A]
     proof
       let A be Subset of X() such that
@@ -301,8 +291,7 @@ A0: x = [varcl A,j] & A is finite by ABCMIZ_1:18;
   end;
 
 theorem CompoundDef:
- for C being initialized ConstructorSignature
- for e being expression of C holds
+ for C being initialized ConstructorSignature for e being expression of C holds
   e is compound iff not ex x being Element of Vars st e = x-term C
   proof let C be initialized ConstructorSignature;
     let e be expression of C;
@@ -328,8 +317,7 @@ definition
  let C be ConstructorSignature;
  attr C is standardized means:
 StandardizedDef:
-  for o being OperSymbol of C st o is constructor
-   holds o in Constructors &
+  for o being OperSymbol of C st o is constructor holds o in Constructors &
     o`1 = the_result_sort_of o &
     card o`2`1 = len the_arity_of o;
 end;
@@ -444,8 +432,7 @@ A2: the carrier of S1 = 3 & the carrier of S2 = 3 by ABCMIZ_1:def 9,YELLOW11:1;
       the_arity_of o = (len the_arity_of o) |-> a_Term &
       the_arity_of o2 = (len the_arity_of o2) |-> a_Term
        by StandardizedDef,ABCMIZ_1:37;
-      hence (the Arity of S1).o = the_arity_of o2
-         .= (the Arity of S2).o;
+      hence (the Arity of S1).o = the_arity_of o2 .= (the Arity of S2).o;
      end;
     end; then
 A3: the Arity of S1 = the Arity of S2 by A1,A2,FUNCT_2:113;
@@ -453,8 +440,7 @@ A3: the Arity of S1 = the Arity of S2 by A1,A2,FUNCT_2:113;
      reconsider o2 = o as OperSymbol of S2 by A1;
      per cases by ABCMIZ_1:def 11;
      suppose o = * or o = non_op; then
-       (the ResultSort of S1).o = a_Type &
-       (the ResultSort of S2).o = a_Type or
+       (the ResultSort of S1).o = a_Type & (the ResultSort of S2).o = a_Type or
        (the ResultSort of S1).o = an_Adj &
        (the ResultSort of S2).o = an_Adj by ABCMIZ_1:def 9;
       hence (the ResultSort of S1).o = (the ResultSort of S2).o;
@@ -605,8 +591,7 @@ A2: i in n;
   end;
 
 theorem Lem2:
- Vars misses Constructors
-  proof assume Vars meets Constructors; then
+ Vars misses Constructors proof assume Vars meets Constructors; then
    consider x being set such that
 A1: x in Vars & x in Constructors by XBOOLE_0:3;
    reconsider x as Element of Vars by A1;
@@ -621,8 +606,7 @@ A2: x = [varcl A, j] & A is finite by A1,ABCMIZ_1:18;
   end;
 
 theorem
- for x being Element of Vars holds
-   x <> * & x <> non_op;
+ for x being Element of Vars holds x <> * & x <> non_op;
 
 theorem Lem3:
  for C being standardized ConstructorSignature holds
@@ -705,8 +689,7 @@ registration
 end;
 
 theorem Th46:
- for C being initialized ConstructorSignature
- for e being expression of C
+ for C being initialized ConstructorSignature for e being expression of C
  for o being OperSymbol of C st e.{} = [o, the carrier of C]
   holds
     e is expression of C, the_result_sort_of o
@@ -754,8 +737,7 @@ A2:  e.{} = [o, the carrier of C];
 A3:  e in (the Sorts of Free(C, X)).the_sort_of t by MSAFREE3:25;
 A4:  the_result_sort_of non_op C = an_Adj C &
      the_result_sort_of ast C = a_Type C by ABCMIZ_1:38;
-A5:  (e.{})`1 = o & non_op C = non_op & ast C = *
-      by A2,MCART_1:7;
+A5:  (e.{})`1 = o & non_op C = non_op & ast C = * by A2,MCART_1:7;
      the_sort_of t = the_result_sort_of o by A2,MSATERM:17;
     hence thesis by A3,A4,A5,ABCMIZ_1:def 28;
    end;
@@ -917,8 +899,7 @@ B5: 0 < 2 & 0+1 = 1 & 1 < 2 & 1+1 = 2 & {} in (doms aa).1 & {} in (doms aa).2 &
 B1: t1 is expression of C & t2 is expression of C &
     variables_in t1 c= variables_in t & variables_in t2 c= variables_in t
      by MSAFREE3:33,34; then
-B3: variables_in t1 c= MSVars C & variables_in t2 c= MSVars C
-      by MSAFREE3:28;
+B3: variables_in t1 c= MSVars C & variables_in t2 c= MSVars C by MSAFREE3:28;
     the_sort_of t1 = (the_arity_of o).1 by A9,MSATERM:23
                   .= an_Adj C by A6,A7,FINSEQ_1:61; then
     t1 in {s where s is Term of C,Y: the_sort_of s = an_Adj C &
@@ -1123,8 +1104,7 @@ A2: t is not quasi-term of C;
 a3: (t.{})`1 in Vars implies
       ex x being Element of Vars st x = (t.{})`1 & t = x-term C by Th51; then
     (t.{})`1 in Constructors & (t.{})`1`1 = a_Term by A1,A2; then
-    ex o being OperSymbol of C st
-     o = (t.{})`1 & the_result_sort_of o = o`1 &
+    ex o being OperSymbol of C st o = (t.{})`1 & the_result_sort_of o = o`1 &
      t is expression of C, the_result_sort_of o by Th54;
    hence thesis by A2,a3,A1;
   end;
@@ -1161,8 +1141,7 @@ B3:  (t.{})`1 in the carrier' of C;
 B4:  o`1 = the_result_sort_of o by StandardizedDef;
 B7:  t.{} = [o, (t.{})`2] by Lem5; then
 B5:  the_sort_of tt = the_result_sort_of o by B1,MSATERM:17;
-    hereby assume
-       t is positive quasi-adjective of C; then
+    hereby assume t is positive quasi-adjective of C; then
 B6:    t in (the Sorts of Free(C, MSVars C)).an_Adj C by ABCMIZ_1:def 28;
       thus (t.{})`1 in Constructors by B2;
       assume (t.{})`1`1 <> an_Adj;
@@ -1171,8 +1150,7 @@ B6:    t in (the Sorts of Free(C, MSVars C)).an_Adj C by ABCMIZ_1:def 28;
     assume (t.{})`1 in Constructors;
     assume (t.{})`1`1 = an_Adj; then
     reconsider t as expression of C, an_Adj C by B1,B4,B7,Th46;
-     t is positive
-      proof given a being expression of C, an_Adj C such that
+     t is positive proof given a being expression of C, an_Adj C such that
 B9:     t = (non_op C)term a;
         t = [non_op, the carrier of C]-tree <*a*> by B9,ABCMIZ_1:43; then
         t.{} = [non_op, the carrier of C] by TREES_4:def 4; then
@@ -1218,8 +1196,7 @@ theorem
    per cases;
    suppose
 A1:  t is positive expression of C, an_Adj C; then
-     (t.{})`1 in Constructors & non_op in {*, non_op}
-       by Th57,TARSKI:def 2;
+     (t.{})`1 in Constructors & non_op in {*, non_op} by Th57,TARSKI:def 2;
     hence thesis by A1,XBOOLE_0:3,ABCMIZ_1:39;
    end;
    suppose
@@ -1265,8 +1242,7 @@ B4:  o`1 = the_result_sort_of o by StandardizedDef;
 B7:  t.{} = [o, (t.{})`2] by Lem5; then
 B5:  the_sort_of tt = the_result_sort_of o by B1,MSATERM:17;
     thus
-     now assume
-       t is pure expression of C, a_Type C; then
+     now assume t is pure expression of C, a_Type C; then
 B6:    t in (the Sorts of Free(C, MSVars C)).a_Type C by ABCMIZ_1:def 28;
       thus (t.{})`1 in Constructors by B2;
       assume (t.{})`1`1 <> a_Type;
@@ -1275,8 +1251,7 @@ B6:    t in (the Sorts of Free(C, MSVars C)).a_Type C by ABCMIZ_1:def 28;
     assume (t.{})`1 in Constructors;
     assume (t.{})`1`1 = a_Type; then
     reconsider t as expression of C, a_Type C by B1,B7,Th46,B4;
-     t is pure
-      proof given a being expression of C, an_Adj C,
+     t is pure proof given a being expression of C, an_Adj C,
                   q being expression of C, a_Type C such that
 B9:     t = (ast C)term(a,q);
         t = [*, the carrier of C]-tree <*a,q*> by B9,ABCMIZ_1:46; then
@@ -1316,11 +1291,10 @@ Z1:  t = [non_op,3]-tree a by Z0,Th53;
 
 begin :: Expressions
 
-reserve C for initialized ConstructorSignature,
-  f for valuation of C;
+
 reserve i,j for Nat,
-  x,y,z for variable,
-  l,l9 for quasi-loci;
+  x for variable,
+  l for quasi-loci;
 
 set MC = MaxConstrSign;
 
@@ -1344,20 +1318,19 @@ registration
 end;
 
 definition
-  redefine
-  func Modes -> non empty Subset of Constructors;
+  redefine func Modes -> non empty Subset of Constructors;
   coherence
   proof
     Modes c= Modes \/ Attrs & Modes \/ Attrs c= Constructors by XBOOLE_1:7;
     hence thesis by XBOOLE_1:1;
   end;
-  func Attrs -> non empty Subset of Constructors;
+  redefine func Attrs -> non empty Subset of Constructors;
   coherence
   proof
     Attrs c= Modes \/ Attrs & Modes \/ Attrs c= Constructors by XBOOLE_1:7;
     hence thesis by XBOOLE_1:1;
   end;
-  func Funcs -> non empty Subset of Constructors;
+  redefine func Funcs -> non empty Subset of Constructors;
   coherence by XBOOLE_1:7;
 end;
 
@@ -1375,8 +1348,7 @@ definition
 end;
 
 theorem
-  kind_of set-constr = a_Type &
-  loci_of set-constr = {} &
+  kind_of set-constr = a_Type & loci_of set-constr = {} &
   index_of set-constr = 0
   proof
     set-constr `2 = [{},0] by MCART_1:7;
@@ -1411,8 +1383,7 @@ theorem Th24:
     defpred P[Nat] means ex l st len l = $1;
     <*>Vars is quasi-loci & len <*>Vars = 0 by ABCMIZ_1:29; then
 A1: P[ 0 ];
-A2: P[j] implies P[j+1]
-    proof given l such that
+A2: P[j] implies P[j+1] proof given l such that
 A3:   len l = j;
       reconsider l1 = l^<*[rng l, 1]*> as quasi-loci by Th23;
       take l1; thus thesis by A3,FINSEQ_2:19;
@@ -1422,8 +1393,7 @@ A3:   len l = j;
   end;
 
 theorem ThLoci:
-  for X being finite Subset of Vars
-  ex l st rng l = varcl X
+  for X being finite Subset of Vars ex l st rng l = varcl X
   proof
     let X be finite Subset of Vars;
     reconsider Y = varcl X as finite Subset of Vars by ABCMIZ_1:24;
@@ -1504,7 +1474,7 @@ A2:   i in dom p & z = p.i by FUNCT_1:def 5;
       reconsider ppi = p.i as DecoratedTree by A2,TREES_3:26;
 B1:   1 <= i & i <= len p by A2,FINSEQ_3:27; then
 A3:   (i-'1)+1 = i by XREAL_1:237;
-B2:   i-'1 < len p by B1,A3,NAT_1:13;
+then B2:   i-'1 < len p by B1,NAT_1:13;
 A4:   len doms p = len p by TREES_3:40;
 A5:   (doms p).i = dom ppi by A2,FUNCT_6:31;
 A6:   dom e = tree doms p by TREES_4:10;
@@ -1531,6 +1501,7 @@ definition
   func main-constr e equals:   :: dobre dla zestandaryzowanych (nie ma def)
 MCON:
   (e.{})`1 if e is compound otherwise {};
+
 :: x-term C = [x, a_Term]-tree {}
 :: (ast C)term(a,t) = [*, the carrier of C]-tree<*a,t*>
 :: (non_op C)term a = [non_op, the carrier of C]-tree<*a*>
@@ -1650,9 +1621,9 @@ begin :: Arity
 
 reserve a,a9 for quasi-adjective,
   t,t1,t2 for quasi-term,
-  T,T9,T1,T2 for quasi-type,
-  e,e1,e2 for expression,
-  f for valuation,
+  T for quasi-type,
+
+
   c for Element of Constructors;
 
 definition
@@ -1668,8 +1639,7 @@ definition
 end;
 
 theorem ThDiff:
-  for C being non void Signature
-  for o being OperSymbol of C holds
+  for C being non void Signature for o being OperSymbol of C holds
   (o is nullary implies o is not unary) &
   (o is nullary implies o is not binary) &
   (o is unary implies o is not binary)
@@ -1885,8 +1855,8 @@ A1: m1 in X & m2 in X & m1 <> m2 by REALSET1:14;
 A2: m1 = o1 & the_result_sort_of o1 = s & len the_arity_of o1 = 0 by A1;
     reconsider m1 as OperSymbol of s by A2,ABCMIZ_1:def 32;
     the_arity_of m1 = {} by A2; then
-A5: m1 is nullary by Ndef;
-    thus thesis by A5;
+ m1 is nullary by Ndef;
+    hence thesis;
   end;
   cluster unary constructor OperSymbol of s;
   existence
@@ -2032,8 +2002,7 @@ registration
   cluster @set-constr -> nullary;
   coherence
   proof
-    len the_arity_of @set-constr
-    = card set-constr`2`1 by ABCMIZ_1:def 24
+    len the_arity_of @set-constr = card set-constr`2`1 by ABCMIZ_1:def 24
     .= card [{},0]`1 by MCART_1:7 .= card 0 by MCART_1:7;
     hence the_arity_of @set-constr = {};
   end;
@@ -2049,8 +2018,7 @@ definition
 end;
 
 theorem
-  adjs set-type = {} &
-  the_base_of set-type = (@set-constr) term by MCART_1:7;
+  adjs set-type = {} & the_base_of set-type = (@set-constr) term by MCART_1:7;
 
 definition
   let l be FinSequence of Vars;
@@ -2123,8 +2091,7 @@ theorem
 A0: m term = [m, the carrier of C]-tree {} &
     m-trm(<*>QuasiTerms C) = [m, the carrier of C]-tree {}
     by ABCMIZ_1:def 29,def 35;
-    thus main-constr (m term)
-     = ((m term).{})`1 by A0,MCON
+    hence main-constr (m term) = ((m term).{})`1 by MCON
     .= [m, the carrier of C]`1 by A0,TREES_4:def 4
     .= m by MCART_1:7;
   end;
@@ -2143,8 +2110,7 @@ A1: len the_arity_of m = 1 by Udef; then
     len p = 1 & (the_arity_of m).1 = a_Term C by FINSEQ_1:57; then
 A0: m term t = [m, the carrier of C]-tree <*t*> &
     m-trm p = [m, the carrier of C]-tree <*t*> by A1,ABCMIZ_1:def 30,def 35;
-    thus main-constr (m term t)
-     = ((m term t).{})`1 by A0,MCON
+    hence main-constr (m term t) = ((m term t).{})`1 by MCON
     .= [m, the carrier of C]`1 by A0,TREES_4:def 4
     .= m by MCART_1:7;
   end;
@@ -2158,8 +2124,7 @@ A1: len the_arity_of m = 1 by Udef;
     the_arity_of m = <*an_Adj*> by ABCMIZ_1:38; then
     (the_arity_of m).1 = an_Adj C by FINSEQ_1:57; then
 A0: m term a = [m, the carrier of C]-tree <*a*> by A1,ABCMIZ_1:def 30;
-    thus main-constr (m term a)
-     = ((m term a).{})`1 by MCON
+    thus main-constr (m term a) = ((m term a).{})`1 by MCON
     .= [m, the carrier of C]`1 by A0,TREES_4:def 4
     .= non_op by MCART_1:7;
   end;
@@ -2179,8 +2144,7 @@ A1: len the_arity_of m = 2 by Bdef; then
     by FINSEQ_1:61; then
 A0: m term(t1,t2) = [m, the carrier of C]-tree <*t1,t2*> &
     m-trm p = [m, the carrier of C]-tree p by A1,ABCMIZ_1:def 31,def 35;
-    thus main-constr (m term(t1,t2))
-     = ((m term(t1,t2)).{})`1 by A0,MCON
+    hence main-constr (m term(t1,t2)) = ((m term(t1,t2)).{})`1 by MCON
     .= [m, the carrier of C]`1 by A0,TREES_4:def 4
     .= m by MCART_1:7;
   end;
@@ -2197,8 +2161,7 @@ A1: len the_arity_of m = 2 by Bdef;
     (the_arity_of m).1 = an_Adj C & (the_arity_of m).2 = a_Type C
     by FINSEQ_1:61; then
 A0: m term(a,q) = [m, the carrier of C]-tree <*a,q*> by A1,ABCMIZ_1:def 31;
-    thus main-constr (m term(a,q))
-     = ((m term(a,q)).{})`1 by MCON
+    thus main-constr (m term(a,q)) = ((m term(a,q)).{})`1 by MCON
     .= [m, the carrier of C]`1 by A0,TREES_4:def 4
     .= * by MCART_1:7;
   end;
@@ -2231,8 +2194,7 @@ theorem
     set B = {constrs a9: a9 in adjs T};
 A1: A = B \/{constrs a}
     proof
-      thus A c= B \/{constrs a}
-      proof let z be set;
+      thus A c= B \/{constrs a} proof let z be set;
         assume z in A; then
         consider a9 such that
 A2:     z = constrs a9 & a9 in {a} \/ adjs T;
@@ -2257,8 +2219,7 @@ A4:     z = constrs a9 & a9 in adjs T;
       end;
     end;
     adjs (a ast T) = {a} \/ adjs T by ABCMIZ_1:82;
-    hence constrs(a ast T)
-     = (constrs the_base_of (a ast T)) \/ union A
+    hence constrs(a ast T) = (constrs the_base_of (a ast T)) \/ union A
     .= (constrs the_base_of T) \/ union A by ABCMIZ_1:82
     .= (constrs the_base_of T) \/ ((union {constrs a}) \/ union B)
     by A1,ZFMISC_1:96
@@ -2277,15 +2238,13 @@ definition
   ex f being valuation of C st t = p at f;
   reflexivity
   proof let t be expression of C;
-    consider f being empty valuation of C;
-    take f;
+    take f = the empty valuation of C;
     thus t at f = t by ABCMIZ_1:139;
   end;
 end;
 
 theorem
- for t1,t2,t3 being expression of C
-  st t1 matches_with t2 & t2 matches_with t3
+ for t1,t2,t3 being expression of C st t1 matches_with t2 & t2 matches_with t3
   holds t1 matches_with t3
   proof
     let t1,t2,t3 be expression of C;
@@ -2304,8 +2263,7 @@ definition
   ex f being valuation of C st B at f c= A;
   reflexivity
   proof let t be Subset of QuasiAdjs C;
-    consider f being empty valuation of C;
-    take f;
+    take f = the empty valuation of C;
     let x be set; assume x in t at f; then
     ex a being quasi-adjective of C st x = a at f & a in t;
     hence x in t by ABCMIZ_1:139;
@@ -2336,8 +2294,7 @@ definition
    (adjs P) at f c= adjs T & (the_base_of P) at f = the_base_of T;
   reflexivity
   proof let t be quasi-type of C;
-    consider f being empty valuation of C;
-    take f;
+    take f = the empty valuation of C;
     thus (adjs t) at f c= adjs t
     proof let x be set; assume x in (adjs t) at f; then
       ex a being quasi-adjective of C st x = a at f & a in adjs t;
@@ -2348,8 +2305,7 @@ definition
 end;
 
 theorem
- for T1,T2,T3 being quasi-type of C
-  st T1 matches_with T2 & T2 matches_with T3
+ for T1,T2,T3 being quasi-type of C st T1 matches_with T2 & T2 matches_with T3
   holds T1 matches_with T3
   proof
     let t1,t2,t3 be quasi-type of C;
@@ -2372,8 +2328,7 @@ definition
 end;
 
 theorem U2:
- for t1,t2 being expression of C
- for f being valuation of C st f unifies t1,t2
+ for t1,t2 being expression of C for f being valuation of C st f unifies t1,t2
   holds f unifies t2,t1
   proof
    let t1,t2 be expression of C;
@@ -2415,9 +2370,10 @@ definition
     take g = C idval variables_in t;
     thus thesis by ABCMIZ_1:137,ABCMIZ_1:131;
   end;
+ 
 ::  symmetry;
 end;
-
+ 
 :: theorem
 ::  for t1,t2 being expression of C st t1 matches_with t2
 ::   holds t1,t2 are_weakly-unifiable;
@@ -2471,7 +2427,7 @@ definition
   for u being expression of C st u is_a_unification_of t1,t2
   holds u matches_with t;
 end;
-
+ 
 :: theorem
 ::  for t1,t2 being expression of C st t1,t2 are_unifiable
 ::  ex t being expression of C st t is_a_general-unification_of t1,t2;
@@ -2479,8 +2435,7 @@ end;
 begin :: Type distribution
 
 theorem Th61:
-  for n being Nat
-  for s being SortSymbol of MaxConstrSign
+  for n being Nat for s being SortSymbol of MaxConstrSign
   ex m being constructor OperSymbol of s
   st len the_arity_of m = n
   proof set C = MaxConstrSign;
@@ -2519,8 +2474,8 @@ C1:   a in dom l & z = l.a by FUNCT_1:def 5;
     end; then
     reconsider l as quasi-loci by ABCMIZ_1:30;
     set m = [s,[l,0]];
-A0: the carrier of C = {a_Type, an_Adj, a_Term} by ABCMIZ_1:def 9;
-A1: m in Constructors by A0,ThCs; then
+ the carrier of C = {a_Type, an_Adj, a_Term} by ABCMIZ_1:def 9;
+then A1: m in Constructors by ThCs; then
     m in {*,non_op}\/Constructors by XBOOLE_0:def 3; then
     reconsider m as constructor OperSymbol of C by A1,ThCc,ABCMIZ_1:def 24;
     the_result_sort_of m = m`1 by ABCMIZ_1:def 24 .= s by MCART_1:7; then
@@ -2533,8 +2488,7 @@ A1: m in Constructors by A0,ThCs; then
   end;
 
 theorem Th63:
-  for l
-  for s being SortSymbol of MaxConstrSign
+  for l for s being SortSymbol of MaxConstrSign
   for m being constructor OperSymbol of s st len the_arity_of m = len l
   holds variables_in (m-trm args l) = rng l
   proof

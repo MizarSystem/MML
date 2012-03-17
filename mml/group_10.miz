@@ -3,7 +3,7 @@
 ::
 :: Received August 13, 2007
 :: Copyright (c) 2007 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, STRUCT_0, GROUP_9, SUBSET_1, ORDINAL4,
@@ -25,7 +25,8 @@ environ
       GROUP_2, GROUP_1, GROUP_3, GR_CY_1, FUNCT_2, NAT_3, REALSET1, VALUED_0,
       DYNKIN;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions GROUP_2, TARSKI, REALSET1, RELAT_1, WELLORD2, STRUCT_0, FUNCT_2;
+ definitions CARD_1, GROUP_2, TARSKI, REALSET1, RELAT_1, WELLORD2, STRUCT_0,
+      FUNCT_2;
  theorems FINSEQ_1, GROUP_2, GROUP_3, TARSKI, GROUP_6, FINSEQ_2, FUNCT_1,
       FUNCT_2, RELAT_1, XBOOLE_0, XBOOLE_1, NAT_1, GROUP_1, XREAL_1, RELSET_1,
       PARTFUN1, FINSEQ_3, INT_1, ZFMISC_1, CARD_1, CARD_2, FINSET_1, XCMPLX_1,
@@ -52,15 +53,8 @@ definition
   redefine func A^s -> Function of E, E;
   correctness
   proof
-    consider f be Function such that
-A1: A.s = f and
-A2: dom f = E & rng f c= E by FUNCT_2:def 2;
-    reconsider f as Function of E,E by A2,FUNCT_2:4;
-    now
-      take f;
-      thus f = A.s by A1;
-    end;
-    hence thesis;
+    A.s in Funcs(E,E);
+    hence thesis by FUNCT_2:121;
   end;
 end;
 
@@ -70,8 +64,8 @@ definition
   let A be Action of (the carrier of S), E;
   attr A is being_left_operation means
   :Def1:
-  A^(1_S) = id E & for s1,s2 being
-  Element of S holds A^(s1*s2) = A^s1 * (A^s2);
+  A^(1_S) = id E &
+  for s1,s2 being Element of S holds A^(s1*s2) = A^s1 * (A^s2);
 end;
 
 registration
@@ -110,14 +104,14 @@ A4:   IT.s in rng IT by FUNCT_1:12;
     hence thesis by A1;
   end;
 end;
-
+ 
 :: ALG I.5.1 DEF 1
 
 definition
   let S be unital (non empty multMagma);
   let E be set;
-  mode LeftOperation of S, E is being_left_operation Action of (the carrier of
-    S), E;
+  mode LeftOperation of S, E is
+       being_left_operation Action of (the carrier of S), E;
 end;
 
 scheme
@@ -131,8 +125,7 @@ proof
   set T = {[s,f(s)] where s is Element of S(): not contradiction};
 A3: now
     let x be set;
-    assume
-    x in T;
+    assume x in T;
     then consider s be Element of S() such that
 A4: x = [s, f(s)];
     f(s) in Funcs(E(),E()) by FUNCT_2:12;
@@ -140,13 +133,11 @@ A4: x = [s, f(s)];
   end;
   now
     let x,y1,y2 be set;
-    assume
-    [x,y1] in T;
+    assume [x,y1] in T;
     then consider s1 be Element of S() such that
 A5: [x,y1] = [s1,f(s1)];
 A6: x=s1 by A5,ZFMISC_1:33;
-    assume
-    [x,y2] in T;
+    assume [x,y2] in T;
     then consider s2 be Element of S() such that
 A7: [x,y2] = [s2,f(s2)];
     x=s2 by A7,ZFMISC_1:33;
@@ -158,8 +149,7 @@ A7: [x,y2] = [s2,f(s2)];
   now
     let x be set;
     hereby
-      assume
-      x in the carrier of S();
+      assume x in the carrier of S();
       then reconsider s=x as Element of S();
       reconsider y=f(s) as set;
       take y;
@@ -215,15 +205,14 @@ A18: [s,T.s] = [s9,f(s9)];
   end;
 end;
 
-theorem Th1:
-  for E being non empty set, S being Group-like (non empty
-multMagma), s being Element of S, LO being LeftOperation of S, E holds LO^s is
-  one-to-one
+canceled;
+
+registration
+  let E be non empty set, S be Group-like (non empty multMagma),
+      s be Element of S, LO be LeftOperation of S, E;
+  cluster LO^s -> one-to-one Function of E,E;
+coherence
 proof
-  let E be non empty set;
-  let S be Group-like (non empty multMagma);
-  let s be Element of S;
-  let LO be LeftOperation of S, E;
   consider e be Element of S such that
 A1: for h being Element of S holds h * e = h & e * h = h & ex g being
   Element of S st h * g = e & g * h = e by GROUP_1:def 3;
@@ -244,6 +233,7 @@ A4: ex f being Function st LO^s = f & dom f = E & rng f c= E by
     .= LO^(s9 * s) by A1,A2,GROUP_1:10
     .= (LO^s9) * (LO^s) by Def1;
   hence thesis by A4,A3,FUNCT_1:47;
+end;
 end;
 
 :: left translation
@@ -318,8 +308,7 @@ A9: f(1_S) = id E
       set f = the_left_translation_of(1_S);
 A10:  now
         let x be set;
-        assume
-        x in E;
+        assume x in E;
         then reconsider s1=x as Element of S;
         f.s1 = 1_S * s1 by TOPGRP_1:def 1;
         hence f.x = x by GROUP_1:def 5;
@@ -348,15 +337,13 @@ definition
   let E be set;
   let n be set;
   func the_subsets_of_card(n, E) -> Subset-Family of E equals
-  {X where X is
-  Subset of E: card X = n};
+  {X where X is Subset of E: card X = n};
   correctness
   proof
     set SF = {X where X is Subset of E: card X = n};
     now
       let x be set;
-      assume
-      x in SF;
+      assume x in SF;
       then ex X being Subset of E st X = x & card X = n;
       hence x in bool E;
     end;
@@ -378,8 +365,7 @@ proof
   let n be natural number;
   let E be non empty set;
   reconsider n9=n as Element of NAT by ORDINAL1:def 13;
-  assume
-  card n c= card E;
+  assume card n c= card E;
   then consider f be Function such that
 A1: f is one-to-one and
 A2: dom f = n and
@@ -404,8 +390,7 @@ proof
   fX"{x1}) = k & fX"{x1} = X};
   now
     let x be set;
-    assume
-    x in f;
+    assume x in f;
     then consider y be Function of E,{x1,x2}, z be Subset of E such that
 A1: x = [y,z] and
     card (y"{x1}) = k and
@@ -417,15 +402,13 @@ A1: x = [y,z] and
   then reconsider f as Relation-like set by RELAT_1:def 1;
   now
     let x,y1,y2 be set;
-    assume
-    [x,y1] in f;
+    assume [x,y1] in f;
     then consider fX1 be Function of E,{x1,x2}, X1 be Subset of E such that
 A2: [x,y1]=[fX1,X1] and
     card (fX1"{x1}) = k and
 A3: fX1"{x1} = X1;
 A4: x=fX1 by A2,ZFMISC_1:33;
-    assume
-    [x,y2] in f;
+    assume [x,y2] in f;
     then consider fX2 be Function of E,{x1,x2}, X2 be Subset of E such that
 A5: [x,y2]=[fX2,X2] and
     card (fX2"{x1}) = k and
@@ -462,8 +445,7 @@ A16: dom fX1 = dom fX2 by FUNCT_2:def 1;
 A17: fX1"{x1} = fX2"{x1} by A10,A15,A11,A12,ZFMISC_1:33;
 A18: for z being set st z in dom fX1 holds fX1.z = fX2.z
     proof
-      assume
-      ex z being set st z in dom fX1 & fX1.z <> fX2.z;
+      assume ex z being set st z in dom fX1 & fX1.z <> fX2.z;
       then consider z be set such that
 A19:  z in dom fX1 and
 A20:  fX1.z <> fX2.z;
@@ -507,13 +489,11 @@ A31: f is one-to-one by FUNCT_1:def 8;
   proof
     let y be set;
     hereby
-      assume
-      y in the_subsets_of_card(k,E);
+      assume y in the_subsets_of_card(k,E);
       then consider X be Subset of E such that
 A32:  y=X & card X = k;
       defpred P[set,set] means ($1 in X & $2=x1) or (not $1 in X & $2=x2);
-A33:  for z1 being Element of E ex z2 being Element of {x1,x2} st P[z1,z2
-      ]
+A33:  for z1 being Element of E ex z2 being Element of {x1,x2} st P[z1,z2 ]
       proof
         let z1 be Element of E;
         per cases;
@@ -551,8 +531,7 @@ A38:      [z,f9.z] in f9 by FUNCT_1:8;
           then z99 in {x1} by TARSKI:def 1;
           hence z in f9"{x1} by A38,RELAT_1:def 14;
         end;
-        assume
-        z in f9"{x1};
+        assume z in f9"{x1};
         then consider z9 be set such that
 A39:    [z,z9] in f9 and
 A40:    z9 in {x1} by RELAT_1:def 14;
@@ -581,8 +560,7 @@ A44: rng f = the_subsets_of_card(k,E) by RELAT_1:def 5;
     let x be set;
     thus x in Choose(E,k,x1,x2) implies ex y being set st [x,y] in f
     proof
-      assume
-      x in Choose(E,k,x1,x2);
+      assume x in Choose(E,k,x1,x2);
       then consider fX be Function of E,{x1,x2} such that
 A45:  fX = x & card (fX"{x1})=k by CARD_FIN:def 1;
       set y = fX"{x1};
@@ -618,21 +596,18 @@ A1: card n c= card E;
   func the_extension_of_left_translation_of(n,s,LO) -> Function of
   the_subsets_of_card(n, E), the_subsets_of_card(n, E) means
   :Def4:
-  for X being
-  Element of the_subsets_of_card(n, E) holds it.X = (LO^s) .: X;
+  for X being Element of the_subsets_of_card(n, E) holds it.X = (LO^s) .: X;
   existence
   proof
     set EE = the_subsets_of_card(n, E);
     set f = {[X,(LO^s) .: X] where X is Element of EE: not contradiction};
 A2: now
       let x,y1,y2 be set;
-      assume
-      [x,y1] in f;
+      assume [x,y1] in f;
       then consider X1 be Element of EE such that
 A3:   [x,y1] = [X1,(LO^s) .: X1];
 A4:   x = X1 by A3,ZFMISC_1:33;
-      assume
-      [x,y2] in f;
+      assume [x,y2] in f;
       then consider X2 be Element of EE such that
 A5:   [x,y2] = [X2,(LO^s) .: X2];
       x = X2 by A5,ZFMISC_1:33;
@@ -640,8 +615,7 @@ A5:   [x,y2] = [X2,(LO^s) .: X2];
     end;
     now
       let x be set;
-      assume
-      x in f;
+      assume x in f;
       then consider X be Element of EE such that
 A6:   x = [X,(LO^s) .: X];
       reconsider y=X,z=(LO^s) .: X as set;
@@ -652,8 +626,7 @@ A6:   x = [X,(LO^s) .: X];
     now
       let x be set;
       hereby
-        assume
-        x in EE;
+        assume x in EE;
         then reconsider X = x as Element of EE;
         reconsider y = (LO^s) .: X as set;
         take y;
@@ -671,14 +644,13 @@ A9:   x = X by A8,ZFMISC_1:33;
 A10: dom f = EE by RELAT_1:def 4;
     now
       let Y be set;
-      assume
-      Y in rng f;
+      assume Y in rng f;
       then consider X1 be set such that
 A11:  [X1,Y] in f by RELAT_1:def 5;
       consider X2 be Element of EE such that
 A12:  [X1,Y] = [X2,(LO^s) .: X2] by A11;
       set fe = (LO^s)|X2;
-      LO^s is one-to-one by Th1;
+      LO^s is one-to-one;
       then
 A13:  fe is one-to-one by FUNCT_1:84;
       EE is not empty by A1,Th2;
@@ -792,8 +764,7 @@ A10: f(1_S) = id EE
       set f = the_extension_of_left_translation_of(n,1_S,LO);
 A11:  now
         let x be set;
-        assume
-        x in EE;
+        assume x in EE;
         then reconsider X=x as Element of EE;
         EE is non empty by A1,Th2;
         then X in EE;
@@ -845,8 +816,7 @@ s2 being Element of S, z being Element of Z st s2 = s * s1 & z1=[s1,z] & z2=[s2
     ,z]};
 A1: now
       let x,y1,y2 be set;
-      assume
-      [x,y1] in f;
+      assume [x,y1] in f;
       then consider z19,z29 be Element of E such that
 A2:   [x,y1] = [z19,z29] and
 A3:   ex s1,s2 being Element of S, z being Element of Z st s2 = s * s1
@@ -855,8 +825,7 @@ A3:   ex s1,s2 being Element of S, z being Element of Z st s2 = s * s1
 A4:   s29 = s * s19 and
 A5:   z19=[s19,z9] and
 A6:   z29=[s29,z9] by A3;
-      assume
-      [x,y2] in f;
+      assume [x,y2] in f;
       then consider z199,z299 be Element of E such that
 A7:   [x,y2] = [z199,z299] and
 A8:   ex s1,s2 being Element of S, z being Element of Z st s2 = s *
@@ -872,8 +841,7 @@ A11:  z299=[s299,z99] by A8;
     end;
     now
       let x be set;
-      assume
-      x in f;
+      assume x in f;
       then consider z1,z2 be Element of E such that
 A12:  x = [z1,z2] and
       ex s1,s2 being Element of S, z being Element of Z st s2 = s * s1 &
@@ -886,8 +854,7 @@ A12:  x = [z1,z2] and
     now
       let x be set;
       hereby
-        assume
-        x in E;
+        assume x in E;
         then consider s1,z be set such that
 A13:    s1 in the carrier of S and
 A14:    z in Z and
@@ -913,8 +880,7 @@ A17:  [x,y] = [z1,z2] and
 A18: dom f = E by RELAT_1:def 4;
     now
       let y be set;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider x be set such that
 A19:  [x,y] in f by RELAT_1:def 5;
       consider z1,z2 be Element of E such that
@@ -1056,8 +1022,7 @@ A22: f(1_S) = id E
       set f = the_left_translation_of(1_S,Z);
 A23:  now
         let x be set;
-        assume
-        x in E;
+        assume x in E;
         then reconsider z1=x as Element of E;
         ex z2 be Element of E, s1,s2 be Element of S, z be Element of Z st
         z2=f.z1 & s2 = 1_S * s1 & z1=[s1,z] & z2=[s2,z] by Def6;
@@ -1075,10 +1040,8 @@ A23:  now
   uniqueness
   proof
     let T1, T2 be LeftOperation of S, [:the carrier of S,Z:] such that
-A24: for s being Element of S holds T1.s = the_left_translation_of(s,Z
-    ) and
-A25: for s being Element of S holds T2.s = the_left_translation_of(s,Z
-    );
+A24: for s being Element of S holds T1.s = the_left_translation_of(s,Z ) and
+A25: for s being Element of S holds T2.s = the_left_translation_of(s,Z );
     let x be Element of S;
     thus T1.x = the_left_translation_of(x,Z) by A24
       .= T2.x by A25;
@@ -1101,15 +1064,13 @@ of Left_Cosets P, A1,A2 being Subset of G, g being Element of G st P2 = it.P1 &
     Subset of G, g being Element of G st A2 = g * A1 & A1=P1 & A2=P2 & g=h};
 A1: now
       let x,y1,y2 be set;
-      assume
-      [x,y1] in f;
+      assume [x,y1] in f;
       then consider P19,P29 be Element of Left_Cosets P such that
 A2:   [x,y1] = [P19,P29] and
 A3:   ex A1,A2 being Subset of G,g being Element of G st A2 = g * A1 &
       A1= P19 & A2=P29 & g=h;
 A4:   x = P19 by A2,ZFMISC_1:33;
-      assume
-      [x,y2] in f;
+      assume [x,y2] in f;
       then consider P199,P299 be Element of Left_Cosets P such that
 A5:   [x,y2] = [P199,P299] and
 A6:   ex A1,A2 being Subset of G,g being Element of G st A2 = g * A1 &
@@ -1119,8 +1080,7 @@ A6:   ex A1,A2 being Subset of G,g being Element of G st A2 = g * A1 &
     end;
     now
       let x be set;
-      assume
-      x in f;
+      assume x in f;
       then consider P1,P2 be Element of Left_Cosets P such that
 A7:   x=[P1,P2] and
       ex A1,A2 being Subset of G,g being Element of G st A2=g*A1 & A1=P1 &
@@ -1134,8 +1094,7 @@ A7:   x=[P1,P2] and
       let x be set;
       hereby
         reconsider g = h as Element of G by GROUP_2:51;
-        assume
-        x in Left_Cosets P;
+        assume x in Left_Cosets P;
         then consider a be Element of G such that
 A8:     x = a * P by GROUP_2:def 15;
         reconsider P1=x as Element of Left_Cosets P by A8,GROUP_2:def 15;
@@ -1161,8 +1120,7 @@ A12: dom f = Left_Cosets P by RELAT_1:def 4;
     now
       let y be set;
 A13:  Left_Cosets P is not empty by GROUP_2:165;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider x be set such that
 A14:  x in dom f & y = f.x by FUNCT_1:def 5;
       [x,y] in f by A14,FUNCT_1:8;
@@ -1257,8 +1215,7 @@ A8:     P29 = f2.P19 & A29 = g9 * A19 & A19=P19 & A29=P29 and
 A9:     g9=h2 by Def8;
         consider P2999 be Element of Left_Cosets P, A1999,A2999 be Subset of G
         , g999 be Element of G such that
-A10:    P2999=f12.P1999 & A2999=g999 * A1999 & A1999=P1999 & A2999=
-        P2999 and
+A10:    P2999=f12.P1999 & A2999=g999 * A1999 & A1999=P1999 & A2999= P2999 and
 A11:    g999=h1*h2 by Def8;
         g999=g99*g9 by A9,A7,A11,GROUP_2:52;
         hence f12.x = f1.(f2.x) by A8,A6,A10,GROUP_2:38;
@@ -1288,8 +1245,7 @@ A15: f(1_H) = id Left_Cosets P
       set f = the_left_translation_of(1_H,P);
 A16:  now
         let x be set;
-        assume
-        x in Left_Cosets P;
+        assume x in Left_Cosets P;
         then reconsider P1=x as Element of Left_Cosets P;
         (ex P2 be Element of Left_Cosets P, A1,A2 be Subset of G, g be
 Element of G st P2=f.P1 & A2 = g * A1 & A1=P1 & A2=P2 & g=1_H )& 1_H=1_G by
@@ -1308,10 +1264,8 @@ Element of G st P2=f.P1 & A2 = g * A1 & A1=P1 & A2=P2 & g=1_H )& 1_H=1_G by
   uniqueness
   proof
     let T1, T2 be LeftOperation of H, Left_Cosets P such that
-A17: for h being Element of H holds T1.h = the_left_translation_of(h,P
-    ) and
-A18: for h being Element of H holds T2.h = the_left_translation_of(h,P
-    );
+A17: for h being Element of H holds T1.h = the_left_translation_of(h,P ) and
+A18: for h being Element of H holds T2.h = the_left_translation_of(h,P );
     let x be Element of H;
     thus T1.x = the_left_translation_of(x,P) by A17
       .= T2.x by A18;
@@ -1319,7 +1273,6 @@ A18: for h being Element of H holds T2.h = the_left_translation_of(h,P
 end;
 
 begin :: Stabilizer and Orbits
-
 :: stabilizer
 :: ALG I.5.2 Definition 3
 
@@ -1330,15 +1283,13 @@ definition
   let A be Subset of E;
   func the_strict_stabilizer_of(A,T) -> strict Subgroup of G means
   :Def10:
-  the
-  carrier of it = {g where g is Element of G: (T^g) .: A = A};
+  the carrier of it = {g where g is Element of G: (T^g) .: A = A};
   existence
   proof
     set X={g where g is Element of G: (T^g) .: A = A};
     now
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then ex g being Element of G st x=g & (T^g) .: A = A;
       hence x in the carrier of G;
     end;
@@ -1346,12 +1297,10 @@ definition
 A1: for g1,g2 being Element of G st g1 in X & g2 in X holds g1 * g2 in X
     proof
       let g1,g2 be Element of G;
-      assume
-      g1 in X;
+      assume g1 in X;
       then
 A2:   ex g being Element of G st g=g1 & (T^g) .: A = A;
-      assume
-      g2 in X;
+      assume g2 in X;
       then
 A3:   ex g being Element of G st g=g2 & (T^g) .: A = A;
       (T^(g1*g2)) .: A = (T^g1 * (T^g2)) .: A by Def1
@@ -1362,8 +1311,7 @@ A4: id E .: A = A by FUNCT_1:162;
 A5: for g being Element of G st g in X holds g" in X
     proof
       let g be Element of G;
-      assume
-      g in X;
+      assume g in X;
       then ex g9 being Element of G st g9=g & (T^g9) .: A = A;
       then (T^g") .: A = (T^g" * (T^g)) .: A by RELAT_1:159
         .= (T^(g"*g)) .: A by Def1
@@ -1395,8 +1343,7 @@ definition
   let x be Element of E;
   pred x is_fixed_under T means
   :Def12:
-  for s being Element of S holds x = (T^
-  s).x;
+  for s being Element of S holds x = (T^s).x;
 end;
 
 definition
@@ -1429,8 +1376,7 @@ A3:       y in X;
           y9 is_fixed_under T by A1,A3;
           hence y in Y;
         end;
-        assume
-        y in Y;
+        assume y in Y;
         then
 A4:     ex y9 be Element of E st y=y9 & y9 is_fixed_under T;
         then P[y];
@@ -1441,7 +1387,7 @@ A4:     ex y9 be Element of E st y=y9 & y9 is_fixed_under T;
     hence thesis;
   end;
 end;
-
+ 
 :: ALG I.5.4 Definition 5
 
 definition
@@ -1451,8 +1397,7 @@ definition
   let x,y be Element of E;
   pred x,y are_conjugated_under T means
   :Def14:
-  ex s being Element of S st y =
-  (T^s).x;
+  ex s being Element of S st y = (T^s).x;
 end;
 
 theorem Th4:
@@ -1478,8 +1423,7 @@ proof
   let E be non empty set;
   let x,y be Element of E;
   let T be LeftOperation of G, E;
-  assume
-  x,y are_conjugated_under T;
+  assume x,y are_conjugated_under T;
   then consider g be Element of G such that
 A1: y = (T^g).x by Def14;
   x in E;
@@ -1502,12 +1446,10 @@ proof
   let E be non empty set;
   let x,y,z be Element of E;
   let T be LeftOperation of S, E;
-  assume
-  x,y are_conjugated_under T;
+  assume x,y are_conjugated_under T;
   then consider s1 be Element of S such that
 A1: y = (T^s1).x by Def14;
-  assume
-  y,z are_conjugated_under T;
+  assume y,z are_conjugated_under T;
   then consider s2 be Element of S such that
 A2: z = (T^s2).y by Def14;
   x in E;
@@ -1541,8 +1483,7 @@ A2:     y in X;
         x,y9 are_conjugated_under T by A1,A2;
         hence y in Y;
       end;
-      assume
-      y in Y;
+      assume y in Y;
       then
 A3:   ex y9 being Element of E st y9=y & x,y9 are_conjugated_under T;
       then P[y];
@@ -1552,18 +1493,18 @@ A3:   ex y9 being Element of E st y9=y & x,y9 are_conjugated_under T;
   end;
 end;
 
-theorem Th7:
-  for S being unital (non empty multMagma), E being non empty set,
-x being Element of E, T being LeftOperation of S, E holds the_orbit_of(x,T) is
-  non empty
+canceled;
+
+registration
+  let S be unital (non empty multMagma), E be non empty set,
+      x be Element of E, T be LeftOperation of S, E;
+  cluster the_orbit_of(x,T) -> non empty;
+  coherence
 proof
-  let S be unital (non empty multMagma);
-  let E be non empty set;
-  let x be Element of E;
-  let T be LeftOperation of S, E;
   x,x are_conjugated_under T by Th4;
   then x in {y where y is Element of E: x,y are_conjugated_under T};
   hence thesis;
+end;
 end;
 
 theorem Th8:
@@ -1575,8 +1516,7 @@ proof
   let E be non empty set;
   let x,y be Element of E;
   let T be LeftOperation of G, E;
-  assume
-  not the_orbit_of(x,T) misses the_orbit_of(y,T);
+  assume not the_orbit_of(x,T) misses the_orbit_of(y,T);
   then the_orbit_of(x,T) /\ the_orbit_of(y,T) <> {} by XBOOLE_0:def 7;
   then consider z1 be set such that
 A1: z1 in the_orbit_of(x,T) /\ the_orbit_of(y,T) by XBOOLE_0:def 1;
@@ -1591,8 +1531,7 @@ A5: x,z19 are_conjugated_under T;
   now
     let z2 be set;
     hereby
-      assume
-      z2 in the_orbit_of(x,T);
+      assume z2 in the_orbit_of(x,T);
       then consider z29 be Element of E such that
 A6:   z2=z29 and
 A7:   x,z29 are_conjugated_under T;
@@ -1602,8 +1541,7 @@ A7:   x,z29 are_conjugated_under T;
       then y,z29 are_conjugated_under T by A3,Th6;
       hence z2 in the_orbit_of(y,T) by A6;
     end;
-    assume
-    z2 in the_orbit_of(y,T);
+    assume z2 in the_orbit_of(y,T);
     then consider z29 be Element of E such that
 A8: z2=z29 and
 A9: y,z29 are_conjugated_under T;
@@ -1629,11 +1567,10 @@ proof
   assume
 A1: x is_fixed_under T;
   now
-    assume
-    X<>{x};
+    assume X<>{x};
     then
 A2: not (for x9 being set holds x9 in X iff x9=x) by TARSKI:def 1;
-    X<>{} by Th7;
+    X<>{};
     then ex x9 being set st x9 in X by XBOOLE_0:def 1;
     then consider x99 be set such that
 A3: x99<>x and
@@ -1646,6 +1583,7 @@ A6: x,y9 are_conjugated_under T by A4;
   end;
   hence thesis;
 end;
+ 
 :: the orbit-stabilizer theorem
 
 theorem Th10:
@@ -1663,8 +1601,7 @@ proof
   reconsider A9 = {a} as Subset of E;
 A1: now
     let x be set;
-    assume
-    x in f;
+    assume x in f;
     then consider b be Element of E, A be Subset of G such that
 A2: [b,A]=x and
     ex g being Element of G st b = (T^g).a & A = g * H;
@@ -1674,13 +1611,11 @@ A2: [b,A]=x and
   end;
   now
     let x,y1,y2 be set;
-    assume
-    [x,y1] in f;
+    assume [x,y1] in f;
     then consider b1 be Element of E, A1 be Subset of G such that
 A3: [b1,A1]=[x,y1] and
 A4: ex g being Element of G st b1 = (T^g).a & A1 = g * H;
-    assume
-    [x,y2] in f;
+    assume [x,y2] in f;
     then consider b2 be Element of E, A2 be Subset of G such that
 A5: [b2,A2]=[x,y2] and
 A6: ex g being Element of G st b2 = (T^g).a & A2 = g * H;
@@ -1716,8 +1651,7 @@ A14: g in the_strict_stabilizer_of(A9,T) by A13,STRUCT_0:def 5;
     hence y1=y2 by A7,A9,A11,A14,GROUP_2:137;
   end;
   then reconsider f as Function by A1,FUNCT_1:def 1,RELAT_1:def 1;
-  for y being set holds y in Left_Cosets H iff ex x being set st [x,y] in
-  f
+  for y being set holds y in Left_Cosets H iff ex x being set st [x,y] in f
   proof
     let y be set;
     hereby
@@ -1744,14 +1678,12 @@ A20: rng f = Left_Cosets H by RELAT_1:def 5;
     let x1,x2 be set;
 A21: the carrier of the_strict_stabilizer_of(A9,T) = {g9 where g9 is
     Element of G: (T^g9) .: A9 = A9} by Def10;
-    assume
-    x1 in dom f;
+    assume x1 in dom f;
     then [x1,f.x1] in f by FUNCT_1:8;
     then consider b1 be Element of E, A1 be Subset of G such that
 A22: [b1,A1]=[x1,f.x1] and
 A23: ex g being Element of G st b1 = (T^g).a & A1=g * H;
-    assume
-    x2 in dom f;
+    assume x2 in dom f;
     then [x2,f.x2] in f by FUNCT_1:8;
     then consider b2 be Element of E, A2 be Subset of G such that
 A24: [b2,A2]=[x2,f.x2] and
@@ -1796,8 +1728,7 @@ A34: f is one-to-one by FUNCT_1:def 8;
   proof
     let x be set;
     hereby
-      assume
-      x in the_orbit_of(a,T);
+      assume x in the_orbit_of(a,T);
       then consider b be Element of E such that
 A35:  b=x and
 A36:  a,b are_conjugated_under T;
@@ -1810,8 +1741,7 @@ A37:  b = (T^g).a by A36,Def14;
     given y be set such that
 A38: [x,y] in f;
     consider b be Element of E, A be Subset of G such that
-A39: [b,A]=[x,y] & ex g being Element of G st b = (T^g).a & A = g * H
-    by A38;
+A39: [b,A]=[x,y] & ex g being Element of G st b = (T^g).a & A = g * H by A38;
     b=x & a,b are_conjugated_under T by A39,Def14,ZFMISC_1:33;
     hence thesis;
   end;
@@ -1834,8 +1764,7 @@ definition
     the_orbit_of(x,T)};
     now
       let x be set;
-      assume
-      x in P;
+      assume x in P;
       then ex X being Subset of E st x=X & ex x being Element of E st X =
       the_orbit_of(x,T);
       hence x in bool E;
@@ -1845,8 +1774,7 @@ definition
     proof
       let x be set;
       hereby
-        assume
-        x in E;
+        assume x in E;
         then reconsider x9=x as Element of E;
         reconsider Y = the_orbit_of(x9,T) as set;
         take Y;
@@ -1864,56 +1792,69 @@ A2: union P = E by TARSKI:def 4;
     E st B in P holds A = B or A misses B
     proof
       let A be Subset of E;
-      assume
-      A in P;
+      assume A in P;
       then
 A3:   ex X being Subset of E st A=X & ex x9 being Element of E st X =
       the_orbit_of(x9,T);
-      hence A<>{} by Th7;
+      hence A<>{};
       let B be Subset of E;
-      assume
-      B in P;
-      then
-A4:   ex X being Subset of E st B=X & ex x9 being Element of E st X =
-      the_orbit_of(x9,T);
-      assume
-      not A = B;
-      hence thesis by A3,A4,Th8;
+      assume B in P;
+      then ex X being Subset of E st B=X & ex x9 being Element of E st
+      X = the_orbit_of(x9,T);
+      hence thesis by A3,Th8;
     end;
     hence thesis by A2,EQREL_1:def 6;
   end;
 end;
 
 begin :: p-groups
-
 :: ALG I.6.5 Definition 9
 
 definition
-  let p be prime (natural number);
+  let p be natural number;
   let G be Group;
-  pred G is_p-group_of_prime p means
+  attr G is p-group means
   :Def17:
-  ex r being natural number st card
-  G = p |^ r;
+  ex r being natural number st card G = p |^ r;
 end;
 
-definition
-  let p be prime (natural number);
-  let G be Group;
-  let P be Subgroup of G;
-  pred P is_p-group_of_prime p means
-  :Def18:
-  ex H being finite Group st P = H
-  & H is_p-group_of_prime p;
+Lm2: for n being natural number st n > 0 holds card INT.Group(n) = n
+proof
+  let n be natural number;
+  assume n > 0;
+  then multMagma(#Segm(n),addint(n)#) = INT.Group(n) by GR_CY_1:def 6;
+  hence thesis by CARD_1:def 5;
 end;
 
+registration
+  let p be non zero natural number;
+  cluster INT.Group(p) -> p-group;
+  coherence
+  proof
+    take 1;
+    thus card INT.Group(p) = p by Lm2
+    .= p |^ 1 by NEWTON:10;
+  end;
+end;
+
+registration
+  let p be non zero natural number;
+  cluster p-group finite cyclic commutative strict Group;
+  existence
+  proof
+    take INT.Group(p);
+    thus thesis;
+  end;
+end;
+ 
 :: like WEDDWITT:39
 :: ALG I.6.5 PRO 11
 
 theorem Th11:
-  for E being non empty finite set, G being finite Group, p being
-prime (natural number), T being LeftOperation of G, E st G is_p-group_of_prime
-  p holds card the_fixed_points_of T mod p = card E mod p
+  for E being non empty finite set, G being finite Group,
+      p being prime (natural number), T being LeftOperation of G, E st
+  G is p-group
+  holds card the_fixed_points_of T mod p = card E mod p
 proof
   let E be non empty finite set;
   let G be finite Group;
@@ -1953,8 +1894,7 @@ A3: dom FX = the_fixed_points_of T & for x being set st x in
   now
     let y be set;
     hereby
-      assume
-      y in O1;
+      assume y in O1;
       then consider X be Subset of E such that
 A4:   y=X and
 A5:   card X = 1 and
@@ -1969,15 +1909,13 @@ A8:   X = {x99} by CARD_1:49;
       now
         x9,x9 are_conjugated_under T by Th4;
         then
-A9:     x9 in {y99 where y99 is Element of E: x9,y99 are_conjugated_under
-        T};
+A9:     x9 in {y99 where y99 is Element of E: x9,y99 are_conjugated_under T};
         given g be Element of G such that
 A10:    x9 <> (T^g).x9;
         set y9 = (T^g).x9;
         x9,y9 are_conjugated_under T by Def14;
         then
-        y9 in {y99 where y99 is Element of E: x9,y99 are_conjugated_under
-        T};
+        y9 in {y99 where y99 is Element of E: x9,y99 are_conjugated_under T};
         then y9=x99 by A7,A8,TARSKI:def 1;
         hence contradiction by A7,A8,A10,A9,TARSKI:def 1;
       end;
@@ -2005,20 +1943,17 @@ A15: x9 is_fixed_under T by A3;
 A16: rng FX = O1 by RELAT_1:def 5;
   now
     let x1,x2 be set;
-    assume
-    x1 in dom FX;
+    assume x1 in dom FX;
     then consider x19 be Element of E, X1 be Subset of E such that
 A17: x19=x1 and
 A18: X1=FX.x1 & X1 = the_orbit_of(x19,T) & x19 is_fixed_under T by
     A3;
-    assume
-    x2 in dom FX;
+    assume x2 in dom FX;
     then consider x29 be Element of E, X2 be Subset of E such that
 A19: x29=x2 and
 A20: X2=FX.x2 & X2 = the_orbit_of(x29,T) and
 A21: x29 is_fixed_under T by A3;
-    assume
-    FX.x1 = FX.x2;
+    assume FX.x1 = FX.x2;
     then {x19} = the_orbit_of(x29,T) by A18,A20,Th9
       .= {x29} by A21,Th9;
     hence x1 = x2 by A17,A19,ZFMISC_1:6;
@@ -2030,12 +1965,11 @@ A22: the_fixed_points_of T,O1 are_equipotent by A3,A16,WELLORD2:def
 A23: now
     let y be set;
     hereby
-      assume
-      y in the_orbits_of T;
+      assume y in the_orbits_of T;
       then consider X be Subset of E such that
 A24:  y=X and
 A25:  ex x being Element of E st X = the_orbit_of(x,T);
-      X is non empty by A25,Th7;
+      X is non empty by A25;
       then 0+1 < card X+1 by XREAL_1:8;
       then
 A26:  1 <= card X by NAT_1:13;
@@ -2104,8 +2038,7 @@ A37: len p1 = len f1 & for i being Nat st i in dom p1 holds p1.i = F(i)
   for x being set st x in rng p1 holds x in NAT
   proof
     let x be set;
-    assume
-    x in rng p1;
+    assume x in rng p1;
     then consider i be Nat such that
 A38: i in dom p1 and
 A39: p1.i = x by FINSEQ_2:11;
@@ -2126,8 +2059,7 @@ A41: len p2 = len f2 & for i being Nat st i in dom p2 holds p2.i = P2(i
   for x being set st x in rng p2 holds x in NAT
   proof
     let x be set;
-    assume
-    x in rng p2;
+    assume x in rng p2;
     then consider i being Nat such that
 A42: i in dom p2 and
 A43: p2.i = x by FINSEQ_2:11;
@@ -2173,7 +2105,7 @@ A51:    j in dom f2 by A41,A49,FINSEQ_3:31;
     hence thesis;
   end;
   assume
-A52: G is_p-group_of_prime p;
+A52: G is p-group;
   for i being Element of NAT st i in dom c2 holds p9 divides c2/.i
   proof
     let i be Element of NAT;
@@ -2203,8 +2135,7 @@ A60: i9 divides p9|^r9 by A53,NAT_D:def 3;
 A61: card the_orbit_of(x,T) = Index H by Th10;
 A62: now
       consider B be finite set;
-      assume
-      card H = card G;
+      assume card H = card G;
       then card G = card G * index H by GROUP_2:177;
       then 1 = card G * index H / card G by XCMPLX_1:60;
       then 1 = (card G / card G) * index H by XCMPLX_1:75;
@@ -2246,8 +2177,7 @@ A66: i in dom c1;
   for x being set st x in rng c1 holds x in {1}
   proof
     let x be set;
-    assume
-    x in rng c1;
+    assume x in rng c1;
     then ex i being Nat st i in dom c1 & x = c1.i by FINSEQ_2:11;
     then x = 1 by A65;
     hence thesis by TARSKI:def 1;
@@ -2287,22 +2217,20 @@ A71:    Seg len c1 = dom c1 by FINSEQ_1:def 3;
 end;
 
 begin :: The Sylow Theorems
-
 :: ALG I.6.6 Definition 10
 
 definition
-  let p be prime (natural number);
+  canceled;
+  let p be natural number;
   let G be Group;
   let P be Subgroup of G;
   pred P is_Sylow_p-subgroup_of_prime p means
   :Def19:
-  P is_p-group_of_prime p
-  & not p divides index P;
+  P is p-group & not p divides index P;
 end;
 
 Lm1: for n being natural number, p being prime (natural number) st n<>0 holds
 ex m,r being natural number st n = p |^ r * m & not p divides m
-
 proof
   let n be natural number;
   let p be prime (natural number);
@@ -2318,8 +2246,7 @@ A3: n = p |^ r * m by NAT_D:def 3;
 A4: not p |^ (r+1) divides n by A2,A1,NAT_3:def 7;
   thus not p divides m
   proof
-    assume
-    p divides m;
+    assume p divides m;
     then consider t be natural number such that
 A5: m = p * t by NAT_D:def 3;
     n = p |^ r * p * t by A3,A5
@@ -2328,38 +2255,14 @@ A5: m = p * t by NAT_D:def 3;
   end;
 end;
 
-Lm2: for n being natural number st n > 0 holds card INT.Group(n) = n
-proof
-  let n be natural number;
-  set G = INT.Group(n);
-  reconsider k = n as Element of NAT by ORDINAL1:def 13;
-  assume
-A1: n > 0;
-  then
-A2: multMagma(#Segm(n),addint(n)#) = G by GR_CY_1:def 6;
-  reconsider G as finite Group by A1;
-A3: Segm k is finite;
-  now
-    reconsider B = Segm n as finite set by A3;
-    take B;
-    thus B = the carrier of G by A2;
-    card B = card k by CARD_1:def 12;
-    hence n = card B by CARD_1:def 5;
-  end;
-  hence thesis;
-end;
-
 Lm3: for X,Y being non empty set holds card {[:X,{y}:] where y is Element of Y
 : not contradiction} = card Y
-
 proof
   let X,Y be non empty set;
   set Z = {[:X,{y}:] where y is Element of Y: not contradiction};
   deffunc F(set) = [: X, {$1} :];
-
   ex f being Function st dom f = Y & for x being set st x in Y holds f.x =
   F(x) from FUNCT_1:sch 3;
-
   then consider f be Function such that
 A1: dom f = Y and
 A2: for x being set st x in Y holds f.x = F(x);
@@ -2367,8 +2270,7 @@ A2: for x being set st x in Y holds f.x = F(x);
   proof
     let y be set;
     hereby
-      assume
-      y in Z;
+      assume y in Z;
       then consider y9 be Element of Y such that
 A3:   y = [:X,{y9}:];
       reconsider x=y9 as set;
@@ -2384,18 +2286,13 @@ A5: y = f.x;
   end;
   then
 A6: rng f = Z by FUNCT_1:def 5;
-
-  for x1,x2 being set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1
-  = x2
-
+  for x1,x2 being set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2
   proof
     let x1,x2 be set;
-    assume
-    x1 in dom f & x2 in dom f;
+    assume x1 in dom f & x2 in dom f;
     then
 A7: f.x1 = F(x1) & f.x2 = F(x2) by A1,A2;
-    assume
-    f.x1 = f.x2;
+    assume f.x1 = f.x2;
     then {x1} = {x2} by A7,ZFMISC_1:134;
     hence thesis by ZFMISC_1:6;
   end;
@@ -2409,7 +2306,6 @@ of G,E, n being natural number st LO = the_left_operation_of(G,T) & n = card G
 & E = [:the carrier of G,T:] & card n c= card E holds the_fixed_points_of(
 the_extension_of_left_operation_of(n,LO)) = {[:the carrier of G,{t}:] where t
 is Element of T: not contradiction}
-
 proof
   let G be finite Group;
   let E,T be non empty set;
@@ -2428,8 +2324,7 @@ A4: card n c= card E;
   now
     let z be set;
     hereby
-      assume
-      z in the_fixed_points_of LO9;
+      assume z in the_fixed_points_of LO9;
       then z in {x where x is Element of EE: x is_fixed_under LO9} by
       Def13;
       then consider e be Element of EE such that
@@ -2440,10 +2335,7 @@ A6:   e is_fixed_under LO9;
       then consider X be Subset of E such that
 A7:   z=X and
 A8:   card X = n;
-
-A9:   for g being Element of G holds e = the_left_translation_of(g,T) .:
-      e
-
+A9:   for g being Element of G holds e = the_left_translation_of(g,T) .: e
       proof
         let g be Element of G;
         LO9.g = the_extension_of_left_translation_of(n,g,LO) by A4,Def5;
@@ -2467,28 +2359,23 @@ A14:    x1=[g1,t] by A3,A11,ZFMISC_1:def 2;
         now
           reconsider z19=x1 as Element of [: the carrier of G,T :] by A3,A11;
           let x2 be set;
-          assume
-          x2 in [:the carrier of G,{t}:];
+          assume x2 in [:the carrier of G,{t}:];
           then consider g2,t9 be set such that
 A15:      g2 in the carrier of G and
 A16:      t9 in {t} & x2=[g2,t9] by ZFMISC_1:def 2;
           reconsider g2 as Element of G by A15;
           set g=g2*g1";
-
           consider z29 be Element of [: the carrier of G,T :], g19, g29 be
           Element of G, t99 be Element of T such that
-
 A17:      z29=the_left_translation_of(g,T).z19 and
 A18:      g29 = g * g19 and
 A19:      z19 = [g19,t99] and
 A20:      z29 = [g29,t99] by Def6;
 A21:      t=t99 by A14,A19,ZFMISC_1:33;
           dom the_left_translation_of(g,T) = E by A3,FUNCT_2:def 1;
-
           then
 A22:      the_left_translation_of(g,T).x1 in the_left_translation_of(g,T)
           .: e by A5,A7,A11,FUNCT_1:def 12;
-
           g29=g2*g1"*g1 by A14,A18,A19,ZFMISC_1:33
             .= g2*(g1"*g1) by GROUP_1:def 4
             .= g2*1_G by GROUP_1:def 6
@@ -2507,29 +2394,20 @@ A24:  dom f = n and
 A25:  rng f = X by WELLORD2:def 4;
       dom f in omega by A24,ORDINAL1:def 13;
       then reconsider X as finite set by A25,FINSET_1:def 1;
-      card [:the carrier of G,{t}:] = card the carrier of G by CARD_2:13
-        .= n by A2;
+      card [:the carrier of G,{t}:] = n by A2,CARD_2:13;
       then [:the carrier of G,{t}:] = X by A7,A8,A23,CARD_FIN:1;
-
       hence z in {[:the carrier of G,{t9}:] where t9 is Element of T: not
       contradiction} by A7;
-
     end;
     assume
-
-    z in {[:the carrier of G,{t}:] where t is Element of T: not
-    contradiction};
-
+    z in {[:the carrier of G,{t}:] where t is Element of T: not contradiction};
     then consider t be Element of T such that
 A26: z = [:the carrier of G,{t}:];
 A27: now
       let z9 be set;
-      assume
-      z9 in z;
-
+      assume z9 in z;
       then ex x,y being set st x in the carrier of G & y in {t} & z9=[x,y] by
       A26,ZFMISC_1:def 2;
-
       hence z9 in [:the carrier of G,T:] by ZFMISC_1:def 2;
     end;
     then reconsider X=z as Subset of E by A3,TARSKI:def 3;
@@ -2544,8 +2422,7 @@ A30:  LO^g = the_left_translation_of(g,T) by A1,Def7;
       now
         let e2 be set;
         hereby
-          assume
-          e2 in e;
+          assume e2 in e;
           then consider g2,t2 be set such that
 A31:      g2 in the carrier of G and
 A32:      t2 in {t} and
@@ -2557,10 +2434,8 @@ A34:      z c= dom(LO^g) by A3,A28,FUNCT_2:def 1;
           e1 in e by A26,A32,ZFMISC_1:def 2;
           hence e1 in dom(LO^g) & e1 in e by A34;
           then reconsider z1=e1 as Element of [:the carrier of G,T:] by A3;
-
           consider z2 be Element of [:the carrier of G,T:], g19,g29 be Element
           of G, t9 be Element of T such that
-
 A35:      z2=(LO^g).z1 and
 A36:      g29=g * g19 and
 A37:      z1=[g19,t9] and
@@ -2576,10 +2451,8 @@ A39:    e1 in dom (LO^g) and
 A40:    e1 in e and
 A41:    e2 = (LO^g).e1;
         reconsider z1=e1 as Element of [:the carrier of G,T:] by A3,A39;
-
         consider z2 be Element of [:the carrier of G,T:], g19,g29 be Element
         of G, t9 be Element of T such that
-
 A42:    z2=(LO^g).z1 and
         g29=g * g19 and
 A43:    z1=[g19,t9] and
@@ -2613,12 +2486,11 @@ A49: z in {x where x is Element of EE: x is_fixed_under LO9};
   end;
   hence thesis by TARSKI:2;
 end;
-
+ 
 :: ALG I.6.6 Lemma
 
 Lm5: for n,m,r being natural number, p being prime (natural number) st n = p
 |^ r * m & not p divides m holds (n choose p|^r) mod p <> 0
-
 proof
   reconsider x1 = 1,x2 = 0 as set;
   let n,m,r be natural number;
@@ -2632,8 +2504,6 @@ A1: n = p |^ r * m;
   set S = INT.Group(k1);
   set CS = the carrier of S;
   set T = Segm k2;
-  card T = card k2 by CARD_1:def 12;
-  then
 A2: card T = m by CARD_1:def 5;
   assume
 A3: not p divides m;
@@ -2644,13 +2514,11 @@ A4: k2<>0 by NAT_D:6;
   reconsider X9=X as non empty finite set;
   set E = the_subsets_of_card(k1,X9);
   multMagma(#Segm(k1),addint(k1)#) = S by GR_CY_1:def 6;
-  then card CS = card k1 by CARD_1:def 12;
   then card CS = p|^r by CARD_1:def 5;
   then
 A5: card X = n by A1,A2,CARD_2:65;
   now
-    assume
-    p |^ r > n;
+    assume p |^ r > n;
     then p |^ r * m > n * m by A4,XREAL_1:70;
     then (n9 / n9) > n9 * m / n9 by A1,XREAL_1:76;
     then 1 > (n9 * m / n9) by A5,XCMPLX_1:60;
@@ -2668,46 +2536,35 @@ A7: card E9 = n choose k1 by A5,CARD_FIN:18;
   set LO = the_left_operation_of(S,T);
   set LO9 = the_extension_of_left_operation_of(k1,LO);
 A8: now
-    assume
-    m mod p9 = 0;
+    assume m mod p9 = 0;
     then m = p * (m div p) + 0 by NAT_D:2;
     hence contradiction by A3,NAT_D:def 3;
   end;
 A9: card S = k1 by Lm2;
-
   then
   card the_fixed_points_of LO9 = card {[:CS,{t}:] where t is Element of T
   : not contradiction} by A6,Lm4
-
-    .= card T by Lm3
-    .= card k2 by CARD_1:def 12;
+    .= card k2 by Lm3;
   then
 A10: card the_fixed_points_of LO9 = m by CARD_1:def 5;
-  S is_p-group_of_prime p by A9,Def17;
+  S is p-group by A9,Def17;
   hence thesis by A7,A10,A8,Th11;
 end;
 
 Lm6: for r,n,m1,m2 being natural number, p being prime (natural number) st p|^
 r * n = m1 * m2 & not p divides n & not p divides m2 holds p|^r divides m1
-
 proof
-
   defpred P[Nat] means for n,m1,m2 be natural number, p being prime (natural
-
 number) st p|^$1 * n = m1 * m2 & not p divides n & not p divides m2 holds p|^$1
   divides m1;
-
 A1: for k be Nat st P[k] holds P[k + 1]
   proof
     let k be Nat;
     assume
 A2: P[k];
-
     for n,m1,m2 be natural number, p being prime (natural number) st p|^(k
-
 +1) * n = m1 * m2 & not p divides n & not p divides m2 holds p|^(k+1) divides
     m1
-
     proof
       let n,m1,m2 be natural number;
       let p be prime (natural number);
@@ -2748,12 +2605,11 @@ A9: P[0]
   for k being Nat holds P[k] from NAT_1:sch 2(A9,A1);
   hence thesis;
 end;
-
+ 
 :: like GROUP_8:16
 
 Lm7: for G being Group, A being non empty Subset of G, x being Element of G
 holds card A = card (A * x)
-
 proof
   let G be Group;
   let A be non empty Subset of G;
@@ -2772,8 +2628,7 @@ A1: for a being Element of A holds f.a = F(a) from FUNCT_2:sch 4;
 A2: B c= rng f
   proof
     let s be set;
-    assume
-    s in B;
+    assume s in B;
     then consider a being Element of G such that
 A3: s = a * x & a in A by GROUP_2:34;
     ex x being set st x in dom f & s = f.x
@@ -2787,8 +2642,7 @@ A4: dom f = A by FUNCT_2:def 1;
 A5: rng f c= B
   proof
     let s be set;
-    assume
-    s in rng f;
+    assume s in rng f;
     then consider a being set such that
 A6: a in A and
 A7: s = f.a by A4,FUNCT_1:def 5;
@@ -2800,8 +2654,7 @@ A7: s = f.a by A4,FUNCT_1:def 5;
 A8: for a,b being Element of A st f.a = f.b holds a = b
   proof
     let a,b be Element of A;
-    assume
-    f.a = f.b;
+    assume f.a = f.b;
     then F(a) = f.b by A1;
     then a*x = b*x by A1;
     hence thesis by GROUP_1:14;
@@ -2813,7 +2666,7 @@ A8: for a,b being Element of A st f.a = f.b holds a = b
   end;
   hence thesis by CARD_1:21;
 end;
-
+ 
 :: ALG I.6.6 Theorem 2
 :: The first Sylow theorem
 
@@ -2852,8 +2705,7 @@ A6: len pf = len f & for i being Nat st i in dom pf holds pf.i = F(i)
     for x being set st x in rng pf holds x in NAT
     proof
       let x be set;
-      assume
-      x in rng pf;
+      assume x in rng pf;
       then consider i be Nat such that
 A7:   i in dom pf and
 A8:   pf.i = x by FINSEQ_2:11;
@@ -2877,8 +2729,7 @@ A11: for X being Element of E holds card the_orbit_of(X,T) mod p = 0;
     proof
       reconsider p99=p9 as real number;
       let x be set;
-      assume
-      x in rng c9;
+      assume x in rng c9;
       then consider i be Nat such that
 A12:  i in dom c9 and
 A13:  c9.i = x by FINSEQ_2:11;
@@ -2935,8 +2786,7 @@ A21: card the_orbit_of(X,T) mod p <> 0;
   then
 A22: index HX mod p <> 0 by A21,GROUP_2:def 18;
 A23: now
-    assume
-    p divides index HX;
+    assume p divides index HX;
     then ex t be Nat st index HX = p * t by NAT_D:def 3;
     hence contradiction by A22,NAT_D:13;
   end;
@@ -2958,8 +2808,7 @@ A26: card k1 c= card the carrier of G by NAT_1:40;
   now
     reconsider X1=X as Element of E;
     let z be set;
-    assume
-    z in the carrier of H;
+    assume z in the carrier of H;
     then consider g be Element of G such that
 A27: z=g and
 A28: (T^g).:{X}={X} by A25;
@@ -2997,9 +2846,8 @@ A33: card H <= p|^r by A24,Lm7;
   then
 A34: p|^r <= card H by NAT_D:7;
   then card H = p|^r by A33,XXREAL_0:1;
-  then H is_p-group_of_prime p by Def17;
   then
-A35: HX is_p-group_of_prime p by Def18;
+A35: H is p-group by Def17;
   index HX = index HX * card HX * ( 1 / card HX) by XCMPLX_1:108
     .= p|^r * m * (1 / card HX) by A1,GROUP_2:177
     .= p9|^r * m * (1 / p9|^r) by A34,A33,XXREAL_0:1
@@ -3011,7 +2859,6 @@ end;
 
 Lm8: for n,r being natural number, p being prime (natural number) st n divides
 p|^r & n > 1 holds p divides n
-
 proof
   let n,r be natural number;
   let p be prime (natural number);
@@ -3030,7 +2877,7 @@ A2: n > 1;
     hence thesis by NAT_D:def 3;
   end;
 end;
-
+ 
 :: ALG I.6.6 Corollary
 :: The Cauchy theorem
 
@@ -3044,17 +2891,16 @@ proof
 A1: 1 < p9 by NAT_4:12;
   consider P be strict Subgroup of G such that
 A2: P is_Sylow_p-subgroup_of_prime p by Th12;
-  P is_p-group_of_prime p by A2,Def19;
+  P is p-group by A2,Def19;
   then consider H be finite Group such that
 A3: P = H and
-A4: H is_p-group_of_prime p by Def18;
+A4: H is p-group;
   consider r be natural number such that
 A5: card H = p |^ r by A4,Def17;
   assume
 A6: p divides card G;
   now
-    assume
-    r=0;
+    assume r=0;
     then card H = 1 by A5,NEWTON:9;
     then card G = 1 * index P by A3,GROUP_2:177;
     hence contradiction by A6,A2,Def19;
@@ -3068,10 +2914,8 @@ A6: p divides card G;
   then
 A7: 1*p <= p|^r9*p by XREAL_1:66;
   set H9 = (Omega).H;
-A8: card H = card (Omega).H * index (Omega).H by GROUP_2:177
-    .= card (Omega).H * 1 by GROUP_2:180;
-  p |^ r = p |^(r9+1)
-    .= p|^r9 * p by NEWTON:11;
+A8: card H = card (Omega).H * 1;
+  p |^ r = p |^(r9+1) .= p|^r9 * p by NEWTON:11;
   then card H9 > 1 by A5,A7,A1,XXREAL_0:2;
   then consider g be Element of H9 such that
 A9: g <> 1_H9 by GR_CY_1:31;
@@ -3080,8 +2924,7 @@ A10: H99 is cyclic Group by GR_CY_2:10;
   reconsider H99 as finite strict Group;
   set n = card H99;
 A11: now
-    assume
-    n = 1;
+    assume n = 1;
     then ord g = 1 by GR_CY_1:27;
     hence contradiction by A9,GROUP_1:85;
   end;
@@ -3101,13 +2944,13 @@ A13: ord h9 = p by A12,GROUP_8:1;
   take h;
   thus thesis by A13,GROUP_8:5;
 end;
-
+ 
 :: ALG I.6.6 Theorem 3
 :: The second Sylow theorem
 
 theorem Th14:
   for G being finite Group, p being prime (natural number) holds (
-for H being Subgroup of G st H is_p-group_of_prime p holds ex P being Subgroup
+for H being Subgroup of G st H is p-group holds ex P being Subgroup
   of G st P is_Sylow_p-subgroup_of_prime p & H is Subgroup of P) & (for P1,P2
   being Subgroup of G st P1 is_Sylow_p-subgroup_of_prime p & P2
   is_Sylow_p-subgroup_of_prime p holds P1,P2 are_conjugated)
@@ -3115,7 +2958,7 @@ proof
   let G be finite Group;
   let p be prime (natural number);
   reconsider p9=p as prime Element of NAT by ORDINAL1:def 13;
-A1: for H,P being Subgroup of G st H is_p-group_of_prime p & P
+A1: for H,P being Subgroup of G st H is p-group & P
 is_Sylow_p-subgroup_of_prime p holds ex g being Element of G st carr H c= carr(
   P |^ g)
   proof
@@ -3125,19 +2968,14 @@ is_Sylow_p-subgroup_of_prime p holds ex g being Element of G st carr H c= carr(
     set T = the_left_operation_of(H9,P);
     reconsider E as non empty finite set by GROUP_2:165;
     reconsider T as LeftOperation of H9, E;
-    assume
-    H is_p-group_of_prime p;
-    then ex I being finite Group st H = I & I is_p-group_of_prime p by
-    Def18;
+    assume H is p-group;
     then
 A2: card the_fixed_points_of T mod p = card E mod p by Th11;
-    assume
-    P is_Sylow_p-subgroup_of_prime p;
+    assume P is_Sylow_p-subgroup_of_prime p;
     then
 A3: not p divides index P by Def19;
     now
-      assume
-      card E mod p = 0;
+      assume card E mod p = 0;
       then (ex t being Nat st card E = p * t + 0 & 0<p) or 0=0 & p=0 by
       NAT_D:def 2;
       then p9 divides card E by NAT_D:def 3;
@@ -3158,8 +2996,7 @@ A6: x9 = g9 * P by GROUP_2:def 15;
     now
       reconsider P1=x9 as Element of Left_Cosets P;
       let y be set;
-      assume
-      y in carr H;
+      assume y in carr H;
       then reconsider h=y as Element of H9;
       reconsider h9=h as Element of H;
       consider P2 be Element of Left_Cosets P, A1,A2 be Subset of G, g99 be
@@ -3183,8 +3020,7 @@ A10:    1_G in carr P by STRUCT_0:def 5;
         then
 A11:    g99 = g99 * 1_G & 1_G in (g9 * P * g9") by GROUP_1:def 5,
         GROUP_2:34;
-        assume
-        not g99 in g9 * P * g9";
+        assume not g99 in g9 * P * g9";
         hence contradiction by A9,A11,GROUP_2:33;
       end;
       hence y in g9 * P * g9" by A8;
@@ -3192,14 +3028,13 @@ A11:    g99 = g99 * 1_G & 1_G in (g9 * P * g9") by GROUP_1:def 5,
     then carr H c= g" * P * g by TARSKI:def 3;
     hence thesis by GROUP_3:71;
   end;
-  thus for H being Subgroup of G st H is_p-group_of_prime p holds ex P being
+  thus for H being Subgroup of G st H is p-group holds ex P being
   Subgroup of G st P is_Sylow_p-subgroup_of_prime p & H is Subgroup of P
   proof
     let H be Subgroup of G;
     consider P9 be strict Subgroup of G such that
 A12: P9 is_Sylow_p-subgroup_of_prime p by Th12;
-    assume
-    H is_p-group_of_prime p;
+    assume H is p-group;
     then consider g be Element of G such that
 A13: carr H c= carr(P9 |^ g) by A1,A12;
     set P = P9 |^ g;
@@ -3207,14 +3042,13 @@ A13: carr H c= carr(P9 |^ g) by A1,A12;
     set H2 = P;
     reconsider H2 as finite Group;
 A14: card P9 = card P by GROUP_3:79;
-    P9 is_p-group_of_prime p by A12,Def19;
+    P9 is p-group by A12,Def19;
     then consider H1 be finite Group such that
 A15: P9 = H1 and
-A16: H1 is_p-group_of_prime p by Def18;
+A16: H1 is p-group;
     ex r be natural number st card H1 = p |^ r by A16,Def17;
-    then H2 is_p-group_of_prime p by A15,A14,Def17;
     then
-A17: P is_p-group_of_prime p by Def18;
+A17: H2 is p-group by A15,A14,Def17;
 A18: not p divides index P9 by A12,Def19;
     card P * index P = card G by GROUP_2:177
       .= card P * index P9 by A14,GROUP_2:177;
@@ -3226,10 +3060,10 @@ A18: not p divides index P9 by A12,Def19;
   assume
 A19: P1 is_Sylow_p-subgroup_of_prime p;
   then
-A20: P1 is_p-group_of_prime p by Def19;
+A20: P1 is p-group by Def19;
   then consider H1 be finite Group such that
 A21: P1 = H1 and
-A22: H1 is_p-group_of_prime p by Def18;
+A22: H1 is p-group;
 A23: not p divides index P1 by A19,Def19;
   consider r1 be natural number such that
 A24: card H1 = p |^ r1 by A22,Def17;
@@ -3237,10 +3071,10 @@ A24: card H1 = p |^ r1 by A22,Def17;
 A25: P2 is_Sylow_p-subgroup_of_prime p;
   then
 A26: not p divides index P2 by Def19;
-  P2 is_p-group_of_prime p by A25,Def19;
+  P2 is p-group by A25,Def19;
   then consider H2 be finite Group such that
 A27: P2 = H2 and
-A28: H2 is_p-group_of_prime p by Def18;
+A28: H2 is p-group;
   consider r2 be natural number such that
 A29: card H2 = p |^ r2 by A28,Def17;
 A30: card G = card P2 * index P2 by GROUP_2:177;
@@ -3285,34 +3119,29 @@ A40:  r = k + 1 by A38,NAT_1:6;
     end;
   end;
   then
-A41: card carr P1 = card P2 by A21,A24,A27,A29
-    .= card carr P2;
+A41: card carr P1 = card carr P2 by A21,A24,A27,A29;
   consider g be Element of G such that
 A42: carr P1 c= carr(P2 |^ g) by A1,A20,A25;
-  card carr P2 = card P2
-    .= card(P2 |^ g) by GROUP_3:79
+  card carr P2 = card P2 .= card(P2 |^ g) by GROUP_3:79
     .= card carr(P2 |^ g);
-  then the multMagma of P1 = the multMagma of P2 |^ g by A42,A41,
-  CARD_FIN:
-  1 ,GROUP_2:68;
+  then the multMagma of P1 = the multMagma of P2 |^ g
+  by A42,A41,CARD_FIN:1,GROUP_2:68;
   hence thesis by GROUP_3:def 11;
 end;
 
 definition
   let G be Group;
-  let p be prime (natural number);
+  let p be natural number;
   func the_sylow_p-subgroups_of_prime(p,G) -> Subset of Subgroups G equals
-  {H
-where H is Element of Subgroups G: ex P being strict Subgroup of G st P = H & P
-  is_Sylow_p-subgroup_of_prime p};
+  {H where H is Element of Subgroups G: ex P being strict Subgroup of G st
+  P = H & P is_Sylow_p-subgroup_of_prime p};
   correctness
   proof
     set X = {H where H is Element of Subgroups G: ex P being strict Subgroup
     of G st P = H & P is_Sylow_p-subgroup_of_prime p};
     now
       let x be set;
-      assume
-      x in X;
+      assume x in X;
       then ex H being Element of Subgroups G st x = H & ex P being strict
       Subgroup of G st P = H & P is_Sylow_p-subgroup_of_prime p;
       hence x in Subgroups G;
@@ -3329,8 +3158,7 @@ registration
   proof
     consider P be strict Subgroup of G such that
 A1: P is_Sylow_p-subgroup_of_prime p by Th12;
-    set P9 = (Omega).P;
-    reconsider H9=P9 as Element of Subgroups G by GROUP_3:def 1;
+    reconsider H9=(Omega).P as Element of Subgroups G by GROUP_3:def 1;
     H9 in the_sylow_p-subgroups_of_prime(p,G) by A1;
     hence thesis by FINSET_1:13,GROUP_3:19;
   end;
@@ -3356,15 +3184,13 @@ p,G): ex H1,H2 being strict Subgroup of G, g being Element of G st P1=H1 & P2=
     H2 & h"=g & H2 = H1 |^ g};
 A1: now
       let x,y1,y2 be set;
-      assume
-      [x,y1] in f;
+      assume [x,y1] in f;
       then consider P19,P29 be Element of E such that
 A2:   [x,y1] = [P19,P29] and
 A3:   ex H1,H2 being strict Subgroup of G, g being Element of G st P19
       =H1 & P29=H2 & h"=g & H2 = H1 |^ g;
 A4:   x = P19 by A2,ZFMISC_1:33;
-      assume
-      [x,y2] in f;
+      assume [x,y2] in f;
       then consider P199,P299 be Element of E such that
 A5:   [x,y2] = [P199,P299] and
 A6:   ex H1,H2 being strict Subgroup of G, g being Element of G st
@@ -3374,8 +3200,7 @@ A6:   ex H1,H2 being strict Subgroup of G, g being Element of G st
     end;
     now
       let x be set;
-      assume
-      x in f;
+      assume x in f;
       then consider P1,P2 be Element of E such that
 A7:   x = [P1,P2] and
       ex H1,H2 being strict Subgroup of G, g being Element of G st P1=H1 &
@@ -3387,8 +3212,7 @@ A7:   x = [P1,P2] and
     then reconsider f as Function by A1,FUNCT_1:def 1,RELAT_1:def 1;
     now
       let y be set;
-      assume
-      y in rng f;
+      assume y in rng f;
       then consider x be set such that
 A8:   [x,y] in f by RELAT_1:def 5;
       consider P1,P2 be Element of E such that
@@ -3404,8 +3228,7 @@ A10: rng f c= E by TARSKI:def 3;
       let x be set;
       hereby
         reconsider g=h" as Element of G by GROUP_2:51;
-        assume
-        x in E;
+        assume x in E;
         then reconsider P1 = x as Element of E;
         P1 in E;
         then consider H1 be Element of Subgroups G such that
@@ -3413,17 +3236,16 @@ A11:    P1=H1 and
 A12:    ex P being strict Subgroup of G st P = H1 & P
         is_Sylow_p-subgroup_of_prime p;
         reconsider H1 as strict Subgroup of G by A12;
-        H1 is_p-group_of_prime p by A12,Def19;
+        H1 is p-group by A12,Def19;
         then consider H9 be finite Group such that
-A13:    H1 = H9 & H9 is_p-group_of_prime p by Def18;
+A13:    H1 = H9 & H9 is p-group;
         set H2 = H1 |^ g;
         reconsider H2 as strict Subgroup of G;
         reconsider H99=H2 as finite Group;
         (ex r be natural number st card H9 = p |^ r )& card H9 = card H99
         by A13, Def17,GROUP_3:79;
-        then H99 is_p-group_of_prime p by Def17;
         then
-A14:    H2 is_p-group_of_prime p by Def18;
+A14:    H99 is p-group by Def17;
         reconsider H29=H2 as Element of Subgroups G by GROUP_3:def 1;
 A15:    card H1 = card H2 by GROUP_3:79;
 A16:    card H1 * index H1 = card G by GROUP_2:177
@@ -3498,8 +3320,7 @@ definition
   func the_left_operation_of(H,p) -> LeftOperation of H,
   the_sylow_p-subgroups_of_prime(p,G) means
   :Def22:
-  for h being Element of H
-  holds it.h = the_left_translation_of(h,p);
+  for h being Element of H holds it.h = the_left_translation_of(h,p);
   existence
   proof
     deffunc f(Element of H)=the_left_translation_of($1,p);
@@ -3577,8 +3398,7 @@ A21: f(1_H) = id E
       set f = the_left_translation_of(1_H,p);
 A22:  now
         let x be set;
-        assume
-        x in E;
+        assume x in E;
         then reconsider P1=x as Element of E;
         consider P2 be Element of E, H1,H2 be strict Subgroup of G, g be
         Element of G such that
@@ -3602,10 +3422,8 @@ A25:    H2 = H1 |^ g by Def21;
   proof
     let T1, T2 be LeftOperation of H, the_sylow_p-subgroups_of_prime(p,G) such
     that
-A26: for h being Element of H holds T1.h = the_left_translation_of(h,p
-    ) and
-A27: for h being Element of H holds T2.h = the_left_translation_of(h,p
-    );
+A26: for h being Element of H holds T1.h = the_left_translation_of(h,p ) and
+A27: for h being Element of H holds T2.h = the_left_translation_of(h,p );
     let x be Element of H;
     thus T1.x = the_left_translation_of(x,p) by A26
       .= T2.x by A27;
@@ -3615,7 +3433,6 @@ end;
 Lm9: for G,H being finite Group, p being prime (natural number), I being
 Subgroup of G, P being Subgroup of H st I = P & I is_Sylow_p-subgroup_of_prime
 p & H is Subgroup of G holds P is_Sylow_p-subgroup_of_prime p
-
 proof
   let G,H be finite Group;
   let p be prime (natural number);
@@ -3625,22 +3442,16 @@ proof
 A1: I = P;
   assume
 A2: I is_Sylow_p-subgroup_of_prime p;
-  then I is_p-group_of_prime p by Def19;
-
-  then ex I9 being finite Group st I = I9 & I9 is_p-group_of_prime p by
-  Def18;
-
   then
-A3: P is_p-group_of_prime p by A1,Def18;
-  assume
-  H is Subgroup of G;
+A3: I is p-group by Def19;
+  assume H is Subgroup of G;
   then reconsider H9=H as Subgroup of G;
 A4: index I = index P * index H9 by A1,GROUP_2:179;
   not p divides index I by A2,Def19;
   then not p divides index P by A4,NAT_D:9;
-  hence thesis by A3,Def19;
+  hence thesis by A1,A3,Def19;
 end;
-
+ 
 :: ALG I.6.6 Theorem 3
 :: The third Sylow theorem
 
@@ -3663,9 +3474,7 @@ A2: P is_Sylow_p-subgroup_of_prime p by Th12;
   then P9 in E by A2;
   then reconsider P9 as Element of E;
   set T = the_left_operation_of(P,p);
-  P is_p-group_of_prime p by A2,Def19;
-  then
-A3: ex H be finite Group st P = H & H is_p-group_of_prime p by Def18;
+A3: P is p-group by A2,Def19;
   set G9 = (Omega).G;
   set T9 = the_left_operation_of(G9,p);
   set K = the_strict_stabilizer_of(P9,T9);
@@ -3674,8 +3483,7 @@ A4: now
     reconsider P99=P9 as strict Subgroup of G;
     let y be set;
     thus y in the_orbit_of(P9,T9) implies y in E;
-    assume
-    y in E;
+    assume y in E;
     then consider Q be Element of Subgroups G such that
 A5: y=Q and
 A6: ex P being strict Subgroup of G st P = Q & P
@@ -3747,8 +3555,7 @@ A19:      h99 in H1 by A18,GROUP_2:59;
       then carr H1 c= g" * H1 * g by TARSKI:def 3;
       then
 A20:  carr H1 c= carr (H1 |^ g) by GROUP_3:71;
-A21:  card carr H1 = card H1
-        .= card(H1 |^ g) by GROUP_3:79
+A21:  card carr H1 = card H1 .= card(H1 |^ g) by GROUP_3:79
         .= card carr(H1 |^ g);
       (T^h).P9=P2 by A11,Def22;
       hence thesis by A12,A13,A15,A20,A21,CARD_FIN:1,GROUP_2:68;
@@ -3756,8 +3563,7 @@ A21:  card carr H1 = card H1
     then
 A22: P9 is_fixed_under T by Def12;
     hereby
-      assume
-      x in the_fixed_points_of T;
+      assume x in the_fixed_points_of T;
       then x in {x9 where x9 is Element of E: x9 is_fixed_under T} by
       Def13;
       then consider Q be Element of E such that
@@ -3838,8 +3644,7 @@ A34:          g in Q9;
               end;
               hence g in Q9 |^ h by GROUP_3:70;
             end;
-            assume
-            g in Q9 |^ h;
+            assume g in Q9 |^ h;
             then consider g9 be Element of G such that
 A35:        g = g9 |^ h and
 A36:        g9 in Q9 by GROUP_3:70;
@@ -3876,8 +3681,7 @@ A43:  Q9 |^ n9 = Q9 by GROUP_3:160;
 A44:  now
         let y be set;
         hereby
-          assume
-          y in the carrier of Q9 |^ n9;
+          assume y in the carrier of Q9 |^ n9;
           then y in carr(Q9) |^ n9 by GROUP_3:def 6;
           then consider q9 be Element of G such that
 A45:      y = q9 |^ n9 and
@@ -3892,8 +3696,7 @@ A47:      n9" * q9 * n9 = n" * q99 * n by A42,GROUP_2:52;
           then y in carr(Q99) |^ n by A45,A46,GROUP_3:50;
           hence y in the carrier of Q99 |^ n by GROUP_3:def 6;
         end;
-        assume
-        y in the carrier of Q99 |^ n;
+        assume y in the carrier of Q99 |^ n;
         then y in carr(Q99) |^ n by GROUP_3:def 6;
         then consider q99 be Element of N such that
 A48:    y = q99 |^ n and
@@ -3915,8 +3718,7 @@ A50:    n9" * q9 * n9 = n" * q99 * n by A42,GROUP_2:52;
         .= the multF of Q99 |^ n by A41,GROUP_2:def 5;
       hence x=P9 by A23,A25,A27,A40,A43,A44,TARSKI:2;
     end;
-    assume
-    x=P9;
+    assume x=P9;
     then x in {x9 where x9 is Element of E: x9 is_fixed_under T} by A22;
     hence thesis by Def13;
   end;
@@ -3927,8 +3729,7 @@ A51: the_fixed_points_of T = {P9} by TARSKI:def 1;
   hence card the_sylow_p-subgroups_of_prime(p,G) mod p = 1 by A1,NAT_D:14;
 A52: card the_orbit_of(P9,T9) = Index K by Th10;
   reconsider K as Subgroup of G9;
-  card G = card G9 * index G9 by GROUP_2:177
-    .= card G9 * 1 by GROUP_2:180;
+  card G = card G9 * 1;
   then
 A53: card G = card K * index K by GROUP_2:177;
   ex B being finite set st B = Left_Cosets K & index K = card B by
@@ -3953,4 +3754,3 @@ theorem
 theorem
   for G being Group, A being non empty Subset of G, g being Element of G
   holds card A = card (A * g) by Lm7;
-

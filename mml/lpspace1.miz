@@ -16,23 +16,26 @@ environ
       COMPLEX1, XXREAL_0, XREAL_0, SUPINF_1, SUPINF_2, EXTREAL1, REALSET1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, VALUED_1, RFUNCT_3, BINOP_1,
       FUNCOP_1, REAL_1, STRUCT_0, ALGSTR_0, RLVECT_1, RLSUB_1, IDEAL_1,
-      SETFAM_1, DOMAIN_1, PRE_TOPC, NORMSP_1, PROB_1, MEASURE1, MEASURE2,
-      MEASURE3, MEASURE6, MESFUNC1, MESFUNC2, MESFUNC5, MESFUNC6, FUNCT_7;
- constructors COMPLEX1, EXTREAL1, BINOP_1, REAL_1, RLSUB_1, IDEAL_1, NORMSP_1,
-      MEASURE3, MEASURE6, MESFUNC2, MESFUNC5, MESFUNC6, SEQ_1, EXTREAL2,
-      SUPINF_1, FUNCT_7, REALSET1, MESFUNC1, RELSET_1, BINOP_2;
+      SETFAM_1, DOMAIN_1, PRE_TOPC, NORMSP_0, NORMSP_1, PROB_1, MEASURE1,
+      MEASURE2, MEASURE3, MEASURE6, MESFUNC1, MESFUNC2, MESFUNC5, MESFUNC6,
+      FUNCT_7;
+ constructors COMPLEX1, EXTREAL1, NAT_1, BINOP_1, REAL_1, RLSUB_1, IDEAL_1,
+      NORMSP_1, MEASURE3, MEASURE6, MESFUNC2, MESFUNC5, MESFUNC6, MESFUNC7,
+      SEQ_1, MESFUNC3, EXTREAL2, SUPINF_1, FUNCT_7, REALSET1, RVSUM_1,
+      MESFUNC1, SEQ_2, RELSET_1, BINOP_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
       VALUED_0, NAT_1, SUBSET_1, XCMPLX_0, PARTFUN1, XXREAL_0, RLVECT_1,
-      STRUCT_0, NORMSP_1, MEASURE1, MESFUNC7, XXREAL_3;
+      STRUCT_0, NORMSP_1, MEASURE1, MESFUNC7, XXREAL_3, NORMSP_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, SUPINF_2, REALSET1, BINOP_1, STRUCT_0, ALGSTR_0, RLVECT_1,
-      IDEAL_1, NORMSP_1, MEASURE6, MESFUNC5, MESFUNC6, SUBSET_1, XXREAL_3;
+      IDEAL_1, NORMSP_1, MEASURE6, MESFUNC5, MESFUNC6, SUBSET_1, XXREAL_3,
+      NORMSP_0;
  theorems FUNCT_1, FUNCT_2, PARTFUN1, COMPLEX1, XBOOLE_0, TARSKI, RELAT_1,
       VALUED_1, IDEAL_1, RLSUB_1, ZFMISC_1, RLVECT_1, FUNCOP_1, XBOOLE_1,
       BINOP_1, SUPINF_2, RFUNCT_3, MESFUNC5, MESFUNC2, EXTREAL1, MEASURE1,
       MESFUNC6, PROB_1, RFUNCT_1, XXREAL_0, NUMBERS, ABSVALUE, MESFUNC1,
       MEASURE2, MESFUNC7, EXTREAL2, RSSPACE3, NORMSP_1, FUNCT_7, VALUED_0,
-      RELSET_1, XXREAL_3, XREAL_0;
+      RELSET_1, XXREAL_3, XREAL_0, NORMSP_0;
  schemes BINOP_1, FUNCT_2;
 
 begin :: Preliminaries of Real Linear Space
@@ -41,8 +44,7 @@ definition
   let V be non empty RLSStruct, V1 be Subset of V;
   attr V1 is multi-closed means
   :Def1:
-  for a be Real, v be VECTOR of V st v in
-  V1 holds a*v in V1;
+  for a be Real, v be VECTOR of V st v in V1 holds a*v in V1;
 end;
 
 theorem
@@ -51,15 +53,13 @@ theorem
 proof
   let V be RealLinearSpace, V1 be Subset of V;
   hereby
-    assume
-    V1 is linearly-closed;
+    assume V1 is linearly-closed;
     then
     ( for v,u be VECTOR of V st v in V1 & u in V1 holds v + u in V1)& for
     a be Real,v be VECTOR of V st v in V1 holds a * v in V1 by RLSUB_1:def 1;
     hence V1 is add-closed & V1 is multi-closed by Def1,IDEAL_1:def 1;
   end;
-  assume
-  V1 is add-closed & V1 is multi-closed;
+  assume V1 is add-closed & V1 is multi-closed;
   then
   ( for v,u being Element of V st v in V1 & u in V1 holds v+u in V1)& for
   a be Real, v be VECTOR of V st v in V1 holds a*v in V1 by Def1,IDEAL_1:def 1;
@@ -203,7 +203,7 @@ A5: now
       reconsider a=a1,b=b1 as Real by XREAL_0:def 1;
       reconsider y = x as VECTOR of V by TARSKI:def 3;
       (a * b) * x = (a * b) * y by A4
-        .= a * (b * y) by RLVECT_1:def 10,def 11
+        .= a * (b * y) by RLVECT_1:def 10
         .= Mv.(a,b * x) by A4
         .= a * (b * x) by A4;
       hence (a1 * b1) * x= a1 * (b1 * x);
@@ -227,8 +227,7 @@ proof
   let V be Abelian add-associative right_zeroed vector-distributive
   scalar-distributive scalar-associative scalar-unital (non
   empty RLSStruct), V1 be add-closed multi-closed non empty Subset of V;
-  assume
-  0.V in V1;
+  assume 0.V in V1;
   then In(0.V,V1) = 0.V by FUNCT_7:def 1;
   hence thesis by Th2;
 end;
@@ -282,8 +281,7 @@ definition
   let A;
   func multpfunc A -> BinOp of PFuncs(A,REAL) means
   :Def3:
-  for f,g being
-  Element of PFuncs(A,REAL) holds it.(f,g) = f(#)g;
+  for f,g being Element of PFuncs(A,REAL) holds it.(f,g) = f(#)g;
   existence
   proof
     deffunc F(Element of PFuncs(A,REAL),Element of PFuncs(A,REAL)) = $1(#)$2;
@@ -310,8 +308,7 @@ definition
   func multrealpfunc A -> Function of [:REAL,PFuncs(A,REAL):],PFuncs(A,REAL)
   means
   :Def4:
-  for a being Real, f being Element of PFuncs(A,REAL) holds it.(a,f)
-  = a(#)f;
+  for a being Real, f being Element of PFuncs(A,REAL) holds it.(a,f) = a(#)f;
   existence
   proof
     deffunc F(Element of REAL,Element of PFuncs(A,REAL)) = $1(#)$2;
@@ -368,8 +365,7 @@ A1: h = (addpfunc A).(f,g);
     then dom h = dom(f+g) by RFUNCT_3:def 4;
     hence dom h = dom f /\ dom g by VALUED_1:def 1;
     let x be Element of A;
-    assume
-    x in dom h;
+    assume x in dom h;
     then
 A2: x in dom (f+g) by A1,RFUNCT_3:def 4;
     h.x = (f+g).x by A1,RFUNCT_3:def 4;
@@ -404,8 +400,7 @@ A1: h = (multpfunc A).(f,g);
     hence dom h = dom (f(#)g) by Def3
       .= dom f /\ dom g by VALUED_1:def 4;
     let x be Element of A;
-    assume
-    x in dom h;
+    assume x in dom h;
     then
 A2: x in dom (f(#)g) by A1,Def3;
     h.x = (f(#)g).x by A1,Def3;
@@ -446,8 +441,7 @@ A1: h = (multrealpfunc A).(a,f);
     then dom h = dom(a(#)f) by Def4;
     hence dom h = dom f by VALUED_1:def 5;
     let x be Element of A;
-    assume
-    x in dom f;
+    assume x in dom f;
     then x in dom(a(#)f) by VALUED_1:def 5;
     then (a(#)f).x = a*(f.x) by VALUED_1:def 5;
     hence h.x = a*(f.x) by A1,Def4;
@@ -480,8 +474,7 @@ proof
 end;
 
 theorem Th11:
-  (addpfunc A).(f,(addpfunc A).(g,h)) = (addpfunc A).((addpfunc A)
-  .(f,g),h)
+  (addpfunc A).(f,(addpfunc A).(g,h)) = (addpfunc A).((addpfunc A) .(f,g),h)
 proof
   addpfunc A is associative by RFUNCT_3:17;
   hence thesis by BINOP_1:def 3;
@@ -543,8 +536,7 @@ proof
 A1: dom h = dom f by XBOOLE_1:28;
   now
     let x be Element of A;
-    assume
-    x in dom f;
+    assume x in dom f;
     then h.x = (RealPFuncUnit A).x * f.x by A1,Th7;
     then h.x = 1 * f.x by FUNCOP_1:13;
     hence h.x = f.x;
@@ -563,8 +555,7 @@ A1: dom h = dom f by XBOOLE_1:28;
   now
     let x be Element of A;
 A2: (RealPFuncZero A).x = 0 by FUNCOP_1:13;
-    assume
-    x in dom f;
+    assume x in dom f;
     hence h.x=0+ f.x by A1,A2,Th6
       .= f.x;
   end;
@@ -572,8 +563,7 @@ A2: (RealPFuncZero A).x = 0 by FUNCOP_1:13;
 end;
 
 theorem Th16:
-  (addpfunc A).(f,(multrealpfunc A).(-1,f)) = (RealPFuncZero A)|(
-  dom f)
+  (addpfunc A).(f,(multrealpfunc A).(-1,f)) = (RealPFuncZero A)|( dom f)
 proof
   reconsider g = (multrealpfunc A).(-1,f) as Element of PFuncs(A,REAL);
   set h = (addpfunc A).(f,g);
@@ -604,8 +594,7 @@ proof
   reconsider g = (multrealpfunc A).(1 qua Real,f) as Element of PFuncs(A,REAL);
 A1: now
     let x be Element of A;
-    assume
-    x in dom f;
+    assume x in dom f;
     hence g.x = 1*(f.x) by Th9
       .= f.x;
   end;
@@ -614,8 +603,7 @@ A1: now
 end;
 
 theorem Th18:
-  (multrealpfunc A).(a,(multrealpfunc A).(b,f)) = (multrealpfunc A
-  ).(a*b,f)
+  (multrealpfunc A).(a,(multrealpfunc A).(b,f)) = (multrealpfunc A ).(a*b,f)
 proof
   reconsider g = (multrealpfunc A).(b,f) as Element of PFuncs(A,REAL);
   reconsider h = (multrealpfunc A).(a,g) as Element of PFuncs(A,REAL);
@@ -668,7 +656,6 @@ end;
 
 Lm1: (addpfunc A).((multrealpfunc A).(a,f),(multrealpfunc A).(a,g)) = (
 multrealpfunc A).(a,(addpfunc A).(f,g))
-
 proof
   reconsider h = (multrealpfunc A).(a,f) as Element of PFuncs(A,REAL);
   reconsider i = (multrealpfunc A).(a,g) as Element of PFuncs(A,REAL);
@@ -742,8 +729,7 @@ A9: x in dom(f(#)h) by VALUED_1:def 4;
     then
 A10: i.x = f.x * h.x by A9,VALUED_1:def 4;
     k.x = j.x + i.x by A5,Th6;
-    then l.x = (g+h).x & k.x = f.x * (g.x + h.x) by A8,A10,
-    RFUNCT_3:def 4;
+    then l.x = (g+h).x & k.x = f.x * (g.x + h.x) by A8,A10,RFUNCT_3:def 4;
     then
 A11: k.x = f.x * l.x by A7,VALUED_1:def 1;
     x in dom f /\ dom l by A2,A1,A5,Th6;
@@ -846,11 +832,9 @@ begin :: Quasi-Real Linear Space of Integrable Functions
 reserve X for non empty set,
   x for Element of X,
   S for SigmaField of X,
-  M for
-  sigma_Measure of S,
-  E,E1,E2,A,B for Element of S,
-  f,g,h,f1,g1 for PartFunc of X
-  ,REAL;
+  M for sigma_Measure of S,
+  E,E1,E2 for Element of S,
+  f,g,h,f1,g1 for PartFunc of X ,REAL;
 
 theorem Th22:
   for X,S,M for f be PartFunc of X,ExtREAL st (ex E st E = dom f)
@@ -882,8 +866,7 @@ A9: f is_measurable_on E by A1,A3,MESFUNC2:37,MESFUNC6:2;
 A10: f is nonnegative
   proof
     let y be R_eal;
-    assume
-    y in rng f;
+    assume y in rng f;
     then ex x1 being set st x1 in dom f & y = f.x1 by FUNCT_1:def 5;
     hence y >= 0 by A2;
   end;
@@ -909,7 +892,6 @@ end;
 
 Lm2: (X = dom f & for x st x in dom f holds 0 = f.x) implies f
 is_integrable_on M & Integral(M,f) =0
-
 proof
 A1: X is Element of S by MEASURE1:21;
   assume
@@ -933,8 +915,7 @@ definition
 A1: I c= PFuncs(X,REAL)
     proof
       let x be set;
-      assume
-      x in I;
+      assume x in I;
       then
       ex f be PartFunc of X,REAL st x = f & ex ND be Element of S st M.ND=
       0 & dom f = ND` & f is_integrable_on M;
@@ -960,19 +941,14 @@ end;
 
 Lm4: M.E1=0 & M.E2=0 implies M.(E1\/E2) =0
 proof
-  assume
-  M.E1=0 & M.E2=0;
-
-  then E1 is measure_zero of M & E2 is measure_zero of M by
-  MEASURE1:def 13;
-
+  assume M.E1=0 & M.E2=0;
+  then E1 is measure_zero of M & E2 is measure_zero of M by MEASURE1:def 13;
   then E1 \/ E2 is measure_zero of M by MEASURE1:70;
   hence thesis by MEASURE1:def 13;
 end;
 
 theorem Th23:
-  f in L1_Functions M & g in L1_Functions M implies f + g in
-  L1_Functions M
+  f in L1_Functions M & g in L1_Functions M implies f + g in L1_Functions M
 proof
   set W = L1_Functions M;
   assume that
@@ -992,8 +968,7 @@ A7: dom g = NDu` and
 A8: g is_integrable_on M;
 A9: dom (f+g)= NDv` /\ NDu` by A4,A7,VALUED_1:def 1
     .= (NDv \/ NDu)` by XBOOLE_1:53;
-  M.(NDv \/ NDu) =0 & f+g is_integrable_on M by A3,A5,A6,A8,Lm4,MESFUNC6
-  :100;
+  M.(NDv \/ NDu) =0 & f+g is_integrable_on M by A3,A5,A6,A8,Lm4,MESFUNC6:100;
   hence thesis by A9;
 end;
 
@@ -1001,16 +976,15 @@ theorem Th24:
   f in L1_Functions M implies a(#)f in L1_Functions M
 proof
   set W = L1_Functions M;
-  assume
-  f in W;
+  assume f in W;
   then
   ex f1 be PartFunc of X,REAL st f1=f & ex ND be Element of S st M.ND=0 &
   dom f1 = ND` & f1 is_integrable_on M;
   then consider ND be Element of S such that
 A1: M.ND=0 and
 A2: dom f = ND` & f is_integrable_on M;
-  dom (a(#)f) = ND` & a(#)f is_integrable_on M by A2,MESFUNC6:102 ,
-  VALUED_1:def 5;
+  dom (a(#)f) = ND` & a(#)f is_integrable_on M by A2,MESFUNC6:102
+,VALUED_1:def 5;
   hence thesis by A1;
 end;
 
@@ -1024,19 +998,14 @@ A2: u in W;
     reconsider h = v+u as Element of PFuncs(X,REAL);
     consider v1 be PartFunc of X, REAL such that
 A3: v1=v and
-
     ex ND be Element of S st M.ND=0 & dom v1 = ND` & v1 is_integrable_on M
     by A1;
-
     consider u1 be PartFunc of X, REAL such that
 A4: u1=u and
-
     ex ND be Element of S st M.ND=0 & dom u1 = ND` & u1 is_integrable_on M
     by A2;
-
     dom h = dom v1 /\ dom u1 & for x be set st x in dom h holds h.x = v1.x
     + u1. x by A3,A4,Th6;
-
     then v+u=v1+u1 by VALUED_1:def 1;
     hence v+u in L1_Functions M by A1,A2,A3,A4,Th23;
   end;
@@ -1046,10 +1015,8 @@ A4: u1=u and
 A5: u in W;
     consider u1 be PartFunc of X, REAL such that
 A6: u1=u and
-
     ex ND be Element of S st M.ND=0 & dom u1 = ND` & u1 is_integrable_on M
     by A5;
-
     reconsider h = a*u as Element of PFuncs(X,REAL);
 A7: dom h = dom u1 by A6,Th9;
     then for x be set st x in dom h holds h.x = a*(u1.x) by A6,Th9;
@@ -1175,8 +1142,7 @@ end;
 theorem Th29:
   f a.e.= g,M implies g a.e.= f,M
 proof
-  assume
-  f a.e.= g,M;
+  assume f a.e.= g,M;
   then ex E be Element of S st M.E = 0 & f|E` = g|E` by Def10;
   hence thesis by Def10;
 end;
@@ -1223,9 +1189,7 @@ A9: (EQ1\/EQ2)` c= EQ2` by XBOOLE_1:7,34;
   then g|(EQ1\/EQ2)` =g1|EQ2`|(EQ1\/EQ2)` by A6,FUNCT_1:82
     .=g1|(EQ1\/EQ2)` by A9,FUNCT_1:82;
   then
-A10: (f+g)|(EQ1\/EQ2)` =f1|(EQ1\/EQ2)` + g1|(EQ1\/EQ2)` by A8,
-  RFUNCT_1:
-  60
+A10: (f+g)|(EQ1\/EQ2)` =f1|(EQ1\/EQ2)` + g1|(EQ1\/EQ2)` by A8,RFUNCT_1:60
     .=(f1+g1)|(EQ1\/EQ2)` by RFUNCT_1:60;
   M.(EQ1 \/ EQ2) = 0 by A3,A5,Lm4;
   hence thesis by A10,Def10;
@@ -1234,8 +1198,7 @@ end;
 theorem Th32:
   f a.e.= g,M implies a(#)f a.e.= a(#)g,M
 proof
-  assume
-  f a.e.= g,M;
+  assume f a.e.= g,M;
   then consider E being Element of S such that
 A1: M.E = 0 and
 A2: f|E`=g|E` by Def10;
@@ -1253,8 +1216,7 @@ definition
   proof
 A1: now
       let x be set;
-      assume
-      x in { f where f is PartFunc of X,REAL: f in L1_Functions M & f
+      assume x in { f where f is PartFunc of X,REAL: f in L1_Functions M & f
       a.e.= X-->0,M };
       then
       ex f be PartFunc of X,REAL st x=f & f in L1_Functions M & f a.e.= X
@@ -1275,8 +1237,7 @@ proof
   set g2 = X-->0;
 A1: now
     let x be Element of X;
-    assume
-    x in dom(a(#)g1);
+    assume x in dom(a(#)g1);
     then (a(#)g1).x = a * g1.x by VALUED_1:def 5;
     then (a(#)g1).x = a * 0 by FUNCOP_1:13;
     hence (a(#)g1).x = (X --> 0).x by FUNCOP_1:13;
@@ -1284,8 +1245,7 @@ A1: now
 A2: dom(g1+g2) = dom g1 /\ dom g2 by VALUED_1:def 1;
   now
     let x be Element of X;
-    assume
-    x in dom(X --> 0);
+    assume x in dom(X --> 0);
     then (g1+g2).x = g1.x + g2.x by A2,VALUED_1:def 1;
     then (g1+g2).x = 0 + g2.x by FUNCOP_1:13;
     hence (g1+g2).x = (X --> 0).x;
@@ -1297,7 +1257,6 @@ end;
 
 Lm6: AlmostZeroFunctions M is add-closed & AlmostZeroFunctions M is
 multi-closed
-
 proof
   set Z = AlmostZeroFunctions M;
   set V = RLSp_L1Funct M;
@@ -1321,8 +1280,7 @@ A7: v+u=v1+u1 by A3,A5,Th25;
   hence Z is add-closed by IDEAL_1:def 1;
   now
     let a be Real, u be VECTOR of V;
-    assume
-    u in Z;
+    assume u in Z;
     then consider u1 be PartFunc of X, REAL such that
 A8: u1=u and
     u1 in L1_Functions M and
@@ -1342,12 +1300,11 @@ registration
 end;
 
 theorem Th34:
-  0.(RLSp_L1Funct M) = X-->0 & 0.(RLSp_L1Funct M) in
-  AlmostZeroFunctions M
+  0.(RLSp_L1Funct M) = X-->0 & 0.(RLSp_L1Funct M) in AlmostZeroFunctions M
 proof
   thus 0.(RLSp_L1Funct M) = X --> 0 by Lm3,FUNCT_7:def 1;
   X-->0 a.e.= X-->0,M & 0.(RLSp_L1Funct M) = 0.(RLSp_PFunctX) by Lm3,Th28,
-  FUNCT_7:def 1;
+FUNCT_7:def 1;
   hence thesis;
 end;
 
@@ -1399,8 +1356,7 @@ PartFunc of X,REAL : g in L1_Functions M & f in L1_Functions M & f a.e.= g,M };
   proof
     now
       let x be set;
-      assume
-      x in {g where g is PartFunc of X,REAL : g in L1_Functions M & f
+      assume x in {g where g is PartFunc of X,REAL : g in L1_Functions M & f
       in L1_Functions M & f a.e.= g,M };
       then ex g be PartFunc of X,REAL st x=g & g in L1_Functions M & f in
       L1_Functions M & f a.e.= g,M;
@@ -1417,14 +1373,12 @@ proof
   assume
 A1: f in L1_Functions M & g in L1_Functions M;
   hereby
-    assume
-    g a.e.= f,M;
+    assume g a.e.= f,M;
     then f a.e.= g,M by Th29;
     hence g in a.e-eq-class(f,M) by A1;
   end;
   hereby
-    assume
-    g in a.e-eq-class(f,M);
+    assume g in a.e-eq-class(f,M);
     then ex r be PartFunc of X,REAL st g=r & r in L1_Functions M & f in
     L1_Functions M & f a.e.= r,M;
     hence g a.e.= f,M by Th29;
@@ -1450,8 +1404,7 @@ proof
 A1: f in L1_Functions M and
 A2: g in L1_Functions M;
   hereby
-    assume
-    a.e-eq-class(f,M) = a.e-eq-class(g,M);
+    assume a.e-eq-class(f,M) = a.e-eq-class(g,M);
     then f in {r where r is PartFunc of X,REAL : r in L1_Functions M & g in
     L1_Functions M & g a.e.= r,M } by A1,Th38;
     then ex r be PartFunc of X,REAL st f=r & r in L1_Functions M & g in
@@ -1462,8 +1415,7 @@ A2: g in L1_Functions M;
 A3: f a.e.= g,M;
   now
     let x be set;
-    assume
-    x in a.e-eq-class(f,M);
+    assume x in a.e-eq-class(f,M);
     then consider r be PartFunc of X,REAL such that
 A4: x=r & r in L1_Functions M and
     f in L1_Functions M and
@@ -1476,8 +1428,7 @@ A5: f a.e.= r,M;
 A6: a.e-eq-class(f,M) c= a.e-eq-class(g,M) by TARSKI:def 3;
   now
     let x be set;
-    assume
-    x in a.e-eq-class(g,M);
+    assume x in a.e-eq-class(g,M);
     then consider r be PartFunc of X,REAL such that
 A7: x=r & r in L1_Functions M and
     g in L1_Functions M and
@@ -1542,8 +1493,7 @@ definition
 A1: C c= bool L1_Functions M
     proof
       let x be set;
-      assume
-      x in C;
+      assume x in C;
       then ex f be PartFunc of X,REAL st a.e-eq-class(f,M) = x & f in
       L1_Functions M;
       hence thesis;
@@ -1600,8 +1550,7 @@ A9: for A,B be Element of C holds P[A,B, f.(A,B)] from BINOP_1:sch 3(
     take f;
     let A,B be Element of C;
     let a,b be PartFunc of X,REAL;
-    assume
-    a in A & b in B;
+    assume a in A & b in B;
     hence thesis by A9;
   end;
   uniqueness
@@ -1683,8 +1632,7 @@ A7: for z be Element of REAL, A be Element of C holds P[z,A, f.(z,A)]
     from BINOP_1:sch 3(A1);
     take f;
     let z be Element of REAL, A be Element of C, a be PartFunc of X,REAL;
-    assume
-    a in A;
+    assume a in A;
     hence thesis by A7;
   end;
   uniqueness
@@ -1795,7 +1743,7 @@ A27:  y(#)a in y1*A1 by A16,Th24,Th38;
       then (x1+y1)*A1 = a.e-eq-class(x(#)a+y(#)a,M) by A17,Def17;
       hence (x+y)*A1 = x*A1+y*A1 by A18,A27,Def15;
       x(#)(y(#)a) =x*(y*a1) by A26,A21,Th26
-        .= (x1*y1)*a1 by RLVECT_1:def 10,def 11
+        .= (x1*y1)*a1 by RLVECT_1:def 10
         .= (x*y)(#)a by Th26;
       then (x1*y1)*A1 = a.e-eq-class(x1(#)(y1(#)a),M) by A17,Def17
         .=x*(y*A1) by A27,Def17;
@@ -1868,8 +1816,8 @@ A49:  a in A1 by A38,A39,Th38;
     end;
     then reconsider A as strict Abelian add-associative right_zeroed
     right_complementable vector-distributive scalar-distributive
-    scalar-associative scalar-unital (non empty RLSStruct) by A1,A6,
-    A28,A14,RLVECT_1:def 8,def 9,def 10,def 11;
+    scalar-associative scalar-unital (non empty RLSStruct) by A1,A6,A28,A14,
+RLVECT_1:def 8,def 9,def 10,def 11;
     take A;
     thus thesis;
   end;
@@ -1922,8 +1870,8 @@ A21: EQ` \ (NDf \/NDg) = (EQ \/ (NDf \/NDg))` by XBOOLE_1:41
 A22: EQ` \ (NDf \/NDg) c= EQ` by XBOOLE_1:36;
   then f|(EQ` \ (NDf \/NDg)) = g|EQ`|(EQ`\(NDf \/NDg)) by A5,FUNCT_1:82
     .= g|(EQ`\(NDf \/ NDg)) by A22,FUNCT_1:82;
-  hence Integral(M,f) = Integral(M,g|(NDg` \(EQ\/NDf))) by A8,A10,A12,A21,A20,
-  A16,MESFUNC6:89
+  hence Integral(M,f) = Integral(M,g|(NDg` \(EQ\/NDf))) by A8,A10,A12,A21,A20
+,A16,MESFUNC6:89
     .= Integral(M,g) by A15,A17,A19,A9,MESFUNC6:89;
 end;
 
@@ -1941,9 +1889,7 @@ A3: A = dom R_EAL f and
 A4: R_EAL f is_measurable_on A by MESFUNC5:def 17;
 A5: f is_measurable_on A by A4,MESFUNC6:def 6;
   then abs f is_integrable_on M by A1,A3,MESFUNC6:94;
-  then -infty < Integral(M,abs f) & Integral(M,abs f) < +infty by
-  MESFUNC6:
-  90;
+  then -infty < Integral(M,abs f) & Integral(M,abs f) < +infty by MESFUNC6:90;
   hence thesis by A1,A2,A3,A5,MESFUNC6:94,XXREAL_0:14;
 end;
 
@@ -1988,8 +1934,7 @@ theorem Th46:
   (ex x be VECTOR of Pre-L-Space M st f in x & g in x) implies f
   a.e.= g,M & f in L1_Functions M & g in L1_Functions M
 proof
-  assume
-  ex x be VECTOR of Pre-L-Space M st f in x & g in x;
+  assume ex x be VECTOR of Pre-L-Space M st f in x & g in x;
   then consider x be VECTOR of Pre-L-Space M such that
 A1: f in x and
 A2: g in x;
@@ -2045,8 +1990,7 @@ proof
   then consider h be PartFunc of X,REAL such that
 A1: x=a.e-eq-class(h,M) and
   h in L1_Functions M;
-  assume
-  f in x;
+  assume f in x;
   then ex g be PartFunc of X,REAL st f=g & g in L1_Functions M & h in
   L1_Functions M & h a.e.= g,M by A1;
   then
@@ -2122,8 +2066,7 @@ A3: y=a.e-eq-class(g,M) & g in L1_Functions M;
 end;
 
 theorem Th51:
-  f in x implies x= a.e-eq-class(f,M) & ||.x.|| = Integral(M,abs f
-  )
+  f in x implies x= a.e-eq-class(f,M) & ||.x.|| = Integral(M,abs f )
 proof
   assume
 A1: f in x;
@@ -2138,8 +2081,7 @@ A2: y=a.e-eq-class(g,M) & g in L1_Functions M;
 end;
 
 theorem Th52:
-  (f in x & g in y implies f+g in x+y) & (f in x implies a(#)f in
-  a*x)
+  (f in x & g in y implies f+g in x+y) & (f in x implies a(#)f in a*x)
 proof
   set C = CosetSet M;
   hereby
@@ -2192,8 +2134,7 @@ A16: f in x;
     then ex r be PartFunc of X,REAL st f=r & r in L1_Functions M & f1 in
     L1_Functions M & f1 a.e.= r,M by A13;
     then a.e-eq-class(f1,M) = a.e-eq-class(f,M) by Th39;
-    then a.e-eq-class(a(#)f1,M) = a.e-eq-class(a(#)f,M) by A16,A13,A14,
-    Th42;
+    then a.e-eq-class(a(#)f1,M) = a.e-eq-class(a(#)f,M) by A16,A13,A14,Th42;
     hence a(#)f in a*x by A16,A13,A15,Th24,Th38;
   end;
 end;
@@ -2226,8 +2167,7 @@ A6: x in dom g;
 end;
 
 theorem Th54:
-  f in L1_Functions M & Integral(M,abs f) = 0 implies f a.e.= X-->
-  0,M
+  f in L1_Functions M & Integral(M,abs f) = 0 implies f a.e.= X--> 0,M
 proof
   assume that
 A1: f in L1_Functions M and
@@ -2247,8 +2187,7 @@ A7: R_EAL abs f is_measurable_on E by MESFUNC5:def 17;
 A8: abs f is_measurable_on E by A7,MESFUNC6:def 6;
   now
     let x be set;
-    assume
-    x in dom abs f;
+    assume x in dom abs f;
     then (abs f).x = abs(f.x) by VALUED_1:def 11;
     hence 0 <= (abs f).x by COMPLEX1:132;
   end;
@@ -2258,7 +2197,7 @@ A10: now
     let n be Element of NAT;
     set r=1/(n+1);
     reconsider Br=E /\ great_eq_dom(abs f,r) as Element of S by A6,A8,
-    MESFUNC6:13;
+MESFUNC6:13;
     set g = Br --> r;
 A11: dom g = Br by FUNCT_2:def 1;
 A12: for x be set st x in dom g holds g.x = r by FUNCOP_1:13;
@@ -2296,18 +2235,18 @@ A22:  ex y being Real st y=(abs f).x & r <= y by MESFUNC6:6;
     end;
     g is_measurable_on Br by A11,A12,Th53;
     then Integral(M,abs g) <= Integral(M,(abs f)|Br) by A11,A18,A13,A20,
-    MESFUNC6:96;
+MESFUNC6:96;
     then
 A23: Integral(M, g) <= Integral(M,(abs f)|Br) by A15,A16,PARTFUN1:34;
 A24: for x be set st x in dom g holds g.x = r by A11,FUNCOP_1:13;
-    Integral(M,(abs f)|Br) <= Integral(M,(abs f)|E) by A6,A8,A9,
-    MESFUNC6:87,XBOOLE_1:17;
+    Integral(M,(abs f)|Br) <= Integral(M,(abs f)|E) by A6,A8,A9,MESFUNC6:87
+,XBOOLE_1:17;
     then Integral(M,g) = 0 by A2,A6,A23,A14,RELAT_1:97;
     then R_EAL(r) * M.(Br) =0 by A11,A24,MESFUNC6:97;
     then
 A25: M.Br =0;
     for x be set st x in great_eq_dom(abs f,r) holds x in dom abs f by
-    MESFUNC6:6;
+MESFUNC6:6;
     then great_eq_dom(abs f,r) c= E by A6,TARSKI:def 3;
     hence ex B be Element of S st P[n,B] by A25,XBOOLE_1:28;
   end;
@@ -2315,8 +2254,7 @@ A25: M.Br =0;
 A26: for n be Element of NAT holds P[n,F.n] from FUNCT_2:sch 3(A10);
   now
     let y be set;
-    assume
-    y in union rng F;
+    assume y in union rng F;
     then consider B be set such that
 A27: y in B and
 A28: B in rng F by TARSKI:def 4;
@@ -2336,7 +2274,7 @@ A34: (abs f).y = abs(f.y) by A32,VALUED_1:def 11;
   end;
   then
 A35: union rng F c= {x where x is Element of X : x in dom f & f.x <> 0} by
-  TARSKI:def 3;
+TARSKI:def 3;
   consider ND be Element of S such that
 A36: M.ND=0 and
 A37: dom f1 = ND` and
@@ -2351,8 +2289,7 @@ A40: dom(g|EQ`) = EQ` by RELAT_1:91;
 A41: dom(f|EQ`) = EQ` by A3,A37,A38,RELAT_1:91,XBOOLE_1:17;
   now
     let y be set;
-    assume
-    y in {x where x is Element of X : x in dom f & f.x <> 0};
+    assume y in {x where x is Element of X : x in dom f & f.x <> 0};
     then consider z be Element of X such that
 A42: y=z and
 A43: z in dom f and
@@ -2369,10 +2306,10 @@ A47: y in F.n by A26,A42;
     hence y in union rng F by A47,TARSKI:def 4;
   end;
   then {x where x is Element of X : x in dom f & f.x <> 0} c= union rng F by
-  TARSKI:def 3;
+TARSKI:def 3;
   then
-A48: {x where x is Element of X : x in dom f & f.x <> 0 } = union rng F by
-  A35,XBOOLE_0:def 10;
+A48: {x where x is Element of X : x in dom f & f.x <> 0 } = union rng F by A35,
+XBOOLE_0:def 10;
 A49: now
     let x be set;
     assume
@@ -2394,8 +2331,7 @@ A51: y in dom(f|EQ`);
 A52: f|EQ` = g|EQ` by A39,A40,FUNCT_1:9,RELAT_1:91;
   now
     let A be set;
-    assume
-    A in rng F;
+    assume A in rng F;
     then consider n be set such that
 A53: n in NAT and
 A54: A=F.n by FUNCT_2:17;
@@ -2420,8 +2356,7 @@ A1: now
     f.x = 0 by FUNCOP_1:13;
     then
 A2: abs (f.x) = 0 by ABSVALUE:7;
-    assume
-    x in dom abs f;
+    assume x in dom abs f;
     hence (abs f).x = 0 by A2,VALUED_1:def 11;
   end;
   dom f = X by FUNCOP_1:19;
@@ -2446,7 +2381,7 @@ A6: B= dom |.f1.| by A4,MESFUNC1:def 10;
   |.f1.| is_integrable_on M by A3,A4,A5,MESFUNC5:106;
   then
 A7: ex E be Element of S st E = dom |.f1.| & |.f1.| is_measurable_on E by
-  MESFUNC5:def 17;
+MESFUNC5:def 17;
 A8: g1 is_integrable_on M by A2,MESFUNC6:def 9;
   then consider C be Element of S such that
 A9: C = dom g1 and
@@ -2457,27 +2392,24 @@ A12: E = dom(f1+g1) and
 A13: Integral(M,(|.f1+g1.|)|E) <= Integral(M,(|.f1.|)|E) + Integral(M,(|.
   g1.|)|E) by A3,A8,MESFUNC7:22;
   dom |.f1+g1.| = E by A12,MESFUNC1:def 10;
-  then f1+g1 =R_EAL(f+g) & (|.f1+g1.|)|E = |.f1+g1.| by MESFUNC6:23,
-  RELAT_1:97;
+  then f1+g1 =R_EAL(f+g) & (|.f1+g1.|)|E = |.f1+g1.| by MESFUNC6:23,RELAT_1:97;
   then
 A14: Integral(M,(|.f1+g1.|)|E) = Integral(M,|.f+g.|) by MESFUNC6:1;
   |.g1.| is_integrable_on M by A8,A9,A10,MESFUNC5:106;
   then
 A15: ex E be Element of S st E = dom |.g1.| & |.g1.| is_measurable_on E by
-  MESFUNC5:def 17;
+MESFUNC5:def 17;
 A16: E= (dom f1 /\ dom g1)\((f1"{-infty} /\ g1"{+infty}) \/ (f1"{+infty} /\
   g1"{-infty})) by A12,MESFUNC1:def 3;
   then E c= dom g1 by XBOOLE_1:18,36;
   then E c= dom |.g1.| by MESFUNC1:def 10;
-  then Integral(M,(|.g1.|)|E) <= Integral(M,(|.g1.|)|C) by A11,A15,
-  MESFUNC5:99;
+  then Integral(M,(|.g1.|)|E) <= Integral(M,(|.g1.|)|C) by A11,A15,MESFUNC5:99;
   then Integral(M,(|.g1.|)|E) <= Integral(M,|.g1.|) by A11,RELAT_1:97;
   then
 A17: Integral(M,(|.g1.|)|E) <= Integral(M,|.g.|) by MESFUNC6:1;
   E c= dom f1 by A16,XBOOLE_1:18,36;
   then E c= dom |.f1.| by MESFUNC1:def 10;
-  then Integral(M,(|.f1.|)|E) <= Integral(M,(|.f1.|)|B) by A6,A7,
-  MESFUNC5:99;
+  then Integral(M,(|.f1.|)|E) <= Integral(M,(|.f1.|)|B) by A6,A7,MESFUNC5:99;
   then Integral(M,(|.f1.|)|E) <= Integral(M,|.f1.|) by A6,RELAT_1:97;
   then Integral(M,(|.f1.|)|E) <= Integral(M,|.f.|) by MESFUNC6:1;
   then Integral(M,(|.f1.|)|E) + Integral(M,(|.g1.|)|E) <= Integral(M,|.f.|) +
@@ -2488,7 +2420,6 @@ end;
 Lm7: L-1-Space M is RealNormSpace-like vector-distributive scalar-distributive
 scalar-associative scalar-unital Abelian
 add-associative right_zeroed right_complementable
-
 proof
   now
     let x,y be Point of L-1-Space M, a be Real;
@@ -2496,13 +2427,10 @@ proof
 A1: f in x and
 A2: ||.x.|| = Integral(M,abs f) by Def19;
     abs f is_integrable_on M by A1,Th48;
-
     then Integral(M,abs a(#)abs f) =R_EAL(abs a) * Integral(M,abs f) by
-    MESFUNC6:102;
-
+MESFUNC6:102;
     then Integral(M,abs(a(#)f)) = R_EAL(abs a) * Integral(M,abs f) by
-    RFUNCT_1:37;
-
+RFUNCT_1:37;
     then
 A3: Integral(M,abs(a(#)f)) = abs a * ||.x.|| by A2,EXTREAL1:13;
     hereby
@@ -2515,8 +2443,7 @@ A5:   f in L1_Functions M by A4,Th48;
       then
 A6:   a.e-eq-class(f,M) in CosetSet M;
 A7:   g in L1_Functions M by Lm3;
-      assume
-      ||.x.|| = 0;
+      assume ||.x.|| = 0;
       then Integral(M,abs f) = 0 by A4,Th50;
       then f a.e.= g,M by A5,Th54;
       then a.e-eq-class(g,M) = a.e-eq-class(f,M) by A5,A7,Th39;
@@ -2529,8 +2456,7 @@ A7:   g in L1_Functions M by Lm3;
       consider f be PartFunc of X,REAL such that
 A8:   f = X-->0 and
 A9:   f in L1_Functions M & zeroCoset M = a.e-eq-class(f,M) by Def16;
-      assume
-      x = 0.(L-1-Space M);
+      assume x = 0.(L-1-Space M);
       then x1 =0.(Pre-L-Space M);
       then
 A10:  x1 = zeroCoset M by Def18;
@@ -2548,10 +2474,8 @@ A14: g is_integrable_on M by A12,Th48;
     f+g in x+y by A1,A12,Th52;
     then
 A15: ||.x+y.|| = Integral(M,abs(f+g)) by Th50;
-
     Integral(M,abs f) + Integral(M,abs g) = ||.x.|| + ||.y.|| by A2,A13,
-    SUPINF_2:1;
-
+SUPINF_2:1;
     hence ||.x+y.|| <= ||.x.|| + ||.y.|| by A11,A15,A14,Th56;
     a(#)f in a*x by A1,Th52;
     hence ||.a*x.|| = abs a * ||.x.|| by A3,Th50;
@@ -2566,4 +2490,3 @@ registration
     add-associative right_zeroed right_complementable;
   coherence by Lm7;
 end;
-

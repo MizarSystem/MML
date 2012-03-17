@@ -90,6 +90,58 @@
 <Adjective nr="68"/>
 </Cluster>
 </RCluster>
+<FCluster aid="BINTREE1" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="26"/>
+<Adjective nr="40"/>
+<Adjective nr="67"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="26"/>
+<Adjective nr="40"/>
+<Adjective nr="67"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="196">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+<LocusVar nr="4"/>
+</Func>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="8">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="9"/>
+<Adjective nr="26"/>
+<Adjective nr="40"/>
+<Adjective nr="67"/>
+</Cluster>
+</FCluster>
 <CCluster aid="BINTREE1" nr="1">
 <ArgTypes/>
 <Cluster>
@@ -120,7 +172,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="235">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 </Typ>

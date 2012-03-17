@@ -20,31 +20,32 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 </Signature>
 <RCluster aid="BHSP_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="100"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -57,8 +58,8 @@
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BHSP_1" nr="1">
@@ -98,7 +99,7 @@
 <Adjective nr="6"/>
 <Adjective nr="15">
 <Func kind="K" nr="22">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -107,7 +108,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <Func kind="K" nr="22">
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -122,7 +123,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="21">
@@ -131,12 +132,12 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="14">
+<Func kind="G" nr="16">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -145,7 +146,7 @@
 </Func>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 </Registrations>

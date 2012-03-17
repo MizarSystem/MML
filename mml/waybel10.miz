@@ -3,7 +3,7 @@
 ::
 :: Received January 15, 1997
 :: Copyright (c) 1997 Association of Mizar Users
-
+ 
 environ
 
  vocabularies XBOOLE_0, ORDERS_2, CAT_1, STRUCT_0, YELLOW_0, SUBSET_1, TARSKI,
@@ -12,11 +12,11 @@ environ
       YELLOW_1, FUNCT_2, NEWTON, CARD_3, RLVECT_2, REWRITE1, UNIALG_2,
       ZFMISC_1, LATTICE3, LATTICES, EQREL_1, WAYBEL10;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, CARD_3, FUNCOP_1, STRUCT_0, QUANTAL1, PRALG_1, WELLORD1,
+      FUNCT_2, CARD_3, FUNCOP_1, STRUCT_0, TMAP_1, QUANTAL1, PRALG_1, WELLORD1,
       ORDERS_2, LATTICE3, ORDERS_3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2,
       WAYBEL_1, WAYBEL_3, YELLOW_7;
  constructors TOLER_1, BORSUK_1, PRALG_1, QUANTAL1, ORDERS_3, WAYBEL_1,
-      WAYBEL_3;
+      WAYBEL_3, TMAP_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, STRUCT_0,
       LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1;
  requirements SUBSET, BOOLE;
@@ -24,7 +24,7 @@ environ
       YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_1, WAYBEL_3, STRUCT_0;
  theorems FUNCT_1, FUNCT_2, YELLOW_0, YELLOW_1, WAYBEL_1, FUNCOP_1, RELSET_1,
       SYSREL, ORDERS_2, LATTICE3, YELLOW_2, WAYBEL_0, ZFMISC_1, TARSKI,
-      YELLOW_7, RELAT_1, FUNCTOR0, XBOOLE_0, XBOOLE_1, ORDERS_1;
+      YELLOW_7, RELAT_1, XBOOLE_0, XBOOLE_1, ORDERS_1, TMAP_1;
  schemes YELLOW_0, FUNCT_2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -51,8 +51,7 @@ A3: for x being set holds x in A iff x in the carrier of L() & P[x] from
   let x be Element of L();
 A4: the carrier of S = A by YELLOW_0:def 15;
   hence x is Element of S implies P[x] by A3;
-  assume
-  P[x];
+  assume P[x];
   hence thesis by A3,A4;
 end;
 
@@ -70,16 +69,14 @@ A5: the carrier of L1() = the carrier of L2()
   proof
     hereby
       let x be set;
-      assume
-      x in the carrier of S1;
+      assume x in the carrier of S1;
       then reconsider y = x as Element of S1;
       P[y] by A1;
       then x is Element of S2 by A2;
       hence x in the carrier of S2;
     end;
     let x be set;
-    assume
-    x in the carrier of S2;
+    assume x in the carrier of S2;
     then reconsider y = x as Element of S2;
     P[y] by A2;
     then x is Element of S1 by A1;
@@ -157,8 +154,7 @@ A4: now
 end;
 
 theorem Th1:
-  for R,Q being Relation holds (R c= Q iff R~ c= Q~) & (R~ c= Q iff
-  R c= Q~)
+  for R,Q being Relation holds (R c= Q iff R~ c= Q~) & (R~ c= Q iff R c= Q~)
 proof
   let R,Q be Relation;
 A1: Q~~ = Q;
@@ -255,8 +251,7 @@ registration
   coherence
   proof
     let R be 1-sorted;
-    assume
-    R in rng (X --> L);
+    assume R in rng (X --> L);
     hence thesis by TARSKI:def 1;
   end;
 end;
@@ -269,8 +264,7 @@ registration
     set c = the Element of T;
     take f = S --> c;
     let x,y be Element of S;
-    assume
-    [x,y] in the InternalRel of S;
+    assume [x,y] in the InternalRel of S;
     then
 A1: x in the carrier of S by ZFMISC_1:106;
     let a,b be Element of T;
@@ -296,8 +290,7 @@ registration
   proof
     let x,y be Element of S;
 A1: f.y = (corestr f).y by WAYBEL_1:32;
-    assume
-    x <= y;
+    assume x <= y;
     then
 A2: f.x <= f.y by WAYBEL_1:def 2;
     f.x = (corestr f).x by WAYBEL_1:32;
@@ -314,14 +307,12 @@ registration
     proof
       let X be Subset of L;
 A1:   (id L).sup X = sup X by FUNCT_1:35;
-      assume
-      ex_sup_of X,L;
+      assume ex_sup_of X,L;
       hence thesis by A1,FUNCT_1:162;
     end;
     let X be Subset of L;
 A2: (id L).inf X = inf X by FUNCT_1:35;
-    assume
-    ex_inf_of X,L;
+    assume ex_inf_of X,L;
     hence thesis by A2,FUNCT_1:162;
   end;
 end;
@@ -378,31 +369,6 @@ proof
   hence thesis by FUNCT_1:35;
 end;
 
-definition
-  let S,T be 1-sorted;
-  let f be Function of the carrier of S, the carrier of T;
-  let R be 1-sorted such that
-A1: the carrier of R c= the carrier of S;
-  func f|R -> Function of R,T equals
-  : Def1:
-  f|the carrier of R;
-  coherence
-  proof
-    per cases;
-    suppose
-      the carrier of T = {} implies the carrier of S = {};
-      hence thesis by A1,FUNCT_2:38;
-    end;
-    suppose
-A2:   the carrier of T = {} & the carrier of S <> {};
-      then f = {} by FUNCT_2:def 1;
-      then f|the carrier of R = {};
-      hence thesis by A2,FUNCTOR0:1;
-    end;
-  end;
-  correctness;
-end;
-
 theorem Th7:
   for S,T being RelStr, R being SubRelStr of S for f being Function
   of the carrier of S, the carrier of T holds f|R = f|the carrier of R & for x
@@ -411,7 +377,7 @@ proof
   let S,T be RelStr, R be SubRelStr of S;
   let f be Function of the carrier of S, the carrier of T;
   the carrier of R c= the carrier of S by YELLOW_0:def 13;
-  hence f|R = f|the carrier of R by Def1;
+  hence f|R = f|the carrier of R by TMAP_1:def 3;
   hence thesis by FUNCT_1:72;
 end;
 
@@ -467,8 +433,7 @@ A5: the carrier of R c= the carrier of S by YELLOW_0:def 13;
   rng h c= the carrier of R
   proof
     let y be set;
-    assume
-    y in rng h;
+    assume y in rng h;
     then consider x being set such that
 A6: x in dom h and
 A7: y = h.x by FUNCT_1:def 5;
@@ -520,8 +485,7 @@ proof
   let S be RelStr, T be non empty reflexive RelStr;
   let x be set;
   hereby
-    assume
-    x is Element of MonMaps(S,T);
+    assume x is Element of MonMaps(S,T);
     then reconsider f = x as Element of MonMaps(S,T);
     f is Element of T|^the carrier of S by YELLOW_0:59;
     then f in the carrier of T|^the carrier of S;
@@ -530,14 +494,14 @@ proof
     f in the carrier of MonMaps(S,T);
     hence x is monotone Function of S,T by YELLOW_1:def 6;
   end;
-  assume
-  x is monotone Function of S,T;
+  assume x is monotone Function of S,T;
   then reconsider f = x as monotone Function of S,T;
   f in Funcs(the carrier of S, the carrier of T) by FUNCT_2:11;
   hence thesis by YELLOW_1:def 6;
 end;
 
 definition
+  canceled;
   let L be non empty reflexive RelStr;
   func ClOpers L -> non empty full strict SubRelStr of MonMaps(L,L) means
   :
@@ -570,16 +534,13 @@ A5: f is closure;
   correctness
   proof
     let S1,S2 be non empty full strict SubRelStr of MonMaps(L,L) such that
-A6: for f being Function of L,L holds f is Element of S1 iff f is
-    closure and
-A7: for f being Function of L,L holds f is Element of S2 iff f is
-    closure;
+A6: for f being Function of L,L holds f is Element of S1 iff f is closure and
+A7: for f being Function of L,L holds f is Element of S2 iff f is closure;
     the carrier of S1 = the carrier of S2
     proof
       hereby
         let x be set;
-        assume
-        x in the carrier of S1;
+        assume x in the carrier of S1;
         then reconsider y = x as Element of S1;
         y is Element of MonMaps(L,L) by YELLOW_0:59;
         then reconsider y as Function of L,L by Th10;
@@ -588,8 +549,7 @@ A7: for f being Function of L,L holds f is Element of S2 iff f is
         hence x in the carrier of S2;
       end;
       let x be set;
-      assume
-      x in the carrier of S2;
+      assume x in the carrier of S2;
       then reconsider y = x as Element of S2;
       y is Element of MonMaps(L,L) by YELLOW_0:59;
       then reconsider y as Function of L,L by Th10;
@@ -713,8 +673,7 @@ A1: c1 <= c2;
     the carrier of Image c2 c= the carrier of Image c1
     proof
       let x be set;
-      assume
-      x in the carrier of Image c2;
+      assume x in the carrier of Image c2;
       then consider y being Element of L such that
 A2:   c2.y = x by YELLOW_2:12;
 A3:   c2.(c2.y) = c2.y by YELLOW_2:20;
@@ -770,16 +729,14 @@ A3: for a,b being Element of S holds a <= b iff P[a,b] from YELLOW_0:
     hereby
       let x be set;
       hereby
-        assume
-        x is Element of S;
+        assume x is Element of S;
         then x in X by A2;
         then
         ex A being Subset of L, B being Relation of A,A st x = RelStr(#A,B
         #) & B c= the InternalRel of L;
         hence x is strict SubRelStr of L by YELLOW_0:def 13;
       end;
-      assume
-      x is strict SubRelStr of L;
+      assume x is strict SubRelStr of L;
       then reconsider R = x as strict SubRelStr of L;
 A4:   the InternalRel of R c= the InternalRel of L by YELLOW_0:def 13;
       the carrier of R c= the carrier of L by YELLOW_0:def 13;
@@ -888,8 +845,7 @@ A2:     for x being set holds x in S iff x in the InternalRel of L & Q
 A3:     S c= [:Y,Y:]
         proof
           let x be set;
-          assume
-          x in S;
+          assume x in S;
           then consider R being RelStr such that
 A4:       R in X and
 A5:       x in the InternalRel of R by A2;
@@ -899,8 +855,7 @@ A5:       x in the InternalRel of R by A2;
             R is SubRelStr of L by A4,Def3;
             then
 A6:         the carrier of R c= the carrier of L by YELLOW_0:def 13;
-            assume
-            x in the carrier of R;
+            assume x in the carrier of R;
             hence thesis by A1,A4,A6;
           end;
           then
@@ -933,16 +888,14 @@ A10:      the InternalRel of R c= S
           proof
             let x,y be set;
 A11:        the InternalRel of R c= the InternalRel of L by YELLOW_0:def 13;
-            assume
-            [x,y] in the InternalRel of R;
+            assume [x,y] in the InternalRel of R;
             hence thesis by A2,A9,A11;
           end;
           the carrier of R c= Y
           proof
             let x be set;
 A12:        the carrier of R c= the carrier of L by YELLOW_0:def 13;
-            assume
-            x in the carrier of R;
+            assume x in the carrier of R;
             hence thesis by A1,A9,A12;
           end;
           then R is SubRelStr of A by A10,YELLOW_0:def 13;
@@ -955,8 +908,7 @@ A13:    X is_<=_than b;
 A14:    S c= the InternalRel of B
         proof
           let x,y be set;
-          assume
-          [x,y] in S;
+          assume [x,y] in S;
           then consider R being RelStr such that
 A15:      R in X and
 A16:      [x,y] in the InternalRel of R by A2;
@@ -969,8 +921,7 @@ A16:      [x,y] in the InternalRel of R by A2;
         Y c= the carrier of B
         proof
           let x be set;
-          assume
-          x in Y;
+          assume x in Y;
           then consider R being RelStr such that
 A17:      R in X and
 A18:      x in the carrier of R by A1;
@@ -1230,8 +1181,7 @@ A9:   (id L).y = y by A1;
       let x,y be Element of L;
 A10:  ex_inf_of (uparrow x) /\ the carrier of S, L by YELLOW_0:17;
 A11:  ex_inf_of (uparrow y) /\ the carrier of S, L by YELLOW_0:17;
-      assume
-      x <= y;
+      assume x <= y;
       then
 A12:  (uparrow y) /\ the carrier of S c= (uparrow x) /\ the carrier of S
       by WAYBEL_0:22,XBOOLE_1:26;
@@ -1240,8 +1190,7 @@ A13:  c.y = "/\"((uparrow y) /\ the carrier of S,L) by Def6;
       hence c.x <= c.y by A12,A10,A11,A13,YELLOW_0:35;
     end;
     let x be set;
-    assume
-    x in the carrier of L;
+    assume x in the carrier of L;
     then reconsider x as Element of L;
     (id L).x <= c.x by A1;
     hence thesis;
@@ -1258,8 +1207,7 @@ proof
   proof
     hereby
       let x be set;
-      assume
-      x in the carrier of Image closure_op S;
+      assume x in the carrier of Image closure_op S;
       then reconsider a = x as Element of Image closure_op S;
       consider b being Element of L such that
 A1:   a = (closure_op S).b by YELLOW_2:12;
@@ -1271,8 +1219,7 @@ A2:   ex_inf_of X,L by YELLOW_0:17;
     end;
     set c = closure_op S;
     let x be set;
-    assume
-    x in the carrier of S;
+    assume x in the carrier of S;
     then reconsider a = x as Element of S;
     reconsider a as Element of L by YELLOW_0:59;
     set X = (uparrow a) /\ the carrier of S;
@@ -1344,8 +1291,7 @@ registration
     let x,y be Element of ClOpers L;
     reconsider a = x, b = y as closure Function of L,L by Th11;
     set f = ClImageMap L;
-    assume
-    f.x = f.y;
+    assume f.x = f.y;
     then Image a = f.y by Def5
       .= Image b by Def5;
     hence x = closure_op Image b by Th20
@@ -1364,8 +1310,7 @@ A2: dom f = the carrier of ClOpers L by FUNCT_2:def 1;
   the carrier of (ClosureSystems L) opp c= rng f
   proof
     let x be set;
-    assume
-    x in the carrier of (ClosureSystems L) opp;
+    assume x in the carrier of (ClosureSystems L) opp;
     then reconsider x as Element of (ClosureSystems L) opp;
     reconsider x as infs-inheriting full strict SubRelStr of L by Th17;
 A3: closure_op x is Element of ClOpers L by Th11;
@@ -1408,8 +1353,7 @@ registration
         let x,y be Element of S;
         reconsider c = x, d = y as closure Function of L,L by Th11;
 A1:     f.y = Image d by Def5;
-        assume
-        x <= y;
+        assume x <= y;
         then c <= d by Th13;
         then
 A2:     Image d is SubRelStr of Image c by Th15;
@@ -1426,8 +1370,7 @@ A2:     Image d is SubRelStr of Image c by Th15;
         L by Th17;
 A3:     B = Image closure_op B by Th19;
 A4:     g.A = closure_op A by Th22;
-        assume
-        x <= y;
+        assume x <= y;
         then ~y <= ~x by YELLOW_7:1;
         then
 A5:     B is SubRelStr of A by Th18;
@@ -1503,7 +1446,7 @@ A16: z <= y9 by A9,A11,A12,WAYBEL_0:def 2;
   take z;
   thus thesis by A14,A15,A16,YELLOW_0:61;
 end;
-
+ 
 :: Corollary 3.14, p. 24
 
 theorem Th25:
@@ -1521,16 +1464,14 @@ A1: Image c = the RelStr of S by Th19;
 A2: Lk c= the carrier of L
     proof
       let x be set;
-      assume
-      x in Lk;
+      assume x in Lk;
       then ex k being Element of L st x = k & c.k <= k;
       hence thesis;
     end;
     c.(c.k) = c.k by YELLOW_2:20;
     then
 A3: c.k in Lk;
-    assume
-    closure_op S is directed-sups-preserving;
+    assume closure_op S is directed-sups-preserving;
     then
 A4: Image c is directed-sups-inheriting by A3,A2,WAYBEL_1:55;
     thus S is directed-sups-inheriting
@@ -1550,14 +1491,12 @@ A7: for X being directed Subset of S st X <> {} & ex_sup_of X,L holds
 A8: X is non empty directed;
   rng c = the carrier of S by A1,YELLOW_0:def 15;
   then reconsider Y = c.:X as Subset of S by RELAT_1:144;
-  assume
-  ex_sup_of X,L;
+  assume ex_sup_of X,L;
   thus ex_sup_of c.:X,L by YELLOW_0:17;
   c.:X is_<=_than c.sup X
   proof
     let x be Element of L;
-    assume
-    x in c.:X;
+    assume x in c.:X;
     then consider a being set such that
 A9: a in the carrier of L and
 A10: a in X and
@@ -1571,8 +1510,7 @@ A12: sup (c.:X) <= c.sup X by YELLOW_0:32;
   X is_<=_than sup (c.:X)
   proof
     let x be Element of L;
-    assume
-    x in X;
+    assume x in X;
     then c.x in c.:X by FUNCT_2:43;
     then
 A13: c.x <= sup (c.:X) by YELLOW_2:24;
@@ -1758,8 +1696,7 @@ proof
 A1: now
     let a be set;
     hereby
-      assume
-      a is Element of Image ((ClImageMap L)|DsupClOpers L);
+      assume a is Element of Image ((ClImageMap L)|DsupClOpers L);
       then consider x being Element of DsupClOpers L such that
 A2:   ((ClImageMap L)|DsupClOpers L).x = a by YELLOW_2:12;
       reconsider x as directed-sups-preserving closure Function of L,L by Th27;
@@ -1767,8 +1704,7 @@ A2:   ((ClImageMap L)|DsupClOpers L).x = a by YELLOW_2:12;
         .= Image x by Def5;
       hence P[a];
     end;
-    assume
-    P[a];
+    assume P[a];
     then reconsider
     S = a as directed-sups-inheriting closure strict System of L;
     reconsider x = closure_op S as Element of DsupClOpers L by Th27;
@@ -1812,8 +1748,7 @@ Th11;
       f9.y = j by A1,Th22;
       then
 A2:   h.y = j by Th7;
-      assume
-      x <= y;
+      assume x <= y;
       then a <= b by YELLOW_0:60;
       then ~a >= ~b by YELLOW_7:1;
       then
@@ -1846,4 +1781,3 @@ Th29;
   Image f = (Subalgebras L) opp by Th29;
   hence thesis;
 end;
-

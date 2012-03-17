@@ -9,17 +9,19 @@ environ
  vocabularies NUMBERS, INT_1, FINSEQ_1, SUBSET_1, FSM_1, AMI_3, NAT_1,
       PARTFUN1, AMI_1, SCMNORM, RELAT_1, FUNCT_1, CIRCUIT2, MSUALG_1, ARYTM_3,
       XXREAL_0, CARD_1, TARSKI, AFINSQ_1, AMI_2, ORDINAL4, GRAPHSP, ARYTM_1,
-      MCART_1, SCM_1, STRUCT_0, ORDINAL1;
+      MCART_1, SCM_1, STRUCT_0, ORDINAL1, RECDEF_2;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0, AFINSQ_1, AMI_2,
-      STRUCT_0, AMI_1, AMI_3;
- constructors XXREAL_0, AMI_3, RELSET_1, AMI_2, AFINSQ_1, ORDINAL4, PRE_POLY;
+      FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, XXREAL_0, AFINSQ_1, RECDEF_2,
+      AMI_2, STRUCT_0, COMPOS_1, AMI_1, AMI_3;
+ constructors XXREAL_0, AMI_3, RELSET_1, AMI_2, AFINSQ_1, ORDINAL4, PRE_POLY,
+      RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, AMI_3, AMI_2, AMI_1, AFINSQ_1, RELAT_1;
+      INT_1, AMI_3, AMI_2, AMI_1, AFINSQ_1, RELAT_1, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AFINSQ_1, AMI_1, NAT_1, AMI_3;
+ definitions AFINSQ_1, COMPOS_1, AMI_1, NAT_1, AMI_3;
  theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, AMI_2,
-      AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, RELAT_1, AFINSQ_1, PARTFUN1;
+      AMI_3, FINSEQ_3, RELSET_1, ORDINAL1, RELAT_1, AFINSQ_1, PARTFUN1,
+      RECDEF_2, COMPOS_1;
  schemes PARTFUN1, WELLORD2;
 
 begin
@@ -48,9 +50,9 @@ A1: s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
 NX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
 by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
    IC Comput(ProgramPart(s),s,k) in NAT;
-  hence IC Comput(ProgramPart(s),s,k) in dom ProgramPart s by AMI_1:143;
+  hence IC Comput(ProgramPart(s),s,k) in dom ProgramPart s by COMPOS_1:34;
    CurInstr(ProgramPart (s),Comput(ProgramPart(s),s,k))
     = halt SCM by A1,Y,NX,AMI_1:54;
   hence CurInstr(ProgramPart s, Comput(ProgramPart(s),s,k)) = halt SCM;
@@ -65,7 +67,7 @@ proof
 TX: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
 by AMI_1:123;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
   assume
 Z:  s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
   then
@@ -84,8 +86,7 @@ theorem Th7:
 
 Lm1: now
   let p be FinSequence, n be Element of NAT;
-  assume
-  n < len p;
+  assume n < len p;
   then n+1 >= 0+1 & n+1 <= len p by NAT_1:13;
   then n+1 in dom p by FINSEQ_3:27;
   hence n+1 in dom p & p.(n+1) in rng p by FUNCT_1:def 5;
@@ -94,8 +95,7 @@ end;
 Lm29: now
   let n be Element of NAT, x be set;
   let p be FinSequence of x;
-  assume
-  n < len p;
+  assume n < len p;
   then
 A1: p.(n+1) in rng p by Lm1;
   rng p c= x by FINSEQ_1:def 4;
@@ -104,8 +104,7 @@ end;
 
 Lm1: now
   let p be XFinSequence, n be Element of NAT;
-  assume
-  n < len p;
+  assume n < len p;
   hence n in dom p by NAT_1:45;
   hence p.n in rng p by FUNCT_1:def 5;
 end;
@@ -113,8 +112,7 @@ end;
 Lm2: now
   let n be Element of NAT, x be set;
   let p be XFinSequence of x;
-  assume
-  n < len p;
+  assume n < len p;
   then
 A1: p.n in rng p by Lm1;
   rng p c= x by RELAT_1:def 19;
@@ -146,8 +144,7 @@ A2: for x being set st x in SCM-Memory ex y being set st y in SCM-Instr &
     X[x,y]
     proof
       let x be set;
-      assume
-      x in SCM-Memory;
+      assume x in SCM-Memory;
       per cases;
       suppose
         ex n being Element of NAT st x = (ps+n) & n < len I;
@@ -176,8 +173,7 @@ FUNCT_2:def 1,RELSET_1:11;
 A7: 0 in INT by INT_1:def 2;
 A8: now
       let x be set;
-      assume
-      x in SCM-Memory;
+      assume x in SCM-Memory;
       per cases;
       suppose
         ex n being Element of NAT st x = dl.(ds+n) & n < len D;
@@ -280,8 +276,7 @@ X:       s3.n = s2.x by A17;
     hereby
       let k be Element of NAT;
 Y:    ps+k in NAT;
-      assume
-      k<len I;
+      assume k<len I;
       then
 A20:  ex k9 being Element of NAT st (ps+k) = (ps+k9) & k9 < len I &
       I1.(ps+k) = I.k9 by A6,Y;
@@ -290,8 +285,7 @@ A20:  ex k9 being Element of NAT st (ps+k) = (ps+k9) & k9 < len I &
         .= I.k by A14,A20,Y;
     end;
     let k be Element of NAT;
-    assume
-    k < len D;
+    assume k < len D;
     then consider k9 being Element of NAT such that
 A21: dl.(ds+k) = dl.(ds+k9) and
     k9 < len D and
@@ -376,7 +370,7 @@ by AMI_1:123;
 A1: s.(IC Comput(ProgramPart(s),s,k)) <> halt SCM and
 A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,AMI_1:150;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,COMPOS_1:38;
 A3: CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k))
 <> halt SCM
 by A1,Y,AMI_1:54;
@@ -392,7 +386,7 @@ A6:   k+1 > i;
     end;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
  = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-  by TY,AMI_1:150;
+  by TY,COMPOS_1:38;
     ProgramPart s halts_on s & CurInstr(ProgramPart s,
     Comput(ProgramPart(s),s,k+1)) = halt SCM
      by A2,Th3,Y,AMI_1:54;
@@ -402,16 +396,15 @@ AMI_1:def 46;
   assume
 A7: LifeSpan(ProgramPart(s),s) = k+1 & ProgramPart s halts_on s;
 A8: now
-    assume
-    CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM;
+    assume CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k)) = halt SCM;
     then k+1 <= k by A7,AMI_1:def 46;
     hence contradiction by NAT_1:13;
   end;
 Z:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,AMI_1:150;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by TX,COMPOS_1:38;
 Y:  (ProgramPart s)/.IC Comput(ProgramPart(s),s,k+1)
  = Comput(ProgramPart(s),s,k+1).IC Comput(ProgramPart(s),s,k+1)
-    by TY,AMI_1:150;
+    by TY,COMPOS_1:38;
   CurInstr(ProgramPart s,Comput(ProgramPart(s),s,k+1))
    = halt SCM by A7,AMI_1:def 46;
   hence thesis by A8,Y,Z,AMI_1:54;
@@ -428,12 +421,11 @@ proof
 A1: IC Comput(ProgramPart(s),s,k) <> IC Comput(ProgramPart(s),s,k+1) and
 A2: s.(IC Comput(ProgramPart(s),s,k+1)) = halt SCM;
 Y:  (ProgramPart Comput(ProgramPart(s),s,k))/.IC Comput(ProgramPart(s),s,k)
- = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by AMI_1:150;
+ = Comput(ProgramPart(s),s,k).IC Comput(ProgramPart(s),s,k) by COMPOS_1:38;
   now
 T: ProgramPart s = ProgramPart Comput(ProgramPart(s),s,k)
 by AMI_1:123;
-    assume
-    s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
+    assume s.(IC Comput(ProgramPart(s),s,k)) = halt SCM;
     then CurInstr(ProgramPart(s),Comput(ProgramPart(s),s,k)) = halt SCM
     by Y,T,AMI_1:54;
     hence contradiction by A1,AMI_1:52,NAT_1:11;
@@ -472,7 +464,7 @@ A2: s.n = a := b or s.n = AddTo(a,b) or s.n = SubFrom(a, b) or
   s.n = MultBy(a, b) or a<>b & s.n = Divide(a,b);
 
 Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by AMI_1:150;
+ = csk.IC csk by COMPOS_1:38;
   thus csk1 = (Exec(CurInstr(ProgramPart csk,csk), csk)) by Lm3
     .= (Exec(s.n, csk)) by A1,Y,AMI_1:54;
   hence IC csk1 = succ IC csk by A2,AMI_3:8,9,10,11,12
@@ -599,7 +591,7 @@ A1: IC Comput(ProgramPart(s),s,k) = n & s.n = SCM-goto il;
   set csk1 = Comput(ProgramPart(s),s,k+1);
   set csk = Comput(ProgramPart(s),s,k);
 Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by AMI_1:150;
+ = csk.IC csk by COMPOS_1:38;
 A2: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
     .= Exec(SCM-goto il, csk) by A1,Y,AMI_1:54;
   hence IC csk1 = il by AMI_3:13;
@@ -624,13 +616,12 @@ A2: s.n = a =0_goto il;
   set csk1 = Comput(ProgramPart(s),s,k+1);
   set csk = Comput(ProgramPart(s),s,k);
 Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by AMI_1:150;
+ = csk.IC csk by COMPOS_1:38;
 A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
     .= Exec(a =0_goto il, csk) by A1,A2,Y,AMI_1:54;
   hence csk.a = 0 implies IC csk1 = il by AMI_3:14;
   hereby
-    assume
-    csk.a <> 0;
+    assume csk.a <> 0;
     hence IC csk1 = succ n by A1,A3,AMI_3:14
       .= (n+1);
   end;
@@ -655,13 +646,12 @@ A2: s.n = a >0_goto il;
   set csk1 = Comput(ProgramPart(s),s,k+1);
   set csk = Comput(ProgramPart(s),s,k);
 Y:  (ProgramPart csk)/.IC csk
- = csk.IC csk by AMI_1:150;
+ = csk.IC csk by COMPOS_1:38;
 A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
     .= Exec(a >0_goto il, csk) by A1,A2,Y,AMI_1:54;
   hence csk.a > 0 implies IC csk1 = il by AMI_3:15;
   hereby
-    assume
-    csk.a <= 0;
+    assume csk.a <= 0;
     hence IC csk1 = succ n by A1,A3,AMI_3:15
       .= (n+1);
   end;
@@ -669,15 +659,17 @@ A3: csk1 = Exec(CurInstr(ProgramPart csk,csk), csk) by Lm3
 end;
 
 theorem Th26:
-  (halt SCM)`1 = 0 & (for a, b being Data-Location holds (a := b)
-  `1 = 1) & (for a, b being Data-Location holds (AddTo(a,b))`1 = 2) & (for a, b
-being Data-Location holds (SubFrom(a,b))`1 = 3) & (for a, b being Data-Location
-holds (MultBy(a,b))`1 = 4) & (for a, b being Data-Location holds (Divide(a,b))
-`1 = 5) & (for i being Element of NAT holds (SCM-goto i)`1 = 6)
- & (for
-a being Data-Location, i being Element of NAT holds (a =0_goto i)
-`1 = 7) & for a being Data-Location, i being Element of NAT holds
-  (a >0_goto i)`1 = 8 by AMI_3:71,MCART_1:7;
+  (halt SCM)`1_3 = 0 &
+  (for a, b being Data-Location holds (a := b)`1_3 = 1) &
+  (for a, b being Data-Location holds (AddTo(a,b))`1_3 = 2) &
+  (for a, b being Data-Location holds (SubFrom(a,b))`1_3 = 3) &
+  (for a, b being Data-Location holds (MultBy(a,b))`1_3 = 4) &
+  (for a, b being Data-Location holds (Divide(a,b))`1_3 = 5) &
+  (for i being Element of NAT holds (SCM-goto i)`1_3 = 6) &
+  (for a being Data-Location, i being Element of NAT
+   holds (a =0_goto i)`1_3 = 7) &
+  for a being Data-Location, i being Element of NAT holds
+   (a >0_goto i)`1_3 = 8 by AMI_3:71,RECDEF_2:def 1;
 
 canceled;
 
@@ -752,8 +744,7 @@ A4: now
     let k be Element of NAT;
 A5: len I=9 & 9=8+1 by AFINSQ_1:54;
 A6: 8=7+1;
-    assume
-    k < len I;
+    assume k < len I;
     then k <= 8 by A5,NAT_1:13;
     then
 A7: k <= 7 or k=8 by A6,NAT_1:8;
@@ -781,8 +772,7 @@ NAT_1:8;
     let k be Element of NAT;
 A14: len D=4 & 4=3+1 by FINSEQ_1:87;
 A15: 3=2+1;
-    assume
-    k < len D;
+    assume k < len D;
     then k <= 3 by A14,NAT_1:13;
     then
 A16: k <= 2 or k=3 by A15,NAT_1:8;
@@ -811,7 +801,7 @@ A2: s = Comput(ProgramPart(s),s,0) by AMI_1:13;
   s.IC s = halt SCM by A1,Def1;
   hence
 A3: ProgramPart s halts_on s by Th3,A2;
-Y:  (ProgramPart s)/.IC s = s.IC s by AMI_1:150;
+Y:  (ProgramPart s)/.IC s = s.IC s by COMPOS_1:38;
   CurInstr(ProgramPart s,s) = halt SCM by A1,Def1,Y;
   hence LifeSpan(ProgramPart(s),s) = 0 by A3,A2,AMI_1:def 46;
   IC s = 0 by Def1;

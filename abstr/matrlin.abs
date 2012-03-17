@@ -21,7 +21,7 @@ environ
       MOD_2, FVSUM_1, MATRIX_3, RELSET_1, PRE_POLY, GRCAT_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1, MATRIX_1, CARD_1,
-      VECTSP_7, MOD_2, GRCAT_1;
+      VECTSP_7, MOD_2, GRCAT_1, PRE_POLY, RELAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -44,16 +44,15 @@ theorem :: MATRLIN:3
   for M be FinSequence st len M = n+1 holds len Del(M,n+1) = n;
 
 theorem :: MATRLIN:4
-  for M be Matrix of n+1,m,D for M1 be Matrix of D holds ( n > 0
-  implies width M = width Del(M,n+1) ) & ( M1 = <*M.(n+1)*> implies width M =
-  width M1 );
+  for M be Matrix of n+1,m,D for M1 be Matrix of D holds
+  ( n > 0 implies width M = width Del(M,n+1) ) &
+  ( M1 = <*M.(n+1)*> implies width M = width M1 );
 
 theorem :: MATRLIN:5
   for M be Matrix of n+1,m,D holds Del(M,n+1) is Matrix of n,m,D;
 
 theorem :: MATRLIN:6
-  for M being FinSequence st len M = n + 1 holds M = Del(M,len M) ^
-  <*M.(len M)*>;
+  for M being FinSequence st M <> {} holds M = Del(M,len M) ^ <*M.(len M)*>;
 
 definition
   let D;
@@ -71,7 +70,6 @@ reserve K for Field,
   V for VectSp of K,
   a for Element of K,
   W for Element of V;
-
 reserve KL1,KL2,KL3 for Linear_Combination of V,
   X for Subset of V;
 
@@ -98,8 +96,7 @@ definition
   attr V is finite-dimensional means
 :: MATRLIN:def 3
 
-  ex A being finite Subset of V st A
-  is Basis of V;
+  ex A being finite Subset of V st A is Basis of V;
 end;
 
 registration
@@ -113,27 +110,21 @@ definition
   mode OrdBasis of V -> FinSequence of V means
 :: MATRLIN:def 4
 
-    it is one-to-one & rng
-    it is Basis of V;
+    it is one-to-one & rng it is Basis of V;
 end;
 
 reserve s for FinSequence,
   V1,V2,V3 for finite-dimensional VectSp of K,
-  f,f1,
-  f2 for Function of V1,V2,
+  f,f1,f2 for Function of V1,V2,
   g for Function of V2,V3,
   b1 for OrdBasis of V1,
-  b2
-  for OrdBasis of V2,
+  b2 for OrdBasis of V2,
   b3 for OrdBasis of V3,
   v1,v2 for Vector of V2,
-  v,w for
-  Element of V1;
-
+  v,w for Element of V1;
 reserve p2,F for FinSequence of V1,
   p1,d for FinSequence of K,
-  KL for
-  Linear_Combination of V1;
+  KL for Linear_Combination of V1;
 
 definition
   let K be non empty doubleLoopStr;
@@ -142,8 +133,7 @@ definition
   func f1+f2 -> Function of V1,V2 means
 :: MATRLIN:def 5
 
-  for v be Element of V1 holds it
-  .v = f1.v + f2.v;
+  for v be Element of V1 holds it .v = f1.v + f2.v;
 end;
 
 definition
@@ -154,8 +144,7 @@ definition
   func a*f -> Function of V1,V2 means
 :: MATRLIN:def 6
 
-  for v be Element of V1 holds it.v
-  = a * (f.v);
+  for v be Element of V1 holds it.v = a * (f.v);
 end;
 
 theorem :: MATRLIN:13
@@ -169,9 +158,10 @@ FinSequence of V1 st len F = len G & for k st k in dom F holds G.k = (F/.k) * a
   holds Sum(G) = Sum(F) * a;
 
 theorem :: MATRLIN:15
-  for V1 being add-associative right_zeroed right_complementable (
-  non empty addLoopStr) for F being FinSequence of V1 st for k st k in dom F
-  holds F/.k = 0.V1 holds Sum(F) = 0.V1;
+  for V1 being add-associative right_zeroed right_complementable
+  (non empty addLoopStr)
+  for F being FinSequence of V1 st for k st k in dom F holds
+  F/.k = 0.V1 holds Sum(F) = 0.V1;
 
 definition
   let K, V1, p1,p2;
@@ -188,17 +178,14 @@ definition
   func Sum M -> FinSequence of V1 means
 :: MATRLIN:def 8
 
-  len it = len M & for k st k in
-  dom it holds it/.k = Sum (M/.k);
+  len it = len M & for k st k in dom it holds it/.k = Sum (M/.k);
 end;
 
 theorem :: MATRLIN:17
-  for M be Matrix of the carrier of V1 st len M = 0 holds Sum Sum
-  M = 0.V1;
+  for M be Matrix of the carrier of V1 st len M = 0 holds Sum Sum M = 0.V1;
 
 theorem :: MATRLIN:18
-  for M be Matrix of m+1,0,the carrier of V1 holds Sum Sum M = 0.
-  V1;
+  for M be Matrix of m+1,0,the carrier of V1 holds Sum Sum M = 0.V1;
 
 theorem :: MATRLIN:19
   for x be Element of D holds <*<*x*>*> = <*<*x*>*>@;
@@ -221,8 +208,7 @@ of V1, p being Permutation of dom F st F1 = F * p holds KL (#) F1 = (KL (#) F)
   * p;
 
 theorem :: MATRLIN:24
-  F is one-to-one & Carrier KL c= rng F implies Sum(KL (#) F) =
-  Sum KL;
+  F is one-to-one & Carrier KL c= rng F implies Sum(KL (#) F) = Sum KL;
 
 theorem :: MATRLIN:25
   for A be set for p be FinSequence of V1 st rng p c= A holds f1
@@ -258,8 +244,8 @@ theorem :: MATRLIN:27
   Line(M1^M2,i) = Line(M1,i);
 
 theorem :: MATRLIN:28
-  for M1 be Matrix of n,k,D, M2 be Matrix of m,k,D st width M1 =
-  width M2 holds width (M1^M2) = width M1;
+  for M1 be Matrix of n,k,D, M2 be Matrix of m,k,D st
+  width M1 = width M2 holds width (M1^M2) = width M1;
 
 theorem :: MATRLIN:29
   for M1 be Matrix of t,k,D, M2 be Matrix of m,k,D st n in dom M2 & i =
@@ -282,8 +268,8 @@ theorem :: MATRLIN:33
   Sum(M1 ^^ M2);
 
 theorem :: MATRLIN:34
-  for P1,P2 be FinSequence of V1 st len P1 = len P2 holds Sum(P1 +
-  P2) = (Sum P1) + (Sum P2);
+  for P1,P2 be FinSequence of V1 st len P1 = len P2 holds
+  Sum(P1 + P2) = (Sum P1) + (Sum P2);
 
 theorem :: MATRLIN:35
   for M1,M2 be Matrix of the carrier of V1 st len M1 = len M2
@@ -292,15 +278,15 @@ theorem :: MATRLIN:35
 canceled;
 
 theorem :: MATRLIN:37
-  for M be Matrix of the carrier of V1 holds Sum Sum M = Sum Sum (
-  M@);
+  for M be Matrix of the carrier of V1 holds Sum Sum M = Sum Sum (M@);
 
 theorem :: MATRLIN:38
-  for M being Matrix of n,m,the carrier of K st n > 0 & m > 0 for
-p,d being FinSequence of K st len p = n & len d = m & for j st j in dom d holds
-d/.j = Sum mlt(p,Col(M,j)) for b,c being FinSequence of V1 st len b = m & len c
-= n & for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b) holds Sum lmlt(p,c
-  ) = Sum lmlt(d,b);
+  for M being Matrix of n,m,the carrier of K st n > 0 & m > 0
+  for p,d being FinSequence of K st len p = n & len d = m &
+  for j st j in dom d holds d/.j = Sum mlt(p,Col(M,j))
+  for b,c being FinSequence of V1 st len b = m & len c = n &
+  for i st i in dom c holds c/.i = Sum lmlt(Line(M,i),b) holds
+  Sum lmlt(p,c) = Sum lmlt(d,b);
 
 begin :: Decomposition of a Vector in Basis
 
@@ -327,10 +313,10 @@ theorem :: MATRLIN:41
   len d = len b1 implies d = Sum(lmlt(d,b1)) |-- b1;
 
 theorem :: MATRLIN:42
-  for a,d be FinSequence of K st len a = len b1 for j be Nat st j
-in dom b2 & len d = len b1 & for k st k in dom b1 holds d.k =
-(f.((b1/.k)) |-- b2)/.j holds
-len b1 > 0 implies (Sum(lmlt(a,f*b1)) |-- b2)/.j = Sum(mlt(a,d));
+  for a,d be FinSequence of K st len a = len b1
+  for j be Nat st j in dom b2 & len d = len b1 &
+  for k st k in dom b1 holds d.k = (f.((b1/.k)) |-- b2)/.j holds
+    len b1 > 0 implies (Sum(lmlt(a,f*b1)) |-- b2)/.j = Sum(mlt(a,d));
 
 begin :: Matrices of Linear Transformations
 
@@ -343,8 +329,7 @@ definition
   func AutMt(f,b1,b2) -> Matrix of K means
 :: MATRLIN:def 10
 
-  len it = len b1 & for k st
-  k in dom b1 holds it/.k = f.(b1/.k) |-- b2;
+  len it = len b1 & for k st k in dom b1 holds it/.k = f.(b1/.k) |-- b2;
 end;
 
 theorem :: MATRLIN:43
@@ -355,17 +340,14 @@ theorem :: MATRLIN:44
 
 theorem :: MATRLIN:45
   f1 is additive homogeneous & f2 is additive homogeneous &
-   AutMt(f1,b1,b2) = AutMt(f2,b1,b2) & len
-  b1 > 0 implies f1 = f2;
+   AutMt(f1,b1,b2) = AutMt(f2,b1,b2) & len b1 > 0 implies f1 = f2;
 
 theorem :: MATRLIN:46
   g is additive homogeneous & len b1 > 0 & len b2 > 0 implies
-   AutMt(g*f,b1,b3) = AutMt
-  (f,b1,b2) * AutMt(g,b2,b3);
+   AutMt(g*f,b1,b3) = AutMt(f,b1,b2) * AutMt(g,b2,b3);
 
 theorem :: MATRLIN:47
   AutMt(f1+f2,b1,b2) = AutMt(f1,b1,b2) + AutMt(f2,b1,b2);
 
 theorem :: MATRLIN:48
   a <> 0.K implies AutMt(a*f,b1,b2) = a * AutMt(f,b1,b2);
-

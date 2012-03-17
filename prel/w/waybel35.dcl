@@ -381,7 +381,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="310">
+<Func kind="K" nr="309">
 <Func kind="K" nr="384">
 <LocusVar nr="1"/>
 </Func>
@@ -390,7 +390,7 @@
 </Adjective>
 <Adjective nr="108">
 <LocusVar nr="1"/>
-<Func kind="K" nr="310">
+<Func kind="K" nr="309">
 <Func kind="K" nr="384">
 <LocusVar nr="1"/>
 </Func>

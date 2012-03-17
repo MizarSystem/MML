@@ -3,7 +3,7 @@
 ::
 :: Received April 6, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SUBSET_1, REAL_1, NORMSP_1, PARTFUN1, NAT_1, PRE_TOPC,
@@ -15,9 +15,10 @@ environ
       FUNCT_2, FUNCOP_1, XCMPLX_0, XXREAL_0, XREAL_0, NUMBERS, COMPLEX1,
       REAL_1, NAT_1, RLVECT_1, SQUARE_1, STRUCT_0, PRE_TOPC, ORDINAL1,
       VALUED_1, SEQ_1, SEQ_2, VALUED_0, SEQ_4, ABIAN, POWER, VFUNCT_1,
-      NORMSP_1, LOPBAN_1, RSSPACE3, NFCONT_1, RECDEF_1;
- constructors REAL_1, SQUARE_1, COMPLEX1, SEQ_2, SEQ_4, POWER, ABIAN, VFUNCT_1,
-      RSSPACE3, LOPBAN_3, NFCONT_1, SEQ_1, VALUED_1, RECDEF_1, RELSET_1;
+      NORMSP_0, NORMSP_1, LOPBAN_1, RSSPACE3, NFCONT_1, RECDEF_1;
+ constructors REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, SEQ_4, PARTFUN2, POWER,
+      ABIAN, BHSP_3, VFUNCT_1, RSSPACE3, LOPBAN_3, NFCONT_1, SEQ_1, VALUED_1,
+      RECDEF_1, NORMSP_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0,
       MEMBERED, STRUCT_0, VALUED_1, FUNCT_2, NUMBERS, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -25,7 +26,8 @@ environ
  theorems TARSKI, ABSVALUE, XBOOLE_1, RLVECT_1, XCMPLX_1, FUNCOP_1, SEQ_1,
       SEQ_2, SERIES_1, NAT_1, POWER, RELAT_1, FUNCT_1, VFUNCT_1, LOPBAN_1,
       NORMSP_1, SEQ_4, FUNCT_2, RSSPACE3, FUNCT_7, LOPBAN_3, PARTFUN2,
-      NFCONT_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, PARTFUN1, VALUED_0;
+      NFCONT_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, PARTFUN1, VALUED_0,
+      NORMSP_0;
  schemes SEQ_1, NAT_1, FUNCT_2;
 
 begin :: Uniform Continuity of Functions on Normed Linear Spaces
@@ -33,12 +35,10 @@ begin :: Uniform Continuity of Functions on Normed Linear Spaces
 reserve n,m for Element of NAT,
   x,X,X1 for set,
   s,g,r,p for Real,
-  S,T for
-  RealNormSpace,
+  S,T for RealNormSpace,
   f,f1,f2 for PartFunc of S, T,
   s1,s2,q1 for sequence of S,
-  x0,x1,
-  x2 for Point of S,
+  x0,x1, x2 for Point of S,
   Y for Subset of S;
 
 definition
@@ -71,8 +71,7 @@ A2: X1 c= X;
   X c= dom f by A1,Def1;
   hence X1 c= dom f by A2,XBOOLE_1:1;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then consider s such that
 A3: 0<s and
 A4: for x1,x2 st x1 in X & x2 in X & ||.x1-x2.||<s holds ||.f/.x1-f/.x2
@@ -80,8 +79,7 @@ A4: for x1,x2 st x1 in X & x2 in X & ||.x1-x2.||<s holds ||.f/.x1-f/.x2
   take s;
   thus 0<s by A3;
   let x1,x2;
-  assume
-  x1 in X1 & x2 in X1 & ||.x1-x2.||<s;
+  assume x1 in X1 & x2 in X1 & ||.x1-x2.||<s;
   hence thesis by A2,A4;
 end;
 
@@ -101,8 +99,7 @@ A5: f1 is_uniformly_continuous_on X /\ X1 by A1,Th1,XBOOLE_1:17;
   hence
 A6: X /\ X1 c= dom (f1+f2) by VFUNCT_1:def 1;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then
 A7: 0<r/2 by XREAL_1:217;
   then consider s such that
@@ -158,8 +155,7 @@ A5: f1 is_uniformly_continuous_on X /\ X1 by A1,Th1,XBOOLE_1:17;
   hence
 A6: X /\ X1 c= dom (f1-f2) by VFUNCT_1:def 2;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then
 A7: 0<r/2 by XREAL_1:217;
   then consider s such that
@@ -199,8 +195,7 @@ VFUNCT_1:def 2
 end;
 
 theorem Th4:
-  f is_uniformly_continuous_on X implies p(#)f
-  is_uniformly_continuous_on X
+  f is_uniformly_continuous_on X implies p(#)f is_uniformly_continuous_on X
 proof
   assume
 A1: f is_uniformly_continuous_on X;
@@ -231,7 +226,7 @@ VFUNCT_1:def 4
         .= ||.0.T - p*(f/.x2).|| by A2,A7,VFUNCT_1:def 4
         .= ||.0.T - 0.T.|| by A3,RLVECT_1:23
         .= ||.0.T .|| by RLVECT_1:26
-        .= 0 by NORMSP_1:def 2;
+        .= 0 by NORMSP_0:def 6;
       hence ||.(p(#)f)/.x1-(p(#)f)/.x2.|| <r by A4;
     end;
     suppose
@@ -240,8 +235,7 @@ A8:   p<>0;
 A9:   0 <> abs(p) by COMPLEX1:133;
       let r;
 A10:  0<abs(p) by A8,COMPLEX1:133;
-      assume
-      0<r;
+      assume 0<r;
       then 0 < r/abs(p) by A10,XREAL_1:141;
       then consider s such that
 A11:  0<s and
@@ -271,23 +265,20 @@ theorem
   f is_uniformly_continuous_on X implies -f is_uniformly_continuous_on X
 proof
 A1: -f = (-1)(#)f by VFUNCT_1:29;
-  assume
-  f is_uniformly_continuous_on X;
+  assume f is_uniformly_continuous_on X;
   hence thesis by A1,Th4;
 end;
 
 theorem
-  f is_uniformly_continuous_on X implies ||.f .||
-  is_uniformly_continuous_on X
+  f is_uniformly_continuous_on X implies ||.f .|| is_uniformly_continuous_on X
 proof
   assume
 A1: f is_uniformly_continuous_on X;
   then X c= dom f by Def1;
   hence
-A2: X c= dom (||.f.||) by NFCONT_1:def 2;
+A2: X c= dom (||.f.||) by NORMSP_0:def 3;
   let r;
-  assume
-  0<r;
+  assume 0<r;
   then consider s such that
 A3: 0<s and
 A4: for x1,x2 st x1 in X & x2 in X & ||.x1-x2.||<s holds ||.f/.x1-f/.x2
@@ -302,8 +293,8 @@ A7: ||.x1-x2.||<s;
   abs((||.f.||)/.x1-(||.f.||)/.x2) =abs((||.f.||).x1-(||.f.||)/.x2) by A2,A5,
 PARTFUN1:def 8
     .=abs((||.f.||).x1-(||.f.||).x2) by A2,A6,PARTFUN1:def 8
-    .= abs(||.f/.x1.||-(||.f.||).x2) by A2,A5,NFCONT_1:def 2
-    .= abs(||.f/.x1.|| - ||.f/.x2.||) by A2,A6,NFCONT_1:def 2;
+    .= abs(||.f/.x1.||-(||.f.||).x2) by A2,A5,NORMSP_0:def 3
+    .= abs(||.f/.x1.|| - ||.f/.x2.||) by A2,A6,NORMSP_0:def 3;
   then
 A8: abs((||.f.||)/.x1-(||.f.||)/.x2) <= ||.f/.x1-f/.x2.|| by NORMSP_1:13;
   ||.f/.x1-f/.x2.||<r by A4,A5,A6,A7;
@@ -328,8 +319,7 @@ A6: for x1,x2 st x1 in X & x2 in X & ||.x1 -x2.|| < s holds ||.f/.x1 -
     take s;
     thus 0<s by A5;
     let x1;
-    assume
-    x1 in X & ||.x1-x0.|| < s;
+    assume x1 in X & ||.x1-x0.|| < s;
     hence ||.f/.x1 - f/.x0.|| < r by A3,A6;
   end;
   X c= dom f by A1,Def1;
@@ -356,8 +346,7 @@ A6: for x1,x2 st x1 in X & x2 in X & ||.x1 -x2.|| < s holds abs(f/.x1
     take s;
     thus 0<s by A5;
     let x1;
-    assume
-    x1 in X & ||.x1-x0.|| < s;
+    assume x1 in X & ||.x1-x0.|| < s;
     hence abs(f/.x1 - f/.x0) < r by A3,A6;
   end;
   X c= dom f by A1,Def2;
@@ -379,8 +368,7 @@ A4: 0<p;
   take s=p/r;
   thus 0<s by A2,A4,XREAL_1:141;
   let x1,x2;
-  assume
-  x1 in X & x2 in X & ||.x1 -x2.|| < s;
+  assume x1 in X & x2 in X & ||.x1 -x2.|| < s;
   then r*||.x1 -x2.|| < s*r & ||.f/.x1-f/.x2.||<=r*||.x1-x2.|| by A2,A3,
 XREAL_1:70;
   then ||.f/.x1-f/.x2.||<p/r*r by XXREAL_0:2;
@@ -395,8 +383,7 @@ proof
 A1: Y is compact and
 A2: f is_continuous_on Y;
 A3: Y c= dom f by A2,NFCONT_1:def 11;
-  assume
-  not thesis;
+  assume not thesis;
   then consider r such that
 A4: 0<r and
 A5: for s st 0<s ex x1,x2 st x1 in Y & x2 in Y & ||.x1 -x2.|| < s & not
@@ -425,8 +412,7 @@ A10: for n ex x2 st P[n,x2] by A9;
 A11: for n holds P[n,s2.n] from FUNCT_2:sch 3(A10);
   now
     let x;
-    assume
-    x in rng s1;
+    assume x in rng s1;
     then ex n st x=s1.n by NFCONT_1:6;
     hence x in Y by A9;
   end;
@@ -442,8 +428,7 @@ A16: q1=s1*Ns1 by A13,VALUED_0:def 17;
 A17: f|Y is_continuous_in (lim q1) by A2,A15,NFCONT_1:def 11;
   now
     let x;
-    assume
-    x in rng s2;
+    assume x in rng s2;
     then ex n st x=s2.n by NFCONT_1:6;
     hence x in Y by A11;
   end;
@@ -477,8 +462,7 @@ A24: 0 < p" by A23;
 A25: p" < k by SEQ_4:10;
     take k;
     let m;
-    assume
-    k <= m;
+    assume k <= m;
     then k+1 <= m+1 by XREAL_1:8;
     then 1/(m+1) <= 1/(k+1) by A25,A24,XREAL_1:120;
     then
@@ -593,33 +577,24 @@ be RealNormSpace for x,y,z be Point of X for e be Real st e>0 holds ((||.x-z.||
 be Point of X st (for e be Real st e>0 holds ||.x.|| <e) holds x=0.X ) & for X
 be RealNormSpace for x,y be Point of X st (for e be Real st e>0 holds ||.x-y.||
 <e) holds x=y
-
 proof
-
 A1: for X be RealNormSpace for x, y, z be Point of X for e be Real st e > 0
   holds ( ||.x-z.|| < e/2 & ||.z-y.|| < e/2 implies ||.x-y.|| <e)
-
   proof
     let X be RealNormSpace;
     let x, y, z be Point of X;
     let e be Real such that
     e > 0;
-    assume
-    ||.x-z.|| < e/2 & ||.z-y.|| < e/2;
+    assume ||.x-z.|| < e/2 & ||.z-y.|| < e/2;
     then ||.x-z.|| + ||.z-y.|| < e/2 + e/2 by XREAL_1:10;
-
     then ||.x-y.|| + (||.x-z.|| + ||.z-y.||) < (||.x-z.|| + ||.z-y.||) + e by
 NORMSP_1:14,XREAL_1:10;
-
     then ||.x-y.|| + (||.x-z.|| + ||.z-y.||) +- (||.x-z.|| + ||.z-y.||) < e +
     (||.x-z.|| + ||.z-y.||) +- (||.x-z.|| + ||.z-y.||) by XREAL_1:10;
-
     hence thesis;
   end;
-
 A2: for X be RealNormSpace for x, y, z be Point of X for e be Real st e > 0
   holds ( ||.x-z.|| < e/2 & ||.y-z.|| < e/2 implies ||.x-y.|| < e)
-
   proof
     let X be RealNormSpace;
     let x, y, z be Point of X;
@@ -632,59 +607,47 @@ A5: ||.y-z.|| < e/2;
     then ||.z-y.|| < e/2 by RLVECT_1:47;
     hence thesis by A1,A3,A4;
   end;
-
 A6: for X be RealNormSpace for x, y be Point of X holds ||.x-y.|| > 0 iff x
   <> y
-
   proof
     let X be RealNormSpace;
     let x, y be Point of X;
-    0 < ||.x-y.|| implies x-y <> 0.X by NORMSP_1:def 2;
+    0 < ||.x-y.|| implies x-y <> 0.X by NORMSP_0:def 6;
     hence 0 < ||.x-y.|| implies x <> y by RLVECT_1:28;
     now
-      assume
-      x <> y;
+      assume x <> y;
       then 0 <> ||.x-y.|| by NORMSP_1:15;
       hence 0 < ||.x-y.|| by NORMSP_1:8;
     end;
     hence thesis;
   end;
-
-A7: for X be RealNormSpace for x, y be Point of X holds ||.x-y.|| = ||.y-x
-  .||
-
+A7: for X be RealNormSpace for x, y be Point of X holds ||.x-y.|| = ||.y-x .||
   proof
     let X be RealNormSpace;
     let x, y be Point of X;
     thus ||.x-y.|| = ||.-(x-y).|| by NORMSP_1:6
       .= ||.y-x.|| by RLVECT_1:47;
   end;
-
 A8: for X be RealNormSpace for x be Point of X st (for e be Real st e>0
   holds ||.x.|| <e) holds x=0.X
-
   proof
     let X be RealNormSpace;
     let x be Point of X such that
 A9: for e be Real st e > 0 holds ||.x.|| <e;
     now
-      assume
-      x<>0.X;
-      then 0<> ||.x.|| by NORMSP_1:def 2;
+      assume x<>0.X;
+      then 0<> ||.x.|| by NORMSP_0:def 5;
       then 0< ||.x.|| by NORMSP_1:8;
       hence contradiction by A9;
     end;
     hence thesis;
   end;
-
   for X be RealNormSpace for x,y be Point of X st (for e be Real st e>0
   holds ||.x-y.|| <e) holds x=y
-
   proof
     let X be RealNormSpace;
     let x,y be Point of X;
-    assume
-    for e be Real st e > 0 holds ||.x-y.|| <e;
+    assume for e be Real st e > 0 holds ||.x-y.|| <e;
     then x-y = 0.X by A8;
     hence thesis by RLVECT_1:35;
   end;
@@ -693,7 +656,6 @@ end;
 
 Lm2: for K, L, e be real number st 0 < K & K < 1 & 0 < e ex n be Element of
 NAT st abs (L * (K to_power n )) < e
-
 proof
   let K, L, e be real number such that
 A1: 0 < K & K < 1 and
@@ -706,10 +668,8 @@ A5: lim rseq = 0 by A1,A3,SERIES_1:1;
   lim ( L(#)rseq ) = L* lim rseq by A1,A3,SEQ_2:22,SERIES_1:1
     .=0 by A5;
   then consider n be Element of NAT such that
-
 A6: for m be Element of NAT st n<=m holds abs( (L(#)rseq).m-0 ) < e by A2,A4,
 SEQ_2:def 7;
-
   abs( (L(#)rseq).n-0 ) < e by A6;
   then abs( L*rseq.n ) < e by SEQ_1:13;
   then abs( L*(K to_power (n+1)) ) < e by A3;
@@ -724,8 +684,7 @@ proof
   let X be RealBanachSpace;
   consider x0 be Element of X;
   let f be Function of X,X;
-  assume
-  f is contraction of X;
+  assume f is contraction of X;
   then consider K be Real such that
 A1: 0 < K and
 A2: K < 1 and
@@ -760,8 +719,7 @@ A9: for n be Element of NAT holds ||.g.(n+1) - g.n .|| <= ||. g.1-g.0 .||*
 A10: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
-      assume
-      P[k];
+      assume P[k];
       then
 A11:  K* ||. g.(k+1) - g.k .|| <= K*( ||. g.1-g.0 .||* (K to_power k ) )
       by A1,XREAL_1:66;
@@ -890,14 +848,12 @@ A29:  n+k2 =l by NAT_1:10;
       then
 A30:  ||.g.l - g.n .|| < e/2 by A25,A29,XXREAL_0:2;
       reconsider k1 as Element of NAT by ORDINAL1:def 13;
-      ||.g.(n+k1) - g.n .|| <= ||. g.1-g.0 .||*( (K to_power n) /(1-K))
-      by A19;
+      ||.g.(n+k1) - g.n .|| <= ||. g.1-g.0 .||*( (K to_power n) /(1-K)) by A19;
       then ||.g.m - g.n .|| < e/2 by A25,A28,XXREAL_0:2;
       hence ||.g.l - g.m .|| < e by A23,A30,Lm1;
     end;
     hence
-    for n, m be Element of NAT st n >= nn & m >= nn holds ||.g.n - g.m.||
-    < e;
+    for n, m be Element of NAT st n >= nn & m >= nn holds ||.g.n - g.m.|| < e;
   end;
   then g is Cauchy_sequence_by_Norm by RSSPACE3:10;
   then
@@ -912,19 +868,17 @@ A34: for e be Real st e >0 ex n be Element of NAT st for m be Element of NAT
   st n<=m holds ||. (g^\1).m - f. (lim g) .|| <e
   proof
     let e be Real;
-    assume
-    e >0;
+    assume e >0;
     then consider n be Element of NAT such that
 A35: for m be Element of NAT st n<=m holds abs( (K(#)||. g - lim g .||
     ).m-0) <e by A32,A33,SEQ_2:def 7;
     take n;
     now
       let m be Element of NAT;
-      assume
-      n<=m;
+      assume n<=m;
       then abs( (K(#)||. g - lim g .||).m-0)<e by A35;
       then abs( K*||. g - lim g .||.m) < e by SEQ_1:13;
-      then abs( K*||. (g - lim g).m .||) < e by NORMSP_1:def 10;
+      then abs( K*||. (g - lim g).m .||) < e by NORMSP_0:def 4;
       then
 A36:  abs( K*||. g.m - lim g .||) < e by NORMSP_1:def 7;
       K*||. g.m - lim g .|| <=abs( K*||. g.m - lim g .||) by ABSVALUE:11;
@@ -949,8 +903,7 @@ A41: for k be Element of NAT holds ||.x-xp.|| <= ||.x-xp.||*(K to_power k)
 A42:  for k be Element of NAT st P[k] holds P[k+1]
       proof
         let k be Element of NAT;
-        assume
-        P[k];
+        assume P[k];
         then
 A43:    K* ||. x-xp .|| <= K*( ||.x-xp.||*(K to_power k) ) by A1,XREAL_1:66;
         ||.f.x - f.xp .|| <= K* ||. x-xp .|| by A3;
@@ -970,8 +923,7 @@ A44:  P[0];
     for e be Real st 0 <e holds ||.x-xp.|| < e
     proof
       let e be Real;
-      assume
-      0 < e;
+      assume 0 < e;
       then consider n be Element of NAT such that
 A45:  abs(||.x-xp.||*(K to_power n) ) < e by A1,A2,Lm2;
       ||.x-xp.||*(K to_power n) <=abs(||.x-xp.||*(K to_power n)) by ABSVALUE:11
@@ -1032,4 +984,3 @@ end;
 theorem
   for K, L, e be real number st 0 < K & K < 1 & 0 < e ex n be Element of
   NAT st abs (L * (K to_power n)) < e by Lm2;
-

@@ -11,17 +11,19 @@ environ
       NORMSP_1, SUPINF_2, EUCLID, ALGSTR_0, RLVECT_1, PRE_TOPC, REAL_1, CARD_1,
       XXREAL_0, ARYTM_1, FINSEQ_1, CARD_3, ORDINAL4, TARSKI, RVSUM_1, SQUARE_1,
       SEQ_2, ORDINAL2, SEQ_1, VALUED_1, RSSPACE3, LOPBAN_1, REWRITE1, BHSP_1,
-      PROB_2, BINOP_2, METRIC_1, BHSP_3, REAL_NS1;
+      PROB_2, BINOP_2, METRIC_1, BHSP_3, REAL_NS1, RELAT_2, NORMSP_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, PRE_TOPC, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, ALGSTR_0,
-      FUNCOP_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, COMPLEX1,
-      REAL_1, RLVECT_1, BHSP_1, BHSP_2, BINOP_2, VALUED_1, SEQ_1, SEQ_2,
-      RVSUM_1, NORMSP_1, EUCLID, RSSPACE3, LOPBAN_1, BHSP_3;
- constructors REAL_1, SQUARE_1, BINOP_2, COMPLEX1, SEQ_2, FINSEQOP, REALSET2,
-      BHSP_2, BHSP_3, RSSPACE3, LOPBAN_1, SEQ_1, RVSUM_1, EUCLID, RELSET_1;
+      BINOP_1, XCMPLX_0, PRE_TOPC, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0,
+      ALGSTR_0, FUNCOP_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1,
+      COMPLEX1, REAL_1, RLVECT_1, BHSP_1, BHSP_2, BINOP_2, VALUED_1, SEQ_1,
+      SEQ_2, RVSUM_1, NORMSP_0, NORMSP_1, EUCLID, RSSPACE3, LOPBAN_1, BHSP_3;
+ constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, SUPINF_1, SEQ_2,
+      FINSEQOP, REALSET2, BHSP_2, BHSP_3, RSSPACE3, LOPBAN_1, PARTFUN1, SEQ_1,
+      BINOP_1, VALUED_1, RVSUM_1, EUCLID, NORMSP_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_2, STRUCT_0, NORMSP_1, BHSP_1,
-      REVROT_1, RSSPACE3, VALUED_0, VALUED_1, FUNCT_2, EUCLID, FINSEQ_1;
+      REVROT_1, RSSPACE3, VALUED_0, VALUED_1, FUNCT_2, EUCLID, FINSEQ_1,
+      NORMSP_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -34,8 +36,7 @@ definition
   func Euclid_add n -> BinOp of REAL n means
 :: REAL_NS1:def 1
 
-  for a,b being Element of
-  REAL n holds it.(a,b) = a+b;
+  for a,b being Element of REAL n holds it.(a,b) = a+b;
 end;
 
 registration
@@ -56,8 +57,7 @@ definition
   func Euclid_norm n -> Function of REAL n,REAL means
 :: REAL_NS1:def 3
 
-  for x being
-  Element of REAL n holds it.x = |.x.|;
+  for x being Element of REAL n holds it.x = |.x.|;
 end;
 
 definition
@@ -67,7 +67,7 @@ definition
 
   the carrier of it =
   REAL n & 0.it = 0*n & the addF of it = Euclid_add n & the Mult of it =
-  Euclid_mult n & the norm of it = Euclid_norm n;
+  Euclid_mult n & the normF of it = Euclid_norm n;
 end;
 
 registration
@@ -89,22 +89,20 @@ theorem :: REAL_NS1:3
 
 registration
   let n be Element of NAT;
-  cluster REAL-NS n -> RealNormSpace-like vector-distributive
-  scalar-distributive scalar-associative scalar-unital Abelian
-    add-associative right_zeroed right_complementable;
+  cluster REAL-NS n -> reflexive discerning RealNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable;
 end;
 
 theorem :: REAL_NS1:4
-  for x be VECTOR of REAL-NS n, a be Element of REAL n st x=a holds
-  -x = -a;
+  for x be VECTOR of REAL-NS n, a be Element of REAL n st x=a holds -x = -a;
 
 theorem :: REAL_NS1:5
   for x,y be VECTOR of REAL-NS n, a,b be Element of REAL n st x=a &
   y=b holds x-y = a - b;
 
 theorem :: REAL_NS1:6
-  for f be FinSequence of REAL st dom f = Seg n holds f is Element
-  of REAL n;
+  for f be FinSequence of REAL st dom f = Seg n holds f is Element of REAL n;
 
 theorem :: REAL_NS1:7
   for n be Element of NAT, x be Element of REAL n st (for i be
@@ -120,8 +118,7 @@ theorem :: REAL_NS1:9
   for i be Element of NAT st i in Seg n holds abs(y.i) <= ||.x.||;
 
 theorem :: REAL_NS1:10
-  for x be Element of REAL (n+1) holds |.x.|^2 = |.(x|n).|^2 + (x.
-  (n+1))^2;
+  for x be Element of REAL (n+1) holds |.x.|^2 = |.(x|n).|^2 + (x. (n+1))^2;
 
 definition
   let n be Element of NAT;
@@ -152,8 +149,7 @@ definition
   func Euclid_scalar n -> Function of [:REAL n,REAL n:],REAL means
 :: REAL_NS1:def 5
 
-  for
-  x,y being Element of REAL n holds it.(x,y) = Sum mlt(x,y);
+  for x,y being Element of REAL n holds it.(x,y) = Sum mlt(x,y);
 end;
 
 definition
@@ -211,4 +207,3 @@ registration
   let n;
   cluster REAL-US n -> complete;
 end;
-

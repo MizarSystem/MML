@@ -14,26 +14,23 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, FINSET_1, CARD_1,
       NUMBERS, XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, NAT_1, RELAT_1, FUNCT_1,
       RELSET_1, FINSEQ_1, ORDERS_1, FUNCT_2, INT_1, SEQ_1, SERIES_1, PARTFUN1,
-      MODELC_1, MODELC_2, RFINSEQ2;
+      STRUCT_0, MODELC_1, MODELC_2, RFINSEQ2;
  constructors KNASTER, MODELC_2, SERIES_1, REAL_1, NEWTON, RFINSEQ2, SEQ_1,
       RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, ORDERS_1, FINSET_1, MODELC_2, FINSEQ_1, NUMBERS,
-      VALUED_0, MEMBERED, CARD_1;
+      VALUED_0, MEMBERED, STRUCT_0, MODELC_1, CARD_1;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
 
 
 begin
 
-reserve k,k1,n,n1,m,m1,m0,m01,h,i,i1,j,j1 for Nat,
-  a,b,x,y,X,X1,X2,X3,X4,Y,Z
-  for set,
-  D,D1,D2,S for non empty set;
-reserve L,L9,L1,L2 for FinSequence;
+reserve k,n,n1,m,m1,m0,h,i,j for Nat,
+  a,x,y,X,X1,X2,X3,X4,Y for set;
+reserve L,L1,L2 for FinSequence;
 reserve F,F1,G,G1,H for LTL-formula;
 reserve W,W1,W2 for Subset of Subformulae H;
 reserve v for LTL-formula;
-reserve r,r1,r2 for real number;
 
 definition
   let F;
@@ -119,8 +116,7 @@ definition
   pred N2 is_succ1_of N1 means
 :: MODELC_3:def 7
 
-  ex H st H in the LTLnew of N1 & N2 =
-  SuccNode1(H,N1);
+  ex H st H in the LTLnew of N1 & N2 = SuccNode1(H,N1);
   pred N2 is_succ2_of N1 means
 :: MODELC_3:def 8
 
@@ -218,7 +214,7 @@ end;
 
 :: Some properties of basic operations to build an automaton for LTL.
 
-reserve N,N1,N2,N3,N10,N20,M,M1,M2 for strict LTLnode over v;
+reserve N,N1,N2,N10,N20,M for strict LTLnode over v;
 reserve w for Element of Inf_seq(AtomicFamily);
 
 definition
@@ -289,7 +285,7 @@ definition
   implies it.k = len CastLTL(L.k)) & (not L.k in W implies it.k=0 );
 end;
 
-reserve R,R1,R2 for Real_Sequence;
+reserve R1,R2 for Real_Sequence;
 
 definition
   let H, W, L;
@@ -321,8 +317,7 @@ definition
   func len(W) -> Real means
 :: MODELC_3:def 26
 
-  ex L st rng L = Subformulae H & L is
-  one-to-one & it = len(L,W);
+  ex L st rng L = Subformulae H & L is one-to-one & it = len(L,W);
 end;
 
 theorem :: MODELC_3:9
@@ -370,12 +365,10 @@ definition
 end;
 
 theorem :: MODELC_3:19
-  N2 is_succ1_of N1 implies len(the LTLnew of N2) <= len(the
-  LTLnew of N1) - 1;
+  N2 is_succ1_of N1 implies len(the LTLnew of N2) <= len(the LTLnew of N1) - 1;
 
 theorem :: MODELC_3:20
-  N2 is_succ2_of N1 implies len(the LTLnew of N2) <= len(the
-  LTLnew of N1) - 1;
+  N2 is_succ2_of N1 implies len(the LTLnew of N2) <= len(the LTLnew of N1) - 1;
 
 definition
   let v, N;
@@ -402,8 +395,7 @@ theorem :: MODELC_3:25
   the LTLnext of N1 c= the LTLnext of N2;
 
 theorem :: MODELC_3:26
-  L is_Finseq_for v & m<= len(L) & L1 = L|Seg m implies L1
-  is_Finseq_for v;
+  L is_Finseq_for v & m<= len(L) & L1 = L|Seg m implies L1 is_Finseq_for v;
 
 theorem :: MODELC_3:27
   L is_Finseq_for v & not F in the LTLold of CastNode(L.1,v) & 1<
@@ -451,7 +443,7 @@ theorem :: MODELC_3:36
   L is_Finseq_for v & 1<= k & k<=len(L) implies len(CastNode(L.k,v
   )) <= len(CastNode(L.1,v)) -k+1;
 
-reserve s,s0,s1,s2,t,t0,t1,t2 for elementary strict LTLnode over v;
+reserve s,s0,s1,s2 for elementary strict LTLnode over v;
 
 theorem :: MODELC_3:37
   s2 is_next_of s1 implies the LTLnext of s1 c= the LTLold of s2;
@@ -488,8 +480,7 @@ definition
   func LTLNodes(v) -> non empty set means
 :: MODELC_3:def 30
 
-  x in it iff ex N being
-  strict LTLnode over v st x=N;
+  x in it iff ex N being strict LTLnode over v st x=N;
 end;
 
 registration
@@ -573,7 +564,7 @@ elementary & w |= *CastNode(x,v) holds ex n st (for i st i<n holds CastNode((f
 |**i).x,v)) & CastNode((f|**n).x,v) is elementary & for i st i<=n holds w |= *
   CastNode((f|**i).x,v);
 
-reserve q,q1,q2 for sequence of LTLStates(v);
+reserve q for sequence of LTLStates(v);
 
 theorem :: MODELC_3:52
   ex s st s = CastNode(q.n,v);
@@ -628,8 +619,7 @@ definition
 end;
 
 theorem :: MODELC_3:58
-  N is non elementary implies chosen_formula(U,N) in the LTLnew of
-  N;
+  N is non elementary implies chosen_formula(U,N) in the LTLnew of N;
 
 definition
   let w;
@@ -695,13 +685,11 @@ definition
   attr H is Sub_atomic means
 :: MODELC_3:def 38
 
-  H is atomic or ex G being LTL-formula st G
-  is atomic & H = 'not' G;
+  H is atomic or ex G being LTL-formula st G is atomic & H = 'not' G;
 end;
 
 theorem :: MODELC_3:63
-  H is neg-inner-most & F is_subformula_of H implies F is
-  neg-inner-most;
+  H is neg-inner-most & F is_subformula_of H implies F is neg-inner-most;
 
 theorem :: MODELC_3:64
   H is Sub_atomic iff H is atomic or H is negative &
@@ -712,8 +700,7 @@ theorem :: MODELC_3:65
   or H is disjunctive or H is next or H is Until or H is Release);
 
 theorem :: MODELC_3:66
-  H is next & H is neg-inner-most implies the_argument_of H is
-  neg-inner-most;
+  H is next & H is neg-inner-most implies the_argument_of H is neg-inner-most;
 
 theorem :: MODELC_3:67
   (H is conjunctive or H is disjunctive or H is Until or H is Release) &
@@ -724,8 +711,9 @@ begin :: Definition of Buchi Automaton (finite state & infinite word ) .
 
 definition
   let W be non empty set;
-  struct BuchiAutomaton over W (# carrier -> set, Tran -> Relation of [:the
-    carrier,W :], the carrier, InitS -> Element of bool the carrier, FinalS ->
+  struct(1-sorted) BuchiAutomaton over W (# carrier -> set,
+    Tran -> Relation of [:the carrier,W :], the carrier,
+    InitS -> Element of bool the carrier, FinalS ->
     Subset of bool the carrier #);
 end;
 
@@ -746,8 +734,8 @@ end;
 
 reserve v for neg-inner-most LTL-formula;
 reserve U for Choice_Function of BOOL Subformulae v;
-reserve N,N1,N2,M,M1,M2 for strict LTLnode over v;
-reserve s,s0,s1,s2 for elementary strict LTLnode over v;
+reserve N,N1,N2,M1 for strict LTLnode over v;
+reserve s,s1 for elementary strict LTLnode over v;
 
 definition
   let v;
@@ -889,4 +877,3 @@ theorem :: MODELC_3:75
 
 theorem :: MODELC_3:76
   w is-accepted-by BAutomaton(v) iff w |= v;
-

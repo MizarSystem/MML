@@ -20,6 +20,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="CLVECT_1"/>
 <ArticleID name="CSSPACE"/>
@@ -27,7 +28,7 @@
 </Signature>
 <RCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -36,28 +37,28 @@
 <Adjective nr="85"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="106"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
 <Adjective nr="110"/>
+<Adjective nr="114"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="175"/>
+<Func kind="K" nr="173"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="106"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="175"/>
+<Func kind="K" nr="173"/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="110"/>
+<Adjective nr="114"/>
 </Cluster>
 </FCluster>
 </Registrations>

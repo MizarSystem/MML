@@ -24,6 +24,7 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="TSEP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -84,47 +85,27 @@
 <Adjective nr="12" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster aid="BORSUK_4" nr="3">
-<ArgTypes/>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="171"/>
-</Cluster>
-</RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="352"/>
+<Func kind="K" nr="367"/>
 <Cluster>
-<Adjective nr="171"/>
-</Cluster>
-</FCluster>
-<FCluster aid="BORSUK_4" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster>
-<Adjective nr="171"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="134"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="106">
+<Func kind="K" nr="366"/>
+</Adjective>
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="151"/>
+<Adjective nr="156"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="300">
+<Func kind="K" nr="307">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -132,7 +113,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="151"/>
+<Adjective nr="156"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -28,23 +28,14 @@
 <Adjective nr="32" value="false"/>
 <Adjective nr="52"/>
 <Adjective nr="59"/>
-<Adjective nr="69"/>
-<Adjective nr="73"/>
+<Adjective nr="70"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SHEFFER1" nr="2">
-<ArgTypes/>
-<Typ kind="G" nr="12">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="78"/>
-</Cluster>
-</RCluster>
-<RCluster aid="SHEFFER1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -53,7 +44,7 @@
 <Adjective nr="79"/>
 </Cluster>
 </RCluster>
-<RCluster aid="SHEFFER1" nr="4">
+<RCluster aid="SHEFFER1" nr="3">
 <ArgTypes/>
 <Typ kind="G" nr="14">
 <Cluster/>
@@ -62,16 +53,16 @@
 <Adjective nr="80"/>
 </Cluster>
 </RCluster>
-<RCluster aid="SHEFFER1" nr="5">
+<RCluster aid="SHEFFER1" nr="4">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
-<RCluster aid="SHEFFER1" nr="6">
+<RCluster aid="SHEFFER1" nr="5">
 <ArgTypes/>
 <Typ kind="G" nr="13">
 <Cluster/>
@@ -80,9 +71,18 @@
 <Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster aid="SHEFFER1" nr="7">
+<RCluster aid="SHEFFER1" nr="6">
 <ArgTypes/>
 <Typ kind="G" nr="14">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="32" value="false"/>
+</Cluster>
+</RCluster>
+<RCluster aid="SHEFFER1" nr="7">
+<ArgTypes/>
+<Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -91,40 +91,40 @@
 </RCluster>
 <RCluster aid="SHEFFER1" nr="8">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="52"/>
 <Adjective nr="59"/>
-<Adjective nr="70"/>
-<Adjective nr="81"/>
+<Adjective nr="71"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SHEFFER1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="122"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SHEFFER1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="122"/>
 <Cluster>
 <Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SHEFFER1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="122"/>
 <Cluster>
-<Adjective nr="70"/>
-<Adjective nr="81"/>
+<Adjective nr="71"/>
+<Adjective nr="82"/>
 </Cluster>
 </FCluster>
 <CCluster aid="SHEFFER1" nr="1">
@@ -142,10 +142,10 @@
 <Adjective nr="46"/>
 <Adjective nr="48"/>
 <Adjective nr="53"/>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER1" nr="2">
@@ -155,10 +155,10 @@
 <Adjective nr="46"/>
 <Adjective nr="48"/>
 <Adjective nr="53"/>
-<Adjective nr="73"/>
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -175,14 +175,14 @@
 <Adjective nr="32" value="false"/>
 <Adjective nr="37"/>
 </Cluster>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="32" value="false"/>
-<Adjective nr="82"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SHEFFER1" nr="4">

@@ -3,7 +3,7 @@
 ::
 :: Received August 28, 2000
 :: Copyright (c) 2000 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XBOOLE_0, FINSEQ_1, SUBSET_1, NAT_1, XXREAL_0, ARYTM_3,
@@ -17,16 +17,15 @@ environ
       FUNCT_7, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1;
- theorems TARSKI, NAT_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, FINSEQ_6, RFINSEQ,
-      INT_1, GENEALG1, FUNCT_7, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
-      ORDINAL1, NAT_2, PARTFUN1, NAT_D, XREAL_0;
+ theorems NAT_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, FINSEQ_6, RFINSEQ, INT_1,
+      GENEALG1, FUNCT_7, XREAL_1, XXREAL_0, ORDINAL1, NAT_2, PARTFUN1, NAT_D,
+      XREAL_0;
 
 begin :: Some Basic Theorems
 
 reserve D for non empty set,
   f for FinSequence of D,
-  p, p1, p2, p3, q for
-  Element of D,
+  p, p1, p2, p3, q for Element of D,
   i, j, k, l, n for Nat;
 
 theorem
@@ -86,19 +85,17 @@ A5: len g - len g < i - len g by A2,XREAL_1:11;
   0 + 1 <= i - len g by A5,INT_1:20;
   then
 A6: k in dom f by A4,FINSEQ_3:27;
-  (g^f).i = (g^f).(k + len g)
-    .= f.k by A6,FINSEQ_1:def 7
+  (g^f).i = (g^f).(k + len g) .= f.k by A6,FINSEQ_1:def 7
     .= (h^f).(len h + k) by A6,FINSEQ_1:def 7;
   hence thesis by A1;
 end;
 
 theorem
-  for f,g being FinSequence holds 1 <= i & i <= len f implies f.i = (g^f
-  ).(len g + i)
+  for f,g being FinSequence st 1 <= i & i <= len f holds
+    f.i = (g^f).(len g + i)
 proof
   let f,g be FinSequence;
-  assume
-  1 <= i & i <= len f;
+  assume 1 <= i & i <= len f;
   then i in dom f by FINSEQ_3:27;
   hence thesis by FINSEQ_1:def 7;
 end;
@@ -138,21 +135,18 @@ definition
   let p be Element of D;
   redefine func Replace(f, i, p) -> FinSequence of D equals
   :Def1:
-  (f|(i-'1))^
-  <*p*>^(f/^i) if 1 <= i & i <= len f otherwise f;
+  (f|(i-'1))^<*p*>^(f/^i) if 1 <= i & i <= len f otherwise f;
   compatibility
   proof
 A1: not (1 <= i & i <= len f) implies f +* (i, p) = f
     proof
-      assume
-      not (1 <= i & i <= len f);
+      assume not (1 <= i & i <= len f);
       then not i in dom f by FINSEQ_3:27;
       hence thesis by FUNCT_7:def 3;
     end;
     1 <= i & i <= len f implies f +* (i, p) = (f|(i-'1))^<*p*>^(f/^i)
     proof
-      assume
-      1 <= i & i <= len f;
+      assume 1 <= i & i <= len f;
       then i in dom f by FINSEQ_3:27;
       hence thesis by FUNCT_7:100;
     end;
@@ -168,81 +162,23 @@ end;
 
 canceled 2;
 
-theorem Th7:
-  len Replace(f, i, p) = len f
-proof
-  reconsider i as Element of NAT by ORDINAL1:def 13;
-  Seg len (f+*(i,p)) = dom (f+*(i,p)) by FINSEQ_1:def 3
-    .= dom f by FUNCT_7:32
-    .= Seg len f by FINSEQ_1:def 3;
-  hence thesis by FINSEQ_1:8;
-end;
+theorem
+  len Replace(f, i, p) = len f by FUNCT_7:99;
 
 theorem
-  rng Replace(f, i, p) c= rng f \/ {p}
-proof
-  reconsider i as Element of NAT by ORDINAL1:def 13;
-  set P = f|(i-'1);
-  set Q = f/^i;
-  set F = <*f.i*>;
-  rng <*p*> = {p} by FINSEQ_1:56;
-  then
-A1: rng f \/ {p} = rng (f^<*p*>) by FINSEQ_1:44;
-  per cases;
-  suppose
-    not i in Seg (len f);
-    then not (1 <= i & i <= len f);
-    then rng Replace(f,i,p) = rng f by Def1;
-    hence thesis by A1,FINSEQ_1:42;
-  end;
-  suppose
-    i in Seg len f;
-    then
-A2: 1 <= i & i <= len f by FINSEQ_1:3;
-    then
-A3: rng f \/ {p} = rng ((P^F^Q)^<*p*>) by A1,FINSEQ_5:87
-      .= rng (P^F^Q) \/ rng <*p*> by FINSEQ_1:44
-      .= rng (P^(F^Q)) \/ rng <*p*> by FINSEQ_1:45
-      .= rng P \/ rng (F^Q) \/ rng <*p*> by FINSEQ_1:44
-      .= rng P \/ (rng F \/ rng Q) \/ rng <*p*> by FINSEQ_1:44
-      .= rng P \/ ((rng Q \/ rng F) \/ rng <*p*>) by XBOOLE_1:4
-      .= rng P \/ ((rng Q \/ rng <*p*>) \/ rng F) by XBOOLE_1:4
-      .= (rng P \/ (rng Q \/ rng <*p*>)) \/ rng F by XBOOLE_1:4
-      .= (rng P \/ rng (Q^<*p*>)) \/ rng F by FINSEQ_1:44
-      .= (rng (P^(Q^<*p*>))) \/ rng F by FINSEQ_1:44
-      .= rng ((P^(Q^<*p*>))^F) by FINSEQ_1:44;
-    rng Replace(f, i, p) = rng (P^<*p*>^Q) by A2,Def1
-      .= rng (P^(<*p*>^Q)) by FINSEQ_1:45
-      .= rng P \/ rng (<*p*>^Q) by FINSEQ_1:44
-      .= rng P \/ (rng <*p*> \/ rng Q) by FINSEQ_1:44
-      .= rng P \/ rng (Q^<*p*>) by FINSEQ_1:44
-      .= rng (P^(Q^<*p*>)) by FINSEQ_1:44;
-    hence thesis by A3,FINSEQ_1:42;
-  end;
-end;
+  rng Replace(f, i, p) c= rng f \/ {p} by FUNCT_7:102;
 
 theorem
   1 <= i & i <= len f implies p in rng Replace(f, i, p)
 proof
-A1: rng ((f|(i-'1))^<*p*>^(f/^i)) = rng (f|(i-'1)^(<*p*>^(f/^i))) by
-  FINSEQ_1:45
-    .= rng (f|(i-'1)) \/ rng (<*p*>^(f/^i)) by FINSEQ_1:44
-    .= rng (f|(i-'1)) \/ (rng <*p*> \/ rng (f/^i)) by FINSEQ_1:44;
-  p in {p} by TARSKI:def 1;
-  then
-A2: p in rng <*p*> by FINSEQ_1:56;
-  assume
-  1 <= i & i <= len f;
-  then
-  rng Replace(f, i, p) = rng (f|(i-'1)) \/ (rng <*p*> \/ rng (f/^i)) by A1,Def1
-    .= rng <*p*> \/ (rng (f/^i) \/ rng (f|(i-'1))) by XBOOLE_1:4;
-  hence thesis by A2,XBOOLE_0:def 3;
+  assume 1 <= i & i <= len f;
+  then i in dom f by FINSEQ_3:27;
+  hence thesis by FUNCT_7:104;
 end;
 
 Lm2: 1 <= i & i <= len f implies Replace(f, i, p).i = p
 proof
-  assume
-  1 <= i & i <= len f;
+  assume 1 <= i & i <= len f;
   then i in dom f by FINSEQ_3:27;
   hence thesis by FUNCT_7:33;
 end;
@@ -250,13 +186,9 @@ end;
 theorem
   1 <= i & i <= len f implies Replace(f, i, p)/.i = p
 proof
-  assume that
-A1: 1 <= i and
-A2: i <= len f;
-  i <= len Replace(f,i,p) by A2,Th7;
-  then i in dom Replace(f,i,p) by A1,FINSEQ_3:27;
-  then Replace(f, i, p)/.i = Replace(f,i,p).i by PARTFUN1:def 8;
-  hence thesis by A1,A2,Lm2;
+  assume 1 <= i & i <= len f;
+  then i in dom f by FINSEQ_3:27;
+  hence thesis by FUNCT_7:38;
 end;
 
 theorem
@@ -278,7 +210,7 @@ A4: len ((f|(i-'1))^<*p*>) = len (f|(i-'1)) + len <*p*> by FINSEQ_1:35
 A5: 0 < k and
 A6: k <= len f - i;
 A7: 0 + 1 <= k by A5,INT_1:20;
-  len f = len Replace(f, i, p) by Th7
+  len f = len Replace(f, i, p) by FUNCT_7:99
     .= len ((f|(i-'1))^<*p*>^(f/^i)) by A1,A2,Def1
     .= i + len (f/^i) by A4,FINSEQ_1:35;
   then
@@ -299,8 +231,8 @@ A1: 1 <= k & k <= len f & k <> i;
 end;
 
 theorem Th13:
-  1 <= i & i < j & j <= len f implies Replace(Replace(f, j, q), i,
-  p) = (f|(i-'1))^<*p*>^(f/^i)|(j-'i-'1)^<*q*>^(f/^j)
+  1 <= i & i < j & j <= len f implies Replace(Replace(f, j, q), i, p) =
+    (f|(i-'1))^<*p*>^(f/^i)|(j-'i-'1)^<*q*>^(f/^j)
 proof
   assume that
 A1: 1 <= i and
@@ -325,7 +257,7 @@ A8: i -'1 < j -'1 by A1,A2,NAT_D:56;
   then
 A9: i-'1 <= len fp by A3,A4,FINSEQ_1:80,XXREAL_0:2;
   i <= len f by A2,A3,XXREAL_0:2;
-  then i <= len F by Th7;
+  then i <= len F by FUNCT_7:99;
   then Replace(F,i,p) = (F|(i-'1))^<*p*>^(F/^i) by A1,Def1
     .= (F|(i-'1))^<*p*>^((P^Q)/^i) by A3,A6,Def1
     .= (F|(i-'1))^<*p*>^((P/^i)^Q) by A2,A7,GENEALG1:1
@@ -379,8 +311,7 @@ theorem Th16:
   Replace(<*p1, p2*>, 2, q) = <*p1, q*>
 proof
   set f = <*p1,p2*>;
-A1: 2 -'1 = 1 + 1 -'1
-    .= 1 by NAT_D:34;
+A1: 2 -'1 = 1 + 1 -'1 .= 1 by NAT_D:34;
   len f = 2 by FINSEQ_1:61;
   then
 A2: 1 in dom f by FINSEQ_3:27;
@@ -412,8 +343,7 @@ theorem Th18:
   Replace(<*p1, p2, p3*>, 2, q) = <*p1, q, p3*>
 proof
   set f = <*p1,p2,p3*>;
-A1: 2 -'1 = 1 + 1 -'1
-    .= 1 by NAT_D:34;
+A1: 2 -'1 = 1 + 1 -'1 .= 1 by NAT_D:34;
 A2: len f = 2 + 1 by FINSEQ_1:62;
 A3: len f = 3 by FINSEQ_1:62;
   then
@@ -433,8 +363,7 @@ theorem Th19:
   Replace(<*p1, p2, p3*>, 3, q) = <*p1, p2, q*>
 proof
   set f = <*p1,p2,p3*>;
-A1: 3 -'1 = 2 + 1 -'1
-    .= 2 by NAT_D:34;
+A1: 3 -'1 = 2 + 1 -'1 .= 2 by NAT_D:34;
 A2: len f = 3 by FINSEQ_1:62;
   then
 A3: 1 in dom f by FINSEQ_3:27;
@@ -495,8 +424,7 @@ A5:   i in dom f by A1,FINSEQ_3:27;
       then f/.i = f.i by PARTFUN1:def 8;
       hence thesis by A5,A3,A4,FUNCT_7:def 12;
     end;
-    assume
-    not(1 <= i & i <= len f & 1 <= j & j <= len f);
+    assume not(1 <= i & i <= len f & 1 <= j & j <= len f);
     then not(i in dom f & j in dom f) by FINSEQ_3:27;
     hence thesis by FUNCT_7:def 12;
   end;
@@ -512,7 +440,6 @@ end;
 
 Lm3: 1 <= i & i <= len f & 1 <= j & j <= len f implies Swap(f, i, j).i = f.j &
 Swap(f, i, j).j = f.i
-
 proof
   assume that
 A1: 1 <= i and
@@ -521,8 +448,8 @@ A3: 1 <= j and
 A4: j <= len f;
 A5: i in dom f by A1,A2,FINSEQ_3:27;
   set F = Replace (f,i,f/.j);
-A6: i <= len F by A2,Th7;
-A7: j <= len F by A4,Th7;
+A6: i <= len F by A2,FUNCT_7:99;
+A7: j <= len F by A4,FUNCT_7:99;
 A8: j in dom f by A3,A4,FINSEQ_3:27;
   per cases;
   suppose
@@ -566,8 +493,7 @@ proof
   per cases;
   suppose
 A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
-A2: for k be Nat st 1 <= k & k <= len f holds f.k = Swap(Swap(f,i,j),j,i).
-    k
+A2: for k be Nat st 1 <= k & k <= len f holds f.k = Swap(Swap(f,i,j),j,i). k
     proof
 A3:   i <= len Swap(f,i,j) by A1,Th20;
 A4:   j <= len Swap(f,i,j) by A1,Th20;
@@ -633,9 +559,9 @@ A2: for k be Nat st 1 <= k & k <= len Swap(f,i,j) holds Swap(f,i,j).k =
     Swap(f,j,i).k
     proof
 A3:   len Swap(f,i,j) = len f by Th20
-        .= len FJ by Th7;
+        .= len FJ by FUNCT_7:99;
 A4:   len Swap(f,i,j) = len f by Th20
-        .= len FI by Th7;
+        .= len FI by FUNCT_7:99;
       let k be Nat;
       assume that
 A5:   1 <= k and
@@ -797,9 +723,7 @@ theorem
   1 < i & i <= len f implies Swap(f, 1, i) = <*f/.i*>^((f/^1)|(i-'2))^<*
   f/.1*>^(f/^i)
 proof
-  assume
-  1 < i & i <= len f;
-  then
+  assume 1 < i & i <= len f; then
   Swap(f,1,i) = (f|(1-'1))^<*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by Th29
     .= (f|0)^<*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by XREAL_1:234
     .= <*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by FINSEQ_1:47;
@@ -810,8 +734,7 @@ theorem
   1 <= i & i < len f implies Swap(f, i, len f) = (f|(i-'1))^<*f/.len f*>
   ^((f/^i)|(len f-'i-'1))^<*f/.i*>
 proof
-  assume
-  1 <= i & i < len f;
+  assume 1 <= i & i < len f;
   then
   Swap(f,i,len f) = (f|(i-'1))^<*f/.len f*>^(f/^i)|(len f-'i-'1)^<*f/.i*>^
   (f/^len f) by Th29
@@ -828,10 +751,8 @@ A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
     assume that
 A2: i <> k and
 A3: j <> k;
-
     Replace(Replace(f, i, f/.j), j, f/.i).k = Replace(f, i, f/.j).k by A3,
     FUNCT_7:34
-
       .= f.k by A2,FUNCT_7:34;
     hence thesis by A1,Def2;
   end;
@@ -842,8 +763,7 @@ A3: j <> k;
 end;
 
 theorem Th32:
-  i <> k & j <> k & 1 <= k & k <= len f implies Swap(f, i, j)/.k =
-  f/.k
+  i <> k & j <> k & 1 <= k & k <= len f implies Swap(f, i, j)/.k = f/.k
 proof
   assume that
 A1: i <> k & j <> k and
@@ -911,12 +831,12 @@ A8: F = P^(f/^i)|(j-'i-'1)^<*f/.i*>^(f/^j) by A1,A4,A7,Th29
       .= P^(f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j)) by FINSEQ_1:45
       .= P^((f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j))) by FINSEQ_1:45;
     set F1 = Replace(f,j,p);
-    i <= len F1 by A2,Th7;
+    i <= len F1 by A2,FUNCT_7:99;
     then
 A9: i in dom F1 by A1,FINSEQ_3:27;
 A10: f.i = F1.i by A7,FUNCT_7:34
       .= F1/.i by A9,PARTFUN1:def 8;
-A11: j <= len F1 by A4,Th7;
+A11: j <= len F1 by A4,FUNCT_7:99;
     then
 A12: j in dom F1 by A3,FINSEQ_3:27;
     set G1 = (f|(j -'1));
@@ -998,7 +918,7 @@ A32: j -'1 <= j by NAT_D:35;
     set G1 = (f|(j -'1));
 A33: j -'1 <= j by NAT_D:35;
     set H1 = <*p*>;
-    j <= len F1 by A4,Th7;
+    j <= len F1 by A4,FUNCT_7:99;
     then
 A34: j in dom F1 by A3,FINSEQ_3:27;
 A35: len (G1^H1) = len G1 + len H1 by FINSEQ_1:35
@@ -1015,7 +935,7 @@ A37: k - 1 >= 1 - 1 by XREAL_1:11;
 A38: j+k-'1 = j+k-1 by A3,NAT_D:37
       .= j+(k-1)
       .= j+(k-'1) by A37,XREAL_0:def 2;
-A39: i <= len F1 by A2,Th7;
+A39: i <= len F1 by A2,FUNCT_7:99;
     then
 A40: i in dom F1 by A1,FINSEQ_3:27;
 A41: (F1/^j)|(i-'j-'1) = (F1/^j)|(i-'(j+1)) by NAT_2:32
@@ -1083,7 +1003,7 @@ A3: 1 <= i and
 A4: i <= len f and
 A5: 1 <= j and
 A6: j <= len f;
-  i <= len Replace(f, k, p) & j <= len Replace(f, k, p) by A4,A6,Th7;
+  i <= len Replace(f, k, p) & j <= len Replace(f, k, p) by A4,A6,FUNCT_7:99;
   hence Swap(Replace(f, k, p), i, j) = Replace(Replace(Replace(f, k, p), i,
   Replace(f, k, p)/.j), j, Replace(f, k, p)/.i) by A3,A5,Def2
     .= Replace(Replace( Replace(f, k, p), i, f/.j), j, Replace(f, k, p)/.i)
@@ -1107,7 +1027,7 @@ A5: j <= len f and
 A6: 1 <= k and
 A7: k <= len f;
 A8: i <= len Replace(f, i, f/.k) & j <= len Replace(f, i, f/.k) by A3,A5,
-  Th7;
+  FUNCT_7:99;
   j <= len Swap(f, i, j) & k <= len Swap(f, i, j) by A5,A7,Th20;
   hence
   Swap(Swap(f, i, j), j, k) = Replace(Replace(Swap(f, i, j), j, Swap(f, i
@@ -1139,7 +1059,8 @@ A7: 1 <= k and
 A8: k <= len f and
 A9: 1 <= l and
 A10: l <= len f;
-A11: i <= len Replace(f,k,f/.l) & j <= len Replace(f,k,f/.l) by A4,A6,Th7;
+A11: i <= len Replace(f,k,f/.l) & j <= len Replace(f,k,f/.l)
+     by A4,A6,FUNCT_7:99;
   set F = Swap(f,i,j);
   k <= len F & l <= len F by A8,A10,Th20;
   then Swap(F,k,l) = Replace(Replace(F,k,F/.l),l,F/.k) by A7,A9,Def2
@@ -1152,4 +1073,3 @@ A11: i <= len Replace(f,k,f/.l) & j <= len Replace(f,k,f/.l) by A4,A6,Th7;
     .= Swap(Swap(f,k,l),i,j) by Th23;
   hence thesis;
 end;
-

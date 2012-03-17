@@ -52,7 +52,7 @@ definition
   let d be Element of D;
   redefine func <*d*> -> Element of D*;
   let e be Element of D;
-  func <*d,e*> -> Element of D*;
+  redefine func <*d,e*> -> Element of D*;
 end;
 
 begin :: from DTCONSTR
@@ -98,8 +98,8 @@ theorem :: PRE_POLY:6
 
 begin :: from TRIANG_1
 
-reserve A,x,y,z,u for set,
-  k,l,m,n for Element of NAT;
+reserve A,x,y,z for set,
+  k for Element of NAT;
 
 scheme :: PRE_POLY:sch 1
 
@@ -195,9 +195,8 @@ theorem :: PRE_POLY:11
 
 begin :: from MATRLIN
 
-reserve k,t,i,j,m,n for Nat,
-  x,y,y1,y2 for set,
-  D for non empty set;
+reserve n for Nat,
+  x for set;
 
 theorem :: PRE_POLY:12
   for M be FinSequence st len M = n+1 holds len Del(M,n+1) = n;
@@ -211,8 +210,7 @@ definition
   attr IT is FinSequence-yielding means
 :: PRE_POLY:def 3
 
-  for x st x in dom IT holds IT.x
-  is FinSequence;
+  for x st x in dom IT holds IT.x is FinSequence;
 end;
 
 registration
@@ -231,11 +229,10 @@ end;
 
 begin :: HEYTING2
 
-reserve V, C, x, a, b for set;
+reserve V, C for set;
 
 theorem :: PRE_POLY:14
-  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <>
-  {};
+  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <> {};
 
 theorem :: PRE_POLY:15
   for f being Element of PFuncs (V, C), g being set st g c= f holds
@@ -265,8 +262,7 @@ end;
 begin :: POLYNOM1
 
 theorem :: PRE_POLY:18
-  for X being set, R being Relation st field R c= X holds R is
-  Relation of X;
+  for X being set, R being Relation st field R c= X holds R is Relation of X;
 
 registration
   let X be set, f be ManySortedSet of X, x, y be set;
@@ -313,9 +309,9 @@ registration
   cluster empty -> FinSequence-yielding Function;
 end;
 
-definition
+registration
   let F, G be FinSequence-yielding FinSequence;
-  redefine func F^^G -> FinSequence-yielding FinSequence;
+  cluster F^^G -> FinSequence-like;
 end;
 
 registration
@@ -462,8 +458,7 @@ definition
   redefine func b1+b2 -> ManySortedSet of X means
 :: PRE_POLY:def 5
 
-  for x being set holds
-  it.x = b1.x+b2.x;
+  for x being set holds it.x = b1.x+b2.x;
 end;
 
 definition
@@ -471,8 +466,7 @@ definition
   func b1 -' b2 -> ManySortedSet of X means
 :: PRE_POLY:def 6
 
-  for x being set holds it.x
-  = b1.x -' b2.x;
+  for x being set holds it.x = b1.x -' b2.x;
 end;
 
 theorem :: PRE_POLY:33
@@ -586,8 +580,7 @@ definition
 end;
 
 theorem :: PRE_POLY:41
-  for n being Ordinal, p, q, r being bag of n st p < q & q < r
-  holds p < r;
+  for n being Ordinal, p, q, r being bag of n st p < q & q < r holds p < r;
 
 definition
   let n be Ordinal, p, q be bag of n;
@@ -603,16 +596,13 @@ theorem :: PRE_POLY:42
   holds p <=' r;
 
 theorem :: PRE_POLY:43
-  for n being Ordinal, p, q, r being bag of n st p < q & q <=' r holds p
-  < r;
+  for n being Ordinal, p, q, r being bag of n st p < q & q <=' r holds p < r;
 
 theorem :: PRE_POLY:44
-  for n being Ordinal, p, q, r being bag of n st p <=' q & q < r holds p
-  < r;
+  for n being Ordinal, p, q, r being bag of n st p <=' q & q < r holds p < r;
 
 theorem :: PRE_POLY:45
-  for n being Ordinal, p, q being bag of n holds p <=' q or q <='
-  p;
+  for n being Ordinal, p, q being bag of n holds p <=' q or q <=' p;
 
 definition
   let X be set, d, b be bag of X;
@@ -635,12 +625,10 @@ theorem :: PRE_POLY:48
   for X being set, b1, b2 being bag of X holds b2 + b1 -' b1 = b2;
 
 theorem :: PRE_POLY:49
-  for n being Ordinal, d, b being bag of n st d divides b holds d
-  <=' b;
+  for n being Ordinal, d, b being bag of n st d divides b holds d <=' b;
 
 theorem :: PRE_POLY:50
-  for n being set, b,b1,b2 being bag of n st b = b1 + b2 holds b1
-  divides b;
+  for n being set, b,b1,b2 being bag of n st b = b1 + b2 holds b1 divides b;
 
 definition
   let X be set;
@@ -663,9 +651,19 @@ registration
   cluster Bags X -> non empty;
 end;
 
-definition
+registration
   let X be set, B be non empty Subset of Bags X;
-  redefine mode Element of B -> bag of X;
+  cluster -> Function-like Relation-like Element of B;
+end;
+
+registration
+  let X be set, B be non empty Subset of Bags X;
+  cluster -> X-defined Element of B;
+end;
+
+registration
+  let X be set, B be non empty Subset of Bags X;
+  cluster -> total natural-valued finite-support Element of B;
 end;
 
 definition
@@ -709,8 +707,7 @@ definition
   func BagOrder n -> Order of Bags n means
 :: PRE_POLY:def 14
 
-  for p, q being bag of n
-  holds [p, q] in it iff p <=' q;
+  for p, q being bag of n holds [p, q] in it iff p <=' q;
 end;
 
 registration
@@ -729,8 +726,7 @@ definition
 end;
 
 theorem :: PRE_POLY:61
-  for X being set, f being Function of X, NAT holds f in NatMinor
-  f;
+  for X being set, f being Function of X, NAT holds f in NatMinor f;
 
 registration
   let X be set, f be Function of X, NAT;
@@ -851,4 +847,3 @@ len (decomp ((((decomp b)/.k)/.2) qua Element of Bags n))) |-> <*((decomp b)/.k
 theorem :: PRE_POLY:75
   for X being set, b1, b2 being real-valued ManySortedSet of X holds
   support (b1+b2) c= support b1 \/ support b2;
-

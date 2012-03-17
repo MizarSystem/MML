@@ -9,22 +9,27 @@ environ
  vocabularies NUMBERS, SUBSET_1, FUNCT_1, ARYTM_3, XXREAL_0, XBOOLE_0, TARSKI,
       NAT_1, ORDINAL1, FINSEQ_1, CARD_1, FINSET_1, RELAT_1, PARTFUN1, FUNCOP_1,
       ORDINAL4, ORDINAL2, ARYTM_1, REAL_1, ZFMISC_1, FUNCT_4, VALUED_0,
-      AFINSQ_1, PRGCOR_2, CAT_1;
+      AFINSQ_1, PRGCOR_2, CAT_1, AMISTD_1, AMISTD_3, AMISTD_2, VALUED_1,
+      PRE_POLY, CONNSP_3, BINOP_1, FINSOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
-      NAT_D,
-      FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0, VALUED_0;
+      BINOP_1, FINSOP_1, NAT_D,
+      FINSET_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0, VALUED_0,
+      VALUED_1;
  constructors WELLORD2, FUNCT_4, XXREAL_0, ORDINAL4, FUNCT_7, ORDINAL3,
-      VALUED_1, ENUMSET1, NAT_D;
+      VALUED_1, ENUMSET1, NAT_D, XXREAL_2, BINOP_1, FINSOP_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS, FINSEQ_1;
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS, FINSEQ_1, VALUED_1,
+      XXREAL_2, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, ORDINAL1, XBOOLE_0, FUNCOP_1,RELAT_1;
+ definitions TARSKI, ORDINAL1, XBOOLE_0, FUNCOP_1,RELAT_1, VALUED_1, NAT_1,
+      FUNCT_1;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       ORDINAL1, CARD_1, FINSEQ_1, FUNCT_7, ORDINAL4, CARD_2, FUNCT_4, ORDINAL3,
       XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1, XREAL_1, VALUED_0, ENUMSET1,
-      XXREAL_0, XREAL_0;
- schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, CLASSES1, FINSEQ_1;
+      XXREAL_0, XREAL_0, GRFUNC_1, XXREAL_2, NAT_D, VALUED_1, BINOP_1,
+      INT_1;
+ schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, CLASSES1, FINSEQ_1, BINOP_1;
 
 begin
 
@@ -93,8 +98,7 @@ A1: r is finite T-Sequence-like;
     then dom r is finite by FINSET_1:29;
     hence ex n st dom r = n by A1;
   end;
-  assume
-  ex n st dom r = n;
+  assume ex n st dom r = n;
   hence thesis by FINSET_1:29,ORDINAL1:def 7;
 end;
 
@@ -143,8 +147,7 @@ definition let p;
     {i where i is Element of NAT:i<len p} c= NAT
     proof
       let x be set;
-      assume
-      x in {i where i is Element of NAT:i<len p};
+      assume x in {i where i is Element of NAT:i<len p};
       then ex i being Element of NAT st i=x & i<len p;
       hence thesis;
     end;
@@ -259,8 +262,7 @@ end;
 theorem
   rng p c= dom f implies f*p is XFinSequence
 proof
-  assume
-  rng p c= dom f;
+  assume rng p c= dom f;
   then dom(f*p) = len p by RELAT_1:46;
   hence thesis by Th7;
 end;
@@ -402,8 +404,7 @@ A2:   pq = p^q;
       hence dom pq = len p + len q by A1,ORDINAL4:def 1;
       thus for k st k in dom p holds pq.k=p.k by A2,ORDINAL4:def 1;
       let k;
-      assume
-      k in dom q;
+      assume k in dom q;
       then pq.(len p +^ k) = q.k & k in NAT by A2,ORDINAL4:def 1;
       hence pq.(len p + k) = q.k by CARD_2:49;
     end;
@@ -464,14 +465,12 @@ theorem Th23:
   k in dom (p^q) implies (k in dom p or ex n st n in dom q & k=len
   p + n )
 proof
-  assume
-  k in dom(p^q);
+  assume k in dom(p^q);
   then k in (len p + len q) by Def4;
   then
 A1: k < len p + len q by NAT_1:45;
   now
-    assume
-    len p <= k;
+    assume len p <= k;
     then consider n being Nat such that
 A2: k=len p + n by NAT_1:10;
     n + len p - len p < len q + len p - len p by A1,A2,XREAL_1:16;
@@ -516,8 +515,7 @@ proof
   now
 A1: dom p c= dom(p^q) by Th24;
     let x;
-    assume
-    x in rng p;
+    assume x in rng p;
     then consider y such that
 A2: y in dom p and
 A3: x=p.y by FUNCT_1:def 5;
@@ -569,8 +567,7 @@ A7:   m in len q by NAT_1:45;
       hence x in rng q by A6,A7,FUNCT_1:12;
     end;
     now
-      assume
-      not len p <= k;
+      assume not len p <= k;
       then
 A8:   k in dom p by NAT_1:45;
       then p.k = x by A2,Def4;
@@ -663,8 +660,7 @@ A8:   k in dom p;
     end;
     hence thesis by A7,Th10;
   end;
-  assume
-  p^r = q^r or r^p = r^q;
+  assume p^r = q^r or r^p = r^q;
   hence thesis by A1,A5;
 end;
 
@@ -691,8 +687,7 @@ end;
 theorem Th33:
   p^q = {} implies p={} & q={}
 proof
-  assume
-  p^q={};
+  assume p^q={};
   then 0 = len (p^q)
     .= len p + len q by Def4;
   hence thesis;
@@ -714,8 +709,7 @@ end;
 Lm1: for x1, y1 being set holds [x,y] in {[x1,y1]} implies x = x1 & y = y1
 proof
   let x1, y1 be set;
-  assume
-  [x,y] in {[x1,y1]};
+  assume [x,y] in {[x1,y1]};
   then [x,y] = [x1,y1] by TARSKI:def 1;
   hence thesis by ZFMISC_1:33;
 end;
@@ -747,8 +741,7 @@ A5:     rng f = {f.0} by A1,CARD_1:87,FUNCT_1:14;
         then z = f.0 by A5,TARSKI:def 1;
         hence [y,z] in g by A4,TARSKI:def 1;
       end;
-      assume
-      [y,z] in g;
+      assume [y,z] in g;
       then
 A6:   y = 0 & z = f.0 by Lm1;
       0 in dom f by A1,CARD_1:87,TARSKI:def 1;
@@ -779,8 +772,7 @@ theorem
   p^q is XFinSequence of D implies p is XFinSequence of D & q is
   XFinSequence of D
 proof
-  assume
-  p^q is XFinSequence of D;
+  assume p^q is XFinSequence of D;
   then rng(p^q) c= D by RELAT_1:def 19;
   then
 A1: rng p \/ rng q c= D by Th29;
@@ -901,8 +893,7 @@ A6: p.1=y;
 A7: for k st k in dom <%y%> holds p.((len <%x%>)+k)=<%y%>.k
   proof
     let k;
-    assume
-    k in dom <%y%>;
+    assume k in dom <%y%>;
     then
 A8: k in {0} by Def5,CARD_1:87;
     thus p.((len <%x%>) + k) = p.(1+k) by Th36
@@ -913,8 +904,7 @@ A8: k in {0} by Def5,CARD_1:87;
 A9: for k st k in dom <%x%> holds p.k=<%x%>.k
   proof
     let k;
-    assume
-    k in dom <%x%>;
+    assume k in dom <%x%>;
     then k in {0} by Def5,CARD_1:87;
     then k=0 by TARSKI:def 1;
     hence thesis by A5,Def5;
@@ -967,8 +957,7 @@ A12: k=1 implies p.k=<%x,y%>.k by A7,Th42;
 A13: for k st k in dom <%z%> holds p.( (len <%x,y%>) + k) = <%z%>.k
   proof
     let k;
-    assume
-    k in dom <%z%>;
+    assume k in dom <%z%>;
     then k in {0} by Def5,CARD_1:87;
     then
 A14: k = 0 by TARSKI:def 1;
@@ -984,8 +973,7 @@ end;
 theorem Tex:
   p <> {} implies ex q,x st p=q^<%x%>
 proof
-  assume
-  p <> {};
+  assume p <> {};
   then consider n being Nat such that
 A1: len p = n+1 by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1059,8 +1047,7 @@ A2: for x being Real holds x in X iff P1[x] from SUBSET_1:sch 3;
     for p st len p = 0 holds P[p]
     proof
       let p;
-      assume
-      len p = 0;
+      assume len p = 0;
       then p = {};
       hence thesis by A1;
     end;
@@ -1108,8 +1095,7 @@ A2: for p,q,s st p^q=r^s & len p <= len r ex t st p^t=r;
 A3: p^q=(r^<%x%>)^s and
 A4: len p <= len (r^<%x%>);
 A5: now
-      assume
-      len p <> len(r^<%x%>);
+      assume len p <> len(r^<%x%>);
       then len p <> len r + len <%x%> by Def4;
       then
 A6:   len p <> len r + 1 by Th36;
@@ -1210,8 +1196,7 @@ A1: x in Y iff x in D()^omega & P1[x] from XBOOLE_0:sch 1;
   take Y;
   x in Y implies ex p st p in D()^omega & P[p] & x=p
   proof
-    assume
-    x in Y;
+    assume x in Y;
     then x in D()^omega & ex p st P[p] & x=p by A1;
     hence thesis;
   end;
@@ -1451,8 +1436,7 @@ end;
 theorem :: FINSEQ_2:7
    n <len p implies (p^q).n=p.n
 proof
-  assume
-  n <len p;
+  assume n <len p;
   then n in dom p by NAT_1:45;
   hence thesis by Def4;
 end;
@@ -1481,8 +1465,7 @@ end;
 theorem Th121: :: FINSEQ_1:12
   n <= len p implies len(p|n) = n
 proof
-  assume
-  n <= len p;
+  assume n <= len p;
   then n c= (len p) by NAT_1:40;
   hence thesis by RELAT_1:91;
 end;
@@ -1505,8 +1488,7 @@ then A3: n < len p by NAT_1:13;
 then A2: len pn = n by Th121;
 A4: now
     let m be Nat;
-    assume
-    m in dom p;
+    assume m in dom p;
     then m<len p by NAT_1:45;
     then
 A5: m <= len pn by A1,A2,NAT_1:13;
@@ -1556,8 +1538,7 @@ end;
 theorem :: CATALAN2:2
   n <= dom p implies (p^q)|n = p|n
 proof
-  assume
-  n <= dom p;
+  assume n <= dom p;
   then n c= dom p by NAT_1:40;
   then ((p^q)|dom p)|n=(p^q)|n by RELAT_1:103;
   hence thesis by Th1;
@@ -1772,8 +1753,7 @@ A2: for k be Nat st k in len q holds p.k=F(k);
     proof
       let y be set;
 A3:   rng q c= D by FINSEQ_1:def 4;
-      assume
-      y in rng p;
+      assume y in rng p;
       then consider x being set such that
 A4:   x in dom p and
 A5:   y=p.x by FUNCT_1:def 5;
@@ -1845,8 +1825,7 @@ A2: for k being Nat st k in dom p holds p.k=F(k);
     proof
       let y be set;
 A3:   rng q c= D by RELAT_1:def 19;
-      assume
-      y in rng p;
+      assume y in rng p;
       then consider x being set such that
 A4:   x in dom p and
 A5:   y=p.x by FUNCT_1:def 5;
@@ -1919,8 +1898,7 @@ A2:   rng p={r} by FUNCOP_1:14;
       rng p c= D
       proof
         let x be set;
-        assume
-        x in rng p;
+        assume x in rng p;
         hence thesis by A1,A2,TARSKI:def 1;
       end;
       hence thesis by RELAT_1:def 19;
@@ -2084,7 +2062,7 @@ definition
   assume that
 A1: p.0 is Nat and
 A2: p.0 in len p;
-  func XFS2FS*(p) -> FinSequence of D means :Def4:
+  func XFS2FS*(p) -> FinSequence of D means :Def4b:
   for m be Nat st m = p.0 holds
   len it =m & for i st 1<=i & i<= m holds it.i=p.i;
   existence
@@ -2127,8 +2105,7 @@ A10:  for i st 1<=i & i<= m0 holds q0.i=p.i
         then i in Seg m0 by FINSEQ_1:3;
         hence thesis by A4,A9;
       end;
-      assume
-      m = p.0;
+      assume m = p.0;
       hence thesis by A3,A10;
     end;
     hence thesis;
@@ -2166,7 +2143,7 @@ A1: p.0=0 and
 A2: 0<len p;
   set q= XFS2FS*(p);
   0 in len p by A2,NAT_1:45;
-  then len q=0 by A1,Def4;
+  then len q=0 by A1,Def4b;
   then q=<*>D;
   hence thesis;
 end;
@@ -2214,7 +2191,7 @@ registration
   end;
 end;
 
-theorem
+theorem Th69:
  for F being non empty initial NAT-defined Function holds 0 in dom F
 proof
  let F be non empty initial NAT-defined Function;
@@ -2257,7 +2234,240 @@ Z2:   y in x;
   end;
 end;
 
-theorem
+theorem Th70:
  for F being finite initial NAT-defined Function
  for n being Nat holds
   n in dom F iff n < card F by NAT_1:45;
+
+:: from AMISTD_2, 2010.04.16, A.T.
+
+theorem
+  for F being initial NAT-defined Function,
+  G being NAT-defined Function st dom F = dom G holds G is initial
+proof
+  let F be initial NAT-defined Function,
+  G be NAT-defined Function;
+  assume dom F = dom G;
+  hence for m,l being Nat st l in dom G & m < l holds m in dom G by Def13;
+end;
+
+theorem
+  for F being initial NAT-defined finite Function
+  holds dom F = { k where k is Element of NAT: k < card F }
+proof
+  let F be initial NAT-defined finite Function;
+  hereby
+    let x be set;
+    assume
+A2: x in dom F;
+    then reconsider f = x as Element of NAT;
+A3: f < card F by A2,Th70;
+    reconsider i = f as Element of NAT;
+    thus x in { k where k is Element of NAT: k < card F } by A3;
+  end;
+  let x be set;
+  assume x in { k where k is Element of NAT: k < card F };
+  then ex k being Element of NAT st x = k & k < card F;
+  hence thesis by Th70;
+end;
+
+theorem
+  for F being initial non empty NAT-defined finite Function, G being non
+  empty NAT-defined finite Function holds F c= G & LastLoc F = LastLoc G
+  implies F = G
+proof
+  let F be initial non empty NAT-defined finite Function, G be non empty NAT
+  -defined finite Function such that
+A1: F c= G and
+A2: LastLoc F = LastLoc G;
+  dom F = dom G
+  proof
+    thus dom F c= dom G by A1,GRFUNC_1:8;
+    let x be set;
+    assume
+A3: x in dom G;
+    dom G c= NAT by RELAT_1:def 18;
+    then reconsider x as Element of NAT by A3;
+A4: LastLoc F in dom F by VALUED_1:31;
+    x <= LastLoc F by A2,A3,VALUED_1:33;
+    then x < LastLoc F or x = LastLoc F by XXREAL_0:1;
+    hence thesis by A4,Def13;
+  end;
+  hence thesis by A1,GRFUNC_1:9;
+end;
+
+theorem
+  for F being initial non empty NAT-defined finite Function holds
+  LastLoc F = card F -' 1
+proof
+  let F be initial non empty NAT-defined finite Function;
+  consider k being natural number such that
+A1: LastLoc F = k;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+  LastLoc F in dom F by VALUED_1:31;
+  then k < card F by A1,Th70;
+  then
+A2: k <= card F -' 1 by NAT_D:49;
+  per cases by A2,XXREAL_0:1;
+  suppose
+    k < card F -' 1;
+    then k+1 < card F -' 1 + 1 by XREAL_1:8;
+    then k+1 < card F by NAT_1:14,XREAL_1:237;
+    then k+1 in dom F by Th70;
+    then
+A3: k+1 <= k by A1,VALUED_1:33;
+    k <= k+1 by NAT_1:11;
+    then k+0 = k+1 by A3,XXREAL_0:1;
+    hence thesis;
+  end;
+  suppose
+    k = card F -' 1;
+    hence thesis by A1;
+  end;
+end;
+
+theorem
+  for F being initial non empty NAT-defined finite Function holds
+  FirstLoc F = 0
+proof
+  let F be initial non empty NAT-defined finite Function;
+  0 in dom F by Th69;
+  then FirstLoc F <= 0 by VALUED_1:36;
+  hence thesis;
+end;
+
+registration
+  let F be initial non empty NAT-defined finite Function;
+  cluster CutLastLoc F -> initial;
+  coherence
+  proof
+    set G = CutLastLoc F;
+    per cases;
+    suppose G is empty;
+      then reconsider H = G as empty finite Function;
+      H is initial;
+      hence thesis;
+    end;
+    suppose G is non empty;
+      then reconsider G as non empty finite Function;
+      G is initial
+      proof
+        let m,l be Nat such that
+A1:     l in dom G and
+A2:     m < l;
+        set M = dom F;
+        reconsider R = {[LastLoc F, F.LastLoc F]} as Relation;
+        R = LastLoc F .--> (F.LastLoc F) by FUNCT_4:87;
+        then
+A5:     dom R = {LastLoc F} by FUNCOP_1:19;
+        then
+A6:     dom F \ dom R = dom G by VALUED_1:37;
+        then
+       l in dom F by A1,XBOOLE_0:def 5;
+        then
+A7:     m in dom F by A2,Def13;
+        l in M by A6,A1,XBOOLE_0:def 5;
+        then m <> LastLoc F by A2,XXREAL_2:def 8;
+        then not m in {LastLoc F} by TARSKI:def 1;
+        hence thesis by A5,A6,A7,XBOOLE_0:def 5;
+      end;
+      hence thesis;
+    end;
+  end;
+end;
+
+reserve l for Element of NAT;
+
+theorem Th2:
+ for I being finite initial NAT-defined Function, J being Function
+ holds dom I misses dom Shift(J,card I)
+proof let I be finite initial NAT-defined Function, J be Function;
+  assume
+A1: dom I meets dom Shift(J,card I);
+  dom Shift(J,card I) = { l+card I: l in dom J } by VALUED_1:def 12;
+  then consider x being set such that
+A2: x in dom I and
+A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
+  consider l such that
+A4: x = l+card I and
+  l in dom J by A3;
+  l+card I < card I by A2,A4,Th70;
+  hence contradiction by NAT_1:11;
+end;
+
+:: from SCMPDS_4, 2010.05.14, A.T.
+
+theorem Th71:
+  not m in dom p implies not succ m in dom p
+proof
+  assume not m in dom p;
+  then
+A1: m >= card p by Th70;
+  m+1 >= m by NAT_1:11;
+  then m+1 >= card p by A1,XXREAL_0:2;
+  hence thesis by Th70;
+end;
+
+:: from SCM_COMP, 2010.05.16, A.T.
+
+registration let D be set;
+ cluster D^omega -> functional;
+ coherence
+  proof
+   let x be set;
+   assume x in D^omega;
+   hence x is Function by Def8;
+  end;
+end;
+
+registration let D be set;
+  cluster -> finite T-Sequence-like Element of D^omega;
+  coherence by Def8;
+end;
+
+definition let D be set;
+ let f be XFinSequence of D;
+ func Down f -> Element of D^omega equals
+ f;
+ coherence by Def8;
+end;
+
+definition let D be set;
+ let f be XFinSequence of D, g be Element of D^omega;
+ redefine func f^g -> Element of D^omega;
+ coherence
+  proof
+    reconsider g as XFinSequence of D by Def8;
+    f^g is XFinSequence of D;
+   hence thesis by Def8;
+  end;
+end;
+
+definition let D be set;
+ let f, g be Element of D^omega;
+ redefine func f^g -> Element of D^omega;
+ coherence
+  proof
+    reconsider f,g as XFinSequence of D by Def8;
+    f^g is XFinSequence of D;
+   hence thesis by Def8;
+  end;
+end;
+
+:: missing, 2010.05.15, A.T.
+
+theorem
+ p c= p^q
+proof
+A: dom p c= dom(p^q) by Th24;
+  for x st x in dom p holds (p^q).x = p.x
+  proof let x;
+   assume
+Z:  x in dom p;
+    then reconsider x as Nat;
+    (p^q).x = p.x by Z,Def4;
+   hence thesis;
+  end;
+ hence thesis by A,GRFUNC_1:8;
+end;
+

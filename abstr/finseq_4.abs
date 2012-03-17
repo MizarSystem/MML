@@ -8,14 +8,15 @@ environ
 
  vocabularies NUMBERS, FUNCT_1, FINSEQ_1, NAT_1, RELAT_1, FINSET_1, CARD_1,
       XBOOLE_0, TARSKI, XXREAL_0, SUBSET_1, PARTFUN1, ARYTM_1, ARYTM_3,
-      ORDINAL4, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, CARD_1, NUMBERS,
-      XCMPLX_0, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1, FINSEQ_1,
-      FINSEQ_3, XXREAL_0;
+      ORDINAL4, FINSEQ_4, FUNCT_2, EQREL_1, CARD_3, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, CARD_1, SETFAM_1,
+      EQREL_1, NUMBERS, XCMPLX_0, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
+      FINSEQ_1, FINSEQ_3, XXREAL_0;
  constructors ENUMSET1, WELLORD2, FUNCT_2, XXREAL_0, REAL_1, PARTFUN1, NAT_1,
-      INT_1, FINSEQ_3, RELSET_1;
+      INT_1, FINSEQ_3, RELSET_1, EQREL_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, INT_1, FINSEQ_1,
-      ORDINAL1, CARD_1, RELSET_1, SUBSET_1;
+      ORDINAL1, CARD_1, RELSET_1, SUBSET_1, EQREL_1, NAT_1, PARTFUN1, FUNCT_2,
+      XXREAL_0, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -24,7 +25,7 @@ begin
 reserve f for Function;
 reserve p,q for FinSequence;
 reserve A,B,C,x,x1,x2,y,z for set;
-reserve i,k,l,m,n for Nat;
+reserve k,l,m,n for Nat;
 reserve a for Nat;
 
 definition
@@ -55,8 +56,7 @@ definition
   pred f just_once_values y means
 :: FINSEQ_4:def 2
 
-  ex B being finite set st B = f " {y}
-  & card B = 1;
+  ex B being finite set st B = f " {y} & card B = 1;
 end;
 
 canceled;
@@ -72,8 +72,7 @@ theorem :: FINSEQ_4:9
   z in dom f & z <> x holds f.z <> y;
 
 theorem :: FINSEQ_4:10
-  f is one-to-one iff for y st y in rng f holds f just_once_values
-  y;
+  f is one-to-one iff for y st y in rng f holds f just_once_values y;
 
 theorem :: FINSEQ_4:11
   f is_one-to-one_at x iff x in dom f & f just_once_values f.x;
@@ -135,8 +134,7 @@ theorem :: FINSEQ_4:26
   <* d1,d2 *>/.1 = d1 & <* d1,d2 *>/.2 = d2;
 
 theorem :: FINSEQ_4:27
-  <* d1,d2,d3 *>/.1 = d1 & <* d1,d2,d3 *>/.2 = d2 & <* d1,d2,d3 *>/.3 =
-  d3;
+  <* d1,d2,d3 *>/.1 = d1 & <* d1,d2,d3 *>/.2 = d2 & <* d1,d2,d3 *>/.3 = d3;
 
 definition
   let p;
@@ -172,8 +170,7 @@ theorem :: FINSEQ_4:35
   p just_once_values x implies p <- x = x..p;
 
 theorem :: FINSEQ_4:36
-  p just_once_values x implies for k st k in dom p & k <> x..p
-  holds p.k <> x;
+  p just_once_values x implies for k st k in dom p & k <> x..p holds p.k <> x;
 
 theorem :: FINSEQ_4:37
   x in rng p & (for k st k in dom p & k <> x..p holds p.k <> x)
@@ -207,8 +204,7 @@ definition
   func p -| x -> FinSequence means
 :: FINSEQ_4:def 6
 
-  ex n st n = x..p - 1 & it = p | Seg
-  n;
+  ex n st n = x..p - 1 & it = p | Seg n;
 end;
 
 canceled 2;
@@ -248,8 +244,7 @@ definition
   func p |-- x -> FinSequence means
 :: FINSEQ_4:def 7
 
-  len it = len p - x..p & for k st k
-  in dom it holds it.k = p.(k + x..p);
+  len it = len p - x..p & for k st k in dom it holds it.k = p.(k + x..p);
 end;
 
 canceled 3;
@@ -291,8 +286,7 @@ theorem :: FINSEQ_4:68
   x in rng p & p is one-to-one implies p |-- x is one-to-one;
 
 theorem :: FINSEQ_4:69
-  p just_once_values x iff x in rng p & p - {x} = (p -| x) ^ (p
-  |-- x);
+  p just_once_values x iff x in rng p & p - {x} = (p -| x) ^ (p |-- x);
 
 theorem :: FINSEQ_4:70
   x in rng p & p is one-to-one implies p - {x} = (p -| x) ^ (p |-- x);
@@ -314,8 +308,7 @@ theorem :: FINSEQ_4:75
   rng p = dom p implies p is one-to-one;
 
 theorem :: FINSEQ_4:76
-  rng p = rng q & len p = len q & q is one-to-one implies p is
-  one-to-one;
+  rng p = rng q & len p = len q & q is one-to-one implies p is one-to-one;
 
 theorem :: FINSEQ_4:77
   p is one-to-one iff card(rng p) = len p;
@@ -339,11 +332,9 @@ theorem :: FINSEQ_4:80
   & f.x = f.y;
 
 theorem :: FINSEQ_4:81
-  card A in card B implies ex x st x in B & for y st y in A holds f.y <>
-  x;
+  card A in card B implies ex x st x in B & for y st y in A holds f.y <> x;
 
 begin :: Addenda
-
 :: from TOPREAL4
 
 theorem :: FINSEQ_4:82
@@ -436,8 +427,7 @@ theorem :: FINSEQ_4:90
 reserve p for FinSequence;
 
 theorem :: FINSEQ_4:91
-  p = <*x1,x2,x3,x4*> iff len p = 4 & p.1 = x1 & p.2 = x2 & p.3=x3
-  & p.4= x4;
+  p = <*x1,x2,x3,x4*> iff len p = 4 & p.1 = x1 & p.2 = x2 & p.3=x3 & p.4= x4;
 
 theorem :: FINSEQ_4:92
   dom<*x1,x2,x3,x4*> = Seg(4);
@@ -496,3 +486,52 @@ registration
   cluster <*x1,x2,x3,x4,x5*> -> 5-long;
 end;
 
+begin :: Moved from FSM_1, 2010.03.16, A.T.
+
+
+
+theorem :: FINSEQ_4:99
+  for m, n being Nat holds m < n implies ex p being Element of NAT
+  st n = m+p & 1 <= p;
+
+theorem :: FINSEQ_4:100
+  for S being set, D1, D2 being non empty set, f1 being Function of
+  S, D1, f2 being Function of D1, D2 holds f1 is bijective & f2 is bijective
+  implies f2*f1 is bijective;
+
+:: Partitions & Equivalence Relations
+
+theorem :: FINSEQ_4:101
+  for Y being set, E1, E2 being Equivalence_Relation of Y holds
+  Class E1 = Class E2 implies E1 = E2;
+
+registration
+  let Z be finite set;
+  cluster -> finite a_partition of Z;
+end;
+
+registration
+  let X be non empty finite set;
+  cluster non empty finite a_partition of X;
+end;
+
+reserve X, A for non empty finite set,
+  PX for a_partition of X,
+  PA1, PA2 for a_partition of A;
+
+theorem :: FINSEQ_4:102
+  for X being non empty set, PX being a_partition of X for Pi
+  being set st Pi in PX ex x being Element of X st x in Pi;
+
+theorem :: FINSEQ_4:103
+  card PX <= card X;
+
+theorem :: FINSEQ_4:104
+  PA1 is_finer_than PA2 implies card PA2 <= card PA1;
+
+theorem :: FINSEQ_4:105
+  PA1 is_finer_than PA2 implies for p2 being Element of PA2 ex p1
+  being Element of PA1 st p1 c=p2;
+
+theorem :: FINSEQ_4:106
+  PA1 is_finer_than PA2 & card PA1 = card PA2 implies PA1 = PA2;

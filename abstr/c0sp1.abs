@@ -12,21 +12,21 @@ environ
       GROUP_1, REAL_1, POLYALG1, CARD_1, XREAL_0, ORDINAL1, RSSPACE4, XXREAL_2,
       FUNCOP_1, FUNCT_2, VALUED_1, LOPBAN_1, COMPLEX1, XXREAL_0, SEQ_4,
       ORDINAL2, LOPBAN_2, PRE_TOPC, NORMSP_1, NAT_1, RSSPACE3, SEQ_2, SEQ_1,
-      REWRITE1, C0SP1;
+      REWRITE1, C0SP1, METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
-      XCMPLX_0, XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, REALSET1,
-      FUNCT_1, FUNCT_2, BINOP_1, DOMAIN_1, RELSET_1, PRE_TOPC, RLVECT_1,
-      GROUP_1, VECTSP_1, FUNCSDOM, PARTFUN1, IDEAL_1, RSSPACE3, MEASURE6,
-      VALUED_1, SEQ_1, XXREAL_0, SEQ_2, SEQ_4, FUNCOP_1, NORMSP_1, LOPBAN_1,
-      LOPBAN_2;
+      XCMPLX_0, XREAL_0, COMPLEX1, XXREAL_0, XXREAL_2, STRUCT_0, ALGSTR_0,
+      REAL_1, REALSET1, FUNCT_1, FUNCT_2, BINOP_1, DOMAIN_1, RELSET_1,
+      PRE_TOPC, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, PARTFUN1, IDEAL_1,
+      RSSPACE3, MEASURE6, VALUED_1, SEQ_1, SEQ_2, SEQ_4, FUNCOP_1, NORMSP_0,
+      NORMSP_1, LOPBAN_1, LOPBAN_2;
  constructors REAL_1, REALSET1, PARTFUN2, RSSPACE3, COMPLEX1, RFUNCT_3,
       MEASURE6, NAT_1, BINOP_2, RCOMP_1, RLSUB_1, LOPBAN_2, ALGSTR_1, FUNCT_2,
       VALUED_1, SEQ_1, SEQ_2, ALGSTR_0, IDEAL_1, XXREAL_2, SEQ_4, RELSET_1,
-      PRE_TOPC;
+      PRE_TOPC, VECTSP_2, SEQM_3;
  registrations XBOOLE_0, SUBSET_1, STRUCT_0, XREAL_0, REALSET1, ALGSTR_0,
       NUMBERS, ORDINAL1, MEMBERED, FUNCSDOM, RELAT_1, XXREAL_0, RLVECT_1,
       VECTSP_1, VECTSP_2, FUNCT_2, VALUED_0, VALUED_1, LOPBAN_2, FUNCOP_1,
-      SEQ_4, RFUNCT_1;
+      SEQ_4, RFUNCT_1, NORMSP_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -38,8 +38,7 @@ definition
   attr V1 is having-inverse means
 :: C0SP1:def 1
 
-  for v be Element of V st v in V1
-  holds -v in V1;
+  for v be Element of V st v in V1 holds -v in V1;
 end;
 
 definition
@@ -79,7 +78,7 @@ end;
 
 reserve X for non empty set;
 reserve x for Element of X;
-reserve d1,d2,a,b for Element of X;
+reserve d1,d2 for Element of X;
 reserve A for BinOp of X;
 reserve M for Function of [:X,X:],X;
 reserve V for Ring;
@@ -101,8 +100,7 @@ definition
   attr V1 is multiplicatively-closed means
 :: C0SP1:def 4
 
-  1.V in V1 & for v,u be
-  Element of V st v in V1 & u in V1 holds v * u in V1;
+  1.V in V1 & for v,u be Element of V st v in V1 & u in V1 holds v * u in V1;
 end;
 
 definition
@@ -150,10 +148,10 @@ begin :: Some properties of Algebras
 
 reserve V for Algebra;
 reserve V1 for Subset of V;
-reserve v,w for Element of V;
-reserve v1,w1 for Element of V1;
+
+
 reserve MR for Function of [:REAL,X:],X;
-reserve a,b for Real;
+reserve a for Real;
 
 definition
   let V be Algebra;
@@ -205,8 +203,7 @@ definition
   attr V is scalar-mult-cancelable means
 :: C0SP1:def 12
 
-  for a be Real, v be Element
-  of V st a*v=0.V holds a=0 or v=0.V;
+  for a be Real, v be Element of V st a*v=0.V holds a=0 or v=0.V;
 end;
 
 theorem :: C0SP1:4
@@ -254,20 +251,13 @@ definition
 end;
 
 theorem :: C0SP1:9
-  BoundedFunctions X is additively-linearly-closed
-  multiplicatively-closed;
+  BoundedFunctions X is additively-linearly-closed multiplicatively-closed;
 
 registration
   let X;
   cluster BoundedFunctions X -> additively-linearly-closed
     multiplicatively-closed;
 end;
-
-theorem :: C0SP1:10
-  AlgebraStr (# BoundedFunctions X, mult_(BoundedFunctions X,RAlgebra X)
-, Add_(BoundedFunctions X,RAlgebra X), Mult_(BoundedFunctions X,RAlgebra X),
-One_(BoundedFunctions X,RAlgebra X), Zero_(BoundedFunctions X,RAlgebra X) #) is
-  Subalgebra of RAlgebra X;
 
 definition
   let X be non empty set;
@@ -278,6 +268,9 @@ BoundedFunctions X, mult_(BoundedFunctions X,RAlgebra X), Add_(BoundedFunctions
 X,RAlgebra X), Mult_(BoundedFunctions X,RAlgebra X), One_(BoundedFunctions X,
     RAlgebra X), Zero_(BoundedFunctions X,RAlgebra X) #);
 end;
+
+theorem :: C0SP1:10
+  R_Algebra_of_BoundedFunctions X is Subalgebra of RAlgebra X;
 
 theorem :: C0SP1:11
   R_Algebra_of_BoundedFunctions X is RealLinearSpace;
@@ -290,8 +283,7 @@ theorem :: C0SP1:12
   holds h.x = f.x + g.x );
 
 theorem :: C0SP1:13
-  f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x
-  = a*f.x );
+  f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x );
 
 theorem :: C0SP1:14
   f=F & g=G & h=H implies ( H = F*G iff for x be Element of X
@@ -309,34 +301,34 @@ definition
   func modetrans(F,X) -> Function of X,REAL means
 :: C0SP1:def 15
 
-  it=F & it|X is
-  bounded;
+  it=F & it|X is bounded;
 end;
 
 definition
   let X be non empty set, f be Function of X,REAL;
   func PreNorms f -> non empty Subset of REAL equals
 :: C0SP1:def 16
-  { abs(f.x) where x is
-  Element of X : not contradiction };
+  { abs(f.x) where x is Element of X : not contradiction };
 end;
 
 theorem :: C0SP1:17
-  f|X is bounded implies PreNorms f is non empty bounded_above;
+  f|X is bounded implies PreNorms f is bounded_above;
 
 theorem :: C0SP1:18
   f|X is bounded iff PreNorms f is bounded_above;
 
 theorem :: C0SP1:19
   ex NORM be Function of BoundedFunctions X,REAL st for F be set
-  st F in BoundedFunctions X holds NORM.F = sup PreNorms(modetrans(F,X));
+  st F in BoundedFunctions X holds NORM.F =
+  upper_bound PreNorms(modetrans(F,X));
 
 definition
   let X be non empty set;
   func BoundedFunctionsNorm X -> Function of BoundedFunctions X,REAL means
 :: C0SP1:def 17
 
-   for x be set st x in BoundedFunctions X holds it.x = sup PreNorms(
+   for x be set st x in BoundedFunctions X
+  holds it.x = upper_bound PreNorms(
   modetrans(x,X));
 end;
 
@@ -344,8 +336,7 @@ theorem :: C0SP1:20
   f|X is bounded implies modetrans(f,X) = f;
 
 theorem :: C0SP1:21
-  f|X is bounded implies (BoundedFunctionsNorm X).f = sup PreNorms
-  f;
+  f|X is bounded implies (BoundedFunctionsNorm X).f = upper_bound PreNorms f;
 
 definition
   let X be non empty set;
@@ -399,8 +390,7 @@ theorem :: C0SP1:30
   h.x = f.x + g.x);
 
 theorem :: C0SP1:31
-  f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x
-  = a*f.x );
+  f=F & g=G implies ( G = a*F iff for x be Element of X holds g.x = a*f.x );
 
 theorem :: C0SP1:32
   f=F & g=G & h=H implies (H = F*G iff for x be Element of X holds
@@ -411,11 +401,13 @@ theorem :: C0SP1:33
   & ||.a*F.|| = abs a * ||.F.|| & ||.F+G.|| <= ||.F.|| + ||.G.||;
 
 theorem :: C0SP1:34
-  R_Normed_Algebra_of_BoundedFunctions X is RealNormSpace-like;
+  R_Normed_Algebra_of_BoundedFunctions X is
+   reflexive discerning RealNormSpace-like;
 
 registration
   let X be non empty set;
-  cluster R_Normed_Algebra_of_BoundedFunctions X -> RealNormSpace-like
+  cluster R_Normed_Algebra_of_BoundedFunctions X ->
+   reflexive discerning RealNormSpace-like
 vector-distributive scalar-distributive scalar-associative scalar-unital
  Abelian add-associative right_zeroed right_complementable;
 end;
@@ -439,4 +431,3 @@ end;
 
 theorem :: C0SP1:38
   R_Normed_Algebra_of_BoundedFunctions X is Banach_Algebra;
-

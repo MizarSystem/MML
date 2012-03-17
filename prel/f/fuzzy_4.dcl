@@ -28,21 +28,21 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="5">
-<Func kind="K" nr="98">
-<Func kind="K" nr="86"/>
+<Func kind="K" nr="97">
+<Func kind="K" nr="85"/>
 <Num nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="15">
 <LocusVar nr="1"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
-<Func kind="K" nr="81"/>
+<Func kind="K" nr="80"/>
 </Func>
 </Func>
 </Typ>

@@ -9,13 +9,13 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_2, XBOOLE_0, TARSKI, CARD_1, FINSEQ_1,
       ZFMISC_1, RELAT_1, AMI_1, ORDINAL1, MCART_1, XXREAL_0, FUNCT_1, FUNCOP_1,
       FUNCT_4, INT_1, CARD_3, PBOOLE, NAT_1, PARTFUN1, COMPLEX1, FINSEQ_2,
-      FUNCT_2, FUNCT_5, SCMFSA_1, GROUP_9;
+      FUNCT_2, FUNCT_5, SCMFSA_1, GROUP_9, RECDEF_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       NAT_1, MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       BINOP_1, INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSEQ_2, CARD_3, FUNCOP_1,
-      FINSEQ_4, AMI_2, FUNCT_7, XXREAL_0;
+      FINSEQ_4, AMI_2, FUNCT_7, XXREAL_0, RECDEF_2;
  constructors DOMAIN_1, XXREAL_0, INT_2, FINSEQ_4, PBOOLE, CAT_2, REAL_1,
-      WELLORD2, RELSET_1, AMI_2, FUNCT_7;
+      WELLORD2, RELSET_1, AMI_2, FUNCT_7, RECDEF_2;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, CARD_3, GR_CY_1, AMI_2, RELAT_1, FINSET_1, CARD_1, CARD_2,
       RELSET_1;
@@ -69,15 +69,14 @@ end;
 
 reserve J,K for Element of Segm 13,
   a for Element of NAT,
-  b,b1,b2,c,c1,c2 for
-  Element of SCM+FSA-Data-Loc,
+  b,b1,b2,c,c1,c2 for Element of SCM+FSA-Data-Loc,
   f,f1,f2 for Element of SCM+FSA-Data*-Loc;
 
 definition
   func SCM+FSA-Instr -> non empty set equals
 :: SCMFSA_1:def 4
-  SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } \/ { [K,<*c1,f1*>] : K
-  in {11,12} };
+  SCM-Instr \/ { [J,{},<*c,f,b*>] : J in {9,10} }
+   \/ { [K,{},<*c1,f1*>] : K in {11,12} };
 end;
 
 theorem :: SCMFSA_1:2
@@ -89,15 +88,14 @@ end;
 
 registration
   let I be Element of SCM+FSA-Instr;
-  cluster I`1 -> natural;
+  cluster I`1_3 -> natural;
 end;
 
 theorem :: SCMFSA_1:3
-  for I being Element of SCM+FSA-Instr st I`1 <= 8 holds I in
-  SCM-Instr;
+  for I being Element of SCM+FSA-Instr st I`1_3 <= 8 holds I in SCM-Instr;
 
 theorem :: SCMFSA_1:4
-  [0,{}] in SCM+FSA-Instr;
+  [0,{},{}] in SCM+FSA-Instr;
 
 definition
   canceled;
@@ -112,10 +110,10 @@ theorem :: SCMFSA_1:5
   NAT in SCM+FSA-Memory;
 
 theorem :: SCMFSA_1:6
-  x in {9,10} implies [x,<*c,f,b*>] in SCM+FSA-Instr;
+  x in {9,10} implies [x,{},<*c,f,b*>] in SCM+FSA-Instr;
 
 theorem :: SCMFSA_1:7
-  x in {11,12} implies [x,<*c,f*>] in SCM+FSA-Instr;
+  x in {11,12} implies [x,{},<*c,f*>] in SCM+FSA-Instr;
 
 theorem :: SCMFSA_1:8
   SCM+FSA-Memory = {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc
@@ -138,8 +136,7 @@ theorem :: SCMFSA_1:13
   <> INT* & SCM+FSA-Instr <> INT*;
 
 theorem :: SCMFSA_1:14
-  for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = NAT holds i =
-  NAT;
+  for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = NAT holds i = NAT;
 
 theorem :: SCMFSA_1:15
   for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = INT holds i in
@@ -205,33 +202,28 @@ end;
 definition
   let x be Element of SCM+FSA-Instr;
   given c,f,b,J such that
- x = [ J, <*c,f,b*>];
+ x = [J,{},<*c,f,b*>];
   func x int_addr1 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 10
-  ex c,f,b st <*c,f,b*>
-  = x`2 & it = c;
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = c;
   func x int_addr2 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 11
-  ex c,f,b st <*c,f,b*>
-  = x`2 & it = b;
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = b;
   func x coll_addr1 -> Element of SCM+FSA-Data*-Loc means
 :: SCMFSA_1:def 12
-  ex c,f,b st <*c,f,b
-  *> = x`2 & it = f;
+  ex c,f,b st <*c,f,b*> = x`3_3 & it = f;
 end;
 
 definition
   let x be Element of SCM+FSA-Instr;
   given c,f,J such that
- x = [ J, <*c,f*>];
+ x = [ J,{}, <*c,f*>];
   func x int_addr3 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 13
-  ex c,f st <*c,f*> = x
-  `2 & it = c;
+  ex c,f st <*c,f*> = x`3_3 & it = c;
   func x coll_addr2 -> Element of SCM+FSA-Data*-Loc means
 :: SCMFSA_1:def 14
-  ex c,f st <*c,f*> =
-  x`2 & it = f;
+  ex c,f st <*c,f*> = x`3_3 & it = f;
   canceled;
 end;
 
@@ -248,15 +240,15 @@ definition
 :: SCMFSA_1:def 17
   ex x9 being Element of
   SCM-Instr, s9 being SCM-State st x = x9 & s9 = s|SCM-Memory +* (NAT --> x9) &
-it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if x`1 <= 8, ex i being Integer, k
+it = s +* SCM-Exec-Res(x9,s9) +* s|NAT if x`1_3 <= 8, ex i being Integer, k
   st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k & it = SCM+FSA-Chg(
-  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if x`1 = 9, ex f being
+  SCM+FSA-Chg(s,x int_addr1,i),succ IC s) if x`1_3 = 9, ex f being
 FinSequence of INT,k st k = abs(s.(x int_addr2)) & f = s.(x coll_addr1)+*(k,s.(
   x int_addr1)) & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr1,f),succ IC s) if
-x`1 = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
-)),succ IC s) if x`1 = 11, ex f being FinSequence of INT,k st k = abs(s.(
+x`1_3 = 10, it = SCM+FSA-Chg(SCM+FSA-Chg(s,x int_addr3,len(s.(x coll_addr2)
+)),succ IC s) if x`1_3 = 11, ex f being FinSequence of INT,k st k = abs(s.(
   x int_addr3)) & f = k |-> 0 & it = SCM+FSA-Chg(SCM+FSA-Chg(s,x coll_addr2,f),
-  succ IC s) if x`1 = 12 otherwise it = s;
+  succ IC s) if x`1_3 = 12 otherwise it = s;
 end;
 
 definition
@@ -332,7 +324,7 @@ theorem :: SCMFSA_1:33
   SCM+FSA-Data*-Loc misses SCM-Memory;
 
 theorem :: SCMFSA_1:34
- SCM+FSA-Instr c= [:NAT,proj2 SCM+FSA-Instr:];
+ SCM+FSA-Instr c= [:NAT,NAT*,proj2 SCM+FSA-Instr:];
 
 registration
  cluster proj2 SCM+FSA-Instr -> FinSequence-membered;

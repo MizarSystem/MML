@@ -10,16 +10,16 @@ environ
       RELAT_1, FINSEQ_1, CARD_1, XBOOLE_0, TARSKI, ZFMISC_1, FSM_1, CAT_1,
       FINSET_1, AMI_3, INT_1, XXREAL_0, MCART_1, FUNCT_1, COMPLEX1, ARYTM_3,
       GRAPHSP, ORDINAL1, ARYTM_1, NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, CARD_3,
-      SCMPDS_2;
+      SCMPDS_2, RECDEF_2, COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, FUNCT_1, FUNCT_2,
       INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, ZFMISC_1, STRUCT_0,
-      RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7, AMI_1, AMI_2,
-      SCMPDS_1, AMI_3, INT_2, XXREAL_0;
+      RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7, COMPOS_1, AMI_1,
+      AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0, RECDEF_2;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_5,
-      SCMPDS_1, RELSET_1;
+      SCMPDS_1, RELSET_1, RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, NUMBERS,
       XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, SCMPDS_1, XXREAL_0,
-      FUNCT_1, GR_CY_1, FINSEQ_4, FUNCT_2, RELSET_1;
+      FUNCT_1, GR_CY_1, FINSEQ_4, FUNCT_2, RELSET_1, COMPOS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -32,7 +32,9 @@ definition
   func SCMPDS -> strict AMI-Struct over { INT } equals
 :: SCMPDS_2:def 1
   AMI-Struct(#
-    SCM-Memory,In(NAT,SCM-Memory),SCMPDS-Instr, SCMPDS-OK,SCMPDS-Exec#);
+    SCM-Memory,In(NAT,SCM-Memory),
+    SCMPDS-Instr, In([0,{},<*0*>],SCMPDS-Instr),
+    SCMPDS-OK,SCMPDS-Exec#);
 end;
 
 registration
@@ -118,19 +120,19 @@ definition
 end;
 
 theorem :: SCMPDS_2:16
-  [0,<*k1*>] in SCMPDS-Instr;
+  [0,{},<*k1*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:17
-  [1,<*d1*>] in SCMPDS-Instr;
+  [1,{},<*d1*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:18
-  x in { 2,3 } implies [x,<*d2,k2*>] in SCMPDS-Instr;
+  x in { 2,3 } implies [x,{},<*d2,k2*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:19
-  x in { 4,5,6,7,8 } implies [x,<*d3,k3,k4*>] in SCMPDS-Instr;
+  x in { 4,5,6,7,8 } implies [x,{},<*d2,k3,k4*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:20
-  x in { 9,10,11,12,13 } implies [x,<*d4,d5,k5,k6*>] in
+  x in { 9,10,11,12,13 } implies [x,{},<*d4,d5,k5,k6*>] in
   SCMPDS-Instr;
 
 reserve a,b,c for Int_position;
@@ -139,62 +141,62 @@ definition
   let k1;
   func goto k1 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 5
-  [ 0, <*k1*>];
+  [0,{},<*k1*>];
 end;
 
 definition
   let a;
   func return a -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 6
-  [ 1, <*a*>];
+  [1,{},<*a*>];
 end;
 
 definition
   let a,k1;
   func a := k1 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 7
-  [ 2, <*a,k1*>];
+  [2,{},<*a,k1*>];
   func saveIC(a,k1) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 8
-  [ 3, <*a,k1*>];
+  [3,{},<*a,k1*>];
 end;
 
 definition
   let a,k1,k2;
   func (a,k1)<>0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 9
-  [ 4, <*a,k1,k2*>];
+  [4,{},<*a,k1,k2*>];
   func (a,k1)<=0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 10
-  [ 5, <*a,k1,k2*>];
+  [5,{},<*a,k1,k2*>];
   func (a,k1)>=0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 11
-  [ 6, <*a,k1,k2*>];
+  [6,{},<*a,k1,k2*>];
   func (a,k1) := k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 12
-  [ 7, <*a,k1,k2*>];
+  [7,{},<*a,k1,k2*>];
   func AddTo(a,k1,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 13
-  [ 8, <*a,k1,k2*>];
+  [8,{},<*a,k1,k2*>];
 end;
 
 definition
   let a,b,k1,k2;
   func AddTo(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 14
-  [ 9, <*a,b,k1,k2*>];
+  [9,{},<*a,b,k1,k2*>];
   func SubFrom(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 15
-  [ 10, <*a,b,k1,k2*>];
+  [10,{},<*a,b,k1,k2*>];
   func MultBy(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 16
-  [ 11, <*a,b,k1,k2*>];
+  [11,{},<*a,b,k1,k2*>];
   func Divide(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 17
-  [ 12, <*a,b,k1,k2*>];
+  [12,{},<*a,b,k1,k2*>];
   func (a,k1) := (b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 18
-  [ 13, <*a,b,k1,k2*>];
+  [13,{},<*a,b,k1,k2*>];
 end;
 
 theorem :: SCMPDS_2:21

@@ -19,9 +19,10 @@ environ
       MATRIX13, LAPLACE, RFINSEQ, WSIERP_1;
  constructors XXREAL_0, GROUP_4, VECTSP_7, MATRIX11, MATRIX13, LAPLACE,
       RFINSEQ, POLYNOM1, WSIERP_1, SEQ_1, VALUED_0, VALUED_1, REAL_1, NAT_D,
-      BINARITH, RELSET_1;
+      BINARITH, RELSET_1, FVSUM_1;
  registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, ORDINAL1, XXREAL_0,
-      NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRIX13, XREAL_0, VALUED_0, CARD_1;
+      NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRIX13, XREAL_0, VALUED_0, CARD_1,
+      FVSUM_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, FINSEQ_1, MATRIX_1, LAPLACE, MATRIX13, FVSUM_1;
  theorems CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5, FINSEQ_6, FINSEQOP,
@@ -41,22 +42,18 @@ reserve i,j,m,n,k for Nat,
   D for non empty set,
   d,d1,d2 for Element of D,
   M,M1,M2 for (Matrix of D),
-  A,A1,
-  A2,B1,B2 for (Matrix of K),
+  A,A1,A2,B1,B2 for (Matrix of K),
   f,g for FinSequence of NAT;
 
 Lm1: for K be non empty addLoopStr for p1,p2 be FinSequence of K holds dom (p1+
 p2)=(dom p1)/\(dom p2)
-
 proof
   let K be non empty addLoopStr;
   let p1,p2 be FinSequence of K;
 A1: rng p2 c= the carrier of K by FINSEQ_1:def 4;
   rng p1 c= the carrier of K by FINSEQ_1:def 4;
-
   then [:rng p1,rng p2:]c=[:the carrier of K,the carrier of K:]by A1,
 ZFMISC_1:119;
-
   then [:rng p1, rng p2:] c= dom (the addF of K) by FUNCT_2:def 1;
   hence thesis by FUNCOP_1:84;
 end;
@@ -145,8 +142,7 @@ A29:    g2.n=g2/.n by A27,PARTFUN1:def 8;
 end;
 
 theorem Th2:
-  for f,g be FinSequence of D st i in dom f holds Del(f^g,i) = Del(
-  f,i)^g
+  for f,g be FinSequence of D st i in dom f holds Del(f^g,i) = Del( f,i)^g
 proof
   let f,g be FinSequence of D such that
 A1: i in dom f;
@@ -231,8 +227,7 @@ A26: len Dg=len Df+len g by FINSEQ_1:35;
 end;
 
 theorem Th3:
-  for f,g be FinSequence of D st i in dom g holds Del(f^g,i+len f)=
-  f^Del(g,i)
+  for f,g be FinSequence of D st i in dom g holds Del(f^g,i+len f)= f^Del(g,i)
 proof
   let f,g be FinSequence of D such that
 A1: i in dom g;
@@ -391,8 +386,7 @@ definition
 A1: i in Seg (Sum f);
   func min(f,i) -> Element of NAT means
   :Def1:
-  i <= Sum(f|it) & it in dom f &
-  for j st i<=Sum (f|j) holds it <= j;
+  i <= Sum(f|it) & it in dom f & for j st i<=Sum (f|j) holds it <= j;
   existence
   proof
     defpred P[Nat] means i<= Sum(f|$1) & $1>=1;
@@ -494,8 +488,7 @@ A1: i in Seg (Sum f);
   then 1<=F by FINSEQ_3:27;
   hence
 A2: F-'1=F-1 by XREAL_1:235;
-  assume
-  Sum(f| (F-'1))>=i;
+  assume Sum(f| (F-'1))>=i;
   then F-'1>=F-0 by A1,Def1;
   hence thesis by A2,XREAL_1:12;
 end;
@@ -617,8 +610,7 @@ A8: jj in Seg Sum (f|i) by A3,A7;
 A9: i=(i-'1)+1;
 A10: i<=min(f,jj)
   proof
-    assume
-    i> min(f,jj);
+    assume i> min(f,jj);
     then min(f,jj)<=i-'1 by A9,NAT_1:13;
     then
 A11: Sum(f|min(f,jj))<=Sum(f| (i-'1)) by POLYNOM3:18;
@@ -677,8 +669,7 @@ definition
   let F be FinSequence of (D**);
   attr F is Matrix-yielding means
   :Def2:
-  for i st i in dom F holds F.i is
-  Matrix of D;
+  for i st i in dom F holds F.i is Matrix of D;
 end;
 
 registration
@@ -713,8 +704,7 @@ proof
 end;
 
 reserve F,F1,F2 for FinSequence_of_Matrix of D,
-  G,G9,G1,G2 for
-  FinSequence_of_Matrix of K;
+  G,G9,G1,G2 for FinSequence_of_Matrix of K;
 
 definition
   let D,F,x;
@@ -769,8 +759,7 @@ proof
 A1: <*M*>.1=M by FINSEQ_1:def 8;
 A2: dom <*M*> ={1} by FINSEQ_1:4,def 8;
     let i;
-    assume
-    i in dom <*M*>;
+    assume i in dom <*M*>;
     hence <*M*>.i is Matrix of D by A2,A1,TARSKI:def 1;
   end;
   hence thesis by Def2;
@@ -797,8 +786,7 @@ definition
   proof
     now
       let i;
-      assume
-      i in dom (F|n);
+      assume i in dom (F|n);
       then (F|n).i=F.i by FUNCT_1:70;
       hence (F|n).i is Matrix of D;
     end;
@@ -826,8 +814,7 @@ definition
   let D,F;
   func Len F -> FinSequence of NAT means
   :Def3:
-  dom it = dom F & for i st i in
-  dom it holds it.i=len (F.i);
+  dom it = dom F & for i st i in dom it holds it.i=len (F.i);
   existence
   proof
     deffunc F(Nat)=len (F.$1);
@@ -855,8 +842,7 @@ A7:   x in dom F1;
   end;
   func Width F -> FinSequence of NAT means
   :Def4:
-  dom it = dom F & for i st i
-  in dom it holds it.i=width (F.i);
+  dom it = dom F & for i st i in dom it holds it.i=width (F.i);
   existence
   proof
     deffunc F(Nat)=width (F.$1);
@@ -1155,8 +1141,7 @@ j-'Sum ((Width F) | (min(Len F,i)-'1))));
 Sum (W|min(L,$1)) implies $3 = d) & (Sum (W| (min(L,$1)-'1)) <$2 &$2<= Sum (W|
 min(L,$1)) implies $3 = F.min(L,$1)*($1-'Sum(L| (min(L,$1)-'1)),
 $2-'Sum (W| (min (L,$1)-'1))));
-A1: for i,j st [i,j] in [:Seg N, Seg M:] ex x being Element of D st P[i,j,
-    x]
+A1: for i,j st [i,j] in [:Seg N, Seg M:] ex x being Element of D st P[i,j, x]
     proof
       let i,j such that
       [i,j] in [:Seg N,Seg M:];
@@ -1239,12 +1224,10 @@ A1: width block_diagonal(F,d)=Sum Width F by Def5;
 end;
 
 theorem
-  for F be FinSequence_of_Matrix of D st F={} holds block_diagonal(F,d)=
-  {}
+  for F be FinSequence_of_Matrix of D st F={} holds block_diagonal(F,d)= {}
 proof
   let F be FinSequence_of_Matrix of D;
-  assume
-  F={};
+  assume F={};
   then len Len F=0 by FINSEQ_1:def 18;
   then Len F=<*>REAL;
   then 0 =len block_diagonal(F,d) by Def5,RVSUM_1:102;
@@ -1384,8 +1367,7 @@ A53:  len LM2=W2 by FINSEQ_1:def 18;
 A54:  len (W1d^LM2)= len W1d + len LM2 by FINSEQ_1:35;
 A55:  len W1d=W1 by FINSEQ_1:def 18;
 A56:  len LM=W1+W2 by A27,FINSEQ_1:def 18;
-      assume
-      i in dom M2;
+      assume i in dom M2;
       then
 A57:  i in Seg L2 by FINSEQ_1:def 3;
       then L1+i in Seg (L1+L2) by FINSEQ_1:81;
@@ -1801,8 +1783,7 @@ A85:        dom Col(M2,n)=Seg len M2 by FINSEQ_2:144;
 end;
 
 theorem Th25:
-  Indices block_diagonal(F1,d1) is Subset of Indices
-  block_diagonal(F1^F2,d2)
+  Indices block_diagonal(F1,d1) is Subset of Indices block_diagonal(F1^F2,d2)
 proof
   set B1=block_diagonal(F1,d1);
   set B2=block_diagonal(F1^F2,d2);
@@ -1821,8 +1802,7 @@ A2: dom B2=Seg len B2 by FINSEQ_1:def 3;
 A3: Seg Sum Width F1 c= Seg Sum Width (F1^F2) by FINSEQ_1:7;
 A4: len B1=Sum Len F1 by Def5;
     let x;
-    assume
-    x in Indices B1;
+    assume x in Indices B1;
     then
 A5: ex i,j be set st i in dom B1 & j in Seg width B1 & x=[i,j] by
 ZFMISC_1:def 2;
@@ -2045,8 +2025,7 @@ A3: len B12=Sum L by Def5;
 A4: len F1=len L1 by FINSEQ_1:def 18;
   assume that
 A5: [i,j] in Indices block_diagonal(F1^F2,d) and
-A6: i <= Sum Len F1 & j > Sum Width F1 or i > Sum Len F1 & j <= Sum
-  Width F1;
+A6: i <= Sum Len F1 & j > Sum Width F1 or i > Sum Len F1 & j <= Sum Width F1;
   i in dom B12 by A5,ZFMISC_1:106;
   then
 A7: 1<=i by FINSEQ_3:27;
@@ -2299,8 +2278,7 @@ A2: width B = Sum Width <*M*> by Def5
 end;
 
 theorem Th35:
-  block_diagonal(F1^F2,d) = block_diagonal(<*block_diagonal(F1,d)
-  *>^F2,d)
+  block_diagonal(F1^F2,d) = block_diagonal(<*block_diagonal(F1,d) *>^F2,d)
 proof
   set F12=F1^F2;
   set D1=block_diagonal(F1,d);
@@ -2390,8 +2368,7 @@ A33:    [ii,jj] in Indices D2 by A21,A31,A32,A30,Th27;
 end;
 
 theorem Th36:
-  block_diagonal(F1^F2,d) = block_diagonal(F1^<*block_diagonal(F2,
-  d)*>,d)
+  block_diagonal(F1^F2,d) = block_diagonal(F1^<*block_diagonal(F2, d)*>,d)
 proof
   set F12=F1^F2;
   set D1=block_diagonal(F1,d);
@@ -2876,7 +2853,6 @@ A19: 1<=1+j by NAT_1:11;
     j+1<=len bGA by A12,A17,XREAL_1:9;
     then
 A20: j+1 in Seg len bGA by A19;
-A21: j in NAT by ORDINAL1:def 13;
     now
       per cases;
       suppose
@@ -2937,7 +2913,7 @@ A41:        jL>=i by XREAL_1:10;
 A42:        Line(A,1+jL) = A9.(1+jL) by A32,MATRIX_2:10
               .= da9.jL by A1,A4,A27,A41,FINSEQ_3:120
               .= Line(da,jL) by A33,MATRIX_2:10;
-            thus Del(bGA,Si).j = bGA.(j+1) by A9,A11,A12,A3,A6,A17,A21,A40,
+            thus Del(bGA,Si).j = bGA.(j+1) by A9,A11,A12,A3,A6,A17,A40,
 FINSEQ_1:81,FINSEQ_3:120
               .= Line(bGA,jL+1+len bG) by A10,A20,MATRIX_2:10
               .= (width bG|->a)^Line(da,jL) by A29,A42,Th23
@@ -3006,7 +2982,7 @@ A17:    j>len A;
 A18:    jL>=1 by NAT_1:14;
         width A <> 0 by A1;
         then
-        reconsider w1=width A-1 as Element of NAT by A1,FINSEQ_1:4,NAT_1:14,21;
+        reconsider w1=width A-1 as Element of NAT by NAT_1:14,21;
 A19:    dom (width A |-> a) = Seg width A by FINSEQ_2:144;
 A20:    width Da = w1+1-'1 by A1,LAPLACE:3
           .= w1 by NAT_D:34;
@@ -3118,8 +3094,7 @@ definition
   let F be FinSequence of (D**);
   attr F is Square-Matrix-yielding means
   :Def6:
-  for i st i in dom F ex n st F.
-  i is Matrix of n,D;
+  for i st i in dom F ex n st F. i is Matrix of n,D;
 end;
 
 registration
@@ -3142,8 +3117,7 @@ registration
     let F be FinSequence of D** such that
 A1: F is Square-Matrix-yielding;
     let i;
-    assume
-    i in dom F;
+    assume i in dom F;
     then ex n st F.i is Matrix of n,D by A1,Def6;
     hence thesis;
   end;
@@ -3162,8 +3136,7 @@ definition
 end;
 
 reserve S,S1,S2 for FinSequence_of_Square-Matrix of D,
-  R,R1,R2 for
-  FinSequence_of_Square-Matrix of K;
+  R,R1,R2 for FinSequence_of_Square-Matrix of K;
 
 theorem
   {} is FinSequence_of_Square-Matrix of D
@@ -3474,8 +3447,7 @@ definition
   let K,R;
   func Det R -> FinSequence of K means
   :Def7:
-  dom it = dom R & for i st i in
-  dom it holds it.i = Det R.i;
+  dom it = dom R & for i st i in dom it holds it.i = Det R.i;
   existence
   proof
     deffunc D(Nat)=Det (R.$1);
@@ -3787,8 +3759,7 @@ A8: len R=0;
 end;
 
 theorem Th54:
-  len A1 <> width A1 & N = block_diagonal(<*A1,A2*>,0.K) implies
-  Det N = 0.K
+  len A1 <> width A1 & N = block_diagonal(<*A1,A2*>,0.K) implies Det N = 0.K
 proof
   defpred P[Nat] means for A1 st len A1<>width A1 & width A1=$1 for n,N st N=
   block_diagonal(<*A1,A2*>,0.K) holds Det N=0.K;
@@ -3969,8 +3940,7 @@ proof
   set B= block_diagonal(G,0.K);
   defpred P[Nat] means $1 in Seg len G & (Len G).$1<>(Width G).$1;
 A1: Seg len G=dom G by FINSEQ_1:def 3;
-  assume
-  Len G<>Width G;
+  assume Len G<>Width G;
   then
 A2: ex k st P[k] by FINSEQ_2:139;
   consider k such that
@@ -4012,8 +3982,7 @@ A14: (Len G).j=(Width G).j by A4,A11,A13;
   len Gk=k1 by A7,FINSEQ_1:80;
   then reconsider bGk as Matrix of Sum Len Gk,K by A12,FINSEQ_2:139;
   let M be Matrix of n,K;
-  assume
-  M =B;
+  assume M =B;
   then
 A15: M = block_diagonal(G| (k1+1)^(G/^k),0.K) by RFINSEQ:21
     .= block_diagonal(Gk^<*G.k*>^(G/^k),0.K) by A3,A1,FINSEQ_5:11
@@ -4047,8 +4016,7 @@ definition
   let f be FinSequence of NAT;
   func 1.(K,f) -> FinSequence_of_Square-Matrix of K means
   :Def8:
-  dom it = dom
-  f & for i st i in dom it holds it.i = 1.(K,f.i);
+  dom it = dom f & for i st i in dom it holds it.i = 1.(K,f.i);
   existence
   proof
     deffunc G(Nat)=1.(K,f.$1);
@@ -4058,8 +4026,7 @@ A2: for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
     rng IT c= (the carrier of K)**
     proof
       let y;
-      assume
-      y in rng IT;
+      assume y in rng IT;
       then consider x such that
 A3:   x in dom IT and
 A4:   IT.x=y by FUNCT_1:def 5;
@@ -4071,16 +4038,14 @@ A4:   IT.x=y by FUNCT_1:def 5;
 ;
     now
       let i;
-      assume
-      i in dom IT;
+      assume i in dom IT;
       then IT.i=1.(K,f.i) by A2;
       hence IT.i is Matrix of K;
     end;
     then reconsider IT as FinSequence_of_Matrix of K by Def2;
     now
       let i;
-      assume
-      i in dom IT;
+      assume i in dom IT;
       then IT.i=1.(K,f.i) by A2;
       hence ex n st IT.i is Matrix of n,K;
     end;
@@ -4365,7 +4330,7 @@ A9: Sum Len 1.(K,f)=0 by RVSUM_1:102;
   hence thesis;
 end;
 
-reserve p,p1,p2 for FinSequence of K;
+reserve p,p1 for FinSequence of K;
 
 begin :: Operations On a Finite Sequence of Matrices
 
@@ -4373,8 +4338,7 @@ definition
   let K,G,p;
   func mlt(p,G) -> FinSequence_of_Matrix of K means
   :Def9:
-  dom it = dom G &
-  for i st i in dom it holds it.i = p/.i * G.i;
+  dom it = dom G & for i st i in dom it holds it.i = p/.i * G.i;
   existence
   proof
     deffunc G(Nat)=p/.$1*G.$1;
@@ -4384,8 +4348,7 @@ A2: for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
     rng IT c= (the carrier of K)**
     proof
       let y;
-      assume
-      y in rng IT;
+      assume y in rng IT;
       then consider x such that
 A3:   x in dom IT and
 A4:   IT.x=y by FUNCT_1:def 5;
@@ -4397,8 +4360,7 @@ A4:   IT.x=y by FUNCT_1:def 5;
 ;
     now
       let i;
-      assume
-      i in dom IT;
+      assume i in dom IT;
       then IT.i=p/.i*G.i by A2;
       hence IT.i is Matrix of K;
     end;
@@ -4423,26 +4385,22 @@ A9:   i in dom G;
   end;
 end;
 
-definition
+registration
   let K;
   let R,p;
-  redefine func mlt(p,R) -> FinSequence_of_Square-Matrix of K;
+  cluster mlt(p,R) -> Square-Matrix-yielding;
   coherence
   proof
     set M=mlt(p,R);
-    now
-      let i;
-      assume
-      i in dom M;
-      then
-A1:   M.i=p/.i* R.i by Def9;
-      consider n such that
-A2:   R.i is Matrix of n,K;
-      take n;
-      len (R.i)=n by A2,MATRIX_1:25;
-      hence M.i is Matrix of n,K by A1;
-    end;
-    hence thesis by Def6;
+    let i;
+    assume i in dom M;
+    then
+A1: M.i=p/.i* R.i by Def9;
+    consider n such that
+A2: R.i is Matrix of n,K;
+    take n;
+    len (R.i)=n by A2,MATRIX_1:25;
+    hence M.i is Matrix of n,K by A1;
   end;
 end;
 
@@ -4489,8 +4447,7 @@ A2: mlt(p,<*A*>).1 = p/.1*(<*A*>.1) by Def9
 end;
 
 theorem Th64:
-  len G = len p & len G1 <=len p1 implies mlt(p^p1,G^G1) = mlt(p,G
-  )^mlt(p1,G1)
+  len G = len p & len G1 <=len p1 implies mlt(p^p1,G^G1) = mlt(p,G )^mlt(p1,G1)
 proof
   assume that
 A1: len G=len p and
@@ -4592,10 +4549,8 @@ A14:  i<=len A1 by A9,A12,FINSEQ_3:27;
         .= Line(AA1,i)^(a*(width A2 |->a1))by A13,A14,MATRIXR1:20
         .= Line(AA1,i)^(width AA2 |->aa1) by A1,FVSUM_1:66;
     end;
-
     thus i in dom AA2 implies Line(a*B,i+len AA1)=(width AA1|->aa1)^Line(AA2,i
     )
-
     proof
       assume
 A15:  i in dom AA2;
@@ -4676,8 +4631,7 @@ definition
   let G1,G2 be FinSequence_of_Matrix of K;
   func G1(+)G2 -> FinSequence_of_Matrix of K means
   :Def10:
-  dom it = dom G1 &
-  for i st i in dom it holds it.i= G1.i + G2.i;
+  dom it = dom G1 & for i st i in dom it holds it.i= G1.i + G2.i;
   existence
   proof
     deffunc G(Nat)=G1.$1+G2.$1;
@@ -4687,8 +4641,7 @@ A2: for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
     rng IT c= (the carrier of K)**
     proof
       let y;
-      assume
-      y in rng IT;
+      assume y in rng IT;
       then consider x such that
 A3:   x in dom IT and
 A4:   IT.x=y by FUNCT_1:def 5;
@@ -4700,8 +4653,7 @@ A4:   IT.x=y by FUNCT_1:def 5;
 ;
     now
       let i;
-      assume
-      i in dom IT;
+      assume i in dom IT;
       then IT.i=G1.i+G2.i by A2;
       hence IT.i is Matrix of K;
     end;
@@ -4726,28 +4678,24 @@ A9:   i in dom G1;
   end;
 end;
 
-definition
+registration
   let K;
   let R,G;
-  redefine func R(+)G -> FinSequence_of_Square-Matrix of K;
+  cluster R(+)G -> Square-Matrix-yielding;
   coherence
   proof
     set RG=R(+)G;
-    now
-      let i;
-      assume
-      i in dom RG;
-      then
-A1:   RG.i=R.i+G.i by Def10;
-      consider n such that
-A2:   R.i is Matrix of n,K;
-      take n;
-A3:   len (R.i+G.i)=len (R.i) by MATRIX_3:def 3;
-A4:   width (R.i+G.i)=width (R.i) by MATRIX_3:def 3;
-      width (R.i)=n by A2,MATRIX_1:25;
-      hence RG.i is Matrix of n,K by A2,A1,A3,A4,MATRIX_1:25,MATRIX_2:7;
-    end;
-    hence thesis by Def6;
+    let i;
+    assume i in dom RG;
+    then
+A1: RG.i=R.i+G.i by Def10;
+    consider n such that
+A2: R.i is Matrix of n,K;
+    take n;
+A3: len (R.i+G.i)=len (R.i) by MATRIX_3:def 3;
+A4: width (R.i+G.i)=width (R.i) by MATRIX_3:def 3;
+    width (R.i)=n by A2,MATRIX_1:25;
+    hence RG.i is Matrix of n,K by A2,A1,A3,A4,MATRIX_1:25,MATRIX_2:7;
   end;
 end;
 
@@ -4882,21 +4830,17 @@ end;
 
 Lm8: width A1=width A2 & i in dom A1 implies Line(A1+A2,i)=Line(A1,i)+Line(A2,
 i)
-
 proof
   assume that
 A1: width A1=width A2 and
 A2: i in dom A1;
-
   reconsider L1=Line(A1,i),L2=Line(A2,i) as Element of width A1-tuples_on the
   carrier of K by A1;
-
   per cases;
   suppose
 A3: width A1=0;
     then width (A1+A2)=0 by MATRIX_3:def 3;
-    then Line(A1+A2,i) = <*>(the carrier of K)
-      .= L1+L2 by A3;
+    then Line(A1+A2,i) = <*>(the carrier of K) .= L1+L2 by A3;
     hence thesis;
   end;
   suppose
@@ -5087,8 +5031,7 @@ definition
   let G1,G2 be FinSequence_of_Matrix of K;
   func G1(#)G2 -> FinSequence_of_Matrix of K means
   :Def11:
-  dom it = dom G1 &
-  for i st i in dom it holds it.i= G1.i * G2.i;
+  dom it = dom G1 & for i st i in dom it holds it.i= G1.i * G2.i;
   existence
   proof
     deffunc G(Nat)=G1.$1*G2.$1;
@@ -5098,8 +5041,7 @@ A2: for k st k in dom IT holds IT.k=G(k) from FINSEQ_1:sch 2;
     rng IT c= (the carrier of K)**
     proof
       let y;
-      assume
-      y in rng IT;
+      assume y in rng IT;
       then consider x such that
 A3:   x in dom IT and
 A4:   IT.x=y by FUNCT_1:def 5;
@@ -5111,8 +5053,7 @@ A4:   IT.x=y by FUNCT_1:def 5;
 ;
     now
       let i;
-      assume
-      i in dom IT;
+      assume i in dom IT;
       then IT.i=G1.i*G2.i by A2;
       hence IT.i is Matrix of K;
     end;
@@ -5278,12 +5219,9 @@ end;
 Lm9: for R1,S1 be Element of i-tuples_on the carrier of K, R2,S2 be Element of
 j-tuples_on the carrier of K holds Sum (mlt(R1^R2,S1^S2)) = Sum(mlt(R1,S1))+Sum
 (mlt(R2,S2))
-
 proof
-
   let R1,S1 be Element of i-tuples_on the carrier of K, R2,S2 be Element of j
   -tuples_on the carrier of K;
-
   mlt(R1^R2,S1^S2)=mlt(R1,S1)^mlt(R2,S2) by FINSEQOP:12;
   hence thesis by RLVECT_1:58;
 end;
@@ -5560,4 +5498,3 @@ A23: b12={};
   for n holds P[n] from NAT_1:sch 2(A16,A2);
   hence thesis by A1;
 end;
-

@@ -141,7 +141,7 @@
 </RCluster>
 <FCluster aid="BCIALG_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="37"/>
@@ -150,7 +150,7 @@
 </FCluster>
 <FCluster aid="BCIALG_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
@@ -161,7 +161,7 @@
 </FCluster>
 <FCluster aid="BCIALG_1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="97"/>
 <Cluster>
 <Adjective nr="55"/>
 <Adjective nr="57"/>

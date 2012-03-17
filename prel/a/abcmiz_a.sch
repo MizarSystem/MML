@@ -221,13 +221,13 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="65">
 <Var nr="1"/>
 </Func>
 </Pred>

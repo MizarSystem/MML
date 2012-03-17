@@ -53,26 +53,26 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="360">
+<Func kind="K" nr="365">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="15">
 <Func kind="U" nr="1">
-<Func kind="K" nr="355">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="327"/>
+<Func kind="K" nr="333"/>
 </Func>
 </Adjective>
 <Adjective nr="51">
-<Func kind="K" nr="355">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="327"/>
+<Func kind="K" nr="333"/>
 </Adjective>
 </Cluster>
 </FCluster>

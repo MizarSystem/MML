@@ -3,20 +3,19 @@
 ::
 :: Received September 16, 2002
 :: Copyright (c) 2002 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, SUBSET_1, EUCLID, PRE_TOPC, TOPREAL2, RELAT_1, STRUCT_0,
       XREAL_0, ORDINAL1, ARYTM_1, SQUARE_1, XBOOLE_0, FUNCT_1, TOPS_2, RCOMP_1,
       ORDINAL2, TOPREAL1, XXREAL_2, MCART_1, XXREAL_0, CARD_1, ARYTM_3,
       PCOMPS_1, METRIC_1, TARSKI, COMPLEX1, JORDAN2C, RLTOPSP1, SPPOL_1,
-      ZFMISC_1, JORDAN6, JORDAN3, JORDAN18;
+      ZFMISC_1, JORDAN6, JORDAN3, JORDAN18, SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, RELSET_1, ORDINAL1,
-      NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, XXREAL_2, STRUCT_0,
-      PCOMPS_1, COMPLEX1, PRE_TOPC, TOPS_2, RCOMP_1, COMPTS_1, METRIC_1,
-      SPPOL_1, RLTOPSP1, EUCLID, TOPREAL1,
-      MEASURE6, PSCOMP_1, TOPREAL2, JORDAN5C,
-      JORDAN2C, TOPREAL6, JORDAN6;
+      NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, XXREAL_2, SEQ_4,
+      STRUCT_0, PCOMPS_1, COMPLEX1, PRE_TOPC, TOPS_2, RCOMP_1, COMPTS_1,
+      METRIC_1, SPPOL_1, RLTOPSP1, EUCLID, TOPREAL1, PSCOMP_1, TOPREAL2,
+      JORDAN5C, JORDAN2C, TOPREAL6, JORDAN6;
  constructors REAL_1, SQUARE_1, COMPLEX1, RCOMP_1, CONNSP_1, TOPS_2, COMPTS_1,
       TOPREAL1, SPPOL_1, PSCOMP_1, JORDAN5C, JORDAN6, JORDAN2C, TOPREAL6,
       SEQ_1, XXREAL_2, SEQ_4, RELSET_1, FUNCSDOM, BINOP_2, PCOMPS_1, RVSUM_1;
@@ -24,7 +23,7 @@ environ
       MEMBERED, COMPTS_1, EUCLID, TOPREAL1, STRUCT_0, TOPS_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, ZFMISC_1, SEQ_4, SQUARE_1, EUCLID, PCOMPS_1,
-      SUBSET_1;
+      SUBSET_1, XXREAL_2;
  theorems JORDAN5B, TARSKI, TOPREAL1, XBOOLE_0, EUCLID, JORDAN6, TOPS_2,
       XBOOLE_1, SEQ_4, RELAT_1, PSCOMP_1, FUNCT_2, TOPREAL3, JORDAN1A,
       COMPTS_1, ZFMISC_1, JORDAN5C, TOPREAL2, JORDAN2C, SQUARE_1, RCOMP_1,
@@ -35,12 +34,10 @@ begin  :: Preliminaries
 
 reserve n for Element of NAT,
   V for Subset of TOP-REAL n,
-  s,s1,s2,t,t1,t2 for
-  Point of TOP-REAL n,
+  s,s1,s2,t,t1,t2 for Point of TOP-REAL n,
   C for Simple_closed_curve,
   P for Subset of TOP-REAL 2,
-  a,p
-  ,p1,p2,q,q1,q2 for Point of TOP-REAL 2;
+  a,p ,p1,p2,q,q1,q2 for Point of TOP-REAL 2;
 
 Lm1: dom proj1 = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
 
@@ -72,9 +69,8 @@ theorem Th4:
   proj2.:(north_halfline a) is bounded_below
 proof
   take a`2;
-  let r be real number;
-  assume
-  r in proj2.:(north_halfline a);
+  let r be ext-real number;
+  assume r in proj2.:(north_halfline a);
   then consider x being set such that
 A1: x in the carrier of TOP-REAL 2 and
 A2: x in north_halfline a and
@@ -88,9 +84,8 @@ theorem Th5:
   proj2.:(south_halfline a) is bounded_above
 proof
   take a`2;
-  let r be real number;
-  assume
-  r in proj2.:(south_halfline a);
+  let r be ext-real number;
+  assume r in proj2.:(south_halfline a);
   then consider x being set such that
 A1: x in the carrier of TOP-REAL 2 and
 A2: x in south_halfline a and
@@ -104,9 +99,8 @@ theorem Th6:
   proj1.:(west_halfline a) is bounded_above
 proof
   take a`1;
-  let r be real number;
-  assume
-  r in proj1.:(west_halfline a);
+  let r be ext-real number;
+  assume r in proj1.:(west_halfline a);
   then consider x being set such that
 A1: x in the carrier of TOP-REAL 2 and
 A2: x in west_halfline a and
@@ -120,9 +114,8 @@ theorem Th7:
   proj1.:(east_halfline a) is bounded_below
 proof
   take a`1;
-  let r be real number;
-  assume
-  r in proj1.:(east_halfline a);
+  let r be ext-real number;
+  assume r in proj1.:(east_halfline a);
   then consider x being set such that
 A1: x in the carrier of TOP-REAL 2 and
 A2: x in east_halfline a and
@@ -145,13 +138,12 @@ registration
 end;
 
 theorem Th8:
-  inf(proj2.:(north_halfline a)) = a`2
+  lower_bound(proj2.:(north_halfline a)) = a`2
 proof
   set X = proj2.:(north_halfline a);
 A1: now
     let r be real number;
-    assume
-    r in X;
+    assume r in X;
     then consider x being set such that
 A2: x in the carrier of TOP-REAL 2 and
 A3: x in north_halfline a and
@@ -163,8 +155,7 @@ A4: r = proj2.x by FUNCT_2:115;
 A5: now
     reconsider r = a`2 as real number;
     let s be real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then
 A6: r + 0 < a`2 + s by XREAL_1:10;
     take r;
@@ -177,13 +168,12 @@ A6: r + 0 < a`2 + s by XREAL_1:10;
 end;
 
 theorem Th9:
-  sup(proj2.:(south_halfline a)) = a`2
+  upper_bound(proj2.:(south_halfline a)) = a`2
 proof
   set X = proj2.:(south_halfline a);
 A1: now
     let r be real number;
-    assume
-    r in X;
+    assume r in X;
     then consider x being set such that
 A2: x in the carrier of TOP-REAL 2 and
 A3: x in south_halfline a and
@@ -195,8 +185,7 @@ A4: r = proj2.x by FUNCT_2:115;
 A5: now
     reconsider r = a`2 as real number;
     let s be real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then
 A6: a`2 - s < r - 0 by XREAL_1:17;
     take r;
@@ -209,13 +198,12 @@ A6: a`2 - s < r - 0 by XREAL_1:17;
 end;
 
 theorem
-  sup(proj1.:(west_halfline a)) = a`1
+  upper_bound(proj1.:(west_halfline a)) = a`1
 proof
   set X = proj1.:(west_halfline a);
 A1: now
     let r be real number;
-    assume
-    r in X;
+    assume r in X;
     then consider x being set such that
 A2: x in the carrier of TOP-REAL 2 and
 A3: x in west_halfline a and
@@ -227,8 +215,7 @@ A4: r = proj1.x by FUNCT_2:115;
 A5: now
     reconsider r = a`1 as real number;
     let s be real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then
 A6: a`1 - s < r - 0 by XREAL_1:17;
     take r;
@@ -241,13 +228,12 @@ A6: a`1 - s < r - 0 by XREAL_1:17;
 end;
 
 theorem
-  inf(proj1.:(east_halfline a)) = a`1
+  lower_bound(proj1.:(east_halfline a)) = a`1
 proof
   set X = proj1.:(east_halfline a);
 A1: now
     let r be real number;
-    assume
-    r in X;
+    assume r in X;
     then consider x being set such that
 A2: x in the carrier of TOP-REAL 2 and
 A3: x in east_halfline a and
@@ -259,8 +245,7 @@ A4: r = proj1.x by FUNCT_2:115;
 A5: now
     reconsider r = a`1 as real number;
     let s be real number;
-    assume
-    0 < s;
+    assume 0 < s;
     then
 A6: r + 0 < a`1 + s by XREAL_1:10;
     take r;
@@ -287,8 +272,7 @@ registration
     proof
       let p be Point of Euclid 2;
       reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
-      assume
-      p in X`;
+      assume p in X`;
       then
 A1:   not p in X by XBOOLE_0:def 5;
       per cases by A1,TOPREAL1:def 12;
@@ -306,8 +290,7 @@ A3:     b in Ball(p,r);
         then
 A4:     dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`1 = a`1;
+          assume c`1 = a`1;
           then
 A5:       sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`1-c`1) by A4,TOPREAL6:101;
 A6:       0 <= (x`1-c`1)^2 by XREAL_1:65;
@@ -337,8 +320,7 @@ A9:     b in Ball(p,r);
         then
 A10:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`2 >= a`2;
+          assume c`2 >= a`2;
           then
 A11:      a`2-x`2 <= c`2-x`2 by XREAL_1:15;
           0 <= a`2-x`2 by A8,XREAL_1:52;
@@ -375,8 +357,7 @@ A16:      (x`1-c`1)^2 + (x`2-c`2)^2 < (a`2-x`2)^2 by A13,A15,SQUARE_1:def 4;
     proof
       let p be Point of Euclid 2;
       reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
-      assume
-      p in X`;
+      assume p in X`;
       then
 A17:  not p in X by XBOOLE_0:def 5;
       per cases by A17,TOPREAL1:def 14;
@@ -394,8 +375,7 @@ A19:    b in Ball(p,r);
         then
 A20:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`1 = a`1;
+          assume c`1 = a`1;
           then
 A21:      sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`1-c`1) by A20,TOPREAL6:101;
 A22:      0 <= (x`1-c`1)^2 by XREAL_1:65;
@@ -425,8 +405,7 @@ A25:    b in Ball(p,r);
         then
 A26:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`2 <= a`2;
+          assume c`2 <= a`2;
           then
 A27:      x`2-c`2 >= x`2-a`2 by XREAL_1:15;
           0 <= x`2-a`2 by A24,XREAL_1:52;
@@ -463,8 +442,7 @@ A32:      (x`1-c`1)^2 + (x`2-c`2)^2 < (x`2-a`2)^2 by A29,A31,SQUARE_1:def 4;
     proof
       let p be Point of Euclid 2;
       reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
-      assume
-      p in X`;
+      assume p in X`;
       then
 A33:  not p in X by XBOOLE_0:def 5;
       per cases by A33,TOPREAL1:def 13;
@@ -482,8 +460,7 @@ A35:    b in Ball(p,r);
         then
 A36:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`2 = a`2;
+          assume c`2 = a`2;
           then
 A37:      sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`2-c`2) by A36,TOPREAL6:101;
 A38:      0 <= (x`2-c`2)^2 by XREAL_1:65;
@@ -513,8 +490,7 @@ A41:    b in Ball(p,r);
         then
 A42:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`1 >= a`1;
+          assume c`1 >= a`1;
           then
 A43:      a`1-x`1 <= c`1-x`1 by XREAL_1:15;
           0 <= a`1-x`1 by A40,XREAL_1:52;
@@ -551,8 +527,7 @@ A48:      (x`1-c`1)^2 + (x`2-c`2)^2 < (a`1-x`1)^2 by A45,A47,SQUARE_1:def 4;
     proof
       let p be Point of Euclid 2;
       reconsider x = p as Point of TOP-REAL 2 by EUCLID:71;
-      assume
-      p in X`;
+      assume p in X`;
       then
 A49:  not p in X by XBOOLE_0:def 5;
       per cases by A49,TOPREAL1:def 15;
@@ -570,8 +545,7 @@ A51:    b in Ball(p,r);
         then
 A52:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`2 = a`2;
+          assume c`2 = a`2;
           then
 A53:      sqrt ((x`1-c`1)^2 + (x`2-c`2)^2) < abs(x`2-c`2) by A52,TOPREAL6:101;
 A54:      0 <= (x`2-c`2)^2 by XREAL_1:65;
@@ -601,8 +575,7 @@ A57:    b in Ball(p,r);
         then
 A58:    dist(x,c) < r by TOPREAL6:def 1;
         now
-          assume
-          c`1 <= a`1;
+          assume c`1 <= a`1;
           then
 A59:      x`1-c`1 >= x`1-a`1 by XREAL_1:15;
           0 <= x`1-a`1 by A56,XREAL_1:52;
@@ -634,8 +607,7 @@ theorem Th12:
   a in BDD P implies not north_halfline a c= UBD P
 proof
 A1: BDD P misses UBD P & a in north_halfline a by JORDAN2C:28,TOPREAL1:45;
-  assume
-  a in BDD P;
+  assume a in BDD P;
   hence thesis by A1,XBOOLE_0:3;
 end;
 
@@ -643,8 +615,7 @@ theorem Th13:
   a in BDD P implies not south_halfline a c= UBD P
 proof
 A1: BDD P misses UBD P & a in south_halfline a by JORDAN2C:28,TOPREAL1:45;
-  assume
-  a in BDD P;
+  assume a in BDD P;
   hence thesis by A1,XBOOLE_0:3;
 end;
 
@@ -652,8 +623,7 @@ theorem
   a in BDD P implies not east_halfline a c= UBD P
 proof
 A1: BDD P misses UBD P & a in east_halfline a by JORDAN2C:28,TOPREAL1:45;
-  assume
-  a in BDD P;
+  assume a in BDD P;
   hence thesis by A1,XBOOLE_0:3;
 end;
 
@@ -661,8 +631,7 @@ theorem
   a in BDD P implies not west_halfline a c= UBD P
 proof
 A1: BDD P misses UBD P & a in west_halfline a by JORDAN2C:28,TOPREAL1:45;
-  assume
-  a in BDD P;
+  assume a in BDD P;
   hence thesis by A1,XBOOLE_0:3;
 end;
 
@@ -712,11 +681,11 @@ begin  :: Two Special Points on a Simple Closed Curve
 definition
   let p,P;
   func North-Bound(p,P) -> Point of TOP-REAL 2 equals
-  |[p`1,inf(proj2.:(P /\
+  |[p`1,lower_bound(proj2.:(P /\
   north_halfline p))]|;
   correctness;
   func South-Bound(p,P) -> Point of TOP-REAL 2 equals
-  |[p`1,sup(proj2.:(P /\
+  |[p`1,upper_bound(proj2.:(P /\
   south_halfline p))]|;
   correctness;
 end;
@@ -748,13 +717,13 @@ A3: p in BDD C;
 A4: X is non empty by XBOOLE_0:def 7;
   X is Bounded by A1,JORDAN2C:16,XBOOLE_1:17;
   then proj2.:X is closed by JCT_MISC:22;
-  then inf (proj2.:X) in proj2.:X by A4,A2,Lm2,RCOMP_1:31,RELAT_1:152;
+  then lower_bound (proj2.:X) in proj2.:X by A4,A2,Lm2,RCOMP_1:31,RELAT_1:152;
   then consider x being set such that
 A5: x in the carrier of TOP-REAL 2 and
 A6: x in X and
-A7: inf (proj2.:X) = proj2.x by FUNCT_2:115;
+A7: lower_bound (proj2.:X) = proj2.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A5;
-A8: x`2 = inf (proj2.:X) by A7,PSCOMP_1:def 29
+A8: x`2 = lower_bound (proj2.:X) by A7,PSCOMP_1:def 29
     .= North-Bound(p,C)`2 by EUCLID:56;
   x in north_halfline p by A6,XBOOLE_0:def 4;
   then x`1 = p`1 by TOPREAL1:def 12
@@ -773,17 +742,17 @@ A9: proj2.:X is bounded_above by XXREAL_2:def 11;
 A10: X is non empty by XBOOLE_0:def 7;
   X is Bounded by A1,JORDAN2C:16,XBOOLE_1:17;
   then proj2.:X is closed by JCT_MISC:22;
-  then sup (proj2.:X) in proj2.:X by A10,A9,Lm2,RCOMP_1:30,RELAT_1:152;
+  then upper_bound (proj2.:X) in proj2.:X by A10,A9,Lm2,RCOMP_1:30,RELAT_1:152;
   then consider x being set such that
 A11: x in the carrier of TOP-REAL 2 and
 A12: x in X and
-A13: sup (proj2.:X) = proj2.x by FUNCT_2:115;
+A13: upper_bound (proj2.:X) = proj2.x by FUNCT_2:115;
   reconsider x as Point of TOP-REAL 2 by A11;
   x in south_halfline p by A12,XBOOLE_0:def 4;
   then
 A14: x`1 = p`1 by TOPREAL1:def 14
     .= South-Bound(p,C)`1 by EUCLID:56;
-  x`2 = sup (proj2.:X) by A13,PSCOMP_1:def 29
+  x`2 = upper_bound (proj2.:X) by A13,PSCOMP_1:def 29
     .= South-Bound(p,C)`2 by EUCLID:56;
   then x = South-Bound(p,C) by A14,TOPREAL3:11;
   hence thesis by A12,XBOOLE_0:def 4;
@@ -803,8 +772,7 @@ A2: proj2.:(C /\ south_halfline p) is non empty by Lm2,RELAT_1:152;
 A3: BDD C misses C by JORDAN1A:15;
 A4: now
 A5: South-Bound(p,C)`1 = p`1 by EUCLID:56;
-    assume
-    South-Bound(p,C)`2 = p`2;
+    assume South-Bound(p,C)`2 = p`2;
     then South-Bound(p,C) = p by A5,TOPREAL3:11;
     then p in C by A1,Th22;
     hence contradiction by A1,A3,XBOOLE_0:3;
@@ -816,41 +784,45 @@ A6: proj2.:(C /\ north_halfline p) is non empty by Lm2,RELAT_1:152;
   proj2.:(south_halfline p) is bounded_above & C /\ south_halfline p c=
   south_halfline p by Th5,XBOOLE_1:17;
   then
-A7: sup(proj2.:(C /\ south_halfline p)) <= sup(proj2.:(south_halfline p) )
+A7: upper_bound(proj2.:(C /\ south_halfline p)) <=
+ upper_bound(proj2.:(south_halfline p) )
   by A2,RELAT_1:156,SEQ_4:65;
 A8: now
 A9: North-Bound(p,C)`1 = p`1 by EUCLID:56;
-    assume
-    North-Bound(p,C)`2 = p`2;
+    assume North-Bound(p,C)`2 = p`2;
     then North-Bound(p,C) = p by A9,TOPREAL3:11;
     then p in C by A1,Th22;
     hence contradiction by A1,A3,XBOOLE_0:3;
   end;
-  South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) & sup(proj2.:(
+  South-Bound(p,C)`2 = upper_bound(proj2.:(C /\ south_halfline p))
+   & upper_bound(proj2.:(
   south_halfline p)) = p`2 by Th9,EUCLID:56;
   hence South-Bound(p,C)`2 < p`2 by A7,A4,XXREAL_0:1;
   proj2.:(north_halfline p) is bounded_below & C /\ north_halfline p c=
   north_halfline p by Th4,XBOOLE_1:17;
   then
-A10: inf(proj2.:(C /\ north_halfline p)) >= inf(proj2.:(north_halfline p ))
+A10: lower_bound(proj2.:(C /\ north_halfline p)) >=
+ lower_bound(proj2.:(north_halfline p ))
   by A6,RELAT_1:156,SEQ_4:64;
-  inf(proj2.:(north_halfline p)) = p`2 & North-Bound(p,C)`2 = inf(proj2.:
+  lower_bound(proj2.:(north_halfline p)) = p`2 &
+   North-Bound(p,C)`2 = lower_bound(proj2.:
   (C /\ north_halfline p)) by Th8,EUCLID:56;
   hence thesis by A10,A8,XXREAL_0:1;
 end;
 
 theorem Th24:
   for C being compact Subset of TOP-REAL 2 holds p in BDD C
-implies inf(proj2.:(C /\ north_halfline p)) > sup(proj2.:(C /\ south_halfline p
+implies lower_bound(proj2.:(C /\ north_halfline p)) >
+ upper_bound(proj2.:(C /\ south_halfline p
   ))
 proof
   let C be compact Subset of TOP-REAL 2;
-  assume
-  p in BDD C;
+  assume p in BDD C;
   then
 A1: South-Bound(p,C)`2 < p`2 & p`2 < North-Bound(p,C)`2 by Th23;
-  North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) & South-Bound(p
-  ,C) `2 = sup(proj2.:(C /\ south_halfline p)) by EUCLID:56;
+  North-Bound(p,C)`2 = lower_bound(proj2.:(C /\ north_halfline p))
+   & South-Bound(p
+  ,C) `2 = upper_bound(proj2.:(C /\ south_halfline p)) by EUCLID:56;
   hence thesis by A1,XXREAL_0:2;
 end;
 
@@ -861,10 +833,10 @@ proof
   let C be compact Subset of TOP-REAL 2;
   assume
 A1: p in BDD C;
-A2: North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) & South-Bound(p
-  ,C) `2 = sup(proj2.:(C /\ south_halfline p)) by EUCLID:56;
-  assume
-  not thesis;
+A2: North-Bound(p,C)`2 = lower_bound(proj2.:(C /\ north_halfline p))
+ & South-Bound(p
+  ,C) `2 = upper_bound(proj2.:(C /\ south_halfline p)) by EUCLID:56;
+  assume not thesis;
   hence thesis by A1,A2,Th24;
 end;
 
@@ -889,8 +861,10 @@ A1: p in BDD C;
   then
 A2: North-Bound(p,C) in C & South-Bound(p,C) in C by Th22;
   hereby
-A3: North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) by EUCLID:56;
-A4: South-Bound(p,C)`2 = sup(proj2.:(C /\ south_halfline p)) by EUCLID:56;
+A3: North-Bound(p,C)`2 = lower_bound(proj2.:(C /\ north_halfline p))
+by EUCLID:56;
+A4: South-Bound(p,C)`2 = upper_bound(proj2.:(C /\ south_halfline p))
+by EUCLID:56;
     let x be set;
 A5: South-Bound(p,C)`1 = p`1 by EUCLID:56;
     assume
@@ -913,8 +887,7 @@ A12:  proj2.:(C /\ north_halfline p) is bounded_below by XXREAL_2:def 11;
 A13:  South-Bound(p,C)`2 < North-Bound(p,C)`2 by XXREAL_0:2;
       then
 A14:  South-Bound(p,C)`2 <= y`2 by A7,TOPREAL1:10;
-      assume
-      y <> North-Bound(p,C);
+      assume y <> North-Bound(p,C);
       then
 A15:  y`2 <> North-Bound(p,C)`2 by A10,A8,TOPREAL3:11;
 A16:  y`2 = proj2.y by PSCOMP_1:def 29;
@@ -922,8 +895,7 @@ A16:  y`2 = proj2.y by PSCOMP_1:def 29;
       then
 A17:  y`2 < North-Bound(p,C)`2 by A15,XXREAL_0:1;
       now
-        assume
-        y`2 > p`2;
+        assume y`2 > p`2;
         then y in north_halfline p by A8,TOPREAL1:def 12;
         then y in C /\ north_halfline p by A9,XBOOLE_0:def 4;
         then y`2 in proj2.:(C /\ north_halfline p) by A16,FUNCT_2:43;
@@ -943,8 +915,7 @@ A18:  y`2 in proj2.:(C /\ south_halfline p) by A16,FUNCT_2:43;
     hence x in {North-Bound(p,C),South-Bound(p,C)} by TARSKI:def 2;
   end;
   let x be set;
-  assume
-  x in {North-Bound(p,C),South-Bound(p,C)};
+  assume x in {North-Bound(p,C),South-Bound(p,C)};
   then
 A19: x = North-Bound(p,C) or x = South-Bound(p,C) by TARSKI:def 2;
   then x in L by RLTOPSP1:69;
@@ -960,12 +931,13 @@ proof
   set np = North-Bound(p,C), sq = South-Bound(q,C), nq = North-Bound(q,C), sp
   = South-Bound(p,C);
 A1: np`1 = p`1 & sp`1 = p`1 by EUCLID:56;
-A2: North-Bound(q,C)`2 = inf(proj2.:(C /\ north_halfline q)) & South-Bound(q
-  ,C) `2 = sup(proj2.:(C /\ south_halfline q)) by EUCLID:56;
-A3: North-Bound(p,C)`2 = inf(proj2.:(C /\ north_halfline p)) & South-Bound(p
-  ,C) `2 = sup(proj2.:(C /\ south_halfline p)) by EUCLID:56;
-  assume
-  p in BDD C & q in BDD C & p`1 <> q`1;
+A2: North-Bound(q,C)`2 = lower_bound(proj2.:(C /\ north_halfline q)) &
+South-Bound(q
+  ,C) `2 = upper_bound(proj2.:(C /\ south_halfline q)) by EUCLID:56;
+A3: North-Bound(p,C)`2 = lower_bound(proj2.:(C /\ north_halfline p)) &
+South-Bound(p
+  ,C) `2 = upper_bound(proj2.:(C /\ south_halfline p)) by EUCLID:56;
+  assume p in BDD C & q in BDD C & p`1 <> q`1;
   hence np <> sq & np <> nq & np <> sp & sq <> nq & sq <> sp & nq <> sp by A1
 ,A2,A3,Th24,EUCLID:56;
 end;
@@ -988,8 +960,7 @@ end;
 theorem
   t,t, V-separate s1,s2
 proof
-  assume
-  not thesis;
+  assume not thesis;
   then ex A being Subset of TOP-REAL n st A is_an_arc_of t,t & A c= V & A
   misses {s1,s2} by Def3;
   hence thesis by JORDAN6:49;
@@ -1002,8 +973,7 @@ proof
 A1: for A being Subset of TOP-REAL n st A is_an_arc_of s1,s2 & A c= V
   holds A meets {t1,t2};
   let A be Subset of TOP-REAL n;
-  assume
-  A is_an_arc_of s2,s1 & A c= V;
+  assume A is_an_arc_of s2,s1 & A c= V;
   hence thesis by A1,JORDAN5B:14;
 end;
 
@@ -1125,8 +1095,7 @@ A4: p1,p2, C-separate q1,q2;
   suppose that
 A5: q1 <> p1 & q2 <> p2 & q1 <> p2 & q2 <> p1;
     let A be Subset of TOP-REAL 2;
-    assume
-    A is_an_arc_of q1,q2 & A c= C;
+    assume A is_an_arc_of q1,q2 & A c= C;
     then consider B being non empty Subset of TOP-REAL 2 such that
 A6: B is_an_arc_of q1,q2 and
 A7: A \/ B = C and
@@ -1181,8 +1150,7 @@ A16: not q2 in P;
 A17:  now
 A18:    A = {q where q is Point of TOP-REAL 2: LE p1,q,P,p1,p2 & LE q,q1,
         P,p1,p2} by JORDAN6:29;
-        assume
-        p2 in A;
+        assume p2 in A;
         then
         ex q being Point of TOP-REAL 2 st p2 = q & LE p1,q,P,p1,p2 & LE q
         ,q1,P,p1,p2 by A18;
@@ -1205,8 +1173,7 @@ A21: not q1 in P;
 A22:  now
 A23:    A = {q where q is Point of TOP-REAL 2: LE p1,q,P1,p1,p2 & LE q,q1
         ,P1,p1,p2} by JORDAN6:29;
-        assume
-        p2 in A;
+        assume p2 in A;
         then ex q being Point of TOP-REAL 2 st p2 = q & LE p1,q,P1,p1,p2 & LE
         q,q1,P1,p1,p2 by A23;
         hence contradiction by A5,A8,JORDAN6:70;
@@ -1217,8 +1184,7 @@ A23:    A = {q where q is Point of TOP-REAL 2: LE p1,q,P1,p1,p2 & LE q,q1
 A24:  A c= P1 by JORDAN16:5;
       hence A c= C by A14,XBOOLE_1:1;
       now
-        assume
-        q2 in A;
+        assume q2 in A;
         then q2 in {p1,p2} by A10,A20,A24,XBOOLE_0:def 4;
         hence contradiction by A6,TARSKI:def 2;
       end;
@@ -1234,4 +1200,3 @@ A25: q1 in P & q2 in P;
     hence thesis by A4,A5,A6,TARSKI:def 2;
   end;
 end;
-

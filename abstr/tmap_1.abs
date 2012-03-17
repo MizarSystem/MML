@@ -8,13 +8,13 @@ environ
 
  vocabularies XBOOLE_0, PRE_TOPC, TARSKI, SUBSET_1, FUNCT_1, RELAT_1, FUNCT_4,
       STRUCT_0, RCOMP_1, SETFAM_1, CONNSP_2, ORDINAL2, FUNCOP_1, FUNCT_3,
-      ZFMISC_1, TSEP_1, CONNSP_1, TMAP_1;
+      ZFMISC_1, TSEP_1, CONNSP_1, TMAP_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, DOMAIN_1, STRUCT_0, PRE_TOPC,
       CONNSP_1, CONNSP_2, BORSUK_1, TSEP_1;
  constructors SETFAM_1, FUNCT_4, CONNSP_1, BORSUK_1, TSEP_1, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, STRUCT_0, PRE_TOPC,
-      BORSUK_1, TSEP_1, RELSET_1;
+      BORSUK_1, TSEP_1, RELSET_1, RELAT_1, PARTFUN1, TOPS_1;
  requirements BOOLE, SUBSET;
 
 
@@ -26,8 +26,6 @@ registration
   cluster X1 union X2 -> TopSpace-like;
 end;
 
-reserve A,B for non empty set;
-
 definition
   let A,B be non empty set;
   let A1,A2 be non empty Subset of A;
@@ -37,8 +35,7 @@ definition
   func f1 union f2 -> Function of A1 \/ A2,B means
 :: TMAP_1:def 1
 
-  it|A1 = f1 & it|A2 =
-  f2;
+  it|A1 = f1 & it|A2 = f2;
 end;
 
 canceled 5;
@@ -271,8 +268,7 @@ being Subset of Y st G is open & f.x in G ex H being Subset of X st H is open &
   x in H & f.:H c= G;
 
 theorem :: TMAP_1:49
-  f is continuous iff for x being Point of X holds f
-  is_continuous_at x;
+  f is continuous iff for x being Point of X holds f is_continuous_at x;
 
 theorem :: TMAP_1:50
   for X,Y,Z being non empty TopSpace st the carrier of Y = the
@@ -316,18 +312,27 @@ theorem :: TMAP_1:57
   of Y & the topology of Y c= the topology of X for f being continuous Function
   of Y,Z holds f is continuous Function of X,Z;
 
-::(Definition of the restriction mapping - general case.)
+definition
+  let S,T be 1-sorted;
+  let f be Function of S,T;
+  let R be 1-sorted such that
+ the carrier of R c= the carrier of S;
+  func f|R -> Function of R,T equals
+:: TMAP_1:def 3
+
+  f | the carrier of R;
+end;
 
 definition
-  let X, Y be non empty TopSpace, X0 be SubSpace of X, f be Function of X,Y;
-  func f|X0 -> Function of X0,Y equals
-:: TMAP_1:def 3
-  f|(the carrier of X0);
+  let X, Y be non empty TopSpace, f be Function of X,Y;
+  let X0 be SubSpace of X;
+  redefine func f | X0 equals
+:: TMAP_1:def 4
+  f | the carrier of X0;
 end;
 
 reserve X, Y for non empty TopSpace,
   X0 for non empty SubSpace of X;
-
 reserve f for Function of X,Y;
 
 canceled;
@@ -404,14 +409,13 @@ definition
   assume
  X1 is SubSpace of X0;
   func g|X1 -> Function of X1,Y equals
-:: TMAP_1:def 4
+:: TMAP_1:def 5
 
-  g|(the carrier of X1);
+  g | the carrier of X1;
 end;
 
 reserve X, Y for non empty TopSpace,
   X0, X1 for non empty SubSpace of X;
-
 reserve f for Function of X,Y,
   g for Function of X0,Y;
 
@@ -520,7 +524,7 @@ definition
   let X be non empty TopSpace, X0 be SubSpace of X;
   canceled;
   func incl X0 -> Function of X0,X equals
-:: TMAP_1:def 6
+:: TMAP_1:def 7
   (id X)|X0;
 end;
 
@@ -556,7 +560,7 @@ definition
   let X;
   let A be Subset of X;
   func A-extension_of_the_topology_of X -> Subset-Family of X equals
-:: TMAP_1:def 7
+:: TMAP_1:def 8
   {H \/ (G
   /\ A) : H in the topology of X & G in the topology of X};
 end;
@@ -576,8 +580,7 @@ in the topology of X & D in {G /\ A where G is Subset of X : G in the topology
   -extension_of_the_topology_of X;
 
 theorem :: TMAP_1:102
-  for A being Subset of X holds A in A
-  -extension_of_the_topology_of X;
+  for A being Subset of X holds A in A -extension_of_the_topology_of X;
 
 theorem :: TMAP_1:103
   for A being Subset of X holds A in the topology of X iff the
@@ -586,7 +589,7 @@ theorem :: TMAP_1:103
 definition
   let X be non empty TopSpace, A be Subset of X;
   func X modified_with_respect_to A -> strict TopSpace equals
-:: TMAP_1:def 8
+:: TMAP_1:def 9
   TopStruct(#the
     carrier of X, A-extension_of_the_topology_of X#);
 end;
@@ -603,8 +606,7 @@ theorem :: TMAP_1:104
 topology of (X modified_with_respect_to A) = A-extension_of_the_topology_of X;
 
 theorem :: TMAP_1:105
-  for B being Subset of X modified_with_respect_to A st B = A
-  holds B is open;
+  for B being Subset of X modified_with_respect_to A st B = A holds B is open;
 
 theorem :: TMAP_1:106
   for A being Subset of X holds A is open iff the TopStruct of X
@@ -613,7 +615,7 @@ theorem :: TMAP_1:106
 definition
   let X be non empty TopSpace, A be Subset of X;
   func modid(X,A) -> Function of X,X modified_with_respect_to A equals
-:: TMAP_1:def 9
+:: TMAP_1:def 10
   id (the
   carrier of X);
 end;
@@ -621,8 +623,7 @@ end;
 canceled;
 
 theorem :: TMAP_1:108
-  for x being Point of X st not x in A holds modid(X,A)
-  is_continuous_at x;
+  for x being Point of X st not x in A holds modid(X,A) is_continuous_at x;
 
 theorem :: TMAP_1:109
   for X0 being non empty SubSpace of X st the carrier of X0
@@ -649,10 +650,9 @@ theorem :: TMAP_1:113
 definition
   let X be non empty TopSpace, X0 be SubSpace of X;
   func X modified_with_respect_to X0 -> strict TopSpace means
-:: TMAP_1:def 10
+:: TMAP_1:def 11
 
-  for A
-  being Subset of X st A = the carrier of X0 holds it = X
+  for A being Subset of X st A = the carrier of X0 holds it = X
   modified_with_respect_to A;
 end;
 
@@ -680,7 +680,7 @@ theorem :: TMAP_1:116
 definition
   let X be non empty TopSpace, X0 be SubSpace of X;
   func modid(X,X0) -> Function of X,X modified_with_respect_to X0 means
-:: TMAP_1:def 11
+:: TMAP_1:def 12
 
 
   for A being Subset of X st A = the carrier of X0 holds it = modid(X,A);
@@ -811,10 +811,9 @@ definition
   assume
  X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
   func f1 union f2 -> Function of X1 union X2,Y means
-:: TMAP_1:def 12
+:: TMAP_1:def 13
 
-  it|X1 = f1 & it|
-  X2 = f2;
+  it|X1 = f1 & it| X2 = f2;
 end;
 
 reserve X, Y for non empty TopSpace;
@@ -915,4 +914,3 @@ theorem :: TMAP_1:153
 Function of X1,Y, f2 being continuous Function of X2,Y st X = X1 union X2 & (f1
   union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds f1 union f2 is continuous
   Function of X,Y;
-

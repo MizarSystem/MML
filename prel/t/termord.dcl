@@ -44,7 +44,6 @@
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="BAGORDER"/>
-<ArticleID name="FVSUM_1"/>
 <ArticleID name="POLYNOM1"/>
 <ArticleID name="TERMORD"/>
 </Signature>
@@ -108,11 +107,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="157"/>
-<Adjective nr="159"/>
-<Adjective nr="161"/>
-<Adjective nr="205">
+<Adjective nr="155"/>
+<Adjective nr="158"/>
+<Adjective nr="160"/>
+<Adjective nr="162"/>
+<Adjective nr="206">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -145,7 +144,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="168">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -172,7 +171,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="168">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -189,7 +188,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="366">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -205,7 +204,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="168">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -238,7 +237,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="169">
+<Adjective nr="170">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -265,7 +264,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="169">
+<Adjective nr="170">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -282,7 +281,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="366">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -298,7 +297,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="169">
+<Adjective nr="170">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -318,10 +317,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="157"/>
-<Adjective nr="159"/>
-<Adjective nr="161"/>
+<Adjective nr="155"/>
+<Adjective nr="158"/>
+<Adjective nr="160"/>
+<Adjective nr="162"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
@@ -350,11 +349,11 @@
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="166">
+<Adjective nr="167">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Adjective>
-<Adjective nr="206">
+<Adjective nr="207">
 <Func kind="K" nr="284">
 <LocusVar nr="1"/>
 </Func>
@@ -373,7 +372,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -389,11 +388,11 @@
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="166">
+<Adjective nr="167">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Adjective>
-<Adjective nr="168">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Adjective>
@@ -413,10 +412,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="157"/>
-<Adjective nr="159"/>
-<Adjective nr="161"/>
+<Adjective nr="155"/>
+<Adjective nr="158"/>
+<Adjective nr="160"/>
+<Adjective nr="162"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
@@ -445,11 +444,11 @@
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="166">
+<Adjective nr="167">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Adjective>
-<Adjective nr="206">
+<Adjective nr="207">
 <Func kind="K" nr="284">
 <LocusVar nr="1"/>
 </Func>
@@ -468,7 +467,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="386">
+<Func kind="K" nr="372">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -494,10 +493,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="157"/>
-<Adjective nr="161"/>
-<Adjective nr="205">
+<Adjective nr="155"/>
+<Adjective nr="158"/>
+<Adjective nr="162"/>
+<Adjective nr="206">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -520,11 +519,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="154"/>
-<Adjective nr="157"/>
-<Adjective nr="161"/>
+<Adjective nr="155"/>
+<Adjective nr="158"/>
 <Adjective nr="162"/>
-<Adjective nr="205">
+<Adjective nr="163"/>
+<Adjective nr="206">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

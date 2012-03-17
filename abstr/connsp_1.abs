@@ -21,6 +21,7 @@ reserve GX for TopSpace;
 reserve A, B, C for Subset of GX;
 reserve TS for TopStruct;
 reserve K, K1, L, L1 for Subset of TS;
+
 ::
 ::                         Separated sets
 ::
@@ -43,12 +44,12 @@ theorem :: CONNSP_1:3
   K is closed & L is closed & K misses L implies K,L are_separated;
 
 theorem :: CONNSP_1:4
-  [#]GX = A \/ B & A is open & B is open & A misses B implies A,B
-  are_separated;
+  [#]GX = A \/ B & A is open & B is open & A misses B implies A,B are_separated
+;
 
 theorem :: CONNSP_1:5
-  [#]GX = A \/ B & A,B are_separated implies A is open closed & B
-  is open closed;
+  [#]GX = A \/ B & A,B are_separated implies
+  A is open closed & B is open closed;
 
 theorem :: CONNSP_1:6
   for X9 being SubSpace of GX, P1,Q1 being Subset of GX, P,Q being
@@ -64,12 +65,11 @@ theorem :: CONNSP_1:8
   K,L are_separated & K1 c= K & L1 c= L implies K1,L1 are_separated;
 
 theorem :: CONNSP_1:9
-  A,B are_separated & A,C are_separated implies A,B \/ C
-  are_separated;
+  A,B are_separated & A,C are_separated implies A,B \/ C are_separated;
 
 theorem :: CONNSP_1:10
-  K is closed & L is closed or K is open & L is open implies K \ L
-  ,L \ K are_separated;
+  K is closed & L is closed or K is open & L is open implies
+  K \ L, L \ K are_separated;
 
 ::
 ::                        Connected Spaces
@@ -80,17 +80,18 @@ definition
   attr GX is connected means
 :: CONNSP_1:def 2
 
-  for A, B being Subset of GX st [#]GX = A
-  \/ B & A,B are_separated holds A = {}GX or B = {}GX;
+  for A, B being Subset of GX st [#]GX = A \/ B & A,B are_separated holds
+  A = {}GX or B = {}GX;
 end;
 
 theorem :: CONNSP_1:11
-  GX is connected iff for A, B being Subset of GX st [#]GX = A \/
-  B & A <> {}GX & B <> {}GX & A is closed & B is closed holds A meets B;
+  GX is connected iff
+  for A, B being Subset of GX st [#]GX = A \/ B & A <> {}GX & B <> {}GX &
+  A is closed & B is closed holds A meets B;
 
 theorem :: CONNSP_1:12
-  GX is connected iff for A,B being Subset of GX st [#]GX = A \/ B & A
-  <> {}GX & B <> {}GX & A is open & B is open holds A meets B;
+  GX is connected iff for A,B being Subset of GX st [#]GX = A \/ B &
+  A <> {}GX & B <> {}GX & A is open & B is open holds A meets B;
 
 theorem :: CONNSP_1:13
   GX is connected iff for A being Subset of GX st A <> {}GX & A <>
@@ -121,8 +122,7 @@ theorem :: CONNSP_1:16
   Q are_separated holds P = {}GX or Q = {}GX;
 
 theorem :: CONNSP_1:17
-  A is connected & A c= B \/ C & B,C are_separated implies A c= B
-  or A c= C;
+  A is connected & A c= B \/ C & B,C are_separated implies A c= B or A c= C;
 
 theorem :: CONNSP_1:18
   A is connected & B is connected & not A,B are_separated implies
@@ -166,17 +166,19 @@ theorem :: CONNSP_1:27
 theorem :: CONNSP_1:28
   [#]GX is connected iff GX is connected;
 
-theorem :: CONNSP_1:29
-  for GX being non empty TopSpace for x being Point of GX holds {x
-  } is connected;
+canceled;
+
+registration
+  let GX be non empty TopSpace, x be Point of GX;
+  cluster {x} -> connected Subset of GX;
+end;
 
 definition
   let GX be TopStruct, x,y be Point of GX;
   pred x, y are_joined means
 :: CONNSP_1:def 4
 
-  ex C being Subset of GX st C is connected
-  & x in C & y in C;
+  ex C being Subset of GX st C is connected & x in C & y in C;
 end;
 
 theorem :: CONNSP_1:30
@@ -202,39 +204,52 @@ Subset-Family of GX st for A being Subset of GX holds A in F iff A is connected
 
 definition
   let GX be TopStruct, A be Subset of GX;
-  pred A is_a_component_of GX means
+  attr A is a_component means
 :: CONNSP_1:def 5
 
-  A is connected & for B being Subset
-  of GX st B is connected holds A c= B implies A = B;
+  A is connected & for B being Subset of GX st B is connected holds
+  A c= B implies A = B;
+end;
+
+registration
+  let GX be TopStruct;
+  cluster a_component -> connected Subset of GX;
+end;
+
+registration
+  let GX be non empty TopSpace;
+  cluster a_component -> non empty Subset of GX;
 end;
 
 theorem :: CONNSP_1:34
-  for GX being non empty TopSpace, A being Subset of GX st A
-  is_a_component_of GX holds A <> {}GX;
+  for GX being non empty TopSpace, A being Subset of GX st
+  A is a_component holds A <> {}GX;
+
+registration
+  let GX;
+  cluster a_component -> closed Subset of GX;
+end;
 
 theorem :: CONNSP_1:35
-  A is_a_component_of GX implies A is closed;
+  A is a_component implies A is closed;
 
 theorem :: CONNSP_1:36
-  A is_a_component_of GX & B is_a_component_of GX implies A = B or
-  A,B are_separated;
+  A is a_component & B is a_component implies
+  A = B or A,B are_separated;
 
 theorem :: CONNSP_1:37
-  A is_a_component_of GX & B is_a_component_of GX implies A = B or A
-  misses B;
+  A is a_component & B is a_component implies A = B or A misses B;
 
 theorem :: CONNSP_1:38
-  C is connected implies for S being Subset of GX st S is_a_component_of
-  GX holds C misses S or C c= S;
+  C is connected implies for S being Subset of GX st S is a_component holds
+  C misses S or C c= S;
 
 definition
   let GX be TopStruct, A, B be Subset of GX;
   pred B is_a_component_of A means
 :: CONNSP_1:def 6
 
-  ex B1 being Subset of GX|A st B1 = B
-  & B1 is_a_component_of GX|A;
+  ex B1 being Subset of GX|A st B1 = B & B1 is a_component;
 end;
 
 theorem :: CONNSP_1:39
@@ -250,8 +265,8 @@ definition
   func Component_of x -> Subset of GX means
 :: CONNSP_1:def 7
 
-  ex F being Subset-Family of
-  GX st (for A being Subset of GX holds A in F iff A is connected & x in A) &
+  ex F being Subset-Family of GX st
+  (for A being Subset of GX holds A in F iff A is connected & x in A) &
   union F = it;
 end;
 
@@ -262,26 +277,30 @@ reserve x for Point of GX;
 theorem :: CONNSP_1:40
   x in Component_of x;
 
-theorem :: CONNSP_1:41
-  Component_of x is connected;
+canceled;
+
+registration
+  let GX,x;
+  cluster Component_of x -> non empty connected;
+end;
 
 theorem :: CONNSP_1:42
   C is connected & Component_of x c= C implies C = Component_of x;
 
 theorem :: CONNSP_1:43
-  A is_a_component_of GX iff ex x being Point of GX st A =
-  Component_of x;
+  A is a_component iff ex x being Point of GX st A = Component_of x;
 
 theorem :: CONNSP_1:44
-  A is_a_component_of GX & x in A implies A = Component_of x;
+  A is a_component & x in A implies A = Component_of x;
 
 theorem :: CONNSP_1:45
-  A = Component_of x implies for p being Point of GX st p in A holds
-  Component_of p = A;
+  for p being Point of GX st p in Component_of x holds
+  Component_of p = Component_of x;
 
 theorem :: CONNSP_1:46
-  for F being Subset-Family of GX st for A being Subset of GX holds A in
-  F iff A is_a_component_of GX holds F is Cover of GX;
+  for F being Subset-Family of GX st
+  for A being Subset of GX holds A in F iff A is a_component holds
+  F is Cover of GX;
 
 begin :: Addenda, the 2009.03 revision, A.T.
 
@@ -296,11 +315,9 @@ registration
 end;
 
 theorem :: CONNSP_1:47
-  for T being TopSpace, X being set holds X is connected Subset of
-  T iff X is connected Subset of the TopStruct of T;
+  for T being TopSpace, X being set holds
+  X is connected Subset of T iff X is connected Subset of the TopStruct of T;
 
 theorem :: CONNSP_1:48
   for T being TopSpace, X being Subset of T, Y being Subset of the
-  TopStruct of T st X=Y holds X is_a_component_of T iff Y is_a_component_of the
-  TopStruct of T;
-
+  TopStruct of T st X=Y holds X is a_component iff Y is a_component;

@@ -45,7 +45,7 @@
 </RCluster>
 <FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="131"/>
+<Func kind="K" nr="130"/>
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="50"/>
@@ -53,7 +53,7 @@
 </FCluster>
 <FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="131"/>
+<Func kind="K" nr="130"/>
 <Cluster>
 <Adjective nr="45"/>
 <Adjective nr="50"/>

@@ -10,24 +10,23 @@ environ
       FUNCSDOM, AMI_3, AMI_1, FSM_1, STRUCT_0, AMI_2, FUNCT_1, AMISTD_1,
       TARSKI, RELAT_1, AMISTD_2, ARYTM_3, FUNCT_4, CIRCUIT2, CARD_1, GRAPHSP,
       ARYTM_1, SUPINF_2, FUNCOP_1, ZFMISC_1, GLIB_000, VALUED_1, MSUALG_1,
-      PARTFUN1, TURING_1, SCMNORM;
+      PARTFUN1, TURING_1, SCMNORM, FINSET_1, RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, RELAT_1,
-      NUMBERS, FUNCT_1, PARTFUN1, STRUCT_0, ALGSTR_0, FUNCSDOM, FUNCOP_1,
-      XCMPLX_0, NAT_1, FUNCT_4, AMI_1, SCMNORM, AMI_2, AMI_3, SCMRING1,
-      SCMRING2, AMISTD_1, SCMRING3, AMISTD_2;
- constructors XXREAL_0, REALSET2, AMI_5, AMISTD_2, SCMRING3, SCMNORM, PRE_POLY;
+      NUMBERS, FUNCT_1, PARTFUN1, FINSET_1, STRUCT_0, ALGSTR_0, FUNCSDOM,
+      FUNCOP_1, XCMPLX_0, NAT_1, FUNCT_4, NAT_D, VALUED_1, COMPOS_1, AMI_1,
+      AMI_2, AMI_3, SCMRING1, SCMRING2, AMISTD_1, SCMRING3, AMISTD_2;
+ constructors XXREAL_0, REALSET2, AMI_5, AMISTD_2, SCMRING3, PRE_POLY, NAT_D;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, NAT_1,
       CARD_3, STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING2, AMISTD_2, SCMRING3,
-      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2;
+      FINSET_1, ORDINAL1, RELSET_1, GRFUNC_1, FUNCT_2, VALUED_1, COMPOS_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin :: On the standard computers
 
-reserve i, j, k for natural number,
+reserve i, j, k for Element of NAT,
   n for Element of NAT,
-  IL for non empty set
-  ,
+  IL for non empty set,
   N for with_non-empty_elements set;
 
 begin :: SCM R
@@ -91,10 +90,10 @@ theorem :: SCMRING4:16
 canceled;
 
 theorem :: SCMRING4:18
-  IncAddr(goto(loc,R),k) = goto(loc+(k,SCM R),R);
+  IncAddr(goto(loc,R),k) = goto(loc + k,R);
 
 theorem :: SCMRING4:19
-  IncAddr(a=0_goto loc,k) = a=0_goto (loc + (k,SCM R));
+  IncAddr(a=0_goto loc,k) = a=0_goto (loc + k);
 
 theorem :: SCMRING4:20
   s.a = (s +* Start-At(loc,SCM R)).a;
@@ -106,14 +105,14 @@ theorem :: SCMRING4:21
 
 theorem :: SCMRING4:22
   Exec(IncAddr(CurInstr(ProgramPart s,s),k),s +*
-  Start-At(IC s +(k,SCM R),SCM R))
+  Start-At(IC s + k,SCM R))
    = Following(ProgramPart s,s) +*
-   Start-At(IC Following(ProgramPart s,s) +(k,SCM R),SCM R);
+   Start-At(IC Following(ProgramPart s,s) +k,SCM R);
 
 theorem :: SCMRING4:23
-  IC s = il.(SCM R,j+k) implies Exec(I, s +* Start-At(IC s -' (k,SCM R),SCM R))
+  IC s = j+k implies Exec(I, s +* Start-At(IC s -' k,SCM R))
   = Exec(IncAddr(I, k), s) +*
-   Start-At (IC Exec(IncAddr(I,k), s) -' (k,SCM R),SCM R);
+   Start-At (IC Exec(IncAddr(I,k), s) -' k,SCM R);
 
 registration
   let R;
@@ -208,7 +207,7 @@ theorem :: SCMRING4:35
   R is non trivial implies for p being autonomic FinPartState of
   SCM R st IC SCM R in dom p & p c= s1 & Relocated (p,k) c= s2 & s = s1 +*
   DataPart s2 for i being Element of NAT
-   holds IC Comput(ProgramPart(s1),s1,i) + (k,SCM R) = IC
+   holds IC Comput(ProgramPart(s1),s1,i) + k = IC
   Comput(ProgramPart(s2),s2,i) & IncAddr(CurInstr(ProgramPart Comput(
 ProgramPart(s1),s1,i),
   Comput(ProgramPart(s1),s1,i)), k) =
@@ -229,7 +228,7 @@ st IC SCM R in dom p & p c= s for i being Element of NAT holds Comput(
 ProgramPart(s+*
   Relocated(p,k)),s+*
   Relocated(p,k),i) = Comput(ProgramPart(s),s,i) +*
-  Start-At(IC Comput(ProgramPart(s),s,i) +(k,SCM R),SCM R) +*
+  Start-At(IC Comput(ProgramPart(s),s,i) +k,SCM R) +*
   ProgramPart (Relocated (p,k));
 
 theorem :: SCMRING4:38
@@ -238,7 +237,7 @@ theorem :: SCMRING4:38
 NAT holds Comput(ProgramPart(s),s,i) = Comput(ProgramPart(s+*p),s+*p,i) +*
 Start-At (IC Comput(ProgramPart(s
   +*p),s
-  +*p,i) + (k,SCM R),SCM R) +* s|dom ProgramPart p
+  +*p,i) + k,SCM R) +* s|dom ProgramPart p
    +* ProgramPart (Relocated (p,k));
 
 theorem :: SCMRING4:39
@@ -247,8 +246,7 @@ theorem :: SCMRING4:39
 ,i) =
 Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),i) +* Start-At (IC
 Comput(ProgramPart(s+*Relocated(p,k)),s+*Relocated(p,k),
-  i) -' (k,SCM R),SCM R) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p)
-;
+  i) -' k,SCM R) +* s|dom ProgramPart Relocated(p,k) +* ProgramPart (p);
 
 theorem :: SCMRING4:40
   R is non trivial & IC SCM R in dom p implies (p is autonomic iff

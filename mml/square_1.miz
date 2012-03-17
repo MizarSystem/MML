@@ -4,7 +4,7 @@
 ::
 :: Received November 16, 1989
 :: Copyright (c) 1990 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, XREAL_0, ORDINAL1, XXREAL_0, SUBSET_1, TARSKI, ARYTM_3,
@@ -32,16 +32,14 @@ proof
 A2: X c= REAL
   proof
     let x be set;
-    assume
-    x in X;
+    assume x in X;
     then ex z being Element of REAL st z = x & P[z];
     hence thesis;
   end;
   Y c= REAL
   proof
     let x be set;
-    assume
-    x in Y;
+    assume x in Y;
     then ex z being Element of REAL st z = x & Q[z];
     hence thesis;
   end;
@@ -98,6 +96,29 @@ A2: x > y;
   end;
 end;
 
+theorem
+  for x,y being real number st 0 <= x & 0 <= y holds max(x,y) <= x + y
+proof
+  let x,y be real number;
+  assume that
+A1: 0 <= x and
+A2: 0 <= y;
+  now
+    per cases by XXREAL_0:16;
+    suppose
+A3:   max(x,y) = x;
+      x + 0 <= x + y by A2,XREAL_1:9;
+      hence thesis by A3;
+    end;
+    suppose
+A4:   max(x,y) = y;
+      y + 0 <= y + x by A1,XREAL_1:9;
+      hence thesis by A4;
+    end;
+  end;
+  hence thesis;
+end;
+
 definition
   let x be complex number;
   canceled 2;
@@ -130,7 +151,7 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-canceled 7;
+canceled 6;
 
 theorem
   for a being complex number holds a^2 = (-a)^2;
@@ -158,24 +179,21 @@ theorem
 canceled;
 
 theorem Th70:
-  for a, b being complex number holds a^2 - b^2 <> 0 implies 1/(a+
-  b) = (a-b)/(a^2-b^2)
+  for a, b being complex number st a^2 - b^2 <> 0 holds
+    1/(a+b) = (a-b)/(a^2-b^2)
 proof
   let a, b be complex number;
-  assume
-  a^2-b^2 <> 0;
+  assume a^2-b^2 <> 0;
   then (a-b) <> 0;
   hence 1/(a+b) = (1*(a-b))/((a+b)*(a-b)) by XCMPLX_1:92
     .= (a-b)/(a^2-b^2);
 end;
 
 theorem Th71:
-  for a, b being complex number holds a^2-b^2 <> 0 implies 1/(a-b)
-  = (a+b)/(a^2-b^2)
+  for a, b being complex number st a^2-b^2 <> 0 holds 1/(a-b) = (a+b)/(a^2-b^2)
 proof
   let a, b be complex number;
-  assume
-  a^2-b^2 <> 0;
+  assume a^2-b^2 <> 0;
   then (a+b)*(a-b) <> 0;
   then (a+b) <> 0;
   hence 1/(a-b) = (1*(a+b))/((a-b)*(a+b)) by XCMPLX_1:92
@@ -200,8 +218,7 @@ end;
 theorem Th76:
   1 < a implies a < a^2
 proof
-  assume
-  1 < a;
+  assume 1 < a;
   then a*1 < a*a by XREAL_1:70;
   hence thesis;
 end;
@@ -291,8 +308,7 @@ A5:   Y[y];
       end;
     end;
     consider z such that
-A6: for x,y st X[x] & Y[y] holds x <= z & z <= y from RealContinuity(
-    A3);
+A6: for x,y st X[x] & Y[y] holds x <= z & z <= y from RealContinuity(A3);
     take z;
 A7: (a + 1)^2 = a^2 + a + (a + 1);
     hence 0 <= z by A1,A2,A6;
@@ -365,7 +381,7 @@ end;
 
 canceled 3;
 
-theorem
+theorem Th82:
   sqrt 0 = 0
 proof
   sqrt 0^2 = 0 by Def4;
@@ -410,14 +426,13 @@ theorem
   a <= 0 implies sqrt a^2 = -a
 proof
 A1: a^2 = (-a)^2;
-  assume
-  a <= 0;
+  assume a <= 0;
   hence thesis by A1,Def4;
 end;
 
 canceled;
 
-theorem
+theorem Th92:
   0 <= a & sqrt a = 0 implies a = 0
 proof
   0 <= a & sqrt a = 0 implies a = 0^2 by Def4;
@@ -445,8 +460,7 @@ proof
 A1: x <> y;
     assume
 A2: 0 <= x;
-    assume
-    x <= y;
+    assume x <= y;
     then x < y by A1,XXREAL_0:1;
     hence thesis by A2,Lm3;
   end;
@@ -462,8 +476,7 @@ proof
 A1: 0 <= x and
 A2: 0 <= y and
 A3: sqrt x = sqrt y;
-  assume
-  x <> y;
+  assume x <> y;
   then x < y or y < x by XXREAL_0:1;
   hence contradiction by A1,A2,A3,Lm3;
 end;
@@ -501,7 +514,9 @@ A5: 0 <= sqrt b by A2,Def4;
   hence thesis by A5,A4,Def4;
 end;
 
-canceled;
+theorem
+  for a,b being real number st 0 <= a & 0 <= b holds
+    sqrt(a + b) = 0 iff a = 0 & b = 0 by Th82,Th92;
 
 theorem
   0 < a implies sqrt (1/a) = 1/sqrt a by Th83,Th99;
@@ -553,8 +568,7 @@ A5: 0 <= sqrt b by A2,Def4;
 end;
 
 theorem
-  0 <= a & 0 <= b & a <>b implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/
-  (a-b)
+  0 <= a & 0 <= b & a <>b implies 1/(sqrt a+sqrt b) = (sqrt a - sqrt b)/ (a-b)
 proof
   assume that
 A1: 0 <= a and
@@ -615,8 +629,7 @@ theorem
   for x,y being complex number st x^2=y^2 holds x=y or x=-y
 proof
   let x,y be complex number;
-  assume
-  x^2=y^2;
+  assume x^2=y^2;
   then (x-y)*(x+y)=0;
   then x-y=0 or x+y=0;
   hence thesis;
@@ -626,8 +639,7 @@ theorem
   for x being complex number st x^2=1 holds x=1 or x=-1
 proof
   let x be complex number;
-  assume
-  x^2=1;
+  assume x^2=1;
   then (x-1)*(x+1)=0;
   then x-1=0 or x+1=0;
   hence thesis;
@@ -661,8 +673,7 @@ end;
 theorem
   x^2-1<=0 implies -1<=x & x<=1
 proof
-  assume
-  x^2-1<=0;
+  assume x^2-1<=0;
   then (x-1)*(x+1)<=0;
   hence thesis by XREAL_1:95;
 end;
@@ -670,7 +681,6 @@ end;
 canceled;
 
 begin :: Addenda
-
 :: from JGRAPH_5, 2006.08.13, A.T.
 
 theorem Th114:
@@ -683,13 +693,13 @@ A2: x<a;
   then (-x)^2>(-a)^2 by A1,Th78;
   hence thesis;
 end;
+ 
 :: from JGRAPH_2, 2006.12.29, AK
 
 theorem
   -1 >= a implies -a <= a^2
 proof
-  assume
-  -1 >= a;
+  assume -1 >= a;
   then --1<=-a by XREAL_1:26;
   then -a<= (-a)^2 by XREAL_1:153;
   hence thesis;
@@ -698,8 +708,7 @@ end;
 theorem
   -1 > a implies -a < a^2
 proof
-  assume
-  -1 > a;
+  assume -1 > a;
   then --1< -a by XREAL_1:26;
   then -a< (-a)^2 by Th76;
   hence thesis;
@@ -796,14 +805,13 @@ A3: b<0;
     hence thesis;
   end;
 end;
-
+ 
 :: from JGRAPH_4, 2006.12.29, AK
 
 theorem
   a^2 <= 1 implies -1 <= a & a <= 1
 proof
-  assume
-  a^2<=1;
+  assume a^2<=1;
   then a^2-1^2<=1^2-1^2 by XREAL_1:11;
   then (a-1)*(a+1)<=0;
   hence thesis by XREAL_1:95;
@@ -812,13 +820,12 @@ end;
 theorem
   a^2 < 1 implies -1 < a & a < 1
 proof
-  assume
-  a^2<1;
+  assume a^2<1;
   then a^2-1^2<1^2-1^2 by XREAL_1:11;
   then (a-1)*(a+1)<0;
   hence thesis by XREAL_1:96;
 end;
-
+ 
 :: from JGRAPH_6, 2006.12.29, AK
 
 theorem Th123:
@@ -893,8 +900,7 @@ A11:  (-b)^2>=0 by XREAL_1:65;
 end;
 
 theorem
-  -1 <= a & a <= 1 & -1 <= b & b <= 1 implies b*sqrt(1+a^2) <= sqrt(1+b
-  ^2)
+  -1 <= a & a <= 1 & -1 <= b & b <= 1 implies b*sqrt(1+a^2) <= sqrt(1+b^2)
 proof
   assume that
 A1: -1<=a and
@@ -926,7 +932,6 @@ end;
 
 Lm8: for a,b being real number st a<=0 & a<=b holds a*sqrt(1+b^2)<= b*sqrt(1+a
 ^2)
-
 proof
   let a,b be real number;
   assume that
@@ -954,7 +959,6 @@ end;
 
 Lm9: for a,b being real number st a>=0 & a>=b holds a*sqrt(1+b^2)>= b*sqrt(1+a
 ^2)
-
 proof
   let a,b be real number;
   assume that
@@ -981,4 +985,3 @@ A1: a>=b;
     hence thesis by A1,Lm7;
   end;
 end;
-

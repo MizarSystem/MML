@@ -17,14 +17,14 @@ environ
       SPRECT_1, TREES_1, PSCOMP_1, GOBOARD1, MCART_1, MATRIX_1, GOBOARD9,
       GOBOARD5, TOPS_1, JORDAN1, SPRECT_2, JORDAN2C;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, CARD_1, NUMBERS, XREAL_0,
-      COMPLEX1, SEQ_1, SEQM_3, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, METRIC_1,
-      BINOP_2, PCOMPS_1, CONNSP_1, CONNSP_2, TBSP_1, CONNSP_3, TOPMETR,
-      RCOMP_1, FINSEQ_1, FINSEQ_2, DOMAIN_1, STRUCT_0, SQUARE_1, BORSUK_2,
-      XXREAL_0, WEIERSTR, SEQ_4, FINSEQ_6, JORDAN3, BINARITH, FUNCOP_1,
-      FUNCT_3, TREAL_1, FUNCT_4, RVSUM_1, RLVECT_1, RLTOPSP1, EUCLID, SPPOL_1,
-      PSCOMP_1, SPRECT_1, SPRECT_2, TOPREAL1, MATRIX_1, GOBOARD1, GOBOARD2,
-      GOBOARD5, GOBOARD9, JORDAN2B, REAL_1, NAT_1, NAT_D;
+      RVSUM_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, CARD_1, NUMBERS, XREAL_0,
+      XXREAL_2, COMPLEX1, SEQ_1, SEQM_3, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
+      METRIC_1, BINOP_2, PCOMPS_1, CONNSP_1, CONNSP_2, TBSP_1, CONNSP_3,
+      TOPMETR, RCOMP_1, FINSEQ_1, FINSEQ_2, DOMAIN_1, STRUCT_0, SQUARE_1,
+      BORSUK_2, XXREAL_0, SEQ_4, FINSEQ_6, JORDAN3, BINARITH, FUNCOP_1,
+      FUNCT_3, TREAL_1, FUNCT_4, RLVECT_1, RLTOPSP1, EUCLID, SPPOL_1, PSCOMP_1,
+      SPRECT_1, SPRECT_2, TOPREAL1, MATRIX_1, GOBOARD1, GOBOARD2, GOBOARD5,
+      GOBOARD9, JORDAN2B, REAL_1, NAT_1, NAT_D, WEIERSTR;
  constructors SETFAM_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSEQOP, RCOMP_1,
       FINSOP_1, REALSET1, BINARITH, TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, TBSP_1,
       MONOID_0, TREAL_1, GOBOARD2, SPPOL_1, JORDAN1, PSCOMP_1, WEIERSTR,
@@ -34,7 +34,7 @@ environ
       NUMBERS, XXREAL_0, XREAL_0, MEMBERED, FINSEQ_1, REALSET1, STRUCT_0,
       PRE_TOPC, TOPS_1, METRIC_1, BORSUK_1, TBSP_1, EUCLID, TOPMETR, TOPREAL1,
       GOBOARD2, JORDAN1, BORSUK_2, SPRECT_1, SPRECT_3, VALUED_0, FINSEQ_2,
-      RLTOPSP1, JORDAN2B, MONOID_0, SEQ_4;
+      RLTOPSP1, JORDAN2B, MONOID_0, SEQ_4, SPPOL_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -42,7 +42,7 @@ begin :: Definitions of Bounded Domain and Unbounded Domain
 
 reserve m,n,i,i2,j for Element of NAT,
   r,r1,r2,s for Real,
-  x,y,z,y1,y2 for set;
+  x,y,z for set;
 
 theorem :: JORDAN2C:1
   r<=0 implies abs(r)=-r;
@@ -54,8 +54,7 @@ theorem :: JORDAN2C:3
   for n,m st n<=m & m<=n+3 holds m=n or m=n+1 or m=n+2 or m=n+3;
 
 theorem :: JORDAN2C:4
-  for n,m st n<=m & m<=n+4 holds m=n or m=n+1 or m=n+2 or m=n+3 or
-  m=n+4;
+  for n,m st n<=m & m<=n+4 holds m=n or m=n+1 or m=n+2 or m=n+3 or m=n+4;
 
 canceled 2;
 
@@ -120,8 +119,7 @@ theorem :: JORDAN2C:17
   for A being Subset of TOP-REAL n, B being Subset of TOP-REAL n
   holds B is_inside_component_of A iff ex C being Subset of
   ((TOP-REAL n) | (A`))
-  st C=B & C is_a_component_of ((TOP-REAL n) | (A`)) & C is bounded Subset of
-  Euclid n;
+  st C=B & C is a_component & C is bounded Subset of Euclid n;
 
 definition
   let n be Nat;
@@ -136,7 +134,7 @@ theorem :: JORDAN2C:18
   for A being Subset of TOP-REAL n, B being Subset of TOP-REAL n
   holds B is_outside_component_of A iff
   ex C being Subset of ((TOP-REAL n) | (A`))
-  st C=B & C is_a_component_of ((TOP-REAL n) | (A`)) &
+  st C=B & C is a_component &
   C is not bounded Subset of Euclid n;
 
 theorem :: JORDAN2C:19
@@ -176,8 +174,13 @@ registration
   cluster [#](TOP-REAL n) -> connected;
 end;
 
+registration
+  let n;
+  cluster [#](TOP-REAL n) -> a_component;
+end;
+
 theorem :: JORDAN2C:23
-  [#](TOP-REAL n) is_a_component_of TOP-REAL n;
+  [#](TOP-REAL n) is a_component;
 
 theorem :: JORDAN2C:24
   for A being Subset of TOP-REAL n holds BDD A is
@@ -212,8 +215,7 @@ reserve u for Point of Euclid n;
 canceled;
 
 theorem :: JORDAN2C:33
-  for P being Subset of TOP-REAL n st P=REAL n holds P is
-  connected;
+  for P being Subset of TOP-REAL n st P=REAL n holds P is connected;
 
 definition
   let n be Nat;
@@ -249,8 +251,7 @@ theorem :: JORDAN2C:38
   1<=n implies 1<=|. (1.REAL n) .|;
 
 theorem :: JORDAN2C:39
-  for W being Subset of Euclid n st n>=1 & W=REAL n holds W is not
-  bounded;
+  for W being Subset of Euclid n st n>=1 & W=REAL n holds W is not bounded;
 
 theorem :: JORDAN2C:40
   for A being Subset of TOP-REAL n holds A is Bounded iff ex r
@@ -288,7 +289,7 @@ P & w7 in P & LSeg(w1,w2) c= P & LSeg(w2,w3) c= P & LSeg(w3,w4) c= P & LSeg(w4,
   w5) c= P & LSeg(w5,w6) c= P & LSeg(w6,w7) c= P ex h being Function of I[01],(
   TOP-REAL n) |P st h is continuous & w1=h.0 & w7=h.1;
 
-reserve s2 for Real;
+
 
 canceled;
 
@@ -411,8 +412,7 @@ theorem :: JORDAN2C:72
   bounded;
 
 theorem :: JORDAN2C:73
-  for A being Subset of TOP-REAL n st A is compact holds A is
-  Bounded;
+  for A being Subset of TOP-REAL n st A is compact holds A is Bounded;
 
 registration
   let n be Element of NAT;
@@ -420,8 +420,7 @@ registration
 end;
 
 theorem :: JORDAN2C:74
-  for A being Subset of TOP-REAL n st 1<=n & A is Bounded holds A`
-  <> {};
+  for A being Subset of TOP-REAL n st 1<=n & A is Bounded holds A` <> {};
 
 theorem :: JORDAN2C:75
   for r being Real holds (ex B being Subset of Euclid n st B={q :
@@ -544,8 +543,8 @@ theorem :: JORDAN2C:99
   LeftComp SpStSeq D c= UBD (L~SpStSeq D);
 
 theorem :: JORDAN2C:100
-  for G being TopSpace,A,B,C being Subset of G st A
-  is_a_component_of G & B is_a_component_of G & C is connected & A meets C & B
+  for G being TopSpace,A,B,C being Subset of G st
+  A is a_component & B is a_component & C is connected & A meets C & B
   meets C holds A=B;
 
 theorem :: JORDAN2C:101
@@ -553,8 +552,7 @@ theorem :: JORDAN2C:101
   SpStSeq D)` & not B is Bounded holds B=LeftComp SpStSeq D;
 
 theorem :: JORDAN2C:102
-  RightComp SpStSeq D c= BDD (L~SpStSeq D) & RightComp SpStSeq D
-  is Bounded;
+  RightComp SpStSeq D c= BDD (L~SpStSeq D) & RightComp SpStSeq D is Bounded;
 
 theorem :: JORDAN2C:103
   LeftComp SpStSeq D = UBD (L~SpStSeq D) & RightComp SpStSeq D =
@@ -576,8 +574,8 @@ theorem :: JORDAN2C:106
   for A being Subset of TOP-REAL 2 st A`<>{} holds A is boundary
   & A is Jordan iff ex A1,A2 being Subset of TOP-REAL 2 st A` = A1 \/ A2 & A1
   misses A2 & (Cl A1) \ A1 = (Cl A2) \ A2 & A=(Cl A1) \ A1 & for C1,C2 being
-  Subset of (TOP-REAL 2) | A` st C1 = A1 & C2 = A2 holds C1 is_a_component_of
-  (TOP-REAL 2) |A` & C2 is_a_component_of (TOP-REAL 2) |A`;
+  Subset of (TOP-REAL 2) | A` st C1 = A1 & C2 = A2 holds C1 is a_component
+  & C2 is a_component;
 
 theorem :: JORDAN2C:107
   for p being Point of TOP-REAL n, P being Subset of TOP-REAL n
@@ -588,8 +586,7 @@ theorem :: JORDAN2C:108
   *q holds p`1=0 & p`2=0 & p=0.TOP-REAL 2;
 
 theorem :: JORDAN2C:109
-  for q1,q2 being Point of TOP-REAL 2 holds LSeg(q1,q2) is
-  boundary;
+  for q1,q2 being Point of TOP-REAL 2 holds LSeg(q1,q2) is boundary;
 
 registration
   let q1,q2 be Point of TOP-REAL 2;
@@ -616,12 +613,11 @@ theorem :: JORDAN2C:113
   REAL 0 = {0.TOP-REAL 0};
 
 theorem :: JORDAN2C:114
-  for A being Subset of TOP-REAL n st A is Bounded holds BDD A is
-  Bounded;
+  for A being Subset of TOP-REAL n st A is Bounded holds BDD A is Bounded;
 
 theorem :: JORDAN2C:115
   for G being non empty TopSpace,A,B,C,D being Subset of G st B
-  is_a_component_of G & C is_a_component_of G & A \/ B=the carrier of G & C
+  is a_component & C is a_component & A \/ B=the carrier of G & C
   misses A holds C=B;
 
 theorem :: JORDAN2C:116
@@ -673,8 +669,7 @@ theorem :: JORDAN2C:125
   is_a_component_of A` holds A misses B;
 
 theorem :: JORDAN2C:126
-  P is_outside_component_of Q & R is_inside_component_of Q implies P
-  misses R;
+  P is_outside_component_of Q & R is_inside_component_of Q implies P misses R;
 
 theorem :: JORDAN2C:127
   2 <= n implies for A, B, P being Subset of TOP-REAL n st P is Bounded
@@ -713,8 +708,7 @@ registration
 end;
 
 theorem :: JORDAN2C:132
-  for C being compact Subset of TOP-REAL 2 holds UBD C
-  is_a_component_of C`;
+  for C being compact Subset of TOP-REAL 2 holds UBD C is_a_component_of C`;
 
 theorem :: JORDAN2C:133
   for C being compact Subset of TOP-REAL 2 for WH being connected
@@ -735,4 +729,3 @@ theorem :: JORDAN2C:136
 theorem :: JORDAN2C:137
   for C being compact Subset of TOP-REAL 2 for p being Point of TOP-REAL
   2 st north_halfline p misses C holds north_halfline p c= UBD C;
-

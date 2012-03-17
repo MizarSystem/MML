@@ -8,7 +8,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -17,10 +16,11 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="EQREL_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -43,8 +43,8 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="12"/>
-<Adjective nr="38">
+<Adjective nr="31"/>
+<Adjective nr="37">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -61,12 +61,12 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="12"/>
-<Adjective nr="38">
+<Adjective nr="31"/>
+<Adjective nr="37">
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="121">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -81,7 +81,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="121">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -97,11 +97,11 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="136">
+<Func kind="K" nr="123">
 <Func kind="U" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="121">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -124,7 +124,7 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -152,7 +152,7 @@
 <Var nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="95">
+<Func kind="K" nr="94">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>

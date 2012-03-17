@@ -3,7 +3,7 @@
 ::
 :: Received February 10, 2004
 :: Copyright (c) 2004 Association of Mizar Users
-
+ 
 environ
 
  vocabularies NUMBERS, CSSPACE, PRE_TOPC, CFUNCT_1, REAL_1, NAT_1, SUBSET_1,
@@ -13,8 +13,8 @@ environ
  notations TARSKI, ORDINAL1, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, COMPLEX1,
       REAL_1, RELAT_1, NAT_1, SEQ_1, VALUED_0, STRUCT_0, PRE_TOPC, RLVECT_1,
       NORMSP_1, BHSP_1, SEQ_2, CFUNCT_1, CLVECT_1, CSSPACE, RECDEF_1;
- constructors XXREAL_0, REAL_1, COMPLEX1, SEQ_2, BHSP_3, CSSPACE, SEQ_1,
-      VALUED_1, RECDEF_1, RELSET_1;
+ constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
+      BHSP_3, CSSPACE, SEQ_1, VALUED_1, PARTFUN1, RECDEF_1, SEQM_3, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, STRUCT_0, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -32,29 +32,27 @@ reserve p, q, r, M, M1, M2 for Real;
 reserve seq, seq1, seq2, seq3 for sequence of X;
 reserve k,n,m for Element of NAT;
 reserve Nseq for increasing sequence of NAT;
+
 deffunc 09(ComplexUnitarySpace) = 0. $1;
 
 definition
   let X, seq;
   attr seq is convergent means
   :Def1:
-  ex g st for r st r > 0 ex m st for n st
-  n >= m holds dist(seq.n, g) < r;
+  ex g st for r st r > 0 ex m st for n st n >= m holds dist(seq.n, g) < r;
 end;
 
 theorem Th1:
   seq is constant implies seq is convergent
 proof
-  assume
-  seq is constant;
+  assume seq is constant;
   then consider x such that
 A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
   take g = x;
   let r such that
 A2: r > 0;
   take m = 0;
-  let n such that
-  n >= m;
+  let n such that n >= m;
   dist((seq.n) , g) = dist(x, g) by A1
     .= 0 by CSSPACE:53;
   hence thesis by A2;
@@ -74,8 +72,7 @@ A4: for r st r > 0 ex m st for n st n >= m holds dist((seq1.n) , g) < r
   by A1,Def1;
   take h = g;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds dist((seq1.n) , h) < r by A4;
 A6: now
@@ -103,8 +100,7 @@ A10: n >= m;
 end;
 
 theorem Th3:
-  seq1 is convergent & seq2 is convergent implies seq1 + seq2 is
-  convergent
+  seq1 is convergent & seq2 is convergent implies seq1 + seq2 is convergent
 proof
   assume that
 A1: seq1 is convergent and
@@ -143,8 +139,7 @@ A10: dist((seq1 + seq2).n, g) <= dist((seq1.n) , g1) + dist((seq2.n) , g2)
 end;
 
 theorem Th4:
-  seq1 is convergent & seq2 is convergent implies seq1 - seq2 is
-  convergent
+  seq1 is convergent & seq2 is convergent implies seq1 - seq2 is convergent
 proof
   assume that
 A1: seq1 is convergent and
@@ -185,11 +180,9 @@ end;
 theorem Th5:
   seq is convergent implies z * seq is convergent
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
-  by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r by Def1;
   take h = z * g;
 A2: now
 A3: 0/|.z.| = 0;
@@ -198,14 +191,12 @@ A4: z <> 0;
     then
 A5: |.z.| > 0 by COMPLEX1:133;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A6: for n st n >= m1 holds dist((seq.n) , g) < r/|.z.| by A1,A5,A3,XREAL_1:76;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then
 A7: dist((seq.n) , g) < r/|.z.| by A6;
 A8: |.z.| <> 0 by A4,COMPLEX1:133;
@@ -224,14 +215,12 @@ A9: |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
     assume
 A10: z = 0;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A11: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then
 A12: dist((seq.n) , g) < r by A11;
     dist(z * (seq.n) , z * g) = dist(0c * (seq.n) , 09(X)) by A10,CLVECT_1:2
@@ -246,8 +235,7 @@ end;
 theorem Th6:
   seq is convergent implies - seq is convergent
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then (-1r) * seq is convergent by Th5;
   hence thesis by CSSPACE:77;
 end;
@@ -255,15 +243,12 @@ end;
 theorem Th7:
   seq is convergent implies seq + x is convergent
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
-  by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r by Def1;
   take g + x;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider m1 be Element of NAT such that
 A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
   take k = m1;
@@ -271,8 +256,7 @@ A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
   dist((seq.n)+x,g+x) <= dist((seq.n),g) + dist(x,x) by CSSPACE:59;
   then
 A3: dist((seq.n) + x, g + x) <= dist((seq.n) , g) + 0 by CSSPACE:53;
-  assume
-  n >= k;
+  assume n >= k;
   then dist((seq.n) , g) < r by A2;
   then dist((seq.n) + x, g + x) < r by A3,XXREAL_0:2;
   hence thesis by BHSP_1:def 12;
@@ -281,8 +265,7 @@ end;
 theorem Th8:
   seq is convergent implies seq - x is convergent
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then seq + (-x) is convergent by Th7;
   hence thesis by CSSPACE:78;
 end;
@@ -294,21 +277,17 @@ proof
   thus seq is convergent implies ex g st for r st r > 0 ex m st for n st n >=
   m holds ||.(seq.n) - g.|| < r
   proof
-    assume
-    seq is convergent;
+    assume seq is convergent;
     then consider g such that
-A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
-    by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r by Def1;
     take g;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then dist((seq.n) , g) < r by A2;
     hence thesis by CSSPACE:def 16;
   end;
@@ -319,14 +298,12 @@ A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
 A3: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r;
     take g;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A4: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A3;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then ||.(seq.n) - g.|| < r by A4;
     hence thesis by CSSPACE:def 16;
   end;
@@ -339,8 +316,7 @@ definition
 A1: seq is convergent;
   func lim seq -> Point of X means
   :Def2:
-  for r st r > 0 ex m st for n st n >=
-  m holds dist((seq.n) , it) < r;
+  for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , it) < r;
   existence by A1,Def1;
   uniqueness
   proof
@@ -349,10 +325,8 @@ A1: seq is convergent;
     < r ) holds x = y
     proof
       given x, y such that
-A2:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , x) <
-      r and
-A3:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y) <
-      r and
+A2:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , x) < r and
+A3:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y) < r and
 A4:   x <> y;
 A5:   dist(x, y) > 0 by A4,CSSPACE:57;
       then
@@ -362,8 +336,7 @@ A7:   for n st n >= m1 holds dist((seq.n) , x) < dist(x, y)/4 by A2;
       consider m2 be Element of NAT such that
 A8:   for n st n >= m2 holds dist((seq.n) , y) < dist(x, y)/4 by A3,A6;
 A9:   now
-        assume
-        m1 >= m2;
+        assume m1 >= m2;
         then
 A10:    dist((seq.m1) , y) < dist(x, y)/4 by A8;
         dist(x, y) = dist(x - (seq.m1) , y - (seq.m1)) by CSSPACE:61;
@@ -376,8 +349,7 @@ A11:    dist(x, y) <= dist((seq.m1) , x) + dist((seq.m1) , y) by CSSPACE:62;
         hence contradiction by A5,XREAL_1:218;
       end;
       now
-        assume
-        m1 <= m2;
+        assume m1 <= m2;
         then
 A12:    dist((seq.m2) , x) < dist(x, y)/4 by A7;
         dist(x, y) = dist(x - (seq.m2) , y - (seq.m2)) by CSSPACE:61;
@@ -449,8 +421,7 @@ A2: ex k st for n st n >= k holds seq2.n = seq1.n;
 A3: for n st n >= k holds seq2.n = seq1.n by A2;
 A4: now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds dist((seq1.n) , (lim seq1)) < r by A1,Def2;
 A6: now
@@ -492,8 +463,7 @@ A2: seq2 is convergent;
   set g = g1 + g2;
 A3: now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then
 A4: r/2 > 0 by XREAL_1:217;
     then consider m1 be Element of NAT such that
@@ -535,9 +505,7 @@ A2: seq2 is convergent;
   set g = g1 - g2;
 A3: now
     let r;
-    assume
-    r > 0;
-    then
+    assume r > 0; then
 A4: r/2 > 0 by XREAL_1:217;
     then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds dist((seq1.n) , g1) < r/2 by A1,Def2;
@@ -580,8 +548,7 @@ A2: z = 0;
 A3: r > 0;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     dist(z*(seq.n), z*g) = dist(0c*(seq.n), 09(X)) by A2,CLVECT_1:2
       .= dist(09(X), 09(X)) by CLVECT_1:2
       .= 0 by CSSPACE:53;
@@ -596,15 +563,13 @@ A7: z <> 0;
     then
 A8: |.z.| > 0 by COMPLEX1:133;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then r/|.z.| > 0 by A8,A6,XREAL_1:76;
     then consider m1 be Element of NAT such that
 A9: for n st n >= m1 holds dist((seq.n),g) < r/|.z.| by A4,Def2;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then
 A10: dist((seq.n) , g) < r/|.z.| by A9;
 A11: |.z.| <> 0 by A7,COMPLEX1:133;
@@ -626,8 +591,7 @@ end;
 theorem Th16:
   seq is convergent implies lim (- seq) = - (lim seq)
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then lim ((-1r) * seq) = (-1r) * (lim seq) by Th15;
   then lim (- seq) = (-1r) * (lim seq) by CSSPACE:77;
   hence thesis by CLVECT_1:4;
@@ -641,15 +605,12 @@ proof
 A1: seq is convergent;
 A2: now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,Def2;
     take k = m1;
     let n;
-    assume
-    n >= k;
-    then
+    assume n >= k; then
 A4: dist((seq.n) , g) < r by A3;
     dist((seq.n) , g) = dist((seq.n) - (-x) , g - (-x)) by CSSPACE:61
       .= dist((seq.n) + (-(-x)) , g - (-x)) by RLVECT_1:def 14
@@ -665,8 +626,7 @@ end;
 theorem
   seq is convergent implies lim (seq - x) = (lim seq) - x
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then lim (seq + (-x)) = (lim seq) + (-x) by Th17;
   then lim (seq - x) = (lim seq) + (-x) by CSSPACE:78;
   hence thesis by RLVECT_1:def 14;
@@ -684,14 +644,12 @@ A1: seq is convergent;
     assume
 A2: lim seq = g;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then dist((seq.n) , g) < r by A3;
     hence thesis by CSSPACE:def 16;
   end;
@@ -702,14 +660,12 @@ A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
 A4: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r;
     now
       let r;
-      assume
-      r > 0;
+      assume r > 0;
       then consider m1 be Element of NAT such that
 A5:   for n st n >= m1 holds ||.(seq.n) - g.|| < r by A4;
       take k = m1;
       let n;
-      assume
-      n >= k;
+      assume n >= k;
       then ||.(seq.n) - g.|| < r by A5;
       hence dist((seq.n) , g) < r by CSSPACE:def 16;
     end;
@@ -749,11 +705,9 @@ end;
 theorem Th20:
   seq is convergent implies ||.seq.|| is convergent
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r
-  by Th9;
+A1: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r by Th9;
   now
     let r be real number;
     assume
@@ -764,9 +718,7 @@ A3: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2;
     take k = m1;
     now
       let n;
-      assume
-      n >= k;
-      then
+      assume n >= k; then
 A4:   ||.(seq.n) - g.|| < r by A3;
       abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.|| by CSSPACE:51;
       then abs(||.(seq.n).|| - ||.g.||) < r by A4,XXREAL_0:2;
@@ -794,8 +746,7 @@ A5: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2,A4,Th19;
     take k = m1;
     now
       let n;
-      assume
-      n >= k;
+      assume n >= k;
       then
 A6:   ||.(seq.n) - g.|| < r by A5;
       abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.|| by CSSPACE:51;
@@ -824,8 +775,7 @@ A4: r > 0;
 A5: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2,A4,Th19;
     take k = m1;
     let n;
-    assume
-    n >= k;
+    assume n >= k;
     then ||.(seq.n) - g.|| < r by A5;
     then
 A6: ||.((seq.n) - g ) - 09(X).|| < r by RLVECT_1:26;
@@ -844,8 +794,7 @@ definition
   let X, seq, x;
   func dist(seq, x) -> Real_Sequence means
   :Def4:
-  for n holds it.n =dist((seq.
-  n) , x);
+  for n holds it.n =dist((seq. n) , x);
   existence
   proof
     deffunc F(Element of NAT) = dist((seq.$1) , x);
@@ -870,8 +819,7 @@ A3: for n holds t.n = dist((seq.n) , x);
 end;
 
 theorem Th23:
-  seq is convergent & lim seq = g implies dist(seq,g) is
-  convergent
+  seq is convergent & lim seq = g implies dist(seq,g) is convergent
 proof
   assume
 A1: seq is convergent & lim seq = g;
@@ -888,8 +836,7 @@ A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
       dist((seq.n) , g) >= 0 by CSSPACE:56;
       then
 A4:   abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:def 1;
-      assume
-      n >= k;
+      assume n >= k;
       then dist((seq.n) , g) < r by A3;
       hence abs((dist(seq, g).n - 0)) < r by A4,Def4;
     end;
@@ -916,8 +863,7 @@ A4: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A3,Def2;
     dist((seq.n) , g) >= 0 by CSSPACE:56;
     then
 A5: abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:def 1;
-    assume
-    n >= k;
+    assume n >= k;
     then dist((seq.n) , g) < r by A4;
     hence abs((dist(seq, g).n - 0)) < r by A5,Def4;
   end;
@@ -930,8 +876,7 @@ theorem
 g2 implies ||.seq1 + seq2.|| is convergent & lim ||.seq1 + seq2.|| = ||.g1 + g2
   .||
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by Th3,Th13;
   hence thesis by Th21;
@@ -942,8 +887,7 @@ theorem
 g2 implies ||.(seq1 + seq2) - (g1 + g2).|| is convergent & lim ||.(seq1 + seq2)
   - (g1 + g2).|| = 0
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by Th3,Th13;
   hence thesis by Th22;
@@ -954,8 +898,7 @@ theorem
 g2 implies ||.seq1 - seq2.|| is convergent & lim ||.seq1 - seq2.|| = ||.g1 - g2
   .||
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by Th4,Th14;
   hence thesis by Th21;
@@ -966,8 +909,7 @@ theorem
 g2 implies ||.(seq1 - seq2) - (g1 - g2).|| is convergent & lim ||.(seq1 - seq2)
   - (g1 - g2).|| = 0
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by Th4,Th14;
   hence thesis by Th22;
@@ -977,8 +919,7 @@ theorem
   seq is convergent & lim seq = g implies ||.z * seq.|| is convergent &
   lim ||.z * seq.|| = ||.z * g.||
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then z * seq is convergent & lim (z * seq) = z * g by Th5,Th15;
   hence thesis by Th21;
 end;
@@ -987,8 +928,7 @@ theorem
   seq is convergent & lim seq = g implies ||.(z * seq) - (z * g).|| is
   convergent & lim ||.(z * seq) - (z * g).|| = 0
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then z * seq is convergent & lim (z * seq) = z * g by Th5,Th15;
   hence thesis by Th22;
 end;
@@ -997,8 +937,7 @@ theorem
   seq is convergent & lim seq = g implies ||.- seq.|| is convergent &
   lim ||.- seq.|| = ||.- g.||
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then - seq is convergent & lim (- seq) = - g by Th6,Th16;
   hence thesis by Th21;
 end;
@@ -1007,18 +946,15 @@ theorem
   seq is convergent & lim seq = g implies ||.(- seq) - (- g).|| is
   convergent & lim ||.(- seq) - (- g).|| = 0
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then - seq is convergent & lim (- seq) = - g by Th6,Th16;
   hence thesis by Th22;
 end;
 
 Lm1: seq is convergent & lim seq = g implies ||.seq + x.|| is convergent & lim
 ||.seq + x.|| = ||.g + x.||
-
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
   hence thesis by Th21;
 end;
@@ -1027,8 +963,7 @@ theorem Th33:
   seq is convergent & lim seq = g implies ||.(seq + x) - (g + x)
   .|| is convergent & lim ||.(seq + x) - (g + x).|| = 0
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
   hence thesis by Th22;
 end;
@@ -1065,8 +1000,7 @@ theorem
   g2 implies dist((seq1 + seq2) , (g1 + g2)) is convergent & lim dist((seq1 +
   seq2) , (g1 + g2)) = 0
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by Th3,Th13;
   hence thesis by Th24;
@@ -1077,8 +1011,7 @@ theorem
   g2 implies dist((seq1 - seq2) , (g1 - g2)) is convergent & lim dist((seq1 -
   seq2) , (g1 - g2)) = 0
 proof
-  assume
-  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  assume seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
   g2;
   then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by Th4,Th14;
   hence thesis by Th24;
@@ -1088,8 +1021,7 @@ theorem
   seq is convergent & lim seq = g implies dist((z * seq) , (z * g)) is
   convergent & lim dist((z * seq) , (z * g)) = 0
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then z * seq is convergent & lim (z * seq) = z * g by Th5,Th15;
   hence thesis by Th24;
 end;
@@ -1098,8 +1030,7 @@ theorem
   seq is convergent & lim seq = g implies dist((seq + x) , (g + x)) is
   convergent & lim dist((seq + x) , (g + x)) = 0
 proof
-  assume
-  seq is convergent & lim seq = g;
+  assume seq is convergent & lim seq = g;
   then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
   hence thesis by Th24;
 end;
@@ -1143,8 +1074,7 @@ theorem Th40:
 proof
   thus w in Ball(x,r) implies ||.x - w.|| < r
   proof
-    assume
-    w in Ball(x,r);
+    assume w in Ball(x,r);
     then ex y be Point of X st w = y & ||.x - y.|| < r;
     hence thesis;
   end;
@@ -1156,13 +1086,11 @@ theorem Th41:
 proof
   thus w in Ball(x,r) implies dist(x,w) < r
   proof
-    assume
-    w in Ball(x,r);
+    assume w in Ball(x,r);
     then ||.x - w.|| < r by Th40;
     hence thesis by CSSPACE:def 16;
   end;
-  assume
-  dist(x,w) < r;
+  assume dist(x,w) < r;
   then ||.x - w.|| < r by CSSPACE:def 16;
   hence thesis;
 end;
@@ -1171,8 +1099,7 @@ theorem
   r > 0 implies x in Ball(x,r)
 proof
 A1: dist(x,x) = 0 by CSSPACE:53;
-  assume
-  r > 0;
+  assume r > 0;
   hence thesis by A1,Th41;
 end;
 
@@ -1195,9 +1122,7 @@ end;
 theorem
   y in Ball(x,r) implies y - w in Ball(x - w,r)
 proof
-  assume
-  y in Ball(x,r);
-  then
+  assume y in Ball(x,r); then
 A1: dist(x,y) < r by Th41;
   dist(x - w,y - w) = dist(x,y) by CSSPACE:61;
   hence thesis by A1,Th41;
@@ -1206,8 +1131,7 @@ end;
 theorem
   y in Ball(x,r) implies (y - x) in Ball (0.(X),r)
 proof
-  assume
-  y in Ball(x,r);
+  assume y in Ball(x,r);
   then ||.x - y.|| < r by Th40;
   then ||.(-y) + x.|| < r by RLVECT_1:def 14;
   then ||.-(y - x).|| < r by RLVECT_1:47;
@@ -1231,13 +1155,11 @@ theorem Th47:
 proof
   thus w in cl_Ball(x,r) implies ||.x - w.|| <= r
   proof
-    assume
-    w in cl_Ball(x,r);
+    assume w in cl_Ball(x,r);
     then ex y be Point of X st w = y & ||.x - y.|| <= r;
     hence thesis;
   end;
-  assume
-  ||.x - w.|| <= r;
+  assume ||.x - w.|| <= r;
   hence thesis;
 end;
 
@@ -1246,13 +1168,11 @@ theorem Th48:
 proof
   thus w in cl_Ball(x,r) implies dist(x,w) <= r
   proof
-    assume
-    w in cl_Ball(x,r);
+    assume w in cl_Ball(x,r);
     then ||.x - w.|| <= r by Th47;
     hence thesis by CSSPACE:def 16;
   end;
-  assume
-  dist(x,w) <= r;
+  assume dist(x,w) <= r;
   then ||.x - w.|| <= r by CSSPACE:def 16;
   hence thesis;
 end;
@@ -1260,8 +1180,7 @@ end;
 theorem
   r >= 0 implies x in cl_Ball(x,r)
 proof
-  assume
-  r >= 0;
+  assume r >= 0;
   then dist(x,x) <= r by CSSPACE:53;
   hence thesis by Th48;
 end;
@@ -1269,8 +1188,7 @@ end;
 theorem Th50:
   y in Ball(x,r) implies y in cl_Ball(x,r)
 proof
-  assume
-  y in Ball(x,r);
+  assume y in Ball(x,r);
   then ||.x - y.|| <= r by Th40;
   hence thesis;
 end;
@@ -1280,13 +1198,11 @@ theorem Th51:
 proof
   thus w in Sphere(x,r) implies ||.x - w.|| = r
   proof
-    assume
-    w in Sphere(x,r);
+    assume w in Sphere(x,r);
     then ex y be Point of X st w = y & ||.x - y.|| = r;
     hence thesis;
   end;
-  assume
-  ||.x - w.|| = r;
+  assume ||.x - w.|| = r;
   hence thesis;
 end;
 
@@ -1295,13 +1211,11 @@ theorem
 proof
   thus w in Sphere(x,r) implies dist(x,w) = r
   proof
-    assume
-    w in Sphere(x,r);
+    assume w in Sphere(x,r);
     then ||.x - w.|| = r by Th51;
     hence thesis by CSSPACE:def 16;
   end;
-  assume
-  dist(x,w) = r;
+  assume dist(x,w) = r;
   then ||.x - w.|| = r by CSSPACE:def 16;
   hence thesis;
 end;
@@ -1309,8 +1223,7 @@ end;
 theorem
   y in Sphere(x,r) implies y in cl_Ball(x,r)
 proof
-  assume
-  y in Sphere(x,r);
+  assume y in Sphere(x,r);
   then ||.x - y.|| = r by Th51;
   hence thesis;
 end;
@@ -1327,8 +1240,7 @@ theorem Th55:
 proof
   now
     let y;
-    assume
-    y in Sphere(x,r);
+    assume y in Sphere(x,r);
     then ||.x - y.|| = r by Th51;
     hence y in cl_Ball(x,r);
   end;
@@ -1340,8 +1252,7 @@ theorem
 proof
   now
     let y;
-    assume
-    y in cl_Ball(x,r);
+    assume y in cl_Ball(x,r);
     then
 A1: ||.x - y.|| <= r by Th47;
     now
@@ -1365,6 +1276,7 @@ A2: cl_Ball(x,r) c= Ball(x,r) \/ Sphere(x,r) by SUBSET_1:7;
 end;
 
 begin :: Cauchy sequence and Hilbert space with complex coefficient
+
 deffunc 09(ComplexUnitarySpace) = 0.$1;
 
 definition
@@ -1402,14 +1314,12 @@ proof
     assume
 A1: seq is Cauchy;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider l being Element of NAT such that
 A2: for n, m st n >= l & m >= l holds dist((seq.n), (seq.m)) < r by A1,Def8;
     take k = l;
     let n, m;
-    assume
-    n >= k & m >= k;
+    assume n >= k & m >= k;
     then dist((seq.n), (seq.m)) < r by A2;
     hence thesis by CSSPACE:def 16;
   end;
@@ -1420,14 +1330,12 @@ A2: for n, m st n >= l & m >= l holds dist((seq.n), (seq.m)) < r by A1,Def8;
 A3: for r st r > 0 ex k st for n, m st n >= k & m >= k holds ||.(seq.n
     ) - (seq.m).|| < r;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider l being Element of NAT such that
 A4: for n, m st n >= l & m >= l holds ||.(seq.n) - (seq.m).|| < r by A3;
     take k = l;
     let n, m;
-    assume
-    n >= k & m >= k;
+    assume n >= k & m >= k;
     then ||.(seq.n) - (seq.m).|| < r by A4;
     hence thesis by CSSPACE:def 16;
   end;
@@ -1441,8 +1349,7 @@ proof
 A1: seq1 is Cauchy and
 A2: seq2 is Cauchy;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then
 A3: r/2 > 0 by XREAL_1:217;
   then consider m1 be Element of NAT such that
@@ -1479,8 +1386,7 @@ proof
 A1: seq1 is Cauchy and
 A2: seq2 is Cauchy;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then
 A3: r/2 > 0 by XREAL_1:217;
   then consider m1 be Element of NAT such that
@@ -1522,16 +1428,14 @@ A4: z <> 0;
     then
 A5: |.z.| > 0 by COMPLEX1:133;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then r/|.z.| > 0 by A5,A3,XREAL_1:76;
     then consider m1 be Element of NAT such that
 A6: for n, m st n >= m1 & m >= m1 holds dist((seq.n), (seq.m)) < r/|.
     z.| by A1,Def8;
     take k = m1;
     let n, m;
-    assume
-    n >= k & m >= k;
+    assume n >= k & m >= k;
     then
 A7: dist((seq.n), (seq.m)) < r/|.z.| by A6;
 A8: |.z.| <> 0 by A4,COMPLEX1:133;
@@ -1552,14 +1456,12 @@ A9: |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
     assume
 A10: z = 0;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A11: for n, m st n >= m1 & m >= m1 holds dist((seq.n), (seq.m)) < r by A1,Def8;
     take k = m1;
     let n, m;
-    assume
-    n >= k & m >= k;
+    assume n >= k & m >= k;
     then
 A12: dist((seq.n), (seq.m)) < r by A11;
     dist(z * (seq.n), z * (seq.m)) = dist(09(X), 0c * (seq.m)) by A10,
@@ -1576,8 +1478,7 @@ end;
 theorem
   seq is Cauchy implies - seq is Cauchy
 proof
-  assume
-  seq is Cauchy;
+  assume seq is Cauchy;
   then (-1r) * seq is Cauchy by Th61;
   hence thesis by CSSPACE:77;
 end;
@@ -1588,8 +1489,7 @@ proof
   assume
 A1: seq is Cauchy;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider m1 be Element of NAT such that
 A2: for n, m st n >= m1 & m >= m1 holds dist((seq.n), (seq.m)) < r by A1,Def8;
   take k = m1;
@@ -1598,8 +1498,7 @@ A2: for n, m st n >= m1 & m >= m1 holds dist((seq.n), (seq.m)) < r by A1,Def8;
 CSSPACE:59;
   then
 A3: dist((seq.n) + x, (seq.m) + x) <= dist((seq.n), (seq.m)) + 0 by CSSPACE:53;
-  assume
-  n >= k & m >= k;
+  assume n >= k & m >= k;
   then dist((seq.n), (seq.m)) < r by A2;
   then dist((seq.n) + x, (seq.m) + x) < r by A3,XXREAL_0:2;
   then dist((seq + x).n, (seq.m) + x) < r by BHSP_1:def 12;
@@ -1609,8 +1508,7 @@ end;
 theorem
   seq is Cauchy implies seq - x is Cauchy
 proof
-  assume
-  seq is Cauchy;
+  assume seq is Cauchy;
   then seq + (-x) is Cauchy by Th63;
   hence thesis by CSSPACE:78;
 end;
@@ -1618,19 +1516,16 @@ end;
 theorem
   seq is convergent implies seq is Cauchy
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider h be Point of X such that
 A1: for r st r > 0 ex k st for n st n >= k holds dist((seq.n), h) < r by Def1;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider m1 be Element of NAT such that
 A2: for n st n >= m1 holds dist((seq.n), h) < r/2 by A1,XREAL_1:217;
   take k = m1;
   let n, m;
-  assume
-  n >= k & m >= k;
+  assume n >= k & m >= k;
   then dist((seq.n), h) < r/2 & dist((seq.m), h) < r/2 by A2;
   then dist((seq.n), (seq.m)) <= dist((seq.n), h) + dist(h, (seq.m)) & dist((
   seq.n) , h) + dist(h, (seq.m)) < r/2 + r/2 by CSSPACE:54,XREAL_1:10;
@@ -1642,8 +1537,7 @@ definition
   let seq1, seq2;
   pred seq1 is_compared_to seq2 means
   :Def9:
-  for r st r > 0 ex m st for n st n
-  >= m holds dist(seq1.n, seq2.n) < r;
+  for r st r > 0 ex m st for n st n >= m holds dist(seq1.n, seq2.n) < r;
 end;
 
 theorem Th66:
@@ -1663,14 +1557,12 @@ proof
   assume
 A1: seq1 is_compared_to seq2;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider k such that
 A2: for n st n >= k holds dist((seq1.n), (seq2.n)) < r by A1,Def9;
   take m = k;
   let n;
-  assume
-  n >= m;
+  assume n >= m;
   hence thesis by A2;
 end;
 
@@ -1690,8 +1582,7 @@ proof
 A1: seq1 is_compared_to seq2 and
 A2: seq2 is_compared_to seq3;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then
 A3: r/2 > 0 by XREAL_1:217;
   then consider m1 be Element of NAT such that
@@ -1725,14 +1616,12 @@ proof
     assume
 A1: seq1 is_compared_to seq2;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A2: for n st n >= m1 holds dist((seq1.n), (seq2.n)) < r by A1,Def9;
     take m = m1;
     let n;
-    assume
-    n >= m;
+    assume n >= m;
     then dist((seq1.n), (seq2.n)) < r by A2;
     hence thesis by CSSPACE:def 16;
   end;
@@ -1743,14 +1632,12 @@ A2: for n st n >= m1 holds dist((seq1.n), (seq2.n)) < r by A1,Def9;
 A3: for r st r > 0 ex m st for n st n >= m holds ||.(seq1.n) - (seq2.n
     ).|| < r;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A4: for n st n >= m1 holds ||.(seq1.n) - (seq2.n).|| < r by A3;
     take m = m1;
     let n;
-    assume
-    n >= m;
+    assume n >= m;
     then ||.(seq1.n) - (seq2.n).|| < r by A4;
     hence thesis by CSSPACE:def 16;
   end;
@@ -1761,16 +1648,14 @@ theorem
   ( ex k st for n st n >= k holds seq1.n = seq2.n ) implies seq1
   is_compared_to seq2
 proof
-  assume
-  ex k st for n st n >= k holds seq1.n = seq2.n;
+  assume ex k st for n st n >= k holds seq1.n = seq2.n;
   then consider m such that
 A1: for n st n >= m holds seq1.n = seq2.n;
   let r such that
 A2: r > 0;
   take k = m;
   let n;
-  assume
-  n >= k;
+  assume n >= k;
   then dist((seq1.n), (seq2.n)) = dist((seq1.n), (seq1.n)) by A1
     .= 0 by CSSPACE:53;
   hence thesis by A2;
@@ -1783,8 +1668,7 @@ proof
 A1: seq1 is Cauchy and
 A2: seq1 is_compared_to seq2;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then
 A3: r/3 > 0 by XREAL_1:224;
   then consider m1 be Element of NAT such that
@@ -1820,16 +1704,14 @@ A12: dist((seq2.n), (seq2.m)) <= dist((seq2.n), (seq1.m)) + dist((seq1.m), (
 end;
 
 theorem
-  seq1 is convergent & seq1 is_compared_to seq2 implies seq2 is
-  convergent
+  seq1 is convergent & seq1 is_compared_to seq2 implies seq2 is convergent
 proof
   assume that
 A1: seq1 is convergent and
 A2: seq1 is_compared_to seq2;
   now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then
 A3: r/2 > 0 by XREAL_1:217;
     then consider m1 be Element of NAT such that
@@ -1864,8 +1746,7 @@ A1: seq1 is convergent & lim seq1 = g and
 A2: seq1 is_compared_to seq2;
 A3: now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then
 A4: r/2 > 0 by XREAL_1:217;
     then consider m1 be Element of NAT such that
@@ -1897,8 +1778,7 @@ definition
   let seq;
   attr seq is bounded means
   :Def10:
-  ex M st M > 0 & for n holds ||.seq.n.|| <=
-  M;
+  ex M st M > 0 & for n holds ||.seq.n.|| <= M;
 end;
 
 theorem Th74:
@@ -1928,8 +1808,7 @@ end;
 theorem Th75:
   seq is bounded implies -seq is bounded
 proof
-  assume
-  seq is bounded;
+  assume seq is bounded;
   then consider M such that
 A1: M > 0 and
 A2: for n holds ||.seq.n.|| <= M by Def10;
@@ -1956,8 +1835,7 @@ end;
 theorem
   seq is bounded implies z * seq is bounded
 proof
-  assume
-  seq is bounded;
+  assume seq is bounded;
   then consider M such that
 A1: M > 0 and
 A2: for n holds ||.seq.n.|| <= M by Def10;
@@ -1970,8 +1848,7 @@ A5:   |.z.| >= 0 by COMPLEX1:132;
         .= |.z.| * ||.seq.n.|| by CSSPACE:45;
       hence ||.(z * seq).n.|| <= |.z.| * M by A2,A5,XREAL_1:66;
     end;
-    assume
-    z <> 0;
+    assume z <> 0;
     then |.z.| > 0 by COMPLEX1:133;
     then |.z.| * M > 0 by A1,XREAL_1:131;
     hence thesis by A4,Def10;
@@ -1995,8 +1872,7 @@ end;
 theorem
   seq is constant implies seq is bounded
 proof
-  assume
-  seq is constant;
+  assume seq is constant;
   then consider x such that
 A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
 A2: x = 09(X) implies seq is bounded
@@ -2015,8 +1891,7 @@ A4: x = 09(X);
   end;
   x <> 09(X) implies seq is bounded
   proof
-    assume
-    x <> 09(X);
+    assume x <> 09(X);
     consider M being real number such that
 A5: ||.x.|| < M by XREAL_1:3;
     reconsider M as Real by XREAL_0:def 1;
@@ -2046,16 +1921,14 @@ A5:   ||.seq.(m+1).|| >= M1;
       let n such that
 A6:   n <= m + 1;
 A7:   now
-        assume
-        m >= n;
+        assume m >= n;
         then ||.seq.n.|| < M1 by A3;
         then ||.seq.n.|| < ||.seq.(m+1).|| by A5,XXREAL_0:2;
         then ||.seq.n.|| + 0 < M by XREAL_1:10;
         hence ||.seq.n.|| < M;
       end;
       now
-        assume
-        n = m + 1;
+        assume n = m + 1;
         then ||.seq.n.|| + 0 < M by XREAL_1:10;
         hence ||.seq.n.|| < M;
       end;
@@ -2069,8 +1942,7 @@ A8:   ||.seq.(m+1).|| <= M1;
       let n such that
 A9:   n <= m + 1;
 A10:  now
-        assume
-        m >= n;
+        assume m >= n;
         then
 A11:    ||.seq.n.|| < M1 by A3;
         M > M1 + 0 by XREAL_1:10;
@@ -2078,8 +1950,7 @@ A11:    ||.seq.n.|| < M1 by A3;
       end;
       now
 A12:    M > M1 + 0 by XREAL_1:10;
-        assume
-        n = m + 1;
+        assume n = m + 1;
         hence ||.seq.n.|| < M by A8,A12,XXREAL_0:2;
       end;
       hence ||.seq.n.|| < M by A9,A10,NAT_1:8;
@@ -2092,8 +1963,7 @@ A13: P[0]
     ||.(seq.0).|| + 1 > 0 + 0 by CSSPACE:46,XREAL_1:10;
     hence M > 0;
     let n;
-    assume
-    n <= 0;
+    assume n <= 0;
     then n = 0;
     then ||.seq.n.|| + 0 < M by XREAL_1:10;
     hence thesis;
@@ -2104,8 +1974,7 @@ end;
 theorem Th80:
   seq is convergent implies seq is bounded
 proof
-  assume
-  seq is convergent;
+  assume seq is convergent;
   then consider g such that
 A1: for r st r > 0 ex m st for n st n >= m holds ||.seq.n - g.|| < r by Th9;
   consider m1 be Element of NAT such that
@@ -2115,8 +1984,7 @@ A3: now
     0 + 0 < p by CSSPACE:46,XREAL_1:10;
     hence p > 0;
     let n;
-    assume
-    n >= m1;
+    assume n >= m1;
     then
 A4: ||.seq.n - g.|| < 1 by A2;
     ||.seq.n.|| - ||.g.|| <= ||.seq.n - g.|| by CSSPACE:50;
@@ -2135,15 +2003,13 @@ A8: for n st n >= m1 holds ||.seq.n.|| < M1 by A3;
     let n;
 A9: M > 0 + M2 by A7,XREAL_1:10;
 A10: now
-      assume
-      n <= m1;
+      assume n <= m1;
       then ||.seq.n.|| < M2 by A6;
       hence ||.seq.n.|| <= M by A9,XXREAL_0:2;
     end;
 A11: M > M1 + 0 by A5,XREAL_1:10;
     now
-      assume
-      n >= m1;
+      assume n >= m1;
       then ||.seq.n.|| < M1 by A8;
       hence ||.seq.n.|| <= M by A11,XXREAL_0:2;
     end;
@@ -2168,8 +2034,7 @@ A6: ex M st ( M > 0 & for n st n >= m1 holds ||.seq2.n.|| < M )
     take M = p + 1;
     now
       let n;
-      assume
-      n >= m1;
+      assume n >= m1;
       then dist((seq1.n), (seq2.n)) < 1 by A3;
       then
 A7:   ||.seq2.n - seq1.n.|| < 1 by CSSPACE:def 16;
@@ -2195,15 +2060,13 @@ A12: for n st n >= m1 holds ||.seq2.n.|| < M1 by A6;
     let n;
 A13: M > 0 + M2 by A11,XREAL_1:10;
 A14: now
-      assume
-      n <= m1;
+      assume n <= m1;
       then ||.seq2.n.|| < M2 by A10;
       hence ||.seq2.n.|| <= M by A13,XXREAL_0:2;
     end;
 A15: M > M1 + 0 by A9,XREAL_1:10;
     now
-      assume
-      n >= m1;
+      assume n >= m1;
       then ||.seq2.n.|| < M1 by A12;
       hence ||.seq2.n.|| <= M by A15,XXREAL_0:2;
     end;
@@ -2215,8 +2078,7 @@ end;
 canceled 5;
 
 theorem Th87:
-  seq is bounded & seq1 is subsequence of seq implies seq1 is
-  bounded
+  seq is bounded & seq1 is subsequence of seq implies seq1 is bounded
 proof
   assume that
 A1: seq is bounded and
@@ -2236,8 +2098,7 @@ A5: for n holds ||.seq.n.|| <= M1 by A1,Def10;
 end;
 
 theorem Th88:
-  seq is convergent & seq1 is subsequence of seq implies seq1 is
-  convergent
+  seq is convergent & seq1 is subsequence of seq implies seq1 is convergent
 proof
   assume that
 A1: seq is convergent and
@@ -2249,8 +2110,7 @@ A4: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g1.|| < r
   by A1,Th9;
   now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds ||.(seq.n) - g1.|| < r by A4;
     take m = m1;
@@ -2266,8 +2126,7 @@ A7: Nseq.n >= m by A6,XXREAL_0:2;
 end;
 
 theorem Th89:
-  seq1 is subsequence of seq & seq is convergent implies lim seq1=
-  lim seq
+  seq1 is subsequence of seq & seq is convergent implies lim seq1= lim seq
 proof
   assume that
 A1: seq1 is subsequence of seq and
@@ -2276,8 +2135,7 @@ A2: seq is convergent;
 A3: seq1 = seq * Nseq by A1,VALUED_0:def 17;
 A4: now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds dist((seq.n), (lim seq)) < r by A2,Def2;
     take m = m1;
@@ -2294,8 +2152,7 @@ A7: Nseq.n >= m by A6,XXREAL_0:2;
 end;
 
 theorem Th90:
-  seq is Cauchy & seq1 is subsequence of seq implies seq1 is
-  Cauchy
+  seq is Cauchy & seq1 is subsequence of seq implies seq1 is Cauchy
 proof
   assume that
 A1: seq is Cauchy and
@@ -2304,8 +2161,7 @@ A2: seq1 is subsequence of seq;
 A3: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   now
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider l be Element of NAT such that
 A4: for n, m st n >= l & m >= l holds dist((seq.n), (seq.m)) < r by A1,Def8;
     take k = l;
@@ -2382,8 +2238,7 @@ theorem
   seq by Th88,Th89;
 
 theorem
-  seq is convergent & (ex k st seq = seq1 ^\k) implies seq1 is
-  convergent
+  seq is convergent & (ex k st seq = seq1 ^\k) implies seq1 is convergent
 proof
   assume that
 A1: seq is convergent and
@@ -2396,8 +2251,7 @@ A4: for r st r > 0 ex m st for n st n >= m holds ||.seq.n - g1.|| < r by A1,Th9
   now
     take g = g1;
     let r;
-    assume
-    r > 0;
+    assume r > 0;
     then consider m1 be Element of NAT such that
 A5: for n st n >= m1 holds ||.seq.n - g.|| < r by A4;
     take m = m1 + k;
@@ -2411,8 +2265,7 @@ A7: n = m1 + k + m2 by NAT_1:10;
     then consider l being Element of NAT such that
 A8: l = n - k;
     now
-      assume
-      l < m1;
+      assume l < m1;
       then l + k < m1 + k by XREAL_1:8;
       hence contradiction by A6,A8;
     end;
@@ -2433,8 +2286,7 @@ A2: ex k st seq = seq1 ^\k;
   consider k such that
 A3: seq = seq1 ^\k by A2;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider l1 being Element of NAT such that
 A4: for n, m st n >= l1 & m >= l1 holds dist((seq.n), (seq.m)) < r by A1,Def8;
   take l = l1 + k;
@@ -2455,15 +2307,13 @@ A9: m = l1 + k + m2 by A6,NAT_1:10;
   then consider l3 being Element of NAT such that
 A10: l3 = m - k;
 A11: now
-    assume
-    l2 < l1;
+    assume l2 < l1;
     then l2 + k < l1 + k by XREAL_1:8;
     hence contradiction by A5,A8;
   end;
 A12: l2 + k = n by A8;
   now
-    assume
-    l3 < l1;
+    assume l3 < l1;
     then l3 + k < l1 + k by XREAL_1:8;
     hence contradiction by A6,A10;
   end;
@@ -2483,8 +2333,7 @@ proof
   assume
 A1: seq1 is_compared_to seq2;
   let r;
-  assume
-  r > 0;
+  assume r > 0;
   then consider m1 be Element of NAT such that
 A2: for n st n >= m1 holds dist((seq1.n), (seq2.n)) < r by A1,Def9;
   take m = m1;
@@ -2508,16 +2357,13 @@ definition
   let X;
   attr X is complete means
   :Def12:
-  for seq holds seq is Cauchy implies seq is
-  convergent;
+  for seq holds seq is Cauchy implies seq is convergent;
 end;
 
 theorem
   X is complete & seq is Cauchy implies seq is bounded
 proof
-  assume
-  X is complete & seq is Cauchy;
+  assume X is complete & seq is Cauchy;
   then seq is convergent by Def12;
   hence thesis by Th80;
 end;
-

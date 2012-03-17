@@ -10,16 +10,17 @@ environ
       TARSKI, AMI_3, ZFMISC_1, SUBSET_1, CARD_1, CAT_1, ORDINAL1, ARYTM_1,
       ARYTM_3, NAT_1, FINSET_1, FUNCT_1, AMI_2, XXREAL_0, FINSEQ_1, MCART_1,
       GRAPHSP, FSM_1, FUNCT_4, FUNCOP_1, INT_1, CARD_3, COMPLEX1, PARTFUN1,
-      FINSEQ_2, GLIB_000, SCMFSA_2;
+      FINSEQ_2, GLIB_000, SCMFSA_2, RECDEF_2, COMPOS_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, XCMPLX_0,
       XXREAL_0, NAT_1, INT_1, RELAT_1, MCART_1, CARD_1, CARD_3, INT_2,
       FINSEQ_1, FUNCOP_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
-      FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, AMI_1, AMI_2, AMI_3, SCMFSA_1;
+      FINSET_1, FUNCT_4, FINSEQ_2, FUNCT_7, RECDEF_2, COMPOS_1, AMI_1, AMI_2,
+      AMI_3, SCMFSA_1;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, INT_2, FINSEQ_4, CAT_2,
-      AMI_5, SCMFSA_1, RELSET_1, PRE_POLY;
+      AMI_5, SCMFSA_1, RELSET_1, PRE_POLY, RECDEF_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       NUMBERS, XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_1, AMI_2, AMI_3,
-      SCMFSA_1, CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2;
+      SCMFSA_1, CARD_1, FINSET_1, CARD_2, RELSET_1, FUNCT_2, COMPOS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -28,8 +29,9 @@ begin :: The SCM+FSA Computer
 definition
   func SCM+FSA -> strict AMI-Struct over { INT,INT* } equals
 :: SCMFSA_2:def 1
-  AMI-Struct(#
-SCM+FSA-Memory,In (NAT,SCM+FSA-Memory), SCM+FSA-Instr,SCM+FSA-OK,SCM+FSA-Exec#)
+  AMI-Struct(# SCM+FSA-Memory,In (NAT,SCM+FSA-Memory),
+     SCM+FSA-Instr, In([0,{},{}],SCM+FSA-Instr),
+     SCM+FSA-OK,SCM+FSA-Exec#)
   ;
 end;
 
@@ -197,47 +199,40 @@ definition
   func a := b -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 11
 
-  ex A,B st a = A & b = B
-  & it = A:=B;
+  ex A,B st a = A & b = B & it = A:=B;
   func AddTo(a,b) -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 12
 
-  ex A,B st a = A & b
-  = B & it = AddTo(A,B);
+  ex A,B st a = A & b = B & it = AddTo(A,B);
   func SubFrom(a,b) -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 13
 
-  ex A,B st a = A &
-  b = B & it = SubFrom(A,B);
+  ex A,B st a = A & b = B & it = SubFrom(A,B);
   func MultBy(a,b) -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 14
 
-  ex A,B st a = A & b
-  = B & it = MultBy(A,B);
+  ex A,B st a = A & b = B & it = MultBy(A,B);
   func Divide(a,b) -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 15
 
-  ex A,B st a = A & b
-  = B & it = Divide(A,B);
+  ex A,B st a = A & b = B & it = Divide(A,B);
 end;
 
 definition
   let la;
-  func goto la -> Instruction of SCM+FSA means
+  func goto la -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 16
 
-  ex La st la = La & it = SCM-goto La;
+   SCM-goto la;
   let a;
   func a=0_goto la -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 17
 
-  ex A,La st a = A &
-  la = La & it = A=0_goto La;
+  ex A st a = A & it = A=0_goto la;
   func a>0_goto la -> Instruction of SCM+FSA means
 :: SCMFSA_2:def 18
 
-  ex A,La st a = A &
-  la = La & it = A>0_goto La;
+  ex A st a = A & it = A>0_goto la;
 end;
 
 definition
@@ -245,10 +240,10 @@ definition
   let a be FinSeq-Location;
   func c:=(a,i) -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 19
-  [9,<*c,a,i*>];
+  [9,{},<*c,a,i*>];
   func (a,i):=c -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 20
-  [10,<*c,a,i*>];
+  [10,{},<*c,a,i*>];
 end;
 
 definition
@@ -256,10 +251,10 @@ definition
   let a be FinSeq-Location;
   func i:=len a -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 21
-  [11,<*i,a*>];
+  [11,{},<*i,a*>];
   func a:=<0,...,0>i -> Instruction of SCM+FSA equals
 :: SCMFSA_2:def 22
-  [12,<*i,a*>];
+  [12,{},<*i,a*>];
 end;
 
 canceled 3;
@@ -564,15 +559,15 @@ theorem :: SCMFSA_2:116
 canceled;
 
 theorem :: SCMFSA_2:118
-  for I being Instruction of SCM+FSA st I = [0,{}] holds I is halting;
+  for I being Instruction of SCM+FSA
+   st I = [0,{},{}] holds I is halting;
 
 theorem :: SCMFSA_2:119
-  for I be Instruction of SCM+FSA st InsCode I = 0 holds I = [0,
-  {}];
+  for I be Instruction of SCM+FSA st InsCode I = 0 holds I = [0,{},{}];
 
 theorem :: SCMFSA_2:120
-  for I being set holds I is Instruction of SCM+FSA iff I = [0,{}
-  ] or (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I =
+  for I being set holds I is Instruction of SCM+FSA iff I = [0,{},{}]
+   or (ex a,b st I = a:=b) or (ex a,b st I = AddTo(a,b)) or (ex a,b st I =
 SubFrom(a,b)) or (ex a,b st I = MultBy(a,b)) or (ex a,b st I = Divide(a,b)) or
 (ex la st I = goto la) or (ex lb,da st I = da=0_goto lb) or (ex lb,da st I = da
 >0_goto lb) or (ex b,a,fa st I = a:=(fa,b)) or (ex a,b,fa st I = (fa,a):=b) or
@@ -583,8 +578,7 @@ registration
 end;
 
 theorem :: SCMFSA_2:121
-  for I being Instruction of SCM+FSA st I is halting holds I =
-  halt SCM+FSA;
+  for I being Instruction of SCM+FSA st I is halting holds I = halt SCM+FSA;
 
 theorem :: SCMFSA_2:122
   for I being Instruction of SCM+FSA st InsCode I = 0 holds I =

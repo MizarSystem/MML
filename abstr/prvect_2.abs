@@ -12,17 +12,19 @@ environ
       PRVECT_1, XBOOLE_0, RLVECT_1, GROUP_2, STRUCT_0, ALGSTR_0, BINOP_1,
       VECTSP_1, REAL_1, SUPINF_2, FUNCT_6, FINSEQOP, SETWISEO, NORMSP_1,
       TARSKI, PRE_TOPC, EUCLID, FUNCT_2, REAL_NS1, REWRITE1, RSSPACE3,
-      PRVECT_2;
+      PRVECT_2, NORMSP_0, METRIC_1, RELAT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_3, XCMPLX_0,
       XXREAL_0, NUMBERS, XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, RVSUM_1,
       STRUCT_0, ALGSTR_0, FUNCT_2, FUNCT_3, BINOP_1, REAL_1, SEQ_1, SEQ_2,
       RLVECT_1, VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQOP, SQUARE_1,
-      PRE_TOPC, EUCLID, PRVECT_1, NORMSP_1, RSSPACE3, LOPBAN_1, REAL_NS1;
- constructors FINSEQOP, REAL_1, SEQ_2, COMPLEX1, SQUARE_1, BINOP_2, SETWISEO,
-      PRVECT_1, RSSPACE3, LOPBAN_1, REAL_NS1, SEQ_1, RVSUM_1, RELSET_1;
+      PRE_TOPC, EUCLID, PRVECT_1, NORMSP_0, NORMSP_1, RSSPACE3, LOPBAN_1,
+      REAL_NS1;
+ constructors FUNCT_3, FINSEQOP, REAL_1, SEQ_2, COMPLEX1, SQUARE_1, BINOP_2,
+      SETWISEO, PRVECT_1, RSSPACE3, LOPBAN_1, REAL_NS1, SEQ_1, RVSUM_1,
+      NORMSP_1, RELSET_1;
  registrations STRUCT_0, FINSEQ_2, FINSEQ_1, CARD_3, RLVECT_1, PRVECT_1,
       XREAL_0, MEMBERED, NORMSP_1, REAL_NS1, ORDINAL1, FUNCT_1, FUNCT_2,
-      RELAT_1, XBOOLE_0, NUMBERS, VALUED_0;
+      RELAT_1, XBOOLE_0, NUMBERS, VALUED_0, NORMSP_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -94,8 +96,7 @@ definition
   attr R is RealLinearSpace-yielding means
 :: PRVECT_2:def 3
 
-  for S be set st S in rng R
-  holds S is RealLinearSpace;
+  for S be set st S in rng R holds S is RealLinearSpace;
 end;
 
 registration
@@ -118,8 +119,7 @@ definition
   func carr G -> Domain-Sequence means
 :: PRVECT_2:def 4
 
-  len it = len G & for j be
-  Element of dom G holds it.j = the carrier of G.j;
+  len it = len G & for j be Element of dom G holds it.j = the carrier of G.j;
 end;
 
 definition
@@ -137,13 +137,11 @@ definition
   func complop G -> UnOps of carr G means
 :: PRVECT_2:def 6
 
-  len it = len carr G & for j
-  be Element of dom carr G holds it.j = comp G.j;
+  len it = len carr G & for j be Element of dom carr G holds it.j = comp G.j;
   func zeros G -> Element of product carr G means
 :: PRVECT_2:def 7
 
-  for j be Element of
-  dom carr G holds it.j = the ZeroF of G.j;
+  for j be Element of dom carr G holds it.j = the ZeroF of G.j;
   func multop G -> MultOps of REAL,carr G means
 :: PRVECT_2:def 8
 
@@ -173,8 +171,7 @@ definition
   attr R is RealNormSpace-yielding means
 :: PRVECT_2:def 10
 
-  for x be set st x in rng R
-  holds x is RealNormSpace;
+  for x be set st x in rng R holds x is RealNormSpace;
 end;
 
 registration
@@ -202,7 +199,7 @@ definition
 :: PRVECT_2:def 11
 
   len it = len G
-  & for j be Element of dom G holds it.j=(the norm of G.j).(x.j);
+  & for j be Element of dom G holds it.j=(the normF of G.j).(x.j);
 end;
 
 definition
@@ -211,8 +208,7 @@ definition
   RealLinearSpace-Sequence),REAL means
 :: PRVECT_2:def 12
 
-  for x being Element of product
-  carr G holds it.x = |.normsequence(G,x).|;
+  for x being Element of product carr G holds it.x = |.normsequence(G,x).|;
 end;
 
 definition
@@ -221,7 +217,7 @@ definition
 :: PRVECT_2:def 13
 
   the RLSStruct of it
-  = product (G qua RealLinearSpace-Sequence) & the norm of it = productnorm G;
+  = product (G qua RealLinearSpace-Sequence) & the normF of it = productnorm G;
 end;
 
 reserve G for RealNormSpace-Sequence;
@@ -245,9 +241,9 @@ theorem :: PRVECT_2:9
 
 registration
   let G be RealNormSpace-Sequence;
-  cluster product G -> RealNormSpace-like vector-distributive
-  scalar-distributive scalar-associative scalar-unital Abelian
-    add-associative right_zeroed right_complementable;
+  cluster product G -> reflexive discerning RealNormSpace-like
+  vector-distributive scalar-distributive scalar-associative scalar-unital
+  Abelian add-associative right_zeroed right_complementable;
 end;
 
 theorem :: PRVECT_2:10
@@ -261,7 +257,7 @@ theorem :: PRVECT_2:11
   st xi=zx.i & zx=x & yi=zy.i & zy=y holds ||.yi - xi.|| <= ||.y - x.||;
 
 theorem :: PRVECT_2:12
-  for G be RealNormSpace-Sequence, seq be sequence of (product G), x0 be
+  for G be RealNormSpace-Sequence, seq be sequence of product G, x0 be
   Point of product G, y0 be Element of product carr G st x0 = y0 & seq is
 convergent & lim seq=x0 holds for i be Element of dom G ex seqi be sequence of
 G.i st seqi is convergent & y0.i = lim seqi & for m be Element of NAT holds ex
@@ -277,4 +273,3 @@ Element of dom G ex seqi be sequence of G.i st seqi is convergent & y0.i = lim
 theorem :: PRVECT_2:14
   for G be RealNormSpace-Sequence st for i be Element of dom G holds G.i
   is complete holds product G is complete;
-

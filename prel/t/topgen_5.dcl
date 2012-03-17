@@ -8,8 +8,8 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -48,14 +48,14 @@
 </Signature>
 <FCluster aid="TOPGEN_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="365"/>
+<Func kind="K" nr="370"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_5" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="366"/>
+<Func kind="K" nr="371"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -74,23 +74,23 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="368">
+<Func kind="K" nr="373">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="19"/>
 <Adjective nr="25">
 <Func kind="U" nr="1">
-<Func kind="K" nr="367"/>
+<Func kind="K" nr="372"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="334"/>
+<Func kind="K" nr="340"/>
 </Func>
 </Adjective>
 <Adjective nr="55">
-<Func kind="K" nr="367"/>
-<Func kind="K" nr="334"/>
+<Func kind="K" nr="372"/>
+<Func kind="K" nr="340"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -114,24 +114,24 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="369">
+<Func kind="K" nr="374">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="19"/>
 <Adjective nr="25">
 <Func kind="U" nr="1">
-<Func kind="K" nr="367"/>
+<Func kind="K" nr="372"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="334"/>
+<Func kind="K" nr="340"/>
 </Func>
 </Adjective>
 <Adjective nr="55">
-<Func kind="K" nr="367"/>
-<Func kind="K" nr="334"/>
+<Func kind="K" nr="372"/>
+<Func kind="K" nr="340"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -139,7 +139,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="52"/>
-<Adjective nr="173"/>
+<Adjective nr="178"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -162,7 +162,7 @@
 <Cluster>
 <Adjective nr="40" value="false"/>
 <Adjective nr="52"/>
-<Adjective nr="173"/>
+<Adjective nr="178"/>
 </Cluster>
 </CCluster>
 </Registrations>

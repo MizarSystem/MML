@@ -21,6 +21,7 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="CLVECT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -28,16 +29,16 @@
 </Signature>
 <RCluster aid="CFUNCDOM" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="121"/>
+<Adjective nr="125"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CFUNCDOM" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -46,7 +47,7 @@
 </RCluster>
 <RCluster aid="CFUNCDOM" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="18">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -55,15 +56,15 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="105"/>
-<Adjective nr="107"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 <Adjective nr="109"/>
 <Adjective nr="111"/>
-<Adjective nr="121"/>
-<Adjective nr="122"/>
+<Adjective nr="113"/>
+<Adjective nr="115"/>
+<Adjective nr="125"/>
+<Adjective nr="126"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CFUNCDOM" nr="1">
@@ -94,7 +95,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="103"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CFUNCDOM" nr="3">
@@ -110,7 +111,7 @@
 </Func>
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="121"/>
+<Adjective nr="125"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CFUNCDOM" nr="4">
@@ -125,8 +126,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="103"/>
-<Adjective nr="121"/>
+<Adjective nr="107"/>
+<Adjective nr="125"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CFUNCDOM" nr="5">
@@ -145,15 +146,15 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="105"/>
-<Adjective nr="107"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 <Adjective nr="109"/>
 <Adjective nr="111"/>
-<Adjective nr="121"/>
-<Adjective nr="122"/>
+<Adjective nr="113"/>
+<Adjective nr="115"/>
+<Adjective nr="125"/>
+<Adjective nr="126"/>
 </Cluster>
 </FCluster>
 </Registrations>

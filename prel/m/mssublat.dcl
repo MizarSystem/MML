@@ -22,6 +22,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="UNIALG_1"/>
+<ArticleID name="XBOOLEAN"/>
+<ArticleID name="MARGREL1"/>
 <ArticleID name="UNIALG_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="MSUALG_1"/>
@@ -32,29 +34,29 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="83"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="197">
+<Func kind="K" nr="222">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="47"/>
 <Adjective nr="51" value="false"/>
-<Adjective nr="86"/>
-<Adjective nr="90"/>
+<Adjective nr="88"/>
 <Adjective nr="92"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="80"/>
+<Adjective nr="76"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,15 +69,15 @@
 </Func>
 </Func>
 <Cluster>
+<Adjective nr="74"/>
 <Adjective nr="76"/>
-<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="79"/>
+<Adjective nr="75"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,15 +90,15 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="76"/>
-<Adjective nr="79"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="81"/>
+<Adjective nr="77"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -109,8 +111,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="76"/>
-<Adjective nr="81"/>
+<Adjective nr="74"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="5">
@@ -118,10 +120,10 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="83"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -134,8 +136,8 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="76"/>
-<Adjective nr="83"/>
+<Adjective nr="74"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 </Registrations>

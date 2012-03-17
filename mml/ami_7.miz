@@ -9,17 +9,18 @@ environ
  vocabularies SETFAM_1, XBOOLE_0, AMI_1, FSM_1, CAT_1, FUNCT_1, RELAT_1,
       STRUCT_0, SUBSET_1, FUNCT_4, FUNCOP_1, GOBOARD5, FRECHET, AMISTD_1,
       ZFMISC_1, NUMBERS, CARD_1, GLIB_000, AMISTD_2, CARD_5, NET_1, TARSKI,
-      AMI_7;
+      AMI_7, ORDINAL1, UNIALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, REALSET1,
-      NUMBERS, FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, FUNCT_7, AMISTD_1, AMISTD_2;
- constructors REALSET1, AMISTD_2;
+      MCART_1, NUMBERS, FUNCOP_1, FUNCT_4, NAT_1,
+      STRUCT_0, COMPOS_1, AMI_1, FUNCT_7, AMISTD_1, AMISTD_2;
+ constructors REALSET1, AMISTD_2, NAT_1;
  registrations SETFAM_1, FUNCOP_1, STRUCT_0, AMI_1, AMISTD_1, AMISTD_2,
-      REALSET1, CARD_1, RELSET_1;
+      REALSET1, CARD_1, RELSET_1, ORDINAL1, COMPOS_1;
  requirements SUBSET, BOOLE;
- definitions AMI_1, AMISTD_1, XBOOLE_0, FUNCOP_1;
+ definitions AMI_1, COMPOS_1, AMISTD_1, XBOOLE_0, FUNCOP_1;
  theorems AMI_1, FUNCT_7, TARSKI, AMISTD_1, SUBSET_1, FUNCOP_1, FUNCT_4,
       ZFMISC_1, YELLOW_8, FUNCT_1, YELLOW15, XBOOLE_0, XBOOLE_1, RELAT_1,
-      PARTFUN1;
+      PARTFUN1, MCART_1, ORDINAL1, COMPOS_1;
  schemes SUBSET_1;
 
 begin :: Preliminaries
@@ -42,7 +43,7 @@ theorem
   for A being realistic IC-Ins-separated definite (non empty
   stored-program AMI-Struct over N), s being State of A, f being
 Element of NAT, w being Element of ObjectKind IC A holds (s+*(IC A,w
-  )).f = s.f by AMI_1:48,FUNCT_7:34;
+  )).f = s.f by COMPOS_1:3,FUNCT_7:34;
 
 definition
 
@@ -86,10 +87,10 @@ proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
 AMI-Struct over N)), I be Instruction of A, s be State of A, o be Object of
   A, w be Element of ObjectKind o such that
-A1: for s being State of A holds Exec(I,s).IC A = NextLoc(IC s,A) and
+A1: for s being State of A holds Exec(I,s).IC A = succ IC s and
 A2: o <> IC A;
-  thus IC Exec(I,s) = NextLoc(IC s,A) by A1
-    .= NextLoc(IC (s+*(o,w)),A) by A2,FUNCT_7:34
+  thus IC Exec(I,s) = succ IC s by A1
+    .= succ IC (s+*(o,w)) by A2,FUNCT_7:34
     .= IC Exec(I,s+*(o,w)) by A1;
 end;
 
@@ -159,7 +160,7 @@ registration
   proof
     let o be Object of STC N;
 A1: the carrier of STC N = NAT \/ {NAT} by AMISTD_1:def 11;
-A2: the Object-Kind of STC N = (NAT --> {[1,0],[0,0]}) +* (NAT .--> NAT)
+A2: the Object-Kind of STC N = (NAT --> {[1,0,0],[0,0,0]}) +* (NAT .--> NAT)
     by AMISTD_1:def 11;
 A3: dom (NAT .--> NAT) = {NAT} by FUNCOP_1:19;
     per cases by A1,XBOOLE_0:def 3;
@@ -167,10 +168,11 @@ A3: dom (NAT .--> NAT) = {NAT} by FUNCOP_1:19;
 A4:   o in NAT;
       then not o in dom (NAT .--> NAT) by A3,TARSKI:def 1;
       then
-A5:   ObjectKind o = (NAT --> {[1,0],[0,0]}).o by A2,FUNCT_4:12
-        .= {[1,0],[0,0]} by A4,FUNCOP_1:13;
-A6:   [0,0] in {[1,0],[0,0]} by TARSKI:def 2;
-      [1,0] <> [0,0] & [1,0] in {[1,0],[0,0]} by TARSKI:def 2,ZFMISC_1:33;
+A5:   ObjectKind o = (NAT --> {[1,0,0],[0,0,0]}).o by A2,FUNCT_4:12
+        .= {[1,0,0],[0,0,0]} by A4,FUNCOP_1:13;
+A6:   [0,0,0] in {[1,0,0],[0,0,0]} by TARSKI:def 2;
+      [1,0,0] <> [0,0,0] & [1,0,0] in {[1,0,0],[0,0,0]}
+       by MCART_1:28,TARSKI:def 2;
       hence thesis by A5,A6,YELLOW_8:def 1;
     end;
     suppose
@@ -184,16 +186,19 @@ end;
 
 registration
   let N be with_non-empty_elements non empty set;
-  cluster halting realistic steady-programmed with_explicit_jumps
+  cluster steady-programmed with_explicit_jumps
     without_implicit_jumps IC-good Exec-preserving with_non_trivial_ObjectKinds
-with_non_trivial_Instructions (regular standard (standard-ins IC-Ins-separated
+with_non_trivial_Instructions
+ (regular J/A-independent homogeneous standard halting realistic
+  (standard-ins IC-Ins-separated
     definite (non empty stored-program AMI-Struct over N)));
   existence
   proof
     take STC N;
-A1: [1,0] in {[1,0],[0,0]} & [0,0] in {[1,0],[0,0]} by TARSKI:def 2;
-    the Instructions of STC N = {[0,0],[1,0]} & [1,0] <> [0,0] by
-AMISTD_1:def 11,ZFMISC_1:33;
+A1: [1,0,0] in {[1,0,0],[0,0,0]} & [0,0,0] in {[1,0,0],[0,0,0]}
+       by TARSKI:def 2;
+    the Instructions of STC N = {[0,0,0],[1,0,0]} & [1,0,0] <> [0,0,0] by
+AMISTD_1:def 11,MCART_1:28;
     then the Instructions of STC N is non trivial by A1,YELLOW_8:def 1;
     hence thesis by Def1;
   end;
@@ -208,11 +213,11 @@ registration
   proof
     let A be definite (non empty stored-program AMI-Struct over N);
     consider l being Element of NAT;
-A1: (the Object-Kind of A).l = the Instructions of A by AMI_1:def 14;
+A1: (the Object-Kind of A).l = the Instructions of A by COMPOS_1:def 8;
     assume
 Z:    for o being Object of A holds ObjectKind o is non trivial;
 X: l in NAT;
-  NAT c= the carrier of A by AMI_1:def 3;
+  NAT c= the carrier of A by COMPOS_1:def 2;
   then reconsider l as Object of A by X;
      ObjectKind l = the Instructions of A by A1;
     hence the Instructions of A is non trivial by Z;
@@ -249,7 +254,7 @@ registration
   let N be with_non-empty_elements set, A be IC-Ins-separated (non empty
   AMI-Struct over N);
   cluster ObjectKind IC A -> non trivial;
-  coherence by AMI_1:def 11;
+  coherence by COMPOS_1:def 6;
 end;
 
 definition
@@ -299,8 +304,7 @@ A1: for x being set holds x in X iff x in the carrier of A & P[x] from
     take X;
     let l be Object of A;
     hereby
-      assume
-      l in X;
+      assume l in X;
       then P[l] by A1;
       hence
       for s being State of A, a being Element of ObjectKind l holds Exec(
@@ -333,8 +337,7 @@ A4: for x being set holds x in X iff x in the carrier of A & P[x] from
     take X;
     let l be Object of A;
     hereby
-      assume
-      l in X;
+      assume l in X;
       then P[l] by A4;
       hence ex s being State of A, a being Element of ObjectKind l st Exec(I,s
       +*(l,a)) <> Exec(I,s) +* (l,a);
@@ -501,8 +504,7 @@ proof
   let A be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N), I be Instruction of A, o be Object of A such that
 A1: ObjectKind o is trivial;
-  assume
-  o in Out_U_Inp I;
+  assume o in Out_U_Inp I;
   then consider s being State of A, a being Element of ObjectKind o such that
 A2: Exec(I,s+*(o,a)) <> Exec(I,s) +* (o,a) by Def5;
   s.o is Element of ObjectKind o by Th2;
@@ -539,8 +541,7 @@ proof
   let A be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N), I be Instruction of A, o be Object of A;
 A1: Input I c= Out_U_Inp I by XBOOLE_1:36;
-  assume
-  ObjectKind o is trivial;
+  assume ObjectKind o is trivial;
   hence thesis by A1,Th15;
 end;
 
@@ -568,8 +569,7 @@ proof
   proof
     assume
 A1: for s being State of A holds Exec(I,s) = s;
-    assume
-    not thesis;
+    assume not thesis;
     then consider o being Object of A such that
 A2: o in Output I by SUBSET_1:10;
     ex s being State of A st s.o <> Exec(I,s).o by A2,Def3;
@@ -608,8 +608,7 @@ proof
   let A be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N), I be Instruction of A such that
 A1: for s being State of A holds Exec(I,s) = s;
-  assume
-  not thesis;
+  assume not thesis;
   then consider o being Object of A such that
 A2: o in Out_U_Inp I by SUBSET_1:10;
   consider s being State of A, a being Element of ObjectKind o such that
@@ -626,8 +625,7 @@ theorem Th21:
 proof
   let A be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N), I be Instruction of A;
-  assume
-  I is halting;
+  assume I is halting;
   then Input I = {} \ Out_\_Inp I by Th20
     .= {};
   hence thesis;
@@ -691,9 +689,9 @@ proof
 A1: J in the Instructions of A and
 A2: t.f <> J by YELLOW15:4;
 X: f in NAT;
-  NAT c= the carrier of A by AMI_1:def 3;
+  NAT c= the carrier of A by COMPOS_1:def 2;
   then reconsider ff=f as Object of A by X;
-  reconsider J as Element of ObjectKind ff by A1,AMI_1:def 14;
+  reconsider J as Element of ObjectKind ff by A1,COMPOS_1:def 8;
   reconsider s = t +* (ff,J) as State of A;
 A3: dom t = the carrier of A by PARTFUN1:def 4;
 A4: Exec(I,t).f = t.f by AMI_1:def 13;
@@ -711,14 +709,14 @@ proof
   AMI-Struct over N)), I be Instruction of A;
   consider t being State of A;
   set l = IC A;
-   reconsider w = NextLoc(IC t,A) as Element of ObjectKind l by AMI_1:def 11;
+   reconsider sICt = succ IC t as Element of NAT by ORDINAL1:def 13;
+   reconsider w = sICt as Element of ObjectKind l by COMPOS_1:def 6;
   set s = t +* (l,w);
-  assume
-  for s being State of A holds Exec(I,s).IC A = NextLoc(IC s,A);
+  assume for s being State of A holds Exec(I,s).IC A = succ IC s;
   then
-A1: Exec(I,t).l = NextLoc(IC t,A) & Exec(I,s).l = NextLoc(IC s,A);
+A1: Exec(I,t).l = succ IC t & Exec(I,s).l = succ IC s;
   dom t = the carrier of A by PARTFUN1:def 4;
-  then Exec(I,t) <> Exec(I,s) by A1,AMISTD_1:35,FUNCT_7:33;
+  then Exec(I,t) <> Exec(I,s) by A1,FUNCT_7:33,ORDINAL1:14;
   hence thesis by Def4;
 end;
 
@@ -745,10 +743,10 @@ theorem
 proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N)), I be Instruction of A such that
-A1: for s being State of A holds Exec(I, s).IC A = NextLoc(IC s,A);
+A1: for s being State of A holds Exec(I, s).IC A = succ IC s;
   consider s being State of A;
-  Exec(I,s).IC A = NextLoc(IC s,A) by A1;
-  then Exec(I,s).IC A <> IC s by AMISTD_1:35;
+  Exec(I,s).IC A = succ IC s by A1;
+  then Exec(I,s).IC A <> IC s by ORDINAL1:14;
   hence thesis by Def3;
 end;
 
@@ -759,8 +757,7 @@ theorem Th26:
 proof
   let A be IC-Ins-separated definite (non empty stored-program AMI-Struct over
   N), I be Instruction of A;
-  assume
-  ex s being State of A st Exec(I,s).IC A <> IC s;
+  assume ex s being State of A st Exec(I,s).IC A <> IC s;
   then
 A1: IC A in Output I by Def3;
   Output I c= Out_U_Inp I by Th11;
@@ -775,10 +772,9 @@ proof
   let A be standard (IC-Ins-separated definite (non empty stored-program
   AMI-Struct over N)), I be Instruction of A;
   consider s being State of A;
-  assume
-  for s being State of A holds Exec(I,s).IC A = NextLoc(IC s,A);
-  then Exec(I,s).IC A = NextLoc(IC s,A);
-  then Exec(I,s).IC A <> IC s by AMISTD_1:35;
+  assume for s being State of A holds Exec(I,s).IC A = succ IC s;
+  then Exec(I,s).IC A = succ IC s;
+  then Exec(I,s).IC A <> IC s by ORDINAL1:14;
   hence thesis by Th26;
 end;
 
@@ -795,7 +791,7 @@ A1: for s being State of A, p being NAT-defined FinPartState of A holds
   assume
 Z: f in Out_U_Inp I;
 X: f in NAT;
-  NAT c= the carrier of A by AMI_1:def 3;
+  NAT c= the carrier of A by COMPOS_1:def 2;
   then reconsider ff=f as Object of A by X;
   consider s being State of A, w being Element of ObjectKind ff
   such that
@@ -822,8 +818,7 @@ proof
   assume
 A1: for s being State of A, o being Object of A, J being Instruction of
   A st InsCode I = InsCode J & o <> IC A holds Exec(J,s).o = s.o;
-  assume
-  o in Output I;
+  assume o in Output I;
   then ex s being State of A st s.o <> Exec(I,s).o by Def3;
   hence thesis by A1;
 end;

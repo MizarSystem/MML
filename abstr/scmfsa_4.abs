@@ -9,16 +9,18 @@ environ
  vocabularies NUMBERS, SUBSET_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2, CARD_1,
       GRAPHSP, ARYTM_3, XXREAL_0, SCMNORM, RELAT_1, FUNCT_1, CARD_3, TARSKI,
       STRUCT_0, FUNCT_4, XBOOLE_0, FUNCOP_1, FSM_1, CIRCUIT2, ARYTM_1, INT_1,
-      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1, FINSET_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XCMPLX_0,
-      NAT_1, NAT_D, FINSET_1, VALUED_1, INT_1, INT_2, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSEQ_2,
-      STRUCT_0, AMI_1, SCMNORM, AMI_3, RELOC, SCMFSA_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, AMI_5, RELOC, SCMFSA_2, SCMNORM, NAT_D,
-      RELSET_1, VALUED_1;
+      COMPLEX1, PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, ORDINAL1, FINSET_1,
+      NAT_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, CARD_3, XXREAL_0,
+      XCMPLX_0, MCART_1, NAT_1, NAT_D, FINSET_1, VALUED_1, INT_1, INT_2,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, FUNCT_7,
+      FINSEQ_1, FINSEQ_2, STRUCT_0, COMPOS_1, AMI_1, AMI_3, SCMFSA_2, AMISTD_2;
+ constructors DOMAIN_1, XXREAL_0, AMI_5, SCMFSA_2, NAT_D, RELSET_1, VALUED_1,
+      AMISTD_2;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      NUMBERS, XREAL_0, INT_1, CARD_3, SCMFSA_2, SCMNORM, FINSET_1, VALUED_1,
-      FUNCT_4, RELAT_1;
+      NUMBERS, XREAL_0, INT_1, CARD_3, SCMFSA_2, FINSET_1, VALUED_1, FUNCT_4,
+      RELAT_1, AMI_1, AMI_3, AMI_6, RELOC, XXREAL_0, SCMFSA10, AMISTD_2,
+      VALUED_0, COMPOS_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -28,15 +30,13 @@ reserve L, j, k, l, m, n, p, q for Element of NAT,
   A for Data-Location,
   I for Instruction of SCM;
 
-definition
-  canceled 2;
-  let i be Instruction of SCM+FSA , k be Element of NAT;
-  func IncAddr (i,k) -> Instruction of SCM+FSA means
-:: SCMFSA_4:def 3
-
-  ex I being
-  Instruction of SCM st I = i & it = IncAddr(I,k) if InsCode i in {6,7,8}
-  otherwise it = i;
+registration
+ let a,b be Int-Location;
+ cluster a:=b -> ins-loc-free;
+ cluster AddTo(a,b) -> ins-loc-free;
+ cluster SubFrom(a,b) -> ins-loc-free;
+ cluster MultBy(a,b) -> ins-loc-free;
+ cluster Divide(a,b) -> ins-loc-free;
 end;
 
 canceled 7;
@@ -46,8 +46,8 @@ theorem :: SCMFSA_4:8
   SCM+FSA;
 
 theorem :: SCMFSA_4:9
-  for k being Element of NAT, a,b being Int-Location holds IncAddr(
-  a:=b,k) = a:=b;
+  for k being Element of NAT, a,b being Int-Location
+   holds IncAddr(a:=b,k) = a:=b;
 
 theorem :: SCMFSA_4:10
   for k being Element of NAT, a,b being Int-Location holds IncAddr
@@ -70,14 +70,19 @@ theorem :: SCMFSA_4:14
   holds IncAddr(goto loc,k) = goto (loc + k);
 
 theorem :: SCMFSA_4:15
-  for k being Element of NAT,loc being Element of NAT
-, a being Int-Location holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k
-  );
+  for k being Element of NAT,loc being Element of NAT, a being Int-Location
+   holds IncAddr(a=0_goto loc,k) = a=0_goto (loc + k);
 
 theorem :: SCMFSA_4:16
   for k being Element of NAT,loc being Element of NAT
 , a being Int-Location holds IncAddr(a>0_goto loc,k) = a>0_goto (loc + k
   );
+
+registration
+ let a,b be Int-Location; let f be FinSeq-Location;
+ cluster b:=(f,a) -> ins-loc-free;
+ cluster (f,a):=b -> ins-loc-free;
+end;
 
 theorem :: SCMFSA_4:17
   for k being Element of NAT, a,b being Int-Location, f being
@@ -87,6 +92,12 @@ theorem :: SCMFSA_4:18
   for k being Element of NAT, a,b being Int-Location, f being
   FinSeq-Location holds IncAddr((f,a):=b,k) = (f,a):=b;
 
+registration
+ let a be Int-Location; let f be FinSeq-Location;
+ cluster a:=len f -> ins-loc-free;
+ cluster f:=<0,...,0>a -> ins-loc-free;
+end;
+
 theorem :: SCMFSA_4:19
   for k being Element of NAT, a being Int-Location, f being
   FinSeq-Location holds IncAddr(a:=len f,k) = a:=len f;
@@ -95,9 +106,7 @@ theorem :: SCMFSA_4:20
   for k being Element of NAT, a being Int-Location, f being
   FinSeq-Location holds IncAddr(f:=<0,...,0>a,k) = f:=<0,...,0>a;
 
-theorem :: SCMFSA_4:21
-  for i being Instruction of SCM+FSA, I st i = I holds IncAddr(i,k
-  ) = IncAddr(I,k);
+canceled;
 
 theorem :: SCMFSA_4:22
   for I being Instruction of SCM+FSA, k being Element of NAT holds
@@ -110,22 +119,6 @@ theorem :: SCMFSA_4:23
 
 begin :: Incrementing Addresses in a finite partial state
 
-definition
-  canceled 2;
-  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
-      k be Element of NAT;
-  func IncAddr(p,k) -> preProgram of SCM+FSA means
-:: SCMFSA_4:def 6
-
-  dom it = dom p & for m st m in dom p holds it. m = IncAddr(p/.m,k);
-end;
-
-registration
-  let p be finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
-      k be Element of NAT;
-  cluster IncAddr(p,k) -> (the Instructions of SCM+FSA)-valued;
-end;
-
 theorem :: SCMFSA_4:24
   for p being finite NAT-defined (the Instructions of SCM+FSA)-valued Function,
       k being Element of NAT for l
@@ -134,8 +127,7 @@ theorem :: SCMFSA_4:24
 theorem :: SCMFSA_4:25
   for I,J being
    finite NAT-defined (the Instructions of SCM+FSA)-valued Function
-    holds IncAddr(I +* J, n) = IncAddr
-  (I,n) +* IncAddr(J,n);
+    holds IncAddr(I +* J, n) = IncAddr(I,n) +* IncAddr(J,n);
 
 theorem :: SCMFSA_4:26
   for f being Function of the Instructions of SCM+FSA, the Instructions
@@ -145,8 +137,7 @@ of SCM+FSA st f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> i) for
   SCM+FSA) +* (halt SCM+FSA .--> IncAddr(i,n)))* IncAddr(s,n);
 
 theorem :: SCMFSA_4:27
-  for I being
-  finite NAT-defined (the Instructions of SCM+FSA)-valued Function
+  for I being finite NAT-defined (the Instructions of SCM+FSA)-valued Function
    holds IncAddr(IncAddr(I,m),n) = IncAddr(I,m+n);
 
 theorem :: SCMFSA_4:28
@@ -163,14 +154,5 @@ Exec(INS, s +* Start-At(IC s -'k,SCM+FSA)) = Exec(IncAddr(INS, k), s)
  +* Start-At (IC
   Exec(IncAddr(INS,k), s) -'k,SCM+FSA);
 
-begin :: Shifting the finite partial state
-
-canceled 5;
-
-theorem :: SCMFSA_4:35
-  for i,j being Element of NAT,
-      p being
-      finite NAT-defined (the Instructions of SCM+FSA)-valued Function
-      holds
-  Shift(IncAddr(p,i),j) = IncAddr(Shift(p,j),i);
-
+theorem :: SCMFSA_4:30
+ not InsCode i in {6,7,8} implies IncAddr(i,k) = i;

@@ -525,6 +525,10 @@ Type expected
 Functor pattern expected
 # 400
 Still not implemented
+# 401
+'not' expected
+# 402
+A bare infinitive expected
 # 450
 Too many variables
 # 451

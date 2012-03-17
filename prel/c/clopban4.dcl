@@ -2,8 +2,6 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="RELAT_1"/>
-<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -12,6 +10,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -22,6 +22,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="NORMSP_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_5"/>
@@ -44,23 +45,25 @@
 </Signature>
 <FCluster aid="CLOPBAN4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="20">
+<Typ kind="G" nr="22">
 <Cluster>
 <Adjective nr="39" value="false"/>
 <Adjective nr="62"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="129"/>
+<Adjective nr="97"/>
+<Adjective nr="98"/>
 <Adjective nr="133"/>
-<Adjective nr="135"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
-<Adjective nr="148"/>
-<Adjective nr="149"/>
+<Adjective nr="137"/>
+<Adjective nr="139"/>
+<Adjective nr="150"/>
+<Adjective nr="151"/>
 <Adjective nr="152"/>
-<Adjective nr="158"/>
-<Adjective nr="163"/>
+<Adjective nr="153"/>
+<Adjective nr="156"/>
+<Adjective nr="162"/>
+<Adjective nr="167"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -75,14 +78,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="18"/>
 <Adjective nr="24">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="32"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="165">
+<Adjective nr="169">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

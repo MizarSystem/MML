@@ -20,6 +20,7 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="FILTER_0"/>
 <ArticleID name="SUBSTLAT"/>
+<ArticleID name="HEYTING2"/>
 </Signature>
 <FCluster aid="HEYTING2" nr="1">
 <ArgTypes>
@@ -31,8 +32,37 @@
 <Adjective nr="29"/>
 </Cluster>
 </Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="80">
+<Func kind="K" nr="38">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+</Func>
+</Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="122">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="29"/>
+</Cluster>
+</FCluster>
+<FCluster aid="HEYTING2" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="29"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="121">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

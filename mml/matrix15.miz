@@ -19,9 +19,9 @@ environ
       SETWOP_2, FINSEQ_1, STRUCT_0, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1,
       FINSEQ_2, MATRIX_1, MATRIX_2, FVSUM_1, FINSOP_1, NAT_D, BINARITH,
       GROUP_4, MATRIX_3, MATRIX_6, MATRIX_7, FINSEQ_7, FUNCT_4, DOMAIN_1,
-      MATRIX11, MEASURE6,
-      PSCOMP_1, VECTSP_4, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP,
-      MATRIX13, PRE_POLY, MATRLIN, FUNCT_7, PNPROC_1, LAPLACE;
+      MATRIX11, MEASURE6, PSCOMP_1, VECTSP_4, VECTSP_6, VECTSP_7, VECTSP_9,
+      FINSEQOP, PRVECT_1, MATRIX13, PRE_POLY, MATRLIN, FUNCT_7, PNPROC_1,
+      LAPLACE;
  constructors SETWISEO, FINSOP_1, ALGSTR_1, FVSUM_1, XXREAL_0, GROUP_4,
       FINSEQ_7, WELLORD2, VECTSP_6, VECTSP_7, VECTSP_9, MATRIX_6, MATRIX_7,
       MATRIX11, MATRIX13, PNPROC_1, REALSET1, LAPLACE, BINOP_2, NAT_D,
@@ -29,7 +29,7 @@ environ
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, FVSUM_1, VECTSP_1,
       FUNCT_2, ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, CARD_1, FUNCOP_1,
       SETFAM_1, FINSEQ_2, MATRLIN, MATRIX13, XREAL_0, PNPROC_1, VECTSP_9,
-      VALUED_0, RELSET_1;
+      VALUED_0, RELSET_1, PRVECT_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FINSEQ_1, FINSEQ_2, MATRIX_1, GROUP_4,
       MATRIX_3, MATRIX_7, VECTSP_4, RELAT_1, LAPLACE, MATRIX13, FVSUM_1,
@@ -38,10 +38,10 @@ environ
       FINSOP_1, FRECHET, FUNCT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FVSUM_1, GROUP_1,
       LAPLACE, MATRIX_1, MATRIX_2, MATRIX_3, MATRIX_4, MATRIX_5, MATRIX_6,
       MATRIX_7, MATRIX11, MATRIX13, MATRIXR1, MATRIXR2, MATRLIN, NAT_1,
-      ORDINAL1, PARTFUN1, PNPROC_1, RELAT_1, RLVECT_1, STIRL2_1,
-      STRUCT_0, TARSKI, WELLORD2, VECTSP_1, VECTSP_4, VECTSP_6, VECTSP_7,
-      VECTSP_9, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ZFMISC_1, NAT_D,
-      PRE_POLY, MEASURE6;
+      ORDINAL1, PARTFUN1, PNPROC_1, RELAT_1, RLVECT_1, STIRL2_1, STRUCT_0,
+      TARSKI, WELLORD2, VECTSP_1, VECTSP_4, VECTSP_6, VECTSP_7, VECTSP_9,
+      XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ZFMISC_1, NAT_D, PRE_POLY,
+      MEASURE6;
  schemes FINSEQ_2, NAT_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -53,8 +53,7 @@ reserve x,y for set,
   a,b for Element of K,
   A,B,B1,B2,X,X1,X2 for (Matrix of K),
   A9 for (Matrix of m,n,K),
-  B9 for (Matrix of m,k,K),
-  M for Matrix of n,K;
+  B9 for (Matrix of m,k,K);
 
 theorem Th1:
   width A = len B implies (a*A) * B = a * (A*B)
@@ -74,8 +73,7 @@ A5: width aA=width A by MATRIX_3:def 5;
 A6: len aA=len A & len aA=len (aA*B) by A1,MATRIX_3:def 4,def 5;
 A7: now
     let i,j;
-    assume
-    [i,j] in Indices aAB;
+    assume [i,j] in Indices aAB;
     then
 A8: [i,j] in Indices AB by MATRIXR1:18;
     then i in dom AB by ZFMISC_1:106;
@@ -146,14 +144,12 @@ A1: a<>0.K;
 A2: for k st P[k] holds P[k+1]
   proof
     let k;
-    assume
-    P[k];
+    assume P[k];
     then
 A3: power(K).(a,k) <> 0.K;
 A4: k in NAT by ORDINAL1:def 13;
     let n;
-    assume
-    n=k+1;
+    assume n=k+1;
     then power(K).(a,n)=power(K).(a,k) * a by A4,GROUP_1:def 8;
     hence thesis by A1,A3,VECTSP_1:44;
   end;
@@ -161,8 +157,7 @@ A5: P[0]
   proof
 A6: 1_K<>0.K;
     let n;
-    assume
-    n=0;
+    assume n=0;
     hence thesis by A6,GROUP_1:def 8;
   end;
   for k holds P[k] from NAT_1:sch 2(A5,A2);
@@ -514,8 +509,7 @@ A10: IN<=m by A9,XREAL_1:10;
   dom (N Shift I) c=Seg (n+m)\Seg n
   proof
     let x;
-    assume
-    x in dom (N Shift I);
+    assume x in dom (N Shift I);
     then consider k be Element of NAT such that
 A11: n+k=x and
 A12: k in dom I by A4;
@@ -615,8 +609,7 @@ A22: ex kCx be Nat st Cx c= Seg kCx by MATRIX13:43;
   then
 A23: rng Sgm Cx=Cx by FINSEQ_1:def 13;
 A24: Sgm Cx is one-to-one by A22,FINSEQ_3:99;
-A25: for i,j st [i,j] in [:Seg l, Seg w:] ex x being Element of D st P[i,j,x
-  ]
+A25: for i,j st [i,j] in [:Seg l, Seg w:] ex x being Element of D st P[i,j,x ]
   proof
     let i,j such that
     [i,j] in [:Seg l, Seg w:];
@@ -643,8 +636,7 @@ A34:  Sgm Bx.x=i by A15,FUNCT_1:def 5;
       take BB=B*(x,y);
 A35:  now
         let m,n;
-        assume
-        m in dom Sgm Cx & n in dom Sgm Cy & Sgm Cx.m=i & Sgm Cy.n=j;
+        assume m in dom Sgm Cx & n in dom Sgm Cy & Sgm Cx.m=i & Sgm Cy.n=j;
         then
 A36:    Sgm Cx".i=m & Sgm Cy".j=n by A24,A21,FUNCT_1:54;
 A37:    Sgm By".j=y by A17,A29,A30,FUNCT_1:54;
@@ -949,8 +941,7 @@ A9: x = Line(A9,Ni) by A4,A7,MATRIX13:103;
 A10: dom A=Seg l by FINSEQ_1:def 3;
 A11: Ni in N
     proof
-      assume
-      not Ni in N;
+      assume not Ni in N;
       then Ni in dom A\N by A8,A10,XBOOLE_0:def 5;
       then x = w |-> 0.K by A2,A9
         .= 0.(w-VectSp_over K) by MATRIX13:102;
@@ -992,8 +983,7 @@ A4: card N=0;
     the_rank_of A = 0
     proof
 A5:   N={} by A4;
-      assume
-      the_rank_of A <>0;
+      assume the_rank_of A <>0;
       then consider i,j such that
 A6:   [i,j] in Indices A and
 A7:   A*(i,j) <> 0.K by MATRIX13:94;
@@ -1561,8 +1551,7 @@ A12: Sgm (Seg len A).i = (idseq len A).i by FINSEQ_3:54
   then
 A13: card (Seg width A) |->0.K = Line(A,i) by A4,A5
     .= Line(AB,i) * Sgm (Seg width A) by A3,A5,A11,A10,A8,A9,A12,MATRIX13:47;
-  assume
-  Line(B,i)<>width B|->0.K;
+  assume Line(B,i)<>width B|->0.K;
   then consider j such that
 A14: j in Seg width B and
 A15: Line(B,i).j<>(width B|->0.K).j by FINSEQ_2:139;
@@ -1609,8 +1598,7 @@ A33: Sgm Seg len A = idseq len A by FINSEQ_3:54
 A34: P c= Seg len A by A20,A21,MATRIX13:67;
     then
 A35: rng Sgm P=P by FINSEQ_1:def 13;
-    assume
-    i in P2;
+    assume i in P2;
     then i in P by A26,A33,A34,FUNCT_1:162;
     then consider x such that
 A36: x in dom Sgm P and
@@ -1637,13 +1625,11 @@ MATRIX13:87;
 end;
 
 begin  ::Basic properties of two transformations which
-
 ::transform finite sequences to matrices
 
 reserve D for non empty set,
   bD for FinSequence of D,
-  b,f,g for FinSequence of
-  K,
+  b,f,g for FinSequence of K,
   MD for Matrix of D;
 
 definition
@@ -1682,8 +1668,7 @@ proof
     1 in Seg 1;
     then
 A1: Line(LineVec2Mx bD,1)=(LineVec2Mx bD).1 by MATRIX_2:10;
-    assume
-    MD = LineVec2Mx bD;
+    assume MD = LineVec2Mx bD;
     hence thesis by A1,FINSEQ_1:57;
   end;
   assume that
@@ -1727,8 +1712,7 @@ A7: len (MD@)=1 by A5,MATRIX_1:def 7;
 end;
 
 theorem
-  len f = len g implies (LineVec2Mx f) + (LineVec2Mx g) = LineVec2Mx (f
-  + g)
+  len f = len g implies (LineVec2Mx f) + (LineVec2Mx g) = LineVec2Mx (f + g)
 proof
   set Lf=LineVec2Mx f;
   set Lg=LineVec2Mx g;
@@ -1766,8 +1750,7 @@ A10: dom Lf=Seg 1 & 1 in Seg 1 by A1,FINSEQ_1:def 3;
 end;
 
 theorem Th28:
-  len f = len g implies (ColVec2Mx f) + (ColVec2Mx g) = ColVec2Mx
-  (f + g)
+  len f = len g implies (ColVec2Mx f) + (ColVec2Mx g) = ColVec2Mx (f + g)
 proof
   set Cf=ColVec2Mx f;
   set Cg=ColVec2Mx g;
@@ -1895,8 +1878,7 @@ end;
 theorem Th33:
   Solutions_of(A,B) is non empty implies len A = len B
 proof
-  assume
-  Solutions_of(A,B) is non empty;
+  assume Solutions_of(A,B) is non empty;
   then consider x such that
 A1: x in Solutions_of(A,B) by XBOOLE_0:def 1;
   ex X st X=x & len X= width A & width X = width B & A * X = B by A1;
@@ -1943,8 +1925,7 @@ theorem Th35:
   Solutions_of(a*A,a*B)
 proof
 A1: width (a*B) = width B & width (a*A)=width A by MATRIX_3:def 5;
-  assume
-  X in Solutions_of(A,B);
+  assume X in Solutions_of(A,B);
   then consider X1 such that
 A2: X = X1 & len X1 = width A and
 A3: width X1 = width B & A * X1 = B;
@@ -1980,7 +1961,6 @@ end;
 
 Lm3: for D be non empty set for A,B be Matrix of D st len A = len B & width A
 = 0 & width B = 0 holds A = B
-
 proof
   let D be non empty set;
   let A,B be Matrix of D such that
@@ -1991,7 +1971,6 @@ A3: width B = 0;
   then Indices A = {} by ZFMISC_1:113;
   then
   for i,j st [i,j] in Indices A holds A*(i,j) = B*(i,j);
-
   hence thesis by A1,A2,A3,MATRIX_1:21;
 end;
 
@@ -2112,7 +2091,6 @@ end;
 
 Lm4: a <> 0.K implies Solutions_of(A9,B9) = Solutions_of(RLine(A9,i,a*Line(A9,
 i)),RLine(B9,i,a*Line(B9,i)))
-
 proof
   assume
 A1: a <> 0.K;
@@ -2122,9 +2100,7 @@ A1: a <> 0.K;
   proof
     let x such that
 A2: x in Solutions_of(A9,B9);
-
     ex X st x=X & len X = width A9 & width X = width B9 & A9 * X = B9 by A2;
-
     hence thesis by A2,Th38;
   end;
   let x such that
@@ -2138,15 +2114,11 @@ A4: not i in Seg m;
   end;
   suppose
 A5: i in Seg m;
-
     reconsider aLA=a*Line(A9,i),aLB=a*Line(B9,i),aLAR=a"*Line(RA,i), aLBR=a"*
     Line(RB,i) as Element of (the carrier of K)* by FINSEQ_1:def 11;
-
     set RRB=RLine(RB,i,a"*Line(RB,i));
     set RRA=RLine(RA,i,a"*Line(RA,i));
-
 A6: ex X st x=X & len X = width RA & width X = width RB & RA * X = RB by A3;
-
 A7: len (a*Line(A9,i))=width A9 by FINSEQ_1:def 18;
     then
 A8: a"*Line(RA,i) = a"*(a*Line(A9,i)) by A5,MATRIX11:28
@@ -2268,7 +2240,6 @@ end;
 
 Lm5: j in Seg m & i <> j implies Solutions_of(A9,B9) = Solutions_of(RLine(A9,i
 ,Line(A9,i) + a*Line(A9,j)), RLine(B9,i,Line(B9,i) + a*Line(B9,j)))
-
 proof
   assume that
 A1: j in Seg m and
@@ -2281,9 +2252,7 @@ A2: i <> j;
   proof
     let x such that
 A3: x in Solutions_of(A9,B9);
-
     ex X st x=X & len X = width A9 & width X = width B9 & A9 * X = B9 by A3;
-
     hence thesis by A1,A3,Th39;
   end;
   let x such that
@@ -2297,27 +2266,20 @@ A5: not i in Seg m;
   end;
   suppose
 A6: i in Seg m;
-
     reconsider LLA=Line(A9,i)+a*LA,LLB=Line(B9,i)+a*LB, LLRA=Line(RA,i)+(-a)*
-
 Line(RA,j),LLRB=Line(RB,i)+(-a)*Line(RB,j) as Element of (the carrier of K)*
 by FINSEQ_1:def 11;
-
     set RRB=RLine(RB,i,Line(RB,i)+(-a)*Line(RB,j));
     set RRA=RLine(RA,i,Line(RA,i)+(-a)*Line(RA,j));
-
 A7: ex X st x=X & len X = width RA & width X = width RB & RA * X = RB by A4;
-
 A8: Line(RB,j)=LB by A1,A2,MATRIX11:28;
 A9: len (Line(B9,i)+a*LB)=width B9 by FINSEQ_1:def 18;
     then
 A10: width RB=width B9 by MATRIX11:def 3;
     Line(RB,i)=Line(B9,i)+a*LB by A6,A9,MATRIX11:28;
-
     then
 A11: Line(RB,i)+(-a)*Line(RB,j)= Line(B9,i)+a*LB+(-1_K*a)*LB by A8,
 VECTSP_1:def 19
-
       .= Line(B9,i)+a*LB+((-1_K)*a)*LB by VECTSP_1:41
       .= Line(B9,i)+a*LB+(-1_K)*(a*LB) by FVSUM_1:67
       .= Line(B9,i)+a*LB+(-(a*LB)) by FVSUM_1:72
@@ -2336,11 +2298,9 @@ A15: len (Line(A9,i)+a*LA)=width A9 by FINSEQ_1:def 18;
     then
 A16: width RA=width A9 by MATRIX11:def 3;
     Line(RA,i)=Line(A9,i)+a*LA by A6,A15,MATRIX11:28;
-
     then
 A17: Line(RA,i)+(-a)*Line(RA,j)= Line(A9,i)+a*LA+(-1_K*a)*LA by A14,
 VECTSP_1:def 19
-
       .= Line(A9,i)+a*LA+((-1_K)*a)*LA by VECTSP_1:41
       .= Line(A9,i)+a*LA+(-1_K)*(a*LA) by FVSUM_1:67
       .= Line(A9,i)+a*LA+(-(a*LA)) by FVSUM_1:72
@@ -2374,8 +2334,7 @@ A2: i = j implies a <> -1_K;
 A3: i=j;
 A4: 1_K+a <> 0.K
     proof
-      assume
-      1_K+a=0.K;
+      assume 1_K+a=0.K;
       then -1.K = -1.K+(1_K+a) by RLVECT_1:def 7
         .= (-1.K+1_K)+a by RLVECT_1:def 6
         .= 0.K+a by VECTSP_1:66
@@ -2428,7 +2387,6 @@ end;
 
 Lm6: for nt be Element of n-tuples_on NAT holds i in Seg n implies Line(Segm(A
 ,nt,Sgm Seg width A),i)=Line(A,nt.i)
-
 proof
   let nt be Element of n-tuples_on NAT;
   set S=Seg width A;
@@ -2439,8 +2397,7 @@ A2: dom Line(A,nt.i)=S by FINSEQ_1:def 3;
   Sgm S = idseq width A by FINSEQ_3:54;
   then
 A3: Line(A,nt.i) * Sgm S = Line(A,nt.i) by A2,RELAT_1:78;
-  assume
-  i in Seg n;
+  assume i in Seg n;
   hence thesis by A3,A1,MATRIX13:24;
 end;
 
@@ -2527,8 +2484,7 @@ A7: width SB=card Seg width B by A3,MATRIX_1:24;
     then
 A8: width SB=width B by FINSEQ_1:78;
     let x;
-    assume
-    x in Solutions_of(SA,SB);
+    assume x in Solutions_of(SA,SB);
     then consider X be Matrix of K such that
 A9: x = X and
 A10: len X = width SA and
@@ -2665,8 +2621,7 @@ A7: x in Solutions_of(DelLine(A,i),DelLine(B,i));
 A8: dom A=S by FINSEQ_1:def 3;
 A9: now
     let j;
-    assume
-    j in (dom A)\(S\{i});
+    assume j in (dom A)\(S\{i});
     then j in dom A /\{i} by A8,XBOOLE_1:48;
     then j in {i} by XBOOLE_0:def 4;
     hence Line(A,j) = width A |-> 0.K & Line(B,j) = width B |-> 0.K by A3,A5,
@@ -2726,8 +2681,7 @@ A9: n>0;
 A10: card Seg n = card Seg n;
 A11: dom A=Seg n by A2,FINSEQ_1:def 3;
 A12: dom B=Seg n by A7,FINSEQ_1:def 3;
-    assume
-    P is one-to-one;
+    assume P is one-to-one;
     then P is onto by A10,STIRL2_1:70;
     then rng P=Seg n by FUNCT_2:def 3;
     then for i st i in (dom A) \ rng IDnP holds Line(A,i) = width A |-> 0.K &
@@ -3137,16 +3091,14 @@ FVSUM_1:74
 end;
 
 theorem Th51:
-  for A be Matrix of 0,n,K, B be Matrix of 0,m,K holds
-  Solutions_of(A,B) = {{}}
+  for A be Matrix of 0,n,K, B be Matrix of 0,m,K holds Solutions_of(A,B) = {{}}
 proof
   let A be Matrix of 0,n,K, B be Matrix of 0,m,K;
 A1: len A=0 by MATRIX_1:def 3;
 A2: Solutions_of(A,B) c= {{}}
   proof
     let x;
-    assume
-    x in Solutions_of(A,B);
+    assume x in Solutions_of(A,B);
     then ex X st X=x &len X = width A & width X = width B & A * X = B;
     then x={} by A1,MATRIX_1:def 4;
     hence thesis by TARSKI:def 1;
@@ -3168,8 +3120,7 @@ proof
   let B be Matrix of K;
   set A=0.(K,n,k);
   set ZERO=0.(K,n,width B);
-  assume
-  Solutions_of(0.(K,n,k),B) is non empty;
+  assume Solutions_of(0.(K,n,k),B) is non empty;
   then consider x such that
 A1: x in Solutions_of(0.(K,n,k),B) by XBOOLE_0:def 1;
 A2: len A=n by MATRIX_1:def 3;
@@ -3201,12 +3152,10 @@ theorem Th53:
   in Solutions_of(A,B) implies x is Matrix of k,m,K
 proof
   let A be Matrix of n,k,K, B be Matrix of n,m,K;
-  assume
-  n > 0;
+  assume n > 0;
   then
 A1: width A=k & width B=m by MATRIX_1:24;
-  assume
-  x in Solutions_of(A,B);
+  assume x in Solutions_of(A,B);
   then ex X st X=x & len X = k & width X = m & A * X = B by A1;
   hence thesis by MATRIX_2:7;
 end;
@@ -3225,14 +3174,12 @@ A3: width B=m by A1,MATRIX_1:24;
   thus Solutions_of(A,B) c= XX
   proof
     let x;
-    assume
-    x in Solutions_of(A,B);
+    assume x in Solutions_of(A,B);
     then x is Matrix of k,m,K by A1,Th53;
     hence thesis;
   end;
   let x;
-  assume
-  x in XX;
+  assume x in XX;
   then consider X be Matrix of k,m,K such that
 A4: x=X and
   not contradiction;
@@ -3277,8 +3224,7 @@ A3: for i,j st [i,j] in Indices B holds B*(i,j)=(A*E)*(i,j) by ZFMISC_1:113;
 A4: Solutions_of(A,B) c= {{}}
     proof
       let x;
-      assume
-      x in Solutions_of(A,B);
+      assume x in Solutions_of(A,B);
       then reconsider X=x as Matrix of 0,0,K by A1,Th53;
       len X=0 by MATRIX_1:def 3;
       then X={};
@@ -3359,8 +3305,7 @@ A9:     ex f be FinSequence of NAT st (for i,j st [i,j] in Indices A9
 &i>len f&j<=n holds A9*(i,j)=0.K())& f is one-to-one & len f <= n &len f<=n()&
 rng f c= Seg n & for i,j st i in dom f holds PP[f,i,j,A9] by A6,NAT_1:13;
         consider f be FinSequence of NAT such that
-A10:    for i,j st [i,j] in Indices A9&i>len f&j<=n holds A9*(i,j)=0.
-        K() and
+A10:    for i,j st [i,j] in Indices A9&i>len f&j<=n holds A9*(i,j)=0. K() and
 A11:    f is one-to-one and
 A12:    len f <= n and
 A13:    len f<=n() and
@@ -3416,8 +3361,7 @@ A34:      for k st QQ[k] holds QQ[k+1]
             let k such that
 A35:        QQ[k];
             set k1=k+1;
-            assume
-            k1<=n();
+            assume k1<=n();
             then consider
             AA be Matrix of n(),m(),K(), BB be Matrix of n(),m9( ),K(
             ) such that
@@ -3752,14 +3696,12 @@ A114:     ( P[A0,B0])& r = the_rank_of A0 &( A0*(len f+1,n1) <> 0.K()
           ,j st i in dom f holds PP[f,i,j,A0];
 A115:     QQ[0]
           proof
-            assume
-            0<=n();
+            assume 0<=n();
             take A0,B0;
             now
 A116:         dom A0=Seg len A0 by FINSEQ_1:def 3;
               let j;
-              assume
-              j in dom A0 \ {len f+1} & j<=0;
+              assume j in dom A0 \ {len f+1} & j<=0;
               hence A0*(j,n1) = 0.K() by A116;
             end;
             hence thesis by A114;
@@ -3773,8 +3715,7 @@ A118:     Aa*(len f+1,n1) <> 0.K() and
 A119:     for i,j st [i,j] in Indices Aa & i>len f&j<=n holds Aa*(i,
           j)=0.K() and
 A120:     for i,j st i in dom f holds PP[f,i,j,Aa] and
-A121:     for j st j in dom Aa\{len f+1}&j<=n() holds Aa*(j,n1)=0.K(
-          );
+A121:     for j st j in dom Aa\{len f+1}&j<=n() holds Aa*(j,n1)=0.K( );
           take Aa,Bb;
           thus P[Aa,Bb] & r = the_rank_of Aa by A117;
           take f9=f^<*n1*>;
@@ -3957,8 +3898,7 @@ A173:     Seg n\/{n1}=Seg n1 by FINSEQ_1:11;
       end;
 A174: Q[0]
       proof
-        assume
-        0<=m();
+        assume 0<=m();
         take A9=A(),B9=B();
         thus P[A9,B9] & r = the_rank_of A9 by A1;
         take f=<*>NAT;
@@ -3982,8 +3922,7 @@ A179: ex f be FinSequence of NAT st (for i,j st [i,j] in Indices A9&
 i>len f&j<=m() holds A9*(i,j)=0.K())& f is one-to-one & len f <= m() & len f<=n
       () & rng f c= Seg m() & for i,j st i in dom f holds PP[f,i,j,A9];
       consider f be FinSequence of NAT such that
-A180: for i,j st [i,j] in Indices A9&i>len f&j<=m() holds A9*(i,j)=
-      0.K() and
+A180: for i,j st [i,j] in Indices A9&i>len f&j<=m() holds A9*(i,j)= 0.K() and
 A181: f is one-to-one and
       len f <= m() and
 A182: len f<=n() and
@@ -4007,8 +3946,7 @@ A189: Indices S=[:Seg L,Seg L:] by MATRIX_1:25;
       proof
 A190:   len D=L by MATRIX_3:def 10;
         let k be Element of NAT;
-        assume
-        k in dom D;
+        assume k in dom D;
         then
 A191:   k in Seg L by A190,FINSEQ_1:def 3;
         then [k,k] in Indices S by A189,ZFMISC_1:106;
@@ -4024,8 +3962,7 @@ A192: Product D<>0.K() by FVSUM_1:107;
         let i,j such that
 A193:   [i,j] in Indices S;
 A194:   i in Seg L by A189,A193,ZFMISC_1:106;
-        assume
-        i>j;
+        assume i>j;
         then
 A195:   i in dom f \{j} by A188,A194,ZFMISC_1:64;
         reconsider i9=i,j9=j as Element of NAT by ORDINAL1:def 13;
@@ -4105,7 +4042,7 @@ A220: rng f c= Seg width A9 and
 A221: for i,j st i in dom f holds PP[f,i,j,A9] by A217;
   not 0 in rng f by A220;
   then reconsider rngf=rng f as without_zero finite Subset of NAT by A220,
-MEASURE6:def 7,XBOOLE_1:1;
+MEASURE6:def 6,XBOOLE_1:1;
 A222: n()=0 or n()>0;
   set S=Segm(A9,Seg card rngf,rngf);
 A223: dom f=Seg r by A215,A218,FINSEQ_1:def 3;
@@ -4427,7 +4364,6 @@ A74:    i9<>j9;
 end;
 
 begin :: The main theorem
-
 ::  The Kronecker-Capelli theorem
 
 theorem Th57:
@@ -4545,8 +4481,7 @@ A33:  Seg len B1=dom B1 & width B1=wB by A20,FINSEQ_1:def 3,MATRIX_1:24;
       thus the_rank_of A=the_rank_of(A^^B) implies Solutions_of(A,B) is non
       empty
       proof
-        assume
-        the_rank_of A = the_rank_of (A^^B);
+        assume the_rank_of A = the_rank_of (A^^B);
         then the_rank_of A1 = the_rank_of (A1^^B1) by A16,A17;
         then for i st i in (dom A1)\Seg card N holds Line(A1,i) = width A1|->
         0.K & Line(B1,i) = width B1 |-> 0.K by A26,A32,A28,Th24,XBOOLE_1:36;
@@ -4564,8 +4499,7 @@ A35:  Seg L\Seg card N c= Seg L by XBOOLE_1:36;
       thus Solutions_of(A,B) is non empty implies the_rank_of A=the_rank_of (A
       ^^B)
       proof
-        assume
-        Solutions_of(A,B) is non empty;
+        assume Solutions_of(A,B) is non empty;
         then Solutions_of(A1,B1) is non empty by A17;
         then consider x such that
 A36:    x in Solutions_of(A1,B1) by XBOOLE_0:def 1;
@@ -4647,8 +4581,7 @@ A60:  Indices ZERO=[:Seg L,Seg wA:] by A20,MATRIX_1:24;
       proof
         assume
 A61:    Solutions_of(A,B) is non empty;
-        assume
-        the_rank_of A <> the_rank_of (A^^B);
+        assume the_rank_of A <> the_rank_of (A^^B);
         then consider i,j such that
 A62:    [i,j] in Indices (A9^^B9) and
 A63:    (A9^^B9)*(i,j)<>0.K by A52,MATRIX13:94;
@@ -4731,12 +4664,10 @@ A7: len A=len (ColVec2Mx b) by A1,Th33;
 end;
 
 theorem Th59:
-  for f st ColVec2Mx f in Solutions_of(A,ColVec2Mx b) holds len f
-  = width A
+  for f st ColVec2Mx f in Solutions_of(A,ColVec2Mx b) holds len f = width A
 proof
   let f;
-  assume
-  ColVec2Mx f in Solutions_of(A,ColVec2Mx b);
+  assume ColVec2Mx f in Solutions_of(A,ColVec2Mx b);
   then
 A1: ex g st ColVec2Mx f = ColVec2Mx g & len g = width A by Th58;
   len ColVec2Mx f = len f by MATRIX_1:def 3;
@@ -4753,8 +4684,7 @@ definition
     Solutions_of(A,b) c= the carrier of (width A)-VectSp_over K
     proof
       let x;
-      assume
-      x in Solutions_of(A,b);
+      assume x in Solutions_of(A,b);
       then consider f such that
 A1:   x=f and
 A2:   ColVec2Mx f in Solutions_of(A,ColVec2Mx b);
@@ -4782,8 +4712,7 @@ registration
 A1: ColVec2Mx k0=0.(K,k,1) by Th32;
 A2: now
       let a being Element of K,v being Element of V;
-      assume
-      v in S;
+      assume v in S;
       then consider f such that
 A3:   v=f and
 A4:   ColVec2Mx f in Solutions_of(A,ColVec2Mx k0);
@@ -4861,8 +4790,7 @@ A6: A * X = ColVec2Mx b by A4;
 end;
 
 theorem Th61:
-  width A <> 0 or len A = 0 implies Solutions_of(A,len A|->0.K) is
-  non empty
+  width A <> 0 or len A = 0 implies Solutions_of(A,len A|->0.K) is non empty
 proof
   set L=len A|->0.K;
 A1: len L=len A by FINSEQ_1:def 18;
@@ -4923,8 +4851,7 @@ proof
   reconsider B=b as Element of (len b)-tuples_on the carrier of K by
 FINSEQ_2:110;
   set CB=ColVec2Mx B;
-  assume
-  Solutions_of(A,b) is non empty;
+  assume Solutions_of(A,b) is non empty;
   then consider x such that
 A1: x in Solutions_of(A,B) by XBOOLE_0:def 1;
   consider f such that
@@ -4948,8 +4875,7 @@ A7: CB+(-1_K)*CB = ColVec2Mx (B+(-1_K)*B) by Th28
       .= ColVec2Mx (B+-B) by FVSUM_1:72
       .= ColVec2Mx (len A|->0.K) by A4,FVSUM_1:35;
     let y;
-    assume
-    y in Solutions_of(A,b);
+    assume y in Solutions_of(A,b);
     then consider g such that
 A8: y=g and
 A9: ColVec2Mx g in Solutions_of(A,CB);
@@ -4987,8 +4913,7 @@ A14: width CB=1 & width ColVec2Mx (len A|->0.K)=1 or width CB=0 & width
     ColVec2Mx (len A|->0.K)=0.(K,len A,1) by Th32;
     then
 A15: CB+ColVec2Mx (len A|->0.K)=CB by A4,MATRIX_3:6;
-    assume
-    y in F+ Space_of_Solutions_of A;
+    assume y in F+ Space_of_Solutions_of A;
     then consider U be Element of V such that
 A16: U in Space_of_Solutions_of A and
 A17: y=F+U by VECTSP_4:57;
@@ -5062,13 +4987,12 @@ theorem
 proof
   let A such that
 A1: Space_of_Solutions_of A = (width A)-VectSp_over K;
-  assume
-  the_rank_of A <> 0;
+  assume the_rank_of A <> 0;
   then consider i,j such that
 A2: [i,j] in Indices A and
 A3: A*(i,j) <> 0.K by MATRIX13:94;
 A4: j in Seg width A by A2,ZFMISC_1:106;
-B4: width A <> 0 by A4;
+then B4: width A <> 0;
   set L=Line(1.(K,width A),j);
 A5: width 1.(K,width A)=width A by MATRIX_1:25;
   then
@@ -5250,7 +5174,6 @@ end;
 
 Lm7: for A be set st A c= dom g ex ga,gb be FinSequence of K st ga=g*Sgm A &
 gb=g*Sgm (dom g\A) & Sum g = Sum ga + Sum gb
-
 proof
 A1: rng g c= the carrier of K by FINSEQ_1:def 4;
   set Ad=the addF of K;
@@ -5264,18 +5187,13 @@ A6: (idseq len g)"A=A by A4,A2,FUNCT_2:171;
 A7: dom g\A c= dom g by XBOOLE_1:36;
   then
 A8: rng Sgm(dom g\A)=dom g\A by A2,FINSEQ_1:def 13;
-
   then reconsider ga=g*Sgm A,gb=g*Sgm (dom g\A) as FinSequence by A4,A5,
 FINSEQ_1:20,XBOOLE_1:36;
-
   (idseq len g)"(dom g\A)=dom g\A by A2,A7,FUNCT_2:171;
-
   then
 A9: Sgm(A)^Sgm(dom g\A) is Permutation of dom g by A6,A3,FINSEQ_3:123;
-
   then reconsider gS=g*(Sgm(A)^Sgm(dom g\A)) as FinSequence of K by A2,
 FINSEQ_2:50;
-
   rng ga c=rng g by RELAT_1:45;
   then
 A10: rng ga c= the carrier of K by A1,XBOOLE_1:1;
@@ -5321,8 +5239,7 @@ A15: len A=n by A4,MATRIX_1:24;
   lines MV c= Solutions_of(A,len A|->0.K)
   proof
     let x;
-    assume
-    x in lines MV;
+    assume x in lines MV;
     then consider k such that
 A16: k in Seg (m-'n) and
 A17: x = Line(MV,k) by MATRIX13:103;
@@ -5331,8 +5248,7 @@ A18: m = width MV by A5,MATRIX_1:24
       .= len Line(MV,k) by FINSEQ_1:def 18;
     now
       let i;
-      assume
-      i in Seg 1;
+      assume i in Seg 1;
       then
 A19:  i=1 by FINSEQ_1:4,TARSKI:def 1;
       Col(C,1)=Line(MV,k) by A6,A18,Th26;
@@ -5368,8 +5284,7 @@ A28: the carrier of Space_of_Solutions_of A c= the carrier of Lin(lines MV)
   proof
     set SN=Seg m\N;
     let y;
-    assume
-    y in the carrier of Space_of_Solutions_of A;
+    assume y in the carrier of Space_of_Solutions_of A;
     then y in Solutions_of(A,len A|->0.K) by A6,A14,Def5;
     then consider f such that
 A29: f=y and
@@ -5647,7 +5562,7 @@ A12:    n=0;
   then (0).SS = (Omega).SS by VECTSP_4:37;
   hence thesis by VECTSP_9:33;
 end;
-
+ 
 :: The dimension of Space of Solutions of linear equations
 
 theorem Th68:
@@ -5681,8 +5596,7 @@ A6:   P[A1,B1];
 A7:   dom A1 = Seg len A1 by FINSEQ_1:def 3
         .= Seg L by MATRIX_1:def 3;
       let i,j;
-      assume
-      j in dom A1 &( i = j implies a <> -1_K);
+      assume j in dom A1 &( i = j implies a <> -1_K);
       then Space_of_Solutions_of RLine(A1,i,Line(A1,i) + a*Line(A1,j)) =
       Space_of_Solutions_of A1 by A4,A7,Th65
         .= Space_of_Solutions_of A9 by A6;
@@ -5885,8 +5799,7 @@ A12: Segm(A9,Seg card N,N) = 1.(K,card N) and
   lines A9 c= the carrier of Lin(lines A9)
   proof
     let x;
-    assume
-    x in lines A9;
+    assume x in lines A9;
     then x in Lin(lines A9) by VECTSP_7:13;
     hence thesis by STRUCT_0:def 5;
   end;
@@ -6081,8 +5994,7 @@ A5: width AB=width B by A1,MATRIX_3:def 4;
   Space_of_Solutions_of AB
   proof
     let x;
-    assume
-    x in the carrier of Space_of_Solutions_of B;
+    assume x in the carrier of Space_of_Solutions_of B;
     then x in Solutions_of(B,len B|->0.K) by A3,Def5;
     then consider f such that
 A6: f=x and
@@ -6197,8 +6109,7 @@ A8: the carrier of Space_of_Solutions_of AB c= the carrier of
 A9: 1.(K,n)=A~*A by MATRIX_6:def 2;
 A10: len (A~)=n by MATRIX_1:25;
     let x;
-    assume
-    x in the carrier of Space_of_Solutions_of AB;
+    assume x in the carrier of Space_of_Solutions_of AB;
     then x in Solutions_of(AB,len AB|->0.K) by A2,A3,A6,A7,A4,A5,Def5;
     then consider f such that
 A11: f=x and
@@ -6297,4 +6208,3 @@ A8: Det (A@)<>0.K by A2,MATRIXR2:43;
       .= the_rank_of B by MATRIX13:84;
   end;
 end;
-

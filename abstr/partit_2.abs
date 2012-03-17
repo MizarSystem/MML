@@ -8,13 +8,14 @@ environ
 
  vocabularies XBOOLE_0, SUBSET_1, FUNCT_2, MARGREL1, PARTIT1, EQREL_1, FUNCT_1,
       SETFAM_1, RELAT_1, ZFMISC_1, TARSKI, RELAT_2, XBOOLEAN, BVFUNC_2,
-      BVFUNC_1, FUNCT_4;
+      BVFUNC_1, FUNCT_4, FUNCT_5, OPOSET_1, BINOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MARGREL1, RELAT_1,
-      RELAT_2, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4, EQREL_1, PARTIT1, BVFUNC_1,
-      BVFUNC_2;
- constructors SETFAM_1, FUNCT_4, XCMPLX_0, BVFUNC_1, BVFUNC_2, RELSET_1;
+      RELAT_2, FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_5, EQREL_1,
+      PARTIT1, BVFUNC_1, BVFUNC_2;
+ constructors SETFAM_1, FUNCT_4, XCMPLX_0, BVFUNC_1, BVFUNC_2, RELSET_1,
+      FUNCT_5, RELAT_2, DOMAIN_1, BINOP_1;
  registrations SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, EQREL_1, MARGREL1,
-      PARTIT1;
+      PARTIT1, RELSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE, ARITHM;
 
 
@@ -22,8 +23,7 @@ begin :: Preliminaries
 
 reserve Y for non empty set,
   a for Element of Funcs(Y,BOOLEAN),
-  G for Subset
-  of PARTITIONS(Y),
+  G for Subset of PARTITIONS(Y),
   P,Q for a_partition of Y;
 
 definition
@@ -54,40 +54,38 @@ being Element of Y holds x in EqClass(y,R) iff ex z being Element of Y st x in
   EqClass(z,P) & z in EqClass(y,Q);
 
 theorem :: PARTIT_2:7
-  for R,S being Relation, Y being set st R is_reflexive_in Y & S
-  is_reflexive_in Y holds R*S is_reflexive_in Y;
+  for R,S being Relation, Y being set st R is_reflexive_in Y &
+  S is_reflexive_in Y holds R*S is_reflexive_in Y;
 
 theorem :: PARTIT_2:8
-  for R being Relation, Y being set st R is_reflexive_in Y holds Y
-  c= field R;
+  for R being Relation, Y being set st R is_reflexive_in Y holds Y c= field R;
 
 theorem :: PARTIT_2:9
-  for Y being set, R being Relation of Y st R is_reflexive_in Y holds Y
-  = field R;
+  for Y being set, R being Relation of Y st R is_reflexive_in Y holds
+    Y = field R;
 
 theorem :: PARTIT_2:10
-  for R,S being Equivalence_Relation of Y st R*S = S*R holds R*S is
-  Equivalence_Relation of Y;
+  for R,S being Equivalence_Relation of Y st R*S = S*R holds
+  R*S is Equivalence_Relation of Y;
 
 begin :: Boolean-valued Functions
 
 theorem :: PARTIT_2:11
-  for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b holds 'not'
-  b '<' 'not' a;
+  for a,b being Element of Funcs(Y,BOOLEAN) st a '<' b holds
+  'not' b '<' 'not' a;
 
 canceled;
 
 theorem :: PARTIT_2:13
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
-PARTITIONS(Y), P being a_partition of Y st a '<' b holds All(a,P,G) '<' All(b,P
-  ,G);
+  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of PARTITIONS(Y),
+      P being a_partition of Y st a '<' b holds All(a,P,G) '<' All(b,P,G);
 
 canceled;
 
 theorem :: PARTIT_2:15
-  for a,b being Element of Funcs(Y,BOOLEAN), G being Subset of
-PARTITIONS(Y), P being a_partition of Y st a '<' b holds Ex(a,P,G) '<' Ex(b,P,G
-  );
+  for a,b being Element of Funcs(Y,BOOLEAN),
+      G being Subset of PARTITIONS(Y), P being a_partition of Y st
+    a '<' b holds Ex(a,P,G) '<' Ex(b,P,G);
 
 begin
 
@@ -96,8 +94,7 @@ theorem :: PARTIT_2:16
   P c= G & Q c= G holds ERl('/\'P)*ERl('/\'Q) = ERl('/\'Q)*ERl('/\'P);
 
 theorem :: PARTIT_2:17
-  G is independent implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,
-  G);
+  G is independent implies All(All(a,P,G),Q,G) = All(All(a,Q,G),P,G);
 
 theorem :: PARTIT_2:18
   G is independent implies Ex(Ex(a,P,G),Q,G) = Ex(Ex(a,Q,G),P,G);
@@ -107,3 +104,99 @@ theorem :: PARTIT_2:19
 Y), P,Q being a_partition of Y st G is independent holds Ex(All(a,P,G),Q,G) '<'
   All(Ex(a,Q,G),P,G);
 
+begin :: Moved from OPOSET_1, 2010.03.11, A.T.
+
+reserve x,y,z for set,
+  S, X for non empty set,
+  R for Relation of X;
+
+notation
+  let A,B be set;
+  synonym [#](A,B) for [:A,B:];
+end;
+
+definition
+  let A,B be set;
+  func {}(A,B) -> Relation of A,B equals
+:: PARTIT_2:def 1
+  {};
+  redefine func [#](A,B) -> Relation of A,B;
+end;
+
+registration let A,B be set;
+ cluster {}(A,B) -> empty;
+end;
+
+theorem :: PARTIT_2:20
+  field id X = X;
+
+theorem :: PARTIT_2:21
+  op1 = {[{},{}]};
+
+theorem :: PARTIT_2:22
+  for A,B being set holds field {}(A,B) = {};
+
+theorem :: PARTIT_2:23
+  R is_reflexive_in X implies R is reflexive & field R = X;
+
+theorem :: PARTIT_2:24
+  R is_symmetric_in X implies R is symmetric;
+
+theorem :: PARTIT_2:25
+  R is symmetric implies R is_symmetric_in S;
+
+theorem :: PARTIT_2:26
+  R is antisymmetric implies R is_antisymmetric_in S;
+
+theorem :: PARTIT_2:27
+  R is_antisymmetric_in X implies R is antisymmetric;
+
+theorem :: PARTIT_2:28
+  R is transitive implies R is_transitive_in S;
+
+theorem :: PARTIT_2:29
+  R is_transitive_in X implies R is transitive;
+
+theorem :: PARTIT_2:30
+  R is asymmetric implies R is_asymmetric_in S;
+
+theorem :: PARTIT_2:31
+  R is_asymmetric_in X implies R is asymmetric;
+
+theorem :: PARTIT_2:32
+  R is irreflexive & field R c= S implies R is_irreflexive_in S;
+
+theorem :: PARTIT_2:33
+  R is_irreflexive_in X implies R is irreflexive;
+
+:: Some existence conditions on non-empty relations
+
+registration
+  cluster empty -> irreflexive asymmetric transitive Relation;
+end;
+
+:: Double negation property of the internal Complement
+
+definition
+  let f be Function;
+  attr f is involutive means
+:: PARTIT_2:def 2
+
+  for x being set st x in dom f holds f.(f.x) = x;
+end;
+
+definition
+  let X;
+  let f be UnOp of X;
+  redefine attr f is involutive means
+:: PARTIT_2:def 3
+  for x being Element of X holds f.(f.x) = x;
+end;
+
+registration
+  cluster op1 -> involutive Function;
+end;
+
+registration let X;
+  cluster id X -> involutive;
+end;

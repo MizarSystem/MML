@@ -15,7 +15,8 @@ environ
       FDIFF_1, XREAL_0, INT_1, SIN_COS4, PARTFUN2, RFUNCT_2, FCONT_1, XBOOLE_0,
       FDIFF_9, SEQ_2;
  constructors REAL_1, SQUARE_1, RCOMP_1, RFUNCT_1, FDIFF_1, RFUNCT_2, FCONT_1,
-      SIN_COS, PARTFUN2, SIN_COS4, RELSET_1, FDIFF_9, SEQ_1, SEQ_2, XXREAL_2;
+      SIN_COS, PARTFUN2, SIN_COS4, RELSET_1, FDIFF_9, SEQ_1, SEQ_2, XXREAL_2,
+      NEWTON;
  registrations XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, RCOMP_1, RELSET_1,
       FUNCT_1, SIN_COS6, RFUNCT_2, ORDINAL1, INT_1, VALUED_0, XXREAL_2,
       XBOOLE_0;
@@ -24,18 +25,14 @@ environ
 
 begin ::  arcsec, arccosec
 
-reserve x, r, s, h for Real,
-  a, b, p, q, th for real number,
-  i for integer
-  number,
-  n for Element of NAT,
-  rr, y for set,
-  Z for open Subset of REAL,
-  X, Y
-  for Subset of REAL,
-  rseq for Real_Sequence,
-  f, f1, f2, g for PartFunc of REAL,
-  REAL;
+reserve x, r for Real,
+      th for real number,
+
+
+  rr for set,
+
+
+  rseq for Real_Sequence;
 
 theorem :: SINCOS10:1
   [.0,PI/2.[ c= dom sec;
@@ -178,12 +175,6 @@ registration
   cluster arccosec2 -> one-to-one;
 end;
 
-definition
-  let th be real number;
-  redefine func sec th -> Real;
-  redefine func cosec th -> Real;
-end;
-
 theorem :: SINCOS10:29
   sin.(PI/4) = 1/sqrt 2 & cos.(PI/4) = 1/sqrt 2;
 
@@ -192,8 +183,7 @@ theorem :: SINCOS10:30
   = 1/sqrt 2 & cos.(3/4*PI) = -1/sqrt 2;
 
 theorem :: SINCOS10:31
-  sec.0 = 1 & sec.(PI/4) = sqrt 2 & sec.(3/4*PI) = -sqrt 2 & sec.
-  PI = -1;
+  sec.0 = 1 & sec.(PI/4) = sqrt 2 & sec.(3/4*PI) = -sqrt 2 & sec. PI = -1;
 
 theorem :: SINCOS10:32
   cosec.(-PI/2) = -1 & cosec.(-PI/4) = -sqrt 2 & cosec.(PI/4) =
@@ -206,8 +196,7 @@ theorem :: SINCOS10:34
   for x be set st x in [.3/4*PI,PI.] holds sec.x in [.-sqrt 2,-1.];
 
 theorem :: SINCOS10:35
-  for x be set st x in [.-PI/2,-PI/4.] holds cosec.x in [.-sqrt 2,
-  -1.];
+  for x be set st x in [.-PI/2,-PI/4.] holds cosec.x in [.-sqrt 2, -1.];
 
 theorem :: SINCOS10:36
   for x be set st x in [.PI/4,PI/2.] holds cosec.x in [.1,sqrt 2.];
@@ -372,16 +361,13 @@ theorem :: SINCOS10:85
   for x be set st x in [.1,sqrt 2.] holds arcsec1.x in [.0,PI/4.];
 
 theorem :: SINCOS10:86
-  for x be set st x in [.-sqrt 2,-1.] holds arcsec2.x in [.3/4*PI,
-  PI.];
+  for x be set st x in [.-sqrt 2,-1.] holds arcsec2.x in [.3/4*PI, PI.];
 
 theorem :: SINCOS10:87
-  for x be set st x in [.-sqrt 2,-1.] holds arccosec1.x in [.-PI/2
-  ,-PI/4.];
+  for x be set st x in [.-sqrt 2,-1.] holds arccosec1.x in [.-PI/2 ,-PI/4.];
 
 theorem :: SINCOS10:88
-  for x be set st x in [.1,sqrt 2.] holds arccosec2.x in [.PI/4,PI
-  /2.];
+  for x be set st x in [.1,sqrt 2.] holds arccosec2.x in [.PI/4,PI /2.];
 
 theorem :: SINCOS10:89
   1 <= r & r <= sqrt 2 implies sec.(arcsec1 r) = r;
@@ -439,31 +425,25 @@ theorem :: SINCOS10:105
   1 <= r & r <= sqrt 2 implies 0 <= arcsec1 r & arcsec1 r <= PI/4;
 
 theorem :: SINCOS10:106
-  -sqrt 2 <= r & r <= -1 implies 3/4*PI <= arcsec2 r & arcsec2 r
-  <= PI;
+  -sqrt 2 <= r & r <= -1 implies 3/4*PI <= arcsec2 r & arcsec2 r <= PI;
 
 theorem :: SINCOS10:107
-  -sqrt 2 <= r & r <= -1 implies -PI/2 <= arccosec1 r & arccosec1
-  r <= -PI/4;
+  -sqrt 2 <= r & r <= -1 implies -PI/2 <= arccosec1 r & arccosec1 r <= -PI/4;
 
 theorem :: SINCOS10:108
-  1 <= r & r <= sqrt 2 implies PI/4 <= arccosec2 r & arccosec2 r
-  <= PI/2;
+  1 <= r & r <= sqrt 2 implies PI/4 <= arccosec2 r & arccosec2 r <= PI/2;
 
 theorem :: SINCOS10:109
   1 < r & r < sqrt 2 implies 0 < arcsec1 r & arcsec1 r < PI/4;
 
 theorem :: SINCOS10:110
-  -sqrt 2 < r & r < -1 implies 3/4*PI < arcsec2 r & arcsec2 r <
-  PI;
+  -sqrt 2 < r & r < -1 implies 3/4*PI < arcsec2 r & arcsec2 r < PI;
 
 theorem :: SINCOS10:111
-  -sqrt 2 < r & r < -1 implies -PI/2 < arccosec1 r & arccosec1 r
-  < -PI/4;
+  -sqrt 2 < r & r < -1 implies -PI/2 < arccosec1 r & arccosec1 r < -PI/4;
 
 theorem :: SINCOS10:112
-  1 < r & r < sqrt 2 implies PI/4 < arccosec2 r & arccosec2 r <
-  PI/2;
+  1 < r & r < sqrt 2 implies PI/4 < arccosec2 r & arccosec2 r < PI/2;
 
 theorem :: SINCOS10:113
   1 <= r & r <= sqrt 2 implies sin.(arcsec1 r) = sqrt(r^2-1)/r &
@@ -528,4 +508,3 @@ theorem :: SINCOS10:131
 
 theorem :: SINCOS10:132
   arccosec2|(cosec.:].0,PI/2.[) is continuous;
-

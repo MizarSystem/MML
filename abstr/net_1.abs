@@ -6,138 +6,145 @@
 
 environ
 
- vocabularies RELAT_1, XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, NET_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1;
- constructors TARSKI, SUBSET_1, RELAT_1;
+ vocabularies RELAT_1, XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, NET_1,
+      STRUCT_0, PETRI;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, PARTIT_2,
+      STRUCT_0, PETRI;
+ constructors TARSKI, SUBSET_1, RELAT_1, STRUCT_0, PETRI, PARTIT_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1;
  requirements SUBSET, BOOLE;
 
 
 begin
 
-definition
-  struct Net (# Places, Transitions -> set, Flow -> Relation #);
+:::definition
+:::  struct(2-sorted) PT_net_Str (# carrier, carrier' -> set, Flow -> Relation #);
+:::end;
+
+definition let P be PT_net_Str;
+ func Flow P equals
+:: NET_1:def 1
+  (the S-T_Arcs of P) \/ the T-S_Arcs of P;
+end;
+
+registration let P be PT_net_Str;
+ cluster Flow P -> Relation-like;
 end;
 
 ::The above definition describes a "structure  of a Petri net" which
 ::is a kind of relational system.
 
 reserve x,y for set;
-reserve N for Net;
+reserve N for PT_net_Str;
 
 definition
-  let N be Net;
+  let N be PT_net_Str;
   attr N is Petri means
-:: NET_1:def 1
+:: NET_1:def 2
 
-  the Places of N misses the Transitions of N & (
-  the Flow of N) c= [:the Places of N, the Transitions of N:] \/ [:the
-  Transitions of N, the Places of N:];
+  the carrier of N misses the carrier' of N & (
+  Flow N) c= [:the carrier of N, the carrier' of N:] \/ [:the
+  carrier' of N, the carrier of N:];
 end;
 
 :: A Petri net is defined as a triple of the form
-::        N = (Places, Transitions, Flow)
-:: with Places and Transitions being disjoint sets and
-::   Flow c= (Transitions x Places) U (Places x Transitions)
-:: It is allowed that both sets Places and Transitions are empty.
+::        N = (carrier, carrier', Flow)
+:: with carrier and carrier' being disjoint sets and
+::   Flow c= (carrier' x carrier) U (carrier x carrier')
+:: It is allowed that both sets carrier and carrier' are empty.
 :: A Petri net is here described as a predicate defined in the set
-:: (on the mode) Net.
+:: (on the mode) PT_net_Str.
 
 definition
-  let N be Net;
+  let N be PT_net_Str;
   func Elements(N) equals
-:: NET_1:def 2
-  (the Places of N) \/ (the Transitions of N);
+:: NET_1:def 3
+  (the carrier of N) \/ (the carrier' of N);
 end;
 
 canceled 6;
 
 theorem :: NET_1:7
   Elements(N) <> {} implies (x is Element of Elements(N) implies x is
-Element of the Places of N or x is Element of the Transitions of N);
+Element of the carrier of N or x is Element of the carrier' of N);
 
 theorem :: NET_1:8
-  x is Element of the Places of N & the Places of N <> {} implies x is
+  x is Element of the carrier of N & the carrier of N <> {} implies x is
   Element of Elements(N);
 
 theorem :: NET_1:9
-  x is Element of the Transitions of N & the Transitions of N <> {}
+  x is Element of the carrier' of N & the carrier' of N <> {}
   implies x is Element of Elements(N);
 
 registration
-  cluster Net (#{}, {}, {}#) -> Petri;
+  cluster PT_net_Str (#{}, {}, {}({},{}), {}({},{})#) -> Petri;
 end;
 
 :: This lemma is of rather "technical" nature. It allows a definition
-:: of a "subtype" of the type Net. (see the following definition of the
+:: of a "subtype" of the type PT_net_Str. (see the following definition of the
 :: type Pnet).
 
 registration
-  cluster strict Petri Net;
+  cluster strict Petri PT_net_Str;
 end;
 
 definition
-  mode Pnet is Petri Net;
+  mode Pnet is Petri PT_net_Str;
 end;
 
 :: The above definition defines a Petri net as a TYPE of the structure
-:: Net. The type is not empty.
+:: PT_net_Str. The type is not empty.
 
 canceled;
 
 theorem :: NET_1:11
-  for N being Pnet holds not (x in the Places of N & x in the
-  Transitions of N);
+  for N being Pnet holds not (x in the carrier of N & x in the carrier' of N);
 
 :: This lemma is of rather "technical" character. It will be used in the
 :: proof of the correctness of a definition of a function bellow. (See
 :: the definition of the functions Enter and Exit.)
 
 theorem :: NET_1:12
-  for N being Pnet holds [x,y] in the Flow of N & x in the
-  Transitions of N implies y in the Places of N;
+  for N being Pnet holds [x,y] in Flow N & x in the
+  carrier' of N implies y in the carrier of N;
 
 theorem :: NET_1:13
-  for N being Pnet holds [x,y] in the Flow of N & y in the
-  Transitions of N implies x in the Places of N;
+  for N being Pnet holds [x,y] in Flow N & y in the
+  carrier' of N implies x in the carrier of N;
 
 theorem :: NET_1:14
-  for N being Pnet holds [x,y] in the Flow of N & x in the Places of N
-  implies y in the Transitions of N;
+  for N being Pnet holds [x,y] in Flow N & x in the carrier of N
+  implies y in the carrier' of N;
 
 theorem :: NET_1:15
-  for N being Pnet holds [x,y] in the Flow of N & y in the Places of N
-  implies x in the Transitions of N;
+  for N being Pnet holds [x,y] in Flow N & y in the carrier of N
+  implies x in the carrier' of N;
 
 definition
   let N be Pnet;
   let x,y;
   canceled 2;
   pred pre N,x,y means
-:: NET_1:def 5
-
-  [y,x] in the Flow of N & x in the Transitions of
-  N;
-  pred post N,x,y means
 :: NET_1:def 6
 
-  [x,y] in the Flow of N & x in the Transitions
-  of N;
+  [y,x] in Flow N & x in the carrier' of N;
+  pred post N,x,y means
+:: NET_1:def 7
+
+  [x,y] in Flow N & x in the carrier' of N;
 end;
 
 definition
-  let N be Net;
+  let N be PT_net_Str;
   let x be Element of Elements(N);
   func Pre(N,x) means
-:: NET_1:def 7
-
-  y in it iff y in Elements(N) & [y,x] in the Flow
-  of N;
-  func Post(N,x) means
 :: NET_1:def 8
 
-  y in it iff y in Elements(N) & [x,y] in the Flow
-  of N;
+  y in it iff y in Elements(N) & [y,x] in Flow N;
+  func Post(N,x) means
+:: NET_1:def 9
+
+  y in it iff y in Elements(N) & [x,y] in Flow N;
 end;
 
 theorem :: NET_1:16
@@ -158,11 +165,11 @@ theorem :: NET_1:19
 
 theorem :: NET_1:20
   for N being Pnet for y being Element of Elements(N) holds y in the
-  Transitions of N implies (x in Pre(N,y) iff pre N,y,x);
+  carrier' of N implies (x in Pre(N,y) iff pre N,y,x);
 
 theorem :: NET_1:21
   for N being Pnet for y being Element of Elements(N) holds y in the
-  Transitions of N implies (x in Post(N,y) iff post N,y,x);
+  carrier' of N implies (x in Post(N,y) iff post N,y,x);
 
 definition
   let N be Pnet;
@@ -170,10 +177,10 @@ definition
   assume
  Elements(N) <> {};
   func enter(N,x) means
-:: NET_1:def 9
+:: NET_1:def 10
 
-  (x in the Places of N implies it = {x}) & (x in
-  the Transitions of N implies it = Pre(N,x));
+  (x in the carrier of N implies it = {x}) & (x in
+  the carrier' of N implies it = Pre(N,x));
 end;
 
 theorem :: NET_1:22
@@ -194,10 +201,10 @@ definition
   assume
  Elements(N) <> {};
   func exit(N,x) -> set means
-:: NET_1:def 10
+:: NET_1:def 11
 
-  (x in the Places of N implies it = {x})
-  & (x in the Transitions of N implies it = Post(N,x));
+  (x in the carrier of N implies it = {x})
+  & (x in the carrier' of N implies it = Post(N,x));
 end;
 
 theorem :: NET_1:25
@@ -216,33 +223,31 @@ definition
   let N be Pnet;
   let x be Element of Elements(N);
   func field(N,x) equals
-:: NET_1:def 11
+:: NET_1:def 12
   enter(N,x) \/ exit(N,x);
 end;
 
 definition
-  let N be Net;
-  let x be Element of the Transitions of N;
+  let N be PT_net_Str;
+  let x be Element of the carrier' of N;
   func Prec(N,x) means
-:: NET_1:def 12
-  y in it iff y in the Places of N & [y,x] in the Flow of
-  N;
-  func Postc(N,x) means
 :: NET_1:def 13
-  y in it iff y in the Places of N & [x,y] in the Flow
-  of N;
+  y in it iff y in the carrier of N & [y,x] in Flow N;
+  func Postc(N,x) means
+:: NET_1:def 14
+  y in it iff y in the carrier of N & [x,y] in Flow N;
 end;
 
 definition
   let N be Pnet;
   let X be set;
   func Entr(N,X) means
-:: NET_1:def 14
+:: NET_1:def 15
 
   x in it iff x c= Elements N & ex y being
   Element of Elements N st y in X & x = enter(N,y);
   func Ext(N,X) means
-:: NET_1:def 15
+:: NET_1:def 16
 
   x in it iff x c= Elements N & ex y being Element
   of Elements N st y in X & x = exit(N,y);
@@ -260,10 +265,10 @@ definition
   let N be Pnet;
   let X be set;
   func Input(N,X) equals
-:: NET_1:def 16
+:: NET_1:def 17
   union Entr(N,X);
   func Output(N,X) equals
-:: NET_1:def 17
+:: NET_1:def 18
   union Ext(N,X);
 end;
 
@@ -280,12 +285,11 @@ theorem :: NET_1:31
 theorem :: NET_1:32
   for N being Pnet for X being Subset of Elements(N) for x being Element
 of Elements(N) holds Elements(N) <> {} implies (x in Input(N,X) iff (x in X & x
-  in the Places of N or ex y being Element of Elements(N) st y in X & y in the
-  Transitions of N & pre N,y,x));
+  in the carrier of N or ex y being Element of Elements(N) st y in X & y in the
+  carrier' of N & pre N,y,x));
 
 theorem :: NET_1:33
   for N being Pnet for X being Subset of Elements(N) for x being Element
 of Elements(N) holds Elements(N) <> {} implies (x in Output(N,X) iff (x in X &
-x in the Places of N or ex y being Element of Elements(N) st y in X & y in the
-  Transitions of N & post N,y,x));
-
+x in the carrier of N or ex y being Element of Elements(N) st y in X & y in the
+  carrier' of N & post N,y,x));

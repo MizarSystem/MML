@@ -56,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="127">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -72,7 +72,25 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="132">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="91"/>
+</Cluster>
+</FCluster>
+<FCluster aid="OPENLATT" nr="3">
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="44"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -81,7 +99,7 @@
 <Adjective nr="80"/>
 </Cluster>
 </FCluster>
-<FCluster aid="OPENLATT" nr="3">
+<FCluster aid="OPENLATT" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -91,14 +109,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="138">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="OPENLATT" nr="4">
+<FCluster aid="OPENLATT" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
@@ -114,27 +132,9 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="139">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="OPENLATT" nr="5">
-<ArgTypes>
-<Typ kind="G" nr="9">
-<Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="37" value="false"/>
-<Adjective nr="68"/>
-<Adjective nr="80"/>
-</Cluster>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="136">
 <LocusVar nr="1"/>
+<LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -145,13 +145,133 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="32" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="134">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
+</Cluster>
+</FCluster>
+<FCluster aid="OPENLATT" nr="7">
+<ArgTypes>
+<Typ kind="G" nr="9">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="134">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="9"/>
+<Adjective nr="15">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="141">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="17">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="141">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="9"/>
+<Adjective nr="15">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="141">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="11">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="U" nr="1">
+<Func kind="K" nr="141">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Func>
+</Func>
+</Typ>
+</FCluster>
+<FCluster aid="OPENLATT" nr="8">
+<ArgTypes>
+<Typ kind="G" nr="9">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="141">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+</Cluster>
+</FCluster>
+<FCluster aid="OPENLATT" nr="9">
+<ArgTypes>
+<Typ kind="G" nr="9">
+<Cluster>
+<Adjective nr="32" value="false"/>
 <Adjective nr="37" value="false"/>
 <Adjective nr="68"/>
 <Adjective nr="80"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="146">
+<Func kind="K" nr="133">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster aid="OPENLATT" nr="10">
+<ArgTypes>
+<Typ kind="G" nr="9">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="80"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

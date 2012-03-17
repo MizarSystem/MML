@@ -25,30 +25,32 @@
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="INTEGRA1"/>
+<ArticleID name="XXREAL_3"/>
+<ArticleID name="MEMBER_1"/>
 <ArticleID name="INTEGRA2"/>
 </Signature>
 <RCluster aid="INTEGRA2" nr="1">
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="51"/>
+<Func kind="K" nr="50"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="54"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="51"/>
+<Func kind="K" nr="50"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
+<Adjective nr="46"/>
 <Adjective nr="52"/>
-<Adjective nr="65"/>
+<Adjective nr="53"/>
+<Adjective nr="66"/>
 </Cluster>
 </RCluster>
 </Registrations>

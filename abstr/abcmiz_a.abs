@@ -24,7 +24,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, FUNCT_1, FINSET_1,
       STRUCT_0, PBOOLE, MSUALG_2, FINSEQ_1, NAT_1, CARD_1, MSAFREE, TREES_3,
       TREES_2, FUNCOP_1, RELAT_1, INDEX_1, INSTALG1, MSAFREE3, WAYBEL26,
-      FACIRC_1, ABCMIZ_1, REALSET1;
+      FACIRC_1, ABCMIZ_1, REALSET1, MSATERM;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
 
 
@@ -40,8 +40,7 @@ scheme :: ABCMIZ_A:sch 1
   ex x being set st x in X() &
   for y being set st y in X() holds not R[y,x]
   provided
- for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
-  and
+ for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x] and
  for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
     holds R[x,z];
 
@@ -49,17 +48,14 @@ scheme :: ABCMIZ_A:sch 2
  FiniteC{X() -> finite set, P[set]}:
   P[X()]
   provided
- for A being Subset of X()
-   st for B being set st B c< A holds P[B]
-   holds P[A];
+ for A being Subset of X() st for B being set st B c< A holds P[B] holds P[A];
 
 scheme :: ABCMIZ_A:sch 3
  Numeration{X() -> finite set, R[set, set]}:
   ex s being one-to-one FinSequence st rng s = X() &
   for i,j st i in dom s & j in dom s & R[s.i, s.j] holds i < j
   provided
- for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x]
-  and
+ for x,y being set st x in X() & y in X() & R[x,y] holds not R[y,x] and
  for x,y,z being set st x in X() & y in X() & z in X() & R[x,y] & R[y,z]
     holds R[x,z];
 
@@ -67,8 +63,7 @@ theorem :: ABCMIZ_A:2
   for x being variable holds varcl vars x = vars x;
 
 theorem :: ABCMIZ_A:3
- for C being initialized ConstructorSignature
- for e being expression of C holds
+ for C being initialized ConstructorSignature for e being expression of C holds
   e is compound iff not ex x being Element of Vars st e = x-term C;
 
 begin :: Standardized Constructor Signature
@@ -82,8 +77,7 @@ definition
  attr C is standardized means
 :: ABCMIZ_A:def 1
 
-  for o being OperSymbol of C st o is constructor
-   holds o in Constructors &
+  for o being OperSymbol of C st o is constructor holds o in Constructors &
     o`1 = the_result_sort_of o &
     card o`2`1 = len the_arity_of o;
 end;
@@ -149,8 +143,7 @@ theorem :: ABCMIZ_A:8
  Vars misses Constructors;
 
 theorem :: ABCMIZ_A:9
- for x being Element of Vars holds
-   x <> * & x <> non_op;
+ for x being Element of Vars holds x <> * & x <> non_op;
 
 theorem :: ABCMIZ_A:10
  for C being standardized ConstructorSignature holds
@@ -171,8 +164,7 @@ registration
 end;
 
 theorem :: ABCMIZ_A:12
- for C being initialized ConstructorSignature
- for e being expression of C
+ for C being initialized ConstructorSignature for e being expression of C
  for o being OperSymbol of C st e.{} = [o, the carrier of C]
   holds
     e is expression of C, the_result_sort_of o;
@@ -265,11 +257,10 @@ theorem :: ABCMIZ_A:26
 
 begin :: Expressions
 
-reserve C for initialized ConstructorSignature,
-  f for valuation of C;
+
 reserve i,j for Nat,
-  x,y,z for variable,
-  l,l9 for quasi-loci;
+  x for variable,
+  l for quasi-loci;
 
 definition
   mode expression is expression of MaxConstrSign;
@@ -301,10 +292,9 @@ registration
 end;
 
 definition
-  redefine
-  func Modes -> non empty Subset of Constructors;
-  func Attrs -> non empty Subset of Constructors;
-  func Funcs -> non empty Subset of Constructors;
+  redefine func Modes -> non empty Subset of Constructors;
+  redefine func Attrs -> non empty Subset of Constructors;
+  redefine func Funcs -> non empty Subset of Constructors;
 end;
 
 reserve C for initialized ConstructorSignature,
@@ -317,8 +307,7 @@ definition
 end;
 
 theorem :: ABCMIZ_A:27
-  kind_of set-constr = a_Type &
-  loci_of set-constr = {} &
+  kind_of set-constr = a_Type & loci_of set-constr = {} &
   index_of set-constr = 0;
 
 theorem :: ABCMIZ_A:28
@@ -331,8 +320,7 @@ theorem :: ABCMIZ_A:30
   ex l st len l = i;
 
 theorem :: ABCMIZ_A:31
-  for X being finite Subset of Vars
-  ex l st rng l = varcl X;
+  for X being finite Subset of Vars ex l st rng l = varcl X;
 
 theorem :: ABCMIZ_A:32   :: to mozna uogolnic na X zamkniety na poddrzewa
                :: (troche dodatkowych pojec i twierdzen)
@@ -408,9 +396,9 @@ begin :: Arity
 
 reserve a,a9 for quasi-adjective,
   t,t1,t2 for quasi-term,
-  T,T9,T1,T2 for quasi-type,
-  e,e1,e2 for expression,
-  f for valuation,
+  T for quasi-type,
+
+
   c for Element of Constructors;
 
 definition
@@ -433,8 +421,7 @@ len the_arity_of o = 2;
 end;
 
 theorem :: ABCMIZ_A:37
-  for C being non void Signature
-  for o being OperSymbol of C holds
+  for C being non void Signature for o being OperSymbol of C holds
   (o is nullary implies o is not unary) &
   (o is nullary implies o is not binary) &
   (o is unary implies o is not binary);
@@ -529,8 +516,7 @@ definition
 end;
 
 theorem :: ABCMIZ_A:41
-  adjs set-type = {} &
-  the_base_of set-type = (@set-constr) term;
+  adjs set-type = {} & the_base_of set-type = (@set-constr) term;
 
 definition
   let l be FinSequence of Vars;
@@ -597,8 +583,7 @@ definition
 end;
 
 theorem :: ABCMIZ_A:50
- for t1,t2,t3 being expression of C
-  st t1 matches_with t2 & t2 matches_with t3
+ for t1,t2,t3 being expression of C st t1 matches_with t2 & t2 matches_with t3
   holds t1 matches_with t3;
 
 definition
@@ -626,8 +611,7 @@ definition
 end;
 
 theorem :: ABCMIZ_A:52
- for T1,T2,T3 being quasi-type of C
-  st T1 matches_with T2 & T2 matches_with T3
+ for T1,T2,T3 being quasi-type of C st T1 matches_with T2 & T2 matches_with T3
   holds T1 matches_with T3;
 
 definition
@@ -640,8 +624,7 @@ definition
 end;
 
 theorem :: ABCMIZ_A:53
- for t1,t2 being expression of C
- for f being valuation of C st f unifies t1,t2
+ for t1,t2 being expression of C for f being valuation of C st f unifies t1,t2
   holds f unifies t2,t1;
 
 definition
@@ -662,6 +645,7 @@ definition
   ex g being irrelevant one-to-one valuation of C
   st variables_in t2 c= dom g & t1,t2 at g are_unifiable;
   reflexivity;
+
 ::  symmetry;
 end;
 
@@ -706,14 +690,12 @@ end;
 begin :: Type distribution
 
 theorem :: ABCMIZ_A:57
-  for n being Nat
-  for s being SortSymbol of MaxConstrSign
+  for n being Nat for s being SortSymbol of MaxConstrSign
   ex m being constructor OperSymbol of s
   st len the_arity_of m = n;
 
 theorem :: ABCMIZ_A:58
-  for l
-  for s being SortSymbol of MaxConstrSign
+  for l for s being SortSymbol of MaxConstrSign
   for m being constructor OperSymbol of s st len the_arity_of m = len l
   holds variables_in (m-trm args l) = rng l;
 
