@@ -9,21 +9,21 @@ environ
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
       ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1, SUBSET_1,
-      SGRAPH1;
+      SGRAPH1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MOD_1, RELAT_1, FUNCT_1,
       MCART_1, REALSET1, PARTFUN1, FUNCT_2, DOMAIN_1, CLASSES2, BINOP_1,
       STRUCT_0, CAT_1, PRE_TOPC, TOPS_2, RLVECT_1, VECTSP_1, VECTSP_2,
       FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
  constructors RELAT_2, PARTFUN1, DOMAIN_1, FUNCOP_1, CLASSES1, CLASSES2,
-      REALSET1, TOPS_2, CAT_2, VECTSP_2, ALGSTR_1, MIDSP_2;
+      REALSET1, TOPS_2, CAT_2, VECTSP_2, ALGSTR_1, MIDSP_2, NAT_D;
  registrations RELSET_1, GROUP_1, STRUCT_0, SUBSET_1, CLASSES2, ALGSTR_1,
       MIDSP_2, FUNCT_2, PARTFUN1, XBOOLE_0, FUNCOP_1;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, PRE_TOPC;
+ definitions BINOP_1, PRE_TOPC, STRUCT_0;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
-      PARTFUN1, VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1,
-      ORDINAL1, XBOOLE_0, ALGSTR_1, TOPS_2;
- schemes FUNCT_2, PARTFUN1, TARSKI, XBOOLE_0;
+      VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1, ORDINAL1,
+      XBOOLE_0, ALGSTR_1, TOPS_2, BINOP_1;
+ schemes FUNCT_2, BINOP_1, TARSKI, XBOOLE_0;
 
 begin ::  0a. Auxiliary theorems: sets and universums
 
@@ -65,47 +65,6 @@ Th4: for x,y st x in y & y in UN holds x in UN
    then y c= UN by ORDINAL1:def 2;
    hence thesis by A1;
  end;
-
-::  0b. Auxiliary schemes: partial functions
-
-scheme PartLambda2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
- ex f being PartFunc of [:X(),Y():],Z()
-  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y])
-   & (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y))
-provided
-A1: for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z()
-proof
-  defpred R[set,set] means $1 in X() & $2 in Y() & P[$1,$2];
-A2: for x,y st R[x,y] holds F(x,y) in Z() by A1;
-  consider f being PartFunc of [:X(),Y():],Z() such that
-  A3: (for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y]) and
-  A4: (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y)) from PARTFUN1:sch 5
-(A2);
-  take f;
-  thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y] by A3;
-  thus for x,y st [x,y] in dom f holds f.[x,y] = F(x,y) by A4;
-end;
-
-scheme PartLambda2D{X,Y()->non empty set,Z()->set,F(set,set)->set,
- P[set,set]}: ex f being PartFunc of [:X(),Y():],Z()
-  st (for x being Element of X(), y being Element of Y() holds
-       [x,y] in dom f iff P[x,y])
-   & (for x being Element of X(), y being Element of Y() st [x,y] in
- dom f holds f.[x,y] = F(x,y))
-provided
-A1: for x being Element of X(), y being Element of Y() st P[x,y] holds
-     F(x,y) in Z()
-proof
-A2: for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z() by A1;
-  consider f being PartFunc of [:X(),Y():],Z() such that
-A3: for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y] and
-A4: for x,y st [x,y] in dom f holds f.[x,y] = F(x,y) from PartLambda2(A2);
-  take f;
-  thus for x being Element of X(), y being Element of Y() holds
-       [x,y] in dom f iff P[x,y] by A3;
-  thus for x being Element of X(), y being Element of Y() st [x,y] in dom f
-       holds f.[x,y] = F(x,y) by A4;
-end;
 
 ::  0c. Auxiliary theorems: Trivial Group
 
@@ -202,8 +161,7 @@ definition let C,O;
  coherence by CAT_2:29;
 end;
 
-theorem
-Th9: CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
+Lm1: CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
   is_full_subcategory_of C by CAT_2:30;
 
 definition let C,O;
@@ -212,7 +170,7 @@ definition let C,O;
  coherence
   proof
         CatStr (# O,Morphs(O),dom(O),cod(O),comp(O),ID(O)#)
- is_full_subcategory_of C by Th9;
+ is_full_subcategory_of C by Lm1;
     hence thesis by CAT_2:def 6;
   end;
 end;
@@ -221,6 +179,8 @@ registration let C,O;
  cluster cat(O) -> strict;
  coherence;
 end;
+
+canceled;
 
 theorem
  the Objects of cat(O) = O;
@@ -238,9 +198,11 @@ registration let G be 1-sorted;
   coherence;
 end;
 
-theorem Th11:
+ Lm2:
  for G being non empty 1-sorted,
      x being Element of G holds (id G).x = x by FUNCT_1:35;
+
+canceled;
 
 theorem Th12:
  for G being 1-sorted, H being non empty 1-sorted,
@@ -304,10 +266,12 @@ Th14: for G1,G2,G3 being non empty LoopStr,
    hence thesis by Def13;
  end;
 
-theorem Th15:
+ Lm3:
   for G being non empty ZeroStr,
       H being non empty LoopStr,
       x being Element of G holds ZeroMap(G,H).x = 0.H by FUNCOP_1:13;
+
+canceled;
 
 theorem Th16:
   for G being non empty LoopStr,
@@ -318,7 +282,7 @@ theorem Th16:
        for x,y being Element of G holds f.(x+y) = f.x+f.y
     proof
       let x,y be Element of G;
-          f.(x+y) = 0.H & f.x = 0.H & f.y = 0.H by Th15;
+          f.(x+y) = 0.H & f.x = 0.H & f.y = 0.H by Lm3;
       hence f.(x+y) = f.x+f.y by RLVECT_1:def 7;
     end;
    hence thesis by Def13;
@@ -455,7 +419,7 @@ proof
       for x,y being Element of G holds f.(x+y) = f.x+f.y
    proof
      let x,y be Element of G;
-          f.(x+y) = x+y & f.x = x & f.y = y by Th11;
+          f.(x+y) = x+y & f.x = x & f.y = y by Lm2;
      hence f.(x+y) = f.x+f.y;
    end;
   hence thesis by Def13;
@@ -1345,7 +1309,7 @@ definition let V;
  :Def35:
  (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
  & (for g,f being Element of Morphs(V) st [g,f] in dom it
-    holds it.[g,f] = g*f);
+    holds it.(g,f) = g*f);
  existence
   proof
     set X = Morphs(V);
@@ -1355,7 +1319,7 @@ definition let V;
     consider c being PartFunc of [:X,X:],X such that
     A2: for g,f being Element of X holds [g,f] in dom c iff P[g,f] and
     A3: for g,f being Element of X st [g,f] in dom c
-        holds c.[g,f] = F(g,f) from PartLambda2D(A1);
+        holds c.(g,f) = F(g,f) from BINOP_1:sch 8(A1);
     take c;
     thus thesis by A2,A3;
   end;
@@ -1366,10 +1330,10 @@ definition let V;
     let c1,c2 be PartFunc of [:X,X:],X such that
     A4: for g,f being Element of X holds [g,f] in dom c1 iff P[g,f] and
     A5: for g,f being Element of X st [g,f] in dom c1
-         holds c1.[g,f] = g*f and
+         holds c1.(g,f) = g*f and
     A6: for g,f being Element of X holds [g,f] in dom c2 iff P[g,f] and
     A7: for g,f being Element of X st [g,f] in dom c2
-         holds c2.[g,f] = g*f;
+         holds c2.(g,f) = g*f;
     A8: dom c1 c= [:X,X:] & dom c2 c= [:X,X:] by RELSET_1:12;
     A9: dom c1 = dom c2
      proof
@@ -1390,15 +1354,15 @@ definition let V;
        hence thesis by A12,XBOOLE_0:def 10;
      end;
     set V' = dom c1;
-        for x,y st [x,y] in V' holds c1.[x,y]=c2.[x,y]
+        for x,y st [x,y] in V' holds c1.(x,y)=c2.(x,y)
      proof
        let x,y;assume
        A15: [x,y] in V';
        then reconsider x,y as Element of X by A8,ZFMISC_1:106;
-           c1.[x,y] = x*y by A5,A15;
+           c1.(x,y) = x*y by A5,A15;
        hence thesis by A7,A9,A15;
      end;
-    hence thesis by A9,PARTFUN1:35;
+    hence thesis by A9,BINOP_1:32;
   end;
 end;
 
@@ -1519,14 +1483,14 @@ theorem
    proof
      assume A7: dom g = cod f;
      then [g,f] in dom (the Comp of C) by Th46;
-     hence g*f = (comp(V)).[g',f'] by A1,CAT_1:def 4
+     hence g*f = (comp(V)).(g',f') by A1,CAT_1:def 4
               .= g'*f' by A6,A7,Def35;
    end;
   thus dom f = dom g iff dom f' = dom g' by A1,A4,Th49;
   thus cod f = cod g iff cod f' = cod g' by A1,A5,Th49;
  end;
 
- Lm1: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds
+ Lm4: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds
      dom(g*f) = dom f
    & cod (g*f) = cod g
   proof set X = Morphs(GroupObjects(UN));
@@ -1542,7 +1506,7 @@ theorem
     hence thesis by A3,Th50;
  end;
 
- Lm2: for f,g,h being Morphism of GroupCat(UN)
+ Lm5: for f,g,h being Morphism of GroupCat(UN)
         st dom h = cod g & dom g = cod f holds h*(g*f) = (h*g)*f
   proof set X = Morphs(
 (GroupObjects(UN)));
@@ -1552,15 +1516,15 @@ theorem
     A2: dom h' = cod g' & dom g' = cod f' by A1,Th50;
     A3: g'*f' = g*f & h'*g' = h*g by A1,Th50;
     reconsider gf = g'*f', hg = h'*g' as Element of X by A2,Th45;
-    A4: dom(h) = cod(g*f) by A1,Lm1;
-    A5: dom(h*g) = cod(f) by A1,Lm1;
+    A4: dom(h) = cod(g*f) by A1,Lm4;
+    A5: dom(h*g) = cod(f) by A1,Lm4;
         h*(g*f) = h'*gf by A3,A4,Th50
            .= hg*f' by A2,Th33
            .= (h*g)*f by A3,A5,Th50;
     hence thesis;
   end;
 
- Lm3: for b being Object of GroupCat(UN) holds
+ Lm6: for b being Object of GroupCat(UN) holds
     dom id b = b
   & cod id b = b
   & (for f being Morphism of GroupCat(UN)
@@ -1614,7 +1578,7 @@ registration let UN;
            (for f being Morphism of GroupCat(UN)
              st cod f = b holds (id b)*f = f) &
            (for g being Morphism of GroupCat(UN)
-             st dom g = b holds g*(id b) = g) ) by Lm1,Lm2,Lm3,Th46;
+             st dom g = b holds g*(id b) = g) ) by Lm4,Lm5,Lm6,Th46;
    hence thesis by CAT_1:29;
   end;
 end;
@@ -1730,10 +1694,7 @@ theorem
     hence thesis;
  end;
 
-theorem :: YELLOW16:8, AK, 20.02.2006
- for S, T being non empty 1-sorted, f being Function of T,S,
-     g being Function of S,T holds
-   f*g = id S implies rng f = the carrier of S by FUNCT_2:29;
+canceled;
 
 theorem :: WAYBEL29:1
  for S, T being non empty 1-sorted

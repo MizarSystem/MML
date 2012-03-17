@@ -7,15 +7,16 @@
 environ
 
  vocabularies RLVECT_1, BOOLE, ARYTM_1, RELAT_1, FUNCT_1, BINOP_1, RLSUB_1,
-      REALSET1;
+      REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, MCART_1,
       RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, DOMAIN_1, STRUCT_0,
       RLVECT_1;
- constructors PARTFUN1, DOMAIN_1, REAL_1, MEMBERED, REALSET1, RLVECT_1;
+ constructors PARTFUN1, DOMAIN_1, REAL_1, MEMBERED, REALSET1, RLVECT_1,
+      BINOP_1, NAT_D;
  registrations FUNCT_1, RLVECT_1, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED,
       REALSET1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1;
+ definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1;
  theorems FUNCT_1, FUNCT_2, RLVECT_1, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_0;
  schemes XBOOLE_0;
@@ -203,7 +204,7 @@ theorem Th21:
  w1 = v & w2 = u implies w1 + w2 = v + u
   proof assume A1: v = w1 & u = w2;
     reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th18;
-     A2: v + u = (the add of V).[ww1,ww2] by A1;
+     A2: v + u = (the add of V).(ww1,ww2) by A1;
          w1 + w2 = ((the add of V)||the carrier of W).[w1,w2] by Def2;
    hence thesis by A2,FUNCT_1:72;
   end;
@@ -212,7 +213,7 @@ theorem Th22:
  w = v implies a * w = a * v
   proof assume A1: w = v;
     reconsider ww1 = w as VECTOR of V by Th18;
-     A2: a * v = (the Mult of V).[a,ww1] by A1;
+     A2: a * v = (the Mult of V).(a,ww1) by A1;
          a * w = ((the Mult of V) | [:REAL, the carrier of W:]).[a,w] by Def2;
    hence thesis by A2,FUNCT_1:72;
   end;
@@ -320,10 +321,16 @@ theorem Th32:
                     A4: M = (the Mult of V) | [:REAL,V1:];
      set W = RLSStruct (# D,d1,A,M #);
       A5: the Zero of W = the Zero of V by A2;
-      A6: for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
-          by A1,A3,FUNCT_1:72;
-      A7: for a for x being VECTOR of W holds a * x = (the Mult of V).[a,x]
-       by A1,A4,FUNCT_1:72;
+A6: for x,y being VECTOR of W holds x + y = (the add of V).(x,y)
+     proof let x,y be VECTOR of W;
+      thus x + y = (the add of V).[x,y] by A1,A3,FUNCT_1:72
+                .= (the add of V).(x,y);
+     end;
+A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
+     proof let a; let x be VECTOR of W;
+      thus a * x = (the Mult of V).[a,x] by A1,A4,FUNCT_1:72
+                .= (the Mult of V).(a,x);
+     end;
          W is Abelian add-associative right_zeroed right_complementable
             RealLinearSpace-like
        proof
@@ -331,17 +338,17 @@ theorem Th32:
         thus for x,y being VECTOR of W holds x + y = y + x
          proof let x,y be VECTOR of W;
            reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-          thus x + y = AV.[x1,y1] by A6
+          thus x + y = AV.(x1,y1) by A6
                 .= y1 + x1 by RLVECT_1:def 3
                 .= y + x by A6;
          end;
         thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
          proof let x,y,z be VECTOR of W;
            reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
-          thus (x + y) + z = AV.[x + y,z1] by A6
+          thus (x + y) + z = AV.(x + y,z1) by A6
                           .= (x1 + y1) + z1 by A6
                           .= x1 + (y1 + z1) by RLVECT_1:def 6
-                          .= AV.[x1,y + z] by A6
+                          .= AV.(x1,y + z) by A6
                           .= x + (y + z) by A6;
          end;
         thus for x being VECTOR of W holds x + 0.W = x
@@ -366,11 +373,11 @@ theorem Th32:
               for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
          proof let a; let x,y be VECTOR of W;
            reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-          thus a * (x + y) = MV.[a,x + y] by A7
+          thus a * (x + y) = MV.(a,x + y) by A7
                           .= a * (x1 + y1) by A6
                           .= a * x1 + a * y1 by RLVECT_1:def 9
-                          .= AV.[MV.[a,x1],a * y] by A7
-                          .= AV.[a * x, a * y] by A7
+                          .= AV.(MV.(a,x1),a * y) by A7
+                          .= AV.(a * x, a * y) by A7
                           .= a * x + a * y by A6;
          end;
         thus for a,b
@@ -379,8 +386,8 @@ theorem Th32:
            reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
           thus (a + b) * x = (a + b) * y by A7
                           .= a * y + b * y by RLVECT_1:def 9
-                          .= AV.[MV.[a,y],b * x] by A7
-                          .= AV.[a * x,b * x] by A7
+                          .= AV.(MV.(a,y),b * x) by A7
+                          .= AV.(a * x,b * x) by A7
                           .= a * x + b * x by A6;
          end;
         thus for a,b
@@ -389,7 +396,7 @@ theorem Th32:
            reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
           thus (a * b) * x = (a * b) * y by A7
                           .= a * (b * y) by RLVECT_1:def 9
-                          .= MV.[a,b * x] by A7
+                          .= MV.(a,b * x) by A7
                           .= a * (b * x) by A7;
          end;
         let x be VECTOR of W;

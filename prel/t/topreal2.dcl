@@ -2,6 +2,7 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
@@ -24,6 +25,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
@@ -35,44 +37,44 @@
 <Cluster/>
 <Func kind="K" nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="58"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="204"/>
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="58"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="64"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="7" value="false"/>
-<Adjective nr="38">
-<Func kind="K" nr="168">
+<Adjective nr="12" value="false"/>
+<Adjective nr="43">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Adjective>

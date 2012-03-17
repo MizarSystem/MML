@@ -9,24 +9,25 @@ environ
  vocabularies SQUARE_1, ARYTM, ARYTM_1, ABSVALUE, FINSEQ_1, RELAT_1, FUNCT_1,
       BOOLE, PARTFUN1, ARYTM_3, SEQ_1, RFINSEQ, CARD_1, FUNCOP_1, BINOP_1,
       SUBSET_1, SETWISEO, RLVECT_1, FUNCT_3, TDGROUP, LIMFUNC1, FINSET_1,
-      RCOMP_1, PROB_1, FINSEQ_2, RVSUM_1, VECTSP_1, RFUNCT_3, MEMBERED;
+      RCOMP_1, PROB_1, FINSEQ_2, RVSUM_1, RFUNCT_3, MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, BINOP_1, CARD_1, REAL_1, NAT_1,
-      FUNCOP_1, SETWISEO, FINSEQ_2, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQOP,
-      SEQ_1, RFUNCT_1, FINSEQ_4, SETWOP_2, FINSET_1, RVSUM_1, RCOMP_1,
-      PARTFUN2, LIMFUNC1, RFINSEQ, XXREAL_0;
+      NAT_D, FUNCOP_1, SETWISEO, FINSEQ_2, RELSET_1, PARTFUN1, FINSEQ_1,
+      FINSEQOP, SEQ_1, SEQM_3, RFUNCT_1, FINSEQ_4, SETWOP_2, FINSET_1, RVSUM_1,
+      RCOMP_1, PARTFUN2, LIMFUNC1, RFINSEQ, XXREAL_0;
  constructors PARTFUN1, BINOP_1, SETWISEO, REAL_1, SQUARE_1, NAT_1, BINOP_2,
       COMPLEX1, FINSEQOP, PROB_1, SEQ_4, RCOMP_1, FINSEQ_4, FINSOP_1, SETWOP_2,
-      RVSUM_1, PARTFUN2, RFUNCT_1, LIMFUNC1, RFINSEQ;
+      RVSUM_1, PARTFUN2, RFUNCT_1, LIMFUNC1, RFINSEQ, SEQM_3, NAT_D;
  registrations FINSET_1, RFINSEQ, RELSET_1, FINSEQ_2, XREAL_0, PARTFUN1, NAT_1,
       MEMBERED, FINSEQ_1, SEQ_1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, BINOP_1, SETWISEO, RFINSEQ, XBOOLE_0;
+ definitions TARSKI, BINOP_1, SETWISEO, RFINSEQ, XBOOLE_0, SUBSET_1, FINSEQ_2,
+      RVSUM_1;
  theorems FINSEQ_1, FINSEQ_2, REAL_1, REAL_2, NAT_1, FUNCT_1, CARD_2, TARSKI,
-      CARD_1, FINSET_1, LIMFUNC1, PARTFUN1, RCOMP_1, SQUARE_1, BINOP_1,
-      FINSEQ_3, FUNCOP_1, RFUNCT_1, ZFMISC_1, SUBSET_1, RVSUM_1, ABSVALUE,
-      RFINSEQ, RELAT_1, SEQ_1, FINSOP_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0;
+      CARD_1, FINSET_1, LIMFUNC1, PARTFUN1, RCOMP_1, BINOP_1, FINSEQ_3,
+      FUNCOP_1, RFUNCT_1, ZFMISC_1, RVSUM_1, ABSVALUE, RFINSEQ, RELAT_1, SEQ_1,
+      FINSOP_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1,
+      COMPLEX1, XXREAL_0;
  schemes NAT_1, FINSEQ_1, SEQ_1, BINOP_1;
 
 begin
@@ -122,7 +123,7 @@ for r,s be real number st 0<=r holds max+(r*s) = r*(max+ s)
 theorem Th5:
 for r,s be real number holds max+(r+s) <= max+(r) + max+(s)
  proof let r,s be real number;
-  A1: r<=max(r,0) & s<=max(s,0) & 0<=max(r,0) & 0<=max(s,0) by SQUARE_1:46;
+  A1: r<=max(r,0) & s<=max(s,0) & 0<=max(r,0) & 0<=max(s,0) by XXREAL_0:25;
       now per cases;
    case 0<=r+s;
     then max+(r+s) = r+s by XXREAL_0:def 9;
@@ -139,13 +140,6 @@ for r,s be real number holds max+(r+s) <= max+(r) + max+(s)
    end;
   hence thesis;
  end;
-
-theorem
-   for r be real number holds 0 <= max+(r) & 0 <=max-(r) by SQUARE_1:46;
-
-theorem
-for r1,r2, s1,s2 be real number st r1<=s1 & r2<=s2 holds
- max(r1,r2) <= max(s1,s2) by XXREAL_0:26;
 
 Lm1:
 for D be non empty set, f be FinSequence of D st len f<=n holds (f|n) = f
@@ -174,6 +168,8 @@ begin
 ::
 :: Partial Functions from a Domain to the Set of Real Numbers
 ::
+
+canceled 2;
 
 theorem Th8:
 for D be non empty set, F be PartFunc of D,REAL, r,s be real number st
@@ -544,21 +540,20 @@ for D be non empty set holds
   [#](D) --> (0 qua Real) is_a_unity_wrt addpfunc(D)
  proof let D be non empty set;
   set F = [#](D) --> (0 qua Real);
-  A1: [#](D) = D by SUBSET_1:def 4;
-  then A2: dom F = D by FUNCOP_1:19;
-  A3: addpfunc(D) is commutative by Th16;
+  A1: dom F = D by FUNCOP_1:19;
+  A2: addpfunc(D) is commutative by Th16;
       now let G be Element of PFuncs(D,REAL);
        dom G /\ D = dom G by XBOOLE_1:28;
-    then A4: dom(G+F) = dom G by A2,SEQ_1:def 3;
+    then A3: dom(G+F) = dom G by A1,SEQ_1:def 3;
         now let d be Element of D; assume d in dom(G+F);
       hence (G+F).d = G.d+F.d by SEQ_1:def 3
-      .= G.d + 0 by A1,FUNCOP_1:13
+      .= G.d + 0 by FUNCOP_1:13
       .= G.d;
      end;
-    then G+F = G by A4,PARTFUN1:34;
+    then G+F = G by A3,PARTFUN1:34;
     hence addpfunc(D).(G,F) = G by Def4;
    end;
-  hence thesis by A3,BINOP_1:13;
+  hence thesis by A2,BINOP_1:13;
  end;
 
 theorem Th19:
@@ -595,9 +590,11 @@ for D be non empty set holds Sum(<*> PFuncs(D,REAL) ) = [#](D)-->(0 qua Real)
   thus Sum f = o0 by A1,FINSOP_1:11;
  end;
 
-theorem Th22:
+ Lm3:
 for D be non empty set, G be Element of PFuncs(D,REAL) holds Sum <*G*> = G
   by FINSOP_1:12;
+
+canceled;
 
 theorem Th23:
 for D be non empty set, f be FinSequence of PFuncs(D,REAL),
@@ -626,7 +623,7 @@ theorem
  proof let D be non empty set, f be FinSequence of PFuncs(D,REAL),
          G be Element of PFuncs(D,REAL);
   thus Sum(<*G*>^f) = Sum <*G*> + Sum f by Th24
-   .= G + Sum f by Th22;
+   .= G + Sum f by Lm3;
  end;
 
 theorem Th26:
@@ -635,7 +632,7 @@ for D be non empty set, G1,G2 be Element of PFuncs(D,REAL) holds
  proof let D be non empty set, G1,G2 be Element of PFuncs(D,REAL);
   thus Sum<*G1,G2*> = Sum(<*G1*>^<*G2*>) by FINSEQ_1:def 9
                   .= Sum<*G1*> + G2 by Th23
-                  .= G1 + G2 by Th22;
+                  .= G1 + G2 by Lm3;
  end;
 
 theorem
@@ -666,7 +663,7 @@ theorem
     let f,g be FinSequence of PFuncs(D,REAL); assume
     A4: f,g are_fiberwise_equipotent & len f = n+1;
     then A5: rng f = rng g & len f = len g by RFINSEQ:1,16;
-    0+1<=n+1 by NAT_1:38;
+    0+1<=n+1 by NAT_1:13;
     then A6: n+1 in dom f by A4,FINSEQ_3:27;
     then reconsider a=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
        a in rng g by A5,A6,FUNCT_1:def 5;
@@ -683,7 +680,7 @@ theorem
        m in Seg m by A9,FINSEQ_1:3;
     then gm.m = a & m in dom g by A7,RFINSEQ:19;
     then A12: gm = (gm|m1) ^ <*a*> by A10,A11,RFINSEQ:20;
-       m1<=m by A11,NAT_1:29;
+       m1<=m by A11,NAT_1:11;
     then A13: Seg m1 c= Seg m by FINSEQ_1:7;
     A14: gm|m1 = gm|(Seg m1) by FINSEQ_1:def 15
     .= (g|(Seg m))|(Seg m1) by FINSEQ_1:def 15
@@ -691,7 +688,7 @@ theorem
     .= g|(Seg m1) by A13,XBOOLE_1:28
     .= g|m1 by FINSEQ_1:def 15;
     set fn=f|n;
-       n<=n+1 by NAT_1:29;
+       n<=n+1 by NAT_1:11;
     then A15: len fn = n by A4,FINSEQ_1:80;
     A16: f = fn ^ <*a*> by A4,RFINSEQ:20;
         now let x;
@@ -770,11 +767,11 @@ for n st n in dom it
    set m = min(len R,len f);
    defpred P[Element of NAT,set] means
     for F be PartFunc of D,REAL, r st r=R.$1 & F = f.$1 holds $2 = r(#)F;
-   A1: m<=len R & m<=len f by SQUARE_1:35;
+   A1: m<=len R & m<=len f by XXREAL_0:17;
    A2: for n st n in Seg m ex x being Element of PFuncs(D,REAL) st P[n,x]
     proof let n; assume n in Seg m;
      then A3: 1<=n & n<=m by FINSEQ_1:3;
-     then n<=len R & n<=len f by A1,XREAL_1:2;
+     then n<=len R & n<=len f by A1,XXREAL_0:2;
       then n in dom R & n in dom f by A3,FINSEQ_3:27;
      then reconsider F=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
      reconsider r=R.n as Real;
@@ -799,11 +796,11 @@ for n st n in dom it
    A7: len p2 = m and
    A8: for n st n in dom p2
     for F be PartFunc of D,REAL, r st r = R.n & F = f.n holds p2.n = r(#)F;
-   A9: m<=len R & m<=len f by SQUARE_1:35;
+   A9: m<=len R & m<=len f by XXREAL_0:17;
    A10: dom p1 = Seg len p1 & dom p2 = Seg len p2 by FINSEQ_1:def 3;
        now let n; assume A11: n in Seg m;
      then A12: 1<=n & n<=m by FINSEQ_1:3;
-     then n<=len R & n<=len f by A9,XREAL_1:2;
+     then n<=len R & n<=len f by A9,XXREAL_0:2;
       then n in dom R & n in dom f by A12,FINSEQ_3:27;
      then reconsider F=f.n as Element of PFuncs(D,REAL) by FINSEQ_2:13;
      reconsider r=R.n as Real;
@@ -887,7 +884,7 @@ A3: n<len f;
     then A4: dom f = Seg len f & dom(f|n) = Seg len(f|n) & len(f|n) = n
        by FINSEQ_1:80,def 3;
        0<n by A1;
-    then 0+1<=n by NAT_1:38;
+    then 0+1<=n by NAT_1:13;
     then n in dom f by A3,FINSEQ_3:27;
     then G = f.m & m in dom f by A2,A4,RFINSEQ:19;
     hence thesis by A1,Def9;
@@ -912,8 +909,8 @@ theorem
    case n<=len f;
     then A3: dom f = Seg len f & dom fn = Seg len fn & len fn = len f - n &
         G= f.(m+n) by A2,FINSEQ_1:def 3,RFINSEQ:def 2;
-       1<=m & m<=len fn & m<=m+n by A2,FINSEQ_3:27,NAT_1:29;
-    then 1<=m+n & m+n<=len f by A3,XREAL_1:2,XREAL_1:21;
+       1<=m & m<=len fn & m<=m+n by A2,FINSEQ_3:27,NAT_1:11;
+    then 1<=m+n & m+n<=len f by A3,XXREAL_0:2,XREAL_1:21;
     then m+n in dom f by FINSEQ_3:27;
     hence thesis by A1,A3,Def9;
    end;
@@ -940,7 +937,7 @@ for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL)
       then A7: 1 in dom f by A4,FINSEQ_3:27;
       then reconsider G = f.1 as Element of PFuncs(D,REAL) by FINSEQ_2:13;
          f=<*G*> by A4,A6,FINSEQ_1:57;
-      then A8: Sum(f) = G by Th22;
+      then A8: Sum(f) = G by Lm3;
       hence d is_common_for_dom f implies d in dom Sum(f) by A7,Def9;
       assume d in dom Sum(f);
       then for F be Element of PFuncs(D,REAL), m st m in dom f & f.m=F holds d
@@ -950,11 +947,11 @@ in dom F
      end;
      case A9: n <> 0;
       then 0<n;
-      then A10: 0+1<=n by NAT_1:38;
+      then A10: 0+1<=n by NAT_1:13;
       set fn = f|n;
-         n<=n+1 by NAT_1:29;
+         n<=n+1 by NAT_1:11;
       then A11: len fn = n & n in dom f by A4,A10,FINSEQ_1:80,FINSEQ_3:27;
-      0+1<=n+1 by NAT_1:38;
+      0+1<=n+1 by NAT_1:13;
       then A12: n+1 in dom f by A4,FINSEQ_3:27;
       then reconsider G=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
          f = fn ^ <*G*> by A4,RFINSEQ:20;
@@ -980,7 +977,7 @@ in dom F
           hence d in dom F by A4,A16,A18,XBOOLE_0:def 3;
          end;
          case m<>len f; then m<len f by A19,REAL_1:def 5;
-          then m<=n by A4,NAT_1:38;
+          then m<=n by A4,NAT_1:13;
           then A20: m in Seg n & dom fn = Seg len fn
           by A19,FINSEQ_1:3,def 3
 ;
@@ -1023,7 +1020,7 @@ A3:    n<len f;
      end;
      case n<>0;
       then 0<n;
-      then 0+1<=n by NAT_1:38;
+      then 0+1<=n by NAT_1:13;
       then A6: n in dom f by A3,FINSEQ_3:27;
           now let m; assume
         A7: m in Seg len(f|n);
@@ -1065,10 +1062,10 @@ for D be non empty set, d be Element of D, f be FinSequence of PFuncs(D,REAL),
   let G be Element of PFuncs(D,REAL), n; assume
   A2: n in dom (R(#)f) & (R(#)f).n = G;
   set m = min(len R,len f);
-  A3: m<=len R & m<=len f by SQUARE_1:35;
+  A3: m<=len R & m<=len f by XXREAL_0:17;
      len(R(#)f) = m by Def7;
   then A4: 1<=n & n<=m by A2,FINSEQ_3:27;
-  then n<=len R & n<=len f by A3,XREAL_1:2;
+  then n<=len R & n<=len f by A3,XXREAL_0:2;
   then A5: n in dom R & n in dom f by A4,FINSEQ_3:27;
   reconsider r=R.n as Real;
   reconsider F=f.n as Element of PFuncs(D,REAL) by A5,FINSEQ_2:13;
@@ -1094,66 +1091,65 @@ theorem
   for f be FinSequence of PFuncs(D,REAL) st len f = $1 & d is_common_for_dom f
     holds (Sum(f)).d = Sum(f#d);
   A1: P[0]
-   proof let f be FinSequence of PFuncs(D,REAL);
-    A2: [#](D) = D by SUBSET_1:def 4; assume
-    A3: len f = 0 & d is_common_for_dom f;
+   proof let f be FinSequence of PFuncs(D,REAL); assume
+    A2: len f = 0 & d is_common_for_dom f;
     then f=<*> PFuncs(D,REAL) by FINSEQ_1:32;
-    then A4: (Sum(f)).d = ([#](D)-->(0 qua Real)).d by Th21
-     .= 0 by A2,FUNCOP_1:13;
-       len(f#d)=0 by A3,Def8;
-    hence (Sum(f)).d = Sum(f#d) by A4,FINSEQ_1:32,RVSUM_1:102;
+    then A3: (Sum(f)).d = ([#](D)-->(0 qua Real)).d by Th21
+     .= 0 by FUNCOP_1:13;
+       len(f#d)=0 by A2,Def8;
+    hence (Sum(f)).d = Sum(f#d) by A3,FINSEQ_1:32,RVSUM_1:102;
    end;
-  A5: for n st P[n] holds P[n+1]
+  A4: for n st P[n] holds P[n+1]
    proof let n; assume
-    A6: P[n];
+    A5: P[n];
     let f be FinSequence of PFuncs(D,REAL); assume
-    A7: len f = n+1 & d is_common_for_dom f;
+    A6: len f = n+1 & d is_common_for_dom f;
     set fn = f|n;
-       n<=n+1 by NAT_1:29;
-    then A8: len fn = n by A7,FINSEQ_1:80;
-    A9: dom f = Seg len f & dom(f#d) = Seg len(f#d) & len (f#d)=len f
+       n<=n+1 by NAT_1:11;
+    then A7: len fn = n by A6,FINSEQ_1:80;
+    A8: dom f = Seg len f & dom(f#d) = Seg len(f#d) & len (f#d)=len f
      by Def8,FINSEQ_1:def 3;
-    0+1<=n+1 by NAT_1:38;
-    then A10: n+1 in dom f by A7,FINSEQ_3:27;
+    0+1<=n+1 by NAT_1:13;
+    then A9: n+1 in dom f by A6,FINSEQ_3:27;
     then reconsider G=f.(n+1) as Element of PFuncs(D,REAL) by FINSEQ_2:13;
-       f = fn ^ <*G*> by A7,RFINSEQ:20;
-    then A11: Sum f = Sum fn + G by Th23;
-    A12: d in dom G by A7,A10,Def9;
+       f = fn ^ <*G*> by A6,RFINSEQ:20;
+    then A10: Sum f = Sum fn + G by Th23;
+    A11: d in dom G by A6,A9,Def9;
         now per cases;
-     case A13: n=0;
-      then A14: f = <*G*> by A7,FINSEQ_1:57;
-      A15: len(f#d) = 1 & len<*G.d*>=1 & dom(f#d)=dom(f#d)
-        by A7,A13,Def8,FINSEQ_1:57;
-      then A16: 1 in dom(f#d) by FINSEQ_3:27;
+     case A12: n=0;
+      then A13: f = <*G*> by A6,FINSEQ_1:57;
+      A14: len(f#d) = 1 & len<*G.d*>=1 & dom(f#d)=dom(f#d)
+        by A6,A12,Def8,FINSEQ_1:57;
+      then A15: 1 in dom(f#d) by FINSEQ_3:27;
           now let m; assume m in Seg 1;
-        then A17: m=1 by FINSEQ_1:4,TARSKI:def 1;
-        hence (f#d).m=G.d by A13,A16,Def8
-        .=<*G.d*>.m by A17,FINSEQ_1:57;
+        then A16: m=1 by FINSEQ_1:4,TARSKI:def 1;
+        hence (f#d).m=G.d by A12,A15,Def8
+        .=<*G.d*>.m by A16,FINSEQ_1:57;
        end;
-      then A18: f#d = <*G.d*> by A15,FINSEQ_2:10;
-      thus (Sum f).d = G.d by A14,Th22
-      .=Sum (f#d) by A18,RVSUM_1:103;
+      then A17: f#d = <*G.d*> by A14,FINSEQ_2:10;
+      thus (Sum f).d = G.d by A13,Lm3
+      .=Sum (f#d) by A17,FINSOP_1:12;
      end;
-     case A19: n<>0;
-      then A20: d is_common_for_dom fn by A7,Th29;
-      then (Sum(fn)).d = Sum(fn#d) & d in dom(Sum(fn)) by A6,A8,A19,Th31;
-      then d in dom(Sum(fn)) /\ dom G by A12,XBOOLE_0:def 3;
-      then A21: d in dom(Sum(fn)+G) by SEQ_1:def 3;
-      A22: (f#d).(n+1) =G.d by A9,A10,Def8;
-      thus (Sum f).d = (Sum fn).d + G.d by A11,A21,SEQ_1:def 3
-      .= Sum(fn#d) + G.d by A6,A8,A20
+     case A18: n<>0;
+      then A19: d is_common_for_dom fn by A6,Th29;
+      then (Sum(fn)).d = Sum(fn#d) & d in dom(Sum(fn)) by A5,A7,A18,Th31;
+      then d in dom(Sum(fn)) /\ dom G by A11,XBOOLE_0:def 3;
+      then A20: d in dom(Sum(fn)+G) by SEQ_1:def 3;
+      A21: (f#d).(n+1) =G.d by A8,A9,Def8;
+      thus (Sum f).d = (Sum fn).d + G.d by A10,A20,SEQ_1:def 3
+      .= Sum(fn#d) + G.d by A5,A7,A19
       .= Sum((f#d)|n) + G.d by Th32
       .= Sum(((f#d)|n)^<*G.d*>) by RVSUM_1:104
-      .= Sum(f#d) by A7,A9,A22,RFINSEQ:20;
+      .= Sum(f#d) by A6,A8,A21,RFINSEQ:20;
      end;
      end;
     hence thesis;
    end;
-  A23: for n holds P[n] from NAT_1:sch 1(A1,A5);
+  A22: for n holds P[n] from NAT_1:sch 1(A1,A4);
   let f be FinSequence of PFuncs(D,REAL); assume
-  A24: d is_common_for_dom f;
+  A23: d is_common_for_dom f;
      len f = len f;
-  hence (Sum(f)).d = Sum(f#d) by A23,A24;
+  hence (Sum(f)).d = Sum(f#d) by A22,A23;
  end;
 
 definition let D be non empty set,
@@ -1284,7 +1280,7 @@ for D be non empty set, F be PartFunc of D,REAL, r be Real
   then A8: (max+ F).d = r by TARSKI:def 1;
       (max+ F).d = max+(F.d) by A2,A7,Def10
   .= max(F.d,0);
-  then F.d = r by A1,A8,SQUARE_1:49;
+  then F.d = r by A1,A8,XXREAL_0:16;
   then F.d in {r} by TARSKI:def 1;
   hence thesis by A7,FUNCT_1:def 13;
  end;
@@ -1327,7 +1323,7 @@ A1: dom F = dom (max+ F) by Def10;
   suppose d in dom F;
   then (max+ F).d = max+(F.d) by A1,Def10
   .= max(F.d,0);
-  hence thesis by SQUARE_1:46;
+  hence thesis by XXREAL_0:25;
   end;
   suppose not d in dom F;
     hence thesis by A1,FUNCT_1:def 4;
@@ -1356,7 +1352,7 @@ for D be non empty set, F be PartFunc of D,REAL, r be Real
   then A8: (max- F).d = r by TARSKI:def 1;
       (max- F).d = max-(F.d) by A2,A7,Def11
   .= max(-F.d,0);
-  then -F.d = r by A1,A8,SQUARE_1:49;
+  then -F.d = r by A1,A8,XXREAL_0:16;
   then F.d in {-r} by TARSKI:def 1;
   hence thesis by A7,FUNCT_1:def 13;
  end;
@@ -1401,7 +1397,7 @@ A1: dom F = dom (max- F) by Def11;
     suppose d in dom F;
   then (max- F).d = max-(F.d) by A1,Def11
   .= max(-F.d,0);
-  hence thesis by SQUARE_1:46;
+  hence thesis by XXREAL_0:25;
   end;
   suppose not d in dom F;
     hence thesis by A1,FUNCT_1:def 4;
@@ -1835,7 +1831,7 @@ theorem
      A2: x1 in [.a,b.] & x2 in [.a,b.] & x3 in [.a,b.] & x1<x2 & x2<x3;
      then A3: 0 < x3 - x2 & x2-x3<0 & 0 < x2 - x1 & x1-x2<0
        by REAL_2:105,XREAL_1:52;
-        x1<x3 by A2,XREAL_1:2;
+        x1<x3 by A2,XXREAL_0:2;
      then A4: x1-x3<0 & 0<>x1-x3 by REAL_2:105;
      set r = (x2-x3)/(x1-x3);
      A5: r + (x1-x2)/(x1-x3) = ((x1-x2) + (x2-x3))/(x1-x3) by XCMPLX_1:63
@@ -2128,7 +2124,7 @@ A7: X c= dom F by A1,Def13;
   then max+(p*(F-r).x)= p* (max+ ((F-r).x)) &
   max+((1-p)*(F-r).y) = (1-p)*(max+ ((F-r).y)) by A4,Th4;
   then max+(F.(p*x+(1-p)*y) -r) <= p*(max+ ((F-r).x)) + (1-p)*(max+ ((F-r).y))
-   by A6,A8,A9,XREAL_1:2;
+   by A6,A8,A9,XXREAL_0:2;
   then max+ ((F-r).(p*x+(1-p)*y)) <= p*(max+ ((F-r).x)) + (1-p)*(max+ ((F-r).y
 ))
    by A2,A5,A7,Def12;
@@ -2153,13 +2149,12 @@ theorem Th64:
 id [#](REAL) is_convex_on REAL
  proof
   set i = id [#](REAL);
-  A1: [#](REAL) = REAL by SUBSET_1:def 4;
-  hence REAL c= dom i by FUNCT_1:34;
+  thus REAL c= dom i by FUNCT_1:34;
   let p be Real; assume
      0<=p & p<=1;
   let x,y be Real; assume
      x in REAL & y in REAL & p*x+(1-p)*y in REAL;
-     i.x = x & i.y = y & i.(p*x+(1-p)*y) = p*x+(1-p)*y by A1,FUNCT_1:34;
+     i.x = x & i.y = y & i.(p*x+(1-p)*y) = p*x+(1-p)*y by FUNCT_1:34;
   hence thesis;
  end;
 
@@ -2416,7 +2411,7 @@ for D be non empty set, F be PartFunc of D,REAL, X be set, d be Element of D
      rng fx <> {} by A1,A3,FUNCT_1:12;
   then fx <> {} by FINSEQ_1:27;
   then len fx <> 0 & 0<=len fx by FINSEQ_1:25;
-  then 0+1<=len fx by NAT_1:38;
+  then 0+1<=len fx by NAT_1:13;
   then max(0,len fx -1) = len fx - 1 by FINSEQ_2:4;
   then reconsider n=len fx - 1 as Element of NAT by FINSEQ_2:5;
      len fx = n+1;
@@ -2433,7 +2428,7 @@ for D be non empty set, F be PartFunc of D,REAL, X be set, d be Element of D
    (for d1,d2 be Element of D st d1 in dom(F|Y) &
    d2 in dom(F|(X\Y)) holds F.d1>= F.d2)
     holds FinS(F,X) = FinS(F,Y) ^ FinS(F,X \ Y);
-  Lm3: P[0]
+  Lm4: P[0]
    proof
    let D be non empty set, F be PartFunc of D,REAL, X be set;
    let Y be set;
@@ -2455,7 +2450,7 @@ A1: Z = dom(F|Y);
     .= FinS(F,X) by A2,Th66;
     hence thesis by A5,FINSEQ_1:47;
    end;
-  Lm4: for n st P[n] holds P[n+1]
+  Lm5: for n st P[n] holds P[n+1]
    proof let n; assume
     A1: P[n];
     let D be non empty set, F be PartFunc of D,REAL, X be set;
@@ -2477,7 +2472,7 @@ A1: Z = dom(F|Y);
     then A6: rng fy = rng(F|Y) & rng fxy = rng(F|(X\Y)) by RFINSEQ:1;
    1<=n+1
  proof
-  0+1<=n+1 by NAT_1:38;
+  0+1<=n+1 by NAT_1:13;
   hence thesis;
  end;
 
@@ -2570,8 +2565,8 @@ RFINSEQ:2;
          len xfy = 1 + len fxy by A34,FINSEQ_1:35;
       then A36: len fxy = len xfy - 1;
       then A37: n1<=len fxy by A35,XREAL_1:11;
-       n1+1<=len fxy & n<n+1 by A35,A36,NAT_1:38,XREAL_1:21;
-      then A38: n1+1 in dom fxy & 1<n+1 by A35,XREAL_1:2,FINSEQ_3:27;
+       n1+1<=len fxy & n<n+1 by A35,A36,NAT_1:13,XREAL_1:21;
+      then A38: n1+1 in dom fxy & 1<n+1 by A35,XXREAL_0:2,FINSEQ_3:27;
       then A39: xfy.(n+1) = fxy.(n+1-1) by A34,A35,FINSEQ_1:37
       .= fxy.(n1+1);
          fxy.(n1+1) in rng fxy by A38,FUNCT_1:def 5;
@@ -2586,7 +2581,7 @@ RFINSEQ:2;
        suppose n <> 1;
         then A43: 1<n by A35,REAL_1:def 5;
         then A44: xfy.n = fxy.n1 by A34,A35,FINSEQ_1:37;
-           1+1<=n by A43,NAT_1:38;
+           1+1<=n by A43,NAT_1:13;
         then 1<=n1 by XREAL_1:21;
         then n1 in dom fxy by A37,FINSEQ_3:27;
         hence r>=s by A38,A39,A44,RFINSEQ:def 4;
@@ -2611,7 +2606,7 @@ theorem
   d1 in dom(F|Y) & d2 in dom(F|(X\Y)) holds F.d1>=F.d2)
    holds FinS(F,X) = FinS(F,Y) ^ FinS(F,X \ Y)
  proof let D be non empty set, F be PartFunc of D,REAL, X be set;
-  A1: for n holds P[n] from NAT_1:sch 1(Lm3,Lm4);
+  A1: for n holds P[n] from NAT_1:sch 1(Lm4,Lm5);
   let Y be set; assume
   A2: dom(F|X) is finite & Y c= X &
   for d1,d2 be Element of D st
@@ -2650,7 +2645,7 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
      rng fx <> {} by A1,A5,FUNCT_1:12;
   then fx <> {} by FINSEQ_1:27;
   then len fx <> 0 & 0<=len fx by FINSEQ_1:25;
-  then 0+1<=len fx by NAT_1:38;
+  then 0+1<=len fx by NAT_1:13;
   then A10: len fx in dom fx by FINSEQ_3:27;
      F.d in rng(F|X) by A1,A9,FUNCT_1:68;
   then consider n such that
@@ -2682,7 +2677,7 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
       then m<len frx by A19,REAL_1:def 5;
       then F.d1-r>=F.d-r by A3,A4,A8,A10,A13,A18,RFINSEQ:32;
       then F.d1>=F.d by XREAL_1:11;
-      hence contradiction by A14,A16,A20,XREAL_1:1;
+      hence contradiction by A14,A16,A20,XXREAL_0:1;
      end;
      end;
     hence contradiction;
@@ -2716,7 +2711,7 @@ FinS(F-r,X).(len FinS(F-r,X)) = (F-r).d iff FinS(F,X).(len FinS(F,X)) = F.d
    case len fx <> m;
     then m<len fx by A27,REAL_1:def 5;
     then F.d1>=F.d by A10,A21,A26,RFINSEQ:32;
-    hence contradiction by A8,A22,A25,A29,XREAL_1:1;
+    hence contradiction by A8,A22,A25,A29,XXREAL_0:1;
    end;
    end;
   hence contradiction;
@@ -2740,7 +2735,7 @@ A3:  G = dom(F|X);
     then A4: dom(F|X) = {} by A3,CARD_2:59;
     then FinS(F,X) = FinS(F,{}) by Th66
     .= <*>REAL by Th71;
-    then A5: FinS(F,X) - (card(G)|->r) = <*>REAL by RVSUM_1:49;
+    then A5: FinS(F,X) - (card(G)|->r) = <*>REAL by FINSEQ_2:87;
        dom((F-r)|X) = dom(F-r) /\ X by FUNCT_1:68
     .=dom F /\ X by Def12
     .=dom(F|X) by FUNCT_1:68;
@@ -2759,7 +2754,7 @@ A9: n+1= card(G);
     .=dom(F|X) by FUNCT_1:68;
     then A11: FinS(F-r,X), (F-r)|X are_fiberwise_equipotent by A8,Def14;
     then A12: rng FinS(F-r,X) = rng((F-r)|X) by RFINSEQ:1;
-    A13: 0+1<=n+1 by NAT_1:38;
+    A13: 0+1<=n+1 by NAT_1:13;
     set frx = FinS(F-r,X),
          fx = FinS(F,X);
     A14: len frx = card G & len fx = card G by A8,A10,Th70;
@@ -2814,55 +2809,52 @@ A9: n+1= card(G);
     then A29: <*(F-r).d*> = <*F.d*> - <*r*> by RVSUM_1:50;
     A30: len n1r = n+1 & len nr = n by FINSEQ_2:69;
     A31: len fx = n+1 & len fy = n by A8,A9,A27,Th70;
-A32:  fx - n1r = diffreal.:(fx,n1r) &
-    fy - nr = diffreal.:(fy,nr) by RVSUM_1:def 6;
-    then A33: len (fx - n1r) = n+1 by A30,A31,FINSEQ_2:86;
-A34:  len (fy - nr) = n by A30,A31,A32,FINSEQ_2:86;
-    A35: len <*F.d*> =1 & len <*r*> = 1 & <*F.d*>.1=F.d & <*r*>.1=r &
-    <*F.d*> - <*r*>=diffreal.:
-(<*F.d*>,<*r*>) by FINSEQ_1:57,RVSUM_1:def 6;
-    then A36: len (<*F.d*> - <*r*>) = 1 by FINSEQ_2:86;
-    then A37: len ((fy - nr)^(<*F.d*> - <*r*>)) = n+1 by A34,FINSEQ_1:35;
-    A38: dom fx = Seg len fx by FINSEQ_1:def 3;
-A39:      dom(<*F.d*> - <*r*>)=dom(<*F.d*> - <*r*>) &
+    then A32: len (fx - n1r) = n+1 by A30,FINSEQ_2:86;
+A33:  len (fy - nr) = n by A30,A31,FINSEQ_2:86;
+    A34: len <*F.d*> =1 & len <*r*> = 1 & <*F.d*>.1=F.d & <*r*>.1=r &
+    <*F.d*> - <*r*>=diffreal.:(<*F.d*>,<*r*>) by FINSEQ_1:57;
+    then A35: len (<*F.d*> - <*r*>) = 1 by FINSEQ_2:86;
+    then A36: len ((fy - nr)^(<*F.d*> - <*r*>)) = n+1 by A33,FINSEQ_1:35;
+    A37: dom fx = Seg len fx by FINSEQ_1:def 3;
+A38:      dom(<*F.d*> - <*r*>)=dom(<*F.d*> - <*r*>) &
       dom(fy - nr)=Seg len(fy - nr) & n+1 in Seg(n+1)
         by FINSEQ_1:6,def 3;
-    A40: n<n+1 & 1 in Seg 1 by FINSEQ_1:3,NAT_1:38;
-then A41:   1 in dom(<*F.d*> - <*r*>) by A36,FINSEQ_1:def 3;
+    A39: n<n+1 & 1 in Seg 1 by FINSEQ_1:3,NAT_1:13;
+then A40:   1 in dom(<*F.d*> - <*r*>) by A35,FINSEQ_1:def 3;
         now let m; assume
-      A42: m in Seg(n+1);
+      A41: m in Seg(n+1);
        per cases;
-       suppose A43: m=n+1;
-        then A44: n1r.m = r by A39,FINSEQ_2:70;
-A45:      m in dom (fx - n1r) by A33,A42,FINSEQ_1:def 3;
+       suppose A42: m=n+1;
+        then A43: n1r.m = r by A38,FUNCOP_1:13;
+A44:      m in dom (fx - n1r) by A32,A41,FINSEQ_1:def 3;
            ((fy - nr)^(<*F.d*> - <*r*>)).m = (<*F.d*> - <*r*>).(n+1-n)
-                  by A34,A37,A40,A43,FINSEQ_1:37
-        .= F.d - r by A35,A41,RVSUM_1:47;
+                  by A33,A36,A39,A42,FINSEQ_1:37
+        .= F.d - r by A34,A40,SEQ_1:def 4;
         hence (fx - n1r).m = ((fy - nr)^(<*F.d*> - <*r*>)).m
-         by A16,A31,A43,A44,A45,RVSUM_1:47;
+         by A16,A31,A42,A43,A44,SEQ_1:def 4;
        end;
        suppose
-A46:      m<>n+1;
-      A47: 1<=m & m<=n+1 by A42,FINSEQ_1:3;
-        then m<n+1 by A46,REAL_1:def 5;
-        then A48: m<=n by NAT_1:38;
-        then A49: m in Seg n by A47,FINSEQ_1:3;
-        then A50: ((fy - nr)^(<*F.d*> - <*r*>)).m = (fy - nr).m
-          by A34,A39,FINSEQ_1:def 7;
-        A51: nr.m = r by A49,FINSEQ_2:70;
-           1<=n & n<=n+1 by A47,A48,XREAL_1:2,NAT_1:29;
+A45:      m<>n+1;
+      A46: 1<=m & m<=n+1 by A41,FINSEQ_1:3;
+        then m<n+1 by A45,REAL_1:def 5;
+        then A47: m<=n by NAT_1:13;
+        then A48: m in Seg n by A46,FINSEQ_1:3;
+        then A49: ((fy - nr)^(<*F.d*> - <*r*>)).m = (fy - nr).m
+          by A33,A38,FINSEQ_1:def 7;
+        A50: nr.m = r by A48,FUNCOP_1:13;
+           1<=n & n<=n+1 by A46,A47,XXREAL_0:2,NAT_1:11;
         then n in Seg(n+1) by FINSEQ_1:3;
-        then A52: (fx|n).m = fx.m & m in dom fx & n1r.m=r
-          by A31,A38,A42,A49,FINSEQ_2:70,RFINSEQ:19;
+        then A51: (fx|n).m = fx.m & m in dom fx & n1r.m=r
+          by A31,A37,A41,A48,FUNCOP_1:13,RFINSEQ:19;
         reconsider s=fx.m as Real;
-A53:      m in dom(fx - n1r) by A33,A42,FINSEQ_1:def 3;
-           m in dom(fy - nr) by A34,A49,FINSEQ_1:def 3;
+A52:      m in dom(fx - n1r) by A32,A41,FINSEQ_1:def 3;
+           m in dom(fy - nr) by A33,A48,FINSEQ_1:def 3;
         hence ((fy - nr)^(<*F.d*> - <*r*>)).m = s-r
-          by A17,A50,A51,A52,RVSUM_1:47
-        .=(fx - n1r).m by A52,A53,RVSUM_1:47;
+          by A17,A49,A50,A51,SEQ_1:def 4
+        .=(fx - n1r).m by A51,A52,SEQ_1:def 4;
      end;
      end;
-    hence thesis by A9,A18,A20,A28,A29,A33,A37,FINSEQ_2:10;
+    hence thesis by A9,A18,A20,A28,A29,A32,A36,FINSEQ_2:10;
    end;
       for n holds P[n] from NAT_1:sch 1(A2,A6);
   hence thesis by A1;
@@ -2900,7 +2892,7 @@ A1:  dx = dom(F|X);
   then A3: rng fx = {r} by A2,RFINSEQ:1;
      len fx = card dx & dom fx = Seg len fx by A1,Th70,FINSEQ_1:def 3;
   then fx = Seg(card dx) --> r by A3,FUNCOP_1:15;
-  hence thesis by FINSEQ_2:def 2;
+  hence thesis;
  end;
 
 theorem Th79:
@@ -3060,8 +3052,7 @@ for D be non empty set, F be PartFunc of D,REAL, X be set, r be Real
    .= dom(F|X) by SEQ_1:def 6;
    then reconsider rFX = (r(#)F)|X as finite Function by A1,FINSET_1:29;
        now let x be Real;
-        r*b = (r multreal) * b by RVSUM_1:def 7;
-     then A8: len(r*b) = len b by FINSEQ_2:37;
+     A8: len(r*b) = len b by FINSEQ_2:37;
          now per cases;
       case A9: not x in rng(r*b);
        then A10: (r*b)"{x} = {} by Lm2;
@@ -3275,7 +3266,7 @@ theorem
  proof let D be non empty set, F be PartFunc of D,REAL, d be Element of D;
   assume A1: d in dom F;
   thus Sum(F,{d}) = Sum <*F.d*> by A1,Th72
-  .= F.d by RVSUM_1:103;
+  .= F.d by FINSOP_1:12;
  end;
 
 theorem

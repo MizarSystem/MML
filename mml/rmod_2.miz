@@ -7,11 +7,11 @@
 environ
 
  vocabularies FUNCSDOM, VECTSP_1, VECTSP_2, RLSUB_1, BOOLE, RLVECT_1, ARYTM_1,
-      LMOD_4, RELAT_1, FUNCT_1, BINOP_1, GROUP_1, REALSET1;
+      LMOD_4, RELAT_1, FUNCT_1, BINOP_1, GROUP_1, REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
       REALSET1, STRUCT_0, DOMAIN_1, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1,
       FUNCSDOM, VECTSP_2;
- constructors PARTFUN1, DOMAIN_1, BINOP_1, REALSET1, VECTSP_2;
+ constructors PARTFUN1, DOMAIN_1, BINOP_1, REALSET1, VECTSP_2, NAT_D;
  registrations FUNCT_1, VECTSP_2, STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0,
       REALSET1;
  requirements SUBSET, BOOLE;
@@ -594,8 +594,15 @@ FUNCT_1:def 5;
    set W = RightModStr (# D,A,d,M #);
     A18: for a,b be Element of W
      for x,y be Vector of V st x = a & b = y
-     holds a + b = x + y by A4, FUNCT_1:70;
-A19: W is Abelian add-associative right_zeroed right_complementable
+     holds a + b = x + y
+      proof let a,b be Element of W;
+       let x,y be Vector of V such that
+A19:      x = a & b = y;
+       thus a + b = A.[a,b]
+         .= x + y by A19,A4, FUNCT_1:70;
+      end;
+
+A20: W is Abelian add-associative right_zeroed right_complementable
      proof
       thus W is Abelian
        proof
@@ -606,10 +613,10 @@ A19: W is Abelian add-associative right_zeroed right_complementable
        end;
       hereby let a,b,c be Element of W;
        reconsider x = a, y = b, z = c as Vector of V by TARSKI:def 3;
-       A20: a + b = x + y & b + c = y + z by A18;
+       A21: a + b = x + y & b + c = y + z by A18;
       hence a + b + c = x + y + z by A18
                     .= x + (y + z) by RLVECT_1:def 6
-                    .= a + (b + c) by A18,A20;
+                    .= a + (b + c) by A18,A21;
       end;
       hereby let a be Element of W;
        reconsider x = a as Vector of V by TARSKI:def 3;
@@ -621,9 +628,9 @@ A19: W is Abelian add-associative right_zeroed right_complementable
        reconsider b' = (comp V).x as Vector of V;
           C.x in D by FUNCT_2:7;
        then reconsider b = ((comp V)|D).x as Element of W;
-A21:     b = b' by FUNCT_1:72;
+A22:     b = b' by FUNCT_1:72;
        take b;
-       thus a + b = x + b' by A18,A21
+       thus a + b = x + b' by A18,A22
                  .= x + -x by VECTSP_1:def 25
                  .= 0.W by RLVECT_1:16;
      end;
@@ -631,28 +638,28 @@ A21:     b = b' by FUNCT_1:72;
      proof let a,b be Scalar of R;
            let v,w be Vector of W;
         reconsider x = v, y = w as Vector of V by TARSKI:def 3;
-       A22: now let a be Scalar of R;
+       A23: now let a be Scalar of R;
                  let x be Element of W;
                  let y be Vector of V;
-         assume A23: y = x;
-          A24: [x,a] in dom M by A13;
-        thus x * a = y * a by A23,A24,FUNCT_1:70;
+         assume A24: y = x;
+          A25: [x,a] in dom M by A13;
+        thus x * a = y * a by A24,A25,FUNCT_1:70;
        end;
-       then A25: v * b = x * b & v * a = x * a & w * a = y * a;
+       then A26: v * b = x * b & v * a = x * a & w * a = y * a;
        then v * a + w * a = x * a + y * a & v + w = x + y by A18;
-      hence (v + w) * a = (x + y) * a by A22
+      hence (v + w) * a = (x + y) * a by A23
                        .= x * a + y * a by VECTSP_2:def 23
-                       .= v * a + w * a by A18,A25;
-      thus v * (a + b) = x * (a + b) by A22
+                       .= v * a + w * a by A18,A26;
+      thus v * (a + b) = x * (a + b) by A23
                       .= x * a + x * b by VECTSP_2:def 23
-                      .= v * a + v * b by A18,A25;
-      thus v * (b * a) = x * (b * a) by A22
+                      .= v * a + v * b by A18,A26;
+      thus v * (b * a) = x * (b * a) by A23
                       .= x * b * a by VECTSP_2:def 23
-                      .= v * b * a by A22,A25;
-      thus v * 1.R = x * 1.R by A22
+                      .= v * b * a by A23,A26;
+      thus v * 1.R = x * 1.R by A23
                    .= v by VECTSP_2:def 23;
      end;
-   then reconsider W as RightMod of R by A19;
+   then reconsider W as RightMod of R by A20;
    reconsider W as strict Submodule of V by Def2;
   take W;
   thus thesis;

@@ -7,13 +7,13 @@
 environ
 
  vocabularies PARTIT1, FUNCT_2, MARGREL1, EQREL_1, BVFUNC_1, ZF_LANG, T_1TOPSP,
-      BVFUNC_2, BINARITH, FUNCT_1;
+      BVFUNC_2, BINARITH, FUNCT_1, NAT_1;
  notations XBOOLE_0, SUBSET_1, FUNCT_1, XBOOLEAN, MARGREL1, VALUAT_1, FRAENKEL,
       EQREL_1, BVFUNC_1, BVFUNC_2;
- constructors BINARITH, BVFUNC_1, BVFUNC_2;
+ constructors BINARITH, BVFUNC_1, BVFUNC_2, NAT_D;
  registrations VALUAT_1, MARGREL1, FRAENKEL, XBOOLEAN;
  definitions BVFUNC_1, XBOOLEAN;
- theorems T_1TOPSP, MARGREL1, BINARITH, BVFUNC_1, BVFUNC_2, VALUAT_1;
+ theorems MARGREL1, BINARITH, BVFUNC_1, BVFUNC_2, VALUAT_1, XBOOLEAN, EQREL_1;
 
 begin :: Chap. 1  Predicate Calculus
 
@@ -28,9 +28,9 @@ proof
     let z be Element of Y;
     assume (a 'imp' b).z=TRUE;
 then A1:('not' a.z) 'or' b.z=TRUE by BVFUNC_1:def 11;
-A2:('not' a.z)=TRUE or ('not' a.z)=FALSE by MARGREL1:39;
+A2:('not' a.z)=TRUE or ('not' a.z)=FALSE by XBOOLEAN:def 3;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A1,A2,BINARITH:7;
     suppose 'not' a.z=TRUE;
     then a.z=FALSE by MARGREL1:41;
@@ -59,7 +59,7 @@ proof
 A2:    (All(a,PA,G) '&' All(b,PA,G)).z
      =All(a,PA,G).z '&' All(b,PA,G).z by VALUAT_1:def 6;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
 A4: now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE);
@@ -91,7 +91,7 @@ A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by BVFUNC_2:def 10;
        (a '&' b).z=a.z '&' b.z by VALUAT_1:def 6;
 then A3: a.z=TRUE & b.z=TRUE by A2,MARGREL1:45;
 A4:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     then B_SUP(b,CompF(PA,G)).z = TRUE by A3,BVFUNC_1:def 20;
     then A5:Ex(b,PA,G).z=TRUE by BVFUNC_2:def 10;
     thus (Ex(a,PA,G) '&' Ex(b,PA,G)).z
@@ -126,7 +126,7 @@ A7:   for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
       end;
       then consider x1 being Element of Y such that
         A8:x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
-         a.x1=FALSE by A8,MARGREL1:43;
+         a.x1=FALSE by A8,XBOOLEAN:def 3;
       then 'not' a.x1=TRUE by MARGREL1:41;
       then ('not' a).x1=TRUE by VALUAT_1:def 5;
       then B_SUP('not' a,CompF(PA,G)).z = TRUE by A8,BVFUNC_1:def 20;
@@ -144,7 +144,7 @@ A10:    for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
       end;
       then consider x1 being Element of Y such that
         A11:x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
-         b.x1=FALSE by A11,MARGREL1:43;
+         b.x1=FALSE by A11,XBOOLEAN:def 3;
       then 'not' b.x1=TRUE by MARGREL1:41;
       then ('not' b).x1=TRUE by VALUAT_1:def 5;
       then B_SUP('not' b,CompF(PA,G)).z = TRUE by A11,BVFUNC_1:def 20;
@@ -162,7 +162,7 @@ A10:    for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
 A13:(Ex('not' a,PA,G) 'or' Ex('not' b,PA,G)).z
      =Ex('not' a,PA,G).z 'or' Ex('not' b,PA,G).z by BVFUNC_1:def 7;
 A14:  Ex('not' b,PA,G).z=TRUE or Ex('not' b,PA,G).z=FALSE
-      by MARGREL1:39;
+      by XBOOLEAN:def 3;
     per cases by A12,A13,A14,BINARITH:7;
       suppose A15:Ex('not' a,PA,G).z=TRUE;
          now assume
@@ -234,7 +234,7 @@ A9:   (ex x being Element of Y st
 A10:  now let x be Element of Y;
         assume x in EqClass(z,CompF(PA,G));
         then a.x<>TRUE by A8;
-        then a.x=FALSE by MARGREL1:43;
+        then a.x=FALSE by XBOOLEAN:def 3;
         then 'not' a.x=TRUE by MARGREL1:41;
         hence ('not' a).x=TRUE by VALUAT_1:def 5;
       end;
@@ -253,7 +253,7 @@ A13:    (ex x being Element of Y st
 A14:  now let x be Element of Y;
         assume x in EqClass(z,CompF(PA,G));
         then b.x<>TRUE by A12;
-        then b.x=FALSE by MARGREL1:43;
+        then b.x=FALSE by XBOOLEAN:def 3;
         then 'not' b.x=TRUE by MARGREL1:41;
         hence ('not' b).x=TRUE by VALUAT_1:def 5;
       end;
@@ -271,7 +271,7 @@ A14:  now let x be Element of Y;
     then A15:All('not' a,PA,G).z 'or' All('not' b,PA,G).z=TRUE
                     by BVFUNC_1:def 7;
 A16:All('not' b,PA,G).z=TRUE or All('not' b,PA,G).z=FALSE
-      by MARGREL1:39;
+      by XBOOLEAN:def 3;
     per cases by A15,A16,BINARITH:7;
       suppose A17:All('not' a,PA,G).z=TRUE;
 A18:  now assume
@@ -328,9 +328,9 @@ proof
     assume ((All(a,PA,G) 'or' All(b,PA,G))).z=TRUE;
 then A1:All(a,PA,G).z 'or' All(b,PA,G).z=TRUE by BVFUNC_1:def 7;
 A2: All(a,PA,G).z=TRUE or All(a,PA,G).z=FALSE
-      by MARGREL1:39;
+      by XBOOLEAN:def 3;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A1,A2,BINARITH:7;
       suppose A4:All(a,PA,G).z=TRUE;
 A5:  now assume
@@ -366,9 +366,9 @@ A2:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by BVFUNC_2:def 10;
     let z be Element of Y;
     assume (a 'or' b).z=TRUE;
 then A3:a.z 'or' b.z=TRUE by BVFUNC_1:def 7;
-A4: b.z=TRUE or b.z=FALSE by MARGREL1:39;
+A4: b.z=TRUE or b.z=FALSE by XBOOLEAN:def 3;
 A5:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A3,A4,BINARITH:7;
     suppose A6: a.z=TRUE;
     thus (Ex(a,PA,G) 'or' Ex(b,PA,G)).z
@@ -396,9 +396,9 @@ A2:Ex('not' b,PA,G) = B_SUP('not' b,CompF(PA,G)) by BVFUNC_2:def 10;
 A4:  (a 'xor' b).z =a.z 'xor' b.z by BVFUNC_1:def 8
     .=('not' a.z '&' b.z) 'or' (a.z '&' 'not' b.z);
 A5:  (a.z '&' 'not' b.z)=TRUE or
-    (a.z '&' 'not' b.z)=FALSE by MARGREL1:39;
+    (a.z '&' 'not' b.z)=FALSE by XBOOLEAN:def 3;
 A6:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     A7:'not' FALSE=TRUE & 'not' TRUE=FALSE by MARGREL1:41;
     A8:FALSE '&' TRUE =FALSE by MARGREL1:49;
     per cases by A3,A4,A5,BINARITH:7;
@@ -482,10 +482,10 @@ A2: now assume
       then consider x1 being Element of Y such that
 A4:  x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
 A5:  b.x1<>TRUE by A3,A4;
-      A6:a.x1=FALSE by A4,MARGREL1:43;
+      A6:a.x1=FALSE by A4,XBOOLEAN:def 3;
 A7:  (a 'or' b).x1
        = a.x1 'or' b.x1 by BVFUNC_1:def 7
-      .= FALSE 'or' FALSE by A5,A6,MARGREL1:43
+      .= FALSE 'or' FALSE by A5,A6,XBOOLEAN:def 3
       .= FALSE;
          (a 'or' b).x1=TRUE by A2,A4;
       hence thesis by A7;
@@ -533,10 +533,10 @@ proof
     then consider x1 being Element of Y such that
       A3: x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
 A4:a.x1<>TRUE by A2,A3;
-A5:b.x1=FALSE by A3,MARGREL1:43;
+A5:b.x1=FALSE by A3,XBOOLEAN:def 3;
 A6:  (a 'or' b).x1
      = a.x1 'or' b.x1 by BVFUNC_1:def 7
-    .= FALSE 'or' FALSE by A4,A5,MARGREL1:43
+    .= FALSE 'or' FALSE by A4,A5,XBOOLEAN:def 3
     .= FALSE;
        (a 'or' b).x1=TRUE by A1,A3,Lm1;
   hence thesis by A6;
@@ -549,10 +549,10 @@ proof
   let z be Element of Y;
   assume A1:All(a 'or' b,PA,G).z=TRUE;
 A2:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     then (a 'or' b).z=TRUE by A1,Lm1;
     then A3:a.z 'or' b.z=TRUE by BVFUNC_1:def 7;
-A4:a.z=TRUE or a.z=FALSE by MARGREL1:39;
+A4:a.z=TRUE or a.z=FALSE by XBOOLEAN:def 3;
     per cases by A3,A4,BINARITH:7;
     suppose a.z=TRUE;
     then B_SUP(a,CompF(PA,G)).z = TRUE by A2,BVFUNC_1:def 20;
@@ -649,7 +649,7 @@ A1:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
     let z be Element of Y;
     assume A2:All(a 'imp' b,PA,G).z=TRUE;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases;
     suppose (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & b.x=TRUE);
@@ -666,7 +666,7 @@ then A5:  b.z<>TRUE by A3;
       A6:a.z=TRUE by A3,A4;
 A7:      (a 'imp' b).z
        =('not' a.z) 'or' b.z by BVFUNC_1:def 11
-      .=('not' TRUE) 'or' FALSE by A5,A6,MARGREL1:43
+      .=('not' TRUE) 'or' FALSE by A5,A6,XBOOLEAN:def 3
       .=FALSE 'or' FALSE by MARGREL1:41
       .=FALSE;
          (a 'imp' b).z=TRUE by A2,A3,Lm2;
@@ -708,7 +708,7 @@ A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by BVFUNC_2:def 10;
 A5:      b.x1<>TRUE by A3,A4;
 A6:      (a 'imp' b).x1
        =('not' a.x1) 'or' b.x1 by BVFUNC_1:def 11
-      .=('not' TRUE) 'or' FALSE by A4,A5,MARGREL1:43
+      .=('not' TRUE) 'or' FALSE by A4,A5,XBOOLEAN:def 3
       .=FALSE 'or' FALSE by MARGREL1:41
       .=FALSE;
          (a 'imp' b).x1=TRUE by A2,A4,Lm2;
@@ -771,7 +771,7 @@ A6:   not (ex x being Element of Y st
         assume x in EqClass(z,CompF(PA,G));
 then A7:    a.x<>TRUE by A6;
         thus (a 'imp' b).x =('not' a.x) 'or' b.x by BVFUNC_1:def 11
-        .=('not' FALSE) 'or' b.x by A7,MARGREL1:43
+        .=('not' FALSE) 'or' b.x by A7,XBOOLEAN:def 3
         .=TRUE 'or' b.x by MARGREL1:41
         .=TRUE by BINARITH:19;
       end;
@@ -786,9 +786,9 @@ proof
     let z be Element of Y;
     assume (a 'imp' b).z=TRUE;
     then A1:('not' a.z) 'or' b.z=TRUE by BVFUNC_1:def 11;
-A2: ('not' a.z)=TRUE or ('not' a.z)=FALSE by MARGREL1:39;
+A2: ('not' a.z)=TRUE or ('not' a.z)=FALSE by XBOOLEAN:def 3;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A1,A2,BINARITH:7;
     suppose 'not' a.z=TRUE;
     hence (a 'imp' Ex(b,PA,G)).z
@@ -810,9 +810,9 @@ proof
     let z be Element of Y;
     assume (a 'imp' b).z=TRUE;
     then A1:('not' a.z) 'or' b.z=TRUE by BVFUNC_1:def 11;
-A2: ('not' a.z)=TRUE or ('not' a.z)=FALSE by MARGREL1:39;
+A2: ('not' a.z)=TRUE or ('not' a.z)=FALSE by XBOOLEAN:def 3;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A1,A2,BINARITH:7;
     suppose 'not' a.z=TRUE;
     then a.z=FALSE by MARGREL1:41;
@@ -845,7 +845,7 @@ proof
     then consider x1 being Element of Y such that
       A2:x1 in EqClass(z,CompF(PA,G)) & (a 'imp' b).x1=TRUE;
     A3:('not' a.x1) 'or' b.x1=TRUE by A2,BVFUNC_1:def 11;
-A4:    b.x1=TRUE or b.x1=FALSE by MARGREL1:39;
+A4:    b.x1=TRUE or b.x1=FALSE by XBOOLEAN:def 3;
     per cases by A3,A4,BINARITH:7;
       suppose ('not' a.x1)=TRUE;
       then a.x1=FALSE by MARGREL1:41;
@@ -900,7 +900,7 @@ A2:now assume
       .=TRUE by BINARITH:19;
     end;
     suppose Ex(b,PA,G).z<>TRUE;
-    then Ex(b,PA,G).z=FALSE by MARGREL1:43;
+    then Ex(b,PA,G).z=FALSE by XBOOLEAN:def 3;
     hence (Ex(b,PA,G) 'imp' Ex(a '&' b,PA,G)).z
      =('not' FALSE) 'or' Ex(a '&' b,PA,G).z by BVFUNC_1:def 11
     .=TRUE 'or' Ex(a '&' b,PA,G).z by MARGREL1:41
@@ -925,9 +925,9 @@ then A1:u is_dependent_of CompF(PA,G) by BVFUNC_2:def 8;
     then consider x1 being Element of Y such that
 A3: x1 in EqClass(z,CompF(PA,G)) & (u 'imp' a).x1=TRUE;
     A4:('not' u.x1) 'or' a.x1=TRUE by A3,BVFUNC_1:def 11;
-A5: ('not' u.x1)=TRUE or ('not' u.x1)=FALSE by MARGREL1:39;
+A5: ('not' u.x1)=TRUE or ('not' u.x1)=FALSE by XBOOLEAN:def 3;
 A6:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A4,A5,BINARITH:7;
     suppose A7:('not' u.x1)=TRUE;
   u.x1 = u.z by A1,A3,A6,BVFUNC_1:def 18;
@@ -963,9 +963,9 @@ then A1: u is_dependent_of CompF(PA,G) by BVFUNC_2:def 8;
     then consider x1 being Element of Y such that
       A3:x1 in EqClass(z,CompF(PA,G)) & (a 'imp' u).x1=TRUE;
     A4:('not' a.x1) 'or' u.x1=TRUE by A3,BVFUNC_1:def 11;
-A5: ('not' a.x1)=TRUE or ('not' a.x1)=FALSE by MARGREL1:39;
+A5: ('not' a.x1)=TRUE or ('not' a.x1)=FALSE by XBOOLEAN:def 3;
 A6:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A4,A5,BINARITH:7;
     suppose ('not' a.x1)=TRUE;
     then a.x1=FALSE by MARGREL1:41;
@@ -996,7 +996,7 @@ A2:All(a,PA,G) 'imp' Ex(b,PA,G) '<' Ex(a 'imp' b,PA,G)
     then A3:('not' All(a,PA,G).z) 'or' Ex(b,PA,G).z=TRUE by
 BVFUNC_1:def 11;
 A4: ('not' All(a,PA,G).z)=TRUE or
-    ('not' All(a,PA,G).z)=FALSE by MARGREL1:39;
+    ('not' All(a,PA,G).z)=FALSE by XBOOLEAN:def 3;
     per cases by A3,A4,BINARITH:7;
       suppose ('not' All(a,PA,G).z)=TRUE;
       then All(a,PA,G).z=FALSE by MARGREL1:41;
@@ -1006,7 +1006,7 @@ A4: ('not' All(a,PA,G).z)=TRUE or
         by A1,BVFUNC_1:def 19;
          (a 'imp' b).x1
        =('not' a.x1) 'or' b.x1 by BVFUNC_1:def 11
-      .=('not' FALSE) 'or' b.x1 by A5,MARGREL1:43
+      .=('not' FALSE) 'or' b.x1 by A5,XBOOLEAN:def 3
       .=TRUE 'or' b.x1 by MARGREL1:41
       .=TRUE by BINARITH:19;
       then B_SUP(a 'imp' b,CompF(PA,G)).z = TRUE by A5,BVFUNC_1:def 20;
@@ -1041,7 +1041,7 @@ A7:  x1 in EqClass(z,CompF(PA,G)) & b.x1=TRUE;
     then consider x1 being Element of Y such that
       A9:x1 in EqClass(z,CompF(PA,G)) & (a 'imp' b).x1=TRUE;
     A10:('not' a.x1) 'or' b.x1=TRUE by A9,BVFUNC_1:def 11;
-A11:('not' a.x1)=TRUE or ('not' a.x1)=FALSE by MARGREL1:39;
+A11:('not' a.x1)=TRUE or ('not' a.x1)=FALSE by XBOOLEAN:def 3;
     per cases by A10,A11,BINARITH:7;
     suppose ('not' a.x1)=TRUE;
     then a.x1=FALSE by MARGREL1:41;
@@ -1071,9 +1071,9 @@ proof
     then A1:('not'
  All(a,PA,G).z) 'or' All(b,PA,G).z=TRUE by BVFUNC_1:def 11;
 A2:    ('not' All(a,PA,G).z)=TRUE or
-    ('not' All(a,PA,G).z)=FALSE by MARGREL1:39;
+    ('not' All(a,PA,G).z)=FALSE by XBOOLEAN:def 3;
 A3:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A1,A2,BINARITH:7;
     suppose 'not' All(a,PA,G).z=TRUE;
     hence (All(a,PA,G) 'imp' Ex(b,PA,G)).z
@@ -1106,9 +1106,9 @@ A1:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by BVFUNC_2:def 10;
 then A2: ('not' Ex(a,PA,G).z) 'or' Ex(b,PA,G).z=TRUE by BVFUNC_1:def 11
 ;
 A3:    ('not' Ex(a,PA,G).z)=TRUE or
-    ('not' Ex(a,PA,G).z)=FALSE by MARGREL1:39;
+    ('not' Ex(a,PA,G).z)=FALSE by XBOOLEAN:def 3;
 A4:z in EqClass(z,CompF(PA,G)) &
-      EqClass(z,CompF(PA,G)) in CompF(PA,G) by T_1TOPSP:def 1;
+      EqClass(z,CompF(PA,G)) in CompF(PA,G) by EQREL_1:def 8;
     per cases by A2,A3,BINARITH:7;
     suppose ('not' Ex(a,PA,G).z)=TRUE;
     then Ex(a,PA,G).z=FALSE by MARGREL1:41;
@@ -1146,7 +1146,7 @@ A3: now assume
       assume x in EqClass(z,CompF(PA,G));
       then (a 'imp' b).x=TRUE by A3;
       then A4:('not' a.x) 'or' b.x=TRUE by BVFUNC_1:def 11;
-A5:   ('not' a.x)=TRUE or ('not' a.x)=FALSE by MARGREL1:39;
+A5:   ('not' a.x)=TRUE or ('not' a.x)=FALSE by XBOOLEAN:def 3;
       per cases by A4,A5,BINARITH:7;
       suppose ('not' a.x)=TRUE;
       then ('not' a).x=TRUE by VALUAT_1:def 5;
@@ -1180,7 +1180,7 @@ A7:now assume
       assume x in EqClass(z,CompF(PA,G));
       then ('not' a 'or' b).x=TRUE by A7;
 then A8:  ('not' a).x 'or' b.x=TRUE by BVFUNC_1:def 7;
-A9:  ('not' a).x=TRUE or ('not' a).x=FALSE by MARGREL1:39;
+A9:  ('not' a).x=TRUE or ('not' a).x=FALSE by XBOOLEAN:def 3;
       per cases by A8,A9,BINARITH:7;
       suppose ('not' a).x=TRUE;
       then 'not' a.x=TRUE by VALUAT_1:def 5;
@@ -1235,7 +1235,7 @@ A5:    (a 'imp' 'not' b).x1
      ='not' TRUE 'or' ('not' b).x1 by A2,BVFUNC_1:def 11
     .=FALSE 'or' ('not' b).x1 by MARGREL1:41
     .=('not' b).x1 by BINARITH:7;
-    per cases by MARGREL1:39;
+    per cases by XBOOLEAN:def 3;
     suppose b.x1=TRUE;
     then (a 'imp' 'not' b).x1
      ='not' TRUE by A5,VALUAT_1:def 5
@@ -1285,7 +1285,7 @@ A6: ('not' ('not' Ex(a '&' b,PA,G) '&' 'not' Ex(a '&' 'not' b,PA,G))).z
       by VALUAT_1:def 6
     .='not' ('not' Ex(a '&' b,PA,G).z '&' 'not' (Ex(a '&' 'not' b,PA,G)).z)
                   by A5,VALUAT_1:def 5;
-    per cases by MARGREL1:39;
+    per cases by XBOOLEAN:def 3;
     suppose b.x1=TRUE;
     then B_SUP(a '&' b,CompF(PA,G)).z = TRUE by A2,A3,BVFUNC_1:def 20;
     hence ('not' ('not' Ex(a '&' b,PA,G) '&' 'not' Ex(a '&' 'not' b,PA,G))).z
@@ -1367,7 +1367,7 @@ then A3:    Ex(a '&' b,PA,G).z<>TRUE;
     then consider x1 being Element of Y such that
       A4:x1 in EqClass(z,CompF(PA,G)) & a.x1=TRUE;
        (a '&' b).x1<>TRUE by A1,A3,A4,BVFUNC_1:def 20;
-    then (a '&' b).x1=FALSE by MARGREL1:43;
+    then (a '&' b).x1=FALSE by XBOOLEAN:def 3;
 then A5:a.x1 '&' b.x1=FALSE by VALUAT_1:def 6;
     per cases by A5,MARGREL1:45;
     suppose a.x1=FALSE;
@@ -1417,10 +1417,10 @@ A3: now assume
       assume A4:x in EqClass(z,CompF(PA,G));
       then (a 'imp' c).x=TRUE by A2;
       then A5:('not' a.x) 'or' c.x=TRUE by BVFUNC_1:def 11;
-A6:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by MARGREL1:39;
+A6:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by XBOOLEAN:def 3;
          (c 'imp' b).x=TRUE by A3,A4;
       then A7:('not' c.x) 'or' b.x=TRUE by BVFUNC_1:def 11;
-A8:  ('not' c.x)=TRUE or ('not' c.x)=FALSE by MARGREL1:39;
+A8:  ('not' c.x)=TRUE or ('not' c.x)=FALSE by XBOOLEAN:def 3;
       per cases by A5,A6,A7,A8,BINARITH:7;
       suppose ('not' a.x)=TRUE & ('not' c.x)=TRUE;
       hence (a 'imp' b).x =TRUE 'or' b.x by BVFUNC_1:def 11
@@ -1470,7 +1470,7 @@ A2: now assume
        (c 'imp' b).x1=TRUE by A2,A3;
     then A4:('not' c.x1) 'or' b.x1=TRUE by BVFUNC_1:def 11;
 A5:    ('not' c.x1)=TRUE or
-    ('not' c.x1)=FALSE by MARGREL1:39;
+    ('not' c.x1)=FALSE by XBOOLEAN:def 3;
 A6:    a.x1 '&' c.x1=TRUE by A3,VALUAT_1:def 6;
     per cases by A4,A5,A6,BINARITH:7,MARGREL1:45;
     suppose A7:(a.x1=TRUE & c.x1=TRUE) & ('not' c.x1)=TRUE;
@@ -1517,10 +1517,10 @@ A3: now assume
       assume A4:x in EqClass(z,CompF(PA,G));
       then (b 'imp' 'not' c).x=TRUE by A2;
       then A5:('not' b.x) 'or' ('not' c).x=TRUE by BVFUNC_1:def 11;
-A6:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by MARGREL1:39;
+A6:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by XBOOLEAN:def 3;
          (a 'imp' c).x=TRUE by A3,A4;
       then A7:('not' a.x) 'or' c.x=TRUE by BVFUNC_1:def 11;
-A8:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by MARGREL1:39;
+A8:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by XBOOLEAN:def 3;
       per cases by A5,A6,A7,A8,BINARITH:7;
       suppose A9:('not' b.x)=TRUE & ('not' a.x)=TRUE;
       then ('not' b).x=TRUE by VALUAT_1:def 5;
@@ -1579,10 +1579,10 @@ A3: now assume
       assume A4:x in EqClass(z,CompF(PA,G));
       then (b 'imp' c).x=TRUE by A2;
       then A5:('not' b.x) 'or' c.x=TRUE by BVFUNC_1:def 11;
-A6:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by MARGREL1:39;
+A6:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by XBOOLEAN:def 3;
          (a 'imp' 'not' c).x=TRUE by A3,A4;
       then A7:('not' a.x) 'or' ('not' c).x=TRUE by BVFUNC_1:def 11;
-A8:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by MARGREL1:39;
+A8:  ('not' a.x)=TRUE or ('not' a.x)=FALSE by XBOOLEAN:def 3;
       per cases by A5,A6,A7,A8,BINARITH:7;
       suppose A9:('not' b.x)=TRUE & ('not' a.x)=TRUE;
       then ('not' b).x=TRUE by VALUAT_1:def 5;
@@ -1635,7 +1635,7 @@ A2:    now assume
       A3:x1 in EqClass(z,CompF(PA,G)) & (a '&' c).x1=TRUE;
        (b 'imp' 'not' c).x1=TRUE by A2,A3;
     then A4:('not' b.x1) 'or' ('not' c).x1=TRUE by BVFUNC_1:def 11;
-A5:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by MARGREL1:39;
+A5:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by XBOOLEAN:def 3;
 A6:    a.x1 '&' c.x1=TRUE by A3,VALUAT_1:def 6;
     per cases by A4,A5,A6,BINARITH:7,MARGREL1:45;
     suppose A7:(a.x1=TRUE & c.x1=TRUE) & ('not' b.x1)=TRUE;
@@ -1679,7 +1679,7 @@ A2: now assume
       A3:x1 in EqClass(z,CompF(PA,G)) & (a '&' 'not' c).x1=TRUE;
        (b 'imp' c).x1=TRUE by A2,A3;
     then A4:('not' b.x1) 'or' c.x1=TRUE by BVFUNC_1:def 11;
-A5:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by MARGREL1:39;
+A5:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by XBOOLEAN:def 3;
 A6:    a.x1 '&' ('not' c).x1=TRUE by A3,VALUAT_1:def 6;
     per cases by A4,A5,A6,BINARITH:7,MARGREL1:45;
     suppose A7:(a.x1=TRUE & ('not' c).x1=TRUE) & ('not' b.x1)=TRUE;
@@ -1730,7 +1730,7 @@ A3:  x1 in EqClass(z,CompF(PA,G)) & c.x1=TRUE;
     then (c 'imp' a).x1=TRUE by A3;
     then A4:('not' c.x1) 'or' a.x1=TRUE by BVFUNC_1:def 11;
 A5:    ('not' c.x1)=TRUE or
-    ('not' c.x1)=FALSE by MARGREL1:39;
+    ('not' c.x1)=FALSE by XBOOLEAN:def 3;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (c 'imp' b).x=TRUE);
@@ -1794,10 +1794,10 @@ A3: now assume
       assume A4:x in EqClass(z,CompF(PA,G));
       then (c 'imp' 'not' a).x=TRUE by A2;
       then A5:('not' c.x) 'or' ('not' a).x=TRUE by BVFUNC_1:def 11;
-A6:  ('not' c.x)=TRUE or ('not' c.x)=FALSE by MARGREL1:39;
+A6:  ('not' c.x)=TRUE or ('not' c.x)=FALSE by XBOOLEAN:def 3;
          (b 'imp' c).x=TRUE by A3,A4;
       then A7:('not' b.x) 'or' c.x=TRUE by BVFUNC_1:def 11;
-A8:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by MARGREL1:39;
+A8:  ('not' b.x)=TRUE or ('not' b.x)=FALSE by XBOOLEAN:def 3;
       per cases by A5,A6,A7,A8,BINARITH:7;
       suppose ('not' c.x)=TRUE & ('not' b.x)=TRUE;
       then ('not' b).x=TRUE by VALUAT_1:def 5;
@@ -1856,7 +1856,7 @@ A3:  x1 in EqClass(z,CompF(PA,G)) & b.x1=TRUE;
     end;
     then (c 'imp' a).x1=TRUE by A3;
     then A4:('not' c.x1) 'or' a.x1=TRUE by BVFUNC_1:def 11;
-A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by MARGREL1:39;
+A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by XBOOLEAN:def 3;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (b 'imp' c).x=TRUE);
@@ -1867,7 +1867,7 @@ A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by MARGREL1:39;
     end;
     then (b 'imp' c).x1=TRUE by A3;
     then A6:('not' b.x1) 'or' c.x1=TRUE by BVFUNC_1:def 11;
-A7:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by MARGREL1:39;
+A7:('not' b.x1)=TRUE or ('not' b.x1)=FALSE by XBOOLEAN:def 3;
     per cases by A4,A5,A6,A7,BINARITH:7;
     suppose ('not' c.x1)=TRUE & ('not' b.x1)=TRUE;
     then b.x1=FALSE by MARGREL1:41;
@@ -1923,7 +1923,7 @@ A3:  x1 in EqClass(z,CompF(PA,G)) & c.x1=TRUE;
     end;
     then (c 'imp' a).x1=TRUE by A3;
     then A4:('not' c.x1) 'or' a.x1=TRUE by BVFUNC_1:def 11;
-A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by MARGREL1:39;
+A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by XBOOLEAN:def 3;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (b 'imp' 'not' c).x=TRUE);
@@ -1936,7 +1936,7 @@ A5:('not' c.x1)=TRUE or ('not' c.x1)=FALSE by MARGREL1:39;
     then (b 'imp' 'not' c).x1=TRUE by A3;
     then A6:('not' b.x1) 'or' ('not' c).x1=TRUE by BVFUNC_1:def 11;
 A7:('not' b.x1)=TRUE or
-    ('not' b.x1)=FALSE by MARGREL1:39;
+    ('not' b.x1)=FALSE by XBOOLEAN:def 3;
     per cases by A4,A5,A6,A7,BINARITH:7;
     suppose ('not' c.x1)=TRUE & ('not' b.x1)=TRUE;
     then c.x1=FALSE by MARGREL1:41;

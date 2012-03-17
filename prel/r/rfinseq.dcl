@@ -11,10 +11,18 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="RFINSEQ"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RVSUM_1"/>
+<ArticleID name="SEQM_3"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -25,9 +33,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
-<Adjective nr="21"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -40,7 +50,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,7 +61,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

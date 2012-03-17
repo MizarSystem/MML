@@ -12,6 +12,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FRAENKEL"/>
 </Signature>
 <RCluster>
@@ -21,7 +22,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -38,7 +39,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -60,14 +61,31 @@
 </Func>
 <Cluster>
 <Adjective nr="8"/>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="76">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="14"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>

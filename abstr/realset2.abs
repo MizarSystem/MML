@@ -7,10 +7,10 @@
 environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
-      VECTSP_1, REALSET2;
+      VECTSP_1, REALSET2, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       REALSET1, FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors ENUMSET1, BINOP_1, REALSET1, VECTSP_1;
+ constructors ENUMSET1, BINOP_1, REALSET1, VECTSP_1, NAT_D;
  registrations REALSET1, RELSET_1, SUBSET_1, XBOOLE_0, RLVECT_1, GROUP_1;
  requirements SUBSET, BOOLE;
 
@@ -100,11 +100,11 @@ definition
            (IT = field(A,od,om,nd,nm) & LoopStr(#A,od,nd#) is Group &
            (for B being non empty set, P being BinOp of B,
                 e being Element of B holds
-               (B = A\{nd} & e = nm & P = om!(A,nd) implies
+           B = A\{nd} & e = nm & P = om!(A,nd) implies
            LoopStr(#B,P,e#) is Group)) &
            for x,y,z being Element of A holds
-            om.[x,od.[y,z]] = od.[om.[x,y],om.[x,z]] &
-            om.[od.[x,y],z] = od.[om.[x,z],om.[y,z]]);
+            om.(x,od.(y,z)) = od.(om.(x,y),om.(x,z)) &
+            om.(od.(x,y),z) = od.(om.(x,z),om.(y,z));
 end;
 
 registration
@@ -171,8 +171,8 @@ theorem :: REALSET2:2
 
 theorem :: REALSET2:3
    for F being Field, x,y,z being Element of suppf(F) holds
-   (omf(F).[x,odf(F).[y,z]] = odf(F).[omf(F).[x,y],omf(F).[x,z]] &
-    omf(F).[odf(F).[x,y],z] = odf(F).[omf(F).[x,z],omf(F).[y,z]] );
+    omf(F).(x,odf(F).(y,z)) = odf(F).(omf(F).(x,y),omf(F).(x,z)) &
+    omf(F).(odf(F).(x,y),z) = odf(F).(omf(F).(x,z),omf(F).(y,z));
 
 theorem :: REALSET2:4
    for F being Field,
@@ -197,29 +197,29 @@ theorem :: REALSET2:7
 theorem :: REALSET2:8
    for F being Field,
        a,b,c being Element of suppf(F)\{ndf(F)} holds
-   omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]];
+   omf(F).(omf(F).(a,b),c) = omf(F).(a,omf(F).(b,c));
 
 theorem :: REALSET2:9
    for F being Field,
        a,b being Element of suppf(F)\{ndf(F)} holds
-   omf(F).[a,b] = omf(F).[b,a];
+   omf(F).(a,b) = omf(F).(b,a);
 
 theorem :: REALSET2:10
    for F being Field,
        a being Element of suppf(F)\{ndf(F)} holds
-   omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a;
+   omf(F).(a,nmf(F)) = a & omf(F).(nmf(F),a) = a;
 
 theorem :: REALSET2:11
    for F being Field,
        a being Element of suppf(F)\{ndf(F)}
    ex b being Element of suppf(F)\{ndf(F)} st
-   omf(F).[a,b] = nmf(F) & omf(F).[b,a] = nmf(F);
+   omf(F).(a,b) = nmf(F) & omf(F).(b,a) = nmf(F);
 
 definition
    let F be Field;
    func compf(F) -> Function of suppf(F),suppf(F) means
 :: REALSET2:def 14
- for x being Element of suppf(F) holds odf(F).[x,it.x] = ndf(F);
+ for x being Element of suppf(F) holds odf(F).(x,it.x) = ndf(F);
 end;
 
 theorem :: REALSET2:12
@@ -235,73 +235,73 @@ theorem :: REALSET2:13
 theorem :: REALSET2:14
     for F being Field,
         a,b being Element of suppf(F) holds
-    (odf(F).[a,b] is Element of suppf(F) &
-    omf(F).[a,b] is Element of suppf(F) &
+    (odf(F).(a,b) is Element of suppf(F) &
+    omf(F).(a,b) is Element of suppf(F) &
     compf(F).a is Element of suppf(F));
 
 theorem :: REALSET2:15
    for F being Field,
        a,b,c being Element of suppf(F) holds
-   omf(F).[a,odf(F).[b,compf(F).c]] =
-   odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])];
+   omf(F).(a,odf(F).(b,compf(F).c)) =
+   odf(F).(omf(F).(a,b),compf(F).(omf(F).(a,c)));
 
 theorem :: REALSET2:16
    for F being Field,
        a,b,c being Element of suppf(F) holds
-   omf(F).[odf(F).[a,compf(F).b],c] =
-   odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])];
+   omf(F).(odf(F).(a,compf(F).b),c) =
+   odf(F).(omf(F).(a,c),compf(F).(omf(F).(b,c)));
 
 theorem :: REALSET2:17
    for F being Field,
-       a being Element of suppf(F) holds omf(F).[a,ndf(F)] = ndf(F);
+       a being Element of suppf(F) holds omf(F).(a,ndf(F)) = ndf(F);
 
 theorem :: REALSET2:18
    for F being Field,
-       a being Element of suppf(F) holds omf(F).[ndf(F),a] = ndf(F);
+       a being Element of suppf(F) holds omf(F).(ndf(F),a) = ndf(F);
 
 theorem :: REALSET2:19
   for F being Field,
        a,b being Element of suppf(F) holds
-   compf(F).(omf(F).[a,b]) = omf(F).[a,compf(F).b];
+   compf(F).(omf(F).(a,b)) = omf(F).(a,compf(F).b);
 
 theorem :: REALSET2:20
-   for F being Field holds omf(F).[nmf(F),ndf(F)] = ndf(F);
+   for F being Field holds omf(F).(nmf(F),ndf(F)) = ndf(F);
 
 theorem :: REALSET2:21
-   for F being Field holds omf(F).[ndf(F),nmf(F)] = ndf(F);
+   for F being Field holds omf(F).(ndf(F),nmf(F)) = ndf(F);
 
 theorem :: REALSET2:22
   for F being Field,
        a,b being Element of suppf(F) holds
-   omf(F).[a,b] is Element of suppf(F);
+   omf(F).(a,b) is Element of suppf(F);
 
 theorem :: REALSET2:23
    for F being Field,
        a,b,c being Element of suppf(F) holds
-   omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]];
+   omf(F).(omf(F).(a,b),c) = omf(F).(a,omf(F).(b,c));
 
 theorem :: REALSET2:24
   for F being Field,
        a,b being Element of suppf(F) holds
-   omf(F).[a,b] = omf(F).[b,a];
+   omf(F).(a,b) = omf(F).(b,a);
 
 theorem :: REALSET2:25
    for F being Field,
        a being Element of suppf(F) holds
-   omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a;
+   omf(F).(a,nmf(F)) = a & omf(F).(nmf(F),a) = a;
 
 definition
   let F be Field;
   func revf(F) -> Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} means
 :: REALSET2:def 15
  for x being Element of suppf(F)\{ndf(F)} holds
-        omf(F).[x,it.x] = nmf(F);
+        omf(F).(x,it.x) = nmf(F);
 end;
 
 theorem :: REALSET2:26
   for F being Field,
       x,y being Element of suppf(F)\{ndf(F)} holds
-      omf(F).[x,y] = nmf(F) implies y = revf(F).x;
+      omf(F).(x,y) = nmf(F) implies y = revf(F).x;
 
 theorem :: REALSET2:27
   for F being Field,
@@ -311,7 +311,7 @@ theorem :: REALSET2:27
 theorem :: REALSET2:28
   for F being Field,
       a,b being Element of suppf(F)\{ndf(F)} holds
-   omf(F).[a,b] is Element of suppf(F)\{ndf(F)} &
+   omf(F).(a,b) is Element of suppf(F)\{ndf(F)} &
    revf(F).a is Element of suppf(F)\{ndf(F)};
 
 theorem :: REALSET2:29
@@ -323,4 +323,4 @@ theorem :: REALSET2:30
   for F being Field,
       a being Element of suppf(F)\{ndf(F)},
       b,c being Element of suppf(F) holds
-   omf(F).[a,b] = omf(F).[a,c] implies b = c;
+   omf(F).(a,b) = omf(F).(a,c) implies b = c;

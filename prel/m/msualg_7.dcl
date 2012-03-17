@@ -51,11 +51,11 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="40"/>
-<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="27">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -68,7 +68,7 @@
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -83,7 +83,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -114,7 +114,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -131,7 +131,7 @@
 <Adjective nr="43"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -140,30 +140,7 @@
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="40"/>
-<Adjective nr="71"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster>
-<Adjective nr="127">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<Typ kind="M" nr="27">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="71"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -172,12 +149,35 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="27">
+<Typ kind="M" nr="28">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="71"/>
+<Adjective nr="72"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="30" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="72"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="129">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="28">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="72"/>
 </Cluster>
 </CCluster>
 </Registrations>

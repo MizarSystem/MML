@@ -23,10 +23,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="SEQ_1"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="RFINSEQ"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
@@ -47,7 +47,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="199">
+<Func kind="K" nr="201">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -99,7 +99,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -165,7 +165,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="48">
+<Pred kind="V" nr="53">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -173,7 +173,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="44" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -243,7 +243,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="48">
+<Pred kind="V" nr="53">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

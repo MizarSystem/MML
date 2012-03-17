@@ -9,12 +9,12 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, SUBSET_1,
       FUNCOP_1, GRCAT_1, UNIALG_1, BINOP_1, LATTICES, RELAT_1, HAHNBAN1,
       FUNCT_5, RLSUB_1, ALGSTR_2, REALSET1, BOOLE, SEQM_3, GROUP_6, VECTSP10,
-      BILINEAR, RELAT_2, SPPOL_1, GROUP_1;
+      BILINEAR, RELAT_2, SPPOL_1, GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, DOMAIN_1, FUNCT_1,
       RELAT_1, PRE_TOPC, REALSET1, REALSET2, RLVECT_1, BINOP_1, GROUP_1,
       VECTSP_1, RELSET_1, FUNCT_2, FUNCT_5, VECTSP_4, BORSUK_1, HAHNBAN1,
       VECTSP10;
- constructors FUNCT_5, BORSUK_1, VECTSP10;
+ constructors FUNCT_5, BORSUK_1, VECTSP10, NAT_D;
  registrations STRUCT_0, SUBSET_1, RELSET_1, VECTSP_1, HAHNBAN1, VECTSP_4,
       VECTSP10, XBOOLE_0;
  requirements SUBSET, BOOLE;
@@ -225,11 +225,13 @@ redefine func f+g;
 commutativity by Lm1;
 end;
 
-theorem Th1:
+ Lm2:
 for K be non empty ZeroStr
 for V,W be non empty VectSpStr over K
  for v be Vector of V,w be Vector of W holds NulForm(V,W).(v,w) = 0.K
   by FUNCOP_1:85;
+
+canceled;
 
 theorem
    for K be right_zeroed (non empty LoopStr)
@@ -241,7 +243,7 @@ for V,W be non empty VectSpStr over K
   set g = NulForm(V,W);
       now let v be Vector of V, w be Vector of W;
     thus (f+g).(v,w) = f.(v,w) + g.(v,w) by Def3
-     .= f.(v,w) + 0.K by Th1
+     .= f.(v,w) + 0.K by Lm2
      .= f.(v,w) by RLVECT_1:def 7;
    end;
   hence thesis by BINOP_1:2;
@@ -277,7 +279,7 @@ for V,W be non empty VectSpStr over K
       now let v be Vector of V, w be Vector of W;
     thus (f-f).(v,w) = f.(v,w) - f.(v,w) by Def8
      .= 0.K by RLVECT_1:28
-     .= (NulForm(V,W)).(v,w) by Th1;
+     .= (NulForm(V,W)).(v,w) by Lm2;
    end;
   hence thesis by BINOP_1:2;
 end;
@@ -355,7 +357,7 @@ for V,W be non empty VectSpStr over K
   hence thesis by BINOP_1:2;
  end;
 
-Lm2: now
+Lm3: now
   let K be non empty 1-sorted, V,W be non empty VectSpStr over K,
       f be Form of V,W, v be Element of (the carrier of V),
       y be Element of W;
@@ -388,7 +390,7 @@ definition
   let V,W be non empty VectSpStr over K;
   let f be Form of V,W, v be Vector of V;
  func FunctionalFAF(f,v) -> Functional of W equals   (curry f).v;
-   correctness by Lm2;
+   correctness by Lm3;
 end;
 
 definition
@@ -396,7 +398,7 @@ definition
   let V,W be non empty VectSpStr over K;
   let f be Form of V,W, w be Vector of W;
  func FunctionalSAF(f,w) -> Functional of V equals   (curry' f).w;
-   correctness by Lm2;
+   correctness by Lm3;
 end;
 
 theorem Th9:
@@ -454,7 +456,7 @@ for K be non empty ZeroStr,
    set N = NulForm(V,W);
    now let y be Vector of W;
     thus FunctionalFAF(N,v).y = N.(v,y) by Th9
-     .= 0.K by Th1
+     .= 0.K by Lm2
      .= (0Functional(W)).y by HAHNBAN1:22;
    end;
   hence thesis by FUNCT_2:113;
@@ -471,7 +473,7 @@ for K be non empty ZeroStr,
   set N = NulForm(V,W);
   now let v be Vector of V;
     thus FunctionalSAF(N,y).v = N.(v,y) by Th10
-     .= 0.K by Th1
+     .= 0.K by Lm2
      .= (0Functional(V)).v by HAHNBAN1:22;
    end;
   hence thesis by FUNCT_2:113;
@@ -701,7 +703,7 @@ for V,W be non empty VectSpStr over K
    let V,W be non empty VectSpStr over K, f be Functional of V;
        now let v be Vector of V, y be Vector of W;
      thus FormFunctional(f,0Functional(W)).(v,y) = 0.K by Th21
-       .= NulForm(V,W).(v,y) by Th1;
+       .= NulForm(V,W).(v,y) by Lm2;
     end;
    hence thesis by BINOP_1:2;
  end;
@@ -717,7 +719,7 @@ for V,W be non empty VectSpStr over K
   let V,W be non empty VectSpStr over K, h be Functional of W;
       now let v be Vector of V, y be Vector of W;
     thus FormFunctional(0Functional(V),h).(v,y) = 0.K by Th22
-       .= NulForm(V,W).(v,y) by Th1;
+       .= NulForm(V,W).(v,y) by Lm2;
    end;
   hence thesis by BINOP_1:2;
  end;
@@ -3081,14 +3083,14 @@ cluster NulForm(V,V) -> symmetric;
  coherence
   proof
    let v,w be Vector of V;
-   thus NulForm(V,V).(v,w) = 0.K by Th1
-    .= NulForm(V,V).(w,v) by Th1;
+   thus NulForm(V,V).(v,w) = 0.K by Lm2
+    .= NulForm(V,V).(w,v) by Lm2;
   end;
 cluster NulForm(V,V) -> alternating;
  coherence
   proof
    let v be Vector of V;
-   thus NulForm(V,V).(v,v) = 0.K by Th1;
+   thus NulForm(V,V).(v,v) = 0.K by Lm2;
   end;
 end;
 

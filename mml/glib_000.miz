@@ -8,19 +8,19 @@ environ
 
  vocabularies AMI_1, BOOLE, CARD_1, CARD_2, CAT_1, FINSEQ_1, FINSET_1,
       FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GLIB_000, MSAFREE2, NEWTON,
-      ORDINAL2, PBOOLE, REALSET1, RELAT_1, TOPGEN_1;
+      ORDINAL2, PBOOLE, REALSET1, RELAT_1, TOPGEN_1, NAT_1;
  notations TARSKI, XBOOLE_0, DOMAIN_1, SUBSET_1, PBOOLE, RELAT_1, CARD_1,
-      CARD_2, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, NAT_1, FUNCT_2, CQC_LANG,
-      FUNCT_4, ORDINAL2, FINSEQ_4, NUMBERS, XXREAL_0;
+      CARD_2, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, NAT_1, NAT_D, FUNCT_2,
+      CQC_LANG, FUNCT_4, ORDINAL2, FINSEQ_4, NUMBERS, XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, BINOP_2, CARD_2, CQC_LANG,
-      PBOOLE, SEQ_4, FINSEQ_4, ORDINAL2;
+      PBOOLE, SEQ_4, FINSEQ_4, ORDINAL2, NAT_D;
  registrations RELSET_1, FINSET_1, NAT_1, CARD_1, CQC_LANG, FINSEQ_1, FUNCT_1,
       RELAT_1, FINSEQ_4, ORDINAL1, FINSEQ_5, REALSET1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions CQC_LANG;
  theorems CARD_1, CARD_2, CQC_LANG, ENUMSET1, FINSEQ_1, FINSET_1, FUNCOP_1,
-      FUNCT_1, FUNCT_2, FUNCT_4, NAT_1, PBOOLE, RELAT_1, RLSUB_2, FINSEQ_4,
-      TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
+      FUNCT_1, FUNCT_2, FUNCT_4, NAT_1, PBOOLE, RELAT_1, FINSEQ_4, TARSKI,
+      XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes BINARITH, NAT_1, SUBSET_1;
 
 begin :: Definitions
@@ -1189,7 +1189,7 @@ definition let G be finite _Graph, v be Vertex of G;
     end;
     assume v.degree() = 0; then
     v.inDegree() + v.outDegree() = 0; then
-    v.inDegree() = 0 & v.outDegree() = 0 by NAT_1:23; then
+    v.inDegree() = 0 & v.outDegree() = 0 by NAT_1:7; then
     card v.edgesIn() = 0 & card v.edgesOut() = 0; then
 A1: v.edgesIn() = {} & v.edgesOut() = {} by CARD_2:59;
     v.edgesInOut() = {} by A1;
@@ -1219,13 +1219,13 @@ definition let G be finite _Graph, v be Vertex of G;
             hence v.degree() = 1 by A1, A4, Def15; end;
         suppose v.edgesIn() = {} & v.edgesOut() = {e}; then
             card v.edgesIn() = 0 & card v.edgesOut() = 1
-              by CARD_1:78, CARD_1:79; then
+              by CARD_1:78, 79; then
             v.inDegree() = 0 & v.outDegree() = 1; then
             v.inDegree() + v.outDegree() = 0 + 1;
             hence v.degree() = 1; end;
         suppose v.edgesIn() = {e} & v.edgesOut()  = {}; then
             card v.edgesIn() = 1 & card v.edgesOut() = 0
-              by CARD_1:78, CARD_1:79; then
+              by CARD_1:78, 79; then
             v.inDegree() = 1 & v.outDegree() = 0; then
             v.inDegree() + v.outDegree() = 1 + 0;
             hence v.degree() = 1; end;
@@ -1253,9 +1253,9 @@ A6: card v.edgesIn() + card v.edgesOut() = 1;
         end;
         hence v is endvertex by A10, Def53; end;
     suppose card v.edgesIn() <> 0; then
-        0 < card v.edgesIn() by NAT_1:19; then
-    A11: 0+1 <= card v.edgesIn() by NAT_1:38;
-        card v.edgesIn() <= 1 by A5, NAT_1:29; then
+        0 < card v.edgesIn() by NAT_1:3; then
+    A11: 0+1 <= card v.edgesIn() by NAT_1:13;
+        card v.edgesIn() <= 1 by A5, NAT_1:11; then
     A12: card v.edgesIn() = 1 by A11, XXREAL_0:1; then
         consider e being set such that
     A13: v.edgesIn() = {e} by CARD_2:60;
@@ -1344,7 +1344,6 @@ definition
 end;
 
 definition let GSq be GraphSeq, x be Nat;
- canceled;
  redefine
   func GSq.x -> _Graph;
   coherence proof
@@ -1355,6 +1354,8 @@ definition let GSq be GraphSeq, x be Nat;
 end;
 
 definition let GSq be GraphSeq;
+ canceled;
+
   attr GSq is finite means :Def60:   ::dGSEQFINITE
     for x being Nat holds GSq.x is finite;
   attr GSq is loopless means :Def61: ::dGSEQLOOPLESS
@@ -1591,10 +1592,7 @@ theorem ::tSELECT01
   VertexSelector = 1 & EdgeSelector = 2 &
   SourceSelector = 3 & TargetSelector = 4;
 
-theorem ::tGRAPHSEL01
-  x in _GraphSelectors iff
-  (x = VertexSelector or x = EdgeSelector or
-   x = SourceSelector or x = TargetSelector) by ENUMSET1:def 2;
+canceled;
 
 theorem ::tGRAPHSEL02
   _GraphSelectors c= dom G proof
@@ -1641,8 +1639,7 @@ proof
                 .= dom GS \/ {n} by CQC_LANG:5;
 end;
 
-theorem ::tGSET02
-  dom GS c= dom GS.set(n,x) by FUNCT_4:11;
+canceled;
 
 theorem Th11: ::tGSET03
   GS.set(n,x).n = x
@@ -1855,7 +1852,7 @@ proof
     A1: VG2 = {};
         VG2 misses {v1} by XBOOLE_1:79; then
     A2: Card (VG2 \/ {v1}) = Card VG2 +` Card {v1} by CARD_2:48
-                          .= 0 +` 1 by A1, CARD_1:78, CARD_1:50
+                          .= 0 +` 1 by A1, CARD_1:78, 50
                           .= Card (0 +^ 1) by CARD_2:def 1
                           .= Card (0+1) by CARD_2:49
                           .= 1 by CARD_1:66;
@@ -1918,9 +1915,9 @@ theorem ::tGORDER01
     for G being finite _Graph holds G.order() >= 1
 proof
     let G be finite _Graph;
-    0 < G.order() by NAT_1:19; then
+    0 < G.order() by NAT_1:3; then
     0+1 < G.order()+1 by XREAL_1:10;
-    hence thesis by NAT_1:38;
+    hence thesis by NAT_1:13;
 end;
 
 theorem ::tGORDER02
@@ -2666,7 +2663,7 @@ A1: e Joins v1, v2,G;
         card {e} <= card v1.edgesIn() by CARD_1:80; then
         1 <= card v1.edgesIn() by CARD_1:79; then
         1 <= v1.inDegree(); then
-        1 <= v1.inDegree() + v1.outDegree() by NAT_1:37;
+        1 <= v1.inDegree() + v1.outDegree() by NAT_1:12;
         hence 1 <= v1.degree();
         for x being set st x in {e} holds x in v2.edgesOut()
           by A2, TARSKI:def 1; then
@@ -2674,7 +2671,7 @@ A1: e Joins v1, v2,G;
         card {e} <= card v2.edgesOut() by CARD_1:80; then
         1 <= card v2.edgesOut() by CARD_1:79; then
         1 <= v2.outDegree(); then
-        1 <= v2.outDegree() + v2.inDegree() by NAT_1:37;
+        1 <= v2.outDegree() + v2.inDegree() by NAT_1:12;
         hence 1 <= v2.degree(); end;
     suppose
     A3: e in v2.edgesIn() & e in v1.edgesOut(); then
@@ -2684,7 +2681,7 @@ A1: e Joins v1, v2,G;
         card {e} <= card v1.edgesOut() by CARD_1:80; then
         1 <= card v1.edgesOut() by CARD_1:79; then
         1 <= v1.outDegree(); then
-        1 <= v1.inDegree() + v1.outDegree() by NAT_1:37;
+        1 <= v1.inDegree() + v1.outDegree() by NAT_1:12;
         hence 1 <= v1.degree();
         for x being set st x in {e} holds x in v2.edgesIn()
           by A3, TARSKI:def 1; then
@@ -2692,7 +2689,7 @@ A1: e Joins v1, v2,G;
         card {e} <= card v2.edgesIn() by CARD_1:80; then
         1 <= card v2.edgesIn() by CARD_1:79; then
         1 <= v2.inDegree(); then
-        1 <= v2.outDegree() + v2.inDegree() by NAT_1:37;
+        1 <= v2.outDegree() + v2.inDegree() by NAT_1:12;
         hence 1 <= v2.degree(); end;
     end;
     hence thesis;
@@ -3510,13 +3507,9 @@ theorem ::tGPSUBG01
    (ex v being set st v in the_Vertices_of G2 & not v in the_Vertices_of G1) or
    (ex e being set st e in the_Edges_of G2 & not e in the_Edges_of G1)
 proof
-    let G be _Graph, G1,G2 be Subgraph of G; assume
-A1: G1 c< G2;
-    now per cases by A1, Th101;
-    suppose the_Vertices_of G1 c< the_Vertices_of G2;
-        hence thesis by RLSUB_2:77; end;
-    suppose the_Edges_of G1 c< the_Edges_of G2;
-        hence thesis by RLSUB_2:77; end;
-    end;
-    hence thesis;
+ let G be _Graph, G1,G2 be Subgraph of G;
+ assume G1 c< G2;
+  then the_Vertices_of G1 c< the_Vertices_of G2 or
+       the_Edges_of G1 c< the_Edges_of G2 by Th101;
+ hence thesis by XBOOLE_0:6;
 end;   

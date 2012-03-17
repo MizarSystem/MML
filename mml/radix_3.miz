@@ -9,16 +9,16 @@ environ
  vocabularies INT_1, NAT_1, ARYTM_1, ARYTM_3, POWER, MIDSP_3, FINSEQ_1,
       FUNCT_1, RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, GROUP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1,
-      NAT_1, FUNCT_1, POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4, WSIERP_1,
-      RADIX_1, MESFUNC1;
+      NAT_1, NAT_D, FUNCT_1, POWER, FINSEQ_1, FINSEQ_4, BINARITH, TREES_4,
+      GR_CY_1, WSIERP_1, RADIX_1, MESFUNC1;
  constructors XXREAL_0, NAT_1, MEMBERED, FINSEQ_4, POWER, BINARITH, RADIX_1,
-      WSIERP_1;
- registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED, XXREAL_0;
+      WSIERP_1, GR_CY_1, NAT_D;
+ registrations INT_1, RELSET_1, FINSET_1, XREAL_0, MEMBERED, XXREAL_0, SEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RADIX_1;
  theorems REAL_1, REAL_2, RADIX_1, POWER, NAT_1, NAT_2, INT_1, BINARITH,
-      SPRECT_3, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, JORDAN3, PRE_FF, NEWTON,
-      RVSUM_1, PREPOWER, JORDAN12, FINSEQ_3, RADIX_2, XREAL_1, XXREAL_0;
+      FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, PRE_FF, NEWTON, RVSUM_1, PREPOWER,
+      JORDAN12, FINSEQ_3, RADIX_2, XREAL_1, XXREAL_0, NAT_D;
  schemes NAT_1, FINSEQ_2;
 
 begin :: Definition for Radix-2^k SD_Sub number
@@ -72,7 +72,7 @@ A4:     Radix(kk + 1) = 2 to_power (1) * 2 to_power (kk) by POWER:32
            Radix(kk) > 1 by A3,XXREAL_0:2;
         hence thesis by A4,REAL_2:144;
         end;
-         1 <= k implies P[k] from NAT_1:sch 9(A1,A2);
+         1 <= k implies P[k] from NAT_1:sch 8(A1,A2);
       hence thesis;
 end;
 
@@ -84,11 +84,11 @@ proof
   assume
 A1:   i in Seg n;
 then A2:   1 <= i & i <= n by FINSEQ_1:3;
-    then i <= n+1 by NAT_1:37;
+    then i <= n+1 by NAT_1:12;
 then A3:   i in Seg (n+1) by A2,FINSEQ_1:3;
        Radix(k) |^ i divides Radix(k) |^ n by A2,RADIX_1:7;
     then consider t be Nat such that
-A4:   Radix(k) |^ n = (Radix(k) |^ i)*t by NAT_1:def 3;
+A4:   Radix(k) |^ n = (Radix(k) |^ i)*t by NAT_D:def 3;
       Radix(k) <> 0 by POWER:39;
 then t <> 0 by A4,PREPOWER:12;
 then A5:   (m mod (Radix(k) |^ n)) mod (Radix(k) |^ i)
@@ -153,7 +153,7 @@ A1:   e in k-SD_Sub_S;
 A2:   e = g and
 A3:   g >= -Radix(k-'1) and
 A4:   g <= Radix(k-'1) - 1 by A1;
-       k-'1 <= k by JORDAN3:7;
+       k-'1 <= k by BINARITH:62;
     then 2 to_power (k-'1) <= 2 to_power k by PRE_FF:10;
     then A5:   Radix(k-'1) <= Radix(k);
     then -Radix(k-'1) >= -Radix(k) by XREAL_1:26;
@@ -181,7 +181,7 @@ A6:   1 <= k by A1,XXREAL_0:2;
     then Radix(k) + 0 = Radix(k-'1) + Radix(k-'1) by Lm1;
     then A7:   Radix(k) - Radix(k-'1) = Radix(k-'1) - 0;
        1 + 1 <= k by A1;
-    then 1 <= k -' 1 by SPRECT_3:8;
+    then 1 <= k -' 1 by BINARITH:73;
     then A8:   Radix(k -' 1) >= 2 by Lm4;
     then Radix(k-'1) >= 1 by XXREAL_0:2;
     then -Radix(k-'1) <= -1 by XREAL_1:26;
@@ -467,7 +467,7 @@ A1:       i in Seg n;
         assume
 A2:       i = n + 1;
            i <= n by A1,FINSEQ_1:3;
-        hence contradiction by A2,NAT_1:38;
+        hence contradiction by A2,NAT_1:13;
       end;
     hence thesis;
   end;
@@ -498,7 +498,7 @@ A6:      1 <= i & i <= n by A4,FINSEQ_1:3;
               hence SDD in k-SD_Sub by A1,A5,Th16;
             end;
             suppose i > 1;
-              then A7:            i -' 1 >= 1 by JORDAN3:12;
+              then A7:            i -' 1 >= 1 by BINARITH:67;
                  i - 1 <= n by A2,XREAL_1:22;
               then i -' 1 in Seg n by A3,A7,FINSEQ_1:3;
               then DigA(a,i-'1) is Element of k-SD by RADIX_1:19;
@@ -709,9 +709,9 @@ A1:   i in Seg n;
 A2:   2 <= k;
       set M = m mod (Radix(k) |^ n);
 A3:   1 <= i & i <= n by A1,FINSEQ_1:3;
-then A4: i <= n+1 by NAT_1:37;
+then A4: i <= n+1 by NAT_1:12;
 then A5:   i in Seg (n+1) by A3,FINSEQ_1:3;
-         i <= (n+1)+1 by A4,NAT_1:37;
+         i <= (n+1)+1 by A4,NAT_1:12;
 then A6:   i in Seg ((n+1)+1) by A3,FINSEQ_1:3;
 A7:  DigA_SDSub(SD2SDSub(DecSD(M,n,k)),i)
             = SD2SDSubDigitS(DecSD(M,n,k),i,k) by A5,Def8
@@ -747,7 +747,7 @@ then A9:      DigA_SDSub(SD2SDSub(DecSD(M,n,k)),i)
           then 0 < i-'1 by JORDAN12:1;
           then A10:        0 + 1 <= i-'1 by INT_1:20;
              i <= n by A1,FINSEQ_1:3;
-          then i -' 1 <= n by JORDAN3:7;
+          then i -' 1 <= n by BINARITH:62;
           then i -' 1 in Seg n by A10,FINSEQ_1:3;
           then DigA_SDSub(SD2SDSub(DecSD(M,n,k)),i)
             = SDSub_Add_Data(DigA(DecSD(m,n+1,k),i),k)
@@ -832,7 +832,7 @@ A15:  k >= 2 & x is_represented_by (n+1),k;
     set xn = x mod (Radix(k) |^ n);
        Radix(k) > 0 by RADIX_2:6;
     then (Radix(k) |^ n) > 0 by PREPOWER:13;
-    then xn < Radix(k) |^ n by NAT_1:46;
+    then xn < Radix(k) |^ n by NAT_D:1;
     then xn is_represented_by n,k by RADIX_1:def 12;
     then A16:  xn = SDSub2IntOut( SD2SDSub(DecSD(xn,n,k)) ) by A12,A15
        .= Sum SDSub2INT( SD2SDSub(DecSD(xn,n,k)) );
@@ -1029,9 +1029,9 @@ A55: Sum SDSub2INT(X)
        .= xn + RN * ( x div RN ) by A15,RADIX_1:27;
          Radix(k) > 0 by RADIX_2:6;
       then (Radix(k) |^ n) > 0 by PREPOWER:13;
-      then x = (x div RN) * RN + (x mod RN) by NAT_1:47;
+      then x = (x div RN) * RN + (x mod RN) by NAT_D:2;
       hence thesis by A55;
   end;
-     for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 9(A1,A11);
+     for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 8(A1,A11);
   hence thesis;
 end;

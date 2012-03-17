@@ -10,13 +10,13 @@ environ
  vocabularies MSUALG_1, FUNCT_1, BOOLE, FINSEQ_2, FINSEQ_1, RELAT_1, FUNCOP_1,
       UNIALG_1, UNIALG_2, CQC_SIM1, PRALG_1, MSUALG_2, TDGROUP, QC_LANG1,
       PARTFUN1, FINSEQ_4, ZF_REFLE, AMI_1, PBOOLE, CARD_3, FUNCT_2, REALSET1,
-      CAT_1, LATTICES, INCPROJ, WELLORD1, GROUP_6;
- notations TARSKI, XBOOLE_0, SUBSET_1, BINOP_1, CARD_3, NAT_1, CQC_LANG,
+      CAT_1, LATTICES, INCPROJ, WELLORD1, GROUP_6, NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, BINOP_1, CARD_3, NAT_1, NAT_D, CQC_LANG,
       LATTICES, LATTICE4, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1,
       STRUCT_0, PBOOLE, UNIALG_1, UNIALG_2, REALSET2, NUMBERS, FINSEQ_1,
       FINSEQ_2, MSUALG_1, MSUALG_2;
  constructors BINOP_1, CARD_3, FINSEQOP, CQC_LANG, FILTER_1, UNIALG_2,
-      LATTICE4, MSUALG_2;
+      LATTICE4, MSUALG_2, NAT_D;
  registrations FUNCT_1, MSUALG_1, MSUALG_2, RELSET_1, STRUCT_0, UNIALG_1,
       UNIALG_2, FINSEQ_2, MSAFREE, CQC_LANG, ARYTM_3, XBOOLE_0, ORDINAL1,
       SUBSET_1, FUNCOP_1, PBOOLE;
@@ -131,9 +131,8 @@ cluster the charact of U0 -> Function-yielding;
  coherence
   proof
    let x be set; assume
-A1: x in dom (the charact of U0);
-    then x is Nat by ORDINAL1:def 13;
-   hence (the charact of U0).x is Function by A1,UNIALG_1:5;
+ x in dom (the charact of U0);
+   thus (the charact of U0).x is Function;
   end;
 end;
 
@@ -978,24 +977,29 @@ then A9:         S is_closed_on o by UNIALG_2:def 5;
 
 A10:       arity o = len the_arity_of y
              proof
-                 now
-               let x be FinSequence of the carrier of 1A;
-               assume
-A11:             x in dom o;
                 o = (the Charact of A).y by A2,A7,MSUALG_1:def 18
                 .= Den(y,A) by MSUALG_1:def 11;
-               then dom o = Args(y,A) by FUNCT_2:def 1
+               then
+A11:           dom o = Args(y,A) by FUNCT_2:def 1
                     .= (len the_arity_of y)-tuples_on the_sort_of A
                                          by MSUALG_1:11;
-               then x in {s where s is Element of (the_sort_of A)* :
-               len s = len the_arity_of y} by A11;
+               now
+                 consider a being Element of
+                 (len the_arity_of y)-tuples_on the_sort_of A;
+                 a in dom o by A11;
+                 hence ex x being FinSequence st x in dom o;
+               let x be FinSequence;
+               assume
+A12:             x in dom o;
+               x in {s where s is Element of (the_sort_of A)* :
+               len s = len the_arity_of y} by A12,A11;
                then consider s being Element of (the_sort_of A)* such that
-A12:             x=s & len s = len the_arity_of y;
-               thus (len the_arity_of y) = len x by A12;
+A13:             x=s & len s = len the_arity_of y;
+               thus (len the_arity_of y) = len x by A13;
               end;
               hence thesis by UNIALG_1:def 10;
              end;
-A13:         (C# * the Arity of MS).y = Args(y,B) by MSUALG_1:def 9
+A14:         (C# * the Arity of MS).y = Args(y,B) by MSUALG_1:def 9
              .= (arity o)-tuples_on S by A3,A4,A10,MSUALG_1:11;
 
                f1.n = (the Charact of B).y by A3,MSUALG_1:def 18
@@ -1004,7 +1008,7 @@ A13:         (C# * the Arity of MS).y = Args(y,B) by MSUALG_1:def 9
                                           by A8,MSUALG_2:def 8
                 .= ((the Charact of A).y) | ((C# * the Arity of MS).y)
                                           by MSUALG_1:def 11
-                .= o | ((arity o)-tuples_on S) by A2,A7,A13,MSUALG_1:def 18;
+                .= o | ((arity o)-tuples_on S) by A2,A7,A14,MSUALG_1:def 18;
 
             hence f1.n = o/.S by A9,UNIALG_2:def 6;
            end;
@@ -1215,7 +1219,7 @@ then A9:     n in dom the charact of 1-Alg A by A5,FINSEQ_3:31;
           by UNIALG_1:5;
         reconsider h as homogeneous quasi_total non empty
          PartFunc of (the carrier of 1-Alg A)*,the carrier of 1-Alg A
-          by A9,FUNCT_1:def 15,UNIALG_1:def 4,def 5;
+          by A9,FUNCT_1:def 15,UNIALG_1:def 5;
 A10:    h = (the Charact of A).x by A3,MSUALG_1:def 18
          .= Den(x,A) by MSUALG_1:def 11;
         consider aa being Element of dom h;

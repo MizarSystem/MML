@@ -7,10 +7,13 @@
 environ
 
  vocabularies RELAT_1, SETFAM_1, ARYTM_1, BOOLE, RELAT_2, LATTICES, FINSEQ_1,
-      FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1;
+      FUNCT_1, TARSKI, EQREL_1, PARTFUN1, TOLER_1, AMI_1, T_1TOPSP, PUA2MSS1,
+      PROB_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
-      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, PARTFUN1;
- constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+      RELAT_2, RELSET_1, SETFAM_1, FINSEQ_1, FUNCT_1, NUMBERS, NAT_1, NAT_D,
+      PARTFUN1;
+ constructors SETFAM_1, RELAT_2, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
+      NAT_D;
  registrations RELSET_1, FINSEQ_1, SUBSET_1, XREAL_0, ARYTM_3, PARTFUN1,
       XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -42,7 +45,10 @@ definition let X; let R1,R2;
   func R1 \/ R2 -> Relation of X;
 end;
 
-canceled 3;
+theorem :: EQREL_1:1
+  nabla X \/ R1 = nabla X;
+
+canceled 2;
 
 theorem :: EQREL_1:4
  id X is_reflexive_in X & id X is_symmetric_in X &
@@ -65,7 +71,7 @@ registration let X;
   cluster nabla X -> total symmetric transitive;
 end;
 
- reserve EqR,EqR1,EqR2 for Equivalence_Relation of X;
+ reserve EqR,EqR1,EqR2,EqR3 for Equivalence_Relation of X;
 
 canceled 3;
 
@@ -98,8 +104,7 @@ end;
 theorem :: EQREL_1:17
   id X /\ EqR = id X;
 
-theorem :: EQREL_1:18
-  nabla X /\ R = R;
+canceled;
 
 theorem :: EQREL_1:19
   for SFXX st (SFXX <> {} & for Y st Y in SFXX
@@ -119,7 +124,8 @@ definition let X; let EqR1,EqR2;
  idempotence;
 end;
 
-canceled;
+theorem :: EQREL_1:21
+   (EqR1 "\/" EqR2) "\/" EqR3 = EqR1 "\/" (EqR2 "\/" EqR3);
 
 theorem :: EQREL_1:22
   EqR "\/" EqR = EqR;
@@ -285,4 +291,86 @@ end;
 theorem :: EQREL_1:46
  for X being non empty set holds
    SmallestPartition X = {{x} where x is Element of X: not contradiction};
+
+:: from T_1TOPSP, 30.12.2006, AK
+
+:: Classes of partitions of a set
+
+reserve X for non empty set, x for Element of X, y,v,w for set;
+
+definition
+ let X be non empty set,x be Element of X,S1 be a_partition of X;
+ func EqClass(x,S1) -> Subset of X means
+:: EQREL_1:def 8
+ x in it & it in S1;
+end;
+
+theorem :: EQREL_1:47
+ for S1,S2 being a_partition of X st
+ (for x being Element of X holds EqClass(x,S1) = EqClass(x,S2)) holds S1=S2;
+
+theorem :: EQREL_1:48
+ for X being non empty set holds {X} is a_partition of X;
+
+definition let X be set;
+  mode Family-Class of X means
+:: EQREL_1:def 9
+   it c= bool bool X;
+end;
+
+definition let X be set;
+ let F be Family-Class of X;
+ attr F is partition-membered means
+:: EQREL_1:def 10
+   for S being set st S in F holds S is a_partition of X;
+end;
+
+registration let X be set;
+ cluster partition-membered Family-Class of X;
+end;
+
+definition let X be set;
+  mode Part-Family of X is partition-membered Family-Class of X;
+end;
+
+reserve F for Part-Family of X;
+
+registration
+ let X be non empty set;
+ cluster non empty a_partition of X;
+end;
+
+theorem :: EQREL_1:49
+ for X being set, p being a_partition of X holds
+  {p} is Part-Family of X;
+
+registration let X be set;
+ cluster non empty Part-Family of X;
+end;
+
+theorem :: EQREL_1:50
+ for S1 being a_partition of X,
+     x,y being Element of X holds
+    EqClass(x,S1) meets EqClass(y,S1) implies EqClass(x,S1) = EqClass(y,S1);
+
+theorem :: EQREL_1:51
+ for A being set,X being non empty set,S being a_partition of X holds
+ A in S implies ex x being Element of X st A = EqClass(x,S);
+
+definition
+ let X be non empty set,F be non empty Part-Family of X;
+ func Intersection F -> non empty a_partition of X means
+:: EQREL_1:def 11
+ for x being Element of X holds EqClass(x,it)
+  = meet{EqClass(x,S) where S is a_partition of X : S in F};
+end;
+
+theorem :: EQREL_1:52
+ for X being non empty set,
+     S being a_partition of X,
+     A being Subset of S holds (union S) \ (union A) = union (S \ A);
+
+theorem :: EQREL_1:53
+ for X being non empty set,A being Subset of X,
+     S being a_partition of X holds A in S implies union(S \ {A}) = X \ A;
 

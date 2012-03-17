@@ -10,18 +10,18 @@ environ
       BOOLE, FUNCT_1, AMI_5, ABSVALUE, FINSEQ_1, FINSEQ_2, CARD_3, CAT_1,
       FINSET_1, ARYTM_1, NAT_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, CARD_3,
-      INT_2, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, DOMAIN_1, STRUCT_0,
-      CQC_LANG, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CAT_3, AMI_1, AMI_2,
-      AMI_3, AMI_5, FUNCT_7, SCMFSA_2, XXREAL_0;
+      INT_2, RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, NAT_D, DOMAIN_1,
+      STRUCT_0, CQC_LANG, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CAT_3, AMI_1,
+      AMI_2, AMI_3, AMI_5, FUNCT_7, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, INT_2, FUNCT_7, CAT_3,
-      AMI_5, SCMFSA_1, SCMFSA_2;
+      AMI_5, SCMFSA_1, SCMFSA_2, MEMBERED, NAT_D;
  registrations AMI_1, AMI_3, INT_1, FUNCT_1, RELSET_1, SCMFSA_2, FINSEQ_1,
-      FRAENKEL, NUMBERS, SETFAM_1, STRUCT_0, CARD_3;
+      FRAENKEL, NUMBERS, SETFAM_1, STRUCT_0, CARD_3, AMI_5;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, AMI_5, CQC_LANG;
+ definitions AMI_1, AMI_2, AMI_3, AMI_5, CQC_LANG, SCMFSA_2;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCOP_1, FUNCT_4,
       FUNCT_1, FINSET_1, ZFMISC_1, INT_1, RELAT_1, AMI_5, SCMFSA_2, SCMFSA_1,
-      ABSVALUE, FINSEQ_2, XBOOLE_0, XBOOLE_1;
+      ABSVALUE, FINSEQ_2, XBOOLE_0, XBOOLE_1, AMI_2;
 
 begin
 
@@ -34,7 +34,7 @@ theorem Th1:
 proof assume IC SCM+FSA in Int-Locations;
   then IC SCM+FSA is Int-Location by SCMFSA_2:11;
 then ObjectKind IC SCM+FSA = INT by SCMFSA_2:26;
- hence contradiction by AMI_1:def 11,SCMFSA_2:6;
+ hence contradiction by AMI_1:def 11,SCMFSA_1:13;
 end;
 
 theorem Th2:
@@ -42,7 +42,7 @@ theorem Th2:
 proof assume IC SCM+FSA in FinSeq-Locations;
   then IC SCM+FSA is FinSeq-Location by SCMFSA_2:12;
 then ObjectKind IC SCM+FSA = INT* by SCMFSA_2:27;
- hence contradiction by AMI_1:def 11,SCMFSA_2:6;
+ hence contradiction by AMI_1:def 11,SCMFSA_1:13;
 end;
 
 theorem
@@ -51,7 +51,7 @@ theorem
     S = s|(the carrier of SCM) +*
        ((the Instruction-Locations of SCM) --> I)
    holds Exec(i,s) = s +*Exec(I,S) +* s|the Instruction-Locations of SCM+FSA
-         by AMI_3:def 1,SCMFSA_2:75,def 1;
+         by SCMFSA_2:75;
 
 theorem Th4:
   for s1,s2 being State of SCM+FSA st
@@ -92,28 +92,27 @@ A9:   dom Exec(l,s1) = dom Exec(l,s2) by A7,AMI_3:36;
 A10: Int-Locations \/ FinSeq-Locations c= (Int-Locations \/ FinSeq-Locations \/
             {IC SCM+FSA}) by XBOOLE_1:7;
 A11: InsCode l <= 11+1 by SCMFSA_2:35;
-A12: InsCode l <= 10+1 implies InsCode l <= 10 or InsCode l = 11 by NAT_1:26;
-A13: InsCode l <= 9+1 implies InsCode l <= 8+1 or InsCode l = 10 by NAT_1:26;
- per cases by A11,A12,A13,NAT_1:26;
+A12: InsCode l <= 10+1 implies InsCode l <= 10 or InsCode l = 11 by NAT_1:8;
+A13: InsCode l <= 9+1 implies InsCode l <= 8+1 or InsCode l = 10 by NAT_1:8;
+ per cases by A11,A12,A13,NAT_1:8;
  suppose InsCode l <= 8;
   then reconsider I = l as Instruction of SCM by SCMFSA_2:34;
   reconsider
    S1 = s1|(the carrier of SCM) +* ((the Instruction-Locations of SCM) --> I),
    S2 = s2|(the carrier of SCM) +* ((the Instruction-Locations of SCM) --> I)
-       as State of SCM by AMI_3:def 1,SCMFSA_2:73;
+       as State of SCM by SCMFSA_2:73;
 A14:  dom((the Instruction-Locations of SCM) --> I)
-        = SCM-Instr-Loc by AMI_3:def 1,FUNCOP_1:19;
-       not IC SCM in SCM-Instr-Loc by AMI_1:48,AMI_3:def 1;
+        = SCM-Instr-Loc by FUNCOP_1:19;
+       not IC SCM in SCM-Instr-Loc by AMI_1:48;
     then SCM-Instr-Loc misses {IC SCM} by ZFMISC_1:56;
     then SCM-Instr-Loc misses SCM-Data-Loc \/ {IC SCM} by AMI_5:33,XBOOLE_1:70
 ;
 then A15:  ((the Instruction-Locations of SCM) --> I)|(SCM-Data-Loc \/
      {IC SCM}) = {} by A14,RELAT_1:95;
 A16:  SCM-Data-Loc \/ {IC SCM} c= the carrier of SCM by AMI_5:23,XBOOLE_1:7;
-       SCM-Data-Loc c= Int-Locations \/ FinSeq-Locations by SCMFSA_1:def 1
-,SCMFSA_2:def 2,XBOOLE_1:7;
+       SCM-Data-Loc c= Int-Locations \/ FinSeq-Locations by XBOOLE_1:7;
 then A17:  SCM-Data-Loc \/ {IC SCM} c= Int-Locations \/ FinSeq-Locations \/
- {IC SCM+FSA} by AMI_3:4,SCMFSA_2:7,XBOOLE_1:9;
+ {IC SCM+FSA} by SCMFSA_2:7,XBOOLE_1:9;
 A18:  S1 | (SCM-Data-Loc \/ {IC SCM})
       = s1|(the carrier of SCM) | (SCM-Data-Loc \/
  {IC SCM}) +* {} by A15,FUNCT_4:75
@@ -126,14 +125,15 @@ A18:  S1 | (SCM-Data-Loc \/ {IC SCM})
      .= s2|(the carrier of SCM) | (SCM-Data-Loc \/
  {IC SCM}) +* {} by FUNCT_4:22
      .= S2 | (SCM-Data-Loc \/ {IC SCM}) by A15,FUNCT_4:75;
-       (the carrier of SCM) misses FinSeq-Locations by AMI_3:def 1
-,SCMFSA_1:def 2,SCMFSA_2:def 3,XBOOLE_1:79;
+       (the carrier of SCM) misses FinSeq-Locations by SCMFSA_1:def 2,XBOOLE_1:
+79;
 then A19:  (the carrier of SCM) /\ FinSeq-Locations = {} by XBOOLE_0:def 7;
       not IC SCM+FSA in the Instruction-Locations of SCM+FSA by AMI_1:48;
 then A20: the Instruction-Locations of SCM+FSA misses {IC SCM+FSA} by
 ZFMISC_1:56;
       (the Instruction-Locations of SCM+FSA)
-         misses Int-Locations \/ FinSeq-Locations by SCMFSA_2:13,14,XBOOLE_1:70
+         misses Int-Locations \/ FinSeq-Locations by SCMFSA_2:13,
+14,XBOOLE_1:70
 ;
    then the Instruction-Locations of SCM+FSA misses
             Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}
@@ -156,8 +156,7 @@ A24: Exec(I,S1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
      .= Exec(I,S1)|Int-Locations +* {} +* Exec(I,S1) |{IC SCM+FSA}
              by A23,FUNCT_4:83
      .= Exec(I,S1)|Int-Locations +* Exec(I,S1) |{IC SCM+FSA} by FUNCT_4:22
-     .= Exec(I,S1) | (SCM-Data-Loc \/ {IC SCM})
-                by AMI_3:4,FUNCT_4:83,SCMFSA_1:def 1,SCMFSA_2:7,def 2;
+     .= Exec(I,S1) | (SCM-Data-Loc \/ {IC SCM}) by FUNCT_4:83,SCMFSA_2:7;
 A25: s2|(the Instruction-Locations of SCM+FSA)
       | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
       = s2|((the Instruction-Locations of SCM+FSA)
@@ -173,12 +172,11 @@ A27: Exec(I,S2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
      .= Exec(I,S2)|Int-Locations +* {} +* Exec(I,S2) |{IC SCM+FSA}
              by A26,FUNCT_4:83
      .= Exec(I,S2)|Int-Locations +* Exec(I,S2) |{IC SCM+FSA} by FUNCT_4:22
-     .= Exec(I,S2) | (SCM-Data-Loc \/ {IC SCM})
-                by AMI_3:4,FUNCT_4:83,SCMFSA_1:def 1,SCMFSA_2:7,def 2;
+     .= Exec(I,S2) | (SCM-Data-Loc \/ {IC SCM}) by FUNCT_4:83,SCMFSA_2:7;
   thus Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
          = (s1 +*Exec(I,S1) +* s1|the Instruction-Locations of SCM+FSA)
                 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}) by
-AMI_3:def 1,SCMFSA_2:75,def 1
+SCMFSA_2:75
         .= (s1 +*Exec(I,S1))
              | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
           +* {} by A22,FUNCT_4:75
@@ -200,7 +198,7 @@ AMI_3:def 1,SCMFSA_2:75,def 1
                  | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
                      by A25,FUNCT_4:75
         .= Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA})
-              by AMI_3:def 1,SCMFSA_2:75,def 1;
+              by SCMFSA_2:75;
   end;
   suppose InsCode l = 9;
    then consider da,db,fa such that
@@ -594,7 +592,8 @@ A1: Int-Locations misses {IC SCM+FSA} by Th1,ZFMISC_1:56;
    then A2: Int-Locations \/ FinSeq-Locations misses {IC SCM+FSA} by A1,
 XBOOLE_1:70;
       Int-Locations \/ FinSeq-Locations
-      misses the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14,XBOOLE_1:70
+      misses the Instruction-Locations of SCM+FSA by SCMFSA_2:13,
+14,XBOOLE_1:70
 ;
 then A3: (Int-Locations \/ FinSeq-Locations)
       misses ({IC SCM+FSA} \/ the Instruction-Locations of SCM+FSA)
@@ -665,7 +664,8 @@ theorem
          p be programmed FinPartState of SCM+FSA;
       A1: dom p c= the Instruction-Locations of SCM+FSA by AMI_3:def 13;
 A2:  Int-Locations \/ FinSeq-Locations misses
-          the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14,XBOOLE_1:70;
+          the Instruction-Locations of SCM+FSA by SCMFSA_2:13,
+14,XBOOLE_1:70;
          now assume {IC SCM+FSA} meets the Instruction-Locations of SCM+FSA;
       then consider x being set such that
 A3:    x in {IC SCM+FSA} and
@@ -721,7 +721,7 @@ theorem
    let s be State of SCM+FSA,
        iloc be Instruction-Location of SCM+FSA,
        a be Int-Location;
-A1: dom (Start-At iloc) = {IC SCM+FSA} by AMI_3:34;
+A1: dom (Start-At iloc) = {IC SCM+FSA} by FUNCOP_1:19;
        a in the carrier of SCM+FSA;
     then a in dom s by AMI_3:36;
 then A2: a in dom s \/ dom (Start-At iloc) by XBOOLE_0:def 2;
@@ -739,7 +739,7 @@ proof
    let s be State of SCM+FSA,
        iloc be Instruction-Location of SCM+FSA,
        a be FinSeq-Location;
-A1: dom (Start-At iloc) = {IC SCM+FSA} by AMI_3:34;
+A1: dom (Start-At iloc) = {IC SCM+FSA} by FUNCOP_1:19;
        a in the carrier of SCM+FSA;
     then a in dom s by AMI_3:36;
 then A2: a in dom s \/ dom (Start-At iloc) by XBOOLE_0:def 2;
@@ -791,13 +791,14 @@ A3:  d1 in dom DataPart p by A1;
         dom DataPart p c= the carrier of SCM+FSA by AMI_3:37;
      then reconsider d1 as Element of SCM+FSA by A3;
         DataPart p = p |(Int-Locations \/ FinSeq-Locations) by Th6;
-     then A4: dom DataPart p c= Int-Locations \/ FinSeq-Locations by RELAT_1:87
-;
+     then A4: dom DataPart p c= Int-Locations \/ FinSeq-Locations
+     by RELAT_1:87;
      consider d2 being Element of Int-Locations \ dom p;
         p is finite by AMI_1:def 24;
-     then dom p is finite by FINSET_1:29;
-     then not Int-Locations c= dom p by FINSET_1:13,SCMFSA_2:22;
-     then A5: Int-Locations \ dom p <> {} by XBOOLE_1:37;
+     then
+A5:  dom p is finite by FINSET_1:29;
+     not Int-Locations c= dom p by A5,FINSET_1:13;
+     then A6: Int-Locations \ dom p <> {} by XBOOLE_1:37;
      then d2 in Int-Locations by XBOOLE_0:def 4;
      then reconsider d2 as Int-Location by SCMFSA_2:11;
      consider il being
@@ -806,7 +807,7 @@ A3:  d1 in dom DataPart p by A1;
      then dom p is finite by FINSET_1:29;
      then not the Instruction-Locations of SCM+FSA c= dom p
                                 by FINSET_1:13,SCMFSA_2:24;
-     then A6: (the Instruction-Locations of SCM+FSA) \ dom p <> {} by
+     then A7: (the Instruction-Locations of SCM+FSA) \ dom p <> {} by
 XBOOLE_1:37;
      then reconsider il as Instruction-Location of SCM+FSA by XBOOLE_0:def 4;
      per cases by A3,A4,XBOOLE_0:def 2;
@@ -814,17 +815,17 @@ XBOOLE_1:37;
      then reconsider d1 as Int-Location by SCMFSA_2:11;
      set p1 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il);
      set p2 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il);
-     consider s1 being State of SCM+FSA such that A7: p1 c= s1 by AMI_3:39;
-     consider s2 being State of SCM+FSA such that A8: p2 c= s2 by AMI_3:39;
+     consider s1 being State of SCM+FSA such that A8: p1 c= s1 by AMI_3:39;
+     consider s2 being State of SCM+FSA such that A9: p2 c= s2 by AMI_3:39;
      take s1,s2;
-         not d2 in dom p by A5,XBOOLE_0:def 4;
-then A9:   dom p misses {d2} by ZFMISC_1:56;
-         not il in dom p by A6,XBOOLE_0:def 4;
-then A10:   dom p misses {il} by ZFMISC_1:56;
+         not d2 in dom p by A6,XBOOLE_0:def 4;
+then A10:   dom p misses {d2} by ZFMISC_1:56;
+         not il in dom p by A7,XBOOLE_0:def 4;
+then A11:   dom p misses {il} by ZFMISC_1:56;
         dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
        = dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
                                                by FUNCT_4:def 1
-      .= dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ {IC SCM+FSA} by AMI_3:34
+      .= dom((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ {IC SCM+FSA} by FUNCOP_1:19
       .= dom(il .--> (d1:=d2)) \/ dom ( d2.--> 0) \/ {IC SCM+FSA}
                 by FUNCT_4:def 1
       .= {il} \/ dom ( d2.--> 0) \/ {IC SCM+FSA} by CQC_LANG:5
@@ -833,16 +834,16 @@ then A10:   dom p misses {il} by ZFMISC_1:56;
        = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
       .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
       .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
-      .= {} by A10,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A10,XBOOLE_0:def 7
+      .= {} by A11,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
       by XBOOLE_0:def 7;
     then p c= p1 by FUNCT_4:33;
-   hence p c= s1 by A7,XBOOLE_1:1;
+   hence p c= s1 by A8,XBOOLE_1:1;
        dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
        = dom((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
                                                by FUNCT_4:def 1
-      .= dom((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ {IC SCM+FSA} by AMI_3:34
+      .= dom((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ {IC SCM+FSA} by FUNCOP_1:19
       .= dom(il .--> (d1:=d2)) \/ dom ( d2.--> 1) \/ {IC SCM+FSA}
                 by FUNCT_4:def 1
       .= {il} \/ dom ( d2.--> 1) \/ {IC SCM+FSA} by CQC_LANG:5
@@ -851,144 +852,144 @@ then A10:   dom p misses {il} by ZFMISC_1:56;
        = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
       .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
       .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A9,XBOOLE_0:def 7
-      .= {} by A10,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A10,XBOOLE_0:def 7
+      .= {} by A11,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
       by XBOOLE_0:def 7;
     then p c= p2 by FUNCT_4:33;
-   hence p c= s2 by A8,XBOOLE_1:1;
+   hence p c= s2 by A9,XBOOLE_1:1;
     take 1;
-        DataPart p c= p by AMI_5:62;
-     then A11: dom DataPart p c= dom p by RELAT_1:25;
+        DataPart p c= p by RELAT_1:88;
+     then A12: dom DataPart p c= dom p by RELAT_1:25;
         dom ((Computation s1).1) = the carrier of SCM+FSA by AMI_3:36;
      then dom p c= dom ((Computation s1).1) by AMI_3:37;
-then A12:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
-A13:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
-then A14: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
-A15:  dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+then A13:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
+A14:  dom(Start-At il) = {IC SCM+FSA} by FUNCOP_1:19;
+then A15: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A16:  dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
          = dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
                                  by FUNCT_4:def 1;
-then A16: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
-                                 by A14,XBOOLE_0:def 2;
-A17:  dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+then A17: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                                 by A15,XBOOLE_0:def 2;
+A18:  dom p1 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
                                  by FUNCT_4:def 1;
-then A18: IC SCM+FSA in dom p1 by A16,XBOOLE_0:def 2;
-A19:  IC s1 = p1.IC SCM+FSA by A7,A18,GRFUNC_1:8
+then A19: IC SCM+FSA in dom p1 by A17,XBOOLE_0:def 2;
+A20:  IC s1 = p1.IC SCM+FSA by A8,A19,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).IC SCM+FSA
-                                              by A16,FUNCT_4:14
-          .= (Start-At il).IC SCM+FSA by A14,FUNCT_4:14
-          .= il by AMI_3:50;
+                                              by A17,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A15,FUNCT_4:14
+          .= il by CQC_LANG:6;
         dom (il .--> (d1:=d2)) = {il} by CQC_LANG:5;
-then A20: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
-A21:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
+then A21: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+A22:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
         il <> d2 by SCMFSA_2:84;
-then A22: not il in dom (d2 .--> 0) by A21,TARSKI:def 1;
-A23:   dom ((il .--> (d1:=d2)) +* ( d2.--> 0))
+then A23: not il in dom (d2 .--> 0) by A22,TARSKI:def 1;
+A24:   dom ((il .--> (d1:=d2)) +* ( d2.--> 0))
          = dom (il .--> (d1:=d2)) \/ dom ( d2.--> 0) by FUNCT_4:def 1;
-then A24: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A20,XBOOLE_0:def 2;
+then A25: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A21,XBOOLE_0:def 2;
         il <> IC SCM+FSA by AMI_1:48;
-then A25: not il in dom (Start-At il) by A13,TARSKI:def 1;
-A26: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
-                               by A15,A24,XBOOLE_0:def 2;
-     then il in dom p1 by A17,XBOOLE_0:def 2;
-then A27:  s1.il = p1.il by A7,GRFUNC_1:8
+then A26: not il in dom (Start-At il) by A14,TARSKI:def 1;
+A27: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                               by A16,A25,XBOOLE_0:def 2;
+     then il in dom p1 by A18,XBOOLE_0:def 2;
+then A28:  s1.il = p1.il by A8,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).il
-                                                 by A26,FUNCT_4:14
-          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).il by A25,FUNCT_4:12
-          .= (il .--> (d1:=d2)).il by A22,FUNCT_4:12
+                                                 by A27,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).il by A26,FUNCT_4:12
+          .= (il .--> (d1:=d2)).il by A23,FUNCT_4:12
           .=(d1:=d2) by CQC_LANG:6;
-A28: d2 in dom (d2 .--> 0) by A21,TARSKI:def 1;
-then A29: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A23,XBOOLE_0:def 2;
+A29: d2 in dom (d2 .--> 0) by A22,TARSKI:def 1;
+then A30: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0)) by A24,XBOOLE_0:def 2;
         d2 <> IC SCM+FSA by SCMFSA_2:81;
-then A30: not d2 in dom (Start-At il) by A13,TARSKI:def 1;
-A31: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
-                                        by A15,A29,XBOOLE_0:def 2;
-     then d2 in dom p1 by A17,XBOOLE_0:def 2;
-then A32:  s1.d2 = p1.d2 by A7,GRFUNC_1:8
+then A31: not d2 in dom (Start-At il) by A14,TARSKI:def 1;
+A32: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il)
+                                        by A16,A30,XBOOLE_0:def 2;
+     then d2 in dom p1 by A18,XBOOLE_0:def 2;
+then A33:  s1.d2 = p1.d2 by A8,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il).d2
-                                                 by A31,FUNCT_4:14
-          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A30,FUNCT_4:12
-          .= (d2.--> 0).d2 by A28,FUNCT_4:14
+                                                 by A32,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 0)).d2 by A31,FUNCT_4:12
+          .= (d2.--> 0).d2 by A29,FUNCT_4:14
           .= 0 by CQC_LANG:6;
      (Computation s1).(0+1).d1 = (Following (Computation s1).0).d1 by
 AMI_1:def 19
                            .= (Following s1).d1 by AMI_1:def 19
-                           .= 0 by  A19,A27,A32,SCMFSA_2:89;
-then A33:  ((Computation s1).1|dom p).d1 = 0 by A3,A11,A12,FUNCT_1:70;
+                           .= 0 by  A20,A28,A33,SCMFSA_2:89;
+then A34:  ((Computation s1).1|dom p).d1 = 0 by A3,A12,A13,FUNCT_1:70;
         dom ((Computation s2).1) = the carrier of SCM+FSA by AMI_3:36;
      then dom p c= dom ((Computation s2).1) by AMI_3:37;
-then A34:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
-A35:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
-then A36: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
-A37:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+then A35:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
+A36:  dom(Start-At il) = {IC SCM+FSA} by FUNCOP_1:19;
+then A37: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A38:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
          = dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
                                  by FUNCT_4:def 1;
-then A38: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
-                                 by A36,XBOOLE_0:def 2;
-A39:  dom p2 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+then A39: IC SCM+FSA in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                                 by A37,XBOOLE_0:def 2;
+A40:  dom p2 = dom p \/ dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
                                  by FUNCT_4:def 1;
-then A40: IC SCM+FSA in dom p2 by A38,XBOOLE_0:def 2;
-A41:  IC s2 = p2.IC SCM+FSA by A8,A40,GRFUNC_1:8
+then A41: IC SCM+FSA in dom p2 by A39,XBOOLE_0:def 2;
+A42:  IC s2 = p2.IC SCM+FSA by A9,A41,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).IC SCM+FSA
-                                              by A38,FUNCT_4:14
-          .= (Start-At il).IC SCM+FSA by A36,FUNCT_4:14
-          .= il by AMI_3:50;
+                                              by A39,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A37,FUNCT_4:14
+          .= il by CQC_LANG:6;
         dom (il .--> (d1:=d2)) = {il} by CQC_LANG:5;
-then A42: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
-A43:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
+then A43: il in dom (il .--> (d1:=d2)) by TARSKI:def 1;
+A44:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
         il <> d2 by SCMFSA_2:84;
-then A44: not il in dom (d2 .--> 1) by A43,TARSKI:def 1;
-A45:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1))
+then A45: not il in dom (d2 .--> 1) by A44,TARSKI:def 1;
+A46:  dom ((il .--> (d1:=d2)) +* ( d2.--> 1))
          = dom (il .--> (d1:=d2)) \/ dom ( d2.--> 1) by FUNCT_4:def 1;
-then A46: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A42,XBOOLE_0:def 2;
+then A47: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A43,XBOOLE_0:def 2;
         il <> IC SCM+FSA by AMI_1:48;
-then A47: not il in dom (Start-At il) by A35,TARSKI:def 1;
-A48: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
-                               by A37,A46,XBOOLE_0:def 2;
+then A48: not il in dom (Start-At il) by A36,TARSKI:def 1;
+A49: il in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                               by A38,A47,XBOOLE_0:def 2;
 
-     then il in dom p2 by A39,XBOOLE_0:def 2;
-then A49:  s2.il = p2.il by A8,GRFUNC_1:8
+     then il in dom p2 by A40,XBOOLE_0:def 2;
+then A50:  s2.il = p2.il by A9,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).il
-                                                 by A48,FUNCT_4:14
-          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).il by A47,FUNCT_4:12
-          .= (il .--> (d1:=d2)).il by A44,FUNCT_4:12
+                                                 by A49,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).il by A48,FUNCT_4:12
+          .= (il .--> (d1:=d2)).il by A45,FUNCT_4:12
           .=(d1:=d2) by CQC_LANG:6;
-A50: d2 in dom (d2 .--> 1) by A43,TARSKI:def 1;
-then A51: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A45,XBOOLE_0:def 2;
+A51: d2 in dom (d2 .--> 1) by A44,TARSKI:def 1;
+then A52: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1)) by A46,XBOOLE_0:def 2;
         d2 <> IC SCM+FSA by SCMFSA_2:81;
-then A52: not d2 in dom (Start-At il) by A35,TARSKI:def 1;
-A53: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
-                                        by A37,A51,XBOOLE_0:def 2;
-     then d2 in dom p2 by A39,XBOOLE_0:def 2;
-then A54:  s2.d2 = p2.d2 by A8,GRFUNC_1:8
+then A53: not d2 in dom (Start-At il) by A36,TARSKI:def 1;
+A54: d2 in dom ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il)
+                                        by A38,A52,XBOOLE_0:def 2;
+     then d2 in dom p2 by A40,XBOOLE_0:def 2;
+then A55:  s2.d2 = p2.d2 by A9,GRFUNC_1:8
           .= ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il).d2
-                                                 by A53,FUNCT_4:14
-          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A52,FUNCT_4:12
-          .= (d2.--> 1).d2 by A50,FUNCT_4:14
+                                                 by A54,FUNCT_4:14
+          .= ((il .--> (d1:=d2)) +* ( d2.--> 1)).d2 by A53,FUNCT_4:12
+          .= (d2.--> 1).d2 by A51,FUNCT_4:14
           .= 1 by CQC_LANG:6;
      (Computation s2).(0+1).d1 = (Following (Computation s2).0).d1 by
 AMI_1:def 19
                            .= (Following s2).d1 by AMI_1:def 19
-                           .= 1 by  A41,A49,A54,SCMFSA_2:89;
-     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A11,A33
-,A34,FUNCT_1:70;
+                           .= 1 by  A42,A50,A55,SCMFSA_2:89;
+     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A12,A34
+,A35,FUNCT_1:70;
      end;
      suppose d1 in FinSeq-Locations;
      then reconsider d1 as FinSeq-Location by SCMFSA_2:12;
      set p1 = p +* ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il);
      set p2 = p +* ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il);
-     consider s1 being State of SCM+FSA such that A55: p1 c= s1 by AMI_3:39;
-     consider s2 being State of SCM+FSA such that A56: p2 c= s2 by AMI_3:39;
+     consider s1 being State of SCM+FSA such that A56: p1 c= s1 by AMI_3:39;
+     consider s2 being State of SCM+FSA such that A57: p2 c= s2 by AMI_3:39;
      take s1,s2;
-         not d2 in dom p by A5,XBOOLE_0:def 4;
-then A57:   dom p misses {d2} by ZFMISC_1:56;
-         not il in dom p by A6,XBOOLE_0:def 4;
-then A58:   dom p misses {il} by ZFMISC_1:56;
+         not d2 in dom p by A6,XBOOLE_0:def 4;
+then A58:   dom p misses {d2} by ZFMISC_1:56;
+         not il in dom p by A7,XBOOLE_0:def 4;
+then A59:   dom p misses {il} by ZFMISC_1:56;
         dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
        = dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
                                                by FUNCT_4:def 1
       .= dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ {IC SCM+FSA}
-                                 by AMI_3:34
+                                 by FUNCOP_1:19
       .= dom(il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 0) \/ {IC SCM+FSA}
                 by FUNCT_4:def 1
       .= {il} \/ dom ( d2.--> 0) \/ {IC SCM+FSA} by CQC_LANG:5
@@ -998,17 +999,17 @@ il)
        = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
       .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
       .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A57,XBOOLE_0:def 7
-      .= {} by A58,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A58,XBOOLE_0:def 7
+      .= {} by A59,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=<0,...,0>d2)) +*
       ( d2.--> 0) +* Start-At il) by XBOOLE_0:def 7;
     then p c= p1 by FUNCT_4:33;
-   hence p c= s1 by A55,XBOOLE_1:1;
+   hence p c= s1 by A56,XBOOLE_1:1;
        dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
        = dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
                                                by FUNCT_4:def 1
       .= dom((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ {IC SCM+FSA}
-               by AMI_3:34
+               by FUNCOP_1:19
       .= dom(il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 1) \/ {IC SCM+FSA}
                 by FUNCT_4:def 1
       .= {il} \/ dom ( d2.--> 1) \/ {IC SCM+FSA} by CQC_LANG:5
@@ -1018,146 +1019,146 @@ il)
        = dom p /\ ({il} \/ {d2}) \/ dom p /\ {IC SCM+FSA} by XBOOLE_1:23
       .= dom p /\ ({il} \/ {d2}) \/ {} by A2,XBOOLE_0:def 7
       .= dom p /\ {il} \/ dom p /\ {d2} by XBOOLE_1:23
-      .= dom p /\ {il} \/ {} by A57,XBOOLE_0:def 7
-      .= {} by A58,XBOOLE_0:def 7;
+      .= dom p /\ {il} \/ {} by A58,XBOOLE_0:def 7
+      .= {} by A59,XBOOLE_0:def 7;
     then dom p misses dom ((il .--> (d1:=<0,...,0>d2)) +*
       ( d2.--> 1) +* Start-At il) by XBOOLE_0:def 7;
     then p c= p2 by FUNCT_4:33;
-   hence p c= s2 by A56,XBOOLE_1:1;
+   hence p c= s2 by A57,XBOOLE_1:1;
     take 1;
-        DataPart p c= p by AMI_5:62;
-     then A59: dom DataPart p c= dom p by RELAT_1:25;
+        DataPart p c= p by RELAT_1:88;
+     then A60: dom DataPart p c= dom p by RELAT_1:25;
         dom ((Computation s1).1) = the carrier of SCM+FSA by AMI_3:36;
      then dom p c= dom ((Computation s1).1) by AMI_3:37;
-then A60:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
-A61:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
-then A62: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
-A63:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+then A61:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
+A62:  dom(Start-At il) = {IC SCM+FSA} by FUNCOP_1:19;
+then A63: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A64:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
          = dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) \/ dom(Start-At il)
                                  by FUNCT_4:def 1;
-then A64: IC SCM+FSA in
+then A65: IC SCM+FSA in
         dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
-                                 by A62,XBOOLE_0:def 2;
-A65:  dom p1 = dom p \/
+                                 by A63,XBOOLE_0:def 2;
+A66:  dom p1 = dom p \/
          dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
                                  by FUNCT_4:def 1;
-then A66: IC SCM+FSA in dom p1 by A64,XBOOLE_0:def 2;
-A67: IC s1 = p1.IC SCM+FSA by A55,A66,GRFUNC_1:8
+then A67: IC SCM+FSA in dom p1 by A65,XBOOLE_0:def 2;
+A68: IC s1 = p1.IC SCM+FSA by A56,A67,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +*
                 ( d2.--> 0) +* Start-At il).IC SCM+FSA
-                                              by A64,FUNCT_4:14
-          .= (Start-At il).IC SCM+FSA by A62,FUNCT_4:14
-          .= il by AMI_3:50;
+                                              by A65,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A63,FUNCT_4:14
+          .= il by CQC_LANG:6;
         dom (il .--> (d1:=<0,...,0>d2)) = {il} by CQC_LANG:5;
-then A68: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
-A69:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
+then A69: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
+A70:  dom (d2 .--> 0) = {d2} by CQC_LANG:5;
         il <> d2 by SCMFSA_2:84;
-then A70: not il in dom (d2 .--> 0) by A69,TARSKI:def 1;
-A71:   dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0))
+then A71: not il in dom (d2 .--> 0) by A70,TARSKI:def 1;
+A72:   dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0))
          = dom (il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 0) by FUNCT_4:def 1;
-     then A72: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A68,
+     then A73: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A69,
 XBOOLE_0:def 2;
         il <> IC SCM+FSA by AMI_1:48;
-then A73: not il in dom (Start-At il) by A61,TARSKI:def 1;
-A74: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
-                               by A63,A72,XBOOLE_0:def 2;
+then A74: not il in dom (Start-At il) by A62,TARSKI:def 1;
+A75: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                               by A64,A73,XBOOLE_0:def 2;
 
-     then il in dom p1 by A65,XBOOLE_0:def 2;
-then A75:  s1.il = p1.il by A55,GRFUNC_1:8
+     then il in dom p1 by A66,XBOOLE_0:def 2;
+then A76:  s1.il = p1.il by A56,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il).il
-                                                 by A74,FUNCT_4:14
-          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).il by A73,FUNCT_4:12
-          .= (il .--> (d1:=<0,...,0>d2)).il by A70,FUNCT_4:12
+                                                 by A75,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).il by A74,FUNCT_4:12
+          .= (il .--> (d1:=<0,...,0>d2)).il by A71,FUNCT_4:12
           .=(d1:=<0,...,0>d2) by CQC_LANG:6;
-A76: d2 in dom (d2 .--> 0) by A69,TARSKI:def 1;
-then A77: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A71,
+A77: d2 in dom (d2 .--> 0) by A70,TARSKI:def 1;
+then A78: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)) by A72,
 XBOOLE_0:def 2;
         d2 <> IC SCM+FSA by SCMFSA_2:81;
-then A78: not d2 in dom (Start-At il) by A61,TARSKI:def 1;
-A79: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
-                                        by A63,A77,XBOOLE_0:def 2;
-     then d2 in dom p1 by A65,XBOOLE_0:def 2;
-then A80:  s1.d2 = p1.d2 by A55,GRFUNC_1:8
+then A79: not d2 in dom (Start-At il) by A62,TARSKI:def 1;
+A80: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il)
+                                        by A64,A78,XBOOLE_0:def 2;
+     then d2 in dom p1 by A66,XBOOLE_0:def 2;
+then A81:  s1.d2 = p1.d2 by A56,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0) +* Start-At il).d2
-                                                 by A79,FUNCT_4:14
-          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).d2 by A78,FUNCT_4:12
-          .= (d2.--> 0).d2 by A76,FUNCT_4:14
+                                                 by A80,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 0)).d2 by A79,FUNCT_4:12
+          .= (d2.--> 0).d2 by A77,FUNCT_4:14
           .= 0 by CQC_LANG:6;
   consider k such that
-A81: k = abs(s1.d2) and
-A82: Exec(d1:=<0,...,0>d2, s1).d1 = k |-> 0 by SCMFSA_2:101;
-A83: k |-> 0 = 0 |-> 0 by A80,A81,ABSVALUE:7 .= {} by FINSEQ_2:72;
+A82: k = abs(s1.d2) and
+A83: Exec(d1:=<0,...,0>d2, s1).d1 = k |-> 0 by SCMFSA_2:101;
+A84: k |-> 0 = 0 |-> 0 by A81,A82,ABSVALUE:7 .= {} by FINSEQ_2:72;
      (Computation s1).(0+1).d1 = (Following (Computation s1).0).d1 by
 AMI_1:def 19
                            .= (Following s1).d1 by AMI_1:def 19
-                           .= {} by A67,A75,A82,A83;
-then A84:  ((Computation s1).1|dom p).d1 = {} by A3,A59,A60,FUNCT_1:70;
+                           .= {} by A68,A76,A83,A84;
+then A85:  ((Computation s1).1|dom p).d1 = {} by A3,A60,A61,FUNCT_1:70;
         dom ((Computation s2).1) = the carrier of SCM+FSA by AMI_3:36;
      then dom p c= dom ((Computation s2).1) by AMI_3:37;
-then A85:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
-A86:  dom(Start-At il) = {IC SCM+FSA} by AMI_3:34;
-then A87: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
-A88:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+then A86:  dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
+A87:  dom(Start-At il) = {IC SCM+FSA} by FUNCOP_1:19;
+then A88: IC SCM+FSA in dom (Start-At il) by TARSKI:def 1;
+A89:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
          = dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) \/ dom(Start-At il)
                                  by FUNCT_4:def 1;
-then A89: IC SCM+FSA in
+then A90: IC SCM+FSA in
        dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
-                                 by A87,XBOOLE_0:def 2;
-A90:  dom p2 = dom p \/
+                                 by A88,XBOOLE_0:def 2;
+A91:  dom p2 = dom p \/
        dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
                                  by FUNCT_4:def 1;
-then A91: IC SCM+FSA in dom p2 by A89,XBOOLE_0:def 2;
-A92:  IC s2 = p2.IC SCM+FSA by A56,A91,GRFUNC_1:8
+then A92: IC SCM+FSA in dom p2 by A90,XBOOLE_0:def 2;
+A93:  IC s2 = p2.IC SCM+FSA by A57,A92,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +*
                 ( d2.--> 1) +* Start-At il).IC SCM+FSA
-                                              by A89,FUNCT_4:14
-          .= (Start-At il).IC SCM+FSA by A87,FUNCT_4:14
-          .= il by AMI_3:50;
+                                              by A90,FUNCT_4:14
+          .= (Start-At il).IC SCM+FSA by A88,FUNCT_4:14
+          .= il by CQC_LANG:6;
         dom (il .--> (d1:=<0,...,0>d2)) = {il} by CQC_LANG:5;
-then A93: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
-A94:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
+then A94: il in dom (il .--> (d1:=<0,...,0>d2)) by TARSKI:def 1;
+A95:  dom (d2 .--> 1) = {d2} by CQC_LANG:5;
         il <> d2 by SCMFSA_2:84;
-then A95: not il in dom (d2 .--> 1) by A94,TARSKI:def 1;
-A96:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1))
+then A96: not il in dom (d2 .--> 1) by A95,TARSKI:def 1;
+A97:  dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1))
          = dom (il .--> (d1:=<0,...,0>d2)) \/ dom ( d2.--> 1) by FUNCT_4:def 1;
-     then A97: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A93,
+     then A98: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A94,
 XBOOLE_0:def 2;
         il <> IC SCM+FSA by AMI_1:48;
-then A98: not il in dom (Start-At il) by A86,TARSKI:def 1;
-A99: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
-                               by A88,A97,XBOOLE_0:def 2;
+then A99: not il in dom (Start-At il) by A87,TARSKI:def 1;
+A100: il in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                               by A89,A98,XBOOLE_0:def 2;
 
-     then il in dom p2 by A90,XBOOLE_0:def 2;
-then A100:  s2.il = p2.il by A56,GRFUNC_1:8
+     then il in dom p2 by A91,XBOOLE_0:def 2;
+then A101:  s2.il = p2.il by A57,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il).il
-                                                 by A99,FUNCT_4:14
-          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).il by A98,FUNCT_4:12
-          .= (il .--> (d1:=<0,...,0>d2)).il by A95,FUNCT_4:12
+                                                 by A100,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).il by A99,FUNCT_4:12
+          .= (il .--> (d1:=<0,...,0>d2)).il by A96,FUNCT_4:12
           .=(d1:=<0,...,0>d2) by CQC_LANG:6;
-A101: d2 in dom (d2 .--> 1) by A94,TARSKI:def 1;
-then A102: d2 in
- dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A96,XBOOLE_0:def 2;
+A102: d2 in dom (d2 .--> 1) by A95,TARSKI:def 1;
+then A103: d2 in
+ dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)) by A97,XBOOLE_0:def 2;
         d2 <> IC SCM+FSA by SCMFSA_2:81;
-then A103:not d2 in dom (Start-At il) by A86,TARSKI:def 1;
-A104: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
-                                        by A88,A102,XBOOLE_0:def 2;
-     then d2 in dom p2 by A90,XBOOLE_0:def 2;
-then A105:  s2.d2 = p2.d2 by A56,GRFUNC_1:8
+then A104:not d2 in dom (Start-At il) by A87,TARSKI:def 1;
+A105: d2 in dom ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il)
+                                        by A89,A103,XBOOLE_0:def 2;
+     then d2 in dom p2 by A91,XBOOLE_0:def 2;
+then A106:  s2.d2 = p2.d2 by A57,GRFUNC_1:8
           .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1) +* Start-At il).d2
-                                                 by A104,FUNCT_4:14
-          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).d2 by A103,FUNCT_4:12
-          .= (d2.--> 1).d2 by A101,FUNCT_4:14
+                                                 by A105,FUNCT_4:14
+          .= ((il .--> (d1:=<0,...,0>d2)) +* ( d2.--> 1)).d2 by A104,FUNCT_4:12
+          .= (d2.--> 1).d2 by A102,FUNCT_4:14
           .= 1 by CQC_LANG:6;
   consider k such that
-A106: k = abs(s2.d2) and
-A107: Exec(d1:=<0,...,0>d2, s2).d1 = k |-> 0 by SCMFSA_2:101;
-A108: k |-> 0 = 1 |-> 0 by A105,A106,ABSVALUE:def 1 .= <*0*> by FINSEQ_2:73;
+A107: k = abs(s2.d2) and
+A108: Exec(d1:=<0,...,0>d2, s2).d1 = k |-> 0 by SCMFSA_2:101;
+A109: k |-> 0 = 1 |-> 0 by A106,A107,ABSVALUE:def 1 .= <*0*> by FINSEQ_2:73;
      (Computation s2).(0+1).d1 = (Following (Computation s2).0).d1 by
 AMI_1:def 19
                            .= (Following s2).d1 by AMI_1:def 19
-                           .= <*0*> by A92,A100,A107,A108;
-     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A59,A84
-,A85,FUNCT_1:70;
+                           .= <*0*> by A93,A101,A108,A109;
+     hence (Computation s1).1|dom p <> (Computation s2).1|dom p by A3,A60,A85
+,A86,FUNCT_1:70;
     end;
     end;
    hence contradiction;
@@ -1168,21 +1169,18 @@ registration
  existence
   proof
    set P = (IC SCM+FSA, insloc 0)-->(insloc 0, halt SCM+FSA);
-A1: {IC SCM+FSA}-->insloc 0 = IC SCM+FSA.-->insloc 0
-             .= Start-At insloc 0 by AMI_3:def 12;
-      P = Start-At(insloc 0)+*((insloc 0) .--> halt SCM+FSA) by  FUNCT_4:def 4,
-A1;
+      P = Start-At(insloc 0)+*((insloc 0) .--> halt SCM+FSA) by  FUNCT_4:def 4;
    then reconsider P as FinPartState of SCM+FSA;
    take P;
-   A2: ObjectKind insloc 0 = the Instructions of SCM+FSA by AMI_1:def 14;
+   A1: ObjectKind insloc 0 = the Instructions of SCM+FSA by AMI_1:def 14;
        ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
               by AMI_1:def 11;
-   hence P is autonomic by A2,AMI_1:67;
+   hence P is autonomic by A1,AMI_1:67;
        now
         dom P = { IC SCM+FSA, insloc 0 } by FUNCT_4:65;
-then A3:  IC SCM+FSA in dom P by TARSKI:def 2;
+then A2:  IC SCM+FSA in dom P by TARSKI:def 2;
      assume dom P c= the Instruction-Locations of SCM+FSA;
-     hence contradiction by A3,AMI_1:48;
+     hence contradiction by A2,AMI_1:48;
     end;
    hence P is non programmed by AMI_3:def 13;
   end;
@@ -1269,7 +1267,7 @@ AMI_1:def 19
                insloc 0 = ((Following(s1))|dom p).IC SCM+FSA by A1,A12,
 FUNCT_1:72
                 .= insloc 1 by A1,A13,A15,FUNCT_1:72;
-       hence contradiction by SCMFSA_2:18;
+       hence contradiction;
     end;
 
      hence contradiction;
@@ -1293,7 +1291,7 @@ A2:   loc = insloc ll by SCMFSA_2:21;
 A3:  loc <> loc1
        proof
          assume loc = loc1;
-         then ll + 0 = ll + 1 by A2,SCMFSA_2:18;
+         then ll + 0 = ll + 1 by A2;
         hence contradiction;
        end;
   assume
@@ -1406,7 +1404,7 @@ A4:  IC (Computation s1).i <> IC (Computation s2).i;
    proof assume
 A5:  I <> CurInstr ((Computation s2).i);
 A6:  IC Cs1i in dom ProgramPart p & IC Cs2i in dom ProgramPart p by A1,Th17;
-       ProgramPart p c= p by AMI_5:63;
+       ProgramPart p c= p by RELAT_1:88;
     then dom ProgramPart p c= dom p by GRFUNC_1:8;
 then (Cs1i|dom p).IC Cs1i = Cs1i.IC Cs1i & (Cs2i|dom p).IC Cs2i = Cs2i.IC Cs2i
                                                      by A6,FUNCT_1:72;

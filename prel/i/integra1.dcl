@@ -21,6 +21,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RCOMP_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="INT_1"/>
@@ -47,7 +48,7 @@
 <Cluster>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -63,8 +64,8 @@
 <Adjective nr="26"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="94"/>
 <Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -99,7 +100,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="260">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,7 +110,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -127,7 +128,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -138,7 +139,7 @@
 <Cluster>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </CCluster>
 </Registrations>

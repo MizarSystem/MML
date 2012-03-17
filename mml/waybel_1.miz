@@ -9,11 +9,11 @@ environ
  vocabularies FUNCT_1, RELAT_1, ORDERS_1, SEQM_3, RELAT_2, LATTICE3, LATTICES,
       WAYBEL_0, YELLOW_1, BOOLE, YELLOW_0, CAT_1, WELLORD1, ORDINAL2, BHSP_3,
       FILTER_0, FILTER_2, BINOP_1, SGRAPH1, GROUP_6, QUANTAL1, YELLOW_2,
-      LATTICE2, ZF_LANG, WAYBEL_1;
+      LATTICE2, ZF_LANG, WAYBEL_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       DOMAIN_1, STRUCT_0, WELLORD1, ORDERS_2, LATTICE3, QUANTAL1, ORDERS_3,
       YELLOW_0, GRCAT_1, YELLOW_1, WAYBEL_0, YELLOW_2;
- constructors DOMAIN_1, TOLER_1, GRCAT_1, QUANTAL1, ORDERS_3, YELLOW_2;
+ constructors DOMAIN_1, TOLER_1, GRCAT_1, QUANTAL1, ORDERS_3, YELLOW_2, NAT_D;
  registrations STRUCT_0, RELSET_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2,
       WAYBEL_0, RELAT_1, FUNCT_2, PARTFUN1;
  requirements SUBSET, BOOLE;
@@ -1407,12 +1407,12 @@ A1:   dom id Image g = dom id the carrier of Image g by GRCAT_1:def 11
   end;
 end;
 
-theorem Th34:
+ Lm4:
   for L1, L2 being non empty RelStr, g being Function of L1,L2,
       s being Element of Image g
    holds (inclusion g).s = s by TMAP_1:91;
 
-Lm4:
+Lm5:
   for L1, L2 being non empty RelStr,g being Function of L1,L2
    holds inclusion g is monotone
  proof let L1, L2 be non empty RelStr,g be Function of L1,L2;
@@ -1427,8 +1427,10 @@ Lm4:
 
 registration let L1, L2 be non empty RelStr, g be Function of L1,L2;
  cluster inclusion g -> one-to-one monotone;
-  coherence by Lm4;
+  coherence by Lm5;
 end;
+
+canceled;
 
 theorem Th35:
   for L being non empty RelStr, f being Function of L,L
@@ -1458,7 +1460,7 @@ A3:    (corestr f).l = s by FUNCT_2:17;
 A4:    (corestr f).l = f.l by Th32;
      thus ((corestr f)*(inclusion f)).s
          = (corestr f).((inclusion f).s) by FUNCT_2:21
-        .= (corestr f).s by Th34
+        .= (corestr f).s by Lm4
         .= f.(f.l) by A3,A4,Th32
         .= s by A1,A3,A4,YELLOW_2:20;
     end;
@@ -2298,7 +2300,7 @@ A3: now
      let I be Ideal of L; assume
 A4:   x = I;
      hence f.I = (SupMap L).((inclusion i).I) by FUNCT_2:21
-              .= (SupMap L).I by A4,Th34
+              .= (SupMap L).I by A4,Lm4
               .= sup I by YELLOW_2:def 3;
     end;
 A5: f is one-to-one
@@ -2333,7 +2335,7 @@ A14:  downarrow x is Element of InclPoset(Ids L) by YELLOW_2:43;
 then A15:  downarrow x in the carrier of Image i by YELLOW_0:def 15;
       then f.(downarrow x) = (SupMap L).((inclusion i).(downarrow x)) by
 FUNCT_2:21
-                  .= (SupMap L).(downarrow x) by A15,Th34;
+                  .= (SupMap L).(downarrow x) by A15,Lm4;
    hence thesis by A13,A15,FUNCT_2:6;
   end;
       now let x,y be Element of Image i;
@@ -2778,7 +2780,7 @@ then A4:  (Top H) => b <= b by A2,A3,Th5;
    hence thesis by A2,A4,ORDERS_2:25;
  end;
 
-Lm5:
+Lm6:
    for H being non empty RelStr st H is_a_Heyting_algebra
     for a,b being Element of H holds a"/\"(a => b) <= b
  proof let H be non empty RelStr; assume
@@ -2798,7 +2800,7 @@ then A2:  H is LATTICE by Def19;
   let a,b,c be Element of H;
   assume a <= b;
 then A3:  a"/\"(b => c) <= b"/\"(b => c) by A2,Th2;
-      b"/\"(b => c) <= c by A1,Lm5;
+      b"/\"(b => c) <= c by A1,Lm6;
   then a"/\"(b => c) <= c by A2,A3,ORDERS_2:26;
   hence (b => c) <= (a => c) by A1,Th70;
  end;
@@ -2812,7 +2814,7 @@ then A2:  H is LATTICE by Def19;
   let a,b,c be Element of H;
   assume
 A3:  b <= c;
-      a"/\"(a => b) <= b by A1,Lm5;
+      a"/\"(a => b) <= b by A1,Lm6;
   then a"/\"(a => b) <= c by A2,A3,ORDERS_2:26;
   hence thesis by A1,Th70;
  end;
@@ -2824,7 +2826,7 @@ theorem Th80:
 A1:  H is_a_Heyting_algebra;
 then A2:  H is LATTICE by Def19;
   let a,b be Element of H;
-      a"/\"(a => b) <= b by A1,Lm5;
+      a"/\"(a => b) <= b by A1,Lm6;
   then (a"/\"(a => b))"/\"a <= b"/\"a by A2,Th2;
   then a"/\"(a"/\"(a => b)) <= b"/\"a by A2,LATTICE3:15;
   then a"/\"(a"/\"(a => b)) <= a"/\"b by A2,LATTICE3:15;
@@ -3068,7 +3070,7 @@ A2:x misses y by XBOOLE_1:79;
 end;
 
 :: Exercise 3.19  (1) implies (3)
-Lm6:
+Lm7:
    for L being bounded LATTICE
      st L is distributive complemented
     for x being Element of L ex x' being Element of L st
@@ -3093,7 +3095,7 @@ A3: x' is_a_complement_of x by A2,Def24;
  end;
 
 :: Exercise 3.19  (3) implies (2)
-Lm7:
+Lm8:
    for L being bounded LATTICE
     st for x being Element of L ex x' being Element of L st
      for y being Element of L holds (y "\/" x') "/\" x <= y & y <= (y "/\" x)
@@ -3219,10 +3221,10 @@ theorem Th90:
    then for x being Element of L ex x' being Element of L st
      for y being Element of L holds (y "\/" x') "/\" x <= y & y <= (y "/\" x)
 "\/" x'
-    by Lm6;
+    by Lm7;
    hence L is_a_Heyting_algebra & for x being Element of L holds 'not' 'not'
  x = x
-    by Lm7;
+    by Lm8;
   end;
  assume that
 A1: L is_a_Heyting_algebra and

@@ -1,0 +1,177 @@
+:: Divisibility of Natural Numbers
+::  by Grzegorz Bancerek
+::
+:: Received January 3, 2007
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1,
+      XXREAL_0, NAT_1, INT_1;
+ constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL2, REAL_1, NAT_1,
+      INT_1;
+ registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0,
+      XXREAL_0, ORDINAL1, NAT_1, INT_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+reserve p,k,l,m,n,s,h,i,j,t for Nat;
+
+definition let k,l be Nat;
+  redefine func k div l -> Nat means
+:: NAT_D:def 1       :: the exact division
+  ( ex t being Nat st k = l * it + t & t < l ) or it = 0 & l = 0;
+end;
+
+definition let k,l be Nat;
+  redefine func k mod l -> Nat means
+:: NAT_D:def 2         :: the rest of division
+ ( ex t being Nat st k = l * t + it & it < l ) or it = 0 & l = 0;
+end;
+
+definition let k,l be Nat;
+  redefine func k div l -> Element of NAT;
+  redefine func k mod l -> Element of NAT;
+end;
+
+theorem :: NAT_D:1
+  0 < i implies j mod i < i;
+
+theorem :: NAT_D:2
+  0 < i implies j = i * (j div i) + (j mod i);
+
+:: The divisibility relation
+
+definition let k,l be Nat;
+  redefine pred k divides l means
+:: NAT_D:def 3
+  ex t being Nat st l = k * t;
+  reflexivity;
+end;
+
+theorem :: NAT_D:3
+  j divides i iff i = j * (i div j);
+
+theorem :: NAT_D:4
+  i divides j & j divides h implies i divides h;
+
+theorem :: NAT_D:5
+  i divides j & j divides i implies i = j;
+
+theorem :: NAT_D:6
+  i divides 0 & 1 divides i;
+
+theorem :: NAT_D:7
+  0 < j & i divides j implies i <= j;
+
+theorem :: NAT_D:8
+  i divides j & i divides h implies i divides j+h;
+
+theorem :: NAT_D:9
+  i divides j implies i divides j * h;
+
+theorem :: NAT_D:10
+  i divides j & i divides j + h implies i divides h;
+
+theorem :: NAT_D:11
+  i divides j & i divides h implies i divides j mod h;
+
+:: The least common multiple and the greatest common divisor
+
+definition let k,n be Nat;
+  func k lcm n -> Nat means
+:: NAT_D:def 4
+  k divides it & n divides it &
+  for m being Nat st k divides m & n divides m holds it divides m;
+    idempotence;
+    commutativity;
+end;
+
+definition let k,n be Nat;
+  redefine func k lcm n -> Element of NAT;
+end;
+
+definition let k,n be Nat;
+  func k hcf n -> Nat means
+:: NAT_D:def 5
+  it divides k & it divides n &
+    for m being Nat st m divides k & m divides n holds m divides it;
+    idempotence;
+    commutativity;
+end;
+
+definition let k,n be Nat;
+  redefine func k hcf n -> Element of NAT;
+end;
+
+scheme :: NAT_D:sch 1
+ Euklides { Q(Nat)->Nat, a,b()->Nat } :
+  ex n being Element of NAT st Q(n) = a() hcf b() & Q(n + 1) = 0
+   provided
+   0 < b() & b() < a() and
+   Q(0) = a() & Q(1) = b() and
+   for n being Element of NAT holds Q(n + 2) = Q(n) mod Q(n + 1);
+
+theorem :: NAT_D:12
+  n mod 2 = 0 or n mod 2 = 1;
+
+theorem :: NAT_D:13
+  (k * n) mod k = 0;
+
+theorem :: NAT_D:14
+  k > 1 implies 1 mod k = 1;
+
+theorem :: NAT_D:15
+  k mod n = 0 & l = k - m * n implies l mod n = 0;
+
+theorem :: NAT_D:16
+  n <> 0 & k mod n = 0 & l < n implies k + l mod n = l;
+
+theorem :: NAT_D:17
+  k mod n = 0 implies k + l mod n = l mod n;
+
+theorem :: NAT_D:18
+  k <> 0 implies (k * n) div k = n;
+
+theorem :: NAT_D:19
+  k mod n = 0 implies (k + l) div n = (k div n) + (l div n);
+
+begin :: Addenda
+
+:: from AMI_5, 2005.11.16, A.T.
+
+theorem :: NAT_D:20
+  k <> 0 implies m * k div k = m;
+
+:: from GR_CY_1, 2005.11.16, A.T.
+
+theorem :: NAT_D:21
+  m mod n = (n*k + m) mod n;
+
+theorem :: NAT_D:22
+  (p+s) mod n = ((p mod n)+s) mod n;
+
+theorem :: NAT_D:23
+  (p+s) mod n = (p + ( s mod n)) mod n;
+
+theorem :: NAT_D:24
+  k < n implies k mod n = k;
+
+theorem :: NAT_D:25
+  n mod n = 0;
+
+theorem :: NAT_D:26
+  0 = 0 mod n;
+
+:: from JORDAN4
+
+theorem :: NAT_D:27
+  i < j implies i div j = 0;
+
+:: Moved from SCMP_GCD by AK on 28.12.2006
+
+theorem :: NAT_D:28
+  m > 0 implies n hcf m = m hcf (n mod m);

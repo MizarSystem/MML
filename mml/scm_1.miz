@@ -9,9 +9,9 @@ environ
  vocabularies AMI_3, INT_1, FINSEQ_1, AMI_1, AMI_2, FUNCT_1, RELAT_1, ARYTM_1,
       NAT_1, MCART_1, SCM_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, NAT_1,
-      INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, AMI_1,
-      AMI_2, AMI_3, XXREAL_0;
- constructors XXREAL_0, NAT_1, MEMBERED, AMI_2, AMI_3;
+      NAT_D, INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0,
+      AMI_1, AMI_2, AMI_3, XXREAL_0;
+ constructors XXREAL_0, NAT_1, MEMBERED, AMI_2, AMI_3, NAT_D;
  registrations AMI_1, AMI_3, INT_1, XBOOLE_0, RELSET_1, FINSEQ_1, FRAENKEL,
       XREAL_0, MEMBERED, ORDINAL1, SETFAM_1, XXREAL_0, CARD_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -32,8 +32,10 @@ definition
  end;
 end;
 
-theorem Th1: for s being State of SCM
+ Lm1: for s being State of SCM
      holds IC s = s.0 & CurInstr s = s.(s.0) by AMI_3:4;
+
+canceled;
 
 theorem Th2: for s being State of SCM, k being Element of NAT
      holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
@@ -67,15 +69,15 @@ canceled 2;
 theorem Th7: for n, m being Element of NAT holds
   IC SCM <> il.n & IC SCM <> dl.n & il.n <> dl.m by AMI_3:56,57;
 
-Lm1: now let p be FinSequence, n be Element of NAT; assume n < len p;
-       then n+1 >= 0+1 & n+1 <= len p by NAT_1:38;
+Lm2: now let p be FinSequence, n be Element of NAT; assume n < len p;
+       then n+1 >= 0+1 & n+1 <= len p by NAT_1:13;
        then n+1 in dom p & dom p = Seg len p by FINSEQ_1:def 3,FINSEQ_3:27;
       hence n+1 in dom p & p.(n+1) in rng p by FUNCT_1:def 5;
  end;
 
-Lm2:
+Lm3:
   now let n be Element of NAT, x be set; let p be FinSequence of x; assume
-        n < len p; then p.(n+1) in rng p & rng p c= x by Lm1,FINSEQ_1:def 4;
+        n < len p; then p.(n+1) in rng p & rng p c= x by Lm2,FINSEQ_1:def 4;
    hence p.(n+1) in x;
   end;
 
@@ -101,7 +103,7 @@ A1: for x being set st x in NAT ex y being set st y in SCM-Instr & X[x,y]
        then consider n being Element of NAT such that
  A2:   x = il.(ps+n) & n < len I;
        reconsider y = I.(n+1) as Element of the Instructions of SCM
-               by A2,Lm2;
+               by A2,Lm3;
       take y;
       thus y in SCM-Instr by AMI_3:def 1;
       thus X[x,y] by A2;
@@ -131,7 +133,7 @@ A6: now let x be set;
        then consider n being Element of NAT such that
  A7:   x = dl.(ds+n) & n < len D;
       take y = D.(n+1);
-      thus y in INT by A7,Lm2;
+      thus y in INT by A7,Lm3;
       thus X[x,y] by A7;
     end;
     suppose not ex n being Element of NAT st x = dl.(ds+n) & n < len D;
@@ -235,34 +237,7 @@ A16:     ds+k = ds+k' by A15,AMI_3:52;
  end;
 end;
 
-theorem for x1, x2, x3, x4 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>
-  holds len p = 4 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 by FINSEQ_1:87;
-
-theorem for x1, x2, x3, x4, x5 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>
-  holds len p = 5 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5
-      by FINSEQ_1:88;
-
-theorem for x1, x2, x3, x4, x5, x6 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>
-  holds len p = 6 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
-                    p.6 = x6 by FINSEQ_1:89;
-
-theorem for x1, x2, x3, x4, x5, x6, x7 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>
-  holds len p = 7 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
-                    p.6 = x6 & p.7 = x7 by FINSEQ_1:90;
-
-theorem  for x1,x2,x3,x4, x5, x6, x7, x8 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>
-  holds len p = 8 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
-                    p.6 = x6 & p.7 = x7 & p.8 = x8 by FINSEQ_1:91;
-
-theorem for x1,x2,x3,x4,x5,x6,x7, x8, x9 being set, p being FinSequence
- st p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>
-  holds len p = 9 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
-                    p.6 = x6 & p.7 = x7 & p.8 = x8 & p.9 = x9 by FINSEQ_1:92;
+canceled 6;
 
 theorem
     for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
@@ -366,7 +341,7 @@ then A1:  s is halting & CurInstr (Computation s).k <> halt SCM &
     CurInstr (Computation s).(k+1) = halt SCM by Th2,Th3;
         now let i be Element of NAT; assume
 A2:    CurInstr (Computation s).i = halt SCM & k+1 > i;
-      then i <= k by NAT_1:38;
+      then i <= k by NAT_1:13;
      hence contradiction by A1,A2,AMI_1:52;
     end;
    hence Complexity s = k+1 & s is halting by A1,Def2;
@@ -379,7 +354,7 @@ then A4: CurInstr((Computation s).(k+1)) = halt SCM &
                                                        by Def2;
        now assume CurInstr((Computation s).k) = halt SCM;
     then k+1 <= k by A3,Def2;
-    hence contradiction by NAT_1:38;
+    hence contradiction by NAT_1:13;
    end;
   hence thesis by A4,Th2;
 end;
@@ -393,13 +368,13 @@ theorem Th17:
 A1: IC (Computation s).k <> IC (Computation s).(k+1) &
    s.(IC (Computation s).(k+1)) = halt SCM;
        now assume s.(IC (Computation s).k) = halt SCM;
-     then CurInstr (Computation s).k = halt SCM & k <= k+1 by Th2,NAT_1:29;
+     then CurInstr (Computation s).k = halt SCM & k <= k+1 by Th2,NAT_1:11;
     hence contradiction by A1,AMI_1:52;
    end;
  hence thesis by A1,Th16;
 end;
 
-Lm3: for n being Element of NAT holds Next il.n = il.(n+1) proof
+Lm4: for n being Element of NAT holds Next il.n = il.(n+1) proof
  let n be Element of NAT;
   consider iN being Element of SCM-Instr-Loc such that
 A1: iN = il.n & Next il.n = Next iN by AMI_3:def 11;
@@ -409,7 +384,7 @@ A1: iN = il.n & Next il.n = Next iN by AMI_3:def 11;
               .= il.(n+1) by AMI_3:def 20;
 end;
 
-Lm4:
+Lm5:
  for k being Element of NAT, s being State of SCM
   holds (Computation s).(k+1) = Exec(CurInstr (Computation s).k,
                                      (Computation s).k) proof
@@ -419,22 +394,23 @@ Lm4:
                                      (Computation s).k);
 end;
 
-Lm5:
+Lm6:
 now let k, n be Element of NAT, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
-A3: csk.0 = il.n by A1,Th1;
+A3: csk.0 = il.n by A1,Lm1;
    assume
 A4:  s.il.n = a := b or s.il.n = AddTo(a,b) or s.il.n = SubFrom(a, b) or
       s.il.n = MultBy(a, b) or a<>b & s.il.n = Divide(a,b);
     thus
-A5:  csk1 = (Exec(CurInstr csk, csk)) by Lm4
-           .= (Exec(s.il.n, csk)) by A2,A3,Th1;
-    thus IC csk1 = Next IC csk by  A4,A5,AMI_3:8,9,10,11,12
-      .= il.(n+1) by A1,Lm3;
+A5:  csk1 = (Exec(CurInstr csk, csk)) by Lm5
+           .= (Exec(s.il.n, csk)) by A2,A3,Lm1;
+    thus IC csk1 = Next IC csk by  A4,A5,AMI_3:8,9,10,11,
+12
+      .= il.(n+1) by A1,Lm4;
 end;
 
 theorem Th18:
@@ -451,10 +427,10 @@ A1: IC (Computation s).k = il.n;
    set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = a := b;
-    then csk1 = Exec(a:=b, csk) by A1,Lm5;
+    then csk1 = Exec(a:=b, csk) by A1,Lm6;
   hence IC csk1 = il.(n+1) & csk1.a = csk.b &
     for d being Data-Location st d <> a holds csk1.d = csk.d
-      by A1,A2,Lm5,AMI_3:8;
+      by A1,A2,Lm6,AMI_3:8;
 end;
 
 theorem Th19:
@@ -471,10 +447,10 @@ A1: IC (Computation s).k = il.n;
    set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = AddTo(a,b);
-    then csk1 = Exec(AddTo(a,b), csk) by A1,Lm5;
+    then csk1 = Exec(AddTo(a,b), csk) by A1,Lm6;
   hence IC csk1 = il.(n+1) & csk1.a = csk.a + csk.b &
     for d being Data-Location st d <> a holds csk1.d = csk.d
-      by A1,A2,Lm5,AMI_3:9;
+      by A1,A2,Lm6,AMI_3:9;
 end;
 
 theorem Th20:
@@ -491,10 +467,10 @@ A1: IC (Computation s).k= il.n;
    set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = SubFrom(a,b);
-    then csk1 = Exec(SubFrom(a,b), csk) by A1,Lm5;
+    then csk1 = Exec(SubFrom(a,b), csk) by A1,Lm6;
    hence IC csk1 = il.(n+1) & csk1.a = csk.a - csk.b &
     for d being Data-Location st d <> a holds csk1.d = csk.d
-      by A1,A2,Lm5,AMI_3:10;
+      by A1,A2,Lm6,AMI_3:10;
 end;
 
 theorem Th21:
@@ -511,10 +487,10 @@ A1: IC (Computation s).k = il.n;
    set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = MultBy(a,b);
-    then csk1 = Exec(MultBy(a,b), csk) by A1,Lm5;
+    then csk1 = Exec(MultBy(a,b), csk) by A1,Lm6;
    hence IC csk1 = il.(n+1) & csk1.a = csk.a * csk.b &
     for d being Data-Location st d <> a holds csk1.d = csk.d
-      by A1,A2,Lm5,AMI_3:11;
+      by A1,A2,Lm6,AMI_3:11;
 end;
 
 theorem Th22:
@@ -532,11 +508,11 @@ A1: IC (Computation s).k = il.n;
    set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = Divide(a,b) & a <> b;
-    then csk1 = Exec(Divide(a,b), csk) by A1,Lm5;
+    then csk1 = Exec(Divide(a,b), csk) by A1,Lm6;
    hence IC csk1 = il.(n+1) &
     csk1.a = csk.a div csk.b & csk1.b = csk.a mod csk.b &
     for d being Data-Location st d <> a & d <> b holds csk1.d = csk.d
-      by A1,A2,Lm5,AMI_3:12;
+      by A1,A2,Lm6,AMI_3:12;
 end;
 
 theorem Th23:
@@ -553,7 +529,7 @@ A1: IC (Computation s).k = il.n & s.il.n = goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A3: csk1 = Exec(CurInstr csk, csk) by Lm4
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm5
            .= Exec(goto il, csk) by A1,A2;
  thus IC csk1 = il by A3,AMI_3:13;
  thus thesis by A3,AMI_3:13;
@@ -574,13 +550,13 @@ A1: IC (Computation s).k = il.n & s.il.n = a =0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A3: csk1 = Exec(CurInstr csk, csk) by Lm4
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm5
            .= Exec(a =0_goto il, csk) by A1,A2;
  thus csk.a = 0 implies IC csk1 = il by A3,AMI_3:14;
  hereby assume
        csk.a <> 0;
   hence IC csk1 = Next il.n by A1,A3,AMI_3:14
-               .= il.(n+1) by Lm3;
+               .= il.(n+1) by Lm4;
  end;
  thus thesis by A3,AMI_3:14;
 end;
@@ -600,13 +576,13 @@ A1: IC (Computation s).k = il.n & s.il.n = a >0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
    set csk = (Computation s).k;
    set csk1 = (Computation s).(k+1);
- A3: csk1 = Exec(CurInstr csk, csk) by Lm4
+ A3: csk1 = Exec(CurInstr csk, csk) by Lm5
            .= Exec(a >0_goto il, csk) by A1,A2;
  thus csk.a > 0 implies IC csk1 = il by A3,AMI_3:15;
  hereby assume
        csk.a <= 0;
   hence IC csk1 = Next il.n by A1,A3,AMI_3:15
-               .= il.(n+1) by Lm3;
+               .= il.(n+1) by Lm4;
  end;
  thus thesis by A3,AMI_3:15;
 end;
@@ -702,7 +678,7 @@ proof
  let s1, s2 be State of SCM, k, c be Element of NAT; assume
 A1: s2 = (Computation s1).k & Complexity s2 = c & s2 is halting & 0 < c;
    then consider l being Nat such that
-A2: c = l+1 by NAT_1:22;
+A2: c = l+1 by NAT_1:6;
    reconsider l as Element of NAT by ORDINAL1:def 13;
        s2.(IC (Computation s2).l) <> halt SCM &
    s2.(IC (Computation s2).(l+1)) = halt SCM by A1,A2,Th16;
@@ -756,28 +732,28 @@ A1:  IC s = il.il &
 A2: now let k be Element of NAT; assume
 A3:  k < len I;   len I=9 & 9=8+1 by FINSEQ_1:92;
 
-    then k <= 8 & 8=7+1 by A3,NAT_1:38;
-    then (k <= 7 or k=8) & 7=6+1 by NAT_1:26;
-    then (k <= 6 or k=7 or k=8) & 6=5+1 by NAT_1:26;
-    then (k <= 5 or k = 6 or k=7 or k=8) & 5=4+1 by NAT_1:26;
-    then (k <= 4 or k=5 or k = 6 or k=7 or k=8) & 4=3+1 by NAT_1:26;
+    then k <= 8 & 8=7+1 by A3,NAT_1:13;
+    then (k <= 7 or k=8) & 7=6+1 by NAT_1:8;
+    then (k <= 6 or k=7 or k=8) & 6=5+1 by NAT_1:8;
+    then (k <= 5 or k = 6 or k=7 or k=8) & 5=4+1 by NAT_1:8;
+    then (k <= 4 or k=5 or k = 6 or k=7 or k=8) & 4=3+1 by NAT_1:8;
     then (k <= 3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 3=2+1
-                                                           by NAT_1:26;
+                                                           by NAT_1:8;
     then (k <= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 2=1+1
-                                                           by NAT_1:26;
+                                                           by NAT_1:8;
     then (k <= 1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 1=0+1
-                                                           by NAT_1:26;
+                                                           by NAT_1:8;
     then (k <= 0 or k=1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) &
-                                        0 <= k by NAT_1:26;
+                                        0 <= k by NAT_1:8;
     then k=0 or k=1 or k=2 or k=3 or k=4 or k=5 or k=6 or k=7 or k=8;
     hence s.il.(0+k)=I.(k+1) by A1,FINSEQ_1:92;
    end;
     now let k be Element of NAT; assume
 A4: k < len D;   len D=4 & 4=3+1 by FINSEQ_1:87;
-    then k <= 3 & 3=2+1 by A4,NAT_1:38;
-    then (k <= 2 or k=3) & 2=1+1 by NAT_1:26;
-    then (k <= 1 or k=2 or k=3) & 1=0+1 by NAT_1:26;
-    then (k <= 0 or k = 1 or k=2 or k=3) & 0 <= k by NAT_1:26;
+    then k <= 3 & 3=2+1 by A4,NAT_1:13;
+    then (k <= 2 or k=3) & 2=1+1 by NAT_1:8;
+    then (k <= 1 or k=2 or k=3) & 1=0+1 by NAT_1:8;
+    then (k <= 0 or k = 1 or k=2 or k=3) & 0 <= k by NAT_1:8;
     then k=0 or k=1 or k=2 or k=3;
     hence s.dl.(0+k)=D.(k+1) by A1,FINSEQ_1:87;
    end;

@@ -9,20 +9,20 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM_1, ARYTM_3, RELAT_1,
       ABSVALUE, ORDINAL2, SQUARE_1, SEQ_1, SEQ_2, SERIES_1, PROB_2, BHSP_1,
       BHSP_3, SUPINF_2, RSSPACE, COMSEQ_1, COMPLEX1, CSSPACE, CFUNCT_1,
-      XCMPLX_0, FUNCOP_1, REALSET1;
+      XCMPLX_0, FUNCOP_1, REALSET1, NAT_1;
  notations TARSKI, SUBSET_1, ZFMISC_1, NUMBERS, STRUCT_0, XCMPLX_0, XXREAL_0,
-      COMPLEX1, REAL_1, NAT_1, RELAT_1, DOMAIN_1, PARTFUN1, FUNCT_1, FUNCT_2,
-      BINOP_1, FUNCOP_1, REALSET1, PRE_TOPC, RLVECT_1, NORMSP_1, SQUARE_1,
-      SEQ_1, SEQ_2, SERIES_1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3, CLVECT_1,
-      CLVECT_2, CSSPACE;
+      COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, DOMAIN_1, PARTFUN1, FUNCT_1,
+      FUNCT_2, BINOP_1, FUNCOP_1, REALSET1, PRE_TOPC, RLVECT_1, NORMSP_1,
+      SQUARE_1, SEQ_1, SEQ_2, SERIES_1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3,
+      CLVECT_1, CLVECT_2, CSSPACE;
  constructors PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1,
       RAT_1, SEQ_2, REALSET1, COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, NORMSP_1,
-      CLVECT_2;
+      CLVECT_2, NAT_D;
  registrations RELSET_1, XREAL_0, STRUCT_0, MEMBERED, ORDINAL1, SUBSET_1,
       COMPLEX1, COMSEQ_1, COMSEQ_2, COMSEQ_3, CSSPACE, XCMPLX_0, REALSET1,
       XXREAL_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SQUARE_1, REALSET1, BINOP_1;
+ definitions SQUARE_1, REALSET1, BINOP_1, RLVECT_1;
  theorems RELAT_1, SQUARE_1, ABSVALUE, ZFMISC_1, SEQ_1, SEQ_2, SEQM_3,
       SERIES_1, INT_1, FUNCT_1, NAT_1, FUNCT_2, RLVECT_1, SEQ_4, RSSPACE,
       XCMPLX_1, CSSPACE, CLVECT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, COMPLEX1,
@@ -223,7 +223,8 @@ A14:    (|.Partial_Sums seq.|).(m+1)
 then A15:    Re(Partial_Sums seq.m) >= 0 & Im(Partial_Sums seq.m) = 0
          by COMSEQ_3:def 3,def 4;
         (Re seq).(m+1) >= 0 & (Im seq).(m+1) = 0 by A1;
-then A16:    Re(seq.(m+1)) >=0 & Im(seq.(m+1)) = 0 by COMSEQ_3:def 3,def 4;
+then A16:    Re(seq.(m+1)) >=0 & Im(seq.(m+1)) = 0 by COMSEQ_3:def 3,
+def 4;
        set z1 = Partial_Sums seq.m;
        set z2 = seq.(m+1);
 A17:    (Re z1)*(Im z2) = (Re z2)*(Im z1) by A15,A16;
@@ -340,10 +341,9 @@ Lm11:
 0.Complex_l2_Space = CZeroseq
 proof
    set W = the_set_of_l2ComplexSequences;
-   thus 0.Complex_l2_Space = Zero_(W,Linear_Space_of_ComplexSequences)
-          by CSSPACE:def 20,RLVECT_1:def 2
-       .= 0.Linear_Space_of_ComplexSequences by CSSPACE:14,def 10
-       .= CZeroseq by CSSPACE:def 7,RLVECT_1:def 2;
+   thus 0.Complex_l2_Space = 0.Linear_Space_of_ComplexSequences by  CSSPACE:def
+20,14,def 10
+       .= CZeroseq by CSSPACE:def 7;
 end;
 
 Lm12:
@@ -368,12 +368,9 @@ A1:[:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
      = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
 then A2:dom ((the add of Linear_Space_of_ComplexSequences)||W)
      =[:W,W:] by A1,RELAT_1:91;
-    u+v =(the add of Complex_l2_Space).[u,v] by RLVECT_1:def 3
-      .=((the add of Linear_Space_of_ComplexSequences)||W).[u,v]
+    u+v =((the add of Linear_Space_of_ComplexSequences)||W).[u,v]
      by CSSPACE:14,def 8,def 20
-      .=(the add of Linear_Space_of_ComplexSequences).[u,v]
-     by A2,CSSPACE:def 20,FUNCT_1:70
-      .=u1+v1 by RLVECT_1:def 3;
+      .=u1+v1 by A2,CSSPACE:def 20,FUNCT_1:70;
    hence thesis by CSSPACE:17;
 end;
 
@@ -415,8 +412,7 @@ Lm16:
 for u,v be VECTOR of Complex_l2_Space holds u-v =seq_id(u)-seq_id(v)
 proof
    let u,v be VECTOR of Complex_l2_Space;
-   thus u-v = u+(-v) by RLVECT_1:def 11
-           .= seq_id(u)+seq_id(-v) by Lm13
+   thus u-v = seq_id(u)+seq_id(-v) by Lm13
            .= seq_id(u)+(-seq_id(v)) by Lm15
            .= seq_id(u)-seq_id(v) by COMSEQ_1:def 10;
 end;
@@ -426,8 +422,10 @@ for v,w be VECTOR of Complex_l2_Space holds
    |.seq_id(v).|(#)|.seq_id(w).| is summable
 proof
      let u,v be VECTOR of Complex_l2_Space;
-A1: |.(seq_id(v)).|(#)|.(seq_id(v)).| is summable by CSSPACE:def 11,def 20;
-A2: |.(seq_id(u)).|(#)|.(seq_id(u)).| is summable by CSSPACE:def 11,def 20;
+A1: |.(seq_id(v)).|(#)|.(seq_id(v)).| is summable by CSSPACE:def 11,
+def 20;
+A2: |.(seq_id(u)).|(#)|.(seq_id(u)).| is summable by CSSPACE:def 11,
+def 20;
      set p = |.(seq_id(v)).|(#)|.(seq_id(v)).|;
      set q = |.(seq_id(u)).|(#)|.(seq_id(u)).|;
      set r = abs(|.(seq_id(u)).|(#)|.(seq_id(v)).|);
@@ -486,7 +484,8 @@ Lm18:
 proof
    let v,w be VECTOR of Complex_l2_Space;
    thus v.|.w = (the scalar of Complex_l2_Space).(v,w) by CSSPACE:def 12
-             .= Sum(seq_id(v)(#)(seq_id(w))*') by CSSPACE:def 19,def 20;
+             .= Sum(seq_id(v)(#)(seq_id(w))*') by CSSPACE:def 19,
+def 20;
 end;
 
 Lm19:
@@ -650,7 +649,8 @@ A9:  for n be Element of NAT holds (seq_id(x)).n = 0
        then (Re(seq.n))^2 + (Im(seq.n))^2 = 0 by A5,A7,RSSPACE:21;
        hence thesis by COMPLEX1:13;
      end;
-      x is Element of the_set_of_ComplexSequences by CSSPACE:def 11,def 20;
+      x is Element of the_set_of_ComplexSequences by CSSPACE:def 11,
+def 20;
      hence x=0.Complex_l2_Space by A9,Lm11,CSSPACE:def 6;
 
    end;
@@ -666,7 +666,8 @@ A12:  for n be Element of NAT holds (seq_id(x)(#)(seq_id(x))*').n=0
               .= 0;
      end;
      thus x.|.x = (the scalar of Complex_l2_Space).(x,x) by CSSPACE:def 12
-               .= Sum(seq_id(x)(#)(seq_id(x))*') by CSSPACE:def 19,def 20
+               .= Sum(seq_id(x)(#)(seq_id(x))*') by CSSPACE:def 19,
+def 20
                .=0 by A12,CSSPACE:88;
    end;
 
@@ -750,8 +751,9 @@ A23:(x+y).|.z =(the scalar of Complex_l2_Space).(x+y,z) by CSSPACE:def 12
        .=(the scalar of Complex_l2_Space).(x,z)+Sum(seqy(#)seqz*')
                         by CSSPACE:def 19,def 20
        .=(the scalar of Complex_l2_Space).(x,z)
-            +(the scalar of Complex_l2_Space).(y,z) by CSSPACE:def 19,def 20
-       .= x.|.z +(the scalar of Complex_l2_Space).[y,z] by CSSPACE:def 12
+            +(the scalar of Complex_l2_Space).(y,z) by CSSPACE:def 19,
+def 20
+       .= x.|.z +(the scalar of Complex_l2_Space).(y,z) by CSSPACE:def 12
        .= x.|.z + y.|.z by CSSPACE:def 12;
 
     |.seqx.|(#)|.seqy.| is summable by Lm17;
@@ -765,7 +767,8 @@ then A24:seqx(#)seqy*' is summable by COMSEQ_3:64;
       .=Sum(a(#)seqx(#)seqy*') by CSSPACE:3
       .=Sum(a(#)(seqx(#)seqy*')) by COMSEQ_1:15
       .=a*Sum(seqx(#)seqy*') by A24,COMSEQ_3:57
-      .=a*(the scalar of Complex_l2_Space).(x,y) by CSSPACE:def 19,def 20
+      .=a*(the scalar of Complex_l2_Space).(x,y) by CSSPACE:def 19,
+def 20
       .=a*(x.|.y) by CSSPACE:def 12;
    hence thesis by A1,A10,A14,A20,A23;
 end;
@@ -965,7 +968,8 @@ A8:          k<=m;
               ||.vm - vk.|| < e by A7,A8;
 then A9:          sqrt |.(vm-vk).|.(vm-vk).| < e by CSSPACE:def 15;
              reconsider e1=e as Real;
-              |.seqmk.|(#)|.seqmk.| is summable by CSSPACE:def 11,def 20;
+              |.seqmk.|(#)|.seqmk.| is summable by CSSPACE:def 11,
+def 20;
 then A10:         |.seqmk.|(#)|.seqmk*'.| is summable by Lm19;
 A11:         for i be Element of NAT holds
               0 <= (|.seqmk.|(#)|.seqmk*'.|).i
@@ -1421,7 +1425,7 @@ A59:   Partial_Sums(|.seqt-seq_id(vseq.n).|
           (#)|.seqt-seq_id(vseq.n).| ) is bounded_above
        proof
           now let i be Element of NAT;
-            0 <= i by NAT_1:18;
+            0 <= i by NAT_1:2;
            then Partial_Sums(|.seqt-seq_id(vseq.n).|
               (#)|.seqt-seq_id(vseq.n).| ).i <=e*e by A51;
            hence Partial_Sums(|.seqt-seq_id(vseq.n).|
@@ -1548,8 +1552,7 @@ then A80:   |.((u-v).|.(u-v)).| < e*e by A79,Lm18;
        then 0 <= |.((u-v).|.(u-v)).| by CSSPACE:36;
        then sqrt |.((u-v).|.(u-v)).| < sqrt (e*e) by A80,SQUARE_1:95;
 then A81:   sqrt |.((u-v).|.(u-v)).| < sqrt (e^2);
-        ||.(vseq.n) - tv.|| = ||.(vseq.n) +(-tv).|| by RLVECT_1:def 11
-                          .=||.-(tv-(vseq.n)).|| by RLVECT_1:47
+        ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
                           .=||.tv-(vseq.n).|| by CSSPACE:49
                           .=sqrt |.((u-v).|.(u-v)).| by CSSPACE:def 15;
        hence ||.(vseq.n) - tv.|| < e by A76,A81,SQUARE_1:89;
@@ -1648,7 +1651,7 @@ A9:   Partial_Sums(|.seq.|).0 = (|.seq.|).0 by SERIES_1:def 1;
          end;
          case
 A10:     n1<>0;
-          0 <= n1 by NAT_1:18;
+          0 <= n1 by NAT_1:2;
 then A11:     0 + 1 <= n1 by A10,INT_1:20;
          set nn=n1-1;
 A12:     nn is Element of NAT by A11,INT_1:18;

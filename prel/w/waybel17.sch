@@ -117,8 +117,8 @@
 <Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="70"/>
 <Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
@@ -126,8 +126,8 @@
 <Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="70"/>
 <Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

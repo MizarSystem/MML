@@ -7,10 +7,10 @@
 environ
 
  vocabularies BOOLE, SEQ_2, ARYTM, LATTICES, ORDINAL2, TARSKI, SUPINF_1,
-      SETFAM_1;
+      SETFAM_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
       DOMAIN_1, XXREAL_0, XREAL_0, REAL_1;
- constructors DOMAIN_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED;
+ constructors DOMAIN_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, NAT_D;
  registrations XREAL_0, SUBSET_1, XBOOLE_0, MEMBERED, NUMBERS, XXREAL_0;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, XXREAL_0;
@@ -23,10 +23,9 @@ begin
 theorem
   not +infty in REAL;
 
-canceled;
-
 definition let IT be set;
  canceled;
+
   attr IT is +Inf-like means :Def2:
     IT = +infty;
 end;
@@ -44,7 +43,7 @@ definition
   mode +Inf is +Inf-like set;
 end;
 
-canceled;
+canceled 2;
 
 theorem
   +infty is +Inf by Def2;
@@ -55,7 +54,8 @@ theorem
   not -infty in REAL by XREAL_0:def 1;
 
 definition let IT be set;
-  canceled;
+ canceled;
+
   attr IT is -Inf-like means :Def4:
     IT = -infty;
 end;
@@ -92,10 +92,7 @@ registration
   coherence;
 end;
 
-canceled;
-
-theorem
-  for x being Real holds x is R_eal by XXREAL_0:def 1;
+canceled 2;
 
 theorem Th11:
   -infty is R_eal & +infty is R_eal
@@ -111,11 +108,10 @@ definition
   coherence by Th11;
 end;
 
-canceled 3;
-
 definition let x,y be R_eal;
- canceled 2;
  redefine
+ canceled 2;
+
   pred x <= y means
     ex p,q being Real st p = x & q = y & p <= q if x in REAL & y in REAL
     otherwise x = -infty or y = +infty;
@@ -159,37 +155,21 @@ A6:        x <> -infty;
    end;
   end;
 
-canceled;
+canceled 4;
 
 theorem
   for x,y being R_eal st
     x is Real & y is Real holds
    (x <= y iff ex p,q being Real st (p = x & q = y & p <= q));
 
-theorem Th17:
+ Lm1:
   for x being R_eal st x in REAL holds -infty < x by XXREAL_0:12;
 
-theorem Th18:
+ Lm2:
   for x being R_eal st x in REAL holds x < +infty by XXREAL_0:9;
 
-canceled;
-
-theorem
-  for x being R_eal holds x <= +infty by XXREAL_0:4;
-
-theorem
-  for x being R_eal holds -infty <= x by XXREAL_0:5;
-
-theorem Th22:
+ Lm3:
   for x,y being R_eal holds x <= y & y <= x implies x = y by XXREAL_0:1;
-
-theorem
-  for x being R_eal st
-    x <= -infty holds x = -infty by XXREAL_0:6;
-
-theorem
-  for x being R_eal st
-    +infty <= x holds x = +infty by XXREAL_0:4;
 
 scheme SepReal {P[R_eal]}:
    ex X being Subset of ExtREAL st
@@ -215,19 +195,17 @@ A1:for r being set holds r in X iff r in REAL \/ {-infty,+infty} & Q[r]
    thus thesis by A1,A2;
 end;
 
-canceled 2;
+canceled 10;
 
 theorem
   for x being set holds
     x is R_eal iff x in ExtREAL;
 
-canceled;
-
-theorem Th29:
+ Lm4:
   for x,y,z being R_eal holds x <= y & y <= z implies x <= z
                     by XXREAL_0:2;
 
-canceled;
+canceled 3;
 
 theorem
   for x being R_eal st
@@ -237,9 +215,9 @@ proof
    assume
 A1:x in REAL;
    -infty <= x & not -infty in REAL by XXREAL_0:5,XREAL_0:def 1;
-   hence -infty < x by A1,Th22;
+   hence -infty < x by A1,Lm3;
    x <= +infty & not +infty in REAL by XXREAL_0:4;
-   hence thesis by A1,Th22;
+   hence thesis by A1,Lm3;
 end;
 
 ::
@@ -642,7 +620,7 @@ A4:  x <> +infty
        reconsider UB0 as Real by A6;
        reconsider UB0 as R_eal;
        x <= UB0 by A3,Def9;
-       hence thesis by A5,Th18;
+       hence thesis by A5,Lm2;
      end;
      x in REAL or x in {-infty,+infty} by A3,XBOOLE_0:def 2;
      hence thesis by A3,A4,TARSKI:def 2;
@@ -688,7 +666,7 @@ A3:x in X & x <> +infty;
         reconsider LB0 as Real by A6;
         reconsider LB0 as R_eal;
         LB0 <= x by A3,Def10;
-        hence thesis by A5,Th17;
+        hence thesis by A5,Lm1;
       end;
       x in REAL or x in {-infty,+infty} by A3,XBOOLE_0:def 2;
       hence thesis by A3,A4,TARSKI:def 2;
@@ -754,7 +732,7 @@ A12:now let a,b be R_eal;
              A17:a = +infty;
                  reconsider UB0 as R_eal;
                  a <= UB0 by A13,Def9;
-                 hence thesis by A17,Th18;
+                 hence thesis by A17,Lm2;
                end;
                a in REAL or a in {-infty,+infty} by XBOOLE_0:def 2;
                hence thesis by A15,A16,TARSKI:def 2;
@@ -775,7 +753,7 @@ A12:now let a,b be R_eal;
 A21:         b is majorant of X by A13,Def14;
              reconsider x as R_eal by XXREAL_0:def 1;
              x <= b by A4,A21,Def9;then
-         A22:b <> -infty by Th17;
+         A22:b <> -infty by Lm1;
              b in REAL or b in {-infty,+infty} by XBOOLE_0:def 2;
              then reconsider b as Real by A20,A22,TARSKI:def 2;
          A23:b in Y by A13,XBOOLE_0:def 3;
@@ -795,7 +773,7 @@ A21:         b is majorant of X by A13,Def14;
              A26:a = +infty;
                  reconsider UB0 as R_eal;
                  a <= UB0 by A13,Def9;
-                 hence thesis by A26,Th18;
+                 hence thesis by A26,Lm2;
                end;
                a in REAL or a in {-infty,+infty} by XBOOLE_0:def 2;
                hence thesis by A24,A25,TARSKI:def 2;
@@ -804,7 +782,7 @@ A21:         b is majorant of X by A13,Def14;
 A27:         b is majorant of X by A13,Def14;
              reconsider x as R_eal by XXREAL_0:def 1;
              x <= b by A4,A27,Def9;
-             then A28:not b = -infty by Th17;
+             then A28:not b = -infty by Lm1;
              b in REAL or b in {-infty,+infty} by XBOOLE_0:def 2;
              then reconsider b as Real by A24,A28,TARSKI:def 2;
          A29:b in Y by A13,XBOOLE_0:def 3;
@@ -886,7 +864,7 @@ A12:for b,a being R_eal st b in SetMinorant(X) & a in X holds
          A17:a = -infty;
              reconsider LB0 as R_eal;
              LB0 <= a by A13,Def10;
-             hence thesis by A17,Th17;
+             hence thesis by A17,Lm1;
            end;
            a in REAL or a in {-infty,+infty} by XBOOLE_0:def 2;
            hence thesis by A15,A16,TARSKI:def 2;
@@ -907,7 +885,7 @@ A12:for b,a being R_eal st b in SetMinorant(X) & a in X holds
 A21:       b is minorant of X by A13,Def15;
            reconsider x as R_eal by XXREAL_0:def 1;
           b <= x by A4,A21,Def10;
-       then A22:not b = +infty by Th18;
+       then A22:not b = +infty by Lm2;
               b in REAL or b in {-infty,+infty} by XBOOLE_0:def 2;
            then reconsider b as Real by A20,A22,TARSKI:def 2;
        A23:b in Y by A13,XBOOLE_0:def 3;
@@ -927,7 +905,7 @@ A21:       b is minorant of X by A13,Def15;
          A26:a = -infty;
              reconsider LB0 as R_eal;
              LB0 <= a by A13,Def10;
-             hence thesis by A26,Th17;
+             hence thesis by A26,Lm1;
            end;
            a in REAL or a in {-infty,+infty} by XBOOLE_0:def 2;
            hence thesis by A24,A25,TARSKI:def 2;
@@ -936,7 +914,7 @@ A21:       b is minorant of X by A13,Def15;
 A27:     b is minorant of X by A13,Def15;
          reconsider x as R_eal by XXREAL_0:def 1;
          b <= x by A4,A27,Def10;
-         then A28:not b = +infty by Th18;
+         then A28:not b = +infty by Lm2;
          b in REAL or b in {-infty,+infty} by XBOOLE_0:def 2;
          then reconsider b as Real by A24,A28,TARSKI:def 2;
      A29:b in Y by A13,XBOOLE_0:def 3;
@@ -1181,7 +1159,7 @@ A1:S1 is majorant of X &
 A2:S2 is majorant of X &
    for y being R_eal st y is majorant of X holds S2 <= y;
    S1 <= S2 & S2 <= S1 by A1,A2;
-   hence thesis by Th22;
+   hence thesis by Lm3;
 end;
 end;
 
@@ -1212,7 +1190,7 @@ A1:S1 is minorant of X &
 A2:S2 is minorant of X &
    for y being R_eal st y is minorant of X holds y <= S2;
    S1 <= S2 & S2 <= S1 by A1,A2;
-   hence thesis by Th22;
+   hence thesis by Lm3;
 end;
 end;
 
@@ -1295,7 +1273,7 @@ A4:x in X & x <> -infty by A1,Th59;
    reconsider x as R_eal by XXREAL_0:def 1;
    sup X is majorant of X by Def16;
    then x <= sup X by A4,Def9;
-   then not sup X = -infty by Th17;
+   then not sup X = -infty by Lm1;
    hence thesis by A2,A3,XXREAL_0:13;
 end;
 
@@ -1314,7 +1292,7 @@ A4:x in X & x <> +infty by A1,Th60;
    reconsider x as R_eal by XXREAL_0:def 1;
    inf X is minorant of X by Def17;
    then inf X <= x by A4,Def10;
-   then inf X <> +infty by Th18;
+   then inf X <> +infty by Lm2;
    hence thesis by A2,A3,XXREAL_0:10;
 end;
 
@@ -1331,7 +1309,7 @@ A1:sup{x} is majorant of {x} by Def16;
 then A2:sup{x} <= x by Def16;
    x in {x} by TARSKI:def 1;
    then x <= sup{x} by A1,Def9;
-   hence thesis by A2,Th22;
+   hence thesis by A2,Lm3;
 end;
 
 theorem
@@ -1347,7 +1325,7 @@ A1:inf{x} is minorant of {x} by Def17;
    then A2:x <= inf{x} by Def17;
    x in {x} by TARSKI:def 1;
    then inf{x} <= x by A1,Def10;
-   hence thesis by A2,Th22;
+   hence thesis by A2,Lm3;
 end;
 
 canceled 4;
@@ -1390,14 +1368,14 @@ proof
   A2:y in {x,y} by TARSKI:def 2;
      sup{x,y} is majorant of {x,y} by Def16;
      then y <= sup{x,y} by A2,Def9;
-     hence thesis by A1,Th22;
+     hence thesis by A1,Lm3;
    end;
    assume y <= x;
    then A3:sup{x,y} <= x by Th92;
 A4:x in {x,y} by TARSKI:def 2;
    sup{x,y} is majorant of {x,y} by Def16;
    then x <= sup{x,y} by A4,Def9;
-   hence thesis by A3,Th22;
+   hence thesis by A3,Lm3;
 end;
 
 theorem Th94:
@@ -1442,14 +1420,14 @@ proof
   A2:x in {x,y} by TARSKI:def 2;
      inf{x,y} is minorant of {x,y} by Def17;
      then inf{x,y} <= x by A2,Def10;
-     hence thesis by A1,Th22;
+     hence thesis by A1,Lm3;
    end;
    assume y <=x;
    then A3:y <= inf{x,y} by Th95;
 A4:y in {x,y} by TARSKI:def 2;
    inf{x,y} is minorant of {x,y} by Def17;
    then inf{x,y} <= y by A4,Def10;
-   hence thesis by A3,Th22;
+   hence thesis by A3,Lm3;
 end;
 
 theorem Th97:
@@ -1463,7 +1441,7 @@ proof
 A1:y in X & x <= y;
    sup X is majorant of X by Def16;
    then y <= sup X by A1,Def9;
-   hence thesis by A1,Th29;
+   hence thesis by A1,Lm4;
 end;
 
 theorem Th98:
@@ -1477,7 +1455,7 @@ proof
 A1:y in X & y <= x;
    inf X is minorant of X by Def17;
    then inf X <= y by A1,Def10;
-   hence thesis by A1,Th29;
+   hence thesis by A1,Lm4;
 end;
 
 theorem
@@ -1496,7 +1474,7 @@ A1:for x being R_eal st x in X holds ex y being R_eal st y in Y & x <= y;
      then consider y being R_eal such that
   A2:y in Y & x <= y by A1;
      y <= sup Y by A2,Th76;
-     hence thesis by A2,Th29;
+     hence thesis by A2,Lm4;
    end;
    then sup Y is majorant of X by Def9;
    hence thesis by Def16;
@@ -1518,7 +1496,7 @@ A1:for y being R_eal st y in Y holds ex x being R_eal st x in X & x <= y;
       then consider x being R_eal such that
    A2:x in X & x <= y by A1;
       inf X <= x by A2,Th79;
-      hence thesis by A2,Th29;
+      hence thesis by A2,Lm4;
    end;
    then inf X is minorant of Y by Def10;
    hence thesis by Def17;
@@ -1545,7 +1523,7 @@ A1:  a in X \/ Y;
     A4:UB1 in {UB1,UB2} by TARSKI:def 2;
        sup{UB1,UB2} is majorant of {UB1,UB2} by Def16;
        then UB1 <= sup{UB1,UB2}by A4,Def9;
-       hence thesis by A3,Th29;
+       hence thesis by A3,Lm4;
      end;
      a in Y implies a <= sup{UB1,UB2}
      proof
@@ -1554,7 +1532,7 @@ A1:  a in X \/ Y;
      A6:UB2 in {UB1,UB2} by TARSKI:def 2;
         sup{UB1,UB2} is majorant of {UB1,UB2} by Def16;
         then UB2 <= sup{UB1,UB2}by A6,Def9;
-        hence thesis by A5,Th29;
+        hence thesis by A5,Lm4;
       end;
       hence thesis by A1,A2,XBOOLE_0:def 2;
    end;
@@ -1582,7 +1560,7 @@ A1:  a in X \/ Y;
     A4:LB1 in {LB1,LB2} by TARSKI:def 2;
        inf{LB1,LB2} is minorant of {LB1,LB2} by Def17;
        then inf{LB1,LB2} <= LB1 by A4,Def10;
-       hence thesis by A3,Th29;
+       hence thesis by A3,Lm4;
      end;
      a in Y implies inf{LB1,LB2} <= a
      proof
@@ -1591,7 +1569,7 @@ A1:  a in X \/ Y;
     A6:LB2 in {LB1,LB2} by TARSKI:def 2;
        inf{LB1,LB2} is minorant of {LB1,LB2} by Def17;
        then inf{LB1,LB2} <= LB2 by A6,Def10;
-       hence thesis by A5,Th29;
+       hence thesis by A5,Lm4;
      end;
      hence thesis by A1,A2,XBOOLE_0:def 2;
    end;
@@ -1653,7 +1631,7 @@ A1:sup X is majorant of X by Def16;
    Y c= X \/ Y by XBOOLE_1:7;
    then sup Y <= a by Th91;
    then sup{sup X,sup Y} <= a by A3,Th92;
-   hence thesis by A2,Th22;
+   hence thesis by A2,Lm3;
 end;
 
 theorem
@@ -1671,7 +1649,7 @@ A1:inf X is minorant of X by Def17;
    Y c= X \/ Y by XBOOLE_1:7;
    then a <= inf Y by Th94;
    then a <= inf{inf X,inf Y} by A3,Th95;
-   hence thesis by A2,Th22;
+   hence thesis by A2,Lm3;
 end;
 
 theorem
@@ -1851,7 +1829,7 @@ A1:S = union F;
 A2:sup SUP(F) is majorant of S by A1,Th113;
    sup S is majorant of SUP(F) by A1,Th112;
    then a <= b & b <= a by A2,Def16;
-   hence thesis by Th22;
+   hence thesis by Lm3;
 end;
 
 definition let F be bool_DOMAIN of ExtREAL;
@@ -1983,7 +1961,7 @@ A1:S = union F;
 A2:   inf INF(F) is minorant of S by A1,Th118;
    inf S is minorant of INF(F) by A1,Th117;
    then a <= b & b <= a by A2,Def17;
-   hence thesis by Th22;
+   hence thesis by Lm3;
 end;
 
 begin :: Addenda

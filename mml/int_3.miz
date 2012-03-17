@@ -12,9 +12,9 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, RLVECT_1,
       MCART_1, RELAT_1, FUNCT_1, BINOP_2, STRUCT_0, FUNCT_2, GCD_1, GROUP_1,
       VECTSP_1, VECTSP_2, FUNCSDOM, BINOP_1, EUCLID, GR_CY_1, INT_1, FUNCT_7,
-      NEWTON, INT_2, NAT_1, XXREAL_0;
+      NEWTON, INT_2, NAT_1, NAT_D, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINOP_2, SEQ_1, INT_2,
-      FUNCT_7, EUCLID, GR_CY_1, GCD_1;
+      FUNCT_7, EUCLID, GR_CY_1, GCD_1, NAT_D;
  registrations STRUCT_0, FUNCT_1, XREAL_0, INT_1, RELSET_1, GCD_1, SEQ_1,
       MEMBERED, ORDINAL1, NAT_1, VECTSP_1, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -22,7 +22,7 @@ environ
  theorems TARSKI, BINOP_1, FUNCT_1, FUNCT_2, VECTSP_1, INT_1, RELAT_1, GCD_1,
       RLVECT_1, REAL_1, EUCLID, ABSVALUE, GR_CY_1, FUNCT_7, NAT_1, MCART_1,
       INT_2, RELSET_1, XREAL_0, ORDINAL1, XCMPLX_0, XCMPLX_1, NUMBERS, BINOP_2,
-      GROUP_1, XREAL_1, COMPLEX1, NEWTON, XXREAL_0;
+      GROUP_1, XREAL_1, COMPLEX1, NEWTON, XXREAL_0, NAT_D;
  schemes NAT_1, BINOP_1, LMOD_7, BINOP_2;
 
 begin
@@ -170,23 +170,17 @@ coherence
      let a,b be Element of M;
      reconsider a' = a as Element of REAL by Lm1;
      reconsider b' = b as Element of REAL by Lm1;
-     thus a + b = (the add of M).(a,b)
-          .= addreal.(a,b) by GR_CY_1:def 2
+     thus a + b = addreal.(a,b) by GR_CY_1:def 2
           .= a' + b' by BINOP_2:def 9
           .= addreal.(b,a) by BINOP_2:def 9
-          .= addint.(b,a) by GR_CY_1:def 2
-          .= b + a;
+          .= b + a by GR_CY_1:def 2;
     end;
     hereby
      let a,b,c be Element of M;
-     A1: a + b = (the add of M).(a,b)
-               .= addreal.(a,b) by GR_CY_1:def 2;
-     A2: (a + b) + c = addint.((a+b),c)
-                     .= addreal.(addreal.(a,b),c) by A1,GR_CY_1:def 2;
-     A3: b + c = (the add of M).(b,c)
-               .= addreal.(b,c) by GR_CY_1:def 2;
-     A4: a + (b + c) = addint.(a,(b+c))
-                     .= addreal.(a,addreal.(b,c)) by A3,GR_CY_1:def 2;
+     A1: a + b = addreal.(a,b) by GR_CY_1:def 2;
+     A2: (a + b) + c = addreal.(addreal.(a,b),c) by A1,GR_CY_1:def 2;
+     A3: b + c = addreal.(b,c) by GR_CY_1:def 2;
+     A4: a + (b + c) = addreal.(a,addreal.(b,c)) by A3,GR_CY_1:def 2;
      reconsider a' = a, b' = b, c' = c as Element of REAL by Lm1;
            addreal.(addreal.(a',b'),c')
       = addreal.(a' + b',c') by BINOP_2:def 9
@@ -199,8 +193,7 @@ coherence
     hereby
      let a be Element of M;
      A5: 0 in INT by INT_1:def 2;
-     A6: a + 0.M = addint.(a,0.M)
-                 .= addreal.(a,the Zero of M) by GR_CY_1:def 2
+     A6: a + 0.M = addreal.(a,the Zero of M) by GR_CY_1:def 2
                  .= addreal.(a,0) by A5,FUNCT_7:def 1;
      reconsider a' = a as Element of REAL by Lm1;
      reconsider t = 0 as Element of REAL;
@@ -214,8 +207,7 @@ coherence
      reconsider v = -a' as Element of M by INT_1:def 2;
      reconsider v' = v as Integer;
      take v;
-     thus a + v = addint.(a,v)
-         .= a'+v' by GR_CY_1:14
+     thus a + v = a'+v' by GR_CY_1:14
          .= 0.M by Lm2;
     end;
  A7: for a,b being Element of M holds
@@ -234,13 +226,11 @@ coherence
      a * (b + c) = a * b + a * c
      proof
      let a,b,c be Element of M;
-     A9: b + c = (the add of M).(b,c)
-               .= addreal.(b,c) by GR_CY_1:def 2;
+     A9: b + c = addreal.(b,c) by GR_CY_1:def 2;
      A10: a * (b + c) = multreal.(a,addreal.(b,c)) by A9,Def1;
      A11: a * b = multreal.(a,b) by Def1;
      A12: a * c = multreal.(a,c) by Def1;
-     A13: a * b + a * c = (the add of M).((a*b),(a*c))
-                       .= addreal.(multreal.(a,b),multreal.(a,c)) by A11,A12,
+     A13: a * b + a * c = addreal.(multreal.(a,b),multreal.(a,c)) by A11,A12,
 GR_CY_1:def 2;
      reconsider a,b,c as Element of REAL by Lm1;
      reconsider t = multreal.(a,b) as Element of REAL;
@@ -302,8 +292,7 @@ let a' be Integer;
 assume A1: a' = a;
 reconsider b' = -a' as Element of M by INT_1:def 2;
 reconsider c = b' as Integer;
-    b' + a = (the add of M).(b',a)
-       .= c + a' by A1,GR_CY_1:14
+    b' + a = c + a' by A1,GR_CY_1:14
        .= 0.M by Lm2;
  hence thesis by RLVECT_1:19;
 end;
@@ -451,7 +440,7 @@ assume A1: a <> 0;
   A3: absreal.(a) = abs((a)) by EUCLID:def 2
                .= a by ABSVALUE:def 1;
     0 + 1 < a + 1 by A1,A2,XREAL_1:8;
-  hence thesis by A3,NAT_1:38;
+  hence thesis by A3,NAT_1:13;
   end;
   case A4: a < 0;
   A5: absreal.(a) = abs((a)) by EUCLID:def 2
@@ -531,7 +520,7 @@ Lm10:for a,b being Element of INT.Ring
         proof
         assume k' <= k;
         then consider x being Nat such that
-        A12: k = k' + x by NAT_1:28;
+        A12: k = k' + x by NAT_1:10;
            k' + x = k' + -b' by A12;
         then A13: x = - b';
         reconsider b' as Element of NAT by A3,INT_1:16;
@@ -616,7 +605,7 @@ Lm11:for a,b being Element of INT.Ring
         proof
         assume k' <= k;
         then consider x being Nat such that
-        A12: k = k' + x by NAT_1:28;
+        A12: k = k' + x by NAT_1:10;
            k' + x = k' + -b' by A12;
         then A13: x = - b';
         reconsider b' as Element of NAT by A3,INT_1:16;
@@ -714,7 +703,7 @@ holds q1 = q2 & r1 = r2
                .= e by A15,Lm9;
           then absreal.d' = absint.e by Def6;
           then reconsider d = absreal.d' as Element of NAT;
-             d * c >= 1 * c by A13,NAT_1:20;
+             d * c >= 1 * c by A13,NAT_1:4;
           hence thesis;
           end;
      consider i1,i2 being Integer such that
@@ -752,7 +741,7 @@ holds q1 = q2 & r1 = r2
              .= e by A27,Lm9;
         then absreal.d' = absint.e by Def6;
         then reconsider d = absreal.d' as Element of NAT;
-           d * c >= 1 * c by A25,NAT_1:20;
+           d * c >= 1 * c by A25,NAT_1:4;
         hence thesis;
         end;
    consider i1,i2 being Integer such that
@@ -1391,14 +1380,14 @@ hereby
 A3: n >= 0 by A2;
    then reconsider nn = n as Element of NAT by INT_1:16;
    consider t being Nat such that
-   A4: aa = nn * t + (aa mod nn) & (aa mod nn) < nn by A1,NAT_1:def 2;
+   A4: aa = nn * t + (aa mod nn) & (aa mod nn) < nn by A1,NAT_D:def 2;
       t = 0
      proof
      assume A5: t <> 0;
       t >= 0;
      then t >= 1 + 0 by A5,INT_1:20;
      then A6: t * n >= 1 * n by A3,XREAL_1:66;
-      nn * t + (aa mod nn) >= nn * t by NAT_1:29;
+      nn * t + (aa mod nn) >= nn * t by NAT_1:11;
      hence thesis by A2,A4,A6,XXREAL_0:2;
      end;
    hence a mod n = a by A4,NEWTON:101;
@@ -1607,7 +1596,7 @@ A1: for a,b being Integer st a > 0 & b > 0 holds
             A11: x' = x & ex u,v being Integer st x' = u * a + v * b;
             consider u,v being Integer such that A12: x = u * a + v * b by A11;
             consider r being Nat such that
-            A13: x' = g * (x' div g) + r & r < g by A5,NAT_1:def 1;
+            A13: x' = g * (x' div g) + r & r < g by A5,NAT_D:def 1;
 A14:         r in NAT by ORDINAL1:def 13;
             r = x' - g * (x' div g) by A13
              .= (u * a + v * b) -
@@ -1635,16 +1624,16 @@ A14:         r in NAT by ORDINAL1:def 13;
      such that A18: b' = b & ex t being Element of NAT st b' = t * g by A3,A9;
      consider u,v being Element of NAT such that
      A19: a = u * g & b = v * g by A17,A18;
-     A20: g divides abs(a) & g divides abs(b) by A8,A19,NAT_1:def 3;
+     A20: g divides abs(a) & g divides abs(b) by A8,A19,NAT_D:def 3;
      for m being Nat st
      m divides abs(a) & m divides abs(b) holds m divides g
         proof
           let m be Nat; assume
           A21: m divides abs(a) & m divides abs(b);
           then consider u being Nat such that
-          A22: a = m * u by A8,NAT_1:def 3;
+          A22: a = m * u by A8,NAT_D:def 3;
           consider v being Nat such that
-          A23: b = m * v by A8,A21,NAT_1:def 3;
+          A23: b = m * v by A8,A21,NAT_D:def 3;
         consider g' being Element of NAT such that
         A24: g' = g & ex s,t being Integer st g' = s * a + t * b by A5;
         consider s,t being Integer such that A25: g = s * a + t * b by A24;
@@ -1659,9 +1648,9 @@ A14:         r in NAT by ORDINAL1:def 13;
              end;
           hence thesis by INT_1:16;
           end;
-        hence thesis by A26,NAT_1:def 3;
+        hence thesis by A26,NAT_D:def 3;
         end;
-     then g = abs(a) hcf abs(b) by A20,NAT_1:def 5
+     then g = abs(a) hcf abs(b) by A20,NAT_D:def 5
                 .= a gcd b by INT_2:def 3;
      hence thesis by A7;
      end;
@@ -1672,11 +1661,11 @@ A29:for a,b being Integer holds a = 0 implies a gcd b = abs(b)
     let a,b be Integer; assume a = 0;
     then A30: abs(a) = 0 by ABSVALUE:def 1;
     A31: a gcd b = abs(a) hcf abs(b) by INT_2:def 3;
-    A32: abs(b) divides abs(a) by A30,NAT_1:53;
+    A32: abs(b) divides abs(a) by A30,NAT_D:6;
     for m being Nat st
     m divides abs(a) & m divides abs(b) holds m
     divides abs(b);
-    hence thesis by A31,A32,NAT_1:def 5;
+    hence thesis by A31,A32,NAT_D:def 5;
     end;
    now per cases by A28;
 case a = 0;
@@ -1769,7 +1758,7 @@ existence
       proof
       let k,l be Element of Segm(n);
       reconsider k' = k,l' = l as Element of NAT;
-      ((k'*l') mod n) < n by A1,NAT_1:46;
+      ((k'*l') mod n) < n by A1,NAT_D:1;
       then reconsider c = (k'*l') mod n as Element of Segm(n) by GR_CY_1:10;
       take c;
       thus thesis;
@@ -1881,20 +1870,20 @@ existence
           reconsider n as Element of NAT by ORDINAL1:def 13;
           consider a being Element of NAT such that A20: a = z mod n;
           consider t being Nat such that
-          A21: (z = n * t + a & a < n) or (a = 0 & n = 0) by A20,NAT_1:def 2;
+          A21: (z = n * t + a & a < n) or (a = 0 & n = 0) by A20,NAT_D:def 2;
           A22: t = 1
                proof
                assume A23: t <> 1;
                   now per cases;
                case t <= 1;
                  then t < 0 + 1 by A23,REAL_1:def 5;
-                 then t <= 0 by NAT_1:38;
+                 then t <= 0 by NAT_1:13;
                  then t = 0;
                  hence thesis by A1,A18,A21;
                end;
                case t > 1;
                  then n * t > 1 * n by A1,XREAL_1:70;
-                 hence thesis by A18,A21,NAT_1:29;
+                 hence thesis by A18,A21,NAT_1:11;
                end;
                end;
                hence thesis;
@@ -1906,7 +1895,7 @@ existence
           reconsider n as Integer;
           A25: n - k < n
                    proof
-                      n <= n + k by NAT_1:29;
+                      n <= n + k by NAT_1:11;
                    then A26: n - k <= (n + k) - k by XREAL_1:11;
                       n - k <> n by A24;
                    hence thesis by A26,REAL_1:def 5;
@@ -1939,7 +1928,7 @@ existence
           reconsider n as Element of NAT by ORDINAL1:def 13;
           consider a being Element of NAT such that A34: a = z mod n;
           consider t being Nat such that
-          A35: (z = n * t + a & a < n) or (a = 0 & n = 0) by A34,NAT_1:def 2;
+          A35: (z = n * t + a & a < n) or (a = 0 & n = 0) by A34,NAT_D:def 2;
              t = 0
             proof
             assume A36: t <> 0;
@@ -1951,7 +1940,7 @@ existence
                 end;
             then 1 * n <= t * n by XREAL_1:66;
             then A38: n + a <= n * t + a by XREAL_1:8;
-               n <= n + a by NAT_1:29;
+               n <= n + a by NAT_1:11;
             hence thesis by A1,A25,A35,A38,XXREAL_0:2;
             end;
           hence thesis by A1,A27,A33,A34,A35;
@@ -1959,7 +1948,7 @@ existence
           end;
           hence thesis;
           end;
-         z mod n < n by A1,NAT_1:46;
+         z mod n < n by A1,NAT_D:1;
       hence thesis by A16,A17,GR_CY_1:10;
       end;
     hence thesis by TARSKI:def 3;
@@ -2005,20 +1994,20 @@ reconsider n as Element of NAT by ORDINAL1:def 13;
 consider a' being Element of NAT such that A6: a' = b mod n;
 consider t being Nat such that
 A7: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
- by A6,NAT_1:def 2;
+ by A6,NAT_D:def 2;
 A8: t = 1
      proof
      assume A9: t <> 1;
         now per cases;
      case t <= 1;
         then t < 0 + 1 by A9,REAL_1:def 5;
-        then t <= 0 by NAT_1:38;
+        then t <= 0 by NAT_1:13;
         then t = 0;
         hence thesis by A1,A3,A4,A7;
      end;
      case t > 1;
         then n * t > 1 * n by A1,XREAL_1:70;
-        hence thesis by A3,A4,A7,NAT_1:29;
+        hence thesis by A3,A4,A7,NAT_1:11;
      end;
      end;
      hence thesis;
@@ -2030,7 +2019,7 @@ case A10: a <> 0;
 reconsider n as Integer;
 A11: n - a < n
      proof
-        n <= n + a by NAT_1:29;
+        n <= n + a by NAT_1:11;
      then A12: n - a <= (n + a) - a by XREAL_1:11;
         n - a <> n by A10;
       hence thesis by A12,REAL_1:def 5;
@@ -2064,7 +2053,7 @@ reconsider n as Element of NAT by ORDINAL1:def 13;
 consider a' being Element of NAT such that A20: a' = b mod n;
 consider t being Nat such that
 A21: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
- by A20,NAT_1:def 2;
+ by A20,NAT_D:def 2;
    t = 0
    proof
    assume A22: t <> 0;
@@ -2076,7 +2065,7 @@ A21: (b = n * t + a' & a' < n) or (a' = 0 & n = 0)
        end;
    then 1 * n <= t * n by XREAL_1:66;
    then A24: n + a' <= n * t + a' by XREAL_1:8;
-      n <= n + a' by NAT_1:29;
+      n <= n + a' by NAT_1:11;
    hence thesis by A3,A11,A21,A24,XXREAL_0:2;
    end;
 hence thesis by A1,A3,A13,A19,A20,A21;
@@ -2096,7 +2085,7 @@ assume A1: n > 0;
 let a,b be Element of Segm(n);
 consider c being Element of NAT such that A2: c = (a + b) mod n;
 consider t being Nat such that
-A3: (a + b = n * t + c & c < n) or c = 0 & n = 0 by A2,NAT_1:def 2;
+A3: (a + b = n * t + c & c < n) or c = 0 & n = 0 by A2,NAT_D:def 2;
 A4: now assume A5: a + b < n;
        t = 0
         proof
@@ -2104,7 +2093,7 @@ A4: now assume A5: a + b < n;
            0 <= t;
         then 1 + 0 <= t by A6,INT_1:20;
         then A7: 1 * n <= t * n by XREAL_1:66;
-           n * t <= n * t + c by NAT_1:29;
+           n * t <= n * t + c by NAT_1:11;
         hence thesis by A3,A5,A7,XXREAL_0:2;
         end;
     hence (addint(n)).(a,b) = a + b by A1,A2,A3,GR_CY_1:def 5;
@@ -2113,7 +2102,7 @@ A8: (addint(n)).(a,b) = (a + b) implies a + b < n
     proof
     assume (addint(n)).(a,b) = (a + b);
     then (a + b) mod n = a + b by A1,GR_CY_1:def 5;
-    hence thesis by A1,NAT_1:46;
+    hence thesis by A1,NAT_D:1;
     end;
 A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
     proof
@@ -2122,7 +2111,7 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
     assume A11: a + b < n;
     consider t being Nat such that
     A12: a + b = n * t + ((a + b) mod n) & ((a + b) mod n) < n
- by A1,NAT_1:def 2;
+ by A1,NAT_D:def 2;
        t = 0
          proof
          assume A13: t <> 0;
@@ -2133,7 +2122,7 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
             hence thesis;
             end;
          then A15: 1 * n <= t * n by XREAL_1:66;
-            t * n <= t * n + ((a + b) mod n) by NAT_1:29;
+            t * n <= t * n + ((a + b) mod n) by NAT_1:11;
          hence thesis by A11,A12,A15,XXREAL_0:2;
          end;
     then 0 = 0 + - n by A10,A12;
@@ -2152,14 +2141,14 @@ A9: (addint(n)).(a,b) = (a + b) - n implies a + b >= n
             proof
             assume t >= 2;
             then A18: n * t >= n * 2 by XREAL_1:66;
-            A19: n * t + c >= n * t by NAT_1:29;
+            A19: n * t + c >= n * t by NAT_1:11;
                a is natural & b is natural by ORDINAL1:def 13;
             then a < n & b < n by A1,GR_CY_1:10;
             then a + b < n * 1 + n * 1 by XREAL_1:10;
             hence thesis by A3,A18,A19,XXREAL_0:2;
             end;
           then t < 1 + 1;
-          then A20: t <= 1 by NAT_1:38;
+          then A20: t <= 1 by NAT_1:13;
              0 <= t;
           then 1 + 0 <= t by A17,INT_1:20;
           hence thesis by A20,XXREAL_0:1;
@@ -2180,10 +2169,10 @@ let a,b be natural number;
 assume A1: b <> 0;
 set k' = a div b;
 consider t being Nat such that
-A2: a = b * k' + t & t < b by A1,NAT_1:def 1;
+A2: a = b * k' + t & t < b by A1,NAT_D:def 1;
    (k' + 1) * b = k' * b + b;
 then A3: (k' + 1) * b > a by A2,XREAL_1:8;
-   k' * b <= k' * b + t by NAT_1:29;
+   k' * b <= k' * b + t by NAT_1:11;
 hence thesis by A2,A3;
 end;
 
@@ -2205,24 +2194,24 @@ A2: now assume (multint(n)).(a,b) = a * b - k * n;
    then A4: (a * b - k * n) + k * n >= 0 + k * n by XREAL_1:8;
    consider t being Nat such that
    A5: a * b = n * t + (a * b - n * k) & (a * b - n * k) < n
- by A1,A3,NAT_1:def 2;
+ by A1,A3,NAT_D:def 2;
       (k + 1) * n = k * n + n;
    hence k * n <= a * b & a * b < (k + 1) * n by A4,A5,XREAL_1:8;
    end;
    now assume A6: k * n <= a * b & a * b < (k + 1) * n;
 consider c being Element of NAT such that A7: c = (a * b) mod n;
 consider t being Nat such that
-A8: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A7,NAT_1:def 2;
+A8: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A7,NAT_D:def 2;
    now
       now
         consider q being Nat such that
-        A9: a * b = k * n + q by A6,NAT_1:28;
+        A9: a * b = k * n + q by A6,NAT_1:10;
          t = k
         proof
            now per cases;
         case t <= k;
           then consider r being Nat such that
-          A10: t + r = k by NAT_1:28;
+          A10: t + r = k by NAT_1:10;
               n * t + c = t * n + (r * n + q) by A1,A8,A9,A10;
           then A11: c = r * n + q;
              now per cases;
@@ -2242,9 +2231,9 @@ A8: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A7,NAT_1:def 2;
                 end;
               hence thesis by A10,A12;
               end;
-            then r * n >= 1 * n by NAT_1:20;
+            then r * n >= 1 * n by NAT_1:4;
             then A14: r * n + q >= 1 * n + q by XREAL_1:8;
-               1 * n + q >= n by NAT_1:29;
+               1 * n + q >= n by NAT_1:11;
             hence thesis by A1,A8,A11,A14,XXREAL_0:2;
           end;
           end;
@@ -2252,8 +2241,8 @@ A8: (a * b = n * t + c & c < n) or c = 0 & n = 0 by A7,NAT_1:def 2;
         end;
         case t > k;
           then t >= k + 1 by INT_1:20;
-          then A15: n * t >= n * (k + 1) by NAT_1:20;
-             n * t + c >= n * t by NAT_1:29;
+          then A15: n * t >= n * (k + 1) by NAT_1:4;
+             n * t + c >= n * t by NAT_1:11;
           hence thesis by A6,A8,A15,XXREAL_0:2;
         end;
         end;
@@ -2283,13 +2272,13 @@ then a - a < n - a by XREAL_1:11;
 then reconsider b = n - a as Element of NAT by INT_1:16;
 consider c being Element of NAT such that A3: c = b mod n;
 consider t being Nat such that
-A4: (b = n * t + c & c < n) or c = 0 & n = 0 by A3,NAT_1:def 2;
+A4: (b = n * t + c & c < n) or c = 0 & n = 0 by A3,NAT_D:def 2;
 A5: (n-a) mod n = b mod n by A2,Lm13;
 A6: n - a <= n
     proof
     assume n - a > n;
     then (n - a) + a > n + a by XREAL_1:8;
-    hence thesis by NAT_1:29;
+    hence thesis by NAT_1:11;
     end;
 A7: now assume A8: a = 0;
   A9: t = 1
@@ -2303,14 +2292,14 @@ A7: now assume A8: a = 0;
           proof
           assume t >= 2;
           then A11: n * t >= n * 2 by XREAL_1:66;
-             n * t + c >= n * t by NAT_1:29;
+             n * t + c >= n * t by NAT_1:11;
           then A12: n - a >= n * 2 by A1,A4,A11,XXREAL_0:2;
-             n <= n * 1 + n * 1 by NAT_1:29;
+             n <= n * 1 + n * 1 by NAT_1:11;
           then n * 1 = 2 * n by A8,A12,XXREAL_0:1;
           hence thesis by A1;
           end;
        then t < 1 + 1;
-       then A13: t <= 1 by NAT_1:38;
+       then A13: t <= 1 by NAT_1:13;
           0 <= t;
        then 1 + 0 <= t by A10,INT_1:20;
        hence thesis by A13,XXREAL_0:1;
@@ -2334,7 +2323,7 @@ A15: (compint(n)).(a) = 0 implies a = 0
     assume A17: a <> 0;
     A18: n - a < n
          proof
-            n <= n + a by NAT_1:29;
+            n <= n + a by NAT_1:11;
          then A19: n - a <= (n + a) - a by XREAL_1:11;
             n - a <> n by A17;
          hence thesis by A19,REAL_1:def 5;
@@ -2342,7 +2331,7 @@ A15: (compint(n)).(a) = 0 implies a = 0
        a - a < n - a by A2,XREAL_1:11;
     then reconsider a' = n - a as Element of NAT by INT_1:16;
     consider t being Nat such that
-    A20: (a' = n * t + (a' mod n) & a' mod n < n) by A1,NAT_1:def 2;
+    A20: (a' = n * t + (a' mod n) & a' mod n < n) by A1,NAT_D:def 2;
        t = 0
          proof
          assume A21: t <> 0;
@@ -2353,7 +2342,7 @@ A15: (compint(n)).(a) = 0 implies a = 0
             hence thesis;
             end;
          then A23: 1 * n <= t * n by XREAL_1:66;
-            t * n <= t * n + (a' mod n) by NAT_1:29;
+            t * n <= t * n + (a' mod n) by NAT_1:11;
          hence thesis by A18,A20,A23,XXREAL_0:2;
          end;
     then a' = 0 by A2,A16,A20,Lm13;
@@ -2366,7 +2355,7 @@ A24: (compint(n)).(a) = n - a implies a <> 0
     then A25: (n - a) mod n = n - a by A1,Def12;
     assume A26: a = 0;
     then reconsider a' = n - a as Element of NAT by ORDINAL1:def 13;
-       a' mod n < n by A1,NAT_1:46;
+       a' mod n < n by A1,NAT_D:1;
     hence thesis by A25,A26,Lm13;
     end;
    now assume A27: a <> 0;
@@ -2384,7 +2373,7 @@ A24: (compint(n)).(a) = n - a implies a <> 0
        0 <= t;
     then 1 + 0 <= t by A29,INT_1:20;
     then A30: 1 * n <= t * n by XREAL_1:66;
-       n * t <= n * t + c by NAT_1:29;
+       n * t <= n * t + c by NAT_1:11;
     hence thesis by A1,A4,A28,A30,XXREAL_0:2;
     end;
   hence (compint(n)).(a) = n - a by A1,A3,A4,A5,Def12;
@@ -2498,9 +2487,11 @@ A13: R is right_complementable
       let x be Element of R;
       thus (1.R)*x = x by A9;
      end;
-hence thesis by A1,A2,A3,A4,A5,A6,A7,A9,A11,A12,A13,GROUP_1:def 4,def 16
-,def 2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18,def 20,def 21,
-VECTSP_1:def 13;
+hence thesis by A1,A2,A3,A4,A5,A6,A7,A9,A11,A12,A13,GROUP_1:def 4,
+def 16
+,def 2,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18,
+def 20,def 21,
+def 13;
 end;
 
 registration
@@ -2536,9 +2527,9 @@ A2: e = 1;
   reconsider a1 = a as Element of NAT;
 A3: a1 < n by A1,GR_CY_1:10;
   thus h*e = (a * 1) mod n by A2,A1,Def11
-  .= h by A3,NAT_1:76;
+  .= h by A3,NAT_D:24;
   thus e*h = (a * 1) mod n by A2,A1,Def11
-  .= h by A3,NAT_1:76;
+  .= h by A3,NAT_D:24;
 end;
 
 Lm17: now
@@ -2575,7 +2566,7 @@ for n being natural number st n > 1 holds
  proof
  let n be natural number;
  assume A1: n > 1;
- then 1 < n + 1 by NAT_1:38;
+ then 1 < n + 1 by NAT_1:13;
  then A2: 1 - 1 < (n + 1) - 1 by XREAL_1:11;
  A3: n <> 0 by A1;
  set F = INT.Ring(n);
@@ -2627,12 +2618,10 @@ for n being natural number st n > 1 holds
         (bb + cc) mod n >= 0 & (bb + cc) mod n < n by A2,Th9;
      then A17: (b' + c') mod n is Element of Segm(n) by A16,GR_CY_1:10;
      A18: (a + b) + c
-         = (addint(n)).((addint(n)).(a,b),c)
-        .= (addint(n)).((a' + b') mod n, c') by A2,GR_CY_1:def 5
+         = (addint(n)).((a' + b') mod n, c') by A2,GR_CY_1:def 5
         .= (((a' + b') mod n) + c') mod n by A2,A15,GR_CY_1:def 5;
      A19: a + (b + c)
-         = (addint(n)).(a,(addint(n)).(b,c))
-        .= (addint(n)).(a', (b' + c') mod n) by A2,GR_CY_1:def 5
+         = (addint(n)).(a', (b' + c') mod n) by A2,GR_CY_1:def 5
         .= (a' + ((b' + c') mod n)) mod n by A2,A17,GR_CY_1:def 5;
            (a' + ((b' + c') mod n)) mod n
       = (aa + (bb + cc mod n)) mod n by A16,NEWTON:101
@@ -2718,8 +2707,7 @@ for n being natural number st n > 1 holds
         (cc * aa) mod n >= 0 & (cc * aa) mod n < n by A2,Th9;
      then A42: (c' * a') mod n is Element of Segm(n) by A41,GR_CY_1:10;
      A43: (b + c) * a
-         = (multint(n)).((addint(n)).(b,c),a)
-        .= (multint(n)).((b' + c') mod n, a') by A2,GR_CY_1:def 5
+         = (multint(n)).((b' + c') mod n, a') by A2,GR_CY_1:def 5
         .= (((b' + c') mod n) * a') mod n by A2,A38,Def11;
      A44: b * a + c * a
          = (addint(n)).((multint(n)).(b,a),(c' * a') mod n) by A2,Def11
@@ -2760,9 +2748,8 @@ for n being natural number st n > 1 holds
         reconsider v = b as Element of F;
         take v;
         thus a + v
-           = (the add of F).(a,v)
-          .= (a'+b) mod n by A2,GR_CY_1:def 5
-          .= 0.F by A5,NAT_1:77;
+           = (a'+b) mod n by A2,GR_CY_1:def 5
+          .= 0.F by A5,NAT_D:25;
       end;
       end;
  A48: F is right_unital
@@ -2776,7 +2763,8 @@ for n being natural number st n > 1 holds
        thus (1.F)*x = x by A31;
       end;
  then reconsider F as commutative Ring by A7,A10,A12,A20,A28,A35,A45,A46,A48,
-GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18;
+GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,
+def 7,VECTSP_1:def 18;
     F is non degenerated by A5,A6,VECTSP_1:def 21;
  hence thesis;
 end;
@@ -2809,13 +2797,13 @@ A3: now assume A4: p is Prime;
     reconsider a' as Element of NAT;
     A6: abs(a') = a & abs(p) = p by ABSVALUE:def 1;
        1 * a' = a' & 1 * p = p;
-    then A7: 1 divides a' & 1 divides p by NAT_1:def 3;
+    then A7: 1 divides a' & 1 divides p by NAT_D:def 3;
     for m being Nat st
     m divides a' & m divides p holds m divides 1
       proof
       let m be Nat; assume A8: m divides a' & m divides p;
       then consider k being Nat such that
-      A9: a' = m * k by NAT_1:def 3;
+      A9: a' = m * k by NAT_D:def 3;
          m <= a'
         proof
         assume A10: m > a';
@@ -2834,7 +2822,7 @@ A3: now assume A4: p is Prime;
       then m <> p by A2,GR_CY_1:10;
       hence thesis by A4,A8,INT_2:def 5;
       end;
-    then a' hcf p = 1 by A7,NAT_1:def 5;
+    then a' hcf p = 1 by A7,NAT_D:def 5;
     then a' gcd p = 1 by A6,INT_2:def 3;
     then consider s,t being Integer such that
     A13: 1 = s * a' + t * p by Th16;
@@ -2867,7 +2855,7 @@ right_complementable
      proof
        let n be natural number; assume n divides p;
        then consider k being Nat such that
-       A16: p = n * k by NAT_1:def 3;
+       A16: p = n * k by NAT_D:def 3;
      A17: k <= p
          proof
          assume A18: k > p;

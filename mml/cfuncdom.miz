@@ -8,11 +8,11 @@ environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
       RLVECT_1, ARYTM_1, FUNCSDOM, CFUNCDOM, COMPLEX1, COMPLSP1, CFUNCT_1,
-      CLVECT_1, CLOPBAN1, GROUP_1;
+      CLVECT_1, CLOPBAN1, GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
       COMPLEX1, CFUNCT_1, GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM, CLVECT_1;
- constructors DOMAIN_1, BINOP_2, MEMBERED, COMPLEX1, FUNCSDOM, CLVECT_1;
+ constructors DOMAIN_1, BINOP_2, MEMBERED, COMPLEX1, FUNCSDOM, CLVECT_1, NAT_D;
  registrations SUBSET_1, VECTSP_1, RELSET_1, MEMBERED, COMPLEX1, CLVECT_1;
  requirements SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, CLVECT_1, BINOP_1;
@@ -200,17 +200,19 @@ A5:    x in dom (multcomplex.:(f,g)) by Lm1;
    hence thesis by A1;
 end;
 
-theorem Th3:
+ Lm2:
 for x being Element of A holds (ComplexFuncUnit(A)).x = 1r by FUNCOP_1:13;
 
-theorem Th4:
+ Lm3:
 for x being Element of A holds (ComplexFuncZero(A)).x = 0 by FUNCOP_1:13;
+
+canceled 2;
 
 theorem
  ComplexFuncZero(A) <> ComplexFuncUnit(A)
 proof
    consider a being Element of A;
-    (ComplexFuncZero(A)).a=0c & (ComplexFuncUnit(A)).a=1r by Th3,Th4;
+    (ComplexFuncZero(A)).a=0c & (ComplexFuncUnit(A)).a=1r by Lm2,Lm3;
    hence thesis by COMPLEX1:def 7;
 end;
 
@@ -298,7 +300,7 @@ proof
      thus
       ((ComplexFuncMult(A)).(ComplexFuncUnit(A),f)).x=
       (ComplexFuncUnit(A)).x * f.x by Th2
-    .=1r * f.x by Th3
+    .=1r * f.x by Lm2
     .= f.x by COMPLEX1:def 7;
    end;
    hence thesis by FUNCT_2:113;
@@ -310,7 +312,7 @@ proof
     now let x be Element of A;
      thus ((ComplexFuncAdd(A)).(ComplexFuncZero(A),f)).x =
       (ComplexFuncZero(A)).x + f.x by Th1
-      .= 0c + f.x by Th4
+      .= 0c + f.x by Lm3
       .= f.x;
    end;
    hence thesis by FUNCT_2:113;
@@ -325,7 +327,7 @@ proof
       ((ComplexFuncAdd(A)).(f,(ComplexFuncExtMult(A)).[-1r,f])).x
       = f.x + ((ComplexFuncExtMult(A)).[-1r,f]).x by Th1
      .= f.x + ((-1r)*y) by Th6
-     .= (ComplexFuncZero(A)).x by  COMPLEX1:def 7,Th4;
+     .= (ComplexFuncZero(A)).x by  COMPLEX1:def 7,Lm3;
    end;
    hence thesis by FUNCT_2:113;
 end;
@@ -375,7 +377,7 @@ proof
    hence thesis by FUNCT_2:113;
 end;
 
-Lm2:
+Lm4:
 (ComplexFuncAdd(A)).
         ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[a,g])
    = (ComplexFuncExtMult(A)).[a,(ComplexFuncAdd(A)).(f,g)]
@@ -482,14 +484,14 @@ A5:(ComplexFuncAdd(A)).
       ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g]) =
                                                   ComplexFuncZero(A);
 then A6:0c = ((ComplexFuncAdd(A)).
-      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])).x1 by Th4
+      ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])).x1 by Lm3
       .= (((ComplexFuncExtMult(A)).[a,f]).x1) +
                     (((ComplexFuncExtMult(A)).[b,g]).x1) by Th1
       .= a*(f.x1) + (((ComplexFuncExtMult(A)).[b,g]).x1) by Th6
       .= a + b*0c by  A4,Th6,COMPLEX1:def 7
       .= a;
     0c = ((ComplexFuncAdd(A)).
-   ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])).x2 by A5,Th4
+   ((ComplexFuncExtMult(A)).[a,f],(ComplexFuncExtMult(A)).[b,g])).x2 by A5,Lm3
       .= (((ComplexFuncExtMult(A)).[a,f]).x2) +
                     (((ComplexFuncExtMult(A)).[b,g]).x2) by Th1
       .= a*(f.x2) + (((ComplexFuncExtMult(A)).[b,g]).x2) by Th6
@@ -619,24 +621,19 @@ proof
      thus u+v = v+u
      proof
        reconsider v' = v, u' = u as Element of Funcs(A,COMPLEX);
-       thus u+v = (ComplexFuncAdd(A)).(u',v')
-           .= (ComplexFuncAdd(A)).(v',u') by Th7
-           .= v+u;
+       thus u+v = v+u by Th7;
      end;
      thus (u+v)+w = u+(v+w)
      proof
        reconsider v'=v, u'=u, w'=w as Element of Funcs(A,COMPLEX);
        thus
-        (u+v)+w = (ComplexFuncAdd(A)).((ComplexFuncAdd(A)).(u',v'),w')
-          .= (ComplexFuncAdd(A)).(u',(ComplexFuncAdd(A)).(v',w')) by Th8
-          .= u+(v+w);
+        (u+v)+w = u+(v+w) by Th8;
      end;
 
      thus u+0.IT = u
      proof
        reconsider u'=u as Element of Funcs(A,COMPLEX);
-       thus u+0.IT = (ComplexFuncAdd(A)).(u',ComplexFuncZero(A))
-            .= (ComplexFuncAdd(A)).(ComplexFuncZero(A),u') by Th7
+       thus u+0.IT = (ComplexFuncAdd(A)).(ComplexFuncZero(A),u') by Th7
             .= u by Th12;
      end;
 
@@ -645,8 +642,7 @@ proof
        reconsider u' = u as Element of Funcs(A,COMPLEX);
        reconsider w = (ComplexFuncExtMult(A)).[-1r,u'] as VECTOR of IT;
        take w;
-       thus u+w = (ComplexFuncAdd(A)).(u',(ComplexFuncExtMult(A)).[-1r,u'])
-          .= 0.IT by Th13;
+       thus u+w = 0.IT by Th13;
      end;
 
      thus a * (u + v) = a*u + a*v
@@ -654,9 +650,7 @@ proof
        reconsider v' = v, u' = u as Element of Funcs(A,COMPLEX);
        reconsider w = (ComplexFuncExtMult(A)).[a,u'],w'
                     = (ComplexFuncExtMult(A)).[a,v'] as VECTOR of IT;
-       thus a*(u+v) = (ComplexFuncExtMult(A)).[a,(ComplexFuncAdd(A)).(u',v')]
-              .=(ComplexFuncAdd(A)).(w,w') by Lm2
-              .= a*u + a*v;
+       thus a*(u+v) = a*u + a*v by Lm4;
       end;
 
       thus (a+b)*v = a*v + b*v
@@ -664,8 +658,7 @@ proof
         reconsider v' = v as Element of Funcs(A,COMPLEX);
         reconsider w = (ComplexFuncExtMult(A)).[a,v'],w'
                      = (ComplexFuncExtMult(A)).[b,v'] as VECTOR of IT;
-        thus (a+b)*v = (ComplexFuncAdd(A)).(w,w') by Th16
-                .= (a*v) + (b*v);
+        thus (a+b)*v = (a*v) + (b*v) by Th16;
       end;
 
       thus (a*b)*v = a*(b*v) by Th15;
@@ -682,7 +675,7 @@ definition let A;
 coherence by Th25;
 end;
 
-Lm3:
+Lm5:
 ex A,x1,x2 st A={x1,x2} & x1<>x2
 proof
    reconsider A={1,2} as non empty set; take A;
@@ -696,7 +689,7 @@ theorem
      (for w being VECTOR of V ex a,b st w = a*u + b*v))
 proof
    consider A,x1,x2 such that
-A1: A={x1,x2} & x1<>x2 by Lm3;
+A1: A={x1,x2} & x1<>x2 by Lm5;
    take V = ComplexVectSpace(A);
    consider f,g such that
 A2: (for a,b st
@@ -749,10 +742,10 @@ proof
 end;
 end;
 
-Lm4:
+Lm6:
  for A for x,y be Element of CRing(A) holds x*y = y*x by Th9;
 
-Lm5:
+Lm7:
 now
   let A;
   let x, e be Element of CRing(A);
@@ -761,7 +754,7 @@ A1: e = ComplexFuncUnit(A);
   reconsider a = x as Element of Funcs(A,COMPLEX);
   thus
 A2: e * x = x by  A1,Th11;
-  thus x * e = x by  Lm4,A2;
+  thus x * e = x by  Lm6,A2;
 end;
 
 registration
@@ -771,13 +764,13 @@ coherence
 proof
   reconsider e = ComplexFuncUnit(A) as Element of CRing(A);
   take e;
-  thus thesis by Lm5;
+  thus thesis by Lm7;
 end;
 end;
 
-Lm6: now let A;
+Lm8: now let A;
   reconsider e = ComplexFuncUnit(A) as Element of CRing(A);
-  for x being Element of CRing(A) holds x*e=x & e*x=x by Lm5;
+  for x being Element of CRing(A) holds x*e=x & e*x=x by Lm7;
   hence 1.CRing(A) = ComplexFuncUnit(A) by GROUP_1:def 5;
 end;
 
@@ -797,35 +790,27 @@ proof
    let x,y,z be Element of CRing(A);
    set IT = CRing(A);
    reconsider f=x, g=y, h=z as Element of Funcs(A,COMPLEX);
-   thus x+y = (ComplexFuncAdd(A)).(f,g)
-          .= (the add of IT).(g,f) by Th7
-          .= y+x;
-   thus (x+y)+z = (ComplexFuncAdd(A)).((ComplexFuncAdd(A)).(f,g),h)
-              .= (ComplexFuncAdd(A)).(f,(the add of IT).(y,z)) by Th8
-              .= x+(y+z);
-   thus x+(0.CRing(A)) = (ComplexFuncAdd(A)).(f,ComplexFuncZero(A))
-                     .= (ComplexFuncAdd(A)).(ComplexFuncZero(A),f) by Th7
+   thus x+y = y+x by Th7;
+   thus (x+y)+z = x+(y+z) by Th8;
+   thus x+(0.CRing(A)) = (ComplexFuncAdd(A)).(ComplexFuncZero(A),f) by Th7
                      .= x by Th12;
    thus ex t being Element of CRing(A) st x+t=(0.CRing(A))
    proof
      set h = (ComplexFuncExtMult(A)).[-1r,f];
      reconsider t=h as Element of IT;
      take t;
-     thus x+t = (ComplexFuncAdd(A)).(f,h)
-            .= 0.IT by Th13;
+     thus x+t = 0.IT by Th13;
    end;
-   thus x*y = y*x by Lm4;
+   thus x*y = y*x by Lm6;
    thus (x*y)*z = x*(y*z) by Th10;
-   thus x*(1.CRing(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm6
+   thus x*(1.CRing(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm8
                      .= (ComplexFuncMult(A)).(ComplexFuncUnit(A),f) by Th9
                      .= x by Th11;
-   hence (1.CRing(A))*x = x by Lm4;
-   thus x*(y+z) = (ComplexFuncMult(A)).(f,(ComplexFuncAdd(A)).(g,h))
-              .= (ComplexFuncAdd(A)).(x*y,(ComplexFuncMult(A)).(f,h)) by Th17
-              .= x*y + x*z;
-   hence (y+z)*x = x*y + x*z by Lm4
-              .= y*x + x*z by Lm4
-              .= y*x + z*x by Lm4;
+   hence (1.CRing(A))*x = x by Lm6;
+   thus x*(y+z) = x*y + x*z by Th17;
+   hence (y+z)*x = x*y + x*z by Lm6
+              .= y*x + x*z by Lm6
+              .= y*x + z*x by Lm6;
 end;
 
 theorem  CRing(A) is commutative Ring
@@ -879,10 +864,10 @@ proof
 end;
 end;
 
-Lm7:
+Lm9:
  for A for x,y be Element of CAlgebra(A) holds x*y = y*x by Th9;
 
-Lm8:
+Lm10:
 now
   let A;
   let x, e be Element of CAlgebra(A);
@@ -891,7 +876,7 @@ A1: e = ComplexFuncUnit(A);
   reconsider a = x as Element of Funcs(A,COMPLEX);
   thus
 A2: e * x = x by  A1,Th11;
-  thus x * e = x by  Lm7,A2;
+  thus x * e = x by  Lm9,A2;
 end;
 
 registration
@@ -901,13 +886,13 @@ coherence
 proof
   reconsider e = ComplexFuncUnit(A) as Element of CAlgebra(A);
   take e;
-  thus thesis by Lm8;
+  thus thesis by Lm10;
 end;
 end;
 
-Lm9: now let A;
+Lm11: now let A;
   reconsider e = ComplexFuncUnit(A) as Element of CAlgebra(A);
-  for x being Element of CAlgebra(A) holds x*e=x & e*x=x by Lm8;
+  for x being Element of CAlgebra(A) holds x*e=x & e*x=x by Lm10;
   hence 1.CAlgebra(A) = ComplexFuncUnit(A) by GROUP_1:def 5;
 end;
 
@@ -930,38 +915,26 @@ proof
    let a,b;
    set IT = CAlgebra(A);
    reconsider f=x, g=y, h=z as Element of Funcs(A,COMPLEX);
-   thus x+y = (ComplexFuncAdd(A)).(f,g)
-           .= (the add of IT).(g,f) by Th7
-           .= y+x;
-   thus (x+y)+z = (ComplexFuncAdd(A)).((ComplexFuncAdd(A)).(f,g),h)
-               .= (ComplexFuncAdd(A)).(f,(the add of IT).(y,z)) by Th8
-               .= x+(y+z);
-   thus x+(0.CAlgebra(A)) = (ComplexFuncAdd(A)).(f,ComplexFuncZero(A))
-                     .= (ComplexFuncAdd(A)).(ComplexFuncZero(A),f) by Th7
+   thus x+y = y+x by Th7;
+   thus (x+y)+z = x+(y+z) by Th8;
+   thus x+(0.CAlgebra(A)) = (ComplexFuncAdd(A)).(ComplexFuncZero(A),f) by Th7
                      .= x by Th12;
    thus ex t being Element of CAlgebra(A) st x+t=(0.CAlgebra(A))
    proof
      set h = (ComplexFuncExtMult(A)).[-1r,f];
      reconsider t=h as Element of IT;
      take t;
-     thus x+t = (ComplexFuncAdd(A)).(f,h)
-             .= 0.IT by Th13;
+     thus x+t = 0.IT by Th13;
    end;
    thus x*y = y*x by Th9;
    thus (x*y)*z = x*(y*z) by Th10;
-   thus x*(1.CAlgebra(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm9
+   thus x*(1.CAlgebra(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm11
                      .= (ComplexFuncMult(A)).(ComplexFuncUnit(A),f) by Th9
                      .= x by Th11;
-   thus x*(y+z) = (ComplexFuncMult(A)).(f,(ComplexFuncAdd(A)).(g,h))
-         .= (ComplexFuncAdd(A)).(x*y,(ComplexFuncMult(A)).(f,h)) by Th17
-         .= x*y + x*z;
+   thus x*(y+z) = x*y + x*z by Th17;
    thus a*(x*y) = (a*x)*y by Th18;
-   thus a*(x+y) = (ComplexFuncExtMult(A)).[a,(ComplexFuncAdd(A)).(f,g)]
-               .= (ComplexFuncAdd(A)).(a*x,(ComplexFuncExtMult(A)).[a,g]) by
-Lm2
-               .= (a*x) + (a*y);
-   thus (a+b)*x = (ComplexFuncAdd(A)).(a*x,b*x) by Th16
-               .= (a*x) + (b*x);
+   thus a*(x+y) = (a*x) + (a*y) by Lm4;
+   thus (a+b)*x = (a*x) + (b*x) by Th16;
     thus (a*b)*x = a*(b*x) by Th15;
    end;
 
@@ -1033,7 +1006,7 @@ proof
 end;
 
 theorem
-  1.CRing(A) = ComplexFuncUnit(A) by Lm6;
+  1.CRing(A) = ComplexFuncUnit(A) by Lm8;
 
 theorem
-  1.CAlgebra(A) = ComplexFuncUnit(A) by Lm9;
+  1.CAlgebra(A) = ComplexFuncUnit(A) by Lm11;

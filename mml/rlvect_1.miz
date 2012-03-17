@@ -7,12 +7,12 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
-      ANPROJ_1, ORDINAL2, ARYTM, FUNCOP_1;
+      ANPROJ_1, ORDINAL2, ARYTM, FUNCOP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1,
-      FINSEQ_1, NAT_1, STRUCT_0;
+      FINSEQ_1, NAT_1, NAT_D, STRUCT_0;
  constructors DOMAIN_1, BINOP_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      FINSEQ_1, STRUCT_0, ORDINAL2;
+      FINSEQ_1, STRUCT_0, ORDINAL2, NAT_D;
  registrations RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, XBOOLE_0,
       ORDINAL2, NUMBERS, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -96,13 +96,13 @@ end;
 
  definition let V be non empty LoopStr, v,w be Element of V;
   func v + w -> Element of V equals
-    (the add of V).[v,w];
+    (the add of V).(v,w);
   coherence;
  end;
 
  definition let V; let v; let a;
   func a * v -> Element of V equals
-    (the Mult of V).[a,v];
+    (the Mult of V).(a,v);
   coherence;
  end;
 
@@ -139,25 +139,22 @@ Lm1: now
 
   thus for x,y being VECTOR of W holds x + y = y + x
    proof let x,y be VECTOR of W;
-      A3: x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
-         x + y = A(X,Y) & y + x = A(Y,X) by A1,A3;
+         x + y = A(X,Y) & y + x = A(Y,X) by A1;
     hence thesis;
    end;
 
   thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
    proof let x,y,z be VECTOR of W;
-      A4: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
-         (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A4;
+         (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1;
     hence thesis;
    end;
 
   thus for x being VECTOR of W holds x + 0.W = x
    proof let x be VECTOR of W;
      reconsider X = x as Element of ZS;
-          x + 0.W = F.(x,0.W)
-                .= A(X,O) by A1;
+          x + 0.W = A(X,O) by A1;
     hence thesis by TARSKI:def 1;
    end;
 
@@ -165,15 +162,13 @@ Lm1: now
    proof let x be VECTOR of W;
      reconsider y = O as VECTOR of W;
     take y;
-    thus x + y = F.(x,y)
-              .= 0.W by A1;
+    thus x + y = 0.W by A1;
    end;
 
   thus for a for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
    proof let a; let x,y be VECTOR of W;
      reconsider X = x, Y = y as Element of ZS;
-         a * x + a * y = F.(a * x,a * y)
-                   .= O by A1
+         a * x + a * y = O by A1
                    .= G.(a,F.(X,Y)) by A2;
     hence thesis;
    end;
@@ -182,30 +177,25 @@ Lm1: now
    proof let a,b; let x be VECTOR of W;
       set c = a + b;
      reconsider X = x as Element of ZS;
-      A5: c * x = G.(c,x)
-              .= M(c,X) by A2;
-         a * x + b * x = F.(a * x,b * x)
-                   .= A(M(a,X),M(b,X)) by A1;
-    hence thesis by A5;
+      A3: c * x = M(c,X) by A2;
+         a * x + b * x = A(M(a,X),M(b,X)) by A1;
+    hence thesis by A3;
    end;
 
   thus for a,b for x being VECTOR of W holds (a * b) * x = a * (b * x)
     proof let a,b; let x be VECTOR of W;
        set c = a * b;
       reconsider X = x as Element of ZS;
-       A6: c * x = G.(c,x)
-               .= M(c,X) by A2;
-          a * (b * x) = G.(a,b * x)
-                  .= M(a,M(b,X)) by A2;
-     hence thesis by A6;
+       A4: c * x = M(c,X) by A2;
+          a * (b * x) = M(a,M(b,X)) by A2;
+     hence thesis by A4;
     end;
 
   thus for x being VECTOR of W holds 1 * x = x
    proof let x be VECTOR of W;
      reconsider X = x as Element of ZS;
      reconsider A' = 1 as Element of REAL;
-          1 * x = G.(1,x)
-              .= M(A',X) by A2;
+          1 * x = M(A',X) by A2;
     hence thesis by TARSKI:def 1;
    end;
  end;
@@ -247,31 +237,27 @@ A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
   thus W is strict;
   thus for x,y being Element of W holds x + y = y + x
    proof let x,y be Element of W;
-      A2: x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
-         x + y = A(X,Y) & y + x = A(Y,X) by A1,A2;
+         x + y = A(X,Y) & y + x = A(Y,X) by A1;
     hence thesis;
    end;
   thus for x,y,z being Element of W
      holds (x + y) + z = x + (y + z)
    proof let x,y,z be Element of W;
-      A3: (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
-         (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A3;
+         (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1;
     hence thesis;
    end;
   thus for x being Element of W holds x + 0.W = x
    proof let x be Element of W;
      reconsider X = x as Element of ZS;
-          x + 0.W = F.(x,0.W)
-                .= A(X,O) by A1;
+          x + 0.W = A(X,O) by A1;
     hence thesis by TARSKI:def 1;
    end;
   let x be Element of W;
      reconsider y = O as Element of W;
    take y;
-   thus x + y = F.(x,y)
-             .= 0.W by A1;
+   thus x + y = 0.W by A1;
  end;
 end;
 
@@ -882,7 +868,7 @@ A3:    for j being Element of NAT holds f.j = 0.V by FUNCOP_1:13;
       assume A6: len F = n + 1;
        reconsider G = F | Seg(n) as FinSequence of the carrier of V
          by FINSEQ_1:23;
-        A7: n < n + 1 by NAT_1:38;
+        A7: n < n + 1 by NAT_1:13;
         then A8: len G = n by A6,FINSEQ_1:21;
        then consider u,f such that u = f.(len G) and A9: f.0 = 0.V and
         A10: for j,v st j < len G & v = G.(j + 1) holds
@@ -930,13 +916,14 @@ A3:    for j being Element of NAT holds f.j = 0.V by FUNCOP_1:13;
      let j,v;
       assume that A17: j < len F and A18: v = F.(j + 1);
        A19: now assume A20: j < n;
-         then A21: j <= n & 1 <= 1 + j by NAT_1:29;
-            1 <= j + 1 & j + 1 <= n + 1 by A20,NAT_1:29,XREAL_1:9;
-         then j + 1 in Seg(n + 1) & j + 1 <= n by A20,FINSEQ_1:3,NAT_1:38;
-         then j + 1 in dom F & j + 1 in Seg n by A6,A21,FINSEQ_1:3,def 3;
+         then A21: j <= n & 1 <= 1 + j by NAT_1:11;
+            1 <= j + 1 & j + 1 <= n + 1 by A20,NAT_1:11,XREAL_1:9;
+         then j + 1 in Seg(n + 1) & j + 1 <= n by A20,FINSEQ_1:3,NAT_1:13;
+         then j + 1 in dom F & j + 1 in Seg n by A6,A21,FINSEQ_1:3,
+def 3;
          then v = G.(j + 1) & j < len G by A6,A7,A18,A20,FINSEQ_1:21,FUNCT_1:72
 ;
-         then f.(j + 1) = f.j + v & j < n + 1 by A10,A20,NAT_1:38;
+         then f.(j + 1) = f.j + v & j < n + 1 by A10,A20,NAT_1:13;
          then f.(j + 1) = f'.j + v & j + 1 < n + 1 by A16,A20,XREAL_1:8;
         hence f''.(j + 1) = f''.j + v by A16;
        end;
@@ -944,7 +931,7 @@ A3:    for j being Element of NAT holds f.j = 0.V by FUNCOP_1:13;
          then f''.(j + 1) = f.j + v by A8,A16,A18;
         hence f''.(j + 1) = f''.j + v by A7,A16,A23;
        end;
-          j <= n by A6,A17,NAT_1:38;
+          j <= n by A6,A17,NAT_1:13;
      hence f''.(j + 1) = f''.j + v by A19,A22,REAL_1:def 5;
     end;
     hence thesis;
@@ -969,12 +956,12 @@ A24:  ex f st u = f.(len F) & f.0 = 0.V &
        now let k;
         assume A33: k <= len F implies f.k = f'.k;
         assume A34: k + 1 <= len F;
-            1 <= k + 1 & dom F = Seg(len F) by FINSEQ_1:def 3,NAT_1:29;
+            1 <= k + 1 & dom F = Seg(len F) by FINSEQ_1:def 3,NAT_1:11;
          then k + 1 in dom F by A34,FINSEQ_1:3;
          then F.(k + 1) in rng F & rng F c= the carrier of V
                                          by FINSEQ_1:def 4,FUNCT_1:def 5;
         then reconsider u1 = F.(k + 1) as Element of V;
-            k < len F by A34,NAT_1:38;
+            k < len F by A34,NAT_1:13;
          then f.(k + 1) = f.k + u1 & f'.(k + 1) = f'.k + u1 & k <= len F
                                                             by A27,A30;
        hence f.(k + 1) = f'.(k + 1) by A33;
@@ -1036,17 +1023,17 @@ theorem Th55:
                     A15: len H <= len G;
          reconsider p = H | (Seg k) as FinSequence of the carrier of V
              by FINSEQ_1:23;
-             1 <= k + 1 & k + 1 <= len F by A1,A13,A15,NAT_1:37;
+             1 <= k + 1 & k + 1 <= len F by A1,A13,A15,NAT_1:12;
           then k + 1 in Seg(len F) by FINSEQ_1:3;
          then reconsider v = F.(k + 1) as Element of V by Th54;
-          A16: k <= len H by A13,NAT_1:37;
+          A16: k <= len H by A13,NAT_1:12;
           then A17: len p = k by FINSEQ_1:21;
              Seg k c= Seg(k + 1) by A13,A16,FINSEQ_1:7;
           then A18: p = F | (Seg k) by A14,FUNCT_1:82;
 A19:          len p <= len G by A15,A16,A17,XXREAL_0:2;
              k <= len G & len G < len F by A1,A15,A16,XXREAL_0:2,XREAL_1:31;
           then A20: k < len F by XXREAL_0:2;
-             1 <= k + 1 & k + 1 <= len G by A13,A15,NAT_1:37;
+             1 <= k + 1 & k + 1 <= len G by A13,A15,NAT_1:12;
           then k + 1 in Seg(len G) by FINSEQ_1:3;
           then k + 1 in dom G by FINSEQ_1:def 3;
           then A21: v = G.(k + 1) by A2,FUNCT_1:70;
@@ -1099,7 +1086,7 @@ theorem
                     A7: for k,v st k in Seg len H & v = I.k holds H.k = a * v;
          reconsider p = H | (Seg n),q = I | (Seg n)
            as FinSequence of the carrier of V by FINSEQ_1:23;
-A8:          n <= n + 1 by NAT_1:37;
+A8:          n <= n + 1 by NAT_1:12;
           then A9: len p = n & len q = n by A5,A6,FINSEQ_1:21;
 A10:          now let k,v;
             assume that A11: k in Seg len p and A12: v = q.k;
@@ -1172,7 +1159,7 @@ A4:     for H,I being FinSequence of the carrier of V
                    st k in Seg(len H) & v = I.k holds H.k = - v;
        reconsider p = H | (Seg n),q = I | (Seg n)
          as FinSequence of the carrier of V by FINSEQ_1:23;
-A8:          n <= n + 1 by NAT_1:37;
+A8:          n <= n + 1 by NAT_1:12;
         then A9: len p = n & len q = n by A5,A6,FINSEQ_1:21;
 A10:          now let k; let v be Element of V;
           assume that A11: k in Seg(len p) and A12: v = q.k;
@@ -1203,7 +1190,7 @@ A18:   dom F = Seg len F by FINSEQ_1:def 3;
    hence thesis by A18;
  end;
 
-Lm7: for j being natural number holds j < 1 implies j = 0 by NAT_1:39;
+Lm7: for j being natural number holds j < 1 implies j = 0 by NAT_1:14;
 
 theorem Th58:
 for V being add-associative right_zeroed (non empty LoopStr),
@@ -1233,7 +1220,7 @@ holds Sum(F ^ G) = Sum(F) + Sum(G)
           then H.(k + 1) in rng H & rng H c= the carrier of V
                                              by FINSEQ_1:def 4,FUNCT_1:def 5;
          then reconsider v = H.(k + 1) as Element of V;
-          A7: k <= k + 1 by NAT_1:37;
+          A7: k <= k + 1 by NAT_1:12;
           then A8: len p = k by A4,FINSEQ_1:21;
           then A9: dom H = Seg(len p + len<* v *>) by A5,FINSEQ_1:56;
              dom p = Seg k by A4,A7,FINSEQ_1:21;
@@ -1273,7 +1260,7 @@ XBOOLE_1:28;
 A20:                 1 <= n by A13,A17,FINSEQ_1:3;
                  then len F <= n by A19,FINSEQ_1:3;
                 then consider j being Nat such that A21: n = len F + j
-                by NAT_1:28;
+                by NAT_1:10;
                  A22: now assume not 1 <= j;
                    then j = 0 by Lm7;
                   hence contradiction by A19,A20,A21,FINSEQ_1:3;
@@ -1387,10 +1374,10 @@ A5:     for H,I being FinSequence of the carrier of V
         reconsider v = H.(k + 1) as Element of V by A6,A11,Th54;
          A15: 1 <= n by A14,FINSEQ_1:3;
         then consider m1 being Nat such that A16: 1 + m1 = n
-         by NAT_1:28;
+         by NAT_1:10;
          A17: n <= k + 1 by A14,FINSEQ_1:3;
         then consider m2 being Nat such that
-        A18: n + m2 = k + 1 by NAT_1:28;
+        A18: n + m2 = k + 1 by NAT_1:10;
         reconsider m2 as Element of NAT by ORDINAL1:def 13;
         reconsider q1 = I | (Seg m1) as FinSequence of the carrier of V
          by FINSEQ_1:23;
@@ -1406,7 +1393,7 @@ A5:     for H,I being FinSequence of the carrier of V
             then consider y such that A23: y in dom q2 and A24: x = q2.y
                  by FUNCT_1:def 5;
             reconsider y as Element of NAT by A23;
-                1 <= y & y <= n + y by A21,A23,FINSEQ_1:3,NAT_1:37;
+                1 <= y & y <= n + y by A21,A23,FINSEQ_1:3,NAT_1:12;
              then A25: 1 <= n + y by XXREAL_0:2;
                 y <= m2 by A21,A23,FINSEQ_1:3;
              then n + y <= len I by A6,A10,A18,XREAL_1:9;
@@ -1419,9 +1406,9 @@ A5:     for H,I being FinSequence of the carrier of V
         then reconsider q2 as FinSequence of the carrier of V
          by FINSEQ_1:def 4;
         set q = q1 ^ q2;
-            k <= k + 1 by NAT_1:37;
+            k <= k + 1 by NAT_1:12;
          then A26: len p = k by A6,FINSEQ_1:21;
-            m1 <= n by A16,NAT_1:29;
+            m1 <= n by A16,NAT_1:11;
          then A27: m1 <= k + 1 by A17,XXREAL_0:2;
          then A28: len q1 = m1 & len q2 = m2
            by A6,A10,A21,FINSEQ_1:21,def 3;
@@ -1493,7 +1480,7 @@ A42:             y in {v} by A40,XBOOLE_0:def 3;
 FUNCT_1:def 5;
                reconsider y1 as Element of NAT by A51;
                 A53: I.n = I.(n + y1) by A21,A22,A43,A51,A52;
-                A54: 1 <= n + y1 by A15,NAT_1:37;
+                A54: 1 <= n + y1 by A15,NAT_1:12;
                    y1 <= m2 by A21,A51,FINSEQ_1:3;
                 then n + y1 <= k + 1 by A18,XREAL_1:9;
                 then n + y1 in Seg(k + 1) by A54,FINSEQ_1:3;
@@ -1533,14 +1520,14 @@ A63:         q is one-to-one
                     x1 in Seg m1 by A6,A10,A27,A71,FINSEQ_1:21;
                  then A76: 1 <= x1 & x1 <= m1 by FINSEQ_1:3;
                  then A77: x1 <= k + 1 by A27,XXREAL_0:2;
-                 A78: 1 <= n + j by A15,NAT_1:37;
+                 A78: 1 <= n + j by A15,NAT_1:12;
                     j <= m2 by A21,A72,FINSEQ_1:3;
                  then n + j <= k + 1 by A18,XREAL_1:9;
                  then n + j in Seg(k + 1) & x1 in Seg(k + 1)
                                                by A76,A77,A78,FINSEQ_1:3;
                  then A79: x1 in dom I & n + j in
  dom I by A6,A10,FINSEQ_1:def 3;
-                    x1 < n & n <= n + j by A39,A76,XXREAL_0:2,NAT_1:37;
+                    x1 < n & n <= n + j by A39,A76,XXREAL_0:2,NAT_1:12;
                hence thesis by A9,A75,A79,FUNCT_1:def 8;
               end;
               A80: now assume A81: x2 in dom q1;
@@ -1552,14 +1539,14 @@ A63:         q is one-to-one
                     x2 in Seg m1 by A6,A10,A27,A81,FINSEQ_1:21;
                  then A86: 1 <= x2 & x2 <= m1 by FINSEQ_1:3;
                  then A87: x2 <= k + 1 by A27,XXREAL_0:2;
-                 A88: 1 <= n + j by A15,NAT_1:37;
+                 A88: 1 <= n + j by A15,NAT_1:12;
                     j <= m2 by A21,A82,FINSEQ_1:3;
                  then n + j <= k + 1 by A18,XREAL_1:9;
                  then n + j in Seg(k + 1) & x2 in Seg(k + 1)
                                                by A86,A87,A88,FINSEQ_1:3;
                  then A89: x2 in dom I & n + j in
  dom I by A6,A10,FINSEQ_1:def 3;
-                    x2 < n & n <= n + j by A39,A86,XXREAL_0:2,NAT_1:37;
+                    x2 < n & n <= n + j by A39,A86,XXREAL_0:2,NAT_1:12;
                hence thesis by A9,A85,A89,FUNCT_1:def 8;
               end;
                  now
@@ -1571,7 +1558,7 @@ A63:         q is one-to-one
 ,A92;
                  A95: q2.j1 = q.(m1 + j2) by A28,A66,A90,A91,A93,FINSEQ_1:def 7
                                .= q2.j2 by A28,A92,FINSEQ_1:def 7;
-                 A96: 1 <= n + j1 & 1 <= n + j2 by A15,NAT_1:37;
+                 A96: 1 <= n + j1 & 1 <= n + j2 by A15,NAT_1:12;
                     j1 <= m2 & j2 <= m2 by A21,A90,A92,FINSEQ_1:3;
                  then n + j1 <= k + 1 & n + j2 <= k + 1 by A18,XREAL_1:9;
                  then n + j1 in Seg(k + 1) & n + j2 in Seg(k + 1)

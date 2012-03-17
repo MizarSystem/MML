@@ -9,14 +9,16 @@ environ
  vocabularies FUNCT_1, RELAT_1, FUNCT_2, BOOLE, PARTFUN1, FINSET_1, MCART_1,
       FINSUB_1, SETWISEO, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, FINSET_1,
-      FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, SETWISEO;
- constructors DOMAIN_1, FINSET_1, SETWISEO;
+      FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      BINOP_1, DOMAIN_1, SETWISEO;
+ constructors DOMAIN_1, FINSET_1, SETWISEO, BINOP_1, PARTFUN1;
  registrations FINSUB_1, FUNCT_1, RELSET_1, SUBSET_1, FINSET_1, RELAT_1,
       ZFMISC_1, XBOOLE_0;
  requirements BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, BINOP_1;
  theorems FINSET_1, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, SETWISEO, FINSUB_1,
-      TARSKI, RELAT_1, RELSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, SUBSET_1;
+      TARSKI, RELAT_1, RELSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, SUBSET_1,
+      PARTFUN1;
  schemes FUNCT_1, FUNCT_2, SETWISEO, DOMAIN_1;
 
 begin
@@ -688,7 +690,7 @@ A8:     u in X() & v in Y();
 A9:    [u,v] in [:X(), Y():] by A8,ZFMISC_1:106;
 then A10:    [u,v] in dom f by A6,XBOOLE_0:def 3;
           [u,v]`1 = u & [u,v]`2 = v by MCART_1:7;
-       then f.[u,v] = F(u,v) by A4,A5,A10;
+       then f.(u,v) = F(u,v) by A4,A5,A10;
       hence x in f.:[:X(), Y():] by A7,A9,A10,FUNCT_1:def 12;
      end;
     let x be set;
@@ -1016,3 +1018,16 @@ A1: B c= F;
   then x in F by A1;
  hence x is Function by Def1;
 end;
+
+registration let A, B be set;
+  cluster PFuncs(A,B) -> functional;
+  coherence
+   proof
+    let x be set;
+    assume x in PFuncs(A,B);
+     then ex f being Function st x = f & dom f c= A & rng f c= B
+      by PARTFUN1:def 5;
+    hence x is Function;
+   end;
+end;
+

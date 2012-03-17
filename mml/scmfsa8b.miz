@@ -10,21 +10,22 @@ environ
       FUNCT_4, RELAT_1, UNIALG_2, FUNCT_1, SCMFSA6C, SF_MASTR, FUNCT_7,
       SCMFSA7B, SCMFSA6B, SCMFSA8A, SCMFSA_4, SCM_1, AMI_2, ARYTM_1, NAT_1,
       ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA8B, FINSEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, NAT_D, INT_1,
       RELAT_1, FUNCT_1, FUNCT_4, FUNCT_7, CARD_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       STRUCT_0, AMI_1, AMI_3, AMI_5, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCM_1,
       SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, INT_2,
       XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, INT_2, SCM_1, AMI_5,
-      SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A;
+      SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, NAT_D;
  registrations RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR,
       SCMFSA6B, SCMFSA6C, INT_1, FRAENKEL, XREAL_0, NUMBERS, SETFAM_1,
       XXREAL_0, CARD_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, CQC_THE1, AMI_1, AMI_3,
-      SCMFSA_2, SCMFSA_4, AMI_5, SCM_1, REAL_2, SCMFSA_5, SCMFSA6A, GRFUNC_1,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, RELAT_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, ORDINAL1;
+ definitions CQC_LANG, AMI_3;
+ theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, AMI_1, AMI_3, SCMFSA_2,
+      SCMFSA_4, AMI_5, SCM_1, REAL_2, SCMFSA_5, SCMFSA6A, GRFUNC_1, SF_MASTR,
+      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, RELAT_1, XBOOLE_0, XBOOLE_1,
+      XREAL_1, ORDINAL1, FUNCOP_1, CQC_LANG;
  schemes NAT_1;
 
 begin
@@ -100,8 +101,8 @@ theorem Th4: ::T15(@BBB8)
  proof
    let s be State of SCM+FSA;
    let l1,l2 be Instruction-Location of SCM+FSA;
-A1: dom Start-At l1 = {IC SCM+FSA} by AMI_3:34
-   .= dom Start-At l2 by AMI_3:34;
+A1: dom Start-At l1 = {IC SCM+FSA} by FUNCOP_1:19
+   .= dom Start-At l2 by FUNCOP_1:19;
    thus s +* Start-At l1 +* Start-At l2
     = s +* (Start-At l1 +* Start-At l2) by FUNCT_4:15
    .= s +* Start-At l2 by A1,FUNCT_4:20;
@@ -260,7 +261,7 @@ A3: CurInstr C1.m = halt SCM+FSA by AMI_1:def 20;
        CurInstr C1.$1 = CurInstr C2.$1 &
        C1.$1 | D = C2.$1 | D;
    A4: IC SCM+FSA in {IC SCM+FSA} & {IC SCM+FSA} = dom Start-At insloc 0
-       by AMI_3:34,TARSKI:def 1;
+       by FUNCOP_1:19,TARSKI:def 1;
       Start-At insloc 0 c= I +* Start-At insloc 0 by FUNCT_4:26;
    then A5: dom Start-At insloc 0 c= dom (I +* Start-At insloc 0) by GRFUNC_1:8
 ;
@@ -269,11 +270,11 @@ A6: C1.0 = s1 +* (I +* Start-At insloc 0) &
 A7: IC C1.0 = C1.0.IC SCM+FSA by AMI_1:def 15
    .= (I +* Start-At insloc 0).IC SCM+FSA by A4,A5,A6,FUNCT_4:14
    .= (Start-At insloc 0).IC SCM+FSA by A4,FUNCT_4:14
-   .= insloc 0 by AMI_3:50;
+   .= insloc 0 by CQC_LANG:6;
 A8: IC C2.0 = C2.0.IC SCM+FSA by AMI_1:def 15
    .= (I +* Start-At insloc 0).IC SCM+FSA by A4,A5,A6,FUNCT_4:14
    .= (Start-At insloc 0).IC SCM+FSA by A4,FUNCT_4:14
-   .= insloc 0 by AMI_3:50;
+   .= insloc 0 by CQC_LANG:6;
 A9: I c= (I +* Start-At insloc 0) by SCMFSA8A:9;
 then A10: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
    A11: insloc 0 in dom I by A2,Th3;
@@ -734,7 +735,7 @@ then A23: s3 is halting by AMI_1:def 20;
       per cases;
       suppose 0 < k;
        then consider k1 being Nat such that
-A24:   k1 + 1 = k by NAT_1:22;
+A24:   k1 + 1 = k by NAT_1:6;
        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m being Element of NAT such that
    A25: insloc m = IC (Computation s1).k1 by SCMFSA_2:21;
@@ -842,7 +843,7 @@ then A24: s3 is halting by AMI_1:def 20;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A11,Lm2;
       end;
       suppose l <> 0;
-       then consider n being Nat such that A26: l = n + 1 by NAT_1:22;
+       then consider n being Nat such that A26: l = n + 1 by NAT_1:6;
        reconsider n as Element of NAT by ORDINAL1:def 13;
    A27:  n < LifeSpan s1 by A25,A26,XREAL_1:8;
        assume A28: CurInstr (Computation s3).l = halt SCM+FSA;
@@ -869,14 +870,16 @@ A31: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
   A32: IExec(I1,s) = Result s1 +* s | A by SCMFSA6B:def 1;
   A33: IExec(if=0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
       assume A34: x in dom IExec(if=0(a,I,J),s);
- A35:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by AMI_3:34;
+ A35:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19
+;
       per cases by A34,SCMFSA6A:35;
       suppose A36: x is Int-Location;
        then x <> IC SCM+FSA by SCMFSA_2:81;
     then A37: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A35,A36,SCMFSA_2:66,TARSKI:def 1;
-   A38: x in dom Result s1 & not x in dom (s | A) by A14,A36,SCMFSA_2:66,84;
+   A38: x in dom Result s1 & not x in dom (s | A) by A14,A36,SCMFSA_2:66,
+84;
           x in dom Result s3 & not x in
  dom (s | A) by A14,A36,SCMFSA_2:66,84;
        hence IExec(if=0(a,I,J),s).x
@@ -891,7 +894,8 @@ A31: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
     then A40: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A35,A39,SCMFSA_2:67,TARSKI:def 1;
-   A41: x in dom Result s1 & not x in dom (s | A) by A14,A39,SCMFSA_2:67,85;
+   A41: x in dom Result s1 & not x in dom (s | A) by A14,A39,SCMFSA_2:67,
+85;
           x in dom Result s3 & not x in
  dom (s | A) by A14,A39,SCMFSA_2:67,85;
        hence IExec(if=0(a,I,J),s).x
@@ -918,7 +922,8 @@ A31: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IC (Computation s1).(LifeSpan s1) + (card J + 3)
            by A4,A6,A18,A19,A22,Th11
        .= IC Result s1 + (card J + 3) by A5,SCMFSA6B:16
-       .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A45,AMI_3:50
+       .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A45,
+CQC_LANG:6
        .= (Start-At insloc (card I + (card J + 3))).IC SCM+FSA
            by SCMFSA_4:def 1
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
@@ -1036,14 +1041,14 @@ then A26: s2 | D = s5 | D by A25,SCMFSA6A:38;
       now let k be Element of NAT;
          k = 0 or 0 < k;
       then k = 0 or 0 + 1 < k + 1 by XREAL_1:8;
-      then A28: k = 0 or 1 <= k by NAT_1:38;
+      then A28: k = 0 or 1 <= k by NAT_1:13;
       per cases by A28,REAL_1:def 5;
       suppose A29: 1 < k;
        then 0 < k;
-       then consider k1 being Nat such that A30: k1 + 1 = k by NAT_1:22;
+       then consider k1 being Nat such that A30: k1 + 1 = k by NAT_1:6;
        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        0 + 1 < k1 + 1 by A29,A30;
-       then consider k2 being Nat such that A31: k2 + 1 = k1 by NAT_1:22;
+       then consider k2 being Nat such that A31: k2 + 1 = k1 by NAT_1:6;
        reconsider k2 as Element of NAT by ORDINAL1:def 13;
        consider m being Element of NAT such that
    A32: insloc m = IC (Computation s2).k2 by SCMFSA_2:21;
@@ -1175,11 +1180,11 @@ A26: CurInstr (Computation s3).(LifeSpan s2 + 2)
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A20,Lm1;
       end;
       suppose A29: l <> 0 & l <> 1;
-       then consider n being Nat such that A30: l = n + 1 by NAT_1:22;
+       then consider n being Nat such that A30: l = n + 1 by NAT_1:6;
         n + 1 < LifeSpan s2 + 1 + 1 by A28,A30;
    then A31:  n < LifeSpan s2 + 1 by XREAL_1:8;
           n <> 0 by A29,A30;
-       then consider l2 being Nat such that A32: n = l2 + 1 by NAT_1:22;
+       then consider l2 being Nat such that A32: n = l2 + 1 by NAT_1:6;
        reconsider l2 as Element of NAT by ORDINAL1:def 13;
   A33: l2 < LifeSpan s2 by A31,A32,XREAL_1:8;
        assume A34: CurInstr (Computation s3).l = halt SCM+FSA;
@@ -1207,14 +1212,16 @@ A37: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
   A38: IExec(JI2,s) = Result s2 +* s | A by SCMFSA6B:def 1;
   A39: IExec(if=0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
       assume A40: x in dom IExec(if=0(a,I,J),s);
- A41:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by AMI_3:34;
+ A41:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19
+;
       per cases by A40,SCMFSA6A:35;
       suppose A42: x is Int-Location;
        then x <> IC SCM+FSA by SCMFSA_2:81;
     then A43: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A41,A42,SCMFSA_2:66,TARSKI:def 1;
-   A44: x in dom Result s2 & not x in dom (s | A) by A13,A42,SCMFSA_2:66,84;
+   A44: x in dom Result s2 & not x in dom (s | A) by A13,A42,SCMFSA_2:66,
+84;
           x in dom Result s3 & not x in
  dom (s | A) by A13,A42,SCMFSA_2:66,84;
        hence IExec(if=0(a,I,J),s).x
@@ -1229,7 +1236,8 @@ A37: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
     then A46: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A41,A45,SCMFSA_2:67,TARSKI:def 1;
-   A47: x in dom Result s2 & not x in dom (s | A) by A13,A45,SCMFSA_2:67,85;
+   A47: x in dom Result s2 & not x in dom (s | A) by A13,A45,SCMFSA_2:67,
+85;
           x in dom Result s3 & not x in
  dom (s | A) by A13,A45,SCMFSA_2:67,85;
        hence IExec(if=0(a,I,J),s).x
@@ -1255,7 +1263,7 @@ A37: dom IExec(if=0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IC (Computation s2).(LifeSpan s2) + 2 by A4,A6,A17,A22,A25,Th11
        .= IC Result s2 + 2 by A5,SCMFSA6B:16
        .= (Start-At (insloc (card I + card J + 1) + 2)).IC SCM+FSA
-           by A51,AMI_3:50
+           by A51,CQC_LANG:6
        .= (Start-At insloc (card I + card J + 1 + 2)).IC SCM+FSA
            by SCMFSA_4:def 1
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
@@ -1455,7 +1463,7 @@ then A23: s3 is halting by AMI_1:def 20;
       now let k be Element of NAT;
       per cases;
       suppose 0 < k;
-       then consider k1 being Nat such that A24: k1 + 1 = k by NAT_1:22;
+       then consider k1 being Nat such that A24: k1 + 1 = k by NAT_1:6;
        reconsider k1 as Element of NAT by ORDINAL1:def 13;
        consider m being Element of NAT such that
    A25: insloc m = IC (Computation s1).k1 by SCMFSA_2:21;
@@ -1563,7 +1571,7 @@ then A24: s3 is halting by AMI_1:def 20;
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A11,Lm3;
       end;
       suppose l <> 0;
-       then consider n being Nat such that A26: l = n + 1 by NAT_1:22;
+       then consider n being Nat such that A26: l = n + 1 by NAT_1:6;
        reconsider n as Element of NAT by ORDINAL1:def 13;
    A27:  n < LifeSpan s1 by A25,A26,XREAL_1:8;
        assume A28: CurInstr (Computation s3).l = halt SCM+FSA;
@@ -1590,14 +1598,16 @@ A31: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
   A32: IExec(I1,s) = Result s1 +* s | A by SCMFSA6B:def 1;
   A33: IExec(if>0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
       assume A34: x in dom IExec(if>0(a,I,J),s);
- A35:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by AMI_3:34;
+ A35:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19
+;
       per cases by A34,SCMFSA6A:35;
       suppose A36: x is Int-Location;
        then x <> IC SCM+FSA by SCMFSA_2:81;
     then A37: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A35,A36,SCMFSA_2:66,TARSKI:def 1;
-   A38: x in dom Result s1 & not x in dom (s | A) by A14,A36,SCMFSA_2:66,84;
+   A38: x in dom Result s1 & not x in dom (s | A) by A14,A36,SCMFSA_2:66,
+84;
           x in dom Result s3 & not x in
  dom (s | A) by A14,A36,SCMFSA_2:66,84;
        hence IExec(if>0(a,I,J),s).x
@@ -1612,7 +1622,8 @@ A31: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
     then A40: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A35,A39,SCMFSA_2:67,TARSKI:def 1;
-   A41: x in dom Result s1 & not x in dom (s | A) by A14,A39,SCMFSA_2:67,85;
+   A41: x in dom Result s1 & not x in dom (s | A) by A14,A39,SCMFSA_2:67,
+85;
           x in dom Result s3 & not x in
  dom (s | A) by A14,A39,SCMFSA_2:67,85;
        hence IExec(if>0(a,I,J),s).x
@@ -1639,7 +1650,8 @@ A31: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IC (Computation s1).(LifeSpan s1) + (card J + 3)
            by A4,A6,A18,A19,A22,Th11
        .= IC Result s1 + (card J + 3) by A5,SCMFSA6B:16
-       .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A45,AMI_3:50
+       .= (Start-At (insloc card I + (card J + 3))).IC SCM+FSA by A45,
+CQC_LANG:6
        .= (Start-At insloc (card I + (card J + 3))).IC SCM+FSA
            by SCMFSA_4:def 1
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
@@ -1757,13 +1769,13 @@ then A26: s2 | D = s5 | D by A25,SCMFSA6A:38;
       now let k be Element of NAT;
          k = 0 or 0 < k;
       then k = 0 or 0 + 1 < k + 1 by XREAL_1:8;
-      then A28: k = 0 or 1 <= k by NAT_1:38;
+      then A28: k = 0 or 1 <= k by NAT_1:13;
       per cases by A28,REAL_1:def 5;
       suppose A29: 1 < k;
        then 0 < k;
-       then consider k1 being Nat such that A30: k1 + 1 = k by NAT_1:22;
+       then consider k1 being Nat such that A30: k1 + 1 = k by NAT_1:6;
           0 + 1 < k1 + 1 by A29,A30;
-       then consider k2 being Nat such that A31: k2 + 1 = k1 by NAT_1:22;
+       then consider k2 being Nat such that A31: k2 + 1 = k1 by NAT_1:6;
        reconsider k1,k2 as Element of NAT by ORDINAL1:def 13;
        consider m being Element of NAT such that
    A32: insloc m = IC (Computation s2).k2 by SCMFSA_2:21;
@@ -1895,11 +1907,11 @@ A26: CurInstr (Computation s3).(LifeSpan s2 + 2)
        hence CurInstr (Computation s3).l <> halt SCM+FSA by A20,Lm1;
       end;
       suppose A29: l <> 0 & l <> 1;
-       then consider n being Nat such that A30: l = n + 1 by NAT_1:22;
+       then consider n being Nat such that A30: l = n + 1 by NAT_1:6;
         n + 1 < LifeSpan s2 + 1 + 1 by A28,A30;
    then A31:  n < LifeSpan s2 + 1 by XREAL_1:8;
           n <> 0 by A29,A30;
-       then consider l2 being Nat such that A32: n = l2 + 1 by NAT_1:22;
+       then consider l2 being Nat such that A32: n = l2 + 1 by NAT_1:6;
        reconsider l2 as Element of NAT by ORDINAL1:def 13;
   A33: l2 < LifeSpan s2 by A31,A32,XREAL_1:8;
        assume A34: CurInstr (Computation s3).l = halt SCM+FSA;
@@ -1927,14 +1939,16 @@ A37: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
   A38: IExec(JI2,s) = Result s2 +* s | A by SCMFSA6B:def 1;
   A39: IExec(if>0(a,I,J),s) = (Result s3) +* (s | A) by SCMFSA6B:def 1;
       assume A40: x in dom IExec(if>0(a,I,J),s);
- A41:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by AMI_3:34;
+ A41:   dom Start-At insloc (card I + card J + 3) = {IC SCM+FSA} by FUNCOP_1:19
+;
       per cases by A40,SCMFSA6A:35;
       suppose A42: x is Int-Location;
        then x <> IC SCM+FSA by SCMFSA_2:81;
     then A43: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A41,A42,SCMFSA_2:66,TARSKI:def 1;
-   A44: x in dom Result s2 & not x in dom (s | A) by A13,A42,SCMFSA_2:66,84;
+   A44: x in dom Result s2 & not x in dom (s | A) by A13,A42,SCMFSA_2:66,
+84;
           x in dom Result s3 & not x in
  dom (s | A) by A13,A42,SCMFSA_2:66,84;
        hence IExec(if>0(a,I,J),s).x
@@ -1949,7 +1963,8 @@ A37: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
     then A46: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A41,A45,SCMFSA_2:67,TARSKI:def 1;
-   A47: x in dom Result s2 & not x in dom (s | A) by A13,A45,SCMFSA_2:67,85;
+   A47: x in dom Result s2 & not x in dom (s | A) by A13,A45,SCMFSA_2:67,
+85;
           x in dom Result s3 & not x in
  dom (s | A) by A13,A45,SCMFSA_2:67,85;
        hence IExec(if>0(a,I,J),s).x
@@ -1975,7 +1990,7 @@ A37: dom IExec(if>0(a,I,J),s) = the carrier of SCM+FSA by AMI_3:36
        .= IC (Computation s2).(LifeSpan s2) + 2 by A4,A6,A17,A22,A25,Th11
        .= IC Result s2 + 2 by A5,SCMFSA6B:16
        .= (Start-At (insloc (card I + card J + 1) + 2)).IC SCM+FSA
-           by A51,AMI_3:50
+           by A51,CQC_LANG:6
        .= (Start-At insloc (card I + card J + 1 + 2)).IC SCM+FSA
            by SCMFSA_4:def 1
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
@@ -2285,12 +2300,14 @@ theorem Th35: ::PRE8'90'(@AAAA)
 A1: IExec(I,s) = Result s1 +* s | A by SCMFSA6B:def 1;
 A2: now let b be Int-Location;
          dom (s | A) = A by SCMFSA8A:3;
-      then b in dom Result s1 & not b in dom (s | A) by SCMFSA_2:66,84;
+      then b in dom Result s1 & not b in dom (s | A) by SCMFSA_2:66,
+84;
       hence IExec(I,s).b = (Result s1).b by A1,FUNCT_4:12;
      end;
       now let f be FinSeq-Location;
          dom (s | A) = A by SCMFSA8A:3;
-      then f in dom Result s1 & not f in dom (s | A) by SCMFSA_2:67,85;
+      then f in dom Result s1 & not f in dom (s | A) by SCMFSA_2:67,
+85;
       hence IExec(I,s).f = (Result s1).f by A1,FUNCT_4:12;
      end;
    hence thesis by A2,SCMFSA6A:38;
@@ -2334,12 +2351,12 @@ theorem Th37: ::T81'
    assume A2: i does_not_refer a;
    assume A3: IC s1 = IC s2;
    A4: InsCode i <= 11+1 by SCMFSA_2:35;
-A5: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:26;
-A6: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:26;
-A7: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:26;
+A5: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
+A6: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
+A7: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
 A8: now let b be Int-Location;
       assume A9: a <> b;
-      per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
+      per cases by A4,A5,A6,A7,NAT_1:33,8;
       suppose InsCode i = 0;
    then A10:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).b = s1.b by AMI_1:def 8
@@ -2520,7 +2537,7 @@ that
       end;
       end;
       now let f be FinSeq-Location;
-      per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
+      per cases by A4,A5,A6,A7,NAT_1:33,8;
       suppose InsCode i = 0;
    then A48:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).f = s1.f by AMI_1:def 8
@@ -2647,7 +2664,7 @@ that
      end;
      end;
    hence S[Exec(i,s1),Exec(i,s2)] by A8;
-A76: now per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
+A76: now per cases by A4,A5,A6,A7,NAT_1:33,8;
       suppose InsCode i = 0;
    then A77:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).IC SCM+FSA = s1.IC SCM+FSA by AMI_1:def 8
@@ -2927,7 +2944,8 @@ then A13: S2 is halting by AMI_1:def 20;
          IC C1.k in dom I by A4,SCMFSA7B:def 7;
       hence IC C2.k in dom I by A1,A5,A8,A10,A11,Th38;
      end;
-   hence I is_closed_on s2 & I is_halting_on s2 by A13,SCMFSA7B:def 7,def 8;
+   hence I is_closed_on s2 & I is_halting_on s2 by A13,SCMFSA7B:def 7,
+def 8;
  end;
 
 theorem Th41: ::TT12 <> AAAA'86

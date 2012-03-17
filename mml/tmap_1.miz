@@ -8,15 +8,15 @@ environ
 
  vocabularies PRE_TOPC, TARSKI, FUNCT_1, RELAT_1, BOOLE, FUNCT_4, SETFAM_1,
       SUBSET_1, CONNSP_2, ORDINAL2, FUNCOP_1, FUNCT_3, TSEP_1, CONNSP_1,
-      TMAP_1;
+      TMAP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCT_4, DOMAIN_1, STRUCT_0, PRE_TOPC, CONNSP_1,
       CONNSP_2, BORSUK_1, GRCAT_1, TSEP_1;
- constructors CONNSP_1, BORSUK_1, GRCAT_1, TSEP_1;
+ constructors CONNSP_1, BORSUK_1, GRCAT_1, TSEP_1, NAT_D;
  registrations PRE_TOPC, BORSUK_1, TSEP_1, STRUCT_0, COMPLSP1, RELSET_1,
       SUBSET_1, XBOOLE_0, FUNCT_2, PARTFUN1;
  requirements BOOLE, SUBSET;
- definitions PRE_TOPC, BORSUK_1, XBOOLE_0;
+ definitions PRE_TOPC, BORSUK_1, XBOOLE_0, STRUCT_0;
  theorems TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, FUNCT_4, ZFMISC_1, PRE_TOPC,
       CONNSP_2, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, RELAT_1, GRCAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, CONNSP_1, PARTFUN1;
@@ -31,62 +31,24 @@ end;
 
 reserve A,B for non empty set;
 
-theorem Th1:
+ Lm1:
  for f being Function of A,B, A0 being Subset of A,
      B0 being Subset of B
-  holds f.:A0 c= B0 iff A0 c= f"B0
- proof let f be Function of A,B, A0 be Subset of A,
-     B0 be Subset of B;
-  thus f.:A0 c= B0 implies A0 c= f"B0
-   proof assume f.:A0 c= B0;
-    then f"(f.:A0) c= f"B0 & A0 c= f"(f.:A0) by FUNCT_2:50,RELAT_1:178;
-    hence A0 c= f"B0 by XBOOLE_1:1;
-   end;
-  thus A0 c= f"B0 implies f.:A0 c= B0
-   proof assume A0 c= f"B0;
-    then f.:A0 c= f.:f"B0 & f.:f"B0 c= B0 by FUNCT_1:145,RELAT_1:156;
-    hence f.:A0 c= B0 by XBOOLE_1:1;
-   end;
- end;
+  holds f.:A0 c= B0 iff A0 c= f"B0 by FUNCT_2:172;
 
-theorem Th2:
+ Lm2:
  for f being Function of A,B, A0 being non empty Subset of A,
   f0 being Function of A0,B st
    for c being Element of A st c in A0 holds f.c = f0.c
-    holds f|A0 = f0
- proof let f be Function of A,B, A0 be non empty Subset of A,
-            f0 be Function of A0,B such that
-    A1: for c being Element of A st c in A0 holds f.c = f0.c;
-  reconsider g = f|A0 as Function of A0,B by FUNCT_2:38;
-       for c being Element of A0 holds g.c = f0.c
-    proof let c be Element of A0;
-     thus g.c = f.c by FUNCT_1:72
-             .= f0.c by A1;
-    end;
-  hence thesis by FUNCT_2:113;
- end;
+    holds f|A0 = f0 by FUNCT_2:173;
 
-canceled;
-
-theorem Th4:
+ Lm3:
  for f being Function, A0, C being set st
-   C c= A0 holds f.:C = (f|A0).:C
- proof let f be Function, A0, C be set;
-  assume A1: C c= A0;
-  thus (f|A0).:C = (f*(id A0)).:C by RELAT_1:94
-               .= f.:((id A0).:C) by RELAT_1:159
-               .= f.:C by A1,FUNCT_1:162;
- end;
+   C c= A0 holds f.:C = (f|A0).:C by FUNCT_2:174;
 
-theorem Th5:
+ Lm4:
  for f being Function, A0, D being set st
-   f"D c= A0 holds f"D = (f|A0)"D
- proof let f be Function, A0, D be set;
-  assume A1: f"D c= A0;
-  thus (f|A0)"D = (f*(id A0))"D by RELAT_1:94
-               .= (id A0)"(f"D) by RELAT_1:181
-               .= f"D by A1,BORSUK_1:4;
- end;
+   f"D c= A0 holds f"D = (f|A0)"D by FUNCT_2:175;
 
 definition let A,B be non empty set;
   let A1,A2 be non empty Subset of A;
@@ -153,10 +115,10 @@ A7:    now let a be Element of A0;
        thus F0.a = F1.a by A7
                 .= f1.a by A4,A19;
       end;
-   hence F0|A1 = f1 by Th2;
+   hence F0|A1 = f1 by Lm2;
         A2 is non empty Subset of A0 &
     for a being Element of A0 st a in A2 holds F0.a = f2.a by A5,XBOOLE_1:7;
-   hence F0|A2 = f2 by Th2;
+   hence F0|A2 = f2 by Lm2;
   end;
  uniqueness
   proof
@@ -179,6 +141,8 @@ A7:    now let a be Element of A0;
    hence thesis by FUNCT_2:113;
   end;
 end;
+
+canceled 5;
 
 theorem Th6:
  for A, B be non empty set, A1, A2 being non empty Subset of A
@@ -346,7 +310,7 @@ begin :: 2. Selected Properties of Subspaces of Topological Spaces.
 
 reserve X for TopSpace;
 
-Lm1: the TopStruct of X is TopSpace-like
+Lm5: the TopStruct of X is TopSpace-like
  proof set S = the TopStruct of X;
   thus the carrier of S in the topology of S &
       (for a being Subset-Family of S st a c= the topology of S
@@ -1032,7 +996,8 @@ A2)
                                                        by A1,A6,TSEP_1:def 5;
                       then C /\ (A1 \/ A2) c= A1 /\ A2 by A5,TSEP_1:4;
                       then A1 \/ A2 c= A1 \/ A1 /\ A2 & A1 /\ A2 c= A1
-                                              by A16,A19,XBOOLE_1:13,17;
+                                              by A16,A19,XBOOLE_1:13,
+17;
                       hence A1 \/ A2 c= A1 by XBOOLE_1:12;
                      end;
                      end;
@@ -1317,7 +1282,7 @@ theorem Th47:
       proof consider V being Subset of X such that
         A3: V is open & V c= H & x in V by CONNSP_2:8;
        take V;
-            H c= f"G by A2,Th1;
+            H c= f"G by A2,Lm1;
        hence thesis by A3,XBOOLE_1:1;
       end;
     hence f"G is a_neighborhood of x by CONNSP_2:8;
@@ -1469,7 +1434,7 @@ theorem
        dom f = [#]X by FUNCT_2:def 1;
   then A4: x in the carrier of X & dom f = the carrier of X;
        {x} is Subset of f"{y} by A3,SUBSET_1:63;
-  then f.:{x} c= {y} by Th1;
+  then f.:{x} c= {y} by Lm1;
   then {f.x} c= {y} & f.x in {f.x} by A4,FUNCT_1:117,TARSKI:def 1;
   then f is_continuous_at x & f.x = y by A1,Th49,TARSKI:def 1;
   hence thesis by A2,Th52;
@@ -1541,9 +1506,11 @@ end;
 reserve X, Y for non empty TopSpace, X0 for non empty SubSpace of X;
 reserve f for Function of X,Y;
 
-theorem Th58:
+ Lm6:
  for x being Point of X st x in the carrier of X0 holds f.x = (f|X0).x
   by FUNCT_1:72;
+
+canceled;
 
 theorem Th59:
  for f0 being Function of X0,Y st
@@ -1552,7 +1519,7 @@ theorem Th59:
  proof let f0 be Function of X0,Y such that
     A1: for x being Point of X st x in the carrier of X0 holds f.x = f0.x;
        the carrier of X0 is Subset of X by TSEP_1:1;
-  then f|(the carrier of X0) = f0 by A1,Th2;
+  then f|(the carrier of X0) = f0 by A1,Lm2;
   hence thesis;
  end;
 
@@ -1565,11 +1532,11 @@ theorem Th60:
 
 theorem Th61:
  for A being Subset of X st A c= the carrier of X0
-   holds f.:A = (f|X0).:A by Th4;
+   holds f.:A = (f|X0).:A by Lm3;
 
 theorem
  for B being Subset of Y st f"B c= the carrier of X0
- holds f"B = (f|X0)"B by Th5;
+ holds f"B = (f|X0)"B by Lm4;
 
 theorem Th63:
  for g being Function of X0,Y ex h being Function of X,Y st h|X0 = g
@@ -1627,7 +1594,7 @@ theorem Th64:
      st H0 is open & x0 in H0 & (f|X0).:H0 c= G
     proof let G be Subset of Y such that
     A3: G is open and A4: (f|X0).x0 in G;
-         f.x in G by A1,A4,Th58;
+         f.x in G by A1,A4,Lm6;
      then consider H being Subset of X such that
        A5: H is open and A6: x in H and A7: f.:H c= G by A2,A3,Th48;
       reconsider C = the carrier of X0 as Subset of X
@@ -1663,7 +1630,7 @@ theorem Th65:
      proof
       let G be Subset of Y such that A5: G is open and
       A6: f.x in G;
-          (f|X0).x0 in G by A3,A6,Th58;
+          (f|X0).x0 in G by A3,A6,Lm6;
       then consider H0 being Subset of X0 such that
       A7: H0 is open and A8: x0 in H0 and A9: (f|X0).:H0 c= G by A4,A5,Th48;
        consider V being Subset of X such that
@@ -1682,7 +1649,7 @@ theorem Th65:
         set g = f|X0;
              y in V by A13,A15;
         then y in A by A11;
-        then A17: z = g.y by A1,A16,Th58;
+        then A17: z = g.y by A1,A16,Lm6;
              H0 /\ V0 c= H0 by XBOOLE_1:17;
         then z in g.:H0 by A15,A17,FUNCT_2:43;
         hence z in G by A9;
@@ -1820,7 +1787,7 @@ theorem
   let g1 be Function of X1,Y such that
    A2: for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = g1.x0;
        the carrier of X1 is Subset of X0 by A1,TSEP_1:1;
-  then g|(the carrier of X1) = g1 by A2,Th2;
+  then g|(the carrier of X1) = g1 by A2,Lm2;
   hence thesis by A1,Def4;
  end;
 
@@ -1839,7 +1806,7 @@ theorem Th75:
   holds g.:A = (g|X1).:A
  proof assume A1: X1 is SubSpace of X0;
   let A be Subset of X0 such that A2: A c= the carrier of X1;
-  thus g.:A = (g|(the carrier of X1)).:A by A2,Th4
+  thus g.:A = (g|(the carrier of X1)).:A by A2,Lm3
            .= (g|X1).:A by A1,Def4;
  end;
 
@@ -1849,7 +1816,7 @@ theorem
   holds g"B = (g|X1)"B
  proof assume A1: X1 is SubSpace of X0;
   let B be Subset of Y such that A2: g"B c= the carrier of X1;
-  thus g"B = (g|(the carrier of X1))"B by A2,Th5
+  thus g"B = (g|(the carrier of X1))"B by A2,Lm4
            .= (g|X1)"B by A1,Def4;
  end;
 
@@ -2075,7 +2042,7 @@ theorem Th88:
    g|X1 is_continuous_at x1 implies g is_continuous_at x0
  proof assume A1: the TopStruct of X1 = X0;
   let x0 be Point of X0, x1 be Point of X1 such that A2: x0 = x1;
-   reconsider Y1 = the TopStruct of X1 as TopSpace by Lm1;
+   reconsider Y1 = the TopStruct of X1 as TopSpace by Lm5;
 A3: Y1 is SubSpace of X0 by A1,TSEP_1:2;
       the carrier of X1 c= the carrier of X0 by A1;
   then reconsider A = the carrier of X1 as Subset of X0;
@@ -2155,7 +2122,7 @@ theorem Th94:
      proof let V be Subset of X;
       assume A1: V is open;
            (id X)"V = (id the carrier of X)"V by GRCAT_1:def 11
-               .= V by BORSUK_1:4;
+               .= V by FUNCT_2:171;
       hence (id X)"V is open by A1;
      end;
     hence thesis by TOPS_2:55;
@@ -2184,7 +2151,7 @@ theorem
   holds (incl X0).x = x
  proof let X0 be non empty SubSpace of X, x be Point of X;
    assume A1: x in the carrier of X0;
-  thus (incl X0).x = (id X).x by A1,Th58
+  thus (incl X0).x = (id X).x by A1,Lm6
                   .= x by Th91;
  end;
 
@@ -2699,9 +2666,11 @@ definition let X be non empty TopSpace, A be Subset of X;
  coherence;
 end;
 
-theorem Th107:
+ Lm7:
  for A being Subset of X st A is open holds modid(X,A) = id X
          by GRCAT_1:def 11;
+
+canceled;
 
 theorem Th108:
  for x being Point of X st not x in A holds modid(X,A) is_continuous_at x
@@ -2767,7 +2736,7 @@ theorem Th110:
           x0 in the carrier of X0 & the carrier of X0 c= the carrier of X
                                                            by BORSUK_1:35;
      then reconsider x = x0 as Point of X;
-     (modid(X,A)|X0).x0 = (id (the carrier of X)).x by Th58
+     (modid(X,A)|X0).x0 = (id (the carrier of X)).x by Lm6
                         .= x by FUNCT_1:35;
      then (x in H or x in G /\ A) & x in A by A1,A2,A3,XBOOLE_0:def 2;
      then x in H /\ A or x in G /\ A by XBOOLE_0:def 3;
@@ -2822,7 +2791,7 @@ theorem Th113:
    proof assume A1: A is open;
     then A2: the TopStruct of X = X modified_with_respect_to A by Th106;
     reconsider f = modid(X,A) as Function of X,X;
-         f = id X by A1,Th107;
+         f = id X by A1,Lm7;
     then f is continuous Function of X,X by Th94;
     hence thesis by A2,Th56;
    end;
@@ -2833,7 +2802,7 @@ theorem Th113:
     set B = (modid(X,A)).:A;
      A4: B = A by FUNCT_1:162;
     then A5: B is open by Th105;
-         (modid(X,A))"B = A by  A4,BORSUK_1:4;
+         (modid(X,A))"B = A by  A4,FUNCT_2:171;
     hence thesis by A3,A5,TOPS_2:55;
    end;
  end;
@@ -2957,7 +2926,7 @@ theorem
  proof assume A1: X0 is open SubSpace of X;
   reconsider A = the carrier of X0 as Subset of X by TSEP_1:1;
   A is open by A1,TSEP_1:16;
-  then modid(X,A) = id X & modid(X,A) = modid(X,X0) by Def11,Th107;
+  then modid(X,A) = id X & modid(X,A) = modid(X,X0) by Def11,Lm7;
   hence thesis;
  end;
 
@@ -3121,10 +3090,10 @@ A4:       g.x = (g|X1).x1 & g.x = (g|X2).x2 by A1,A2,Th72;
        then reconsider S2 = H2 as Subset of X1 union X2
        by XBOOLE_1:1;
            g.:S1 c= G & g.:S2 c= G by A2,A5,A6,Th75;
-       then S1 c= g"G & S2 c= g"G by Th1;
+       then S1 c= g"G & S2 c= g"G by Lm1;
        then S1 \/ S2 c= g"G by XBOOLE_1:8;
        then H c= g"G by A7,XBOOLE_1:1;
-      hence thesis by Th1;
+      hence thesis by Lm1;
      end;
     hence thesis by Def2;
    end;
@@ -3174,7 +3143,7 @@ theorem
      ex H being a_neighborhood of x st f.:H c= G
      proof
       let G be a_neighborhood of f.x;
-A4:       f.x = (f|X1).x1 & f.x = (f|X2).x2 by A2,Th58;
+A4:       f.x = (f|X1).x1 & f.x = (f|X2).x2 by A2,Lm6;
        then consider H1 being a_neighborhood of x1 such that
         A5: (f|X1).:H1 c= G by A3,Def2;
        consider H2 being a_neighborhood of x2 such that
@@ -3187,10 +3156,10 @@ A4:       f.x = (f|X1).x1 & f.x = (f|X2).x2 by A2,Th58;
             the carrier of X2 c= the carrier of X by BORSUK_1:35;
        then reconsider S2 = H2 as Subset of X by XBOOLE_1:1;
            f.:S1 c= G & f.:S2 c= G by A5,A6,Th61;
-       then S1 c= f"G & S2 c= f"G by Th1;
+       then S1 c= f"G & S2 c= f"G by Lm1;
        then S1 \/ S2 c= f"G by XBOOLE_1:8;
        then H c= f"G by A7,XBOOLE_1:1;
-      hence thesis by Th1;
+      hence thesis by Lm1;
      end;
     hence thesis by Def2;
    end;
@@ -3711,7 +3680,8 @@ theorem Th138:
        now assume X1 meets X2;
     then A1: X1 meet X2 is SubSpace of X1 & X1 meet X2 is SubSpace of X2 &
              X1 is SubSpace of X1 union X2 & X2 is SubSpace of X1 union X2
-                                                             by TSEP_1:22,30;
+                                                             by TSEP_1:22,
+30;
     hence (g|X1)|(X1 meet X2) = g|(X1 meet X2) by Th79
                              .= (g|X2)|(X1 meet X2) by A1,Th79;
    end;

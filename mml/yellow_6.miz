@@ -11,14 +11,15 @@ environ
       CONNSP_2, TOPS_1, SUBSET_1, PRALG_1, PBOOLE, RLVECT_2, WAYBEL_3,
       YELLOW_1, FRAENKEL, ZF_REFLE, ORDERS_1, WAYBEL_0, QUANTAL1, LATTICES,
       RELAT_2, CAT_1, YELLOW_0, WELLORD1, ORDINAL2, MCART_1, REALSET1, SEQ_2,
-      SETFAM_1, CLOSURE1, YELLOW_6;
+      SETFAM_1, CLOSURE1, YELLOW_6, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, REALSET1, CARD_1, CARD_3,
       PBOOLE, PRE_CIRC, ORDINAL1, CLASSES1, CLASSES2, TOLER_1, STRUCT_0,
       TOPS_1, COMPTS_1, CONNSP_2, PRALG_1, ORDERS_2, LATTICE3, PRE_TOPC,
       YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_3, FRAENKEL, WAYBEL_3, GRCAT_1;
  constructors DOMAIN_1, CLASSES1, REALSET1, TOLER_1, PRE_CIRC, TOPS_1,
-      COMPTS_1, CONNSP_2, GRCAT_1, LATTICE3, PRALG_1, YELLOW_3, WAYBEL_3;
+      COMPTS_1, CONNSP_2, GRCAT_1, LATTICE3, PRALG_1, YELLOW_3, WAYBEL_3,
+      NAT_D;
  registrations SUBSET_1, STRUCT_0, RELSET_1, WAYBEL_0, ORDERS_2, PRALG_1,
       YELLOW_1, YELLOW_3, INDEX_1, LATTICE3, YELLOW_0, PBOOLE, FUNCOP_1,
       RELAT_1, FUNCT_1, CLASSES2, CARD_1, FRAENKEL, SEQM_3, PCOMPS_1, FUNCT_2,
@@ -31,8 +32,8 @@ environ
       CARD_3, PRALG_1, YELLOW_3, RELSET_1, DOMAIN_1, YELLOW_0, CLASSES2,
       CLASSES1, CARD_2, FUNCT_6, LATTICE3, COMPTS_1, MCART_1, SUBSET_1,
       WAYBEL_3, GRCAT_1, XBOOLE_0, XBOOLE_1, ORDINAL1, PARTFUN1, REALSET1;
- schemes PBOOLE, FUNCT_7, MSUALG_9, SUBSET_1, NATTRA_1, RELSET_1, DOMAIN_1,
-      MSSUBFAM, FUNCT_2, XBOOLE_0;
+ schemes PBOOLE, FUNCT_7, MSUALG_9, SUBSET_1, RELSET_1, DOMAIN_1, MSSUBFAM,
+      FUNCT_2, XBOOLE_0;
 
 begin :: Preliminaries, classical mathematics
 
@@ -124,20 +125,14 @@ end;
 
 begin :: Topological spaces, preliminaries
 
-theorem Th6:
+ Lm1:
   for T being non empty TopSpace, A being Subset of T
   for p being Point of T holds p in Cl A iff
     for G being a_neighborhood of p holds G meets A by CONNSP_2:34;
 
-theorem
-  for X be non empty TopSpace, A be Subset of X
-    holds [#]X is a_neighborhood of A by CONNSP_2:35;
-
-theorem
-  for X be non empty TopSpace, A be Subset of X,
-      Y being a_neighborhood of A holds A c= Y by CONNSP_2:36;
-
 begin :: 1-sorted structures
+
+canceled 3;
 
 theorem Th9:
  for Y be non empty set
@@ -249,7 +244,7 @@ then A6:  R in rng J by A4,FUNCT_1:def 5;
   end;
 end;
 
-theorem Th10:
+ Lm2:
  for T being non empty 1-sorted, S being Subset of T,
      p being Element of T holds
      not p in S iff p in S` by XBOOLE_0:def 4;
@@ -262,9 +257,9 @@ registration let T be non empty RelStr, A be lower Subset of T;
   proof let x,y be Element of T such that
 A1: x in A` and
 A2: x <= y;
-        not x in A by A1,Th10;
+        not x in A by A1,Lm2;
     then not y in A by A2,WAYBEL_0:def 19;
-   hence y in A` by Th10;
+   hence y in A` by Lm2;
   end;
 end;
 
@@ -274,9 +269,9 @@ registration let T be non empty RelStr, A be upper Subset of T;
   proof let x,y be Element of T such that
 A1: x in A` and
 A2: y <= x;
-        not x in A by A1,Th10;
+        not x in A by A1,Lm2;
     then not y in A by A2,WAYBEL_0:def 20;
-   hence y in A` by Th10;
+   hence y in A` by Lm2;
   end;
 end;
 
@@ -325,7 +320,7 @@ registration
   end;
 end;
 
-Lm1: :: WAYBEL_0:3 ?
+Lm3: :: WAYBEL_0:3 ?
  for N being non empty RelStr holds
   N is directed iff the RelStr of N is directed
 proof let N be non empty RelStr;
@@ -356,7 +351,7 @@ A4:    x' <= z' & y' <= z' by A3,Def5;
    hence x <= z & y <= z by ORDERS_2:def 9;
 end;
 
-Lm2:
+Lm4:
  for N being non empty RelStr holds
   N is transitive iff the RelStr of N is transitive
 proof let N be non empty RelStr;
@@ -422,7 +417,7 @@ registration let I be non empty set;
   end;
 end;
 
-theorem Th11:
+ Lm5:
  for R1,R2 being RelStr holds
   [#][:R1,R2:] = [:[#]R1,[#]R2:] by YELLOW_3:def 2;
 
@@ -433,10 +428,12 @@ registration let Y1,Y2 be directed RelStr;
    reconsider S1 = [#]Y1 as directed Subset of Y1 by WAYBEL_0:def 6;
    reconsider S2 = [#]Y2 as directed Subset of Y2 by WAYBEL_0:def 6;
        [:S1,S2:] is directed;
-   then [#][:Y1,Y2:] is directed by Th11;
+   then [#][:Y1,Y2:] is directed by Lm5;
    hence thesis by WAYBEL_0:def 6;
   end;
 end;
+
+canceled 2;
 
 theorem Th12:
  for R being RelStr holds the carrier of R = the carrier of R~
@@ -447,7 +444,7 @@ LATTICE3:def 5
  hence the carrier of R = the carrier of R~;
 end;
 
-Lm3:
+Lm6:
  for R,S being RelStr, p,q being Element of R,
    p',q' being Element of S
     st p = p' & q = q' & the RelStr of R = the RelStr of S
@@ -509,8 +506,8 @@ registration
  coherence
   proof
 A1:  the RelStr of R --> p = the RelStr of R by Def7;
-        the RelStr of R is directed by Lm1;
-   hence thesis by A1,Lm1;
+        the RelStr of R is directed by Lm3;
+   hence thesis by A1,Lm3;
   end;
 end;
 
@@ -521,8 +518,8 @@ registration
  coherence
   proof
 A1:  the RelStr of R --> p = the RelStr of R by Def7;
-        the RelStr of R is transitive by Lm2;
-   hence thesis by A1,Lm2;
+        the RelStr of R is transitive by Lm4;
+   hence thesis by A1,Lm4;
   end;
 end;
 
@@ -562,7 +559,7 @@ proof let R be RelStr;
   the InternalRel of R c= the InternalRel of R;
   then reconsider R' = R as SubRelStr of R by YELLOW_0:def 13;
       the InternalRel of R' = (the InternalRel of R)|_2 the carrier of R'
-   by YELLOW_0:56;
+   by XBOOLE_1:28;
  hence thesis by YELLOW_0:def 14;
 end;
 
@@ -616,7 +613,7 @@ A3: the carrier of T c= the carrier of S by A1,YELLOW_0:def 13;
  hence T is SubNetStr of R by A2,Def8;
 end;
 
-Lm4:
+Lm7:
  for S being 1-sorted, R being NetStr over S holds
   the NetStr of R is SubNetStr of R
 proof let S be 1-sorted, N be NetStr over S;
@@ -631,13 +628,13 @@ definition let S be 1-sorted, N be NetStr over S, M be SubNetStr of N;
 :Def9: M is full SubRelStr of N;
 end;
 
-Lm5:
+Lm8:
  for S being 1-sorted, R being NetStr over S holds
   the NetStr of R is full SubRelStr of R
 proof let S be 1-sorted, R be NetStr over S;
   reconsider R' = the NetStr of R as SubRelStr of R by YELLOW_0:def 13;
       the InternalRel of R' = (the InternalRel of R)|_2 the carrier of R'
-   by YELLOW_0:56;
+   by XBOOLE_1:28;
  hence thesis by YELLOW_0:def 14;
 end;
 
@@ -645,9 +642,9 @@ registration let S be 1-sorted, N be NetStr over S;
  cluster full strict SubNetStr of N;
  existence
   proof
-    reconsider M = the NetStr of N as SubNetStr of N by Lm4;
+    reconsider M = the NetStr of N as SubNetStr of N by Lm7;
    take M;
-   thus M is full SubRelStr of N by Lm5;
+   thus M is full SubRelStr of N by Lm8;
    thus thesis;
   end;
 end;
@@ -656,9 +653,9 @@ registration let S be 1-sorted, N be non empty NetStr over S;
  cluster full non empty strict SubNetStr of N;
  existence
   proof
-    reconsider M = the NetStr of N as SubNetStr of N by Lm4;
+    reconsider M = the NetStr of N as SubNetStr of N by Lm7;
    take M;
-   thus M is full SubRelStr of N by Lm5;
+   thus M is full SubRelStr of N by Lm8;
    thus thesis;
   end;
 end;
@@ -1122,7 +1119,7 @@ A3:   the RelStr of N = the RelStr of R by Def7;
   end;
 end;
 
-Lm6:
+Lm9:
  for S1,S2 being non empty 1-sorted st the carrier of S1 = the carrier of S2
  for N being constant net of S1 holds N is constant net of S2
 proof
@@ -1135,7 +1132,7 @@ A1: the carrier of S1 = the carrier of S2;
   hence N is constant net of S2 by Def6;
 end;
 
-Lm7:
+Lm10:
  for S1,S2 being non empty 1-sorted st the carrier of S1 = the carrier of S2
   holds NetUniv S1 = NetUniv S2
 proof let S1,S2 be non empty 1-sorted;
@@ -1364,12 +1361,12 @@ A1:  for i be Element of Y,
                  the carrier of T such that
 A2:   for i being Element of Y,
          f being Element of product J
-      holds F. [i,f] = F(i,f) from FUNCT_7:sch 1(A1);
+      holds F.(i,f) = F(i,f) from FUNCT_7:sch 1(A1);
         the carrier of R = [:the carrier of Y, the carrier of product J:]
                         by YELLOW_3:def 2;
     then reconsider F as Function of the carrier of R, the carrier of T;
     reconsider N = NetStr(#the carrier of R, the InternalRel of R,F#)
-      as strict net of T by Lm1,Lm2;
+      as strict net of T by Lm3,Lm4;
    take N;
   thus the RelStr of N = [:Y, product J:];
   let i be Element of Y,
@@ -1706,7 +1703,7 @@ A5:   N.e in G by A2,A4;
          N.e in S by A3;
    hence G meets S by A5,XBOOLE_0:3;
   end;
- hence p in Cl S by Th6;
+ hence p in Cl S by Lm1;
 end;
 
 theorem Th44:
@@ -1764,9 +1761,9 @@ A18:   W /\ V c= cT;
    end;
   consider f being Function of cpN, cT such that
 A19: for i being Element of cpN holds
-     f.i in F(i) from NATTRA_1:sch 1(A15);
+     f.i in F(i) from FUNCT_2:sch 11(A15);
   reconsider N = NetStr(#the carrier of pN, the InternalRel of pN, f#)
-    as net of T by Lm1,Lm2;
+    as net of T by Lm3,Lm4;
        now let V be a_neighborhood of p;
 A20:   Int V c= V by TOPS_1:44;
          N is_eventually_in Int V
@@ -1776,8 +1773,7 @@ then A21:     Int V in the carrier of OpenNeighborhoods p by Th39;
            q in [#]T & [#]T is open by TOPS_1:53;
        then [#]T in the carrier of OpenNeighborhoods q by Th39;
         then reconsider i = [Int V,[#]T] as Element of N by A14,A21,
-ZFMISC_1:106
-;
+ZFMISC_1:106;
        take i; let j be Element of N;
         consider j1 being Element of OpenNeighborhoods p,
                       j2 being Element of OpenNeighborhoods q
@@ -2317,7 +2313,7 @@ A5: M in NetUniv S;
     the carrier of N in the_universe_of the carrier of S by Def14;
   then reconsider M as net of S;
   reconsider N = M as net of T by Def27;
-A6: N in NetUniv T by A2,A5,Lm7;
+A6: N in NetUniv T by A2,A5,Lm10;
   reconsider q = p as Point of T by Def27;
 A7: the topology of T = { V where V is Subset of S:
      for p being Element of S st p in V
@@ -2450,7 +2446,7 @@ A4:  S` is open by A2,TOPS_1:29;
     then not N is_eventually_in [#]CC\S by A1;
     then not N is_eventually_in S`;
     then not p in S` by A3,A4,Th50;
-   hence p in S by A1,Th10;
+   hence p in S by A1,Lm2;
   end;
   assume
 A5: for p being Element of T holds
@@ -2458,7 +2454,7 @@ A5: for p being Element of T holds
       holds p in S;
        now let p be Element of T;
     assume p in S`;
-then A6: not p in S by Th10;
+then A6: not p in S by Lm2;
     let N be net of T;
     assume [N,p] in C;
      then not N is_often_in S by A5,A6;
@@ -2598,7 +2594,7 @@ A20:   R is transitive
      set N = R --> q;
 A21:  the_value_of N = q by Th22;
          the carrier of CC = the carrier of T by Def27;
-     then reconsider M = N as constant strict net of T by Lm6;
+     then reconsider M = N as constant strict net of T by Lm9;
          the_value_of the mapping of M = q by A21,Def10;
 then A22:  the_value_of M = q by Def10;
      set V = the_universe_of the carrier of T;
@@ -2672,7 +2668,7 @@ A10:  the_value_of M = the_value_of the mapping of M by Def10
           .= the_value_of the mapping of N
           .= the_value_of N by Def10;
     assume N in NetUniv T;
-     then M in NetUniv CC by A1,Lm7;
+     then M in NetUniv CC by A1,Lm10;
     hence [N,the_value_of N] in C by A9,A10,Def23;
    end;
   thus C is (SUBNETS)
@@ -2680,7 +2676,7 @@ A10:  the_value_of M = the_value_of the mapping of M by Def10
      reconsider M = N as net of CC by Def27;
      reconsider X = Y as subnet of M by A3;
     assume Y in NetUniv T;
-then A11:   X in NetUniv CC by A1,Lm7;
+then A11:   X in NetUniv CC by A1,Lm10;
     let p be Element of T;
      reconsider q = p as Element of CC by Def27;
     assume [N,p] in C;
@@ -2692,14 +2688,14 @@ then A11:   X in NetUniv CC by A1,Lm7;
      reconsider x = X as net of CC by Def27;
      reconsider q = p as Element of CC by Def27;
     assume X in NetUniv T;
-then A12:  x in NetUniv CC by A1,Lm7;
+then A12:  x in NetUniv CC by A1,Lm10;
     assume not [X,p] in C;
      then consider y being subnet of x such that
 A13:   y in NetUniv CC and
 A14:    not ex z being subnet of y st [z,q] in CCC by A9,A12,Def25;
      reconsider Y = y as subnet of X by A6;
     take Y;
-    thus Y in NetUniv T by A1,A13,Lm7;
+    thus Y in NetUniv T by A1,A13,Lm10;
     let Z be subnet of Y;
      reconsider z = Z as subnet of y by A3;
          not [z,q] in CCC by A14;
@@ -2782,13 +2778,13 @@ A31:  M in NetUniv CC;
     then reconsider M as net of CC;
     reconsider N = M as net of T by Def27;
     reconsider q = p as Point of T by Def27;
-A32: N in NetUniv T by A1,A31,Lm7;
+A32: N in NetUniv T by A1,A31,Lm10;
    assume not [x,y] in C;
     then consider Y being subnet of N such that
 A33:   Y in NetUniv T and
 A34:   not ex Z being subnet of Y st [Z,q] in C by A26,A30,A32,Def25;
     reconsider YY = the RelStr of Y
-       as transitive directed non empty RelStr by Lm1,Lm2;
+       as transitive directed non empty RelStr by Lm3,Lm4;
     set X = YY --> q;
 A35: the RelStr of X = YY by Def7;
     reconsider X as constant non empty strict net of T;
@@ -2997,7 +2993,7 @@ then A78:       y in product Carrier J by YELLOW_1:def 4;
        such that
 A79:     for x being Element of X,
             y being Element of product J
-         holds f. [x,y] = F(x,y) from FUNCT_7:sch 1(A74);
+         holds f.(x,y) = F(x,y) from FUNCT_7:sch 1(A74);
        reconsider f as Function of Iterated J,Y by A54;
       take f;
        set h = the mapping of Iterated J,
@@ -3040,7 +3036,8 @@ A83:       dom Carrier J = the carrier of X' by PBOOLE:def 3;
          thus h.x = h.(x1,x2) by A82
                 .= (the mapping of J.x').(x2.x1) by Def16
                 .= g.(u.x'.j) by A71
-                .= g.(f.x) by A79,A82;
+                .= g.(f.(x1,x2)) by A79
+                .= g.(f.x) by A82;
         end;
       hence the mapping of Iterated J = (the mapping of Y)*f by A80,FUNCT_1:20
 ;
@@ -3056,7 +3053,7 @@ A83:       dom Carrier J = the carrier of X' by PBOOLE:def 3;
 A85:     p = [k',G] by A54,DOMAIN_1:9;
        reconsider k = k' as Element of Y by A35;
        reconsider k'' = k' as Element of X';
-A86:    f.p = u.k.(G.k) by A79,A85;
+A86:    f.(k',G) = u.k.(G.k) by A79;
 A87:    u.k is Function of M.k, B.k by PBOOLE:def 18;
        then A88:     dom(u.k) = M.k by FUNCT_2:def 1
            .= the carrier of J.k' by A59
@@ -3065,7 +3062,8 @@ A89:    dom Carrier J = the carrier of X' by PBOOLE:def 3;
            G in the carrier of product J;
        then G in product Carrier J by YELLOW_1:def 4;
        then G.k'' in dom(u.k) by A88,A89,CARD_3:18;
-       then A90:     f.p in rng(u.k) by A86,FUNCT_1:def 5;
+       then
+A90:     f.p in rng(u.k) by A86,FUNCT_1:def 5,A85;
             rng(u.k) c= B.k by A87,RELSET_1:12;
        then f.p in B.k by A90;
        then f.p in { c where c is Element of Y : k <= c } by A55;
@@ -3075,9 +3073,9 @@ A92:    k <= c;
        reconsider G as Element of product J;
        reconsider k' = k as Element of X;
       assume n <= p;
-       then [m',F] <= [k',G] by A53,A85,Lm3;
+       then [m',F] <= [k',G] by A53,A85,Lm6;
        then m' <= k' by YELLOW_3:11;
-       then m <= k by A35,Lm3;
+       then m <= k by A35,Lm6;
       hence m <= f.p by A91,A92,YELLOW_0:def 2;
      end;
    hence contradiction by A34,A52;

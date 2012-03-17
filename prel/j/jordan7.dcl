@@ -23,6 +23,8 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="INT_1"/>
@@ -35,7 +37,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="78"/>
+<Adjective nr="84"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

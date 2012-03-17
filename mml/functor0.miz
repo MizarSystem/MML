@@ -8,11 +8,11 @@ environ
 
  vocabularies FUNCT_1, MCART_1, BOOLE, RELAT_1, PBOOLE, SGRAPH1, PRALG_1,
       FUNCOP_1, MSUALG_3, CAT_4, ALTCAT_1, RELAT_2, MSUALG_6, CAT_1, ALTCAT_2,
-      FUNCT_3, ENS_1, WELLORD1, FUNCTOR0;
+      FUNCT_3, ENS_1, WELLORD1, FUNCTOR0, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, FUNCT_3, FUNCT_4, PBOOLE,
       STRUCT_0, MSUALG_3, ALTCAT_1, ALTCAT_2;
- constructors FUNCT_3, MSUALG_3, ALTCAT_2;
+ constructors FUNCT_3, MSUALG_3, ALTCAT_2, NAT_D;
  registrations RELAT_1, FUNCT_1, ALTCAT_1, ALTCAT_2, STRUCT_0, RELSET_1,
       SUBSET_1, FUNCT_2, FUNCOP_1, PBOOLE;
  requirements SUBSET, BOOLE;
@@ -131,8 +131,8 @@ A3:  y = f.x by FUNCT_1:def 12;
 A4:  x = [x1,x2] by A2,RELAT_1:def 1;
 A5:   x1 = x2 by A2,A4,RELAT_1:def 10;
 then A6:   x in dom~f by A1,A4,FUNCT_4:43;
-     then y = (~f).x by A3,A4,A5,FUNCT_4:44;
-   hence y in (~f).:id A by A2,A6,FUNCT_1:def 12;
+     then f.(x1,x2) = (~f).(x1,x2) by A4,A5,FUNCT_4:44;
+   hence y in (~f).:id A by A2,A6,A4,FUNCT_1:def 12,A3;
   end;
  let y be set;
  assume y in (~f).:id A;
@@ -144,8 +144,8 @@ A9:  y = (~f).x by FUNCT_1:def 12;
 A10:  x = [x1,x2] by A8,RELAT_1:def 1;
 A11:   x1 = x2 by A8,A10,RELAT_1:def 10;
 then A12:   x in dom f by A7,A10,FUNCT_4:43;
-  then y = f.x by A9,A10,A11,FUNCT_4:def 2;
- hence y in f.:id A by A8,A12,FUNCT_1:def 12;
+  then ~f.(x1,x2) = f.(x1,x2) by A10,A11,FUNCT_4:def 2;
+ hence y in f.:id A by A8,A12,FUNCT_1:def 12,A10,A9;
 end;
 
 theorem Th5:
@@ -187,8 +187,8 @@ A5: [y,z] in dom([:A,B:] --> a);
    assume A6: [y,z] in dom([:A,B:] --> a);
     then y in A & z in B by ZFMISC_1:106;
     then [z,y] in [:B,A:] by ZFMISC_1:106;
-   hence ([:B,A:] --> a).[z,y] = a by FUNCOP_1:13
-       .= ([:A,B:] --> a).[y,z] by A6,FUNCOP_1:13;
+   hence ([:B,A:] --> a).(z,y) = a by FUNCOP_1:13
+       .= ([:A,B:] --> a).(y,z) by A6,FUNCOP_1:13;
   end;
  hence ~([:A,B:] --> a) = [:B,A:] --> a by A1,FUNCT_4:def 2;
 end;
@@ -264,8 +264,9 @@ A6:   x2 = [x21,x22] by A2,ZFMISC_1:103;
 A7: (~f).x1 = (~f).x2;
 A8: [x12,x11] in dom f by A3,A4,FUNCT_4:43;
 A9: [x22,x21] in dom f by A5,A6,FUNCT_4:43;
-      f.[x12,x11] = (~f).x2 by A3,A4,A7,FUNCT_4:44
-        .= f.[x22,x21] by A5,A6,FUNCT_4:44;
+      f.(x12,x11) = ~f.(x11,x12) by A3,A4,FUNCT_4:44
+        .= (~f).(x21,x22) by A4,A7,A6
+        .= f.(x22,x21) by A5,A6,FUNCT_4:44;
   then [x12,x11] = [x22,x21] by A1,A8,A9,FUNCT_1:def 8;
   then x12 = x22 & x21 = x11 by ZFMISC_1:33;
  hence x1 = x2 by A4,A6;
@@ -296,11 +297,13 @@ A10: [:g,f:].x1 = [:g,f:].x2;
        [:g,f:].(x11,x12) = [g.x11,f.x12] & [:g,f:].(x21,x22) = [g.x21,f.x22]
          by A4,A6,FUNCT_3:def 9;
 then A11:  f.x22 = f.x12 & g.x11 = g.x21 by A10,ZFMISC_1:33,A5,A7;
-      (~[:f,g:]).x1 = [:f,g:].(x12,x11) by A5,A8,FUNCT_4:44
+      (~[:f,g:]).[x11,x12] = (~[:f,g:]).(x11,x12)
+          .= [:f,g:].(x12,x11) by A5,A8,FUNCT_4:44
           .= [f.x22,g.x21] by A4,A11,FUNCT_3:def 9
           .= [:f,g:].(x22,x21) by A6,FUNCT_3:def 9
-          .= (~[:f,g:]).x2 by A7,A9,FUNCT_4:44;
- hence x1 = x2 by A1,A8,A9,FUNCT_1:def 8;
+          .= (~[:f,g:]).(x21,x22) by A7,A9,FUNCT_4:44
+          .= (~[:f,g:]).[x21,x22];
+ hence x1 = x2 by A1,A8,A9,FUNCT_1:def 8,A5,A7;
 end;
 
 theorem Th11:
@@ -334,7 +337,8 @@ A16:   y = [y1,y2] by ZFMISC_1:103;
      set x1 = f".y1, x2 = g".y2;
 A17:   y2 in dom(g") & y1 in dom(f") by A1,A2,A14,A15,FUNCT_1:54;
    then [y2,y1] in dom([:g,f:]") by A4,ZFMISC_1:106;
-then A18:   x = [:g",f":].(y2,y1) by A3,A13,A16,FUNCT_4:def 2
+then
+A18:   (~([:g,f:]")).(y1,y2) = [:g",f":].(y2,y1) by A3,FUNCT_4:def 2
        .= [x2,x1] by A17,FUNCT_3:def 9;
          y1 in dom(f") & y2 in dom(g") by A1,A2,A14,A15,FUNCT_1:54;
      then x1 in rng(f") & x2 in rng(g") by FUNCT_1:def 5;
@@ -342,9 +346,10 @@ then A18:   x = [:g",f":].(y2,y1) by A3,A13,A16,FUNCT_4:def 2
      then A20: [x2,x1] in dom[:g,f:] by A6,ZFMISC_1:106;
      then A21: [x2,x1] in dom~[:f,g:] by A5,A6,FUNCT_4:47;
     thus
-      x in dom~[:f,g:] by A5,A6,A18,A20,FUNCT_4:47;
+      x in dom~[:f,g:] by A5,A6,A18,A20,FUNCT_4:47,A16,A13;
 A22:   f.x1 = y1 & g.x2 = y2 by A1,A2,A14,A15,FUNCT_1:54;
-    thus (~[:f,g:]).x = [:f,g:].(x1,x2) by A18,A21,FUNCT_4:44
+    thus (~[:f,g:]).x = ~[:f,g:].(x2,x1) by A18,A13,A16
+          .= [:f,g:].(x1,x2) by A21,FUNCT_4:44
           .= y by A16,A19,A22,FUNCT_3:def 9;
    end;
    assume that
@@ -356,7 +361,7 @@ A24: (~[:f,g:]).x = y;
 A25:   x1 in dom g and
 A26:   x2 in dom f and
 A27:   x = [x1,x2] by A6,ZFMISC_1:103;
-A28:  y = [:f,g:].(x2,x1) by A23,A24,A27,FUNCT_4:44
+A28:  (~[:f,g:]).(x1,x2) = [:f,g:].(x2,x1) by A23,A27,FUNCT_4:44
      .= [f.x2,g.x1] by A25,A26,FUNCT_3:def 9;
         g.x1 in rng g & f.x2 in rng f by A25,A26,FUNCT_1:def 5;
     then [g.x1,f.x2] in [:rng g, rng f:] by ZFMISC_1:106;
@@ -364,8 +369,9 @@ A28:  y = [:f,g:].(x2,x1) by A23,A24,A27,FUNCT_4:44
 then A29:  [g.x1,f.x2] in dom([:g,f:]") by A7,FUNCT_1:55;
         [x1,x2] in dom[:g,f:] by A6,A25,A26,ZFMISC_1:106;
    hence x = ([:g,f:]").([:g,f:].(x1,x2)) by A7,A27,FUNCT_1:56
-         .= ([:g,f:]").[g.x1,f.x2] by A25,A26,FUNCT_3:def 9
-         .= (~([:g,f:]")).y by A28,A29,FUNCT_4:def 2;
+         .= ([:g,f:]").(g.x1,f.x2) by A25,A26,FUNCT_3:def 9
+         .= (~([:g,f:]")).(f.x2,g.x1) by A29,FUNCT_4:def 2
+         .= (~([:g,f:]")).y by A28,A24,A27;
   end;
  hence thesis by A9,A11,FUNCT_1:54;
 end;
@@ -555,8 +561,9 @@ A11:  [a2,a] in dom[:g2,g2:] by A5,A7,ZFMISC_1:106;
              .= [:g2,g2:].(a2,a) by A2,A11,FUNCT_4:def 2
              .= [g2.a2,g2.a] by A9,FUNCT_3:def 9;
     then A12:  g2.a2 = b by ZFMISC_1:33;
-        [a2,a1] in dom[:g2,g2:] by A5,A7,ZFMISC_1:106;
-   hence f.z = ([:g2,g2:]).(a2,a1) by A2,A4,FUNCT_4:def 2
+A13:      [a2,a1] in dom[:g2,g2:] by A5,A7,ZFMISC_1:106;
+   thus f.z = [:g1,g1:].(a1,a2) by  A4,A1
+       .= [:g2,g2:].(a2,a1) by A2,FUNCT_4:def 2,A1,A13
        .= [b,b] by A9,A10,A12,FUNCT_3:def 9;
   end;
  hence f = [:A,A:] --> [b,b] by A3,FUNCOP_1:17;
@@ -963,7 +970,7 @@ A11: F.o2 = ([:g,g:].(o2,o2))`1 by  A6,A10,FUNCT_4:def 2
         .= g.o2 by MCART_1:7;
         [o1,o2] in dom~[:g,g:] by A1,A6,A7,ZFMISC_1:106;
 then A12: [o2,o1] in dom[:g,g:] by FUNCT_4:43;
-A13:  (B'*f').[o1,o2] = B'.(f'.[o1,o2]) by A5,A7,FUNCT_1:23
+A13:  (B'*f').[o1,o2] = B'.(f'.(o1,o2)) by A5,A7,FUNCT_1:23
                 .= B'.([:g,g:].(o2,o1)) by A1,A6,A12,FUNCT_4:def 2
                 .= (the Arrows of C2).(F.o2,F.o1) by A2,A9,A11,FUNCT_3:96
                 .= <^F.o2,F.o1^> by ALTCAT_1:def 2;

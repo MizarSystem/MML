@@ -17,6 +17,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,7 +32,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="182"/>
+<Func kind="K" nr="208"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
@@ -38,24 +40,24 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="53">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>

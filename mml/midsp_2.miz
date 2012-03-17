@@ -7,10 +7,10 @@
 environ
 
  vocabularies RLVECT_1, MIDSP_1, PRE_TOPC, FUNCT_1, QC_LANG1, ARYTM_1,
-      VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2;
+      VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2, NAT_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, DOMAIN_1, STRUCT_0,
       PRE_TOPC, RLVECT_1, VECTSP_1, MIDSP_1;
- constructors BINOP_1, VECTSP_1, MIDSP_1, DOMAIN_1;
+ constructors BINOP_1, VECTSP_1, MIDSP_1, DOMAIN_1, NAT_D;
  registrations MIDSP_1, STRUCT_0, RELSET_1, VECTSP_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, VECTSP_1;
@@ -73,10 +73,9 @@ reserve G for add-associative right_zeroed right_complementable
 reserve x for Element of G;
 reserve w for Function of [:S,S:],the carrier of G;
 
-theorem
-Th2: Double 0.G = 0.G by RLVECT_1:def 7;
+Lm1: Double 0.G = 0.G by RLVECT_1:def 7;
 
-canceled;
+canceled 2;
 
 theorem
 Th4: w is_atlas_of S,G implies w.(a,a) = 0.G
@@ -195,7 +194,7 @@ theorem Th14:
 theorem
 Th15: Double (-x) = -Double x
  proof
-      0.G = Double 0.G by Th2
+      0.G = Double 0.G by Lm1
       .= Double (x+-x) by RLVECT_1:def 10
       .= Double x + Double (-x) by Th14;
    hence thesis by RLVECT_1:19;
@@ -294,7 +293,7 @@ Th18: (for a being set holds a is Element of vectgroup(M)
     end;
  end;
 
-Lm1:(for a being Element of vectgroup(M)
+Lm2:(for a being Element of vectgroup(M)
           ex x being Element of vectgroup(M) st Double x = a)
         & for a being Element of vectgroup(M)
             holds Double a = 0.vectgroup(M) implies a = 0.vectgroup(M)
@@ -366,7 +365,7 @@ registration
       (for a being Element of G
        ex x being Element of G st Double x = a) &
    for a being Element of G
-       holds Double a = 0.G implies a = 0.G by Lm1;
+       holds Double a = 0.G implies a = 0.G by Lm2;
    then G is midpoint_operator by Def5;
    hence thesis;
   end;
@@ -427,7 +426,7 @@ theorem
   (Half x = Half y implies x = y) &
   Half Double x = x
  proof
-      Double 0.G = 0.G by Th2;
+      Double 0.G = 0.G by Lm1;
    hence Half 0.G = 0.G by Def6;
       Double (Half x + Half y) = Double Half x + Double Half y by Th14
                 .= x + Double Half y by Def6
@@ -500,7 +499,7 @@ registration let M;
   proof
    set G = vectgroup(M);
       (for x ex y st Double y = x) & for x holds Double
-x = 0.G implies x = 0.G by Lm1;
+x = 0.G implies x = 0.G by Lm2;
    hence thesis by Def5;
   end;
 end;
@@ -714,7 +713,7 @@ definition let S,G,w;
  coherence;
 end;
 
-Lm2: w is_atlas_of S,G implies for a,b,c holds
+Lm3: w is_atlas_of S,G implies for a,b,c holds
         a@b = c iff (Atlas(w)).(a,c) = (Atlas(w)).(c,b)
  proof
    assume A1: w is_atlas_of S,G;
@@ -730,7 +729,7 @@ theorem
 Th32: w is_atlas_of S,G implies MidStr(#S,@(w)#),G are_associated_wrp Atlas(w)
  proof
    assume w is_atlas_of S,G;
-   then for a,b,c holds a@b = c iff (Atlas(w)).(a,c) = (Atlas(w)).(c,b) by Lm2
+   then for a,b,c holds a@b = c iff (Atlas(w)).(a,c) = (Atlas(w)).(c,b) by Lm3
 ;
    hence thesis by Def2;
  end;

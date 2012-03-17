@@ -7,13 +7,15 @@
 environ
 
  vocabularies RLVECT_1, ANPROJ_1, ARYTM_1, RELAT_1, FUNCT_2, FUNCT_1, FUNCSDOM,
-      REALSET1, COLLSP, RELAT_2, INCSP_1, VECTSP_1, AFF_2, ANALOAF, ANPROJ_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, DOMAIN_1,
-      STRUCT_0, RLVECT_1, REAL_1, FRAENKEL, FUNCSDOM, COLLSP, ANPROJ_1;
- constructors DOMAIN_1, REAL_1, MEMBERED, FUNCSDOM, ANPROJ_1;
+      REALSET1, COLLSP, RELAT_2, INCSP_1, VECTSP_1, AFF_2, ANALOAF, ANPROJ_2,
+      NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
+      DOMAIN_1, STRUCT_0, RLVECT_1, REAL_1, FRAENKEL, FUNCSDOM, COLLSP,
+      ANPROJ_1;
+ constructors DOMAIN_1, REAL_1, MEMBERED, FUNCSDOM, ANPROJ_1, NAT_D;
  registrations SUBSET_1, COLLSP, ANPROJ_1, STRUCT_0, RELSET_1, MEMBERED;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions COLLSP, ANPROJ_1, BINOP_1, FUNCSDOM;
+ definitions COLLSP, ANPROJ_1, BINOP_1, FUNCSDOM, RLVECT_1;
  theorems RLVECT_1, FUNCT_2, FUNCSDOM, COLLSP, ANPROJ_1, ENUMSET1, XCMPLX_0,
       XCMPLX_1, FUNCOP_1;
  schemes FUNCT_2;
@@ -71,7 +73,6 @@ proof assume A1: for a,b st a*u + b*v = 0.V holds a=0 & b=0;
   hence thesis by A2; end;
   given a,b such that A5: a*u = b*v and A6: a<>0 & b<>0;
      0.V = a*u - b*v by A5,RLVECT_1:28
-     .= a*u + -(b*v) by RLVECT_1:def 11
      .= a*u + b*(-v) by RLVECT_1:39
      .= a*u + (-b)*v by RLVECT_1:38;
   hence contradiction by A1,A6;
@@ -333,7 +334,6 @@ theorem Th5:
   consider a,b such that A5: y = a*u + b*v by A2,A3,ANPROJ_1:11;
   consider a1,b1 such that A6: y = a1*u1 + b1*v1 by A2,A4,ANPROJ_1:11;
      0.V = (a*u + b*v) - (a1*u1 + b1*v1) by A5,A6,RLVECT_1:28
-   .= (a*u + b*v) + -(a1*u1 + b1*v1) by RLVECT_1:def 11
    .= (a*u + b*v) + (-1)*(a1*u1 + b1*v1) by RLVECT_1:29
    .= (a*u + b*v) + ((-1)*(a1*u1) + (-1)*(b1*v1)) by RLVECT_1:def 9
    .= (a*u + b*v) + (((-1)*a1)*u1 + (-1)*(b1*v1)) by RLVECT_1:def 9
@@ -534,8 +534,7 @@ proof thus
         .= b*(a2*v) + (b*(-a3))*w by RLVECT_1:def 9
         .= b*(a2*v) + b*((-a3)*w) by RLVECT_1:def 9
         .= b*(a2*v) + b*(-(a3*w)) by Lm8
-        .= b*(a2*v + (-(a3*w))) by RLVECT_1:def 9
-        .= b*(a2*v - a3*w) by RLVECT_1:def 11; end;
+        .= b*(a2*v - a3*w) by RLVECT_1:def 9; end;
 
 theorem Th8:
 o is_Prop_Vect & u,v,w are_Prop_Vect & u2,v2,w2 are_Prop_Vect &
@@ -603,11 +602,8 @@ set u1' = a2*v - a3*w, v1' = a1*u - a3*w, w1' = a1*u - a2*v;
 then A32: are_Prop u1',u1 & are_Prop v1',v1 & are_Prop w1',w1 by A28,Lm9
 ;  1*u1' + (-1)*v1' + 1*w1' = u1' + (-1)*v1' + 1*w1' by RLVECT_1:def 9
  .= u1' + (-1)*v1' + w1' by RLVECT_1:def 9
- .= u1' + (-v1') + w1' by RLVECT_1:29 .=
-(a2*v - a3*w) + (-(a1*u) + a3*w) + (a1*u - a2*v) by RLVECT_1:47
- .= (a2*v + (-(a3*w))) + (a3*w + (-(a1*u))) + (a1*u - a2*v)
-by RLVECT_1:def 11 .= (a2*v + (-(a3*w))) + (a3*w + (-(a1*u))) + (a1*u +
-(-(a2*v))) by RLVECT_1:def 11 .= a2*v + (-(a3*w)) + a3*w + (-(a1*u)) +
+ .= u1' + (-v1') + w1' by RLVECT_1:29 .= (a2*v + (-(a3*w))) + (a3*w + (-(a1*u))
+) + (a1*u - a2*v) by RLVECT_1:47 .= a2*v + (-(a3*w)) + a3*w + (-(a1*u)) +
 (a1*u + (-(a2*v))) by RLVECT_1:def 6 .= a2*v + ((-(a3*w)) + a3*w) + (-(a1*u))
 + (a1*u + (-(a2*v))) by RLVECT_1:def 6
 .= a2*v + 0.V + (-(a1*u)) + (a1*u + (-(a2*v))) by RLVECT_1:16
@@ -1175,35 +1171,27 @@ Lm30: ex A,x1,x2,x3 st A={x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3
     reconsider u=f, v=g, w = h as Element of V;
     A3: for a,b,c st a*u + b*v + c*w = 0.V holds a=0 & b=0 & c = 0
      proof let r,s,t be Real such that A4: r*u + s*v + t*w = 0.V;
-        A5: r*u = (RealFuncExtMult(A)).[r,f] &
-        s*v = (RealFuncExtMult(A)).[s,g] &
-        t*w = (RealFuncExtMult(A)).[t,h] by RLVECT_1:def 4;
         reconsider u' = r*u,v' = s*v,w' = t*w as Element of Funcs(A,REAL);
         reconsider u''=u',v''=v' as Element of V;
-     0.V = (the add of V).[u'' + v'',w'] by A4,RLVECT_1:def 3
-       .= (RealFuncAdd(A)).((RealFuncAdd(A)).
+     0.V = (RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-   (RealFuncExtMult(A)).[t,h]) by  RLVECT_1:def 3,A5;
+   (RealFuncExtMult(A)).[t,h]) by A4;
          then (RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-   (RealFuncExtMult(A)).[t,h]) = RealFuncZero(A) by RLVECT_1:def 2;
+   (RealFuncExtMult(A)).[t,h]) = RealFuncZero(A);
         hence r=0 & s=0 & t=0 by A2; end;
-   A6: for y being Element of V ex a,b,c st y = a*u + b*v + c*w
+   A5: for y being Element of V ex a,b,c st y = a*u + b*v + c*w
         proof let y be Element of V;
          reconsider h'=y as Element of Funcs(A,REAL);
          consider a,b,c such that
-    A7: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
+    A6: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
             ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
             (RealFuncExtMult(A)).[c,h]) by A2;
-        a*u = (RealFuncExtMult(A)).[a,f] &
-         b*v = (RealFuncExtMult(A)).[b,g] &
-         c*w = (RealFuncExtMult(A)).[c,h] by RLVECT_1:def 4;
-        then h' = (the add of V).[a*u + b*v,c*w] by  A7,RLVECT_1:def 3
-          .= a*u + b*v + c*w by RLVECT_1:def 3; hence thesis; end;
+        h' = a*u + b*v + c*w by A6; hence thesis; end;
        u is_Prop_Vect by A3,Th1; then u <> 0.V by RLVECT_1:def 13;
     then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
     take V; reconsider u,v,w as Element of V; take u,v,w;
-   thus thesis by A3,A6; end;
+   thus thesis by A3,A5; end;
 
 theorem
 Th17: ex f,g,h,f1 st
@@ -1562,27 +1550,13 @@ Th23: ex V being non trivial RealLinearSpace st
       reconsider u' = r*u,v' = s*v,w' = t*w,u1' = r1*u1
  as Element of Funcs(A,REAL); reconsider
       u''= u',v''=v',w''=w' as Element of V;
-   0.V = (the add of V).[u'' + v'' + w'',u1'] by A4,RLVECT_1:def 3
- .= (the add of V).[(the add of V).[u'' + v'',w'],u1'] by RLVECT_1:def 3
- .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).(u',v'),w'),u1') by
-RLVECT_1:def 3
- .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
-                             ((RealFuncExtMult(A)).[r,f],v'),w'),u1') by
-RLVECT_1:def 4
- .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
-   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),w'),u1') by
-RLVECT_1:def 4
- .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
+   0.V = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-                   (RealFuncExtMult(A)).[t,h]),u1') by RLVECT_1:def 4
- .= (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
-   ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
-      (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) by
-RLVECT_1:def 4;
+      (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) by A4;
   then (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
    ((RealFuncExtMult(A)).[r,f],(RealFuncExtMult(A)).[s,g]),
     (RealFuncExtMult(A)).[t,h]),(RealFuncExtMult(A)).[r1,f1]) =
-                 RealFuncZero(A) by RLVECT_1:def 2;
+                 RealFuncZero(A);
   hence r = 0 & s = 0 & t = 0 & r1 = 0 by A2; end;
    A5: for y being Element of V ex a,b,c,d st y = a*u + b*v + c*w + d*u1
     proof let y be Element of V;
@@ -1590,13 +1564,8 @@ RLVECT_1:def 4;
      h'=y as Element of Funcs(A,REAL); consider a,b,c,d such that
      A6: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
        ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
-       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) by A2;
-         a*u = (RealFuncExtMult(A)).[a,f] & b*v = (RealFuncExtMult(A)).[b,g] &
-         c*w = (RealFuncExtMult(A)).[c,h] & d*u1 = (RealFuncExtMult(A)).[d,f1]
-                        by RLVECT_1:def 4; then h' =
- (the add of V).[(the add of V).[a*u + b*v,c*w],d*u1] by  A6,RLVECT_1:def 3
- .= (the add of V).[a*u + b*v + c*w,d*u1] by RLVECT_1:def 3
- .= a*u + b*v + c*w + d*u1 by RLVECT_1:def 3; hence thesis; end;
+       (RealFuncExtMult(A)).[c,h]),(RealFuncExtMult(A)).[d,f1]) by A2; h' = a*u
++ b*v + c*w + d*u1 by A6; hence thesis; end;
        u is_Prop_Vect by A3,Th2; then u <> 0.V by RLVECT_1:def 13;
     then reconsider V as non trivial RealLinearSpace by ANPROJ_1:def 8;
     take V; reconsider u,v,w,u1 as Element of V; take u,v,w,u1;

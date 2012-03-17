@@ -49,9 +49,9 @@
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="105"/>
 <Adjective nr="106"/>
-<Adjective nr="132"/>
+<Adjective nr="107"/>
+<Adjective nr="133"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

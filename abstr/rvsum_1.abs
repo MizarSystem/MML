@@ -8,24 +8,65 @@ environ
 
  vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, VECTSP_1,
       SETWISEO, SQUARE_1, ARYTM, FUNCOP_1, FINSEQOP, RLVECT_1, RVSUM_1, CARD_3,
-      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1;
+      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1, NAT_1;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XBOOLE_0, XCMPLX_0,
-      XXREAL_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, SETWOP_2;
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D, SQUARE_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, SETWOP_2;
  constructors PARTFUN1, BINOP_1, SETWISEO, SQUARE_1, NAT_1, BINOP_2, FINSEQOP,
-      SEQ_1, FINSEQ_4, FINSOP_1, SETWOP_2;
+      SEQ_1, FINSEQ_4, FINSOP_1, SETWOP_2, REAL_1, NAT_D;
  registrations RELSET_1, FINSEQ_2, NAT_1, MEMBERED, FUNCT_1, FUNCT_2, BINOP_2,
-      XCMPLX_0, XREAL_0, SQUARE_1, FUNCOP_1, ORDINAL1, FINSEQ_1;
+      XCMPLX_0, XREAL_0, SQUARE_1, FUNCOP_1, ORDINAL1, FINSEQ_1, SEQ_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
- reserve i,j,k for Element of NAT,
-         x,x1,x2,x3,r,r1,r2,r3 for Element of REAL,
-         F,F1,F2 for FinSequence of REAL,
-         R,R1,R2,R3 for Element of i-tuples_on REAL;
+registration
+  cluster real-yielding FinSequence;
+end;
+
+definition
+  let F be real-yielding Relation;
+  redefine func rng F -> Subset of REAL;
+end;
+
+registration
+  let f, g be real-yielding Relation;
+  cluster f*g -> real-yielding;
+end;
+
+registration
+  let D be non empty set;
+  let F be Function of REAL,D; let F1 be real-yielding FinSequence;
+  cluster F*F1 -> FinSequence-like;
+end;
+
+registration let r be real number;
+  cluster <*r*> -> real-yielding;
+end;
+
+registration let r1, r2 be real number;
+  cluster <*r1, r2*> -> real-yielding;
+end;
+
+registration let r1, r2, r3 be real number;
+  cluster <*r1, r2, r3*> -> real-yielding;
+end;
+
+registration let j be Nat, r be real number;
+  cluster j |-> r -> real-yielding;
+end;
+
+registration let f, g be real-yielding FinSequence;
+  cluster f ^ g -> real-yielding;
+end;
+
+reserve i,j,k for Element of NAT,
+        x,x1,x2,x3 for Element of REAL,
+        r,r1,r2,r3 for real number,
+        F,F1,F2 for real-yielding FinSequence,
+        R,R1,R2,R3 for Element of i-tuples_on REAL;
 
 canceled 2;
 
@@ -66,7 +107,7 @@ end;
 canceled;
 
 theorem :: RVSUM_1:19
-  (r multreal).x = r*x;
+  (r multreal).r1 = r*r1;
 
 theorem :: RVSUM_1:20
   r multreal is_distributive_wrt addreal;
@@ -83,23 +124,18 @@ theorem :: RVSUM_1:23
 theorem :: RVSUM_1:24
   compreal is_distributive_wrt addreal;
 
-:: Some Functors on the i-tuples on Real
-
 definition let F1,F2;
-  func F1 + F2 -> FinSequence of REAL equals
+  redefine func F1 + F2 -> FinSequence of REAL equals
 :: RVSUM_1:def 4
   addreal.:(F1,F2);
  commutativity;
 end;
 
-canceled;
-
-theorem :: RVSUM_1:26
-  i in dom (F1+F2) implies (F1+F2).i = F1.i + F2.i;
-
 definition let i,R1,R2;
   redefine func R1 + R2 -> Element of i-tuples_on REAL;
 end;
+
+canceled 2;
 
 theorem :: RVSUM_1:27
   (R1+R2).j = R1.j + R2.j;
@@ -121,25 +157,23 @@ theorem :: RVSUM_1:32
 theorem :: RVSUM_1:33
   R + (i|->(0 qua Real)) = R;
 
-definition let F;
-  func -F -> FinSequence of REAL equals
-:: RVSUM_1:def 5
-  compreal*F;
-  involutiveness;
-end;
-
-theorem :: RVSUM_1:34
-  dom F = dom -F;
+canceled;
 
 theorem :: RVSUM_1:35
-  (-F).i = -F.i;
+  for i being set holds (-F).i = -F.i;
+
+definition let F;
+  redefine func -F -> FinSequence of REAL equals
+:: RVSUM_1:def 5
+  compreal*F;
+end;
 
 definition let i,R;
   redefine func -R -> Element of i-tuples_on REAL;
 end;
 
 theorem :: RVSUM_1:36
-  r = R.j implies (-R).j = -r;
+  (-R).j = -(R.j);
 
 theorem :: RVSUM_1:37
   -(<*>REAL) = <*>REAL;
@@ -168,19 +202,16 @@ theorem :: RVSUM_1:45
   -(R1 + R2) = -R1 + -R2;
 
 definition let F1,F2;
-  func F1 - F2 -> FinSequence of REAL equals
+  redefine func F1 - F2 -> FinSequence of REAL equals
 :: RVSUM_1:def 6
   diffreal.:(F1,F2);
 end;
 
-canceled;
-
-theorem :: RVSUM_1:47
-  i in dom (F1-F2) implies (F1-F2).i = F1.i - F2.i;
-
 definition let i,R1,R2;
   redefine func R1 - R2 -> Element of i-tuples_on REAL;
 end;
+
+canceled 2;
 
 theorem :: RVSUM_1:48
   (R1-R2).j = R1.j - R2.j;
@@ -233,19 +264,24 @@ theorem :: RVSUM_1:63
 theorem :: RVSUM_1:64
   R1 = R1 - R + R;
 
-definition let r be real number; let F;
-  func r*F -> FinSequence of REAL equals
+notation
+  let F,r;
+  synonym r*F for r(#)F;
+end;
+
+canceled;
+
+theorem :: RVSUM_1:66
+  for i being set holds
+  (r*F).i = r*(F.i);
+
+definition let F,r;
+  redefine func r*F -> FinSequence of REAL equals
 :: RVSUM_1:def 7
   (r multreal)*F;
 end;
 
-theorem :: RVSUM_1:65
-  dom(r*F) = dom F;
-
-theorem :: RVSUM_1:66
-  (r*F).i = r*(F.i);
-
-definition let i; let r be real number; let R;
+definition let i,R,r;
   redefine func r*R -> Element of i-tuples_on REAL;
 end;
 
@@ -298,8 +334,7 @@ end;
 theorem :: RVSUM_1:79
   (sqr R).j = (R.j)^2;
 
-theorem :: RVSUM_1:80
-  sqr (<*>REAL) = <*>REAL;
+canceled;
 
 theorem :: RVSUM_1:81
   sqr <*r*> = <*r^2*>;
@@ -313,8 +348,12 @@ theorem :: RVSUM_1:83
 theorem :: RVSUM_1:84
   sqr (r*R) = r^2* sqr R;
 
+notation let F1,F2;
+  synonym mlt(F1,F2) for F1(#)F2;
+end;
+
 definition let F1,F2;
-  func mlt(F1,F2) -> FinSequence of REAL equals
+  redefine func mlt(F1,F2) -> FinSequence of REAL equals
 :: RVSUM_1:def 9
   multreal.:(F1,F2);
   commutativity;
@@ -338,10 +377,7 @@ theorem :: RVSUM_1:88
 theorem :: RVSUM_1:89
   mlt(<*r1*>,<*r2*>) = <*r1*r2*>;
 
-canceled;
-
-theorem :: RVSUM_1:91
-  mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3);
+canceled 2;
 
 theorem :: RVSUM_1:92
   mlt(i|->r,R) = r*R;
@@ -371,13 +407,44 @@ theorem :: RVSUM_1:100
 
 :: Finite sum of Finite Sequence of Real Numbers
 
-definition let F be FinSequence of REAL;
-  func Sum F -> Real equals
+definition let F be Relation;
+  attr F is complex-yielding means
 :: RVSUM_1:def 10
-    addreal $$ F;
+    rng F c= COMPLEX;
 end;
 
-canceled;
+registration
+  cluster -> complex-yielding FinSequence of COMPLEX;
+  cluster real-yielding -> complex-yielding FinSequence;
+  cluster real-yielding complex-yielding FinSequence;
+end;
+
+definition let F be complex-yielding FinSequence;
+  func Sum F -> complex number means
+:: RVSUM_1:def 11
+    ex f being FinSequence of COMPLEX st f = F &
+    it = addcomplex $$ f;
+end;
+
+registration let F be real-yielding FinSequence;
+  cluster Sum F -> real;
+end;
+
+theorem :: RVSUM_1:101
+  for F being FinSequence of REAL holds
+    Sum F = addreal $$ F;
+
+definition let F be FinSequence of COMPLEX;
+  redefine func Sum F -> Element of COMPLEX equals
+:: RVSUM_1:def 12
+  addcomplex $$ F;
+end;
+
+definition let F be FinSequence of REAL;
+  redefine func Sum F -> Element of REAL equals
+:: RVSUM_1:def 13
+  addreal $$ F;
+end;
 
 theorem :: RVSUM_1:102
   Sum(<*> REAL) = 0;
@@ -448,28 +515,11 @@ theorem :: RVSUM_1:122
 
 :: The Product of Finite Sequences of Real Numbers
 
-definition let F be Relation;
-  attr F is complex-yielding means
-:: RVSUM_1:def 11
-    rng F c= COMPLEX;
-end;
-
-registration
-  cluster -> real-yielding FinSequence of REAL;
-  cluster -> complex-yielding FinSequence of COMPLEX;
-  cluster real-yielding -> complex-yielding FinSequence;
-  cluster real-yielding complex-yielding FinSequence;
-end;
-
 definition let F be complex-yielding FinSequence;
   func Product F -> complex number means
-:: RVSUM_1:def 12
+:: RVSUM_1:def 14
     ex f being FinSequence of COMPLEX st f = F &
     it = multcomplex $$ f;
-end;
-
-definition let F be FinSequence of COMPLEX;
-  redefine func Product F -> Element of COMPLEX;
 end;
 
 registration let F be real-yielding FinSequence;
@@ -480,6 +530,18 @@ theorem :: RVSUM_1:123
   for F being FinSequence of REAL holds
     Product F = multreal $$ F;
 
+definition let F be FinSequence of COMPLEX;
+  redefine func Product F -> Element of COMPLEX equals
+:: RVSUM_1:def 15
+  multcomplex $$ F;
+end;
+
+definition let F be FinSequence of REAL;
+  redefine func Product F -> Element of REAL equals
+:: RVSUM_1:def 16
+  multreal $$ F;
+end;
+
 registration
   cluster empty -> complex-yielding FinSequence;
 end;
@@ -488,15 +550,15 @@ theorem :: RVSUM_1:124
   Product <*>REAL = 1;
 
 registration let r be complex number;
-  cluster <*r*> -> complex-yielding FinSequence-like;
+  cluster <*r*> -> complex-yielding;
 end;
 
 registration let r1, r2 be complex number;
-  cluster <*r1, r2*> -> complex-yielding FinSequence-like;
+  cluster <*r1, r2*> -> complex-yielding;
 end;
 
 registration let r1, r2, r3 be complex number;
-  cluster <*r1, r2, r3*> -> complex-yielding FinSequence-like;
+  cluster <*r1, r2, r3*> -> complex-yielding;
 end;
 
 theorem :: RVSUM_1:125
@@ -528,10 +590,6 @@ theorem :: RVSUM_1:130
 
 theorem :: RVSUM_1:131
   for R being Element of 0-tuples_on REAL holds Product R = 1;
-
-registration let j be Element of NAT, r be real number;
-  cluster j |-> r -> real-yielding;
-end;
 
 theorem :: RVSUM_1:132
   Product (i|->1) = 1;
@@ -580,4 +638,3 @@ theorem :: RVSUM_1:142
 
 theorem :: RVSUM_1:143
   Product (i|->(z1*z2)) = (Product (i|->z1))*(Product (i|->z2));
-

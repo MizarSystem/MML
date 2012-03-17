@@ -147,21 +147,21 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="26" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="85"/>
 <Adjective nr="96"/>

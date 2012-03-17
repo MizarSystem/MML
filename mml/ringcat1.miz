@@ -8,18 +8,18 @@ environ
 
  vocabularies CLASSES2, VECTSP_1, INCSP_1, FUNCT_1, CAT_1, FUNCSDOM, GRCAT_1,
       RELAT_1, MIDSP_1, ARYTM_3, ENS_1, FUNCT_2, RLVECT_1, MOD_2, TARSKI,
-      PARTFUN1, RINGCAT1, GROUP_1;
+      PARTFUN1, RINGCAT1, GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, MCART_1, RELSET_1,
-      PARTFUN1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, GRCAT_1,
-      FUNCSDOM, CAT_1, CLASSES2, MOD_2;
- constructors PARTFUN1, DOMAIN_1, ALGSTR_1, GRCAT_1, MOD_2;
+      PARTFUN1, FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
+      GRCAT_1, FUNCSDOM, CAT_1, CLASSES2, MOD_2;
+ constructors PARTFUN1, DOMAIN_1, ALGSTR_1, GRCAT_1, MOD_2, NAT_D;
  registrations VECTSP_2, MOD_2, RELSET_1, STRUCT_0, GRCAT_1, SUBSET_1,
       XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions GRCAT_1;
- theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, PARTFUN1, TARSKI, RELAT_1,
-      ZFMISC_1, XBOOLE_0, FUNCT_1;
- schemes FUNCT_2, GRCAT_1, TARSKI;
+ definitions GRCAT_1, BINOP_1;
+ theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, TARSKI, RELAT_1, ZFMISC_1,
+      XBOOLE_0, FUNCT_1, BINOP_1;
+ schemes FUNCT_2, BINOP_1, TARSKI;
 
 begin
 
@@ -1126,7 +1126,7 @@ definition let V;
  :Def23:
  (for g,f being Element of Morphs(V) holds [g,f] in dom it iff dom(g) = cod(f))
  & (for g,f being Element of Morphs(V)
-     st [g,f] in dom it holds it.[g,f] = g*f);
+     st [g,f] in dom it holds it.(g,f) = g*f);
  existence
   proof
     set X = Morphs(V);
@@ -1138,7 +1138,7 @@ definition let V;
     A2:for g,f being Element of X holds [g,f] in dom c iff P[g,f]
                                                  and
     A3:for g,f being Element of X
-          st [g,f] in dom c holds c.[g,f] = F(g,f) from GRCAT_1:sch 2(A1);
+          st [g,f] in dom c holds c.(g,f) = F(g,f) from BINOP_1:sch 8(A1);
     take c;
     thus thesis by A2,A3;
   end;
@@ -1149,10 +1149,10 @@ definition let V;
     let c1,c2 be PartFunc of [:X,X:],X such that
     A4:for g,f being Element of X holds [g,f] in dom c1 iff P[g,f] and
     A5:for g,f being Element of X
-         st [g,f] in dom c1 holds c1.[g,f] = g*f and
+         st [g,f] in dom c1 holds c1.(g,f) = g*f and
     A6:for g,f being Element of X holds [g,f] in dom c2 iff P[g,f] and
     A7:for g,f being Element of X
-         st [g,f] in dom c2 holds c2.[g,f] = g*f;
+         st [g,f] in dom c2 holds c2.(g,f) = g*f;
     A8: dom c1 = dom c2
      proof
           now let x; assume
@@ -1172,15 +1172,15 @@ definition let V;
        hence thesis by A11,XBOOLE_0:def 10;
      end;
     set V0 = dom c1;
-   for x,y st [x,y] in V0 holds c1.[x,y]=c2.[x,y]
+   for x,y st [x,y] in V0 holds c1.(x,y)=c2.(x,y)
      proof
        let x,y;assume
        A14: [x,y] in V0;
        then reconsider x,y as Element of X by ZFMISC_1:106;
-          c1.[x,y] = x*y by A5,A14;
+          c1.(x,y) = x*y by A5,A14;
        hence thesis by A7,A8,A14;
      end;
-    hence thesis by A8,PARTFUN1:35;
+    hence thesis by A8,BINOP_1:32;
   end;
 end;
 
@@ -1302,7 +1302,7 @@ for f' being Element of Morphs(RingObjects(UN))
    proof
      assume A7: dom g = cod f;
      then [g,f] in dom (the Comp of C) by Th26;
-     hence g*f = (comp(V)).[g',f'] by A1,CAT_1:def 4
+     hence g*f = (comp(V)).(g',f') by A1,CAT_1:def 4
               .= g'*f' by A6,A7,Def23;
    end;
   thus dom f = dom g iff dom f' = dom g' by A1,A4,Th29;

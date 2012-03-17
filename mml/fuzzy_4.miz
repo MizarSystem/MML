@@ -8,18 +8,20 @@ environ
 
  vocabularies FUZZY_1, RELAT_1, FUNCT_1, LATTICES, ORDINAL2, RCOMP_1, INTEGRA1,
       SEQ_2, ARYTM_1, FUZZY_3, FUNCT_3, BOOLE, PARTFUN1, SQUARE_1, SEQ_1,
-      FUZZY_4, ARYTM;
+      FUZZY_4, ARYTM, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, SQUARE_1, BINOP_1, RELSET_1, PARTFUN1, SEQ_1, SEQ_4,
-      RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1, FUZZY_1, FUZZY_2, FUZZY_3;
- constructors REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_2, FUZZY_3;
+      XXREAL_0, XREAL_0, SQUARE_1, BINOP_1, RELAT_1, RELSET_1, PARTFUN1,
+      FUNCT_4, SEQ_1, SEQ_4, RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1, FUZZY_1,
+      FUZZY_2, FUZZY_3;
+ constructors REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_2, FUZZY_3,
+      FUNCT_4, NAT_D;
  registrations XREAL_0, RELSET_1, SUBSET_1, INTEGRA1, MEMBERED, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
  definitions TARSKI, FUZZY_1, BINOP_1;
  theorems FUZZY_1, FUNCT_3, PARTFUN1, FUNCT_1, INTEGRA1, INTEGRA2, SQUARE_1,
       REAL_2, ZFMISC_1, FUZZY_3, SEQ_4, SUBSET_1, RCOMP_1, XBOOLE_0, FUZZY_2,
-      XXREAL_0;
- schemes PARTFUN1;
+      XXREAL_0, XBOOLE_1, FUNCT_4;
+ schemes PARTFUN1, BINOP_1;
 
 begin :: Basic properties of the membership function
 
@@ -106,105 +108,99 @@ A6:y in dom F & sup rng F - s <= G.y by A3;
  end;
 
 theorem Th3:
-for f be RMembership_Func of C1,C2, c be Element of [:C1,C2:] holds
+for f be RMembership_Func of C1,C2, c be set holds
 0 <= f.c & f.c <= 1
 proof
- let f being RMembership_Func of C1,C2;
- let c be Element of [:C1,C2:];
+ let f being RMembership_Func of C1,C2; let c be set;
+ per cases;
+ suppose c in [:C1,C2:];
+  then reconsider c as Element of [:C1,C2:];
     (Zmf(C1,C2)).c <= f.c & f.c <= (Umf(C1,C2)).c by FUZZY_3:3;
  then chi({},[:C1,C2:]).c <= f.c &
  f.c <= chi([:C1,C2:],[:C1,C2:]).c by FUZZY_3:def 1,def 2;
  hence thesis by FUNCT_3:def 3;
+ end;
+ suppose
+A1: not c in [:C1,C2:];
+   dom f = [:C1,C2:] by FUZZY_1:def 1;
+   then f.c = 0 by A1, FUNCT_1:def 4;
+  hence thesis;
+ end;
+end;
+
+definition let C1,C2; let f be RMembership_Func of C1,C2; let x,y;
+ redefine func f.(x,y) -> Element of REAL;
+ coherence
+  proof f.(x,y) = f. [x,y];
+   hence thesis;
+  end;
 end;
 
 theorem
-   for f be RMembership_Func of C1,C2, x,y st [x,y] in [:C1,C2:] holds
-0 <= f. [x,y] & f. [x,y] <= 1 by Th3;
+ for f be RMembership_Func of C1,C2, x,y holds
+   0 <= f.(x,y) & f.(x,y) <= 1 by Th3;
 
 begin
 :: Definition and properties of converse fuzzy relation
 
+notation
+let C1,C2 be non empty set;
+let h be RMembership_Func of C2,C1;
+ synonym converse h for ~h;
+end;
+
 definition
 let C1,C2 be non empty set;
 let h be RMembership_Func of C2,C1;
-func converse h -> RMembership_Func of C1,C2 means :Def1:
-for x,y st [x,y] in [:C1,C2:] holds it. [x,y] = h. [y,x];
-existence
-proof
-   defpred P[set,set,set] means $3 = h. [$2,$1];
-A1:for x,y,z st x in C1 & y in C2 & P[x,y,z] holds z in REAL;
-A2:for x,y,z1,z2 st x in C1 & y in C2 & P[x,y,z1] & P[x,y,z2] holds z1=z2;
-  consider IT being PartFunc of [:C1,C2:],REAL such that
-A3:(for x,y holds [x,y] in dom IT iff x in C1 & y in C2
-   & ex z st P[x,y,z])
-   & (for x,y st [x,y] in dom IT holds P[x,y,IT. [x,y]])
-     from PARTFUN1:sch 4(A1,A2);
- A4:dom IT = [:C1,C2:] & rng IT c= [.0,1.]
-  proof
-  A5:dom IT = [:C1,C2:]
-   proof
-      [:C1,C2:] c= dom IT
-    proof
-     A6:for x,y being set st [x,y] in [:C1,C2:] holds [x,y] in dom IT
-     proof
-      let x,y be set;
-      assume [x,y] in [:C1,C2:];
-      then A7:x in C1 & y in C2 by ZFMISC_1:106;
-         ex z st z = h. [y,x];
-      hence thesis by A3,A7;
-     end;
-        for z st z in [:C1,C2:] ex x,y st z = [x,y]
-     proof
-      let z being set;
-      assume z in [:C1,C2:];
-      then ex x,y st x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
-      hence thesis;
-     end;
-     hence thesis by A6,ZFMISC_1:111;
-    end;
-    hence thesis by XBOOLE_0:def 10;
-   end;
-     rng IT c= [.0,1.]
-  proof
-A8:rng h c= [.0,1.] by FUZZY_1:def 1;
-    let c being set; assume c in rng IT;
-    then consider z being Element of [:C1,C2:] such that
-A9:z in dom IT & c = IT.z by PARTFUN1:26;
-    reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
-       A = [. inf A, sup A .] by INTEGRA1:5;
-then A10:0=inf A & 1=sup A by INTEGRA1:6;
-    consider x,y being set such that
-A11:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
-       [y,x] in [:C2,C1:] by A11,ZFMISC_1:106;
-    then [y,x] in dom h by FUZZY_1:def 1;
-    then h. [y,x] in rng h by FUNCT_1:def 5;
-    then 0 <= h. [y,x] & h. [y,x] <= 1 by A8,A10,INTEGRA2:1;
-    then 0 <= IT.z & IT.z <= 1 by A3,A9,A11;
-    hence thesis by A9,A10,INTEGRA2:1;
-  end;
-  hence thesis by A5;
-  end;
-then IT is RMembership_Func of C1,C2 by FUZZY_1:def 1;
- hence thesis by A3,A4;
- end;
-uniqueness
-proof
-  let F,G be RMembership_Func of C1,C2;
-  assume that
-A12:for x,y st [x,y] in [:C1,C2:] holds F. [x,y] = h. [y,x]
-  and
-A13:for x,y st [x,y] in [:C1,C2:] holds G. [x,y] = h. [y,x];
-A14:[:C1,C2:] = dom F & [:C1,C2:] = dom G by FUZZY_1:def 1;
-     for x,y st x in C1 & y in C2 holds F.(x,y) = G.(x,y)
-  proof
-   let x,y be set;
-   assume x in C1 & y in C2;
-   then [x,y] in [:C1,C2:] by ZFMISC_1:106;
-   then F.(x,y) = h.(y,x) & G.(x,y) = h.(y,x) by A12,A13;
+redefine func converse h -> RMembership_Func of C1,C2 means :Def1:
+for x,y st [x,y] in [:C1,C2:] holds it.(x,y) = h.(y,x);
+ coherence
+  proof set IT = converse h;
+A1:  dom h = [:C2,C1:] by FUZZY_1:def 1;
+    then
+A2:  dom IT = [:C1,C2:] by FUNCT_4:47;
+    rng h c= [.0,1.] by FUZZY_1:def 1;
+    then
+A3:  rng IT c= [.0,1.] by A1,FUNCT_4:48;
+    rng IT c= REAL by A3,XBOOLE_1:1;
+    then reconsider IT as PartFunc of [:C1,C2:],REAL by A2, PARTFUN1:25;
+    IT is Membership_Func of [:C1,C2:] by A2,A3,FUZZY_1:def 1;
    hence thesis;
   end;
- hence thesis by A14,FUNCT_3:6;
-end;
+ compatibility
+  proof let IT be RMembership_Func of C1,C2;
+A4:  dom h = [:C2,C1:] by FUZZY_1:def 1;
+   thus IT = ~h implies for x,y st [x,y] in [:C1,C2:] holds IT.(x,y) = h.(y,x)
+    proof assume
+A5:    IT = ~h;
+     let x,y;
+     assume [x,y] in [:C1,C2:];
+      then [y,x] in dom h by A4,ZFMISC_1:107;
+     hence IT.(x,y) = h.(y,x) by FUNCT_4:def 2,A5;
+    end;
+   assume
+A6:  for x,y st [x,y] in [:C1,C2:] holds IT.(x,y) = h.(y,x);
+A7:  dom IT = [:C1,C2:] by FUZZY_1:def 1;
+A8:  for x holds x in dom IT iff ex y,z st x = [z,y] & [y,z] in dom h
+     proof let x;
+      thus x in dom IT implies ex y,z st x = [z,y] & [y,z] in dom h
+       proof assume x in dom IT;
+         then consider z,y such that
+A9:       z in C1 & y in C2 & x = [z,y] by ZFMISC_1:def 2;
+        take y,z;
+        thus thesis by A9,A4,ZFMISC_1:def 2;
+       end;
+      thus thesis by A7,ZFMISC_1:107;
+     end;
+    for y,z st [y,z] in dom h holds IT.(z,y) = h.(y,z)
+     proof let y,z;
+      assume [y,z] in dom h;
+       then
+A10:      [z,y] in [:C1,C2:] by ZFMISC_1:107;
+      thus IT.(z,y) = h.(y,z) by A10,A6;
+     end;
+   hence IT = ~h by A8,FUNCT_4:def 2;
+  end;
 end;
 
 theorem
@@ -220,10 +216,11 @@ A1:for c being Element of [:C1,C2:] st c in [:C1,C2:] holds
   consider x,y being set such that
 A2:x in C1 & y in C2 & c = [x,y] by ZFMISC_1:def 2;
 A3:[y,x] in [:C2,C1:] by A2,ZFMISC_1:106;
-     (converse converse f).c = (converse f). [y,x] by A2,Def1;
-  hence thesis by A2,A3,Def1;
+  (converse converse f).(x,y) = (converse f).(y,x) by A2,Def1
+        .= f.(x,y) by A3,Def1;
+  hence thesis by A2;
  end;
-    dom(converse converse f) = [:C1,C2:] & dom f = [:C1,C2:] by FUZZY_1:def 1;
+  dom(converse converse f) = [:C1,C2:] & dom f = [:C1,C2:] by FUZZY_1:def 1;
  hence thesis by A1,PARTFUN1:34;
 end;
 
@@ -240,10 +237,11 @@ A1:for c being Element of [:C2,C1:] st c in [:C2,C1:] holds
   consider y,x being set such that
 A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
 A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
-     (1_minus(converse f)).c = 1-(converse f). [y,x] by A2,FUZZY_1:def 6
-  .= 1-f. [x,y] by A2,Def1
-  .= (1_minus f). [x,y] by A3,FUZZY_1:def 6;
-  hence thesis by A2,Def1;
+  (1_minus(converse f)).(y,x) = 1-(converse f).(y,x) by A2,FUZZY_1:def 6
+  .= 1-f.(x,y) by A2,Def1
+  .= (1_minus f).(x,y) by A3,FUZZY_1:def 6
+  .= (converse(1_minus f)).(y,x) by A2,Def1;
+  hence thesis by A2;
  end;
     dom(1_minus(converse f)) = [:C2,C1:] & [:C2,C1:] = dom converse(1_minus f)
  by FUZZY_1:def 1;
@@ -265,11 +263,12 @@ A1:dom converse max(f,g) = [:C2,C1:] &
   consider y,x such that
 A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
 A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
-     (converse max(f,g)).c = max(f,g). [x,y] by A2,Def1
-  .=max(f. [x,y],g. [x,y]) by A3,FUZZY_1:def 5
-  .=max((converse f). [y,x], g. [x,y]) by A2,Def1
-  .=max((converse f). [y,x],(converse g). [y,x]) by A2,Def1;
-  hence thesis by A2,FUZZY_1:def 5;
+     (converse max(f,g)).(y,x) = max(f,g).(x,y) by A2,Def1
+  .=max(f.(x,y),g.(x,y)) by A3,FUZZY_1:def 5
+  .=max((converse f).(y,x), g.(x,y)) by A2,Def1
+  .=max((converse f).(y,x),(converse g).(y,x)) by A2,Def1
+  .=max(converse f,converse g).(y,x) by A2,FUZZY_1:def 5;
+  hence thesis by A2;
  end;
  hence thesis by A1,PARTFUN1:34;
 end;
@@ -289,10 +288,10 @@ A1:dom converse min(f,g) = [:C2,C1:] &
   consider y,x such that
 A2:y in C2 & x in C1 & c = [y,x] by ZFMISC_1:def 2;
 A3:[x,y] in [:C1,C2:] by A2,ZFMISC_1:106;
-     (converse min(f,g)).c = min(f,g). [x,y] by A2,Def1
-  .=min(f. [x,y],g. [x,y]) by A3,FUZZY_1:def 4
-  .=min((converse f). [y,x], g. [x,y]) by A2,Def1
-  .=min((converse f). [y,x],(converse g). [y,x]) by A2,Def1;
+     (converse min(f,g)).(y,x) = min(f,g).(x,y) by A2,Def1
+  .=min(f.(x,y),g.(x,y)) by A3,FUZZY_1:def 4
+  .=min((converse f).(y,x), g.(x,y)) by A2,Def1
+  .=min((converse f).(y,x),(converse g).(y,x)) by A2,Def1;
   hence thesis by A2,FUZZY_1:def 4;
  end;
  hence thesis by A1,PARTFUN1:34;
@@ -306,7 +305,7 @@ proof
  let f,g being RMembership_Func of C1,C2, x,y;
  assume A1: x in C1 & y in C2 & f. [x,y] <= g. [x,y];
  then [y,x] in [:C2,C1:] by ZFMISC_1:106;
- then f. [x,y] = (converse f). [y,x] & g. [x,y] = (converse g). [y,x] by Def1;
+ then f.(x,y) = (converse f).(y,x) & g.(x,y) = (converse g).(y,x) by Def1;
  hence thesis by A1;
 end;
 
@@ -432,7 +431,7 @@ let C1,C2,C3 be non empty set;
 let h be RMembership_Func of C1,C2;
 let g be RMembership_Func of C2,C3;
 func h(#)g -> RMembership_Func of C1,C3 means :Def3:
-for x,z st [x,z] in [:C1,C3:] holds it. [x,z] = sup(rng(min(h,g,x,z)));
+for x,z st [x,z] in [:C1,C3:] holds it.(x,z) = sup(rng(min(h,g,x,z)));
 existence
 proof
    defpred P[set,set,set] means $3 = sup(rng(min(h,g,$1,$2)));
@@ -441,8 +440,8 @@ A2:for x,z,c1,c2 st x in C1 & z in C3 & P[x,z,c1] & P[x,z,c2] holds c1=c2;
   consider IT being PartFunc of [:C1,C3:],REAL such that
 A3:(for x,z holds [x,z] in dom IT iff x in C1 & z in C3 &
      ex c st P[x,z,c]) &
-    (for x,z st [x,z] in dom IT holds P[x,z,IT. [x,z]])
-    from PARTFUN1:sch 4(A1,A2);
+    (for x,z st [x,z] in dom IT holds P[x,z,IT.(x,z)])
+    from BINOP_1:sch 5(A1,A2);
 A4:dom IT = [:C1,C3:] & rng IT c= [.0,1.]
   proof
 A5:dom IT = [:C1,C3:]
@@ -491,7 +490,7 @@ then A12:  sup(rng(min(h,g,x,z))) <= sup A & inf A <= inf(rng(min(h,g,x,z)))
     end;
     consider x,z being set such that
 A13:x in C1 & z in C3 & a = [x,z] by ZFMISC_1:def 2;
-       IT. [x,z] = sup(rng(min(h,g,x,z))) by A3,A5,A13;
+       IT.(x,z) = sup(rng(min(h,g,x,z))) by A3,A5,A13;
     then 0 <= IT.a & IT.a <= 1 by A10,A13;
     hence thesis by A8,A9,INTEGRA2:1;
   end;
@@ -505,18 +504,18 @@ proof
   let F,G be RMembership_Func of C1,C3;
   assume that
 A14:for x,z st [x,z] in [:C1,C3:]
-  holds F. [x,z] = sup(rng(min(h,g,x,z)))
+  holds F.(x,z) = sup(rng(min(h,g,x,z)))
   and
 A15:for x,z st [x,z] in [:C1,C3:]
-  holds G. [x,z] = sup(rng(min(h,g,x,z)));
+  holds G.(x,z) = sup(rng(min(h,g,x,z)));
 A16:dom F = [:C1,C3:] & dom G = [:C1,C3:] by FUZZY_1:def 1;
      for c being Element of [:C1,C3:] st c in [:C1,C3:] holds F.c = G.c
   proof
    let c being Element of [:C1,C3:];
    consider x,z being set such that
 A17:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
-      F. [x,z] = sup(rng(min(h,g,x,z))) &
-   G. [x,z] = sup(rng(min(h,g,x,z))) by A14,A15,A17;
+      F.(x,z) = sup(rng(min(h,g,x,z))) &
+   G.(x,z) = sup(rng(min(h,g,x,z))) by A14,A15,A17;
    hence thesis by A17;
   end;
  hence thesis by A16,PARTFUN1:34;
@@ -689,10 +688,11 @@ A1:dom(f(#)(max(g,h))) = [:C1,C3:] & dom(f(#)h) = [:C1,C3:] &
   let c being Element of [:C1,C3:];
   consider x,z being set such that
 A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
-     (f(#)(max(g,h))).c = sup(rng(min(f,max(g,h),x,z))) by A2,Def3
+     (f(#)(max(g,h))).c = (f(#)(max(g,h))).(x,z) by A2
+  .= sup(rng(min(f,max(g,h),x,z))) by A2,Def3
   .= max(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A2,Lm1
-  .= max((f(#)g). [x,z],sup rng(min(f,h,x,z))) by A2,Def3
-  .= max((f(#)g). [x,z],(f(#)h). [x,z]) by A2,Def3
+  .= max((f(#)g).(x,z),sup rng(min(f,h,x,z))) by A2,Def3
+  .= max((f(#)g).(x,z),(f(#)h).(x,z)) by A2,Def3
   .= max(f(#)g,f(#)h).c by A2,FUZZY_1:def 5;
   hence thesis;
  end;
@@ -856,10 +856,11 @@ A1:dom((max(f,g))(#)h) = [:C1,C3:] & dom(f(#)h) = [:C1,C3:] &
   let c being Element of [:C1,C3:];
   consider x,z being set such that
 A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
-     ((max(f,g))(#)h).c = sup(rng(min(max(f,g),h,x,z))) by A2,Def3
+     ((max(f,g))(#)h).c = ((max(f,g))(#)h).(x,z) by A2
+  .= sup(rng(min(max(f,g),h,x,z))) by A2,Def3
   .= max(sup rng(min(f,h,x,z)),sup rng(min(g,h,x,z))) by A2,Lm2
-  .= max((f(#)h). [x,z],sup rng(min(g,h,x,z))) by A2,Def3
-  .= max((f(#)h). [x,z],(g(#)h). [x,z]) by A2,Def3
+  .= max((f(#)h).(x,z),sup rng(min(g,h,x,z))) by A2,Def3
+  .= max((f(#)h).(x,z),(g(#)h).(x,z)) by A2,Def3
   .= max(f(#)h,g(#)h).c by A2,FUZZY_1:def 5;
   hence thesis;
  end;
@@ -976,10 +977,10 @@ proof
  consider x,z being set such that
 A1: x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
 A2: [x,z] in [:C1,C3:] by A1; then
-A3: (f(#)(min(g,h))). [x,z] = sup(rng(min(f,min(g,h),x,z))) by Def3;
-    min(f(#)g,f(#)h). [x,z] = min((f(#)g). [x,z],(f(#)h). [x,z])
+A3: (f(#)(min(g,h))).(x,z) = sup(rng(min(f,min(g,h),x,z))) by Def3;
+    min(f(#)g,f(#)h).(x,z) = min((f(#)g).(x,z),(f(#)h).(x,z))
    by A2,FUZZY_1:def 4
- .= min((f(#)g). [x,z],sup rng(min(f,h,x,z))) by A2,Def3
+ .= min((f(#)g).(x,z),sup rng(min(f,h,x,z))) by A2,Def3
  .= min(sup rng(min(f,g,x,z)),sup rng(min(f,h,x,z))) by A2,Def3;
  hence thesis by A1,A3,Lm3;
 end;
@@ -1094,10 +1095,10 @@ proof
  consider x,z being set such that
 A1: x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
 A2: [x,z] in [:C1,C3:] by A1; then
-A3: (min(f,g)(#)h). [x,z] = sup(rng(min(min(f,g),h,x,z))) by Def3;
-    min(f(#)h,g(#)h). [x,z] = min((f(#)h). [x,z],(g(#)h). [x,z])
+A3: (min(f,g)(#)h).(x,z) = sup(rng(min(min(f,g),h,x,z))) by Def3;
+    min(f(#)h,g(#)h).(x,z) = min((f(#)h).(x,z),(g(#)h).(x,z))
    by A2,FUZZY_1:def 4
- .= min(sup(rng(min(f,h,x,z))),(g(#)h). [x,z]) by A2,Def3
+ .= min(sup(rng(min(f,h,x,z))),(g(#)h).(x,z)) by A2,Def3
  .= min(sup(rng(min(f,h,x,z))),sup(rng(min(g,h,x,z)))) by A2,Def3;
  hence thesis by A1,A3,Lm4;
 end;
@@ -1129,9 +1130,9 @@ A5:y in dom min(converse g,converse f,z,x) &
 then A6:[z,y] in [:C3,C2:] & [y,x] in [:C2,C1:] & y in dom min(f,g,x,z)
    by A1,FUZZY_1:def 1,ZFMISC_1:106;
 then A7:min(f,g,x,z).y <= sup rng min(f,g,x,z) by Th1;
-      r = min((converse g). [z,y],(converse f). [y,x]) by A1,A5,Def2
-   .= min(g. [y,z],(converse f). [y,x]) by A6,Def1
-   .= min(g. [y,z],f. [x,y]) by A6,Def1
+      r = min((converse g).(z,y),(converse f).(y,x)) by A1,A5,Def2
+   .= min(g.(y,z),(converse f).(y,x)) by A6,Def1
+   .= min(g.(y,z),f.(x,y)) by A6,Def1
    .= min(f,g,x,z).y by A1,A5,Def2;
    hence thesis by A4,A7,XXREAL_0:2;
   end;
@@ -1158,9 +1159,9 @@ A10:y in dom min(f,g,x,z) &
                                     by A1,FUZZY_1:def 1,ZFMISC_1:106;
 then A12:min(converse g,converse f,z,x).y <=
    sup rng min(converse g,converse f,z,x) by Th1;
-       r = min(f. [x,y],g. [y,z]) by A1,A10,Def2
-   .= min((converse f). [y,x],g. [y,z]) by A11,Def1
-   .= min((converse f). [y,x],(converse g). [z,y]) by A11,Def1
+       r = min(f.(x,y),g.(y,z)) by A1,A10,Def2
+   .= min((converse f).(y,x),g.(y,z)) by A11,Def1
+   .= min((converse f).(y,x),(converse g).(z,y)) by A11,Def1
    .= min(converse g,converse f,z,x).y by A1,A10,Def2;
    hence thesis by A9,A12,XXREAL_0:2;
   end;
@@ -1184,9 +1185,9 @@ A1:dom converse(f(#)g) = [:C3,C1:] &
    consider z,x be set such that
 A2:z in C3 & x in C1 & c =[z,x] by ZFMISC_1:def 2;
 A3:[x,z] in [:C1,C3:] by A2,ZFMISC_1:106;
-A4:(converse(f(#)g)).c = (f(#)g). [x,z] by A2,Def1
+A4:(converse(f(#)g)).(z,x) = (f(#)g).(x,z) by A2,Def1
   .= sup rng min(f,g,x,z) by A3,Def3;
-     ((converse g)(#)(converse f)).c =
+     ((converse g)(#)(converse f)).(z,x) =
     sup rng min(converse g,converse f,z,x) by A2,Def3;
   hence thesis by A2,A4,Lm5;
   end;
@@ -1206,8 +1207,8 @@ proof
 A1:x in C1 & z in C3 &
  (for y be set st y in C2 holds f. [x,y]<=g. [x,y] & h. [y,z]<=k. [y,z]);
  then [x,z] in [:C1,C3:] by ZFMISC_1:106;
- then A2:(f(#)h). [x,z] = sup (rng (min(f,h,x,z))) &
- (g(#)k). [x,z] = sup rng min(g,k,x,z) by Def3;
+ then A2:(f(#)h).(x,z) = sup (rng (min(f,h,x,z))) &
+ (g(#)k).(x,z) = sup rng min(g,k,x,z) by Def3;
     sup (rng (min(f,h,x,z))) <= sup rng min(g,k,x,z)
  proof
       rng min(f,h,x,z) is bounded by Th1;
@@ -1267,8 +1268,8 @@ begin
 definition
 let C1,C2 be non empty set;
 func Imf(C1,C2) -> RMembership_Func of C1,C2 means
-   for x,y st [x,y] in [:C1,C2:]
-holds (x=y implies it. [x,y] = 1) & (not x=y implies it. [x,y] = 0);
+:Def4:   for x,y st [x,y] in [:C1,C2:]
+holds (x=y implies it.(x,y) = 1) & (x<>y implies it.(x,y) = 0);
 existence
 proof
    defpred P[set,set,set] means
@@ -1278,26 +1279,27 @@ A2:for x,y,z1,z2 st x in C1 & y in C2 & P[x,y,z1] & P[x,y,z2] holds z1=z2;
   consider IT being PartFunc of [:C1,C2:],REAL such that
 A3:(for x,y holds [x,y] in dom IT iff x in C1 & y in C2
    & ex z st P[x,y,z])
-   & (for x,y st [x,y] in dom IT holds P[x,y,IT. [x,y]])
-     from PARTFUN1:sch 4(A1,A2);
-A4:dom IT = [:C1,C2:] & rng IT c= [.0,1.]
+   & for x,y st [x,y] in dom IT holds P[x,y,IT.(x,y)]
+     from BINOP_1:sch 5(A1,A2);
+A4: for x,y st [x,y] in dom IT holds P[x,y,IT.(x,y)] by A3;
+A5:dom IT = [:C1,C2:] & rng IT c= [.0,1.]
    proof
-A5: dom IT = [:C1,C2:]
+A6: dom IT = [:C1,C2:]
     proof
         [:C1,C2:] c= dom IT
      proof
-A6:   for x,y being set st [x,y] in [:C1,C2:] holds [x,y] in dom IT
+A7:   for x,y being set st [x,y] in [:C1,C2:] holds [x,y] in dom IT
       proof
        let x,y be set;
        assume [x,y] in [:C1,C2:];
-then A7:    x in C1 & y in C2 by ZFMISC_1:106;
+then A8:    x in C1 & y in C2 by ZFMISC_1:106;
           ex z st ((x=y implies z = 1) & (not x=y implies z = 0))
        proof
            not x=y implies
          ex z st (x=y implies z = 1) & (not x=y implies z = 0);
         hence thesis;
        end;
-       hence thesis by A3,A7;
+       hence thesis by A3,A8;
       end;
           for c st c in [:C1,C2:] ex x,y st c = [x,y]
         proof
@@ -1306,7 +1308,7 @@ then A7:    x in C1 & y in C2 by ZFMISC_1:106;
         then ex x,y st x in C1 & y in C2 & c = [x,y] by ZFMISC_1:def 2;
         hence thesis;
         end;
-       hence thesis by A6,ZFMISC_1:111;
+       hence thesis by A7,ZFMISC_1:111;
       end;
       hence thesis by XBOOLE_0:def 10;
      end;
@@ -1315,9 +1317,9 @@ then A7:    x in C1 & y in C2 by ZFMISC_1:106;
      let c being set;
      assume c in rng IT;
      then consider z being Element of [:C1,C2:] such that
-A8: z in dom IT & c = IT.z by PARTFUN1:26;
+A9: z in dom IT & c = IT.z by PARTFUN1:26;
      consider x,y being set such that
-A9:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
+A10:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
     1 in [.0,1.] & 0 in [.0,1.]
      proof
       reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
@@ -1325,36 +1327,36 @@ A9:x in C1 & y in C2 & z = [x,y] by ZFMISC_1:def 2;
       then 0=inf A & 1=sup A by INTEGRA1:6;
       hence thesis by INTEGRA2:1;
      end;
-     then (x=y implies IT. [x,y] in [.0,1.]) & (x<>y implies IT. [x,y] in [.0,
+     then (x=y implies IT.(x,y) in [.0,1.]) & (x<>y implies IT.(x,y) in [.0,
 1.])
-      by A3,A8,A9;
-     hence thesis by A8,A9;
+      by A3,A9,A10;
+     hence thesis by A9,A10;
    end;
-   hence thesis by A5;
+   hence thesis by A6;
   end;
  then IT is RMembership_Func of C1,C2 by FUZZY_1:def 1;
- hence thesis by A3,A4;
+ hence thesis by A4,A5;
 end;
 uniqueness
 proof
  let F,G be RMembership_Func of C1,C2;
  assume that
-A10:for x,y st [x,y] in [:C1,C2:]
-   holds (x=y implies F. [x,y] = 1) & (not x=y implies F. [x,y] = 0)
- and
 A11:for x,y st [x,y] in [:C1,C2:]
-   holds (x=y implies G. [x,y] = 1) & (not x=y implies G. [x,y] = 0);
-A12: dom F = [:C1,C2:] & dom G = [:C1,C2:] by FUZZY_1:def 1;
+   holds (x=y implies F.(x,y) = 1) & (x<>y implies F.(x,y) = 0)
+ and
+A12:for x,y st [x,y] in [:C1,C2:]
+   holds (x=y implies G.(x,y) = 1) & (x<>y implies G.(x,y) = 0);
+A13: dom F = [:C1,C2:] & dom G = [:C1,C2:] by FUZZY_1:def 1;
       for x,y st x in C1 & y in C2 holds F.(x,y) = G.(x,y)
  proof
   let x,y be set;
   assume x in C1 & y in C2;
   then [x,y] in [:C1,C2:] by ZFMISC_1:106;
-  then (x=y implies F. [x,y] = 1) & (not x=y implies F. [x,y] = 0) &
-  (x=y implies G. [x,y] = 1) & (not x=y implies G. [x,y] = 0) by A10,A11;
+  then (x=y implies F.(x,y) = 1) & (not x=y implies F.(x,y) = 0) &
+  (x=y implies G.(x,y) = 1) & (not x=y implies G.(x,y) = 0) by A11,A12;
   hence thesis;
  end;
- hence thesis by A12,FUNCT_3:6;
+ hence thesis by A13,FUNCT_3:6;
 end;
 end;
 
@@ -1398,33 +1400,33 @@ A4:r in rng min(Zmf(C1,C2),f,x,z) &
    consider y be set such that
 A5:y in dom min(Zmf(C1,C2),f,x,z) &
    r = min(Zmf(C1,C2),f,x,z).y by A4,FUNCT_1:def 5;
- A6:[x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
+ [x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
                                                by A1,A5,ZFMISC_1:106;
-   then A7:   chi({},[:C1,C2:]). [x,y] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
+   then A6:   chi({},[:C1,C2:]). [x,y] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
 FUNCT_3:def 3;
-A8:0 <= f. [y,z] by A6,Th3;
+A7:0 <= f. [y,z] by Th3;
       r = min(Zmf(C1,C2). [x,y],f. [y,z]) by A1,A5,Def2
-    .= min(0,f. [y,z]) by A7,FUZZY_3:def 1
-    .= 0 by A8,XXREAL_0:def 8
-    .= Zmf(C1,C3). [x,z] by A7,FUZZY_3:def 1;
+    .= min(0,f. [y,z]) by A6,FUZZY_3:def 1
+    .= 0 by A7,XXREAL_0:def 8
+    .= Zmf(C1,C3). [x,z] by A6,FUZZY_3:def 1;
    hence thesis by A4;
   end;
   hence thesis by REAL_2:182;
  end;
   sup rng min(Zmf(C1,C2),f,x,z) >= Zmf(C1,C3). [x,z]
  proof
-A9:rng min(Zmf(C1,C2),f,x,z) c= [.0,1.] by FUZZY_1:def 1;
+A8:rng min(Zmf(C1,C2),f,x,z) c= [.0,1.] by FUZZY_1:def 1;
   reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
      A = [. inf A, sup A .] by INTEGRA1:5;
-then A10:0=inf A & 1=sup A by INTEGRA1:6;
+then A9:0=inf A & 1=sup A by INTEGRA1:6;
   A is bounded_below by INTEGRA1:3;
-then A11:inf A <= inf rng min(Zmf(C1,C2),f,x,z) by A9,SEQ_4:64;
+then A10:inf A <= inf rng min(Zmf(C1,C2),f,x,z) by A8,SEQ_4:64;
   rng min(Zmf(C1,C2),f,x,z) is bounded by Th1;
-then A12:inf rng min(Zmf(C1,C2),f,x,z) <= sup rng min(Zmf(C1,C2),f,x,z)
+then A11:inf rng min(Zmf(C1,C2),f,x,z) <= sup rng min(Zmf(C1,C2),f,x,z)
              by SEQ_4:24;
      [x,z] in [:C1,C3:] by A1,ZFMISC_1:106;
   then chi({},[:C1,C3:]). [x,z] = 0 by FUNCT_3:def 3;
-  hence thesis by A10,A11,A12,FUZZY_3:def 1;
+  hence thesis by A9,A10,A11,FUZZY_3:def 1;
  end;
  hence thesis by A2,XXREAL_0:1;
 end;
@@ -1442,8 +1444,8 @@ A1:dom(Zmf(C1,C2)(#)f) = [:C1,C3:] &
   let c be Element of [:C1,C3:];
   consider x,z being set such that
 A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
-      (Zmf(C1,C2)(#)f).c
-   = sup rng min(Zmf(C1,C2),f,x,z) by A2,Def3
+      (Zmf(C1,C2)(#)f).c = (Zmf(C1,C2)(#)f).(x,z) by A2
+  .= sup rng min(Zmf(C1,C2),f,x,z) by A2,Def3
   .= Zmf(C1,C3).c by A2,Lm6;
   hence thesis;
  end;
@@ -1473,33 +1475,33 @@ A4:r in rng min(f,Zmf(C2,C3),x,z) &
    consider y be set such that
 A5:y in dom min(f,Zmf(C2,C3),x,z) &
    r = min(f,Zmf(C2,C3),x,z).y by A4,FUNCT_1:def 5;
- A6:[x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
+ [x,y] in [:C1,C2:] & [y,z] in [:C2,C3:] & [x,z] in [:C1,C3:]
                                                by A1,A5,ZFMISC_1:106;
-then A7:   chi({},[:C2,C3:]). [y,z] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
+then A6:   chi({},[:C2,C3:]). [y,z] = 0 & chi({},[:C1,C3:]). [x,z] = 0 by
 FUNCT_3:def 3;
-A8:0 <= f. [x,y] by A6,Th3;
+A7:0 <= f. [x,y] by Th3;
       r = min(f. [x,y],Zmf(C2,C3). [y,z]) by A1,A5,Def2
-    .= min(f. [x,y],0) by A7,FUZZY_3:def 1
-    .= 0 by A8,XXREAL_0:def 8
-    .= Zmf(C1,C3). [x,z] by A7,FUZZY_3:def 1;
+    .= min(f. [x,y],0) by A6,FUZZY_3:def 1
+    .= 0 by A7,XXREAL_0:def 8
+    .= Zmf(C1,C3). [x,z] by A6,FUZZY_3:def 1;
    hence thesis by A4;
   end;
   hence thesis by REAL_2:182;
  end;
   sup rng min(f,Zmf(C2,C3),x,z) >= Zmf(C1,C3). [x,z]
  proof
-A9:rng min(f,Zmf(C2,C3),x,z) c= [.0,1.] by FUZZY_1:def 1;
+A8:rng min(f,Zmf(C2,C3),x,z) c= [.0,1.] by FUZZY_1:def 1;
   reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
      A = [. inf A, sup A .] by INTEGRA1:5;
-then A10:0=inf A & 1=sup A by INTEGRA1:6;
+then A9:0=inf A & 1=sup A by INTEGRA1:6;
   A is bounded_below by INTEGRA1:3;
-then A11:inf A <= inf rng min(f,Zmf(C2,C3),x,z) by A9,SEQ_4:64;
+then A10:inf A <= inf rng min(f,Zmf(C2,C3),x,z) by A8,SEQ_4:64;
   rng min(f,Zmf(C2,C3),x,z) is bounded by Th1;
-then A12:inf rng min(f,Zmf(C2,C3),x,z) <= sup rng min(f,Zmf(C2,C3),x,z)
+then A11:inf rng min(f,Zmf(C2,C3),x,z) <= sup rng min(f,Zmf(C2,C3),x,z)
              by SEQ_4:24;
      [x,z] in [:C1,C3:] by A1,ZFMISC_1:106;
   then chi({},[:C1,C3:]). [x,z] = 0 by FUNCT_3:def 3;
-  hence thesis by A10,A11,A12,FUZZY_3:def 1;
+  hence thesis by A9,A10,A11,FUZZY_3:def 1;
  end;
  hence thesis by A2,XXREAL_0:1;
 end;
@@ -1517,8 +1519,8 @@ A1:dom(f(#)Zmf(C2,C3)) = [:C1,C3:] &
   let c be Element of [:C1,C3:];
   consider x,z being set such that
 A2:x in C1 & z in C3 & c = [x,z] by ZFMISC_1:def 2;
-      (f(#)Zmf(C2,C3)).c
-   = sup rng min(f,Zmf(C2,C3),x,z) by A2,Def3
+      (f(#)Zmf(C2,C3)).c = (f(#)Zmf(C2,C3)).(x,z) by A2
+  .= sup rng min(f,Zmf(C2,C3),x,z) by A2,Def3
   .= Zmf(C1,C3).c by A2,Lm7;
   hence thesis;
  end;
@@ -1532,5 +1534,32 @@ proof
  let f be RMembership_Func of C1,C1;
     f(#)Zmf(C1,C1) = Zmf(C1,C1) by Th23;
  hence thesis by Th22;
+end;
+
+begin :: Addenda
+
+:: missing, 2006.12.03, AT
+
+theorem
+ for X,Y being non empty set
+ for x being Element of X, y being Element of Y
+  holds (x = y implies Imf(X,Y).(x,y) = 1) &
+        (x <> y implies Imf(X,Y).(x,y) = 0)
+proof let X,Y being non empty set;
+ let x being Element of X, y being Element of Y;
+  [x,y] in [:X,Y:] by ZFMISC_1:106;
+ hence thesis by Def4;
+end;
+
+theorem
+ for X,Y being non empty set
+ for x being Element of X, y being Element of Y
+ for f being RMembership_Func of X,Y
+  holds (converse f).(y,x) = f.(x,y)
+proof let X,Y being non empty set;
+ let x being Element of X, y being Element of Y;
+ let f being RMembership_Func of X,Y;
+  [y,x] in [:Y,X:] by ZFMISC_1:106;
+ hence (converse f).(y,x) = f.(x,y) by Def1;
 end;
 

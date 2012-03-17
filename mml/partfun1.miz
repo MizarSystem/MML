@@ -25,20 +25,7 @@ begin
 :: Auxiliary theorems ::
 ::::::::::::::::::::::::
 
-theorem Th1:
-   P c= [:X1,Y1:] & Q c= [:X2,Y2:] implies P \/ Q c= [:X1 \/ X2,Y1 \/ Y2:]
- proof
-     X1 c= X1 \/ X2 & Y2 c= Y1 \/ Y2 & X2 c= X1 \/ X2 & Y1 c= Y1 \/
- Y2 by XBOOLE_1:7;
-  then [:X1,Y1:] c= [:X1 \/ X2,Y1 \/ Y2:] & [:X2,Y2:] c= [:X1 \/ X2,Y1 \/
- Y2:] &
-       [:X1 \/ X2,Y1 \/ Y2:] \/ [:X1 \/ X2,Y1 \/ Y2:] = [:X1 \/ X2,Y1 \/ Y2:]
-    by ZFMISC_1:119;
-then A1:  [:X1,Y1:] \/ [:X2,Y2:] c= [:X1 \/ X2,Y1 \/ Y2:] by XBOOLE_1:13;
-  assume P c= [:X1,Y1:] & Q c= [:X2,Y2:];
-  then P \/ Q c= [:X1,Y1:] \/ [:X2,Y2:] by XBOOLE_1:13;
-  hence thesis by A1,XBOOLE_1:1;
- end;
+canceled;
 
 theorem Th2:
    for f,g being Function
@@ -75,7 +62,7 @@ A8: for x,y holds
       f c= [:dom f,rng f:] & g c= [:dom g,rng g:] by RELAT_1:21;
 then A9: h c= [:dom h,rng h:] &
      f \/ g c= [:dom f \/ dom g,rng f \/ rng g:]
-      by Th1,RELAT_1:21;
+      by ZFMISC_1:143,RELAT_1:21;
       now let x,y;
     thus [x,y] in f \/ g implies [x,y] in h
      proof assume
@@ -135,8 +122,6 @@ end;
 
 Lm1: dom {} = {};
 
-canceled 7;
-
 Lm2:
  now let X,Y;
   take E = {};
@@ -162,7 +147,7 @@ definition let X,Y;
   mode PartFunc of X,Y is Function-like Relation of X,Y;
  end;
 
-canceled 13;
+canceled 20;
 
 theorem
   for f being Function holds f is PartFunc of dom f, rng f by Lm3;
@@ -252,22 +237,6 @@ theorem
 A1: dom f1 = dom f2 and
 A2: for x being Element of X st x in dom f1 holds f1.x = f2.x;
       for x st x in dom f1 holds f1.x = f2.x by A2;
-   hence thesis by A1,FUNCT_1:9;
- end;
-
-theorem
-  for f1,f2 being PartFunc of [:X,Y:],Z
-     st dom f1 = dom f2 & for x,y st [x,y] in dom f1 holds f1.[x,y]=f2.[x,y]
-    holds f1 = f2
- proof let f1,f2 be PartFunc of [:X,Y:],Z such that
-A1:   dom f1 = dom f2 and
-A2:   for x,y st [x,y] in dom f1 holds f1.[x,y] = f2.[x,y];
-      z in dom f1 implies f1.z = f2.z
-    proof assume
-A3:    z in dom f1;
-     then ex x,y st x in X & y in Y & z = [x,y] by ZFMISC_1:def 2;
-     hence thesis by A2,A3;
-    end;
    hence thesis by A1,FUNCT_1:9;
  end;
 
@@ -376,96 +345,6 @@ A5:  for x st x in dom f holds Q[x,f.x] from PartFuncEx(A2,A3);
    thus thesis by A5;
   end;
 
-scheme PartFuncEx2{X,Y,Z()->set,P[set,set,set]}:
- ex f being PartFunc of [:X(),Y():],Z() st
-   (for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st P[x,y,z]) &
-   (for x,y st [x,y] in dom f holds P[x,y,f.[x,y]])
-provided
-A1: for x,y,z st x in X() & y in Y() & P[x,y,z] holds z in Z() and
-A2: for x,y,z1,z2 st x in X() & y in Y() & P[x,y,z1] & P[x,y,z2] holds z1 = z2
-proof
-defpred Q[set,set] means for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
-A3: for x,z st x in [:X(),Y():] & Q[x,z] holds z in Z()
-     proof let x,z;
-      assume x in [:X(),Y():];
-      then consider x1,y1 such that
-A4:     x1 in X() & y1 in Y() and
-A5:     x = [x1,y1] by ZFMISC_1:def 2;
-      assume for x1,y1 st x = [x1,y1] holds P[x1,y1,z];
-      then P[x1,y1,z] by A5;
-      hence z in Z() by A1,A4;
-     end;
-A6: for x,z1,z2
-      st x in [:X(),Y():] & Q[x,z1] & Q[x,z2] holds z1 = z2
-    proof let x,z1,z2 such that
-A7:    x in [:X(),Y():] and
-A8:    (for x1,y1 st x = [x1,y1] holds P[x1,y1,z1]) and
-A9:    (for x1,y1 st x = [x1,y1] holds P[x1,y1,z2]);
-     consider x1,y1 such that
-A10:    x1 in X() & y1 in Y() and
-A11:    x = [x1,y1] by A7,ZFMISC_1:def 2;
-        P[x1,y1,z1] & P[x1,y1,z2] by A8,A9,A11;
-     hence thesis by A2,A10;
-    end;
-   consider f being PartFunc of [:X(),Y():],Z() such that
-A12:  for x holds x in dom f iff x in [:X(),Y():] & ex z st Q[x,z] and
-A13:  for x st x in dom f holds Q[x,f.x] from PartFuncEx(A3,A6);
-   take f;
-   thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st P[x,y,z
-]
-    proof let x,y;
-      thus [x,y] in dom f implies x in X() & y in Y() & ex z st P[x,y,z]
-       proof assume
-A14:       [x,y] in dom f;
-        hence x in X() & y in Y() by ZFMISC_1:106;
-        consider z such that
-A15:       for x1,y1 st [x,y] = [x1,y1] holds P[x1,y1,z] by A12,A14;
-        take z;
-        thus thesis by A15;
-       end;
-      assume x in X() & y in Y();
-      then A16:     [x,y] in [:X(),Y():] by ZFMISC_1:def 2;
-      given z such that
-A17:     P[x,y,z];
-         now take z;
-       let x1,y1;
-       assume [x,y] = [x1,y1];
-       then x=x1 & y=y1 by ZFMISC_1:33;
-       hence P[x1,y1,z] by A17;
-      end;
-      hence thesis by A12,A16;
-    end;
-   thus thesis by A13;
- end;
-
-scheme LambdaR2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
- ex f being PartFunc of [:X(),Y():],Z()
-  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y]) &
-     (for x,y st [x,y] in dom f holds f.[x,y] = F(x,y))
-provided
-A1:  for x,y st P[x,y] holds F(x,y) in Z()
-proof
-defpred Q[set,set,set] means P[$1,$2] & $3 = F($1,$2);
-A2: for x,y,z st x in X() & y in Y() & Q[x,y,z] holds z in Z() by A1;
-A3: for x,y,z1,z2 st x in X() & y in Y() & Q[x,y,z1] & Q[x,y,z2] holds z1 = z2;
-  consider f being PartFunc of [:X(),Y():],Z() such that
-A4: for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st Q[x,y,z] and
-A5: for x,y st [x,y] in dom f holds Q[x,y,f.[x,y]] from PartFuncEx2(A2,A3);
-  take f;
-  thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y]
-   proof let x,y;
-    thus [x,y] in dom f implies x in X() & y in Y() & P[x,y]
-     proof assume [x,y] in dom f;
-      then x in X() & y in Y() & ex z st P[x,y] & z = F(x,y) by A4;
-      hence thesis;
-     end;
-    assume x in X() & y in Y() & P[x,y];
-    then x in X() & y in Y() & ex z st P[x,y] & z = F(x,y);
-    hence thesis by A4;
-   end;
-  thus thesis by A5;
- end;
-
 definition let X,Y,V,Z;
   let f be PartFunc of X,Y; let g be PartFunc of V,Z;
  redefine func g*f -> PartFunc of X,Z;
@@ -477,6 +356,8 @@ definition let X,Y,V,Z;
     hence g*f is PartFunc of X,Z by Lm3;
    end;
 end;
+
+canceled;
 
 theorem
   for f being Relation of X,Y holds (id X)*f = f
@@ -1064,8 +945,7 @@ A13:    x =(f").(f.x) by A1,A11,FUNCT_1:56;
   hence thesis by A9,FUNCT_1:9;
  end;
 
-theorem
-  for f being Function holds <:f,X,Y:>|Z = <:f,X /\ Z,Y:> by RELAT_1:100;
+canceled;
 
 theorem
   for f being Function holds Z|<:f,X,Y:> = <:f,X,Z /\ Y:>

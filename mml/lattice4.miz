@@ -8,12 +8,12 @@ environ
 
  vocabularies SETFAM_1, BOOLE, LATTICES, FILTER_0, GROUP_6, FUNCT_1, MOD_4,
       RELAT_1, WELLORD1, FILTER_1, ZF_LANG, SUBSET_1, FINSUB_1, LATTICE2,
-      SETWISEO, BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN;
+      SETWISEO, BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, LATTICES,
       LATTICE2, FILTER_0, FUNCOP_1, SETWISEO, GRCAT_1, WELLORD1, FILTER_1;
  constructors WELLORD1, DOMAIN_1, FUNCOP_1, SETWISEO, LATTICE2, FILTER_1,
-      GRCAT_1;
+      GRCAT_1, NAT_D;
  registrations LATTICES, FILTER_0, STRUCT_0, FINSUB_1, RELSET_1, XBOOLE_0,
       FUNCT_2;
  requirements BOOLE, SUBSET;
@@ -361,19 +361,19 @@ definition let L,B;
   coherence;
 end;
 
-canceled 2;
-
-theorem Th14:
+ Lm1:
   FinMeet B = (the L_meet of L) $$ (B,id L) by LATTICE2:def 4;
 
-theorem Th15:
+ Lm2:
   FinJoin B = (the L_join of L) $$ (B,id L) by LATTICE2:def 3;
+
+canceled 4;
 
 theorem Th16:
   FinJoin {.p.} = p
  proof set J=the L_join of L;
    A1:   J is commutative associative by LATTICE2:27,29;
-   thus FinJoin {.p.} =(the L_join of L) $$ ({.p.},id L) by Th15
+   thus FinJoin {.p.} =(the L_join of L) $$ ({.p.},id L) by Lm2
                    .= (id L).p by A1,SETWISEO:26
                    .= p by TMAP_1:91;
  end;
@@ -383,7 +383,7 @@ theorem Th17:
  proof
    set M = the L_meet of L;
    A1:   M is commutative associative by LATTICE2:31,32;
-   thus FinMeet {.p.} = M $$ ({.p.},id L) by Th14
+   thus FinMeet {.p.} = M $$ ({.p.},id L) by Lm1
                    .= (id L).p by A1,SETWISEO:26
                    .= p by TMAP_1:91;
  end;
@@ -469,13 +469,13 @@ theorem
    set J = the L_join of 0L;
 A1:   J is idempotent & J is commutative & J is associative
       & J has_a_unity by LATTICE2:26,27,29,67;
-   thus FinJoin (B1 \/ B2) = J $$ (B1 \/ B2,id 0L) by Th15
+   thus FinJoin (B1 \/ B2) = J $$ (B1 \/ B2,id 0L) by Lm2
                     .= J $$ (B1,id 0L) "\/" J $$ (B2,id 0L) by A1,SETWISEO:42
-                    .= FinJoin B1 "\/" J $$ (B2,id 0L) by Th15
-                    .=FinJoin B1 "\/" FinJoin B2 by Th15;
+                    .= FinJoin B1 "\/" J $$ (B2,id 0L) by Lm2
+                    .=FinJoin B1 "\/" FinJoin B2 by Lm2;
  end;
 
-Lm1:
+Lm3:
  for f being Function of the carrier of 0L , the carrier of 0L
  holds FinJoin ({}.the carrier of 0L,f) = Bottom 0L
  proof let f be Function of the carrier of 0L , the carrier of 0L;
@@ -489,7 +489,7 @@ Lm1:
  end;
 
 theorem Th23:
-  FinJoin {}.the carrier of 0L = Bottom 0L by Lm1;
+  FinJoin {}.the carrier of 0L = Bottom 0L by Lm3;
 
 theorem
  Th24: for A being ClosedSubset of 0L st Bottom 0L in A
@@ -545,7 +545,7 @@ theorem Th25:
    hence thesis by Def7;
  end;
 
-Lm2:
+Lm4:
  for f being Function of the carrier of 1L, the carrier of 1L
  holds FinMeet ({}.the carrier of 1L,f) = Top 1L
  proof
@@ -560,7 +560,7 @@ Lm2:
  end;
 
 theorem Th26:
-  FinMeet {}.the carrier of 1L = Top 1L by Lm2;
+  FinMeet {}.the carrier of 1L = Top 1L by Lm4;
 
 reserve f,g for UnOp of the carrier of 1L;
 
@@ -599,10 +599,10 @@ theorem Th30:
    set M= the L_meet of 1L;
    A1:   M is idempotent & M is commutative & M is associative
       & M has_a_unity by LATTICE2:30,31,32,73;
-   thus FinMeet (B1 \/ B2) = M $$ (B1 \/ B2,id 1L) by Th14
+   thus FinMeet (B1 \/ B2) = M $$ (B1 \/ B2,id 1L) by Lm1
                     .= M $$ (B1,id 1L) "/\" M $$ (B2,id 1L) by A1,SETWISEO:42
-                    .= FinMeet B1 "/\" M $$ (B2,id 1L) by Th14
-                    .=FinMeet B1 "/\" FinMeet B2 by Th14;
+                    .= FinMeet B1 "/\" M $$ (B2,id 1L) by Lm1
+                    .=FinMeet B1 "/\" FinMeet B2 by Lm1;
  end;
 
 theorem
@@ -638,7 +638,7 @@ begin :: Distributive Upper-bounded Lattices
          p for Element of DL,
          f for UnOp of the carrier of DL;
 
-  Lm3: (the L_join of DL).((the L_meet of DL) $$ (B,f),p) =
+  Lm5: (the L_join of DL).((the L_meet of DL) $$ (B,f),p) =
           (the L_meet of DL) $$ (B,(the L_join of DL) [:] (f,p))
  proof
    set J = the L_join of DL;
@@ -654,7 +654,7 @@ begin :: Distributive Upper-bounded Lattices
        A4:  now let f;
              thus M $$ (B,f) = FinMeet({}.the carrier of DL,f) by A3,
 LATTICE2:def 4
-                    .=Top DL by Lm2;
+                    .=Top DL by Lm4;
            end;
       hence J.(M $$ (B,f),p) = Top DL "\/" p
                            .= Top DL by LATTICES:44
@@ -669,8 +669,8 @@ Th32: FinMeet B "\/" p = FinMeet (((the L_join of DL)[:](id DL,p)).:B)
  proof
    set J = the L_join of DL;
    set M = the L_meet of DL;
-   thus FinMeet B "\/" p = J.(M $$ (B,id DL),p) by Th14
-                      .= M $$ (B,J [:] (id DL,p)) by Lm3
+   thus FinMeet B "\/" p = J.(M $$ (B,id DL),p) by Lm1
+                      .= M $$ (B,J [:] (id DL,p)) by Lm5
                       .=FinMeet(B,J [:] (id DL,p)) by LATTICE2:def 4
                       .= FinMeet (B,(id DL)*(J [:] (id DL,p))) by TMAP_1:93
                       .= FinMeet (((the L_join of DL)[:](id DL,p)).:
@@ -1014,7 +1014,7 @@ theorem
                             .= M.((comp BL).a,b`) by Def17
                             .= M.((comp BL).a,(comp BL).b) by Def17;
    end;
-   thus (FinJoin B)`= (J$$(B,id BL))` by Th15
+   thus (FinJoin B)`= (J$$(B,id BL))` by Lm2
                    .= (comp BL).(J$$(B,id BL)) by Def17
                    .= M$$(B,(comp BL)*(id BL)) by A1,A2,A3,A4,SETWISEO:45
                    .= M$$(B, comp BL) by TMAP_1:93
@@ -1054,7 +1054,7 @@ A4:    for a,b being Element of BL
                             .= J.((comp BL).a,b`) by Def17
                             .= J.((comp BL).a,(comp BL).b) by Def17;
    end;
-   thus (FinMeet B)`= (M$$(B,id BL))` by Th14
+   thus (FinMeet B)`= (M$$(B,id BL))` by Lm1
                    .= (comp BL).(M$$(B,id BL)) by Def17
                    .= J$$(B,(comp BL)*(id BL)) by A1,A2,A3,A4,SETWISEO:45
                    .= J$$(B, comp BL) by TMAP_1:93
@@ -1079,7 +1079,7 @@ BL in AF;
    proof
    assume {}.the carrier of BL c= SetImp AF;
      take B0={.Bottom BL.};
-     A4:   FinJoin ({}.the carrier of BL,comp BL)= Bottom BL by Lm1
+     A4:   FinJoin ({}.the carrier of BL,comp BL)= Bottom BL by Lm3
                                                .=FinMeet {.Bottom BL.} by Th17;
         B0 c= C
      proof

@@ -27,6 +27,8 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -42,7 +44,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="219">
+<Func kind="K" nr="245">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -56,12 +58,12 @@
 <Adjective nr="17"/>
 <Adjective nr="21"/>
 <Adjective nr="35" value="false"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="98"/>
 <Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -82,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="237">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

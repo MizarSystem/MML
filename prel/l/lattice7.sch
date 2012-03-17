@@ -38,8 +38,8 @@
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="71"/>
 <Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -7,11 +7,12 @@
 environ
 
  vocabularies LATTICES, FUNCT_1, BOOLE, BINOP_1, SUBSET_1, FILTER_1, RELAT_1,
-      RELAT_2, BHSP_3, FILTER_0, TARSKI, ZF_LANG, LATTICE3, ORDERS_1, SETFAM_1;
+      RELAT_2, BHSP_3, FILTER_0, TARSKI, ZF_LANG, LATTICE3, ORDERS_1, SETFAM_1,
+      NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, DOMAIN_1, STRUCT_0,
       FUNCT_1, FUNCT_2, BINOP_1, LATTICES, FILTER_0, LATTICE2, FILTER_1,
       RELAT_1, RELAT_2, RELSET_1, ORDERS_1, ORDERS_2;
- constructors DOMAIN_1, BINOP_1, ORDERS_2, LATTICE2, FILTER_1;
+ constructors DOMAIN_1, BINOP_1, ORDERS_2, LATTICE2, FILTER_1, NAT_D;
  registrations LATTICE2, ORDERS_2, RELSET_1, STRUCT_0, SUBSET_1, LATTICES,
       XBOOLE_0;
  requirements SUBSET, BOOLE;
@@ -78,17 +79,28 @@ registration let X be set;
   end;
 end;
 
-theorem Th1:
- x "\/" y = x \/ y & x "/\" y = x /\ y
-  proof set B = BooleLatt X;
-   reconsider x' = x, y' = y as Subset of X by Def1;
-   thus x "\/" y = join(B).(x',y') .= x \/ y by Def1;
-   thus x "/\" y = met(B).(x',y') .= x /\ y by Def1;
+registration let X; let x,y; let x',y' be set;
+ reconsider x'' = x, y'' = y as Subset of X by Def1;
+ identify x "\/" y with x' \/ y' when x = x', y = y';
+ compatibility
+  proof assume
+A1:  x = x' & y = y';
+   thus x "\/" y = join(BooleLatt X).(x'',y'') .= x' \/ y' by A1,Def1;
   end;
+ identify x "/\" y with x' /\ y' when x = x', y = y';
+ compatibility
+  proof assume
+A2:  x = x' & y = y';
+   thus x "/\" y = met(BooleLatt X).(x'',y'') .= x' /\ y' by A2,Def1;
+  end;
+end;
+
+theorem Th1:
+ x "\/" y = x \/ y & x "/\" y = x /\ y;
 
 theorem Th2:
  x [= y iff x c= y
-  proof (x [= y iff x "\/" y = y) & x "\/" y = x \/ y by Th1,LATTICES:def 3;
+  proof (x [= y iff x "\/" y = y) & x "\/" y = x \/ y by LATTICES:def 3;
    hence thesis by XBOOLE_1:7,12;
   end;
 
@@ -96,30 +108,12 @@ registration let X;
  cluster BooleLatt X -> Lattice-like;
   coherence
    proof
-A1:  now let x,y;
-      thus x"\/"y = y \/ x by Th1 .= y"\/"x by Th1;
-     end;
-A2:  now let x,y,z;
-      thus x"\/"(y"\/"z) = x \/ (y"\/"z) by Th1 .= x \/ (y \/ z) by Th1
-              .= x \/ y \/ z by XBOOLE_1:4 .= (x"\/"y) \/ z by Th1
-              .= (x"\/"y)"\/"z by Th1;
-     end;
-A3:  now let x,y;
-      thus (x"/\"y)"\/"y = (x"/\"y) \/ y by Th1 .= (x /\ y) \/ y by Th1
-              .= y by XBOOLE_1:22;
-     end;
-A4:  now let x,y;
-      thus x"/\"y = y /\ x by Th1 .= y"/\"x by Th1;
-     end;
-A5:  now let x,y,z;
-      thus x"/\"(y"/\"z) = x /\ (y"/\"z) by Th1 .= x /\ (y /\ z) by Th1
-              .= x /\ y /\ z by XBOOLE_1:16 .= (x"/\"y) /\ z by Th1
-              .= (x"/\"y)"/\"z by Th1;
-     end;
-          now let x,y;
-      thus x"/\"(x"\/"y) = x /\ (x"\/"y) by Th1 .= x /\ (x \/ y) by Th1
-              .= x by XBOOLE_1:21;
-     end;
+A1:  x"\/"y = y"\/"x;
+A2:  x"\/"(y"\/"z) = (x"\/"y)"\/"z by  XBOOLE_1:4;
+A3:  (x"/\"y)"\/"y = y by XBOOLE_1:22;
+A4:  x"/\"y = y"/\"x;
+A5:  x"/\"(y"/\"z) = (x"/\"y)"/\"z by XBOOLE_1:16;
+    x"/\"(x"\/"y) = x by XBOOLE_1:21;
     then BooleLatt X is join-commutative join-associative meet-absorbing
          meet-commutative meet-associative join-absorbing
     by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
@@ -133,8 +127,8 @@ theorem Th3:
  BooleLatt X is lower-bounded & Bottom BooleLatt X = {}
   proof {} c= X by XBOOLE_1:2;
    then reconsider x = {} as Element of BooleLatt X by Def1;
-A1:now let y; thus x"/\"y = x /\ y by Th1 .= x; hence y"/\"x = x; end;
-   thus BooleLatt X is lower-bounded proof take x; thus thesis by A1; end;
+A1: x"/\"y = x & y"/\"x = x;
+   thus BooleLatt X is lower-bounded proof take x; thus thesis; end;
    hence thesis by A1,LATTICES:def 16;
   end;
 
@@ -143,10 +137,7 @@ theorem Th4:
   proof
 A1:  X in bool X & bool X = carr(BooleLatt X) by Def1,ZFMISC_1:def 1;
    then reconsider x = X as Element of BooleLatt X;
-A2:  now let y;
-     thus x"\/"y = x \/ y by Th1 .= x by A1,XBOOLE_1:12;
-     hence y"\/"x = x;
-    end;
+A2: x"\/"y = x & y"\/"x = x by A1,XBOOLE_1:12;
    thus BooleLatt X is upper-bounded proof take x; thus thesis by A2; end;
    hence thesis by A2,LATTICES:def 17;
   end;
@@ -186,7 +177,7 @@ theorem
   proof set B = BooleLatt X; let x be Element of B;
 A1:  x`"/\"x = Bottom B & x"\/"x` = Top B & Bottom B = {} & Top B = X &
     x`"/\"x = x` /\ x &
-    x"\/"x` = x \/ x` by Th1,Th3,Th4,LATTICES:47,48;
+    x"\/"x` = x \/ x` by Th3,Th4,LATTICES:47,48;
     then x` misses x by XBOOLE_0:def 7;
     then X \ x = (x \ x) \/ (x` \ x) & x \ x = {} & x` \ x = x`
     by A1,XBOOLE_1:37,42,83;
@@ -1091,7 +1082,7 @@ then A13:  q c= c by ZFMISC_1:94;
       hence p [= q by Th2;
      end;
     then q [= c & c [= q by A4,A13,Th2;
-then A14:  c = q & b /\ a = b"/\"a by Th1,LATTICES:26;
+then A14:  c = q & b /\ a = b"/\"a by LATTICES:26;
          b /\ a c= c
      proof let z be set; assume z in b /\ a;
 then A15:     z in b & z in a by XBOOLE_0:def 3;
@@ -1100,10 +1091,10 @@ A16:     z in y & y in x /\ bool X by A10,TARSKI:def 4;
 A17:     y in x & y in bool X by A16,XBOOLE_0:def 3;
       reconsider y as Element of B by A5,A16,XBOOLE_0:def 3;
             b"/\"y in Y & b"/\"
-y = b /\ y & z in b /\ y by A15,A16,A17,Th1,XBOOLE_0:def 3;
+y = b /\ y & z in b /\ y by A15,A16,A17,XBOOLE_0:def 3;
       hence thesis by A14,TARSKI:def 4;
      end;
-   hence b"/\"a [= c by A14,Th2;
+   hence b"/\"a [= c by Th2;
   end;
 
 theorem Th27:

@@ -10,7 +10,7 @@ environ
       ARYTM_3, ARYTM_1, RELAT_1, BOOLE, SUBSET_1, ORDINAL2, FUNCT_1, MCART_1,
       FINSEQ_1, TOPREAL1, RELAT_2, TOPS_2, COMPTS_1, JORDAN5C, JORDAN3,
       TREAL_1, SEQ_1, PSCOMP_1, TOPREAL2, SEQ_2, METRIC_1, SEQ_4, ABSVALUE,
-      SQUARE_1, FUNCT_5, JORDAN6, JORDAN1K;
+      SQUARE_1, FUNCT_5, JORDAN6, JORDAN1K, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, RCOMP_1, SETWOP_2, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, STRUCT_0, TOPREAL1, TOPREAL2, CONNSP_1, JORDAN2B,
@@ -18,12 +18,12 @@ environ
       METRIC_1, PCOMPS_1, SEQ_4, JORDAN5C, TREAL_1, PSCOMP_1;
  constructors REAL_1, SQUARE_1, COMPLEX1, RCOMP_1, SETWOP_2, CONNSP_1, TOPS_2,
       COMPTS_1, TSEP_1, TOPREAL1, TOPREAL2, TREAL_1, PSCOMP_1, JORDAN5C,
-      JORDAN2B;
+      JORDAN2B, NAT_D;
  registrations STRUCT_0, FUNCT_1, PRE_TOPC, TOPMETR, METRIC_1, PSCOMP_1,
       BORSUK_2, TSEP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, TOPREAL2,
       BORSUK_1, TOPREAL1, COMPTS_1, XXREAL_0, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, PRE_TOPC, JORDAN5C, XBOOLE_0, PSCOMP_1;
+ definitions TARSKI, PRE_TOPC, JORDAN5C, XBOOLE_0, PSCOMP_1, STRUCT_0;
  theorems TARSKI, RCOMP_1, TOPMETR, TOPS_1, METRIC_1, FUNCT_1, FUNCT_2,
       FINSEQ_1, REAL_1, ABSVALUE, REAL_2, PRE_TOPC, TOPS_2, JORDAN1, JORDAN5B,
       JORDAN5C, TOPREAL1, STRUCT_0, TOPREAL5, SUBSET_1, TREAL_1, PSCOMP_1,
@@ -47,7 +47,7 @@ theorem Th2:
 proof assume A1:r<=s;
  per cases by A1,REAL_1:def 5;
  suppose r<s;
-  hence thesis by TOPREAL3:3;
+  hence thesis by XREAL_1:228;
  end;
  suppose r=s;
   hence thesis;
@@ -1349,10 +1349,12 @@ proof let P be Subset of R^1, r,s be real number;
  hence P is open by A4,A5,TOPS_1:38;
 end;
 
-theorem Th47: for S being TopSpace,
+ Lm3: for S being TopSpace,
   P1,P2 being Subset of S,
   P1' being Subset of S|P2 st P1=P1' & P1 c= P2
   holds S|P1=(S|P2)|P1' by PRE_TOPC:28;
+
+canceled;
 
 theorem Th48:for P7 being Subset of I[01] st
 P7=(the carrier of I[01]) \{0,1} holds P7<>{} & P7 is connected
@@ -1379,7 +1381,7 @@ proof let P7 be Subset of I[01];
      reconsider D1=[.0,1.] as Subset of R^1 by TOPMETR:24;
      reconsider P1=P7 as Subset of R^1 by A13,TOPMETR:24;
          I[01]=R^1|D1 by TOPMETR:26,27;
-     then A14:  I[01]|P7=R^1|P1 by Th47,BORSUK_1:83;
+     then A14:  I[01]|P7=R^1|P1 by Lm3,BORSUK_1:83;
          P1={r1:0<r1 & r1<1} by A13,RCOMP_1:def 2;
      then P1 is open by JORDAN2B:32;
      then A15: I[01]|P7 is non empty open SubSpace of R^1
@@ -1427,7 +1429,8 @@ proof let P7 be Subset of I[01];
               proof
                assume l in Q;
                 then consider s being real number such that
-                  A21: s > 0 and A22: Ball(m,s) c= B0 by A16,TOPMETR:22,def 7;
+                  A21: s > 0 and A22: Ball(m,s) c= B0 by A16,TOPMETR:22,
+def 7;
                   reconsider s as Element of REAL by XREAL_0:def 1;
                    reconsider e1 = l-s/2
                             as Point of RealSpace by METRIC_1:def 14;
@@ -1435,7 +1438,8 @@ proof let P7 be Subset of I[01];
                        s/2<s by A21,XREAL_1:218;
                    then abs(l - (l-s/2)) < s by A23,ABSVALUE:def 1;
                    then (the distance of RealSpace).(m,e1) < s
-                                              by METRIC_1:def 13,def 14;
+                                              by METRIC_1:def 13,
+def 14;
                    then dist(m,e1) < s by METRIC_1:def 1;
                    then e1 in {z where z is Element of
                                             RealSpace : dist(m,z)<s};
@@ -1784,7 +1788,7 @@ proof let GX be TopSpace,
   assume A1: P1 c=P & Q=Q' & Q' is connected;
        [#](GX|P)=P by PRE_TOPC:def 10;
    then reconsider P1'=P1 as Subset of GX|P by A1;
-       GX|P1=(GX|P)|P1' by A1,Th47;
+       GX|P1=(GX|P)|P1' by A1,Lm3;
  hence thesis by A1,CONNSP_1:24;
 end;
 
@@ -1879,7 +1883,7 @@ proof
 then A7:     the carrier of (S|P1)=P1;
          reconsider P4=F1/\P1' as Subset of (S|P3)|P1'
            by TOPS_2:38;
-         A8:S|P1=(S|P3)|P1' by A1,Th47;
+         A8:S|P1=(S|P3)|P1' by A1,Lm3;
 A9:     P4 is closed by A6,Th3;
          A10:f1"P1=the carrier of T by A7,FUNCT_2:48
          .=dom f1 by FUNCT_2:def 1;
@@ -2335,14 +2339,15 @@ registration
   coherence by TOPMETR:24,XREAL_0:def 1;
 end;
 
-Lm3: for g being Function of I[01],R^1,
+Lm4: for g being Function of I[01],R^1,
            s1,s2,r being real number st g is continuous &
   g.0[01] < r & r < g.1[01] & s1=g.0 & s2=g.1 ex r1 st 0<r1 & r1<1 & g.r1=r
 proof let g be Function of I[01],R^1,s1,s2,r be real number;
   assume g is continuous &
     g.0[01] < r & r < g.1[01] & s1=g.0 & s2=g.1;
       then ex rc being Real st
-      g.rc=r & 0<rc & rc <1 by BORSUK_1:def 17,def 18,TOPMETR:27,TOPREAL5:12;
+      g.rc=r & 0<rc & rc <1 by BORSUK_1:def 17,
+def 18,TOPMETR:27,TOPREAL5:12;
      hence thesis;
 end;
 
@@ -2419,7 +2424,7 @@ A12: Vertical_Line(r) is closed by Th33;
    hence P1 meets Vertical_Line(r) by A21,XBOOLE_0:3;
   end;
   case g.0[01]< r & r < g.1[01];
-    then consider r1 such that A22:0<r1 & r1<1 & g.r1=r by A5,A9,A10,Lm3;
+    then consider r1 such that A22:0<r1 & r1<1 & g.r1=r by A5,A9,A10,Lm4;
     dom f=[.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
     then A23:r1 in dom f by A22,RCOMP_1:48;
     [#]((TOP-REAL 2)|P1)=P1 by PRE_TOPC:def 10;
@@ -2437,7 +2442,7 @@ A12: Vertical_Line(r) is closed by Th33;
  hence thesis by A11,A12,TOPS_1:35;
 end;
 
-Lm4:now let P be Simple_closed_curve;
+Lm5:now let P be Simple_closed_curve;
    let P1,P1' be non empty Subset of TOP-REAL 2;
      assume A1:( ex P2 being non empty Subset of TOP-REAL 2 st
          P1 is_an_arc_of W-min(P),E-max(P)
@@ -2484,7 +2489,7 @@ Lm4:now let P be Simple_closed_curve;
          A8:(E-max(P))`1=E-bound(P) by EUCLID:56;
          then (W-min(P))`1<(E-max(P))`1 by A7,TOPREAL5:23;
          then A9: (W-min P)`1<=(W-bound(P)+E-bound(P))/2 &
-          (W-bound(P)+E-bound(P))/2<=(E-max P)`1 by A7,A8,TOPREAL3:3;
+          (W-bound(P)+E-bound(P))/2<=(E-max P)`1 by A7,A8,XREAL_1:228;
          then P2 meets Vertical_Line((W-bound(P)+E-bound(P))/2) &
           P2 /\ Vertical_Line((W-bound(P)+E-bound(P))/2) is closed
                                    by A3,Th64;
@@ -2527,7 +2532,7 @@ definition let P be Subset of TOP-REAL 2
                   Vertical_Line((W-bound(P)+E-bound(P))/2))`2 by A1,Th40;
      hence thesis;
     end;
-   uniqueness by A1,Lm4;
+   uniqueness by A1,Lm5;
 end;
 
 definition let P be Subset of TOP-REAL 2; assume

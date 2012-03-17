@@ -8,7 +8,7 @@ environ
 
  vocabularies BOOLE, FUNCT_1, RELAT_1, FUNCOP_1, FUNCT_3, MCART_1, SETFAM_1,
       TARSKI, SUBSET_1, EQREL_1, PRE_TOPC, ORDINAL2, CONNSP_2, TOPS_1,
-      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1, ARYTM;
+      COMPTS_1, FINSET_1, PCOMPS_1, METRIC_1, RCOMP_1, BORSUK_1, ARYTM, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0,
       REAL_1, FINSET_1, RELAT_1, FUNCT_1, MCART_1, DOMAIN_1, RCOMP_1, SETFAM_1,
       EQREL_1, BINOP_1, FUNCT_2, STRUCT_0, METRIC_1, PCOMPS_1, PRE_TOPC,
@@ -16,7 +16,7 @@ environ
       PARTFUN1;
  constructors SETFAM_1, FUNCT_3, DOMAIN_1, FUNCOP_1, FINSET_1, XCMPLX_0,
       XXREAL_0, MEMBERED, EQREL_1, RCOMP_1, TOPS_1, TOPS_2, COMPTS_1, CONNSP_2,
-      PCOMPS_1;
+      PCOMPS_1, NAT_D;
  registrations SUBSET_1, PCOMPS_1, EQREL_1, FINSET_1, PRE_TOPC, STRUCT_0,
       METRIC_1, FUNCOP_1, RELSET_1, MEMBERED, PARTFUN1, FUNCT_2, RELAT_1,
       TOPS_1, XREAL_0;
@@ -36,13 +36,9 @@ begin
 
 reserve e,u,X,Y,X1 for set, A for Subset of X;
 
-canceled 3;
+ Lm1: (id X)"A = A by FUNCT_2:171;
 
-theorem Th4: (id X)"A = A
- proof
-  thus A = (id X)"((id X).:A) by FUNCT_2:92
-   .= (id X)"A by FUNCT_1:162;
- end;
+canceled 4;
 
 theorem Th5:
  for F being Function st X c= F"X1 holds F.:X c= X1
@@ -358,7 +354,7 @@ proof
  let F be Function of X,Y, y be Element of Y, z be Element of Z;
  thus [:F,id Z:]"{[y,z]} = [:F,id Z:]"[:{y},{z}:] by ZFMISC_1:35
     .= [:F"{y},(id Z)"{z}:] by FUNCT_3:94
-    .= [:F"{y},{z}:] by Th4;
+    .= [:F"{y},{z}:] by Lm1;
 end;
 
 definition let B be non empty set, A be set;
@@ -1658,8 +1654,7 @@ theorem
   st [:X1,Y1:] <> {}
   holds Pr1(X,Y). [:X1,Y1:] = X1 & Pr2(X,Y). [:X1,Y1:] = Y1 by Th13;
 
-theorem
- Pr1(X,Y).{} = {} & Pr2(X,Y).{} = {} by FUNCT_3:9;
+canceled;
 
 theorem Th67:
  for t being Point of Y, A being Subset of X st A is compact
@@ -1812,7 +1807,7 @@ A2:  A = Class(id the carrier of X,x) by EQREL_1:def 5;
    thus A = {x} by A2,EQREL_1:33;
   end;
 
-Lm1:
+Lm2:
  for A being Subset of X st A in TrivDecomp X
  for V being a_neighborhood of A
   ex W being Subset of X st W is open & A c= W & W c= V &
@@ -2135,10 +2130,7 @@ carrier of X;
  correctness;
 end;
 
-theorem
- for XX being non empty TopSpace, X being non empty SubSpace of XX,
-     D being non empty a_partition of the carrier of X
-  holds D c= TrivExt D by XBOOLE_1:7;
+canceled;
 
 theorem Th74:
  for XX being non empty TopSpace, X being non empty SubSpace of XX,
@@ -2281,7 +2273,7 @@ definition let X be non empty TopSpace;
  correctness
   proof
    take TrivDecomp X;
-   thus thesis by Lm1;
+   thus thesis by Lm2;
   end;
 end;
 
@@ -2322,7 +2314,7 @@ theorem Th82:
     for V being a_neighborhood of A
      ex W being Subset of X st W is open & A c= W & W c= V &
       for B being Subset of X st B in TrivDecomp X & B meets W
-       holds B c= W by Lm1;
+       holds B c= W by Lm2;
   end;
 
 definition let X be TopSpace;
@@ -2331,7 +2323,7 @@ definition let X be TopSpace;
 :Def14: for A being Subset of X st A = the carrier of IT holds A is closed;
 end;
 
-Lm2:
+Lm3:
  for T being TopStruct holds
  the TopStruct of T is SubSpace of T
   proof let T be TopStruct;
@@ -2355,7 +2347,7 @@ registration let X be TopSpace;
  cluster strict closed SubSpace of X;
  existence
   proof
-   reconsider Y = the TopStruct of X as strict SubSpace of X by Lm2;
+   reconsider Y = the TopStruct of X as strict SubSpace of X by Lm3;
     take Y;
       Y is closed
     proof let A be Subset of X;
@@ -2686,7 +2678,7 @@ begin
 :: Decomposition of retracts
 ::
 
-Lm3: TopSpaceMetr RealSpace =
+Lm4: TopSpaceMetr RealSpace =
    TopStruct(#the carrier of RealSpace, Family_open_set RealSpace#)
       by PCOMPS_1:def 6;
 
@@ -2699,7 +2691,7 @@ definition
   proof
     reconsider P = [.0,1.]
        as non empty Subset of TopSpaceMetr RealSpace
-     by Lm3,METRIC_1:def 14,RCOMP_1:15;
+     by Lm4,METRIC_1:def 14,RCOMP_1:15;
    take (TopSpaceMetr RealSpace)|P;
    thus thesis;
   end;
@@ -2712,7 +2704,7 @@ A1: (for P being Subset of TopSpaceMetr(RealSpace)
         st P = [.0,1.]
     holds I2 = (TopSpaceMetr RealSpace)|P;
     reconsider P = [.0,1.] as Subset of TopSpaceMetr RealSpace
-       by Lm3,METRIC_1:def 14;
+       by Lm4,METRIC_1:def 14;
         I1 = (TopSpaceMetr RealSpace)|P & I2 = (TopSpaceMetr RealSpace)|P by A1
 ;
    hence thesis;
@@ -2724,7 +2716,7 @@ registration
  coherence
   proof
     reconsider P = [.0,1.] as non empty Subset of
-     TopSpaceMetr RealSpace by Lm3,METRIC_1:def 14,RCOMP_1:15;
+     TopSpaceMetr RealSpace by Lm4,METRIC_1:def 14,RCOMP_1:15;
        I[01] = (TopSpaceMetr RealSpace)|P by Def16;
    hence thesis;
   end;
@@ -2734,7 +2726,7 @@ theorem Th83:
  the carrier of I[01] = [.0,1.]
   proof
     reconsider P = [.0,1.] as Subset of TopSpaceMetr RealSpace
-        by Lm3,METRIC_1:def 14;
+        by Lm4,METRIC_1:def 14;
     A1:  I[01] = (TopSpaceMetr RealSpace)|P &
     P <> {}(TopSpaceMetr RealSpace) by Def16,RCOMP_1:15;
    thus the carrier of I[01] = [#] I[01]

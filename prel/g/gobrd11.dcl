@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -23,6 +24,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="INT_1"/>
@@ -40,20 +42,20 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="78">
+<Adjective nr="84">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="84"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -61,11 +63,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="228">
+<Func kind="K" nr="254">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

@@ -10,19 +10,19 @@ environ
       CARD_3, ARYTM_1, NAT_1, CQC_LANG, BOOLE, MCART_1, FUNCT_4, PARTFUN1,
       FUNCOP_1, FINSET_1, ORDINAL2, AMI_3, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS,
-      XCMPLX_0, FUNCT_1, INT_1, NAT_1, MCART_1, CQC_LANG, CARD_3, GR_CY_1,
-      RELAT_1, FUNCT_4, PARTFUN1, FINSET_1, FINSEQ_1, STRUCT_0, AMI_1, AMI_2,
-      XXREAL_0;
+      XCMPLX_0, FUNCT_1, INT_1, NAT_1, NAT_D, MCART_1, CQC_LANG, CARD_3,
+      GR_CY_1, RELAT_1, FUNCT_4, PARTFUN1, FINSET_1, FINSEQ_1, STRUCT_0, AMI_1,
+      AMI_2, XXREAL_0;
  constructors DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, MEMBERED, FINSEQ_4,
-      CAT_2, AMI_1, AMI_2;
+      CAT_2, AMI_1, AMI_2, NAT_D;
  registrations INT_1, AMI_1, RELSET_1, AMI_2, CQC_LANG, NAT_1, FINSET_1,
       XBOOLE_0, FRAENKEL, MEMBERED, ORDINAL1, SETFAM_1, CARD_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, TARSKI, INT_1, CQC_LANG;
  theorems NAT_1, PARTFUN1, FUNCT_1, SUBSET_1, GRFUNC_1, TARSKI, ZFMISC_1,
-      ENUMSET1, AMI_2, CQC_LANG, FUNCT_4, AMI_1, FUNCOP_1, CARD_3, FUNCT_2,
-      MCART_1, FINSEQ_3, TREES_1, INT_1, RELAT_1, RELSET_1, GR_CY_1, STRUCT_0,
-      ORDINAL1, XBOOLE_0, XBOOLE_1;
+      ENUMSET1, AMI_2, CQC_LANG, FUNCT_4, AMI_1, CARD_3, FUNCT_2, MCART_1,
+      FINSEQ_3, TREES_1, INT_1, RELAT_1, RELSET_1, GR_CY_1, STRUCT_0, ORDINAL1,
+      XBOOLE_0, XBOOLE_1, NAT_D;
  schemes NAT_1;
 
 begin :: A small concrete machine
@@ -52,7 +52,7 @@ theorem Th1:
   then SCM-OK.x = SCM-Instr by TARSKI:def 1;
   then consider k such that
 A2:      x = 2*k+2*1 by AMI_2:9;
-     x = 2*(k + 1) & k + 1 > 0 by A2,NAT_1:19;
+     x = 2*(k + 1) & k + 1 > 0 by A2,NAT_1:3;
   hence thesis by AMI_2:def 3;
  end;
 
@@ -185,7 +185,7 @@ canceled;
 theorem
  IC SCM = 0;
 
-theorem Th5:
+ Lm1:
  for S being SCM-State st S = s holds IC s = IC S by AMI_2:def 6;
 
 definition let loc be Instruction-Location of SCM;
@@ -199,17 +199,21 @@ definition let loc be Instruction-Location of SCM;
  correctness;
 end;
 
+canceled;
+
 theorem Th6:
  for loc being Instruction-Location of SCM,
      mj being Element of SCM-Instr-Loc st mj = loc
  holds Next mj = Next loc by Def11;
 
-theorem Th7:
+ Lm2:
 for i being Element of SCM-Instr st i = I
 for S being SCM-State st S = s holds
  Exec(I,s) = SCM-Exec-Res(i,S) by AMI_2:def 17;
 
 begin :: Users guide
+
+canceled;
 
 theorem Th8:
  Exec(a:=b, s).IC SCM = Next IC s &
@@ -222,8 +226,8 @@ theorem Th8:
   set S1 = SCM-Chg(S, I address_1,S.(I address_2));
   reconsider i = 1 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mk, ml*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(a:=b, s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
+A2:  IC s = IC S by Lm1;
+A3: Exec(a:=b, s) = SCM-Exec-Res(I,S) by Lm2 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
   thus Exec(a:=b, s).IC SCM = Next IC S by A3,AMI_2:16
@@ -249,8 +253,8 @@ theorem Th9:
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)+S.(I address_2));
   reconsider i = 2 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mk, ml*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
+A2:  IC s = IC S by Lm1;
+A3: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by Lm2 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
   thus Exec(AddTo(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
@@ -276,8 +280,8 @@ theorem Th10:
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)-S.(I address_2));
   reconsider i = 3 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mk, ml*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by Th7
+A2:  IC s = IC S by Lm1;
+A3: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by Lm2
  .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
@@ -304,8 +308,8 @@ theorem Th11:
   set S1 = SCM-Chg(S, I address_1,S.(I address_1)*S.(I address_2));
   reconsider i = 4 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mk, ml*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S1, Next IC S))
+A2:  IC s = IC S by Lm1;
+A3: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by Lm2 .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
   thus Exec(MultBy(a,b), s).IC SCM = Next IC S by A3,AMI_2:16
@@ -333,8 +337,8 @@ theorem Th12:
   set S1' = SCM-Chg(S1, I address_2,S.(I address_1) mod S.(I address_2));
   reconsider i = 5 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mk, ml*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(Divide(a,b), s) = SCM-Exec-Res(I,S) by Th7
+A2:  IC s = IC S by Lm1;
+A3: Exec(Divide(a,b), s) = SCM-Exec-Res(I,S) by Lm2
  .= (SCM-Chg(S1', Next IC S))
  by A1,AMI_2:def 16;
 A4: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
@@ -366,7 +370,7 @@ theorem
   reconsider S = s as SCM-State;
   reconsider i = 6 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mj*>];
-A2: Exec(goto loc, s) = SCM-Exec-Res(I,S) by Th7 .= (SCM-Chg(S,I jump_address))
+A2: Exec(goto loc, s) = SCM-Exec-Res(I,S) by Lm2 .= (SCM-Chg(S,I jump_address))
  by AMI_2:def 16;
     I jump_address = mj by A1,AMI_2:24;
   hence Exec(goto loc, s).IC SCM = loc by A2,AMI_2:16;
@@ -385,8 +389,8 @@ theorem Th14:
   reconsider S = s as SCM-State;
   reconsider i = 7 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mj,a'*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(a=0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
+A2:  IC s = IC S by Lm1;
+A3: Exec(a=0_goto loc, s) = SCM-Exec-Res(I,S) by Lm2
   .= SCM-Chg(S,IFEQ(S.(I cond_address),0,I cjump_address,Next IC S))
     by A1,AMI_2:def 16;
   thus s.a = 0 implies Exec(a=0_goto loc, s).IC SCM = loc
@@ -420,8 +424,8 @@ theorem Th15:
   reconsider S = s as SCM-State;
   reconsider i = 8 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mj,a'*>];
-A2:  IC s = IC S by Th5;
-A3: Exec(a>0_goto loc, s) = SCM-Exec-Res(I,S) by Th7
+A2:  IC s = IC S by Lm1;
+A3: Exec(a>0_goto loc, s) = SCM-Exec-Res(I,S) by Lm2
    .= SCM-Chg(S,IFGT(S.(I cond_address),0,I cjump_address,Next IC S))
     by A1,AMI_2:def 16;
   thus s.a > 0 implies Exec(a>0_goto loc, s).IC SCM = loc
@@ -448,7 +452,7 @@ reserve Y,K,T for Element of Segm 9,
         a1,a2,a3 for Element of SCM-Instr-Loc,
         b1,b2,c1,c2,c3 for Element of SCM-Data-Loc;
 
-Lm1:
+Lm3:
  for I being Instruction of SCM st
   ex s st Exec(I,s).IC SCM = Next IC s
  holds I is non halting
@@ -469,7 +473,7 @@ A6: Exec(I,s).IC SCM = Next w by A1;
     hence contradiction by A4,A5,A6;
   end;
 
-Lm2:
+Lm4:
  for I being Instruction of SCM st I = [0,{}] holds I is halting
   proof
     let I be Instruction of SCM such that
@@ -505,51 +509,51 @@ then A5:
    not (ex mk being Element of SCM-Instr-Loc,
            ml being Element of SCM-Data-Loc st I = [ 8, <*mk,ml*>]) by A3,A4;
     reconsider t = s as SCM-State;
-    thus Exec(I,s) = SCM-Exec-Res(L,t) by Th7
+    thus Exec(I,s) = SCM-Exec-Res(L,t) by Lm2
        .= s by A5,AMI_2:def 16;
   end;
 
-Lm3:
+Lm5:
  a := b is non halting
   proof
     consider s;
        Exec(a:=b,s).IC SCM = Next IC s by Th8;
-    hence thesis by Lm1;
+    hence thesis by Lm3;
   end;
 
-Lm4:
+Lm6:
  AddTo(a,b) is non halting
   proof
     consider s;
        Exec(AddTo(a,b),s).IC SCM = Next IC s by Th9;
-    hence thesis by Lm1;
+    hence thesis by Lm3;
   end;
 
-Lm5:
+Lm7:
  SubFrom(a,b) is non halting
   proof
     consider s;
        Exec(SubFrom(a,b),s).IC SCM = Next IC s by Th10;
-    hence thesis by Lm1;
+    hence thesis by Lm3;
   end;
 
-Lm6:
+Lm8:
  MultBy(a,b) is non halting
   proof
     consider s;
        Exec(MultBy(a,b),s).IC SCM = Next IC s by Th11;
-    hence thesis by Lm1;
+    hence thesis by Lm3;
   end;
 
-Lm7:
+Lm9:
  Divide(a,b) is non halting
   proof
     consider s;
        Exec(Divide(a,b),s).IC SCM = Next IC s by Th12;
-    hence thesis by Lm1;
+    hence thesis by Lm3;
   end;
 
-Lm8:
+Lm10:
  goto loc is non halting
   proof
     assume
@@ -598,12 +602,12 @@ A12: 6 is Element of Segm 9 by GR_CY_1:10;
       = SCM-Chg(w,a3) by AMI_2:def 7
      .= SCM-Chg(w,V jump_address) by A12,AMI_2:24
      .= SCM-Exec-Res(V,w) by AMI_2:def 16
-     .= Exec(goto loc,t) by Th7
+     .= Exec(goto loc,t) by Lm2
      .= t by A1,AMI_1:def 8;
     hence contradiction by A4,A11;
   end;
 
-Lm9:
+Lm11:
  a=0_goto loc is non halting
   proof
     reconsider V = a=0_goto loc as Element of SCM-Instr;
@@ -652,7 +656,7 @@ A13:   a=0_goto loc is halting;
     per cases;
     suppose
 A14:   w.(V cond_address) <> 0;
-A15: IC t = IC w by Th5;
+A15: IC t = IC w by Lm1;
 A16: IC w = w.0 by AMI_2:def 6;
 A17: Exec(a=0_goto loc,t).IC SCM = w.0 by A13,AMI_1:def 8;
     reconsider e = w.0 as Instruction-Location of SCM by A16;
@@ -672,13 +676,13 @@ cjump_address
      .= SCM-Chg(w,IFEQ(w.(V cond_address),0,V cjump_address,Next IC w)) by A11,
 A12,A20,AMI_2:25
      .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
-     .= Exec(a=0_goto loc,t) by Th7
+     .= Exec(a=0_goto loc,t) by Lm2
      .= t by A13,AMI_1:def 8;
     hence contradiction by A3,A10;
   end;
   end;
 
-Lm10:
+Lm12:
  a>0_goto loc is non halting
   proof
     reconsider V = a>0_goto loc as Element of SCM-Instr;
@@ -727,7 +731,7 @@ A13:   a>0_goto loc is halting;
     per cases;
     suppose
 A14:   w.(V cond_address) <= 0;
-A15: IC t = IC w by Th5;
+A15: IC t = IC w by Lm1;
 A16: IC w = w.0 by AMI_2:def 6;
 A17: Exec(a>0_goto loc,t).IC SCM = w.0 by A13,AMI_1:def 8;
     reconsider e = w.0 as Instruction-Location of SCM by A16;
@@ -747,13 +751,13 @@ cjump_address
      .= SCM-Chg(w,IFGT(w.(V cond_address),0,V cjump_address,Next IC w)) by A11,
 A12,A20,AMI_2:25
      .= SCM-Exec-Res(V,w) by A12,AMI_2:def 16
-     .= Exec(a>0_goto loc,t) by Th7
+     .= Exec(a>0_goto loc,t) by Lm2
      .= t by A13,AMI_1:def 8;
     hence contradiction by A3,A10;
   end;
   end;
 
-Lm11:
+Lm13:
  for I being set holds I is Instruction of SCM iff
   I = [0,{}] or
   (ex a,b st I = a:=b) or
@@ -789,7 +793,7 @@ then A1:   I in { [SCM-Halt,{}] } \/
           I in { [T,<*c2,c3*>] : T in { 1,2,3,4,5 } } by XBOOLE_0:def 2;
       per cases by A1,XBOOLE_0:def 2;
       suppose I in { [SCM-Halt,{}] };
-      hence thesis by AMI_2:def 1,TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
       end;
       suppose I in { [Y,<*a3*>] : Y = 6 };
       then consider Y, a3 such that
@@ -827,43 +831,43 @@ coherence
   proof
     reconsider I = [0,{}] as Instruction of SCM by AMI_2:2;
     take I;
-    thus I is halting by Lm2;
+    thus I is halting by Lm4;
     let W be Instruction of SCM such that
 A1:   W is halting;
     assume
 A2:   I <> W;
-    per cases by Lm11;
+    per cases by Lm13;
     suppose W = [0,{}];
     hence thesis by A2;
     end;
     suppose ex a,b st W = a:=b;
-    hence thesis by A1,Lm3;
-    end;
-    suppose ex a,b st W = AddTo(a,b);
-    hence thesis by A1,Lm4;
-    end;
-    suppose ex a,b st W = SubFrom(a,b);
     hence thesis by A1,Lm5;
     end;
-    suppose ex a,b st W = MultBy(a,b);
+    suppose ex a,b st W = AddTo(a,b);
     hence thesis by A1,Lm6;
     end;
-    suppose ex a,b st W = Divide(a,b);
+    suppose ex a,b st W = SubFrom(a,b);
     hence thesis by A1,Lm7;
     end;
-    suppose ex loc st W = goto loc;
+    suppose ex a,b st W = MultBy(a,b);
     hence thesis by A1,Lm8;
     end;
-    suppose ex a,loc st W = a=0_goto loc;
+    suppose ex a,b st W = Divide(a,b);
     hence thesis by A1,Lm9;
     end;
-    suppose ex a,loc st W = a>0_goto loc;
+    suppose ex loc st W = goto loc;
     hence thesis by A1,Lm10;
+    end;
+    suppose ex a,loc st W = a=0_goto loc;
+    hence thesis by A1,Lm11;
+    end;
+    suppose ex a,loc st W = a>0_goto loc;
+    hence thesis by A1,Lm12;
   end;
   end;
 end;
 
-Lm12:
+Lm14:
  for I being Instruction of SCM st I is halting holds I = halt SCM
   proof
     let I be Instruction of SCM such that
@@ -876,12 +880,12 @@ A2:   for J being Instruction of SCM st J is halting holds K = J
           .= halt SCM by A2;
   end;
 
-Lm13:
+Lm15:
  halt SCM = [0,{}]
   proof
     reconsider I = [0,{}] as Instruction of SCM by AMI_2:2;
-       I is halting by Lm2;
-    hence thesis by Lm12;
+       I is halting by Lm4;
+    hence thesis by Lm14;
   end;
 
 begin :: Preliminaries
@@ -914,13 +918,13 @@ A6:  R[i];
 then A8: P[k()*(n() div k())];
   per cases;
   suppose n() mod k() = 0;
-   then n() = k() * (n() div k()) + 0 by A2,NAT_1:47;
+   then n() = k() * (n() div k()) + 0 by A2,NAT_D:2;
    hence thesis by A7;
   end;
   suppose
 A9: n() mod k() <> 0;
-A10: n() = k() * (n() div k()) + (n() mod k()) by A2,NAT_1:47;
-      n() mod k() <= k() by A2,NAT_1:46;
+A10: n() = k() * (n() div k()) + (n() mod k()) by A2,NAT_D:2;
+      n() mod k() <= k() by A2,NAT_D:1;
   hence thesis by A3,A8,A9,A10;
  end;
  end;
@@ -957,16 +961,16 @@ then A2: df = dg by SUBSET_1:8;
   hence f = g by A2,PARTFUN1:34;
  end;
 
- Lm14:
+ Lm16:
  for f,g being Function, A,B being set st
   f|A = g|A & f|B = g|B holds f|(A \/ B) = g|(A \/ B)
     by RELAT_1:185;
 
- Lm15:
+ Lm17:
  for f being Function, x being set st x in dom f
  holds f|{x} = {[x,f.x]} by GRFUNC_1:89;
 
- Lm16:
+ Lm18:
  for f being Function, X being set st X misses dom f
   holds f|X = {} by RELAT_1:95;
 
@@ -982,11 +986,11 @@ A2: f.x = g.x;
    per cases;
    suppose
 A3:  x in dom f;
-   hence f|{x} = {[x,g.x]} by A2,Lm15 .= g|{x} by A1,A3,Lm15;
+   hence f|{x} = {[x,g.x]} by A2,Lm17 .= g|{x} by A1,A3,Lm17;
    end;
    suppose not x in dom f;
 then A4: {x} misses dom f by ZFMISC_1:56;
-   hence f|{x} = {} by Lm16 .= g|{x} by A1,A4,Lm16;
+   hence f|{x} = {} by Lm18 .= g|{x} by A1,A4,Lm18;
  end;
  end;
 
@@ -1001,7 +1005,7 @@ A3: f.y = g.y;
 A4: f|{x} = g|{x} by A1,A2,Th24;
 A5: f|{y} = g|{y} by A1,A3,Th24;
       {x,y} = {x} \/ {y} by ENUMSET1:41;
-  hence f|{x,y} = g|{x,y} by A4,A5,Lm14;
+  hence f|{x,y} = g|{x,y} by A4,A5,Lm16;
  end;
 
 theorem
@@ -1015,7 +1019,7 @@ A3: f.z = g.z;
 A4: f|{x,y} = g|{x,y} by A1,A2,Th25;
 A5: f|{z} = g|{z} by A1,A3,Th24;
       {x,y,z} = {x,y} \/ {z} by ENUMSET1:43;
-  hence f|{x,y,z} = g|{x,y,z} by A4,A5,Lm14;
+  hence f|{x,y,z} = g|{x,y,z} by A4,A5,Lm16;
  end;
 
 theorem Th27:
@@ -1025,7 +1029,7 @@ theorem Th27:
   assume a in dom f & f.a = b;
    then [a,b] in f by FUNCT_1:8;
    then {[a,b]} c= f by ZFMISC_1:37;
-  hence a .--> b c= f by AMI_1:19;
+  hence a .--> b c= f by CQC_LANG:45;
  end;
 
 canceled;
@@ -1129,12 +1133,6 @@ end;
 
 reserve N for with_non-empty_elements set;
 
-theorem
-  for S being IC-Ins-separated definite (non empty non void AMI-Struct over N
-)
- for l being Instruction-Location of S
-  holds dom(Start-At l) = {IC S} by FUNCOP_1:19;
-
 definition let N be set; let S be AMI-Struct over N;
  let IT be FinPartState of S;
  attr IT is programmed means
@@ -1151,6 +1149,8 @@ registration let N be set; let S be AMI-Struct over N;
     thus dom Z c= the Instruction-Locations of S by RELAT_1:60,XBOOLE_1:2;
   end;
 end;
+
+canceled;
 
 theorem
    for N being set for S being AMI-Struct over N
@@ -1458,12 +1458,6 @@ A2: p c= s;
    .= l by A1,Def16;
  end;
 
-theorem
- for S being IC-Ins-separated definite (non empty non void AMI-Struct over N
-),
-     l being Instruction-Location of S
-  holds (Start-At l).IC S = l by CQC_LANG:6;
-
 definition let N;
  let S be definite IC-Ins-separated (non empty non void AMI-Struct over N);
  let l be Instruction-Location of S, I be Element of the Instructions of S;
@@ -1479,7 +1473,7 @@ end;
 
 begin :: Small concrete model
 
-Lm17:
+Lm19:
  for s being State of SCM, i being Instruction of SCM,
       l being Instruction-Location of SCM
    holds Exec(i,s).l = s.l
@@ -1611,6 +1605,8 @@ A8:     c = [T,<*b2,c1*>] & T in { 1,2,3,4,5};
   hence s.l = Exec(i,s).l by A2;
  end;
 
+canceled;
+
 theorem
    SCM is realistic by AMI_1:def 21,AMI_2:6;
 
@@ -1621,7 +1617,7 @@ registration
         SCM is steady-programmed
      proof let s be State of SCM, i be Instruction of SCM,
       l be Instruction-Location of SCM;
-      thus Exec(i,s).l = s.l by Lm17;
+      thus Exec(i,s).l = s.l by Lm19;
      end;
    hence thesis by AMI_1:def 21,AMI_2:6;
   end;
@@ -1643,7 +1639,7 @@ definition let k be natural number;
  coherence
   proof
     reconsider k as Element of NAT by ORDINAL1:def 13;
-       SCM-Instr-Loc = { 2*i : i > 0 } & k+1 > 0 by AMI_2:def 3,NAT_1:19;
+       SCM-Instr-Loc = { 2*i : i > 0 } & k+1 > 0 by AMI_2:def 3,NAT_1:3;
     then 2*(k +1) in SCM-Instr-Loc;
    hence thesis;
   end;
@@ -1719,37 +1715,36 @@ begin  :: Halt Instruction
 theorem
     for I being Instruction of SCM st
   ex s st Exec(I,s).IC SCM = Next IC s
- holds I is non halting by Lm1;
+ holds I is non halting by Lm3;
 
 theorem
-    for I being Instruction of SCM st I = [0,{}] holds I is halting by Lm2;
+    for I being Instruction of SCM st I = [0,{}] holds I is halting by Lm4;
 
 theorem
-    a := b is non halting by Lm3;
+    a := b is non halting by Lm5;
 
 theorem
-    AddTo(a,b) is non halting by Lm4;
+    AddTo(a,b) is non halting by Lm6;
 
 theorem
-    SubFrom(a,b) is non halting by Lm5;
+    SubFrom(a,b) is non halting by Lm7;
 
 theorem
-    MultBy(a,b) is non halting by Lm6;
+    MultBy(a,b) is non halting by Lm8;
 
 theorem
-    Divide(a,b) is non halting by Lm7;
+    Divide(a,b) is non halting by Lm9;
 
 theorem
-    goto loc is non halting by Lm8;
+    goto loc is non halting by Lm10;
 
 theorem
-    a=0_goto loc is non halting by Lm9;
+    a=0_goto loc is non halting by Lm11;
 
 theorem
-    a>0_goto loc is non halting by Lm10;
+    a>0_goto loc is non halting by Lm12;
 
-theorem
-    [0,{}] is Instruction of SCM by AMI_2:2;
+canceled;
 
 theorem
     for I being set holds I is Instruction of SCM iff
@@ -1761,10 +1756,10 @@ theorem
   (ex a,b st I = Divide(a,b)) or
   (ex loc st I = goto loc) or
   (ex a,loc st I = a=0_goto loc) or
-  ex a,loc st I = a>0_goto loc by Lm11;
+  ex a,loc st I = a>0_goto loc by Lm13;
 
 theorem
-    for I being Instruction of SCM st I is halting holds I = halt SCM by Lm12;
+    for I being Instruction of SCM st I is halting holds I = halt SCM by Lm14;
 
 theorem
-    halt SCM = [0,{}] by Lm13;
+    halt SCM = [0,{}] by Lm15;

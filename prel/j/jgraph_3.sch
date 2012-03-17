@@ -17,6 +17,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -35,7 +37,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -48,7 +50,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -57,17 +59,17 @@
 </Fraenkel>
 <Func kind="K" nr="27">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="215">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -81,7 +83,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -94,7 +96,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -103,7 +105,7 @@
 </Fraenkel>
 <Func kind="K" nr="30">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -111,7 +113,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -123,17 +125,17 @@
 </Fraenkel>
 <Func kind="K" nr="27">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="189">
+<Func kind="K" nr="215">
 <Func kind="U" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="193">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Func>

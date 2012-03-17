@@ -7,15 +7,16 @@
 environ
 
  vocabularies BOOLE, FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, VECTSP_1, INCSP_1,
-      RLVECT_1, FINSEQ_2, RVSUM_1, MATRIX_1, TREES_1, CAT_3, PARTFUN1;
- notations TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, NUMBERS, NAT_1, ZFMISC_1,
-      RELAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, BINOP_1, FINSEQOP, MATRIX_3,
-      MATRIX_1, GROUP_1, VECTSP_1, FVSUM_1, FUNCT_3, RLVECT_1, XXREAL_0;
+      RLVECT_1, FINSEQ_2, RVSUM_1, MATRIX_1, TREES_1, CAT_3, PARTFUN1, NAT_1;
+ notations TARSKI, XBOOLE_0, FINSEQ_2, SUBSET_1, NUMBERS, NAT_1, NAT_D,
+      ZFMISC_1, RELAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, BINOP_1, FINSEQOP,
+      MATRIX_3, MATRIX_1, GROUP_1, VECTSP_1, FVSUM_1, FUNCT_3, RLVECT_1,
+      XXREAL_0;
  constructors FUNCT_3, DOMAIN_1, BINOP_1, XXREAL_0, NAT_1, SETWOP_2, FVSUM_1,
-      MATRIX_3;
+      MATRIX_3, NAT_D;
  registrations FUNCT_1, STRUCT_0, INT_1, RELSET_1, XBOOLE_0, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions BINOP_1, MATRIX_1, MATRIX_3;
+ definitions BINOP_1, MATRIX_1, MATRIX_3, RLVECT_1;
  theorems FINSEQ_1, FUNCT_1, FUNCT_2, NAT_1, ZFMISC_1, XBOOLE_0, RLVECT_1,
       MATRIX_3, VECTSP_1, FVSUM_1, MATRIX_1, FINSEQ_2, FUNCOP_1, FINSEQOP,
       FUNCT_3, GROUP_1;
@@ -33,27 +34,27 @@ end;
 theorem Th1:
   for K being Field, M being Matrix of K holds --M=M
 proof let K be Field, M be Matrix of K;
-  per cases by NAT_1:19;
-  suppose A0:len M = 0; then
+  per cases by NAT_1:3;
+  suppose A1:len M = 0; then
     len -M = 0 by MATRIX_3:def 2; then
     len --M = 0 by MATRIX_3:def 2;
-    hence thesis by A0,MATRIX_1:37;
+    hence thesis by A1,MATRIX_1:37;
   end;
-  suppose A1: len M>0;
-  A2: len (-M) = len M & width (-M) = width M by MATRIX_3:def 2;
+  suppose A2: len M>0;
+  A3: len (-M) = len M & width (-M) = width M by MATRIX_3:def 2;
    len (--M) = len (-M) & width (--M) = width (-M) by MATRIX_3:def 2;
-  then A3: len (--M) =len M & width (--M)= width M by MATRIX_3:def 2;
-  A4: M is Matrix of len M,width M,K by A1,MATRIX_1:20;
-  -M is Matrix of len M,width M,K by A1,A2,MATRIX_1:20;
-  then A5: Indices (-M)=Indices M by A4,MATRIX_1:27;
+  then A4: len (--M) =len M & width (--M)= width M by MATRIX_3:def 2;
+  A5: M is Matrix of len M,width M,K by A2,MATRIX_1:20;
+  -M is Matrix of len M,width M,K by A2,A3,MATRIX_1:20;
+  then A6: Indices (-M)=Indices M by A5,MATRIX_1:27;
   for i,j st [i,j] in Indices M holds M*(i,j) = (--M)*(i,j)
   proof let i,j;
-    assume A6: [i,j] in Indices M;
+    assume A7: [i,j] in Indices M;
     then (-M)*(i,j)= -(M*(i,j)) by MATRIX_3:def 2;
-    then (-(-M))*(i,j) = --(M*(i,j)) by A5,A6,MATRIX_3:def 2;
+    then (-(-M))*(i,j) = --(M*(i,j)) by A6,A7,MATRIX_3:def 2;
     hence M*(i,j) = (--M)*(i,j) by RLVECT_1:30;
   end;
-  hence thesis by A3,MATRIX_1:21;
+  hence thesis by A4,MATRIX_1:21;
   end;
 end;
 
@@ -61,15 +62,15 @@ theorem Th2:
   for K being Field,M being Matrix of K
     holds M+(-M)=0.(K,len M,width M)
 proof let K be Field,M be Matrix of K;
-  per cases by NAT_1:19;
+  per cases by NAT_1:3;
   suppose len M>0;
     then M is Matrix of len M,width M,K by MATRIX_1:20;
     hence thesis by MATRIX_3:7;
   end;
-  suppose A0:len M = 0; then
-AA: len (0.(K,len M,width M)) = 0 by FINSEQ_2:69;
+  suppose A1:len M = 0; then
+A2: len (0.(K,len M,width M)) = 0 by FINSEQ_2:69;
     len (M+(-M)) = len M by MATRIX_3:def 3;
-    hence thesis by A0,MATRIX_1:37,AA;
+    hence thesis by A1,MATRIX_1:37,A2;
   end;
 end;
 
@@ -89,12 +90,12 @@ proof let K be Field,M1,M2,M3 be Matrix of K;
   then M1+(M3+(-M3))=M2+M3+(-M3) by A1,MATRIX_3:5;
   then A3: M1+(M3+-M3)=M2+(M3+(-M3)) by A1,A2,MATRIX_3:5;
   A4: M3+-M3=0.(K,len M1,width M1) by A1,Th2;
-  per cases by NAT_1:19;
-  suppose A0:len M1 > 0; then
-  A5: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
-  M2 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
+  per cases by NAT_1:3;
+  suppose A5:len M1 > 0; then
+  A6: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
+  M2 is Matrix of len M1,width M1,K by A5,A1,MATRIX_1:20;
   then M2+0.(K,len M1,width M1)=M2 by MATRIX_3:6;
-  hence M1 = M2 by A3,A4,A5,MATRIX_3:6;
+  hence M1 = M2 by A3,A4,A6,MATRIX_3:6;
   end;
   suppose len M1 = 0;
     hence thesis by A1,MATRIX_1:37;
@@ -116,14 +117,14 @@ proof let K be Field,M1,M2 be Matrix of K;
   then 0.(K,len M1,width M1)=M2+M1+(-M1) by A1,MATRIX_3:4;
   then 0.(K,len M1,width M1)=M2+(M1+(-M1)) by A1,A2,MATRIX_3:5;
   then A3: 0.(K,len M1,width M1)=M2+(0.(K,len M1,width M1)) by Th2;
-  per cases by NAT_1:19;
+  per cases by NAT_1:3;
   suppose len M1 > 0; then
     M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
     hence thesis by A3,MATRIX_3:6;
   end;
-  suppose A0:len M1 = 0; then
+  suppose A4:len M1 = 0; then
     len (0.(K,len M1,width M1)) = 0 by FINSEQ_2:69;
-    hence thesis by A0,A1,MATRIX_1:37;
+    hence thesis by A4,A1,MATRIX_1:37;
   end;
 end;
 
@@ -134,19 +135,19 @@ theorem Th7:
 proof let K be Field,M1,M2 be Matrix of K;
   assume A1: len M1=len M2 & width M1=width M2 &
   M1 - M2 = 0.(K,len M1,width M1);
-  per cases by NAT_1:19;
-  suppose A0:len M1 > 0;
-  A2: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
-  then A3: width (0.(K,len M1,width M1))=width M1 by A0,MATRIX_1:20;
-  A4: M1 is Matrix of len M1,width M1,K by A0,MATRIX_1:20;
-  A5: M2 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
-  A6: M1+(-M2)+M2 = M2+0.(K,len M1,width M1) by A1,A2,A3,MATRIX_3:4
-  .=M2 by A5,MATRIX_3:6;
-  A7: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;
-  then M1+((-M2)+M2)=M2 by A1,A6,MATRIX_3:5;
-  then M1+(M2+(-M2))=M2 by A7,MATRIX_3:4;
-  then M1+(0.(K,len M1,width M1))=M2 by A5,MATRIX_3:7;
-  hence thesis by A4,MATRIX_3:6;
+  per cases by NAT_1:3;
+  suppose A2:len M1 > 0;
+  A3: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
+  then A4: width (0.(K,len M1,width M1))=width M1 by A2,MATRIX_1:20;
+  A5: M1 is Matrix of len M1,width M1,K by A2,MATRIX_1:20;
+  A6: M2 is Matrix of len M1,width M1,K by A2,A1,MATRIX_1:20;
+  A7: M1+(-M2)+M2 = M2+0.(K,len M1,width M1) by A1,A3,A4,MATRIX_3:4
+  .=M2 by A6,MATRIX_3:6;
+  A8: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;
+  then M1+((-M2)+M2)=M2 by A1,A7,MATRIX_3:5;
+  then M1+(M2+(-M2))=M2 by A8,MATRIX_3:4;
+  then M1+(0.(K,len M1,width M1))=M2 by A6,MATRIX_3:7;
+  hence thesis by A5,MATRIX_3:6;
   end;
   suppose len M1 = 0;
     hence thesis by A1,MATRIX_1:37;
@@ -170,7 +171,7 @@ theorem Th9:
   for n,m being Element of NAT,K being Field
     holds -(0.(K,n,m))=0.(K,n,m)
 proof let n,m be Element of NAT,K be Field;
-  per cases by NAT_1:19;
+  per cases by NAT_1:3;
   suppose A1: n>0;
   A2: len (0.(K,n,m))=n by MATRIX_1:def 3;
   then A3: width (0.(K,n,m))=m by A1,MATRIX_1:20;
@@ -178,9 +179,9 @@ proof let n,m be Element of NAT,K be Field;
   hence thesis by A2,A3,Th8;
   end;
   suppose n = 0; then
-AA: len (0.(K,n,m)) = 0 by FINSEQ_2:69; then
+A4: len (0.(K,n,m)) = 0 by FINSEQ_2:69; then
     len (-(0.(K,n,m))) = 0 by MATRIX_3:def 2;
-    hence thesis by AA,MATRIX_1:37;
+    hence thesis by A4,MATRIX_1:37;
   end;
 end;
 
@@ -190,23 +191,23 @@ theorem
   M1=0.(K,len M1,width M1)
 proof let K be Field,M1,M2 be Matrix of K;
   assume A1: len M1=len M2 & width M1=width M2 & M2 - M1 = M2;
-  per cases by NAT_1:19;
-  suppose Aa:len M1 > 0; then
-  A2: M2 is Matrix of len M1, width M1, K by A1,MATRIX_1:20;
-  A3: len (-M1)=len M1 & width (-M1)=width (M1) by MATRIX_3:def 2;
-  A4: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;
-  A5: -M1 is Matrix of len M1,width M1,K by Aa,A3,MATRIX_1:20;
-  M2+(-M1)+(-M2) = 0.(K,len M1,width M1) by A1,A2,MATRIX_3:7;
-  then (-M1)+M2+(-M2) = 0.(K,len M1,width M1) by A1,A3,MATRIX_3:4;
-  then (-M1)+(M2+(-M2)) = 0.(K,len M1,width M1) by A1,A3,A4,MATRIX_3:5;
-  then -M1+ (0.(K,len M1,width M1))=0.(K,len M1,width M1) by A2,MATRIX_3:7;
-  then -M1= 0.(K,len M1,width M1) by A5,MATRIX_3:6;
+  per cases by NAT_1:3;
+  suppose A2:len M1 > 0; then
+  A3: M2 is Matrix of len M1, width M1, K by A1,MATRIX_1:20;
+  A4: len (-M1)=len M1 & width (-M1)=width (M1) by MATRIX_3:def 2;
+  A5: len (-M2)=len M2 & width (-M2)=width (M2) by MATRIX_3:def 2;
+  A6: -M1 is Matrix of len M1,width M1,K by A2,A4,MATRIX_1:20;
+  M2+(-M1)+(-M2) = 0.(K,len M1,width M1) by A1,A3,MATRIX_3:7;
+  then (-M1)+M2+(-M2) = 0.(K,len M1,width M1) by A1,A4,MATRIX_3:4;
+  then (-M1)+(M2+(-M2)) = 0.(K,len M1,width M1) by A1,A4,A5,MATRIX_3:5;
+  then -M1+ (0.(K,len M1,width M1))=0.(K,len M1,width M1) by A3,MATRIX_3:7;
+  then -M1= 0.(K,len M1,width M1) by A6,MATRIX_3:6;
   then M1=- 0.(K,len M1,width M1) by Th1;
   hence thesis by Th9;
   end;
-  suppose Aa:len M1 = 0; then
+  suppose A7:len M1 = 0; then
     len (0.(K,len M1,width M1)) = 0 by FINSEQ_2:69;
-    hence thesis by Aa,MATRIX_1:37;
+    hence thesis by A7,MATRIX_1:37;
   end;
 end;
 
@@ -216,16 +217,16 @@ theorem Th11:
     M1 = M1 -(M2 - M2)
 proof let K be Field,M1,M2 be Matrix of K;
  assume len M1=len M2 & width M1=width M2;
-  then A2: M1 -(M2 - M2)=M1-0.(K,len M1,width M1) by Th2
+  then A1: M1 -(M2 - M2)=M1-0.(K,len M1,width M1) by Th2
                .=M1+0.(K,len M1,width M1) by Th9;
-  per cases by NAT_1:19;
+  per cases by NAT_1:3;
   suppose len M1 > 0; then
     M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
-    hence M1 = M1 -(M2 - M2) by A2,MATRIX_3:6;
+    hence M1 = M1 -(M2 - M2) by A1,MATRIX_3:6;
   end;
-  suppose A1:len M1 = 0; then
+  suppose A2:len M1 = 0; then
     len (M1 - (M2 - M2)) = 0 by MATRIX_3:def 3;
-    hence thesis by A1,MATRIX_1:37;
+    hence thesis by A2,MATRIX_1:37;
   end;
 end;
 
@@ -240,24 +241,24 @@ proof let K be Field,M1,M2 be Matrix of K;
   A4: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
   A5: len (-M1+-M2)=len M1 & width (-M1+-M2)=width M1
                       by A2,MATRIX_3:def 3;
-  per cases by NAT_1:19;
-  suppose A0:len M1 > 0; then
-  A6: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
-  A7: M1 is Matrix of len M1,width M1,K by A0,MATRIX_1:20;
+  per cases by NAT_1:3;
+  suppose A6:len M1 > 0; then
+  A7: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A8: M1 is Matrix of len M1,width M1,K by A6,MATRIX_1:20;
    M1+M2 +(-M1+-M2) =M1+M2+(-M2+-M1) by A1,A2,A3,MATRIX_3:4
                   .=M1+M2+-M2+-M1 by A1,A2,A3,A4,MATRIX_3:5
                   .=M1+(M2+-M2)+-M1 by A1,A3,MATRIX_3:5
-                  .=M1+0.(K,len M1,width M1)+-M1 by A6,MATRIX_3:7
-                  .=M1+-M1 by A7,MATRIX_3:6
-                  .=0.(K,len M1,width M1) by A7,MATRIX_3:7;
+                  .=M1+0.(K,len M1,width M1)+-M1 by A7,MATRIX_3:7
+                  .=M1+-M1 by A8,MATRIX_3:6
+                  .=0.(K,len M1,width M1) by A8,MATRIX_3:7;
  hence thesis by A4,A5,Th8;
  end;
-  suppose Aa:len M1 = 0; then
+  suppose A9:len M1 = 0; then
     len (M1+M2) = 0 by MATRIX_3:def 3; then
-Ab: len -(M1+M2) = 0 by MATRIX_3:def 2;
-    len (-M1) = 0 by Aa,MATRIX_3:def 2; then
+A10: len -(M1+M2) = 0 by MATRIX_3:def 2;
+    len (-M1) = 0 by A9,MATRIX_3:def 2; then
     len (-M1+-M2) = 0 by MATRIX_3:def 3;
-    hence thesis by Ab,MATRIX_1:37;
+    hence thesis by A10,MATRIX_1:37;
   end;
 end;
 
@@ -269,23 +270,23 @@ proof let K be Field,M1,M2 be Matrix of K;
  assume A1: len M1=len M2 & width M1=width M2;
   A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
   A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
-  per cases by NAT_1:19;
-  suppose A0:len M1 > 0;
-  A4: M2 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
-  A5: M1 is Matrix of len M1,width M1,K by A0,MATRIX_1:20;
-  A6: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
-  then A7: width (0.(K,len M1,width M1))=width M1 by A0,MATRIX_1:20;
+  per cases by NAT_1:3;
+  suppose A4:len M1 > 0;
+  A5: M2 is Matrix of len M1,width M1,K by A4,A1,MATRIX_1:20;
+  A6: M1 is Matrix of len M1,width M1,K by A4,MATRIX_1:20;
+  A7: len (0.(K,len M1,width M1))=len M1 by MATRIX_1:def 3;
+  then A8: width (0.(K,len M1,width M1))=width M1 by A4,MATRIX_1:20;
    M1 - (M1 - M2)=M1+(-M1+--M2) by A1,A3,Th12
   .=M1+(-M1+M2) by Th1
   .=M1+-M1+M2 by A1,A2,MATRIX_3:5
-  .=0.(K,len M1,width M1)+M2 by A5,MATRIX_3:7
-  .=M2+0.(K,len M1,width M1) by A1,A6,A7,MATRIX_3:4
-  .=M2 by A4,MATRIX_3:6;
+  .=0.(K,len M1,width M1)+M2 by A6,MATRIX_3:7
+  .=M2+0.(K,len M1,width M1) by A1,A7,A8,MATRIX_3:4
+  .=M2 by A5,MATRIX_3:6;
   hence thesis;
   end;
-  suppose A0:len M1 = 0; then
+  suppose A9:len M1 = 0; then
     len (M1 - (M1 - M2)) = 0 by MATRIX_3:def 3;
-    hence thesis by A0,MATRIX_1:37,A1;
+    hence thesis by A9,MATRIX_1:37,A1;
   end;
 end;
 
@@ -296,19 +297,19 @@ proof let K be Field,M1,M2,M3 be Matrix of K;
   assume A1: len M1=len M2 & len M2=len M3 &
   width M1=width M2 & width M2 = width M3 & M1 - M3 = M2 - M3;
   A2: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
-  per cases by NAT_1:19;
-  suppose Aa:len M1 > 0; then
-  A3: M3 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
-  A4: M2 is Matrix of len M1,width M1,K by Aa,A1,MATRIX_1:20;
-  A5: M1 is Matrix of len M1,width M1,K by Aa,MATRIX_1:20;
+  per cases by NAT_1:3;
+  suppose A3:len M1 > 0; then
+  A4: M3 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A5: M2 is Matrix of len M1,width M1,K by A3,A1,MATRIX_1:20;
+  A6: M1 is Matrix of len M1,width M1,K by A3,MATRIX_1:20;
   M1+-M3+M3=M2+(-M3+M3) by A1,A2,MATRIX_3:5;
   then M1+-M3+M3=M2+(M3+-M3) by A2,MATRIX_3:4;
-  then M1+-M3+M3=M2+0.(K,len M1,width M1) by A3,MATRIX_3:7;
-  then M1+-M3+M3=M2 by A4,MATRIX_3:6;
+  then M1+-M3+M3=M2+0.(K,len M1,width M1) by A4,MATRIX_3:7;
+  then M1+-M3+M3=M2 by A5,MATRIX_3:6;
   then M1+(-M3+M3)=M2 by A1,A2,MATRIX_3:5;
   then M1+(M3+-M3)=M2 by A2,MATRIX_3:4;
-  then M1+0.(K,len M1,width M1)=M2 by A3,MATRIX_3:7;
-  hence thesis by A5,MATRIX_3:6;
+  then M1+0.(K,len M1,width M1)=M2 by A4,MATRIX_3:7;
+  hence thesis by A6,MATRIX_3:6;
   end;
   suppose len M1 = 0;
     hence thesis by A1,MATRIX_1:37;
@@ -322,22 +323,22 @@ theorem Th15: for K being Field,M1,M2,M3 being Matrix of K
 proof let K be Field,M1,M2,M3 be Matrix of K;
   assume A1: len M1=len M2 & len M2=len M3 &
   width M1=width M2 & width M2 = width M3 & M3 - M1 = M3 - M2;
-  per cases by NAT_1:19;
-  suppose A0:len M1>0;
-  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
-  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
-  A4: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
-  A5: M3 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
-  A6: -M2 is Matrix of len M1,width M1,K by A0,A1,A3,MATRIX_1:20;
-  A7: -M1 is Matrix of len M1,width M1,K by A0,A2,MATRIX_1:20;
-  -M1+M3=M3+-M2 by A1,A2,MATRIX_3:4;
-  then -M1+M3=-M2+M3 by A1,A3,MATRIX_3:4;
-  then -M1+M3+-M3=-M2+(M3+-M3) by A1,A3,A4,MATRIX_3:5;
-  then -M1+M3+-M3=-M2+0.(K,len M1,width M1) by A5,MATRIX_3:7;
-  then -M1+M3+-M3=-M2 by A6,MATRIX_3:6;
-  then -M1+(M3+-M3)=-M2 by A1,A2,A4,MATRIX_3:5;
-  then -M1+0.(K,len M1,width M1)=-M2 by A5,MATRIX_3:7;
-  then -M1=-M2 by A7,MATRIX_3:6;
+  per cases by NAT_1:3;
+  suppose A2:len M1>0;
+  A3: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A4: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A5: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A6: M3 is Matrix of len M1,width M1,K by A2,A1,MATRIX_1:20;
+  A7: -M2 is Matrix of len M1,width M1,K by A2,A1,A4,MATRIX_1:20;
+  A8: -M1 is Matrix of len M1,width M1,K by A2,A3,MATRIX_1:20;
+  -M1+M3=M3+-M2 by A1,A3,MATRIX_3:4;
+  then -M1+M3=-M2+M3 by A1,A4,MATRIX_3:4;
+  then -M1+M3+-M3=-M2+(M3+-M3) by A1,A4,A5,MATRIX_3:5;
+  then -M1+M3+-M3=-M2+0.(K,len M1,width M1) by A6,MATRIX_3:7;
+  then -M1+M3+-M3=-M2 by A7,MATRIX_3:6;
+  then -M1+(M3+-M3)=-M2 by A1,A3,A5,MATRIX_3:5;
+  then -M1+0.(K,len M1,width M1)=-M2 by A6,MATRIX_3:7;
+  then -M1=-M2 by A8,MATRIX_3:6;
   then --M1=M2 by Th1;
  hence M1 = M2 by Th1;
  end;
@@ -371,26 +372,26 @@ proof let K be Field,M1,M2,M3 be Matrix of K;
   width M1=width M2 & width M2 = width M3;
   A2: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
   A3: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
-  per cases by NAT_1:19;
-  suppose A0:len M1>0; then
-  A4: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
-  A5: M1 is Matrix of len M1,width M1,K by A0,MATRIX_1:20;
-  A6: len (M1+-M2)=len M1 & width (M1+-M2)=width M1
+  per cases by NAT_1:3;
+  suppose A4:len M1>0; then
+  A5: M2 is Matrix of len M1,width M1,K by A1,MATRIX_1:20;
+  A6: M1 is Matrix of len M1,width M1,K by A4,MATRIX_1:20;
+  A7: len (M1+-M2)=len M1 & width (M1+-M2)=width M1
                       by MATRIX_3:def 3;
    (M1 - M2) - (M3 - M2)=M1+-M2+(-M3+--M2) by A1,A2,Th12
                        .=M1+-M2+(-M3+M2) by Th1
                        .=M1+-M2+(M2+-M3) by A1,A3,MATRIX_3:4
-                       .=M1+-M2+M2+-M3 by A1,A3,A6,MATRIX_3:5
+                       .=M1+-M2+M2+-M3 by A1,A3,A7,MATRIX_3:5
                        .=M1+(-M2+M2)+-M3 by A1,A2,MATRIX_3:5
                        .=M1+(M2+-M2)+-M3 by A2,MATRIX_3:4
-                       .=M1+0.(K,len M1,width M1)+-M3 by A4,MATRIX_3:7
-                       .=M1+-M3 by A5,MATRIX_3:6;
+                       .=M1+0.(K,len M1,width M1)+-M3 by A5,MATRIX_3:7
+                       .=M1+-M3 by A6,MATRIX_3:6;
     hence thesis;
   end;
   suppose len M1 = 0; then
-A1: len (M1-M2) = 0 & len (M1-M3) = 0 by MATRIX_3:def 3; then
+A8: len (M1-M2) = 0 & len (M1-M3) = 0 by MATRIX_3:def 3; then
     len ((M1 - M2) - (M3 - M2)) = 0 by MATRIX_3:def 3;
-    hence thesis by A1,MATRIX_1:37;
+    hence thesis by A8,MATRIX_1:37;
   end;
 end;
 
@@ -402,29 +403,29 @@ theorem Th18:
 proof let K be Field,M1,M2,M3 be Matrix of K;
   assume A1: len M1=len M2 & len M2=len M3 & width M1=width M2 &
   width M2 = width M3;
-  per cases by NAT_1:19;
-  suppose A0:len M1>0;
-  A2: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
-  A3: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
-  A4: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
-  A5: M3 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
-  A6: -M1 is Matrix of len M1,width M1,K by A0,A2,MATRIX_1:20;
-  A7: len (-M1+M3)=len M1 & width (-M1+M3)=width M1 by A2,MATRIX_3:def 3;
-   (M3 - M1) - (M3 - M2)=(-M1+M3)-(M3+-M2) by A1,A2,MATRIX_3:4
-  .=(-M1+M3)+(-M3+--M2) by A1,A3,Th12
+  per cases by NAT_1:3;
+  suppose A2:len M1>0;
+  A3: len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
+  A4: len (-M2)=len M2 & width (-M2)=width M2 by MATRIX_3:def 2;
+  A5: len (-M3)=len M3 & width (-M3)=width M3 by MATRIX_3:def 2;
+  A6: M3 is Matrix of len M1,width M1,K by A2,A1,MATRIX_1:20;
+  A7: -M1 is Matrix of len M1,width M1,K by A2,A3,MATRIX_1:20;
+  A8: len (-M1+M3)=len M1 & width (-M1+M3)=width M1 by A3,MATRIX_3:def 3;
+   (M3 - M1) - (M3 - M2)=(-M1+M3)-(M3+-M2) by A1,A3,MATRIX_3:4
+  .=(-M1+M3)+(-M3+--M2) by A1,A4,Th12
   .=(-M1+M3)+(-M3+M2) by Th1
-  .=(-M1+M3)+-M3+M2 by A1,A4,A7,MATRIX_3:5
-  .=-M1+(M3+-M3)+M2 by A1,A2,A4,MATRIX_3:5
-  .=-M1+(0.(K,len M1,width M1))+M2 by A5,MATRIX_3:7
-  .=-M1+M2 by A6,MATRIX_3:6
-  .=M2+-M1 by A1,A2,MATRIX_3:4;
+  .=(-M1+M3)+-M3+M2 by A1,A5,A8,MATRIX_3:5
+  .=-M1+(M3+-M3)+M2 by A1,A3,A5,MATRIX_3:5
+  .=-M1+(0.(K,len M1,width M1))+M2 by A6,MATRIX_3:7
+  .=-M1+M2 by A7,MATRIX_3:6
+  .=M2+-M1 by A1,A3,MATRIX_3:4;
   hence thesis;
   end;
-  suppose A0:len M1=0;
-A2:len ((M3 - M1) - (M3 - M2)) = len (M3 - M1) by MATRIX_3:def 3
+  suppose A9:len M1=0;
+A10:len ((M3 - M1) - (M3 - M2)) = len (M3 - M1) by MATRIX_3:def 3
            .= len M3 by MATRIX_3:def 3;
    len (M2 - M1) = len M2 by MATRIX_3:def 3;
-   hence thesis by A0,A1,A2,MATRIX_1:37;
+   hence thesis by A9,A1,A10,MATRIX_1:37;
   end;
 end;
 
@@ -445,7 +446,7 @@ proof let K be Field,M1,M2,M3,M4 be Matrix of K;
   A7: len (M2+-M4)=len M1 & width (M2+-M4)=width M1 by A1,MATRIX_3:def 3;
   A8: len (M1+-M2)=len M1 & width (M1+-M2)=width M1 by MATRIX_3:def 3;
   A9: len (M1+-M3)=len M1 & width (M1+-M3)=width M1 by MATRIX_3:def 3;
-  per cases by NAT_1:19;
+  per cases by NAT_1:3;
   suppose len M1 > 0; then
   M3+-M4 is Matrix of len M1,width M1,K by A6,MATRIX_1:20;
   then M1+-M2+-(M3 +- M4)=0.(K,len M1,width M1) by A1,MATRIX_3:7;
@@ -460,10 +461,10 @@ proof let K be Field,M1,M2,M3,M4 be Matrix of K;
   then M1+-M3-(M2 + -M4)=0.(K,len M1,width M1) by A1,A4,Th12;
   hence thesis by A5,A7,Th7;
   end;
-  suppose Ab:len M1 = 0; then
-Aa: len (M1 - M3) = 0 by MATRIX_3:def 3;
-    len (M2 - M4) = 0 by Ab,A1,MATRIX_3:def 3;
-    hence thesis by Aa,MATRIX_1:37;
+  suppose A10:len M1 = 0; then
+A11: len (M1 - M3) = 0 by MATRIX_3:def 3;
+    len (M2 - M4) = 0 by A10,A1,MATRIX_3:def 3;
+    hence thesis by A11,MATRIX_1:37;
   end;
 end;
 
@@ -473,16 +474,16 @@ theorem Th20:
     M1 = M1 + (M2 - M2)
 proof let K be Field,M1,M2 be Matrix of K;
  assume A1: len M1=len M2 & width M1=width M2;
-  per cases by NAT_1:19;
-  suppose A0:len M1>0;
-  then A2: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
-  A3: M2 is Matrix of len M1,width M1,K by A0,A1,MATRIX_1:20;
-  thus M1+(M2-M2)=M1+0.(K,len M1,width M1) by A3,MATRIX_3:7
-               .=M1 by A2,MATRIX_3:6;
+  per cases by NAT_1:3;
+  suppose A2:len M1>0;
+  then A3: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
+  A4: M2 is Matrix of len M1,width M1,K by A2,A1,MATRIX_1:20;
+  thus M1+(M2-M2)=M1+0.(K,len M1,width M1) by A4,MATRIX_3:7
+               .=M1 by A3,MATRIX_3:6;
   end;
-  suppose A0:len M1 = 0;
+  suppose A5:len M1 = 0;
     len (M1 + (M2 - M2)) = len M1 by MATRIX_3:def 3;
-    hence thesis by A0,MATRIX_1:37;
+    hence thesis by A5,MATRIX_1:37;
   end;
 end;
 
@@ -560,25 +561,25 @@ theorem Th26: for K being Field,M1,M2,M3 being Matrix of K
 proof let K be Field,M1,M2,M3 be Matrix of K;
  assume A1: len M1=len M2 & len M2=len M3 &
  width M1=width M2 & width M2 = width M3;
-  per cases by NAT_1:19;
-  suppose Aa: len M1 > 0; then
-  A2: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
-  A3: M2 is Matrix of len M1,width M1,K by Aa,A1,MATRIX_1:20;
-  A4: len (-M2)=len M1 & width (-M2)=width M1 by A1,MATRIX_3:def 2;
-  A5: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
-  A6: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
- thus M1 + M3 = M1+0.(K,len M1,width M1)+M3 by A2,MATRIX_3:6
-             .=M1+(M2+-M2)+M3 by A3,MATRIX_3:7
-             .=M1+M2+-M2+M3 by A1,A4,MATRIX_3:5
-             .=M1+M2+(-M2+M3) by A1,A4,A6,MATRIX_3:5
+  per cases by NAT_1:3;
+  suppose A2: len M1 > 0; then
+  A3: M1 is Matrix of len M1,width M1,K by MATRIX_1:20;
+  A4: M2 is Matrix of len M1,width M1,K by A2,A1,MATRIX_1:20;
+  A5: len (-M2)=len M1 & width (-M2)=width M1 by A1,MATRIX_3:def 2;
+  A6: len (-M3)=len M1 & width (-M3)=width M1 by A1,MATRIX_3:def 2;
+  A7: len (M1+M2)=len M1 & width (M1+M2)=width M1 by MATRIX_3:def 3;
+ thus M1 + M3 = M1+0.(K,len M1,width M1)+M3 by A3,MATRIX_3:6
+             .=M1+(M2+-M2)+M3 by A4,MATRIX_3:7
+             .=M1+M2+-M2+M3 by A1,A5,MATRIX_3:5
+             .=M1+M2+(-M2+M3) by A1,A5,A7,MATRIX_3:5
              .=M1+M2+(-M2+--M3) by Th1
-             .=(M1 + M2) - (M2 - M3) by A1,A5,Th12;
+             .=(M1 + M2) - (M2 - M3) by A1,A6,Th12;
   end;
-  suppose Ab:len M1 = 0;
-Aa: len (M1 + M3) = len M1 by MATRIX_3:def 3;
+  suppose A8:len M1 = 0;
+A9: len (M1 + M3) = len M1 by MATRIX_3:def 3;
     len ((M1 + M2) - (M2 - M3)) = len (M1 + M2) by MATRIX_3:def 3
          .= len M1 by MATRIX_3:def 3;
-    hence thesis by Aa,Ab,MATRIX_1:37;
+    hence thesis by A9,A8,MATRIX_1:37;
   end;
 end;
 
@@ -792,9 +793,9 @@ theorem
   M1+M2=-(-M1+-M2)
 proof let K be Field,M1,M2 be Matrix of K;
   assume len M1=len M2 & width M1=width M2;
-  then A2: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
+  then A1: len (-M2)=len M1 & width (-M2)=width M1 by MATRIX_3:def 2;
   len (-M1)=len M1 & width (-M1)=width M1 by MATRIX_3:def 2;
-  then -(-M1+-M2)=--M1+--M2 by A2,Th12
+  then -(-M1+-M2)=--M1+--M2 by A1,Th12
            .=M1+--M2 by Th1;
  hence M1+M2=-(-M1+-M2) by Th1;
 end;
@@ -899,21 +900,21 @@ theorem
   0.(K, len M, width M) - M = - M
 proof
   let K be Field, M be Matrix of K;
-  A2: len (-M) = len M & width (-M) = width M by MATRIX_3:def 2;
-  A3: len (0.(K, len M, width M)) = len M by MATRIX_1:def 3;
-  per cases by NAT_1:19;
+  A1: len (-M) = len M & width (-M) = width M by MATRIX_3:def 2;
+  A2: len (0.(K, len M, width M)) = len M by MATRIX_1:def 3;
+  per cases by NAT_1:3;
   suppose
-  A1: len M>0; then
-  A4: width (0.(K, len M, width M)) = width M by A3,MATRIX_1:20;
-  A5: -M is Matrix of len M, width M, K by A1,A2,MATRIX_1:20;
+  A3: len M>0; then
+  A4: width (0.(K, len M, width M)) = width M by A2,MATRIX_1:20;
+  A5: -M is Matrix of len M, width M, K by A3,A1,MATRIX_1:20;
   0.(K, len M, width M) - M
-  = (-M) + 0.(K, len M, width M) by A2,A3,A4,MATRIX_3:4;
+  = (-M) + 0.(K, len M, width M) by A1,A2,A4,MATRIX_3:4;
   hence thesis by A5,MATRIX_3:6;
   end;
-  suppose Aa:len M = 0;
+  suppose A6:len M = 0;
     len (0.(K, len M, width M) - M) = len (0.(K, len M, width M))
       by MATRIX_3:def 3;
-    hence thesis by Aa,A2,A3,MATRIX_1:37;
+    hence thesis by A6,A1,A2,MATRIX_1:37;
   end;
 end;
 
@@ -1062,8 +1063,7 @@ proof let K be Field,x,y,z be FinSequence of K;
     A37: (x+y).i = ((the add of K).:(x,y)).i by FVSUM_1:def 3
     .= ((the add of K)*(<:x,y:>)).i by FUNCOP_1:def 3
     .= (the add of K).((<:x,y:>).i) by A20,A35,FUNCT_1:23
-    .= (the add of K).([x.i,y.i]) by A2,A4,A19,FUNCT_3:69
-    .= a+b by RLVECT_1:def 3;
+    .= a+b by A2,A4,A19,FUNCT_3:69;
     A38: mlt(x+y,z).i = ((the mult of K).:(x+y,z)).i by FVSUM_1:def 7
     .= ((the mult of K)*<:x+y,z:>).i by FUNCOP_1:def 3
     .= (the mult of K).((<:x+y,z:>).i) by A34,FUNCT_1:23
@@ -1089,8 +1089,7 @@ proof let K be Field,x,y,z be FinSequence of K;
     .= mlt(y,z).i by FVSUM_1:def 7;
     A41: ((the add of K).:(mlt(x,z),mlt(y,z)))
     =(mlt(x,z)+mlt(y,z)) by FVSUM_1:def 3;
-     a*e+b*e = (the add of K).([a*e,b*e]) by RLVECT_1:def 3
-    .=(the add of K).((<:mlt(x,z),mlt(y,z):>).i)
+     a*e+b*e =(the add of K).((<:mlt(x,z),mlt(y,z):>).i)
     by A7,A8,A10,A19,A39,A40,FUNCT_3:69
     .= ((the add of K)*<:mlt(x,z),mlt(y,z):>).i by A20,A36,FUNCT_1:23
     .=(mlt(x,z)+mlt(y,z)).i by A41,FUNCOP_1:def 3;
@@ -1254,7 +1253,7 @@ proof let K be Field,A,B,C be Matrix of K;
      len Line(A,i) = len C by A1,MATRIX_1:def 8;
     then A11: len Line(A,i) = len Col(C,j) by MATRIX_1:def 9;
     A12: dom B = Seg len B by FINSEQ_1:def 3;
-     1+0<=len B by A1,NAT_1:38;
+     1+0<=len B by A1,NAT_1:13;
     then A13: 1 in dom B by A12,FINSEQ_1:3;
     j in Seg width B by ZFMISC_1:106,A2,A3,A9;
     then A14: [1,j] in Indices B by A13,ZFMISC_1:106;
@@ -1310,7 +1309,7 @@ proof let K be Field,A,B,C be Matrix of K;
     then A10: len Col(A,j) =len Line(B,i) by MATRIX_1:def 8;
     len Col(A,j) = width C by A1,MATRIX_1:def 9;
     then A11: len Col(A,j) = len Line(C,i) by MATRIX_1:def 8;
-    1+0<=width B by A1,NAT_1:38;
+    1+0<=width B by A1,NAT_1:13;
     then A12: 1 in Seg width B by FINSEQ_1:3;
     i in dom (B*A) by ZFMISC_1:106,A6,A9;
     then i in Seg len B by A4,FINSEQ_1:def 3;

@@ -9,19 +9,19 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, SEQ_2, SERIES_1, SUPINF_2, RSSPACE,
       CLVECT_1, BINOP_1, RLSUB_1, RSSPACE3, COMSEQ_1, COMPLEX1, CSSPACE,
-      CFUNCT_1, METRIC_1, CSSPACE3, FUNCOP_1, REALSET1;
+      CFUNCT_1, METRIC_1, CSSPACE3, FUNCOP_1, REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, STRUCT_0,
-      XREAL_0, REAL_1, NAT_1, RELAT_1, BINOP_1, REALSET1, DOMAIN_1, PARTFUN1,
-      FUNCT_1, XXREAL_0, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1, NORMSP_1,
-      SEQ_1, SEQ_2, SERIES_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3,
-      CLVECT_1, CSSPACE;
+      XREAL_0, REAL_1, NAT_1, NAT_D, RELAT_1, BINOP_1, REALSET1, DOMAIN_1,
+      PARTFUN1, FUNCT_1, XXREAL_0, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1,
+      NORMSP_1, SEQ_1, SEQ_2, SERIES_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2,
+      COMSEQ_3, CLVECT_1, CSSPACE;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, RAT_1,
       SEQ_2, REALSET1, COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, NORMSP_1,
-      CSSPACE;
+      CSSPACE, BINOP_1, NAT_D;
  registrations RELSET_1, XREAL_0, STRUCT_0, MEMBERED, ORDINAL1, SUBSET_1,
       COMPLEX1, COMSEQ_1, COMSEQ_2, CLVECT_1, REALSET1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions REALSET1;
+ definitions REALSET1, RLVECT_1, BINOP_1;
  theorems RELAT_1, ABSVALUE, ZFMISC_1, SEQ_1, SEQ_2, SERIES_1, FUNCT_1, NAT_1,
       FUNCT_2, RLVECT_1, RSSPACE, CSSPACE, CLVECT_1, COMSEQ_1, COMSEQ_2,
       COMSEQ_3, COMPLEX1, TARSKI, XBOOLE_0, STRUCT_0, RSSPACE2, FUNCOP_1,
@@ -302,74 +302,56 @@ A2:for v,w being VECTOR of l holds v + w = w + v
    proof
      let v,w be VECTOR of l;
      reconsider v1=v, w1=w as VECTOR of l0;
-    thus v+w = (the add of l).[v1,w1] by RLVECT_1:def 3
-       .=v1+w1 by RLVECT_1:def 3
-       .= (the add of l).[w1,v1] by RLVECT_1:def 3
+    thus v+w =v1+w1
        .= w +v by RLVECT_1:def 3;
    end;
 A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
    proof
      let u,v,w be VECTOR of l;
      reconsider u1=u, v1=v, w1=w as VECTOR of l0;
-     thus (u + v) + w = (the add of l).[(u+v),w] by RLVECT_1:def 3
-       .= (the add of l).[(the add of l).[u,v],w] by RLVECT_1:def 3
-       .= (the add of l).[(u1+v1),w] by RLVECT_1:def 3
-       .=(u1+v1)+w1 by RLVECT_1:def 3
+     thus (u + v) + w =(u1+v1)+w1
        .=u1+(v1+w1) by RLVECT_1:def 6
-       .= (the add of l).[u1,(v1+w1)] by RLVECT_1:def 3
-       .= (the add of l).[u1,(the add of l).[v1,w1]] by RLVECT_1:def 3
-       .= (the add of l).[u,v+w] by RLVECT_1:def 3
-       .= u+(v+w) by RLVECT_1:def 3;
+       .= u+(v+w);
    end;
 A4:for v being VECTOR of l holds v + 0.l = v
    proof
      let v be VECTOR of l;
      reconsider v1=v as VECTOR of l0;
-A5:  0.l=the Zero of l by RLVECT_1:def 2
-       .=0.l0 by RLVECT_1:def 2;
-      v+0.l= (the add of l).[v,0.l] by RLVECT_1:def 3
-         .= v1 + 0.l0 by A5,RLVECT_1:def 3
+      v+0.l= v1 + 0.l0
          .= v1 by RLVECT_1:def 7;
      hence thesis;
    end;
 
-A6:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
+A5:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
    proof
      let v be VECTOR of l;
      reconsider v1=v as VECTOR of l0;
-A7:  0.l=the Zero of l by RLVECT_1:def 2
-       .=0.l0 by RLVECT_1:def 2;
      consider w1 being VECTOR of l0 such that
-A8:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
+A6:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
      reconsider w = w1 as VECTOR of l;
-A9:  v+w = (the add of l).[v,w] by RLVECT_1:def 3
-        .=0.l by A7,A8,RLVECT_1:def 3;
+A7:  v+w =0.l by A6;
      take w;
-     thus thesis by A9;
+     thus thesis by A7;
    end;
 
-A10:for a be Complex for v,w being VECTOR of l holds
+A8:for a be Complex for v,w being VECTOR of l holds
          a * (v + w) = a * v + a * w
    proof
      let a be Complex;
      let v,w be VECTOR of l;
      reconsider v1=v, w1=w as VECTOR of l0;
      thus a*(v+w)
-        = (the Mult of l).[a,v+w] by CLVECT_1:def 1
-       .= (the Mult of l).[a,(the add of l).[v1,w1]] by RLVECT_1:def 3
-       .= (the Mult of l).[a,(v1+w1)] by RLVECT_1:def 3
+        = (the Mult of l).[a,(the add of l).(v1,w1)] by CLVECT_1:def 1
        .=a*(v1+w1) by CLVECT_1:def 1
        .=a*v1+a*w1 by CLVECT_1:def 2
-       .=(the add of l).[a*v1,a*w1] by RLVECT_1:def 3
        .=(the add of l).[(the Mult of l).[a,v1],a*w1] by CLVECT_1:def 1
        .=(the add of l).[(the Mult of l).[a,v1],
                 (the Mult of l).[a,w1]] by CLVECT_1:def 1
        .=(the add of l).[a*v, (the Mult of l).[a,w]] by CLVECT_1:def 1
-       .=(the add of l).[a*v, a*w] by CLVECT_1:def 1
-       .= a*v +a*w by RLVECT_1:def 3;
+       .= a*v +a*w by CLVECT_1:def 1;
    end;
 
-A11:for a,b be Complex for v being VECTOR of l
+A9:for a,b be Complex for v being VECTOR of l
      holds (a + b) * v = a * v + b * v
    proof
      let a,b be Complex;
@@ -378,16 +360,14 @@ A11:for a,b be Complex for v being VECTOR of l
      thus (a+b)*v = (the Mult of l).[(a+b),v] by CLVECT_1:def 1
        .=(a+b)*v1 by CLVECT_1:def 1
        .=a*v1+b*v1 by CLVECT_1:def 2
-       .=(the add of l).[a*v1,b*v1] by RLVECT_1:def 3
        .=(the add of l).[(the Mult of l).[a,v1],b*v1] by CLVECT_1:def 1
        .=(the add of l).[(the Mult of l).[a,v1],
                 (the Mult of l).[b,v1]] by CLVECT_1:def 1
        .=(the add of l).[a*v, (the Mult of l).[b,v]] by CLVECT_1:def 1
-       .=(the add of l).[a*v, b*v] by CLVECT_1:def 1
-       .= a*v +b*v by RLVECT_1:def 3;
+       .= a*v +b*v by CLVECT_1:def 1;
    end;
 
-A12:for a,b be Complex for v being VECTOR of l holds (a * b) * v = a * (b * v)
+A10:for a,b be Complex for v being VECTOR of l holds (a * b) * v = a * (b * v)
    proof
      let a,b be Complex;
      let v be VECTOR of l;
@@ -408,7 +388,7 @@ A12:for a,b be Complex for v being VECTOR of l holds (a * b) * v = a * (b * v)
             .= 1r*v1 by CLVECT_1:def 1
             .= v by CLVECT_1:def 2;
    end;
-   hence thesis by A2,A3,A4,A6,A10,A11,A12,CLVECT_1:1;
+   hence thesis by A2,A3,A4,A5,A8,A9,A10,CLVECT_1:1;
 end;
 
 theorem Th5:
@@ -555,12 +535,9 @@ A4:  [:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
        = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
 then A5:  dom ((the add of Linear_Space_of_ComplexSequences)||W)
        =[:W,W:] by A4,RELAT_1:91;
-      u+v =(the add of l1).[u,v] by RLVECT_1:def 3
-        .=((the add of Linear_Space_of_ComplexSequences)||W).[u,v]
+      u+v =((the add of Linear_Space_of_ComplexSequences)||W).[u,v]
           by CSSPACE:def 8
-        .=(the add of Linear_Space_of_ComplexSequences).[u,v]
-          by A5,FUNCT_1:70
-        .=u1+v1 by RLVECT_1:def 3;
+        .=u1+v1 by A5,FUNCT_1:70;
      hence thesis by CSSPACE:4,def 7;
    end;
 
@@ -597,8 +574,7 @@ A9:for u be VECTOR of l1 holds -u =-seq_id u & seq_id(-u)=-seq_id u
 A10:for u,v be VECTOR of l1 holds u-v =seq_id(u)-seq_id(v)
    proof
      let u,v be VECTOR of l1;
-     thus u-v = u+ -v by RLVECT_1:def 11
-             .= seq_id(u)+seq_id(-v) by A3
+     thus u-v = seq_id(u)+seq_id(-v) by A3
              .= seq_id(u)+(-seq_id(v)) by A9
              .= seq_id(u)-seq_id(v) by COMSEQ_1:def 10;
    end;
@@ -606,10 +582,8 @@ A10:for u,v be VECTOR of l1 holds u-v =seq_id(u)-seq_id(v)
 A11:0.l1 = CZeroseq
    proof
      set W = the_set_of_l1ComplexSequences;
-     thus 0.l1 = Zero_(W,Linear_Space_of_ComplexSequences)
-                   by RLVECT_1:def 2
-              .= 0.Linear_Space_of_ComplexSequences by CSSPACE:def 10
-              .= CZeroseq by CSSPACE:def 7,RLVECT_1:def 2;
+     thus 0.l1 = 0.Linear_Space_of_ComplexSequences by CSSPACE:def 10
+              .= CZeroseq by CSSPACE:def 7;
    end;
     for v be VECTOR of l1 holds ||.v.|| = Sum |.seq_id v.|
    proof
@@ -1165,7 +1139,7 @@ A44: Partial_Sums(|.((seq_id tseq -seq_id(vseq.n))).|) is bounded_above
         now
          take e1;
          let i be Element of NAT;
-          0 <= i by NAT_1:18;
+          0 <= i by NAT_1:2;
          then Partial_Sums(|.((seq_id tseq -seq_id(vseq.n))).|).i <=e by A37;
          hence Partial_Sums(|.((seq_id tseq -seq_id(vseq.n))).|).i < e1
              by A17,XXREAL_0:2;
@@ -1246,8 +1220,7 @@ A58:   Sum |.(seq_id tseq-seq_id(vseq.n)).| < e by A56,A57;
          by Th8;
 then A59:   (the norm of Complex_l1_Space).(u-v) < e
          by A58,Def2;
-        ||.(vseq.n) - tv.|| =||.(vseq.n) + -tv.|| by RLVECT_1:def 11
-          .=||.-(tv-(vseq.n)).|| by RLVECT_1:47
+        ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
           .=||.tv-(vseq.n).|| by CLVECT_1:104;
        hence ||.(vseq.n) - tv.|| < e by A59,CLVECT_1:def 9;
      end;

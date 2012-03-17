@@ -9,13 +9,13 @@ environ
  vocabularies COMPLEX1, FUNCT_1, BINOP_1, ARYTM_1, FINSEQOP, FUNCOP_1,
       FINSEQ_1, RELAT_1, ABSVALUE, FINSEQ_2, SQUARE_1, RLVECT_1, RVSUM_1,
       PRE_TOPC, BOOLE, SETFAM_1, TARSKI, METRIC_1, SEQ_4, ARYTM, SEQ_2,
-      ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1, XCMPLX_0;
+      ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1, XCMPLX_0, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1,
       PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, STRUCT_0, PRE_TOPC, COMPTS_1,
       FINSEQ_1, FUNCOP_1, RVSUM_1, FINSEQ_2, FINSEQOP, SEQ_4;
  constructors SETFAM_1, PARTFUN1, BINOP_1, SETWISEO, REAL_1, SQUARE_1, BINOP_2,
-      COMPLEX1, FINSEQOP, SEQ_1, SEQ_4, SETWOP_2, RVSUM_1, COMPTS_1;
+      COMPLEX1, FINSEQOP, SEQ_1, SEQ_4, SETWOP_2, RVSUM_1, COMPTS_1, NAT_D;
  registrations SUBSET_1, PRE_TOPC, RELSET_1, FINSEQ_2, XREAL_0, COMPLEX1,
       ARYTM_3, SEQ_1, MEMBERED, FUNCT_1, FUNCT_2, BINOP_2, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -23,7 +23,7 @@ environ
       COMPLEX1, FINSEQ_2, SQUARE_1, SUBSET_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, FINSEQ_1, FUNCOP_1, SQUARE_1, BINOP_1,
       PRE_TOPC, COMPLEX1, SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4,
-      RELAT_1, ZFMISC_1, XBOOLE_0, XCMPLX_0, BINOP_2, XREAL_1, XXREAL_0;
+      RELAT_1, ZFMISC_1, XBOOLE_0, XCMPLX_0, BINOP_2, XREAL_1, XXREAL_0, SEQ_1;
  schemes FUNCT_2, FRAENKEL, BINOP_2;
 
 begin
@@ -59,7 +59,7 @@ theorem Th8:
  the_inverseOp_wrt addcomplex = compcomplex by Th6,Th7,FINSEQOP:def 3;
 
 definition
- redefine  canceled 2;
+ redefine   canceled 2;
 
 func diffcomplex equals
   addcomplex*(id COMPLEX,compcomplex);
@@ -84,10 +84,10 @@ canceled 3;
 theorem
   1r is_a_unity_wrt multcomplex by BINOP_2:6,SETWISEO:22;
 
-theorem Th13:
+ Lm3:
   the_unity_wrt multcomplex = 1r by BINOP_2:6;
 
-canceled;
+canceled 2;
 
 theorem Th15:
   multcomplex is_distributive_wrt addcomplex
@@ -124,7 +124,7 @@ definition let c be complex number;
  end;
 end;
 
-Lm3:
+Lm4:
    (multcomplex[;](c,id COMPLEX)).c' = c*c'
  proof
   thus (multcomplex[;](c,id COMPLEX)).c'
@@ -134,7 +134,7 @@ Lm3:
  end;
 
 theorem Th16:
-  (c multcomplex).c' = c*c' by Lm3;
+  (c multcomplex).c' = c*c' by Lm4;
 
 theorem Th17:
    c multcomplex is_distributive_wrt addcomplex by Th15,FINSEQOP:55;
@@ -189,28 +189,22 @@ end;
 reserve x,z,z1,z2,z3 for Element of COMPLEX n,
         A,B for Subset of COMPLEX n;
 
-theorem Th18:
+ Lm5:
    len z = n by FINSEQ_2:109;
 
-Lm4: dom z = Seg n
- proof len z = n by Th18; hence thesis by FINSEQ_1:def 3; end;
+Lm6: dom z = Seg n
+ proof len z = n by Lm5; hence thesis by FINSEQ_1:def 3; end;
 
-theorem
-  for z being Element of COMPLEX 0 holds z = <*>COMPLEX by FINSEQ_2:113;
-
-theorem
-  <*>COMPLEX is Element of COMPLEX 0 by FINSEQ_2:114;
+canceled 3;
 
 theorem Th21:
   k in Seg n implies z.k in COMPLEX
- proof len z = n by Th18;
+ proof len z = n by Lm5;
   then Seg n = dom z by FINSEQ_1:def 3;
   hence thesis by FINSEQ_2:13;
  end;
 
-canceled;
-
-theorem Th23:
+ Lm7:
   (for k st k in Seg n holds z1.k = z2.k) implies z1 = z2 by FINSEQ_2:139;
 
 definition let n,z1,z2;
@@ -218,20 +212,22 @@ definition let n,z1,z2;
   coherence by FINSEQ_2:140;
 end;
 
+canceled 2;
+
 theorem Th24:
   k in Seg n & c1 = z1.k & c2 = z2.k implies (z1 + z2).k = c1 + c2
  proof assume that
 A1:   k in Seg n and
 A2:   c1 = z1.k & c2 = z2.k;
-      z1 + z2 = addcomplex.:(z1,z2) & k in dom(z1+z2) by A1,Lm4;
+      z1 + z2 = addcomplex.:(z1,z2) & k in dom(z1+z2) by A1,Lm6;
   hence (z1 + z2).k = addcomplex.(c1,c2) by A2,FUNCOP_1:28
                    .= c1 + c2 by BINOP_2:def 3;
  end;
 
-theorem Th25:
+ Lm8:
   z1 + z2 = z2 + z1 by FINSEQOP:34;
 
-theorem Th26:
+ Lm9:
   z1 + (z2 + z3) = z1 + z2 + z3 by FINSEQOP:29;
 
 definition let n;
@@ -245,14 +241,13 @@ definition let n;
   coherence;
 end;
 
-theorem
-  k in Seg n implies (0c n).k = 0c by FUNCOP_1:13;
+Lm10: z + 0c n = z by Lm1,FINSEQOP:57;
 
-Lm5: z + 0c n = z by Lm1,FINSEQOP:57;
+canceled 3;
 
 theorem Th28:
   z + 0c n = z & z = 0c n + z
- proof thus z + 0c n = z by Lm5; hence thesis by Th25; end;
+ proof thus z + 0c n = z by Lm10; hence thesis by Lm8; end;
 
 definition let n,z;
   redefine func -z -> Element of COMPLEX n;
@@ -264,13 +259,13 @@ theorem Th29:
  proof assume that
 A1:   k in Seg n and
 A2:   c = z.k;
-      -z = compcomplex*z & k in dom(-z) by A1,Lm4;
+      -z = compcomplex*z & k in dom(-z) by A1,Lm6;
   hence (-z).k = compcomplex.c by A2,FUNCT_1:22 .= -c by BINOP_2:def 1;
  end;
 
-Lm6: z + -z = 0c n by Lm1,Th7,Th8,FINSEQOP:77;
+Lm11: z + -z = 0c n by Lm1,Th7,Th8,FINSEQOP:77;
 
-Lm7: -0c n = 0c n
+Lm12: -0c n = 0c n
  proof
    thus -0c n = n|->(compcomplex.0c) by FINSEQOP:17
              .= n|->-0c by BINOP_2:def 1
@@ -279,42 +274,42 @@ Lm7: -0c n = 0c n
 
 theorem Th30:
   z + -z = 0c n & -z + z = 0c n
- proof thus z + -z = 0c n by Lm6; hence -z + z = 0c n by Th25; end;
+ proof thus z + -z = 0c n by Lm11; hence -z + z = 0c n by Lm8; end;
 
 theorem Th31:
   z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1 by Lm1,Th7,Th8,FINSEQOP:78;
 
 theorem Th32:
   --z = z
- proof z + -z = 0c n by Lm6; hence thesis by Th31; end;
+ proof z + -z = 0c n by Lm11; hence thesis by Th31; end;
 
 theorem
   -z1 = -z2 implies z1 = z2
  proof assume -z1 = -z2; hence z1 = --z2 by Th32 .= z2 by Th32; end;
 
-Lm8: z1 + z = z2 + z implies z1 = z2
+Lm13: z1 + z = z2 + z implies z1 = z2
  proof assume z1 + z = z2 + z;
-  then z1 + (z + -z)= (z2 + z) + -z by Th26;
-  then z1 + (z + -z)= z2 + (z + -z) & z + -z = 0c n by Lm6,Th26;
-  then z1 = z2 + 0c n by Lm5;
-  hence z1 = z2 by Lm5;
+  then z1 + (z + -z)= (z2 + z) + -z by Lm9;
+  then z1 + (z + -z)= z2 + (z + -z) & z + -z = 0c n by Lm11,Lm9;
+  then z1 = z2 + 0c n by Lm10;
+  hence z1 = z2 by Lm10;
  end;
 
 theorem
   z1 + z = z2 + z or z1 + z = z + z2 implies z1 = z2
- proof z1 + z = z2 + z iff z1 + z = z + z2 by Th25;
-  hence thesis by Lm8;
+ proof z1 + z = z2 + z iff z1 + z = z + z2 by Lm8;
+  hence thesis by Lm13;
  end;
 
 theorem Th35:
   -(z1 + z2) = -z1 + -z2
  proof
-       (z1 + z2) + (-z1 + -z2) = z1 + z2 + -z1 + -z2 by Th26
-                          .= z2 + z1 + -z1 + -z2 by Th25
-                          .= z2 + (z1 + -z1) + -z2 by Th26
-                          .= z2 + 0c n + -z2 by Lm6
-                          .= z2 + -z2 by Lm5
-                          .= 0c n by Lm6;
+       (z1 + z2) + (-z1 + -z2) = z1 + z2 + -z1 + -z2 by Lm9
+                          .= z2 + z1 + -z1 + -z2 by Lm8
+                          .= z2 + (z1 + -z1) + -z2 by Lm9
+                          .= z2 + 0c n + -z2 by Lm11
+                          .= z2 + -z2 by Lm10
+                          .= 0c n by Lm11;
    hence thesis by Th31;
  end;
 
@@ -328,54 +323,56 @@ theorem
  proof assume that
 A1:   k in Seg n and
 A2:   c1 = z1.k & c2 = z2.k;
-      z1 - z2 = diffcomplex.:(z1,z2) & k in dom(z1 - z2) by A1,Lm4;
+      z1 - z2 = diffcomplex.:(z1,z2) & k in dom(z1 - z2) by A1,Lm6;
   hence (z1 - z2).k = diffcomplex.(c1,c2) by A2,FUNCOP_1:28
                    .= c1 - c2 by Lm2;
  end;
 
-theorem Th37:
+ Lm14:
   z1 - z2 = z1 + - z2 by FINSEQOP:89;
+
+canceled;
 
 theorem
   z - 0c n = z
  proof
-  thus z - 0c n = z + -0c n by Th37 .= z + 0c n by Lm7 .= z by Lm5;
+  thus z - 0c n = z + -0c n by Lm14 .= z + 0c n by Lm12 .= z by Lm10;
  end;
 
 theorem
   0c n - z = -z
- proof thus 0c n - z = 0c n + -z by Th37 .= -z by Th28; end;
+ proof thus 0c n - z = 0c n + -z by Lm14 .= -z by Th28; end;
 
 theorem
   z1 - -z2 = z1 + z2
- proof thus z1 - -z2 = z1 + --z2 by Th37 .= z1 + z2 by Th32; end;
+ proof thus z1 - -z2 = z1 + --z2 by Lm14 .= z1 + z2 by Th32; end;
 
 theorem Th41:
   -(z1 - z2) = z2 - z1
  proof
-   thus -(z1 - z2) = -(z1 + -z2) by Th37
+   thus -(z1 - z2) = -(z1 + -z2) by Lm14
                   .= -z1 + --z2 by Th35
                   .= -z1 + z2 by Th32
-                  .= z2 + -z1 by Th25
-                  .= z2 - z1 by Th37;
+                  .= z2 + -z1 by Lm8
+                  .= z2 - z1 by Lm14;
  end;
 
 theorem Th42:
   -(z1 - z2) = -z1 + z2
  proof
-   thus -(z1 - z2) = -(z1+ -z2) by Th37
+   thus -(z1 - z2) = -(z1+ -z2) by Lm14
                   .= -z1 + --z2 by Th35
                   .= -z1 + z2 by Th32;
  end;
 
 theorem Th43:
   z - z = 0c n
- proof thus z - z = z + -z by Th37 .= 0c n by Lm6; end;
+ proof thus z - z = z + -z by Lm14 .= 0c n by Lm11; end;
 
 theorem Th44:
   z1 - z2 = 0c n implies z1 = z2
  proof assume z1 - z2 = 0c n;
-   then z1 + - z2 = 0c n by Th37;
+   then z1 + - z2 = 0c n by Lm14;
    then z1 = --z2 by Th31;
    hence thesis by Th32;
  end;
@@ -383,35 +380,35 @@ theorem Th44:
 theorem Th45:
   z1 - z2 - z3 = z1 - (z2 + z3)
  proof
-   thus z1 - z2 - z3 = z1 - z2 + -z3 by Th37
-                    .= z1 + -z2 + -z3 by Th37
-                    .= z1 + (- z2 + -z3) by Th26
+   thus z1 - z2 - z3 = z1 - z2 + -z3 by Lm14
+                    .= z1 + -z2 + -z3 by Lm14
+                    .= z1 + (- z2 + -z3) by Lm9
                     .= z1 + -(z2 + z3) by Th35
-                    .= z1 - (z2 + z3) by Th37;
+                    .= z1 - (z2 + z3) by Lm14;
  end;
 
 theorem Th46:
   z1 + (z2 - z3) = z1 + z2 - z3
  proof
-   thus z1 + (z2 - z3) = z1 + (z2 + -z3) by Th37
-                      .= z1 + z2 + -z3 by Th26
-                      .= z1 + z2 - z3 by Th37;
+   thus z1 + (z2 - z3) = z1 + (z2 + -z3) by Lm14
+                      .= z1 + z2 + -z3 by Lm9
+                      .= z1 + z2 - z3 by Lm14;
  end;
 
 theorem Th47:
   z1 - (z2 - z3) = z1 - z2 + z3
  proof
-   thus z1 - (z2 - z3) = z1 + - (z2 - z3) by Th37
+   thus z1 - (z2 - z3) = z1 + - (z2 - z3) by Lm14
                       .= z1 + (-z2 + z3) by Th42
-                      .= z1 + -z2 + z3 by Th26
-                      .= z1 - z2 + z3 by Th37;
+                      .= z1 + -z2 + z3 by Lm9
+                      .= z1 - z2 + z3 by Lm14;
  end;
 
 theorem Th48:
   z1 - z2 + z3 = z1 + z3 - z2
  proof
   thus z1 - z2 + z3 = z1 - (z2 - z3) by Th47
-          .= z1 + -(z2 - z3) by Th37
+          .= z1 + -(z2 - z3) by Lm14
           .= z1 + (z3 - z2) by Th41
           .= z1 + z3 - z2 by Th46;
  end;
@@ -419,7 +416,7 @@ theorem Th48:
 theorem Th49:
   z1 = z1 + z - z
  proof
-  thus z1 = z1 + 0c n by Lm5
+  thus z1 = z1 + 0c n by Lm10
          .= z1 + (z - z) by Th43
          .= z1 + z - z by Th46;
  end;
@@ -427,9 +424,9 @@ theorem Th49:
 theorem Th50:
   z1 + (z2 - z1) = z2
 proof
- thus z1 + (z2 - z1) = z2 - z1 + z1 by Th25
-        .= z2 + -z1 + z1 by Th37
-        .= z2 + (-z1 + z1) by Th26
+ thus z1 + (z2 - z1) = z2 - z1 + z1 by Lm8
+        .= z2 + -z1 + z1 by Lm14
+        .= z2 + (-z1 + z1) by Lm9
         .= z2 + 0c n by Th30
         .= z2 by Th28;
 end;
@@ -437,10 +434,10 @@ end;
 theorem Th51:
   z1 = z1 - z + z
  proof
-  thus z1 = z1 + 0c n by Lm5
+  thus z1 = z1 + 0c n by Lm10
          .= z1 + (-z + z) by Th30
-         .= z1 + -z + z by Th26
-         .= z1 - z + z by Th37;
+         .= z1 + -z + z by Lm9
+         .= z1 - z + z by Lm14;
  end;
 
 definition let n,c,z;
@@ -453,7 +450,7 @@ theorem Th52:
  proof assume that
 A1:  k in Seg n and
 A2:  c' = z.k;
-      c*z = (c multcomplex)*z & k in dom(c*z) by A1,Lm4;
+      c*z = (c multcomplex)*z & k in dom(c*z) by A1,Lm6;
   hence (c*z).k = (c multcomplex).c' by A2,FUNCT_1:22 .= c*c' by Th16;
  end;
 
@@ -490,7 +487,7 @@ theorem
   1r*z = z
  proof
 A1:  rng z c= COMPLEX by FINSEQ_1:def 4;
-   thus 1r*z = (id COMPLEX)*z by Th13,FINSEQOP:45
+   thus 1r*z = (id COMPLEX)*z by Lm3,FINSEQOP:45
            .= z by A1,RELAT_1:79;
  end;
 
@@ -508,7 +505,7 @@ theorem
  proof
 A1:   compcomplex.1r = -1r by BINOP_2:def 1;
    thus (-1r)*z
-      = -z by A1,Th7,Th8,Th13,Th15,FINSEQOP:72;
+      = -z by A1,Th7,Th8,Lm3,Th15,FINSEQOP:72;
  end;
 
 definition let n,z;
@@ -595,7 +592,7 @@ A2:  j in Seg n;
    then c = 0c by COMPLEX1:131;
    hence z.j = (n|->0c).j by A2,FUNCOP_1:13;
   end;
-  then z = n|->0c by Th23;
+  then z = n|->0c by Lm7;
   hence thesis;
  end;
 
@@ -620,7 +617,7 @@ A2:   0 <= |.c.| by COMPLEX1:132;
                .= |.c.|*|.z.| by A2,SQUARE_1:89;
  end;
 
-Lm9: for t being Element of i-tuples_on REAL st j in Seg i holds t.j is Real
+Lm15: for t being Element of i-tuples_on REAL st j in Seg i holds t.j is Real
  proof let t be Element of i-tuples_on REAL;
   assume
 A1:  j in Seg i;
@@ -649,16 +646,16 @@ A4:    k in Seg n;
      set r2 = (sqr (abs z1 + abs z2)).k;
      reconsider c1 = z1.k, c2 = z2.k as Element of COMPLEX by A4,Th21;
      reconsider c12 = (z1 + z2).k as Element of COMPLEX by A4,Th21;
-     reconsider abs1 = (abs z1).k, abs2 = (abs z2).k as Real by A4,Lm9;
-     reconsider abs12 = (abs z1 + abs z2).k as Real by A4,Lm9;
-     reconsider abs'12 = (abs (z1 + z2)).k as Real by A4,Lm9;
+     reconsider abs1 = (abs z1).k, abs2 = (abs z2).k as Real by A4,Lm15;
+     reconsider abs12 = (abs z1 + abs z2).k as Real by A4,Lm15;
+     reconsider abs'12 = (abs (z1 + z2)).k as Real by A4,Lm15;
          |.c1 + c2.| <= |.c1.| + |.c2.| by COMPLEX1:142;
      then |.c12.| <= |.c1.| + |.c2.| by A4,Th24;
      then |.c12.| <= |.c1.| + abs2 by A4,Th59;
      then A5:     |.c12.| <= abs1 + abs2 by A4,Th59;
          len(abs z1 + abs z2) = n by FINSEQ_2:109;
      then dom (abs z1 + abs z2) = Seg n by FINSEQ_1:def 3;
-     then 0 <= |.c12.| & |.c12.| <= abs12 by A4,A5,COMPLEX1:132,RVSUM_1:26;
+     then 0 <= |.c12.| & |.c12.| <= abs12 by A4,A5,COMPLEX1:132,SEQ_1:def 3;
      then abs'12 <= abs12 & 0 <= abs'12 by A4,Th59;
      then (abs'12)^2 <= (abs12)^2 by SQUARE_1:77;
      then (abs'12)^2 <= r2 by RVSUM_1:79;
@@ -731,7 +728,7 @@ then Sum sqr abs z1 = (sqrt Sum sqr abs z1)^2 &
 
 theorem Th69:
   |.z1 - z2.| <= |.z1.| + |.z2.|
- proof |.z1 - z2.| = |.z1 + - z2.| by Th37;
+ proof |.z1 - z2.| = |.z1 + - z2.| by Lm14;
   then |.z1 - z2.| <= |.z1.| + |.-z2.| by Th68;
   hence thesis by Th66;
  end;
@@ -975,7 +972,7 @@ definition let n,A,r;
   end;
 end;
 
- Lm10:
+ Lm16:
   (for r' being real number st r' > 0 holds r + r' >= r1) implies r >= r1
    by XREAL_1:43;
 
@@ -997,7 +994,7 @@ A5:  r1 < lower_bound X + r' by A1,A3,SEQ_4:def 5;
     r <= r1 by A2,A4;
     hence lower_bound X + r' >= r by A5,XXREAL_0:2;
    end;
-  hence lower_bound X >= r by Lm10;
+  hence lower_bound X >= r by Lm16;
  end;
 
 theorem Th85:

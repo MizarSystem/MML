@@ -96,7 +96,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="226">
+<Func kind="K" nr="228">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

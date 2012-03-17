@@ -9,13 +9,13 @@ environ
  vocabularies ORDINAL1, CARD_1, FUNCT_1, FINSET_1, TARSKI, ORDINAL2, BOOLE,
       RELAT_1, CARD_2, ZFMISC_1, GROUP_1, ARYTM_3, MCART_1, FINSEQ_2, FINSEQ_1,
       PROB_1, RLVECT_1, FUNCOP_1, FUNCT_2, PARTFUN1, FUNCT_4, CARD_4, HAHNBAN,
-      INT_1;
+      INT_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
-      NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, ORDINAL1, WELLORD2,
+      NAT_1, NAT_D, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, ORDINAL1, WELLORD2,
       ORDINAL2, MCART_1, DOMAIN_1, CARD_1, CARD_2, FINSEQ_2, FUNCT_2, BINOP_1,
       FUNCT_4, FUNCOP_1, PARTFUN1, NEWTON, CARD_3, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, FUNCOP_1, FUNCT_4,
-      XXREAL_0, NAT_1, MEMBERED, CARD_2, CARD_3, NEWTON, ORDINAL2;
+      XXREAL_0, NAT_1, MEMBERED, CARD_2, CARD_3, NEWTON, ORDINAL2, NAT_D;
  registrations SUBSET_1, FUNCT_1, FINSEQ_1, ORDINAL1, CARD_1, CARD_3, FINSET_1,
       FINSEQ_2, RELSET_1, XREAL_0, MEMBERED, ORDINAL2, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -24,7 +24,8 @@ environ
  theorems TARSKI, ZFMISC_1, NAT_1, ORDINAL1, ORDINAL2, ORDINAL3, WELLORD2,
       FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCOP_1, PARTFUN1, MCART_1, CARD_3,
       ORDERS_1, CARD_1, CARD_2, NEWTON, FINSEQ_1, FINSET_1, FINSEQ_2, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, NUMBERS, XXREAL_0;
+      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, NUMBERS, XXREAL_0,
+      NAT_D;
  schemes NAT_1, FUNCT_1, ORDINAL2, CARD_3, XBOOLE_0, BINOP_1;
 
 begin
@@ -54,10 +55,10 @@ theorem
   end;
 
 theorem
-     X is finite implies Card X in alef 0 & Card X in omega by Th2,CARD_1:83;
+  X is finite implies Card X in alef 0 & Card X in omega by Th2,CARD_1:83;
 
 theorem
-     X is finite iff ex n st Card X = Card n
+  X is finite iff ex n st Card X = Card n
   proof
    hereby
     assume X is finite;
@@ -379,7 +380,7 @@ A1:  A*^two = A+^ n by Th29;
 then A2:  A+^ n is_limit_ordinal by A1,ORDINAL3:48;
        now assume n <> 0;
      then consider k being Nat such that
-A3:    n = k+1 by NAT_1:22;
+A3:    n = k+1 by NAT_1:6;
        reconsider k as Element of NAT by ORDINAL1:def 13;
           n = succ k by A3,CARD_1:52;
       then A+^ n = succ(A+^ k) by ORDINAL2:45;
@@ -388,14 +389,16 @@ A3:    n = k+1 by NAT_1:22;
    hence thesis by A1,ORDINAL2:44;
   end;
 
+Lm2:  omega is_limit_ordinal by ORDINAL1:def 12;
+
 theorem
  Th31: omega c= A implies 1+^A = A
   proof
     deffunc f(Ordinal) = 1+^$1;
     consider phi being Ordinal-Sequence such that
-A1:  dom phi = omega & for B st B in omega holds phi.B = f(B) from
-ORDINAL2:sch 3;
-A2:  1+^omega = sup phi by A1,ORDINAL2:19,46
+A1:  dom phi = omega & for B st B in omega holds phi.B = f(B)
+      from ORDINAL2:sch 3;
+A2:  1+^omega = sup phi by A1,Lm2,ORDINAL2:46
              .= sup rng phi by ORDINAL2:35;
 A3:  1+^omega c= omega
      proof let B; assume B in 1+^omega;
@@ -406,12 +409,11 @@ A5:     x in dom phi & C = phi.x by A4,FUNCT_1:def 5;
       reconsider x as Ordinal by A5,ORDINAL1:23;
       reconsider x' = x as Cardinal by A1,A5,CARD_1:65;
        reconsider x as finite Ordinal by A1,A5,Th7;
-          Card card x = Card x & Card card x = card x & Card x' = x &
-        0+1 = 1
-        by CARD_1:def 5;
+       Card card x = Card x & Card card x = card x & Card x' = x &
+        0+1 = 1 by CARD_1:def 5;
        then x+^1 = (card x+1) & 1+^x = (1+card x) by CARD_2:49;
        then C = 1+^x & 1+^x = x+^1 & succ x in omega
-        by A1,A5,ORDINAL1:41,ORDINAL2:19;
+        by A1,A5,ORDINAL1:41,Lm2;
        then C in omega by ORDINAL2:48;
       hence thesis by A4,ORDINAL1:22;
      end;
@@ -431,8 +433,9 @@ theorem
 A2:   M = succ A by ORDINAL1:42;
      omega <> M & omega c= M iff omega c< M
       by XBOOLE_0:def 8;
-    then omega = succ A or omega in succ A by A1,A2,CARD_1:14,83,ORDINAL1:21;
-then A3:  omega c= A by ORDINAL1:34,42,ORDINAL2:19;
+    then omega = succ A or omega in succ A by A1,A2,CARD_1:14,
+83,ORDINAL1:21;
+then A3:  omega c= A by ORDINAL1:34,42,Lm2;
        Card (A+^1) = Card 1 +` Card A by CARD_2:24
                 .= Card (1+^A) by CARD_2:24
                 .= Card A by A3,Th31;
@@ -609,12 +612,12 @@ theorem
   end;
 
 theorem
- Th49: X is countable implies X \ Y is countable by Th46;
+  X is countable implies X \ Y is countable by Th46;
 
 theorem
     X is countable & Y is countable implies X \+\ Y is countable
   proof assume X is countable & Y is countable;
-    then X \ Y is countable & Y \ X is countable by Th49;
+    then X \ Y is countable & Y \ X is countable by Th46;
    hence X \+\ Y is countable by Th47;
   end;
 
@@ -652,15 +655,15 @@ A2:    P[k] implies P[k+1]
     end;
  end;
 
- Lm2: (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1) implies n1 <= n2
+ Lm3: (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1) implies n1 <= n2
   proof assume
 A1:  (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1);
    assume A2: n1 > n2;
    then consider n being Nat such that
-A3:  n1 = n2+n by NAT_1:28;
+A3:  n1 = n2+n by NAT_1:10;
        n <> 0 by A2,A3;
    then consider k being Nat such that
-A4:  n = k+1 by NAT_1:22;
+A4:  n = k+1 by NAT_1:6;
      reconsider k as Element of NAT by ORDINAL1:def 13;
      2|^n1 = (2|^n2)*(2|^(k+1)) & 2 <> 0 by A3,A4,NEWTON:13;
     then (2|^n1)*(2*m1+1) = 2|^n2*(2|^(k+1)*(2*m1+1)) & 2|^n2 <> 0
@@ -669,23 +672,23 @@ A4:  n = k+1 by NAT_1:22;
     then 2*m2+1 = 2|^k*(2|^1)*(2*m1+1) by NEWTON:13
           .= 2*(2|^k)*(2*m1+1) by NEWTON:10
           .= 2*((2|^k)*(2*m1+1));
-    then 2 divides 2*m2+1 & 2 divides 2*m2 by NAT_1:def 3;
-    then 2 divides 1 & 0 < 1 by NAT_1:57;
-   hence contradiction by NAT_1:54;
+    then 2 divides 2*m2+1 & 2 divides 2*m2 by NAT_D:def 3;
+    then 2 divides 1 & 0 < 1 by NAT_D:10;
+   hence contradiction by NAT_D:7;
   end;
 
 theorem
  Th52: (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1) implies n1 = n2 & m1 = m2
   proof assume
 A1:  (2|^n1)*(2*m1+1) = (2|^n2)*(2*m2+1);
-    then n1 <= n2 & n2 <= n1 by Lm2;
+    then n1 <= n2 & n2 <= n1 by Lm3;
    hence
 A2:  n1 = n2 by XXREAL_0:1;  2|^n1 <> 0 by Th51;
     then 2*m1+1 = 2*m2+1 by A1,A2,XCMPLX_1:5;
    hence m1 = m2;
   end;
 
- Lm3: x in [:NAT,NAT:] implies ex n1,n2 st x = [n1,n2]
+ Lm4: x in [:NAT,NAT:] implies ex n1,n2 st x = [n1,n2]
   proof assume A1: x in [:NAT,NAT:];
    then reconsider n1 = x`1, n2 = x`2 as Element of NAT by MCART_1:10;
    take n1,n2; thus thesis by A1,MCART_1:23;
@@ -701,10 +704,10 @@ A2:  dom f = [:NAT,NAT:] & rng f c= NAT by FUNCT_2:def 1,RELSET_1:12;
        f is one-to-one
      proof let x,y; assume x in dom f;
       then consider n1,m1 being Element of NAT such that
-A3:     x = [n1,m1] by A2,Lm3;
+A3:     x = [n1,m1] by A2,Lm4;
       assume y in dom f;
       then consider n2,m2 being Element of NAT such that
-A4:     y = [n2,m2] by A2,Lm3;
+A4:     y = [n2,m2] by A2,Lm4;
       assume
 A5:     f.x = f.y;
        (2|^n1)*(2*m1+1) = f.(n1,m1) by A1
@@ -822,7 +825,7 @@ A13:       p2^q = p1 by A11,FINSEQ_1:64;
              len p1+0 = len(p1^p)+len q by A12,A13,FINSEQ_1:35
                   .= len p1+len p+len q by FINSEQ_1:35
                   .= len p1+(len p+len q);
-          then len p = 0 by NAT_1:23;
+          then len p = 0 by NAT_1:7;
           then p = {} by FINSEQ_1:25;
        then p1 = p2 by A12,FINSEQ_1:47;
          hence thesis by A8,A9,A10,FINSEQ_1:46;
@@ -940,36 +943,41 @@ A1:  Card X <=` alef 0 & for Y st Y in X holds Y is countable;
   end;
 
 theorem
-     for f st dom f is finite &
+  for f st dom f is finite &
    for x st x in dom f holds f.x is finite holds Union f is finite
   proof let f; assume
 A1:  dom f is finite & for x st x in dom f holds f.x is finite;
     then reconsider df = dom f as finite set;
 A2:    Card dom f = Card card df by CARD_1:def 11;
-     now assume dom f <> {};
-then A3:   df <> {};
+A3:  now assume dom f <> {};
+then A4:   df <> {};
      defpred P[set,set] means Card (f.$2) <=` Card (f.$1);
          for x,y holds
       Card (f.x) c= Card (f.y) or Card (f.y) c= Card (f.x);
-      then A4: for x,y holds P[x,y] or P[y,x];
-A5:   for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+      then A5: for x,y holds P[x,y] or P[y,x];
+A6:   for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
      consider x such that
-A6:   x in df & for y st y in df holds P[x,y] from CARD_3:sch 3(A3,A4,A5);
-      reconsider fx = f.x as finite set by A1,A6;
+A7:   x in df & for y st y in df holds P[x,y] from CARD_3:sch 3(A4,A5,A6);
+      reconsider fx = f.x as finite set by A1,A7;
          Card Union f <=` (Card card df) *` (Card (f.x)) &
-       Card (f.x) = Card card fx by A2,A6,Th59,CARD_1:def 11;
+       Card (f.x) = Card card fx by A2,A7,Th59,CARD_1:def 11;
       then Card Union f <=` Card ((card df) * (card fx)) &
        Card ((card df) * (card fx)) is finite by CARD_2:52;
       then Card Union f is finite by Th26;
      hence thesis by Th1;
     end;
-   hence thesis by CARD_3:14,RELAT_1:64;
+    dom f = {} implies Union f is finite
+    proof
+      assume dom f = {};
+      hence thesis by ZFMISC_1:2,RELAT_1:65;
+    end;
+   hence thesis by A3;
   end;
 
 canceled;
 
 theorem
-    D is countable implies D* is countable
+  D is countable implies D* is countable
   proof assume
 A1:  D is countable;
    defpred P[set,set] means ex n st $1 = n & $2 = n-tuples_on D;
@@ -1549,7 +1557,8 @@ A50:   [:(alef 0 \ A) /\ A,(alef 0 \ A) /\ A:] = {} &
    then dom g /\ dom f = {} by A37,A49,XBOOLE_1:23;
 then A51:     dom g misses dom f by XBOOLE_0:def 7;
 then A52:   dom (g+*f) = dom g \/ dom f & g <= g+*f & rng f c= rng (g+*f) &
-      rng (g+*f) c= rng g \/ rng f by FUNCT_4:18,19,33,def 1;
+      rng (g+*f) c= rng g \/ rng f by FUNCT_4:18,19,33,
+def 1;
       then rng g c= rng (g+*f) by RELAT_1:25;
       then rng g \/ rng f c= rng (g+*f) by A52,XBOOLE_1:8;
 then A53:   rng (g+*f) = rng g \/ rng f by A52,XBOOLE_0:def 10
@@ -1667,7 +1676,8 @@ then A79:      g+*f in X & f c= (g+*f) & f = Y & (g+*f) = g+*f
 A80:  B <> {} by A60,A63,Th1;
      consider x being Element of B;
          x in M \ A by A62,A80,TARSKI:def 3;
-      then not x in rng f & x in rng (g+*f) by A69,A71,A80,XBOOLE_0:def 2,def 4
+      then not x in rng f & x in rng (g+*f) by A69,A71,A80,XBOOLE_0:def 2,
+def 4
 ;
      hence contradiction by A36,A79;
     end;
@@ -1739,7 +1749,7 @@ then A6:      K*`M = Card (card K * card M) & L*`N = Card (card L * card N) &
          card K < card L & card M < card N & 0 <= card K & 0 <= card M
            by A2,CARD_1:73,CARD_2:52;
          then card K * card M <= card K * card N &
-         card K * card N < card L * card N by XREAL_1:66,XREAL_1:70;
+         card K * card N < card L * card N by XREAL_1:66,70;
          then card K * card M < card L * card N by XXREAL_0:2;
         hence thesis by A6,CARD_1:73;
        end;
@@ -1852,6 +1862,6 @@ then A6:  Card (D*) <=` Card D by A1,A4,Th84;
   end;
 
 registration
- cluster INT -> infinite;
-coherence by FINSET_1:13,NUMBERS:17;
+  cluster INT -> infinite;
+  coherence by FINSET_1:13,NUMBERS:17;
 end;

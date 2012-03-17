@@ -7,10 +7,11 @@
 environ
 
  vocabularies RLVECT_1, RLSUB_1, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, TARSKI,
-      MCART_1, BINOP_1, LATTICES, RLSUB_2;
+      MCART_1, BINOP_1, LATTICES, RLSUB_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, RELAT_1, FUNCT_1,
       LATTICES, REAL_1, RELSET_1, STRUCT_0, RLVECT_1, RLSUB_1, DOMAIN_1;
- constructors DOMAIN_1, BINOP_1, REAL_1, MEMBERED, REALSET1, LATTICES, RLSUB_1;
+ constructors DOMAIN_1, BINOP_1, REAL_1, MEMBERED, REALSET1, LATTICES, RLSUB_1,
+      NAT_D;
  registrations LATTICES, RLVECT_1, RLSUB_1, STRUCT_0, RELSET_1, SUBSET_1,
       MEMBERED;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -1452,15 +1453,6 @@ A8:         v1 = u & u1 = u by A6,A7,TARSKI:def 1;
       thus v2 = u2 by A2,A8,RLVECT_1:21;
      end;
 
-Lm18: X c< Y implies ex x st x in Y & not x in X
- proof assume X c< Y;
-    then not Y c= X by XBOOLE_1:60;
-    then A1: Y \ X <> {} by XBOOLE_1:37;
-    consider x being Element of Y \ X;
-  take x;
-  thus thesis by A1,XBOOLE_0:def 4;
- end;
-
 theorem
     V = W1 + W2 &
   (ex v st for v1,v2,u1,u2 st
@@ -1478,7 +1470,7 @@ theorem
        by A3,RLSUB_1:def 2;
       then {0.V} c< the carrier of W1 /\ W2 by XBOOLE_0:def 8;
       then consider x such that A4: x in the carrier of W1 /\ W2 and
-                               A5: not x in {0.V} by Lm18;
+                               A5: not x in {0.V} by XBOOLE_0:6;
 A6:      x in W1 /\ W2 by A4,RLVECT_1:def 1;
       then A7: x in W1 & x in W2 by Th7;
       A8: x <> 0.V by A5,TARSKI:def 1;
@@ -1834,7 +1826,7 @@ theorem Th74:
 reserve l for Lattice;
 reserve a,b for Element of l;
 
-Lm19: a is_a_complement_of b iff a "\/" b = Top l & a "/\" b = Bottom l
+Lm18: a is_a_complement_of b iff a "\/" b = Top l & a "/\" b = Bottom l
  proof
      not (a "\/" b = Top l & a "/\" b = Bottom
  l) implies not a is_a_complement_of b
@@ -1850,7 +1842,7 @@ Lm19: a is_a_complement_of b iff a "\/" b = Top l & a "/\" b = Bottom l
  l & a "/\" b = Bottom l & b "/\" a = Bottom l;
  end;
 
-Lm20: (for a holds a "/\" b = b) implies b = Bottom l
+Lm19: (for a holds a "/\" b = b) implies b = Bottom l
  proof assume A1: for a holds a "/\" b = b;
 then for a holds a "/\" b = b & b "/\" a = b;
 then l is lower-bounded by LATTICES:def 13;
@@ -1858,7 +1850,7 @@ then l is lower-bounded by LATTICES:def 13;
            .= b by A1;
  end;
 
-Lm21: (for a holds a "\/" b = b) implies b = Top l
+Lm20: (for a holds a "\/" b = b) implies b = Top l
  proof assume A1: for a holds a "\/" b = b;
 then for a holds b "\/" a = b & a "\/" b = b;
 then l is upper-bounded by LATTICES:def 14;
@@ -1882,13 +1874,13 @@ theorem Th75:
       thus A "\/" I1 = W + (Omega).V by Def7
                   .= (Omega).V by Th15;
      end;
-     then A1: Top S = I by Lm21;
+     then A1: Top S = I by Lm20;
         now let A be Element of S0;
        reconsider W = A as Subspace of V by Def3;
       thus A "/\" Z0 = W /\ (0).V by Def8
                   .= Z0 by Th22;
      end;
-     then A2: Bottom S = Z by Lm20;
+     then A2: Bottom S = Z by Lm19;
         now let A be Element of S;
        reconsider W = A as Subspace of V by Def3;
        consider L being strict Linear_Compl of W;
@@ -1898,7 +1890,7 @@ theorem Th75:
                  .= Top S by  Th44,A1;
            B "/\" A = L /\ W by Def8
               .= Bottom S by A2,Th45;
-      hence B is_a_complement_of A by A3,Lm19;
+      hence B is_a_complement_of A by A3,Lm18;
      end;
    hence thesis by LATTICES:def 19;
   end;
@@ -1940,8 +1932,7 @@ theorem
 ::  Auxiliary theorems.
 ::
 
-theorem
-    X c< Y implies ex x st x in Y & not x in X by Lm18;
+canceled;
 
 theorem
    for V being add-associative right_zeroed right_complementable
@@ -1959,7 +1950,7 @@ theorem
 canceled 3;
 
 theorem
-    (for a holds a "/\" b = b) implies b = Bottom l by Lm20;
+    (for a holds a "/\" b = b) implies b = Bottom l by Lm19;
 
 theorem
-    (for a holds a "\/" b = b) implies b = Top l by Lm21;
+    (for a holds a "\/" b = b) implies b = Top l by Lm20;

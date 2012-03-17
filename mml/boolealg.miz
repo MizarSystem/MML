@@ -6,9 +6,9 @@
 
 environ
 
- vocabularies LATTICES, BOOLE, SUBSET_1;
+ vocabularies LATTICES, BOOLE, SUBSET_1, NAT_1;
  notations STRUCT_0, LATTICES;
- constructors LATTICES;
+ constructors LATTICES, NAT_D;
  registrations LATTICES;
  theorems LATTICES, FILTER_0, LATTICE4;
 
@@ -61,9 +61,9 @@ theorem
   proof
     assume X "\/" Y [= Z;
     then X "/\" (X "\/" Y) [= X "/\" Z by LATTICES:27; then
-A2: X [= X "/\" Z by LATTICES:def 9;
+A1: X [= X "/\" Z by LATTICES:def 9;
     X "/\" Z [= Z by LATTICES:23;
-    hence thesis by A2,LATTICES:25;
+    hence thesis by A1,LATTICES:25;
   end;
 
 theorem
@@ -84,14 +84,7 @@ proof
   hence thesis by A1,LATTICES:25;
 end;
 
-theorem
-  X [= Y implies X \ Z [= Y \ Z by LATTICES:27;
-
-theorem
-  X \ Y [= X by LATTICES:23;
-
-theorem
-  X \ Y [= X \+\ Y by LATTICES:22;
+canceled 3;
 
 theorem
   X \ Y [= Z & Y \ X [= Z implies X \+\ Y [= Z by Lm1;
@@ -127,18 +120,14 @@ A3: X [= Y "/\" Z by A1,FILTER_0:7;
     hence X = Y "/\" Z by A3,Def3;
 end;
 
-canceled;
-
-theorem
-  X "/\" (Y \ Z) = (X "/\" Y) \ Z by LATTICES:def 7;
-
-canceled;
-Th15: X meets Y implies Y meets X
+Lm2: X meets Y implies Y meets X
 proof
   assume X meets Y;
   then X "/\" Y <> Bottom L by Def4;
   hence thesis by Def4;
 end;
+
+canceled 3;
 
 theorem
   X meets X iff X <> Bottom L
@@ -152,7 +141,7 @@ proof
   hence thesis by A1,Def4;
 end;
 
-Th17: X misses Y implies Y misses X
+Lm3: X misses Y implies Y misses X
 proof
   assume X misses Y;
   then Y "/\" X = Bottom L by Def4;
@@ -161,21 +150,21 @@ end;
 
 definition let L, X, Y;
   redefine pred X meets Y;
-  symmetry by Th15;
+  symmetry by Lm2;
   redefine func X \+\ Y;
   commutativity;
   redefine pred X misses Y;
-  symmetry by Th17;
+  symmetry by Lm3;
 end;
 
 begin
-
-canceled 5;
 
 begin :: Distributive Lattices
 
  reserve L for D_Lattice;
  reserve X,Y,Z for Element of L;
+
+canceled 5;
 
 theorem
   (X "/\" Y) "\/" (X "/\" Z) = X implies X [= Y "\/" Z
@@ -185,15 +174,12 @@ proof
   hence thesis by LATTICES:21;
 end;
 
-canceled;
-
-theorem
-  (X "\/" Y) \ Z = (X \ Z) "\/" (Y \ Z) by LATTICES:def 11;
-
 begin :: Distributive Bounded Lattices
 
  reserve L for 0_Lattice;
  reserve X,Y,Z for Element of L;
+
+canceled 2;
 
 theorem
 Th25: X [= Bottom L implies X = Bottom L
@@ -234,8 +220,7 @@ proof
   hence thesis by Th25;
 end;
 
-theorem
-  Bottom L \ X = Bottom L by LATTICES:40;
+canceled;
 
 theorem
 Th30:  X meets Y & Y [= Z implies X meets Z
@@ -345,9 +330,9 @@ proof
   X "/\" Y` [= (Y "\/" Z) "/\" Y` by LATTICES:27;
   then X "/\" Y` [= (Y "/\" Y`) "\/" (Z "/\" Y`) by LATTICES:def 11;
   then X \ Y [= Bottom L "\/" (Z "/\" Y`) by LATTICES:47;
-  then A2: X \ Y [= Z "/\" Y` by LATTICES:39;
+  then A1: X \ Y [= Z "/\" Y` by LATTICES:39;
   Z "/\" Y` [= Z by LATTICES:23;
-  hence thesis by A2,LATTICES:25;
+  hence thesis by A1,LATTICES:25;
 end;
 
 theorem
@@ -589,7 +574,7 @@ proof
    then Y` [= X` by LATTICES:21;
    then X`` [= Y`` by LATTICES:53;
    then X [= Y`` by LATTICES:49;
-   then A3: X [= Y by LATTICES:49;
+   then A2: X [= Y by LATTICES:49;
    X "/\" (Y` "/\" Y) = (Y "/\" X`) "/\" Y by A1,LATTICES:def 7;
    then X "/\" Bottom L = (Y "/\" X`) "/\" Y by LATTICES:47;
    then Bottom L = (X` "/\" Y) "/\" Y by LATTICES:40
@@ -599,13 +584,10 @@ proof
    then Y`` [= X`` by LATTICES:53;
    then Y [= X`` by LATTICES:49;
    then Y [= X by LATTICES:49;
-   hence thesis by A3,Def3;
+   hence thesis by A2,Def3;
 end;
 
-canceled 2;
-
-theorem
-  X \ X = Bottom L by LATTICES:47;
+canceled 3;
 
 theorem
 Th67: X \ Bottom L = X
@@ -636,16 +618,16 @@ proof
   assume A1: X meets Y or X meets Z;
   per cases by A1;
   suppose X meets Y; then
-A3: X "/\" Y <> Bottom L by Def4;
+A2: X "/\" Y <> Bottom L by Def4;
     X "/\" Y [= (X "/\" Y) "\/" (X "/\" Z) by LATTICES:22;
     then X "/\" Y [= X "/\" (Y "\/" Z) by LATTICES:def 11;
-    then X "/\" (Y "\/" Z) <> Bottom L by A3,Th25;
+    then X "/\" (Y "\/" Z) <> Bottom L by A2,Th25;
     hence thesis by Def4;
   end;
   suppose X meets Z; then
-A4: X "/\" Z <> Bottom L by Def4;
+A3: X "/\" Z <> Bottom L by Def4;
     (X "/\" Z) "\/" (X "/\" Y) = X "/\" (Y "\/" Z) by LATTICES:def 11;
-    then X "/\" (Y "\/" Z) <> Bottom L by A4,Th27;
+    then X "/\" (Y "\/" Z) <> Bottom L by A3,Th27;
     hence thesis by Def4;
   end;
 end;
@@ -823,7 +805,7 @@ proof
              .= (X \+\ Y) "\/" (X "/\" Y) by LATTICES:def 5;
 end;
 
-Lm2: (X "\/" Y) \ (X \+\ Y) = X "/\" Y
+Lm4: (X "\/" Y) \ (X \+\ Y) = X "/\" Y
 proof
   set XY = X "\/" Y;
   thus XY \ (X \+\ Y)
@@ -967,7 +949,7 @@ proof
    .= (Bottom L "/\" X`) "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:47
    .= Bottom L "\/" ((X "\/" Y) \ (X \+\ Y)) by LATTICES:40
    .= (X "\/" Y) \ (X \+\ Y) by LATTICES:39
-   .= Y "/\" X by Lm2;
+   .= Y "/\" X by Lm4;
   hence thesis;
 end;
 

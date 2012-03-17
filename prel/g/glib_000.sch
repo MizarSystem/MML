@@ -46,7 +46,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="165">
+<Func kind="K" nr="157">
 <Var nr="1"/>
 </Func>
 <Num nr="1"/>
@@ -78,7 +78,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="165">
+<Func kind="K" nr="157">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -102,7 +102,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="165">
+<Func kind="K" nr="157">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="91">
@@ -146,7 +146,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="159">
 <Var nr="1"/>
 </Func>
 <Num nr="0"/>
@@ -176,7 +176,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="159">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -200,7 +200,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="167">
+<Func kind="K" nr="159">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="91">

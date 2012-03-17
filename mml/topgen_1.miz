@@ -8,17 +8,17 @@ environ
 
  vocabularies PRE_TOPC, SETFAM_1, SUBSET_1, BOOLE, TARSKI, FINSET_1, TOPGEN_1,
       TOPS_1, NATTRA_1, RLVECT_3, CARD_1, ARYTM, URYSOHN1, TOPMETR, ORDINAL1,
-      RAT_1, BORSUK_5, CARD_4;
+      RAT_1, BORSUK_5, CARD_4, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, ORDINAL1, NUMBERS,
       CARD_4, FINSET_1, DOMAIN_1, STRUCT_0, GROUP_1, PRE_TOPC, TOPS_1, TDLAT_3,
       YELLOW_8, URYSOHN1, TOPMETR, BORSUK_5, ORDERS_4;
  constructors SETFAM_1, XXREAL_0, MEMBERED, CARD_4, TOPS_1, COMPTS_1, REALSET2,
       URYSOHN1, TDLAT_3, TEX_2, T_0TOPSP, TOPMETR, YELLOW_8, BORSUK_5,
-      ORDERS_4;
+      ORDERS_4, NAT_D;
  registrations STRUCT_0, MEMBERED, TOPS_1, TEX_4, TEX_1, YELLOW13, CARD_1,
       WAYBEL12, BORSUK_3, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC;
+ definitions TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC;
  theorems TARSKI, ZFMISC_1, PRE_TOPC, TOPS_1, XBOOLE_0, XBOOLE_1, SUBSET_1,
       TOPS_3, TDLAT_3, YELLOW_8, FRECHET, BORSUK_5, TOPMETR, NUMBERS, CARD_4,
       ORDERS_4, GROUP_1;
@@ -47,9 +47,11 @@ theorem Th1:
     hence thesis by XBOOLE_0:def 7;
   end;
 
-theorem Th2:
+ Lm2:
   for T being 1-sorted holds
     T is countable iff [#]T is countable by ORDERS_4:def 2;
+
+canceled;
 
 theorem
   for T being 1-sorted holds
@@ -58,12 +60,12 @@ theorem
     let T be 1-sorted;
     hereby
       assume T is countable; then
-      [#]T is countable by Th2;
+      [#]T is countable by Lm2;
       hence Card [#]T <=` alef 0 by CARD_4:def 1;
     end;
     assume Card [#]T <=` alef 0; then
     [#]T is countable by CARD_4:def 1;
-    hence thesis by Th2;
+    hence thesis by Lm2;
   end;
 
 registration let T be finite 1-sorted;
@@ -117,10 +119,12 @@ end;
 
 begin :: Boundary of a Subset
 
-theorem Th4:
+ Lm3:
   for T being TopStruct,
       A being Subset of T holds
     A \/ [#]T = [#]T by XBOOLE_1:12;
+
+canceled;
 
 theorem Th5:
   for T being TopSpace,
@@ -445,8 +449,8 @@ theorem :: Theorem 1.3.2. (f)
       .= (Int A \/ [#]T) /\ (Int A \/ Int A` \/ (Int A)`) by TDLAT_3:3
       .= (Int A \/ [#]T) /\ (Int A \/ (Int A)` \/ Int A`) by XBOOLE_1:4
       .= (Int A \/ [#]T) /\ ([#]T \/ Int A`) by PRE_TOPC:18
-      .= [#]T /\ ([#]T \/ Int A`) by Th4
-      .= [#]T /\ [#]T by Th4
+      .= [#]T /\ ([#]T \/ Int A`) by Lm3
+      .= [#]T /\ [#]T by Lm3
       .= [#]T;
     hence thesis;
   end;
@@ -1423,7 +1427,7 @@ theorem Th42:
     end;
   end;
 
-Lm2:
+Lm4:
   for T being TopSpace,
       A being Subset of T st A is closed dense-in-itself holds
     Der A = A
@@ -1448,7 +1452,7 @@ theorem Th43:
     hereby
       assume A is perfect; then
       A is dense-in-itself closed by Def10;
-      hence Der A = A by Lm2;
+      hence Der A = A by Lm4;
     end;
     assume
 A1: Der A = A; then
@@ -1609,11 +1613,6 @@ registration let T be discrete non empty TopSpace,
   coherence by Th47;
 end;
 
-theorem
-  for T being discrete non empty TopSpace,
-      A being Subset of T st
-    A is dense holds A = [#]T by TOPS_3:19;
-
 begin :: Density of a Topological Space and Separable Spaces
 
 :: 1.3.6. Density of a Topological Space
@@ -1657,6 +1656,8 @@ definition let T be TopSpace;
     density T <=` alef 0;
 end;
 
+canceled;
+
 theorem Th49:
   for T being countable TopSpace holds
     T is separable
@@ -1677,9 +1678,9 @@ begin :: Exercise 1.3.E.
 
 theorem
   for A being Subset of R^1 st A = RAT holds A` = IRRAT
-    by BORSUK_5:def 3,BORSUK_5:13;
+    by BORSUK_5:def 3,TOPMETR:24;
 
-Lm3: RAT = REAL \ IRRAT
+Lm5: RAT = REAL \ IRRAT
   proof
     REAL \ IRRAT = REAL /\ RAT by XBOOLE_1:48,BORSUK_5:def 3;
     hence thesis by NUMBERS:12,XBOOLE_1:28;
@@ -1687,7 +1688,7 @@ Lm3: RAT = REAL \ IRRAT
 
 theorem
   for A being Subset of R^1 st A = IRRAT holds A` = RAT
-    by Lm3,BORSUK_5:13;
+    by Lm5,TOPMETR:24;
 
 theorem
   for A being Subset of R^1 st A = RAT holds
@@ -1695,9 +1696,9 @@ theorem
   proof
     let A be Subset of R^1;
     assume A = RAT; then
-    A` = IRRAT by BORSUK_5:def 3,BORSUK_5:13; then
+    A` = IRRAT by BORSUK_5:def 3,TOPMETR:24; then
     Cl A` = [#]R^1 by BORSUK_5:51; then
-    (Cl A`)` = {}R^1 by TOPS_1:8;
+    (Cl A`)` = {}R^1 by XBOOLE_1:37;
     hence thesis by Th5;
   end;
 
@@ -1707,9 +1708,9 @@ theorem
   proof
     let A be Subset of R^1;
     assume A = IRRAT; then
-    A` = RAT by Lm3,BORSUK_5:13; then
+    A` = RAT by Lm5,TOPMETR:24; then
     Cl A` = [#]R^1 by BORSUK_5:35; then
-    (Cl A`)` = {}R^1 by TOPS_1:8;
+    (Cl A`)` = {}R^1 by XBOOLE_1:37;
     hence thesis by Th5;
   end;
 
@@ -1740,7 +1741,7 @@ theorem Th56:
     let A be Subset of R^1;
     assume
 A1: A = RAT;
-    A` = IRRAT by A1,BORSUK_5:def 3,BORSUK_5:13; then
+    A` = IRRAT by A1,BORSUK_5:def 3,TOPMETR:24; then
     A` is dense by Th55;
     hence thesis by TOPS_1:def 4;
   end;
@@ -1752,7 +1753,7 @@ theorem Th57:
     let A be Subset of R^1;
     assume
 A1: A = IRRAT;
-    A` = RAT by Lm3,A1,BORSUK_5:13; then
+    A` = RAT by Lm5,A1,TOPMETR:24; then
     A` is dense by Th54;
     hence thesis by TOPS_1:def 4;
   end;
@@ -1763,8 +1764,9 @@ theorem Th58:
   proof
     let A be Subset of R^1;
     assume
-A1: A = REAL; then
-    Int A = A by TOPS_1:43,BORSUK_5:13;
+A1: A = REAL;
+    [#]R^1 = REAL by TOPMETR:24;
+    then Int A = A by A1,TOPS_1:43;
     hence thesis by A1,TOPS_3:def 1;
   end;
 

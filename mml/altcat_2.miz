@@ -8,11 +8,12 @@ environ
 
  vocabularies FUNCOP_1, RELAT_1, FUNCT_1, CAT_4, PRALG_1, BOOLE, PBOOLE,
       NATTRA_1, MSUALG_3, CAT_1, MCART_1, ALTCAT_1, BINOP_1, RELAT_2, ALTCAT_2,
-      REALSET1;
+      REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       PZFMISC1, REALSET1, DOMAIN_1, STRUCT_0, FUNCT_2, BINOP_1, MULTOP_1,
       FUNCT_3, FUNCT_4, CAT_1, PBOOLE, FUNCOP_1, PRALG_1, ALTCAT_1;
- constructors FUNCT_3, DOMAIN_1, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1;
+ constructors FUNCT_3, DOMAIN_1, REALSET1, PZFMISC1, CAT_1, PRALG_1, ALTCAT_1,
+      NAT_D;
  registrations STRUCT_0, ALTCAT_1, FUNCT_1, RELAT_1, RELSET_1, FUNCOP_1,
       PBOOLE, REALSET1;
  requirements SUBSET, BOOLE;
@@ -68,26 +69,26 @@ A3:    x = [z1,y1] and
 A4:    [y1,z1] in dom f by FUNCT_4:def 2;
      take y1,z1;
      thus x = [z1,y1] by A3;
-          ~f.x in dom g by A2,FUNCT_1:21;
-      then f.[y1,z1] in dom g by A3,A4,FUNCT_4:def 2;
+          ~f.(z1,y1) in dom g by A2,FUNCT_1:21,A3;
+      then f.(y1,z1) in dom g by A4,FUNCT_4:def 2;
      hence [y1,z1] in dom(g*f) by A4,FUNCT_1:21;
     end;
     given y,z being set such that
 A5:  x = [z,y] and
 A6:  [y,z] in dom(g*f);
 A7:   [y,z] in dom f by A6,FUNCT_1:21;
-         f.[y,z] in dom g by A6,FUNCT_1:21;
-then A8:   ~f.x in dom g by A5,A7,FUNCT_4:def 2;
+         f.(y,z) in dom g by A6,FUNCT_1:21;
+then A8:   ~f.(z,y) in dom g by A7,FUNCT_4:def 2;
          x in dom ~f by A5,A7,FUNCT_4:def 2;
-    hence x in dom(g*~f) by A8,FUNCT_1:21;
+    hence x in dom(g*~f) by A8,FUNCT_1:21,A5;
    end;
       now let y,z be set; assume
 A9: [y,z] in dom(g*f);
     then [y,z] in dom f by FUNCT_1:21;
 then A10:  [z,y] in dom ~f by FUNCT_4:43;
-   hence (g*~f).[z,y] = g.(~f.[z,y]) by FUNCT_1:23
-     .= g.(f.[y,z]) by A10,FUNCT_4:44
-     .= (g*f).[y,z] by A9,FUNCT_1:22;
+   hence (g*~f).(z,y) = g.(~f.(z,y)) by FUNCT_1:23
+     .= g.(f.(y,z)) by A10,FUNCT_4:44
+     .= (g*f).(y,z) by A9,FUNCT_1:22;
   end;
  hence ~(g*f) = g*~f by A1,FUNCT_4:def 2;
 end;
@@ -137,11 +138,11 @@ A16:  [y,z] in dom(f*[:g,h:]);
 then A18:  [g.y,h.z] in dom f by A17,FUNCT_3:def 9;
         [z,y] in [:dom h, dom g:] by A17,ZFMISC_1:106;
     then [z,y] in dom[:h,g:] by FUNCT_3:def 9;
-   hence (~f*[:h,g:]).[z,y] = ~f.([:h,g:].(z,y)) by FUNCT_1:23
-       .= ~f.[h.z,g.y] by A17,FUNCT_3:def 9
-       .= f.[g.y,h.z] by A18,FUNCT_4:def 2
+   hence (~f*[:h,g:]).(z,y) = ~f.([:h,g:].(z,y)) by FUNCT_1:23
+       .= ~f.(h.z,g.y) by A17,FUNCT_3:def 9
+       .= f.(g.y,h.z) by A18,FUNCT_4:def 2
        .= f.([:g,h:].(y,z)) by A17,FUNCT_3:def 9
-       .= (f*[:g,h:]).[y,z] by A16,FUNCT_1:22;
+       .= (f*[:g,h:]).(y,z) by A16,FUNCT_1:22;
   end;
  hence ~(f*[:g,h:]) = ~f*[:h,g:] by A1,FUNCT_4:def 2;
 end;
@@ -154,8 +155,8 @@ registration let f be Function-yielding Function;
     then consider z,y being set such that
 A1:  x = [y,z] and
 A2:  [z,y] in dom f by FUNCT_4:def 2;
-        f.[z,y] = (~f).x by A1,A2,FUNCT_4:def 2;
-   hence (~f).x is Function;
+        f.(z,y) = (~f).(y,z) by A2,FUNCT_4:def 2;
+   hence (~f).x is Function by A1;
   end;
 end;
 
@@ -225,12 +226,14 @@ A1: i1 in I & i2 in I and
 A2: ii = [i1,i2] by ZFMISC_1:103;
 A3:  [i2,i1] in [:I,I:] by A1,ZFMISC_1:106;
         dom F = [:I,I:] by PBOOLE:def 3;
-then A4:  F.[i2,i1] = G.ii by A2,A3,FUNCT_4:def 2;
+then A4:  F.(i2,i1) = G.(i1,i2) by A3,FUNCT_4:def 2;
         dom A = [:I,I:] by PBOOLE:def 3;
-then A5:  A.[i2,i1] = ~A.ii by A2,A3,FUNCT_4:def 2;
+then A5:  A.(i2,i1) = ~A.(i1,i2) by A3,FUNCT_4:def 2;
         dom B = [:I,I:] by PBOOLE:def 3;
-     then B.[i2,i1] = ~B.ii by A2,A3,FUNCT_4:def 2;
-   hence G.ii is Function of ~A.ii, ~B.ii by A3,A4,A5,PBOOLE:def 18;
+    then B.(i2,i1) = ~B.(i1,i2) by A3,FUNCT_4:def 2;
+    then G.(i1,i2) is Function of ~A.(i1,i2), ~B.(i1,i2)
+            by A3,A4,A5,PBOOLE:def 18;
+   hence thesis by A2;
    end;
    hence thesis;
   end;

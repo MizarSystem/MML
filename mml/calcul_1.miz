@@ -8,22 +8,23 @@ environ
 
  vocabularies RELAT_1, CQC_THE1, CQC_LANG, QC_LANG1, FINSEQ_1, ZF_LANG,
       ZF_MODEL, BOOLE, FUNCT_1, FUNCT_4, CALCUL_1, FINSET_1, VALUAT_1, CAT_1,
-      MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA;
+      MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA,
+      NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
-      NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XCMPLX_0, XXREAL_0, NAT_1, CQC_LANG,
-      RELAT_1, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, FUNCT_2, FRAENKEL,
-      DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
+      NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XCMPLX_0, XXREAL_0, NAT_1, NAT_D,
+      CQC_LANG, RELAT_1, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, FUNCT_2,
+      FRAENKEL, DOMAIN_1, MCART_1, SUBSTUT1, SUBSTUT2, SUBLEMMA;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, CQC_THE1,
-      SUBSTUT2;
+      SUBSTUT2, PARTFUN1, NAT_D;
  registrations NAT_1, FINSEQ_1, RELSET_1, CQC_LANG, XREAL_0, SUBSET_1,
       QC_LANG1, FUNCT_1, FINSET_1, ORDINAL1, CARD_5, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, CQC_LANG;
+ definitions TARSKI, XBOOLE_0, CQC_LANG, FINSEQ_2;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
       RELAT_1, QC_LANG3, QC_LANG2, SUBSTUT1, FUNCT_4, SUBLEMMA, NAT_1,
       FINSEQ_1, FINSEQ_3, VALUAT_1, FINSEQ_2, SUBSTUT2, FUNCOP_1, CQC_THE1,
-      FINSET_1, CARD_2, CQC_SIM1, CARD_1, CARD_4, GRFUNC_1, GRAPH_2, GRAPH_5,
-      XREAL_1, ORDINAL1;
+      FINSET_1, CARD_2, CQC_SIM1, CARD_1, CARD_4, GRFUNC_1, XREAL_1, ORDINAL1,
+      XXREAL_0;
  schemes XBOOLE_0, NAT_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -37,8 +38,6 @@ begin :: Preliminaries
          J for interpretation of A,
          v,w for Element of Valuations_in A,
          Sub for CQC_Substitution,
-
-
          f,f1,g,h,h1 for FinSequence of CQC-WFF;
 
 registration let g be FinSequence, N be set;
@@ -56,7 +55,7 @@ A1:  len f > 0 implies ex g being FinSequence of D st
         for i st len f = i+1 holds g = f|(Seg i)
     proof
       assume len f > 0; then
-      consider j being Nat such that A2: len f = j+1 by NAT_1:22;
+      consider j being Nat such that A2: len f = j+1 by NAT_1:6;
       reconsider j as Element of NAT by ORDINAL1:def 13;
       take g = f|(Seg j);
       reconsider g as FinSequence by FINSEQ_1:19;
@@ -86,7 +85,7 @@ A1:  len f > 0 implies ex g being FinSequence of D st
     proof
       assume A4: len f > 0 & (for i st len f = i+1 holds g = f|(Seg i)) &
                          (for i st len f = i+1 holds h = f|(Seg i)); then
-      consider j being Nat such that A5: len f = j+1 by NAT_1:22;
+      consider j being Nat such that A5: len f = j+1 by NAT_1:6;
       reconsider j as Element of NAT by ORDINAL1:def 13;
        g = f|(Seg j) & h = f|(Seg j) by A4,A5;
        hence thesis;
@@ -102,7 +101,7 @@ definition let D be non empty set, f be FinSequence of D;
     f.(len f);
   coherence
   proof
-    0+1 <= len f & len f <= len f by A1,NAT_1:38; then
+    0+1 <= len f & len f <= len f by A1,NAT_1:13; then
     len f in dom f by FINSEQ_3:27; then
     f.(len f) in rng f by FUNCT_1:12;
     hence thesis;
@@ -147,18 +146,18 @@ theorem Th2:
   len f > 0 implies len Ant(f)+1 = len f & len Ant(f) < len f
    proof
      assume  len f > 0; then
-     consider i being Nat such that A1: len f = i+1 by NAT_1:22;
+     consider i being Nat such that A1: len f = i+1 by NAT_1:6;
      reconsider i as Element of NAT by ORDINAL1:def 13;
      Ant(f) = f|(Seg i) by A1,Def1; then
      dom Ant(f) = dom f /\ Seg i by FUNCT_1:68; then
      Seg (len Ant(f)) = dom f /\ Seg i by FINSEQ_1:def 3; then
 A2:  Seg (len Ant(f)) = Seg (len f) /\ Seg i by FINSEQ_1:def 3;
-     i <= len f by A1,NAT_1:29; then
+     i <= len f by A1,NAT_1:11; then
      Seg i c= Seg (len f) by FINSEQ_1:7; then
 A3:  Seg (len Ant(f)) = Seg i by A2,XBOOLE_1:28; then
 A4:  len Ant(f) = i by FINSEQ_1:8;
      thus len Ant(f)+1 = len f by A1,A3,FINSEQ_1:8;
-     thus thesis by A1,A4,NAT_1:38;
+     thus thesis by A1,A4,NAT_1:13;
    end;
 
 theorem Th3:
@@ -185,7 +184,7 @@ A10:    f.j = <*Suc(f)*>.1 by FINSEQ_1:57;
         1 in dom <*Suc(f)*> by FINSEQ_1:55;
         hence f.j = (Ant(f)^<*Suc(f)*>).j by A9,A10,FINSEQ_1:def 7;
       end;
-      hence f.j = (Ant(f)^<*Suc(f)*>).j by A6,A7,NAT_1:26;
+      hence f.j = (Ant(f)^<*Suc(f)*>).j by A6,A7,NAT_1:8;
     end; then
      f = (Ant(f)^<*Suc(f)*>) by A3,FINSEQ_2:10; then
      rng f = rng Ant(f) \/ rng <*Suc(f)*> by FINSEQ_1:44;
@@ -199,7 +198,7 @@ theorem Th4:
      then len f > 0;
      then len Ant(f)+1 = len f by Th2;
      then len Ant(f)+1 > 1 by A1; then
-     1 <= len Ant(f) by NAT_1:38;
+     1 <= len Ant(f) by NAT_1:13;
      hence thesis;
    end;
 
@@ -237,21 +236,21 @@ theorem Th6:
     (fin <> {} implies 1 <= len fin & len fin1 < len (fin1^fin))
   proof
     len (fin^fin1) = len fin + len fin1 by FINSEQ_1:35;
-    hence len fin <= len (fin^fin1) & len fin1 <= len (fin^fin1) by NAT_1:37;
+    hence len fin <= len (fin^fin1) & len fin1 <= len (fin^fin1) by NAT_1:12;
     assume fin <> {}; then
     len fin <> 0 by FINSEQ_1:25; then
     0 < len fin; then
-A1: 0+1 <= len fin by NAT_1:38; then
+A1: 0+1 <= len fin by NAT_1:13; then
     len fin1 + 1 <= len fin + len fin1 by XREAL_1:8; then
     len fin1 + 1 <= len (fin1^fin) by FINSEQ_1:35;
-    hence thesis by A1,NAT_1:38;
+    hence thesis by A1,NAT_1:13;
   end;
 
 theorem Th7:
   Seq ((f^g)|dom f) = (f^g)|dom f
   proof
     (f^g)|dom f = f by FINSEQ_1:33;
-    hence thesis by GRAPH_2:24;
+    hence thesis by FINSEQ_3:125;
   end;
 
 theorem Th8:
@@ -273,15 +272,15 @@ theorem Th9:
     len (fin^<*b*>^<*c*>) = len fin + len <*b*> + 1 by FINSEQ_1:35; then
     len (fin^<*b*>^<*c*>) = (len fin + 1) + 1 by FINSEQ_1:56; then
     len (fin^<*b*>^<*c*>) = len fin + (1 + 1); then
-    1 + 1 <= len (fin^<*b*>^<*c*>) by NAT_1:29;
-    hence thesis by NAT_1:38;
+    1 + 1 <= len (fin^<*b*>^<*c*>) by NAT_1:11;
+    hence thesis by NAT_1:13;
   end;
 
 theorem Th10:
   1 <= len (fin^<*b*>) & len (fin^<*b*>) in dom (fin^<*b*>)
   proof
     len (fin^<*b*>) = len fin + 1 by FINSEQ_2:19; then
-    1 <= len (fin^<*b*>) by NAT_1:29;
+    1 <= len (fin^<*b*>) by NAT_1:11;
     hence thesis by FINSEQ_3:27;
   end;
 
@@ -292,9 +291,9 @@ theorem Th11:
     not n+m in Seg n by FINSEQ_3:11; then
     card (Seg n \/ {n+m}) = card (Seg n) + 1 by CARD_2:54; then
 A2: card (Seg n \/ {n+m}) = n + 1 by FINSEQ_1:78;
-    0+1 <= m by A1,NAT_1:38; then
-    1 <= m & m <= n+m by NAT_1:29; then
-    1 <= m+n by XREAL_1:2; then
+    0+1 <= m by A1,NAT_1:13; then
+    1 <= m & m <= n+m by NAT_1:11; then
+    1 <= m+n by XXREAL_0:2; then
     n+m in Seg (n+m) by FINSEQ_1:3; then
 A3: {n+m} c= Seg (n+m) by ZFMISC_1:37;
     Seg n c= Seg (n+m) by FINSEQ_3:19; then
@@ -328,14 +327,14 @@ A7:     now assume i in Seg n; then
 A8:       1 <= i & i <= n by FINSEQ_1:3;
           f1 = Ant(f)^(g^<*Suc(f)*>) by FINSEQ_1:45; then
           n <= len f1 by Th6; then
-          1 <= i & i <= len f1 by A8,XREAL_1:2;
+          1 <= i & i <= len f1 by A8,XXREAL_0:2;
           hence i in dom f1 by FINSEQ_3:27;
         end;
         now assume i in {n+(m+1)}; then
 A9:      i = (n+m)+1 by TARSKI:def 1;
           len f1 = len (Ant(f)^g) + len <*Suc(f)*> by FINSEQ_1:35; then
           len f1 = n + m + len <*Suc(f)*> by FINSEQ_1:35; then
-          1 <= i & i <= len f1 by A9,FINSEQ_1:56,NAT_1:29;
+          1 <= i & i <= len f1 by A9,FINSEQ_1:56,NAT_1:11;
           hence i in dom f1 by FINSEQ_3:27;
         end;
         hence b in dom f1 by A6,A7,XBOOLE_0:def 2;
@@ -352,25 +351,25 @@ A12:  dom Sgm (dom f2) = Seg (n+1) by A11,Th12;
       for b holds b in dom f iff b in Seg (n+1); then
 A13:  dom Sgm (dom f2) = dom f by A12,TARSKI:2;
       reconsider i = c as Element of NAT by A5;
-A14:  0+1 <= m+1 by NAT_1:38;
-      m+1 <= n+(m+1) by NAT_1:29; then
-      1 <= n+(m+1) by A14,XREAL_1:2; then
+A14:  0+1 <= m+1 by NAT_1:13;
+      m+1 <= n+(m+1) by NAT_1:11; then
+      1 <= n+(m+1) by A14,XXREAL_0:2; then
       n+(m+1) in Seg (n+(m+1)) by FINSEQ_1:3; then
 A15:  {n+(m+1)} c= Seg (n+(m+1)) by ZFMISC_1:37;
       now let i,j such that A16: i in Seg n & j in {n+(m+1)};
 A17:    i <= n by A16,FINSEQ_1:3;
-        n+1 <= n+1+m by NAT_1:29; then
-        n < n+(m+1) by NAT_1:38; then
+        n+1 <= n+1+m by NAT_1:11; then
+        n < n+(m+1) by NAT_1:13; then
         n < j by A16,TARSKI:def 1;
-        hence i < j by A17,XREAL_1:2;
+        hence i < j by A17,XXREAL_0:2;
       end; then
 A18:  Sgm (dom f2) = Sgm(Seg n)^Sgm{n+(m+1)} by A11,A15,FINSEQ_3:48;
       Sgm (dom f2) = Sgm(Seg n)^<*n+(m+1)*> by A18,FINSEQ_3:50; then
 A19:  Sgm (dom f2) = (idseq n)^<*n+(m+1)*> by FINSEQ_3:54;
 A20:  now assume A21: i in Seg n; then
-        i in dom idseq n by FINSEQ_2:54; then
+        i in dom idseq n by RELAT_1:71; then
         Sgm (dom f2).i = (idseq n).i by A19,FINSEQ_1:def 7; then
-A22:    Sgm (dom f2).i = i by A21,FINSEQ_2:56;
+A22:    Sgm (dom f2).i = i by A21,FUNCT_1:35;
 A23:    i in dom Sgm (dom f2) by A3,A4,A13,FUNCT_1:8;
         Seq f2 = Sgm (dom f2) * f2 by FINSEQ_1:def 14; then
 A24:    Seq f2.i = f2.i by A22,A23,FUNCT_1:23;
@@ -610,7 +609,7 @@ A2:    J,v |= rng(Ant(f)) & J,v |= Suc(f) by Def14;
        thus J,v |= Suc(f)
        proof
 A6:      Suc(f) = f.(len f) by A1,Def2;
-         0+1 <= len f & len f <= len f by A1,NAT_1:38; then
+         0+1 <= len f & len f <= len f by A1,NAT_1:13; then
          len f in dom f by FINSEQ_3:27; then
          Suc(f) in rng(f) by A6,FUNCT_1:12;
          hence thesis by A4,Def11;
@@ -834,12 +833,10 @@ theorem Th31:
     PR.n in rng PR by FUNCT_1:def 5; then
     (PR.n)`2 in {k: k <= 9} by CQC_THE1:def 3,MCART_1:10; then
     ex k st k = (PR.n)`2 & k <= 9;
-    hence thesis by CQC_THE1:10;
+    hence thesis by NAT_1:34;
   end;
 
-Lm1: for f being FinSequence st f <> {} holds 1 <= len f by GRAPH_5:8;
-
-Lm2: 1 <= n & n <= len PR implies (PR.n)`1 is FinSequence of CQC-WFF
+Lm1: 1 <= n & n <= len PR implies (PR.n)`1 is FinSequence of CQC-WFF
    proof
      assume A1: 1 <= n & n <= len PR;
      n in dom PR by A1,FINSEQ_3:27; then
@@ -866,14 +863,14 @@ A5:   for k holds P[k] implies P[k+1]
         let k such that A6: P[k];
         assume A7: k+1 <= len PR;
         let m such that A8: 1 <= m & m <= k+1;
-A9:    1 <= m & m <= len PR by A7,A8,XREAL_1:2;
-A10:    k <= k+1 by NAT_1:29;
+A9:    1 <= m & m <= len PR by A7,A8,XXREAL_0:2;
+A10:    k <= k+1 by NAT_1:11;
 A11:    m <= k implies ex g st g = (PR.m)`1 & Ant(g) |= Suc(g)
-                                       by A6,A7,A8,A10,XREAL_1:2;
+                                       by A6,A7,A8,A10,XXREAL_0:2;
         now assume A12: m = k+1;
           take g = (PR.m)`1;
           thus g = (PR.m)`1;
-          reconsider g = (PR.m)`1 as FinSequence of CQC-WFF by A9,Lm2;
+          reconsider g = (PR.m)`1 as FinSequence of CQC-WFF by A9,Lm1;
 A13:      PR,m is_a_correct_step by A2,A9,Def8;
           now per cases by A9,Th31;
             suppose (PR.m)`2 = 0; then
@@ -889,9 +886,9 @@ A13:      PR,m is_a_correct_step by A2,A9,Def8;
              consider i,f,f1 such that A16: 1 <= i & i < m &
                       Ant(f) is_Subsequence_of Ant(f1) & Suc(f) = Suc(f1) &
                       (PR.i)`1 = f & (PR.m)`1 = f1 by A13,Def7;
-             1 <= i & i <= k by A12,A16,NAT_1:38; then
+             1 <= i & i <= k by A12,A16,NAT_1:13; then
              consider h such that A17: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                 by A6,A7,A10,XREAL_1:2;
+                                                 by A6,A7,A10,XXREAL_0:2;
              thus Ant(g) |= Suc(g) by A16,A17,Th16;
             end;
             suppose (PR.m)`2 = 3; then
@@ -900,12 +897,12 @@ A13:      PR,m is_a_correct_step by A2,A9,Def8;
                 'not' Suc(Ant(f)) = Suc(Ant(f1))
                 & Suc(f) = Suc(f1) & f = (PR.j)`1 & f1 = (PR.i)`1 &
                             Ant(Ant(f))^<*Suc(f)*> = (PR.m)`1 by A13,Def7;
-A19:         1 <= i & i <= k by A12,A18,NAT_1:38; then
+A19:         1 <= i & i <= k by A12,A18,NAT_1:13; then
              consider h such that A20: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                by A6,A7,A10,XREAL_1:2;
-             1 <= j & j <= k by A18,A19,XREAL_1:2; then
+                                                by A6,A7,A10,XXREAL_0:2;
+             1 <= j & j <= k by A18,A19,XXREAL_0:2; then
              consider h1 such that A21: h1 = (PR.j)`1 & Ant(h1) |= Suc(h1)
-                                                by A6,A7,A10,XREAL_1:2;
+                                                by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(Ant(f)) & Suc(g) = Suc(f) by A18,Th5;
              hence Ant(g) |= Suc(g) by A18,A20,A21,Th18;
             end;
@@ -914,12 +911,12 @@ A19:         1 <= i & i <= k by A12,A18,NAT_1:38; then
                j < i & len f > 1 & Ant(f) = Ant(f1) & Suc(Ant(f)) = 'not' p &
                 'not' Suc(f) = Suc(f1) & f = (PR.j)`1 & f1 = (PR.i)`1 &
                                      Ant(Ant(f))^<*p*> = (PR.m)`1 by A13,Def7;
-A23:         1 <= i & i <= k by A12,A22,NAT_1:38; then
+A23:         1 <= i & i <= k by A12,A22,NAT_1:13; then
              consider h such that A24: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                      by A6,A7,A10,XREAL_1:2;
-             1 <= j & j <= k by A22,A23,XREAL_1:2; then
+                                                      by A6,A7,A10,XXREAL_0:2;
+             1 <= j & j <= k by A22,A23,XXREAL_0:2; then
              consider h1 such that A25: h1 = (PR.j)`1 & Ant(h1) |= Suc(h1)
-                                                      by A6,A7,A10,XREAL_1:2;
+                                                      by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(Ant(f)) & Suc(g) = p by A22,Th5;
              hence Ant(g) |= Suc(g) by A22,A24,A25,Th19;
             end;
@@ -927,30 +924,31 @@ A23:         1 <= i & i <= k by A12,A22,NAT_1:38; then
              consider i,j,f,f1 such that A26: 1 <= i & i < m & 1 <= j & j < i
              & Ant(f) = Ant(f1) & f = (PR.j)`1 & f1 = (PR.i)`1 &
                    Ant(f)^<*(Suc(f)) '&' (Suc(f1))*> = (PR.m)`1 by A13,Def7;
-A27:         1 <= i & i <= k by A12,A26,NAT_1:38; then
+A27:         1 <= i & i <= k by A12,A26,NAT_1:13; then
              consider h such that A28: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                        by A6,A7,A10,XREAL_1:2;
-             1 <= j & j <= k by A26,A27,XREAL_1:2; then
+                                                        by A6,A7,A10,XXREAL_0:2
+;
+             1 <= j & j <= k by A26,A27,XXREAL_0:2; then
              consider h1 such that A29: h1 = (PR.j)`1 & Ant(h1) |= Suc(h1)
-                                                       by A6,A7,A10,XREAL_1:2;
+                                                       by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(f) & Suc(g) = (Suc(f)) '&' (Suc(f1)) by A26,Th5;
              hence Ant(g) |= Suc(g) by A26,A28,A29,Th20;
             end;
             suppose (PR.m)`2 = 6; then
              consider i,f,p,q such that A30: 1 <= i & i < m & p '&' q = Suc(f)
                     & f = (PR.i)`1 & Ant(f)^<*p*> = (PR.m)`1 by A13,Def7;
-             1 <= i & i <= k by A12,A30,NAT_1:38; then
+             1 <= i & i <= k by A12,A30,NAT_1:13; then
              consider h such that A31: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                      by A6,A7,A10,XREAL_1:2;
+                                                      by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(f) & Suc(g) = p by A30,Th5;
              hence Ant(g) |= Suc(g) by A30,A31,Th21;
             end;
             suppose (PR.m)`2 = 7; then
              consider i,f,p,q such that A32: 1 <= i & i < m & p '&' q = Suc(f)
                     & f = (PR.i)`1 & Ant(f)^<*q*>= (PR.m)`1 by A13,Def7;
-             1 <= i & i <= k by A12,A32,NAT_1:38; then
+             1 <= i & i <= k by A12,A32,NAT_1:13; then
              consider h such that A33: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                       by A6,A7,A10,XREAL_1:2;
+                                                       by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(f) & Suc(g) = q by A32,Th5;
              hence Ant(g) |= Suc(g) by A32,A33,Th22;
             end;
@@ -958,9 +956,9 @@ A27:         1 <= i & i <= k by A12,A26,NAT_1:38; then
              consider i,f,p,x,y such that A34: 1 <= i & i < m &
                Suc(f) = All(x,p) & f = (PR.i)`1 & Ant(f)^<*p.(x,y)*> = (PR.m)`1
                                                              by A13,Def7;
-             1 <= i & i <= k by A12,A34,NAT_1:38; then
+             1 <= i & i <= k by A12,A34,NAT_1:13; then
              consider h such that A35: h = (PR.i)`1 & Ant(h) |= Suc(h)
-                                                       by A6,A7,A10,XREAL_1:2;
+                                                       by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(f) & Suc(g) = p.(x,y) by A34,Th5;
              hence Ant(g) |= Suc(g) by A34,A35,Th25;
             end;
@@ -969,20 +967,20 @@ A27:         1 <= i & i <= k by A12,A26,NAT_1:38; then
                 Suc(f) = p.(x,y) & not y in still_not-bound_in (Ant(f)) &
                 not y in still_not-bound_in All(x,p) & f = (PR.i)`1 &
                 Ant(f)^<*All(x,p)*> = (PR.m)`1 by A13,Def7;
-             1 <= i & i <= k by A12,A36,NAT_1:38; then
+             1 <= i & i <= k by A12,A36,NAT_1:13; then
              consider h such that A37: h = (PR.i)`1 & Ant(h) |= Suc(h)
-               by A6,A7,A10,XREAL_1:2;
+               by A6,A7,A10,XXREAL_0:2;
              Ant(g) = Ant(f) & Suc(g) = All(x,p) by A36,Th5;
              hence Ant(g) |= Suc(g) by A36,A37,Th29;
             end;
           end;
           hence thesis;
         end;
-        hence thesis by A8,A11,NAT_1:26;
+        hence thesis by A8,A11,NAT_1:8;
       end;
 A38:  for k holds P[k] from NAT_1:sch 1(A4,A5);
       PR <> {} by A2,Def8; then
-      1 <= len PR & len PR <= len PR by Lm1; then
+      1 <= len PR & len PR <= len PR by FINSEQ_1:28; then
       consider g such that A39: g = (PR.(len PR))`1 & Ant(g) |= Suc(g) by A38;
       for p st p in rng(Ant(f)) holds J,v |= p by A1,A3,Def11; then
       J,v |= rng(Ant(f)) by Def11; then
@@ -1008,7 +1006,7 @@ A4:   a = [f,0] by A2,A3,TARSKI:def 1;
                                                            by FINSEQ_1:def 4;
     now let n such that A5: 1 <= n & n <= len PR;
       1 <= n & n <= 1 by A5,FINSEQ_1:56; then
-      n = 1 by XREAL_1:1; then
+      n = 1 by XXREAL_0:1; then
       PR.n = [f,0] by FINSEQ_1:57; then
       (PR.n)`1 = f & (PR.n)`2 = 0 by MCART_1:7;
       hence PR,n is_a_correct_step by A1,Def7;
@@ -1028,8 +1026,8 @@ theorem Th34:
      n in dom PR by FINSEQ_3:27; then
 A2:  (PR^PR1).n = PR.n by FINSEQ_1:def 7;
      len(PR^PR1) = len PR + len PR1 by FINSEQ_1:35; then
-     len PR <= len(PR^PR1) by NAT_1:29; then
-A3:  1 <= n & n <= len(PR^PR1) by A1,XREAL_1:2;
+     len PR <= len(PR^PR1) by NAT_1:11; then
+A3:  1 <= n & n <= len(PR^PR1) by A1,XXREAL_0:2;
      thus PR,n is_a_correct_step implies PR^PR1,n is_a_correct_step
      proof
        assume A4: PR,n is_a_correct_step;
@@ -1044,7 +1042,7 @@ A3:  1 <= n & n <= len(PR^PR1) by A1,XREAL_1:2;
           consider i,f,g such that A5: 1 <= i & i < n and
                        A6: Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) &
                                   (PR.i)`1 = f & (PR.n)`1 = g by A2,A4,Def7;
-          i <= len PR by A1,A5,XREAL_1:2; then
+          i <= len PR by A1,A5,XXREAL_0:2; then
           i in dom PR by A5,FINSEQ_3:27; then
           PR.i = (PR^PR1).i by FINSEQ_1:def 7;
           hence thesis by A2,A5,A6;
@@ -1055,8 +1053,8 @@ A3:  1 <= n & n <= len(PR^PR1) by A1,XREAL_1:2;
                 Ant(Ant(f)) = Ant(Ant(g)) & 'not' Suc(Ant(f)) = Suc(Ant(g)) &
                 Suc(f) = Suc(g) & f = (PR.j)`1 &
                 g = (PR.i)`1 & Ant(Ant(f))^<*Suc(f)*> = (PR.n)`1 by A2,A4,Def7;
-          i <= len PR & j <= n by A1,A7,XREAL_1:2; then
-          i in Seg(len PR) & j <= len PR by A7,XREAL_1:2,FINSEQ_1:3; then
+          i <= len PR & j <= n by A1,A7,XXREAL_0:2; then
+          i in Seg(len PR) & j <= len PR by A7,XXREAL_0:2,FINSEQ_1:3; then
           i in dom PR & j in dom PR by A7,FINSEQ_1:def 3,FINSEQ_3:27; then
           PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A7,A8;
@@ -1066,8 +1064,8 @@ A3:  1 <= n & n <= len(PR^PR1) by A1,XREAL_1:2;
       A10: len f > 1 & Ant(f) = Ant(g) & Suc(Ant(f)) = 'not' p & 'not' Suc(f)
                = Suc(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                Ant(Ant(f))^<*p*> = (PR.n)`1 by A2,A4,Def7;
-          i <= len PR & j <= n by A1,A9,XREAL_1:2; then
-          i in Seg(len PR) & j <= len PR by A9,XREAL_1:2,FINSEQ_1:3; then
+          i <= len PR & j <= n by A1,A9,XXREAL_0:2; then
+          i in Seg(len PR) & j <= len PR by A9,XXREAL_0:2,FINSEQ_1:3; then
           i in dom PR & j in dom PR by A9,FINSEQ_1:def 3,FINSEQ_3:27; then
           PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A9,A10;
@@ -1076,8 +1074,8 @@ A3:  1 <= n & n <= len(PR^PR1) by A1,XREAL_1:2;
           consider i,j,f,g such that A11: 1 <= i & i < n & 1 <= j & j < i and
 A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                      Ant(f)^<*(Suc(f)) '&' (Suc(g))*> = (PR.n)`1 by A2,A4,Def7;
-          i <= len PR & j <= n by A1,A11,XREAL_1:2; then
-          i in Seg(len PR) & j <= len PR by A11,XREAL_1:2,FINSEQ_1:3; then
+          i <= len PR & j <= n by A1,A11,XXREAL_0:2; then
+          i in Seg(len PR) & j <= len PR by A11,XXREAL_0:2,FINSEQ_1:3; then
           i in dom PR & j in dom PR by A11,FINSEQ_1:def 3,FINSEQ_3:27; then
           PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A11,A12;
@@ -1086,7 +1084,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
           consider i,f,p,q such that A13: 1 <= i & i < n and
            A14: p '&' q = Suc(f) & f = (PR.i)`1 & Ant(f)^<*p*> = (PR.n)`1
                                                                by A2,A4,Def7;
-          i <= len PR by A1,A13,XREAL_1:2; then
+          i <= len PR by A1,A13,XXREAL_0:2; then
           i in dom PR by A13,FINSEQ_3:27; then
           PR.i = (PR^PR1).i by FINSEQ_1:def 7;
           hence thesis by A2,A13,A14;
@@ -1095,7 +1093,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
           consider i,f,p,q such that A15: 1 <= i & i < n and
            A16: p '&' q = Suc(f) & f = (PR.i)`1 & Ant(f)^<*q*> = (PR.n)`1
                                                                by A2,A4,Def7;
-          i <= len PR by A1,A15,XREAL_1:2; then
+          i <= len PR by A1,A15,XXREAL_0:2; then
           i in dom PR by A15,FINSEQ_3:27; then
           PR.i = (PR^PR1).i by FINSEQ_1:def 7;
           hence thesis by A2,A15,A16;
@@ -1104,7 +1102,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
           consider i,f,p,x,y such that A17: 1 <= i & i < n and
      A18: Suc(f) = All(x,p) & f = (PR.i)`1 &
                                 Ant(f)^<*p.(x,y)*> = (PR.n)`1 by A2,A4,Def7;
-          i <= len PR by A1,A17,XREAL_1:2; then
+          i <= len PR by A1,A17,XXREAL_0:2; then
           i in dom PR by A17,FINSEQ_3:27; then
           PR.i = (PR^PR1).i by FINSEQ_1:def 7;
           hence thesis by A2,A17,A18;
@@ -1114,7 +1112,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
      A20: Suc(f) = p.(x,y) & not y in still_not-bound_in (Ant(f)) &
                not y in still_not-bound_in All(x,p) & f = (PR.i)`1 &
                              Ant(f)^<*All(x,p)*> = (PR.n)`1 by A2,A4,Def7;
-          i <= len PR by A1,A19,XREAL_1:2; then
+          i <= len PR by A1,A19,XXREAL_0:2; then
           i in dom PR by A19,FINSEQ_3:27; then
           PR.i = (PR^PR1).i by FINSEQ_1:def 7;
           hence thesis by A2,A19,A20;
@@ -1132,7 +1130,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
        consider i,f,g such that A22: 1 <= i & i < n and
                        A23: Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) &
                        ((PR^PR1).i)`1 = f & ((PR^PR1).n)`1 = g by A2,A21,Def7;
-       i <= len PR by A1,A22,XREAL_1:2; then
+       i <= len PR by A1,A22,XXREAL_0:2; then
        i in dom PR by A22,FINSEQ_3:27; then
        PR.i = (PR^PR1).i by FINSEQ_1:def 7;
        hence thesis by A2,A22,A23;
@@ -1143,8 +1141,8 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                  Ant(Ant(f1)) & 'not' Suc(Ant(f)) = Suc(Ant(f1))
              &   Suc(f) = Suc(f1) & f = ((PR^PR1).j)`1 & f1 = ((PR^PR1).i)`1 &
                  Ant(Ant(f))^<*Suc(f)*> = ((PR^PR1).n)`1 by A2,A21,Def7;
-       i <= len PR & j <= n by A1,A24,XREAL_1:2; then
-       i in Seg(len PR) & j <= len PR by A24,XREAL_1:2,FINSEQ_1:3; then
+       i <= len PR & j <= n by A1,A24,XXREAL_0:2; then
+       i in Seg(len PR) & j <= len PR by A24,XXREAL_0:2,FINSEQ_1:3; then
        i in dom PR & j in dom PR by A24,FINSEQ_1:def 3,FINSEQ_3:27; then
        PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A24,A25;
@@ -1155,8 +1153,8 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                 Suc(Ant(f)) = 'not' p & 'not' Suc(f) = Suc(g) &
                 f = ((PR^PR1).j)`1 & g = ((PR^PR1).i)`1 &
                 Ant(Ant(f))^<*p*> = ((PR^PR1).n)`1  by A2,A21,Def7;
-       i <= len PR & j <= n by A1,A26,XREAL_1:2; then
-       i in Seg(len PR) & j <= len PR by A26,XREAL_1:2,FINSEQ_1:3; then
+       i <= len PR & j <= n by A1,A26,XXREAL_0:2; then
+       i in Seg(len PR) & j <= len PR by A26,XXREAL_0:2,FINSEQ_1:3; then
        i in dom PR & j in dom PR by A26,FINSEQ_1:def 3,FINSEQ_3:27; then
        PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A26,A27;
@@ -1166,8 +1164,8 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                                   A29: Ant(f) = Ant(g) & f = ((PR^PR1).j)`1 &
                 g = ((PR^PR1).i)`1 & Ant(f)^<*(Suc(f)) '&' (Suc(g))*> =
                                              ((PR^PR1).n)`1 by A2,A21,Def7;
-       i <= len PR & j <= n by A1,A28,XREAL_1:2; then
-       i in Seg(len PR) & j <= len PR by A28,XREAL_1:2,FINSEQ_1:3; then
+       i <= len PR & j <= n by A1,A28,XXREAL_0:2; then
+       i in Seg(len PR) & j <= len PR by A28,XXREAL_0:2,FINSEQ_1:3; then
        i in dom PR & j in dom PR by A28,FINSEQ_1:def 3,FINSEQ_3:27; then
        PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A28,A29;
@@ -1176,7 +1174,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
        consider i,f,p,q such that A30: 1 <= i & i < n and
                                   A31: p '&' q = Suc(f) & f = ((PR^PR1).i)`1 &
                                   Ant(f)^<*p*> = ((PR^PR1).n)`1 by A2,A21,Def7;
-       i <= len PR by A1,A30,XREAL_1:2; then
+       i <= len PR by A1,A30,XXREAL_0:2; then
        i in dom PR by A30,FINSEQ_3:27; then
        PR.i = (PR^PR1).i by FINSEQ_1:def 7;
        hence thesis by A2,A30,A31;
@@ -1185,7 +1183,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
        consider i,f,p,q such that A32: 1 <= i & i < n and
                                   A33: p '&' q = Suc(f) & f = ((PR^PR1).i)`1 &
                                   Ant(f)^<*q*>= ((PR^PR1).n)`1 by A2,A21,Def7;
-       i <= len PR by A1,A32,XREAL_1:2; then
+       i <= len PR by A1,A32,XXREAL_0:2; then
        i in dom PR by A32,FINSEQ_3:27; then
        PR.i = (PR^PR1).i by FINSEQ_1:def 7;
        hence thesis by A2,A32,A33;
@@ -1195,7 +1193,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                                   A35: Suc(f) = All(x,p) & f = ((PR^PR1).i)`1 &
                                   Ant(f)^<*p.(x,y)*> = ((PR^PR1).n)`1
                                                                by A2,A21,Def7;
-       i <= len PR by A1,A34,XREAL_1:2; then
+       i <= len PR by A1,A34,XXREAL_0:2; then
        i in dom PR by A34,FINSEQ_3:27; then
        PR.i = (PR^PR1).i by FINSEQ_1:def 7;
        hence thesis by A2,A34,A35;
@@ -1206,7 +1204,7 @@ A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                not y in still_not-bound_in (Ant(f)) &
                not y in still_not-bound_in All(x,p) & f = ((PR^PR1).i)`1 &
                Ant(f)^<*All(x,p)*> = ((PR^PR1).n)`1 by A2,A21,Def7;
-       i <= len PR by A1,A36,XREAL_1:2; then
+       i <= len PR by A1,A36,XXREAL_0:2; then
        i in dom PR by A36,FINSEQ_3:27; then
        PR.i = (PR^PR1).i by FINSEQ_1:def 7;
        hence thesis by A2,A36,A37;
@@ -1222,7 +1220,7 @@ theorem Th35:
     n in dom PR1 by A1,FINSEQ_3:27; then
 A3: PR1.n = (PR^PR1).(n+len PR) by FINSEQ_1:def 7;
     n + len PR <= len PR + len PR1 by A1,XREAL_1:8; then
-A4: 1 <= n+len PR & n+len PR <= len(PR^PR1) by A1,FINSEQ_1:35,NAT_1:37;
+A4: 1 <= n+len PR & n+len PR <= len(PR^PR1) by A1,FINSEQ_1:35,NAT_1:12;
     per cases by A4,Th31;
        case ((PR^PR1).(n+len PR))`2  = 0;
        hence thesis by A2,A3,Def7;
@@ -1234,8 +1232,8 @@ A4: 1 <= n+len PR & n+len PR <= len(PR^PR1) by A1,FINSEQ_1:35,NAT_1:37;
         consider i,f,g such that A5: 1 <= i & i < n and
 A6:     Ant(f) is_Subsequence_of Ant(g) & Suc(f) = Suc(g) &
                                  (PR1.i)`1 = f & (PR1.n)`1 = g by A2,A3,Def7;
-A7:     1 <= len PR+i & len PR+i < n+len PR by A5,NAT_1:37,XREAL_1:8;
-        i <= len PR1 by A1,A5,XREAL_1:2; then
+A7:     1 <= len PR+i & len PR+i < n+len PR by A5,NAT_1:12,XREAL_1:8;
+        i <= len PR1 by A1,A5,XXREAL_0:2; then
         i in dom PR1 by A5,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
         hence thesis by A3,A6,A7;
@@ -1246,10 +1244,10 @@ A7:     1 <= len PR+i & len PR+i < n+len PR by A5,NAT_1:37,XREAL_1:8;
                  Ant(Ant(f1)) & 'not' Suc(Ant(f)) = Suc(Ant(f1)) &
                  Suc(f) = Suc(f1) & f = (PR1.j)`1 & f1 = (PR1.i)`1 &
                  Ant(Ant(f))^<*Suc(f)*> = (PR1.n)`1 by A2,A3,Def7;
-A10:     1 <= len PR+i & len PR+i < n+len PR by A8,NAT_1:37,XREAL_1:8;
-A11:    1 <= len PR+j & len PR+j < i+len PR by A8,NAT_1:37,XREAL_1:8;
-A12:     i <= len PR1 & j <= n by A1,A8,XREAL_1:2; then
-        i in Seg(len PR1) & j <= len PR1 by A8,XREAL_1:2,FINSEQ_1:3; then
+A10:     1 <= len PR+i & len PR+i < n+len PR by A8,NAT_1:12,XREAL_1:8;
+A11:    1 <= len PR+j & len PR+j < i+len PR by A8,NAT_1:12,XREAL_1:8;
+A12:     i <= len PR1 & j <= n by A1,A8,XXREAL_0:2; then
+        i in Seg(len PR1) & j <= len PR1 by A8,XXREAL_0:2,FINSEQ_1:3; then
         i in dom PR1 & j in dom PR1 by A8,A12,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                      by FINSEQ_1:def 7;
@@ -1261,10 +1259,10 @@ A12:     i <= len PR1 & j <= n by A1,A8,XREAL_1:2; then
                       Suc(Ant(f)) = 'not' p & 'not' Suc(f) = Suc(g) &
                   f = (PR1.j)`1 & g = (PR1.i)`1 & Ant(Ant(f))^<*p*> = (PR1.n)`1
                                                      by A2,A3,Def7;
-A15:    1 <= len PR+i & len PR+i < n+len PR by A13,NAT_1:37,XREAL_1:8;
-A16:    1 <= len PR+j & len PR+j < i+len PR by A13,NAT_1:37,XREAL_1:8;
-A17:     i <= len PR1 & j <= n by A1,A13,XREAL_1:2; then
-        i in Seg(len PR1) & j <= len PR1 by A13,XREAL_1:2,FINSEQ_1:3; then
+A15:    1 <= len PR+i & len PR+i < n+len PR by A13,NAT_1:12,XREAL_1:8;
+A16:    1 <= len PR+j & len PR+j < i+len PR by A13,NAT_1:12,XREAL_1:8;
+A17:     i <= len PR1 & j <= n by A1,A13,XXREAL_0:2; then
+        i in Seg(len PR1) & j <= len PR1 by A13,XXREAL_0:2,FINSEQ_1:3; then
         i in dom PR1 & j in dom PR1 by A13,A17,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                              by FINSEQ_1:def 7;
@@ -1275,10 +1273,10 @@ A17:     i <= len PR1 & j <= n by A1,A13,XREAL_1:2; then
                                    A19: Ant(f) = Ant(g) & f = (PR1.j)`1 &
                  g = (PR1.i)`1 & Ant(f)^<*(Suc(f)) '&' (Suc(g))*> = (PR1.n)`1
                                                    by A2,A3,Def7;
-A20:    1 <= len PR+i & len PR+i < n+len PR by A18,NAT_1:37,XREAL_1:8;
-A21:    1 <= len PR+j & len PR+j < i+len PR by A18,NAT_1:37,XREAL_1:8;
-A22:     i <= len PR1 & j <= n by A1,A18,XREAL_1:2; then
-        i in Seg(len PR1) & j <= len PR1 by A18,XREAL_1:2,FINSEQ_1:3; then
+A20:    1 <= len PR+i & len PR+i < n+len PR by A18,NAT_1:12,XREAL_1:8;
+A21:    1 <= len PR+j & len PR+j < i+len PR by A18,NAT_1:12,XREAL_1:8;
+A22:     i <= len PR1 & j <= n by A1,A18,XXREAL_0:2; then
+        i in Seg(len PR1) & j <= len PR1 by A18,XXREAL_0:2,FINSEQ_1:3; then
         i in dom PR1 & j in dom PR1 by A18,A22,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                             by FINSEQ_1:def 7;
@@ -1288,8 +1286,8 @@ A22:     i <= len PR1 & j <= n by A1,A18,XREAL_1:2; then
         consider i,f,p,q such that A23: 1 <= i & i < n and
                                    A24: p '&' q = Suc(f) & f = (PR1.i)`1 &
                                     Ant(f)^<*p*> = (PR1.n)`1 by A2,A3,Def7;
-A25:    1 <= len PR+i & len PR+i < n+len PR by A23,NAT_1:37,XREAL_1:8;
-        i <= len PR1 by A1,A23,XREAL_1:2; then
+A25:    1 <= len PR+i & len PR+i < n+len PR by A23,NAT_1:12,XREAL_1:8;
+        i <= len PR1 by A1,A23,XXREAL_0:2; then
         i in dom PR1 by A23,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
         hence thesis by A3,A24,A25;
@@ -1298,8 +1296,8 @@ A25:    1 <= len PR+i & len PR+i < n+len PR by A23,NAT_1:37,XREAL_1:8;
         consider i,f,p,q such that A26: 1 <= i & i < n and
                                    A27: p '&' q = Suc(f) & f = (PR1.i)`1 &
                                 Ant(f)^<*q*>= (PR1.n)`1 by A2,A3,Def7;
-A28:    1 <= len PR+i & len PR+i < n+len PR by A26,NAT_1:37,XREAL_1:8;
-        i <= len PR1 by A1,A26,XREAL_1:2; then
+A28:    1 <= len PR+i & len PR+i < n+len PR by A26,NAT_1:12,XREAL_1:8;
+        i <= len PR1 by A1,A26,XXREAL_0:2; then
         i in dom PR1 by A26,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
         hence thesis by A3,A27,A28;
@@ -1308,8 +1306,8 @@ A28:    1 <= len PR+i & len PR+i < n+len PR by A26,NAT_1:37,XREAL_1:8;
         consider i,f,p,x,y such that A29: 1 <= i & i < n and
                                      A30: Suc(f) = All(x,p) &
                  f = (PR1.i)`1 & Ant(f)^<*p.(x,y)*> = (PR1.n)`1 by A2,A3,Def7;
-A31:    1 <= len PR+i & len PR+i < n+len PR by A29,NAT_1:37,XREAL_1:8;
-        i <= len PR1 by A1,A29,XREAL_1:2; then
+A31:    1 <= len PR+i & len PR+i < n+len PR by A29,NAT_1:12,XREAL_1:8;
+        i <= len PR1 by A1,A29,XXREAL_0:2; then
         i in dom PR1 by A29,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
         hence thesis by A3,A30,A31;
@@ -1320,8 +1318,8 @@ A31:    1 <= len PR+i & len PR+i < n+len PR by A29,NAT_1:37,XREAL_1:8;
                                     not y in still_not-bound_in (Ant(f)) &
                                     not y in still_not-bound_in All(x,p) &
         f = (PR1.i)`1 & Ant(f)^<*All(x,p)*> = (PR1.n)`1 by A2,A3,Def7;
-A34:    1 <= len PR+i & len PR+i < n+len PR by A32,NAT_1:37,XREAL_1:8;
-        i <= len PR1 by A1,A32,XREAL_1:2; then
+A34:    1 <= len PR+i & len PR+i < n+len PR by A32,NAT_1:12,XREAL_1:8;
+        i <= len PR1 by A1,A32,XXREAL_0:2; then
         i in dom PR1 by A32,FINSEQ_3:27; then
         PR1.i = (PR^PR1).(len PR+i) by FINSEQ_1:def 7;
         hence thesis by A3,A33,A34;
@@ -1359,7 +1357,7 @@ A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1; then
         PR1.k = [g,2]  by FINSEQ_1:57; then
         (PR1.k)`1 = g & (PR1.k)`2 = 2 by MCART_1:7; then
 A13:    (PR2.n)`1 = g & (PR2.n)`2 = 2 by A11,FINSEQ_1:def 7;
-A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:38; then
+A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13; then
         len PR in dom PR by FINSEQ_3:27; then
         f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
         hence PR2,n is_a_correct_step by A1,A13,A14,Def7;
@@ -1411,7 +1409,7 @@ A14:      1 <= n & n <= len PR by FINSEQ_3:27; then
           PR,n is_a_correct_step by A2,Def8; then
 A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           len PR <= len (PR^PR1) by Th6; then
-          1 <= n & n <= len (PR^PR1) by A14,XREAL_1:2;
+          1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
         now given k such that A16: k in dom PR1 & n = len PR + k;
@@ -1419,8 +1417,8 @@ A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27; then
           PR1,k is_a_correct_step by A3,Def8; then
 A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
-          k <= n by A16,NAT_1:29; then
-          1 <= n & n <= len (PR^PR1) by A17,A19,XREAL_1:2,FINSEQ_1:35;
+          k <= n by A16,NAT_1:11; then
+          1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
@@ -1438,7 +1436,7 @@ A24:    1 <= len PR & len PR < len (PR^PR1) by A6,Th6; then
 A25:    f = ((PR^PR1).(len PR))`1 by A2,FINSEQ_1:def 7;
         len PR in dom (PR^PR1) by A24,FINSEQ_3:27; then
 A26:    f = (PR3.(len PR))`1 by A25,FINSEQ_1:def 7;
-A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:38;
+A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:13;
         1 <= len PR1 by A23,Th6; then
         len PR1 in dom PR1 by FINSEQ_3:27; then
         g = ((PR^PR1).(len PR + len PR1))`1 by A3,FINSEQ_1:def 7; then
@@ -1494,7 +1492,7 @@ A14:      1 <= n & n <= len PR by FINSEQ_3:27; then
           PR,n is_a_correct_step by A2,Def8; then
 A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           len PR <= len (PR^PR1) by Th6; then
-          1 <= n & n <= len (PR^PR1) by A14,XREAL_1:2;
+          1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
         now given k such that A16: k in dom PR1 & n = len PR + k;
@@ -1502,8 +1500,8 @@ A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27; then
           PR1,k is_a_correct_step by A3,Def8; then
 A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
-          k <= n by A16,NAT_1:29; then
-          1 <= n & n <= len (PR^PR1) by A17,A19,XREAL_1:2,FINSEQ_1:35;
+          k <= n by A16,NAT_1:11; then
+          1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
@@ -1520,7 +1518,7 @@ A24:    1 <= len PR & len PR < len (PR^PR1) by A6,Th6; then
 A25:    f = ((PR^PR1).(len PR))`1 by A2,FINSEQ_1:def 7;
         len PR in dom (PR^PR1) by A24,FINSEQ_3:27; then
 A26:    f = (PR3.(len PR))`1 by A25,FINSEQ_1:def 7;
-A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:38;
+A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:13;
         1 <= len PR1 by A23,Th6; then
         len PR1 in dom PR1 by FINSEQ_3:27; then
         g = ((PR^PR1).(len PR + len PR1))`1 by A3,FINSEQ_1:def 7; then
@@ -1576,7 +1574,7 @@ A14:      1 <= n & n <= len PR by FINSEQ_3:27; then
           PR,n is_a_correct_step by A2,Def8; then
 A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           len PR <= len (PR^PR1) by Th6; then
-          1 <= n & n <= len (PR^PR1) by A14,XREAL_1:2;
+          1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
         now given k such that A16: k in dom PR1 & n = len PR + k;
@@ -1584,8 +1582,8 @@ A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27; then
           PR1,k is_a_correct_step by A3,Def8; then
 A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
-          k <= n by A16,NAT_1:29; then
-          1 <= n & n <= len (PR^PR1) by A17,A19,XREAL_1:2,FINSEQ_1:35;
+          k <= n by A16,NAT_1:11; then
+          1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
@@ -1604,7 +1602,7 @@ A24:    1 <= len PR & len PR < len (PR^PR1) by A6,Th6; then
 A25:    f = ((PR^PR1).(len PR))`1 by A2,FINSEQ_1:def 7;
         len PR in dom (PR^PR1) by A24,FINSEQ_3:27; then
 A26:    f = (PR3.(len PR))`1 by A25,FINSEQ_1:def 7;
-A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:38;
+A27:    1 <= len (PR^PR1) & len (PR^PR1) < n by A7,A20,A21,Th6,NAT_1:13;
         1 <= len PR1 by A23,Th6; then
         len PR1 in dom PR1 by FINSEQ_3:27; then
         g = ((PR^PR1).(len PR + len PR1))`1 by A3,FINSEQ_1:def 7; then
@@ -1660,7 +1658,7 @@ A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1; then
         PR1.k = [Ant(f)^<*p*>,6] by FINSEQ_1:57; then
         (PR1.k)`1 = Ant(f)^<*p*> & (PR1.k)`2 = 6 by MCART_1:7; then
 A13:    (PR2.n)`1 = Ant(f)^<*p*> & (PR2.n)`2 = 6 by A11,FINSEQ_1:def 7;
-A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:38; then
+A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13; then
         len PR in dom PR by FINSEQ_3:27; then
         f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
         hence PR2,n is_a_correct_step by A1,A13,A14,Def7;
@@ -1711,7 +1709,7 @@ A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1; then
         PR1.k = [Ant(f)^<*q*>,7] by FINSEQ_1:57; then
         (PR1.k)`1 = Ant(f)^<*q*> & (PR1.k)`2 = 7 by MCART_1:7; then
 A13:    (PR2.n)`1 = Ant(f)^<*q*> & (PR2.n)`2 = 7 by A11,FINSEQ_1:def 7;
-A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:38; then
+A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13; then
         len PR in dom PR by FINSEQ_3:27; then
         f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
         hence PR2,n is_a_correct_step by A1,A13,A14,Def7;
@@ -1762,7 +1760,7 @@ A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1; then
         PR1.k = [Ant(f)^<*p.(x,y)*>,8] by FINSEQ_1:57; then
         (PR1.k)`1 = Ant(f)^<*p.(x,y)*> & (PR1.k)`2 = 8 by MCART_1:7; then
 A13:    (PR2.n)`1 = Ant(f)^<*p.(x,y)*> & (PR2.n)`2 = 8 by A11,FINSEQ_1:def 7;
-A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:38; then
+A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13; then
         len PR in dom PR by FINSEQ_3:27; then
         f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
         hence PR2,n is_a_correct_step by A1,A13,A14,Def7;
@@ -1816,7 +1814,7 @@ A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1; then
         PR1.k = [Ant(f)^<*All(x,p)*>,9] by FINSEQ_1:57; then
         (PR1.k)`1 = Ant(f)^<*All(x,p)*> & (PR1.k)`2 = 9 by MCART_1:7; then
 A13:    (PR2.n)`1 = Ant(f)^<*All(x,p)*> & (PR2.n)`2 = 9 by A11,FINSEQ_1:def 7;
-A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:38; then
+A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13; then
         len PR in dom PR by FINSEQ_3:27; then
         f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
         hence PR2,n is_a_correct_step by A1,A13,A14,Def7;
@@ -1884,13 +1882,13 @@ A7: |- Ant(f1)^<*p*> by A2,A6,Th44;
     1+1 <= len f + 1 by A1,XREAL_1:8; then
     1+1 <= len f + len <*p*> by FINSEQ_1:56; then
     1+1 <= len f3 by FINSEQ_1:35; then
-A8: 1 < len f3 by NAT_1:38;
+A8: 1 < len f3 by NAT_1:13;
 A9: Ant(f1) = Ant(f)^<*'not' Suc(f)*> by Th5; then
     1 <= len Ant(f1) by Th10; then
     1+1 <= len Ant(f1) + 1 by XREAL_1:8; then
     1+1 <= len Ant(f1) + len <*p*> by FINSEQ_1:56; then
     1+1 <= len f4 by FINSEQ_1:35; then
-A10: 1 < len f4 by NAT_1:38;
+A10: 1 < len f4 by NAT_1:13;
     Ant(f4) = Ant(f1) by Th5; then
     Ant(Ant(f4)) = Ant(f) by A9,Th5; then
 A11: Ant(Ant(f4)) = Ant(Ant(f3)) by Th5;
@@ -2179,7 +2177,7 @@ A3: Ant(f1) = f^<*p,'not' p *> by FINSEQ_1:def 9; then
 A4: (Ant(f1)).(len f+1) = p by Th14;
     len f+2 = len f + len <*p,'not' p *> by FINSEQ_1:61; then
     len f+2 = len Ant(f1) by A3,FINSEQ_1:35; then
-    1 <= len f+1 & len f+1 <= len Ant(f1) by XREAL_1:8,NAT_1:29; then
+    1 <= len f+1 & len f+1 <= len Ant(f1) by XREAL_1:8,NAT_1:11; then
     len f+1 in dom Ant(f1) by FINSEQ_3:27; then
     Suc(f1) is_tail_of Ant(f1) by A2,A4,Def3; then
 A5: |- f1 by Th33;
@@ -2244,7 +2242,7 @@ A7: Ant(f2) = f^<*'not' 'not' p,'not' p *> by FINSEQ_1:def 9; then
 A8: (Ant(f2)).(len f+1) = 'not' 'not' p by Th14;
     len f+2 = len f + len <*'not' 'not' p,'not' p *> by FINSEQ_1:61; then
     len f+2 = len Ant(f2) by A7,FINSEQ_1:35; then
-    1 <= len f+1 & len f+1 <= len Ant(f2) by XREAL_1:8,NAT_1:29; then
+    1 <= len f+1 & len f+1 <= len Ant(f2) by XREAL_1:8,NAT_1:11; then
     len f+1 in dom Ant(f2) by FINSEQ_3:27; then
     Suc(f2) is_tail_of Ant(f2) by A6,A8,Def3; then
 A9: |- f2 by Th33;

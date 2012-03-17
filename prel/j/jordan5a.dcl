@@ -15,6 +15,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -48,16 +50,16 @@
 </ArgTypes>
 <Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -67,15 +69,15 @@
 <Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="35"/>
 <Adjective nr="36"/>
-<Adjective nr="73"/>
+<Adjective nr="42"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 </Registrations>

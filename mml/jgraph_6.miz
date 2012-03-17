@@ -11,16 +11,17 @@ environ
       ORDINAL2, TOPS_2, ARYTM_1, ARYTM, COMPLEX1, MCART_1, JGRAPH_3, BORSUK_1,
       TOPREAL1, TOPREAL2, JORDAN3, PSCOMP_1, REALSET1, JORDAN5C, JORDAN6,
       JGRAPH_2, JGRAPH_6, RELAT_2, FINSEQ_1, FINSEQ_4, TARSKI, TOPS_1, FUNCT_4,
-      JORDAN17, ZF_LANG;
+      JORDAN17, ZF_LANG, NAT_1;
  notations XBOOLE_0, ORDINAL1, XCMPLX_0, COMPLEX1, EUCLID, TARSKI, RELAT_1,
       TOPS_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SUBSET_1, FINSEQ_1,
       STRUCT_0, TOPMETR, COMPTS_1, METRIC_1, SQUARE_1, RCOMP_1, PRE_TOPC,
       FUNCT_4, JGRAPH_3, JORDAN5C, JORDAN6, TOPREAL2, CONNSP_1, FINSEQ_4,
       TOPS_1, JORDAN17, JGRAPH_2, NUMBERS, XREAL_0, TOPRNS_1, TOPREAL1,
-      PSCOMP_1, REAL_1, NAT_1, SPPOL_2, XXREAL_0;
+      PSCOMP_1, REAL_1, NAT_1, NAT_D, SPPOL_2, XXREAL_0;
  constructors FUNCT_4, REAL_1, SQUARE_1, NAT_1, COMPLEX1, RCOMP_1, FINSEQ_4,
       TOPS_1, CONNSP_1, TOPS_2, COMPTS_1, TOPRNS_1, TOPMETR, TOPREAL1, SPPOL_2,
-      PSCOMP_1, JORDAN5C, JORDAN6, JGRAPH_2, JGRAPH_3, JORDAN17;
+      PSCOMP_1, JORDAN5C, JORDAN6, JGRAPH_2, JGRAPH_3, JORDAN17, BINOP_2,
+      NAT_D;
  registrations STRUCT_0, RELSET_1, FUNCT_1, EUCLID, PRE_TOPC, TOPMETR,
       SQUARE_1, PSCOMP_1, BORSUK_1, TOPREAL2, JGRAPH_3, TOPS_1, JGRAPH_2,
       XREAL_0, NAT_1, MEMBERED, XBOOLE_0, SPPOL_2, TOPREAL1, XXREAL_0, FUNCT_2,
@@ -40,87 +41,21 @@ environ
 
 begin :: Preliminaries
 
-canceled;
-
-theorem Th2: for a,b,r being real number st 0<=r & r<=1 & a<=b holds
- a<=(1-r)*a+r*b & (1-r)*a+r*b<=b by XREAL_1:174,175;
-
  Lm1:
   for a,b being real number st a>=0 & b>0 or a>0 & b>=0 holds a+b>0
     by XREAL_1:36;
 
-canceled;
+ Lm2: for a,b being real number st a>=0 & b>=0
+holds a*sqrt(b)=sqrt(a^2*b) by SQUARE_1:124;
 
-theorem Th4: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
-holds a^2*b^2<=1
-proof let a,b be real number;
- assume A1: -1<=a & a<=1 & -1<=b & b<=1;
-  then A2: a^2<=1 by JGRAPH_2:7,SQUARE_1:59;
-  A3: b^2<=1 by A1,JGRAPH_2:7,SQUARE_1:59;
-       0<=b^2 by XREAL_1:65;
-  then a^2*b^2 <= 1*b^2 by A2,XREAL_1:66;
- hence a^2*b^2<=1 by A3,XXREAL_0:2;
-end;
-
-theorem Th5: for a,b being real number st a>=0 & b>=0
-holds a*sqrt(b)=sqrt(a^2*b)
-proof let a,b be real number;
- assume A1: a>=0 & b>=0;
-  then A2: sqrt(a^2)=a by SQUARE_1:89;
-       a^2>=0 by XREAL_1:65;
- hence a*sqrt(b)=sqrt(a^2*b) by A1,A2,SQUARE_1:97;
-end;
-
-Lm2: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
-holds (1+a^2)*b^2<=1+b^2
-proof let a,b be real number;
-  assume -1<=a & a<=1 & -1<=b & b<=1;
-  then a^2*b^2<=1 by Th4;
-  then 1*b^2+a^2*b^2<=1+b^2 by XREAL_1:9;
- hence (1+a^2)*b^2<=1+b^2;
-end;
-
-theorem Th6: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
+ Lm3: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
 holds (-b)*sqrt(1+a^2)<=sqrt(1+b^2) & -sqrt(1+b^2)<= b*sqrt(1+a^2)
-proof let a,b be real number;
-  assume A1: -1<=a & a<=1 & -1<=b & b<=1;
-       a^2>=0 by XREAL_1:65;
-  then 1+a^2>=1+0 by XREAL_1:9;
-  then A2: 1+a^2>=0;
-  then A3: sqrt(1+a^2)>=0 by SQUARE_1:def 4;
-       b^2>=0 by XREAL_1:65;
-  then 1+b^2>=1+0 by XREAL_1:9;
-  then 1+b^2>=0;
-  then A4: sqrt(1+b^2)>=0 by SQUARE_1:def 4;
-  A5: now per cases;
-  case b>=0;
-    then -b<=0 by XREAL_1:60;
-   hence (-b)*sqrt(1+a^2)<=sqrt(1+b^2) by A3,A4,XREAL_1:133;
-  end;
-  case b<0; then -b>0 by XREAL_1:60;
-    then A6: (-b)*sqrt(1+a^2)=sqrt((-b)^2*(1+a^2)) by A2,Th5;
-         (1+a^2)*b^2<=1+b^2 by A1,Lm2;
-    then A7: (-b)^2*(1+a^2)<=1+b^2;
-         (-b)^2>=0 by XREAL_1:65;
-    then (-b)^2*(1+a^2)>=0 by A2,XREAL_1:129;
-   hence (-b)*sqrt(1+a^2)<=sqrt(1+b^2) by A6,A7,SQUARE_1:94;
-  end;
-  end;
-  then -((-b)*sqrt(1+a^2)) >= - sqrt(1+b^2) by XREAL_1:26;
- hence (-b)*sqrt(1+a^2)<=sqrt(1+b^2) & -sqrt(1+b^2)<= b*sqrt(1+a^2) by A5;
-end;
+by SQUARE_1:125;
 
-theorem Th7: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
-holds b*sqrt(1+a^2)<=sqrt(1+b^2)
-proof let a,b be real number;
-  assume A1: -1<=a & a<=1 & -1<=b & b<=1;
-   then A2: --1>=-b by XREAL_1:26;
-        -1<=-b by A1,XREAL_1:26;
-   then (--b)*sqrt(1+a^2)<=sqrt(1+(-b)^2) by A1,A2,Th6;
- hence b*sqrt(1+a^2)<=sqrt(1+b^2);
-end;
+ Lm4: for a,b being real number st -1<=a & a<=1 & -1<=b & b<=1
+holds b*sqrt(1+a^2)<=sqrt(1+b^2) by SQUARE_1:126;
 
-Lm3: for a,b being real number st b<=0 & a<=b
+Lm5: for a,b being real number st b<=0 & a<=b
 holds a*sqrt(1+b^2)<= b*sqrt(1+a^2)
 proof let a,b be real number;
  assume A1: b<=0 & a<=b;
@@ -132,12 +67,12 @@ proof let a,b be real number;
   then A3: 1+b^2>=0;
        --b<=0 by A1;
   then -b>=0 by XREAL_1:60;
-  then A4: (-b)*sqrt(1+a^2)=sqrt((-b)^2*(1+a^2)) by A2,Th5;
+  then A4: (-b)*sqrt(1+a^2)=sqrt((-b)^2*(1+a^2)) by A2,Lm2;
        --a<=0 by A1;
   then -a>=0 by XREAL_1:60;
-  then A5: (-a)*sqrt(1+b^2)=sqrt((-a)^2*(1+b^2)) by A3,Th5;
+  then A5: (-a)*sqrt(1+b^2)=sqrt((-a)^2*(1+b^2)) by A3,Lm2;
        a<b or a=b by A1,REAL_1:def 5;
-  then b^2<a^2 or a=b by A1,JGRAPH_5:2;
+  then b^2<a^2 or a=b by A1,SQUARE_1:114;
   then A6: b^2*1+b^2*a^2<=a^2*1+a^2*b^2 by XREAL_1:9;
        (b)^2>=0 by XREAL_1:65;
   then (b)^2*(1+a^2)>=0 by A2,XREAL_1:129;
@@ -147,13 +82,13 @@ proof let a,b be real number;
    hence (a)*sqrt(1+b^2)<=b*sqrt(1+a^2) by XREAL_1:26;
 end;
 
-Lm4: for a,b being real number st a<=0 & a<=b
+Lm6: for a,b being real number st a<=0 & a<=b
 holds a*sqrt(1+b^2)<= b*sqrt(1+a^2)
 proof let a,b be real number;
  assume A1: a<=0 & a<=b;
       now per cases;
  case b<=0;
-  hence b*sqrt(1+a^2)>= a*sqrt(1+b^2) by A1,Lm3;
+  hence b*sqrt(1+a^2)>= a*sqrt(1+b^2) by A1,Lm5;
  end;
  case A2: b>0;
       A3: (b)^2 >=0 by XREAL_1:65;
@@ -169,31 +104,23 @@ proof let a,b be real number;
  hence thesis;
 end;
 
-Lm5: for a,b being real number st a>=0 & a>=b
+Lm7: for a,b being real number st a>=0 & a>=b
 holds a*sqrt(1+b^2)>= b*sqrt(1+a^2)
 proof let a,b be real number;
  assume A1: a>=0 & a>=b;
   then A2: -a<=0 by XREAL_1:60;
        -a <= -b by A1,XREAL_1:26;
-  then (-a)*sqrt(1+(-b)^2)<= (-b)*sqrt(1+(-a)^2) by A2,Lm4;
+  then (-a)*sqrt(1+(-b)^2)<= (-b)*sqrt(1+(-a)^2) by A2,Lm6;
   then (-a)*sqrt(1+(b)^2)<= (-b)*sqrt(1+(-a)^2);
   then (-a)*sqrt(1+(b)^2)<= (-b)*sqrt(1+(a)^2);
   then -(a*sqrt(1+(b)^2))<= -(b*sqrt(1+(a)^2));
   hence a*sqrt(1+b^2)>= b*sqrt(1+a^2) by XREAL_1:26;
 end;
 
-theorem Th8: for a,b being real number st a>=b
-holds a*sqrt(1+b^2)>= b*sqrt(1+a^2)
-proof let a,b be real number;
- assume A1: a>=b;
-  per cases;
-  suppose a>=0;
-   hence thesis by A1,Lm5;
-  end;
-  suppose a<0;
-   hence thesis by A1,Lm3;
-end;
-end;
+ Lm8: for a,b being real number st a>=b
+holds a*sqrt(1+b^2)>= b*sqrt(1+a^2) by SQUARE_1:127;
+
+canceled 8;
 
 theorem Th9: for a,c,d being real number,p being Point of TOP-REAL 2
 st c <=d & p in LSeg(|[a,c]|,|[a,d]|) holds p`1=a & c <=p`2 & p`2<=d
@@ -636,20 +563,20 @@ end;
 
 begin :: General Fashoda Theorem for Unit Circle
 
-Lm6: (|[-1,0]|)`1 =-1 & (|[-1,0]|)`2=0 & (|[1,0]|)`1 =1 & (|[1,0]|)`2=0 &
+Lm9: (|[-1,0]|)`1 =-1 & (|[-1,0]|)`2=0 & (|[1,0]|)`1 =1 & (|[1,0]|)`2=0 &
       (|[0,-1]|)`1 =0 & (|[0,-1]|)`2=-1 & (|[0,1]|)`1 =0 & (|[0,1]|)`2=1
                by EUCLID:56;
-Lm7: now thus |.(|[-1,0]|).|=sqrt((-1)^2+0^2) by Lm6,JGRAPH_3:10
+Lm10: now thus |.(|[-1,0]|).|=sqrt((-1)^2+0^2) by Lm9,JGRAPH_3:10
        .=1 by SQUARE_1:83;
-       thus |.(|[1,0]|).|=sqrt(1^2+0^2) by Lm6,JGRAPH_3:10
+       thus |.(|[1,0]|).|=sqrt(1^2+0^2) by Lm9,JGRAPH_3:10
                         .=1 by SQUARE_1:83;
-       thus |.(|[0,-1]|).|=sqrt(0^2+(-1)^2) by Lm6,JGRAPH_3:10
+       thus |.(|[0,-1]|).|=sqrt(0^2+(-1)^2) by Lm9,JGRAPH_3:10
                          .=1 by SQUARE_1:83;
-       thus |.(|[0,1]|).|=sqrt(0^2+1^2) by Lm6,JGRAPH_3:10
+       thus |.(|[0,1]|).|=sqrt(0^2+1^2) by Lm9,JGRAPH_3:10
                         .=1 by SQUARE_1:83;
       end;
-Lm8: 0 in [.0,1.] by RCOMP_1:48;
-Lm9: 1 in [.0,1.] by RCOMP_1:48;
+Lm11: 0 in [.0,1.] by RCOMP_1:48;
+Lm12: 1 in [.0,1.] by RCOMP_1:48;
 
 reserve p,p1,p2,p3,q,q1,q2 for Point of TOP-REAL 2,i,j for Element of NAT,
         r,lambda for Real;
@@ -766,24 +693,24 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
    case A6: p1=p2;
     thus rng f meets rng g
        proof
-        A7: p1 in rng f by A2,A3,Lm9,BORSUK_1:83,FUNCT_1:def 5;
-             p2 in rng g by A2,A4,Lm8,BORSUK_1:83,FUNCT_1:def 5;
+        A7: p1 in rng f by A2,A3,Lm12,BORSUK_1:83,FUNCT_1:def 5;
+             p2 in rng g by A2,A4,Lm11,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A6,A7,XBOOLE_0:3;
        end;
    end;
    case A8: p2=p3;
     thus rng f meets rng g
        proof
-        A9: p3 in rng f by A2,A3,Lm8,BORSUK_1:83,FUNCT_1:def 5;
-             p2 in rng g by A2,A4,Lm8,BORSUK_1:83,FUNCT_1:def 5;
+        A9: p3 in rng f by A2,A3,Lm11,BORSUK_1:83,FUNCT_1:def 5;
+             p2 in rng g by A2,A4,Lm11,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A8,A9,XBOOLE_0:3;
        end;
    end;
    case A10: p3=p4;
     thus rng f meets rng g
        proof
-        A11: p3 in rng f by A2,A3,Lm8,BORSUK_1:83,FUNCT_1:def 5;
-             p4 in rng g by A2,A4,Lm9,BORSUK_1:83,FUNCT_1:def 5;
+        A11: p3 in rng f by A2,A3,Lm11,BORSUK_1:83,FUNCT_1:def 5;
+             p4 in rng g by A2,A4,Lm12,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A10,A11,XBOOLE_0:3;
        end;
    end;
@@ -801,14 +728,14 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
     reconsider g2=h*g as Function of I[01],TOP-REAL 2;
     A14: dom f2=the carrier of I[01] by FUNCT_2:def 1;
     A15: dom g2=the carrier of I[01] by FUNCT_2:def 1;
-    A16: f2.1= |[-1,0]| by A2,A12,A14,Lm9,BORSUK_1:83,FUNCT_1:22;
-    A17: g2.1= |[0,-1]| by A2,A12,A15,Lm9,BORSUK_1:83,FUNCT_1:22;
-    A18: f2.0= |[1,0]| by A2,A12,A14,Lm8,BORSUK_1:83,FUNCT_1:22;
-    A19: g2.0= |[0,1]| by A2,A12,A15,Lm8,BORSUK_1:83,FUNCT_1:22;
+    A16: f2.1= |[-1,0]| by A2,A12,A14,Lm12,BORSUK_1:83,FUNCT_1:22;
+    A17: g2.1= |[0,-1]| by A2,A12,A15,Lm12,BORSUK_1:83,FUNCT_1:22;
+    A18: f2.0= |[1,0]| by A2,A12,A14,Lm11,BORSUK_1:83,FUNCT_1:22;
+    A19: g2.0= |[0,1]| by A2,A12,A15,Lm11,BORSUK_1:83,FUNCT_1:22;
     A20: f2 is continuous one-to-one &
      g2 is continuous one-to-one &
      f2.1=|[-1,0]| & f2.0=|[1,0]| & g2.1=|[0,-1]| & g2.0= |[0,1]|
-                        by A2,A12,A14,A15,Lm8,Lm9,BORSUK_1:83,FUNCT_1:22
+                        by A2,A12,A14,A15,Lm11,Lm12,BORSUK_1:83,FUNCT_1:22
 ,JGRAPH_5:8,9;
     A21: rng f2 c= C0
      proof let y be set;assume y in rng f2;
@@ -861,13 +788,13 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
     then reconsider KYN={q4 where q4 is Point of TOP-REAL 2:
         |.q4.|=1 & q4`2<=q4`1 & q4`2<=-q4`1} as Subset of TOP-REAL 2;
     reconsider O=0,I=1 as Point of I[01] by BORSUK_1:83,RCOMP_1:48;
-          -(|[-1,0]|)`1=1 by Lm6;
-    then A33: f2.I in KXN by A16,Lm6,Lm7;
-    A34: f2.O in KXP by A18,Lm6,Lm7;
-          -(|[0,-1]|)`1= 0 by Lm6;
-    then A35: g2.I in KYN by A17,Lm6,Lm7;
-          -(|[0,1]|)`1= 0 by Lm6;
-    then g2.O in KYP by A19,Lm6,Lm7;
+          -(|[-1,0]|)`1=1 by Lm9;
+    then A33: f2.I in KXN by A16,Lm9,Lm10;
+    A34: f2.O in KXP by A18,Lm9,Lm10;
+          -(|[0,-1]|)`1= 0 by Lm9;
+    then A35: g2.I in KYN by A17,Lm9,Lm10;
+          -(|[0,1]|)`1= 0 by Lm9;
+    then g2.O in KYP by A19,Lm9,Lm10;
     then rng f2 meets rng g2 by A2,A20,A21,A27,A33,A34,A35,Th23;
     then consider x2 being set such that
     A36: x2 in rng f2 & x2 in rng g2 by XBOOLE_0:3;
@@ -917,24 +844,24 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
    case A6: p1=p2;
     thus rng f meets rng g
        proof
-        A7: p1 in rng f by A2,A3,Lm9,BORSUK_1:83,FUNCT_1:def 5;
-             p2 in rng g by A2,A4,Lm9,BORSUK_1:83,FUNCT_1:def 5;
+        A7: p1 in rng f by A2,A3,Lm12,BORSUK_1:83,FUNCT_1:def 5;
+             p2 in rng g by A2,A4,Lm12,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A6,A7,XBOOLE_0:3;
        end;
    end;
    case A8: p2=p3;
     thus rng f meets rng g
        proof
-        A9: p3 in rng f by A2,A3,Lm8,BORSUK_1:83,FUNCT_1:def 5;
-             p2 in rng g by A2,A4,Lm9,BORSUK_1:83,FUNCT_1:def 5;
+        A9: p3 in rng f by A2,A3,Lm11,BORSUK_1:83,FUNCT_1:def 5;
+             p2 in rng g by A2,A4,Lm12,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A8,A9,XBOOLE_0:3;
        end;
    end;
    case A10: p3=p4;
     thus rng f meets rng g
        proof
-        A11: p3 in rng f by A2,A3,Lm8,BORSUK_1:83,FUNCT_1:def 5;
-             p4 in rng g by A2,A4,Lm8,BORSUK_1:83,FUNCT_1:def 5;
+        A11: p3 in rng f by A2,A3,Lm11,BORSUK_1:83,FUNCT_1:def 5;
+             p4 in rng g by A2,A4,Lm11,BORSUK_1:83,FUNCT_1:def 5;
         hence thesis by A10,A11,XBOOLE_0:3;
        end;
    end;
@@ -952,14 +879,14 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
     reconsider g2=h*g as Function of I[01],TOP-REAL 2;
     A14: dom f2=the carrier of I[01] by FUNCT_2:def 1;
     A15: dom g2=the carrier of I[01] by FUNCT_2:def 1;
-    A16: f2.1= |[-1,0]| by A2,A12,A14,Lm9,BORSUK_1:83,FUNCT_1:22;
-    A17: g2.1= |[0,1]| by A2,A12,A15,Lm9,BORSUK_1:83,FUNCT_1:22;
-    A18: f2.0= |[1,0]| by A2,A12,A14,Lm8,BORSUK_1:83,FUNCT_1:22;
-    A19: g2.0= |[0,-1]| by A2,A12,A15,Lm8,BORSUK_1:83,FUNCT_1:22;
+    A16: f2.1= |[-1,0]| by A2,A12,A14,Lm12,BORSUK_1:83,FUNCT_1:22;
+    A17: g2.1= |[0,1]| by A2,A12,A15,Lm12,BORSUK_1:83,FUNCT_1:22;
+    A18: f2.0= |[1,0]| by A2,A12,A14,Lm11,BORSUK_1:83,FUNCT_1:22;
+    A19: g2.0= |[0,-1]| by A2,A12,A15,Lm11,BORSUK_1:83,FUNCT_1:22;
     A20: f2 is continuous one-to-one &
      g2 is continuous one-to-one &
      f2.1=|[-1,0]| & f2.0=|[1,0]| & g2.1=|[0,1]| & g2.0= |[0,-1]|
-                        by A2,A12,A14,A15,Lm8,Lm9,BORSUK_1:83,FUNCT_1:22
+                        by A2,A12,A14,A15,Lm11,Lm12,BORSUK_1:83,FUNCT_1:22
 ,JGRAPH_5:8,9;
     A21: rng f2 c= C0
      proof let y be set;assume y in rng f2;
@@ -1012,13 +939,13 @@ P being compact non empty Subset of TOP-REAL 2,C0 being Subset of TOP-REAL 2
     then reconsider KYN={q4 where q4 is Point of TOP-REAL 2:
         |.q4.|=1 & q4`2<=q4`1 & q4`2<=-q4`1} as Subset of TOP-REAL 2;
     reconsider O=0,I=1 as Point of I[01] by BORSUK_1:83,RCOMP_1:48;
-          -(|[-1,0]|)`1=1 by Lm6;
-    then A33: f2.I in KXN by A16,Lm6,Lm7;
-    A34: f2.O in KXP by A18,Lm6,Lm7;
-          -(|[0,-1]|)`1= 0 by Lm6;
-    then A35: g2.I in KYP by A17,Lm6,Lm7;
-          -(|[0,1]|)`1= 0 by Lm6;
-    then g2.O in KYN by A19,Lm6,Lm7;
+          -(|[-1,0]|)`1=1 by Lm9;
+    then A33: f2.I in KXN by A16,Lm9,Lm10;
+    A34: f2.O in KXP by A18,Lm9,Lm10;
+          -(|[0,-1]|)`1= 0 by Lm9;
+    then A35: g2.I in KYP by A17,Lm9,Lm10;
+          -(|[0,1]|)`1= 0 by Lm9;
+    then g2.O in KYN by A19,Lm9,Lm10;
     then rng f2 meets rng g2 by A2,A20,A21,A27,A33,A34,A35,Th24;
     then consider x2 being set such that
     A36: x2 in rng f2 & x2 in rng g2 by XBOOLE_0:3;
@@ -1076,7 +1003,7 @@ notation let a,b,c,d be real number;
   synonym rectangle(a,b,c,d) for [.a,b,c,d.];
 end;
 
-Lm10:
+Lm13:
 for a,b,c,d being real number st a <= b & c <= d holds
 rectangle(a,b,c,d) =
 {p: p`1=a & c <=p`2 & p`2<=d or p`2=d & a<=p`1 & p`1<=b or
@@ -1581,7 +1508,7 @@ theorem Th34: for Kb,Cb being Subset of TOP-REAL 2 st
         end;
         then A12: (q`1)^2>0 by SQUARE_1:74;
         A13: (q`1)^2+(q`2)^2<>0 by A10,COMPLEX1:2;
-               (q`1)^2<1^2 by A3,JGRAPH_2:8;
+               (q`1)^2<1^2 by A3,SQUARE_1:120;
           then A14: sqrt((q`1)^2)<1 by A12,SQUARE_1:83,95;
            A15: |.(|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|).|^2
           =((q`1)/sqrt(1+(q`2/(q`1))^2))^2+(q`2/sqrt(1+(q`2/(q`1))^2))^2
@@ -1623,7 +1550,7 @@ theorem Th34: for Kb,Cb being Subset of TOP-REAL 2 st
         A20: q`2 <> 0 by A16,XREAL_1:60;
         then A21: (q`2)^2>0 by SQUARE_1:74;
         A22: (q`1)^2+(q`2)^2 <>0 by A20,COMPLEX1:2;
-               (q`2)^2<1^2 by A3,JGRAPH_2:8;
+               (q`2)^2<1^2 by A3,SQUARE_1:120;
           then A23: sqrt((q`2)^2)<1 by A21,SQUARE_1:83,95;
            A24: |.(|[q`1/sqrt(1+(q`1/q`2)^2),q`2/sqrt(1+(q`1/q`2)^2)]|).|^2
           =((q`1)/sqrt(1+(q`1/(q`2))^2))^2+(q`2/sqrt(1+(q`1/(q`2))^2))^2
@@ -1707,7 +1634,7 @@ XCMPLX_1:90
 ]|
                                  by A39,JGRAPH_2:11,JGRAPH_3:def 1;
              px`2<=px`1 & --px`1>=-px`2 or px`2>=px`1 & px`2<=-px`1
-                                by A31,A32,A42,XREAL_1:66,XREAL_1:26;
+                                by A31,A32,A42,XREAL_1:66,26;
         then A45:px`2<=px`1 & px`1>=-px`2 or px`2>=px`1 & -px`2>=--px`1
                                 by XREAL_1:26;
         A46:px`1/sqrt(1+(px`2/px`1)^2)=q`1 by A31,A32,A34,XCMPLX_1:90;
@@ -1754,7 +1681,7 @@ XCMPLX_1:90
 
          then (px`1)^2-1+1<0+1 & ((px`1)^2+(px`2)^2)>0 by A49,A50,Lm1,XREAL_1:8
 ;
-          then A53:px`1<1 & px`1>-1 by JGRAPH_2:6,SQUARE_1:59;
+          then A53:px`1<1 & px`1>-1 by SQUARE_1:118,59;
           then px`2<1 & 1>-px`2 or px`2>=px`1 & -px`2>=px`1
                                 by A45,XXREAL_0:2;
           then px`2<1 & -1< --px`2 or px`2>-1 & -px`2> -1
@@ -1804,7 +1731,7 @@ XCMPLX_1:90
 ]|
                                  by A64,JGRAPH_2:11,JGRAPH_3:14;
              px`1<=px`2 & --px`2>=-px`1 or px`1>=px`2 & px`1<=-px`2
-                                by A56,A57,A66,XREAL_1:66,XREAL_1:26;
+                                by A56,A57,A66,XREAL_1:66,26;
         then A69:px`1<=px`2 & px`2>=-px`1 or px`1>=px`2 & -px`1>=--px`2
                                 by XREAL_1:26;
         A70:px`2/sqrt(1+(px`1/px`2)^2)=q`2 by A56,A57,A59,XCMPLX_1:90;
@@ -1851,7 +1778,7 @@ XCMPLX_1:90
 
          then (px`2)^2-1+1<0+1 & ((px`2)^2+(px`1)^2)>0 by A73,A74,Lm1,XREAL_1:8
 ;
-          then A77:px`2<1 & px`2>-1 by JGRAPH_2:6,SQUARE_1:59;
+          then A77:px`2<1 & px`2>-1 by SQUARE_1:118,59;
           then px`1<1 & 1>-px`1 or px`1>=px`2 & -px`1>=px`2
                                 by A69,XXREAL_0:2;
           then px`1<1 & -1< --px`1 or px`1>-1 & -px`1> -1
@@ -1917,7 +1844,7 @@ A1:Kb={p: not(-1 <=p`1 & p`1<= 1 & -1 <=p`2 & p`2<= 1)}&
         end;
         then A13: (q`1)^2>0 by SQUARE_1:74;
         A14: (q`1)^2+(q`2)^2 <>0 by A11,COMPLEX1:2;
-              (q`1)^2>1^2 by A3,A6,JGRAPH_2:5;
+              (q`1)^2>1^2 by A3,A6,SQUARE_1:117;
           then A15: sqrt((q`1)^2)>1 by SQUARE_1:83,95;
            A16: |.(|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|).|^2
           =((q`1)/sqrt(1+(q`2/(q`1))^2))^2+(q`2/sqrt(1+(q`2/(q`1))^2))^2
@@ -1975,7 +1902,7 @@ A1:Kb={p: not(-1 <=p`1 & p`1<= 1 & -1 <=p`2 & p`2<= 1)}&
           end;
          hence -1>q`2 or q`2>1;
         end;
-          then (q`2)^2>1^2 by A3,JGRAPH_2:5;
+          then (q`2)^2>1^2 by A3,SQUARE_1:117;
           then A27: sqrt((q`2)^2)>1 by SQUARE_1:83,95;
            A28: |.(|[q`1/sqrt(1+(q`1/q`2)^2),q`2/sqrt(1+(q`1/q`2)^2)]|).|^2
           =((q`1)/sqrt(1+(q`1/(q`2))^2))^2+(q`2/sqrt(1+(q`1/(q`2))^2))^2
@@ -2096,7 +2023,7 @@ XCMPLX_1:90
           ((px`1)^2-1>0 or (px`1)^2+(px`2)^2<0) by A50,XREAL_1:133;
          then (px`1)^2-1+1>0+1 & ((px`1)^2+(px`2)^2)>0 by A47,A48,Lm1,XREAL_1:8
 ;
-          then px`1>1 or px`1< -1 by JGRAPH_2:7,SQUARE_1:59;
+          then px`1>1 or px`1< -1 by SQUARE_1:119,59;
         then px in Kb by A1;
       hence ex x being set st x in dom Sq_Circ & x in Kb & y=Sq_Circ.x
                                by A29,A45,A46;
@@ -2179,7 +2106,7 @@ XCMPLX_1:90
           ((px`2)^2-1>0 or (px`1)^2+(px`2)^2<0) by A71,XREAL_1:133;
          then (px`2)^2-1+1>0+1 & ((px`1)^2+(px`2)^2)>0 by A68,A69,Lm1,XREAL_1:8
 ;
-          then px`2>1 or px`2< -1 by JGRAPH_2:7,SQUARE_1:59;
+          then px`2>1 or px`2< -1 by SQUARE_1:119,59;
         then px in Kb by A1;
       hence ex x being set st x in dom Sq_Circ & x in Kb & y=Sq_Circ.x
                                by A29,A66,A67;
@@ -2224,7 +2151,7 @@ theorem Th36: for Kb,Cb being Subset of TOP-REAL 2 st
         end;
         then A12: (q`1)^2>0 by SQUARE_1:74;
         A13: (q`1)^2+(q`2)^2 <>0 by A10,COMPLEX1:2;
-               (q`1)^2<=1^2 by A3,JGRAPH_2:7;
+               (q`1)^2<=1^2 by A3,SQUARE_1:119;
           then A14: sqrt((q`1)^2)<=1 by A12,SQUARE_1:83,94;
            A15: |.(|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|).|^2
           =((q`1)/sqrt(1+(q`2/(q`1))^2))^2+(q`2/sqrt(1+(q`2/(q`1))^2))^2
@@ -2265,7 +2192,7 @@ theorem Th36: for Kb,Cb being Subset of TOP-REAL 2 st
         A20: q`2 <>0 by A16,XREAL_1:60;
         then A21: (q`2)^2>0 by SQUARE_1:74;
         A22: (q`1)^2+(q`2)^2 <>0 by A20,COMPLEX1:2;
-               (q`2)^2<=1 by A3,JGRAPH_2:7,SQUARE_1:59;
+               (q`2)^2<=1 by A3,SQUARE_1:119,59;
           then A23: sqrt((q`2)^2)<=1 by A21,SQUARE_1:83,94;
            A24: |.(|[q`1/sqrt(1+(q`1/q`2)^2),q`2/sqrt(1+(q`1/q`2)^2)]|).|^2
           =((q`1)/sqrt(1+(q`1/(q`2))^2))^2+(q`2/sqrt(1+(q`1/(q`2))^2))^2
@@ -2348,7 +2275,7 @@ XCMPLX_1:90
 ]|
                                  by A39,JGRAPH_2:11,JGRAPH_3:def 1;
              px`2<=px`1 & --px`1>=-px`2 or px`2>=px`1 & px`2<=-px`1
-                                by A31,A32,A42,XREAL_1:66,XREAL_1:26;
+                                by A31,A32,A42,XREAL_1:66,26;
         then A45:px`2<=px`1 & px`1>=-px`2 or px`2>=px`1 & -px`2>=--px`1
                                 by XREAL_1:26;
         A46:px`1/sqrt(1+(px`2/px`1)^2)=q`1 by A31,A32,A34,XCMPLX_1:90;
@@ -2394,7 +2321,7 @@ XCMPLX_1:90
          (px`1)^2+(px`2)^2<=0 & (px`1)^2+(px`2)^2>=0 by A52,REAL_2:122;
          then (px`1)^2-1+1<=0+1 & ((px`1)^2+(px`2)^2)>=0 by A49,A50,Lm1,
 XREAL_1:9;
-          then A53:px`1<=1 & px`1>= -1 by JGRAPH_2:5,SQUARE_1:59;
+          then A53:px`1<=1 & px`1>= -1 by SQUARE_1:117,59;
           then px`2<=1 & 1>= -px`2 or px`2>= -1 & -px`2>=px`1
                                 by A45,XXREAL_0:2;
           then px`2<=1 & -1<= --px`2 or px`2>= -1 & -px`2>= -1
@@ -2444,7 +2371,7 @@ XCMPLX_1:90
 ]|
                                  by A64,JGRAPH_2:11,JGRAPH_3:14;
              px`1<=px`2 & --px`2>=-px`1 or px`1>=px`2 & px`1<=-px`2
-                                by A56,A57,A66,XREAL_1:66,XREAL_1:26;
+                                by A56,A57,A66,XREAL_1:66,26;
         then A69:px`1<=px`2 & px`2>=-px`1 or px`1>=px`2 & -px`1>=--px`2
                                 by XREAL_1:26;
         A70:px`2/sqrt(1+(px`1/px`2)^2)=q`2 by A56,A57,A59,XCMPLX_1:90;
@@ -2491,7 +2418,7 @@ XCMPLX_1:90
 
          then (px`2)^2-1+1<=0+1 & ((px`2)^2+(px`1)^2)>=0 by A73,A74,Lm1,
 XREAL_1:9;
-          then A77:px`2<=1 & px`2>= -1 by JGRAPH_2:5,SQUARE_1:59;
+          then A77:px`2<=1 & px`2>= -1 by SQUARE_1:117,59;
           then px`1<=1 & 1>= -px`1 or px`1>= -1 & -px`1>=px`2
                                 by A69,XXREAL_0:2;
           then px`1<=1 & -1<= --px`1 or px`1>= -1 & -px`1>= -1
@@ -2557,7 +2484,7 @@ theorem Th37: for Kb,Cb being Subset of TOP-REAL 2 st
         end;
         then A13: (q`1)^2>0 by SQUARE_1:74;
         A14: (q`1)^2+(q`2)^2 <>0 by A11,COMPLEX1:2;
-              (q`1)^2>=1^2 by A3,A6,JGRAPH_2:6;
+              (q`1)^2>=1^2 by A3,A6,SQUARE_1:118;
           then A15: sqrt((q`1)^2)>=1 by SQUARE_1:83,94;
            A16: |.(|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|).|^2
           =((q`1)/sqrt(1+(q`2/(q`1))^2))^2+(q`2/sqrt(1+(q`2/(q`1))^2))^2
@@ -2619,7 +2546,7 @@ theorem Th37: for Kb,Cb being Subset of TOP-REAL 2 st
           end;
          hence -1>=q`2 or q`2>=1;
         end;
-          then (q`2)^2>=1^2 by A3,JGRAPH_2:6;
+          then (q`2)^2>=1^2 by A3,SQUARE_1:118;
           then A27: sqrt((q`2)^2)>=1 by SQUARE_1:83,94;
            A28: |.(|[q`1/sqrt(1+(q`1/q`2)^2),q`2/sqrt(1+(q`1/q`2)^2)]|).|^2
           =((q`1)/sqrt(1+(q`1/(q`2))^2))^2+(q`2/sqrt(1+(q`1/(q`2))^2))^2
@@ -2735,7 +2662,7 @@ XCMPLX_1:90
          = ((px`1)^2-1)*((px`1)^2+(px`2)^2);
          then (px`1)^2-1>=0 & (px`1)^2+(px`2)^2>=0 by A48,A50,SQUARE_1:25;
          then (px`1)^2-1+1>=0+1 & ((px`1)^2+(px`2)^2)>=0 by XREAL_1:9;
-          then px`1>=1 or px`1<= -1 by JGRAPH_2:8,SQUARE_1:59;
+          then px`1>=1 or px`1<= -1 by SQUARE_1:120,59;
         then px in Kb by A1;
       hence ex x being set st x in dom Sq_Circ & x in Kb & y=Sq_Circ.x
                                by A29,A45,A46;
@@ -2818,7 +2745,7 @@ XCMPLX_1:90
            (px`2)^2-1<=0 & (px`1)^2+(px`2)^2<=0) by A71,SQUARE_1:25;
          then (px`2)^2-1+1>=0+1 & ((px`1)^2+(px`2)^2)>=0 by A68,A69,Lm1,
 XREAL_1:9;
-          then px`2>=1 or px`2<= -1 by JGRAPH_2:8,SQUARE_1:59;
+          then px`2>=1 or px`2<= -1 by SQUARE_1:120,59;
         then px in Kb by A1;
       hence ex x being set st x in dom Sq_Circ & x in Kb & y=Sq_Circ.x
                                by A29,A66,A67;
@@ -2974,7 +2901,7 @@ proof let a,b,c,d be real number;assume A1: a <= b & c <= d;
          .= (1-lambda)*(p0)`2 + (lambda*p01)`2 by TOPREAL3:9
          .= (1-lambda)*(p0)`2 + lambda*(p01)`2 by TOPREAL3:9
          .= (1-lambda)*c + lambda*d by A2,EUCLID:56;
-      then q`1 = a & q`2 <= d & q`2 >= c by A1,A13,A14,Th2;
+      then q`1 = a & q`2 <= d & q`2 >= c by A1,A13,A14,XREAL_1:174,175;
       hence a2 in L1 by A13;
      end;
     hence thesis by A4,XBOOLE_0:def 10;
@@ -3051,7 +2978,7 @@ proof let a,b,c,d be real number;assume A1: a <= b & c <= d;
          .= (1-lambda)*(p01)`1 + (lambda*p1)`1 by TOPREAL3:9
          .= (1-lambda)*(p01)`1 + lambda*(p1)`1 by TOPREAL3:9
          .= (1-lambda)*a + lambda*b by A2,EUCLID:56;
-      then q`2 = d & q`1 <= b & q`1 >= a by A1,A24,A25,Th2;
+      then q`2 = d & q`1 <= b & q`1 >= a by A1,A24,A25,XREAL_1:174,175;
       hence a2 in L2 by A24;
      end;
     hence thesis by A15,XBOOLE_0:def 10;
@@ -3126,7 +3053,7 @@ proof let a,b,c,d be real number;assume A1: a <= b & c <= d;
          .= (1-lambda)*(p0)`1 + (lambda*p10)`1 by TOPREAL3:9
          .= (1-lambda)*(p0)`1 + lambda*(p10)`1 by TOPREAL3:9
          .= (1-lambda)*a + lambda*b by A3,EUCLID:56;
-      then q`2 = c & q`1 <= b & q`1 >= a by A1,A35,A36,Th2;
+      then q`2 = c & q`1 <= b & q`1 >= a by A1,A35,A36,XREAL_1:174,175;
       hence a2 in L3 by A35;
      end;
     hence thesis by A26,XBOOLE_0:def 10;
@@ -3203,7 +3130,7 @@ proof let a,b,c,d be real number;assume A1: a <= b & c <= d;
          .= (1-lambda)*(p10)`2 + (lambda*p1)`2 by TOPREAL3:9
          .= (1-lambda)*(p10)`2 + lambda*(p1)`2 by TOPREAL3:9
          .= (1-lambda)*c + lambda*d by A3,EUCLID:56;
-      then q`1 = b & q`2 <= d & q`2 >= c by A1,A46,A47,Th2;
+      then q`1 = b & q`2 <= d & q`2 >= c by A1,A46,A47,XREAL_1:174,175;
       hence a2 in L4 by A46;
      end;
     hence thesis by A37,XBOOLE_0:def 10;
@@ -3848,7 +3775,7 @@ thus f1 is_S-Seq
       end;
      let i be Element of NAT; assume A14: 1 <= i & i + 1 <= len f1;
       then A15: i <= 1 + 1 by A5,XREAL_1:8;
-           now per cases by A14,A15,NAT_1:27;
+           now per cases by A14,A15,NAT_1:9;
        suppose A16: i = 1;
         then (f1/.i)`1 = p0`1 by A1,FINSEQ_4:27 .= a
                                   by A1,EUCLID:56
@@ -3880,7 +3807,7 @@ thus f1 is_S-Seq
        let a be set; assume a in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
        then consider i such that A20: a = LSeg(f1,i) & 1<=i & i+1<=len f1;
             i+1 <= 2 + 1 by A1,A20,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
-       then i = 1 or i = 2 by A20,NAT_1:27;
+       then i = 1 or i = 2 by A20,NAT_1:9;
        then a = LSeg(p0,p01) or a = LSeg(p01,p1) by A6,A20,TOPREAL1:def 5;
        hence a in {LSeg(p0,p01),LSeg(p01,p1)} by TARSKI:def 2;
       end;
@@ -3951,7 +3878,7 @@ thus f2 is_S-Seq
       end;
      let i; assume A32: 1 <= i & i + 1 <= len f2;
       then A33: i <= 1 + 1 by A23,XREAL_1:8;
-       per cases by A32,A33,NAT_1:27;
+       per cases by A32,A33,NAT_1:9;
        suppose A34: i = 1;
         then (f2/.i)`2 = p0`2 by A1,FINSEQ_4:27 .= c
                            by A1,EUCLID:56
@@ -3982,7 +3909,7 @@ A36:   L~f2 = union {LSeg(p0,p10),LSeg(p10,p1)}
        let ax be set; assume ax in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
        then consider i such that A39: ax = LSeg(f2,i) & 1<=i & i+1<=len f2;
             i+1 <= 2 + 1 by A1,A39,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
-       then i = 1 or i = 2 by A39,NAT_1:27;
+       then i = 1 or i = 2 by A39,NAT_1:9;
        then ax = LSeg(p0,p10) or ax = LSeg(p10,p1) by A24,A39,TOPREAL1:def 5;
        hence ax in {LSeg(p0,p10),LSeg(p10,p1)} by TARSKI:def 2;
       end;
@@ -4082,13 +4009,13 @@ proof let a,b,c,d be real number;
     P = P1 \/ P2 & P1 /\ P2 = {p1,p2} by Th59;
         (|[a,c]|)`1=a by EUCLID:56;
    then A3: p1<>p2 by A1,EUCLID:56;
-        p1 in P1 /\ P2 by A1,A2,Lm10,TARSKI:def 2;
+        p1 in P1 /\ P2 by A1,A2,Lm13,TARSKI:def 2;
    then p1 in P1 by XBOOLE_0:def 3;
-   then A4: p1 in P by A1,A2,Lm10,XBOOLE_0:def 2;
-        p2 in P1 /\ P2 by A1,A2,Lm10,TARSKI:def 2;
+   then A4: p1 in P by A1,A2,Lm13,XBOOLE_0:def 2;
+        p2 in P1 /\ P2 by A1,A2,Lm13,TARSKI:def 2;
    then p2 in P1 by XBOOLE_0:def 3;
-   then p2 in P by A1,A2,Lm10,XBOOLE_0:def 2;
- hence thesis by A1,A2,A3,A4,Lm10,TOPREAL2:6;
+   then p2 in P by A1,A2,Lm13,XBOOLE_0:def 2;
+ hence thesis by A1,A2,A3,A4,Lm13,TOPREAL2:6;
 end;
 
 theorem Th61:
@@ -8107,7 +8034,7 @@ proof let p1,p2 be Point of TOP-REAL 2,
     A6: p2 in K by A1,A2,JORDAN7:5;
     K= {p:p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
                    p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
     then A7: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A8: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
     then A9: f.p1 in P by A5,A7,FUNCT_1:def 12;
@@ -8144,7 +8071,7 @@ proof let p1,p2 be Point of TOP-REAL 2,
                .=(p2`2)/sqrt(1+(p2`2)^2);
       A29: (f.p2)`1<0 by A23,A24,A27,REAL_2:128;
            (p1`2)*sqrt(1+(p2`2)^2)<= (p2`2)*sqrt(1+(p1`2)^2)
-                                by A1,A21,Lm5;
+                                by A1,A21,Lm7;
       then (p1`2)*sqrt(1+(p2`2)^2)/sqrt(1+(p2`2)^2)
         <= (p2`2)*sqrt(1+(p1`2)^2)/sqrt(1+(p2`2)^2) by A23,REAL_1:73;
       then (p1`2)
@@ -8171,7 +8098,7 @@ proof let p1,p2 be Point of TOP-REAL 2,
            (f.p2)`2=(p2`2)/sqrt(1+(p2`1)^2) by A30,A33,EUCLID:56;
       then A35: (f.p2)`2>=0 by A30,A32,REAL_2:125;
            -sqrt(1+(p2`1)^2)<= (p2`1)*sqrt(1+(p1`2)^2)
-                                by A4,A30,Th6;
+                                by A4,A30,Lm3;
       then (p1`1)*sqrt(1+(p2`1)^2)/sqrt(1+(p2`1)^2)
         <= (p2`1)*sqrt(1+(p1`2)^2)/sqrt(1+(p2`1)^2) by A4,A32,REAL_1:73;
       then (p1`1)
@@ -8265,7 +8192,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
     A5: p2 in K by A1,A2,JORDAN7:5;
          K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
     then A6: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A7: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
     then A8: f.p2 in P by A5,A6,FUNCT_1:def 12;
@@ -8302,7 +8229,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
              (f.p3)`2=(p3`2)/sqrt(1+(p3`1)^2) by A19,A22,EUCLID:56;
         then A24: (f.p3)`2>=0 by A19,A21,REAL_2:125;
              (p2`1)*sqrt(1+(p3`1)^2)<= (p3`1)*sqrt(1+(p2`1)^2)
-                                by A18,Th8;
+                                by A18,Lm8;
         then (p2`1)*sqrt(1+(p3`1)^2)/sqrt(1+(p3`1)^2)
           <= (p3`1)*sqrt(1+(p2`1)^2)/sqrt(1+(p3`1)^2) by A21,REAL_1:73;
         then (p2`1)
@@ -8330,7 +8257,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
         A30: --1>=-p2`1 by A11,XREAL_1:26;
              (p2`1)^2 = (-p2`1)^2;
         then (--p2`1)*sqrt(1+(p3`2)^2)<= sqrt(1+(p2`1)^2)
-                           by A25,A29,A30,Th6;
+                           by A25,A29,A30,Lm3;
         then (p2`1)*sqrt(1+(p3`2)^2)/sqrt(1+(p3`2)^2)
           <= (p3`1)*sqrt(1+(p2`1)^2)/sqrt(1+(p3`2)^2) by A25,A27,REAL_1:73;
         then (p2`1)
@@ -8405,7 +8332,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
         A54: (f.p3)`2=(p3`2)/sqrt(1+(p3`2)^2) by A49,A52,EUCLID:56;
         A55: (f.p3)`1>=0 by A49,A51,A53,REAL_2:125;
              (p2`2)*sqrt(1+(p3`2)^2)>= (p3`2)*sqrt(1+(p2`2)^2)
-                                by A48,Th8;
+                                by A48,Lm8;
         then (p2`2)*sqrt(1+(p3`2)^2)/sqrt(1+(p3`2)^2)
           >= (p3`2)*sqrt(1+(p2`2)^2)/sqrt(1+(p3`2)^2) by A51,REAL_1:73;
         then (p2`2)
@@ -8450,7 +8377,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
          hence LE f.p2,f.p3,P by A63,A64,JORDAN6:def 10;
         end;
         case A65: (f.p2)`2<0;
-               sqrt(1+(p3`1)^2)>= (p3`1)*sqrt(1+(p2`2)^2) by A41,A56,Th7;
+               sqrt(1+(p3`1)^2)>= (p3`1)*sqrt(1+(p2`2)^2) by A41,A56,Lm4;
           then (p2`1)*sqrt(1+(p3`1)^2)/sqrt(1+(p3`1)^2)
             >= (p3`1)*sqrt(1+(p2`2)^2)/sqrt(1+(p3`1)^2)
                                 by A41,A58,REAL_1:73;
@@ -8508,7 +8435,7 @@ proof let p1,p2,p3 be Point of TOP-REAL 2,
                W-min(P)=|[-1,0]| by A3,JGRAPH_5:32;
          then A82: f.p3 <> W-min(P) by A81,EUCLID:56;
                (p2`1)*sqrt(1+(p3`1)^2)>= (p3`1)*sqrt(1+(p2`1)^2)
-                                by A74,Th8;
+                                by A74,Lm8;
           then (p2`1)*sqrt(1+(p3`1)^2)/sqrt(1+(p3`1)^2)
             >= (p3`1)*sqrt(1+(p2`1)^2)/sqrt(1+(p3`1)^2) by A77,REAL_1:73;
           then (p2`1)
@@ -8756,7 +8683,7 @@ proof let p,q be Point of TOP-REAL 2,
                           by A1,A3,A5,JGRAPH_3:14;
     then A11: (f.q)`1=q`1/sqrt(1+(q`1/(-1))^2) by A3,EUCLID:56
                .=q`1/sqrt(1+(q`1)^2);
-         -sqrt(1+(q`1)^2)<= q`1*sqrt(1+(p`2)^2) by A2,A3,Th6;
+         -sqrt(1+(q`1)^2)<= q`1*sqrt(1+(p`2)^2) by A2,A3,Lm3;
     then (-1)*sqrt(1+(q`1)^2)/sqrt(1+(q`1)^2)
       <= q`1*sqrt(1+(p`2)^2)/sqrt(1+(q`1)^2) by A10,REAL_1:73;
     then (-1)
@@ -8797,7 +8724,7 @@ proof let p,q be Point of TOP-REAL 2,
                           by A1,A9,A10,JGRAPH_3:def 1;
     then A11: (f.q)`2= q`2/sqrt(1+(q`2/(-1))^2) by A9,EUCLID:56
                .=(q`2)/sqrt(1+(q`2)^2);
-        (p`2)*sqrt(1+(q`2)^2)>= (q`2)*sqrt(1+(p`2)^2) by A1,Lm4;
+        (p`2)*sqrt(1+(q`2)^2)>= (q`2)*sqrt(1+(p`2)^2) by A1,Lm6;
    then (p`2)*sqrt(1+(q`2)^2)/sqrt(1+(q`2)^2)
      >= (q`2)*sqrt(1+(p`2)^2)/sqrt(1+(q`2)^2) by A6,REAL_1:73;
    then (p`2)
@@ -8826,7 +8753,7 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
   A2: K is_simple_closed_curve by Th60;
   A3: K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
   p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-  by Lm10;
+  by Lm13;
   A4: P={p: |.p.|=1} by A1,Th33;
   thus LE p1,p2,K & LE p2,p3,K & LE p3,p4,K implies
     f.p1,f.p2,f.p3,f.p4 are_in_this_order_on P
@@ -8856,7 +8783,7 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A17: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A18: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A19: f.p1 in P by A6,A17,FUNCT_1:def 12;
@@ -8961,7 +8888,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A56: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A57: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A58: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -8991,7 +8918,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A67: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A68: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A69: f.p4 in P by A7,A67,FUNCT_1:def 12;
@@ -9045,7 +8972,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A87: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A88: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A89: f.p4 in P by A7,A87,FUNCT_1:def 12;
@@ -9072,7 +8999,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A99: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A100: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A101: f.p4 in P by A7,A99,FUNCT_1:def 12;
@@ -9088,7 +9015,7 @@ or
        end;
        A106: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by Lm10;
+                         by Lm13;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9208,7 +9135,7 @@ GOBOARD7:8;
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A135: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A136: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A137: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -9238,7 +9165,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A146: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A147: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A148: f.p4 in P by A7,A146,FUNCT_1:def 12;
@@ -9292,7 +9219,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A166: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A167: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A168: f.p4 in P by A7,A166,FUNCT_1:def 12;
@@ -9319,7 +9246,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A178: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A179: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A180: f.p4 in P by A7,A178,FUNCT_1:def 12;
@@ -9337,7 +9264,7 @@ or
        end;
        A185: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by Lm10;
+                         by Lm13;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9456,7 +9383,7 @@ GOBOARD7:8;
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A213: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A214: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              A215: (f.p1)`1<0 & (f.p1)`2<=0 by A1,A15,A23,Th77;
@@ -9486,7 +9413,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A224: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A225: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A226: f.p4 in P by A7,A224,FUNCT_1:def 12;
@@ -9541,7 +9468,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A244: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A245: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A246: f.p4 in P by A7,A244,FUNCT_1:def 12;
@@ -9568,7 +9495,7 @@ or
                   K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1
 or
                p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                                          by Lm10;
+                                          by Lm13;
              then A256: f.:K=P by A1,A4,Th45,JGRAPH_3:33;
              A257: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
              then A258: f.p4 in P by A7,A256,FUNCT_1:def 12;
@@ -9585,7 +9512,7 @@ or
        end;
        A263: K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-                         by Lm10;
+                         by Lm13;
        thus K={p: p`1=-1 & -1 <=p`2 & p`2<=1 or
           p`1=1 & -1 <=p`2 & p`2<=1 or -1=p`2 & -1<=p`1 & p`1<=1 or
           1=p`2 & -1<=p`1 & p`1<=1}
@@ -9811,7 +9738,7 @@ proof let p1,p2,p3,p4 be Point of TOP-REAL 2,
    A6: LE f.p2,f.p4,P by A1,A4,JORDAN6:73;
         K= {p: p`1=-1 & -1 <=p`2 & p`2<=1 or p`2=1 & -1<=p`1 & p`1<=1 or
         p`1=1 & -1 <=p`2 & p`2<=1 or p`2=-1 & -1<=p`1 & p`1<=1}
-        by Lm10;
+        by Lm13;
     then A7: f.:K=P by A1,A3,Th45,JGRAPH_3:33;
     A8: dom f = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
         P={p: |.p.|=1} by A1,Th33;

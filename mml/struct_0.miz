@@ -6,10 +6,12 @@
 
 environ
 
- vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE;
- notations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_2, FINSEQ_1, PBOOLE;
- constructors PBOOLE;
+ vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_2, FINSEQ_1, PBOOLE;
+ constructors PBOOLE, NAT_D;
  registrations SUBSET_1, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions SUBSET_1;
 
 begin
 
@@ -25,6 +27,14 @@ end;
 definition let S be 1-sorted;
  attr S is empty means
 :Def1:  the carrier of S is empty;
+end;
+
+registration
+  cluster empty 1-sorted;
+  existence
+   proof take T = 1-sorted(#{}#);
+    thus the carrier of T is empty;
+   end;
 end;
 
 registration
@@ -77,6 +87,38 @@ end;
 definition
   let S, T be 1-sorted;
   mode Function of S,T is Function of the carrier of S, the carrier of T;
+end;
+
+:: from PRE_TOPC, 2006.12.02, AT
+
+definition let T be 1-sorted;
+  func {}T -> Subset of T equals {};
+   coherence
+   proof
+     {} = {}the carrier of T;
+    hence thesis;
+   end;
+  func [#]T -> Subset of T equals the carrier of T;
+   coherence
+   proof
+     the carrier of T = [#]the carrier of T;
+    hence thesis;
+   end;
+end;
+
+registration let T be 1-sorted;
+  cluster {}T -> empty;
+  coherence;
+end;
+
+registration let T be empty 1-sorted;
+  cluster [#]T -> empty;
+  coherence by Def1;
+end;
+
+registration let T be non empty 1-sorted;
+  cluster [#]T -> non empty;
+  coherence;
 end;
 
 ::Moved from TOPREAL1 on 2005.09.22

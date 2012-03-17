@@ -6,8 +6,9 @@
 
 environ
 
- vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
+ vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3, PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2;
  constructors FUNCT_2;
  registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, FUNCT_1, FUNCT_2;
  requirements SUBSET, BOOLE;
@@ -28,7 +29,7 @@ definition let A,B be non empty set, C be set, f be Function of [:A,B:],C;
   redefine func f.(a,b) -> Element of C;
 end;
 
-reserve X,Y,Z,x,x1,x2,y,y1,y2,z for set;
+reserve X,Y,Z,x,x1,x2,y,y1,y2,z,z1,z2 for set;
 
 theorem :: BINOP_1:1
   for X,Y,Z being set
@@ -270,4 +271,50 @@ theorem :: BINOP_1:31
   f is constant iff
    for x1,x2,y1,y2 st x1 in X & x2 in X & y1 in Y & y2 in Y
      holds f.(x1,y1)=f.(x2,y2);
+
+:: from PARTFUN1, 2006.12.05, AT
+
+theorem :: BINOP_1:32
+  for f1,f2 being PartFunc of [:X,Y:],Z
+     st dom f1 = dom f2 & for x,y st [x,y] in dom f1 holds f1.(x,y)=f2.(x,y)
+    holds f1 = f2;
+
+scheme :: BINOP_1:sch 5
+ PartFuncEx2{X,Y,Z()->set,P[set,set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z() st
+   (for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st P[x,y,z]) &
+   (for x,y st [x,y] in dom f holds P[x,y,f.(x,y)])
+provided
+ for x,y,z st x in X() & y in Y() & P[x,y,z] holds z in Z() and
+ for x,y,z1,z2 st x in X() & y in Y() & P[x,y,z1] & P[x,y,z2] holds z1 = z2;
+
+scheme :: BINOP_1:sch 6
+ LambdaR2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z()
+  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y]) &
+     (for x,y st [x,y] in dom f holds f.(x,y) = F(x,y))
+provided
+  for x,y st P[x,y] holds F(x,y) in Z();
+
+:: from GRCAT_1, 2006.12.05, AT
+
+scheme :: BINOP_1:sch 7
+ PartLambda2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z()
+  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y])
+   & for x,y st [x,y] in dom f holds f.(x,y) = F(x,y)
+provided
+ for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z();
+
+scheme :: BINOP_1:sch 8
+ {X,Y()->non empty set,Z()->set,F(set,set)->set,
+ P[set,set]}: ex f being PartFunc of [:X(),Y():],Z()
+  st (for x being Element of X(), y being Element of Y() holds
+       [x,y] in dom f iff P[x,y])
+   & for x being Element of X(), y being Element of Y()
+       st [x,y] in dom f
+      holds f.(x,y) = F(x,y)
+provided
+ for x being Element of X(), y being Element of Y() st P[x,y] holds
+     F(x,y) in Z();
 

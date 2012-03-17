@@ -8,20 +8,19 @@ environ
 
  vocabularies RELAT_1, FUNCT_2, MARGREL1, PARTIT1, EQREL_1, BOOLE, FUNCT_1,
       SETFAM_1, CANTOR_1, T_1TOPSP, RELAT_2, ZF_LANG, BVFUNC_1, BVFUNC_2,
-      FUNCT_4, PARTFUN1;
+      FUNCT_4, PARTFUN1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MARGREL1, VALUAT_1,
       RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
       FUNCT_4, EQREL_1, PARTIT1, BVFUNC_1, BVFUNC_2;
- constructors SETFAM_1, FUNCT_4, BVFUNC_1, BVFUNC_2, XCMPLX_0;
+ constructors SETFAM_1, FUNCT_4, BVFUNC_1, BVFUNC_2, XCMPLX_0, NAT_D;
  registrations PARTIT1, SUBSET_1, MARGREL1, VALUAT_1, RELSET_1, FUNCT_1,
       RELAT_1, EQREL_1, PARTFUN1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions BVFUNC_1, TARSKI, RELAT_2, XBOOLE_0, MARGREL1, XBOOLEAN;
- theorems TARSKI, FUNCT_1, FUNCT_2, T_1TOPSP, MARGREL1, BVFUNC_1, BVFUNC_2,
-      VALUAT_1, ZFMISC_1, RELSET_1, PARTIT1, SETFAM_1, SUBSET_1, FUNCT_4,
-      RELAT_1, EQREL_1, MSUALG_5, RELAT_2, XBOOLE_0, XBOOLE_1, PARTFUN1,
-      ORDERS_1;
- schemes FUNCT_2, NATTRA_1;
+ theorems TARSKI, FUNCT_1, FUNCT_2, BVFUNC_1, BVFUNC_2, VALUAT_1, ZFMISC_1,
+      RELSET_1, PARTIT1, SETFAM_1, SUBSET_1, FUNCT_4, RELAT_1, EQREL_1,
+      RELAT_2, XBOOLE_0, XBOOLE_1, PARTFUN1, ORDERS_1, XBOOLEAN;
+ schemes FUNCT_2;
 
 begin :: Preliminaries
 
@@ -123,11 +122,11 @@ theorem Th4:
   proof let R being Equivalence_Relation of Y;
 A1:  (nabla Y)*R c= nabla Y by Th3;
        (nabla Y) \/ R c= (nabla Y)*R by Th2;
-    then nabla Y c= (nabla Y)*R by MSUALG_5:4;
+    then nabla Y c= (nabla Y)*R by EQREL_1:1;
    hence (nabla Y)*R = nabla Y by A1,XBOOLE_0:def 10;
 A2:  R*nabla Y c= nabla Y by Th3;
        (nabla Y) \/ R c= R*nabla Y by Th2;
-    then nabla Y c= R*nabla Y by MSUALG_5:4;
+    then nabla Y c= R*nabla Y by EQREL_1:1;
    hence R*nabla Y = nabla Y by A2,XBOOLE_0:def 10;
   end;
 
@@ -137,9 +136,9 @@ theorem Th5:
 proof let P be a_partition of Y, x,y be Element of Y;
   hereby assume [x,y] in ERl P;
     then ex A being Subset of Y st A in P & x in A & y in A by PARTIT1:def 6;
-   hence x in EqClass(y,P) by T_1TOPSP:def 1;
+   hence x in EqClass(y,P) by EQREL_1:def 8;
   end;
-      y in EqClass(y,P) & EqClass(y,P) in P by T_1TOPSP:def 1;
+      y in EqClass(y,P) & EqClass(y,P) in P by EQREL_1:def 8;
   hence thesis by PARTIT1:def 6;
 end;
 
@@ -263,7 +262,7 @@ A2: ('not' b).x= TRUE;
       .= 'not' TRUE by A2,VALUAT_1:def 5
       .= FALSE;
   then a.x <> TRUE by A1,BVFUNC_1:def 15;
-  then a.x = FALSE by MARGREL1:39;
+  then a.x = FALSE by XBOOLEAN:def 3;
  hence ('not' a).x = 'not' FALSE by VALUAT_1:def 5
           .=TRUE;
 end;
@@ -404,7 +403,7 @@ A30:    b in dom hP' and
 A31:    hP'.b = a by FUNCT_1:def 5;
       reconsider b as Element of P by A30;
          a = EqClass(y,b) by A25,A31;
-     hence y in a by T_1TOPSP:def 1;
+     hence y in a by EQREL_1:def 8;
     end;
    then A32: y in A' by SETFAM_1:58;
 A33: dom hQ' = Q by FUNCT_2:def 1;
@@ -416,7 +415,7 @@ A34:    b in dom hQ' and
 A35:    hQ'.b = a by FUNCT_1:def 5;
       reconsider b as Element of Q by A34;
          a = EqClass(x,b) by A27,A35;
-     hence x in a by T_1TOPSP:def 1;
+     hence x in a by EQREL_1:def 8;
     end;
    then A36: x in B' by SETFAM_1:58;
    reconsider G' = G as non empty Subset of PARTITIONS(Y) by A2,A8,XBOOLE_1:3;
@@ -427,7 +426,7 @@ A37: for d being Element of G' holds bool Y meets P(d)
      hence bool Y meets d by XBOOLE_1:63;
     end;
    consider h' being Function of G', bool Y such that
-A38: for d being Element of G' holds h'.d in P(d) from NATTRA_1:sch 1(A37);
+A38: for d being Element of G' holds h'.d in P(d) from FUNCT_2:sch 11(A37);
    set h = h' +* hP' +* hQ';
 A39: dom h = dom(h' +* hP') \/ Q by A33,FUNCT_4:def 1
          .= dom h' \/ P \/ Q by A29,FUNCT_4:def 1
@@ -458,10 +457,10 @@ A49:   hQ.d in FQ by A21,A22,A43,FUNCT_1:def 5;
 A51:   z in hQ.d by A15,A24,A49,SETFAM_1:58;
      thus h.d = hQ'.d by A33,A43,FUNCT_4:14
              .= EqClass(x,d') by A27,A43
-             .= hP.d by A45,A47,T_1TOPSP:def 1
-             .= EqClass(z,d') by A45,A48,T_1TOPSP:def 1
-             .= hQ.d by A44,A51,T_1TOPSP:def 1
-             .= EqClass(y,d') by A44,A50,T_1TOPSP:def 1
+             .= hP.d by A45,A47,EQREL_1:def 8
+             .= EqClass(z,d') by A45,A48,EQREL_1:def 8
+             .= hQ.d by A44,A51,EQREL_1:def 8
+             .= EqClass(y,d') by A44,A50,EQREL_1:def 8
              .= hP'.d by A25;
      end;
      suppose not d in Q;

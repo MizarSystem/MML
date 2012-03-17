@@ -38,7 +38,7 @@
 <ArticleID name="SEQFUNC"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="RFINSEQ"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="MESFUNC5"/>
 </Signature>
@@ -61,7 +61,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="66"/>
+<Adjective nr="71"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -74,7 +74,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="65"/>
+<Adjective nr="70"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -83,7 +83,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="67"/>
+<Adjective nr="72"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -7,11 +7,12 @@
 environ
 
  vocabularies FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
-      ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED;
+      ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       MEMBERED, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, RELSET_1, PARTFUN1,
       FUNCT_2;
- constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, REAL_1, MEMBERED, COMPLEX1;
+ constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, REAL_1, MEMBERED, COMPLEX1,
+      NAT_D;
  registrations XREAL_0, RELSET_1, MEMBERED, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XREAL_0, RELAT_1;
@@ -1015,7 +1016,7 @@ theorem
  end;
 
 theorem
- Th35:  1(#)seq=seq
+   1(#)seq=seq
   proof
       now let n;
     thus (1(#)seq).n=1*seq.n by Th13
@@ -1024,14 +1025,23 @@ theorem
    hence thesis by FUNCT_2:113;
   end;
 
-theorem
- Th36:  -(-seq)=seq
+theorem Th36:
+  for F being real-yielding Function holds
+  --F = F
   proof
-   thus -(-seq)=(-1)(#)(-seq) by Th25
-    .=(-1)(#)((-1)(#)seq) by Th25
-    .=((-1)*(-1))(#)seq by Th31
-    .=seq by Th35;
-   end;
+    let F being real-yielding Function;
+A1: dom --F = dom -F by Def7;
+A2: dom -F = dom F by Def7;
+    now
+      let c be set;
+      assume
+A3:   c in dom F;
+      hence (--F).c = -(-F).c by A1,A2,Def7
+      .= --(F.c) by A2,A3,Def7
+      .= F.c;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
 
 theorem
  Th37: seq1-(-seq2)=seq1+seq2

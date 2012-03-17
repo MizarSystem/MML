@@ -8,18 +8,20 @@ environ
 
  vocabularies INT_1, REALSET1, GROUP_2, GROUP_3, FINSEQ_1, GROUP_1, RELAT_1,
       LATTICES, BINOP_1, FUNCT_1, BOOLE, QC_LANG1, RCOMP_1, ARYTM_1, GROUP_4,
-      RLSUB_1, SUBSET_1, FINSET_1, CARD_1, TARSKI, GROUP_5, CARD_3, FINSEQ_4;
+      RLSUB_1, SUBSET_1, FINSET_1, CARD_1, TARSKI, GROUP_5, CARD_3, FINSEQ_4,
+      NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, STRUCT_0, XCMPLX_0, FUNCT_1,
       CARD_1, FINSEQ_1, FINSET_1, FINSEQ_4, INT_1, RLVECT_1, GROUP_1, GROUP_2,
       GROUP_3, GROUP_4, DOMAIN_1;
  constructors SETFAM_1, DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQ_4,
-      REALSET1, RLVECT_1, GROUP_4;
+      REALSET1, RLVECT_1, GROUP_4, FINSOP_1, NAT_D;
  registrations CARD_1, INT_1, GROUP_1, GROUP_2, GROUP_3, RELSET_1, STRUCT_0,
       MEMBERED, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, GROUP_1, XBOOLE_0, GROUP_2, GROUP_3;
+ definitions TARSKI, GROUP_1, XBOOLE_0, GROUP_2, GROUP_3, GROUP_4;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, GROUP_1, GROUP_2,
-      GROUP_3, GROUP_4, TARSKI, ZFMISC_1, RLVECT_1, XBOOLE_0, XBOOLE_1, CARD_2;
+      GROUP_3, GROUP_4, TARSKI, ZFMISC_1, RLVECT_1, XBOOLE_0, XBOOLE_1, CARD_2,
+      FINSOP_1;
  schemes FINSEQ_2, DOMAIN_1;
 
 begin :: Preliminaries.
@@ -86,16 +88,16 @@ theorem Th4:
   proof
    thus x in H1 * H2 implies ex a,b st x = a * b & a in H1 & b in H2
     proof assume x in H1 * H2;
-     then x in carr H1 * H2 by GROUP_4:57;
+     then x in carr H1 * H2;
      then consider a,b such that A1: x = a * b & a in carr H1 & b in H2
                                                               by GROUP_2:114;
         a in H1 by A1,RLVECT_1:def 1;
      hence thesis by A1;
     end;
     given a,b such that A2: x = a * b & a in H1 & b in H2;
-        b in carr H2 by A2,RLVECT_1:def 1;
-     then x in H1 * carr H2 by A2,GROUP_2:115;
-   hence thesis by GROUP_4:57;
+    b in carr H2 by A2,RLVECT_1:def 1;
+    then x in H1 * carr H2 by A2,GROUP_2:115;
+   hence thesis;
   end;
 
 theorem Th5:
@@ -109,7 +111,7 @@ theorem Th5:
       hence thesis by Th4;
      end;
      given a,b such that A2: x = a * b & a in H1 & b in H2;
-         x in H1 * H2 by A2,Th4;
+      x in H1 * H2 by A2,Th4;
       then x in the carrier of H1 "\/" H2 by A1,GROUP_4:69;
     hence thesis by RLVECT_1:def 1;
    end;
@@ -118,7 +120,7 @@ theorem
     G is commutative Group implies
   (x in H1 "\/" H2 iff ex a,b st x = a * b & a in H1 & b in H2)
    proof assume G is commutative Group;
-    then H1 * H2 = H2 * H1 by GROUP_4:65;
+    then H1 * H2 = H2 * H1 by GROUP_2:29;
     hence thesis by Th5;
    end;
 
@@ -126,17 +128,16 @@ theorem Th7:
  for N1,N2 being strict normal Subgroup of G
  holds x in N1 "\/" N2 iff ex a,b st x = a * b & a in N1 & b in N2
   proof let N1,N2 be strict normal Subgroup of G;
-       N1 * N2 = N2 * N1 by GROUP_4:64;
+   N1 * N2 = N2 * N1 by GROUP_3:148;
    hence thesis by Th5;
   end;
 
 theorem
-    for N being normal Subgroup of G holds
- H * N = N * H
+  for N being normal Subgroup of G holds H * N = N * H
   proof let N be normal Subgroup of G;
-   thus H * N = carr H * N by GROUP_4:57
+   thus H * N = carr H * N
              .= N * carr H by GROUP_3:143
-             .= N * H by GROUP_4:57;
+             .= N * H;
   end;
 
 definition let G,F,a;
@@ -157,7 +158,7 @@ A1: Seg len F = dom F by FINSEQ_1:def 3;
                 A3: for k st k in dom F holds F1.k = (F/.k) |^ a and
                 A4: len F2 = len F and
                 A5: for k st k in dom F holds F2.k = (F/.k) |^ a;
-        now let k;
+     now let k;
        assume k in Seg len F;
        then A6: k in dom F by FINSEQ_1:def 3;
       hence F1.k = (F/.k) |^ a by A3
@@ -261,7 +262,7 @@ theorem Th17:
         by Th12
                  .= Product(F) |^ a * Product(<* b *> |^ a) by A3,GROUP_4:8
                  .= Product(F) |^ a * Product<* b |^ a *> by Th14
-                               .= Product(F) |^ a * (b |^ a) by GROUP_4:12
+                               .= Product(F) |^ a * (b |^ a) by FINSOP_1:12
                                .= (Product(F) * b) |^ a by GROUP_3:28
                                .= Product(F ^ <* b *>) |^ a by GROUP_4:9;
       end;
@@ -1371,7 +1372,7 @@ A9:   dom I1 = dom F by A5,FINSEQ_3:31;
              J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k & F1.k = (F/.k)" &
           I1.k = (I1/.k) & @(I1/.k) = I1/.k &
           I1.k = @(- @(I/.k)) & @(- @(I/.k)) = - @(I/.k)
-            by A4,A6,A7,A8,A9,A11,FINSEQ_4:def 4,GROUP_4:def 2,def 4;
+            by A4,A6,A7,A8,A9,A11,FINSEQ_4:def 4,GROUP_4:def 4;
           then J.k = ((F/.k)" |^ @(I/.k))" by GROUP_1:70
                   .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
                   .= (F/.k) |^ @(I/.k) by GROUP_1:19;

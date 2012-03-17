@@ -150,6 +150,7 @@ A9:  r < t by ARYTM_3:101;
 
 theorem Th1:
  RAT+ c= REAL+ by Lm2,Lm3,XBOOLE_1:86;
+
  RAT+ \/ DEDEKIND_CUTS c= RAT+ \/ IR by XBOOLE_1:9;
 then Lm4:
  REAL+ c= RAT+ \/ IR by XBOOLE_1:1;
@@ -157,12 +158,17 @@ then Lm4:
 then Lm5:
  DEDEKIND_CUTS \ RA c= REAL+ by XBOOLE_1:7;
 
+Lm6: omega c=
+({[c,d] where c,d is Element of omega: c,d are_relative_prime & d <> {}} \
+  {[k,1] where k is Element of omega: not contradiction}) \/ omega
+     by XBOOLE_1:7;
+
 theorem Th2:
- omega c= REAL+ by Th1,ARYTM_3:34,XBOOLE_1:1;
+ omega c= REAL+ by Th1,XBOOLE_1:1,Lm6;
 
 registration
  cluster REAL+ -> non empty;
- coherence by Th2,ORDINAL2:19;
+ coherence by Th2,XBOOLE_1:3;
 end;
 
 definition let x;
@@ -232,7 +238,7 @@ A1: [{},y] in REAL+;
 end;
 end;
 
-Lm6:
+Lm7:
  (for r holds r < s iff r < t) implies s = t
 proof assume
 A1: for r holds r < s iff r < t;
@@ -260,7 +266,7 @@ A4:  for s holds s in x iff s < r2;
            s in x iff s < r1 by A2;
        hence thesis by A4;
       end;
-    hence IT1 = IT2 by A1,A3,Lm6;
+    hence IT1 = IT2 by A1,A3,Lm7;
    end;
    thus thesis;
   end;
@@ -298,7 +304,7 @@ A7:    x = { s: s < t} and t <> {};
  consistency;
 end;
 
-Lm7:
+Lm8:
  for B being set st B in DEDEKIND_CUTS & r in B ex s st s in B & r < s
 proof let B be set;
  assume B in DEDEKIND_CUTS;
@@ -309,7 +315,7 @@ proof let B be set;
  hence thesis;
 end;
 
-Lm8:
+Lm9:
  {} in DEDEKIND_CUTS
  proof
    reconsider B = {} as Subset of RAT+ by XBOOLE_1:2;
@@ -320,7 +326,7 @@ Lm8:
   hence thesis by ZFMISC_1:64;
  end;
 
-Lm9:
+Lm10:
  DEDEKIND_CUTS /\ RAT+ = {{}}
 proof
      now let e be set;
@@ -332,14 +338,14 @@ A3:    e in DEDEKIND_CUTS by A1,XBOOLE_0:def 3;
       then reconsider A = e as non empty Subset of RAT+ by A2;
          A in RAT+ by A1,XBOOLE_0:def 3;
       then ex s st s in A & for r st r in A holds r <=' s by ARYTM_3:99;
-     hence contradiction by A3,Lm7;
+     hence contradiction by A3,Lm8;
     end;
-   thus e = {} implies e in DEDEKIND_CUTS /\ RAT+ by Lm8,XBOOLE_0:def 3;
+   thus e = {} implies e in DEDEKIND_CUTS /\ RAT+ by Lm9,XBOOLE_0:def 3;
   end;
  hence thesis by TARSKI:def 1;
 end;
 
-Lm10:
+Lm11:
  DEDEKIND_CUT x = {} iff x = {}
 proof
  thus DEDEKIND_CUT x = {} implies x = {}
@@ -372,7 +378,7 @@ A6:    e in { s : s < {} };
  hence DEDEKIND_CUT x = {} by A5,XBOOLE_0:def 1;
 end;
 
-Lm11:
+Lm12:
  for A being Element of DEDEKIND_CUTS
   holds GLUED A = {} iff A = {}
 proof let A be Element of DEDEKIND_CUTS;
@@ -405,7 +411,7 @@ A7: GLUED A <> {};
  hence contradiction by A4,A6;
 end;
 
-Lm12:
+Lm13:
  for A being Element of DEDEKIND_CUTS
   holds DEDEKIND_CUT GLUED A = A
 proof let A be Element of DEDEKIND_CUTS;
@@ -432,8 +438,8 @@ A5: e in A;
  end;
  suppose
 A6: A = {};
-   then GLUED A = {} by Lm11;
-  hence DEDEKIND_CUT GLUED A = A by A6,Lm10;
+   then GLUED A = {} by Lm12;
+  hence DEDEKIND_CUT GLUED A = A by A6,Lm11;
  end;
  suppose that
 A7: A <> {} and
@@ -441,14 +447,14 @@ A8: not ex r st for s holds s in A iff s < r;
 A9: GLUED A = A by A8,Def4;
      now assume GLUED A in RAT+;
     then GLUED A in RAT+ /\ DEDEKIND_CUTS by A9,XBOOLE_0:def 3;
-    then GLUED A = {} by Lm9,TARSKI:def 1;
-   hence contradiction by A7,Lm11;
+    then GLUED A = {} by Lm10,TARSKI:def 1;
+   hence contradiction by A7,Lm12;
   end;
  hence DEDEKIND_CUT GLUED A = A by A9,Def3;
 end;
 end;
 
-Lm13:
+Lm14:
  for x,y be set st x in IR & y in IR holds x c= y or y c= x
 proof let x,y be set;
  assume x in IR;
@@ -505,7 +511,7 @@ A2: not(y in RAT+ & x in RAT+ or y in RAT+ & not x in RAT+
          or not y in RAT+ & x in RAT+);
       x in REAL+ & y in REAL+;
    then x in IR & y in IR by A2,Lm4,XBOOLE_0:def 2;
-  hence y c= x by A1,A2,Lm13;
+  hence y c= x by A1,A2,Lm14;
   end;
  end;
 
@@ -513,7 +519,7 @@ notation let x,y be Element of REAL+;
  antonym y < x for x <=' y;
 end;
 
-Lm14:
+Lm15:
  x = x' & y = y' implies (x <=' y iff x' <=' y')
 proof assume that
 A1: x = x' and
@@ -525,7 +531,7 @@ A2: y = y';
  thus thesis by A1,A2,Def5;
 end;
 
-Lm15:
+Lm16:
  for B being set st B in DEDEKIND_CUTS & B <> {}
    ex r st r in B & r <> {}
 proof let B be set such that
@@ -551,7 +557,7 @@ A10: r1 <> r2 & r2 <> r3 & r3 <> r1 by A5,A6,A8,ARYTM_3:82;
  hence thesis by A3,A9;
 end;
 
-Lm16:
+Lm17:
  for B being set holds B in DEDEKIND_CUTS & r in B & s <=' r implies s in B
 proof let B be set such that
 A1: B in DEDEKIND_CUTS and
@@ -564,7 +570,7 @@ A3: s <=' r;
  hence s in B by A2,A3;
 end;
 
-Lm17:
+Lm18:
  for B being set st B in DEDEKIND_CUTS & B <> {} holds {} in B
 proof let B be set such that
 A1: B in DEDEKIND_CUTS and
@@ -573,10 +579,10 @@ A2: B <> {};
   consider r such that
 A3: r in B by SUBSET_1:10;
      {} <=' r by ARYTM_3:71;
- hence thesis by A1,A3,Lm16;
+ hence thesis by A1,A3,Lm17;
 end;
 
-Lm18:
+Lm19:
  for B being set st B in DEDEKIND_CUTS \ RA & not r in B & B <> {}
     ex s st not s in B & s < r
 proof let B be set such that
@@ -584,7 +590,7 @@ A1: B in DEDEKIND_CUTS \ RA and
 A2: not r in B and
 A3: B <> {};
 A4: B in DEDEKIND_CUTS by A1,XBOOLE_0:def 4;
-   then A5: r <> {} by A2,A3,Lm17;
+   then A5: r <> {} by A2,A3,Lm18;
  assume
 A6: for s st not s in B holds not s < r;
      B = { s: s < r}
@@ -596,7 +602,7 @@ A7:    e in B;
        reconsider B as Element of DEDEKIND_CUTS by A1,XBOOLE_0:def 4;
           B c= RAT+;
        then reconsider t = e as Element of RAT+ by A7;
-          not r <=' t by A2,A4,A7,Lm16;
+          not r <=' t by A2,A4,A7,Lm17;
       hence e in { s: s < r};
      end;
     let e be set;
@@ -608,7 +614,7 @@ A7:    e in B;
  hence contradiction by A1,XBOOLE_0:def 4;
 end;
 
-Lm19:
+Lm20:
 DEDEKIND_CUT x in RA implies x in RAT+
 proof assume
 A1: DEDEKIND_CUT x in RA;
@@ -617,7 +623,7 @@ A1: DEDEKIND_CUT x in RA;
  hence contradiction by A1,XBOOLE_0:def 4;
 end;
 
-Lm20:
+Lm21:
  DEDEKIND_CUT x c= DEDEKIND_CUT y implies x <=' y
 proof assume
 A1: DEDEKIND_CUT x c= DEDEKIND_CUT y;
@@ -627,14 +633,14 @@ A2:  x = {} and
 A3: not y in RAT+;
 A4: DEDEKIND_CUT y = y by A3,Def3;
       y <> {} by A3;
-   then x in y by A2,A4,Lm17;
+   then x in y by A2,A4,Lm18;
   hence thesis by A2,A3,Def5;
  end;
  suppose
 A5: y = {};
-  then DEDEKIND_CUT y = {} by Lm10;
+  then DEDEKIND_CUT y = {} by Lm11;
   then DEDEKIND_CUT x = {} by A1,XBOOLE_1:3;
-  then x = {} by Lm10;
+  then x = {} by Lm11;
   hence thesis by A5;
  end;
  suppose that
@@ -647,7 +653,7 @@ A9: DEDEKIND_CUT x = { s : s < rx } by A6,Def3;
 A10: y = ry and
 A11: DEDEKIND_CUT y = { s : s < ry } by A7,Def3;
  assume y < x;
-  then ry < rx by A8,A10,Lm14;
+  then ry < rx by A8,A10,Lm15;
   then ry in DEDEKIND_CUT x by A9;
   then ry in DEDEKIND_CUT y by A1;
   then ex s st s = ry & s < ry by A11;
@@ -662,13 +668,13 @@ A15: x = rx and
 A16: DEDEKIND_CUT x = { s : s < rx } by A12,Def3;
 A17: DEDEKIND_CUT x in RA by A14,A15,A16;
 A18: DEDEKIND_CUT y = y by A13,Def3;
-   then DEDEKIND_CUT x <> y by A13,A17,Lm19;
+   then DEDEKIND_CUT x <> y by A13,A17,Lm20;
    then not DEDEKIND_CUT y c= DEDEKIND_CUT x by A1,A18,XBOOLE_0:def 10;
    then consider r0 being Element of RAT+ such that
 A19: r0 in y and
 A20: not r0 in DEDEKIND_CUT x by A18,SUBSET_1:7;
      rx <=' r0 by A16,A20;
-  then x in y by A15,A18,A19,Lm16;
+  then x in y by A15,A18,A19,Lm17;
  hence x <=' y by A12,A13,Def5;
  end;
  suppose that
@@ -680,13 +686,13 @@ A24: y = ry and
 A25: DEDEKIND_CUT y = { s : s < ry } by A22,Def3;
 A26: DEDEKIND_CUT y in RA by A23,A24,A25;
 A27: DEDEKIND_CUT x = x by A21,Def3;
-   then not x in RA by A21,Lm19;
+   then not x in RA by A21,Lm20;
    then not DEDEKIND_CUT y c= DEDEKIND_CUT x by A1,A26,A27,XBOOLE_0:def 10;
    then consider r0 being Element of RAT+ such that
 A28: r0 in DEDEKIND_CUT y and
 A29: not r0 in x by A27,SUBSET_1:7;
      ex s st s = r0 & s < ry by A25,A28;
-  then not y in x by A24,A27,A29,Lm16;
+  then not y in x by A24,A27,A29,Lm17;
  hence x <=' y by A21,A22,Def5;
  end;
  suppose that
@@ -697,7 +703,7 @@ A31: not y in RAT+;
 end;
 end;
 
-Lm21:
+Lm22:
  x <=' y & y <=' x implies x = y
 proof assume that
 A1: x <=' y and
@@ -707,7 +713,7 @@ A2: y <=' x;
 A3: x in RAT+ and
 A4: y in RAT+;
   reconsider x' = x, y' = y as Element of RAT+ by A3,A4;
-     x' <=' y' & y' <=' x' by A1,A2,Lm14;
+     x' <=' y' & y' <=' x' by A1,A2,Lm15;
  hence thesis by ARYTM_3:73;
  end;
  suppose that
@@ -730,19 +736,19 @@ A10: not y in RAT+;
 end;
 end;
 
-Lm22:
+Lm23:
 DEDEKIND_CUT x = DEDEKIND_CUT y implies x = y
 proof
  assume DEDEKIND_CUT x = DEDEKIND_CUT y;
-  then x <=' y & y <=' x by Lm20;
- hence x = y by Lm21;
+  then x <=' y & y <=' x by Lm21;
+ hence x = y by Lm22;
 end;
 
-Lm23:
+Lm24:
  GLUED DEDEKIND_CUT x = x
 proof
-     DEDEKIND_CUT GLUED DEDEKIND_CUT x = DEDEKIND_CUT x by Lm12;
- hence thesis by Lm22;
+     DEDEKIND_CUT GLUED DEDEKIND_CUT x = DEDEKIND_CUT x by Lm13;
+ hence thesis by Lm23;
 end;
 
 definition let A,B be Element of DEDEKIND_CUTS;
@@ -772,13 +778,13 @@ A2:        s0 in A & t0 in B;
 A3:          s = s1 + t1 and
 A4:         s1 <=' s0 and
 A5:          t1 <=' t0 by A1,ARYTM_3:95;
-A6:          s1 in A by A2,A4,Lm16;
-               t1 in B by A2,A5,Lm16;
+A6:          s1 in A by A2,A4,Lm17;
+               t1 in B by A2,A5,Lm17;
             hence s in C by A3,A6;
           end;
           consider s1 being Element of RAT+ such that
 A7:       s1 in A and
-A8:       s0 < s1 by A2,Lm7;
+A8:       s0 < s1 by A2,Lm8;
          take t2 = s1 + t0;
          thus t2 in C by A2,A7;
              s0 <=' s1 & s0 <> s1 by A8;
@@ -796,7 +802,7 @@ A11:     not b0 in B by SUBSET_1:49;
          then consider s,t such that
 A12:       a0 + b0 = s + t & s in A & t in B;
             a0 <=' s or b0 <=' t by A12,ARYTM_3:89;
-        hence contradiction by A10,A11,A12,Lm16;
+        hence contradiction by A10,A11,A12,Lm17;
        end;
        then C <> RAT+;
       hence thesis by A9,ZFMISC_1:64;
@@ -823,7 +829,7 @@ A13:  C c= D
   end;
 end;
 
-Lm24:
+Lm25:
  for B being set st B in DEDEKIND_CUTS ex r st not r in B
 proof let B be set;
  assume
@@ -846,7 +852,7 @@ A2:      e in { r *' s : r in A & s in B};
            ex r,s st e = r *' s & r in A & s in B by A2;
        hence contradiction by A1;
       end;
-    hence thesis by Lm8,XBOOLE_0:def 1;
+    hence thesis by Lm9,XBOOLE_0:def 1;
    end;
    suppose
 A3:  A <> {};
@@ -871,18 +877,18 @@ A6:    s0 in B;
          then consider t0 being Element of RAT+ such that
 A7:       s = r0 *' t0 and
 A8:       t0 <=' s0 by A4,ARYTM_3:87;
-            t0 in B by A6,A8,Lm16;
+            t0 in B by A6,A8,Lm17;
         hence s in C by A5,A7;
        end;
        consider t0 being Element of RAT+ such that
 A9:     t0 in B and
-A10:     s0 < t0 by A6,Lm7;
+A10:     s0 < t0 by A6,Lm8;
       per cases;
       suppose
 A11:      r0 = {};
        consider r1 being Element of RAT+ such that
 A12:     r1 in A and
-A13:     r1 <> {} by A3,Lm15;
+A13:     r1 <> {} by A3,Lm16;
       take r1 *' t0;
       thus r1 *' t0 in C by A9,A12;
 A14:     r = {} by A4,A11,ARYTM_3:54;
@@ -903,16 +909,16 @@ then A17:     r <> r0 *' t0 by A4,A16,ARYTM_3:62;
      end;
 then A18:  C in IR;
     consider r0 being Element of RAT+ such that
-A19:  not r0 in A by Lm24;
+A19:  not r0 in A by Lm25;
     consider s0 being Element of RAT+ such that
-A20:  not s0 in B by Lm24;
+A20:  not s0 in B by Lm25;
        now assume r0 *' s0 in C;
       then consider r1,s1 being Element of RAT+ such that
 A21:    r0 *' s0 = r1 *' s1 and
 A22:    r1 in A and
 A23:    s1 in B;
          r0 <=' r1 or s0 <=' s1 by A21,ARYTM_3:91;
-     hence contradiction by A19,A20,A22,A23,Lm16;
+     hence contradiction by A19,A20,A22,A23,Lm17;
     end;
     then C <> RAT+;
    hence thesis by A18,ZFMISC_1:64;
@@ -955,11 +961,11 @@ A1: x = {};
     proof given e being set such that
 A2:    e in { r *' s : r in A & s in B};
          ex r,s st e = r *' s & r in A & s in B by A2;
-     hence contradiction by A1,Lm10;
+     hence contradiction by A1,Lm11;
     end;
   then { r *' s : r in A & s in B} = {} by XBOOLE_0:def 1;
   then A3:  A *' B = {};
- thus x *' y = {} by A3,Lm11;
+ thus x *' y = {} by A3,Lm12;
 end;
 
 canceled;
@@ -977,11 +983,11 @@ A2: y <> {};
  assume
 A3: x <> {};
   then GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y) = {} by A1,A2,Def8;
-  then A4: DEDEKIND_CUT x + DEDEKIND_CUT y = {} by Lm11;
-     DEDEKIND_CUT x <> {} by A3,Lm10;
+  then A4: DEDEKIND_CUT x + DEDEKIND_CUT y = {} by Lm12;
+     DEDEKIND_CUT x <> {} by A3,Lm11;
   then consider r0 being Element of RAT+ such that
 A5: r0 in DEDEKIND_CUT x by SUBSET_1:10;
-     DEDEKIND_CUT y <> {} by A2,Lm10;
+     DEDEKIND_CUT y <> {} by A2,Lm11;
   then consider s0 being Element of RAT+ such that
 A6: s0 in DEDEKIND_CUT y by SUBSET_1:10;
      r0 + s0 in { r + s : r in DEDEKIND_CUT x & s in DEDEKIND_CUT y } by A5,A6;
@@ -989,7 +995,7 @@ A6: s0 in DEDEKIND_CUT y by SUBSET_1:10;
 end;
 end;
 
-Lm25:
+Lm26:
  for A,B,C being Element of DEDEKIND_CUTS
   holds A + (B + C) c= A + B + C
 proof let A,B,C be Element of DEDEKIND_CUTS;
@@ -1012,15 +1018,15 @@ A7: e = r0 + r1 + s1 by A1,A4,ARYTM_3:57;
  hence e in A + B + C;
 end;
 
-Lm26:
+Lm27:
  for A,B,C being Element of DEDEKIND_CUTS
   holds A + (B + C) = A + B + C
 proof let A,B,C be Element of DEDEKIND_CUTS;
-     A + (B + C) c= A + B + C & A + B + C c= A + (B + C) by Lm25;
+     A + (B + C) c= A + B + C & A + B + C c= A + (B + C) by Lm26;
  hence thesis by XBOOLE_0:def 10;
 end;
 
-Lm27:
+Lm28:
  for A,B being Element of DEDEKIND_CUTS st A + B = {}
   holds A = {} or B = {}
 proof let A,B be Element of DEDEKIND_CUTS such that
@@ -1059,22 +1065,22 @@ A4: x <> {} and
 A5: y <> {} and
 A6: z <> {};
 A7: now assume GLUED(DEDEKIND_CUT y + DEDEKIND_CUT z) = {};
-      then DEDEKIND_CUT y + DEDEKIND_CUT z = {} by Lm11;
-      then DEDEKIND_CUT y = {} or DEDEKIND_CUT z = {} by Lm27;
-     hence contradiction by A5,A6,Lm10;
+      then DEDEKIND_CUT y + DEDEKIND_CUT z = {} by Lm12;
+      then DEDEKIND_CUT y = {} or DEDEKIND_CUT z = {} by Lm28;
+     hence contradiction by A5,A6,Lm11;
     end;
 A8: now assume GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y) = {};
-      then DEDEKIND_CUT x + DEDEKIND_CUT y = {} by Lm11;
-      then DEDEKIND_CUT x = {} or DEDEKIND_CUT y = {} by Lm27;
-     hence contradiction by A4,A5,Lm10;
+      then DEDEKIND_CUT x + DEDEKIND_CUT y = {} by Lm12;
+      then DEDEKIND_CUT x = {} or DEDEKIND_CUT y = {} by Lm28;
+     hence contradiction by A4,A5,Lm11;
     end;
  thus x + (y + z) = x + GLUED(DEDEKIND_CUT y + DEDEKIND_CUT z) by A5,A6,Def8
     .= GLUED(DEDEKIND_CUT x + DEDEKIND_CUT GLUED(DEDEKIND_CUT y +
          DEDEKIND_CUT z)) by A4,A7,Def8
-    .= GLUED(DEDEKIND_CUT x + (DEDEKIND_CUT y + DEDEKIND_CUT z)) by Lm12
-    .= GLUED((DEDEKIND_CUT x + DEDEKIND_CUT y) + DEDEKIND_CUT z) by Lm26
+    .= GLUED(DEDEKIND_CUT x + (DEDEKIND_CUT y + DEDEKIND_CUT z)) by Lm13
+    .= GLUED((DEDEKIND_CUT x + DEDEKIND_CUT y) + DEDEKIND_CUT z) by Lm27
     .= GLUED(DEDEKIND_CUT GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y) +
-       DEDEKIND_CUT z) by Lm12
+       DEDEKIND_CUT z) by Lm13
     .= GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y) + z by A6,A8,Def8
     .= (x + y) + z by A4,A5,Def8;
 end;
@@ -1106,7 +1112,7 @@ A7:  e in y;
  hence e in x by A1,A2,A5;
 end;
 
-Lm28:
+Lm29:
  for e being set st e in REAL+ holds e <> RAT+
 proof let e be set;
  assume e in REAL+;
@@ -1115,7 +1121,7 @@ proof let e be set;
   hence thesis by ZFMISC_1:64;
 end;
 
-Lm29:
+Lm30:
  for B being set holds B in IR & r in B & s <=' r implies s in B
 proof let B be set such that
 A1: B in IR and
@@ -1127,7 +1133,7 @@ A3: s <=' r;
  hence s in B by A2,A3;
 end;
 
-Lm30:
+Lm31:
  y < x implies ex z st z in RAT+ & z < x & y < z
 proof assume
 A1: y < x;
@@ -1136,13 +1142,13 @@ A1: y < x;
 A2: x in RAT+ and
 A3: y in RAT+;
   reconsider x' = x, y' = y as Element of RAT+ by A2,A3;
-     y' < x' by A1,Lm14;
+     y' < x' by A1,Lm15;
   then consider z' being Element of RAT+ such that
 A4: y' < z' & z' < x' by ARYTM_3:101;
      z' in RAT+;
   then reconsider z = z' as Element of REAL+ by Th1;
  take z;
- thus thesis by A4,Lm14;
+ thus thesis by A4,Lm15;
  end;
  suppose that
 A5: not x in RAT+ and
@@ -1163,7 +1169,7 @@ A10: y' < s by A7,A8;
  take z;
  thus z in RAT+;
  thus z < x by A5,A7,A9,Def5;
- thus y < z by A10,Lm14;
+ thus y < z by A10,Lm15;
  end;
  suppose that
 A11: x in RAT+ and
@@ -1212,7 +1218,7 @@ A23: not z' in y;
   then reconsider z = z' as Element of REAL+ by Th1;
  take z;
  thus z in RAT+;
- thus z < x by A22,Lm14;
+ thus z < x by A22,Lm15;
  thus y < z by A12,A23,Def5;
  end;
  suppose that
@@ -1243,7 +1249,7 @@ A30: not z' in B by A26,A27,A28,SUBSET_1:7;
 end;
 end;
 
-Lm31:
+Lm32:
  x <=' y & y <=' z implies x <=' z
 proof assume that
 A1: x <=' y and
@@ -1256,10 +1262,10 @@ A5: z in RAT+;
   reconsider x' = x as Element of RAT+ by A3;
   reconsider y' = y as Element of RAT+ by A4;
   reconsider z' = z as Element of RAT+ by A5;
-A6: x' <=' y' by A1,Lm14;
-      y' <=' z' by A2,Lm14;
+A6: x' <=' y' by A1,Lm15;
+      y' <=' z' by A2,Lm15;
   then x' <=' z' by A6,ARYTM_3:74;
- hence x <=' z by Lm14;
+ hence x <=' z by Lm15;
  end;
  suppose that
 A7: x in RAT+ and
@@ -1273,7 +1279,7 @@ A9: not z in RAT+;
 A10: z = C and
 A11: r in C implies
        (for s st s <=' r holds s in C) & ex s st s in C & r < s;
-A12: x' <=' y' by A1,Lm14;
+A12: x' <=' y' by A1,Lm15;
      y in C by A2,A8,A9,A10,Def5;
   then x' in C by A11,A12;
  hence x <=' z by A9,A10,Def5;
@@ -1293,7 +1299,7 @@ A17: r in B implies
 A18: x' in B by A1,A14,A16,Def5;
      not z' in B by A2,A14,A16,Def5;
   then x' <=' z' by A17,A18;
- hence x <=' z by Lm14;
+ hence x <=' z by Lm15;
  end;
  suppose that
 A19: x in RAT+ and
@@ -1329,7 +1335,7 @@ A29: r in A implies
   reconsider y' = y as Element of RAT+ by A26;
   reconsider z' = z as Element of RAT+ by A27;
 A30: not y' in A by A1,A25,A28,Def5;
-     y' <=' z' by A2,Lm14;
+     y' <=' z' by A2,Lm15;
   then not z' in A by A29,A30;
  hence x <=' z by A25,A28,Def5;
  end;
@@ -1442,9 +1448,9 @@ A5: y in Y;
     then consider x0 being Element of REAL+ such that
 A6:  x0 in RAT+ and
 A7:  x0 < x and
-A8:  z < x0 by Lm30;
+A8:  z < x0 by Lm31;
     reconsider x' = x0 as Element of RAT+ by A6;
-A9:  z' < x' by A8,Lm14;
+A9:  z' < x' by A8,Lm15;
        x' in Z by A4,A7;
    hence contradiction by A3,A9;
   end;
@@ -1453,9 +1459,9 @@ A9:  z' < x' by A8,Lm14;
   then consider y0 being Element of REAL+ such that
 A10: y0 in RAT+ and
 A11: y0 < z and
-A12: y < y0 by Lm30;
+A12: y < y0 by Lm31;
   reconsider y' = y0 as Element of RAT+ by A10;
-     y' < z' by A11,Lm14;
+     y' < z' by A11,Lm15;
   then y' in Z by A3;
   then ex y'' being Element of RAT+ st y' = y'' &
     ex x,z st z = y'' & x in X & z < x;
@@ -1463,7 +1469,7 @@ A12: y < y0 by Lm30;
 A13: y1 = y' and
 A14: x1 in X and
 A15: y1 < x1;
-     y < x1 by A12,A13,A15,Lm31;
+     y < x1 by A12,A13,A15,Lm32;
  hence contradiction by A2,A5,A14;
  end;
  suppose
@@ -1509,18 +1515,18 @@ A22:  y0 < x0;
           s in RAT+;
        then reconsider z = s as Element of REAL+ by Th1;
       assume s <=' t;
-       then z <=' y0 by Lm14;
-       then z < x0 by A22,Lm31;
+       then z <=' y0 by Lm15;
+       then z < x0 by A22,Lm32;
       hence s in Z by A21;
      end;
      consider z such that
 A23:  z in RAT+ and
 A24:  z < x0 and
-A25:   y0 < z by A22,Lm30;
+A25:   y0 < z by A22,Lm31;
      reconsider z' = z as Element of RAT+ by A23;
     take z';
     thus z' in Z by A21,A24;
-    thus thesis by A25,Lm14;
+    thus thesis by A25,Lm15;
    end;
   then A26:  Z in IR;
      now assume
@@ -1540,7 +1546,7 @@ A28:   not x1 in RAT+;
 A29:  x1 = A and
         r in A implies
        (for s st s <=' r holds s in A) & ex s st s in A & r < s;
-       x1 <> RAT+ by Lm28;
+       x1 <> RAT+ by Lm29;
     then consider x' being Element of RAT+ such that
 A30:   not x' in A by A29,SUBSET_1:49;
        x' in RAT+;
@@ -1551,7 +1557,7 @@ A31:  x1 < x2 by A28,A29,A30,Def5;
     then consider x such that
 A32:  x in X and
 A33:  x2 < x;
-       x1 < x by A31,A33,Lm31;
+       x1 < x by A31,A33,Lm32;
    hence contradiction by A1,A2,A32;
   end;
   end;
@@ -1559,7 +1565,7 @@ A33:  x2 < x;
   then Z in IR \ {RAT+} \ RA by A17,XBOOLE_0:def 4;
   then reconsider z = Z as Element of REAL+ by Lm5;
 A35: now assume z in RAT+;
-    then z in {{}} by A34,Lm9,XBOOLE_0:def 3;
+    then z in {{}} by A34,Lm10,XBOOLE_0:def 3;
     hence contradiction by TARSKI:def 1;
    end;
  take z;
@@ -1570,7 +1576,7 @@ A37: y in Y;
    then consider x0 being Element of REAL+ such that
 A38: x0 in RAT+ and
 A39: x0 < x and
-A40: z < x0 by Lm30;
+A40: z < x0 by Lm31;
    reconsider x' = x0 as Element of RAT+ by A38;
       x' in z by A36,A39;
   hence contradiction by A35,A40,Def5;
@@ -1579,22 +1585,22 @@ A40: z < x0 by Lm30;
   then consider y0 being Element of REAL+ such that
 A41: y0 in RAT+ and
 A42: y0 < z and
-A43: y < y0 by Lm30;
+A43: y < y0 by Lm31;
   reconsider y' = y0 as Element of RAT+ by A41;
      y' in z by A35,A42,Def5;
   then ex z' st y' = z' & ex x,z st z = z' & x in X & z < x;
   then consider x0 being Element of REAL+ such that
 A44: x0 in X and
 A45: y0 < x0;
-     y < x0 by A43,A45,Lm31;
+     y < x0 by A43,A45,Lm32;
  hence contradiction by A2,A37,A44;
 end;
 end;
 
-Lm32: one = 1;
-Lm33: {} = {};
+Lm33: one = 1;
+Lm34: {} = {};
 
-Lm34:
+Lm35:
  for A,B being Element of DEDEKIND_CUTS st A + B = A & A <> {}
   holds B = {}
 proof let A,B be Element of DEDEKIND_CUTS such that
@@ -1603,7 +1609,7 @@ A2: A <> {} and
 A3: B <> {};
   consider y' such that
 A4: y' in B and
-A5: y' <> {} by A3,Lm15;
+A5: y' <> {} by A3,Lm16;
      A <> RAT+ by ZFMISC_1:64;
   then consider r such that
 A6: not r in A by SUBSET_1:49;
@@ -1611,36 +1617,36 @@ A6: not r in A by SUBSET_1:49;
 A7: n in omega and
 A8: r <=' n *' y' by A5,ARYTM_3:103;
     defpred P[Element of RAT+] means $1 *' y' in A;
-A9: not P[n] by A6,A8,Lm16;
+A9: not P[n] by A6,A8,Lm17;
   consider A0 being Element of RAT+ such that
 A10: A0 in A by A2,SUBSET_1:10;
 A11: {} <=' A0 by ARYTM_3:71;
          {} *' y' = {} by ARYTM_3:54;
-then A12:   P[{}] by A10,A11,Lm16;
+then A12:   P[{}] by A10,A11,Lm17;
   consider n0 being Element of RAT+ such that
        n0 in omega and
 A13: P[n0] and
-A14: not P[n0 + one] from ARYTM_3:sch 2(Lm32,Lm33,A7,A12,A9);
+A14: not P[n0 + one] from ARYTM_3:sch 2(Lm33,Lm34,A7,A12,A9);
 A15:  (n0 + one) *' y' = n0 *' y' + one *' y' by ARYTM_3:63
          .= n0 *' y' + y' by ARYTM_3:59;
  thus contradiction by A1,A4,A13,A14,A15;
 end;
 
-Lm35:
+Lm36:
  x + y = x implies y = {}
 proof assume that
 A1: x + y = x and
 A2: y <> {};
 A3: x <> {} by A1,A2,Th6;
-then A4: DEDEKIND_CUT x <> {} by Lm10;
+then A4: DEDEKIND_CUT x <> {} by Lm11;
      DEDEKIND_CUT x = DEDEKIND_CUT GLUED(DEDEKIND_CUT x +
         DEDEKIND_CUT y) by A1,A2,A3,Def8
-     .= DEDEKIND_CUT x + DEDEKIND_CUT y by Lm12;
-  then DEDEKIND_CUT y = {} by A4,Lm34;
- hence contradiction by A2,Lm10;
+     .= DEDEKIND_CUT x + DEDEKIND_CUT y by Lm13;
+  then DEDEKIND_CUT y = {} by A4,Lm35;
+ hence contradiction by A2,Lm11;
 end;
 
-Lm36:
+Lm37:
  for A,B being Element of DEDEKIND_CUTS st A <> {} & A c= B & A <> B
   ex C being Element of DEDEKIND_CUTS st A + C = B
 proof let A,B be Element of DEDEKIND_CUTS such that
@@ -1683,12 +1689,12 @@ A12:    p + q = s0 by ARYTM_3:def 13;
           r0 + s + p = q + p by A9,A10,A12,ARYTM_3:57;
        then A13:      r0 + s = q by ARYTM_3:69;
           q <=' s0 by A12,ARYTM_3:85;
-       then q in B by A8,Lm16;
+       then q in B by A8,Lm17;
       hence s in DIF by A7,A13;
      end;
      consider s1 being Element of RAT+ such that
 A14:  s1 in B and
-A15:  s0 < s1 by A8,Lm7;
+A15:  s0 < s1 by A8,Lm8;
      consider q such that
 A16:  s0 + q = s1 by A15,ARYTM_3:def 13;
     take t + q;
@@ -1710,7 +1716,7 @@ A20: not s2 in B by SUBSET_1:49;
 A21:  t in B and
 A22: r + s2 = t;
        s2 <=' t by A22,ARYTM_3:85;
-   hence contradiction by A20,A21,Lm16;
+   hence contradiction by A20,A21,Lm17;
   end;
   then DIF <> RAT+;
   then reconsider DIF as Element of DEDEKIND_CUTS by A19,ZFMISC_1:64;
@@ -1733,8 +1739,8 @@ A24:     y' in A;
 A25:     not y' in A;
        consider s0 being Element of RAT+ such that
 A26:     s0 in B and
-A27:     y' < s0 by A23,Lm7;
-A28:    not s0 in A by A25,A27,Lm16;
+A27:     y' < s0 by A23,Lm8;
+A28:    not s0 in A by A25,A27,Lm17;
        set Z = { r : ex x' st not x' in A & x' + r = s0 };
 A29:   s0 + {} = s0 by ARYTM_3:92;
        for r2 being Element of RAT+ st r2 < s0
@@ -1759,18 +1765,18 @@ A34:    r2 + q = s0 by A30,ARYTM_3:def 13;
 A35:    n in omega and
 A36:    s0 <=' n *' q by ARYTM_3:103;
        defpred P[Element of RAT+] means $1 *' q in A;
-A37:   not P[n] by A28,A36,Lm16;
+A37:   not P[n] by A28,A36,Lm17;
       consider y0 being Element of RAT+ such that
 A38:   y0 in A by A1,SUBSET_1:10;
          {} *' q = {} by ARYTM_3:54;
-then A39:   P[{}] by A38,Lm17;
+then A39:   P[{}] by A38,Lm18;
       consider n0 being Element of RAT+ such that
           n0 in omega and
 A40:   P[n0] and
-A41:   not P[n0 + one] from ARYTM_3:sch 2(Lm32,Lm33,A35,A39,A37);
+A41:   not P[n0 + one] from ARYTM_3:sch 2(Lm33,Lm34,A35,A39,A37);
 A42:    (n0 + one) *' q = n0 *' q + one *' q by ARYTM_3:63
          .= n0 *' q + q by ARYTM_3:59;
-         n0 *' q <=' r2 by A33,A40,Lm16;
+         n0 *' q <=' r2 by A33,A40,Lm17;
       then n0 *' q + q <=' s0 by A34,ARYTM_3:83;
       then consider t such that
 A43:    n0 *' q + q + t = s0 by ARYTM_3:def 13;
@@ -1801,23 +1807,23 @@ A49:   t3 in DIF;
 A50:   not r4 in A and
 A51:   s4 in B and
 A52:   r4 + t3 = s4;
-        s3 <=' r4 by A48,A50,Lm16;
+        s3 <=' r4 by A48,A50,Lm17;
      then s3 + t3 <=' s4 by A52,ARYTM_3:83;
-    hence e in B by A47,A51,Lm16;
+    hence e in B by A47,A51,Lm17;
    end;
  hence B = A + DIF;
 end;
 
-Lm37:
+Lm38:
  x <=' y implies DEDEKIND_CUT x c= DEDEKIND_CUT y
 proof assume
 A1: x <=' y;
 A2: DEDEKIND_CUT x in IR & DEDEKIND_CUT y in IR by XBOOLE_0:def 4;
  assume
 A3: not DEDEKIND_CUT x c= DEDEKIND_CUT y;
-  then DEDEKIND_CUT y c= DEDEKIND_CUT x by A2,Lm13;
-  then y <=' x by Lm20;
- hence thesis by A1,A3,Lm21;
+  then DEDEKIND_CUT y c= DEDEKIND_CUT x by A2,Lm14;
+  then y <=' x by Lm21;
+ hence thesis by A1,A3,Lm22;
 end;
 
 theorem Th10:
@@ -1840,11 +1846,11 @@ A3:  x = y;
  suppose that
 A4: x <> {} and
 A5: x <> y;
-A6: DEDEKIND_CUT x <> {} by A4,Lm10;
-A7: DEDEKIND_CUT x <> DEDEKIND_CUT y by A5,Lm22;
-A8: DEDEKIND_CUT x c= DEDEKIND_CUT y by A1,Lm37;
+A6: DEDEKIND_CUT x <> {} by A4,Lm11;
+A7: DEDEKIND_CUT x <> DEDEKIND_CUT y by A5,Lm23;
+A8: DEDEKIND_CUT x c= DEDEKIND_CUT y by A1,Lm38;
   then consider C being Element of DEDEKIND_CUTS such that
-A9: DEDEKIND_CUT x + C = DEDEKIND_CUT y by A6,A7,Lm36;
+A9: DEDEKIND_CUT x + C = DEDEKIND_CUT y by A6,A7,Lm37;
  take GLUED C;
      now assume
 A10:  C = {};
@@ -1858,10 +1864,10 @@ A11:     e in { r + s : r in C & s in DEDEKIND_CUT x};
     then DEDEKIND_CUT y = {} by A9,Def6;
    hence contradiction by A6,A8,XBOOLE_1:3;
   end;
- then GLUED C <> {} by Lm11;
+ then GLUED C <> {} by Lm12;
  hence x + GLUED C = GLUED(DEDEKIND_CUT x + DEDEKIND_CUT GLUED C) by A4,Def8
-     .= GLUED DEDEKIND_CUT y by A9,Lm12
-     .= y by Lm23;
+     .= GLUED DEDEKIND_CUT y by A9,Lm13
+     .= y by Lm24;
 end;
 end;
 
@@ -1882,18 +1888,18 @@ A2: z + q = y or y + q = z by Th11;
  suppose
 A3: z + q = y;
   then x + y = x + y + q by A1,Th7;
-  then q = {} by Lm35;
+  then q = {} by Lm36;
  hence y = z by A3,Def8;
  end;
  suppose
 A4: y + q = z;
   then x + z = x + z + q by A1,Th7;
-  then q = {} by Lm35;
+  then q = {} by Lm36;
  hence y = z by A4,Def8;
 end;
 end;
 
-Lm38:
+Lm39:
  for A,B,C being Element of DEDEKIND_CUTS
   holds A *' (B *' C) c= A *' B *' C
 proof let A,B,C be Element of DEDEKIND_CUTS;
@@ -1916,11 +1922,11 @@ A7: e = r0 *' r1 *' s1 by A1,A4,ARYTM_3:58;
  hence e in A *' B *' C;
 end;
 
-Lm39:
+Lm40:
  for A,B,C being Element of DEDEKIND_CUTS
   holds A *' (B *' C) = A *' B *' C
 proof let A,B,C be Element of DEDEKIND_CUTS;
-     A *' (B *' C) c= A *' B *' C & A *' B *' C c= A *' (B *' C) by Lm38;
+     A *' (B *' C) c= A *' B *' C & A *' B *' C c= A *' (B *' C) by Lm39;
  hence thesis by XBOOLE_0:def 10;
 end;
 
@@ -1928,16 +1934,16 @@ theorem
     x *' (y *' z) = x *' y *' z
 proof
  thus x *' (y *' z) =
- GLUED(DEDEKIND_CUT x *' (DEDEKIND_CUT y *' DEDEKIND_CUT z)) by Lm12
-     .= GLUED((DEDEKIND_CUT x *' DEDEKIND_CUT y) *' DEDEKIND_CUT z) by Lm39
-     .= x *' y *' z by Lm12;
+ GLUED(DEDEKIND_CUT x *' (DEDEKIND_CUT y *' DEDEKIND_CUT z)) by Lm13
+     .= GLUED((DEDEKIND_CUT x *' DEDEKIND_CUT y) *' DEDEKIND_CUT z) by Lm40
+     .= x *' y *' z by Lm13;
 end;
 
-Lm40:
+Lm41:
  x *' y = {} implies x = {} or y = {}
 proof assume x *' y = {};
   then GLUED(DEDEKIND_CUT x *' DEDEKIND_CUT y) = {};
-  then A1: DEDEKIND_CUT x *' DEDEKIND_CUT y = {} by Lm11;
+  then A1: DEDEKIND_CUT x *' DEDEKIND_CUT y = {} by Lm12;
      DEDEKIND_CUT x = {} or DEDEKIND_CUT y = {}
    proof assume DEDEKIND_CUT x <> {};
      then consider r0 being Element of RAT+ such that
@@ -1949,10 +1955,10 @@ A3:   s0 in DEDEKIND_CUT y by SUBSET_1:10;
  s : r in DEDEKIND_CUT x & s in DEDEKIND_CUT y} by A2,A3;
     hence contradiction by A1;
    end;
- hence x = {} or y = {} by Lm10;
+ hence x = {} or y = {} by Lm11;
 end;
 
-Lm41:
+Lm42:
 for A,B,C being Element of DEDEKIND_CUTS
  holds A *' (B + C) = A *' B + A *' C
 proof let A,B,C be Element of DEDEKIND_CUTS;
@@ -2000,7 +2006,7 @@ A17: t0 in C;
   then consider s0' being Element of RAT+ such that
 A18: r0 *' s0 = r0' *' s0' and
 A19: s0' <=' s0 by ARYTM_3:87;
-      s0' in B by A14,A19,Lm16;
+      s0' in B by A14,A19,Lm17;
    then s0' + t0 in { s + t: s in B & t in C } by A17;
 then A20: s0' + t0 in B + C;
      e = r0' *' (s0' + t0) by A9,A12,A15,A18,ARYTM_3:63;
@@ -2012,7 +2018,7 @@ then A20: s0' + t0 in B + C;
   then consider t0' being Element of RAT+ such that
 A21: r0' *' t0 = r0 *' t0' and
 A22: t0' <=' t0 by ARYTM_3:87;
-      t0' in C by A17,A22,Lm16;
+      t0' in C by A17,A22,Lm17;
    then s0 + t0' in { s + t: s in B & t in C } by A14;
 then A23: s0 + t0' in B + C;
      e = r0 *' (s0 + t0') by A9,A12,A15,A21,ARYTM_3:63;
@@ -2047,16 +2053,16 @@ A3: z = {};
 A4: x <> {} and
 A5: y <> {} and
 A6: z <> {};
-A7: x *' y <> {} by A4,A5,Lm40;
-A8: x *' z <> {} by A4,A6,Lm40;
+A7: x *' y <> {} by A4,A5,Lm41;
+A8: x *' z <> {} by A4,A6,Lm41;
  thus x *' (y + z) =
  GLUED(DEDEKIND_CUT x *' DEDEKIND_CUT GLUED(DEDEKIND_CUT y +
        DEDEKIND_CUT z)) by A5,A6,Def8
-    .= GLUED(DEDEKIND_CUT x *' (DEDEKIND_CUT y + DEDEKIND_CUT z)) by Lm12
+    .= GLUED(DEDEKIND_CUT x *' (DEDEKIND_CUT y + DEDEKIND_CUT z)) by Lm13
     .= GLUED((DEDEKIND_CUT x *' DEDEKIND_CUT y) + (DEDEKIND_CUT x *'
-       DEDEKIND_CUT z)) by Lm41
-    .= GLUED((DEDEKIND_CUT x *' DEDEKIND_CUT y) + DEDEKIND_CUT (x*'z)) by Lm12
-    .= GLUED(DEDEKIND_CUT(x*'y) + DEDEKIND_CUT (x*'z)) by Lm12
+       DEDEKIND_CUT z)) by Lm42
+    .= GLUED((DEDEKIND_CUT x *' DEDEKIND_CUT y) + DEDEKIND_CUT (x*'z)) by Lm13
+    .= GLUED(DEDEKIND_CUT(x*'y) + DEDEKIND_CUT (x*'z)) by Lm13
     .= (x *' y) + (x *' z) by A7,A8,Def8;
 end;
 end;
@@ -2064,7 +2070,7 @@ end;
     one in RAT+;
  then reconsider rone = one as Element of REAL+ by Th1;
 
-Lm42:
+Lm43:
  for B being set st B in IR & B <> {} ex r st r in B & r <> {}
 proof let B be set such that
 A1: B in IR and
@@ -2087,7 +2093,7 @@ A10: r1 <> r2 & r2 <> r3 & r3 <> r1 by A5,A6,A8,ARYTM_3:82;
  hence thesis by A3,A9;
 end;
 
-Lm43:
+Lm44:
  for A being Element of DEDEKIND_CUTS st A <> {}
   ex B being Element of DEDEKIND_CUTS st A *' B = DEDEKIND_CUT rone
 proof let A be Element of DEDEKIND_CUTS such that
@@ -2162,7 +2168,7 @@ A20:    t0 <=' s0 by A18,ARYTM_3:87;
       then t0 in B;
       then consider t1 being Element of RAT+ such that
 A21:    t1 in B and
-A22:    t0 < t1 by Lm7;
+A22:    t0 < t1 by Lm8;
          r0 *' t0 <=' t1 *' r0 by A22,ARYTM_3:90;
       then consider r1 being Element of RAT+ such that
 A23:    r0 *' t0 = t1 *' r1 and
@@ -2198,7 +2204,7 @@ A29: A in IR by ZFMISC_1:64;
   consider x' such that
 A30: x' in A by A1,SUBSET_1:10;
      {} <=' x' by ARYTM_3:71;
-then A31: {} in A by A29,A30,Lm29;
+then A31: {} in A by A29,A30,Lm30;
      r in B implies
    (for s st s <=' r holds s in B) & ex s st s in B & r < s
   proof assume r in B;
@@ -2216,7 +2222,7 @@ A33:   x' *' r <=' one;
        A in DEDEKIND_CUTS \ RA by A25,XBOOLE_0:def 4;
     then consider x'' being Element of RAT+ such that
 A34:  not x'' in A and
-A35:  x'' < x' by A30,A32,Lm18;
+A35:  x'' < x' by A30,A32,Lm19;
 A36: x'' <=' x' & x'' <> x' by A35;
     consider s such that
 A37:  one = x'' *' s by A31,A34,ARYTM_3:61;
@@ -2237,7 +2243,7 @@ A40:  s <> {} by A37,ARYTM_3:54;
 then A41: B in IR;
   consider x' such that
 A42: x' in A and
-A43: x' <> {} by A1,A29,Lm42;
+A43: x' <> {} by A1,A29,Lm43;
   consider y' such that
 A44: x' *' y' = one by A43,ARYTM_3:61;
      now assume y' in B;
@@ -2247,7 +2253,7 @@ A45: not z' in A and
 A46: z' *' y' <=' one;
        y' <> {} by A44,ARYTM_3:54;
     then z' <=' x' by A44,A46,ARYTM_3:88;
-   hence contradiction by A29,A42,A45,Lm29;
+   hence contradiction by A29,A42,A45,Lm30;
   end;
   then B <> RAT+;
   then not B in {RAT+} by TARSKI:def 1;
@@ -2265,7 +2271,7 @@ A49:    t in B;
       then consider x' such that
 A50:    not x' in A and
 A51:    x' *' t <=' one;
-         s <=' x' by A29,A48,A50,Lm29;
+         s <=' x' by A29,A48,A50,Lm30;
       then A52:    s *' t <=' x' *' t by ARYTM_3:90;
 then A53:  r <=' one by A47,A51,ARYTM_3:74;
         now assume
@@ -2299,11 +2305,11 @@ A61:   n0 in omega and
 A62:   xx <=' n0 *' rr by ARYTM_3:103;
       defpred P[Element of RAT+] means $1 *' rr in A;
 A63:  P[{}] by A31,ARYTM_3:54;
-A64:  not P[n0] by A29,A60,A62,Lm29;
+A64:  not P[n0] by A29,A60,A62,Lm30;
      consider n1 being Element of RAT+ such that
          n1 in omega and
 A65:   P[n1] and
-A66:   not P[n1 + one] from ARYTM_3:sch 2(Lm32,Lm33,A61,A63,A64);
+A66:   not P[n1 + one] from ARYTM_3:sch 2(Lm33,Lm34,A61,A63,A64);
         { r *' s : s in A } c= RAT+
       proof let e be set;
        assume e in { r *' s : s in A };
@@ -2326,7 +2332,7 @@ A71:     s1 = s0 & x' <=' s1 or s1 = x' & s0 <=' s1;
        then A73: r *' s1 + dr *' x' <=' r *' s1 + dr *' s1 by ARYTM_3:83;
           r *' s1 + dr *' s1 = (r + dr) *' s1 by ARYTM_3:63
              .= s1 by A59,ARYTM_3:59;
-      hence contradiction by A29,A42,A66,A69,A70,A71,A72,A73,Lm29;
+      hence contradiction by A29,A42,A66,A69,A70,A71,A72,A73,Lm30;
      end;
      set s0 = n1 *' rr;
         r *' {} = {} by ARYTM_3:54;
@@ -2352,22 +2358,22 @@ A76:    s0 *' r' in A;
    end;
    end;
   then DEDEKIND_CUT GLUED(A *' B) = DEDEKIND_CUT rone by Def4;
- hence A *' B = DEDEKIND_CUT rone by Lm12;
+ hence A *' B = DEDEKIND_CUT rone by Lm13;
 end;
 end;
 
 theorem
     x <> {} implies ex y st x *' y = one
 proof assume x <> {};
-  then DEDEKIND_CUT x <> {} by Lm10;
+  then DEDEKIND_CUT x <> {} by Lm11;
   then consider B being Element of DEDEKIND_CUTS such that
-A1:  DEDEKIND_CUT x *' B = DEDEKIND_CUT rone by Lm43;
+A1:  DEDEKIND_CUT x *' B = DEDEKIND_CUT rone by Lm44;
  take y = GLUED B;
- thus x *' y = GLUED DEDEKIND_CUT rone by A1,Lm12
-    .= one by Lm23;
+ thus x *' y = GLUED DEDEKIND_CUT rone by A1,Lm13
+    .= one by Lm24;
 end;
 
-Lm44:
+Lm45:
  for A,B being Element of DEDEKIND_CUTS st A = { r: r < one }
   holds A *' B = B
 proof let A,B be Element of DEDEKIND_CUTS such that
@@ -2382,7 +2388,7 @@ A4:  s in B;
        ex t st t = r & t < one by A1,A3;
     then r *' s <=' one *' s by ARYTM_3:90;
     then r *' s <=' s by ARYTM_3:59;
-   hence e in B by A2,A4,Lm16;
+   hence e in B by A2,A4,Lm17;
   end;
  let e be set;
  assume
@@ -2390,7 +2396,7 @@ A5: e in B;
   then reconsider s = e as Element of RAT+;
   consider s1 being Element of RAT+ such that
 A6: s1 in B and
-A7: s < s1 by A5,Lm7;
+A7: s < s1 by A5,Lm8;
      s1 <> {} by A7,ARYTM_3:71;
   then consider s2 being Element of RAT+ such that
 A8: s1 *' s2 = s by ARYTM_3:61;
@@ -2410,11 +2416,11 @@ theorem
 proof assume
 A1: x = one;
 then A2: ex r st x = r & DEDEKIND_CUT x = { s : s < r } by Def3;
- thus x *' y = GLUED DEDEKIND_CUT y by A1,A2,Lm44
-    .= y by Lm23;
+ thus x *' y = GLUED DEDEKIND_CUT y by A1,A2,Lm45
+    .= y by Lm24;
 end;
 
-Lm45:
+Lm46:
  for i,j being Element of omega, x',y' st i = x' & j = y'
   holds i +^ j = x' + y'
 proof let i,j be Element of omega, x',y';
@@ -2436,7 +2442,7 @@ A7: RED(a,b) = one by A5,ARYTM_3:29;
    .= x' + y' by A7,ARYTM_3:def 10;
 end;
 
-Lm46:
+Lm47:
  z' < x' + y' & x' <> {} & y' <> {} implies
   ex r,s st z' = r + s & r < x' & s < y'
 proof assume that
@@ -2475,7 +2481,7 @@ A13: r1 <=' r0 & r1 <> r0 by A8,ARYTM_3:98;
 end;
 end;
 
-Lm47:
+Lm48:
  x in RAT+ & y in RAT+ implies
   ex x',y' st x = x' & y = y' & x + y = x' + y'
 proof assume that
@@ -2530,7 +2536,7 @@ A14:      s1 in B;
       then consider t2,t0 being Element of RAT+ such that
 A16:    s2 = t2 + t0 and
 A17:    t2 < x' and
-A18:    t0 < y' by A5,A6,A7,A9,Lm46;
+A18:    t0 < y' by A5,A6,A7,A9,Lm47;
 A19:    t0 in B by A10,A18;
          t2 in A by A8,A17;
       then s2 in { r + s : r in A & s in B } by A16,A19;
@@ -2545,7 +2551,7 @@ A22: for s holds s < x' + y' iff s < r
      hence thesis by A21;
     end;
  thus x + y = GLUED(DEDEKIND_CUT x + DEDEKIND_CUT y) by A5,A6,Def8
-    .= x' + y' by A20,A22,Lm6;
+    .= x' + y' by A20,A22,Lm7;
 end;
 end;
 
@@ -2557,8 +2563,8 @@ A1: x in omega & y in omega;
     consider x',y' being Element of RAT+ such that
 A2:  x = x' and
 A3:  y = y' and
-A4:  x + y = x' + y' by A1,Lm47,ARYTM_3:34;
-       x' + y' = x0 +^ y0 by A2,A3,Lm45;
+A4:  x + y = x' + y' by A1,Lm48,Lm6;
+       x' + y' = x0 +^ y0 by A2,A3,Lm46;
    hence thesis by A4,ORDINAL1:def 13;
   end;
 
@@ -2576,22 +2582,22 @@ A3: for a being natural Ordinal st P[a] holds P[succ a]
        one in RAT+;
     then reconsider rone = one as Element of REAL+ by Th1;
     A4: a in omega by ORDINAL1:def 13;
-    then a in RAT+ by ARYTM_3:34;
+    then a in RAT+ by Lm6;
     then reconsider x = a as Element of REAL+ by Th1;
    assume A5: a in A;
     consider x', y' being Element of RAT+ such that
 A6:  x = x' and
 A7:  rone = y' and
-A8:  x + rone = x' + y' by A4,Lm47,ARYTM_3:34;
+A8:  x + rone = x' + y' by A4,Lm48,Lm6;
     reconsider i = a as Element of omega by ORDINAL1:def 13;
-       x' + y' = i +^ 1 by A6,A7,Lm45
+       x' + y' = i +^ 1 by A6,A7,Lm46
        .= succ i by ORDINAL2:48;
    hence succ a in A by A2,A5,A8;
   end;
 A9: for a being natural Ordinal holds P[a] from ARYTM_3:sch 1(A1,A3);
  let e be set;
  assume e in omega;
-  then e is natural Ordinal by ORDINAL1:23,ORDINAL1:def 13;
+  then e is natural Ordinal by ORDINAL1:23,def 13;
  hence thesis by A9;
 end;
 
@@ -2603,13 +2609,13 @@ proof let x;
 A1: x in omega;
 then A2: x c= omega by ORDINAL1:def 2;
   reconsider m = x as Element of omega by A1;
-  reconsider x' = x as Element of RAT+ by A1,ARYTM_3:34;
+  reconsider x' = x as Element of RAT+ by A1,Lm6;
  let y;
  hereby assume
 A3:  y in x;
   hence
     y in omega by A2;
-   then reconsider y' = y as Element of RAT+ by ARYTM_3:34;
+   then reconsider y' = y as Element of RAT+ by Lm6;
    reconsider n = y as Element of omega by A2,A3;
   thus y <> x by A3;
       n c= m by A3,ORDINAL1:def 2;
@@ -2618,23 +2624,23 @@ A4: m = n +^ C by ORDINAL3:30;
       C c= m by A4,ORDINAL3:27;
    then reconsider C as Element of omega by ORDINAL1:22;
       C in omega;
-   then reconsider z' = C as Element of RAT+ by ARYTM_3:34;
-      x' = y' + z' by A4,Lm45;
+   then reconsider z' = C as Element of RAT+ by Lm6;
+      x' = y' + z' by A4,Lm46;
    then y' <=' x' by ARYTM_3:def 13;
-  hence y <=' x by Lm14;
+  hence y <=' x by Lm15;
  end;
  assume
 A5: y in omega;
   then reconsider n = y as Element of omega;
-  reconsider y' = y as Element of RAT+ by A5,ARYTM_3:34;
+  reconsider y' = y as Element of RAT+ by A5,Lm6;
  assume
 A6: y <> x;
  assume y <=' x;
-  then y' <=' x' by Lm14;
+  then y' <=' x' by Lm15;
   then consider z' such that
 A7: y' + z' = x' by ARYTM_3:def 13;
   reconsider k = z' as Element of omega by A1,A5,A7,ARYTM_3:78;
-     n +^ k = m by A7,Lm45;
+     n +^ k = m by A7,Lm46;
   then n c= m by ORDINAL3:27;
   then n c< m by A6,XBOOLE_0:def 8;
  hence y in x by ORDINAL1:21;
@@ -2751,6 +2757,6 @@ A28: for s holds s < x' *' y' iff s < r
          s in DEDEKIND_CUT x *' DEDEKIND_CUT y iff s < x' *' y' by A10;
      hence thesis by A27;
     end;
- thus x *' y = x' *' y' by A26,A28,Lm6;
+ thus x *' y = x' *' y' by A26,A28,Lm7;
 end;
 end;

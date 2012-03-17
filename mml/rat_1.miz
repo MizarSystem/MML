@@ -7,18 +7,19 @@
 environ
 
  vocabularies ARYTM, INT_1, ARYTM_3, ARYTM_1, RELAT_1, RAT_1, ORDINAL2, BOOLE,
-      COMPLEX1, OPPCAT_1, ARYTM_2, QUOFIELD;
+      COMPLEX1, OPPCAT_1, ARYTM_2, QUOFIELD, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_3, ARYTM_2,
-      NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, NAT_1, INT_1, ARYTM_1,
-      XXREAL_0;
+      NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, NAT_1, NAT_D, INT_1,
+      ARYTM_1, XXREAL_0;
  constructors FUNCT_4, ARYTM_1, ARYTM_0, XXREAL_0, REAL_1, NAT_1, INT_1,
-      ORDINAL2, ORDINAL3;
+      ORDINAL2, ORDINAL3, NAT_D;
  registrations INT_1, XREAL_0, REAL_1, ZFMISC_1, XBOOLE_0, NUMBERS, ARYTM_3,
       ORDINAL2, ARYTM_2, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XREAL_0, TARSKI, XBOOLE_0, XCMPLX_0, ARYTM_3;
  theorems REAL_1, INT_1, NAT_1, TARSKI, XREAL_0, XCMPLX_0, XCMPLX_1, XBOOLE_0,
-      NUMBERS, ARYTM_3, ARYTM_0, ARYTM_2, ZFMISC_1, ARYTM_1, XREAL_1, XXREAL_0;
+      NUMBERS, ARYTM_3, ARYTM_0, ARYTM_2, ZFMISC_1, ARYTM_1, XREAL_1, XXREAL_0,
+      XBOOLE_1;
  schemes NAT_1;
 
 begin
@@ -34,7 +35,12 @@ begin
 
 reserve i1,j1 for Element of NAT;
 
-Lm1:
+Lm1: omega c=
+({[c,d] where c,d is Element of omega: c,d are_relative_prime & d <> {}} \
+  {[k,1] where k is Element of omega: not contradiction}) \/ omega
+by XBOOLE_1:7;
+
+Lm2:
  quotient(i1,j1) = i1/j1
 proof
    set x = quotient(i1,j1);
@@ -76,9 +82,9 @@ ARYTM_0:def 7
            .= +(*(x'1,y1),0) by A9,ARYTM_0:14
            .= *(x'1,y1) by ARYTM_0:13;
       A18: x'1 in omega by A14;
-      then A19:    x'1 in RAT+ by ARYTM_3:34;
+      then A19:    x'1 in RAT+ by Lm1;
          x1 in omega by A7;
-      then reconsider xx = x1 as Element of RAT+ by ARYTM_3:34;
+      then reconsider xx = x1 as Element of RAT+ by Lm1;
       consider yy being Element of RAT+ such that
 A20:    xx *' yy = one by A2,A7,ARYTM_3:60;
          xx in RAT+ & yy in RAT+;
@@ -98,9 +104,9 @@ A26:    i1 * j1" = x' *' y' by A17,A19,ARYTM_0:def 3,ARYTM_2:1;
       consider x'',y'' being Element of RAT+ such that
 A27:   x' = x'' and
 A28:   y' = y'' and
-A29:   i1 * j1" = x'' *' y'' by A18,A22,A24,A25,A26,ARYTM_2:22,ARYTM_3:34;
+A29:   i1 * j1" = x'' *' y'' by A18,A22,A24,A25,A26,ARYTM_2:22,Lm1;
 A30:   j1 in omega;
-      then reconsider a = x, b = j1 as Element of RAT+ by ARYTM_3:34;
+      then reconsider a = x, b = j1 as Element of RAT+ by Lm1;
          x1 in omega by A7;
       then consider x1',y1' being Element of REAL+ such that
 A31:   x1 = x1' and
@@ -108,7 +114,7 @@ A32:   y1 = y1' and
 A33:   *(x1,y1) = x1' *' y1' by A23,ARYTM_0:def 3,ARYTM_2:1,2;
       A34: ex x1'',y1'' being Element of RAT+
          st x1' = x1'' & y1' = y1'' & x1' *' y1' = x1'' *' y1''
-           by A7,A22,A30,A31,A32,ARYTM_2:22,ARYTM_3:34;
+           by A7,A22,A30,A31,A32,ARYTM_2:22,Lm1;
          a *' b = quotient(i1,j1) *' quotient(j1,one) by ARYTM_3:46
          .= quotient(i1*^j1,j1*^one) by ARYTM_3:55
          .= quotient(i1,one) *' quotient(j1,j1) by ARYTM_3:55
@@ -124,7 +130,7 @@ end;
 0 in omega;
   then reconsider 0' = 0 as Element of REAL+ by ARYTM_2:2;
 
-Lm2:
+Lm3:
  for x' being Element of REAL+ st x' = a
   holds 0' - x' = -a
 proof let xx being Element of REAL+ such that
@@ -172,7 +178,7 @@ A16:  y' = xx -' 0' by A4,A11,A14,ZFMISC_1:33;
 end;
 end;
 
-Lm3: x in RAT implies ex m,n st x = m/n
+Lm4: x in RAT implies ex m,n st x = m/n
   proof assume
 A1: x in RAT;
 then A2: x in RAT+ \/ [:{0},RAT+:] by NUMBERS:def 3;
@@ -181,7 +187,7 @@ then A2: x in RAT+ \/ [:{0},RAT+:] by NUMBERS:def 3;
     then reconsider x as Element of RAT+;
    take numerator x,denominator x;
        quotient(numerator x,denominator x) = x by ARYTM_3:45;
-   hence thesis by Lm1;
+   hence thesis by Lm2;
    end;
    suppose x in [:{0},RAT+:];
     then consider x1,x2 being set such that
@@ -192,18 +198,18 @@ A5:  x = [x1,x2] by ZFMISC_1:103;
     reconsider x' = x2 as Element of REAL+ by A4,ARYTM_2:1;
    take m = -numerator x2, n = denominator x2;
 A6:  x2 = quotient(numerator x2,denominator x2) by ARYTM_3:45
-      .= numerator x2/n by Lm1;
+      .= numerator x2/n by Lm2;
     A7: x1 = 0 by A3,TARSKI:def 1;
     A8:   x = [0,x'] by A3,A5,TARSKI:def 1;
       not x in {[0,0]} by A1,NUMBERS:def 3,XBOOLE_0:def 4;
       then x2 <> 0 by A8,TARSKI:def 1;
    hence x = 0' - x' by A5,A7,ARYTM_1:19
-         .= -numerator x2/n by A6,Lm2
+         .= -numerator x2/n by A6,Lm3
          .= m/n;
   end;
   end;
 
-Lm4: x = m/l implies x in RAT
+Lm5: x = m/l implies x in RAT
  proof assume
 A1: x = m/l;
    then x in REAL by XREAL_0:def 1;
@@ -214,13 +220,13 @@ A1: x = m/l;
    then x = m * 0" by A1
          .= 0;
     then x in omega;
-     then x in RAT+ \/ [:{0},RAT+:] by ARYTM_3:34,XBOOLE_0:def 2;
+     then x in RAT+ \/ [:{0},RAT+:] by Lm1,XBOOLE_0:def 2;
    hence thesis by A2,NUMBERS:def 3,XBOOLE_0:def 4;
   end;
   suppose ex k st m = k;
    then consider k such that
 A4:  m = k;
-      x = quotient(k,l) by A1,A4,Lm1;
+      x = quotient(k,l) by A1,A4,Lm2;
    then x in RAT+ \/ [:{0},RAT+:] by XBOOLE_0:def 2;
   hence x in RAT by A2,NUMBERS:def 3,XBOOLE_0:def 4;
   end;
@@ -230,12 +236,12 @@ A6: for k holds m <> k;
    consider k such that
 A7:  m = -k by A3,A6,INT_1:def 1;
 A8:  x = -k/l by A1,A7;
-   A9: k/l = quotient(k,l) by Lm1;
+   A9: k/l = quotient(k,l) by Lm2;
    then k/l in RAT+;
    then reconsider x' = k/l as Element of REAL+ by ARYTM_2:1;
       m <> 0 by A6;
    then A10:  x' <> 0 by A1,A5,A8,XCMPLX_1:50;
-A11:  x = 0' - x' by A8,Lm2
+A11:  x = 0' - x' by A8,Lm3
     .= [0,x'] by A10,ARYTM_1:19;
       0 in {0} by TARSKI:def 1;
    then x in [:{0},RAT+:] by A9,A11,ZFMISC_1:106;
@@ -244,7 +250,7 @@ A11:  x = 0' - x' by A8,Lm2
  end;
  end;
 
-Lm5: x = m/n implies x in RAT
+Lm6: x = m/n implies x in RAT
  proof assume
 A1: x = m/n;
       n is Element of INT by INT_1:def 2;
@@ -252,11 +258,11 @@ A1: x = m/n;
 A2:  n = k or n = -k by INT_1:def 1;
   per cases by A2;
   suppose n = k;
-  hence x in RAT by A1,Lm4;
+  hence x in RAT by A1,Lm5;
   end;
   suppose n = -k;
    then x = (-m)/k by A1,XCMPLX_1:193;
-  hence x in RAT by Lm4;
+  hence x in RAT by Lm5;
  end;
  end;
 
@@ -266,18 +272,18 @@ definition
   compatibility
    proof let R be set;
     thus R = RAT implies for x holds x in R iff ex m,n st x = m/n
-          by Lm3,Lm5;
+          by Lm4,Lm6;
     assume
 A1:   for x holds x in R iff ex m,n st x = m/n;
     thus R c= RAT
      proof let x;
       assume x in R;
        then ex m,n st x = m/n by A1;
-      hence thesis by Lm5;
+      hence thesis by Lm6;
      end;
     let x;
     assume x in RAT;
-     then ex m,n st x = m/n by Lm3;
+     then ex m,n st x = m/n by Lm4;
     hence thesis by A1;
    end;
  end;
@@ -629,7 +635,7 @@ canceled;
 theorem Th29:
   1<=denominator(p)
   proof 0<denominator(p) by Th27;
-   then 0+1<=denominator(p) by NAT_1:38;
+   then 0+1<=denominator(p) by NAT_1:13;
    hence thesis;
   end;
 
@@ -731,17 +737,17 @@ theorem
     hence thesis by Th40;
   end;
 
-Lm6:1"=1;
+Lm7:1"=1;
 
 theorem
   1>denominator(p)" iff p is not integer
   proof
 A1: denominator(p)"<=1 by Th34;
     now assume not p is Integer;
-    then denominator(p)" <> 1 by Lm6,Th41;
+    then denominator(p)" <> 1 by Lm7,Th41;
     hence denominator(p)"<1 by A1,REAL_1:def 5;
     end;
-    hence thesis by Lm6,Th40;
+    hence thesis by Lm7,Th40;
   end;
 
 theorem Th47:
@@ -799,8 +805,8 @@ A3:  for l st P[l] holds l<=k
       let l such that A4:l*denominator(p)<=k;
       assume A5: not thesis;
       0<denominator(p) by A2;
-      then 0+1<=denominator(p) by NAT_1:38;
-      then A6:k*1<=k*denominator(p) by NAT_1:20;
+      then 0+1<=denominator(p) by NAT_1:13;
+      then A6:k*1<=k*denominator(p) by NAT_1:4;
       0<denominator(p) by A2;
       then k*denominator(p)<l*denominator(p) by A5,XREAL_1:70;
       hence contradiction by A4,A6,XXREAL_0:2;
@@ -824,7 +830,7 @@ then A15:      0+l*denominator(p)<k;
       then l*denominator(p)+1*denominator(p)<=k by XREAL_1:21;
       then (l+1)*denominator(p)<=k;
       then l+1<=l by A10;
-      hence contradiction by NAT_1:38;
+      hence contradiction by NAT_1:13;
      end;
      then A17:k=denominator(p)*l by A9,XXREAL_0:1;
           p*k=m by A1,XCMPLX_1:88;
@@ -890,7 +896,7 @@ theorem Th63:
     then consider l such that A2:m=numerator(p)*l & k=denominator(p)*l by Th60;
     A3:l<=1 by A1,A2;
      l<>0 by A1,A2;
-    then 0<l; then 0+1<=l by NAT_1:38;
+    then 0<l; then 0+1<=l by NAT_1:13;
     then A4:l=1 by A3,XXREAL_0:1;
     hence k=denominator(p) by A2;
     thus m=numerator(p) by A2,A4;
@@ -1139,7 +1145,7 @@ A4:-numerator(-p)=numerator(p)*l
         .= denominator(p)*(l*k);
     then l*k = 1 by A1,XCMPLX_1:7;
     then
-A5:   k = 1 by NAT_1:40;
+A5:   k = 1 by NAT_1:15;
    hence denominator(p)=denominator(-p) by A3;
      numerator(p) =(-numerator(-p)) by A3,A5;
    then numerator(p)=(-numerator(-p))/denominator(p)*denominator(p)

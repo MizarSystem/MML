@@ -25,6 +25,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="FUNCT_6"/>
@@ -33,7 +34,6 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
@@ -45,8 +45,8 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="FINSEQ_4"/>
@@ -139,10 +139,10 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="468">
+<Func kind="K" nr="462">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -183,7 +183,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="460">
+<Func kind="K" nr="454">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -262,7 +262,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="458">
+<Func kind="K" nr="452">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -319,12 +319,12 @@
 <Func kind="K" nr="87"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="466">
+<Func kind="K" nr="460">
 <LocusVar nr="1"/>
-<Func kind="K" nr="468">
+<Func kind="K" nr="462">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-<Func kind="K" nr="262">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -394,7 +394,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="470">
+<Func kind="K" nr="464">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

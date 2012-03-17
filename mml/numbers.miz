@@ -21,7 +21,12 @@ environ
 
 begin
 
-Lm1: 1 = succ 0;
+Lm1: omega c=
+({[c,d] where c,d is Element of omega: c,d are_relative_prime & d <> {}} \
+  {[k,1] where k is Element of omega: not contradiction}) \/ omega
+by XBOOLE_1:7;
+
+Lm2: 1 = succ 0;
 
 notation
  synonym NAT for omega;
@@ -33,7 +38,7 @@ definition
  coherence;
 end;
 
-Lm2: REAL+ c= REAL
+Lm3: REAL+ c= REAL
 proof
 A1: REAL+ c= REAL+ \/ [:{0},REAL+:] by XBOOLE_1:7;
     not [0,0] in REAL+ by ARYTM_2:3;
@@ -42,7 +47,7 @@ end;
 
 registration
  cluster REAL -> non empty;
- coherence by Lm2,XBOOLE_1:3;
+ coherence by Lm3,XBOOLE_1:3;
 end;
 
 definition
@@ -58,17 +63,17 @@ definition
  NAT \/ [:{0},NAT:] \ {[0,0]};
  coherence;
  redefine func NAT -> Subset of REAL;
- coherence by Lm2,ARYTM_2:2,XBOOLE_1:1;
+ coherence by Lm3,ARYTM_2:2,XBOOLE_1:1;
 end;
 
-Lm3: RAT+ c= RAT
+Lm4: RAT+ c= RAT
 proof
 A1: RAT+ c= RAT+ \/ [:{0},RAT+:] by XBOOLE_1:7;
       not [0,0] in RAT+ by ARYTM_3:68;
  hence thesis by A1,ZFMISC_1:40;
 end;
 
-Lm4: NAT c= INT
+Lm5: NAT c= INT
 proof
 A1: NAT c= NAT \/ [:{0},NAT:] by XBOOLE_1:7;
     not [0,0] in NAT by ARYTM_3:38;
@@ -79,15 +84,15 @@ registration
  cluster COMPLEX -> non empty;
  coherence;
  cluster RAT -> non empty;
- coherence by Lm3,XBOOLE_1:3;
- cluster INT -> non empty;
  coherence by Lm4,XBOOLE_1:3;
+ cluster INT -> non empty;
+ coherence by Lm5,XBOOLE_1:3;
 end;
 
 reserve i,j,k for Element of NAT;
 reserve a,b for Element of REAL;
 
-Lm5:
+Lm6:
  for x,y,z being set st [x,y] = {z}
   holds z = {x} & x = y
 proof let x,y,z be set;
@@ -100,7 +105,7 @@ A2: z = {x} by TARSKI:def 1;
  hence x = y by A2,ZFMISC_1:9;
 end;
 
-Lm6:
+Lm7:
  not (0,one)-->(a,b) in REAL
 proof set f = (0,one)-->(a,b);
 A1: f = {[0,a],[one,b]} by FUNCT_4:71;
@@ -128,7 +133,7 @@ A8: now assume i = j;
     suppose that
 A9:  {i,j} = [0,a] and
 A10:  {i} = [one,b];
-A11:    i = {one} by A10,Lm5;
+A11:    i = {one} by A10,Lm6;
           i in [0,a] by A9,TARSKI:def 2;
       then i = {0,a} or i = {0} by A6,TARSKI:def 2;
       then 0 in i by TARSKI:def 1,def 2;
@@ -137,7 +142,7 @@ A11:    i = {one} by A10,Lm5;
     suppose that
 A12:  {i,j} = [one,b] and
 A13:  {i} = [0,a];
-A14:    i = {0} by A13,Lm5;
+A14:    i = {0} by A13,Lm6;
           i in [one,b] by A12,TARSKI:def 2;
       then i = {one,b} or i = {one} by A7,TARSKI:def 2;
       then one in i by TARSKI:def 1,def 2;
@@ -177,10 +182,8 @@ A22: r1 <> r2 & r2 <> r3 & r3 <> r1 by A20,ARYTM_3:82;
   (r3 = [0,x] or r3 = [one,y]) by A18,A21,TARSKI:def 2;
  hence contradiction by A22;
 end;
-  then not f in IR by A1;
-  then not f in DEDEKIND_CUTS by ARYTM_2:def 1;
-  then not f in RAT+ \/ DEDEKIND_CUTS by A16,XBOOLE_0:def 2;
-  then A23: not f in REAL+ by ARYTM_2:def 2;
+  then not f in DEDEKIND_CUTS by A1,ARYTM_2:def 1;
+  then A23: not f in REAL+ by ARYTM_2:def 2,A16,XBOOLE_0:def 2;
       now assume f in [:{{}},REAL+:];
     then consider x,y being set such that
 A24:  x in {{}} and
@@ -201,8 +204,7 @@ A25:  f = [x,y] by ZFMISC_1:103;
    hence contradiction by TARSKI:def 2;
   end;
   end;
-  then not f in REAL+ \/ [:{{}},REAL+:] by A23,XBOOLE_0:def 2;
- hence thesis;
+ hence thesis by A23,XBOOLE_0:def 2;
 end;
 
 theorem Th1:
@@ -218,7 +220,7 @@ A3: REAL+ c= REAL+ \/ [:{{}},REAL+:] by XBOOLE_1:7;
     then rng (0,1) --> (0,1) c= REAL by A2,XBOOLE_1:1;
     then A5:   (0,1) --> (0,1) in Funcs({0,one},REAL) by A1,FUNCT_2:def 2;
     reconsider z = 0, j = 1 as Element of REAL by A4,ARYTM_2:21;
-A6:  not (0,1) --> (z,j) in REAL by Lm6;
+A6:  not (0,1) --> (z,j) in REAL by Lm7;
     set X = { x where x is Element of Funcs({0,one},REAL): x.one = 0};
       now assume (0,1) --> (0,1) in X;
       then ex x being Element of Funcs({0,one},REAL) st
@@ -229,7 +231,7 @@ A6:  not (0,1) --> (z,j) in REAL by Lm6;
    hence REAL <> COMPLEX by A6,XBOOLE_0:def 2;
   end;
 
-Lm7: RAT c= REAL
+Lm8: RAT c= REAL
  proof
      [:{0},RAT+:] c= [:{0},REAL+:] by ARYTM_2:1,ZFMISC_1:118;
    then RAT+ \/ [:{0},RAT+:] c= REAL+ \/ [:{0},REAL+:]
@@ -240,7 +242,7 @@ Lm7: RAT c= REAL
 reserve r,s,t for Element of RAT+;
 reserve i,j,k for Element of omega;
 
-Lm8:   :: powinien byc w ARYTM_3
+Lm9:   :: powinien byc w ARYTM_3
  for i,j being ordinal Element of RAT+ st i in j holds i < j
  proof let i,j be ordinal Element of RAT+;
 A1: i in omega & j in omega by ARYTM_3:37;
@@ -255,23 +257,23 @@ A4: x' <=' y' by ARYTM_2:def 5;
   hence i < j by A3,A4,ARYTM_3:73;
  end;
 
-Lm9:   :: powinien byc w ARYTM_3
+Lm10:   :: powinien byc w ARYTM_3
  for i,j being ordinal Element of RAT+ st i c= j holds i <='j
   proof let i,j be ordinal Element of RAT+;
    assume i c= j;
     then consider C being ordinal number such that
 A1:   j = i+^C by ORDINAL3:30;
       C in omega by A1,ARYTM_3:1;
-    then reconsider C as Element of RAT+ by ARYTM_3:34;
+    then reconsider C as Element of RAT+ by Lm1;
       j = i + C by A1,ARYTM_3:64;
    hence i <='j by ARYTM_3:def 13;
   end;
 
-Lm10: 2 = succ 1 .= succ 0 \/ {1} by ORDINAL1:def 1
+Lm11: 2 = succ 1 .= succ 0 \/ {1} by ORDINAL1:def 1
       .= 0 \/ {0} \/ {1} by ORDINAL1:def 1
       .= {0,1} by ENUMSET1:41;
 
-Lm11:
+Lm12:
   for i,k being natural Ordinal st i *^ i = 2 *^ k
    ex k being natural Ordinal st i = 2 *^ k
 proof let i,k be natural Ordinal; assume
@@ -279,7 +281,7 @@ A1: i *^ i = 2 *^ k;
    {} in 2 by ORDINAL1:24;
  then A2: i mod^ 2 in 2 by ARYTM_3:10;
 set id2 = i div^ 2;
- per cases by A2,Lm10,TARSKI:def 2;
+ per cases by A2,Lm11,TARSKI:def 2;
  suppose
 A3: i mod^ 2 = 0;
  take k = id2;
@@ -304,25 +306,25 @@ end;
 end;
 
     1 in omega;
-  then reconsider 1' = 1 as Element of RAT+ by ARYTM_3:34;
+  then reconsider 1' = 1 as Element of RAT+ by Lm1;
     2 in omega;
-  then reconsider two = 2 as ordinal Element of RAT+ by ARYTM_3:34;
+  then reconsider two = 2 as ordinal Element of RAT+ by Lm1;
 
-Lm12:
+Lm13:
   one + one = two
 proof
-    1 +^ 1 = succ(1 +^ {}) by ORDINAL2:45,Lm1
+    1 +^ 1 = succ(1 +^ {}) by ORDINAL2:45,Lm2
     .= succ 1 by ORDINAL2:44
     .= two;
  hence one + one = two by ARYTM_3:64;
 end;
 
-Lm13:
+Lm14:
  for i being Element of RAT+ holds i + i = two *' i
  proof let i be Element of RAT+;
   thus i + i = one *' i + i by ARYTM_3:59
       .= one *' i + one *' i  by ARYTM_3:59
-      .= two *' i by Lm12,ARYTM_3:63;
+      .= two *' i by Lm13,ARYTM_3:63;
  end;
 
 theorem Th2:
@@ -330,14 +332,14 @@ theorem Th2:
  proof
   set DD = { A where A is Subset of RAT+: r in A implies
       (for s st s <=' r holds s in A) & ex s st s in A & r < s };
-    0 in omega;
-  then reconsider 0' = 0 as Element of RAT+ by ARYTM_3:34;
+
+  reconsider 0' = 0 as Element of RAT+ by Lm1;
   defpred P[Element of RAT+] means $1 *' $1 < two;
   set X = { s : P[s] };
   reconsider X as Subset of RAT+ from DOMAIN_1:sch 7;
   consider half being Element of RAT+ such that
 A1: 1' = two*'half by ARYTM_3:61;
-A2:    one <=' two by Lm12,ARYTM_3:def 13;
+A2:    one <=' two by Lm13,ARYTM_3:def 13;
 then A3: one < two by ARYTM_3:75;
 A4: for r,t st r in X & t <=' r holds t in X
    proof let r,t;
@@ -354,7 +356,7 @@ A6:     t <=' r;
 A8:  1' *' 1' = 1' by ARYTM_3:59;
       2 = succ 1 .= 1 \/ {1} by ORDINAL1:def 1;
     then 1 c= 2 by XBOOLE_1:7;
-    then A9:  1' <=' two by Lm9;
+    then A9:  1' <=' two by Lm10;
 then A10: 1' < two by ARYTM_3:75;
     then A11: 1 in X by A8;
 A12:  0' <=' 1' by ARYTM_3:71;
@@ -413,7 +415,8 @@ A33:     s *' s + t02s2 = t0 *' t0 or t0 *' t0 + t02s2 = s *' s
         then A34:       s *' s < t0 *' t0 by A32,ARYTM_3:77;
           s *' s < es by A29,A32,ARYTM_3:77;
         then two + s *' s < two + es by ARYTM_3:83;
-        then A35:      two < t02s2 by A25,A26,A33,A34,ARYTM_3:83,def 13;
+        then A35:      two < t02s2 by A25,A26,A33,A34,ARYTM_3:83,
+def 13;
           two *' t0 <> 0 by A22,ARYTM_3:86;
         then consider 2t' being Element of RAT+ such that
 A36:     (two *' t0) *' 2t' = one by ARYTM_3:61;
@@ -450,7 +453,7 @@ A46:      x *' t0x + x *' t0 + x *' x
             .= x *' t0 + x *' t0 by A37,A43,ARYTM_3:63,def 13
             .= x *' t0 *' one + x *' t0 by ARYTM_3:59
             .= x *' t0 *' one + x *' t0 *' one by ARYTM_3:59
-            .= t0 *' x *' two by Lm12,ARYTM_3:63
+            .= t0 *' x *' two by Lm13,ARYTM_3:63
             .= x *' (t0 *' two) by ARYTM_3:58
             .= s *' s *' one by A36,ARYTM_3:58
             .= s *' s by ARYTM_3:59;
@@ -491,7 +494,8 @@ A55:     s *' s + t02s2 = t0 *' t0 or t0 *' t0 + t02s2 = s *' s
         then A56:      s *' s < t0 *' t0 by A53,ARYTM_3:77;
           s *' s < es by A53,A54,ARYTM_3:77;
         then two + s *' s < two + es by ARYTM_3:83;
-        then A57:      two < t02s2 by A25,A26,A55,A56,ARYTM_3:83,def 13;
+        then A57:      two < t02s2 by A25,A26,A55,A56,ARYTM_3:83,
+def 13;
           two *' t0 <> 0 by A22,ARYTM_3:86;
         then consider 2t' being Element of RAT+ such that
 A58:     (two *' t0) *' 2t' = one by ARYTM_3:61;
@@ -500,7 +504,7 @@ A58:     (two *' t0) *' 2t' = one by ARYTM_3:61;
 A59:   x + t0x = t0 or t0 + t0x = x by ARYTM_3:100;
           x *' (two *' t0) = s *' s *' one by A58,ARYTM_3:58;
         then A60:      x <=' s *' s or two *' t0 <=' one by ARYTM_3:91;
-          one <=' two by Lm12,ARYTM_3:def 13;
+          one <=' two by Lm13,ARYTM_3:def 13;
         then A61: one < two by ARYTM_3:75;
 A62:     now assume
 A63:       t0 <=' one;
@@ -530,7 +534,7 @@ A69:      x *' t0x + x *' t0 + x *' x
             .= x *' t0 + x *' t0 by A59,A66,ARYTM_3:63,def 13
             .= x *' t0 *' one + x *' t0 by ARYTM_3:59
             .= x *' t0 *' one + x *' t0 *' one by ARYTM_3:59
-            .= t0 *' x *' two by Lm12,ARYTM_3:63
+            .= t0 *' x *' two by Lm13,ARYTM_3:63
             .= x *' (t0 *' two) by ARYTM_3:58
             .= s *' s *' one by A58,ARYTM_3:58
             .= s *' s by ARYTM_3:59;
@@ -557,24 +561,23 @@ A71:      t0x <=' t0 by A59,A66,ARYTM_3:def 13;
      end;
        d <> 0 by ARYTM_3:41;
      then A72:    d *^ d <> {} by ORDINAL3:34;
-     two = (n *^ n)/(d *^ d) by A23;
-     then two/1 = (n *^ n)/(d *^ d) by ARYTM_3:46;
+     two/1 = (n *^ n)/(d *^ d) by A23,ARYTM_3:46;
      then A73:    two*^(d *^ d) = 1*^(n *^ n) by A72,ARYTM_3:51
                     .= n *^ n by ORDINAL2:56;
      then consider k being natural Ordinal such that
-A74:    n = 2 *^ k by Lm11;
+A74:    n = 2 *^ k by Lm12;
        two*^(d *^ d) = 2 *^ (k *^ (2 *^ k)) by A73,A74,ORDINAL3:58;
      then d *^ d = k *^ (2 *^ k)  by ORDINAL3:36
                 .= 2 *^ (k *^ k)by ORDINAL3:58;
      then consider p being natural Ordinal such that
-A75:    d = 2 *^ p by Lm11;
+A75:    d = 2 *^ p by Lm12;
        n, d are_relative_prime by ARYTM_3:40;
     hence contradiction by A74,A75,ARYTM_3:def 2;
    end;
 A76: not X in {[0,0]} by A16,TARSKI:def 1;
   now assume two in X;
      then ex s st two = s & s *' s < two;
-    hence contradiction by A17,A18,A19,Lm8;
+    hence contradiction by A17,A18,A19,Lm9;
    end;
    then X <> RAT+;
    then A77:  not X in {RAT+} by TARSKI:def 1;
@@ -645,10 +648,10 @@ A90:  r <=' eps;
         r *' (r + r + r) + r *' r = r *' (r + r) + r *' r + r *' r by
 ARYTM_3:63
           .= r *' (r + r) + (r *' r + r *' r) by ARYTM_3:57
-          .= r *' (two *' r) + (r *' r + r *' r) by Lm13
-          .= r *' (two *' r) + two *' (r *' r) by Lm13
+          .= r *' (two *' r) + (r *' r + r *' r) by Lm14
+          .= r *' (two *' r) + two *' (r *' r) by Lm14
           .= two *' (r *' r) + two *' (r *' r) by ARYTM_3:58
-          .= two *' (two *' (r *' r)) by Lm13
+          .= two *' (two *' (r *' r)) by Lm14
           .= two *' (two *' r *' r) by ARYTM_3:58
           .= (two *' r) *' (two *' r) by ARYTM_3:58;
      then A92:   two *' r *' (two *' r) <=' two by A79,A80,A83,A91,ARYTM_3:83
@@ -658,7 +661,7 @@ A93:   two *' r <> 0 by A82,ARYTM_3:86;
      then A94:   t <> 0 by A82,ARYTM_3:86;
        1' < two *' one by A10,ARYTM_3:59;
      then half < one by A1,ARYTM_3:90;
-     then one + half < two by Lm12,ARYTM_3:83;
+     then one + half < two by Lm13,ARYTM_3:83;
      then A95:    t < two *' r by A82,ARYTM_3:88;
      then A96:   t *' t < two *' r *' t by A94,ARYTM_3:88;
        two *' r *' t < two *' r *' (two *' r) by A93,A95,ARYTM_3:88;
@@ -683,8 +686,7 @@ A97:   0' <> half by A1,ARYTM_3:54;
    then X in REAL+ by A20,ARYTM_2:def 2,XBOOLE_0:def 4;
    then X in REAL+ \/ [:{0},REAL+:] by XBOOLE_0:def 2;
    then A98: X in REAL by A76,XBOOLE_0:def 4;
-     now assume X in RAT;
-     then A99:   X in RAT+ \/ [:{0},RAT+:];
+     now assume A99: X in RAT;
     per cases by A99,XBOOLE_0:def 2;
     suppose
 A100:    X in RAT+;
@@ -700,16 +702,16 @@ A101:     X = [i,j] and i,j are_relative_prime & j <> {};
       end;
       suppose X in omega;
        then A102:     X is ordinal number by ORDINAL1:23;
-         2 c= X by A11,A13,Lm10,ZFMISC_1:38;
+         2 c= X by A11,A13,Lm11,ZFMISC_1:38;
        then A103:      not X in 2 by ORDINAL1:7;
          now per cases by A102,A103,ORDINAL1:24;
         suppose X = two;
-         then half = 0 or half = 1 by A15,Lm10,TARSKI:def 2;
+         then half = 0 or half = 1 by A15,Lm11,TARSKI:def 2;
         hence contradiction by A1,ARYTM_3:54,59;
         end;
         suppose two in X;
          then ex s st s = two & s *' s < two;
-        hence contradiction by A17,A18,A19,Lm8;
+        hence contradiction by A17,A18,A19,Lm9;
        end;
        end;
       hence contradiction;
@@ -724,17 +726,17 @@ A104:   X = [x,y] by ZFMISC_1:102;
     hence contradiction by A13,TARSKI:def 2;
    end;
    end;
-  hence thesis by A98,Lm7,XBOOLE_0:def 8;
+  hence thesis by A98,Lm8,XBOOLE_0:def 8;
  end;
 
 theorem Th3:
  RAT c< COMPLEX by Th1,Th2,XBOOLE_1:56;
 
-Lm14: INT c= RAT
+Lm15: INT c= RAT
  proof
-     [:{0},NAT:] c= [:{0},RAT+:] by ARYTM_3:34,ZFMISC_1:118;
+     [:{0},NAT:] c= [:{0},RAT+:] by Lm1,ZFMISC_1:118;
    then NAT \/ [:{0},NAT:] c= RAT+ \/ [:{0},RAT+:]
-               by ARYTM_3:34,XBOOLE_1:13;
+               by Lm1,XBOOLE_1:13;
   hence thesis by XBOOLE_1:33;
  end;
 
@@ -752,8 +754,8 @@ A3:  not [1,2] in NAT by ARYTM_3:38;
       not 1 in {0} by TARSKI:def 1;
     then not [1,2] in [:{0},NAT:] by ZFMISC_1:106;
     then not [1,2] in NAT \/ [:{0},NAT:] by A3,XBOOLE_0:def 2;
-    then INT <> RAT by A2,Lm3,XBOOLE_0:def 4;
-   hence thesis by Lm14,XBOOLE_0:def 8;
+    then INT <> RAT by A2,Lm4,XBOOLE_0:def 4;
+   hence thesis by Lm15,XBOOLE_0:def 8;
   end;
 
 theorem Th5:
@@ -772,7 +774,7 @@ theorem Th7:
    then not [0,1] in {[0,0]} by TARSKI:def 1;
    then A2:  [0,1] in INT by A1,XBOOLE_0:def 4;
      not [0,1] in NAT by ARYTM_3:38;
-  hence thesis by A2,Lm4,XBOOLE_0:def 8;
+  hence thesis by A2,Lm5,XBOOLE_0:def 8;
  end;
 
 theorem Th8:
@@ -832,7 +834,7 @@ theorem
    INT <> REAL by Th2,Th4;
 
 theorem
-   INT <> COMPLEX by Th1,Th5;
+   INT <> COMPLEX by Th1,Th2,Th4,XBOOLE_1:56;
 
 theorem
    NAT <> INT by Th7;
@@ -841,10 +843,10 @@ theorem
    NAT <> RAT by Th4,Th7;
 
 theorem
-   NAT <> REAL by Th2,Th8;
+   NAT <> REAL by Th2,Th4,Th7,XBOOLE_1:56;
 
 theorem
-   NAT <> COMPLEX by Th1,Th9;
+   NAT <> COMPLEX by Th1,Th2,Th8,XBOOLE_1:56;
 
 definition
   func ExtREAL equals
@@ -857,8 +859,10 @@ registration
   coherence;
 end;
 
-theorem Th31:
+ Lm16:
  REAL c= ExtREAL by XBOOLE_1:7;
+
+canceled;
 
 theorem Th32:
  REAL <> ExtREAL
@@ -869,5 +873,5 @@ theorem Th32:
   end;
 
 theorem
- REAL c< ExtREAL by Th31,Th32,XBOOLE_0:def 8;
+ REAL c< ExtREAL by Lm16,Th32,XBOOLE_0:def 8;
 

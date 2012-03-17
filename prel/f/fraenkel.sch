@@ -13,6 +13,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FRAENKEL"/>
 </Signature>
 <Scheme>
@@ -720,13 +721,13 @@
 </Fraenkel>
 </Pred>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="63">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="4"/>
 <Func kind="F" nr="3"/>
 </Func>
-<Func kind="K" nr="63">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="5"/>
@@ -1865,7 +1866,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="84">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -1895,7 +1896,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="84">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -1905,7 +1906,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="84">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -1913,13 +1914,13 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="63">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
-<Func kind="K" nr="63">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -2054,7 +2055,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="78">
+<Func kind="K" nr="84">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

@@ -8,18 +8,17 @@ environ
 
  vocabularies MARGREL1, ZF_LANG, BINARITH, PARTIT1, FUNCT_2, FRAENKEL,
       VALUAT_1, RELAT_1, FUNCT_1, BOOLE, SEQM_3, EQREL_1, T_1TOPSP, SETFAM_1,
-      TARSKI, BVFUNC_1, FUNCOP_1;
+      TARSKI, BVFUNC_1, FUNCOP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, FRAENKEL, EQREL_1, T_1TOPSP,
-      PARTIT1, XXREAL_0;
- constructors SETFAM_1, XXREAL_0, XREAL_0, VALUAT_1, BINARITH, T_1TOPSP,
-      PARTIT1;
+      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, FRAENKEL, EQREL_1, PARTIT1,
+      XXREAL_0;
+ constructors SETFAM_1, XXREAL_0, XREAL_0, VALUAT_1, BINARITH, PARTIT1, NAT_D;
  registrations SUBSET_1, MARGREL1, XREAL_0, ARYTM_3, VALUAT_1, BINARITH,
       FRAENKEL, EQREL_1, XBOOLEAN;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, VALUAT_1, XBOOLE_0, MARGREL1, XBOOLEAN;
- theorems TARSKI, FUNCT_1, FUNCT_2, MARGREL1, BINARITH, EQREL_1, SETFAM_1,
-      T_1TOPSP, PARTIT1, VALUAT_1, XBOOLE_0, FUNCOP_1, XBOOLEAN;
+ theorems TARSKI, FUNCT_1, FUNCT_2, MARGREL1, EQREL_1, SETFAM_1, PARTIT1,
+      VALUAT_1, XBOOLE_0, FUNCOP_1, XBOOLEAN;
  schemes DOMAIN_1, FUNCT_2, FUNCT_1;
 
 begin :: Chap. 1  Boolean Operations
@@ -37,8 +36,8 @@ definition let k,l be boolean set;
  :Def3: k => l = TRUE;
  compatibility
   proof
-   A1:k= 0 or k= 1 by MARGREL1:39;
-  A2:l= 0 or l= 1 by MARGREL1:39;
+   A1:k= 0 or k= 1 by XBOOLEAN:def 3;
+  A2:l= 0 or l= 1 by XBOOLEAN:def 3;
  thus thesis by A1,A2;
   end;
  end;
@@ -126,7 +125,7 @@ A2:   for x being set st x in dom p /\ dom q holds s.x = F(x)
 A3:      y in dom s and
 A4:      x = s.y by FUNCT_1:def 5;
         x = (p.y) 'or' (q.y) by A3,A4,A1,A2;
-        then x = FALSE or x = TRUE by MARGREL1:39;
+        then x = FALSE or x = TRUE by XBOOLEAN:def 3;
        hence x in BOOLEAN;
       end;
     hence thesis by A1,A2;
@@ -188,7 +187,7 @@ registration
 A1:   y in dom(p 'xor' q) and
 A2:   x = (p 'xor' q).y by FUNCT_1:def 5;
      x = (p.y) 'xor' (q.y) by A1,A2,Def6;
-     then x = FALSE or x = TRUE by MARGREL1:39;
+     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence x in BOOLEAN;
    end;
 end;
@@ -347,7 +346,7 @@ A1:   y in dom(p 'imp' q) and
 A2:   x = (p 'imp' q).y by FUNCT_1:def 5;
      x = (p.y) => (q.y) by A1,A2,Def9
       .= 'not' (p.y) 'or' (q.y);
-     then x = FALSE or x = TRUE by MARGREL1:39;
+     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence x in BOOLEAN;
    end;
   cluster p 'eqv' q -> boolean-valued;
@@ -358,7 +357,7 @@ A2:   x = (p 'imp' q).y by FUNCT_1:def 5;
 A3:   y in dom(p 'eqv' q) and
 A4:   x = (p 'eqv' q).y by FUNCT_1:def 5;
      x = 'not' ((p.y) 'xor' (q.y)) by A3,A4,Def10;
-     then x = FALSE or x = TRUE by MARGREL1:39;
+     then x = FALSE or x = TRUE by XBOOLEAN:def 3;
     hence x in BOOLEAN;
    end;
 end;
@@ -668,7 +667,7 @@ proof
     then A2:(a '&' b 'or' c).x = (a.x '&' b.x) 'or' c.x
       by VALUAT_1:def 6;
     A3:c.x 'or' (a.x '&' b.x) =
-       (c.x 'or' a.x) '&' (c.x 'or' b.x) by BINARITH:23;
+       (c.x 'or' a.x) '&' (c.x 'or' b.x) by XBOOLEAN:9;
        (a.x 'or' c.x) = (a 'or' c).x by Def7;
     then (a '&' b 'or' c).x = (a 'or' c).x '&' (b 'or' c).x
        by A2,A3,Def7
@@ -697,7 +696,7 @@ proof
     then A2:((a 'or' b) '&' c).x = (a.x 'or' b.x) '&' c.x
      by Def7;
     A3:c.x '&' (a.x 'or' b.x) =
-       (c.x '&' a.x) 'or' (c.x '&' b.x) by BINARITH:22;
+       (c.x '&' a.x) 'or' (c.x '&' b.x) by XBOOLEAN:8;
        (a.x '&' c.x) = (a '&' c).x by VALUAT_1:def 6;
     then ((a 'or' b) '&' c).x = (a '&' c).x 'or' (b '&' c).x
       by A2,A3,VALUAT_1:def 6
@@ -788,7 +787,7 @@ proof
          (a.x = FALSE & b.x = FALSE) or
       (a.x = FALSE & b.x = TRUE ) or
       (a.x = TRUE & b.x = FALSE) or
-      (a.x = TRUE & b.x = TRUE ) by MARGREL1:39;
+      (a.x = TRUE & b.x = TRUE ) by XBOOLEAN:def 3;
       hence thesis by A2,Def15;
     end;
    consider k3 being Function such that
@@ -838,7 +837,7 @@ proof
       A5:(('not' a.x) = TRUE & b.x = FALSE) or
       (('not' a.x) = TRUE & b.x = TRUE ) or
       (('not' a.x) = FALSE & b.x = FALSE) or
-      (('not' a.x) = FALSE & b.x = TRUE ) by MARGREL1:39;
+      (('not' a.x) = FALSE & b.x = TRUE ) by XBOOLEAN:def 3;
          ('not' a.x) 'or' b.x = TRUE by A3;
       hence thesis by A5;
     end;
@@ -857,7 +856,7 @@ proof
     proof
       let x be Element of Y;
          a.x= TRUE implies b.x=TRUE by A6,Def15;
-      hence thesis by MARGREL1:39;
+      hence thesis by XBOOLEAN:def 3;
     end;
     A8:for x being Element of Y holds ('not' a.x) 'or' b.x = TRUE
     proof
@@ -910,7 +909,7 @@ proof
       A5:('not' a.x '&' b.x) 'or' (a.x '&' 'not'
 b.x) = FALSE by A3;
          (a.x '&' 'not' b.x) = TRUE or
-          (a.x '&' 'not' b.x) = FALSE by MARGREL1:39;
+          (a.x '&' 'not' b.x) = FALSE by XBOOLEAN:def 3;
       hence thesis by A5;
     end;
     A6:for x being Element of Y holds
@@ -922,7 +921,7 @@ b.x) = FALSE by A3;
        ('not' a.x = TRUE & b.x = FALSE) or
           ('not' a.x = FALSE & b.x = FALSE) or
           ('not' a.x = FALSE & b.x = TRUE )
-          by A7,MARGREL1:39,45;
+          by A7,XBOOLEAN:def 3,MARGREL1:45;
       hence thesis by A8;
     end;
    consider k3 being Function such that
@@ -943,7 +942,7 @@ b.x) = FALSE by A3;
      let x be Element of Y;
          b.x = TRUE iff 'not' b.x = FALSE;
       then (a.x = FALSE & 'not' b.x = TRUE ) or
-          (a.x = TRUE & 'not' b.x = FALSE) by A11,MARGREL1:39;
+          (a.x = TRUE & 'not' b.x = FALSE) by A11,XBOOLEAN:def 3;
      hence thesis;
     end;
     A13:for x being Element of Y holds (a 'eqv' b).x = (I_el Y).x
@@ -1220,7 +1219,7 @@ A3:    not ((for x being Element of Y holds a.x=TRUE ) or
         A4:a.x1<>TRUE;
       consider x2 being Element of Y such that
         A5:a.x2<>FALSE by A3;
-         a.x1 = FALSE by A4,MARGREL1:43;
+         a.x1 = FALSE by A4,XBOOLEAN:def 3;
       hence contradiction by A2,A5;
     end;
     hence thesis;
@@ -1330,7 +1329,7 @@ A7:    B_INF(a) '&' B_INF(b) = B_INF(a) '&' I_el(Y) by A5,Def16
       let x be Element of Y;
          (a 'or' b).x=FALSE by A13;
       then A15:a.x 'or' b.x = FALSE by Def7;
-         a.x = TRUE or a.x = FALSE by MARGREL1:39;
+         a.x = TRUE or a.x = FALSE by XBOOLEAN:def 3;
       hence thesis by A15;
     end;
     A16:for x being Element of Y holds b.x = FALSE
@@ -1338,7 +1337,7 @@ A7:    B_INF(a) '&' B_INF(b) = B_INF(a) '&' I_el(Y) by A5,Def16
       let x be Element of Y;
          (a 'or' b).x=FALSE by A13;
       then A17:a.x 'or' b.x = FALSE by Def7;
-         b.x = TRUE or b.x = FALSE by MARGREL1:39;
+         b.x = TRUE or b.x = FALSE by XBOOLEAN:def 3;
       hence thesis by A17;
     end;
        B_SUP(b) = O_el(Y) by A16,Def17;
@@ -1427,7 +1426,7 @@ then A18:    B_SUP(a) 'or' B_SUP(b) = O_el(Y) 'or' O_el(Y) by A14,Def17;
         let x be Element of Y;
            (a 'or' b).x=FALSE by A34;
         then A35:a.x 'or' b.x = FALSE by Def7;
-           a.x = TRUE or a.x = FALSE by MARGREL1:39;
+           a.x = TRUE or a.x = FALSE by XBOOLEAN:def 3;
         hence thesis by A35;
       end;
       A36:(for x being Element of Y holds (a 'or' b).x=FALSE) implies
@@ -1437,7 +1436,7 @@ then A18:    B_SUP(a) 'or' B_SUP(b) = O_el(Y) 'or' O_el(Y) by A14,Def17;
         let x be Element of Y;
            (a 'or' b).x=FALSE by A37;
         then A38:a.x 'or' b.x = FALSE by Def7;
-           b.x = TRUE or b.x = FALSE by MARGREL1:39;
+           b.x = TRUE or b.x = FALSE by XBOOLEAN:def 3;
         hence thesis by A38;
       end;
          (for x being Element of Y holds a.x = FALSE) &
@@ -2222,7 +2221,7 @@ end;
 
 definition let Y;let x be Element of Y;let PA be a_partition of Y;
  redefine func EqClass(x,PA) -> Element of PA;
- coherence by T_1TOPSP:def 1;
+ coherence by EQREL_1:def 8;
  end;
 
 definition let Y;let a be Element of Funcs(Y,BOOLEAN),PA be a_partition of Y;
@@ -2389,8 +2388,8 @@ proof
       then reconsider x1 as Element of Y by A1;
       reconsider x2 as Element of Y by A1,A2;
       A3:EqClass(x1,PA) = F or EqClass(x1,PA) misses F by A1,EQREL_1:def 6;
-A4:    x1 in EqClass(x1,PA) by T_1TOPSP:def 1;
-         x2 in EqClass(x2,PA) by T_1TOPSP:def 1;
+A4:    x1 in EqClass(x1,PA) by EQREL_1:def 8;
+         x2 in EqClass(x2,PA) by EQREL_1:def 8;
       then EqClass(x2,PA) meets F by A2,XBOOLE_0:3;
 then A5:  EqClass(x2,PA) = F by A1,EQREL_1:def 6;
       per cases;
@@ -2424,9 +2423,9 @@ proof
       assume A2:x1 in F & x2 in F;
       then reconsider x1,x2 as Element of Y by A1;
       A3:EqClass(x1,PA) = F or EqClass(x1,PA) misses F by A1,EQREL_1:def 6;
-       x1 in EqClass(x1,PA) by T_1TOPSP:def 1;
+       x1 in EqClass(x1,PA) by EQREL_1:def 8;
       then A4:EqClass(x2,PA) = EqClass(x1,PA)
-        by A2,A3,T_1TOPSP:def 1,XBOOLE_0:3;
+        by A2,A3,EQREL_1:def 8,XBOOLE_0:3;
       per cases;
        suppose A5:
        (ex x being Element of Y st x in EqClass(x1,PA) & a.x=TRUE);
@@ -2455,7 +2454,7 @@ proof
     per cases;
     suppose
 A2: (for x being Element of Y st x in EqClass(y,PA) holds a.x=TRUE);
-        y in EqClass(y,PA) by T_1TOPSP:def 1;
+        y in EqClass(y,PA) by EQREL_1:def 8;
 then A3:  a.y = TRUE by A2;
         'not' B_INF(a,PA).y = ('not' B_INF(a,PA)).y by VALUAT_1:def 5;
      then 'not' (B_INF(a,PA)).y 'or' a.y
@@ -2509,9 +2508,9 @@ proof
     end;
     suppose
 A2:       not (ex x being Element of Y st x in EqClass(y,PA) & a.x=TRUE);
-        y in EqClass(y,PA) by T_1TOPSP:def 1;
+        y in EqClass(y,PA) by EQREL_1:def 8;
      then a.y<>TRUE by A2;
-     then a.y=FALSE by MARGREL1:43;
+     then a.y=FALSE by XBOOLEAN:def 3;
      then 'not' a.y = TRUE;
      then ('not' a.y) 'or' (B_SUP(a,PA)).y
          = (I_el Y).y 'or' (B_SUP(a,PA)).y by Def14
@@ -2569,7 +2568,7 @@ then A10:      ('not' B_INF(a,PA)).y = 'not' FALSE by VALUAT_1:def 5;
   not (ex x being Element of Y st x in EqClass(y,PA) & ('not' a).x=TRUE);
       then consider x1 being Element of Y such that
         A12:x1 in EqClass(y,PA) & a.x1<>TRUE;
-         a.x1=FALSE by A12,MARGREL1:43;
+         a.x1=FALSE by A12,XBOOLEAN:def 3;
       then ('not' a).x1 = 'not' FALSE by VALUAT_1:def 5;
       then ('not' a).x1 = TRUE;
       hence contradiction by A11,A12;
@@ -2651,7 +2650,7 @@ A4:     (ex x being Element of Y st x in EqClass(y,%O(Y)) & a.x=TRUE) &
      not (for x being Element of Y holds a.x=FALSE);
      then consider x1 being Element of Y such that
        A8:a.x1<>FALSE;
-        x1 in Y & a.x1=TRUE by A8,MARGREL1:43;
+        x1 in Y & a.x1=TRUE by A8,XBOOLEAN:def 3;
      hence contradiction by A2,A7;
     end;
     hence thesis by A3,A5;
@@ -2671,7 +2670,7 @@ proof
   A1:for y being Element of Y holds (B_INF(a,%I Y)).y = a.y
   proof
     let y be Element of Y;
-    A2:y in EqClass(y,%I(Y)) by T_1TOPSP:def 1;
+    A2:y in EqClass(y,%I(Y)) by EQREL_1:def 8;
 A3:now assume A4:
       (for x being Element of Y st x in EqClass(y,%I(Y)) holds a.x=TRUE);
       then a.y = TRUE by A2;
@@ -2682,21 +2681,21 @@ A5:now assume A6:
       & a.y = TRUE;
       then consider x1 being Element of Y such that
         A7:x1 in EqClass(y,%I(Y)) & a.x1<>TRUE;
-         y in EqClass(y,%I(Y)) & EqClass(y,%I(Y)) in %I(Y) by T_1TOPSP:def 1;
+         y in EqClass(y,%I(Y)) & EqClass(y,%I(Y)) in %I(Y) by EQREL_1:def 8;
       then EqClass(y,%I(Y)) in {B:ex z being set st B={z} & z in Y}
       by PARTIT1:35;
       then consider B such that
         A8:EqClass(y,%I(Y))=B & (ex z being set st B={z} & z in Y);
       consider z being set such that
         A9:EqClass(y,%I(Y))={z} & z in Y by A8;
-A10:      y in {z} & z in Y by A9,T_1TOPSP:def 1;
+A10:      y in {z} & z in Y by A9,EQREL_1:def 8;
          x1=z by A7,A9,TARSKI:def 1;
       hence contradiction by A6,A7,A10,TARSKI:def 1;
     end;
        now assume A11:
   not (for x being Element of Y st x in EqClass(y,%I(Y)) holds a.x=TRUE)
       & a.y<>TRUE;
-      then a.y = FALSE by MARGREL1:43;
+      then a.y = FALSE by XBOOLEAN:def 3;
       hence thesis by A11,Def19;
     end;
     hence thesis by A3,A5;
@@ -2717,27 +2716,27 @@ proof
     (B_SUP(a,%I Y)).y = a.y
   proof
     let y be Element of Y;
-    A2:y in EqClass(y,%I(Y)) by T_1TOPSP:def 1;
+    A2:y in EqClass(y,%I(Y)) by EQREL_1:def 8;
 A3:now assume A4:
       (ex x being Element of Y st x in EqClass(y,%I(Y)) & a.x=TRUE)
       & a.y<>TRUE;
       then consider x1 being Element of Y such that
          A5:x1 in EqClass(y,%I(Y)) & a.x1=TRUE;
-         y in EqClass(y,%I(Y)) & EqClass(y,%I(Y)) in %I(Y) by T_1TOPSP:def 1;
+         y in EqClass(y,%I(Y)) & EqClass(y,%I(Y)) in %I(Y) by EQREL_1:def 8;
       then EqClass(y,%I(Y)) in {B:ex z being set st B={z} & z in Y}
       by PARTIT1:35;
       then consider B such that
         A6:EqClass(y,%I(Y))=B & (ex z being set st B={z} & z in Y);
       consider z being set such that
         A7:EqClass(y,%I(Y))={z} & z in Y by A6;
-A8:      y in {z} & z in Y by A7,T_1TOPSP:def 1;
+A8:      y in {z} & z in Y by A7,EQREL_1:def 8;
          x1=z by A5,A7,TARSKI:def 1;
       hence contradiction by A4,A5,A8,TARSKI:def 1;
     end;
        now assume A9:
       not (ex x being Element of Y st x in EqClass(y,%I(Y)) & a.x=TRUE)
       & a.y<>TRUE;
-      then a.y = FALSE by MARGREL1:43;
+      then a.y = FALSE by XBOOLEAN:def 3;
       hence thesis by A9,Def20;
     end;
     hence thesis by A2,A3,Def20;
@@ -2782,7 +2781,7 @@ A6:now assume A7:
  not (for x being Element of Y st x in EqClass(y,PA) holds b.x=TRUE);
       then consider x1 being Element of Y such that
         A8:x1 in EqClass(y,PA) & b.x1<>TRUE;
-         x1 in EqClass(y,PA) & b.x1=FALSE by A8,MARGREL1:43;
+         x1 in EqClass(y,PA) & b.x1=FALSE by A8,XBOOLEAN:def 3;
       then a.x1 '&' b.x1 = FALSE;
 then A9:  (a '&' b).x1 <>TRUE by VALUAT_1:def 6;
          (B_INF(b,PA)).y = FALSE by A7,Def19;
@@ -2795,7 +2794,7 @@ A10:now assume A11:
  (for x being Element of Y st x in EqClass(y,PA) holds b.x=TRUE);
       then consider x1 being Element of Y such that
         A12:x1 in EqClass(y,PA) & a.x1<>TRUE;
-         x1 in EqClass(y,PA) & a.x1=FALSE by A12,MARGREL1:43;
+         x1 in EqClass(y,PA) & a.x1=FALSE by A12,XBOOLEAN:def 3;
       then a.x1 '&' b.x1 = FALSE;
 then A13:  (a '&' b).x1 <>TRUE by VALUAT_1:def 6;
          (B_INF(b,PA)).y = TRUE by A11,Def19;
@@ -2810,7 +2809,7 @@ Def19;
 not (for x being Element of Y st x in EqClass(y,PA) holds b.x=TRUE);
       then consider xa being Element of Y such that
         A15:xa in EqClass(y,PA) & a.xa<>TRUE;
-         xa in EqClass(y,PA) & a.xa=FALSE by A15,MARGREL1:43;
+         xa in EqClass(y,PA) & a.xa=FALSE by A15,XBOOLEAN:def 3;
       then a.xa '&' b.xa = FALSE;
 then A16:      (a '&' b).xa<>TRUE by VALUAT_1:def 6;
          (B_INF(b,PA)).y = FALSE by A14,Def19;
@@ -2846,7 +2845,7 @@ A2:now assume A3:
       A6: (a.x1 = FALSE & b.x1 = FALSE) or
       (a.x1 = FALSE & b.x1 = TRUE ) or
       (a.x1 = TRUE & b.x1 = FALSE) or
-      (a.x1 = TRUE & b.x1 = TRUE ) by MARGREL1:39;
+      (a.x1 = TRUE & b.x1 = TRUE ) by XBOOLEAN:def 3;
          now per cases by A5,A6;
       case (a.x1 = FALSE & b.x1 = TRUE );
        then (B_SUP(b,PA)).y = TRUE by A4,Def20;

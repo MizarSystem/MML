@@ -115,11 +115,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="215">
+<Func kind="K" nr="209">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="209">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -128,11 +128,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="215">
+<Func kind="K" nr="209">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="209">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

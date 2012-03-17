@@ -7,12 +7,13 @@
 environ
 
  vocabularies FRAENKEL, FUNCT_1, FUNCT_5, FUNCT_2, RELAT_1, BOOLE, CAT_1,
-      FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2, REALSET1;
+      FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2, REALSET1,
+      NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL,
       REALSET1, PBOOLE, CAT_1;
  constructors PARTFUN1, FUNCT_3, DOMAIN_1, BINOP_1, FUNCT_4, FRAENKEL, FUNCT_5,
-      PBOOLE, REALSET1, CAT_1;
+      PBOOLE, REALSET1, CAT_1, NAT_D;
  registrations RELSET_1, SUBSET_1, XBOOLE_0, REALSET1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, CAT_1, REALSET1, CQC_LANG, BINOP_1;
@@ -134,11 +135,7 @@ definition let B,C; let c be Object of C;
  end;
 end;
 
-canceled;
-
-theorem
-   for c being Object of C, f being Morphism of B holds (B --> c).f = id c
-    by FUNCOP_1:13;
+canceled 2;
 
 theorem
       for c being Object of C, b being Object of B holds (Obj (B --> c)).b = c
@@ -383,10 +380,7 @@ definition let C,E;
   coherence by Th19;
 end;
 
-canceled;
-
-theorem
-   for f being Morphism of E holds (incl E).f = f by FUNCT_1:35;
+canceled 2;
 
 theorem Th22:
    for a being Object of E holds (Obj incl E).a = a
@@ -933,7 +927,6 @@ definition let C,D;
        c = [:the Cod of C,the Cod of D:],
        p = |:the Comp of C, the Comp of D:|,
        i = [:the Id of C,the Id of D:];
-      now
 A1:   for f,g being Element of M st d.g = c.f holds
          [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D)
       proof let f,g be Element of M;
@@ -958,7 +951,6 @@ A5:      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
        hence (the Dom of C).g`1 = (the Cod of C).f`1 &
           (the Dom of D).g`2 = (the Cod of D).f`2 by CAT_1:def 8;
       end;
-    thus
 A6:   for f,g being Element of M holds [g,f] in dom(p) iff d.g = c.f
      proof let f,g be Element of M;
 A7:      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
@@ -977,14 +969,13 @@ A7:      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
       hence thesis by A7,FUNCT_4:57;
      end;
 A8:  for f,g being Element of M st d.g = c.f holds
-         p.[g,f] = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f`2]]
+         p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
       proof let f,g be Element of M;
        assume d.g = c.f;
        then [g,f] in dom(p) & g = [g`1,g`2] & f = [f`1,f`2] by A6,MCART_1:23;
-       hence p.[g,f] = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f`2]]
+       hence p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
         by FUNCT_4:58;
       end;
-    thus
 A9:  for f,g being Element of M
        st d.g = c.f holds d.(p.[g,f]) = d.f & c.(p.[g,f]) = c.g
       proof let f,g be Element of M;
@@ -1019,12 +1010,12 @@ A14:      (the Dom of C).((the Comp of C).(g`1,f`1)) = (the Dom of C).f`1 &
  c.((the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)) by A14
              .= c.g by A10,A11,FUNCT_3:def 9,A14;
       end;
-    thus for f,g,h being Element of M
+A15:  for f,g,h being Element of M
        st d.h = c.g & d.g = c.f holds p.[h,p.[g,f]] = p.[p.[h,g],f]
      proof let f,g,h be Element of M;
       assume
-A15:     d.h = c.g & d.g = c.f;
-then A16:    [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in
+A16:     d.h = c.g & d.g = c.f;
+then A17:    [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in
  dom(the Comp of D) &
        [h`1,g`1] in dom(the Comp of C) & [h`2,g`2] in dom(the Comp of D)
          by A1;
@@ -1032,79 +1023,83 @@ then A16:    [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in
        (the Comp of D).[g`2,f`2] in the Morphisms of D &
        (the Comp of C).[h`1,g`1] in the Morphisms of C &
        (the Comp of D).[h`2,g`2] in the Morphisms of D by PARTFUN1:27;
-       then reconsider pgf = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f
-`2]],
-                 phg = [(the Comp of C).[h`1,g`1],(the Comp of D).[h`2,g`2]]
+     then reconsider
+          pgf = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f`2]],
+          phg = [(the Comp of C).[h`1,g`1],(the Comp of D).[h`2,g`2]]
          as Element of M by ZFMISC_1:106;
-A17:    pgf`1 = (the Comp of C).[g`1,f`1] & pgf`2 = (the Comp of D).[g`2,f`2] &
+A18:    pgf`1 = (the Comp of C).[g`1,f`1] & pgf`2 = (the Comp of D).[g`2,f`2] &
        phg`1 = (the Comp of C).[h`1,g`1] & phg`2 = (the Comp of D).[h`2,g`2]
         by MCART_1:7;
       set pgf1 = pgf`1, phg1 = phg`1;
       set pgf2 = pgf`2, phg2 = phg`2;
-A18:    (the Dom of C).g`1 = (the Cod of C).f`1 &
-       (the Dom of D).g`2 = (the Cod of D).f`2 &
-       (the Dom of C).h`1 = (the Cod of C).g`1 &
-       (the Dom of D).h`2 = (the Cod of D).g`2 by A16,CAT_1:def 8;
-         p.(g,f) = pgf & p.(h,g) = phg & d.h = c.(p.(g,f)) & d.(p.(h,g)) = c.f
-        by A8,A9,A15;
-      then p.[h,p.[g,f]] = [(the Comp of C).[h`1,pgf1],(the Comp of D).[h`2,
-pgf2]] &
-      p.[p.[h,g],f] = [(the Comp of C).[phg1,f`1],(the Comp of D).[phg2,f`2]] &
-      (the Comp of C).[h`1,pgf1] = (the Comp of C).[phg1,f`1] &
-      (the Comp of D).[h`2,pgf2] = (the Comp of D).[phg2,f`2]
-        by A8,A17,A18,CAT_1:def 8;
+A19:  (the Dom of C).g`1 = (the Cod of C).f`1 &
+      (the Dom of D).g`2 = (the Cod of D).f`2 &
+      (the Dom of C).h`1 = (the Cod of C).g`1 &
+      (the Dom of D).h`2 = (the Cod of D).g`2 by A17,CAT_1:def 8;
+A20:    p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
+                   by A16,A8;
+A21:    p.(h,g) = [(the Comp of C).(h`1,g`1),(the Comp of D).(h`2,g`2)]
+                 by A8,A16;
+      d.h = c.(p.(g,f)) & d.(p.(h,g)) = c.f by A9,A16;
+      then p.(h,p.(g,f)) = [(the Comp of C).(h`1,pgf1),
+                            (the Comp of D).(h`2,pgf2)] &
+      p.(p.(h,g),f) = [(the Comp of C).(phg1,f`1),(the Comp of D).(phg2,f`2)] &
+      (the Comp of C).(h`1,pgf1) = (the Comp of C).(phg1,f`1) &
+      (the Comp of D).(h`2,pgf2) = (the Comp of D).(phg2,f`2)
+        by A8,A18,A19,CAT_1:def 8,A20,A21;
       hence p.[h,p.[g,f]] = p.[p.[h,g],f];
      end;
+      now
     let b be Element of O;
-A19:    b = [b`1,b`2] by MCART_1:23;
-A20: (the Dom of C).((the Id of C).b`1) = b`1 &
+A22:    b = [b`1,b`2] by MCART_1:23;
+A23: (the Dom of C).((the Id of C).b`1) = b`1 &
     (the Dom of D).((the Id of D).b`2) = b`2 &
     (the Cod of C).((the Id of C).b`1) = b`1 &
     (the Cod of D).((the Id of D).b`2) = b`2 &
     i.(b`1,b`2) = [(the Id of C).b`1,(the Id of D).b`2]
     by CAT_1:def 8,FUNCT_3:96;
     thus
-A21:  d.(i.b) = d.((the Id of C).b`1,(the Id of D).b`2) by  A19,A20
-            .= b by A20,A19,FUNCT_3:96;
+A24:  d.(i.b) = d.((the Id of C).b`1,(the Id of D).b`2) by  A22,A23
+            .= b by A23,A22,FUNCT_3:96;
     thus
-A22:  c.(i.b) = c.((the Id of C).b`1,(the Id of D).b`2) by  A19,A20
-            .= b by A20,A19,FUNCT_3:96;
-A23:  (i.(b`1,b`2))`1 = (the Id of C).b`1 & (i.(b`1,b`2))`2 = (the Id of D).b`2
-       by A20,MCART_1:7;
+A25:  c.(i.b) = c.((the Id of C).b`1,(the Id of D).b`2) by  A22,A23
+            .= b by A23,A22,FUNCT_3:96;
+A26:  (i.(b`1,b`2))`1 = (the Id of C).b`1 & (i.(b`1,b`2))`2 = (the Id of D).b`2
+       by A23,MCART_1:7;
     thus for f being Element of M st c.f = b holds p.[i.b,f] = f
      proof let f be Element of M;
-A24:      f = [f`1,f`2] by MCART_1:23;
+A27:      f = [f`1,f`2] by MCART_1:23;
       assume
-A25:     c.f = b;
+A28:     c.f = b;
          c.(f`1,f`2) = [(the Cod of C).f`1,(the Cod of D).f`2]
                 by FUNCT_3:96;
       then (the Cod of C).f`1 = b`1 & (the Cod of D).f`2 = b`2
-       by A19,A25,ZFMISC_1:33,A24;
+       by A22,A28,ZFMISC_1:33,A27;
       then
-A26:     p.(i.(b`1,b`2),f) =
+A29:     p.(i.(b`1,b`2),f) =
          [(the Comp of C).((i.b)`1,f`1),(the Comp of D).((i.b)`2,f`2)] &
          (the Comp of C).((the Id of C).b`1,f`1) = f`1 &
          (the Comp of D).((the Id of D).b`2,f`2) = f`2
-       by A8,A21,A25,CAT_1:def 8,A19;
-      thus p.[i.b,f] = f by  A19,A23,MCART_1:23,A26;
+       by A8,A24,A28,CAT_1:def 8,A22;
+      thus p.[i.b,f] = f by  A22,A26,MCART_1:23,A29;
      end;
     let g be Element of M;
-A27:   g = [g`1,g`2] by MCART_1:23;
+A30:   g = [g`1,g`2] by MCART_1:23;
     assume
-A28:   d.g = b;
+A31:   d.g = b;
        d.(g`1,g`2) = [(the Dom of C).g`1,(the Dom of D).g`2] by FUNCT_3:96;
     then
   (the Dom of C).g`1 = b`1 & (the Dom of D).g`2 = b`2
-      by A19,A28,ZFMISC_1:33,A27;
+      by A22,A31,ZFMISC_1:33,A30;
     then
-A29:  p.(g,i.(b`1,b`2)) =
+A32:  p.(g,i.(b`1,b`2)) =
          [(the Comp of C).(g`1,(i.b)`1),(the Comp of D).(g`2,(i.b)`2)] &
          (the Comp of C).(g`1,(the Id of C).b`1) = g`1 &
          (the Comp of D).(g`2,(the Id of D).b`2) = g`2
-       by A8,A22,A28,CAT_1:def 8,A19;
-    thus p.[g,i.b] = g by  A19,A23,MCART_1:23,A29;
+       by A8,A25,A31,CAT_1:def 8,A22;
+    thus p.[g,i.b] = g by  A22,A26,MCART_1:23,A32;
    end;
-   hence thesis by CAT_1:def 8;
+   hence thesis by A6,A9,CAT_1:def 8,A15;
   end;
 end;
 
@@ -1134,7 +1129,8 @@ end;
 
 theorem
    for cd being Object of [:C,D:]
-    ex c being Object of C, d being Object of D st cd = [c,d] by DOMAIN_1:9;
+    ex c being Object of C, d being Object of D st cd = [c,d]
+    by DOMAIN_1:9;
 
 theorem Th36:
    for f being Morphism of C for g being Morphism of D
@@ -1170,9 +1166,9 @@ A1:  dom f' = cod f & dom g' = cod g;
  [f',f] in dom(the Comp of C) & [g',g] in dom(the Comp of D) by CAT_1:40;
 
      dom [f',g'] = [dom f',dom g'] & cod [f,g] = [cod f,cod g] by Th38;
-  hence [f',g']*[f,g] = |:the Comp of C, the Comp of D:|.[[f',g'],[f,g]]
+  hence [f',g']*[f,g] = |:the Comp of C, the Comp of D:|.([f',g'],[f,g])
                 by A1,CAT_1:41
-    .= [(the Comp of C).[f',f],(the Comp of D).[g',g]] by A2,FUNCT_4:def 3
+    .= [(the Comp of C).(f',f),(the Comp of D).(g',g)] by A2,FUNCT_4:def 3
 
     .= [f'*f,(the Comp of D).[g',g]] by A1,CAT_1:41
     .= [f'*f,g'*g] by A1,CAT_1:41;
@@ -1695,11 +1691,7 @@ definition let C,D;
   coherence by Th55;
 end;
 
-canceled 2;
-
-theorem
-   for f being (Morphism of C),g being Morphism of D
-     holds pr1(C,D).(f,g) = f by FUNCT_3:def 5;
+canceled 3;
 
 theorem
       for c being Object of C, d being Object of D
@@ -1711,9 +1703,7 @@ A1: id [c,d] = [id c,id d] by Th41;
   hence thesis by CAT_1:103,A1;
  end;
 
-theorem
-   for f being (Morphism of C),g being Morphism of D
-    holds pr2(C,D).(f,g) = g by FUNCT_3:def 6;
+canceled;
 
 theorem
       for c being Object of C, d being Object of D

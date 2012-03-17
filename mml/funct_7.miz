@@ -9,13 +9,14 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1;
+      FUNCT_2, FUNCT_7, PARTFUN1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1, RELSET_1,
-      BINOP_1, FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1, FUNCT_2,
-      FINSEQ_2, FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
+      NAT_1, NAT_D, SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1,
+      RELSET_1, BINOP_1, FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1,
+      FUNCT_2, FINSEQ_2, FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, FUNCT_4,
-      XXREAL_0, NAT_1, INT_1, FUNCT_5, CQC_LANG, PBOOLE, FINSEQ_4, REWRITE1;
+      XXREAL_0, NAT_1, INT_1, FUNCT_5, CQC_LANG, PBOOLE, FINSEQ_4, REWRITE1,
+      NAT_D;
  registrations NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
       FUNCOP_1, FUNCT_4, CQC_LANG, PARTFUN1, INT_1, ORDINAL1, XREAL_0, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -382,7 +383,7 @@ A7: for n st P[n] holds n <= m from NAT_1:sch 6(A5,A4);
 A8:     x in A;
         then reconsider l = x as Element of NAT;
              l <= m by A7,A8;
-        then l < m+1 by NAT_1:38;
+        then l < m+1 by NAT_1:13;
        hence thesis;
       end;
      let x be set;
@@ -390,7 +391,7 @@ A8:     x in A;
       then consider l being Element of NAT such that
 A9:    x = l and
 A10:    l < m+1;
-           l <= m by A10,NAT_1:38;
+           l <= m by A10,NAT_1:13;
       then l < m or l = m by XXREAL_0:1;
      hence x in A by A1,A6,A9;
     end;
@@ -439,9 +440,9 @@ A1:  len p = len q+1;
    let i be Element of NAT;
    hereby assume
           i in dom q;
-then A2:   i >= 1 & i <= len q & len q <= len p by A1,FINSEQ_3:27,NAT_1:29;
+then A2:   i >= 1 & i <= len q & len q <= len p by A1,FINSEQ_3:27,NAT_1:11;
      then i+1 <= len p & i+1 >= 1 & i <= len p by A1,XXREAL_0:2,XREAL_1:8
-,NAT_1:29;
+,NAT_1:11;
     hence i in dom p & i+1 in dom p by A2,FINSEQ_3:27;
    end;
    assume i in dom p & i+1 in dom p;
@@ -541,7 +542,8 @@ A1:  for x being set st x in dom (p^q) holds (p^q).x is Function;
    let x be set; assume
 A2:  x in dom q;
    then reconsider i = x as Element of NAT;
-         (p^q).(len p+i) = q.x & len p+i in dom (p^q) by A2,FINSEQ_1:41,def 7;
+         (p^q).(len p+i) = q.x & len p+i in dom (p^q) by A2,FINSEQ_1:41,
+def 7;
    hence q.x is Function by A1;
   end;
 
@@ -549,7 +551,7 @@ begin :: Some useful schemes
 
 scheme Kappa2D{ X,Y,Z()->non empty set,F(Element of X(),Element of Y())->set}:
  ex f being Function of [:X(),Y():], Z()
-  st for x being Element of X(), y being Element of Y() holds f.[x,y]=F(x,y)
+  st for x being Element of X(), y being Element of Y() holds f.(x,y)=F(x,y)
 provided
 A1: for x being Element of X(), y being Element of Y() holds F(x,y) in Z()
 proof
@@ -561,7 +563,7 @@ A3: for p being Element of [:X(),Y():] holds f.p = G(p)
  take f;
  let x be Element of X(), y be Element of Y();
     [x,y]`1 = x & [x,y]`2 = y by MCART_1:7;
- hence f.[x,y]=F(x,y) by A3;
+ hence f.(x,y)=F(x,y) by A3;
 end;
 
 scheme FinMono{ A() -> set, D() -> non empty set, F,G(set) -> set }:
@@ -1101,11 +1103,11 @@ A6: for i being Element of NAT st R[i] holds R[i+1]
 A7:   i <= len p implies f1.i = f2.i & f1.i is Function and
 A8:   i+1 <= len p;
      reconsider g = f1.i as Function;
-           i+1 >= 1 by NAT_1:29;
+           i+1 >= 1 by NAT_1:11;
 then A9:   i+1 in dom p by A8,FINSEQ_3:27;
      reconsider h = p.(i+1) as Function;
            f1.(i+1) = h*g by A2,A9;
-     hence f1.(i+1) = f2.(i+1) & f1.(i+1) is Function by A4,A7,A8,A9,NAT_1:38;
+     hence f1.(i+1) = f2.(i+1) & f1.(i+1) is Function by A4,A7,A8,A9,NAT_1:13;
     end;
         for i being Element of NAT holds R[i] from NAT_1:sch 1(A5,A6);
    hence thesis by A1,A3;
@@ -1199,7 +1201,7 @@ A5:  for i being Element of NAT st 1 <= i & i < len p+1 holds
    take q; thus len q = len p+1 & q.1 = x by A3,A4;
    let i be Element of NAT, f be Function; assume i in dom p;
     then i >= 1 & i <= len p by FINSEQ_3:27;
-    then i >= 1 & i < len p+1 by NAT_1:38;
+    then i >= 1 & i < len p+1 by NAT_1:13;
     then ex f being Function st f = p.i & q.(i+1) = f.(q.i) by A5;
    hence f = p.i implies q.(i+1) = f.(q.i);
   end;
@@ -1220,11 +1222,11 @@ A13:   i in dom q1 implies q1.i = q2.i and
 A14:   i+1 in dom q1;
            i+1 <= len q1 by A14,FINSEQ_3:27;
 then A15:   i <= len p by A6,XREAL_1:8;
-     per cases by NAT_1:19; suppose i = 0;
+     per cases by NAT_1:3; suppose i = 0;
       hence q1.(i+1) = q2.(i+1) by A6,A8;
      end;
      suppose i > 0;
-       then i >= 0+1 by NAT_1:38;
+       then i >= 0+1 by NAT_1:13;
 then A16:    i in dom p by A15,FINSEQ_3:27;
       reconsider f = p.i as Function;
       thus q1.(i+1) = f.(q2.i) by A6,A7,A13,A16,Th24
@@ -1298,7 +1300,7 @@ then A3:  len (p^<*f*>) = len p+1 & len <*f.(apply(p,x).(len p+1))*> = 1
 then A4:  dom apply(p^<*f*>,x) = Seg (len apply(p,x)+1) by A1,A2,FINSEQ_1:def 3
 ;
 A5: (p^<*f*>).(len p+1) = f by FINSEQ_1:59;
-         len p+1 >= 1 by NAT_1:29;
+         len p+1 >= 1 by NAT_1:11;
 then A6: len p+1 in dom (p^<*f*>) & len p+1 in dom apply(p,x) by A2,A3,
 FINSEQ_3:27;
     defpred P[Element of NAT] means $1 in dom apply(p,x)
@@ -1308,13 +1310,13 @@ A8: for i being Element of NAT st P[i] holds P[i+1]
     proof let i be Element of NAT such that
 A9:   i in dom apply(p,x) implies apply(p^<*f*>,x).i = apply(p,x).i and
 A10:   i+1 in dom apply(p,x);
-           i <= i+1 & i+1 <= len apply(p,x) by A10,FINSEQ_3:27,NAT_1:38;
+           i <= i+1 & i+1 <= len apply(p,x) by A10,FINSEQ_3:27,NAT_1:13;
 then A11:   i <= len apply(p,x) & i <= len p by A2,XXREAL_0:2,XREAL_1:8;
-     per cases by NAT_1:19; suppose i = 0;
+     per cases by NAT_1:3; suppose i = 0;
       hence apply(p^<*f*>,x).(i+1) = apply(p,x).(i+1) by A2,Def5;
      end;
      suppose i > 0;
-       then A12: i >= 0+1 by NAT_1:38;
+       then A12: i >= 0+1 by NAT_1:13;
 then A13:    i in dom apply(p,x) & i in dom p by A11,FINSEQ_3:27;
       reconsider g = p.i as Function;
        dom p c= dom (p^<*f*>) by FINSEQ_1:39;
@@ -1389,7 +1391,7 @@ A3:   apply(<*f*>^p,x) = <*x*>^apply(p,f.x);
 A4:   apply(p'^<*g*>,x) = apply(p',x)^<*g.(apply(p',x).(len p'+1))*> by Th44;
 A5:   len <*x*> = 1 & len <*f*> = 1 by FINSEQ_1:57;
 then A6:   len apply(p,f.x) = len p+1 & len p' = len p+1 by Def5,FINSEQ_1:35;
-      then len p' >= 1 by NAT_1:29;
+      then len p' >= 1 by NAT_1:11;
       then len p' in dom apply(p,f.x) by A6,FINSEQ_3:27;
 then apply(p',x).(1+len p') = apply(p,f.x).(len p+1)
        by A3,A5,A6,FINSEQ_1:def 7;
@@ -1645,7 +1647,7 @@ A3:  len (p^q) = len p+len q by FINSEQ_1:35;
    reconsider p1 = pq|Seg (len p+1), p2 = pq|Seg len p
      as FinSequence by FINSEQ_1:19;
    hereby take p1;
-          len p <= len (p^q) by A3,NAT_1:29;
+          len p <= len (p^q) by A3,NAT_1:11;
      then len p+1 <= len pq by A1,XREAL_1:8;
     hence
 A4:   len p1 = len p+1 by FINSEQ_1:21;
@@ -1660,7 +1662,7 @@ A4:   len p1 = len p+1 by FINSEQ_1:21;
    consider q2 being FinSequence such that
 A5:  pq = p2^q2 by TREES_1:3;
    take q2;
-         len p <= len (p^q) & len (p^q) <= len pq by A1,A3,NAT_1:29;
+         len p <= len (p^q) & len (p^q) <= len pq by A1,A3,NAT_1:11;
     then len p <= len pq by XXREAL_0:2;
 then A6:  len p2 = len p & len pq = len p2+len q2 by A5,FINSEQ_1:21,35
 ;
@@ -1774,7 +1776,7 @@ A10:    for i being Element of NAT st i in dom (q^<*f*>)
         holds (q^<*f*>).i in Funcs(p.i, p.(i+1)) by A4,Def8;
             len <*f*> = 1 by FINSEQ_1:57;
 then A11:    len (q^<*f*>) = len q+1 by FINSEQ_1:35;
-       then len q >= 1 & len q <= len (q^<*f*>) & len q+1 >= 1 by A8,NAT_1:29;
+       then len q >= 1 & len q <= len (q^<*f*>) & len q+1 >= 1 by A8,NAT_1:11;
        then len q in dom (q^<*f*>) & len q+1 in dom (q^<*f*>) & len q in dom q
         by A11,FINSEQ_3:27;
 then A12:    (q^<*f*>).len q in Funcs(p.len q, p.(len q+1)) &
@@ -1829,8 +1831,8 @@ A4:  len <*dom f*> = 1 & len <*f*> = 1 by FINSEQ_1:57;
 then A5:  len (<*f*>^p) = len p+1 & len r = 1+len q by FINSEQ_1:35;
 A6:  now assume
 A7:    p <> {}; then len p <> 0 by FINSEQ_1:25;
-      then len p > 0 by NAT_1:19;
-      then len p >= 0+1 by NAT_1:38;
+      then len p > 0 by NAT_1:3;
+      then len p >= 0+1 by NAT_1:13;
       then 1 in dom p by FINSEQ_3:27;
       then p.1 in Funcs(q.1, q.(1+1)) by A3;
      then consider g being Function such that
@@ -1844,7 +1846,7 @@ A8:    p.1 = g & dom g = q.1 & rng g c= q.2 by FUNCT_2:def 2;
       let i be Element of NAT; assume
             i in dom (<*f*>^p);
 then A9:    i <= len p+1 & i >= 1 by A5,FINSEQ_3:27;
-            1 <= len q by A2,NAT_1:29;
+            1 <= len q by A2,NAT_1:11;
 then A10:     1 in dom q by FINSEQ_3:27;
             {} c= q.1 by XBOOLE_1:2;
 then A11:     rng f c= q.1 by A1,A6,Th59,XBOOLE_1:1;
@@ -1855,11 +1857,11 @@ then A11:     rng f c= q.1 by A1,A6,Th59,XBOOLE_1:1;
        end;
        suppose i <> 1;
         then i > 1 by A9,REAL_1:def 5;
-        then i >= 1+1 by NAT_1:38;
+        then i >= 1+1 by NAT_1:13;
        then consider j being Nat such that
-A12:      i = 1+1+j by NAT_1:28;
+A12:      i = 1+1+j by NAT_1:10;
 A13:      i = j+1+1 by A12;
-        then j+1 >= 1 & j+1 <= len p by A9,NAT_1:29,XREAL_1:8;
+        then j+1 >= 1 & j+1 <= len p by A9,NAT_1:11,XREAL_1:8;
         then j+1 in dom p by FINSEQ_3:27;
 then A14:      p.(j+1) in Funcs(q.(j+1),q.(j+1+1)) & j+1 in dom q & j+1+1 in
 dom q &
@@ -1908,7 +1910,7 @@ A10:    p.len p = g & dom g = q.len p & rng g c= q.(len p+1) by FUNCT_2:def 2;
       let i be Element of NAT; assume
             i in dom (p^<*f*>);
 then A11:    i <= len p+1 & i >= 1 by A5,FINSEQ_3:27;
-then A12:    i = len p+1 or len p >= i by NAT_1:26;
+then A12:    i = len p+1 or len p >= i by NAT_1:8;
 A13:    len p+1+1 = len p+(1+1);
       per cases by A12,REAL_1:def 5; suppose i = len p+1;
         then r.i = dom f & (p^<*f*>).i = f & r.(i+1) = rng f
@@ -1924,7 +1926,7 @@ q.i &
        hence (p^<*f*>).i in Funcs(r.i,r.(i+1));
        end;
        suppose i < len p;
-        then i <= len p & i+1 <= len p & i+1 >= 1 by NAT_1:29,38;
+        then i <= len p & i+1 <= len p & i+1 >= 1 by NAT_1:11,13;
         then i in dom p & i in dom q' & i+1 in dom q' by A6,A11,FINSEQ_3:27;
         then p.i in Funcs(q.i, q.(i+1)) & q.i = q'.i & q'.i = r.i &
         p.i = (p^<*f*>).i & q.(i+1) = q'.(i+1) & q'.(i+1) = r.(i+1)
@@ -1967,8 +1969,8 @@ A10:    p <> {};
 then A11:    firstdom p = proj1 (p.1) & firstdom (p^<*f*>) = proj1((p^<*f*>).1)
 &
       len p <> 0 by Def6,FINSEQ_1:25;
-      then len p > 0 by NAT_1:19;
-      then len p >= 0+1 by NAT_1:38;
+      then len p > 0 by NAT_1:3;
+      then len p >= 0+1 by NAT_1:13;
       then A12: 1 in dom p by FINSEQ_3:27;
 then p.1 = (p^<*f*>).1 by FINSEQ_1:def 7;
 then A13:    dom compose(p,X) = (firstdom p) /\ X & x in (firstdom p) /\ X
@@ -1976,7 +1978,8 @@ then A13:    dom compose(p,X) = (firstdom p) /\ X & x in (firstdom p) /\ X
            len apply(p,x) = len p+1 & len apply(p^<*f*>,x) = len (p^<*f*>)+1 &
       len (p^<*f*>) = len p+1 by A8,Def5,FINSEQ_1:35;
      hence apply(p^<*f*>,x).(len (p^<*f*>)+1)
-        = f.(compose(p,X).x) by A3,A4,A5,A11,A12,Th62,FINSEQ_1:59,def 7
+        = f.(compose(p,X).x) by A3,A4,A5,A11,A12,Th62,FINSEQ_1:59,
+def 7
        .= compose(p^<*f*>,X).x by A6,A13,FUNCT_1:23;
     end;
     end;
@@ -2024,16 +2027,16 @@ definition
  existence
   proof len q <> 0 by FINSEQ_1:25;
    then consider n being Nat such that
-A1:  len q = n+1 by NAT_1:22;
+A1:  len q = n+1 by NAT_1:6;
    reconsider n as Element of NAT by ORDINAL1:def 13;
    defpred P[set,set] means
      ex i being Element of NAT st i = $1 & $2 in Funcs(q.i,q.(i+1));
 A2:  for x being set st x in Seg n ex y being set st P[x,y]
      proof let x be set; assume
 A3:    x in Seg n; then reconsider i = x as Element of NAT;
-            i <= n & n <= n+1 by A3,FINSEQ_1:3,NAT_1:29;
+            i <= n & n <= n+1 by A3,FINSEQ_1:3,NAT_1:11;
        then i >= 1 & i+1 >= 1 & i+1 <= n+1 & i <= n+1
-        by A3,XXREAL_0:2,XREAL_1:8,FINSEQ_1:3,NAT_1:29;
+        by A3,XXREAL_0:2,XREAL_1:8,FINSEQ_1:3,NAT_1:11;
        then i in dom q & i+1 in dom q by A1,FINSEQ_3:27;
       then reconsider X = q.i, Y = q.(i+1) as non empty set by FUNCT_1:def 15;
       consider y being Function of X,Y;
@@ -2079,8 +2082,8 @@ theorem Th68:
   proof let q be non-empty non empty FinSequence;
    let p be FuncSequence of q; assume
 A1:  p <> {}; then len p <> 0 by FINSEQ_1:25;
-    then len p > 0 by NAT_1:19;
-    then len p >= 0+1 by NAT_1:38;
+    then len p > 0 by NAT_1:3;
+    then len p >= 0+1 by NAT_1:13;
 then A2:  1 in dom p & len p in dom p by FINSEQ_3:27;
 A3:  len p+1 = len q by Def10;
          p.1 in Funcs(q.1,q.(1+1)) by A2,Def10;
@@ -2278,7 +2281,7 @@ A2:  for k be Nat st P[k] holds P[k+1]
    hence thesis by RELAT_1:44,45;
   end;
 A3:  for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
-  assume n <> 0; then consider k be Nat such that A4:n = k+1 by NAT_1:22;
+  assume n <> 0; then consider k be Nat such that A4:n = k+1 by NAT_1:6;
   reconsider k as Element of NAT by ORDINAL1:def 13;
   thus thesis by A4,A3; end;
 
@@ -2344,7 +2347,7 @@ theorem
 A1: P[ 0] by Th72;
 A2: P[k] implies P[k+1] by Lm5;
 A3: P[k] from NAT_1:sch 1(A1,A2);
-  assume n <> 0; then consider k be Nat such that A4:n = k+1 by NAT_1:22;
+  assume n <> 0; then consider k be Nat such that A4:n = k+1 by NAT_1:6;
   reconsider k as Element of NAT by ORDINAL1:def 13;
   n=k+1 by A4;
   hence thesis by A3; end;
@@ -2460,7 +2463,7 @@ then A10:    f.x = a by A3,A7,FUNCOP_1:13;
        hence P[k+1] by A8,FUNCT_1:9;
       end;
 A11:  P[k] from NAT_1:sch 1(A4,A5);
-     consider k be Nat such that A12:n = k+1 by A1,NAT_1:22;
+     consider k be Nat such that A12:n = k+1 by A1,NAT_1:6;
      reconsider k as Element of NAT by ORDINAL1:def 13;
      n = k + 1 by A12;
    hence thesis by A11; end;

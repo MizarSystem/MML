@@ -9,13 +9,13 @@ environ
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
       CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
-      REALSET1;
+      REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC,
+      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, NAT_D, STRUCT_0, PRE_TOPC,
       RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2, COMPLEX1, CFUNCT_1, NORMSP_1;
  constructors PARTFUN1, DOMAIN_1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1,
-      NAT_1, COMPLEX1, SEQ_2, REALSET1, RLVECT_1;
+      NAT_1, COMPLEX1, SEQ_2, REALSET1, RLVECT_1, NAT_D;
  registrations RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, MEMBERED,
       ORDINAL1, RLVECT_1, COMPLEX1, XCMPLX_0, REALSET1, XXREAL_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -83,18 +83,16 @@ A2:for a being Element of COMPLEX for x being Element of ZS holds
    thus for x,y being VECTOR of W holds x + y = y + x
    proof
      let x,y be VECTOR of W;
-A3:  x + y = F.(x,y) & y + x = F.(y,x);
      reconsider X = x, Y = y as Element of ZS;
-       x + y = A(X,Y) & y + x = A(Y,X) by A1,A3;
+       x + y = A(X,Y) & y + x = A(Y,X) by A1;
      hence thesis;
    end;
 
    thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
    proof
      let x,y,z be VECTOR of W;
-A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      reconsider X = x, Y = y, Z = z as Element of ZS;
-       (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1,A4;
+       (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1;
      hence thesis;
    end;
 
@@ -102,8 +100,7 @@ A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
    proof
      let x be VECTOR of W;
      reconsider X = x as Element of ZS;
-       x + 0.W = F.(x,0.W)
-            .= A(X,O) by A1;
+       x + 0.W = A(X,O) by A1;
      hence thesis by TARSKI:def 1;
    end;
 
@@ -112,8 +109,7 @@ A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      let x be VECTOR of W;
      reconsider y = O as VECTOR of W;
      take y;
-     thus x + y = F.(x,y)
-               .= 0.W by A1;
+     thus x + y = 0.W by A1;
    end;
 
    thus for z being Complex for x,y being VECTOR of W holds
@@ -121,8 +117,7 @@ A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
    proof
      let z be Complex; let x,y be VECTOR of W;
      reconsider X = x, Y = y as Element of ZS;
-       z * x + z * y = F.(z * x,z * y)
-                  .= A(O,O) by A1;
+       z * x + z * y = A(O,O) by A1;
      hence thesis by A2;
    end;
 
@@ -133,10 +128,9 @@ A4:  (x + y) + z = F.(x + y,z) & x + (y + z) = F.(x,y + z);
      let x be VECTOR of W;
      set c = z1 + z2;
      reconsider X = x as Element of ZS;
-A5:  c * x = O by A2;
-       z1 * x + z2 * x = F.(z1 * x,z2 * x)
-                   .= A(O,O) by A1;
-     hence thesis by A5;
+A3:  c * x = O by A2;
+       z1 * x + z2 * x = A(O,O) by A1;
+     hence thesis by A3;
    end;
 
    thus for z1,z2 being Complex for x being VECTOR of W holds
@@ -146,9 +140,9 @@ A5:  c * x = O by A2;
      let x be VECTOR of W;
      set c = z1 * z2;
      reconsider X = x as Element of ZS;
-A6:  c * x = O by A2;
+A4:  c * x = O by A2;
        z1 * (z2 * x) = O by A2;
-     hence thesis by A6;
+     hence thesis by A4;
    end;
 
    thus for x being VECTOR of W holds 1r * x = x
@@ -196,7 +190,8 @@ A1:(for v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
    (for v being VECTOR of CLSStruct (# ZS,O,F,G #) holds 1r * v = v) by Lm1;
    take CLSStruct (# ZS,O,F,G #);
    thus CLSStruct (# ZS,O,F,G #) is non empty;
-   thus thesis by A1,Def2,RLVECT_1:def 5,def 6,def 7,def 8;
+   thus thesis by A1,Def2,RLVECT_1:def 5,def 6,def 7,
+def 8;
    end;
 end;
 
@@ -218,7 +213,8 @@ theorem
   (for z1,z2 being Complex, v being VECTOR of V holds
     (z1 * z2) * v = z1 * (z2 * v)) &
   (for v being VECTOR of V holds 1r * v = v)
-    implies V is ComplexLinearSpace by Def2,RLVECT_1:def 5,def 6,def 7,def 8;
+    implies V is ComplexLinearSpace by Def2,RLVECT_1:def 5,def 6,
+def 7,def 8;
 
 ::
 ::  Axioms of complex linear space.
@@ -434,7 +430,7 @@ A7:    for k being Element of NAT, v being VECTOR of V
         H.k = z * v;
        reconsider p = H | (Seg n),q = I | (Seg n)
            as FinSequence of the carrier of V by FINSEQ_1:23;
-A8:    n <= n + 1 by NAT_1:37;
+A8:    n <= n + 1 by NAT_1:12;
 then A9:    len p = n & len q = n by A5,A6,FINSEQ_1:21;
 A10:     now
          let k be Element of NAT;
@@ -889,7 +885,7 @@ A7:for z for x being VECTOR of W holds z * x = (the Mult of V).[z,x]
      proof
        let x,y be VECTOR of W;
        reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-       thus x + y = AV.[x1,y1] by A6
+       thus x + y = AV.(x1,y1) by A6
                  .= y1 + x1 by RLVECT_1:def 3
                  .= y + x by A6;
      end;
@@ -2613,10 +2609,10 @@ proof
       take k = m1 + m2;
       let n such that
   A8:  k <= n;
-          m1 <= m1 + m2 by NAT_1:37;
+          m1 <= m1 + m2 by NAT_1:12;
       then m1 <= n by A8,XXREAL_0:2;
   then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
-          m2 <= k by NAT_1:37;
+          m2 <= k by NAT_1:12;
       then m2 <= n by A8,XXREAL_0:2;
       then ||.(S2.n) - g2.|| < r/2 by A7;
       then A10: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
@@ -2653,10 +2649,10 @@ proof
       take k = m1 + m2;
       let n such that
   A8:  k <= n;
-          m1 <= m1 + m2 by NAT_1:37;
+          m1 <= m1 + m2 by NAT_1:12;
       then m1 <= n by A8,XXREAL_0:2;
   then A9:  ||.(S1.n) - g1.|| < r/2 by A6;
-          m2 <= k by NAT_1:37;
+          m2 <= k by NAT_1:12;
       then m2 <= n by A8,XXREAL_0:2;
       then ||.(S2.n) - g2.|| < r/2 by A7;
       then A10: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
@@ -2899,10 +2895,10 @@ proof
       take k = m1 + m2;
       let n such that
   A7:  k <= n;
-          m1 <= m1 + m2 by NAT_1:37;
+          m1 <= m1 + m2 by NAT_1:12;
       then m1 <= n by A7,XXREAL_0:2;
   then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
-          m2 <= k by NAT_1:37;
+          m2 <= k by NAT_1:12;
       then m2 <= n by A7,XXREAL_0:2;
       then ||.(S2.n) - g2.|| < r/2 by A6;
       then A9: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2
@@ -2939,10 +2935,10 @@ proof
       take k = m1 + m2;
       let n such that
   A7:  k <= n;
-          m1 <= m1 + m2 by NAT_1:37;
+          m1 <= m1 + m2 by NAT_1:12;
       then m1 <= n by A7,XXREAL_0:2;
   then A8:  ||.(S1.n) - g1.|| < r/2 by A5;
-          m2 <= k by NAT_1:37;
+          m2 <= k by NAT_1:12;
       then m2 <= n by A7,XXREAL_0:2;
       then ||.(S2.n) - g2.|| < r/2 by A6;
       then A9: ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| < r/2 + r/2

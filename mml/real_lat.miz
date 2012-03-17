@@ -7,10 +7,10 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, SQUARE_1, LATTICES, ARYTM, FUNCT_2, RELAT_1,
-      QC_LANG1, REAL_LAT;
+      QC_LANG1, REAL_LAT, NAT_1;
  notations XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, SQUARE_1,
       STRUCT_0, LATTICES, BINOP_1, FUNCSDOM, RELAT_1, FUNCT_2, FRAENKEL;
- constructors SQUARE_1, MEMBERED, LATTICES, FUNCSDOM;
+ constructors SQUARE_1, MEMBERED, LATTICES, FUNCSDOM, NAT_D;
  registrations LATTICES, RELSET_1, MEMBERED, XREAL_0;
  requirements SUBSET, BOOLE;
  definitions LATTICES;
@@ -73,7 +73,7 @@ definition
  canceled;
 
  func Real_Lattice -> strict LattStr equals
-  LattStr (# REAL, maxreal, minreal #);
+ LattStr (# REAL, maxreal, minreal #);
  coherence;
 end;
 
@@ -89,53 +89,53 @@ end;
 
 reserve a,b,c for Element of Real_Lattice;
 
+registration let a,b be Element of Real_Lattice;
+ identify a "\/" b with max(a,b);
+ compatibility
+  proof
+   thus a "\/" b = max(a,b) by Def2;
+  end;
+ identify a "/\" b with min(a,b);
+ compatibility
+  proof
+   thus a "/\" b = min(a,b) by Def1;
+  end;
+end;
+
 Lm1: a"\/"b = b"\/"a
  proof
-  thus a"\/"b = max(a,b) by Def2
-           .= b"\/"a by Def2;
+  thus a"\/"b = b"\/"a;
  end;
 
 Lm2: a"\/"(b"\/"c) = (a"\/"b)"\/"c
  proof
  set l=b"\/"c;
- A1: a"\/"(b"\/"c) =max(a,l) by Def2;
-    max(b,c)=l by Def2;
- then A2: a"\/"(b"\/"c)=max(max(a,b),c) by A1,XXREAL_0:34;
-     max(a,b)=a"\/"b by Def2;
- hence thesis by A2,Def2;
+ A1: a"\/"(b"\/"c)=max(max(a,b),c) by XXREAL_0:34;
+ thus thesis by A1;
  end;
 
 Lm3: (a"/\"b)"\/"b = b
  proof
   set k=a"/\"b;
-     min(a,b)=k by Def1;
- hence (a"/\"b)"\/"b = max(min(a,b),b) by Def2
-               .= b by XXREAL_0:36;
+ thus (a"/\"b)"\/"b = b by XXREAL_0:36;
  end;
 
 Lm4: a"/\"b = b"/\"a
  proof
-  thus a"/\"b = min(a,b) by Def1
-           .= b"/\"a by Def1;
+  thus a"/\"b = b"/\"a;
  end;
 
 Lm5: a"/\"(b"/\"c) = (a"/\"b)"/\"c
  proof
   set l=b"/\"c;
   set k=a"/\"b;
-  A1:min(b,c)=l by Def1;
-  A2:min(a,b)=k by Def1;
-  thus a"/\"(b"/\"c) = min(a,min(b,c)) by A1,Def1
-                .= min(k,c) by A2,XXREAL_0:33
-                .= (a"/\"b)"/\"c by Def1;
+  thus a"/\"(b"/\"c) = (a"/\"b)"/\"c by XXREAL_0:33;
  end;
 
 Lm6: a"/\"(a"\/"b) = a
  proof
   set l=a"\/"b;
-     max(a,b)=l by Def2;
-  hence a"/\"(a"\/"b) = min(a,max(a,b)) by Def1
-                .= a by XXREAL_0:35;
+  thus a"/\"(a"\/"b) = a by XXREAL_0:35;
  end;
 
 registration
@@ -155,12 +155,7 @@ Lm7: a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c)
   set l=a"/\"c;
   set k=a"/\"b;
   set m=b"\/"c;
-  A1:min(a,c)=l by Def1;
-  A2:min(a,b)=k by Def1;
-     max(b,c)=m by Def2;
-  hence a"/\"(b"\/"c) = min(a,max(b,c)) by Def1
-                .= max(k,l) by A1,A2,XXREAL_0:38
-                .= (a"/\"b)"\/"(a"/\"c) by Def2;
+  thus a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c) by XXREAL_0:38;
  end;
 
 reserve p,q,r for Element of Real_Lattice;

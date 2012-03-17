@@ -38,15 +38,15 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="SEQ_1"/>
-<ArticleID name="REALSET2"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="REALSET2"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="FINSEQ_4"/>
@@ -63,10 +63,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="405">
+<Func kind="K" nr="409">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="425">
+<Func kind="K" nr="429">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -76,7 +76,7 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 </Registrations>

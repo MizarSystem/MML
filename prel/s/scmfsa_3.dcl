@@ -22,46 +22,47 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMI_3"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="SCMFSA_2"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="64"/>
-<Func kind="K" nr="225">
+<Func kind="K" nr="174">
 <Func kind="K" nr="64"/>
 </Func>
 </Func>
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="229"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
+<Adjective nr="15"/>
 <Adjective nr="53">
 <Func kind="K" nr="2">
 <Func kind="K" nr="64"/>
-<Func kind="K" nr="225">
+<Func kind="K" nr="174">
 <Func kind="K" nr="64"/>
 </Func>
 </Func>
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="229"/>
 </Adjective>
 <Adjective nr="57" value="false">
 <Func kind="K" nr="2">
 <Func kind="K" nr="64"/>
-<Func kind="K" nr="225">
+<Func kind="K" nr="174">
 <Func kind="K" nr="64"/>
 </Func>
 </Func>
-<Func kind="K" nr="227"/>
+<Func kind="K" nr="229"/>
 </Adjective>
 </Cluster>
 </RCluster>

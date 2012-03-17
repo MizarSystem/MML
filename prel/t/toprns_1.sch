@@ -15,6 +15,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -38,7 +40,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="184">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -52,7 +54,7 @@
 <Adjective nr="16">
 <Func kind="K" nr="45"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="184">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -60,7 +62,7 @@
 </Cluster>
 <Func kind="K" nr="45"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="184">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -73,8 +75,8 @@
 <Func kind="K" nr="45"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="123">
-<Func kind="K" nr="184">
+<Func kind="K" nr="147">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>

@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -22,6 +23,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="REALSET1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -35,7 +37,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="173">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -43,12 +45,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="39">
-<Func kind="K" nr="173">
+<Adjective nr="44">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -57,7 +59,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="173">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -65,52 +67,52 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="39">
-<Func kind="K" nr="173">
+<Adjective nr="44">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="55"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="173">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="55" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="55"/>
+<Adjective nr="45" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="173">
+<Func kind="K" nr="199">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="54" value="false"/>
+<Adjective nr="60" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

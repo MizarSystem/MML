@@ -8,12 +8,12 @@ environ
 
  vocabularies REALSET1, GROUP_2, INT_1, RELAT_1, GROUP_1, BINOP_1, VECTSP_1,
       FUNCT_1, FINSET_1, CARD_1, ABSVALUE, BOOLE, TARSKI, RLSUB_1, SETFAM_1,
-      GROUP_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, BINOP_1,
-      RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, RLVECT_1, FINSET_1, GROUP_1,
-      GROUP_2, DOMAIN_1, CARD_1, XXREAL_0, INT_1, INT_2;
+      GROUP_3, NAT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, NAT_D,
+      BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, RLVECT_1, FINSET_1,
+      GROUP_1, GROUP_2, DOMAIN_1, CARD_1, XXREAL_0, INT_1, INT_2;
  constructors SETFAM_1, WELLORD2, DOMAIN_1, BINOP_1, XXREAL_0, NAT_1, REALSET1,
-      INT_2, RLVECT_1, GROUP_2, ARYTM_3, ORDINAL3;
+      INT_2, RLVECT_1, GROUP_2, ARYTM_3, ORDINAL3, NAT_D;
  registrations SUBSET_1, FUNCT_1, FINSET_1, GROUP_2, GROUP_1, STRUCT_0,
       RELSET_1, INT_1, XBOOLE_0, NAT_1, ARYTM_3;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -111,8 +111,7 @@ theorem
 theorem
  H * a = H * {a};
 
-theorem
-    a * A * H = a * (A * H) by GROUP_2:116;
+canceled;
 
 theorem Th10:
  A * a * H = A * (a * H)
@@ -142,8 +141,7 @@ theorem
                  .= H * (a * A) by GROUP_2:118;
   end;
 
-theorem
-    H * A * a = H * (A * a) by GROUP_2:118;
+canceled;
 
 theorem
     H1 * a * H2 = H1 * (a * H2) by Th10;
@@ -274,8 +272,10 @@ definition let G,a,b;
  correctness;
 end;
 
-theorem Th20:
+ Lm2:
  a |^ b = b" * a * b & a |^ b = b" * (a * b) by GROUP_1:def 4;
+
+canceled;
 
 theorem Th21:
  a |^ g = b |^ g implies a = b
@@ -327,12 +327,12 @@ theorem Th27:
   proof
    thus a |^ b = a implies a * b = b * a
     proof assume a |^ b = a;
-      then a = b" * (a * b) by Th20;
+      then a = b" * (a * b) by Lm2;
      hence thesis by GROUP_1:21;
     end;
     assume a * b = b * a;
      then a = b" * (a * b) by GROUP_1:21;
-   hence thesis by Th20;
+   hence thesis by Lm2;
   end;
 
 theorem Th28:
@@ -375,16 +375,16 @@ theorem Th32:
    thus a" |^ b = (a * b)" * b by GROUP_1:25
               .= (a * b)" * b"" by GROUP_1:19
               .= (b" * (a * b))" by GROUP_1:25
-              .= (a |^ b)" by Th20;
+              .= (a |^ b)" by Lm2;
   end;
 
-Lm2: now let G,a,b;
+Lm3: now let G,a,b;
  thus a |^ 0 |^ b = (1.G) |^ b by GROUP_1:43
                .= 1.G by Th22
                .= (a |^ b) |^ 0 by GROUP_1:43;
 end;
 
-Lm3: now let n;
+Lm4: now let n;
   assume A1: for G,a,b holds a |^ n |^ b = (a |^ b) |^ n;
  let G,a,b;
  thus a |^ (n + 1) |^ b = (a |^ n * a) |^ b by GROUP_1:49
@@ -393,17 +393,17 @@ Lm3: now let n;
                      .= (a |^ b) |^ (n + 1) by GROUP_1:49;
 end;
 
-Lm4: for n,G,a,b holds a |^ n |^ b = (a |^ b) |^ n
+Lm5: for n,G,a,b holds a |^ n |^ b = (a |^ b) |^ n
 proof
   defpred P[Nat] means a |^ $1 |^ b = (a |^ b) |^ $1;
-A1: P[0] by Lm2;
-A2: for k be Nat st P[k] holds P[k+1] by Lm3;
+A1: P[0] by Lm3;
+A2: for k be Nat st P[k] holds P[k+1] by Lm4;
    for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
 theorem
-    (a |^ n) |^ b = (a |^ b) |^ n by Lm4;
+    (a |^ n) |^ b = (a |^ b) |^ n by Lm5;
 
 theorem
     (a |^ i) |^ b = (a |^ b) |^ i
@@ -411,12 +411,12 @@ theorem
     per cases;
      suppose i >= 0;
        then i = abs i by ABSVALUE:def 1;
-      hence a |^ i |^ b =(a |^ b) |^ i by Lm4;
+      hence a |^ i |^ b =(a |^ b) |^ i by Lm5;
      end;
      suppose A1: i < 0;
       hence a |^ i |^ b = (a |^ abs i)" |^ b by GROUP_1:56
                     .= (a |^ abs (i) |^ b)" by Th32
-                    .= ((a |^ b) |^ abs i)" by Lm4
+                    .= ((a |^ b) |^ abs i)" by Lm5
                     .= (a |^ b) |^ i by A1,GROUP_1:56;
   end;
   end;
@@ -1996,7 +1996,7 @@ theorem
    hence thesis;
   end;
 
-Lm5:
+Lm6:
  for N1 being strict normal Subgroup of G
  holds carr N1 * carr N2 c= carr N2 * carr N1
  proof let N1 be strict normal Subgroup of G;
@@ -2007,7 +2007,7 @@ Lm5:
      then a |^ b in N1 |^ b by Th70;
      then a |^ b in the HGrStr of N1 by Def13;
      then A2: a |^ b in carr N1 by RLVECT_1:def 1;
-        b * (a |^ b) = b * (b" * (a * b)) by Th20
+        b * (a |^ b) = b * (b" * (a * b)) by Lm2
                 .= a * b by Th1;
   hence thesis by A1,A2;
  end;
@@ -2017,7 +2017,7 @@ theorem Th148:
  holds carr N1 * carr N2 = carr N2 * carr N1
   proof let N1,N2 be strict normal Subgroup of G;
        carr N1 * carr N2 c= carr N2 * carr N1 &
-    carr N2 * carr N1 c= carr N1 * carr N2 by Lm5;
+    carr N2 * carr N1 c= carr N1 * carr N2 by Lm6;
    hence thesis by XBOOLE_0:def 10;
   end;
 

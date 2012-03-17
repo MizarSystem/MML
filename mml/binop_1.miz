@@ -6,14 +6,15 @@
 
 environ
 
- vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2;
+ vocabularies FUNCT_1, BOOLE, RELAT_1, BINOP_1, SEQM_3, PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2;
  constructors FUNCT_2;
  registrations RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, FUNCT_1, FUNCT_2;
  requirements SUBSET, BOOLE;
  definitions FUNCT_1;
- theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, RELSET_1, XBOOLE_1;
- schemes FUNCT_2;
+ theorems RELAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, XBOOLE_1;
+ schemes FUNCT_2, PARTFUN1;
 
 begin
 
@@ -36,7 +37,7 @@ definition let A,B be non empty set, C be set, f be Function of [:A,B:],C;
   end;
 end;
 
-reserve X,Y,Z,x,x1,x2,y,y1,y2,z for set;
+reserve X,Y,Z,x,x1,x2,y,y1,y2,z,z1,z2 for set;
 
 theorem Th1:
   for X,Y,Z being set
@@ -197,7 +198,7 @@ registration
    let f be BinOp of {};
 A1:  [:{},{}:] = {} by ZFMISC_1:113;
 then A2:  f c= [:dom f, rng f:] & dom f = {} & rng f c= {}
-     by FUNCT_2:def 1,RELAT_1:21,RELSET_1:12;
+     by FUNCT_2:def 1,RELAT_1:21;
    thus f is empty by A1,XBOOLE_1:3;
    hereby let a,b,c be Element of {};
     thus f.(a,f.(b,c)) = {} by A2,FUNCT_1:def 4
@@ -548,5 +549,152 @@ A4:x1 in X & y1 in Y & x = [x1,y1] by A1,ZFMISC_1:103;
 A5:x2 in X & y2 in Y & y = [x2,y2] by A1,ZFMISC_1:103;
  thus f.x = f.(x1,y1) by A4 .= f.(x2,y2) by A4,A5,A3
    .= f.y by A5;
+end;
+
+:: from PARTFUN1, 2006.12.05, AT
+
+theorem
+  for f1,f2 being PartFunc of [:X,Y:],Z
+     st dom f1 = dom f2 & for x,y st [x,y] in dom f1 holds f1.(x,y)=f2.(x,y)
+    holds f1 = f2
+ proof let f1,f2 be PartFunc of [:X,Y:],Z such that
+A1:   dom f1 = dom f2 and
+A2:   for x,y st [x,y] in dom f1 holds f1.(x,y) = f2.(x,y);
+      z in dom f1 implies f1.z = f2.z
+    proof assume
+A3:    z in dom f1;
+      then consider x,y such that
+A4:    z = [x,y] by ZFMISC_1:102;
+      f1.(x,y) = f2.(x,y) by A2,A3,A4;
+     hence thesis by A4;
+    end;
+   hence thesis by A1,FUNCT_1:9;
+ end;
+
+scheme PartFuncEx2{X,Y,Z()->set,P[set,set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z() st
+   (for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st P[x,y,z]) &
+   (for x,y st [x,y] in dom f holds P[x,y,f.(x,y)])
+provided
+A1: for x,y,z st x in X() & y in Y() & P[x,y,z] holds z in Z() and
+A2: for x,y,z1,z2 st x in X() & y in Y() & P[x,y,z1] & P[x,y,z2] holds z1 = z2
+proof
+defpred Q[set,set] means for x1,y1 st $1 = [x1,y1] holds P[x1,y1,$2];
+A3: for x,z st x in [:X(),Y():] & Q[x,z] holds z in Z()
+     proof let x,z;
+      assume x in [:X(),Y():];
+      then consider x1,y1 such that
+A4:     x1 in X() & y1 in Y() and
+A5:     x = [x1,y1] by ZFMISC_1:def 2;
+      assume for x1,y1 st x = [x1,y1] holds P[x1,y1,z];
+      then P[x1,y1,z] by A5;
+      hence z in Z() by A1,A4;
+     end;
+A6: for x,z1,z2
+      st x in [:X(),Y():] & Q[x,z1] & Q[x,z2] holds z1 = z2
+    proof let x,z1,z2 such that
+A7:    x in [:X(),Y():] and
+A8:    (for x1,y1 st x = [x1,y1] holds P[x1,y1,z1]) and
+A9:    (for x1,y1 st x = [x1,y1] holds P[x1,y1,z2]);
+     consider x1,y1 such that
+A10:    x1 in X() & y1 in Y() and
+A11:    x = [x1,y1] by A7,ZFMISC_1:def 2;
+        P[x1,y1,z1] & P[x1,y1,z2] by A8,A9,A11;
+     hence thesis by A2,A10;
+    end;
+   consider f being PartFunc of [:X(),Y():],Z() such that
+A12:  for x holds x in dom f iff x in [:X(),Y():] & ex z st Q[x,z] and
+A13:  for x st x in dom f holds Q[x,f.x] from PARTFUN1:sch 2(A3,A6);
+   take f;
+   thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st P[x,y,z
+]
+    proof let x,y;
+      thus [x,y] in dom f implies x in X() & y in Y() & ex z st P[x,y,z]
+       proof assume
+A14:       [x,y] in dom f;
+        hence x in X() & y in Y() by ZFMISC_1:106;
+        consider z such that
+A15:       for x1,y1 st [x,y] = [x1,y1] holds P[x1,y1,z] by A12,A14;
+        take z;
+        thus thesis by A15;
+       end;
+      assume x in X() & y in Y();
+      then A16:     [x,y] in [:X(),Y():] by ZFMISC_1:def 2;
+      given z such that
+A17:     P[x,y,z];
+         now take z;
+       let x1,y1;
+       assume [x,y] = [x1,y1];
+       then x=x1 & y=y1 by ZFMISC_1:33;
+       hence P[x1,y1,z] by A17;
+      end;
+      hence thesis by A12,A16;
+    end;
+   thus thesis by A13;
+ end;
+
+scheme LambdaR2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z()
+  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y]) &
+     (for x,y st [x,y] in dom f holds f.(x,y) = F(x,y))
+provided
+A1:  for x,y st P[x,y] holds F(x,y) in Z()
+proof
+defpred Q[set,set,set] means P[$1,$2] & $3 = F($1,$2);
+A2: for x,y,z st x in X() & y in Y() & Q[x,y,z] holds z in Z() by A1;
+A3: for x,y,z1,z2 st x in X() & y in Y() & Q[x,y,z1] & Q[x,y,z2] holds z1 = z2;
+  consider f being PartFunc of [:X(),Y():],Z() such that
+A4: for x,y holds [x,y] in dom f iff x in X() & y in Y() & ex z st Q[x,y,z] and
+A5: for x,y st [x,y] in dom f holds Q[x,y,f.(x,y)] from PartFuncEx2(A2,A3);
+  take f;
+  thus for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y]
+   proof let x,y;
+    thus [x,y] in dom f implies x in X() & y in Y() & P[x,y]
+     proof assume [x,y] in dom f;
+      then x in X() & y in Y() & ex z st P[x,y] & z = F(x,y) by A4;
+      hence thesis;
+     end;
+    assume x in X() & y in Y() & P[x,y];
+    then x in X() & y in Y() & ex z st P[x,y] & z = F(x,y);
+    hence thesis by A4;
+   end;
+  thus thesis by A5;
+ end;
+
+:: from GRCAT_1, 2006.12.05, AT
+
+scheme PartLambda2{X,Y,Z()->set,F(set,set)->set,P[set,set]}:
+ ex f being PartFunc of [:X(),Y():],Z()
+  st (for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y])
+   & for x,y st [x,y] in dom f holds f.(x,y) = F(x,y)
+provided
+A1: for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z()
+proof
+  defpred R[set,set] means $1 in X() & $2 in Y() & P[$1,$2];
+A2: for x,y st R[x,y] holds F(x,y) in Z() by A1;
+  consider f being PartFunc of [:X(),Y():],Z() such that
+A3: for x,y holds [x,y] in dom f iff x in X() & y in Y() & R[x,y] and
+A4: for x,y st [x,y] in dom f holds f.(x,y) = F(x,y) from LambdaR2(A2);
+  take f;
+  thus thesis by A3,A4;
+end;
+
+scheme {X,Y()->non empty set,Z()->set,F(set,set)->set,
+ P[set,set]}: ex f being PartFunc of [:X(),Y():],Z()
+  st (for x being Element of X(), y being Element of Y() holds
+       [x,y] in dom f iff P[x,y])
+   & for x being Element of X(), y being Element of Y()
+       st [x,y] in dom f
+      holds f.(x,y) = F(x,y)
+provided
+A1: for x being Element of X(), y being Element of Y() st P[x,y] holds
+     F(x,y) in Z()
+proof
+A2: for x,y st x in X() & y in Y() & P[x,y] holds F(x,y) in Z() by A1;
+  consider f being PartFunc of [:X(),Y():],Z() such that
+A3: for x,y holds [x,y] in dom f iff x in X() & y in Y() & P[x,y] and
+A4: for x,y st [x,y] in dom f holds f.(x,y) = F(x,y) from PartLambda2(A2);
+  take f;
+  thus thesis by A3,A4;
 end;
 

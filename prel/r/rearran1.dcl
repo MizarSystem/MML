@@ -19,12 +19,12 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="SEQ_1"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="RFINSEQ"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="REARRAN1"/>
 </Signature>
@@ -48,9 +48,9 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="27"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39">
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44">
 <Func kind="K" nr="18">
 <LocusVar nr="1"/>
 </Func>

@@ -7,16 +7,19 @@
 environ
 
  vocabularies ARYTM, ARYTM_3, SQUARE_1, ARYTM_1, RELAT_1, ABSVALUE, COMPLEX1,
-      FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1, XCMPLX_0, OPPCAT_1, ORDINAL1, XREAL_0;
+      FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1, XCMPLX_0, OPPCAT_1, ORDINAL1, XREAL_0,
+      NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_0, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, XXREAL_0;
- constructors FUNCT_4, ARYTM_3, FRAENKEL, ARYTM_0, REAL_1, SQUARE_1, MEMBERED;
+ constructors FUNCT_4, ARYTM_3, FRAENKEL, ARYTM_0, REAL_1, SQUARE_1, MEMBERED,
+      NAT_D;
  registrations XREAL_0, SQUARE_1, FRAENKEL, RELSET_1, FUNCT_2, XCMPLX_0,
       MEMBERED, XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems SQUARE_1, XREAL_0, FUNCT_2, XBOOLE_0, TARSKI, NUMBERS, ENUMSET1,
-      FUNCT_4, XCMPLX_0, ORDINAL1, XCMPLX_1, ARYTM_0, XREAL_1, XXREAL_0;
+      FUNCT_4, XCMPLX_0, ORDINAL1, XCMPLX_1, ARYTM_0, XREAL_1, XXREAL_0,
+      REAL_2;
 
 begin
 
@@ -1429,7 +1432,7 @@ theorem Th157:
     end;
   end;
 
-theorem :: SQUARE_1'91
+theorem Th158: :: SQUARE_1'91
   for a being real number holds sqrt a^2 = |.a.| by Lm24;
 
 theorem :: SQUARE_1'34
@@ -1472,7 +1475,7 @@ A3:   x <= y; then A4: 0 <= y - x by XREAL_1:50;
   end;
 end;
 
-theorem :: SQUARE_1'62
+theorem Th161: :: SQUARE_1'62
   for x being real number holds
     |.x.|^2 = x^2
  proof
@@ -1502,3 +1505,39 @@ proof
   then a-c = 0 & b-d = 0 by Th28,Th12;
  hence a = c & b = d;
 end;
+
+:: from JGRAPH_1, 29.12.2006, AK
+
+reserve r1, r2 for real number;
+
+theorem  sqrt(r1^2+r2^2)<=abs(r1)+abs(r2)
+proof
+  A1: r1^2>=0 by XREAL_1:65;
+      r2^2>=0 by XREAL_1:65;
+  then r1^2+r2^2>=0+0 by A1,XREAL_1:9;
+  then A2:(sqrt(r1^2+r2^2))^2=r1^2+r2^2 by SQUARE_1:def 4;
+A3:(abs(r1)+abs(r2))^2=(abs(r1))^2+2*(abs(r1))*(abs(r2))+(abs(r2))^2;
+      (abs(r1))^2=r1^2 by Th161;
+then A4:(abs(r1)+abs(r2))^2 - (sqrt(r1^2+r2^2))^2=
+  r1^2+2*(abs(r1))*(abs(r2))+r2^2-(r1^2+r2^2) by A2,A3,Th161
+  .=2*(abs(r1))*(abs(r2));
+  A5:abs(r1)>=0 by Th132;
+  then A6: 2*abs(r1)>=0 by XREAL_1:129;
+  A7:abs(r2)>=0 by Th132;
+  then 2*abs(r1)*abs(r2)>=0 by A6,XREAL_1:129;
+  then A8:(abs(r1)+abs(r2))^2>= (sqrt(r1^2+r2^2))^2 by A4,REAL_2:105;
+      (sqrt(r1^2+r2^2))^2>=0 by XREAL_1:65;
+  then A9:sqrt((abs(r1)+abs(r2))^2)>=sqrt((sqrt(r1^2+r2^2))^2) by A8,
+SQUARE_1:94;
+      abs(r1)+abs(r2)>=0+0 by A5,A7,XREAL_1:9;
+ hence thesis by A2,A9,SQUARE_1:89;
+end;
+
+theorem  abs(r1)<=sqrt(r1^2+r2^2) ::& abs(r2)<=sqrt(r1^2+r2^2)
+ proof
+   A1: r1^2>=0 by XREAL_1:65;
+   r2^2>=0 by XREAL_1:65;
+   then r1^2+0<= r1^2+r2^2 by XREAL_1:8;
+   then sqrt(r1^2)<= sqrt(r1^2+r2^2) by A1,SQUARE_1:94;
+  hence abs(r1)<= sqrt(r1^2+r2^2) by Th158;
+ end;

@@ -7,19 +7,19 @@
 environ
 
  vocabularies BOOLE, TARSKI, CLASSES1, TOLER_1, FUNCT_2, FRAENKEL, FUNCT_1,
-      MCART_1, RELAT_1, CAT_1, ENS_1, PARTFUN1, COH_SP, SETFAM_1;
+      MCART_1, RELAT_1, CAT_1, ENS_1, PARTFUN1, COH_SP, SETFAM_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
-      MCART_1, FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, FRAENKEL, EQREL_1,
-      TOLER_1, CAT_1;
- constructors FRAENKEL, EQREL_1, CLASSES1, TOLER_1, CAT_1;
+      MCART_1, FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, BINOP_1, FRAENKEL,
+      EQREL_1, TOLER_1, CAT_1;
+ constructors FRAENKEL, EQREL_1, CLASSES1, TOLER_1, CAT_1, BINOP_1, NAT_D;
  registrations FUNCT_1, RELSET_1, SUBSET_1, FRAENKEL, PARTFUN1, FUNCT_2,
       EQREL_1, TOLER_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, CLASSES1, XBOOLE_0;
+ definitions TARSKI, CLASSES1, XBOOLE_0, BINOP_1;
  theorems TARSKI, ZFMISC_1, TOLER_1, ENUMSET1, RELAT_1, FUNCT_2, CLASSES1,
       PARTFUN1, FRAENKEL, MCART_1, FUNCT_1, DOMAIN_1, CAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, EQREL_1;
- schemes TOLER_1, TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0;
+ schemes TOLER_1, TARSKI, FUNCT_2, BINOP_1, XBOOLE_0;
 
 begin
 
@@ -825,7 +825,7 @@ definition let X;
     consider h being PartFunc of [:MapsC(X),MapsC(X):],MapsC(X) such that
     A7: for x,y holds [x,y] in dom h iff x in MapsC(X) & y in MapsC(X) &
        ex z st P[x,y,z] and
-    A8: for x,y st [x,y] in dom h holds P[x,y,h.[x,y]] from PARTFUN1:sch 4
+    A8: for x,y st [x,y] in dom h holds P[x,y,h.(x,y)] from BINOP_1:sch 5
 (A5,A6);
     take h;
     thus A9: for l2,l1 holds [l2,l1] in dom h iff dom l2 = cod l1
@@ -840,8 +840,11 @@ definition let X;
       hence thesis by A7;
      end;
     let l2,l1;
-    assume dom l2 = cod l1; then [l2,l1] in dom h by A9;
-    hence thesis by A8;
+    assume
+   dom l2 = cod l1;
+     then [l2,l1] in dom h by A9;
+     then P[l2,l1,h.(l2,l1)] by A8;
+    hence thesis;
    end;
   uniqueness
    proof
@@ -1514,7 +1517,7 @@ func fComp X -> PartFunc of [:MapsT(X),MapsT(X):],MapsT(X) means :Def31:
    consider h being PartFunc of [:MapsT(X),MapsT(X):],MapsT(X) such that
    A7: for x,y holds [x,y] in dom h iff x in MapsT(X) & y in MapsT(X) &
       ex z st P[x,y,z] and
-   A8: for x,y st [x,y] in dom h holds P[x,y,h.[x,y]] from PARTFUN1:sch 4
+   A8: for x,y st [x,y] in dom h holds P[x,y,h.(x,y)] from BINOP_1:sch 5
 (A5,A6);
    take h;
    thus A9: for m2,m1 holds [m2,m1] in dom h iff dom m2 = cod m1
@@ -1529,8 +1532,10 @@ func fComp X -> PartFunc of [:MapsT(X),MapsT(X):],MapsT(X) means :Def31:
      hence thesis by A7;
     end;
    let m2,m1;
-   assume dom m2 = cod m1; then [m2,m1] in dom h by A9;
-   hence thesis by A8;
+   assume dom m2 = cod m1;
+    then [m2,m1] in dom h by A9;
+    then P[m2,m1,h.(m2,m1)] by A8;
+   hence thesis;
   end;
  uniqueness
   proof

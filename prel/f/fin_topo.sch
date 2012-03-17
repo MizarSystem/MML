@@ -57,14 +57,14 @@
 <And>
 <Not>
 <Pred kind="R" nr="10">
-<Func kind="K" nr="85">
+<Func kind="K" nr="77">
 <Var nr="1"/>
 </Func>
 <Num nr="0"/>
 </Pred>
 </Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
@@ -90,7 +90,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="10">
-<Func kind="K" nr="85">
+<Func kind="K" nr="77">
 <Var nr="1"/>
 </Func>
 <Var nr="2"/>
@@ -98,7 +98,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
@@ -110,7 +110,7 @@
 </Func>
 </Func>
 <Func kind="F" nr="4">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
@@ -126,24 +126,24 @@
 </For>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="4">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
-<Func kind="K" nr="85">
+<Func kind="K" nr="77">
 <Var nr="1"/>
 </Func>
 </Func>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
-<Func kind="K" nr="85">
+<Func kind="K" nr="77">
 <Var nr="1"/>
 </Func>
 </Func>
@@ -176,14 +176,14 @@
 </Not>
 <Pred kind="R" nr="10">
 <Var nr="3"/>
-<Func kind="K" nr="85">
+<Func kind="K" nr="77">
 <Var nr="1"/>
 </Func>
 </Pred>
 <Not>
 <And>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
@@ -194,7 +194,7 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <Pred kind="R" nr="6">
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
@@ -202,7 +202,7 @@
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="K" nr="49"/>
 <Func kind="K" nr="10">
 <Func kind="F" nr="1"/>

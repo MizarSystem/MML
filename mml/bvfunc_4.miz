@@ -7,15 +7,14 @@
 environ
 
  vocabularies FUNCT_2, MARGREL1, PARTIT1, BVFUNC_1, ZF_LANG, FUNCT_1, RELAT_1,
-      BINARITH, EQREL_1, BVFUNC_2, T_1TOPSP;
+      BINARITH, EQREL_1, BVFUNC_2, T_1TOPSP, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, VALUAT_1, RELAT_1,
       FUNCT_1, FRAENKEL, EQREL_1, BVFUNC_1, BVFUNC_2;
- constructors BINARITH, BVFUNC_1, BVFUNC_2;
+ constructors BINARITH, BVFUNC_1, BVFUNC_2, NAT_D;
  registrations MARGREL1, VALUAT_1, BINARITH, FRAENKEL, XBOOLEAN;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM;
- definitions BVFUNC_1, XBOOLEAN;
- theorems FUNCT_1, FUNCT_2, T_1TOPSP, MARGREL1, BINARITH, BVFUNC_1, BVFUNC_2,
-      VALUAT_1;
+ definitions BVFUNC_1, XBOOLEAN, BVFUNC_2;
+ theorems FUNCT_1, FUNCT_2, BVFUNC_1, BVFUNC_2, VALUAT_1, XBOOLEAN, EQREL_1;
 
 begin
 
@@ -80,7 +79,7 @@ proof
     A2:(a 'or' (a '&' b)).x
     =a.x 'or' (a '&' b).x by BVFUNC_1:def 7
    .=a.x 'or' (a.x '&' b.x) by VALUAT_1:def 6;
-       now per cases by MARGREL1:39;
+       now per cases by XBOOLEAN:def 3;
      case a.x=TRUE;
      hence thesis by A2;
      end;
@@ -113,7 +112,7 @@ proof
     A2:(a '&' (a 'or' b)).x
     =a.x '&' (a 'or' b).x by VALUAT_1:def 6
    .=a.x '&' (a.x 'or' b.x) by BVFUNC_1:def 7;
-       now per cases by MARGREL1:39;
+       now per cases by XBOOLEAN:def 3;
      case A3:a.x=TRUE;
       then (a '&' (a 'or' b)).x
       =TRUE by A2;
@@ -147,7 +146,7 @@ proof
      =a.x '&' ('not' a).x by VALUAT_1:def 6
     .=a.x '&' 'not' a.x by VALUAT_1:def 5;
     A3:(O_el Y).x=FALSE by BVFUNC_1:def 13;
-       now per cases by MARGREL1:39;
+       now per cases by XBOOLEAN:def 3;
       case a.x=TRUE;
       hence thesis by A2,A3;
       end;
@@ -178,7 +177,7 @@ proof
        (a 'or' 'not' a).x
      =a.x 'or' ('not' a).x by BVFUNC_1:def 7
     .=a.x 'or' 'not' a.x by VALUAT_1:def 5
-    .=TRUE by BINARITH:18;
+    .=TRUE by XBOOLEAN:102;
     hence thesis by BVFUNC_1:def 14;
   end;
   consider k3 being Function such that
@@ -202,29 +201,29 @@ proof
        (a 'eqv' b).x
     ='not' (a.x 'xor' b.x) by BVFUNC_1:def 12
    .=((a.x 'or' 'not' b.x) '&' 'not' a.x) 'or'
-     ((a.x 'or' 'not' b.x) '&' b.x) by BINARITH:22
+     ((a.x 'or' 'not' b.x) '&' b.x) by XBOOLEAN:8
    .=(('not' a.x '&' a.x) 'or' ('not' a.x '&' 'not' b.x)) 'or'
-     (b.x '&' (a.x 'or' 'not' b.x)) by BINARITH:22
+     (b.x '&' (a.x 'or' 'not' b.x)) by XBOOLEAN:8
    .=(('not' a.x '&' a.x) 'or' ('not' a.x '&' 'not' b.x)) 'or'
      ((b.x '&' a.x) 'or' (b.x '&' 'not' b.x))
-    by BINARITH:22
+    by XBOOLEAN:8
    .=(FALSE 'or' ('not' a.x '&' 'not' b.x)) 'or'
      ((b.x '&' a.x) 'or' (b.x '&' 'not' b.x))
-    by MARGREL1:46
+    by XBOOLEAN:138
    .=('not' a.x '&' 'not' b.x) 'or'
-     ((b.x '&' a.x) 'or' FALSE) by MARGREL1:46
+     ((b.x '&' a.x) 'or' FALSE) by XBOOLEAN:138
    .=(('not' a.x '&' 'not' b.x) 'or' b.x) '&'
-     (('not' a.x '&' 'not' b.x) 'or' a.x) by BINARITH:23
+     (('not' a.x '&' 'not' b.x) 'or' a.x) by XBOOLEAN:9
    .=((b.x 'or' 'not' a.x) '&' (b.x 'or' 'not' b.x)) '&'
-     (a.x 'or' ('not' a.x '&' 'not' b.x)) by BINARITH:23
+     (a.x 'or' ('not' a.x '&' 'not' b.x)) by XBOOLEAN:9
    .=((b.x 'or' 'not' a.x) '&' (b.x 'or' 'not' b.x)) '&'
      ((a.x 'or' 'not' a.x) '&' (a.x 'or' 'not' b.x))
-    by BINARITH:23
+    by XBOOLEAN:9
    .=((b.x 'or' 'not' a.x) '&' TRUE) '&'
      ((a.x 'or' 'not' a.x) '&' (a.x 'or' 'not' b.x))
-    by BINARITH:18
+    by XBOOLEAN:102
    .=(b.x 'or' 'not' a.x) '&'
-     (TRUE '&' (a.x 'or' 'not' b.x)) by BINARITH:18
+     (TRUE '&' (a.x 'or' 'not' b.x)) by XBOOLEAN:102
    .=(a 'imp' b).x '&' ('not' b.x 'or' a.x) by BVFUNC_1:def 11
    .=(a 'imp' b).x '&' (b 'imp' a).x by BVFUNC_1:def 11
    .=((a 'imp' b) '&' (b 'imp' a)).x by VALUAT_1:def 6;
@@ -311,9 +310,7 @@ proof
     hence thesis;
 end;
 
-theorem  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-(a 'eqv' b)=I_el(Y) & (b 'eqv' c)=I_el(Y) implies (a 'eqv' c)=I_el(Y)
-by BVFUNC_1:20;
+canceled;
 
 theorem  for a,b being Element of Funcs(Y,BOOLEAN) holds
 a 'eqv' b=I_el(Y) implies 'not' a 'eqv' 'not' b=I_el(Y)
@@ -381,18 +378,17 @@ proof
     (All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G)).z
   proof
     let z be Element of Y;
-       All(a 'eqv' b,PA,G).z
+    All(a 'eqv' b,PA,G).z
     =(All((a 'imp' b) '&' (b 'imp' a),PA,G)).z by Th7
-   .=(All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G)).z by BVFUNC_2:13;
+   .=(All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G)).z by BVFUNC_1:42;
     hence thesis;
   end;
   consider k3 being Function such that
-              A2: (All(a 'eqv' b,PA,G))=k3 & dom k3=Y & rng k3 c= BOOLEAN
+A2: (All(a 'eqv' b,PA,G))=k3 & dom k3=Y & rng k3 c= BOOLEAN
                      by FUNCT_2:def 2;
   consider k4 being Function such that
     A3: (All(a 'imp' b,PA,G) '&' All(b 'imp' a,PA,G))=k4 & dom k4=Y &
-        rng k4 c= BOOLEAN
-                     by FUNCT_2:def 2;
+        rng k4 c= BOOLEAN by FUNCT_2:def 2;
       Y=dom k3 & Y=dom k4 & (for u being set
             st u in Y holds k3.u=k4.u)by A1,A2,A3;
   hence (All(a 'eqv' b,PA,G))=
@@ -406,12 +402,9 @@ proof
   let a be Element of Funcs(Y,BOOLEAN);
   let G be Subset of PARTITIONS(Y);
   let PA,PB be a_partition of Y;
-  thus All(a,PA,G) '<' Ex(a,PB,G)
-  proof
-    A1:All(a,PA,G) '<' a by BVFUNC_2:11;
-       a '<' Ex(a,PB,G) by BVFUNC_2:12;
+A1: All(a,PA,G) '<' a by BVFUNC_2:11;
+    a '<' Ex(a,PB,G) by BVFUNC_2:12;
     hence thesis by A1,BVFUNC_1:18;
-  end;
 end;
 
 theorem  for a,u being Element of Funcs(Y,BOOLEAN),
@@ -424,22 +417,20 @@ proof
   let PA be a_partition of Y;
   assume A1:G is independent & PA in G & u is_independent_of PA,G &
              a 'imp' u = I_el(Y);
-A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
-     for x being Element of Y holds
-    (All(a,PA,G) 'imp' u).x = TRUE
+  for x being Element of Y holds (All(a,PA,G) 'imp' u).x = TRUE
   proof
     let x be Element of Y;
        (a 'imp' u).x = TRUE by A1,BVFUNC_1:def 14;
-    then A3:'not' a.x 'or' u.x = TRUE by BVFUNC_1:def 11;
-    A4:'not' a.x=TRUE or 'not' a.x=FALSE by MARGREL1:39;
-       now per cases by A3,A4;
+    then A2:'not' a.x 'or' u.x = TRUE by BVFUNC_1:def 11;
+    A3:'not' a.x=TRUE or 'not' a.x=FALSE by XBOOLEAN:def 3;
+     now per cases by A2,A3;
       case 'not' a.x=TRUE;
       then a.x=FALSE;
-      then A5:a.x<>TRUE;
+      then A4:a.x<>TRUE;
          x in EqClass(x,CompF(PA,G)) & EqClass(x,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-      then B_INF(a,CompF(PA,G)).x = FALSE by A5,BVFUNC_1:def 19;
-      then (All(a,PA,G) 'imp' u).x =TRUE 'or' u.x by A2,BVFUNC_1:def 11
+      by EQREL_1:def 8;
+      then B_INF(a,CompF(PA,G)).x = FALSE by A4,BVFUNC_1:def 19;
+      then (All(a,PA,G) 'imp' u).x =TRUE 'or' u.x by BVFUNC_1:def 11
      .=TRUE;
       hence thesis;
       end;
@@ -465,27 +456,26 @@ proof
   let PA be a_partition of Y;
   assume u is_independent_of PA,G;
   then A1: u is_dependent_of CompF(PA,G) by BVFUNC_2:def 8;
-A2:Ex(u,PA,G) = B_SUP(u,CompF(PA,G)) by BVFUNC_2:def 10;
      for z being Element of Y holds
     (Ex(u,PA,G) 'imp' u).z = TRUE
   proof
     let z be Element of Y;
-A3:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-    A4:(Ex(u,PA,G) 'imp' u).z
+A2:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+    A3:(Ex(u,PA,G) 'imp' u).z
     ='not' Ex(u,PA,G).z 'or' u.z by BVFUNC_1:def 11;
-       now per cases by MARGREL1:39;
+       now per cases by XBOOLEAN:def 3;
     case u.z=TRUE;
-      hence thesis by A4;
+      hence thesis by A3;
     end;
-    case A5:u.z=FALSE;
+    case A4:u.z=FALSE;
          now given x1 being Element of Y such that
-          A6:x1 in EqClass(z,CompF(PA,G)) & u.x1=TRUE;
-           u.z=u.x1 by A1,A3,A6,BVFUNC_1:def 18;
-        hence contradiction by A5,A6;
+          A5:x1 in EqClass(z,CompF(PA,G)) & u.x1=TRUE;
+           u.z=u.x1 by A1,A2,A5,BVFUNC_1:def 18;
+        hence contradiction by A4,A5;
       end;
       then B_SUP(u,CompF(PA,G)).z = FALSE by BVFUNC_1:def 20;
-      then (Ex(u,PA,G) 'imp' u).z =TRUE by A2,A4;
+      then (Ex(u,PA,G) 'imp' u).z =TRUE by A3;
       hence thesis;
     end;
     end;
@@ -505,26 +495,23 @@ proof
   let PA be a_partition of Y;
   assume u is_independent_of PA,G;
   then A1: u is_dependent_of CompF(PA,G) by BVFUNC_2:def 8;
-A2:All(u,PA,G) = B_INF(u,CompF(PA,G)) by BVFUNC_2:def 9;
-     for z being Element of Y holds
-    (u 'imp' All(u,PA,G)).z = TRUE
+   for z being Element of Y holds (u 'imp' All(u,PA,G)).z = TRUE
   proof
     let z be Element of Y;
-A3:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-    A4:(u 'imp' All(u,PA,G)).z
+A2:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+    A3:(u 'imp' All(u,PA,G)).z
     ='not' u.z 'or' All(u,PA,G).z by BVFUNC_1:def 11;
-       now per cases by MARGREL1:39;
+    now per cases by XBOOLEAN:def 3;
     case u.z=FALSE;
-      then (u 'imp' All(u,PA,G)).z
-     =TRUE by A4;
+      then (u 'imp' All(u,PA,G)).z = TRUE by A3;
       hence thesis;
     end;
     case u.z=TRUE;
       then for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
-         u.x=TRUE by A1,A3,BVFUNC_1:def 18;
-      then All(u,PA,G).z=TRUE by A2,BVFUNC_1:def 19;
-      hence thesis by A4;
+         u.x=TRUE by A1,A2,BVFUNC_1:def 18;
+      then All(u,PA,G).z=TRUE by BVFUNC_1:def 19;
+      hence thesis by A3;
     end;
     end;
     hence thesis;
@@ -543,36 +530,33 @@ proof
   let PA,PB be a_partition of Y;
   assume u is_independent_of PB,G;
   then A1: u is_dependent_of CompF(PB,G) by BVFUNC_2:def 8;
-A2:All(u,PA,G) = B_INF(u,CompF(PA,G)) by BVFUNC_2:def 9;
-A3:All(u,PB,G) = B_INF(u,CompF(PB,G)) by BVFUNC_2:def 9;
      for z being Element of Y holds
     (All(u,PA,G) 'imp' All(u,PB,G)).z = TRUE
   proof
     let z be Element of Y;
-A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
-      by T_1TOPSP:def 1;
-    A6:(All(u,PA,G) 'imp' All(u,PB,G)).z
+A2:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+A3:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
+      by EQREL_1:def 8;
+    A4:(All(u,PA,G) 'imp' All(u,PB,G)).z
     ='not' All(u,PA,G).z 'or' All(u,PB,G).z by BVFUNC_1:def 11;
-       now per cases by MARGREL1:39;
+    now per cases by XBOOLEAN:def 3;
     case All(u,PA,G).z=FALSE;
-      then (All(u,PA,G) 'imp' All(u,PB,G)).z
-      =TRUE by A6;
+      then (All(u,PA,G) 'imp' All(u,PB,G)).z = TRUE by A4;
       hence thesis;
     end;
-    case A7:All(u,PA,G).z=TRUE;
+    case A5:All(u,PA,G).z=TRUE;
          now assume
            not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
            u.x=TRUE);
-        then All(u,PA,G).z=FALSE by A2,BVFUNC_1:def 19;
-        hence contradiction by A7;
+        then All(u,PA,G).z=FALSE by BVFUNC_1:def 19;
+        hence contradiction by A5;
       end;
-      then u.z=TRUE by A4;
+      then u.z=TRUE by A2;
       then for x being Element of Y st x in EqClass(z,CompF(PB,G)) holds
-         u.x=TRUE by A1,A5,BVFUNC_1:def 18;
-      then All(u,PB,G).z=TRUE by A3,BVFUNC_1:def 19;
-      hence thesis by A6;
+         u.x=TRUE by A1,A3,BVFUNC_1:def 18;
+      then All(u,PB,G).z=TRUE by BVFUNC_1:def 19;
+      hence thesis by A4;
     end;
     end;
     hence thesis;
@@ -591,36 +575,33 @@ proof
   let PA,PB be a_partition of Y;
   assume u is_independent_of PA,G;
   then A1: u is_dependent_of CompF(PA,G) by BVFUNC_2:def 8;
-A2:Ex(u,PA,G) = B_SUP(u,CompF(PA,G)) by BVFUNC_2:def 10;
-A3:Ex(u,PB,G) = B_SUP(u,CompF(PB,G)) by BVFUNC_2:def 10;
      for z being Element of Y holds
     (Ex(u,PA,G) 'imp' Ex(u,PB,G)).z = TRUE
   proof
     let z be Element of Y;
-A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-A5:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
-      by T_1TOPSP:def 1;
-    A6:(Ex(u,PA,G) 'imp' Ex(u,PB,G)).z
+A2:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+A3:z in EqClass(z,CompF(PB,G)) & EqClass(z,CompF(PB,G)) in CompF(PB,G)
+      by EQREL_1:def 8;
+    A4:(Ex(u,PA,G) 'imp' Ex(u,PB,G)).z
     ='not' Ex(u,PA,G).z 'or' Ex(u,PB,G).z by BVFUNC_1:def 11;
-       now per cases by MARGREL1:39;
+       now per cases by XBOOLEAN:def 3;
     case Ex(u,PB,G).z=TRUE;
-      hence thesis by A6;
+      hence thesis by A4;
     end;
-    case A7:Ex(u,PB,G).z=FALSE;
-         now assume
-           (ex x being Element of Y st
+    case A5:Ex(u,PB,G).z=FALSE;
+         now assume (ex x being Element of Y st
             x in EqClass(z,CompF(PB,G)) & u.x=TRUE);
-        then Ex(u,PB,G).z=TRUE by A3,BVFUNC_1:def 20;
-        hence contradiction by A7;
+        then Ex(u,PB,G).z=TRUE by BVFUNC_1:def 20;
+        hence contradiction by A5;
       end;
-      then u.z<>TRUE by A5;
+      then u.z<>TRUE by A3;
       then not (ex x being Element of Y st
-            x in EqClass(z,CompF(PA,G)) & u.x=TRUE) by A1,A4,
+            x in EqClass(z,CompF(PA,G)) & u.x=TRUE) by A1,A2,
 BVFUNC_1:def 18;
       then (B_SUP(u,CompF(PA,G))).z = FALSE by BVFUNC_1:def 20;
       then (Ex(u,PA,G) 'imp' Ex(u,PB,G)).z
-      =TRUE by A2,A6;
+      =TRUE by A4;
       hence thesis;
     end;
     end;
@@ -638,90 +619,87 @@ proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
-A1:All(a 'eqv' b,PA,G) = B_INF(a 'eqv' b,CompF(PA,G)) by BVFUNC_2:def 9;
-A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
-A3:All(b,PA,G) = B_INF(b,CompF(PA,G)) by BVFUNC_2:def 9;
     let z be Element of Y;
-    assume A4:(All(a 'eqv' b,PA,G)).z=TRUE;
-    A5: now assume
+    assume A1:(All(a 'eqv' b,PA,G)).z=TRUE;
+    A2: now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (a 'eqv' b).x=TRUE);
-      then (All(a 'eqv' b,PA,G)).z=FALSE by A1,BVFUNC_1:def 19;
-      hence contradiction by A4;
+      then (All(a 'eqv' b,PA,G)).z=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A1;
     end;
-    A6:(All(a,PA,G) 'eqv' All(b,PA,G)).z
+    A3:(All(a,PA,G) 'eqv' All(b,PA,G)).z
      ='not'( All(a,PA,G).z 'xor' All(b,PA,G).z) by BVFUNC_1:def 12
     .=((All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&' 'not'
 All(a,PA,G).z) 'or'
       ((All(a,PA,G).z 'or' 'not' All(b,PA,G).z) '&' All(b,PA,G).z)
-     by BINARITH:22
+     by XBOOLEAN:8
     .=('not' All(a,PA,G).z '&' All(a,PA,G).z 'or'
        'not' All(a,PA,G).z '&' 'not' All(b,PA,G).z) 'or'
       (All(b,PA,G).z '&' (All(a,PA,G).z 'or' 'not' All(b,PA,G).z))
-     by BINARITH:22
+     by XBOOLEAN:8
     .=(('not' All(a,PA,G).z '&' All(a,PA,G).z) 'or'
        ('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
       ((All(b,PA,G).z '&' All(a,PA,G).z) 'or'
-       (All(b,PA,G).z '&' 'not' All(b,PA,G).z)) by BINARITH:22
+       (All(b,PA,G).z '&' 'not' All(b,PA,G).z)) by XBOOLEAN:8
     .=(FALSE 'or'
        ('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
       ((All(b,PA,G).z '&' All(a,PA,G).z) 'or'
-       (All(b,PA,G).z '&' 'not' All(b,PA,G).z)) by MARGREL1:46
+       (All(b,PA,G).z '&' 'not' All(b,PA,G).z)) by XBOOLEAN:138
     .=(('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z)) 'or'
-      ((All(b,PA,G).z '&' All(a,PA,G).z) 'or' FALSE) by MARGREL1:46
+      ((All(b,PA,G).z '&' All(a,PA,G).z) 'or' FALSE) by XBOOLEAN:138
     .=('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z) 'or'
       (All(b,PA,G).z '&' All(a,PA,G).z);
     per cases;
-    suppose A7:
+    suppose A4:
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
-      then A8:All(a,PA,G).z=TRUE by A2,BVFUNC_1:def 19;
-         B_INF(b,CompF(PA,G)).z = TRUE by A7,BVFUNC_1:def 19;
+      then A5:All(a,PA,G).z=TRUE by BVFUNC_1:def 19;
+         B_INF(b,CompF(PA,G)).z = TRUE by A4,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-      =TRUE by A3,A6,A8;
+      =TRUE by A3,A5;
     hence thesis;
     end;
-    suppose A9:
+    suppose A6:
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
       then consider x1 being Element of Y such that
-        A10: x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
-      A11:b.x1=FALSE by A10,MARGREL1:43;
-      A12:a.x1=TRUE by A9,A10;
-      A13: (a 'eqv' b).x1
+        A7: x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
+      A8:b.x1=FALSE by A7,XBOOLEAN:def 3;
+      A9:a.x1=TRUE by A6,A7;
+      A10: (a 'eqv' b).x1
       ='not' (a.x1 'xor' b.x1) by BVFUNC_1:def 12
-     .=FALSE by A11,A12;
-         (a 'eqv' b).x1=TRUE by A5,A10;
-    hence thesis by A13;
+     .=FALSE by A8,A9;
+         (a 'eqv' b).x1=TRUE by A2,A7;
+    hence thesis by A10;
     end;
-    suppose A14:
+    suppose A11:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
       then consider x1 being Element of Y such that
-        A15: x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
-      A16:a.x1=FALSE by A15,MARGREL1:43;
-      A17:b.x1=TRUE by A14,A15;
-      A18: (a 'eqv' b).x1
+        A12: x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
+      A13:a.x1=FALSE by A12,XBOOLEAN:def 3;
+      A14:b.x1=TRUE by A11,A12;
+      A15: (a 'eqv' b).x1
       ='not' (a.x1 'xor' b.x1) by BVFUNC_1:def 12
-     .=FALSE by A16,A17;
-         (a 'eqv' b).x1=TRUE by A5,A15;
-    hence thesis by A18;
+     .=FALSE by A13,A14;
+         (a 'eqv' b).x1=TRUE by A2,A12;
+    hence thesis by A15;
     end;
-    suppose A19:
+    suppose A16:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
-      then A20:All(a,PA,G).z=FALSE by A2,BVFUNC_1:def 19;
-         B_INF(b,CompF(PA,G)).z = FALSE by A19,BVFUNC_1:def 19;
+      then A17:All(a,PA,G).z=FALSE by BVFUNC_1:def 19;
+         B_INF(b,CompF(PA,G)).z = FALSE by A16,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-      =TRUE by A3,A6,A20;
+      =TRUE by A3,A17;
     hence thesis;
 end;
 end;
@@ -734,43 +712,41 @@ proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
-A1:All(a '&' b,PA,G) = B_INF(a '&' b,CompF(PA,G)) by BVFUNC_2:def 9;
-A2:All(b,PA,G) = B_INF(b,CompF(PA,G)) by BVFUNC_2:def 9;
     let z be Element of Y;
-    assume A3:All(a '&' b,PA,G).z=TRUE;
-A4:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-    A5: now assume
+    assume A1:All(a '&' b,PA,G).z=TRUE;
+A2:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+    A3: now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          (a '&' b).x=TRUE);
-      then All(a '&' b,PA,G).z=FALSE by A1,BVFUNC_1:def 19;
-      hence contradiction by A3;
+      then All(a '&' b,PA,G).z=FALSE by BVFUNC_1:def 19;
+      hence contradiction by A1;
     end;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
       then consider x1 being Element of Y such that
-        A6:x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
-      A7:b.x1=FALSE by A6,MARGREL1:43;
-         (a '&' b).x1=TRUE by A5,A6;
-      then A8:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
-         a.x1 '&' b.x1 =FALSE by A7;
-      hence contradiction by A8;
+        A4:x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
+      A5:b.x1=FALSE by A4,XBOOLEAN:def 3;
+         (a '&' b).x1=TRUE by A3,A4;
+      then A6:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
+         a.x1 '&' b.x1 =FALSE by A5;
+      hence contradiction by A6;
     end;
-    then A9: B_INF(b,CompF(PA,G)).z = TRUE by BVFUNC_1:def 19;
+    then A7: B_INF(b,CompF(PA,G)).z = TRUE by BVFUNC_1:def 19;
        now assume
          not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE);
       then consider x1 being Element of Y such that
-        A10:x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
-      A11:a.x1=FALSE by A10,MARGREL1:43;
-         (a '&' b).x1=TRUE by A5,A10;
-      then A12:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
-         a.x1 '&' b.x1 =FALSE by A11;
-      hence contradiction by A12;
+        A8:x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
+      A9:a.x1=FALSE by A8,XBOOLEAN:def 3;
+         (a '&' b).x1=TRUE by A3,A8;
+      then A10:a.x1 '&' b.x1=TRUE by VALUAT_1:def 6;
+         a.x1 '&' b.x1 =FALSE by A9;
+      hence contradiction by A10;
     end;
-    then a.z=TRUE by A4;
-    then (a '&' All(b,PA,G)).z =TRUE '&' TRUE by A2,A9,VALUAT_1:def 6
+    then a.z=TRUE by A2;
+    then (a '&' All(b,PA,G)).z =TRUE '&' TRUE by A7,VALUAT_1:def 6
    .=TRUE;
     hence thesis;
 end;
@@ -783,48 +759,46 @@ proof
   let a,u be Element of Funcs(Y,BOOLEAN);
   let G be Subset of PARTITIONS(Y);
   let PA be a_partition of Y;
-A1:Ex(a 'imp' u,PA,G) = B_SUP(a 'imp' u,CompF(PA,G)) by BVFUNC_2:def 10;
-A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
     let z be Element of Y;
     assume (All(a,PA,G) 'imp' u).z=TRUE;
-    then A3:'not' All(a,PA,G).z 'or' u.z=TRUE by BVFUNC_1:def 11;
-    A4: ('not' All(a,PA,G).z)=TRUE or
-    ('not' All(a,PA,G).z)=FALSE by MARGREL1:39;
-A5:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
-      by T_1TOPSP:def 1;
-       now per cases by A3,A4;
+    then A1:'not' All(a,PA,G).z 'or' u.z=TRUE by BVFUNC_1:def 11;
+    A2: ('not' All(a,PA,G).z)=TRUE or
+    ('not' All(a,PA,G).z)=FALSE by XBOOLEAN:def 3;
+A3:z in EqClass(z,CompF(PA,G)) & EqClass(z,CompF(PA,G)) in CompF(PA,G)
+      by EQREL_1:def 8;
+       now per cases by A1,A2;
       case 'not' All(a,PA,G).z=TRUE;
       then All(a,PA,G).z=FALSE;
       then All(a,PA,G).z<>TRUE;
       then consider x1 being Element of Y such that
-        A6: x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE by A2,BVFUNC_1:def 19
+        A4: x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE by BVFUNC_1:def 19
 ;
          now assume
            not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & (a 'imp' u).x=TRUE);
-        then (a 'imp' u).x1<>TRUE by A6;
-        then (a 'imp' u).x1=FALSE by MARGREL1:43;
-        then A7:('not' a.x1) 'or' u.x1=FALSE by BVFUNC_1:def 11;
-           'not' a.x1=TRUE or 'not' a.x1=FALSE by MARGREL1:39;
+        then (a 'imp' u).x1<>TRUE by A4;
+        then (a 'imp' u).x1=FALSE by XBOOLEAN:def 3;
+        then A5:('not' a.x1) 'or' u.x1=FALSE by BVFUNC_1:def 11;
+           'not' a.x1=TRUE or 'not' a.x1=FALSE by XBOOLEAN:def 3;
         then 'not' a.x1=FALSE & u.x1=FALSE
-         by A7;
-        hence contradiction by A6;
+         by A5;
+        hence contradiction by A4;
       end;
-      hence thesis by A1,BVFUNC_1:def 20;
+      hence thesis by BVFUNC_1:def 20;
       end;
-      case A8:u.z=TRUE;
+      case A6:u.z=TRUE;
          now assume
            not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & (a 'imp' u).x=TRUE);
-        then (a 'imp' u).z<>TRUE by A5;
-        then (a 'imp' u).z=FALSE by MARGREL1:43;
-        then A9:('not' a.z) 'or' u.z=FALSE by BVFUNC_1:def 11;
-           'not' a.z=TRUE or 'not' a.z=FALSE by MARGREL1:39;
+        then (a 'imp' u).z<>TRUE by A3;
+        then (a 'imp' u).z=FALSE by XBOOLEAN:def 3;
+        then A7:('not' a.z) 'or' u.z=FALSE by BVFUNC_1:def 11;
+           'not' a.z=TRUE or 'not' a.z=FALSE by XBOOLEAN:def 3;
         then 'not' a.z=FALSE & u.z=FALSE
-         by A9;
-        hence contradiction by A8;
+         by A7;
+        hence contradiction by A6;
       end;
-      hence thesis by A1,BVFUNC_1:def 20;
+      hence thesis by BVFUNC_1:def 20;
     end;
     end;
     hence thesis;
@@ -840,8 +814,6 @@ proof
   assume (a 'eqv' b)=I_el(Y);
   then (a 'imp' b)=I_el(Y) & (b 'imp' a)=I_el(Y) by Th10;
   then A1:'not' a 'or' b = I_el(Y) & 'not' b 'or' a = I_el(Y) by Th8;
-A2:All(a,PA,G) = B_INF(a,CompF(PA,G)) by BVFUNC_2:def 9;
-A3:All(b,PA,G) = B_INF(b,CompF(PA,G)) by BVFUNC_2:def 9;
      for z being Element of Y holds (All(a,PA,G) 'eqv' All(b,PA,G)).z=TRUE
   proof
     let z be Element of Y;
@@ -873,7 +845,7 @@ All(b,PA,G))) 'or'
   .=('not' All(a,PA,G) '&' 'not' All(b,PA,G)) 'or'
     (All(b,PA,G) '&' All(a,PA,G))
     by BVFUNC_1:12;
-then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
+then A2:(All(a,PA,G) 'eqv' All(b,PA,G)).z
   =('not' All(a,PA,G) '&' 'not' All(b,PA,G)).z 'or'
     ( All(b,PA,G) '&' All(a,PA,G)).z by BVFUNC_1:def 7
   .=('not' All(a,PA,G)).z '&' ('not' All(b,PA,G)).z 'or'
@@ -884,60 +856,60 @@ then A4:(All(a,PA,G) 'eqv' All(b,PA,G)).z
     ( All(b,PA,G).z '&' All(a,PA,G).z) by VALUAT_1:def 5
   .=('not' All(a,PA,G).z '&' 'not' All(b,PA,G).z) 'or'
     ( All(b,PA,G).z '&' All(a,PA,G).z) by VALUAT_1:def 5;
-    A5:now assume A6:
+    A3:now assume A4:
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
-      then A7:All(a,PA,G).z = TRUE by A2,BVFUNC_1:def 19;
-         B_INF(b,CompF(PA,G)).z = TRUE by A6,BVFUNC_1:def 19;
+      then A5:All(a,PA,G).z = TRUE by BVFUNC_1:def 19;
+         B_INF(b,CompF(PA,G)).z = TRUE by A4,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-     =TRUE by A3,A4,A7;
+     =TRUE by A2,A5;
       hence thesis;
     end;
-    A8:now assume A9:
+    A6:now assume A7:
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
       then consider x1 being Element of Y such that
-        A10:x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
-      A11:b.x1=FALSE by A10,MARGREL1:43;
-      A12:a.x1=TRUE by A9,A10;
+        A8:x1 in EqClass(z,CompF(PA,G)) & b.x1<>TRUE;
+      A9:b.x1=FALSE by A8,XBOOLEAN:def 3;
+      A10:a.x1=TRUE by A7,A8;
          ('not' a 'or' b).x1 =('not' a).x1 'or' b.x1 by BVFUNC_1:def 7
-    .=FALSE 'or' FALSE by A11,A12,VALUAT_1:def 5
+    .=FALSE 'or' FALSE by A9,A10,VALUAT_1:def 5
     .=FALSE;
       then ('not' a 'or' b).x1<>TRUE;
       hence thesis by A1,BVFUNC_1:def 14;
     end;
-    A13:now assume A14:
+    A11:now assume A12:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
       then consider x1 being Element of Y such that
-        A15:x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
-      A16:a.x1=FALSE by A15,MARGREL1:43;
-      A17:b.x1=TRUE by A14,A15;
+        A13:x1 in EqClass(z,CompF(PA,G)) & a.x1<>TRUE;
+      A14:a.x1=FALSE by A13,XBOOLEAN:def 3;
+      A15:b.x1=TRUE by A12,A13;
          ('not' b 'or' a).x1
      =('not' b).x1 'or' a.x1 by BVFUNC_1:def 7
-    .=FALSE 'or' FALSE by A16,A17,VALUAT_1:def 5
+    .=FALSE 'or' FALSE by A14,A15,VALUAT_1:def 5
     .=FALSE;
       then ('not' b 'or' a).x1<>TRUE;
       hence thesis by A1,BVFUNC_1:def 14;
     end;
-       now assume A18:
+       now assume A16:
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          a.x=TRUE) &
       not (for x being Element of Y st x in EqClass(z,CompF(PA,G)) holds
          b.x=TRUE);
-      then A19:All(a,PA,G).z = FALSE by A2,BVFUNC_1:def 19;
-         B_INF(b,CompF(PA,G)).z = FALSE by A18,BVFUNC_1:def 19;
+      then A17:All(a,PA,G).z = FALSE by BVFUNC_1:def 19;
+         B_INF(b,CompF(PA,G)).z = FALSE by A16,BVFUNC_1:def 19;
       then (All(a,PA,G) 'eqv' All(b,PA,G)).z
-     =TRUE by A3,A4,A19;
+     =TRUE by A2,A17;
       hence thesis;
     end;
-    hence thesis by A5,A8,A13;
+    hence thesis by A3,A6,A11;
   end;
   hence thesis by BVFUNC_1:def 14;
 end;
@@ -952,8 +924,6 @@ proof
   assume (a 'eqv' b)=I_el(Y);
   then (a 'imp' b)=I_el(Y) & (b 'imp' a)=I_el(Y) by Th10;
   then A1:'not' a 'or' b = I_el(Y) & 'not' b 'or' a = I_el(Y) by Th8;
-A2:Ex(a,PA,G) = B_SUP(a,CompF(PA,G)) by BVFUNC_2:def 10;
-A3:Ex(b,PA,G) = B_SUP(b,CompF(PA,G)) by BVFUNC_2:def 10;
      for z being Element of Y holds (Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z=TRUE
   proof
     let z be Element of Y;
@@ -985,7 +955,7 @@ Ex(b,PA,G))) 'or'
   .=('not' Ex(a,PA,G) '&' 'not' Ex(b,PA,G)) 'or'
     (Ex(b,PA,G) '&' Ex(a,PA,G))
     by BVFUNC_1:12;
-then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
+then A2:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
    =('not' Ex(a,PA,G) '&' 'not' Ex(b,PA,G)).z 'or'
     ( Ex(b,PA,G) '&' Ex(a,PA,G)).z by BVFUNC_1:def 7
   .= ('not' Ex(a,PA,G)).z '&' ('not' Ex(b,PA,G)).z 'or'
@@ -997,56 +967,56 @@ then A4:(Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
   .=('not' Ex(a,PA,G).z '&' 'not' Ex(b,PA,G).z) 'or'
     ( Ex(b,PA,G).z '&' Ex(a,PA,G).z) by VALUAT_1:def 5;
     per cases;
-    suppose A5:
+    suppose A3:
       (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & a.x=TRUE) &
       (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & b.x=TRUE);
-    then A6:Ex(a,PA,G).z = TRUE by A2,BVFUNC_1:def 20;
-       B_SUP(b,CompF(PA,G)).z = TRUE by A5,BVFUNC_1:def 20;
+    then A4:Ex(a,PA,G).z = TRUE by BVFUNC_1:def 20;
+       B_SUP(b,CompF(PA,G)).z = TRUE by A3,BVFUNC_1:def 20;
     then (Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
-     =TRUE by A3,A4,A6;
+     =TRUE by A2,A4;
     hence thesis;
     end;
-    suppose A7:
+    suppose A5:
       (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & a.x=TRUE) &
       not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & b.x=TRUE);
     then consider x1 being Element of Y such that
-      A8:x1 in EqClass(z,CompF(PA,G)) & a.x1=TRUE;
-       b.x1<>TRUE by A7,A8;
-    then A9:b.x1=FALSE by MARGREL1:43;
+      A6:x1 in EqClass(z,CompF(PA,G)) & a.x1=TRUE;
+       b.x1<>TRUE by A5,A6;
+    then A7:b.x1=FALSE by XBOOLEAN:def 3;
        ('not' a 'or' b).x1 =('not' a).x1 'or' b.x1 by BVFUNC_1:def 7
-    .=FALSE 'or' FALSE by A8,A9,VALUAT_1:def 5
+    .=FALSE 'or' FALSE by A6,A7,VALUAT_1:def 5
     .=FALSE;
       then ('not' a 'or' b).x1<>TRUE;
     hence thesis by A1,BVFUNC_1:def 14;
     end;
-    suppose A10:
+    suppose A8:
       not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & a.x=TRUE) &
       (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & b.x=TRUE);
     then consider x1 being Element of Y such that
-      A11:x1 in EqClass(z,CompF(PA,G)) & b.x1=TRUE;
-       a.x1<>TRUE by A10,A11;
-    then A12:a.x1=FALSE by MARGREL1:43;
+      A9:x1 in EqClass(z,CompF(PA,G)) & b.x1=TRUE;
+       a.x1<>TRUE by A8,A9;
+    then A10:a.x1=FALSE by XBOOLEAN:def 3;
        ('not' b 'or' a).x1 =('not' b).x1 'or' a.x1 by BVFUNC_1:def 7
-    .=FALSE 'or' FALSE by A11,A12,VALUAT_1:def 5
+    .=FALSE 'or' FALSE by A9,A10,VALUAT_1:def 5
     .=FALSE;
       then ('not' b 'or' a).x1<>TRUE;
     hence thesis by A1,BVFUNC_1:def 14;
     end;
-    suppose A13:
+    suppose A11:
       not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & a.x=TRUE) &
       not (ex x being Element of Y st
             x in EqClass(z,CompF(PA,G)) & b.x=TRUE);
-    then A14:Ex(a,PA,G).z = FALSE by A2,BVFUNC_1:def 20;
-       B_SUP(b,CompF(PA,G)).z = FALSE by A13,BVFUNC_1:def 20;
+    then A12:Ex(a,PA,G).z = FALSE by BVFUNC_1:def 20;
+       B_SUP(b,CompF(PA,G)).z = FALSE by A11,BVFUNC_1:def 20;
     then (Ex(a,PA,G) 'eqv' Ex(b,PA,G)).z
-     =TRUE by A3,A4,A14;
+     =TRUE by A2,A12;
     hence thesis;
   end;
   end;

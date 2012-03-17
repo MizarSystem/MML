@@ -139,7 +139,7 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="74"/>
-<Adjective nr="97"/>
+<Adjective nr="98"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -156,7 +156,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="207">
+<Func kind="K" nr="211">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -165,7 +165,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
-<Func kind="K" nr="207">
+<Func kind="K" nr="211">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -190,7 +190,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="207">
+<Func kind="K" nr="211">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

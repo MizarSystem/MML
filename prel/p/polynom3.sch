@@ -26,6 +26,8 @@
 <ArticleID name="FINSOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
@@ -33,7 +35,6 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
@@ -41,9 +42,8 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="GROUP_1"/>
@@ -111,7 +111,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="111">
-<Func kind="K" nr="394">
+<Func kind="K" nr="396">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">
@@ -136,7 +136,7 @@
 <Pred kind="R" nr="2">
 <Var nr="3"/>
 <Func kind="K" nr="145">
-<Func kind="K" nr="394">
+<Func kind="K" nr="396">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">
@@ -150,7 +150,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
-<Func kind="K" nr="394">
+<Func kind="K" nr="396">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="129">
@@ -184,7 +184,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="50" value="false"/>
+<Adjective nr="55" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -210,7 +210,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="63">
+<Adjective nr="68">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -222,7 +222,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="13">
-<Func kind="K" nr="254">
+<Func kind="K" nr="271">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -244,7 +244,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="245">
+<Func kind="K" nr="262">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

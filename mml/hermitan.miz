@@ -10,13 +10,13 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
       RELAT_1, HAHNBAN1, RLSUB_1, REALSET1, SEQM_3, GROUP_6, VECTSP10,
       BILINEAR, HERMITAN, COMPLEX1, ABSVALUE, ARYTM_3, SQUARE_1, COMPLFLD,
-      ARYTM, XCMPLX_0, GROUP_1;
+      ARYTM, XCMPLX_0, GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, REALSET1, STRUCT_0, FUNCT_1,
       REALSET2, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1, FUNCT_2,
       SQUARE_1, COMPLEX1, VECTSP_4, COMPLFLD, HAHNBAN1, VECTSP10, BILINEAR;
  constructors DOMAIN_1, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, BINOP_2, MEMBERED,
-      BILINEAR;
+      BILINEAR, FUNCOP_1, BORSUK_1, NAT_D;
  registrations STRUCT_0, XREAL_0, RELSET_1, SQUARE_1, COMPLFLD, HAHNBAN1,
       VECTSP10, BILINEAR, COMPLEX1, MEMBERED, XCMPLX_0, XXREAL_0;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
@@ -25,7 +25,7 @@ environ
  theorems COMPLEX1, SQUARE_1, ABSVALUE, COMPLFLD, XREAL_0, FUNCT_2, HAHNBAN1,
       VECTSP_1, RLVECT_1, VECTSP_4, VECTSP_6, TARSKI, VECTSP10, BILINEAR,
       DOMAIN_1, ZFMISC_1, FUNCT_1, XCMPLX_1, GROUP_1, XREAL_1, BINOP_1,
-      XXREAL_0;
+      XXREAL_0, FUNCOP_1;
  schemes FUNCT_2, BINOP_1;
 
 begin :: Auxiliary Facts about Complex Numbers
@@ -139,7 +139,7 @@ A2: a1 = [*(Re z)/|.z.|,((-Im z)/|.z.|)*] by COMPLEX1:27;
   hence thesis by A1,Th2,COMPLFLD:9,A2;
  end;
 
-Lm3: the unity of F_Complex = 1.F_Complex by  COMPLFLD:def 1,COMPLFLD:10;
+Lm3: the unity of F_Complex = 1.F_Complex by  COMPLFLD:def 1,10;
 
 theorem Th9:
 for a be Element of F_Complex
@@ -214,8 +214,10 @@ for a be Element of F_Complex st Im a = 0 holds a = a*'
   .= x*';
  end;
 
-theorem Th15:
+ Lm5:
 for r,s be Real holds [**r,0**]*[**s,0**] =[**r*s,0**] by COMPLFLD:6;
+
+canceled;
 
 theorem Th16:
 for a be Element of F_Complex holds a*a*' = |.a.|^2
@@ -723,7 +725,7 @@ attr f is diagReR+0valued means :Def7:
     for v be Vector of V holds 0 <= Re (f.(v,v));
 end;
 
-Lm5:
+Lm6:
  now let V be non empty VectSpStr over F_Complex, f be Functional of V;
   set 0F = 0Functional(V);
   let v1,w be Vector of V;
@@ -732,15 +734,15 @@ Lm5:
      .= 0.F_Complex by VECTSP_1:39;
  end;
 
-Lm6:
+Lm7:
 for V be non empty VectSpStr over F_Complex
 for f be Functional of V holds FormFunctional(f,0Functional(V)) is hermitan
  proof
   let V be non empty VectSpStr over F_Complex, f be Functional of V,
       v1,w be Vector of V;
   set 0F = 0Functional(V), F= FormFunctional(f,0F);
-  thus F.(v1,w) = the Zero of F_Complex by Lm5
-    .= (F.(w,v1))*' by  COMPLFLD:83,Lm5;
+  thus F.(v1,w) = the Zero of F_Complex by Lm6
+    .= (F.(w,v1))*' by  COMPLFLD:83,Lm6;
  end;
 
 registration
@@ -760,13 +762,13 @@ cluster NulForm(V,V) -> hermitan;
    proof
     NulForm(V,V) = FormFunctional(0Functional(V),0Functional(V))
     by BILINEAR:23;
-    hence thesis by Lm6;
+    hence thesis by Lm7;
    end;
 cluster NulForm(V,V) -> diagReR+0valued;
  coherence
   proof let v be Vector of V;
    Re (0.F_Complex) = 0 by  COMPLFLD:9,COMPLEX1:def 2;
-   hence thesis by BILINEAR:1;
+   hence thesis by FUNCOP_1:85;
   end;
 end;
 
@@ -1207,11 +1209,11 @@ theorem
 (NulForm(V,W))*' = NulForm(V,W)
  proof
   let V,W be non empty VectSpStr over F_Complex;
-  set f= NulForm(V,W), K = F_Complex;
+  set f= NulForm(V,W);
       now let v be Vector of V,w be Vector of W;
    thus f*'.(v,w) = (f.(v,w))*' by Def8
-    .= 0.K by BILINEAR:1,COMPLFLD:83
-    .= f.(v,w) by BILINEAR:1;
+    .= 0.F_Complex by FUNCOP_1:85,COMPLFLD:83
+    .= f.(v,w) by FUNCOP_1:85;
    end;
   hence thesis by BINOP_1:2;
  end;
@@ -1509,10 +1511,10 @@ holds
     = [**r,0**]*a*([**r,0**]*a*')*w2 by GROUP_1:def 4
    .= a*[**r,0**]*[**r,0**]*a*'*w2 by GROUP_1:def 4
    .= a*([**r,0**]*[**r,0**])*a*'*w2 by GROUP_1:def 4
-   .= a*[**r^2,0**]*a*'*w2 by Th15
+   .= a*[**r^2,0**]*a*'*w2 by Lm5
    .= [**r^2,0**]*(a*a*')*w2 by GROUP_1:def 4
    .= [**r^2,0**]*[**1,0**]*w2 by A1,Th16,SQUARE_1:59
-   .= [**r^2*1,0**]*w2 by Th15;
+   .= [**r^2*1,0**]*w2 by Lm5;
   hence thesis by A3;
  end;
 
@@ -1826,7 +1828,7 @@ A1: quasinorm(f) is subadditive
         .= [**|.r.|^2,0**] * f.(v,v) by Th16
         .= [**|.r.|^2,0**] * [**Re(f.(v,v)),Im (f.(v,v))**] by COMPLEX1:29
         .= [**|.r.|^2,0**] * [**Re(f.(v,v)),0**] by Def6
-        .= [**|.r.|^2 * Re(f.(v,v)),0**] by Th15;
+        .= [**|.r.|^2 * Re(f.(v,v)),0**] by Lm5;
     A5: 0 <= |.r.|^2 & 0 <= |.r.| & 0 <= Re(f.(v,v))
          by Def7,COMPLEX1:132,XREAL_1:65;
       thus q.(r*v) = sqrt (signnorm(f,r*v)) by Def10

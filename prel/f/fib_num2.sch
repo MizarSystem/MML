@@ -14,8 +14,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="REALSET1"/>
+<ArticleID name="BINOP_2"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -51,14 +51,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="91">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="91">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -102,14 +102,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="91">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="91">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>

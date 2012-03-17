@@ -10,16 +10,16 @@ environ
       FUNCT_1, NAT_1, FINSET_1, ARYTM_3, FUNCT_4, BOOLE, CARD_3, PARTFUN1,
       RELOC;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, CARD_3, INT_1, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, CQC_LANG, FINSET_1,
+      NAT_D, RELAT_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, CQC_LANG, FINSET_1,
       STRUCT_0, AMI_1, AMI_2, AMI_3, BINARITH, AMI_5, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, BINARITH, AMI_5;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, BINARITH, AMI_5, NAT_D;
  registrations AMI_1, AMI_3, AMI_5, FUNCT_1, RELSET_1, INT_1, FRAENKEL,
       XBOOLE_0, NUMBERS, ORDINAL1, SETFAM_1, CARD_3;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, TARSKI, AMI_3, XBOOLE_0, AMI_5;
- theorems AMI_1, AMI_2, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCT_4,
-      FUNCT_1, FUNCT_2, BINARITH, ZFMISC_1, AMI_5, CQC_THE1, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, PARTFUN1, FINSET_1, MCART_1;
+ definitions CQC_LANG, AMI_1, TARSKI, AMI_2, AMI_3, XBOOLE_0, AMI_5;
+ theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1,
+      FUNCT_2, BINARITH, ZFMISC_1, AMI_5, RELAT_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, PARTFUN1, FINSET_1, MCART_1, FUNCOP_1, NAT_D;
  schemes NAT_1, ZFREFLE1, FRAENKEL;
 
 begin  :: Relocatability
@@ -34,9 +34,8 @@ ex m being Element of NAT st loc = il.m & it = il.(m+k);
 existence
  proof
   consider m being Element of NAT such that A1: loc = il.m by AMI_5:19;
-  take IT = il.(m+k);
-  take m;
-  thus loc = il.m & IT = il.(m+k) by A1;
+  take IT = il.(m+k), m;
+  thus thesis by A1;
  end;
 uniqueness;
 
@@ -46,9 +45,8 @@ ex m being Element of NAT st loc = il.m & it = il.(m -' k);
 existence
  proof
   consider m being Element of NAT such that A2: loc = il.m by AMI_5:19;
-  take IT = il.(m -' k);
-  take m;
-  thus loc = il.m & IT = il.(m -' k) by A2;
+  take IT = il.(m -' k), m;
+  thus thesis by A2;
  end;
 uniqueness;
 end;
@@ -214,7 +212,7 @@ theorem Th13:
    proof
     let I be Instruction of SCM, k be Element of NAT;
 A1: InsCode(I) <= 8 by AMI_5:36;
-    per cases by A1,CQC_THE1:9;
+    per cases by A1,NAT_1:33;
     suppose InsCode I = 0;
     hence InsCode (IncAddr (I, k)) = InsCode I by Def3;
     end;
@@ -339,7 +337,7 @@ A16: {F(j) : j in dom p}  is finite from FRAENKEL:sch 21(A15);
 A17:         x = m and
 A18:        il.m in dom p;
        set j = m * 2 + 2;
-A19:    x = (m * 2) div 2 by A17,NAT_1:72
+A19:    x = (m * 2) div 2 by A17,NAT_D:20
          .=(j -' 2) div 2 by BINARITH:39;
            j in dom p by A18;
        hence x in C by A19;
@@ -354,15 +352,15 @@ A21:    j in dom p;
       then j in SCM-Instr-Loc by A21;
       then consider l being Element of NAT such that
 A22:       j = 2*l and
-A23:       l > 0 by AMI_2:def 3;
-          ex i being Nat st l = i + 1 by A23,NAT_1:22;
-      then l >= 1 by NAT_1:29;
-then A24:   j >= 2*1 by A22,NAT_1:20;
-          2 divides j by A22,NAT_1:def 3;
+A23:       l > 0;
+          ex i being Nat st l = i + 1 by A23,NAT_1:6;
+      then l >= 1 by NAT_1:11;
+then A24:   j >= 2*1 by A22,NAT_1:4;
+          2 divides j by A22,NAT_D:def 3;
       then 2 divides (j -' 2)+2 by A24,BINARITH:53;
-then A25:   2 divides (j -' 2) by NAT_1:57;
+then A25:   2 divides (j -' 2) by NAT_D:10;
          j = j -' 2 + 2 by A24,BINARITH:53
-       .= m * 2 + 2 by A25,NAT_1:49;
+       .= m * 2 + 2 by A25,NAT_D:3;
      then il.m in dom p by A21;
     hence x in B by A20;
    end;
@@ -655,9 +653,9 @@ theorem Th21:
       then x in dom X;
 then A1:   x in dom (Start-At ((IC p)+k)) /\ SCM-Data-Loc by RELAT_1:90;
    then x in SCM-Data-Loc by XBOOLE_0:def 3;
-      then reconsider x as Data-Location by AMI_5:16;
+      then reconsider x as Data-Location by AMI_3:def 2;
           x in dom (Start-At ((IC p)+k)) by A1,XBOOLE_0:def 3;
-      then x in {IC SCM} by AMI_3:34;
+      then x in {IC SCM} by FUNCOP_1:19;
       then x = IC SCM by TARSKI:def 1;
     hence contradiction by AMI_5:20;
   end;
@@ -693,7 +691,7 @@ then A1:   x in dom (Start-At ((IC p)+k)) /\ the Instruction-Locations of SCM
                                                 by RELAT_1:90;
 then A2:   x in the Instruction-Locations of SCM by XBOOLE_0:def 3;
           x in dom (Start-At ((IC p)+k)) by A1,XBOOLE_0:def 3;
-      then x in {IC SCM} by AMI_3:34;
+      then x in {IC SCM} by FUNCOP_1:19;
       then x = IC SCM by TARSKI:def 1;
      hence contradiction by A2,AMI_1:48;
     end;
@@ -772,7 +770,7 @@ theorem Th25:
 A1:Relocated (p,k)
     = Start-At ((IC p)+k) +* (IncAddr(Shift(ProgramPart(p),k),k)+*DataPart p)
                                                     by FUNCT_4:15;
-        dom(Start-At((IC p)+k)) = {IC SCM} by AMI_3:34;
+        dom(Start-At((IC p)+k)) = {IC SCM} by FUNCOP_1:19;
     then IC SCM in dom (Start-At((IC p)+k)) by TARSKI:def 1;
    hence IC SCM in dom Relocated (p,k) by A1,FUNCT_4:13;
   end;
@@ -989,7 +987,7 @@ A4:  now let d be Instruction-Location of SCM;
      end;
 
 A5:  InsCode(INS) <= 8 by AMI_5:36;
-     per cases by A5,CQC_THE1:9;
+     per cases by A5,NAT_1:33;
 
     suppose InsCode (INS) = 0;
 then A6: INS = halt SCM by AMI_5:46;
@@ -1437,7 +1435,7 @@ A3: now let d be Instruction-Location of SCM;
      end;
 
 A4: InsCode(INS) <= 8 by AMI_5:36;
-    per cases by A4,CQC_THE1:9;
+    per cases by A4,NAT_1:33;
 
  suppose InsCode (INS) = 0;
 then A5: INS = halt SCM by AMI_5:46;
@@ -1821,9 +1819,9 @@ theorem
         not IC SCM in dom DataPart p by AMI_5:65;
     then dom DataPart p misses {IC SCM} by ZFMISC_1:56;
     then dom DataPart p /\ {IC SCM} = {} by XBOOLE_0:def 7;
-then A3: dom DataPart p /\ dom (Start-At ((IC p) + k)) = {} by AMI_3:34;
+then A3: dom DataPart p /\ dom (Start-At ((IC p) + k)) = {} by FUNCOP_1:19;
 A4: dom DataPart p c= SCM-Data-Loc by AMI_5:69;
-A5: dom ProgramPart(Relocated(p,k)) c= SCM-Instr-Loc by AMI_5:70;
+A5: dom ProgramPart(Relocated(p,k)) c= SCM-Instr-Loc by RELAT_1:87;
         SCM-Instr-Loc misses dom DataPart p by A4,AMI_5:33,XBOOLE_1:63;
  then dom DataPart p misses dom (ProgramPart (Relocated (p,k))) by A5,
 XBOOLE_1:63;
@@ -1877,7 +1875,7 @@ A12: (Computation (s +* Relocated (p,k))).i
        +* ProgramPart (Relocated (p,k));
 A13: (Computation (s)).(i+1) = Following((Computation (s)).i) by AMI_1:def 19;
         dom (Start-At (IC (Computation (s)).i + k)) = {IC SCM}
-                                          by AMI_3:34;
+                                          by FUNCOP_1:19;
 then A14: IC SCM in dom (Start-At (IC (Computation (s)).i + k)) by TARSKI:def 1
 ;
 A15: not IC SCM in dom ProgramPart(Relocated (p,k)) by AMI_5:66;
@@ -2142,7 +2140,7 @@ A65: Next (IC Cs1i + k) = Next (il.(j + k)) by A64,Def1
 
   set I = CurInstr(Cs1i);
 A66: InsCode(I) <= 8 by AMI_5:36;
-    per cases by A66,CQC_THE1:9;
+    per cases by A66,NAT_1:33;
     suppose InsCode I = 0;
 then A67:  I = halt SCM by AMI_5:46;
 then A68:  CurInstr(Cs2i) = halt SCM by A21,Def3,AMI_5:37;
@@ -2175,7 +2173,8 @@ A73:  Cs3i.db = Cs2i.db by A43;
        now let x be set; assume
 A74: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A74,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A74;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          DPp c= p by RELAT_1:88;
      then A75: dom DPp c= dom p by GRFUNC_1:8;
    per cases;
@@ -2198,7 +2197,7 @@ A78: Cs2i1.d = Cs2i.db by A21,A61,A71,A76,AMI_3:8;
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A79: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
    per cases;
    suppose
      da = d;
@@ -2234,7 +2233,8 @@ A86:  Cs3i.db = Cs2i.db by A43;
        now let x be set such that
 A87: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A87,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A87;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          DPp c= p by RELAT_1:88;
      then A88: dom DPp c= dom p by GRFUNC_1:8;
    per cases;
@@ -2258,7 +2258,7 @@ then Cs1i1.d = Cs2i1.d by A2,A9,A10,A32,A82,A85,A86,A87,A88,A89,A90,AMI_5:89;
 
        now let x be set; assume
 A91: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
    per cases;
     suppose
 A92:  da = d;
@@ -2296,7 +2296,8 @@ A100:  Cs3i.db = Cs2i.db by A43;
        now let x be set such that
 A101: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A101,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A101;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          DPp c= p by RELAT_1:88;
      then A102: dom DPp c= dom p by GRFUNC_1:8;
    per cases;
@@ -2322,7 +2323,7 @@ AMI_5:90;
 
        now let x be set; assume
 A105: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
    per cases;
     suppose
 A106:  da = d;
@@ -2360,7 +2361,8 @@ A114:  Cs3i.db = Cs2i.db by A43;
        now let x be set such that
 A115: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A115,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A115;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          DPp c= p by RELAT_1:88;
      then A116: dom DPp c= dom p by GRFUNC_1:8;
    per cases;
@@ -2385,7 +2387,7 @@ AMI_5:91;
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A119: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
     per cases;
     suppose
 A120:  da = d;
@@ -2430,7 +2432,8 @@ A128: da <> db;
        now let x be set such that
 A129: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A129,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A129;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          DPp c= p by RELAT_1:88;
      then A130: dom DPp c= dom p by GRFUNC_1:8;
    per cases;
@@ -2466,7 +2469,7 @@ then Cs1i1.d = Cs2i1.d by A2,A9,A10,A32,A124,A126,A127,A128,A129,A130,A134,A135
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A136: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
     per cases;
     suppose
 A137:  da = d;
@@ -2507,7 +2510,8 @@ Exec(I, Cs1i).IC SCM = Next IC Cs1i by A124,AMI_3:12;
        now let x be set such that
 A144: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A144,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A144;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
 
    per cases;
    suppose
@@ -2533,7 +2537,7 @@ A147:  (Cs1i|dom DPp).d = Cs1i.d & (Cs2i|dom DPp).d = Cs2i.d
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A148: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
    per cases;
     suppose
 A149:  da = d;
@@ -2580,7 +2584,8 @@ A154:  CurInstr(Cs2i) = goto (loc+k) by A21,A153,Th10;
        now let x be set such that
 A155: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A155,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A155;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A60,A61,A153,A154,AMI_3:13;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A32,A45,A155;
    end;
@@ -2590,7 +2595,7 @@ A155: x in dom (Cs1i1|dom DPp);
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A156: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
          Cs3i1.d = Cs3i.d & Cs2i1.d = Cs2i.d by A61,A63,A153,A154,AMI_3:13;
     hence (Cs3i1|SCM-Data-Loc).x = (Cs2i1|SCM-Data-Loc).x by A53,A156;
    end;
@@ -2652,7 +2657,8 @@ A163:  Cs2i.da <> 0;
        now let x be set such that
 A165: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A165,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A165;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A60,A61,A157,A158,AMI_3:14;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A32,A45,A165;
    end;
@@ -2662,7 +2668,7 @@ A165: x in dom (Cs1i1|dom DPp);
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A166: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
          Cs3i1.d = Cs3i.d & Cs2i1.d = Cs2i.d by A61,A63,A157,A158,AMI_3:14;
     hence (Cs3i1|SCM-Data-Loc).x = (Cs2i1|SCM-Data-Loc).x by A53,A166;
    end;
@@ -2723,7 +2729,8 @@ A173:  Cs2i.da <= 0;
        now let x be set such that
 A175: x in dom (Cs1i1|dom DPp);
          dom DPp c= SCM-Data-Loc by AMI_5:69;
-     then reconsider d = x as Data-Location by A32,A175,AMI_5:16;
+         then x in SCM-Data-Loc by A32,A175;
+     then reconsider d = x as Data-Location by AMI_3:def 2;
          Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A60,A61,A167,A168,AMI_3:15;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A32,A45,A175;
    end;
@@ -2733,7 +2740,7 @@ A175: x in dom (Cs1i1|dom DPp);
                                     by A24,A32,A33,GRFUNC_1:9;
        now let x be set; assume
 A176: x in dom (Cs3i1|SCM-Data-Loc);
-     then reconsider d = x as Data-Location by A40,AMI_5:16;
+     then reconsider d = x as Data-Location by A40,AMI_3:def 2;
          Cs3i1.d = Cs3i.d & Cs2i1.d = Cs2i.d by A61,A63,A167,A168,AMI_3:15;
     hence (Cs3i1|SCM-Data-Loc).x = (Cs2i1|SCM-Data-Loc).x by A53,A176;
    end;
@@ -2815,8 +2822,8 @@ theorem Th36:
 A1:  IC SCM in dom p;
    let s be State of SCM such that
 A2: Relocated (p,k) c= s;
-A3: dom Start-At (IC(Computation (s +* p)).0 + k) = {IC SCM} by AMI_3:34;
-A4: dom Start-At(IC p) = {IC SCM} by AMI_3:34;
+A3: dom Start-At (IC(Computation (s +* p)).0 + k) = {IC SCM} by FUNCOP_1:19;
+A4: dom Start-At(IC p) = {IC SCM} by FUNCOP_1:19;
          ProgramPart (Relocated (p,k)) c= Relocated (p,k) by RELAT_1:88;
 then A5: ProgramPart (Relocated (p,k)) c= s by A2,XBOOLE_1:1;
 A6: s|dom ProgramPart p c= s by RELAT_1:88;
@@ -2891,12 +2898,12 @@ then A18: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
     then dom sdom is finite by A18,FINSET_1:29;
     then sdom is finite by FINSET_1:29;
     then reconsider sdom as FinPartState of SCM by AMI_1:def 24;
-        dom (s|dom ProgramPart p) c= SCM-Instr-Loc by A18,AMI_5:70;
+        dom (s|dom ProgramPart p) c= SCM-Instr-Loc by A18,RELAT_1:87;
     then reconsider sdom as programmed FinPartState of SCM by AMI_3:def 13;
 A19: (Computation (s +* p)).(i+1) = Following((Computation (s +* p)).i)
                                                          by AMI_1:def 19;
         dom (Start-At (IC (Computation (s +* p)).i + k)) = {IC SCM}
-                                          by AMI_3:34;
+                                          by FUNCOP_1:19;
 then A20: IC SCM in dom (Start-At (IC (Computation (s +* p)).i + k)) by
 TARSKI:def 1
 ;
@@ -2981,8 +2988,8 @@ A1:IC SCM in dom p;
 A2: p c= s and
 A3:Relocated (p,k) is autonomic;
 A4: dom Start-At (IC(Computation (s +* Relocated(p,k))).0 -' k) = {IC SCM}
-                                       by AMI_3:34;
-A5: dom Start-At((IC p)+k) = {IC SCM} by AMI_3:34;
+                                       by FUNCOP_1:19;
+A5: dom Start-At((IC p)+k) = {IC SCM} by FUNCOP_1:19;
          ProgramPart p c= p by RELAT_1:88;
 then A6: ProgramPart p c= s by A2,XBOOLE_1:1;
          Start-At (IC p) c= p by A1,AMI_5:78;
@@ -3071,7 +3078,7 @@ then A21: dom ProgramPart Relocated(p,k) =
     then sdom is finite by FINSET_1:29;
     then reconsider sdom as FinPartState of SCM by AMI_1:def 24;
         dom (s|(dom ProgramPart Relocated(p,k))) c= SCM-Instr-Loc by A21,
-AMI_5:70
+RELAT_1:87
 ;
     then reconsider sdom as programmed FinPartState of SCM by AMI_3:def 13;
 
@@ -3080,7 +3087,7 @@ A22: (Computation (s +* Relocated(p,k))).(i+1)
         dom (Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)) = {IC
 SCM
 }
-                                          by AMI_3:34;
+                                          by FUNCOP_1:19;
 then A23: IC SCM in dom (Start-At (IC (Computation (s +* Relocated(p,k))).i -'
 k))
                                           by TARSKI:def 1;
@@ -3193,9 +3200,9 @@ A5:  (Computation s2).i
 then A6:  (Computation (s1 +* p)).i|dom (p ) = (Computation (s2 +* p)).i|dom (p
 )
                                                 by A2,AMI_1:def 25;
-A7:  dom (Start-At ((IC p)+k)) = {IC SCM} by AMI_3:34;
-A8: dom (Start-At ((IC (Computation(s1 +* p)).i)+k)) = {IC SCM} by AMI_3:34;
-A9: dom (Start-At ((IC (Computation(s2 +* p)).i)+k)) = {IC SCM} by AMI_3:34;
+A7:  dom (Start-At ((IC p)+k)) = {IC SCM} by FUNCOP_1:19;
+A8: dom (Start-At ((IC (Computation(s1 +* p)).i)+k)) = {IC SCM} by FUNCOP_1:19;
+A9: dom (Start-At ((IC (Computation(s2 +* p)).i)+k)) = {IC SCM} by FUNCOP_1:19;
 
 A10:  {IC SCM} c= dom p by A1,ZFMISC_1:37;
 
@@ -3314,11 +3321,11 @@ A30:  (Computation s2).i
 then A31:  (Computation (s1 +* Relocated (p,k))).i|dom (Relocated (p,k))
    = (Computation (s2 +* Relocated (p,k))).i|dom (Relocated (p,k)) by A27,
 AMI_1:def 25;
-A32:  dom (Start-At (IC p)) = {IC SCM} by AMI_3:34;
+A32:  dom (Start-At (IC p)) = {IC SCM} by FUNCOP_1:19;
 A33: dom (Start-At ((IC (Computation(s1 +* Relocated (p,k))).i) -' k))
-     = {IC SCM} by AMI_3:34;
+     = {IC SCM} by FUNCOP_1:19;
 A34: dom (Start-At ((IC (Computation(s2 +* Relocated (p,k))).i) -' k))
-     = {IC SCM} by AMI_3:34;
+     = {IC SCM} by FUNCOP_1:19;
 
          IC SCM in dom Relocated (p,k) by Th25;
 then A35:  {IC SCM} c= dom Relocated (p,k) by ZFMISC_1:37;

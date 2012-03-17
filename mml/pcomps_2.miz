@@ -8,13 +8,13 @@ environ
 
  vocabularies ARYTM, FUNCT_1, ARYTM_3, RELAT_1, WELLORD1, RELAT_2, BOOLE,
       TARSKI, FINSEQ_1, PRE_TOPC, METRIC_1, SETFAM_1, COMPTS_1, SUBSET_1,
-      ARYTM_1, PCOMPS_1, FINSET_1, PCOMPS_2, GROUP_1, FINSEQ_4;
+      ARYTM_1, PCOMPS_1, FINSET_1, PCOMPS_2, GROUP_1, FINSEQ_4, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, TOPS_2, FUNCT_1, FUNCT_2, NAT_1, SETFAM_1, STRUCT_0,
-      NEWTON, METRIC_1, COMPTS_1, PRE_TOPC, PCOMPS_1, WELLORD1, RELAT_1,
-      FINSEQ_1, FINSET_1, RELAT_2, FINSEQ_2, FINSEQ_4, XXREAL_0;
+      XREAL_0, REAL_1, TOPS_2, FUNCT_1, FUNCT_2, NAT_1, NAT_D, SETFAM_1,
+      STRUCT_0, NEWTON, METRIC_1, COMPTS_1, PRE_TOPC, PCOMPS_1, WELLORD1,
+      RELAT_1, FINSEQ_1, FINSET_1, RELAT_2, FINSEQ_2, FINSEQ_4, XXREAL_0;
  constructors SETFAM_1, RELAT_2, WELLORD1, WELLORD2, XXREAL_0, REAL_1, NAT_1,
-      MEMBERED, FINSEQ_4, PREPOWER, TOPS_2, COMPTS_1, PCOMPS_1;
+      MEMBERED, FINSEQ_4, PREPOWER, TOPS_2, COMPTS_1, PCOMPS_1, NAT_D;
  registrations SUBSET_1, PRE_TOPC, FINSET_1, RELSET_1, STRUCT_0, XREAL_0,
       FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL1, XXREAL_0, NAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -31,19 +31,12 @@ begin :: 1. Selected properties of real numbers
   reserve r,u for real number;
   reserve n,k,i for Element of NAT;
 
-canceled 2;
-
-theorem
-   r>0 & u > 0 implies ex k be Element of NAT st u/(2 |^ k) <= r
-    by PREPOWER:106;
-
-theorem
-    k>=n & r >= 1 implies r |^ k >= r |^ n by PREPOWER:107;
-
 begin :: 2. Certain functions defined on families of sets
 
   reserve R for Relation;
   reserve A for set;
+
+canceled 4;
 
 theorem
   Th5: R well_orders A implies R |_2 A well_orders A & A = field (R |_2 A)
@@ -479,10 +472,10 @@ proof
             suppose A19: q = k+1;
             thus f.q=(g.q)/.len(g.q) by A9 .= (g.(k+1))/.(q+1) by A13,A19;
             end;
-            suppose A20: q < k+1; then A21: q+1 <= k+1 by NAT_1:38;
-            A22: q <= k by A20,NAT_1:38;   q+1>=1 by NAT_1:29;
+            suppose A20: q < k+1; then A21: q+1 <= k+1 by NAT_1:13;
+            A22: q <= k by A20,NAT_1:13;   q+1>=1 by NAT_1:11;
             then A23: q+1 in Seg(k+1) by A21,FINSEQ_1:3;
-              k+1+1>=k+1 by NAT_1:29; then Seg(k+1) c= Seg(k+1+1) by FINSEQ_1:7
+              k+1+1>=k+1 by NAT_1:11; then Seg(k+1) c= Seg(k+1+1) by FINSEQ_1:7
 ;
             then q+1 in Seg(k+1+1) by A23;
         then q+1 in Seg(len(g.(k+1))) by A13;
@@ -770,7 +763,7 @@ theorem  :: Stone Theorem - general case
                   end;
                   suppose n>0;
                   then consider k being Nat such that A23: n = k + 1
-                  by NAT_1:22;
+                  by NAT_1:6;
                   reconsider k as Element of NAT by ORDINAL1:def 13;
                   thus X in the topology of PT
                     proof
@@ -1010,7 +1003,7 @@ by A31;
                   end;
                 end;
                 suppose n>0;
-                then consider k being Nat such that A69: n = k + 1 by NAT_1:22;
+                then consider k being Nat such that A69: n = k + 1 by NAT_1:6;
                 reconsider k as Element of NAT by ORDINAL1:def 13;
                 thus ex Y be set st Y in FX & X c= Y
                   proof
@@ -1152,7 +1145,7 @@ by A31;
                           end;
                           suppose t>0;
                           then consider l be Nat such that
-A104:                     t=l+1 by NAT_1:22;
+A104:                     t=l+1 by NAT_1:6;
                           reconsider l as Element of NAT by ORDINAL1:def 13;
                               V in {union { Ball(c,1/(2 |^ (l+1)))
                           where c is Element of PM:
@@ -1225,7 +1218,7 @@ REAL_1:73;
             then union (f.k) in {union(f.q) where q is Element of NAT: q <= l};
             hence contradiction by A109,A120,TARSKI:def 4;
           end;A122:l >= k+(m+1) by A102,A104,XREAL_1:8;   k+(m+1)>=k
-by NAT_1:29;
+by NAT_1:11;
           then k <= l by A122,XXREAL_0:2;
           then k < l by A121,REAL_1:def 5;
           hence contradiction by A115,A120;
@@ -1363,7 +1356,7 @@ by NAT_1:29;
             (1+1)/2 + (1/(2 |^ (m+1+k+1)) +
               1/(2 |^ (m+1+k+1))) .=
 2/2 + 2/(2 |^ (m+1+k+1)) by XCMPLX_1:63;
-               A163: m+k+1 >= 1 by NAT_1:29;
+               A163: m+k+1 >= 1 by NAT_1:11;
             A164: 2/(2 |^ (m+1+k+1)) =(1*2)/(2 |^ (m+1+k)*2) by NEWTON:11
             .= 1/(2 |^ (m+1+k)) by XCMPLX_1:92;
                  2 |^ (m+1+k) >= 2 |^ 1 by A163,PREPOWER:107;
@@ -1397,7 +1390,7 @@ by NAT_1:29;
         end;
         suppose n1>0;
         then consider l be Nat such that
-A171:   n1 = l+1 by NAT_1:22;
+A171:   n1 = l+1 by NAT_1:6;
         reconsider l as Element of NAT by ORDINAL1:def 13;
             x1 in {union {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
@@ -1526,15 +1519,15 @@ A171:   n1 = l+1 by NAT_1:22;
             then consider i such that A195:n1=i &
                 i < m+1+k+1;
             consider h be Nat such that
-              A196: m+1+k+1 = (l+1) + h by A171,A195,NAT_1:28;
+              A196: m+1+k+1 = (l+1) + h by A171,A195,NAT_1:10;
                 h <> 0 by A171,A195,A196;
             then consider i be Nat such that
-            A197: h = i + 1 by NAT_1:22;
+            A197: h = i + 1 by NAT_1:6;
             A198: 2 |^ (l+1) > 0 by PREPOWER:13;
             A199: 2/(2 |^ (m+1+k+1)) = (1*2)/(2 |^ ((l+1)+i)*2) by  A196,A197,
 NEWTON:11
              .= 1/(2 |^ ((l+1)+i)) by XCMPLX_1:92;
-                (l+1)+i >= l+1 by NAT_1:29;
+                (l+1)+i >= l+1 by NAT_1:11;
             then 2 |^ ((l+1)+i) >= 2 |^ (l+1) by PREPOWER:107;
             then A200:1/(2 |^ ((l+1)+i)) <= 1/(2 |^ (l+1))
               by A198,REAL_2:201;
@@ -1590,8 +1583,8 @@ then A206: NZ,rng g are_equipotent by A92,WELLORD2:def 4;
         end;
         suppose x1 > 0;
         then consider l be Nat such that
-          A209: x1 = l +1 by NAT_1:22;
-             x1 >= 1 by A209,NAT_1:29;
+          A209: x1 = l +1 by NAT_1:6;
+             x1 >= 1 by A209,NAT_1:11;
         hence x1 in {0} or x1 in Seg(m+1+k+1) by A207,A208,FINSEQ_1:3;
       end;
       end;

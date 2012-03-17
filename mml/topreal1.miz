@@ -10,23 +10,24 @@ environ
  vocabularies EUCLID, METRIC_1, PCOMPS_1, BOOLE, FINSEQ_1, RELAT_1, FUNCT_1,
       PRE_TOPC, BORSUK_1, TOPS_2, RCOMP_1, SUBSET_1, MCART_1, ARYTM_1, ARYTM_3,
       CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
-      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM, JORDAN1A;
+      TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM, JORDAN1A, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, TOPS_1,
-      TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, STRUCT_0,
-      METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC, XXREAL_0;
+      XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2,
+      TOPS_1, TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4,
+      STRUCT_0, METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC, XXREAL_0;
  constructors SETFAM_1, XXREAL_0, REAL_1, NAT_1, INT_1, MEMBERED, COMPLEX1,
-      RCOMP_1, FINSEQ_4, TOPS_1, TOPS_2, COMPTS_1, EUCLID, TOPMETR, ORDINAL2;
- registrations SUBSET_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
+      RCOMP_1, FINSEQ_4, TOPS_1, TOPS_2, COMPTS_1, EUCLID, TOPMETR, ORDINAL2,
+      BINOP_2, FINSEQOP, NAT_D;
+ registrations SUBSET_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1, SEQ_1,
       XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, PCOMPS_1,
       XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, EUCLID;
+ definitions TARSKI, XBOOLE_0, FINSEQ_2, EUCLID;
  theorems BORSUK_1, COMPTS_1, CONNSP_2, ENUMSET1, EUCLID, FINSEQ_1, FUNCT_1,
       FUNCT_2, HEINE, METRIC_1, NAT_1, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_1,
       REAL_2, TARSKI, TOPMETR, TOPMETR2, TOPS_1, TOPS_2, ZFMISC_1, FINSEQ_3,
       FINSEQ_4, TBSP_1, PARTFUN2, RELSET_1, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1,
-      XREAL_0, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0;
+      XREAL_0, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0, FINSEQ_2;
  schemes NAT_1, ZFREFLE1, XBOOLE_0;
 
 begin
@@ -34,7 +35,8 @@ begin
  reserve r,y1,y2,lambda for Real, i,j,n for Element of NAT;
  reserve a for natural number;
 
-Lm1: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
+Lm1: |[0,0]| = 0.REAL 2 by FINSEQ_2:75;
+Lm2: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
     by TOPMETR:16;
 
 :: PRELIMINARIES
@@ -244,7 +246,7 @@ definition let n be Element of NAT; let p1,p2 be Point of TOP-REAL n;
   commutativity by Th8;
 end;
 
-Lm2: for p,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2)
+Lm3: for p,p1,p2 being Point of TOP-REAL n st p in LSeg(p1,p2)
         holds LSeg(p1,p) c= LSeg(p1,p2)
 proof let p,p1,p2 be Point of TOP-REAL n;
 assume p in LSeg(p1,p2);
@@ -329,7 +331,7 @@ A2: p = (1-r)*p1 + r*p2 and
 A3: 0 <= r and A4: r <= 1;
    now per cases;
    suppose A5: 0 <> r & r <> 1;
-        LSeg(p1,p) c= LSeg(p1,p2) & LSeg(p,p2) c= LSeg(p1,p2) by A1,Lm2;
+        LSeg(p1,p) c= LSeg(p1,p2) & LSeg(p,p2) c= LSeg(p1,p2) by A1,Lm3;
     then A6: LSeg(p1,p) \/ LSeg(p,p2) c= LSeg(p1,p2) by XBOOLE_1:8;
         LSeg(p1,p2) c= LSeg(p1,p) \/ LSeg(p,p2)
        proof
@@ -428,13 +430,13 @@ theorem Th12:
    then A2: LSeg(p1,p2) = LSeg(p1,q1) \/ LSeg(q1,p2) by Th11;
        now per cases by A1,A2,XBOOLE_0:def 2;
    suppose q2 in LSeg(p1,q1);
-     then A3: LSeg(q2,q1) c= LSeg(p1,q1) by Lm2;
-         LSeg(p1,q1) c= LSeg(p1,p2) by A1,Lm2;
+     then A3: LSeg(q2,q1) c= LSeg(p1,q1) by Lm3;
+         LSeg(p1,q1) c= LSeg(p1,p2) by A1,Lm3;
      hence thesis by A3,XBOOLE_1:1;
    end;
    suppose q2 in LSeg(q1,p2);
-     then A4: LSeg(q1,q2) c= LSeg(q1,p2) by Lm2;
-         LSeg(q1,p2) c= LSeg(p1,p2) by A1,Lm2;
+     then A4: LSeg(q1,q2) c= LSeg(q1,p2) by Lm3;
+         LSeg(q1,p2) c= LSeg(p1,p2) by A1,Lm3;
      hence thesis by A4,XBOOLE_1:1;
    end;
    end;
@@ -561,8 +563,8 @@ theorem Th15:
   assume A1: p1 <> p2;
   set P = LSeg(p1,p2);
 A2: the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
-     by Lm1;
-   reconsider p1' = p1, p2' = p2 as Element of REAL n by Lm1;
+     by Lm2;
+   reconsider p1' = p1, p2' = p2 as Element of REAL n by Lm2;
    defpred X[set,set] means
      for x being Real st x = $1 holds $2 = (1-x)*p1 + x*p2;
  A3: for a being set st a in [.0,1.] ex u being set st X[a,u]
@@ -705,8 +707,8 @@ A19: (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|PP) by TOPMETR:20;
        then the carrier of (TOP-REAL n)|P c= the carrier of TOP-REAL n &
         a in the carrier of (TOP-REAL n)|P by PRE_TOPC:12;
        then reconsider a'=a, fW=f.W as Point of TOP-REAL n by TARSKI:def 3;
-       reconsider p12 = p1 - p2 as Element of REAL n by Lm1;
-           WW1 - aa1 = fW - a' by EUCLID:def 13
+       reconsider p12 = p1 - p2 as Element of REAL n by Lm2;
+           WW1 - aa1 = fW - a'
          .= (1-W1)*p1 + W1*p2 - ((1-u1)*p1 + u1*p2) by A4,A5,A26,A27
          .= W1*p2 + (1-W1)*p1 - (1-u1)*p1 - u1*p2 by EUCLID:50
          .= W1*p2 + ((1-W1)*p1 - (1-u1)*p1) - u1*p2 by EUCLID:49
@@ -717,8 +719,8 @@ A19: (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|PP) by TOPMETR:20;
          .= (u1-W1)*p1 + -(u1-W1)*p2 by EUCLID:44
          .= (u1-W1)*p1 - (u1-W1)*p2 by EUCLID:45
          .= (u1-W1)*(p1 - p2) by EUCLID:53
-         .= (u1-W1)*(p12) by EUCLID:def 11
-         .= (u1-W1)*(p1' - p2') by EUCLID:def 13;
+         .= (u1-W1)*(p12)
+         .= (u1-W1)*(p1' - p2');
    then A28: |. WW1 -aa1 .| = abs(u1-W1)*|.p1' - p2'.| by EUCLID:14;
    A29: dist(W',u') < delta by A26,METRIC_1:12;
        reconsider W'' = W', u'' = u' as Point of RealSpace by TOPMETR:12;
@@ -839,10 +841,10 @@ proof
     A4: L1 c= LSeg(p0,p01)
      proof
       let a be set; assume a in L1;
-      then consider p such that A5: a = p and A6: p`1 = 0 & p`2 <= 1 & p`2 >=
- 0;
+      then consider p such that
+A5:   a = p and A6: p`1 = 0 & p`2 <= 1 & p`2 >= 0;
       set lambda = p`2;
-      (1-lambda)*p0 + lambda*p01 = 0.REAL 2 + lambda*p01 by EUCLID:32,58
+      (1-lambda)*p0 + lambda*p01 = 0.REAL 2 + lambda*p01 by EUCLID:32,Lm1
         .= lambda*p01 by EUCLID:31
         .= |[lambda*p01`1, lambda*p01`2 ]| by EUCLID:61
         .= p by A1,A6,EUCLID:57;
@@ -857,7 +859,7 @@ proof
        A7: a = (1-lambda)*p0 + lambda*p01 & 0 <= lambda & lambda <= 1;
       set q = (1-lambda)*p0 + lambda*p01;
            (1-lambda)*p0 + lambda*p01 = 0.REAL 2 + lambda*p01
-             by EUCLID:32,58
+             by EUCLID:32,Lm1
         .= lambda*p01 by EUCLID:31
         .= |[lambda*(p01`1), lambda*(p01`2) ]| by EUCLID:61
         .= |[ 0, lambda ]| by A1;
@@ -904,11 +906,11 @@ proof
     A12: L3 c= LSeg(p0,p10)
      proof
       let a be set; assume a in L3;
-      then consider p such that A13: a = p and A14: p`1 <= 1 & p`1 >= 0 & p`2 =
-0;
+      then consider p such that
+A13:  a = p and A14: p`1 <= 1 & p`1 >= 0 & p`2 = 0;
       set lambda = p`1;
-          (1-lambda)*p0 + lambda*p10 = 0.REAL 2 + lambda*p10
-            by EUCLID:32,58
+      (1-lambda)*p0 + lambda*p10 = 0.REAL 2 + lambda*p10
+            by EUCLID:32,Lm1
         .= lambda*p10 by EUCLID:31
         .= |[lambda*p10`1, lambda*p10`2 ]| by EUCLID:61
         .= p by A3,A14,EUCLID:57;
@@ -923,7 +925,7 @@ proof
        A15: a = (1-lambda)*p0 + lambda*p10 & 0 <= lambda & lambda <= 1;
        set q =(1-lambda)*p0 + lambda*p10;
            (1-lambda)*p0 + lambda*p10 = 0.REAL 2 + lambda*p10
-             by EUCLID:32,58
+             by EUCLID:32,Lm1
         .= lambda*p10 by EUCLID:31
         .= |[ lambda*(p10`1), lambda*(p10`2) ]| by EUCLID:61
         .= |[ lambda, 0 ]| by A3;
@@ -1208,10 +1210,10 @@ theorem Th28:
   assume A7: len f <> 0 & len f <> 1;
   now assume len f <= 1;
    then len f < 0+1 by A7,REAL_1:def 5;
-   then len f <= 0 by NAT_1:38;
+   then len f <= 0 by NAT_1:13;
    hence contradiction by A7;
   end;
-  then A8: len f >= 1+1 by NAT_1:38;
+  then A8: len f >= 1+1 by NAT_1:13;
   then LSeg(f,1) in L;
   then LSeg(f,1) c= union L by ZFMISC_1:92;
   then LSeg(f,1) c= {} by A6;
@@ -1327,7 +1329,7 @@ XBOOLE_0:def 3;
       end;
      let i; assume A13: 1 <= i & i + 1 <= len f1;
       then A14: i <= 1 + 1 by A4,XREAL_1:8;
-      per cases by A13,A14,NAT_1:27;
+      per cases by A13,A14,NAT_1:9;
        suppose A15: i = 1;
         then (f1/.i)`1 = p0`1 by FINSEQ_4:27 .= 0 by EUCLID:56
                  .= (f1/.(i+1))`1 by A5,A15,EUCLID:56;
@@ -1356,7 +1358,7 @@ A17:   L~f1 = union {LSeg(p0,p01),LSeg(p01,p1)}
        let a be set; assume a in {LSeg(f1,i): 1 <= i & i+1 <= len f1};
        then consider i such that A20: a = LSeg(f1,i) & 1<=i & i+1<=len f1;
            i+1 <= 2 + 1 by A20,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
-       then i = 1 or i = 2 by A20,NAT_1:27;
+       then i = 1 or i = 2 by A20,NAT_1:9;
        then a = LSeg(p0,p01) or a = LSeg(p01,p1) by A5,A20,Def5;
        hence a in {LSeg(p0,p01),LSeg(p01,p1)} by TARSKI:def 2;
       end;
@@ -1421,7 +1423,7 @@ XBOOLE_0:def 3;
       end;
      let i; assume A31: 1 <= i & i + 1 <= len f2;
       then A32: i <= 1 + 1 by A22,XREAL_1:8;
-       per cases by A31,A32,NAT_1:27;
+       per cases by A31,A32,NAT_1:9;
        suppose A33: i = 1;
         then (f2/.i)`2 = p0`2 by FINSEQ_4:27 .= 0 by EUCLID:56
                  .= (f2/.(i+1))`2 by A23,A33,EUCLID:56;
@@ -1447,7 +1449,7 @@ A35:   L~f2 = union {LSeg(p0,p10),LSeg(p10,p1)}
        let a be set; assume a in {LSeg(f2,i): 1 <= i & i+1 <= len f2};
        then consider i such that A38: a = LSeg(f2,i) & 1<=i & i+1<=len f2;
        i+1 <= 2 + 1 by A38,FINSEQ_1:62; then i <= 1 + 1 by XREAL_1:8;
-       then i = 1 or i = 2 by A38,NAT_1:27;
+       then i = 1 or i = 2 by A38,NAT_1:9;
        then a = LSeg(p0,p10) or a = LSeg(p10,p1) by A23,A38,Def5;
        hence a in {LSeg(p0,p10),LSeg(p10,p1)} by TARSKI:def 2;
       end;
@@ -1541,7 +1543,7 @@ A15: for n st ARC[n] holds ARC[n+1]
      assume
 A17:    1 <= n + 1 + 2 & n + 1 + 2 <= len h;
       then A18: 1 <= n + 1 + 1 & n + 1 + 1 <= n + 2 + 1 & n + 2 + 1 <= len h
-      by NAT_1:29;
+      by NAT_1:11;
      then A19: 1 <= n + 1 + 1 & n + 1 + 1 <= len h by XXREAL_0:2;
 A20:  n + 1 + 1 = n + (1 + 1);
      consider NE being non empty Subset of TOP-REAL 2 such that
@@ -1573,12 +1575,12 @@ A23:    n + 1 +1 <> n + 2 + 1;
 then A30:   i <= len(h|(n+1+2)) - 1 by A29,XREAL_1:11;
       A31: len(h|(n+1+2))-1 = n+1+2-1 by A17,FINSEQ_1:80.= n+(1+1);
 A32:      n+(1+1) = n+1+1;
-          now per cases by A30,A31,A32,NAT_1:26;
+          now per cases by A30,A31,A32,NAT_1:8;
        suppose A33: i = n+2;
         A34: len(h|(n+1+2)) = n+1+2 by A17,FINSEQ_1:80;
             n+1+2 = n+2+1;
         then A35:     1 <= n+2 & n+2<=n+1+2 & n+2+1 <= n+1+2 & 1<=n+2+1 by A20,
-NAT_1:29;
+NAT_1:11;
         then n + 2 in Seg len(h|(n+1+2)) & n + 2 + 1 in Seg len(h|(n+1+2))
          by A34,FINSEQ_1:3;
         then A36: n + 2 in dom(h|(n+1+2)) & n + 2 + 1 in dom(h|(n+1+2))
@@ -1596,13 +1598,13 @@ NAT_1:29;
         then A40: LSeg(h|(n+2),i) in {LSeg(h|(n+2),j) : 1 <= j &
           j+1 <= len(h|(n+2))} by A29;
         A41: 1 <= 1+i & n+1 <= n+1+1 & n+1+1 = n+(1+1) & i+1 <= n+1+1
-         by A38,NAT_1:29,XREAL_1:9;
+         by A38,NAT_1:11,XREAL_1:9;
         then A42: 1 <= i+1 & i <= n+2 & i+1 <= n+2 by A38,XXREAL_0:2;
         then A43: i in Seg len (h|(n+2)) & i+1 in Seg len(h|(n+2)) by A29,A39,
 FINSEQ_1:3;
         set p1' = (h|(n+2))/.i, p2' = (h|(n+2))/.(i+1);
         A44: i in dom(h|(n+2)) & i+1 in dom(h|(n+2)) by A43,FINSEQ_1:def 3;
-            n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:29;
+            n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:11;
       then i <= n+1+2 & i+1 <= n+1+2 by A42,XXREAL_0:2;
       then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
          by A17,A29,A41,FINSEQ_1:3;
@@ -1644,14 +1646,14 @@ FINSEQ_1:80;
         then A57: 1 <= i & i+1 <= len(h|(n+1+2)) by A53,A55,XXREAL_0:2;
        A58: len(h|(n+2)) = n + 2 by A19,FINSEQ_1:80;
         A59: 1 <= 1+i & n+1+1 = n+(1+1) & i+1 <= n+1+1
-         by A53,A54,FINSEQ_1:80,NAT_1:29;
+         by A53,A54,FINSEQ_1:80,NAT_1:11;
         A60: 1 <= i+1 & i <= n+2 & i+1 <= n+2
-         by A53,A54,A56,XXREAL_0:2,FINSEQ_1:80,NAT_1:29;
+         by A53,A54,A56,XXREAL_0:2,FINSEQ_1:80,NAT_1:11;
         then A61: i in Seg len(h|(n+2)) & i+1 in
  Seg len(h|(n+2)) by A53,A58,FINSEQ_1:3;
         set p1' = (h|(n+2))/.i, p2' = (h|(n+2))/.(i+1);
         A62: i in dom(h|(n+2)) & i+1 in dom(h|(n+2)) by A61,FINSEQ_1:def 3;
-            n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:29;
+            n+2 <= n+2+1 & n+2+1 = n+1+2 by NAT_1:11;
 then A63:    i <= n+1+2 & i+1 <= n+1+2 by A60,XXREAL_0:2;
         then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
          by A17,A53,A59,FINSEQ_1:3;
@@ -1672,7 +1674,7 @@ then A63:    i <= n+1+2 & i+1 <= n+1+2 by A60,XXREAL_0:2;
        suppose A68: x in LSeg(h,n+2);
 A69:      len(h|(n+1+2)) = n+1+2 & 1 <= n+1+2 & n+2 <= n+2+1 &
           1 <= n+2 & n+1+2 = n+2+1
-          by A17,A20,FINSEQ_1:80,NAT_1:29;
+          by A17,A20,FINSEQ_1:80,NAT_1:11;
         then n + 2 in Seg len(h|(n+1+2)) & n + 2 + 1 in Seg len(h|(n+1+2))
          by FINSEQ_1:3;
         then A70: n + 2 in dom(h|(n+1+2)) & n + 2 + 1 in dom(h|(n+1+2))
@@ -1715,11 +1717,11 @@ A82:    h is s.n.c. by A1,Def10;
 A83:    h is unfolded by A1,Def10;
         now assume
 A84:    i < n+1;
-         A85: 1 <= 1+i & i+1 <= n+(1+1) by A19,A78,FINSEQ_1:80,NAT_1:29;
+         A85: 1 <= 1+i & i+1 <= n+(1+1) by A19,A78,FINSEQ_1:80,NAT_1:11;
 A86:      i+1 <= len h by A19,A78,A80,XXREAL_0:2;
             A87: i+1 < n+1+1 by A84,XREAL_1:8;
          set p1' = h/.i, p2' = h/.(i+1);
-             n+1 <= n+1+1 & n+1+1 = n+(1+1) by NAT_1:29;
+             n+1 <= n+1+1 & n+1+1 = n+(1+1) by NAT_1:11;
          then i <= n+2 by A84,XXREAL_0:2;
          then i in Seg len(h|(n+2)) & i+1 in Seg len(h|(n+2))
           by A78,A79,A85,FINSEQ_1:3;
@@ -1737,7 +1739,7 @@ A93:      1 <= n+1 & 1 <= n+1+1 & n+1+1 <= len h
           by A18,A78,A81,XXREAL_0:2;
          set p1' = h/.(n+1), p2' = h/.(n+1+1);
 A94:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
-          by NAT_1:29;
+          by NAT_1:11;
          then n+1 in Seg len(h|(n+2)) & n+1+1 in Seg len(h|(n+2))
           by A79,FINSEQ_1:3;
          then A95: n+1 in dom(h|(n+2)) & n+1+1 in dom(h|(n+2))
@@ -1749,7 +1751,7 @@ A94:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
           LSeg(pn,pn1) = LSeg(h,n+1+1) by A18,Def5;
          then A99: x in LSeg(h,n+1) /\ LSeg(h,n+1+1)
            by A74,A75,A77,A92,A98,XBOOLE_0:def 3;
-         1 <= n+1 by NAT_1:29;
+         1 <= n+1 by NAT_1:11;
          then LSeg(h,n+1) /\ LSeg(h,n+1+1) = {h/.(n+1+1)} by A17,A83,Def8;
          hence x = pn by A99,TARSKI:def 1;
           end;
@@ -1759,10 +1761,10 @@ A94:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
             then dom(h|(n+2)) = Seg(n+2) & n + 2 in Seg(n+2)
              by A18,FINSEQ_1:3,def 3;
             then A103: x = (h|(n+2))/.(n+1+1) by A100,FINSEQ_4:85;
-         1 <= n+1 by NAT_1:29;
+         1 <= n+1 by NAT_1:11;
           then A104: x in LSeg(h|(n+2),n+1) by A102,A103,Th27;
                1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len h
-              by A18,XXREAL_0:2,NAT_1:29;
+              by A18,XXREAL_0:2,NAT_1:11;
             then 1 <= n+1 & n+1+1 <= len(h|(n+2)) by FINSEQ_1:80;
             then LSeg(h|(n+2),n+1) in {LSeg(h|(n+2),i): 1 <= i & i+1 <=
  len(h|(n+2))};
@@ -1785,7 +1787,7 @@ A106:     hh is_homeomorphism & hh.0 = f.0 & hh.1 = f1.1
    end;
 A107: for n holds ARC[n] from NAT_1:sch 1(A14,A15);
   reconsider h1 = len h - 2 as Element of NAT by A3,INT_1:18;
- 1 <= h1 + 2 by NAT_1:37;
+ 1 <= h1 + 2 by NAT_1:12;
    then consider NE being non empty Subset of TOP-REAL 2 such that
 A108:  NE = Q(h1) &
      ex f being Function of I[01], (TOP-REAL 2)|NE st

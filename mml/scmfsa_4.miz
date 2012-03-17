@@ -10,26 +10,21 @@ environ
       SCMFSA_2, ARYTM_1, CAT_1, RELOC, AMI_5, AMI_2, NAT_1, ABSVALUE, FINSEQ_1,
       FINSEQ_2, SCMFSA_4, CARD_3, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      NAT_1, BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
+      NAT_1, NAT_D, BINARITH, INT_1, INT_2, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
       CQC_LANG, FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4, STRUCT_0,
       AMI_1, AMI_3, AMI_5, RELOC, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, FINSEQ_4, INT_2, BINARITH, FUNCT_7,
-      AMI_5, RELOC, SCMFSA_2;
+      AMI_5, RELOC, SCMFSA_2, NAT_D;
  registrations AMI_1, SCMFSA_2, FUNCT_7, XBOOLE_0, FUNCT_1, TREES_2, RELSET_1,
       INT_1, AMI_3, FRAENKEL, NUMBERS, ORDINAL1, SETFAM_1, CARD_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, AMI_3, XBOOLE_0;
+ definitions TARSKI, AMI_3, XBOOLE_0, SCMFSA_2;
  theorems SCMFSA_2, BINARITH, AMI_3, ZFMISC_1, RELOC, AMI_5, ENUMSET1, NAT_1,
       CQC_LANG, RELAT_1, FUNCT_1, TARSKI, FUNCT_4, FUNCT_2, AMI_1, FINSET_1,
-      GRFUNC_1, CQC_THE1, SCMFSA_3, RELSET_1, XBOOLE_0, XBOOLE_1;
+      GRFUNC_1, SCMFSA_3, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes ZFREFLE1, FUNCT_7;
 
 begin ::Preliminaries
-
-registration let N be set; let S be AMI-Struct over N;
- cluster -> finite FinPartState of S;
- coherence by AMI_1:def 24;
-end;
 
 registration
  let N be set,
@@ -104,7 +99,7 @@ existence
   take m;
   thus loc = insloc m & IT = insloc(m+k) by A1;
  end;
-uniqueness by SCMFSA_2:18;
+uniqueness;
 
 func loc -' k -> Instruction-Location of SCM+FSA means
 :Def2:
@@ -116,7 +111,7 @@ existence
   take m;
   thus loc = insloc m & IT = insloc(m -' k) by A2;
  end;
-uniqueness by SCMFSA_2:18;
+uniqueness;
 end;
 
 theorem Th3:
@@ -157,9 +152,9 @@ A1: L = l;
 A2: l = insloc m & l+k = insloc(m+k) by Def1;
   consider M being Element of NAT such that
 A3: L = il.M & L+k = il.(M+k) by RELOC:def 1;
-     il.m = il.M by A1,A2,A3,SCMFSA_2:def 7;
+     il.m = il.M by A1,A2,A3;
   then M = m;
- hence l+k = L+k by A2,A3,SCMFSA_2:def 7;
+ hence l+k = L+k by A2,A3;
 end;
 
 theorem
@@ -424,9 +419,9 @@ theorem Th22:
    proof
     let I be Instruction of SCM+FSA, k be Element of NAT;
    A1: InsCode I <= 11+1 by SCMFSA_2:35;
-A2: InsCode I <= 10+1 implies InsCode I <= 10 or InsCode I = 11 by NAT_1:26;
-A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:26;
-  per cases by A1,A2,A3,NAT_1:26;
+A2: InsCode I <= 10+1 implies InsCode I <= 10 or InsCode I = 11 by NAT_1:8;
+A3: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:8;
+  per cases by A1,A2,A3,NAT_1:8;
   suppose InsCode I <= 8;
    then reconsider i = I as Instruction of SCM by SCMFSA_2:34;
        IncAddr (I, k) = IncAddr (i, k) by Th21;
@@ -462,8 +457,8 @@ A1:  dom SCM+FSA-Stop = {insloc 0} by CQC_LANG:5;
 A2:   insloc n in dom SCM+FSA-Stop and
 A3:   m < n;
          insloc n = insloc 0 by A1,A2,TARSKI:def 1;
-      then n = 0 by SCMFSA_2:18;
-     hence insloc m in dom SCM+FSA-Stop by A3,NAT_1:18;
+      then n = 0;
+     hence insloc m in dom SCM+FSA-Stop by A3,NAT_1:2;
     end;
    thus dom SCM+FSA-Stop c= the Instruction-Locations of SCM+FSA
           by A1,ZFMISC_1:37;
@@ -811,8 +806,7 @@ A2:     IC s = insloc m by SCMFSA_2:21;
 A3:     IC s = insloc m1 & IC s + k = insloc(m1 + k) by Def1;
 
 A4:  Next IC (s +* Start-At (IC s + k))
-     = Next (insloc(m1 + k)) by A3,AMI_5:79
-    .= Next (insloc(m + k)) by A2,A3,SCMFSA_2:18
+     = Next (insloc(m + k)) by  A3,AMI_5:79,A2
     .= insloc((m + k) + 1) by SCMFSA_2:32
     .= insloc(m + 1 + k)
     .= insloc(m + 1) + k by Def1
@@ -832,12 +826,12 @@ A5:  now let d be Instruction-Location of SCM+FSA;
      end;
    A6: InsCode INS <= 11+1 by SCMFSA_2:35;
 A7: InsCode INS <= 10+1 implies InsCode INS <=
- 10 or InsCode INS = 11 by NAT_1:26;
+ 10 or InsCode INS = 11 by NAT_1:8;
 A8: InsCode INS <= 9+1 implies InsCode INS <=
- 8+1 or InsCode INS = 10 by NAT_1:26;
+ 8+1 or InsCode INS = 10 by NAT_1:8;
 A9: InsCode INS <= 8+1 implies InsCode INS <=
- 7+1 or InsCode INS = 9 by NAT_1:26;
-    per cases by A6,A7,A8,A9,CQC_THE1:9,NAT_1:26;
+ 7+1 or InsCode INS = 9 by NAT_1:8;
+    per cases by A6,A7,A8,A9,NAT_1:33,8;
     suppose InsCode INS = 0;
 then A10: INS = halt SCM+FSA by SCMFSA_2:122;
 then A11: Following(s) = Exec(halt SCM+FSA, s) by AMI_1:def 18
@@ -1610,12 +1604,12 @@ A3: now let d be Instruction-Location of SCM+FSA;
 
    A4: InsCode INS <= 11+1 by SCMFSA_2:35;
 A5: InsCode INS <= 10+1 implies InsCode INS <=
- 10 or InsCode INS = 11 by NAT_1:26;
+ 10 or InsCode INS = 11 by NAT_1:8;
 A6: InsCode INS <= 9+1 implies InsCode INS <=
- 8+1 or InsCode INS = 10 by NAT_1:26;
+ 8+1 or InsCode INS = 10 by NAT_1:8;
 A7: InsCode INS <= 8+1 implies InsCode INS <=
- 7+1 or InsCode INS = 9 by NAT_1:26;
-    per cases by A4,A5,A6,A7,CQC_THE1:9,NAT_1:26;
+ 7+1 or InsCode INS = 9 by NAT_1:8;
+    per cases by A4,A5,A6,A7,NAT_1:33,8;
 
  suppose InsCode INS = 0;
 then A8: INS = halt SCM+FSA by SCMFSA_2:122;
@@ -2331,7 +2325,7 @@ A11:       p c= s by AMI_3:39;
        consider j such that
 A12:       insloc(m+k) = insloc(j+k) and
 A13:       insloc j in dom p by A3,A7,A8;
-          j+k = m+k by A12,SCMFSA_2:18;
+          j+k = m+k by A12;
 then A14:   insloc m in dom p by A13;
           s.insloc m in the Instructions of SCM+FSA;
        hence f.x in (the Object-Kind of SCM+FSA).x
@@ -2340,8 +2334,7 @@ then A14:   insloc m in dom p by A13;
     then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
               by A6,AMI_1:def 16;
 A15: dom p is finite;
-A16: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2
-            by SCMFSA_2:18;
+A16: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2;
        A is finite from FUNCT_7:sch 2(A15,A16);
     then f is finite by A3,FINSET_1:29;
     then reconsider f as FinPartState of SCM+FSA by AMI_1:def 24;
@@ -2361,7 +2354,7 @@ A16: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2
     then consider j such that
 A17:     insloc(m+k) = insloc(j+k) and
 A18:     f.insloc(m+k) = p.insloc j by A4;
-       m+k = j+k by A17,SCMFSA_2:18;
+       m+k = j+k by A17;
    hence IT.insloc(m+k) = p.insloc m by A18;
   end;
 
@@ -2446,7 +2439,7 @@ A3:      insloc p in A;
         consider l such that
 A4:      insloc p = insloc(l+m) and
 A5:      insloc l in dom I by A3;
-           p = l+m by A4,SCMFSA_2:18;
+           p = l+m by A4;
         then x = insloc(l+(m+n)) by A2;
        hence x in { insloc(q+(m+n)):insloc q in dom I} by A5;
       end;
@@ -2541,7 +2534,7 @@ A10:  not insloc m in dom J;
        now given l such that
 A11:  insloc(m+n) = insloc(l+n) and
 A12:  insloc l in dom J;
-         m+n = l+n by A11,SCMFSA_2:18;
+         m+n = l+n by A11;
      hence contradiction by A10,A12;
     end;
 then A13:  not insloc(m+n) in dom Shift(J,n) by A2;

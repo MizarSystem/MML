@@ -8,13 +8,14 @@
 environ
 
  vocabularies ARYTM_3, QC_LANG1, BINOP_1, FUNCT_1, LATTICES, ARYTM, RELAT_1,
-      BOOLE, NAT_LAT, REALSET1, ORDINAL2;
+      BOOLE, NAT_LAT, REALSET1, ORDINAL2, XREAL_0, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, XREAL_0,
-      REALSET1, STRUCT_0, NAT_1, LATTICES, BINOP_1, RELAT_1, FUNCT_1, XXREAL_0;
+      REALSET1, STRUCT_0, NAT_1, NAT_D, LATTICES, BINOP_1, RELAT_1, FUNCT_1,
+      XXREAL_0;
  constructors PARTFUN1, BINOP_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
-      REALSET1, LATTICES, ORDINAL2;
+      REALSET1, LATTICES, ORDINAL2, NAT_D;
  registrations FINSET_1, STRUCT_0, RELSET_1, LATTICES, NAT_1, MEMBERED,
-      ARYTM_3, ORDINAL2, ORDINAL1;
+      ARYTM_3, ORDINAL2, ORDINAL1, INT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
 
 
@@ -34,34 +35,44 @@ definition
   it.(m,n)=m lcm n;
 end;
 
- reserve p,q,r for Element of LattStr (# NAT, lcmlat, hcflat #);
-
-definition let m be Element of LattStr (# NAT, lcmlat, hcflat #);
-  func @m -> Element of NAT equals
+definition
+ func Nat_Lattice -> strict non empty LattStr
+  equals
 :: NAT_LAT:def 5
-  m;
+LattStr(# NAT, lcmlat, hcflat #);
+end;
+
+registration
+ cluster -> natural Element of Nat_Lattice;
+end;
+
+ reserve p,q,r for Element of Nat_Lattice;
+
+registration let p,q;
+ identify p"\/"q with p lcm q;
+ identify p"/\"q with p hcf q;
 end;
 
 canceled 47;
 
 theorem :: NAT_LAT:48
- p"\/"q =@p lcm @q;
+ p"\/"q =p lcm q;
 
 theorem :: NAT_LAT:49
- p"/\"q = @p hcf @q;
+ p"/\"q = p hcf q;
 
 canceled 2;
 
 theorem :: NAT_LAT:52
-  for a,b being Element of LattStr (# NAT, lcmlat, hcflat #) st
-    a[=b holds @a divides @b;
+  for a,b being Element of Nat_Lattice st
+    a[=b holds a divides b;
 
 definition
-  func 0_NN -> Element of LattStr (# NAT, lcmlat, hcflat #) equals
+  func 0_NN -> Element of Nat_Lattice equals
 :: NAT_LAT:def 6
     1;
 
-  func 1_NN -> Element of LattStr (# NAT, lcmlat, hcflat #) equals
+  func 1_NN -> Element of Nat_Lattice equals
 :: NAT_LAT:def 7
     0;
 end;
@@ -69,16 +80,10 @@ end;
 canceled 2;
 
 theorem :: NAT_LAT:55
-  @0_NN=1;
+  0_NN=1;
 
-theorem :: NAT_LAT:56
-  for a being Element of LattStr (# NAT, lcmlat, hcflat #) holds
-    0_NN"/\"a = 0_NN & a"/\"0_NN = 0_NN;
-
-definition
-  func Nat_Lattice -> Lattice equals
-:: NAT_LAT:def 8
-  LattStr (# NAT, lcmlat, hcflat #);
+registration
+ cluster Nat_Lattice -> Lattice-like;
 end;
 
 registration
@@ -87,11 +92,11 @@ end;
 
  reserve p,q,r for Element of Nat_Lattice;
 
-canceled 4;
-
 registration
   cluster Nat_Lattice -> lower-bounded;
 end;
+
+canceled 5;
 
 theorem :: NAT_LAT:61
   lcmlat.(p,q)=lcmlat.(q,p);
@@ -128,6 +133,8 @@ theorem :: NAT_LAT:68
 :: NATPLUS
 
 definition
+ canceled;
+
   func NATPLUS -> Subset of NAT means
 :: NAT_LAT:def 9
  for n being Nat holds n in it iff 0 < n;
@@ -172,7 +179,7 @@ definition
 end;
 
 registration
-  cluster -> natural Element of NATPLUS;
+  cluster -> natural non zero Element of NATPLUS;
 end;
 
  reserve m,n for NatPlus;
@@ -203,7 +210,16 @@ definition let m be Element of NatPlus_Lattice;
     m;
 end;
 
+registration
+  cluster -> natural non zero Element of NatPlus_Lattice;
+end;
+
  reserve p,q for Element of NatPlus_Lattice;
+
+registration let p,q be Element of NatPlus_Lattice;
+ identify p"\/"q with p lcm q;
+ identify p"/\"q with p hcf q;
+end;
 
 theorem :: NAT_LAT:69
  p"\/"q =@p lcm @q;

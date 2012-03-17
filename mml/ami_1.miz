@@ -7,13 +7,13 @@
 environ
 
  vocabularies BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
-      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1;
+      CARD_3, TARSKI, FRAENKEL, PARTFUN1, FINSET_1, AMI_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, CARD_3,
       XCMPLX_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1,
-      CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1, STRUCT_0,
-      XXREAL_0;
+      NAT_D, CQC_LANG, FRAENKEL, FUNCOP_1, FUNCT_4, FINSEQ_1, DOMAIN_1,
+      STRUCT_0, XXREAL_0;
  constructors SETFAM_1, PARTFUN1, DOMAIN_1, FUNCOP_1, FUNCT_4, FRAENKEL,
-      XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0;
+      XXREAL_0, NAT_1, INT_1, CARD_3, CQC_LANG, STRUCT_0, NAT_D;
  registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
       FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
       ORDINAL1, SETFAM_1, CARD_3;
@@ -35,12 +35,6 @@ theorem
 
 theorem
   for a,b being set holds 2 <> [a,b] by ZFMISC_1:10, CARD_5:1;
-
-canceled;
-
-theorem
- for a,b,c,d being set st a <> b holds
-  product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) } by CARD_3:63;
 
 begin :: General concepts
 
@@ -187,6 +181,8 @@ definition let N; let S be non void AMI-Struct over N;
 end;
 
 reserve E for set;
+
+canceled 2;
 
 theorem Th6:
  Trivial-AMI N is halting
@@ -452,22 +448,12 @@ A7:   [x,z] in q & q in A by A5,TARSKI:def 4;
   hence union A is Function by A3,FUNCT_1:def 1,RELAT_1:def 1;
  end;
 
-canceled 2;
-
-theorem Th18:
+ Lm1:
  for x1,x2,y1,y2 being set holds
    (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
 
-theorem Th19:
+ Lm2:
  for x,y holds x .--> y = {[x,y]} by CQC_LANG:45;
-
-theorem
- for a,b,c being set holds (a,a) --> (b,c) = a .--> c by CQC_LANG:44;
-
-canceled;
-
-theorem
-    x in product f implies x is Function by CARD_3:64;
 
 begin :: Superproducts
 
@@ -552,7 +538,7 @@ A5:      g.z in f.z by A3,A4;
  end;
 end;
 
-canceled 2;
+canceled 9;
 
 theorem Th25:
  g in sproduct f implies dom g c= dom f &
@@ -795,7 +781,7 @@ A3:   f.x <> {};
      consider y being Element of f.x;
         x .--> y in sproduct f by A2,A3,Th36;
      then x .--> y = {} by A1,TARSKI:def 1;
-     then {[x,y]} = {} by Th19;
+     then {[x,y]} = {} by Lm2;
     hence contradiction;
    end;
   assume
@@ -1021,7 +1007,7 @@ theorem
    then A1:  x1 .--> y1 in sproduct f by Th36;
   assume x2 in dom f & y2 in f.x2;
    then A2:  x2 .--> y2 in sproduct f by Th36;
-      (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by Th18;
+      (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by Lm1;
   hence (x1,x2)-->(y1,y2) in sproduct f by A1,A2,Th46;
  end;
 
@@ -1146,7 +1132,7 @@ theorem Th52:
    holds (Computation s).j = (Computation s).i
  proof assume i <= j;
    then consider k being Nat such that
-A1:   j = i + k by NAT_1:28;
+A1:   j = i + k by NAT_1:10;
       reconsider k as Element of NAT by ORDINAL1:def 13;
 A2:   j = i + k by A1;
   let N;
@@ -1278,7 +1264,7 @@ A2: CurInstr s' = halt S by A1,Th54;
       now per cases;
     suppose i <= k;
       then consider j being Nat such that
-A3:     k = i + j by NAT_1:28;
+A3:     k = i + j by NAT_1:10;
       reconsider j as Element of NAT by ORDINAL1:def 13;
 A4:    (Computation s).k = (Computation (Computation s).i).j by A3,Th51;
       then A5:    (Computation s).i is halting by A2,Def20;
@@ -1323,6 +1309,11 @@ definition let N be set; let S be AMI-Struct over N;
        {} in sproduct the Object-Kind of S & {} is finite by Th26;
    hence thesis;
   end;
+end;
+
+registration let N be set; let S be AMI-Struct over N;
+ cluster -> finite FinPartState of S;
+ coherence by Def24;
 end;
 
 definition let N;

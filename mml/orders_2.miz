@@ -7,16 +7,16 @@
 environ
 
  vocabularies FUNCT_1, BOOLE, TARSKI, RELAT_1, RELAT_2, WELLORD1, SUBSET_1,
-      ORDERS_1, PARTFUN1, ORDERS_2;
+      ORDERS_1, PARTFUN1, ORDERS_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
       RELSET_1, PARTFUN1, WELLORD1, DOMAIN_1, STRUCT_0, PRE_TOPC, ORDERS_1;
  constructors RELAT_2, WELLORD1, PARTFUN1, DOMAIN_1, MEMBERED, ORDERS_1,
-      PRE_TOPC;
+      PRE_TOPC, NAT_D;
  registrations RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, XBOOLE_0, ORDERS_1;
  requirements BOOLE, SUBSET;
  definitions RELAT_2, TARSKI, WELLORD1, STRUCT_0, XBOOLE_0, ORDERS_1;
- theorems RELAT_1, RELAT_2, TARSKI, WELLORD1, ZFMISC_1, STRUCT_0, PRE_TOPC,
-      XBOOLE_0, XBOOLE_1, PARTFUN1, ORDERS_1;
+ theorems RELAT_1, RELAT_2, TARSKI, WELLORD1, ZFMISC_1, STRUCT_0, XBOOLE_0,
+      XBOOLE_1, PARTFUN1, ORDERS_1;
  schemes XBOOLE_0;
 
 begin :: Original ORDERS_1
@@ -430,9 +430,7 @@ theorem
         then x in {a1 : for a2 st a2 in [#](A) holds a2 < a1};
        then consider a such that x = a and
                                  A1: for a2 st a2 in [#](A) holds a2 < a;
-        a in the carrier of A;
-        then a in [#](A) by PRE_TOPC:12;
-        hence thesis by A1;
+        thus thesis by A1;
     end;
    thus thesis by XBOOLE_1:2;
   end;
@@ -458,9 +456,7 @@ theorem
         then x in {a1 : for a2 st a2 in [#](A) holds a1 < a2};
        then consider a such that x = a and
                                  A1: for a2 st a2 in [#](A) holds a < a2;
-            a in the carrier of A;
-        then a in [#](A) by PRE_TOPC:12;
-        hence thesis by A1;
+        thus thesis by A1;
     end;
    thus thesis by XBOOLE_1:2;
   end;
@@ -553,15 +549,15 @@ definition let A; let S;
  consistency;
 end;
 
-canceled 3;
-
-theorem Th56:
+ Lm2:
  x in InitSegm(S,a) iff x in LowerCone{a} & x in S by XBOOLE_0:def 3;
+
+canceled 4;
 
 theorem Th57:
  a in InitSegm(S,b) iff a < b & a in S
   proof
-   a in InitSegm(S,b) iff a in LowerCone{b} & a in S by Th56;
+   a in InitSegm(S,b) iff a in LowerCone{b} & a in S by Lm2;
    hence thesis by Th52;
   end;
 
@@ -570,8 +566,10 @@ canceled 2;
 theorem
   InitSegm({}(A),a) = {};
 
-theorem Th61:
+ Lm3:
  InitSegm(S,a) c= S by XBOOLE_1:17;
+
+canceled;
 
 theorem Th62:
   not a in InitSegm(S,a)
@@ -1184,7 +1182,7 @@ A1:    fC1 c< fC2;
           now assume A3: fC2 is Initial_Segm of fC1;
             fC1 <> {} by Def16;
         then ex a st a in fC1 & fC2 = InitSegm(fC1,a) by A3,Def15;
-        then fC2 c= fC1 by Th61;
+        then fC2 c= fC1 by Lm3;
        hence contradiction by A1,A2,XBOOLE_0:def 10;
       end;
      hence thesis by A1,Th83;
@@ -1192,7 +1190,7 @@ A1:    fC1 c< fC2;
     assume A4: fC1 is Initial_Segm of fC2;
            fC2 <> {} by Def16;
      then ex a st a in fC2 & fC1 = InitSegm(fC2,a) by A4,Def15;
-    then fC1 <> fC2 & fC1 c= fC2 by A4,Th61,Th68;
+    then fC1 <> fC2 & fC1 c= fC2 by A4,Lm3,Th68;
    hence thesis by XBOOLE_0:def 8;
   end;
 
@@ -1238,7 +1236,7 @@ registration let A; let f;
   end;
 end;
 
-Lm2: union(Chains(f)) is Subset of A
+Lm4: union(Chains(f)) is Subset of A
  proof
        now let X;
      assume X in Chains(f);
@@ -1248,9 +1246,9 @@ Lm2: union(Chains(f)) is Subset of A
   hence thesis by ZFMISC_1:94;
  end;
 
-Lm3: union(Chains(f)) is Chain of A
+Lm5: union(Chains(f)) is Chain of A
  proof
-   reconsider C = union(Chains(f)) as Subset of A by Lm2;
+   reconsider C = union(Chains(f)) as Subset of A by Lm4;
         the InternalRel of A is_strongly_connected_in C
      proof let x,y;
        assume that A1: x in C and A2: y in C;
@@ -1370,7 +1368,7 @@ A6:      not x in fC by A3,XBOOLE_0:def 4;
 theorem Th89:
      union(Chains(f)) is Chain of f
   proof
-    reconsider C = union(Chains(f)) as Chain of A by Lm3;
+    reconsider C = union(Chains(f)) as Chain of A by Lm5;
      A1: C <> {} by Th87;
      A2: the InternalRel of A well_orders C
       proof
@@ -1649,19 +1647,19 @@ theorem
     hence thesis by Def9;
    end;
 
-Lm4: R is_connected_in X & Y c= X implies R is_connected_in Y
+Lm6: R is_connected_in X & Y c= X implies R is_connected_in Y
  proof assume that A1: R is_connected_in X and A2: Y c= X;
   let x,y;
    assume x in Y & y in Y;
     hence thesis by A1,A2,RELAT_2:def 6;
  end;
 
-Lm5: R well_orders X & Y c= X implies R well_orders Y
+Lm7: R well_orders X & Y c= X implies R well_orders Y
  proof assume that A1: R well_orders X and A2: Y c= X;
          R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X &
     R is_connected_in X by A1,WELLORD1:def 5;
   hence R is_reflexive_in Y & R is_transitive_in Y & R is_antisymmetric_in Y &
-        R is_connected_in Y by A2,Lm4,ORDERS_1:93,94,95;
+        R is_connected_in Y by A2,Lm6,ORDERS_1:93,94,95;
   let Z be set;
    assume that A3: Z c= Y and A4: Z <> {};
          Z c= X & R is_well_founded_in X by A1,A2,A3,WELLORD1:def 5,XBOOLE_1:1;
@@ -1762,7 +1760,7 @@ A13:            x' in (the InternalRel of A)-Seg(x) & x' in Y
                  hence thesis;
                 end;
                     the InternalRel of A well_orders F by Def16;
-               then the InternalRel of A well_orders X by A15,Lm5;
+               then the InternalRel of A well_orders X by A15,Lm7;
                then A18: the InternalRel of A is_well_founded_in X
                                                            by WELLORD1:def 5;
                     now assume X = {};

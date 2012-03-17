@@ -10,7 +10,7 @@ environ
       RELAT_1, QC_LANG1, FUZZY_3, SEQ_1, TARSKI, FUZZY_1, GROUP_1, LATTICE2,
       LATTICE3, WAYBEL_0, MEASURE5, SQUARE_1, BOOLE, YELLOW_0, SEQ_2, INTEGRA1,
       SEQ_4, BHSP_3, ORDINAL2, YELLOW_1, PBOOLE, FUNCT_2, PARTFUN1, MONOID_0,
-      CARD_3, WAYBEL_3, WAYBEL_1, FUNCOP_1;
+      CARD_3, WAYBEL_3, WAYBEL_1, FUNCOP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
       DOMAIN_1, ORDINAL1, PARTFUN1, SUBSET_1, NUMBERS, XREAL_0, REAL_1, SEQ_1,
       SEQ_4, RCOMP_1, RELSET_1, STRUCT_0, ORDERS_2, PBOOLE, MONOID_0, LATTICE3,
@@ -18,7 +18,7 @@ environ
       FUZZY_4, INTEGRA1, PRE_CIRC, XXREAL_0;
  constructors DOMAIN_1, SQUARE_1, PRE_CIRC, REALSET2, LATTICE3, MONOID_0,
       PRALG_1, PSCOMP_1, ORDERS_3, WAYBEL_1, YELLOW_3, WAYBEL_3, INTEGRA1,
-      FUZZY_4, YELLOW12;
+      FUZZY_4, YELLOW12, NAT_D;
  registrations SUBSET_1, LATTICE3, XREAL_0, YELLOW14, RELSET_1, ORDERS_4,
       STRUCT_0, MONOID_0, WAYBEL_2, WAYBEL10, WAYBEL17, WAYBEL_3, MEMBERED,
       YELLOW_1;
@@ -194,22 +194,14 @@ notation
    antonym y ~>= x for x <= y;
    end;
 
-notation
-  let x,y be real number;
-  synonym x <R= y for x <= y;
-   antonym y <R x for x <= y;
-   synonym y >R= x for x <= y;
-   antonym x >R y for x <= y;
-   end;
-
 theorem Th3:
  for R being non empty real RelStr
  for x,y being Element of R
-  holds x <R= y iff x <<= y
+  holds x <= y iff x <<= y
   proof
     let R be non empty real RelStr;
     let x,y be Element of R;
-      [x,y] in the InternalRel of R iff x <R= y by Def1;
+      [x,y] in the InternalRel of R iff x <= y by Def1;
     hence thesis by ORDERS_2:def 9;
   end;
 
@@ -235,15 +227,15 @@ A3:     R' is antisymmetric
          proof
            let x,y be Element of R';
            assume x <<= y & x >>= y;
-           then x <R= y & x >R= y by Th3;
+           then x <= y & x >= y by Th3;
            hence x = y by XXREAL_0:1;
          end;
           R' is transitive
          proof
            let x,y,z be Element of R';
            assume x <<= y & y <<= z;
-           then x <R= y & y <R= z by Th3;
-           then x <R= z by XXREAL_0:2;
+           then x <= y & y <= z by Th3;
+           then x <= z by XXREAL_0:2;
            hence thesis by Th3;
          end;
         hence thesis by A2,A3;
@@ -257,7 +249,7 @@ registration
   proof
     let R be non empty real RelStr;
     let x,y be Element of R;
-      x <R= y or x >R= y;
+      x <= y or x >= y;
     hence thesis by Th3;
   end;
 end;
@@ -273,7 +265,7 @@ definition
  let R be non empty real RelStr;
  let x,y be Element of R;
  redefine func min(x,y) -> Element of R;
- coherence  by XXREAL_0:15;
+ coherence by XXREAL_0:15;
 end;
 
 registration
@@ -286,37 +278,46 @@ reserve
    R for real non empty RelStr,
    a,b for Element of R;
 
-theorem Th4:
-  a"\/"b = max(a,b)
+registration let R; let a,b be Element of R;
+ identify a"\/"b with max(a,b);
+ compatibility
   proof
-      max(a,b) >R= a & max(a,b) >R= b by XXREAL_0:25;
-then A1: max(a,b) >>= a & max(a,b) >>= b by Th3;
-      for d being Element of R st d >>= a & d >>= b holds max(a,b) <<= d
-      proof
+    max(a,b) >= a & max(a,b) >= b by XXREAL_0:25;
+    then
+A1: max(a,b) >>= a & max(a,b) >>= b by Th3;
+    for d being Element of R st d >>= a & d >>= b holds max(a,b) <<= d
+     proof
        let d be Element of R;
        assume d >>= a & d >>= b;
-       then d >R= a & d >R= b by Th3;
-       then max(a,b) <R= d by SQUARE_1:50;
+       then d >= a & d >= b by Th3;
+       then max(a,b) <= d by SQUARE_1:50;
        hence max(a,b) <<= d by Th3;
-      end;
-    hence thesis by A1,YELLOW_0:22;
+     end;
+   hence thesis by A1,YELLOW_0:22;
   end;
-
-theorem Th5:
-  a"/\"b = min(a,b)
+ identify a"/\"b with min(a,b);
+ compatibility
   proof
-      min(a,b) <R= a & min(a,b) <R= b by XXREAL_0:17;
-then A1: min(a,b) <<= a & min(a,b) <<= b by Th3;
-      for d being Element of R st d <<= a & d <<= b holds min(a,b) >>= d
-    proof
+    min(a,b) <= a & min(a,b) <= b by XXREAL_0:17;
+    then
+A2: min(a,b) <<= a & min(a,b) <<= b by Th3;
+    for d being Element of R st d <<= a & d <<= b holds min(a,b) >>= d
+     proof
       let d being Element of R;
       assume d <<= a & d <<= b;
-      then d <R= a & d <R= b by Th3;
-      then d <R= min(a,b) by SQUARE_1:39;
+      then d <= a & d <= b by Th3;
+      then d <= min(a,b) by SQUARE_1:39;
       hence thesis by Th3;
-    end;
-    hence thesis by A1,YELLOW_0:23;
+     end;
+   hence thesis by A2,YELLOW_0:23;
   end;
+end;
+
+theorem
+  a"\/"b = max(a,b);
+
+theorem
+  a"/\"b = min(a,b);
 
 theorem Th6:
   (ex x st x in the carrier of R & for y st y in the carrier of R holds x <= y)
@@ -324,10 +325,10 @@ theorem Th6:
     proof
      hereby given x such that
 A1:   x in the carrier of R &
-      for y st y in the carrier of R holds x <R= y;
+      for y st y in the carrier of R holds x <= y;
       reconsider a = x as Element of R by A1;
         now let b;assume b in the carrier of R;
-          b >R= a by A1;
+          b >= a by A1;
         hence a <<= b by Th3;
       end;
       then a is_<=_than the carrier of R by LATTICE3:def 8;
@@ -349,10 +350,10 @@ theorem Th7:
     proof
       hereby given x such that
 A1:   x in the carrier of R &
-      for y st y in the carrier of R holds x >R= y;
+      for y st y in the carrier of R holds x >= y;
       reconsider a = x as Element of R by A1;
         now let b;assume b in the carrier of R;
-          a >R= b by A1;
+          a >= b by A1;
         hence a >>= b by Th3;
       end;
       then a is_>=_than the carrier of R by LATTICE3:def 9;
@@ -425,7 +426,7 @@ A5:   Y is empty;
       take x;
       thus Y is_<=_than x by A5,YELLOW_0:6;
       let y be Element of R;
-        x <R= y by A1,RCOMP_1:48;
+        x <= y by A1,RCOMP_1:48;
       hence thesis by Th3;
      end;
      suppose A6:Y is non empty;
@@ -1117,14 +1118,14 @@ reserve C for non empty set, c for Element of C,
    s,t for Element of FuzzyLattice C;
 
 theorem Th16:
-  (for c holds f.c <R= g.c) iff (C,f)@ <<= (C,g)@
+  (for c holds f.c <= g.c) iff (C,f)@ <<= (C,g)@
   proof
 A1: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
       by YELLOW_1:def 5;
-A2: (for c holds f.c <R= g.c) implies (C,f)@ <<= (C,g)@
+A2: (for c holds f.c <= g.c) implies (C,f)@ <<= (C,g)@
     proof
      assume
-A3:  for c holds f.c <R= g.c;
+A3:  for c holds f.c <= g.c;
      set f' = (C,f)@, g' = (C,g)@;
      reconsider f',g' as Element of product (C --> RealPoset [. 0,1 .])
          by A1;
@@ -1133,12 +1134,12 @@ A3:  for c holds f.c <R= g.c;
        let c be Element of C;
 A4:    (C --> RealPoset [. 0,1 .]).c = RealPoset [. 0,1 .] by FUNCOP_1:13;
        set f1 = f.c, g1=g.c;
-         f1 <R= g1 & f = f' & g = g' by A3;
+         f1 <= g1 & f = f' & g = g' by A3;
        hence thesis by A4,Th3;
       end;
      hence (C,f)@ <<= (C,g)@ by A1,WAYBEL_3:28;
     end;
-     (C,f)@ <<= (C,g)@ implies (for c holds f.c <R= g.c)
+     (C,f)@ <<= (C,g)@ implies (for c holds f.c <= g.c)
     proof
      assume
 A5:  (C,f)@ <<= (C,g)@;
@@ -1153,7 +1154,7 @@ A6:    (C --> RealPoset [. 0,1 .]).c = RealPoset [. 0,1 .] by FUNCOP_1:13;
   end;
 
 theorem
-    s <<= t iff for c holds @s.c <R= @t.c
+    s <<= t iff for c holds @s.c <= @t.c
   proof
     (C,@s)@ = s & (C,@t)@ = t;
     hence thesis by Th16;
@@ -1171,7 +1172,7 @@ A2:   for c being Element of C holds J.c is sup-Semilattice by FUNCOP_1:13;
         by A1;
 A3:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
       thus (@fg).c = ((C,f)@.c) "\/" ((C,g)@.c) by  A1,A2,A3,Th12
-      .= max(f.c, g.c) by Th4;
+      .= max(f.c, g.c);
     end;
     then @fg = max(f,g) by FUZZY_1:def 5;
     hence thesis;
@@ -1194,7 +1195,7 @@ A1: (RealPoset [. 0,1 .]) |^ C = product (C --> RealPoset [. 0,1 .])
 A2:   for c being Element of C holds J.c is Semilattice by FUNCOP_1:13;
 A3:   J.c = RealPoset [. 0,1 .] by FUNCOP_1:13;
       thus (@fg).c = ((C,f)@.c) "/\" ((C,g)@.c) by A1,A2,A3,Th11
-      .= min(f.c, g.c) by Th5;
+      .= min(f.c, g.c);
     end;
     then @fg = min(f,g) by FUZZY_1:def 4;
     hence thesis;
@@ -1580,15 +1581,13 @@ A1:  Y = dom min(R,S,x,z)
        hereby assume c in L;
        then consider y being Element of Y such that
 A2:    c = R.(x,y) "/\" S.(y,z);
-         c = min(R. [x,y], S. [y,z] qua real number) by A2,Th5
-        .= min(R,S,x,z).y by FUZZY_4:def 2;
+         c = min(R,S,x,z).y by  A2,FUZZY_4:def 2;
        hence c in rng min(R,S,x,z) by A1,PARTFUN1:27;
        end;
        assume c in rng min(R,S,x,z);
        then consider y being Element of Y such that
 A3:    y in dom min(R,S,x,z) & c = min(R,S,x,z).y by PARTFUN1:26;
-         c = min(R. [x,y], S. [y,z] qua real number) by A3,FUZZY_4:def 2
-        .= R.(x,y) "/\" S.(y,z) by Th5;
+         c = R.(x,y) "/\" S.(y,z) by A3,FUZZY_4:def 2;
        hence c in L;
       end;
      hence rng min(R,S,x,z) = L by TARSKI:2;
@@ -1616,7 +1615,9 @@ theorem Th22:
     let R being RMembership_Func of X,Y;
     let S being RMembership_Func of Y,Z;
     let x being Element of X, z being Element of Z;
-A1: (R (#) S). [x,z] = upper_bound(rng(min(R,S,x,z))) by FUZZY_4:def 3;
+     [x,z] in [:X,Z:];
+    then
+A1: (R (#) S).(x,z) = upper_bound(rng(min(R,S,x,z))) by FUZZY_4:def 3;
     set
     L = {R.(x,y) "/\" S.(y,z) where y is Element of Y: not contradiction};
 A2: (R (#) S). [x,z] is_>=_than L
@@ -1630,8 +1631,7 @@ A2: (R (#) S). [x,z] is_>=_than L
 A3:     b = R.(x,y) "/\" S.(y,z) & not contradiction;
         reconsider b as Real by Lm4;
 A4:     dom min(R,S,x,z) = Y by FUZZY_1:def 1;
-          b = min(R. [x,y], S. [y,z] qua real number) by A3,Th5
-        .= min(R,S,x,z).y by FUZZY_4:def 2;
+          b = min(R,S,x,z).y by  A3,FUZZY_4:def 2;
         then b <= upper_bound rng min(R,S,x,z) by A4,FUZZY_4:1;
         hence thesis by A1,Th3;
        end;

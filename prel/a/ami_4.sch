@@ -13,6 +13,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="NAT_D"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -50,7 +53,7 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="67">
+<Func kind="K" nr="73">
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>
 </Func>
@@ -125,7 +128,7 @@
 <Num nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="63">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>

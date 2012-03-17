@@ -13,21 +13,21 @@ environ
       CARD_5, CARD_3, RELOC, FUNCT_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, MCART_1, SETFAM_1, RELAT_1,
       FUNCT_1, FUNCT_2, REALSET1, ORDINAL1, NUMBERS, XCMPLX_0, INT_1, NAT_1,
-      CQC_LANG, FINSEQ_1, FINSEQ_2, FUNCT_4, COMPLEX1, GR_CY_1, CARD_3,
+      NAT_D, CQC_LANG, FINSEQ_1, FINSEQ_2, FUNCT_4, COMPLEX1, GR_CY_1, CARD_3,
       FUNCT_7, FINSEQ_4, AMI_1, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, AMI_5,
       SCMFSA_3, AMISTD_1, AMISTD_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, MEMBERED, FINSEQ_4, INT_2,
-      FUNCT_7, PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2;
+      FUNCT_7, PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2, NAT_D;
  registrations AMI_1, RELSET_1, SCMRING1, TEX_2, AMISTD_2, RELAT_1, FINSEQ_1,
       INT_1, SCMFSA_2, FUNCT_7, AMI_3, NAT_1, FRAENKEL, MEMBERED, ORDINAL1,
       SETFAM_1, STRUCT_0, CARD_3;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions TARSKI, FUNCT_1, FUNCT_2, AMISTD_1, AMISTD_2, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, FUNCT_2, SCMFSA_2, AMISTD_1, AMISTD_2, XBOOLE_0;
  theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, FUNCT_1, FUNCT_2, RELSET_1,
       CQC_LANG, SETFAM_1, AMI_2, AMISTD_1, MCART_1, FINSEQ_1, FINSEQ_3,
       GR_CY_1, AMISTD_2, AMI_6, FUNCT_7, CARD_3, SCMFSA6A, SCMFSA_1, SCMFSA_2,
-      INT_1, SCMBSORT, ENUMSET1, BVFUNC14, ABSVALUE, FINSEQ_4, YELLOW14,
-      GROUP_7, FINSEQ_2, ORDINAL1, XBOOLE_0, XBOOLE_1, YELLOW_8, NEWTON;
+      INT_1, SCMBSORT, ENUMSET1, BVFUNC14, ABSVALUE, FINSEQ_4, GROUP_7,
+      FINSEQ_2, ORDINAL1, XBOOLE_0, XBOOLE_1, YELLOW_8, NEWTON, NAT_D;
  schemes FUNCT_2;
 
 begin
@@ -51,11 +51,8 @@ theorem Th1:
 A1:   a <> b & a <> c;
     thus ( f +* (a .--> A) +* (b .--> B) +* (c .--> C) ).a
        = ( f +* (a .--> A) ).a by A1,SCMBSORT:6
-      .= A by YELLOW14:3;
+      .= A by FUNCT_7:96;
   end;
-
-theorem
- for a, b being set holds <*a*> +* (1,b) = <*b*> by FUNCT_7:97;
 
 definition
   let la, lb be Int-Location,
@@ -69,18 +66,20 @@ coherence
   end;
 end;
 
+canceled;
+
 theorem Th3:
  not a in the Instruction-Locations of SCM+FSA
   proof
     a in SCM+FSA-Data-Loc by SCMFSA_2:def 4;
-    hence thesis by SCMFSA_2:13,def 2,XBOOLE_0:3;
+    hence thesis by SCMFSA_2:13,XBOOLE_0:3;
   end;
 
 theorem Th4:
  not f in the Instruction-Locations of SCM+FSA
   proof
     f in SCM+FSA-Data*-Loc by SCMFSA_2:def 5;
-    hence thesis by SCMFSA_2:14,def 3,XBOOLE_0:3;
+    hence thesis by SCMFSA_2:14,XBOOLE_0:3;
   end;
 
 theorem Th5:
@@ -127,11 +126,7 @@ A1: i1 <> i2 & Next i1 = Next i2;
 A2: m1 = i1 & Next i1 = Next m1 by SCMFSA_2:def 9;
     consider m2 being Element of SCM+FSA-Instr-Loc such that
 A3: m2 = i2 & Next i2 = Next m2 by SCMFSA_2:def 9;
-    reconsider M1 = m1, M2 = m2 as Element of SCM-Instr-Loc by SCMFSA_1:def 3;
-    (ex L1 being Element of SCM-Instr-Loc st L1 = m1 & Next m1 = Next L1) &
-    ex L2 being Element of SCM-Instr-Loc st L2 = m2 & Next m2 = Next L2
-      by SCMFSA_1:def 15;
-    then Next m1 = M1+2 & Next m2 = M2+2 by AMI_2:def 15;
+    Next m1 = m1+2 & Next m2 = m2+2 by AMI_2:def 15;
     hence contradiction by A1,A2,A3;
   end;
 
@@ -226,10 +221,10 @@ Lm4:
  T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or T = 8
   or T = 9 or T = 10 or T = 11 or T = 12
   proof
-    T in Segm 13 by SCMFSA_2:def 1;
+    T in Segm 13;
     then reconsider t = T as Element of NAT;
-    t = 0 or t < 12+1 by GR_CY_1:10,SCMFSA_2:def 1;
-    then t = 0 or t <= 12 by NAT_1:38;
+    t = 0 or t < 12+1 by GR_CY_1:10;
+    then t = 0 or t <= 12 by NAT_1:13;
     hence thesis by SCMBSORT:14;
   end;
 
@@ -295,29 +290,25 @@ theorem Th25:
 theorem Th26:
  AddressPart (b:=(f,a)) = <*b,f,a*>
   proof
-    thus AddressPart (b:=(f,a)) = [ 9, <*b,f,a*>]`2 by SCMFSA_2:def 19
-       .= <*b,f,a*> by MCART_1:def 2;
+    thus AddressPart (b:=(f,a)) = <*b,f,a*> by MCART_1:def 2;
   end;
 
 theorem Th27:
  AddressPart ((f,a):=b) = <*b,f,a*>
   proof
-    thus AddressPart ((f,a):=b) = [ 10, <*b,f,a*>]`2 by SCMFSA_2:def 20
-       .= <*b,f,a*> by MCART_1:def 2;
+    thus AddressPart ((f,a):=b) = <*b,f,a*> by MCART_1:def 2;
   end;
 
 theorem Th28:
  AddressPart (a:=len f) = <*a,f*>
   proof
-    thus AddressPart (a:=len f) = [ 11, <*a,f*>]`2 by SCMFSA_2:def 21
-       .= <*a,f*> by MCART_1:def 2;
+    thus AddressPart (a:=len f) = <*a,f*> by MCART_1:def 2;
   end;
 
 theorem Th29:
  AddressPart (f:=<0,...,0>a) = <*a,f*>
   proof
-    thus AddressPart (f:=<0,...,0>a) = [ 12, <*a,f*>]`2 by SCMFSA_2:def 22
-       .= <*a,f*> by MCART_1:def 2;
+    thus AddressPart (f:=<0,...,0>a) = <*a,f*> by MCART_1:def 2;
   end;
 
 theorem Th30:
@@ -353,7 +344,10 @@ A1: T = 0 or T = 1 or T = 2 or T = 3 or T = 4 or T = 5 or T = 6 or T = 7 or
        InsCode (a =0_goto i1) = 7 & InsCode (a >0_goto i1) = 8 &
         InsCode (b:=(f,a)) = 9 & InsCode ((f,a):=b) = 10 &
          InsCode (a:=len f) = 11 & InsCode (f:=<0,...,0>a) = 12
-       by SCMFSA_2:42,43,44,45,46,47,48,49,50,51,52,53,124;
+       by SCMFSA_2:42,43,44,45,46,
+47,48,49,50,51,52,
+53,
+124;
     then AddressPart halt SCM+FSA in AddressParts T or
      AddressPart (a:=b) in AddressParts T or
       AddressPart AddTo(a,b) in AddressParts T or
@@ -1693,7 +1687,7 @@ Lm6:
 A1:   for l being Instruction-Location of SCM+FSA holds NIC(i,l)={Next l};
     consider p, q being Element of the Instruction-Locations of SCM+FSA
      such that
-A2:   p <> q by SCMFSA_1:def 3,SCMFSA_2:def 1,YELLOW_8:def 1;
+A2:   p <> q by YELLOW_8:def 1;
     set X = { NIC(i,f) where f is Instruction-Location of SCM+FSA:
         not contradiction };
     assume not thesis;
@@ -1763,7 +1757,7 @@ A1:   x in meet X by XBOOLE_0:def 1;
    then {i1} in X & {i2} in X by Th68;
    then x in {i1} & x in {i2} by A1,SETFAM_1:def 1;
    then x = i1 & x = i2 by TARSKI:def 1;
- hence contradiction by SCMFSA_2:18;
+ hence contradiction by AMI_3:53;
 end;
 end;
 
@@ -2029,7 +2023,7 @@ set X = { NIC(a=0_goto i1, il) : not contradiction };
       NIC(a=0_goto i1, il2) = {i1, Next il2} by Th76;
   then A3: (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A2,
 TARSKI:def 2;
-         il1 <> il2 by SCMFSA_2:18;
+         il1 <> il2 by AMI_3:53;
    hence x in {i1} by A3,Th8,TARSKI:def 1;
   end;
   assume x in {i1};
@@ -2150,7 +2144,7 @@ set X = { NIC(a>0_goto i1, il) : not contradiction };
       NIC(a>0_goto i1, il2) = {i1, Next il2} by Th78;
   then A3: (x = i1 or x = Next il1) & (x = i1 or x = Next il2) by A2,
 TARSKI:def 2;
-         il1 <> il2 by SCMFSA_2:18;
+         il1 <> il2 by AMI_3:53;
    hence x in {i1} by A3,Th8,TARSKI:def 1;
   end;
   assume x in {i1};
@@ -2384,7 +2378,7 @@ A2:   f is bijective
   A4: f.x1 = f.x2;
       reconsider k1 = x1, k2 = x2 as Element of NAT by A3,FUNCT_2:def 1;
          f.k1 = insloc k1 & f.k2 = insloc k2 by A1;
-      hence x1 = x2 by A4,SCMFSA_2:18;
+      hence x1 = x2 by A4,AMI_3:53;
     end;
     thus f is onto
     proof
@@ -2416,7 +2410,7 @@ A2:   f is bijective
      end;
      suppose f.j = Next (f.k);
          then j = k+1 by A7,A8,A10,A11,FUNCT_1:def 8;
-      hence k <= j by NAT_1:29;
+      hence k <= j by NAT_1:11;
    end;
    end;
 
@@ -2636,7 +2630,7 @@ A2: intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
    dom ((intloc 0, intloc 1)-->(0,1)) = {intloc 0, intloc 1} by FUNCT_4:65;
 then A3: intloc 0 in dom ((intloc 0, intloc 1)-->(0,1)) &
    intloc 1 in dom ((intloc 0, intloc 1)-->(0,1)) by TARSKI:def 2;
-A4: intloc 0 <> intloc 1 by SCMFSA_2:16;
+A4: intloc 0 <> intloc 1 by AMI_3:52;
 A5: t.intloc 0 = (intloc 0, intloc 1)-->(0,1).intloc 0 by A3,FUNCT_4:14
           .= 0 by A4,FUNCT_4:66;
       Exec((intloc 0:=intloc 1), t).intloc 0
@@ -2658,7 +2652,7 @@ A7: intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
 ;
 then A8: intloc 0 in dom ((intloc 0, intloc 1)-->(0,1)) &
    intloc 1 in dom ((intloc 0, intloc 1)-->(0,1)) by TARSKI:def 2;
-A9: intloc 0 <> intloc 1 by SCMFSA_2:16;
+A9: intloc 0 <> intloc 1 by AMI_3:52;
 A10: t.intloc 0 = (intloc 0, intloc 1)-->(0,1).intloc 0 by A8,FUNCT_4:14
              .= 0 by A9,FUNCT_4:66;
 A11: t.intloc 1 = (intloc 0, intloc 1)-->(0,1).intloc 1 by A8,FUNCT_4:14
@@ -2681,7 +2675,7 @@ A13: intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
 ;
 then A14: intloc 0 in dom ((intloc 0, intloc 1)-->(0,1)) &
    intloc 1 in dom ((intloc 0, intloc 1)-->(0,1)) by TARSKI:def 2;
-A15: intloc 0 <> intloc 1 by SCMFSA_2:16;
+A15: intloc 0 <> intloc 1 by AMI_3:52;
 A16: t.intloc 0 = (intloc 0, intloc 1)-->(0,1).intloc 0 by A14,FUNCT_4:14
           .= 0 by A15,FUNCT_4:66;
 A17: t.intloc 1 = (intloc 0, intloc 1)-->(0,1).intloc 1 by A14,FUNCT_4:14
@@ -2703,7 +2697,7 @@ A19:  intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
        dom ((intloc 0, intloc 1)-->(1,0)) = {intloc 0, intloc 1} by FUNCT_4:65;
      then A20: intloc 0 in dom ((intloc 0, intloc 1)-->(1,0)) &
    intloc 1 in dom ((intloc 0, intloc 1)-->(1,0)) by TARSKI:def 2;
-A21: intloc 0 <> intloc 1 by SCMFSA_2:16;
+A21: intloc 0 <> intloc 1 by AMI_3:52;
 A22: t.intloc 0 = (intloc 0, intloc 1)-->(1,0).intloc 0 by A20,FUNCT_4:14
              .= 1 by A21,FUNCT_4:66;
 A23: t.intloc 1 = (intloc 0, intloc 1)-->(1,0).intloc 1 by A20,FUNCT_4:14
@@ -2725,7 +2719,7 @@ A25:  intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
     dom ((intloc 0, intloc 1)-->(7,3)) = {intloc 0, intloc 1} by FUNCT_4:65;
 then A26: intloc 0 in dom ((intloc 0, intloc 1)-->(7,3)) &
    intloc 1 in dom ((intloc 0, intloc 1)-->(7,3)) by TARSKI:def 2;
-A27: intloc 0 <> intloc 1 by SCMFSA_2:16;
+A27: intloc 0 <> intloc 1 by AMI_3:52;
 A28: t.intloc 0 = (intloc 0, intloc 1)-->(7,3).intloc 0 by A26,FUNCT_4:14
           .= 7 by A27,FUNCT_4:66;
 A29: t.intloc 1 = (intloc 0, intloc 1)-->(7,3).intloc 1 by A26,FUNCT_4:14
@@ -2733,8 +2727,8 @@ A29: t.intloc 1 = (intloc 0, intloc 1)-->(7,3).intloc 1 by A26,FUNCT_4:14
 A30: 7 = 2 * 3 + 1;
       Exec(Divide(intloc 0, intloc 1), t).intloc 0
     = 7 div (3 qua Integer) by A27,A28,A29,SCMFSA_2:93
-   .= 7 div (3 qua Element of NAT) by NEWTON:101
-   .= 2 by A30,NAT_1:def 1;
+   .= 7 div (3 qua Element of NAT)
+   .= 2 by A30,NAT_D:def 1;
   hence thesis by A24,A25,A28,AMISTD_1:def 3;
 end;
 end;
@@ -2804,9 +2798,9 @@ A1: InsCode (b:=(f,a)) = 9 by SCMFSA_2:50
 A2: intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
        fsloc 0 <> intloc 0 & fsloc 0 <> intloc 1 by SCMFSA_2:83;
 then A3: t.fsloc 0 = F by Th1;
-       intloc 0 <> intloc 1 by SCMFSA_2:16;
+       intloc 0 <> intloc 1 by AMI_3:52;
 then A4: t.intloc 0 = D by BVFUNC14:15;
-A5: t.intloc 1 = E by YELLOW14:3;
+A5: t.intloc 1 = E by FUNCT_7:96;
     consider k being Element of NAT such that
 A6:   k = abs( t.intloc 1 ) and
 A7:   Exec((intloc 0):=(fsloc 0, intloc 1), t).intloc 0 = (t.fsloc 0) /. k
@@ -2837,9 +2831,9 @@ A9: InsCode ((f,a):=b) = 10 by SCMFSA_2:51
 A10: fsloc 0 <> IC SCM+FSA by SCMFSA_2:82;
        fsloc 0 <> intloc 0 & fsloc 0 <> intloc 1 by SCMFSA_2:83;
 then A11: t.fsloc 0 = F by Th1;
-       intloc 0 <> intloc 1 by SCMFSA_2:16;
+       intloc 0 <> intloc 1 by AMI_3:52;
 then A12: t.intloc 0 = D by BVFUNC14:15;
-A13: t.intloc 1 = E by YELLOW14:3;
+A13: t.intloc 1 = E by FUNCT_7:96;
     consider k being Element of NAT such that
 A14:   k = abs( t.intloc 1 ) and
 A15:   Exec((fsloc 0, intloc 1):=(intloc 0), t).fsloc 0 =
@@ -2889,7 +2883,7 @@ A1: InsCode (a:=len f) = 11 by SCMFSA_2:52
 A2: intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
        fsloc 0 <> intloc 0 by SCMFSA_2:83;
 then A3: t.fsloc 0 = F by BVFUNC14:15;
-A4: t.intloc 0 = D by YELLOW14:3;
+A4: t.intloc 0 = D by FUNCT_7:96;
        Exec(intloc 0 :=len fsloc 0, t).intloc 0
      = len (t.fsloc 0) by SCMFSA_2:100
     .= 1 by A3,FINSEQ_1:56;
@@ -2911,7 +2905,7 @@ A5: InsCode (f:=<0,...,0>a) = 12 by SCMFSA_2:53
 A6: fsloc 0 <> IC SCM+FSA by SCMFSA_2:82;
        fsloc 0 <> intloc 0 by SCMFSA_2:83;
 then A7: t.fsloc 0 = F by BVFUNC14:15;
-A8: t.intloc 0 = D by YELLOW14:3;
+A8: t.intloc 0 = D by FUNCT_7:96;
     consider k being Element of NAT such that
 A9:   k = abs( t.intloc 0 ) and
 A10:   Exec(fsloc 0:=<0,...,0>intloc 0, t).fsloc 0 = k |-> 0 by SCMFSA_2:101;
@@ -2966,7 +2960,9 @@ A2:   J = [0,{}] or
       ex a,f st J = f:=<0,...,0>a by SCMFSA_2:120;
       per cases by SCMFSA_2:120;
       suppose I = [0,{}];
-      hence thesis by A1,A2,AMI_3:71,SCMFSA_2:42,43,44,45,46,47,48,49,50,51,52
+      hence thesis by A1,A2,AMI_3:71,SCMFSA_2:42,43,44,
+45,46,47,48,49,50,
+51,52
 ,53,123,124;
       end;
       suppose ex a,b st I = a:=b;
@@ -2998,7 +2994,8 @@ A5:       J = d1:=d2;
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A4,SCMFSA_2:43,44,45,46,47,48,49,50,51,52,53;
+          by A1,A4,SCMFSA_2:43,44,45,46,47,
+48,49,50,51,52,53;
       end;
       end;
       hence thesis;
@@ -3032,7 +3029,8 @@ A8:       J = AddTo(d1,d2);
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A7,SCMFSA_2:42,44,45,46,47,48,49,50,51,52,53;
+          by A1,A7,SCMFSA_2:42,44,45,46,47,
+48,49,50,51,52,53;
       end;
       end;
       hence thesis;
@@ -3066,7 +3064,9 @@ A11:       J = SubFrom(d1,d2);
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A10,SCMFSA_2:42,43,45,46,47,48,49,50,51,52,53;
+          by A1,A10,SCMFSA_2:42,43,45,46,
+47,48,49,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3100,7 +3100,9 @@ A14:       J = MultBy(d1,d2);
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A13,SCMFSA_2:42,43,44,46,47,48,49,50,51,52,53;
+          by A1,A13,SCMFSA_2:42,43,44,46,
+47,48,49,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3134,7 +3136,9 @@ A17:       J = Divide(d1,d2);
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A16,SCMFSA_2:42,43,44,45,47,48,49,50,51,52,53;
+          by A1,A16,SCMFSA_2:42,43,44,45,
+47,48,49,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3168,7 +3172,9 @@ A20:       J = goto i2;
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A19,SCMFSA_2:42,43,44,45,46,48,49,50,51,52,53;
+          by A1,A19,SCMFSA_2:42,43,44,45,
+46,48,49,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3202,7 +3208,9 @@ A23:       J = d1 =0_goto i2;
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A22,SCMFSA_2:42,43,44,45,46,47,49,50,51,52,53;
+          by A1,A22,SCMFSA_2:42,43,44,45,
+46,47,49,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3236,7 +3244,9 @@ A26:       J = d1 >0_goto i2;
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A25,SCMFSA_2:42,43,44,45,46,47,48,50,51,52,53;
+          by A1,A25,SCMFSA_2:42,43,44,45,
+46,47,48,50,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3270,7 +3280,9 @@ A29:       J = d2:=(f1,d1);
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A28,SCMFSA_2:42,43,44,45,46,47,48,49,51,52,53;
+          by A1,A28,SCMFSA_2:42,43,44,45,
+46,47,48,49,51,52,
+53;
       end;
       end;
       hence thesis;
@@ -3304,7 +3316,9 @@ A32:       J = (f1,d1):=d2;
                 (ex a,f st J = a:=len f) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A31,SCMFSA_2:42,43,44,45,46,47,48,49,50,52,53;
+          by A1,A31,SCMFSA_2:42,43,44,45,
+46,47,48,49,50,52,
+53;
       end;
       end;
       hence thesis;
@@ -3338,7 +3352,9 @@ A35:       J = d1:=len f1;
                 (ex a,b,f st J = (f,a):=b) or
                  ex a,f st J = f:=<0,...,0>a;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A34,SCMFSA_2:42,43,44,45,46,47,48,49,50,51,53;
+          by A1,A34,SCMFSA_2:42,43,44,45,
+46,47,48,49,50,51,
+53;
       end;
       end;
       hence thesis;
@@ -3372,7 +3388,9 @@ A38:       J = f1:=<0,...,0>d1;
                 (ex a,b,f st J = (f,a):=b) or
                  ex a,f st J = a:=len f;
         hence dom AddressPart I = dom AddressPart J
-          by A1,A37,SCMFSA_2:42,43,44,45,46,47,48,49,50,51,52;
+          by A1,A37,SCMFSA_2:42,43,44,45,
+46,47,48,49,50,51,
+52;
       end;
       end;
       hence thesis;

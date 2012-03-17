@@ -14,10 +14,10 @@ environ
  registrations FUNCT_1, RELAT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1,
       PARTFUN1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, PARTFUN1, FUNCT_1;
+ definitions TARSKI, XBOOLE_0, PARTFUN1, FUNCT_1, SUBSET_1;
  theorems TARSKI, RELAT_1, FUNCT_1, ZFMISC_1, PARTFUN1, GRFUNC_1, RELSET_1,
       SUBSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, RELAT_2, MCART_1;
- schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1;
+ schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1, WELLORD2;
 
 begin
 
@@ -686,7 +686,7 @@ A2:  g*f = id X;
    hence thesis by A2,FUNCT_1:53;
  end;
 
-theorem
+theorem Th38:
   for f being Function of X,Y
     st (Y = {} implies X = {}) & Z c= X holds f|Z is Function of Z,Y
  proof let f be Function of X,Y such that
@@ -798,7 +798,7 @@ theorem
   thus thesis by FUNCT_1:142;
  end;
 
-theorem
+theorem Th50:
   for f being Function of X,Y
      st (Y = {} implies X = {}) & P c= X holds P c= f"(f.:P)
  proof let f be Function of X,Y;
@@ -1134,7 +1134,7 @@ theorem
 
 canceled 3;
 
-theorem
+theorem Th92:
   for f being Permutation of X st P c= X holds f.:(f"P) = P & f"(f.:P) = P
  proof let f be Permutation of X such that
 A1: P c= X;
@@ -1932,18 +1932,106 @@ theorem
    for i being set st i in N holds R.:{i} = f.i
  proof let N be set, f be Function of N, bool N;
    deffunc F(set) = f.$1;
-A1: N = [#]N by SUBSET_1:def 4;
-A2: for i being Element of N st i in [#]N holds F(i) c= [#]N
+A1: for i being Element of N st i in [#]N holds F(i) c= [#]N
     proof let i be Element of N;
      assume i in [#]N;
       then f.i in bool N by Th7;
-     hence F(i) c= [#]N by A1;
+     hence F(i) c= [#]N;
     end;
    consider R being Relation of [#]N such that
-A3: for i being Element of N st i in [#]N holds R.:{i} = F(i)
-                from RELSET_1:sch 3(A2);
-   reconsider R as Relation of N by A1;
+A2: for i being Element of N st i in [#]N holds R.:{i} = F(i)
+                from RELSET_1:sch 3(A1);
+   reconsider R as Relation of N;
   take R;
-  thus thesis by A3,A1;
+  thus thesis by A2;
  end;
+
+:: Moved from BORSUK_1 by AK on 27.12.2006
+
+theorem Th171:
+  for A being Subset of X holds (id X)"A = A
+ proof
+   let A be Subset of X;
+   thus A = (id X)"((id X).:A) by Th92
+   .= (id X)"A by FUNCT_1:162;
+ end;
+
+:: Moved from TMAP_1 by AK on 27.12.2006
+
+reserve A,B for non empty set;
+
+theorem
+ for f being Function of A,B, A0 being Subset of A,
+     B0 being Subset of B
+  holds f.:A0 c= B0 iff A0 c= f"B0
+ proof let f be Function of A,B, A0 be Subset of A,
+     B0 be Subset of B;
+  thus f.:A0 c= B0 implies A0 c= f"B0
+   proof assume f.:A0 c= B0;
+    then f"(f.:A0) c= f"B0 & A0 c= f"(f.:A0) by Th50,RELAT_1:178;
+    hence A0 c= f"B0 by XBOOLE_1:1;
+   end;
+  thus A0 c= f"B0 implies f.:A0 c= B0
+   proof assume A0 c= f"B0;
+    then f.:A0 c= f.:f"B0 & f.:f"B0 c= B0 by FUNCT_1:145,RELAT_1:156;
+    hence f.:A0 c= B0 by XBOOLE_1:1;
+   end;
+ end;
+
+theorem
+ for f being Function of A,B, A0 being non empty Subset of A,
+  f0 being Function of A0,B st
+   for c being Element of A st c in A0 holds f.c = f0.c
+    holds f|A0 = f0
+ proof let f be Function of A,B, A0 be non empty Subset of A,
+            f0 be Function of A0,B such that
+    A1: for c being Element of A st c in A0 holds f.c = f0.c;
+  reconsider g = f|A0 as Function of A0,B by Th38;
+       for c being Element of A0 holds g.c = f0.c
+    proof let c be Element of A0;
+     thus g.c = f.c by FUNCT_1:72
+             .= f0.c by A1;
+    end;
+  hence thesis by Th113;
+ end;
+
+theorem
+ for f being Function, A0, C being set st
+   C c= A0 holds f.:C = (f|A0).:C
+ proof let f be Function, A0, C be set;
+  assume A1: C c= A0;
+  thus (f|A0).:C = (f*(id A0)).:C by RELAT_1:94
+               .= f.:((id A0).:C) by RELAT_1:159
+               .= f.:C by A1,FUNCT_1:162;
+ end;
+
+theorem
+ for f being Function, A0, D being set st
+   f"D c= A0 holds f"D = (f|A0)"D
+ proof let f be Function, A0, D be set;
+  assume A1: f"D c= A0;
+  thus (f|A0)"D = (f*(id A0))"D by RELAT_1:94
+               .= (id A0)"(f"D) by RELAT_1:181
+               .= f"D by A1,Th171;
+ end;
+
+scheme MChoice{A()-> non empty set, B()-> non empty set,
+                  F(set) -> set}:
+ex t being Function of A(),B() st
+  for a being Element of A() holds t.a in F(a)
+provided
+A1: for a being Element of A() holds B() meets F(a)
+proof
+   defpred P[set,set] means $2 in F($1);
+A2: for e being set st e in A() ex u being set st u in B() & P[e,u]
+ proof let e be set; assume e in A(); then B() meets F(e) by A1;
+  hence thesis by XBOOLE_0:3;
+ end;
+ consider t being Function such that
+A3:  dom t = A() & rng t c= B() and
+A4:  for e being set st e in A() holds P[e,t.e] from WELLORD2:sch 1(A2);
+ reconsider t as Function of A(),B() by A3,Def1,RELSET_1:11;
+ take t; let a be Element of A();
+ thus t.a in F(a) by A4;
+end;
 

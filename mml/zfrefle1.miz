@@ -8,13 +8,13 @@ environ
 
  vocabularies ZF_LANG, ZF_MODEL, QMAX_1, BOOLE, FUNCT_1, QC_LANG1, CLASSES2,
       ORDINAL1, ZF_REFLE, ORDINAL2, CARD_1, FINSET_1, RELAT_1, CLASSES1,
-      TARSKI, FUNCT_2, ORDINAL4, FUNCT_5, PROB_1, ZFREFLE1;
+      TARSKI, FUNCT_2, ORDINAL4, FUNCT_5, PROB_1, ZFREFLE1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, FINSET_1, NUMBERS, NAT_1, ORDINAL1, ZF_LANG, ZF_MODEL,
-      WELLORD2, CARD_1, ORDINAL2, CARD_3, FUNCT_5, ORDINAL3, CLASSES1,
-      CLASSES2, ORDINAL4, ZF_LANG1, ZF_REFLE;
+      FUNCT_2, BINOP_1, FINSET_1, NUMBERS, NAT_1, NAT_D, ORDINAL1, ZF_LANG,
+      ZF_MODEL, WELLORD2, CARD_1, ORDINAL2, CARD_3, FUNCT_5, ORDINAL3,
+      CLASSES1, CLASSES2, ORDINAL4, ZF_LANG1, ZF_REFLE;
  constructors ENUMSET1, RELAT_2, WELLORD2, BINOP_1, ORDINAL3, XXREAL_0,
-      XREAL_0, NAT_1, ZF_MODEL, FUNCT_5, CLASSES1, ZF_LANG1, ZF_REFLE;
+      XREAL_0, NAT_1, ZF_MODEL, FUNCT_5, CLASSES1, ZF_LANG1, ZF_REFLE, NAT_D;
  registrations ORDINAL1, ZF_LANG, ORDINAL2, CLASSES2, ZF_LANG1, RELSET_1,
       CARD_1, FUNCT_2, PARTFUN1, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -27,7 +27,10 @@ environ
 
 begin
 
-Lm1: 1 = succ 0;
+Lm1: {} in omega by ORDINAL1:def 12;
+Lm2: omega is_limit_ordinal by ORDINAL1:def 12;
+
+Lm3: 1 = succ 0;
 
  reserve H,S for ZF-formula,
          x for Variable,
@@ -173,7 +176,7 @@ A4:    P[i];
       let H;
       assume
 A5:    card Free H = i+1; then
-A6:    Free H <> {} by CARD_1:47,NAT_1:21;
+A6:    Free H <> {} by CARD_1:47,NAT_1:5;
       consider e being Element of Free H;
       reconsider x = e as Variable by A6,TARSKI:def 3;
 A7:    Free All(x,H) = Free H \ {x} by ZF_LANG1:67;
@@ -670,7 +673,7 @@ A2:     u in 1 & e = psi.u by A1,FUNCT_1:def 5;
         B in C & C in dom psi;
       hence thesis by A1,ORDINAL3:17;
      end;
-       dom psi = {{}} & {} in 1 by A1,ORDINAL1:10,ORDINAL3:18,Lm1;
+       dom psi = {{}} & {} in 1 by A1,ORDINAL1:10,ORDINAL3:18,Lm3;
     then rng psi = {psi.{}} & psi.{} = A & sup psi = sup rng psi
      by A1,FUNCT_1:14;
    hence thesis by ORDINAL2:31;
@@ -798,9 +801,10 @@ then A6:  dom xi = omega & a = sup rng xi by RELAT_1:91;
     then rng xi c= W by XBOOLE_1:1;
     then rng xi in W by A1,A6,Th12; then a in W by ZF_REFLE:28;
    then reconsider a as Ordinal of W by ORDINAL4:def 2;
-   take a;  0-element_of W = {} & 0-element_of W in dom nu
+   take a;
+   0-element_of W = {} & 0-element_of W in dom nu
      by ORDINAL4:35,36;
-    then A7: b in rng xi by A2,FUNCT_1:73,ORDINAL2:19;
+    then A7: b in rng xi by A2,Lm1,FUNCT_1:73;
    hence
     b in a by ORDINAL2:27;
 A8:  rng xi c= a
@@ -863,9 +867,8 @@ A23:    P[C] from ORDINAL2:sch 1(A13,A14,A21);
 A24:  a in dom phi by ORDINAL4:36;
     then A25: a c= dom phi by ORDINAL1:def 2;
 then A26:  a is_limit_ordinal & a <> {} & phi|a is increasing & dom (phi|a) = a
-&
-    a in
- dom phi by A1,A6,A7,A11,ORDINAL2:19,27,ORDINAL4:15,16,36,RELAT_1:91;
+& a in dom phi by A1,A6,A7,A11,ORDINAL2:27,ORDINAL4:15,16,
+36,RELAT_1:91,Lm2;
     then phi.a is_limes_of phi|a & sup (phi|a) = lim (phi|a) &
      sup (phi|a) = sup rng (phi|a)
       by A1,ORDINAL2:def 17,ORDINAL4:8;
@@ -889,7 +892,7 @@ A32:     C in a by A30,ORDINAL2:27;
        then e = C or e in C & C in dom phi by A25,A30,A32,ORDINAL1:21;
 then A33:     phi.e = phi.C or phi.e in phi.C by A1,ORDINAL2:def 16;
           succ u in omega & succ u in dom nu
-        by A31,ORDINAL1:41,ORDINAL2:19,ORDINAL4:36;
+        by A31,Lm2,ORDINAL1:41,ORDINAL4:36;
 then A34:     xi.succ u = nu.succ u & C = nu.u & nu.u in dom phi &
        nu.succ u in rng xi & phi.e = B
         by A6,A26,A29,A31,FUNCT_1:70,73,ORDINAL4:36;

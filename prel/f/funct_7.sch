@@ -10,10 +10,9 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="ENUMSET1"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="DOMAIN_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -72,19 +71,13 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="99">
-<Func kind="K" nr="11">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
-</Func>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>
-<Func kind="K" nr="80">
-<Func kind="F" nr="1"/>
-<Func kind="F" nr="2"/>
 <Var nr="2"/>
 <Var nr="3"/>
-</Func>
 </Func>
 <Func kind="F" nr="4">
 <Var nr="2"/>
@@ -133,7 +126,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="18">
+<Pred kind="V" nr="21">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -150,7 +143,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="18">
+<Pred kind="V" nr="21">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
@@ -344,8 +337,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="22"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -360,8 +353,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="22"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Not>
@@ -378,9 +371,9 @@
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="119">
+<Func kind="K" nr="97">
 <Var nr="1"/>
-<Func kind="K" nr="121">
+<Func kind="K" nr="99">
 <Var nr="2"/>
 </Func>
 </Func>

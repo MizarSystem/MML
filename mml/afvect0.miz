@@ -7,10 +7,10 @@
 environ
 
  vocabularies ANALOAF, REALSET1, TDGROUP, DIRAF, BINOP_1, FUNCT_1, RLVECT_1,
-      ARYTM_1, VECTSP_1, MCART_1, RELAT_1, AFVECT0;
+      ARYTM_1, VECTSP_1, MCART_1, RELAT_1, AFVECT0, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET2, STRUCT_0, ANALOAF,
       TDGROUP, FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
- constructors DOMAIN_1, BINOP_1, TDGROUP;
+ constructors DOMAIN_1, BINOP_1, TDGROUP, NAT_D;
  registrations TDGROUP, RELSET_1, STRUCT_0, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, RLVECT_1, BINOP_1;
@@ -563,30 +563,29 @@ theorem
 Lm2: a+b = b+a
  proof reconsider a'=a,b'=b as Element of AFV;
  reconsider c'=(a+b) as Element of AFV;
-     c'= (Padd(o)).(a',b') .= Padd(o,a',b') by Def7;
+     c'= Padd(o,a',b') by Def7;
  then o,a' // b',c' by Def5; then o,b' // a',c' by Def1;
- then c' = Padd(o,b',a') by Def5 .= (Padd(o)).(b',a')
- by Def7 .= b + a; hence thesis; end;
+ then c' = Padd(o,b',a') by Def5 .= b + a by Def7; hence thesis; end;
 
 Lm3: (a+b)+c = a+(b+c)
  proof reconsider a'=a,b'=b,c'=c as Element of AFV;
   set p= b+c,q=a+b; reconsider p'=p,q'=q as Element of AFV; reconsider x'=(a+p)
 ,y'=(q+c)
   as Element of AFV;
-      p'=(Padd(o)).(b',c') .= Padd(o,b',c') by Def7;
+      p'= Padd(o,b',c') by Def7;
   then A1: o,b' // c',p' by Def5;
-      q'=(Padd(o)).(a',b') .= Padd(o,a',b') by Def7;
+      q'= Padd(o,a',b') by Def7;
   then o,a' // b',q' by Def5; then o,b' // a',q' by Def1;
   then A2: a',q' // o,b' by Th4;   c',p' // o,b' by A1,Th4;
   then A3: a',q' // c',p' by A2,Def1;
   consider x'' such that A4: x',p' // c',x'' by Def1;
   A5: c',x'' // x',p' by A4,Th4;
-      x'=(Padd(o)).(a',p') .= Padd(o,a',p') by Def7;
+      x'= Padd(o,a',p') by Def7;
   then o,a' // p',x' by Def5; then a',o // x',p' by Th8;
   then a',o // c',x'' by A5,Def1; then A6: q',o // p',x'' by A3,Def1;
        x',c' // p',x'' by A4,Def1; then q',o // x',c' by A6,Def1;
   then o,q' // c',x' by Th8; then A7: c',x' // o,q' by Th4;
-      y'=(Padd(o)).(q',c') .= Padd(o,q',c') by Def7;
+      y'= Padd(o,q',c') by Def7;
   then o,q' // c',y' by Def5; then c',y' // o,q' by Th4;
   then c',y' // c',x' by A7,Def1; hence thesis by Th5; end;
 
@@ -595,8 +594,7 @@ Lm4: a + (0.(GroupVect(AFV,o))) = a
   reconsider a'=a as Element of AFV;
   reconsider x'=(a + (0.(GroupVect(AFV,o))))
  as Element of AFV;
-  x'=(Padd(o)).(a',o)
-  .= Padd(o,a',o) by Def7;
+  x'= Padd(o,a',o) by Def7;
   then o,a' // o,x' by Def5;
   hence thesis by Th5; end;
 
@@ -652,8 +650,7 @@ theorem Th66: for a ex b st b + b = a
   reconsider a''=a as Element of AFV;consider b'
   being Element of AFV such that A1: o,b' // b',a'' by Def1;
   reconsider b=b' as Element of GroupVect(AFV,o);
-      a'' = Padd(o,b',b') by A1,Def5 .=(Padd(o)).(b',b') by Def7
-  .= b+b;
+      a'' = Padd(o,b',b') by A1,Def5 .= b+b by Def7;
   hence thesis; end;
 
 registration let AFV,o;
@@ -674,8 +671,7 @@ theorem Th67: for a being Element of GroupVect(AFV,o)
  A1: a + a = 0.(GroupVect(AFV,o));
  reconsider a''=a as Element of AFV;
  set GV = GroupVect(AFV,o);
-     o = (Padd(o)).(a'',a'') by A1
- .= Padd(o,a'',a'') by Def7;
+     o = Padd(o,a'',a'') by  A1,Def7;
  then A2: o,a'' // a'',o by Def5;
  A3: o,o // o,o by Th2;
  thus 0.GV = a by A2,A3,TDGROUP:21; end;
@@ -751,8 +747,7 @@ in V
      as Element of AFV;
  set z1' = x1' # y2', z2' = x2' # y1'; A6: z1'=z2' by A3,A5,TDGROUP:def 4;
      reconsider z1=z1',z2=z2' as Element of AFV;
-         z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1);
-     then z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
+     z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
      then o,x1 // y2,z1 & o,x2 // y1,z1 by A6,Def5;
      then x1,x2 // y1,y2 by Th13;
      hence xy in the CONGR of AFV by A5,ANALOAF:def 2; end;
@@ -770,8 +765,7 @@ V
      A10: x1,x2 // y1,y2 by A7,A9,ANALOAF:def 2;
           x1' # y2' = x2' # y1' proof
     reconsider z1=x1'#y2',z2=x2'#y1' as Element of AFV;
-          z1 = (Padd(o)).(x1,y2) & z2 = (Padd(o)).(x2,y1);
-then A11:      z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
+A11:      z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
        then o,x1 // y2,z1 & o,x2 // y1,z2 by Def5;
       then x1,o // z1,y2 & o,x2 // y1,z2 by Th8; then o,x2 // y1,z1 by A10,Th13
 ;
@@ -902,7 +896,7 @@ consider g being UnOp of X such that
 A3: f is one-to-one by A2,Th76;
 A4: rng(f) = T by A2,Th77;
      now let a,b be Element of ADG;
-  thus f.(a+b) = (the add of Z).(f.a,f.b) by A1,A2,Th75 .= (f.a)+(f.b);
+  thus f.(a+b) = (f.a)+(f.b) by A1,A2,Th75;
   thus f.(0.ADG) = 0.Z by A1,A2,Th75;
   reconsider fa = f.a as Element of AV(ADG);
   thus f.(-a) = (Pcom(o)).fa by A1,A2,Th75

@@ -8,11 +8,12 @@ environ
 
  vocabularies CARD_1, ORDINAL1, FUNCT_1, CLASSES1, TARSKI, BOOLE, RELAT_1,
       ORDINAL2, CARD_3, FUNCT_2, PROB_1, RLVECT_1, ZF_LANG, ZFMISC_1, SETFAM_1,
-      FINSET_1, CLASSES2, HAHNBAN;
+      FINSET_1, CLASSES2, HAHNBAN, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, WELLORD2, FINSET_1,
       SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1, ORDINAL2, CARD_1,
       CLASSES1, CARD_3;
- constructors SETFAM_1, RELAT_2, WELLORD2, FUNCT_2, CLASSES1, CARD_3, ORDINAL2;
+ constructors SETFAM_1, RELAT_2, WELLORD2, FUNCT_2, CLASSES1, CARD_3, ORDINAL2,
+      NAT_D;
  registrations ORDINAL1, CARD_1, CLASSES1, SUBSET_1, PARTFUN1, ORDINAL2;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions TARSKI, ORDINAL1, CLASSES1, XBOOLE_0;
@@ -56,7 +57,8 @@ A2:  X in W;
       assume x in bool X;
       hence x in W by A1,A2,CLASSES1:def 1;
      end;
-then A3:    Card X <` Card bool X & Card bool X <=` Card W by CARD_1:27,30;
+then A3:    Card X <` Card bool X & Card bool X <=` Card W by CARD_1:27,
+30;
   then Card X <` Card W;
     then Card X <> Card W;
    hence thesis by A3,CARD_1:21;
@@ -381,7 +383,8 @@ then A3:  A in succ A & Card W = On W & W is subset-closed
      by Th10,CLASSES1:def 2,ORDINAL1:10;
     then A in On W by A2,ORDINAL1:19;
     then Rank A in W by A1,A2;
-    then bool Rank A in W & Rank succ A = bool Rank A by A2,CLASSES1:34,def 2;
+    then bool Rank A in W & Rank succ A = bool Rank A by A2,CLASSES1:34,
+def 2;
    hence thesis by A3,Th1;
   end;
 
@@ -406,7 +409,7 @@ A7:  for x st x in dom Card L holds (Card L).x in F.x
         Card (L.x) = (Card L).x by A5,A6,CARD_1:30,CARD_3:def 2;
       hence thesis;
      end;
-        dom Card L = dom L & Rank A = Union L by A1,A5,Th25,CARD_3:def 2;
+     dom Card L = dom L & Rank A = Union L by A1,A5,Th25,CARD_3:def 2;
     then A8: Card Rank A <=` Sum Card L & Sum
  Card L <` Product F by A5,A6,A7,CARD_3:54,56;
     then A9:  Card Rank A <` Product F by ORDINAL1:22;
@@ -420,7 +423,7 @@ A11:    x = f & dom f = dom F & for x st x in dom F holds f.x in F.x
          then consider y such that
 A12:       y in dom f & z = f.y by FUNCT_1:def 5;
          reconsider y as Ordinal by A6,A11,A12,ORDINAL1:23;
-              y c= A & A in W by A3,A6,A11,A12,ORDINAL1:def 2,ORDINAL1:def 10;
+              y c= A & A in W by A3,A6,A11,A12,ORDINAL1:def 2,def 10;
 then A13:       f.y in F.y & F.y = F.y & F.y = Card bool (L.y) & L.y = Rank y &
            L.y = L.y & y in W by A4,A5,A6,A11,A12,CLASSES1:def 1;
           then PQ[y] & y in On W by A2,A6,A11,A12,ORDINAL1:def 10;
@@ -1179,13 +1182,15 @@ end;
 
 canceled;
 
+Lm5:  omega is_limit_ordinal by ORDINAL1:def 12;
+
 theorem
  Th69: Card Rank omega = Card omega
   proof
     deffunc h(Ordinal) = Rank $1;
     consider L such that
 A1:  dom L = omega & for A st A in omega holds L.A = h(A) from ORDINAL2:sch 2;
-A2:  Rank omega = Union L by A1,Th25,ORDINAL2:19
+A2:  Rank omega = Union L by A1,Th25,Lm5
                .= union rng L by CARD_3:def 4;
 A3:  omega c= Rank omega by CLASSES1:44;
          now let X,Y; assume X in rng L;
@@ -1220,10 +1225,10 @@ theorem
    thus X in Rank omega implies bool X in Rank omega
      proof assume X in Rank omega;
       then consider A such that
-A1:     A in omega & X in Rank A by CLASSES1:35,ORDINAL2:19;
+A1:     A in omega & X in Rank A by CLASSES1:35,Lm5;
            succ A in omega & bool X in Rank succ A
-        by A1,CLASSES1:48,ORDINAL1:41,ORDINAL2:19;
-      hence thesis by CLASSES1:35,ORDINAL2:19;
+        by A1,CLASSES1:48,ORDINAL1:41,Lm5;
+      hence thesis by CLASSES1:35,Lm5;
      end;
    thus X c= Rank omega implies X,Rank omega are_equipotent or
    X in Rank omega
@@ -1240,7 +1245,8 @@ A4:       Card X = Card n & omega c= Rank omega
       then X,n are_equipotent & n is finite by CARD_1:21,69;
       then reconsider X as finite set by CARD_1:68;
       defpred P[set,set] means the_rank_of $2 c= the_rank_of $1;
-A5:     X <> {} by A2,A4,ORDINAL2:19;
+        0 in omega; then
+A5:     X <> {} by A2,A4;
 A6:     for x,y holds P[x,y] or P[y,x];
 A7:     for x,y,z st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
       consider x such that
@@ -1252,37 +1258,37 @@ A8:     x in X & for y st y in X holds P[x,y] from CARD_3:sch 3(A5,A6,A7);
        end;
 then A9:     the_rank_of X c= succ A by CLASSES1:77;
            A in omega by A2,A8,CLASSES1:74;
-       then succ A in omega by ORDINAL1:41,ORDINAL2:19;
+       then succ A in omega by ORDINAL1:41,Lm5;
        then the_rank_of X in omega by A9,ORDINAL1:22;
       hence thesis by A2,CLASSES1:74;
      end;
   end;
 
 theorem
-     FinSETS = Rank omega
+  FinSETS = Rank omega
   proof
-A1:    omega c= Rank omega by CLASSES1:44;
-   then reconsider M = Rank omega as non empty set by ORDINAL2:19;
+A1: 0 in omega;
+A2:    omega c= Rank omega by CLASSES1:44;
+   then reconsider M = Rank omega as non empty set by A1;
         M is epsilon-transitive & M is_Tarski-Class by Th70,CLASSES1:37;
-then M is Universe & M is_Tarski-Class_of {} by A1,Def1,CLASSES1:def 3
-,ORDINAL2:19;
+then M is Universe & M is_Tarski-Class_of {} by A2,Def1,CLASSES1:def 3,A1;
     hence FinSETS c= Rank omega by CLASSES1:def 4;
-A2:  On FinSETS <> {} & On FinSETS is_limit_ordinal by Th55;
+A3:  On FinSETS <> {} & On FinSETS is_limit_ordinal by Th55;
     then {} in On FinSETS by ORDINAL3:10;
     then omega c= On FinSETS & FinSETS = Rank On FinSETS
-     by A2,Th54,ORDINAL1: def 12;
+     by A3,Th54,ORDINAL1: def 12;
    hence thesis by CLASSES1:43;
   end;
 
- definition
-  func SETS -> Universe equals     Tarski-Class FinSETS;
-   correctness;
- end;
+definition
+  func SETS -> Universe equals
+    Tarski-Class FinSETS;
+  correctness;
+end;
 
-registration
- let X be set;
- cluster the_transitive-closure_of X -> epsilon-transitive;
- coherence by CLASSES1:58;
+registration let X be set;
+  cluster the_transitive-closure_of X -> epsilon-transitive;
+  coherence by CLASSES1:58;
 end;
 
 registration
@@ -1377,7 +1383,7 @@ end;
 
  deffunc u(Ordinal) = UNIVERSE $1;
 
-Lm5:
+Lm6:
  now
 A1:  for A,x holds x = u(A) iff
       ex L st x = last L & dom L = succ A & L.{} = FinSETS &
@@ -1398,11 +1404,11 @@ registration let A;
    coherence
     proof
        defpred P[Ordinal] means UNIVERSE $1 is Universe;
-A1:    P[{}] by Lm5;
+A1:    P[{}] by Lm6;
 A2:    P[B] implies P[succ B]
        proof assume P[B];
         then reconsider UU = UNIVERSE B as Universe;
-             UNIVERSE succ B = Tarski-Class UU by Lm5;
+             UNIVERSE succ B = Tarski-Class UU by Lm6;
         hence P[succ B];
        end;
 A3:   for A st A <> {} & A is_limit_ordinal &
@@ -1412,7 +1418,7 @@ A4:      A <> {} & A is_limit_ordinal and
              for B st B in A holds P[B];
         consider L such that
 A5:      dom L = A & for B st B in A holds L.B = u(B) from ORDINAL2:sch 2;
-          UNIVERSE A = Universe_closure Union L by A4,A5,Lm5
+          UNIVERSE A = Universe_closure Union L by A4,A5,Lm6
                    .= Universe_closure union rng L by CARD_3:def 4;
         hence thesis;
        end;
@@ -1424,20 +1430,20 @@ A5:      dom L = A & for B st B in A holds L.B = u(B) from ORDINAL2:sch 2;
 canceled 3;
 
 theorem
-     UNIVERSE {} = FinSETS by Lm5;
+     UNIVERSE {} = FinSETS by Lm6;
 
 theorem
-     UNIVERSE succ A = Tarski-Class UNIVERSE A by Lm5;
+     UNIVERSE succ A = Tarski-Class UNIVERSE A by Lm6;
 
-Lm6: 1 = succ 0;
+Lm7: 1 = succ 0;
 
 theorem
-     UNIVERSE 1 = SETS by Lm5,Lm6;
+     UNIVERSE 1 = SETS by Lm6,Lm7;
 
 theorem
      A <> {} & A is_limit_ordinal & dom L = A &
   (for B st B in A holds L.B = UNIVERSE B) implies
-   UNIVERSE A = Universe_closure Union L by Lm5;
+   UNIVERSE A = Universe_closure Union L by Lm6;
 
 theorem
       FinSETS c= U & Tarski-Class {} c= U &
@@ -1446,7 +1452,7 @@ theorem
         {} <> On U by Th55;
     then {} in On U & Rank On U = U &
      On U c= Rank On U by Th54,CLASSES1:44,ORDINAL3:10;
-hence thesis by Lm5,Th5;
+hence thesis by Lm6,Th5;
   end;
 
 theorem
@@ -1461,7 +1467,7 @@ A3:    P[B];
 A4:    A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
       assume A in succ B;
        then UNIVERSE succ B = Tarski-Class UNIVERSE B & A c= B
-        by Lm5,ORDINAL1:34;
+        by Lm6,ORDINAL1:34;
 then A5:    UNIVERSE B in UNIVERSE succ B & (A in B or A = B)
         by A4,CLASSES1:5,ORDINAL1:21;
        then UNIVERSE A in UNIVERSE B or UNIVERSE A = UNIVERSE B by A3;
@@ -1476,7 +1482,7 @@ A7:    B <> {} & B is_limit_ordinal and
 then A8:    succ A in B by A7,ORDINAL1:41;
       consider L such that
 A9:    dom L = B & for C st C in B holds L.C = u(C) from ORDINAL2:sch 2;
-A10:    UNIVERSE B = Universe_closure Union L by A7,A9,Lm5
+A10:    UNIVERSE B = Universe_closure Union L by A7,A9,Lm6
                  .= Universe_closure union rng L by CARD_3:def 4;
            L.succ A = UNIVERSE succ A by A8,A9;
        then UNIVERSE succ A in rng L by A8,A9,FUNCT_1:def 5;
@@ -1484,7 +1490,7 @@ A10:    UNIVERSE B = Universe_closure Union L by A7,A9,Lm5
         by A10,Def4,ZFMISC_1:92;
        then UNIVERSE A in Tarski-Class UNIVERSE A &
        UNIVERSE succ A = Tarski-Class UNIVERSE A &
-       UNIVERSE succ A c= UNIVERSE B by Lm5,CLASSES1:5,XBOOLE_1:1;
+       UNIVERSE succ A c= UNIVERSE B by Lm6,CLASSES1:5,XBOOLE_1:1;
       hence thesis;
     end;
 A11:for B holds P[B] from ORDINAL2:sch 1(A1,A2,A6);

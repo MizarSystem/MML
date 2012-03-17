@@ -28,7 +28,9 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -44,7 +46,6 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
-<ArticleID name="MEMBERED"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -89,24 +90,24 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="307"/>
+<Func kind="K" nr="335"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="214">
+<Func kind="K" nr="240">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -115,22 +116,22 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="25">
-<Func kind="K" nr="214">
+<Func kind="K" nr="240">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="28">
-<Func kind="K" nr="214">
+<Func kind="K" nr="240">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="34">
-<Func kind="K" nr="214">
+<Func kind="K" nr="240">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="35" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="95"/>
 </Cluster>
 </CCluster>
 </Registrations>

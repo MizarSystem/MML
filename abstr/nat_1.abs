@@ -6,8 +6,7 @@
 
 environ
 
- vocabularies ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0,
-      ZF_LANG;
+ vocabularies ORDINAL2, ARYTM, ARYTM_1, ORDINAL1, XREAL_0, ZF_LANG;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, XXREAL_0;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL2;
@@ -28,9 +27,7 @@ end;
 
 :: The results of axioms of natural numbers
 
-canceled;
-
-theorem :: NAT_1:2                       :: axiom of induction
+theorem :: NAT_1:1                       :: axiom of induction
   for X st 0 in X & for x st x in X holds x + 1 in X
   for n holds n in X;
 
@@ -81,24 +78,22 @@ end;
 :: Some theorems of not great relation "<=" in real numbers are translated
 :: to natural number easy and it is necessary to have them here.
 
-canceled 15;
-
-theorem :: NAT_1:18
+theorem :: NAT_1:2
   0 <= i;
 
-theorem :: NAT_1:19
+theorem :: NAT_1:3
   0 <> i implies 0 < i;
 
-theorem :: NAT_1:20
+theorem :: NAT_1:4
   i <= j implies i * h <= j * h;
 
-theorem :: NAT_1:21
+theorem :: NAT_1:5
   0 < i + 1;
 
-theorem :: NAT_1:22
+theorem :: NAT_1:6
   i = 0 or ex k st i = k + 1;
 
-theorem :: NAT_1:23
+theorem :: NAT_1:7
   i + j = 0 implies i = 0 & j = 0;
 
 registration
@@ -119,18 +114,16 @@ scheme :: NAT_1:sch 3
        k = 0 & n = N() or
        ex m,l being Element of NAT st k = m + 1 & P[m,l] & n = F(k,l);
 
-canceled 2;
-
-theorem :: NAT_1:26
+theorem :: NAT_1:8
   i <= j + 1 implies i <= j or i = j + 1;
 
-theorem :: NAT_1:27
+theorem :: NAT_1:9
   i <= j & j <= i + 1 implies i = j or j = i + 1;
 
-theorem :: NAT_1:28
+theorem :: NAT_1:10
   i <= j implies ex k st j = i + k;
 
-theorem :: NAT_1:29
+theorem :: NAT_1:11
   i <= i + j;
 
 scheme :: NAT_1:sch 4
@@ -159,21 +152,19 @@ scheme :: NAT_1:sch 6
    for k being Element of NAT st P[k] holds k <= N() and
    ex k being Element of NAT st P[k];
 
-canceled 7;
-
-theorem :: NAT_1:37
+theorem :: NAT_1:12
   i <= j implies i <= j + h;
 
-theorem :: NAT_1:38
+theorem :: NAT_1:13
   i < j + 1 iff i <= j;
 
-theorem :: NAT_1:39
+theorem :: NAT_1:14
   j < 1 implies j = 0;
 
-theorem :: NAT_1:40
+theorem :: NAT_1:15
   i * j = 1 implies i = 1 & j = 1;
 
-theorem :: NAT_1:41
+theorem :: NAT_1:16
   k <> 0 implies n < n + k;
 
 scheme :: NAT_1:sch 7
@@ -186,110 +177,11 @@ scheme :: NAT_1:sch 7
 
 :: Exact division and rest of division
 
-theorem :: NAT_1:42
+theorem :: NAT_1:17
   0 < m implies for n ex k,t st n = (m*k)+t & t < m;
 
-theorem :: NAT_1:43
+theorem :: NAT_1:18
   n = m*k+t & t < m & n = m*k1+t1 & t1 < m implies k = k1 & t = t1;
-
-definition let k,l be Nat;
-  func k div l -> Nat means
-:: NAT_1:def 1       :: the exact division
-  ( ex t being Nat st k = l * it + t & t < l ) or it = 0 & l = 0;
-
-  func k mod l -> Nat means
-:: NAT_1:def 2         :: the rest of division
- ( ex t being Nat st k = l * t + it & it < l ) or it = 0 & l = 0;
- end;
-
-definition let k,l be Nat;
-  redefine func k div l -> Element of NAT;
-  redefine func k mod l -> Element of NAT;
-end;
-
-canceled 2;
-
-theorem :: NAT_1:46
-  0 < i implies j mod i < i;
-
-theorem :: NAT_1:47
-  0 < i implies j = i * (j div i) + (j mod i);
-
-:: The divisibility relation
-
-definition let k,l be Nat;
-  pred k divides l means
-:: NAT_1:def 3
-  ex t being Nat st l = k * t;
-  reflexivity;
-end;
-
-canceled;
-
-theorem :: NAT_1:49
-  j divides i iff i = j * (i div j);
-
-canceled;
-
-theorem :: NAT_1:51
-  i divides j & j divides h implies i divides h;
-
-theorem :: NAT_1:52
-  i divides j & j divides i implies i = j;
-
-theorem :: NAT_1:53
-  i divides 0 & 1 divides i;
-
-theorem :: NAT_1:54
-  0 < j & i divides j implies i <= j;
-
-theorem :: NAT_1:55
-  i divides j & i divides h implies i divides j+h;
-
-theorem :: NAT_1:56
-  i divides j implies i divides j * h;
-
-theorem :: NAT_1:57
-  i divides j & i divides j + h implies i divides h;
-
-theorem :: NAT_1:58
-  i divides j & i divides h implies i divides j mod h;
-
-:: The least common multiple and the greatest common divisor
-
-definition let k,n be Nat;
-  func k lcm n -> Nat means
-:: NAT_1:def 4
-  k divides it & n divides it &
-  for m being Nat st k divides m & n divides m holds it divides m;
-    idempotence;
-    commutativity;
-end;
-
-definition let k,n be Nat;
-  redefine func k lcm n -> Element of NAT;
-end;
-
-definition let k,n be Nat;
-  func k hcf n -> Nat means
-:: NAT_1:def 5
-  it divides k & it divides n &
-    for m being Nat st m divides k & m divides n holds m divides it;
-    idempotence;
-    commutativity;
-end;
-
-definition let k,n be Nat;
-  redefine func k hcf n -> Element of NAT;
-end;
-
-scheme :: NAT_1:sch 8
- Euklides { Q(Nat)->Nat, a,b()->Nat } :
-  ex n being Element of NAT st Q(n) = a() hcf b() & Q(n + 1) = 0
-   provided
-   0 < b() & b() < a() and
-   Q(0) = a() & Q(1) = b() and
-   for n being Element of NAT holds Q(n + 2) = Q(n) mod Q(n + 1);
 
 registration
   cluster -> ordinal Nat;
@@ -299,47 +191,23 @@ registration
   cluster non empty ordinal Subset of REAL;
 end;
 
-theorem :: NAT_1:59
+theorem :: NAT_1:19
   k < k + n iff 1 <= n;
 
-theorem :: NAT_1:60
+theorem :: NAT_1:20
   k < n implies n - 1 is Element of NAT;
 
-theorem :: NAT_1:61
+theorem :: NAT_1:21
   k <= n implies n - k is Element of NAT;
-
-theorem :: NAT_1:62
-  n mod 2 = 0 or n mod 2 = 1;
-
-theorem :: NAT_1:63
-  (k * n) mod k = 0;
-
-theorem :: NAT_1:64
-  k > 1 implies 1 mod k = 1;
-
-theorem :: NAT_1:65
-  k mod n = 0 & l = k - m * n implies l mod n = 0;
-
-theorem :: NAT_1:66
-  n <> 0 & k mod n = 0 & l < n implies k + l mod n = l;
-
-theorem :: NAT_1:67
-  k mod n = 0 implies k + l mod n = l mod n;
-
-theorem :: NAT_1:68
-  k <> 0 implies (k * n) div k = n;
-
-theorem :: NAT_1:69
-  k mod n = 0 implies (k + l) div n = (k div n) + (l div n);
 
 begin :: Addenda
 
 :: from ALGSEQ_1
 
-theorem :: NAT_1:70
+theorem :: NAT_1:22
   m < n+1 implies m < n or m = n;
 
-theorem :: NAT_1:71
+theorem :: NAT_1:23
   k < 2 implies k = 0 or k = 1;
 
 registration
@@ -354,47 +222,19 @@ registration
   cluster -> non negative Nat;
 end;
 
-:: from AMI_5, 2005.11.16, A.T.
-
-theorem :: NAT_1:72
-  k <> 0 implies m * k div k = m;
-
-:: from GR_CY_1, 2005.11.16, A.T.
-
-theorem :: NAT_1:73
-  m mod n = (n*k + m) mod n;
-
-theorem :: NAT_1:74
-  (p+s) mod n = ((p mod n)+s) mod n;
-
-theorem :: NAT_1:75
-  (p+s) mod n = (p + ( s mod n)) mod n;
-
-theorem :: NAT_1:76
-  k < n implies k mod n = k;
-
-theorem :: NAT_1:77
-  n mod n = 0;
-
-theorem :: NAT_1:78
-  0 = 0 mod n;
-
 :: from JORDAN4
 
-theorem :: NAT_1:79
+theorem :: NAT_1:24
  i <> 0 & h = j*i implies j <= h;
-
-theorem :: NAT_1:80
-  i < j implies i div j=0;
 
 :: from SCMFSA_7, 2006.03.15, A.T.
 
-theorem :: NAT_1:81
+theorem :: NAT_1:25
   k < n iff 1 <= k + 1 & k + 1 <= n;
 
 :: from BINOM, 2006.05.28, A.T.
 
-scheme :: NAT_1:sch 9
+scheme :: NAT_1:sch 8
  Ind1{M() -> Nat, P[Nat]} :
   for i being Element of NAT st M() <= i holds P[i]
 provided
@@ -403,7 +243,7 @@ provided
 
 :: from INT_2, 2006.05.30, AG
 
-scheme :: NAT_1:sch 10
+scheme :: NAT_1:sch 9
  CompInd1 { a() -> Nat, P[Nat] } :
   for k being Element of NAT st k>=a() holds P[k]
   provided
@@ -412,41 +252,42 @@ scheme :: NAT_1:sch 10
 
 :: Moved from CQC_THE1 on 07.07.2006 by AK
 
-theorem :: NAT_1:82
+theorem :: NAT_1:26
   n <= 1 implies n = 0 or n = 1;
 
-theorem :: NAT_1:83
+theorem :: NAT_1:27
   n <= 2 implies n = 0 or n = 1 or n = 2;
 
-theorem :: NAT_1:84
+theorem :: NAT_1:28
   n <= 3 implies n = 0 or n = 1 or n = 2 or n = 3;
 
-theorem :: NAT_1:85
+theorem :: NAT_1:29
   n <= 4 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4;
 
-theorem :: NAT_1:86
+theorem :: NAT_1:30
   n <= 5 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5;
 
-theorem :: NAT_1:87
+theorem :: NAT_1:31
   n <= 6 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6;
 
-theorem :: NAT_1:88
+theorem :: NAT_1:32
   n <= 7 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5 or n = 6
   or n = 7;
 
-theorem :: NAT_1:89
+theorem :: NAT_1:33
   n <= 8 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8;
 
-theorem :: NAT_1:90
+theorem :: NAT_1:34
   n <= 9 implies n = 0 or n = 1 or n = 2 or n = 3
   or n = 4 or n = 5 or n = 6 or n = 7 or n = 8 or n = 9;
 
 :: compare BINARITH:sch 1, 2006.07.19, A.T.
 
- scheme :: NAT_1:sch 11
+scheme :: NAT_1:sch 10
  Indfrom1 { P[Nat] } :
- for k being non empty Nat holds P[k]
-   provided
-    P[1] and
-    for k being non empty Nat st P[k] holds P[k + 1];
+  for k being non empty Nat holds P[k]
+  provided
+ P[1] and
+ for k being non empty Nat st P[k] holds P[k + 1];
+   

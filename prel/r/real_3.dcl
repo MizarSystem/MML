@@ -11,7 +11,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -63,7 +62,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="56">
+<Func kind="K" nr="99">
 <LocusVar nr="1"/>
 <Num nr="0"/>
 </Func>
@@ -95,7 +94,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="57">
+<Func kind="K" nr="100">
 <LocusVar nr="1"/>
 <Num nr="0"/>
 </Func>
@@ -127,7 +126,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="56">
+<Func kind="K" nr="99">
 <Num nr="0"/>
 <LocusVar nr="1"/>
 </Func>
@@ -159,7 +158,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="57">
+<Func kind="K" nr="100">
 <Num nr="0"/>
 <LocusVar nr="1"/>
 </Func>
@@ -249,7 +248,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="105">
+<Func kind="K" nr="95">
 <Num nr="0"/>
 </Func>
 <Cluster>

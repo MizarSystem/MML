@@ -7,15 +7,15 @@
 environ
 
  vocabularies RELAT_1, FUNCT_1, PRE_TOPC, TOPS_2, EQREL_1, RELAT_2, BORSUK_1,
-      SUBSET_1, TARSKI, BOOLE, METRIC_1, RFINSEQ, ORDINAL2, T_0TOPSP;
+      SUBSET_1, TARSKI, BOOLE, METRIC_1, RFINSEQ, ORDINAL2, T_0TOPSP, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RFINSEQ, RELAT_2, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, STRUCT_0, PRE_TOPC, TOPS_2, BORSUK_1,
       EQREL_1;
- constructors SETFAM_1, RFINSEQ, TOPS_2, BORSUK_1;
+ constructors SETFAM_1, RFINSEQ, TOPS_2, BORSUK_1, NAT_D;
  registrations BORSUK_1, RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, PARTFUN1,
       XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TOPS_2, RELAT_2, SUBSET_1, PRE_TOPC;
+ definitions TOPS_2, RELAT_2, SUBSET_1, PRE_TOPC, STRUCT_0;
  theorems RFINSEQ, FUNCT_1, FUNCT_2, EQREL_1, RELAT_1, TOPS_2, PRE_TOPC,
       BORSUK_1, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, RELAT_2, PARTFUN1,
       ORDERS_1;
@@ -243,22 +243,24 @@ end;
 ::    Properties of Canonical Map and T_0 Reflex
 ::
 
-theorem Th3:
+ Lm1:
 for T being non empty TopSpace,
     p being Point of T holds p in (T_0-canonical_map(T)).p by BORSUK_1:70;
 
-theorem Th4:
+ Lm2:
 for T being non empty TopSpace holds
   dom T_0-canonical_map(T) = the carrier of T &
   rng T_0-canonical_map(T) c= the carrier of T_0-reflex(T)
     by FUNCT_2:def 1;
 
-theorem Th5:
+ Lm3:
 for T being non empty TopSpace holds
   the carrier of T_0-reflex(T) = Indiscernible(T) &
   the topology of T_0-reflex(T) =
     { A where A is Subset of Indiscernible(T) : union A in the topology of T}
       by BORSUK_1:def 10;
+
+canceled 3;
 
 theorem Th6:
 for T being non empty TopSpace,
@@ -267,7 +269,7 @@ for T being non empty TopSpace,
 proof
   let T be non empty TopSpace;
   let V be Subset of T_0-reflex(T);
-A1: V is Subset of Indiscernible(T) by Th5;
+A1: V is Subset of Indiscernible(T) by Lm3;
 
   hereby assume V is open;
     then V in the topology of T_0-reflex(T) by PRE_TOPC:def 5;
@@ -292,14 +294,14 @@ proof
   let C be set;
   hereby assume C is Point of TR;
     then C in the carrier of TR;
-    then C in Indiscernible(T) by Th5;
+    then C in Indiscernible(T) by Lm3;
     then C in Class R;
     hence ex p being Point of T st C = Class(R,p) by EQREL_1:45;
   end;
   assume ex p being Point of T st C = Class(R,p);
   then C in Class R by EQREL_1:def 5;
   then C in Indiscernible(T);
-  hence C is Point of TR by Th5;
+  hence C is Point of TR by Lm3;
 end;
 
 theorem Th8:
@@ -313,12 +315,12 @@ proof
   set R = Indiscernibility(T);
 
       F.p in the carrier of T_0-reflex(T);
-  then F.p in Indiscernible(T) by Th5;
+  then F.p in Indiscernible(T) by Lm3;
   then F.p in Class R;
   then consider y being Element of T such that
 A1:  F.p = Class(R,y) by EQREL_1:45;
 
-      p in Class(R,y) by A1,Th3;
+      p in Class(R,y) by A1,Lm1;
   hence F.p = Class(R,p) by A1,EQREL_1:31;
 end;
 
@@ -333,7 +335,7 @@ proof
   set F = T_0-canonical_map(T);
   set R = Indiscernibility(T);
   hereby assume F.q = F.p;
-    then q in F.p by Th3;
+    then q in F.p by Lm1;
     then q in Class(R,p) by Th8;
     hence [q,p] in R by EQREL_1:27;
   end;
@@ -357,7 +359,7 @@ proof
   assume that A2: p in A and
               A3: F.p = F.q;
 
-      q in F.p & F.p = Class(Indiscernibility(T),p) by A3,Th3,Th8;
+      q in F.p & F.p = Class(Indiscernibility(T),p) by A3,Lm1,Th8;
   then [q,p] in Indiscernibility(T) by EQREL_1:27;
   hence q in A by A1,A2,Def3;
 end;
@@ -407,7 +409,7 @@ proof
     set D = Indiscernible(T);
 A2: F = proj D by BORSUK_1:def 11;
 
-        A' is Subset of D by Th5;
+        A' is Subset of D by Lm3;
 then A3: F"A' = union A' by A2,BORSUK_1:31;
 
         for C being Subset of T st
@@ -419,7 +421,7 @@ then A3: F"A' = union A' by A2,BORSUK_1:31;
   hence F is open by Def2;
 end;
 
-Lm1:
+Lm4:
 for T being non empty TopSpace,
     x,y being Point of T_0-reflex(T) st x <> y
   ex V being Subset of T_0-reflex(T) st V is open &
@@ -488,7 +490,7 @@ registration
     take T_0-reflex(T);
         for x,y being Point of T_0-reflex(T) st x <> y holds
       ex V being Subset of T_0-reflex(T) st V is open &
-        ((x in V & not y in V) or (y in V & not x in V)) by Lm1;
+        ((x in V & not y in V) or (y in V & not x in V)) by Lm4;
     hence T_0-reflex(T) is discerning non empty by Def7;
   end;
 end;
@@ -507,7 +509,7 @@ proof
   let T be non empty TopSpace;
       for x,y being Point of T_0-reflex(T) st not x = y
     ex A being Subset of T_0-reflex(T) st A is open &
-       ((x in A & not y in A) or (y in A & not x in A)) by Lm1;
+       ((x in A & not y in A) or (y in A & not x in A)) by Lm4;
 
   hence T_0-reflex(T) is T_0-TopSpace by Def7;
 end;
@@ -779,10 +781,10 @@ end;
   proof
     let x be set;
     assume A12: x in the carrier of T;
-  then A13:  x in dom F by Th4;
+  then A13:  x in dom F by Lm2;
         Class(R,x) in Class R by A12,EQREL_1:def 5;
     then Class(R,x) in Indiscernible T;
-  then A14:  Class(R,x) in the carrier of TR by Th5;
+  then A14:  Class(R,x) in the carrier of TR by Lm3;
         F.x = Class(R,x) by A12,Th8;
     then (h*F).x = h.Class(R,x) by A13,FUNCT_1:23;
     then H.x in f.:Class(R,x) by A4,A14;

@@ -7,12 +7,12 @@
 environ
 
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, SQUARE_1, BOOLE, ARYTM_1, FUNCT_1,
-      RELAT_1, FUNCT_2, FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2;
+      RELAT_1, FUNCT_2, FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
-      XCMPLX_0, DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
-      FINSEQ_1, BINOP_1, FUNCOP_1, XXREAL_0;
+      XCMPLX_0, DOMAIN_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCT_3, FINSEQ_1, BINOP_1, FUNCOP_1, XXREAL_0;
  constructors RELAT_2, PARTFUN1, FUNCT_3, DOMAIN_1, BINOP_1, FUNCOP_1,
-      SQUARE_1, NAT_1, FINSEQ_1;
+      SQUARE_1, NAT_1, FINSEQ_1, NAT_D;
  registrations SUBSET_1, FUNCT_1, FINSEQ_1, RELSET_1, XREAL_0, FUNCOP_1,
       FUNCT_2, NAT_1, PARTFUN1, ORDINAL2, XXREAL_0, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -36,7 +36,7 @@ begin
 
 theorem
   min(i,j) is Element of NAT & max(i,j) is Element of NAT
-    by XXREAL_0:15,XXREAL_0:16;
+    by XXREAL_0:15,16;
 
 theorem Th2:
   l = min(i,j) implies Seg i /\ Seg j = Seg l
@@ -71,7 +71,7 @@ theorem
    suppose
 A1:   j <= i;
     then i = j or j < i by REAL_1:def 5;
-    then i - j is Element of NAT by NAT_1:61;
+    then i - j is Element of NAT by NAT_1:21;
     hence max(0,i-j) is Element of NAT by A1,Th4;
  end;
  end;
@@ -88,13 +88,13 @@ theorem
   i in Seg (l+1) implies i in Seg l or i = l+1
  proof assume i in Seg(l+1);
   then 1 <= i & i <= l+1 by FINSEQ_1:3;
-  then 1 <= i & i <= l or i = l+1 by NAT_1:26;
+  then 1 <= i & i <= l or i = l+1 by NAT_1:8;
   hence i in Seg l or i = l+1;
  end;
 
 theorem
   i in Seg l implies i in Seg(l+j)
- proof l <= l+j by NAT_1:29; then Seg l c= Seg(l+j) by FINSEQ_1:7;
+ proof l <= l+j by NAT_1:11; then Seg l c= Seg(l+j) by FINSEQ_1:7;
   hence thesis;
  end;
 
@@ -264,7 +264,7 @@ A1:  len r = i+j;
   consider q being FinSequence such that
 A2:  r = p^q by TREES_1:3;
   take p,q;
-       i <= len r by A1,NAT_1:29;
+       i <= len r by A1,NAT_1:11;
   hence len p = i by FINSEQ_1:21;
   then len(p^q) = i + len q by FINSEQ_1:35;
   hence len q = j by A1,A2;
@@ -587,21 +587,23 @@ definition let i be natural number;
  coherence by Th52;
 end;
 
-canceled;
-
-theorem Th54:
+ Lm4:
   dom idseq k = Seg k by RELAT_1:71;
+
+canceled 2;
 
 theorem Th55:
   len idseq k = k
  proof
    reconsider k as Element of NAT by ORDINAL1:def 13;
-   dom idseq k = Seg k by Th54;
+   dom idseq k = Seg k by Lm4;
    hence thesis by FINSEQ_1:def 3;
 end;
 
-theorem Th56:
+ Lm5:
   j in Seg i implies (idseq i).j = j by FUNCT_1:35;
+
+canceled;
 
 theorem
   i<>0 implies for k being Element of Seg i holds (idseq i).k = k
@@ -609,7 +611,7 @@ theorem
 A1: i<>0;
   let k be Element of Seg i;
   k in Seg i by A1,Lm1;
-  hence thesis by Th56;
+  hence thesis by Lm5;
  end;
 
 theorem
@@ -619,7 +621,7 @@ theorem
 theorem Th59:
   idseq 1 = <*1*>
  proof 1 in Seg 1;
-  then len idseq 1 = 1 & (idseq 1).1 = 1 by Th55,Th56;
+  then len idseq 1 = 1 & (idseq 1).1 = 1 by Th55,Lm5;
   hence thesis by FINSEQ_1:57;
  end;
 
@@ -632,17 +634,17 @@ A2:  p = q^<*a*> by Th21;
 A3:  len p = len q + 1 by A2,Th19;
 then A4:  len q = i by A1;
        i+1 in Seg(i + 1) by FINSEQ_1:6;
-  then p.(i+1) = i+1 by Th56;
+  then p.(i+1) = i+1 by Lm5;
 then A5:  a = i+1 by A1,A2,A3,FINSEQ_1:59;
 A6:  dom q = Seg len q by FINSEQ_1:def 3;
        for a st a in Seg i holds q.a = a
    proof let a; assume
 A7:   a in Seg i;
     then reconsider j = a as Element of NAT;
-         i <= i+1 by NAT_1:29;
+         i <= i+1 by NAT_1:11;
     then Seg i c= Seg (i+1) by FINSEQ_1:7;
     then j in Seg(i+1) & p.j = q.j by A2,A4,A6,A7,FINSEQ_1:def 7;
-    hence thesis by Th56;
+    hence thesis by Lm5;
    end;
   then q = id Seg i by A4,A6,FUNCT_1:34;
   hence thesis by A2,A5;
@@ -662,8 +664,7 @@ theorem
             .= <*1,2,3*> by Th60,Th61;
  end;
 
-theorem
-  p*(idseq k) = p|(Seg k) by RELAT_1:94;
+canceled;
 
 theorem Th64:
   len p <= k implies p*(idseq k) = p
@@ -692,18 +693,20 @@ definition let i be natural number, a be set;
   coherence by Th66;
 end;
 
-canceled;
-
-theorem Th68:
+ Lm6:
   dom(k |-> a) = Seg k by FUNCOP_1:19;
+
+canceled 2;
 
 theorem Th69:
   len(k |-> a) = k
  proof reconsider k as Element of NAT by ORDINAL1:def 13;
-       dom(k |-> a) = Seg k by Th68; hence thesis by FINSEQ_1:def 3; end;
+       dom(k |-> a) = Seg k by Lm6; hence thesis by FINSEQ_1:def 3; end;
 
-theorem Th70:
+ Lm7:
   b in Seg k implies (k |-> a).b = a by FUNCOP_1:13;
+
+canceled;
 
 theorem
   k<>0 implies for w being Element of Seg k holds (k |-> d).w = d
@@ -711,7 +714,7 @@ theorem
 A1:  k <> 0;
   let w be Element of Seg k;
   w in Seg k by A1,Lm1;
-  hence thesis by Th70;
+  hence thesis by Lm7;
  end;
 
 theorem Th72:
@@ -721,7 +724,7 @@ theorem Th72:
 theorem Th73:
   1 |-> a = <*a*>
  proof 1 in Seg 1;
-  then len(1 |-> a) = 1 & (1 |-> a).1 = a by Th69,Th70;
+  then len(1 |-> a) = 1 & (1 |-> a).1 = a by Th69,Lm7;
   hence thesis by FINSEQ_1:57;
  end;
 
@@ -734,7 +737,7 @@ A2:     p = q^<*x*> by Th21;
 A3:  len p = len q + 1 by A2,Th19;
 then A4:  len q = i by A1;
        i+1 in Seg(i + 1) by FINSEQ_1:6;
-  then A5: p.(i+1) = a by Th70;
+  then A5: p.(i+1) = a by Lm7;
   now per cases;
    suppose i = 0;
     then q = {} & len (i |-> a) = 0 by A4,Th69,FINSEQ_1:25;
@@ -781,7 +784,7 @@ theorem Th77:
   hence s is FinSequence of D by FINSEQ_1:def 4;
  end;
 
-Lm4:
+Lm8:
   for F being Function st [:rng p,rng q:] c= dom F & i = min(len p,len q)
     holds dom(F.:(p,q)) = Seg i
  proof let F be Function such that
@@ -801,7 +804,7 @@ theorem Th78:
  proof let F be Function;
   reconsider k = min(len p,len q) as Element of NAT by XXREAL_0:15;
   assume [:rng p,rng q:] c= dom F;
-  then dom(F.:(p,q)) = Seg k by Lm4;
+  then dom(F.:(p,q)) = Seg k by Lm8;
   hence thesis by FINSEQ_1:def 2;
  end;
 
@@ -811,11 +814,11 @@ theorem Th79:
  proof let F be Function;
   reconsider k = min(len p,len q) as Element of NAT by XXREAL_0:15;
   assume [:rng p,rng q:] c= dom F;
-  then dom(F.:(p,q)) = Seg k by Lm4;
+  then dom(F.:(p,q)) = Seg k by Lm8;
   hence thesis by FINSEQ_1:def 3;
  end;
 
-Lm5:
+Lm9:
    for F being Function st [:{a},rng p:] c= dom F
     holds dom(F[;](a,p)) = dom p
  proof let F be Function such that
@@ -836,7 +839,7 @@ theorem Th80:
     holds F[;](a,p) is FinSequence
  proof let F be Function;
   assume [:{a},rng p:] c= dom F;
-  then dom(F[;](a,p)) = dom p by Lm5;
+  then dom(F[;](a,p)) = dom p by Lm9;
   then dom(F[;](a,p)) = Seg len p by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 2;
  end;
@@ -846,12 +849,12 @@ theorem Th81:
     holds len r = len p
  proof let F be Function;
   assume [:{a},rng p:] c= dom F;
-  then dom(F[;](a,p)) = dom p by Lm5;
+  then dom(F[;](a,p)) = dom p by Lm9;
   then dom(F[;](a,p)) = Seg len p by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 3;
  end;
 
-Lm6:
+Lm10:
    for F being Function st [:rng p,{a}:] c= dom F
     holds dom(F[:](p,a)) = dom p
  proof let F be Function such that
@@ -872,7 +875,7 @@ theorem Th82:
     holds F[:](p,a) is FinSequence
  proof let F be Function;
   assume [:rng p,{a}:] c= dom F;
-  then dom(F[:](p,a)) = dom p by Lm6;
+  then dom(F[:](p,a)) = dom p by Lm10;
   then dom(F[:](p,a)) = Seg len p by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 2;
  end;
@@ -882,7 +885,7 @@ theorem Th83:
     holds len r = len p
  proof let F be Function;
   assume [:rng p,{a}:] c= dom F;
-  then dom(F[:](p,a)) = dom p by Lm6;
+  then dom(F[:](p,a)) = dom p by Lm10;
   then dom(F[:](p,a)) = Seg len p by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 3;
  end;

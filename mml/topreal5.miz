@@ -9,13 +9,13 @@ environ
  vocabularies PRE_TOPC, EUCLID, ARYTM, RCOMP_1, BOOLE, CONNSP_1, SUBSET_1,
       RELAT_2, RELAT_1, FUNCT_1, ORDINAL2, TOPMETR, ARYTM_1, BORSUK_1, ARYTM_3,
       FUNCT_5, FINSEQ_1, MCART_1, TOPREAL2, TOPREAL1, TOPS_2, COMPTS_1,
-      PSCOMP_1, REALSET1, SPPOL_1;
+      PSCOMP_1, REALSET1, SPPOL_1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, STRUCT_0, PRE_TOPC, TOPS_2,
       COMPTS_1, RCOMP_1, FINSEQ_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TMAP_1,
       CONNSP_1, SPPOL_1, PSCOMP_1, JORDAN2B, XXREAL_0;
  constructors XXREAL_0, REAL_1, RCOMP_1, CONNSP_1, TOPS_2, COMPTS_1, TMAP_1,
-      TOPMETR, TOPREAL1, TOPREAL2, SPPOL_1, PSCOMP_1, JORDAN2B;
+      TOPMETR, TOPREAL1, TOPREAL2, SPPOL_1, PSCOMP_1, JORDAN2B, NAT_D;
  registrations FUNCT_1, PRE_TOPC, TOPMETR, STRUCT_0, EUCLID, BORSUK_1,
       PSCOMP_1, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, FUNCT_2, TOPREAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -60,9 +60,11 @@ then A5:C1,C2 are_separated by A3,CONNSP_1:8;
  hence not A is connected by A2,A4,A5;
 end;
 
-theorem Th5:for f being continuous Function of X,Y,
+ Lm3:for f being continuous Function of X,Y,
    A being Subset of X st A is connected holds f.:A is connected
    by TOPS_2:75;
+
+canceled;
 
 theorem Th6:
  for ra,rb st ra<=rb holds
@@ -72,10 +74,10 @@ proof let ra,rb;assume ra<=rb;
    hence thesis by CONNSP_1:28;
 end;
 
- Lm3:for A being Subset of R^1,a
+ Lm4:for A being Subset of R^1,a
   st A={r:a<r} holds A is open by JORDAN2B:31;
 
- Lm4:for A being Subset of R^1,a
+ Lm5:for A being Subset of R^1,a
   st A={r:a>r} holds A is open by JORDAN2B:30;
 
 canceled 2;
@@ -116,15 +118,17 @@ proof let A be Subset of R^1,a;assume
     then ex r st r=x & r<a;
    hence x in REAL;
   end;
-  then reconsider C1=B1 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,def 7;
-  A11:C1 is open by Lm4;
+  then reconsider C1=B1 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,
+def 7;
+  A11:C1 is open by Lm5;
       B2 c= REAL
   proof let x;assume x in B2;
     then ex r st r=x & r>a;
    hence x in REAL;
   end;
-  then reconsider C2=B2 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,def 7;
-          C2 is open by Lm3;
+  then reconsider C2=B2 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,
+def 7;
+          C2 is open by Lm4;
  hence A is not connected by A3,A7,A8,A9,A11,Th4;
 end;
 
@@ -154,7 +158,7 @@ A10:   dom f=the carrier of X by FUNCT_2:def 1;
            b in f.:([#](X)) by A1,A6,A10,FUNCT_1:def 12;
        then A12:not C is connected by A3,A4,A7,A11,Th9;
            [#](X) is connected by A1,CONNSP_1:28;
-     hence contradiction by A12,Th5;
+     hence contradiction by A12,Lm3;
      end;
    hence ex xc being Point of X st f.xc =d;
    end;
@@ -187,7 +191,7 @@ A8:   dom f=the carrier of X by FUNCT_2:def 1;
       then A9:a in f.:B by A1,FUNCT_1:def 12;
            b in f.:B by A1,A8,FUNCT_1:def 12;
        then not C is connected by A3,A4,A6,A9,Th9;
-     hence contradiction by A1,Th5;
+     hence contradiction by A1,Lm3;
      end;
    hence ex xc being Point of X st xc in B & f.xc =d;
    end;
@@ -230,7 +234,7 @@ A11:   dom f=the carrier of Closed-Interval-TSpace(ra,rb) by FUNCT_2:def 1;
        by A2,A11,FUNCT_1:def 12;
        then A13:not C is connected by A2,A6,A12,Th9;
            [#](Closed-Interval-TSpace(ra,rb)) is connected by A1,Th6;
-     hence contradiction by A13,Th5;
+     hence contradiction by A13,Lm3;
      end;
     hence thesis;
   end;
@@ -247,7 +251,7 @@ theorem ::Intermediate Value Theorem >
     the carrier of Closed-Interval-TSpace(ra,rb) by PRE_TOPC:12;
     A5:the carrier of Closed-Interval-TSpace(ra,rb)=[.ra,rb.]
                             by A1,TOPMETR:25;
-    A6:f.:([#](Closed-Interval-TSpace(ra,rb))) is connected by A3,Th5;
+    A6:f.:([#](Closed-Interval-TSpace(ra,rb))) is connected by A3,Lm3;
     A7:dom f=the carrier of Closed-Interval-TSpace(ra,rb)
                 by FUNCT_2:def 1;
         now assume A8:for rc st ra<rc & rc <rb holds (f.rc)<>d;
@@ -292,11 +296,11 @@ proof let g be Function of I[01],R^1,s1,s2;
     g.0<>g.1 & s1=g.0 & s2=g.1;
         now per cases by A1,REAL_1:def 5;
     case s1<s2;
-      then s1<(s1+s2)/2 & (s1+s2)/2<s2 by TOPREAL3:3;
+      then s1<(s1+s2)/2 & (s1+s2)/2<s2 by XREAL_1:228;
      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,Th12,TOPMETR:27;
     end;
     case s2<s1;
-      then s2<(s1+s2)/2 & (s1+s2)/2<s1 by TOPREAL3:3;
+      then s2<(s1+s2)/2 & (s1+s2)/2<s1 by XREAL_1:228;
      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,Th13,TOPMETR:27;
     end;
     end;

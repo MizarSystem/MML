@@ -8,20 +8,20 @@ environ
 
  vocabularies FINSET_1, REALSET1, RELAT_1, BOOLE, SUBSET_1, VECTSP_1, BINOP_1,
       GROUP_1, FUNCT_1, RLSUB_1, CARD_1, TARSKI, SETFAM_1, FINSUB_1, SETWISEO,
-      ARYTM_3, GROUP_2;
+      ARYTM_3, GROUP_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FINSUB_1, FINSET_1,
       REALSET1, XXREAL_0, NUMBERS, STRUCT_0, RLVECT_1, GROUP_1, WELLORD2,
       CARD_1, BINOP_1, SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1,
-      MCART_1;
+      NAT_D, MCART_1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, SETWISEO,
-      XXREAL_0, NAT_1, MEMBERED, REALSET1, RLVECT_1, GROUP_1;
+      XXREAL_0, NAT_1, MEMBERED, REALSET1, RLVECT_1, GROUP_1, NAT_D;
  registrations SUBSET_1, FINSET_1, FINSUB_1, GROUP_1, STRUCT_0, RELSET_1,
       ARYTM_3, MEMBERED, REALSET1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions FUNCT_1, GROUP_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1;
+ definitions FUNCT_1, GROUP_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, SUBSET_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSET_1, FINSUB_1, FUNCT_1, FUNCT_2,
-      GROUP_1, NAT_1, SUBSET_1, TARSKI, WELLORD2, ZFMISC_1, RLVECT_1, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+      GROUP_1, NAT_1, TARSKI, WELLORD2, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, NAT_D;
  schemes FUNCT_1, SUBSET_1, SETWISEO;
 
 begin
@@ -121,9 +121,7 @@ theorem
    let x;
     assume x in the carrier of G;
      then reconsider a = x as Element of G;
-         a" in the carrier of G;
-      then a" in [#](the carrier of G) by SUBSET_1:def 4;
-      then a"" in ([#](the carrier of G))";
+      a"" in ([#](the carrier of G))";
    hence thesis by GROUP_1:19;
   end;
 
@@ -357,9 +355,7 @@ theorem Th21:
          A2: (a * y") * y = a * (y" * y) by GROUP_1:def 4
                          .= a * 1.G by GROUP_1:def 6
                          .= a by GROUP_1:def 5;
-            a * y" in the carrier of G;
-         then a * y" in B by SUBSET_1:def 4;
-      hence thesis by A1,A2;
+      thus thesis by A1,A2;
      end;
     thus A * [#](the carrier of G) c= the carrier of G;
     let x;
@@ -370,9 +366,7 @@ theorem Th21:
        A3: y * (y" * a) = (y * y") * a by GROUP_1:def 4
                        .= 1.G * a by GROUP_1:def 6
                        .= a by GROUP_1:def 5;
-          y" * a in the carrier of G;
-       then y" * a in B by SUBSET_1:def 4;
-    hence thesis by A1,A3;
+    thus thesis by A1,A3;
    end;
 
 theorem Th22:
@@ -1212,23 +1206,25 @@ canceled;
 theorem
  carr(H) <> {};
 
-theorem Th88:
+ Lm3:
  x in carr(H) iff x in H by RLVECT_1:def 1;
+
+canceled;
 
 theorem Th89:
  g1 in carr(H) & g2 in carr(H) implies g1 * g2 in carr(H)
   proof assume g1 in carr(H) & g2 in carr(H);
-    then g1 in H & g2 in H by Th88;
+    then g1 in H & g2 in H by Lm3;
     then g1 * g2 in H by Th59;
-   hence thesis by Th88;
+   hence thesis by Lm3;
   end;
 
 theorem Th90:
  g in carr(H) implies g" in carr(H)
   proof assume g in carr(H);
-    then g in H by Th88;
+    then g in H by Lm3;
     then g" in H by Th60;
-   hence thesis by Th88;
+   hence thesis by Lm3;
   end;
 
 theorem
@@ -1387,13 +1383,13 @@ theorem Th99:
       then x in the carrier of H1 /\ H2 by RLVECT_1:def 1;
       then x in carr(H1) /\ carr(H2) by Def10;
       then x in carr(H1) & x in carr(H2) by XBOOLE_0:def 3;
-     hence thesis by Th88;
+     hence thesis by Lm3;
     end;
     assume x in H1 & x in H2;
-     then x in carr(H2) & x in carr(H1) by Th88;
+     then x in carr(H2) & x in carr(H1) by Lm3;
      then x in carr(H1) /\ carr(H2) by XBOOLE_0:def 3;
      then x in carr(H1 /\ H2) by Th98;
-   hence thesis by Th88;
+   hence thesis by Lm3;
   end;
 
 theorem
@@ -1426,7 +1422,7 @@ theorem
    hence thesis by Th68;
   end;
 
-Lm3:
+Lm4:
  for H1 being strict Subgroup of G holds
  H1 is Subgroup of H2 iff H1 /\ H2 = H1
  proof let H1 be strict Subgroup of G;
@@ -1451,18 +1447,18 @@ XBOOLE_1:28;
 theorem
     (1).G /\ H = (1).G & H /\ (1).G = (1).G
   proof A1: (1).G is Subgroup of H by Th77;
-   hence (1).G /\ H = (1).G by Lm3;
-   thus thesis by A1,Lm3;
+   hence (1).G /\ H = (1).G by Lm4;
+   thus thesis by A1,Lm4;
   end;
 
 theorem Th104:
  for G being strict Group, H being strict Subgroup of G holds
- H /\ (Omega).G = H & (Omega).G /\ H = H by Lm3;
+ H /\ (Omega).G = H & (Omega).G /\ H = H by Lm4;
 
 theorem
     for G being strict Group holds (Omega).G /\ (Omega).G = G by Th104;
 
-Lm4: H1 /\ H2 is Subgroup of H1
+Lm5: H1 /\ H2 is Subgroup of H1
  proof the carrier of H1 /\ H2 = (the carrier of H1) /\ (the carrier of H2) &
        (the carrier of H1) /\ (the carrier of H2) c= the carrier of H1
                                                              by Th97,
@@ -1471,16 +1467,16 @@ XBOOLE_1:17;
  end;
 
 theorem
-   H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2 by Lm4;
+   H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2 by Lm5;
 
 theorem
     for H1 being strict Subgroup of G holds
- H1 is Subgroup of H2 iff H1 /\ H2 = H1 by Lm3;
+ H1 is Subgroup of H2 iff H1 /\ H2 = H1 by Lm4;
 
 theorem
     H1 is Subgroup of H2 implies H1 /\ H3 is Subgroup of H2
   proof assume A1: H1 is Subgroup of H2;
-       H1 /\ H3 is Subgroup of H1 by Lm4;
+       H1 /\ H3 is Subgroup of H1 by Lm5;
    hence thesis by A1,Th65;
   end;
 
@@ -1511,7 +1507,7 @@ theorem
 theorem
     H1 is finite or H2 is finite implies H1 /\ H2 is finite
   proof assume A1: H1 is finite or H2 is finite;
-       H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2 by Lm4;
+       H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2 by Lm5;
    hence thesis by A1,Th48;
   end;
 
@@ -1533,11 +1529,11 @@ theorem
     proof assume x in A * H;
        then x in A * carr H;
       then consider g1,g2 such that A1: x = g1 * g2 & g1 in A & g2 in carr H;
-          g2 in H by A1,Th88;
+          g2 in H by A1,Lm3;
      hence thesis by A1;
     end;
     given g1,g2 such that A2: x = g1 * g2 & g1 in A & g2 in H;
-        g2 in carr H by A2,Th88;
+        g2 in carr H by A2,Lm3;
      then x in A * carr H by A2;
    hence thesis;
   end;
@@ -1549,11 +1545,11 @@ theorem
     proof assume x in H * A;
        then x in carr H * A;
       then consider g1,g2 such that A1: x = g1 * g2 & g1 in carr H & g2 in A;
-          g1 in H by A1,Th88;
+          g1 in H by A1,Lm3;
      hence thesis by A1;
     end;
     given g1,g2 such that A2: x = g1 * g2 & g1 in H & g2 in A;
-        g1 in carr H by A2,Th88;
+        g1 in carr H by A2,Lm3;
      then x in carr H * A by A2;
    hence thesis;
   end;
@@ -1598,10 +1594,10 @@ theorem Th125:
        then x in a * carr(H);
       then consider g such that A1: x = a * g & g in carr(H) by Th33;
      take g;
-     thus thesis by A1,Th88;
+     thus thesis by A1,Lm3;
     end;
     given g such that A2: x = a * g & g in H;
-        g in carr(H) by A2,Th88;
+        g in carr(H) by A2,Lm3;
      then x in a * carr(H) by A2,Th33;
    hence thesis;
   end;
@@ -1614,10 +1610,10 @@ theorem Th126:
        then x in carr(H) * a;
       then consider g such that A1: x = g * a & g in carr(H) by Th34;
      take g;
-     thus thesis by A1,Th88;
+     thus thesis by A1,Lm3;
     end;
     given g such that A2: x = g * a & g in H;
-        g in carr(H) by A2,Th88;
+        g in carr(H) by A2,Lm3;
      then x in carr(H) * a by A2,Th34;
    hence thesis;
   end;
@@ -1662,7 +1658,7 @@ G = the HGrStr of G &
         a * [#](the carrier of G) = the carrier of G &
         a * (Omega).G = a * carr((Omega).G) &
         carr((Omega).G) * a = (Omega).
-G * a by Th42,SUBSET_1:def 4;
+G * a by Th42;
    hence thesis;
   end;
 
@@ -1679,11 +1675,11 @@ theorem Th136:
         assume x in a * H;
          then consider g such that A2: x = a * g and A3: g in H by Th125;
              a * g in H by A1,A3,Th59;
-       hence thesis by A2,Th88;
+       hence thesis by A2,Lm3;
       end;
      let x;
       assume x in carr(H);
-        then A4: x in H by Th88;
+        then A4: x in H by Lm3;
         then x in G by Th49;
        then reconsider b = x as Element of G by RLVECT_1:def 1;
            a" in H by A1,Th60;
@@ -1696,7 +1692,7 @@ theorem Th136:
     assume A6: a * H = carr(H);
         a * 1.G = a & 1.G in H by Th55,GROUP_1:def 5;
      then a in carr(H) by A6,Th125;
-   hence thesis by Th88;
+   hence thesis by Lm3;
   end;
 
 theorem Th137:
@@ -1775,11 +1771,11 @@ theorem Th142:
         assume x in H * a;
          then consider g such that A2: x = g * a and A3: g in H by Th126;
              g * a in H by A1,A3,Th59;
-       hence thesis by A2,Th88;
+       hence thesis by A2,Lm3;
       end;
      let x;
       assume x in carr(H);
-        then A4: x in H by Th88;
+        then A4: x in H by Lm3;
         then x in G by Th49;
        then reconsider b = x as Element of G by RLVECT_1:def 1;
            a" in H by A1,Th60;
@@ -1792,7 +1788,7 @@ theorem Th142:
     assume A6: H * a = carr(H);
         1.G * a = a & 1.G in H by Th55,GROUP_1:def 5;
      then a in carr(H) by A6,Th126;
-   hence thesis by Th88;
+   hence thesis by Lm3;
   end;
 
 theorem Th143:
@@ -2441,7 +2437,7 @@ A3:  Left_Cosets(H), Right_Cosets(H) are_equipotent by Th166;
     thus thesis by A2,A3,CARD_1:81;
    end;
 
-Lm5: for X being finite set st
+Lm6: for X being finite set st
       (for Y st Y in X ex B being finite set st B = Y & card B = k &
         for Z st Z in X & Y <> Z holds Y,Z are_equipotent & Y misses Z)
      ex C being finite set st C = union X & card C = k * card X
@@ -2571,7 +2567,7 @@ A2:   B = the carrier of G & ord G = card B by A1,GROUP_1:def 15;
       thus X,Y are_equipotent by A5,A8,Th151;
       thus X misses Y by A5,A7,A8,Th138;
      end;
-    then ex D being finite set st D = union C & card D = ord H * card C by Lm5
+    then ex D being finite set st D = union C & card D = ord H * card C by Lm6
 ;
    hence thesis by A2,A3,Def18;
   end;
@@ -2580,7 +2576,7 @@ theorem
     G is finite implies ord H divides ord G
   proof assume G is finite;
     then ord G = ord H * index H by Th177;
-   hence thesis by NAT_1:def 3;
+   hence thesis by NAT_D:def 3;
   end;
 
 reserve J for Subgroup of H;
@@ -2696,5 +2692,5 @@ theorem
     for X being finite set st
   (for Y st Y in X ex B being finite set st B = Y & card B = k &
     for Z st Z in X & Y <> Z holds Y,Z are_equipotent & Y misses Z)
-  ex C being finite set st C = union X & card C = k * card X by Lm5;
+  ex C being finite set st C = union X & card C = k * card X by Lm6;
 

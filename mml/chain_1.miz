@@ -9,22 +9,22 @@ environ
  vocabularies CHAIN_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSET_1, CARD_1, ORDERS_1,
       BOOLE, MATRIX_2, RLVECT_1, WAYBEL25, SUBSET_1, FINSEQ_2, FUNCT_2,
       GRAPH_1, ARYTM_1, MCART_1, VECTSP_1, GROUP_6, CARD_3, GOBOARD5, BINOP_1,
-      SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1, SETFAM_1;
+      SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1, SETFAM_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
       XCMPLX_0, XXREAL_0, XREAL_0, FUNCT_1, REAL_1, REALSET1, EUCLID, FUNCT_2,
       ABIAN, CARD_1, DOMAIN_1, MOD_4, CARD_3, BINOP_1, VECTSP_1, SQUARE_1,
-      NAT_1, NUMBERS, FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
+      NAT_1, NAT_D, NUMBERS, FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
  constructors DOMAIN_1, REAL_1, SQUARE_1, NAT_1, RAT_1, MEMBERED, CARD_3,
-      REALSET1, ABIAN, EUCLID, MOD_4;
+      REALSET1, ABIAN, EUCLID, MOD_4, WELLORD2, NAT_D;
  registrations FINSET_1, SUBSET_1, RELSET_1, ABIAN, FINSEQ_1, VECTSP_1,
       STRUCT_0, AFINSQ_1, REALSET1, FINSEQ_5, NAT_1, MEMBERED, GROUP_1,
       XXREAL_0, XREAL_0;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
- definitions REALSET1, TARSKI, FUNCT_1, RLVECT_1, SUBSET_1;
+ definitions REALSET1, TARSKI, FUNCT_1, RLVECT_1, SUBSET_1, BINOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, SUBSET_1, XBOOLE_0, CARD_1, FINSEQ_2,
-      FUNCT_2, EUCLID, NAT_1, XBOOLE_1, CARD_2, MCART_1, RLVECT_1, FUNCT_1,
-      DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1, FINSET_1, FRECHET2, CARD_4, MOD_4,
-      XREAL_0, REALSET1, XREAL_1, XXREAL_0, ORDINAL1;
+      FUNCT_2, EUCLID, NAT_1, XBOOLE_1, CARD_2, MCART_1, FUNCT_1, DOMAIN_1,
+      ENUMSET1, CARD_3, MSSCYC_1, FINSET_1, CARD_4, MOD_4, XREAL_0, REALSET1,
+      XREAL_1, XXREAL_0, ORDINAL1;
  schemes ZFREFLE1, FRAENKEL, FUNCT_2, FINSET_1, LMOD_7, BINOP_1;
 
 begin :: stuff I could not find in MML
@@ -89,7 +89,7 @@ definition
  compatibility
  proof
      d is non zero iff d > 0;
-  then d is non zero iff d >= 1 + 0 by NAT_1:38;
+  then d is non zero iff d >= 1 + 0 by NAT_1:13;
   hence thesis;
  end;
 end;
@@ -1547,7 +1547,7 @@ A27: Q[A,l,r,f.A] by A19,A26;
   end;
   then A28: rng f is finite by FINSET_1:13;
      CELLS c= bool(REAL d) from FrSet12;
-  hence thesis by A14,A19,A20,A28,FRECHET2:50;
+  hence thesis by A14,A19,A20,A28,CARD_1:97;
  end;
 end;
 
@@ -1684,7 +1684,8 @@ A4: A = cell(x,x) & for i holds x.i in G.i;
  proof
   reconsider X = {} as Subset of Seg d by XBOOLE_1:2;
   take X;
-  thus thesis by A4,CARD_2:19;
+  card {} = 0 by CARD_1:78;
+  hence thesis by A4;
  end;
  hence thesis by A4,Th33;
 end;
@@ -1790,7 +1791,7 @@ theorem Th42:
 proof
  assume
 A1: d = d' + 1;
- then A2: d' < d by NAT_1:38;
+ then A2: d' < d by NAT_1:13;
  let A be Subset of REAL d;
  hereby
   assume A in cells(d',G);
@@ -2521,7 +2522,7 @@ theorem Th55:
 proof
  assume
 A1: d = d' + 1;
- then A2: d' < d by NAT_1:38;
+ then A2: d' < d by NAT_1:13;
  let A be Cell of d',G;
  consider l,r,i0 such that
 A3: A = cell(l,r) & l.i0 = r.i0 & l.i0 in G.i0 &
@@ -2924,8 +2925,10 @@ end;
 theorem
  for C being Chain of k,G holds C + 0_(k,G) = C;
 
-theorem Th59:
+ Lm1:
  for C being Chain of k,G holds C + C = 0_(k,G) by XBOOLE_1:92;
+
+canceled;
 
 theorem Th60:
  for C being Chain of d,G holds C` = C + Omega(G)
@@ -2993,8 +2996,8 @@ proof
  per cases;
  suppose
 A1: k + 1 + 1 <= d;
-  then A2: k + 1 < d by NAT_1:38;
-  then A3: k < d by NAT_1:38;
+  then A2: k + 1 < d by NAT_1:13;
+  then A3: k < d by NAT_1:13;
 A4: for C being Cell of (k + 1 + 1),G, l,r
     st C = cell(l,r) & for i holds l.i <= r.i holds
    del (del {C}) = 0_(k,G)
@@ -3359,7 +3362,7 @@ definition
     del C = 0_(k',G));
  existence
  proof
-  per cases by NAT_1:22;
+  per cases by NAT_1:6;
   suppose
 A1: k = 0;
    take C = 0_(k,G);
@@ -3405,7 +3408,7 @@ proof
 A1: k > d;
  let C be Chain of k,G;
  consider k' being Nat such that
-A2: k = k' + 1 by A1,NAT_1:22;
+A2: k = k' + 1 by A1,NAT_1:6;
     reconsider k' as Element of NAT by ORDINAL1:def 13;
  reconsider C' = C as Chain of (k' + 1),G by A2;
     C' = C & del C' = 0_(k',G) by A1,A2,Th53;
@@ -3440,7 +3443,7 @@ definition
  redefine func 0_(k,G) -> Cycle of k,G;
  coherence
  proof
-  per cases by NAT_1:22;
+  per cases by NAT_1:6;
   suppose
 A1: k = 0;
       {} = 0_(k,G) & card {} = 2* 0 by CARD_1:78;
@@ -3462,7 +3465,7 @@ definition
  coherence
  proof
   consider d' being Nat such that
-A1: d = d' + 1 by NAT_1:22;
+A1: d = d' + 1 by NAT_1:6;
     reconsider d' as Element of NAT by ORDINAL1:def 13;
   reconsider G as Grating of d' + 1 by A1;
      del Omega(G) = 0_(d',G) by Th62;
@@ -3476,7 +3479,7 @@ definition
  redefine func C1 + C2 -> Cycle of k,G;
  coherence
  proof
-  per cases by NAT_1:22;
+  per cases by NAT_1:6;
   suppose
 A1: k = 0;
    then card C1 is even & card C2 is even by Th68;
@@ -3501,7 +3504,7 @@ theorem
 proof
  let C be Cycle of d,G;
  consider d' being Nat such that
-A1: d = d' + 1 by NAT_1:22;
+A1: d = d' + 1 by NAT_1:6;
     reconsider d' as Element of NAT by ORDINAL1:def 13;
  reconsider G as Grating of d' + 1 by A1;
  reconsider C as Cycle of (d' + 1),G by A1;
@@ -3516,7 +3519,7 @@ definition
  redefine func del C -> Cycle of k,G;
  coherence
  proof
-  per cases by NAT_1:22;
+  per cases by NAT_1:6;
   suppose
 A1: k = 0;
    defpred P[Chain of (k + 1),G] means del $1 is Cycle of k,G;
@@ -3570,22 +3573,17 @@ A2: ch is add-associative
   proof
    let A,B,C be Element of ch;
    reconsider A' = A, B' = B, C' = C as Chain of k,G;
-   thus (A + B) + C = op.(A + B,C) by RLVECT_1:5
-    .= op.(op.(A,B),C) by RLVECT_1:5
-    .= op.(A' + B',C) by A1
+   thus (A + B) + C = op.(A' + B',C) by A1
     .= (A' + B') + C' by A1
     .= A' + (B' + C') by XBOOLE_1:91
     .= op.(A,B' + C') by A1
-    .= op.(A,op.(B,C)) by A1
-    .= op.(A,B + C) by RLVECT_1:5
-    .= A + (B + C) by RLVECT_1:5;
+    .= A + (B + C) by A1;
   end;
 A3: ch is right_zeroed
   proof
    let A be Element of ch;
    reconsider A' = A as Chain of k,G;
-   thus A + 0.ch = op.(A',0_(k,G)) by RLVECT_1:5
-    .= A' + 0_(k,G) by A1
+   thus A + 0.ch = A' + 0_(k,G) by A1
     .= A;
   end;
 A4: ch is right_complementable
@@ -3593,18 +3591,15 @@ A4: ch is right_complementable
    let A be Element of ch;
    reconsider A' = A as Chain of k,G;
    take A;
-   thus A + A = op.(A,A) by RLVECT_1:5
-    .= A' + A' by A1
-    .= 0.ch by Th59;
+   thus A + A = A' + A' by A1
+    .= 0.ch by Lm1;
   end;
    ch is Abelian
   proof
    let A,B be Element of ch;
    reconsider A' = A, B' = B as Chain of k,G;
-   thus A + B = op.(A,B) by RLVECT_1:5
-    .= A' + B' by A1
-    .= op.(B,A) by A1
-    .= B + A by RLVECT_1:5;
+   thus A + B = A' + B' by A1
+    .= B + A by A1;
   end;
   then reconsider ch as strict AbGroup by A2,A3,A4;
   take ch;
@@ -3612,8 +3607,7 @@ A4: ch is right_complementable
   thus 0.ch = 0_(k,G);
   let A,B be Element of ch, A',B' be Chain of k,G;
   assume A = A' & B = B';
-  hence A + B = op.(A',B') by RLVECT_1:5
-   .= A' + B' by A1;
+  hence A + B = A' + B' by A1;
  end;
  uniqueness
  proof

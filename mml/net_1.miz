@@ -6,9 +6,9 @@
 
 environ
 
- vocabularies RELAT_1, BOOLE, TARSKI, NET_1, SETFAM_1;
+ vocabularies RELAT_1, BOOLE, TARSKI, NET_1, SETFAM_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1;
- constructors TARSKI, SUBSET_1, RELAT_1;
+ constructors TARSKI, SUBSET_1, RELAT_1, NAT_D;
  registrations SUBSET_1, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions XBOOLE_0;
@@ -59,30 +59,28 @@ end;
 :: as the union of its Places and Transitions. Here a function assigning
 :: to a Petri net such a set is defined.
 
-canceled 3;
+Lm1:  (the Places of N) c= Elements(N) by XBOOLE_1:7;
 
-theorem
-Th4:  (the Places of N) c= Elements(N) by XBOOLE_1:7;
-
-theorem Th5:
+ Lm2:
   (the Transitions of N) c= Elements(N) by XBOOLE_1:7;
 
-theorem
- Th6:x in Elements(N) iff
+ Lm3:x in Elements(N) iff
       x in the Places of N or x in the Transitions of N by XBOOLE_0:def 2;
+
+canceled 6;
 
 theorem
     Elements(N) <> {} implies
   (x is Element of Elements(N) implies
       x is Element of the Places of N or
-        x is Element of the Transitions of N) by Th6;
+        x is Element of the Transitions of N) by Lm3;
 
 theorem
     x is Element of the Places of N &
            the Places of N <> {} implies x is Element of Elements(N)
  proof
   assume A1:x is Element of the Places of N & the Places of N <> {};
-     the Places of N c= Elements(N) by Th4;
+     the Places of N c= Elements(N) by Lm1;
   hence thesis by A1,TARSKI:def 3;
  end;
 
@@ -91,11 +89,11 @@ theorem
            the Transitions of N <> {} implies x is Element of Elements(N)
  proof
   assume A1:x is Element of the Transitions of N & the Transitions of N <> {};
-     the Transitions of N c= Elements(N) by Th5;
+     the Transitions of N c= Elements(N) by Lm2;
   hence thesis by A1,TARSKI:def 3;
  end;
 
- Lm1:Net (# {} , {} , {} #) is_Petri_net
+ Lm4:Net (# {} , {} , {} #) is_Petri_net
   proof
    set N = Net (# {} , {} , {} #);
    thus (the Places of N) /\ the Transitions of N = {};
@@ -104,7 +102,7 @@ theorem
 
 registration
  cluster Net (#{}, {}, {}#) -> Petri;
- coherence by Lm1;
+ coherence by Lm4;
 end;
 
 :: This lemma is of rather "technical" nature. It allows a definition
@@ -331,7 +329,7 @@ A2:x in Pre(N,y) implies pre N,y,x
   assume pre N,y,x;
   then A3:[x,y] in the Flow of N by Def5;
   then x in the Places of N by A1,Th13;
-  then x in Elements(N) by Th6;
+  then x in Elements(N) by Lm3;
   hence thesis by A3,Def7;
  end;
  hence thesis by A2;
@@ -356,7 +354,7 @@ A2:x in Post(N,y) implies post N,y,x
   assume post N,y,x;
   then A3:[y,x] in the Flow of N by Def6;
   then x in the Places of N by A1,Th12;
-  then x in Elements(N) by Th6;
+  then x in Elements(N) by Lm3;
   hence thesis by A3,Def8;
  end;
  hence thesis by A2;
@@ -374,7 +372,7 @@ A2:x in Post(N,y) implies post N,y,x
           not(x in the Places of N & x in the Transitions of N) by Th11;
       hence thesis;
     end;
-   uniqueness by A1,Th6;
+   uniqueness by A1,Lm3;
   end;
 
 theorem
@@ -384,7 +382,7 @@ Th22:for N being Pnet for x being Element of Elements(N) holds
   let N be Pnet;
   let x be Element of Elements(N);
   assume A1:Elements(N) <> {};
-  then x in (the Places of N) or x in (the Transitions of N) by Th6;
+  then x in (the Places of N) or x in (the Transitions of N) by Lm3;
   hence thesis by A1,Def9;
  end;
 
@@ -423,7 +421,7 @@ theorem
           not(x in the Places of N & x in the Transitions of N) by Th11;
       hence thesis;
     end;
-   uniqueness by A1,Th6;
+   uniqueness by A1,Lm3;
   end;
 
 theorem
@@ -434,7 +432,7 @@ theorem
   let N be Pnet;
   let x be Element of Elements(N);
   assume A1:Elements(N) <> {};
-  then x in (the Places of N) or x in (the Transitions of N) by Th6;
+  then x in (the Places of N) or x in (the Transitions of N) by Lm3;
   hence thesis by A1,Def10;
  end;
 
@@ -759,7 +757,7 @@ theorem
  A4:z in X & y = enter(N,z) by A3,Def14;
    A5:(z in the Places of N implies y = {z}) &
        (z in the Transitions of N implies y = Pre(N,z)) by A4,Def9;
-    A6:z in the Places of N or z in the Transitions of N by A1,Th6;
+    A6:z in the Places of N or z in the Transitions of N by A1,Lm3;
      z in the Transitions of N implies
         ex y being Element of Elements(N) st y in X &
          y in the Transitions of N & pre N,y,x
@@ -833,7 +831,7 @@ theorem
  A4:z in X & y = exit(N,z) by A3,Def15;
    A5:(z in the Places of N implies y = {z}) &
        (z in the Transitions of N implies y = Post(N,z)) by A4,Def10;
-    A6:z in the Places of N or z in the Transitions of N by A1,Th6;
+    A6:z in the Places of N or z in the Transitions of N by A1,Lm3;
      z in the Transitions of N implies
         ex y being Element of Elements(N) st y in X &
          y in the Transitions of N & post N,y,x

@@ -8,11 +8,11 @@ environ
 
  vocabularies ZF_REFLE, PBOOLE, BOOLE, RELAT_1, FUNCT_1, PRALG_1, TDGROUP,
       CARD_3, FINSEQ_2, FINSEQ_1, FUNCOP_1, FUNCT_2, AMI_1, QC_LANG1, UNIALG_1,
-      PARTFUN1, REALSET1, MSUALG_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
+      PARTFUN1, REALSET1, MSUALG_1, NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, NAT_D, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, STRUCT_0, FUNCOP_1, PARTFUN1, FINSEQ_2, CARD_3,
       PBOOLE, REALSET2, UNIALG_1;
- constructors CARD_3, PBOOLE, REALSET2, UNIALG_1;
+ constructors CARD_3, PBOOLE, REALSET2, UNIALG_1, NAT_D;
  registrations FUNCT_1, PBOOLE, UNIALG_1, TEX_2, RELSET_1, STRUCT_0, FINSEQ_2,
       FUNCOP_1, ARYTM_3, XBOOLE_0, ORDINAL1;
  requirements BOOLE, SUBSET;
@@ -399,42 +399,33 @@ definition let A be Universal_Algebra;
    then A2:  dom the charact of A = OS by A1,FINSEQ_3:31;
    then reconsider O = the charact of A as ManySortedSet of OS
      by PBOOLE:def 3;
-      O is Function-yielding
-    proof let i;
-     assume
-A3:    i in dom O;
-         dom O = dom the charact of A;
-      then reconsider n = i as Nat by A3,ORDINAL1:def 13;
-         O.n is Function by A3,UNIALG_1:5;
-     hence O.i is Function;
-    end;
-   then reconsider O as ManySortedFunction of OS;
+   reconsider O as ManySortedFunction of OS;
    reconsider DO = (MSSorts A)# * the Arity of MSSign A,
                RO = (MSSorts A)* the ResultSort of MSSign A
     as ManySortedSet of OS;
       O is ManySortedFunction of DO,RO
    proof let i;
     assume
-A4:   i in OS;
+A3:   i in OS;
      then reconsider o = i as Element of OS;
-     reconsider n = i as Nat by A1,A4,ORDINAL1:def 13;
+     reconsider n = i as Nat by A1,A3,ORDINAL1:def 13;
      set D = the carrier of A;
      reconsider h = O.n as homogeneous quasi_total non empty PartFunc of D*,D
-                             by A2,A4,FUNCT_1:def 15,UNIALG_1:5,def 4,def 5;
+                             by A2,A3,FUNCT_1:def 15,UNIALG_1:5,def 4,def 5;
         dom({0}-->D) = {0} by FUNCOP_1:19;
      then reconsider M = {0}-->D as ManySortedSet of {0} by PBOOLE:def 3;
-     A5:   n in dom(dom signature(A)-->0) by A1,A4,FUNCOP_1:19;
-A6:   0 in {0} by TARSKI:def 1;
-A7:   DO.i = ((MSSorts A)#*(*-->0)*signature A).n by A1,RELAT_1:55
-         .= (M#*(*-->0)).((signature A).n) by  A1,A4,FUNCT_1:23
-         .= (M#*(*-->0)).arity h by A1,A4,UNIALG_1:def 11
+     A4:   n in dom(dom signature(A)-->0) by A1,A3,FUNCOP_1:19;
+A5:   0 in {0} by TARSKI:def 1;
+A6:   DO.i = ((MSSorts A)#*(*-->0)*signature A).n by A1,RELAT_1:55
+         .= (M#*(*-->0)).((signature A).n) by  A1,A3,FUNCT_1:23
+         .= (M#*(*-->0)).arity h by A1,A3,UNIALG_1:def 11
          .= Funcs(Seg arity h,D) by PBOOLE:153
          .= dom(O.o) by Th8;
-A8:   RO.i = (MSSorts A).((dom signature(A)-->0).n) by A1,A5,FUNCT_1:23
-         .= ({0}-->the carrier of A).0 by A1,A4,FUNCOP_1:13
-         .= the carrier of A by A6,FUNCOP_1:13;
+A7:   RO.i = (MSSorts A).((dom signature(A)-->0).n) by A1,A4,FUNCT_1:23
+         .= ({0}-->the carrier of A).0 by A1,A3,FUNCOP_1:13
+         .= the carrier of A by A5,FUNCOP_1:13;
      then rng h c= RO.i by RELSET_1:12;
-    hence O.i is Function of DO.i,RO.i by A7,A8,FUNCT_2:def 1,RELSET_1:11;
+    hence O.i is Function of DO.i,RO.i by A6,A7,FUNCT_2:def 1,RELSET_1:11;
    end;
    hence thesis;
   end;
@@ -657,16 +648,17 @@ FUNCT_2:def 1
      proof let n,h such that
 A13:    n in dom(the_charact_of A) and
 A14:    h = (the_charact_of A).n;
-      let x,y such that
-A15:     x in dom h & y in dom h;
-A16:     dom(the_charact_of A) = the OperSymbols of MS by PBOOLE:def 3;
-       then reconsider o = n as OperSymbol of MS by A13;
-A17:    dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
-A18:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
-        (the ResultSort of MS).o in the carrier of MS by A13,A16,FUNCT_2:7;
-     then A19:   (the Sorts of A).((the ResultSort of MS).o)
-       is Component of the Sorts of A by PBOOLE:151;
-    A20: ((the Sorts of A)*the ResultSort of MS).o
+          let x,y being FinSequence such that
+A15:      x in dom h & y in dom h;
+A16:      dom(the_charact_of A) = the OperSymbols of MS by PBOOLE:def 3;
+          then reconsider o = n as OperSymbol of MS by A13;
+A17:      dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+A18:      ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
+          (the ResultSort of MS).o in the carrier of MS by A13,A16,FUNCT_2:7;
+          then
+A19:      (the Sorts of A).((the ResultSort of MS).o)
+          is Component of the Sorts of A by PBOOLE:151;
+A20:      ((the Sorts of A)*the ResultSort of MS).o
           = (the Sorts of A).((the ResultSort of MS).o) by A13,A16,A17,
 FUNCT_1:23
          .= the_sort_of A by A19,Def17;

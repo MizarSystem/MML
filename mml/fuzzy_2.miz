@@ -7,15 +7,16 @@
 environ
 
  vocabularies FUZZY_1, FUNCT_1, BOOLE, SQUARE_1, RELAT_1, ARYTM_1, PARTFUN1,
-      RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2;
+      RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, SQUARE_1, REAL_1,
       RELSET_1, PARTFUN1, INTEGRA1, SEQ_1, RCOMP_1, PSCOMP_1, FUZZY_1;
- constructors REAL_1, SQUARE_1, PSCOMP_1, INTEGRA1, FUZZY_1;
+ constructors REAL_1, SQUARE_1, PSCOMP_1, INTEGRA1, FUZZY_1, FUNCT_3, RFUNCT_1,
+      NAT_D;
  registrations RELSET_1, INTEGRA1, MEMBERED, XXREAL_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUZZY_1;
  theorems TARSKI, FUNCT_1, REAL_2, SQUARE_1, PARTFUN1, INTEGRA1, INTEGRA2,
-      FUZZY_1, XBOOLE_0, XREAL_1, XXREAL_0;
+      FUZZY_1, XBOOLE_0, XREAL_1, XXREAL_0, FUNCT_3;
  schemes PARTFUN1;
 
 begin
@@ -32,9 +33,9 @@ theorem Th1:
   0 <= h.x & h.x <= 1
   proof
     let x be Element of C,h be Membership_Func of C;
-    (EMF(C)).x = 0 by FUZZY_1:43;
+    (EMF C).x = 0 by FUNCT_3:def 3;
     hence 0 <= h.x by FUZZY_1:17;
-    (UMF(C)).x = 1 by FUZZY_1:43;
+    (UMF C).x = 1 by FUNCT_3:def 3;
     hence thesis by FUZZY_1:17;
   end;
 
@@ -104,11 +105,7 @@ A2: h.c <= h1.c;
     hence thesis;
   end;
 
-theorem
-  f\g c= f by FUZZY_1:18;
-
-theorem
-  f\g c= f \+\ g by FUZZY_1:18;
+canceled 2;
 
 theorem
   f\EMF(C) = f
@@ -117,8 +114,7 @@ theorem
     .= f by FUZZY_1:19;
   end;
 
-theorem
-  EMF(C)\f = EMF(C) by FUZZY_1:19;
+canceled;
 
 theorem
   f\g c= f\min(f,g)
@@ -210,8 +206,7 @@ proof
  hence thesis by XXREAL_0:25;
 end;
 
-theorem
-  max(f,g)\h = max(f\h,g\h) by FUZZY_1:10;
+canceled;
 
 theorem
   f\g c= h & g\f c= h implies f \+\ g c= h
@@ -226,8 +221,7 @@ A2: (g\f).c <= h.c;
     hence thesis;
   end;
 
-theorem
-   min(f,g\h) = min(f,g)\h by FUZZY_1:8;
+canceled;
 
 theorem
   min(f,g\h) c= min(f,g)\min(f,h)
@@ -760,26 +754,26 @@ end;
 theorem
 f*(EMF(C)) = EMF(C) & f*(UMF(C)) = f
 proof
-A1:f*(EMF(C)) = EMF(C)
+A1:f*(EMF C) = EMF C
  proof
   A2:C = dom EMF(C) & C = dom (f*EMF(C)) by FUZZY_1:def 1;
-     for c being Element of C st c in C holds (f*(EMF(C))).c = (EMF(C)).c
+     for c being Element of C st c in C holds (f*(EMF C)).c = (EMF C).c
   proof
    let c;
-      (f*EMF(C)).c = (f.c)*((EMF(C)).c) by Def2
-               .= (f.c)*0 by FUZZY_1:43;
-   hence thesis by FUZZY_1:43;
+   (f*EMF(C)).c = (f.c)*((EMF C).c) by Def2
+               .= (f.c)*0 by FUNCT_3:def 3;
+   hence thesis by FUNCT_3:def 3;
   end;
  hence thesis by A2,PARTFUN1:34;
  end;
-    f*(UMF(C)) = f
+ f*(UMF(C)) = f
  proof
-A3:C = dom f & C = dom (f*UMF(C)) by FUZZY_1:def 1;
-     for c being Element of C st c in C holds (f*(UMF(C))).c = f.c
+A3:C = dom f & C = dom (f*UMF C) by FUZZY_1:def 1;
+  for c being Element of C st c in C holds (f*(UMF(C))).c = f.c
   proof
    let c;
       (f*(UMF(C))).c = (f.c)*((UMF(C)).c) by Def2
-                 .= (f.c)*1 by FUZZY_1:43;
+                 .= (f.c)*1 by FUNCT_3:def 3;
    hence thesis;
   end;
   hence thesis by A3,PARTFUN1:34;
@@ -797,8 +791,8 @@ A1:f ++ EMF(C) = f
   proof
    let c;
       (f ++ EMF(C)).c = f.c + (EMF(C)).c - (f.c)*((EMF(C)).c) by Def3
-                  .= f.c + 0 - (f.c)*((EMF(C)).c) by FUZZY_1:43
-                  .= f.c - (f.c)*0 by FUZZY_1:43;
+                  .= f.c + 0 - (f.c)*((EMF(C)).c) by FUNCT_3:def 3
+                  .= f.c - (f.c)*0 by FUNCT_3:def 3;
    hence thesis;
   end;
  hence thesis by A2,PARTFUN1:34;
@@ -810,7 +804,7 @@ A3:C = dom UMF(C) & C = dom (f ++ UMF(C)) by FUZZY_1:def 1;
   proof
    let c;
       (f ++ UMF(C)).c = f.c + (UMF(C)).c - (f.c)*((UMF(C)).c) by Def3
-                  .= (UMF(C)).c+f.c - (f.c)*1 by FUZZY_1:43
+                  .= (UMF(C)).c+f.c - (f.c)*1 by FUNCT_3:def 3
                   .= (UMF(C)).c + (f.c - f.c);
    hence thesis;
   end;

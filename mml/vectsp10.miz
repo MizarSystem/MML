@@ -9,12 +9,12 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
       BINOP_1, LATTICES, RELAT_1, HAHNBAN1, MCART_1, RLSUB_1, RLSUB_2,
       RLVECT_3, RLVECT_2, FUNCT_2, REALSET1, BOOLE, SEQM_3, GROUP_6, SETFAM_1,
-      ARYTM_3, VECTSP10, GROUP_1;
+      ARYTM_3, VECTSP10, GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
       REALSET1, REALSET2, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1,
       FUNCT_2, FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
  constructors DOMAIN_1, BINOP_1, RLVECT_2, REALSET2, VECTSP_5, VECTSP_6,
-      VECTSP_7, HAHNBAN1;
+      VECTSP_7, HAHNBAN1, NAT_D;
  registrations STRUCT_0, SUBSET_1, FUNCT_1, RELSET_1, VECTSP_1, HAHNBAN1,
       VECTSP_4, XBOOLE_0, FINSET_1;
  requirements SUBSET, BOOLE;
@@ -50,8 +50,7 @@ cluster StructVectSp(K) -> Abelian;
        now
     let x,y be Vector of V;
      reconsider x'=x,y'=y as Element of K;
-     thus x+y = (the add of V).(x,y)
-       .= y'+x' by RLVECT_1:5
+     thus x+y = y'+x' by RLVECT_1:5
        .= y+x;
      end;
     hence thesis by RLVECT_1:def 5;
@@ -900,10 +899,8 @@ func VectQuot(V,W) -> strict Abelian add-associative right_zeroed
    A4: aa = a+W by VECTSP_4:def 6;
      consider b be Vector of V such that
    A5: bb = b+W by VECTSP_4:def 6;
-    thus A1+A2 = (the add of A).(A1,A2)
-     .= (a+b) +W by A2,A3,A4,A5,Def3
-     .= aC.(A2,A1) by A2,A3,A4,A5,Def3
-     .= A2+A1;
+    thus A1+A2 = (a+b) +W by A2,A3,A4,A5,Def3
+     .= A2+A1 by A2,A3,A4,A5,Def3;
     end;
  A6: A is add-associative
     proof
@@ -925,90 +922,78 @@ func VectQuot(V,W) -> strict Abelian add-associative right_zeroed
    A12: cc = c+W by VECTSP_4:def 6;
    A13: aC.(A1,A2) =a+b+W by A7,A8,A10,A11,Def3;
    A14: aC.(A2,A3) =b+c+W by A8,A9,A11,A12,Def3;
-     thus A1+A2 + A3 = (the add of A).((the add of A).(A1,A2),A3)
-     .= a+b+c +W by A9,A12,A13,Def3
+     thus A1+A2 + A3 = a+b+c +W by A9,A12,A13,Def3
      .= a+(b+c) +W by RLVECT_1:def 6
-     .= (the add of A).(A1,A2+A3) by A7,A10,A14,Def3
-     .= A1+(A2+A3);
+     .= A1+(A2+A3) by A7,A10,A14,Def3;
     end;
-A16: A is right_zeroed
+A15: A is right_zeroed
     proof
      let A1 be Element of A;
         A1 in C;
      then consider aa be Coset of W such that
-   A17: A1=aa;
+   A16: A1=aa;
      consider a be Vector of V such that
-   A18: aa = a+W by VECTSP_4:def 6;
-   A19: 0.A = 0.V + W by VECTSP_4:60;
-     thus A1 + 0.A = (the add of A).(A1,0.A)
-     .= (a+0.V) +W by A17,A18,A19,Def3
-     .= A1 by A17,A18,RLVECT_1:10;
+   A17: aa = a+W by VECTSP_4:def 6;
+   A18: 0.A = 0.V + W by VECTSP_4:60;
+     thus A1 + 0.A = (a+0.V) +W by A16,A17,A18,Def3
+     .= A1 by A16,A17,RLVECT_1:10;
     end;
- A20: A is right_complementable
+ A19: A is right_complementable
     proof
      let A1 be Element of A;
         A1 in C;
      then consider aa be Coset of W such that
-   A21: A1=aa;
+   A20: A1=aa;
      consider a be Vector of V such that
-   A22: aa = a+W by VECTSP_4:def 6;
-   A23: 0.A = 0.V + W by VECTSP_4:60;
+   A21: aa = a+W by VECTSP_4:def 6;
+   A22: 0.A = 0.V + W by VECTSP_4:60;
      set A2 = -a+ W;
         A2 is Coset of W by VECTSP_4:def 6;
      then A2 in C;
      then reconsider A2 as Element of A;
      take A2;
-     thus A1 + A2 = (the add of A).(A1,A2)
-     .= (a+-a) +W by A21,A22,Def3
-     .= 0.A by A23,RLVECT_1:16;
+     thus A1 + A2 = (a+-a) +W by A20,A21,Def3
+     .= 0.A by A22,RLVECT_1:16;
     end;
         now
       let x,y be Element of K;
       let A1,A2 be Element of A;
          A1 in C;
       then consider aa be Coset of W such that
-   A24: A1=aa;
+   A23: A1=aa;
          A2 in C;
       then consider bb be Coset of W such that
-   A25: A2=bb;
+   A24: A2=bb;
       consider a be Vector of V such that
-   A26: aa = a+W by VECTSP_4:def 6;
+   A25: aa = a+W by VECTSP_4:def 6;
       consider b be Vector of V such that
-   A27: bb = b+W by VECTSP_4:def 6;
-   A28: aC.(A1,A2) =a+b+W by A24,A25,A26,A27,Def3;
-   A29: lC.(x,A1) =x*a+W by A24,A26,Def5;
-      then lC.(x,A1) is Coset of W by VECTSP_4:def 6;
-   then A30:  lC.(x,A1) in C;
-   A31: lC.(x,A1) = x*A1 & lC.(x,A2) = x*A2 by VECTSP_1:def 24;
-   A32: lC.(x,A2) =x*b+W by A25,A27,Def5;
-      then lC.(x,A2) is Coset of W by VECTSP_4:def 6;
-   then A33:  lC.(x,A2) in C;
+   A26: bb = b+W by VECTSP_4:def 6;
+   A27: aC.(A1,A2) =a+b+W by A23,A24,A25,A26,Def3;
+   A28: lC.(x,A1) =x*a+W by A23,A25,Def5;
+   A29: lC.(x,A1) = x*A1 & lC.(x,A2) = x*A2 by VECTSP_1:def 24;
+   A30: lC.(x,A2) =x*b+W by A24,A26,Def5;
     thus x*(A1+A2) = lC.(x,(the add of A).(A1,A2)) by VECTSP_1:def 24
-        .= x*(a+b) +W by A28,Def5
+        .= x*(a+b) +W by A27,Def5
         .= x*a+x*b +W by VECTSP_1:def 26
-        .= aC.(lC.(x,A1), lC.(x,A2)) by A29,A30,A32,A33,Def3
-        .= x*A1+x*A2 by A31;
-   A34: lC.(y,A1) =y*a+W by A24,A26,Def5;
-     then lC.(y,A1) is Coset of W by VECTSP_4:def 6;
-   then A35: lC.(y,A1) in C;
-   A36: lC.(y,A1) = y*A1 by VECTSP_1:def 24;
+        .= x*A1+x*A2 by  A28,A30,Def3,A29;
+   A31: lC.(y,A1) =y*a+W by A23,A25,Def5;
+   A32: lC.(y,A1) = y*A1 by VECTSP_1:def 24;
     thus (x+y)*A1 = (the lmult of A).(x+y,A1) by VECTSP_1:def 24
-      .= (x+y)*a +W by A24,A26,Def5
+      .= (x+y)*a +W by A23,A25,Def5
       .= x*a + y*a + W by VECTSP_1:def 26
-      .= aC.(lC.(x,A1), lC.(y,A1)) by A29,A30,A34,A35,Def3
-      .= x*A1+y*A1 by A31,A36;
+      .= x*A1+y*A1 by  A28,A31,Def3,A29,A32;
     thus (x*y)*A1 = (the lmult of A).(x*y,A1) by VECTSP_1:def 24
-      .= (x*y)*a +W by A24,A26,Def5
+      .= (x*y)*a +W by A23,A25,Def5
       .= x*(y*a) +W by VECTSP_1:def 26
-      .= lC.(x,y*A1) by A34,A36,Def5
+      .= lC.(x,y*A1) by A31,A32,Def5
       .=x*(y*A1) by VECTSP_1:def 24;
     thus (1.K)*A1 = (the lmult of A).(1.K,A1) by VECTSP_1:def 24
-      .= 1.K*a +W by A24,A26,Def5
-      .= A1 by A24,A26,VECTSP_1:def 26;
+      .= 1.K*a +W by A23,A25,Def5
+      .= A1 by A23,A25,VECTSP_1:def 26;
     end;
    then reconsider A as strict Abelian add-associative right_zeroed
      right_complementable VectSp-like (non empty VectSpStr over K)
-      by A1,A6,A16,A20,VECTSP_1:def 26;
+      by A1,A6,A15,A19,VECTSP_1:def 26;
    take A;
    thus thesis;
   end;

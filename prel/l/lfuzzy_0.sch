@@ -31,9 +31,9 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -54,14 +54,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="2"/>
 </Typ>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -82,7 +82,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -116,9 +116,9 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -139,14 +139,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="3"/>
 </Typ>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -167,7 +167,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -423,9 +423,9 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -452,14 +452,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="2"/>
 </Typ>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -480,14 +480,14 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="3"/>
 </Typ>
-<Func kind="K" nr="144">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

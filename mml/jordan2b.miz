@@ -9,18 +9,18 @@ environ
  vocabularies ARYTM, PRE_TOPC, EUCLID, METRIC_1, TOPMETR, FINSEQ_1, FINSEQ_2,
       BORSUK_1, FUNCT_1, RELAT_1, ARYTM_1, RFINSEQ, BOOLE, RLVECT_1, FUNCT_4,
       COMPLEX1, SQUARE_1, RVSUM_1, ABSVALUE, ARYTM_3, PCOMPS_1, ORDINAL2,
-      TOPS_2, SUBSET_1, MCART_1, FUNCT_5, FINSEQ_4, SEQ_1;
+      TOPS_2, SUBSET_1, MCART_1, FUNCT_5, FINSEQ_4, SEQ_1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, FINSEQ_4, RVSUM_1, FUNCT_1, RELSET_1, FINSEQ_1,
-      FUNCT_2, BINOP_1, STRUCT_0, TOPS_2, SQUARE_1, FUNCT_7, TOPMETR, PRE_TOPC,
-      METRIC_1, EUCLID, RFINSEQ, FINSEQ_2, BINARITH, PSCOMP_1, PCOMPS_1,
-      FINSEQOP, XXREAL_0;
+      COMPLEX1, REAL_1, NAT_1, NAT_D, FINSEQ_4, RVSUM_1, FUNCT_1, RELSET_1,
+      FINSEQ_1, FUNCT_2, BINOP_1, STRUCT_0, TOPS_2, SQUARE_1, FUNCT_7, TOPMETR,
+      PRE_TOPC, METRIC_1, EUCLID, RFINSEQ, FINSEQ_2, BINARITH, PSCOMP_1,
+      PCOMPS_1, FINSEQOP, XXREAL_0;
  constructors REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSEQOP, FINSEQ_4, FINSOP_1,
-      SETWOP_2, RFINSEQ, BINARITH, FUNCT_7, TOPS_2, TOPMETR, PSCOMP_1;
+      SETWOP_2, RFINSEQ, BINARITH, FUNCT_7, TOPS_2, TOPMETR, PSCOMP_1, NAT_D;
  registrations STRUCT_0, RELSET_1, EUCLID, TOPMETR, METRIC_1, PCOMPS_1,
       FINSEQ_2, FUNCT_7, XREAL_0, ARYTM_3, SEQ_1, MEMBERED, XXREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, PRE_TOPC, EUCLID, FINSEQ_2, RVSUM_1, SQUARE_1;
+ definitions TARSKI, PRE_TOPC, EUCLID, FINSEQ_2, RVSUM_1, SQUARE_1, STRUCT_0;
  theorems TARSKI, EUCLID, TOPMETR, TOPS_1, METRIC_1, FUNCT_1, RFINSEQ,
       BINARITH, FUNCT_2, RELAT_1, TBSP_1, NAT_1, FINSEQ_3, FINSEQ_1, REAL_1,
       ABSVALUE, REAL_2, SQUARE_1, FINSEQ_2, TOPS_2, RVSUM_1, TOPREAL3,
@@ -114,13 +114,15 @@ A1:for x st x in REAL n ex y st y in REAL & P[x,y]
  hence thesis;
 end;
 
-theorem Th2: for i st i in Seg n holds (0*n).i=0 by FUNCOP_1:13;
+ Lm3: for i st i in Seg n holds (0*n).i=0 by FUNCOP_1:13;
+
+canceled;
 
 theorem  for i st i in Seg n holds Proj(0.REAL n,i)=0
  proof let i;assume A1:i in Seg n;  len (0*n)=n by FINSEQ_2:109;
      then A2:i in dom (0*n) by A1,FINSEQ_1:def 3;
      Proj(0.REAL n,i)=(0*n)/.i by Def1 .=(0*n).i by A2,FINSEQ_4:def 4
-     .=0 by A1,Th2;
+     .=0 by A1,Lm3;
   hence thesis;
  end;
 
@@ -134,10 +136,9 @@ proof let r,p,i;assume A1:i in Seg n;
   A3:Proj(p,i)=w1/.i by Def1 .=w3.i by A2,FINSEQ_4:def 4;
      len w=n by FINSEQ_2:109;
   then A4:i in dom w by A1,FINSEQ_1:def 3;
-  A5:w=r*w1 by EUCLID:def 11;
-A6: r is Real by XREAL_0:def 1;
+  A5:w=r*w1;
      Proj(r*p,i)=w/.i by Def1 .= w.i by A4,FINSEQ_4:def 4
-  .= r*Proj(p,i) by A3,A5,A6,RVSUM_1:67;
+  .= r*Proj(p,i) by A3,A5,RVSUM_1:67;
  hence thesis;
 end;
 
@@ -152,7 +153,6 @@ proof let p,i;assume A1:i in Seg n;
      len w=n by FINSEQ_2:109;
   then A4:i in dom w by A1,FINSEQ_1:def 3;
      Proj(-p,i)=w/.i by Def1 .= w.i by A4,FINSEQ_4:def 4 .=(-w3).i
-    by EUCLID:def 12
   .=((-1)*w3).i by RVSUM_1:76 .= (-1)*Proj(p,i) by A3,RVSUM_1:67
   .=-Proj(p,i);
  hence thesis;
@@ -174,7 +174,7 @@ proof let p1,p2,i;assume A1:i in Seg n;
   A5:Proj(p2,i)=w5/.i by Def1 .=w7.i by A3,FINSEQ_4:def 4;
      i in Seg len w by A1,FINSEQ_2:109;
   then A6:i in dom w by FINSEQ_1:def 3;
-  A7:w=w1+w5 by EUCLID:def 10;
+  A7:w=w1+w5;
      Proj(p1+p2,i)=w/.i by Def1 .= w.i by A6,FINSEQ_4:def 4
   .=Proj(p1,i)+Proj(p2,i) by A4,A5,A7,RVSUM_1:27;
  hence thesis;
@@ -198,19 +198,21 @@ proof let p1,p2,i;assume A1:i in Seg n;
    .=w7.i by A3,FINSEQ_4:def 4;
      len w=n by FINSEQ_2:109;
   then A6:i in dom w by A1,FINSEQ_1:def 3;
-  A7:w=w1-w5 by EUCLID:def 13;
+  A7:w=w1-w5;
      Proj(p1-p2,i)=w/.i by Def1.= w.i by A6,FINSEQ_4:def 4
   .=Proj(p1,i)-Proj(p2,i) by A4,A5,A7,RVSUM_1:48;
  hence thesis;
 end;
 
-theorem Th8: len (0*n)=n by FINSEQ_2:109;
+ Lm4: len (0*n)=n by FINSEQ_2:109;
+
+canceled;
 
 theorem Th9: i<=n implies (0*n)|i=0*i
 proof assume A1: i<=n;
-  then i<=len (0*n) by Th8;
+  then i<=len (0*n) by Lm4;
   then A2:len ((0*n)|i)=i by FINSEQ_1:80;
-  A3:i=len (0*i) by Th8;
+  A3:i=len (0*i) by Lm4;
      for j st 1<=j & j<=i holds ((0*n)|i).j=(0*i).j
    proof let j;assume A4: 1<=j & j<=i;
      then A5:j in Seg i by FINSEQ_1:3;
@@ -225,9 +227,9 @@ end;
 
 theorem Th10: (0*n)/^i=0*(n-'i)
 proof
-  A1:n=len (0*n) by Th8;
-  A2:len ((0*n)/^i) = len (0*n)-'i by JORDAN3:19 .=n-'i by Th8;
-  A3: n-'i=len (0*(n-'i)) by Th8;
+  A1:n=len (0*n) by Lm4;
+  A2:len ((0*n)/^i) = len (0*n)-'i by JORDAN3:19 .=n-'i by Lm4;
+  A3: n-'i=len (0*(n-'i)) by Lm4;
      for j st 1<=j & j<=n-'i holds ((0*n)/^i).j=(0*(n-'i)).j
    proof let j;assume A4: 1<=j & j<=n-'i;
      then A5:j in Seg (n-'i) by FINSEQ_1:3;
@@ -238,7 +240,7 @@ proof
      end;
      then n-'i=n-i by BINARITH:50;
      then A7: j+i<=n-i+i by A4,XREAL_1:8;
-        1<=j+i by A4,NAT_1:37;
+        1<=j+i by A4,NAT_1:12;
      then A8:j+i in Seg n by A7,FINSEQ_1:3;
         now per cases;
      case i<=len (0*n);
@@ -286,7 +288,7 @@ proof
      r be Element of D;
   assume A1: i in dom w;
     then A2: 1<=i & i<=len w by FINSEQ_3:27;
-    then A3:i-'1<=len w by JORDAN3:7;
+    then A3:i-'1<=len w by BINARITH:62;
     A4:len(w+*(i,r))=i-1+1+(len w -i) by Th12;
     A5:len ((w|(i-'1))^<*r*>^(w/^i))
     =len ((w|(i-'1))^<*r*>)+len(w/^i) by FINSEQ_1:35
@@ -313,11 +315,11 @@ proof
       case A10:i<j;
         A11:j<=len ((w|(i-'1))^<*r*>^(w/^i)) by A5,A6,Th12;
          A12:i<=len w by A1,FINSEQ_3:27;
-            i+1<=j by A10,NAT_1:38;
+            i+1<=j by A10,NAT_1:13;
          then A13: i+1-i<=j-i by XREAL_1:11;
          A14:len (w/^i)=len w -'i by JORDAN3:19 .=len w -i by A12,BINARITH:50;
             j-i<=len w-i by A6,A7,XREAL_1:11;
-         then 1<=j-'i & j-'i<=len (w/^i) by A13,A14,JORDAN3:1;
+         then 1<=j-'i & j-'i<=len (w/^i) by A13,A14,BINARITH:57;
          then A15:j-'i in dom (w/^i) by FINSEQ_3:27;
            ((w|(i-'1))^<*r*>^(w/^i)).j
         =(w/^i).(j-len ((w|(i-'1))^<*r*>)) by A8,A10,A11,FINSEQ_1:37
@@ -333,7 +335,7 @@ proof
        hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j by A1,A16,FUNCT_7:33;
       end;
       case A18:j<i;
-        then j+1<=i by NAT_1:38;
+        then j+1<=i by NAT_1:13;
         then A19: j+1-1<=i-1 by XREAL_1:11;
         then A20:j<=i-'1 by A2,BINARITH:50;
            ((w|(i-'1))^<*r*>^(w/^i)).j
@@ -351,8 +353,8 @@ end;
 theorem Th14:for r being Real st i in Seg n holds Sum( (0*n)+*(i,r))=r
 proof let r be Real;assume i in Seg n;
 then A1: 1<=i & i<=n by FINSEQ_1:3;
-  then A2:i-'1<=n by JORDAN3:7;
-     len(0*n) = n by Th8;
+  then A2:i-'1<=n by BINARITH:62;
+     len(0*n) = n by Lm4;
   then A3:i in dom (0*n) by A1,FINSEQ_3:27;
   reconsider w=0*n as FinSequence of REAL;
      Sum( w+*(i,r))=Sum((w|(i-'1))^<*r*>^(w/^i)) by A3,Th13
@@ -374,7 +376,7 @@ proof let q be Element of REAL n,p,i;assume
   A3: |.q.|^2=Sum sqr q by A2,SQUARE_1:def 4;
   A4:0<=|.q.| by EUCLID:12;
    A5:len q=n by FINSEQ_2:109;
-      len (0*n)=n by Th8;
+      len (0*n)=n by Lm4;
    then len ((0*n)+*(i,(Proj(p,i))^2))=n by Th12;
    then reconsider w1= (0*n)+*(i,(Proj(p,i))^2) as Element of n-tuples_on REAL
      by FINSEQ_2:110;
@@ -387,7 +389,7 @@ A8: j in Seg n;
       per cases;
       suppose A9:j=i;
         A10:i in dom w1 by A1,A6,FINSEQ_1:def 3;
-A11:    dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Th8;
+A11:    dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Lm4;
         A12: r1=w1/.i by A9,A10,FINSEQ_4:def 4
         .=(Proj(p,i))^2 by A1,A11,FUNCT_7:38
         .=(q/.i)^2 by A1,Def1;
@@ -397,7 +399,7 @@ A11:    dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Th8;
       end;
       suppose A13:j<>i;
         A14:j in dom w1 by A6,A8,FINSEQ_1:def 3;
-        A15: dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Th8;
+        A15: dom 0*n=Seg len 0*n by FINSEQ_1:def 3 .=Seg n by Lm4;
         A16: r1=w1/.j by A14,FINSEQ_4:def 4
         .=(0*n)/.j by A8,A13,A15,FUNCT_7:39.=(n|->0).j by A8,A15,FINSEQ_4:def 4
 .=0 by A8,FUNCOP_1:13;
@@ -442,7 +444,7 @@ proof let s1,P,i such that A1:P= { p:s1>Proj(p,i) } & i in Seg n;
       reconsider pen=ppe, pqn=pq as Element of REAL n;
       (Pitag_dist n).(q,pe)=dist(q,pe) by METRIC_1:def 1;
       then A7: |.pqn-pen.|<r by A6,EUCLID:def 6;
-          pq-ppe=pqn-pen by EUCLID:def 13;
+          pq-ppe=pqn-pen;
        then (Proj(pq-ppe,i)) <= |.pqn-pen.| by A1,Th15;
       then (Proj(pq-ppe,i)) <r by A7,XXREAL_0:2;
       then Proj(pq,i)-Proj(ppe,i) < r by A1,Th7;
@@ -480,7 +482,7 @@ proof let s1,P,i such that A1:P= { p:s1<Proj(p,i) } & i in Seg n;
       reconsider pen=ppe, pqn=pq as Element of REAL n;
       (Pitag_dist n).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then A7: |.pen-pqn.|<r by A6,EUCLID:def 6;
-          ppe-pq=pen-pqn by EUCLID:def 13;
+          ppe-pq=pen-pqn;
        then Proj(ppe-pq,i) <= |.pen-pqn.| by A1,Th15;
       then Proj(ppe-pq,i) <r by A7,XXREAL_0:2;
       then Proj(ppe,i)-Proj(pq,i) < r by A1,Th7;
@@ -732,7 +734,7 @@ theorem Th24: for p being Element of TOP-REAL 1
    hence thesis;
   end;
 
-theorem Th25: for w being Element of Euclid 1
+ Lm5: for w being Element of Euclid 1
  ex r being Real st w=<*r*> by FINSEQ_2:117;
 
 definition let r be real number;
@@ -745,10 +747,12 @@ definition let r be real number;
   end;
 end;
 
+canceled;
+
 theorem  s*|[ r ]|=|[ s*r ]|
 proof
   reconsider r,s as Real by XREAL_0:def 1;
-  s*|[r]|=s*<*r*> by EUCLID:def 11 .=|[s*r]| by RVSUM_1:69;
+  s*|[r]|=s*<*r*> .=|[s*r]| by RVSUM_1:69;
  hence thesis;
 end;
 
@@ -756,10 +760,10 @@ theorem  |[ r1+r2 ]|=|[ r1 ]|+|[ r2 ]|
 proof
    reconsider r1,r2 as Real by XREAL_0:def 1;
    A1: |[r1+r2]|=<*r1*>+<*r2*> by RVSUM_1:29;
- thus thesis by A1,EUCLID:def 10;
+ thus thesis by A1;
 end;
 
-theorem  |[ 0 ]|=0.REAL 1 by FINSEQ_2:73;
+canceled;
 
 theorem  |[r1]|=|[r2]| implies r1=r2
 proof assume A1: |[r1]|=|[r2]|;
@@ -919,7 +923,7 @@ then A4:        u1-s<s+r-s by XREAL_1:11;
            then consider q being Element of Euclid 1
            such that
            A8: x=q & dist(u,q)<r;
-           consider s1 be Real such that A9:q=<*s1*> by Th25;
+           consider s1 be Real such that A9:q=<*s1*> by Lm5;
            reconsider eu=u, eq=q as Element of REAL 1;
           (Pitag_dist 1).(eu,eq)<r by A8,METRIC_1:def 1;
            then |.<*u1*>-<*s1*>.| < r by A1,A9,EUCLID:def 6;
@@ -1006,7 +1010,7 @@ then A14: rng f=[#](R^1);
         the carrier of TopSpaceMetr(Euclid 1);
         assume A15: r>0 & P=Ball(u,r);
          consider s1 be Real such that
-         A16: u=<*s1*> by Th25;
+         A16: u=<*s1*> by Lm5;
          reconsider f1=f as Function of
           the carrier of TOP-REAL 1,the carrier of R^1;
             dom f1=the carrier of TOP-REAL 1 by FUNCT_2:def 1;
@@ -1056,7 +1060,7 @@ then A14: rng f=[#](R^1);
 theorem Th35: for p being Element of TOP-REAL 2 holds
  Proj(p,1)=p`1 & Proj(p,2)=p`2
  proof let p be Element of TOP-REAL 2;
-   A1:p = |[p`1, p`2]| by EUCLID:57 .=<*p`1,p`2*>;
+   A1:p =<*p`1,p`2*> by EUCLID:57;
    reconsider r1=p`1,r2=p`2 as Real;
    reconsider g=<*r1,r2*> as FinSequence of REAL by FINSEQ_2:121;
    A2:Proj(p,1) = g/.1 by A1,Def1 .=p`1 by FINSEQ_4:26;

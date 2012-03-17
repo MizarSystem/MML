@@ -25,10 +25,9 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="FUNCT_3"/>
 <ArticleID name="SEQ_1"/>
+<ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="RFINSEQ"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="BINOP_2"/>
 <ArticleID name="FRAENKEL"/>
@@ -36,6 +35,8 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINARITH"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="UNIALG_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="COMPUT_1"/>
 </Signature>
@@ -46,10 +47,10 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="67"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -57,10 +58,10 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -89,7 +90,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="K" nr="28">
-<Func kind="K" nr="318">
+<Func kind="K" nr="322">
 <Func kind="K" nr="107">
 <Func kind="F" nr="2"/>
 </Func>
@@ -120,7 +121,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="303">
+<Func kind="K" nr="301">
 <Func kind="K" nr="82"/>
 <Var nr="1"/>
 </Func>
@@ -166,10 +167,10 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -177,10 +178,10 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -188,10 +189,10 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="34"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -225,7 +226,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="34">
 <Func kind="K" nr="28">
-<Func kind="K" nr="318">
+<Func kind="K" nr="322">
 <Func kind="K" nr="108">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

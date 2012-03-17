@@ -9,21 +9,21 @@ environ
 
  vocabularies PRE_TOPC, EUCLID, FINSEQ_1, ARYTM, ARYTM_1, ARYTM_3, METRIC_1,
       RELAT_1, MCART_1, FUNCT_1, SQUARE_1, RVSUM_1, ABSVALUE, COMPLEX1,
-      RLVECT_1, TOPREAL1, BOOLE, TARSKI, FINSEQ_2, FINSEQ_4;
+      RLVECT_1, TOPREAL1, BOOLE, TARSKI, FINSEQ_4, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      SQUARE_1, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2,
-      BINOP_1, PRE_TOPC, FINSEQ_2, FINSEQ_4, STRUCT_0, METRIC_1, FINSEQOP,
-      RVSUM_1, EUCLID, TOPREAL1, XXREAL_0;
+      SQUARE_1, COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FINSEQ_1,
+      FUNCT_2, BINOP_1, PRE_TOPC, FINSEQ_2, FINSEQ_4, STRUCT_0, METRIC_1,
+      FINSEQOP, RVSUM_1, EUCLID, TOPREAL1, XXREAL_0;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, INT_1, BINOP_2, COMPLEX1,
-      FINSEQOP, SEQ_1, FINSEQ_4, TOPREAL1;
+      FINSEQOP, SEQ_1, FINSEQ_4, TOPREAL1, NAT_D;
  registrations FUNCT_1, RELSET_1, STRUCT_0, EUCLID, XREAL_0, FINSEQ_1, INT_1,
-      MEMBERED, SQUARE_1, XXREAL_0, ORDINAL1;
+      MEMBERED, SQUARE_1, XXREAL_0, ORDINAL1, SEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, TOPREAL1, FUNCT_1, XBOOLE_0, SQUARE_1;
+ definitions TARSKI, TOPREAL1, FUNCT_1, XBOOLE_0, SQUARE_1, EUCLID, RVSUM_1;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       SQUARE_1, FINSEQ_2, METRIC_1, RVSUM_1, EUCLID, TOPREAL1, FINSEQ_3,
-      FINSEQ_4, CQC_THE1, PARTFUN2, TBSP_1, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1, XREAL_0, COMPLEX1, XREAL_1, BINOP_2, XXREAL_0;
+      FINSEQ_4, PARTFUN2, TBSP_1, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      XREAL_0, COMPLEX1, XREAL_1, BINOP_2, XXREAL_0, FINSEQOP;
 
 begin
 
@@ -38,23 +38,15 @@ reserve p,p1,p2,p3,p11,p22,q,q1,q2 for Point of TOP-REAL 2,
 :: Real numbers preliminaries
 :::::::::::::::::::::::::::::
 
-canceled 2;
-
-theorem Th3:
+ Lm1:
 r<s implies r < (r+s)/2 & (r+s)/2 < s by XREAL_1:228;
-
-Lm1: the carrier of Euclid n = REAL n
- proof
-     Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
-  hence thesis;
- end;
 
 begin
 :::::::::::::::::::::::::::::::::::
 :: Properties of sets in TOP-REAL 2
 :::::::::::::::::::::::::::::::::::
 
-canceled 2;
+canceled 5;
 
 theorem Th6:
 1 in dom <*x,y,z*> & 2 in dom <*x,y,z*> & 3 in dom <*x,y,z*>
@@ -93,8 +85,8 @@ p1=<*r1,s1*> & p2=<*r2,s2*> implies p1+p2=<*r1+r2,s1+s2*> &
                  by EUCLID:59,65;
      |[r1,s1]|=<*r1,s1*> & |[r2,s2]|=<*r2,s2*> &
   |[r1,s1]|`1=r1 & |[r1,s1]|`2=s1 & |[r2,s2]|`1=r2 & |[r2,s2]|`2=s2
-                                  by EUCLID:56,def 16;
-  hence thesis by A1,A2,EUCLID:def 16;
+                                  by EUCLID:56;
+  hence thesis by A1,A2;
  end;
 
 theorem Th11:
@@ -111,21 +103,20 @@ u1 = p1 & u2 = p2 implies
  proof assume
   A1: u1 = p1 & u2 = p2;
      p1 = |[p1`1,p1`2]| by EUCLID:57;
-  then A2: u1 = <* p1`1,p1`2 *> by A1,EUCLID:def 16;
+  then A2: u1 = <* p1`1,p1`2 *> by A1;
      p2 = |[p2`1,p2`2]| by EUCLID:57;
-  then A3: u2 = <* p2`1,p2`2 *> by A1,EUCLID:def 16;
-     Euclid 2 = MetrStruct(# REAL 2,Pitag_dist 2 #) by EUCLID:def 7;
-  then reconsider v1 = u1, v2 = u2 as Element of REAL 2;
-  A4: v1-v2= diffreal.:(v1,v2) by RVSUM_1:def 6
-     .= <* diffreal.(p1`1,p2`1), diffreal.(p1`2,p2`2) *> by A2,A3,FINSEQ_2:89
+  then A3: u2 = <* p2`1,p2`2 *> by A1;
+  reconsider v1 = u1, v2 = u2 as Element of REAL 2;
+  A4: v1-v2= <* diffreal.(p1`1,p2`1), diffreal.(p1`2,p2`2) *> by A2,A3,FINSEQ_2
+:89
      .= <* p1`1 - p2`1, diffreal.(p1`2,p2`2) *> by BINOP_2:def 10
      .= <* p1`1 - p2`1,p1`2 - p2`2*> by BINOP_2:def 10;
-  A5: abs (v1-v2) = absreal * (v1-v2) by EUCLID:def 3
-     .= <* absreal.(p1`1-p2`1),absreal.(p1`2-p2`2) *> by A4,FINSEQ_2:40
+  A5: abs (v1-v2) = <* absreal.(p1`1-p2`1),absreal.(p1`2-p2`2) *> by A4,
+FINSEQ_2:40
      .= <* abs( p1`1-p2`1 ),absreal.(p1`2-p2`2) *> by EUCLID:def 2
      .= <* abs( p1`1-p2`1 ),abs( p1`2-p2`2) *> by EUCLID:def 2;
-A6:  sqr abs (v1-v2) = sqrreal *(abs (v1-v2)) by RVSUM_1:def 8
-     .= <* sqrreal.(abs( p1`1 - p2`1 )),sqrreal.(abs( p1`2-p2`2 )) *>
+A6:  sqr abs (v1-v2) = <* sqrreal.(abs( p1`1 - p2`1 )),sqrreal.(abs( p1`2-p2`2
+)) *>
             by A5,FINSEQ_2:40
      .= <* (abs( p1`1 - p2`1 ))^2,sqrreal.(abs( p1`2-p2`2 )) *>
        by RVSUM_1:def 2
@@ -133,7 +124,6 @@ A6:  sqr abs (v1-v2) = sqrreal *(abs (v1-v2)) by RVSUM_1:def 8
      .= <* (p1`1 - p2`1)^2,(abs(p1`2-p2`2))^2 *> by COMPLEX1:161
      .= <* (p1`1-p2`1)^2,(p1`2 - p2`2)^2 *> by COMPLEX1:161;
      (Pitag_dist 2).(u1,u2) = |.v1 - v2.| by EUCLID:def 6
-  .= sqrt Sum sqr (v1-v2) by EUCLID:def 5
   .= sqrt Sum sqr abs (v1-v2) by EUCLID:29;
   hence thesis by A6,RVSUM_1:107;
  end;
@@ -141,8 +131,7 @@ A6:  sqr abs (v1-v2) = sqrreal *(abs (v1-v2)) by RVSUM_1:def 8
 theorem Th13:
 the carrier of TOP-REAL n = the carrier of Euclid n
  proof
-  thus the carrier of TOP-REAL n = REAL n by EUCLID:25
-   .= the carrier of Euclid n by Lm1;
+  thus the carrier of TOP-REAL n = the carrier of Euclid n by EUCLID:25;
  end;
 
 reserve lambda for Real;
@@ -365,12 +354,12 @@ theorem
   p1`1 = (p`1+q`1)/2 & p1`2 = p`2 by EUCLID:56,57;
    per cases by A1,REAL_1:def 5;
    suppose A3: p`1 < q`1;
-    then p`1 <= (p`1+q`1)/2 & (p`1+q`1)/2 <= q`1 by Th3;
+    then p`1 <= (p`1+q`1)/2 & (p`1+q`1)/2 <= q`1 by Lm1;
     then p1 in {p2: p2`2 = p`2 & p`1 <= p2`1 & p2`1 <= q`1} by A2;
     hence thesis by A2,A3,Th16;
    end;
    suppose A4: p`1 > q`1;
-    then q`1 <= (p`1+q`1)/2 & (p`1+q`1)/2 <= p`1 by Th3;
+    then q`1 <= (p`1+q`1)/2 & (p`1+q`1)/2 <= p`1 by Lm1;
     then p1 in {p2: p2`2 = p`2 & q`1 <= p2`1 & p2`1 <= p`1} by A2;
     hence thesis by A2,A4,Th16;
  end;
@@ -385,12 +374,12 @@ theorem
   A3: p1`1 = p`1 & p1`2 = (p`2+q`2)/2 by EUCLID:56;
    per cases by A1,REAL_1:def 5;
    suppose A4: p`2 < q`2;
-    then p`2 <= (p`2+q`2)/2 & (p`2+q`2)/2 <= q`2 by Th3;
+    then p`2 <= (p`2+q`2)/2 & (p`2+q`2)/2 <= q`2 by Lm1;
     then p1 in {p2: p2`1 = p`1 & p`2 <= p2`2 & p2`2 <= q`2} by A3;
     hence thesis by A2,A4,Th15;
    end;
    suppose A5: p`2 > q`2;
-    then q`2 <= (p`2+q`2)/2 & (p`2+q`2)/2 <= p`2 by Th3;
+    then q`2 <= (p`2+q`2)/2 & (p`2+q`2)/2 <= p`2 by Lm1;
     then p1 in {p2: p2`1 = p`1 & q`2 <= p2`2 & p2`2 <= p`2} by A3;
     hence thesis by A2,A5,Th15;
  end;
@@ -400,10 +389,10 @@ theorem Th21:
 f = <* p,p1,q *> & i<>0 & j>i+1 implies LSeg(f,j) = {}
  proof assume
   A1: f = <* p,p1,q *> & i<>0 & j>i+1;
-  then i>0; then i>=0+1 by NAT_1:38;
+  then i>0; then i>=0+1 by NAT_1:13;
   then 1+i>=1+1 & j>1+i by A1,XREAL_1:9;
-  then j>2 by XXREAL_0:2; then j>=2+1 by NAT_1:38;
-   then j+1 > 3 & len f = 3 by A1,FINSEQ_1:62,NAT_1:38;
+  then j>2 by XXREAL_0:2; then j>=2+1 by NAT_1:13;
+   then j+1 > 3 & len f = 3 by A1,FINSEQ_1:62,NAT_1:13;
   hence thesis by TOPREAL1:def 5;
  end;
 
@@ -425,7 +414,7 @@ theorem
       let x; assume x in M; then consider j such that
       A5: x = LSeg(f,j) & 1<=j & j+1<=len f;
 A6:    j <= 2 & j > 0 by A2,A5,XREAL_1:8;
-       per cases by A6,CQC_THE1:3;
+       per cases by A6,NAT_1:27;
        suppose j=1;
         then x = LSeg(p1,p2) by A2,A5,TOPREAL1:def 5;
         hence x in {LSeg(p1,p2),LSeg(p2,p3)} by TARSKI:def 2;
@@ -527,10 +516,10 @@ theorem
      then dom h = Seg i by XBOOLE_1:28;
     then len h <= len f by A6,FINSEQ_1:def 3;
     then A7: k+1<=len f by A3,XXREAL_0:2;
-       k <= k+1 by NAT_1:37;
+       k <= k+1 by NAT_1:12;
     then k <= len h by A3,XXREAL_0:2;
     then A8: k in dom h by A3,FINSEQ_3:27;
-       1<=k+1 by NAT_1:37;
+       1<=k+1 by NAT_1:12;
     then k+1 in dom h by A3,FINSEQ_3:27;
     then X = LSeg(f,k) by A3,A5,A8,Th24;
     then X in Mf by A3,A7;
@@ -539,7 +528,7 @@ theorem
    end;
    suppose A9: not i in dom f;
         now per cases by A9,FINSEQ_3:27;
-     case i<1; then i<0+1; then i<=0 & 0<=i by NAT_1:38;
+     case i<1; then i<0+1; then i<=0 & 0<=i by NAT_1:13;
       then Seg i = {} by XXREAL_0:1,FINSEQ_1:4;
       then dom h = dom f /\ {} by A4,FUNCT_1:68;
       then len h = 0 by FINSEQ_1:4,def 3;
@@ -576,9 +565,7 @@ for p1,p2 being Point of TOP-REAL n, u being Point of Euclid n
      A3: (1-lambda)*p1 + lambda*p2=a and
      A4: 0 <= lambda & lambda <= 1;
      set p = (1-lambda)*p1 + lambda*p2;
-        u in the carrier of Euclid n;
-     then u in the carrier of TOP-REAL n by Th13;
-     then reconsider q2'=u as Element of REAL n by EUCLID:25;
+     reconsider q2'=u as Element of REAL n;
      reconsider q2=q2' as Point of TOP-REAL n by EUCLID:25;
      A5: q2 - p = (1-lambda+lambda)*q2-((1-lambda)*p1 + lambda*p2) by EUCLID:33
       .= (1-lambda)*q2+lambda*q2-((1-lambda)*p1 + lambda*p2) by EUCLID:37
@@ -593,14 +580,14 @@ for p1,p2 being Point of TOP-REAL n, u being Point of Euclid n
       .= (1-lambda)*(q2+-p1)+(lambda*(q2 + -p2)) by EUCLID:36;
      reconsider p'=(1-lambda)*p1 + lambda*p2,p1'=p1,p2'=p2 as Element of REAL n
       by EUCLID:25;
-         -p1 = -p1' by EUCLID:def 12; then q2+-p1 = q2'+-p1' by EUCLID:def 10;
-     then A6: (1-lambda)*(q2+-p1)=(1-lambda)*(q2'+-p1') by EUCLID:def 11;
-         -p2 = -p2' by EUCLID:def 12;
-     then q2+-p2 = q2'+-p2' by EUCLID:def 10;
-     then A7: lambda*(q2+-p2)=lambda*(q2'+(-p2')) by EUCLID:def 11;
-        q2-p = q2' - p' by EUCLID:def 13;
+         -p1 = -p1'; then q2+-p1 = q2'+-p1';
+     then A6: (1-lambda)*(q2+-p1)=(1-lambda)*(q2'+-p1');
+         -p2 = -p2';
+     then q2+-p2 = q2'+-p2';
+     then A7: lambda*(q2+-p2)=lambda*(q2'+(-p2'));
+        q2-p = q2' - p';
      then q2' - p' = (1-lambda)*(q2'+-p1')+lambda*(q2' + -p2')
-                               by A5,A6,A7,EUCLID:def 10;
+                               by A5,A6,A7;
      then A8: |. q2'-p' .| <= |.(1-lambda)*(q2'+-p1').|
                              + |.lambda*(q2' + -p2').| by EUCLID:15;
      A9: |.(1-lambda)*(q2'+-p1').| + |.lambda*(q2' + -p2').| =
@@ -609,19 +596,17 @@ for p1,p2 being Point of TOP-REAL n, u being Point of Euclid n
      consider u3 being Point of Euclid n such that
      A10: u3=p1 & dist(u,u3)<r by A2;
      A11: (Pitag_dist n).(q2',p1')=|.q2'-p1'.| by EUCLID:def 6;
-     A12: Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
-     then A13: dist(u,u3) = |.q2'-p1'.| by A10,A11,METRIC_1:def 1;
-     A14: n-tuples_on REAL = REAL n by EUCLID:def 1;
-     then A15: |.q2'+-p1'.| <= r by A10,A13,RVSUM_1:52;
+     A12: dist(u,u3) = |.q2'-p1'.| by A10,A11,METRIC_1:def 1;
+     A13: |.q2'+-p1'.| <= r by A10,A12,FINSEQOP:89;
         p2 in {u4 where u4 is Point of Euclid n :
             dist(u,u4)<r} by A1,METRIC_1:18;
      then consider u4 be Point of Euclid n such that
-     A16: u4=p2 & dist(u,u4)<r;
+     A14: u4=p2 & dist(u,u4)<r;
          (Pitag_dist n).(q2',p2')=|.q2'-p2'.| by EUCLID:def 6;
-     then dist(u,u4)= |.q2'-p2'.| by A12,A16,METRIC_1:def 1;
-     then A17: |.q2'+-p2'.| < r by A14,A16,RVSUM_1:52;
-     A18: 0 <= 1-lambda by A4,XREAL_1:50;
-     then A19: 1-lambda= abs(1-lambda) & lambda=abs(lambda) by A4,
+     then dist(u,u4)= |.q2'-p2'.| by A14,METRIC_1:def 1;
+     then A15: |.q2'+-p2'.| < r by A14,FINSEQOP:89;
+     A16: 0 <= 1-lambda by A4,XREAL_1:50;
+     then A17: 1-lambda= abs(1-lambda) & lambda=abs(lambda) by A4,
 ABSVALUE:def 1;
         abs(1-lambda)*|.q2'+-p1'.| < (1-lambda)*r &
       abs(lambda)*|.q2' + -p2'.| <= lambda*r or
@@ -630,22 +615,21 @@ ABSVALUE:def 1;
       proof
         per cases by A4;
          suppose lambda=0;
-          hence thesis by A10,A13,A14,A19,RVSUM_1:52;
+          hence thesis by A10,A12,A17,FINSEQOP:89;
          end;
          suppose lambda>0;
-          hence thesis by A15,A17,A18,A19,XREAL_1:66,XREAL_1:70;
+          hence thesis by A13,A15,A16,A17,XREAL_1:66,70;
        end;
        end;
       then abs(1-lambda)*|.q2'+-p1'.| + abs(lambda)*|.q2' + -p2'.|
            < (1-lambda)*r + lambda*r by XREAL_1:10;
-      then A20: |.q2'-p'.| < r by A8,A9,XXREAL_0:2;
+      then A18: |.q2'-p'.| < r by A8,A9,XXREAL_0:2;
       reconsider u5=(1-lambda)*p1 + lambda*p2 as Point of Euclid n
                                   by Th13;
-      A21: (Pitag_dist n).(q2',p')=|.q2'-p'.| by EUCLID:def 6;
-         (Pitag_dist n).(u,u5)=dist(u,u5) by A12,METRIC_1:def 1;
-      then a in {u6 where u6 is Element of Euclid n:dist(u,u6)<
-r}
-         by A3,A20,A21;
+      A19: (Pitag_dist n).(q2',p')=|.q2'-p'.| by EUCLID:def 6;
+         (Pitag_dist n).(u,u5)=dist(u,u5) by METRIC_1:def 1;
+      then a in {u6 where u6 is Element of Euclid n:dist(u,u6)<r}
+         by A3,A18,A19;
       hence thesis by METRIC_1:18;
      end;
    thus thesis;
@@ -669,37 +653,29 @@ p in Ball(u,r)
   A7: (Pitag_dist 2).(p1',p2')=|.p1'-p2'.| by EUCLID:def 6;
   A8: (Pitag_dist 2).(p1',p')=|.p1'-p'.| by EUCLID:def 6;
   reconsider up=p as Point of Euclid 2 by Th13;
-  A9: Euclid 2 = MetrStruct(#REAL 2,Pitag_dist 2#) by EUCLID:def 7;
-  then A10: dist(u,up)=|.p1'-p'.| by A1,A8,METRIC_1:def 1;
-  A11: |.p1'-p2'.| < r by A1,A6,A7,A9,METRIC_1:def 1;
-  A12: |.p1'-p'.| = sqrt Sum sqr (p1'-p') by EUCLID:def 5;
-  A13: p1'= <*r1,s1*> & p'= <*r2,s1*> & p2'=<*r2,s2*> by A2,A3,A4,EUCLID:def 16
-;
-     p1'-p'=p1-p & p1'-p2'=p1-p2 by EUCLID:def 13;
-  then A14: (p1'-p')=<*r1-r2,s1-s1*> & (p1'-p2')=<*r1-r2,s1-s2*>
-                         by A13,Th10;
-  A15: sqr (p1'-p') = sqrreal*(p1'-p') by RVSUM_1:def 8
-    .= <* sqrreal.(r1-r2),sqrreal.(s1-s1)*> by A14,FINSEQ_2:40;
-  A16: sqr (p1'-p2') = sqrreal*(p1'-p2') by RVSUM_1:def 8
-    .= <* sqrreal.(r1-r2),sqrreal.(s1-s2)*> by A14,FINSEQ_2:40;
-   A17: Sum sqr (p1'-p') = sqrreal.(r1-r2) + sqrreal.0 by A15,RVSUM_1:107
+  A9: dist(u,up)=|.p1'-p'.| by A1,A8,METRIC_1:def 1;
+  A10: |.p1'-p2'.| < r by A1,A6,A7,METRIC_1:def 1;
+  A11: p1'= <*r1,s1*> & p'= <*r2,s1*> & p2'=<*r2,s2*> by A2,A3,A4;
+     p1'-p'=p1-p & p1'-p2'=p1-p2;
+  then A12: (p1'-p')=<*r1-r2,s1-s1*> & (p1'-p2')=<*r1-r2,s1-s2*>
+                         by A11,Th10;
+  A13: sqr (p1'-p') = <* sqrreal.(r1-r2),sqrreal.(s1-s1)*> by A12,FINSEQ_2:40;
+  A14: sqr (p1'-p2') = <* sqrreal.(r1-r2),sqrreal.(s1-s2)*> by A12,FINSEQ_2:40;
+   A15: Sum sqr (p1'-p') = sqrreal.(r1-r2) + sqrreal.0 by A13,RVSUM_1:107
     .= sqrreal.(r1-r2) + 0 by RVSUM_1:def 2,SQUARE_1:60
     .= sqrreal.(r1-r2);
       (s1-s2)^2 >= 0 by XREAL_1:65;
    then sqrreal.(s1-s2) >= 0 by RVSUM_1:def 2;
-   then A18: sqrreal.(r1-r2)+0 <= sqrreal.(r1-r2)
+   then A16: sqrreal.(r1-r2)+0 <= sqrreal.(r1-r2)
          + sqrreal.(s1-s2) by XREAL_1:9;
       (r1-r2)^2 >= 0 by XREAL_1:65;
    then sqrreal.(r1-r2) >= 0 by RVSUM_1:def 2;
-   then A19: |.p1'-p'.| <= sqrt(sqrreal.(r1-r2)
-         + sqrreal.(s1-s2)) by A12,A17,A18,SQUARE_1:94;
-      |.p1'-p2'.| =
-    sqrt Sum <*sqrreal.(r1-r2),sqrreal.(s1-s2)*>
-      by A16,EUCLID:def 5
-    .= sqrt (sqrreal.(r1-r2) + sqrreal.(s1-s2)) by RVSUM_1:107;
-   then |.p1'-p'.| < r by A11,A19,XXREAL_0:2;
+   then A17: |.p1'-p'.| <= sqrt(sqrreal.(r1-r2)
+         + sqrreal.(s1-s2)) by A15,A16,SQUARE_1:94;
+   |.p1'-p2'.| = sqrt (sqrreal.(r1-r2) + sqrreal.(s1-s2)) by  A14,RVSUM_1:107;
+   then |.p1'-p'.| < r by A10,A17,XXREAL_0:2;
    then p in {u6 where u6 is Element of Euclid 2:dist(u,u6)<r}
-    by A10;
+    by A9;
    hence thesis by METRIC_1:18;
  end;
 
@@ -786,38 +762,37 @@ then A8:    0+0<=(p`1 - p3`1)^2 + (p`2 - p3`2)^2 by XREAL_1:9;
  then A9: 0<=sqrt c & (p`1 - p2`1)^2 >= 0 & (p`2 - p2`2)^2 >=
  0 by XREAL_1:65,SQUARE_1:def 4;
 then A10:    0+0 <= (p`1 - p2`1)^2 + (p`2 - p2`2)^2 by XREAL_1:9;
- A11: Euclid 2=MetrStruct (# REAL 2, Pitag_dist 2 #) by EUCLID:def 7;
- then A12: (Pitag_dist 2).(u,u1) = dist(u,u1) by METRIC_1:def 1;
+ A11: (Pitag_dist 2).(u,u1) = dist(u,u1) by METRIC_1:def 1;
        r <= dist(u,u1) by A3,METRIC_1:12;
-    then r <= sqrt a by A12,Th12;
+    then r <= sqrt a by A11,Th12;
     then r * r <= (sqrt a)*sqrt a by A2,XREAL_1:68;
     then r * r <= (sqrt a)^2;
     then r^2 <= (sqrt a)^2;
- then A13: r^2 <= a by A5,SQUARE_1:def 4;
- A14: c + b = a + d by A4;
- A15: (Pitag_dist 2).(u,u4) = dist(u,u4) by A11,METRIC_1:def 1;
+ then A12: r^2 <= a by A5,SQUARE_1:def 4;
+ A13: c + b = a + d by A4;
+ A14: (Pitag_dist 2).(u,u4) = dist(u,u4) by METRIC_1:def 1;
        dist(u,u4) < r by A1,METRIC_1:12;
-    then sqrt b < r by A15,Th12;
+    then sqrt b < r by A14,Th12;
     then (sqrt b)*sqrt b < r*r by A7,XREAL_1:98;
     then (sqrt b)^2 < r*r;
     then b < r*r by A6,SQUARE_1:def 4;
- then A16: b < r^2;
- A17: (Pitag_dist 2).(u,u3) = dist(u,u3) by A11,METRIC_1:def 1;
+ then A15: b < r^2;
+ A16: (Pitag_dist 2).(u,u3) = dist(u,u3) by METRIC_1:def 1;
        dist(u,u3) < r by A1,METRIC_1:12;
-    then sqrt c < r by A17,Th12;
+    then sqrt c < r by A16,Th12;
     then (sqrt c)*sqrt c < r*r by A9,XREAL_1:98;
     then (sqrt c)^2 < r*r;
     then c < r*r by A8,SQUARE_1:def 4;
     then c < r^2;
- then A18: c+b <r^2 + r^2 by A16,XREAL_1:10;
-       r^2+d <= c + b by A13,A14,XREAL_1:8;
-    then r^2+d < r^2+r^2 by A18,XXREAL_0:2;
+ then A17: c+b <r^2 + r^2 by A15,XREAL_1:10;
+       r^2+d <= c + b by A12,A13,XREAL_1:8;
+    then r^2+d < r^2+r^2 by A17,XXREAL_0:2;
     then d < r^2+r^2 - r^2 by XREAL_1:22;
     then sqrt d < sqrt(r^2) by A10,SQUARE_1:95;
- then A19: sqrt d < r by A2,SQUARE_1:89;
-       dist(u,u2) = (Pitag_dist 2).(u,u2) by A11,METRIC_1:def 1
+ then A18: sqrt d < r by A2,SQUARE_1:89;
+       dist(u,u2) = (Pitag_dist 2).(u,u2) by METRIC_1:def 1
      .= sqrt d by Th12;
-    hence thesis by A19,METRIC_1:12;
+    hence thesis by A18,METRIC_1:12;
  end;
  end;
 
@@ -834,7 +809,7 @@ not f/.m in Ball(u,r)
    per cases by A1,REAL_1:def 5;
     suppose 1=m; hence contradiction by A1,A2;
     end;
-    suppose A3: 1<m; then 1+1<=m by NAT_1:38;
+    suppose A3: 1<m; then 1+1<=m by NAT_1:13;
      then A4: 1<=m-1 by XREAL_1:21; reconsider k=m-1 as Element of NAT
       by A3,INT_1:18;
      m-1<=m by XREAL_1:45;
@@ -845,7 +820,7 @@ not f/.m in Ball(u,r)
      then LSeg(f,k) /\ Ball(u,r) <> {} by A2,XBOOLE_0:def 3;
      then m<=k by A1,A4,A5;
      then m+1<=m by XREAL_1:21;
-     hence contradiction by NAT_1:38;
+     hence contradiction by NAT_1:13;
  end;
  end;
 
@@ -1071,13 +1046,13 @@ LSeg(p,|[p`1,(p`2+q`2)/2]|) /\
     A3: l23 = LSeg(|[p`1,p`2]|,|[p`1,(p`2+q`2)/2]|) by EUCLID:57;
     A4: l = LSeg(|[q`1,(p`2+q`2)/2]|,|[q`1,q`2]|) by A1,EUCLID:57;
         now per cases by A1,REAL_1:def 5;
-     suppose A5: p`2 < q`2; then p`2 < (p`2+q`2)/2 by Th3;
+     suppose A5: p`2 < q`2; then p`2 < (p`2+q`2)/2 by Lm1;
       then x in {p1: p1 `1 = p`1 & p`2 <= p1 `2 & p1 `2 <=
  (p`2+q`2)/2} by A2,A3,Th15;
       then consider t1 be Point of TOP-REAL 2 such that
       A6: t1 = x & t1 `1 = p`1 & p`2 <= t1 `2 & t1 `2 <= (p`2+q`2)/2;
       A7: t1`2 <= p3 `2 by A6,EUCLID:56;
-         (p`2+q`2)/2 < q`2 by A5,Th3;
+         (p`2+q`2)/2 < q`2 by A5,Lm1;
       then x in {p2: p2 `1 = q`1 & (p`2+q`2)/2 <= p2 `2 & p2 `2 <=
  q`2} by A2,A4,Th15;
       then ex t2 be Point of TOP-REAL 2 st
@@ -1086,13 +1061,13 @@ LSeg(p,|[p`1,(p`2+q`2)/2]|) /\
       then t1`2 = p3 `2 & t1 `1 = p3 `1 by A6,A7,XXREAL_0:1,EUCLID:56;
       hence x=p3 by A6,Th11;
      end;
-     suppose A8: p`2 > q`2; then p`2 > (p`2+q`2)/2 by Th3;
+     suppose A8: p`2 > q`2; then p`2 > (p`2+q`2)/2 by Lm1;
       then x in {p11: p11 `1 = p`1 & (p`2+q`2)/2<=p11 `2 & p11 `2<=
 p`2} by A2,A3,Th15;
       then consider t1 be Point of TOP-REAL 2 such that
       A9: t1 = x & t1 `1 = p`1 & (p`2+q`2)/2 <= t1 `2 & t1 `2 <= p`2;
       A10: p3 `2 <= t1 `2 by A9,EUCLID:56;
-         q`2 < (p`2+q`2)/2 by A8,Th3;
+         q`2 < (p`2+q`2)/2 by A8,Lm1;
       then x in {p22: p22 `1=q`1 & q`2<=p22 `2 & p22 `2<=(p`2+q`2)/2} by A2,A4,
 Th15;
       then ex t2 be Point of TOP-REAL 2 st
@@ -1125,13 +1100,13 @@ LSeg(p,|[(p`1+q`1)/2,p`2]|) /\
     A3: l23 = LSeg(|[p`1,p`2]|,|[(p`1+q`1)/2,p`2]|) by EUCLID:57;
     A4: l = LSeg(|[(p`1+q`1)/2,q`2]|,|[q`1,q`2]|) by A1,EUCLID:57;
         now per cases by A1,REAL_1:def 5;
-     suppose A5: p`1 < q`1; then p`1 < (p`1+q`1)/2 by Th3;
+     suppose A5: p`1 < q`1; then p`1 < (p`1+q`1)/2 by Lm1;
       then x in {p1: p1 `2 = p`2 & p`1 <= p1 `1 & p1 `1 <=
  (p`1+q`1)/2} by A2,A3,Th16;
       then consider t1 be Point of TOP-REAL 2 such that
       A6: t1 = x & t1 `2 = p`2 & p`1 <= t1 `1 & t1 `1 <= (p`1+q`1)/2;
       A7: t1`1 <= p3 `1 by A6,EUCLID:56;
-         (p`1+q`1)/2 < q`1 by A5,Th3;
+         (p`1+q`1)/2 < q`1 by A5,Lm1;
       then x in {p2: p2 `2 = q`2 & (p`1+q`1)/2 <= p2 `1 & p2 `1 <=
  q`1} by A2,A4,Th16;
       then ex t2 be Point of TOP-REAL 2 st
@@ -1140,13 +1115,13 @@ LSeg(p,|[(p`1+q`1)/2,p`2]|) /\
       then t1`2 = p3 `2 & t1 `1 = p3 `1 by A6,A7,XXREAL_0:1,EUCLID:56;
       hence x=p3 by A6,Th11;
      end;
-     suppose A8: p`1 > q`1; then p`1 > (p`1+q`1)/2 by Th3;
+     suppose A8: p`1 > q`1; then p`1 > (p`1+q`1)/2 by Lm1;
       then x in {p11: p11 `2 = p`2 & (p`1+q`1)/2 <= p11 `1 & p11 `1 <= p`1}
        by A2,A3,Th16;
       then consider t1 be Point of TOP-REAL 2 such that
       A9: t1 = x & t1 `2 = p`2 & (p`1+q`1)/2 <= t1 `1 & t1 `1 <= p`1;
       A10: p3 `1 <= t1 `1 by A9,EUCLID:56;
-         q`1 < (p`1+q`1)/2 by A8,Th3;
+         q`1 < (p`1+q`1)/2 by A8,Lm1;
       then x in {p22: p22 `2 = q`2 & q`1<=p22 `1 & p22 `1<=
 (p`1+q`1)/2} by A2,A4,Th16;
       then ex t2 be Point of TOP-REAL 2 st
@@ -1190,16 +1165,16 @@ A4: f is special by A1,TOPREAL1:def 10;
        A11: 1 <= j & j + 2 <= len (f|i);
            len(f|i) <= len f by A6,A8,FINSEQ_1:def 3;
        then A12: j + 2 <= len f by A11,XXREAL_0:2;
-          j <= j+2 by NAT_1:29;
+          j <= j+2 by NAT_1:11;
        then j <= len(f|i) by A11,XXREAL_0:2;
        then A13: j in dom(f|i) by A11,FINSEQ_3:27;
           j + 1 <= j + 2 by XREAL_1:8;
        then A14: j+1 <= len(f|i) by A11,XXREAL_0:2;
-          1<=j+1 by NAT_1:37;
+          1<=j+1 by NAT_1:12;
        then A15: j+1 in dom(f|i) by A14,FINSEQ_3:27;
        then A16: LSeg(f,j) = LSeg(f|i,j) & j+(1+1) = j + 1+ 1
            by A1,A13,Th24;
-          1<=j+1+1 by NAT_1:37;
+          1<=j+1+1 by NAT_1:12;
        then j+1+1 in dom(f|i) by A11,FINSEQ_3:27;
        then LSeg(f,j+1) = LSeg(f|i,j+1) by A1,A15,Th24;
        then LSeg(f|i,j) /\ LSeg(f|i,j+1) = {f/.(j+1)}
@@ -1211,10 +1186,10 @@ A4: f is special by A1,TOPREAL1:def 10;
    proof let n,k; assume n+1 < k;
     then LSeg(f,n) misses LSeg(f,k) by A2,TOPREAL1:def 9;
     then A17: LSeg(f,n) /\ LSeg(f,k) = {} by XBOOLE_0:def 7;
-A18:  k+1 >= 1 by NAT_1:29;
-A19:  n+1 >= 1 by NAT_1:29;
-A20:  k+1 >= k by NAT_1:29;
-A21:  n+1 >= n by NAT_1:29;
+A18:  k+1 >= 1 by NAT_1:11;
+A19:  n+1 >= 1 by NAT_1:11;
+A20:  k+1 >= k by NAT_1:11;
+A21:  n+1 >= n by NAT_1:11;
      per cases;
      suppose A22: n in dom(f|i);
           now per cases;
@@ -1262,11 +1237,11 @@ A21:  n+1 >= n by NAT_1:29;
     A25:  1 <= j & j + 1 <= len (f|i);
        len(f|i) <= len f by A6,A8,FINSEQ_1:def 3;
     then A26: j + 1 <= len f by A25,XXREAL_0:2;
-       j <= j + 1 by NAT_1:29;
+       j <= j + 1 by NAT_1:11;
     then j <= len(f|i) by A25,XXREAL_0:2;
     then j in dom (f|i) by A25,FINSEQ_3:27;
     then A27: (f|i)/.j=f/.j by FINSEQ_4:85;
-       1<=j+1 by NAT_1:37;
+       1<=j+1 by NAT_1:12;
     then j+1 in dom(f|i) by A25,FINSEQ_3:27;
     then (f|i)/.(j+1)=f/.(j+1) by FINSEQ_4:85;
     hence ((f|i)/.j)`1 = ((f|i)/.(j+1))`1 or ((f|i)/.j)`2 = ((f|i)/.(j+1))`2
@@ -1314,7 +1289,7 @@ A3:  1 <= i & i + 2 <= len f;
      A6: 1 <= i & i + 1 <= len f;
      set p2 = f/.i, p3 = f/.(i+1);
 A7:  i <= 2 & i > 0 by A2,A6,XREAL_1:8;
-     per cases by A7,CQC_THE1:3;
+     per cases by A7,NAT_1:27;
      suppose i=1;
       hence p2`1 = p3`1 or p2`2 = p3`2 by A2,EUCLID:56;
      end;
@@ -1363,7 +1338,7 @@ A3:  1 <= i & i + 2 <= len f;
      A6: 1 <= i & i + 1 <= len f;
      set p2 = f/.i, p3 = f/.(i+1);
 A7:  i <= 2 & i > 0 by A2,A6,XREAL_1:8;
-     per cases by A7,CQC_THE1:3;
+     per cases by A7,NAT_1:27;
      suppose i=1;
       hence p2`1 = p3`1 or p2`2 = p3`2 by A2,EUCLID:56;
      end;
@@ -1413,7 +1388,7 @@ A3:  1 <= i & i + 2 <= len f;
      A6: 1 <= i & i + 1 <= len f;
      set p2 = f/.i, p3 = f/.(i+1);
 A7:  i <= 2 & i > 0 by A2,A6,XREAL_1:8;
-     per cases by A7,CQC_THE1:3;
+     per cases by A7,NAT_1:27;
      suppose i=1;
       hence p2`1 = p3`1 or p2`2 = p3`2 by A2,EUCLID:56;
      end;
@@ -1463,7 +1438,7 @@ A3:  1 <= i & i + 2 <= len f;
      A6: 1 <= i & i + 1 <= len f;
      set p2 = f/.i, p3 = f/.(i+1);
 A7:  i <= 2 & i > 0 by A2,A6,XREAL_1:8;
-     per cases by A7,CQC_THE1:3;
+     per cases by A7,NAT_1:27;
      suppose i=1;
       hence p2`1 = p3`1 or p2`2 = p3`2 by A2,EUCLID:56;
      end;
@@ -1488,7 +1463,7 @@ L~(f|(i+1)) = L~(f|i) \/ LSeg(f/.i,f/.(i+1))
   then Seg(i+1) c= dom f & Seg i c= dom f by FINSEQ_1:def 3;
   then Seg(i+1) = dom f /\ Seg(i+1) & dom f /\ Seg i = Seg i by XBOOLE_1:28;
   then A4: Seg(i+1)=dom(f|Seg(i+1)) & dom(f|(Seg i))=Seg i by FUNCT_1:68;
-  then A5: i+1=len(f|(i+1)) & i=len(f|i) & i<=i+1 by A2,FINSEQ_1:def 3,NAT_1:29
+  then A5: i+1=len(f|(i+1)) & i=len(f|i) & i<=i+1 by A2,FINSEQ_1:def 3,NAT_1:11
 ;
   then LSeg(f,i) = LSeg(p,q) & i+1 in dom(f|(i+1)) & i in dom(f|(i+1))
          by A3,FINSEQ_3:27,TOPREAL1:def 5;
@@ -1508,8 +1483,8 @@ A10:  m <= i by A5,A9,XREAL_1:8;
       hence thesis by A8;
      end;
      suppose A11: m < i;
-      then A12: m<=i & m+1<=i & m<=m+1 & i<=i+1 by NAT_1:38;
-      A13: m+1<=len(f|i) & 1<=m+1 by A5,A9,A11,NAT_1:38;
+      then A12: m<=i & m+1<=i & m<=m+1 & i<=i+1 by NAT_1:13;
+      A13: m+1<=len(f|i) & 1<=m+1 by A5,A9,A11,NAT_1:13;
       then A14: m in dom(f|i) & m+1 in dom(f|i) & m<=i+1
            by A2,A4,A9,A12,XXREAL_0:2,FINSEQ_1:3;
       then m in dom(f|(i+1)) & m+1 in dom(f|(i+1)) by A2,A4,A9,A13,FINSEQ_1:3;
@@ -1528,7 +1503,7 @@ A10:  m <= i by A5,A9,XREAL_1:8;
     A16: x in X & X in Mi by TARSKI:def 4;
     consider m such that
     A17: X=LSeg(f|i,m) & 1<=m & m+1<=len(f|i) by A16;
-       m<=m+1 by NAT_1:29;
+       m<=m+1 by NAT_1:11;
     then A18: 1<=m & m<=len(f|i) & 1<=m+1 & m+1<=len(f|i) by A17,XXREAL_0:2;
     then A19: m in dom(f|i) & m+1 in dom(f|i) & m<=len(f|(i+1)) & m+1<=len(f|(i
 +1))
@@ -1565,9 +1540,9 @@ theorem
     hence contradiction by A1,A2,A3;
    end;
    suppose A4: n<len f;
-     then n+1<=len f by NAT_1:38;
+     then n+1<=len f by NAT_1:13;
     then A5: LSeg(f,n) in Mf by A2;
-       n+1<=len f & 1<=n by A2,A4,NAT_1:38;
+       n+1<=len f & 1<=n by A2,A4,NAT_1:13;
     then f/.n in LSeg(f,n) by TOPREAL1:27;
     then f/.n in union Mf by A5,TARSKI:def 4;
     hence contradiction by A1,A2;
@@ -1599,7 +1574,7 @@ A4: k+1 = len f;
 A5: f is s.n.c. by A1,TOPREAL1:def 10;
 A6: f is unfolded by A1,TOPREAL1:def 10;
   assume m + 1 <> len f;
-then A7:  m+1<=k by A1,A4,NAT_1:26;
+then A7:  m+1<=k by A1,A4,NAT_1:8;
   A8: m+1+1=m+(1+1);
   A9: f is one-to-one by A1,TOPREAL1:def 10;
   A10: len f in dom f by A3,FINSEQ_3:27;
@@ -1607,7 +1582,7 @@ then A7:  m+1<=k by A1,A4,NAT_1:26;
     suppose A11: m+1=k;
      then A12: LSeg(f,m) /\ LSeg(f,m+1) = {f/.(m+1)} by A1,A6,A8,
 TOPREAL1:def 8;
-     A13:  m+1+1<=len f & 1<=m+1 & m+1<=len f by A4,A11,NAT_1:29;
+     A13:  m+1+1<=len f & 1<=m+1 & m+1<=len f by A4,A11,NAT_1:11;
      then f/.(m+2) in LSeg(f,m+1) by TOPREAL1:27;
      then q in LSeg(f,m+1) by A11;
      then q in {f/.(m+1)} by A1,A12,XBOOLE_0:def 3;

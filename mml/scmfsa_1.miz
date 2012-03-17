@@ -9,13 +9,13 @@ environ
  vocabularies INT_1, AMI_2, BOOLE, GR_CY_1, TARSKI, FINSEQ_1, AMI_5, MCART_1,
       FUNCT_1, FUNCOP_1, FUNCT_4, CAT_1, RELAT_1, AMI_3, AMI_1, ORDINAL2,
       CARD_3, ZF_REFLE, PBOOLE, ABSVALUE, FINSEQ_2, FUNCT_2, FUNCT_5, SCMFSA_1,
-      FINSEQ_4, ARYTM;
+      FINSEQ_4, ARYTM, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, NAT_1,
-      MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FRAENKEL,
-      INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSOP_1, CARD_3, GR_CY_1, CQC_LANG,
-      FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7, XXREAL_0;
+      NAT_D, MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      FRAENKEL, INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSOP_1, CARD_3, GR_CY_1,
+      CQC_LANG, FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, PBOOLE, FINSEQ_4, FINSOP_1,
-      INT_2, FUNCT_7, CAT_2, AMI_2, AMI_3;
+      INT_2, FUNCT_7, CAT_2, AMI_2, AMI_3, NAT_D;
  registrations NUMBERS, SUBSET_1, FUNCT_1, INT_1, AMI_1, RELSET_1, AMI_3,
       PBOOLE, FINSEQ_1, AMI_2, CQC_LANG, ARYTM_3, XBOOLE_0, FRAENKEL, ORDINAL1,
       SETFAM_1, CARD_3;
@@ -32,16 +32,35 @@ begin
  reserve x,y,z for set,
          k for Element of NAT;
 
+notation
+  synonym SCM+FSA-Data-Loc for SCM-Data-Loc;
+  synonym SCM+FSA-Instr-Loc for SCM-Instr-Loc;
+end;
+
 definition
- func SCM+FSA-Data-Loc -> Subset of INT equals
-  SCM-Data-Loc;
-  coherence by NUMBERS:17,XBOOLE_1:1;
- func SCM+FSA-Data*-Loc -> Subset of INT equals
+  redefine func SCM+FSA-Data-Loc -> Subset of INT;
+  coherence
+  proof
+    SCM-Data-Loc c= NAT;
+    hence thesis by NUMBERS:17,XBOOLE_1:1;
+  end;
+end;
+
+definition
+  canceled;
+  func SCM+FSA-Data*-Loc -> Subset of INT equals
   INT \ NAT;
   coherence;
- func SCM+FSA-Instr-Loc -> Subset of INT equals
-  SCM-Instr-Loc;
-  coherence by NUMBERS:17,XBOOLE_1:1;
+  canceled;
+end;
+
+definition
+  redefine func SCM+FSA-Instr-Loc -> Subset of INT;
+  coherence
+  proof
+    SCM-Instr-Loc c= NAT;
+    hence thesis by NUMBERS:17,XBOOLE_1:1;
+  end;
 end;
 
 registration
@@ -50,10 +69,6 @@ registration
   proof not INT c= NAT by NUMBERS:17,27,XBOOLE_0:def 10;
    hence thesis by XBOOLE_1:37;
   end;
- cluster SCM+FSA-Data-Loc -> non empty;
- coherence;
- cluster SCM+FSA-Instr-Loc -> non empty;
- coherence;
 end;
 
 reserve J,K for Element of Segm 13,
@@ -392,7 +407,7 @@ A1:  x in INT;
   then reconsider x as Integer by INT_1:def 2;
  per cases;
  suppose x < 0;
-  then not x is natural number by NAT_1:18;
+  then not x is natural number by NAT_1:2;
   then not x in NAT by ORDINAL1:def 13;
   then x in INT \ NAT by A1,XBOOLE_0:def 4;
   then x in {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc by XBOOLE_0:def 2
@@ -915,17 +930,7 @@ A9:  a2 = f2;
     thus a1 = <*c1,f1*>/.2 by A7,FINSEQ_4:26
      .= a2 by A6,A8,A9,FINSEQ_4:26;
    end;
-end;
-
-definition let l be Element of SCM+FSA-Instr-Loc;
- func Next l -> Element of SCM+FSA-Instr-Loc means
-      ex L being Element of SCM-Instr-Loc st L = l & it = Next L;
- existence
-  proof reconsider L = l as Element of SCM-Instr-Loc;
-       Next L in SCM+FSA-Instr-Loc;
-   hence thesis;
-  end;
- correctness;
+canceled;
 end;
 
 definition let s be SCM+FSA-State;

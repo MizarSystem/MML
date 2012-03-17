@@ -7,11 +7,13 @@
 environ
 
  vocabularies FINSEQ_1, BOOLE, RELAT_1, FUNCT_1, FINSEQ_5, ARYTM_1, WELLORD1,
-      PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1, MONOID_0;
+      PBOOLE, RELAT_2, FUNCOP_1, BHSP_3, ISOCAT_1, EQREL_1, REWRITE1, MONOID_0,
+      NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FINSEQ_1, PBOOLE, FINSEQ_5;
- constructors SETFAM_1, WELLORD1, XXREAL_0, XREAL_0, NAT_1, EQREL_1, PBOOLE,
+      NAT_D, FUNCT_1, RELAT_1, RELAT_2, WELLORD1, EQREL_1, FINSEQ_1, PBOOLE,
       FINSEQ_5;
+ constructors SETFAM_1, WELLORD1, XXREAL_0, XREAL_0, NAT_1, EQREL_1, PBOOLE,
+      FINSEQ_5, NAT_D;
  registrations SUBSET_1, RELAT_1, FINSEQ_1, XREAL_0, ARYTM_3, ORDINAL1,
       PARTFUN1, RELSET_1, XXREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -34,10 +36,10 @@ Def1:
    proof
     thus p = {} or q = {} implies ex r being FinSequence st r = p^q;
     assume p <> {} & q <> {};
-     then len p <> 0 & len p >= 0 by FINSEQ_1:25,NAT_1:18;
-     then len p >= 0+1 by NAT_1:38;
+     then len p <> 0 & len p >= 0 by FINSEQ_1:25,NAT_1:2;
+     then len p >= 0+1 by NAT_1:13;
     then consider i being Nat such that
-A1:   len p = 1+i by NAT_1:28;
+A1:   len p = 1+i by NAT_1:10;
     reconsider i as Element of NAT by ORDINAL1:def 13;
     reconsider r = p|Seg i as FinSequence by FINSEQ_1:19;
     take r^q, i, r;
@@ -59,13 +61,13 @@ Lm2:
  now let p be FinSequence, x be Element of NAT;
   assume x+1 in dom p;
    then x+1 <= len p by Lm1;
-  hence x < len p by NAT_1:38;
+  hence x < len p by NAT_1:13;
  end;
 
 Lm3:
  now let p be FinSequence, x be Element of NAT;
   assume (x <= len p or x < len p) & (x >= 1 or x > 0);
-   then x <= len p & x >= 0+1 by NAT_1:38;
+   then x <= len p & x >= 0+1 by NAT_1:13;
    then x in Seg len p by FINSEQ_1:3;
   hence x in dom p by FINSEQ_1:def 3;
  end;
@@ -73,7 +75,7 @@ Lm3:
 Lm4:
  now let p be FinSequence, x be Element of NAT;
   assume x < len p;
-   then x+1 <= len p & x+1 >= 1 by NAT_1:29,38;
+   then x+1 <= len p & x+1 >= 1 by NAT_1:11,13;
   hence x+1 in dom p by Lm3;
  end;
 
@@ -95,7 +97,7 @@ A2:  len (p^<*x*>) = i+1 & r = (p^<*x*>)|Seg i & (p^<*x*>)$^q = r^q by A1,Def1;
 A3:  p^<*x*> = r^s by A2,TREES_1:3;
        len <*x*> = 1 by FINSEQ_1:57;
     then len (p^<*x*>) = len p + 1 by FINSEQ_1:35;
-then A4:  len p = i & i <= i+1 by A2,NAT_1:29;
+then A4:  len p = i & i <= i+1 by A2,NAT_1:11;
 then A5:  len r = i by A2,FINSEQ_1:21;
    then consider t being FinSequence such that
 A6:  p^t = r by A3,A4,FINSEQ_1:64;
@@ -167,8 +169,8 @@ A3:  len p() > 0 & len q() > 0 & p().len p() = q().1
 proof let i be Element of NAT; assume
 A4:  i in dom (p()$^q()) & i+1 in dom (p()$^q());
 then A5: i >= 0+1 by Lm1;
-A6: i+1 >= 1 by NAT_1:29;
-       0+1 <= len q() by A3,NAT_1:38;
+A6: i+1 >= 1 by NAT_1:11;
+       0+1 <= len q() by A3,NAT_1:13;
 then A7: 1 in Seg len q() & Seg len q() = dom q() by FINSEQ_1:3,def 3;
    let x,y be set; assume
 A8:  x = (p()$^q()).i & y = (p()$^q()).(i+1);
@@ -183,7 +185,7 @@ FINSEQ_1:57;
 A13:   i < len p();
      then i in dom p() & i+1 in dom p() by A5,Lm3,Lm4;
 then A14:   P[p().i, p().(i+1)] by A1;
-A15:   i <= len r by A12,A13,NAT_1:38;
+A15:   i <= len r by A12,A13,NAT_1:13;
      then i in Seg len r by A5,FINSEQ_1:3;
      then i in dom r by FINSEQ_1:def 3;
 then A16:   x = r.i & r.i = p().i by A8,A10,A11,FINSEQ_1:def 7;
@@ -193,19 +195,19 @@ A17:   now assume i+1 <= len r;
       hence y = r.(i+1) & r.(i+1) = p().(i+1) by A8,A10,A11,FINSEQ_1:def 7;
      end;
         i = len r or i < len r by A15,REAL_1:def 5;
-    hence thesis by A3,A7,A8,A11,A12,A14,A16,A17,FINSEQ_1:def 7,NAT_1:38;
+    hence thesis by A3,A7,A8,A11,A12,A14,A16,A17,FINSEQ_1:def 7,NAT_1:13;
     end;
     suppose i >= len p();
     then consider k being Nat such that
-A18:   i = len p()+k by NAT_1:28;
+A18:   i = len p()+k by NAT_1:10;
        reconsider k as Element of NAT by ORDINAL1:def 13;
 A19:   len (p()$^q()) = len r + len q() & i = len r+(1+k) &
      i < len (p()$^q()) & len r+(1+k)+1 = len r+(k+1+1)
       by A4,A11,A12,A18,Lm2,FINSEQ_1:35;
-   then k+1 < len q() & k+1 >= 1 by NAT_1:29,XREAL_1:9;
+   then k+1 < len q() & k+1 >= 1 by NAT_1:11,XREAL_1:9;
 then A20:   k+1 in dom q() & k+1+1 in dom q() & k+1<>0 by Lm3,Lm4;
      then x = q().(k+1) & y = q().(k+1+1) & k+1 > 0
-      by A8,A11,A19,FINSEQ_1:def 7,NAT_1:19;
+      by A8,A11,A19,FINSEQ_1:def 7,NAT_1:3;
     hence thesis by A2,A20;
   end;
   end;
@@ -282,7 +284,7 @@ then A3:  len p > 0 & len q > 0 & p.len p = q.1 by Def2;
 A4:  p = p1^<*x*> by FINSEQ_1:63;
      r = p1^q by A4,Th2;
   then len r = len p1+len q by FINSEQ_1:35;
-    then len r > len p1+0 & len p1+0 >= 0 by A3,NAT_1:18,XREAL_1:10;
+    then len r > len p1+0 & len p1+0 >= 0 by A3,NAT_1:2,XREAL_1:10;
    hence len r > 0;
     for i being Element of NAT st i in dom (p$^q) & i+1 in dom (p$^q)
     for x,y being set st x = (p$^q).i & y = (p$^q).(i+1) holds P[x,y]
@@ -387,7 +389,7 @@ A2:  len p > 0 &
       then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
      hence contradiction by Def2;
     end;
-    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:13;
    hence thesis by A1,XXREAL_0:1;
   end;
 
@@ -408,7 +410,7 @@ A3:  not a in field R;
       then [p.1, p.(1+1)] in R by Def2;
      hence contradiction by A1,A3,RELAT_1:30;
     end;
-    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:13;
    hence thesis by A1,XXREAL_0:1;
   end;
 
@@ -436,14 +438,14 @@ A3:  len p > 0 & len q > 0 by Def2;
 A4:  p = p1^<*x*> by FINSEQ_1:63;
 A5:  r = p1^q by A4,Th2;
 then A6:  len r = len p1+len q by FINSEQ_1:35;
-       len p1 = 0 or len p1 > 0 by NAT_1:19;
-    then p1 = {} or len p1 >= 0+1 by FINSEQ_1:25,NAT_1:38;
+       len p1 = 0 or len p1 > 0 by NAT_1:3;
+    then p1 = {} or len p1 >= 0+1 by FINSEQ_1:25,NAT_1:13;
     then r = q & p = <*x*> or 1 in Seg len p1 by A4,A5,FINSEQ_1:3,47;
     then 1 in dom p1 or len p = 1 & r = q by FINSEQ_1:57,def 3;
     then r.1 = p1.1 & p1.1 = a or r.1 = b & b = a by A1,A2,A4,A5,FINSEQ_1:def 7
 ;
    hence r.1 = a;
-       0+1 <= len q by A3,NAT_1:38;
+       0+1 <= len q by A3,NAT_1:13;
     then len q in Seg len q by FINSEQ_1:3;
     then len q in dom q by FINSEQ_1:def 3;
    hence r.len r = c by A2,A5,A6,FINSEQ_1:def 7;
@@ -464,7 +466,7 @@ proof
 A4:   i+j in dom p implies R reduces p.i,p.(i+j) and
 A5:   i+(j+1) in dom p;
 A6:    i+(j+1) = i+j+1;
-         i <= i+j & i >= 1 by A1,Lm1,NAT_1:29;
+         i <= i+j & i >= 1 by A1,Lm1,NAT_1:11;
       then A7: i+j >= 1 & i+j < len p by A5,A6,Lm2,XXREAL_0:2;
 then i+j in dom p by Lm3;
       then [p.(i+j),p.(i+(j+1))] in R by A5,A6,Def2;
@@ -476,7 +478,7 @@ Th16;
   end;
 A8:  for j being Element of NAT holds Q[j] from NAT_1:sch 1(A2,A3);
      consider k being Nat such that
-A9:  j = i+k by A1,NAT_1:28;
+A9:  j = i+k by A1,NAT_1:10;
      k in NAT by ORDINAL1:def 13;
    hence R reduces p.i,p.j by A1,A8,A9;
   end;
@@ -490,7 +492,7 @@ A1:  a = p.1 & b = p.len p;
    assume
 A2:  a <> b;
      len p > 0 by Def2;
-    then len p <> 1 & len p >= 0+1 by A1,A2,NAT_1:38;
+    then len p <> 1 & len p >= 0+1 by A1,A2,NAT_1:13;
     then len p > 1 by REAL_1:def 5;
     then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
     then A3: [a,p.2] in R by A1,Def2;
@@ -504,7 +506,7 @@ proof
       i in dom p implies p.i in field R and
 A6:   i+1 in dom p;
 A7:   i < len p by A6,Lm2;
-     per cases by NAT_1:19; suppose i = 0; hence p.(i+1) in field R by A1,A3,
+     per cases by NAT_1:3; suppose i = 0; hence p.(i+1) in field R by A1,A3,
 RELAT_1:30;
      end;
      suppose i > 0;
@@ -535,7 +537,7 @@ A2:   a = p.1 & b = p.len p by Def3;
     assume a <> b;
 then A3:   a in field R & b in field R by A1,Th19;
         len p > 0 by Def2;
-then A4:   len p >= 0+1 by NAT_1:38;
+then A4:   len p >= 0+1 by NAT_1:13;
         now let i be Element of NAT; assume
           i >= 1 & i < len p;
        then i in dom p & i+1 in dom p by Lm3,Lm4;
@@ -574,7 +576,7 @@ proof
 A4:   i in dom p implies R reduces a,p.i and
 A5:   i+1 in dom p;
 A6:   i < len p by A5,Lm2;
-     per cases by NAT_1:19;
+     per cases by NAT_1:3;
      suppose i = 0; hence R reduces a,p.(i+1) by A1,Th13;
      end;
      suppose A7: i > 0;
@@ -628,7 +630,7 @@ then [p.i, p.(i+1)] in R \/ id X & R reduces a,p.i by A5,A6,Def2;
      end;
      suppose not i in dom p;
       then i < 0+1 or i > len p & i+1 <= len p by A6,Lm1,Lm3;
-      then i <= 0 & i >= 0 by NAT_1:18,38;
+      then i <= 0 & i >= 0 by NAT_1:2,13;
       then i = 0;
      hence R reduces a, p.(i+1) by A1,Th13;
     end;
@@ -759,7 +761,7 @@ A2:  len p > 0 & p.1 = a & p.len p = b &
       then [a, p.(1+1)] in R by A2;
      hence contradiction by A1;
     end;
-    then len p <= 1 & len p >= 0+1 by A2,NAT_1:38;
+    then len p <= 1 & len p >= 0+1 by A2,NAT_1:13;
    hence thesis by A2,XXREAL_0:1;
   end;
 
@@ -1299,12 +1301,12 @@ A5:  P[0] by Lm1;
    now let i be Element of NAT such that
 A6:    i in dom p implies P[i] and
 A7:    i+1 in dom p;
-     per cases by NAT_1:19; suppose i = 0;
+     per cases by NAT_1:3; suppose i = 0;
        then p.(i+1) = a & R reduces c,c by A2,Th13;
       hence P[i+1] by A4;
      end;
      suppose i > 0;
-       then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:38;
+       then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:13;
 then A9:     i in dom p by Lm3;
       consider d being set such that
 A10:     ([p.i,d] in R or p.i = d) & R reduces c,d by A6,A8,Lm3;
@@ -1391,13 +1393,13 @@ A13:    for j being Element of NAT st R[j] holds R[j+1]
         proof let j be Element of NAT such that
 A14:     j in dom q implies P[i+1,j] and
 A15:     j+1 in dom q;
-           1 in dom p & i+1 >= 1 by FINSEQ_5:6,NAT_1:29;
+           1 in dom p & i+1 >= 1 by FINSEQ_5:6,NAT_1:11;
         then A16: R reduces a,p.(i+1) by A5,A11,Th18;
-       per cases by NAT_1:19; suppose j = 0;
+       per cases by NAT_1:3; suppose j = 0;
         hence P[i+1,j+1] by A7,A16,Th37;
        end;
        suppose j > 0;
-        then A17: j >= 0+1 & j < len q by A15,Lm2,NAT_1:38;
+        then A17: j >= 0+1 & j < len q by A15,Lm2,NAT_1:13;
 then A18:     j in dom q by Lm3;
        consider d being set such that
 A19:     R reduces p.(i+1),d & R reduces q.j,d by A14,A17,Def7,Lm3;
@@ -1479,7 +1481,7 @@ A10:   R reduces a,c & R reduces p.i,c by A6,A8,Def7;
      end;
      suppose not i in dom p;
       then i < 0+1 or i > len p & i+1 <= len p by A7,Lm1,Lm3;
-      then i <= 0 & i >= 0 by NAT_1:18,38;
+      then i <= 0 & i >= 0 by NAT_1:2,13;
       then i = 0;
      hence a, p.(i+1) are_convergent_wrt R by A3,Th39;
     end;
@@ -1641,7 +1643,7 @@ A10:      a = p.1 & b = p.len p by Def3;
        consider q being RedSequence of R such that
 A11:      a = q.1 & c = q.len q by A9,Def3;
            len p > 0 & len q > 0 by Def2;
-then A12:      len p >= 0+1 & len q >= 0+1 by NAT_1:38;
+then A12:      len p >= 0+1 & len q >= 0+1 by NAT_1:13;
        per cases;
        suppose len p = 1; hence b,c are_convergent_wrt R by A9,A10,Th37;
        end;
@@ -1649,7 +1651,7 @@ then A12:      len p >= 0+1 & len q >= 0+1 by NAT_1:38;
        end;
        suppose len p <> 1 & len q <> 1;
          then len p > 1 & len q > 1 by A12,REAL_1:def 5;
-then A13:       1 <= 2 & 1+1 <= len p & 1+1 <= len q by NAT_1:38;
+then A13:       1 <= 2 & 1+1 <= len p & 1+1 <= len q by NAT_1:13;
 then A14:       1 in dom p & 1+1 in dom p & 1 in dom q & 1+1 in
  dom q by A12,Lm3;
 then A15:       [a,p.2] in R & [a,q.2] in R by A10,A11,Def2;
@@ -1767,10 +1769,10 @@ A5:     Z[0] by Lm1;
       now let i be Element of NAT such that
 A6:      i in dom p implies p.i,b are_convergent_wrt R \/ Q and
 A7:      i+1 in dom p;
-        per cases by NAT_1:19;
+        per cases by NAT_1:3;
         suppose i = 0; hence p.(i+1),b are_convergent_wrt R \/ Q by A2,A4,Th37;
         end;
-        suppose i > 0; then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:38;
+        suppose i > 0; then A8: i >= 0+1 & i < len p by A7,Lm2,NAT_1:13;
 then A9:      i in dom p by Lm3;
         consider d being set such that
 A10:      R \/ Q reduces p.i,d & R \/ Q reduces b,d by A6,A8,Def7,Lm3;
@@ -1788,7 +1790,7 @@ A14:        j in dom q implies
              (R reduces q.j,e or Q reduces q.j,e) and
 A15:        j+1 in dom q;
 A16:        j < len q by A15,Lm2;
-          per cases by NAT_1:19;
+          per cases by NAT_1:3;
           suppose j = 0;
             then R \/ Q reduces p.(i+1),p.(i+1) &
             (R reduces q.(j+1),p.(i+1) or
@@ -1986,7 +1988,7 @@ A5: Z[0] by Lm1;
 A6:   i in dom p implies a,p.i are_convertible_wrt R and
 A7:   i+1 in dom p;
 A8:   i < len p by A7,Lm2;
-     per cases by NAT_1:19; suppose i = 0;
+     per cases by NAT_1:3; suppose i = 0;
      hence a,p.(i+1) are_convertible_wrt R by A4,Th27;
      end;
      suppose A9: i > 0;
@@ -2062,7 +2064,7 @@ A14:     Z[0] by Lm1;
 A15:       i in dom p implies x,p.i are_convertible_wrt R and
 A16:       i+1 in dom p;
 A17:       i < len p by A16,Lm2;
-         per cases by NAT_1:19; suppose i = 0;
+         per cases by NAT_1:3; suppose i = 0;
           hence x,p.(i+1) are_convertible_wrt R by A13,Th27;
          end;
          suppose A18: i > 0;

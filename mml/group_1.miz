@@ -8,19 +8,19 @@ environ
 
  vocabularies INT_1, VECTSP_1, ABSVALUE, BINOP_1, FUNCT_1, ARYTM_1, REALSET1,
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
-      GROUP_1;
+      GROUP_1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, STRUCT_0, RLVECT_1, INT_1,
-      NAT_1, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
+      NAT_1, NAT_D, FINSEQOP, SETWISEO, CARD_1, FINSET_1, BINOP_1, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQOP,
-      INT_2, RLVECT_1, ARYTM_3;
+      INT_2, RLVECT_1, ARYTM_3, NAT_D;
  registrations FINSET_1, INT_1, STRUCT_0, RELSET_1, XREAL_0, MEMBERED, CARD_4,
       ORDINAL2, XXREAL_0, NAT_1, ARYTM_3;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO;
  theorems ABSVALUE, BINOP_1, CARD_1, FINSEQOP, FUNCT_2, INT_1, NAT_1, REAL_1,
-      RLVECT_1, ZFMISC_1, STRUCT_0, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0,
-      ORDINAL1;
+      ZFMISC_1, STRUCT_0, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
+      NAT_D;
  schemes FUNCT_1, FUNCT_2, INT_1, NAT_1, RECDEF_1, BINOP_1;
 
 begin
@@ -957,7 +957,7 @@ Lm4: h |^ (- i) = (h |^ i)"
 Lm5: j >= 1 or j = 0 or j < 0
  proof
       j < 0 or (j is Element of NAT & (j <> 0 or j = 0)) by INT_1:16;
-  hence thesis by NAT_1:39;
+  hence thesis by NAT_1:14;
  end;
 
 Lm6: h |^ (j - 1) = h |^ j * (h |^ (- 1))
@@ -1025,7 +1025,7 @@ Lm7: j >= 0 or j = - 1 or j < - 1
       then - j >= -0 by XREAL_1:26;
      then reconsider n = - j as Element of NAT by INT_1:16;
          n <> -0 by A1;
-      then n >= 1 by NAT_1:39;
+      then n >= 1 by NAT_1:14;
       then n > 1 or n = 1 by REAL_1:def 5;
       then - 1 > - (- j) or - 1 = j by XREAL_1:26;
     hence thesis;
@@ -1349,7 +1349,7 @@ theorem
     ord 1.G = 1
   proof A1: not 1.G is_of_order_0 by Th79;
     A2: (1.G) |^ 1 = 1.G & 1 <> 0 by Th42;
-       for n st (1.G) |^ n = 1.G & n <> 0 holds 1 <= n by NAT_1:39;
+       for n st (1.G) |^ n = 1.G & n <> 0 holds 1 <= n by NAT_1:14;
    hence thesis by A1,A2,Def12;
   end;
 
@@ -1373,7 +1373,7 @@ proof let n be Element of NAT;
   assume A3: h |^ n = 1.G;
     per cases;
      suppose n = 0;
-      hence thesis by NAT_1:53;
+      hence thesis by NAT_D:6;
      end;
      suppose A4: n <> 0;
           now per cases;
@@ -1385,17 +1385,17 @@ proof let n be Element of NAT;
            then h is_not_of_order_0 by Def12;
            then ord h <= n by A3,A4,Def12;
           then consider m being Nat such that
-          A6: n = ord h + m by NAT_1:28;
+          A6: n = ord h + m by NAT_1:10;
 A7:       m in NAT by ORDINAL1:def 13;
            A8: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
                    .= 1.G * (h |^ m) by Th82
                    .= h |^ m by Def5;
-              m < n by A5,A6,NAT_1:41;
+              m < n by A5,A6,NAT_1:16;
            then ord h divides m by A7,A2,A3,A8;
           then consider i being Nat such that A9: m = ord h * i
-          by NAT_1:def 3;
+          by NAT_D:def 3;
               n = ord h * (1 + i) by A6,A9;
-         hence thesis by NAT_1:def 3;
+         hence thesis by NAT_D:def 3;
        end;
        end;
       hence thesis;
@@ -1533,31 +1533,26 @@ theorem
     reconsider x = a, y = b as Element of A;
      A1: for a,b be Element of G,
           x,y be Element of A st a = x & b = y
-      holds a + b = x * y by RLVECT_1:5;
-   hence a + b = x * y
+      holds a + b = x * y;
+   thus a + b = x * y
              .= b + a by A1;
    end;
-A2: for a,b be Element of G,
-        x,y be Element of A st a = x & b = y
-      holds a + b = x * y by RLVECT_1:5;
    hereby let a,b,c be Element of G;
     reconsider x = a, y = b, z = c as Element of A;
-     A3: a + b = x * y & b + c = y * z by A2;
-   hence a + b + c = x * y * z by A2
+   thus a + b + c = x * y * z
                   .= x * (y * z) by Def4
-                  .= a + (b + c) by A2,A3;
+                  .= a + (b + c);
    end;
    hereby let a be Element of G;
     reconsider x = a as Element of A;
-    thus a + 0.G = x * 1.A by A2
+    thus a + 0.G = x * 1.A
                 .= a by Def5;
    end;
    let a be Element of G;
    reconsider x = a as Element of A;
    reconsider b = inverse_op(A).x as Element of G;
    take b;
-   thus a + b = x * inverse_op(A).x by A2
-              .= x * x" by Def7
+   thus a + b = x * x" by Def7
               .= 0.G by Def6;
   end;
 

@@ -19,8 +19,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
@@ -43,7 +43,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="63"/>
@@ -51,7 +51,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Typ>
 <Typ kind="M" nr="15">
 <Cluster/>
@@ -62,7 +62,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="280">
+<Func kind="K" nr="282">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="1"/>
@@ -75,7 +75,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="63"/>
@@ -89,7 +89,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="67"/>
@@ -97,7 +97,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Typ>
 <Typ kind="M" nr="15">
 <Cluster/>
@@ -108,7 +108,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="280">
+<Func kind="K" nr="282">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="1"/>
@@ -121,7 +121,7 @@
 <Func kind="K" nr="1">
 <Func kind="K" nr="64"/>
 </Func>
-<Func kind="K" nr="242"/>
+<Func kind="K" nr="244"/>
 </Adjective>
 <Adjective nr="60"/>
 <Adjective nr="67"/>

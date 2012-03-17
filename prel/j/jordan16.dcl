@@ -26,9 +26,9 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="JORDAN16"/>
 </Signature>
 <RCluster>
@@ -42,7 +42,7 @@
 <Cluster/>
 <Func kind="K" nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="178">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -71,7 +71,7 @@
 <Func kind="K" nr="41"/>
 <Func kind="K" nr="41"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 <Adjective nr="55"/>
 </Cluster>
 </RCluster>
@@ -88,7 +88,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="209">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -104,7 +104,7 @@
 <Func kind="K" nr="41"/>
 <Func kind="K" nr="41"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 <Adjective nr="55"/>
 </Cluster>
 </FCluster>

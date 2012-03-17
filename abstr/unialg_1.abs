@@ -7,13 +7,13 @@
 environ
 
  vocabularies FINSEQ_1, PARTFUN1, RELAT_1, FUNCT_2, FUNCOP_1, BOOLE, FUNCT_1,
-      ZF_REFLE, INCPROJ, UNIALG_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
-      FINSEQ_1, FUNCOP_1, STRUCT_0, PARTFUN1, XXREAL_0;
+      ZF_REFLE, INCPROJ, UNIALG_1, FINSEQ_2, FRAENKEL, PRALG_1, NAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, NAT_D, RELAT_1, FUNCT_1,
+      FINSEQ_1, FRAENKEL, FINSEQ_2, FUNCOP_1, STRUCT_0, PARTFUN1, XXREAL_0;
  constructors PARTFUN1, FUNCOP_1, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED,
-      FINSEQ_1, STRUCT_0;
+      FINSEQ_1, FRAENKEL, FINSEQ_2, STRUCT_0, NAT_D;
  registrations SUBSET_1, RELSET_1, STRUCT_0, PARTFUN1, FUNCOP_1, ARYTM_3,
-      MEMBERED, ORDINAL1, XXREAL_0;
+      MEMBERED, ORDINAL1, XXREAL_0, FRAENKEL;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -24,11 +24,11 @@ reserve A,z for set,
         h for PartFunc of A*,A,
         n,m for Nat;
 
-definition let A;
-  let IT be PartFunc of A*,A;
+definition
+  let IT be Relation;
 attr IT is homogeneous means
 :: UNIALG_1:def 1
- for x,y st x in dom IT & y in dom IT holds len x = len y;
+ for x,y being FinSequence st x in dom IT & y in dom IT holds len x = len y;
 end;
 
 definition let A;
@@ -38,8 +38,18 @@ attr IT is quasi_total means
     for x,y st len x = len y & x in dom IT holds y in dom IT;
 end;
 
+registration
+  let f be Relation;
+  let i be Nat;
+  cluster f|(i-tuples_on NAT) -> homogeneous;
+end;
+
 registration let A be non empty set;
 cluster homogeneous quasi_total non empty PartFunc of A*,A;
+end;
+
+registration
+  cluster homogeneous non empty Function;
 end;
 
 theorem :: UNIALG_1:1
@@ -52,6 +62,18 @@ holds {<*>A} -->a is homogeneous quasi_total non empty PartFunc of A*,A;
 theorem :: UNIALG_1:3
 for A being non empty set, a being Element of A
  holds {<*>A} -->a is Element of PFuncs(A*,A);
+
+::::::::::::::::::: stolen from HILBERT3 and improved
+registration let A be set, B be functional set;
+ cluster -> Function-yielding PartFunc of A,B;
+end;
+:::::::::::::::::
+
+registration
+  let A be set;
+  let B be functional set;
+  cluster -> Function-yielding PartFunc of A,B;
+end;
 
 definition let A;
  mode PFuncFinSequence of A is FinSequence of PFuncs(A*,A);
@@ -92,6 +114,13 @@ end;
 
 registration let A be non empty set;
 cluster homogeneous quasi_total non-empty PFuncFinSequence of A;
+end;
+
+registration
+  let A be non empty set;
+  let f be homogeneous PFuncFinSequence of A;
+  let i be set;
+  cluster f.i -> homogeneous;
 end;
 
 definition let IT be UAStr;
@@ -140,16 +169,16 @@ end;
 reserve U1 for partial non-empty non empty UAStr;
 
 definition
-  let A;
-  let f be homogeneous non empty PartFunc of A*,A;
+  let f be homogeneous Relation;
   func arity(f) -> Nat means
 :: UNIALG_1:def 10
-    x in dom f implies it = len x;
+    for x being FinSequence st x in dom f holds it = len x
+    if ex x being FinSequence st x in dom f
+    otherwise it = 0;
 end;
 
 definition
-  let A;
-  let f be homogeneous non empty PartFunc of A*,A;
+  let f be homogeneous Function;
   redefine func arity(f) -> Element of NAT;
 end;
 

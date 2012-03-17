@@ -10,11 +10,11 @@ environ
  vocabularies FUNCT_1, TARSKI, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, FUNCT_2,
       FUNCT_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, PARTFUN1, FUNCOP_1;
- constructors PARTFUN1, FUNCOP_1;
+      FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1;
+ constructors PARTFUN1, FUNCOP_1, BINOP_1;
  registrations RELAT_1, FUNCT_1, RELSET_1, XBOOLE_0, FUNCOP_1, ZFMISC_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0;
+ definitions TARSKI, FUNCT_2, PARTFUN1, XBOOLE_0, BINOP_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, GRFUNC_1, PARTFUN1, FUNCOP_1, ZFMISC_1,
       RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, ENUMSET1;
  schemes FUNCT_1, PARTFUN1, XBOOLE_0;
@@ -584,7 +584,7 @@ theorem
 definition let f;
  func ~f -> Function means :Def2:
   (for x holds x in dom it iff ex y,z st x = [z,y] & [y,z] in dom f) &
-  (for y,z st [y,z] in dom f holds it.[z,y] = f.[y,z]);
+   for y,z st [y,z] in dom f holds it.(z,y) = f.(y,z);
  existence
   proof
    defpred P[set] means ex y st [$1,y] in dom f;
@@ -636,29 +636,32 @@ A15:    [y,z] in dom f;
    then [z,y] in D by A11,A13;
    then consider y',z' such that
 A16:   [z,y] = [z',y'] and
-A17:   h.[z,y] =f.[y',z'] by A12;
+A17:   h.(z,y) = f.[y',z'] by A12;
+A18:  h.(z,y) = f.(y',z') by A17;
       z = z' & y = y' by A16,ZFMISC_1:33;
-   hence h.[z,y] = f.[y,z] by A17;
+   hence h.(z,y) = f.(y,z) by A18;
   end;
  uniqueness
   proof let h1,h2 be Function such that
-A18:  for x holds x in dom h1 iff ex y,z st x = [z,y] & [y,z] in dom f and
-A19:  for y,z st [y,z] in dom f holds h1.[z,y] = f.[y,z] and
-A20:  for x holds x in dom h2 iff ex y,z st x = [z,y] & [y,z] in dom f and
-A21:  for y,z st [y,z] in dom f holds h2.[z,y] = f.[y,z];
+A19:  for x holds x in dom h1 iff ex y,z st x = [z,y] & [y,z] in dom f and
+A20:  for y,z st [y,z] in dom f holds h1.(z,y) = f.(y,z) and
+A21:  for x holds x in dom h2 iff ex y,z st x = [z,y] & [y,z] in dom f and
+A22:  for y,z st [y,z] in dom f holds h2.(z,y) = f.(y,z);
       x in dom h1 iff x in dom h2
-    proof x in dom h1 iff ex y,z st x = [z,y] & [y,z] in dom f by A18;
-     hence thesis by A20;
+    proof x in dom h1 iff ex y,z st x = [z,y] & [y,z] in dom f by A19;
+     hence thesis by A21;
     end;
-then A22:  dom h1 = dom h2 by TARSKI:2;
+then A23:  dom h1 = dom h2 by TARSKI:2;
       x in dom h1 implies h1.x = h2.x
     proof assume x in dom h1;
      then consider x1,x2 such that
-A23:   x = [x2,x1] and
-A24:   [x1,x2] in dom f by A18;
-     thus h1.x = f.[x1,x2] by A19,A23,A24 .= h2.x by A21,A23,A24;
+A24:   x = [x2,x1] and
+A25:   [x1,x2] in dom f by A19;
+      h1.(x2,x1) = f.(x1,x2) by A20,A25
+          .= h2.(x2,x1) by A22,A25;
+     hence thesis by A24;
     end;
-   hence thesis by A22,FUNCT_1:9;
+   hence thesis by A23,FUNCT_1:9;
   end;
 end;
 
@@ -671,7 +674,8 @@ A2:  y = (~f).x by FUNCT_1:def 5;
   consider x1,x2 such that
 A3:  x = [x2,x1] and
 A4:  [x1,x2] in dom f by A1,Def2;
-     y = f.[x1,x2] by A2,A3,A4,Def2;
+     y = (~f).(x2,x1) by A2,A3
+      .= f.(x1,x2) by A4,Def2;
   hence thesis by A4,FUNCT_1:def 5; end;
 
 theorem Th43:
@@ -685,7 +689,7 @@ A2:  [x1,y1] in dom f by Def2;
   hence thesis by A2; end;
 
 theorem
-      [y,x] in dom ~f implies (~f).[y,x] = f.[x,y]
+ [y,x] in dom ~f implies (~f).(y,x) = f.(x,y)
  proof assume [y,x] in dom ~f; then [x,y] in dom f by Th43;
   hence thesis by Def2; end;
 
@@ -731,8 +735,11 @@ A2:  x in dom f and
 A3:  y = f.x by FUNCT_1:def 5;
   consider x1,y1 such that x1 in X & y1 in Y and
 A4:  x =[x1,y1] by A1,A2,ZFMISC_1:103;
-     [y1,x1] in dom ~f & y = (~f).[y1,x1] by A2,A3,A4,Def2;
-  hence y in rng ~f by FUNCT_1:def 5; end;
+A5: [y1,x1] in dom ~f by A2,A4,Th43;
+   y = f.(x1,y1) by A3,A4
+     .= (~f).(y1,x1) by A2,A4,Def2;
+  hence y in rng ~f by FUNCT_1:def 5,A5;
+end;
 
 theorem
       for f being PartFunc of [:X,Y:],Z holds ~f is PartFunc of [:Y,X:],Z
@@ -793,7 +800,9 @@ A4:  dom ~~f c= dom f
 A5:   x = [z2,y2] and
 A6:   [y2,z2] in dom ~f and
 A7:   [z2,y2] in dom f by A1;
-    thus (~~f).x = (~f).[y2,z2] by A5,A6,Def2 .= f.x by A5,A7,Def2;
+     (~~f).(z2,y2) = (~f).(y2,z2) by A6,Def2
+         .= f.(z2,y2) by A7,Def2;
+    hence thesis by A5;
    end;
   hence thesis by A4,GRFUNC_1:8; end;
 
@@ -827,8 +836,8 @@ definition let f,g;
 :Def3:
   (for z holds z in dom it iff
     ex x,y,x',y' st z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in dom g) &
-  (for x,y,x',y' st [x,y] in dom f & [x',y'] in dom g
-     holds it.[[x,x'],[y,y']] = [f.[x,y],g.[x',y']]);
+   for x,y,x',y' st [x,y] in dom f & [x',y'] in dom g
+     holds it.([x,x'],[y,y']) = [f.(x,y),g.(x',y')];
  existence
   proof
    defpred P[set] means ex y st [$1,y] in dom f;
@@ -898,7 +907,7 @@ A20:   [x',y'] in dom g;
 A21:   [[x,x'],[y,y']] = [[x1,x1'],[y1,y1']] and
 A22:   h.[[x,x'],[y,y']] = [f.[x1,y1],g.[x1',y1']] by A14;
       x = x1 & y = y1 & x'= x1' & y' = y1' by A21,Lm2;
-   hence h.[[x,x'],[y,y']] = [f.[x,y],g.[x',y']] by A22;
+   hence h.([x,x'],[y,y']) = [f.(x,y),g.(x',y')] by A22;
   end;
  uniqueness
   proof let h1,h2 be Function such that
@@ -906,12 +915,12 @@ A23:  for z holds z in dom h1 iff
       ex x,y,x',y' st z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in
  dom g and
 A24:  for x,y,x',y' st [x,y] in dom f & [x',y'] in dom g
-       holds h1.[[x,x'],[y,y']] = [f.[x,y],g.[x',y']] and
+       holds h1.([x,x'],[y,y']) = [f.(x,y),g.(x',y')] and
 A25:  for z holds z in dom h2 iff
       ex x,y,x',y' st z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in
  dom g and
 A26:  for x,y,x',y' st [x,y] in dom f & [x',y'] in dom g
-       holds h2.[[x,x'],[y,y']] = [f.[x,y],g.[x',y']];
+       holds h2.([x,x'],[y,y']) = [f.(x,y),g.(x',y')];
         z in dom h1 iff z in dom h2
       proof
            z in dom h1 iff
@@ -925,7 +934,9 @@ then A27:  dom h1 = dom h2 by TARSKI:2;
      proof assume z in dom h1;
       then consider x,y,x',y' such that
 A28:     z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in dom g by A23;
-      thus h1.z = [f.[x,y],g.[x',y']] by A24,A28 .= h2.z by A26,A28;
+       h1.([x,x'],[y,y']) = [f.(x,y),g.(x',y')] by A24,A28
+          .= h2.([x,x'],[y,y']) by A26,A28;
+      hence thesis by A28;
      end;
     hence thesis by A27,FUNCT_1:9;
   end;
@@ -947,7 +958,7 @@ A2:   [x1,y1] in dom f & [x1',y1'] in dom g by Def3;
 
 theorem
       [[x,x'],[y,y']] in dom |:f,g:|
-     implies |:f,g:|.[[x,x'],[y,y']] = [f.[x,y],g.[x',y']]
+     implies |:f,g:|.([x,x'],[y,y']) = [f.(x,y),g.(x',y')]
  proof assume [[x,x'],[y,y']] in dom |:f,g:|;
    then [x,y] in dom f & [x',y'] in dom g by Th57;
    hence thesis by Def3; end;
@@ -963,8 +974,11 @@ A2: z = |:f,g:|.p by FUNCT_1:def 5;
 A3:  p = [[x,x'],[y,y']] and
 A4:  [x,y] in dom f & [x',y'] in dom g by A1,Def3;
      f.[x,y] in rng f & g.[x',y'] in rng g by A4,FUNCT_1:def 5;
-  then [f.[x,y],g.[x',y']] in [:rng f,rng g:] by ZFMISC_1:106;
-  hence z in [:rng f,rng g:] by A2,A3,A4,Def3; end;
+  then
+A5:  [f.(x,y),g.(x',y')] in [:rng f,rng g:] by ZFMISC_1:106;
+   z = |:f,g:|.([x,x'],[y,y']) by A2,A3
+     .= [f.(x,y),g.(x',y')] by Def3,A4;
+  hence z in [:rng f,rng g:] by A5; end;
 
 theorem Th60:
    dom f c= [:X,Y:] & dom g c= [:X',Y':]

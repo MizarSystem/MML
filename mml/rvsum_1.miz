@@ -8,17 +8,18 @@ environ
 
  vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, VECTSP_1,
       SETWISEO, SQUARE_1, ARYTM, FUNCOP_1, FINSEQOP, RLVECT_1, RVSUM_1, CARD_3,
-      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1;
+      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1, NAT_1;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XBOOLE_0, XCMPLX_0,
-      XXREAL_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
-      FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, SETWOP_2;
+      XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D, SQUARE_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, SETWOP_2;
  constructors PARTFUN1, BINOP_1, SETWISEO, SQUARE_1, NAT_1, BINOP_2, FINSEQOP,
-      SEQ_1, FINSEQ_4, FINSOP_1, SETWOP_2;
+      SEQ_1, FINSEQ_4, FINSOP_1, SETWOP_2, REAL_1, NAT_D;
  registrations RELSET_1, FINSEQ_2, NAT_1, MEMBERED, FUNCT_1, FUNCT_2, BINOP_2,
-      XCMPLX_0, XREAL_0, SQUARE_1, FUNCOP_1, ORDINAL1, FINSEQ_1;
+      XCMPLX_0, XREAL_0, SQUARE_1, FUNCOP_1, ORDINAL1, FINSEQ_1, SEQ_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, BINOP_2, FINSEQ_2, TARSKI;
+ definitions SEQ_1, BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, BINOP_2, FINSEQ_2,
+      TARSKI;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1, FINSEQ_2,
       FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0, ZFMISC_1, XCMPLX_0,
       XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, SEQ_1, NUMBERS, XBOOLE_1, FINSEQ_3;
@@ -44,14 +45,109 @@ Lm2: for a, b being complex number holds
     hence thesis;
   end;
 
- reserve i,j,k for Element of NAT,
-         x,x1,x2,x3,r,r1,r2,r3 for Element of REAL,
-         F,F1,F2 for FinSequence of REAL,
-         R,R1,R2,R3 for Element of i-tuples_on REAL;
+registration
+  cluster real-yielding FinSequence;
+  existence
+  proof
+    consider f being FinSequence of REAL;
+    f is real-yielding;
+    hence thesis;
+  end;
+end;
+
+definition
+  let F be real-yielding Relation;
+  redefine func rng F -> Subset of REAL;
+  coherence by SEQ_1:def 1;
+end;
+
+registration
+  let f, g be real-yielding Relation;
+  cluster f*g -> real-yielding;
+  coherence
+  proof
+    rng (f*g) c= rng g by RELAT_1:45;
+    hence rng (f*g) c= REAL by XBOOLE_1:1;
+  end;
+end;
+
+registration
+  let D be non empty set;
+  let F be Function of REAL,D; let F1 be real-yielding FinSequence;
+  cluster F*F1 -> FinSequence-like;
+  coherence
+  proof
+    consider n1 being Element of NAT such that
+A1: dom F1 = Seg n1 by FINSEQ_1:def 2;
+    take n1;
+A2: dom F = REAL by FUNCT_2:def 1;
+    rng F1 c= REAL;
+    hence dom(F*F1) = Seg n1 by  A2,RELAT_1:46,A1;
+  end;
+end;
+
+registration let r be real number;
+  cluster <*r*> -> real-yielding;
+  coherence
+  proof
+    reconsider p = r as Element of REAL by XREAL_0:def 1;
+    reconsider f = <*p*> as FinSequence of REAL;
+    f is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+registration let r1, r2 be real number;
+  cluster <*r1, r2*> -> real-yielding;
+  coherence
+  proof
+    reconsider p1 = r1, p2 = r2 as Element of REAL by XREAL_0:def 1;
+    reconsider f = <*p1,p2*> as FinSequence of REAL;
+    f is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+registration let r1, r2, r3 be real number;
+  cluster <*r1, r2, r3*> -> real-yielding;
+  coherence
+  proof
+    reconsider p1 = r1, p2 = r2, p3 = r3 as Element of REAL
+      by XREAL_0:def 1;
+    reconsider f = <*p1,p2,p3*> as FinSequence of REAL;
+    f is FinSequence-like;
+    hence thesis;
+  end;
+end;
+
+registration let j be Nat, r be real number;
+  cluster j |-> r -> real-yielding;
+  coherence
+  proof
+    r in REAL by XREAL_0:def 1; then
+    (j |-> r) is FinSequence of REAL by FINSEQ_2:77;
+    hence thesis;
+  end;
+end;
+
+registration let f, g be real-yielding FinSequence;
+  cluster f ^ g -> real-yielding;
+  coherence
+  proof
+    rng (f ^ g) = rng f \/ rng g by FINSEQ_1:44;
+    hence rng (f ^ g) c= REAL by XBOOLE_1:8;
+  end;
+end;
+
+reserve i,j,k for Element of NAT,
+        x,x1,x2,x3 for Element of REAL,
+        r,r1,r2,r3 for real number,
+        F,F1,F2 for real-yielding FinSequence,
+        R,R1,R2,R3 for Element of i-tuples_on REAL;
 
 canceled 2;
 
-theorem Th3:
+theorem
   0 is_a_unity_wrt addreal by BINOP_2:2,SETWISEO:22;
 
 definition
@@ -71,17 +167,15 @@ definition
   correctness;
 end;
 
-Lm3: diffreal.(r1,r2) = r1 - r2 by BINOP_2:def 10;
-
 definition
   func sqrreal -> UnOp of REAL means
 :Def2: for r holds it.r = r^2;
   existence
  proof
-  deffunc F(Element of REAL) = ($1)^2;
+  deffunc F(Element of REAL) = $1^2;
   consider G being Function of REAL,REAL such that
 A1: for x being Element of REAL holds G.x = F(x) from FUNCT_2:sch 4;
-  take G; let r; thus G.r = (r)^2 by A1;
+  take G; let r; r in REAL by XREAL_0:def 1; hence G.r = (r)^2 by A1;
  end;
   uniqueness
  proof let G1,G2 be UnOp of REAL such that
@@ -145,30 +239,36 @@ definition let x be real number;
    end;
 end;
 
-Lm4: (multreal[;](r,id REAL)).x = r*x
+Lm3:
+ (multreal[;](r,id REAL)).r1 = r*r1
  proof
-  thus (multreal[;](r,id REAL)).x = multreal.(r,(id REAL).x) by FUNCOP_1:66
-                               .= multreal.(r,x) by FUNCT_1:35
-                               .= r*x by BINOP_2:def 11;
+  reconsider a=r, s=r1 as Element of REAL by XREAL_0:def 1;
+  thus(multreal[;](r,id REAL)).r1 = multreal.(a,(id REAL).s) by FUNCOP_1:66
+  .= multreal.(a,s) by FUNCT_1:35
+  .= r*r1 by BINOP_2:def 11;
  end;
 
 canceled;
 
 theorem
-  (r multreal).x = r*x by Lm4;
+  (r multreal).r1 = r*r1 by Lm3;
 
-theorem Th20:
-  r multreal is_distributive_wrt addreal by Th16,FINSEQOP:55;
+theorem
+  r multreal is_distributive_wrt addreal
+  proof
+    r in REAL by XREAL_0:def 1;
+    hence thesis by Th16,FINSEQOP:55;
+  end;
 
 theorem Th21:
   compreal is_an_inverseOp_wrt addreal
  proof let x;
    thus addreal.(x,compreal.x) = x+compreal.x by BINOP_2:def 9
-                              .= x+-x by BINOP_2:def 7
-                              .= the_unity_wrt addreal by Th3,BINOP_1:def 8;
+   .= x+-x by BINOP_2:def 7
+   .= the_unity_wrt addreal by BINOP_2:2;
    thus addreal.(compreal.x,x) = compreal.x+x by BINOP_2:def 9
-                              .= -x+x by BINOP_2:def 7
-                              .= the_unity_wrt addreal by Th3,BINOP_1:def 8;
+   .= -x+x by BINOP_2:def 7
+   .= the_unity_wrt addreal by BINOP_2:2;
  end;
 
 theorem Th22:
@@ -182,47 +282,102 @@ theorem
 
 :: Some Functors on the i-tuples on Real
 
-definition let F1,F2;
-  func F1 + F2 -> FinSequence of REAL equals
-  addreal.:(F1,F2);
-  correctness;
- commutativity
-  proof let F,F1,F2 be FinSequence of REAL;
-   assume
-A1:  F = addreal.:(F1,F2);
-A2:  dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
-A3:  [:rng F2, rng F1:] c= dom addreal by A2,ZFMISC_1:119;
-     [:rng F1, rng F2:] c= dom addreal by A2,ZFMISC_1:119; then
-A4:  dom(addreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
-          .= dom(addreal.:(F2,F1)) by A3,FUNCOP_1:84;
-       for z being set st z in dom(addreal.:(F2,F1))
-       holds F.z = addreal.(F2.z,F1.z)
-     proof let z be set such that
-A5:    z in dom(addreal.:(F2,F1));
-       set F1z = F1.z, F2z =F2.z;
-      thus F.z = addreal.(F1.z,F2.z) by A1,A4,A5,FUNCOP_1:28
-           .= F1z + F2z by BINOP_2:def 9
-           .= addreal.(F2.z,F1.z) by BINOP_2:def 9;
+Lm4: F is FinSequence of REAL
+     proof
+       thus rng F c= REAL;
      end;
-   hence F = addreal.:(F2,F1) by A1,A4,FUNCOP_1:27;
+
+Lm5: now let F1,F2;
+  thus F1 + F2 is FinSequence-like
+  proof
+A1: dom (F1+F2) = dom F1 /\ dom F2 by SEQ_1:def 3;
+    consider n1 being Element of NAT such that
+A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
+    consider n2 being Element of NAT such that
+A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
+    per cases;
+    suppose n1 <= n2;
+      then
+A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
+      take n1;
+      thus dom(F1+F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+    end;
+    suppose n2 <= n1;
+      then
+A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
+      take n2;
+      thus dom(F1+F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+    end;
   end;
 end;
 
-canceled;
-
-theorem Th26:
-  i in dom (F1+F2) implies (F1+F2).i = F1.i + F2.i
- proof assume that
-A1: i in dom (F1+F2);
-  set r1 = F1.i, r2 = F2.i;
-  (F1 + F2).i = addreal.(r1,r2) by A1,FUNCOP_1:28;
-  hence thesis by BINOP_2:def 9;
- end;
+definition let F1,F2;
+  redefine func F1 + F2 -> FinSequence of REAL equals
+  addreal.:(F1,F2);
+  coherence
+  proof
+    F1+F2 is FinSequence-like by Lm5;
+    hence thesis by Lm4;
+  end;
+  compatibility
+  proof
+    let F be FinSequence of REAL;
+A1: dom (F1+F2) = dom F1 /\ dom F2 by SEQ_1:def 3;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+A2: dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
+    [:rng F3, rng F4:] c= dom addreal by A2,ZFMISC_1:119; then
+A3: dom(addreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84;
+    thus F = F1+F2 implies F = addreal.:(F1,F2)
+    proof
+      assume
+A4:   F = F1+F2;
+      for z being set st z in dom(addreal.:(F1,F2))
+      holds F.z = addreal.(F1.z,F2.z)
+      proof let z be set;
+        assume z in dom(addreal.:(F1,F2));
+        hence F.z = F1.z + F2.z by A1,A4,A3,SEQ_1:def 3
+        .= addreal.(F1.z,F2.z) by BINOP_2:def 9;
+     end;
+     hence thesis by A1,A4,A3,FUNCOP_1:27;
+   end;
+   assume
+A5: F = addreal.:(F1,F2);
+   now let c be set;
+     assume c in dom F;
+     hence F.c = addreal.(F1.c,F2.c) by A5,FUNCOP_1:28
+     .= F1.c + F2.c by BINOP_2:def 9;
+   end;
+   hence thesis by A3,A5,SEQ_1:def 3;
+  end;
+ commutativity
+  proof let F be FinSequence of REAL;
+    let F1,F2;
+   assume
+A6:  F = addreal.:(F1,F2);
+     reconsider F1,F2 as FinSequence of REAL by Lm4;
+A7:  dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
+A8:  [:rng F2, rng F1:] c= dom addreal by A7,ZFMISC_1:119;
+     [:rng F1, rng F2:] c= dom addreal by A7,ZFMISC_1:119; then
+A9:  dom(addreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
+          .= dom(addreal.:(F2,F1)) by A8,FUNCOP_1:84;
+       for z being set st z in dom(addreal.:(F2,F1))
+       holds F.z = addreal.(F2.z,F1.z)
+     proof let z be set such that
+A10:    z in dom(addreal.:(F2,F1));
+      thus F.z = addreal.(F1.z,F2.z) by A6,A9,A10,FUNCOP_1:28
+           .= F1.z + F2.z by BINOP_2:def 9
+           .= addreal.(F2.z,F1.z) by BINOP_2:def 9;
+     end;
+   hence thesis by A6,A9,FUNCOP_1:27;
+  end;
+end;
 
 definition let i,R1,R2;
   redefine func R1 + R2 -> Element of i-tuples_on REAL;
   coherence by FINSEQ_2:140;
 end;
+
+canceled 2;
 
 theorem Th27:
   (R1+R2).j = R1.j + R2.j
@@ -238,25 +393,33 @@ A3:  not j in dom R2 by A1,FINSEQ_2:144;
   end;
   suppose j in Seg i;
    then j in dom (R1 + R2) by FINSEQ_2:144;
-  hence thesis by Th26;
+  hence thesis by SEQ_1:def 3;
  end;
  end;
 
 theorem
-  <*>REAL + F = <*>REAL by FINSEQ_2:87;
+  <*>REAL + F = <*>REAL
+  proof
+    F is FinSequence of REAL by Lm4;
+    hence thesis by FINSEQ_2:87;
+  end;
 
 theorem
   <*r1*> + <*r2*> = <*r1+r2*>
  proof
-   thus <*r1*> + <*r2*> = <*addreal.(r1,r2)*> by FINSEQ_2:88
-                       .= <*r1+r2*> by BINOP_2:def 9;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   <*s1*> + <*s2*> = <*addreal.(s1,s2)*> by FINSEQ_2:88
+   .= <*r1+r2*> by BINOP_2:def 9;
+   hence thesis;
  end;
 
 theorem
   (i|->r1) + (i|->r2) = i|->(r1+r2)
  proof
-   thus (i|->r1) + (i|->r2) = i|->(addreal.(r1,r2)) by FINSEQOP:18
-                           .= i|->(r1+r2) by BINOP_2:def 9;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   (i|->s1) + (i|->s2) = i|->(addreal.(s1,s2)) by FINSEQOP:18
+   .= i|->(r1+r2) by BINOP_2:def 9;
+   hence thesis;
  end;
 
 canceled;
@@ -264,61 +427,81 @@ canceled;
 theorem Th32:
   R1 + (R2 + R3) = R1 + R2 + R3 by FINSEQOP:29;
 
-theorem Th33:
+theorem
   R + (i|->(0 qua Real)) = R by BINOP_2:2,FINSEQOP:57;
 
-definition let F;
-  func -F -> FinSequence of REAL equals
-  compreal*F;
-  correctness;
-  involutiveness
-  proof let f,F be FinSequence of REAL;
-   assume
-A1:   f = compreal*F;
-A2:  rng f c= REAL;
-A3:  rng F c= REAL;
-A4:  rng f c= dom compreal by A2,FUNCT_2:def 1;
-       rng F c= dom compreal by A3,FUNCT_2:def 1;
-    then A5:  dom F = dom f by A1,RELAT_1:46;
-    then A6:  dom F = dom(compreal*f) by A4,RELAT_1:46;
-       for k st k in dom F holds F.k = (compreal*f).k
-     proof let k such that
-A7:    k in dom F;
-      reconsider fk = f.k, Fk = F.k as Element of REAL;
-      thus F.k = --Fk
-          .= -compreal.(F.k) by BINOP_2:def 7
-          .= -fk by A1,A7,FUNCT_1:23
-          .= compreal.(f.k) by BINOP_2:def 7
-          .= (compreal*f).k by A5,A7,FUNCT_1:23;
-     end;
-   hence F = compreal*f by A6,FINSEQ_1:17;
+Lm6: now
+  let F;
+  thus -F is FinSequence-like
+  proof
+    consider n being Element of NAT such that
+A1: dom F = Seg n by FINSEQ_1:def 2;
+    take n;
+    thus thesis by A1,SEQ_1:def 7;
   end;
 end;
 
-theorem Th34:
-  dom F = dom -F
-  proof
-    dom compreal = REAL by FUNCT_2:def 1;
-    then rng F c= dom compreal;
-    hence dom F = dom -F by RELAT_1:46;
-  end;
+canceled;
 
 theorem Th35:
-  (-F).i = -F.i
- proof per cases;
+  for i being set holds (-F).i = -F.i
+ proof
+   let i be set;
+    per cases;
   suppose
 A1: not i in dom -F; then
-A2: not i in dom F by Th34;
+A2: not i in dom F by SEQ_1:def 7;
    thus (-F).i = -0 by A1,FUNCT_1:def 4
       .= -F.i by A2,FUNCT_1:def 4;
   end;
-  suppose
-A3:  i in dom -F;
-  set r = F.i;
-  (-F).i = compreal.r by A3,FUNCT_1:22;
-  hence thesis by BINOP_2:def 7;
- end;
- end;
+  suppose i in dom -F;
+    hence thesis by SEQ_1:def 7;
+  end;
+end;
+
+definition let F;
+  redefine func -F -> FinSequence of REAL equals
+  compreal*F;
+  coherence
+  proof
+    -F is FinSequence-like by Lm6;
+    hence thesis by Lm4;
+  end;
+  compatibility
+  proof
+    let F1 be FinSequence of REAL;
+A1: dom(-F) = dom F by SEQ_1:def 7;
+A2: rng F c= REAL;
+    dom compreal = REAL by FUNCT_2:def 1;
+    then
+A3: dom(compreal*F) = dom F by A2,RELAT_1:46;
+    thus F1 = -F implies F1 = compreal*F
+    proof
+      assume
+A4:   F1 = -F;
+      now
+        let c be set;
+        assume
+A5:     c in dom F1;
+        hence F1.c = -(F.c) by A4,SEQ_1:def 7
+        .= compreal.(F.c) by BINOP_2:def 7
+        .= (compreal*F).c by A1,A4,A5,FUNCT_1:23;
+      end;
+      hence thesis by A1,A3,A4,FUNCT_1:9;
+    end;
+    assume
+A6: F1 = compreal*F;
+    now
+      let c be set;
+      assume
+A7:   c in dom F1;
+      thus (-F).c = -(F.c) by Th35
+      .= compreal.(F.c) by BINOP_2:def 7
+      .= (compreal*F).c by A6,A7,FUNCT_1:22;
+    end;
+    hence thesis by A1,A3,A6,FUNCT_1:9;
+  end;
+end;
 
 definition let i,R;
   redefine func -R -> Element of i-tuples_on REAL;
@@ -326,7 +509,7 @@ definition let i,R;
 end;
 
 theorem
-  r = R.j implies (-R).j = -r by Th35;
+  (-R).j = -(R.j) by Th35;
 
 theorem
   -(<*>REAL) = <*>REAL by FINSEQ_2:38;
@@ -334,70 +517,126 @@ theorem
 theorem
   -<*r*> = <*-r*>
  proof
-   thus -<*r*> = <*compreal.r*> by FINSEQ_2:39
-              .= <*-r*> by BINOP_2:def 7;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   -<*s*> = <*compreal.s*> by FINSEQ_2:39
+   .= <*-r*> by BINOP_2:def 7;
+   hence thesis;
  end;
 
 theorem Th39:
   -(i|->r) = i|->-r
  proof
-   thus -(i|->r) = i|->(compreal.r) by FINSEQOP:17
-                .= i|->-r by BINOP_2:def 7;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   -(i|->s) = i|->(compreal.s) by FINSEQOP:17
+   .= i|->-r by BINOP_2:def 7;
+   hence thesis;
  end;
 
-theorem Th40:
+theorem
   R + -R = (i|->0) by Th22,Th23,BINOP_2:2,FINSEQOP:77;
 
-theorem Th41:
+theorem
   R1 + R2 = (i|->0) implies R1 = -R2 by Th22,Th23,BINOP_2:2,FINSEQOP:78;
 
 canceled;
 
 theorem
   -R1 = -R2 implies R1 = R2
- proof assume -R1 = -R2; hence R1 = --R2 .= R2; end;
+  proof assume -R1 = -R2;
+    hence R1 = --R2 by SEQ_1:36 .= R2 by SEQ_1:36;
+  end;
 
 theorem
   R1 + R = R2 + R implies R1 = R2
  proof assume R1 + R = R2 + R;
-  then R1 + (R + -R)= (R2 + R)+-R by Th32;
-  then R1 + (R + -R)= R2 + (R + -R) & R + -R = (i|->0) by Th32,Th40;
-  then R1 = R2 + (i|->(0 qua Real)) by Th33;
-  hence R1 = R2 by Th33;
+  then R1 + (R + -R)= (R2 + R)+-R by FINSEQOP:29;
+  then R1 + (R + -R)= R2 + (R + -R) & R + -R = (i|->0)
+  by FINSEQOP:29,77,Th22,Th23,BINOP_2:2;
+  then R1 = R2 + (i|->(0 qua Real)) by BINOP_2:2,FINSEQOP:57;
+  hence R1 = R2 by BINOP_2:2,FINSEQOP:57;
  end;
 
 theorem Th45:
   -(R1 + R2) = -R1 + -R2
  proof
-   (R1 + R2) + (-R1 + -R2) = R1 + R2 + -R1 + -R2 by Th32
-                          .= R2 + (R1 + -R1) + -R2 by Th32
-                          .= R2 + (i|->(0 qua Real)) + -R2 by Th40
-                          .= R2 + -R2 by Th33
-                          .= (i|->0) by Th40;
-   hence thesis by Th41;
+   (R1 + R2) + (-R1 + -R2) = R1 + R2 + -R1 + -R2 by FINSEQOP:29
+   .= R2 + (R1 + -R1) + -R2 by Th32
+   .= R2 + (i|->(0 qua Real)) + -R2 by Th22,Th23,BINOP_2:2,FINSEQOP:77
+   .= R2 + -R2 by BINOP_2:2,FINSEQOP:57
+   .= (i|->0) by Th22,Th23,BINOP_2:2,FINSEQOP:77;
+   hence thesis by Th22,Th23,BINOP_2:2,FINSEQOP:78;
  end;
 
-definition let F1,F2;
-  func F1 - F2 -> FinSequence of REAL equals
-  diffreal.:(F1,F2);
-  coherence;
+Lm7: now let F1,F2;
+  thus F1 - F2 is FinSequence-like
+  proof
+A1: dom (F1-F2) = dom F1 /\ dom F2 by SEQ_1:def 4;
+    consider n1 being Element of NAT such that
+A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
+    consider n2 being Element of NAT such that
+A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
+    per cases;
+    suppose n1 <= n2;
+      then
+A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
+      take n1;
+      thus dom(F1-F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+    end;
+    suppose n2 <= n1;
+      then
+A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
+      take n2;
+      thus dom(F1-F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+    end;
+  end;
 end;
 
-canceled;
-
-theorem Th47:
-  i in dom (F1-F2) implies (F1-F2).i = F1.i - F2.i
- proof assume that
-A1: i in dom (F1-F2);
-   set r1 = F1.i, r2 = F2.i;
-  (F1 - F2).i = diffreal.(r1,r2) by A1,FUNCOP_1:28;
-  hence thesis by Lm3;
- end;
+definition let F1,F2;
+  redefine func F1 - F2 -> FinSequence of REAL equals
+  diffreal.:(F1,F2);
+  coherence
+  proof
+    F1 - F2 is FinSequence-like by Lm7;
+    hence thesis by Lm4;
+  end;
+  compatibility
+  proof
+    let F be FinSequence of REAL;
+A1: dom (F1-F2) = dom F1 /\ dom F2 by SEQ_1:def 4;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+A2: dom diffreal = [:REAL,REAL:] by FUNCT_2:def 1;
+    [:rng F3, rng F4:] c= dom diffreal by A2,ZFMISC_1:119; then
+A3: dom(diffreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84;
+    thus F = F1-F2 implies F = diffreal.:(F1,F2)
+    proof
+      assume
+A4:   F = F1-F2;
+      for z being set st z in dom(diffreal.:(F1,F2))
+      holds F.z = diffreal.(F1.z,F2.z)
+      proof let z be set;
+        assume z in dom(diffreal.:(F1,F2));
+        hence F.z = F1.z - F2.z by A1,A4,A3,SEQ_1:def 4
+        .= diffreal.(F1.z,F2.z) by BINOP_2:def 10;
+     end;
+     hence thesis by A1,A4,A3,FUNCOP_1:27;
+   end;
+   assume
+A5: F = diffreal.:(F1,F2);
+   now let c be set;
+     assume c in dom F;
+     hence F.c = diffreal.(F1.c,F2.c) by A5,FUNCOP_1:28
+     .= F1.c - F2.c by BINOP_2:def 10;
+   end;
+   hence thesis by A3,A5,SEQ_1:def 4;
+  end;
+end;
 
 definition let i,R1,R2;
   redefine func R1 - R2 -> Element of i-tuples_on REAL;
   coherence by FINSEQ_2:140;
 end;
+
+canceled 2;
 
 theorem
   (R1-R2).j = R1.j - R2.j
@@ -413,25 +652,33 @@ A3:  not j in dom R2 by A1,FINSEQ_2:144;
   end;
   suppose j in Seg i;
   then j in dom (R1 - R2) by FINSEQ_2:144;
-  hence thesis by Th47;
+  hence thesis by SEQ_1:def 4;
  end;
  end;
 
 theorem
-  <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL by FINSEQ_2:87;
+  <*>REAL - F = <*>REAL & F - <*>REAL = <*>REAL
+  proof
+    F is FinSequence of REAL by Lm4;
+    hence thesis by FINSEQ_2:87;
+  end;
 
 theorem
   <*r1*> - <*r2*> = <*r1-r2*>
  proof
-   thus <*r1*> - <*r2*> = <*diffreal.(r1,r2)*> by FINSEQ_2:88
-                       .= <*r1-r2*> by Lm3;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   <*s1*> - <*s2*> = <*diffreal.(s1,s2)*> by FINSEQ_2:88
+   .= <*r1-r2*> by BINOP_2:def 10;
+   hence thesis;
  end;
 
 theorem
   (i|->r1) - (i|->r2) = i|->(r1-r2)
  proof
-   thus (i|->r1) - (i|->r2) = i|->(diffreal.(r1,r2)) by FINSEQOP:18
-                           .= i|->(r1-r2) by Lm3;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   (i|->s1) - (i|->s2) = i|->(diffreal.(s1,s2)) by FINSEQOP:18
+   .= i|->(r1-r2) by BINOP_2:def 10;
+   hence thesis;
  end;
 
 theorem Th52:
@@ -440,81 +687,83 @@ theorem Th52:
 theorem
   R - (i|->(0 qua Real)) = R
  proof
-  thus R - (i|->(0 qua Real)) = R + - (i|->(0 qua Real)) by Th52
-  .= R + (i|->(-0 qua Real)) by Th39 .= R by Th33;
+  thus R - (i|->(0 qua Real)) = R + - (i|->(0 qua Real)) by FINSEQOP:89
+  .= R + (i|->(-0 qua Real)) by Th39 .= R by BINOP_2:2,FINSEQOP:57;
  end;
 
 theorem
   (i|->(0 qua Real)) - R = -R
- proof thus (i|->(0 qua Real)) - R = (i|->(0 qua Real)) + -R by Th52
-   .= - R by Th33;
+ proof thus (i|->(0 qua Real)) - R = (i|->(0 qua Real)) + -R by FINSEQOP:89
+   .= - R by BINOP_2:2,FINSEQOP:57;
  end;
 
 theorem
   R1 - -R2 = R1 + R2
  proof
-   thus R1 - -R2 = R1 + --R2 by Th52 .= R1 + R2;
+   thus R1 - -R2 = R1 + --R2 by FINSEQOP:89 .= R1 + R2 by SEQ_1:36;
  end;
 
 theorem
   -(R1 - R2) = R2 - R1
  proof
-   thus -(R1 - R2) = -(R1 + -R2) by Th52
+   thus -(R1 - R2) = -(R1 + -R2) by FINSEQOP:89
                   .= -R1 + --R2 by Th45
+                  .= -R1 + R2 by SEQ_1:36
                   .= R2 - R1 by Th52;
  end;
 
 theorem Th57:
   -(R1 - R2) = -R1 + R2
  proof
-   thus -(R1 - R2) = -(R1+ -R2) by Th52
+   thus -(R1 - R2) = -(R1+ -R2) by FINSEQOP:89
                   .= -R1 +--R2 by Th45
-                  .= -R1 + R2;
+                  .= -R1 + R2 by SEQ_1:36;
  end;
 
 theorem Th58:
   R - R = (i|->0)
- proof thus R - R = R + - R by Th52 .= (i|->0) by Th40; end;
+ proof thus R - R = R + - R by FINSEQOP:89
+   .= (i|->0) by Th22,Th23,BINOP_2:2,FINSEQOP:77; end;
 
 theorem
   R1 - R2 = (i|->0) implies R1 = R2
  proof assume R1 - R2 = (i|->0);
-   then R1 + - R2 = (i|->0) by Th52;
-   then R1 = --R2 by Th41;
-   hence thesis;
+   then R1 + - R2 = (i|->0) by FINSEQOP:89;
+   then R1 = --R2 by Th22,Th23,BINOP_2:2,FINSEQOP:78;
+   hence thesis by SEQ_1:36;
  end;
 
 theorem
   R1 - R2 - R3 = R1 - (R2 + R3)
  proof
-   thus R1 - R2 - R3 = R1 - R2 + - R3 by Th52
-                    .= R1 + - R2 + - R3 by Th52
-                    .= R1 + (- R2 + - R3) by Th32
+   thus R1 - R2 - R3 = R1 - R2 + - R3 by FINSEQOP:89
+                    .= R1 + - R2 + - R3 by FINSEQOP:89
+                    .= R1 + (- R2 + - R3) by FINSEQOP:29
                     .= R1 + -(R2 + R3) by Th45
-                    .= R1 - (R2 + R3) by Th52;
+                    .= R1 - (R2 + R3) by FINSEQOP:89;
  end;
 
 theorem Th61:
   R1 + (R2 - R3) = R1 + R2 - R3
  proof
-   thus R1 + (R2 - R3) = R1 + (R2 + - R3) by Th52
-                      .= R1 + R2 + - R3 by Th32
-                      .= R1 + R2 - R3 by Th52;
+   thus R1 + (R2 - R3) = R1 + (R2 + - R3) by FINSEQOP:89
+                      .= R1 + R2 + - R3 by FINSEQOP:29
+                      .= R1 + R2 - R3 by FINSEQOP:89;
  end;
 
 theorem
   R1 - (R2 - R3) = R1 - R2 + R3
  proof
-   thus R1 - (R2 - R3) = R1 + - (R2 - R3) by Th52
+   thus R1 - (R2 - R3) = R1 + - (R2 - R3) by FINSEQOP:89
                       .= R1 + (- R2 + R3) by Th57
-                      .= R1 + - R2 + R3 by Th32
-                      .= R1 - R2 + R3 by Th52;
+                      .= R1 + - R2 + R3 by FINSEQOP:29
+                      .= R1 - R2 + R3 by FINSEQOP:89;
  end;
 
 theorem
   R1 = R1 + R - R
  proof
-   thus R1 = R1 + (i|->(0 qua Real)) by Th33
+   thus R1 = R1 + (i|->(0 qua Real)) by BINOP_2:2,FINSEQOP:57
           .= R1 + (R - R) by Th58
           .= R1 + R - R by Th61;
  end;
@@ -522,47 +771,92 @@ theorem
 theorem
   R1 = R1 - R + R
  proof
-   thus R1 = R1 + (i|->(0 qua Real)) by Th33
-          .= R1 + (-R + R) by Th40
-          .= R1 + -R + R by Th32
-          .= R1 - R + R by Th52;
+   thus R1 = R1 + (i|->(0 qua Real)) by BINOP_2:2,FINSEQOP:57
+          .= R1 + (-R + R) by Th22,Th23,BINOP_2:2,FINSEQOP:77
+          .= R1 + -R + R by FINSEQOP:29
+          .= R1 - R + R by FINSEQOP:89;
  end;
 
-definition let r be real number; let F;
-  func r*F -> FinSequence of REAL equals
-  (r multreal)*F;
-  coherence;
+notation
+  let F,r;
+  synonym r*F for r(#)F;
 end;
 
-theorem Th65:
-  dom(r*F) = dom F
+Lm8: now
+  let F,r;
+  thus r*F is FinSequence-like
   proof
-    dom(r multreal) = REAL by FUNCT_2:def 1;
-    then rng F c= dom(r multreal);
-    hence dom F = dom(r*F) by RELAT_1:46;
+    consider n being Element of NAT such that
+A1: dom F = Seg n by FINSEQ_1:def 2;
+    take n;
+    thus thesis by A1,SEQ_1:def 6;
   end;
+end;
+
+canceled;
 
 theorem Th66:
-  (r*F).i = r*(F.i)
- proof per cases;
+  for i being set holds
+  (r*F).i = r*(F.i) :: poprawic definicje SEQ_1
+ proof
+  let i be set;
+   per cases;
   suppose
 A1: not i in dom (r*F);
-    then A2:  not i in dom F by Th65;
+    then A2:  not i in dom F by SEQ_1:def 6;
    thus (r*F).i = r*0 by A1,FUNCT_1:def 4
       .= r*(F.i) by A2,FUNCT_1:def 4;
   end;
-  suppose
-A3:  i in dom (r*F);
-  set r' = F.i;
-A4:  r' in dom(multreal[;](r,id REAL)) by A3,FUNCT_1:21;
-  thus (r*F).i = (multreal[;](r,id REAL)).r' by A3,FUNCT_1:22
-              .= multreal.(r,(id REAL).r') by A4,FUNCOP_1:42
-              .= multreal.(r,r') by FUNCT_1:35
-              .= r*(F.i) by BINOP_2:def 11;
+  suppose i in dom (r*F);
+  hence (r*F).i = r*(F.i) by SEQ_1:def 6;
  end;
  end;
 
-definition let i; let r be real number; let R;
+definition let F,r;
+  redefine func r*F -> FinSequence of REAL equals
+  (r multreal)*F;
+  coherence
+  proof
+    r*F is FinSequence-like by Lm8;
+    hence thesis by Lm4;
+  end;
+  compatibility
+  proof
+    let F1 be FinSequence of REAL;
+A1: dom(r*F) = dom F by SEQ_1:def 6;
+A2: rng F c= REAL;
+    dom(r multreal) = REAL by FUNCT_2:def 1;
+    then
+A3: dom((r multreal)*F) = dom F by A2,RELAT_1:46;
+    thus F1 = r*F implies F1 = (r multreal)*F
+    proof
+      assume
+A4:   F1 = r*F;
+      now
+        let c be set;
+        assume
+A5:     c in dom F1;
+        hence F1.c = r*(F.c) by A4,SEQ_1:def 6
+        .= (r multreal).(F.c) by Lm3
+        .= ((r multreal)*F).c by A1,A4,A5,FUNCT_1:23;
+      end;
+      hence thesis by A1,A3,A4,FUNCT_1:9;
+    end;
+    assume
+A6: F1 = (r multreal)*F;
+    now
+      let c be set;
+      assume
+A7:   c in dom F1;
+      thus (r*F).c = r*(F.c) by Th66
+      .= (r multreal).(F.c) by Lm3
+      .= ((r multreal)*F).c by A6,A7,FUNCT_1:22;
+    end;
+    hence thesis by A1,A3,A6,FUNCT_1:9;
+  end;
+end;
+
+definition let i,R,r;
   redefine func r*R -> Element of i-tuples_on REAL;
   coherence by FINSEQ_2:133;
 end;
@@ -576,24 +870,29 @@ theorem
 theorem
   r*<*r1*> = <*r*r1*>
  proof
-   thus r*<*r1*> = <*(multreal[;](r,id REAL)).r1*> by FINSEQ_2:39
-                .= <*r*r1*> by Lm4;
+   reconsider s=r, s1=r1 as Element of REAL by XREAL_0:def 1;
+   s*<*s1*> = <*(multreal[;](s,id REAL)).s1*> by FINSEQ_2:39
+   .= <*r*r1*> by Lm3;
+   hence thesis;
  end;
 
 theorem Th70:
   r1*(i|->r2) = i|->(r1*r2)
  proof
-   thus r1*(i|->r2) = i|->((multreal[;](r1,id REAL)).r2) by FINSEQOP:17
-                   .= i|->(r1*r2) by Lm4;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   s1*(i|->s2) = i|->((multreal[;](s1,id REAL)).s2) by FINSEQOP:17
+   .= i|->(r1*r2) by Lm3;
+   hence thesis;
  end;
 
 theorem Th71:
   (r1*r2)*R = r1*(r2*R)
  proof
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
    thus (r1*r2)*R
-      = multreal[;](multreal.(r1,r2),id REAL)*R by BINOP_2:def 11
-     .= multreal[;](r1,multreal[;](r2,id REAL))*R by FUNCOP_1:77
-     .= (multreal[;](r1,id REAL)*(multreal [;] (r2,id REAL)))*R
+      = multreal[;](multreal.(s1,s2),id REAL)*R by BINOP_2:def 11
+     .= multreal[;](s1,multreal[;](s2,id REAL))*R by FUNCOP_1:77
+     .= (multreal[;](s1,id REAL)*(multreal [;] (s2,id REAL)))*R
      by FUNCOP_1:69
      .= r1*(r2*R) by RELAT_1:55;
  end;
@@ -601,17 +900,19 @@ theorem Th71:
 theorem
   (r1 + r2)*R = r1*R + r2*R
  proof
-  thus (r1 + r2)*R
-     = multreal[;](addreal.(r1,r2),id REAL)*R by BINOP_2:def 9
-    .= addreal.:(multreal[;](r1,id REAL),multreal[;](r2,id REAL))*R
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   thus (r1 + r2)*R
+     = multreal[;](addreal.(s1,s2),id REAL)*R by BINOP_2:def 9
+    .= addreal.:(multreal[;](s1,id REAL),multreal[;](s2,id REAL))*R
         by Th16,FINSEQOP:36
     .= r1*R + r2*R by FUNCOP_1:31;
  end;
 
 theorem
   r*(R1+R2) = r*R1 + r*R2
- proof set rM = r multreal;
-  r multreal is_distributive_wrt addreal by Th20;
+ proof
+   r in REAL by XREAL_0:def 1; then
+  r multreal is_distributive_wrt addreal by Th16,FINSEQOP:55;
   hence r*(R1+R2) = r*R1 + r*R2 by FINSEQOP:52;
  end;
 
@@ -642,7 +943,7 @@ theorem Th76:
 definition let F;
   func sqr F -> FinSequence of REAL equals
   sqrreal*F;
-  coherence;
+  coherence by Lm4;
 end;
 
 theorem Th77:
@@ -678,21 +979,24 @@ end;
 theorem
   (sqr R).j = (R.j)^2 by Th78;
 
-theorem
-  sqr (<*>REAL) = <*>REAL by FINSEQ_2:38;
+canceled;
 
 theorem
   sqr <*r*> = <*r^2*>
  proof
-   thus sqr <*r*> = <*sqrreal.r*> by FINSEQ_2:39
-                 .= <*r^2*> by Def2;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   sqr <*s*> = <*sqrreal.s*> by FINSEQ_2:39
+   .= <*r^2*> by Def2;
+   hence thesis;
  end;
 
 theorem
   sqr(i |-> r) = i |-> r^2
  proof
-  thus sqr(i |-> r) = i |-> (sqrreal.r) by FINSEQOP:17
-                   .= i |-> r^2 by Def2;
+  reconsider s=r as Element of REAL by XREAL_0:def 1;
+  sqr(i |-> s) = i |-> (sqrreal.s) by FINSEQOP:17
+  .= i |-> r^2 by Def2;
+  hence thesis;
  end;
 
 theorem Th83:
@@ -713,38 +1017,101 @@ theorem Th84:
  proof
 A1: rng R c= REAL;
 A2: rng(sqrreal*R) c= REAL;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
   thus sqr (r*R) = sqrreal*(multreal[;](r,(id REAL)*R)) by FUNCOP_1:44
-                .= sqrreal*(multreal[;](r,R)) by A1,RELAT_1:79
-                .= multreal[;](sqrreal.r,sqrreal*R) by Th17,FINSEQOP:53
-                .= multreal[;]
-(sqrreal.r,(id REAL)*(sqrreal*R)) by A2,RELAT_1:79
-                .= multreal[;](sqrreal.r,id REAL)*(sqrreal*R) by FUNCOP_1:44
-                .= r^2* sqr R by Def2;
- end;
+  .= sqrreal*(multreal[;](r,R)) by A1,RELAT_1:79
+  .= multreal[;](sqrreal.s,sqrreal*R) by Th17,FINSEQOP:53
+  .= multreal[;](sqrreal.r,(id REAL)*(sqrreal*R)) by A2,RELAT_1:79
+  .= multreal[;](sqrreal.r,id REAL)*(sqrreal*R) by FUNCOP_1:44
+  .= r^2* sqr R by Def2;
+end;
+
+notation let F1,F2;
+  synonym mlt(F1,F2) for F1(#)F2;
+end;
+
+Lm9: now let F1,F2;
+  thus mlt(F1,F2) is FinSequence-like
+  proof
+A1: dom mlt(F1,F2) = dom F1 /\ dom F2 by SEQ_1:def 5;
+    consider n1 being Element of NAT such that
+A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
+    consider n2 being Element of NAT such that
+A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
+    per cases;
+    suppose n1 <= n2;
+      then
+A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
+      take n1;
+      thus dom mlt(F1,F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+    end;
+    suppose n2 <= n1;
+      then
+A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
+      take n2;
+      thus dom mlt(F1,F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+    end;
+  end;
+end;
 
 definition let F1,F2;
-  func mlt(F1,F2) -> FinSequence of REAL equals
+  redefine func mlt(F1,F2) -> FinSequence of REAL equals
   multreal.:(F1,F2);
-  coherence;
-  commutativity
-  proof let F,F1,F2 be FinSequence of REAL;
+  coherence
+  proof
+    mlt(F1,F2) is FinSequence-like by Lm9;
+    hence thesis by Lm4;
+  end;
+  compatibility
+  proof
+    let F be FinSequence of REAL;
+A1: dom mlt(F1,F2) = dom F1 /\ dom F2 by SEQ_1:def 5;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+A2: dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
+    [:rng F3, rng F4:] c= dom multreal by A2,ZFMISC_1:119; then
+A3: dom(multreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84;
+    thus F = mlt(F1,F2) implies F = multreal.:(F1,F2)
+    proof
+      assume
+A4:   F = mlt(F1,F2);
+      for z being set st z in dom(multreal.:(F1,F2))
+      holds F.z = multreal.(F1.z,F2.z)
+      proof let z be set;
+        assume z in dom(multreal.:(F1,F2));
+        hence F.z = F1.z * F2.z by A1,A4,A3,SEQ_1:def 5
+        .= multreal.(F1.z,F2.z) by BINOP_2:def 11;
+     end;
+     hence thesis by A1,A4,A3,FUNCOP_1:27;
+   end;
    assume
-A1:  F = multreal.:(F1,F2);
-A2:  dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
-A3:  [:rng F2, rng F1:] c= dom multreal by A2,ZFMISC_1:119;
-     [:rng F1, rng F2:] c= dom multreal by A2,ZFMISC_1:119;
-    then A4:  dom(multreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
-          .= dom(multreal.:(F2,F1)) by A3,FUNCOP_1:84;
+A5: F = multreal.:(F1,F2);
+   now let c be set;
+     assume c in dom F;
+     hence F.c = multreal.(F1.c,F2.c) by A5,FUNCOP_1:28
+     .= F1.c * F2.c by BINOP_2:def 11;
+   end;
+   hence thesis by A3,A5,SEQ_1:def 5;
+  end;
+  commutativity
+  proof let F be FinSequence of REAL; let F1,F2;
+   assume
+A6:  F = multreal.:(F1,F2);
+A7:  dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
+    reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+A8:  [:rng F4, rng F3:] c= dom multreal by A7,ZFMISC_1:119;
+     [:rng F3, rng F4:] c= dom multreal by A7,ZFMISC_1:119;
+    then A9:  dom(multreal.:(F1,F2)) = dom F1 /\ dom F2 by FUNCOP_1:84
+          .= dom(multreal.:(F2,F1)) by A8,FUNCOP_1:84;
      for z being set st z in dom(multreal.:(F2,F1))
        holds F.z = multreal.(F2.z,F1.z)
      proof let z be set such that
-A5:    z in dom(multreal.:(F2,F1));
+A10:    z in dom(multreal.:(F2,F1));
        set F1z = F1.z, F2z =F2.z;
-      thus F.z = multreal.(F1.z,F2.z) by A1,A4,A5,FUNCOP_1:28
+      thus F.z = multreal.(F1.z,F2.z) by A6,A9,A10,FUNCOP_1:28
            .= F1z * F2z by BINOP_2:def 11
            .= multreal.(F2.z,F1.z) by BINOP_2:def 11;
      end;
-   hence F = multreal.:(F2,F1) by A1,A4,FUNCOP_1:27;
+   hence F = multreal.:(F2,F1) by A6,A9,FUNCOP_1:27;
   end;
 end;
 
@@ -781,36 +1148,47 @@ A2:  not j in dom R2 by FINSEQ_2:144;
  end;
 
 theorem
-  mlt(<*>REAL,F) = <*>REAL by FINSEQ_2:87;
+  mlt(<*>REAL,F) = <*>REAL
+  proof
+    F is FinSequence of REAL by Lm4;
+    hence thesis by FINSEQ_2:87;
+  end;
 
 theorem
   mlt(<*r1*>,<*r2*>) = <*r1*r2*>
  proof
-  thus mlt(<*r1*>,<*r2*>) = <*multreal.(r1,r2)*> by FINSEQ_2:88
-                         .= <*r1*r2*> by BINOP_2:def 11;
+  reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+  mlt(<*s1*>,<*s2*>) = <*multreal.(s1,s2)*> by FINSEQ_2:88
+  .= <*r1*r2*> by BINOP_2:def 11;
+  hence thesis;
  end;
 
-canceled;
-
-theorem
-  mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3) by FINSEQOP:29;
+canceled 2;
 
 theorem Th92:
   mlt(i|->r,R) = r*R
  proof
-  thus mlt(i|->r,R) = multreal[;](r,R) by FINSEQOP:21
-                   .= r*R by FINSEQOP:23;
+  reconsider s=r as Element of REAL by XREAL_0:def 1;
+  mlt(i|->s,R) = multreal[;](s,R) by FINSEQOP:21
+  .= r*R by FINSEQOP:23;
+  hence thesis;
  end;
 
 theorem
   mlt(i|->r1,i|->r2) = i|->(r1*r2)
  proof
-   thus mlt(i|->r1,i|->r2) = r1*(i|->r2) by Th92
-                          .= i|->(r1*r2) by Th70;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   mlt(i|->s1,i|->s2) = s1*(i|->s2) by Th92
+   .= i|->(r1*r2) by Th70;
+   hence thesis;
  end;
 
 theorem Th94:
-  r*mlt(R1,R2) = mlt(r*R1,R2) by FINSEQOP:27;
+  r*mlt(R1,R2) = mlt(r*R1,R2)
+  proof
+    r in REAL by XREAL_0:def 1;
+    hence thesis by FINSEQOP:27;
+  end;
 
 canceled;
 
@@ -861,7 +1239,7 @@ theorem Th98:
 theorem Th99:
   sqr(R1 - R2) = sqr R1 - 2*mlt(R1,R2) + sqr R2
  proof
-   thus sqr(R1 - R2) = sqr(R1 + -R2) by Th52
+   thus sqr(R1 - R2) = sqr(R1 + -R2) by FINSEQOP:89
                     .= sqr R1 + 2*mlt(R1,-R2) + sqr -R2 by Th98
                     .= sqr R1 + 2*mlt(R1,-R2) + sqr R2 by Th83
                     .= sqr R1 + 2*mlt(R1,(-1)*R2) + sqr R2 by Th76
@@ -869,7 +1247,7 @@ theorem Th99:
                     .= sqr R1 + ((-1)*2)*mlt(R1,R2) + sqr R2 by Th71
                     .= sqr R1 + (-1)*(2*mlt(R1,R2)) + sqr R2 by Th71
                     .= sqr R1 + -(2*mlt(R1,R2)) + sqr R2 by Th76
-                    .= sqr R1 - 2*mlt(R1,R2) + sqr R2 by Th52;
+                    .= sqr R1 - 2*mlt(R1,R2) + sqr R2 by FINSEQOP:89;
  end;
 
 theorem
@@ -877,46 +1255,219 @@ theorem
 
 :: Finite sum of Finite Sequence of Real Numbers
 
-definition let F be FinSequence of REAL;
-  func Sum F -> Real equals
-    addreal $$ F;
-  coherence;
+definition let F be Relation;
+  attr F is complex-yielding means :Def10:
+    rng F c= COMPLEX;
 end;
 
-canceled;
+registration
+  cluster -> complex-yielding FinSequence of COMPLEX;
+  coherence
+  proof
+    let f be FinSequence of COMPLEX;
+    rng f c= COMPLEX;
+    hence thesis by Def10;
+  end;
+  cluster real-yielding -> complex-yielding FinSequence;
+  coherence
+  proof
+    let f be FinSequence;
+    assume f is real-yielding; then
+    rng f c= REAL by SEQ_1:def 1; then
+    rng f c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+    hence thesis by Def10;
+  end;
+  cluster real-yielding complex-yielding FinSequence;
+  existence
+  proof
+    consider f being FinSequence of REAL;
+    f is real-yielding;
+    hence thesis;
+  end;
+end;
+
+definition let F be complex-yielding FinSequence;
+  func Sum F -> complex number means :Def11:
+    ex f being FinSequence of COMPLEX st f = F &
+    it = addcomplex $$ f;
+  existence
+  proof
+    rng F c= COMPLEX by Def10; then
+    reconsider f = F as FinSequence of COMPLEX by FINSEQ_1:def 4;
+    take addcomplex $$ f;
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration let F be real-yielding FinSequence;
+  cluster Sum F -> real;
+  coherence
+  proof
+    consider f being FinSequence of COMPLEX such that
+A1: f = F & Sum F = addcomplex $$ f by Def11;
+A2: rng f c= REAL by A1,SEQ_1:def 1; then
+    reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
+    set mc = addcomplex, mr = addreal;
+A3: mc $$ f = mc $$ (dom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
+    consider n being Element of NAT such that
+A4: dom f = Seg n by FINSEQ_1:def 2;
+    defpred P[Element of NAT] means
+      mc $$ (Seg $1,[#](f,the_unity_wrt mc)) is real;
+    Seg 0 = {}.NAT by FINSEQ_1:4; then
+A5: P[0] by SETWISEO:40,BINOP_2:1;
+    set g = [#](f,the_unity_wrt mc);
+A6: for k being Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume
+A7:   P[k];
+A8:   g.(k+1) is real
+      proof
+        per cases;
+        suppose
+A9:       k+1 in dom f; then
+          g.(k+1) = f.(k+1) by SETWOP_2:22; then
+          g.(k+1) in rng f by A9,FUNCT_1:12;
+          hence thesis by A2,XREAL_0:def 1;
+        end;
+        suppose not k+1 in dom f;
+          hence thesis by BINOP_2:1,SETWOP_2:22;
+        end;
+      end;
+      reconsider a = g.(k+1), b = mc $$(Seg k,g) as real number by A7,A8;
+      not (k + 1) in Seg k by FINSEQ_3:9; then
+      mc $$ (Seg k \/ {.k+1.},g) = mc.(mc $$(Seg k,g),g.(k+1))
+        by SETWOP_2:4
+        .= b + a by BINOP_2:def 3;
+      hence thesis by FINSEQ_1:11;
+    end;
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+    hence thesis by A1,A4,A3;
+  end;
+end;
+
+theorem Th101:
+  for F being FinSequence of REAL holds
+    Sum F = addreal $$ F
+  proof
+    let F be FinSequence of REAL;
+    rng F c= COMPLEX by XBOOLE_1:1,NUMBERS:11; then
+    reconsider f = F as FinSequence of COMPLEX by FINSEQ_1:def 4;
+    set g = addreal, h = addcomplex;
+    consider n being Element of NAT such that
+A1: dom f = Seg n by FINSEQ_1:def 2;
+A2: g $$ F = g $$ (Seg n,[#](F,the_unity_wrt g)) by A1,SETWOP_2:def 2;
+A3: h $$ f = h $$ (Seg n,[#](f,the_unity_wrt h)) by A1,SETWOP_2:def 2;
+    defpred P[Element of NAT] means
+      g $$ (Seg $1,[#](F,the_unity_wrt g)) =
+        h $$ (Seg $1,[#](f,the_unity_wrt h));
+A4: Seg 0 = {}.NAT by FINSEQ_1:4;
+A5: P[0]
+    proof
+      g $$ (Seg 0,[#](F,the_unity_wrt g)) =
+           the_unity_wrt h by BINOP_2:1,2,SETWISEO:40,A4
+        .= h $$ (Seg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
+      hence thesis;
+    end;
+A6: for k being Element of NAT st P[k] holds P[k+1]
+    proof
+      let k be Element of NAT;
+      assume
+A7:   P[k];
+      set i = [#](F,the_unity_wrt g);
+      set j = [#](f,the_unity_wrt h);
+A8:   i.(k+1) = j.(k+1)
+      proof
+        per cases;
+        suppose
+A9:       k+1 in dom f; then
+          j.(k+1) = F.(k+1) by SETWOP_2:22
+                 .= i.(k+1) by A9,SETWOP_2:22;
+          hence thesis;
+        end;
+        suppose
+A10:       not k+1 in dom f; then
+          j.(k+1) = the_unity_wrt h by SETWOP_2:22
+                 .= i.(k+1) by A10,SETWOP_2:22,BINOP_2:1,2;
+          hence thesis;
+        end;
+      end;
+      reconsider a = i.(k+1), b = g $$(Seg k,i) as real number;
+A11:   not (k + 1) in Seg k by FINSEQ_3:9;
+      g $$ (Seg (k+1),i) = g $$ (Seg k \/ {.k+1.},i) by FINSEQ_1:11
+        .= g.(g $$(Seg k,i),i.(k+1)) by A11,SETWOP_2:4
+        .= g $$(Seg k,i) + (i.(k+1)) by BINOP_2:def 9
+        .= h.(h $$(Seg k,j),j.(k+1)) by BINOP_2:def 3,A7,A8
+        .= h $$ (Seg k \/ {.k+1.},j) by A11,SETWOP_2:4
+        .= h $$ (Seg (k+1),j) by FINSEQ_1:11;
+      hence thesis;
+    end;
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6); then
+    g $$ F = h $$ f by A2,A3;
+    hence thesis by Def11;
+  end;
+
+definition let F be FinSequence of COMPLEX;
+  redefine func Sum F -> Element of COMPLEX equals
+  addcomplex $$ F;
+  coherence by XCMPLX_0:def 2;
+  compatibility by Def11;
+end;
+
+definition let F be FinSequence of REAL;
+  redefine func Sum F -> Element of REAL equals
+  addreal $$ F;
+  coherence by XREAL_0:def 1;
+  compatibility by Th101;
+end;
 
 theorem Th102:
   Sum(<*> REAL) = 0 by BINOP_2:2,FINSOP_1:11;
 
-theorem Th103:
-  Sum <*r*> = r by FINSOP_1:12;
+theorem
+  Sum <*r*> = r
+  proof
+   reconsider r as Element of REAL by XREAL_0:def 1;
+   Sum <*r*> = r by FINSOP_1:12;
+   hence thesis;
+ end;
 
 theorem Th104:
   Sum(F^<*r*>) = Sum F + r
  proof
-  thus Sum(F^<*r*>) = addreal.(addreal $$ F,r) by FINSOP_1:5
-                 .= Sum F + r by BINOP_2:def 9;
+   reconsider F1=F as FinSequence of REAL by Lm4;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   thus Sum(F^<*r*>) = Sum(F1^<*s*>)
+   .= addreal.(addreal $$ F1,s) by FINSOP_1:5
+   .= Sum F1 + r by BINOP_2:def 9
+   .= Sum F + r;
  end;
 
 theorem Th105:
   Sum(F1^F2) = Sum F1 + Sum F2
  proof
-  thus Sum(F1^F2)
-     = addreal.(addreal $$ F1,addreal $$ F2) by FINSOP_1:6
-    .= Sum F1 + Sum F2 by BINOP_2:def 9;
+   reconsider F3=F1,F4=F2 as FinSequence of REAL by Lm4;
+   thus Sum(F1^F2) = Sum(F3^F4)
+   .= addreal.(addreal $$ F3,addreal $$ F4) by FINSOP_1:6
+   .= Sum F3 + Sum F4 by BINOP_2:def 9
+   .= Sum F1 + Sum F2;
  end;
 
 theorem
   Sum(<*r*>^F) = r + Sum F
- proof thus Sum(<*r*>^F) = Sum <*r*> + Sum F by Th105
-  .= r + Sum F by Th103;
+ proof
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   thus Sum(<*r*>^F) = Sum <*s*> + Sum F by Th105
+  .= r + Sum F by FINSOP_1:12;
  end;
 
 theorem Th107:
   Sum<*r1,r2*> = r1 + r2
  proof
-   thus Sum<*r1,r2*> = Sum<*r1*> + r2 by Th104
-                  .= r1 + r2 by Th103;
+   reconsider s1=r1 as Element of REAL by XREAL_0:def 1;
+   thus Sum<*r1,r2*> = Sum<*s1*> + r2 by Th104
+                  .= r1 + r2 by FINSOP_1:12;
  end;
 
 theorem
@@ -933,6 +1484,7 @@ theorem
 theorem Th110:
   Sum(i |-> r) = i*r
  proof
+   reconsider r as Element of REAL by XREAL_0:def 1;
    defpred P[Element of NAT] means Sum($1 |->r) = $1*r;
 A1: P[0] by Th102,FINSEQ_2:113;
 A2:  for i st P[i] holds P[(i+1)]
@@ -1061,7 +1613,8 @@ theorem Th114:
 A1:  for i st i in dom F holds 0 <= F.i;
   set i = len F;
   set R1 = i|->(0 qua Real);
-  reconsider R2 = F as Element of i-tuples_on REAL by FINSEQ_2:110;
+  reconsider F1 = F as FinSequence of REAL by Lm4;
+  reconsider R2 = F1 as Element of i-tuples_on REAL by FINSEQ_2:110;
 A2: Seg len F = dom F by FINSEQ_1:def 3;
    now let j; assume
 A3: j in Seg i;
@@ -1079,7 +1632,8 @@ theorem Th115:
  proof assume
 A1:   for i st i in dom F holds 0 <= F.i;
   set i = len F, R1 = i|->(0 qua Real);
-  reconsider R2 = F as Element of i-tuples_on REAL by FINSEQ_2:110;
+  reconsider F1 = F as FinSequence of REAL by Lm4;
+  reconsider R2 = F1 as Element of i-tuples_on REAL by FINSEQ_2:110;
 A2: Seg len F = dom F by FINSEQ_1:def 3;
 A3: now let j; assume
 A4:  j in Seg i;
@@ -1109,16 +1663,22 @@ end;
 
 theorem Th117:
   Sum(r*F) = r*(Sum F)
- proof set rM = multreal[;](r,id REAL);
-  thus Sum (r*F) = rM.(addreal $$F) by Th16,Th22,SETWOP_2:41
-    .= r*(Sum F) by Lm4;
+ proof
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   set rM = multreal[;](s,id REAL);
+    reconsider F1=F as FinSequence of REAL by Lm4;
+  thus Sum (r*F) = rM.(addreal $$ F1) by Th16,Th22,SETWOP_2:41
+    .= r*(Sum F1) by Lm3
+    .= r*(Sum F);
  end;
 
 theorem
   Sum -F = -(Sum F)
  proof
-   thus Sum -F = compreal.(addreal $$ F) by Th22,Th23,SETWOP_2:42
-            .= -(Sum F) by BINOP_2:def 7;
+   reconsider F1=F as FinSequence of REAL by Lm4;
+   thus Sum -F = compreal.(addreal $$ F1) by Th22,Th23,SETWOP_2:42
+   .= -(Sum F1) by BINOP_2:def 7
+   .= -(Sum F);
  end;
 
 theorem Th119:
@@ -1133,7 +1693,7 @@ theorem Th120:
  proof
   thus Sum(R1 - R2)
      = diffreal.(addreal$$R1,addreal$$R2) by Th22,Th23,SETWOP_2:48
-    .= Sum R1 - Sum R2 by Lm3;
+    .= Sum R1 - Sum R2 by BINOP_2:def 10;
  end;
 
 theorem
@@ -1204,7 +1764,7 @@ A9:   2*(x1*x2)*Sum mlt(R1',R2')
        .= 2*Sum((x1*x2)*mlt(R1',R2')) by Th117
        .= 2*Sum(x1*(x2*mlt(R1',R2'))) by Th71
        .= 2*Sum(x1*mlt(R2',x2*R1')) by Th94
-       .= 2*Sum(mlt(x1*R2',x2*R1')) by Th94;
+       .= 2*Sum(mlt(x1*R2',x2*R1')) by FINSEQOP:27;
 A10:  -(Sum mlt(R1',R2')+x1*x2)^2
         = -(x1*x2)^2+-(2*(x1*x2)*Sum mlt(R1',R2')+(Sum mlt(R1',R2'))^2)
        .= -x1^2*x2^2+(-(Sum mlt(R1',R2'))^2+ -2*Sum(mlt(x1*R2',x2*R1')))
@@ -1216,7 +1776,8 @@ A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
       .= Sum(sqr (x1*R2')-2*mlt(x1*R2',x2*R1')+sqr(x2*R1')) by Th119;
    Sum sqr (R^<*r*>) = Sum sqr R + r^2
  proof
-   sqr(R^<*r*>) = (sqrreal*R)^<*sqrreal.r*> by FINSEQOP:9
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   sqr(R^<*s*>) = (sqrreal*R)^<*sqrreal.s*> by FINSEQOP:9
                .= (sqr R)^<*r^2*> by Def2;
    hence Sum sqr (R^<*r*>) = Sum sqr R + r^2 by Th104;
  end;
@@ -1243,51 +1804,13 @@ A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
 
 :: The Product of Finite Sequences of Real Numbers
 
-definition let F be Relation;
-  attr F is complex-yielding means :Def11:
-    rng F c= COMPLEX;
-end;
-
-registration
-  cluster -> real-yielding FinSequence of REAL;
-  coherence
-  proof
-    let f be FinSequence of REAL;
-    rng f c= REAL;
-    hence thesis by SEQ_1:def 1;
-  end;
-  cluster -> complex-yielding FinSequence of COMPLEX;
-  coherence
-  proof
-    let f be FinSequence of COMPLEX;
-    rng f c= COMPLEX;
-    hence thesis by Def11;
-  end;
-  cluster real-yielding -> complex-yielding FinSequence;
-  coherence
-  proof
-    let f be FinSequence;
-    assume f is real-yielding; then
-    rng f c= REAL by SEQ_1:def 1; then
-    rng f c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
-    hence thesis by Def11;
-  end;
-  cluster real-yielding complex-yielding FinSequence;
-  existence
-  proof
-    consider f being FinSequence of REAL;
-    f is real-yielding;
-    hence thesis;
-  end;
-end;
-
 definition let F be complex-yielding FinSequence;
-  func Product F -> complex number means :Def12:
+  func Product F -> complex number means :Def14:
     ex f being FinSequence of COMPLEX st f = F &
     it = multcomplex $$ f;
   existence
   proof
-    rng F c= COMPLEX by Def11; then
+    rng F c= COMPLEX by Def10; then
     reconsider f = F as FinSequence of COMPLEX by FINSEQ_1:def 4;
     take multcomplex $$ f;
     thus thesis;
@@ -1295,17 +1818,12 @@ definition let F be complex-yielding FinSequence;
   uniqueness;
 end;
 
-definition let F be FinSequence of COMPLEX;
-  redefine func Product F -> Element of COMPLEX;
-  coherence by XCMPLX_0:def 2;
-end;
-
 registration let F be real-yielding FinSequence;
   cluster Product F -> real;
   coherence
   proof
     consider f being FinSequence of COMPLEX such that
-A1: f = F & Product F = multcomplex $$ f by Def12;
+A1: f = F & Product F = multcomplex $$ f by Def14;
 A2: rng f c= REAL by A1,SEQ_1:def 1; then
     reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
     set mc = multcomplex, mr = multreal;
@@ -1320,8 +1838,8 @@ A5: P[0] by SETWISEO:40,BINOP_2:6;
 A6: for k being Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
-      assume P[k]; then
-A7:   mc $$(Seg k,g) is real;
+      assume
+A7:   P[k];
 A8:   g.(k+1) is real
       proof
         per cases;
@@ -1331,9 +1849,8 @@ A9:       k+1 in dom f; then
           g.(k+1) in rng f by A9,FUNCT_1:12;
           hence thesis by A2,XREAL_0:def 1;
         end;
-        suppose not k+1 in dom f; then
-          g.(k+1) = 1 by BINOP_2:6,SETWOP_2:22;
-          hence thesis;
+        suppose not k+1 in dom f;
+          hence thesis by BINOP_2:6,SETWOP_2:22;
         end;
       end;
       reconsider a = g.(k+1), b = mc $$(Seg k,g) as real number by A7,A8;
@@ -1343,9 +1860,8 @@ A9:       k+1 in dom f; then
         .= b * a by BINOP_2:def 5;
       hence thesis by FINSEQ_1:11;
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6); then
-    mc $$ f is real by A4,A3;
-    hence thesis by A1;
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+    hence thesis by A1,A4,A3;
   end;
 end;
 
@@ -1375,9 +1891,8 @@ A5: P[0]
 A6: for k being Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
-      assume P[k]; then
-A7:   g $$ (Seg k,[#](F,the_unity_wrt g)) =
-        h $$ (Seg k,[#](f,the_unity_wrt h));
+      assume
+A7:   P[k];
       set i = [#](F,the_unity_wrt g);
       set j = [#](f,the_unity_wrt h);
 A8:   i.(k+1) = j.(k+1)
@@ -1408,8 +1923,22 @@ A11:   not (k + 1) in Seg k by FINSEQ_3:9;
     end;
     for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6); then
     g $$ F = h $$ f by A2,A3;
-    hence thesis by Def12;
+    hence thesis by Def14;
   end;
+
+definition let F be FinSequence of COMPLEX;
+  redefine func Product F -> Element of COMPLEX equals
+  multcomplex $$ F;
+  coherence by XCMPLX_0:def 2;
+  compatibility by Def14;
+end;
+
+definition let F be FinSequence of REAL;
+  redefine func Product F -> Element of REAL equals
+  multreal $$ F;
+  coherence by XREAL_0:def 1;
+  compatibility by Th123;
+end;
 
 registration
   cluster empty -> complex-yielding FinSequence;
@@ -1417,26 +1946,24 @@ registration
   proof
     let F be FinSequence;
     assume F is empty; then
-    rng F = {} by RELAT_1:60; then
-    rng F c= COMPLEX by XBOOLE_1:2;
-    hence thesis by Def11;
+    rng F c= COMPLEX by XBOOLE_1:2,RELAT_1:60;
+    hence thesis by Def10;
   end;
 end;
 
-Lm5:
+Lm10:
   for F being empty FinSequence holds
     Product F = 1
   proof
-    Product <*>REAL = multreal $$ <*>REAL by Th123
-                   .= 1 by BINOP_2:7,FINSOP_1:11;
+    Product <*>REAL = 1 by BINOP_2:7,FINSOP_1:11;
     hence thesis;
   end;
 
 theorem Th124:
-  Product <*>REAL = 1 by Lm5;
+  Product <*>REAL = 1 by Lm10;
 
 registration let r be complex number;
-  cluster <*r*> -> complex-yielding FinSequence-like;
+  cluster <*r*> -> complex-yielding;
   coherence
   proof
     reconsider p = r as Element of COMPLEX by XCMPLX_0:def 2;
@@ -1447,7 +1974,7 @@ registration let r be complex number;
 end;
 
 registration let r1, r2 be complex number;
-  cluster <*r1, r2*> -> complex-yielding FinSequence-like;
+  cluster <*r1, r2*> -> complex-yielding;
   coherence
   proof
     reconsider p1 = r1, p2 = r2 as Element of COMPLEX by XCMPLX_0:def 2;
@@ -1458,7 +1985,7 @@ registration let r1, r2 be complex number;
 end;
 
 registration let r1, r2, r3 be complex number;
-  cluster <*r1, r2, r3*> -> complex-yielding FinSequence-like;
+  cluster <*r1, r2, r3*> -> complex-yielding;
   coherence
   proof
     reconsider p1 = r1, p2 = r2, p3 = r3 as Element of COMPLEX
@@ -1477,17 +2004,17 @@ theorem Th125:
     reconsider r' = r as Element of COMPLEX by XCMPLX_0:def 2;
     reconsider F = <*r'*> as FinSequence of COMPLEX;
     multcomplex $$ F = r by FINSOP_1:12;
-    hence thesis by Def12;
+    hence thesis by Def14;
   end;
 
 registration let f, g be complex-yielding FinSequence;
   cluster f ^ g -> complex-yielding;
   coherence
   proof
-A1: rng f c= COMPLEX & rng g c= COMPLEX by Def11;
+A1: rng f c= COMPLEX & rng g c= COMPLEX by Def10;
     rng (f ^ g) = rng f \/ rng g by FINSEQ_1:44; then
     rng (f ^ g) c= COMPLEX by A1,XBOOLE_1:8;
-    hence thesis by Def11;
+    hence thesis by Def10;
   end;
 end;
 
@@ -1497,13 +2024,12 @@ theorem Th126:
   proof
     let F be complex-yielding FinSequence, r be complex number;
     reconsider p = r as Element of COMPLEX by XCMPLX_0:def 2;
-A1: rng F c= COMPLEX by Def11;
-    rng (F^<*p*>) c= COMPLEX by Def11; then
+A1: rng F c= COMPLEX by Def10;
+    rng (F^<*p*>) c= COMPLEX by Def10; then
     reconsider Fr = F^<*r*>, Ff = F as FinSequence of COMPLEX
       by A1,FINSEQ_1:def 4;
-    thus Product (F^<*r*>) = multcomplex $$ Fr by Def12
-                 .= multcomplex.(multcomplex $$ Ff,p) by FINSOP_1:5
-                 .= multcomplex.(Product Ff,p) by Def12
+    thus Product (F^<*r*>) = multcomplex $$ Fr by Def14
+                 .= multcomplex.(Product Ff,p) by FINSOP_1:5
                  .= Product F * r by BINOP_2:def 5;
   end;
 
@@ -1512,14 +2038,12 @@ theorem Th127:
     Product (F1^F2) = Product F1 * Product F2
  proof
   let F1, F2 be complex-yielding FinSequence;
-A1: rng F1 c= COMPLEX & rng F2 c= COMPLEX by Def11;
-    rng (F1^F2) c= COMPLEX by Def11; then
+A1: rng F1 c= COMPLEX & rng F2 c= COMPLEX by Def10;
+    rng (F1^F2) c= COMPLEX by Def10; then
     reconsider FF = F1^F2, f1 = F1, f2 = F2 as FinSequence of COMPLEX
       by A1,FINSEQ_1:def 4;
-  thus Product (F1^F2) = multcomplex $$ FF by Def12
-    .= multcomplex.(multcomplex $$ f1,multcomplex $$ f2) by FINSOP_1:6
-    .= multcomplex.(Product F1,multcomplex $$ f2) by Def12
-    .= multcomplex.(Product f1,Product f2) by Def12
+  thus Product (F1^F2) = multcomplex $$ FF by Def14
+    .= multcomplex.(Product f1,Product f2) by FINSOP_1:6
     .= Product F1 * Product F2 by Lm2;
  end;
 
@@ -1551,27 +2075,15 @@ theorem
   for R being Element of 0-tuples_on REAL holds Product R = 1
     by Th124,FINSEQ_2:113;
 
-registration let j be Element of NAT, r be real number;
-  cluster j |-> r -> real-yielding;
-  coherence
-  proof
-    r in REAL by XREAL_0:def 1; then
-    (j |-> r) is FinSequence of REAL by FINSEQ_2:77;
-    hence thesis;
-  end;
-end;
-
 theorem
   Product (i|->1) = 1
   proof
-    reconsider f = i |-> 1 as FinSequence of REAL by FINSEQ_2:77;
-    Product (i |-> the_unity_wrt multreal) =
-      multreal $$ f by Th123,BINOP_2:7
-      .= the_unity_wrt multreal by BINOP_2:7,SETWOP_2:35;
+    Product (i |-> the_unity_wrt multreal) = the_unity_wrt multreal
+    by SETWOP_2:35;
     hence thesis by BINOP_2:7;
   end;
 
-Lm6:
+Lm11:
   for p being complex-yielding FinSequence
     st len p <> 0 ex q being complex-yielding FinSequence,
        d being complex number st p = q^<*d*>
@@ -1581,7 +2093,7 @@ A1:  len p <> 0;
   then p <> {} by FINSEQ_1:25;
   then consider q being FinSequence,d being set such that
 A2:  p = q^<*d*> by FINSEQ_1:63;
-     rng p c= COMPLEX by Def11; then
+     rng p c= COMPLEX by Def10; then
 A3:  p is FinSequence of COMPLEX by FINSEQ_1:def 4;
 A4:  for i st i in dom q holds q.i in COMPLEX
    proof let i; assume i in dom q;
@@ -1615,37 +2127,37 @@ A3:   for F being complex-yielding FinSequence st
 A4:   len F = i+1;
       then consider F' being complex-yielding FinSequence,
            x being complex number such that
-A5:   F = F'^<*x*> by Lm6;
-A6:   len F = len F' + 1 by A5,FINSEQ_2:19;then
-A7:   len F' = i by A4;
-A8:   Product F = Product F' * x by A5,Th126;
+A5:   F = F'^<*x*> by Lm11;
+A6:   len F = len F' + 1 by A5,FINSEQ_2:19;
+A7:   Product F = Product F' * x by A5,Th126;
       thus (ex k st k in Seg (i+1) & F.k = 0) implies Product F = 0
       proof given k such that
-A9:     k in Seg (i+1) and
-A10:    F.k = 0;
-        now per cases by A9,FINSEQ_2:8;
+A8:     k in Seg (i+1) and
+A9:    F.k = 0;
+        now per cases by A8,FINSEQ_2:8;
          suppose
-A11:      k in Seg i;
+A10:      k in Seg i;
           Seg len F' = dom F' by FINSEQ_1:def 3;
-          then F'.k = F.k by A5,A7,A11,FINSEQ_1:def 7;
-          then Product F' = 0 by A3,A7,A10,A11;
-          hence thesis by A8;
+          then F'.k = F.k by A5,A4,A6,A10,FINSEQ_1:def 7;
+          then Product F' = 0 by A3,A4,A6,A9,A10;
+          hence thesis by A7;
          end;
          suppose k = i+1;
-          then x = 0 by A4,A5,A6,A10,FINSEQ_1:59;
-          hence thesis by A8;
+          then x = 0 by A4,A5,A6,A9,FINSEQ_1:59;
+          hence thesis by A7;
         end;
         end;
         hence thesis;
        end;
       assume
-A12:  Product F = 0;
-      per cases by A8,A12,XCMPLX_1:6;
+A11:  Product F = 0;
+      per cases by A7,A11,XCMPLX_1:6;
        suppose Product F' = 0;
         then consider k such that
-A13:    k in Seg i & F'.k = 0 by A3,A7;
+A12:    k in Seg i & F'.k = 0 by A3,A4,A6;
         Seg len F' = dom F' by FINSEQ_1:def 3;
-        then k in Seg (i+1) & F.k = 0 by A5,A7,A13,FINSEQ_1:def 7,FINSEQ_2:9;
+        then k in Seg (i+1) & F.k = 0
+        by A5,A4,A6,A12,FINSEQ_1:def 7,FINSEQ_2:9;
         hence thesis;
        end;
        suppose x = 0;
@@ -1653,57 +2165,54 @@ A13:    k in Seg i & F'.k = 0 by A3,A7;
         hence thesis;
      end;
      end;
-A14: Seg len F = dom F by FINSEQ_1:def 3;
+A13: Seg len F = dom F by FINSEQ_1:def 3;
      for i holds P[i] from NAT_1:sch 1(A1,A2);
-     hence thesis by A14;
+     hence thesis by A13;
   end;
 
 theorem
   Product ((i+j)|->r) = (Product (i|->r))*(Product (j|->r))
  proof
-   thus Product ((i+j)|->r) = multreal$$((i+j)|->r) by Th123
-     .= multreal.(multreal$$(i|->r),multreal$$(j|->r)) by SETWOP_2:37
-     .= (multreal$$(i|->r))*(multreal$$(j|->r)) by BINOP_2:def 11
-     .= (multreal$$(i|->r))*(Product (j|->r)) by Th123
-     .= (Product (i|->r))*(Product (j|->r)) by Th123;
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   Product ((i+j)|->s) = multreal.(multreal$$(i|->s),multreal$$(j|->s))
+   by SETWOP_2:37
+   .= (Product (i|->s))*(Product (j|->s)) by BINOP_2:def 11;
+   hence thesis;
  end;
 
 theorem
   Product ((i*j)|->r) = Product (j |-> (Product (i|->r)))
   proof
-    Product ((i*j) |-> (r qua Real)) =
-         multreal $$ ((i*j) |-> (r qua Real)) by Th123
-      .= multreal $$ (j |-> (multreal $$ (i|->(r qua Real)))) by SETWOP_2:38
-      .= Product (j |-> (multreal $$ (i|->(r qua Real)))) by Th123
-      .= Product (j |-> (Product (i|->(r qua Real)))) by Th123;
-    hence thesis;
-  end;
+   reconsider r as Element of REAL by XREAL_0:def 1;
+   Product ((i*j)|->r) = Product (j |-> (Product (i|->r)))
+   by SETWOP_2:38;
+   hence thesis;
+ end;
 
 theorem
   Product (i|->(r1*r2)) = (Product (i|->r1))*(Product (i|->r2))
  proof
-   thus Product (i|->(r1*r2)) = multreal$$(i|->(r1*r2)) by Th123
-     .= multreal$$(i|->multreal.(r1,r2)) by BINOP_2:def 11
-     .= multreal.(multreal$$(i|->r1),multreal$$(i|->r2)) by SETWOP_2:47
-     .= (multreal$$(i|->r1))*(multreal$$(i|->r2)) by BINOP_2:def 11
-     .= (multreal$$(i|->r1))*(Product (i|->r2)) by Th123
-     .= (Product (i|->r1))*(Product (i|->r2)) by Th123;
+   reconsider s1=r1, s2=r2 as Element of REAL by XREAL_0:def 1;
+   Product (i|->(s1*s2)) =
+   multreal$$(i|->multreal.(s1,s2)) by BINOP_2:def 11
+   .= multreal.(multreal$$(i|->s1),multreal$$(i|->s2)) by SETWOP_2:47
+   .= (Product (i|->s1))*(Product (i|->s2)) by BINOP_2:def 11;
+   hence thesis;
  end;
 
 theorem Th137:
   Product mlt(R1,R2) = Product R1 * Product R2
  proof
-   thus Product (mlt(R1,R2)) = multreal $$ mlt (R1,R2) by Th123
-    .= multreal.(multreal$$R1,multreal$$R2) by SETWOP_2:46
-    .= multreal.(Product R1,multreal$$R2) by Th123
-    .= multreal.(Product R1,Product R2) by Th123
+   thus Product (mlt(R1,R2)) =
+   multreal.(multreal$$R1,multreal$$R2) by SETWOP_2:46
     .= Product R1 * Product R2 by Lm1;
  end;
 
 theorem
   Product (r*R) = Product (i|->r) * Product R
  proof
-   thus Product (r*R) = Product mlt(i|->r,R) by Th92
+   reconsider s=r as Element of REAL by XREAL_0:def 1;
+   thus Product (r*R) = Product mlt(i|->s,R) by Th92
     .= Product (i|->r) * Product R by Th137;
  end;
 
@@ -1736,45 +2245,31 @@ definition let i be Nat, z be Element of COMPLEX;
   end;
 end;
 
-theorem Th140:
+theorem
   for F being FinSequence of COMPLEX holds
     Product F = multcomplex $$ F
   proof
     let F be FinSequence of COMPLEX;
-    thus thesis by Def12;
+    thus thesis;
   end;
 
 theorem
   Product ((i+j)|->z) = (Product (i|->z))*(Product (j|->z))
  proof
-   thus Product ((i+j)|->z) = multcomplex$$((i+j)|->z) by Th140
-     .= multcomplex.(multcomplex$$(i|->z),multcomplex$$(j|->z)) by SETWOP_2:37
-     .= (multcomplex$$(i|->z))*(multcomplex$$(j|->z)) by BINOP_2:def 5
-     .= (multcomplex$$(i|->z))*(Product (j|->z)) by Th140
-     .= (Product (i|->z))*(Product (j|->z)) by Th140;
+   thus Product ((i+j)|->z) =
+   multcomplex.(multcomplex$$(i|->z),multcomplex$$(j|->z)) by SETWOP_2:37
+     .= (Product (i|->z))*(Product (j|->z)) by BINOP_2:def 5;
  end;
 
 theorem
-  Product ((i*j)|->z) = Product (j |-> (Product (i|->z)))
-  proof
-    Product ((i*j) |-> z) =
-         multcomplex $$ ((i*j) |-> z) by Th140
-      .= multcomplex $$ (j |-> (multcomplex $$ (i|->z)))
-                  by SETWOP_2:38
-      .= Product (j |-> (multcomplex $$ (i|->z))) by Th140
-      .= Product (j |-> (Product (i|->z))) by Th140;
-    hence thesis;
-  end;
+  Product ((i*j)|->z) = Product (j |-> (Product (i|->z))) by SETWOP_2:38;
 
 theorem
   Product (i|->(z1*z2)) = (Product (i|->z1))*(Product (i|->z2))
  proof
-   thus Product (i|->(z1*z2)) = multcomplex$$(i|->(z1*z2)) by Th140
-     .= multcomplex$$(i|->multcomplex.(z1,z2)) by BINOP_2:def 5
+   thus Product (i|->(z1*z2)) =
+   multcomplex$$(i|->multcomplex.(z1,z2)) by BINOP_2:def 5
      .= multcomplex.(multcomplex$$(i|->z1),multcomplex$$(i|->z2))
                 by SETWOP_2:47
-     .= (multcomplex$$(i|->z1))*(multcomplex$$(i|->z2)) by BINOP_2:def 5
-     .= (multcomplex$$(i|->z1))*(Product (i|->z2)) by Th140
-     .= (Product (i|->z1))*(Product (i|->z2)) by Th140;
+     .= (Product (i|->z1))*(Product (i|->z2)) by BINOP_2:def 5;
  end;
-

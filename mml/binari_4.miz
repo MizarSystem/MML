@@ -9,21 +9,22 @@ environ
 
  vocabularies INT_1, MIDSP_3, MARGREL1, FINSEQ_1, CQC_LANG, POWER, ABSVALUE,
       BINARITH, BINARI_2, BINARI_3, ARYTM_1, NAT_1, BINARI_4, EUCLID, ARYTM_3,
-      FINSEQ_2, FINSEQ_4, FUNCT_1, BOOLE, RELAT_1, VECTSP_1, ZF_LANG, GROUP_1;
+      FINSEQ_4, FUNCT_1, BOOLE, RELAT_1, VECTSP_1, ZF_LANG, GROUP_1;
  notations INT_1, XBOOLEAN, MARGREL1, FINSEQ_1, CQC_LANG, POWER, BINARITH,
       BINARI_2, BINARI_3, SERIES_1, NUMBERS, XCMPLX_0, XXREAL_0, XBOOLE_0,
-      BINOP_2, EUCLID, REAL_1, NAT_1, TARSKI, FINSEQ_4, FUNCT_1, RELAT_1,
-      ZFMISC_1, FINSEQOP, PREPOWER, SUBSET_1;
+      BINOP_2, EUCLID, REAL_1, NAT_1, NAT_D, TARSKI, FINSEQ_4, FUNCT_1,
+      RELAT_1, ZFMISC_1, FINSEQOP, PREPOWER, SUBSET_1;
  constructors XXREAL_0, REAL_1, NAT_1, FINSEQOP, SEQ_1, FINSEQ_4, SETWOP_2,
-      PREPOWER, SERIES_1, BINARITH, BINARI_2, WSIERP_1, EUCLID, BINARI_3;
+      PREPOWER, SERIES_1, BINARITH, BINARI_2, WSIERP_1, EUCLID, BINARI_3,
+      NAT_D;
  registrations INT_1, MARGREL1, RELSET_1, NAT_1, XREAL_0, MEMBERED, XXREAL_0,
-      XBOOLEAN;
+      XBOOLEAN, SEQ_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
- definitions FINSEQ_2, MARGREL1, XBOOLEAN;
+ definitions FINSEQ_2, MARGREL1, XBOOLEAN, EUCLID;
  theorems POWER, NAT_1, PRE_FF, ABSVALUE, REAL_1, BINARI_3, INT_1, BINARITH,
-      NAT_2, BINARI_2, JORDAN2B, FINSEQ_1, FINSEQ_2, FINSEQ_4, MARGREL1,
-      EUCLID, FUNCOP_1, RVSUM_1, FUNCT_2, ZFMISC_1, CQC_LANG, INT_3, EULER_2,
-      PEPIN, PREPOWER, XREAL_1, NEWTON, XXREAL_0, ORDINAL1;
+      NAT_2, BINARI_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, RVSUM_1,
+      FUNCT_2, ZFMISC_1, CQC_LANG, INT_3, EULER_2, PEPIN, PREPOWER, XREAL_1,
+      NEWTON, XXREAL_0, ORDINAL1, XBOOLEAN, SEQ_1, NAT_D;
  schemes NAT_1, BINARITH;
 
 begin :: Preliminaries
@@ -57,7 +58,7 @@ A4:     m = 0;
       end;
       suppose
 A5:     m > 0;
-A6:      (2 to_power m) * 2 >= m * 2 by A3,NAT_1:20;
+A6:      (2 to_power m) * 2 >= m * 2 by A3,NAT_1:4;
            2 to_power 1 = 2 by POWER:30;
 then A7:      2 to_power (m+1) >= m * 2 by A6,POWER:32;
            m * 2 >= m + 1 by A5,Th1;
@@ -70,7 +71,7 @@ then A7:      2 to_power (m+1) >= m * 2 by A6,POWER:32;
 end;
 
 theorem
-     for m be Element of NAT holds 0*m + 0*m = 0*m
+  for m be Element of NAT holds 0*m + 0*m = 0*m
 proof
   let m be Element of NAT;
 A1:dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
@@ -78,17 +79,14 @@ A1:dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
 then A2:[:rng 0*m, rng 0*m:] c= dom addreal by A1,ZFMISC_1:119;
 A3:dom(0*m + 0*m) = dom(addreal.:(0*m,0*m)) by RVSUM_1:def 4
     .= dom 0*m /\ dom 0*m by A2,FUNCOP_1:84
-    .= dom (m |-> (0 qua Real)) by EUCLID:def 4
     .= Seg m by FUNCOP_1:19;
-A4:dom(0*m) = dom(m |-> (0 qua Real)) by EUCLID:def 4
-   .= Seg m by FUNCOP_1:19;
+A4:dom(0*m) = Seg m by FUNCOP_1:19;
      for k be Element of NAT st k in dom(0*m) holds (0*m).k = (0*m+0*m).k
   proof
     let k be Element of NAT such that
 A5:   k in dom(0*m);
-A6:  (0*m).k = (m |-> (0 qua Real)).k by EUCLID:def 4
-     .= 0 qua Real by A4,A5,FUNCOP_1:13;
-    then (0*m+0*m).k = 0 + 0 by A3,A4,A5,RVSUM_1:26;
+A6:  (0*m).k = 0 by A4,A5,FUNCOP_1:13;
+    then (0*m+0*m).k = 0 + 0 by A3,A4,A5,SEQ_1:def 3;
     hence thesis by A6;
   end;
   hence thesis by A3,A4,FINSEQ_1:17;
@@ -100,15 +98,15 @@ theorem Th4:
 proof
    defpred P[Element of NAT] means
      $1 <= l & l <= m implies $1 = l or ($1 + 1 <= l & l <= m);
-A1: P[0]   by NAT_1:38;
+A1: P[0]   by NAT_1:13;
 A2:for k be Element of NAT st P[k] holds P[k+1]  proof
     let k be Element of NAT such that
         k <= l & l <= m implies k = l or (k + 1 <= l & l <= m);
     assume that
 A3:  k+1 <= l and
 A4:  l <= m;
-        k+1 = l or k+1 < l by A3,XXREAL_0:1;
-    hence thesis by A4,NAT_1:38;
+     k+1 = l or k+1 < l by A3,XXREAL_0:1;
+    hence thesis by A4,NAT_1:13;
   end;
   thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
 end;
@@ -122,7 +120,7 @@ proof
   let x,y be Tuple of n,BOOLEAN such that
 A1: x = 0*n & y = 0*n;
      len carry(x,y) = n by FINSEQ_2:109;
-  then 1 <= len carry(x,y) by NAT_1:39;
+  then 1 <= len carry(x,y) by NAT_1:14;
 then A2:carry(x,y).1 = carry(x,y)/.1 by FINSEQ_4:24
    .= 0 by BINARITH:def 5;
 A3:for j be Element of NAT st 1 < j & j <= n holds carry(x,y).j = 0
@@ -131,12 +129,10 @@ A3:for j be Element of NAT st 1 < j & j <= n holds carry(x,y).j = 0
 A4:  1 < j & j <= n;
     reconsider k = j - 1 as Element of NAT by A4,INT_1:18;
        k + 1 = j;
-then A5: 1 <= k & k < n & j = k + 1 by A4,NAT_1:38;
+then A5: 1 <= k & k < n & j = k + 1 by A4,NAT_1:13;
 then A6: k in Seg n & k <= len x & k <= len y by FINSEQ_1:3,FINSEQ_2:109;
-       len(0*n) = len(n |-> (0 qua Real)) by EUCLID:def 4
-     .= n by FINSEQ_2:69;
+       len(0*n) = n by FINSEQ_2:69;
 then A7: x/.k = (0*n).k by A1,A5,FINSEQ_4:24
-     .= (n |-> (0 qua Real)).k by EUCLID:def 4
      .= FALSE by A6,FUNCOP_1:13;
        len carry(x,y) = n by FINSEQ_2:109;
     then carry(x,y).j = carry(x,y)/.j by A4,FINSEQ_4:24
@@ -150,14 +146,13 @@ then A7: x/.k = (0*n).k by A1,A5,FINSEQ_4:24
     let l be Element of NAT such that
 A8:   l in Seg n;
 A9:  1 <= l & l <= n by A8,FINSEQ_1:3;
-A10:  (0*n).l = (n |-> (0 qua Real)).l by EUCLID:def 4
-     .= 0 by A8,FUNCOP_1:13;
+A10:  (0*n).l = 0 by A8,FUNCOP_1:13;
        now per cases by A9,Th4;
      suppose l = 1;
       hence thesis by A2,A10;
      end;
      suppose 1 + 1 <= l & l <= n;
-      then 1 < l & l <= n by NAT_1:38;
+      then 1 < l & l <= n by NAT_1:13;
       hence thesis by A3,A10;
     end;
     end;
@@ -177,8 +172,7 @@ A1: x = 0*n & y = 0*n;
   proof
     let k be Element of NAT such that
 A2:   k in Seg n;
-A3:  (0*n).k = (n |-> (0 qua Real)).k by EUCLID:def 4
-     .= FALSE by A2,FUNCOP_1:13;
+A3:  (0*n).k = FALSE by A2,FUNCOP_1:13;
        len x = n & len y = n & len carry(x,y) = n & len(x+y) = n
      by FINSEQ_2:109;
 then A4:  1 <= k & k <= len x & k <= len carry(x,y) & k <= len(x+y)
@@ -195,17 +189,17 @@ A6:  carry(x,y)/.k = carry(x,y).k by A4,FINSEQ_4:24
 end;
 
 theorem
-     for n be non empty Element of NAT
+  for n be non empty Element of NAT
   for F be Tuple of n,BOOLEAN st F = 0*n holds
    Intval F = 0
 proof
   let n be non empty Element of NAT;
   let F be Tuple of n,BOOLEAN such that
 A1:F = 0*n;
-A2:1 <= n & n <= len F by FINSEQ_2:109,NAT_1:39;
+A2:1 <= n & n <= len F by FINSEQ_2:109,NAT_1:14;
 then A3:n in Seg n by FINSEQ_1:3;
-     F/.n = F.n by A2,FINSEQ_4:24
-   .= FALSE by A1,A3,JORDAN2B:2;
+   F/.n = F.n by A2,FINSEQ_4:24
+   .= FALSE by A1,A3,FUNCOP_1:13;
   then Intval F = Absval F by BINARI_2:def 3;
   hence thesis by A1,BINARI_3:7;
 end;
@@ -215,16 +209,16 @@ theorem Th8:
 proof
   assume
 A1: l + m <= k - 1;
-     k <= k + m by NAT_1:29;
+     k <= k + m by NAT_1:11;
   then A2: k - m <= k + m - m by XREAL_1:11;
     A3: l + m - m <= k - 1 - m by A1,XREAL_1:11;
      k - 1 - m = k - m - 1;
   then k - 1 - m < k - m by XREAL_1:148;
   then k - 1 - m < k by A2,XXREAL_0:2;
   hence l < k by A3,XXREAL_0:2;
-     k <= k + l by NAT_1:29;
+  k <= k + l by NAT_1:11;
   then A4: k - l <= k + l - l by XREAL_1:11;
-    A5: m + l - l <= k - 1 - l by A1,XREAL_1:11;
+A5: m + l - l <= k - 1 - l by A1,XREAL_1:11;
      k - 1 - l = k - l - 1;
   then k - 1 - l < k - l by XREAL_1:148;
   then k - 1 - l < k by A4,XXREAL_0:2;
@@ -239,14 +233,14 @@ A1: g <= h + i & h < 0 & i < 0;
   then g - i <= h + i - i by XREAL_1:11;
   then i + (g + -i) < 0 + h by A1,XREAL_1:10;
   hence g < h;
-     g - h <= i + h - h by A1,XREAL_1:11;
+  g - h <= i + h - h by A1,XREAL_1:11;
   then h + (g + -h) < 0 + i by A1,XREAL_1:10;
   hence thesis;
 end;
 
 theorem Th10:
   l + m <= 2 to_power n - 1 implies
-   add_ovfl(n-BinarySequence(l),n-BinarySequence(m)) = FALSE
+    add_ovfl(n-BinarySequence(l),n-BinarySequence(m)) = FALSE
 proof
   assume
 A1: l + m <= 2 to_power n - 1;
@@ -261,7 +255,7 @@ A5:Absval(L+M) + IFEQ(add_ovfl(L,M),FALSE,0,2 to_power n)
    .= l + Absval(M) by A3,BINARI_3:36
    .= l + m by A3,BINARI_3:36;
 A6:2 to_power n > 2 to_power n - 1 by XREAL_1:148;
-     Absval(L+M) + 2 to_power n >= 2 to_power n by NAT_1:29;
+     Absval(L+M) + 2 to_power n >= 2 to_power n by NAT_1:11;
   hence contradiction by A1,A4,A5,A6,XXREAL_0:2;
 end;
 
@@ -305,7 +299,7 @@ A5:for n be non empty Element of NAT st P[n] holds P[n+1] proof
 A6:  z/.(n+1) = TRUE;
     consider x be (Tuple of n,BOOLEAN), a be Element of BOOLEAN such that
 A7:  z = x^<*a*> by FINSEQ_2:137;
-A8: n + 1 >= 1 by NAT_1:29;
+A8: n + 1 >= 1 by NAT_1:11;
     then n + 1 - 1 >= 1 - 1 by XREAL_1:11;
 then A9: n + 1 -' 1 = n by BINARITH:def 3;
        len z = n+1 by FINSEQ_2:109;
@@ -313,7 +307,7 @@ then A10: z/.(n+1) = (x^<*a*>).(n+1) by A7,A8,FINSEQ_4:24
      .= a by FINSEQ_2:136;
        Absval(z) = Absval(x) + IFEQ(a,FALSE,0,2 to_power n) by A7,BINARITH:46
      .= Absval(x) + 2 to_power n by A6,A10,CQC_LANG:def 1;
-    hence thesis by A9,NAT_1:29;
+    hence thesis by A9,NAT_1:11;
   end;
   thus for n being non empty Element of NAT holds P[n]
    from BINARITH:sch 1(A1,A5);
@@ -329,19 +323,19 @@ A1: l + m <= 2 to_power (n-'1) - 1;
   F = FALSE, T = TRUE;
   assume
       not(carry(L,M)/.n = F);
-then A2:carry(L,M)/.n = T by MARGREL1:39;
+then A2:carry(L,M)/.n = T by XBOOLEAN:def 3;
 A3:l < 2 to_power (n-'1) & m < 2 to_power (n-'1) by A1,Th8;
-     1 <= n by NAT_1:39;
+     1 <= n by NAT_1:14;
 then A4:n in Seg n by FINSEQ_1:3;
 then A5:L/.n = IFEQ((l div 2 to_power (n-'1)) mod 2,0,F,T) by BINARI_3:def 1
-   .= IFEQ(0 mod 2,0,F,T) by A3,NAT_1:80
-   .= IFEQ(0,0,F,T) by NAT_1:78
+   .= IFEQ(0 mod 2,0,F,T) by A3,NAT_D:27
+   .= IFEQ(0,0,F,T) by NAT_D:26
    .= F by CQC_LANG:def 1;
 A6:M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by A4,BINARI_3:def 1
-   .= IFEQ(0 mod 2,0,F,T) by A3,NAT_1:80
-   .= IFEQ(0,0,F,T) by NAT_1:78
+   .= IFEQ(0 mod 2,0,F,T) by A3,NAT_D:27
+   .= IFEQ(0,0,F,T) by NAT_D:26
    .= F by CQC_LANG:def 1;
-     n >= 1 by NAT_1:39;
+     n >= 1 by NAT_1:14;
   then n-1 >= 1-1 by XREAL_1:11;
   then n-'1 = n - 1 by BINARITH:def 3;
   then n-'1 < n by XREAL_1:148;
@@ -365,20 +359,20 @@ A1: l + m <= 2 to_power (n-'1) - 1;
   set L = n-BinarySequence(l), M = n-BinarySequence(m),
    F = FALSE, T = TRUE;
 A2:l < 2 to_power (n-'1) & m < 2 to_power (n-'1) by A1,Th8;
-     1 <= n by NAT_1:39;
+     1 <= n by NAT_1:14;
 then A3:n in Seg n by FINSEQ_1:3;
 then A4:L/.n = IFEQ((l div 2 to_power (n-'1)) mod 2,0,F,T) by BINARI_3:def 1
-   .= IFEQ(0 mod 2,0,F,T) by A2,NAT_1:80
-   .= IFEQ(0,0,F,T) by NAT_1:78
+   .= IFEQ(0 mod 2,0,F,T) by A2,NAT_D:27
+   .= IFEQ(0,0,F,T) by NAT_D:26
    .= F by CQC_LANG:def 1;
   M/.n = IFEQ((m div 2 to_power (n-'1)) mod 2,0,F,T) by A3,BINARI_3:def 1
-   .= IFEQ(0 mod 2,0,F,T) by A2,NAT_1:80
-   .= IFEQ(0,0,F,T) by NAT_1:78
+   .= IFEQ(0 mod 2,0,F,T) by A2,NAT_D:27
+   .= IFEQ(0,0,F,T) by NAT_D:26
    .= F by CQC_LANG:def 1;
   then (L+M)/.n = F 'xor' F 'xor' (carry(L,M)/.n) by A3,A4,BINARITH:def 8
    .= F by A1,Th13;
 then A5:Intval(L+M) = Absval(L+M) by BINARI_2:def 3;
-     n >= 1 by NAT_1:39;
+     n >= 1 by NAT_1:14;
   then n-1 >= 1-1 by XREAL_1:11;
   then n-'1 = n - 1 by BINARITH:def 3;
   then n-'1 < n by XREAL_1:148;
@@ -405,12 +399,12 @@ A1: z = <*TRUE*>;
 end;
 
 theorem
-     for z be Tuple of 1,BOOLEAN st z=<*FALSE*> holds
-   Intval(z) = 0
+  for z be Tuple of 1,BOOLEAN st z=<*FALSE*> holds
+    Intval(z) = 0
 proof
   let z be Tuple of 1,BOOLEAN such that
 A1: z = <*FALSE*>;
-     len z = 1 by FINSEQ_2:109;
+  len z = 1 by FINSEQ_2:109;
   then z/.1 = z.1 by FINSEQ_4:24
    .= FALSE by A1,FINSEQ_1:57;
   then Intval(z) = Absval(z) by BINARI_2:def 3;
@@ -422,8 +416,8 @@ theorem
    TRUE 'or' x = TRUE;
 
 theorem
-     for n be non empty Element of NAT holds 0 <= 2 to_power (n-'1) - 1 &
-      -(2 to_power (n-'1)) <= 0
+  for n be non empty Element of NAT holds 0 <= 2 to_power (n-'1) - 1 &
+    -(2 to_power (n-'1)) <= 0
 proof
     defpred P[Element of NAT] means
     0 <= 2 to_power ($1-'1) - 1 & -(2 to_power ($1-'1)) <= 0;
@@ -445,15 +439,14 @@ then 2 to_power (k-'1) < 2 to_power ((k+1)-'1) by POWER:44;
 end;
 
 theorem
-     for x,y be Tuple of n,BOOLEAN st x = 0*n & y = 0*n holds
-   x,y are_summable
+  for x,y be Tuple of n,BOOLEAN st x = 0*n & y = 0*n holds
+    x,y are_summable
 proof
   let x,y be Tuple of n,BOOLEAN such that
 A1: x = 0*n & y = 0*n;
-A2:1 <= n & len x = n by FINSEQ_2:109,NAT_1:39;
+A2:1 <= n & len x = n by FINSEQ_2:109,NAT_1:14;
 then A3:n in Seg n by FINSEQ_1:3;
   x/.n = (0*n).n by A1,A2,FINSEQ_4:24
-   .= (n |-> (0 qua Real)).n by EUCLID:def 4
    .= FALSE by A3,FUNCOP_1:13;
   then add_ovfl(x,y) = FALSE '&' FALSE 'or' FALSE '&' (carry(x,y)/.n) 'or'
     FALSE '&' (carry(x,y)/.n) by A1,BINARITH:def 9
@@ -466,9 +459,9 @@ theorem Th20:
 proof
    (i*n) mod n = ((i mod n) * ((n qua Integer) mod n)) mod n by INT_3:15
    .= ((i mod n) * (n mod n)) mod n by NEWTON:101
-   .= ((i mod n) * 0) mod n by NAT_1:77
+   .= ((i mod n) * 0) mod n by NAT_D:25
    .= 0 mod n by NEWTON:101;
-  hence thesis by NAT_1:78;
+  hence thesis by NAT_D:26;
 end;
 
 begin :: Majorant Power
@@ -589,7 +582,7 @@ theorem
 proof
   let i such that
 A1:i <= 2 to_power (n-'1) - 1 & -(2 to_power (n-'1)) <= i;
-A2:n >= 1 by NAT_1:39;
+A2:n >= 1 by NAT_1:14;
      now per cases;
    suppose
    i >= 0;
@@ -597,20 +590,20 @@ A2:n >= 1 by NAT_1:39;
 A3:  2sComplement(n,i) = n-BinarySequence(abs(i)) by Def2
       .= n-BinarySequence(i) by ABSVALUE:def 1;
         i + 1 <= 2 to_power (n-'1) - 1 + 1 by A1,XREAL_1:8;
-then A4:  i < 2 to_power (n-'1) by NAT_1:38;
-        n >= 1 by NAT_1:39;
+then A4:  i < 2 to_power (n-'1) by NAT_1:13;
+        n >= 1 by NAT_1:14;
      then n - 1 >= 1 - 1 by XREAL_1:11;
      then n-'1 = n - 1 by BINARITH:def 3;
      then n-'1 < n by XREAL_1:148;
      then 2 to_power (n-'1) < 2 to_power n by POWER:44;
   then i < 2 to_power n by A4,XXREAL_0:2;
 then A5:  Absval(n-BinarySequence i) = i by BINARI_3:36;
-        1 <= n by NAT_1:39;
+        1 <= n by NAT_1:14;
      then n in Seg n by FINSEQ_1:3;
      then (n-BinarySequence i)/.n
        = IFEQ((i div 2 to_power (n-'1)) mod 2,0,FALSE,TRUE) by BINARI_3:def 1
-      .= IFEQ(0 mod 2,0,FALSE,TRUE) by A4,NAT_1:80
-      .= IFEQ(0,0,FALSE,TRUE) by NAT_1:78
+      .= IFEQ(0 mod 2,0,FALSE,TRUE) by A4,NAT_D:27
+      .= IFEQ(0,0,FALSE,TRUE) by NAT_D:26
       .= FALSE by CQC_LANG:def 1;
      hence thesis by A3,A5,BINARI_2:def 3;
    end;
@@ -646,7 +639,7 @@ then A12:  k < 2 to_power (n-'1) + (2 to_power (n-'1));
      then (n-BinarySequence(k))/.n =
       IFEQ((k div 2 to_power (n-'1)) mod 2,0,FALSE,TRUE) by BINARI_3:def 1
       .= IFEQ(1 mod 2,0,FALSE,TRUE) by A11,A12,NAT_2:22
-      .= IFEQ(1,0,FALSE,TRUE) by NAT_1:64
+      .= IFEQ(1,0,FALSE,TRUE) by NAT_D:14
       .= TRUE by CQC_LANG:def 1;
      then Intval(2sComplement(n,i)) = Absval(n-BinarySequence(k)) - 2 to_power
 n
@@ -664,16 +657,16 @@ Lm1:
    ex s be Integer st k = l + s*n
 proof assume
 A1: k mod n = l mod n & k > l;
-A2: l = (l div n)*n + (l mod n) by NAT_1:47;
-A3: k = (k div n)*n + (l mod n) by A1,NAT_1:47;
+A2: l = (l div n)*n + (l mod n) by NAT_D:2;
+A3: k = (k div n)*n + (l mod n) by A1,NAT_D:2;
     consider m be Nat such that
-A4:  k = l + m by A1,NAT_1:28;
+A4:  k = l + m by A1,NAT_1:10;
     m mod n = (((k div n) - (l div n))*n) mod n by A2,A3,NEWTON:101,A4
      .= 0 by Th20;
-then (l+m) div n = (l div n) + (m div n) by NAT_1:69;
-then A5: k = ((l div n) + (m div n))*n + (l mod n) by A1,A4,NAT_1:47
+then (l+m) div n = (l div n) + (m div n) by NAT_D:19;
+then A5: k = ((l div n) + (m div n))*n + (l mod n) by A1,A4,NAT_D:2
      .= (m div n)*n + ((l div n)*n + (l mod n))
-     .= (m div n)*n + l by NAT_1:47;
+     .= (m div n)*n + l by NAT_D:2;
     take m div n;
     thus thesis by A5;
 end;
@@ -723,7 +716,7 @@ A1: m < n & k mod 2 to_power n = l mod 2 to_power n;
   then consider s be Integer such that
 A2: k = l + s*(2 to_power n) by A1,Lm2;
   consider j be Nat such that
-A3: n = m + j by A1,NAT_1:28;
+A3: n = m + j by A1,NAT_1:10;
     reconsider j as Element of NAT by ORDINAL1:def 13;
   set M = 2 to_power m, J = 2 to_power j;
   reconsider L = l as Integer;
@@ -731,14 +724,14 @@ A4:M > 0 by POWER:39;
 A5:L div M = l div M by NEWTON:101;
      m + -m < n + -m by A1,XREAL_1:10;
   then 0 + 1 < j + 1 by A3,XREAL_1:10;
-  then 1 <= j by NAT_1:38;
+  then 1 <= j by NAT_1:13;
   then 2 to_power 1 divides 2 to_power j by NAT_2:13;
   then 2 divides 2 to_power j by POWER:30;
 then A6:J mod 2 = 0 by PEPIN:6;
 A7:(s*J) mod 2 = ((s mod 2) * ((J qua Integer) mod 2)) mod 2 by INT_3:15
    .= ((s mod 2) * 0) mod 2 by A6,NEWTON:101
    .= 0 mod 2 by NEWTON:101
-   .= 0 by NAT_1:78;
+   .= 0 by NAT_D:26;
      k div M
    = (l + s*(2 to_power (j+m))) div M by A2,A3,NEWTON:101
    .= (l + s*(J*M)) div M by POWER:32
@@ -762,27 +755,27 @@ A1: h mod 2 to_power n = i mod 2 to_power n;
   reconsider M = 2 to_power MajP(n,abs h) as Integer;
      n <= MajP(n,abs h) by Def1;
   then consider x be Nat such that
-A2: MajP(n,abs h) = n + x by NAT_1:28;
+A2: MajP(n,abs h) = n + x by NAT_1:10;
     reconsider x as Element of NAT by ORDINAL1:def 13;
      M = (2 to_power n)*(2 to_power x) by A2,POWER:32;
 then A3:M mod 2 to_power n =
    ((2 to_power n)*(2 to_power x)) mod 2 to_power n by NEWTON:101
    .= (((2 to_power n) mod (2 to_power n)) * (2 to_power x)) mod 2 to_power n
     by EULER_2:10
-   .= (0 * (2 to_power x)) mod 2 to_power n by NAT_1:77
-   .= 0 by NAT_1:78;
+   .= (0 * (2 to_power x)) mod 2 to_power n by NAT_D:25
+   .= 0 by NAT_D:26;
   reconsider L = 2 to_power MajP(n,abs i) as Integer;
      n <= MajP(n,abs i) by Def1;
   then consider y be Nat such that
-A4: MajP(n,abs i) = n + y by NAT_1:28;
+A4: MajP(n,abs i) = n + y by NAT_1:10;
      reconsider y as Element of NAT by ORDINAL1:def 13;
      L = (2 to_power n)*(2 to_power y) by A4,POWER:32;
 then A5:L mod 2 to_power n =
    ((2 to_power n)*(2 to_power y)) mod 2 to_power n by NEWTON:101
    .= (((2 to_power n) mod (2 to_power n)) * (2 to_power y)) mod 2 to_power n
     by EULER_2:10
-   .= (0 * (2 to_power y)) mod 2 to_power n by NAT_1:77
-   .= 0 by NAT_1:78;
+   .= (0 * (2 to_power y)) mod 2 to_power n by NAT_D:25
+   .= 0 by NAT_D:26;
 A6:(M + h) mod 2 to_power n = ((M mod 2 to_power n)+(h mod 2 to_power n))
    mod 2 to_power n by INT_3:14
    .= (h mod 2 to_power n) mod 2 to_power n by A3;
@@ -939,7 +932,7 @@ proof
   let j be Element of NAT such that
 A1: 1 <= j & j <= n;
 A2:j in Seg n by A1,FINSEQ_1:3;
-     n <= n+1 by NAT_1:29;
+     n <= n+1 by NAT_1:11;
   then j <= n+1 by A1,XXREAL_0:2;
 then A3:j in Seg (n+1) by A1,FINSEQ_1:3;
   set M = abs( (2 to_power MajP(n+1,abs(i))) + i );
@@ -949,10 +942,10 @@ A4:i < 0 implies
   proof
     assume
 A5:  i < 0;
-       n + 1 >= n by NAT_1:29;
+       n + 1 >= n by NAT_1:11;
     then MajP(n+1,abs(i)) >= MajP(n,abs(i)) by Th22;
     then consider m be Nat such that
-A6:  MajP(n+1,abs(i)) = MajP(n,abs(i)) + m by NAT_1:28;
+A6:  MajP(n+1,abs(i)) = MajP(n,abs(i)) + m by NAT_1:10;
      reconsider m as Element of NAT by ORDINAL1:def 13;
     set P = MajP(n,abs(i));
     set Q = 2 to_power P;
@@ -963,13 +956,13 @@ then A7: M = 2 to_power (P+m) + i by A6,ABSVALUE:def 1
      .= (Q * 2 to_power m)+i by POWER:32;
 A8: (Q * 2 to_power m qua Integer) mod Q
       = (Q * 2 to_power m) mod Q by NEWTON:101
-     .= 0 by NAT_1:63;
+     .= 0 by NAT_D:13;
 A9: M mod Q = ((Q * 2 to_power m)+i) mod Q by A7,NEWTON:101
      .= (((Q * 2 to_power m qua Integer) mod Q) +
       (i mod Q)) mod Q by INT_3:14
      .= (i mod Q) mod Q by A8;
 A10: (Q qua Integer) mod Q = Q mod Q by NEWTON:101
-     .= 0 by NAT_1:77;
+     .= 0 by NAT_D:25;
        Q >= abs i by Def1;
     then Q >= -i by A5,ABSVALUE:def 1;
     then Q + i >= -i + i by XREAL_1:8;
@@ -1029,7 +1022,7 @@ A2:     j in Seg m;
 A3:    len 2sComplement(m+1,i) = m+1 & len 2sComplement(m,i) = m &
        len a = m by FINSEQ_2:109;
 A4:    1 <= j & j <= m by A2,FINSEQ_1:3;
-         m <= m + 1 by NAT_1:29;
+         m <= m + 1 by NAT_1:11;
       then j <= m + 1 by A4,XXREAL_0:2;
 then A5:    2sComplement(m+1,i).j = 2sComplement(m+1,i)/.j by A3,A4,FINSEQ_4:24
        .= 2sComplement(m,i)/.j by A4,Th32
@@ -1088,7 +1081,8 @@ then A4: -1 <= h & -1 <= i by A3,INT_1:20;
 A5:    h <= -1 & i <= -1 by A2,INT_1:21;
 then A6: h = -1 & i = -1 by A4,XXREAL_0:1;
     then abs h = --1 & abs i = --1 by ABSVALUE:def 1;
-    then 2 to_power 0 = abs h & 2 to_power 2 > 2 to_power 0 by POWER:29,44;
+    then 2 to_power 0 = abs h & 2 to_power 2 > 2 to_power 0 by POWER:29,
+44;
 then A7: MajP(2,abs h) = 2 by Th24;
 A8:   2 to_power 2 = 2 |^ (1+1) by POWER:46
      .= 2 |^ 1 + 2 |^ 1 by PEPIN:30
@@ -1104,8 +1098,8 @@ A9: abs(2 to_power MajP(2,abs h) + h)
      = (1+2) div 1 by POWER:29
      .= 3 by NAT_2:6;
 then A10:(3 div 2 to_power (1-'1)) mod 2 = (2+1) mod 2
-     .= ((2 mod 2) + 1) mod 2 by NAT_1:74
-     .= (0 + 1) mod 2 by NAT_1:77
+     .= ((2 mod 2) + 1) mod 2 by NAT_D:22
+     .= (0 + 1) mod 2 by NAT_D:25
      .= (1 qua Integer) mod 2 by NEWTON:101
      .= 1 by PEPIN:5;
 A11:1 in Seg 2 by FINSEQ_1:3;
@@ -1149,7 +1143,7 @@ A21:   2 to_power (N-'1) <= 2 to_power N + h &
       then reconsider NH = 2 to_power N + h,
        NI = 2 to_power N + i as Element of NAT by INT_1:16;
 A22:   1 <= N & len (N-BinarySequence(NH)) = N & len(N-BinarySequence(NI)) = N
-       by FINSEQ_2:109,NAT_1:29;
+       by FINSEQ_2:109,NAT_1:11;
 A23:   2 to_power N + h < 0 + 2 to_power N &
        2 to_power N + i < 0 + 2 to_power N by A14,XREAL_1:10;
 A24:   H/.N = (N-BinarySequence(abs NH))/.N by A14,A20,Def2
@@ -1161,7 +1155,7 @@ A25:   I/.N = (N-BinarySequence(abs NI))/.N by A14,A20,Def2
        .= (N-BinarySequence(NI)).N by A22,FINSEQ_4:24
        .= T by A17,A21,A23,BINARI_3:30;
 A26:  H1/.N = H/.N & I1/.N = I/.N by A22,Th32;
-         N < N+1 by NAT_1:38;
+         N < N+1 by NAT_1:13;
       then carry(H1,I1)/.(N+1) = T '&' T 'or' T '&' (carry(H1,I1)/.N) 'or'
        T '&' (carry(H1,I1)/.N) by A22,A24,A25,A26,BINARITH:def 5
        .= T 'or' (carry(H1,I1)/.N);
@@ -1226,7 +1220,7 @@ A9: H1 = H^<*a*> by Th33;
   consider a be Element of BOOLEAN such that
 A10: I1 = I^<*a*> by Th33;
 A11:  len H1 = n + 1 & len I1 = n + 1 by FINSEQ_2:109;
-A12:  1 <= n + 1 by NAT_1:29;
+A12:  1 <= n + 1 by NAT_1:11;
 then A13:  H1/.(n+1) = H1.(n+1) by A11,FINSEQ_4:24
        .= ((n+1)-BinarySequence(abs(2 to_power (n+1)+h))).(n+1) by A1,A5,Def2
        .= ((n+1)-BinarySequence(NH)).(n+1) by ABSVALUE:def 1
@@ -1288,7 +1282,6 @@ then A3:-1 <= h & h <= 1-1 & -1 <= i & i <= 1-1 &
 A4: 2sComplement(1,0) = 1-BinarySequence(abs 0) by Def2
      .= 1-BinarySequence(0) by ABSVALUE:def 1
      .= 0*1 by BINARI_3:26
-     .= 1 |-> (0 qua Real) by EUCLID:def 4
      .= <* FALSE *> by FINSEQ_2:73;
 A5:2 to_power 1 = 2 & (for k be Element of NAT
  st 2 to_power k >= 1 & k >= 1 holds
@@ -1296,8 +1289,7 @@ A5:2 to_power 1 = 2 & (for k be Element of NAT
        abs(-1) = --1 by ABSVALUE:def 1
      .= 1;
 then A6: MajP(1,abs(-1)) = 1 by A5,Def1;
-A7: 0*0 = 0 |-> (0 qua Real) by EUCLID:def 4
-     .= {} by FINSEQ_2:72;
+A7: 0*0 = {} by FINSEQ_2:72;
 A8: 2sComplement(1,-1)
      = 1-BinarySequence(abs((2 to_power 1)+-1)) by A6,Def2
      .= 1-BinarySequence(abs(2+-1)) by POWER:30
@@ -1350,7 +1342,7 @@ A17:    h >= 0 & i < 0;
       then reconsider h as Element of NAT by INT_1:16;
 A18:   H1 = (n+1)-BinarySequence(abs h) by Def2
        .= (n+1)-BinarySequence(h) by ABSVALUE:def 1;
-A19:   len H1 = n+1 & len I1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:29;
+A19:   len H1 = n+1 & len I1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:11;
          2 to_power n - 1 < 2 to_power n by XREAL_1:148;
 then A20:   h < 2 to_power n by A14,XXREAL_0:2;
 then A21:   H1.(n+1) = F by A18,BINARI_3:27;
@@ -1401,7 +1393,7 @@ A34:    h < 0 & i >= 0;
       then reconsider i as Element of NAT by INT_1:16;
 A35:   I1 = (n+1)-BinarySequence(abs i) by Def2
        .= (n+1)-BinarySequence(i) by ABSVALUE:def 1;
-A36:   len I1 = n+1 & len H1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:29;
+A36:   len I1 = n+1 & len H1 = n+1 & 1 <= n + 1 by FINSEQ_2:109,NAT_1:11;
          2 to_power n - 1 < 2 to_power n by XREAL_1:148;
 then A37:   i < 2 to_power n by A14,XXREAL_0:2;
 then A38:   I1.(n+1) = F by A35,BINARI_3:27;

@@ -9,26 +9,26 @@ environ
  vocabularies ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
-      RLVECT_1, FINSEQ_2;
+      RLVECT_1, FINSEQ_2, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, CARD_1,
       XXREAL_0, FINSET_1, RELAT_1, RELAT_2, FUNCT_1, FINSEQ_1, RVSUM_1,
       FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2, FUNCT_3, REALSET1,
       DOMAIN_1, STRUCT_0, REALSET2, PRE_TOPC, GROUP_1, ORDERS_2, EQREL_1,
       RCOMP_1, TOLER_1, ORDERS_3;
  constructors DOMAIN_1, REAL_1, SQUARE_1, NAT_1, BINOP_2, MEMBERED, EQREL_1,
-      PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, PRE_TOPC, REALSET2, ORDERS_3;
+      PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, PRE_TOPC, REALSET2, ORDERS_3, NAT_D;
  registrations RELSET_1, STRUCT_0, SUBSET_1, MEMBERED, PARTFUN1, XREAL_0,
       FINSET_1, ARYTM_3, FSM_1, ORDERS_2, EQREL_1, FINSEQ_1, FUNCOP_1,
-      REALSET1, XXREAL_0, NAT_1;
+      REALSET1, XXREAL_0, NAT_1, RELAT_1, SEQ_1;
  requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, PROB_2, FINSEQ_2, SUBSET_1, PRE_TOPC, CARD_3,
-      FINSEQ_1;
+      FINSEQ_1, STRUCT_0;
  theorems EQREL_1, XBOOLE_0, XBOOLE_1, SUBSET_1, XCMPLX_1, TRIANG_1, CARD_2,
-      CARD_1, KURATO_2, REAL_1, TOLER_1, REAL_2, NAT_1, SQUARE_1, GROUP_1,
-      TARSKI, ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2, FUNCT_3,
-      RVSUM_1, CARD_3, FUNCT_6, FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1,
-      FINSEQ_6, FINSEQ_2, REALSET2, ORDERS_2, RELSET_1, SYSREL, FUNCOP_1,
-      REALSET1, ORDERS_1, RCOMP_1, XREAL_0;
+      CARD_1, REAL_1, TOLER_1, REAL_2, NAT_1, SQUARE_1, GROUP_1, TARSKI,
+      ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2, FUNCT_3, RVSUM_1,
+      FUNCT_6, FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1, FINSEQ_6,
+      FINSEQ_2, REALSET2, ORDERS_2, RELSET_1, SYSREL, FUNCOP_1, REALSET1,
+      ORDERS_1, RCOMP_1, XREAL_0;
  schemes FUNCT_2, BINOP_2, FINSEQ_2;
 
 begin :: Preliminaries
@@ -1175,7 +1175,7 @@ A1:   MemberFunc (X, A).x = 0;
       then X /\ Class (the InternalRel of A, x) = {} by CARD_2:59;
       then X misses Class (the InternalRel of A, x) by XBOOLE_0:def 7;
       then not x in UAp X by Th10;
-      hence x in (UAp X)` by KURATO_2:1;
+      hence x in (UAp X)` by XBOOLE_0:def 4;
     end;
     assume x in (UAp X)`;
  then not x in UAp X by XBOOLE_0:def 4;
@@ -1194,7 +1194,7 @@ theorem Th42:
     hereby assume
 A1:   0 < MemberFunc (X, A).x & MemberFunc (X, A).x < 1;
       then not x in (UAp X)` by Th41;
-      then x in UAp X & not x in LAp X by A1,Th40,KURATO_2:1;
+      then x in UAp X & not x in LAp X by A1,Th40,XBOOLE_0:def 4;
       then x in UAp X \ LAp X by XBOOLE_0:def 4;
       hence x in BndAp X;
     end;
@@ -1262,7 +1262,7 @@ A2:   x in X;
       suppose
 A3:   not x in X;
       then not x in UAp X by Th16;
-      then x in (UAp X)` by A1,KURATO_2:1;
+      then x in (UAp X)` by A1,XBOOLE_0:def 4;
       then F.x = 0 by Th41;
       hence thesis by A1,A3,FUNCT_3:def 3;
     end;
@@ -1470,7 +1470,7 @@ A4:   k in dom p;
 then A5:   p.k = MemberFunc ((X^<*y*>).k, A).x by Def10;
 A6:   k <= len X + 1 by A2,A4,FINSEQ_1:3;
 A7:   1 <= k by A4,FINSEQ_3:27;
-      per cases by A6,NAT_1:26;
+      per cases by A6,NAT_1:8;
       suppose
 A8:   k <= len X;
 then A9:   k in dom X by A7,FINSEQ_3:27;
@@ -1510,8 +1510,8 @@ A1: P[<*> bool the carrier of A]
       assume <*> bool the carrier of A is disjoint_valued;
       set F = FinSeqM (x, <*> bool the carrier of A);
        dom F = dom <*> bool the carrier of A by Def10;
-then A2:   Sum F = 0 by RELAT_1:60,64,RVSUM_1:102;
-       Union <*> bool the carrier of A = {}A by CARD_3:14;
+then A2:   Sum F = 0 by RELAT_1:64,RVSUM_1:102;
+       Union <*> bool the carrier of A = {}A by ZFMISC_1:2;
       hence thesis by A2,Th54;
     end;
 A3: for p being FinSequence of bool the carrier of A
@@ -1542,7 +1542,7 @@ A10:      m in dom p & X = p.m by A9,FUNCT_1:def 5;
 A11:      p.m meets y by A8,A9,A10,XBOOLE_0:3;
 A12:      (p^<*y*>).m = p.m by A10,FINSEQ_1:def 7;
 A13:      (p^<*y*>).(len p + 1) = y by FINSEQ_1:59;
-A14:      len p < len p + 1 by NAT_1:38;
+A14:      len p < len p + 1 by NAT_1:13;
            m <= len p by A10,FINSEQ_3:27;
           hence thesis by A5,A11,A12,A13,A14,PROB_2:def 3;
         end;
@@ -1598,7 +1598,7 @@ A1:   y in UAp X;
     then consider y' being Element of A such that
 A2: y' = y & MemberFunc (X, A).y' > 0;
      not y in (UAp X)` by A2,Th41;
-    hence thesis by A2,KURATO_2:1;
+    hence thesis by A2,XBOOLE_0:def 4;
   end;
 
 theorem

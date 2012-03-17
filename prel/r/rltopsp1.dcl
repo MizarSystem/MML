@@ -307,11 +307,6 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
 <Adjective nr="81">
 <LocusVar nr="1"/>
 </Adjective>

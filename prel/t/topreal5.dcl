@@ -20,10 +20,12 @@
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
@@ -32,13 +34,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="59"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="18">
 <Func kind="U" nr="1">
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -47,13 +49,13 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="33">
-<Func kind="K" nr="168">
+<Func kind="K" nr="194">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="53"/>
-<Adjective nr="54" value="false"/>
-<Adjective nr="55" value="false"/>
+<Adjective nr="59"/>
+<Adjective nr="60" value="false"/>
+<Adjective nr="61" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

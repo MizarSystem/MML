@@ -30,6 +30,8 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
@@ -47,51 +49,51 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="98">
+<Adjective nr="104">
 <Func kind="U" nr="1">
-<Func kind="K" nr="203">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="104"/>
 <Adjective nr="105"/>
+<Adjective nr="106"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="203">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="258">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="36">
-<Func kind="K" nr="203">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="42">
-<Func kind="K" nr="203">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="48">
-<Func kind="K" nr="203">
+<Func kind="K" nr="229">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="90"/>
-<Adjective nr="93" value="false"/>
-<Adjective nr="94" value="false"/>
-<Adjective nr="97"/>
-<Adjective nr="106">
+<Adjective nr="96"/>
+<Adjective nr="99" value="false"/>
+<Adjective nr="100" value="false"/>
+<Adjective nr="103"/>
+<Adjective nr="112">
 <Num nr="2"/>
 </Adjective>
 </Cluster>

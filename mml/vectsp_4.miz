@@ -7,10 +7,10 @@
 environ
 
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, BINOP_1, LATTICES, RLSUB_1, BOOLE,
-      RELAT_1, FUNCT_1, GROUP_1, REALSET1;
+      RELAT_1, FUNCT_1, GROUP_1, REALSET1, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, REALSET1, FUNCT_1,
       FUNCT_2, STRUCT_0, DOMAIN_1, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1;
- constructors PARTFUN1, DOMAIN_1, BINOP_1, REALSET1, VECTSP_1;
+ constructors PARTFUN1, DOMAIN_1, BINOP_1, REALSET1, VECTSP_1, NAT_D;
  registrations FUNCT_1, VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, XBOOLE_0,
       REALSET1;
  requirements SUBSET, BOOLE;
@@ -743,9 +743,14 @@ FUNCT_1:def 5;
     by A13,FUNCT_2:def 1,RELSET_1:11;
    set W = VectSpStr (# D,A,d,M #);
     A18: for a,b be Element of W
-     for x,y be Element of V st x = a & b = y
-     holds a + b = x + y by A4,FUNCT_1:70;
-A19: W is Abelian add-associative right_zeroed right_complementable
+     for x,y be Element of V st x = a & b = y holds a + b = x + y
+      proof let a,b be Element of W;
+       let x,y be Element of V such that
+A19:      x = a & b = y;
+       thus a + b = A.[a,b]
+             .= x + y by A4,FUNCT_1:70,A19;
+      end;
+A20: W is Abelian add-associative right_zeroed right_complementable
      proof
       thus W is Abelian
        proof
@@ -757,10 +762,10 @@ A19: W is Abelian add-associative right_zeroed right_complementable
       hereby let a,b,c be Element of W;
        reconsider x = a, y = b, z = c as Element of V
         by TARSKI:def 3;
-       A20: a + b = x + y & b + c = y + z by A18;
+       A21: a + b = x + y & b + c = y + z by A18;
       hence a + b + c = x + y + z by A18
                     .= x + (y + z) by RLVECT_1:def 6
-                    .= a + (b + c) by A18,A20;
+                    .= a + (b + c) by A18,A21;
       end;
       hereby let a be Element of W;
        reconsider x = a as Element of V by TARSKI:def 3;
@@ -772,9 +777,9 @@ A19: W is Abelian add-associative right_zeroed right_complementable
        reconsider a' = a as Element of D;
        reconsider b = C.a' as Element of D;
        reconsider b as Element of W;
-A21:    (comp V).x = C.x by A9,FUNCT_1:70;
+A22:    (comp V).x = C.x by A9,FUNCT_1:70;
       take b;
-      thus a + b = x + (comp V).x by A18,A21
+      thus a + b = x + (comp V).x by A18,A22
                 .= x + - x by VECTSP_1:def 25
                 .= 0.W by RLVECT_1:16;
      end;
@@ -783,29 +788,29 @@ A21:    (comp V).x = C.x by A9,FUNCT_1:70;
            let v,w be Element of W;
         reconsider x = v, y = w as Element of V
          by TARSKI:def 3;
-       A22: now let a be Element of GF;
+       A23: now let a be Element of GF;
                  let x be Element of W;
                  let y be Element of V;
-         assume A23: y = x;
-          A24: [a,x] in dom M by A13;
-        thus a * x = a * y by A23,A24,FUNCT_1:70;
+         assume A24: y = x;
+          A25: [a,x] in dom M by A13;
+        thus a * x = a * y by A24,A25,FUNCT_1:70;
        end;
-       then A25: b * v = b * x & a * v = a * x & a * w = a * y;
+       then A26: b * v = b * x & a * v = a * x & a * w = a * y;
        then a * v + a * w = a * x + a * y & v + w = x + y by A18;
-      hence a * (v + w) = a * (x + y) by A22
+      hence a * (v + w) = a * (x + y) by A23
                        .= a * x + a * y by VECTSP_1:def 26
-                       .= a * v + a * w by A18,A25;
-      thus (a + b) * v = (a + b) * x by A22
+                       .= a * v + a * w by A18,A26;
+      thus (a + b) * v = (a + b) * x by A23
                       .= a * x + b * x by VECTSP_1:def 26
-                      .= a * v + b * v by A18,A25;
-      thus a * b * v = a * b * x by A22
+                      .= a * v + b * v by A18,A26;
+      thus a * b * v = a * b * x by A23
                     .= a * (b * x) by VECTSP_1:def 26
-                    .= a * (b * v) by A22,A25;
-      thus 1.GF * v = 1.GF * x by A22
+                    .= a * (b * v) by A23,A26;
+      thus 1.GF * v = 1.GF * x by A23
                    .= v by VECTSP_1:def 26;
      end;
    then reconsider W as Abelian add-associative right_zeroed
-    right_complementable VectSp-like (non empty VectSpStr over GF) by A19;
+    right_complementable VectSp-like (non empty VectSpStr over GF) by A20;
    reconsider W as strict Subspace of V by Def2;
   take W;
   thus thesis;

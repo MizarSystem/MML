@@ -7,20 +7,22 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
-      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1;
+      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, NAT_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
-      XXREAL_0, BINARITH, BINOP_2, STRUCT_0, RLVECT_1, GROUP_1;
+      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, STRUCT_0,
+      RLVECT_1, GROUP_1;
  constructors BINOP_1, BINOP_2, MEMBERED, RLVECT_1, GROUP_1, XXREAL_0,
-      BINARITH, NAT_1, REAL_1;
+      BINARITH, NAT_1, REAL_1, DOMAIN_1, NAT_D;
  registrations STRUCT_0, RLVECT_1, RELSET_1, MEMBERED, GROUP_1, NAT_1,
-      ORDINAL1;
- requirements NUMERALS, SUBSET, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1;
+      ORDINAL1, XREAL_0;
+ requirements NUMERALS, SUBSET, ARITHM, BOOLE;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1;
  theorems FUNCT_2, RLVECT_1, XCMPLX_0, BINOP_2, GROUP_1, NAT_1, BINARITH,
-      XREAL_1;
+      XREAL_1, XREAL_0;
  schemes FUNCT_2;
 
 begin
+
 ::
 ::                         1. GROUP STRUCTURE
 ::
@@ -47,38 +49,29 @@ registration
    hereby
     let x,y be Element of G_Real;
      reconsider x'=x ,y'=y as Element of REAL;
-    thus x+y = (the add of G_Real).(x,y) by RLVECT_1:5
-               .= y'+x' by BINOP_2:def 9
-               .= addreal.(y',x') by BINOP_2:def 9
-               .= y+x by RLVECT_1:5;
+    thus x+y = y'+x' by BINOP_2:def 9
+               .= y+x by BINOP_2:def 9;
    end;
    hereby
     let x,y,z be Element of G_Real;
      reconsider x'=x ,y'=y , z'=z as Element of REAL;
-    thus (x+y)+z = (the add of G_Real).(x+y,z) by RLVECT_1:5
-               .= (the add of G_Real).((the add of G_Real).(x,y),z)
-                  by RLVECT_1:5
-               .= addreal.((x'+y'),z') by BINOP_2:def 9
+    thus (x+y)+z = addreal.((x'+y'),z') by BINOP_2:def 9
                .= (x'+y')+z' by BINOP_2:def 9
                .= x'+(y'+z')
                .= addreal.(x',(y'+z')) by BINOP_2:def 9
-               .= addreal.(x',addreal.(y',z')) by BINOP_2:def 9
-               .= (the add of G_Real).(x,y+z) by RLVECT_1:5
-               .= x+(y+z) by RLVECT_1:5;
+               .= x+(y+z) by BINOP_2:def 9;
    end;
    hereby
     let x be Element of G_Real;
      reconsider x'=x as Element of REAL;
-    thus x+0.G_Real = (the add of G_Real).(x,0.G_Real) by RLVECT_1:5
-         .= x'+0 by BINOP_2:def 9
+    thus x+0.G_Real = x'+0 by BINOP_2:def 9
          .= x;
    end;
    let x be Element of G_Real;
    reconsider x'=x as Element of REAL;
    reconsider y = -x' as Element of G_Real;
    take y;
-   thus x+ y = (the add of G_Real).(x,y) by RLVECT_1:5
-              .= x'+ -x' by BINOP_2:def 9
+   thus x+ y = x'+ -x' by BINOP_2:def 9
               .= 0.G_Real;
   end;
 end;
@@ -108,7 +101,8 @@ theorem  (for x,y,z being Element of GS holds
              (x+y)+z = x+(y+z) &
              x+(0.GS) = x &
              ex x' being Element of GS st x+x' = 0.GS)
-     iff GS is AbGroup by RLVECT_1:def 5,def 6,def 7,def 8;
+     iff GS is AbGroup by RLVECT_1:def 5,def 6,def 7,
+def 8;
 
 ::
 ::                         4. FIELD STRUCTURE
@@ -198,6 +192,40 @@ definition
   correctness;
 end;
 
+registration
+ cluster F_Real -> non empty;
+ coherence
+  proof thus the carrier of F_Real is non empty; end;
+end;
+
+registration
+ cluster -> real Element of F_Real;
+ coherence
+  proof let a be Element of F_Real;
+   thus thesis by XREAL_0:def 1;
+  end;
+end;
+
+registration let a,b be Element of F_Real, x,y be real number;
+ identify a+b with x+y when a = x, b = y;
+ compatibility
+  proof assume
+A1:  a = x & b = y;
+    then reconsider x'=x, y'=y as Element of REAL;
+   thus a+b = x+y by A1,BINOP_2:def 9;
+  end;
+end;
+
+registration let a,b be Element of F_Real, x,y be real number;
+ identify a*b with x*y when a = x, b = y;
+ compatibility
+  proof assume
+A1:  a = x & b = y;
+    then reconsider x'=x, y'=y as Element of REAL;
+   thus a*b = x*y by A1,BINOP_2:def 11;
+  end;
+end;
+
 definition let IT be non empty doubleLoopStr;
  canceled 2;
 
@@ -222,25 +250,7 @@ definition let IT be non empty multLoopStr_0;
  :Def21:  0.IT = 1.IT;
 end;
 
-registration
- cluster F_Real -> non empty;
- coherence
-  proof
-    thus the carrier of F_Real is non empty;
-  end;
-end;
-
 set FR = F_Real;
-Lm1: now
-  let h, a be Element of FR;
-  assume
-A1: a = 1;
-  reconsider g = h as Element of REAL;
-  thus h * a = g*1 by A1,BINOP_2:def 11
-  .= h;
-  thus a * h = 1*g by A1,BINOP_2:def 11
-  .= h;
-end;
 
 registration
  cluster F_Real -> unital;
@@ -248,15 +258,15 @@ registration
  proof
    reconsider e = 1 as Element of FR;
    take e;
-   thus thesis by Lm1;
+   thus thesis;
  end;
 end;
 
-Lm2:
+Lm1:
  1.F_Real = 1
 proof
   reconsider e = 1 as Element of FR;
-  for h being Element of FR holds h * e = h & e * h = h by Lm1;
+  for h being Element of FR holds h * e = h & e * h = h;
   hence thesis by GROUP_1:def 5;
 end;
 
@@ -268,83 +278,42 @@ registration
   proof
    hereby let x,y,z be Element of F_Real;
      reconsider x'=x ,y'=y , z'=z as Element of REAL;
-    thus (x+y)+z = (the add of F_Real).(x+y,z) by RLVECT_1:5
-               .= (the add of F_Real).((the add of F_Real).(x,y),z)
-                  by RLVECT_1:5
-               .= addreal.((x'+y'),z') by BINOP_2:def 9
-               .= (x'+y')+z' by BINOP_2:def 9
-               .= x'+(y'+z')
-               .= addreal.(x',(y'+z')) by BINOP_2:def 9
-               .= addreal.(x',addreal.(y',z')) by BINOP_2:def 9
-               .= (the add of F_Real).(x,y+z) by RLVECT_1:5
-               .= x+(y+z) by RLVECT_1:5;
+    thus (x+y)+z = x+(y+z);
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
-   thus x+0.F_Real = (the add of F_Real).(x,0.F_Real) by RLVECT_1:5
-               .= x'+0 by BINOP_2:def 9
-               .= x;
+   thus x+0.F_Real = x;
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
      reconsider y=-x' as Element of F_Real;
      take y' = y;
-    thus x+ y' = addreal.(x',y') by RLVECT_1:5
-               .= x'+ -x' by BINOP_2:def 9
-               .= 0.F_Real;
+    thus x+ y' = 0.F_Real;
    end;
    hereby let x,y be Element of F_Real;
      reconsider x'=x ,y'=y as Element of REAL;
-    thus x+y = (the add of F_Real).(x,y) by RLVECT_1:5
-             .= y'+x' by BINOP_2:def 9
-             .= addreal.(y',x') by BINOP_2:def 9
-             .= y+x by RLVECT_1:5;
+    thus x+y = y+x;
    end;
    hereby let x,y be Element of F_Real;
      reconsider x'=x ,y'=y as Element of REAL;
-    thus x*y = y'*x' by BINOP_2:def 11
-               .= y*x by BINOP_2:def 11;
+    thus x*y = y*x;
    end;
    hereby let x,y,z be Element of F_Real;
      reconsider x'=x ,y'=y , z'=z as Element of REAL;
-    thus (x*y)*z = multreal.((x'*y'),z') by BINOP_2:def 11
-               .= (x'*y')*z' by BINOP_2:def 11
-               .= x'*(y'*z')
-               .= multreal.(x',(y'*z')) by BINOP_2:def 11
-               .= x*(y*z) by BINOP_2:def 11;
+    thus (x*y)*z = x*(y*z);
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
-    thus (1.F_Real)*x = 1*x' by Lm2,BINOP_2:def 11
-               .= x;
+    thus (1.F_Real)*x = x by Lm1;
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
-    thus x*(1.F_Real) = 1*x' by Lm2,BINOP_2:def 11
-               .= x;
+    thus x*(1.F_Real) = x by Lm1;
    end;
    hereby let x,y,z be Element of F_Real;
      reconsider x'=x ,y'=y , z'=z as Element of REAL;
-    thus x*(y+z) = (the mult of F_Real).(x,(the add of F_Real).(y,z))
-                  by RLVECT_1:5
-               .= multreal.(x',(y'+z')) by BINOP_2:def 9
-               .= x'*(y'+z') by BINOP_2:def 11
-               .= x'*y'+x'*z'
-               .= addreal.(x'*y',x'*z') by BINOP_2:def 9
-               .= addreal.(multreal.(x',y'),x'*z') by BINOP_2:def 11
-               .= addreal.(multreal.(x',y'),multreal.(x',z'))
-                  by BINOP_2:def 11
-               .= x*y+x*z by RLVECT_1:5;
-    thus (y+z)*x = (the mult of F_Real).((the add of F_Real).(y,z),x)
-                  by RLVECT_1:5
-               .= multreal.((y'+z'),x') by BINOP_2:def 9
-               .= (y'+z')*x' by BINOP_2:def 11
-               .= y'*x'+z'*x'
-               .= addreal.(y'*x',z'*x') by BINOP_2:def 9
-               .= addreal.(multreal.(y',x'),z'*x') by BINOP_2:def 11
-               .= addreal.(multreal.(y',x'),multreal.(z',x'))
-                  by BINOP_2:def 11
-               .= y*x+z*x by RLVECT_1:5;
+    thus x*(y+z) = x*y+x*z;
+    thus (y+z)*x = y*x+z*x;
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
@@ -352,13 +321,13 @@ registration
     then A1: x'*(x')" =1 by XCMPLX_0:def 7;
     reconsider y = (x')" as Element of F_Real;
     take y;
-    thus x*y = 1.F_Real by A1,Lm2,BINOP_2:def 11;
+    thus x*y = 1.F_Real by A1,Lm1;
    end;
-   thus 0.F_Real <> 1.F_Real by Lm2;
+   thus 0.F_Real <> 1.F_Real by Lm1;
   end;
 end;
 
-Lm3: for L being non empty doubleLoopStr st
+Lm2: for L being non empty doubleLoopStr st
    L is distributive holds L is right-distributive left-distributive
 proof
    let L be non empty doubleLoopStr;
@@ -373,7 +342,7 @@ end;
 registration
   cluster distributive -> left-distributive right-distributive
     (non empty doubleLoopStr);
-  coherence by Lm3;
+  coherence by Lm2;
   cluster left-distributive right-distributive -> distributive
     (non empty doubleLoopStr);
   coherence
@@ -438,7 +407,7 @@ end;
 canceled 12;
 
 theorem
-  1.F_Real = 1 by Lm2;
+  1.F_Real = 1 by Lm1;
 
 theorem
   for x,y,z being Element of F_Real holds
@@ -451,7 +420,7 @@ theorem
   (1.F_Real)*x = x &
   (x <> 0.F_Real implies ex y be Element of F_Real st x*y = 1.F_Real) &
   x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x
-  by Def18,Def19,Def20,GROUP_1:def 4,RLVECT_1:def 6,def 7,def 10;
+  by Def19,Def20,RLVECT_1:def 10;
 
 theorem
   for FS being non empty doubleLoopStr holds
@@ -710,7 +679,7 @@ A2:  for x being Element of F holds g.x = -x;
   end;
 end;
 
-Lm4:
+Lm3:
  now let F be add-associative right_zeroed right_complementable Abelian
    associative left_unital distributive (non empty doubleLoopStr);
   let MLT be
@@ -725,35 +694,24 @@ Lm4:
       proof
        let x,y,z be Element of GF;
        reconsider x'=x,y'=y,z'=z as Element of F;
-       thus x+y = (the add of GF).(x,y) by RLVECT_1:5
-                  .= y'+x' by RLVECT_1:5
-                  .= (the add of F).(y',x') by RLVECT_1:5
-                  .= y+x by RLVECT_1:5;
-       thus (x+y)+z = (the add of GF).(x+y,z) by RLVECT_1:5
-                  .= (the add of GF).((the add of GF).(x,y),z)
-                     by RLVECT_1:5
-                  .= (the add of F).((x'+y'),z') by RLVECT_1:5
-                  .= (x'+y')+z' by RLVECT_1:5
+       thus x+y = y'+x' by RLVECT_1:5
+                  .= y+x;
+       thus (x+y)+z = (x'+y')+z'
                   .= x'+(y'+z') by RLVECT_1:def 6
-                  .= (the add of F).(x',(y'+z')) by RLVECT_1:5
-                  .= (the add of F).(x',(the add of F).(y',z'))
-                     by RLVECT_1:5
-                  .= (the add of GF).(x,y+z) by RLVECT_1:5
-                  .= x+(y+z) by RLVECT_1:5;
-       thus x+0.GF = (the add of GF).(x,0.GF) by RLVECT_1:5
-                  .= x'+(0.F) by RLVECT_1:5
+                  .= x+(y+z);
+       thus x+0.GF = x'+(0.F)
                   .= x by RLVECT_1:10;
        consider t being Element of F such that
 A1:     x' + t = 0.F by RLVECT_1:def 8;
        reconsider t' = t as Element of GF;
        take t';
-       thus x + t' = (the add of GF).(x,t') by RLVECT_1:5
-                 .= 0.GF by  RLVECT_1:5,A1;
+       thus x + t' = 0.GF by  A1;
       end;
-  hence GF is AbGroup by RLVECT_1:def 5,def 6,def 7,def 8;
+  hence GF is AbGroup by RLVECT_1:def 5,def 6,def 7,
+def 8;
  end;
 
-Lm5:
+Lm4:
  now let F be add-associative right_zeroed right_complementable
    associative left_unital distributive (non empty doubleLoopStr);
   let MLT be
@@ -765,15 +723,12 @@ A1: MLT = the mult of F;
    let x,y be Element of F;
    let v,w be Element of LS;
    reconsider v' = v , w' = w as Element of F;
-  thus x*(v+w) = MLT.(x,(the add of F).(v',w')) by RLVECT_1:5
-          .= x*(v'+w') by  RLVECT_1:5,A1
+  thus x*(v+w) = x*(v'+w') by  A1
           .= x*v'+x*w' by Def18
-          .= (the add of F).(MLT.(x,v'),x*w') by  RLVECT_1:5,A1
-          .= x*v+x*w by  A1,RLVECT_1:5;
+          .= x*v+x*w by  A1;
   thus (x+y)*v = (x+y)*v' by A1
           .= x*v'+y*v' by Def18
-          .= (the add of F).(MLT.(x,v'),y*v') by  RLVECT_1:5,A1
-          .= x*v+y*v by  A1,RLVECT_1:5;
+          .= x*v+y*v by  A1;
   thus (x*y)*v = (x*y)*v' by A1
           .= x*(y*v') by GROUP_1:def 4
           .= x*(y*v) by  A1;
@@ -805,8 +760,8 @@ registration let F be add-associative right_zeroed right_complementable Abelian
      x*(v+w) = x*v+x*w &
      (x+y)*v = x*v+y*v &
      (x*y)*v = x*(y*v) &
-     (1.F)*v = v by Lm5;
-   thus thesis by Lm4;
+     (1.F)*v = v by Lm4;
+   thus thesis by Lm3;
   end;
 end;
 
@@ -899,7 +854,7 @@ A1:   v+w=0.V;
   hence thesis by RLVECT_1:16;
  end;
 
-Lm6:
+Lm5:
 for V being add-associative right_zeroed
                      right_complementable (non empty LoopStr),
     v,w being Element of V
@@ -911,7 +866,7 @@ holds -(w+-v)=v-w
     hence thesis by RLVECT_1:30;
  end;
 
-Lm7:
+Lm6:
 for V being add-associative right_zeroed
                      right_complementable (non empty LoopStr),
   v,w being Element of V holds -(-v-w)=w+v
@@ -927,7 +882,7 @@ theorem
                     right_complementable (non empty LoopStr),
     u,v,w being Element of V holds
   -(v+w)=-w-v & -(w+-v)=v-w & -(v-w)=w+-v & -(-v-w)=w+v &
-      u-(w+v)=u-v-w by Lm6,Lm7,RLVECT_1:41,44,47;
+      u-(w+v)=u-v-w by Lm5,Lm6,RLVECT_1:41,44,47;
 
 theorem
     for V being add-associative right_zeroed
@@ -1112,7 +1067,7 @@ Th78: 1.F_Real + 1.F_Real <> 0.F_Real
    proof
     reconsider t=1 as Element of REAL;
     reconsider t as Element of FR;
-    1.FR+1.FR=(the add of FR).(t,t) by Lm2,RLVECT_1:5;
+    1.FR+1.FR=(the add of FR).(t,t) by Lm1;
     hence thesis by BINOP_2:def 9;
    end;
   hence thesis;
@@ -1168,15 +1123,13 @@ registration
    end;
 end;
 
-canceled 2;
-
-theorem Th81:
+ Lm7:
  for F being add-associative right_zeroed
                  right_complementable (non empty LoopStr),
      a, b being Element of F holds
   -(a-b) = b-a by RLVECT_1:47;
 
-canceled 2;
+canceled 5;
 
 theorem
     for F being add-associative right_zeroed
@@ -1205,7 +1158,7 @@ theorem
  proof let F be add-associative right_zeroed
                       right_complementable (non empty LoopStr),
     a,b be Element of F;
-     a - b = -(b - a) by Th81; hence thesis by Th86;
+     a - b = -(b - a) by Lm7; hence thesis by Th86;
  end;
 
 theorem
@@ -1291,29 +1244,28 @@ theorem
     set G = HGrStr (# the carrier of B, the add of B #);
     A1: for a,b be Element of G,
        x,y be Element of B st a = x & b = y
-     holds a * b = x + y by RLVECT_1:5;
+     holds a * b = x + y;
     A2: G is associative Group-like
      proof
       thus for a,b,c being Element of G
         holds a * b * c = a * (b * c)
        proof let a,b,c be Element of G;
          reconsider x = a, y = b, z = c as Element of B;
-          A3: a * b = x + y & b * c = y + z by A1;
-        hence a * b * c = x + y + z by A1
+        thus a * b * c = x + y + z
                       .= x + (y + z) by RLVECT_1:def 6
-                      .= a * (b * c) by A1,A3;
+                      .= a * (b * c);
        end;
        reconsider e = 0.B as Element of G;
       take e;
       let a be Element of G;
        reconsider x = a as Element of B;
-      thus a * e = x + 0.B by A1
+      thus a * e = x + 0.B
                 .= a by RLVECT_1:10;
       thus e * a = x + 0.B by A1
                 .= a by RLVECT_1:10;
        reconsider b = - x as Element of G;
       take b;
-      thus a * b = x + (- x) by A1
+      thus a * b = x + (- x)
                 .= e by RLVECT_1:16;
       thus b * a = x + (- x) by A1
                 .= e by RLVECT_1:16;
@@ -1321,7 +1273,7 @@ theorem
        now let a,b be Element of G;
       reconsider x = a, y = b as Element of B;
      thus a * b = y + x by A1
-               .= b * a by A1;
+               .= b * a;
     end;
    hence thesis by A2,GROUP_1:def 16;
   end;
@@ -1340,7 +1292,7 @@ theorem
              right-distributive unital (non empty doubleLoopStr);
     let n be Element of NAT;
     assume n > 0;
-    then n >= 0+1 by NAT_1:38;
+    then n >= 0+1 by NAT_1:13;
     then A1: n-1 >= 0 by XREAL_1:21;
         n = n-1+1
      .= n-'1+1 by A1,BINARITH:def 3;

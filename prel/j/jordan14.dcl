@@ -20,6 +20,8 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -50,45 +52,45 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="82">
+<Adjective nr="88">
 <Func kind="U" nr="1">
-<Func kind="K" nr="200">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="88"/>
 <Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="200">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="247">
+<Func kind="K" nr="273">
 <Num nr="2"/>
-<Func kind="K" nr="234">
+<Func kind="K" nr="260">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="33">
-<Func kind="K" nr="200">
+<Adjective nr="39">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="37">
-<Func kind="K" nr="200">
+<Adjective nr="43">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="79">
-<Func kind="K" nr="200">
+<Adjective nr="85">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -98,11 +100,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="100"/>
+<Adjective nr="106"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="200">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -113,28 +115,28 @@
 <Func kind="K" nr="65"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
-<Func kind="K" nr="200">
+<Func kind="K" nr="170">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="246">
-<Func kind="K" nr="254">
+<Func kind="K" nr="272">
+<Func kind="K" nr="280">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="34">
-<Func kind="K" nr="200">
+<Adjective nr="40">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="90">
+<Adjective nr="96">
 <Num nr="2"/>
 </Adjective>
-<Adjective nr="96">
-<Func kind="K" nr="200">
+<Adjective nr="102">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -6,12 +6,12 @@
 
 environ
 
- vocabularies BOOLE, SUBSET_1, PRE_TOPC, TOPS_1;
+ vocabularies BOOLE, SUBSET_1, PRE_TOPC, TOPS_1, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC;
- constructors SETFAM_1, MEMBERED, PRE_TOPC;
+ constructors SETFAM_1, MEMBERED, PRE_TOPC, NAT_D;
  registrations PRE_TOPC, STRUCT_0, MEMBERED;
  requirements BOOLE, SUBSET;
- definitions TARSKI, XBOOLE_0, PRE_TOPC, SUBSET_1;
+ definitions TARSKI, XBOOLE_0, PRE_TOPC, SUBSET_1, STRUCT_0;
  theorems PRE_TOPC, TARSKI, SUBSET_1, STRUCT_0, XBOOLE_0, XBOOLE_1;
 
 begin
@@ -19,17 +19,10 @@ begin
  reserve TS for 1-sorted,
          K, Q for Subset of TS;
 
-canceled;
-
-theorem
-     K \/ [#] TS = [#] TS by XBOOLE_1:12;
-
-canceled 5;
-
-theorem Th8:
+ Lm1:
  ([#]TS)` = {} TS by XBOOLE_1:37;
 
-canceled 12;
+canceled 20;
 
 theorem Th21:
  K` = Q` implies K = Q
@@ -93,7 +86,7 @@ proof
  thus ([#] GX) c= Cl([#] GX) by PRE_TOPC:48;
  end;
 
-Lm1: Cl P is closed
+Lm2: Cl P is closed
       proof
            Cl Cl P = Cl P by Th26;
        hence thesis by PRE_TOPC:52;
@@ -101,7 +94,7 @@ Lm1: Cl P is closed
 
 registration let T be TopSpace, P be Subset of T;
  cluster Cl P -> closed;
-coherence by Lm1;
+coherence by Lm2;
 end;
 
 canceled;
@@ -211,7 +204,7 @@ A1: (P`) \/ Q` = (P /\ Q)` by XBOOLE_1:54;
  hence thesis by Th30;
 end;
 
- Lm2:
+ Lm3:
  for GX being non empty 1-sorted, R being Subset of GX
  for p being Element of GX holds p in R` iff not p in R by
 XBOOLE_0:def 4;
@@ -338,7 +331,7 @@ proof
 A2: GX is non empty by A1,STRUCT_0:def 1;
        T` c= Cl T` by PRE_TOPC:48;
   then not x'' in T` by A1,XBOOLE_0:def 4;
-  hence x in T by A2,Lm2;
+  hence x in T by A2,Lm3;
  end;
 
 theorem Th45:
@@ -356,7 +349,7 @@ end;
 theorem Th47:
  Int({} GX) = {} GX
  proof
-     {} GX = ([#] GX)` by Th8
+     {} GX = ([#] GX)` by Lm1
    .= (Cl ({}GX)`)` by Th27;
  hence thesis;
  end;
@@ -584,8 +577,10 @@ end;
 theorem
  Fr T = Fr T`;
 
-theorem Th63:
+ Lm4:
  Fr T c= Cl T by XBOOLE_1:17;
+
+canceled;
 
 theorem
   Fr T = Cl(T`) /\ T \/ (Cl T \ T)
@@ -708,7 +703,7 @@ theorem
   thus thesis by A1,XBOOLE_0:def 3;
  end;
 
-Lm3: Fr K c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L)
+Lm5: Fr K c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L)
   proof
     let x; assume A1: x in Fr K;
     then reconsider x''= x as Point of TS;
@@ -766,8 +761,8 @@ theorem
   proof
    A1: Fr K \/ Fr L c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L)
      proof
-    A2: Fr K c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L) by Lm3;
-      Fr L c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L) by Lm3;
+    A2: Fr K c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L) by Lm5;
+      Fr L c= Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L) by Lm5;
    hence thesis by A2,XBOOLE_1:8;
    end;
        Fr(K \/ L) \/ Fr(K /\ L) \/ (Fr K /\ Fr L) c= Fr K \/ Fr L
@@ -842,14 +837,14 @@ A1:  (Cl T`)` \/ (Cl T)` = (Cl T /\ Cl T`)` by XBOOLE_1:54;
   hence thesis;
  end;
 
-Lm4: Fr T = Cl T \ Int T
+Lm6: Fr T = Cl T \ Int T
  proof
       Fr T = Cl T /\ (Int T)`
     .= Cl T \ Int T by SUBSET_1:32;
   hence thesis;
  end;
 
-Lm5: Cl Fr K = Fr K
+Lm7: Cl Fr K = Fr K
  proof
   A1: Cl Cl K = Cl K by Th26;
           Cl Cl K` = Cl K` by Th26;
@@ -857,7 +852,7 @@ Lm5: Cl Fr K = Fr K
   hence thesis;
  end;
 
-Lm6: Int Fr Fr K = {}
+Lm8: Int Fr Fr K = {}
  proof
    assume A1: Int Fr Fr K <> {};
    consider x' being Element of Int(Fr(Fr K));
@@ -879,13 +874,13 @@ A8:Fr K misses (Fr K)` by XBOOLE_1:79;
 theorem
   Fr Fr Fr K = Fr Fr K
  proof
- A1: Int Fr Fr K = {} by Lm6;
-       Fr Fr Fr K = Cl(Fr(Fr K)) \ Int(Fr(Fr K)) by Lm4
-         .= Fr Fr K by A1,Lm5;
+ A1: Int Fr Fr K = {} by Lm8;
+       Fr Fr Fr K = Cl(Fr(Fr K)) \ Int(Fr(Fr K)) by Lm6
+         .= Fr Fr K by A1,Lm7;
  hence thesis;
 end;
 
-Lm7: for X, Y, Z being set holds X c= Z & Y = Z \ X implies X c= Z \ Y
+Lm9: for X, Y, Z being set holds X c= Z & Y = Z \ X implies X c= Z \ Y
  proof
   let X, Y, Z be set;
  assume that A1: X c= Z and A2: Y = Z \ X;
@@ -899,11 +894,11 @@ theorem Th76:
   proof
    hereby assume P is open;
     then P = Int P by Th55;
-    hence Fr P = Cl P \ P by Lm4;
+    hence Fr P = Cl P \ P by Lm6;
    end;
    assume A1: Fr P = Cl P \ P;
 A2: Fr P misses (Fr P)` by XBOOLE_1:79;
-A3:   Fr P c= Cl P & P c= Cl P by Th63,PRE_TOPC:48;
+A3:   Fr P c= Cl P & P c= Cl P by Lm4,PRE_TOPC:48;
        Cl P \ Fr P = (P \/ Fr P) \ Fr P by Th65
        .= (Fr P)` /\ (P \/ Fr P) by SUBSET_1:32
        .= (P /\ (Fr P)`) \/ ((Fr P)` /\ (Fr P)) by XBOOLE_1:23
@@ -911,7 +906,7 @@ A3:   Fr P c= Cl P & P c= Cl P by Th63,PRE_TOPC:48;
        .= Int P \/ (Fr P /\ (Fr P)`) by Th74
        .= Int P \/ {} TS by A2,XBOOLE_0:def 7
        .= Int P;
-    then P c= Int P & Int P c= P by A1,A3,Lm7,Th44;
+    then P c= Int P & Int P c= P by A1,A3,Lm9,Th44;
    hence thesis by XBOOLE_0:def 10;
   end;
 
@@ -922,7 +917,7 @@ theorem Th77:
    proof
    assume P is closed;
    then P = Cl P by PRE_TOPC:52;
-   hence thesis by Lm4;
+   hence thesis by Lm6;
    end;
   assume A1: Fr P = P \ Int P;
 A2:(P`) misses P by XBOOLE_1:79;
@@ -1276,7 +1271,7 @@ then A1: R = Cl R by PRE_TOPC:52;
   end;
   assume A3: R = Fr R;
       A4: Int R c= R by Th44;
-       R = R \ Int R by A1,A3,Lm4;
+       R = R \ Int R by A1,A3,Lm6;
    then Int(Cl R) = {} by A1,A4,XBOOLE_1:38;
    then Cl R is boundary by Th84;
   hence thesis by Def5;
@@ -1394,11 +1389,11 @@ theorem Th104:
  proof
  assume A1: R is open_condensed;
   then A2: R = Int(Cl R) by Def8;
-  A3: Fr R = Cl R \ Int R by Lm4
+  A3: Fr R = Cl R \ Int R by Lm6
       .= Cl(Cl R) \ Int(Int(Cl R)) by A2,Th26
       .= Cl(Cl R) \ Int(Cl R) by Th45
-      .= Fr(Cl R) by Lm4;
-      Fr(Cl R) = Cl(Cl R) \ Int(Cl R) by Lm4
+      .= Fr(Cl R) by Lm6;
+      Fr(Cl R) = Cl(Cl R) \ Int(Cl R) by Lm6
       .= Cl R \ Int(Cl R) by Th26;
   hence thesis by A1,A3,Def8;
  end;
@@ -1430,7 +1425,7 @@ theorem Th106:
    end;
   assume A5: P is closed_condensed;
   then A6: Cl Int P = P by Def7;
-       Fr(Int P) = Cl(Int P) \ Int(Int P) by Lm4;
+       Fr(Int P) = Cl(Int P) \ Int(Int P) by Lm6;
    then Fr P = Cl(Int P) \ Int(Int P) by A5,Th102
        .= P \ Int P by A6,Th45;
    then P is closed by Th77;

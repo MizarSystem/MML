@@ -94,19 +94,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="138"/>
-<Adjective nr="171">
+<Adjective nr="139"/>
+<Adjective nr="172">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="201">
+<Adjective nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="211">
+<Adjective nr="212">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="213">
+<Adjective nr="214">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

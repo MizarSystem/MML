@@ -9,15 +9,15 @@ environ
  vocabularies AMISTD_3, AMI_1, TREES_2, GOBOARD5, AMI_3, RELAT_1, FINSET_1,
       FUNCT_1, AMISTD_1, SQUARE_1, WAYBEL_0, BOOLE, ORDINAL1, FINSEQ_1, CARD_1,
       CARD_3, ORDINAL2, ARYTM, PARTFUN1, TREES_1, TARSKI, WELLORD1, WELLORD2,
-      AMISTD_2, FRECHET, FINSEQ_2, CAT_1, FUNCOP_1, MEMBERED;
+      AMISTD_2, FRECHET, FINSEQ_2, CAT_1, FUNCOP_1, MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, SETFAM_1, ZFMISC_1, SUBSET_1, FINSET_1, CARD_1,
-      NUMBERS, ORDINAL1, ORDINAL2, MEMBERED, CQC_SIM1, XXREAL_0, NAT_1,
+      NUMBERS, ORDINAL1, ORDINAL2, MEMBERED, CQC_SIM1, XXREAL_0, NAT_1, NAT_D,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, WELLORD1, WELLORD2,
       FUNCOP_1, CQC_LANG, FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0,
       AMI_1, AMI_3, AMI_5, AMISTD_1, AMISTD_2;
  constructors WELLORD1, PARTFUN1, WELLORD2, DOMAIN_1, BINOP_1, XXREAL_0, NAT_1,
       MEMBERED, ORDERS_1, FINSEQ_2, REALSET1, TREES_2, CQC_SIM1, AMI_5,
-      AMISTD_2, ORDINAL2;
+      AMISTD_2, ORDINAL2, NAT_D;
  registrations AMI_1, AMISTD_1, FINSET_1, RELSET_1, TREES_2, ARYTM_3, FINSEQ_6,
       HEYTING2, NECKLACE, CARD_5, RELAT_1, FUNCOP_1, SCMFSA_4, XREAL_0, CARD_1,
       ORDINAL1, MEMBERED, FINSEQ_1, CARD_4, XXREAL_0, CARD_3, REALSET1,
@@ -29,8 +29,8 @@ environ
       TREES_2, SUBSET_1, FUNCT_2, TREES_1, FINSEQ_1, FUNCT_1, PARTFUN1,
       XBOOLE_1, RELAT_1, FINSEQ_3, FINSEQ_5, TARSKI, QC_LANG4, CARD_5,
       FINSEQ_2, XBOOLE_0, AMI_5, AMISTD_2, CQC_LANG, CARD_2, WELLORD2,
-      ENUMSET1, WELLORD1, ZFMISC_1, AMI_1, CARD_4, FINSET_1, FUNCOP_1,
-      RELSET_1, MEMBERED, ORDERS_1, XXREAL_0;
+      ENUMSET1, WELLORD1, ZFMISC_1, CARD_4, FINSET_1, FUNCOP_1, RELSET_1,
+      MEMBERED, ORDERS_1, XXREAL_0;
  schemes FRAENKEL, TREES_2, FUNCT_2, NAT_1, HILBERT2, ORDINAL2, BINOP_1;
 
 begin
@@ -76,7 +76,7 @@ proof
 A1:  dom R = {x} and
 A2:  rng R = {y};
    set g = x .--> y;
-A3: g = {[x,y]} by AMI_1:19;
+A3: g = {[x,y]} by CQC_LANG:45;
    for a, b being set holds [a,b] in R iff [a,b] in g
   proof
     let a, b be set;
@@ -136,17 +136,14 @@ proof
 end;
 end;
 
-theorem Th3:
+ Lm1:
   field R is finite implies R is finite by ORDERS_1:196;
 
 registration
   let R be infinite Relation;
   cluster field R -> infinite;
-coherence by Th3;
+coherence by Lm1;
 end;
-
-theorem
-   dom R is finite & rng R is finite implies R is finite by ORDERS_1:197;
 
 registration
   cluster RelIncl {} -> empty;
@@ -167,6 +164,8 @@ proof
   hence thesis;
 end;
 end;
+
+canceled 2;
 
 theorem Th5:
   RelIncl {x} = {[x,x]}
@@ -242,7 +241,7 @@ A1: F is_isomorphism_of R,S;
   then dom F is finite by A1,WELLORD1:def 7;
   then rng F is finite by FINSET_1:26;
   then field S is finite by A1,WELLORD1:def 7;
-  hence S is finite by Th3;
+  hence S is finite by Lm1;
 end;
 
 theorem Th10:
@@ -294,7 +293,7 @@ A1: RelIncl O is well-ordering by WELLORD2:7;
   hence thesis by A1,WELLORD2:def 2;
 end;
 
-Lm1:
+Lm2:
   for X being finite set st X c= O holds order_type_of RelIncl X is finite
 proof
   let X be finite set;
@@ -313,7 +312,7 @@ proof
   assume
 A1: X c= O;
   then A2: card X = Card order_type_of RelIncl X by CARD_5:16;
-   order_type_of RelIncl X is finite by A1,Lm1;
+   order_type_of RelIncl X is finite by A1,Lm2;
   then order_type_of RelIncl X in omega by CARD_4:7;
   hence thesis by A2,CARD_1:66;
 end;
@@ -528,7 +527,7 @@ A10: len (p^<*m*>) = len p + 1 by FINSEQ_2:19;
 A11: len (p^<*m*>) = k by A8,FINSEQ_2:69;
 A12: (p^<*m*>).len (p^<*m*>) = m by A10,FINSEQ_1:59;
    0 = k or 0 < k;
-  then 0+1 <= k by A8,FINSEQ_2:72,NAT_1:38;
+  then 0+1 <= k by A8,FINSEQ_2:72,NAT_1:13;
   then k in Seg k by FINSEQ_1:3;
   then A13: m = 0 by A8,A11,A12,FUNCOP_1:13;
 A14: len (p^<*n*>) = len (len (p^<*n*>) |-> 0) by FINSEQ_2:69;
@@ -545,7 +544,7 @@ A16:   z <= len (p^<*n*>);
     then A18: z in Seg k by A10,A11,A15,A16,FINSEQ_1:3;
     thus (len (p^<*n*>) |-> 0).z = 0 by A17,FUNCOP_1:13
       .= (p^<*m*>).z by A8,A18,FUNCOP_1:13
-      .= (p^<*n*>).z by A9,A13,NAT_1:19;
+      .= (p^<*n*>).z by A9,A13,NAT_1:3;
   end;
   then len (p^<*n*>) |-> 0 = p^<*n*> by A14,FINSEQ_1:18;
   hence p^<*n*> in X;
@@ -1191,14 +1190,14 @@ A34:   n+1 <= len w and
 A35:   w|Seg (n+1) in dom T1 and
 A36:   v|Seg (n+1) in dom T2;
     set t1 = w|Seg n;
-A37: n <= n+1 by NAT_1:29;
+A37: n <= n+1 by NAT_1:11;
     then A38: Seg n c= Seg(n+1) by FINSEQ_1:7;
     then w|Seg n = w|Seg(n+1)|Seg n by RELAT_1:103;
     then A39: w|Seg n is_a_prefix_of w|Seg(n+1) by TREES_1:def 1;
      v|Seg n = v|Seg(n+1)|Seg n by A38,RELAT_1:103;
     then A40: v|Seg n is_a_prefix_of v|Seg(n+1) by TREES_1:def 1;
 A41: (w|Seg(n+1)).len(w|Seg(n+1)) is Element of NAT by ORDINAL1:def 13;
-A42: 1 <= n+1 by NAT_1:29;
+A42: 1 <= n+1 by NAT_1:11;
     then A43: n+1 in dom w by A34,FINSEQ_3:27;
 A44: len(w|Seg(n+1)) = n+1 by A34,FINSEQ_1:21;
     then len(w|Seg(n+1)) in Seg(n+1) by A42,FINSEQ_1:3;
@@ -1267,14 +1266,14 @@ A64:   n+1 <= len w and
 A65:   w|Seg (n+1) in dom T1 and
 A66:   v|Seg (n+1) in dom T2;
     set t1 = w|Seg n;
-A67: n <= n+1 by NAT_1:29;
+A67: n <= n+1 by NAT_1:11;
     then A68: Seg n c= Seg(n+1) by FINSEQ_1:7;
     then w|Seg n = w|Seg(n+1)|Seg n by RELAT_1:103;
     then A69: w|Seg n is_a_prefix_of w|Seg(n+1) by TREES_1:def 1;
      v|Seg n = v|Seg(n+1)|Seg n by A68,RELAT_1:103;
     then A70: v|Seg n is_a_prefix_of v|Seg(n+1) by TREES_1:def 1;
 A71: (w|Seg(n+1)).len(w|Seg(n+1)) is Element of NAT by ORDINAL1:def 13;
-A72: 1 <= n+1 by NAT_1:29;
+A72: 1 <= n+1 by NAT_1:11;
     then A73: n+1 in dom w by A64,FINSEQ_3:27;
 A74: len(w|Seg(n+1)) = n+1 by A64,FINSEQ_1:21;
     then len(w|Seg(n+1)) in Seg(n+1) by A72,FINSEQ_1:3;
@@ -1331,12 +1330,12 @@ A88:   P[n] and
 A89:   n+1 <= len p and
 A90:   p|Seg (n+1) in dom T1;
     set t1 = p|Seg n;
-A91: n <= n+1 by NAT_1:29;
+A91: n <= n+1 by NAT_1:11;
     then Seg n c= Seg(n+1) by FINSEQ_1:7;
     then p|Seg n = p|Seg(n+1)|Seg n by RELAT_1:103;
     then A92: p|Seg n is_a_prefix_of p|Seg(n+1) by TREES_1:def 1;
 A93: (p|Seg(n+1)).len(p|Seg(n+1)) is Element of NAT by ORDINAL1:def 13;
-A94: 1 <= n+1 by NAT_1:29;
+A94: 1 <= n+1 by NAT_1:11;
     then A95: n+1 in dom p by A89,FINSEQ_3:27;
 A96: len(p|Seg(n+1)) = n+1 by A89,FINSEQ_1:21;
     then len(p|Seg(n+1)) in Seg(n+1) by A94,FINSEQ_1:3;
@@ -1476,7 +1475,7 @@ A34:     pi(M,E.t0) = M.(E.t0) by A32,AMI_5:def 5;
 ;
 A36:     t1.(n+1) is Element of NAT by ORDINAL1:def 13;
 A37:     dom E-level n = {f0} by A24,Th20;
-         n <= n+1 by NAT_1:29;
+         n <= n+1 by NAT_1:11;
         then Seg n c= Seg(n+1) by FINSEQ_1:7;
         then Seg n c= dom t1 by A28,FINSEQ_1:def 3;
         then dom t0 = Seg n by RELAT_1:91;

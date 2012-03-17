@@ -8,12 +8,12 @@ environ
 
  vocabularies FUNCT_1, FUNCT_2, CARD_3, FINSEQ_1, RELAT_1, FINSEQ_2, FUNCOP_1,
       PROB_1, TARSKI, FUNCT_5, BOOLE, PARTFUN1, SETFAM_1, FINSEQ_4, MCART_1,
-      FUNCT_6, PRALG_2, PRALG_1;
+      FUNCT_6, PRALG_2, PRALG_1, NAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1,
       FUNCT_1, MCART_1, FINSEQ_1, SETFAM_1, FUNCT_2, BINOP_1, PARTFUN1,
       FUNCT_3, WELLORD2, FUNCOP_1, FINSEQ_2, FUNCT_4, FUNCT_5, CARD_3;
  constructors ENUMSET1, SETFAM_1, PARTFUN1, WELLORD2, FUNCT_3, BINOP_1,
-      FUNCOP_1, FUNCT_4, FUNCT_5, FINSEQ_2, CARD_3;
+      FUNCOP_1, FUNCT_4, FUNCT_5, FINSEQ_2, CARD_3, NAT_D;
  registrations SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSEQ_1, RELSET_1,
       ARYTM_3, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -205,10 +205,11 @@ then A2:  dom ~([:X,Y:] --> z) = [:Y,X:] by FUNCT_4:47;
 A3:    x in [:Y,X:];
      then consider y1,y2 such that
 A4:    x = [y2,y1] & [y1,y2] in [:X,Y:] by A1,A2,FUNCT_4:def 2;
-         ([:X,Y:] --> z).[y1,y2] = z & ([:Y,X:] --> z).x = z by A3,A4,
-FUNCOP_1:13
-;
-     hence (~([:X,Y:] --> z)).x = ([:Y,X:] --> z).x by A1,A4,FUNCT_4:def 2;
+      ([:X,Y:] --> z).(y1,y2) = z & ([:Y,X:] --> z).(y2,y1) = z
+                        by A3,A4,FUNCOP_1:13;
+      then (~([:X,Y:] --> z)).(y2,y1) = ([:Y,X:] --> z).(y2,y1)
+                       by A1,A4,FUNCT_4:def 2;
+     hence (~([:X,Y:] --> z)).x = ([:Y,X:] --> z).x by A4;
     end;
    hence thesis by A1,A2,FUNCT_1:9;
   end;
@@ -295,9 +296,9 @@ A13:       a = [x,y] & x in dom f & g = f.x & y in dom g by FUNCT_5:def 4;
          a in dom ~~uncurry f;
      then consider x,y such that
 A14:   a = [y,x] & [x,y] in dom ~uncurry f by FUNCT_4:def 2;
-         (~uncurry f).(x,y) = (uncurry f).a &
-      (~uncurry f).(x,y) = (~~uncurry f).a by A14,FUNCT_4:44,def 2;
-     hence (uncurry f).a = (~~uncurry f).a;
+         (~uncurry f).(x,y) = (uncurry f).(y,x) &
+      (~uncurry f).(x,y) = (~~uncurry f).(y,x) by A14,FUNCT_4:44,def 2;
+     hence (uncurry f).a = (~~uncurry f).a by A14;
     end;
    hence thesis by A10,A11,FUNCT_1:9;
   end;
@@ -854,8 +855,7 @@ A3:  for y st y in dom f holds x in f.y;
    hence thesis by A1,SETFAM_1:def 1;
   end;
 
-theorem
-    meet {} = {} by SETFAM_1:2;
+canceled;
 
 theorem
  Th39: Union <*X*> = X & meet <*X*> = X
@@ -909,8 +909,9 @@ theorem
    correctness;
  end;
 
-theorem
- Th44: x in dom f & g = f.x & y in dom g implies f..(x,y) = g.y by FUNCT_5:45;
+ Lm2: x in dom f & g = f.x & y in dom g implies f..(x,y) = g.y by FUNCT_5:45;
+
+canceled;
 
 theorem
     x in dom f implies
@@ -921,7 +922,7 @@ theorem
     dom <*f,g*> = Seg 2 & dom <*f,g,h*> = Seg 3
      by ENUMSET1:def 1
 ,FINSEQ_1:4,61,62,def 8,FINSEQ_3:1,29,30,TARSKI:def 1,def 2;
-   hence thesis by Th44;
+   hence thesis by Lm2;
   end;
 
 theorem
@@ -930,7 +931,7 @@ theorem
        <*f,g*>.2 = g & <*f,g,h*>.2 = g & 2 in Seg 2 & 2 in Seg 3 &
     dom <*f,g*> = Seg 2 & dom <*f,g,h*> = Seg 3
      by ENUMSET1:def 1,FINSEQ_1:4,61,62,FINSEQ_3:1,29,30,TARSKI:def 2;
-   hence thesis by Th44;
+   hence thesis by Lm2;
   end;
 
 theorem
@@ -938,14 +939,14 @@ theorem
   proof
        <*f,g,h*>.3 = h & 3 in Seg 3 & dom <*f,g,h*> = Seg 3
      by ENUMSET1:def 1,FINSEQ_1:62,FINSEQ_3:1,30;
-   hence thesis by Th44;
+   hence thesis by Lm2;
   end;
 
 theorem
     x in X & y in dom f implies (X --> f)..(x,y) = f.y
   proof
        dom (X --> f) = X & (x in X implies (X --> f).x = f) by FUNCOP_1:13,19;
-   hence thesis by Th44;
+   hence thesis by Lm2;
   end;
 
 begin
@@ -1129,8 +1130,8 @@ A1:  x in dom f & f.x is Function & y in dom <:f:>;
 then A2:  y in dom g & dom h = f"SubFuncs rng f & g in SubFuncs rng f
      by A1,Def1,Th51,Th52;
 then A3:  x in dom h by A1,FUNCT_1:def 13;
-   thus f..(x,y) = g.y by A1,A2,Th44 .= h.x by A1,Th54 .= <:f:>..(y,x) by A1,A3
-,Th44;
+   thus f..(x,y) = g.y by A1,A2,Lm2 .= h.x by A1,Th54 .= <:f:>..(y,x) by A1,A3
+,Lm2;
   end;
 
  definition let f be Function;
@@ -1208,11 +1209,11 @@ A2:  (Frege f).g = h & dom h = f"SubFuncs rng f &
      for x st x in dom h holds h.x = (uncurry f).(x,g.x) by Def7;
 A3:  dom g = dom doms f & dom doms f = f"SubFuncs rng f &
      dom Frege f = product doms f by A1,Def2,Def7,CARD_3:18;
-   hence (Frege f)..(g,x) = h.x by A1,A2,Th44
+   hence (Frege f)..(g,x) = h.x by A1,A2,Lm2
                      .= f..(x,g.x) by A1,A2,A3;
   end;
 
- Lm2: rng Frege f c= product rngs f
+ Lm3: rng Frege f c= product rngs f
   proof let x; assume x in rng Frege f;
    then consider y such that
 A1:  y in dom Frege f & x = (Frege f).y by FUNCT_1:def 5;
@@ -1252,12 +1253,12 @@ A4:  dom doms f = f"SubFuncs rng f & (doms f).x = dom g & x in f"SubFuncs rng f
 A5:  h.x in dom g by A3;
    thus h'.x = (uncurry f).(x,h.x) by A1,A2,A4 .= g.(h.x) by A1,A5,FUNCT_5:45;
        dom Frege f = product doms f by Def7;
-    then h' in rng Frege f & rng Frege f c= product rngs f by A1,Lm2,
+    then h' in rng Frege f & rng Frege f c= product rngs f by A1,Lm3,
 FUNCT_1:def 5;
    hence h' in product rngs f;
   end;
 
- Lm3: product rngs f c= rng Frege f
+ Lm4: product rngs f c= rng Frege f
   proof let x; assume x in product rngs f;
    then consider g such that
 A1:  x = g & dom g = dom rngs f & for y st y in dom rngs f holds g.y in
@@ -1329,7 +1330,7 @@ theorem
  Th58: rng Frege f = product rngs f
   proof
    thus rng Frege f c= product rngs f & product rngs f c= rng Frege f
-      by Lm2,Lm3;
+      by Lm3,Lm4;
   end;
 
 theorem
@@ -1901,7 +1902,7 @@ A1:  dom Funcs(X --> Y, Z) = dom (X --> Y) & X = dom (X --> Y)
    hence thesis by A1,FUNCOP_1:17;
   end;
 
- Lm4: [x,y] in dom f & g = (curry f).x & z in dom g implies [x,z] in dom f
+ Lm5: [x,y] in dom f & g = (curry f).x & z in dom g implies [x,z] in dom f
   proof assume [x,y] in dom f;
     then x in proj1 dom f by FUNCT_5:def 1;
  then A1:   ex g' being Function st
@@ -2097,7 +2098,7 @@ A48:     dom j = dom v
          proof
           thus dom j c= dom v
             proof let b be set; assume b in dom j;
-              then [z,b] in dom uncurry s by A46,A47,Lm4;
+              then [z,b] in dom uncurry s by A46,A47,Lm5;
              then consider a1 being set, g1 being Function, a2 being set such
 that
 A49:           [z,b] = [a1,a2] & a1 in dom s & g1 = s.a1 & a2 in dom g1
@@ -2110,7 +2111,7 @@ A49:           [z,b] = [a1,a2] & a1 in dom s & g1 = s.a1 & a2 in dom g1
           hence thesis by A46,FUNCT_5:27;
          end;
            now let b be set; assume b in f.z;
-then A50:       [z,b] in dom uncurry s by A42,A46,A47,A48,Lm4;
+then A50:       [z,b] in dom uncurry s by A42,A46,A47,A48,Lm5;
          then consider a1 being set, g1 being Function, a2 being set such that
 A51:       [z,b] = [a1,a2] & a1 in dom s & g1 = s.a1 & a2 in dom g1
            by FUNCT_5:def 4;
@@ -2150,7 +2151,7 @@ A2:   dom f2 = dom f & for x st x in dom f holds f2.x = Funcs(X,f.x);
     end;
  end;
 
- Lm5: f <> {} & X <> {} implies
+ Lm6: f <> {} & X <> {} implies
  product Funcs(X,f),Funcs(X,product f) are_equipotent
   proof assume
 A1: f <> {} & X <> {};
@@ -2375,7 +2376,7 @@ A1:  dom Funcs(X, Y --> Z) = dom (Y --> Z) & Y = dom (Y --> Z)
 theorem
     product Funcs(X,f),Funcs(X, product f) are_equipotent
   proof
-A1: X <> {} & f <> {} implies thesis by Lm5;
+A1: X <> {} & f <> {} implies thesis by Lm6;
 A2: product Funcs({},f) = product (dom f --> {{}}) by Th78
                       .= Funcs(dom f, {{}}) by CARD_3:20
                       .= {dom f --> {}} by FUNCT_5:66;
@@ -2504,11 +2505,11 @@ A14: for y st y in B holds h.y = g.y
  hence thesis by A2,A5,FUNCT_1:9;
  end;
 
-Lm6:
+Lm7:
 dom f = {} implies commute f = {} by RELAT_1:64,FUNCT_5:49,50;
 
 theorem
-commute {} = {} by Lm6,RELAT_1:60;
+commute {} = {} by Lm7,RELAT_1:60;
 
 :: from EXTENS_1
 

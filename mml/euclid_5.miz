@@ -7,15 +7,15 @@
 environ
 
  vocabularies PRE_TOPC, ARYTM, FINSEQ_1, FINSEQ_2, EUCLID, EUCLID_2, RLVECT_1,
-      RVSUM_1, ARYTM_1, RELAT_1, FUNCT_1, MCART_1, EUCLID_5, VECTSP_1;
+      RVSUM_1, ARYTM_1, RELAT_1, FUNCT_1, MCART_1, EUCLID_5, VECTSP_1, NAT_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1, FUNCT_1, BINOP_1,
       BINOP_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP, PRE_TOPC,
       RVSUM_1, EUCLID, STRUCT_0, EUCLID_2;
  constructors XXREAL_0, REAL_1, BINOP_2, FINSEQOP, SEQ_1, FINSEQ_4, SETWOP_2,
-      EUCLID_2;
- registrations XREAL_0, RELSET_1, ARYTM_3, MEMBERED;
+      EUCLID_2, NAT_D;
+ registrations XREAL_0, RELSET_1, ARYTM_3, MEMBERED, SEQ_1, EUCLID;
  requirements REAL, SUBSET, NUMERALS, ARITHM;
- theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2;
+ theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, EUCLID_2, BINOP_2, SEQ_1;
 
 begin
 
@@ -23,8 +23,6 @@ reserve
 
   x,y,z for Real,
   x3,y3 for Element of REAL,
-
-
   p for Point of TOP-REAL 3;
 
 theorem Th1: ex x, y, z st p= <* x, y, z *>
@@ -132,7 +130,7 @@ A3: p`2 = f.2 by Def2
 
 theorem Th4: 0.REAL 3 = |[ 0,0,0 ]|
   proof
-A1: 0.REAL 3 = 0*3 by EUCLID:def 9
+A1: 0.REAL 3 = 0*3
             .= 3 |-> 0 by EUCLID:def 4
             .= <* 0, 0, 0 *> by FINSEQ_2:76;
     then A2: (0.REAL 3)`1 = <* 0, 0, 0 *>.1 by Def1
@@ -150,7 +148,7 @@ reserve p1,p2,p3,p4 for Point of TOP-REAL 3,
 theorem Th5: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]|
   proof
     reconsider p1'=p1, p2'=p2 as Element of REAL 3 by EUCLID:25;
-A1: p1 + p2 = p1' + p2' by EUCLID:def 10;
+A1: p1 + p2 = p1' + p2';
     then len(p1'+p2') = 3 by EUCLID:28;
     then A2:   dom(p1'+p2') = Seg 3 by FINSEQ_1:def 3;
 then A3:   1 in dom(p1'+p2') by FINSEQ_1:3;
@@ -158,15 +156,15 @@ A4: 2 in dom(p1'+p2') by A2,FINSEQ_1:3;
 A5:   3 in dom(p1'+p2') by A2,FINSEQ_1:3;
 A6: p1`1 = p1'.1 & p2`1 = p2'.1 by Def1;
 A7: (p1+p2)`1 = (p1' + p2').1 by A1,Def1
-             .= p1`1 + p2`1 by A3,A6,RVSUM_1:26;
+             .= p1`1 + p2`1 by A3,A6,SEQ_1:def 3;
 A8: p1`2 = p1'.2 &
     p2`2 = p2'.2 by Def2;
 A9: (p1+p2)`2 = (p1' + p2').2 by A1,Def2
-             .= p1`2 + p2`2 by A4,A8,RVSUM_1:26;
+             .= p1`2 + p2`2 by A4,A8,SEQ_1:def 3;
 A10: p1`3 = p1'.3 &
     p2`3 = p2'.3 by Def3;
      (p1+p2)`3 = (p1' + p2').3 by A1,Def3
-             .= p1`3 + p2`3 by A5,A10,RVSUM_1:26;
+             .= p1`3 + p2`3 by A5,A10,SEQ_1:def 3;
     hence p1 + p2 =
           |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]| by A7,A9,Th3;
  end;
@@ -182,7 +180,7 @@ theorem Th6: |[x1,y1,z1]| + |[x2,y2,z2]| = |[x1+x2, y1+y2, z1+z2]|
 theorem Th7: x*p = |[ x*p`1, x*p`2, x*p`3]|
   proof
     reconsider p1=p as Element of REAL 3 by EUCLID:25;
-A1: x*p = x*p1 by EUCLID:def 11;
+A1: x*p = x*p1;
 A2: p`1 = p1.1 & p`2 = p1.2 & p`3 = p1.3 by Def1,Def2,Def3;
 A3: (x*p)`1 = (x*p1).1 by A1,Def1
            .= x*(p`1) by A2,RVSUM_1:66;
@@ -463,8 +461,8 @@ end;
 theorem Th29:
   |(p1,p2)| = p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3
 proof
-  consider f1, f2 being FinSequence of REAL such that
-  A1: f1 = p1 & f2 = p2 & |(p1,p2)| = |(f1,f2)| by EUCLID_2:def 2;
+  reconsider f1=p1, f2=p2 as FinSequence of REAL by EUCLID:27;
+A1: |(p1,p2)| = |(f1,f2)|;
   A2: len f1 = len <* p1`1, p1`2, p1`3 *> by A1,Th27
   .= 3 by FINSEQ_1:62;
   A3: len f2 = len <* p2`1, p2`2, p2`3 *> by A1,Th27

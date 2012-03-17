@@ -8,13 +8,13 @@ environ
 
  vocabularies FINSEQ_1, RELAT_1, TREES_1, ZFMISC_1, FUNCT_1, TREES_2, FINSET_1,
       TREES_4, BOOLE, TREES_9, ORDINAL1, CARD_1, MCART_1, ORDERS_1, TARSKI,
-      QC_LANG1, ZF_LANG, QC_LANG4;
+      QC_LANG1, ZF_LANG, QC_LANG4, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
-      RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1,
-      TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
+      NAT_D, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FINSET_1, FINSEQ_1, FINSEQ_4,
+      CARD_1, TREES_1, TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1,
       XXREAL_0;
  constructors XXREAL_0, XREAL_0, NAT_1, QC_LANG2, FINSEQ_4, TREES_4, TREES_9,
-      BINOP_1;
+      BINOP_1, NAT_D;
  registrations SUBSET_1, TREES_1, TREES_2, TREES_9, RELSET_1, TREES_A,
       FINSET_1, FINSEQ_1, NAT_1, ORDINAL2, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -50,7 +50,7 @@ proof let D be non empty set, r be FinSequence of D, r1,r2 be FinSequence,
     k be Element of NAT;
      assume A1: k+1 <= len r & r1 = r|Seg (k+1) & r2 = r|Seg k;
 then A2:len r1 = k+1 by FINSEQ_1:21;
-     k < len r by A1,NAT_1:38;
+     k < len r by A1,NAT_1:13;
 then A3:len r2 = k by A1,FINSEQ_1:21;
      r1 is_a_prefix_of r by A1,TREES_1:def 1;
   then consider q1 being FinSequence such that A4: r = r1^q1 by TREES_1:8;
@@ -158,8 +158,8 @@ proof
     t^<*n*> in succ t by A1;
     then n < card succ t by TREES_9:7;
 then A2:  n < len (t succ) by TREES_9:def 5;
-       0 <= n by NAT_1:18; then 0+1 <= n+1 by XREAL_1:8;
-    then 1 <= n+1 & n+1 <= len (t succ) by A2,NAT_1:38;
+       0 <= n by NAT_1:2; then 0+1 <= n+1 by XREAL_1:8;
+    then 1 <= n+1 & n+1 <= len (t succ) by A2,NAT_1:13;
     then n+1 in Seg len (t succ) by FINSEQ_1:3;
     hence n+1 in dom (t succ) by FINSEQ_1:def 3;
   end;
@@ -167,7 +167,7 @@ then A2:  n < len (t succ) by TREES_9:def 5;
   assume n+1 in dom (t succ);
   then n+1 in Seg len (t succ) by FINSEQ_1:def 3;
   then 1 <= n+1 & n+1 <= len (t succ) by FINSEQ_1:3;
-  then n < len (t succ) by NAT_1:38;
+  then n < len (t succ) by NAT_1:13;
   then n < card succ t by TREES_9:def 5;
 then t^<*n*> in succ t by TREES_9:7;
   hence t^<*n*> in dom T;
@@ -185,7 +185,7 @@ A3:n+1 in dom (q succ) by A1,A2,Th12;
 then A4:n+1 in dom (T*(q succ)) by Th10;
      n+1 in Seg len (q succ) by A3,FINSEQ_1:def 3;
   then 1 <= n+1 & n+1 <= len (q succ) by FINSEQ_1:3;
-then A5:n < len (q succ) by NAT_1:38;
+then A5:n < len (q succ) by NAT_1:13;
      succ(T,x).(n+1) = T.((q succ).(n+1)) by A2,A4,FUNCT_1:22
                  .= T.(x^<*n*>) by A2,A5,TREES_9:def 5;
   hence T.(x^<*n*>) = succ(T,x).(n+1);
@@ -215,7 +215,7 @@ A1:  n' in dom succ(T,x) & y' = (succ(T,x)).n' by FUNCT_1:def 5;
   then consider m' being Element of NAT such that
   A3: n' = m' & 1 <= m' & m' <= k by A1,A2;
      m' <> 0 by A3;
-  then consider n being Nat such that A4: n+1 = m' by NAT_1:22;
+  then consider n being Nat such that A4: n+1 = m' by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
      n+1 in dom (x succ) by A1,A3,A4,Th11;
 then x^<*n*> in dom T by Th12;
@@ -245,7 +245,7 @@ proof
          hence ex y st P[x,y];
          end;
          suppose len G(x) <> 0;
-           then consider m being Nat such that A3: m+1 = len G(x) by NAT_1:22;
+           then consider m being Nat such that A3: m+1 = len G(x) by NAT_1:6;
            reconsider m as Element of NAT by ORDINAL1:def 13;
               ex y st y = {0} \/ Seg m;
          hence ex y st P[x,y] by A3;
@@ -265,11 +265,11 @@ A8:     m+1 = len G(x) & F.x = {0} \/ Seg m by A4,A6;
             0 <= k & k <= m
            proof per cases by A7,A8,XBOOLE_0:def 2;
              suppose k in {0}; then k = 0 by TARSKI:def 1;
-             hence thesis by NAT_1:18;
+             hence thesis by NAT_1:2;
              end;
              suppose k in
  Seg m; then 0+1 <= k & k <= m by FINSEQ_1:3;
-             hence thesis by NAT_1:38;
+             hence thesis by NAT_1:13;
            end;
            end; then 0+1 <= k+1 & k+1 <= m+1 by XREAL_1:8;
          hence k+1 in Seg len G(x) by A8,FINSEQ_1:3;
@@ -283,8 +283,8 @@ A8:     m+1 = len G(x) & F.x = {0} \/ Seg m by A4,A6;
              suppose k = 0; then k in {0} by TARSKI:def 1;
              hence thesis by XBOOLE_0:def 2;
              end;
-             suppose k <> 0; then 0 < k by NAT_1:19;
-then A11:            0+1 <= k by NAT_1:38;
+             suppose k <> 0; then 0 < k by NAT_1:3;
+then A11:            0+1 <= k by NAT_1:13;
                   1 <= k+1 & k+1 <= len G(x) by A9,FINSEQ_1:3;
                then 1 <= k & k <= m by A10,A11,XREAL_1:8;
                then k in Seg m by FINSEQ_1:3;
@@ -356,7 +356,7 @@ A28:for n,x,m st m+1 = len G(x) & x in D() holds n in F(x) iff 0 <= n & n <= m
         A32: m = k by A29,A31;
         per cases by A30,A31,A32,XBOOLE_0:def 2;
           suppose n in {0}; then n = 0 by TARSKI:def 1;
-          hence 0 <= n & n <= m by NAT_1:18;
+          hence 0 <= n & n <= m by NAT_1:2;
           end;
           suppose n in Seg m;
         then 1 <= n & n <= m by FINSEQ_1:3;
@@ -373,7 +373,7 @@ A33:    0 <= n & n <= m;
           suppose n = 0; then n in {0} by TARSKI:def 1;
           hence n in F(x) by A34,XBOOLE_0:def 2;
           end;
-          suppose n <> 0; then 0 < n by NAT_1:19; then 0+1 <= n by NAT_1:38;
+          suppose n <> 0; then 0 < n by NAT_1:3; then 0+1 <= n by NAT_1:13;
           then n in Seg m by A33,FINSEQ_1:3;
           hence n in F(x) by A34,A35,XBOOLE_0:def 2;
       end;
@@ -385,7 +385,7 @@ A36: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in
        then len G(d) <> 0 & ex m st m+1 = len G(d) & F.d = {0} \/ Seg m by A4;
        then consider m such that A38: m+1 = len G(d);
           0 <= k2 & k2 <= m by A28,A37,A38;
-       then 0 <= k1 & k1 <= m by A37,XXREAL_0:2,NAT_1:18;
+       then 0 <= k1 & k1 <= m by A37,XXREAL_0:2,NAT_1:2;
        hence k1 in F(d) by A28,A38;
      end;
    consider T being DecoratedTree of D() such that
@@ -404,7 +404,7 @@ A40:         succ t = { t^<*k*>: k in F(T.t)} by A39;
            A42: for k st k in Seg len G(T.t) ex x st P[k,x]
              proof let k; assume k in Seg len G(T.t);
                then k <> 0 by FINSEQ_1:3;
-               then consider m being Nat such that A43: m+1 = k by NAT_1:22;
+               then consider m being Nat such that A43: m+1 = k by NAT_1:6;
                reconsider m as Element of NAT by ORDINAL1:def 13;
                consider x such that A44: x = t^<*m*>;
                thus ex x st P[k,x] by A43,A44;
@@ -440,7 +440,7 @@ A50:                 m in dom L & y = L.m by FUNCT_1:def 5;
                  reconsider m as Element of NAT by A50;
 A51:              1 <= m & m <= len G(T.t) by A45,A50,FINSEQ_1:3;
                     m <> 0 by A45,A50,FINSEQ_1:3;
-                 then consider k being Nat such that A52: k+1 = m by NAT_1:22;
+                 then consider k being Nat such that A52: k+1 = m by NAT_1:6;
                  reconsider k as Element of NAT by ORDINAL1:def 13;
                     y = t^<*k*> & k in F(T.t) by A5,A45,A46,A50,A51,A52;
                  hence y in succ t by A40;
@@ -469,7 +469,7 @@ A59:            Seg len G(w) = { k : 1 <= k & k <=
                then consider m such that A60: n' = m & 1 <= m & m <=
  len G(w) by A55,A58;
                   0 <> m by A60;
-               then consider n being Nat such that A61: m = n+1 by NAT_1:22;
+               then consider n being Nat such that A61: m = n+1 by NAT_1:6;
                reconsider n as Element of NAT by ORDINAL1:def 13;
                   n+1 in Seg len G(w) by A59,A60,A61;
                then t^<*n*> in succ t by A57;
@@ -482,7 +482,7 @@ A63:            Seg len (t succ) = { k : 1 <= k & k <= len (t succ)}
                then consider m such that A64: n' = m & 1 <= m & m <=
  len (t succ) by A56,A62;
                   0 <> m by A64;
-               then consider n being Nat such that A65: m = n+1 by NAT_1:22;
+               then consider n being Nat such that A65: m = n+1 by NAT_1:6;
                reconsider n as Element of NAT by ORDINAL1:def 13;
                   n+1 in dom (t succ) by A56,A63,A64,A65;
 then A66:            t^<*n*> in dom T by Th12;
@@ -501,7 +501,7 @@ A67:             t^<*k*> = t^<*n*> & k+1 in Seg len G(w) by A57;
             Seg len G(w) = { k : 1 <= k & k <= len G(w)} by FINSEQ_1:def 1;
          then consider k such that A70: m = k & 1 <= k & k <= len G(w) by A69;
             0 <> k by A70;
-         then consider n being Nat such that A71: m = n+1 by A70,NAT_1:22;
+         then consider n being Nat such that A71: m = n+1 by A70,NAT_1:6;
          reconsider n as Element of NAT by ORDINAL1:def 13;
             n+1 in dom (t succ) by A68,A71,Th11;
 then A72:       t^<*n*> in dom T by Th12;
@@ -514,7 +514,7 @@ then A74:       0 <= n & n <= l by XREAL_1:8;
              suppose n = 0; then n in {0} by TARSKI:def 1;
              hence thesis by XBOOLE_0:def 2;
              end;
-             suppose n <> 0; then 0 < n by NAT_1:19; then 0+1 <= n by NAT_1:38;
+             suppose n <> 0; then 0 < n by NAT_1:3; then 0+1 <= n by NAT_1:13;
              then n in Seg l by A74,FINSEQ_1:3;
              hence thesis by XBOOLE_0:def 2;
            end;
@@ -704,7 +704,7 @@ A15:X is finite
       A17: for k st k in Seg(n+1) ex x st P[k,x]
         proof let k; assume k in Seg(n+1);
           then 0 <> k by FINSEQ_1:3;
-          then consider l being Nat such that A18: k = l+1 by NAT_1:22;
+          then consider l being Nat such that A18: k = l+1 by NAT_1:6;
           reconsider l as Element of NAT by ORDINAL1:def 13;
           consider x such that A19: x = F(l);
           thus ex x st P[k,x] by A18,A19;
@@ -728,8 +728,8 @@ A21:    dom p = Seg (n+1) & for k st k+1 in Seg (n+1) holds p.(k+1) = F(k)
 FUNCT_1:def 5;
                  dom p = { k : 1 <= k & k <= n+1 } by A21,FINSEQ_1:def 1;
               then consider k such that A23: x = k & 1 <= k & k <= n+1 by A22;
-                 0+1 <= k by A23; then 0 < k by NAT_1:38;
-              then consider m being Nat such that A24: m+1 = k by NAT_1:22;
+                 0+1 <= k by A23; then 0 < k by NAT_1:13;
+              then consider m being Nat such that A24: m+1 = k by NAT_1:6;
               reconsider m as Element of NAT by ORDINAL1:def 13;
                  m+1 in Seg (n+1) by A23,A24,FINSEQ_1:3;
 then A25:           p.(m+1) = F(m) by A21;
@@ -739,7 +739,7 @@ then A25:           p.(m+1) = F(m) by A21;
           thus X c= rng p
             proof let y; assume y in X;
               then consider m such that A26: y = F(m) & m <= n;
-                 0 <= m by NAT_1:18; then 0+1 <= m+1 by XREAL_1:8;
+                 0 <= m by NAT_1:2; then 0+1 <= m+1 by XREAL_1:8;
               then 1 <= m+1 & m+1 <= n+1 by A26,XREAL_1:8;
 then A27:           m+1 in Seg (n+1) by FINSEQ_1:3;
                then p.(m+1) = F(m) by A21;
@@ -846,10 +846,10 @@ A1:  t'' in B & t is_a_proper_prefix_of t'' by Th23;
     proof
       len t < len t'' by A1,TREES_1:24;
       then consider m being Nat such that A4: (len t) + m = len t''
-      by NAT_1:28;
+      by NAT_1:10;
          m <> 0 by A1,A4,TREES_1:24;
-      then 0 < m by NAT_1:19;
-then A5:    0+1 <= m by NAT_1:38;
+      then 0 < m by NAT_1:3;
+then A5:    0+1 <= m by NAT_1:13;
          len t'' = (len t) + len r by A2,FINSEQ_1:35;
       hence thesis by A4,A5;
     end;
@@ -875,7 +875,7 @@ A2:for m,k st m <= k holds f.k qua Element of NAT <= f.m qua Element of NAT
        for m st m <= $1
         holds f.$1 qua Element of NAT <= f.m qua Element of NAT;
       A4: P[0]
-        proof let m such that A5: m <= 0;  0 <= m by NAT_1:18;
+        proof let m such that A5: m <= 0;  0 <= m by NAT_1:2;
           hence f.0 qua Element of NAT <= f.m qua Element of NAT
            by A5,XXREAL_0:1;
         end;
@@ -884,7 +884,7 @@ A2:for m,k st m <= k holds f.k qua Element of NAT <= f.m qua Element of NAT
              now let m;
            assume
 A8:         m <= k+1;
-            per cases by A8,NAT_1:26;
+            per cases by A8,NAT_1:8;
               suppose A9: m <= k;
               reconsider fk = f.k, fm = f.m, fk1 = f.(k+1) as Element of NAT;
 A10:            fk <= fm by A7,A9;
@@ -1411,7 +1411,7 @@ A2:  1 <= n & len L = n & L.1 = H & L.n = G &
   A3: ex k st P[k]
     proof
       A4: 0 <> n by A2;
-      then consider k being Nat such that A5: k+1 = n by NAT_1:22;
+      then consider k being Nat such that A5: k+1 = n by NAT_1:6;
       reconsider k as Element of NAT by ORDINAL1:def 13;
 A6:  k+1 = n by A5;
 A7:   Seg n = dom L by A2,FINSEQ_1:def 3;
@@ -1422,20 +1422,20 @@ A7:   Seg n = dom L by A2,FINSEQ_1:def 3;
     proof
       let k; assume A9: k <> 0 & P[k];
 then A10:    0 < k & ex G' st G' = L.(k+1) & k+1 in dom L &
-        G' in rng tree_of_subformulae(F) by NAT_1:19;
+        G' in rng tree_of_subformulae(F) by NAT_1:3;
       consider G' such that A11: G' = L.(k+1) & k+1 in dom L &
         G' in rng tree_of_subformulae(F) by A9;
-      consider m being Nat such that A12: m+1 = k by A9,NAT_1:22;
+      consider m being Nat such that A12: m+1 = k by A9,NAT_1:6;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-A13:    m < k by A12,NAT_1:38;
-A14:   0+1 <= k by A10,NAT_1:38;
+A13:    m < k by A12,NAT_1:13;
+A14:   0+1 <= k by A10,NAT_1:13;
       A15: Seg len L = dom L by FINSEQ_1:def 3; A16: Seg n = dom L by A2,
 FINSEQ_1:def 3;
       A17: 1 <= k+1 & k+1 <= n by A2,A9,A15,FINSEQ_1:3;
-then 1 <= k & k < n by A14,NAT_1:38;
+then 1 <= k & k < n by A14,NAT_1:13;
       then consider H1,G1 being Element of QC-WFF such that
 A18:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2;
-         1 <= k & k <= n by A14,A17,NAT_1:38;
+         1 <= k & k <= n by A14,A17,NAT_1:13;
 then A19:   k in dom L by A16,FINSEQ_1:3;
          H1 in rng tree_of_subformulae(F) by A11,A18,Th37;
       hence ex m st m < k & P[m] by A12,A13,A18,A19;
@@ -1525,8 +1525,8 @@ proof
   then consider r being FinSequence such that A1: t' = t^r by TREES_1:8;
   reconsider r as FinSequence of NAT by A1,FINSEQ_1:50;
   consider n such that A2: n = len r;
-         0 < n+1 by NAT_1:19;
-      then A3: 0+1 <= n+1 by NAT_1:38;
+         0 < n+1 by NAT_1:3;
+      then A3: 0+1 <= n+1 by NAT_1:13;
       defpred P[set,set] means
         ex G being QC-formula, m,k1 being Element of NAT,
            r1 being FinSequence st
@@ -1538,7 +1538,7 @@ proof
           let k; assume k in Seg(n+1);
           then 1 <= k & k <= n+1 by FINSEQ_1:3;
           then consider k1 being Nat such that
-A6:         k+k1 = n+1 by NAT_1:28;
+A6:         k+k1 = n+1 by NAT_1:10;
             reconsider k1 as Element of NAT by ORDINAL1:def 13;
              r|Seg k1 is FinSequence by FINSEQ_1:19;
           then consider r1 being FinSequence such that
@@ -1600,7 +1600,7 @@ A17:            G = L.(n+1) & (n+1)+k1 = n+1 & r1 = r|Seg k1 &
             r1 being FinSequence such that
 A19:           H1 = L.k & k+k1 = n+1 & r1 = r|Seg k1 &
                 H1 = (tree_of_subformulae(F)).(t^r1) by A12;
-             1 <= k+1 & k+1 <= n+1 by A18,NAT_1:38; then consider
+             1 <= k+1 & k+1 <= n+1 by A18,NAT_1:13; then consider
             G1 being QC-formula, k2 being Element of NAT,
             r2 being FinSequence such that
 A20:           G1 = L.(k+1) & (k+1)+k2 = n+1 & r2 = r|Seg k2 &
@@ -1697,7 +1697,7 @@ A14:  1 <= len r
          t1 is_a_prefix_of r by XBOOLE_1:2;
       then A16: t1 is_a_proper_prefix_of r by A15,XBOOLE_0:def 8;
          len t1 = 0 by FINSEQ_1:25;
-      then 0 < len r by A16,TREES_1:24; then 0+1 <= len r by NAT_1:38; hence
+      then 0 < len r by A16,TREES_1:24; then 0+1 <= len r by NAT_1:13; hence
   thesis;
     end;
     then consider t1 being Element of dom tree_of_subformulae(F),

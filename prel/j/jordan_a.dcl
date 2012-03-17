@@ -27,9 +27,9 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
@@ -75,7 +75,7 @@
 <Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="325">
+<Func kind="K" nr="331">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -83,23 +83,24 @@
 <Adjective nr="5"/>
 <Adjective nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="307">
-<Func kind="K" nr="187">
+<Func kind="K" nr="313">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 <Func kind="K" nr="41"/>
 </Adjective>
+<Adjective nr="56"/>
 <Adjective nr="73">
-<Func kind="K" nr="307">
-<Func kind="K" nr="187">
+<Func kind="K" nr="313">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -114,13 +115,13 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -129,7 +130,7 @@
 <Func kind="K" nr="45"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="326">
+<Func kind="K" nr="332">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
@@ -137,12 +138,12 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="41">
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="81">
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -156,7 +157,7 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="187">
+<Func kind="K" nr="213">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -164,7 +165,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="20">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

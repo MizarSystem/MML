@@ -9,14 +9,14 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, QC_LANG1, FUNCT_1, ARYTM, ARYTM_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, GRCAT_1, UNIALG_1,
       LATTICES, FUNCOP_1, FUNCSDOM, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3,
-      BHSP_3, RSSPACE, RSSPACE3, PARTFUN1, LOPBAN_1, FRAENKEL, MONOID_0;
+      BHSP_3, RSSPACE, RSSPACE3, PARTFUN1, LOPBAN_1, FRAENKEL, MONOID_0, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, XXREAL_0,
-      STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, MONOID_0, PSCOMP_1,
-      RLVECT_1, FRAENKEL, COMPLEX1, RLSUB_1, NORMSP_1, RSSPACE, RSSPACE3,
-      SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM;
+      STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, NAT_D, MONOID_0,
+      PSCOMP_1, RLVECT_1, FRAENKEL, COMPLEX1, RLSUB_1, NORMSP_1, RSSPACE,
+      RSSPACE3, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM;
  constructors FUNCT_3, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, RAT_1, COMPLEX1,
-      SEQM_3, RLSUB_1, FUNCSDOM, MONOID_0, PSCOMP_1, RSSPACE3;
+      SEQM_3, RLSUB_1, FUNCSDOM, MONOID_0, PSCOMP_1, RSSPACE3, NAT_D;
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL1, RLVECT_1, NORMSP_1,
       XREAL_0, MEMBERED, RSSPACE3, SEQM_3, MONOID_0, XXREAL_0, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
@@ -86,8 +86,7 @@ A1:for a be Real, f being Element of Funcs(X,the carrier of Y)
 A2:dom (F.[a,f]) = X by FUNCT_2:169;
      F.(a,f) = @((the Mult of Y)[;](a,f)) by A1
           .= (the Mult of Y) [;](a,f) by FUNCSDOM:def 1;
-   hence (F.[a,f]).x = (the Mult of Y).(a,f.x) by A2,FUNCOP_1:42
-                    .= a*(f.x);
+   hence (F.[a,f]).x = a*(f.x) by A2,FUNCOP_1:42;
 end;
 
 definition
@@ -173,22 +172,21 @@ theorem
 A1: now assume A2: h = (FuncAdd(X,Y)).(f,g);
      let x be Element of X; A3: x in dom ((the add of Y).:(f,g)) by Lm1;
      thus h.x = ((the add of Y).:(f,g)).x by A2,Def1
-             .= (the add of Y).(f.x,g.x) by A3,FUNCOP_1:28
-             .= f.x + g.x;
+             .= f.x + g.x by A3,FUNCOP_1:28;
     end;
     now assume A4: for x being Element of X holds h.x=f.x + g.x;
     now let x be Element of X; A5: x in dom ((the add of Y).:(f,g)) by Lm1;
    thus ((FuncAdd(X,Y)).(f,g)).x = ((the add of Y).:(f,g)).x by Def1
-                              .= (the add of Y).(f.x,g.x) by A5,FUNCOP_1:28
-                              .= f.x + g.x
+                              .= f.x + g.x by A5,FUNCOP_1:28
                               .= h.x by A4; end;
   hence h = (FuncAdd(X,Y)).(f,g) by FUNCT_2:113;  end;
  hence thesis by A1; end;
 
-theorem
-   Th4: for x being Element of X holds (FuncZero(X,Y)).x = 0.Y by FUNCOP_1:13;
+   Lm2: for x being Element of X holds (FuncZero(X,Y)).x = 0.Y by FUNCOP_1:13;
 
 reserve a,b for Real;
+
+canceled;
 
 theorem
  Th5: h = (FuncExtMult(X,Y)).[a,f] iff
@@ -237,7 +235,7 @@ Th8: (FuncAdd(X,Y)).(FuncZero(X,Y),f) = f
     now let x be Element of X;
    thus ((FuncAdd(X,Y)).(FuncZero(X,Y),f)).x =
     (FuncZero(X,Y)).x + f.x by Th3
-    .= 0.Y + f.x by Th4
+    .= 0.Y + f.x by Lm2
     .= f.x by RLVECT_1:def 7;
   end;
   hence thesis by FUNCT_2:113;
@@ -253,7 +251,7 @@ Th9: (FuncAdd(X,Y)).(f,(FuncExtMult(X,Y)).[-1,f]) = FuncZero(X,Y)
      .= f.x + ((-1)*y) by Th5
      .= f.x + (-y) by RLVECT_1:29
      .= 0.Y by RLVECT_1:16
-     .= (FuncZero(X,Y)).x by Th4;
+     .= (FuncZero(X,Y)).x by Lm2;
    end;
   hence thesis by FUNCT_2:113;
   end;
@@ -299,7 +297,7 @@ Th12: (FuncAdd(X,Y)).
   hence thesis by FUNCT_2:113;
  end;
 
-Lm2: (FuncAdd(X,Y)).
+Lm3: (FuncAdd(X,Y)).
         ((FuncExtMult(X,Y)).[a,f],(FuncExtMult(X,Y)).[a,g])
    = (FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(f,g)]
  proof
@@ -328,19 +326,14 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
  proof
   thus u+v = v+u proof
    reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
-   thus u+v = (FuncAdd(X,Y)).(u',v')
-           .= (FuncAdd(X,Y)).(v',u') by Th6
-           .= v+u;
+   thus u+v = v+u by Th6;
    end;
   thus (u+v)+w = u+(v+w) proof
     reconsider v'=v, u'=u, w'=w as Element of Funcs(X,the carrier of Y);
-    thus (u+v)+w = (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w')
-            .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).(v',w')) by Th7
-            .= u+(v+w); end;
+    thus (u+v)+w = u+(v+w) by Th7; end;
   thus u+0.IT = u proof
     reconsider u'=u as Element of Funcs(X,the carrier of Y);
-   thus u+0.IT = (FuncAdd(X,Y)).(u',FuncZero(X,Y))
-              .= (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th6
+   thus u+0.IT = (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th6
               .= u by Th8;
   end;
   thus ex w st u+w = 0.IT
@@ -348,25 +341,21 @@ Th13: RLSStruct(#Funcs(X,the carrier of Y),
     reconsider u' = u as Element of Funcs(X,the carrier of Y);
     reconsider w = (FuncExtMult(X,Y)).[-1,u'] as VECTOR of IT;
     take w;
-    thus u+w = (FuncAdd(X,Y)).(u',(FuncExtMult(X,Y)).[-1,u'])
-            .= 0.IT by Th9;
+    thus u+w = 0.IT by Th9;
    end;
   thus a*(u+v) = a*u + a *v
    proof
     reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
     reconsider w = (FuncExtMult(X,Y)).[a,u'],w' = (FuncExtMult(X,Y)).[a,v']
  as VECTOR of IT;
-    thus a*(u+v) = (FuncExtMult(X,Y)).[a,(FuncAdd(X,Y)).(u',v')]
-                .=(FuncAdd(X,Y)).(w,w') by Lm2
-                .= (a*u) + (a*v);
+    thus a*(u+v) = (a*u) + (a*v) by Lm3;
    end;
   thus (a+b)*v = a*v + b*v
    proof
     reconsider v' = v as Element of Funcs(X,the carrier of Y);
     reconsider w = (FuncExtMult(X,Y)).[a,v'],w' = (FuncExtMult(X,Y)).[b,v']
  as VECTOR of IT;
-    thus (a+b)*v = (FuncAdd(X,Y)).(w,w') by Th12
-                .= (a*v) + (b*v);
+    thus (a+b)*v = (a*v) + (b*v) by Th12;
    end;
   thus (a*b)*v = a*(b*v) by Th11;
   thus 1*v = v by Th10;
@@ -432,8 +421,7 @@ hereby assume
     end;
     assume for x be Element of X holds h.x=f.x+g.x;
     then A2:  for x be Element of X holds h'.x=f'.x+g'.x;
-    f+g = (FuncAdd(X,Y)).(f',g');
-    hence h = f+g by A2,Th3;
+    thus h = f+g by A2,Th3;
  end;
 
 theorem Th15:
@@ -600,31 +588,29 @@ A2: v in W & u in W;
                 let x,y be VECTOR of X;
                 reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A4: f= (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
-                A5: u' is LinearOperator of X,Y by A2,Def7;
-                A6: v' is LinearOperator of X,Y by A2,Def7;
-                thus f.(x+y) =u'.(x+y)+v'.(x+y) by A4,Th3
-               .=(u'.x+u'.y)+v'.(x+y) by A5,Def5
-               .=u'.x+u'.y+(v'.x+v'.y) by A6,Def5
+                A4: u' is LinearOperator of X,Y by A2,Def7;
+                A5: v' is LinearOperator of X,Y by A2,Def7;
+                thus f.(x+y) =u'.(x+y)+v'.(x+y) by Th3
+               .=(u'.x+u'.y)+v'.(x+y) by A4,Def5
+               .=u'.x+u'.y+(v'.x+v'.y) by A5,Def5
                .=u'.x+u'.y+v'.x+v'.y by RLVECT_1:def 6
                .=u'.x+v'.x+u'.y+v'.y by RLVECT_1:def 6
-              .= f.x+ u'.y+v'.y by A4,Th3
+              .= f.x+ u'.y+v'.y by Th3
                .= f.x+ (u'.y+v'.y) by RLVECT_1:def 6
-               .= f.x+f.y by A4,Th3;
+               .= f.x+f.y by Th3;
               end;
                f is homogeneous
                proof
                  let x be VECTOR of X, s be Real;
                 reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A7: f= (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
-                A8: u' is LinearOperator of X,Y by A2,Def7;
-                A9: v' is LinearOperator of X,Y by A2,Def7;
-                thus f.(s*x) =u'.(s*x)+v'.(s*x) by A7,Th3
-               .=(s*(u'.x))+v'.(s*x) by A8,Def6
-               .=s*u'.x+s*v'.x by A9,Def6
+                A6: u' is LinearOperator of X,Y by A2,Def7;
+                A7: v' is LinearOperator of X,Y by A2,Def7;
+                thus f.(s*x) =u'.(s*x)+v'.(s*x) by Th3
+               .=(s*(u'.x))+v'.(s*x) by A6,Def6
+               .=s*u'.x+s*v'.x by A7,Def6
                .=s*(u'.x+v'.x) by RLVECT_1:def 9
-               .= s*f.x by A7,Th3;
+               .= s*f.x by Th3;
                end;
           hence thesis by A3;
      end;
@@ -638,20 +624,20 @@ A2: v in W & u in W;
     proof
      let a be Real;
      let v be VECTOR of RealVectSpace(the carrier of X,Y) such that
-    A10: v in W;
+    A8: v in W;
          a*v is LinearOperator of X,Y
          proof
          reconsider f=a*v as Function of X,Y by FUNCT_2:121;
            f is LinearOperator of X,Y
           proof
-            A11:  f is additive
+            A9:  f is additive
              proof
                 let x,y be VECTOR of X;
                 reconsider v' = v as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A12: v' is LinearOperator of X,Y by A10,Def7;
+                A10: v' is LinearOperator of X,Y by A8,Def7;
                 thus f.(x+y) = a*(v'.(x+y)) by Th5
-               .=a*(v'.x+v'.y) by A12,Def5
+               .=a*(v'.x+v'.y) by A10,Def5
                .=a*v'.x+a*v'.y by RLVECT_1:def 9
                .=f.x+a*v'.y by Th5
                .=f.x+ f.y by Th5;
@@ -661,14 +647,14 @@ A2: v in W & u in W;
                 let x be VECTOR of X, s be Real;
                 reconsider v' = v as Element of
                 Funcs(the carrier of X,the carrier of Y);
-                A13: v' is LinearOperator of X,Y by A10,Def7;
+                A11: v' is LinearOperator of X,Y by A8,Def7;
                 thus f.(s*x) =a*v'.(s*x) by Th5
-               .=a*(s*(v'.x)) by A13,Def6
+               .=a*(s*(v'.x)) by A11,Def6
                .=a*s*v'.x by RLVECT_1:def 9
                .=s*(a*v'.x) by RLVECT_1:def 9
                .=s*f.x by Th5;
                end;
-       hence thesis by A11;
+       hence thesis by A9;
      end;
    hence thesis;
   end;
@@ -1906,7 +1892,7 @@ definition
   mode RealBanachSpace is complete RealNormSpace;
 end;
 
-Lm3:
+Lm4:
 for e be Real, seq be Real_Sequence st ( seq is convergent &
 ex k be Element of NAT st
 (for i be Element of NAT st k <= i holds seq.i <=e ) ) holds
@@ -1927,7 +1913,7 @@ A6:(seq ^\k) is convergent by A1,SEQ_4:33;
 A7:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
 A8:now let i be Element of NAT;
 A9: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
-       k <= k+i by NAT_1:29;
+       k <= k+i by NAT_1:11;
      then seq.(k+i) <=e by A5;
      hence (seq ^\k) .i <= cseq.i by A3,A9;
   end;
@@ -2281,7 +2267,7 @@ A45:
                                      .= ||.xseq.n-xseq.m.|| by NORMSP_1:11;
                       hence thesis by A55,A64;
                     end;
-                   then lim rseq <= e * ||.x.|| by A60,Lm3;
+                   then lim rseq <= e * ||.x.|| by A60,Lm4;
                    hence thesis by A60,NORMSP_1:11;
                   end;
                  hence ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.||

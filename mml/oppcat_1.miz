@@ -6,13 +6,14 @@
 
 environ
 
- vocabularies CAT_1, PARTFUN1, RELAT_1, FUNCT_1, BOOLE, ARYTM_3, OPPCAT_1;
+ vocabularies CAT_1, PARTFUN1, RELAT_1, FUNCT_1, BOOLE, ARYTM_3, OPPCAT_1,
+      NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      PARTFUN1, FUNCT_4, CAT_1;
- constructors PARTFUN1, FUNCT_4, CAT_1;
+      BINOP_1, PARTFUN1, FUNCT_4, CAT_1;
+ constructors PARTFUN1, FUNCT_4, CAT_1, BINOP_1, NAT_D;
  registrations CAT_1, RELSET_1, XBOOLE_0, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions CAT_1;
+ definitions CAT_1, BINOP_1;
  theorems FUNCT_2, FUNCT_4, PARTFUN1, CAT_1, SUBSET_1, FUNCT_1;
  schemes FUNCT_2;
 
@@ -42,7 +43,7 @@ A1:   for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f
      hence thesis by CAT_1:def 8;
     end;
 A2:  for f,g being Element of M st d.g = c.f
-       holds p.[g,f] = (the Comp of C).[f,g]
+       holds p.(g,f) = (the Comp of C).(f,g)
     proof let f,g be Element of M;
      assume d.g = c.f; then [g,f] in dom(p) by A1;
       hence thesis by FUNCT_4:44;
@@ -51,7 +52,7 @@ A2:  for f,g being Element of M st d.g = c.f
 A3:  for f,g being Element of M
        st d.g = c.f holds d.(p.[g,f]) = d.f & c.(p.[g,f]) = c.g
     proof let f,g be Element of M;
-        d.g = c.f implies p.[g,f] = (the Comp of C).[f,g] by A2;
+        d.g = c.f implies p.(g,f) = (the Comp of C).(f,g) by A2;
      hence thesis by CAT_1:def 8;
     end;
    thus for f,g,h being Element of M
@@ -59,12 +60,12 @@ A3:  for f,g being Element of M
     proof let f,g,h be Element of M; assume
 A4:    d.h = c.g & d.g = c.f;
      then [g,f] in dom p & [h,g] in dom p by A1;
-     then p.[g,f] = (the Comp of C).[f,g] & p.[h,g] = (the Comp of C).[g,h] &
+     then p.(g,f) = (the Comp of C).(f,g) & p.(h,g) = (the Comp of C).(g,h) &
         c.(p.[g,f]) = c.g & d.(p.[h,g]) = d.g &
         p.[g,f] is Element of M & p.[h,g] is Element of M by A2,A3,A4,
 PARTFUN1:27;
-     then p.[h,p.[g,f]] = (the Comp of C).[(the Comp of C).[f,g],h] &
-        p.[p.[h,g],f] = (the Comp of C).[f,(the Comp of C).[g,h]] by A2,A4;
+     then p.(h,p.[g,f]) = (the Comp of C).((the Comp of C).[f,g],h) &
+        p.(p.[h,g],f) = (the Comp of C).(f,(the Comp of C).[g,h]) by A2,A4;
      hence thesis by A4,CAT_1:def 8;
     end;
    let b be Element of (the Objects of C);
@@ -72,11 +73,11 @@ PARTFUN1:27;
 A5:    d.(i.b) = b & c.(i.b) = b by CAT_1:def 8;
    thus for f being Element of M st c.f = b holds p.[i.b,f] = f
     proof let f be Element of M;
-        c.f = b implies p.[i.b,f] = (the Comp of C).[f,i.b] by A2,A5;
+        c.f = b implies p.(i.b,f) = (the Comp of C).(f,i.b) by A2,A5;
      hence thesis by CAT_1:def 8;
     end;
    let g be Element of M;
-      d.g = b implies p.[g,i.b] = (the Comp of C).[i.b,g] by A2,A5;
+      d.g = b implies p.(g,i.b) = (the Comp of C).(i.b,g) by A2,A5;
    hence d.g = b implies p.[g,i.b] = g by CAT_1:def 8;
   end;
  hence thesis by CAT_1:def 8; end;
@@ -89,7 +90,7 @@ definition let C;
   coherence by Th1;
 end;
 
-theorem Th2:
+ Lm1:
   C opp opp = the CatStr of C by FUNCT_4:54;
 
 definition let C; let c be Object of C;
@@ -103,6 +104,8 @@ definition let C; let c be Object of C opp;
   c opp;
  coherence;
 end;
+
+canceled;
 
 theorem
       for c being Object of C holds c opp opp = c;
@@ -200,7 +203,7 @@ A3:  dom g = cod(g opp) & cod f = dom(f opp);
      the Comp of C = ~~(the Comp of C) by FUNCT_4:54;
   then the Comp of C = ~(the Comp of C opp) & f opp = f & g opp = g &
      [f opp,g opp] in dom(the Comp of C opp) by A1,A3,CAT_1:40;
-  then (the Comp of C ).[g,f] = (the Comp of C opp).[f opp,g opp]
+  then (the Comp of C ).(g,f) = (the Comp of C opp).(f opp,g opp)
     by FUNCT_4:def 2;
   then g*f = (f opp)*(g opp) by A1,A2,A3,CAT_1:41;
   hence thesis;
@@ -222,8 +225,8 @@ theorem Th19:
 A1:  dom g = cod f;
 A2:  cod(opp g) = dom g & dom(opp f) = cod f;
 then A3:  [opp f,opp g] in dom( the Comp of C ) by A1,CAT_1:40;
-  thus opp (g*f) = ~(the Comp of C).[opp g,opp f] by A1,CAT_1:41
-                .= (the Comp of C).[opp f,opp g] by A3,FUNCT_4:def 2
+  thus opp (g*f) = ~(the Comp of C).(opp g,opp f) by A1,CAT_1:41
+                .= (the Comp of C).(opp f,opp g) by A3,FUNCT_4:def 2
                 .= (opp f)*(opp g) by A1,A2,CAT_1:41;
  end;
 
@@ -466,7 +469,7 @@ theorem
   thus (/*S).(opp f) = S.((opp f) opp) by Def6 .= S.f;
  end;
 
-Lm1: for S being Functor of C opp,B, c being Object of C
+Lm2: for S being Functor of C opp,B, c being Object of C
      holds (/*S).(id c) = id((Obj S).(c opp))
  proof let S be Functor of C opp,B, c be Object of C;
   thus (/*S).(id c) = S.((id c) opp) by Def6
@@ -479,10 +482,10 @@ theorem Th29:
     holds (Obj /*S).c = (Obj S).(c opp)
  proof let S be Functor of C opp,B, c be Object of C;
 A1: now let c be Object of C;
-        (/*S).(id c) = id((Obj S).(c opp)) by Lm1;
+        (/*S).(id c) = id((Obj S).(c opp)) by Lm2;
      hence ex d being Object of B st (/*S).(id c) = id d;
     end;
-     (/*S).(id c) = id((Obj S).(c opp)) by Lm1;
+     (/*S).(id c) = id((Obj S).(c opp)) by Lm2;
   hence (Obj /*S).c = (Obj S).(c opp) by A1,CAT_1:102;
  end;
 
@@ -494,7 +497,7 @@ theorem
                        .= (Obj S).c;
  end;
 
-Lm2: for S being Functor of C opp,B, c being Object of C
+Lm3: for S being Functor of C opp,B, c being Object of C
      holds /*S.(id c) = id((Obj /*S).c)
  proof let S be Functor of C opp,B, c be Object of C;
   thus /*S.(id c) = S.((id c) opp) by Def6
@@ -503,13 +506,13 @@ Lm2: for S being Functor of C opp,B, c being Object of C
                 .= id((Obj /*S).c) by Th29;
  end;
 
-Lm3:
+Lm4:
   now let C,B; let S be Functor of C opp,B, c be Object of C;
-      (/*S).(id c) = id ((Obj /*S).c) by Lm2;
+      (/*S).(id c) = id ((Obj /*S).c) by Lm3;
    hence ex d being Object of B st (/*S).(id c) = id d;
   end;
 
-Lm4: for S being Functor of C opp,B, f being Morphism of C
+Lm5: for S being Functor of C opp,B, f being Morphism of C
      holds (Obj /*S).(dom f) = cod (/*S.f) & (Obj /*S).(cod f) = dom (/*S.f)
  proof let S be Functor of C opp,B, f be Morphism of C;
      now
@@ -523,15 +526,15 @@ Lm4: for S being Functor of C opp,B, f being Morphism of C
   hence thesis by Def6;
  end;
 
-Lm5:
+Lm6:
   now let C,B; let S be Functor of C opp,B, f be Morphism of C;
-   thus (/*S).(id dom f) = id((Obj /*S).(dom f)) by Lm2
-                       .= id cod (/*S.f) by Lm4;
-   thus (/*S).(id cod f) = id((Obj /*S).(cod f)) by Lm2
-                       .= id dom (/*S.f) by Lm4;
+   thus (/*S).(id dom f) = id((Obj /*S).(dom f)) by Lm3
+                       .= id cod (/*S.f) by Lm5;
+   thus (/*S).(id cod f) = id((Obj /*S).(cod f)) by Lm3
+                       .= id dom (/*S.f) by Lm5;
   end;
 
-Lm6: for S being Functor of C opp,B, f,g being Morphism of C st dom g = cod f
+Lm7: for S being Functor of C opp,B, f,g being Morphism of C st dom g = cod f
      holds /*S.(g*f) = (/*S.f)*(/*S.g)
  proof let S be Functor of C opp,B, f,g be Morphism of C such that
 A1:  dom g = cod f;
@@ -554,7 +557,7 @@ definition let C,D;
        holds it.(g*f) = (it.f)*(it.g));
  existence
   proof consider S being Functor of C opp,D; take /*S;
-   thus thesis by Lm3,Lm5,Lm6;
+   thus thesis by Lm4,Lm6,Lm7;
   end;
 end;
 
@@ -597,8 +600,8 @@ theorem Th35:
    for S being Functor of C opp,B holds /*S is Contravariant_Functor of C,B
  proof let S be Functor of C opp,B;
    thus for c being Object of C ex d being Object of B st /*S.(id c) = id d
-     by Lm3;
-   thus thesis by Lm5,Lm6;
+     by Lm4;
+   thus thesis by Lm6,Lm7;
  end;
 
 theorem Th36:
@@ -642,7 +645,7 @@ then A4:   cod (S1.g) = dom(S1.f) by Th34;
   hence thesis by CAT_1:96;
  end;
 
-Lm7: for S being Contravariant_Functor of C opp,B, c being Object of C
+Lm8: for S being Contravariant_Functor of C opp,B, c being Object of C
      holds (/*S).(id c) = id((Obj S).(c opp))
  proof let S be Contravariant_Functor of C opp,B, c be Object of C;
   thus (/*S).(id c) = S.((id c) opp) by Def6
@@ -655,10 +658,10 @@ theorem Th37:
     holds (Obj /*S).c = (Obj S).(c opp)
  proof let S be Contravariant_Functor of C opp,B, c be Object of C;
 A1: now let c be Object of C;
-        (/*S).(id c) = id((Obj S).(c opp)) by Lm7;
+        (/*S).(id c) = id((Obj S).(c opp)) by Lm8;
      hence ex d being Object of B st (/*S).(id c) = id d;
     end;
-     (/*S).(id c) = id((Obj S).(c opp)) by Lm7;
+     (/*S).(id c) = id((Obj S).(c opp)) by Lm8;
   hence (Obj /*S).c = (Obj S).(c opp) by A1,CAT_1:102;
  end;
 
@@ -670,7 +673,7 @@ theorem
                        .= (Obj S).c;
  end;
 
-Lm8: for S being Contravariant_Functor of C opp,B, c being Object of C
+Lm9: for S being Contravariant_Functor of C opp,B, c being Object of C
      holds /*S.(id c) = id((Obj /*S).c)
  proof let S be Contravariant_Functor of C opp,B, c be Object of C;
   thus /*S.(id c) = S.((id c) opp) by Def6
@@ -679,7 +682,7 @@ Lm8: for S being Contravariant_Functor of C opp,B, c being Object of C
                 .= id((Obj /*S).c) by Th37;
  end;
 
-Lm9: for S being Contravariant_Functor of C opp,B, f being Morphism of C
+Lm10: for S being Contravariant_Functor of C opp,B, f being Morphism of C
      holds (Obj /*S).(dom f) = dom (/*S.f) & (Obj /*S).(cod f) = cod (/*S.f)
  proof let S be Contravariant_Functor of C opp,B, f be Morphism of C;
      now
@@ -699,17 +702,17 @@ theorem
      now
    thus for c being Object of C ex d being Object of B st /*S.(id c) = id d
     proof let c be Object of C;
-        (/*S).(id c) = id ((Obj /*S).c) by Lm8;
+        (/*S).(id c) = id ((Obj /*S).c) by Lm9;
      hence ex d being Object of B st (/*S).(id c) = id d;
     end;
    thus for f being Morphism of C
      holds (/*S).(id dom f) = id dom (/*S.f) &
             (/*S).(id cod f) = id cod (/*S.f)
     proof let f be Morphism of C;
-     thus (/*S).(id dom f) = id((Obj /*S).(dom f)) by Lm8
-                         .= id dom (/*S.f) by Lm9;
-     thus (/*S).(id cod f) = id((Obj /*S).(cod f)) by Lm8
-                         .= id cod (/*S.f) by Lm9;
+     thus (/*S).(id dom f) = id((Obj /*S).(dom f)) by Lm9
+                         .= id dom (/*S.f) by Lm10;
+     thus (/*S).(id cod f) = id((Obj /*S).(cod f)) by Lm9
+                         .= id cod (/*S.f) by Lm10;
     end;
    let f,g be Morphism of C such that
 A1:  dom g = cod f;
@@ -773,7 +776,7 @@ theorem
   thus (*'S).(f opp) = S.(opp (f opp)) by Def8 .= S.f;
  end;
 
-Lm10: for S being Functor of C,B, c being Object of C opp
+Lm11: for S being Functor of C,B, c being Object of C opp
      holds (*'S).(id c) = id((Obj S).(opp c))
  proof let S be Functor of C,B, c be Object of C opp;
   thus (*'S).(id c) = S.(opp id c) by Def8
@@ -785,9 +788,9 @@ theorem Th41:
    for S being Functor of C,B, c being Object of C opp
     holds (Obj *'S).c = (Obj S).(opp c)
  proof let S be Functor of C,B, c be Object of C opp;
-      now thus (*'S).(id c) = id((Obj S).(opp c)) by Lm10;
+      now thus (*'S).(id c) = id((Obj S).(opp c)) by Lm11;
     let c be Object of C opp;
-        (*'S).(id c) = id((Obj S).(opp c)) by Lm10;
+        (*'S).(id c) = id((Obj S).(opp c)) by Lm11;
     hence ex d being Object of B st (*'S).(id c) = id d;
    end;
   hence (Obj *'S).c = (Obj S).(opp c) by CAT_1:102;
@@ -801,7 +804,7 @@ theorem
                        .= (Obj S).c;
  end;
 
-Lm11: for S being Functor of C,B, c being Object of C
+Lm12: for S being Functor of C,B, c being Object of C
      holds (S*').(id c) = id(((Obj S).c) opp)
  proof let S be Functor of C,B, c be Object of C;
   thus (S*').(id c) = (S.(id c)) opp by Def9
@@ -813,15 +816,15 @@ theorem Th43:
    for S being Functor of C,B, c being Object of C
      holds (Obj S*').c = ((Obj S).c) opp
  proof let S be Functor of C,B, c be Object of C;
-      now thus (S*').(id c) = id(((Obj S).c) opp) by Lm11;
+      now thus (S*').(id c) = id(((Obj S).c) opp) by Lm12;
     let c be Object of C;
-        (S*').(id c) = id(((Obj S).c) opp) by Lm11;
+        (S*').(id c) = id(((Obj S).c) opp) by Lm12;
     hence ex d being Object of B opp st (S*').(id c) = id d;
    end;
   hence (Obj S*').c = ((Obj S).c) opp by CAT_1:102;
  end;
 
-Lm12: for S being Contravariant_Functor of C,B, c being Object of C opp
+Lm13: for S being Contravariant_Functor of C,B, c being Object of C opp
      holds (*'S).(id c) = id((Obj S).(opp c))
  proof let S be Contravariant_Functor of C,B, c be Object of C opp;
   thus (*'S).(id c) = S.(opp id c) by Def8
@@ -833,9 +836,9 @@ theorem Th44:
    for S being Contravariant_Functor of C,B, c being Object of C opp
     holds (Obj *'S).c = (Obj S).(opp c)
  proof let S be Contravariant_Functor of C,B, c be Object of C opp;
-      now thus (*'S).(id c) = id((Obj S).(opp c)) by Lm12;
+      now thus (*'S).(id c) = id((Obj S).(opp c)) by Lm13;
     let c be Object of C opp;
-        (*'S).(id c) = id((Obj S).(opp c)) by Lm12;
+        (*'S).(id c) = id((Obj S).(opp c)) by Lm13;
     hence ex d being Object of B st (*'S).(id c) = id d;
    end;
   hence (Obj *'S).c = (Obj S).(opp c) by CAT_1:102;
@@ -849,7 +852,7 @@ theorem
                        .= (Obj S).c;
  end;
 
-Lm13: for S being Contravariant_Functor of C,B, c being Object of C
+Lm14: for S being Contravariant_Functor of C,B, c being Object of C
      holds (S*').(id c) = id(((Obj S).c) opp)
  proof let S be Contravariant_Functor of C,B, c be Object of C;
   thus (S*').(id c) = (S.(id c)) opp by Def9
@@ -861,15 +864,15 @@ theorem Th46:
    for S being Contravariant_Functor of C,B, c being Object of C
      holds (Obj S*').c = ((Obj S).c) opp
  proof let S be Contravariant_Functor of C,B, c be Object of C;
-      now thus (S*').(id c) = id(((Obj S).c) opp) by Lm13;
+      now thus (S*').(id c) = id(((Obj S).c) opp) by Lm14;
     let c be Object of C;
-        (S*').(id c) = id(((Obj S).c) opp) by Lm13;
+        (S*').(id c) = id(((Obj S).c) opp) by Lm14;
     hence ex d being Object of B opp st (S*').(id c) = id d;
    end;
   hence (Obj S*').c = ((Obj S).c) opp by CAT_1:102;
  end;
 
-Lm14:
+Lm15:
    for F being Function of the Morphisms of C,the Morphisms of D
     for f being Morphism of C opp holds *'F*'.f = (F.(opp f)) opp
  proof let F be Function of the Morphisms of C,the Morphisms of D;
@@ -883,7 +886,7 @@ theorem Th47:
     for f being Morphism of C holds *'F*'.(f opp) = (F.f) opp
  proof let F be Function of the Morphisms of C,the Morphisms of D;
   let f be Morphism of C;
-  thus *'F*'.(f opp) = (F.(opp(f opp))) opp by Lm14
+  thus *'F*'.(f opp) = (F.(opp(f opp))) opp by Lm15
                   .= (F.f) opp;
  end;
 
@@ -930,7 +933,7 @@ theorem
     holds S*'*' = S
  proof let D be strict Category;
   let S be Function of the Morphisms of C, the Morphisms of D;
-     now thus D opp opp = D by Th2;
+     now thus D opp opp = D by Lm1;
    let f be Morphism of C;
    thus S*'*'.f = (S*'.f) opp by Def9
              .= (S.f) opp opp by Def9
@@ -945,7 +948,7 @@ theorem
     holds *'*'S = S
  proof let C be strict Category;
   let S be Function of the Morphisms of C, the Morphisms of D;
-     now thus C opp opp = C by Th2;
+     now thus C opp opp = C by Lm1;
    let f be Morphism of C opp opp;
    thus *'*'S.f = *'S.(opp f) by Def8
              .= S.(opp opp f) by Def8
@@ -954,7 +957,7 @@ theorem
   hence thesis by FUNCT_2:113;
  end;
 
-Lm15:
+Lm16:
    for S being Function of the Morphisms of C opp,the Morphisms of B
     for T being Function of the Morphisms of B,the Morphisms of D
      holds /*(T*S) = T*(/*S)
@@ -1006,16 +1009,16 @@ theorem
  proof let F1 be Function of the Morphisms of C,the Morphisms of B;
    let F2 be Function of the Morphisms of B,the Morphisms of D;
       now let f be Morphism of C opp;
-    thus (*'(F2*F1)*').f = ((F2*F1).(opp f)) opp by Lm14
+    thus (*'(F2*F1)*').f = ((F2*F1).(opp f)) opp by Lm15
                       .= (F2.(F1.(opp f))) opp by FUNCT_2:21
                       .= (*'F2*').((F1.(opp f)) opp) by Th47
-                      .= (*'F2*').((*'F1*').f) by Lm14
+                      .= (*'F2*').((*'F1*').f) by Lm15
                       .= ((*'F2*')*(*'F1*')).f by FUNCT_2:21;
    end;
    hence thesis by FUNCT_2:113;
  end;
 
-Lm16: for S being Contravariant_Functor of C,B, c being Object of C opp
+Lm17: for S being Contravariant_Functor of C,B, c being Object of C opp
      holds *'S.(id c) = id((Obj *'S).c)
  proof let S be Contravariant_Functor of C,B, c be Object of C opp;
   thus *'S.(id c) = S.(opp id c) by Def8
@@ -1024,7 +1027,7 @@ Lm16: for S being Contravariant_Functor of C,B, c being Object of C opp
                 .= id((Obj *'S).c) by Th44;
  end;
 
-Lm17: for S being Contravariant_Functor of C,B, f being Morphism of C opp
+Lm18: for S being Contravariant_Functor of C,B, f being Morphism of C opp
      holds (Obj *'S).(dom f) = dom (*'S.f) & (Obj *'S).(cod f) = cod (*'S.f)
  proof let S be Contravariant_Functor of C,B, f be Morphism of C opp;
      now
@@ -1045,16 +1048,16 @@ theorem Th56:
    thus for c being Object of C opp ex d being Object of D st *'S.(id c) = id
 d
     proof let c be Object of C opp;
-         (*'S).(id c) = id ((Obj *'S).c) by Lm16;
+         (*'S).(id c) = id ((Obj *'S).c) by Lm17;
      hence ex d being Object of D st (*'S).(id c) = id d;
     end;
    thus for f being Morphism of C opp
       holds *'S.(id dom f) = id dom (*'S.f) & *'S.(id cod f) = id cod (*'S.f)
     proof let f be Morphism of C opp;
-     thus (*'S).(id dom f) = id((Obj *'S).(dom f)) by Lm16
-                         .= id dom (*'S.f) by Lm17;
-     thus (*'S).(id cod f) = id((Obj *'S).(cod f)) by Lm16
-                         .= id cod (*'S.f) by Lm17;
+     thus (*'S).(id dom f) = id((Obj *'S).(dom f)) by Lm17
+                         .= id dom (*'S.f) by Lm18;
+     thus (*'S).(id cod f) = id((Obj *'S).(cod f)) by Lm17
+                         .= id cod (*'S.f) by Lm18;
     end;
    let f,g be Morphism of C opp such that
 A1:  dom g = cod f;
@@ -1068,7 +1071,7 @@ A2:  dom(opp f) = cod f & cod (opp g) = dom g;
   hence *'S is Functor of C opp,D by CAT_1:96;
  end;
 
-Lm18: for S being Contravariant_Functor of C,B, c being Object of C
+Lm19: for S being Contravariant_Functor of C,B, c being Object of C
        holds S*'.(id c) = id((Obj S*').c)
  proof let S be Contravariant_Functor of C,B, c be Object of C;
   thus S*'.(id c) = (S.(id c)) opp by Def9
@@ -1077,7 +1080,7 @@ Lm18: for S being Contravariant_Functor of C,B, c being Object of C
                 .= id((Obj S*').c) by Th46;
  end;
 
-Lm19: for S being Contravariant_Functor of C,B, f being Morphism of C
+Lm20: for S being Contravariant_Functor of C,B, f being Morphism of C
       holds (Obj S*').(dom f) = dom (S*'.f) & (Obj S*').(cod f) = cod (S*'.f)
  proof let S be Contravariant_Functor of C,B, f be Morphism of C;
      now
@@ -1098,16 +1101,16 @@ theorem Th57:
    thus for c being Object of C ex d being Object of D opp st S*'.(id c) = id
 d
     proof let c be Object of C;
-        (S*').(id c) = id(((Obj S).c) opp) by Lm13;
+        (S*').(id c) = id(((Obj S).c) opp) by Lm14;
      hence ex d being Object of D opp st (S*').(id c) = id d;
     end;
    thus for f being Morphism of C
       holds S*'.(id dom f) = id dom (S*'.f) & S*'.(id cod f) = id cod (S*'.f)
     proof let f be Morphism of C;
-     thus (S*').(id dom f) = id((Obj S*').(dom f)) by Lm18
-                         .= id dom (S*'.f) by Lm19;
-     thus (S*').(id cod f) = id((Obj S*').(cod f)) by Lm18
-                         .= id cod (S*'.f) by Lm19;
+     thus (S*').(id dom f) = id((Obj S*').(dom f)) by Lm19
+                         .= id dom (S*'.f) by Lm20;
+     thus (S*').(id cod f) = id((Obj S*').(cod f)) by Lm19
+                         .= id cod (S*'.f) by Lm20;
     end;
    let f,g be Morphism of C; assume
 A1:  dom g = cod f;
@@ -1121,7 +1124,7 @@ then A2:  dom(S.f) = cod (S.g) by Th34;
   hence S*' is Functor of C,D opp by CAT_1:96;
  end;
 
-Lm20: for S being Functor of C,B, c being Object of C opp
+Lm21: for S being Functor of C,B, c being Object of C opp
      holds *'S.(id c) = id((Obj *'S).c)
  proof let S be Functor of C,B, c be Object of C opp;
   thus *'S.(id c) = S.(opp id c) by Def8
@@ -1130,7 +1133,7 @@ Lm20: for S being Functor of C,B, c being Object of C opp
                 .= id((Obj *'S).c) by Th41;
  end;
 
-Lm21: for S being Functor of C,B, f being Morphism of C opp
+Lm22: for S being Functor of C,B, f being Morphism of C opp
      holds (Obj *'S).(dom f) = cod (*'S.f) & (Obj *'S).(cod f) = dom (*'S.f)
  proof let S be Functor of C,B, f be Morphism of C opp;
      now
@@ -1150,16 +1153,16 @@ theorem Th58:
    thus for c being Object of C opp ex d being Object of D st *'S.(id c) = id
 d
     proof let c be Object of C opp;
-        (*'S).(id c) = id ((Obj *'S).c) by Lm20;
+        (*'S).(id c) = id ((Obj *'S).c) by Lm21;
      hence ex d being Object of D st (*'S).(id c) = id d;
     end;
    thus for f being Morphism of C opp
       holds *'S.(id dom f) = id cod (*'S.f) & *'S.(id cod f) = id dom (*'S.f)
      proof let f be Morphism of C opp;
-      thus (*'S).(id dom f) = id((Obj *'S).(dom f)) by Lm20
-                          .= id cod(*'S.f) by Lm21;
-      thus (*'S).(id cod f) = id((Obj *'S).(cod f)) by Lm20
-                          .= id dom(*'S.f) by Lm21;
+      thus (*'S).(id dom f) = id((Obj *'S).(dom f)) by Lm21
+                          .= id cod(*'S.f) by Lm22;
+      thus (*'S).(id cod f) = id((Obj *'S).(cod f)) by Lm21
+                          .= id dom(*'S.f) by Lm22;
      end;
    let f,g be Morphism of C opp such that
 A1:  dom g = cod f;
@@ -1171,7 +1174,7 @@ A2:  dom(opp f) = cod f & cod (opp g) = dom g;
                  .= (*'S.f)*(*'S.g) by Def8;
  end;
 
-Lm22: for S being Functor of C,B, c being Object of C
+Lm23: for S being Functor of C,B, c being Object of C
      holds S*'.(id c) = id((Obj S*').c)
  proof let S be Functor of C,B, c be Object of C;
   thus S*'.(id c) = (S.(id c)) opp by Def9
@@ -1180,7 +1183,7 @@ Lm22: for S being Functor of C,B, c being Object of C
                 .= id((Obj S*').c) by Th43;
  end;
 
-Lm23: for S being Functor of C,B, f being Morphism of C
+Lm24: for S being Functor of C,B, f being Morphism of C
      holds (Obj S*').(dom f) = cod (S*'.f) & (Obj S*').(cod f) = dom (S*'.f)
  proof let S be Functor of C,B, f be Morphism of C;
      now
@@ -1200,16 +1203,16 @@ theorem Th59:
    thus for c being Object of C ex d being Object of D opp st S*'.(id c) = id
 d
     proof let c be Object of C;
-         (S*').(id c) = id ((Obj S*').c) by Lm22;
+         (S*').(id c) = id ((Obj S*').c) by Lm23;
      hence ex d being Object of D opp st (S*').(id c) = id d;
     end;
    thus for f being Morphism of C
       holds S*'.(id dom f) = id cod (S*'.f) & S*'.(id cod f) = id dom (S*'.f)
      proof let f be Morphism of C;
-      thus (S*').(id dom f) = id((Obj S*').(dom f)) by Lm22
-                          .= id cod(S*'.f) by Lm23;
-      thus (S*').(id cod f) = id((Obj S*').(cod f)) by Lm22
-                          .= id dom(S*'.f) by Lm23;
+      thus (S*').(id dom f) = id((Obj S*').(dom f)) by Lm23
+                          .= id cod(S*'.f) by Lm24;
+      thus (S*').(id cod f) = id((Obj S*').(cod f)) by Lm23
+                          .= id dom(S*'.f) by Lm24;
      end;
    let f,g be Morphism of C; assume
 A1:  dom g = cod f;
@@ -1228,7 +1231,7 @@ theorem
      *'S1 is Functor of C opp,B by Th56;
   then S2*(*'S1) is Functor of C opp,D by CAT_1:110;
   then /*(S2*(*'S1)) is Contravariant_Functor of C,D by Th35;
-  then S2*(/*(*'S1)) is Contravariant_Functor of C,D by Lm15;
+  then S2*(/*(*'S1)) is Contravariant_Functor of C,D by Lm16;
   hence thesis by Th48;
  end;
 
@@ -1239,7 +1242,7 @@ theorem
      *'S1 is Contravariant_Functor of C opp,B by Th58;
   then S2*(*'S1) is Functor of C opp,D by Th36;
   then /*(S2*(*'S1)) is Contravariant_Functor of C,D by Th35;
-  then S2*(/*(*'S1)) is Contravariant_Functor of C,D by Lm15;
+  then S2*(/*(*'S1)) is Contravariant_Functor of C,D by Lm16;
   hence thesis by Th48;
  end;
 

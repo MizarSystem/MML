@@ -6,62 +6,51 @@
 
 environ
 
- vocabularies VECTSP_1, FUNCT_1, RLVECT_1, ALGSTR_1, ARYTM_1, LATTICES,
-      BINOP_1, ALGSTR_2, GROUP_1;
+ vocabularies VECTSP_1, RLVECT_1, ALGSTR_1, ARYTM_1, LATTICES, BINOP_1,
+      ALGSTR_2, GROUP_1, NAT_1;
  notations REAL_1, BINOP_1, BINOP_2, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1,
       ALGSTR_1;
- constructors BINOP_1, BINOP_2, MEMBERED, ALGSTR_1;
+ constructors BINOP_1, BINOP_2, MEMBERED, ALGSTR_1, NAT_D;
  registrations VECTSP_1, ALGSTR_1, MEMBERED;
- theorems VECTSP_1, ALGSTR_1, RLVECT_1, BINOP_2, GROUP_1;
+ theorems VECTSP_1, ALGSTR_1, RLVECT_1, GROUP_1;
 
 begin :: DOUBLE LOOPS
 
  reserve L for non empty doubleLoopStr;
 
-Lm1: for a,b being Element of F_Real
-          for x,y being Real
-          holds a = x & b = y implies a * b = x * y
-    proof
-       let a,b be Element of F_Real;
-       let x,y be Real;
-       assume a=x & b=y;
-       hence a * b = multreal.(x,y) by GROUP_1:def 1,VECTSP_1:def 15
-                 .= x * y by BINOP_2:def 11;
-    end;
+Lm1: 0 = 0.F_Real by RLVECT_1:def 2,VECTSP_1:def 15;
 
-Lm2: 0 = 0.F_Real by RLVECT_1:def 2,VECTSP_1:def 15;
-
-Lm3: for a,b being Element of F_Real st a<>0.F_Real
+Lm2: for a,b being Element of F_Real st a<>0.F_Real
          ex x being Element of F_Real st a*x=b
      proof
        let a,b be Element of F_Real such that
        A1: a<>0.F_Real;
        reconsider p=a, q=b as Real by VECTSP_1:def 15;
-       consider r be Real such that A2: p*r = q by A1,Lm2,ALGSTR_1:32;
+       consider r be Real such that A2: p*r = q by A1,Lm1,ALGSTR_1:32;
        reconsider x=r as Element of F_Real by VECTSP_1:def 15;
-          a*x = b by A2,Lm1;
+          a*x = b by A2;
        hence thesis;
      end;
 
-Lm4: for a,b being Element of F_Real st a<>0.F_Real
+Lm3: for a,b being Element of F_Real st a<>0.F_Real
              ex x being Element of F_Real st x*a=b
 proof
   let a,b be Element of F_Real; assume a<>0.F_Real;
   then consider x being Element of F_Real such that
-A1: a*x=b by Lm3;
+A1: a*x=b by Lm2;
   thus thesis by A1;
 end;
 
-Lm5: for a,x,y being Element of F_Real st a<>0.F_Real
+Lm4: for a,x,y being Element of F_Real st a<>0.F_Real
             holds a*x=a*y implies x=y by VECTSP_1:33;
 
-Lm6: for a,x,y being Element of F_Real st a<>0.F_Real
+Lm5: for a,x,y being Element of F_Real st a<>0.F_Real
             holds x*a=y*a implies x=y by VECTSP_1:33;
 
-Lm7: for a being Element of F_Real
+Lm6: for a being Element of F_Real
    holds a*0.F_Real = 0.F_Real by VECTSP_1:44;
 
-Lm8: for a being Element of F_Real
+Lm7: for a being Element of F_Real
    holds 0.F_Real*a = 0.F_Real by VECTSP_1:44;
 
 :: Below is the basic definition of the mode of DOUBLE LOOP.
@@ -70,7 +59,7 @@ Lm8: for a being Element of F_Real
 
 registration
   cluster F_Real -> multLoop_0-like;
-  coherence by Lm3,Lm4,Lm5,Lm6,Lm7,Lm8,ALGSTR_1:34;
+  coherence by Lm2,Lm3,Lm4,Lm5,Lm6,Lm7,ALGSTR_1:34;
 end;
 
 :: In the following part of this article the negation and minus functions
@@ -532,7 +521,7 @@ definition
   mode _Skew-Field is associative doublesidedQuasi-Field;
 end;
 
-Lm9: 0.L <> 1.L & (for a holds a * 1.L = a)
+Lm8: 0.L <> 1.L & (for a holds a * 1.L = a)
      & (for a st a<>0.L ex x st a*x = 1.L)
      & (for a,b,c holds (a*b)*c = a*(b*c))
      & (for a holds a*0.L = 0.L)
@@ -557,7 +546,7 @@ Lm9: 0.L <> 1.L & (for a holds a * 1.L = a)
       end;
   end;
 
-Lm10: 0.L <> 1.L & (for a holds a * 1.L = a)
+Lm9: 0.L <> 1.L & (for a holds a * 1.L = a)
      & (for a st a<>0.L ex x st a*x = 1.L)
      & (for a,b,c holds (a*b)*c = a*(b*c))
      & (for a holds a*0.L = 0.L)
@@ -574,7 +563,7 @@ Lm10: 0.L <> 1.L & (for a holds a * 1.L = a)
         assume a<>0.L;
         then consider x such that A3: a * x = 1.L by A1;
         thus 1.L*a = a * (x*a) by A1,A3
-                  .= a*1.L by A1,A3,Lm9;
+                  .= a*1.L by A1,A3,Lm8;
       end;
        a=0.L implies 1.L*a = a*1.L
       proof
@@ -585,7 +574,7 @@ Lm10: 0.L <> 1.L & (for a holds a * 1.L = a)
     hence thesis by A2;
   end;
 
-Lm11: 0.L <> 1.L
+Lm10: 0.L <> 1.L
      & (for a holds a * 1.L = a)
      & (for a st a<>0.L ex x st a*x = 1.L)
      & (for a,b,c holds (a*b)*c = a*(b*c))
@@ -601,7 +590,7 @@ Lm11: 0.L <> 1.L
     let a;
     assume a<>0.L;
     then consider x such that A2: a * x = 1.L by A1;
-       x*a=1.L by A1,A2,Lm9;
+       x*a=1.L by A1,A2,Lm8;
     hence thesis;
   end;
 
@@ -701,7 +690,7 @@ theorem Th32:
          A7: for a holds 1.L * a = a
              proof
                let a;
-               thus 1.L*a = a*1.L by A1,Lm10 .= a by A1;
+               thus 1.L*a = a*1.L by A1,Lm9 .= a by A1;
              end;
 
          thus for a,b st a<>0.L ex x st a*x=b
@@ -718,7 +707,7 @@ theorem Th32:
            proof
                let a,b;
                assume a<>0.L;
-               then consider y such that A9: y*a = 1.L by A1,Lm11;
+               then consider y such that A9: y*a = 1.L by A1,Lm10;
                take x = b*y;
                thus x*a = b * 1.L by A1,A9
                        .= b by A1;
@@ -728,7 +717,7 @@ theorem Th32:
            proof
                let a,x,y;
                assume a<>0.L;
-               then consider z such that A10: z*a = 1.L by A1,Lm11;
+               then consider z such that A10: z*a = 1.L by A1,Lm10;
                assume a*x = a*y;
                then (z*a)*x = z*(a*y) by A1 .= (z*a)*y by A1;
                hence x = 1.L * y by A7,A10 .= y by A7;

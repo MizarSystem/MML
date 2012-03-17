@@ -32,48 +32,6 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="29"/>
-<Adjective nr="42"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="72">
-<LocusVar nr="1"/>
-<Num nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="8"/>
-<Adjective nr="18"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="42"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="29"/>
-<Adjective nr="42" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="72">
-<LocusVar nr="1"/>
-<Num nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="8"/>
-<Adjective nr="18"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="42" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>

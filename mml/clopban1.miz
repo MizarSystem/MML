@@ -10,14 +10,14 @@ environ
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, GRCAT_1, UNIALG_1, LATTICES,
       FUNCOP_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3, BHSP_3, RSSPACE,
       RSSPACE3, PARTFUN1, LOPBAN_1, XCMPLX_0, COMPLEX1, CLVECT_1, CFUNCT_1,
-      CLOPBAN1, CSSPACE3, MONOID_0, FRAENKEL;
+      CLOPBAN1, CSSPACE3, MONOID_0, FRAENKEL, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0,
       MONOID_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
-      PSCOMP_1, COMPLEX1, RLVECT_1, FRAENKEL, NORMSP_1, SEQ_1, SEQ_2, SEQM_3,
-      SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1;
+      NAT_D, PSCOMP_1, COMPLEX1, RLVECT_1, FRAENKEL, NORMSP_1, SEQ_1, SEQ_2,
+      SEQM_3, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1;
  constructors FUNCT_3, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, RAT_1, COMPLEX1,
-      SEQM_3, FUNCSDOM, MONOID_0, PSCOMP_1, LOPBAN_1, CSSPACE3;
+      SEQM_3, FUNCSDOM, MONOID_0, PSCOMP_1, LOPBAN_1, CSSPACE3, NAT_D;
  registrations SUBSET_1, RELSET_1, STRUCT_0, RLVECT_1, XREAL_0, MEMBERED,
       CLVECT_1, CSSPACE3, COMPLEX1, ORDINAL1, XCMPLX_0, SEQM_3, MONOID_0,
       XXREAL_0, FUNCT_2, NUMBERS;
@@ -265,22 +265,17 @@ proof
      thus u+v = v+u
      proof
        reconsider v' = v, u' = u as Element of Funcs(X,the carrier of Y);
-       thus u+v = (FuncAdd(X,Y)).(u',v')
-               .= (FuncAdd(X,Y)).(v',u') by Th4
-               .= v+u;
+       thus u+v = v+u by Th4;
      end;
      thus (u+v)+w = u+(v+w)
      proof
        reconsider v'=v, u'=u, w'=w as Element of Funcs(X,the carrier of Y);
-       thus (u+v)+w = (FuncAdd(X,Y)).((FuncAdd(X,Y)).(u',v'),w')
-            .= (FuncAdd(X,Y)).(u',(FuncAdd(X,Y)).(v',w')) by Th5
-            .= u+(v+w);
+       thus (u+v)+w = u+(v+w) by Th5;
      end;
      thus u+0.IT = u
      proof
        reconsider u'=u as Element of Funcs(X,the carrier of Y);
-       thus u+0.IT = (FuncAdd(X,Y)).(u',FuncZero(X,Y))
-              .= (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th4
+       thus u+0.IT = (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th4
               .= u by Th6;
      end;
      thus ex w st u+w = 0.IT
@@ -288,8 +283,7 @@ proof
        reconsider u' = u as Element of Funcs(X,the carrier of Y);
        reconsider w = (FuncExtMult(X,Y)).[-1r,u'] as VECTOR of IT;
        take w;
-       thus u+w = (FuncAdd(X,Y)).(u',(FuncExtMult(X,Y)).[-1r,u'])
-           .= 0.IT by Th7;
+       thus u+w = 0.IT by Th7;
      end;
 
 A1:  for a be Complex, u,v be VECTOR of IT holds
@@ -408,8 +402,7 @@ A1:  h = f+g;
    assume
     for x be Element of X holds h.x=f.x+g.x;
 then A2:for x be Element of X holds h'.x=f'.x+g'.x;
-    f+g = (FuncAdd(X,Y)).(f',g');
-   hence h = f+g by A2,LOPBAN_1:3;
+   thus h = f+g by A2,LOPBAN_1:3;
 end;
 
 theorem Th13:
@@ -433,7 +426,7 @@ A1:  h = c*f;
    hence h =c*f by CLVECT_1:def 1;
 end;
 
-theorem Th14:
+ Lm2:
 for X be non empty set, Y be ComplexLinearSpace holds
  0.ComplexVectSpace(X,Y) = X --> 0.Y by LOPBAN_1:def 3;
 
@@ -568,6 +561,8 @@ A1:f is additive
 end;
 end;
 
+canceled;
+
 theorem Th15:
 for X,Y be ComplexLinearSpace holds LinearOperators(X,Y) is lineary-closed
 proof
@@ -589,32 +584,30 @@ A3:      f is additive
            let x,y be VECTOR of X;
            reconsider v' = v, u' = u as Element of
                 Funcs(the carrier of X,the carrier of Y);
-A4:        f = (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
-A5:        u' is LinearOperator of X,Y by A2,Def5;
-A6:        v' is LinearOperator of X,Y by A2,Def5;
+A4:        u' is LinearOperator of X,Y by A2,Def5;
+A5:        v' is LinearOperator of X,Y by A2,Def5;
            thus
-            f.(x+y) =u'.(x+y)+v'.(x+y) by A4,LOPBAN_1:3
-                  .=(u'.x+u'.y)+v'.(x+y) by A5,Def3
-                  .=u'.x+u'.y+(v'.x+v'.y) by A6,Def3
+            f.(x+y) =u'.(x+y)+v'.(x+y) by LOPBAN_1:3
+                  .=(u'.x+u'.y)+v'.(x+y) by A4,Def3
+                  .=u'.x+u'.y+(v'.x+v'.y) by A5,Def3
                   .=u'.x+u'.y+v'.x+v'.y by RLVECT_1:def 6
                   .=u'.x+v'.x+u'.y+v'.y by RLVECT_1:def 6
-                  .= f.x+ u'.y+v'.y by A4,LOPBAN_1:3
+                  .= f.x+ u'.y+v'.y by LOPBAN_1:3
                   .= f.x+ (u'.y+v'.y) by RLVECT_1:def 6
-                  .= f.x+f.y by A4,LOPBAN_1:3;
+                  .= f.x+f.y by LOPBAN_1:3;
          end;
           f is homogeneous
          proof
            let x be VECTOR of X, s be Complex;
            reconsider v' = v, u' = u as Element of
            Funcs(the carrier of X,the carrier of Y);
-A7:        f = (FuncAdd(the carrier of X,Y)).(u',v') by RLVECT_1:def 3;
-A8:        u' is LinearOperator of X,Y by A2,Def5;
-A9:       v' is LinearOperator of X,Y by A2,Def5;
-           thus f.(s*x) =u'.(s*x)+v'.(s*x) by A7,LOPBAN_1:3
-               .=(s*(u'.x))+v'.(s*x) by A8,Def4
-               .=s*u'.x+s*v'.x by A9,Def4
+A6:        u' is LinearOperator of X,Y by A2,Def5;
+A7:       v' is LinearOperator of X,Y by A2,Def5;
+           thus f.(s*x) =u'.(s*x)+v'.(s*x) by LOPBAN_1:3
+               .=(s*(u'.x))+v'.(s*x) by A6,Def4
+               .=s*u'.x+s*v'.x by A7,Def4
                .=s*(u'.x+v'.x) by CLVECT_1:def 2
-               .= s*f.x by A7,LOPBAN_1:3;
+               .= s*f.x by LOPBAN_1:3;
          end;
          hence thesis by A3;
        end;
@@ -627,39 +620,39 @@ A9:       v' is LinearOperator of X,Y by A2,Def5;
    proof
      let c be Complex;
      let v be VECTOR of ComplexVectSpace(the carrier of X,Y) such that
-A10: v in W;
+A8: v in W;
       c*v is LinearOperator of X,Y
      proof
        reconsider f=c*v as Function of X,Y by FUNCT_2:121;
         f is LinearOperator of X,Y
        proof
-A11:     f is additive
+A9:     f is additive
          proof
            let x,y be VECTOR of X;
            reconsider v' = v as Element of
            Funcs(the carrier of X,the carrier of Y);
-A12:       f= (FuncExtMult(the carrier of X,Y)).[c,v'] by CLVECT_1:def 1;
-A13:       v' is LinearOperator of X,Y by A10,Def5;
-           thus f.(x+y) = c*(v'.(x+y)) by A12,Th3
-               .=c*(v'.x+v'.y) by A13,Def3
+A10:       f= (FuncExtMult(the carrier of X,Y)).[c,v'] by CLVECT_1:def 1;
+A11:       v' is LinearOperator of X,Y by A8,Def5;
+           thus f.(x+y) = c*(v'.(x+y)) by A10,Th3
+               .=c*(v'.x+v'.y) by A11,Def3
                .=c*v'.x+c*v'.y by CLVECT_1:def 2
-               .=f.x+c*v'.y by A12,Th3
-               .=f.x+ f.y by A12,Th3;
+               .=f.x+c*v'.y by A10,Th3
+               .=f.x+ f.y by A10,Th3;
          end;
           f is homogeneous
          proof
            let x be VECTOR of X, s be Complex;
            reconsider v' = v as Element of
            Funcs(the carrier of X,the carrier of Y);
-A14:       f= (FuncExtMult(the carrier of X,Y)).[c,v'] by CLVECT_1:def 1;
-A15:       v' is LinearOperator of X,Y by A10,Def5;
-           thus f.(s*x) =c*v'.(s*x) by A14,Th3
-               .=c*(s*(v'.x)) by A15,Def4
+A12:       f= (FuncExtMult(the carrier of X,Y)).[c,v'] by CLVECT_1:def 1;
+A13:       v' is LinearOperator of X,Y by A8,Def5;
+           thus f.(s*x) =c*v'.(s*x) by A12,Th3
+               .=c*(s*(v'.x)) by A13,Def4
                .=c*s*v'.x by CLVECT_1:def 2
                .=s*(c*v'.x) by CLVECT_1:def 2
-               .=s*f.x by A14,Th3;
+               .=s*f.x by A12,Th3;
          end;
-         hence thesis by A11;
+         hence thesis by A9;
        end;
        hence thesis;
      end;
@@ -808,7 +801,7 @@ proof
 A1:C_VectorSpace_of_LinearOperators(X,Y) is
       Subspace of ComplexVectSpace(the carrier of X,Y) by Th16;
     0.ComplexVectSpace(the carrier of X,Y)
-          =((the carrier of X) -->0.Y) by Th14;
+          =((the carrier of X) -->0.Y) by Lm2;
    hence thesis by A1,CLVECT_1:31;
 end;
 
@@ -1877,7 +1870,7 @@ definition
   mode ComplexBanachSpace is complete ComplexNormSpace;
 end;
 
-Lm2:
+Lm3:
 for e be Real, seq be Real_Sequence st ( seq is convergent &
  ex k be Element of NAT
  st (for i be Element of NAT st k <= i holds seq.i <=e ) ) holds
@@ -1897,7 +1890,7 @@ A6:(seq ^\k) is convergent by A1,SEQ_4:33;
 A7:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
 A8:now let i be Element of NAT;
 A9: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
-       k <= k+i by NAT_1:29;
+       k <= k+i by NAT_1:11;
      then seq.(k+i) <=e by A5;
      hence (seq ^\k) .i <= cseq.i by A3,A9;
   end;
@@ -2236,7 +2229,7 @@ A64:           m >=k;
                 .= ||.xseq.n-xseq.m.|| by CLVECT_1:109;
                hence thesis by A55,A64;
              end;
-             then lim rseq <= e * ||.x.|| by A60,Lm2;
+             then lim rseq <= e * ||.x.|| by A60,Lm3;
              hence thesis by A60,CLVECT_1:109;
            end;
            hence ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e* ||.x.|| by A50

@@ -9,12 +9,13 @@ environ
  vocabularies BOOLE, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, ZF_LANG,
       LATTICES, MARGREL1, MIDSP_3, BINARITH, CLASSES1, PARTFUN1, AMI_1,
       MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP,
-      GFACIRC1;
- notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NAT_1, RELAT_1, STRUCT_0,
-      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, MARGREL1, CLASSES1, BINARITH,
-      MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP;
+      GFACIRC1, NAT_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NAT_1, NAT_D, RELAT_1,
+      STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, MARGREL1, CLASSES1,
+      BINARITH, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1,
+      TWOSCOMP;
  constructors ENUMSET1, XXREAL_0, CLASSES1, BINARITH, CIRCUIT1, CIRCUIT2,
-      FACIRC_1, TWOSCOMP;
+      FACIRC_1, TWOSCOMP, NAT_D;
  registrations STRUCT_0, RELAT_1, RELSET_1, FINSEQ_2, FRAENKEL, MARGREL1,
       CARD_3, CIRCCOMB, FACIRC_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -255,7 +256,7 @@ theorem Th4:
      .= or2.<*and2b.<*x,y*>,and2.<*x,y*> *> by TWOSCOMP:def 1;
     thus xor2c.<*0,0*>
       = FALSE 'xor' 'not' FALSE by Def4
-     .= 1 by BINARITH:17;
+     .= 1 by XBOOLEAN:102;
     thus xor2c.<*0,1*>
       = FALSE 'xor' 'not' TRUE by Def4
      .= 0;
@@ -267,10 +268,7 @@ theorem Th4:
      .= 1 by BINARITH:13;
   end;
 
-theorem
-  for x,y being Element of BOOLEAN holds
-    'not' (x 'xor' y) = 'not' x 'xor' y &
-    'not' (x 'xor' y) = x 'xor' 'not' y by XBOOLEAN:74;
+canceled;
 
 theorem
   for x,y being Element of BOOLEAN holds
@@ -293,10 +291,7 @@ theorem
       .= xor2.<*x,y*> by TWOSCOMP:def 13;
   end;
 
-theorem
-  for x,y,z being Element of BOOLEAN holds
-    'not' ( ( x 'xor' 'not' y ) 'xor'       z )
-        =   ( x 'xor' 'not' y ) 'xor' 'not' z by XBOOLEAN:74;
+canceled;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
@@ -323,10 +318,12 @@ theorem
        xor2c.<* xor2a.<*x,y*>, z *>
      = xor2c.<* xor2c.<*x,y*>, z *> by Th4;
 
-theorem Th11:
+ Lm1:
   for x,y,z being Element of BOOLEAN holds
     'not' ( ( 'not' x 'xor' 'not' y ) 'xor' 'not' z )
      = ( x 'xor' y ) 'xor' z by XBOOLEAN:74;
+
+canceled;
 
 theorem
   for x,y,z being Element of BOOLEAN holds
@@ -338,12 +335,12 @@ theorem
       = inv1.<* xor2c.<* 'not' x 'xor' 'not' y, z *> *> by TWOSCOMP:def 15
      .= inv1.<* ( 'not' x 'xor' 'not' y ) 'xor' 'not' z *> by Def4
      .= 'not' ( ( 'not' x 'xor' 'not' y ) 'xor' 'not' z ) by Def1
-     .= ( x 'xor' y ) 'xor' z by Th11
+     .= ( x 'xor' y ) 'xor' z by Lm1
      .=  xor2.<* x 'xor' y, z *>  by TWOSCOMP:def 13
      .=  xor2.<* xor2.<*x,y*>, z *>  by TWOSCOMP:def 13;
   end;
 
-Lm1:
+Lm2:
  for f1,f2,f3 being Function of 2-tuples_on BOOLEAN, BOOLEAN
   for x,y,z being set st
     x <> [<*y,z*>,f2] & y <> [<*z,x*>,f3] & z <> [<*x,y*>,f1]
@@ -409,7 +406,7 @@ then z <> zx by A17,A18,A19,A20,ORDINAL1:5;
      hence not zx in {x,y,z} by A1,A16,ENUMSET1:def 1;
   end;
 
-Lm2:
+Lm3:
  for f1,f2,f3 being Function of 2-tuples_on BOOLEAN, BOOLEAN
   for f4 being Function of 3-tuples_on BOOLEAN, BOOLEAN
    for x,y,z being set
@@ -453,7 +450,7 @@ A11: a in {x,y,z};
      hence thesis by A11,XBOOLE_0:def 4;
   end;
 
-Lm3:
+Lm4:
  for f being Function of 2-tuples_on BOOLEAN, BOOLEAN
   for x,y,c being set st c <> [<*x,y*>,f]
    for s being State of 2GatesCircuit(x,y,c,f) holds
@@ -666,7 +663,8 @@ A1:  InnerVertices Cxy is Relation & InnerVertices Cyz is Relation &
      InnerVertices Czx is Relation by FACIRC_1:38;
 then InnerVertices (Cxy +* Cyz) is Relation by FACIRC_1:3;
 then InnerVertices Cxyz is Relation &
-     InnerVertices GFA0CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,38;
+     InnerVertices GFA0CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,
+38;
     hence thesis by FACIRC_1:3;
    end;
 
@@ -689,9 +687,9 @@ A1:  x <> yz & y <> zx & z <> xy;
 A2:  Cxy +* Cyz tolerates Czx by CIRCCOMB:55;
 A3:  Cxy tolerates Cyz by CIRCCOMB:55;
 A4:  y <> [<*y,z*>,f2] by FACIRC_2:3;
-A5:  not xy in {y,z} by A1,Lm1;
-A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm1;
-A7:  not zx in {x,y,z} by A1,Lm1;
+A5:  not xy in {y,z} by A1,Lm2;
+A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm2;
+A7:  not zx in {x,y,z} by A1,Lm2;
      InputVertices GFA0CarryIStr(x,y,z)
       = (InputVertices(Cxy +* Cyz) \ InnerVertices(Czx)) \/
         (InputVertices(Czx) \ InnerVertices(Cxy +* Cyz)) by A2,CIRCCMB2:6
@@ -763,7 +761,7 @@ A1:  x <> yz & y <> zx & z <> xy;
 A2:  InnerVertices S = {xyz} by CIRCCOMB:49;
 A3:  InputVertices S = rng <*xy, yz, zx*> by CIRCCOMB:49
                     .= {xy, yz, zx} by FINSEQ_2:148;
-A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm2;
+A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm3;
 A5:  {xy, yz, zx} \ {xy, yz, zx} = {} by XBOOLE_1:37;
      GFA0CarryStr(x,y,z) = MI +* S & MI tolerates S by CIRCCOMB:55;
     hence InputVertices GFA0CarryStr(x,y,z)
@@ -1132,23 +1130,10 @@ theorem Th27:
       .= {xy} \/ {GFA0AdderOutput(x,y,z)} by ENUMSET1:41;
    end;
 
-theorem
- for x,y,z being set holds
-  InnerVertices GFA0AdderStr(x,y,z) is Relation by FACIRC_1:58;
-
-::-------------------------------------------------------
-:: InputVertices
-
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2] holds
-  InputVertices GFA0AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
-theorem
- for x,y,z being non pair set holds
-  InputVertices GFA0AdderStr(x,y,z) is without_pairs by FACIRC_1:59;
-
 ::-------------------------------------------------------
 :: Carrier and misc.
+
+canceled 3;
 
 theorem
  for x,y,z being set holds
@@ -1187,13 +1172,11 @@ A1:  z <> [<*x,y*>,f];
      hence thesis by ENUMSET1:def 1;
    end;
 
-theorem
- for x,y,z being non pair set holds
-   InputVertices GFA0AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
 ::----------------------------------------------------
 :: GFA0 Adder : Stability of the Adder Output Circuit
 ::----------------------------------------------------
+
+canceled;
 
 theorem Th35:
  for x,y,z being set st z <> [<*x,y*>, xor2]
@@ -1211,10 +1194,10 @@ A1:  z <> [<*x,y*>,f];
      let s be State of A;
      let a1,a2,a3 be Element of BOOLEAN such that
 A2:  a1 = s.x & a2 = s.y & a3 = s.z;
-     (Following s).xy = f.<*a1, a2*> by A1,A2,Lm3;
+     (Following s).xy = f.<*a1, a2*> by A1,A2,Lm4;
      hence (Following s).xy = a1 'xor' a2 by TWOSCOMP:def 13;
      thus (Following s).x = a1 & (Following s).y = a2 & (Following s).z = a3
-       by A1,A2,Lm3;
+       by A1,A2,Lm4;
    end;
 
 theorem Th36:
@@ -1235,7 +1218,7 @@ A1:  z <> [<*x,y*>,f];
 A2:  a1a2 = s.xy & a1 = s.x & a2 = s.y & a3 = s.z;
      set C = GFA0AdderOutput(x,y,z);
      thus (Following s).GFA0AdderOutput(x,y,z)
-         = f.<*s.xy, s.z*> by A1,Lm3
+         = f.<*s.xy, s.z*> by A1,Lm4
         .= a1a2 'xor' a3 by A2,TWOSCOMP:def 13;
    end;
 
@@ -1267,11 +1250,6 @@ A2:  a1 = s.x & a2 = s.y & a3 = s.z;
           (Following(s,2)).z = a3 by A1,A2,FACIRC_1:62;
    end;
 
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2]
-  for s being State of GFA0AdderCirc(x,y,z)
-    holds Following(s,2) is stable by FACIRC_1:63;
-
 ::=====================================================================
 
 ::---------------------------------------------------
@@ -1301,6 +1279,8 @@ end;
 
 ::-------------------------------------------------------
 :: InnerVertices
+
+canceled;
 
 theorem Th39:
   for x,y,z being set holds
@@ -1370,7 +1350,7 @@ theorem Th42:
      set S1 = GFA0AdderStr(x,y,z);
      set S2 = GFA0CarryStr(x,y,z);
 A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
-      by FACIRC_1:58,FACIRC_1:59;
+      by FACIRC_1:58,59;
 A2:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th15,Th18;
      InputVertices S1 = {x,y,z} & InputVertices S2 = {x,y,z}
@@ -1777,7 +1757,8 @@ A1:  InnerVertices Cxy is Relation & InnerVertices Cyz is Relation &
      InnerVertices Czx is Relation by FACIRC_1:38;
 then InnerVertices (Cxy +* Cyz) is Relation by FACIRC_1:3;
 then InnerVertices Cxyz is Relation &
-     InnerVertices GFA1CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,38;
+     InnerVertices GFA1CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,
+38;
     hence thesis by FACIRC_1:3;
    end;
 
@@ -1800,9 +1781,9 @@ A1:  x <> yz & y <> zx & z <> xy;
 A2:  Cxy +* Cyz tolerates Czx by CIRCCOMB:55;
 A3:  Cxy tolerates Cyz by CIRCCOMB:55;
 A4:  y <> yz by FACIRC_2:3;
-A5:  not xy in {y,z} by A1,Lm1;
-A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm1;
-A7:  not zx in {x,y,z} by A1,Lm1;
+A5:  not xy in {y,z} by A1,Lm2;
+A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm2;
+A7:  not zx in {x,y,z} by A1,Lm2;
      InputVertices GFA1CarryIStr(x,y,z)
       = (InputVertices(Cxy +* Cyz) \ InnerVertices(Czx)) \/
         (InputVertices(Czx) \ InnerVertices(Cxy +* Cyz)) by A2,CIRCCMB2:6
@@ -1874,7 +1855,7 @@ A2:  InputVertices S = rng <*xy, yz, zx*> by CIRCCOMB:49
                     .= {xy, yz, zx} by FINSEQ_2:148;
      assume
 A3:  x <> yz & y <> zx & z <> xy;
-A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm2;
+A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm3;
 A5:  {xy, yz, zx} \ {xy, yz, zx} = {} by XBOOLE_1:37;
      GFA1CarryStr(x,y,z) = MI +* S & MI tolerates S by CIRCCOMB:55;
      hence InputVertices GFA1CarryStr(x,y,z)
@@ -2245,23 +2226,10 @@ theorem Th63:
       .= {xy} \/ {GFA1AdderOutput(x,y,z)} by ENUMSET1:41;
    end;
 
-theorem
- for x,y,z being set holds
-  InnerVertices GFA1AdderStr(x,y,z) is Relation by FACIRC_1:58;
-
-::-------------------------------------------------------
-:: InputVertices
-
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2c] holds
-  InputVertices GFA1AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
-theorem
- for x,y,z being non pair set holds
-  InputVertices GFA1AdderStr(x,y,z) is without_pairs by FACIRC_1:59;
-
 ::-------------------------------------------------------
 :: Carrier and misc.
+
+canceled 3;
 
 theorem
  for x,y,z being set holds
@@ -2300,13 +2268,11 @@ A1:  z <> [<*x,y*>,f];
      hence thesis by ENUMSET1:def 1;
    end;
 
-theorem
- for x,y,z being non pair set holds
-   InputVertices GFA1AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
 ::----------------------------------------------------
 :: GFA1 Adder : Stability of the Adder Output Circuit
 ::----------------------------------------------------
+
+canceled;
 
 theorem Th71:
  for x,y,z being set st z <> [<*x,y*>, xor2c]
@@ -2324,10 +2290,10 @@ A1:  z <> [<*x,y*>,f];
      let s be State of A;
      let a1,a2,a3 be Element of BOOLEAN such that
 A2:  a1 = s.x & a2 = s.y & a3 = s.z;
-     (Following s).xy = f.<*a1, a2*> by A1,A2,Lm3;
+     (Following s).xy = f.<*a1, a2*> by A1,A2,Lm4;
      hence (Following s).xy = a1 'xor' 'not' a2 by Def4;
      thus (Following s).x = a1 & (Following s).y = a2 & (Following s).z = a3
-       by A1,A2,Lm3;
+       by A1,A2,Lm4;
    end;
 
 theorem Th72:
@@ -2348,7 +2314,7 @@ A1:  z <> [<*x,y*>,f];
 A2:  a1a2 = s.xy & a1 = s.x & a2 = s.y & a3 = s.z;
      set C = GFA1AdderOutput(x,y,z);
      thus (Following s).GFA1AdderOutput(x,y,z)
-         = f.<*s.xy, s.z*> by A1,Lm3
+         = f.<*s.xy, s.z*> by A1,Lm4
         .= a1a2 'xor' 'not' a3 by A2,Def4;
    end;
 
@@ -2402,11 +2368,6 @@ A2:  a1 = s.x & a2 = s.y & a3 = s.z;
         .= 'not' (a1 'xor' 'not' a2 'xor' a3) by XBOOLEAN:74;
    end;
 
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2c]
-  for s being State of GFA1AdderCirc(x,y,z)
-    holds Following(s,2) is stable by FACIRC_1:63;
-
 ::=====================================================================
 
 ::---------------------------------------------------
@@ -2436,6 +2397,8 @@ end;
 
 ::-------------------------------------------------------
 :: InnerVertices
+
+canceled;
 
 theorem Th76:
   for x,y,z being set holds
@@ -2505,7 +2468,7 @@ theorem Th79:
      set S1 = GFA1AdderStr(x,y,z);
      set S2 = GFA1CarryStr(x,y,z);
 A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
-      by FACIRC_1:58,FACIRC_1:59;
+      by FACIRC_1:58,59;
 A2:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th51,Th54;
      InputVertices S1 = {x,y,z} & InputVertices S2 = {x,y,z}
@@ -2916,7 +2879,8 @@ A1:  InnerVertices Cxy is Relation & InnerVertices Cyz is Relation &
      InnerVertices Czx is Relation by FACIRC_1:38;
 then InnerVertices (Cxy +* Cyz) is Relation by FACIRC_1:3;
 then InnerVertices Cxyz is Relation &
-     InnerVertices GFA2CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,38;
+     InnerVertices GFA2CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,
+38;
     hence thesis by FACIRC_1:3;
    end;
 
@@ -2939,9 +2903,9 @@ A1:  x <> yz & y <> zx & z <> xy;
 A2:  Cxy +* Cyz tolerates Czx by CIRCCOMB:55;
 A3:  Cxy tolerates Cyz by CIRCCOMB:55;
 A4:  y <> yz by FACIRC_2:3;
-A5:  not xy in {y,z} by A1,Lm1;
-A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm1;
-A7:  not zx in {x,y,z} by A1,Lm1;
+A5:  not xy in {y,z} by A1,Lm2;
+A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm2;
+A7:  not zx in {x,y,z} by A1,Lm2;
      InputVertices GFA2CarryIStr(x,y,z)
       = (InputVertices(Cxy +* Cyz) \ InnerVertices(Czx)) \/
         (InputVertices(Czx) \ InnerVertices(Cxy +* Cyz)) by A2,CIRCCMB2:6
@@ -3013,7 +2977,7 @@ A2:  InputVertices S = rng <*xy, yz, zx*> by CIRCCOMB:49
                     .= {xy, yz, zx} by FINSEQ_2:148;
      assume
 A3:  x <> yz & y <> zx & z <> xy;
-A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm2;
+A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm3;
 A5:  {xy, yz, zx} \ {xy, yz, zx} = {} by XBOOLE_1:37;
      GFA2CarryStr(x,y,z) = MI +* S & MI tolerates S by CIRCCOMB:55;
      hence InputVertices GFA2CarryStr(x,y,z)
@@ -3385,23 +3349,10 @@ theorem Th100:
     hence thesis by Th63;
    end;
 
-theorem
- for x,y,z being set holds
-  InnerVertices GFA2AdderStr(x,y,z) is Relation by FACIRC_1:58;
-
-::-------------------------------------------------------
-:: InputVertices
-
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2c] holds
-  InputVertices GFA2AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
-theorem
- for x,y,z being non pair set holds
-  InputVertices GFA2AdderStr(x,y,z) is without_pairs by FACIRC_1:59;
-
 ::-------------------------------------------------------
 :: Carrier and misc.
+
+canceled 3;
 
 theorem
  for x,y,z being set holds
@@ -3437,13 +3388,11 @@ A1:  z <> [<*x,y*>,f];
     hence thesis by A1,Th69;
    end;
 
-theorem
- for x,y,z being non pair set holds
-   InputVertices GFA2AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
 ::----------------------------------------------------
 :: GFA2 Adder : Stability of the Adder Output Circuit
 ::----------------------------------------------------
+
+canceled;
 
 theorem
  for x,y,z being set st z <> [<*x,y*>, xor2c]
@@ -3522,11 +3471,6 @@ A2:  a1 = s.x & a2 = s.y & a3 = s.z;
         .= 'not' a1 'xor' a2 'xor' 'not' a3;
    end;
 
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2c]
-  for s being State of GFA2AdderCirc(x,y,z)
-    holds Following(s,2) is stable by FACIRC_1:63;
-
 ::=====================================================================
 
 ::---------------------------------------------------
@@ -3556,6 +3500,8 @@ end;
 
 ::-------------------------------------------------------
 :: InnerVertices
+
+canceled;
 
 theorem Th113:
   for x,y,z being set holds
@@ -3625,7 +3571,7 @@ theorem Th116:
      set S1 = GFA2AdderStr(x,y,z);
      set S2 = GFA2CarryStr(x,y,z);
 A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
-      by FACIRC_1:58,FACIRC_1:59;
+      by FACIRC_1:58,59;
 A2:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th88,Th91;
      InputVertices S1 = {x,y,z} & InputVertices S2 = {x,y,z}
@@ -4037,7 +3983,8 @@ A1:  InnerVertices Cxy is Relation & InnerVertices Cyz is Relation &
      InnerVertices Czx is Relation by FACIRC_1:38;
 then InnerVertices (Cxy +* Cyz) is Relation by FACIRC_1:3;
 then InnerVertices Cxyz is Relation &
-     InnerVertices GFA3CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,38;
+     InnerVertices GFA3CarryIStr(x,y,z) is Relation by A1,FACIRC_1:3,
+38;
     hence thesis by FACIRC_1:3;
    end;
 
@@ -4060,9 +4007,9 @@ A1:  x <> yz & y <> zx & z <> xy;
 A2:  Cxy +* Cyz tolerates Czx by CIRCCOMB:55;
 A3:  Cxy tolerates Cyz by CIRCCOMB:55;
 A4:  y <> yz by FACIRC_2:3;
-A5:  not xy in {y,z} by A1,Lm1;
-A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm1;
-A7:  not zx in {x,y,z} by A1,Lm1;
+A5:  not xy in {y,z} by A1,Lm2;
+A6:  not z in {xy, yz} & not x in {xy, yz} by A1,Lm2;
+A7:  not zx in {x,y,z} by A1,Lm2;
      InputVertices GFA3CarryIStr(x,y,z)
       = (InputVertices(Cxy +* Cyz) \ InnerVertices(Czx)) \/
         (InputVertices(Czx) \ InnerVertices(Cxy +* Cyz)) by A2,CIRCCMB2:6
@@ -4134,7 +4081,7 @@ A2:  InputVertices S = rng <*xy, yz, zx*> by CIRCCOMB:49
                     .= {xy, yz, zx} by FINSEQ_2:148;
      assume
 A3:  x <> yz & y <> zx & z <> xy;
-A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm2;
+A4:  {x, y, z} \ {xyz} = {x, y, z} by Lm3;
 A5:  {xy, yz, zx} \ {xy, yz, zx} = {} by XBOOLE_1:37;
      GFA3CarryStr(x,y,z) = MI +* S & MI tolerates S by CIRCCOMB:55;
      hence InputVertices GFA3CarryStr(x,y,z)
@@ -4505,23 +4452,10 @@ theorem Th137:
     hence thesis by Th27;
    end;
 
-theorem
- for x,y,z being set holds
-  InnerVertices GFA3AdderStr(x,y,z) is Relation by FACIRC_1:58;
-
-::-------------------------------------------------------
-:: InputVertices
-
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2] holds
-  InputVertices GFA3AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
-theorem
- for x,y,z being non pair set holds
-  InputVertices GFA3AdderStr(x,y,z) is without_pairs by FACIRC_1:59;
-
 ::-------------------------------------------------------
 :: Carrier and misc.
+
+canceled 3;
 
 theorem
  for x,y,z being set holds
@@ -4556,13 +4490,11 @@ A1:  z <> [<*x,y*>,xor2];
      hence thesis by A1,Th33;
    end;
 
-theorem
- for x,y,z being non pair set holds
-   InputVertices GFA3AdderStr(x,y,z) = {x,y,z} by FACIRC_1:57;
-
 ::----------------------------------------------------
 :: GFA3 Adder : Stability of the Adder Output Circuit
 ::----------------------------------------------------
+
+canceled;
 
 theorem
  for x,y,z being set st z <> [<*x,y*>, xor2]
@@ -4638,13 +4570,8 @@ A1:  z <> [<*x,y*>,f];
 A2:  a1 = s.x & a2 = s.y & a3 = s.z;
      thus (Following(s,2)).GFA3AdderOutput(x,y,z)
          = a1 'xor' a2 'xor' a3 by A1,A2,Th147
-        .= 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) by Th11;
+        .= 'not' ('not' a1 'xor' 'not' a2 'xor' 'not' a3) by Lm1;
    end;
-
-theorem
- for x,y,z being set st z <> [<*x,y*>,xor2]
-  for s being State of GFA3AdderCirc(x,y,z)
-    holds Following(s,2) is stable by FACIRC_1:63;
 
 ::=====================================================================
 
@@ -4675,6 +4602,8 @@ end;
 
 ::-------------------------------------------------------
 :: InnerVertices
+
+canceled;
 
 theorem Th150:
   for x,y,z being set holds
@@ -4744,7 +4673,7 @@ theorem Th153:
      set S1 = GFA3AdderStr(x,y,z);
      set S2 = GFA3CarryStr(x,y,z);
 A1:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
-      by FACIRC_1:58,FACIRC_1:59;
+      by FACIRC_1:58,59;
 A2:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
       by Th125,Th128;
      InputVertices S1 = {x,y,z} & InputVertices S2 = {x,y,z}

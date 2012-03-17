@@ -9,23 +9,23 @@ environ
  vocabularies VECTSP_1, FUNCT_1, FINSEQ_4, RELAT_1, FUNCT_2, PARTFUN1,
       FINSEQ_2, FINSEQ_1, CAT_1, FUNCOP_1, BOOLE, BINOP_1, SETWISEO, ALGSTR_1,
       MONOID_0, LATTICE2, MCART_1, GROUP_1, VECTSP_2, FUNCT_3, FINSET_1,
-      COMPLEX1, CARD_1, ARYTM_1, MONOID_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, NAT_1,
+      COMPLEX1, CARD_1, ARYTM_1, MONOID_1, NAT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, NAT_1, NAT_D,
       RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, MONOID_0, RELSET_1, PARTFUN1,
       FUNCT_2, BINOP_1, FUNCOP_1, SETWISEO, FINSET_1, FRAENKEL, FUNCT_3,
       FINSEQ_2, CARD_1, LATTICE2, FUNCT_4, FUNCT_6, GROUP_1, VECTSP_1,
       DOMAIN_1;
  constructors FUNCT_3, DOMAIN_1, BINOP_1, SETWISEO, FRAENKEL, XXREAL_0, REAL_1,
-      NAT_1, BINOP_2, FUNCT_5, FUNCT_6, LATTICE2, MONOID_0;
+      NAT_1, BINOP_2, FUNCT_5, FUNCT_6, LATTICE2, MONOID_0, NAT_D;
  registrations SUBSET_1, FUNCT_1, FINSET_1, MONOID_0, RELAT_1, STRUCT_0,
       RELSET_1, FINSEQ_1, FUNCOP_1, NAT_1, ORDINAL2, FUNCT_2, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, LATTICE2, SETWISEO, MONOID_0, STRUCT_0, XBOOLE_0,
-      FUNCT_5;
+      FUNCT_5, FUNCT_6;
  theorems TARSKI, NAT_1, FINSET_1, FINSEQ_1, BINOP_1, SETWISEO, MCART_1,
       FUNCOP_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_3, CARD_1, CARD_2, FINSEQ_2,
-      FINSEQ_3, FUNCT_5, FUNCT_6, MONOID_0, GRFUNC_1, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, GROUP_1;
+      FINSEQ_3, FUNCT_5, MONOID_0, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, GROUP_1;
  schemes NAT_1, FUNCT_2, MONOID_0, PARTFUN1, WELLORD2, BINOP_1;
 
 begin :: Updating
@@ -45,10 +45,10 @@ definition let f be Function, x1,x2,y be set;
   correctness;
 end;
 
-theorem Th1:
+ Lm1:
  for f,g being Function, x1,x2,x being set st
   [x1,x2] in dom f & g = f.(x1,x2) & x in dom g holds f..(x1,x2,x) = g.x
-     by FUNCT_6:44;
+     by FUNCT_5:45;
 
 definition let A,D1,D2,D be non empty set;
  let f be Function of D1, D2, Funcs(A,D);
@@ -60,7 +60,7 @@ definition let A,D1,D2,D be non empty set;
    proof reconsider g = f.(x1,x2) as Element of Funcs(A,D);
         dom f = [:D1,D2:] & dom g = A & [x1,x2] in
  [:D1,D2:] by FUNCT_2:def 1;
-     then f..(x1,x2,x) = g.x by Th1;
+     then f..(x1,x2,x) = g.x by Lm1;
     hence thesis;
    end;
 end;
@@ -128,6 +128,8 @@ definition let A be set;
    end;
 end;
 
+canceled;
+
 theorem
     for f,g being Function, X being set holds (f|X)*g = f*(X|g)
   proof let f,g be Function, X be set;
@@ -151,7 +153,8 @@ then A6:     x in dom g & g.x in X & g.x in dom f by FUNCT_1:85;
        now let x; assume x in dom ((f|X)*g);
       then ((f|X)*g).x = (f|X).(g.x) & g.x in dom (f|X) &
       (f*(X|g)).x = f.((X|g).x) & x in dom (X|g) by A2,FUNCT_1:21,22;
-      then ((f|X)*g).x = f.(g.x) & (f*(X|g)).x = f.(g.x) by FUNCT_1:70,85;
+      then ((f|X)*g).x = f.(g.x) & (f*(X|g)).x = f.(g.x) by FUNCT_1:70,
+85;
      hence ((f|X)*g).x = (f*(X|g)).x;
     end;
    hence thesis by A2,FUNCT_1:9;
@@ -227,7 +230,7 @@ A3:  ((f,D).:A).(f1,f2) = f.:(f1,f2) & dom (f.:
 (f1,f2)) = A & [f1,f2] = [f1,f2] &
     dom ((f,D).:A) = [:Funcs(A,D1), Funcs(A,D2):] by Def2,FUNCT_2:def 1;
     then (f.:(f1,f2)).x = f.(f1.x,f2.x) by A1,FUNCOP_1:28;
-   hence thesis by A1,A3,Th1;
+   hence thesis by A1,A3,Lm1;
   end;
 
 reserve A for set, D for non empty set, a,b,c,l,r for Element of D,
@@ -581,7 +584,7 @@ A1:  carr(.:(G,X)) = Funcs(X, carr(G)) by Th18;
    hence thesis by A1,FUNCT_2:def 2;
   end;
 
-Lm1: .:(G,X) is constituted-Functions
+Lm2: .:(G,X) is constituted-Functions
  proof let a be Element of .:(G,X);
       a is Element of Funcs(X,carr(G)) by Th18;
   hence thesis;
@@ -589,7 +592,7 @@ Lm1: .:(G,X) is constituted-Functions
 
 registration let G be non empty HGrStr, A be set;
  cluster .:(G,A) -> constituted-Functions;
-  coherence by Lm1;
+  coherence by Lm2;
 end;
 
 theorem Th20:
@@ -1097,7 +1100,7 @@ theorem Th40:
   proof
        now let b be Element of A;
       reconsider pa = p^<*a*> as FinSequence of A;
-         len p < len p+1 by NAT_1:38;
+         len p < len p+1 by NAT_1:13;
       then not len p+1 in dom p & dom p is finite &
        dom ({b}|p) c= dom p by FINSEQ_3:27,FUNCT_1:89;
       then not len p+1 in dom ({b}|p) & dom ({b}|p) is finite;
@@ -1315,7 +1318,8 @@ then A17:       y in dom fm & fm.y in NAT\{0} & y <> x by FUNCT_1:def 13
 A
       by Def6;
       reconsider V' = f'"(NAT\{0}) as finite set by Def6;
-          {x} c= fm"(NAT\{0}) & card {x} = 1 by A9,CARD_1:47,79,ZFMISC_1:37;
+          {x} c= fm"(NAT\{0}) & card {x} = 1 by A9,CARD_1:47,
+79,ZFMISC_1:37;
        then card V' = n+1-1 by A9,A13,CARD_2:63
          .= n;
        then for V being finite set st V = f'"(NAT\{0}) holds card V = n;

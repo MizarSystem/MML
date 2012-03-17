@@ -111,6 +111,7 @@
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="61"/>
 </Adjective>
+<Adjective nr="27"/>
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>
