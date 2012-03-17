@@ -10,20 +10,22 @@ environ
       FINSEQ_1, ALGSTR_1, ALGSTR_2, VECTSP_1, RLVECT_1, ORDINAL1, LATTICES,
       ALGSEQ_1, QUOFIELD, ORDERS_2, ANPROJ_1, QC_LANG1, FUNCOP_1, FINSET_1,
       CAT_3, FUNCT_4, GRCAT_1, ENDALG, GROUP_1, ARYTM_3, RELAT_1, REALSET1,
-      BINOP_1, FINSEQ_4, COHSP_1, VECTSP_2, BINOM, ARYTM, ALGSTR_0;
+      BINOP_1, FINSEQ_4, COHSP_1, VECTSP_2, BINOM, ARYTM, ALGSTR_0, XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, RELAT_1, RELSET_1,
       FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2, POLYNOM1, NUMBERS,
+      XXREAL_0,
       DOMAIN_1, STRUCT_0, ALGSTR_0, FUNCT_4, NAT_1, ALGSTR_1, RLVECT_1,
       ORDERS_1, FINSEQ_1, FUNCOP_1, GROUP_1, QUOFIELD, GRCAT_1, TRIANG_1,
-      VECTSP_2, POLYNOM2, VECTSP_1, GROUP_6, XXREAL_0;
+      VECTSP_2, POLYNOM2, VECTSP_1, GROUP_6;
  constructors FINSEQ_4, RFUNCT_3, REALSET2, GRCAT_1, GROUP_6, TRIANG_1,
       QUOFIELD, POLYNOM2, RECDEF_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1, XREAL_0,
-      STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM1, POLYNOM2, ALGSTR_0, FINSEQ_1;
+      STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM1, POLYNOM2, ALGSTR_0, FINSEQ_1,
+      CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCOP_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, ZFMISC_1,
-      VECTSP_1, POLYNOM1, PBOOLE, STRUCT_0, QUOFIELD, REAL_1, FUNCT_7, FUNCT_4,
+      VECTSP_1, POLYNOM1, PBOOLE, STRUCT_0, QUOFIELD, FUNCT_7, FUNCT_4,
       FUNCOP_1, GRCAT_1, BINOM, TRIANG_1, FINSEQ_3, RLVECT_1, VECTSP_2,
       GROUP_1, FINSET_1, NAT_1, FINSEQ_2, GROUP_7, FINSEQ_5, MATRLIN, POLYNOM2,
       XBOOLE_0, REALSET1, XREAL_1, GROUP_6, XXREAL_0, ORDINAL1, PARTFUN1,
@@ -31,16 +33,6 @@ environ
  schemes FUNCT_2;
 
 begin
-
-registration
-  cluster non trivial (non empty ZeroStr);
-  existence
-  proof
-    consider R being non degenerated comRing;
-    take R;
-    thus thesis;
-  end;
-end;
 
 registration
   cluster non trivial -> non empty ZeroStr;
@@ -56,22 +48,6 @@ registration
     consider R being domRing;
     take R;
     thus thesis;
-  end;
-end;
-
-registration
-  let R be non trivial ZeroStr;
-  cluster non-zero Element of R;
-  existence
-  proof
-    consider a being Element of (the carrier of R)\{0.R};
-A1: (the carrier of R)\{0.R} is non empty by REALSET1:4;
-    then
-A2: a in the carrier of R & not(a in {0.R}) by XBOOLE_0:def 4;
-    reconsider a as Element of R by A1,XBOOLE_0:def 4;
-    take a;
-    a <> 0.R by A2,TARSKI:def 1;
-    hence thesis by RLVECT_1:def 14;
   end;
 end;
 
@@ -432,8 +408,8 @@ A10:  len y = len SgmX(BagOrder n, Support p) & eval(p,x) = Sum y &
       for i being Element of NAT st 1 <= i & i <= len y holds
       y/.i = (p * SgmX(BagOrder n, Support p))/.i *
       eval(((SgmX(BagOrder n, Support p))/.i)@,x) by POLYNOM2:def 4;
-      len y = 0 by A9,A10,CARD_1:47;
-      then y = <*>(the carrier of L) by FINSEQ_1:32;
+      len y = 0 by A9,A10;
+      then y = <*>(the carrier of L);
       hence eval(p,x) = a by A7,A10,RLVECT_1:60;
     end;
     case
@@ -485,7 +461,7 @@ A23:      dom sg = Seg k by FINSEQ_1:def 2;
           by FINSEQ_1:def 1;
           then consider m' being Element of NAT such that
 A24:      m' = u & 1 <= m' & m' <= k by A19,A23;
-          thus thesis by A21,A24,REAL_1:def 5;
+          thus thesis by A21,A24,XXREAL_0:1;
         end;
         sg/.1 = sg.1 & sg/.u = sg.u by A16,A19,FINSEQ_3:33,PARTFUN1:def 8;
         then
@@ -1112,10 +1088,10 @@ A4: m.b = (0_(n,L)+*(b .--> a)).b by A1,A2,FUNCT_7:def 3
 end;
 
 theorem Th10:
-  for X being set, L being non trivial ZeroStr, a being non-zero Element of L,
+  for X being set, L being non trivial ZeroStr, a being non zero Element of L,
   b being bag of X holds term(Monom(a,b)) = b
 proof
-  let n be set, L be (non trivial ZeroStr), a be non-zero Element of L,
+  let n be set, L be (non trivial ZeroStr), a be non zero Element of L,
   b be bag of n;
   set m = 0_(n,L)+*(b,a);
   reconsider m as Function of Bags n, the carrier of L;
@@ -1130,7 +1106,7 @@ A3: b in dom(b .--> a) by TARSKI:def 1;
   m.b = (0_(n,L)+*(b .--> a)).b by A1,A2,FUNCT_7:def 3
     .= (b .--> a).b by A3,FUNCT_4:14
     .= a by FUNCOP_1:87;
-  then m.b <> 0.L by RLVECT_1:def 14;
+  then m.b <> 0.L by STRUCT_0:def 15;
   hence term(Monom(a,b)) = b by Def6;
 end;
 
@@ -1327,7 +1303,7 @@ A18:      dom sg = Seg k by FINSEQ_1:def 2;
           by FINSEQ_1:def 1;
           then consider m' being Element of NAT such that
 A19:      m' = u & 1 <= m' & m' <= k by A14,A18;
-          thus thesis by A16,A19,REAL_1:def 5;
+          thus thesis by A16,A19,XXREAL_0:1;
         end;
         sg/.1 = sg.1 & sg/.u = sg.u by A11,A14,FINSEQ_3:33,PARTFUN1:def 8;
         then
@@ -1389,8 +1365,8 @@ A33:  len y = len SgmX(BagOrder n, Support m) & eval(m,x) = Sum y &
       BagOrder n linearly_orders Support m by POLYNOM2:20;
       then rng SgmX(BagOrder n, Support m) = {} by A30,TRIANG_1:def 2;
       then SgmX(BagOrder n, Support m) = {} by RELAT_1:64;
-      then len y = 0 by A33,CARD_1:47;
-      then y = <*>(the carrier of L) by FINSEQ_1:32;
+      then len y = 0 by A33;
+      then y = <*>(the carrier of L);
 
 hence eval(m,x) = coefficient(m) * eval(term(m),x) by A32,A33,RLVECT_1:60;
     end;
@@ -1412,7 +1388,7 @@ proof
   now per cases;
     case a <> 0.L;
       then
-A1:   a is non-zero by RLVECT_1:def 14;
+A1:   a is non zero by STRUCT_0:def 15;
       thus eval(m,x) = coefficient(m) * eval(term(m),x) by Th12
         .= a * eval(term(m),x) by Th9
         .= a * eval(b,x) by A1,Th10;
@@ -1948,8 +1924,8 @@ A3:     Support c <> {};
       end;
       then reconsider Sc = Support c as empty Subset of Bags n;
       SgmX(BagOrder n, Sc) = {} by POLYNOM2:9,20;
-      then len y = 0 by A1,CARD_1:47;
-      then y = <*>(the carrier of L) by FINSEQ_1:32;
+      then len y = 0 by A1;
+      then y = <*>(the carrier of L);
       hence eval(c,x) = coefficient(c) by A1,A2,RLVECT_1:60;
     end;
     case
@@ -2010,7 +1986,7 @@ A20:      dom sg = Seg k by FINSEQ_1:def 2;
           by FINSEQ_1:def 1;
           then consider m' being Element of NAT such that
 A21:      m' = u & 1 <= m' & m' <= k by A16,A20;
-          thus thesis by A18,A21,REAL_1:def 5;
+          thus thesis by A18,A21,XXREAL_0:1;
         end;
         sg/.1 = sg.1 & sg/.u = sg.u by A13,A16,FINSEQ_3:33,PARTFUN1:def 8;
         then
@@ -2223,13 +2199,13 @@ A5:   len s = len decomp b and
 A6:   for k being Element of NAT st k in dom s
       ex b1,b2 being bag of n st (decomp b)/.k = <*b1, b2*>
       & s/.k = (O.b1)*(p.b2) by POLYNOM1:def 26;
-A7:   len s <> 0 by A5,CARD_2:59;
-      then s is non empty by CARD_1:47;
+A7:   len s <> 0 by A5;
+      then s is non empty;
       then consider s1 being Element of cL, t being FinSequence of cL such that
 A8:   s1 = s.1 and
 A9:   s = <*s1*>^t by FINSEQ_3:111;
 A10:  Sum s = (Sum <*s1*>) + (Sum t) by A9,RLVECT_1:58;
-      s is non empty by A7,CARD_1:47;
+      s is non empty by A7;
       then
 A11:  1 in dom s by FINSEQ_5:6;
       then consider b1, b2 being bag of n such that
@@ -2291,7 +2267,7 @@ A32:          b2 = EmptyBag n & b1 = b by A29,A30,GROUP_7:2;
                 then decomp b = <* <*EmptyBag n, EmptyBag n*> *>
                 by POLYNOM1:77;
                 then len t +1 = 0+1 by A5,A22,FINSEQ_1:56;
-                hence contradiction by A17,CARD_2:59;
+                hence contradiction by A17;
               end;
               then s.(k+1) = 0.L*(p.EmptyBag n) by A25,A31,A32,Th18
                 .= 0.L by VECTSP_1:39;
@@ -2338,11 +2314,11 @@ A5:   len s = len decomp b and
 A6:   for k being Element of NAT st k in dom s
       ex b1,b2 being bag of n st (decomp b)/.k = <*b1, b2*>
       & s/.k = (p.b1)*(O.b2) by POLYNOM1:def 26;
-A7:   len s <> 0 by A5,CARD_2:59;
+A7:   len s <> 0 by A5;
       then consider t being FinSequence of cL,s1 being Element of cL such that
 A8:   s = t^<*s1*> by FINSEQ_2:22;
 A9:   Sum s = (Sum t) + (Sum <*s1*>) by A8,RLVECT_1:58;
-      s is non empty by A7,CARD_1:47;
+      s is non empty by A7;
       then
 A10:  len s in dom s by FINSEQ_5:6;
       then consider b1, b2 being bag of n such that
@@ -2404,7 +2380,7 @@ A32:          b1 = EmptyBag n & b2 = b by A29,A30,GROUP_7:2;
                 then decomp b = <* <*EmptyBag n, EmptyBag n*> *>
                 by POLYNOM1:77;
                 then len t +1 = 0+1 by A5,A22,FINSEQ_1:56;
-                hence contradiction by A17,CARD_2:59;
+                hence contradiction by A17;
               end;
               then s.k = (p.EmptyBag n)*0.L by A25,A31,A32,Th18
                 .= 0.L by VECTSP_1:36;
@@ -2511,8 +2487,8 @@ A5: now
     end;
     then rng(SgmX(BagOrder n, Support(a*p))) = {} by A3,TRIANG_1:def 2;
     then SgmX(BagOrder n, Support(a*p)) = {} by RELAT_1:64;
-    then len y = 0 by A1,CARD_1:47;
-    then y = <*>(the carrier of L) by FINSEQ_1:32;
+    then len y = 0 by A1;
+    then y = <*>(the carrier of L);
     then Sum y = 0.L by RLVECT_1:60
       .= a * Sum z by A4,BINOM:1;
     hence thesis by A1,A2;
@@ -2688,8 +2664,8 @@ A5:   now
       BagOrder n linearly_orders Support(p*a) by POLYNOM2:20;
       then rng(SgmX(BagOrder n, Support(p*a))) = {} by A5,TRIANG_1:def 2;
       then SgmX(BagOrder n, Support(p*a)) = {} by RELAT_1:64;
-      then len y = 0 by A1,CARD_1:47;
-      then y = <*>(the carrier of L) by FINSEQ_1:32;
+      then len y = 0 by A1;
+      then y = <*>(the carrier of L);
       then Sum y = 0.L by RLVECT_1:60
         .= Sum z * a by A3,BINOM:2;
       hence thesis by A1,A2;

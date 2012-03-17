@@ -35,8 +35,8 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="GOBOARD1"/>
 <ArticleID name="SPPOL_1"/>
+<ArticleID name="GOBOARD1"/>
 <ArticleID name="JORDAN8"/>
 </Signature>
 <FCluster aid="JORDAN8" nr="1">
@@ -45,9 +45,9 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="258">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,19 +55,19 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="116"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
+<Adjective nr="124"/>
+<Adjective nr="130"/>
+<Adjective nr="131"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN8" nr="2">
@@ -75,17 +75,17 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="47">
-<Func kind="K" nr="258">
+<Adjective nr="56">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="124" value="false"/>
-<Adjective nr="125" value="false"/>
+<Adjective nr="126" value="false"/>
+<Adjective nr="127" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="258">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -93,18 +93,18 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="304">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="116"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
+<Adjective nr="124"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
 </Cluster>
 </FCluster>
 </Registrations>

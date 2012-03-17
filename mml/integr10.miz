@@ -1,0 +1,1601 @@
+:: Extended {R}iemann Integral of Functions of Real Variable and One-sided 
+:: {L}aplace Transform
+::  by Masahiko Yamazaki , Hiroshi Yamazaki , Yasunari Shidama and Yatsuka Nakamura
+:: 
+:: Received July 22, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA1, ARYTM_1, RELAT_1, FUNCT_1, PARTFUN1, SEQ_1, BOOLE,
+      RFUNCT_1, LIMFUNC1, ABSVALUE, ARYTM_3, SQUARE_1, RCOMP_1, INTEGRA5,
+      FINSEQ_4, ARYTM, SIN_COS, INTEGR10, LIMFUNC2, FCONT_1, LATTICES;
+ notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, COMPLEX1,
+      XCMPLX_0, REAL_1, RELSET_1, FUNCT_2, RCOMP_1, RCOMP_2, PARTFUN1,
+      RFUNCT_1, SEQ_1, SEQ_2,
+      LIMFUNC1, LIMFUNC2, MEMBERED, INTEGRA1, INTEGRA5,
+      SIN_COS, VALUED_1, FCONT_1;
+ constructors ARYTM_0, REAL_1, PARTFUN2, LIMFUNC1, LIMFUNC2, TAYLOR_1,
+      RFUNCT_3, FCONT_1, RFUNCT_2, PSCOMP_1, RCOMP_2, BINOP_2, INTEGRA5,
+      RSSPACE, COMSEQ_3, SIN_COS, INTEGRA7, CFUNCT_1, SEQ_1, FDIFF_1,
+      SEQM_3;
+ registrations XREAL_0, NUMBERS, MEMBERED, NAT_1, RELAT_1, XXREAL_0, XBOOLE_0,
+      VALUED_0;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions XCMPLX_0, MEMBERED, LIMFUNC1, TAYLOR_1, SEQ_4;
+ theorems LIMFUNC1, LIMFUNC2, PARTFUN1, RFUNCT_1, COMPLEX1, RCOMP_1, XREAL_0,
+      XXREAL_0, FUNCT_2, XBOOLE_1, XREAL_1, INTEGRA5, INTEGRA6, INTEGRA7,
+      VALUED_1, FDIFF_1, TAYLOR_1, XXREAL_1;
+ schemes FUNCT_2, PARTFUN2;
+
+begin :: Preliminaries
+
+reserve a,b,r,g for Element of REAL;
+
+theorem Th1:
+  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M
+  holds ex r st a < r & r < b & (b - r)*M < g1
+proof
+  let a,b,g1,M be real number such that
+A1: a < b & 0 < g1 & 0 < M;
+A2: b - g1/M < b by XREAL_1:46,141,A1;
+  set r3 = max(a,b - g1/M);
+  r3 < b by A2,A1,XXREAL_0:16;
+  then consider q be real number such that
+A3: r3 < q & q < b by XREAL_1:7;
+  reconsider r = q as Real by XREAL_0:def 1;
+  take r;
+A4: a <= r3 by XXREAL_0:25;
+  b - g1/M <= r3 by XXREAL_0:25;
+  then b - g1/M < r by A3, XXREAL_0:2;
+  then b - g1/M - (r - g1/M) < r - (r - g1/M) by XREAL_1:16; then
+A5: (b - r)*1 < g1/M;
+  (b - r)*M < g1/1 by A5,A1,XREAL_1:113;
+  hence thesis by A3,A4,XXREAL_0:2;
+end;
+
+theorem Th2:
+  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M
+  holds ex r st a < r & r < b & (r - a)*M < g1
+proof
+  let a,b,g1,M be real number such that
+A1: a < b & 0 < g1 & 0 < M;
+A2: (-b) < (-a) by A1, XREAL_1:26;
+  consider r1 be Real such that
+A3: (-b) < r1 & r1 < (-a) & ((-a) - r1)*M < g1 by A1,A2,Th1;
+  reconsider r= -r1 as Real;
+  take r;
+A4: -(-b) > -r1 by A3,XREAL_1:26;
+  -r1 > -(-a) by A3,XREAL_1:26;
+  hence thesis by A3,A4;
+end;
+
+theorem
+  exp_R.b - exp_R.a = integral(exp_R,a,b)
+proof
+A1: exp_R is_continuous_on REAL by FDIFF_1:33,TAYLOR_1:16;
+A2: min(a,b) <= a & a <= max(a,b) by XXREAL_0:17,25;
+  [. min(a,b),max(a,b) .] c= REAL;
+  then
+A3: exp_R.max(a,b) = integral(exp_R,min(a,b),max(a,b)) + exp_R.min(a,b)
+  by A1,A2,XXREAL_0:2,INTEGRA7:20,27;
+A4: min(a,b) = a implies exp_R.b - exp_R.a = integral(exp_R,a,b)
+  proof
+    assume
+A5: min(a,b) = a;
+    then max(a,b) = b by XXREAL_0:36;
+    hence exp_R.b - exp_R.a = integral(exp_R,a,b) by A3,A5;
+  end;
+  min(a,b) = b implies exp_R.b - exp_R.a = integral(exp_R,a,b)
+  proof
+    assume
+A6: min(a,b) = b; then
+A7: max(a,b) = a by XXREAL_0:36;
+    b < a implies exp_R.b - exp_R.a = integral(exp_R,a,b)
+    proof
+      assume b < a;
+      then integral(exp_R,a,b) = -integral(exp_R,[' b,a ']) by INTEGRA5:def 5;
+      then exp_R.a = -integral(exp_R,a,b) + exp_R.b by A2,A3,A6,A7,
+      INTEGRA5:def 5;
+      hence exp_R.b - exp_R.a = integral(exp_R,a,b);
+    end;
+    hence exp_R.b - exp_R.a = integral(exp_R,a,b) by A2,A4,A6,XXREAL_0:1;
+  end;
+  hence exp_R.b - exp_R.a = integral(exp_R,a,b) by A4,XXREAL_0:15;
+end;
+
+begin :: The Definition of Extended Riemann Integral
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a,b be Real;
+  pred f is_right_ext_Riemann_integrable_on a,b means
+  :Def1:
+  (for d be Real st a <= d & d < b
+  holds f is_integrable_on [' a,d '] & f|[' a,d '] is bounded) &
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = [.a,b.[
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is_left_convergent_in b;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a,b be Real;
+  pred f is_left_ext_Riemann_integrable_on a,b means
+  :Def2:
+  (for d be Real st a < d & d <= b
+  holds f is_integrable_on [' d,b '] & f|[' d,b '] is bounded) &
+  ex Intf be PartFunc of REAL,REAL st dom Intf = ].a,b.]
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is_right_convergent_in a;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a,b be Real;
+  assume
+A1: f is_right_ext_Riemann_integrable_on a,b;
+  func ext_right_integral(f,a,b) -> Real means
+  :Def3:
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = [.a,b.[
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is_left_convergent_in b &
+  it = lim_left(Intf,b);
+  existence
+  proof
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = [.a,b.[
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,a,x)) &
+    Intf is_left_convergent_in b by A1,Def1;
+    take IT = lim_left(Intf,b);
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let y1,y2 be Real;
+    assume
+A3: ex Intf1 be PartFunc of REAL,REAL st dom Intf1 = [.a,b.[
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,a,x)) &
+    Intf1 is_left_convergent_in b &
+    y1 = lim_left(Intf1,b);
+    assume
+A4: ex Intf2 be PartFunc of REAL,REAL
+    st dom Intf2 = [.a,b.[
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,a,x)) &
+    Intf2 is_left_convergent_in b &
+    y2 = lim_left(Intf2,b);
+    consider Intf1 be PartFunc of REAL,REAL such that
+A5: dom Intf1 = [.a,b.[
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,a,x)) &
+    Intf1 is_left_convergent_in b &
+    y1 = lim_left(Intf1,b) by A3;
+    consider Intf2 be PartFunc of REAL,REAL such that
+A6: dom Intf2 = [.a,b.[
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,a,x)) &
+    Intf2 is_left_convergent_in b &
+    y2 = lim_left(Intf2,b) by A4;
+    now let x be Real;
+      assume
+A7:   x in dom Intf1;
+      thus Intf1.x = integral(f,a,x) by A5,A7
+        .= Intf2.x by A5,A6,A7;
+    end;
+    hence y1 = y2 by A5,A6, PARTFUN1:34;
+  end;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a,b be Real;
+  assume
+A1: f is_left_ext_Riemann_integrable_on a,b;
+  func ext_left_integral(f,a,b) -> Real means
+  :Def4:
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = ].a,b.]
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is_right_convergent_in a &
+  it = lim_right(Intf,a);
+  existence
+  proof
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = ].a,b.]
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,x,b)) &
+    Intf is_right_convergent_in a by A1,Def2;
+    take IT = lim_right(Intf,a);
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let y1,y2 be Real;
+    assume
+A3: ex Intf1 be PartFunc of REAL,REAL
+    st dom Intf1 = ].a,b.]
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,x,b)) &
+    Intf1 is_right_convergent_in a &
+    y1 = lim_right(Intf1,a);
+    assume
+A4: ex Intf2 be PartFunc of REAL,REAL
+    st dom Intf2 = ].a,b.]
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,x,b)) &
+    Intf2 is_right_convergent_in a &
+    y2 = lim_right(Intf2,a);
+    consider Intf1 be PartFunc of REAL,REAL such that
+A5: dom Intf1 = ].a,b.]
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,x,b)) &
+    Intf1 is_right_convergent_in a &
+    y1 = lim_right(Intf1,a) by A3;
+    consider Intf2 be PartFunc of REAL,REAL such that
+A6: dom Intf2 = ].a,b.]
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,x,b)) &
+    Intf2 is_right_convergent_in a &
+    y2 = lim_right(Intf2,a) by A4;
+    now
+      let x be Real;
+      assume
+A7:   x in dom Intf1;
+      thus Intf1.x = integral(f,x,b) by A5,A7
+        .= Intf2.x by A5,A6,A7;
+    end;
+    hence y1 = y2 by A5,A6,PARTFUN1:34;
+  end;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a be real number;
+  pred f is_+infty_ext_Riemann_integrable_on a means
+  :Def5:
+  (for b be Real st a <= b holds
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) &
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = right_closed_halfline(a)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is convergent_in+infty;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let b be real number;
+  pred f is_-infty_ext_Riemann_integrable_on b means
+  :Def6:
+  (for a be Real st a <= b holds
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) &
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = left_closed_halfline(b)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is convergent_in-infty;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let a be real number;
+  assume
+A1: f is_+infty_ext_Riemann_integrable_on a;
+  func infty_ext_right_integral(f,a) -> Real means
+  :Def7:
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = right_closed_halfline(a)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is convergent_in+infty &
+  it = lim_in+infty Intf;
+  existence
+  proof
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,a,x)) &
+    Intf is convergent_in+infty by Def5,A1;
+    take IT = lim_in+infty Intf;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let L1,L2 be Real;
+    assume
+A3: ex Intf1 be PartFunc of REAL,REAL
+    st dom Intf1 = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,a,x)) &
+    Intf1 is convergent_in+infty &
+    L1 = lim_in+infty Intf1;
+    assume
+A4: ex Intf2 be PartFunc of REAL,REAL
+    st dom Intf2 = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,a,x)) &
+    Intf2 is convergent_in+infty &
+    L2 = lim_in+infty Intf2;
+    consider Intf1 be PartFunc of REAL,REAL such that
+A5: dom Intf1 = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,a,x)) &
+    Intf1 is convergent_in+infty &
+    L1 = lim_in+infty Intf1 by A3;
+    consider Intf2 be PartFunc of REAL,REAL such that
+A6: dom Intf2 = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,a,x)) &
+    Intf2 is convergent_in+infty &
+    L2 = lim_in+infty Intf2 by A4;
+    now
+      let x be Real;
+      assume
+A7:   x in dom Intf1;
+      thus Intf1.x = integral(f,a,x) by A5,A7
+        .= Intf2.x by A5,A6,A7;
+    end;
+    hence L1 = L2 by A5,A6, PARTFUN1:34;
+  end;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  let b be real number;
+  assume
+A1: f is_-infty_ext_Riemann_integrable_on b;
+  func infty_ext_left_integral(f,b) -> Real means
+  :Def8:
+  ex Intf be PartFunc of REAL,REAL
+  st dom Intf = left_closed_halfline(b)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is convergent_in-infty &
+  it = lim_in-infty Intf;
+  existence
+  proof
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,x,b)) &
+    Intf is convergent_in-infty
+    by Def6,A1;
+    take IT = lim_in-infty Intf;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let L1,L2 be Real;
+    assume
+A3: ex Intf1 be PartFunc of REAL,REAL
+    st dom Intf1 = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,x,b)) &
+    Intf1 is convergent_in-infty &
+    L1 = lim_in-infty Intf1;
+    assume
+A4: ex Intf2 be PartFunc of REAL,REAL
+    st dom Intf2 = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,x,b)) &
+    Intf2 is convergent_in-infty &
+    L2 = lim_in-infty Intf2;
+    consider Intf1 be PartFunc of REAL,REAL such that
+A5: dom Intf1 = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf1 holds
+    Intf1.x = integral(f,x,b)) &
+    Intf1 is convergent_in-infty &
+    L1 = lim_in-infty Intf1 by A3;
+    consider Intf2 be PartFunc of REAL,REAL such that
+A6: dom Intf2 = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf2 holds
+    Intf2.x = integral(f,x,b)) &
+    Intf2 is convergent_in-infty &
+    L2 = lim_in-infty Intf2 by A4;
+    now
+      let x be Real;
+      assume
+A7:   x in dom Intf1;
+      thus Intf1.x = integral(f,x,b) by A5,A7
+        .= Intf2.x by A5,A6,A7;
+    end;
+    hence L1 = L2 by A5,A6,PARTFUN1:34;
+  end;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  attr f is infty_ext_Riemann_integrable means
+  f is_+infty_ext_Riemann_integrable_on 0 &
+  f is_-infty_ext_Riemann_integrable_on 0;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  func infty_ext_integral(f) -> Real equals
+  infty_ext_right_integral(f,0) + infty_ext_left_integral(f,0);
+  coherence;
+end;
+
+begin :: Linearity of Extended Riemann Integral
+
+theorem
+  for f,g be PartFunc of REAL,REAL,
+  a,b be Real st a < b &
+  [' a,b '] c= dom f &
+  [' a,b '] c= dom g &
+  f is_right_ext_Riemann_integrable_on a,b &
+  g is_right_ext_Riemann_integrable_on a,b holds
+  f + g is_right_ext_Riemann_integrable_on a,b &
+  ext_right_integral(f + g,a,b)
+  = ext_right_integral(f,a,b) + ext_right_integral(g,a,b)
+proof
+  let f,g be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1:a < b & [' a,b '] c= dom f & [' a,b '] c= dom g &
+  f is_right_ext_Riemann_integrable_on a,b &
+  g is_right_ext_Riemann_integrable_on a,b;
+  consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = [.a,b.[
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is_left_convergent_in b &
+  ext_right_integral(f,a,b) = lim_left(Intf,b) by Def3,A1;
+  consider Intg be PartFunc of REAL,REAL such that
+A3: dom Intg = [.a,b.[
+  & (for x be Real st x in dom Intg holds
+  Intg.x = integral(g,a,x)) &
+  Intg is_left_convergent_in b &
+  ext_right_integral(g,a,b) = lim_left(Intg,b) by Def3,A1;
+  set Intfg = Intf + Intg;
+A4:for d be Real st a <= d & d < b holds
+  f + g is_integrable_on [' a,d '] & (f+g)|[' a,d '] is bounded
+  proof
+    let d be Real;
+    assume
+A5: a <= d & d < b;
+A6: [' a,d '] = [.a,d.] by INTEGRA5:def 4,A5;
+A7: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A8: [.a,d.] c= [.a,b.] by A5,XXREAL_1:34;
+    then
+A9: [' a,d '] c= dom f by A7,A6,A1,XBOOLE_1:1;
+A10: [' a,d '] c= dom g by A7,A6,A8,A1,XBOOLE_1:1;
+A11: f is_integrable_on [' a,d '] & f|[' a,d '] is bounded
+    by A5, Def1,A1;
+A12: g is_integrable_on [' a,d '] & g|[' a,d '] is bounded
+    by A5, Def1,A1;
+    (f + g)|([' a,d '] /\ [' a,d ']) is bounded
+    by A11,A12,RFUNCT_1:100;
+    hence thesis by A11,A12,A9,A10,INTEGRA6:11;
+  end;
+  R2:dom Intfg = [.a,b.[
+  & (for x be Real st x in dom Intfg holds
+  Intfg.x = integral(f + g,a,x))
+  proof
+    thus
+A13: dom Intfg = dom Intf /\ dom Intg by VALUED_1:def 1
+      .= [.a,b.[ by A2,A3;
+    let x be Real;
+    assume
+A14: x in dom Intfg;
+    then
+A15: a <= x & x < b by A13,XXREAL_1:3;
+A16: [' a,x '] = [.a,x.] by INTEGRA5:def 4,A15;
+A17: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A18: [.a,x.] c= [.a,b.] by A15,XXREAL_1:34;
+    then
+A19: [' a,x '] c= dom f by A17,A16,A1,XBOOLE_1:1;
+A20: [' a,x '] c= dom g by A17,A18,A1,XBOOLE_1:1,A16;
+A21:f is_integrable_on [' a,x '] & f|[' a,x '] is bounded
+    by A15, Def1,A1;
+A22: g is_integrable_on [' a,x '] & g|[' a,x '] is bounded
+    by A15, Def1,A1;
+    thus Intfg.x = Intf.x + Intg.x by VALUED_1:def 1,A14
+      .= integral(f,a,x) + Intg.x by A2,A13,A14
+      .= integral(f,a,x) + integral(g,a,x) by A3,A13,A14
+      .= integral(f + g,a,x) by A19,A20,A21,A22,INTEGRA6:12,A15;
+  end;
+A23: Intfg is_left_convergent_in b &
+  lim_left(Intfg,b)
+  = ext_right_integral(f,a,b) + ext_right_integral(g,a,b)
+  proof
+A24: for r st r < b ex g st r < g & g < b & g in dom(Intf + Intg)
+    proof
+      let r be Real such that
+A25:  r < b;
+      per cases;
+      suppose
+A26:  r < a;
+        reconsider g = a as Real;
+        take g;
+        thus
+        r < g & g < b & g in dom(Intf + Intg) by A26, A1, R2,XXREAL_1:3;
+      end;
+      suppose
+A27:  not r < a;
+        reconsider g = r + (b - r)/2 as Real;
+        take g;
+        0 < b - r by A25,XREAL_1:52; then
+A28:    0 < (b - r)/2 & (b - r)/2 < b - r by XREAL_1:217,218; then
+A29:    r < g by XREAL_1:31;
+        a - a <= r - a by A27,XREAL_1:11; then
+A30:    r - (r - a) < g - 0 by A29,XREAL_1:16;
+        (b - r)/2 + r < b - r + r by A28,XREAL_1:10;
+        hence r < g & g < b & g in dom(Intf + Intg)
+        by A28,R2,A30,XXREAL_1:3,XREAL_1:10;
+      end;
+    end;
+    thus Intfg is_left_convergent_in b by LIMFUNC2:53,A2,A3,A24;
+    thus lim_left (Intfg,b) = ext_right_integral(f,a,b) +
+      ext_right_integral(g,a,b) by A3,A2,LIMFUNC2:53,A24;
+  end;
+  thus f + g is_right_ext_Riemann_integrable_on a,b by A4,R2,A23,Def1;
+  hence thesis by R2,A23,Def3;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL,
+  a,b be Real st a < b & [' a,b '] c= dom f &
+  f is_right_ext_Riemann_integrable_on a,b holds
+  for r be Real holds
+  r(#)f is_right_ext_Riemann_integrable_on a,b &
+  ext_right_integral(r(#)f,a,b) = r*ext_right_integral(f,a,b)
+proof
+  let f be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1: a < b & [' a,b '] c= dom f &
+  f is_right_ext_Riemann_integrable_on a,b;
+  for r be Real holds
+  r(#)f is_right_ext_Riemann_integrable_on a,b &
+  ext_right_integral(r(#)f,a,b) = r*ext_right_integral(f,a,b)
+  proof
+    let r be Real;
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = [.a,b.[
+    & (for x be Real st x in dom Intf holds
+    Intf.x =integral(f,a,x)) &
+    Intf is_left_convergent_in b &
+    ext_right_integral(f,a,b) = lim_left(Intf,b) by Def3,A1;
+    set Intfg = r(#)Intf;
+    R1:for d be Real st a<= d & d < b holds
+    r(#)f is_integrable_on [' a,d '] & (r(#)f)|[' a,d '] is bounded
+    proof
+      let d be Real;
+      assume
+A3:   a <= d & d < b;
+A4:   [' a,d '] = [.a,d.] by INTEGRA5:def 4,A3;
+A5:   [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+      [.a,d.] c= [.a,b.] by A3,XXREAL_1:34;
+      then
+A6:   [' a,d '] c= dom f by A5,A4,A1,XBOOLE_1:1;
+      f is_integrable_on [' a,d '] & f|[' a,d '] is bounded
+      by A3, Def1,A1;
+      hence thesis by RFUNCT_1:97,A6,INTEGRA6:9;
+    end;
+A8: dom Intfg = [.a,b.[
+    & (for x be Real st x in dom Intfg holds
+    Intfg.x = integral(r(#)f,a,x))
+    proof
+      thus
+A9:   dom Intfg = [.a,b.[ by A2,VALUED_1:def 5;
+      let x be Real;
+      assume
+A10:  x in dom Intfg;
+      then
+A11:  a <= x & x < b by A9,XXREAL_1:3;
+A12:  [' a,x '] = [.a,x.] by INTEGRA5:def 4,A11;
+A13:  [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A14:  [.a,x.] c= [.a,b.] by A11,XXREAL_1:34;
+A15:  f is_integrable_on [' a,x '] & f|[' a,x '] is bounded
+      by A11, Def1,A1;
+      thus Intfg.x = r*Intf.x by VALUED_1:def 5,A10
+        .= r*integral(f,a,x) by A2,A9,A10
+        .= integral(r(#)f,a,x) by A13,A12,A1,XBOOLE_1:1,A14
+      ,A15,A11,INTEGRA6:10;
+    end;
+A16: Intfg is_left_convergent_in b by A2, LIMFUNC2:51;
+A17: lim_left (Intfg,b) = r*ext_right_integral(f,a,b) by A2,LIMFUNC2:51;
+    thus r(#)f is_right_ext_Riemann_integrable_on a,b by R1,A8,A16,Def1;
+    hence thesis by A8,A16,A17,Def3;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for f,g be PartFunc of REAL,REAL,
+  a,b be Real st a < b &
+  [' a,b '] c= dom f &
+  [' a,b '] c= dom g &
+  f is_left_ext_Riemann_integrable_on a,b &
+  g is_left_ext_Riemann_integrable_on a,b holds
+  f + g is_left_ext_Riemann_integrable_on a,b &
+  ext_left_integral(f + g,a,b)
+  = ext_left_integral(f,a,b) + ext_left_integral(g,a,b)
+proof
+  let f,g be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1: a < b &
+  [' a,b '] c= dom f &
+  [' a,b '] c= dom g &
+  f is_left_ext_Riemann_integrable_on a,b &
+  g is_left_ext_Riemann_integrable_on a,b;
+  consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = ].a,b.]
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is_right_convergent_in a &
+  ext_left_integral(f,a,b) = lim_right(Intf,a) by Def4,A1;
+  consider Intg be PartFunc of REAL,REAL such that
+A3: dom Intg = ].a,b.]
+  & (for x be Real st x in dom Intg holds
+  Intg.x = integral(g,x,b)) &
+  Intg is_right_convergent_in a &
+  ext_left_integral(g,a,b) = lim_right(Intg,a) by Def4,A1;
+  set Intfg = Intf + Intg;
+A4: for d be Real st a < d & d <= b
+  holds
+  f + g is_integrable_on [' d,b '] & (f+g)|[' d,b '] is bounded
+  proof
+    let d be Real;
+    assume
+A5: a < d & d <= b;
+A6: [' d,b '] = [.d,b.] by INTEGRA5:def 4,A5;
+A7: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A8: [.d,b.] c= [.a,b.] by A5,XXREAL_1:34;
+    then
+A9: [' d,b '] c= dom f by A7,A6,A1,XBOOLE_1:1;
+A10: [' d,b '] c= dom g by A7,A6,A8,A1,XBOOLE_1:1;
+A11: f is_integrable_on [' d,b '] & f|[' d,b '] is bounded
+    by A5,Def2,A1;
+A12: g is_integrable_on [' d,b '] & g|[' d,b '] is bounded
+    by A5,Def2,A1;
+    (f + g)|([' d,b '] /\ [' d,b ']) is bounded
+    by A11,A12,RFUNCT_1:100;
+    hence thesis by A11,A12, A9,A10,INTEGRA6:11;
+  end;
+A13: dom Intfg = ].a,b.]
+  & (for x be Real st x in dom Intfg holds
+  Intfg.x = integral(f + g,x,b))
+  proof
+    thus
+A14: dom Intfg = dom Intf /\ dom Intg by VALUED_1:def 1
+      .= ].a,b.] by A2,A3;
+    let x be Real;
+    assume
+A15: x in dom Intfg;
+    then
+A16: a < x & x <= b by A14,XXREAL_1:2;
+A17: [' x,b '] = [.x,b.] by INTEGRA5:def 4,A16;
+A18: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A19: [.x,b.] c= [.a,b.] by A16,XXREAL_1:34;
+    then
+A20: [' x,b '] c= dom f by A18,A17,A1,XBOOLE_1:1;
+A21: [' x,b '] c= dom g by A18,A17,A19,A1,XBOOLE_1:1;
+A22: f is_integrable_on [' x,b '] & f|[' x,b '] is bounded
+    by A16,Def2,A1;
+A23: g is_integrable_on [' x,b '] & g|[' x,b '] is bounded
+    by A16,Def2,A1;
+    thus
+    Intfg.x = Intf.x + Intg.x by VALUED_1:def 1,A15
+      .= integral(f,x,b) + Intg.x by A2,A14,A15
+      .= integral(f,x,b) + integral(g,x,b) by A3,A14,A15
+      .= integral(f + g,x,b) by A16,A20,A21,A22,A23,INTEGRA6:12;
+  end;
+A24: Intfg is_right_convergent_in a &
+  lim_right(Intfg,a)
+  = ext_left_integral(f,a,b) + ext_left_integral(g,a,b)
+  proof
+A25: for r st a < r ex g st g < r & a < g & g in dom(Intf + Intg)
+    proof
+     let r be Real such that
+A26: a < r;
+      per cases;
+      suppose
+A27:   b < r;
+        reconsider g = b as Real;
+        take g;
+        thus g < r & a < g & g in dom(Intf + Intg) by A1,XXREAL_1:2,A27,A13;
+      end;
+      suppose
+A28:   not b < r;
+        reconsider g = r - (r - a)/2 as Real;
+        take g;
+        0 < r - a by A26, XREAL_1:52;
+        then
+A29:    0 < (r - a)/2 & (r - a)/2 < r - a by XREAL_1:217,218;
+A30:    (r - a)/2 + (a - (r - a)/2) < r - a + (a - (r - a)/2)
+        by A29,XREAL_1:10;
+        r - (r - a)/2 < b - 0 by A28,A29,XREAL_1:17;
+        hence
+        g < r & a < g & g in dom(Intf + Intg)
+        by XXREAL_1:2,XREAL_1:46,A13,A30,A29;
+      end;
+    end;
+  thus
+  Intfg is_right_convergent_in a by LIMFUNC2:62,A2,A3,A25;
+  thus lim_right(Intfg,a) = ext_left_integral(f,a,b) +
+    ext_left_integral(g,a,b) by LIMFUNC2:62,A2,A3,A25;
+  end;
+  thus f + g is_left_ext_Riemann_integrable_on a,b by A4,A13,A24,Def2;
+  hence thesis by A13,A24,Def4;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL,
+  a,b be Real st a < b &
+  [' a,b '] c= dom f &
+  f is_left_ext_Riemann_integrable_on a,b holds
+  for r be Real holds
+  r(#)f is_left_ext_Riemann_integrable_on a,b &
+  ext_left_integral(r(#)f,a,b) = r*ext_left_integral(f,a,b)
+proof
+  let f be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1: a < b & [' a,b '] c= dom f &
+  f is_left_ext_Riemann_integrable_on a,b;
+  for r be Real holds
+  r(#)f is_left_ext_Riemann_integrable_on a,b &
+  ext_left_integral(r(#)f,a,b) = r*ext_left_integral(f,a,b)
+  proof
+    let r be Real;
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = ].a,b.]
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,x,b)) &
+    Intf is_right_convergent_in a &
+    ext_left_integral(f,a,b) = lim_right(Intf,a) by Def4,A1;
+    set Intfg = r(#)Intf;
+A3: for d be Real st a < d & d <= b holds
+    r(#)f is_integrable_on [' d,b '] & (r(#)f)|[' d,b '] is bounded
+    proof
+      let d be Real;
+      assume
+A4:   a < d & d <= b;
+A5:   [' d,b '] = [.d,b.] by INTEGRA5:def 4,A4;
+A6:   [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+      [.d,b.] c= [.a,b.] by A4,XXREAL_1:34;
+      then
+A7:   [' d,b '] c= dom f by A6,A5,A1,XBOOLE_1:1;
+A8:   f is_integrable_on [' d,b '] & f|[' d,b '] is bounded
+      by A4, Def2,A1;
+      thus thesis by A7,A8,INTEGRA6:9,RFUNCT_1:97;
+    end;
+A9: dom Intfg = ].a,b.]
+    & (for x be Real st x in dom Intfg holds
+    Intfg.x = integral(r(#)f,x,b))
+    proof
+      thus
+A10:  dom Intfg = ].a,b.] by A2,VALUED_1:def 5;
+      let x be Real;
+      assume
+A11:  x in dom Intfg;
+      then
+A12:  a < x & x <= b by A10, XXREAL_1:2;
+A13:  [' x,b '] = [.x,b.] by INTEGRA5:def 4,A12;
+A14:  [' a,b '] = [.a,b.] by INTEGRA5:def 4,A1;
+A15:  [.x,b.] c= [.a,b.] by A12,XXREAL_1:34;
+A16:  f is_integrable_on [' x,b '] & f|[' x,b '] is bounded
+      by A12, Def2,A1;
+      thus Intfg.x = r*Intf.x by VALUED_1:def 5,A11
+        .= r*integral(f,x,b) by A2,A10,A11
+        .= integral(r(#)f,x,b)
+      by A15,A14,A13,A1,XBOOLE_1:1 ,A16,INTEGRA6:10,A12;
+    end;
+A17: Intfg is_right_convergent_in a by A2, LIMFUNC2:60;
+A18: lim_right (Intfg,a) = r*ext_left_integral(f,a,b) by A2,LIMFUNC2:60;
+    thus r(#)f is_left_ext_Riemann_integrable_on a,b by A3,A9,A17,Def2;
+    hence thesis by A9,A17,A18,Def4;
+  end;
+  hence thesis;
+end;
+
+theorem Th9:
+  for f,g be PartFunc of REAL,REAL,
+  a be real number st
+  right_closed_halfline(a) c= dom f &
+  right_closed_halfline(a) c= dom g &
+  f is_+infty_ext_Riemann_integrable_on a &
+  g is_+infty_ext_Riemann_integrable_on a holds
+  f + g is_+infty_ext_Riemann_integrable_on a &
+  infty_ext_right_integral(f + g,a)
+  = infty_ext_right_integral(f,a) + infty_ext_right_integral(g,a)
+proof
+  let f,g be PartFunc of REAL,REAL,
+  a be real number;
+  assume
+A1: right_closed_halfline(a) c= dom f &
+  right_closed_halfline(a) c= dom g &
+  f is_+infty_ext_Riemann_integrable_on a &
+  g is_+infty_ext_Riemann_integrable_on a;
+  consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = right_closed_halfline(a)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x)) &
+  Intf is convergent_in+infty &
+  infty_ext_right_integral(f,a) = lim_in+infty Intf by Def7,A1;
+  consider Intg be PartFunc of REAL,REAL such that
+A3: dom Intg = right_closed_halfline(a)
+  & (for x be Real st x in dom Intg holds
+  Intg.x = integral(g,a,x)) &
+  Intg is convergent_in+infty &
+  infty_ext_right_integral(g,a) = lim_in+infty Intg by Def7,A1;
+  set Intfg = Intf + Intg;
+A4: for b be Real st a <= b holds
+  f + g is_integrable_on [' a,b '] & (f+g)|[' a,b '] is bounded
+  proof
+    let b be Real;
+    assume
+A5: a <= b;
+A6: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A5;
+A7: [.a,b.] c= right_closed_halfline(a) by XXREAL_1:251;
+    then
+A8: [' a,b '] c= dom f by A6,A1,XBOOLE_1:1;
+A9: [' a,b '] c= dom g by A6,A7,A1,XBOOLE_1:1;
+A10: f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
+    by A5, Def5,A1;
+A11: g is_integrable_on [' a,b '] & g|[' a,b '] is bounded
+    by A5, Def5,A1;
+    (f + g)|([' a,b '] /\ [' a,b ']) is bounded  by A10,A11,RFUNCT_1:100;
+    hence thesis by A10,A11, A8,A9,INTEGRA6:11;
+  end;
+A12: dom Intfg = right_closed_halfline(a)
+  & (for x be Real st x in dom Intfg holds
+  Intfg.x = integral(f + g,a,x))
+  proof
+    thus
+A13: dom Intfg = dom Intf /\ dom Intg by VALUED_1:def 1
+      .= right_closed_halfline(a) by A2,A3;
+    let x be Real;
+    assume
+A14: x in dom Intfg; then
+A15: a <= x by A13,XXREAL_1:236;
+A16: [' a,x '] = [.a,x.] by INTEGRA5:def 4,A15;
+A17: [.a,x.] c= right_closed_halfline(a) by XXREAL_1:251; then
+A18: [' a,x '] c= dom f by A16,A1,XBOOLE_1:1;
+A19: [' a,x '] c= dom g by A16,A17,A1,XBOOLE_1:1;
+A20: f is_integrable_on [' a,x '] & f|[' a,x '] is bounded
+    by A15, Def5,A1;
+A21: g is_integrable_on [' a,x '] & g|[' a,x '] is bounded
+    by A15, Def5,A1;
+    thus
+    Intfg.x = Intf.x + Intg.x by VALUED_1:def 1,A14
+      .= integral(f,a,x) + Intg.x by A2, A13,A14
+      .= integral(f,a,x) + integral(g,a,x) by A3, A13,A14
+      .= integral(f + g,a,x) by A15,A18,A19,A20,A21,INTEGRA6:12;
+  end;
+A22: Intfg is convergent_in+infty &
+  lim_in+infty (Intfg)
+  = infty_ext_right_integral(f,a) + infty_ext_right_integral(g,a)
+  proof
+A23: for r ex g st r < g & g in dom(Intf + Intg)
+    proof
+      let r be Real;
+      per cases;
+      suppose
+A24:   r < a;
+        reconsider g = a as Real by XREAL_0:def 1;
+        take g;
+       thus r < g & g in dom(Intf + Intg) by XXREAL_1:236, A24,A12;
+      end;
+      suppose
+A25:   not r < a;
+        reconsider g = r + 1 as Real;
+        take g;
+A26:    r + 0 < r + 1 by XREAL_1:10;
+        a <= g by A25,A26,XXREAL_0:2;
+        hence r < g & g in dom(Intf + Intg) by XXREAL_1:236,A26,A12;
+      end;
+    end;
+    thus Intfg is convergent_in+infty by LIMFUNC1:117,A2,A3,A23;
+    thus lim_in+infty (Intfg) = infty_ext_right_integral(f,a) +
+      infty_ext_right_integral(g,a) by LIMFUNC1:117,A2,A3,A23;
+  end;
+  thus (f + g) is_+infty_ext_Riemann_integrable_on a by A4,A12,A22,Def5;
+  hence thesis by A12,A22,Def7;
+end;
+
+theorem Th10:
+  for f be PartFunc of REAL,REAL,
+  a be real number st
+  right_closed_halfline(a) c= dom f &
+  f is_+infty_ext_Riemann_integrable_on a holds
+  for r be Real holds
+  r(#)f is_+infty_ext_Riemann_integrable_on a &
+  infty_ext_right_integral(r(#)f,a) = r*infty_ext_right_integral(f,a)
+proof
+  let f be PartFunc of REAL,REAL, a be real number;
+  assume
+A1: right_closed_halfline(a) c= dom f &
+  f is_+infty_ext_Riemann_integrable_on a;
+  for r be Real holds
+  r(#)f is_+infty_ext_Riemann_integrable_on a &
+  infty_ext_right_integral(r(#)f,a) = r*infty_ext_right_integral(f,a)
+  proof
+    let r be Real;
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = right_closed_halfline(a)
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,a,x)) &
+    Intf is convergent_in+infty &
+    infty_ext_right_integral(f,a) = lim_in+infty Intf by Def7,A1;
+    set Intfg = r(#)Intf;
+A3: for b be Real st a <= b
+    holds
+    r(#)f is_integrable_on [' a,b '] & (r(#)f)|[' a,b '] is bounded
+    proof
+      let b be Real;
+      assume
+A4:   a <= b;
+A5:   [' a,b '] = [.a,b.] by INTEGRA5:def 4,A4;
+      [.a,b.] c= right_closed_halfline(a) by XXREAL_1:251;
+      then
+A6:   [' a,b '] c= dom f by A5,A1,XBOOLE_1:1;
+      f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
+      by A4, Def5,A1;
+      hence thesis by RFUNCT_1:97, A6,INTEGRA6:9;
+    end;
+A8: dom Intfg = right_closed_halfline(a)
+    & (for x be Real st x in dom Intfg holds
+    Intfg.x = integral(r(#)f,a,x))
+    proof
+      thus
+A9:   dom Intfg = right_closed_halfline(a) by A2,VALUED_1:def 5;
+      let x be Real;
+      assume
+A10:  x in dom Intfg;
+      then
+A11:  a <= x by A9, XXREAL_1:236;
+A12:  [' a,x '] = [.a,x.] by INTEGRA5:def 4,A11;
+A13:  [.a,x.] c= right_closed_halfline(a) by XXREAL_1:251;
+A14:  f is_integrable_on [' a,x '] & f|[' a,x '] is bounded by A11,Def5,A1;
+      thus Intfg.x = r*Intf.x by VALUED_1:def 5,A10
+        .= r*integral(f,a,x) by A2, A9,A10
+        .=integral(r(#)f,a,x) by A13,A12,A1,XBOOLE_1:1,A14,INTEGRA6:10,A11;
+    end;
+A15: Intfg is convergent_in+infty by A2, LIMFUNC1:115;
+A16: lim_in+infty (Intfg) = r*infty_ext_right_integral(f,a)
+       by LIMFUNC1:115,A2;
+    thus r(#)f is_+infty_ext_Riemann_integrable_on a by A3,A8,A15,Def5;
+    hence thesis by A8,A15,A16,Def7;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for f,g be PartFunc of REAL,REAL,
+  b be real number st
+  left_closed_halfline(b) c= dom f &
+  left_closed_halfline(b) c= dom g &
+  f is_-infty_ext_Riemann_integrable_on b &
+  g is_-infty_ext_Riemann_integrable_on b holds
+  f + g is_-infty_ext_Riemann_integrable_on b &
+  infty_ext_left_integral(f + g,b)
+  = infty_ext_left_integral(f,b) + infty_ext_left_integral(g,b)
+proof
+  let f,g be PartFunc of REAL,REAL, b be real number;
+  assume
+A1: left_closed_halfline(b) c= dom f &
+  left_closed_halfline(b) c= dom g &
+  f is_-infty_ext_Riemann_integrable_on b &
+  g is_-infty_ext_Riemann_integrable_on b;
+  consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = left_closed_halfline(b)
+  & (for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b)) &
+  Intf is convergent_in-infty &
+  infty_ext_left_integral(f,b) = lim_in-infty Intf by Def8,A1;
+  consider Intg be PartFunc of REAL,REAL such that
+A3: dom Intg = left_closed_halfline(b)
+  & (for x be Real st x in dom Intg holds
+  Intg.x = integral(g,x,b)) &
+  Intg is convergent_in-infty &
+  infty_ext_left_integral(g,b) = lim_in-infty Intg by Def8,A1;
+  set Intfg = Intf + Intg;
+A4: for a be Real st a <= b holds
+  f + g is_integrable_on [' a,b '] & (f+g)|[' a,b '] is bounded
+  proof
+    let a be Real;
+    assume
+A5: a <= b;
+A6: [' a,b '] = [.a,b.] by INTEGRA5:def 4,A5;
+A7: [.a,b.] c= left_closed_halfline(b) by XXREAL_1:265;
+    then
+A8: [' a,b '] c= dom f by A6,A1,XBOOLE_1:1;
+A9: [' a,b '] c= dom g by A6,A7,A1,XBOOLE_1:1;
+A10: f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
+    by A5, Def6,A1;
+A11: g is_integrable_on [' a,b '] & g|[' a,b '] is bounded
+    by A5, Def6,A1;
+    (f + g)|([' a,b '] /\ [' a,b ']) is bounded  by A10,A11,RFUNCT_1:100;
+    hence thesis by A10,A11, A8,A9,INTEGRA6:11;
+  end;
+A12: dom Intfg = left_closed_halfline(b)
+  & (for x be Real st x in dom Intfg holds
+  Intfg.x = integral(f + g,x,b))
+  proof
+    thus
+A13: dom Intfg = dom Intf /\ dom Intg by VALUED_1:def 1
+      .= left_closed_halfline(b) by A2,A3;
+    let x be Real;
+    assume
+A14: x in dom Intfg;
+    then
+A15: x <= b by A13,XXREAL_1:234;
+A16: [' x,b '] = [.x,b.] by INTEGRA5:def 4,A15;
+A17: [.x,b.] c= left_closed_halfline(b) by XXREAL_1:265;
+    then
+A18: [' x,b '] c= dom f by A16,A1,XBOOLE_1:1;
+A19: [' x,b '] c= dom g by A16,A17,A1,XBOOLE_1:1;
+A20: f is_integrable_on [' x,b '] & f|[' x,b '] is bounded
+    by A15, Def6,A1;
+A21: g is_integrable_on [' x,b '] & g|[' x,b '] is bounded
+    by A15, Def6,A1;
+    thus
+    Intfg.x = Intf.x + Intg.x by VALUED_1:def 1,A14
+      .= integral(f,x,b) + Intg.x by A2, A13,A14
+      .= integral(f,x,b) + integral(g,x,b) by A3, A13,A14
+      .= integral(f + g,x,b) by A18,A19,A20,A21,INTEGRA6:12,A15;
+  end;
+A22: Intfg is convergent_in-infty &
+  lim_in-infty (Intfg)
+  = infty_ext_left_integral(f,b) + infty_ext_left_integral(g,b)
+  proof
+A23: for r ex g st g < r & g in dom(Intf + Intg)
+    proof
+      let r be Real;
+      per cases;
+      suppose
+A24:   b < r;
+        reconsider g = b as Real by XREAL_0:def 1;
+        take g;
+        thus g < r & g in dom(Intf + Intg) by A24,A12,XXREAL_1:234;
+      end;
+      suppose
+A25:   not b < r;
+        reconsider g = r - 1 as Real;
+        take g;
+A26:     r - 1 < r - 0 by XREAL_1:17;
+        g <= b by A25,A26,XXREAL_0:2;
+        hence g < r & g in dom(Intf + Intg) by A26,A12,XXREAL_1:234;
+      end;
+    end;
+    thus Intfg is convergent_in-infty by LIMFUNC1:126,A2,A3,A23;
+    thus lim_in-infty (Intfg) = infty_ext_left_integral(f,b) +
+      infty_ext_left_integral(g,b) by LIMFUNC1:126,A2,A3,A23;
+  end;
+  thus (f + g) is_-infty_ext_Riemann_integrable_on b by A4,A12,A22,Def6;
+  hence thesis by A12,A22,Def8;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL,
+  b be real number st
+  left_closed_halfline(b) c= dom f &
+  f is_-infty_ext_Riemann_integrable_on b holds
+  for r be Real holds
+  r(#)f is_-infty_ext_Riemann_integrable_on b &
+  infty_ext_left_integral(r(#)f,b) = r*infty_ext_left_integral(f,b)
+proof
+  let f be PartFunc of REAL,REAL,
+  b be real number;
+  assume
+A1: left_closed_halfline(b) c= dom f &
+  f is_-infty_ext_Riemann_integrable_on b;
+  for r be Real holds
+  r(#)f is_-infty_ext_Riemann_integrable_on b &
+  infty_ext_left_integral(r(#)f,b) = r*infty_ext_left_integral(f,b)
+  proof
+    let r be Real;
+    consider Intf be PartFunc of REAL,REAL such that
+A2: dom Intf = left_closed_halfline(b)
+    & (for x be Real st x in dom Intf holds
+    Intf.x = integral(f,x,b)) &
+    Intf is convergent_in-infty &
+    infty_ext_left_integral(f,b) = lim_in-infty Intf by Def8,A1;
+    set Intfg = r(#)Intf;
+A3: for a be Real st a <= b holds
+    r(#)f is_integrable_on [' a,b '] & (r(#)f)|[' a,b '] is bounded
+    proof
+      let a be Real;
+      assume
+A4:   a <= b;
+A5:   [' a,b '] = [.a,b.] by INTEGRA5:def 4,A4;
+      [.a,b.] c= left_closed_halfline(b) by XXREAL_1:265;
+      then
+A6:   [' a,b '] c= dom f by A5,A1,XBOOLE_1:1;
+A7:   f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
+      by A4, Def6,A1;
+      thus thesis by A7,RFUNCT_1:97,A6,INTEGRA6:9;
+    end;
+A8: dom Intfg = left_closed_halfline(b)
+    & (for x be Real st x in dom Intfg holds
+    Intfg.x = integral(r(#)f,x,b))
+    proof
+      thus
+A9:   dom Intfg = left_closed_halfline(b) by A2,VALUED_1:def 5;
+      let x be Real;
+      assume
+A10:  x in dom Intfg;
+      then
+A11:  x <= b by A9,XXREAL_1:234;
+A12:  [' x,b '] = [.x,b.] by INTEGRA5:def 4,A11;
+A13:  [.x,b.] c= left_closed_halfline(b) by XXREAL_1:265;
+A14:  f is_integrable_on [' x,b '] & f|[' x,b '] is bounded
+      by A11, Def6,A1;
+      thus
+      Intfg.x = r*Intf.x by VALUED_1:def 5,A10
+        .= r*integral(f,x,b) by A2,A9,A10
+        .= integral(r(#)f,x,b) by A13,A12,A1,XBOOLE_1:1,A14,INTEGRA6:10,A11;
+    end;
+A15: Intfg is convergent_in-infty by A2,LIMFUNC1:124;
+A16: lim_in-infty (Intfg) = r*infty_ext_left_integral(f,b) by LIMFUNC1:124,A2;
+    thus r(#)f is_-infty_ext_Riemann_integrable_on b by A3,A8,A15,Def6;
+    hence thesis by A8,A15,A16,Def8;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL,
+  a,b be Real st a < b & [' a,b '] c= dom f &
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded holds
+  ext_right_integral(f,a,b) = integral(f,a,b)
+proof
+  let f be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1: a < b & [' a,b '] c= dom f &
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded;
+A2: for d be Real st a <= d & d < b
+  holds
+  f is_integrable_on [' a,d '] & f|[' a,d '] is bounded by A1,INTEGRA6:18;
+  reconsider AB = [.a,b.[ as non empty Subset of REAL by A1,XXREAL_1:3;
+  deffunc F(Element of AB) = integral(f,a,$1);
+  consider Intf be Function of AB, REAL such that
+A3: for x being Element of AB holds Intf.x = F(x) from FUNCT_2:sch 4;
+A4: dom Intf = AB by FUNCT_2:def 1;
+  then reconsider Intf as PartFunc of REAL, REAL by PARTFUN1:28;
+A5: for x be Real st x in dom Intf holds
+  Intf.x = integral(f,a,x) by A3,A4;
+A6: for r be Real st r < b ex g be Real
+  st r < g & g < b & g in dom Intf
+  proof
+    let r such that
+A7: r < b;
+    per cases;
+    suppose
+A8: r < a;
+      reconsider g = a as Real;
+      take g;
+      thus
+      r < g & g < b & g in dom Intf by A8,A4,A1,XXREAL_1:3;
+    end;
+    suppose
+A9: not r < a;
+      reconsider g = r + (b - r)/2 as Real;
+      take g;
+      0 < b - r by A7,XREAL_1:52;
+      then
+A10:  0 < (b - r)/2 & (b - r)/2 < b - r by XREAL_1:217,218;
+      then
+A11:  r < g by XREAL_1:31;
+      a - a <= r - a by A9,XREAL_1:11;
+      then
+A12:  r - (r - a) < g - 0 by A11,XREAL_1:16;
+      (b - r)/2 + r < b - r + r by A10,XREAL_1:10;
+      hence
+      r < g & g < b & g in dom Intf by A10,A4,A12,XXREAL_1:3,XREAL_1:10;
+    end;
+  end;
+  consider M0 be real number such that
+A13: for x being set st x in [' a,b '] /\ dom f
+  holds abs(f.x) <= M0 by RFUNCT_1:90,A1;
+  reconsider M = M0 + 1 as Real;
+A14: 0 < M & for x be Real st x in [' a,b ']
+  holds abs(f.x) <= M
+  proof
+A15: for x be Real st
+    x in [' a,b '] holds abs(f.x) < M
+    proof
+      let x be Real such that
+A16:  x in [' a,b '];
+A17:  [' a,b '] /\ dom f = [' a,b '] by A1,XBOOLE_1:28;
+      thus thesis by A17,A16,A13,XREAL_1:41;
+    end;
+    a in {r where r is Real: a <= r & r <= b } by A1; then
+    a in [.a,b.] by RCOMP_1:def 1; then
+    a in [' a,b '] by A1,INTEGRA5:def 4; then
+    abs(f.a) < M by A15;
+    hence thesis by A15,COMPLEX1:132;
+  end;
+A19: for g1 be Real st 0 < g1 ex r be Real
+  st r < b &
+  for r1 be Real st r < r1 & r1 < b & r1 in dom Intf holds
+  abs(Intf.r1 - integral(f,a,b)) < g1
+  proof
+    let g1 be Real;
+    assume
+A20: 0 < g1;
+    consider r be Real such that
+A21: a < r & r < b & (b - r)*M < g1 by A14,A20,A1,Th1;
+    take r;
+    thus r < b by A21;
+    now let r1 be Real;
+      assume
+A22:  r < r1 & r1 < b & r1 in dom Intf;
+      then
+A23:  Intf.r1 = integral(f,a,r1) by A3,A4;
+A24:  [' a,b '] = [. a,b .] by A1,INTEGRA5:def 4;
+A25:  a <= r1 by A21,A22,XXREAL_0:2;
+      r1 in [. a,b .] by A22,A25,XXREAL_1:1;
+      then
+A26:  r1 in [' a,b '] by A1,INTEGRA5:def 4;
+A27:  abs(Intf.r1 - integral(f,a,b))
+      = abs (integral(f,a,b) - Intf.r1) by COMPLEX1:146
+        .= abs(integral(f,a,r1) + integral(f,r1,b) - integral(f,a,r1))
+      by A1,INTEGRA6:17,A23,A26
+        .= abs(integral(f,r1,b));
+A28:  b in [' a,b '] by A1,XXREAL_1:1,A24;
+A29:  [. r1,b .] = [' r1,b '] by A22,INTEGRA5:def 4;
+      [' r1,b '] c= [' a,b '] by A24,A29,A25,XXREAL_1:34;
+      then
+      for x be real number st x in [' r1,b '] holds abs(f.x) <= M by A14;
+      then
+A30:  abs(integral(f,r1,b)) <= M * (b - r1) by A1,A22,A26,A28,INTEGRA6:23;
+      b - r1 < b - r by A22,XREAL_1:17;
+      then M * (b - r1) < M * (b - r) by A14, XREAL_1:70;
+      then abs(integral(f,r1,b)) < M * (b - r) by A30, XXREAL_0:2;
+      hence
+      abs(Intf.r1 - integral(f,a,b)) < g1 by A21,A27,XXREAL_0:2;
+    end;
+    hence
+    for r1 be Real st r < r1 & r1 < b & r1 in dom Intf holds
+    abs(Intf.r1 - integral(f,a,b)) < g1;
+  end;
+  then
+A31: Intf is_left_convergent_in b by A6,LIMFUNC2:13;
+  then
+A32: integral(f,a,b) = lim_left(Intf,b) by A19,LIMFUNC2:49;
+  f is_right_ext_Riemann_integrable_on a,b by A2,A4,A5,A31,Def1;
+  hence thesis by A4,A5,A31,A32,Def3;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL, a,b be Real st
+  a < b &
+  [' a,b '] c= dom f &
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
+  holds
+  ext_left_integral(f,a,b) = integral(f,a,b)
+proof
+  let f be PartFunc of REAL,REAL,
+  a,b be Real such that
+A1: a < b &
+  [' a,b '] c= dom f &
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded;
+A2: for d be Real st a < d & d <= b
+  holds
+  f is_integrable_on [' d,b '] & f|[' d,b '] is bounded by A1,INTEGRA6:18;
+  reconsider AB = ].a,b.] as non empty Subset of REAL by A1,XXREAL_1:2;
+  deffunc F(Element of AB) = integral(f,$1,b);
+  consider Intf be Function of AB, REAL such that
+A3: for x being Element of AB holds Intf.x = F(x) from FUNCT_2:sch 4;
+A4: dom Intf = AB by FUNCT_2:def 1;
+  then reconsider Intf as PartFunc of REAL, REAL by PARTFUN1:28;
+A5: for x be Real st x in dom Intf holds
+  Intf.x = integral(f,x,b) by A3,A4;
+A6: for r be Real st a < r ex g be Real
+  st g < r & a < g & g in dom Intf
+  proof
+    let r such that
+A7: a < r;
+    per cases;
+    suppose
+A8: b < r;
+      reconsider g = b as Real;
+      take g;
+      g in ].a,b.] by A1,XXREAL_1:2;
+      hence g < r & a < g & g in dom Intf by A8,A1,FUNCT_2:def 1;
+    end;
+    suppose
+A9: not b < r;
+      reconsider g = a + (r - a)/2 as Real;
+      take g;
+      0 < r - a by A7, XREAL_1:52;
+      then
+A10:  0 < (r - a)/2 & (r - a)/2 < r - a by XREAL_1:217,218;
+      then
+A11:  a < g by XREAL_1:31;
+A12:  (r - a)/2 + a < r - a + a by A10,XREAL_1:10;
+      g < b by A9,A12,XXREAL_0:2;
+      hence g < r & a < g & g in dom Intf by A11,A12,A4,XXREAL_1:2;
+    end;
+  end;
+  consider M0 be real number such that
+A14: for x being set st x in [' a,b '] /\ dom f
+  holds abs(f.x) <= M0 by RFUNCT_1:90,A1;
+  reconsider M = M0 + 1 as Real;
+A15: 0 < M & for x be Real st x in [' a,b ']
+  holds abs(f.x) <= M
+  proof
+A16: for x be Real st x in [' a,b '] holds abs(f.x) < M
+    proof
+      let x be Real such that
+A17:  x in [' a,b '];
+      [' a,b '] /\ dom f = [' a,b '] by A1,XBOOLE_1:28;
+      hence thesis by XREAL_1:41,A17,A14;
+    end;
+    a in {r where r is Real: a <= r & r <= b } by A1;
+    then a in [.a,b.] by RCOMP_1:def 1;
+    then a in [' a,b '] by A1,INTEGRA5:def 4;
+    then abs(f.a) < M by A16;
+    hence thesis by A16,COMPLEX1:132;
+  end;
+A20: for g1 be Real st 0 < g1 ex r be Real st a < r &
+  for r1 be Real st r1 < r & a < r1 & r1 in dom Intf holds
+  abs(Intf.r1 - integral(f,a,b)) < g1
+  proof
+    let g1 be Real;
+    assume
+A21: 0 < g1;
+    consider r be Real such that
+A22: a < r & r < b & (r - a)*M < g1 by A15,A21,A1,Th2;
+    take r;
+    thus a < r by A22;
+    now let r1 be Real;
+      assume
+A23:  a < r1 & r1 < r & r1 in dom Intf;
+      then
+A24:  Intf.r1 = integral(f,r1,b) by A3,A4;
+A25:  [' a,b '] = [. a,b .] by A1,INTEGRA5:def 4;
+A26:  r1 <= b by A23,A22,XXREAL_0:2;
+A27:  r1 in [' a,b '] by A25,A23,A26,XXREAL_1:1;
+A28:  abs(Intf.r1 - integral(f,a,b))
+      = abs (integral(f,a,b) - Intf.r1) by COMPLEX1:146
+        .= abs(integral(f,a,r1) + integral(f,r1,b) - integral(f,r1,b))
+      by A1,INTEGRA6:17,A24,A27
+        .= abs(integral(f,a,r1));
+A29:  a in [' a,b '] by A1,XXREAL_1:1,A25;
+A30:  [. a,r1 .] = [' a,r1 '] by A23,INTEGRA5:def 4;
+      [' a,r1 '] c= [' a,b '] by A25,A30,A26,XXREAL_1:34;
+      then
+      for x be real number st x in [' a,r1 '] holds abs(f.x) <= M by A15;
+      then
+A31:  abs(integral(f,a,r1)) <= M * (r1 - a) by A1,A23,A27,A29,INTEGRA6:23;
+      r1 - a < r - a by A23,XREAL_1:16;
+      then M * (r1 - a) < M * (r - a) by A15, XREAL_1:70;
+      then abs(integral(f,a,r1)) < M * (r - a) by A31,XXREAL_0:2;
+      hence abs(Intf.r1 - integral(f,a,b)) < g1 by A28,A22,XXREAL_0:2;
+    end;
+    hence
+    for r1 be Real st r1 < r & a < r1 & r1 in dom Intf holds
+    abs(Intf.r1 - integral(f,a,b)) < g1;
+  end;
+  then
+A32: Intf is_right_convergent_in a by A6,LIMFUNC2:16;
+  then
+A33: integral(f,a,b) = lim_right(Intf,a) by A20,LIMFUNC2:50;
+  f is_left_ext_Riemann_integrable_on a,b by A2,A4,A5,A32,Def2;
+  hence thesis by A4,A5,A32,A33,Def4;
+end;
+
+begin :: The Definition of One-Sided Laplace Transform
+
+definition
+  let s be real number;
+  func exp*- s -> Function of REAL,REAL means
+  for t be Real holds it.t = exp_R.(-s*t);
+  existence
+  proof
+    deffunc F(Real) = exp_R.(-s*$1);
+    consider g being Function of REAL,REAL such that
+A1: for x be Element of REAL holds g.x = F(x) from FUNCT_2:sch 4;
+    take g;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be Function of REAL, REAL;
+    assume that
+A1: for d be Real holds f1.d = exp_R.(-s*d) and
+A2: for d be Real holds f2.d = exp_R.(-s*d);
+    for d being Element of REAL holds f1.d = f2.d
+    proof
+      let d be Element of REAL;
+      thus f1.d = exp_R.(-s*d) by A1
+        .=f2.d by A2;
+    end;
+    hence f1 = f2 by FUNCT_2:113;
+  end;
+end;
+
+definition
+  let f be PartFunc of REAL,REAL;
+  func One-sided_Laplace_transform(f) -> PartFunc of REAL,REAL means
+  :Def12:
+  dom it = right_open_halfline(0) &
+  for s be Real st s in dom it holds
+  it.s = infty_ext_right_integral(f(#)(exp*-s),0);
+  existence
+  proof
+    defpred P[Element of REAL,Element of REAL]
+    means $1 in right_open_halfline(0)
+    & $2 = infty_ext_right_integral(f(#)(exp*-$1),0);
+    consider g being PartFunc of REAL,REAL such that
+A1: (for d be Element of REAL holds
+    d in dom g iff (ex c be Element of REAL st P[d,c])) &
+    (for d be Element of REAL st d in dom g holds P[d,g/.d])
+    from PARTFUN2:sch 1;
+    take g;
+A2: dom g = right_open_halfline(0)
+    proof
+      let s1 be real number;
+      reconsider s = s1 as Real by XREAL_0:def 1;
+      s in right_open_halfline(0) implies s in dom g
+      proof
+        assume
+A3:     s in right_open_halfline(0);
+        ex y be Element of REAL st s in right_open_halfline(0)
+        & y = infty_ext_right_integral(f(#)(exp*-s),0) by A3;
+        hence thesis by A1;
+      end;
+      hence thesis by A1;
+    end;
+A4: for s be Real st s in dom g holds
+    g.s = infty_ext_right_integral(f(#)(exp*-s),0)
+    proof
+      let s be Real;
+      assume
+A5:   s in dom g;
+      then s in right_open_halfline(0)
+      & g/.s = infty_ext_right_integral(f(#)(exp*-s),0) by A1;
+      hence
+      g.s = infty_ext_right_integral(f(#)(exp*-s),0) by A5,PARTFUN1:def 8;
+    end;
+    thus thesis by A2,A4;
+  end;
+  uniqueness
+  proof
+    let f1,f2 be PartFunc of REAL, REAL;
+    assume
+A6: dom f1 = right_open_halfline(0) &
+    for s be Real st s in dom f1 holds
+    f1.s = infty_ext_right_integral(f(#)(exp*-s),0);
+    assume
+A7: dom f2 = right_open_halfline(0) &
+    for s be Real st s in dom f2 holds
+    f2.s = infty_ext_right_integral(f(#)(exp*-s),0);
+    for s being Element of REAL
+    st s in dom f1 holds f1.s = f2.s
+    proof
+      let s be Element of REAL such that AS1:s in dom f1;
+A8:   f1.s = infty_ext_right_integral(f(#)(exp*-s),0) by A6,AS1;
+      thus f1.s = f2.s by A6,A7,A8,AS1;
+    end;
+    hence f1 = f2 by A6,A7,PARTFUN1:34;
+  end;
+end;
+
+begin :: Linearity of One-Sided Laplace Transform
+
+theorem
+  for f, g be PartFunc of REAL,REAL
+  st dom f = right_closed_halfline(0)
+  & dom g = right_closed_halfline(0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  g(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) holds
+  (for s be Real st s in right_open_halfline(0) holds
+  (f + g)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) &
+  One-sided_Laplace_transform(f + g)
+  = One-sided_Laplace_transform(f) + One-sided_Laplace_transform(g)
+proof
+  let f, g be PartFunc of REAL,REAL such that
+A1: dom f = right_closed_halfline(0)
+  & dom g = right_closed_halfline(0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  g(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0);
+  set F = One-sided_Laplace_transform(f) + One-sided_Laplace_transform(g);
+  set Intf = One-sided_Laplace_transform(f);
+  set Intg = One-sided_Laplace_transform(g);
+A3: for s be Real st s in right_open_halfline(0) holds
+  (f + g)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0 &
+  infty_ext_right_integral((f + g)(#)(exp*-s),0)
+  = infty_ext_right_integral(f(#)(exp*-s),0) +
+  infty_ext_right_integral(g(#)(exp*-s),0)
+  proof
+    let s be Real;
+    assume
+A4: s in right_open_halfline(0);
+A5: f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0 by A4,A1;
+A6: g(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0 by A4,A1;
+A7: (f + g)(#)(exp*-s) = f(#)(exp*-s) + g(#)(exp*-s) by RFUNCT_1:22;
+A8: dom (f(#)(exp*-s)) = dom f /\ dom (exp*-s) by VALUED_1:def 4
+      .= right_closed_halfline(0) /\ REAL by A1,FUNCT_2:def 1
+      .= right_closed_halfline(0) by XBOOLE_1:28;
+    dom (g(#)(exp*-s)) = dom g /\ dom (exp*-s) by VALUED_1:def 4
+      .= right_closed_halfline(0) /\ REAL by A1,FUNCT_2:def 1
+      .= right_closed_halfline(0) by XBOOLE_1:28;
+    hence thesis by A5,A6,A7,A8,Th9;
+  end;
+A10: dom F = dom Intf /\ dom Intg by VALUED_1:def 1
+    .= right_open_halfline(0) /\ dom Intg by Def12
+    .= right_open_halfline(0) /\ right_open_halfline(0) by Def12
+    .= right_open_halfline(0);
+  for s be Real st s in dom F holds
+  F.s = infty_ext_right_integral((f + g)(#)(exp*-s),0)
+  proof
+    let s be Real;
+    assume
+A11: s in dom F;
+    then
+A12: s in dom Intf by A10,Def12;
+A13: s in dom Intg by A11,A10,Def12;
+    thus infty_ext_right_integral((f + g)(#)(exp*-s),0)
+    = infty_ext_right_integral(f(#)(exp*-s),0)
+     + infty_ext_right_integral(g(#)(exp*-s),0) by A3,A10,A11
+      .= Intf.s + infty_ext_right_integral(g(#)(exp*-s),0) by A12,Def12
+      .= Intf.s + Intg.s by A13,Def12
+      .= F.s by A11,VALUED_1:def 1;
+  end;
+  hence thesis by A3,A10,Def12;
+end;
+
+theorem
+  for f be PartFunc of REAL,REAL, a be Real
+  st dom f = right_closed_halfline(0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) holds
+  (for s be Real st s in right_open_halfline(0) holds
+  (a(#)f)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) &
+  One-sided_Laplace_transform(a(#)f)
+  = a(#)One-sided_Laplace_transform(f)
+proof
+  let f be PartFunc of REAL,REAL, a be Real such that
+A1: dom f = right_closed_halfline(0)
+  & (for s be Real st s in right_open_halfline(0) holds
+  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0);
+  set F = a(#)One-sided_Laplace_transform(f);
+  set Intf = One-sided_Laplace_transform(f);
+A3: for s be Real st s in right_open_halfline(0) holds
+  (a(#)f)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0 &
+  infty_ext_right_integral((a(#)f)(#)(exp*-s),0)
+  = a*infty_ext_right_integral(f(#)(exp*-s),0)
+  proof
+    let s be Real;
+    assume
+A4: s in right_open_halfline(0);
+A5: f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0 by A4,A1;
+A6: (a(#)f)(#)(exp*-s) = a(#)(f(#)(exp*-s)) by RFUNCT_1:24;
+A7: dom (f(#)(exp*-s)) = dom f /\ dom (exp*-s) by VALUED_1:def 4
+      .= right_closed_halfline(0) /\ REAL by A1,FUNCT_2:def 1
+      .= right_closed_halfline(0) by XBOOLE_1:28;
+    thus thesis by A5,A6,A7,Th10;
+  end;
+A9: dom F = dom Intf by VALUED_1:def 5
+    .= right_open_halfline(0) by Def12;
+  for s be Real st s in dom F holds
+  F.s = infty_ext_right_integral((a(#)f)(#)(exp*-s),0)
+  proof
+    let s be Real;
+    assume
+A10: s in dom F; then
+A11: s in dom Intf by A9,Def12;
+    thus infty_ext_right_integral((a(#)f)(#)(exp*-s),0)
+    = a*infty_ext_right_integral(f(#)(exp*-s),0) by A3,A9,A10
+      .= a*Intf.s by A11,Def12
+      .= F.s by VALUED_1:6;
+  end;
+  hence thesis by A3,A9,Def12;
+end;

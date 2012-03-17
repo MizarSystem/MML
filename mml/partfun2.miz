@@ -7,15 +7,15 @@
 environ
 
  vocabularies PARTFUN1, RELAT_1, FINSEQ_4, FUNCT_1, BOOLE, FUNCOP_1, PARTFUN2,
-      COMPLEX1;
+      COMPLEX1, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, FUNCOP_1;
  constructors PARTFUN1, FUNCOP_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, FUNCT_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, GRFUNC_1, FUNCOP_1, PARTFUN1, RELAT_1,
-      RELSET_1, XBOOLE_0;
+      RELSET_1, XBOOLE_0, SUBSET_1;
  schemes FUNCT_2, XBOOLE_0;
 
 begin
@@ -418,14 +418,14 @@ proof
 A1: g = f|X;
     then
 A2: dom g = dom f /\ X & for x st x in dom g holds
-    (g qua Function).x = (f qua Function).x by FUNCT_1:68;
-    thus dom g = dom f /\ X by A1,FUNCT_1:68;
+    (g qua Function).x = (f qua Function).x by RELAT_1:90,FUNCT_1:70;
+    thus dom g = dom f /\ X by A1,RELAT_1:90;
     let c;
     assume
 A3: c in dom g;
     then
 A4: c in dom f by A2,XBOOLE_0:def 3;
-    (g qua Function).c = (f qua Function).c by A1,A3,FUNCT_1:68;
+    (g qua Function).c = (f qua Function).c by A1,A3,FUNCT_1:70;
     then g/.c = (f qua Function).c by A3,PARTFUN1:def 8;
     hence thesis by A4,PARTFUN1:def 8;
   end;
@@ -817,17 +817,7 @@ definition
       end;
       suppose SC <> {};
         then dom (SC --> d) = SC & rng (SC --> d) = {d} by FUNCOP_1:14,19;
-        then (SC --> d) is PartFunc of SC,{d} by PARTFUN1:24;
-        then
-A1:     (SC --> d) is PartFunc of C,{d} by PARTFUN1:30;
-        now
-          let x;
-          assume x in {d};
-          then x = d by TARSKI:def 1;
-          hence x in D;
-        end;
-        then {d} c= D by TARSKI:def 3;
-        hence thesis by A1,PARTFUN1:31;
+        hence thesis by PARTFUN1:30;
       end;
     end;
     hence thesis;
@@ -911,27 +901,94 @@ end;
 :: PARTIAL FUNCTION CONSTANT ON SET
 ::
 
-definition
-  let C,D;
-  let f,X;
-  canceled 2;
-  pred f is_constant_on X means
-  :Def3:
-  ex d st for c st c in X /\ dom f holds f/.c = d;
+definition let C,D,f;
+ redefine attr f is constant means
+:Defx:  ex d st for c st c in dom f holds f/.c = d;
+ compatibility
+  proof
+   thus f is constant implies
+   ex d st for c st c in dom f holds f/.c = d
+   proof assume
+Z:    f is constant;
+    per cases;
+    suppose
+S:   dom f = {};
+     consider d;
+     take d;
+     thus for c st c in dom f holds f/.c = d by S;
+    end;
+    suppose dom f <> {};
+     then consider c0 being set such that
+W:   c0 in dom f by XBOOLE_0:def 1;
+    reconsider c0 as Element of C by W;
+    take d = f/.c0;
+    let c;
+    assume
+Z1:   c in dom f;
+    hence f/.c = f.c by PARTFUN1:def 8
+        .= f.c0 by W,Z,FUNCT_1:def 16,Z1
+        .= d by W,PARTFUN1:def 8;
+    end;
+   end;
+   given d such that
+G1: for c st c in dom f holds f/.c = d;
+   let x,y be set such that
+Z1:  x in dom f and
+Z2:  y in dom f;
+   thus f.x = f/.x by Z1,PARTFUN1:def 8
+         .= d by Z1,G1
+         .= f/.y by Z2,G1
+         .=f.y by Z2,PARTFUN1:def 8;
+
+  end;
 end;
 
-canceled;
+theorem Thx:
+ f|X is constant iff ex d st for c st c in X /\ dom f holds f/.c = d
+  proof
+    thus f|X is constant implies
+      ex d st for c st c in X /\ dom f holds f/.c = d
+    proof
+     given d such that
+G:    for c st c in dom(f|X) holds f|X/.c = d;
+     take d;
+     let c;
+     assume
+Z:    c in X /\ dom f;
+      then
+A:     c in dom(f|X) by RELAT_1:90;
+      c in dom f by Z,XBOOLE_0:def 3;
+     hence f/.c = f.c by PARTFUN1:def 8
+            .= (f|X).c by A,FUNCT_1:70
+            .= f|X/.c by A,PARTFUN1:def 8
+            .= d by G,A;
+    end;
+   given d such that
+G:   for c st c in X /\ dom f holds f/.c = d;
+   take d;
+   let c;
+   assume
+Z:  c in dom(f|X);
+    then
+A:   c in X /\ dom f by RELAT_1:90;
+    then
+B:   c in dom f by XBOOLE_0:def 3;
+   thus f|X/.c = (f|X).c by PARTFUN1:def 8,Z
+        .= f.c by Z,FUNCT_1:70
+        .= f/.c by B,PARTFUN1:def 8
+        .= d by G,A;
+  end;
 
 theorem
-  f is_constant_on X iff
+  f|X is constant iff
   for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f/.c1=f/.c2
 proof
-  thus f is_constant_on X implies
+  thus f|X is constant implies
   for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f/.c1=f/.c2
   proof
-    assume f is_constant_on X;
+    assume f|X is constant;
     then consider d such that
-A1: for c st c in X /\ dom f holds f/.c = d by Def3;
+A1: for c st c in X /\ dom f holds f/.c = d by Thx;
     let c1,c2;
     assume c1 in X /\ dom f & c2 in X /\ dom f;
     then f/.c1 = d & f/.c2 = d by A1;
@@ -947,7 +1004,7 @@ A3:   X /\ dom f = {};
         let c;
         thus c in X /\ dom f implies f/.c = d by A3;
       end;
-      hence thesis by Def3;
+      hence thesis by Thx;
     end;
     suppose
 A4:   X /\ dom f <> {};
@@ -955,22 +1012,22 @@ A4:   X /\ dom f <> {};
       x in dom f by A4,XBOOLE_0:def 3;
       then reconsider x as Element of C;
       for c holds c in X /\ dom f implies f/.c = f/.x by A2;
-      hence thesis by Def3;
+      hence thesis by Thx;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  X meets dom f implies (f is_constant_on X iff ex d st rng (f|X) = {d})
+  X meets dom f implies (f|X is constant iff ex d st rng (f|X) = {d})
 proof
   assume
 A1: X /\ dom f <> {};
-  thus f is_constant_on X implies ex d st rng (f|X) = {d}
+  thus f|X is constant implies ex d st rng (f|X) = {d}
   proof
-    assume f is_constant_on X;
+    assume f|X is constant;
     then consider d such that
-A2: for c st c in X /\ dom f holds f/.c = d by Def3;
+A2: for c st c in X /\ dom f holds f/.c = d by Thx;
     take d;
     thus rng (f|X) c= {d}
     proof
@@ -1003,21 +1060,18 @@ A5:   dom (f|X) = X /\ dom f by RELAT_1:90;
 A6: rng (f|X) = {d};
   take d;
   let c;
-  assume c in X /\ dom f;
-  then
-A7: c in dom (f|X) by RELAT_1:90;
+  assume c in dom (f|X);
   then f|X/.c in {d} by A6,Th4;
-  then f|X/.c = d by TARSKI:def 1;
-  hence thesis by A7,Th32;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
-  f is_constant_on X & Y c= X implies f is_constant_on Y
+  f|X is constant & Y c= X implies f|Y is constant
 proof
   assume
-A1: f is_constant_on X & Y c= X;
+A1: f|X is constant & Y c= X;
   then consider d such that
-A2: for c st c in X /\ dom f holds f/.c = d by Def3;
+A2: for c st c in X /\ dom f holds f/.c = d by Thx;
   now
     let c;
     assume c in Y /\ dom f;
@@ -1025,11 +1079,11 @@ A2: for c st c in X /\ dom f holds f/.c = d by Def3;
     then c in X /\ dom f by A1,XBOOLE_0:def 3;
     hence f/.c = d by A2;
   end;
-  hence thesis by Def3;
+  hence thesis by Thx;
 end;
 
 theorem Th58:
-  X misses dom f implies f is_constant_on X
+  X misses dom f implies f|X is constant
 proof
   assume
 A1: X /\ dom f = {};
@@ -1038,11 +1092,11 @@ A1: X /\ dom f = {};
     let c;
     thus c in X /\ dom f implies f/.c = d by A1;
   end;
-  hence thesis by Def3;
+  hence thesis by Thx;
 end;
 
 theorem
-  f|SC = dom (f|SC) --> d implies f is_constant_on SC
+  f|SC = dom (f|SC) --> d implies f|SC is constant
 proof
   assume
 A1: f|SC = dom (f|SC) --> d;
@@ -1054,16 +1108,16 @@ A2: c in dom (f|SC) by RELAT_1:90;
     then f|SC/.c = d by A1,Th48;
     hence f/.c = d by A2,Th32;
   end;
-  hence f is_constant_on SC by Def3;
+  hence f|SC is constant by Thx;
 end;
 
 theorem
-  f is_constant_on {x}
+  f|{x} is constant
 proof
   now per cases;
     suppose {x} /\ dom f = {};
       then {x} misses dom f by XBOOLE_0:def 7;
-      hence f is_constant_on {x} by Th58;
+      hence f|{x} is constant by Th58;
     end;
     suppose
 A1:   {x} /\ dom f <> {};
@@ -1077,22 +1131,22 @@ A1:   {x} /\ dom f <> {};
         then c in {x} by XBOOLE_0:def 3;
         hence f/.c = f/.x1 by TARSKI:def 1;
       end;
-      hence f is_constant_on {x} by Def3;
+      hence f|{x} is constant by Thx;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  f is_constant_on X & f is_constant_on Y & X /\ Y meets dom f implies
-  f is_constant_on X \/ Y
+  f|X is constant & f|Y is constant & X /\ Y meets dom f implies
+  f|(X \/ Y) is constant
 proof
   assume
-A1: f is_constant_on X & f is_constant_on Y & X /\ Y /\ dom f <> {};
+A1: f|X is constant & f|Y is constant & X /\ Y /\ dom f <> {};
   then consider d1 such that
-A2: for c st c in X /\ dom f holds f/.c = d1 by Def3;
+A2: for c st c in X /\ dom f holds f/.c = d1 by Thx;
   consider d2 such that
-A3: for c st c in Y /\ dom f holds f/.c = d2 by A1,Def3;
+A3: for c st c in Y /\ dom f holds f/.c = d2 by A1,Thx;
   consider x being Element of X /\ Y /\ dom f;
 A4: x in X /\ Y & x in dom f by A1,XBOOLE_0:def 3;
   then reconsider x as Element of C;
@@ -1106,7 +1160,9 @@ A5: f/.x = d1 by A2;
   then
 A6: d1 = d2 by A3,A5;
   let c;
-  assume c in (X \/ Y) /\ dom f;
+  assume c in dom(f|(X \/ Y));
+  then
+X:   c in (X \/ Y) /\ dom f by RELAT_1:90;
   then
 A7: c in X \/ Y & c in dom f by XBOOLE_0:def 3;
   now per cases by A7,XBOOLE_0:def 2;
@@ -1119,35 +1175,41 @@ A7: c in X \/ Y & c in dom f by XBOOLE_0:def 3;
       hence f/.c = d1 by A3,A6;
     end;
   end;
-  hence f/.c = d1;
+  hence (f|(X \/ Y))/.c = d1 by X,Th34;
 end;
 
 theorem
-  f is_constant_on Y implies f|X is_constant_on Y
+  f|Y is constant implies f|X|Y is constant
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider d such that
-A1: for c st c in Y /\ dom f holds f/.c = d by Def3;
+A1: for c st c in Y /\ dom f holds f/.c = d by Thx;
   take d;
   let c;
-  assume c in Y /\ dom (f|X);
+  assume c in dom (f|X|Y);
+   then
+X:  c in Y /\ dom (f|X) by RELAT_1:90;
   then
 A2: c in Y & c in dom (f|X) by XBOOLE_0:def 3;
   then c in Y & c in dom f /\ X by RELAT_1:90;
   then c in Y & c in dom f by XBOOLE_0:def 3;
   then c in Y /\ dom f by XBOOLE_0:def 3;
   then f/.c = d by A1;
-  hence f|X/.c = d by A2,Th32;
+  then f|X/.c = d by A2,Th32;
+ hence f|X|Y/.c = d by Th34,X;
 end;
 
 theorem
-  SC --> d is_constant_on SC
+  (SC --> d)|SC is constant
 proof
   take d;
   let c;
-  assume c in SC /\ dom (SC --> d);
+  assume c in dom((SC --> d)|SC);
+  then
+X:   c in SC /\ dom (SC --> d) by RELAT_1:90;
   then c in SC by XBOOLE_0:def 3;
-  hence (SC --> d)/.c = d by Th48;
+  then (SC --> d)/.c = d by Th48;
+  hence ((SC --> d)|SC)/.c = d by X,Th34;
 end;
 
 ::
@@ -1353,12 +1415,12 @@ A2: [c,f/.c] in f & f/.c in SD;
 end;
 
 theorem Th76:
-  f is_constant_on X iff ex d st for c st c in X /\ dom f holds f.c = d
+  f|X is constant iff ex d st for c st c in X /\ dom f holds f.c = d
 proof
   hereby
-    assume f is_constant_on X;
+    assume f|X is constant;
     then consider d such that
-A1: for c st c in X /\ dom f holds f/.c = d by Def3;
+A1: for c st c in X /\ dom f holds f/.c = d by Thx;
     take d;
     let c;
     assume
@@ -1371,21 +1433,25 @@ A2: c in X /\ dom f;
 A3: for c st c in X /\ dom f holds f.c = d;
   take d;
   let c;
-  assume
-A4: c in X /\ dom f;
-  then c in dom f by XBOOLE_0:def 3;
-  hence f/.c = f.c by PARTFUN1:def 8
+  assume c in dom(f|X);
+   then
+A4: c in X /\ dom f by RELAT_1:90;
+  then
+B4: c in dom f by XBOOLE_0:def 3;
+  thus
+   (f|X)/.c = f/.c by A4,Th34
+    .= f.c by PARTFUN1:def 8,B4
     .= d by A3,A4;
 end;
 
 theorem
-  f is_constant_on X iff
+  f|X is constant iff
   for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f.c1=f.c2
 proof
-  thus f is_constant_on X implies
+  thus f|X is constant implies
   for c1,c2 st c1 in X /\ dom f & c2 in X /\ dom f holds f.c1=f.c2
   proof
-    assume f is_constant_on X;
+    assume f|X is constant;
     then consider d such that
 A1: for c st c in X /\ dom f holds f.c = d by Th76;
     let c1,c2;

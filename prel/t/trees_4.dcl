@@ -27,12 +27,12 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -43,7 +43,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="38"/>
 </Cluster>
 </CCluster>
 </Registrations>

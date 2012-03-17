@@ -29,28 +29,28 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
-<Func kind="K" nr="24">
+<Adjective nr="18">
+<Func kind="K" nr="25">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="24">
+<Func kind="K" nr="25">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="5">
+<Func kind="G" nr="6">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -7,11 +7,14 @@
 environ
 
  vocabularies FUNCT_1, RELAT_1, BOOLE, FINSET_1, TARSKI, PRE_TOPC, SETFAM_1,
-      SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1, YELLOW_6, PCOMPS_1;
+      SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1, YELLOW_6, PCOMPS_1, FUNCT_4,
+      CARD_5, GROUP_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_3, SETFAM_1, FINSET_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_2;
- constructors SETFAM_1, DOMAIN_1, FUNCT_3, FINSET_1, TOPS_2;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, STRUCT_0, PRE_TOPC;
+      FUNCT_3, SETFAM_1, FINSET_1, DOMAIN_1, FUNCT_4, STRUCT_0, PRE_TOPC,
+      TOPS_2;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_3, FINSET_1, TOPS_2, FUNCT_4;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, STRUCT_0, PRE_TOPC,
+      TOPS_1;
  requirements SUBSET, BOOLE;
 
 
@@ -23,16 +26,7 @@ reserve x, y, z for set,
   P, Q for Subset of T;
 
 definition
- canceled;
-  let F be set;
-  attr F is centered means
-:: COMPTS_1:def 2
-
-  F <> {} &
-  for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
-end;
-
-definition
+ canceled 2;
   let T be TopStruct;
   attr T is compact means
 :: COMPTS_1:def 3
@@ -40,22 +34,20 @@ definition
   for F being Subset-Family of T st
   F is Cover of T & F is open ex G being Subset-Family of T
   st G c= F & G is Cover of T & G is finite;
-  attr T is being_T2 means
-:: COMPTS_1:def 4
+end;
 
-  for p, q being Point of T st p <> q
-  ex W, V being Subset of T st W is open & V is open &
-  p in W & q in V & W misses V;
-  attr T is being_T3 means
+definition
+  let T be non empty TopSpace;
+  canceled;
+  redefine attr T is regular means
 :: COMPTS_1:def 5
 
   for p being Point of T, P being Subset of T
   st P <> {} & P is closed & p in P`
   ex W, V being Subset of T st W is open & V is open &
   p in W & P c= V & W misses V;
-  attr T is being_T4 means
+  redefine attr T is normal means
 :: COMPTS_1:def 6
-
   for W, V being Subset of T st W <> {} & V <> {} &
   W is closed & V is closed & W misses V
   ex P, Q being Subset of T st P is open & Q is open &
@@ -64,10 +56,7 @@ end;
 
 notation
   let T be TopStruct;
-  synonym T is Hausdorff for T is being_T2;
-  synonym T is_T2 for T is being_T2;
-  synonym T is_T3 for T is being_T3;
-  synonym T is_T4 for T is being_T4;
+  synonym T is Hausdorff for T is T_2;
 end;
 
 definition
@@ -112,12 +101,12 @@ reserve TS for TopSpace;
 reserve PS, QS for Subset of TS;
 
 theorem :: COMPTS_1:15
-  TS is_T2 implies for A being Subset of TS st A <> {} & A is compact
+  TS is T_2 implies for A being Subset of TS st A <> {} & A is compact
   for p being Point of TS st p in A`
   ex PS,QS st PS is open & QS is open & p in PS & A c= QS & PS misses QS;
 
 theorem :: COMPTS_1:16
-  TS is_T2 & PS is compact implies PS is closed;
+  TS is T_2 & PS is compact implies PS is closed;
 
 theorem :: COMPTS_1:17
   T is compact & P is closed implies P is compact;
@@ -129,13 +118,15 @@ theorem :: COMPTS_1:19
   P is compact & Q is compact implies P \/ Q is compact;
 
 theorem :: COMPTS_1:20
-  TS is_T2 & PS is compact & QS is compact implies PS /\ QS is compact;
+  TS is T_2 & PS is compact & QS is compact implies PS /\ QS is compact;
 
 theorem :: COMPTS_1:21
-  TS is_T2 & TS is compact implies TS is_T3;
+ for TS being non empty TopSpace holds
+  TS is T_2 & TS is compact implies TS is regular;
 
 theorem :: COMPTS_1:22
-  TS is_T2 & TS is compact implies TS is_T4;
+ for TS being non empty TopSpace holds
+  TS is T_2 & TS is compact implies TS is normal;
 
 reserve S for non empty TopStruct;
 reserve f for Function of T,S;
@@ -150,11 +141,11 @@ reserve SS for non empty TopSpace;
 reserve f for Function of TS,SS;
 
 theorem :: COMPTS_1:25
-  TS is compact & SS is_T2 & rng f = [#] SS & f is continuous implies
+  TS is compact & SS is T_2 & rng f = [#] SS & f is continuous implies
   for PS st PS is closed holds f.:PS is closed;
 
 theorem :: COMPTS_1:26
-  TS is compact & SS is_T2 & dom f = [#]TS & rng f = [#]SS &
+  TS is compact & SS is T_2 & dom f = [#]TS & rng f = [#]SS &
   f is one-to-one & f is continuous implies f is_homeomorphism;
 
 definition
@@ -177,15 +168,15 @@ end;
 
 registration
   let x be set;
-  cluster 1TopSp {x} -> being_T2;
+  cluster 1TopSp {x} -> T_2;
 end;
 
 registration
-  cluster being_T2 non empty TopSpace;
+  cluster T_2 non empty TopSpace;
 end;
 
 registration
-  let T be being_T2 non empty TopSpace;
+  let T be T_2 non empty TopSpace;
   cluster compact -> closed Subset of T;
 end;
 
@@ -194,11 +185,68 @@ registration
   cluster finite Subset of T;
 end;
 
+registration let A be finite set;
+ cluster 1TopSp A -> finite;
+end;
+
+registration
+ cluster non empty finite TopSpace;
+end;
+
+registration
+ cluster finite -> compact TopSpace;
+end;
+
 theorem :: COMPTS_1:27
-  for T being TopSpace st the carrier of T is finite holds T is compact;
+ for T being TopSpace st the carrier of T is finite holds T is compact;
 
 registration
   let T be TopSpace;
   cluster finite -> compact Subset of T;
 end;
+
+registration let T be non empty TopStruct;
+ cluster non empty finite Subset of T;
+end;
+
+registration let T be non empty TopSpace;
+ cluster non empty compact Subset of T;
+end;
+
+:: comp. TOPMETR:3, 2008.07.06, A.T.
+
+registration
+ cluster empty -> T_2 TopStruct;
+end;
+
+registration let T be T_2 TopStruct;
+ cluster -> T_2 SubSpace of T;
+end;
+
+:: from BORSUK_1, 2008.07.07, A.T.
+
+theorem :: COMPTS_1:28
+  for X being TopStruct for Y being SubSpace of X, A being Subset of X,
+  B being Subset of Y st A = B holds A is compact iff B is compact;
+
+:: from TOPMETR2, 2008.07.07, A.T.
+
+reserve T, S for non empty TopSpace,
+  p for Point of T;
+
+theorem :: COMPTS_1:29
+  for T1,T2 being SubSpace of T,
+  f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} & T1 is compact &
+  T2 is compact & T is T_2 & f is continuous & g is continuous & f.p = g.p
+  holds f+*g is continuous Function of T,S;
+
+theorem :: COMPTS_1:30
+  for T being non empty TopSpace, T1, T2 being SubSpace of T,
+  p1,p2 being Point of T
+  for f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#]
+  T2) = {p1,p2} & T1 is compact &
+  T2 is compact & T is T_2 & f is continuous & g is continuous &
+  f.p1 = g.p1 & f.p2 = g.p2 holds f+*g is continuous Function of T,S;
 

@@ -35,22 +35,21 @@
 <ArticleID name="LATTICE3"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
-<ArticleID name="COMPTS_1"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 <ArticleID name="WAYBEL11"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="11">
+<Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
-<Adjective nr="114"/>
-<Adjective nr="115"/>
-<Adjective nr="141"/>
+<Adjective nr="27"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="127"/>
+<Adjective nr="128"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

@@ -33,23 +33,23 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TURING_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

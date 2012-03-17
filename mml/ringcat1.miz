@@ -11,11 +11,11 @@ environ
       RINGCAT1, GROUP_1, COHSP_1, ENDALG, ALGSTR_0, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELSET_1, PARTFUN1,
       FUNCT_2, BINOP_1, STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1, GRCAT_1,
-      FUNCSDOM, CAT_1, CLASSES2, MOD_2, GROUP_6;
+      FUNCSDOM, GRAPH_1, CAT_1, CLASSES2, MOD_2, GROUP_6;
  constructors PARTFUN1, DOMAIN_1, GRCAT_1, GROUP_6, MOD_2;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_2, GRCAT_1, MOD_2;
  requirements SUBSET, BOOLE;
- definitions GRCAT_1, STRUCT_0, GROUP_1, GROUP_6;
+ definitions GRCAT_1, STRUCT_0, GROUP_1, GROUP_6, GRAPH_1;
  theorems CAT_1, FUNCT_2, GRCAT_1, MCART_1, MOD_2, TARSKI, RELAT_1, ZFMISC_1,
       XBOOLE_0, FUNCT_1, BINOP_1, GROUP_6, GROUP_1;
  schemes FUNCT_2, BINOP_1, TARSKI;
@@ -196,12 +196,10 @@ Lm2: the RingMorphismStr of F is RingMorphism-like
 proof
   set S = the RingMorphismStr of F;
 A1: fun F is linear by Def6;
-  then fun F is additive;
   hence for x,y being Scalar of the Dom of S holds
   (fun S).(x+y) = (fun S).x+(fun S).y by GRCAT_1:def 13;
-  fun F is multiplicative by A1;
-  hence for x,y being Scalar of the Dom of S holds
-  (fun S).(x*y) = (fun S).x*(fun S).y by GROUP_6:def 7;
+  thus for x,y being Scalar of the Dom of S holds
+  (fun S).(x*y) = (fun S).x*(fun S).y by GROUP_6:def 7,A1;
   thus thesis by A1;
 end;
 
@@ -1216,8 +1214,8 @@ end;
 
 registration
   let UN;
-  cluster RingCat(UN) -> strict non void;
-  coherence by CAT_1:def 1;
+  cluster RingCat(UN) -> strict non void non empty;
+  coherence;
 end;
 
 theorem Th26:
@@ -1228,10 +1226,8 @@ proof
   let f,g be Morphism of C;
   reconsider f' = f as Element of Morphs(V);
   reconsider g' = g as Element of Morphs(V);
-A1: dom g = dom(V).g' by CAT_1:def 2
-    .= dom(g') by Def20;
-  cod f = cod(V).f' by CAT_1:def 3
-    .= cod(f') by Def21;
+A1: dom g = dom(g') by Def20;
+  cod f = cod(f') by Def21;
   hence thesis by A1,Def23;
 end;
 
@@ -1270,21 +1266,7 @@ proof
     .= ID(b') by Def22;
 end;
 
-theorem Th29:
-  for f being Morphism of RingCat(UN)
-  for f' being Element of Morphs(RingObjects(UN)) st f = f'
-  holds dom f = dom f' & cod f = cod f'
-proof
-  set C = RingCat(UN), V = RingObjects(UN);
-  set X = Morphs(V);
-  let f be (Morphism of C), f' be Element of X;
-  assume
-A1: f = f';
-  hence dom f = dom(V).f' by CAT_1:def 2
-    .= dom f' by Def20;
-  thus cod f = cod(V).f' by A1,CAT_1:def 3
-    .= cod f' by Def21;
-end;
+canceled;
 
 theorem Th30:
   for f,g being (Morphism of RingCat(UN)),
@@ -1301,11 +1283,11 @@ proof
   assume
 A1: f = f' & g = g';
   then
-A2: dom g = dom g' by Th29;
-A3: cod f = cod f' by A1,Th29;
-A4: dom f = dom f' by A1,Th29;
-A5: cod g = cod g' by A1,Th29;
-  thus dom g = cod f iff dom g' = cod f' by A1,A3,Th29; thus
+A2: dom g = dom g' by Def20;
+A3: cod f = cod f' by A1,Def21;
+A4: dom f = dom f' by A1,Def20;
+A5: cod g = cod g' by A1,Def21;
+  thus dom g = cod f iff dom g' = cod f' by A1,A3,Def20; thus
 A6: dom g = cod f iff [g',f'] in dom comp(V) by A2,A3,Def23;
   thus dom g = cod f implies g*f = g'*f'
   proof
@@ -1315,8 +1297,8 @@ A7: dom g = cod f;
     hence g*f = (comp(V)).(g',f') by A1,CAT_1:def 4
       .= g'*f' by A6,A7,Def23;
   end;
-  thus dom f = dom g iff dom f' = dom g' by A1,A4,Th29;
-  thus cod f = cod g iff cod f' = cod g' by A1,A5,Th29;
+  thus dom f = dom g iff dom f' = dom g' by A1,A4,Def20;
+  thus cod f = cod g iff cod f' = cod g' by A1,A5,Def21;
 end;
 
 Lm9: for f,g being Morphism of RingCat(UN) st dom g = cod f holds
@@ -1364,9 +1346,9 @@ proof
   reconsider b'' = b' as Ring;
 A1: id b = ID(b') by Th28;
   hence
-A2: dom id b = dom ID(b'') by Th29
+A2: dom id b = dom ID(b'') by Def20
     .= b; thus
-A3: cod id b = cod ID(b'') by A1,Th29
+A3: cod id b = cod ID(b'') by A1,Def21
     .= b;
   thus for f being Morphism of C st cod f = b holds (id b)*f = f
   proof
@@ -1374,7 +1356,7 @@ A3: cod id b = cod ID(b'') by A1,Th29
 A4: cod f = b;
     reconsider f1 = f as strict Element of X by Th27;
     reconsider f' = f1 as strict RingMorphism;
-A5: cod f' = b'' by A4,Th29;
+A5: cod f' = b'' by A4,Def21;
     thus (id b)*f = ID(b'')*f' by A1,A2,A4,Th30
       .= f by A5,Th14;
   end;
@@ -1384,7 +1366,7 @@ A5: cod f' = b'' by A4,Th29;
 A6: dom f = b;
     reconsider f1 = f as strict Element of X by Th27;
     reconsider f' = f1 as strict RingMorphism;
-A7: dom f' = b'' by A6,Th29;
+A7: dom f' = b'' by A6,Def20;
     thus f*(id b) = f'*ID(b'') by A1,A3,A6,Th30
       .= f by A7,Th14;
   end;

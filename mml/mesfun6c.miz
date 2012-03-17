@@ -1,0 +1,1707 @@
+:: Integral of Complex-Valued Measurable Function
+::  by Keiko Narita , Noboru Endou and Yasunari Shidama
+:: 
+:: Received July 30, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, SUPINF_1, MEASURE1, RELAT_1, FUNCT_1, COMPLEX1, SEQ_1,
+      MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, ARYTM_3, RFUNCT_3, SQUARE_1,
+      PROB_1, INTEGRA1, MESFUNC5, SUPINF_2, XCMPLX_0, PREPOWER, POWER, ZF_LANG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XCMPLX_0,
+      XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_1,
+      SUPINF_2, SEQ_1, PREPOWER, POWER, SQUARE_1, COMPLEX1, MEASURE6, MEASURE1,
+      EXTREAL1, MESFUNC1, MESFUNC2, PROB_1, MESFUNC5, MESFUNC6;
+ constructors REAL_1, SEQ_1, PREPOWER, POWER, SQUARE_1, COMPLEX1, MEASURE6,
+      EXTREAL1, MESFUNC1, MESFUNC2, MESFUNC5, MESFUNC6, NAT_1, EXTREAL2,
+      SUPINF_1, MESFUNC7;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      MEMBERED, MEASURE1, VALUED_0, XCMPLX_0, MESFUNC7, RELAT_1, FUNCT_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, MESFUNC5, MEASURE6, VALUED_1, MESFUNC6, COMPLEX1,
+      XCMPLX_0, SUPINF_2;
+ theorems MEASURE1, TARSKI, PARTFUN1, FUNCT_1, SUPINF_2, EXTREAL1, EXTREAL2,
+      MESFUNC1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, HOLDER_1, PREPOWER,
+      MESFUNC2, XREAL_1, MESFUNC5, XXREAL_0, VALUED_1, MESFUNC6, SUBSET_1,
+      COMPLEX1, XREAL_0, RELAT_1, POWER, SQUARE_1;
+ schemes SEQ_1;
+
+begin :: Definitions for Complex-valued Functions
+
+theorem Th7a:
+for a,b be real number holds
+  R_EAL a + R_EAL b = a+b & -R_EAL a = -a &
+  R_EAL a - R_EAL b = a-b & R_EAL a * R_EAL b = a*b
+proof
+   let a,b be real number;
+   reconsider a'=a,b'=b,c'=a+b as Real by XREAL_0:def 1;
+A1:a' = R_EAL a & b' = R_EAL b & c' = R_EAL(a+b);
+   hence R_EAL a + R_EAL b = a+b by SUPINF_2:1;
+   -a' = R_EAL(-a);
+   hence -R_EAL a = -a by SUPINF_2:3;
+   thus R_EAL a - R_EAL b = a-b by A1,SUPINF_2:5;
+   thus R_EAL a * R_EAL b = a*b by A1,EXTREAL1:13;
+end;
+
+definition
+  let X be non empty set, f be PartFunc of X,COMPLEX;
+func Re f -> PartFunc of X,REAL means :Def1:
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = Re(f.x);
+existence
+proof
+   deffunc g(set) = Re(f.$1);
+   defpred P[set] means $1 in dom f;
+   consider F be PartFunc of X,REAL such that
+A1: for z be Element of X holds z in dom F iff P[z] and
+A2: for z be Element of X st z in dom F holds F.z = g(z) from SEQ_1:sch 3;
+   take F;
+   thus dom F = dom f by A1,SUBSET_1:8;
+   thus thesis by A2;
+end;
+uniqueness
+proof
+   deffunc f0(set) = Re(f.$1);
+   thus for h,g being PartFunc of X,REAL st
+    (dom h=dom f & for z be Element of X st z in dom h holds h.z = f0(z)) &
+    (dom g=dom f & for z be Element of X st z in dom g holds g.z = f0(z))
+    holds h = g from SEQ_1:sch 4;
+end;
+
+func Im f -> PartFunc of X,REAL means :Def2:
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = Im(f.x);
+existence
+proof
+   deffunc g(set) = Im (f.$1);
+   defpred P[set] means $1 in dom f;
+   consider F be PartFunc of X,REAL such that
+A1: for z be Element of X holds z in dom F iff P[z] and
+A2: for z be Element of X st z in dom F holds F.z = g(z) from SEQ_1:sch 3;
+   take F;
+   thus dom F = dom f by A1,SUBSET_1:8;
+   thus thesis by A2;
+end;
+uniqueness
+proof
+   deffunc f0(set) = Im (f.$1);
+   thus for h,g being PartFunc of X,REAL st
+    (dom h=dom f & for z be Element of X st z in dom h holds h.z = f0(z)) &
+    (dom g=dom f & for z be Element of X st z in dom g holds g.z = f0(z))
+    holds h = g from SEQ_1:sch 4;
+end;
+end;
+
+begin :: The Measurability of Complex-valued Functions
+
+reserve X for non empty set,
+  Y for set,
+  S for SigmaField of X,
+  M for sigma_Measure of S,
+  f,g for PartFunc of X,COMPLEX,
+  r for Real,
+  c for complex number,
+  E,A,B for Element of S;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let f be PartFunc of X,COMPLEX;
+  let E be Element of S;
+pred f is_measurable_on E means :Def3:
+  Re f is_measurable_on E & Im f is_measurable_on E;
+end;
+
+theorem COM21r:
+r(#)(Re f) = Re(r(#)f) & r(#)(Im f) = Im(r(#)f)
+proof
+A1:dom(r(#)(Re f)) = dom Re f & dom(r(#)(Im f)) = dom Im f &
+   dom(r(#)f) = dom f by VALUED_1:def 5;
+A2:dom Re(r(#)f) = dom(r(#)f) & dom Re f = dom f by Def1;
+A3:dom Im(r(#)f) = dom(r(#)f) & dom Im f = dom f by Def2;
+A4:Re r = r & Im r = 0 by COMPLEX1:def 2,def 3;
+   now let x be set;
+    assume A5: x in dom(r(#)(Re f)); then
+A6: (Re f).x = Re(f.x) & Re(r(#)f).x = Re((r(#)f).x) by A1,A2,Def1;
+    Re(r * f.x) = Re r * Re(f.x) - Im r * Im(f.x) by COMPLEX1:24; then
+    Re(r(#)f).x = r * Re(f.x) by A1,A4,A5,A6,A2,VALUED_1:def 5;
+    hence (r(#)(Re f)).x = Re(r(#)f).x by A5,A6,VALUED_1:def 5;
+   end;
+   hence r(#)(Re f) = Re(r(#)f) by A1,A2,FUNCT_1:9;
+   now let x be set;
+    assume A7: x in dom(r(#)Im(f)); then
+A8: (Im f).x = Im(f.x) & Im(r(#)f).x = Im((r(#)f).x) by A1,A3,Def2;
+    Im(r * f.x) = Im r * Re(f.x) + Re r * Im(f.x) by COMPLEX1:24; then
+    Im(r(#)f).x = r * Im(f.x) by A1,A4,A7,A8,A3,VALUED_1:def 5;
+    hence (r(#)Im(f)).x = Im(r(#)f).x by A7,A8,VALUED_1:def 5;
+   end;
+   hence r(#)Im(f) = Im(r(#)f) by A1,A3,FUNCT_1:9;
+end;
+
+theorem COM21:
+Re(c(#)f) = (Re c)(#)(Re f) - (Im c)(#)(Im f) &
+Im(c(#)f) = (Im c)(#)(Re f) + (Re c)(#)(Im f)
+proof
+A0:dom(Re(c(#)f)) = dom(c(#)f) & dom Re f = dom f &
+   dom(Im(c(#)f)) = dom(c(#)f) & dom Im f = dom f by Def1,Def2;
+A1:dom((Re c)(#)(Re f)) = dom Re f & dom((Im c)(#)(Im f)) = dom Im f &
+   dom((Im c)(#)(Re f)) = dom Re f & dom((Re c)(#)(Im f)) = dom Im f &
+   dom(c(#)f) = dom f by VALUED_1:def 5;
+A2:dom( Re(c)(#)Re(f) - Im(c)(#)Im(f) )
+      = dom(Re(c)(#)Re(f)) /\ dom(Im(c)(#)Im(f)) by VALUED_1:12;
+   now let x be set;
+    assume P01: x in dom(Re(c(#)f)); then
+    Re(c(#)f).x = Re((c(#)f).x) by Def1; then
+Q01:Re(c(#)f).x = Re(c * f.x) by P01,A0,VALUED_1:def 5;
+P05:(Re(c)(#)Re(f)).x = Re(c) * Re(f).x & (Im(c)(#)Im(f)).x = Im(c) * Im(f).x &
+    Re(f).x = Re(f.x) & Im(f).x = Im(f.x)
+      by P01,A0,A1,Def1,Def2,VALUED_1:def 5;
+    Re(c * f.x) = Re(c) * Re(f.x) - Im(c) * Im(f.x) by COMPLEX1:24;
+    hence Re(c(#)f).x = ( Re(c)(#)Re(f) - Im(c)(#)Im(f) ).x
+      by Q01,P01,P05,A0,A2,A1,VALUED_1:13;
+   end;
+   hence Re(c(#)f) = Re(c)(#)Re(f) - Im(c)(#)Im(f) by A0,A2,A1,FUNCT_1:9;
+B2:dom( Im(c)(#)Re(f) + Re(c)(#)Im(f) )
+      = dom(Im(c)(#)Re(f)) /\ dom(Re(c)(#)Im(f)) by VALUED_1:def 1;
+   now let x be set;
+    assume P01: x in dom(Im(c(#)f)); then
+    Im(c(#)f).x = Im((c(#)f).x) by Def2; then
+Q01:Im(c(#)f).x = Im(c * f.x) by P01,A0,VALUED_1:def 5;
+P04:(Im(c)(#)Re(f) + Re(c)(#)Im(f)).x = (Im(c)(#)Re(f)).x + (Re(c)(#)Im(f)).x &
+    (Im(c)(#)Re(f)).x = Im(c) * Re(f).x & (Re(c)(#)Im(f)).x = Re(c) * Im(f).x
+        by P01,A0,B2,A1,VALUED_1:def 1,def 5;
+    (Re f).x = Re(f.x) & (Im f).x = Im(f.x) by P01,A0,A1,Def1,Def2;
+    hence Im(c(#)f).x = ( Im(c)(#)Re(f) + Re(c)(#)Im(f) ).x
+      by Q01,P04,COMPLEX1:24;
+   end;
+   hence Im(c(#)f) = Im(c)(#)Re(f) + Re(c)(#)Im(f) by A0,B2,A1,FUNCT_1:9;
+end;
+
+theorem COM21c:
+-(Im f) = Re(<i>(#)f) & Re f = Im(<i>(#)f)
+proof
+A1:dom -(Im f) = dom Im f by VALUED_1:8;
+A2:dom Re(<i>(#)f) = dom(<i>(#)f) & dom Re f = dom f by Def1;
+A3:dom(<i>(#)f) = dom f by VALUED_1:def 5;
+A5:dom Im(<i>(#)f) = dom(<i>(#)f) & dom Im f = dom f by Def2;
+   now let x be set;
+    assume P01: x in dom -(Im f); then
+P06:Re(<i>(#)f).x = Re((<i>(#)f).x) by A1,A2,A3,A5,Def1;
+Q01:(-Im(f)).x = -((Im f).x) by VALUED_1:8;
+    Re(<i> * f.x) = Re(<i>) * Re(f.x) - Im(<i>) * Im(f.x) by COMPLEX1:24; then
+    Re(<i>(#)f).x = -Im(f.x) by P06,P01,A1,A3,A5,COMPLEX1:17,VALUED_1:def 5;
+    hence (-Im(f)).x = Re(<i>(#)f).x by Q01,P01,A1,Def2;
+   end;
+   hence -Im(f) = Re(<i>(#)f) by A2,A3,A5,FUNCT_1:9,VALUED_1:8;
+   now let x be set;
+    assume P01: x in dom Re f; then
+P06:Im(<i>(#)f).x = Im((<i>(#)f).x) by A2,A3,A5,Def2;
+    Im(<i> * f.x) = Im(<i>) * Re(f.x) + Re(<i>) * Im(f.x)
+                                                 by COMPLEX1:24; then
+    Im(<i>(#)f).x = Re(f.x) by P06,P01,A2,A3,COMPLEX1:17,VALUED_1:def 5;
+    hence Re(f).x = Im(<i>(#)f).x by P01,Def1;
+   end;
+   hence Re f = Im(<i>(#)f) by A2,A3,A5,FUNCT_1:9;
+end;
+
+theorem COM19:
+Re(f+g) = Re f + Re g & Im(f+g) = Im f + Im g
+proof
+A0:dom(Re(f+g)) = dom(f+g) & dom Re f = dom f & dom Re g = dom g by Def1; then
+   dom((Re f)+(Re g)) = dom f /\ dom g by VALUED_1:def 1; then
+C1:dom(Re(f+g)) = dom((Re f)+(Re g)) by A0,VALUED_1:def 1;
+   now let x be set;
+    assume P01: x in dom(Re(f+g)); then
+P03:x in dom f /\ dom g by A0,VALUED_1:def 1;
+    Re(f+g).x = Re((f+g).x) by P01,Def1; then
+    Re(f+g).x = Re(f.x + g.x) by A0,P01,VALUED_1:def 1; then
+Q02:Re(f+g).x = Re(f.x) + Re(g.x) by COMPLEX1:19;
+    x in dom Re f & x in dom Re g by A0,P03,XBOOLE_0:def 3; then
+    (Re f).x = Re(f.x) & (Re g).x = Re(g.x) by Def1;
+    hence Re(f+g).x = (Re(f)+Re(g)).x by Q02,P01,C1,VALUED_1:def 1;
+   end;
+   hence Re(f+g) = Re(f)+Re(g) by C1,FUNCT_1:9;
+B0:dom Im(f+g) = dom(f+g) & dom Im f = dom f & dom Im g = dom g by Def2; then
+   dom(Im f + Im g) = dom f /\ dom g by VALUED_1:def 1; then
+C2:dom Im(f+g) = dom(Im f + Im g) by B0,VALUED_1:def 1;
+   now let x be set;
+    assume P01: x in dom Im(f+g); then
+P03:x in dom f /\ dom g by B0,VALUED_1:def 1;
+    Im(f+g).x = Im((f+g).x) by P01,Def2; then
+    Im(f+g).x = Im(f.x + g.x) by B0,P01,VALUED_1:def 1; then
+Q02:Im(f+g).x = Im(f.x) + Im(g.x) by COMPLEX1:19;
+    x in dom Im f & x in dom Im g by B0,P03,XBOOLE_0:def 3; then
+    (Im f).x = Im(f.x) & (Im g).x = Im(g.x) by Def2;
+    hence Im(f+g).x = (Im(f)+Im(g)).x by Q02,P01,C2,VALUED_1:def 1;
+   end;
+   hence Im(f+g) = Im(f)+Im(g) by C2,FUNCT_1:9;
+end;
+
+theorem COM48:
+Re(f-g) = Re f - Re g & Im(f-g) = Im f - Im g
+proof
+   Re(f-g) = Re f + Re -g & Im(f-g) = Im f + Im -g by COM19; then
+   Re(f-g) = Re f + (-1)(#)(Re g) & Im(f-g) = Im f + (-1)(#)(Im g) by COM21r;
+   hence thesis;
+end;
+
+theorem COM91: :: MESFUNC7:2
+(Re f)|A = Re(f|A) & (Im f)|A = Im(f|A)
+proof
+   dom((Re f)|A) = (dom Re f) /\ A by RELAT_1:90 .= dom f /\ A by Def1; then
+A1:dom((Re f)|A) = dom(f|A) by RELAT_1:90 .= dom Re(f|A) by Def1;
+   now let x be set;
+    assume A2: x in dom(Re(f)|A); then
+    x in dom Re(f) /\ A by RELAT_1:90; then
+A3: x in dom Re f & x in A by XBOOLE_0:def 3;
+    thus Re(f|A).x = Re((f|A).x) by A1,A2,Def1
+                   .= Re(f.x) by A3,FUNCT_1:72
+                   .= (Re f).x by A3,Def1
+                   .= ((Re f)|A).x by A3,FUNCT_1:72;
+   end;
+   hence Re(f)|A = Re(f|A) by A1,FUNCT_1:9;
+   dom((Im f)|A) = (dom Im f) /\ A by RELAT_1:90 .= dom f /\ A by Def2; then
+B1:dom((Im f)|A) = dom(f|A) by RELAT_1:90 .= dom Im(f|A) by Def2;
+   now let x be set;
+    assume B2: x in dom(Im(f)|A); then
+    x in dom Im(f) /\ A by RELAT_1:90; then
+B3: x in dom Im f & x in A by XBOOLE_0:def 3;
+    thus Im(f|A).x = Im((f|A).x) by B1,B2,Def2
+                   .= Im(f.x) by B3,FUNCT_1:72
+                   .= (Im f).x by B3,Def2
+                   .= ((Im f)|A).x by B3,FUNCT_1:72;
+   end;
+   hence Im(f)|A = Im(f|A) by B1,FUNCT_1:9;
+end;
+
+theorem COM99:
+f = Re f + <i>(#)(Im f)
+proof
+A1:dom f = dom Re f & dom f = dom Im f by Def1,Def2;
+A2:dom(<i>(#)(Im f)) = dom Im f by VALUED_1:def 5;
+A3:dom(Re f + <i>(#)(Im f)) = dom Re f /\ dom(<i>(#)(Im f)) by VALUED_1:def 1
+    .= dom f /\ dom f by A1,VALUED_1:def 5;
+   now let x be set;
+    assume P01: x in dom(Re f + <i>(#)(Im f)); then
+    (Re f + <i>(#)(Im f)).x
+      = (Re f).x + (<i>(#)(Im f)).x by VALUED_1:def 1
+     .= Re(f.x) + (<i>(#)(Im f)).x by P01,A1,A3,Def1
+     .= Re(f.x) + <i> * (Im f).x by P01,A1,A2,A3,VALUED_1:def 5
+     .= Re(f.x) + <i> * Im(f.x) by P01,A1,A3,Def2;
+    hence (Re f + <i>(#)(Im f)).x = f.x by COMPLEX1:29;
+   end;
+   hence thesis by A3,FUNCT_1:9;
+end;
+
+theorem
+B c= A & f is_measurable_on A implies f is_measurable_on B
+proof
+  assume A1: B c= A;
+  assume f is_measurable_on A; then
+  Re f is_measurable_on A & Im f is_measurable_on A by Def3; then
+  Re f is_measurable_on B & Im f is_measurable_on B by A1,MESFUNC6:16;
+  hence f is_measurable_on B by Def3;
+end;
+
+theorem
+f is_measurable_on A & f is_measurable_on B implies f is_measurable_on (A \/ B)
+proof
+  assume f is_measurable_on A & f is_measurable_on B; then
+  Re f is_measurable_on A & Im f is_measurable_on A &
+  Re f is_measurable_on B & Im f is_measurable_on B by Def3; then
+  Re f is_measurable_on (A \/ B) &
+  Im f is_measurable_on (A \/ B) by MESFUNC6:17;
+  hence f is_measurable_on (A \/ B) by Def3;
+end;
+
+theorem
+f is_measurable_on A & g is_measurable_on A implies f+g is_measurable_on A
+proof
+   assume f is_measurable_on A & g is_measurable_on A; then
+   Re f is_measurable_on A & Im f is_measurable_on A &
+   Re g is_measurable_on A & Im g is_measurable_on A by Def3; then
+   Re f + Re g is_measurable_on A &
+   Im f + Im g is_measurable_on A by MESFUNC6:26; then
+   Re(f+g) is_measurable_on A & Im(f+g) is_measurable_on A by COM19;
+   hence f+g is_measurable_on A by Def3;
+end;
+
+theorem
+f is_measurable_on A & g is_measurable_on A & A c= dom g
+  implies f-g is_measurable_on A
+proof
+   assume that
+A1: f is_measurable_on A & g is_measurable_on A and
+A2: A c= dom g;
+A3:Re f is_measurable_on A & Im f is_measurable_on A &
+   Re g is_measurable_on A & Im g is_measurable_on A by A1,Def3;
+   A c= dom Re g & A c= dom Im g by A2,Def1,Def2; then
+   Re f - Re g is_measurable_on A &
+   Im f - Im g is_measurable_on A by A3,MESFUNC6:29; then
+   Re(f-g) is_measurable_on A & Im(f-g) is_measurable_on A by COM48;
+   hence f-g is_measurable_on A by Def3;
+end;
+
+theorem
+Y c= dom(f+g) implies dom(f|Y+g|Y)=Y & (f+g)|Y = f|Y+g|Y
+proof
+   assume A1: Y c= dom(f+g); then
+A0:dom((f+g)|Y) = Y by RELAT_1:91;
+A2:dom(f+g) = dom f /\ dom g by VALUED_1:def 1;
+   dom(f|Y) = dom f /\ Y & dom(g|Y) = dom g /\ Y by FUNCT_1:68; then
+A3:dom(f|Y) = Y & dom(g|Y) = Y by A1,A2,XBOOLE_1:18,28; then
+A4:dom(f|Y+g|Y) = Y /\ Y by VALUED_1:def 1;
+   now let x be set;
+    assume A5: x in dom((f+g)|Y);
+    hence ((f+g)|Y).x = (f+g).x by FUNCT_1:68
+      .=f.x+g.x by A0,A1,A5,VALUED_1:def 1
+      .=(f|Y).x + g.x by A0,A3,A5,FUNCT_1:68
+      .=(f|Y).x + (g|Y).x by A0,A3,A5,FUNCT_1:68
+      .= ((f|Y)+(g|Y)).x by A0,A4,A5,VALUED_1:def 1;
+   end;
+   hence thesis by A4,A1,RELAT_1:91,FUNCT_1:9;
+end;
+
+theorem
+f is_measurable_on B & A = dom f /\ B implies f|B is_measurable_on A
+proof
+   assume A1: f is_measurable_on B & A = dom f /\ B; then
+A2:Re f is_measurable_on B & Im f is_measurable_on B by Def3;
+   A = dom Re(f) /\ B & A = dom Im(f) /\ B by A1,Def1,Def2;then
+   (Re f)|B is_measurable_on A & (Im f)|B is_measurable_on A
+                                                  by A2,MESFUNC6:76; then
+   Re(f|B) is_measurable_on A & Im(f|B) is_measurable_on A by COM91;
+   hence f|B is_measurable_on A by Def3;
+end;
+
+theorem
+dom f in S & dom g in S implies dom(f+g) in S
+proof
+   assume dom f in S & dom g in S; then
+   reconsider E1 = dom f, E2 = dom g as Element of S;
+   dom(f+g) = E1 /\ E2 by VALUED_1:def 1;
+   hence dom(f+g) in S;
+end;
+
+theorem
+dom f = A implies (f is_measurable_on B iff f is_measurable_on A/\B)
+proof
+   assume dom f = A; then
+A1: dom Re f = A & dom Im f = A by Def1,Def2;
+   hereby assume f is_measurable_on B; then
+    Re f is_measurable_on B & Im f is_measurable_on B by Def3; then
+    Re f is_measurable_on A/\B & Im f is_measurable_on A/\B by A1,MESFUNC6:80;
+    hence f is_measurable_on A/\B by Def3;
+   end;
+   hereby assume f is_measurable_on A/\B; then
+    Re f is_measurable_on A/\B & Im f is_measurable_on A/\B by Def3; then
+    Re f is_measurable_on B & Im f is_measurable_on B by A1,MESFUNC6:80;
+    hence f is_measurable_on B by Def3;
+   end;
+end;
+
+theorem Th21:
+f is_measurable_on A & A c= dom f implies c(#)f is_measurable_on A
+proof
+   assume
+A1: f is_measurable_on A & A c= dom f; then
+A2:Re f is_measurable_on A & Im f is_measurable_on A by Def3;
+   dom Re f = dom f & dom Im f = dom f by Def1,Def2; then
+A4:Re(c)(#)Re(f) is_measurable_on A & Im(c)(#)Re(f) is_measurable_on A &
+   Re(c)(#)Im(f) is_measurable_on A & Im(c)(#)Im(f) is_measurable_on A
+                                                  by A1,A2,MESFUNC6:21; then
+   Im(c)(#)Re(f) + Re(c)(#)Im(f) is_measurable_on A by MESFUNC6:26; then
+A5:Im(c(#)f) is_measurable_on A by COM21;
+   dom(Im(c)(#)Im(f)) = dom Im(f) by VALUED_1:def 5; then
+   A c= dom(Im(c)(#)Im(f)) by A1,Def2; then
+   Re(c)(#)Re(f) - Im(c)(#)Im(f) is_measurable_on A by A4,MESFUNC6:29; then
+   Re(c(#)f) is_measurable_on A by COM21;
+   hence c(#)f is_measurable_on A by A5,Def3;
+end;
+
+theorem
+( ex A be Element of S st dom f = A ) implies
+  for c be complex number, B be Element of S st f is_measurable_on B holds
+  c(#)f is_measurable_on B
+proof
+   assume ex A be Element of S st A = dom f; then
+   consider A be Element of S such that
+A3: A = dom f;
+   hereby let c be complex number, B be Element of S;
+    assume f is_measurable_on B; then
+B1: Re f is_measurable_on B & Im f is_measurable_on B by Def3;
+C1: dom Re f = dom f & dom Im f = dom f by Def1,Def2; then
+    Re f is_measurable_on A /\ B &
+    Im f is_measurable_on A /\ B by A3,B1,MESFUNC6:80; then
+    f is_measurable_on A /\ B by Def3; then
+    c(#)f is_measurable_on A /\ B by A3,XBOOLE_1:17,Th21; then
+B3: Re(c(#)f) is_measurable_on A /\ B &
+    Im(c(#)f) is_measurable_on A /\ B by Def3;
+D1: dom((Re c)(#)(Re f)) = dom Re f & dom((Im c)(#)(Im f)) = dom Im f &
+    dom((Im c)(#)(Re f)) = dom Re f & dom((Re c)(#)(Im f)) = dom Im f
+      by VALUED_1:def 5;
+    dom(Re(c(#)f)) = dom((Re c)(#)(Re f) - (Im c)(#)(Im f)) &
+    dom(Im(c(#)f)) = dom((Im c)(#)(Re f) + (Re c)(#)(Im f)) by COM21; then
+    dom(Re(c(#)f)) = dom((Re c)(#)(Re f)) /\ dom((Im c)(#)(Im f)) &
+    dom(Im(c(#)f)) = dom((Im c)(#)(Re f)) /\ dom((Re c)(#)(Im f))
+       by VALUED_1:def 1,12; then
+    Re(c(#)f) is_measurable_on B &
+    Im(c(#)f) is_measurable_on B by C1,D1,A3,B3,MESFUNC6:80;
+    hence c(#)f is_measurable_on B by Def3;
+   end;
+end;
+
+begin :: The Integral of a Complex-valued Measurable Function
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+pred f is_integrable_on M means :Def4:
+  Re f is_integrable_on M & Im f is_integrable_on M;
+end;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+  assume AS: f is_integrable_on M;
+func Integral(M,f) -> complex number means :Def5:
+  ex R,I be Real st R = Integral(M,Re f) & I = Integral(M,Im f)
+  & it = R+ I*<i>;
+existence
+proof
+   Re f is_integrable_on M & Im f is_integrable_on M by AS,Def4; then
+   -infty < Integral(M,Re f) & Integral(M,Re f) < +infty &
+   -infty < Integral(M,Im f) & Integral(M,Im f) < +infty by MESFUNC6:90; then
+   reconsider R=Integral(M,Re f), I=Integral(M,Im f) as Real by EXTREAL1:1;
+   take IT = R + I*<i>;
+   thus thesis;
+end;
+uniqueness;
+end;
+
+Lm1:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f be PartFunc of X,ExtREAL holds
+max+f is nonnegative & max-f is nonnegative
+proof
+   let X be non empty set;
+   let S be SigmaField of X;
+   let M be sigma_Measure of S;
+   let f be PartFunc of X,ExtREAL;
+   ( for x be set st x in dom max+ f holds 0<= (max+f).x ) &
+   ( for x be set st x in dom max- f holds 0<= (max-f).x ) by MESFUNC2:14,15;
+   hence max+f is nonnegative & max-f is nonnegative by SUPINF_2:71;
+end;
+
+theorem Th100a:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f be PartFunc of X,ExtREAL, A be Element of S st
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 holds
+  f|A is_integrable_on M
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+       f be PartFunc of X,ExtREAL, A be Element of S;
+   assume
+A1: (ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0; then
+   consider E be Element of S such that
+B2: E = dom f & f is_measurable_on E;
+A2:dom f=dom (max+ f) & dom f=dom (max- f) by MESFUNC2:def 2,def 3;
+A3:max+f is nonnegative & max-f is nonnegative by Lm1; then
+A4:integral+(M,(max+ f)|A)=0 by A1,A2,MESFUNC5:88,MESFUNC2:27;
+A5:integral+(M,(max- f)|A)=0 by A1,A2,A3,MESFUNC5:88,MESFUNC2:28;
+B5:f is_measurable_on A /\ E by B2,XBOOLE_1:17,MESFUNC1:34;
+   dom f /\ (A /\ E) = A /\ E by B2,XBOOLE_1:17,28; then
+B7:f|(A /\ E) is_measurable_on A /\ E by B5,MESFUNC5:48;
+B9: dom (f|A) = dom f /\ A  by FUNCT_1:68;
+C1:f|(A /\ E) = f|A /\ f|E by RELAT_1:108
+             .= f|A /\ f by B2,RELAT_1:98
+             .= f|A by RELAT_1:88,XBOOLE_1:28;
+   integral+(M,max+(f|A)) < +infty & integral+(M,max-(f|A)) < +infty
+                                   by A4,A5,MESFUNC5:34;
+   hence thesis by C1,B7,B2,B9,MESFUNC5:def 17;
+end;
+
+theorem Th88a:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f be PartFunc of X,REAL, E,A be Element of S st
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 holds
+  f|A is_integrable_on M
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+       f be PartFunc of X,REAL, E,A be Element of S;
+   assume
+A1: (ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0; then
+   consider E be Element of S such that
+A2: E = dom f & f is_measurable_on E;
+   E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,MESFUNC6:def 6; then
+   R_EAL(f|A) is_integrable_on M by A1,Th100a;
+   hence thesis by MESFUNC6:def 9;
+end;
+
+theorem
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0
+ implies f|A is_integrable_on M & Integral(M,f|A) = 0
+proof
+   set g = f|A;
+   assume
+A1: (ex E be Element of S st E = dom f & f is_measurable_on E) &
+    M.A = 0; then
+   consider E be Element of S such that
+A2: E = dom f & f is_measurable_on E;
+A3:Re f is_measurable_on E & Im f is_measurable_on E by A2,Def3;
+A4:dom Re f = dom f & dom Im f = dom f by Def1,Def2; then
+A5:Integral(M,Re(f)|A)=0 & Integral(M,Im(f)|A)=0 by A1,A2,A3,MESFUNC6:88;
+A6:Re g = (Re f)|A & Im g = (Im f)|A by COM91; then
+   reconsider R=Integral(M,Re g), I=Integral(M,Im g) as Real
+     by A4,A2,A1,A3,MESFUNC6:88;
+   (Re f)|A is_integrable_on M & (Im f)|A is_integrable_on M
+      by A1,A3,A4,A2,Th88a; then
+   Re g is_integrable_on M & Im g is_integrable_on M by COM91;
+   hence g is_integrable_on M by Def4;
+   hence Integral(M,g) = R + I * <i> by Def5 .= 0 by A5,A6;
+end;
+
+theorem
+E = dom f & f is_integrable_on M & M.A =0
+  implies Integral(M,f|(E\A)) = Integral(M,f)
+proof
+   assume A1: E = dom f & f is_integrable_on M & M.A =0; then
+A2:Re f is_integrable_on M & Im f is_integrable_on M by Def4;
+A3:dom f = dom Re f & dom f = dom Im f by Def1,Def2;
+C0:R_EAL(Re f) is_integrable_on M &
+   R_EAL(Im f) is_integrable_on M by A2,MESFUNC6:def 9; then
+   consider RE be Element of S such that
+C1: RE = dom(R_EAL(Re f)) & R_EAL(Re f) is_measurable_on RE by MESFUNC5:def 17;
+D1:RE = dom(Re f) & Re f is_measurable_on RE by C1,MESFUNC6:def 6;
+   consider IE be Element of S such that
+C2: IE = dom(R_EAL(Im f)) & R_EAL(Im f) is_measurable_on IE
+      by C0,MESFUNC5:def 17;
+D2:IE = dom(Im f) & Im f is_measurable_on IE by C2,MESFUNC6:def 6;
+   set C=E\A;
+   (Re f)|C is_integrable_on M & (Im f)|C is_integrable_on M
+                                                   by A2,MESFUNC6:91; then
+A4:Re(f|C) is_integrable_on M & Im(f|C) is_integrable_on M by COM91; then
+   -infty < Integral(M,Re(f|C)) & Integral(M,Re(f|C)) < +infty &
+   -infty < Integral(M,Im(f|C)) & Integral(M,Im(f|C)) < +infty
+     by MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(f|C)), I2=Integral(M,Im(f|C)) as Real
+     by EXTREAL1:1;
+   Integral(M,Re(f)|C) = Integral(M,Re(f|C)) by COM91; then
+B1:Integral(M,Re(f|C)) = Integral(M,Re f) by A3,A1,D1,MESFUNC6:89;
+   Integral(M,Im(f)|C) = Integral(M,Im(f|C)) by COM91; then
+B2:Integral(M,Im(f|C)) = Integral(M,Im f) by A3,A1,D2,MESFUNC6:89;
+   f|(E\A) is_integrable_on M by A4,Def4;
+   hence Integral(M,f|(E\A)) = R2 + I2 * <i> by Def5
+                     .= Integral(M,f) by A1,B1,B2,Def5;
+end;
+
+theorem Th91:
+f is_integrable_on M implies f|A is_integrable_on M
+proof
+   assume f is_integrable_on M; then
+   Re f is_integrable_on M & Im f is_integrable_on M by Def4; then
+   (Re f)|A is_integrable_on M & (Im f)|A is_integrable_on M
+     by MESFUNC6:91; then
+   Re(f|A) is_integrable_on M & Im(f|A) is_integrable_on M by COM91;
+   hence f|A is_integrable_on M by Def4;
+end;
+
+theorem
+f is_integrable_on M & A misses B implies
+  Integral(M,f|(A\/B)) = Integral(M,f|A) + Integral(M,f|B)
+proof
+   assume A1: f is_integrable_on M & A misses B; then
+   Re f is_integrable_on M & Im f is_integrable_on M by Def4; then
+A2:Integral(M,(Re f)|(A\/B)) = Integral(M,(Re f)|A) + Integral(M,(Re f)|B) &
+   Integral(M,(Im f)|(A\/B)) = Integral(M,(Im f)|A) + Integral(M,(Im f)|B)
+                                                       by A1,MESFUNC6:92;
+A3:f|A is_integrable_on M & f|B is_integrable_on M &
+   f|(A\/B) is_integrable_on M by A1,Th91;
+   Re(f|A) is_integrable_on M & Im(f|A) is_integrable_on M by A3,Def4; then
+   -infty < Integral(M,Re(f|A)) & Integral(M,Re(f|A)) < +infty &
+   -infty < Integral(M,Im(f|A)) & Integral(M,Im(f|A)) < +infty
+     by MESFUNC6:90; then
+   reconsider R1=Integral(M,Re(f|A)), I1=Integral(M,Im(f|A)) as Real
+     by EXTREAL1:1;
+   Re(f|B) is_integrable_on M & Im(f|B) is_integrable_on M by A3,Def4; then
+   -infty < Integral(M,Re(f|B)) & Integral(M,Re(f|B)) < +infty &
+   -infty < Integral(M,Im(f|B)) & Integral(M,Im(f|B)) < +infty
+     by MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(f|B)), I2=Integral(M,Im(f|B)) as Real
+     by EXTREAL1:1;
+   set C=A\/B;
+   Re(f|C) is_integrable_on M & Im(f|C) is_integrable_on M by A3,Def4; then
+   -infty < Integral(M,Re(f|C)) & Integral(M,Re(f|C)) < +infty &
+   -infty < Integral(M,Im(f|C)) & Integral(M,Im(f|C)) < +infty
+     by MESFUNC6:90; then
+   reconsider R3=Integral(M,Re(f|C)), I3=Integral(M,Im(f|C)) as Real
+     by EXTREAL1:1;
+B2:Integral(M,Re(f)|C) = Integral(M,Re(f|A)) + Integral(M,Re(f)|B) by A2,COM91
+                  .= Integral(M,Re(f|A)) + Integral(M,Re(f|B)) by COM91;
+B4:Integral(M,Im(f)|C) = Integral(M,Im(f|A)) + Integral(M,Im(f)|B) by A2,COM91
+                  .= Integral(M,Im(f|A)) + Integral(M,Im(f|B)) by COM91;
+   R_EAL R3 = R_EAL R1 + R_EAL R2 &
+   R_EAL I3 = R_EAL I1 + R_EAL I2 by B2,B4,COM91; then
+C3:R3 = R1 + R2 & I3 = I1 + I2 by MESFUNC5:7;
+   Integral(M,f|(A\/B)) = R3 + I3 * <i> by A3,Def5; then
+   Integral(M,f|(A\/B)) = (R1 + I1 * <i>) + (R2 + I2 * <i>) by C3; then
+   Integral(M,f|(A\/B)) = Integral(M,f|A) + (R2 + I2 * <i>) by A3,Def5;
+   hence Integral(M,f|(A\/B)) = Integral(M,f|A) + Integral(M,f|B) by A3,Def5;
+end;
+
+theorem
+f is_integrable_on M & B = (dom f)\A implies
+  f|A is_integrable_on M & Integral(M,f) = Integral(M,f|A)+Integral(M,f|B)
+proof
+   assume A1: f is_integrable_on M & B = (dom f)\A; then
+A2:f|A is_integrable_on M & f|B is_integrable_on M by Th91;
+A3:Re f is_integrable_on M & Im f is_integrable_on M by A1,Def4;
+   dom f = dom Re f & dom f = dom Im f by Def1,Def2; then
+A4:Integral(M,Re(f)) = Integral(M,Re(f)|A)+Integral(M,Re(f)|B) &
+   Integral(M,Im(f)) = Integral(M,Im(f)|A)+Integral(M,Im(f)|B)
+                                                by A1,A3,MESFUNC6:93;
+   -infty < Integral(M,Re f) & Integral(M,Re f) < +infty &
+   -infty < Integral(M,Im f) & Integral(M,Im f) < +infty
+      by A3,MESFUNC6:90; then
+   reconsider R=Integral(M,Re f), I=Integral(M,Im f) as Real by EXTREAL1:1;
+   Re(f|A) is_integrable_on M & Im(f|A) is_integrable_on M by A2,Def4; then
+   -infty < Integral(M,Re(f|A)) & Integral(M,Re(f|A)) < +infty &
+   -infty < Integral(M,Im(f|A)) & Integral(M,Im(f|A)) < +infty
+     by MESFUNC6:90; then
+   reconsider R1=Integral(M,Re(f|A)), I1=Integral(M,Im(f|A)) as Real
+     by EXTREAL1:1;
+   Re(f|B) is_integrable_on M & Im(f|B) is_integrable_on M by A2,Def4; then
+   -infty < Integral(M,Re(f|B)) & Integral(M,Re(f|B)) < +infty &
+   -infty < Integral(M,Im(f|B)) & Integral(M,Im(f|B)) < +infty
+     by MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(f|B)), I2=Integral(M,Im(f|B)) as Real
+     by EXTREAL1:1;
+B1:Integral(M,Re f) = Integral(M,Re(f|A)) + Integral(M,Re(f)|B) by A4,COM91
+                   .= Integral(M,Re(f|A)) + Integral(M,Re(f|B)) by COM91;
+B2:Integral(M,Im f) = Integral(M,Im(f|A)) + Integral(M,Im(f)|B) by A4,COM91
+                   .= Integral(M,Im(f|A)) + Integral(M,Im(f|B)) by COM91;
+   R_EAL R = R_EAL R1 + R_EAL R2 &
+   R_EAL I = R_EAL I1 + R_EAL I2 by B1,B2; then
+C3:R = R1 + R2 & I = I1 + I2 by MESFUNC5:7;
+   Integral(M,f) = R + I * <i> by A1,Def5; then
+   Integral(M,f) = (R1 + I1 * <i>) + (R2 + I2 * <i>) by C3; then
+   Integral(M,f) = Integral(M,f|A) + (R2 + I2 * <i>) by A2,Def5;
+   hence thesis by A2,Def5;
+end;
+
+definition
+  let k be real number, X be non empty set, f be PartFunc of X,REAL;
+func f to_power k -> PartFunc of X,REAL means :Def7:
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = (f.x) to_power k;
+existence
+proof
+   defpred P[set,set] means $1 in dom f & $2= (f.$1) to_power k;
+   consider F be PartFunc of X,REAL such that
+A1: for z be Element of X holds z in dom F iff
+     ex c be Element of REAL st P[z,c] and
+A2: for z be Element of X st z in dom F holds P[z,F.z]  from SEQ_1:sch 2;
+   take F;
+   now let z be Element of X;
+    hereby assume AS: z in dom f;
+     (f.z) to_power k is Element of REAL by XREAL_0:def 1;
+     hence z in dom F by A1,AS;
+    end;
+    hereby assume z in dom F; then
+     ex c be Element of REAL st P[z,c] by A1;
+     hence z in dom f;
+    end;
+   end;
+   hence dom F = dom f by SUBSET_1:8;
+   thus thesis by A2;
+end;
+uniqueness
+proof
+   deffunc f0(set) = (f.$1) to_power k;
+   thus for h,g being PartFunc of X,REAL st
+    (dom h=dom f & for z be Element of X st z in dom h holds h.z = f0(z)) &
+    (dom g=dom f & for z be Element of X st z in dom g holds g.z = f0(z))
+     holds h = g from SEQ_1:sch 4;
+end;
+end;
+
+registration let X;
+ cluster nonnegative PartFunc of X,REAL;
+ existence
+  proof
+    reconsider f = {} as Function;
+    dom f = {};
+    then reconsider f as PartFunc of X,REAL by PARTFUN1:55;
+   take f;
+   let x be Element of ExtREAL;
+   thus thesis;
+  end;
+end;
+
+registration
+ let k be non negative (real number), X;
+ let f be nonnegative PartFunc of X,REAL;
+ cluster f to_power k -> nonnegative;
+ coherence
+proof
+   now let x be set;
+    assume A11:x in dom (f to_power k);
+    per cases;
+    suppose k = 0; then
+     (f.x) to_power k = 1 by POWER:29;
+     hence 0 <= (f to_power k).x by A11,Def7;
+    end;
+    suppose B1: k > 0;
+     per cases by MESFUNC6:51;
+     suppose 0 < f.x; then
+      0 < (f.x) to_power k by POWER:39;
+      hence 0 <= (f to_power k).x by A11,Def7;
+     end;
+     suppose 0 = f.x; then
+      0 = ((f.x) to_power k) by B1,POWER:def 2;
+      hence 0 <= (f to_power k).x by A11,Def7;
+     end;
+    end;
+   end;
+   hence f to_power k is nonnegative by MESFUNC6:52;
+end;
+end;
+
+theorem Lm648:
+for k be real number, X,S,E
+for f be PartFunc of X,REAL st
+f is nonnegative & 0 <= k holds (f to_power k) is nonnegative;
+
+theorem Lm648a:
+for x be set,X,S,E for f be PartFunc of X,REAL st
+ f is nonnegative holds (f.x) to_power (1/2) = sqrt(f.x)
+proof
+   let x be set,X,S,E;
+   let f be PartFunc of X,REAL;
+   assume f is nonnegative; then
+P1:0 <= f.x by MESFUNC6:51;
+   hence (f.x) to_power (1/2) = 2-root (f.x) by POWER:52
+          .= 2 -Root (f.x) by P1,POWER:def 1
+          .= sqrt (f.x) by P1,PREPOWER:41;
+end;
+
+theorem MES121:
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ less_dom(f,a) = A\(A /\ great_eq_dom(f,a))
+proof
+   let f be PartFunc of X,REAL, a be Real;
+   assume A1: A c= dom f;
+   now let x be set;
+    assume x in A /\ less_dom(f,a); then
+A4: x in A & x in less_dom(f,a) by XBOOLE_0:def 3; then
+    ex y be Real st y = f.x & y < a by MESFUNC6:3; then
+    not (ex y1 be Real st y1 = f.x & a <= y1); then
+    not x in great_eq_dom(f,a) by MESFUNC6:6; then
+    not(x in (A /\ great_eq_dom(f,a))) by XBOOLE_0:def 3;
+    hence x in A\(A /\ great_eq_dom(f,a)) by A4,XBOOLE_0:def 4;
+   end; then
+A3:A /\ less_dom(f,a) c= A\(A /\ great_eq_dom(f,a)) by TARSKI:def 3;
+   now let x be set;
+    assume x in A\(A /\ great_eq_dom(f,a)); then
+A6: x in A & not(x in A /\ great_eq_dom(f,a)) by XBOOLE_0:def 4; then
+    not (x in great_eq_dom(f,a)) by XBOOLE_0:def 3; then
+    not(a <= f.x) by A1,A6,MESFUNC6:6; then
+    x in less_dom(f,a) by A1,A6,MESFUNC6:3;
+    hence x in A /\ less_dom(f,a) by A6,XBOOLE_0:def 3;
+   end; then
+   A\(A /\ great_eq_dom(f,a)) c= A /\ less_dom(f,a) by TARSKI:def 3;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem MES714:
+for k be real number, X,S,E
+for f be PartFunc of X,REAL st
+f is nonnegative & 0 <= k & E c= dom f & f is_measurable_on E holds
+  (f to_power k) is_measurable_on E
+proof
+   let k be real number, X,S,E;
+   let f be PartFunc of X,REAL;
+   reconsider k1=k as Real by XREAL_0:def 1;
+   assume that
+A1: f is nonnegative and
+B1: 0 <= k and
+A2: E c= dom f & f is_measurable_on E;
+A3:dom(f to_power k) = dom f by Def7;
+   per cases by B1;
+   suppose B11: k = 0;
+A8: E c= dom (f to_power k) by A2,Def7;
+    now let r be real number;
+     reconsider r1=r as Real by XREAL_0:def 1;
+     per cases;
+     suppose A11: r <= 1;
+      now let x be set;
+       assume A12: x in E; then
+       (f to_power k).x = (f.x) to_power k by A2,A3,Def7; then
+       r <= (f to_power k).x by B11,A11,POWER:29;
+       hence x in great_eq_dom(f to_power k,r1) by A2,A3,A12,MESFUNC6:6;
+      end; then
+      E c= great_eq_dom(f to_power k,r) by TARSKI:def 3; then
+      E /\ great_eq_dom(f to_power k,r) = E by XBOOLE_1:28; then
+      E /\ less_dom(f to_power k,r1) = E \ E by A8,MES121;
+      hence E /\ less_dom(f to_power k,r) in S;
+     end;
+     suppose A6: 1 < r;
+      now let x be set;
+       assume A7: x in E; then
+       (f to_power k).x = (f.x) to_power k by A2,A3,Def7; then
+       (f to_power k).x < r by B11,A6,POWER:29;
+       hence x in less_dom(f to_power k,r) by A2,A3,A7,MESFUNC6:3;
+      end; then
+      E c= less_dom(f to_power k,r) by TARSKI:def 3; then
+      E /\ less_dom(f to_power k,r) = E by XBOOLE_1:28;
+      hence E /\ less_dom(f to_power k,r) in S;
+     end;
+    end;
+    hence f to_power k is_measurable_on E by MESFUNC6:12;
+   end;
+   suppose B12: k > 0;
+    for r be real number holds
+     E /\ great_eq_dom(f to_power k,r) in S
+    proof
+     let r be real number;
+     reconsider r1=r as Real by XREAL_0:def 1;
+     per cases;
+     suppose C1: r1 <= 0;
+      now let x be set;
+       assume x in E; then
+       x in dom f by A2; then
+C4:    x in dom (f to_power k) by Def7;
+       0 <= (f to_power k).x by MESFUNC6:51,A1,B12;
+       hence x in great_eq_dom(f to_power k,r1) by C1,C4,MESFUNC6:6;
+      end; then
+      E c= great_eq_dom(f to_power k,r) by TARSKI:def 3; then
+      E /\ great_eq_dom(f to_power k,r) = E by XBOOLE_1:28;
+      hence E /\ great_eq_dom(f to_power k,r) in S;
+     end;
+     suppose A15: 0 < r1;
+A16:  now let x be set;
+       assume A17: x in great_eq_dom(f,r1 to_power (1/k)); then
+A10:   x in dom (f to_power k) by A3,MESFUNC6:6;
+A20:   ex y be Real st y = f.x & r1 to_power (1/k) <= y by A17,MESFUNC6:6;
+A24:   0 < r to_power (1/k) by A15,POWER:39;
+       set R = r to_power (1/k);
+       R to_power k = r to_power (1/k*k) by A15,POWER:38; then
+       R to_power k = r to_power 1 by B12,XCMPLX_1:88; then
+       r1 to_power 1 <= (f.x) to_power k1 by B12,A20,A24,HOLDER_1:3; then
+       r <= (f.x) to_power k by POWER:30; then
+       r <= (f to_power k).x by A10,Def7;
+       hence x in great_eq_dom(f to_power k,r1) by A10,MESFUNC6:6;
+      end;
+      now let x be set;
+       assume A26: x in great_eq_dom(f to_power k,r1); then
+A27:   x in dom (f to_power k) by MESFUNC6:6;
+A29:   0 <= f.x by A1,MESFUNC6:51;
+       ex y2 be Real st y2 = (f to_power k).x & r1 <= y2
+         by A26,MESFUNC6:6; then
+       r <= (f.x) to_power k by A27,Def7; then
+A33:   r to_power (1/k1) <= ((f.x) to_power k1) to_power (1/k1)
+         by A15,B12,HOLDER_1:3;
+       ((f.x) to_power k1) to_power (1/k1) = (f.x) to_power (k1 * 1/k1)
+         by B12,A29,HOLDER_1:2; then
+       ((f.x) to_power k1) to_power (1/k1) = (f.x) to_power 1
+         by B12,XCMPLX_1:88; then
+       ((f.x) to_power k) to_power (1/k) = f.x by POWER:30;
+       hence x in great_eq_dom(f,r1 to_power (1/k)) by A3,A27,A33,MESFUNC6:6;
+      end; then
+      E /\ great_eq_dom(f to_power k,r1)
+       = E /\ great_eq_dom(f,r1 to_power (1/k)) by A16,TARSKI:2;
+      hence E /\ great_eq_dom(f to_power k,r) in S
+        by A2,MESFUNC6:13;
+     end;
+    end;
+    hence f to_power k is_measurable_on E by A2,A3,MESFUNC6:13;
+   end;
+end;
+
+theorem MES648:
+f is_measurable_on A & A c= dom f implies |.f.| is_measurable_on A
+proof
+   assume A1: f is_measurable_on A & A c= dom f; then
+A2:Re f is_measurable_on A & Im f is_measurable_on A by Def3;
+A0:dom |.Re f.| = dom Re f & dom |.Im f.| = dom Im f &
+   dom |.f.| = dom f by VALUED_1:def 11;
+C0:dom Re f = dom f & dom Im f = dom f by Def1,Def2; then
+B1:|.Re f.| is_measurable_on A & |.Im f.| is_measurable_on A
+      by A1,A2,MESFUNC6:48;
+
+B3:now let x be set;
+    assume P01: x in dom |.Re f.|;
+    0 <= |.(Re f).x .| by COMPLEX1:132;
+    hence 0 <= |. Re f.|.x by P01,VALUED_1:def 11;
+   end; then
+C21: |.Re(f).| to_power 2 is nonnegative by Lm648,MESFUNC6:52;
+B4:now let x be set;
+    assume x in dom |.Im f.|; then
+    |.Im f.|.x = |.(Im f).x .| by VALUED_1:def 11;
+    hence 0 <= |.Im f.|.x by COMPLEX1:132;
+   end; then
+C22: |.Im f.| to_power 2 is nonnegative by Lm648,MESFUNC6:52;
+   set F = |.Re f.| to_power 2 + |.Im f.| to_power 2;
+   |.Re f.| to_power 2 is_measurable_on A &
+   |.Im f.| to_power 2 is_measurable_on A
+      by B1,A0,C0,A1,B3,B4,MES714,MESFUNC6:52; then
+C1:F is_measurable_on A by MESFUNC6:26;
+C31:dom F = dom( |.Re f.| to_power 2 ) /\ dom( |.Im f.| to_power 2 )
+                                               by VALUED_1:def 1;
+C32:dom(|.Re f.| to_power 2) = dom f &
+    dom(|.Im f.| to_power 2) = dom f by A0,C0,Def7; then
+D2: dom(|.f.|) = dom (F to_power (1/2)) by A0,Def7,C31;
+   now let x be set;
+    assume P01: x in dom |.f.|; then
+    (|.Re f.| to_power 2).x = (|.Re f.|.x) to_power 2 by A0,C32,Def7; then
+    (|.Re f.| to_power 2).x = |.Re(f).x .| to_power 2
+                                            by P01,A0,C0,VALUED_1:def 11; then
+    (|.Re f.| to_power 2).x = |.Re(f.x).| to_power 2 by P01,A0,C0,Def1; then
+    (|.Re f.| to_power 2).x = |.Re(f.x).|^2 by POWER:53; then
+Q01:(|.Re f.| to_power 2).x = (Re(f.x))^2 by COMPLEX1:161;
+    (|.Im f.| to_power 2).x = (|.Im f.|.x) to_power 2 by P01,A0,C32,Def7; then
+    (|.Im f.| to_power 2).x = |.Im(f).x .| to_power 2
+                                            by P01,A0,C0,VALUED_1:def 11; then
+    (|.Im f.| to_power 2).x = |.Im(f.x).| to_power 2 by P01,A0,C0,Def2; then
+    (|.Im f.| to_power 2).x = |.Im(f.x).|^2 by POWER:53; then
+Q02:(|.Im f.| to_power 2).x = (Im(f.x))^2 by COMPLEX1:161;
+    (F.x) to_power (1/2) = sqrt (F.x) by C21,C22,MESFUNC6:56,Lm648a
+     .= sqrt ( (Re(f.x))^2 + (Im(f.x))^2 )
+        by Q01,Q02,P01,A0,C31,C32,VALUED_1:def 1; then
+    (F to_power (1/2)).x = |.f.x .| by P01,D2,Def7;
+    hence |.f.|.x = (F to_power (1/2)).x by P01,VALUED_1:def 11;
+   end; then
+   |.f.| = F to_power (1/2) by D2,FUNCT_1:9;
+   hence |.f.| is_measurable_on A by C1,C31,C32,A1,MES714,C21,C22,MESFUNC6:56;
+end;
+
+theorem Th94:
+(ex A be Element of S st A = dom f & f is_measurable_on A ) implies
+  (f is_integrable_on M iff |.f.| is_integrable_on M)
+proof
+   assume ex A be Element of S st A = dom f & f is_measurable_on A; then
+   consider A be Element of S such that
+P1: A = dom f & f is_measurable_on A;
+P2:dom Re f = A & dom Im f = A by P1,Def1,Def2;
+P3:Re f is_measurable_on A & Im f is_measurable_on A by Def3,P1;
+P5:dom (|.Re f.| + |.Im f.|) = dom |.Re f.| /\ dom |.Im f.| by VALUED_1:def 1;
+P4:dom |.Re f.| = dom Re f & dom |.Im f.| = dom Im f & dom |.f.| = dom f
+     by VALUED_1:def 11;
+P7:|.f.| is_measurable_on A by MES648,P1;
+   hereby assume f is_integrable_on M; then
+    Re f is_integrable_on M & Im f is_integrable_on M by Def4; then
+    |.Re f.| is_integrable_on M & |.Im f.| is_integrable_on M
+       by P2,P3,MESFUNC6:94; then
+L9: |.Re f.| + |.Im f.| is_integrable_on M by MESFUNC6:100;
+    now let x be Element of X;
+     assume P11: x in dom |.f.|; then
+P14: (Re f).x = Re(f.x) & (Im f).x = Im(f.x) by P1,P2,P4,Def1,Def2;
+P15: |.f.|.x = |.f.x .| by P11,VALUED_1:def 11;
+     |.(Re f).x .| = |.Re f.|.x & |.(Im f).x .| = |.Im f.|.x &
+     (|.Re f.| + |.Im f.|).x = |.Re f.|.x + |.Im f.|.x
+                       by P1,P2,P11,P4,P5,VALUED_1:def 1,def 11;
+     hence |.(|.f.|.x).| <= (|.Re f.| + |.Im f.|).x by P14,P15,COMPLEX1:164;
+    end;
+    hence |.f.| is_integrable_on M by P1,P7,P4,L9,P5,P2,MESFUNC6:96;
+   end;
+   hereby assume R: |.f.| is_integrable_on M;
+    now let x be Element of X;
+     assume P101: x in dom Re f; then
+P13: |.f.|.x = |.f.x .| by P1,P2,P4,VALUED_1:def 11;
+     |.Re(f.x).| <= |.f.x .| by COMPLEX1:165;
+     hence |.Re(f).x .| <= |.f.|.x by P13,P101,Def1;
+    end; then
+R11:Re f is_integrable_on M by P2,P3,P4,P1,MESFUNC6:96,R;
+    now let x be Element of X;
+     assume P101: x in dom Im f; then
+P14: |.f.|.x = |.f.x .| by P1,P2,P4,VALUED_1:def 11;
+     |.Im(f.x).| <= |.f.x .| by COMPLEX1:165;
+     hence |.Im(f).x .| <= |.f.|.x by P14,P101,Def2;
+    end; then
+    Im f is_integrable_on M by P2,P3,P4,P1,MESFUNC6:96,R;
+    hence f is_integrable_on M by Def4,R11;
+   end;
+end;
+
+theorem
+f is_integrable_on M & g is_integrable_on M implies dom (f+g) in S
+proof
+   assume f is_integrable_on M & g is_integrable_on M; then
+   Re f is_integrable_on M & Im f is_integrable_on M &
+   Re g is_integrable_on M & Im g is_integrable_on M by Def4; then
+   dom(Re(f)+Re(g)) in S & dom(Im(f)+Im(g)) in S by MESFUNC6:99; then
+A1:dom(Re(f+g)) in S & dom(Im(f+g)) in S by COM19;
+   dom(<i>(#)Im(f+g)) = dom(Im(f+g)) by VALUED_1:def 5; then
+   dom(Re(f+g) + <i>(#)Im(f+g)) = dom(Re(f+g)) /\ dom(Im(f+g))
+                                          by VALUED_1:def 1; then
+   dom(Re(f+g) + <i>(#)Im(f+g)) in S by A1,MEASURE1:19;
+   hence thesis by COM99;
+end;
+
+theorem Th100:
+f is_integrable_on M & g is_integrable_on M implies f+g is_integrable_on M
+proof
+   assume f is_integrable_on M & g is_integrable_on M; then
+   Re f is_integrable_on M & Im f is_integrable_on M &
+   Re g is_integrable_on M & Im g is_integrable_on M by Def4; then
+   Re(f)+ Re(g) is_integrable_on M &
+   Im(f)+ Im(g) is_integrable_on M by MESFUNC6:100; then
+   Re(f+g) is_integrable_on M & Im(f+g) is_integrable_on M by COM19;
+   hence f+g is_integrable_on M by Def4;
+end;
+
+theorem Th100x:
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f,g be PartFunc of X,REAL st
+f is_integrable_on M & g is_integrable_on M holds f-g is_integrable_on M
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+       f,g be PartFunc of X,REAL;
+   assume f is_integrable_on M & g is_integrable_on M; then
+A1:R_EAL f is_integrable_on M & R_EAL g is_integrable_on M
+                                               by MESFUNC6:def 9; then
+   (-1)(#)R_EAL g is_integrable_on M by MESFUNC5:116; then
+   -R_EAL g is_integrable_on M by MESFUNC2:11; then
+   R_EAL -g is_integrable_on M by MESFUNC6:28; then
+   R_EAL f + R_EAL -g is_integrable_on M by A1,MESFUNC5:114; then
+   R_EAL(f-g) is_integrable_on M by MESFUNC6:23;
+   hence f-g is_integrable_on M by MESFUNC6:def 9;
+end;
+
+theorem
+f is_integrable_on M & g is_integrable_on M implies f-g is_integrable_on M
+proof
+   assume f is_integrable_on M & g is_integrable_on M; then
+   Re f is_integrable_on M & Im f is_integrable_on M &
+   Re g is_integrable_on M & Im g is_integrable_on M by Def4; then
+   Re(f)- Re(g) is_integrable_on M &
+   Im(f)- Im(g) is_integrable_on M by Th100x; then
+   Re(f-g) is_integrable_on M &
+   Im(f-g) is_integrable_on M by COM48;
+   hence f-g is_integrable_on M by Def4;
+end;
+
+theorem Th101:
+f is_integrable_on M & g is_integrable_on M implies
+  ex E be Element of S st E = dom f /\ dom g &
+    Integral(M,f+g)=Integral(M,f|E)+Integral(M,g|E)
+proof
+   assume A1: f is_integrable_on M & g is_integrable_on M; then
+A2:Re f is_integrable_on M & Im f is_integrable_on M &
+   Re g is_integrable_on M & Im g is_integrable_on M by Def4; then
+   consider E be Element of S such that
+A3: E = dom Re f /\ dom Re g &
+    Integral(M,Re(f)+Re(g))=Integral(M,(Re f)|E)+Integral(M,(Re g)|E)
+                                                      by MESFUNC6:101;
+D1:dom f = dom Re f & dom g = dom Re g & dom f = dom Im f & dom g = dom Im g
+      by Def1,Def2;
+A3I:ex Ei be Element of S st Ei = dom Im f /\ dom Im g &
+    Integral(M,Im(f)+Im(g))=Integral(M,Im(f)|Ei)+Integral(M,Im(g)|Ei)
+      by A2,MESFUNC6:101;
+A4:f+g is_integrable_on M by A1,Th100; then
+   Re(f+g) is_integrable_on M & Im(f+g) is_integrable_on M by Def4; then
+   -infty < Integral(M,Re(f+g)) & Integral(M,Re(f+g)) < +infty &
+   -infty < Integral(M,Im(f+g)) & Integral(M,Im(f+g)) < +infty
+     by MESFUNC6:90; then
+   reconsider R=Integral(M,Re(f+g)), I=Integral(M,Im(f+g)) as Real
+     by EXTREAL1:1;
+A5:f|E is_integrable_on M & g|E is_integrable_on M by A1,Th91; then
+   Re(f|E) is_integrable_on M & Im(f|E) is_integrable_on M by Def4; then
+   -infty < Integral(M,Re(f|E)) & Integral(M,Re(f|E)) < +infty &
+   -infty < Integral(M,Im(f|E)) & Integral(M,Im(f|E)) < +infty
+     by MESFUNC6:90; then
+   reconsider R1=Integral(M,Re(f|E)), I1=Integral(M,Im(f|E)) as Real
+     by EXTREAL1:1;
+   Re(g|E) is_integrable_on M & Im(g|E) is_integrable_on M by A5,Def4; then
+   -infty < Integral(M,Re(g|E)) & Integral(M,Re(g|E)) < +infty &
+   -infty < Integral(M,Im(g|E)) & Integral(M,Im(g|E)) < +infty
+     by MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(g|E)), I2=Integral(M,Im(g|E)) as Real
+     by EXTREAL1:1;
+   Integral(M,Re(f)+Re(g)) = Integral(M,Re(f+g)) by COM19; then
+B1:Integral(M,Re(f+g)) = Integral(M,Re(f|E)) + Integral(M,Re(g)|E) by A3,COM91
+                      .= Integral(M,Re(f|E)) + Integral(M,Re(g|E)) by COM91;
+   Integral(M,Im(f)+Im(g)) = Integral(M,Im(f+g)) by COM19; then
+   Integral(M,Im(f+g)) = Integral(M,Im(f|E)) + Integral(M,Im(g)|E)
+      by A3I,A3,D1,COM91; then
+   R_EAL R = R_EAL R1 + R_EAL R2 & R_EAL I = R_EAL I1 + R_EAL I2
+     by B1,COM91; then
+C3:R = R1 + R2 & I = I1 + I2 by MESFUNC5:7;
+   Integral(M,f+g) = R + I * <i> by A4,Def5; then
+   Integral(M,f+g) = (R1 + I1 * <i>) + (R2 + I2 * <i>) by C3; then
+   Integral(M,f+g) = Integral(M,f|E) + (R2 + I2 * <i>) by A5,Def5; then
+   Integral(M,f+g) = Integral(M,f|E)+Integral(M,g|E) by A5,Def5;
+   hence thesis by D1,A3;
+end;
+
+theorem
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f,g be PartFunc of X,REAL st
+f is_integrable_on M & g is_integrable_on M holds
+  ex E be Element of S st
+    E = dom f /\ dom g & Integral(M,f-g)=Integral(M,f|E)+Integral(M,(-g)|E)
+proof
+   let X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+       f,g be PartFunc of X,REAL;
+   assume f is_integrable_on M & g is_integrable_on M; then
+A1:R_EAL f is_integrable_on M & R_EAL g is_integrable_on M
+     by MESFUNC6:def 9; then
+   (-1)(#)R_EAL g is_integrable_on M by MESFUNC5:116; then
+   -R_EAL g is_integrable_on M by MESFUNC2:11; then
+   R_EAL -g is_integrable_on M by MESFUNC6:28; then
+   consider E be Element of S such that
+A2: E = dom(R_EAL f) /\ dom(R_EAL -g) &
+    Integral(M,R_EAL f + R_EAL -g)
+      = Integral(M,(R_EAL f)|E) + Integral(M,(R_EAL -g)|E) by A1,MESFUNC5:115;
+   take E;
+   dom(R_EAL -g) = dom(-R_EAL g) by MESFUNC6:28;
+   hence thesis by A2,MESFUNC1:def 7,MESFUNC6:23;
+end;
+
+theorem Th102r:
+f is_integrable_on M implies
+  r(#)f is_integrable_on M & Integral(M,r(#)f) = r * Integral(M,f)
+proof
+   assume A1: f is_integrable_on M; then
+A2:Re f is_integrable_on M & Im f is_integrable_on M by Def4; then
+A3:r(#)Re(f) is_integrable_on M &
+   Integral(M,r(#)Re(f)) = R_EAL r * Integral(M,Re f) &
+   r(#)Im(f) is_integrable_on M &
+   Integral(M,r(#)Im(f)) = R_EAL r * Integral(M,Im f) by MESFUNC6:102; then
+A4:Re(r(#)f) is_integrable_on M & Im(r(#)f) is_integrable_on M &
+   Integral(M,r(#)Re(f)) = Integral(M,Re(r(#)f)) &
+   Integral(M,r(#)Im(f)) = Integral(M,Im(r(#)f)) by COM21r; then
+A5:r(#)f is_integrable_on M by Def4;
+   -infty < Integral(M,Re f) & Integral(M,Re f) < +infty &
+   -infty < Integral(M,Im f) & Integral(M,Im f) < +infty
+     by A2,MESFUNC6:90; then
+   reconsider R1=Integral(M,Re f), I1=Integral(M,Im f) as Real by EXTREAL1:1;
+   -infty < Integral(M,Re(r(#)f)) & Integral(M,Re(r(#)f)) < +infty &
+   -infty < Integral(M,Im(r(#)f)) & Integral(M,Im(r(#)f)) < +infty
+      by A4,MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(r(#)f)), I2=Integral(M,Im(r(#)f))
+     as Real by EXTREAL1:1;
+   R_EAL r * R_EAL R1 = r * R1 & R_EAL r * R_EAL I1 = r * I1 by Th7a; then
+   R2 + I2 * <i> = r * (R1 + I1 * <i>) by A3,A4; then
+   Integral(M,r(#)f) = r * (R1 + I1 * <i>) by A5,Def5;
+   hence thesis by A4,A1,Def5,Def4;
+end;
+
+theorem Th102c:
+f is_integrable_on M implies
+  <i>(#)f is_integrable_on M & Integral(M,<i>(#)f) = <i> * Integral(M,f)
+proof
+   assume A1: f is_integrable_on M; then
+A2:Re f is_integrable_on M & Im f is_integrable_on M by Def4;
+A3:Re(<i>(#)f) = -Im(f) & Im(<i>(#)f)= Re f by COM21c;
+   -Im(f)=(-1)(#)Im(f); then
+   Re(<i>(#)f) is_integrable_on M & Im(<i>(#)f) is_integrable_on M
+     by A2,A3,MESFUNC6:102;
+   hence
+A5: <i>(#)f is_integrable_on M by Def4;
+   consider R,I be Real such that
+A6: R=Integral(M,Re f) & I =Integral(M,Im f) & Integral(M,f)=R+ I * <i>
+      by A1,Def5;
+   consider R1,I1 be Real such that
+A7: R1=Integral(M,Re(<i>(#)f)) & I1 =Integral(M,Im(<i>(#)f))
+     & Integral(M,<i>(#)f)=R1+ I1 * <i> by A5,Def5;
+   R1 = R_EAL(-1) * R_EAL(I) by A3,A7,A6,A2,MESFUNC6:102
+     .=(-1)*I by EXTREAL1:38;
+   hence Integral(M,<i>(#)f) = <i>*Integral(M,f) by A3,A6,A7;
+end;
+
+theorem Th102:
+f is_integrable_on M implies
+  c(#)f is_integrable_on M & Integral(M,c(#)f) = c * Integral(M,f)
+proof
+   assume A1: f is_integrable_on M;
+A2:c = Re(c) + Im(c) * <i> by COMPLEX1:29;
+B1:dom(c(#)f) = dom f & dom(Re(c)(#)f) = dom f & dom(<i>(#)f) = dom f &
+   dom((Im c)(#)(<i>(#)f)) = dom(<i>(#)f) by VALUED_1:def 5;
+B2:dom((Re c)(#)f + (Im c)(#)(<i>(#)f))
+    = dom((Re c)(#)f) /\ dom((Im c)(#)(<i>(#)f)) by VALUED_1:def 1;
+   now let x be Element of X;
+    assume x in dom(c(#)f); then
+    (c(#)f).x = c * f.x &
+    ((Re c)(#)f + (Im c)(#)(<i>(#)f)).x
+      = ((Re c)(#)f).x + ((Im c)(#)(<i>(#)f)).x &
+    ((Re c)(#)f).x= Re c * f.x &
+    ((Im c)(#)(<i>(#)f)).x = Im c * (<i>(#)f).x &
+    (<i>(#)f).x = <i> * f.x by B1,B2,VALUED_1:def 1,def 5;
+    hence (c(#)f).x = ((Re c)(#)f + (Im c)(#)(<i>(#)f)).x by A2;
+   end; then
+A3:c(#)f = (Re c)(#)f + (Im c)(#)(<i>(#)f) by B1,B2,PARTFUN1:34;
+A4:(Re c)(#)f is_integrable_on M &
+   Integral(M,(Re c)(#)f) = Re c * Integral(M,f) by A1,Th102r;
+A5:<i>(#)f is_integrable_on M &
+   Integral(M,<i>(#)f) = <i> * Integral(M,f) by A1,Th102c; then
+A6:(Im c)(#)(<i>(#)f) is_integrable_on M &
+   Integral(M,(Im c)(#)(<i>(#)f)) = Im c * Integral(M,<i>(#)f) by Th102r;
+   hence c(#)f is_integrable_on M by A3,Th100,A4;
+   consider E be Element of S such that
+A7: E = dom ((Re c)(#)f) /\ dom ((Im c)(#)(<i>(#)f)) &
+    Integral(M,(Re c)(#)f + (Im c)(#)(<i>(#)f))
+     = Integral(M,((Re c)(#)f)|E) + Integral(M,((Im c)(#)(<i>(#)f))|E)
+        by Th101,A4,A6;
+   ((Re c)(#)f)|E =(Re c)(#)f by B1,A7,RELAT_1:97;
+   hence
+   Integral(M,c(#)f) = Re c * Integral(M,f) + (Im c)*<i>* Integral(M,f)
+     by A4,A6,A5,A3,A7,B1,RELAT_1:97
+    .= c * Integral(M,f) by A2;
+end;
+
+Th95a:
+( ex A be Element of S st A = dom f & f is_measurable_on A )
+& f is_integrable_on M & Integral(M,f) = 0 implies
+  |. Integral(M,f).| <= Integral(M,|.f.|)
+proof
+   assume that
+A1: ( ex A be Element of S st A = dom f & f is_measurable_on A ) and
+A2: f is_integrable_on M and
+X1: Integral(M,f) = 0;
+D1:|.f.| is_integrable_on M by A1,A2,Th94;
+   consider R,I be Real such that
+A3: R = Integral(M,Re f) & I = Integral(M,Im f)
+     & Integral(M,f)=R + I * <i> by A2,Def5;
+   Re f is_integrable_on M by A2,Def4; then
+C1:|.Integral(M,Re f).| <= Integral(M,|.Re f.|) by MESFUNC6:95;
+   consider A be Element of S such that
+A4: A = dom f & f is_measurable_on A by A1;
+B1:dom Re f = A & Re f is_measurable_on A by A4,Def1,Def3;
+A5:dom |.f.| = dom f by VALUED_1:def 11;
+C2:now let x be Element of X;
+    assume x in dom Re f; then
+    Re(f).x = Re(f.x) & |.f.|.x = |.f.x .| by A5,B1,A4,Def1,VALUED_1:def 11;
+    hence |.Re(f).x .| <= |.f.|.x by COMPLEX1:165;
+   end;
+   R = 0 by A3,X1,COMPLEX1:12,28; then
+   |.Integral(M,Re f).| = 0 by A3,EXTREAL2:53;
+   hence thesis by C1,C2,X1,B1,A5,A4,D1,MESFUNC6:96,COMPLEX1:130;
+end;
+
+theorem MES72:
+for f be PartFunc of X,REAL,Y,r holds (r(#)f)|Y = r(#)(f|Y)
+proof
+   let f be PartFunc of X,REAL,Y,r;
+
+A0:dom((r(#)f)|Y) c= dom (r(#)f) & dom((r(#)f)|Y) c= Y by RELAT_1:87,89;
+A1:dom ((r(#)f)|Y) = dom (r(#)f) /\ Y by RELAT_1:90
+    .= dom f /\ Y by VALUED_1:def 5
+    .= dom (f|Y) by RELAT_1:90; then
+A3:dom ((r(#)f)|Y) = dom (r(#)(f|Y)) by VALUED_1:def 5;
+
+   now let x be Element of X;
+    assume A2: x in dom((r(#)f)|Y); then
+    x in dom (r(#)(f|Y)) by A1,VALUED_1:def 5; then
+    (r(#)(f|Y)).x = r*((f|Y).x) by VALUED_1:def 5; then
+    (r(#)(f|Y)).x = r*((f.x)) by A1,A2,FUNCT_1:68; then
+    (r(#)(f|Y)).x = (r(#)f).x by A2,A0,VALUED_1:def 5;
+    hence (r(#)(f|Y)).x = ((r(#)f)|Y).x  by A2,FUNCT_1:68;
+   end;
+   hence thesis by A3,PARTFUN1:34;
+end;
+
+theorem MES73:
+for f,g be PartFunc of X,REAL st
+  ( ex A be Element of S st A = dom f /\ dom g &
+      f is_measurable_on A & g is_measurable_on A ) &
+  f is_integrable_on M & g is_integrable_on M & g-f is nonnegative holds
+   ex E be Element of S st
+     E = dom f /\ dom g & Integral(M,f|E) <= Integral(M,g|E)
+proof
+   let f,g be PartFunc of X,REAL;
+   assume that
+A1: ( ex A be Element of S st A = dom f /\ dom g &
+      f is_measurable_on A & g is_measurable_on A ) and
+A2: f is_integrable_on M & g is_integrable_on M and
+A3: g-f is nonnegative;
+   set h=(-1)(#)f;
+   h is_integrable_on M & Integral(M,h) = R_EAL (-1) * Integral(M,f)
+     by A2,MESFUNC6:102; then
+   consider E be Element of S such that
+A5: E = dom h /\ dom g &
+    Integral(M,h+g) = Integral(M,h|E)+Integral(M,g|E) by A2,MESFUNC6:101;
+   consider A be Element of S such that
+B1: A = dom f /\ dom g &
+    f is_measurable_on A & g is_measurable_on A by A1;
+B2:h is_measurable_on A by B1,XBOOLE_1:17,MESFUNC6:21;
+   dom h = dom f by VALUED_1:def 5; then
+   dom(h+g) = A by B1,VALUED_1:def 1; then
+A7:0 <= Integral(M,h|E)+Integral(M,g|E) by A5,A3,B2,B1,MESFUNC6:26,84;
+A8:f|E is_integrable_on M by A2,MESFUNC6:91;
+   take E;
+   h|E = (-1)(#)(f|E) by MES72; then
+A9:0 <= R_EAL(-1) * Integral(M,f|E) + Integral(M,g|E) by A7,A8,MESFUNC6:102;
+   -infty < Integral(M,f|E) & Integral(M,f|E) < +infty by A8,MESFUNC6:90; then
+   reconsider c1=Integral(M,f|E) as Real by EXTREAL1:1;
+   g|E is_integrable_on M by A2,MESFUNC6:91; then
+   -infty < Integral(M,g|E) & Integral(M,g|E) < +infty by MESFUNC6:90; then
+   reconsider c2=Integral(M,g|E) as Real by EXTREAL1:1;
+   R_EAL (-1) * Integral(M,f|E) = (-1)*c1 by EXTREAL1:13; then
+   0 <= -c1 + c2 by A9,SUPINF_2:1; then
+   (0 qua real number) +c1 <= -c1+c2+c1 by XREAL_1:8;
+   hence thesis by A5,VALUED_1:def 5;
+end;
+
+Th95b:
+  ( ex A be Element of S st A = dom f & f is_measurable_on A ) &
+  f is_integrable_on M & Integral(M,f) <> 0 implies
+  |. Integral(M,f).| <= Integral(M,|.f.|)
+proof
+   assume that
+A1: ( ex A be Element of S st A = dom f & f is_measurable_on A ) and
+A2: f is_integrable_on M and
+A3: Integral(M,f) <> 0;
+Y1:|.f.| is_integrable_on M by A1,A2,Th94;
+   set a = Integral(M,f);
+   set b = a / |.a.|;
+   |.b.|*|.b*'.| = |.b*b*'.| by COMPLEX1:151; then
+   |.b.|*|.b*'.| = |.b*b.| by COMPLEX1:155; then
+A4:|.b.|*|.b*'.| = |.a / |.a.|.|*|.a / |.a.|.| by COMPLEX1:151;
+A5:|.a / |.a.|.| = |.a.|/|.|.a.|.| by COMPLEX1:153;
+   0 < |.a.| by A3,COMPLEX1:133; then
+A6:|.a.|/|.a.| = 1 by XCMPLX_1:60;
+A81: b*b*' = Re(b*b*') + (Im(b*b*'))*<i> by COMPLEX1:29;
+   reconsider b1=b as Element of COMPLEX by XCMPLX_0:def 2;
+   Re(b1*b1*') = (Re b1)^2 + (Im b1)^2 & Im(b1*b1*') = 0 by COMPLEX1:126; then
+   b*b*' = |.b*b.| by A81,COMPLEX1:154; then
+   (b*' * a) / |.a.| = 1 by A6,A4,A5,COMPLEX1:151; then
+A8:b*' * a = |.a.| by XCMPLX_1:58;
+   consider A be Element of S such that
+B1: A = dom f & f is_measurable_on A by A1;
+B4:dom |.f.| = dom f by VALUED_1:def 11;
+   set h = f (#) (|.f.|");
+E1:h = f /" |.f.|; then
+E0:dom h = dom f /\ dom |.f.| by VALUED_1:16;
+G0:dom(|.f.|(#)h) = dom|.f.| /\ dom h by VALUED_1:def 4;
+Z0:now let x be set;
+    assume P01: x in dom f; then
+P11:(|.f.|(#)h).x = (|.f.|.x)*(h.x) by G0,B4,E0,VALUED_1:def 4;
+P12:|.f.|.x = |.f.x .| by P01,B4,VALUED_1:def 11;
+P03:h.x = (f.x)/|.f.|.x by E1,VALUED_1:17;
+    per cases;
+    suppose f.x <> 0; then
+     0 < |.f.x .| by COMPLEX1:133;
+     hence f.x = (|.f.|(#)h).x by P11,P03,P12,XCMPLX_1:88;
+    end;
+    suppose X1: f.x = 0; then
+     (Re(f.x))^2 + (Im(f.x))^2 = 0 by COMPLEX1:13; then
+     f.x = (h.x)*|.f.x .| by X1,SQUARE_1:82;
+     hence f.x = (|.f.|(#)h).x by P11,P01,B4,VALUED_1:def 11;
+    end;
+   end; then
+Z1:f = |.f.| (#) h by G0,B4,E0,FUNCT_1:9;
+Z2:|.f.| (#) h is_measurable_on A by Z0,B1,G0,B4,E0,FUNCT_1:9;
+E3:dom(b*'(#)(|.f.|(#)h)) = dom f by G0,B4,E0,VALUED_1:def 5;
+E4:dom(b*'(#)h) = dom f by E0,B4,VALUED_1:def 5; then
+E5:dom(|.f.|(#)(b*'(#)h)) = dom f /\ dom f by B4,VALUED_1:def 4;
+   now let x be set;
+    assume P01: x in dom(b*'(#)(|.f.|(#)h)); then
+    (b*'(#)(|.f.|(#)h)).x = b*'*((|.f.|(#)h).x) by VALUED_1:def 5; then
+    (b*'(#)(|.f.|(#)h)).x = b*'*((|.f.|.x)*(h.x))
+                             by P01,E3,G0,B4,E0,VALUED_1:def 4; then
+Q01:(b*'(#)(|.f.|(#)h)).x = b*'*(|.f.x .|*(h.x))
+                             by P01,E3,B4,VALUED_1:def 11;
+    x in dom(|.f.|(#)(b*'(#)h)) by P01,E5,G0,B4,E0,VALUED_1:def 5; then
+    (|.f.|(#)(b*'(#)h)).x = (|.f.|.x)*((b*'(#)h).x) by VALUED_1:def 4; then
+    (|.f.|(#)(b*'(#)h)).x = |.f.x .|*((b*'(#)h).x)
+                                    by P01,E3,B4,VALUED_1:def 11; then
+    (|.f.|(#)(b*'(#)h)).x = (b*'*(h.x))*|.f.x .|
+       by P01,E3,E4,VALUED_1:def 5;
+    hence (b*'(#)(|.f.|(#)h)).x = (|.f.|(#)(b*'(#)h)).x by Q01;
+   end; then
+Z4:b*'(#)(|.f.|(#)h) = |.f.|(#)(b*'(#)h) by E5,E3,FUNCT_1:9;
+Y2:|.f.| is_measurable_on A by B1,MES648;
+   b*'(#)(|.f.|(#)h) is_measurable_on A by G0,B4,E0,B1,Z2,Th21; then
+F1:Re(|.f.|(#)(b*'(#)h)) is_measurable_on A by Z4,Def3;
+F21:b*'(#)(|.f.|(#)h) is_integrable_on M by Z1,A2,Th102; then
+F2:Re(|.f.|(#)(b*'(#)h)) is_integrable_on M by Z4,Def4;
+   consider R1,I1 be Real such that
+Y32:R1 = Integral(M,Re(|.f.|(#)(b*'(#)h))) &
+    I1 = Integral(M,Im(|.f.|(#)(b*'(#)h))) &
+    Integral(M,|.f.|(#)(b*'(#)h)) = R1 + I1 * <i> by F21,Z4,Def5;
+   Re(R1 + I1 * <i>) = R1 by COMPLEX1:28; then
+   Re |.a.| = R1 by A8,Z1,Z4,A2,Th102,Y32; then
+Y3:|.a.| = Integral(M,Re(|.f.|(#)(b*'(#)h))) by Y32,COMPLEX1:def 2;
+F3:dom(Re(|.f.|(#)(b*'(#)h))) = dom f by E5,Def1;
+   now let x be set;
+    assume P02:x in dom(Re(|.f.|(#)(b*'(#)h))) /\ dom |.f.|; then
+P11:|.f.|.x = |.f.x .| by F3,B4,VALUED_1:def 11;
+    h.x = f.x / |.f.|.x by E1,VALUED_1:17; then
+P12:|.h.x .| = |.f.x .| / |.|.f.x .|.| by P11,COMPLEX1:153;
+    per cases;
+    suppose f.x <> 0; then
+     0 < |.f.x .| by COMPLEX1:133; then
+P13: |.f.x .| / |.f.x .| = 1 by XCMPLX_1:60;
+     x in dom(b*'(#)h) by P02,F3,E0,VALUED_1:def 5; then
+     (b*'(#)h).x = b*'*(h.x) by VALUED_1:def 5; then
+P14: |.(b*'(#)h).x .| = |.b*'.|*|.h.x .| by COMPLEX1:151;
+     (|.f.|(#)(b*'(#)h)).x = (|.f.|.x)*((b*'(#)h).x)
+                                  by P02,F3,B4,E5,VALUED_1:def 4; then
+     (|.f.|(#)(b*'(#)h)).x = |.f.x .|*((b*'(#)h).x)
+                                  by P02,F3,B4,VALUED_1:def 11; then
+     |.(|.f.|(#)(b*'(#)h)).x .| = |.|.f.x .|.|*|.(b*'(#)h).x .|
+                                             by COMPLEX1:151; then
+P16: Re((|.f.|(#)(b*'(#)h)).x) <= |.f.x .|
+            by P14,A4,A5,A6,P13,P12,COMPLEX1:140;
+     Re((|.f.|(#)(b*'(#)h)).x) = Re(|.f.|(#)(b*'(#)h)).x by P02,F3,B4,Def1;
+     hence
+     Re(|.f.|(#)(b*'(#)h)).x <= |.f.|.x by P16,P02,F3,B4,VALUED_1:def 11;
+    end;
+    suppose f.x = 0;  then
+R01: (Re(f.x))^2 + (Im(f.x))^2 = 0 by COMPLEX1:13;
+     (|.f.|(#)(b*'(#)h)).x = (|.f.|.x)*((b*'(#)h).x)
+                                  by P02,F3,B4,E5,VALUED_1:def 4; then
+     (|.f.|(#)(b*'(#)h)).x = |.f.x .|*((b*'(#)h).x)
+                                  by P02,F3,B4,VALUED_1:def 11; then
+     |.(|.f.|(#)(b*'(#)h)).x .| = |.|.f.x .|.|*|.(b*'(#)h).x .|
+                                             by COMPLEX1:151; then
+P16: Re((|.f.|(#)(b*'(#)h)).x) <= |.f.x .| by R01,SQUARE_1:82,COMPLEX1:140;
+     Re((|.f.|(#)(b*'(#)h)).x) = Re(|.f.|(#)(b*'(#)h)).x by P02,F3,B4,Def1;
+     hence
+     Re(|.f.|(#)(b*'(#)h)).x <= |.f.|.x by P16,P02,F3,B4,VALUED_1:def 11;
+    end;
+   end; then
+F5:|.f.| - Re(|.f.|(#)(b*'(#)h)) is nonnegative by MESFUNC6:58;
+   set F = Re(|.f.|(#)(b*'(#)h));
+   consider E be Element of S such that
+F6: E = dom F /\ dom |.f.| & Integral(M,F|E) <= Integral(M,|.f.||E)
+      by B1,F3,B4,F1,F2,F5,Y1,Y2,MES73;
+   |.f.||E = |.f.| by B4,F3,F6,RELAT_1:97;
+   hence |.Integral(M,f).| <= Integral(M,|.f.|) by Y3,F6,F3,B4,RELAT_1:97;
+end;
+
+theorem
+  ( ex A be Element of S st A = dom f & f is_measurable_on A ) &
+  f is_integrable_on M implies
+  |. Integral(M,f).| <= Integral(M,|.f.|)
+proof
+   assume that
+A1: ( ex A be Element of S st A = dom f & f is_measurable_on A ) and
+A2: f is_integrable_on M;
+   per cases;
+   suppose Integral(M,f) = 0;
+    hence thesis by A1,A2,Th95a;
+   end;
+   suppose Integral(M,f) <> 0;
+    hence thesis by A1,A2,Th95b;
+   end;
+end;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+  let B be Element of S;
+func Integral_on(M,B,f) -> complex number equals
+  Integral(M,f|B);
+coherence;
+end;
+
+theorem
+f is_integrable_on M & g is_integrable_on M & B c= dom(f+g) implies
+  f+g is_integrable_on M &
+  Integral_on(M,B,f+g) = Integral_on(M,B,f) + Integral_on(M,B,g)
+proof
+   assume
+A1: f is_integrable_on M & g is_integrable_on M & B c= dom(f+g); then
+A2:Re f is_integrable_on M & Im f is_integrable_on M &
+   Re g is_integrable_on M & Im g is_integrable_on M by Def4;
+   B c= dom Re(f+g) & B c= dom Im(f+g) by A1,Def1,Def2; then
+   B c= dom(Re(f)+Re(g)) & B c= dom(Im(f)+Im(g)) by COM19; then
+A3:Re(f)+Re(g) is_integrable_on M &
+   Integral_on(M,B,Re(f)+Re(g))
+     = Integral_on(M,B,Re f) + Integral_on(M,B,Re g) &
+   Im(f)+Im(g) is_integrable_on M &
+   Integral_on(M,B,Im(f)+Im(g))
+     = Integral_on(M,B,Im f) + Integral_on(M,B,Im g) by A2,MESFUNC6:103; then
+A4:Re(f+g) is_integrable_on M & Im(f+g) is_integrable_on M by COM19; then
+   Re(f+g)|B is_integrable_on M & Im(f+g)|B is_integrable_on M
+                                                    by MESFUNC6:91; then
+A8:Re((f+g)|B) is_integrable_on M & Im((f+g)|B) is_integrable_on M
+                                                             by COM91; then
+A9:(f+g)|B is_integrable_on M by Def4;
+   -infty < Integral(M,Re((f+g)|B)) & Integral(M,Re((f+g)|B)) < +infty &
+   -infty < Integral(M,Im((f+g)|B)) & Integral(M,Im((f+g)|B)) < +infty
+     by A8,MESFUNC6:90; then
+   reconsider R=Integral(M,Re((f+g)|B)), I=Integral(M,Im((f+g)|B)) as Real
+     by EXTREAL1:1;
+   Re(f)|B is_integrable_on M & Im(f)|B is_integrable_on M &
+   Re(g)|B is_integrable_on M & Im(g)|B is_integrable_on M
+                                                    by A2,MESFUNC6:91; then
+B1:Re(f|B) is_integrable_on M & Im(f|B) is_integrable_on M &
+   Re(g|B) is_integrable_on M & Im(g|B) is_integrable_on M by COM91; then
+B2:f|B is_integrable_on M & g|B is_integrable_on M by Def4;
+   -infty < Integral(M,Re(f|B)) & Integral(M,Re(f|B)) < +infty &
+   -infty < Integral(M,Im(f|B)) & Integral(M,Im(f|B)) < +infty
+     by B1,MESFUNC6:90; then
+   reconsider R1=Integral(M,Re(f|B)), I1=Integral(M,Im(f|B)) as Real
+     by EXTREAL1:1;
+   -infty < Integral(M,Re(g|B)) & Integral(M,Re(g|B)) < +infty &
+   -infty < Integral(M,Im(g|B)) & Integral(M,Im(g|B)) < +infty
+     by B1,MESFUNC6:90; then
+   reconsider R2=Integral(M,Re(g|B)), I2=Integral(M,Im(g|B)) as Real
+     by EXTREAL1:1;
+A6:Integral(M,Re(f+g)|B) = Integral(M,Re(f)|B) + Integral(M,Re(g)|B) &
+   Integral(M,Im(f+g)|B) = Integral(M,Im(f)|B) + Integral(M,Im(g)|B)
+      by A3,COM19;
+   Integral(M,Re(f)|B) = R1 & Integral(M,Im(f)|B) = I1 &
+   Integral(M,Re(g)|B) = R2 & Integral(M,Im(g)|B) = I2 by COM91; then
+   R_EAL R = R_EAL R1 + R_EAL R2 & R_EAL I = R_EAL I1 + R_EAL I2
+     by A6,COM91; then
+C1:R = R1 + R2 & I = I1 + I2 by MESFUNC5:7;
+C2:Integral(M,f|B) = R1 + I1*<i> & Integral(M,g|B) = R2 + I2*<i> by B2,Def5;
+   Integral_on(M,B,f+g) = R + I * <i> by A9,Def5
+                      .= Integral_on(M,B,f) + Integral_on(M,B,g) by C1,C2;
+   hence thesis by A4,Def4;
+end;
+
+theorem
+f is_integrable_on M & f is_measurable_on B implies
+ Integral_on(M,B,c(#)f) = c * Integral_on(M,B,f)
+proof
+   assume f is_integrable_on M & f is_measurable_on B; then
+A2:f|B is_integrable_on M by Th91;
+B0:dom((c(#)f)|B) = dom(c(#)f) /\ B by FUNCT_1:68; then
+   dom((c(#)f)|B) = dom f /\ B by VALUED_1:def 5; then
+B1:dom((c(#)f)|B) = dom(f|B) by FUNCT_1:68; then
+A3:dom((c(#)f)|B) = dom(c(#)(f|B)) by VALUED_1:def 5;
+   now let x be set;
+    assume A4: x in dom((c(#)f)|B); then
+A5: x in dom (c(#)f) by B0,XBOOLE_0:def 3;
+A7: x in dom (c(#)(f|B)) by A4,B1,VALUED_1:def 5;
+    (c(#)f)|B.x= (c(#)f).x by A4,FUNCT_1:70; then
+    (c(#)f)|B.x= c * f.x by A5,VALUED_1:def 5; then
+    (c(#)f)|B.x= c * f|B.x by A4,B1,FUNCT_1:70;
+    hence (c(#)f)|B.x= (c(#)(f|B)).x by A7,VALUED_1:def 5;
+   end; then
+   (c(#)f)|B = c(#)(f|B) by A3,FUNCT_1:9;
+   hence thesis by A2,Th102;
+end;
+
+begin :: Several Properties of Real-valued Measurable Functions
+
+reserve f for PartFunc of X,REAL,
+        a for Real;
+
+theorem
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ great_eq_dom(f,a) = A\(A /\ less_dom(f,a))
+proof
+   let f be PartFunc of X,REAL, a be Real;
+   assume A1: A c= dom f;
+   now let x be set;
+    assume x in A /\ great_eq_dom(f,a); then
+A4: x in A & x in great_eq_dom(f,a) by XBOOLE_0:def 3; then
+    ex y be Real st y = f.x & a <= y by MESFUNC6:6; then
+    not (ex y1 be Real st y1 = f.x & y1 < a); then
+    not x in less_dom(f,a) by MESFUNC6:3; then
+    not(x in (A /\ less_dom(f,a))) by XBOOLE_0:def 3;
+    hence x in A\(A /\ less_dom(f,a)) by A4,XBOOLE_0:def 4;
+   end; then
+A3:A /\ great_eq_dom(f,a) c= A\(A /\ less_dom(f,a)) by TARSKI:def 3;
+   now let x be set;
+    assume x in A\(A /\ less_dom(f,a)); then
+A6: x in A & not(x in A /\ less_dom(f,a)) by XBOOLE_0:def 4; then
+    not x in less_dom(f,a) by XBOOLE_0:def 3; then
+    not(f.x < a) by A1,A6,MESFUNC6:3; then
+    x in great_eq_dom(f,a) by A1,A6,MESFUNC6:6;
+    hence x in A /\ great_eq_dom(f,a) by A6,XBOOLE_0:def 3;
+   end; then
+   A\(A /\ less_dom(f,a)) c= A /\ great_eq_dom(f,a) by TARSKI:def 3;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ great_dom(f,a) = A\(A /\ less_eq_dom(f,a))
+proof
+   let f be PartFunc of X,REAL, a be Real;
+   assume A1: A c= dom f;
+    now let x be set;
+     assume x in A /\ great_dom(f,a); then
+A4:  x in A & x in great_dom(f,a) by XBOOLE_0:def 3; then
+     ex y be Real st y = f.x & a < y by MESFUNC6:5; then
+     not (ex y1 be Real st y1 = f.x & y1 <= a); then
+     not x in less_eq_dom(f,a) by MESFUNC6:4; then
+     not(x in (A /\ less_eq_dom(f,a))) by XBOOLE_0:def 3;
+     hence x in A\(A /\ less_eq_dom(f,a)) by A4,XBOOLE_0:def 4;
+    end; then
+A3:A /\ great_dom(f,a) c= A\(A /\ less_eq_dom(f,a)) by TARSKI:def 3;
+   now let x be set;
+    assume x in A\(A /\ less_eq_dom(f,a)); then
+A6: x in A & not(x in A /\ less_eq_dom(f,a)) by XBOOLE_0:def 4; then
+    not x in less_eq_dom(f,a) by XBOOLE_0:def 3; then
+    not f.x <= a by A1,A6,MESFUNC6:4; then
+    x in great_dom(f,a) by A1,A6,MESFUNC6:5;
+    hence x in A /\ great_dom(f,a) by A6,XBOOLE_0:def 3;
+   end; then
+   A\(A /\ less_eq_dom(f,a)) c= A /\ great_dom(f,a) by TARSKI:def 3;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ less_eq_dom(f,a) = A\(A /\ great_dom(f,a))
+proof
+   let f be PartFunc of X,REAL, a be Real;
+   assume A1: A c= dom f;
+   now let x be set;
+    assume x in A /\ less_eq_dom(f,a); then
+A4: x in A & x in less_eq_dom(f,a) by XBOOLE_0:def 3; then
+    ex y be Real st y = f.x & y <= a by MESFUNC6:4; then
+    not (ex y1 be Real st y1 = f.x & a < y1); then
+    not x in great_dom(f,a) by MESFUNC6:5; then
+    not(x in (A /\ great_dom(f,a))) by XBOOLE_0:def 3;
+    hence x in A\(A /\ great_dom(f,a)) by A4,XBOOLE_0:def 4;
+   end; then
+A3:A /\ less_eq_dom(f,a) c= A\(A /\ great_dom(f,a)) by TARSKI:def 3;
+   now let x be set;
+    assume x in A\(A /\ great_dom(f,a)); then
+A6: x in A & not(x in A /\ great_dom(f,a)) by XBOOLE_0:def 4; then
+    not (x in great_dom(f,a)) by XBOOLE_0:def 3; then
+    not(a < f.x) by A1,A6,MESFUNC6:5; then
+    x in less_eq_dom(f,a) by A1,A6,MESFUNC6:4;
+    hence x in A /\ less_eq_dom(f,a) by A6,XBOOLE_0:def 3;
+   end; then
+   A\(A /\ great_dom(f,a)) c= A /\ less_eq_dom(f,a) by TARSKI:def 3;
+   hence thesis by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+A /\ eq_dom(f,a) = A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a)
+proof
+   now let x be set;
+    assume x in A /\ eq_dom(f,a); then
+A3: x in A & x in eq_dom(f,a) by XBOOLE_0:def 3; then
+A4: ex y be Real st y = f.x & a = y by MESFUNC6:7;
+A5: x in dom f by A3,MESFUNC6:7; then
+    x in great_eq_dom(f,a) by A4,MESFUNC6:6; then
+A6: x in A /\ great_eq_dom(f,a) by A3,XBOOLE_0:def 3;
+    x in less_eq_dom(f,a) by A4,A5,MESFUNC6:4;
+    hence x in A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a) by A6,XBOOLE_0:def 3;
+   end; then
+A1:A /\ eq_dom(f,a) c= A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a)
+     by TARSKI:def 3;
+    now let x be set;
+     assume x in A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a); then
+A8:  x in A /\ great_eq_dom(f,a) & x in less_eq_dom(f,a) by XBOOLE_0:def 3;then
+A9:  x in A & x in great_eq_dom(f,a) by XBOOLE_0:def 3; then
+A10: ex y1 be Real st y1 = f.x & a <= y1 by MESFUNC6:6;
+A11: ex y2 be Real st y2 = f.x & y2 <= a by A8,MESFUNC6:4;
+A12: x in dom f by A8,MESFUNC6:4;
+     a = f.x by A10,A11,XXREAL_0:1; then
+     x in eq_dom(f,a) by A12,MESFUNC6:7;
+     hence x in A /\ eq_dom(f,a) by A9,XBOOLE_0:def 3;
+    end; then
+   A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a) c= A /\ eq_dom(f,a)
+     by TARSKI:def 3;
+   hence thesis by A1,XBOOLE_0:def 10;
+end;
+

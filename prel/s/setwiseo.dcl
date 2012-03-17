@@ -17,13 +17,13 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="35">
+<Func kind="K" nr="36">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SETWISEO" nr="2">
@@ -36,13 +36,13 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="35">
+<Func kind="K" nr="36">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
 </Cluster>
 </RCluster>
 </Registrations>

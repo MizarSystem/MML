@@ -27,15 +27,15 @@
 </Signature>
 <RCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="99"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="9">
@@ -49,31 +49,31 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="99"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="162">
+<Func kind="K" nr="166">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -82,65 +82,65 @@
 </FCluster>
 <FCluster aid="RUSUB_2" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="99"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="7">
-<Func kind="K" nr="162">
+<Func kind="G" nr="8">
+<Func kind="K" nr="166">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="164">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="165">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
-<Adjective nr="37"/>
+<Adjective nr="35"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RUSUB_2" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="99"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="104"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="7">
-<Func kind="K" nr="162">
+<Func kind="G" nr="8">
+<Func kind="K" nr="166">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="164">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="165">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="43"/>
+<Adjective nr="35"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

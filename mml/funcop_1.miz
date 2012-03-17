@@ -7,7 +7,7 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, FUNCT_3, PARTFUN1, BINOP_1, MCART_1,
-      FUNCOP_1, PRALG_1, ZF_REFLE, CAT_1, CQC_LANG, CAT_4, FUNCT_2;
+      FUNCOP_1, PRALG_1, ZF_REFLE, CAT_1, CQC_LANG, CAT_4, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELSET_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCT_3;
@@ -1429,3 +1429,98 @@ theorem
    then dom(x .--> y) misses A by Th19;
   hence (x .--> y)|A = {} by RELAT_1:95;
  end;
+
+:: from CAT_1, (new notation), 2008.06.30. A.T.
+
+notation let x,y;
+ synonym x :-> y for x .--> y;
+end;
+
+definition
+  let m,o be set;
+  redefine
+  func m :-> o -> Function of {m}, {o};
+  coherence;
+end;
+
+theorem
+  for x being Element of {a} for y being Element of {b}
+  holds ((a,b):->c).(x,y) = c by TARSKI:def 1;
+
+:: from MSUHOM_1, ALTCAT_1, 2008.07.06, A.T.
+
+registration
+  let f be Function-yielding Function, C be set;
+  cluster f|C -> Function-yielding;
+  coherence
+proof
+    let i be set;
+    f.i is Function;
+    hence thesis by FUNCT_1:70;
+end;
+end;
+
+:: from CIRCCOMB, 2008.07.06, A.T.
+
+registration
+  let A be set;
+  let f be Function;
+  cluster A --> f -> Function-yielding;
+  coherence
+  proof
+    set g = A --> f;
+A1: dom (A --> f) = A by Th19;
+    g is Function-yielding
+    proof
+      let a be set;
+      assume a in dom g;
+      hence g.a is Function by A1,Th13;
+    end;
+    hence thesis;
+  end;
+end;
+
+:: from SEQM_3, 2008.07.17, A.T.
+
+registration
+  let X,a be set;
+  cluster X --> a -> constant;
+  coherence
+proof
+  let x,y be set;
+A1: dom(X --> a) = X by Th19;
+  assume
+A2: x in dom(X --> a) & y in dom(X --> a);
+  hence (X --> a).x = a by A1,Th13
+    .= (X --> a).y by A1,A2,Th13;
+end;
+end;
+
+:: from YELLOW_6, 2008.07.17, A.T.
+
+registration
+  cluster non empty constant Function;
+  existence
+  proof
+    take f = {{}} --> {};
+    thus f is non empty constant;
+  end;
+end;
+
+:: missing, 2008.07.17, A.T.
+
+registration let f be constant Function, X be set;
+ cluster f|X -> constant;
+ coherence
+  proof let x,y be set;
+F:  dom(f|X) c= dom f by RELAT_1:89;
+   assume
+Z:  x in dom(f|X) & y in dom (f|X);
+    then
+G:   x in dom f & y in dom f by F;
+  thus (f|X).x = f.x by Z,FUNCT_1:70
+          .= f.y by G,FUNCT_1:def 16
+          .= (f|X).y by Z,FUNCT_1:70;
+  end;
+end;
+

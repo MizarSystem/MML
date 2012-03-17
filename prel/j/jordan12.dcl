@@ -41,18 +41,18 @@
 <CCluster aid="JORDAN12" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="115"/>
+<Adjective nr="127"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="257">
+<Func kind="K" nr="261">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="118"/>
+<Adjective nr="130"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -8,13 +8,13 @@ environ
 
  vocabularies FUNCT_1, CAT_1, WELLORD1, BOOLE, FINSET_1, CAT_3, RELAT_1,
       FUNCOP_1, FINSEQ_4, CARD_1, ARYTM_1, FUNCT_4, FUNCT_6, PARTFUN1, FUNCT_3,
-      ALGSTR_1, DIRAF, EQREL_1, CAT_4, ARYTM, GRAPH_1, AMI_1;
+      ALGSTR_1, DIRAF, EQREL_1, CAT_4, ARYTM, GRAPH_1, AMI_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, FUNCOP_1, BINOP_1, ALGSTR_1, XCMPLX_0, NAT_1, CARD_1,
-      FUNCT_4, GRAPH_1, CAT_1, CAT_3;
+      FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
  constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1,
-      CAT_1;
+      CAT_1, CARD_1, STRUCT_0;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -39,7 +39,7 @@ definition
   let C be Category;
   attr C is with_finite_product means
 :: CAT_4:def 3
-  for I being finite set, F being Function of I,the Vertices of C
+  for I being finite set, F being Function of I,the carrier of C
   ex a being Object of C, F' being Projections_family of a,I
   st cods F' = F & a is_a_product_wrt F';
 end;
@@ -57,21 +57,21 @@ theorem :: CAT_4:1
   c is_a_product_wrt p1,p2;
 
 definition
-  struct (CatStr)ProdCatStr (# Vertices,Edges -> set,
-    Source,Target -> Function of the Edges, the Vertices,
-    Comp -> PartFunc of [:the Edges, the Edges :],the Edges,
-    Id -> Function of the Vertices, the Edges,
-    TerminalObj -> Element of the Vertices,
-    CatProd -> Function of [:the Vertices,the Vertices:],the Vertices,
-    Proj1,Proj2 -> Function of [:the Vertices,the Vertices:],the Edges #);
+  struct (CatStr)ProdCatStr (# carrier,carrier' -> set,
+    Source,Target -> Function of the carrier', the carrier,
+    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
+    Id -> Function of the carrier, the carrier',
+    TerminalObj -> Element of the carrier,
+    CatProd -> Function of [:the carrier,the carrier:],the carrier,
+    Proj1,Proj2 -> Function of [:the carrier,the carrier:],the carrier' #);
 end;
 
 registration
- cluster non void ProdCatStr;
+ cluster non void non empty ProdCatStr;
 end;
 
 definition
-  let C be non void ProdCatStr;
+  let C be non void non empty ProdCatStr;
   func [1]C -> Object of C equals
 :: CAT_4:def 4
 
@@ -95,20 +95,20 @@ definition
   let o,m;
   func c1Cat(o,m) -> strict ProdCatStr equals
 :: CAT_4:def 8
-  ProdCatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m,
+  ProdCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m,
     Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
 registration
   let o,m;
- cluster c1Cat(o,m) -> non void;
+ cluster c1Cat(o,m) -> non void non empty;
 end;
 
 theorem :: CAT_4:2
   the CatStr of c1Cat(o,m) = 1Cat(o,m);
 
 registration
-  cluster strict Category-like non void ProdCatStr;
+  cluster strict Category-like non void non empty ProdCatStr;
 end;
 
 registration
@@ -145,7 +145,7 @@ theorem :: CAT_4:11
   holds c is_a_product_wrt p1,p2;
 
 definition
-  let IT be Category-like non void ProdCatStr;
+  let IT be Category-like non void non empty ProdCatStr;
   attr IT is Cartesian means
 :: CAT_4:def 9
 
@@ -160,11 +160,12 @@ theorem :: CAT_4:12
   for o,m being set holds c1Cat(o,m) is Cartesian;
 
 registration
-  cluster strict Cartesian (Category-like non void ProdCatStr);
+  cluster strict Cartesian (Category-like non void non empty ProdCatStr);
 end;
 
 definition
-  mode Cartesian_category is Cartesian (Category-like non void ProdCatStr);
+  mode Cartesian_category is
+   Cartesian (Category-like non void non empty ProdCatStr);
 end;
 
 reserve C for Cartesian_category;
@@ -369,7 +370,7 @@ definition
   let C be Category;
   attr C is with_finite_coproduct means
 :: CAT_4:def 21
-  for I being finite set, F being Function of I,the Vertices of C
+  for I being finite set, F being Function of I,the carrier of C
   ex a being Object of C, F' being Injections_family of a,I
   st doms F' = F & a is_a_coproduct_wrt F';
 end;
@@ -387,21 +388,21 @@ theorem :: CAT_4:46
   c is_a_coproduct_wrt i1,i2;
 
 definition
-  struct (CatStr)CoprodCatStr (# Vertices,Edges -> set,
-    Source,Target -> Function of the Edges, the Vertices,
-    Comp -> PartFunc of [:the Edges, the Edges :],the Edges,
-    Id -> Function of the Vertices, the Edges,
-    Initial -> Element of the Vertices,
-    Coproduct -> Function of [:the Vertices,the Vertices:],the Vertices,
-    Incl1,Incl2 -> Function of [:the Vertices,the Vertices:],the Edges #);
+  struct (CatStr)CoprodCatStr (# carrier,carrier' -> set,
+    Source,Target -> Function of the carrier', the carrier,
+    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
+    Id -> Function of the carrier, the carrier',
+    Initial -> Element of the carrier,
+    Coproduct -> Function of [:the carrier,the carrier:],the carrier,
+    Incl1,Incl2 -> Function of [:the carrier,the carrier:],the carrier' #);
 end;
 
 registration
- cluster non void CoprodCatStr;
+ cluster non void non empty CoprodCatStr;
 end;
 
 definition
-  let C be non void CoprodCatStr;
+  let C be non void non empty CoprodCatStr;
   func [0]C -> Object of C equals
 :: CAT_4:def 22
 
@@ -425,7 +426,7 @@ definition
   let o,m;
   func c1Cat*(o,m) -> strict CoprodCatStr equals
 :: CAT_4:def 26
-  CoprodCatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m,
+  CoprodCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m,
     Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
@@ -434,16 +435,16 @@ theorem :: CAT_4:47
 
 registration
   let o,m;
- cluster c1Cat*(o,m) -> non void;
+ cluster c1Cat*(o,m) -> non void non empty;
 end;
 
 registration
-  cluster strict Category-like non void CoprodCatStr;
+  cluster strict Category-like non void non empty CoprodCatStr;
 end;
 
 registration
   let o,m be set;
-  cluster c1Cat*(o,m) -> Category-like non void;
+  cluster c1Cat*(o,m) -> Category-like non void non empty;
 end;
 
 canceled;
@@ -475,7 +476,7 @@ theorem :: CAT_4:56
   i1,i2 being Morphism of c1Cat*(o,m) holds c is_a_coproduct_wrt i1,i2;
 
 definition
-  let IT be Category-like non void CoprodCatStr;
+  let IT be Category-like non void non empty CoprodCatStr;
   attr IT is Cocartesian means
 :: CAT_4:def 27
 
@@ -490,12 +491,12 @@ theorem :: CAT_4:57
   for o,m being set holds c1Cat*(o,m) is Cocartesian;
 
 registration
-  cluster strict Cocartesian (Category-like non void CoprodCatStr);
+  cluster strict Cocartesian (Category-like non void non empty CoprodCatStr);
 end;
 
 definition
   mode Cocartesian_category is Cocartesian
-    (Category-like non void CoprodCatStr);
+    (Category-like non void non empty CoprodCatStr);
 end;
 
 reserve C for Cocartesian_category;

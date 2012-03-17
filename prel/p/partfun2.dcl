@@ -32,7 +32,7 @@
 </RCluster>
 <FCluster aid="PARTFUN2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>

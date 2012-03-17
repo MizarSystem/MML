@@ -1,0 +1,345 @@
+:: Eigenvalues of a Linear Transformation
+::  by Karol P\c{a}k
+:: 
+:: Received July 11, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, ARYTM, ARYTM_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, RELAT_1,
+      FUNCT_1, FUNCT_2, INCSP_1, RLSUB_1, GROUP_1, BINOP_1, FINSET_1, SGRAPH1,
+      CARD_1, CARD_3, GR_CY_1, FREEALG, SEQ_1, MATRIX_1, MATRIX_2, MATRIX_3,
+      LAPLACE, RLVECT_1, RLVECT_2, RLVECT_3, VECTSP_1, VECTSP_2, VECTSP_9,
+      PRVECT_1, ALGSTR_0, RLSUB_2, MATRLIN, RANKNULL, VECTSP10, SUBSET_1,
+      LATTICES, SQUARE_1, ARYTM_3, REALSET1, MONOID_0, POLYNOM1, ALGSEQ_1,
+      POLYNOM3, POLYNOM2, MCART_1, POLYNOM5, MATRLIN2, VECTSP11;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
+      ALGSTR_0, XXREAL_0, NAT_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSEQ_1, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_2,
+      MATRIX_1, MATRIX_2, BINARITH, GROUP_4, MATRIX_3, DOMAIN_1, PSCOMP_1,
+      VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13,
+      MATRLIN, LAPLACE, MOD_2, RANKNULL, POLYNOM1, POLYNOM3, MONOID_0,
+      ALGSEQ_1, POLYNOM4, POLYNOM5, MATRLIN2;
+ constructors FINSOP_1, XXREAL_0, GROUP_4, VECTSP_7, VECTSP_9, MATRIX13,
+      REALSET1, LAPLACE, VECTSP_5, RANKNULL, MONOID_0, POLYNOM1, POLYNOM4,
+      POLYNOM5, SEQ_1, MATRLIN2, BINOP_2;
+ registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
+      ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, SEQM_3, MATRLIN,
+      MATRIX13, XREAL_0, VECTSP_9, VECTSP_7, FRAENKEL, RANKNULL, POLYNOM3,
+      POLYNOM5, MONOID_0, MATRIX_1, CARD_1;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+ reserve i,j,m,n,k for Nat,
+         x,y for set,
+         K for Field,
+         a,a1,a2 for Element of K;
+
+theorem :: VECTSP11:1
+  for A,B be Matrix of K
+    for nt be Element of n-tuples_on NAT,
+        mt be Element of m-tuples_on NAT
+      st [:rng nt,rng mt:] c= Indices A
+    holds
+      Segm(A+B,nt,mt) = Segm(A,nt,mt) + Segm(B,nt,mt);
+
+theorem :: VECTSP11:2
+ for P be without_zero finite Subset of NAT st P c= Seg n
+   holds Segm(1.(K,n),P,P) = 1.(K,card P);
+
+theorem :: VECTSP11:3
+  for A,B be Matrix of K
+    for P, Q be without_zero finite Subset of NAT
+      st [:P,Q:] c= Indices A
+  holds Segm(A+B,P,Q) = Segm(A,P,Q) + Segm(B,P,Q);
+
+theorem :: VECTSP11:4
+  for A,B be Matrix of n,K st i in Seg n & j in Seg n
+   holds Delete(A+B,i,j)=Delete(A,i,j) + Delete(B,i,j);
+
+theorem :: VECTSP11:5
+  for A be Matrix of n,K st i in Seg n & j in Seg n
+   holds Delete(a*A,i,j)=a*Delete(A,i,j);
+
+theorem :: VECTSP11:6
+  i in Seg n implies Delete(1.(K,n),i,i)=1.(K,n-'1);
+
+theorem :: VECTSP11:7
+  for A,B be Matrix of n,K
+    ex P be Polynomial of K st
+      len P <= n+1 & for x be Element of K holds eval(P,x) = Det(A+x*B);
+
+:: The Characteristic Polynomials of Square Matrixs
+
+theorem :: VECTSP11:8
+  for A be Matrix of n,K
+    ex P be Polynomial of K st
+      len P = n+1 &
+      for x be Element of K holds eval(P,x) = Det(A+x*1.(K,n));
+
+registration let K;
+  cluster non trivial finite-dimensional VectSp of K;
+end;
+
+begin :: Maps with Eigenvalues
+
+definition
+  let R be non empty doubleLoopStr;
+  let V be non empty VectSpStr over R;
+  let IT be Function of V,V;
+  attr IT is with_eigenvalues means
+:: VECTSP11:def 1
+    ex v be Vector of V, a be Scalar of R st
+       v <> 0.V & IT.v = a*v;
+end;
+
+reserve V for non trivial VectSp of K,
+        V1,V2 for VectSp of K,
+        f for linear-transformation of V1,V1,
+        v,w for Vector of V,
+        v1,w1 for Vector of V1,
+        L for Scalar of K;
+
+registration let K,V;
+  cluster with_eigenvalues linear-transformation of V,V;
+end;
+
+definition
+  let R be non empty doubleLoopStr;
+  let V be non empty VectSpStr over R;
+  let f be Function of V,V such that
+f is with_eigenvalues;
+  mode eigenvalue of f -> Element of R means
+:: VECTSP11:def 2
+    ex v be Vector of V st v <> 0.V & f.v = it * v;
+end;
+
+definition
+  let R be non empty doubleLoopStr;
+  let V be non empty VectSpStr over R;
+  let f be Function of V,V;
+  let L be Scalar of R such that
+f is with_eigenvalues & L is eigenvalue of f;
+  mode eigenvector of f,L -> Vector of V means
+:: VECTSP11:def 3
+    f.it = L * it;
+end;
+
+theorem :: VECTSP11:9
+  for a st a <> 0.K
+    for f be with_eigenvalues Function of V,V
+      for L be eigenvalue of f
+  holds
+    a*f is with_eigenvalues & a*L is eigenvalue of a*f &
+     ( w is eigenvector of f,L iff w is eigenvector of a*f,a*L );
+
+theorem :: VECTSP11:10
+  for f1,f2 be with_eigenvalues Function of V,V
+    for L1,L2 be Scalar of K st
+        L1 is eigenvalue of f1 & L2 is eigenvalue of f2 &
+        ex v st v is eigenvector of f1,L1 & v is eigenvector of f2,L2 & v<>0.V
+    holds
+      f1+f2 is with_eigenvalues & L1+L2 is eigenvalue of f1+f2 &
+      for w st w is eigenvector of f1,L1 & w is eigenvector of f2,L2
+        holds w is eigenvector of f1+f2,L1+L2;
+
+theorem :: VECTSP11:11
+    id V is with_eigenvalues & 1_K is eigenvalue of id V &
+    for v holds v is eigenvector of id V,1_K;
+
+theorem :: VECTSP11:12
+  for L be eigenvalue of id V holds L = 1_K;
+
+theorem :: VECTSP11:13
+  ker f is non trivial implies
+    f is with_eigenvalues & 0.K is eigenvalue of f;
+
+theorem :: VECTSP11:14
+  f is with_eigenvalues & L is eigenvalue of f
+    iff
+  ker (f+(-L)*id V1) is non trivial;
+
+theorem :: VECTSP11:15
+  for V1 be finite-dimensional VectSp of K,
+      b1,b1' be OrdBasis of V1
+    for f be linear-transformation of V1,V1 holds
+      f is with_eigenvalues & L is eigenvalue of f
+         iff
+      Det AutEqMt(f+(-L)*id V1,b1,b1') =0.K;
+
+theorem :: VECTSP11:16
+  for K be algebraic-closed Field,
+      V1 be non trivial finite-dimensional VectSp of K,
+      f be linear-transformation of V1,V1
+    holds f is with_eigenvalues;
+
+theorem :: VECTSP11:17
+  for f,L st f is with_eigenvalues & L is eigenvalue of f holds
+    v1 is eigenvector of f,L
+       iff
+    v1 in ker (f+(-L)*id V1);
+
+definition
+  let S be 1-sorted;
+  let F be Function of S,S;
+  let n be Nat;
+  func F |^ n -> Function of S,S means
+:: VECTSP11:def 4
+    for F' be Element of GFuncs the carrier of S st F'=F holds
+      it = Product(n|-> F');
+end;
+
+reserve S for 1-sorted,
+        F for Function of S,S;
+
+theorem :: VECTSP11:18
+   F |^ 0 = id S;
+
+theorem :: VECTSP11:19
+   F |^ 1 = F;
+
+theorem :: VECTSP11:20
+  F |^(i+j) = (F |^ i) * (F |^ j);
+
+theorem :: VECTSP11:21
+  for s1,s2 be Element of S,n,m st (F|^m).s1 = s2 & (F|^n).s2 = s2
+    holds (F|^(m+i*n)).s1 = s2;
+
+theorem :: VECTSP11:22
+  for K be add-associative right_zeroed right_complementable
+     Abelian associative well-unital distributive(non empty doubleLoopStr),
+      V1 be Abelian add-associative right_zeroed
+            right_complementable VectSp-like (non empty VectSpStr over K)
+  for W be Subspace of V1,
+      f be Function of V1,V1,
+      fW be Function of W,W st fW=f|W
+    holds (f|^n)|W=fW|^n;
+
+definition
+  let K,V1;
+  let f be linear-transformation of V1,V1;
+  let n be Nat;
+  redefine func f |^ n -> linear-transformation of V1,V1;
+end;
+
+theorem :: VECTSP11:23
+  (f|^i).v1 = 0.V1 implies (f|^(i+j)).v1=0.V1;
+
+begin :: Generalized Eigenspace of a Linear Transformation
+
+definition
+  let K,V1,f;
+  func UnionKers f -> strict Subspace of V1 means
+:: VECTSP11:def 5
+     the carrier of it = {v where v is Vector of V1:ex n st (f|^n).v = 0.V1};
+end;
+
+theorem :: VECTSP11:24
+   v1 in UnionKers f iff ex n st (f|^n).v1 = 0.V1;
+
+theorem :: VECTSP11:25
+  ker (f|^i) is Subspace of UnionKers f;
+
+theorem :: VECTSP11:26
+  ker (f|^i) is Subspace of ker (f|^(i+j));
+
+theorem :: VECTSP11:27
+  for V be finite-dimensional VectSp of K,f be linear-transformation of V,V
+    ex n st UnionKers f = ker (f|^n);
+
+theorem :: VECTSP11:28
+  f|ker (f|^n) is linear-transformation of ker (f|^n),ker (f|^n);
+
+theorem :: VECTSP11:29
+  f|ker ((f+L*id V1)|^n) is linear-transformation of ker ((f+L*id V1)|^n),
+                                                     ker ((f+L*id V1)|^n);
+
+theorem :: VECTSP11:30
+  f|(UnionKers f) is linear-transformation of UnionKers f,UnionKers f;
+
+theorem :: VECTSP11:31
+  f|(UnionKers (f+L*id V1)) is linear-transformation of UnionKers (f+L*id V1),
+                                                       UnionKers (f+L*id V1);
+
+theorem :: VECTSP11:32
+  f|im (f|^n) is linear-transformation of im (f|^n),im (f|^n);
+
+theorem :: VECTSP11:33
+  f|im ((f+L*id V1)|^n) is linear-transformation of im ((f+L*id V1)|^n),
+                                                    im ((f+L*id V1)|^n);
+
+theorem :: VECTSP11:34
+  UnionKers f = ker (f|^n) implies ker (f|^n) /\ im (f|^n) = (0).V1;
+
+theorem :: VECTSP11:35
+  for V be finite-dimensional VectSp of K,
+    f be linear-transformation of V,V,n st
+      UnionKers f = ker (f|^n)
+    holds V is_the_direct_sum_of ker (f|^n),im (f|^n);
+
+theorem :: VECTSP11:36
+  for I be Linear_Compl of UnionKers f holds f|I is one-to-one;
+
+theorem :: VECTSP11:37
+  for I be Linear_Compl of UnionKers (f+(-L)*id V1),
+      fI be linear-transformation of I,I st fI = f|I
+    for v be Vector of I st fI.v = L * v holds v = 0.V1;
+
+theorem :: VECTSP11:38
+  n >= 1 implies
+     ex h be linear-transformation of V1,V1 st
+        (f + L*id V1) |^ n = f * h + ((L*id V1) |^ n)  &
+        for i holds (f |^ i) * h = h * (f |^ i);
+
+theorem :: VECTSP11:39
+   for L1,L2 be Scalar of K st
+         f is with_eigenvalues & L1 <> L2 &
+         L1 is eigenvalue of f & L2 is eigenvalue of f
+     for I be Linear_Compl of UnionKers (f+(-L1)*id V1),
+         fI be linear-transformation of I,I st fI = f|I
+        holds
+       fI is with_eigenvalues &
+      not L1 is eigenvalue of fI & L2 is eigenvalue of fI &
+         UnionKers (f+(-L2)*id V1) is Subspace of I;
+
+:: Main Lemmas for Expansion of Matrices of Nilpotent Linear Transformations
+
+theorem :: VECTSP11:40
+     for U be finite Subset of V1 st U is linearly-independent
+      for u be Vector of V1 st u in U
+        for L be Linear_Combination of U\{u} holds
+          Card U=Card (U\{u}\/{u+Sum(L)}) &
+          U\{u}\/{u+Sum(L)} is linearly-independent;
+
+theorem :: VECTSP11:41
+ for A be Subset of V1
+   for L be Linear_Combination of V2,
+       f be linear-transformation of V1,V2 st Carrier L c= f.:A
+       ex M be Linear_Combination of A st f.(Sum M)=Sum L;
+
+theorem :: VECTSP11:42
+  for f be linear-transformation of V1,V2
+    for A be Subset of V1,B be Subset of V2 st f.:A = B holds
+       f.:(the carrier of Lin A) = the carrier of Lin B;
+
+theorem :: VECTSP11:43
+  for L be Linear_Combination of V1,
+      F be FinSequence of V1,
+      f be linear-transformation of V1,V2 st
+         f|(Carrier L /\ rng F) is one-to-one & rng F c= Carrier L
+    ex Lf be Linear_Combination of V2 st
+        Carrier Lf = f.:(Carrier L /\ rng F) &
+        f*(L(#)F) = Lf(#)(f*F) &
+        for v1 st v1 in Carrier L /\ rng F holds L.v1=Lf.(f.v1);
+
+theorem :: VECTSP11:44
+  for A,B be Subset of V1
+    for L be Linear_Combination of V1 st
+        Carrier L c= A\/B & Sum L = 0.V1
+      for f be linear Function of V1,V2 st
+         f|B is one-to-one &
+         f.:B is linearly-independent Subset of V2 &
+         f.:A c= {0.V2}
+      holds Carrier L c= A;

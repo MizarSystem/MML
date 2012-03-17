@@ -10,17 +10,19 @@ environ
       REALSET1, SEQ_1, SEQ_2, FUNCT_3, RLVECT_1, BOOLE, RFUNCT_1, FCONT_1,
       ABSVALUE, ORDINAL2, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, PARTFUN2,
       PRE_TOPC, INTEGRA5, FINSEQ_1, FINSEQ_2, FINSEQ_4, ARYTM, SIN_COS,
-      INTEGRA7, MEASURE5, PREPOWER;
+      INTEGRA7, MEASURE5, PREPOWER, LATTICES, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      XXREAL_0, COMPLEX1, REAL_1, NAT_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
+      XXREAL_0, COMPLEX1, REAL_1, NAT_1,
+      RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
       PARTFUN2, PSCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, SEQ_4,
       SQUARE_1, PREPOWER, FCONT_1, FDIFF_1, FINSEQ_2, RVSUM_1, INTEGRA1,
-      INTEGRA2, SEQFUNC, INTEGRA5, SIN_COS, TAYLOR_1;
+      INTEGRA2, SEQFUNC, SIN_COS, TAYLOR_1, INTEGRA5;
  constructors REAL_1, FDIFF_1, PARTFUN1, PARTFUN2, RFUNCT_1, INTEGRA2,
       LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2, INTEGRA5, SIN_COS, PREPOWER,
-      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2;
+      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2, RFUNCT_2;
  registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, RCOMP_1, INT_1, ORDINAL1,
-      MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2,
+      XXREAL_2, SEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions XCMPLX_0, SUBSET_1, INTEGRA1, INTEGRA5, VALUED_1, FDIFF_1;
  theorems TARSKI, PARTFUN1, RVSUM_1, ZFMISC_1, PREPOWER, INTEGRA1, INTEGRA2,
@@ -28,7 +30,7 @@ environ
       FINSEQ_1, FINSEQ_2, SQUARE_1, RCOMP_1, FCONT_1, FCONT_3, FDIFF_2,
       RELAT_1, XREAL_0, XXREAL_0, PARTFUN2, FUNCT_2, XBOOLE_0, XBOOLE_1, SEQ_4,
       XREAL_1, COMPLEX1, INTEGRA4, INTEGRA5, SIN_COS, INTEGRA6, TAYLOR_1,
-      VALUED_1, XXREAL_1;
+      VALUED_1, XXREAL_1, XXREAL_2;
  schemes FUNCT_2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -142,22 +144,7 @@ A8: f.x - a <= b by A7,XREAL_1:14;
 end;
 
 theorem Th3:
-  f|X is_bounded_on X implies f is_bounded_on X
-proof
-  assume f|X is_bounded_on X;
-  then consider r be real number such that
-A1: for z be set st z in X /\ dom(f|X) holds abs((f|X).z) <= r by RFUNCT_1:90;
-  now
-    let z be set;
-    assume
-A2: z in X /\ dom f;
-A3: dom(f|X) = dom f /\ X by FUNCT_1:68;
-    then X /\ dom(f|X) = (X /\ X) /\ dom f by XBOOLE_1:16;
-    then abs((f|X).z) <= r by A1,A2;
-    hence abs(f.z) <= r by A2,A3,FUNCT_1:68;
-  end;
-  hence f is_bounded_on X by RFUNCT_1:90;
-end;
+  f|X|X is bounded implies f|X is bounded by RELAT_1:101;
 
 theorem Th4:
   for x be Real st
@@ -267,13 +254,13 @@ end;
 
 theorem Th10:
   a <= b & [' a,b '] c= X & F is_differentiable_on X &
-  F`|X is_integrable_on [' a,b '] & F`|X is_bounded_on [' a,b '] implies
+  F`|X is_integrable_on [' a,b '] & (F`|X)|[' a,b '] is bounded implies
   F.b = integral(F`|X,a,b) + F.a
 proof
   assume that
 A1: a <= b and
 A2: [' a,b '] c= X & F is_differentiable_on X &
-  F`|X is_integrable_on [' a,b '] & F`|X is_bounded_on [' a,b '];
+  F`|X is_integrable_on [' a,b '] & (F`|X)|[' a,b '] is bounded;
 A3: [' a,b '] = [.a,b.] by A1,INTEGRA5:def 4;
   then [.a,b.] = [.inf [.a,b.], sup [.a,b.].] by INTEGRA1:5;
   then
@@ -643,7 +630,7 @@ A13: x in ]. a,b .[;
     f is_continuous_on O by A3,A6,FCONT_1:17;
     then
 A14: f|O is_continuous_in z by A13,FCONT_1:def 2;
-A15: f is_bounded_on [' a,b '] & f is_integrable_on [' a,b ']
+A15: f|[' a,b '] is bounded & f is_integrable_on [' a,b ']
     by A3,INTEGRA5:10,11;
     for r be real number st 0 < r ex s be real number st
     0 < s & for x1 be real number st x1 in dom f & abs(x1-z) < s
@@ -678,7 +665,7 @@ A21:    O = dom(f|O) by PARTFUN2:32;
       end;
       hence thesis by A16,A17,XXREAL_0:15;
     end;
-    then f is_continuous_in z by A7,A13,FCONT_1:3;
+    then f is_continuous_in z by FCONT_1:3;
     hence thesis by A1,A2,A10,A11,A13,A15,INTEGRA6:28;
   end;
   then for x be Real st x in O holds G is_differentiable_in x;
@@ -703,7 +690,7 @@ A26: x in O /\ dom H;
     hence H/.x = F.a by A25,A26,PARTFUN1:def 8;
   end;
   then
-A27: H is_constant_on O by PARTFUN2:def 3;
+A27: H|O is constant by PARTFUN2:54;
   then
 A28: H is_differentiable_on O &
   for x be Real st x in O holds (H`|O).x = 0 by A25,FDIFF_1:30;
@@ -770,7 +757,7 @@ A2: x in ].a,b.[ & x0 in ].a,b.[ and
 A3: F is_integral_of f,].a,b.[;
 A4: F is_differentiable_on O & F`|O = f|O by A3,Lm1;
 A5: O c= [.a,b.] by XXREAL_1:25;
-A6: [.x0,x.] c=].a,b.[ & [.x,x0.] c=].a,b.[ by A2,RCOMP_1:17;
+A6: [.x0,x.] c=].a,b.[ & [.x,x0.] c=].a,b.[ by A2,XXREAL_2:def 12;
 A7: now
     assume
 A8: x0 <= x;
@@ -785,8 +772,9 @@ A12: f is_continuous_on [' x0,x '] by A1,A5,A9,FCONT_1:17,XBOOLE_1:1;
     then f||[' x0,x '] is_integrable_on [' x0,x '] by INTEGRA5:def 2;
     then
 A13: F`|].a,b.[ is_integrable_on [' x0,x '] by A10,INTEGRA5:def 2;
-    f||[' x0,x '] is_bounded_on [' x0,x '] by A12,INTEGRA5:9,10;
-    then F.x = integral(f|].a,b.[,x0,x) +F.x0 by A4,A8,A9,A10,A13,Th3,Th10;
+    f|[' x0,x ']|[' x0,x '] is bounded by A12,INTEGRA5:9,10;
+    then f|[' x0,x '] is bounded by Th3;
+    then F.x = integral(f|].a,b.[,x0,x) +F.x0 by A4,A8,A9,A10,A13,Th10;
     then F.x = integral(f|].a,b.[,[' x0,x ']) + F.x0 by A8,INTEGRA5:def 5;
     then F.x = integral(f,[' x0,x ']) + F.x0 by A9,FUNCT_1:82;
     hence F.x = integral(f,x0,x) +F.x0 by A8,INTEGRA5:def 5;
@@ -808,7 +796,7 @@ A19: f is_continuous_on [' x,x0 '] by A1,A5,A15,FCONT_1:17,XBOOLE_1:1;
     then f||[' x,x0 '] is_integrable_on [' x,x0 '] by INTEGRA5:def 2;
     then
 A20: F`|].a,b.[ is_integrable_on [' x,x0 '] by A17,INTEGRA5:def 2;
-    (F`|].a,b.[)|[' x,x0 '] is_bounded_on [' x,x0 '] by A17,A19,INTEGRA5:9,10;
+    (F`|].a,b.[)|[' x,x0 ']|[' x,x0 '] is bounded  by A17,A19,INTEGRA5:9,10;
     then F.x0 = integral(f|]. a,b .[,x,x0) +F.x by A4,A14,A15,A20,Th3,Th10;
     then F.x0 = integral(f|]. a,b .[,[' x,x0 ']) +F.x by A14,INTEGRA5:def 5;
     then F.x0 = integral(f,[' x,x0 ']) +F.x by A15,FUNCT_1:82;
@@ -820,7 +808,7 @@ end;
 
 theorem Th18:
   a <= b & [' a,b '] c= X & F is_integral_of f,X &
-  f is_integrable_on [' a,b '] & f is_bounded_on [' a,b ']
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
   implies F.b = integral(f,a,b) + F.a
 proof
   assume that
@@ -837,8 +825,8 @@ A5: (F`|X)||[' a,b '] = f||[' a,b '] by A2,FUNCT_1:82;
   then f||[' a,b '] is_integrable_on [' a,b '] by INTEGRA5:def 2;
   then
 A6: F`|X is_integrable_on [' a,b '] by A5,INTEGRA5:def 2;
-  assume f is_bounded_on [' a,b '];
-  then (F`|X)|[' a,b '] is_bounded_on [' a,b '] by A5,INTEGRA5:9;
+  assume f|[' a,b '] is bounded;
+  then (F`|X)|[' a,b ']|[' a,b '] is bounded  by A5,INTEGRA5:9;
   then F.b = integral(f|X,a,b) +F.a by A1,A2,A4,A6,Th3,Th10;
   then F.b = integral(f|X,[' a,b ']) +F.a by A1,INTEGRA5:def 5;
   then F.b =integral(f,[' a,b ']) +F.a by A2,FUNCT_1:82;
@@ -848,7 +836,7 @@ end;
 theorem Th19:
   a <= b & [. a,b .] c= X & f is_continuous_on X implies
   f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
-  f is_bounded_on [' a,b ']
+  f|[' a,b '] is bounded
 proof
   assume a <= b;
   then
@@ -869,7 +857,7 @@ A3: [. a,b .] =[' a,b '] by A1,INTEGRA5:def 4;
   assume f is_continuous_on X;
   then
 A4: f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
-  f is_bounded_on [' a,b '] by A1,A2,Th19;
+  f|[' a,b '] is bounded by A1,A2,Th19;
   assume F is_integral_of f,X;
   hence F.b = integral(f,a,b) + F.a by A1,A2,A3,A4,Th18;
 end;
@@ -877,7 +865,7 @@ end;
 theorem Th21:
   b <= a & [' b,a '] c= X &
   f is_integrable_on [' b,a '] & g is_integrable_on [' b,a '] &
-  f is_bounded_on [' b,a '] & g is_bounded_on [' b,a '] &
+  f|[' b,a '] is bounded & g|[' b,a '] is bounded &
   X c= dom f & X c= dom g & F is_integral_of f,X & G is_integral_of g,X
   implies
   (F.a)*(G.a) - (F.b)*(G.b) = integral(f(#)G,b,a) + integral(F(#)g,b,a)
@@ -886,7 +874,7 @@ proof
 A1: b <= a and
 A2: [' b,a '] c= X and
 A3: f is_integrable_on [' b,a '] & g is_integrable_on [' b,a '] and
-A4: f is_bounded_on [' b,a '] & g is_bounded_on [' b,a '];
+A4: f|[' b,a '] is bounded & g|[' b,a '] is bounded;
   assume that
 A5: X c= dom f & X c= dom g and
 A6: F is_integral_of f,X & G is_integral_of g,X;
@@ -905,15 +893,15 @@ A11: F(#)G is_differentiable_on X by A9,FDIFF_2:20;
   F is_continuous_on I & G is_continuous_on I by A2,A9,FCONT_1:17,FDIFF_1:33;
   then
 A12: F is_integrable_on I & G is_integrable_on I &
-  F is_bounded_on I & G is_bounded_on I by INTEGRA5:10,17;
+  F|I is bounded & G|I is bounded by INTEGRA5:10,17;
   I c= dom f & I c= dom g & I c= dom F & I c= dom G by A2,A5,A7,XBOOLE_1:1;
   then
 A13: f(#)G is_integrable_on I & F(#)g is_integrable_on I &
-  f(#)G is_bounded_on I /\ I & F(#)g is_bounded_on I /\ I
+  (f(#)G)|(I /\ I) is bounded & (F(#)g)|(I /\ I) is bounded
   by A3,A4,A12,INTEGRA6:14,RFUNCT_1:101;
   then
 A14: f(#)G + F(#)g is_integrable_on I &
-  f(#)G + F(#)g is_bounded_on I /\ I by A8,INTEGRA6:11,RFUNCT_1:100;
+  (f(#)G + F(#)g)|(I /\ I) is bounded  by A8,INTEGRA6:11,RFUNCT_1:100;
 A15: min(b,a) <= b & b <= max(b,a) by XXREAL_0:17,25;
 A16: [. b,a .] = I by A1,INTEGRA5:def 4;
   min(b,a) = b by A1,XXREAL_0:def 8;
@@ -948,8 +936,8 @@ A5: F is_integral_of f,X & G is_integral_of g,X;
 A6: [. b,a .] =[' b,a '] by A1,INTEGRA5:def 4;
   then f is_continuous_on [' b,a '] & g is_continuous_on [' b,a ']
   by A2,A4,FCONT_1:17;
-  then f is_integrable_on [' b,a '] & f is_bounded_on [' b,a '] &
-  g is_integrable_on [' b,a '] & g is_bounded_on [' b,a '] by INTEGRA5:10,17;
+  then f is_integrable_on [' b,a '] & f|[' b,a '] is bounded &
+  g is_integrable_on [' b,a '] & g|[' b,a '] is bounded by INTEGRA5:10,17;
   hence thesis by A1,A2,A3,A5,A6,Th21;
 end;
 
@@ -1225,9 +1213,9 @@ begin :: Uniform Convergent Functional Sequence
 theorem
   for H be Functional_Sequence of REAL,REAL, rseq be Real_Sequence st a < b &
   (for n be Element of NAT holds
-  H.n is_integrable_on [' a,b '] & H.n is_bounded_on [' a,b '] &
+  H.n is_integrable_on [' a,b '] & (H.n)|[' a,b '] is bounded &
   rseq.n = integral(H.n,a,b) ) & H is_unif_conv_on [' a,b '] holds
-  lim(H,[' a,b ']) is_bounded_on [' a,b '] &
+  lim(H,[' a,b '])|[' a,b '] is bounded  &
   lim(H,[' a,b ']) is_integrable_on [' a,b '] & rseq is convergent &
   lim rseq = integral(lim(H,[' a,b ']),a,b)
 proof
@@ -1236,7 +1224,7 @@ proof
   assume that
 A1: a < b and
 A2: (for n be Element of NAT holds
-  H.n is_integrable_on AB & H.n is_bounded_on AB &
+  H.n is_integrable_on AB & (H.n)|AB is bounded &
   rseq.n =integral(H.n,a,b) ) and
 A3: H is_unif_conv_on AB;
 A4: AB common_on_dom H by A3,SEQFUNC:44;
@@ -1246,7 +1234,7 @@ A5: dom lim(H,AB) = AB by SEQFUNC:22;
   consider K be Element of NAT such that
 A6: for n be Element of NAT,x be Element of REAL st n >= K & x in AB
   holds abs((H.n).x-(lim(H,AB)).x) < 1 by A3,SEQFUNC:44;
-  H.K is_bounded_on AB by A2;
+  (H.K)|AB is bounded by A2;
   then consider r be real number such that
 A7: for c be set st c in AB /\ dom(H.K) holds
   abs((H.K).c) <= r by RFUNCT_1:90;
@@ -1269,11 +1257,11 @@ A11: abs((H.K).c) + abs((H.K).c-(lim(H,AB)).c) <= r+1 by A10,XREAL_1:9;
     hence abs((lim(H,AB)).c) <= r+1 by A11,XXREAL_0:2;
   end;
   hence
-A12: lim(H,AB) is_bounded_on AB by RFUNCT_1:90;
+A12: lim(H,AB)|AB is bounded by RFUNCT_1:90;
   consider T being DivSequence of AB such that
 A13: delta T is convergent & lim delta T = 0 by INTEGRA4:11;
 A14: for n be Element of NAT holds (H.n)||AB is Function of AB,REAL &
-  (H.n)||AB is_bounded_on AB & lower_sum((H.n)||AB,T) is convergent &
+  (H.n)||AB|AB is bounded & lower_sum((H.n)||AB,T) is convergent &
   lim lower_sum((H.n)||AB,T) = lower_integral((H.n)||AB) &
   upper_sum((H.n)||AB,T) is convergent &
   lim upper_sum((H.n)||AB,T) = upper_integral((H.n)||AB) &
@@ -1284,8 +1272,8 @@ A14: for n be Element of NAT holds (H.n)||AB is Function of AB,REAL &
     AB c= dom (H.n) by A4,SEQFUNC:def 10;
     hence
 A15: (H.n)||AB is Function of AB,REAL by FUNCT_2:131,INTEGRA5:6;
-    H.n is_bounded_on AB by A2;
-    hence (H.n)||AB is_bounded_on AB by INTEGRA5:9;
+    (H.n)|AB is bounded by A2;
+    hence (H.n)||AB|AB is bounded by INTEGRA5:9;
     hence lower_sum((H.n)||AB,T) is convergent &
     lim lower_sum((H.n)||AB,T) = lower_integral((H.n)||AB) &
     upper_sum((H.n)||AB,T) is convergent &
@@ -1300,12 +1288,12 @@ A15: (H.n)||AB is Function of AB,REAL by FUNCT_2:131,INTEGRA5:6;
     hence rseq.n = integral((H.n)||AB);
   end;
   set H0 = lim(H,AB)||AB;
-  lim(H,AB) is_bounded_above_on AB &
-  lim(H,AB) is_bounded_below_on AB by A12,RFUNCT_1:def 11;
+  lim(H,AB)|AB is bounded_above &
+  lim(H,AB)|AB is bounded_below by A12;
   then
-A16: H0 is_bounded_above_on AB & H0 is_bounded_below_on AB by INTEGRA5:7,8;
+A16: H0|AB is bounded_above & H0|AB is bounded_below by INTEGRA5:7,8;
   then
-A17: H0 is_bounded_on AB by RFUNCT_1:def 11;
+A17: H0|AB is bounded;
 A18: H0 is Function of AB,REAL by A5,FUNCT_2:131,INTEGRA5:6;
   then
 A19: H0 is_upper_integrable_on AB & H0 is_lower_integrable_on AB
@@ -1335,7 +1323,7 @@ A22:  N<= n;
       then reconsider R2=upper_volume(H0,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
       consider H1 be Function of AB,REAL such that
-A23:  rng H1 = {e} & H1 is_bounded_on AB by INTEGRA4:5;
+A23:  rng H1 = {e} & H1|AB is bounded by INTEGRA4:5;
       len upper_volume(H1,T.k) = l0 by INTEGRA1:def 7;
       then reconsider R3=upper_volume(H1,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
@@ -1380,19 +1368,22 @@ A30:    sup rng(Hn|divset(T.k,i)) - sup rng(H0|divset(T.k,i))
         <= sup rng(H1|divset(T.k,i))
         proof
 A32:      divset(T.k,i) c= AB by INTEGRA1:10,A27;
-          Hn is_bounded_on AB by A14;
-          then Hn is_bounded_above_on AB by RFUNCT_1:def 11;
+          Hn|AB is bounded by A14;
+          then Hn|AB is bounded_above;
           then
-A33:      Hn|divset(T.k,i) is_bounded_above_on divset(T.k,i) by A27,INTEGRA1:10
+A33:      Hn|divset(T.k,i)|divset(T.k,i) is bounded_above  by A27,INTEGRA1:10
           ,INTEGRA2:5;
           Hn is Function of AB, REAL by A14;
 
 then reconsider f = Hn|divset(T.k,i) as Function of divset(T.k,i),REAL
           by A32,FUNCT_2:38;
+B33:      f|divset(T.k,i) is bounded_above by A33;
           reconsider g = H0|divset(T.k,i) as Function of divset(T.k,i),REAL
           by A18,A32,FUNCT_2:38;
-A34:      rng f is bounded_above & rng g is bounded_above by A16,A32,A33,
-          INTEGRA1:15,INTEGRA2:5;
+          g|divset(T.k,i) is bounded_above by A16,A32,INTEGRA2:5;
+          then
+A34:      rng f is bounded_above & rng g is bounded_above by
+          INTEGRA1:15,B33;
 A35:      rng (H1|divset(T.k,i)) c= {e} by A23,RELAT_1:99;
           consider x0 be set such that
 A36:      x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1445,7 +1436,7 @@ A41:    0 <= vol divset(T.k,i) by INTEGRA1:11;
 A42:  upper_sum(Hn,T).k-upper_sum(H0,T).k <= Sum R3 by A24,RVSUM_1:112;
 A43:  sup rng H1 = e by A23,SEQ_4:22;
 A44:  vol AB = b-a by A1,INTEGRA6:5;
-      H1 is_bounded_above_on AB by A23,RFUNCT_1:def 11;
+      H1|AB is bounded_above by A23;
       then
 A45:  upper_sum(H1,T.k) <= e*(b-a) by A43,A44,INTEGRA1:29;
       then
@@ -1485,7 +1476,7 @@ X:    Seg l0 = dom Tk by FINSEQ_1:def 3;
       then reconsider R2=lower_volume(H0,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
       consider H1 be Function of AB,REAL such that
-A50:  rng H1 = {e} & H1 is_bounded_on AB by INTEGRA4:5;
+A50:  rng H1 = {e} & H1|AB is bounded by INTEGRA4:5;
       len lower_volume(H1,T.k) = l0 by INTEGRA1:def 8;
       then reconsider R3=lower_volume(H1,T.k) as Element of l0-tuples_on REAL
       by FINSEQ_2:110;
@@ -1524,18 +1515,20 @@ A55:    (R1-R2).i = (inf rng(Hn|divset(T.k,i)) - inf rng(H0|divset (T.k,i)) )
 A56:    (R2-R1).i = (inf rng(H0|divset(T.k,i)) - inf rng(Hn|divset (T.k,i)))
         * vol divset(T.k,i);
 A58:    divset(T.k,i) c= AB by INTEGRA1:10,A54;
-A59:    H0|divset(T.k,i) is_bounded_below_on divset(T.k,i) by A16,A54,
+A59:    H0|divset(T.k,i)|divset(T.k,i) is bounded_below  by A16,A54,
         INTEGRA1:10,INTEGRA2:6;
         reconsider g = H0|divset(T.k,i) as Function of divset(T.k,i),REAL
         by A18,A58,FUNCT_2:38;
+X:      g|divset(T.k,i) is bounded_below by A59;
         Hn is Function of AB,REAL by A14;
         then reconsider f = Hn|divset(T.k,i) as Function of divset(T.k,i),REAL
         by A58,FUNCT_2:38;
-        Hn is_bounded_on AB by A14;
-        then Hn is_bounded_below_on AB by RFUNCT_1:def 11;
+        Hn|AB is bounded by A14;
+        then Hn|AB is bounded_below;
+        then f|divset(T.k,i) is bounded_below by A58,INTEGRA2:6;
         then
-A60:    rng f is bounded_below & rng g is bounded_below by A58,A59,INTEGRA1:13
-        ,INTEGRA2:6;
+A60:    rng f is bounded_below & rng g is bounded_below by INTEGRA1:13
+        ,X;
 A61:    rng(H1|divset(T.k,i)) c= {e} by A50,RELAT_1:99;
         consider x0 be set such that
 A62:    x0 in divset(T.k,i) by XBOOLE_0:def 1;
@@ -1583,7 +1576,7 @@ A68:  lower_sum(Hn,T).k-lower_sum(H0,T).k <=lower_sum(H1,T.k)
       by A51,RVSUM_1:112;
 A69:  sup rng H1 = e by A50,SEQ_4:22;
 A70:  vol AB = b-a by A1,INTEGRA6:5;
-      H1 is_bounded_above_on AB by A50,RFUNCT_1:def 11;
+      H1|AB is bounded_above by A50;
       then
 A71:  upper_sum(H1,T.k) <= e*(b-a) by A69,A70,INTEGRA1:29;
       lower_sum(H1,T.k) <= upper_sum(H1,T.k) by A50,INTEGRA1:30;

@@ -27,20 +27,20 @@
 </Signature>
 <FCluster aid="GR_CY_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="179">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="78">
+<Adjective nr="56"/>
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

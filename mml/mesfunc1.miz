@@ -7,19 +7,19 @@
 environ
 
  vocabularies INT_1, RAT_1, ARYTM_1, TARSKI, FUNCT_1, FUNCT_2, RELAT_1, BOOLE,
-      ARYTM_3, CARD_4, CARD_1, FINSET_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6,
+      ARYTM_3, CARD_4, CARD_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6,
       RLVECT_1, GROUP_1, COMPLEX1, SETFAM_1, MESFUNC1, ARYTM, PROB_1, VALUED_0,
       ORDINAL2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XCMPLX_0, XREAL_0, MEASURE6, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      NAT_1, INT_1, RAT_1, FINSET_1, CARD_4, XXREAL_0, VALUED_0, PROB_1,
-      SUPINF_1, SUPINF_2, MEASURE1, MEASURE2, MEASURE3, EXTREAL1;
+      XCMPLX_0, XREAL_0, MEASURE6, REAL_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, NAT_1, INT_1, RAT_1, CARD_4, XXREAL_0, VALUED_0, PROB_1,
+      SUPINF_1, SUPINF_2, MEASURE1, MEASURE2, MEASURE3, EXTREAL1, RELSET_2;
  constructors WELLORD2, REAL_1, NAT_1, RAT_1, MEASURE3, MEASURE6, EXTREAL1,
-      SUPINF_1;
+      SUPINF_1, RELSET_2, PARTFUN1, EQREL_1, RELAT_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_1, MEMBERED, MEASURE1, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions TARSKI, MEASURE6;
+ definitions TARSKI, MEASURE6, RELAT_1;
  theorems MEASURE1, TARSKI, SUBSET_1, PARTFUN1, FUNCT_1, FUNCT_2, MEASURE5,
       MEASURE6, SETFAM_1, NAT_1, REAL_2, INT_1, CARD_1, CARD_4, WELLORD2,
       RAT_1, RELSET_1, XREAL_0, EXTREAL1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
@@ -1020,11 +1020,6 @@ A3: -infty < b & b < a & b in REAL by MEASURE5:17;
   hence contradiction by A1;
 end;
 
-notation
-  let A, S be set;
-  synonym A is_measurable_on S for A in S;
-end;
-
 reserve X for set;
 reserve x for Element of X;
 reserve f,g for PartFunc of X,ExtREAL;
@@ -1034,6 +1029,11 @@ reserve A for set;
 reserve a for R_eal;
 reserve r,s for Real;
 reserve n,m for Element of NAT;
+
+notation
+  let f be ext-real-valued Function, a be ext-real number;
+  synonym eq_dom(f,a) for Coim(f,a);
+end;
 
 definition
   canceled;
@@ -1103,21 +1103,48 @@ A4: for x being set holds x in A iff x in dom f & P[x] from XBOOLE_0:sch 1;
     (for x be set holds x in D2 iff P[x]) holds D1 = D2 from XBOOLE_0:sch 3;
   end;
   defpred P[set] means $1 in dom f & a = f.$1;
-  func eq_dom(f,a) -> set means
+  redefine func eq_dom(f,a) means
   :Def16:
   for x being set holds x in it iff x in dom f & f.x = a;
-  existence
-  proof
-    consider A being set such that
-A5: for x being set holds x in A iff x in dom f & P[x] from XBOOLE_0:sch 1;
-    take A;
-    thus thesis by A5;
-  end;
-  uniqueness
-  proof
-    thus for D1,D2 be set st (for x be set holds x in D1 iff P[x]) &
-    (for x be set holds x in D2 iff P[x]) holds D1 = D2 from XBOOLE_0:sch 3;
-  end;
+  compatibility
+   proof let X be set;
+    thus X = eq_dom(f,a) implies
+     for x being set holds x in X iff x in dom f & f.x = a
+    proof assume
+Z:    X = eq_dom(f,a);
+     let x being set;
+     thus x in X implies x in dom f & f.x = a
+      proof assume
+Z1:      x in X;
+       hence x in dom f by Z,FUNCT_1:def 13;
+        f.x in {a} by Z,Z1,FUNCT_1:def 13;
+       hence f.x = a by TARSKI:def 1;
+      end;
+     assume
+Z1:      x in dom f;
+     assume f.x = a;
+      then f.x in {a} by TARSKI:def 1;
+     hence x in X by Z,Z1,FUNCT_1:def 13;
+    end;
+    assume
+Z:     for x being set holds x in X iff x in dom f & f.x = a;
+     for x being set holds x in X iff x in dom f & f.x in {a}
+      proof let x be set;
+       thus x in X implies x in dom f & f.x in {a}
+        proof assume
+Z1:       x in X;
+         hence x in dom f by Z;
+          f.x = a by Z1,Z;
+         hence f.x in {a} by TARSKI:def 1;
+        end;
+       assume
+Z1:     x in dom f;
+       assume f.x in {a};
+        then f.x = a by TARSKI:def 1;
+       hence x in X by Z,Z1;
+      end;
+    hence X = eq_dom(f,a) by FUNCT_1:def 13;
+   end;
 end;
 
 definition
@@ -1180,18 +1207,10 @@ A4:   x in dom f by Def15;
   end;
   redefine func eq_dom(f,a) -> Subset of X;
   coherence
-  proof
-    eq_dom(f,a) c= X
-    proof
-      let x be set;
-      assume x in eq_dom(f,a);
-      then
-A5:   x in dom f by Def16;
-      dom f c= X by RELSET_1:12;
-      hence thesis by A5;
-    end;
+   proof
+    Coim(f,a) is Subset of X;
     hence thesis;
-  end;
+   end;
 end;
 
 canceled;
@@ -2159,7 +2178,7 @@ definition
   let A be Element of S;
   pred f is_measurable_on A means
   :Def17:
-  for r being real number holds A /\ less_dom(f,R_EAL r) is_measurable_on S;
+  for r being real number holds A /\ less_dom(f,R_EAL r) in S;
 end;
 
 reserve X for non empty set;
@@ -2171,37 +2190,37 @@ reserve A,B for Element of S;
 theorem
   for X,S,f,A st A c= dom f holds f is_measurable_on A iff
 
-(for r being real number holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S)
+(for r being real number holds A /\ great_eq_dom(f,R_EAL r) in S)
 proof
   let X,S,f,A;
   assume
 A1: A c= dom f;
 A2: f is_measurable_on A implies for r being real number holds A /\
-  great_eq_dom(f,R_EAL r) is_measurable_on S
+  great_eq_dom(f,R_EAL r) in S
   proof
     assume
 A3: f is_measurable_on A;
     for r being real number
-    holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S
+    holds A /\ great_eq_dom(f,R_EAL r) in S
     proof
       let r be real number;
-A4:   A /\ less_dom(f,R_EAL r) is_measurable_on S by A3,Def17;
+A4:   A /\ less_dom(f,R_EAL r) in S by A3,Def17;
       A /\ great_eq_dom(f,R_EAL r) = A\(A /\ less_dom(f,R_EAL r)) by A1,Th18;
       hence thesis by A4,MEASURE1:20;
     end;
     hence thesis;
   end;
   (for r being real number
-  holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S) implies
+  holds A /\ great_eq_dom(f,R_EAL r) in S) implies
   f is_measurable_on A
   proof
     assume
 A5: for r being real number
-    holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S;
-    for r being real number holds A /\ less_dom(f,R_EAL r) is_measurable_on S
+    holds A /\ great_eq_dom(f,R_EAL r) in S;
+    for r being real number holds A /\ less_dom(f,R_EAL r) in S
     proof
       let r be real number;
-A6:   A /\ great_eq_dom(f,R_EAL r) is_measurable_on S by A5;
+A6:   A /\ great_eq_dom(f,R_EAL r) in S by A5;
       A /\ less_dom(f,R_EAL r) = A\(A /\ great_eq_dom(f,R_EAL r)) by A1,Th21;
       hence thesis by A6,MEASURE1:20;
     end;
@@ -2213,16 +2232,16 @@ end;
 theorem Th32:
   for X,S,f,A holds f is_measurable_on A iff
 
-(for r being real number holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S)
+(for r being real number holds A /\ less_eq_dom(f,R_EAL r) in S)
 proof
   let X,S,f,A;
 A1: f is_measurable_on A implies (for r being real number
-  holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S)
+  holds A /\ less_eq_dom(f,R_EAL r) in S)
   proof
     assume
 A2: f is_measurable_on A;
     for r being real number holds A /\
-    less_eq_dom(f,R_EAL r) is_measurable_on S
+    less_eq_dom(f,R_EAL r) in S
     proof
       let r be real number;
       defpred P[Element of NAT,set] means
@@ -2243,13 +2262,13 @@ A4:   for n holds P[n,F.n] from FUNCT_2:sch 3(A3);
     hence thesis;
   end;
   (for r being real number
-  holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S) implies
+  holds A /\ less_eq_dom(f,R_EAL r) in S) implies
   f is_measurable_on A
   proof
     assume
 A5: for r being real number holds A /\
-    less_eq_dom(f,R_EAL r) is_measurable_on S;
-    for r being real number holds A /\ less_dom(f,R_EAL r) is_measurable_on S
+    less_eq_dom(f,R_EAL r) in S;
+    for r being real number holds A /\ less_dom(f,R_EAL r) in S
     proof
       let r be real number;
       defpred P[Element of NAT,set] means
@@ -2274,36 +2293,36 @@ end;
 
 theorem Th33:
   for X,S,f,A st A c= dom f holds f is_measurable_on A iff
-  (for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S)
+  (for r being real number holds A /\ great_dom(f,R_EAL r) in S)
 proof
   let X,S,f,A;
   assume that
 A1: A c= dom f;
 A2: f is_measurable_on A implies
-  (for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S)
+  (for r being real number holds A /\ great_dom(f,R_EAL r) in S)
   proof
     assume
 A3: f is_measurable_on A;
-    for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S
+    for r being real number holds A /\ great_dom(f,R_EAL r) in S
     proof
       let r be real number;
-A4:   A /\ less_eq_dom(f,R_EAL r) is_measurable_on S by A3,Th32;
+A4:   A /\ less_eq_dom(f,R_EAL r) in S by A3,Th32;
       A /\ great_dom(f,R_EAL r) = A\(A /\ less_eq_dom(f,R_EAL r)) by A1,Th19;
       hence thesis by A4,MEASURE1:20;
     end;
     hence thesis;
   end;
-  (for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S)
+  (for r being real number holds A /\ great_dom(f,R_EAL r) in S)
   implies f is_measurable_on A
   proof
     assume
 A5: for r being real number holds A /\
-    great_dom(f,R_EAL r) is_measurable_on S;
+    great_dom(f,R_EAL r) in S;
     for r being real number
-    holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S
+    holds A /\ less_eq_dom(f,R_EAL r) in S
     proof
       let r be real number;
-A6:   A /\ great_dom(f,R_EAL r) is_measurable_on S by A5;
+A6:   A /\ great_dom(f,R_EAL r) in S by A5;
       A /\ less_eq_dom(f,R_EAL r) = A\(A /\ great_dom(f,R_EAL r)) by A1,Th20;
       hence thesis by A6,MEASURE1:20;
     end;
@@ -2319,10 +2338,10 @@ proof
   assume that
 A1: B c= A and
 A2: f is_measurable_on A;
-  for r being real number holds (B /\ less_dom(f,R_EAL r)) is_measurable_on S
+  for r being real number holds (B /\ less_dom(f,R_EAL r)) in S
   proof
     let r be real number;
-A3: A /\ less_dom(f,R_EAL r) is_measurable_on S by A2,Def17;
+A3: A /\ less_dom(f,R_EAL r) in S by A2,Def17;
     B /\ (A /\ less_dom(f,R_EAL r)) = B /\ A /\ less_dom(f,R_EAL r) by
     XBOOLE_1:16
       .= B /\ less_dom(f,R_EAL r) by A1,XBOOLE_1:28;
@@ -2340,11 +2359,11 @@ proof
 A1: f is_measurable_on A and
 A2: f is_measurable_on B;
   for r being real number
-  holds ((A \/ B) /\ less_dom(f,R_EAL r)) is_measurable_on S
+  holds ((A \/ B) /\ less_dom(f,R_EAL r)) in S
   proof
     let r be real number;
-A3: A /\ less_dom(f,R_EAL r) is_measurable_on S by A1,Def17;
-    B /\ less_dom(f,R_EAL r) is_measurable_on S by A2,Def17;
+A3: A /\ less_dom(f,R_EAL r) in S by A1,Def17;
+    B /\ less_dom(f,R_EAL r) in S by A2,Def17;
     then (A /\ less_dom(f,R_EAL r)) \/ (B /\ less_dom(f,R_EAL r)) in S
     by A3,FINSUB_1:def 1;
     hence thesis by XBOOLE_1:23;
@@ -2354,21 +2373,21 @@ end;
 
 theorem
   for X,S,f,A,r,s st f is_measurable_on A & A c= dom f holds
-  (A /\ great_dom(f,R_EAL r) /\ less_dom(f,R_EAL s)) is_measurable_on S
+  (A /\ great_dom(f,R_EAL r) /\ less_dom(f,R_EAL s)) in S
 proof
   let X,S,f,A,r,s;
   assume that
 A1: f is_measurable_on A and
 A2: A c= dom f;
 A3: A /\ less_dom(f,R_EAL s) in S by A1,Def17;
-A4: for r1 being Real holds A /\ great_eq_dom(f,R_EAL r1) is_measurable_on S
+A4: for r1 being Real holds A /\ great_eq_dom(f,R_EAL r1) in S
   proof
     let r1 be Real;
-A5: A /\ less_dom(f,R_EAL r1) is_measurable_on S by A1,Def17;
+A5: A /\ less_dom(f,R_EAL r1) in S by A1,Def17;
     A /\ great_eq_dom(f,R_EAL r1) = A\(A /\ less_dom(f,R_EAL r1)) by A2,Th18;
     hence thesis by A5,MEASURE1:20;
   end;
-  for r1 being Real holds A /\ great_dom(f,R_EAL r1) is_measurable_on S
+  for r1 being Real holds A /\ great_dom(f,R_EAL r1) in S
   proof
     let r1 being Real;
     defpred P[Element of NAT,set] means
@@ -2387,7 +2406,7 @@ A7: for n holds P[n,F.n] from FUNCT_2:sch 3(A6);
     hence thesis;
   end;
   then
-A8: A /\ great_dom(f,R_EAL r) is_measurable_on S;
+A8: A /\ great_dom(f,R_EAL r) in S;
   (A /\ great_dom(f,R_EAL r))/\(A /\ less_dom(f,R_EAL s))
   = (A /\ great_dom(f,R_EAL r) /\ A) /\ less_dom(f,R_EAL s) by XBOOLE_1:16
     .= (great_dom(f,R_EAL r) /\ (A /\ A)) /\
@@ -2397,7 +2416,7 @@ end;
 
 theorem
   for X,S,f,A st f is_measurable_on A & A c= dom f holds
-  A /\ eq_dom(f,+infty) is_measurable_on S
+  A /\ eq_dom(f,+infty) in S
 proof
   let X,S,f,A;
   assume that
@@ -2419,7 +2438,7 @@ end;
 
 theorem
   for X,S,f,A st f is_measurable_on A holds
-  A /\ eq_dom(f,-infty) is_measurable_on S
+  A /\ eq_dom(f,-infty) in S
 proof
   let X,S,f,A;
   assume
@@ -2440,7 +2459,7 @@ end;
 
 theorem
   for X,S,f,A st f is_measurable_on A & A c= dom f holds
-  A /\ great_dom(f,-infty) /\ less_dom(f,+infty) is_measurable_on S
+  A /\ great_dom(f,-infty) /\ less_dom(f,+infty) in S
 proof
   let X,S,f,A;
   assume that
@@ -2484,7 +2503,7 @@ end;
 
 theorem
   for X,S,f,g,A,r st f is_measurable_on A & g is_measurable_on A & A c= dom g
-  holds A /\ less_dom(f,R_EAL r) /\ great_dom(g,R_EAL r) is_measurable_on S
+  holds A /\ less_dom(f,R_EAL r) /\ great_dom(g,R_EAL r) in S
 proof
   let X,S,f,g,A,r;
   assume
@@ -2507,7 +2526,7 @@ proof
   assume
 A1: f is_measurable_on A & A c= dom f;
   for r1 being real number holds A /\
-  less_dom(r(#)f,R_EAL r1) is_measurable_on S
+  less_dom(r(#)f,R_EAL r1) in S
   proof
     let r1 being real number;
     now per cases;

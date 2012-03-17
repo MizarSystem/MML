@@ -10,18 +10,19 @@ environ
       FUNCT_1, FUNCT_3, RLVECT_1, PARTFUN2, LATTICES, SEQ_2, PARTFUN1, SEQ_1,
       RFUNCT_1, RCOMP_1, ARYTM_3, INTEGRA2, SQUARE_1, FINSEQ_2, FDIFF_1,
       SEQM_3, ABSVALUE, INT_1, RFUNCT_3, INTEGRA4, FINSEQ_4, REALSET1, ARYTM,
-      FINSET_1;
+      FINSET_1, ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, INT_1, XXREAL_2, REALSET1, FUNCT_1, RELSET_1,
       FINSET_1, PSCOMP_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1, PARTFUN2,
-      RFUNCT_1, FINSEQ_2, SEQ_2, SEQ_4, PRE_CIRC, RCOMP_1, FDIFF_1, GOBOARD1,
-      SQUARE_1, RVSUM_1, INTEGRA1, INTEGRA2, RFUNCT_3, PARTFUN1, XXREAL_0;
+      RFUNCT_1, FINSEQ_2, SEQ_2, SEQM_3, SEQ_4, PRE_CIRC, RCOMP_1, FDIFF_1,
+      GOBOARD1, SQUARE_1, RVSUM_1, INTEGRA1, INTEGRA2, RFUNCT_3, PARTFUN1,
+      XXREAL_0;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, FINSOP_1,
       PARTFUN2, FDIFF_1, REALSET1, RFUNCT_3, PRE_CIRC, PSCOMP_1, INTEGRA2,
       SEQ_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
-      INTEGRA1, VALUED_0, VALUED_1, XXREAL_2;
+      INTEGRA1, VALUED_0, VALUED_1, XXREAL_2, CARD_1, SEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -48,14 +49,14 @@ theorem :: INTEGRA4:4
   holds f is_integrable_on A & integral(f)=r*vol(A);
 
 theorem :: INTEGRA4:5
-  for r holds ex f being Function of A,REAL st rng f = {r} & f is_bounded_on A;
+  for r holds ex f being Function of A,REAL st rng f = {r} & f|A is bounded;
 
 theorem :: INTEGRA4:6
   for f being PartFunc of A,REAL, D being Element of divs A
   st vol(A)=0 holds f is_integrable_on A & integral(f)=0;
 
 theorem :: INTEGRA4:7
-  for f being Function of A,REAL st f is_bounded_on A &
+  for f being Function of A,REAL st f|A is bounded &
   f is_integrable_on A holds ex a st inf rng f <= a & a <= sup rng f &
   integral(f)=a*vol(A);
 
@@ -63,16 +64,16 @@ begin :: Integrability of Bounded Total Functions
 
 theorem :: INTEGRA4:8
   for f being Function of A,REAL, T being DivSequence of A
-  st f is_bounded_on A & delta(T) is convergent & lim delta(T)=0
+  st f|A is bounded & delta(T) is convergent & lim delta(T)=0
   holds lower_sum(f,T) is convergent & lim lower_sum(f,T) = lower_integral(f);
 
 theorem :: INTEGRA4:9
   for f being Function of A,REAL, T being DivSequence of A
-  st f is_bounded_on A & delta(T) is convergent & lim delta(T)=0
+  st f|A is bounded & delta(T) is convergent & lim delta(T)=0
   holds upper_sum(f,T) is convergent & lim upper_sum(f,T) = upper_integral(f);
 
 theorem :: INTEGRA4:10
-  for f being Function of A,REAL st f is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded
   holds f is_upper_integrable_on A & f is_lower_integrable_on A;
 
 definition
@@ -87,7 +88,7 @@ theorem :: INTEGRA4:11
   ex T being DivSequence of A st delta(T) is convergent & lim delta(T)=0;
 
 theorem :: INTEGRA4:12
-  for f being Function of A,REAL st f is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded
   holds f is_integrable_on A iff
   (for T being DivSequence of A st delta(T) is convergent & lim delta(T)=0
   holds lim upper_sum(f,T)-lim lower_sum(f,T)=0);
@@ -96,40 +97,40 @@ theorem :: INTEGRA4:13
   for f being Function of C,REAL holds max+(f) is total & max-(f) is total;
 
 theorem :: INTEGRA4:14
-  for f being PartFunc of C,REAL st f is_bounded_above_on X holds
-  max+(f) is_bounded_above_on X;
+  for f being PartFunc of C,REAL st f|X is bounded_above holds
+  (max+f)|X is bounded_above;
 
 theorem :: INTEGRA4:15
-  for f being PartFunc of C,REAL holds max+(f) is_bounded_below_on X;
+  for f being PartFunc of C,REAL holds (max+f)|X is bounded_below;
 
 theorem :: INTEGRA4:16
-  for f being PartFunc of C,REAL st f is_bounded_below_on X holds
-  max-(f) is_bounded_above_on X;
+  for f being PartFunc of C,REAL st f|X is bounded_below holds
+  (max-f)|X is bounded_above;
 
 theorem :: INTEGRA4:17
-  for f being PartFunc of C,REAL holds max-(f) is_bounded_below_on X;
+  for f being PartFunc of C,REAL holds (max-f)|X is bounded_below;
 
 theorem :: INTEGRA4:18
-  for f being PartFunc of A,REAL st f is_bounded_above_on A
+  for f being PartFunc of A,REAL st f|A is bounded_above
   holds rng (f|X) is bounded_above;
 
 theorem :: INTEGRA4:19
-  for f being PartFunc of A,REAL st f is_bounded_below_on A
+  for f being PartFunc of A,REAL st f|A is bounded_below
   holds rng (f|X) is bounded_below;
 
 theorem :: INTEGRA4:20
-  for f being Function of A,REAL st f is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded
   & f is_integrable_on A holds max+(f) is_integrable_on A;
 
 theorem :: INTEGRA4:21
   for f being PartFunc of C,REAL holds max-(f)=max+(-f);
 
 theorem :: INTEGRA4:22
-  for f being Function of A,REAL st f is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded
   & f is_integrable_on A holds max-(f) is_integrable_on A;
 
 theorem :: INTEGRA4:23
-  for f being Function of A,REAL st f is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded
   & f is_integrable_on A holds abs(f) is_integrable_on A
   & abs(integral(f))<=integral(abs(f));
 
@@ -139,12 +140,12 @@ theorem :: INTEGRA4:24
   sup rng f - inf rng f <= a;
 
 theorem :: INTEGRA4:25
-  for f,g being Function of A,REAL st f is_bounded_on A &
+  for f,g being Function of A,REAL st f|A is bounded &
   a>=0 & (for x,y st x in A & y in A holds abs(g.x-g.y)<=a*abs(f.x-f.y)) holds
   sup rng g - inf rng g <= a*(sup rng f - inf rng f);
 
 theorem :: INTEGRA4:26
-  for f,g,h being Function of A,REAL st f is_bounded_on A & g is_bounded_on A &
+  for f,g,h being Function of A,REAL st f|A is bounded & g|A is bounded &
   a>=0 &
 
 (for x,y st x in A & y in A holds abs(h.x-h.y)<=a*(abs(f.x-f.y)+abs(g.x-g.y)))
@@ -152,24 +153,24 @@ theorem :: INTEGRA4:26
   sup rng h - inf rng h <= a*((sup rng f - inf rng f)+(sup rng g - inf rng g));
 
 theorem :: INTEGRA4:27
-  for f,g being Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & g is_bounded_on A &
+  for f,g being Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & g|A is bounded &
   a>0 & (for x,y st x in A & y in A holds abs(g.x-g.y)<=a*abs(f.x-f.y)) holds
   g is_integrable_on A;
 
 theorem :: INTEGRA4:28
-  for f,g,h being Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & g is_bounded_on A & g is_integrable_on A &
-  h is_bounded_on A & a > 0 & (for x,y st x in A & y in A holds
+  for f,g,h being Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & g|A is bounded & g is_integrable_on A &
+  h|A is bounded & a > 0 & (for x,y st x in A & y in A holds
   abs(h.x-h.y)<=a*(abs(f.x-f.y)+abs(g.x-g.y))) holds h is_integrable_on A;
 
 theorem :: INTEGRA4:29
-  for f,g being Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & g is_bounded_on A & g is_integrable_on A
+  for f,g being Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & g|A is bounded & g is_integrable_on A
   holds f(#)g is_integrable_on A;
 
 theorem :: INTEGRA4:30
-  for f being Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & not(0 in rng f) & f^ is_bounded_on A
+  for f being Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & not(0 in rng f) & f^|A is bounded
   holds f^ is_integrable_on A;
 

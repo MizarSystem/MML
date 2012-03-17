@@ -7,15 +7,14 @@
 environ
 
  vocabularies INT_1, RAT_1, ARYTM_1, TARSKI, FUNCT_1, FUNCT_2, RELAT_1, BOOLE,
-      ARYTM_3, CARD_4, CARD_1, FINSET_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6,
-      RLVECT_1, GROUP_1, COMPLEX1, SETFAM_1, MESFUNC1, ARYTM, PROB_1, VALUED_0,
-      ORDINAL2;
+      ARYTM_3, CARD_4, CARD_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6, RLVECT_1,
+      GROUP_1, COMPLEX1, SETFAM_1, MESFUNC1, ARYTM, PROB_1, VALUED_0, ORDINAL2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, XREAL_0, MEASURE6, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      NAT_1, INT_1, RAT_1, FINSET_1, CARD_4, XXREAL_0, VALUED_0, PROB_1,
-      SUPINF_1, SUPINF_2, MEASURE1, MEASURE2, MEASURE3, EXTREAL1;
+      NAT_1, INT_1, RAT_1, CARD_4, XXREAL_0, VALUED_0, PROB_1, SUPINF_1,
+      SUPINF_2, MEASURE1, MEASURE2, MEASURE3, EXTREAL1, RELSET_2;
  constructors WELLORD2, REAL_1, NAT_1, RAT_1, MEASURE3, MEASURE6, EXTREAL1,
-      SUPINF_1;
+      SUPINF_1, RELSET_2, PARTFUN1, EQREL_1, RELAT_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_1, MEMBERED, MEASURE1, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
@@ -195,11 +194,6 @@ theorem :: MESFUNC1:15
 theorem :: MESFUNC1:16
   for a being R_eal st (for r being Real holds a < R_EAL r) holds a = -infty;
 
-notation
-  let A, S be set;
-  synonym A is_measurable_on S for A in S;
-end;
-
 reserve X for set;
 reserve x for Element of X;
 reserve f,g for PartFunc of X,ExtREAL;
@@ -209,6 +203,11 @@ reserve A for set;
 reserve a for R_eal;
 reserve r,s for Real;
 reserve n,m for Element of NAT;
+
+notation
+  let f be ext-real-valued Function, a be ext-real number;
+  synonym eq_dom(f,a) for Coim(f,a);
+end;
 
 definition
   canceled;
@@ -229,7 +228,7 @@ definition
 :: MESFUNC1:def 15
 
   for x being set holds x in it iff x in dom f & a <= f.x;
-  func eq_dom(f,a) -> set means
+  redefine func eq_dom(f,a) means
 :: MESFUNC1:def 16
 
   for x being set holds x in it iff x in dom f & f.x = a;
@@ -306,7 +305,7 @@ definition
   pred f is_measurable_on A means
 :: MESFUNC1:def 17
 
-  for r being real number holds A /\ less_dom(f,R_EAL r) is_measurable_on S;
+  for r being real number holds A /\ less_dom(f,R_EAL r) in S;
 end;
 
 reserve X for non empty set;
@@ -318,17 +317,16 @@ reserve A,B for Element of S;
 theorem :: MESFUNC1:31
   for X,S,f,A st A c= dom f holds f is_measurable_on A iff
 
-(for r being real number holds A /\ great_eq_dom(f,R_EAL r) is_measurable_on S)
-;
+(for r being real number holds A /\ great_eq_dom(f,R_EAL r) in S);
 
 theorem :: MESFUNC1:32
   for X,S,f,A holds f is_measurable_on A iff
 
-(for r being real number holds A /\ less_eq_dom(f,R_EAL r) is_measurable_on S);
+(for r being real number holds A /\ less_eq_dom(f,R_EAL r) in S);
 
 theorem :: MESFUNC1:33
   for X,S,f,A st A c= dom f holds f is_measurable_on A iff
-  (for r being real number holds A /\ great_dom(f,R_EAL r) is_measurable_on S);
+  (for r being real number holds A /\ great_dom(f,R_EAL r) in S);
 
 theorem :: MESFUNC1:34
   for X,S,f,A,B st B c= A & f is_measurable_on A holds f is_measurable_on B;
@@ -339,23 +337,23 @@ theorem :: MESFUNC1:35
 
 theorem :: MESFUNC1:36
   for X,S,f,A,r,s st f is_measurable_on A & A c= dom f holds
-  (A /\ great_dom(f,R_EAL r) /\ less_dom(f,R_EAL s)) is_measurable_on S;
+  (A /\ great_dom(f,R_EAL r) /\ less_dom(f,R_EAL s)) in S;
 
 theorem :: MESFUNC1:37
   for X,S,f,A st f is_measurable_on A & A c= dom f holds
-  A /\ eq_dom(f,+infty) is_measurable_on S;
+  A /\ eq_dom(f,+infty) in S;
 
 theorem :: MESFUNC1:38
   for X,S,f,A st f is_measurable_on A holds
-  A /\ eq_dom(f,-infty) is_measurable_on S;
+  A /\ eq_dom(f,-infty) in S;
 
 theorem :: MESFUNC1:39
   for X,S,f,A st f is_measurable_on A & A c= dom f holds
-  A /\ great_dom(f,-infty) /\ less_dom(f,+infty) is_measurable_on S;
+  A /\ great_dom(f,-infty) /\ less_dom(f,+infty) in S;
 
 theorem :: MESFUNC1:40
   for X,S,f,g,A,r st f is_measurable_on A & g is_measurable_on A & A c= dom g
-  holds A /\ less_dom(f,R_EAL r) /\ great_dom(g,R_EAL r) is_measurable_on S;
+  holds A /\ less_dom(f,R_EAL r) /\ great_dom(g,R_EAL r) in S;
 
 theorem :: MESFUNC1:41
   for X,S,f,A,r st f is_measurable_on A & A c= dom f

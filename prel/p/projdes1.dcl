@@ -25,26 +25,26 @@
 <CCluster aid="PROJDES1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="82"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="83"/>
-<Adjective nr="87" value="false"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="92" value="false"/>
 </Cluster>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="82"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="83"/>
+<Adjective nr="84"/>
 <Adjective nr="85"/>
-<Adjective nr="87" value="false"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
+<Adjective nr="92" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -17,37 +17,37 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="9">
-<Func kind="K" nr="24">
-<Func kind="K" nr="18"/>
-<Func kind="K" nr="18"/>
+<Adjective nr="10">
+<Func kind="K" nr="25">
+<Func kind="K" nr="19"/>
+<Func kind="K" nr="19"/>
 </Func>
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
 </Adjective>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="24">
-<Func kind="K" nr="18"/>
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="25">
+<Func kind="K" nr="19"/>
+<Func kind="K" nr="19"/>
 </Func>
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="9">
-<Func kind="K" nr="24">
-<Func kind="K" nr="18"/>
-<Func kind="K" nr="18"/>
+<Adjective nr="10">
+<Func kind="K" nr="25">
+<Func kind="K" nr="19"/>
+<Func kind="K" nr="19"/>
 </Func>
-<Func kind="K" nr="18"/>
-</Adjective>
-<Adjective nr="12">
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
 </Adjective>
 <Adjective nr="13">
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
+</Adjective>
+<Adjective nr="14">
+<Func kind="K" nr="19"/>
 </Adjective>
 </Cluster>
 </CCluster>

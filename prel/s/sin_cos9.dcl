@@ -34,16 +34,16 @@
 <FCluster aid="SIN_COS9" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="216"/>
-<Func kind="K" nr="76">
-<Func kind="K" nr="56">
-<Func kind="K" nr="65">
 <Func kind="K" nr="219"/>
+<Func kind="K" nr="77">
+<Func kind="K" nr="57">
+<Func kind="K" nr="66">
+<Func kind="K" nr="222"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="65">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="66">
+<Func kind="K" nr="222"/>
 <Num nr="2"/>
 </Func>
 </Func>
@@ -56,10 +56,10 @@
 <FCluster aid="SIN_COS9" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="217"/>
-<Func kind="K" nr="76">
-<Func kind="K" nr="47"/>
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="220"/>
+<Func kind="K" nr="77">
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Func>
 <Cluster>
@@ -69,7 +69,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="224"/>
+<Func kind="K" nr="227"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -77,7 +77,7 @@
 </FCluster>
 <FCluster aid="SIN_COS9" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="225"/>
+<Func kind="K" nr="228"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
@@ -86,16 +86,16 @@
 <FCluster aid="SIN_COS9" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="216"/>
-<Func kind="K" nr="75">
-<Func kind="K" nr="56">
-<Func kind="K" nr="65">
 <Func kind="K" nr="219"/>
+<Func kind="K" nr="76">
+<Func kind="K" nr="57">
+<Func kind="K" nr="66">
+<Func kind="K" nr="222"/>
 <Num nr="4"/>
 </Func>
 </Func>
-<Func kind="K" nr="65">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="66">
+<Func kind="K" nr="222"/>
 <Num nr="4"/>
 </Func>
 </Func>
@@ -108,18 +108,18 @@
 <FCluster aid="SIN_COS9" nr="6">
 <ArgTypes/>
 <Func kind="K" nr="7">
-<Func kind="K" nr="217"/>
-<Func kind="K" nr="75">
-<Func kind="K" nr="65">
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="220"/>
+<Func kind="K" nr="76">
+<Func kind="K" nr="66">
+<Func kind="K" nr="222"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="63">
-<Func kind="K" nr="65">
+<Func kind="K" nr="64">
+<Func kind="K" nr="66">
 <Num nr="3"/>
 <Num nr="4"/>
 </Func>
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Func>
 </Func>

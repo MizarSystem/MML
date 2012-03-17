@@ -24,11 +24,11 @@
 </Signature>
 <FCluster aid="GROUP_8" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
@@ -36,7 +36,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="137">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -38,9 +38,9 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="262">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -48,7 +48,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="67">
+<Adjective nr="80">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -62,8 +62,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
+<Adjective nr="22"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <FCluster aid="GOBOARD9" nr="1">
@@ -73,18 +73,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="126">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

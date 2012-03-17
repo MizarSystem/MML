@@ -20,9 +20,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ALGSTR_0"/>
@@ -48,7 +45,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="320">
+<Func kind="K" nr="295">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -59,15 +56,15 @@
 <Adjective nr="5"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="28" value="false"/>
-<Adjective nr="127"/>
-<Adjective nr="128"/>
-<Adjective nr="129"/>
-<Adjective nr="130"/>
-<Adjective nr="132"/>
-<Adjective nr="133"/>
+<Adjective nr="8" value="false"/>
+<Adjective nr="22"/>
+<Adjective nr="27"/>
+<Adjective nr="137"/>
+<Adjective nr="138"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
+<Adjective nr="142"/>
+<Adjective nr="143"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">
@@ -77,18 +74,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="338">
+<Func kind="K" nr="315">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -96,7 +93,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

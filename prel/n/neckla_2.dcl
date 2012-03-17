@@ -23,26 +23,26 @@
 </Signature>
 <RCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="39"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="34"/>
 <Adjective nr="45"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="120"/>
+<Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="121"/>
+<Func kind="K" nr="125"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -51,19 +51,19 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="110">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 <CCluster aid="NECKLA_2" nr="2">
@@ -71,23 +71,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="101"/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
-</Cluster>
-</CCluster>
-<CCluster aid="NECKLA_2" nr="3">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="11"/>
-<Adjective nr="19"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="15"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 </Registrations>

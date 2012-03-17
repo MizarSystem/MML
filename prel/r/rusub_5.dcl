@@ -29,44 +29,44 @@
 </Signature>
 <FCluster aid="RUSUB_5" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="76"/>
-<Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="88"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RUSUB_5" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="76"/>
-<Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="88"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="100"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

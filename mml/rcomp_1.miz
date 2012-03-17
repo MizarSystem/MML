@@ -15,14 +15,14 @@ environ
  constructors FUNCOP_1, REAL_1, NAT_1, XXREAL_1, COMPLEX1, PARTFUN1, SEQ_1,
       SEQ_2, SEQM_3, SEQ_4, RECDEF_1, XXREAL_2, MEMBERED;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, SEQM_3, VALUED_0;
+      MEMBERED, SEQM_3, VALUED_0, XXREAL_2, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2, XBOOLE_0, SUBSET_1, XXREAL_1;
- theorems TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2, SEQM_3,
+ theorems TARSKI, SUBSET_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2, SEQM_3,
       SEQ_4, ABSVALUE, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
       XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, NUMBERS, XXREAL_1,
       XXREAL_2, MEMBERED;
- schemes REAL_1, FUNCT_2, SEQ_1;
+ schemes SUBSET_1, FUNCT_2, SEQ_1;
 
 begin
 
@@ -196,42 +196,6 @@ A2: 1 /2*(2*r)>1/2*(2*p) by XREAL_1:70;
   hence thesis by A2;
 end;
 
-canceled 5;
-
-theorem
-  r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.]
-proof
-  assume
-A1: r in [.p,g.] & s in [.p,g.];
-  then
-A2: ex t be Real st t=r & p<=t & t<=g;
-A3: ex t be Real st t=s & p<=t & t<=g by A1;
-  let x;
-  assume x in [.r,s.];
-  then consider t be Real such that
-A4: t=x & r<=t & t<=s;
-A5: p<=t by A2,A4,XXREAL_0:2;
-  t<=g by A3,A4,XXREAL_0:2;
-  hence x in [.p,g.] by A4,A5;
-end;
-
-theorem
-  r in ].p,g.[ & s in ].p,g.[ implies [.r,s.] c= ].p,g.[
-proof
-  assume
-A1: r in ].p,g.[ & s in ].p,g.[;
-  then
-A2: ex q be Real st q=r & p<q & q<g;
-A3: ex q be Real st q=s & p<q & q<g by A1;
-  let y;
-  assume y in [.r,s.];
-  then consider q be Real such that
-A4: q=y & r<=q & q<=s;
-A5: p<q by A2,A4,XXREAL_0:2;
-  q<g by A3,A4,XXREAL_0:2;
-  hence thesis by A4,A5;
-end;
-
 definition
   let X;
   attr X is compact means
@@ -254,7 +218,7 @@ definition
   X` is closed;
 end;
 
-canceled 4;
+canceled 11;
 
 theorem Th22:
   for s1 st rng s1 c= [.s,g.] holds s1 is bounded
@@ -389,7 +353,7 @@ theorem Th25:
 proof
   defpred P[Real] means $1<=p or q<=$1;
   consider X such that
-A1: for r be Real holds r in X iff P[r] from REAL_1:sch 1;
+A1: for r be Real holds r in X iff P[r] from SUBSET_1:sch 3;
 A2: ].p,q.[` = X
   proof thus ].p,q.[` c= X
     proof
@@ -521,7 +485,7 @@ proof
 A1: X is compact;
   assume
 A2: not X is bounded;
-  now per cases by A2,XXREAL_2:def 11;
+  now per cases by A2;
     suppose
 A3:   not X is bounded_above;
       defpred P[Element of NAT,Element of REAL] means
@@ -645,7 +609,7 @@ A2: rng s1 c= X;
     s1 is bounded
     proof
       thus s1 is bounded_above
-      proof X is bounded_above by A1,XXREAL_2:def 11;
+      proof X is bounded_above by A1;
         then consider p such that
 A3:     for q st q in X holds q<=p by SEQ_4:def 1;
         take r = p+1;
@@ -669,7 +633,7 @@ A5:       t<=p by A2,A3;
         hence thesis;
       end;
       thus s1 is bounded_below
-      proof X is bounded_below by A1,XXREAL_2:def 11;
+      proof X is bounded_below by A1;
         then consider p such that
 A6:     for q st q in X holds p<=q by SEQ_4:def 2;
         take r = p - 1;
@@ -854,8 +818,7 @@ proof
 A1: X<>{} and
 A2: X is compact;
   X is bounded closed by A2,Th28;
-  then X is bounded_above & X is bounded_below & X is closed
-   by XXREAL_2:def 11;
+  then X is bounded_above & X is bounded_below & X is closed;
   hence thesis by A1,Th30,Th31;
 end;
 
@@ -877,7 +840,7 @@ A3: X={};
 A4: X<>{};
     X is bounded closed by A1,Th28;
     then
-A5: X is bounded_below & X is bounded_above & X is closed by XXREAL_2:def 11;
+A5: X is bounded_below & X is bounded_above & X is closed;
     then
 A6: upper_bound X in X by A4,Th30;
 A7: lower_bound X in X by A4,A5,Th31;
@@ -1228,7 +1191,7 @@ A3: X={};
   end;
   suppose
 A4: X<>{};
-A5: X is bounded_below & X is bounded_above by A1,XXREAL_2:def 11;
+A5: X is bounded_below & X is bounded_above by A1;
     take p=lower_bound X, g=upper_bound X;
     now
       let r be Real;
@@ -1237,12 +1200,12 @@ A5: X is bounded_below & X is bounded_above by A1,XXREAL_2:def 11;
         assume
 A6:     r in X;
         then
-A7:     g<>r & p<>r by A1,A5,Th43,Th44;
+A7:     g<>r & p<>r by A1,Th43,Th44;
         r<=g by A5,A6,SEQ_4:def 4;
         then
-A8:     r<g by A7,REAL_1:def 5;
+A8:     r<g by A7,XXREAL_0:1;
         p<=r by A5,A6,SEQ_4:def 5;
-        then p<r by A7,REAL_1:def 5;
+        then p<r by A7,XXREAL_0:1;
         hence r in ].p,g.[ by A8;
       end;
       assume r in ].p,g.[;

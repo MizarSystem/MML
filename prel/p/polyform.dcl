@@ -43,58 +43,58 @@
 </Signature>
 <RCluster aid="POLYFORM" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="109"/>
+<Adjective nr="114"/>
 </Cluster>
 </RCluster>
 <RCluster aid="POLYFORM" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </RCluster>
 <FCluster aid="POLYFORM" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="72"/>
+<Adjective nr="78"/>
 </Cluster>
 </FCluster>
 <FCluster aid="POLYFORM" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="311">
+<Func kind="K" nr="316">
 <LocusVar nr="1"/>
-<Func kind="K" nr="54">
-<Func kind="K" nr="310">
+<Func kind="K" nr="55">
+<Func kind="K" nr="315">
 <LocusVar nr="1"/>
 </Func>
 <Num nr="1"/>
@@ -102,7 +102,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -9,8 +9,9 @@ environ
  vocabularies RLVECT_1, ARYTM_1, RELAT_1, FUNCT_1, RSSPACE, RSSPACE3, VECTSP_1,
       VECTSP_2, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FUNCOP_1, LATTICES, SEQ_2,
       ABSVALUE, FUNCSDOM, LOPBAN_1, ORDINAL2, ARYTM_3, PARTFUN2, ARYTM,
-      BINOP_1, ALGSTR_0, NORMSP_1, FUNCT_2, SEQM_3, BHSP_3, RSSPACE4, GROUP_1,
-      PRE_TOPC, LOPBAN_2, C0SP1, ALGSTR_2, IDEAL_1, SUBSET_1, POLYALG1;
+      BINOP_1, ALGSTR_0, NORMSP_1, FUNCT_2, BHSP_3, RSSPACE4, GROUP_1,
+      PRE_TOPC, LOPBAN_2, C0SP1, ALGSTR_2, IDEAL_1, SUBSET_1, POLYALG1,
+      SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
       XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, REALSET1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, RELSET_1, PRE_TOPC, BINOP_2, RLVECT_1,
@@ -24,10 +25,10 @@ environ
  registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, XREAL_0, REALSET1,
       ALGSTR_0, NUMBERS, ORDINAL1, MEMBERED, FUNCSDOM, RELAT_1, XXREAL_0,
       RLVECT_1, VECTSP_1, VECTSP_2, FUNCT_2, VALUED_0, VALUED_1, LOPBAN_2,
-      GCD_1, SEQM_3;
+      GCD_1, SEQM_3, FUNCOP_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions PRE_TOPC, PSCOMP_1, REALSET1, ALGSTR_0, TARSKI, ORDINAL1,
-      XCMPLX_0, FINSET_1, REAL_1, FUNCT_2, MEMBERED, ZFMISC_1, NORMSP_1,
+      XCMPLX_0, FINSET_1, FUNCT_2, MEMBERED, ZFMISC_1, NORMSP_1,
       FINSEQ_1, GOBOARD1, PARTFUN1, SEQ_4, RFUNCT_1, FUNCSDOM, RLVECT_1,
       RLSUB_1, RSSPACE, RSSPACE3, VECTSP_1, VECTSP_2, STRUCT_0, GROUP_1,
       BINOP_1, LOPBAN_2, VALUED_1;
@@ -656,23 +657,21 @@ begin :: Banach Algebra of Bounded Functionals
 
 definition let X be non empty set;
 func BoundedFunctions X -> non empty Subset of RAlgebra X equals
-  { f where f is Function of X,REAL : f is_bounded_on X };
+  { f where f is Function of X,REAL : f|X is bounded };
 correctness
 proof
-P1:{ f where f is Function of X,REAL : f is_bounded_on X } c= Funcs(X,REAL)
+P1:{ f where f is Function of X,REAL : f|X is bounded } c= Funcs(X,REAL)
    proof
     let x be set;
-    assume x in { f where f is Function of X,REAL : f is_bounded_on X }; then
-    ex f be Function of X,REAL st x=f & f is_bounded_on X;
+    assume x in { f where f is Function of X,REAL : f|X is bounded }; then
+    ex f be Function of X,REAL st x=f & f|X is bounded;
     hence x in Funcs(X,REAL) by FUNCT_2:11;
    end;
-   { f where f is Function of X,REAL : f is_bounded_on X } is non empty
+   { f where f is Function of X,REAL : f|X is bounded } is non empty
    proof
     reconsider g = X --> 0 as Function of X,REAL by FUNCOP_1:58;
-    for x be Element of X st x in X /\ dom g holds g.x =0 by FUNCOP_1:13; then
-    g is_constant_on X by PARTFUN2:76; then
-    g is_bounded_on X by RFUNCT_1:108; then
-    g in { f where f is Function of X,REAL : f is_bounded_on X };
+    g|X is bounded by RFUNCT_1:108; then
+    g in { f where f is Function of X,REAL : f|X is bounded };
     hence thesis;
    end;
    hence thesis by P1;
@@ -693,12 +692,12 @@ P0:RAlgebra X is RealLinearSpace by LmAlgebra2;
 XS1: v in W & u in W;
 
     consider v1 be Function of X,REAL such that
-L010:v1=v & v1 is_bounded_on X by XS1;
+L010:v1=v & v1|X is bounded by XS1;
 
     consider u1 be Function of X,REAL such that
-L020:u1=u & u1 is_bounded_on X by XS1;
+L020:u1=u & u1|X is bounded by XS1;
     dom(v1+u1) = X /\ X by FUNCT_2:def 1; then
-L04:v1+u1 is Function of X,REAL & v1+u1 is_bounded_on X
+L04:v1+u1 is Function of X,REAL & (v1+u1)|X is bounded
        by L010,L020,RFUNCT_1:100;
 
     reconsider h = v+u as Element of Funcs(X,REAL);
@@ -718,8 +717,8 @@ P1:W is add-closed by IDEAL_1:def 1;
 XS1: v in W;
 
     consider v1 be Function of X,REAL such that
-L010:v1=v & v1 is_bounded_on X by XS1;
-M1: -v1 is Function of X,REAL & -v1 is_bounded_on X
+L010:v1=v & v1|X is bounded by XS1;
+M1: -v1 is Function of X,REAL & (-v1)|X is bounded
       by L010,RFUNCT_1:99;
     reconsider h = -v, v2 = v as Element of Funcs(X,REAL);
 
@@ -742,8 +741,8 @@ Q1:W is having-inverse by Rdef210b;
     let a be Real, u be Element of V such that
 XS1: u in W;
     consider u1 be Function of X,REAL such that
-L110:u1=u & u1 is_bounded_on X by XS1;
-M2: a(#)u1 is Function of X,REAL & a(#)u1 is_bounded_on X
+L110:u1=u & u1|X is bounded by XS1;
+M2: a(#)u1 is Function of X,REAL & (a(#)u1)|X is bounded
        by L110,RFUNCT_1:97;
 
     reconsider h = a*u as Element of Funcs(X,REAL);
@@ -761,12 +760,12 @@ Q2:for v,u be Element of V st v in W & u in W holds v * u in W
 XS1: v in W & u in W;
 
     consider v1 be Function of X,REAL such that
-L010:v1=v & v1 is_bounded_on X by XS1;
+L010:v1=v & v1|X is bounded by XS1;
 
     consider u1 be Function of X,REAL such that
-L020:u1=u & u1 is_bounded_on X by XS1;
+L020:u1=u & u1|X is bounded by XS1;
     dom(v1(#)u1) = X /\ X by FUNCT_2:def 1; then
-M3: v1(#)u1 is Function of X,REAL & v1(#)u1 is_bounded_on X
+M3: v1(#)u1 is Function of X,REAL & (v1(#)u1)|X is bounded
        by L010,L020,RFUNCT_1:101;
 
     reconsider h = v*u as Element of Funcs(X,REAL);
@@ -780,9 +779,7 @@ R3: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
    end;
 
    reconsider g = RealFuncUnit X as Function of X,REAL;
-   for x be Element of X st x in X /\ dom g holds g.x =1 by FUNCOP_1:13; then
-   g is_constant_on X by PARTFUN2:76; then
-   g is_bounded_on X by RFUNCT_1:108; then
+   g|X is bounded by RFUNCT_1:108; then
    1.V in W;
    hence thesis by Rdef200,Q2;
 end;
@@ -893,7 +890,7 @@ end;
 definition let X be non empty set, F be set such that
 A1:F in BoundedFunctions X;
 func modetrans(F,X) -> Function of X,REAL means :DefB7:
-  it=F & it is_bounded_on X;
+  it=F & it|X is bounded;
 correctness by A1;
 end;
 
@@ -918,9 +915,9 @@ end;
 end;
 
 theorem ThB13:
-f is_bounded_on X implies PreNorms f is non empty bounded_above
+f|X is bounded implies PreNorms f is non empty bounded_above
 proof
-   assume f is_bounded_on X; then
+   assume f|X is bounded; then
    consider K be real number such that
 A1: for x be set st x in X /\ dom f holds abs(f.x) <= K by RFUNCT_1:90;
 A3:X /\ dom f = X /\ X by FUNCT_2:def 1;
@@ -933,7 +930,7 @@ A3:X /\ dom f = X /\ X by FUNCT_2:def 1;
 end;
 
 theorem
-f is_bounded_on X iff PreNorms f is bounded_above
+f|X is bounded iff PreNorms f is bounded_above
 proof
    now assume A1: PreNorms f is bounded_above;
     reconsider K = sup PreNorms f as Real;
@@ -943,7 +940,7 @@ A7: now let t be set;
      hence abs(f.t) <= K by A1,SEQ_4:def 4;
     end;
     take K;
-    thus f is_bounded_on X by A7,RFUNCT_1:90;
+    thus f|X is bounded by A7,RFUNCT_1:90;
    end;
    hence thesis by ThB13;
 end;
@@ -987,18 +984,18 @@ end;
 end;
 
 theorem ThB16:
-f is_bounded_on X implies modetrans(f,X) = f
+f|X is bounded implies modetrans(f,X) = f
 proof
-   assume f is_bounded_on X; then
+   assume f|X is bounded; then
    f in BoundedFunctions X;
    hence thesis by DefB7;
 end;
 
 theorem ThB17:
-f is_bounded_on X implies (BoundedFunctionsNorm X).f = sup PreNorms f
+f|X is bounded implies (BoundedFunctionsNorm X).f = sup PreNorms f
 proof
    reconsider f'=f as set;
-   assume A0:f is_bounded_on X; then
+   assume A0:f|X is bounded; then
    f in BoundedFunctions X; then
    (BoundedFunctionsNorm X).f = sup PreNorms(modetrans(f',X)) by DefB9;
    hence (BoundedFunctionsNorm X).f = sup PreNorms f by ThB16,A0;
@@ -1194,9 +1191,9 @@ proof
 end;
 
 theorem ThB19:
-f=F & f is_bounded_on X implies abs(f.x) <= ||.F.||
+f=F & f|X is bounded implies abs(f.x) <= ||.F.||
 proof
-   assume A1: f=F & f is_bounded_on X; then
+   assume A1: f=F & f|X is bounded; then
 A2:PreNorms f is non empty bounded_above by ThB13;
    abs(f.x) in PreNorms f; then
    abs(f.x) <= sup PreNorms f by A2,SEQ_4:def 4;
@@ -1208,7 +1205,7 @@ theorem
 proof
    F in BoundedFunctions X; then
    consider g be Function of X,REAL such that
-A0: F=g & g is_bounded_on X;
+A0: F=g & g|X is bounded;
 A1:now let r be Real;
     assume r in PreNorms g; then
     ex t be Element of X st r=abs(g.t);
@@ -1231,7 +1228,7 @@ proof
     reconsider z as Function of X, REAL by FUNCOP_1:58;
     F in BoundedFunctions X; then
     consider g be Function of X,REAL such that
-A0:  g=F & g is_bounded_on X;
+A0:  g=F & g|X is bounded;
 A3: now let r be Real;
      assume r in PreNorms g; then
      consider t be Element of X such that
@@ -1287,7 +1284,7 @@ proof
 A1:now assume A2: ||.F.|| = 0;
     F in BoundedFunctions X; then
     consider g be Function of X,REAL such that
-A3:  F=g & g is_bounded_on X;
+A3:  F=g & g|X is bounded;
     set z = X --> 0;
     reconsider z as Function of X,REAL by FUNCOP_1:58;
     now let t be Element of X;
@@ -1304,7 +1301,7 @@ A3:now assume A4: F = 0.R_Normed_Algebra_of_BoundedFunctions X;
     reconsider z as Function of X,REAL by FUNCOP_1:58;
     F in BoundedFunctions X; then
     consider g be Function of X,REAL such that
-A41: F=g & g is_bounded_on X;
+A41: F=g & g|X is bounded;
 
 A5: z=g by A41,A4,ThB18;
 A6: now let r be Real such that
@@ -1329,10 +1326,10 @@ A12:||.a*F.|| = abs a * ||.F.||
    proof
     F in BoundedFunctions X; then
     consider f1 be Function of X,REAL such that
-A121:f1=F & f1 is_bounded_on X;
+A121:f1=F & f1|X is bounded;
     a*F in BoundedFunctions X; then
     consider h1 be Function of X,REAL such that
-A122:h1=a*F & h1 is_bounded_on X;
+A122:h1=a*F & h1|X is bounded;
 
 A13:now let t be Element of X;
      abs(h1.t) = abs(a*f1.t) by A121,A122,ThB23; then
@@ -1396,13 +1393,13 @@ A35: a*F =0.R_Normed_Algebra_of_BoundedFunctions X by RLVECT_1:10;
    proof
     F in BoundedFunctions X; then
     consider f1 be Function of X,REAL such that
-A361:f1=F & f1 is_bounded_on X;
+A361:f1=F & f1|X is bounded;
     G in BoundedFunctions X; then
     consider g1 be Function of X,REAL such that
-A362:g1=G & g1 is_bounded_on X;
+A362:g1=G & g1|X is bounded;
     F+G in BoundedFunctions X; then
     consider h1 be Function of X,REAL such that
-A363:h1=F+G & h1 is_bounded_on X;
+A363:h1=F+G & h1|X is bounded;
 
 A36:now let t be Element of X;
 A37: abs(h1.t) =abs(f1.t+g1.t) by A361,A362,A363,ThB22;
@@ -1516,16 +1513,16 @@ A13:for m,k be Element of NAT holds abs(xseq.m-xseq.k) <= ||.vseq.m - vseq.k.||
      let m,k be Element of NAT;
      vseq.m in BoundedFunctions X; then
      ex vseqm be Function of X,REAL st
-      vseq.m=vseqm & vseqm is_bounded_on X; then
+      vseq.m=vseqm & vseqm|X is bounded; then
 A14: modetrans(vseq.m,X)=vseq.m by ThB16;
      vseq.k in BoundedFunctions X; then
      ex vseqk be Function of X,REAL st
-       vseq.k=vseqk & vseqk is_bounded_on X; then
+       vseq.k=vseqk & vseqk|X is bounded; then
 A15: modetrans(vseq.k,X)=vseq.k by ThB16;
 
      vseq.m-vseq.k in BoundedFunctions X; then
      consider h1 be Function of X,REAL such that
-A161: h1=vseq.m-vseq.k & h1 is_bounded_on X;
+A161: h1=vseq.m-vseq.k & h1|X is bounded;
 
      xseq.m =modetrans(vseq.m,X).x & xseq.k =modetrans(vseq.k,X).x by A12; then
      xseq.m - xseq.k = h1.x by A14,A15,A161,ThB27;
@@ -1567,7 +1564,7 @@ A28:abs xseq is convergent & abs(tseq.x) = lim abs(xseq) by A25,SEQ_4:26,27;
     proof
      let n be Element of NAT;
      vseq.n in BoundedFunctions X; then
-A261:ex h1 be Function of X,REAL st vseq.n=h1 & h1 is_bounded_on X; then
+A261:ex h1 be Function of X,REAL st vseq.n=h1 & h1|X is bounded; then
 A27: modetrans(vseq.n,X)=vseq.n by ThB16;
      xseq.n =modetrans(vseq.n,X).x by A25; then
      abs(xseq.n) <= ||.vseq.n.|| by A27,A261,AD0,ThB19; then
@@ -1576,7 +1573,7 @@ A27: modetrans(vseq.n,X)=vseq.n by ThB16;
     end;
     hence abs(tseq.x) <= lim ||.vseq.|| by A3,A28,SEQ_2:32;
    end; then
-A23:tseq is_bounded_on X by RFUNCT_1:90;
+A23:tseq|X is bounded by RFUNCT_1:90;
 
 A31:
    for e be Real st e > 0
@@ -1602,15 +1599,15 @@ A37:  for m,k be Element of NAT holds
        let m,k be Element of NAT;
        vseq.m in BoundedFunctions X; then
        ex vseqm be Function of X,REAL st
-         vseq.m=vseqm & vseqm is_bounded_on X; then
+         vseq.m=vseqm & vseqm|X is bounded; then
 A38:   modetrans(vseq.m,X) = vseq.m by ThB16;
        vseq.k in BoundedFunctions X; then
        ex vseqk be Function of X,REAL st
-         vseq.k=vseqk & vseqk is_bounded_on X; then
+         vseq.k=vseqk & vseqk|X is bounded; then
 A39:   modetrans(vseq.k,X)=vseq.k by ThB16;
        vseq.m-vseq.k in BoundedFunctions X; then
        consider h1 be Function of X,REAL such that
-A401:   h1 =vseq.m-vseq.k & h1 is_bounded_on X;
+A401:   h1 =vseq.m-vseq.k & h1|X is bounded;
 A40:   xseq.m =modetrans(vseq.m,X).x by A36;
        xseq.k =modetrans((vseq.k),X).x by A36; then
        xseq.m - xseq.k =h1.x by A38,A39,A40,A401,ThB27;
@@ -1683,10 +1680,10 @@ A52: for n be Element of NAT st n >= k holds
 A53: n >= k;
      vseq.n in BoundedFunctions X; then
      consider f1 be Function of X,REAL such that
-G1:   f1=vseq.n & f1 is_bounded_on X;
+G1:   f1=vseq.n & f1|X is bounded;
      vseq.n-tv in BoundedFunctions X; then
      consider h1 be Function of X,REAL such that
-A531: h1=vseq.n-tv & h1 is_bounded_on X;
+A531: h1=vseq.n-tv & h1|X is bounded;
 A54: now let t be Element of X;
 J1:   modetrans(vseq.n,X)=f1 by G1,DefB7;
       h1.t = f1.t- tseq.t by G1,A531,ThB27;
@@ -1747,14 +1744,14 @@ proof
 A1:now let f,g being Element of B;
     f in BoundedFunctions X; then
     consider f1 be Function of X,REAL such that
-A01: f1=f & f1 is_bounded_on X;
+A01: f1=f & f1|X is bounded;
     g in BoundedFunctions X; then
     consider g1 be Function of X,REAL such that
-A02: g1=g & g1 is_bounded_on X;
+A02: g1=g & g1|X is bounded;
 
     f*g in BoundedFunctions X; then
     consider h1 be Function of X,REAL such that
-A03: h1=f*g & h1 is_bounded_on X;
+A03: h1=f*g & h1|X is bounded;
 
 A04:PreNorms f1 is non empty bounded_above &
     PreNorms g1 is non empty bounded_above &
@@ -1785,7 +1782,7 @@ E6:  0 <= sup PreNorms f1 by E4,COMPLEX1:132;
    end;
    1.B in BoundedFunctions X; then
    consider ONE be Function of X,REAL such that
-A21:ONE = 1.B & ONE is_bounded_on X;
+A21:ONE = 1.B & ONE|X is bounded;
    1.B = 1_R_Algebra_of_BoundedFunctions X; then
 A22:1.B = X --> 1 by ThB12One;
    for s be set holds s in PreNorms ONE iff s = 1
@@ -1810,22 +1807,22 @@ A2:||. 1.B .|| = 1 by A21,ThB17;
 A3:now let a be Real, f,g be Element of B;
     f in BoundedFunctions X; then
     consider f1 be Function of X,REAL such that
-A31: f1=f & f1 is_bounded_on X;
+A31: f1=f & f1|X is bounded;
     g in BoundedFunctions X; then
     consider g1 be Function of X,REAL such that
-A32: g1=g & g1 is_bounded_on X;
+A32: g1=g & g1|X is bounded;
 
     a*g in BoundedFunctions X; then
     consider h1 be Function of X,REAL such that
-A33: h1=a*g & h1 is_bounded_on X;
+A33: h1=a*g & h1|X is bounded;
 
     f*g in BoundedFunctions X; then
     consider h2 be Function of X,REAL such that
-A34: h2=f*g & h2 is_bounded_on X;
+A34: h2=f*g & h2|X is bounded;
 
     a*(f*g) in BoundedFunctions X; then
     consider h3 be Function of X,REAL such that
-A35: h3=a*(f*g) & h3 is_bounded_on X;
+A35: h3=a*(f*g) & h3|X is bounded;
 
     now let x be Element of X;
      h3.x = a*h2.x by A34,A35,ThB23; then
@@ -1839,30 +1836,30 @@ A35: h3=a*(f*g) & h3 is_bounded_on X;
 A4:now let f,g,h be Element of B;
     f in BoundedFunctions X; then
     consider f1 be Function of X,REAL such that
-A41: f1=f & f1 is_bounded_on X;
+A41: f1=f & f1|X is bounded;
     g in BoundedFunctions X; then
     consider g1 be Function of X,REAL such that
-A42: g1=g & g1 is_bounded_on X;
+A42: g1=g & g1|X is bounded;
 
     h in BoundedFunctions X; then
     consider h1 be Function of X,REAL such that
-A43: h1=h & h1 is_bounded_on X;
+A43: h1=h & h1|X is bounded;
 
     g+h in BoundedFunctions X; then
     consider gPh1 be Function of X,REAL such that
-A44: gPh1=g+h & gPh1 is_bounded_on X;
+A44: gPh1=g+h & gPh1|X is bounded;
 
     g*f in BoundedFunctions X; then
     consider gf1 be Function of X,REAL such that
-A45: gf1=g*f & gf1 is_bounded_on X;
+A45: gf1=g*f & gf1|X is bounded;
 
     h*f in BoundedFunctions X; then
     consider hf1 be Function of X,REAL such that
-A46: hf1=h*f & hf1 is_bounded_on X;
+A46: hf1=h*f & hf1|X is bounded;
 
     (g+h)*f in BoundedFunctions X; then
     consider F1 be Function of X,REAL such that
-A47: F1=(g+h)*f & F1 is_bounded_on X;
+A47: F1=(g+h)*f & F1|X is bounded;
 
     now let x be Element of X;
      F1.x = gPh1.x * f1.x by A44,A41,A47,ThB23a; then

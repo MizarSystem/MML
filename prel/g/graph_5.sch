@@ -52,7 +52,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -74,12 +74,12 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>

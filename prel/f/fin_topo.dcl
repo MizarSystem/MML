@@ -19,41 +19,41 @@
 </Signature>
 <RCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="108"/>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="108"/>
 <Cluster>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="24"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 </Registrations>

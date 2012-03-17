@@ -1,0 +1,1904 @@
+:: Introduction to Matroids
+::  by Grzegorz Bancerek and Yasunari Shidama
+:: 
+:: Received July 30, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies CLASSES1, PRE_TOPC, FINSET_1, BVFUNC_2, CARD_1, AMI_1, BOOLE,
+      VECTSP_1, RLVECT_3, FUNCT_1, RELAT_1, SETFAM_1, ORDERS_1, MATROID0,
+      TARSKI, SUBSET_1, JORDAN13, NATTRA_1, TAXONOM2, EQREL_1, MATRLIN, ARYTM,
+      ARYTM_1, RLVECT_1, RLVECT_2, AOFA_000, QC_LANG1, LEXBFS;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, SETFAM_1, FINSET_1,
+      NUMBERS, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      EQREL_1, ORDERS_1, TAXONOM2, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, CARD_1,
+      CLASSES1, SEQ_1, MEMBERED, VALUED_1, LEXBFS, AOFA_000, STRUCT_0,
+      ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, VECTSP_4, VECTSP_6, VECTSP_7,
+      PRE_TOPC, TDLAT_3, MATRLIN, PENCIL_1, RANKNULL;
+ constructors XXREAL_0, ARYTM_2, ARYTM_3, XBOOLE_0, NUMBERS, XREAL_0, NAT_1,
+      PCOMPS_1, EQREL_1, DOMAIN_1, FINSET_1, XCMPLX_0, CARD_1, CLASSES1,
+      COH_SP, TDLAT_3, FINSEQ_1, TAXONOM2, SEQ_1, MEMBERED, LEXBFS, VALUED_0,
+      VALUED_1, RANKNULL, VECTSP_1, VECTSP_7, GROUP_1, PRE_TOPC, MATRLIN,
+      PENCIL_1, SETFAM_1, TARSKI, ZFMISC_1, RELAT_1, REALSET1, STRUCT_0,
+      RLVECT_1, VECTSP_6, VECTSP_4;
+ registrations FINSET_1, ZFMISC_1, XBOOLE_0, NUMBERS, CARD_1, RELSET_1,
+      STRUCT_0, PSCOMP_1, SUBSET_1, ARYTM_2, XCMPLX_0, ARYTM_3, WAYBEL11,
+      PENCIL_1, TDLAT_3, FSM_1, MSAFREE1, PUA2MSS1, SETFAM_1, EQREL_1, MATRLIN,
+      XREAL_0, ORDINAL1, MEMBERED, VALUED_1, ALGSTR_0, ALGSTR_1, BINOM,
+      RLVECT_1, VECTSP_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, FUNCT_1, CLASSES1, TAXONOM2, XBOOLE_0, STRUCT_0, LEXBFS,
+      GROUP_1, PRE_TOPC, PENCIL_1;
+ theorems TARSKI, XBOOLE_1, ZFMISC_1, CARD_1, COH_SP, PRE_TOPC, NAT_1,
+      CLASSES1, TDLAT_3, XXREAL_0, XREAL_1, XBOOLE_0, TAXONOM2, ORDERS_1,
+      FUNCT_2, FUNCT_1, EQREL_1, WELLORD2, VECTSP_7, VECTSP_9, MATRLIN,
+      STRUCT_0, CARD_FIN, CARD_2, VECTSP_4, ORDINAL1, CARD_FIL, RANKNULL,
+      VECTSP_1, VECTSP_6, ALGSTR_0, SETWISEO, HALLMAR1, BORSUK_5;
+ schemes FUNCT_2, NAT_1;
+
+begin :: Definition by Independent Sets
+
+notation
+  let x,y be set;
+  antonym x c/= y for x c= y;
+end;
+
+definition
+  mode SubsetFamilyStr is TopStruct;
+end;
+
+notation
+  let M be SubsetFamilyStr;
+  let A be Subset of M;
+  synonym A is independent for A is open;
+  antonym A is dependent for A is open;
+end;
+
+definition
+  let M be SubsetFamilyStr;
+  func the_family_of M -> Subset-Family of M equals the topology of M;
+  coherence;
+end;
+
+definition
+  let M be SubsetFamilyStr;
+  let A be Subset of M;
+  redefine attr A is independent means: Def8: A in the_family_of M;
+  compatibility by PRE_TOPC:def 5;
+end;
+
+definition
+  let M be SubsetFamilyStr;
+  attr M is subset-closed means: Def2: the_family_of M is subset-closed;
+  attr M is with_exchange_property means
+  for A,B being finite Subset of M
+  st A in the_family_of M & B in the_family_of M & card B = (card A) + 1
+  ex e being Element of M st e in B \ A & A \/ {e} in the_family_of M;
+end;
+
+registration
+  cluster strict non empty non void finite subset-closed with_exchange_property
+  SubsetFamilyStr;
+  existence
+  proof
+    bool {0} c= bool {0}; then
+    reconsider S = bool {0} as Subset-Family of {0};
+    take M = TopStruct(#{0}, S#);
+    thus M is strict;
+    thus the carrier of M is non empty;
+    thus the topology of M is non empty;
+    thus the carrier of M is finite;
+    thus the_family_of M is subset-closed by COH_SP:2;
+    let A,B be finite Subset of M;
+    assume A in the_family_of M;
+    assume B in the_family_of M;
+    assume
+02: card B = (card A) + 1;
+    bool {0} = {{},{0}} by ZFMISC_1:30; then
+04: (A = {} or A = {0}) & (B = {} or B = {0}) by TARSKI:def 2; then
+05: (card A = 0 or card A = 1) & (card B = 0 or card B = 1) by CARD_1:50;
+    reconsider e = 0 as Element of M by TARSKI:def 1;
+    take e;
+    thus thesis by 02,04,05;
+  end;
+end;
+
+registration
+  let M be non void SubsetFamilyStr;
+  cluster independent Subset of M;
+  existence
+  proof
+    consider a being Element of the topology of M;
+    reconsider a as Subset of M;
+    take a; thus a in the_family_of M;
+  end;
+end;
+
+registration
+  let M be subset-closed SubsetFamilyStr;
+  cluster the_family_of M -> subset-closed;
+  coherence by Def2;
+end;
+
+theorem Th2:
+  for M being non void subset-closed SubsetFamilyStr
+  for A being independent Subset of M
+  for B being set st B c= A
+  holds B is independent Subset of M
+  proof
+    let M be non void subset-closed SubsetFamilyStr;
+    let A be independent Subset of M;
+    let B be set;
+    assume 01: B c= A;
+    A in the_family_of M by Def8; then
+    B in the_family_of M by 01,CLASSES1:def 1;
+    hence B is independent Subset of M by Def8;
+  end;
+
+
+registration
+  let M be non void subset-closed SubsetFamilyStr;
+  cluster finite independent Subset of M;
+  existence
+  proof
+    consider a being Element of the topology of M;
+    reconsider a as independent Subset of M by PRE_TOPC:def 5;
+    {} c= a by XBOOLE_1:2; then
+    reconsider b = {} as independent Subset of M by Th2;
+    take b; thus thesis;
+  end;
+end;
+
+definition
+  mode Matroid is non empty non void subset-closed with_exchange_property
+  SubsetFamilyStr;
+end;
+
+theorem M0:
+  for M being subset-closed SubsetFamilyStr
+  holds M is non void iff {} in the_family_of M
+  proof
+    let M be subset-closed SubsetFamilyStr;
+    hereby
+      assume M is non void; then
+      reconsider M' = M as non void subset-closed SubsetFamilyStr;
+      consider a being independent Subset of M';
+      {} c= a by XBOOLE_1:2; then
+      {} is independent Subset of M' by Th2;
+      hence {} in the_family_of M by Def8;
+    end;
+    assume {} in the_family_of M;
+    hence the topology of M is non empty;
+  end;
+
+registration
+  let M be non void subset-closed SubsetFamilyStr;
+  cluster {} the carrier of M -> independent;
+  coherence
+  proof
+    thus {} the carrier of M in the_family_of M by M0;
+  end;
+end;
+
+theorem M1:
+  for M being non void SubsetFamilyStr
+  holds M is subset-closed iff
+  for A,B being Subset of M st A is independent & B c= A holds B is independent
+  proof
+    let M be non void SubsetFamilyStr;
+    thus M is subset-closed implies for A,B being Subset of M
+    st A is independent & B c= A holds B is independent by Th2;
+    assume
+03: for A,B being Subset of M st A is independent & B c= A
+    holds B is independent;
+    let x,y be set; assume x in the_family_of M; then
+04: x is independent Subset of M by Def8;
+    assume y c= x; then
+    y is independent Subset of M by 03,04,XBOOLE_1:1;
+    hence thesis by Def8;
+  end;
+
+registration
+  let M be non void subset-closed SubsetFamilyStr;
+  let A be independent Subset of M;
+  let B be set;
+  cluster A/\B -> independent Subset of M;
+  coherence
+  proof
+    A/\B c= A by XBOOLE_1:17;
+    hence thesis by M1;
+  end;
+  cluster B/\A -> independent Subset of M;
+  coherence;
+  cluster A\B -> independent Subset of M;
+  coherence
+  proof
+    A\B c= A by XBOOLE_1:36;
+    hence thesis by M1;
+  end;
+end;
+
+theorem M2:
+  for M being non void non empty SubsetFamilyStr
+  holds M is with_exchange_property iff
+  for A,B being finite Subset of M
+  st A is independent & B is independent & card B = (card A) + 1
+  ex e being Element of M st e in B \ A & A \/ {e} is independent
+  proof
+    let M be non void non empty SubsetFamilyStr;
+    consider e0 being Element of M;
+    thus M is with_exchange_property implies
+    for A,B being finite Subset of M
+    st A is independent & B is independent & card B = (card A) + 1
+    ex e being Element of M st e in B \ A & A \/ {e} is independent
+    proof assume
+00:   for A,B being finite Subset of M
+      st A in the_family_of M & B in the_family_of M & card B = (card A) + 1
+      ex e being Element of M st e in B \ A & A \/ {e} in the_family_of M;
+      let A,B be finite Subset of M;
+      assume
+      A in the_family_of M & B in the_family_of M & card B = (card A) + 1; then
+      consider e being Element of M such that
+01:   e in B \ A & A \/ {e} in the_family_of M by 00;
+      take e; thus e in B \ A & A \/ {e} in the_family_of M by 01;
+    end;
+    assume
+02: for A,B being finite Subset of M
+    st A is independent & B is independent & card B = (card A) + 1
+    ex e being Element of M st e in B \ A & A \/ {e} is independent;
+    let A,B be finite Subset of M;
+    assume A in the_family_of M & B in the_family_of M; then
+03: A is independent & B is independent by Def8;
+    assume card B = (card A) + 1; then
+    consider e being Element of M such that
+04: e in B \ A & A \/ {e} is independent by 02,03;
+    take e; thus thesis by 04,Def8;
+  end;
+
+notation
+  let A be set;
+  synonym A is finite-membered for A is with_finite-elements;
+end;
+
+definition
+  let A be set;
+  redefine attr A is finite-membered means:
+Def6:
+  for B being set st B in A holds B is finite;
+  compatibility
+  proof
+    thus A is finite-membered implies
+    for B being set st B in A holds B is finite
+    proof
+      assume for a being Element of A holds a is finite;
+      hence thesis;
+    end;
+    assume
+A1: for B being set st B in A holds B is finite;
+    let a be Element of A;
+    A <> {} or A = {};
+    hence thesis by A1;
+  end;
+end;
+
+definition
+  let M be SubsetFamilyStr;
+  attr M is finite-membered means:
+Def7:
+  the_family_of M is finite-membered;
+end;
+
+definition
+  let M be SubsetFamilyStr;
+  attr M is finite-degree means:
+Def9:
+  M is finite-membered &
+  ex n being Nat st
+  for A being finite Subset of M st A is independent holds card A <= n;
+end;
+
+registration
+  cluster finite-degree -> finite-membered SubsetFamilyStr;
+  coherence
+  proof let M be SubsetFamilyStr;
+    assume M is finite-membered;
+    hence thesis;
+  end;
+  cluster finite -> finite-degree SubsetFamilyStr;
+  coherence
+  proof let M be SubsetFamilyStr;
+    assume the carrier of M is finite; then
+    reconsider X = the carrier of M as finite set;
+    thus M is finite-membered
+    proof
+      let x be set; assume x in the_family_of M; then
+      x c= X;
+      hence thesis;
+    end;
+    take n = card X;
+    let A be finite Subset of M;
+    thus thesis by NAT_1:44;
+  end;
+end;
+
+begin :: Examples
+
+registration
+  cluster mutually-disjoint non empty with_non-empty_elements set;
+  existence
+  proof
+    take Y = {{0}};
+    thus thesis by TAXONOM2:10;
+  end;
+end;
+
+theorem Th11:
+  for A,B being finite set st card A < card B
+  ex x being set st x in B \ A
+  proof
+    let A,B be finite set;
+    assume card A < card B; then
+    not B c= A by NAT_1:44; then
+    consider x being set such that
+00: x in B & x nin A by TARSKI:def 3;
+    take x;
+    thus x in B \ A by 00,XBOOLE_0:def 4;
+  end;
+
+theorem
+  for P being mutually-disjoint with_non-empty_elements non empty set
+  for f being Choice_Function of P holds f is one-to-one
+  proof
+    let P be mutually-disjoint with_non-empty_elements non empty set;
+    let f be Choice_Function of P;
+    let x1,x2 be set; assume
+00: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+    not {} in P; then
+    f.x1 in x1 & f.x1 in x2 by 00,ORDERS_1:def 1; then
+    x1 meets x2 by XBOOLE_0:3;
+    hence x1 = x2 by 00,TAXONOM2:def 5;
+  end;
+
+registration
+  cluster -> non void subset-closed with_exchange_property
+  (discrete SubsetFamilyStr);
+  coherence
+  proof
+    let T be discrete SubsetFamilyStr;
+    thus
+01: T is non void
+    proof
+      thus the topology of T is non empty by TDLAT_3:def 1;
+    end;
+    for A,B being Subset of T st A is independent & B c= A
+    holds B is independent by TDLAT_3:17;
+    hence T is subset-closed by 01,M1;
+    let A,B be finite Subset of T such that
+    A in the_family_of T & B in the_family_of T and
+02: card B = card A + 1;
+    now assume B c= A; then
+      card B c= card A by CARD_1:27; then
+      card B <= card A & 0 < 1 by NAT_1:40; then
+      card B + 0 < card A + 1 by XREAL_1:10;
+      hence contradiction by 02;
+    end; then
+    consider x being set such that
+03: x in B & not x in A by TARSKI:def 3;
+    reconsider x as Element of T by 03;
+    take x; thus x in B \ A by 03,XBOOLE_0:def 4;
+    {x} c= the carrier of T by 03,ZFMISC_1:37; then
+    reconsider C = A \/ {x} as Subset of T by XBOOLE_1:8;
+    C is independent by TDLAT_3:17;
+    hence thesis by Def8;
+  end;
+end;
+
+theorem
+  for T being non empty discrete TopStruct holds T is Matroid;
+
+definition
+  let P be set;
+  func ProdMatroid P -> strict SubsetFamilyStr means:
+Def4:
+  the carrier of it = union P &
+  the_family_of it = {A where A is Subset of union P:
+   for D being set st D in P ex d being set st A /\ D c= {d}};
+  existence
+  proof
+    set X = union P;
+    set F = {A where A is Subset of union P:
+    for D being set st D in P ex d being set st A /\ D c= {d}};
+    F c= bool X
+    proof
+      let x be set; assume x in F; then
+      ex A being Subset of X st x = A &
+      for D being set st D in P ex d being set st A /\ D c= {d};
+      hence thesis;
+    end; then
+    reconsider F as Subset-Family of X;
+    take M = TopStruct(#X,F#);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let P be non empty with_non-empty_elements set;
+  cluster ProdMatroid P -> non empty;
+  coherence
+  proof set M = ProdMatroid P;
+    the carrier of M = union P by Def4;
+    hence the carrier of M is non empty;
+  end;
+end;
+
+theorem Th10:
+  for P being set
+  for A being Subset of ProdMatroid P holds A is independent iff
+  for D being Element of P ex d being Element of D st A /\ D c= {d}
+  proof
+    let P be set;
+    set M = ProdMatroid P;
+00: the_family_of M = {A where A is Subset of union P:
+    for D being set st D in P ex d being set st A /\ D c= {d}} by Def4;
+03: the carrier of M = union P by Def4;
+    let A be Subset of ProdMatroid P;
+    thus A is independent implies
+    for D being Element of P ex d being Element of D st A /\ D c= {d}
+    proof assume A in the_family_of M; then
+01:   ex B being Subset of union P st A = B & for D being set st D in P
+      ex d being set st B /\ D c= {d} by 00;
+      let D be Element of P;
+      P = {} implies A = {} & {} /\ D = {} by 03,ZFMISC_1:2; then
+      P = {} implies A /\ D c= {1} by XBOOLE_1:2; then
+      consider d being set such that
+02:   A /\ D c= {d} by 01;
+      consider d0 being Element of D;
+      now assume d nin D; then
+        d nin A /\ D by XBOOLE_0:def 3; then
+        A /\ D <> {d} by TARSKI:def 1; then
+        A /\ D = {} by 02,ZFMISC_1:39;
+        hence A /\ D c= {d0} by XBOOLE_1:2;
+      end;
+      hence thesis by 02;
+    end;
+    assume
+03: for D being Element of P ex d being Element of D st A /\ D c= {d};
+04: the carrier of M = union P by Def4;
+    now let D be set; assume D in P; then
+      ex d being Element of D st A /\ D c= {d} by 03;
+      hence ex d being set st A /\ D c= {d};
+    end;
+    hence A in the_family_of M by 00,04;
+  end;
+
+registration
+  let P be set;
+  cluster ProdMatroid P -> non void subset-closed;
+  coherence
+  proof set M = ProdMatroid P;
+00: the_family_of M = {A where A is Subset of union P:
+    for D being set st D in P ex d being set st A /\ D c= {d}} by Def4;
+    set A = {} union P;
+    now let D be set; assume D in P;
+      consider d being set;
+      take d; thus A /\ D c= {d} by XBOOLE_1:2;
+    end; then
+    A in the_family_of M by 00;
+    hence the topology of M is non empty;
+    thus the_family_of M is subset-closed
+    proof
+      let a,b be set;
+      assume
+01:   a in the_family_of M & b c= a; then
+02:   ex B being Subset of union P st a = B & for D being set st D in P
+      ex d being set st B /\ D c= {d} by 00; then
+03:   b is Subset of union P by 01,XBOOLE_1:1;
+      now let D be set; assume D in P; then
+        consider d being set such that
+03:     a /\ D c= {d} by 02;
+        take d;
+        b /\ D c= a /\ D by 01,XBOOLE_1:26;
+        hence b /\ D c= {d} by 03,XBOOLE_1:1;
+      end;
+      hence b in the_family_of M by 00,03;
+    end;
+  end;
+end;
+
+theorem Th14:
+  for P being mutually-disjoint set
+  for x being Subset of ProdMatroid P
+  ex f being Function of x,P st
+    for a being set st a in x holds a in f.a
+  proof
+    let P be mutually-disjoint set;
+    let x be Subset of ProdMatroid P;
+    defpred P[set,set] means $1 in $2;
+00: now
+      let a be set;
+      assume a in x; then
+      a in the carrier of ProdMatroid P; then
+      a in union P by Def4;
+      then ex y being set st a in y & y in P by TARSKI:def 4;
+      hence ex y being set st y in P & P[a,y];
+    end;
+    consider f being Function of x,P such that
+01: for a being set st a in x holds P[a,f.a] from FUNCT_2:sch 1(00);
+    take f; thus thesis by 01;
+  end;
+
+theorem Th13:
+  for P being mutually-disjoint set
+  for x being Subset of ProdMatroid P
+  for f being Function of x,P st
+    for a being set st a in x holds a in f.a
+  holds x is independent iff f is one-to-one
+  proof
+    let P be mutually-disjoint set, x be Subset of ProdMatroid P;
+    let f be Function of x,P;
+    assume
+01: for a being set st a in x holds a in f.a;
+    hereby
+      assume
+03:   x is independent;
+      thus f is one-to-one
+      proof
+        let a,b be set;
+        assume a in dom f & b in dom f; then
+06:     f.a in rng f & f.b in rng f & a in x & b in x by FUNCT_1:def 5; then
+        reconsider D1 = f.a, D2 = f.b as Element of P;
+        consider d1 being Element of D1 such that
+04:     x /\ D1 c= {d1} by 03,Th10;
+        consider d2 being Element of D2 such that
+05:     x /\ D2 c= {d2} by 03,Th10;
+        a in D1 & b in D2 by 01,06; then
+07:     a in x /\ D1 & b in x /\ D2 by 06,XBOOLE_0:def 3; then
+        a = d1 & b = d2 by 04,05,TARSKI:def 1;
+        hence thesis by 05,07,TARSKI:def 1;
+      end;
+    end;
+    assume
+08: f is one-to-one;
+    now
+      let D be Element of P;
+      assume
+09:   for d being Element of D holds x /\ D c/= {d};
+      consider d1 being Element of D;
+      x /\ D c/= {d1} by 09; then
+      consider d2 being set such that
+010:  d2 in x /\ D & d2 nin {d1} by TARSKI:def 3;
+011:  d2 in x & d2 in D & d1 <> d2 by 010,XBOOLE_0:def 3,TARSKI:def 1;
+      the carrier of ProdMatroid P = union P by Def4; then
+      ex y being set st d2 in y & y in P by 011,TARSKI:def 4; then
+012:  dom f = x & D in P by FUNCT_2:def 1; then
+      d2 in f.d2 & f.d2 in rng f by 01,011,FUNCT_1:def 5; then
+      f.d2 meets D & f.d2 in P by 011,XBOOLE_0:3; then
+013:  f.d2 = D by TAXONOM2:def 5;
+      x /\ D c= {d2}
+      proof
+        let a be set;
+        assume a in x /\ D; then
+014:    a in x & a in D by XBOOLE_0:def 3; then
+        a in f.a & f.a in rng f by 01,012,FUNCT_1:def 5; then
+        f.a meets D & f.a in P by 014,XBOOLE_0:3; then
+        f.a = D by TAXONOM2:def 5; then
+        a = d2 by 011,012,013,014,08,FUNCT_1:def 8;
+        hence thesis by TARSKI:def 1;
+      end;
+      hence contradiction by 09,011;
+    end;
+    hence x is independent by Th10;
+  end;
+
+registration
+  let P be mutually-disjoint set;
+  cluster ProdMatroid P -> with_exchange_property;
+  coherence
+  proof set M = ProdMatroid P;
+00: the_family_of M = {A where A is Subset of union P:
+    for D being set st D in P ex d being set st A /\ D c= {d}} by Def4;
+    let A,B be finite Subset of M;
+    defpred P[set,set] means $1 in $2;
+    assume
+0A: A in the_family_of M & B in the_family_of M;
+07: A is independent & B is independent by 0A,Def8;
+    consider f being Function of A,P such that
+06: for a being set st a in A holds a in f.a by Th14;
+    consider g being Function of B,P such that
+03: for a being set st a in B holds a in g.a by Th14;
+    the carrier of ProdMatroid P = union P by Def4; then
+    (P = {} implies A = {}) & (P = {} implies B = {}) by ZFMISC_1:2; then
+02: dom f = A & f is one-to-one & rng f c= P &
+    dom g = B & g is one-to-one & rng g c= P
+    by 06,07,03,Th13,FUNCT_2:def 1;
+    reconsider A' = rng f, B' = rng g as finite set;
+    A, A' are_equipotent & B, B' are_equipotent by 02,WELLORD2:def 4; then
+0A: card A = card A' & card B = card B' by CARD_1:21;
+    assume card B = (card A) + 1; then
+    card B > card A by NAT_1:13; then
+    consider a being set such that
+08: a in B' \ A' by 0A,Th11;
+05: a in B' & a nin A' by 08,XBOOLE_0:def 4; then
+    consider x' being set such that
+09: x' in B & a = g.x' by 02,FUNCT_1:def 5;
+    reconsider x = x' as Element of M by 09;
+    take x;
+    now assume x in A; then
+0B:   x in f.x & x in g.x & f.x in rng f & g.x in rng g
+      by 02,06,03,09,FUNCT_1:def 5; then
+      f.x meets g.x & f.x in P & g.x in P by XBOOLE_0:3;
+      hence contradiction by 0B,09,05,TAXONOM2:def 5;
+    end;
+    hence x in B \ A by 09,XBOOLE_0:def 4;
+    reconsider xx = {x} as Subset of M by 09,ZFMISC_1:37;
+    reconsider Ax = A \/ xx as Subset of union P by Def4;
+    now let D be set; assume
+0C:   D in P; then
+      consider d being Element of D such that
+0D:   A /\ D c= {d} by 07,Th10;
+0E:   Ax /\ D = A /\ D \/ xx /\ D by XBOOLE_1:23;
+      per cases;
+      suppose
+0F:     D = a;
+        take x';
+        A /\ D c= {}
+        proof let z be set;
+          assume z in A /\ D; then
+0G:       z in A & z in D by XBOOLE_0:def 3; then
+0H:       z in f.z & f.z in rng f by 06,02,FUNCT_1:def 5; then
+          f.z in P & D meets f.z by 0G,XBOOLE_0:3;
+          hence z in {} by 0F,0H,05,TAXONOM2:def 5;
+        end; then
+        A /\ D = {};
+        hence Ax /\ D c= {x'} by 0E,XBOOLE_1:17;
+      end;
+      suppose
+0I:     D <> a;
+        reconsider d as set;
+        take d;
+        a in rng g by 09,02,FUNCT_1:def 5; then
+        a misses D & x in a by 03,09,0I,0C,TAXONOM2:def 5; then
+        x nin D by XBOOLE_0:3; then
+        xx c/= D by ZFMISC_1:37; then
+        xx /\ D <> xx & xx /\ D c= xx by XBOOLE_1:17; then
+        xx /\ D = {} by ZFMISC_1:39;
+        hence Ax /\ D c= {d} by 0D,0E;
+      end;
+    end;
+    hence A \/ {x} in the_family_of M by 00;
+  end;
+end;
+
+registration
+  let X be finite set;
+  let P be Subset of bool X;
+  cluster ProdMatroid P -> finite;
+  coherence
+  proof
+    union P is finite;
+    hence the carrier of ProdMatroid P is finite by Def4;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster -> mutually-disjoint a_partition of X;
+  coherence
+  proof
+    let P be a_partition of X;
+    let x,y be set;
+    thus thesis by EQREL_1:def 6;
+  end;
+end;
+
+registration
+  cluster finite strict Matroid;
+  existence
+  proof
+    consider X being finite non empty set, P being a_partition of X;
+    take M = ProdMatroid P;
+    thus thesis;
+  end;
+end;
+
+registration
+  let M be finite-membered non void SubsetFamilyStr;
+  cluster -> finite (independent Subset of M);
+  coherence
+  proof
+    let A be independent Subset of M;
+    A in the_family_of M & the_family_of M is finite-membered
+    by Def7,Def8;
+    hence A is finite by Def6;
+  end;
+end;
+
+definition
+  let F be Field;
+  let V be VectSp of F;
+  func LinearlyIndependentSubsets V -> strict SubsetFamilyStr means:
+Def5:
+  the carrier of it = the carrier of V &
+  the_family_of it = {A where A is Subset of V: A is linearly-independent};
+  existence
+  proof
+    set X = the carrier of V;
+    set F = {A where A is Subset of V: A is linearly-independent};
+    F c= bool X
+    proof
+      let x be set; assume x in F; then
+      ex A being Subset of X st x = A & A is linearly-independent;
+      hence thesis;
+    end; then
+    reconsider F as Subset-Family of X;
+    take M = TopStruct(#X,F#);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let F be Field;
+  let V be VectSp of F;
+  cluster LinearlyIndependentSubsets V ->
+     non empty non void subset-closed;
+  coherence
+  proof set M = LinearlyIndependentSubsets V;
+    the carrier of M = the carrier of V by Def5;
+    hence the carrier of M is non empty;
+A2: the_family_of M = {A where A is Subset of V: A is linearly-independent}
+    by Def5;
+    {} the carrier of V is linearly-independent by VECTSP_7:4; then
+    {} in the_family_of M by A2;
+    hence the topology of M is non empty;
+    let x,y be set;
+    assume x in the_family_of M; then
+    consider A being Subset of V such that
+A3: x = A & A is linearly-independent by A2;
+    assume
+A4: y c= x; then
+    reconsider B = y as Subset of V by A3,XBOOLE_1:1;
+    B is linearly-independent by A3,A4,VECTSP_7:2;
+    hence y in the_family_of M by A2;
+  end;
+end;
+
+registration
+  let F be Field;
+  let V be VectSp of F;
+  cluster linearly-independent empty Subset of V;
+  existence
+  proof
+    take {} the carrier of V;
+    thus thesis by VECTSP_7:4;
+  end;
+end;
+
+theorem Th21:
+  for F being Field, V being VectSp of F
+  for A being Subset of LinearlyIndependentSubsets V
+  holds A is independent iff A is linearly-independent Subset of V
+  proof
+    let F be Field;
+    let V be VectSp of F;
+    set M = LinearlyIndependentSubsets V;
+    let B be Subset of M;
+    the_family_of M = {A where A is Subset of V: A is linearly-independent}
+    by Def5; then
+    B in the_family_of M iff
+    ex A being Subset of V st B = A & A is linearly-independent;
+    hence thesis by Def8;
+  end;
+
+theorem
+  for F being Field
+  for V being VectSp of F
+  for A, B being finite Subset of V st B c= A
+  for v being Vector of V st v in Lin(A) & not v in Lin(B)
+    holds
+   ex w being Vector of V st w in A\B & w in Lin(A \ {w} \/ {v})
+   proof
+     let F be Field;
+     let V be VectSp of F;
+     let A, B be finite Subset of V;
+     assume B c= A; then
+     A = B\/(A\B) by XBOOLE_1:45;
+     hence thesis by VECTSP_9:22;
+   end;
+
+theorem ThI1:
+  for F being Field, V being VectSp of F
+  for A being Subset of V st A is linearly-independent
+  for a being Element of V st a nin the carrier of Lin A
+  holds A\/{a} is linearly-independent
+  proof
+    let F be Field;
+    let V be VectSp of F;
+    let A be Subset of V such that
+Z0: A is linearly-independent;
+    let a be Element of V;
+    set B = A\/{a};
+    assume
+Z1: a nin the carrier of Lin A & B is linearly-dependent; then
+    consider l being Linear_Combination of B such that
+A0: Sum l = 0.V & Carrier l <> {} by VECTSP_7:def 1;
+A1: {Sum s where s is Linear_Combination of A: not contradiction} =
+    the carrier of Lin A by VECTSP_7:def 2;
+    a in {a} by TARSKI:def 1; then
+A2: (l!{a}).a = l.a by RANKNULL:25;
+    A c= the carrier of Lin A
+    proof
+      let x be set; assume
+B0:   x in A; then
+      reconsider x as Element of V;
+      x in Lin A by B0,VECTSP_7:13;
+      hence thesis by STRUCT_0:def 5;
+    end; then
+    a nin A by Z1; then
+    B\A={a} & A c= B by XBOOLE_1:7,88,ZFMISC_1:56; then
+    l = (l!A)+(l!{a}) by RANKNULL:27; then
+    0.V = Sum (l!A) + Sum (l!{a}) by A0,VECTSP_6:77
+    .= Sum (l!A) + (l.a)*a by A2,VECTSP_6:43; then
+A3: (l.a)*a = - Sum (l!A) by ALGSTR_0:def 13;
+A4: (-(l.a)")*(l!A) is Linear_Combination of A by VECTSP_6:61;
+    now assume
+      l.a <> 0.F; then
+      a = ((l.a)")*(-Sum(l!A)) by A3,VECTSP_1:67
+      .= -((l.a)" * Sum(l!A)) by VECTSP_1:69
+      .= (-(l.a)")*(Sum(l!A)) by VECTSP_1:68
+      .= Sum((-(l.a)")*(l!A)) by VECTSP_6:78;
+      hence contradiction by A1,Z1,A4;
+    end; then
+A5: a nin Carrier l & Carrier l c= B by VECTSP_6:20,def 7;
+    Carrier l c= A
+    proof
+      let x be set;
+      thus thesis by A5,SETWISEO:6;
+    end; then
+    l is Linear_Combination of A by VECTSP_6:def 7;
+    hence contradiction by A0,Z0,VECTSP_7:def 1;
+  end;
+
+registration
+  let F be Field;
+  let V be VectSp of F;
+  cluster LinearlyIndependentSubsets V -> with_exchange_property;
+  coherence
+  proof set M = LinearlyIndependentSubsets V;
+A2: the_family_of M = {A where A is Subset of V: A is linearly-independent}
+    by Def5;
+    let A,B be finite Subset of M such that
+A5: A in the_family_of M & B in the_family_of M & card B = (card A) + 1;
+    A is independent & B is independent by A5,Def8; then
+    reconsider A' = A, B' = B as
+    linearly-independent finite Subset of V by Th21;
+    set V' = Lin (A' \/ B');
+    A' c= the carrier of V'
+    proof
+      let a be set; assume a in A'; then
+      a in A' \/ B' by XBOOLE_0:def 2; then
+      a in V' by VECTSP_7:13;
+      hence thesis by STRUCT_0:def 5;
+    end; then
+    reconsider A'' = A' as linearly-independent finite Subset of V'
+    by VECTSP_9:16;
+    B' c= the carrier of V'
+    proof
+      let a be set; assume a in B'; then
+      a in A' \/ B' by XBOOLE_0:def 2; then
+      a in V' by VECTSP_7:13;
+      hence thesis by STRUCT_0:def 5;
+    end; then
+    reconsider B'' = B' as linearly-independent finite Subset of V'
+    by VECTSP_9:16;
+A0: V' = Lin(A''\/ B'') by VECTSP_9:21; then
+    consider D being Basis of V' such that
+A4: B' c= D by VECTSP_7:27;
+    consider C being Basis of V' such that
+A3: C c= A'' \/ B'' by A0,VECTSP_7:28;
+    consider e being Element of C \ the carrier of Lin A';
+    reconsider c = C as finite set by A3;
+A8: c is Basis of V' & A' is Basis of Lin A' by RANKNULL:20; then
+BB: V' is finite-dimensional & Lin A' is finite-dimensional
+    by MATRLIN:def 3; then
+    card c = Card D by VECTSP_9:26; then
+    card B c= card c by A4,CARD_1:27; then
+    card B <= card c by NAT_1:40; then
+A9: card A < card c by A5,NAT_1:13;
+    now assume
+      C c= the carrier of Lin A'; then
+      reconsider C' = C as Subset of Lin A';
+      the carrier of Lin A' c= the carrier of V by VECTSP_4:def 2; then
+      reconsider C'' = C' as Subset of V by XBOOLE_1:1;
+      C is linearly-independent by VECTSP_7:def 3; then
+      C'' is linearly-independent by VECTSP_9:15; then
+      consider E being Basis of Lin A' such that
+B2:   C' c= E by VECTSP_7:27,VECTSP_9:16;
+B3:   card A = Card E by A8,BB,VECTSP_9:26; then
+      A,E are_equipotent by CARD_1:21; then
+      E is finite by CARD_1:68;
+      hence contradiction by A9,B2,B3,NAT_1:44;
+    end; then
+    consider x being set such that
+AA: x in C & x nin the carrier of Lin A' by TARSKI:def 3;
+    x in C \ the carrier of Lin A' by AA,XBOOLE_0:def 4; then
+A6: e in C & e nin the carrier of Lin A' by XBOOLE_0:def 4; then
+A7: e in A\/B by A3; then
+    reconsider e as Element of M;
+    take e;
+    A c= the carrier of Lin A'
+    proof
+      let x be set; assume x in A; then
+      x in Lin A' by VECTSP_7:13;
+      hence thesis by STRUCT_0:def 5;
+    end; then
+B7: e nin A by A6; then
+B8: e in B' by A7,XBOOLE_0:def 2;
+    hence e in B \ A by B7,XBOOLE_0:def 4;
+    reconsider a = e as Element of V by B8;
+    A'\/{a} is linearly-independent by A6,ThI1;
+    hence A \/ {e} in the_family_of M by A2;
+
+  end;
+end;
+
+registration
+  let F be Field;
+  let V be finite-dimensional VectSp of F;
+  cluster LinearlyIndependentSubsets V -> finite-membered;
+  coherence
+  proof set M = LinearlyIndependentSubsets V;
+    let A be set;
+    assume A in the_family_of M; then
+    A is independent Subset of M by Def8; then
+    A is linearly-independent Subset of V by Th21;
+    hence thesis by VECTSP_9:25;
+  end;
+end;
+
+begin :: Maximal Independent Subsets, Ranks, and Basis
+
+definition
+  let M be SubsetFamilyStr;
+  let A,C be Subset of M;
+  pred A is_maximal_independent_in C means:
+MAXIMAL:
+  A is independent & A c= C &
+  for B being Subset of M st B is independent & B c= C & A c= B holds A = B;
+end;
+
+theorem Th:
+  for M being non void finite-degree SubsetFamilyStr
+  for C,A being Subset of M st A c= C & A is independent
+  ex B being independent Subset of M st A c= B & B is_maximal_independent_in C
+  proof
+    let M be non void finite-degree SubsetFamilyStr;
+    let C,A0 be Subset of M; assume
+A0: A0 c= C & A0 is independent; then
+    reconsider AA = A0 as independent Subset of M;
+    defpred P[Nat] means
+    for A being finite Subset of M st A0 c= A & A c= C & A is independent
+    holds card A <= $1;
+    consider n being Nat such that
+A1: for A being finite Subset of M st A is independent holds card A <= n
+    by Def9;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    P[n] by A1; then
+A2: ex n being Nat st P[n];
+    consider n0 being Nat such that
+A3: P[n0] & for m being Nat st P[m] holds n0 <= m from NAT_1:sch 5(A2);
+    now
+      assume
+B1:   for A being independent Subset of M st A0 c= A & A c= C
+      holds card A < n0;
+      card AA < n0 & 0 <= card AA by A0,B1,NAT_1:2; then
+      (card AA)+1 <= n0 & (card AA)+1 >= 0+1 by NAT_1:13,XREAL_1:8; then
+      consider n being Nat such that
+B2:   n0 = 1+n by NAT_1:10,XXREAL_0:2;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      P[n]
+      proof let A be finite Subset of M;
+        assume A0 c= A & A c= C & A is independent; then
+        card A < n+1 by B1,B2;
+        hence card A <= n by NAT_1:13;
+      end; then
+      n+1 <= n by A3,B2;
+      hence contradiction by NAT_1:13;
+    end; then
+    consider A being independent Subset of M such that
+A4: A0 c= A & A c= C & card A >= n0;
+    take A;
+    thus A0 c= A & A is independent & A c= C by A4;
+    let B be Subset of M; assume
+A5: B is independent & B c= C & A c= B; then
+    reconsider B' = B as independent Subset of M;
+    A0 c= B & card A <= card B' by A4,A5,XBOOLE_1:1,NAT_1:44; then
+    n0 <= card B' & card B' <= n0 & card A <= n0 by A3,A4,A5,XXREAL_0:2; then
+    card B' = n0 & card A = n0 by A4,XXREAL_0:1;
+    hence A = B by A5,CARD_FIN:1;
+  end;
+
+theorem
+  for M being non void finite-degree subset-closed SubsetFamilyStr
+  for C being Subset of M
+  ex A being independent Subset of M st A is_maximal_independent_in C
+  proof
+    let M be non void finite-degree subset-closed SubsetFamilyStr;
+    let C be Subset of M;
+    {} the carrier of M c= C & {} the carrier of M is independent
+    by XBOOLE_1:2; then
+    ex A being independent Subset of M st
+    {} the carrier of M c= A & A is_maximal_independent_in C by Th;
+    hence thesis;
+  end;
+
+theorem M3:
+  for M being non empty non void subset-closed finite-degree SubsetFamilyStr
+  holds
+  M is Matroid iff
+  for C being Subset of M, A,B being independent Subset of M
+  st A is_maximal_independent_in C & B is_maximal_independent_in C
+  holds card A = card B
+  proof
+    let M be non empty non void subset-closed finite-degree SubsetFamilyStr;
+    hereby assume
+A0:   M is Matroid;
+      let C be Subset of M;
+B0:   now
+        let A,B be independent Subset of M such that
+A1:     A is_maximal_independent_in C & B is_maximal_independent_in C and
+A2:     card A < card B;
+        (card A)+1 <= card B by A2,NAT_1:13; then
+        (card A)+1 c= card B by NAT_1:40; then
+        consider D being set such that
+A3:     D c= B & Card D = (card A)+1 by CARD_FIL:36;
+        reconsider D as finite Subset of M by A3,XBOOLE_1:1;
+        D is independent by A3,M1; then
+        consider e being Element of M such that
+A4:     e in D \ A & A \/ {e} is independent by A0,A3,M2;
+        D \ A c= D by XBOOLE_1:36; then
+A5:     D \ A c= B & B c= C & A c= C by A1,A3,MAXIMAL,XBOOLE_1:1; then
+        D \ A c= C by XBOOLE_1:1; then
+        {e} c= C by A4,ZFMISC_1:37; then
+        A c= A \/ {e} & A \/ {e} c= C by A5,XBOOLE_1:7,8; then
+        A \/ {e} = A by A1,A4,MAXIMAL; then
+        {e} c= A by XBOOLE_1:7; then
+        e in A by ZFMISC_1:37;
+        hence contradiction by A4,XBOOLE_0:def 4;
+      end;
+      let A,B be independent Subset of M such that
+A1:   A is_maximal_independent_in C & B is_maximal_independent_in C;
+      card A < card B or card B < card A or card A = card B by XXREAL_0:1;
+      hence card A = card B by A1,B0;
+    end;
+    assume
+A3: for C being Subset of M, A,B being independent Subset of M
+    st A is_maximal_independent_in C & B is_maximal_independent_in C
+    holds card A = card B;
+    M is with_exchange_property
+    proof
+      let A,B be finite Subset of M;
+      reconsider C = A \/ B as Subset of M;
+      assume
+A4:   A in the_family_of M & B in the_family_of M & card B = (card A)+1;
+      assume
+A5:   for e be Element of M st e in B \ A
+      holds not A \/ {e} in the_family_of M;
+      reconsider A as independent Subset of M by A4,Def8;
+A6:   A is_maximal_independent_in C
+      proof
+        thus A in the_family_of M by A4;
+        thus A c= C by XBOOLE_1:7;
+        let D be Subset of M; assume
+A7:     D is independent & D c= C & A c= D;
+        assume not (A c= D & D c= A); then
+        consider e being set such that
+A8:     e in D & not e in A by A7,TARSKI:def 3;
+        reconsider e as Element of M by A8;
+        e in B by A7,A8,XBOOLE_0:def 2; then
+        e in B \ A by A8,XBOOLE_0:def 4; then
+        {e} c= D & not A \/ {e} in the_family_of M by A5,A8,ZFMISC_1:37; then
+        A \/ {e} c= D & A \/ {e} is not independent by A7,Def8,XBOOLE_1:8;
+        hence contradiction by A7,M1;
+      end;
+      B c= C & B is independent by Def8,A4,XBOOLE_1:7; then
+      consider B' being independent Subset of M such that
+B1:   B c= B' & B' is_maximal_independent_in C by Th;
+      card A = card B' & card B <= card B' by A3,A6,B1,NAT_1:44;
+      hence contradiction by A4,NAT_1:13;
+    end;
+    hence M is Matroid;
+  end;
+
+definition
+  let M be finite-degree Matroid;
+  let C be Subset of M;
+  func Rnk C -> Nat equals
+  union {card A where A is independent Subset of M: A c= C};
+  coherence
+  proof
+    consider n being Nat such that
+A1: for A being finite Subset of M st A is independent holds card A <= n
+    by Def9;
+    defpred P[Nat] means
+    for A being independent Subset of M st A c= C holds card A <= $1;
+    defpred Q[Nat] means
+    ex A being independent Subset of M st A c= C & $1 = card A;
+A2: ex ne being Nat st P[ne]
+    proof take n;
+      thus thesis by A1;
+    end;
+    consider n0 being Nat such that
+A3: P[n0] & for m being Nat st P[m] holds n0 <= m from NAT_1:sch 5(A2);
+    set X = {card A where A is independent Subset of M: A c= C};
+    union X = n0
+    proof
+      now let a be set; assume a in X; then
+        consider A being independent Subset of M such that
+A4:     a = card A & A c= C;
+        card A <= n0 by A3,A4;
+        hence a c= n0 by A4,NAT_1:40;
+      end;
+      hence union X c= n0 by ZFMISC_1:94;
+B1:   for k being Nat st Q[k] holds k <= n0 by A3;
+      card {} = card {} & {} the carrier of M c= C by XBOOLE_1:2; then
+B2:   ex n being Nat st Q[n];
+      consider n being Nat such that
+B3:   Q[n] & for m being Nat st Q[m] holds m <= n from NAT_1:sch 6(B1,B2);
+      consider A being independent Subset of M such that
+B4:   A c= C & n = card A by B3;
+      P[n] by B3; then
+      n <= n0 & n0 <= n by A3,B3; then
+      n = n0 by XXREAL_0:1; then
+      n0 in X by B4;
+      hence thesis by ZFMISC_1:92;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem ThR0:
+  for M being finite-degree Matroid
+  for C being Subset of M
+  for A being independent Subset of M st A c= C
+  holds card A <= Rnk C
+  proof
+    let M be finite-degree Matroid;
+    let C be Subset of M;
+    let A be independent Subset of M;
+    assume A c= C; then
+    card A in {card B where B is independent Subset of M: B c= C}; then
+    card A c= Rnk C by ZFMISC_1:92;
+    hence card A <= Rnk C by NAT_1:40;
+  end;
+
+theorem ThR1:
+  for M being finite-degree Matroid
+  for C being Subset of M
+  ex A being independent Subset of M st A c= C & card A = Rnk C
+  proof
+    let M be finite-degree Matroid;
+    let C be Subset of M;
+    consider n being Nat such that
+A1: for A being finite Subset of M st A is independent holds card A <= n
+    by Def9;
+    defpred P[Nat] means
+    for A being independent Subset of M st A c= C holds card A <= $1;
+    defpred Q[Nat] means
+    ex A being independent Subset of M st A c= C & $1 = card A;
+A2: ex ne being Nat st P[ne]
+    proof take n;
+      thus thesis by A1;
+    end;
+    consider n0 being Nat such that
+A3: P[n0] & for m being Nat st P[m] holds n0 <= m from NAT_1:sch 5(A2);
+    set X = {card A where A is independent Subset of M: A c= C};
+    now let a be set; assume a in X; then
+      consider A being independent Subset of M such that
+A4:   a = card A & A c= C;
+      card A <= n0 by A3,A4;
+      hence a c= n0 by A4,NAT_1:40;
+    end; then
+A5: Rnk C c= n0 by ZFMISC_1:94;
+B1: for k being Nat st Q[k] holds k <= n0 by A3;
+    card {} = card {} & {} the carrier of M c= C by XBOOLE_1:2; then
+B2: ex n being Nat st Q[n];
+    consider n being Nat such that
+B3: Q[n] & for m being Nat st Q[m] holds m <= n from NAT_1:sch 6(B1,B2);
+    consider A being independent Subset of M such that
+B4: A c= C & n = card A by B3;
+    P[n] by B3; then
+    n <= n0 & n0 <= n by A3,B3; then
+B5: n = n0 by XXREAL_0:1; then
+    n0 in X by B4; then
+B6: n0 c= Rnk C by ZFMISC_1:92;
+    take A; thus thesis by B4,B5,B6,A5,XBOOLE_0:def 10;
+  end;
+
+theorem ThR2:
+  for M being finite-degree Matroid
+  for C being Subset of M
+  for A being independent Subset of M holds
+  A is_maximal_independent_in C iff A c= C & card A = Rnk C
+  proof
+    let M be finite-degree Matroid;
+    let C be Subset of M;
+    set X = {card A where A is independent Subset of M: A c= C};
+L:  now let A be independent Subset of M; assume
+A1:   A c= C & card A = Rnk C;
+      thus A is_maximal_independent_in C
+      proof thus A is independent & A c= C by A1;
+        let B be Subset of M; assume B is independent; then
+        reconsider B' = B as independent Subset of M;
+        assume B c= C; then
+        card B' in X; then
+A2:     card B' c= Rnk C by ZFMISC_1:92;
+        assume
+A3:     A c= B; then
+        card A c= card B' by CARD_1:27; then
+        card A = card B' by A1,A2,XBOOLE_0:def 10;
+        hence A = B by A3,CARD_FIN:1;
+      end;
+    end;
+    consider B being independent Subset of M such that
+AA: B c= C & card B = Rnk C by ThR1;
+    let A be independent Subset of M;
+    hereby assume
+A0:   A is_maximal_independent_in C;
+      hence A c= C by MAXIMAL;
+      B is_maximal_independent_in C by L,AA;
+      hence card A = Rnk C by A0,AA,M3;
+    end;
+    thus thesis by L;
+  end;
+
+theorem ThR3:
+  for M being finite-degree Matroid
+  for C being finite Subset of M
+  holds Rnk C <= card C
+  proof
+    let M be finite-degree Matroid;
+    let C be finite Subset of M;
+    ex A being independent Subset of M st A c= C & card A = Rnk C by ThR1;then
+    Rnk C c= card C by CARD_1:27;
+    hence Rnk C <= card C by NAT_1:40;
+  end;
+
+theorem ThR4:
+  for M being finite-degree Matroid
+  for C being finite Subset of M holds
+  C is independent iff card C = Rnk C
+  proof
+    let M be finite-degree Matroid;
+    let C be finite Subset of M;
+    set X = {card A where A is independent Subset of M: A c= C};
+    hereby assume
+      C is independent; then
+      card C in X; then
+      card C c= Rnk C by ZFMISC_1:92; then
+      card C <= Rnk C & Rnk C <= card C by ThR3,NAT_1:40;
+      hence card C = Rnk C by XXREAL_0:1;
+    end;
+    ex A being independent Subset of M st A c= C & card A = Rnk C by ThR1;
+    hence thesis by CARD_FIN:1;
+  end;
+
+definition
+  let M be finite-degree Matroid;
+  func Rnk M -> Nat equals Rnk [#]M;
+  coherence;
+end;
+
+definition
+  let M be non void finite-degree SubsetFamilyStr;
+  mode Basis of M -> independent Subset of M means:
+BASIS:
+  it is_maximal_independent_in [#]M;
+  existence
+  proof set C = [#]M;
+    consider A being independent Subset of M;
+    consider B being independent Subset of M such that
+A1: A c= B & B is_maximal_independent_in C by Th;
+    take B; thus thesis by A1;
+  end;
+end;
+
+theorem
+  for M being finite-degree Matroid
+  for B1,B2 being Basis of M holds card B1 = card B2
+  proof
+    let M be finite-degree Matroid;
+    let B1,B2 be Basis of M;
+    B1 is_maximal_independent_in [#]M &
+    B2 is_maximal_independent_in [#]M by BASIS;
+    hence card B1 = card B2 by M3;
+  end;
+
+theorem
+  for M being finite-degree Matroid
+  for A being independent Subset of M
+  ex B being Basis of M st A c= B
+  proof
+    let M be finite-degree Matroid;
+    let A be independent Subset of M;
+    consider B being independent Subset of M such that
+A1: A c= B & B is_maximal_independent_in [#]M by Th;
+    reconsider B as Basis of M by A1,BASIS;
+    take B;
+    thus A c= B by A1;
+  end;
+
+reserve M for finite-degree Matroid,
+  A,B,C for Subset of M, e,f for Element of M;
+
+
+theorem R2:
+  A c= B implies Rnk A <= Rnk B
+  proof
+    ex C being independent Subset of M st C c= A & card C = Rnk A by ThR1;
+    hence thesis by ThR0,XBOOLE_1:1;
+  end;
+
+theorem R3:
+  Rnk (A\/B) + Rnk (A/\B) <= Rnk A + Rnk B
+  proof
+    consider C being independent Subset of M such that
+A0: C c= A/\B & card C = Rnk (A/\B) by ThR1;
+    A/\B c= A & A/\B c= B by XBOOLE_1:17; then
+A8: C c= A & C c= B by A0,XBOOLE_1:1; then
+    consider Ca being independent Subset of M such that
+A2: C c= Ca & Ca is_maximal_independent_in A by Th;
+A6: Ca c= A & A c= A\/B by A2,MAXIMAL,XBOOLE_1:7; then
+    Ca c= A\/B by XBOOLE_1:1; then
+    consider C' being independent Subset of M such that
+A1: Ca c= C' & C' is_maximal_independent_in A\/B by Th;
+    C'/\B c= B by XBOOLE_1:17; then
+    consider Cb being independent Subset of M such that
+A3: C'/\B c= Cb & Cb is_maximal_independent_in B by Th;
+A4: card Ca = Rnk A & card Cb = Rnk B & C' c= A\/B &
+    card C' = Rnk (A\/B) by A1,A2,A3,ThR2;
+A5: C' = Ca \/ (C'/\B)
+    proof
+      thus C' c= Ca \/ (C'/\B)
+      proof
+        let x be set; assume
+B1:     x in C';
+B3:     x in B implies x in C'/\B by B1,XBOOLE_0:def 3;
+        {x} c= C' by B1,ZFMISC_1:37; then
+        Ca\/{x} c= C' by A1,XBOOLE_1:8; then
+        reconsider Cax = Ca\/{x} as independent Subset of M by M1,XBOOLE_1:1;
+        now assume x in A; then
+          {x} c= A by ZFMISC_1:37; then
+          Cax c= A & Ca c= Cax by A6,XBOOLE_1:7,8; then
+          Ca = Cax by A2,MAXIMAL; then
+          {x} c= Ca by XBOOLE_1:7;
+          hence x in Ca by ZFMISC_1:37;
+        end;
+        hence thesis by B1,B3,A4,XBOOLE_0:def 2;
+      end;
+      let x be set; assume x in Ca \/ (C'/\B); then
+      x in Ca or x in C'/\B by XBOOLE_0:def 2;
+      hence x in C' by A1,XBOOLE_0:def 3;
+    end;
+A7: Ca/\(C'/\B) = Ca/\C'/\B by XBOOLE_1:16 .= Ca/\B by A1,XBOOLE_1:28;
+    Ca/\B = C
+    proof
+      thus Ca/\B c= C
+      proof
+        let x be set; assume x in Ca/\B; then
+B1:     x in Ca & x in B by XBOOLE_0:def 3; then
+        {x} c= Ca by ZFMISC_1:37; then
+        C\/{x} c= Ca by A2,XBOOLE_1:8; then
+        reconsider Cx = C\/{x} as independent Subset of M by M1,XBOOLE_1:1;
+        x in A/\B by B1,A6,XBOOLE_0:def 3; then
+        {x} c= A/\B by ZFMISC_1:37; then
+        Cx c= A/\B & C c= Cx & C is_maximal_independent_in A/\B
+        by A0,ThR2,XBOOLE_1:7,8; then
+        C = Cx by MAXIMAL; then
+        {x} c= C by XBOOLE_1:7;
+        hence x in C by ZFMISC_1:37;
+      end;
+      thus thesis by A8,A2,XBOOLE_1:19;
+    end; then
+    Rnk (A\/B) = Rnk A + card (C'/\B) - Rnk (A/\B)
+    by A0,A4,A5,A7,CARD_2:64; then
+    Rnk (A\/B) + Rnk (A/\B) = Rnk A + card (C'/\B) & card (C'/\B) <= Rnk B
+    by A3,A4,NAT_1:44;
+    hence thesis by XREAL_1:8;
+ end;
+
+theorem R4:
+  Rnk A <= Rnk (A\/B) & Rnk (A \/ {e}) <= Rnk A + 1
+  proof
+    thus Rnk A <= Rnk (A\/B) by R2,XBOOLE_1:7;
+A1: Rnk(A\/{e}) + Rnk(A/\{e}) <= Rnk A + Rnk {e} by R3;
+A2: Rnk(A\/{e}) <= Rnk(A\/{e}) + Rnk(A/\{e}) by NAT_1:11;
+    Rnk {e} <= card {e} & card {e} = 1 by ThR3,CARD_1:50; then
+    Rnk A + Rnk {e} <= Rnk A + 1 by XREAL_1:8; then
+    Rnk(A\/{e}) + Rnk(A/\{e}) <= Rnk A + 1 by A1,XXREAL_0:2;
+    hence thesis by A2,XXREAL_0:2;
+  end;
+
+theorem
+  Rnk (A\/{e}) = Rnk (A\/{f}) & Rnk (A\/{f}) = Rnk A implies
+  Rnk (A \/ {e,f}) = Rnk A
+  proof
+    consider C being independent Subset of M such that
+A0: C c= A & card C = Rnk A by ThR1;
+    A c= A\/{e,f} & A c= A\/{e} & A c= A\/{f} by XBOOLE_1:7; then
+A6: C c= A\/{e,f} & C c= A\/{e} & C c= A\/{f} by A0,XBOOLE_1:1; then
+    consider C' being independent Subset of M such that
+A1: C c= C' & C' is_maximal_independent_in A\/{e,f} by Th;
+A2: card C' = Rnk (A \/ {e,f}) & C is_maximal_independent_in A &
+    C' c= A\/{e,f} by A0,A1,ThR2;
+    assume Rnk (A\/{e}) = Rnk (A\/{f}) & Rnk (A\/{f}) = Rnk A; then
+A3: C is_maximal_independent_in A\/{e} & C is_maximal_independent_in A\/{f}
+    by A0,A6,ThR2;
+    now assume C' <> C; then
+      consider x being set such that
+A4:   not (x in C' iff x in C) by TARSKI:2;
+      {x} c= C' by A1,A4,ZFMISC_1:37; then
+      C\/{x} c= C' by A1,XBOOLE_1:8; then
+      reconsider Cx = C\/{x} as independent Subset of M by M1,XBOOLE_1:1;
+      now assume x in A; then
+        {x} c= A by ZFMISC_1:37; then
+        Cx c= A & C c= Cx by A0,XBOOLE_1:8,7; then
+        C = Cx by A2,MAXIMAL; then
+        {x} c= C by XBOOLE_1:7;
+        hence contradiction by A1,A4,ZFMISC_1:37;
+      end; then
+      x in {e,f} by A1,A2,A4,XBOOLE_0:def 2; then
+      x = e or x = f by TARSKI:def 2; then
+      {x} c= A\/{e} & C c= A\/{e} or {x} c= A\/{f} & C c= A\/{f}
+      by A0,XBOOLE_1:10; then
+      C c= Cx & (Cx c= A\/{e} or Cx c= A\/{f}) by XBOOLE_1:8,7; then
+      C = Cx by A3,MAXIMAL; then
+      {x} c= C by XBOOLE_1:7;
+      hence contradiction by A1,A4,ZFMISC_1:37;
+    end;
+    hence Rnk (A \/ {e,f}) = Rnk A by A0,A2;
+  end;
+
+begin :: Dependence from a Set, Spans, and Cycles
+
+definition
+  let M be finite-degree Matroid;
+  let e be Element of M;
+  let A be Subset of M;
+  pred e is_dependent_on A means:
+DF:
+  Rnk (A \/ {e}) = Rnk A;
+end;
+
+theorem ThD1:
+  e in A implies e is_dependent_on A
+  proof
+    assume e in A; then
+    {e} c= A by ZFMISC_1:37;
+    hence Rnk(A\/{e}) = Rnk A by XBOOLE_1:12;
+  end;
+
+theorem ThD2:
+  A c= B & e is_dependent_on A implies e is_dependent_on B
+  proof assume
+A0: A c= B & Rnk (A \/ {e}) = Rnk A;
+    consider Ca being independent Subset of M such that
+A1: Ca c= A & card Ca = Rnk A by ThR1;
+B4: Ca c= B by A0,A1,XBOOLE_1:1;
+A5: B c= B\/{e} by XBOOLE_1:7;
+A4: Rnk B <= Rnk (B\/{e}) & Rnk (B\/{e}) <= Rnk B + 1 by R4;
+    Ca c= B\/{e} by B4,A5,XBOOLE_1:1; then
+    consider E being independent Subset of M such that
+A6: Ca c= E & E is_maximal_independent_in B\/{e} by Th;
+    now assume
+B1:   Rnk (B\/{e}) = Rnk B + 1; then
+C1:   card E = Rnk B + 1 by A6,ThR2;
+      card (E/\B) <= Rnk B by ThR0,XBOOLE_1:17; then
+C2:   card (E/\B)+1 <= Rnk B + 1 by XREAL_1:8;
+      E c= B\/{e} by A6,ThR2; then
+      E = E/\(B\/{e}) by XBOOLE_1:28 .= E/\B\/E/\{e} by XBOOLE_1:23; then
+      Rnk B + 1 <= card (E/\B) + card (E/\{e}) by C1,CARD_2:62; then
+      card (E/\B)+1 <= card (E/\B) + card (E/\{e}) & E/\{e} c= {e}
+      by C2,XXREAL_0:2,XBOOLE_1:17; then
+      1 <= card (E/\{e}) & (E/\{e} = {} & card {} = 0 or
+      E/\{e} = {e} & card {e} = 1) by XREAL_1:8,ZFMISC_1:39,CARD_1:50; then
+      e in E/\{e} by TARSKI:def 1; then
+      e in E by XBOOLE_0:def 3; then
+      {e} c= E by ZFMISC_1:37; then
+A3:   Ca\/{e} c= E & Ca\/{e} c= A\/{e} & Ca c= A\/{e} & Ca c= Ca\/{e}
+      by A1,A6,XBOOLE_1:8,9,10;
+      Ca\/{e} is independent & Ca is_maximal_independent_in A\/{e}
+      by A0,A1,A3,M1,ThR2; then
+      Ca = Ca\/{e} by A3,MAXIMAL; then
+      {e} c= Ca by XBOOLE_1:7; then
+      B = B\/{e} by B4,XBOOLE_1:1,12;
+      hence contradiction by B1;
+    end;
+    hence Rnk (B\/{e}) = Rnk B by A4,NAT_1:9;
+  end;
+
+definition
+  let M be finite-degree Matroid;
+  let A be Subset of M;
+  func Span A -> Subset of M equals
+  {e where e is Element of M: e is_dependent_on A};
+  coherence
+  proof
+    set X = {e where e is Element of M: e is_dependent_on A};
+    X c= the carrier of M
+    proof
+      let x be set; assume x in X; then
+      ex e being Element of M st x = e & e is_dependent_on A;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem SPAN:
+  e in Span A iff Rnk (A \/ {e}) = Rnk A
+  proof
+    hereby assume e in Span A; then
+      ex x being Element of M st e = x & x is_dependent_on A;
+      hence Rnk (A \/ {e}) = Rnk A by DF;
+    end;
+    assume Rnk (A \/ {e}) = Rnk A; then
+    e is_dependent_on A by DF;
+    hence thesis;
+  end;
+
+theorem S1:
+  A c= Span A
+  proof
+    let e be set; assume
+A0: e in A; then
+    reconsider x = e as Element of M;
+    x is_dependent_on A by A0,ThD1;
+    hence thesis;
+  end;
+
+theorem
+  A c= B implies Span A c= Span B
+  proof assume
+A0: A c= B;
+    let x be set; assume x in Span A; then
+    ex e st x = e & e is_dependent_on A; then
+    ex e st x = e & e is_dependent_on B by A0,ThD2;
+    hence thesis;
+  end;
+
+theorem S0:
+  Rnk Span A = Rnk A
+  proof
+A0: A c= Span A by S1;
+    consider Ca being independent Subset of M such that
+B2: Ca c= A & card Ca = Rnk A by ThR1;
+    Ca c= Span A by A0,B2,XBOOLE_1:1; then
+    consider C being independent Subset of M such that
+A2: Ca c= C & C is_maximal_independent_in Span A by Th;
+    now assume C c/= Ca; then
+      consider x being set such that
+A3:   x in C & x nin Ca by TARSKI:def 3;
+      C c= Span A by A2,ThR2; then
+      x in Span A by A3; then
+      consider e being Element of M such that
+A4:   x = e & e is_dependent_on A;
+      {e} c= C by A3,A4,ZFMISC_1:37; then
+      Ca\/{e} c= C by A2,XBOOLE_1:8; then
+      reconsider Ce = Ca\/{e} as independent Subset of M by M1;
+      Ce c= A\/{e} by B2,XBOOLE_1:9; then
+      consider D being independent Subset of M such that
+A6:   Ce c= D & D is_maximal_independent_in A\/{e} by Th;
+      card Ca = Rnk (A\/{e}) by B2,A4,DF .= card D by A6,ThR2; then
+      card Ce <= card Ca & card Ca <= card Ce by A6,XBOOLE_1:7,NAT_1:44; then
+      card Ca = card Ce by XXREAL_0:1; then
+      Ca = Ce by XBOOLE_1:7,CARD_FIN:1; then
+      e nin {e} by A3,A4,XBOOLE_0:def 2;
+      hence contradiction by TARSKI:def 1;
+    end; then
+    C = Ca by A2,XBOOLE_0:def 10;
+    hence thesis by B2,A2,ThR2;
+  end;
+
+theorem Sd:
+  e is_dependent_on Span A implies e is_dependent_on A
+  proof assume
+Z0: Rnk ((Span A)\/{e}) = Rnk Span A;
+    consider Ca being independent Subset of M such that
+B2: Ca c= A & card Ca = Rnk A by ThR1;
+A0: A c= Span A by S1; then
+    Ca c= Span A by B2,XBOOLE_1:1; then
+    consider C being independent Subset of M such that
+A2: Ca c= C & C is_maximal_independent_in Span A by Th;
+A3: Rnk A = Rnk Span A & Rnk Span A = card C & C c= Span A
+    by A2,ThR2,S0;
+    Ca c= A\/{e} & A\/{e} c= (Span A)\/{e} by B2,A0,XBOOLE_1:9,10; then
+    Rnk A = Rnk Ca & Rnk Ca <= Rnk(A\/{e}) & Rnk(A\/{e}) <= Rnk A
+    by Z0,B2,R2,A3,ThR4;
+    hence Rnk (A\/{e}) = Rnk A by XXREAL_0:1;
+  end;
+
+theorem
+  Span Span A = Span A
+  proof
+    thus Span Span A c= Span A
+    proof
+      let x be set; assume x in Span Span A; then
+      consider e being Element of M such that
+A0:   x = e & e is_dependent_on Span A;
+      e is_dependent_on A by A0,Sd;
+      hence thesis by A0;
+    end;
+    thus thesis by S1;
+  end;
+
+theorem
+  f nin Span A & f in Span (A \/ {e}) implies e in Span (A \/ {f})
+  proof assume that
+Z1: f nin Span A and
+Z2: f in Span (A \/ {e});
+A3: Rnk A <> Rnk (A\/{f}) & Rnk(A\/{e}\/{f}) = Rnk(A\/{e}) by Z1,Z2,SPAN;
+    Rnk A <= Rnk (A\/{f}) & Rnk (A\/{f}) <= Rnk A + 1 by R4; then
+A4: Rnk (A\/{f}) = Rnk A + 1 by A3,NAT_1:9;
+A5: A\/{f} c= A\/{f}\/{e} & A\/{f}\/{e} = A\/({f}\/{e}) &
+    A\/{e}\/{f} = A\/({e}\/{f}) by XBOOLE_1:4,7; then
+    Rnk(A\/{f}) <= Rnk(A\/{e}) & Rnk (A\/{e}) <= Rnk A + 1
+    by A3,R4; then
+    Rnk (A\/{f}) = Rnk (A\/{f}\/{e}) by A3,A4,A5,XXREAL_0:1;
+    hence e in Span (A \/ {f}) by SPAN;
+  end;
+
+definition
+  let M be SubsetFamilyStr;
+  let A be Subset of M;
+  attr A is cycle means:
+CYCLE:
+  A is dependent &
+  for e being Element of M st e in A holds A \ {e} is independent;
+end;
+
+theorem LemC:
+  A is cycle implies A is non empty finite
+  proof assume that
+A0: A is dependent and
+A1: for e being Element of M st e in A holds A \ {e} is independent;
+    {} the carrier of M is independent;
+    hence A is non empty by A0;
+    consider e being Element of A;
+    now assume A is non empty set; then
+A2:   e in A; then
+      reconsider e as Element of M;
+      reconsider Ae = A\{e} as independent Subset of M by A1,A2;
+      A = Ae\/{e} by A2,ZFMISC_1:140;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+registration
+  let M;
+  cluster cycle -> non empty finite Subset of M;
+  coherence by LemC;
+end;
+
+theorem C5:
+  A is cycle iff
+     A is non empty & for e st e in A holds A\{e} is_maximal_independent_in A
+  proof
+    thus A is cycle implies A is non empty &
+    for e st e in A holds A\{e} is_maximal_independent_in A
+    proof assume that
+Z0:   A is dependent and
+Z2:   for e being Element of M st e in A holds A \ {e} is independent;
+      {} the carrier of M is independent;
+      hence A is non empty by Z0;
+      let e; assume
+Z1:   e in A;
+      set Ae = A\{e};
+A1:   A = Ae\/{e} by Z1,ZFMISC_1:140;
+      thus Ae is independent & Ae c= A by Z2,Z1,XBOOLE_1:36;
+      let B; assume B is independent & B c= A & Ae c= B;
+      hence Ae = B by Z0,A1,BORSUK_5:2;
+    end;
+    consider a being Element of A;
+    assume that
+Z4: A is non empty and
+Z3: for e st e in A holds A\{e} is_maximal_independent_in A;
+    a in A by Z4; then
+    reconsider a as Element of M;
+    set Ae = A\{a};
+A2: Ae is_maximal_independent_in A by Z4,Z3;
+A3: Ae c= A by XBOOLE_1:36;
+    hereby
+      assume A is independent; then
+      A = Ae by A2,A3,MAXIMAL; then
+      a nin {a} by Z4,XBOOLE_0:def 4;
+      hence contradiction by TARSKI:def 1;
+    end;
+    let e; assume e in A; then
+    A\{e} is_maximal_independent_in A by Z3;
+    hence thesis by MAXIMAL;
+  end;
+
+theorem C4:
+  A is cycle implies Rnk A + 1 = Card A
+  proof assume
+A0: A is cycle; then
+    reconsider A as non empty finite Subset of M;
+    consider a being Element of A;
+A1: A\{a} is_maximal_independent_in A by A0,C5; then
+    A\{a} is independent by MAXIMAL; then
+A2: Rnk A = card (A\{a}) by A1,ThR2;
+    a in {a} by TARSKI:def 1; then
+    a nin A\{a} & A = (A\{a})\/{a} by XBOOLE_0:def 4,ZFMISC_1:140;
+    hence thesis by A2,CARD_2:54;
+  end;
+
+theorem
+  A is cycle & e in A implies e is_dependent_on A\{e}
+  proof assume
+Z0: A is cycle & e in A; then
+    reconsider Ae = A\{e} as independent Subset of M by CYCLE;
+    Ae is_maximal_independent_in A by Z0,C5; then
+    Rnk A = card Ae by ThR2;
+    hence Rnk((A\{e})\/{e}) = card Ae by Z0,ZFMISC_1:140
+    .= Rnk (A\{e}) by ThR4;
+  end;
+
+theorem C1:
+  A is cycle & B is cycle & A c= B implies A = B
+  proof assume that
+A0: A is dependent and
+    for e st e in A holds A \ {e} is independent and
+    B is dependent and
+AA: for e st e in B holds B \ {e} is independent;
+    assume
+A1: A c= B & A <> B; then
+    consider x being set such that
+A2: not (x in A iff x in B) by TARSKI:2;
+    reconsider x as Element of M by A2;
+    A c= B\{x} & B\{x} is independent by AA,A1,A2,ZFMISC_1:40;
+    hence contradiction by A0,M1;
+  end;
+
+theorem C3:
+  (for B st B c= A holds B is not cycle) implies A is independent
+  proof assume
+Z0: for B st B c= A holds B is not cycle;
+    consider C being independent Subset of M such that
+Z1: C c= A & card C = Rnk A by ThR1;
+    per cases;
+    suppose A c= C; hence thesis by Z1,XBOOLE_0:def 10; end;
+    suppose A c/= C; then
+      consider x being set such that
+Z2:   x in A & x nin C by TARSKI:def 3;
+      reconsider x as Element of M by Z2;
+A2:   C\/{x} c= A & C c= C\/{x} by Z1,Z2,SETWISEO:8;
+      defpred P[Nat] means
+      ex B being independent Subset of M
+      st card B = $1 & B c= C & B\/{x} is dependent;
+Z3:   ex n being Nat st P[n]
+      proof take n = Rnk A, C;
+        thus card C = n & C c= C by Z1;
+A1:     C is_maximal_independent_in A by Z1,ThR2;
+        assume C\/{x} is independent; then
+        C = C\/{x} by A1,A2,MAXIMAL; then
+        {x} c= C by XBOOLE_1:7;
+        hence contradiction by Z2,ZFMISC_1:37;
+      end;
+      consider n being Nat such that
+Z4:   P[n] & for k being Nat st P[k] holds n <= k from NAT_1:sch 5(Z3);
+      consider B being independent Subset of M such that
+Z5:   card B = n & B c= C & B\/{x} is dependent by Z4;
+      B c= A by Z1,Z5,XBOOLE_1:1; then
+Z6:   B\/{x} c= A & x nin B by Z2,Z5,SETWISEO:8;
+      B\/{x} is cycle
+      proof
+        thus B\/{x} is dependent by Z5;
+        let e be Element of M;
+        set Be = B\{e};
+A5:     Be c= B by XBOOLE_1:36;
+        assume
+A3:     e in B\/{x};
+        per cases by A3,SETWISEO:6;
+        suppose
+B1:       e in B; then
+          B = Be\/{e} & e nin Be by ZFMISC_1:64,140; then
+B3:       n = card Be+1 by Z5,CARD_2:54;
+          assume
+B2:       (B\/{x}) \ {e} is dependent;
+          (B\/{x}) \ {e} = Be\/{x} by B1,Z6,ZFMISC_1:17,XBOOLE_1:87; then
+          n <= card Be by Z4,A5,B2,Z5,XBOOLE_1:1;
+          hence contradiction by B3,NAT_1:13;
+        end;
+        suppose e = x;
+          hence (B\/{x}) \ {e} is independent by Z6,ZFMISC_1:141;
+        end;
+      end;
+      hence A is independent by Z6,Z0;
+    end;
+  end;
+
+theorem C2:
+  A is cycle & B is cycle & A <> B & e in A /\ B implies
+  ex C st C is cycle & C c= (A \/ B) \ {e}
+  proof assume that
+Z0: A is cycle & B is cycle & A <> B & e in A /\ B and
+Z1: for C st C is cycle holds C c/= (A \/ B) \ {e};
+A0: e in A & e in B by Z0,XBOOLE_0:def 3; then
+    reconsider Ae = A\{e}, Be = B\{e} as independent Subset of M by Z0,CYCLE;
+A1: A = Ae\/{e} & B = Be\/{e} by A0,ZFMISC_1:140;
+    reconsider A' = A, B' = B as finite Subset of M by Z0;
+A3: Rnk(A\/B)+Rnk(A/\B) <= Rnk A + Rnk B by R3;
+B2: e in {e} by TARSKI:def 1; then
+    e nin Ae & e nin Be by XBOOLE_0:def 4; then
+A4: card A' = card Ae+1 & card B' = card Be+1 by A1,CARD_2:54; then
+    Rnk A + 1 = card Ae+1 & Rnk B + 1 = card Be+1 by Z0,C4; then
+A5: card(A'\/B')+card(A'/\B') = Rnk A+1 + (Rnk B+1) by A4,HALLMAR1:1 .=
+    Rnk A + Rnk B+1+1;
+    Rnk(A\/B)+Rnk(A/\B)+1 <= Rnk A + Rnk B+1 by A3,XREAL_1:8; then
+A7: Rnk(A\/B)+Rnk(A/\B)+1+1 <= card(A'\/B')+card(A'/\B') by A5,XREAL_1:8;
+A9: A/\B c= A & A/\B c= B by XBOOLE_1:17;
+    A c/= A/\B by Z0,C1,A9,XBOOLE_1:1; then
+    consider a being set such that
+B0: a in A & a nin A/\B by TARSKI:def 3;
+    reconsider a as Element of M by B0;
+    {a} misses A/\B by B0,ZFMISC_1:56; then
+    A/\B c= A\{a} & A\{a} is independent by Z0,A9,B0,CYCLE,XBOOLE_1:86; then
+    A/\B is independent by M1; then
+    card (A'/\B') = Rnk (A/\B) by ThR4; then
+Z2: Rnk(A\/B)+Rnk(A/\B)+1+1 = Rnk(A\/B)+1+1+card(A'/\B');
+    for C st C c= (A \/ B) \ {e} holds C is not cycle by Z1; then
+    reconsider C = (A\/B)\{e} as independent Subset of M by C3;
+B1: e nin C & e in A\/B by B2,A0,XBOOLE_0:def 2,def 4; then
+B3: C\/{e} = A'\/B' by ZFMISC_1:140;
+    C is_maximal_independent_in A\/B
+    proof
+      thus C is independent & C c= A\/B by XBOOLE_1:36;
+      let D be Subset of M;
+      A is dependent & A c= A\/B by Z0,CYCLE,XBOOLE_1:7; then
+      A\/B is dependent by M1;
+      hence thesis by B3,BORSUK_5:2;
+    end; then
+    Rnk(A\/B)+1 = card C+1 by ThR2 .= card(A'\/B') by B1,B3,CARD_2:54;
+    hence contradiction by Z2,A7,NAT_1:13;
+  end;
+
+theorem
+  A is independent & B is cycle & C is cycle & B c= A\/{e} & C c= A\/{e}
+  implies B = C
+  proof assume that
+A0: A is independent & B is cycle & C is cycle and
+A1: B c= A\/{e} & C c= A\/{e};
+    now assume B c= A; then
+      B is independent by A0,M1;
+      hence contradiction by A0,CYCLE;
+    end; then
+    consider b being set such that
+A2: b in B & b nin A by TARSKI:def 3;
+    b in {e} by A1,A2,XBOOLE_0:def 2; then
+A3: b = e by TARSKI:def 1;
+    now assume C c= A; then
+      C is independent by A0,M1;
+      hence contradiction by A0,CYCLE;
+    end; then
+    consider c being set such that
+A4: c in C & c nin A by TARSKI:def 3;
+    c in {e} by A1,A4,XBOOLE_0:def 2; then
+    c = e by TARSKI:def 1; then
+A5: e in B/\C by A2,A3,A4,XBOOLE_0:def 3;
+    assume B <> C; then
+    consider D being Subset of M such that
+A6: D is cycle & D c= (B \/ C) \ {e} by A0,A5,C2;
+    D c= A
+    proof
+      let x be set; assume x in D; then
+A7:   x in B\/C & x nin {e} by A6,XBOOLE_0:def 4; then
+      x in B or x in C by XBOOLE_0:def 2;
+      hence thesis by A1,A7,XBOOLE_0:def 2;
+    end; then
+    D is independent by A0,M1;
+    hence thesis by A6,CYCLE;
+  end;

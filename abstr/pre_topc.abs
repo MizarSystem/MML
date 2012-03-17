@@ -7,10 +7,11 @@
 environ
 
  vocabularies SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
-      PRE_TOPC;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELSET_1, STRUCT_0;
- constructors SETFAM_1, PARTFUN1, STRUCT_0;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0;
+      PRE_TOPC, FUNCOP_1, TSP_1, COMPTS_1, CARD_5, GROUP_3, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, SETFAM_1, FUNCT_2,
+      FUNCOP_1, RELSET_1, CARD_1, STRUCT_0;
+ constructors SETFAM_1, PARTFUN1, STRUCT_0, FUNCOP_1, CARD_1, DOMAIN_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, RELAT_1;
  requirements BOOLE, SUBSET;
 
 
@@ -64,24 +65,7 @@ canceled 4;
 theorem :: PRE_TOPC:5
   {} in the topology of GX;
 
-canceled 6;
-
-theorem :: PRE_TOPC:12
-  for T being 1-sorted holds [#]T = the carrier of T;
-
-theorem :: PRE_TOPC:13
-  for T being non empty 1-sorted, p being Point of T holds p in [#]T;
-
-theorem :: PRE_TOPC:14
-  for T being 1-sorted, P being Subset of T holds P c= [#]T;
-
-canceled;
-
-theorem :: PRE_TOPC:16
-  for T being 1-sorted for A being set st A c= [#]T holds A is Subset of T;
-
-theorem :: PRE_TOPC:17
-  for T being 1-sorted, P being Subset of T holds P` = [#]T \ P;
+canceled 12;
 
 theorem :: PRE_TOPC:18
   for T being 1-sorted, P being Subset of T holds P \/ P` = [#]T;
@@ -187,7 +171,7 @@ definition
   canceled;
   attr f is continuous means
 :: PRE_TOPC:def 12
-  for P1 being Subset of T st P1 is closed holds f" P1 is closed;
+ for P1 being Subset of T st P1 is closed holds f" P1 is closed;
 end;
 
 theorem :: PRE_TOPC:31
@@ -206,9 +190,6 @@ canceled;
 theorem :: PRE_TOPC:41
   for A being Subset of T st A <> {}T ex x being Point of T st x in A;
 
-theorem :: PRE_TOPC:42
-  [#]GX is closed;
-
 registration
   let T be TopSpace;
   cluster [#]T -> closed;
@@ -223,6 +204,8 @@ registration
   let T be non empty TopSpace;
   cluster non empty closed Subset of T;
 end;
+
+canceled;
 
 theorem :: PRE_TOPC:43
   for X' being SubSpace of T, B being Subset of X' holds
@@ -285,4 +268,104 @@ theorem :: PRE_TOPC:54
   for A being Subset of T, p being Point of T holds p in Cl A iff
   T is non empty & for G being Subset of T st G is open holds
   p in G implies A meets G;
+
+begin ::Addenda
+
+:: from TOPMETR, 2008.07.06, A.T.
+
+theorem :: PRE_TOPC:55
+ for T being non empty TopStruct, A being non empty SubSpace of T
+  for p being Point of A holds p is Point of T;
+
+theorem :: PRE_TOPC:56
+  for A,B,C being TopSpace for f being Function of A,C holds
+  f is continuous & C is SubSpace of B implies
+  for h being Function of A,B st h = f holds h is continuous;
+
+theorem :: PRE_TOPC:57
+  for A being TopSpace, B being non empty TopSpace for f being Function of A,B
+  for C being SubSpace of B holds f is continuous
+  implies for h being Function of A,C st h = f holds h is continuous;
+
+:: from TOPS_1, 2008.07.07, A.T.
+
+registration
+  let T be TopSpace;
+  cluster {}T -> closed;
+end;
+
+:: from BORSUK_1, 2008.07.07, A.T.
+
+registration
+  let X be TopSpace, Y be non empty TopSpace;
+  let y be Point of Y;
+  cluster X --> y -> continuous;
+end;
+
+registration
+  let S be TopSpace;
+  let T be non empty TopSpace;
+  cluster continuous Function of S, T;
+end;
+
+reserve T for TopStruct,
+        x,y for Point of T;
+
+:: from TSP_1, T_0TOPSP, COMPTS_1, URYSOHN1 2008.07.16, A.T.
+
+definition let T;
+ attr T is T_0 means
+:: PRE_TOPC:def 14
+ for x,y
+    st for G being Subset of T st G is open holds x in G iff y in G
+   holds x = y;
+ attr T is T_1 means
+:: PRE_TOPC:def 15
+  for p,q being Point of T st p <> q
+   ex G being Subset of T st G is open &
+    p in G & q in G`;
+ attr T is T_2 means
+:: PRE_TOPC:def 16
+  for p, q being Point of T st p <> q
+   ex G1,G2 being Subset of T st G1 is open &G2 is open &
+    p in G1 & q in G2 & G1 misses G2;
+ attr T is regular means
+:: PRE_TOPC:def 17
+  for p being Point of T, F being Subset of T
+    st F is closed & p in F`
+  ex G1,G2 being Subset of T st G1 is open & G2 is open &
+   p in G1 & F c= G2 & G1 misses G2;
+ attr T is normal means
+:: PRE_TOPC:def 18
+ for F1,F2 being Subset of T
+    st F1 is closed & F2 is closed & F1 misses F2
+  ex G1,G2 being Subset of T st G1 is open & G2 is open &
+   F1 c= G1 & F2 c= G2 & G1 misses G2;
+end;
+
+definition let T;
+ attr T is T_3 means
+:: PRE_TOPC:def 19
+  T is T_1 regular;
+ attr T is T_4 means
+:: PRE_TOPC:def 20
+  T is T_1 normal;
+end;
+
+registration
+ cluster T_3 -> T_1 regular TopStruct;
+ cluster T_1 regular -> T_3 TopStruct;
+ cluster T_4 -> T_1 normal TopStruct;
+ cluster T_1 normal -> T_4 TopStruct;
+end;
+
+registration
+ cluster T_1 (non empty TopSpace);
+end;
+
+registration
+ cluster T_1 -> T_0 TopStruct;
+ cluster T_2 -> T_1 TopStruct;
+end;
+
 

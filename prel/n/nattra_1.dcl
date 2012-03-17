@@ -17,11 +17,11 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
@@ -29,21 +29,23 @@
 </Signature>
 <RCluster aid="NATTRA_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="2">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
+<Adjective nr="32" value="false"/>
 <Adjective nr="41" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="52"/>
+<Adjective nr="54"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NATTRA_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="2">
+<Typ kind="G" nr="7">
 <Cluster>
+<Adjective nr="32" value="false"/>
 <Adjective nr="41" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="54"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,10 +54,11 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="40"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="41" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -17,15 +17,15 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="24">
+<Func kind="K" nr="49"/>
 </Func>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="49"/>
 </Typ>
 <And>
 <Not>

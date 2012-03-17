@@ -21,7 +21,7 @@ environ
       XREAL_0, MEMBERED, STRUCT_0, METRIC_1, PCOMPS_1, EUCLID, TOPMETR;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions STRUCT_0, TARSKI;
- theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, ZFMISC_1, REAL_1, SEQ_2,
+ theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, ZFMISC_1, SEQ_2,
       SEQ_4, ABSVALUE, COMPTS_1, RELAT_1, TOPS_2, RCOMP_1, TOPMETR, PCOMPS_1,
       METRIC_1, METRIC_6, XBOOLE_0, XBOOLE_1, XREAL_0, SUBSET_1, XREAL_1,
       COMPLEX1, XXREAL_0, SETFAM_1, XXREAL_2;
@@ -56,7 +56,7 @@ A5:     dist(x,a) < r1 by A3,METRIC_1:12;
 A6:     r1 + 0 <= abs(r1) + abs(r2) by XREAL_1:9;
         0 <= dist(x1,x2) by METRIC_1:5;
         then r1 + 0 <= abs(r1) + abs(r2) + dist(x1,x2) by A6,XREAL_1:9;
-        then dist(x,a) - r < r1 - r1 by A5,REAL_1:92;
+        then dist(x,a) - r < r1 - r1 by A5,XREAL_1:16;
         then dist(x,a) - r + r < 0 + r by XREAL_1:10;
         hence thesis by A4,METRIC_1:12;
       end;
@@ -66,13 +66,14 @@ A8:     M is non empty by A7;
 A9:     dist(x,a) <= dist(x1,x2) + dist(x2,a) by METRIC_1:4;
 A10:    dist(x2,a) < r2 by A7,METRIC_1:12;
         r2 <= abs(r2) by ABSVALUE:11;
-        then dist(x2,a) - abs(r2) < r2 - r2 by A10,REAL_1:92;
+        then dist(x2,a) - abs(r2) < r2 - r2 by A10,XREAL_1:16;
         then dist(x2,a) - abs(r2) + abs(r2) < 0 + abs(r2) by XREAL_1:10;
         then
 A11:    dist(x,a) - abs(r2) < dist(x1,x2) + dist(x2,a) - dist(x2,a )
-        by A9,REAL_1:92;
+        by A9,XREAL_1:17;
         0 <= abs(r1) by COMPLEX1:132;
-        then dist(x,a) - abs(r2) - abs(r1) < dist(x1,x2) - 0 by A11,REAL_1:92;
+        then dist(x,a) - abs(r2) - abs(r1) < dist(x1,x2) - 0
+         by A11,XREAL_1:16;
         then dist(x,a) - (abs(r1) + abs(r2)) + (abs(r1) + abs(r2)) <
         abs(r1) + abs(r2) + dist(x1,x2) by XREAL_1:10;
         hence thesis by A8,METRIC_1:12;
@@ -240,71 +241,7 @@ A18: rng p = F by A1,FINSEQ_1:73;
   hence thesis by A1,A2,A18;
 end;
 
-definition
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let G be Subset-Family of S;
-  func f"G -> Subset-Family of T means
-  :Def1:
-  for A being Subset of T holds
-  A in it iff ex B being Subset of S st B in G & A = f"B;
-  existence
-  proof
-    defpred P[Subset of T] means ex B being Subset of S st B in G & $1 = f"B;
-    ex R being Subset-Family of T st
-    for A being Subset of T holds A in R iff P[A] from SUBSET_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-    let R1,R2 be Subset-Family of T such that
-A1: for A being Subset of T holds A in R1 iff
-    ex B being Subset of S st (B in G & A = f"B) and
-A2: for A being Subset of T holds A in R2 iff
-    ex B being Subset of S st (B in G & A = f"B);
-    for x being set holds (x in R1 iff x in R2)
-    proof
-      let x be set;
-      thus x in R1 implies x in R2
-      proof
-        assume
-A3:     x in R1;
-        then reconsider x as Subset of T;
-        ex B being Subset of S st (B in G & x = f"B) by A1,A3;
-        hence thesis by A2;
-      end;
-      assume
-A4:   x in R2;
-      then reconsider x as Subset of T;
-      ex B being Subset of S st (B in G & x = f"B) by A2,A4;
-      hence thesis by A1;
-    end;
-    hence thesis by TARSKI:2;
-  end;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  A,B being Subset-Family of S st A c= B holds f"A c= f"B
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let A,B be Subset-Family of S;
-  assume
-A1: A c= B;
-  let x be set;
-  assume
-A2: x in f"A;
-  then reconsider x as Subset of T;
-  ex C being Subset of S st C in B & x = f"C
-  proof
-    consider C being Subset of S such that
-A3: C in A & x = f"C by A2,Def1;
-    take C;
-    thus thesis by A1,A3;
-  end;
-  hence thesis by Def1;
-end;
+canceled;
 
 theorem Th5:
   for T,S being non empty TopSpace, f being Function of T,S,
@@ -323,7 +260,7 @@ A2: P in f"(B);
     thus P is open
     proof
       consider C being Subset of S such that
-A3:   C in B & P = f"C by A2,Def1;
+A3:   C in B & P = f"C by A2,FUNCT_2:def 10;
       reconsider C as Subset of S;
 A4:   [#]S <> {};
       C is open by A1,A3,TOPS_2:def 1;
@@ -333,191 +270,7 @@ A4:   [#]S <> {};
   hence thesis by TOPS_2:def 1;
 end;
 
-definition
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let G be Subset-Family of T;
-  func f.:G -> Subset-Family of S means
-  :Def2:
-  for A being Subset of S holds
-  A in it iff ex B being Subset of T st (B in G & A = f.:B);
-  existence
-  proof thus
-    ex R being Subset-Family of S st for A being Subset of S holds A in R iff
-    ex B being Subset of T st (B in G & A = f.:B)
-    proof
-      defpred P[Subset of S] means
-      ex B being Subset of T st B in G & $1 = f.:B;
-      ex R being Subset-Family of S st
-      for A being Subset of S holds A in R iff P[A] from SUBSET_1:sch 3;
-      hence thesis;
-    end;
-  end;
-  uniqueness
-  proof
-    let R1,R2 be Subset-Family of S such that
-A1: for A being Subset of S holds A in R1 iff
-    ex B being Subset of T st (B in G & A = f.:B) and
-A2: for A being Subset of S holds A in R2 iff
-    ex B being Subset of T st (B in G & A = f.:B);
-    for x being set holds (x in R1 iff x in R2)
-    proof
-      let x be set;
-      thus x in R1 implies x in R2
-      proof
-        assume
-A3:     x in R1;
-        then reconsider x as Subset of S;
-        ex B being Subset of T st (B in G & x = f.:B) by A1,A3;
-        hence thesis by A2;
-      end;
-      assume
-A4:   x in R2;
-      then reconsider x as Subset of S;
-      ex B being Subset of T st (B in G & x = f.:B) by A2,A4;
-      hence thesis by A1;
-    end;
-    hence thesis by TARSKI:2;
-  end;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  A,B being Subset-Family of T holds A c= B implies f.:A c= f.:B
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let A,B be Subset-Family of T;
-  assume
-A1: A c= B;
-  let x be set;
-  assume
-A2: x in f.:A;
-  then reconsider x as Subset of S;
-  ex C being Subset of T st (C in B & x = f.:C)
-  proof
-    consider C being Subset of T such that
-A3: C in A & x = f.:C by A2,Def2;
-    take C;
-    thus thesis by A1,A3;
-  end;
-  hence thesis by Def2;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  B being Subset-Family of S, P being Subset of S st
-  f.:(f"B) is Cover of P holds B is Cover of P
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let B be Subset-Family of S;
-  let P be Subset of S;
-  assume f.:(f"B) is Cover of P;
-  then
-A1: P c= union (f.:(f"B)) by SETFAM_1:def 12;
-  P c= union B
-  proof
-    let x be set;
-    assume x in P;
-    then consider Y being set such that
-A2: x in Y & Y in f.:(f"(B)) by A1,TARSKI:def 4;
-    ex Z being set st (x in Z & Z in B)
-    proof
-      reconsider Y as Subset of S by A2;
-      consider Y1 being Subset of T such that
-A3:   Y1 in f"(B) & Y = f.:Y1 by A2,Def2;
-      consider Y2 being Subset of S such that
-A4:   Y2 in B & Y1 = f"(Y2) by A3,Def1;
-A5:   f.:(f"Y2) c= Y2 by FUNCT_1:145;
-      reconsider Y2 as set;
-      take Y2;
-      thus thesis by A2,A3,A4,A5;
-    end;
-    hence thesis by TARSKI:def 4;
-  end;
-  hence thesis by SETFAM_1:def 12;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  B being Subset-Family of T, P being Subset of T st B is Cover of P holds
-  f"(f.:B) is Cover of P
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let B be Subset-Family of T;
-  let P be Subset of T;
-  assume B is Cover of P;
-  then
-A1: P c= union B by SETFAM_1:def 12;
-  P c= union(f"(f.:B))
-  proof
-    let x be set;
-    assume x in P;
-    then consider Y being set such that
-A2: x in Y & Y in B by A1,TARSKI:def 4;
-    ex Z being set st (x in Z & Z in f"(f.:B))
-    proof
-      reconsider Y as Subset of T by A2;
-      set Z = f"(f.:Y);
-      dom f = [#]T by FUNCT_2:def 1;
-      then
-A3:   Y c= f"(f.:Y) by FUNCT_1:146;
-A4:   f.:Y in f.:B & f"(f.:Y) = f"(f.:Y) by A2,Def2;
-      take Z;
-      thus thesis by A2,A3,A4,Def1;
-    end;
-    hence thesis by TARSKI:def 4;
-  end;
-  hence thesis by SETFAM_1:def 12;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  Q being Subset-Family of S holds union(f.:(f"(Q))) c= union Q
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let Q be Subset-Family of S;
-  let x be set;
-  thus x in union(f.:(f"(Q))) implies x in union Q
-  proof
-    assume x in union(f.:(f"Q));
-    then consider A being set such that
-A1: x in A & A in f.:(f"Q) by TARSKI:def 4;
-    reconsider A as Subset of S by A1;
-    consider A1 being Subset of T such that
-A2: A1 in f"Q & A = f.:A1 by A1,Def2;
-    consider A2 being Subset of S such that
-A3: A2 in Q & A1 = f"A2 by A2,Def1;
-    f.:(f"A2) c= A2 by FUNCT_1:145;
-    hence thesis by A1,A2,A3,TARSKI:def 4;
-  end;
-end;
-
-theorem
-  for T,S being non empty TopSpace, f being Function of T,S,
-  P being Subset-Family of T holds union P c= union(f"(f.:P))
-proof
-  let T,S be non empty TopSpace;
-  let f be Function of T,S;
-  let P be Subset-Family of T;
-  let x be set;
-  assume x in union P;
-  then consider A being set such that
-A1: x in A & A in P by TARSKI:def 4;
-A2: A c= [#](T) by A1;
-  reconsider A as Subset of T by A1;
-  reconsider A1 = f.:A as Subset of S;
-  reconsider A2 = f"A1 as Subset of T;
-  A c= dom f by A2,FUNCT_2:def 1;
-  then
-A3: A c= A2 by FUNCT_1:146;
-  A1 in f.:P by A1,Def2;
-  then A2 in f"(f.:P) by Def1;
-  hence thesis by A1,A3,TARSKI:def 4;
-end;
+canceled 5;
 
 theorem
   for T,S being non empty TopSpace holds for f being Function of T,S holds
@@ -557,13 +310,13 @@ A4: F.:Q = f"Q
 A5:     y in dom F & y in Q & x = F.y by FUNCT_1:def 12;
         reconsider y as Subset of S by A5;
         F.y = f"y by A3;
-        hence thesis by A5,Def1;
+        hence thesis by A5,FUNCT_2:def 10;
       end;
       assume
 A6:   x in f"Q;
       then reconsider x as Subset of T;
       consider y being Subset of S such that
-A7:   y in Q & x = f"y by A6,Def1;
+A7:   y in Q & x = f"y by A6,FUNCT_2:def 10;
 A8:   x = F.y by A3,A7;
       dom F = bool [#](S) by FUNCT_2:def 1;
       hence thesis by A7,A8,FUNCT_1:def 12;
@@ -616,7 +369,7 @@ A4: F.:P = f.:P
 A5:     y in dom F & y in P & x = F.y by FUNCT_1:def 12;
         reconsider y as Subset of T by A5;
         F.y = f.:y by A3;
-        hence thesis by A5,Def2;
+        hence thesis by A5,FUNCT_2:def 11;
       end;
       thus x in f.:P implies x in F.:P
       proof
@@ -624,7 +377,7 @@ A5:     y in dom F & y in P & x = F.y by FUNCT_1:def 12;
 A6:     x in f.:P;
         then reconsider x as Subset of S;
         consider y being Subset of T such that
-A7:     y in P & x = f.:y by A6,Def2;
+A7:     y in P & x = f.:y by A6,FUNCT_2:def 11;
 A8:     x = F.y by A3,A7;
         dom F = bool [#](T) by FUNCT_2:def 1;
         hence thesis by A7,A8,FUNCT_1:def 12;
@@ -673,7 +426,7 @@ A5:     for x being Element of D ex y being Subset of [#](S) st P0[x,y]
 A6:       x in B by A4;
           then reconsider x as Subset of T;
           consider y being Subset of S such that
-A7:       y in F & x = f"y by A1,A6,Def1;
+A7:       y in F & x = f"y by A1,A6,FUNCT_2:def 10;
           reconsider y as Subset of [#](S);
           take y;
           thus thesis by A7;
@@ -824,7 +577,7 @@ A13:        f.y in Q & Q in F0 by TARSKI:def 4;
             proof
               set Z = f"Q;
               take Z;
-              thus thesis by A12,A13,Def1,FUNCT_1:def 13;
+              thus thesis by A12,A13,FUNCT_2:def 10,FUNCT_1:def 13;
             end;
             hence thesis by TARSKI:def 4;
           end;
@@ -857,6 +610,7 @@ theorem
   P is compact & f is continuous implies f.:P is compact by Th14;
 
 definition
+ canceled 2;
   let P be Subset of R^1;
   func [#](P) -> Subset of REAL equals
 
@@ -1016,7 +770,7 @@ A1: P is compact;
   now per cases;
     case
 A2:   [#](P) <> {};
-A3:   R^1 is_T2 by PCOMPS_1:38,TOPMETR:def 7;
+A3:   R^1 is T_2 by PCOMPS_1:38,TOPMETR:def 7;
       for s1 being Real_Sequence st
       (rng s1) c= [#](P) & s1 is convergent holds lim s1 in [#](P)
       proof
@@ -1496,9 +1250,9 @@ A9: dist(x1,p1) <= dist(x1,p2) + dist(p2,p1) &
 A10: dist(x1,p2) <= dist(x2,p2) by A1,A2,A3,A7,Th25;
 A11: dist(x2,p1) <= dist(x1,p1) by A1,A2,A3,A5,Th25;
 A12: dist(x1,p1) - dist(x2,p2) <=
-  dist(x1,p2) + dist(p1,p2) - dist(x1,p2) by A9,A10,REAL_1:92;
+  dist(x1,p2) + dist(p1,p2) - dist(x1,p2) by A9,A10,XREAL_1:15;
   dist(x2,p2) - dist(x1,p1) <=
-  dist(x2,p1) + dist(p1,p2) - dist(x2,p1) by A9,A11,REAL_1:92;
+  dist(x2,p1) + dist(p1,p2) - dist(x2,p1) by A9,A11,XREAL_1:15;
   then -dist(p1,p2) <= -(dist(x2,p2) - dist(x1,p1)) by XREAL_1:26;
   hence thesis by A6,A8,A12,ABSVALUE:12;
 end;

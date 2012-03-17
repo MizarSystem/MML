@@ -19,8 +19,8 @@
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -31,8 +31,8 @@
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Not>
 <And>
@@ -41,8 +41,8 @@
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Not>
 <And>

@@ -24,11 +24,11 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCOP_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_2"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
@@ -49,47 +49,47 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="84">
-<Func kind="K" nr="260"/>
-<Func kind="K" nr="14">
-<Func kind="K" nr="45"/>
+<Adjective nr="29"/>
+<Adjective nr="89">
+<Func kind="K" nr="267"/>
+<Func kind="K" nr="15">
+<Func kind="K" nr="46"/>
 </Func>
-<Func kind="K" nr="273"/>
+<Func kind="K" nr="280"/>
 </Adjective>
-<Adjective nr="98"/>
-<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="107"/>
 </Cluster>
-<Func kind="K" nr="135">
-<Func kind="U" nr="10">
-<Func kind="K" nr="260"/>
-<Func kind="K" nr="14">
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="138">
+<Func kind="U" nr="9">
+<Func kind="K" nr="267"/>
+<Func kind="K" nr="15">
+<Func kind="K" nr="46"/>
 </Func>
-<Func kind="K" nr="273"/>
+<Func kind="K" nr="280"/>
 </Func>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="84">
-<Func kind="K" nr="260"/>
-<Func kind="K" nr="14">
-<Func kind="K" nr="45"/>
+<Adjective nr="29"/>
+<Adjective nr="89">
+<Func kind="K" nr="267"/>
+<Func kind="K" nr="15">
+<Func kind="K" nr="46"/>
 </Func>
-<Func kind="K" nr="273"/>
+<Func kind="K" nr="280"/>
 </Adjective>
-<Adjective nr="98"/>
-<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="107"/>
 </Cluster>
-<Func kind="K" nr="135">
-<Func kind="U" nr="10">
-<Func kind="K" nr="260"/>
-<Func kind="K" nr="14">
-<Func kind="K" nr="45"/>
+<Func kind="K" nr="138">
+<Func kind="U" nr="9">
+<Func kind="K" nr="267"/>
+<Func kind="K" nr="15">
+<Func kind="K" nr="46"/>
 </Func>
-<Func kind="K" nr="273"/>
+<Func kind="K" nr="280"/>
 </Func>
 </Func>
 </Typ>
@@ -98,27 +98,27 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="419">
+<Func kind="K" nr="426">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="84">
-<Func kind="K" nr="260"/>
-<Func kind="K" nr="14">
-<Func kind="K" nr="45"/>
+<Adjective nr="29"/>
+<Adjective nr="89">
+<Func kind="K" nr="267"/>
+<Func kind="K" nr="15">
+<Func kind="K" nr="46"/>
 </Func>
-<Func kind="K" nr="273"/>
+<Func kind="K" nr="280"/>
 </Adjective>
-<Adjective nr="98"/>
-<Adjective nr="102"/>
+<Adjective nr="103"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 </Registrations>

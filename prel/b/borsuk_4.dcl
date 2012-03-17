@@ -21,7 +21,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSEQ_2"/>
@@ -48,38 +47,38 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="8" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BORSUK_4" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="8" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="8" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BORSUK_4" nr="3">
@@ -88,21 +87,21 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="338"/>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="101"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -110,17 +109,17 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="64"/>
+<Adjective nr="76"/>
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="80"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <Func kind="K" nr="286">
 <Num nr="2"/>
@@ -129,8 +128,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="68"/>
+<Adjective nr="8" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </CCluster>
 </Registrations>

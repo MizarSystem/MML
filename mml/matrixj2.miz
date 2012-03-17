@@ -1,0 +1,3900 @@
+:: Jordan Matrix Decomposition
+::  by Karol P\c{a}k
+:: 
+:: Received July 11, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, ARYTM, FINSEQ_1, FINSEQ_2, FINSEQ_4, TREES_1, RELAT_1,
+      FUNCT_1, INCSP_1, CAT_3, RVSUM_1, RLSUB_1, GROUP_1, CARD_1, MATRIX_1,
+      MATRIX_2, MATRIX_3, MATRIXR1, RLVECT_1, RLVECT_2, RLVECT_3, VECTSP_1,
+      VECTSP_9, PRVECT_1, MATRIX_6, ARYTM_1, FUNCOP_1, CAT_1, RLSUB_2, MATRLIN,
+      RANKNULL, VECTSP10, FINSET_1, SUBSET_1, TARSKI, FUNCT_4, COMPLEX1,
+      SQUARE_1, VECTSP_2, FUNCSDOM, ORDINAL4, SETWISEO, CARD_3, RFINSEQ,
+      REALSET1, MATRIXJ1, MATRLIN2, VECTSP11, MATRIXJ2, POLYNOM5, BCIALG_2,
+      HURWITZ, MATHMORP, ZF_REFLE, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
+      ALGSTR_0, XXREAL_0, NAT_1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      SETWOP_2, FINSEQ_1, STRUCT_0, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1,
+      FINSEQ_2, MATRIX_1, MATRIX_2, FVSUM_1, BINARITH, GROUP_4, MATRIX_3,
+      MATRIX_6, FUNCT_4, DOMAIN_1, VECTSP_4, VECTSP_6, VECTSP_7, VECTSP_9,
+      FINSEQOP, MATRIX13, MATRLIN, FUNCT_7, LAPLACE, MOD_2, RFINSEQ, VECTSP_2,
+      VECTSP_5, MATRIX15, RANKNULL, FUNCSDOM, GRCAT_1, POLYNOM5, WSIERP_1,
+      MATRIXJ1, MATRLIN2, VECTSP11;
+ constructors FINSOP_1, XXREAL_0, GROUP_4, WELLORD2, VECTSP_7, VECTSP_9,
+      MATRIX_6, REALSET1, LAPLACE, VECTSP_5, RANKNULL, MATRIX15, GRCAT_1,
+      POLYNOM1, MONOID_0, POLYNOM4, POLYNOM5, MATRIXJ1, MATRLIN2, VECTSP11,
+      SEQ_1, BINOP_2, REAL_1;
+ registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2, ORDINAL1,
+      XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, CARD_1, FINSEQ_2, SEQM_3, XREAL_0,
+      VECTSP_9, VECTSP_7, VALUED_0, MATRIXJ1, VECTSP11, POLYNOM5, FUNCOP_1;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+ definitions STRUCT_0, TARSKI, RLVECT_1, FINSEQ_1, VECTSP_4, RELAT_1, GROUP_4,
+      FVSUM_1, MATRIX_1, FUNCT_1, FUNCOP_1, MATRIXJ1, VECTSP11, MATRLIN2;
+ theorems ZFMISC_1, RLVECT_1, MATRIX_1, MATRIX_2, MATRIX_3, VECTSP_1, NAT_1,
+      FINSEQ_2, BINARITH, CARD_1, CARD_2, FINSEQ_1, FINSEQ_3, FRECHET, FUNCT_1,
+      FUNCT_2, FUNCT_7, FUNCOP_1, FVSUM_1, GROUP_1, LAPLACE, MATRIX_6,
+      MATRIX13, MATRIXR1, MATRIXR2, MATRLIN, ORDINAL1, PARTFUN1, RELAT_1,
+      RELSET_1, STIRL2_1, STRUCT_0, TARSKI, WELLORD2, VECTSP_4, VECTSP_6,
+      VECTSP_7, VECTSP_9, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, MATRIX15,
+      MOD_2, VECTSP10, RANKNULL, ANPROJ_1, VECTSP_5, FINSEQ_4, FINSEQ_5,
+      RFINSEQ, RVSUM_1, POLYNOM3, POLYNOM4, MATRIXJ1, MATRLIN2, VECTSP11,
+      GRCAT_1, FUNCT_4, CARD_4;
+ schemes NAT_1, MATRIX_1, FUNCT_2;
+
+begin :: Jordan blocks
+
+ reserve i,j,m,n,k for Nat,
+         x,y for set,
+         K for Field,
+         a,L for Element of K;
+
+Lm1:
+   for f be Function st f is one-to-one & x in dom f holds
+    rng (f+*(x,y)) = (rng f)\{f.x}\/{y}
+proof
+  let f be Function such that
+A1:  f is one-to-one & x in dom f;
+  set xy=x.-->y;
+  dom xy = {x} & rng xy = {y} by FUNCOP_1:14,19;
+  then rng(f+*xy) = f.:(dom f\{x})\/{y} by FRECHET:12
+                 .= (f.:(dom f))\(f.:{x})\/{y} by A1,FUNCT_1:123
+                 .= (rng f)\Im(f,x)\/{y} by RELAT_1:146
+                 .= (rng f)\{f.x}\/{y} by A1,FUNCT_1:117;
+  hence thesis by A1,FUNCT_7:def 3;
+end;
+
+definition
+  let K,L,n;
+  func Jordan_block(L,n) -> Matrix of K means :Def1:
+    len it = n & width it = n &
+    for i,j st [i,j] in Indices it holds
+     (    i = j     implies it*(i,j) = L ) &
+     (   i+1 = j    implies it*(i,j) = 1_K ) &
+     (i<>j & i+1<>j implies it*(i,j) = 0.K );
+  existence
+  proof
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    defpred P[Nat,Nat,set] means
+      ($1 = $2 implies $3 = L) & ($1+1 = $2 implies $3 = 1_K ) &
+      ($1<>$2 & $1+1<>$2 implies $3 = 0.K);
+A1:  for i,j st [i,j] in [:Seg N, Seg N:]
+         for x1,x2 be Element of K st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
+A2:  for i,j st [i,j] in [:Seg N, Seg N:] ex x be Element of K st P[i,j,x]
+     proof
+       let i,j such that [i,j] in [:Seg N, Seg N:];
+       per cases;
+         suppose
+A3:          i=j;
+           take L;
+           thus thesis by A3;
+         end;
+         suppose
+A4:        i+1=j;
+           take 1_K;
+           thus thesis by A4;
+         end;
+         suppose
+       A5:  i<>j & i+1<>j;
+           take 0.K;
+           thus thesis by A5;
+         end;
+     end;
+    consider M be Matrix of N,K such that
+A6:    for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
+       from MATRIX_1:sch 2(A1,A2);
+    take M;
+    thus thesis by A6,MATRIX_1:25;
+  end;
+  uniqueness
+  proof
+    let M1,M2 be Matrix of K such that
+A7:   len M1 = n & width M1 = n and
+A8:   for i,j st [i,j] in Indices M1 holds
+      (    i = j     implies M1*(i,j) = L ) &
+      (   i+1 = j    implies M1*(i,j) = 1_K ) &
+      (i<>j & i+1<>j implies M1*(i,j) = 0.K ) and
+A9:   len M2 = n & width M2 = n and
+A10:   for i,j st [i,j] in Indices M2 holds
+      (    i = j     implies M2*(i,j) = L ) &
+      (   i+1 = j    implies M2*(i,j) = 1_K ) &
+      (i<>j & i+1<>j implies M2*(i,j) = 0.K );
+    now let i,j such that
+A11:      [i,j] in Indices M1;
+A12:     Indices M1 = [:Seg n,Seg n:] by A7,FINSEQ_1:def 3
+                   .= Indices M2 by A9,FINSEQ_1:def 3;
+         i=j or i+1=j or i<>j & i+1<>j;
+         then M1*(i,j)=L & M2*(i,j)=L or M1*(i,j)=1_K & M2*(i,j)=1_K
+           or M1*(i,j)=0.K & M2*(i,j)=0.K by A8,A10,A11,A12;
+         hence M1*(i,j)=M2*(i,j);
+    end;
+    hence thesis by A7,A9,MATRIX_1:21;
+  end;
+end;
+
+definition
+  let K,L,n;
+  redefine func Jordan_block(L,n) -> Upper_Triangular_Matrix of n,K;
+  coherence
+  proof
+    len Jordan_block(L,n)=n & width Jordan_block(L,n)=n by Def1;
+    then reconsider LBn=Jordan_block(L,n) as Matrix of n,K by MATRIX_2:7;
+    now let i,j such that
+A1:    [i,j] in Indices LBn;
+       assume
+A2:      i>j;
+       then i+1>j by NAT_1:13;
+       hence LBn*(i,j) = 0.K by A1,A2,Def1;
+    end;
+    hence thesis by MATRIX_2:def 3;
+  end;
+end;
+
+theorem Th1:
+  diagonal_of_Matrix Jordan_block(L,n) = n |-> L
+proof
+  set B=Jordan_block(L,n);
+A1:  len diagonal_of_Matrix B=n & len (n |-> L)=n
+     by MATRIX_3:def 10,FINSEQ_2:109;
+  now let i such that
+A2:   1<=i & i<=n;
+A3:   i in Seg n by A2,FINSEQ_1:3;
+       then
+A4:  [i,i] in [:Seg n,Seg n:] & [:Seg n,Seg n:]=Indices B
+         by ZFMISC_1:106,MATRIX_1:25;
+       thus (diagonal_of_Matrix B).i = B*(i,i) by A3,MATRIX_3:def 10
+                                    .= L by A4,Def1
+                                    .= (n|->L).i by A3,FINSEQ_1:4,FINSEQ_2:71;
+  end;
+  hence thesis by A1,FINSEQ_1:18;
+end;
+
+theorem Th2:
+  Det Jordan_block(L,n) = power(K).(L,n)
+proof
+  thus Det Jordan_block(L,n)=(the multF of K)$$
+            diagonal_of_Matrix Jordan_block(L,n) by MATRIX13:7
+        .= Product(n|->L) by Th1
+        .= power(K).(L,n) by MATRIXJ1:5;
+end;
+
+theorem Th3:
+  Jordan_block(L,n) is invertible iff n = 0 or L <> 0.K
+proof
+  set B=Jordan_block(L,n);
+A1: B is invertible implies L <> 0.K or n=0
+    proof
+      assume B is invertible;
+      then
+A2:     Det B<>0.K by LAPLACE:34;
+      assume
+A3:     L=0.K;
+      assume n<>0;
+      then
+A4:     n in Seg n & dom (n|->L)=Seg n by FINSEQ_1:5,FINSEQ_2:144;
+      then (n|->L).n=L by FINSEQ_1:4,FINSEQ_2:71;
+      then 0.K = Product (n|->L) by A3,A4,FVSUM_1:107
+              .= (power K).(L,n) by MATRIXJ1:5;
+      hence thesis by A2,Th2;
+    end;
+  n = 0 or L <> 0.K implies B is invertible
+    proof
+      assume
+A5:     n=0 or L<>0.K;
+      assume not B is invertible;
+      then 0.K = Det B by LAPLACE:34
+              .= (power K).(L,n) by Th2
+              .= Product (n|->L) by MATRIXJ1:5;
+      then consider k be Element of NAT such that
+A6:     k in dom (n|->L) & (n|->L).k=0.K by FVSUM_1:107;
+      dom (n|->L)=Seg n by FINSEQ_2:144;
+      hence thesis by A5,A6,FINSEQ_1:4,FINSEQ_2:71;
+    end;
+  hence thesis by A1;
+end;
+
+theorem Th4:
+  i in Seg n & i<>n implies
+    Line(Jordan_block(L,n),i) = L*Line(1.(K,n),i)+Line(1.(K,n),i+1)
+proof
+   assume
+A1:  i in Seg n & i<>n;
+   set ONE=1.(K,n);set i1=i+1;
+   set Li=Line(ONE,i);
+   set Li1=Line(ONE,i1);
+   set J=Jordan_block(L,n);
+   set LJ=Line(J,i);
+   reconsider N=n as Element of NAT by ORDINAL1:def 13;
+A2:   width ONE=n & width J=n & Indices ONE=[:Seg n,Seg n:] &
+      Indices ONE=Indices J by MATRIX_1:25,27;
+   reconsider Li,Li1,LJ as Element of N-tuples_on the carrier of K
+     by MATRIX_1:25;
+   now let j such that
+A3:    j in Seg n;
+     i<=n by A1,FINSEQ_1:3;
+     then i<n by A1,XXREAL_0:1;
+     then 1<=i1 & i1<=n by NAT_1:11,13;
+     then i1 in Seg n;
+     then
+A4:    [i,j] in [:Seg n,Seg n:] & [i1,j] in [:Seg n,Seg n:]
+         by A1,A3,ZFMISC_1:106;
+A5:    Li.j=ONE*(i,j) & Li1.j=ONE*(i1,j) & LJ.j=J*(i,j)
+         by A2,A3,MATRIX_1:def 8;
+     then (L*Li).j=L*(ONE*(i,j)) by A3,FVSUM_1:63;
+     then
+A6:    (L*Li+Li1).j=L*(ONE*(i,j))+ONE*(i1,j) by A3,A5,FVSUM_1:22;
+     now per cases;
+       suppose
+A7:        i=j;
+         then
+A8:        i1>j by NAT_1:13;
+         thus LJ.j = L by A2,A4,A5,A7,Def1
+                  .= L+0.K by RLVECT_1:def 7
+                  .= L*1_K+0.K by VECTSP_1:def 19
+                  .= L*(ONE*(i,j))+0.K by A2,A4,A7,MATRIX_1:def 12
+                  .= (L*Li+Li1).j by A2,A4,A6,A8,MATRIX_1:def 12;
+       end;
+       suppose
+A9:        i1=j;
+         then
+A10:       i<j by NAT_1:13;
+         thus LJ.j = 1_K by A2,A4,A5,A9,Def1
+                  .= 0.K+1_K by RLVECT_1:def 7
+                  .= L*0.K+1_K by VECTSP_1:39
+                  .= L*(ONE*(i,j))+1_K by A2,A4,A10,MATRIX_1:def 12
+                  .= (L*Li+Li1).j by A2,A4,A6,A9,MATRIX_1:def 12;
+       end;
+       suppose
+A11:       i<>j & i1<>j;
+         hence LJ.j = 0.K by A2,A4,A5,Def1
+                   .= 0.K+0.K by RLVECT_1:def 7
+                   .= L*0.K+0.K by VECTSP_1:39
+                   .= L*(ONE*(i,j))+0.K by A2,A4,A11,MATRIX_1:def 12
+                   .= (L*Li+Li1).j by A2,A4,A6,A11,MATRIX_1:def 12;
+       end;
+     end;
+     hence (L*Li+Li1).j=LJ.j;
+   end;
+   hence thesis by FINSEQ_2:139;
+end;
+
+theorem Th5:
+  Line(Jordan_block(L,n),n) = L*Line(1.(K,n),n)
+proof
+   set ONE=1.(K,n);
+   set Ln=Line(ONE,n);
+   set J=Jordan_block(L,n);
+   set LJ=Line(J,n);
+   reconsider N=n as Element of NAT by ORDINAL1:def 13;
+A1:  width ONE=n & width J=n & Indices ONE=[:Seg n,Seg n:] &
+     Indices ONE=Indices J by MATRIX_1:25,27;
+   reconsider Ln,LJ as Element of N-tuples_on the carrier of K
+       by MATRIX_1:25;
+   now let j such that
+A2:    j in Seg n;
+      n in Seg n by A2,FINSEQ_1:5,4;
+      then
+A3:     [n,j] in [:Seg n,Seg n:] by A2,ZFMISC_1:106;
+A4:     Ln.j=ONE*(n,j) & LJ.j=J*(n,j) by A1,A2,MATRIX_1:def 8;
+      then
+A5:     (L*Ln).j=L*(ONE*(n,j)) by A2,FVSUM_1:63;
+      now per cases;
+        suppose
+A6:         n=j;
+          thus LJ.j = L by A1,A3,A4,A6,Def1
+                   .= L*1_K by VECTSP_1:def 19
+                   .= (L*Ln).j by A1,A3,A5,A6,MATRIX_1:def 12;
+        end;
+        suppose n+1=j;
+          then j>n & j<=n by A2,NAT_1:13,FINSEQ_1:3;
+          hence (L*Ln).j=LJ.j;
+        end;
+        suppose
+A7:         n<>j & n+1<>j;
+          hence LJ.j = 0.K by A1,A3,A4,Def1
+                    .= L*0.K by VECTSP_1:39
+                    .= (L*Ln).j by A1,A3,A5,A7,MATRIX_1:def 12;
+        end;
+      end;
+      hence (L*Ln).j=LJ.j;
+   end;
+   hence thesis by FINSEQ_2:139;
+end;
+
+theorem Th6:
+  for F be Element of n-tuples_on the carrier of K st i in Seg n
+    holds
+  ( i <> n implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i)+ F/.(i+1))&
+  ( i = n  implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i))
+proof
+  let F be Element of n-tuples_on the carrier of K such that
+A1:  i in Seg n;
+  set J=Jordan_block(L,n);
+  set Li=Line(J,i);
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
+A2:  width J=n & Indices J=[:Seg n,Seg n:] by MATRIX_1:25;
+  reconsider Li,f=F as Element of N-tuples_on the carrier of K by MATRIX_1:25;
+A3:  dom mlt(Li,f)=Seg n & dom f=Seg n by FINSEQ_2:144;
+  thus i <> n implies Line(J,i) "*" F = L * (F/.i)+ F/.(i+1)
+    proof
+      assume
+A4:     i<>n;
+      i<=n by A1,FINSEQ_1:3;
+      then i<n by A4,XXREAL_0:1;
+      then 1<=i+1 & i+1<=n by NAT_1:11,13;
+      then
+A5:     i+1 in Seg n & i+1>i by NAT_1:13;
+      then
+A6:     [i,i] in Indices J & [i,i+1] in Indices J & f.i=f/.i &
+        f.(i+1)=f/.(i+1) & J*(i,i)=Li.i & J*(i,i+1)=Li.(i+1)
+          by A1,A2,A3,ZFMISC_1:106,PARTFUN1:def 8,MATRIX_1:def 8;
+A7:     mlt(Li,f)/.i = mlt(Li,f).i by A1,A3,PARTFUN1:def 8
+                    .= J*(i,i)*f/.i by A1,A6,FVSUM_1:74
+                    .= L*(f/.i) by A6,Def1;
+A8:     mlt(Li,f)/.(i+1) = mlt(Li,f).(i+1) by A3,A5,PARTFUN1:def 8
+                        .= J*(i,i+1)*f/.(i+1) by A5,A6,FVSUM_1:74
+                        .= 1_K*(f/.(i+1)) by A6,Def1
+                        .= f/.(i+1) by VECTSP_1:def 13;
+      now let j such that
+A9:       j in Seg n & j<>i & j<>i+1;
+A10:    [i,j] in Indices J & f.j=f/.j
+           by A1,A2,A3,A9,ZFMISC_1:106,PARTFUN1:def 8;
+         then 0.K = J*(i,j) by A9,Def1
+                 .= Li.j by A2,A9,MATRIX_1:def 8;
+         hence mlt(Li,f).j = 0.K * (f/.j) by A9,A10,FVSUM_1:74
+                          .= 0.K by VECTSP_1:36;
+      end;
+      hence thesis by A1,A5,A7,A8,A3,MATRIX15:7;
+    end;
+  assume
+A11:  i=n;
+A12:  Line(J,i).i=J*(i,i)& [i,i] in Indices J & f.i=f/.i
+     by A1,A2,A3,MATRIX_1:def 8,ZFMISC_1:106,PARTFUN1:def 8;
+  now let j such that
+A13:    j in Seg n & j<>i;
+        j<=n by A13,FINSEQ_1:3;
+        then
+A14:      j<i+1 by A11,NAT_1:13;
+A15:      [i,j] in Indices J & f.j=f/.j
+           by A1,A2,A3,A13,ZFMISC_1:106,PARTFUN1:def 8;
+        Line(J,i).j = J*(i,j) by A2,A13,MATRIX_1:def 8
+                   .= 0.K by A13,A14,A15,Def1;
+        hence mlt(Line(J,i),f).j = 0.K*f/.j by A3,A13,A15,FVSUM_1:74
+                                .= 0.K by VECTSP_1:36;
+  end;
+  hence Line(J,i)"*"F = mlt(Line(J,i),f).i by A1,A3,MATRIX_3:14
+                     .= J*(i,i)*(f/.i) by A12,A1,A3,FVSUM_1:74
+                     .= L*(F/.i) by A12,Def1;
+end;
+
+theorem Th7:
+  for F be Element of n-tuples_on the carrier of K st i in Seg n
+    holds
+  ( i = 1  implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i) ) &
+  ( i <> 1 implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i)+F/.(i-1) )
+proof
+  let F be Element of n-tuples_on the carrier of K such that
+A1:  i in Seg n;
+  set J=Jordan_block(L,n);
+  set Ci=Col(J,i);
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
+A2:  len J=n & dom J=Seg len J & Indices J=[:Seg n,Seg n:]
+     by MATRIX_1:25,FINSEQ_1:def 3;
+  reconsider Ci,f=F as Element of N-tuples_on the carrier of K by MATRIX_1:25;
+A3:  dom mlt(Ci,f)=Seg n & dom f=Seg n by FINSEQ_2:144;
+  thus i = 1 implies Col(J,i) "*" F = L * (F/.i)
+    proof
+      assume
+A4:      i=1;
+A5:     Col(J,i).i=J*(i,i) & [i,i] in Indices J & f.i=f/.i
+          by A1,A2,A3,MATRIX_1:def 9,ZFMISC_1:106,PARTFUN1:def 8;
+      now let j such that
+A6:          j in Seg n & j<>i;
+           1<=j by A6,FINSEQ_1:3;
+           then
+A7:         i<j+1 by A4,NAT_1:13;
+A8:         [j,i] in Indices J & f.j=f/.j
+              by A1,A2,A3,A6,ZFMISC_1:106,PARTFUN1:def 8;
+           Col(J,i).j = J*(j,i) by A2,A6,MATRIX_1:def 9
+                     .= 0.K by A7,A6,A8,Def1;
+           hence mlt(Col(J,i),f).j = 0.K*f/.j by A3,A6,A8,FVSUM_1:74
+                                  .= 0.K by VECTSP_1:36;
+      end;
+      hence Col(J,i)"*"F = mlt(Col(J,i),f).i by A1,A3,MATRIX_3:14
+                        .= J*(i,i)*(f/.i) by A1,A3,A5,FVSUM_1:74
+                        .= L*(F/.i) by A5,Def1;
+    end;
+  assume
+A9:   i<>1;
+A10:   n>=i & i>=1 by A1,FINSEQ_1:3;
+  then reconsider i1=i-1 as Element of NAT by NAT_1:21;
+  i1+1>0+1 by A9,A10,XXREAL_0:1;
+  then i1>0 & i1+1>=i1 by NAT_1:11;
+  then i1>=1 & n>=i1 by A10,NAT_1:14,XXREAL_0:2;
+  then
+A11:  i1 in Seg n & i1<>i;
+  then
+A12:  Col(J,i).i=J*(i,i) & Col(J,i).i1=J*(i1,i) & i1+1=i &
+     [i,i] in Indices J & [i1,i] in Indices J & f.i=f/.i & f.i1=f/.i1
+     by A1,A2,A3,MATRIX_1:def 9,ZFMISC_1:106,PARTFUN1:def 8;
+A13:  mlt(Ci,f)/.i = mlt(Ci,f).i by A1,A3,PARTFUN1:def 8
+                 .= J*(i,i)*f/.i by A1,A12,FVSUM_1:74
+                 .= L*(f/.i) by A12,Def1;
+A14:  mlt(Ci,f)/.i1 = mlt(Ci,f).i1 by A3,A11,PARTFUN1:def 8
+                  .= J*(i1,i)*f/.i1 by A11,A12,FVSUM_1:74
+                  .= 1_K*(f/.i1) by A12,Def1
+                  .= f/.i1 by VECTSP_1:def 13;
+  now let j such that
+A15:      j in Seg n & j<>i & j<>i1;
+A16:      [j,i] in Indices J & f.j=f/.j & j+1<>i
+         by A1,A2,A3,A15,ZFMISC_1:106,PARTFUN1:def 8;
+        then 0.K = J*(j,i) by A15,Def1
+                .= Ci.j by A2,A15,MATRIX_1:def 9;
+        hence mlt(Ci,f).j = 0.K*(f/.j) by A15,A16,FVSUM_1:74
+                         .= 0.K by VECTSP_1:36;
+  end;
+  hence thesis by A1,A3,A11,A13,A14,MATRIX15:7;
+end;
+
+theorem
+  L <> 0.K implies
+    ex M be Matrix of n,K st Jordan_block(L,n)~ = M &
+      for i,j st [i,j] in Indices M holds
+        (i > j  implies M*(i,j) = 0.K) &
+        (i <= j implies M*(i,j) = - power(K).(-L",j-'i+1))
+proof
+  assume
+A1:  L <> 0.K;
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
+  defpred P[Nat,Nat,set] means
+    ($1 > $2 implies $3 = 0.K) &
+     ($1<= $2 implies $3 = -power(K).(-L",$2-'$1+1) );
+A2: for i,j st [i,j] in [:Seg N, Seg N:]
+      for x1,x2 be Element of K st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
+A3: for i,j st [i,j] in [:Seg N, Seg N:] ex x be Element of K st P[i,j,x]
+    proof
+     let i,j such that [i,j] in [:Seg N,Seg N:];
+     per cases;
+       suppose
+A4:       i>j;
+         take 0.K;
+         thus thesis by A4;end;
+       suppose
+A5:       i<=j;
+         take P=-power(K).(-L",j-'i+1);
+         thus thesis by A5;end;
+    end;
+  consider M be Matrix of N,K such that
+A6:   for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)]
+      from MATRIX_1:sch 2(A2,A3);
+  reconsider M as Matrix of n,K;
+  take M;
+  set J=Jordan_block(L,n);
+  set ONE=1.(K,n);
+  set JM=J*M;
+  set MJ=M*J;
+A7:  J is invertible & Indices M=Indices J & Indices J=Indices ONE &
+     Indices JM=Indices ONE & Indices MJ=Indices ONE & Indices ONE=
+     [:Seg n,Seg n:] by A1,Th3,MATRIX_1:25,27;
+A8:  len M=n & width M=n & len J=n & width J=n by MATRIX_1:25;
+  now let i,j such that
+A9:     [i,j] in Indices ONE;
+      set C=Col(M,j);
+      set i1=i+1;
+A10:     i in Seg n & j in Seg n & dom M=Seg n & dom C=Seg n
+        by A7,A8,A9,ZFMISC_1:106,FINSEQ_1:def 3,FINSEQ_2:144;
+      then
+A11:     C/.i=C.i & C.i=M*(i,j) by PARTFUN1:def 8,MATRIX_1:def 9;
+A12:     JM*(i,j)=Line(J,i)"*"Col(M,j) by A7,A8,A9,MATRIX_3:def 4;
+      now per cases;
+        suppose
+A13:        i=n;
+           then
+A14:         JM*(i,j)=L*(M*(i,j)) by A12,A8,A10,Th6,A11;
+           now per cases;
+             suppose
+A15:            i>j;
+              hence JM*(i,j) = L*0.K by A7,A9,A14,A6
+                            .= 0.K by VECTSP_1:36
+                            .= ONE*(i,j) by A9,A15,MATRIX_1:def 12;end;
+             suppose
+A16:            i<=j;
+              j<=n by A10,FINSEQ_1:3;
+              then
+A17:            j=n by A13,A16,XXREAL_0:1;
+              hence JM*(i,j) = L*(-power(K).(-L",n-'n+1)) by A7,A9,A14,A13,A6
+                            .= L*(-power(K).(-L",0+1)) by BINARITH:51
+                            .= L*(-(-L")) by GROUP_1:98
+                            .= L*L" by RLVECT_1:30
+                            .= 1_K by A1,VECTSP_1:def 22
+                            .= ONE*(i,j) by A9,A13,A17,MATRIX_1:def 12;end;
+           end;
+           hence JM*(i,j)=ONE*(i,j);end;
+        suppose
+A18:        i<>n;
+          i<=n by A10,FINSEQ_1:3;
+          then i<n by A18,XXREAL_0:1;
+          then 1<=i1 & i1<=n by NAT_1:11,13;
+          then i1 in Seg n;
+          then
+A19:         C/.i1=C.i1 & C.i1=M*(i1,j) & [i1,j] in Indices M
+            by A7,A10,PARTFUN1:def 8,MATRIX_1:def 9,ZFMISC_1:106;
+          then
+A20:         JM*(i,j)=L*(M*(i,j)) + M*(i1,j) by A12,A8,A10,Th6,A11,A18;
+          now per cases by XXREAL_0:1;
+            suppose
+A21:            i>j;
+              then i1>j by NAT_1:13;
+              hence JM*(i,j) = L*(M*(i,j)) + 0.K by A19,A20,A6
+                            .= L*(M*(i,j)) by RLVECT_1:def 7
+                            .= L*0.K by A9,A7,A6,A21
+                            .= 0.K by VECTSP_1:36
+                            .= ONE*(i,j) by A9,A21,MATRIX_1:def 12;end;
+            suppose
+A22:            i=j;
+              then i1>j by NAT_1:13;
+              hence JM*(i,j) = L*(M*(i,j)) + 0.K by A19,A20,A6
+                            .= L*(M*(i,i)) by A22,RLVECT_1:def 7
+                            .= L*(-power(K).(-L",i-'i+1)) by A9,A7,A6,A22
+                            .= L*(-power(K).(-L",0+1)) by BINARITH:51
+                            .= L*(-(-L")) by GROUP_1:98
+                            .= L*L" by RLVECT_1:30
+                            .= 1_K by A1,VECTSP_1:def 22
+                            .= ONE*(i,j) by A9,A22,MATRIX_1:def 12;end;
+            suppose
+A23:            i<j;
+              then
+A24:            i1<=j by NAT_1:13;
+              then
+A25:            j-'i1=j-i1 & j-'i=j-i by A23,BINARITH:50;
+              set P=power(K).(-L",j-'i1+1);
+              thus JM*(i,j) = L*(M*(i,j)) + (-P) by A19,A20,A6,A24
+                           .= L*(-power(K).(-L",j-'i+1)) + (-P) by A9,A7,A6,A23
+                           .= L*(-(-L")*P) + (-P) by A25,GROUP_1:def 8
+                           .= L*((-(-L"))*P) + (-P) by VECTSP_1:41
+                           .= L*(L"*P) + (-P) by RLVECT_1:30
+                           .= (L*L")*P + (-P) by GROUP_1:def 4
+                           .= 1_K*P + (-P) by A1,VECTSP_1:def 22
+                           .= P + (-P) by VECTSP_1:def 16
+                           .= 0.K by RLVECT_1:def 11
+                           .= ONE*(i,j) by A9,A23,MATRIX_1:def 12;end;
+          end;
+          hence ONE*(i,j)=JM*(i,j);end;
+      end;
+      hence ONE*(i,j)=JM*(i,j);
+    end;
+  then
+A26:  ONE = JM by MATRIX_1:28;
+  now let i,j such that
+A27:     [i,j] in Indices ONE;
+       set LL=Line(M,i);
+A28:      i in Seg n & j in Seg n & dom LL=Seg n
+         by A7,A8,A27,ZFMISC_1:106,FINSEQ_2:144;
+       then
+A29:     LL/.j=LL.j & LL.j=M*(i,j) by A8,PARTFUN1:def 8,MATRIX_1:def 8;
+A30:     MJ*(i,j) = LL"*"Col(J,j) by A7,A8,A27,MATRIX_3:def 4
+                .= Col(J,j)"*"LL by FVSUM_1:115;
+       now per cases;
+         suppose
+A31:         j=1;
+           then
+A32:         MJ*(i,j)= L* (M*(i,j)) by A8,A28,A29,A30,Th7;
+           now per cases;
+             suppose
+A33:             i=j;
+               hence MJ*(i,j) = L*(-power(K).(-L",i-'i+1)) by A7,A27,A6,A32
+                             .= L*(-power(K).(-L",0+1)) by BINARITH:51
+                             .= L*(-(-L")) by GROUP_1:98
+                             .= L*L" by RLVECT_1:30
+                             .= 1_K by A1,VECTSP_1:def 22
+                             .= ONE*(i,j) by A27,A33,MATRIX_1:def 12;end;
+             suppose
+A34:             i<>j;
+               1<=i by A28,FINSEQ_1:3;
+               then j<i by A31,A34,XXREAL_0:1;
+               hence MJ*(i,j) = L*0.K by A7,A27,A6,A32
+                             .= 0.K by VECTSP_1:36
+                             .= ONE*(i,j) by A27,A34,MATRIX_1:def 12;end;
+           end;
+           hence ONE*(i,j)=MJ*(i,j);end;
+         suppose
+A35:         j<>1;
+A36:         j>=1 by A28,FINSEQ_1:3;
+           then reconsider j1=j-1 as Element of NAT by NAT_1:21;
+           j1+1>0+1 by A35,A36,XXREAL_0:1;
+           then j1>0 & j1<=j1+1 & j<=n by A28,FINSEQ_1:3,NAT_1:11;
+           then n>=j1 & j1>=1 by NAT_1:14,XXREAL_0:2;
+           then j1 in Seg n;
+           then
+A37:          LL/.j1=LL.j1 & LL.j1=M*(i,j1) & [i,j1] in Indices ONE
+             by A7,A8,A28,PARTFUN1:def 8,MATRIX_1:def 8,ZFMISC_1:106;
+           then
+A38:          MJ*(i,j)= L* (M*(i,j))+M*(i,j1) by A8,A28,A29,A35,A30,Th7;
+           now per cases by XXREAL_0:1;
+             suppose
+A39:             i<j1+1;
+                then
+A40:              i<=j1 by NAT_1:13;
+                then
+A41:              j1-'i=j1-i & j-'i=j-i by A39,BINARITH:50;
+                set P=power(K).(-L",j1-'i+1);
+                thus MJ*(i,j) = L* (M*(i,j))+(-P) by A7,A6,A37,A38,A40
+                             .= L*(-power(K).(-L",j-'i+1))+(-P)
+                                    by A7,A6,A27,A39
+                             .= L*(-(-L")*P)+(-P) by A41,GROUP_1:def 8
+                             .= L*((-(-L"))*P)+(-P) by VECTSP_1:41
+                             .= L*(L"*P)+(-P) by RLVECT_1:30
+                             .= (L*L")*P + (-P) by GROUP_1:def 4
+                             .= 1_K*P + (-P) by A1,VECTSP_1:def 22
+                             .= P + (-P) by VECTSP_1:def 16
+                             .= 0.K by RLVECT_1:def 11
+                             .= ONE*(i,j) by A27,A39,MATRIX_1:def 12;end;
+             suppose
+A42:             i=j1+1;
+               then i>j1 by NAT_1:13;
+               hence MJ*(i,j) = L* (M*(i,j))+0.K by A7,A6,A37,A38
+                             .= L* (M*(i,j)) by RLVECT_1:def 7
+                             .= L* (-power(K).(-L",i-'i+1)) by A7,A42,A27,A6
+                             .= L*(-power(K).(-L",0+1)) by BINARITH:51
+                             .= L*(-(-L")) by GROUP_1:98
+                             .= L*L" by RLVECT_1:30
+                             .= 1_K by A1,VECTSP_1:def 22
+                             .= ONE*(i,j) by A27,A42,MATRIX_1:def 12;end;
+             suppose
+A43:             i>j1+1;
+               then i>j1 by NAT_1:13;
+               hence MJ*(i,j) = L* (M*(i,j))+0.K by A7,A6,A37,A38
+                             .= L* (M*(i,j)) by RLVECT_1:def 7
+                             .= L* 0.K by A7,A43,A27,A6
+                             .= 0.K by VECTSP_1:36
+                             .= ONE*(i,j) by A27,A43,MATRIX_1:def 12;end;
+           end;
+           hence MJ*(i,j)=ONE*(i,j);end;
+       end;
+       hence ONE*(i,j)=MJ*(i,j);
+   end;
+  then ONE=MJ by MATRIX_1:28;
+  then M is_reverse_of J by A26,MATRIX_6:def 2;
+  hence thesis by A6,A7,MATRIX_6:def 4;
+end;
+
+theorem Th9:
+  Jordan_block(L,n) + a*1.(K,n)=Jordan_block(L+a,n)
+proof
+  set J=Jordan_block(L,n);
+  set Ja=Jordan_block(L+a,n);
+  set ONE=1.(K,n);
+  now let i,j such that
+A1:    [i,j] in Indices Ja;
+A2:  Indices J=Indices Ja & Indices J=Indices ONE by MATRIX_1:27;
+     now per cases;
+        suppose
+A3:         i=j;
+          hence Ja*(i,j) = L+a by A1,Def1
+                        .= J*(i,j)+a by A1,A2,A3,Def1
+                        .= J*(i,j)+a*1_K by VECTSP_1:def 16
+                        .= J*(i,j)+a*(ONE*(i,j)) by A2,A1,A3,MATRIX_1:def 12
+                        .= J*(i,j)+(a*ONE)*(i,j) by A2,A1,MATRIX_3:def 5
+                        .= (J+a*ONE)*(i,j) by A2,A1,MATRIX_3:def 3;
+        end;
+        suppose
+A4:         i+1=j;
+          then
+A5:         i<>j;
+          thus Ja*(i,j) = 1_K by A1,A4,Def1
+                       .= 1_K+0.K by RLVECT_1:def 7
+                       .= J*(i,j)+0.K by A2,A1,A4,Def1
+                       .= J*(i,j)+a*0.K by VECTSP_1:36
+                       .= J*(i,j)+a*(ONE*(i,j)) by A2,A1,A5,MATRIX_1:def 12
+                       .= J*(i,j)+(a*ONE)*(i,j) by A2,A1,MATRIX_3:def 5
+                       .= (J+a*ONE)*(i,j) by A2,A1,MATRIX_3:def 3;
+        end;
+        suppose
+A6:         i<>j & i+1<>j;
+          hence Ja*(i,j) = 0.K by A1,Def1
+                        .= 0.K+0.K by RLVECT_1:def 7
+                        .= J*(i,j)+0.K by A2,A1,A6,Def1
+                        .= J*(i,j)+a*0.K by VECTSP_1:36
+                        .= J*(i,j)+a*(ONE*(i,j)) by A2,A1,A6,MATRIX_1:def 12
+                        .= J*(i,j)+(a*ONE)*(i,j) by A2,A1,MATRIX_3:def 5
+                        .= (J+a*ONE)*(i,j) by A2,A1,MATRIX_3:def 3;
+        end;
+    end;
+    hence Ja*(i,j)=(J+a*ONE)*(i,j);
+  end;
+  hence thesis by MATRIX_1:28;
+end;
+
+begin :: Finite Sequences of Jordan blocks
+
+definition
+  let K;
+  let G be FinSequence of (the carrier of K)**;
+  attr G is Jordan-block-yielding means :Def2:
+    for i st i in dom G ex L,n st G.i = Jordan_block(L,n);
+end;
+
+registration
+  let K;
+  cluster Jordan-block-yielding FinSequence of (the carrier of K)**;
+  existence
+  proof
+    reconsider F=<*>((the carrier of K)**) as
+       FinSequence of (the carrier of K)**;
+    take F;
+    for i st i in dom F ex L,n st F.i = Jordan_block(L,n);
+    hence thesis by Def2;
+  end;
+end;
+
+registration
+  let K;
+  cluster Jordan-block-yielding -> Square-Matrix-yielding
+                                   FinSequence of (the carrier of K)**;
+  coherence
+    proof
+      let F be FinSequence of (the carrier of K)** such that
+A1:         F is Jordan-block-yielding;
+      let i such that
+A2:         i in dom F;
+      ex L,n st F.i=Jordan_block(L,n) by A1,A2,Def2;
+      hence thesis;
+    end;
+end;
+
+definition
+  let K;
+  mode FinSequence_of_Jordan_block of K is
+     Jordan-block-yielding FinSequence of (the carrier of K)**;
+end;
+
+Lm2:
+  {} is FinSequence_of_Jordan_block of K
+proof
+  reconsider F=<*>((the carrier of K)**) as
+    FinSequence of (the carrier of K)**;
+  for i st i in dom F ex L,n st F.i = Jordan_block(L,n);
+  hence thesis by Def2;
+end;
+
+definition
+  let K,L;
+  mode FinSequence_of_Jordan_block of L,K -> FinSequence_of_Jordan_block of K
+    means :Def3:
+  for i st i in dom it ex n st it.i = Jordan_block(L,n);
+  existence
+  proof
+    reconsider F=<*>{} as FinSequence_of_Jordan_block of K by Lm2;
+    take F;
+    thus thesis;
+  end;
+end;
+
+theorem Th10:
+  {} is FinSequence_of_Jordan_block of L,K
+proof
+  reconsider F=<*>{} as FinSequence_of_Jordan_block of K by Lm2;
+  for i st i in dom F ex n st F.i = Jordan_block(L,n);
+  hence thesis by Def3;
+end;
+
+theorem Th11:
+  <*Jordan_block(L,n)*> is FinSequence_of_Jordan_block of L,K
+proof
+  now let i such that
+A1:    i in dom <*Jordan_block(L,n)*>;
+     dom <*Jordan_block(L,n)*> ={1} by FINSEQ_1:4,def 8;
+     then <*Jordan_block(L,n)*>.1=Jordan_block(L,n) & i=1
+       by A1,TARSKI:def 1,FINSEQ_1:def 8;
+     hence ex a,k st <*Jordan_block(L,n)*>.i=Jordan_block(a,k);
+  end;
+  then reconsider JJ=<*Jordan_block(L,n)*> as FinSequence_of_Jordan_block of K
+    by Def2;
+  now let i such that
+A2:   i in dom JJ;
+    dom JJ ={1} by FINSEQ_1:4,def 8;
+    then JJ.1=Jordan_block(L,n) & i=1 by A2,TARSKI:def 1,FINSEQ_1:def 8;
+    hence ex n st JJ.i = Jordan_block(L,n);
+  end;
+  hence thesis by Def3;
+end;
+
+registration
+  let K,L;
+  cluster non-empty FinSequence_of_Jordan_block of L,K;
+  existence
+  proof
+    reconsider JJ= <*Jordan_block(L,1)*> as FinSequence_of_Jordan_block of L,K
+      by Th11;
+    take JJ;
+    now let x such that
+A1:       x in dom JJ;
+       dom JJ ={1} by FINSEQ_1:4,def 8;
+       then JJ.1=Jordan_block(L,1) & x=1 & len Jordan_block(L,1)=1
+         by A1,TARSKI:def 1,FINSEQ_1:def 8,Def1;
+       hence JJ.x is non empty;
+    end;
+    hence thesis by FUNCT_1:def 15;
+  end;
+end;
+
+registration
+  let K;
+  cluster non-empty FinSequence_of_Jordan_block of K;
+  existence
+  proof
+    consider F be non-empty FinSequence_of_Jordan_block of 1_K,K;
+    take F;
+    thus thesis;
+  end;
+end;
+
+
+theorem Th12:
+   for J be FinSequence_of_Jordan_block of L,K holds
+      J (+) mlt(len J|->a,1.(K,Len J)) is
+      FinSequence_of_Jordan_block of (L+a),K
+proof
+  let J be FinSequence_of_Jordan_block of L,K;
+  set M=mlt(len J|->a,1.(K,Len J));
+A1: for i st i in dom (J(+)M) ex n st (J(+)M).i=Jordan_block(L+a,n)
+    proof
+      let i such that
+A2:       i in dom (J(+)M);
+A3:       i in dom J & dom J=Seg len J
+        by A2,MATRIXJ1:def 10,FINSEQ_1:def 3;
+      then consider n such that
+A4:      J.i = Jordan_block(L,n) by Def3;
+      take n;
+      len (len J|->a)=len J by FINSEQ_2:69;
+      then dom (len J|->a)=dom J by FINSEQ_3:31;
+      then
+A5:      (len J|->a)/.i = (len J|->a).i by A3,PARTFUN1:def 8
+                       .= a by A3,FINSEQ_2:71,FINSEQ_1:4;
+A6:    dom M=dom 1.(K,Len J) by MATRIXJ1:def 9;
+A7:    dom 1.(K,Len J)=dom Len J by MATRIXJ1:def 8;
+A8:      dom Len J=dom J by MATRIXJ1:def 3;
+      then
+A9:      (Len J).i=len (J.i) & len (J.i)=n
+         by A4,A3,MATRIXJ1:def 3,MATRIX_1:25;
+      M.i = a * 1.(K,Len J).i by A3,A6,A5,A7,A8,MATRIXJ1:def 9
+         .= a* 1.(K,n) by A9,A3,A7,A8,MATRIXJ1:def 8;
+      hence (J(+)M).i = Jordan_block(L,n) +a* 1.(K,n) by A4,A2,MATRIXJ1:def 10
+                     .= Jordan_block(L+a,n) by Th9;
+    end;
+  J(+)M is Jordan-block-yielding
+    proof
+      let i such that
+A10:      i in dom (J(+)M);
+      ex n st (J(+)M).i=Jordan_block(L+a,n) by A10,A1;
+      hence thesis;
+    end;
+  then reconsider JM=J(+)M as FinSequence_of_Jordan_block of K;
+  JM is FinSequence_of_Jordan_block of (L+a),K
+    proof
+      let i such that
+A11:      i in dom JM;
+      thus thesis by A11,A1;
+    end;
+  hence thesis;
+end;
+
+definition
+  let K;
+  let J1,J2 be FinSequence_of_Jordan_block of K;
+  redefine func J1^J2 -> FinSequence_of_Jordan_block of K;
+  coherence
+  proof
+    J1^J2 is Jordan-block-yielding
+      proof
+        let i such that
+A1:       i in dom (J1^J2);
+        per cases by A1,FINSEQ_1:38;
+          suppose i in dom J1;
+            then (J1^J2).i=J1.i & ex L,n st J1.i=Jordan_block(L,n)
+              by FINSEQ_1:def 7,Def2;
+            hence thesis;end;
+          suppose ex n st n in dom J2 & i=len J1 + n;
+            then consider k such that
+A2:           k in dom J2 & i=len J1+k;
+            (J1^J2).i=J2.k & ex L,n st J2.k=Jordan_block(L,n)
+              by A2,FINSEQ_1:def 7,Def2;
+            hence thesis;end;
+        end;
+     hence thesis;
+   end;
+end;
+
+definition
+  let K;
+  let J be FinSequence_of_Jordan_block of K;
+  let n;
+  redefine func J|n -> FinSequence_of_Jordan_block of K;
+  coherence
+  proof
+    now let i such that
+A1:      i in dom (J|n);
+      i in dom J by A1,RELAT_1:86;
+      then (J|n).i=J.i& ex L,k st J.i=Jordan_block(L,k) by A1,FUNCT_1:70,Def2;
+      hence ex L,k st (J|n).i=Jordan_block(L,k);
+    end;
+    hence thesis by Def2;
+  end;
+  redefine func J/^n -> FinSequence_of_Jordan_block of K;
+  coherence
+  proof
+    now let i such that
+A2:     i in dom (J/^n);
+      i+n in dom J by A2,FINSEQ_5:29;
+      then (J/^n).i=(J/^n)/.i & J.(n+i)=J/.(n+i) &
+ex L,k st
+         J.(n+i)=Jordan_block(L,k) by A2,PARTFUN1:def 8,Def2;
+      hence ex L,k st (J/^n).i=Jordan_block(L,k) by A2,FINSEQ_5:30;
+    end;
+    hence thesis by Def2;
+  end;
+end;
+
+definition
+  let K,L;
+  let J1,J2 be FinSequence_of_Jordan_block of L,K;
+  redefine func J1^J2 -> FinSequence_of_Jordan_block of L,K;
+  coherence
+  proof
+    J1^J2 is FinSequence_of_Jordan_block of L,K
+      proof
+        let i such that
+A1:        i in dom (J1^J2);
+        per cases by A1,FINSEQ_1:38;
+          suppose i in dom J1;
+            then (J1^J2).i=J1.i & ex n st J1.i=Jordan_block(L,n)
+              by FINSEQ_1:def 7,Def3;
+            hence thesis;end;
+          suppose ex n st n in dom J2 & i=len J1 + n;
+            then consider k such that
+A2:           k in dom J2 & i=len J1+k;
+            (J1^J2).i=J2.k & ex n st J2.k=Jordan_block(L,n)
+              by A2,FINSEQ_1:def 7,Def3;
+            hence thesis;end;
+      end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let K,L;
+  let J be FinSequence_of_Jordan_block of L,K;
+  let n;
+  redefine func J|n -> FinSequence_of_Jordan_block of L,K;
+  coherence
+  proof
+    now let i such that
+A1:    i in dom (J|n);
+      i in dom J by A1,RELAT_1:86;
+      then (J|n).i=J.i& ex k st J.i=Jordan_block(L,k) by A1,FUNCT_1:70,Def3;
+      hence ex k st (J|n).i=Jordan_block(L,k);
+    end;
+    hence thesis by Def3;
+  end;
+  redefine func J/^n -> FinSequence_of_Jordan_block of L,K;
+  coherence
+  proof
+    now let i such that
+A2:     i in dom (J/^n);
+       i+n in dom J by A2,FINSEQ_5:29;
+       then (J/^n).i=(J/^n)/.i & J.(n+i)=J/.(n+i) &
+          ex k st J.(n+i)=Jordan_block(L,k) by A2,PARTFUN1:def 8,Def3;
+       hence ex k st (J/^n).i=Jordan_block(L,k) by A2,FINSEQ_5:30;
+    end;
+    hence thesis by Def3;
+  end;
+end;
+
+begin :: Nilpotent Transformations
+
+definition
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be Function of V,V;
+  attr f is nilpotent means :Def4:
+    ex n st for v be Vector of V holds (f|^n).v=0.V;
+end;
+
+theorem Th13:
+  for K be doubleLoopStr
+    for V be non empty VectSpStr over K
+       for f be Function of V,V holds
+          f is nilpotent iff ex n st f|^n = ZeroMap(V,V)
+proof
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be Function of V,V;
+  hereby assume f is nilpotent;
+      then consider n such that
+A1:     for v be Vector of V holds (f|^n).v=0.V by Def4;
+      now let x such that
+A2:       x in dom (f|^n);
+        reconsider v=x as Vector of V by FUNCT_2:def 1,A2;
+        thus (f|^n).x = (f|^n).v
+                     .= 0.V by A1;
+      end;
+      then (f|^n) = (dom (f|^n))-->0.V by FUNCOP_1:17
+                 .= (the carrier of V)-->0.V by FUNCT_2:def 1
+                 .= ZeroMap(V,V) by GRCAT_1:def 12;
+      hence ex n st f|^n = ZeroMap(V,V);
+  end;
+  given n such that
+A3:   f|^n = ZeroMap(V,V);
+  take n;
+  let v be Vector of V;
+  thus (f|^n).v = ((the carrier of V)-->0.V).v by A3,GRCAT_1:def 12
+               .= 0.V by FUNCOP_1:13;
+end;
+
+registration
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  cluster nilpotent Function of V,V;
+  existence
+    proof
+      take F=ZeroMap(V,V);
+      F|^1=F by VECTSP11:19;
+      hence thesis by Th13;
+    end;
+end;
+
+registration
+  let R be Ring;
+  let V be LeftMod of R;
+  cluster nilpotent linear Function of V,V;
+  existence
+    proof
+      take F=ZeroMap(V,V);
+      F|^1=F by VECTSP11:19;
+      hence thesis by Th13,MOD_2:8;
+    end;
+end;
+
+theorem Th14:
+  for V be VectSp of K,f be linear-transformation of V,V holds
+    f|ker (f|^n) is nilpotent linear-transformation of ker (f|^n),ker (f|^n)
+proof
+  let V be VectSp of K,f be linear-transformation of V,V;
+  set KER = ker (f|^n);
+  reconsider fK=f|KER as linear-transformation of KER,KER by VECTSP11:28;
+  now let v be Vector of KER;
+     reconsider v1=v as Vector of V by VECTSP_4:18;
+A1:    v1 in KER by STRUCT_0:def 5;
+     thus (fK|^n).v = ((f|^n)|KER).v by VECTSP11:22
+                   .= (f|^n).v1 by FUNCT_1:72
+                   .= 0.V by A1,RANKNULL:10
+                   .= 0.KER by VECTSP_4:19;
+  end;
+  hence thesis by Def4;
+end;
+
+definition
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be nilpotent Function of V,V;
+  func degree_of_nilpotent f -> Nat means :Def5:
+    f|^it = ZeroMap(V,V) &
+    for k st f|^k = ZeroMap(V,V) holds it <= k;
+  existence
+  proof
+    defpred P[Nat] means f|^$1 = ZeroMap(V,V);
+A1:    ex n st P[n] by Th13;
+    consider n such that
+A2:    P[n] and
+A3:    for k st P[k] holds n<=k from NAT_1:sch 5(A1);
+    take n;
+    thus thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+     let i,j such that
+A4:     f|^i = ZeroMap(V,V) &
+    for k st f|^k = ZeroMap(V,V) holds i <= k and
+A5:     f|^j = ZeroMap(V,V) &
+        for k st f|^k = ZeroMap(V,V) holds j <= k;
+    i<=j & j<=i by A4,A5;
+    hence thesis by XXREAL_0:1;
+  end;
+end;
+
+notation
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be nilpotent Function of V,V;
+  synonym deg f for degree_of_nilpotent f;
+end;
+
+theorem Th15:
+  for K be doubleLoopStr
+    for V be non empty VectSpStr over K
+      for f be nilpotent Function of V,V holds
+        deg f = 0 iff [#]V = {0.V}
+proof
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be nilpotent Function of V,V;
+  hereby assume
+A1:     deg f=0;
+    [#]V c= {0.V}
+    proof
+      let x such that
+A2:      x in [#]V;
+      id V = f|^0 by VECTSP11:18
+          .= ZeroMap(V,V) by A1,Def5
+          .= (the carrier of V)-->0.V by GRCAT_1:def 12;
+      then x = ((the carrier of V)-->0.V).x by A2,FUNCT_1:35
+            .= 0.V by A2,FUNCOP_1:13;
+      hence thesis by TARSKI:def 1;
+    end;
+    hence [#]V ={0.V} by ZFMISC_1:39;
+  end;
+  assume
+A3:  [#]V={0.V};
+  now let x such that
+A5:   x in dom (f|^0);
+     reconsider v=x as Vector of V by FUNCT_2:def 1,A5;
+     thus (f|^0).x = (id V).v by VECTSP11:18
+                  .= 0.V by A3,TARSKI:def 1;
+  end;
+  then (f|^0) = (dom (f|^0))-->0.V by FUNCOP_1:17
+             .= (the carrier of V)-->0.V by FUNCT_2:def 1
+             .= ZeroMap(V,V) by GRCAT_1:def 12;
+  hence thesis by Def5;
+end;
+
+theorem Th16:
+  for K be doubleLoopStr
+    for V be non empty VectSpStr over K
+      for f be nilpotent Function of V,V
+        ex v be Vector of V st
+          for i st i < deg f holds (f|^i).v <> 0.V
+proof
+  let K be doubleLoopStr;
+  let V be non empty VectSpStr over K;
+  let f be nilpotent Function of V,V;
+  set D=deg f;
+  assume
+A1:  for v be Vector of V ex i st i < D & (f|^i).v=0.V;
+  then consider i such that
+A2:  i < D & (f|^i).(0.V) =0.V;
+  [#]V<>{0.V} by A2,Th15;
+  then consider v be set such that
+A3:  v in [#]V & v<>0.V by ZFMISC_1:41;
+  reconsider v as Vector of V by A3;
+  defpred P[Nat] means 0<$1 & $1 < D & (f|^$1).(0.V)=0.V;
+  consider j such that
+A4:  j < D & (f|^j).v =0.V by A1;
+  j>0
+    proof
+      assume j<=0;
+      then j=0;
+      then 0.V = id V.v by A4,VECTSP11:18
+              .= v by FUNCT_1:35;
+      hence thesis by A3;
+    end;
+  then
+A5:  D-j=D-'j & j-j<D-j & D-j<D-0 by A4,BINARITH:50,XREAL_1:11,12;
+  then
+A6:  D=(D-'j)+j;
+A7:  dom (f|^j)=[#]V by FUNCT_2:def 1;
+A8:  f|^D = ZeroMap(V,V) by Def5
+         .= (the carrier of V)-->0.V by GRCAT_1:def 12;
+  then 0.V = (f|^D).v by FUNCOP_1:13
+          .= ((f|^(D-'j))*(f|^j)).v by A6,VECTSP11:20
+          .= (f|^(D-'j)).(0.V) by A4,A7,FUNCT_1:23;
+  then
+A9:  ex j st P[j] by A5;
+  consider m such that
+A10:  P[m] &
+      for n be Nat st P[n] holds m <= n from NAT_1:sch 5(A9);
+A11: D-'m=D-m & D-m<D-0 by A10,BINARITH:50,XREAL_1:12;
+A12: dom (f|^(D-'m))=[#]V by FUNCT_2:def 1;
+  now let x such that
+A13:    x in dom (f|^(D-'m));
+     reconsider X=x as Vector of V by FUNCT_2:def 1,A13;
+     consider k such that
+A14:    k < D & (f|^k).X =0.V by A1;
+     defpred F[Nat] means $1<=D & ex i st $1=k+i*m;
+A15:   for i be Nat st F[i] holds i <= D;
+     k=k+0*m;
+     then
+A16:   ex k st F[k] by A14;
+     consider MAX be Nat such that
+A17:    F[MAX] and
+A18:    for k be Nat st F[k] holds k <= MAX from NAT_1:sch 6(A15,A16);
+     consider I be Nat such that
+A19:    MAX=k+I*m by A17;
+     now per cases by A17,XXREAL_0:1;
+        suppose
+A20:       MAX=D;
+          then I<>0 by A14,A19;
+          then reconsider I1=I-1 as Nat by NAT_1:20;
+          D-'m=k+I1*m by A19,A11,A20;
+          hence (f|^(D-'m)).X=0.V by A10,A14,VECTSP11:21;
+        end;
+        suppose
+A21:        MAX<D;
+          MAX<>0
+          proof
+            assume
+A22:          MAX=0;
+            then k=0 by A19;
+            then k+1*m<D by A10;
+            hence thesis by A10,A22,A18;
+          end;
+          then
+A24:        D-MAX=D-'MAX & MAX-MAX < D-MAX & D-MAX <D-0
+              by A21,BINARITH:50,XREAL_1:11,12;
+          then
+A25:        D=D-'MAX+MAX;
+A26:        (f|^MAX).X=0.V & dom (f|^MAX)= the carrier of V
+               by A10,A14,A19,VECTSP11:21,FUNCT_2:def 1;
+          0.V = (f|^D).X by A8,FUNCOP_1:13
+             .= ((f|^(D-'MAX))*(f|^MAX)).X by A25,VECTSP11:20
+             .= (f|^(D-'MAX)).(0.V) by A26,FUNCT_1:23;
+          then m <= D-'MAX by A10,A24;
+          then MAX+m <= MAX+(D-MAX) & MAX+m=k+(I+1)*m by A19,A24,XREAL_1:8;
+          then MAX+m<=MAX+0 by A18;
+          hence (f|^(D-'m)).X=0.V by A10,XREAL_1:8;
+        end;
+    end;
+    hence (f|^(D-'m)).x=0.V;
+  end;
+  then f|^(D-'m) = (the carrier of V)-->0.V by A12,FUNCOP_1:17
+                .= ZeroMap(V,V) by GRCAT_1:def 12;
+  hence contradiction by A11,Def5;
+end;
+
+theorem Th17:
+  for K be Field, V be VectSp of K, W be Subspace of V
+    for f be nilpotent Function of V,V st f|W is Function of W,W
+      holds
+    f|W is nilpotent Function of W,W
+proof
+  let K be Field,V be VectSp of K,W be Subspace of V;
+  let f be nilpotent Function of V,V;
+  assume f|W is Function of W,W;
+  then reconsider fW=f|W as Function of W,W;
+  consider n such that
+A1:  f|^n =ZeroMap(V,V) by Th13;
+  [#]W c= [#]V by VECTSP_4:def 2;
+  then
+A2: [#]W=[#]V/\[#]W by XBOOLE_1:28;
+  fW|^n = ZeroMap(V,V)|W by A1,VECTSP11:22
+       .= ((the carrier of V)-->0.V)|[#]W by GRCAT_1:def 12
+       .= ((the carrier of V)/\[#]W) -->0.V by FUNCOP_1:18
+       .= (the carrier of W)-->0.W by A2,VECTSP_4:19
+       .= ZeroMap(W,W) by GRCAT_1:def 12;
+  hence f|W is nilpotent Function of W,W by Th13;
+end;
+
+theorem Th18:
+  for K be Field, V be VectSp of K, W be Subspace of V
+    for f be nilpotent linear-transformation of V,V,
+       fI be nilpotent Function of im (f|^n),im (f|^n) st
+           fI = f|im (f|^n) & n <= deg f
+      holds deg fI + n = deg f
+ proof
+   let K be Field,V be VectSp of K,W be Subspace of V;
+   let f be nilpotent linear-transformation of V,V;
+   set IM=im (f|^n);
+   let fI be nilpotent Function of IM,IM;
+   assume
+A1:   fI=f|IM;
+   set D=deg f;
+   assume n<=D;
+   then reconsider Dn=D-n as Element of NAT by NAT_1:21;
+A2:  dom (fI|^Dn)=[#]IM by FUNCT_2:def 1;
+   now let x such that
+A3:    x in dom (fI|^Dn);
+     reconsider X=x as Vector of IM by FUNCT_2:def 1,A3;
+     reconsider v=X as Vector of V by VECTSP_4:18;
+     X in IM by STRUCT_0:def 5;
+     then consider w be Element of V such that
+A4:    v = (f|^n).w by RANKNULL:13;
+A5:    dom (f|^n) = the carrier of V by FUNCT_2:def 1;
+     (f|^D).w = ZeroMap(V,V).w by Def5
+             .= ((the carrier of V)-->0.V).w by GRCAT_1:def 12
+             .= 0.V by FUNCOP_1:13;
+     hence 0.IM = (f|^(Dn+n)).w by VECTSP_4:19
+               .= ((f|^Dn)*(f|^n)).w by VECTSP11:20
+               .= (f|^Dn).v by A4,A5,FUNCT_1:23
+               .= ((f|^Dn)|IM).X by FUNCT_1:72
+               .= (fI|^Dn).x by A1,VECTSP11:22;
+   end;
+   then fI|^Dn = (the carrier of IM)-->0.IM by A2,FUNCOP_1:17
+              .= ZeroMap(IM,IM) by GRCAT_1:def 12;
+   then
+A6:  deg fI<=Dn by Def5;
+   deg fI = Dn
+     proof
+       set DI=deg fI;
+       assume DI<>Dn;
+       then DI<Dn by A6,XXREAL_0:1;
+       then
+A7:      DI+n<Dn+n by XREAL_1:8;
+       consider v be Vector of V such that
+A8:      for i st i < D holds (f|^i).v<>0.V by Th16;
+       (f|^n).v in IM by RANKNULL:13;
+       then
+A9:      (f|^n).v in the carrier of IM by STRUCT_0:def 5;
+A10:     dom (f|^n)=the carrier of V by FUNCT_2:def 1;
+       fI|^DI = ZeroMap(IM,IM) by Def5
+             .= (the carrier of IM)-->0.IM by GRCAT_1:def 12;
+       then 0.IM = (fI|^DI).((f|^n).v) by A9,FUNCOP_1:13
+                .= ((f|^DI)|IM).((f|^n).v) by A1,VECTSP11:22
+                .= (f|^DI).((f|^n).v) by A9,FUNCT_1:72
+                .= ((f|^DI)*(f|^n)).v by A10,FUNCT_1:23
+                .= (f|^(DI+n)).v by VECTSP11:20;
+       hence thesis by A7,A8, VECTSP_4:19;
+     end;
+   hence thesis;
+end;
+
+reserve V1,V2 for finite-dimensional VectSp of K,
+        W1,W2 for Subspace of V1,
+        U1,U2 for Subspace of V2,
+        b1 for OrdBasis of V1,
+        B1 for FinSequence of V1,
+        b2 for OrdBasis of V2,
+        B2 for FinSequence of V2,
+        bw1 for OrdBasis of W1,
+        bw2 for OrdBasis of W2,
+        Bu1 for FinSequence of U1,
+        Bu2 for FinSequence of U2;
+
+theorem Th19:
+  for M be Matrix of len b1,len B2,K,
+      M1 be Matrix of len bw1,len Bu1,K,
+      M2 be Matrix of len bw2,len Bu2,K st
+          b1 = bw1 ^ bw2 & B2 = Bu1 ^ Bu2 &
+          M = block_diagonal(<*M1,M2*>,0.K) &
+          width M1 = len Bu1 & width M2 = len Bu2
+    holds
+      (i in dom bw1 implies
+           Mx2Tran(M,b1,B2).(b1/.i)           = Mx2Tran(M1,bw1,Bu1).(bw1/.i))&
+      (i in dom bw2 implies
+           Mx2Tran(M,b1,B2).(b1/.(i+len bw1)) = Mx2Tran(M2,bw2,Bu2).(bw2/.i))
+proof
+  let M be Matrix of len b1,len B2,K,
+      M1 be Matrix of len bw1,len Bu1,K,
+      M2 be Matrix of len bw2,len Bu2,K such that
+A1:          b1 = bw1 ^ bw2 & B2 = Bu1 ^ Bu2 and
+A2:          M = block_diagonal(<*M1,M2*>,0.K) and
+A3:         width M1 = len Bu1 & width M2 = len Bu2;
+  set F=Mx2Tran(M,b1,B2);
+  set F1=Mx2Tran(M1,bw1,Bu1);
+  set F2=Mx2Tran(M2,bw2,Bu2);
+  rng Bu1 c= the carrier of U1 & the carrier of U1 c= the carrier of V2 &
+    rng Bu2 c= the carrier of U2 & the carrier of U2 c= the carrier of V2
+    by FINSEQ_1:def 4,VECTSP_4:def 2;
+  then rng Bu1 c= the carrier of V2 & rng Bu2 c= the carrier of V2
+    by XBOOLE_1:1;
+  then reconsider bu1=Bu1,bu2=Bu2 as FinSequence of V2 by FINSEQ_1:def 4;
+A4:  dom bw1 c= dom b1 & dom b1=Seg len b1 by A1,FINSEQ_1:39,def 3;
+A5:  width 1.(K,len b1)=len b1 & len 1.(K,len b1)=len b1 & len M=len b1 &
+       dom 1.(K,len b1)=Seg len 1.(K,len b1)
+       by MATRIX_1:def 3,25,FINSEQ_1:def 3;
+A6:  dom bw1=Seg len bw1 by FINSEQ_1:def 3;
+A7:  width 1.(K,len bw1)=len bw1 & len 1.(K,len bw1)=len bw1 &
+       dom 1.(K,len bw1)=Seg len 1.(K,len bw1)
+       by MATRIX_1:25,FINSEQ_1:def 3;
+A8:  dom bw2=Seg len bw2 by FINSEQ_1:def 3;
+A9:  width 1.(K,len bw2)=len bw2 & len 1.(K,len bw2)=len bw2 &
+       dom 1.(K,len bw2)=Seg len 1.(K,len bw2) by MATRIX_1:25,FINSEQ_1:def 3;
+A10: len M1=len bw1 & len M2=len bw2 by MATRIX_1:def 3;
+  then
+A11: dom M1=dom bw1 & dom M2=dom bw2 by FINSEQ_3:31;
+  thus i in dom bw1 implies F.(b1/.i)= F1.(bw1/.i)
+    proof
+      assume
+A12:      i in dom bw1;
+      then
+A13:    Line(M,i)=Line(M1,i)^(width M2|->0.K) & len Line(M1,i)=width M1 &
+        len (width M2|->0.K)=width M2 by A2,A11,MATRIXJ1:23,FINSEQ_2:109;
+      thus F.(b1/.i)
+            = Sum lmlt (Line(LineVec2Mx(b1/.i|--b1) * M,1),B2)
+                   by MATRLIN2:def 3
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len b1),i)) * M,1),B2)
+                   by A4,A12,MATRLIN2:19
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len b1)*M,i)),1),B2)
+                   by A4,A5,A12,MATRLIN2:35
+           .= Sum lmlt (Line(LineVec2Mx(Line(M,i)),1),B2) by A5,MATRIXR2:68
+           .= Sum lmlt(Line(M,i),B2) by MATRIX15:25
+           .= Sum (lmlt(Line(M1,i),bu1)^lmlt(width M2|->0.K,bu2))
+                   by A1,A3,A13,MATRLIN2:9
+           .= Sum lmlt(Line(M1,i),bu1) + Sum lmlt(width M2|->0.K,bu2)
+                   by RLVECT_1:58
+           .= Sum lmlt(Line(M1,i),bu1) + 0.K*Sum bu2 by A3,MATRLIN2:11
+           .= Sum lmlt(Line(M1,i),bu1) + 0.V2 by VECTSP_1:59
+           .= Sum lmlt(Line(M1,i),bu1) by RLVECT_1:def 7
+           .= Sum lmlt(Line(M1,i),Bu1) by MATRLIN2:14,15
+           .= Sum lmlt (Line(LineVec2Mx(Line(M1,i)),1),Bu1) by MATRIX15:25
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len bw1)*M1,i)),1),Bu1)
+                   by A10,MATRIXR2:68
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len bw1),i)) * M1,1),Bu1)
+                   by A12,A6,A7,A10,MATRLIN2:35
+           .= Sum lmlt (Line(LineVec2Mx(bw1/.i|--bw1) * M1,1),Bu1)
+                   by A12,MATRLIN2:19
+           .= F1.(bw1/.i) by MATRLIN2:def 3;
+    end;
+  assume
+A14:  i in dom bw2;
+  set BI=len bw1+i;
+A15: Line(M,BI)=(width M1|->0.K)^Line(M2,i) & len Line(M2,i)=width M2 &
+      len (width M1|->0.K)=width M1
+      by A2,A14,A10,A11,MATRIXJ1:23,FINSEQ_2:109;
+A16: BI in dom b1 by A1,A14,FINSEQ_1:41;
+  thus F.(b1/.(i+len bw1))
+            = Sum lmlt (Line(LineVec2Mx(b1/.BI|--b1) * M,1),B2)
+                   by MATRLIN2:def 3
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len b1),BI)) * M,1),B2)
+                   by A16,MATRLIN2:19
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len b1)*M,BI)),1),B2)
+                   by A4,A5,MATRLIN2:35,A1,A14,FINSEQ_1:41
+           .= Sum lmlt (Line(LineVec2Mx(Line(M,BI)),1),B2)
+                   by A5,MATRIXR2:68
+           .= Sum lmlt(Line(M,BI),B2) by MATRIX15:25
+           .= Sum (lmlt(width M1|->0.K,bu1)^lmlt(Line(M2,i),bu2))
+                   by A1,A3,A15,MATRLIN2:9
+           .= Sum lmlt(width M1|->0.K,bu1) + Sum lmlt(Line(M2,i),bu2)
+                   by RLVECT_1:58
+           .= 0.K*Sum bu1 + Sum lmlt(Line(M2,i),bu2) by A3,MATRLIN2:11
+           .= 0.V2 + Sum lmlt(Line(M2,i),bu2) by VECTSP_1:59
+           .= Sum lmlt(Line(M2,i),bu2) by RLVECT_1:def 7
+           .= Sum lmlt(Line(M2,i),Bu2) by MATRLIN2:14,15
+           .= Sum lmlt (Line(LineVec2Mx(Line(M2,i)),1),Bu2) by MATRIX15:25
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len bw2)*M2,i)),1),Bu2)
+                   by A10,MATRIXR2:68
+           .= Sum lmlt (Line(LineVec2Mx(Line(1.(K,len bw2),i)) * M2,1),Bu2)
+                   by A14,A10,A8,A9,MATRLIN2:35
+           .= Sum lmlt (Line(LineVec2Mx(bw2/.i|--bw2) * M2,1),Bu2)
+                   by A14,MATRLIN2:19
+           .= F2.(bw2/.i) by MATRLIN2:def 3;
+end;
+
+theorem Th20:
+  for M be Matrix of len b1,len B2,K,
+      F be FinSequence_of_Matrix of K st M = block_diagonal(F,0.K)
+   for i,m st i in dom b1 & m = min(Len F,i) holds
+      Mx2Tran(M,b1,B2).(b1/.i) =
+         Sum lmlt(Line(F.m,i-'Sum (Len F|(m-'1))),
+                 (B2|Sum(Width F|m))/^Sum (Width F|(m-'1))) &
+      len ((B2|Sum(Width F|m))/^Sum (Width F|(m-'1))) = width (F.m)
+proof
+   let M be Matrix of len b1,len B2,K,
+      F be FinSequence_of_Matrix of K such that
+A1:M = block_diagonal(F,0.K);
+   set B=block_diagonal(F,0.K);
+   let i,m such that
+A2:   i in dom b1 & m = min(Len F,i);
+A3: 1<=i & i<=len b1 by A2,FINSEQ_3:27;
+   set ONE=1.(K,len b1);
+   len ONE=len b1 by MATRIX_1:def 3;
+   then
+A4:  dom ONE=dom b1 & width ONE=len b1 & len M=len b1 & dom b1=Seg len b1 &
+     len M=Sum Len F & width M=Sum Width F & width M=len B2
+     by A3,A1,FINSEQ_1:def 3,FINSEQ_3:31,MATRIX_1:24,MATRIXJ1:def 5;
+   set W=Width F;
+   set L=Len F;
+   set Wm=Sum (W|m);
+   set Wm1=Sum (W|(m-'1));
+   set Fm=F.m;
+   set B2W=B2|Wm;
+   m in dom Len F & dom L=dom F & dom W=dom F
+     by A2,A4,MATRIXJ1:def 1,def 3,def 4;
+   then
+A5:  1<=m & m<=len W & W.m=width Fm & m in NAT by FINSEQ_3:27,
+     MATRIXJ1:def 4;
+   W = (W|m)^(W/^m) by RFINSEQ:21;
+   then
+A6:  Sum W=Wm+Sum (W/^m) by RVSUM_1:105;
+A8:  Sum W-'Wm = Sum W-Wm by A6,NAT_1:11,BINARITH:50
+              .= Sum (W/^m) by A6;
+   W = (W|(m-'1))^<*width Fm*>^(W/^m) by A5,POLYNOM4:3;
+   then
+A9:  Sum W = Sum ((W|(m-'1))^<*width Fm*>)+Sum (W/^m) by RVSUM_1:105
+          .= Wm1 + width Fm+Sum (W/^m) by RVSUM_1:104;
+   then aa: Sum W=Wm1+(width Fm+Sum (W/^m));
+A11:  B2=B2W^(B2/^Wm) by RFINSEQ:21;
+   then
+A12:  len B2=len B2W+ len (B2/^Wm) & len B2W =Wm
+     by A4,A6,FINSEQ_1:35,80,NAT_1:11;
+   Wm>=Wm1 by NAT_1:11,A6,A9;
+   then Seg Wm1 c= Seg Wm by FINSEQ_1:7;
+   then B2W|Wm1=B2|Wm1 by RELAT_1:103;
+   then
+A13:  B2W=(B2|Wm1)^(B2W/^Wm1) by RFINSEQ:21;
+   then
+A14:  len B2W=len (B2|Wm1)+len (B2W/^Wm1) & len (B2|Wm1) =Wm1
+      by A4,aa,FINSEQ_1:35,80,NAT_1:11;
+A15: B2W/^Wm1 = (B2|Sum(Width F|m))/^Wm1 by MATRIXJ1:21
+             .= (B2|Sum(Width F|m))/^Sum (Width F|(m-'1)) by MATRIXJ1:21;
+A16: len (Sum (W|(m-'1))|->0.K)=Sum (W|(m-'1)) &
+   len Line(Fm,i-'Sum (Len F|(m-'1))) =width Fm &
+     len ((Sum W-'Sum (W|m))|->0.K)=Sum (W/^m) by A8,FINSEQ_2:109;
+A17: len ((Sum (W|(m-'1))|->0.K)^Line(Fm,i-'Sum (Len F|(m-'1))))=Wm
+     by A6,A9,FINSEQ_2:109;
+   Mx2Tran(M,b1,B2).(b1/.i)
+      = Sum lmlt (Line(LineVec2Mx(b1/.i|--b1) * M,1),B2) by MATRLIN2:def 3
+     .= Sum lmlt (Line(LineVec2Mx(Line(ONE,i)) * M,1),B2) by A2,MATRLIN2:19
+     .= Sum lmlt (Line(LineVec2Mx(Line(ONE*M,i)),1),B2) by A2,A4,MATRLIN2:35
+     .= Sum lmlt (Line(LineVec2Mx(Line(M,i)),1),B2) by A4,MATRIXR2:68
+     .= Sum lmlt (Line(M,i),B2) by MATRIX15:25
+     .= Sum lmlt((Sum (Width F|(m-'1))|->0.K)^Line(Fm,i-'Sum (Len F|(m-'1)))^
+               ((Sum W-'Sum (Width F|m))|->0.K),B2) by A1,A2,A4,MATRIXJ1:37
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K) ^ Line(Fm,i-'Sum (Len F|(m-'1)))^
+            ((Sum W-'Sum (Width F|m))|->0.K),B2) by MATRIXJ1:21
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K) ^ Line(Fm,i-'Sum (Len F|(m-'1)))^
+            ((Sum W-'Sum (W|m))|->0.K),B2) by MATRIXJ1:21
+     .= Sum (lmlt((Sum (W|(m-'1))|->0.K) ^
+             Line(Fm,i-'Sum (Len F|(m-'1))),B2W)^
+             lmlt(((Sum W-'Sum (W|m))|->0.K),B2/^Wm))
+             by A4,A6,A16,A17,A11,A12,MATRLIN2:9
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K)^Line(Fm,i-'Sum (Len F|(m-'1))),B2W)+
+          Sum lmlt(((Sum W-'Sum (W|m))|->0.K),B2/^Wm) by RLVECT_1:58
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K) ^ Line(Fm,i-'Sum (Len F|(m-'1))),B2W)+
+          0.K* Sum (B2/^Wm) by A4,A6,A8,A12,MATRLIN2:11
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K)^ Line(Fm,i-'Sum (Len F|(m-'1))),B2W)+
+          0.V2 by VECTSP_1:59
+     .= Sum lmlt((Sum (W|(m-'1))|->0.K) ^ Line(Fm,i-'Sum (Len F|(m-'1))),B2W)
+          by RLVECT_1:def 7
+     .= Sum (lmlt(Sum (W|(m-'1))|->0.K,B2|Wm1) ^
+             lmlt(Line(Fm,i-'Sum (Len F|(m-'1))),B2W/^Wm1))
+          by A13,A14,A6,A9,A12,A16,MATRLIN2:9
+     .= Sum lmlt(Sum (W|(m-'1))|->0.K,B2|Wm1) +
+          Sum lmlt(Line(Fm,i-'Sum (Len F|(m-'1))),B2W/^Wm1) by RLVECT_1:58
+     .= 0.K*Sum (B2|Wm1) + Sum lmlt(Line(Fm,i-'Sum (Len F|(m-'1))),B2W/^Wm1)
+          by A14,MATRLIN2:11
+     .= 0.V2+Sum lmlt(Line(Fm,i-'Sum (Len F|(m-'1))),B2W/^Wm1) by VECTSP_1:59
+     .= Sum lmlt(Line(Fm,i-'Sum (Len F|(m-'1))),B2W/^Wm1) by RLVECT_1:def 7;
+   hence thesis by A15,A14,A6,A9,A12;
+end;
+
+theorem Th21:
+  len B1 in dom B1 implies
+    Sum lmlt (Line(Jordan_block(L,len B1),len B1),B1)= L*(B1/.(len B1))
+proof
+  set N=len B1;
+  assume
+A1:  N in dom B1;
+  set ONE=1.(K,N);
+  set J=Jordan_block(L,N);
+  thus Sum lmlt (Line(J,N),B1) = Sum lmlt(L*Line(ONE,N),B1) by Th5
+                              .= L* Sum lmlt (Line(ONE,N),B1) by MATRLIN2:13
+                              .= L* (B1/.N) by A1,MATRLIN2:16;
+end;
+
+theorem Th22:
+  i in dom B1 & i <> len B1 implies
+    Sum lmlt (Line(Jordan_block(L,len B1),i),B1)= L*(B1/.i)+B1/.(i+1)
+proof
+  assume
+A1:  i in dom B1 & i<>len B1;
+  set N=len B1;
+  set ONE=1.(K,N);
+  set J=Jordan_block(L,N);
+A2: width ONE=N & dom B1=Seg N by FINSEQ_1:def 3,MATRIX_1:25;
+  i<=N by A1,FINSEQ_3:27;
+  then i<N by A1,XXREAL_0:1;
+  then 1<=i+1 & i+1<=N by NAT_1:11,13;
+  then
+A3:   i+1 in dom B1 by A2;
+  len (L*Line(ONE,i))=len Line(ONE,i) & len Line(ONE,i)=width ONE &
+     len Line(ONE,i+1)=width ONE by FINSEQ_2:109,MATRIXR1:16;
+  then dom (L*Line(ONE,i))=dom Line(ONE,i+1) &
+    dom Line(ONE,i+1)= dom B1 by A2,FINSEQ_3:31;
+  then dom lmlt(L*Line(ONE,i),B1) =dom B1 &
+    dom lmlt(Line(ONE,i+1),B1) =dom B1 by MATRLIN:16;
+  then
+A4:  len lmlt (L*Line(ONE,i),B1)=len lmlt(Line(ONE,i+1),B1) by FINSEQ_3:31;
+  thus Sum lmlt (Line(Jordan_block(L,len B1),i),B1)
+       = Sum lmlt (L*Line(ONE,i)+Line(ONE,i+1),B1) by A1,A2,Th4
+      .= Sum (lmlt (L*Line(ONE,i),B1)+lmlt(Line(ONE,i+1),B1)) by MATRLIN2:7
+      .= (Sum lmlt (L*Line(ONE,i),B1))+(Sum lmlt(Line(ONE,i+1),B1))
+            by A4,MATRLIN2:10
+      .= (L*Sum lmlt (Line(ONE,i),B1))+(Sum lmlt(Line(ONE,i+1),B1))
+            by MATRLIN2:13
+      .= L*(B1/.i)+(Sum lmlt(Line(ONE,i+1),B1)) by A1,MATRLIN2:16
+      .= L*(B1/.i)+B1/.(i+1) by MATRLIN2:16,A3;
+end;
+
+theorem Th23:
+  for M be Matrix of len b1,len B2,K st M = Jordan_block(L,n)
+    for i st i in dom b1 holds
+      (i =  len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)) &
+      (i <> len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1))
+proof
+  let M be Matrix of len b1,len B2,K such that
+A1:   M = Jordan_block(L,n);
+  let i such that
+A2:   i in dom b1;
+  set ONE=1.(K,len b1);
+  set J=Jordan_block(L,n);
+  len ONE=len b1 by MATRIX_1:def 3;
+  then
+A3:   dom ONE=dom b1 & width ONE=len b1 & width J=n & len M=len b1 &
+     len M=n & dom b1=Seg len b1
+     by A1,FINSEQ_1:def 3,FINSEQ_3:31,MATRIX_1:25,26;
+  then n<>0 by A2,FINSEQ_1:4;
+  then
+A4:   width J=len B2 by A1,A3,MATRIX_1:20;
+  then
+A5:   dom B2=dom b1 by A3,FINSEQ_3:31;
+  Mx2Tran(M,b1,B2).(b1/.i) = Sum lmlt (Line(LineVec2Mx(b1/.i|--b1) * M,1),B2)
+                                by MATRLIN2:def 3
+                          .= Sum lmlt (Line(LineVec2Mx(Line(ONE,i))*M,1),B2)
+                                by A2,MATRLIN2:19
+                          .= Sum lmlt (Line(LineVec2Mx(Line(ONE*M,i)),1),B2)
+                                by A2,A3,MATRLIN2:35
+                          .= Sum lmlt (Line(LineVec2Mx(Line(M,i)),1),B2)
+                                by A3,MATRIXR2:68
+                          .= Sum lmlt (Line(M,i),B2) by MATRIX15:25;
+  hence thesis by Th21,Th22,A1,A2,A3,A4,A5;
+end;
+
+theorem Th24:
+  for J be FinSequence_of_Jordan_block of L,K
+    for M be Matrix of len b1,len B2,K st M = block_diagonal(J,0.K)
+      for i,m st i in dom b1 & m = min(Len J,i) holds
+        (i = Sum (Len J|m) implies
+             Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)) &
+        (i <> Sum (Len J|m) implies
+             Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1))
+proof
+  let J be FinSequence_of_Jordan_block of L,K;
+  let M be Matrix of len b1,len B2,K such that
+A1:   M = block_diagonal(J,0.K);
+  let i,m such that
+A2:   i in dom b1 & m = min(Len J,i);
+A3:   1<=i & i<=len b1 by A2,FINSEQ_3:27;
+  set B=block_diagonal(J,0.K);
+  set BBB=(B2|Sum(Width J|m))/^Sum (Width J|(m-'1));
+  set S=Sum (Len J|(m-'1));
+  set Sm=Sum (Len J|m);
+  set iS=i-'S;
+A4:  (Len J)|(m-'1) = Len (J|(m-'1)) by MATRIXJ1:17;
+A5:  (Len J)|m = Len (J|m) by MATRIXJ1:17;
+A6:   Mx2Tran(M,b1,B2).(b1/.i) = Sum lmlt(Line(J.m,iS),BBB) &
+      len BBB = width (J.m) by Th20,A1,A2;
+A7: len M=len b1 & Width J=Len J & dom b1=Seg len b1 & len M=Sum Len J &
+        width M=Sum Width J & width M=len B2
+      by A3,A1,FINSEQ_1:def 3,MATRIX_1:24,MATRIXJ1:def 5,46;
+  then
+A8:   m-'1=m-1 & S<i & m in dom Len J & i<=Sm & dom Len J=dom J
+      by A2,A4,A5,MATRIXJ1:7,def 1,def 3;
+  then
+A9:   (Len J)|(m-'1+1)=(Len J|(m-'1))^<*(Len J).m*> & (Len J).m = len (J.m) &
+       m =m-'1+1 & iS=i-S & (Len J).m=width (J.m)
+    by A7,A4,FINSEQ_5:11,MATRIXJ1:def 3,def 4,BINARITH:50;
+  then
+A10:  Sm=S+len (J.m) by A5,RVSUM_1:104;
+  then S+iS<=S+len (J.m) by A7,A9,A2,A5,MATRIXJ1:def 1;
+  then
+A11:  iS<=len (J.m) by XREAL_1:8;
+  iS<>0 by A7,A9,A2,A4,MATRIXJ1:7;
+  then 1<=iS by NAT_1:14;
+  then
+A12:  iS in dom BBB by A11,A6,A9,FINSEQ_3:27;
+A13:  m in NAT by ORDINAL1:def 13;
+   m <= len Len J by A8,FINSEQ_3:27;
+   then Sm <= Sum ((Len J)|(len Len J)) by A5,A13,POLYNOM3:18;
+   then Sm <= Sum Len J by FINSEQ_1:79;
+   then
+A14:   len (B2|Sm) =Sm by A7,FINSEQ_1:80;
+   then
+A15:   i in dom (B2|Sm) by A3,A8,FINSEQ_3:27;
+   consider n such that
+A16:   J.m = Jordan_block(L,n) by A8,Def3;
+A17:   len (J.m)=n by A16,MATRIX_1:25;
+A18:   BBB/.iS = (B2|Sum(Width J|m))/.(Sum (Width J|(m-'1))+iS)
+                     by A12,FINSEQ_5:30
+              .= (B2|Sum(Width J|m))/.(S+iS) by MATRIXJ1:46
+              .= (B2|Sum((Len J)|m))/.i by A7,A9,MATRIXJ1:21
+              .= B2/.i by A5,A15,FINSEQ_4:85;
+   hence i = Sm implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)
+     by A6,A9,A10,A12,Th21,A16,A17;
+   assume
+A19:   i<>Sm;
+   then i<Sm by A8,XXREAL_0:1;
+   then 1<=i+1 & i+1<=Sm by NAT_1:11,13;
+   then
+A20:   i+1 in dom (B2|Sm) by A14,FINSEQ_3:27;
+A21:   iS<>len (J.m) by A9,A10,A19;
+   then iS<len (J.m) by A11,XXREAL_0:1;
+   then 1<=iS+1 & iS+1<=len (J.m) by NAT_1:11,13;
+   then iS+1 in dom BBB by A6,A9,FINSEQ_3:27;
+   then BBB/.(iS+1) = (B2|Sum(Width J|m))/.(Sum (Width J|(m-'1))+(iS+1))
+                         by FINSEQ_5:30
+                   .= (B2|Sum(Width J|m))/.(Sum ((Len J)|(m-'1))+(iS+1))
+                         by A7,MATRIXJ1:21
+                   .= (B2|Sum((Len J)|m))/.(i+1) by A4,A7,A9,MATRIXJ1:21
+                   .= B2/.(i+1) by A5,A20,FINSEQ_4:85;
+   hence thesis by A6,A9,A21,A12,Th22,A16,A17,A18;
+end;
+
+theorem Th25:
+  for J be FinSequence_of_Jordan_block of 0.K,K
+    for M be Matrix of len b1,len b1,K st M = block_diagonal(J,0.K)
+       for m st for i st i in dom J holds len (J.i) <= m
+    holds
+      Mx2Tran(M,b1,b1) |^ m = ZeroMap(V1,V1)
+proof
+  let J be FinSequence_of_Jordan_block of 0.K,K;
+  let M be Matrix of len b1,len b1,K such that
+A1:   M = block_diagonal(J,0.K);
+  let m such that
+A2:   for i st i in dom J holds len (J.i) <= m;
+  set MT=Mx2Tran(M,b1,b1);
+  set MTm=MT|^m;
+  reconsider Z=ZeroMap(V1,V1) as linear-transformation of V1,V1 by MOD_2:8;
+A3:dom Z=the carrier of V1 & dom MTm=the carrier of V1 &
+  rng b1 c= the carrier of V1 by FUNCT_2:def 1,RELSET_1:12;
+  per cases;
+    suppose len b1=0;
+      then dim V1=0 by MATRLIN2:21;
+      then (Omega).V1=(0).V1 by VECTSP_9:33;
+      then
+A4:     the carrier of V1 = {0.V1} by VECTSP_4:def 3;
+      rng MTm c= the carrier of V1 by RELSET_1:12;
+      then rng MTm={0.V1} by A4,ZFMISC_1:39;
+      then MTm = (the carrier of V1)-->0.V1 by A3,FUNCOP_1:15
+              .= Z by GRCAT_1:def 12;
+      hence thesis;
+    end;
+    suppose
+A5:     len b1>0;
+A6:   dom J=dom Len J & len M=len b1 & len M = Sum Len J
+        by A1,MATRIX_1:25,MATRIXJ1:def 3;
+A7:   dom (Z*b1)=dom b1 & dom (MTm*b1)=dom b1 by A3,RELAT_1:46;
+      now let x such that
+A8:       x in dom b1;
+        reconsider n=x as Element of NAT by A8;
+        set mm=min(Len J,n);
+        set Sm=Sum ((Len J)|(mm-'1));
+A9:       n in Seg Sum Len J by A6,A8,FINSEQ_1:def 3;
+        then
+A10:      mm in dom Len J by MATRIXJ1:def 1;
+        then
+A11:      n<=Sum ((Len J)|mm) & (Len J)|mm =Len (J|mm) & Sm < n & mm-'1=mm-1&
+          (Len J).mm=(Len J)/.mm by A9,MATRIXJ1:def 1,17,7,PARTFUN1:def 8;
+        then
+A12:      Sum (Len J|mm)-'n=Sum (Len J|mm) - n & n-'Sm=n-Sm by BINARITH:50;
+A13:    mm-'1+1=mm by A11;
+A14:    (Len J)|mm=((Len J)|(mm-'1))^<*(Len J).mm*> & (Len J).mm = len (J.mm)
+          by A10,A13,FINSEQ_5:11,MATRIXJ1:def 3;
+        then
+A15:      Sum (Len J|mm)=Sm+len (J.mm) by A11,RVSUM_1:104;
+aa:     n-'Sm<>0 by A12,A9,MATRIXJ1:7;
+A17:    now let k such that
+A18:        n+k<=Sum (Len J|mm);
+          1<=n & n<=n+k by A9,FINSEQ_1:3,NAT_1:11;
+          then
+A19:        1<=n+k by XXREAL_0:2;
+          mm<=len Len J by A10,FINSEQ_3:27;
+          then Sum (Len J|mm)<= Sum ((Len J)|(len Len J)) by A11,POLYNOM3:18;
+          then Sum (Len J|mm)<= len b1 by A6,FINSEQ_1:79;
+          then n+k <= len b1 by A18,XXREAL_0:2;
+          hence n+k in dom b1 by A19,FINSEQ_3:27;
+        end;
+A20:    now let k such that
+A21:         n+k<=Sum(Len J|mm);
+A22:        1<=n-'Sm+k by aa,NAT_1:14;
+          n+k-Sm<=Sm+len (J.mm)-Sm by A21,A15,XREAL_1:11;
+          then n-'Sm+k in Seg ((Len J)/.mm) by A22,A11,A12,A14;
+          then min(Len J,n-'Sm+k+Sum ((Len J)|(mm-'1)))=mm by A10,MATRIXJ1:10;
+          hence min(Len J,n+k)=mm by A12;
+        end;
+        defpred P[Nat] means
+          n+$1 < Sum(Len J|mm) implies (MT|^($1+1)).(b1/.n)=b1/.(n+$1+1);
+A23:    P[0]
+          proof
+            assume n+0< Sum(Len J|mm);
+            then MT.(b1/.n) = 0.K*(b1/.n)+ b1/.(n+1) by A1,A8,Th24
+                           .= 0.V1+b1/.(n+1) by VECTSP_1:59
+                           .= b1/.(n+1) by RLVECT_1:def 7;
+            hence b1/.(n+0+1)=(MT|^(0+1)).(b1/.n) by VECTSP11:19;
+          end;
+A24:    for k st P[k] holds P[k+1]
+          proof
+            let k such that
+A25:          P[k];set k1=k+1;
+            assume
+A26:          n+k1<Sum(Len J|mm);
+            then n+k1<Sum(Len J|min(Len J,n+k1)) & n+k1 in dom b1 by A20,A17;
+            then
+A27:          MT.(b1/.(n+k1)) = 0.K*(b1/.(n+k1))+ b1/.(n+k1+1) by A1,Th24
+                             .= 0.V1+b1/.(n+k1+1) by VECTSP_1:59
+                             .= b1/.(n+k1+1) by RLVECT_1:def 7;
+A28:        the carrier of V1= dom (MT|^k1) by FUNCT_2:def 1;
+A29:        n+k1=n+k+1;
+            thus (MT|^(k1+1)).(b1/.n) = ((MT|^1)*(MT|^k1)).(b1/.n)
+                                         by VECTSP11:20
+                                     .= (MT|^1).(b1/.(n+k1))
+                                         by A25,A29,A28,A26,NAT_1:13,FUNCT_1:23
+                                     .= b1/.(n+k1+1) by A27,VECTSP11:19;
+          end;
+A30:    for k holds P[k] from NAT_1:sch 2(A23,A24);
+        defpred Q[Nat] means (MT|^($1+1)).(b1/.n)=0.V1;
+A31:    Q[Sum(Len J|mm)-'n]
+          proof
+            per cases;
+              suppose
+A32:              Sum(Len J|mm)-'n=0;
+                then MT.(b1/.n) = 0.K*(b1/.n) by A1,A8,A12,Th24
+                               .= 0.V1 by VECTSP_1:59;
+                hence thesis by A32,VECTSP11:19;
+              end;
+              suppose Sum(Len J|mm)-'n>0;
+                then reconsider S1=(Sum(Len J|mm)-'n)-1 as Element of NAT
+                  by NAT_1:20;
+                S1+n=Sum(Len J|mm)-1 & Sum(Len J|mm)-1<Sum(Len J|mm)-0
+                  by A12,XREAL_1:12;
+                then
+A33:              (MT|^(S1+1)).(b1/.n) = b1/.(n+S1+1) by A30
+                                      .= b1/.Sum(Len J|mm) by A12;
+                Sum(Len J|mm)-'n+n = Sum(Len J|mm) by A12;
+                then Sum(Len J|mm) in dom b1 & min(Len J,Sum(Len J|mm))=mm
+                  by A17,A20;
+                then
+A34:              MT.(b1/.Sum(Len J|mm)) = 0.K*(b1/.Sum(Len J|mm)) by A1,Th24
+                                        .= 0.V1 by VECTSP_1:59;
+A35:            the carrier of V1= dom (MT|^(Sum(Len J|mm)-'n))
+                  by FUNCT_2:def 1;
+                thus (MT|^(Sum(Len J|mm)-'n+1)).(b1/.n)
+                   = ((MT|^1)*(MT|^(Sum(Len J|mm)-'n))).(b1/.n) by VECTSP11:20
+                  .= (MT|^1).((MT|^(Sum(Len J|mm)-'n)).(b1/.n))
+                        by A35,FUNCT_1:23
+                  .= 0.V1 by A33,A34,VECTSP11:19;
+              end;
+          end;
+A36:    for k st Sum(Len J|mm)-'n <=k holds Q[k] implies Q[k+1]
+          proof
+            let k such that Sum(Len J|mm)-'n <=k;set k1=k+1;
+            assume
+A37:          Q[k];
+A38:          dom (MT|^k1)=the carrier of V1 by FUNCT_2:def 1;
+            thus (MT|^(k1+1)).(b1/.n) = ((MT|^1)*(MT|^k1)).(b1/.n)
+                                          by VECTSP11:20
+                                     .= (MT|^1).((MT|^k1).(b1/.n))
+                                          by A38,FUNCT_1:23
+                                     .= MT.(0.V1) by A37,VECTSP11:19
+                                     .= MT.(0.K*0.V1) by VECTSP_1:59
+                                     .= 0.K*MT.(0.V1) by MOD_2:def 5
+                                     .= 0.V1 by VECTSP_1:59;
+          end;
+A39:    for k st Sum(Len J|mm)-'n <= k holds Q[k] from NAT_1:sch 8(A31,A36);
+        Sm-n <n-n by A11,XREAL_1:11;
+        then
+A40:      len (J.mm)+(Sm-n) < len (J.mm)+0 by XREAL_1:8;
+        then
+A41:      Sum (Len J|mm)-'n<len (J.mm) & len (J.mm) <= m
+          by A2,A6,A10,A12,A15;
+        0<m by A2,A6,A10,A12,A15,A40;
+        then reconsider m1=m-1 as Element of NAT by NAT_1:20;
+        Sum (Len J|mm)-'n<m1+1 by A41,XXREAL_0:2;
+        then Sum (Len J|mm)-'n <= m1 by NAT_1:13;
+        then
+A42:      (MT|^(m1+1)).(b1/.n) = 0.V1 by A39;
+        thus (Z*b1).x = Z.(b1.x) by A8,FUNCT_1:23
+                     .= Z.(b1/.x) by A8,PARTFUN1:def 8
+                     .= ((the carrier of V1)-->0.V1).(b1/.x) by GRCAT_1:def 12
+                     .= 0.V1 by FUNCOP_1:13
+                     .= MTm.(b1.n) by A42,A8,PARTFUN1:def 8
+                     .= (MTm*b1).x by A8,FUNCT_1:23;
+      end;
+    hence thesis by A5,MATRLIN:26,A7,FUNCT_1:9;
+  end;
+end;
+
+Lm3:
+for J be FinSequence_of_Jordan_block of L,K
+  for M be Matrix of len b1,len b1,K st M = block_diagonal(J,0.K) &
+     len b1<>0 holds
+  (Mx2Tran(M,b1,b1)|^n).(b1/.Sum (Len J|min(Len J,len b1)))=
+      ((power K).(L,n))*(b1/.Sum (Len J|min(Len J,len b1)))
+    & Sum (Len J|min(Len J,len b1)) in dom b1
+proof
+  let J be FinSequence_of_Jordan_block of L,K;
+  let M be Matrix of len b1,len b1,K such that
+A1:   M = block_diagonal(J,0.K);
+  set MT=Mx2Tran(M,b1,b1);
+A2:  len b1 = len M & len M = Sum Len J by A1,MATRIX_1:25;
+  set B=len b1;
+  set m=min(Len J,B);
+  set S=Sum (Len J|m);
+  assume B<>0;
+  then
+A3:   B in Seg B & Seg B=dom b1 by FINSEQ_1:def 3,5;
+   then
+A4:   B<= Sum ((Len J)|m) & Sum ((Len J)|m)=S & m in dom Len J
+      by A2,MATRIXJ1:def 1,17;
+   then m<=len Len J by FINSEQ_3:27;
+   then
+A5:  Sum ((Len J)|m)<=Sum ((Len J)|(len Len J)) & (Len J)|(len Len J)=Len J
+     by POLYNOM3:18,FINSEQ_1:79;
+   then B=S by A2,A4,XXREAL_0:1;
+   then
+A6:  MT.(b1/.S)=L*(b1/.S) by A1,A3,Th24;
+   defpred P[Nat] means (MT|^$1).(b1/.S)=((power K).(L,$1))*(b1/.S);
+A7:  P[0]
+     proof
+       thus (MT|^0).(b1/.S) = (id V1).(b1/.S) by VECTSP11:18
+                           .= b1/.S by FUNCT_1:35
+                           .= 1_K * b1/.S by VECTSP_1:def 26
+                           .= ((power K).(L,0))*b1/.S by GROUP_1:def 8;
+     end;
+A8:  for n st P[n] holds P[n+1]
+     proof
+       let n such that
+A9:      P[n];
+A10:    dom (MT|^n) = the carrier of V1 by FUNCT_2:def 1;
+A11:   n in NAT by ORDINAL1:def 13;
+       thus (MT|^(n+1)).(b1/.S) = ((MT|^1)*(MT|^n)).(b1/.S) by VECTSP11:20
+                                .= (MT*(MT|^n)).(b1/.S) by VECTSP11:19
+                                .= MT.(((power K).(L,n))*(b1/.S))
+                                      by A9,A10,FUNCT_1:23
+                                .= ((power K).(L,n))*(L*(b1/.S))
+                                      by A6,MOD_2:def 5
+                                .= (((power K).(L,n))*L)*(b1/.S)
+                                      by VECTSP_1:def 26
+                                .= ((power K).(L,n+1))*(b1/.S)
+                                      by A11,GROUP_1:def 8;
+     end;
+  for n holds P[n] from NAT_1:sch 2(A7,A8);
+  hence thesis by A3,A5,A2,A4,XXREAL_0:1;
+end;
+
+theorem
+  for J be FinSequence_of_Jordan_block of L,K
+    for M be Matrix of len b1,len b1,K st M = block_diagonal(J,0.K)
+      holds
+    Mx2Tran(M,b1,b1) is nilpotent iff len b1 = 0 or L = 0.K
+proof
+  let J be FinSequence_of_Jordan_block of L,K;
+  let M be Matrix of len b1,len b1,K such that
+A1:   M = block_diagonal(J,0.K);
+  set MT=Mx2Tran(M,b1,b1);
+  thus MT is nilpotent implies len b1 = 0 or L = 0.K
+    proof
+      assume MT is nilpotent;
+      then reconsider MT as nilpotent linear-transformation of V1,V1;
+      set B=len b1;
+      set m=min(Len J,B);
+      set S=Sum (Len J|m);
+      assume
+A2:     B<>0;
+      then
+A3:    ((power K).(L,deg MT))*(b1/.S) = (MT|^(deg MT)).(b1/.S) by A1,Lm3
+                                     .= ZeroMap(V1,V1).(b1/.S) by Def5
+                                     .= ((the carrier of V1)-->0.V1).(b1/.S)
+                                        by GRCAT_1:def 12
+                                     .= 0.V1 by FUNCOP_1:13
+                                     .= 0.K * (b1/.S) by VECTSP_1:59;
+      rng b1 is Basis of V1 & S in dom b1 by A1,A2,Lm3,MATRLIN:def 4;
+      then b1.S in rng b1 & b1/.S=b1.S &
+        rng b1 is linearly-independent Subset of V1
+        by FUNCT_1:def 5,PARTFUN1:def 8,VECTSP_7:def 3;
+      then b1/.S <>0.V1 by VECTSP_7:3;
+      then 0.K = (power K).(L,deg MT) by A3,VECTSP10:5
+              .= Product (deg MT|->L) by MATRIXJ1:5;
+      then consider k be Element of NAT such that
+  A4:   k in dom (deg MT|->L) & (deg MT|->L).k=0.K by FVSUM_1:107;
+      dom (deg MT|->L)=Seg deg MT by FINSEQ_2:144;
+      hence 0.K=L by A4,FINSEQ_2:71,FINSEQ_1:4;
+    end;
+  assume
+A5:  len b1=0 or L=0.K;
+  per cases by A5;
+    suppose len b1=0;
+      then dim V1=0 by MATRLIN2:21;
+      then (Omega).V1=(0).V1 by VECTSP_9:33;
+      then
+A6:     the carrier of V1 = {0.V1} by VECTSP_4:def 3;
+      rng (MT|^1) c= the carrier of V1 by RELSET_1:12;
+      then rng (MT|^1)={0.V1} by A6,ZFMISC_1:39;
+      then (MT|^1) = (dom (MT|^1))-->0.V1 by FUNCOP_1:15
+                  .= (the carrier of V1)-->0.V1 by FUNCT_2:def 1
+                  .= ZeroMap(V1,V1) by GRCAT_1:def 12;
+      hence thesis by Th13;
+    end;
+    suppose
+A7:     L=0.K;
+      now let i such that
+A8:        i in dom J;
+A9:      dom J=dom (Len J) by MATRIXJ1:def 3;
+         then len (J.i)=(Len J).i by A8,MATRIXJ1:def 3;
+         hence len (J.i) <= Sum Len J by A8,A9,POLYNOM3:4;
+      end;
+      then MT|^(Sum Len J)=ZeroMap(V1,V1) by A1,A7,Th25;
+      hence thesis by Th13;
+    end;
+end;
+
+theorem
+  for J be FinSequence_of_Jordan_block of 0.K,K
+    for M be Matrix of len b1,len b1,K st
+          M = block_diagonal(J,0.K) & len b1 > 0
+      for F be nilpotent Function of V1,V1 st F = Mx2Tran(M,b1,b1)
+    holds
+      (ex i st i in dom J & len (J.i) = deg F) &
+      for i st i in dom J holds len (J.i) <= deg F
+proof
+  let J be FinSequence_of_Jordan_block of 0.K,K;
+  let M be Matrix of len b1,len b1,K such that
+A1:       M = block_diagonal(J,0.K) and
+A2:       len b1 > 0;
+  set mm=min(Len J,len b1);
+A3:  len M=len b1 & len M=Sum Len J & len b1 in Seg len b1 &
+  dom b1=Seg len b1 by A1,A2,MATRIX_1:def 3,FINSEQ_1:def 3,5;
+  then
+A4:  min(Len J,len b1) in dom Len J & dom J=dom (Len J)
+     by MATRIXJ1:def 1,def 3;
+  let F be nilpotent Function of V1,V1 such that
+A5:   F = Mx2Tran(M,b1,b1);
+  defpred P[Nat] means for i st i in dom J holds len (J.i) <= $1;
+  now let i such that
+A6:    i in dom J;
+     len (J.i)=(Len J).i by A4,A6,MATRIXJ1:def 3;
+     hence len (J.i) <= Sum Len J by A4,A6,POLYNOM3:4;
+  end;
+  then
+A7:   ex k st P[k];
+  consider MIN be Nat such that
+A8:    P[MIN] and
+A9:    for m st P[m] holds MIN <= m from NAT_1:sch 5(A7);
+A10:  ex i st i in dom J & len (J.i) = MIN
+    proof
+      assume
+A11:     for i st i in dom J holds len (J.i) <> MIN;
+      then len (J.mm)<> MIN & len (J.mm)<=MIN by A4,A8;
+      then len (J.mm)<MIN by XXREAL_0:1;
+      then reconsider M1=MIN-1 as Element of NAT by NAT_1:20;
+      now let i such that
+A12:       i in dom J;
+         len (J.i) <> MIN & len (J.i) <= MIN by A8,A11,A12;
+         then len (J.i) < M1+1 by XXREAL_0:1;
+         hence len (J.i) <= M1 by NAT_1:13;
+      end;
+      then M1+1<=M1 by A9;
+      hence thesis by NAT_1:13;
+    end;
+  then consider i such that
+A13:   i in dom J & len (J.i) = MIN;
+A14:  len (J.i)=(Len J).i & (Len J).i=(Len J)/.i
+     by A4,MATRIXJ1:def 3,A13,PARTFUN1:def 8;
+  set S=Sum ((Len J)|(i-'1));
+  1<=i & i<=len Len J & i in NAT by A4,A13,FINSEQ_3:27;
+  then Sum ((Len J)|i) <= Sum ((Len J)|(len Len J)) &
+     (Len J)|(len Len J)=Len J & i-'1=i-1
+     by POLYNOM3:18,FINSEQ_1:79,BINARITH:50;
+  then
+A15:  i=i-'1+1 & Seg Sum ((Len J)|i) c= Seg Sum Len J by FINSEQ_1:7;
+  defpred P[Nat] means $1 in Seg MIN & $1 <> MIN implies
+      (F|^$1).(b1/.(S+1))=b1/.(S+$1+1);
+A16:  P[0] by FINSEQ_1:3;
+A17:  for n st P[n] holds P[n+1]
+      proof
+        let n such that
+A18:       P[n];set n1=n+1;
+        assume
+A19:       n1 in Seg MIN & n1<>MIN;
+        (Len J)|i=((Len J)|(i-'1))^<*MIN*> by A4,A13,A14,A15, FINSEQ_5:11;
+        then
+A20:       Sum ((Len J)|i)=S+MIN by RVSUM_1:104;
+        n1<=MIN by A19,FINSEQ_1:3;
+        then
+A21:       n1<MIN & n<MIN by A19,XXREAL_0:1,NAT_1:13;
+        then
+A22:       S+n1 < Sum ((Len J)|i) by A20,XREAL_1:8;
+        S+n1 in Seg Sum ((Len J)|i) & min(Len J,S+n1) = i & (Len J)|i=Len J|i
+          by A4,A13,A14,A19,MATRIXJ1:17,10;
+        then
+A23:      F.(b1/.(S+n1)) = 0.K*(b1/.(S+n1))+ (b1/.(S+n1+1))
+                                by A1,A3,A5,A15,A22,Th24
+                        .= 0.V1+b1/.(S+n1+1) by VECTSP_1:59
+                        .= b1/.(S+n1+1) by RLVECT_1:def 7;
+        now per cases by NAT_1:14;
+          suppose n=0;
+            hence (F|^n1).(b1/.(S+1))=b1/.(S+n1+1) by A23,VECTSP11:19;
+          end;
+          suppose
+A24:          n>=1;
+A25:        dom (F|^n)= the carrier of V1 by FUNCT_2:def 1;
+            thus (F|^n1).(b1/.(S+1))
+                 = ((F|^1)*(F|^n)).(b1/.(S+1)) by VECTSP11:20
+                .= (F|^1).((F|^n).(b1/.(S+1))) by A25,FUNCT_1:23
+                .= b1/.(S+n1+1) by A23,VECTSP11:19,A24,A21,FINSEQ_1:3,A18;
+          end;
+        end;
+        hence thesis;
+      end;
+A26:for n holds P[n] from NAT_1:sch 2(A16,A17);
+A27:deg F >= MIN
+      proof
+        set D=deg F;
+        assume
+A28:        D < MIN;
+        D<>0
+          proof
+            assume D=0;
+            then [#]V1={0.V1} by Th15;
+            then (Omega).V1=(0).V1 by VECTSP_4:def 3;
+            then dim V1=0 by VECTSP_9:33;
+            hence thesis by A2,MATRLIN2:21;
+          end;
+        then D>=1 by NAT_1:14;
+        then D in Seg MIN by A28,FINSEQ_1:3;
+        then
+A29:      b1/.(S+D+1) = (F|^D).(b1/.(S+1)) by A28,A26
+                     .= ZeroMap(V1,V1).(b1/.(S+1)) by Def5
+                     .= ((the carrier of V1)-->0.V1).(b1/.(S+1))
+                           by GRCAT_1:def 12
+                     .= 0.V1 by FUNCOP_1:13;
+        1<=1+D & D+1<=MIN by A28,NAT_1:11,13;
+        then D+1 in Seg MIN;
+        then S+(D+1) in Seg Sum ((Len J)|i) & rng b1 is Basis of V1
+          by A4,A13,A14,MATRIXJ1:10,MATRLIN:def 4;
+        then b1/.(S+D+1)=b1.(S+D+1) & b1.(S+D+1) in rng b1 &
+          rng b1 is linearly-independent Subset of V1
+          by PARTFUN1:def 8,FUNCT_1:def 5,A3,A15,VECTSP_7:def 3;
+        hence thesis by A29,VECTSP_7:3;
+      end;
+  F|^MIN = ZeroMap(V1,V1) by A1,A5,A8,Th25;
+  then deg F <= MIN by Def5;
+  then deg F = MIN by A27,XXREAL_0:1;
+  hence thesis by A8,A10;
+end;
+
+Lm4:for V1,V2 be VectSp of K, f be linear-transformation of V1,V2
+     for W1 be Subspace of V1,W2 be Subspace of V2
+       for F be Function of W1,W2 st F=f|W1 holds
+          F is linear-transformation of W1,W2
+proof
+  let V1,V2 be VectSp of K,f be linear-transformation of V1,V2;
+  let W1 be Subspace of V1;
+  let W2 be Subspace of V2;
+  let F be Function of W1,W2 such that
+A1:  F=f|W1;
+A2:  now let w1,w2 be Vector of W1;
+       thus F.(w1+w2) = (f|W1).w1+(f|W1).w2 by A1,MOD_2:def 5
+                     .= F.w1+F.w2 by A1,VECTSP_4:21;
+  end;
+  now let a be Scalar of K,w be Vector of W1;
+     thus F.(a*w) = a*(f|W1).w by A1,MOD_2:def 5
+                 .= a*(F.w) by A1,VECTSP_4:22;
+  end;
+  hence thesis by A2,MOD_2:def 5;
+end;
+
+theorem Th28:
+  for V1,V2,b1,b2,L st len b1 = len b2
+    for F be linear-transformation of V1,V2 st
+      for i st i in dom b1 holds
+          F.(b1/.i) = L * (b2/.i) or
+          (i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1))
+      ex J be non-empty FinSequence_of_Jordan_block of L,K st
+          AutMt(F,b1,b2) = block_diagonal(J,0.K)
+proof
+  defpred P[Nat] means
+    for V1,V2,b1,b2,L st len b1 = len b2
+      for F be linear-transformation of V1,V2 st
+        $1= Card {i where i is Element of NAT:
+                  i in dom b1 & F.(b1/.i) = L * (b2/.i)} &
+    for i st i in dom b1 holds
+          F.(b1/.i) = L * (b2/.i) or
+           (i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1))
+       ex J be non-empty FinSequence_of_Jordan_block of L,K st
+           AutMt(F,b1,b2) = block_diagonal(J,0.K);
+A1:  P[0]
+     proof
+       let V1,V2,b1,b2,L such that len b1 = len b2;
+       let F be linear-transformation of V1,V2 such that
+A2:      0 = Card {i where i is Element of NAT:
+              i in dom b1 & F.(b1/.i) = L * (b2/.i)} and
+A3:      for i st i in dom b1 holds
+            F.(b1/.i) = L * (b2/.i) or
+           (i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1));
+       set Lb=len b1;
+A4:      Lb=0
+         proof
+           assume Lb<>0;
+           then
+A5:          Lb in Seg Lb & dom b1=Seg Lb by FINSEQ_1:5,def 3;
+           per cases by A3,A5;
+             suppose F.(b1/.Lb)= L * (b2/.Lb);
+                then Lb in {i where i is Element of NAT:
+                i in dom b1 & F.(b1/.i) = L * (b2/.i)} by A5;
+                hence thesis by A2;
+             end;
+             suppose Lb+1 in dom b1 & F.(b1/.Lb) = L *(b2/.Lb)+b2/.(Lb+1);
+                then Lb+1<=Lb by FINSEQ_3:27;
+                hence thesis by NAT_1:13;
+             end;
+         end;
+       reconsider J={} as FinSequence_of_Jordan_block of L,K by Th10;
+       for x st x in dom J holds J.x is non empty;
+       then reconsider J as non-empty FinSequence_of_Jordan_block of L,K
+         by FUNCT_1:def 15;
+       take J;
+       len AutMt(F,b1,b2)=0 by A4,MATRIX_1:def 3;
+       then AutMt(F,b1,b2)={} & block_diagonal(J,0.K)={} by MATRIXJ1:22;
+       hence thesis;
+     end;
+A6:for n st P[n] holds P[n+1]
+     proof
+       let n such that
+A7:        P[n];set n1=n+1;
+       let V1,V2,b1,b2,L such that
+A8:        len b1 = len b2;
+       set Lb=len b1;
+       let F be linear-transformation of V1,V2 such that
+A9:       n1 = Card {i where i is Element of NAT:
+             i in dom b1 & F.(b1/.i) = L * (b2/.i)} and
+A10:      for i st i in dom b1 holds
+             F.(b1/.i) = L * (b2/.i) or
+             i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1);
+          set FF={i where i is Element of NAT:
+               i in dom b1 & F.(b1/.i) = L * (b2/.i)};
+       reconsider FF as finite set by A9,CARD_4:1;
+       consider x such that
+A11:      x in FF by XBOOLE_0:def 1,A9,CARD_1:47;
+       consider ii be Element of NAT such that
+A12:     ii=x & ii in dom b1 & F.(b1/.ii) = L * (b2/.ii) by A11;
+A13:    dom b1=Seg Lb & dom b1=dom b2 & Lb<>0
+          by A8,A12,FINSEQ_1:4,def 3,FINSEQ_3:31;
+       then
+A14:      Lb in dom b1 & not Lb+1 in dom b1 & Lb>0
+          by FINSEQ_1:5,FINSEQ_3:9;
+       then F.(b1/.Lb)= L * (b2/.Lb) by A10;
+       then
+A15:     Lb in FF by A14;
+       per cases;
+          suppose
+A16:          n=0;
+            set J=Jordan_block(L,Lb);
+            reconsider JJ=<*J*> as FinSequence_of_Jordan_block of L,K by Th11;
+            now let x such that
+A17:             x in dom JJ;
+              dom JJ ={1} by FINSEQ_1:4,def 8;
+              then JJ.1=J & x=1 & len J=Lb
+                by A17,TARSKI:def 1,FINSEQ_1:def 8,Def1;
+              hence JJ.x is non empty by A13;
+            end;
+            then reconsider JJ as non-empty FinSequence_of_Jordan_block of L,K
+              by FUNCT_1:def 15;
+            take JJ;
+A18:          block_diagonal(JJ,0.K)=J by MATRIXJ1:34;
+            reconsider BB=block_diagonal(JJ,0.K) as Matrix of len b1,len b2,K
+              by A8,MATRIXJ1:34;
+            set T=Mx2Tran(BB,b1,b2);
+            reconsider F'=F as Function of V1,V2;
+            rng b1 c= [#]V1 & dom F=[#]V1 & dom T=[#]V1
+              by FINSEQ_1:def 4,FUNCT_2:def 1;
+            then
+A19:           dom (F'*b1)=dom b1 & dom (T*b1)=dom b1 by RELAT_1:46;
+            now let y such that
+A20:              y in dom b1;
+               reconsider j=y as Element of NAT by A20;
+A21:           (F'*b1).y=F.(b1.y) & (T*b1).y=T.(b1.y) & b1/.j=b1.j
+                 by A20,FUNCT_1:23,PARTFUN1:def 8;
+               now per cases;
+                  suppose
+A22:                  j = Lb;
+                    hence (T*b1).y = L*(b2/.Lb) by A18,A20,A21,Th23
+                                  .= (F'*b1).y by A14,A10,A21,A22;
+                  end;
+                  suppose
+A23:                  j <> Lb;
+                    then
+A24:                  (T*b1).y = L*(b2/.j)+ b2/.(j+1) by A18,A20,A21,Th23;
+                    ex z be set st FF={z} by A9,A16,CARD_2:60;
+                    then FF={Lb} by A15,TARSKI:def 1;
+                    then not j in FF by A23,TARSKI:def 1;
+                    then F.(b1/.j) <> L * (b2/.j) by A20;
+                    hence (T*b1).y=(F'*b1).y by A20,A21,A24,A10;
+                  end;
+               end;
+               hence (F'*b1).y = (T*b1).y;
+            end;
+            then F=T by A14,MATRLIN:26,A19,FUNCT_1:9;
+            hence AutMt(F,b1,b2)=block_diagonal(JJ,0.K) by MATRLIN2:36;
+          end;
+          suppose
+A25:          n<>0;
+            defpred Q[Nat] means $1 in FF & $1 < Lb;
+A26:        for k st Q[k] holds k <= Lb;
+A27:        ex k st Q[k]
+               proof
+                 Card FF<>1 by A9,A25;
+                 then FF <> {Lb} by CARD_2:60;
+                 then consider y such that
+A28:                y in FF & y <> Lb by A15,ZFMISC_1:41;
+                 consider j be Element of NAT such that
+A29:                j=y & j in dom b1 & F.(b1/.j) = L * (b2/.j) by A28;
+                 take j;
+                 j<=Lb by A29,FINSEQ_3:27;
+                 hence thesis by A28,A29,XXREAL_0:1;
+               end;
+            consider m such that
+A30:           Q[m] and
+A31:           for k st Q[k] holds k<= m from NAT_1:sch 6(A26,A27);
+            set b1m=b1|m;
+            set b2m=b2|m;
+            set b1'm=b1/^m;
+            set b2'm=b2/^m;
+A32:        len b1m=m & len b2m=m & len b1'm =Lb-m & len b2'm=Lb-m &
+              Lb-m=Lb-'m  by A8,A30,FINSEQ_1:80,RFINSEQ:def 2,BINARITH:50;
+            reconsider Rb1=rng b1m, Rb1'=rng b1'm as linearly-independent
+              Subset of V1 by MATRLIN2:22,23;
+            reconsider Rb2=rng b2m, Rb2'=rng b2'm as linearly-independent
+              Subset of V2 by MATRLIN2:22,23;
+            set Lb1=Lin Rb1;
+            set Lb2=Lin Rb2;
+            set Lb1'=Lin Rb1';
+            set Lb2'=Lin Rb2';
+            reconsider b1m as OrdBasis of Lb1 by MATRLIN2:22;
+            reconsider b1'm as OrdBasis of Lb1' by MATRLIN2:23;
+            reconsider b2m as OrdBasis of Lb2 by MATRLIN2:22;
+            reconsider b2'm as OrdBasis of Lb2' by MATRLIN2:23;
+A33:          b1=b1m^b1'm & b2=b2m^b2'm by RFINSEQ:21;
+            then
+A34:          dom b1m c= dom b1 & dom b1'm = dom b2'm & dom b1m = dom b2m
+              by A32,FINSEQ_1:39,FINSEQ_3:31;
+            set FRb1=F.:Rb1;
+A35:        the carrier of Lin(FRb1) = F.:(the carrier of Lb1) by VECTSP11:42;
+A36:        for i st i in dom b1m holds
+              (F|Lb1).(b1m/.i) = L * (b2m/.i) or
+              (i+1 in dom b1m & (F|Lb1).(b1m/.i) = L * (b2m/.i) +b2m/.(i+1))
+              proof
+                let i such that
+A37:               i in dom b1m;
+A38:              b1/.i=b1.i & b2/.i=b2.i & b2.i=b2m.i & b1.i=b1m.i &
+                   b1m.i=b1m/.i & b2m.i=b2m/.i & F.(b1m/.i)=(F|Lb1).(b1m/.i)
+                   by A13,A37,A33,A34,PARTFUN1:def 8,FINSEQ_1:def 7,FUNCT_1:72;
+                set i1=i+1;
+                per cases by A37,A10,A34;
+                  suppose F.(b1/.i) = L * (b2/.i);
+                     hence thesis by A38,VECTSP_4:22;
+                  end;
+                  suppose
+A39:                  i1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.i1;
+                    reconsider rngb2=rng b2 as Basis of V2 by MATRLIN:def 4;
+A40:                  i1<=m
+                      proof
+                        assume i1>m;
+                          then i>=m & i<=m & ex ii be Element of NAT st
+                            m=ii & ii in dom b1 & F.(b1/.ii) = L * (b2/.ii)
+                            by A30,A37,A32,NAT_1:13,FINSEQ_3:27;
+                          then i=m & F.(b1/.m)=L*(b2/.m) by XXREAL_0:1;
+                          then F.(b1/.i)=L*(b2/.i)+0.V2 by RLVECT_1:def 7;
+                          then b2/.i1=0.V2 & b2/.i1=b2.i1 & b2.i1 in rngb2 &
+                            rngb2 is linearly-independent
+                            by A13,A39,RLVECT_1:21,PARTFUN1:def 8,
+                               FUNCT_1:def 5,VECTSP_7:def 3;
+                          hence thesis by VECTSP_7:3;
+                      end;
+A41:                1<=i1 by NAT_1:11;
+                    then i1 in dom b1m by A40,A32,FINSEQ_3:27;
+                    then b2/.i1=b2.i1 & b2.i1=b2m.i1 & b2m.i1=b2m/.i1 &
+                      L*(b2/.i)=L*(b2m/.i) by A38,A13,A33,A34,PARTFUN1:def 8,
+                        FINSEQ_1:def 7,VECTSP_4:22;
+                  hence thesis by A38,A39,A41,VECTSP_4:21,A40,A32,FINSEQ_3:27;
+                  end;
+              end;
+            FRb1 c= the carrier of Lb2
+              proof
+                let y such that
+A42:                 y in FRb1;
+                consider x such that
+A43:               x in dom F & x in Rb1 & F.x=y by A42,FUNCT_1:def 12;
+                consider i be set such that
+A44:               i in dom b1m & b1m.i=x by A43,FUNCT_1:def 5;
+                reconsider i as Element of NAT by A44;
+                b1m/.i=b1m.i by A44,PARTFUN1:def 8;
+                then (F|Lb1).(b1m/.i)=y by A43,A44,FUNCT_1:72;
+                then y=L * (b2m/.i) or y=L * (b2m/.i)+b2m/.(i+1) by A44,A36;
+                hence thesis;
+              end;
+            then Lin(FRb1) is Subspace of Lb2 by VECTSP_9:20;
+            then F.:(the carrier of Lb1) c= the carrier of Lb2 &
+              rng (F|Lb1) = F.:(the carrier of Lb1)
+              by A35,RELAT_1:148,VECTSP_4:def 2;
+            then reconsider
+              FL=F|Lb1 as linear-transformation of Lb1,Lb2 by FUNCT_2:8,Lm4;
+A45:        for i st i in dom b1m holds
+               FL.(b1m/.i) = L * (b2m/.i) or
+            i+1 in dom b1m & FL.(b1m/.i) = L * (b2m/.i) +b2m/.(i+1) by A36;
+            set FF1={i where i is Element of NAT:
+               i in dom b1m & FL.(b1m/.i) = L * (b2m/.i)};
+A46:        FF1 c= FF\{Lb}
+              proof
+                let x; assume x in FF1;
+                then consider j be Element of NAT such that
+A47:               x=j & j in dom b1m & FL.(b1m/.j) = L * (b2m/.j);
+                b1m/.j=b1m.j & b2m/.j=b2m.j & b1m.j=b1.j & b2m.j=b2.j &
+                  FL.(b1m/.j)=F.(b1m/.j) & b2/.j=b2.j & b1/.j=b1.j
+                  by A13,A33,A34,A47,PARTFUN1:def 8,FINSEQ_1:def 7,FUNCT_1:72;
+                then F.(b1/.j)=L * (b2/.j)  by A47,VECTSP_4:22;
+                then
+A48:              j in FF by A47,A34;
+                j<=m by A47,A32,FINSEQ_3:27;
+                hence thesis by A47,A48,A30,ZFMISC_1:64;
+              end;
+            FF\{Lb} c= FF1
+              proof
+                let x such that
+A49:               x in FF\{Lb};
+A50:            x in FF & x <> Lb by A49,ZFMISC_1:64;
+                then consider j be Element of NAT such that
+A51:              j=x & j in dom b1 & F.(b1/.j) = L * (b2/.j);
+                j<=Lb by A51,FINSEQ_3:27;
+                then j <Lb by A50,A51,XXREAL_0:1;
+                then 1<=j & j<=m by A31,A49,A51,FINSEQ_3:27;
+                then
+A52:              j in dom b1m by A32,FINSEQ_3:27;
+                then b1m/.j=b1m.j & b2m/.j=b2m.j & b1m.j=b1.j & b2m.j=b2.j&
+                   FL.(b1m/.j)=F.(b1m/.j) & b2/.j=b2.j & b1/.j=b1.j
+                   by A13,A33,A34,PARTFUN1:def 8,FINSEQ_1:def 7,FUNCT_1:72;
+                then FL.(b1m/.j)=L * (b2m/.j)  by A51,VECTSP_4:22;
+                hence thesis by A51,A52;
+              end;
+            then FF1=FF\{Lb} & n in NAT by A46,XBOOLE_0:def 10,ORDINAL1:def 13;
+            then Card FF1=n by A9,A15,STIRL2_1:65;
+            then consider J be non-empty FinSequence_of_Jordan_block of L,K
+              such that
+ A53:           AutMt(FL,b1m,b2m) = block_diagonal(J,0.K) by A7,A32,A45;
+            reconsider B=block_diagonal(J,0.K) as Matrix of len b1m,len b2m,K
+              by A53;
+            set JB=Jordan_block(L,Lb-'m);
+            reconsider JJ=<*JB*> as FinSequence_of_Jordan_block of L,K by Th11;
+            set JJJ=J^JJ;
+            now let x such that
+A54:              x in dom JJJ;
+              reconsider i=x as Nat by A54;
+              per cases by A54,FINSEQ_1:38;
+                suppose i in dom J;
+                  then J.i is non empty & JJJ.i=J.i
+                     by FINSEQ_1:def 7,FUNCT_1:def 15;
+                  hence JJJ.x is non empty;
+                end;
+                suppose ex j st j in dom JJ & i=len J + j;
+                  then consider j such that
+A55:                 j in dom JJ & i=len J+j;
+                  dom JJ=Seg 1 by FINSEQ_1:55;
+                  then j=1 & len JB=Lb-'m by A55,FINSEQ_1:4,TARSKI:def 1,Def1;
+                  then JJJ.i=JJ.1 & JJ.1=JB & len JB<>0
+                    by A30,A32,A55,FINSEQ_1:def 7,FINSEQ_1:57;
+                  hence JJJ.x is non empty;
+                end;
+            end;
+            then reconsider JJJ as non-empty FinSequence_of_Jordan_block of L,K
+              by FUNCT_1:def 15;
+            take JJJ;
+            reconsider JB as Matrix of len b1'm,len b2'm,K by A32;
+A56:          block_diagonal(JJJ,0.K)=block_diagonal(<*B,JB*>,0.K) &
+                Sum Len <*B,JB*> = len B + len JB &
+                Sum Width <*B,JB*> = width B + width JB &
+                len B=len b1m & len JB = len b1'm &
+                width B=len b1m & width JB = len b1'm
+                  by MATRIX_1:25,MATRIXJ1:16,20,35,A32;
+            then reconsider BB=block_diagonal(<*B,JB*>,0.K) as
+              Matrix of len b1,len b2,K by A8,A32;
+            set T=Mx2Tran(BB,b1,b2);
+            reconsider F'=F as Function of V1,V2;
+            rng b1 c= [#]V1 & dom F=[#]V1 & dom T=[#]V1
+              by FINSEQ_1:def 4,FUNCT_2:def 1;
+            then
+A57:          dom (F'*b1)=dom b1 & dom (T*b1)=dom b1 by RELAT_1:46;
+            now let x such that
+A58:             x in dom b1;
+              reconsider I=x as Element of NAT by A58;
+A59:          (F'*b1).x=F.(b1.I) & (T*b1).x=T.(b1.I) & b1.I=b1/.I
+                by A58,FUNCT_1:23,PARTFUN1:def 8;
+              now per cases by A58,A33,FINSEQ_1:38;
+                 suppose
+A60:                 I in dom b1m;
+                   then
+A61:                 b1m/.I = b1m.I & FL.(b1m/.I) =F.(b1m/.I) & b1.I=b1m.I
+                       by A33,PARTFUN1:def 8,FUNCT_1:72,FINSEQ_1:def 7;
+                    thus (T*b1).x
+                         = Mx2Tran(B,b1m,b2m).(b1m/.I)
+                                by A56,A33,Th19,A32,A59,A60
+                        .= FL.(b1m/.I) by A53,MATRLIN2:34
+                        .= (F'*b1).x by A61,A58,FUNCT_1:23;
+                 end;
+                 suppose ex j st j in dom b1'm & I=len b1m + j;
+                   then consider j such that
+A62:                  j in dom b1'm & I=len b1m + j;
+                   now per cases;
+                     suppose
+A63:                     j=len b1'm;
+A64:                     b2'm/.j=b2'm.j & b2.I = b2'm.j & b2/.I=b2.I
+                         by A13,A33,A58,A62,A34,PARTFUN1:def 8,A32,
+                         FINSEQ_1:def 7;
+                       thus (F'*b1).x = L*(b2/.I) by A59,A63,A14,A10,A62,A32
+                                     .= L*(b2'm/.j) by A64,VECTSP_4:22
+                                     .= Mx2Tran(JB,b1'm,b2'm).(b1'm/.j)
+                                          by A63,A62,Th23;
+                     end;
+                     suppose
+A65:                     j<>len b1'm;
+                       j<=len b1'm by A62,FINSEQ_3:27;
+                       then j<len b1'm by A65,XXREAL_0:1;
+                       then 1<=j+1 & j+1<=len b1'm by NAT_1:11,13;
+                       then j+1 in dom b1'm by FINSEQ_3:27;
+                       then b2'm/.j=b2'm.j & b2.I = b2'm.j & b2/.I=b2.I &
+                         b2'm/.(j+1)=b2'm.(j+1)&b2.(len b1m+(j+1))=b2'm.(j+1)&
+                         len b1m + (j+1) in dom b2 by A13,A33,A58,A62,A34,
+                           PARTFUN1:def 8,A32,FINSEQ_1:def 7,41;
+                       then L*(b2'm/.j) = L*(b2/.I) & b2'm/.(j+1)=b2/.(I+1)
+                         by VECTSP_4:22,A62,PARTFUN1:def 8;
+                       then
+A66:                     L*(b2/.I) + b2/.(I+1)
+                            = L*(b2'm/.j) + b2'm/.(j+1) by VECTSP_4:21
+                           .= Mx2Tran(JB,b1'm,b2'm).(b1'm/.j) by A62,A65,Th23;
+                       (F'*b1).x = L*(b2/.I) + b2/.(I+1)
+                         proof
+                           assume (F'*b1).x <> L*(b2/.I) + b2/.(I+1);
+                           then F.(b1/.I)=L*(b2/.I) & I<>Lb & I<=Lb
+                             by A10,A58,A59,A62,A65,A32,FINSEQ_3:27;
+                           then I in FF & I < Lb by A58,XXREAL_0:1;
+                           then len b1m + j<=len b1m+0 by A62,A31,A32;
+                           then j<=0 by XREAL_1:8;
+                           hence thesis by A62,FINSEQ_3:27;
+                         end;
+                       hence (F'*b1).x=Mx2Tran(JB,b1'm,b2'm).(b1'm/.j) by A66;
+                     end;
+                   end;
+                   hence (F'*b1).x=(T*b1).x by A56,A33,Th19,A32,A59,A62;
+                end;
+              end;
+              hence (F'*b1).x=(T*b1).x;
+            end;
+            then F=T by A14,MATRLIN:26,A57,FUNCT_1:9;
+            hence AutMt(F,b1,b2)=block_diagonal(JJJ,0.K) by A56,MATRLIN2:36;
+          end;
+       end;
+A67:for n holds P[n] from NAT_1:sch 2(A1,A6);
+  let V1,V2,b1,b2,L such that A68:len b1 = len b2;
+  let F be linear-transformation of V1,V2 such that
+A69:  for i st i in dom b1 holds F.(b1/.i) = L * (b2/.i) or
+      (i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1));
+set FF={i where i is Element of NAT:
+              i in dom b1 & F.(b1/.i) = L * (b2/.i)};
+  FF c= dom b1
+     proof
+       let x;assume x in FF;
+       then ex i be Element of NAT st x=i & i in dom b1 &
+          F.(b1/.i) = L * (b2/.i);
+       hence thesis;
+     end;
+  then reconsider FF as finite set;
+  P[card FF] by A67;
+  hence thesis by A68,A69;
+end;
+
+theorem Th29:
+  for V1 be finite-dimensional VectSp of K
+    for F be nilpotent linear-transformation of V1,V1
+      ex J be non-empty FinSequence_of_Jordan_block of 0.K,K,
+         b1 be OrdBasis of V1 st
+         AutMt(F,b1,b1) = block_diagonal(J,0.K)
+proof
+  defpred P[Nat] means
+  for V1 be finite-dimensional VectSp of K
+    for F be nilpotent linear-transformation of V1,V1 st deg F=$1 holds
+      ex J be FinSequence_of_Jordan_block of 0.K,K,
+         b1 be OrdBasis of V1 st
+         AutMt(F,b1,b1) = block_diagonal(J,0.K) &
+         for i st i in dom J holds (Len J).i <> 0;
+A1:P[0]
+  proof
+    let V1 be finite-dimensional VectSp of K;
+    let F be nilpotent linear-transformation of V1,V1 such that A2:deg F=0;
+    reconsider J={} as FinSequence_of_Jordan_block of 0.K,K
+       by Th10;
+    consider b1 be OrdBasis of V1;
+    take J,b1;
+    [#]V1 = {0.V1} by A2,Th15
+         .= the carrier of (0).V1 by VECTSP_4:def 3;
+    then (0).V1 = (Omega).V1 by VECTSP_4:37;
+    then 0 = dim V1 by VECTSP_9:33
+          .= len b1 by MATRLIN2:21
+          .= len AutMt(F,b1,b1) by MATRIX_1:def 3;
+    hence AutMt(F,b1,b1) = {}
+                        .= block_diagonal(J,0.K) by MATRIXJ1:22;
+    thus thesis;
+  end;
+A3:for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A4:    P[n];set n1=n+1;
+    let V1 be finite-dimensional VectSp of K;
+    let F be nilpotent linear-transformation of V1,V1 such that
+A5:    deg F=n1;
+    set IM=im F|^1;
+    reconsider FI=F|IM as linear-transformation of IM,IM by VECTSP11:32;
+    reconsider FI as nilpotent linear-transformation of IM,IM by Th17;
+    deg FI+1=n1 by A5,Th18,NAT_1:11;
+    then consider J be FinSequence_of_Jordan_block of 0.K,K,
+      b1 be OrdBasis of IM such that
+A6:     AutMt(FI,b1,b1) = block_diagonal(J,0.K) and
+A7:     for i st i in dom J holds (Len J).i <> 0 by A4;
+A8:   FI=Mx2Tran(AutMt(FI,b1,b1),b1,b1) by MATRLIN2:34;
+A9:   len b1 = len AutMt(FI,b1,b1) by MATRIX_1:def 3
+            .= Sum Len J by A6,MATRIXJ1:def 5;
+    then
+A10:  dom b1= Seg Sum Len J by FINSEQ_1:def 3;
+    set LJ=Len J;
+    set S=Sum LJ;
+    set L=len J;
+    defpred Q[Nat,Nat] means $2 in dom LJ & $2 <= $1 &
+      Sum(LJ|($2-'1)) <= $1-'$2;
+    defpred R[set,set] means
+      for i,k st i=$1 & k=$2 holds Q[i,k] & i-'k <= Sum (LJ|k) &
+        for n st Q[i,n] holds n<=k;
+A11: for x st x in Seg(S+L) ex y st y in NAT & R[x,y]
+      proof
+        let x such that
+A12:        x in Seg (S+L);
+        reconsider i=x as Nat by A12;
+        defpred q[Nat] means $1 in dom LJ & $1 <= i &
+          Sum(LJ|($1-'1)) <= i-'$1;
+A13:     for k st q[k] holds k <= L
+          proof
+            let k;assume q[k];
+            then k<=len LJ & len LJ=L by FINSEQ_3:27,FINSEQ_2:109;
+            hence thesis;
+          end;
+        1-'1=0 & 0<=len LJ by BINARITH:51;
+        then
+A14:      Sum(LJ|(1-'1))=0 & 0<=i-'1 by RVSUM_1:102;
+        L<>0
+          proof
+            assume
+A15:            L=0;
+            then LJ=<*>NAT by FINSEQ_2:113;
+            hence thesis by A12,A15,RVSUM_1:102,FINSEQ_1:4;
+         end;
+       then 1<=L & len LJ=L by NAT_1:14,FINSEQ_2:109;
+       then 1 in dom LJ & 1<=i by A12,FINSEQ_3:27,FINSEQ_1:3;
+       then
+A16:     ex k st q[k] by A14;
+       consider k such that
+A17:       q[k] and
+A18:       for n st q[n] holds n <= k from NAT_1:sch 6(A13,A16);
+       take k;
+       thus k in NAT by ORDINAL1:def 13;
+       let i',k' be Nat such that
+A19:       i'=x & k'=k;
+       i-'k <= Sum (LJ|k)
+          proof
+            assume
+A20:          i-'k > Sum (LJ|k);
+            then i-'k >= Sum (LJ|k)+1 by NAT_1:13;
+            then
+A21:          i-'k-1>=Sum (LJ|k)+1-1 by XREAL_1:11;
+A22:          i-'k>=1 & i-'k=i-k by A17,A20,NAT_1:14,BINARITH:50;
+            then
+A23:          i-k+k >=1+k by XREAL_1:8;
+            then
+A24:          i-'(k+1)=i-(k+1) & k+1-'1=k by BINARITH:39,50;
+A25:          k+1<=len LJ
+              proof
+                assume k+1>len LJ;
+                then
+A26:              k>=len LJ & len LJ=L by NAT_1:13,FINSEQ_2:109;
+                then i-k>S by A20,A22,FINSEQ_1:79;
+                then i-k+k>S+k & S+k>=S+L by A26,XREAL_1:8;
+                then i> S+L by XXREAL_0:2;
+                hence thesis by A12,FINSEQ_1:3;
+              end;
+            1<=k+1 by NAT_1:14;
+            then k+1 in dom LJ & k+1 <=i & Sum(LJ|(k+1-'1)) <= i-'(k+1)
+              by A21,A22,A23,A24,A25,FINSEQ_3:27;
+            then k+1<=k by A18;
+            hence thesis by NAT_1:13;
+          end;
+          hence thesis by A17,A18,A19;
+        end;
+      consider r be Function of Seg (S+L),NAT such that
+A27:     for x st x in Seg (S+L) holds R[x,r.x] from FUNCT_2:sch 1(A11);
+A28:     dom r=Seg (S+L) by FUNCT_2:def 1;
+      defpred P[set,set] means for i,k st i=$1 & k=r.i holds
+        (i -' k = Sum (LJ|(k-'1)) implies
+        (F.$2 = b1.(i -' k+1) & i-'k+1 in dom b1)) &
+        (i -' k <> Sum (LJ|(k-'1)) implies
+             ($2 = b1.(i -' k) & i-'k in dom b1 & min(LJ,i-'k)=k &
+             ((i-'k < Sum (LJ|k) implies F.$2 = b1.(i -' k+1) &
+                   i -' k+1 in dom b1) &
+              (i-'k = Sum (LJ|k) implies F.$2 = 0.V1))));
+A29:  for x st x in Seg (S+L) ex y st y in the carrier of V1 & P[x,y]
+        proof
+          let x such that
+A30:          x in Seg (S+L);
+          reconsider i=x as Nat by A30;
+          r.i=r/.i by A30,A28,PARTFUN1:def 8;
+          then reconsider k=r.i as Element of NAT;
+A31:         Q[i,k] & i-'k <= Sum (LJ|k) by A30,A27;
+          k<=len LJ by A31,FINSEQ_3:27;
+          then
+A32:        Sum (LJ|k) <= Sum (LJ|(len LJ)) & LJ|(len LJ) =LJ
+            by POLYNOM3:18,FINSEQ_1:79;
+          dom LJ=dom J by MATRIXJ1:def 3;
+          then
+A33:        LJ.k =len (J.k) & LJ.k <> 0 by A7,A31,MATRIXJ1:def 3;
+          1<=k by A31,FINSEQ_3:27;
+          then
+A34:        k-'1=k-1 by BINARITH:50;
+          then k=k-'1+1;
+          then LJ|k=(LJ|(k-'1))^<*LJ.k*> by A31,FINSEQ_5:11;
+          then
+A35:        Sum (LJ|k)=Sum (LJ|(k-'1)) + len (J.k) by A33,RVSUM_1:104;
+          per cases;
+            suppose
+A36:            i -' k = Sum (LJ|(k-'1));
+              then i-'k <> Sum (LJ|k) by A33,A35;
+              then i-'k < Sum (LJ|k) by A31,XXREAL_0:1;
+              then i-'k+1 <=Sum(LJ|k) by NAT_1:13;
+              then
+A37:            1<= i-'k+1 & i-'k+1 <= S by A32,XXREAL_0:2,NAT_1:11;
+              then i-'k+1 in dom b1 by A10;
+              then
+A38:            b1/.(i-'k+1) = b1.(i-'k+1) by PARTFUN1:def 8;
+              b1/.(i-'k+1) in IM & b1/.(i-'k+1) is Element of V1
+                by STRUCT_0:def 5,VECTSP_4:18;
+             then consider y be Element of V1 such that
+A39:           (F|^1).y=b1/.(i-'k+1)  by RANKNULL:13;
+             take y;
+             thus y in the carrier of V1;
+             thus thesis by A10,A36,A37,A38,A39,VECTSP11:19;
+            end;
+            suppose
+A40:            i -' k <> Sum (LJ|(k-'1));
+              then i -' k>Sum (LJ|(k-'1)) by A31,XXREAL_0:1;
+              then 1<= i-'k & i-'k <= S by NAT_1:14,A31,A32,XXREAL_0:2;
+              then
+A41:            i-'k in dom b1 by A10;
+              take y=b1/.(i-'k);
+              y in IM by STRUCT_0:def 5;
+              then y in V1 by VECTSP_4:17;
+              hence y in the carrier of V1 by STRUCT_0:def 5;
+              let i',k' be Nat such that
+A42:              x=i' & k'=r.i';
+              i-'k <= Sum (LJ|k) by A30,A27;
+              then
+A43:            min(LJ,i-'k)<=k by A41,A10,MATRIXJ1:def 1;
+A44:            min(LJ,i-'k)=k
+                proof
+                  assume min(LJ,i-'k)<>k;
+                  then min(LJ,i-'k)<k-'1+1 by A34,A43,XXREAL_0:1;
+                  then min(LJ,i-'k) <=k-'1 by NAT_1:13;
+                  then i-'k <= Sum(LJ|min(LJ,i-'k)) &
+                    Sum(LJ|min(LJ,i-'k)) <= Sum (LJ|(k-'1))
+                    by A41,POLYNOM3:18,A10,MATRIXJ1:def 1;
+                  then i-'k <= Sum (LJ|(k-'1)) by XXREAL_0:2;
+                  hence thesis by A31,A40,XXREAL_0:1;
+                end;
+A45:          Len J|k=LJ|k by MATRIXJ1:17;
+A46:          now assume
+A47:                i-'k < Sum (LJ|k);
+                then i-'k+1<=Sum (LJ|k) by NAT_1:13;
+                then
+A48:              1<=i-'k+1 & i-'k+1<=S by A32,NAT_1:11,XXREAL_0:2;
+                then
+A49:              i-'k+1 in dom b1 by A10;
+                F.(b1/.(i-'k)) = FI.(b1/.(i-'k)) by FUNCT_1:72
+                              .= 0.K*(b1/.(i-'k))+(b1/.(i-'k+1))
+                                    by A8,A6,A41,A44,A45,Th24,A47
+                              .= 0.IM+(b1/.(i-'k+1)) by VECTSP_1:59
+                              .= b1/.(i-'k+1) by RLVECT_1:def 7
+                              .= b1.(i-'k+1) by A49,PARTFUN1:def 8;
+                hence F.y = b1.(i -' k+1) & i -' k+1 in dom b1 by A48,A10;
+              end;
+              now assume
+A50:                i-'k = Sum (LJ|k);
+                F.(b1/.(i-'k)) = FI.(b1/.(i-'k)) by FUNCT_1:72
+                              .= 0.K*(b1/.(i-'k)) by A8,A6,A41,A44,A45,Th24,A50
+                              .= 0.IM by VECTSP_1:59
+                              .= 0.V1 by VECTSP_4:19;
+                hence F.y = 0.V1;
+              end;
+            hence thesis by A40,A41,A42,PARTFUN1:def 8,A46,A44;
+          end;
+        end;
+    consider B be Function of Seg (S+L),the carrier of V1 such that
+A51:  for x st x in Seg (S+L) holds P[x,B.x] from FUNCT_2:sch 1(A29);
+A52:  rng B c= the carrier of V1 & dom B=Seg (S+L)
+      by RELSET_1:12,FUNCT_2:def 1;
+    then reconsider B as FinSequence by FINSEQ_1:def 2;
+    reconsider B as FinSequence of V1 by A52,FINSEQ_1:def 4;
+    reconsider RNG=rng B as Subset of V1 by FINSEQ_1:def 4;
+    now let l be Linear_Combination of RNG such that
+A53:    Sum l = 0.V1;
+      set RA={v1 where v1 is Vector of V1:
+        ex i,k st i in Seg(L+S) & k=r.i & v1=B.i & i-'k < Sum (LJ|k)};
+      set RB={v1 where v1 is Vector of V1:
+         ex i,k st i in Seg(L+S) & k=r.i & v1=B.i &
+            i-'k <> Sum (LJ|(k-'1)) & i-'k = Sum (LJ|k)};
+A54:    RA c= the carrier of V1
+        proof
+          let x;assume x in RA;
+          then ex v1 be Vector of V1 st x=v1 &
+             ex i,k st i in Seg(L+S) & k=r.i & v1=B.i & i-'k < Sum (LJ|k);
+          hence thesis;
+        end;
+      RB c= the carrier of V1
+        proof
+          let x;assume x in RB;
+          then ex v1 be Vector of V1 st x=v1 &
+            ex i,k st i in Seg(L+S) & k=r.i & v1=B.i &
+              i-'k <> Sum (LJ|(k-'1)) & i-'k = Sum (LJ|k);
+          hence thesis;
+        end;
+      then reconsider RA,RB as Subset of V1 by A54;
+A55:    Carrier l c= RB\/RA
+        proof
+          let x such that
+A56:        x in Carrier l;
+          reconsider v1=x as Vector of V1 by A56;
+          Carrier l c= RNG by VECTSP_6:def 7;
+          then consider i be set such that
+A57:         i in dom B & B.i=v1 by A56,FUNCT_1:def 5;
+          reconsider i as Nat by A57;
+          r.i=r/.i by A57,A52,A28,PARTFUN1:def 8;
+          then reconsider k=r.i as Element of NAT;
+A58:         i-'k <= Sum (LJ|k) by A27,A57,A52;
+          per cases by A58,XXREAL_0:1;
+             suppose
+A59:             i-'k = Sum (LJ|k);
+A60:            Q[i,k] by A57,A52,A27;
+               then 1<=k by FINSEQ_3:27;
+               then k-'1=k-1 by BINARITH:50;
+               then k-'1+1=k;
+               then LJ|k=(LJ|(k-'1))^<*LJ.k*> & dom LJ=dom J
+                 by A60,FINSEQ_5:11,MATRIXJ1:def 3;
+               then i-'k = Sum (LJ|(k-'1))+LJ.k & LJ.k<>0
+                 by A7,A59,A60,RVSUM_1:104;
+               then i-'k <>Sum (LJ|(k-'1));
+               then v1 in RB or v1 in RA by A57,A59,A52;
+               hence thesis by XBOOLE_0:def 2;
+             end;
+             suppose i-'k < Sum (LJ|k);
+               then v1 in RB or v1 in RA by A57,A52;
+               hence thesis by XBOOLE_0:def 2;
+             end;
+        end;
+A61:    F|RA is one-to-one
+        proof
+          let x1,x2 be set such that
+A62:        x1 in dom (F|RA) & x2 in dom (F|RA) & (F|RA).x1=(F|RA).x2;
+          dom(F|RA)=dom F /\ RA  by FUNCT_1:68;
+          then
+A63:        x1 in RA & x2 in RA & (F|RA).x1=F.x1 & (F|RA).x2=F.x2
+            by A62,XBOOLE_0:def 3,FUNCT_1:70;
+          then consider v1 be Vector of V1 such that
+A64:         x1=v1 and
+A65:         ex i1,k1 be Nat st i1 in Seg(L+S) & k1=r.i1 & v1=B.i1 &
+               i1-'k1 < Sum (LJ|k1);
+          consider i1,k1 be Nat such that
+A66:         i1 in Seg(L+S) & k1=r.i1 & v1=B.i1 & i1-'k1 < Sum (LJ|k1) by A65;
+          consider v2 be Vector of V1 such that
+A67:         x2 = v2 and
+A68:         ex i2,k2 be Nat st i2 in Seg(L+S) & k2=r.i2 & v2=B.i2 &
+               i2-'k2 < Sum (LJ|k2) by A63;
+          consider i2,k2 be Nat such that
+A69:         i2 in Seg(L+S) & k2=r.i2 & v2=B.i2 & i2-'k2 < Sum (LJ|k2) by A68;
+A70:      b1 is one-to-one by MATRLIN:def 4;
+A71:      k1<=i1 & k2<=i2 & k1 in dom LJ & k2 in dom LJ by A66,A69,A27;
+          then
+A72:        i1-'k1=i1-k1 & i2-'k2=i2-k2 & 1<=k1 & 1<=k2
+            by BINARITH:50,FINSEQ_3:27;
+          then
+A73:         k1-'1=k1-1 & k2-'1=k2-1 by BINARITH:50;
+          then k1-'1+1<=len LJ & k2-'1+1<=len LJ by A71,FINSEQ_3:27;
+          then
+A75:         k1-'1 <=len LJ & k2-'1 <=len LJ by NAT_1:13;
+A76:      dom LJ=dom J by MATRIXJ1:def 3;
+A77:      k1-'1 in dom LJ implies LJ.(k1-'1)<>0 by A7,A76;
+A78:      k2-'1 in dom LJ implies LJ.(k2-'1)<>0 by A7,A76;
+          per cases;
+            suppose
+A81:            i1-'k1=Sum (LJ|(k1-'1)) & i2-'k2=Sum (LJ|(k2-'1));
+              then F.v1=b1.(i1 -' k1+1) & i1 -' k1+1 in dom b1 &
+                F.v2=b1.(i2 -' k2+1) & i2 -' k2+1 in dom b1 by A66,A69,A51;
+              then i1-'k1+1=i2-'k2+1 by A62,A63,A64,A67,A70,FUNCT_1:def 8;
+              then k1-'1=k2-'1 by A75,A81,A77,A78,MATRIXJ1:11;
+              then i1-k1=i2-k1 by A72,A73,A81;
+              hence thesis by A64,A66,A67,A69;
+            end;
+            suppose
+A82:            i1-'k1=Sum (LJ|(k1-'1)) & i2-'k2<>Sum (LJ|(k2-'1));
+              then
+A83:            F.v1=b1.(i1-'k1+1) & i1-'k1+1 in dom b1 & F.v2=b1.(i2-'k2+1)&
+                i2-'k2+1 in dom b1 & min(LJ,i2-'k2)=k2 by A66,A69,A51;
+              then
+A84:            i1-'k1+1=i2-'k2+1 by A62,A63,A64,A67,A70,FUNCT_1:def 8;
+              k1-'1 <>0
+                proof
+                  assume k1-'1=0; then
+                  LJ|(k1-'1)=<*>REAL;
+                  hence thesis by A82,A27,A69,A84,RVSUM_1:102;
+                end;
+              then k1-'1 >=1 by NAT_1:14;
+              then
+A85:            k1-'1 in dom LJ by A75,FINSEQ_3:27;
+              then LJ.(k1-'1)<>0 by A76,A7;
+              hence thesis by A69,A82,A84,A83,A85,MATRIXJ1:6;
+            end;
+            suppose
+A86:            i1-'k1<>Sum (LJ|(k1-'1)) & i2-'k2=Sum (LJ|(k2-'1));
+              then
+A87:            F.v1=b1.(i1-'k1+1) & i1-'k1+1 in dom b1 &
+                F.v2=b1.(i2-'k2+1) & i2-'k2+1 in dom b1 & min(LJ,i1-'k1)=k1
+                by A66,A69,A51;
+              then
+A88:            i1-'k1+1=i2-'k2+1 by A62,A63,A64,A67,A70,FUNCT_1:def 8;
+              k2-'1 <>0
+                proof
+                  assume k2-'1=0;
+                  then i1-'k1 =0 by A86,A88,RVSUM_1:102;
+                  hence thesis by A86,A27,A66;
+                end;
+              then k2-'1 >=1 by NAT_1:14;
+              then
+A89:            k2-'1 in dom LJ by A75,FINSEQ_3:27;
+              then LJ.(k2-'1)<>0 by A76,A7;
+              hence thesis by A66,A86,A88,A87,A89,MATRIXJ1:6;
+            end;
+            suppose i1-'k1<>Sum (LJ|(k1-'1)) & i2-'k2<>Sum (LJ|(k2-'1));
+              then
+A90:            F.v1=b1.(i1-'k1+1) & i1-'k1+1 in dom b1 &min(LJ,i2-'k2)=k2&
+                F.v2=b1.(i2-'k2+1) & i2-'k2+1 in dom b1 & min(LJ,i1-'k1)=k1
+                by A66,A69,A51;
+              then i1-'k1+1=i2-'k2+1 by A62,A63,A64,A67,A70,FUNCT_1:def 8;
+              then i1 - k1 =i2-k1 by A90,A72;
+              hence thesis by A64,A66,A67,A69;
+            end;
+        end;
+      rng b1 is Basis of IM by MATRLIN:def 4;
+      then rng b1 is linearly-independent Subset of IM by VECTSP_7:def 3;
+      then reconsider rngb1=rng b1 as linearly-independent Subset of V1
+        by VECTSP_9:15;
+      F.:RA c= rngb1
+        proof
+          let y; assume y in F.:RA;
+          then consider x such that
+A91:        x in dom F & x in RA & y=F.x by FUNCT_1:def 12;
+          consider v1 be Vector of V1 such that
+A92:         x=v1 and
+A93:         ex i,k st i in Seg(L+S) & k=r.i & v1=B.i&i-'k < Sum (LJ|k) by A91;
+         consider i,k such that
+A94:         i in Seg(L+S) & k=r.i & v1=B.i & i-'k < Sum (LJ|k) by A93;
+         i-'k <> Sum (LJ|(k-'1)) or i-'k = Sum (LJ|(k-'1));
+         then F.v1= b1.(i -' k+1) & i -' k+1 in dom b1 by A94,A51;
+         hence thesis by A91,A92,FUNCT_1:def 5;
+       end;
+     then
+A95:   F.:RA is linearly-independent Subset of V1 by VECTSP_7:2;
+A96:   F.:RB c= {0.V1}
+       proof
+         let y; assume y in F.:RB;
+         then consider x such that
+A97:       x in dom F & x in RB & y=F.x by FUNCT_1:def 12;
+         consider v1 be Vector of V1 such that
+A98:        x=v1 and
+A99:       ex i,k st i in Seg(L+S) & k=r.i & v1=B.i &
+              i-'k <> Sum (LJ|(k-'1)) & i-'k = Sum (LJ|k) by A97;
+         F.v1= 0.V1 by A51,A99;
+         hence thesis by A97,A98,TARSKI:def 1;
+       end;
+A100:  Carrier l c= RB by A53,A55,A61,A95,A96,VECTSP11:44;
+    RB c= rngb1
+      proof
+        let x; assume x in RB;
+        then consider v1 be Vector of V1 such that
+A101:      x=v1 and
+A102:      ex i,k st i in Seg(L+S) & k=r.i & v1=B.i &
+              i-'k <> Sum (LJ|(k-'1)) & i-'k = Sum (LJ|k);
+        consider i,k such that
+A103:      i in Seg(L+S) & k=r.i & v1=B.i &
+           i-'k <> Sum (LJ|(k-'1)) & i-'k = Sum (LJ|k) by A102;
+        v1= b1.(i -' k) & i-'k in dom b1 by A103,A51;
+        hence thesis by A101,FUNCT_1:def 5;
+      end;
+      then Carrier l c= rngb1 by A100,XBOOLE_1:1;
+      then l is Linear_Combination of rngb1 by VECTSP_6:def 7;
+      hence Carrier l ={} by A53,VECTSP_7:def 1;
+    end;
+    then
+A104:   RNG is linearly-independent Subset of V1 by VECTSP_7:def 1;
+    consider BAS be Basis of V1;
+A105:   BAS is linearly-independent & Lin(BAS) = the VectSpStr of V1
+        by VECTSP_7:def 3;
+    then reconsider BAS,RNG as finite Subset of V1 by VECTSP_9:25;
+A106:   (Omega).Lin(BAS) = (Omega).V1 by VECTSP_7:def 3;
+    consider C be finite Subset of V1 such that
+A107:   C c= BAS & card C = card BAS - card RNG and
+A108:   the VectSpStr of V1= Lin(RNG\/C) by A104,A105,VECTSP_9:23;
+A109:  dim V1= dim Lin(RNG\/C) & dim V1 =dim Lin BAS &
+       dim Lin BAS=card BAS by A105,A108,VECTSP_9:30,32,A106;
+    then
+A110:  card (RNG\/C) >= card BAS by MATRLIN2:6;
+A111:  card (RNG\/C) = card RNG + card C - card (RNG/\C) by CARD_2:64
+                    .= card BAS-card (RNG/\C) by A107;
+    then card (RNG\/C)+card (RNG/\C) =card BAS;
+    then card (RNG\/C) <= card BAS by NAT_1:11;
+    then
+A112:   card (RNG\/C) = card BAS & RNG\/C is linearly-independent
+      by A109,A110,XXREAL_0:1,MATRLIN2:5;
+    defpred W[Nat] means $1 <= card C implies
+      ex f be FinSequence of V1 st f is one-to-one &
+         len f = card C & RNG misses rng f & RNG\/rng f is Basis of V1 &
+         for i st i in dom f & i<= $1 holds F.(f.i)=0.V1;
+A113:W[0]
+      proof
+        assume 0<= card C;
+        card C=card Seg card C by FINSEQ_1:78;
+       then Seg card C,C are_equipotent by CARD_1:21;
+       then consider f be Function such that
+A114:    f is one-to-one & dom f = Seg card C & rng f = C by WELLORD2:def 4;
+       reconsider f as FinSequence by A114,FINSEQ_1:def 2;
+       reconsider f as FinSequence of V1 by A114,FINSEQ_1:def 4;
+       take f;
+       thus f is one-to-one & len f = card C by A114,FINSEQ_1:def 3;
+       RNG/\C={} by A111,A112;
+       hence RNG misses rng f & RNG\/rng f is Basis of V1
+         by A108,A112,A114,XBOOLE_0:def 7,VECTSP_7:def 3;
+       let i;assume i in dom f & i<=0;
+       hence thesis by FINSEQ_3:27;
+     end;
+A115:for n st W[n] holds W[n+1]
+     proof
+       let n such that
+A116:      W[n];set n1=n+1;
+       assume
+A117:      n1<=card C;
+       then consider f be FinSequence of V1 such that
+A118:     f is one-to-one and
+A119:     len f = card C and
+A120:     RNG misses rng f & RNG\/rng f is Basis of V1 and
+A121:     for i st i in dom f & i<= n holds F.(f.i)=0.V1 by A116,NAT_1:13;
+       per cases;
+         suppose F.(f.n1)=0.V1;
+           then for i st i in dom f & i<=n1 holds F.(f.i)=0.V1 by A121,NAT_1:8;
+           hence thesis by A118,A119,A120;
+         end;
+         suppose
+A122:        F.(f.n1)<>0.V1;
+A123:      rng b1 c= F.:RNG
+             proof
+               let y such that
+A124:              y in rng b1;
+               consider x such that
+A125:             x in dom b1 & b1.x=y by A124,FUNCT_1:def 5;
+               reconsider x as Element of NAT by A125;
+               set m=min(LJ,x);
+               set x1=x-'1;
+               set mx=m+x1;
+A126:          m in dom LJ by A125,A10,MATRIXJ1:def 1;
+               then 1<=m & m<=len LJ & len LJ=L & 1<=x & x<=S
+                 by A125,A9,FINSEQ_2:109,FINSEQ_3:27;
+               then
+A127:            1+1<=m+x & m+x<=L+S & x1=x-1 by XREAL_1:9,BINARITH:50;
+               then 2-1<=m+x-1 & m+x-1<=L+S-1 & L+S-1<=L+S-0 by XREAL_1:11,12;
+               then 1<=mx & mx<=L+S by A127,XXREAL_0:2;
+               then
+A128:            mx in Seg (S+L);
+               then r.mx=r/.mx by A28,PARTFUN1:def 8;
+               then reconsider k=r.mx as Element of NAT;
+A129:          Q[mx,k] by A27,A128;
+A130:          m<=mx by NAT_1:11;
+               then
+A131:            mx-'m=mx-m & mx-'k =mx-k & Sum(LJ|(m-'1))< x1+1 &x<= Sum(LJ|m)
+                 by A10,A125,A127,A129,BINARITH:50,MATRIXJ1:7,def 1;
+               then Sum(LJ|(m-'1))<= mx-'m by NAT_1:13;
+               then
+A132:            m<=k by A126,A27,A128,A130;
+A133:            m=k
+                 proof
+                   assume
+A134:                m<>k;
+                   then
+A135:                m<k by A132,XXREAL_0:1;
+                   then reconsider k1=k-1 as Element of NAT by NAT_1:20;
+                   k=k1+1;
+                   then k-'1=k1 & m<=k1 by A135,BINARITH:39,NAT_1:13;
+                   then Sum(LJ|m)<=Sum(LJ|k1) & Sum(LJ|k1) <=mx-'k &
+                     mx-'k<=mx-'m & mx-'k<>mx-'m
+                     by A128,A131,A27,A134,A132,POLYNOM3:18,BINARITH:59;
+                   then Sum(LJ|m) <=mx-'k & mx-'k< mx-'m by XXREAL_0:1,2;
+                   then Sum(LJ|m)<=x1 by A131,XXREAL_0:2;
+                   hence thesis by A127,A131,NAT_1:13;
+                 end;
+               mx-'m<Sum(LJ|m) & (mx-'m =Sum(LJ|(m-'1)) or
+                  mx-'m <>Sum(LJ|(m-'1))) by A131,A127,NAT_1:13;
+               then F.(B.mx)= b1.(mx-'m+1) & mx-'m+1 =x & B.mx in RNG &
+                 dom F=[#]V1 by A51,A52,A127,A128,A131,A133,
+                 FUNCT_1:def 5,FUNCT_2:def 1;
+               hence thesis by A125,FUNCT_1:def 12;
+             end;
+           reconsider rngB1=rng b1 as Basis of IM by MATRLIN:def 4;
+           1<=n1 by NAT_1:14;
+           then
+A136:        n1 in dom f by A117,A119,FINSEQ_3:27;
+           then
+A137:        f/.n1=f.n1 & f.n1 in rng f by PARTFUN1:def 8,FUNCT_1:def 5;
+           F.(f/.n1) in im F & F|^1=F by RANKNULL:13,VECTSP11:19;
+           then F.(f/.n1) in Lin(rngB1) by VECTSP_7:def 3;
+           then consider L be Linear_Combination of rngB1 such that
+A138:         F.(f/.n1) = Sum L by VECTSP_7:12;
+           consider K be Linear_Combination of V1 such that
+A139:         Carrier L=Carrier K & Sum L=Sum K by VECTSP_9:12;
+           Carrier L c= rngB1 by VECTSP_6:def 7;
+           then consider M be Linear_Combination of RNG such that
+A140:         F.(Sum M)=Sum K by VECTSP11:41,A139,A123,XBOOLE_1:1;
+           reconsider Rf=RNG\/rng f as finite Subset of V1 by A120;
+A141:       Rf is linearly-independent by A120,VECTSP_7:def 3;
+           set fn=f/.n1;
+A142:       fn in Rf by A137,XBOOLE_0:def 2;
+           RNG c= Rf & not fn in RNG by A137,A120,XBOOLE_1:7,XBOOLE_0:3;
+           then Carrier M c= RNG & Carrier M=Carrier(-M) & RNG c= Rf\{fn}
+             by VECTSP_6:def 7,69,ZFMISC_1:40;
+           then Carrier(-M) c= Rf\{fn} by XBOOLE_1:1;
+           then reconsider M'=-M as Linear_Combination of Rf\{fn}
+             by VECTSP_6:def 7;
+           set fnM=fn+Sum(M');
+           set fnS=n1 .--> fnM;
+           take ff=f+*(n1,fnM);
+A143:        not fnM in Rf\{fn}
+             proof
+               card Rf <>0 by A137;
+               then reconsider c1=card Rf-1 as Element of NAT by NAT_1:20;
+               assume
+A144:            fnM in Rf\{fn};
+               c1+1=card Rf;
+               then card (Rf\{fn})= c1 & Rf\{fn}\/ {fnM} = Rf\{fn} &
+                 card (Rf\{fn}\/ {fnM})=c1+1
+                 by A144,A142,VECTSP11:40,A141,STIRL2_1:65,ZFMISC_1:46;
+               hence thesis;
+             end;
+A145:        fnM <> fn
+             proof
+               assume fnM=fn;
+               then 0.V1 = fnM-fn by VECTSP_1:63
+                        .= Sum(M')+(fn-fn) by RLVECT_1:def 6
+                        .= Sum(M')+0.V1 by RLVECT_1:def 11
+                        .= Sum(M') by RLVECT_1:def 7
+                        .= -Sum(M) by VECTSP_6:79;
+               then 0.V1=Sum(M) by VECTSP_1:86;
+               hence thesis by A122,A137,A138,A139,A140,RANKNULL:9;
+             end;
+           not fnM in rng f
+             proof
+               assume fnM in rng f;
+               then fnM in Rf by XBOOLE_0:def 2;
+               hence thesis by A143,A145,ZFMISC_1:64;
+             end;
+           then rng f misses {fnM} & rng fnS={fnM} by ZFMISC_1:56,FUNCOP_1:14;
+           then f+*(fnS) is one-to-one by A118,FUNCT_4:98;
+           hence ff is one-to-one by A136,FUNCT_7:def 3;
+A146:       dom ff=dom f by FUNCT_7:32;
+           hence len ff=card C by A119,FINSEQ_3:31;
+A147:      rng ff = (rng f)\{fn} \/{fnM} by Lm1,A118,A136,A137;
+           thus RNG misses rng ff
+             proof
+               assume RNG meets rng ff;
+               then consider x such that
+A148:             x in RNG & x in rng ff by XBOOLE_0:3;
+               not x in (rng f)\{fn} by A148,A120,XBOOLE_0:3;
+               then x in {fnM} by A148,A147,XBOOLE_0:def 2;
+               then x = fnM & not fnM in Rf
+                 by A143,A145,TARSKI:def 1,ZFMISC_1:64;
+               hence thesis by A148,XBOOLE_0:def 2;
+             end;
+A149:      not fn in RNG by A120,A137,XBOOLE_0:3;
+A150:      Rf\{fn}\/{fnM} = (RNG\{fn})\/((rng f)\{fn})\/{fnM} by XBOOLE_1:42
+                         .= RNG\/((rng f)\{fn})\/{fnM} by A149,ZFMISC_1:65
+                         .= RNG\/ rng ff by A147,XBOOLE_1:4;
+           then reconsider Rff=RNG\/ rng ff  as finite Subset of V1;
+A151:        Rf\{fn}\/{fnM} is linearly-independent by A141,A142,VECTSP11:40;
+           dim V1 = card Rf by A120,VECTSP_9:def 2
+                 .= card (RNG\/ rng ff) by A141,A142,A150,VECTSP11:40;
+           then dim Lin(Rff)=dim V1 by A150,A141,A142,VECTSP11:40,VECTSP_9:30;
+           then (Omega).V1=(Omega).Lin(Rff) by VECTSP_9:32;
+           hence RNG\/ rng ff is Basis of V1 by A150,A151,VECTSP_7:def 3;
+           let i such that
+A152:         i in dom ff & i<= n1;
+           per cases by A152,XXREAL_0:1;
+             suppose i<n1;
+               then ff.i=f.i & i<=n by FUNCT_7:34,NAT_1:13;
+               hence thesis by A152,A146,A121;
+             end;
+             suppose i=n1;
+               then ff.i=fnM by A152,A146,FUNCT_7:33;
+               hence F.(ff.i) = F.(fn - Sum M) by VECTSP_6:79
+                             .= F.fn-F.(Sum M) by RANKNULL:8
+                             .= 0.V1 by A138,A139,A140,RLVECT_1:def 11;
+             end;
+         end;
+       end;
+    for n holds W[n] from NAT_1:sch 2(A113,A115);
+    then consider f be FinSequence of V1 such that
+A153:    f is one-to-one and
+A154:    len f = card C and
+A155:    RNG misses rng f & RNG\/rng f is Basis of V1 and
+A156:    for i st i in dom f & i<= card C holds F.(f.i)=0.V1;
+    now let x1,x2 be set such that
+A157:    x1 in dom B & x2 in dom B & B.x1 = B.x2;
+      reconsider i1=x1,i2=x2 as Nat by A157;
+      r/.i1=r.i1 & r/.i2=r.i2 by A28,A52,A157,PARTFUN1:def 8;
+      then reconsider k1=r.i1,k2=r.i2 as Element of NAT;
+A158:  Q[i1,k1] & i1-'k1 <= Sum (LJ|k1) by A27,A52,A157;
+A159:  Q[i2,k2] & i2-'k2 <= Sum (LJ|k2) by A27,A52,A157;
+A160:  i1 -' k1 = Sum (LJ|(k1-'1)) implies F.(B.x1) = b1.(i1 -' k1+1)&
+         i1-'k1+1 in dom b1 by A51,A52,A157;
+A161:  i1 -' k1 <> Sum (LJ|(k1-'1)) implies
+         B.x1 = b1.(i1 -' k1) & i1-'k1 in dom b1 & min(LJ,i1-'k1)=k1 &
+         (i1-'k1 < Sum (LJ|k1) implies F.(B.x1) = b1.(i1 -' k1+1) &
+         i1 -' k1+1 in dom b1) &
+         (i1-'k1 = Sum (LJ|k1) implies F.(B.x1) = 0.V1) by A51,A52,A157;
+A162:  i2 -' k2 = Sum (LJ|(k2-'1)) implies F.(B.x2) = b1.(i2 -' k2+1) &
+                   i2-'k2+1 in dom b1 by A51,A52,A157;
+A163:  i2 -' k2 <> Sum (LJ|(k2-'1)) implies
+         B.x2 = b1.(i2 -' k2) & i2-'k2 in dom b1 & min(LJ,i2-'k2)=k2 &
+         (i2-'k2 < Sum (LJ|k2) implies F.(B.x2) = b1.(i2 -' k2+1) &
+         i2 -' k2+1 in dom b1) &
+         (i2-'k2 = Sum (LJ|k2) implies F.(B.x2) = 0.V1) by A51,A52,A157;
+A164:  b1 is one-to-one & rng b1 is Basis of IM by MATRLIN:def 4;
+      then
+A165:  rng b1 is linearly-independent Subset of IM by VECTSP_7:def 3;
+      1<=k1 & k1<= len LJ & 1<=k2& k2 <= len LJ & k1-'1 <= k1 & k2-'1<=k2
+        by A158,A159,FINSEQ_3:27,BINARITH:52;
+      then
+A166:   k1-'1=k1-1 & k2-'1=k2-1 & i1-'k1 =i1-k1 & i2-'k2=i2-k2 &
+        k1-'1 <=len LJ & k2-'1 <=len LJ by A158,A159,XXREAL_0:2,BINARITH:50;
+A167:  dom LJ=dom J & 0<=len LJ by MATRIXJ1:def 3;
+      now per cases by A158,A159,XXREAL_0:1;
+        suppose
+A168:       i1 -' k1 = Sum (LJ|(k1-'1)) & i2 -' k2 = Sum (LJ|(k2-'1));
+          then F.(B.x1) = b1.(i1 -' k1+1) & i1-'k1+1 in dom b1 &
+             F.(B.x2) = b1.(i2 -' k2+1) & i2-'k2+1 in dom b1 by A51,A52,A157;
+          then
+A169:       i1-'k1+1 = i2-'k2+1 by A164,A157,FUNCT_1:def 8;
+          then Sum (LJ|(k1-'1)) = Sum (LJ|(k2-'1)) &
+            (k1-'1 in dom LJ implies LJ.(k1-'1)<>0) &
+            (k2-'1 in dom LJ implies LJ.(k2-'1)<>0) by A168,A167,A7;
+          then k1-'1 = k2-'1 by A166,MATRIXJ1:11;
+          hence i1=i2 by A169,A166;
+        end;
+        suppose
+A170:       i1 -' k1 = Sum (LJ|(k1-'1)) & i2 -' k2 <> Sum (LJ|(k2-'1))&
+          i2-'k2 < Sum (LJ|k2);
+          then
+A171:       F.(B.x1) = b1.(i1-'k1+1) & i1-'k1+1 in dom b1 &
+            F.(B.x2) = b1.(i2-'k2+1) & i2-'k2+1 in dom b1 & min(LJ,i2-'k2)=k2
+            by A51,A52,A157;
+          then
+A172:       i1-'k1+1 = i2-'k2+1 by A164,A157,FUNCT_1:def 8;
+          k1-'1 <>0
+            proof
+              assume k1-'1=0; then
+              LJ|(k1-'1)=<*>REAL;
+              hence thesis by A170,A27,A52,A157,A172,RVSUM_1:102;
+            end;
+          then k1-'1 >=1 by NAT_1:14;
+          then
+A173:       k1-'1 in dom LJ by A166,FINSEQ_3:27;
+          then LJ.(k1-'1)<>0 by A167,A7;
+          hence i1=i2 by A170,A172,A171,A173,MATRIXJ1:6;
+        end;
+        suppose i1 -' k1 = Sum (LJ|(k1-'1)) & i2 -' k2 <> Sum (LJ|(k2-'1))&
+            i2-'k2 = Sum (LJ|k2);
+          then b1.(i1 -' k1+1) =0.IM & b1.(i1 -' k1+1) in rng b1
+            by A157,FUNCT_1:def 5,VECTSP_4:19,A160,A163;
+          hence i1 = i2 by A165,VECTSP_7:3;
+        end;
+        suppose
+A174:       i2 -' k2 = Sum (LJ|(k2-'1)) & i1 -' k1 <> Sum (LJ|(k1-'1)) &
+          i1-'k1 < Sum (LJ|k1);
+          then
+A175:       F.(B.x2) = b1.(i2 -' k2+1) & i2-'k2+1 in dom b1 &
+            F.(B.x1) = b1.(i1 -' k1+1) & i1-'k1+1 in dom b1 &
+            min(LJ,i1-'k1)=k1 by A51,A52,A157;
+A176:     i2-'k2+1 = i1-'k1+1 by A175,A164,A157,FUNCT_1:def 8;
+          k2-'1 <>0
+            proof
+              assume k2-'1=0;
+              then i1-'k1 =0 by A174,A176,RVSUM_1:102;
+              hence thesis by A174,A27,A52,A157;
+            end;
+          then k2-'1 >=1 by NAT_1:14;
+          then
+A177:       k2-'1 in dom LJ by A166,FINSEQ_3:27;
+          then LJ.(k2-'1)<>0 by A167,A7;
+          hence i1=i2 by A174,A176,A175,A177,MATRIXJ1:6;
+        end;
+        suppose i2 -' k2 = Sum (LJ|(k2-'1)) & i1 -' k1 <> Sum (LJ|(k1-'1))&
+            i1-'k1 = Sum (LJ|k1);
+          then b1.(i2 -' k2+1) =0.IM & b1.(i2 -' k2+1) in rng b1
+            by A157,FUNCT_1:def 5,VECTSP_4:19,A162,A161;
+          hence i1= i2 by A165,VECTSP_7:3;
+        end;
+        suppose
+A178:       i1 -' k1 <> Sum (LJ|(k1-'1)) & i2 -' k2 <> Sum (LJ|(k2-'1));
+          then i2-'k2 = i1-'k1 by A161,A163,A164,A157,FUNCT_1:def 8;
+          then i2-k1=i1-k1 by A178,A166,A161,A51,A52,A157;
+          hence i1=i2;
+        end;
+      end;
+      hence x1=x2;
+    end;
+    then B is one-to-one by FUNCT_1:def 8;
+    then B^f is one-to-one & rng (B^f)=rng B\/rng f
+      by A153,A155,FINSEQ_1:44,FINSEQ_3:98;
+    then reconsider Bf=B^f as OrdBasis of V1 by A155,MATRLIN:def 4;
+    for i st i in dom Bf holds F.(Bf/.i) = 0.K * (Bf/.i) or
+      (i+1 in dom Bf & F.(Bf/.i) = 0.K * (Bf/.i) +Bf/.(i+1))
+      proof
+        let i such that
+A179:       i in dom Bf;
+A180:     Bf/.i=Bf.i by A179,PARTFUN1:def 8;
+        per cases by A179,FINSEQ_1:38;
+          suppose
+A181:         i in dom B;
+            r/.i=r.i  by A28,A52,A181,PARTFUN1:def 8;
+            then reconsider k=r.i as Element of NAT;
+A182:       Q[i,k] & i-'k <= Sum (LJ|k) by A27,A52,A181;
+            1<=k by FINSEQ_3:27,A182;
+            then k-'1=k-1 by BINARITH:50;
+            then k-'1+1=k;
+            then LJ|k=(LJ|(k-'1))^<*LJ.k*> & dom LJ=dom J
+              by A182,FINSEQ_5:11,MATRIXJ1:def 3;
+            then
+A183:         Sum(LJ|k) = Sum (LJ|(k-'1))+LJ.k & LJ.k<>0
+              by A7,A182,RVSUM_1:104;
+            per cases by A182,XXREAL_0:1;
+              suppose
+A184:             i -' k = Sum (LJ|k);
+A185:           i-'k <>Sum (LJ|(k-'1)) by A183,A184;
+                F.(Bf/.i) = F.(B.i) by A181,A180,FINSEQ_1:def 7
+                         .= 0.V1 by A185,A51,A52,A181,A184
+                         .= 0.K*(Bf/.i) by VECTSP_1:59;
+                hence thesis;
+              end;
+              suppose
+A186:             i -' k < Sum (LJ|k);
+                then
+A187:             i-'k+1<=Sum(LJ|k) & Sum(LJ|(k-'1))<i-'k+1 by A182,NAT_1:13;
+                i -' k = Sum (LJ|(k-'1)) or i -' k <> Sum (LJ|(k-'1));
+                then
+A188:             F.(B.i)=b1.(i -' k+1) & i-'k+1 in dom b1 & dom J=dom LJ
+                  by A51,A52,A181,A186,MATRIXJ1:def 3;
+                then
+A189:             1<=i-'k+1 & i-'k+1<=S & k <= L & i-'k=i-k
+                  by A9,A182,FINSEQ_3:27,BINARITH:50;
+                then 1+0<= i-k+1+k & i-k+1+k<=S+L & 1+k<=i-k+1+k by XREAL_1:9;
+                then
+A190:             i+1 in Seg(S+L) & k<=i+1 by NAT_1:13;
+                then r/.(i+1)=r.(i+1)  by A28,PARTFUN1:def 8;
+                then reconsider k1=r.(i+1) as Element of NAT;
+                set i1=i+1;
+A191:             Q[i1,k1] by A27,A190;
+A192:           i1-'k=i1-k by A190,BINARITH:50;
+                then Sum (LJ|(k-'1))<=i-'k+1 & i1-'k=i-'k+1
+                  by A182,NAT_1:12,A189;
+                then
+A193:             k<=k1 by A182,A27,A190;
+                k=k1
+                  proof
+                    assume
+A194:                 k<>k1;
+                    then
+A195:                 k<k1 by A193,XXREAL_0:1;
+                    then reconsider K1=k1-1 as Element of NAT by NAT_1:20;
+                    k1=K1+1;
+                    then k1-'1=K1 & k<=K1 & i1-k1=i1-'k1
+                      by A191,A195,BINARITH:39,50,NAT_1:13;
+                    then Sum(LJ|k)<=Sum(LJ|K1) & Sum(LJ|K1) <= i1-'k1 &
+                      i1-'k1 <= i1-'k & i1-'k1 <> i1-'k
+                      by A194,A192,A27,A190,A193,POLYNOM3:18,BINARITH:59;
+                    then Sum(LJ|k)<= i1-'k1 & i1-'k1 < i1-'k  by XXREAL_0:1,2;
+                    hence thesis by A192,A187,XXREAL_0:2,A189;
+                  end;
+                then
+A196:             B.i1 = b1.(i -' k+1) & dom B c= dom Bf
+                  by A187,A189,A190,A192,A51,FINSEQ_1:39;
+                then Bf.i1=b1.(i -' k+1) & i1 in dom Bf
+                  by A190,A52,FINSEQ_1:def 7;
+                then Bf/.i1=b1.(i -' k+1) by PARTFUN1:def 8;
+                then F.(Bf/.i) = Bf/.i1 by A181,A180,A188,FINSEQ_1:def 7
+                              .= 0.V1+Bf/.i1 by RLVECT_1:def 7
+                              .= 0.K*(Bf/.i)+Bf/.i1 by VECTSP_1:59;
+                hence thesis by A196,A190,A52;
+              end;
+          end;
+          suppose ex j st j in dom f & i=len B + j;
+            then consider j such that
+A197:         j in dom f & i=len B + j;
+A198:       j<=len f by A197,FINSEQ_3:27;
+            F.(Bf/.i) = F.(f.j) by A197,A180,FINSEQ_1:def 7
+                     .= 0.V1 by A154,A156,A197,A198
+                     .= 0.K*(Bf/.i) by VECTSP_1:59;
+            hence thesis;
+          end;
+        end;
+        then consider J be non-empty FinSequence_of_Jordan_block of 0.K,K
+          such that
+ A199:      AutMt(F,Bf,Bf) = block_diagonal(J,0.K)by Th28;
+        now let i such that
+A200:       i in dom J;
+          J.i<>{} & dom (Len J)=dom J by A200,FUNCT_1:def 15,MATRIXJ1:def 3;
+          hence (Len J).i <> 0 by A200,MATRIXJ1:def 3;
+        end;
+      hence thesis by A199;
+    end;
+A201:for n holds P[n] from NAT_1:sch 2(A1,A3);
+  let V1 be finite-dimensional VectSp of K;
+  let F be nilpotent linear-transformation of V1,V1;
+  P[deg F] by A201;
+  then consider J be FinSequence_of_Jordan_block of 0.K,K,
+     b1 be OrdBasis of V1 such that
+A202:     AutMt(F,b1,b1) = block_diagonal(J,0.K) and
+A203:     for i st i in dom J holds (Len J).i <> 0;
+  now let x such that
+A204:     x in dom J;
+      reconsider i=x as Element of NAT by A204;
+      dom J=dom (Len J) by MATRIXJ1:def 3;
+      then (Len J).i <> 0 & (Len J).i=len (J.i) by A203,A204,MATRIXJ1:def 3;
+      hence J.x is non empty;
+  end;
+  then J is non-empty by FUNCT_1:def 15;
+  hence thesis by A202;
+end;
+
+theorem Th30:
+  for V be VectSp of K
+    for F be linear-transformation of V,V,
+         V1 be finite-dimensional Subspace of V,
+         F1 be linear-transformation of V1,V1
+      st V1 = ker ((F+(-L)*id V)|^n) & F|V1=F1
+     ex J be non-empty FinSequence_of_Jordan_block of L,K,
+        b1 be OrdBasis of V1 st
+         AutMt(F1,b1,b1) = block_diagonal(J,0.K)
+proof
+  let V be VectSp of K;
+  let F be linear-transformation of V,V;
+  let V1 be finite-dimensional Subspace of V;
+  let F1 be linear-transformation of V1,V1 such that
+A1:   V1 = ker ((F+(-L)*id V)|^n) and
+A2:   F|V1=F1;
+  set FL=F+(-L)*id V;
+  reconsider FLV=FL|V1 as nilpotent linear-transformation of V1,V1
+    by A1,Th14;
+  consider J be non-empty FinSequence_of_Jordan_block of 0.K,K,
+     b1 be OrdBasis of V1 such that
+A3:  AutMt(FLV,b1,b1) = block_diagonal(J,0.K) by Th29;
+  L+0.K=L by RLVECT_1:def 7;
+  then reconsider JM=J (+) mlt(len J|->L,1.(K,Len J))
+    as FinSequence_of_Jordan_block of L,K by Th12;
+  now let x such that
+A4:    x in dom JM;
+    reconsider i=x as Nat by A4;
+    dom JM=dom J by MATRIXJ1:def 10;
+    then J.i <> {} & JM.i = J.i + mlt(len J|->L,1.(K,Len J)).i
+      by A4,FUNCT_1:def 15,MATRIXJ1:def 10;
+    hence JM.x is non empty by MATRIX_3:def 3;
+  end;
+  then reconsider JM as non-empty FinSequence_of_Jordan_block of L,K
+    by FUNCT_1:def 15;
+  take JM,b1;
+A5:  Sum Len J = len AutMt(FLV,b1,b1) by A3,MATRIXJ1:def 5
+              .= len b1 by MATRIX_1:def 3;
+A6:  dom FLV = the carrier of V1 by FUNCT_2:def 1
+            .= dom (F1+(-L)*(id V1)) by FUNCT_2:def 1;
+  now let x such that
+A7:   x in dom FLV;
+     reconsider v1=x as Vector of V1 by FUNCT_2:def 1,A7;
+     reconsider v=v1 as Vector of V by VECTSP_4:18;
+     (id V).v=v & (id V1).v1=v1 by FUNCT_1:35;
+     then
+A8:    (-L)*((id V).v)=(-L)*((id V1).v1) & F.v1=F1.v1
+       by A2,VECTSP_4:22,FUNCT_1:72;
+     thus FLV.x = (F+(-L)*id V).v by FUNCT_1:72
+                .= F.v + ((-L)*id V).v by MATRLIN:def 5
+                .= F.v+(-L)*((id V).v) by MATRLIN:def 6
+                .= F1.v1+(-L)*((id V1).v1) by A8,VECTSP_4:21
+                .= F1.v1+((-L)*id V1).v1 by MATRLIN:def 6
+                .= (F1+(-L)*id V1).x by MATRLIN:def 5;
+  end;
+  then
+A9:  FLV=F1+(-L)*(id V1) by A6,FUNCT_1:9;
+  set Aid=AutMt(id V1,b1,b1);
+  set AF1=AutMt(F1,b1,b1);
+A10:now let i,j such that
+A11:    [i,j] in Indices AF1;
+A12:  Indices (AF1+(-L)*Aid)= Indices AF1 & Indices Aid=Indices AF1
+        by MATRIX_1:27;
+      thus (AF1+(-L)*Aid+L*Aid)*(i,j)
+          = (AF1+(-L)*Aid)*(i,j)+(L*Aid)*(i,j) by A11,A12,MATRIX_3:def 3
+         .=(AF1*(i,j)+((-L)*Aid)*(i,j))+(L*Aid)*(i,j) by A11,MATRIX_3:def 3
+         .= AF1*(i,j)+(((-L)*Aid)*(i,j) +(L*Aid)*(i,j)) by RLVECT_1:def 6
+         .= AF1*(i,j)+((-L)*(Aid*(i,j)) +(L*Aid)*(i,j))
+                by A11,A12,MATRIX_3:def 5
+         .= AF1*(i,j)+((-L)*(Aid*(i,j)) +L*(Aid*(i,j)))
+                by A11,A12,MATRIX_3:def 5
+         .= AF1*(i,j)+(-L+L)*(Aid*(i,j)) by VECTSP_1:def 12
+         .= AF1*(i,j)+0.K*(Aid*(i,j)) by VECTSP_1:63
+         .= AF1*(i,j)+0.K by VECTSP_1:39
+         .= AF1*(i,j) by RLVECT_1:def 7;
+  end;
+  dom Len J=dom 1.(K,Len J) by MATRIXJ1:def 8;
+  then
+A13:  len 1.(K,Len J) = len (Len J) by FINSEQ_3:31
+                     .= len J by FINSEQ_2:109;
+A14:  Len mlt(len J|->L,1.(K,Len J)) = Len 1.(K,Len J) by MATRIXJ1:62
+                                    .= Len J by MATRIXJ1:56;
+A15:  Width mlt(len J|->L,1.(K,Len J)) = Width 1.(K,Len J) by MATRIXJ1:62
+                                      .= Len J by MATRIXJ1:56
+                                      .= Width J by MATRIXJ1:46;
+  Mx2Tran(AutMt((-L)*(id V1),b1,b1),b1,b1) = (-L)*(id V1) by MATRLIN2:34
+         .= (-L)*Mx2Tran(Aid,b1,b1) by MATRLIN2:34
+         .= Mx2Tran((-L)*Aid,b1,b1) by MATRLIN2:38;
+  then AutMt((-L)*(id V1),b1,b1) = (-L)*Aid by MATRLIN2:39;
+  then AutMt(FLV,b1,b1)+L*Aid = AF1+(-L)*Aid+L*Aid by A9,MATRLIN:47
+                             .= AF1 by A10,MATRIX_1:28;
+  hence AF1
+         = block_diagonal(J,0.K)+L*1.(K,Sum Len J) by A3,A5,MATRLIN2:28
+        .= block_diagonal(J,0.K)+L*block_diagonal(1.(K,Len J),0.K)
+             by MATRIXJ1:61
+        .= block_diagonal(J,0.K)+
+             block_diagonal(mlt(len J|->L,1.(K,Len J)),L*0.K)
+             by A13,MATRIXJ1:65
+        .= block_diagonal(J,0.K)+block_diagonal(mlt(len J|->L,1.(K,Len J)),0.K)
+             by VECTSP_1:39
+        .= block_diagonal(JM,0.K+0.K) by A14,A15,MATRIXJ1:72
+        .= block_diagonal(JM,0.K) by RLVECT_1:def 7;
+end;
+
+begin :: The Main Theorem
+
+theorem Th31:
+  for K be algebraic-closed Field
+    for V be non trivial finite-dimensional VectSp of K,
+        F be linear-transformation of V,V
+      ex J be non-empty (FinSequence_of_Jordan_block of K),
+         b1 be OrdBasis of V st
+         AutMt(F,b1,b1) = block_diagonal(J,0.K) &
+         for L be Scalar of K holds
+           L is eigenvalue of F iff
+             ex i st i in dom J & J.i = Jordan_block(L,len (J.i))
+proof
+  let K be algebraic-closed Field;
+  defpred P[Nat] means
+  for V be non trivial finite-dimensional VectSp of K st
+        dim V <= $1
+     for F be linear-transformation of V,V
+      ex J be non-empty (FinSequence_of_Jordan_block of K),
+         b1 be OrdBasis of V st
+         AutMt(F,b1,b1) = block_diagonal(J,0.K) &
+         for L be Scalar of K holds
+           L is eigenvalue of F iff
+             ex i st i in dom J & J.i = Jordan_block(L,len (J.i));
+A1: P[0]
+    proof
+      let V be non trivial finite-dimensional VectSp of K such that
+A2:      dim V <= 0;
+      dim V=0 by A2;
+      hence thesis by MATRLIN2:42;
+    end;
+A3: for n st P[n] holds P[n+1]
+    proof
+      let n such that
+A4:     P[n];set n1=n+1;
+      let V be non trivial finite-dimensional VectSp of K such that
+A5:     dim V <= n1;
+      per cases by A5,NAT_1:8;
+        suppose dim V<=n;
+          hence thesis by A4;
+        end;
+        suppose
+A6:         dim V=n1;
+          let F be linear-transformation of V,V;
+A7:       F is with_eigenvalues by VECTSP11:16;
+          then consider v be Vector of V, L be Scalar of K such that
+A8:          v <> 0.V & F.v = L*v by VECTSP11:def 1;
+          set FL=F+(-L)*id V;
+          consider m such that
+A9:          UnionKers FL = ker (FL|^m) by VECTSP11:27;
+          set KER = ker (FL|^m);
+          set IM  = im (FL|^m);
+A10:       L is eigenvalue of F & FL|^1=FL by A7,A8,VECTSP11:19,def 2;
+          then ker FL is non trivial & ker FL is Subspace of KER
+            by A7,A9,VECTSP11:14,25;
+          then
+A11:        dim ker FL<>0 & dim ker FL <= dim KER by MATRLIN2:42,VECTSP_9:29;
+          reconsider FK=F|KER as linear-transformation of KER,KER
+            by VECTSP11:29;
+          reconsider FI=F|IM as linear-transformation of IM,IM by VECTSP11:33;
+          consider Jk be non-empty FinSequence_of_Jordan_block of L,K,
+              Bker be OrdBasis of KER such that
+A12:        AutMt(FK,Bker,Bker) = block_diagonal(Jk,0.K) by Th30;
+A13:      len Jk<>0
+            proof
+              assume len Jk=0;
+              then Len Jk = <*>NAT by FINSEQ_2:113
+                         .= <*>REAL;
+              then 0 = len block_diagonal(Jk,0.K) by MATRIXJ1:def 5,RVSUM_1:102
+                    .= len Bker by A12,MATRIX_1:def 3
+                    .= dim KER by MATRLIN2:21;
+              hence thesis by A11;
+            end;
+A14:       V is_the_direct_sum_of KER,IM & KER/\IM=(0).V by A9,VECTSP11:35,34;
+          then
+A15:       dim V=dim KER + dim IM & KER+IM = (Omega).V &
+           IM is Linear_Compl of KER by VECTSP_9:38,VECTSP_5:def 4,VECTSP_5:47;
+          per cases;
+            suppose
+A16:            IM is trivial;
+              consider Bim be OrdBasis of IM;
+              Bker^Bim is OrdBasis of KER+IM by A14,MATRLIN2:26;
+              then reconsider BB=Bker^Bim as OrdBasis of V by A15,MATRLIN2:4;
+              take Jk,BB;
+              0 = dim IM by A16,MATRLIN2:42
+               .= len Bim by MATRLIN2:21
+               .= len AutMt(FI,Bim,Bim) by MATRIX_1:def 3;
+              then
+A17:            AutMt(FI,Bim,Bim)={};
+              (dim KER=0 implies dim KER=0) & (dim IM=0 implies dim IM=0);
+              hence AutMt(F,BB,BB)
+                 = block_diagonal(<*AutMt(FK,Bker,Bker),
+                                    AutMt(FI,Bim,Bim)*>,0.K) by A14,MATRLIN2:27
+                .= block_diagonal(<*AutMt(FK,Bker,Bker)*>,0.K)
+                       by A17,MATRIXJ1:40
+                .= block_diagonal(Jk,0.K) by A12,MATRIXJ1:34;
+              let L1 be Scalar of K;
+              thus L1 is eigenvalue of F implies
+                ex i st i in dom Jk & Jk.i = Jordan_block(L1,len (Jk.i))
+                proof
+                  assume
+A18:                L1 is eigenvalue of F;
+                  take i=len Jk;
+                  i in Seg len Jk by A13,FINSEQ_1:5;
+                  hence
+A19:                i in dom Jk by FINSEQ_1:def 3;
+                  consider k such that
+A20:                Jk.i=Jordan_block(L,k) by A19,Def3;
+                  L1 = L
+                    proof
+                      assume L<>L1;
+                      then FI is with_eigenvalues & L1 is eigenvalue of FI
+                        by A7,A10,A9,A15,A18,VECTSP11:39;
+                      then consider v1 be Vector of IM such that
+A21:                    v1<>0.IM & FI.v1 = L1*v1 by VECTSP11:def 2;
+                      thus thesis by A21,A16,ANPROJ_1:def 8;
+                    end;
+                  hence thesis by A20,Def1;
+                end;
+              given i such that
+A22:             i in dom Jk & Jk.i = Jordan_block(L1,len (Jk.i));
+              consider k such that
+A23:             Jk.i=Jordan_block(L,k) by A22,Def3;
+              Jk.i <> {} by A22,FUNCT_1:def 15;
+              then len (Jk.i) in Seg len (Jk.i) by FINSEQ_1:5;
+              then [len (Jk.i),len (Jk.i)] in [:Seg len (Jk.i),Seg len (Jk.i):]
+                by ZFMISC_1:106;
+              then
+A24:            [len (Jk.i),len (Jk.i)] in Indices (Jk.i) by MATRIX_1:25;
+              then L = (Jk.i)*(len (Jk.i),len (Jk.i)) by A23,Def1
+                    .= L1 by A22,A24,Def1;
+              hence L1 is eigenvalue of F by A7,A8,VECTSP11:def 2;
+            end;
+            suppose
+A25:            IM is non trivial;
+              then
+A26:            FI is with_eigenvalues by VECTSP11:16;
+              n1 <> dim IM & dim IM <= n1 by A6,A11,A15,NAT_1:11;
+              then dim IM <n1 by XXREAL_0:1;
+              then dim IM <=n by NAT_1:13;
+              then consider Ji be non-empty (FinSequence_of_Jordan_block of K),
+                 Bim be OrdBasis of IM such that
+A27:             AutMt(FI,Bim,Bim) = block_diagonal(Ji,0.K) and
+A28:             for L be Scalar of K holds L is eigenvalue of FI iff
+                   ex i st i in dom Ji & Ji.i = Jordan_block(L,len (Ji.i))
+                   by A4,A25;
+              set JJ=Jk^Ji;
+              now let x such that
+A29:                  x in dom JJ;
+                reconsider i=x as Nat by A29;
+                now per cases by A29,FINSEQ_1:38;
+                  suppose i in dom Jk;
+                    then JJ.i=Jk.i & Jk.i is non empty
+                      by FINSEQ_1:def 7,FUNCT_1:def 15;
+                    hence JJ.i is non empty;
+                  end;
+                  suppose ex j st j in dom Ji & i = len Jk +j;
+                    then consider j such that
+A30:                  j in dom Ji & i=len Jk+j;
+                    JJ.i=Ji.j & Ji.j is non empty
+                      by A30,FINSEQ_1:def 7,FUNCT_1:def 15;
+                    hence JJ.i is non empty;
+                  end;
+                end;
+                hence JJ.x is non empty;
+              end;
+              then reconsider JJ as non-empty FinSequence_of_Jordan_block of K
+                by FUNCT_1:def 15;
+              Bker^Bim is OrdBasis of KER+IM by A14,MATRLIN2:26;
+              then reconsider BB=Bker^Bim as OrdBasis of V by A15,MATRLIN2:4;
+              take JJ,BB;
+              (dim KER=0 implies dim KER=0) & (dim IM=0 implies dim IM=0);
+              hence AutMt(F,BB,BB)
+                = block_diagonal(<*block_diagonal(Jk,0.K),
+                                    block_diagonal(Ji,0.K)*>,0.K)
+                      by A12,A27,A14,MATRLIN2:27
+               .= block_diagonal(<*block_diagonal(Jk,0.K)*>^Ji,0.K)
+                      by MATRIXJ1:36
+               .= block_diagonal(JJ,0.K) by MATRIXJ1:35;
+              let L1 be Scalar of K;
+              thus L1 is eigenvalue of F implies
+                ex i st i in dom JJ & JJ.i = Jordan_block(L1,len (JJ.i))
+                proof
+                  assume
+A31:                L1 is eigenvalue of F;
+                  per cases;
+                    suppose
+A32:                    L = L1;
+                      take i=len Jk;
+                      i in Seg len Jk by A13,FINSEQ_1:5;
+                      then
+A33:                    i in dom Jk by FINSEQ_1:def 3;
+                      then consider k such that
+A34:                    Jk.i = Jordan_block(L,k) by Def3;
+                      dom Jk c= dom JJ & k=len (Jk.i) & JJ.i=Jk.i
+                        by A33,A34,FINSEQ_1:def 7,39,Def1;
+                      hence thesis by A32,A33,A34;
+                    end;
+                    suppose L<>L1;
+                      then L1 is eigenvalue of FI
+                        by A7,A10,A9,A15,A31,VECTSP11:39;
+                      then consider i such that
+A35:                    i in dom Ji & Ji.i = Jordan_block(L1,len (Ji.i))
+                        by A28;
+                      take ii=len Jk+i;
+                      ii in dom JJ & JJ.ii=Ji.i by A35,FINSEQ_1:def 7,41;
+                      hence thesis by A35;
+                    end;
+                end;
+              given i such that
+A36:             i in dom JJ & JJ.i = Jordan_block(L1,len (JJ.i));
+              per cases by A36,FINSEQ_1:38;
+                suppose
+A37:                i in dom Jk;
+                  then
+A38:                JJ.i = Jk.i by FINSEQ_1:def 7;
+                  consider k such that
+A39:                Jk.i = Jordan_block(L,k) by A37,Def3;
+                  Jk.i <> {} by A37,FUNCT_1:def 15;
+                  then len (Jk.i) in Seg len (Jk.i) by FINSEQ_1:5;
+                  then [len (Jk.i),len (Jk.i)] in
+                    [:Seg len (Jk.i),Seg len (Jk.i):] by ZFMISC_1:106;
+                  then
+A40:                [len (Jk.i),len (Jk.i)] in Indices (Jk.i) by MATRIX_1:25;
+                  then L = (Jk.i)*(len (Jk.i),len (Jk.i)) by A39,Def1
+                        .= L1 by A38,A40,A36,Def1;
+                  hence thesis by A7,A8,VECTSP11:def 2;
+                end;
+                suppose ex j st j in dom Ji & i = len Jk +j;
+                  then consider j such that
+A41:                j in dom Ji & i=len Jk+j;
+                  JJ.i=Ji.j by A41,FINSEQ_1:def 7;
+                  then L1 is eigenvalue of FI by A36,A41,A28;
+                  then consider w be Vector of IM such that
+A42:                 w<>0.IM & FI.w = L1*w by A26,VECTSP11:def 2;
+                  reconsider W=w as Vector of V by VECTSP_4:18;
+A43:              0.IM = 0.V by VECTSP_4:19;
+                  L1*W = FI.w by A42,VECTSP_4:22
+                      .= F.W by FUNCT_1:72;
+                  hence thesis by A7,A42,A43,VECTSP11:def 2;
+                end;
+            end;
+     end;
+  end;
+A44: for n holds P[n] from NAT_1:sch 2(A1,A3);
+  let V be non trivial finite-dimensional VectSp of K,
+      F be linear-transformation of V,V;
+  P[dim V] by A44;
+  hence thesis;
+end;
+
+theorem
+  for K be algebraic-closed Field,
+      M be Matrix of n,K
+    ex J be non-empty (FinSequence_of_Jordan_block of K),
+       P be Matrix of n,K st
+     Sum Len J = n & P is invertible &
+     M = P * block_diagonal(J,0.K) * (P~)
+proof
+  let K be algebraic-closed Field,
+      M be Matrix of n,K;
+  per cases;
+    suppose
+A1:     n=0;
+      reconsider J ={} as FinSequence_of_Jordan_block of K by Lm2;
+      for x st x in dom J holds J.x is non empty;
+      then reconsider J as non-empty FinSequence_of_Jordan_block of K
+        by FUNCT_1:def 15;
+      reconsider P={} as Matrix of n,K by A1,MATRIX_1:13;
+      take J,P;
+A2:     Len J = <*>NAT by FINSEQ_2:113,CARD_1:47
+             .= <*>REAL;
+      hence Sum Len J=n by A1,RVSUM_1:102;
+      reconsider B=block_diagonal(J,0.K) as Matrix of n,K by A2,A1,RVSUM_1:102;
+      Det P=1_K & 1_K <>0.K by A1,MATRIXR2:41;
+      hence P is invertible by LAPLACE:34;
+      M = P * B * (P~) by A1,MATRIX_1:36;
+      hence thesis;
+    end;
+    suppose
+A3:     n>0;
+     set V=n-VectSp_over K;
+     consider B be OrdBasis of V;
+A4:    len B = dim V by MATRLIN2:21
+            .= n by MATRIX13:112;
+     then reconsider M'=M as Matrix of len B,K;
+     set T=Mx2Tran(M',B,B);
+     dim V=n by MATRIX13:112;
+     then V is non trivial by A3,MATRLIN2:42;
+     then consider J be non-empty (FinSequence_of_Jordan_block of K),
+       b1 be OrdBasis of V such that
+A5:     AutMt(T,b1,b1) = block_diagonal(J,0.K) and
+        for L be Scalar of K holds L is eigenvalue of T iff
+          ex i st i in dom J & J.i = Jordan_block(L,len (J.i)) by Th31;
+A6:  len b1 = dim V by MATRLIN2:21
+           .= n by MATRIX13:112;
+     reconsider P=AutEqMt(id V,B,b1) as Matrix of n,K by A4;
+     take J,P;
+     thus Sum Len J=len AutMt(T,b1,b1) by A5,MATRIXJ1:def 5
+         .=n by A6,MATRIX_1:def 3;
+     thus P is invertible by A4,MATRLIN2:29;
+A7:  width P=n & len (P~)=n & len AutMt(T,b1,b1) = n & width AutMt(T,b1,b1)=n
+       by A3,A6,MATRIX_1:24;
+A8:  dom T=[#]V & rng T c= [#]V by FUNCT_2:def 1,RELSET_1:12;
+     thus M = AutMt(T,B,B) by MATRLIN2:36
+           .= AutMt(T*id V,B,B) by A8,RELAT_1:78
+           .= AutMt(id V,B,b1)* AutMt(T,b1,B) by A3,A4,A6,MATRLIN:46
+           .= P* AutMt(T,b1,B) by A6,A4,MATRLIN2:def 2
+           .= P* AutMt((id V)*T,b1,B) by A8,RELAT_1:79
+           .= P* (AutMt(T,b1,b1)*AutMt(id V,b1,B)) by A3,A6,A4,MATRLIN:46
+           .= P*(AutMt(T,b1,b1) *AutEqMt(id V,b1,B)) by A6,A4,MATRLIN2:def 2
+           .= P*(AutMt(T,b1,b1)*(P~)) by A4,MATRLIN2:29
+           .= P*block_diagonal(J,0.K) *(P~) by A5,A7,MATRIX_3:35;
+    end;
+end;

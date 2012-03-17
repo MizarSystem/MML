@@ -11,18 +11,18 @@ environ
       VECTSP_1, FINSEQ_2, PARTFUN1, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FCONT_1,
       FCONT_2, COMPTS_1, LATTICES, SEQ_2, ABSVALUE, INTEGRA2, FUNCT_3,
       ORDINAL2, MEASURE5, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, RFUNCT_2,
-      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM;
+      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM, PROB_1, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, XXREAL_2, REALSET1, RELSET_1, FUNCT_2, RCOMP_1,
-      PARTFUN1, PSCOMP_1, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1, RFUNCT_1,
-      FINSEQ_2, SEQ_2, SEQ_4, BINOP_2, PRE_CIRC, FDIFF_1, RVSUM_1, INTEGRA1,
-      INTEGRA2, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
+      RELAT_1, COMPLEX1, REAL_1, NAT_1, XXREAL_2, REALSET1, RELSET_1, FUNCT_2,
+      RCOMP_1, PARTFUN1, PSCOMP_1, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1,
+      RFUNCT_1, FINSEQ_2, SEQ_2, SEQ_4, BINOP_2, PRE_CIRC, FDIFF_1, RVSUM_1,
+      INTEGRA1, INTEGRA2, FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FCONT_2, FDIFF_1, REALSET1, PRE_CIRC, PSCOMP_1, INTEGRA2, SEQ_1,
       XXREAL_2;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, VALUED_0, VALUED_1, FUNCT_2,
-      FINSET_1, XXREAL_2;
+      FINSET_1, XXREAL_2, CARD_1, RFUNCT_2, SEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -49,13 +49,16 @@ theorem :: INTEGRA5:3
 
 begin :: Integrability for partial function of REAL,REAL
 
-definition
-  let C be non empty Subset of REAL;
+notation
   let f be PartFunc of REAL,REAL;
-  func f||C -> PartFunc of C,REAL equals
-:: INTEGRA5:def 1
+  let C be non empty Subset of REAL;
+  synonym f||C for f|C;
+end;
 
-  f|C;
+definition
+  let f be PartFunc of REAL,REAL;
+  let C be non empty Subset of REAL;
+  redefine func f||C -> PartFunc of C,REAL;
 end;
 
 theorem :: INTEGRA5:4
@@ -67,6 +70,7 @@ theorem :: INTEGRA5:5
   holds (f+g)||C = f||C + g||C;
 
 definition
+ canceled;
   let A be closed-interval Subset of REAL;
   let f be PartFunc of REAL,REAL;
   pred f is_integrable_on A means
@@ -88,22 +92,22 @@ theorem :: INTEGRA5:6
   for f being PartFunc of REAL,REAL st A c= dom f holds f||A is total;
 
 theorem :: INTEGRA5:7
-  for f being PartFunc of REAL,REAL st f is_bounded_above_on A holds
-  f||A is_bounded_above_on A;
+  for f being PartFunc of REAL,REAL st f|A is bounded_above holds
+  f||A|A is bounded_above;
 
 theorem :: INTEGRA5:8
-  for f being PartFunc of REAL,REAL st f is_bounded_below_on A holds
-  f||A is_bounded_below_on A;
+  for f being PartFunc of REAL,REAL st f|A is bounded_below holds
+  f||A|A is bounded_below;
 
 theorem :: INTEGRA5:9
-  for f being PartFunc of REAL,REAL st f is_bounded_on A
-  holds f||A is_bounded_on A;
+  for f being PartFunc of REAL,REAL st f|A is bounded
+  holds f||A|A is bounded;
 
 begin :: Integrability for continuous function
 
 theorem :: INTEGRA5:10
   for f being PartFunc of REAL,REAL st f is_continuous_on A
-  holds f is_bounded_on A;
+  holds f|A is bounded;
 
 theorem :: INTEGRA5:11
   for f being PartFunc of REAL,REAL st f is_continuous_on A
@@ -111,25 +115,25 @@ theorem :: INTEGRA5:11
 
 theorem :: INTEGRA5:12
   for f being PartFunc of REAL,REAL, D being Element of divs A
-  st A c= X & f is_differentiable_on X & f`|X is_bounded_on A
+  st A c= X & f is_differentiable_on X & (f`|X)|A is bounded
   holds lower_sum((f`|X)||A,D) <= f.(sup A)-f.(inf A) &
   f.(sup A)-f.(inf A)<=upper_sum((f`|X)||A,D);
 
 theorem :: INTEGRA5:13
   for f being PartFunc of REAL,REAL st A c= X & f is_differentiable_on X &
-  f`|X is_integrable_on A & f`|X is_bounded_on A holds
+  f`|X is_integrable_on A & (f`|X)|A is bounded holds
   integral(f`|X,A) = f.(sup A)-f.(inf A);
 
 theorem :: INTEGRA5:14
-  for f being PartFunc of REAL,REAL st f is_non_decreasing_on A &
+  for f being PartFunc of REAL,REAL st f|A is non-decreasing &
   A c= dom f holds rng (f|A) is bounded;
 
 theorem :: INTEGRA5:15
-  for f being PartFunc of REAL,REAL st f is_non_decreasing_on A & A c= dom f
+  for f being PartFunc of REAL,REAL st f|A is non-decreasing & A c= dom f
   holds inf rng (f|A) = f.(inf A) & sup rng (f|A) = f.(sup A);
 
 theorem :: INTEGRA5:16
-  for f being PartFunc of REAL,REAL st f is_monotone_on A & A c= dom f
+  for f being PartFunc of REAL,REAL st f|A is monotone & A c= dom f
   holds f is_integrable_on A;
 
 theorem :: INTEGRA5:17
@@ -175,7 +179,7 @@ theorem :: INTEGRA5:20
 theorem :: INTEGRA5:21
   for f,g being PartFunc of REAL,REAL, X being open Subset of REAL
   st f is_differentiable_on X & g is_differentiable_on X & A c= X &
-  f`|X is_integrable_on A & f`|X is_bounded_on A & g`|X is_integrable_on A &
-  g`|X is_bounded_on A holds integral((f`|X)(#)g,A)
+  f`|X is_integrable_on A & (f`|X)|A is bounded & g`|X is_integrable_on A &
+  (g`|X)|A is bounded holds integral((f`|X)(#)g,A)
   =f.(sup A)*g.(sup A)-f.(inf A)*g.(inf A)-integral(f(#)(g`|X),A);
 

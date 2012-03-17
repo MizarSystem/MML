@@ -1,0 +1,313 @@
+:: Integral of Complex-Valued Measurable Function
+::  by Keiko Narita , Noboru Endou and Yasunari Shidama
+:: 
+:: Received July 30, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, SUPINF_1, MEASURE1, RELAT_1, FUNCT_1, COMPLEX1, SEQ_1,
+      MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, ARYTM_3, RFUNCT_3, SQUARE_1,
+      PROB_1, INTEGRA1, MESFUNC5, SUPINF_2, XCMPLX_0, PREPOWER, POWER, ZF_LANG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XCMPLX_0,
+      XREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_1,
+      SUPINF_2, SEQ_1, PREPOWER, POWER, SQUARE_1, COMPLEX1, MEASURE6, MEASURE1,
+      EXTREAL1, MESFUNC1, MESFUNC2, PROB_1, MESFUNC5, MESFUNC6;
+ constructors REAL_1, SEQ_1, PREPOWER, POWER, SQUARE_1, COMPLEX1, MEASURE6,
+      EXTREAL1, MESFUNC1, MESFUNC2, MESFUNC5, MESFUNC6, NAT_1, EXTREAL2,
+      SUPINF_1, MESFUNC7;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      MEMBERED, MEASURE1, VALUED_0, XCMPLX_0, MESFUNC7, RELAT_1, FUNCT_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Definitions for Complex-valued Functions
+
+theorem :: MESFUN6C:1
+for a,b be real number holds
+  R_EAL a + R_EAL b = a+b & -R_EAL a = -a &
+  R_EAL a - R_EAL b = a-b & R_EAL a * R_EAL b = a*b;
+
+definition
+  let X be non empty set, f be PartFunc of X,COMPLEX;
+func Re f -> PartFunc of X,REAL means
+:: MESFUN6C:def 1
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = Re(f.x);
+
+func Im f -> PartFunc of X,REAL means
+:: MESFUN6C:def 2
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = Im(f.x);
+end;
+
+begin :: The Measurability of Complex-valued Functions
+
+reserve X for non empty set,
+  Y for set,
+  S for SigmaField of X,
+  M for sigma_Measure of S,
+  f,g for PartFunc of X,COMPLEX,
+  r for Real,
+  c for complex number,
+  E,A,B for Element of S;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let f be PartFunc of X,COMPLEX;
+  let E be Element of S;
+pred f is_measurable_on E means
+:: MESFUN6C:def 3
+  Re f is_measurable_on E & Im f is_measurable_on E;
+end;
+
+theorem :: MESFUN6C:2
+r(#)(Re f) = Re(r(#)f) & r(#)(Im f) = Im(r(#)f);
+
+theorem :: MESFUN6C:3
+Re(c(#)f) = (Re c)(#)(Re f) - (Im c)(#)(Im f) &
+Im(c(#)f) = (Im c)(#)(Re f) + (Re c)(#)(Im f);
+
+theorem :: MESFUN6C:4
+-(Im f) = Re(<i>(#)f) & Re f = Im(<i>(#)f);
+
+theorem :: MESFUN6C:5
+Re(f+g) = Re f + Re g & Im(f+g) = Im f + Im g;
+
+theorem :: MESFUN6C:6
+Re(f-g) = Re f - Re g & Im(f-g) = Im f - Im g;
+
+theorem :: MESFUN6C:7  :: MESFUNC7:2
+(Re f)|A = Re(f|A) & (Im f)|A = Im(f|A);
+
+theorem :: MESFUN6C:8
+f = Re f + <i>(#)(Im f);
+
+theorem :: MESFUN6C:9
+B c= A & f is_measurable_on A implies f is_measurable_on B;
+
+theorem :: MESFUN6C:10
+f is_measurable_on A & f is_measurable_on B implies f is_measurable_on (A \/ B)
+;
+
+theorem :: MESFUN6C:11
+f is_measurable_on A & g is_measurable_on A implies f+g is_measurable_on A;
+
+theorem :: MESFUN6C:12
+f is_measurable_on A & g is_measurable_on A & A c= dom g
+  implies f-g is_measurable_on A;
+
+theorem :: MESFUN6C:13
+Y c= dom(f+g) implies dom(f|Y+g|Y)=Y & (f+g)|Y = f|Y+g|Y;
+
+theorem :: MESFUN6C:14
+f is_measurable_on B & A = dom f /\ B implies f|B is_measurable_on A;
+
+theorem :: MESFUN6C:15
+dom f in S & dom g in S implies dom(f+g) in S;
+
+theorem :: MESFUN6C:16
+dom f = A implies (f is_measurable_on B iff f is_measurable_on A/\B);
+
+theorem :: MESFUN6C:17
+f is_measurable_on A & A c= dom f implies c(#)f is_measurable_on A;
+
+theorem :: MESFUN6C:18
+( ex A be Element of S st dom f = A ) implies
+  for c be complex number, B be Element of S st f is_measurable_on B holds
+  c(#)f is_measurable_on B;
+
+begin :: The Integral of a Complex-valued Measurable Function
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+pred f is_integrable_on M means
+:: MESFUN6C:def 4
+  Re f is_integrable_on M & Im f is_integrable_on M;
+end;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+  assume  f is_integrable_on M;
+func Integral(M,f) -> complex number means
+:: MESFUN6C:def 5
+  ex R,I be Real st R = Integral(M,Re f) & I = Integral(M,Im f)
+  & it = R+ I*<i>;
+end;
+
+theorem :: MESFUN6C:19
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f be PartFunc of X,ExtREAL, A be Element of S st
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 holds
+  f|A is_integrable_on M;
+
+theorem :: MESFUN6C:20
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f be PartFunc of X,REAL, E,A be Element of S st
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 holds
+  f|A is_integrable_on M;
+
+theorem :: MESFUN6C:21
+(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0
+ implies f|A is_integrable_on M & Integral(M,f|A) = 0;
+
+theorem :: MESFUN6C:22
+E = dom f & f is_integrable_on M & M.A =0
+  implies Integral(M,f|(E\A)) = Integral(M,f);
+
+theorem :: MESFUN6C:23
+f is_integrable_on M implies f|A is_integrable_on M;
+
+theorem :: MESFUN6C:24
+f is_integrable_on M & A misses B implies
+  Integral(M,f|(A\/B)) = Integral(M,f|A) + Integral(M,f|B);
+
+theorem :: MESFUN6C:25
+f is_integrable_on M & B = (dom f)\A implies
+  f|A is_integrable_on M & Integral(M,f) = Integral(M,f|A)+Integral(M,f|B);
+
+definition
+  let k be real number, X be non empty set, f be PartFunc of X,REAL;
+func f to_power k -> PartFunc of X,REAL means
+:: MESFUN6C:def 6
+  dom it = dom f &
+  for x be Element of X st x in dom it holds it.x = (f.x) to_power k;
+end;
+
+registration let X;
+ cluster nonnegative PartFunc of X,REAL;
+end;
+
+registration
+ let k be non negative (real number), X;
+ let f be nonnegative PartFunc of X,REAL;
+ cluster f to_power k -> nonnegative;
+end;
+
+theorem :: MESFUN6C:26
+for k be real number, X,S,E
+for f be PartFunc of X,REAL st
+f is nonnegative & 0 <= k holds (f to_power k) is nonnegative;
+
+theorem :: MESFUN6C:27
+for x be set,X,S,E for f be PartFunc of X,REAL st
+ f is nonnegative holds (f.x) to_power (1/2) = sqrt(f.x);
+
+theorem :: MESFUN6C:28
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ less_dom(f,a) = A\(A /\ great_eq_dom(f,a));
+
+theorem :: MESFUN6C:29
+for k be real number, X,S,E
+for f be PartFunc of X,REAL st
+f is nonnegative & 0 <= k & E c= dom f & f is_measurable_on E holds
+  (f to_power k) is_measurable_on E;
+
+theorem :: MESFUN6C:30
+f is_measurable_on A & A c= dom f implies |.f.| is_measurable_on A;
+
+theorem :: MESFUN6C:31
+(ex A be Element of S st A = dom f & f is_measurable_on A ) implies
+  (f is_integrable_on M iff |.f.| is_integrable_on M);
+
+theorem :: MESFUN6C:32
+f is_integrable_on M & g is_integrable_on M implies dom (f+g) in S;
+
+theorem :: MESFUN6C:33
+f is_integrable_on M & g is_integrable_on M implies f+g is_integrable_on M;
+
+theorem :: MESFUN6C:34
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f,g be PartFunc of X,REAL st
+f is_integrable_on M & g is_integrable_on M holds f-g is_integrable_on M;
+
+theorem :: MESFUN6C:35
+f is_integrable_on M & g is_integrable_on M implies f-g is_integrable_on M;
+
+theorem :: MESFUN6C:36
+f is_integrable_on M & g is_integrable_on M implies
+  ex E be Element of S st E = dom f /\ dom g &
+    Integral(M,f+g)=Integral(M,f|E)+Integral(M,g|E);
+
+theorem :: MESFUN6C:37
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+    f,g be PartFunc of X,REAL st
+f is_integrable_on M & g is_integrable_on M holds
+  ex E be Element of S st
+    E = dom f /\ dom g & Integral(M,f-g)=Integral(M,f|E)+Integral(M,(-g)|E);
+
+theorem :: MESFUN6C:38
+f is_integrable_on M implies
+  r(#)f is_integrable_on M & Integral(M,r(#)f) = r * Integral(M,f);
+
+theorem :: MESFUN6C:39
+f is_integrable_on M implies
+  <i>(#)f is_integrable_on M & Integral(M,<i>(#)f) = <i> * Integral(M,f);
+
+theorem :: MESFUN6C:40
+f is_integrable_on M implies
+  c(#)f is_integrable_on M & Integral(M,c(#)f) = c * Integral(M,f);
+
+theorem :: MESFUN6C:41
+for f be PartFunc of X,REAL,Y,r holds (r(#)f)|Y = r(#)(f|Y);
+
+theorem :: MESFUN6C:42
+for f,g be PartFunc of X,REAL st
+  ( ex A be Element of S st A = dom f /\ dom g &
+      f is_measurable_on A & g is_measurable_on A ) &
+  f is_integrable_on M & g is_integrable_on M & g-f is nonnegative holds
+   ex E be Element of S st
+     E = dom f /\ dom g & Integral(M,f|E) <= Integral(M,g|E);
+
+theorem :: MESFUN6C:43
+  ( ex A be Element of S st A = dom f & f is_measurable_on A ) &
+  f is_integrable_on M implies
+  |. Integral(M,f).| <= Integral(M,|.f.|);
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let M be sigma_Measure of S;
+  let f be PartFunc of X,COMPLEX;
+  let B be Element of S;
+func Integral_on(M,B,f) -> complex number equals
+:: MESFUN6C:def 7
+  Integral(M,f|B);
+end;
+
+theorem :: MESFUN6C:44
+f is_integrable_on M & g is_integrable_on M & B c= dom(f+g) implies
+  f+g is_integrable_on M &
+  Integral_on(M,B,f+g) = Integral_on(M,B,f) + Integral_on(M,B,g);
+
+theorem :: MESFUN6C:45
+f is_integrable_on M & f is_measurable_on B implies
+ Integral_on(M,B,c(#)f) = c * Integral_on(M,B,f);
+
+begin :: Several Properties of Real-valued Measurable Functions
+
+reserve f for PartFunc of X,REAL,
+        a for Real;
+
+theorem :: MESFUN6C:46
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ great_eq_dom(f,a) = A\(A /\ less_dom(f,a));
+
+theorem :: MESFUN6C:47
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ great_dom(f,a) = A\(A /\ less_eq_dom(f,a));
+
+theorem :: MESFUN6C:48
+for f be PartFunc of X,REAL, a be Real st
+  A c= dom f holds A /\ less_eq_dom(f,a) = A\(A /\ great_dom(f,a));
+
+theorem :: MESFUN6C:49
+A /\ eq_dom(f,a) = A /\ great_eq_dom(f,a) /\ less_eq_dom(f,a);
+

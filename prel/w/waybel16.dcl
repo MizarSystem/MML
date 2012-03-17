@@ -16,11 +16,11 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
@@ -37,17 +37,17 @@
 </Signature>
 <FCluster aid="WAYBEL16" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="56"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="178">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -56,24 +56,24 @@
 </FCluster>
 <FCluster aid="WAYBEL16" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="56"/>
-<Adjective nr="111"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="62"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="186">
-<Func kind="K" nr="178">
+<Func kind="K" nr="191">
+<Func kind="K" nr="183">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="112"/>
+<Adjective nr="29"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -1,0 +1,2338 @@
+:: Fatou's Lemma and the {L}ebesgue's Convergence Theorem
+::  by Noboru Endou , Keiko Narita and Yasunari Shidama
+:: 
+:: Received July 22, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, MEASURE1, RELAT_1, FUNCT_1, ORDINAL2, COMPLEX1, SEQ_1,
+      SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, ARYTM_3, RLVECT_1,
+      GROUP_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC5, SUPINF_1, SUPINF_2,
+      SEQFUNC, TDGROUP, RFUNCT_3, MESFUNC8, SEQM_3, RINFSUP1, MESFUN10,
+      XXREAL_2, SQUARE_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, XXREAL_0, XXREAL_2, RELAT_1, FUNCT_1, RELSET_1, DOMAIN_1, SEQM_3,
+      FUNCT_2, PARTFUN1, NAT_1, PROB_1, SUPINF_1, SUPINF_2, KURATO_2, MEASURE1,
+      EXTREAL1, MESFUNC1, MEASURE6, MESFUNC2, SEQFUNC, MESFUNC5, MESFUNC8,
+      RINFSUP2;
+ constructors REAL_1, DOMAIN_1, NAT_1, KURATO_2, EXTREAL1, MESFUNC1, MEASURE6,
+      MESFUNC2, MESFUNC5, RINFSUP2, EXTREAL2, XXREAL_2, MESFUNC9, SUPINF_1;
+ registrations SUPINF_1, NAT_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1,
+      MEASURE1, RELAT_1, XBOOLE_0, SUPINF_2, NUMBERS, XXREAL_0, MESFUNC8,
+      RINFSUP2, VALUED_0, XXREAL_2, FINSET_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions SUPINF_2, MESFUNC1, MEASURE6, XXREAL_0, MESFUNC8, RINFSUP2;
+ theorems TARSKI, PARTFUN1, FUNCT_1, SUPINF_2, EXTREAL1, EXTREAL2, MESFUNC1,
+      XREAL_0, XBOOLE_0, XBOOLE_1, MESFUNC2, XREAL_1, XXREAL_0, MESFUNC5,
+      NAT_1, RELAT_1, FUNCT_2, SEQFUNC, ORDINAL1, MESFUNC8, RINFSUP2, KURATO_2,
+      MESFUNC7, MESFUNC9, NUMBERS, XXREAL_2;
+ schemes FUNCT_2, SEQFUNC, FUNCT_1;
+
+begin :: Fatou's Lemma
+
+reserve X for non empty set,
+        F for with_the_same_dom Functional_Sequence of X,ExtREAL,
+        seq,seq1,seq2 for ExtREAL_sequence,
+        x for Element of X,
+        a,r for R_eal,
+        n,m,k for Nat;
+
+theorem Th61a:
+(for n be Nat holds seq1.n <= seq2.n) implies inf rng seq1 <= inf rng seq2
+proof
+   assume A1:for n be Nat holds seq1.n <= seq2.n;
+   now let x be ext-real number;
+    assume x in rng seq2; then
+A2: ex z be set st z in dom seq2 & x=seq2.z by FUNCT_1:def 5;
+    now let n be Element of NAT;
+A3:  inf rng seq1 is LowerBound of rng seq1 by XXREAL_2:def 4;
+     dom seq1 = NAT by FUNCT_2:def 1; then
+     seq1.n in rng seq1 by FUNCT_1:def 5; then
+A4:  inf rng seq1 <= seq1.n by A3,XXREAL_2:def 2;
+     seq1.n <= seq2.n by A1;
+     hence inf rng seq1 <= seq2.n by A4,XXREAL_0:2;
+    end;
+    hence inf rng seq1 <= x by A2;
+   end; then
+   inf rng seq1 is LowerBound of rng seq2 by XXREAL_2:def 2;
+   hence thesis by XXREAL_2:def 4;
+end;
+
+theorem limseq1b:
+(for n be Nat holds seq1.n <= seq2.n) implies
+  (inferior_realsequence seq1).k <= (inferior_realsequence seq2).k &
+  (superior_realsequence seq1).k <= (superior_realsequence seq2).k
+proof
+   assume A1: for n be Nat holds seq1.n <= seq2.n;
+   reconsider k1 = k as Element of NAT by ORDINAL1:def 13;
+   now let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13; then
+    (seq1^\k1).n = seq1.(n+k) & (seq2^\k1).n = seq2.(n+k)
+      by KURATO_2:def 2;
+    hence (seq1^\k1).n <= (seq2^\k1).n by A1;
+   end; then
+   inf(seq1^\k1) <= inf(seq2^\k1) &
+   sup(seq1^\k1) <= sup(seq2^\k1) by Th61a,MESFUNC5:61; then
+   (inferior_realsequence seq1).k <= inf(seq2^\k1) &
+   (superior_realsequence seq1).k <= sup(seq2^\k1) by RINFSUP2:27;
+   hence thesis by RINFSUP2:27;
+end;
+
+theorem limseq1:
+(for n be Nat holds seq1.n <= seq2.n) implies
+  lim_inf seq1 <= lim_inf seq2 & lim_sup seq1 <= lim_sup seq2
+proof
+   assume for n be Nat holds seq1.n <= seq2.n; then
+   for n be Nat holds
+    (inferior_realsequence seq1).n <= (inferior_realsequence seq2).n &
+    (superior_realsequence seq1).n <= (superior_realsequence seq2).n
+      by limseq1b;
+   hence thesis by Th61a,MESFUNC5:61;
+end;
+
+theorem Th63a:
+(for n be Nat holds seq.n >= a) implies inf seq >= a
+proof
+   assume A1: for n be Nat holds seq.n >= a;
+   now let x be ext-real number;
+    assume x in rng seq; then
+    consider z be set such that
+A2:  z in dom seq and
+A3:  x = seq.z by FUNCT_1:def 5;
+    thus x >= a by A1,A3,A2;
+   end; then
+   a is LowerBound of rng seq by XXREAL_2:def 2;
+   hence thesis by XXREAL_2:def 4;
+end;
+
+theorem Th63b:
+(for n be Nat holds seq.n <= a) implies sup seq <= a
+proof
+   assume A1: for n be Nat holds seq.n <= a;
+   now let x be ext-real number;
+    assume x in rng seq; then
+    consider z be set such that
+A2:  z in dom seq and
+A3:  x = seq.z by FUNCT_1:def 5;
+    thus x <= a by A1,A2,A3;
+   end; then
+   a is UpperBound of rng seq by XXREAL_2:def 1;
+   hence thesis by XXREAL_2:def 3;
+end;
+
+theorem inferiorf1a:
+for n be Element of NAT st
+  x in dom inf(F^\n) holds (inf(F^\n)).x =inf((F#x)^\n)
+proof
+   let n be Element of NAT;
+   assume A1: x in dom inf(F^\n);
+   now let k be Element of NAT;
+    reconsider g=F as Function of NAT,PFuncs(X,ExtREAL);
+    ((F^\n)#x).k =((F^\n).k).x by MESFUNC5:def 13; then
+    ((F^\n)#x).k = (g.(n+k)).x by KURATO_2:def 2; then
+    ((F^\n)#x).k =(F#x).(n+k) by MESFUNC5:def 13;
+    hence ((F^\n)#x).k = ((F#x)^\n).k by KURATO_2:def 2;
+   end; then
+   (F^\n)#x = (F#x)^\n by FUNCT_2:113;
+   hence (inf(F^\n)).x =inf((F#x)^\n) by MESFUNC8:def 3,A1;
+end;
+
+reserve S for SigmaField of X,
+        M for sigma_Measure of S,
+        E for Element of S;
+
+:: Fatou's Lemma
+theorem Th135:
+E = dom(F.0) &
+(for n holds F.n is nonnegative & F.n is_measurable_on E) implies
+ex I be ExtREAL_sequence st
+ (for n holds I.n = Integral(M,F.n)) & Integral(M,lim_inf F) <= lim_inf I
+proof
+   assume that
+A1: E = dom(F.0) and
+A2: for n holds F.n is nonnegative & F.n is_measurable_on E;
+
+   deffunc G(Element of NAT) = inf(F^\$1);
+
+   consider G be Function such that
+A3: dom G = NAT & for n be Element of NAT holds G.n = G(n) from FUNCT_1:sch 4;
+
+   now let n be Element of NAT;
+    G.n = inf(F^\n) by A3;
+    hence G.n is PartFunc of X,ExtREAL;
+   end; then
+   reconsider G as Functional_Sequence of X,ExtREAL by A3,SEQFUNC:1;
+
+A4:for n be Element of NAT holds G.n = (inferior_realsequence F).n
+   proof
+    let n be Element of NAT;
+    (inferior_realsequence F).n = inf(F^\n) by MESFUNC8:8;
+    hence thesis by A3;
+   end; then
+A5:G = inferior_realsequence F by SEQFUNC:2;
+
+   set H = inferior_realsequence F;
+
+   reconsider G as with_the_same_dom Functional_Sequence of X,ExtREAL
+     by A4,SEQFUNC:2;
+
+A6:dom(H.0) = dom(F.0) & dom(H.0) = dom(G.0) by A4,MESFUNC8:def 5;
+
+   for x be set st x in dom(G.0) holds 0 <= (G.0).x
+   proof
+    let x be set;
+    assume P11: x in dom(G.0); then
+    reconsider x as Element of X;
+
+P12:now let n be Nat;
+     F.n is nonnegative by A2; then
+     0 <= (F.n).x by SUPINF_2:70; then
+     0 <= (F#x).(0+n) by MESFUNC5:def 13;
+     hence 0. <= ((F#x)^\0).n by KURATO_2:def 2;
+    end;
+
+    (F^\0).0 = F.(0+0) by KURATO_2:def 2; then
+    dom inf(F^\0) = dom(F.0) by MESFUNC8:def 3; then
+    (inf(F^\0)).x =inf((F#x)^\0) by P11,A6,inferiorf1a;
+    then (G.0).x = inf((F#x)^\0) by A3;
+    hence thesis by P12,Th63a;
+   end; then
+P1:G.0 is nonnegative by SUPINF_2:71;
+
+P2:for n be Nat holds G.n is_measurable_on E by A1,A2,A5,MESFUNC8:20;
+
+P3:for n,m be Nat, x be Element of X st
+    n <= m & x in E holds (G.n).x <= (G.m).x & (G#x).n <= (G#x).m
+   proof
+    let n,m be Nat, x be Element of X;
+    reconsider n1=n, m1=m as Element of NAT by ORDINAL1:def 13;
+    assume P31: n <= m & x in E; then
+    H#x = inferior_realsequence(F#x) by A1,MESFUNC8:7; then
+    (H#x).n1 <= (H#x).m1 by P31,RINFSUP2:7; then
+    (H.n).x <= (H#x).m by MESFUNC5:def 13;
+    hence (G.n).x <= (G.m).x by A5,MESFUNC5:def 13; then
+    (G#x).n <= (G.m).x by MESFUNC5:def 13;
+    hence (G#x).n <= (G#x).m by MESFUNC5:def 13;
+   end; then
+PP:for n,m be Nat st n <= m holds
+    for x be Element of X st x in E holds (G.n).x <= (G.m).x;
+
+   now let x be Element of X;
+    assume x in E; then
+    for n,m be Element of NAT st m <= n holds (G#x).m <= (G#x).n by P3; then
+    G#x is non-decreasing by RINFSUP2:7;
+    hence G#x is convergent by RINFSUP2:37;
+   end; then
+   consider J be ExtREAL_sequence such that
+P4: (for n be Nat holds J.n = Integral(M,G.n)) &
+    J is convergent & Integral(M,lim G) = lim J
+        by A1,A6,P1,P2,PP,MESFUNC9:52;
+
+   deffunc I(Element of NAT) = Integral(M,F.$1);
+
+   consider I be Function of NAT,ExtREAL such that
+P5: for n be Element of NAT holds I.n = I(n) from FUNCT_2:sch 4;
+   reconsider I as ExtREAL_sequence;
+   take I;
+
+P6:for n be Nat holds I.n = Integral(M,F.n)
+   proof
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence I.n = Integral(M,F.n) by P5;
+   end;
+
+P7:dom lim G = E & dom sup G = E by A1,A6,MESFUNC8:def 4,def 10;
+
+   now let x be Element of X;
+    assume P81: x in dom lim G; then
+    for n,m be Element of NAT st m <= n holds (G#x).m <= (G#x).n by P7,P3; then
+    G#x is non-decreasing by RINFSUP2:7; then
+P82:lim(G#x) = sup(G#x) by RINFSUP2:37;
+    (sup G).x = sup(G#x) by P81,P7,MESFUNC8:def 4;
+    hence (lim G).x = (sup G).x by P82,P81,MESFUNC8:def 10;
+   end; then
+P8:lim G = sup G by P7,PARTFUN1:34;
+
+   for n be Nat holds J.n <= I.n
+   proof
+    let n be Nat;
+Q1: dom(F.n) = E & dom(G.n) = E by A1,A6,MESFUNC8:def 2;
+Q2: F.n is_measurable_on E & G.n is_measurable_on E by A1,A2,A5,MESFUNC8:20;
+Q3: F.n is nonnegative by A2;
+
+q4: now let x be set;
+     assume Q41: x in dom(G.n);
+     0 <= (G.0).x by P1,SUPINF_2:70;
+     hence 0 <= (G.n).x by Q41,Q1,P3;
+    end; then
+Q4: G.n is nonnegative by SUPINF_2:71;
+
+Q0: n is Element of NAT by ORDINAL1:def 13; then
+Q5: I.n = Integral(M,F.n) by P5;
+
+    now let x be Element of X;
+     assume P01:x in dom(G.n);
+     (inferior_realsequence(F#x)).n <= (F#x).n by Q0,RINFSUP2:8; then
+     (H.n).x <= (F#x).n by P01,A5,MESFUNC8:def 5; then
+     (H.n).x <= (F.n).x by MESFUNC5:def 13;
+     hence (G.n).x <= (F.n).x by A4,Q0;
+    end; then
+    integral+(M,G.n) <= integral+(M,F.n) by Q1,Q2,Q3,Q4,MESFUNC5:91; then
+    Integral(M,G.n) <= integral+(M,F.n)
+      by Q1,Q2,q4,MESFUNC5:94,SUPINF_2:71; then
+    Integral(M,G.n) <= Integral(M,F.n) by Q1,Q2,Q3,MESFUNC5:94;
+    hence J.n <= I.n by Q5,P4;
+   end; then
+   lim_inf J <= lim_inf I by limseq1; then
+   lim J <= lim_inf I by P4,RINFSUP2:41;
+   hence thesis by P6,P4,P8,A5,MESFUNC8:11;
+end;
+
+begin :: Lebesgue's Convergence Theorem
+
+theorem SUPINF226a:
+for X,Y being non empty Subset of ExtREAL, r be R_eal st
+ X = {r} & r in REAL holds sup(X + Y) = sup X + sup Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   let r be R_eal;
+   assume that
+A1: X = {r} and
+A2: r in REAL;
+A5:sup(X + Y) <= sup X + sup Y by SUPINF_2:26;
+   set W = X+Y;
+A8:-r <> +infty & -r <> -infty by A2,EXTREAL1:4;
+A61:r in X by A1,TARSKI:def 1;
+   now let z be set;
+    assume A60: z in Y; then
+    reconsider y = z as Element of ExtREAL;
+A62:r + y in W by A61,A60,SUPINF_2:def 5;
+A63:-r in -X by A61,SUPINF_2:def 6;
+    r + y - r = (-r + r) + y by A2,A8,EXTREAL1:8; then
+    r + y - r = 0. + y by EXTREAL1:9; then
+    y = r + y - r by SUPINF_2:18;
+    hence z in -X + W by A62,A63,SUPINF_2:def 5;
+   end; then
+A64:Y c= -X + W by TARSKI:def 3;
+   now let z be set;
+    assume z in -X + W; then
+    consider x,y be R_eal such that
+A65: x in -X & y in W & z = x + y by SUPINF_2:def 5;
+    -x in --X by A65,SUPINF_2:23; then
+    -x in X by SUPINF_2:22; then
+A66:-x = r by A1,TARSKI:def 1;
+    consider x1,y1 be R_eal such that
+A67: x1 in X & y1 in Y & y = x1 + y1 by A65,SUPINF_2:def 5;
+    z = -r + (r + y1) by A65,A66,A1,A67,TARSKI:def 1; then
+    z = (-r + r) + y1 by A2,A8,EXTREAL1:8; then
+    z = 0. + y1 by EXTREAL1:9;
+    hence z in Y by A67,SUPINF_2:18;
+   end; then
+   -X + W c= Y by TARSKI:def 3; then
+A6:Y = -X + W by A64,XBOOLE_0:def 10;
+   sup Y <= sup W + sup -X by A6,SUPINF_2:26; then
+   sup Y <= sup(X+Y) + -inf X by SUPINF_2:33; then
+   sup Y <= sup(X+Y) -r by A1,XXREAL_2:13; then
+   r + sup Y <= sup(X+Y) by A2,EXTREAL2:32; then
+   sup X + sup Y <= sup(X+Y) by A1,XXREAL_2:11;
+   hence sup(X+Y) = sup X + sup Y by A5,XXREAL_0:1;
+end;
+
+theorem SUPINF227a:
+for X,Y being non empty Subset of ExtREAL, r be R_eal st
+ X = {r} & r in REAL holds inf(X + Y) = inf X + inf Y
+proof
+   let X,Y be non empty Subset of ExtREAL;
+   let r be R_eal;
+   assume that
+A1: X = {r} and
+A2: r in REAL;
+A5:inf(X + Y) >= inf X + inf Y by SUPINF_2:27;
+   set Z = -X;
+   set W = X+Y;
+A8:-r <> +infty & -r <> -infty by A2,EXTREAL1:4;
+A61:r in X by A1,TARSKI:def 1;
+   now let z be set;
+    assume A60: z in Y; then
+    reconsider y = z as Element of ExtREAL;
+A62:r + y in W by A61,A60,SUPINF_2:def 5;
+A63:-r in Z by A61,SUPINF_2:def 6;
+    r + y - r = (-r + r) + y by A2,A8,EXTREAL1:8; then
+    r + y - r = 0. + y by EXTREAL1:9; then
+    y = r + y - r by SUPINF_2:18;
+    hence z in Z + W by A62,A63,SUPINF_2:def 5;
+   end; then
+A64:Y c= Z + W by TARSKI:def 3;
+
+   now let z be set;
+    assume z in Z + W; then
+    consider x,y be R_eal such that
+A65: x in Z & y in W & z = x + y by SUPINF_2:def 5;
+    -x in -Z by A65,SUPINF_2:23; then
+    -x in X by SUPINF_2:22; then
+A66:-x = r by A1,TARSKI:def 1;
+
+    consider x1,y1 be R_eal such that
+A67: x1 in X & y1 in Y & y = x1 + y1 by A65,SUPINF_2:def 5;
+    z = -r + (r + y1) by A65,A66,A1,A67,TARSKI:def 1; then
+    z = (-r + r) + y1 by A2,A8,EXTREAL1:8; then
+    z = 0. + y1 by EXTREAL1:9;
+    hence z in Y by A67,SUPINF_2:18;
+   end; then
+   Z + W c= Y by TARSKI:def 3; then
+A6:Y = Z + W by A64,XBOOLE_0:def 10;
+   inf Y >= inf W + inf Z by A6,SUPINF_2:27; then
+   inf Y >= inf(X+Y) + -sup X by SUPINF_2:32; then
+   inf Y >= inf(X+Y) -r by A1,XXREAL_2:11; then
+   r + inf Y >= inf(X+Y) by A2,EXTREAL2:27; then
+   inf X + inf Y >= inf(X+Y) by A1,XXREAL_2:13;
+   hence inf(X+Y) = inf X + inf Y by A5,XXREAL_0:1;
+end;
+
+theorem limseq2:
+ r in REAL &
+ (for n be Nat holds seq1.n = r + seq2.n) implies
+   lim_inf seq1 = r + lim_inf seq2 & lim_sup seq1 = r + lim_sup seq2
+proof
+   assume that
+A0: r in REAL and
+A1: for n be Nat holds seq1.n = r + seq2.n;
+
+   reconsider R1 = rng inferior_realsequence seq1,
+    R2 = rng inferior_realsequence seq2,
+    P1 = rng superior_realsequence seq1,
+    P2 = rng superior_realsequence seq2 as non empty Subset of ExtREAL;
+
+   now let z be set;
+    assume z in R1; then
+    consider n be set such that
+B1:  n in NAT & (inferior_realsequence seq1).n = z by FUNCT_2:17;
+
+    reconsider n as Element of NAT by B1;
+
+    consider Y1 be non empty Subset of ExtREAL such that
+B2:  Y1 = {seq1.k where k is Element of NAT : n <= k} &
+     z = inf Y1 by B1,RINFSUP2:def 6;
+
+    consider Y2 be non empty Subset of ExtREAL such that
+B21: Y2 = {seq2.k where k is Element of NAT : n <= k} &
+     (inferior_realsequence seq2).n = inf Y2 by RINFSUP2:def 6;
+
+    now let w be set;
+     assume w in Y1; then
+     consider k1 be Element of NAT such that
+B3:   w = seq1.k1 & n <= k1 by B2;
+     reconsider w1=w as R_eal by B3;
+B4:  w1 = r + seq2.k1 by A1,B3;
+     r in {r} & seq2.k1 in Y2 by TARSKI:def 1,B3,B21;
+     hence w in {r} + Y2 by B4,SUPINF_2:def 5;
+    end; then
+B6: Y1 c= {r} + Y2 by TARSKI:def 3;
+
+    now let w be set;
+     assume w in {r} + Y2; then
+     consider w1,w2 be R_eal such that
+B7:   w1 in {r} & w2 in Y2 & w = w1 + w2 by SUPINF_2:def 5;
+     consider k2 be Element of NAT such that
+B8:   w2 = seq2.k2 & n <= k2 by B21,B7;
+     w1 = r by B7,TARSKI:def 1; then
+     w = seq1.k2 by A1,B7,B8;
+     hence w in Y1 by B2,B8;
+    end; then
+    {r} + Y2 c= Y1 by TARSKI:def 3; then
+    Y1 = {r} + Y2 by B6,XBOOLE_0:def 10; then
+    inf Y1 = inf{r} + inf Y2 by A0,SUPINF227a; then
+B9: inf Y1 = r + inf Y2 by XXREAL_2:13;
+    r in {r} &
+    (inferior_realsequence seq2).n in R2 by TARSKI:def 1,FUNCT_2:6;
+    hence z in {r} + R2 by B9,B2,B21,SUPINF_2:def 5;
+   end; then
+B9:R1 c= {r} + R2 by TARSKI:def 3;
+
+   now let z be set;
+    assume z in {r} + R2; then
+    consider z2,z3 be R_eal such that
+C2:  z2 in {r} & z3 in R2 & z = z2 + z3 by SUPINF_2:def 5;
+
+    consider n be set such that
+C3:  n in NAT & (inferior_realsequence seq2).n = z3 by C2,FUNCT_2:17;
+
+    reconsider n as Element of NAT by C3;
+
+    consider Y2 be non empty Subset of ExtREAL such that
+C4:  Y2 = {seq2.k where k is Element of NAT : n <= k} &
+     z3 = inf Y2 by C3,RINFSUP2:def 6;
+
+    consider Y1 be non empty Subset of ExtREAL such that
+C5:  Y1 = {seq1.k where k is Element of NAT : n <= k} &
+     (inferior_realsequence seq1).n = inf Y1 by RINFSUP2:def 6;
+
+    now let w be set;
+     assume w in Y1; then
+     consider k1 be Element of NAT such that
+B3:   w = seq1.k1 & n <= k1 by C5;
+     reconsider w1=w as R_eal by B3;
+B4:  w1 = r + seq2.k1 by A1,B3;
+     r in {r} & seq2.k1 in Y2 by TARSKI:def 1,B3,C4;
+     hence w in {r} + Y2 by B4,SUPINF_2:def 5;
+    end; then
+B6: Y1 c= {r} + Y2 by TARSKI:def 3;
+
+    now let w be set;
+     assume w in {r} + Y2; then
+     consider w1,w2 be R_eal such that
+B7:   w1 in {r} & w2 in Y2 & w = w1 + w2 by SUPINF_2:def 5;
+     consider k2 be Element of NAT such that
+B8:   w2 = seq2.k2 & n <= k2 by C4,B7;
+     w1 = r by B7,TARSKI:def 1; then
+     w = seq1.k2 by A1,B7,B8;
+     hence w in Y1 by C5,B8;
+    end; then
+    {r} + Y2 c= Y1 by TARSKI:def 3; then
+    Y1 = {r} + Y2 by B6,XBOOLE_0:def 10; then
+    inf Y1 = inf{r} + inf Y2 by A0,SUPINF227a; then
+    inf Y1 = r + inf Y2 by XXREAL_2:13; then
+    z = (inferior_realsequence seq1).n by C2,C4,C5,TARSKI:def 1;
+    hence z in R1 by FUNCT_2:6;
+   end; then
+   {r} + R2 c= R1 by TARSKI:def 3; then
+   R1 = {r} + R2 by B9,XBOOLE_0:def 10; then
+   sup R1 = sup {r} + sup R2 by A0,SUPINF226a;
+   hence lim_inf seq1 = r + lim_inf seq2 by XXREAL_2:11;
+
+   now let z be set;
+    assume z in P1; then
+    consider n be set such that
+B1:  n in NAT & (superior_realsequence seq1).n = z by FUNCT_2:17;
+
+    reconsider n as Element of NAT by B1;
+
+    consider Y1 be non empty Subset of ExtREAL such that
+B2:  Y1 = {seq1.k where k is Element of NAT : n <= k} &
+     z = sup Y1 by B1,RINFSUP2:def 7;
+
+    consider Y2 be non empty Subset of ExtREAL such that
+B21: Y2 = {seq2.k where k is Element of NAT : n <= k} &
+     (superior_realsequence seq2).n = sup Y2 by RINFSUP2:def 7;
+
+    now let w be set;
+     assume w in Y1; then
+     consider k1 be Element of NAT such that
+B3:   w = seq1.k1 & n <= k1 by B2;
+     reconsider w1=w as R_eal by B3;
+B4:  w1 = r + seq2.k1 by A1,B3;
+     r in {r} & seq2.k1 in Y2 by TARSKI:def 1,B3,B21;
+     hence w in {r} + Y2 by B4,SUPINF_2:def 5;
+    end; then
+B6: Y1 c= {r} + Y2 by TARSKI:def 3;
+
+    now let w be set;
+     assume w in {r} + Y2; then
+     consider w1,w2 be R_eal such that
+B7:   w1 in {r} & w2 in Y2 & w = w1 + w2 by SUPINF_2:def 5;
+     consider k2 be Element of NAT such that
+B8:   w2 = seq2.k2 & n <= k2 by B21,B7;
+     w1 = r by B7,TARSKI:def 1; then
+     w = seq1.k2 by A1,B7,B8;
+     hence w in Y1 by B2,B8;
+    end; then
+    {r} + Y2 c= Y1 by TARSKI:def 3; then
+    Y1 = {r} + Y2 by B6,XBOOLE_0:def 10; then
+    sup Y1 = sup{r} + sup Y2 by A0,SUPINF226a; then
+B9: sup Y1 = r + sup Y2 by XXREAL_2:11;
+    r in {r} &
+    (superior_realsequence seq2).n in P2 by TARSKI:def 1,FUNCT_2:6;
+    hence z in {r} + P2 by B9,B2,B21,SUPINF_2:def 5;
+   end; then
+B9:P1 c= {r} + P2 by TARSKI:def 3;
+
+   now let z be set;
+    assume z in {r} + P2; then
+    consider z2,z3 be R_eal such that
+C2:  z2 in {r} & z3 in P2 & z = z2 + z3 by SUPINF_2:def 5;
+
+    consider n be set such that
+C3:  n in NAT & (superior_realsequence seq2).n = z3 by C2,FUNCT_2:17;
+
+    reconsider n as Element of NAT by C3;
+
+    consider Y2 be non empty Subset of ExtREAL such that
+C4:  Y2 = {seq2.k where k is Element of NAT : n <= k} &
+     z3 = sup Y2 by C3,RINFSUP2:def 7;
+
+    consider Y1 be non empty Subset of ExtREAL such that
+C5:  Y1 = {seq1.k where k is Element of NAT : n <= k} &
+     (superior_realsequence seq1).n = sup Y1 by RINFSUP2:def 7;
+
+    now let w be set;
+     assume w in Y1; then
+     consider k1 be Element of NAT such that
+B3:   w = seq1.k1 & n <= k1 by C5;
+     reconsider w1=w as R_eal by B3;
+B4:  w1 = r + seq2.k1 by A1,B3;
+     r in {r} & seq2.k1 in Y2 by TARSKI:def 1,B3,C4;
+     hence w in {r} + Y2 by B4,SUPINF_2:def 5;
+    end; then
+B6: Y1 c= {r} + Y2 by TARSKI:def 3;
+
+    now let w be set;
+     assume w in {r} + Y2; then
+     consider w1,w2 be R_eal such that
+B7:   w1 in {r} & w2 in Y2 & w = w1 + w2 by SUPINF_2:def 5;
+     consider k2 be Element of NAT such that
+B8:   w2 = seq2.k2 & n <= k2 by C4,B7;
+     w1 = r by B7,TARSKI:def 1; then
+     w = seq1.k2 by A1,B7,B8;
+     hence w in Y1 by C5,B8;
+    end; then
+    {r} + Y2 c= Y1 by TARSKI:def 3; then
+    Y1 = {r} + Y2 by B6,XBOOLE_0:def 10; then
+    sup Y1 = sup{r} + sup Y2 by A0,SUPINF226a; then
+    sup Y1 = r + sup Y2 by XXREAL_2:11; then
+    z = (superior_realsequence seq1).n by C2,TARSKI:def 1,C4,C5;
+    hence z in P1 by FUNCT_2:6;
+   end; then
+   {r} + P2 c= P1 by TARSKI:def 3; then
+   P1 = {r} + P2 by B9,XBOOLE_0:def 10; then
+   inf P1 = inf{r} + inf P2 by A0,SUPINF227a;
+   hence lim_sup seq1 = r + lim_sup seq2 by XXREAL_2:13;
+end;
+
+reserve F1,F2 for Functional_Sequence of X,ExtREAL,
+        f,g,P for PartFunc of X,ExtREAL;
+
+theorem limfunc2:
+dom(F1.0) = dom(F2.0) & F1 is with_the_same_dom & F2 is with_the_same_dom &
+f"{+infty} = {} & f"{-infty} = {} &
+(for n be Nat holds F1.n = f + F2.n) implies
+  lim_inf F1 = f + lim_inf F2 & lim_sup F1 = f + lim_sup F2
+proof
+   assume that
+A0: dom(F1.0) = dom(F2.0) &
+    F1 is with_the_same_dom & F2 is with_the_same_dom and
+A1: f"{+infty} = {} & f"{-infty} = {} and
+A2: for n be Nat holds F1.n = f + F2.n;
+
+A3:F1.0 = f + F2.0 by A2;
+
+A4:dom(f + F2.0) = (dom f /\ dom(F2.0))\((f"{-infty} /\ (F2.0)"{+infty}) \/
+                    (f"{+infty} /\ (F2.0)"{-infty})) by MESFUNC1:def 3;
+
+A5:dom(lim_inf F1) = dom(F1.0) & dom(lim_inf F2) = dom(F2.0) by MESFUNC8:def 8;
+
+A6:dom(f + lim_inf F2)
+    = (dom f /\ dom(lim_inf F2))\((f"{-infty} /\ (lim_inf F2)"{+infty}) \/
+          (f"{+infty} /\ (lim_inf F2)"{-infty})) by MESFUNC1:def 3; then
+Z7:dom(f + lim_inf F2) = dom f /\ dom(F2.0) by A1,MESFUNC8:def 8; then
+A7:dom(lim_inf F1) = dom(f + lim_inf F2) by A3,A4,A1,MESFUNC8:def 8;
+
+   for x be Element of X st
+     x in dom(lim_inf F1) holds (lim_inf F1).x = (f + lim_inf F2).x
+   proof
+    let x be Element of X;
+    assume P01: x in dom(lim_inf F1);
+
+R02:dom(f + lim_inf F2) c= dom f by A6,A1,XBOOLE_1:17; then
+    not f.x in {+infty} by A1,P01,A7,FUNCT_1:def 13; then
+R04:f.x <> +infty by TARSKI:def 1;
+
+    not f.x in {-infty} by A1,R02,P01,A7,FUNCT_1:def 13; then
+    f.x <> -infty by TARSKI:def 1; then
+RR: f.x is Real by R04,EXTREAL1:1;
+
+P07:for n be Nat holds (F1#x).n = f.x + (F2#x).n
+    proof
+     let n be Nat;
+     F1.n = f + F2.n by A2; then
+     dom(f + F2.n) = dom(F1.0) by A0,MESFUNC8:def 2; then
+P06: x in dom(f + F2.n) by P01,MESFUNC8:def 8;
+
+     (F1.n).x = (f + F2.n).x by A2; then
+     (F1.n).x = f.x + (F2.n).x by P06,MESFUNC1:def 3; then
+     (F1#x).n = f.x + (F2.n).x by MESFUNC5:def 13;
+     hence (F1#x).n = f.x + (F2#x).n by MESFUNC5:def 13;
+    end;
+
+P08:(lim_inf F1).x = lim_inf(F1#x) &
+    (lim_inf F2).x = lim_inf(F2#x) by P01,A5,A0,MESFUNC8:def 8;
+    x in dom(f + lim_inf F2) by P01,Z7,A4,A1,A3,MESFUNC8:def 8; then
+    (f + lim_inf F2).x = f.x + (lim_inf F2).x by MESFUNC1:def 3;
+    hence (lim_inf F1).x = (f + lim_inf F2).x by P07,P08,RR,limseq2;
+   end;
+   hence lim_inf F1 = f + lim_inf F2 by A7,PARTFUN1:34;
+
+B5:dom(lim_sup F1) = dom(F1.0) & dom(lim_sup F2) = dom(F2.0) by MESFUNC8:def 9;
+BB:dom(f + lim_sup F2)
+    = (dom f /\ dom(lim_sup F2))\((f"{-infty} /\ (lim_sup F2)"{+infty}) \/
+           (f"{+infty} /\ (lim_sup F2)"{-infty})) by MESFUNC1:def 3; then
+B6:dom(f + lim_sup F2) = dom f /\ dom(F2.0) by A1,MESFUNC8:def 9; then
+B7:dom(lim_sup F1) = dom(f + lim_sup F2) by A3,A4,A1,MESFUNC8:def 9;
+   for x be Element of X st
+     x in dom(lim_sup F1) holds (lim_sup F1).x = (f + lim_sup F2).x
+   proof
+    let x be Element of X;
+    assume Q01: x in dom(lim_sup F1);
+R02:dom(f + lim_sup F2) c= dom f by A1,BB,XBOOLE_1:17; then
+    not f.x in {+infty} by A1,B7,Q01,FUNCT_1:def 13; then
+R04:f.x <> +infty by TARSKI:def 1;
+    not f.x in {-infty} by A1,B7,Q01,R02,FUNCT_1:def 13; then
+    f.x <> -infty by TARSKI:def 1; then
+RR: f.x is Real by R04,EXTREAL1:1;
+Q07:for n be Nat holds (F1#x).n = f.x + (F2#x).n
+    proof
+     let n be Nat;
+     F1.n = f + F2.n by A2; then
+Q06: dom(f + F2.n) = dom(F1.0) by A0,MESFUNC8:def 2;
+     (F1.n).x = (f + F2.n).x by A2; then
+     (F1.n).x = f.x + (F2.n).x by Q06,Q01,B5,MESFUNC1:def 3; then
+     (F1#x).n = f.x + (F2.n).x by MESFUNC5:def 13;
+     hence (F1#x).n = f.x + (F2#x).n by MESFUNC5:def 13;
+    end;
+Q08:(lim_sup F1).x = lim_sup(F1#x) &
+    (lim_sup F2).x = lim_sup(F2#x) by Q01,B5,A0,MESFUNC8:def 9;
+    x in dom(f + lim_sup F2) by Q01,B6,A4,A1,A3,MESFUNC8:def 9; then
+    (f + lim_sup F2).x = f.x + (lim_sup F2).x by MESFUNC1:def 3;
+    hence (lim_sup F1).x = (f + lim_sup F2).x by Q07,Q08,RR,limseq2;
+   end;
+   hence lim_sup F1 = f + lim_sup F2 by B7,PARTFUN1:34;
+end;
+
+theorem subseq1:
+seq^\0 = seq
+proof
+   now let n be Element of NAT;
+    (seq^\0).n = seq.(n+0) by KURATO_2:def 2;
+    hence (seq^\0).n = seq.n;
+   end;
+   hence seq^\0 = seq by FUNCT_2:113;
+end;
+
+theorem Th114a:
+f is_integrable_on M & g is_integrable_on M implies f-g is_integrable_on M
+proof
+   assume A1: f is_integrable_on M & g is_integrable_on M; then
+   (-1)(#)g is_integrable_on M by MESFUNC5:116; then
+   -g is_integrable_on M by MESFUNC2:11; then
+   f+(-g) is_integrable_on M by A1,MESFUNC5:114;
+   hence f-g is_integrable_on M by MESFUNC2:9;
+end;
+
+theorem Th115a:
+f is_integrable_on M & g is_integrable_on M implies
+ ex E be Element of S st
+   E = dom f /\ dom g & Integral(M,f-g)=Integral(M,f|E)+Integral(M,(-g)|E)
+proof
+   assume
+A1: f is_integrable_on M & g is_integrable_on M; then
+   (-1)(#)g is_integrable_on M by MESFUNC5:116; then
+   -g is_integrable_on M by MESFUNC2:11; then
+   consider E be Element of S such that
+A2: E = dom f /\ dom(-g) &
+    Integral(M,f+(-g))= Integral(M,f|E)+Integral(M,(-g)|E)
+                                                      by A1,MESFUNC5:115;
+A3:dom g = dom(-g) by MESFUNC1:def 7;
+
+   Integral(M,f-g)= Integral(M,f|E)+Integral(M,(-g)|E) by A2,MESFUNC2:9;
+   hence thesis by A2,A3;
+end;
+
+theorem supinfa:
+(for n be Nat holds seq1.n = -seq2.n) implies
+  lim_inf seq2 = -lim_sup seq1 & lim_sup seq2 = -lim_inf seq1
+proof
+   assume A0: for n be Nat holds seq1.n = -seq2.n;
+   now let z be set;
+    assume z in rng (inferior_realsequence seq2); then
+    consider n be set such that
+A21: n in dom (inferior_realsequence seq2) &
+     z = (inferior_realsequence seq2).n by FUNCT_1:def 5;
+    reconsider z2 = z as Element of ExtREAL by A21;
+    reconsider n as Element of NAT by A21;
+    consider R2 be non empty Subset of ExtREAL such that
+A22: R2 = {seq2.k where k is Element of NAT : n <= k} &
+     z = inf R2 by A21,RINFSUP2:def 6;
+    set R1 = {seq1.k where k is Element of NAT : n <= k};
+    reconsider R1 as non empty Subset of ExtREAL by RINFSUP2:5;
+    set z1 = -z2;
+A25:z2 = -z1;
+
+    now let x be set;
+     assume x in -R2; then
+     consider y be R_eal such that
+P01:  y in R2 & x = -y by SUPINF_2:def 6;
+     consider k be Element of NAT such that
+P02:  y = seq2.k & n <= k by P01,A22;
+     seq1.k = -seq2.k by A0;
+     hence x in R1 by P01,P02;
+    end; then
+R01:-R2 c= R1 by TARSKI:def 3;
+
+    now let x be set;
+     assume x in R1; then
+     consider k be Element of NAT such that
+P01:  x = seq1.k & n <= k;
+     reconsider x1=x as Element of ExtREAL by P01;
+     -x1 = -(-seq2.k) by A0,P01; then
+     -x1 in {seq2.k2 where k2 is Element of NAT : n <= k2} by P01; then
+     -(-x1) in -R2 by A22,SUPINF_2:23;
+     hence x in -R2;
+    end; then
+    R1 c= -R2 by TARSKI:def 3; then
+A23:-R2 = R1 by R01,XBOOLE_0:def 10;
+
+    ex K1 be non empty Subset of ExtREAL st
+     K1 = {seq1.k where k is Element of NAT: n <= k} &
+     (superior_realsequence seq1).n = sup K1 by RINFSUP2:def 7; then
+    (superior_realsequence seq1).n = z1 by A22,A23,SUPINF_2:33; then
+    z1 in rng(superior_realsequence seq1) by FUNCT_2:6;
+    hence z in -rng(superior_realsequence seq1) by A25,SUPINF_2:def 6;
+   end; then
+A26:rng (inferior_realsequence seq2) c= -(rng (superior_realsequence seq1))
+       by TARSKI:def 3;
+
+   now let z be set;
+    assume z in -(rng (superior_realsequence seq1)); then
+    consider t be R_eal such that
+B20: t in rng (superior_realsequence seq1) & z = -t by SUPINF_2:def 6;
+    consider n be set such that
+B21: n in dom (superior_realsequence seq1) &
+     t = (superior_realsequence seq1).n by B20,FUNCT_1:def 5;
+    reconsider z1 = z as Element of ExtREAL by B20;
+    reconsider n as Element of NAT by B21;
+    consider R1 be non empty Subset of ExtREAL such that
+B22: R1 = {seq1.k where k is Element of NAT : n <= k} &
+     t = sup R1 by B21,RINFSUP2:def 7;
+    set R2 = {seq2.k where k is Element of NAT : n <= k};
+    reconsider R2 as non empty Subset of ExtREAL by RINFSUP2:5;
+
+    now let x be set;
+     assume x in -R1; then
+     consider y be R_eal such that
+P01:  y in R1 & x = -y by SUPINF_2:def 6;
+     consider k be Element of NAT such that
+P02:  y = seq1.k & n <= k by P01,B22;
+     seq1.k = -seq2.k by A0;
+     hence x in R2 by P01,P02;
+    end; then
+R02:-R1 c= R2 by TARSKI:def 3;
+
+    now let x be set;
+     assume x in R2; then
+     consider k be Element of NAT such that
+P01:  x = seq2.k & n <= k;
+     reconsider x1=x as Element of ExtREAL by P01;
+     -x1 = -(-seq1.k) by A0,P01; then
+     -x1 in {seq1.k2 where k2 is Element of NAT : n <= k2} by P01; then
+     -(-x1) in -R1 by B22,SUPINF_2:23;
+     hence x in -R1;
+    end; then
+    R2 c= -R1 by TARSKI:def 3; then
+B23:-R1 = R2 by R02,XBOOLE_0:def 10;
+
+    ex K2 be non empty Subset of ExtREAL st
+     K2 = {seq2.k where k is Element of NAT: n <= k} &
+     (inferior_realsequence seq2).n = inf K2 by RINFSUP2:def 6; then
+    (inferior_realsequence seq2).n = z1 by B23,B20,B22,SUPINF_2:32;
+    hence z in rng (inferior_realsequence seq2) by FUNCT_2:6;
+   end; then
+   -(rng (superior_realsequence seq1)) c= rng (inferior_realsequence seq2)
+      by TARSKI:def 3; then
+   rng (inferior_realsequence seq2) = -(rng (superior_realsequence seq1))
+     by A26,XBOOLE_0:def 10;
+   hence lim_inf seq2 = - lim_sup seq1 by SUPINF_2:33;
+
+   now let z be set;
+    assume z in rng (superior_realsequence seq2); then
+    consider n be set such that
+A31: n in dom (superior_realsequence seq2) &
+     z = (superior_realsequence seq2).n by FUNCT_1:def 5;
+    reconsider z2 = z as Element of ExtREAL by A31;
+    reconsider n as Element of NAT by A31;
+    consider R2 be non empty Subset of ExtREAL such that
+A32: R2 = {seq2.k where k is Element of NAT : n <= k} &
+     z = sup R2 by A31,RINFSUP2:def 7;
+    set R1 = {seq1.k where k is Element of NAT : n <= k};
+    reconsider R1 as non empty Subset of ExtREAL by RINFSUP2:5;
+    set z1 = -z2;
+A35:z2 = -z1;
+
+    now let x be set;
+     assume x in -R2; then
+     consider y be R_eal such that
+P01:  y in R2 & x = -y by SUPINF_2:def 6;
+     consider k be Element of NAT such that
+P02:  y = seq2.k & n <= k by P01,A32;
+     seq1.k = -seq2.k by A0;
+     hence x in R1 by P01,P02;
+    end; then
+R01:-R2 c= R1 by TARSKI:def 3;
+
+    now let x be set;
+     assume x in R1; then
+     consider k be Element of NAT such that
+P01:  x = seq1.k & n <= k;
+     reconsider x1=x as Element of ExtREAL by P01;
+     -x1 = -(-seq2.k) by P01,A0; then
+     -x1 in {seq2.k2 where k2 is Element of NAT : n <= k2} by P01; then
+     -(-x1) in -R2 by A32,SUPINF_2:23;
+     hence x in -R2;
+    end; then
+    R1 c= -R2 by TARSKI:def 3; then
+A33:-R2 = R1 by R01,XBOOLE_0:def 10;
+
+    ex K1 be non empty Subset of ExtREAL st
+     K1 = {seq1.k where k is Element of NAT: n <= k} &
+     (inferior_realsequence seq1).n = inf K1 by RINFSUP2:def 6; then
+    (inferior_realsequence seq1).n = z1 by A32,A33,SUPINF_2:32; then
+    z1 in rng(inferior_realsequence seq1) by FUNCT_2:6;
+    hence z in -rng(inferior_realsequence seq1) by A35,SUPINF_2:def 6;
+   end; then
+A36:rng (superior_realsequence seq2) c= -(rng (inferior_realsequence seq1))
+       by TARSKI:def 3;
+
+   now let z be set;
+    assume z in -(rng (inferior_realsequence seq1)); then
+    consider t be R_eal such that
+B30: t in rng (inferior_realsequence seq1) & z = -t by SUPINF_2:def 6;
+    consider n be set such that
+B31: n in dom (inferior_realsequence seq1) &
+     t = (inferior_realsequence seq1).n by B30,FUNCT_1:def 5;
+    reconsider z1 = z as Element of ExtREAL by B30;
+    reconsider n as Element of NAT by B31;
+    consider R1 be non empty Subset of ExtREAL such that
+B32: R1 = {seq1.k where k is Element of NAT : n <= k} &
+     t = inf R1 by B31,RINFSUP2:def 6;
+    set R2 = {seq2.k where k is Element of NAT : n <= k};
+    reconsider R2 as non empty Subset of ExtREAL by RINFSUP2:5;
+
+    now let x be set;
+     assume x in -R1; then
+     consider y be R_eal such that
+P01:  y in R1 & x = -y by SUPINF_2:def 6;
+     consider k be Element of NAT such that
+P02:  y = seq1.k & n <= k by P01,B32;
+     seq1.k = -seq2.k by A0;
+     hence x in R2 by P01,P02;
+    end; then
+R02:-R1 c= R2 by TARSKI:def 3;
+    now let x be set;
+     assume x in R2; then
+     consider k be Element of NAT such that
+P01:  x = seq2.k & n <= k;
+     reconsider x1=x as Element of ExtREAL by P01;
+     seq1.k = -seq2.k by A0; then
+     -x1 in R1 by P01,B32; then
+     -(-x1) in -R1 by SUPINF_2:23;
+     hence x in -R1;
+    end; then
+    R2 c= -R1 by TARSKI:def 3; then
+B33:-R1 = R2 by R02,XBOOLE_0:def 10;
+
+    ex K2 be non empty Subset of ExtREAL st
+     K2 = {seq2.k where k is Element of NAT: n <= k} &
+     (superior_realsequence seq2).n = sup K2 by RINFSUP2:def 7; then
+    (superior_realsequence seq2).n = z1 by B33,B30,B32,SUPINF_2:33;
+    hence z in rng (superior_realsequence seq2) by FUNCT_2:6;
+   end; then
+   -(rng (inferior_realsequence seq1)) c= rng (superior_realsequence seq2)
+      by TARSKI:def 3; then
+   rng (superior_realsequence seq2) = -(rng (inferior_realsequence seq1))
+     by A36,XBOOLE_0:def 10;
+   hence lim_sup seq2 = -lim_inf seq1 by SUPINF_2:32;
+end;
+
+theorem supinfb:
+dom(F1.0) = dom(F2.0) & F1 is with_the_same_dom & F2 is with_the_same_dom &
+(for n be Nat holds F1.n = - F2.n) implies
+  lim_inf F1 = -lim_sup F2 & lim_sup F1 = -lim_inf F2
+proof
+   assume that
+A1: dom(F1.0) = dom(F2.0) &
+    F1 is with_the_same_dom & F2 is with_the_same_dom and
+A2: for n be Nat holds F1.n = - F2.n;
+
+A3:dom lim_inf F1 = dom(F1.0) & dom lim_sup F2 = dom(F2.0) &
+   dom lim_sup F1 = dom(F1.0) & dom lim_inf F2 = dom(F2.0)
+     by MESFUNC8:def 8,def 9;
+
+A5:dom(-lim_sup F2) = dom lim_sup F2 by MESFUNC1:def 7;
+
+A6:now let x be Element of X;
+    assume A61: x in dom(F1.0);
+    let n be Nat;
+    dom(F1.n) = dom(F1.0) by A1,MESFUNC8:def 2; then
+A62:x in dom(-F2.n) by A61,A2;
+    (F1.n).x = (-F2.n).x by A2; then
+    (F1.n).x = -(F2.n).x by A62,MESFUNC1:def 7; then
+    (F1#x).n = -(F2.n).x by MESFUNC5:def 13;
+    hence (F2#x).n = -(F1#x).n by MESFUNC5:def 13;
+   end;
+
+   now let x be Element of X;
+    assume P01: x in dom lim_inf F1; then
+P07:for n be Nat holds (F2#x).n = -(F1#x).n by A3,A6;
+
+P08:(lim_inf F1).x = lim_inf(F1#x) &
+    (lim_sup F2).x = lim_sup(F2#x) by P01,A3,A1,MESFUNC8:def 8,def 9;
+
+    x in dom(-lim_sup F2) by P01,A3,A1,MESFUNC1:def 7; then
+    (-lim_sup F2).x = -(lim_sup F2).x by MESFUNC1:def 7;
+    hence (lim_inf F1).x = (-lim_sup F2).x by P08,P07,supinfa;
+   end;
+   hence lim_inf F1 = -lim_sup F2 by A5,A3,A1,PARTFUN1:34;
+
+B5:dom(-lim_inf F2) = dom lim_inf F2 by MESFUNC1:def 7;
+
+   for x be Element of X st
+    x in dom lim_sup F1 holds (lim_sup F1).x = (-lim_inf F2).x
+   proof
+    let x be Element of X;
+    assume Q01: x in dom lim_sup F1; then
+Q07:for n be Nat holds (F2#x).n = -(F1#x).n by A3,A6;
+
+Q08:(lim_sup F1).x = lim_sup(F1#x) &
+    (lim_inf F2).x = lim_inf(F2#x) by Q01,A1,A3,MESFUNC8:def 8,def 9;
+
+    x in dom(-lim_inf F2) by Q01,A1,A3,MESFUNC1:def 7; then
+    (-lim_inf F2).x = -(lim_inf F2).x by MESFUNC1:def 7;
+    hence (lim_sup F1).x = (-lim_inf F2).x by Q08,Q07,supinfa;
+   end;
+   hence lim_sup F1 = -lim_inf F2 by A1,A3,B5,PARTFUN1:34;
+end;
+
+theorem Th136z:
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M & P is nonnegative &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ (for n be Nat holds |. F.n .| is_integrable_on M) &
+ |. lim_inf F .| is_integrable_on M &
+ |. lim_sup F .| is_integrable_on M
+proof
+   assume that
+A1: E = dom(F.0) & E = dom P and
+A2: for n be Nat holds F.n is_measurable_on E and
+A3: P is_integrable_on M & P is nonnegative and
+A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x;
+
+   hereby let n be Nat;
+B1: E = dom(F.n) & F.n is_measurable_on E by A1,A2,MESFUNC8:def 2;
+    now let x be Element of X;
+     assume B2: x in dom(F.n); then
+B3:  x in dom(|. F.n .|) by MESFUNC1:def 10;
+     (|. F.n .|).x <= P.x by B1,B2,A4;
+     hence |. (F.n).x .| <= P.x by B3,MESFUNC1:def 10;
+    end; then
+    F.n is_integrable_on M by B1,A1,A3,MESFUNC5:108;
+    hence |. F.n .| is_integrable_on M by B1,MESFUNC5:106;
+   end;
+
+C0:E = dom(lim_inf F) & E = dom(lim_sup F) by A1,MESFUNC8:def 8,def 9;
+C1:(lim_inf F) is_measurable_on E & (lim_sup F) is_measurable_on E
+     by A1,A2,MESFUNC8:23,24;
+
+C2:for x be Element of X, k be Nat st x in E holds
+    -(P.x) <= (F#x).k & (F#x).k <= P.x
+   proof
+    let x be Element of X, k be Nat;
+    assume C3: x in E; then
+    x in dom(F.k) by A1,MESFUNC8:def 2; then
+C4: x in dom(|.(F.k).|) by MESFUNC1:def 10;
+    (|. F.k .|).x <= P.x by A4,C3; then
+    |. (F.k).x .| <= P.x by C4,MESFUNC1:def 10; then
+    -(P.x) <= (F.k).x & (F.k).x <= P.x by EXTREAL2:60;
+    hence -(P.x) <= (F#x).k & (F#x).k <= P.x by MESFUNC5:def 13;
+   end;
+
+   now let x be Element of X;
+    assume D2: x in dom(lim_inf F); then
+D3: x in E by A1,MESFUNC8:def 8;
+
+    for k be Nat holds (inferior_realsequence(F#x)).k <= P.x
+    proof
+     let k be Nat;
+     reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+D4:  (inferior_realsequence(F#x)).k1 <= (F#x).k1 by RINFSUP2:8;
+     (F#x).k <= P.x by C2,D3;
+     hence (inferior_realsequence(F#x)).k <= P.x by D4,XXREAL_0:2;
+    end; then
+    lim_inf(F#x) <= P.x by Th63b; then
+D5: (lim_inf F).x <= P.x by D2,MESFUNC8:def 8;
+
+    now let y be ext-real number;
+     assume y in rng(F#x); then
+     consider k be set such that
+D6:   k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
+     thus -(P.x) <= y by D6,C2,D3;
+    end; then
+    -(P.x) is LowerBound of rng(F#x) by XXREAL_2:def 2; then
+    -(P.x) <= inf(F#x) by XXREAL_2:def 4; then
+    -(P.x) <= inf((F#x)^\0) by subseq1; then
+D7: -(P.x) <= (inferior_realsequence(F#x)).0 by RINFSUP2:27;
+    (inferior_realsequence(F#x)).0 <= sup inferior_realsequence(F#x)
+      by RINFSUP2:23; then
+    -(P.x) <= lim_inf(F#x) by D7,XXREAL_0:2; then
+    -(P.x) <= (lim_inf F).x by D2,MESFUNC8:def 8;
+    hence |. (lim_inf F).x .| <= P.x by D5,EXTREAL2:60;
+    end; then
+    lim_inf F is_integrable_on M by C0,C1,A1,A3,MESFUNC5:108;
+    hence |. lim_inf F .| is_integrable_on M by C0,C1,MESFUNC5:106;
+
+    now let x be Element of X;
+     assume D12: x in dom(lim_sup F);
+
+    for k be Nat holds (superior_realsequence(F#x)).k >= -(P.x)
+    proof
+     let k be Nat;
+     reconsider k1=k as Element of NAT by ORDINAL1:def 13;
+D14: (superior_realsequence(F#x)).k1 >= (F#x).k1 by RINFSUP2:8;
+     (F#x).k >= -(P.x) by C2,D12,C0;
+     hence (superior_realsequence(F#x)).k >= -(P.x) by D14,XXREAL_0:2;
+    end; then
+    lim_sup(F#x) >= -(P.x) by Th63a; then
+D15:(lim_sup F).x >= -(P.x) by D12,MESFUNC8:def 9;
+
+    now let y be ext-real number;
+     assume y in rng(F#x); then
+     consider k be set such that
+D16:   k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
+     thus P.x >= y by D16,C2,D12,C0;
+    end; then
+    P.x is UpperBound of rng(F#x) by XXREAL_2:def 1; then
+    P.x >= sup rng(F#x) by XXREAL_2:def 3; then
+    P.x >= sup((F#x)^\0) by subseq1; then
+D17:P.x >= (superior_realsequence(F#x)).0 by RINFSUP2:27;
+    (superior_realsequence(F#x)).0 >= inf superior_realsequence(F#x)
+      by RINFSUP2:23; then
+    P.x >= lim_sup(F#x) by D17,XXREAL_0:2; then
+    P.x >= (lim_sup F).x by D12,MESFUNC8:def 9;
+    hence |. (lim_sup F).x .| <= P.x by D15,EXTREAL2:60;
+   end; then
+   lim_sup F is_integrable_on M by C0,C1,A1,A3,MESFUNC5:108;
+   hence |. lim_sup F .| is_integrable_on M by C0,C1,MESFUNC5:106;
+end;
+
+Th136:
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M & P is nonnegative &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
+eq_dom(P,+infty) = {}
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  lim_inf I >= Integral(M,lim_inf F) &
+  lim_sup I <= Integral(M,lim_sup F) &
+  ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) )
+proof
+   assume that
+A1: E = dom(F.0) & E = dom P and
+A2: for n be Nat holds F.n is_measurable_on E and
+A3: P is_integrable_on M & P is nonnegative and
+A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
+A5: eq_dom(P,+infty) = {};
+
+A6:for n be Nat holds F.n is_integrable_on M
+   proof
+    let n be Nat;
+A61:E = dom(F.n) & F.n is_measurable_on E by A1,A2,MESFUNC8:def 2;
+    now let x be Element of X;
+     assume x in dom(F.n); then
+     x in dom(|. F.n .|) & (|. F.n .|).x <= P.x by A61,A4,MESFUNC1:def 10;
+     hence |. (F.n).x .| <= P.x by MESFUNC1:def 10;
+    end;
+    hence F.n is_integrable_on M by A61,A1,A3,MESFUNC5:108;
+   end;
+
+A7:E = dom(lim_inf F) & E = dom(lim_sup F) by A1,MESFUNC8:def 8,def 9;
+
+A8:lim_inf F is_measurable_on E & lim_sup F is_measurable_on E
+     by A1,A2,MESFUNC8:23,24;
+
+A9:for x be Element of X, k be Nat st x in E holds
+    -(P.x) <= (F#x).k & (F#x).k <= P.x
+   proof
+    let x be Element of X, k be Nat;
+    assume A91: x in E; then
+    x in dom(F.k) by A1,MESFUNC8:def 2; then
+A92:x in dom |.(F.k).| by MESFUNC1:def 10;
+    (|. F.k .|).x <= P.x by A4,A91; then
+    |. (F.k).x .| <= P.x by A92,MESFUNC1:def 10; then
+    -(P.x) <= (F.k).x & (F.k).x <= P.x by EXTREAL2:60;
+    hence -(P.x) <= (F#x).k & (F#x).k <= P.x by MESFUNC5:def 13;
+   end;
+
+   deffunc I(Element of NAT) = Integral(M,F.$1);
+   consider I be Function of NAT,ExtREAL such that
+B1: for n be Element of NAT holds I.n = I(n) from FUNCT_2:sch 4;
+
+   reconsider I as ExtREAL_sequence;
+
+B2:for n be Nat holds I.n = Integral(M,F.n) & I.n is Real
+   proof
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13; then
+B21:I.n = Integral(M,F.n) by B1;
+    F.n is_integrable_on M by A6; then
+    -infty < Integral(M,F.n) & Integral(M,F.n) < +infty by MESFUNC5:102;
+    hence thesis by B21,EXTREAL1:1;
+   end;
+
+   deffunc G(Element of NAT) = P + F.$1;
+
+   consider G be Function such that
+B3: dom G = NAT & for n be Element of NAT holds G.n = G(n) from FUNCT_1:sch 4;
+
+B8:now let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence G.n = P + F.n by B3;
+   end;
+
+   now let n be Element of NAT;
+    G.n = P + F.n by B3;
+    hence G.n is PartFunc of X,ExtREAL;
+   end; then
+   reconsider G as Functional_Sequence of X,ExtREAL by B3,SEQFUNC:1;
+
+B4:P"{+infty} = {} by A5,MESFUNC5:36;
+
+   now let x be set;
+    assume x in P"{-infty}; then
+B51:x in dom P & P.x in {-infty} by FUNCT_1:def 13;
+    -infty < 0 & 0 <= P.x by A3,SUPINF_2:70;
+    hence contradiction by B51,TARSKI:def 1;
+   end; then
+B5:P"{-infty} = {} by XBOOLE_0:def 1;
+
+B6:for n be Nat holds dom(G.n) = E
+   proof
+    let n be natural number;
+B61:dom(F.n) = E by A1,MESFUNC8:def 2;
+    dom(G.n) = dom(P + F.n) by B8; then
+    dom(G.n) =
+      (dom P /\ dom(F.n))\((P"{-infty} /\ (F.n)"{+infty}) \/ (P"{+infty} /\
+      (F.n)"{-infty})) by MESFUNC1:def 3;
+    hence dom(G.n) = E by B4,B5,B61,A1;
+   end;
+
+   now let n,m be natural number;
+    thus dom(G.n) = E by B6 .= dom(G.m) by B6;
+   end; then
+   reconsider G as with_the_same_dom Functional_Sequence of X,ExtREAL
+                                                    by MESFUNC8:def 2;
+B7:E = dom(G.0) by B6;
+
+   now let n be Nat;
+C10:G.n = P + F.n by B8;
+
+    now let x be set;
+     assume C11: x in dom(P+(F.n)); then
+     reconsider x1=x as Element of X;
+     x in E by C11,C10,B6; then
+     -(P.x) <= (F#x1).n by A9; then
+C12: -P.x <= (F.n).x by MESFUNC5:def 13;
+     -P.x + P.x = P.x - P.x; then
+     -P.x + P.x = 0 by EXTREAL2:13; then
+     0 <= (F.n).x + P.x by C12,SUPINF_2:14;
+     hence 0 <= (P+(F.n)).x by C11,MESFUNC1:def 3;
+    end;
+    hence G.n is nonnegative by C10,SUPINF_2:71;
+
+    F.n is_integrable_on M by A6; then
+    G.n is_integrable_on M by C10,A3,MESFUNC5:114; then
+    ex E1 be Element of S st
+      E1 = dom(G.n) & G.n is_measurable_on E1 by MESFUNC5:def 17;
+    hence G.n is_measurable_on E by B6;
+   end; then
+   consider IG be ExtREAL_sequence such that
+C1: (for n be Nat holds IG.n = Integral(M,G.n)) &
+    Integral(M,lim_inf G) <= lim_inf IG by B7,Th135;
+
+   -infty < Integral(M,P) & Integral(M,P) < +infty by A3,MESFUNC5:102; then
+C2:Integral(M,P) is Real by EXTREAL1:1;
+
+   now let n be Nat;
+    F.n is_integrable_on M & G.n=P+(F.n) by A6,B8; then
+C31:ex E2 be Element of S st
+     E2 = dom P /\ dom(F.n) &
+     Integral(M,G.n) = Integral(M,P|E2) + Integral(M,(F.n)|E2)
+       by A3,MESFUNC5:115;
+C32:dom(F.n) = E by A1,MESFUNC8:def 2; then
+    P|E = P & (F.n)|E = F.n by A1,RELAT_1:97; then
+    Integral(M,G.n) = Integral(M,P) + I.n by A1,C31,C32,B2;
+    hence IG.n = Integral(M,P) + I.n by C1;
+   end; then
+C3:lim_inf IG = Integral(M,P) + lim_inf I by C2,limseq2;
+
+   now let x be Element of X;
+    assume C41: x in dom lim_inf F;
+
+    now let k be Nat;
+     k is Element of NAT by ORDINAL1:def 13; then
+     (inferior_realsequence(F#x)).k <= (F#x).k & (F#x).k <= P.x
+       by A9,C41,A7,RINFSUP2:8;
+     hence (inferior_realsequence(F#x)).k <= P.x by XXREAL_0:2;
+    end; then
+    lim_inf(F#x) <= P.x by Th63b; then
+C42:(lim_inf F).x <= P.x by C41,MESFUNC8:def 8;
+    now let y be ext-real number;
+     assume y in rng(F#x); then
+     consider k be set such that
+C43:  k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
+     thus -(P.x) <= y by C43,A9,C41,A7;
+    end; then
+    -(P.x) is LowerBound of rng(F#x) by XXREAL_2:def 2; then
+    -(P.x) <= inf rng(F#x) by XXREAL_2:def 4; then
+    -(P.x) <= inf((F#x)^\0) by subseq1; then
+C44:-(P.x) <= (inferior_realsequence(F#x)).0 by RINFSUP2:27;
+    (inferior_realsequence(F#x)).0 <= sup inferior_realsequence(F#x)
+      by RINFSUP2:23; then
+    -(P.x) <= lim_inf(F#x) by C44,XXREAL_0:2; then
+    -(P.x) <= (lim_inf F).x by C41,MESFUNC8:def 8;
+    hence |. (lim_inf F).x .| <= P.x by C42,EXTREAL2:60;
+   end; then
+   lim_inf F is_integrable_on M by A7,A8,A1,A3,MESFUNC5:108; then
+C4:ex E3 be Element of S st
+     E3 = dom P /\ dom(lim_inf F) &
+     Integral(M,P + lim_inf F) =
+       Integral(M,P|E3) + Integral(M,(lim_inf F)|E3) by A3,MESFUNC5:115;
+
+C5:-infty < Integral(M,P) & Integral(M,P) < +infty by A3,MESFUNC5:102;
+
+   P|E = P & (lim_inf F)|E = lim_inf F & dom(G.0) = dom(F.0)
+     by A1,A7,B6,RELAT_1:97; then
+   Integral(M,P) + Integral(M,lim_inf F) <= Integral(M,P) + lim_inf I
+     by B8,C3,A1,A7,C4,C1,B4,B5,limfunc2; then
+   Integral(M,lim_inf F) <= lim_inf I + Integral(M,P) - Integral(M,P)
+     by C5,EXTREAL2:31; then
+   Integral(M,lim_inf F) <= lim_inf I + (Integral(M,P) - Integral(M,P))
+     by C5,EXTREAL1:11; then
+   Integral(M,lim_inf F) <= lim_inf I + 0. by EXTREAL1:9; then
+C6:Integral(M,lim_inf F) <= lim_inf I by SUPINF_2:18;
+
+   deffunc H(Element of NAT) = P - F.$1;
+
+   consider H be Function such that
+D1: dom H = NAT & for n be Element of NAT holds H.n = H(n) from FUNCT_1:sch 4;
+
+D2:now let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence H.n = P - F.n by D1;
+   end;
+
+   now let n be Element of NAT;
+    H.n = P - F.n by D1;
+    hence H.n is PartFunc of X,ExtREAL;
+   end; then
+   reconsider H as Functional_Sequence of X,ExtREAL by D1,SEQFUNC:1;
+
+D3:now let n be natural number;
+    dom(F.n) = E & dom(H.n) = dom(P - F.n) by D2,A1,MESFUNC8:def 2; then
+    dom(H.n) = (E /\ E)\(({} /\ (F.n)"{+infty}) \/ ({} /\ (F.n)"{-infty}))
+       by A1,B4,B5,MESFUNC1:def 4;
+    hence dom(H.n) = E;
+   end;
+
+   now let n,m be natural number;
+    thus dom(H.n) = E by D3 .= dom(H.m) by D3;
+   end; then
+   reconsider H as with_the_same_dom Functional_Sequence of X,ExtREAL
+     by MESFUNC8:def 2;
+
+D4:now let n be Nat;
+D41:H.n = P - F.n by D2;
+    now let x be Element of X;
+     assume x in dom(F.n); then
+     x in E by A1,MESFUNC8:def 2; then
+     (F#x).n <= P.x by A9;
+     hence (F.n).x <= P.x by MESFUNC5:def 13;
+    end;
+    hence H.n is nonnegative by D41,MESFUNC7:1;
+    F.n is_integrable_on M by A6; then
+    H.n is_integrable_on M by D41,A3,Th114a; then
+    ex E4 be Element of S st
+     E4 = dom(H.n) & H.n is_measurable_on E4 by MESFUNC5:def 17;
+    hence H.n is_measurable_on E by D3;
+   end;
+
+   E = dom(H.0) by D3; then
+   consider IH be ExtREAL_sequence such that
+D5: (for n be Nat holds IH.n = Integral(M,H.n)) &
+    Integral(M,lim_inf H) <= lim_inf IH by D4,Th135;
+
+   deffunc I1(Element of NAT) = - I.$1;
+   consider I1 be Function of NAT,ExtREAL such that
+D6: for n be Element of NAT holds I1.n = I1(n) from FUNCT_2:sch 4;
+
+   reconsider I1 as ExtREAL_sequence;
+
+D7:now let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence I1.n = -I.n by D6;
+   end; then
+D8:-lim_inf I1 = lim_sup I by supinfa;
+
+   now let n be Nat;
+D91:F.n is_integrable_on M & H.n = P - F.n by D2,A6; then
+D92:ex E5 be Element of S st
+     E5 = dom P /\ dom(F.n) &
+     Integral(M,H.n) = Integral(M,P|E5) + Integral(M,(-F.n)|E5) by A3,Th115a;
+
+D93:dom(F.n) = E by A1,MESFUNC8:def 2; then
+    E = dom(-F.n) by MESFUNC1:def 7; then
+D94:P|E = P & (-F.n)|E = -(F.n) by A1,RELAT_1:97;
+
+    Integral(M,-F.n) = Integral(M,(-1)(#)F.n) by MESFUNC2:11; then
+D95:Integral(M,(-F.n)) = R_EAL (-1)*Integral(M,F.n) by D91,MESFUNC5:116;
+
+    reconsider In = I.n as Real by B2;
+    R_EAL (-1)*I.n = (-1)*In & -I.n = -In by SUPINF_2:3,EXTREAL1:13; then
+    Integral(M,H.n) = Integral(M,P) + -I.n by A1,B2,D92,D93,D94,D95; then
+    IH.n = Integral(M,P) + -I.n by D5;
+    hence IH.n = Integral(M,P) + I1.n by D7;
+   end; then
+D9:lim_inf IH = Integral(M,P) + lim_inf I1 by C2,limseq2;
+
+   deffunc F1(Element of NAT) = - F.$1;
+
+   consider F1 be Function such that
+E1: dom F1 = NAT &
+    for n be Element of NAT holds F1.n = F1(n) from FUNCT_1:sch 4;
+
+   now let n be Element of NAT;
+    F1.n = -F.n by E1;
+    hence F1.n is PartFunc of X,ExtREAL;
+   end; then
+   reconsider F1 as Functional_Sequence of X,ExtREAL by E1,SEQFUNC:1;
+
+E2:now let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence F1.n = -F.n by E1;
+   end;
+
+   now let n,m be natural number;
+    F1.n = -F.n & F1.m = -F.m by E2; then
+    dom(F1.n) = dom(F.n) & dom(F1.m) = dom(F.m) by MESFUNC1:def 7;
+    hence dom(F1.n) = dom(F1.m) by MESFUNC8:def 2;
+   end; then
+   reconsider F1 as with_the_same_dom Functional_Sequence of X,ExtREAL
+                                                         by MESFUNC8:def 2;
+E3:now let n be Nat;
+    H.n = P - F.n by D2; then
+    H.n = P + (- F.n) by MESFUNC2:9;
+    hence H.n = P + F1.n by E2;
+   end;
+
+   F1.0 = -F.0 by E2; then
+E4:dom(F1.0) = dom(F.0) by MESFUNC1:def 7; then
+   dom(F1.0) = dom(H.0) by A1,D3; then
+   lim_inf H = P + lim_inf F1 by E3,B4,B5,limfunc2; then
+   lim_inf H = P + -lim_sup F by E4,E2,supinfb; then
+E5:lim_inf H = P - lim_sup F by MESFUNC2:9;
+
+   now let x be Element of X;
+    assume E61: x in dom lim_sup F;
+
+    for k be Nat holds (superior_realsequence(F#x)).k >= -(P.x)
+    proof
+     let k be Nat;
+     k is Element of NAT by ORDINAL1:def 13; then
+     (superior_realsequence(F#x)).k >= (F#x).k & (F#x).k >= -(P.x)
+       by A9,E61,A7,RINFSUP2:8;
+     hence (superior_realsequence(F#x)).k >= -(P.x) by XXREAL_0:2;
+    end; then
+    lim_sup(F#x) >= -(P.x) by Th63a; then
+E62:(lim_sup F).x >= -(P.x) by E61,MESFUNC8:def 9;
+
+    now let y be ext-real number;
+     assume y in rng(F#x); then
+     consider k be set such that
+E63:  k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
+     thus P.x >= y by E63,A9,E61,A7;
+    end; then
+    P.x is UpperBound of rng(F#x) by XXREAL_2:def 1; then
+    P.x >= sup rng(F#x) by XXREAL_2:def 3; then
+    P.x >= sup((F#x)^\0) by subseq1; then
+E64:P.x >= (superior_realsequence(F#x)).0 by RINFSUP2:27;
+    (superior_realsequence(F#x)).0 >= inf superior_realsequence(F#x)
+       by RINFSUP2:23; then
+    P.x >= lim_sup(F#x) by E64,XXREAL_0:2; then
+    P.x >= (lim_sup F).x by E61,MESFUNC8:def 9;
+    hence |. (lim_sup F).x .| <= P.x by E62,EXTREAL2:60;
+   end; then
+E6:lim_sup F is_integrable_on M by A7,A8,A1,A3,MESFUNC5:108; then
+E7:ex E6 be Element of S st
+      E6 = dom P /\ dom lim_sup F &
+      Integral(M,P - lim_sup F) =
+        Integral(M,P|E6) + Integral(M,(-lim_sup F)|E6) by A3,Th115a;
+
+E8:-infty < Integral(M,P) & Integral(M,P) < +infty by A3,MESFUNC5:102;
+
+   E = dom lim_sup F by A1,MESFUNC8:def 9; then
+   E = dom(-lim_sup F) by MESFUNC1:def 7; then
+E9:P|E = P & (-lim_sup F)|E = -lim_sup F by A1,RELAT_1:97;
+   Integral(M,-lim_sup F) = Integral(M,(-1)(#)lim_sup F) by MESFUNC2:11; then
+   Integral(M,P)+ R_EAL(-1)*Integral(M,lim_sup F) <= Integral(M,P) + -lim_sup I
+         by D5,D9,D8,A1,A7,E5,E6,E7,E9,MESFUNC5:116; then
+   R_EAL(-1)*Integral(M,lim_sup F)
+     <= -lim_sup I + Integral(M,P) - Integral(M,P) by E8,EXTREAL2:31; then
+   R_EAL (-1)*Integral(M,lim_sup F)
+     <= -lim_sup I + (Integral(M,P) - Integral(M,P)) by E8,EXTREAL1:11; then
+F1:R_EAL (-1)*Integral(M,lim_sup F) <= -lim_sup I + 0. by EXTREAL1:9;
+
+   set E1 = Integral(M,lim_sup F);
+
+   -infty < E1 & E1 < +infty by E6,MESFUNC5:102; then
+   reconsider e1 = E1 as Real by EXTREAL1:1;
+   R_EAL (-1)*E1 = (-1)*e1 & -E1 = -e1 by EXTREAL1:13,SUPINF_2:3; then
+   -Integral(M,lim_sup F) <= -lim_sup I by F1,SUPINF_2:18; then
+F2:Integral(M,lim_sup F) >= lim_sup I by SUPINF_2:16;
+
+   now assume L1:for x be Element of X st x in E holds F#x is convergent;
+L2: dom lim F = dom(F.0) by MESFUNC8:def 10; then
+L3: dom lim F = dom lim_sup F & dom lim F = dom lim_inf F
+       by MESFUNC8:def 8,def 9;
+L4: for x be Element of X st x in dom lim F holds (lim F).x = (lim_sup F).x
+    proof
+     let x be Element of X;
+     assume L31: x in dom lim F; then
+     x in dom(F.0) & F#x is convergent by L1,L2,A1;
+     hence (lim F).x = (lim_sup F).x by L31,MESFUNC8:14;
+    end; then
+L5: lim F = lim_sup F by L3,PARTFUN1:34;
+
+L6: for x be Element of X st x in dom(lim F) holds (lim F).x = (lim_inf F).x
+    proof
+     let x be Element of X;
+     assume L51: x in dom(lim F); then
+     x in dom(F.0) & F#x is convergent by L1,L2,A1;
+     hence (lim F).x = (lim_inf F).x by L51,MESFUNC8:14;
+    end; then
+    Integral(M,lim F) <= lim_inf I by C6,L3,PARTFUN1:34; then
+L7: lim_sup I <= lim_inf I by L5,F2,XXREAL_0:2;
+
+    lim_inf I <= lim_sup I by RINFSUP2:39; then
+    lim_inf I = lim_sup I by L7,XXREAL_0:1;
+    hence I is convergent by RINFSUP2:40; then
+    lim I = lim_inf I & lim I = lim_sup I by RINFSUP2:41; then
+    Integral(M,lim F) <= lim I & lim I <= Integral(M,lim F)
+      by L4,L6,C6,F2,L3,PARTFUN1:34;
+    hence lim I = Integral(M,lim F) by XXREAL_0:1;
+   end;
+   hence thesis by B2,C6,F2;
+end;
+
+:: Lebesgue's Convergence theorem
+theorem Th136x:
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M & P is nonnegative &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  lim_inf I >= Integral(M,lim_inf F) &
+  lim_sup I <= Integral(M,lim_sup F) &
+  ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) )
+proof
+   assume that
+A1: E = dom(F.0) & E = dom P &
+    (for n be Nat holds F.n is_measurable_on E) &
+    P is_integrable_on M & P is nonnegative and
+A3: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x;
+
+A4:ex A be Element of S st A = dom P & P is_measurable_on A
+     by A1,MESFUNC5:def 17; then
+A5:P is_measurable_on E by A1;
+   for x be set st x in eq_dom(P,+infty) holds x in E
+     by A1,MESFUNC1:def 16; then
+   eq_dom(P,+infty) c= E by TARSKI:def 3; then
+   eq_dom(P,+infty) = E /\ eq_dom(P,+infty) by XBOOLE_1:28; then
+   reconsider E0 = eq_dom(P,+infty) as Element of S by A1,A4,MESFUNC1:37;
+   reconsider E1 = E \ E0 as Element of S;
+
+   P"{+infty} = E0 by MESFUNC5:36; then
+A6:M.E0 = 0 by A1,MESFUNC5:111;
+
+A7:E1 c= E by XBOOLE_1:36;
+A8:dom(P|E1) = E1 by A1,RELAT_1:91,XBOOLE_1:36;
+
+   set P1 = P|E1;
+
+   deffunc F1(Nat) = (F.$1)|E1;
+
+   consider F1 be Functional_Sequence of X,ExtREAL such that
+B1: for n be Nat holds F1.n = F1(n) from SEQFUNC:sch 1;
+
+B2:now let n be Nat;
+    dom(F.n) = E by A1,MESFUNC8:def 2; then
+    dom((F.n)|E1) = E1 by XBOOLE_1:36,RELAT_1:91;
+    hence dom(F1.n) = E1 by B1;
+   end; then
+B3:E1 = dom(F1.0);
+
+   now let n,m be Nat;
+    thus dom(F1.n) = E1 by B2 .= dom(F1.m) by B2;
+   end; then
+   reconsider F1 as with_the_same_dom Functional_Sequence of X,ExtREAL
+     by MESFUNC8:def 2;
+
+   P is_measurable_on E1 by A5,XBOOLE_1:36,MESFUNC1:34; then
+B4:P1 is_integrable_on M by A1,MESFUNC5:118;
+
+B5:P1 is nonnegative by A1,MESFUNC5:21;
+
+B6:now let x be Element of X, n be Nat;
+    assume B61: x in E1;
+    F1.n = (F.n)|E1 by B1; then
+B62:(F1.n).x = (F.n).x & P1.x = P.x by B61,FUNCT_1:72;
+    x in E by A7,B61; then
+    x in dom(F.n) by A1,MESFUNC8:def 2; then
+    x in dom(|. F.n .|) by MESFUNC1:def 10; then
+B63:(|. F.n .|).x = |. (F.n).x .| by MESFUNC1:def 10;
+    E1 = dom(F1.n) by B2; then
+    E1 = dom(|. F1.n .|) by MESFUNC1:def 10; then
+    (|. F.n .|).x = (|. F1.n .|).x by B61,B62,B63,MESFUNC1:def 10;
+    hence (|. F1.n .|).x <= P1.x by B61,A7,A3,B62;
+   end;
+
+B7:for n be Nat holds F1.n is_measurable_on E1
+   proof
+    let n be Nat;
+    F.n is_measurable_on E by A1; then
+B71:F.n is_measurable_on E1 by XBOOLE_1:36,MESFUNC1:34;
+    dom(F.n) = E by A1,MESFUNC8:def 2; then
+    E1 = dom(F.n) /\ E1 by XBOOLE_1:28,36; then
+    (F.n)|E1 is_measurable_on E1 by B71,MESFUNC5:48;
+    hence F1.n is_measurable_on E1 by B1;
+   end;
+
+   now assume eq_dom(P1,+infty) <> {}; then
+    consider x be set such that
+B81: x in eq_dom(P1,+infty) by XBOOLE_0:def 1;
+    reconsider x as Element of X by B81;
+    x in dom P1 & P1.x = +infty by B81,MESFUNC1:def 16; then
+    consider y be R_eal such that
+B82: y = P1.x & +infty = y;
+
+B83:x in E1 by A8,B81,MESFUNC1:def 16; then
+    x in dom P & y = P.x & +infty = y by A7,A1,B82,FUNCT_1:72; then
+    x in eq_dom(P,+infty) by MESFUNC1:def 16;
+    hence contradiction by B83,XBOOLE_0:def 4;
+   end; then
+   consider I be ExtREAL_sequence such that
+B9: (for n be Nat holds I.n = Integral(M,F1.n)) &
+    lim_inf I >= Integral(M,lim_inf F1) &
+    lim_sup I <= Integral(M,lim_sup F1) &
+    ( (for x be Element of X st x in E1 holds F1#x is convergent)
+        implies I is convergent & lim I = Integral(M,lim F1) )
+          by B3,A8,B4,B5,B6,B7,Th136;
+
+C1:for n be Nat holds I.n = Integral(M,F.n)
+   proof
+    let n be Nat;
+
+C11:E = dom(F.n) & F.n is_measurable_on E by A1,MESFUNC8:def 2;
+
+    I.n = Integral(M,F1.n) by B9; then
+C12:I.n = Integral(M,(F.n)|E1) by B1;
+
+    |. F.n .| is_integrable_on M by A1,A3,Th136z; then
+    F.n is_integrable_on M & E1 = dom(F.n) \ E0 by C11,MESFUNC5:106; then
+    Integral(M,F.n) = Integral(M,(F.n)|E0) + Integral(M,(F.n)|E1)
+       by MESFUNC5:105; then
+    Integral(M,F.n) = 0. + Integral(M,(F.n)|E1) by C11,A6,MESFUNC5:100;
+    hence I.n = Integral(M,F.n) by C12,SUPINF_2:18;
+   end;
+
+C2:dom(lim_inf F) = E & lim_inf F is_measurable_on E &
+   dom(lim_sup F) = E & lim_sup F is_measurable_on E
+     by A1,MESFUNC8:def 8,def 9,23,24; then
+C3:Integral(M,(lim_inf F)|(E\E0)) = Integral(M,lim_inf F) &
+   Integral(M,(lim_sup F)|(E\E0)) = Integral(M,lim_sup F) by A6,MESFUNC5:101;
+
+   E1 = dom((lim_inf F)|(E\E0)) & E1 = dom((lim_sup F)|(E\E0))
+     by C2,XBOOLE_1:36,RELAT_1:91; then
+C4:dom((lim_inf F)|(E\E0)) = dom(lim_inf F1) &
+   dom((lim_sup F)|(E\E0)) = dom(lim_sup F1) by B3,MESFUNC8:def 8,def 9;
+
+   now let x be Element of X;
+    assume C51: x in dom(lim_inf F1); then
+C52:x in E1 by B3,MESFUNC8:def 8;
+
+    now let n be Element of NAT;
+     ((F.n)|E1).x = (F.n).x by C52,FUNCT_1:72; then
+     (F1.n).x = (F.n).x by B1; then
+     (F1#x).n = (F.n).x by MESFUNC5:def 13;
+     hence (F1#x).n = (F#x).n by MESFUNC5:def 13;
+    end; then
+C53:F1#x = F#x by FUNCT_2:113;
+    E1 = dom(lim_inf F1) by B3,MESFUNC8:def 8; then
+    lim_inf(F#x) = (lim_inf F).x by C51,A7,C2,MESFUNC8:def 8; then
+    (lim_inf F1).x = (lim_inf F).x by C53,C51,MESFUNC8:def 8;
+    hence ((lim_inf F)|(E\E0)).x = (lim_inf F1).x by C52,FUNCT_1:72;
+   end; then
+C5:(lim_inf F)|(E\E0) = lim_inf F1 by C4,PARTFUN1:34;
+
+   now let x be Element of X;
+    assume C61: x in dom(lim_sup F1); then
+C62:x in E1 by B3,MESFUNC8:def 9;
+    now let n be Element of NAT;
+     ((F.n)|E1).x = (F.n).x by C62,FUNCT_1:72; then
+     (F1.n).x = (F.n).x by B1; then
+     (F1#x).n = (F.n).x by MESFUNC5:def 13;
+     hence (F1#x).n = (F#x).n by MESFUNC5:def 13;
+    end; then
+C63:F1#x = F#x by FUNCT_2:113;
+    E1 = dom(lim_sup F1) by B3,MESFUNC8:def 9; then
+    lim_sup(F#x) = (lim_sup F).x by C61,A7,C2,MESFUNC8:def 9; then
+    (lim_sup F1).x = (lim_sup F).x by C63,C61,MESFUNC8:def 9;
+    hence ((lim_sup F)|(E\E0)).x = (lim_sup F1).x by C62,FUNCT_1:72;
+   end; then
+C6:(lim_sup F)|(E\E0) = lim_sup F1 by C4,PARTFUN1:34;
+
+L2:dom(lim F) = dom(F.0) by MESFUNC8:def 10; then
+L3:dom(lim F) = dom(lim_sup F) & dom(lim F) = dom(lim_inf F)
+     by MESFUNC8:def 8,def 9;
+
+   now assume L1:for x be Element of X st x in E holds F#x is convergent;
+L4: for x be Element of X st x in dom(lim F) holds (lim F).x = (lim_sup F).x
+    proof
+     let x be Element of X;
+     assume L31: x in dom(lim F); then
+     x in dom(F.0) & F#x is convergent by L1,L2,A1;
+     hence (lim F).x = (lim_sup F).x by L31,MESFUNC8:14;
+    end; then
+L5: lim F = lim_sup F by L3,PARTFUN1:34;
+
+L6: for x be Element of X st x in dom(lim F) holds (lim F).x = (lim_inf F).x
+    proof
+     let x be Element of X;
+     assume L51: x in dom(lim F); then
+     x in dom(F.0) & F#x is convergent by L1,L2,A1;
+     hence (lim F).x = (lim_inf F).x by L51,MESFUNC8:14;
+    end; then
+    lim F = lim_inf F by L3,PARTFUN1:34; then
+L7: lim_sup I <= lim_inf I by L5,C6,B9,C5,XXREAL_0:2;
+
+    lim_inf I <= lim_sup I by RINFSUP2:39; then
+    lim_inf I = lim_sup I by L7,XXREAL_0:1;
+    hence I is convergent by RINFSUP2:40; then
+    lim I = lim_inf I & lim I = lim_sup I by RINFSUP2:41; then
+    Integral(M,lim F) <= lim I & lim I <= Integral(M,lim F)
+        by L4,L6,C5,C3,C6,B9,L3,PARTFUN1:34;
+    hence lim I = Integral(M,lim F) by XXREAL_0:1;
+   end;
+   hence thesis by C1,C5,C3,C6,B9;
+end;
+
+theorem
+E = dom(F.0) &
+(for n holds F.n is nonnegative & F.n is_measurable_on E) &
+(for x,n,m st x in E & n <= m holds (F.n).x >= (F.m).x) &
+Integral(M,(F.0)|E) < +infty
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F)
+proof
+   assume that
+A1: E = dom(F.0) and
+A2: for n holds F.n is nonnegative & F.n is_measurable_on E and
+A3: for x,n,m st x in E & n <= m holds
+      (F.n).x >= (F.m).x and
+A4: Integral(M,(F.0)|E) < +infty;
+
+A5:F.0 is nonnegative & F.0 is_measurable_on E by A2;
+
+A6:dom(F.0) = dom(|. F.0 .|) by MESFUNC1:def 10;
+
+A7:for x be Element of X st x in dom(F.0) holds (F.0).x = |. F.0 .|.x
+   proof
+    let x be Element of X;
+    assume A71: x in dom(F.0);
+    0 <= (F.0).x by A5,SUPINF_2:70; then
+    |.(F.0).x.| = (F.0).x by EXTREAL1:def 3;
+    hence |. F.0 .|.x = (F.0).x by A6,A71,MESFUNC1:def 10;
+   end;
+
+A8:dom max+(F.0) = dom(F.0) & dom max-(F.0) = dom(F.0) by MESFUNC2:def 2,def 3;
+
+   (for x be set st x in dom max+(F.0) holds 0. <= (max+(F.0)).x) &
+   (for x be set st x in dom max-(F.0) holds 0. <= (max-(F.0)).x)
+     by MESFUNC2:14,15; then
+A9:max+(F.0) is nonnegative & max-(F.0) is nonnegative by SUPINF_2:71;
+
+B1:dom(max+(F.0) + max-(F.0)) = dom max+(F.0) /\ dom max-(F.0)
+     by A9,MESFUNC5:28;
+
+B2:0 <= integral+(M,max+(F.0)) by A1,A8,A5,A9,MESFUNC2:27,MESFUNC5:85;
+
+B3:0 <= integral+(M,max-(F.0)) by A1,A8,A5,A9,MESFUNC2:28,MESFUNC5:85;
+
+   max+(F.0) is_measurable_on E & max-(F.0) is_measurable_on E
+     by A1,A5,MESFUNC2:27,28; then
+B4:ex C be Element of S st
+    C = dom(max+(F.0) + max-(F.0)) &
+    integral+(M,max+(F.0) + max-(F.0))
+      = integral+(M,max+(F.0)|C) + integral+(M,max-(F.0)|C)
+                                     by A1,A8,A9,MESFUNC5:84;
+
+B5:max+(F.0)|E =  max+(F.0) & max-(F.0)|E = max-(F.0) by A1,A8,RELAT_1:97;
+
+   Integral(M,F.0) = integral+(M,F.0) by A1,A5,MESFUNC5:94; then
+   integral+(M,F.0) < +infty by A4,A1,RELAT_1:97; then
+   integral+(M,|. F.0 .|) < +infty by A7,A6,PARTFUN1:34; then
+   integral+(M,max+(F.0)) + integral+(M,max-(F.0)) < +infty
+     by B5,B1,A1,A8,B4,MESFUNC2:26; then
+   integral+(M,max+(F.0)) <> +infty & integral+(M,max-(F.0)) <> +infty
+     by B2,B3,EXTREAL2:23; then
+   integral+(M,max+(F.0)) < +infty & integral+(M,max-(F.0)) < +infty
+     by XXREAL_0:4; then
+C2:F.0 is_integrable_on M by A1,A5,MESFUNC5:def 17;
+
+   for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= (F.0).x
+   proof
+    let x be Element of X, n be Nat;
+    assume C31: x in E;
+
+    dom(F.n) = dom(|. F.n .|) by MESFUNC1:def 10; then
+C32:x in dom(|. F.n .|) by C31,A1,MESFUNC8:def 2;
+
+    F.n is nonnegative by A2; then
+    0 <= (F.n).x by SUPINF_2:70; then
+    |.(F.n).x.| = (F.n).x by EXTREAL1:def 3; then
+    |.(F.n).x.| <= (F.0).x by C31,A3;
+    hence (|. F.n .|).x <= (F.0).x by C32,MESFUNC1:def 10;
+   end; then
+   consider I be ExtREAL_sequence such that
+C4:  (for n be Nat holds I.n = Integral(M,F.n)) &
+     lim_inf I >= Integral(M,lim_inf F) &
+     lim_sup I <= Integral(M,lim_sup F) &
+     ( (for x be Element of X st x in E holds F#x is convergent)
+         implies I is convergent & lim I = Integral(M,lim F) )
+                                                 by A1,A2,A5,C2,Th136x;
+
+   for x be Element of X st x in E holds F#x is convergent
+   proof
+    let x be Element of X;
+    assume C5: x in E;
+    now let n,m be Element of NAT;
+     assume m <= n; then
+     (F.n).x <= (F.m).x by C5,A3; then
+     (F#x).n <= (F.m).x by MESFUNC5:def 13;
+     hence (F#x).n <= (F#x).m by MESFUNC5:def 13;
+    end; then
+    F#x is non-increasing by RINFSUP2:7;
+    hence F#x is convergent by RINFSUP2:36;
+   end;
+   hence
+    ex I be ExtREAL_sequence st
+     (for n be Nat holds I.n = Integral(M,F.n)) &
+     I is convergent & lim I = Integral(M,lim F) by C4;
+end;
+
+definition let X be set, F be Functional_Sequence of X,ExtREAL;
+attr F is uniformly_bounded means :DefUB:
+ ex K be real number st
+  for n be Nat, x be set st x in dom(F.0) holds |. (F.n).x .| <= K;
+end;
+
+:: Lebesgue's Bounded Convergence Theorem
+theorem
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_measurable_on E) &
+F is uniformly_bounded &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+ (for n be Nat holds F.n is_integrable_on M) &
+ lim F is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F)
+proof
+   assume that
+A1: M.E < +infty & E = dom(F.0) and
+A2: for n be Nat holds F.n is_measurable_on E and
+A3: F is uniformly_bounded and
+A4: for x be Element of X st x in E holds F#x is convergent;
+
+   consider K1 be real number such that
+A5: for n be Nat, x be set st x in dom(F.0) holds |. (F.n).x .| <= K1
+      by A3,DefUB;
+   set K = max(K1,1);
+X: K > 0 by XXREAL_0:30;
+Y: K >= K1 by XXREAL_0:25;
+X5: for n be Nat, x be set st x in dom(F.0) holds |. (F.n).x .| <= K
+    proof let n be Nat, x be set;
+     assume x in dom(F.0);
+      then |. (F.n).x .| <= K1 by A5;
+     hence thesis by Y,XXREAL_0:2;
+    end;
+
+   K in REAL by XREAL_0:def 1; then
+   consider h be PartFunc of X,ExtREAL such that
+B1: h is_simple_func_in S & dom h = E &
+    for x be set st x in E holds h.x = K by MESFUNC5:47,NUMBERS:31;
+
+   for x be set st x in E holds h.x >= 0. by B1,X; then
+B2:h is nonnegative by B1,SUPINF_2:71;
+
+B3:h is_measurable_on E by B1,MESFUNC2:37;
+
+   K is Real by XREAL_0:def 1; then
+B4:integral'(M,h) = R_EAL K * M.(dom h) by B1,MESFUNC5:110,X;
+
+B5:R_EAL K * +infty = +infty by EXTREAL1:def 1,X;
+
+B6:dom h = dom |.h.| by MESFUNC1:def 10;
+
+B7:for x be Element of X st x in dom h holds h.x = |.h.|.x
+   proof
+    let x be Element of X;
+    assume x in dom h; then
+B71:x in dom |.h.| by MESFUNC1:def 10;
+    0 <= h.x by B2,SUPINF_2:70; then
+    |. h.x .| = h.x by EXTREAL1:def 3;
+    hence |.h.|.x = h.x by B71,MESFUNC1:def 10;
+   end;
+
+B8:dom max+h = dom h & dom max-h = dom h by MESFUNC2:def 2,def 3;
+
+B9:max+h is_measurable_on E & max-h is_measurable_on E
+      by B1,B3,MESFUNC2:27,28;
+
+   (for x be set st x in dom max+h holds 0. <= (max+h).x) &
+   (for x be set st x in dom max-h holds 0. <= (max-h).x)
+     by MESFUNC2:14,15; then
+C1:max+h is nonnegative & max-h is nonnegative by SUPINF_2:71; then
+C2:dom(max+h + max-h) = dom max+h /\ dom max-h by MESFUNC5:28;
+
+C3:0 <= integral+(M,max+h) & 0 <= integral+(M,max-h)
+      by B1,B8,B9,C1,MESFUNC5:85;
+
+C4:ex C be Element of S st
+    C = dom(max+h + max-h) &
+    integral+(M,max+h + max-h) = integral+(M,max+h|C) + integral+(M,max-h|C)
+      by B1,B8,B9,C1,MESFUNC5:84;
+
+C5:max+h|E =  max+h & max-h|E = max-h by B1,B8,RELAT_1:97;
+
+   Integral(M,h) = integral+(M,h) & Integral(M,h) = integral'(M,h)
+     by B1,B2,MESFUNC5:95; then
+   integral+(M,h) < +infty by B5,B4,B1,A1,EXTREAL1:44,X; then
+   integral+(M,|.h.|) < +infty by B7,B6,PARTFUN1:34; then
+   integral+(M,max+h) + integral+(M,max-h) < +infty
+     by C5,C2,B1,B8,C4,MESFUNC2:26; then
+   integral+(M,max+h) <> +infty & integral+(M,max-h) <> +infty
+     by C3,EXTREAL2:23; then
+   integral+(M,max+h) < +infty & integral+(M,max-h) < +infty
+     by XXREAL_0:4; then
+C6:h is_integrable_on M by B1,B3,MESFUNC5:def 17;
+
+C7:for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= h.x
+   proof
+    let x be Element of X, n be Nat;
+    assume C71: x in E; then
+C72:|. (F.n).x .| <= K by A1,X5;
+    dom(F.n) = dom(|.(F.n).|) by MESFUNC1:def 10; then
+    x in dom(|.(F.n).|) by C71,A1,MESFUNC8:def 2; then
+    |. F.n .|.x = |. (F.n).x .| by MESFUNC1:def 10;
+    hence (|. F.n .|).x <= h.x by C72,C71,B1;
+   end; then
+D1:(for n be Nat holds |. F.n .| is_integrable_on M) &
+   |. lim_inf F .| is_integrable_on M &
+   |. lim_sup F .| is_integrable_on M by A1,A2,B1,B2,C6,Th136z;
+
+E1:now let n be Nat;
+    |. F.n .| is_integrable_on M & E = dom(F.n) &
+    F.n is_measurable_on E by A1,A2,B1,B2,C6,C7,Th136z,MESFUNC8:def 2;
+    hence F.n is_integrable_on M by MESFUNC5:106;
+   end;
+
+E4:dom(lim_inf F) = dom (F.0) & dom(lim F) = dom (F.0)
+                                      by MESFUNC8:def 8,def 10;
+
+   for x be Element of X st
+     x in dom(lim F) holds (lim F).x = (lim_inf F).x
+   proof
+    let x be Element of X;
+    assume E41: x in dom(lim F); then
+    x in E by A1,MESFUNC8:def 10; then
+    F#x is convergent by A4;
+    hence (lim F).x = (lim_inf F).x by E41,MESFUNC8:14;
+   end; then
+E2:lim F = lim_inf F by E4,PARTFUN1:34; then
+E3:lim F is_measurable_on E by A1,A2,MESFUNC8:24;
+
+   ex I be ExtREAL_sequence st
+     (for n be Nat holds I.n = Integral(M,F.n)) &
+     lim_inf I >= Integral(M,lim_inf F) &
+     lim_sup I <= Integral(M,lim_sup F) &
+     ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) )
+        by A1,A2,B1,B2,C6,C7,Th136x;
+   hence thesis by A4,E1,E2,E3,A1,E4,D1,MESFUNC5:106;
+end;
+
+definition let X be set, F be Functional_Sequence of X,ExtREAL,
+ f be PartFunc of X,ExtREAL;
+pred F is_uniformly_convergent_to f means :DefUC:
+ F is with_the_same_dom &
+ dom(F.0) = dom f &
+ for e be real number st e>0
+  ex N be Nat st
+   for n be Nat, x be set st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e;
+end;
+
+theorem UCONV:
+F1 is_uniformly_convergent_to f implies
+ (for x be Element of X st x in dom(F1.0) holds
+                            F1#x is convergent & lim(F1#x) = f.x)
+proof
+   assume A0:F1 is_uniformly_convergent_to f;
+
+   let x be Element of X;
+   assume A2: x in dom(F1.0);
+
+   per cases by XXREAL_0:14;
+   suppose f.x in REAL; then
+    reconsider g=f.x as real number;
+
+Q00:now let e be real number;
+     assume 0 < e; then
+     consider N be Nat such that
+Q01:  for n be Nat, x be set st n >= N & x in dom(F1.0) holds
+                           |. (F1.n).x - f.x .| < e by A0,DefUC;
+     take N;
+     hereby let m be Nat;
+      assume N <= m; then
+      |. (F1.m).x - f.x .| < e by Q01,A2;
+      hence |. (F1#x).m - R_EAL g .| < e by MESFUNC5:def 13;
+     end;
+    end; then
+L1: F1#x is convergent_to_finite_number by MESFUNC5:def 8; then
+    F1#x is convergent by MESFUNC5:def 11;
+    hence thesis by L1,Q00,MESFUNC5:def 12;
+   end;
+   suppose P2: f.x = +infty;
+    now let e be real number;
+     assume 0 < e; then
+     consider N be Nat such that
+Q02:  for n be Nat, x be set st n >= N & x in dom(F1.0) holds
+                          |. (F1.n).x - f.x .| < e by A0,DefUC;
+     take N;
+     hereby let n be Nat;
+      assume n >= N; then
+      |. (F1.n).x - f.x .| < e by Q02,A2; then
+P03:  |. -( (F1.n).x - f.x ) .| < e by EXTREAL2:66;
+
+      (F1.n).x = (F1#x).n by MESFUNC5:def 13; then
+      -( (F1#x).n - f.x ) < R_EAL e by P03,EXTREAL2:58; then
+      f.x - (F1#x).n < R_EAL e by EXTREAL2:15; then
+      (F1#x).n = +infty by P2,EXTREAL2:29;
+      hence e <= (F1#x).n by XXREAL_0:3;
+     end;
+    end; then
+L2: F1#x is convergent_to_+infty by MESFUNC5:def 9; then
+    F1#x is convergent by MESFUNC5:def 11;
+    hence thesis by L2,P2,MESFUNC5:def 12;
+   end;
+   suppose P3: f.x = -infty;
+    now let e be real number;
+     assume e < 0; then
+     -0 < -e by XREAL_1:26; then
+     consider N be Nat such that
+Q03:  for n be Nat, x be set st n >= N & x in dom(F1.0) holds
+                            |. (F1.n).x - f.x .| < -e by A0,DefUC;
+     take N;
+     hereby let n be Nat;
+      assume n >= N; then
+P03:  |. (F1.n).x - f.x .| < -e by Q03,A2;
+
+      (F1.n).x = (F1#x).n by MESFUNC5:def 13; then
+      (F1#x).n - f.x < R_EAL -e by P03,EXTREAL2:58; then
+      (F1#x).n = -infty by P3,EXTREAL2:29;
+      hence e >= (F1#x).n by XXREAL_0:5;
+     end;
+    end; then
+L3: F1#x is convergent_to_-infty by MESFUNC5:def 10; then
+    F1#x is convergent by MESFUNC5:def 11;
+    hence thesis by L3,P3,MESFUNC5:def 12;
+   end;
+end;
+
+theorem
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_integrable_on M) &
+F is_uniformly_convergent_to f
+implies
+ f is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,f)
+proof
+   assume that
+A1: M.E < +infty & E = dom(F.0) and
+A2: (for n be Nat holds F.n is_integrable_on M) and
+A3: F is_uniformly_convergent_to f;
+
+A4:for n be Nat holds F.n is_measurable_on E
+   proof
+    let n be Nat;
+    F.n is_integrable_on M by A2; then
+    ex A be Element of S st A = dom(F.n) & (F.n) is_measurable_on A
+                                                    by MESFUNC5:def 17;
+    hence F.n is_measurable_on E by A1,MESFUNC8:def 2;
+   end;
+
+   dom f = dom(F.0) by A3,DefUC; then
+A5:dom(lim F) = dom f by MESFUNC8:def 10;
+
+   now let x be Element of X;
+    assume x in dom f; then
+    x in dom(F.0) by A3,DefUC; then
+    x in dom(lim F) & lim(F#x) = f.x by A3,UCONV,MESFUNC8:def 10;
+    hence (lim F).x = f.x by MESFUNC8:def 10;
+   end; then
+A6:lim F = f by A5,PARTFUN1:34;
+
+   consider N be Nat such that
+A7: for n be Nat, x be set st n >= N & x in dom(F.0) holds
+     |. (F.n).x - f.x .| < 1/2 by A3,DefUC;
+
+A8:for x be set st x in dom(F.0) holds |. (F.N).x - f.x .| < 1/2 by A7;
+
+   consider h be PartFunc of X,ExtREAL such that
+B1: h is_simple_func_in S & dom h = E &
+    (for x be set st x in E holds h.x=1.) by MESFUNC5:47;
+
+   for x be set st x in E holds h.x >= 0. by B1; then
+B2:h is nonnegative by B1,SUPINF_2:71; then
+   Integral(M,h) = integral+(M,h) & Integral(M,h) = integral'(M,h)
+                                             by B1,MESFUNC5:95; then
+B3:integral+(M,h) = R_EAL 1 * M.(dom h) by B1,MESFUNC5:110;
+
+B4:dom h = dom(|.h.|) by MESFUNC1:def 10;
+   now let x be Element of X;
+    assume x in dom h; then
+B41:x in dom(|.h.|) by MESFUNC1:def 10;
+    0 <= h.x by B2,SUPINF_2:70; then
+    |. h.x .| = h.x by EXTREAL1:def 3;
+    hence |.h.|.x = h.x by B41,MESFUNC1:def 10;
+   end; then
+B5:h = |.h.| by B4,PARTFUN1:34;
+
+B6:h is_measurable_on E by B1,MESFUNC2:37; then
+B7:max+h is_measurable_on E & max-h is_measurable_on E by B1,MESFUNC2:27,28;
+
+   (for x be set st x in dom max+h holds 0. <= (max+h).x) &
+   (for x be set st x in dom max-h holds 0. <= (max-h).x)
+     by MESFUNC2:14,15; then
+B8:max+h is nonnegative & max-h is nonnegative by SUPINF_2:71;
+
+B9:dom max+h = dom h & dom max-h = dom h by MESFUNC2:def 2,def 3; then
+C1:max+h|E = max+h & max-h|E = max-h by B1,RELAT_1:97;
+   dom(max+h + max-h) = dom max+h /\ dom max-h by B8,MESFUNC5:28; then
+   ex C be Element of S st
+    C = E &
+    integral+(M,max+h + max-h) = integral+(M,max+h|C) + integral+(M,max-h|C)
+      by B1,B9,B7,B8,MESFUNC5:84; then
+C2:integral+(M,|.h.|) = integral+(M,max+h) + integral+(M,max-h)
+      by C1,MESFUNC2:26;
+
+C3:0 <= integral+(M,max+h) & 0 <= integral+(M,max-h)
+     by B1,B9,B7,B8,MESFUNC5:85;
+
+   R_EAL 1 * +infty = +infty by EXTREAL1:def 1; then
+   integral+(M,|.h.|) < +infty by B1,B3,B5,A1,EXTREAL1:44; then
+   integral+(M,max+h) <> +infty & integral+(M,max-h) <> +infty
+     by C2,C3,EXTREAL2:23; then
+   integral+(M,max+h) < +infty & integral+(M,max-h) < +infty
+     by XXREAL_0:4; then
+C4:h is_integrable_on M by B1,B6,MESFUNC5:def 17;
+
+   set AFN = |. F.N .|;
+
+   E = dom(F.N) & F.N is_integrable_on M & F.N is_measurable_on E
+     by A2,A4,A1,MESFUNC8:def 2; then
+   AFN is_integrable_on M by MESFUNC5:106; then
+C5:AFN + h is_integrable_on M by C4,MESFUNC5:114;
+
+   now let x be set;
+    assume x in dom AFN; then
+    AFN.x = |. (F.N).x .| by MESFUNC1:def 10;
+    hence 0 <= AFN.x by EXTREAL2:51;
+   end; then
+C6:AFN is nonnegative by SUPINF_2:71; then
+C7:dom(AFN + h) = dom AFN /\ dom h & AFN + h is nonnegative by B2,MESFUNC5:28;
+
+C9:dom(F.N) = dom AFN by MESFUNC1:def 10; then
+C8:E = dom AFN by A1,MESFUNC8:def 2;
+
+D1:now let x be set, n be Nat;
+    assume D11: n >= N & x in dom(F.0); then
+D12:x in dom AFN by C9,MESFUNC8:def 2;
+
+D13: |. (F.n).x - f.x .| < 1/2 & |. (F.N).x - f.x .| < 1/2 by D11,A7;
+
+D14:now assume d: f.x in REAL;
+D17: now assume (F.n).x = +infty or (F.n).x = -infty; then
+      (F.n).x - f.x = +infty or (F.n).x - f.x = -infty by d,SUPINF_2:6,7;
+      hence contradiction by D13,XXREAL_0:9,EXTREAL2:67;
+     end;
+
+D18: now assume (F.N).x = +infty or (F.N).x = -infty; then
+      (F.N).x - f.x = +infty or (F.N).x - f.x = -infty
+        by d,SUPINF_2:6,7; then
+      1. < |. (F.N).x - f.x .| by XXREAL_0:9,EXTREAL2:67;
+      hence contradiction by D11,A8,XXREAL_0:2;
+     end; then
+D19: (F.n).x in REAL & (F.N).x in REAL by D17,XXREAL_0:14;
+D21: |. (F.n).x - f.x .| < 1 & |. f.x - (F.N).x .| < 1/2
+      by D13,XXREAL_0:2,MESFUNC5:1; then
+D22: |. f.x - (F.N).x .| < 1 by XXREAL_0:2;
+
+     0 <= |. (F.n).x - f.x .| by EXTREAL2:51; then
+     reconsider a = |. (F.n).x - f.x .| as Real by D21,EXTREAL2:20,EXTREAL1:1;
+
+     0 <= |. f.x - (F.N).x .| by EXTREAL2:51; then
+     reconsider b = |. f.x - (F.N).x .| as Real by D22,EXTREAL2:20,EXTREAL1:1;
+
+     -f.x + f.x = -(f.x - f.x) by EXTREAL2:15; then
+     -f.x + f.x = 0. by EXTREAL2:13; then
+     (F.n).x - (F.N).x = (F.n).x + (-f.x + f.x) - (F.N).x by SUPINF_2:18; then
+     (F.n).x - (F.N).x = (F.n).x + -f.x + f.x - (F.N).x
+        by d,D17,EXTREAL1:8; then
+     (F.n).x - (F.N).x = (F.n).x - f.x + (f.x - (F.N).x)
+        by d,D18,EXTREAL1:11; then
+D23: |. (F.n).x - (F.N).x .| <= |. (F.n).x - f.x .| + |. f.x - (F.N).x .|
+           by D21,EXTREAL2:20,61,67;
+
+     a < 1/2 & b <= 1/2 by D13,MESFUNC5:1; then
+     a + b < 1/2 + 1/2 by XREAL_1:10; then
+     |. (F.n).x - f.x .| + |. f.x - (F.N).x .| < 1 by SUPINF_2:1; then
+D24: |. (F.n).x - (F.N).x .| < 1 by D23,XXREAL_0:2;
+
+     |. (F.n).x .| - |. (F.N).x .| <= |. (F.n).x - (F.N).x .|
+        by D19,EXTREAL2:68; then
+     |. (F.n).x .| - |. (F.N).x .| <= 1. by D24,XXREAL_0:2;
+     hence |. (F.n).x .| <= |. (F.N).x .| + 1. by EXTREAL2:27;
+    end;
+
+    now assume D25: f.x = +infty or f.x = -infty;
+     |. (F.n).x - f.x .| < 1. & |. (F.N).x - f.x .| < 1.
+        by D13,XXREAL_0:2; then
+     -1. < (F.n).x - f.x & -1. < (F.N).x - f.x &
+     (F.n).x - f.x < 1. & (F.N).x - f.x < 1. by EXTREAL2:58; then
+     ( (F.n).x = +infty & (F.N).x = +infty ) or
+     ( (F.n).x = -infty & (F.N).x = -infty ) by D25,EXTREAL2:28,29;
+     hence |. (F.n).x .| <= |. (F.N).x .| + 1.
+        by EXTREAL2:67,27;
+    end; then
+D26:|. (F.n).x .| <= AFN.x + 1. by D12,D14,XXREAL_0:14,MESFUNC1:def 10;
+
+    dom(AFN + h) = dom AFN /\ dom h by B2,C6,MESFUNC5:28; then
+    dom(AFN + h) = E /\ E by C9,A1,MESFUNC8:def 2,B1; then
+    AFN.x + h.x = (AFN + h).x by D11,A1,MESFUNC1:def 3; then
+D27:AFN.x + 1. = (AFN + h).x by B1,D11,A1;
+
+    dom(F.n) = E by A1,MESFUNC8:def 2; then
+    x in dom |. F.n .| by D11,A1,MESFUNC1:def 10;
+    hence (|. F.n .|).x <= (AFN + h).x by D26,D27,MESFUNC1:def 10;
+   end;
+
+   reconsider N1=N as Element of NAT by ORDINAL1:def 13;
+
+D3:for x be Element of X, n be Nat st
+     x in E holds (|.(F^\N1).n.|).x <= (AFN + h).x
+   proof
+    let x be Element of X, n be Nat;
+    assume D31: x in E;
+    n is Element of NAT by ORDINAL1:def 13; then
+    (F^\N1).n = F.(n+N) by KURATO_2:def 2;
+    hence (|.(F^\N1).n.|).x <= (AFN + h).x by D31,A1,D1,NAT_1:11;
+   end;
+
+D5:for n be Nat holds (F^\N1).n is_measurable_on E
+   proof
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13; then
+    (F^\N1).n = F.(n+N) by KURATO_2:def 2;
+    hence (F^\N1).n is_measurable_on E by A4;
+   end;
+
+D6:for x be Element of X st
+    x in E holds (F^\N1)#x is convergent & lim(F#x) = lim((F^\N1)#x)
+   proof
+    let x be Element of X;
+    assume x in E; then
+D61:F#x is convergent by A1,A3,UCONV;
+D62:now let n be Element of NAT;
+     ((F^\N1)#x).n = ((F^\N1).n).x by MESFUNC5:def 13; then
+     ((F^\N1)#x).n = (F.(n+N)).x by KURATO_2:def 2; then
+     ((F^\N1)#x).n = (F#x).(n+N) by MESFUNC5:def 13;
+     hence ((F^\N1)#x).n = ((F#x)^\N1).n by KURATO_2:def 2;
+    end;
+    (F#x)^\N1 is convergent by D61,RINFSUP2:21;
+    hence (F^\N1)#x is convergent by D62,FUNCT_2:113;
+    lim(F#x) = lim((F#x)^\N1) by D61,RINFSUP2:21;
+    hence lim(F#x) = lim((F^\N1)#x) by D62,FUNCT_2:113;
+   end;
+   (F^\N1).0 = F.(0+N) by KURATO_2:def 2; then
+D4:dom((F^\N1).0) = E by A1,MESFUNC8:def 2; then
+   dom(lim(F^\N1)) = E by MESFUNC8:def 10; then
+D7:dom(lim F) = dom(lim(F^\N1)) by A1,MESFUNC8:def 10;
+D8:now let x be Element of X;
+    assume D81:x in dom(lim F); then
+D82:lim((F^\N1)#x) = (lim (F^\N1)).x by D7,MESFUNC8:def 10;
+    x in E by D81,A1,MESFUNC8:def 10; then
+    lim(F#x) = lim((F^\N1)#x) by D6;
+    hence (lim F).x = (lim (F^\N1)).x by D81,D82,MESFUNC8:def 10;
+   end;
+   consider J be ExtREAL_sequence such that
+E1: ( for n be Nat holds J.n = Integral(M,(F^\N1).n) )&
+    lim_inf J >= Integral(M,lim_inf (F^\N1)) &
+    lim_sup J <= Integral(M,lim_sup (F^\N1)) &
+    ( (for x be Element of X st x in E holds (F^\N1)#x is convergent)
+        implies J is convergent & lim J = Integral(M,lim (F^\N1)) )
+           by D4,D5,B1,C5,C7,C8,D3,Th136x;
+E2:|. lim_inf(F^\N1) .| is_integrable_on M by D4,D5,B1,C5,C7,C8,D3,Th136z;
+E3:dom lim_inf(F^\N1) = dom((F^\N1).0) &
+   dom lim(F^\N1) = dom((F^\N1).0) by MESFUNC8:def 8,def 10;
+   now let x be Element of X;
+    assume P01: x in dom(lim(F^\N1)); then
+    x in E by D4,MESFUNC8:def 10; then
+    (F^\N1)#x is convergent by D6;
+    hence (lim(F^\N1)).x = (lim_inf(F^\N1)).x by P01, MESFUNC8:14;
+   end; then
+E4:lim(F^\N1) = lim_inf(F^\N1) by E3,PARTFUN1:34;
+   for x be Element of X st x in E holds (F^\N1)#x is convergent by D6; then
+   lim(F^\N1) is_measurable_on E by D4,D5,MESFUNC8:25; then
+E5:lim(F^\N1) is_integrable_on M by D4,E3,E4,E2,MESFUNC5:106;
+   deffunc I(Element of NAT) = Integral(M,F.$1);
+   consider I be Function of NAT,ExtREAL such that
+E6: for n be Element of NAT holds I.n = I(n) from FUNCT_2:sch 4;
+   reconsider I as ExtREAL_sequence;
+E7:for n be Nat holds I.n = Integral(M,F.n)
+   proof
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence I.n = Integral(M,F.n) by E6;
+   end;
+   now let n be Element of NAT;
+E8: J.n = Integral(M,(F^\N1).n) by E1;
+    (F^\N1).n = F.(n+N) & (I^\N1).n = I.(n+N) by KURATO_2:def 2;
+    hence J.n = (I^\N1).n by E8,E6;
+   end; then
+   J = I^\N1 by FUNCT_2:113; then
+   I is convergent & lim I = lim J by E1,D6,RINFSUP2:17; then
+   I is convergent & lim I = Integral(M,lim F) by D6,E1,D8,D7,PARTFUN1:34;
+   hence f is_integrable_on M &
+    ex I be ExtREAL_sequence st
+     (for n be Nat holds I.n = Integral(M,F.n)) &
+     I is convergent & lim I = Integral(M,f) by E5,E7,A6,D8,D7,PARTFUN1:34;
+end;

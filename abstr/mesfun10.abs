@@ -1,0 +1,190 @@
+:: Fatou's Lemma and the {L}ebesgue's Convergence Theorem
+::  by Noboru Endou , Keiko Narita and Yasunari Shidama
+:: 
+:: Received July 22, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, MEASURE1, RELAT_1, FUNCT_1, ORDINAL2, COMPLEX1, SEQ_1,
+      SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, ARYTM_3, RLVECT_1,
+      GROUP_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC5, SUPINF_1, SUPINF_2,
+      SEQFUNC, TDGROUP, RFUNCT_3, MESFUNC8, SEQM_3, RINFSUP1, MESFUN10,
+      XXREAL_2, SQUARE_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, XXREAL_0, XXREAL_2, RELAT_1, FUNCT_1, RELSET_1, DOMAIN_1, SEQM_3,
+      FUNCT_2, PARTFUN1, NAT_1, PROB_1, SUPINF_1, SUPINF_2, KURATO_2, MEASURE1,
+      EXTREAL1, MESFUNC1, MEASURE6, MESFUNC2, SEQFUNC, MESFUNC5, MESFUNC8,
+      RINFSUP2;
+ constructors REAL_1, DOMAIN_1, NAT_1, KURATO_2, EXTREAL1, MESFUNC1, MEASURE6,
+      MESFUNC2, MESFUNC5, RINFSUP2, EXTREAL2, XXREAL_2, MESFUNC9, SUPINF_1;
+ registrations SUPINF_1, NAT_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1,
+      MEASURE1, RELAT_1, XBOOLE_0, SUPINF_2, NUMBERS, XXREAL_0, MESFUNC8,
+      RINFSUP2, VALUED_0, XXREAL_2, FINSET_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Fatou's Lemma
+
+reserve X for non empty set,
+        F for with_the_same_dom Functional_Sequence of X,ExtREAL,
+        seq,seq1,seq2 for ExtREAL_sequence,
+        x for Element of X,
+        a,r for R_eal,
+        n,m,k for Nat;
+
+theorem :: MESFUN10:1
+(for n be Nat holds seq1.n <= seq2.n) implies inf rng seq1 <= inf rng seq2;
+
+theorem :: MESFUN10:2
+(for n be Nat holds seq1.n <= seq2.n) implies
+  (inferior_realsequence seq1).k <= (inferior_realsequence seq2).k &
+  (superior_realsequence seq1).k <= (superior_realsequence seq2).k;
+
+theorem :: MESFUN10:3
+(for n be Nat holds seq1.n <= seq2.n) implies
+  lim_inf seq1 <= lim_inf seq2 & lim_sup seq1 <= lim_sup seq2;
+
+theorem :: MESFUN10:4
+(for n be Nat holds seq.n >= a) implies inf seq >= a;
+
+theorem :: MESFUN10:5
+(for n be Nat holds seq.n <= a) implies sup seq <= a;
+
+theorem :: MESFUN10:6
+for n be Element of NAT st
+  x in dom inf(F^\n) holds (inf(F^\n)).x =inf((F#x)^\n);
+
+reserve S for SigmaField of X,
+        M for sigma_Measure of S,
+        E for Element of S;
+
+:: Fatou's Lemma
+theorem :: MESFUN10:7
+E = dom(F.0) &
+(for n holds F.n is nonnegative & F.n is_measurable_on E) implies
+ex I be ExtREAL_sequence st
+ (for n holds I.n = Integral(M,F.n)) & Integral(M,lim_inf F) <= lim_inf I;
+
+begin :: Lebesgue's Convergence Theorem
+
+theorem :: MESFUN10:8
+for X,Y being non empty Subset of ExtREAL, r be R_eal st
+ X = {r} & r in REAL holds sup(X + Y) = sup X + sup Y;
+
+theorem :: MESFUN10:9
+for X,Y being non empty Subset of ExtREAL, r be R_eal st
+ X = {r} & r in REAL holds inf(X + Y) = inf X + inf Y;
+
+theorem :: MESFUN10:10
+ r in REAL &
+ (for n be Nat holds seq1.n = r + seq2.n) implies
+   lim_inf seq1 = r + lim_inf seq2 & lim_sup seq1 = r + lim_sup seq2;
+
+reserve F1,F2 for Functional_Sequence of X,ExtREAL,
+        f,g,P for PartFunc of X,ExtREAL;
+
+theorem :: MESFUN10:11
+dom(F1.0) = dom(F2.0) & F1 is with_the_same_dom & F2 is with_the_same_dom &
+f"{+infty} = {} & f"{-infty} = {} &
+(for n be Nat holds F1.n = f + F2.n) implies
+  lim_inf F1 = f + lim_inf F2 & lim_sup F1 = f + lim_sup F2;
+
+theorem :: MESFUN10:12
+seq^\0 = seq;
+
+theorem :: MESFUN10:13
+f is_integrable_on M & g is_integrable_on M implies f-g is_integrable_on M;
+
+theorem :: MESFUN10:14
+f is_integrable_on M & g is_integrable_on M implies
+ ex E be Element of S st
+   E = dom f /\ dom g & Integral(M,f-g)=Integral(M,f|E)+Integral(M,(-g)|E);
+
+theorem :: MESFUN10:15
+(for n be Nat holds seq1.n = -seq2.n) implies
+  lim_inf seq2 = -lim_sup seq1 & lim_sup seq2 = -lim_inf seq1;
+
+theorem :: MESFUN10:16
+dom(F1.0) = dom(F2.0) & F1 is with_the_same_dom & F2 is with_the_same_dom &
+(for n be Nat holds F1.n = - F2.n) implies
+  lim_inf F1 = -lim_sup F2 & lim_sup F1 = -lim_inf F2;
+
+theorem :: MESFUN10:17
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M & P is nonnegative &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ (for n be Nat holds |. F.n .| is_integrable_on M) &
+ |. lim_inf F .| is_integrable_on M &
+ |. lim_sup F .| is_integrable_on M;
+
+:: Lebesgue's Convergence theorem
+theorem :: MESFUN10:18
+E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
+P is_integrable_on M & P is nonnegative &
+(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  lim_inf I >= Integral(M,lim_inf F) &
+  lim_sup I <= Integral(M,lim_sup F) &
+  ( (for x be Element of X st x in E holds F#x is convergent)
+      implies I is convergent & lim I = Integral(M,lim F) );
+
+theorem :: MESFUN10:19
+E = dom(F.0) &
+(for n holds F.n is nonnegative & F.n is_measurable_on E) &
+(for x,n,m st x in E & n <= m holds (F.n).x >= (F.m).x) &
+Integral(M,(F.0)|E) < +infty
+implies
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F);
+
+definition let X be set, F be Functional_Sequence of X,ExtREAL;
+attr F is uniformly_bounded means
+:: MESFUN10:def 1
+ ex K be real number st
+  for n be Nat, x be set st x in dom(F.0) holds |. (F.n).x .| <= K;
+end;
+
+:: Lebesgue's Bounded Convergence Theorem
+theorem :: MESFUN10:20
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_measurable_on E) &
+F is uniformly_bounded &
+(for x be Element of X st x in E holds F#x is convergent)
+implies
+ (for n be Nat holds F.n is_integrable_on M) &
+ lim F is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,lim F);
+
+definition let X be set, F be Functional_Sequence of X,ExtREAL,
+ f be PartFunc of X,ExtREAL;
+pred F is_uniformly_convergent_to f means
+:: MESFUN10:def 2
+ F is with_the_same_dom &
+ dom(F.0) = dom f &
+ for e be real number st e>0
+  ex N be Nat st
+   for n be Nat, x be set st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e;
+end;
+
+theorem :: MESFUN10:21
+F1 is_uniformly_convergent_to f implies
+ (for x be Element of X st x in dom(F1.0) holds
+                            F1#x is convergent & lim(F1#x) = f.x);
+
+theorem :: MESFUN10:22
+M.E < +infty & E = dom(F.0) &
+(for n be Nat holds F.n is_integrable_on M) &
+F is_uniformly_convergent_to f
+implies
+ f is_integrable_on M &
+ ex I be ExtREAL_sequence st
+  (for n be Nat holds I.n = Integral(M,F.n)) &
+  I is convergent & lim I = Integral(M,f);

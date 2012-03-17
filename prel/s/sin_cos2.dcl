@@ -22,27 +22,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="86">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="19"/>
-</Cluster>
-</FCluster>
-<FCluster aid="SIN_COS2" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="89">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
-<FCluster aid="SIN_COS2" nr="3">
+<FCluster aid="SIN_COS2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,7 +39,20 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
+</Cluster>
+</FCluster>
+<FCluster aid="SIN_COS2" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="95">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

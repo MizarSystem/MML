@@ -13,48 +13,26 @@ environ
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4, STRUCT_0,
       PRE_TOPC, TOPS_2, COMPTS_1, RCOMP_1, METRIC_1, PCOMPS_1, TOPMETR,
       XXREAL_0;
- constructors FUNCT_4, REAL_1, MEMBERED, RCOMP_1, TOPS_2, COMPTS_1, TOPMETR;
+ constructors FUNCT_4, REAL_1, MEMBERED, RCOMP_1, TOPS_2, COMPTS_1, TOPMETR,
+      XXREAL_2;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, NUMBERS, XREAL_0, MEMBERED,
-      STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1, BORSUK_1, TOPMETR;
+      STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1, BORSUK_1, TOPMETR, XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI;
+ definitions TARSKI, STRUCT_0;
  theorems BORSUK_1, COMPTS_1, FUNCT_1, FUNCT_2, FUNCT_4, HEINE, TOPMETR,
-      PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_1, TARSKI, TOPS_2, ZFMISC_1, RELAT_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, STRUCT_0, XXREAL_0, XXREAL_1;
+      PCOMPS_1, PRE_TOPC, RCOMP_1, TARSKI, TOPS_2, ZFMISC_1, RELAT_1,
+      RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, STRUCT_0, XXREAL_0, XXREAL_1,
+      XXREAL_2;
  schemes CLASSES1, FUNCT_2;
 
 begin
 
 reserve x,r,a,b for Real;
 
-theorem Th1:
-  for x,y,z being real number holds
-  x <= y & y <= z implies [. x,y .] /\ [. y,z .] = {y}
-proof
-  let x,y,z be real number;
-  assume x <= y & y <= z;
-  then y in [. x,y .] & y in [. y,z .] by XXREAL_1:1;
-  then y in [. x,y .] /\ [. y,z .] by XBOOLE_0:def 3;
-  then
-A1: {y} c= [. x,y .] /\ [. y,z .] by ZFMISC_1:37;
-  [. x,y .] /\ [. y,z .] c= {y}
-  proof
-    let a be set;
-    assume a in [. x,y .] /\ [. y,z .];
-    then a in [. x,y .] & a in [. y,z .] by XBOOLE_0:def 3;
-    then
-A2: a in {r: x<=r & r<=y} & a in {b: y<=b & b<=z} by RCOMP_1:def 1;
-    then
-A3: ex r st r=a & x <= r & r <= y;
-    ex b st b=a & y <= b & b <= z by A2;
-    then a = y by A3,XXREAL_0:1;
-    hence a in {y} by TARSKI:def 1;
-  end;
-  hence thesis by A1,XBOOLE_0:def 10;
-end;
-
 reserve f,g for Function,
   x1,x2 for set;
+
+canceled;
 
 theorem
   f is one-to-one & g is one-to-one &
@@ -163,225 +141,9 @@ end;
 reserve T, S for non empty TopSpace,
   p for Point of T;
 
-theorem Th4:
-  for T1,T2 being SubSpace of T,
-  f being Function of T1,S, g being Function of T2,S st
-  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} & T1 is compact &
-  T2 is compact & T is_T2 & f is continuous & g is continuous & f.p = g.p
-  holds f+*g is continuous Function of T,S
-proof
-  let T1,T2 be SubSpace of T, f be Function of T1,S, g be Function of T2,S;
-  assume that
-A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} and
-A2: T1 is compact and
-A3: T2 is compact and
-A4: T is_T2 and
-A5: f is continuous and
-A6: g is continuous and
-A7: f.p = g.p;
-A8: dom f = the carrier of T1 by FUNCT_2:def 1
-    .= [#] T1 by PRE_TOPC:12;
-A9: dom g = the carrier of T2 by FUNCT_2:def 1
-    .= [#] T2 by PRE_TOPC:12;
-  set h = f+*g;
-A10: dom h = [#] T by A1,A8,A9,FUNCT_4:def 1
-    .= the carrier of T by PRE_TOPC:12;
-  rng h c= rng f \/ rng g & rng f \/ rng g c= the carrier of S by FUNCT_4:18;
-  then rng h c= the carrier of S by XBOOLE_1:1;
-  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
-  for P being Subset of S st P is closed holds h"P is closed
-  proof
-    let P be Subset of S;
-    assume
-A11: P is closed;
-A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
-    then
-A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
-      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
-A14: for x being set st x in [#] T1 holds h.x = f.x
-    proof
-      let x be set such that
-A15:  x in [#] T1;
-      now per cases;
-        suppose
-A16:      x in [#] T2;
-          then x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
-          then x = p by A1,TARSKI:def 1;
-          hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-        end;
-        suppose not x in [#] T2;
-          hence h.x = f.x by A9,FUNCT_4:12;
-        end;
-      end;
-      hence thesis;
-    end;
-    now
-      let x be set;
-      thus x in h"P /\ [#] T1 implies x in f"P
-      proof
-        assume x in h"P /\ [#] T1;
-        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
-        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
-        hence x in f"P by FUNCT_1:def 13;
-      end;
-      assume x in f"P;
-      then x in dom f & f.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#] T1 & h.x in P by A8,A12,A14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
-    end;
-    then
-A17: h"P /\ [#] T1 = f"P by TARSKI:2;
-    now
-      let x be set;
-      thus x in h"P /\ [#] T2 implies x in g"P
-      proof
-        assume x in h"P /\ [#] T2;
-        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
-        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
-        hence x in g"P by FUNCT_1:def 13;
-      end;
-      assume x in g"P;
-      then x in dom g & g.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#]
-      T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
-    end;
-    then
-A18: h"P = f"P \/ g"P by A13,A17,TARSKI:2;
-    f"P c= the carrier of T1;
-    then f"P c= [#] T1 & [#] T1 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then f"P c= [#] T by XBOOLE_1:1;
-    then reconsider P1 = f"P as Subset of T by PRE_TOPC:12;
-    g"P c= the carrier of T2;
-    then g"P c= [#] T2 & [#] T2 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then g"P c= [#] T by XBOOLE_1:1;
-    then reconsider P2 = g"P as Subset of T by PRE_TOPC:12;
-    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
-    then f"P is compact & g"P is compact by A2,A3,COMPTS_1:17;
-    then P1 is compact & P2 is compact by BORSUK_1:42;
-    hence h"P is closed by A4,A18,COMPTS_1:16,19;
-  end;
-  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
-end;
+reserve T for T_2 TopSpace;
 
-theorem
-  for T being non empty TopSpace, T1, T2 being SubSpace of T,
-  p1,p2 being Point of T
-  for f being Function of T1,S, g being Function of T2,S st
-  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#]
-  T2) = {p1,p2} & T1 is compact &
-  T2 is compact & T is_T2 & f is continuous & g is continuous &
-  f.p1 = g.p1 & f.p2 = g.p2 holds f+*g is continuous Function of T,S
-proof
-  let T be non empty TopSpace, T1, T2 be SubSpace of T, p1,p2 be Point of T;
-  let f be Function of T1,S, g be Function of T2,S;
-  assume that
-A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p1,p2} and
-A2: T1 is compact and
-A3: T2 is compact and
-A4: T is_T2 and
-A5: f is continuous and
-A6: g is continuous and
-A7: f.p1 = g.p1 & f.p2 = g.p2;
-  set h = f+*g;
-A8: dom f = the carrier of T1 by FUNCT_2:def 1
-    .= [#] T1 by PRE_TOPC:12;
-A9: dom g = the carrier of T2 by FUNCT_2:def 1
-    .= [#] T2 by PRE_TOPC:12;
-  then
-A10: dom h = [#] T by A1,A8,FUNCT_4:def 1
-    .= the carrier of T by PRE_TOPC:12;
-  rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g by FUNCT_4:18;
-  then rng h c= the carrier of S by XBOOLE_1:1;
-  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
-  for P being Subset of S st P is closed holds h"P is closed
-  proof
-    let P be Subset of S;
-    assume
-A11: P is closed;
-A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
-    then
-A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
-      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
-A14: for x being set st x in [#] T1 holds h.x = f.x
-    proof
-      let x be set such that
-A15:  x in [#] T1;
-      now per cases;
-        suppose
-A16:      x in [#] T2;
-          then
-A17:      x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
-          now per cases by A1,A17,TARSKI:def 2;
-            suppose x = p1;
-              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-            end;
-            suppose x = p2;
-              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
-            end;
-          end;
-          hence h.x = f.x;
-        end;
-        suppose not x in [#] T2;
-          hence h.x = f.x by A9,FUNCT_4:12;
-        end;
-      end;
-      hence thesis;
-    end;
-    now
-      let x be set;
-      thus x in h"P /\ [#] T1 implies x in f"P
-      proof
-        assume x in h"P /\ [#] T1;
-        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
-        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
-        hence x in f"P by FUNCT_1:def 13;
-      end;
-      assume x in f"P;
-      then x in dom f & f.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#] T1 & h.x in P by A8,A12,A14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
-    end;
-    then
-A18: h"P /\ [#] T1 = f"P by TARSKI:2;
-    now
-      let x be set;
-      thus x in h"P /\ [#] T2 implies x in g"P
-      proof
-        assume x in h"P /\ [#] T2;
-        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
-        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
-        hence x in g"P by FUNCT_1:def 13;
-      end;
-      assume x in g"P;
-      then x in dom g & g.x in P by FUNCT_1:def 13;
-      then x in dom h & x in [#]
-      T2 & h.x in P by A9,A12,FUNCT_4:14,XBOOLE_0:def 2;
-      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
-      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
-    end;
-    then
-A19: h"P = f"P \/ g"P by A13,A18,TARSKI:2;
-    f"P c= the carrier of T1;
-    then f"P c= [#] T1 & [#] T1 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then f"P c= [#] T by XBOOLE_1:1;
-    then reconsider P1 = f"P as Subset of T by PRE_TOPC:12;
-    g"P c= the carrier of T2;
-    then g"P c= [#] T2 & [#] T2 c= [#] T by A1,PRE_TOPC:12,XBOOLE_1:7;
-    then g"P c= [#] T by XBOOLE_1:1;
-    then reconsider P2 = g"P as Subset of T by PRE_TOPC:12;
-    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
-    then f"P is compact & g"P is compact by A2,A3,COMPTS_1:17;
-    then P1 is compact & P2 is compact by BORSUK_1:42;
-    hence h"P is closed by A4,A19,COMPTS_1:16,19;
-  end;
-  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
-end;
-
-reserve T for being_T2 TopSpace;
+canceled 2;
 
 theorem
   for P, Q being Subset of T for p being Point of T,
@@ -447,7 +209,7 @@ A20: for x being set st x in [. 1/2,1 .] holds X[x,g2.x]
   from CLASSES1:sch 1(A17);
   reconsider R = P' \/ Q' as non empty Subset of M;
 A21: R = [#] (M|R) by PRE_TOPC:def 10
-    .= the carrier of M|R by PRE_TOPC:12;
+    .= the carrier of M|R;
   now
     let y be set;
     assume y in rng f2;
@@ -485,7 +247,7 @@ A29: rng g2 c= Q by TARSKI:def 3;
   0 in [. 0,1 .] & 1 in [. 0,1 .] & 1/2 in [. 0,1 .]
    by XXREAL_1:1;
   then [. 0,1/2 .] c= the carrier of I[01] &
-  [. 1/2,1 .] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:16;
+  [. 1/2,1 .] c= the carrier of I[01] by BORSUK_1:83,XXREAL_2:def 12;
   then the carrier of (Closed-Interval-TSpace(0,1/2))
   c= the carrier of I[01] & the carrier of (Closed-Interval-TSpace(1/2,1))
   c= the carrier of I[01] by TOPMETR:25;
@@ -500,17 +262,16 @@ A30: dom f2 = the carrier of T1 & rng f2 c= the carrier of T|(P \/ Q
   reconsider g1 = g2 as Function of T2,M|R by A30,FUNCT_2:def 1,RELSET_1:11;
   1/2 in { r where r is Real : 0 <= r & r <= 1};
   then reconsider pp = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
-  [#] T1 = the carrier of T1 & [#] T2 = the carrier of T2 by PRE_TOPC:12;
-  then
+  [#] T1 = the carrier of T1 & [#] T2 = the carrier of T2;
 A31: [#] T1 = [. 0,1/2 .] & [#] T2 = [. 1/2,1 .] by TOPMETR:25;
   then [#] T1 \/ [#] T2 = the carrier of I[01] by BORSUK_1:83,XXREAL_1:165;
   then
-A32: ([#] T1) \/ ([#] T2) = [#](I[01] qua TopSpace) by PRE_TOPC:12;
-A33: ([#] T1) /\ ([#] T2) = {pp} by A31,Th1;
+A32: ([#] T1) \/ ([#] T2) = [#](I[01] qua TopSpace);
+A33: ([#] T1) /\ ([#] T2) = {pp} by A31,XXREAL_1:418;
 A34: T1 is compact & T2 is compact by HEINE:11;
-  TopSpaceMetr(RealSpace) is_T2 by PCOMPS_1:38;
+  TopSpaceMetr(RealSpace) is T_2 by PCOMPS_1:38;
   then
-A35: I[01] is_T2 by TOPMETR:3,def 7;
+A35: I[01] is T_2 by TOPMETR:3,def 7;
   deffunc U(Element of REAL) = 2*$1;
   consider f3 being Function of REAL,REAL such that
 A36: for x holds f3.x = U(x) from FUNCT_2:sch 4;
@@ -548,14 +309,14 @@ A44: y = f3.x by A42,FUNCT_1:70
   end;
   then reconsider f4 = f3' as Function of T1,I[01] by A41,FUNCT_2:def 1
   ,RELSET_1:11;
-A45: f4 is continuous by A40,TOPMETR:8;
+A45: f4 is continuous by A40,PRE_TOPC:57;
 A46: f is continuous by A2,TOPS_2:def 5;
   dom f = the carrier of I[01] & rng f c= the carrier of
   M|R by A7,A21,FUNCT_2:def 1,XBOOLE_1:7;
   then reconsider ff=f as Function of I[01],M|R by FUNCT_2:def 1,RELSET_1:11;
   M|P' is SubSpace of M|R by TOPMETR:5;
   then
-A47: ff is continuous by A46,TOPMETR:7;
+A47: ff is continuous by A46,PRE_TOPC:56;
   for x being set st x in the carrier of T1 holds f1.x = (ff*f4).x
   proof
     let x be set such that
@@ -612,7 +373,7 @@ A58: y = g3.x by A56,FUNCT_1:70
   end;
   then reconsider g4 = g3' as Function of T2,I[01] by A55,FUNCT_2:def 1
   ,RELSET_1:11;
-A59: g4 is continuous by A54,TOPMETR:8;
+A59: g4 is continuous by A54,PRE_TOPC:57;
 A60: g is continuous by A4,TOPS_2:def 5;
   dom g = the carrier of I[01] & rng g c= the carrier of (M|R)
   by A10,A21,FUNCT_2:def 1,XBOOLE_1:7;
@@ -620,7 +381,7 @@ A60: g is continuous by A4,TOPS_2:def 5;
   of I[01],M|R by FUNCT_2:def 1,RELSET_1:11;
   M|Q' is SubSpace of M|R by TOPMETR:5;
   then
-A61: g' is continuous by A60,TOPMETR:7;
+A61: g' is continuous by A60,PRE_TOPC:56;
   for x being set st x in the carrier of T2 holds g1.x = (g'*g4).x
   proof
     let x be set such that
@@ -640,7 +401,7 @@ A64: 1/2 in [. 1/2,1 .] & 1/2 in [. 0,1/2 .] by XXREAL_1:1;
   then f1.pp = g.(2*(1/2) -1) by A3,A5,A16
     .= g1.pp by A20,A64;
   then reconsider h = f2 +* g2 as continuous Function of I[01],M|R
-  by A32,A33,A34,A35,A49,A63,Th4;
+  by A32,A33,A34,A35,A49,A63,COMPTS_1:29;
 A65: dom h = [. 0,1/2 .] \/ [. 1/2,1 .] by A15,A19,FUNCT_4:def 1
     .= [. 0,1 .] by XXREAL_1:165;
 A66: rng h c= rng f2 \/ rng g2 by FUNCT_4:18;
@@ -650,7 +411,7 @@ A67: rng h c= P \/ Q by A66,XBOOLE_1:1;
   reconsider h' = h as Function of I[01],T|(P \/ Q);
   take h';
 A68: I[01] is compact by HEINE:11,TOPMETR:27;
-A69: M|R is_T2 by TOPMETR:3;
+A69: M|R is T_2 by TOPMETR:3;
 A70: rng g2 c= rng h by FUNCT_4:19;
   Q c= rng g2
   proof
@@ -662,7 +423,7 @@ A71: x in dom g & a = g.x by A10,FUNCT_1:def 5;
     then consider x' being Real such that
 A72: x' = x & 0 <= x' & x' <= 1;
     0+1 <= x'+1 & x'+1 <= 1+1 & 2 <> 0 & 2 > 0 by A72,XREAL_1:8;
-    then 1/2 <= (x'+1)/2 & (x'+1)/2 <= 2/2 & 2 <> 0 by REAL_1:73;
+    then 1/2 <= (x'+1)/2 & (x'+1)/2 <= 2/2 & 2 <> 0 by XREAL_1:74;
     then (x'+1)/2 in {r where r is Real: 1/2 <= r & r <= 1};
     then
 A73: (x'+1)/2 in dom g2 by A19,RCOMP_1:def 1;
@@ -681,7 +442,7 @@ A76: x in dom f & a = f.x by A7,FUNCT_1:def 5;
     x in {r where r is Real: 0 <= r & r <= 1} by A6,A76,RCOMP_1:def 1;
     then consider x' being Real such that
 A77: x' = x & 0 <= x' & x' <= 1;
-    0/2 <= x'/2 & x'/2 <= 1/2 & 2 <> 0 by A77,REAL_1:73;
+    0/2 <= x'/2 & x'/2 <= 1/2 & 2 <> 0 by A77,XREAL_1:74;
     then x'/2 in {r where r is Real: 0 <= r & r <= 1/2};
     then
 A78: x'/2 in dom f2 by A15,RCOMP_1:def 1;
@@ -699,7 +460,7 @@ A79: x in dom f2 & a = f2.x by A75,FUNCT_1:def 5;
       suppose
 A80:    x in [. 1/2,1 .];
         then x in [. 0,1/2 .] /\ [. 1/2,1 .] by A15,A79,XBOOLE_0:def 3;
-        then x in {1/2} by Th1;
+        then x in {1/2} by XXREAL_1:418;
         then
 A81:    x = 1/2 by TARSKI:def 1;
 A82:    1/2 in [. 0,1/2 .] by XXREAL_1:1;
@@ -727,7 +488,7 @@ A86:    x in dom h by FUNCT_4:def 1;
 A87: rng h = [#] (M|R) by PRE_TOPC:def 10;
   dom h = the carrier of I[01] by FUNCT_2:def 1;
   then
-A88: dom h = [#]I[01] by PRE_TOPC:12;
+A88: dom h = [#]I[01];
 A89: now
     let x be Real;
     assume x in dom f2;

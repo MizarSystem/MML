@@ -29,113 +29,113 @@
 </Signature>
 <FCluster aid="MSSUBLAT" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
-<Adjective nr="62"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
-<Adjective nr="65"/>
-<Adjective nr="66" value="false"/>
-<Adjective nr="70"/>
-<Adjective nr="72"/>
+<Adjective nr="35"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="71"/>
+<Adjective nr="75"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="65"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="8">
+<Func kind="G" nr="9">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="U" nr="6">
+<Func kind="U" nr="7">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="59"/>
+<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="64"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="8">
+<Func kind="G" nr="9">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="U" nr="6">
+<Func kind="U" nr="7">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="58"/>
+<Adjective nr="61"/>
+<Adjective nr="64"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="4">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="8">
+<Func kind="G" nr="9">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="U" nr="6">
+<Func kind="U" nr="7">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MSSUBLAT" nr="5">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
-<Adjective nr="62"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
+<Adjective nr="68"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="8">
+<Func kind="G" nr="9">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="U" nr="6">
+<Func kind="U" nr="7">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="55"/>
-<Adjective nr="62"/>
+<Adjective nr="61"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 </Registrations>

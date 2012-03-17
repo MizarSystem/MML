@@ -18,39 +18,39 @@
 </Signature>
 <RCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="92"/>
+<Func kind="K" nr="96"/>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 </Registrations>

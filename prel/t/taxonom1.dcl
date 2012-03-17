@@ -28,26 +28,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="5" value="false"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
+<Adjective nr="4"/>
+<Adjective nr="6" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TAXONOM1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="46"/>
+<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="50">
+<Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -58,12 +58,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="127">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="5" value="false"/>
+<Adjective nr="6" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

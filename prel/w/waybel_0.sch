@@ -19,14 +19,14 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="16" value="false"/>
-</Cluster>
-</Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="17" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="G" nr="7">
+<Cluster>
+<Adjective nr="17" value="false"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -44,13 +44,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -82,7 +82,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -123,7 +123,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -147,13 +147,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="89">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

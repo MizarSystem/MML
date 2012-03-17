@@ -8,13 +8,14 @@ environ
 
  vocabularies FRAENKEL, FUNCT_1, FUNCT_5, FUNCT_2, RELAT_1, BOOLE, CAT_1,
       FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2, REALSET1,
-      GRAPH_1, AMI_1;
+      GRAPH_1, AMI_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, FRAENKEL,
-      REALSET1, FUNCOP_1, GRAPH_1, CAT_1;
+      REALSET1, FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1;
  constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCT_4, FRAENKEL, FUNCT_5, REALSET1,
-      CAT_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, FUNCT_4;
+      CAT_1, FUNCOP_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, FUNCT_4,
+      STRUCT_0;
  requirements SUBSET, BOOLE;
 
 
@@ -64,7 +65,7 @@ definition
   let c be Object of C;
   func B --> c -> Functor of B,C equals
 :: CAT_2:def 1
-  (the Edges of B) --> (id c);
+  (the carrier' of B) --> (id c);
 end;
 
 canceled 2;
@@ -118,7 +119,7 @@ definition
   mode Subcategory of C -> Category means
 :: CAT_2:def 4
 
-    the Vertices of it c= the Vertices of C &
+    the carrier of it c= the carrier of C &
     (for a,b being Object of it, a',b' being Object of C
     st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')) &
     the Comp of it c= the Comp of C &
@@ -139,7 +140,7 @@ theorem :: CAT_2:12
   for e being Object of E holds e is Object of C;
 
 theorem :: CAT_2:13
-  the Edges of E c= the Edges of C;
+  the carrier' of E c= the carrier' of C;
 
 theorem :: CAT_2:14
   for f being Morphism of E holds f is Morphism of C;
@@ -186,7 +187,7 @@ theorem :: CAT_2:25
   st a = a' & b = b' holds Hom(a,b) = Hom(a',b');
 
 definition
-  let C be non void CatStr, D;
+  let C be non void non empty CatStr, D;
   pred C is_full_subcategory_of D means
 :: CAT_2:def 6
 
@@ -201,12 +202,12 @@ theorem :: CAT_2:27
   E is_full_subcategory_of C iff incl(E) is full;
 
 theorem :: CAT_2:28
-  for O being non empty Subset of the Vertices of C holds
+  for O being non empty Subset of the carrier of C holds
   union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
-  is non empty Subset of the Edges of C;
+  is non empty Subset of the carrier' of C;
 
 theorem :: CAT_2:29
-  for O being non empty Subset of the Vertices of C, M being non empty set st
+  for O being non empty Subset of the carrier of C, M being non empty set st
   M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
   holds (the Source of C)|M is Function of M,O &
   (the Target of C)|M is Function of M,O &
@@ -216,11 +217,11 @@ theorem :: CAT_2:29
 registration
   let O, M be non empty set, d,c being Function of M,O,
       p being PartFunc of [:M,M:],M, i being Function of O,M;
- cluster CatStr(#O,M,d,c,p,i#) -> non void;
+ cluster CatStr(#O,M,d,c,p,i#) -> non void non empty;
 end;
 
 theorem :: CAT_2:30
-  for O being non empty Subset of the Vertices of C, M being non empty set,
+  for O being non empty Subset of the carrier of C, M being non empty set,
   d,c being Function of M,O, p being PartFunc of [:M,M:],M,
   i being Function of O,M
   st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in
@@ -229,7 +230,7 @@ theorem :: CAT_2:30
   holds CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C;
 
 theorem :: CAT_2:31
-  for O being non empty Subset of the Vertices of C, M being non empty set ,
+  for O being non empty Subset of the carrier of C, M being non empty set ,
   d,c being Function of M,O, p being PartFunc of [:M,M:],M,
   i being Function of O,M st CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C
   holds
@@ -257,8 +258,9 @@ definition
   let C,D;
   func [:C,D:] -> Category equals
 :: CAT_2:def 7
-  CatStr (# [:the Vertices of C,the Vertices of D:],
-    [:the Edges of C,the Edges of D:], [:the Source of C,the Source of D:],
+  CatStr (# [:the carrier of C,the carrier of D:],
+    [:the carrier' of C,the carrier' of D:],
+     [:the Source of C,the Source of D:],
     [:the Target of C,the Target of D:], |:the Comp of C, the Comp of D:|,
     [:the Id of C,the Id of D:] #);
 end;
@@ -271,8 +273,8 @@ end;
 canceled;
 
 theorem :: CAT_2:33
-  the Vertices of [:C,D:] = [:the Vertices of C,the Vertices of D:] &
-  the Edges of [:C,D:] = [:the Edges of C,the Edges of D:] &
+  the carrier of [:C,D:] = [:the carrier of C,the carrier of D:] &
+  the carrier' of [:C,D:] = [:the carrier' of C,the carrier' of D:] &
   the Source of [:C,D:] = [:the Source of C,the Source of D:] &
   the Target of [:C,D:] = [:the Target of C,the Target of D:] &
   the Comp of [:C,D:] = |:the Comp of C, the Comp of D:| &
@@ -395,8 +397,8 @@ theorem :: CAT_2:51
   holds (Obj S-?c').c = (Obj S).(c,c');
 
 theorem :: CAT_2:52
-  for L being Function of the Vertices of C,Funct(B,D),
-  M being Function of the Vertices of B,Funct(C,D)
+  for L being Function of the carrier of C,Funct(B,D),
+  M being Function of the carrier of B,Funct(C,D)
   st ( for c being Object of C,b being Object of B
   holds (M.b).(id c) = (L.c).(id b) ) &
   ( for f being Morphism of B for g being Morphism of C
@@ -406,27 +408,27 @@ theorem :: CAT_2:52
   holds S.(f,g) = ((L.(cod g)).f)*((M.(dom f)).g);
 
 theorem :: CAT_2:53
-  for L being Function of the Vertices of C,Funct(B,D),
-  M being Function of the Vertices of B,Funct(C,D)
+  for L being Function of the carrier of C,Funct(B,D),
+  M being Function of the carrier of B,Funct(C,D)
   st ex S being Functor of [:B,C:],D st
   for c being Object of C,b being Object of B holds S-?c = L.c & S?-b = M.b
   for f being Morphism of B for g being Morphism of C
   holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g);
 
 theorem :: CAT_2:54
-  pr1(the Edges of C,the Edges of D) is Functor of [:C,D:],C;
+  pr1(the carrier' of C,the carrier' of D) is Functor of [:C,D:],C;
 
 theorem :: CAT_2:55
-  pr2(the Edges of C,the Edges of D) is Functor of [:C,D:],D;
+  pr2(the carrier' of C,the carrier' of D) is Functor of [:C,D:],D;
 
 definition
   let C,D;
   func pr1(C,D) -> Functor of [:C,D:],C equals
 :: CAT_2:def 10
-  pr1(the Edges of C,the Edges of D);
+  pr1(the carrier' of C,the carrier' of D);
   func pr2(C,D) -> Functor of [:C,D:],D equals
 :: CAT_2:def 11
-  pr2(the Edges of C,the Edges of D);
+  pr2(the carrier' of C,the carrier' of D);
 end;
 
 canceled 3;

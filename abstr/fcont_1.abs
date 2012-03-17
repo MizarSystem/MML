@@ -9,15 +9,16 @@ environ
  vocabularies ARYTM, SEQ_1, PARTFUN1, RELAT_1, SEQ_2, ORDINAL2, FUNCT_1,
       SEQM_3, ABSVALUE, ARYTM_1, ARYTM_3, RCOMP_1, BOOLE, FINSEQ_1, COMPTS_1,
       SEQ_4, RFUNCT_1, PARTFUN2, SQUARE_1, RFUNCT_2, FCONT_1, FRECHET2,
-      COMPLEX1;
+      COMPLEX1, ANPROJ_1, PROB_1, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1, PARTFUN2,
-      RFUNCT_1, RFUNCT_2, RCOMP_1, RECDEF_1;
+      RFUNCT_1, RCOMP_1, RECDEF_1, RFUNCT_2;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1, SEQ_2,
       SEQM_3, SEQ_4, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2,
+      XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -35,7 +36,6 @@ definition
   pred f is_continuous_in x0 means
 :: FCONT_1:def 1
 
-  x0 in dom f &
   for s1 st rng s1 c= dom f & s1 is convergent & lim s1 = x0 holds
   f*s1 is convergent & f.x0 = lim (f*s1);
 end;
@@ -43,51 +43,52 @@ end;
 canceled;
 
 theorem :: FCONT_1:2
-  f is_continuous_in x0 iff x0 in dom f & for s1 st rng s1 c= dom f &
+  f is_continuous_in x0 iff for s1 st rng s1 c= dom f &
   s1 is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds
   f*s1 is convergent & f.x0=lim(f*s1);
 
 theorem :: FCONT_1:3
-  f is_continuous_in x0 iff x0 in dom f &
+  f is_continuous_in x0 iff
   for r st 0<r ex s st 0<s & for x1 st x1 in dom f & abs(x1-x0)<s holds
   abs(f.x1-f.x0)<r;
 
 theorem :: FCONT_1:4
-  for f,x0 holds f is_continuous_in x0 iff x0 in dom f &
+  for f,x0 holds f is_continuous_in x0 iff
   for N1 being Neighbourhood of f.x0 ex N being Neighbourhood of x0 st
   for x1 st x1 in dom f & x1 in N holds f.x1 in N1;
 
 theorem :: FCONT_1:5
-  for f,x0 holds f is_continuous_in x0 iff x0 in dom f &
+  for f,x0 holds f is_continuous_in x0 iff
   for N1 being Neighbourhood of f.x0
   ex N being Neighbourhood of x0 st f.:N c= N1;
 
 theorem :: FCONT_1:6
-  x0 in dom f & (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) implies
+  (ex N be Neighbourhood of x0 st dom f /\ N = {x0}) implies
   f is_continuous_in x0;
 
 theorem :: FCONT_1:7
-  f1 is_continuous_in x0 & f2 is_continuous_in x0 implies
+  x0 in dom f1 /\ dom f2 & f1 is_continuous_in x0 & f2 is_continuous_in x0
+   implies
   f1+f2 is_continuous_in x0 & f1-f2 is_continuous_in x0 &
   f1(#)f2 is_continuous_in x0;
 
 theorem :: FCONT_1:8
-  f is_continuous_in x0 implies r(#)f is_continuous_in x0;
+  x0 in dom f & f is_continuous_in x0 implies r(#)f is_continuous_in x0;
 
 theorem :: FCONT_1:9
-  f is_continuous_in x0 implies abs(f) is_continuous_in x0 &
+  x0 in dom f & f is_continuous_in x0 implies abs(f) is_continuous_in x0 &
   -f is_continuous_in x0;
 
 theorem :: FCONT_1:10
   f is_continuous_in x0 & f.x0<>0 implies f^ is_continuous_in x0;
 
 theorem :: FCONT_1:11
-  f1 is_continuous_in x0 & f1.x0<>0 & f2 is_continuous_in x0 implies
-  f2/f1 is_continuous_in x0;
+ x0 in dom f2 &  f1 is_continuous_in x0 & f1.x0<>0 & f2 is_continuous_in x0
+   implies f2/f1 is_continuous_in x0;
 
 theorem :: FCONT_1:12
-  f1 is_continuous_in x0 & f2 is_continuous_in f1.x0 implies
-  f2*f1 is_continuous_in x0;
+  x0 in dom (f2*f1) & f1 is_continuous_in x0 & f2 is_continuous_in f1.x0
+  implies f2*f1 is_continuous_in x0;
 
 definition
   let f,X;
@@ -199,7 +200,7 @@ theorem :: FCONT_1:36
 
 theorem :: FCONT_1:37
   f1 is_Lipschitzian_on X & f2 is_Lipschitzian_on X1 &
-  f1 is_bounded_on Z & f2 is_bounded_on Z1 implies
+  f1|Z is bounded & f2|Z1 is bounded implies
   f1(#)f2 is_Lipschitzian_on (X /\ Z /\ X1 /\ Z1);
 
 theorem :: FCONT_1:38
@@ -210,7 +211,7 @@ theorem :: FCONT_1:39
   abs(f) is_Lipschitzian_on X;
 
 theorem :: FCONT_1:40
-  X c= dom f & f is_constant_on X implies f is_Lipschitzian_on X;
+  X c= dom f & f|X is constant implies f is_Lipschitzian_on X;
 
 theorem :: FCONT_1:41
   id Y is_Lipschitzian_on Y;
@@ -222,7 +223,7 @@ theorem :: FCONT_1:43
   for f st (ex r st rng f = {r}) holds f is_continuous_on (dom f);
 
 theorem :: FCONT_1:44
-  X c= dom f & f is_constant_on X implies f is_continuous_on X;
+  X c= dom f & f|X is constant implies f is_continuous_on X;
 
 theorem :: FCONT_1:45
 
@@ -255,11 +256,11 @@ theorem :: FCONT_1:52
   f is_continuous_on X;
 
 theorem :: FCONT_1:53
-  X c= dom f & f is_monotone_on X & (ex p,g st p<=g & f.:X=[.p,g.]) implies
+  X c= dom f & f|X is monotone & (ex p,g st p<=g & f.:X=[.p,g.]) implies
   f is_continuous_on X;
 
 theorem :: FCONT_1:54
   for f being one-to-one PartFunc of REAL,REAL st
-  p<=g & [.p,g.] c= dom f & (f is_increasing_on [.p,g.] or
-  f is_decreasing_on [.p,g.]) holds (f|[.p,g.])" is_continuous_on f.:[.p,g.];
+  p<=g & [.p,g.] c= dom f & (f|[.p,g.] is increasing or
+  f|[.p,g.] is decreasing) holds (f|[.p,g.])" is_continuous_on f.:[.p,g.];
 

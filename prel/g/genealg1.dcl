@@ -22,13 +22,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
 <Adjective nr="4"/>
-<Adjective nr="6"/>
+<Adjective nr="5"/>
+<Adjective nr="7"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

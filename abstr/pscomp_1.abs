@@ -9,9 +9,9 @@ environ
  vocabularies AMI_1, FREEALG, HAHNBAN, COMPTS_1, BOOLE, FINSET_1, ZFMISC_1,
       SETFAM_1, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1, SEQ_1, SEQ_2, ORDINAL2,
       LATTICES, ARYTM_3, SEQ_4, PRE_TOPC, RCOMP_1, FUNCOP_1, PRALG_1, SUBSET_1,
-      NEWTON, INT_1, REALSET1, LIMFUNC1, PCOMPS_1, EUCLID, TOPREAL1, FUNCT_5,
-      MCART_1, PSCOMP_1, ARYTM, MEMBERED, FUZZY_2, PARTFUN1, VALUED_0,
-      XXREAL_2, SUPINF_1;
+      NEWTON, INT_1, LIMFUNC1, EUCLID, TOPREAL1, FUNCT_5, MCART_1, PSCOMP_1,
+      ARYTM, MEMBERED, FUZZY_2, PARTFUN1, VALUED_0, XXREAL_2, SUPINF_1,
+      ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, SETFAM_1, FINSET_1, REAL_1, NAT_1, INT_1, MEMBERED, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, STRUCT_0, PRE_TOPC,
@@ -19,11 +19,11 @@ environ
       COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1, MEASURE6, XXREAL_0, XXREAL_2;
  constructors DOMAIN_1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQ_4, RCOMP_1,
       FUNCOP_1, LIMFUNC1, MEASURE6, TOPS_2, COMPTS_1, PCOMPS_1, TSP_1,
-      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2;
+      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCT_2,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_2, SEQM_3,
       RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, EUCLID, SPPOL_2, VALUED_0,
-      VALUED_1;
+      VALUED_1, FUNCOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -101,7 +101,8 @@ reserve seq for Real_Sequence,
 canceled;
 
 theorem :: PSCOMP_1:6
-  seq is convergent & seq is_not_0 & lim seq = 0 implies seq" is non bounded;
+  seq is convergent & seq is non-zero & lim seq = 0 implies seq" is non bounded
+;
 
 theorem :: PSCOMP_1:7
   rng seq is bounded iff seq is bounded;
@@ -458,24 +459,14 @@ theorem :: PSCOMP_1:59
   for R being Subset-Family of REAL
   st f is continuous & R is closed holds ("f).:R is closed;
 
-notation
-  let T be non empty TopStruct, f be RealMap of T, X be Subset of T;
-  synonym f||X for f|X;
-end;
-
 definition
   let T be non empty TopStruct, f be RealMap of T, X be Subset of T;
-  redefine func f||X -> RealMap of T|X;
-end;
-
-registration
-  let T be non empty TopSpace;
-  cluster compact non empty Subset of T;
+  redefine func f|X -> RealMap of T|X;
 end;
 
 registration
   let T be non empty TopSpace, f be continuous RealMap of T, X be Subset of T;
-  cluster f||X -> continuous RealMap of T|X;
+  cluster f|X -> continuous RealMap of T|X;
 end;
 
 registration
@@ -509,7 +500,7 @@ registration
 end;
 
 registration
-  cluster compact non empty TopSpace;
+ cluster non empty compact TopSpace;
 end;
 
 registration
@@ -520,12 +511,12 @@ end;
 theorem :: PSCOMP_1:62
   for T being non empty TopSpace, X being non empty Subset of T,
   Y being compact Subset of T, f being continuous RealMap of T
-  st X c= Y holds inf (f||Y) <= inf (f||X);
+  st X c= Y holds inf (f|Y) <= inf (f|X);
 
 theorem :: PSCOMP_1:63
   for T being non empty TopSpace, X being non empty Subset of T,
   Y being compact Subset of T, f being continuous RealMap of T
-  st X c= Y holds sup (f||X) <= sup (f||Y);
+  st X c= Y holds sup (f|X) <= sup (f|Y);
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
 
@@ -568,30 +559,30 @@ end;
 
 theorem :: PSCOMP_1:69
   for X being Subset of TOP-REAL 2, p being Point of TOP-REAL 2
-  st p in X holds (proj1||X).p = p`1;
+  st p in X holds (proj1|X).p = p`1;
 
 theorem :: PSCOMP_1:70
   for X being Subset of TOP-REAL 2, p being Point of TOP-REAL 2
-  st p in X holds (proj2||X).p = p`2;
+  st p in X holds (proj2|X).p = p`2;
 
 definition
   let X be Subset of TOP-REAL 2;
   func W-bound X -> Real equals
 :: PSCOMP_1:def 30
 
-  inf (proj1||X);
+  inf (proj1|X);
   func N-bound X -> Real equals
 :: PSCOMP_1:def 31
 
-  sup (proj2||X);
+  sup (proj2|X);
   func E-bound X -> Real equals
 :: PSCOMP_1:def 32
 
-  sup (proj1||X);
+  sup (proj1|X);
   func S-bound X -> Real equals
 :: PSCOMP_1:def 33
 
-  inf (proj2||X);
+  inf (proj2|X);
 end;
 
 theorem :: PSCOMP_1:71
@@ -660,28 +651,28 @@ definition
   let X be Subset of TOP-REAL 2;
   func W-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 42
-  |[W-bound X, inf (proj2||W-most X)]|;
+  |[W-bound X, inf (proj2|W-most X)]|;
   func W-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 43
-  |[W-bound X, sup (proj2||W-most X)]|;
+  |[W-bound X, sup (proj2|W-most X)]|;
   func N-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 44
-  |[inf (proj1||N-most X), N-bound X]|;
+  |[inf (proj1|N-most X), N-bound X]|;
   func N-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 45
-  |[sup (proj1||N-most X), N-bound X]|;
+  |[sup (proj1|N-most X), N-bound X]|;
   func E-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 46
-  |[E-bound X, sup (proj2||E-most X)]|;
+  |[E-bound X, sup (proj2|E-most X)]|;
   func E-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 47
-  |[E-bound X, inf (proj2||E-most X)]|;
+  |[E-bound X, inf (proj2|E-most X)]|;
   func S-max X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 48
-  |[sup (proj1||S-most X), S-bound X]|;
+  |[sup (proj1|S-most X), S-bound X]|;
   func S-min X -> Point of TOP-REAL 2 equals
 :: PSCOMP_1:def 49
-  |[inf (proj1||S-most X), S-bound X]|;
+  |[inf (proj1|S-most X), S-bound X]|;
 end;
 
 canceled;

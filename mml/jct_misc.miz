@@ -10,10 +10,11 @@ environ
       RCOMP_1, ARYTM_3, ORDINAL2, SEQM_3, ABSVALUE, SQUARE_1, FUNCT_3, MCART_1,
       PRE_TOPC, SETFAM_1, COMPTS_1, SEQ_1, SEQ_2, RELAT_2, PSCOMP_1, LIMFUNC1,
       CONNSP_1, METRIC_1, SEQ_4, TOPMETR, INTEGRA1, FRECHET2, JORDAN2C,
-      LATTICES, EUCLID, FUNCT_5;
+      LATTICES, EUCLID, FUNCT_5, SUPINF_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, FUNCT_1, COMPLEX1,
       RELSET_1, FUNCT_2, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, REAL_1, XXREAL_2, BINARITH, VALUED_1, SEQ_1, SEQ_2, SEQ_4,
+      XREAL_0, REAL_1,
+      XXREAL_1, XXREAL_2, BINARITH, VALUED_1, SEQ_1, SEQ_2, SEQ_4,
       RCOMP_1,
       STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3, METRIC_1,
       TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C, EUCLID, RECDEF_1;
@@ -23,15 +24,16 @@ environ
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, SEQM_3, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1,
       EUCLID, TOPMETR, TOPREAL1, PSCOMP_1, JORDAN2C, BORSUK_3, TOPREAL6,
-      INTEGRA1, VALUED_1, FUNCT_2;
+      INTEGRA1, VALUED_1, FUNCT_2, XXREAL_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, RCOMP_1, SEQ_4, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1;
- theorems REAL_1, REAL_2, ZFMISC_1, TARSKI, SUBSET_1, MCART_1, FUNCT_2,
+ definitions TARSKI, RCOMP_1, SEQ_4, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1,
+      XXREAL_2;
+ theorems REAL_2, ZFMISC_1, TARSKI, SUBSET_1, MCART_1, FUNCT_2,
       FUNCT_1, RFUNCT_2, RCOMP_1, SEQ_4, SEQM_3, ABSVALUE, PSCOMP_1, GOBOARD7,
       BORSUK_1, TOPMETR, JORDAN6, UNIFORM1, SQUARE_1, RELAT_1, SEQ_2, TOPREAL6,
       TSP_1, SEQ_1, INTEGRA1, CONNSP_1, XREAL_0, LIMFUNC1, FCONT_3, TSEP_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, COMPLEX1, BINARITH, JORDAN2C, PRE_TOPC,
-      TOPREAL3, METRIC_6, XXREAL_0, XXREAL_1;
+      TOPREAL3, METRIC_6, XXREAL_0, XXREAL_1, XXREAL_2;
  schemes FUNCT_2;
 
 begin :: Preliminaries
@@ -72,10 +74,10 @@ A2: s in [.a,b.];
   a <= r & a <= s by A1,A2,XXREAL_1:1;
   then a+a <= r+s by XREAL_1:9;
   then
-A3: (a+a)/2 <= (r+s)/2 by REAL_1:73;
+A3: (a+a)/2 <= (r+s)/2 by XREAL_1:74;
   r <= b & s <= b by A1,A2,XXREAL_1:1;
   then r+s <= b+b by XREAL_1:9;
-  then (r+s)/2 <= (b+b)/2 by REAL_1:73;
+  then (r+s)/2 <= (b+b)/2 by XREAL_1:74;
   hence thesis by A3;
 end;
 
@@ -227,9 +229,22 @@ end;
 
 definition
   let A be Subset of REAL;
-  attr A is connected means
+  redefine attr A is connected means
   :Def1:
   for r,s being real number st r in A & s in A holds [.r,s.] c= A;
+ compatibility
+  proof
+   thus A is connected implies
+   for r,s being real number st r in A & s in A holds [.r,s.] c= A
+              by XXREAL_2:def 12;
+   assume
+Z:  for r,s being real number st r in A & s in A holds [.r,s.] c= A;
+:::   thus A is connected;
+   let r,s be ext-real number;
+   assume
+ZZ: r in A & s in A;
+   thus [.r,s.] c= A by Z,ZZ;
+  end;
 end;
 
 theorem
@@ -388,7 +403,7 @@ A1: dist(A,B) = lower_bound Y0 by Def2;
 A2: Y0 is bounded_below
   proof
     take 0;
-    let r0;
+    let r0 be ext-real number;
     assume r0 in Y0;
     then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
     hence 0<=r0 by COMPLEX1:132;
@@ -421,7 +436,7 @@ A3: dist(A,B) = lower_bound X by Def2;
 A4: X is bounded_below
   proof
     take 0;
-    let r0;
+    let r0 be ext-real number;
     assume r0 in X;
     then ex r,s being Real st r0 = abs(r - s) & r in A & s in B;
     hence 0<=r0 by COMPLEX1:132;
@@ -803,7 +818,7 @@ A42: SA.i = T.i /\ A & SB.i = T.i /\ B by A14,A15;
     then SA.i c= A & SB.i c= B by XBOOLE_1:17;
     then
 A43: d0 <= di by A41,Th17;
-    then d0/2 <= di/2 by REAL_1:73;
+    then d0/2 <= di/2 by XREAL_1:74;
     then
 A44: di/2 + d0/2 <= di/2 + di/2 by XREAL_1:8;
 A45: fa.k0 = ga.(Nseq1.k0) by SEQM_3:31
@@ -830,7 +845,7 @@ A53: now per cases;
         then abs(sa.i+sb.i-2*r) <= sb.i-sa.i by A48,A49,XXREAL_0:2;
         then
 A54:    r in [.sa.i,sb.i.] by RCOMP_1:9;
-        [.sa.i,sb.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
+        [.sa.i,sb.i.] c= T.i by A47,A50,A51,XXREAL_2:def 12;
         hence r in T.i by A54;
       end;
       suppose sb.i <= sa.i;
@@ -842,7 +857,7 @@ A55:    sa.i - sb.i >= 0 by XREAL_1:50;
         then abs(sb.i+sa.i-2*r) <= sa.i-sb.i by A48,A49,XXREAL_0:2;
         then
 A56:    r in [.sb.i,sa.i.] by RCOMP_1:9;
-        [.sb.i,sa.i.] c= T.i by A47,A50,A51,RCOMP_1:16;
+        [.sb.i,sa.i.] c= T.i by A47,A50,A51,XXREAL_2:def 12;
         hence r in T.i by A56;
       end;
     end;
@@ -942,7 +957,7 @@ A83: now per cases;
       then abs(sa.j+sb.j-2*r) <= sb.j-sa.j by A78,A79,XXREAL_0:2;
       then
 A84:  r in [.sa.j,sb.j.] by RCOMP_1:9;
-      [.sa.j,sb.j.] c= T.j by A77,A80,A81,RCOMP_1:16;
+      [.sa.j,sb.j.] c= T.j by A77,A80,A81,XXREAL_2:def 12;
       hence r in T.j by A84;
     end;
     suppose sb.j <= sa.j;
@@ -954,7 +969,7 @@ A85:  sa.j - sb.j >= 0 by XREAL_1:50;
       then abs(sb.j+sa.j-2*r) <= sa.j-sb.j by A78,A79,XXREAL_0:2;
       then
 A86:  r in [.sb.j,sa.j.] by RCOMP_1:9;
-      [.sb.j,sa.j.] c= T.j by A77,A80,A81,RCOMP_1:16;
+      [.sb.j,sa.j.] c= T.j by A77,A80,A81,XXREAL_2:def 12;
       hence r in T.j by A86;
     end;
   end;

@@ -16,9 +16,6 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="CARD_5"/>
@@ -50,28 +47,28 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="12"/>
+<Adjective nr="2" value="false"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="22"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="15"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="30"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="61" value="false"/>
-<Adjective nr="108"/>
+<Adjective nr="62" value="false"/>
+<Adjective nr="113"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -84,7 +81,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="109">
+<Adjective nr="114">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -95,28 +92,28 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
+<Func kind="K" nr="96">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WELLFND1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="311">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="94">
+<Adjective nr="99">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="109">
+<Adjective nr="114">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

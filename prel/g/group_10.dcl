@@ -32,10 +32,10 @@
 </Signature>
 <RCluster aid="GROUP_10" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="82"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -47,34 +47,34 @@
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="28">
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="29">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="30">
+<Adjective nr="31">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="89">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -84,45 +84,45 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="205">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GROUP_10" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="46"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="16"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="213">
+<Func kind="K" nr="217">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 </Registrations>

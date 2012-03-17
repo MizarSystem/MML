@@ -42,11 +42,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="273">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="68"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -9,14 +9,14 @@ environ
  vocabularies RELAT_1, FINSEQ_1, FUNCT_1, ZF_REFLE, AMI_1, BOOLE, PARTFUN1,
       UNIALG_1, FUNCT_2, CARD_3, MSUALG_1, UNIALG_2, EQREL_1, SETFAM_1, TARSKI,
       FINSEQ_2, PROB_1, PBOOLE, INCPROJ, RELAT_2, GROUP_1, MCART_1, PRALG_1,
-      TDGROUP, QC_LANG1, PUA2MSS1, ARYTM;
+      TDGROUP, QC_LANG1, PUA2MSS1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, SETFAM_1,
       RELAT_1, STRUCT_0, FUNCT_1, RELSET_1, PARTFUN1, MCART_1, FINSEQ_1,
       FINSEQ_2, FUNCT_2, RELAT_2, EQREL_1, CARD_3, PBOOLE, MSUALG_1, UNIALG_1;
  constructors SETFAM_1, NAT_1, EQREL_1, CARD_3, MSUALG_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FRAENKEL, NAT_1, FINSEQ_1, EQREL_1, FINSEQ_2, CARD_3, STRUCT_0,
-      UNIALG_1, MSUALG_1, MSAFREE, ORDINAL1;
+      UNIALG_1, MSUALG_1, MSAFREE, ORDINAL1, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, XBOOLE_0, TARSKI, SETFAM_1, RELAT_2, EQREL_1, PBOOLE,
       RELAT_1, FUNCT_1, UNIALG_1, MSUALG_1;
@@ -1466,7 +1466,7 @@ A5: Q[0]
     let x1,x2, y1,y2 be FinSequence;
     assume
 A6: len x1 = 0 & x() = x1^x2 & len y1 = 0 & y() = y1^y2;
-    then x1 = {} & y1 = {} by CARD_2:59;
+    then x1 = {} & y1 = {};
     hence P[y1^x2] by A1,A6;
   end;
 A7: for i being Element of NAT st Q[i] holds Q[i+1]
@@ -1476,7 +1476,7 @@ A8: for x1,x2, y1,y2 being FinSequence
     st len x1 = i & x() = x1^x2 & len y1 = i & y() = y1^y2 holds P[y1^x2];
     let x1,x2, y1,y2 be FinSequence such that
 A9: len x1 = i+1 & x() = x1^x2 & len y1 = i+1 & y() = y1^y2;
-A10: x1 <> {} & y1 <> {} by A9,CARD_1:47;
+A10: x1 <> {} & y1 <> {} by A9;
     then consider x' being FinSequence, xx being set such that
 A11: x1 = x'^<*xx*> by FINSEQ_1:63;
     consider y' being FinSequence, yy being set such that
@@ -1863,30 +1863,30 @@ definition
   let f,g be Function;
   pred f,g form_morphism_between S1,S2 means
   :
-  Def13: dom f = the carrier of S1 & dom g = the OperSymbols of S1 &
-  rng f c= the carrier of S2 & rng g c= the OperSymbols of S2 &
+  Def13: dom f = the carrier of S1 & dom g = the carrier' of S1 &
+  rng f c= the carrier of S2 & rng g c= the carrier' of S2 &
   f*the ResultSort of S1 = (the ResultSort of S2)*g &
   for o being set, p being Function
-  st o in the OperSymbols of S1 & p = (the Arity of S1).o
+  st o in the carrier' of S1 & p = (the Arity of S1).o
   holds f*p = (the Arity of S2).(g.o);
 end;
 
 theorem Th29:
   for S being non void non empty ManySortedSign holds
-  id the carrier of S, id the OperSymbols of S form_morphism_between S,S
+  id the carrier of S, id the carrier' of S form_morphism_between S,S
 proof
   let S be non void non empty ManySortedSign;
-  set f = id the carrier of S, g = id the OperSymbols of S;
-A1: dom the ResultSort of S = the OperSymbols of S &
+  set f = id the carrier of S, g = id the carrier' of S;
+A1: dom the ResultSort of S = the carrier' of S &
   rng the ResultSort of S c= the carrier of S &
-  dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+  dom the Arity of S = the carrier' of S by FUNCT_2:def 1;
   then f*the ResultSort of S = the ResultSort of S by RELAT_1:79;
-  hence dom f = the carrier of S & dom g = the OperSymbols of S &
-  rng f c= the carrier of S & rng g c= the OperSymbols of S &
+  hence dom f = the carrier of S & dom g = the carrier' of S &
+  rng f c= the carrier of S & rng g c= the carrier' of S &
   f*the ResultSort of S = (the ResultSort of S)*g by A1,RELAT_1:71,78;
   let o be set, p be Function;
   assume
-A2: o in the OperSymbols of S & p = (the Arity of S).o;
+A2: o in the carrier' of S & p = (the Arity of S).o;
   then
 A3: g.o = o & p in (the carrier of S)* by FUNCT_1:34,FUNCT_2:7;
   then p is FinSequence of the carrier of S by FINSEQ_1:def 11;
@@ -1901,23 +1901,23 @@ theorem Th30:
 proof
   let S1,S2,S3 be ManySortedSign;
   let f1,f2, g1,g2 be Function such that
-A1: dom f1 = the carrier of S1 & dom g1 = the OperSymbols of S1 and
-A2: rng f1 c= the carrier of S2 & rng g1 c= the OperSymbols of S2 and
+A1: dom f1 = the carrier of S1 & dom g1 = the carrier' of S1 and
+A2: rng f1 c= the carrier of S2 & rng g1 c= the carrier' of S2 and
 A3: f1*the ResultSort of S1 = (the ResultSort of S2)*g1 and
 A4: for o being set, p being Function
-  st o in the OperSymbols of S1 & p = (the Arity of S1).o
+  st o in the carrier' of S1 & p = (the Arity of S1).o
   holds f1*p = (the Arity of S2).(g1.o) and
-A5: dom f2 = the carrier of S2 & dom g2 = the OperSymbols of S2 and
-A6: rng f2 c= the carrier of S3 & rng g2 c= the OperSymbols of S3 and
+A5: dom f2 = the carrier of S2 & dom g2 = the carrier' of S2 and
+A6: rng f2 c= the carrier of S3 & rng g2 c= the carrier' of S3 and
 A7: f2*the ResultSort of S2 = (the ResultSort of S3)*g2 and
 A8: for o being set, p being Function
-  st o in the OperSymbols of S2 & p = (the Arity of S2).o
+  st o in the carrier' of S2 & p = (the Arity of S2).o
   holds f2*p = (the Arity of S3).(g2.o);
   set f = f2*f1, g = g2*g1;
-  thus dom f = the carrier of S1 & dom g = the OperSymbols of S1
+  thus dom f = the carrier of S1 & dom g = the carrier' of S1
   by A1,A2,A5,RELAT_1:46;
   rng f c= rng f2 & rng g c= rng g2 by RELAT_1:45;
-  hence rng f c= the carrier of S3 & rng g c= the OperSymbols of S3
+  hence rng f c= the carrier of S3 & rng g c= the carrier' of S3
   by A6,XBOOLE_1:1;
   thus f*the ResultSort of S1
   = f2*((the ResultSort of S2)*g1) by A3,RELAT_1:55
@@ -1925,7 +1925,7 @@ A8: for o being set, p being Function
     .= (the ResultSort of S3)*g by A7,RELAT_1:55;
   let o be set, p be Function;
   assume
-A9: o in the OperSymbols of S1 & p = (the Arity of S1).o;
+A9: o in the carrier' of S1 & p = (the Arity of S1).o;
   then
 A10: f1*p = (the Arity of S2).(g1.o) & g1.o in rng g1 by A1,A4,FUNCT_1:def 5;
   f*p = f2*(f1*p) & g.o = g2.(g1.o) by A1,A9,FUNCT_1:23,RELAT_1:55;
@@ -1936,7 +1936,7 @@ definition
   let S1,S2 be ManySortedSign;
   pred S1 is_rougher_than S2 means
   ex f,g being Function st f,g form_morphism_between S2,S1 &
-  rng f = the carrier of S1 & rng g = the OperSymbols of S1;
+  rng f = the carrier of S1 & rng g = the carrier' of S1;
 end;
 
 definition
@@ -1945,9 +1945,9 @@ definition
   reflexivity
   proof
     let S be non void non empty ManySortedSign;
-    take f = id the carrier of S, g = id the OperSymbols of S;
+    take f = id the carrier of S, g = id the carrier' of S;
     thus f,g form_morphism_between S,S &
-    rng f = the carrier of S & rng g = the OperSymbols of S
+    rng f = the carrier of S & rng g = the carrier' of S
     by Th29,RELAT_1:71;
   end;
 end;
@@ -1959,14 +1959,14 @@ proof
   let S1,S2,S3 be ManySortedSign;
   given f1,g1 being Function such that
 A1: f1,g1 form_morphism_between S2,S1 &
-  rng f1 = the carrier of S1 & rng g1 = the OperSymbols of S1;
+  rng f1 = the carrier of S1 & rng g1 = the carrier' of S1;
   given f2,g2 being Function such that
 A2: f2,g2 form_morphism_between S3,S2 &
-  rng f2 = the carrier of S2 & rng g2 = the OperSymbols of S2;
+  rng f2 = the carrier of S2 & rng g2 = the carrier' of S2;
   take f = f1*f2, g = g1*g2;
   thus f,g form_morphism_between S3,S1 by A1,A2,Th30;
-  dom f1 = the carrier of S2 & dom g1 = the OperSymbols of S2 by A1,Def13;
-  hence rng f = the carrier of S1 & rng g = the OperSymbols of S1
+  dom f1 = the carrier of S2 & dom g1 = the carrier' of S2 by A1,Def13;
+  hence rng f = the carrier of S1 & rng g = the carrier' of S1
   by A1,A2,RELAT_1:47;
 end;
 
@@ -1977,7 +1977,7 @@ definition
   let P be a_partition of A;
   func MSSign(A,P) -> strict ManySortedSign means
   :
-  Def15: the carrier of it = P & the OperSymbols of it =
+  Def15: the carrier of it = P & the carrier' of it =
   {[o,p] where o is OperSymbol of A, p is Element of P*:
   product p meets dom Den(o,A)} &
   for o being OperSymbol of A, p being Element of P*
@@ -2019,7 +2019,7 @@ A7: dom R = O & rng R c= P and
 A8: for o being set st o in O holds S[o,R.o] from WELLORD2:sch 1(A3);
     reconsider R as Function of O, P by A7,FUNCT_2:4;
     take S = ManySortedSign(#P, O, Ar, R#);
-    thus the carrier of S = P & the OperSymbols of S = O;
+    thus the carrier of S = P & the carrier' of S = O;
     let f be OperSymbol of A, p be Element of P*;
     set o = [f, p];
     assume product p meets dom Den(f, A);
@@ -2038,12 +2038,12 @@ A11: o = [f2,q2] & Den(f2,A).:product q2 c= R.o by A8,A9;
     product p meets dom Den(f,A)};
     let S1, S2 be strict ManySortedSign such that
 A12: the carrier of S1 = P and
-A13: the OperSymbols of S1 = O and
+A13: the carrier' of S1 = O and
 A14: for f being OperSymbol of A, p being Element of P*
     st product p meets dom Den(f,A) holds (the Arity of S1).[f,p] = p &
     Den(f,A).:product p c= (the ResultSort of S1).[f,p] and
 A15: the carrier of S2 = P and
-A16: the OperSymbols of S2 = O and
+A16: the carrier' of S2 = O and
 A17: for f being OperSymbol of A, p being Element of P*
     st product p meets dom Den(f,A) holds (the Arity of S2).[f,p] = p &
     Den(f,A).:product p c= (the ResultSort of S2).[f,p];
@@ -2107,11 +2107,11 @@ A1: dom q = dom x & rng q c= P & x in product q by Th6;
     then reconsider q as FinSequence by A1,FINSEQ_1:def 2;
     reconsider q as FinSequence of P by A1,FINSEQ_1:def 4;
     reconsider q as Element of P* by FINSEQ_1:def 11;
-    product q meets dom Den(g, A) & the OperSymbols of MSSign(A,P) =
+    product q meets dom Den(g, A) & the carrier' of MSSign(A,P) =
     {[f,p] where f is OperSymbol of A, p is Element of P*:
     product p meets dom Den(f,A)} by A1,Def15,XBOOLE_0:3;
-    then [g,q] in the OperSymbols of MSSign(A,P);
-    hence the OperSymbols of MSSign(A,P) <> {};
+    then [g,q] in the carrier' of MSSign(A,P);
+    hence the carrier' of MSSign(A,P) <> {};
   end;
 end;
 
@@ -2122,7 +2122,7 @@ definition
   redefine
   func o`1 -> OperSymbol of A;
   coherence
-  proof o in the OperSymbols of MSSign(A,P) & the OperSymbols of MSSign(A,P) =
+  proof o in the carrier' of MSSign(A,P) & the carrier' of MSSign(A,P) =
     {[f,p] where f is OperSymbol of A, p is Element of P*:
     product p meets dom Den(f, A)} by Def15;
     then ex f being OperSymbol of A, p being Element of P* st
@@ -2131,7 +2131,7 @@ definition
   end;
   func o`2 -> Element of P*;
   coherence
-  proof o in the OperSymbols of MSSign(A,P) & the OperSymbols of MSSign(A,P) =
+  proof o in the carrier' of MSSign(A,P) & the carrier' of MSSign(A,P) =
     {[f,p] where f is OperSymbol of A, p is Element of P*:
     product p meets dom Den(f,A)} by Def15;
     then ex f being OperSymbol of A, p being Element of P* st
@@ -2144,7 +2144,7 @@ definition
   let A be partial non-empty UAStr;
   let S be non void non empty ManySortedSign;
   let G be MSAlgebra over S;
-  let P be IndexedPartition of the OperSymbols of S;
+  let P be IndexedPartition of the carrier' of S;
   pred A can_be_characterized_by S,G,P means
   :
   Def16: the Sorts of G is IndexedPartition of A &
@@ -2158,7 +2158,7 @@ definition
   pred A can_be_characterized_by S means
 
   ex G being MSAlgebra over S,
-  P being IndexedPartition of the OperSymbols of S st
+  P being IndexedPartition of the carrier' of S st
   A can_be_characterized_by S,G,P;
 end;
 
@@ -2173,13 +2173,13 @@ proof
 
 then reconsider Z = id P as ManySortedSet of the carrier of S by PBOOLE:def 3;
   deffunc F1(OperSymbol of S) = Den($1`1, A)|product $1`2;
-  consider D being ManySortedSet of the OperSymbols of S such that
+  consider D being ManySortedSet of the carrier' of S such that
 A1: for o being OperSymbol of S holds D.o = F1(o) from PBOOLE:sch 5;
   deffunc F2(OperSymbol of A) = {a where a is OperSymbol of S: a`1 = $1};
   consider Q being ManySortedSet of dom the charact of A such that
 A2: for o being OperSymbol of A holds Q.o = F2(o) from PBOOLE:sch 5;
 A3: dom Q = dom the charact of A by PBOOLE:def 3;
-A4: the carrier of S = P & the OperSymbols of S =
+A4: the carrier of S = P & the carrier' of S =
   {[o,p] where o is OperSymbol of A, p is Element of P*:
   product p meets dom Den(o,A)} by Def15;
   Q is non-empty
@@ -2197,7 +2197,7 @@ A5: dom f = dom y & rng f c= P & y in product f by Th6;
     then f is FinSequence of P by A5,FINSEQ_1:def 4;
     then reconsider f as Element of P* by FINSEQ_1:def 11;
     product f meets dom Den(o,A) by A5,XBOOLE_0:3;
-    then [o,f] in the OperSymbols of S & [o,f]`1 = o &
+    then [o,f] in the carrier' of S & [o,f]`1 = o &
     Q.o = {a where a is OperSymbol of S: a`1 = o} by A2,A4,MCART_1:7;
     then [o,f] in Q.x;
     hence Q.x is not empty;
@@ -2207,12 +2207,12 @@ A5: dom f = dom y & rng f c= P & y in product f by Th6;
   proof
     let x be set;
     assume
-A6: x in the OperSymbols of S;
+A6: x in the carrier' of S;
     then consider o being OperSymbol of A, p being Element of P* such that
 A7: x = [o,p] & product p meets dom Den(o,A) by A4;
     reconsider xx = x as OperSymbol of S by A6;
 A8: rng the ResultSort of S c= the carrier of S &
-    dom the Arity of S = the OperSymbols of S by FUNCT_2:def 1;
+    dom the Arity of S = the carrier' of S by FUNCT_2:def 1;
     rng p c= P;
     then (the Arity of S).x = p & (Z# ).p = product(Z*p) & Z*p = p
     by A4,A7,Def15,PBOOLE:def 19,RELAT_1:79;
@@ -2231,7 +2231,7 @@ A11: rng (Den(o, A)|product p) = Den(o, A).:product p &
   end;
   then reconsider D as ManySortedFunction of
   Z# * the Arity of S, Z * the ResultSort of S;
-A12: Union Q = the OperSymbols of S
+A12: Union Q = the carrier' of S
   proof
     hereby
       let x be set;
@@ -2241,10 +2241,10 @@ A13:  y in dom Q & x in Q.y by CARD_5:10;
       reconsider y as OperSymbol of A by A13,PBOOLE:def 3;
       Q.y = {a where a is OperSymbol of S: a`1 = y} by A2;
       then ex a being OperSymbol of S st x = a & a`1 = y by A13;
-      hence x in the OperSymbols of S;
+      hence x in the carrier' of S;
     end;
     let x be set;
-    assume x in the OperSymbols of S;
+    assume x in the carrier' of S;
     then reconsider b = x as OperSymbol of S;
     Q.b`1 = {a where a is OperSymbol of S: a`1 = b`1} by A2;
     then b in Q.b`1;
@@ -2267,7 +2267,7 @@ A15:  z in Q.x & z in Q.y by XBOOLE_0:3;
       hence contradiction by A14;
     end;
   end;
-  then reconsider Q as IndexedPartition of the OperSymbols of S by A12,Th15;
+  then reconsider Q as IndexedPartition of the carrier' of S by A12,Th15;
   take G = MSAlgebra(#Z, D#), Q;
   id P is IndexedPartition of A
   proof
@@ -2281,8 +2281,8 @@ A15:  z in Q.x & z in Q.y by XBOOLE_0:3;
   reconsider QQ = {a /\ dom Den(o,A) where a is Element of PP:
   a meets dom Den(o,A)} as a_partition of dom Den(o,A) by Th11;
   set F = (the Charact of G)|(Q.o);
-A16: Q.o in rng Q & rng Q c= bool the OperSymbols of S by A3,FUNCT_1:def 5;
-  then Q.o c= the OperSymbols of S & dom D = the OperSymbols of S
+A16: Q.o in rng Q & rng Q c= bool the carrier' of S by A3,FUNCT_1:def 5;
+  then Q.o c= the carrier' of S & dom D = the carrier' of S
   by PBOOLE:def 3;
   then
 A17: dom F = Q.o & Q.o <> {} & dom {} = {} by A16,RELAT_1:91;
@@ -2301,7 +2301,7 @@ A19: x in dom F & y = F.x by FUNCT_1:def 5;
     then x in Q.o by XBOOLE_0:def 3;
     then consider a being OperSymbol of S such that
 A20: x = a & a`1 = o by A18;
-    a in the OperSymbols of S;
+    a in the carrier' of S;
     then consider s being OperSymbol of A, p being Element of P* such that
 A21: a = [s,p] & product p meets dom Den(s,A) by A4;
 A22: s = o & a`2 = p & product p in PP & Den(o,A) is_exactly_partitable_wrt P
@@ -2329,7 +2329,7 @@ A26: b = product p;
     then product p c= dom Den(o,A) by A25,A26,Def10;
     then
 A27: b = a by A25,A26,XBOOLE_1:28;
-    [o,p] in the OperSymbols of S & [o,p]`1 = o & [o,p]`2 = p
+    [o,p] in the carrier' of S & [o,p]`1 = o & [o,p]`2 = p
     by A4,A25,A26,MCART_1:7;
     then [o,p] in dom D & [o,p] in Q.o & D.[o,p] = x
     by A1,A18,A24,A26,A27,PBOOLE:def 3;
@@ -2344,10 +2344,10 @@ A28: x1 in dom F & x2 in dom F & F.x1 = F.x2;
 A29: x1 = a1 & a1`1 = o by A17,A18;
     consider a2 being OperSymbol of S such that
 A30: x2 = a2 & a2`1 = o by A17,A18,A28;
-    a1 in the OperSymbols of S;
+    a1 in the carrier' of S;
     then consider o1 being OperSymbol of A, p1 being Element of P* such that
 A31: a1 = [o1,p1] & product p1 meets dom Den(o1,A) by A4;
-    a2 in the OperSymbols of S;
+    a2 in the carrier' of S;
     then consider o2 being OperSymbol of A, p2 being Element of P* such that
 A32: a2 = [o2,p2] & product p2 meets dom Den(o2,A) by A4;
     F.x1 = D.a1 & F.x1 = D.a2 & a1`2 = p1 & a2`2 = p2
@@ -2368,7 +2368,7 @@ end;
 theorem Th33:
   for A being partial non-empty UAStr
   for S being non void non empty ManySortedSign for G being MSAlgebra over S
-  for Q being IndexedPartition of the OperSymbols of S
+  for Q being IndexedPartition of the carrier' of S
   st A can_be_characterized_by S,G,Q
   for o being OperSymbol of A, r being FinSequence of rng the Sorts of G
   st product r c= dom Den(o,A) ex s being OperSymbol of S st
@@ -2377,7 +2377,7 @@ proof
   let A be partial non-empty UAStr;
   let S2 be non void non empty ManySortedSign;
   let G be MSAlgebra over S2,
-  Q be IndexedPartition of the OperSymbols of S2 such that
+  Q be IndexedPartition of the carrier' of S2 such that
 A1: the Sorts of G is IndexedPartition of A & dom Q = dom the charact of A and
 A2: for o being OperSymbol of A holds
   (the Charact of G)|(Q.o) is IndexedPartition of Den(o, A);
@@ -2398,7 +2398,7 @@ A3: product r c= dom Den(o,A);
 A4: P-index_of [h,Den(o,A).h] in dom P &
   [h,Den(o,A).h] in P.(P-index_of [h,Den(o,A).h]) by Def4;
   reconsider Qo = Q.o as Element of rng Q by A1,FUNCT_1:def 5;
-A5: dom the Charact of G = the OperSymbols of S2 by PBOOLE:def 3;
+A5: dom the Charact of G = the carrier' of S2 by PBOOLE:def 3;
   then
 A6: dom P = Qo by RELAT_1:91;
 
@@ -2408,7 +2408,7 @@ reconsider s = P-index_of [h,Den(o,A).h] as Element of Qo by A4,A5,RELAT_1:91;
   reconsider Q = {product t where t is Element of (rng R)*
   : not contradiction} as a_partition of (the carrier of A)* by Th9;
   take s;
-  dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+  dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
   then
 A7: Args(s,G) = (the Sorts of G)# .((the Arity of S2).s) by FUNCT_1:23
     .= product q by PBOOLE:def 19;
@@ -2431,7 +2431,7 @@ A1: P = Class LimDomRel A;
   set S1 = MSSign(A,P);
   let S2 be non void non empty ManySortedSign;
   given G being MSAlgebra over S2,
-  Q being IndexedPartition of the OperSymbols of S2 such that
+  Q being IndexedPartition of the carrier' of S2 such that
 A2: A can_be_characterized_by S2,G,Q;
 A3: the Sorts of G is IndexedPartition of A & dom Q = dom the charact of A
   by A2,Def16;
@@ -2440,7 +2440,7 @@ A3: the Sorts of G is IndexedPartition of A & dom Q = dom the charact of A
 A4: dom R = the carrier of S2 by PBOOLE:def 3;
   then reconsider SG = the Sorts of G as Function of the carrier of S2, rng R
   by FUNCT_2:def 1,RELSET_1:11;
-A5: the OperSymbols of S1 =
+A5: the carrier' of S1 =
   {[o,p] where o is OperSymbol of A, p is Element of P*:
   product p meets dom Den(o,A)} by Def15;
 A6: the carrier of S1 = P by Def15;
@@ -2460,11 +2460,11 @@ A10: for r being set st r in rng R holds Q[r,em.r] from WELLORD2:sch 1(A8);
   defpred S[set,set] means
   ex p being FinSequence of P, o being OperSymbol of S2 st
   $2 = [Q-index_of $1, p] & $1 = o & Args(o,G) c= product p;
-A11: for s2 being set st s2 in the OperSymbols of S2 ex s1 being set st
-  s1 in the OperSymbols of S1 & S[s2,s1]
+A11: for s2 being set st s2 in the carrier' of S2 ex s1 being set st
+  s1 in the carrier' of S1 & S[s2,s1]
   proof
     let s2 be set;
-    assume s2 in the OperSymbols of S2;
+    assume s2 in the carrier' of S2;
     then reconsider s2 as OperSymbol of S2;
     SG*the_arity_of s2 is FinSequence of rng R by Lm2;
     then consider p being FinSequence of P such that
@@ -2475,8 +2475,8 @@ A12: product (SG*the_arity_of s2) c= product p by A7,Th4;
     consider aa being Element of Args(s2,G);
 A13: aa in Args(s2,G);
 A14: dom Den(s2,G) = Args(s2,G) by FUNCT_2:def 1;
-A15: dom the Arity of S2 = the OperSymbols of S2 &
-    dom the Charact of G = the OperSymbols of S2 by FUNCT_2:def 1,PBOOLE:def 3;
+A15: dom the Arity of S2 = the carrier' of S2 &
+    dom the Charact of G = the carrier' of S2 by FUNCT_2:def 1,PBOOLE:def 3;
     (the Charact of G)|(Q.o) is IndexedPartition of Den(o, A) by A2,Def16;
     then rng ((the Charact of G)|(Q.o)) is a_partition of Den(o, A) by Def3;
     then (the Charact of G).:(Q.o) is a_partition of Den(o, A) & s2 in Q.o
@@ -2489,19 +2489,19 @@ A16: dom Den(s2, G) c= dom Den(o, A) by RELAT_1:25;
 A17: Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by A15,FUNCT_1:23
       .= product(SG*the_arity_of s2) by PBOOLE:def 19;
     then product p meets dom Den(o,A) by A12,A13,A14,A16,XBOOLE_0:3;
-    hence s1 in the OperSymbols of S1 by A5;
+    hence s1 in the carrier' of S1 by A5;
     take p, s2;
     thus thesis by A12,A17;
   end;
   consider g being Function such that
-A18: dom g = the OperSymbols of S2 & rng g c= the OperSymbols of S1 &
-  for s being set st s in the OperSymbols of S2 holds S[s,g.s]
+A18: dom g = the carrier' of S2 & rng g c= the carrier' of S1 &
+  for s being set st s in the carrier' of S2 holds S[s,g.s]
   from WELLORD2:sch 1(A11);
-  reconsider g as Function of the OperSymbols of S2, the OperSymbols of S1
+  reconsider g as Function of the carrier' of S2, the carrier' of S1
   by A18,FUNCT_2:4;
   take g; thus
-A19: dom f = the carrier of S2 & dom g = the OperSymbols of S2 &
-  rng f c= the carrier of S1 & rng g c= the OperSymbols of S1
+A19: dom f = the carrier of S2 & dom g = the carrier' of S2 &
+  rng f c= the carrier of S1 & rng g c= the carrier' of S1
   by FUNCT_2:def 1;
   now
     let c be OperSymbol of S2;
@@ -2519,7 +2519,7 @@ A22: g.c = [Q-index_of c, p] & c = o & Args(o,G) c= product p by A18;
     consider aa being Element of Args(o,G);
     (the Charact of G)|(Q.s2) is IndexedPartition of Den(s2, A) by A2,Def16;
     then rng ((the Charact of G)|(Q.s2)) is a_partition of Den(s2, A) by Def3;
-    then o in Q.s2 & dom the Charact of G = the OperSymbols of S2 &
+    then o in Q.s2 & dom the Charact of G = the carrier' of S2 &
     (the Charact of G).:(Q.s2) is a_partition of Den(s2, A)
     by A22,Def4,PBOOLE:def 3,RELAT_1:148;
     then
@@ -2548,7 +2548,7 @@ A25: Den(s2, A).:product p c= (the ResultSort of S1).(g.c) by A22,Def15;
   hence f*the ResultSort of S2 = (the ResultSort of S1)*g by FUNCT_2:113;
   hereby
     let o be set, p be Function;
-    assume o in the OperSymbols of S2;
+    assume o in the carrier' of S2;
     then reconsider s = o as OperSymbol of S2;
     assume
 A26: p = (the Arity of S2).o;
@@ -2556,7 +2556,7 @@ A26: p = (the Arity of S2).o;
     reconsider r = SG*q as FinSequence of rng R by Lm2;
     consider p' being FinSequence of P, o' being OperSymbol of S2 such that
 A27: g.s = [Q-index_of s, p'] & s = o' & Args(o',G) c= product p' by A18;
-    g.s in the OperSymbols of S1;
+    g.s in the carrier' of S1;
     then consider o1 being OperSymbol of A, p1 being Element of P* such that
 A28: g.s = [o1,p1] & product p1 meets dom Den(o1,A) by A5;
     p' = p1 & Q-index_of s = o1 by A27,A28,ZFMISC_1:33;
@@ -2581,11 +2581,11 @@ A30: R-index_of a in dom R & a in R.(R-index_of a) by Def4;
     rng f c= P by A4,A10,A19,A30,Def15,FUNCT_1:def 5;
     hence thesis by A30,Th3;
   end;
-  thus rng g c= the OperSymbols of S1;
-  thus the OperSymbols of S1 c= rng g
+  thus rng g c= the carrier' of S1;
+  thus the carrier' of S1 c= rng g
   proof
     let s1 be set;
-    assume s1 in the OperSymbols of S1;
+    assume s1 in the carrier' of S1;
     then consider o being OperSymbol of A, p being Element of P* such that
 A31: s1 = [o,p] & product p meets dom Den(o,A) by A5;
     consider a being set such that
@@ -2624,7 +2624,7 @@ A39: product r c= product p & product p c= dom Den(o,A)
 A40: (the Sorts of G)*the_arity_of s2 = r & s2 in Q.o by A2,Th33;
     consider p' being FinSequence of P, o' being OperSymbol of S2 such that
 A41: g.s2 = [Q-index_of s2, p'] & s2 = o' & Args(o',G) c= product p' by A18;
-    dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+    dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
     then Args(s2,G) = (the Sorts of G)# .((the Arity of S2).s2) by FUNCT_1:23
       .= product r by A40,PBOOLE:def 19;
     then p' = em*r & p = em*r & Q-index_of s2 = o by A3,A10,A39,A40,A41,Def4,

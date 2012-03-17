@@ -9,7 +9,7 @@ environ
  vocabularies MSUALG_1, FUNCT_1, FUNCOP_1, PRALG_1, RELAT_1, CARD_3, FINSEQ_1,
       FINSEQ_2, AMI_1, ZF_REFLE, FUNCT_4, BOOLE, PBOOLE, PARTFUN1, TDGROUP,
       MSAFREE2, FINSET_1, QC_LANG1, PRE_CIRC, CIRCUIT1, CLASSES1, MCART_1,
-      MARGREL1, LATTICES, CIRCCOMB, CAT_1, ARYTM;
+      MARGREL1, LATTICES, CIRCCOMB, CAT_1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_2, FUNCOP_1, PARTFUN1,
       FUNCT_4, CARD_3, CLASSES1, MARGREL1, PBOOLE, STRUCT_0, MSUALG_1,
@@ -17,7 +17,7 @@ environ
  constructors CLASSES1, MARGREL1, CIRCUIT1, CIRCUIT2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, MSUALG_1,
-      MSUALG_2, MSAFREE2, FUNCT_7;
+      MSUALG_2, MSAFREE2, FUNCT_7, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, PARTFUN1, MSUALG_1, PRE_CIRC, MSAFREE2, STRUCT_0, RELAT_1,
       XBOOLE_0, FUNCOP_1, PBOOLE;
@@ -31,25 +31,7 @@ begin :: Combining of ManySortedSign's
 
 definition
   let S be ManySortedSign;
-  mode Gate of S is Element of the OperSymbols of S;
-end;
-
-registration
-  let A be set;
-  let f be Function;
-  cluster A --> f -> Function-yielding;
-  coherence
-  proof
-    set g = A --> f;
-A1: dom (A --> f) = A by FUNCOP_1:19;
-    g is Function-yielding
-    proof
-      let a be set;
-      assume a in dom g;
-      hence g.a is Function by A1,FUNCOP_1:13;
-    end;
-    hence thesis;
-  end;
+  mode Gate of S is Element of the carrier' of S;
 end;
 
 Lm1: now
@@ -58,12 +40,6 @@ Lm1: now
     .= i-tuples_on X by FUNCT_6:9;
 end;
 
-Lm2: now
-  let S be non void ManySortedSign;
-  let o be Gate of S;
-  the OperSymbols of S is non empty by MSUALG_1:def 5;
-  hence o in the OperSymbols of S;
-end;
 
 registration
   let f,g be non-empty Function;
@@ -285,18 +261,18 @@ definition
   func S1 +* S2 -> strict non empty ManySortedSign means
   :Def2:
   the carrier of it = (the carrier of S1) \/ (the carrier of S2) &
-  the OperSymbols of it = (the OperSymbols of S1) \/ (the OperSymbols of S2) &
+  the carrier' of it = (the carrier' of S1) \/ (the carrier' of S2) &
   the Arity of it = (the Arity of S1) +* (the Arity of S2) &
   the ResultSort of it = (the ResultSort of S1) +* (the ResultSort of S2);
   existence
   proof
-A1: dom the Arity of S1 = the OperSymbols of S1 &
-    dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
-A2: dom the ResultSort of S1 = the OperSymbols of S1 &
-    dom the ResultSort of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+A1: dom the Arity of S1 = the carrier' of S1 &
+    dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
+A2: dom the ResultSort of S1 = the carrier' of S1 &
+    dom the ResultSort of S2 = the carrier' of S2 by FUNCT_2:def 1;
     reconsider CARR = (the carrier of S1) \/ (the carrier of S2) as
     non empty set;
-    set OPER = (the OperSymbols of S1) \/ (the OperSymbols of S2);
+    set OPER = (the carrier' of S1) \/ (the carrier' of S2);
     set ARITY = (the Arity of S1) +* (the Arity of S2);
     set RESULT = (the ResultSort of S1) +* (the ResultSort of S2);
     the carrier of S1 c= CARR & the carrier of S2 c= CARR by XBOOLE_1:7;
@@ -353,7 +329,7 @@ theorem Th8:
 proof
   let S be non empty ManySortedSign;
   the carrier of S = (the carrier of S) \/ the carrier of S &
-  the OperSymbols of S = (the OperSymbols of S) \/ the OperSymbols of S &
+  the carrier' of S = (the carrier' of S) \/ the carrier' of S &
   the Arity of S = (the Arity of S)+*the Arity of S &
   the ResultSort of S = (the ResultSort of S)+*the ResultSort of S;
   hence thesis by Def2;
@@ -371,7 +347,7 @@ proof
   S1 & (the ResultSort of S1)+*the ResultSort of S2
   = (the ResultSort of S2)+*the ResultSort of S1 by FUNCT_4:35;
   then the carrier of S = (the carrier of S1) \/ (the carrier of S2) &
-  the OperSymbols of S = (the OperSymbols of S1) \/ (the OperSymbols of S2)&
+  the carrier' of S = (the carrier' of S1) \/ (the carrier' of S2)&
   the Arity of S = (the Arity of S2) +* (the Arity of S1) &
   the ResultSort of S = (the ResultSort of S2) +* (the ResultSort of S1)
   by Def2;
@@ -386,29 +362,29 @@ proof
   set S12 = S1+*S2, S23 = S2+*S3;
   set S12'3 = S12+*S3, S1'23 = S1+*S23;
 A1: the carrier of S12 = (the carrier of S1) \/ (the carrier of S2) &
-  the OperSymbols of S12 = (the OperSymbols of S1) \/ the OperSymbols of S2&
+  the carrier' of S12 = (the carrier' of S1) \/ the carrier' of S2&
   the Arity of S12 = (the Arity of S1) +* (the Arity of S2) &
   the ResultSort of S12 = (the ResultSort of S1)+*the ResultSort of S2
   by Def2;
 A2: the carrier of S23 = (the carrier of S2) \/ (the carrier of S3) &
-  the OperSymbols of S23 = (the OperSymbols of S2) \/ the OperSymbols of S3&
+  the carrier' of S23 = (the carrier' of S2) \/ the carrier' of S3&
   the Arity of S23 = (the Arity of S2) +* (the Arity of S3) &
   the ResultSort of S23 = (the ResultSort of S2)+*the ResultSort of S3
   by Def2;
 A3: the carrier of S12'3 = (the carrier of S12) \/ (the carrier of S3) &
-  the OperSymbols of S12'3 =
-  (the OperSymbols of S12) \/ the OperSymbols of S3 &
+  the carrier' of S12'3 =
+  (the carrier' of S12) \/ the carrier' of S3 &
   the Arity of S12'3 = (the Arity of S12) +* (the Arity of S3) &
   the ResultSort of S12'3 = (the ResultSort of S12)+*the ResultSort of S3
   by Def2;
   the carrier of S1'23 = (the carrier of S1) \/ (the carrier of S23) &
-  the OperSymbols of S1'23 =
-  (the OperSymbols of S1) \/ the OperSymbols of S23 &
+  the carrier' of S1'23 =
+  (the carrier' of S1) \/ the carrier' of S23 &
   the Arity of S1'23 = (the Arity of S1) +* (the Arity of S23) &
   the ResultSort of S1'23 = (the ResultSort of S1)+*the ResultSort of S23
   by Def2;
   then the carrier of S12'3 = the carrier of S1'23 &
-  the OperSymbols of S12'3 = the OperSymbols of S1'23 &
+  the carrier' of S12'3 = the carrier' of S1'23 &
   the Arity of S12'3 = the Arity of S1'23 &
   the ResultSort of S12'3 = the ResultSort of S1'23
   by A1,A2,A3,FUNCT_4:15,XBOOLE_1:4;
@@ -432,10 +408,10 @@ A2: S = S1+*S2;
   let o1, o2 be Gate of S;
   assume
 A3: the_result_sort_of o1 = the_result_sort_of o2;
-A4: r = r1+*r2 & dom r = the OperSymbols of S by A2,Def2,FUNCT_2:def 1;
+A4: r = r1+*r2 & dom r = the carrier' of S by A2,Def2,FUNCT_2:def 1;
   r1+*r2 c= r1 \/ r2 & r1 \/ r2 c= f by A1,FUNCT_4:30,XBOOLE_1:8;
   then
-A5: r1+*r2 c= f & o1 in dom r & o2 in dom r by A4,Lm2,XBOOLE_1:1;
+A5: r1+*r2 c= f & o1 in dom r & o2 in dom r by A4,XBOOLE_1:1;
   then r.o1 = f.o1 & r.o2 = f.o2 & dom r c= dom f by A4,GRFUNC_1:8;
   hence o1 = o2 by A3,A5,FUNCT_1:def 8;
 end;
@@ -455,37 +431,35 @@ A2: S = S1+*S2;
   let o1, o2 be Gate of S;
   assume
 A3: the_result_sort_of o1 = the_result_sort_of o2;
-A4: r = r1+*r2 & dom r = the OperSymbols of S &
-  dom r1 = the OperSymbols of S1 & dom r2 = the OperSymbols of S2
+A4: r = r1+*r2 & dom r = the carrier' of S &
+  dom r1 = the carrier' of S1 & dom r2 = the carrier' of S2
   by A2,Def2,FUNCT_2:def 1;
-A5: o1 in the OperSymbols of S & o2 in the OperSymbols of S &
-  the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2
-  by A2,Def2,Lm2;
-  then (not o1 in the OperSymbols of S2 & o1 in the OperSymbols of S1 or
-  o1 in the OperSymbols of S2) &
-  (not o2 in the OperSymbols of S2 & o2 in the OperSymbols of S1 or
-  o2 in the OperSymbols of S2) by XBOOLE_0:def 2;
+A5: o1 in the carrier' of S & o2 in the carrier' of S &
+  the carrier' of S = (the carrier' of S1) \/ the carrier' of S2
+  by A2,Def2;
+  then (not o1 in the carrier' of S2 & o1 in the carrier' of S1 or
+  o1 in the carrier' of S2) &
+  (not o2 in the carrier' of S2 & o2 in the carrier' of S1 or
+  o2 in the carrier' of S2) by XBOOLE_0:def 2;
   then
-A6: (r.o1 = r1.o1 & r1.o1 in rng r1 & o1 in the OperSymbols of S1 or
-  r.o1 = r2.o1 & r2.o1 in rng r2 & o1 in the OperSymbols of S2) &
-  (r.o2 = r1.o2 & r1.o2 in rng r1 & o2 in the OperSymbols of S1 or
-  r.o2 = r2.o2 & r2.o2 in rng r2 & o2 in the OperSymbols of S2)
+A6: (r.o1 = r1.o1 & r1.o1 in rng r1 & o1 in the carrier' of S1 or
+  r.o1 = r2.o1 & r2.o1 in rng r2 & o1 in the carrier' of S2) &
+  (r.o2 = r1.o2 & r1.o2 in rng r1 & o2 in the carrier' of S1 or
+  r.o2 = r2.o2 & r2.o2 in rng r2 & o2 in the carrier' of S2)
   by A4,A5,FUNCT_1:def 5,FUNCT_4:def 1;
   per cases by A1,A3,A6,XBOOLE_0:3;
   suppose
-A7: r.o1 = r1.o1 & o1 in the OperSymbols of S1 &
-    r.o2 = r1.o2 & o2 in the OperSymbols of S1;
-    then reconsider S = S1 as non void Circuit-like (non empty ManySortedSign)
-    by MSUALG_1:def 5;
+A7: r.o1 = r1.o1 & o1 in the carrier' of S1 &
+    r.o2 = r1.o2 & o2 in the carrier' of S1;
+    then reconsider S = S1 as non void Circuit-like (non empty ManySortedSign);
     reconsider p1 = o1, p2 = o2 as Gate of S by A7;
     the_result_sort_of p1 = r1.p1 & the_result_sort_of p2 = r1.p2;
     hence o1 = o2 by A3,A7,MSAFREE2:def 6;
   end;
   suppose
-A8: r.o1 = r2.o1 & o1 in the OperSymbols of S2 &
-    r.o2 = r2.o2 & o2 in the OperSymbols of S2;
-    then reconsider S = S2 as non void Circuit-like (non empty ManySortedSign)
-    by MSUALG_1:def 5;
+A8: r.o1 = r2.o1 & o1 in the carrier' of S2 &
+    r.o2 = r2.o2 & o2 in the carrier' of S2;
+    then reconsider S = S2 as non void Circuit-like (non empty ManySortedSign);
     reconsider p1 = o1, p2 = o2 as Gate of S by A8;
     the_result_sort_of p1 = r2.p1 & the_result_sort_of p2 = r2.p2;
     hence o1 = o2 by A3,A8,MSAFREE2:def 6;
@@ -498,11 +472,13 @@ theorem Th13:
 proof
   let S1,S2 be non empty ManySortedSign;
   consider o1 being Gate of S1, o2 being Gate of S2;
+Lm2: for S being non void ManySortedSign for o being Gate of S
+  holds o in the carrier' of S;
   assume S1 is not void or S2 is not void;
-  then (o1 in the OperSymbols of S1 or o2 in the OperSymbols of S2) &
-  the OperSymbols of S1+*S2 =
-  (the OperSymbols of S1) \/ the OperSymbols of S2 by Def2,Lm2;
-  hence the OperSymbols of S1+*S2 <> {};
+  then (o1 in the carrier' of S1 or o2 in the carrier' of S2) &
+  the carrier' of S1+*S2 =
+  (the carrier' of S1) \/ the carrier' of S2 by Def2,Lm2;
+  hence the carrier' of S1+*S2 <> {};
 end;
 
 theorem
@@ -609,9 +585,9 @@ proof
   let o2 be OperSymbol of S2, o be OperSymbol of S1+*S2;
   assume
 A1: o2 = o;
-A2: dom the Arity of S2 = the OperSymbols of S2 &
-  dom the ResultSort of S2 = the OperSymbols of S2 &
-  o2 in the OperSymbols of S2 by Lm2,FUNCT_2:def 1;
+A2: dom the Arity of S2 = the carrier' of S2 &
+  dom the ResultSort of S2 = the carrier' of S2 &
+  o2 in the carrier' of S2 by FUNCT_2:def 1;
 A3: the Arity of S1+*S2 = (the Arity of S1)+*(the Arity of S2) &
   the ResultSort of S1+*S2 = (the ResultSort of S1)+*(the ResultSort of S2)
   by Def2;
@@ -641,8 +617,8 @@ A4: InnerVertices S2 c= InnerVertices S by FUNCT_4:19;
   hence v in InnerVertices S by A2,A3;
 A5: the_result_sort_of action_at v2 = v2 &
   the_result_sort_of action_at v = v by A2,A3,A4,MSAFREE2:def 7;
-  the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2 &
-  action_at v2 in the OperSymbols of S2 by A1,Def2,Lm2;
+  the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 &
+  action_at v2 in the carrier' of S2 by A1,Def2;
   then reconsider o = action_at v2 as OperSymbol of S by XBOOLE_0:def 2;
   v = the_result_sort_of o by A1,A3,A5,Th18;
   hence thesis by A2,A3,A4,MSAFREE2:def 7;
@@ -662,9 +638,9 @@ A1: the Arity of S1 tolerates the Arity of S2 &
   let o1 be OperSymbol of S1, o be OperSymbol of S1+*S2;
   assume
 A2: o1 = o;
-A3: dom the Arity of S1 = the OperSymbols of S1 &
-  dom the ResultSort of S1 = the OperSymbols of S1 &
-  o1 in the OperSymbols of S1 by Lm2,FUNCT_2:def 1;
+A3: dom the Arity of S1 = the carrier' of S1 &
+  dom the ResultSort of S1 = the carrier' of S1 &
+  o1 in the carrier' of S1 by FUNCT_2:def 1;
 A4: the Arity of S1+*S2 = (the Arity of S1)+*(the Arity of S2) &
   the ResultSort of S1+*S2 = (the ResultSort of S1)+*(the ResultSort of S2)
   by Def2;
@@ -693,8 +669,8 @@ A5: v in InnerVertices S by A3,A4,XBOOLE_0:def 2;
   then
 A6: the_result_sort_of action_at v1 = v1 &
   the_result_sort_of action_at v = v by A3,MSAFREE2:def 7;
-  the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2 &
-  action_at v1 in the OperSymbols of S1 by A2,Def2,Lm2;
+  the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 &
+  action_at v1 in the carrier' of S1 by A2,Def2;
   then reconsider o = action_at v1 as OperSymbol of S by XBOOLE_0:def 2;
   v = the_result_sort_of o by A1,A2,A4,A6,Th20;
   hence thesis by A5,MSAFREE2:def 7;
@@ -728,7 +704,7 @@ A1: the Sorts of A1 tolerates the Sorts of A2;
   proof
     set S = S1+*S2;
 A2: the carrier of S = (the carrier of S1) \/ (the carrier of S2) &
-    the OperSymbols of S = (the OperSymbols of S1) \/ (the OperSymbols of S2)&
+    the carrier' of S = (the carrier' of S1) \/ (the carrier' of S2)&
     the Arity of S = (the Arity of S1) +* (the Arity of S2) &
     the ResultSort of S = (the ResultSort of S1) +* (the ResultSort of S2)
     by Def2;
@@ -1069,8 +1045,8 @@ A1: the Charact of A1+*A2 = (the Charact of A1)+*the Charact of A2 by Def4;
   let o be OperSymbol of S1+*S2, o2 be OperSymbol of S2;
   assume
 A2: o = o2;
-  dom the Charact of A2 = the OperSymbols of S2 by PBOOLE:def 3;
-  hence Den(o, A) = Den(o2, A2) by A1,A2,Lm2,FUNCT_4:14;
+  dom the Charact of A2 = the carrier' of S2 by PBOOLE:def 3;
+  hence Den(o, A) = Den(o2, A2) by A1,A2,FUNCT_4:14;
 end;
 
 theorem Th35:
@@ -1093,8 +1069,8 @@ A2: the Charact of A1 tolerates the Charact of A2;
   let o be OperSymbol of S1+*S2, o1 be OperSymbol of S1;
   assume
 A3: o = o1;
-  dom the Charact of A1 = the OperSymbols of S1 by PBOOLE:def 3;
-  hence Den(o, A) = Den(o1, A1) by A1,A2,A3,Lm2,FUNCT_4:16;
+  dom the Charact of A1 = the carrier' of S1 by PBOOLE:def 3;
+  hence Den(o, A) = Den(o1, A1) by A1,A2,A3,FUNCT_4:16;
 end;
 
 theorem Th36:
@@ -1363,7 +1339,7 @@ definition
   let x be set;
   func 1GateCircStr(p,f,x) -> non void strict ManySortedSign means
   :
-  Def5: the carrier of it = (rng p) \/ {x} & the OperSymbols of it = {[p,f]} &
+  Def5: the carrier of it = (rng p) \/ {x} & the carrier' of it = {[p,f]} &
   (the Arity of it).[p,f] = p & (the ResultSort of it).[p,f] = x;
   existence
   proof
@@ -1377,7 +1353,7 @@ A1: x in {x} by TARSKI:def 1;
     reconsider A = {pf} --> pp as Function of {pf}, C* by FUNCOP_1:57;
     reconsider R = {pf} --> ox as Function of {pf}, C by FUNCOP_1:57;
     reconsider S = ManySortedSign(#C, {pf}, A, R#) as
-    non void strict ManySortedSign by MSUALG_1:def 5;
+    non void strict ManySortedSign;
     take S;
     pf in {pf} by TARSKI:def 1;
     hence thesis by FUNCOP_1:13;
@@ -1416,7 +1392,7 @@ theorem Th43:
 proof
   let f,x be set, p be FinSequence;
   set S = 1GateCircStr(p,f,x);
-A1: the OperSymbols of S = {[p,f]} & (the Arity of S).[p,f] = p &
+A1: the carrier' of S = {[p,f]} & (the Arity of S).[p,f] = p &
   (the ResultSort of S).[p,f] = x by Def5;
   then
 A2: dom the Arity of S = {[p,f]} & dom the ResultSort of S = {[p,f]}
@@ -1437,7 +1413,7 @@ proof
   let f,x be set, p be FinSequence;
   set S = 1GateCircStr(p,f,x);
   let o be Gate of 1GateCircStr(p,f,x);
-A1: the OperSymbols of S = {[p,f]} & (the Arity of S).[p,f] = p &
+A1: the carrier' of S = {[p,f]} & (the Arity of S).[p,f] = p &
   (the ResultSort of S).[p,f] = x by Def5;
   hence o = [p,f] by TARSKI:def 1;
   thus thesis by A1,TARSKI:def 1;
@@ -1450,9 +1426,8 @@ theorem
 proof
   let f,x be set;
   let p be FinSequence;
-  the OperSymbols of 1GateCircStr(p,f,x) is non empty &
-  the ResultSort of 1GateCircStr(p,f,x) = (p,f) .--> x
-  by Th43,MSUALG_1:def 5;
+  the carrier' of 1GateCircStr(p,f,x) is non empty &
+  the ResultSort of 1GateCircStr(p,f,x) = (p,f) .--> x by Th43;
   then
 A1: rng the ResultSort of 1GateCircStr(p,f,x) = {x} by FUNCOP_1:14;
   the carrier of 1GateCircStr(p,f,x) = (rng p) \/ {x} by Def5;
@@ -1465,7 +1440,7 @@ definition
   func 1GateCircStr(p,f) -> non void strict ManySortedSign means
   :
   Def6: the carrier of it = (rng p) \/ {[p,f]} &
-  the OperSymbols of it = {[p,f]} & (the Arity of it).[p,f] = p &
+  the carrier' of it = {[p,f]} & (the Arity of it).[p,f] = p &
   (the ResultSort of it).[p,f] = [p,f];
   existence
   proof
@@ -1499,7 +1474,7 @@ theorem
 proof
   let f be set, p be FinSequence;
   set S = 1GateCircStr(p,f);
-  the carrier of S = (rng p) \/ {[p,f]} & the OperSymbols of S = {[p,f]} &
+  the carrier of S = (rng p) \/ {[p,f]} & the carrier' of S = {[p,f]} &
   (the Arity of S).[p,f] = p & (the ResultSort of S).[p,f] = [p,f] by Def6;
   hence thesis by Def5;
 end;
@@ -1511,7 +1486,7 @@ theorem Th47:
 proof
   let f be set, p be FinSequence;
   set S = 1GateCircStr(p,f);
-A1: the OperSymbols of S = {[p,f]} & (the Arity of S).[p,f] = p &
+A1: the carrier' of S = {[p,f]} & (the Arity of S).[p,f] = p &
   (the ResultSort of S).[p,f] = [p,f] by Def6;
   then
 A2: dom the Arity of S = {[p,f]} & dom the ResultSort of S = {[p,f]}
@@ -1532,7 +1507,7 @@ proof
   let f be set, p be FinSequence;
   set S = 1GateCircStr(p,f);
   let o be Gate of 1GateCircStr(p,f);
-  the OperSymbols of S = {[p,f]} & (the Arity of S).[p,f] = p &
+  the carrier' of S = {[p,f]} & (the Arity of S).[p,f] = p &
   (the ResultSort of S).[p,f] = [p,f] by Def6;
   hence o = [p,f] by TARSKI:def 1;
   hence thesis by Def6;
@@ -1545,9 +1520,8 @@ theorem Th49:
 proof
   let f be set;
   let p be FinSequence;
-A1: the OperSymbols of 1GateCircStr(p,f) is non empty &
-  the ResultSort of 1GateCircStr(p,f) = (p,f) .--> [p,f]
-  by Th47,MSUALG_1:def 5;
+A1: the carrier' of 1GateCircStr(p,f) is non empty &
+  the ResultSort of 1GateCircStr(p,f) = (p,f) .--> [p,f] by Th47;
   then
 A2: rng the ResultSort of 1GateCircStr(p,f) = {[p,f]} by FUNCOP_1:14;
 A3: the carrier of 1GateCircStr(p,f) = (rng p) \/ {[p,f]} by Def6;
@@ -1615,14 +1589,14 @@ definition
   let IT be ManySortedSign;
   attr IT is unsplit means
   :
-  Def7: the ResultSort of IT = id the OperSymbols of IT;
+  Def7: the ResultSort of IT = id the carrier' of IT;
   attr IT is gate`1=arity means
   :
-  Def8: for g being set st g in the OperSymbols of IT holds
+  Def8: for g being set st g in the carrier' of IT holds
   g = [(the Arity of IT).g, g`2];
   attr IT is gate`2isBoolean means
   :
-  Def9: for g being set st g in the OperSymbols of IT
+  Def9: for g being set st g in the carrier' of IT
   for p being FinSequence st p = (the Arity of IT).g
   ex f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN st g = [g`1, f];
 end;
@@ -1632,7 +1606,7 @@ definition
   let IT be MSAlgebra over S;
   attr IT is gate`2=den means
   :
-  Def10: for g being set st g in the OperSymbols of S holds
+  Def10: for g being set st g in the carrier' of S holds
   g = [g`1, (the Charact of IT).g];
 end;
 
@@ -1661,21 +1635,21 @@ scheme Lemma {S() -> non empty ManySortedSign, F(set,set) -> set}:
   ex A being strict MSAlgebra over S() st
   the Sorts of A = (the carrier of S()) --> BOOLEAN &
   for g being set, p being Element of (the carrier of S())* st
-  g in the OperSymbols of S() & p = (the Arity of S()).g
+  g in the carrier' of S() & p = (the Arity of S()).g
   holds (the Charact of A).g = F(g,p)
 provided
 A1: for g being set, p being Element of (the carrier of S())* st
-g in the OperSymbols of S() & p = (the Arity of S()).g
+g in the carrier' of S() & p = (the Arity of S()).g
 holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN
 proof
   set S = S(), SORTS = (the carrier of S) --> BOOLEAN;
-  consider CHARACT being ManySortedSet of the OperSymbols of S such that
+  consider CHARACT being ManySortedSet of the carrier' of S such that
 A2: for o being set, p being Element of (the carrier of S)* st
-  o in the OperSymbols of S & p = (the Arity of S).o holds
+  o in the carrier' of S & p = (the Arity of S).o holds
   CHARACT.o = F(o,p) from MSSLambdaWeak;
-A3: dom CHARACT = the OperSymbols of S &
-  dom the Arity of S = the OperSymbols of S &
-  dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1,PBOOLE:def 3;
+A3: dom CHARACT = the carrier' of S &
+  dom the Arity of S = the carrier' of S &
+  dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1,PBOOLE:def 3;
   CHARACT is Function-yielding
   proof
     let x be set;
@@ -1687,11 +1661,11 @@ A4: x in dom CHARACT;
     CHARACT.x = F(o,p) by A2,A3,A4;
     hence thesis by A1,A3,A4;
   end;
-  then reconsider CHARACT as ManySortedFunction of the OperSymbols of S;
+  then reconsider CHARACT as ManySortedFunction of the carrier' of S;
   now
     let i be set;
     assume
-A5: i in the OperSymbols of S;
+A5: i in the carrier' of S;
     then reconsider o = i as Gate of S;
     reconsider p = (the Arity of S).o as Element of (the carrier of S)*
     by A5,FUNCT_2:7;
@@ -1714,13 +1688,13 @@ registration
   proof
     let S be non empty ManySortedSign;
     assume
-A1: for g being set st g in the OperSymbols of S
+A1: for g being set st g in the carrier' of S
     for p being FinSequence st p = (the Arity of S).g
     ex f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN st g = [g`1,f];
     deffunc F(set,set) = $1`2;
 A2: now
       let g be set, p be Element of (the carrier of S)*;
-      assume g in the OperSymbols of S & p = (the Arity of S).g;
+      assume g in the carrier' of S & p = (the Arity of S).g;
       then consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such
       that
 A3:   g = [g`1,f] by A1;
@@ -1730,12 +1704,12 @@ A3:   g = [g`1,f] by A1;
     consider A being strict MSAlgebra over S such that
 A4: the Sorts of A = (the carrier of S) --> BOOLEAN &
     for g being set, p being Element of (the carrier of S)* st
-    g in the OperSymbols of S & p = (the Arity of S).g
+    g in the carrier' of S & p = (the Arity of S).g
     holds (the Charact of A).g = F(g,p) from Lemma(A2);
     take A;
     let g be set;
     assume
-A5: g in the OperSymbols of S;
+A5: g in the carrier' of S;
     then reconsider p = (the Arity of S).g as Element of (the carrier of S)*
     by FUNCT_2:7;
     consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such that
@@ -1747,32 +1721,32 @@ end;
 
 theorem Th52:
   for S being non empty ManySortedSign holds S is unsplit iff
-  for o being set st o in the OperSymbols of S holds
+  for o being set st o in the carrier' of S holds
   (the ResultSort of S).o = o
 proof
   let S be non empty ManySortedSign;
   hereby
     assume S is unsplit;
-    then the ResultSort of S = id the OperSymbols of S by Def7;
-    hence for o being set st o in the OperSymbols of S holds
+    then the ResultSort of S = id the carrier' of S by Def7;
+    hence for o being set st o in the carrier' of S holds
     (the ResultSort of S).o = o by FUNCT_1:34;
   end;
-A1: dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
-  assume for o being set st o in the OperSymbols of S holds
+A1: dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
+  assume for o being set st o in the carrier' of S holds
   (the ResultSort of S).o = o;
-  hence the ResultSort of S = id the OperSymbols of S by A1,FUNCT_1:34;
+  hence the ResultSort of S = id the carrier' of S by A1,FUNCT_1:34;
 end;
 
 theorem
   for S being non empty ManySortedSign st S is unsplit holds
-  the OperSymbols of S c= the carrier of S
+  the carrier' of S c= the carrier of S
 proof
   let S be non empty ManySortedSign;
   assume
 A1: S is unsplit;
   let x be set;
   assume
-A2: x in the OperSymbols of S;
+A2: x in the carrier' of S;
   then (the ResultSort of S).x = x by A1,Th52;
   hence thesis by A2,FUNCT_2:7;
 end;
@@ -1782,13 +1756,13 @@ registration
   coherence
   proof
     let S be non empty ManySortedSign such that
-A1: the ResultSort of S = id the OperSymbols of S;
+A1: the ResultSort of S = id the carrier' of S;
     let S' be non void non empty ManySortedSign such that
 A2: S' = S;
     let o1,o2 be Gate of S';
     the_result_sort_of o1 = (the ResultSort of S).o1 &
-    o1 in the OperSymbols of S & o2 in the OperSymbols of S &
-    the_result_sort_of o2 = (the ResultSort of S).o2 by A2,Lm2;
+    o1 in the carrier' of S & o2 in the carrier' of S &
+    the_result_sort_of o2 = (the ResultSort of S).o2 by A2;
     then the_result_sort_of o1 = o1 & the_result_sort_of o2 = o2
     by A1,FUNCT_1:34;
     hence thesis;
@@ -1801,7 +1775,7 @@ theorem Th54:
 proof
   let f be set, p be FinSequence;
   set S = 1GateCircStr(p,f);
-A1: the OperSymbols of S = {[p,f]} & (the ResultSort of S).[p,f] = [p,f]
+A1: the carrier' of S = {[p,f]} & (the ResultSort of S).[p,f] = [p,f]
   by Def6;
   then
 A2: dom the ResultSort of S = {[p,f]} by FUNCT_2:def 1;
@@ -1811,9 +1785,9 @@ A2: dom the ResultSort of S = {[p,f]} by FUNCT_2:def 1;
     then x = [p,f] by TARSKI:def 1;
     hence (the ResultSort of S).x = x by Def6;
   end;
-  hence the ResultSort of S = id the OperSymbols of S by A1,A2,FUNCT_1:34;
+  hence the ResultSort of S = id the carrier' of S by A1,A2,FUNCT_1:34;
   let g be set;
-  assume g in the OperSymbols of S;
+  assume g in the carrier' of S;
   then
 A3: g = [p,f] by A1,TARSKI:def 1;
   then (the Arity of S).g = p by Def6;
@@ -1847,7 +1821,7 @@ proof
     let x be set;
     assume x in dom A1 /\ dom A2;
     then x in dom A1 & x in dom A2 by XBOOLE_0:def 3;
-    then x in the OperSymbols of S1 & x in the OperSymbols of S2
+    then x in the carrier' of S1 & x in the carrier' of S2
     by FUNCT_2:def 1;
     then x = [A1.x, x`2] & x = [A2.x, x`2] by Def8;
     hence thesis by ZFMISC_1:33;
@@ -1855,7 +1829,7 @@ proof
   let x be set;
   assume x in dom R1 /\ dom R2;
   then x in dom R1 & x in dom R2 by XBOOLE_0:def 3;
-  then x in the OperSymbols of S1 & x in the OperSymbols of S2
+  then x in the carrier' of S1 & x in the carrier' of S2
   by FUNCT_2:def 1;
   then R1.x = x & R2.x = x by Th52;
   hence thesis;
@@ -1873,8 +1847,8 @@ A1: A1 is gate`2=den & A2 is gate`2=den;
   let x be set;
   assume x in dom C1 /\ dom C2;
   then x in dom C1 & x in dom C2 by XBOOLE_0:def 3;
-  then x in the OperSymbols of S1 & x in
-  the OperSymbols of S2 by PBOOLE:def 3;
+  then x in the carrier' of S1 & x in
+  the carrier' of S2 by PBOOLE:def 3;
   then x = [x`1, C1.x] & x = [x`1, C2.x] by A1,Def10;
   hence thesis by ZFMISC_1:33;
 end;
@@ -1884,11 +1858,11 @@ theorem Th57:
 proof
   let S1,S2 be unsplit non empty ManySortedSign;
   set S = S1+*S2;
-A1: the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2 &
+A1: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 &
   the ResultSort of S = (the ResultSort of S1)+*the ResultSort of S2 by Def2;
-  the ResultSort of S1 = id the OperSymbols of S1 &
-  the ResultSort of S2 = id the OperSymbols of S2 by Def7;
-  hence the ResultSort of S = id the OperSymbols of S by A1,FUNCT_4:23;
+  the ResultSort of S1 = id the carrier' of S1 &
+  the ResultSort of S2 = id the carrier' of S2 by Def7;
+  hence the ResultSort of S = id the carrier' of S by A1,FUNCT_4:23;
 end;
 
 registration
@@ -1903,27 +1877,27 @@ theorem Th58:
 proof
   let S1,S2 be gate`1=arity non empty ManySortedSign;
   set S = S1+*S2;
-A1: the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2 &
+A1: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 &
   the Arity of S = (the Arity of S1)+*the Arity of S2 by Def2;
   let g be set;
   assume
-A2: g in the OperSymbols of S;
+A2: g in the carrier' of S;
   then reconsider g as Gate of S;
-A3: g in the OperSymbols of S1 or g in the OperSymbols of S2 by A1,A2,
+A3: g in the carrier' of S1 or g in the carrier' of S2 by A1,A2,
   XBOOLE_0:def 2;
-A4: dom the Arity of S = the OperSymbols of S &
-  dom the Arity of S1 = the OperSymbols of S1 &
-  dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+A4: dom the Arity of S = the carrier' of S &
+  dom the Arity of S1 = the carrier' of S1 &
+  dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
 A5: now
     assume
-A6: not g in the OperSymbols of S2;
+A6: not g in the carrier' of S2;
     then reconsider g1 = g as Gate of S1 by A1,A2,XBOOLE_0:def 2;
     thus g = [(the Arity of S1).g1, g`2] by A3,A6,Def8
       .= [(the Arity of S).g, g`2] by A1,A2,A4,A6,FUNCT_4:def 1;
   end;
   now
     assume
-A7: g in the OperSymbols of S2;
+A7: g in the carrier' of S2;
     then reconsider g2 = g as Gate of S2;
     thus g = [(the Arity of S2).g2, g`2] by A7,Def8
       .= [(the Arity of S).g, g`2] by A1,A4,A7,FUNCT_4:def 1;
@@ -1946,29 +1920,29 @@ proof
   set S = S1+*S2;
   assume
 A1: S1 is gate`2isBoolean & S2 is gate`2isBoolean;
-A2: the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2 &
+A2: the carrier' of S = (the carrier' of S1) \/ the carrier' of S2 &
   the Arity of S = (the Arity of S1)+*the Arity of S2 by Def2;
   let g be set;
   assume
-A3: g in the OperSymbols of S;
+A3: g in the carrier' of S;
   let p be FinSequence such that
 A4: p = (the Arity of S).g;
   reconsider g as Gate of S by A3;
-A5: g in the OperSymbols of S1 or g in the OperSymbols of S2 by A2,A3,
+A5: g in the carrier' of S1 or g in the carrier' of S2 by A2,A3,
   XBOOLE_0:def 2;
-A6: dom the Arity of S = the OperSymbols of S &
-  dom the Arity of S1 = the OperSymbols of S1 &
-  dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+A6: dom the Arity of S = the carrier' of S &
+  dom the Arity of S1 = the carrier' of S1 &
+  dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
 A7: now
     assume
-A8: not g in the OperSymbols of S2;
+A8: not g in the carrier' of S2;
     then reconsider g1 = g as Gate of S1 by A2,A3,XBOOLE_0:def 2;
     (the Arity of S1).g1 = p by A2,A3,A4,A6,A8,FUNCT_4:def 1;
     hence thesis by A1,A5,A8,Def9;
   end;
   now
     assume
-A9: g in the OperSymbols of S2;
+A9: g in the carrier' of S2;
     then reconsider g2 = g as Gate of S2;
     (the Arity of S2).g2 = p by A2,A4,A6,A9,FUNCT_4:def 1;
     hence thesis by A1,A9,Def9;
@@ -1990,6 +1964,15 @@ definition
   end;
 end;
 
+registration
+ cluster -> empty FinSeqLen of 0;
+ coherence
+  proof let f be  FinSeqLen of 0;
+   len f = 0 by Def12;
+   hence thesis;
+  end;
+end;
+
 definition
   let n be Nat;
   let X,Y be non empty set;
@@ -2006,8 +1989,8 @@ A1: x in rng p implies X = Y;
     set S = 1GateCircStr(p,f,x);
     set g1 = (rng p) --> X, g2 = x .--> Y;
     set SORTS = g1 +* g2;
-    set CHARACT = (the OperSymbols of S) --> f;
-A2: the carrier of S = (rng p) \/ {x} & the OperSymbols of S = {[p,f]} &
+    set CHARACT = (the carrier' of S) --> f;
+A2: the carrier of S = (rng p) \/ {x} & the carrier' of S = {[p,f]} &
     (the Arity of S).[p,f] = p & (the ResultSort of S).[p,f] = x by Def5;
 A3: x in {x} & dom (x .--> Y) = {x} & dom ((rng p) --> X) = rng p
     by FUNCOP_1:19,TARSKI:def 1;
@@ -2040,7 +2023,7 @@ A8: g1#.p' = SORTS#.pp by GRFUNC_1:8;
     now
       let i be set;
       assume
-A9:   i in the OperSymbols of S;
+A9:   i in the carrier' of S;
       then i = [p,f] by A2,TARSKI:def 1;
       then CHARACT.i = f & (SORTS#*the Arity of S).i = SORTS#.p &
       SORTS#.pp = n-tuples_on X & (SORTS*the ResultSort of S).i = Y
@@ -2061,7 +2044,7 @@ A9:   i in the OperSymbols of S;
     set S = 1GateCircStr(p,f,x);
     let A1,A2 be strict non-empty MSAlgebra over S such that
 A10: not thesis;
-    the OperSymbols of S = {[p,f]} by Def5;
+    the carrier' of S = {[p,f]} by Def5;
     then dom the Charact of A1 = {[p,f]} & dom the Charact of A2 = {[p,f]}
     by PBOOLE:def 3;
     then the Charact of A1 = {[[p,f],f]} & the Charact of A2 = {[[p,f],f]}
@@ -2084,8 +2067,8 @@ definition
   proof
     set S = 1GateCircStr(p,f);
     set SORTS = (the carrier of S) --> X;
-    set CHARACT = (the OperSymbols of S) --> f;
-A1: the carrier of S = (rng p) \/ {[p,f]} & the OperSymbols of S = {[p,f]} &
+    set CHARACT = (the carrier' of S) --> f;
+A1: the carrier of S = (rng p) \/ {[p,f]} & the carrier' of S = {[p,f]} &
     (the Arity of S).[p,f] = p & (the ResultSort of S).[p,f] = [p,f] by Def6;
 A2: [p,f] in {[p,f]} by TARSKI:def 1;
     then [p,f] in the carrier of S by A1,XBOOLE_0:def 2;
@@ -2101,7 +2084,7 @@ then reconsider pp = p as Element of (the carrier of S)* by FINSEQ_1:def 11;
     now
       let i be set;
       assume
-A6:   i in the OperSymbols of S;
+A6:   i in the carrier' of S;
       then i = [p,f] by A1,TARSKI:def 1;
       then CHARACT.i = f & (SORTS#*the Arity of S).i = SORTS#.p &
       SORTS#.pp = n-tuples_on X & (SORTS*the ResultSort of S).i = X
@@ -2121,7 +2104,7 @@ A6:   i in the OperSymbols of S;
     set S = 1GateCircStr(p,f);
     let A1,A2 be strict non-empty MSAlgebra over S such that
 A7: not thesis;
-    the OperSymbols of S = {[p,f]} by Def6;
+    the carrier' of S = {[p,f]} by Def6;
     then dom the Charact of A1 = {[p,f]} & dom the Charact of A2 = {[p,f]}
     by PBOOLE:def 3;
     then the Charact of A1 = {[[p,f],f]} & the Charact of A2 = {[[p,f],f]}
@@ -2142,7 +2125,7 @@ proof
 A1: 1GateCircuit(p,f) is gate`2=den
   proof
     let g be set;
-    assume g in the OperSymbols of 1GateCircStr(p,f);
+    assume g in the carrier' of 1GateCircStr(p,f);
     then
 A2: g = [p,f] by Th48;
     hence g = [g`1, f] by MCART_1:7
@@ -2171,7 +2154,7 @@ proof
   let p be FinSeqLen of n;
   let f be Function of n-tuples_on X, X;
   let g be set;
-  assume g in the OperSymbols of 1GateCircStr(p,f);
+  assume g in the carrier' of 1GateCircStr(p,f);
   then
 A1: g = [p,f] & (the Arity of 1GateCircStr(p,f)).[p,f] = p & len p = n
   by Def6,Def12,Th48;
@@ -2215,7 +2198,7 @@ proof
   let n be Nat, X be non empty set, f be Function of n-tuples_on X, X;
   let p be FinSeqLen of n;
   set S = 1GateCircStr(p,f), A = 1GateCircuit(p,f);
-  the OperSymbols of S = {[p,f]} by Def6;
+  the carrier' of S = {[p,f]} by Def6;
   then
 A1: dom the Charact of A = {[p,f]} by PBOOLE:def 3;
   (the Charact of A).[p,f] = f by Def14;
@@ -2274,7 +2257,7 @@ proof
   set IV = InnerVertices S;
   IV = {[p,f]} by Th49;
   then reconsider v = [p,f] as Element of IV by TARSKI:def 1;
-  the OperSymbols of S = {[p,f]} by Def6;
+  the carrier' of S = {[p,f]} by Def6;
   then reconsider o = [p,f] as Gate of S by TARSKI:def 1;
 A1: (Following s).v = (Den (action_at v, A)).(action_at v depends_on_in s)
   by CIRCUIT2:def 5;
@@ -2386,13 +2369,13 @@ registration
     deffunc F(set,Element of (the carrier of S)*) =
     ((len $2)-tuples_on BOOLEAN) --> FALSE;
 A1: for g being set, p being Element of (the carrier of S)* st
-    g in the OperSymbols of S & p = (the Arity of S).g
+    g in the carrier' of S & p = (the Arity of S).g
     holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN
     by FUNCOP_1:57;
     consider A being strict MSAlgebra over S such that
 A2: the Sorts of A = (the carrier of S) --> BOOLEAN &
     for g being set, p being Element of (the carrier of S)* st
-    g in the OperSymbols of S & p = (the Arity of S).g
+    g in the carrier' of S & p = (the Arity of S).g
     holds (the Charact of A).g = F(g,p) from Lemma(A1);
     take A;
     let v be Vertex of S;
@@ -2452,15 +2435,15 @@ proof
 A1: A1 is gate`2=den & A2 is gate`2=den and
 A2: the Sorts of A1 tolerates the Sorts of A2;
 A3: the Charact of A = (the Charact of A1)+*the Charact of A2 by A2,Def4;
-A4: dom the Charact of A1 = the OperSymbols of S1 &
-  dom the Charact of A2 = the OperSymbols of S2 by PBOOLE:def 3;
+A4: dom the Charact of A1 = the carrier' of S1 &
+  dom the Charact of A2 = the carrier' of S2 by PBOOLE:def 3;
 A5: the Charact of A1 tolerates the Charact of A2 by A1,Th56;
   let g be set;
   assume
-A6: g in the OperSymbols of S;
-  the OperSymbols of S = (the OperSymbols of S1) \/ the OperSymbols of S2
+A6: g in the carrier' of S;
+  the carrier' of S = (the carrier' of S1) \/ the carrier' of S2
   by Def2;
-  then g in the OperSymbols of S1 or g in the OperSymbols of S2 by A6,
+  then g in the carrier' of S1 or g in the carrier' of S2 by A6,
   XBOOLE_0:def 2;
   then (the Charact of A).g = (the Charact of A1).g &
   [g`1, (the Charact of A1).g] = g or
@@ -2488,7 +2471,7 @@ registration
     deffunc F(set,set) = $1`2;
 A1: now
       let g be set, p be Element of (the carrier of S)*;
-      assume g in the OperSymbols of S & p = (the Arity of S).g;
+      assume g in the carrier' of S & p = (the Arity of S).g;
       then consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such
       that
 A2:   g = [g`1, f] by Def9;
@@ -2498,7 +2481,7 @@ A2:   g = [g`1, f] by Def9;
     consider A being strict MSAlgebra over S such that
 A3: the Sorts of A = (the carrier of S) --> BOOLEAN &
     for g being set, p being Element of (the carrier of S)* st
-    g in the OperSymbols of S & p = (the Arity of S).g
+    g in the carrier' of S & p = (the Arity of S).g
     holds (the Charact of A).g = F(g,p) from Lemma(A1);
     take A;
     thus A is Boolean
@@ -2508,7 +2491,7 @@ A3: the Sorts of A = (the carrier of S) --> BOOLEAN &
     end;
     let g be set;
     assume
-A4: g in the OperSymbols of S;
+A4: g in the carrier' of S;
     then reconsider p = (the Arity of S).g as Element of (the carrier of S)*
     by FUNCT_2:7;
     consider f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN such that

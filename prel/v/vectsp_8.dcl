@@ -30,34 +30,34 @@
 </Signature>
 <RCluster aid="VECTSP_8" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="10">
-<Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="64"/>
-<Adjective nr="72"/>
-<Adjective nr="74"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-</Cluster>
-</Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="82">
+<Adjective nr="14" value="false"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="70"/>
+<Adjective nr="78"/>
+<Adjective nr="80"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+</Cluster>
+</Typ>
+<Typ kind="G" nr="12">
+<Cluster>
+<Adjective nr="14" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="83">
+<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>

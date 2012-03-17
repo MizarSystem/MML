@@ -20,10 +20,11 @@ environ
       WAYBEL_5, WAYBEL_6, WAYBEL_8, WAYBEL_9, WAYBEL11;
  constructors SETFAM_1, FINSUB_1, NAT_1, TOPS_1, TOPS_2, BORSUK_1, TMAP_1,
       T_0TOPSP, CANTOR_1, WAYBEL_1, YELLOW_4, WAYBEL_3, WAYBEL_5, WAYBEL_6,
-      WAYBEL_8, YELLOW_8, WAYBEL11;
+      WAYBEL_8, YELLOW_8, WAYBEL11, COMPTS_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, XCMPLX_0, STRUCT_0,
       PRE_TOPC, BORSUK_1, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_4,
-      WAYBEL_3, YELLOW_6, WAYBEL_6, WAYBEL_8, YELLOW_8, WAYBEL11, ORDINAL1;
+      WAYBEL_3, YELLOW_6, WAYBEL_6, WAYBEL_8, YELLOW_8, WAYBEL11, ORDINAL1,
+      CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, WAYBEL_0, WAYBEL_6, TMAP_1, YELLOW_8, COMPTS_1, WAYBEL_3,
       WAYBEL_1, WAYBEL_8, TOPS_2, XBOOLE_0, SUBSET_1, BINOP_1, STRUCT_0,
@@ -51,12 +52,11 @@ A1: P[0]
   proof
     let F be finite Subset-Family of X;
     assume
-A2: card F = 0;
+A2:   card F = 0;
     take G = F;
     thus G c= F;
     thus union G = union F;
-    thus for g being Subset of X st g in G holds not g c= union (G\{g}) by A2,
-    CARD_2:59;
+    thus for g being Subset of X st g in G holds not g c= union (G\{g}) by A2;
   end;
 A3: now
     let n be Nat;
@@ -78,11 +78,11 @@ A7:     F = FF \/ {g} by XBOOLE_1:45;
         g in {g} by TARSKI:def 1;
         then not g in FF by XBOOLE_0:def 4;
         then card (FF \/ {g}) = card FF + 1 by CARD_2:54;
-        then card FF = n by A5,A7,XCMPLX_1:2;
         then consider G being finite Subset-Family of X such that
 A8:     G c= FF and
 A9:     union G = union FF and
-A10:    for g being Subset of X st g in G holds not g c= union (G\{g}) by A4;
+A10:    for g being Subset of X st g in G holds not g c= union (G\{g})
+               by A4,A5,A7,XCMPLX_1:2;
         take G;
         FF c= F by A7,XBOOLE_1:7;
         hence G c= F by A8,XBOOLE_1:1;
@@ -1177,9 +1177,8 @@ A6: S` is open by TOPS_1:29;
 A7: S` <> the carrier of L by Th2;
   reconsider V = S` as Element of InclPoset sigma L by A2,A3,A4,A6,
   PRE_TOPC:def 5;
-  V is prime by A2,A4,Th17;
-  then consider p being Element of L such that
-A8: V = (downarrow p)` by A1,A7,Th29;
+  consider p being Element of L such that
+A8: V = (downarrow p)` by A1,A7,Th29,A2,A4,Th17;
 A9: S = downarrow p by A8,TOPS_1:21;
   take p;
 A10: Cl {p} = downarrow p by WAYBEL11:9;
@@ -1219,8 +1218,7 @@ A10: X is upper by A7,WAYBEL11:def 4;
     wayabove y in bas by A9;
     then
 A11: wayabove y is open & x in wayabove y by A8,YELLOW_8:21;
-    wayabove y c= Y by WAYBEL_3:11;
-    then wayabove y c= Int Y by A11,TOPS_1:56;
+    wayabove y c= Int Y by A11,TOPS_1:56,WAYBEL_3:11;
     hence x in Int Y by A11;
     thus Y c= X by A9,A10,WAYBEL11:42;
     thus Y is compact by A3,Th22;
@@ -1445,7 +1443,7 @@ A11:  x in X & X in wV by TARSKI:def 4;
     then V = union waybelow V by TARSKI:2;
     hence V = sup waybelow V by YELLOW_1:22;
   end;
-  hence thesis by A2;
+  hence thesis by Th23;
 end;
 
 theorem Th37: :: Theorem 1.14 (3) implies (4) p. 107
@@ -1485,8 +1483,7 @@ A7: x <> y;
 A8: x in VVl by XBOOLE_0:def 4;
   VVl is open by WAYBEL11:12;
   then reconsider VVp = VVl as Element of IPs by A3,A4,Th24;
-  IPs is satisfying_axiom_of_approximation by A2,A3;
-  then VVp = sup waybelow VVp by WAYBEL_3:def 5;
+  VVp = sup waybelow VVp by WAYBEL_3:def 5,A2,A3;
   then VVp = union waybelow VVp by YELLOW_1:22;
   then consider Vp being set such that
 A9: x in Vp & Vp in waybelow VVp by A8,TARSKI:def 4;
@@ -1758,9 +1755,8 @@ theorem :: Corollary 1.15 (1) implies (2) p. 108
   L is algebraic implies ex B being Basis of L st B = {uparrow x : x in
   the carrier of CompactSublatt L}
 proof
-  assume L is algebraic;
-  then
-A1: L is satisfying_axiom_K;
+  assume
+Z:  L is algebraic;
   set P = {uparrow k where k is Element of L :
   k in the carrier of CompactSublatt L};
   P c= bool the carrier of L
@@ -1833,7 +1829,7 @@ A5:       Intersect B = meet B by SETFAM_1:def 10;
 A6:   S is open and
 A7:   x in S;
       reconsider x' = x as Element of L;
-A8:   x = sup compactbelow x' by A1,WAYBEL_8:def 3;
+A8:   x = sup compactbelow x' by Z,WAYBEL_8:def 3;
       S is inaccessible by A6,WAYBEL11:def 4;
       then (compactbelow x') meets S by A7,A8,WAYBEL11:def 1;
       then consider k being set such that
@@ -1972,7 +1968,6 @@ A2: for V being Element of InclPoset sigma L
 A3: sigma L = the topology of L by Th23;
 A4: the carrier of IPs = sigma L by YELLOW_1:1;
 A5: IPs = IPt by Th23;
-A6: InclPoset sigma L is satisfying_axiom_K by A1;
   reconsider ips = InclPoset sigma L as algebraic LATTICE by A1,A5;
 A7: ips is continuous;
   (for x being Element of L ex X being Basis of x st
@@ -2054,7 +2049,7 @@ A12:      Intersect Bx = meet Bx by SETFAM_1:def 10;
 A13:  S is open and
 A14:  x in S;
       reconsider S' = S as Element of IPt by A3,A4,A13,PRE_TOPC:def 5;
-      S' = sup compactbelow S' by A3,A6,WAYBEL_8:def 3;
+      S' = sup compactbelow S' by A3,A1,WAYBEL_8:def 3;
       then S' = union compactbelow S' by YELLOW_1:22;
       then consider UA being set such that
 A15:  x in UA & UA in compactbelow S' by A14,TARSKI:def 4;

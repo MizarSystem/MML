@@ -23,8 +23,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -44,35 +44,35 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="124" value="false"/>
+<Adjective nr="128" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="223">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="39"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CONLAT_2" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="140"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="144"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="90">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
-<Adjective nr="140"/>
+<Adjective nr="32"/>
+<Adjective nr="144"/>
 </Cluster>
 </FCluster>
 </Registrations>

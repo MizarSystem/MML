@@ -17,14 +17,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Func>
 </Typ>
 <Not>
@@ -32,7 +32,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="49"/>
 </Typ>
 <And>
 <Not>
@@ -66,7 +66,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="49"/>
 </Typ>
 <And>
 <Not>

@@ -11,9 +11,9 @@ environ
       VECTSP_1, FINSEQ_2, PARTFUN1, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FCONT_1,
       FCONT_2, COMPTS_1, LATTICES, SEQ_2, ABSVALUE, INTEGRA2, FUNCT_3,
       ORDINAL2, MEASURE5, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, RFUNCT_2,
-      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM;
+      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM, PROB_1, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, XXREAL_2,
+      RELAT_1, COMPLEX1, REAL_1, NAT_1, XXREAL_2,
       REALSET1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
       PSCOMP_1, FINSEQ_1, FUNCOP_1, VALUED_1, SEQ_1, RFUNCT_1, FINSEQ_2, SEQ_2,
       SEQ_4, BINOP_2, PRE_CIRC, FDIFF_1, RVSUM_1, INTEGRA1, INTEGRA2, FCONT_1,
@@ -23,10 +23,10 @@ environ
       XXREAL_2;
  registrations XBOOLE_0, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
       FINSEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, VALUED_0, VALUED_1, FUNCT_2,
-      FINSET_1, XXREAL_2;
+      FINSET_1, XXREAL_2, CARD_1, RFUNCT_2, SEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions VALUED_1;
- theorems REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
+ theorems SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
       FUNCT_1, FINSEQ_1, RVSUM_1, SEQ_1, SEQ_2, FDIFF_1, ABSVALUE, PRE_CIRC,
       NAT_1, TARSKI, INTEGRA2, NAT_2, FINSEQ_2, RCOMP_1, FCONT_2, INTEGRA4,
       FCONT_1, ROLLE, RFUNCT_2, FDIFF_2, RELAT_1, XREAL_0, FUNCT_2, XBOOLE_0,
@@ -138,12 +138,16 @@ end;
 
 begin :: Integrability for partial function of REAL,REAL
 
-definition
-  let C be non empty Subset of REAL;
+notation
   let f be PartFunc of REAL,REAL;
-  func f||C -> PartFunc of C,REAL equals
+  let C be non empty Subset of REAL;
+  synonym f||C for f|C;
+end;
 
-  f|C;
+definition
+  let f be PartFunc of REAL,REAL;
+  let C be non empty Subset of REAL;
+  redefine func f||C -> PartFunc of C,REAL;
   correctness by PARTFUN1:43;
 end;
 
@@ -221,6 +225,7 @@ A6: c in dom(f||C) & c in dom(g||C) by XBOOLE_0:def 3;
 end;
 
 definition
+ canceled;
   let A be closed-interval Subset of REAL;
   let f be PartFunc of REAL,REAL;
   pred f is_integrable_on A means
@@ -249,13 +254,13 @@ A1: A c= dom f;
 end;
 
 theorem Th7:
-  for f being PartFunc of REAL,REAL st f is_bounded_above_on A holds
-  f||A is_bounded_above_on A
+  for f being PartFunc of REAL,REAL st f|A is bounded_above holds
+  f||A|A is bounded_above
 proof
   let f be PartFunc of REAL,REAL;
-  assume f is_bounded_above_on A;
+  assume f|A is bounded_above;
   then consider r be real number such that
-A1: for x being set st x in A /\ dom f holds f.x <= r by RFUNCT_1:def 9;
+A1: for x being set st x in A /\ dom f holds f.x <= r by RFUNCT_1:87;
   for x being set st x in A /\ dom (f||A) holds (f||A).x <= r
   proof
     let x be set;
@@ -268,17 +273,17 @@ A4: A /\ dom(f||A)= dom f /\ A by XBOOLE_1:28;
     then (f||A).x = f.x by FUNCT_1:68;
     hence thesis by A1,A2,A4;
   end;
-  hence thesis by RFUNCT_1:def 9;
+  hence thesis by RFUNCT_1:87;
 end;
 
 theorem Th8:
-  for f being PartFunc of REAL,REAL st f is_bounded_below_on A holds
-  f||A is_bounded_below_on A
+  for f being PartFunc of REAL,REAL st f|A is bounded_below holds
+  f||A|A is bounded_below
 proof
   let f be PartFunc of REAL,REAL;
-  assume f is_bounded_below_on A;
+  assume f|A is bounded_below;
   then consider r be real number such that
-A1: for x being set st x in A /\ dom f holds f.x >= r by RFUNCT_1:def 10;
+A1: for x being set st x in A /\ dom f holds f.x >= r by RFUNCT_1:88;
   for x being set st x in A /\ dom (f||A) holds (f||A).x >= r
   proof
     let x be set;
@@ -291,25 +296,25 @@ A4: A /\ dom(f||A)= dom f /\ A by XBOOLE_1:28;
     then (f||A).x = f.x by FUNCT_1:68;
     hence thesis by A1,A2,A4;
   end;
-  hence thesis by RFUNCT_1:def 10;
+  hence thesis by RFUNCT_1:88;
 end;
 
 theorem Th9:
-  for f being PartFunc of REAL,REAL st f is_bounded_on A
-  holds f||A is_bounded_on A
+  for f being PartFunc of REAL,REAL st f|A is bounded
+  holds f||A|A is bounded
 proof
   let f be PartFunc of REAL,REAL;
-  assume f is_bounded_on A;
-  then f is_bounded_above_on A & f is_bounded_below_on A by RFUNCT_1:def 11;
-  then f||A is_bounded_above_on A & f||A is_bounded_below_on A by Th7,Th8;
-  hence thesis by RFUNCT_1:def 11;
+  assume f|A is bounded;
+  then f|A is bounded_above & f|A is bounded_below;
+  then f||A|A is bounded_above & f||A|A is bounded_below by Th7,Th8;
+  hence thesis;
 end;
 
 begin :: Integrability for continuous function
 
 theorem Th10:
   for f being PartFunc of REAL,REAL st f is_continuous_on A
-  holds f is_bounded_on A
+  holds f|A is bounded
 proof
   let f be PartFunc of REAL,REAL;
   assume
@@ -332,7 +337,7 @@ A4: for r be real number st r in f.:A holds b <= r by A2,SEQ_4:def 2;
     hence thesis by A3;
   end;
   then
-A5: f is_bounded_above_on A by RFUNCT_1:def 9;
+A5: f|A is bounded_above by RFUNCT_1:87;
   for x being set st x in A /\ dom f holds b <= f.x
   proof
     let x be set;
@@ -341,8 +346,8 @@ A5: f is_bounded_above_on A by RFUNCT_1:def 9;
     then f.x in f.:A by FUNCT_1:def 12;
     hence thesis by A4;
   end;
-  then f is_bounded_below_on A by RFUNCT_1:def 10;
-  hence thesis by A5,RFUNCT_1:def 11;
+  then f|A is bounded_below by RFUNCT_1:88;
+  hence thesis by A5;
 end;
 
 theorem Th11:
@@ -358,7 +363,7 @@ A2: f is_uniformly_continuous_on A by FCONT_2:11;
 A3: A c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in A & x2 in A
   & abs(x1 - x2) < s holds abs(f.x1 - f.x2) < r by FCONT_2:def 1;
   reconsider g=f|A as PartFunc of A,REAL by PARTFUN1:43;
-A4: g is total & g is_bounded_on A
+A4: g is total & g|A is bounded
   proof
 A5: dom g = dom f /\ A by FUNCT_1:68
       .= A by A3,XBOOLE_1:28;
@@ -392,8 +397,8 @@ A9:     x in dom f & x in A & y = f.x by FUNCT_1:def 12;
       hence thesis by A8,XBOOLE_0:def 10;
     end;
     then rng g is bounded_above & rng g is bounded_below by A6;
-    then g is_bounded_above_on A & g is_bounded_below_on A by INTEGRA1:14,16;
-    hence thesis by RFUNCT_1:def 11;
+    then g|A is bounded_above & g|A is bounded_below by INTEGRA1:14,16;
+    hence thesis;
   end;
   then reconsider g as Function of A,REAL;
   for T being DivSequence of A st delta(T) is convergent & lim delta(T)=0
@@ -454,20 +459,20 @@ A24:      k in dom D;
 A25:      divset(D,k) c= A by INTEGRA1:10;
           reconsider h=g|divset(D,k) as PartFunc of divset(D,k),REAL
           by PARTFUN1:43;
-          h is total & h is_bounded_on divset(D,k)
+          h is total & h|divset(D,k) is bounded
           proof
             dom g = A by PARTFUN1:def 4;
 
 then dom g /\ divset(D,k) = divset(D,k) by A24,INTEGRA1:10,XBOOLE_1:28;
             then dom h = divset(D,k) by FUNCT_1:68;
             hence h is total by PARTFUN1:def 4;
-            g is_bounded_above_on A & g is_bounded_below_on A
-            by A4,RFUNCT_1:def 11;
+            g|A is bounded_above & g|A is bounded_below
+            by A4;
 
 then rng h is bounded_above & rng h is bounded_below by INTEGRA4:18,19;
-            then h is_bounded_above_on divset(D,k) &
-            h is_bounded_below_on divset(D,k) by INTEGRA1:14,16;
-            hence thesis by RFUNCT_1:def 11;
+            then h|divset(D,k) is bounded_above &
+            h|divset(D,k) is bounded_below by INTEGRA1:14,16;
+            hence thesis;
           end;
           then reconsider h as Function of divset(D,k),REAL;
           for x1,x2 st x1 in divset(D,k) & x2 in divset(D,k) holds
@@ -485,7 +490,7 @@ A27:        abs(x1-x2)<=delta(T).m
 A28:              abs(x1-x2)=x1-x2 by ABSVALUE:def 1;
                   x1<=sup divset(D,k) & x2>=inf divset(D,k) by A26,INTEGRA2:1;
 
-then abs(x1-x2)<=sup divset(D,k)-inf divset(D,k) by A28,REAL_1:92;
+then abs(x1-x2)<=sup divset(D,k)-inf divset(D,k) by A28,XREAL_1:15;
                   then
 A29:              abs(x1-x2)<=vol(divset(D,k)) by INTEGRA1:def 6;
 A30:              k in Seg(len D) by A24,FINSEQ_1:def 3;
@@ -513,7 +518,7 @@ then upper_volume(chi(A,A),D).k<=delta(T.m) by INTEGRA1:def 19;
 A32:              abs(x1-x2)=x2-x1;
                   x2<=sup divset(D,k) & x1>=inf divset(D,k) by A26,INTEGRA2:1;
 
-then abs(x1-x2)<=sup divset(D,k)-inf divset(D,k) by A32,REAL_1:92;
+then abs(x1-x2)<=sup divset(D,k)-inf divset(D,k) by A32,XREAL_1:15;
                   then
 A33:              abs(x1-x2)<=vol(divset(D,k)) by INTEGRA1:def 6;
 A34:              k in Seg(len D) by A24,FINSEQ_1:def 3;
@@ -646,13 +651,12 @@ A49: lim osc = 0 by A12,SEQ_2:def 7;
   then g is_integrable_on A by A4,INTEGRA4:12;
   then consider g being PartFunc of A,REAL such that
 A50: g=f|A & g is_integrable_on A;
-  f||A = g by A50;
-  hence thesis by A50,Def2;
+  thus thesis by A50,Def2;
 end;
 
 theorem Th12:
   for f being PartFunc of REAL,REAL, D being Element of divs A
-  st A c= X & f is_differentiable_on X & f`|X is_bounded_on A
+  st A c= X & f is_differentiable_on X & (f`|X)|A is bounded
   holds lower_sum((f`|X)||A,D) <= f.(sup A)-f.(inf A) &
   f.(sup A)-f.(inf A)<=upper_sum((f`|X)||A,D)
 proof
@@ -661,7 +665,7 @@ proof
   assume that
 A1: A c= X and
 A2: f is_differentiable_on X and
-A3: f`|X is_bounded_on A;
+A3: (f`|X)|A is bounded;
 A4: for k st k in dom D holds ex r st r in divset(D,k) &
   f.(sup divset(D,k))-f.(inf divset(D,k))=diff(f,r)*vol(divset(D,k))
   proof
@@ -692,7 +696,7 @@ A13:    divset(D,k) c= A by A5,INTEGRA1:10;
 A14:    f is_continuous_on divset(D,k) by A5,A12,FCONT_1:17,INTEGRA1:10;
         consider r1,r2 such that
 A15:    r1<=r2 & r1=inf divset(D,k) & r2=sup divset(D,k) by INTEGRA1:4;
-A16:    inf divset(D,k) < sup divset(D,k) by A11,A15,REAL_1:def 5;
+A16:    inf divset(D,k) < sup divset(D,k) by A11,A15,XXREAL_0:1;
 A17:    divset(D,k)=[.inf divset(D,k),sup divset(D,k).] by INTEGRA1:5;
 A18:    f
         is_continuous_on [.inf divset(D,k),sup divset(D,k).] by A14,INTEGRA1:5;
@@ -743,14 +747,14 @@ A29: for k st k in dom D holds rng(((f`|X)||A)|divset(D,k)) is bounded
     assume k in dom D;
     dom(f`|X) = X by A2,FDIFF_1:def 8;
     then reconsider g=f`|X as PartFunc of X,REAL by PARTFUN1:28;
-A30: f`|X is_bounded_above_on A & f`|X is_bounded_below_on A
-    by A3,RFUNCT_1:def 11;
+A30: (f`|X)|A is bounded_above & (f`|X)|A is bounded_below
+    by A3;
     then consider r1 be real number such that
 A31: for x being set st x in A /\ dom(f`|X) holds (f`|X).x <= r1
-    by RFUNCT_1:def 9;
+    by RFUNCT_1:87;
     consider r2 be real number such that
 A32: for x being set st x in A /\ dom(f`|X) holds (f`|X).x >= r2
-    by A30,RFUNCT_1:def 10;
+    by A30,RFUNCT_1:88;
 A33: dom((f`|X)|A) =dom(f`|X) /\ A by FUNCT_1:68;
     for x being set st x in A /\ dom((f`|X)||A) holds ((f`|X)||A).x<=r1
     proof
@@ -763,7 +767,7 @@ A35:  A /\ (A /\ dom(f`|X)) = (A /\ A) /\ dom(f`|X) by XBOOLE_1:16
       y <= r1 & g.x=((f`|X)||A).x by A31,A33,A34,A35,FUNCT_1:68;
       hence thesis;
     end;
-    then ((f`|X)||A) is_bounded_above_on A by RFUNCT_1:def 9;
+    then (f`|X)||A|A is bounded_above by RFUNCT_1:87;
     then
 A36: rng(((f`|X)||A)|divset(D,k)) is bounded_above by INTEGRA4:18;
     for x being set st x in A /\ dom((f`|X)||A) holds ((f`|X)||A).x>=r2
@@ -777,7 +781,7 @@ A38:  A /\ (A /\ dom(f`|X)) = (A /\ A) /\ dom(f`|X) by XBOOLE_1:16
       y >= r2 & g.x=((f`|X)||A).x by A32,A33,A37,A38,FUNCT_1:68;
       hence thesis;
     end;
-    then ((f`|X)||A) is_bounded_below_on A by RFUNCT_1:def 10;
+    then (f`|X)||A|A is bounded_below by RFUNCT_1:88;
     then rng(((f`|X)||A)|divset(D,k)) is bounded_below by INTEGRA4:19;
     hence thesis by A36;
   end;
@@ -788,8 +792,7 @@ A39: len p = len D & for i be Nat st i in dom p holds
 A40: dom p = Seg len D by A39,FINSEQ_1:def 3;
   len D - 1 in NAT
   proof
-    len D <> 0 by CARD_2:59;
-    then len D >= 1 by NAT_1:14;
+    len D >= 1 by NAT_1:14;
     then consider j being Nat such that
 A41: len D = 1 + j by NAT_1:10;
     thus thesis by A41,ORDINAL1:def 13;
@@ -881,8 +884,7 @@ A62: i in dom (<*f.(inf A)*>^s2)
     end;
 A63: len D = 1 or len D >= 2
     proof
-      len D <> 0 by CARD_2:59;
-      then len D = 1 or len D is non trivial by NAT_2:def 1;
+      len D = 1 or len D is non trivial by NAT_2:def 1;
       hence thesis by NAT_2:31;
     end;
 A64: (s1^<*f.(sup A)*>)/.i=(s1^<*f.(sup A)*>).i by A61,PARTFUN1:def 8;
@@ -895,11 +897,11 @@ A67:    i in Seg 1 by A59,A61,FINSEQ_1:def 3;
         then
 A68:    i = 1 by FINSEQ_1:4,TARSKI:def 1;
 A69:    i in Seg(len D) & i in dom D by A66,A67,FINSEQ_1:def 3;
-        s1={} by A42,A66,CARD_2:59;
+        s1={} by A42,A66;
         then s1^<*f.(sup A)*> = <*f.(sup A)*> by FINSEQ_1:47;
         then
 A70:    (s1^<*f.(sup A)*>)/.i=f.(sup A) by A64,A68,FINSEQ_1:def 8;
-        s2={} by A44,A66,CARD_2:59;
+        s2={} by A44,A66;
         then <*f.(inf A)*>^s2 = <*f.(inf A)*> by FINSEQ_1:47;
         then
 A71:    (<*f.(inf A)*>^s2)/.i=f.(inf A) by A65,A68,FINSEQ_1:def 8;
@@ -949,7 +951,7 @@ A81:        (<*f.(inf A)*>^s2).i = f.(inf A)
 A82:        i=len D;
 A83:        i in Seg(len D) & i in dom D
             proof
-              thus i in Seg(len D) by A73,A82,FINSEQ_1:5;
+              thus i in Seg(len D) by A82,FINSEQ_1:5;
               hence thesis by FINSEQ_1:def 3;
             end;
 A84:        i-len s1 = 1 & i-len s1 in dom <*f.(sup A)*>
@@ -1002,7 +1004,7 @@ A93:        i in dom s1 & i in Seg k1 & i-1 in Seg k1 & i-1+1=i
             proof
 A94:          1 <= i & i <= len D by A91,FINSEQ_1:3;
               then
-A95:          1 <= i & i < k1 + 1 by A90,REAL_1:def 5;
+A95:          1 <= i & i < k1 + 1 by A90,XXREAL_0:1;
               then
 A96:          1 <= i & i <= k1 by NAT_1:13;
               then i in Seg(len s1) by A42,FINSEQ_1:3;
@@ -1155,7 +1157,7 @@ end;
 
 theorem Th13:
   for f being PartFunc of REAL,REAL st A c= X & f is_differentiable_on X &
-  f`|X is_integrable_on A & f`|X is_bounded_on A holds
+  f`|X is_integrable_on A & (f`|X)|A is bounded holds
   integral(f`|X,A) = f.(sup A)-f.(inf A)
 proof
   let f be PartFunc of REAL,REAL;
@@ -1163,7 +1165,7 @@ proof
 A1: A c= X and
 A2: f is_differentiable_on X and
 A3: f`|X is_integrable_on A and
-A4: f`|X is_bounded_on A;
+A4: (f`|X)|A is bounded;
   (f`|X)||A is_integrable_on A by A3,Def2;
   then
 A5: (f`|X)||A is_upper_integrable_on A & (f`|X)||A is_lower_integrable_on A &
@@ -1206,12 +1208,12 @@ A10: D in dom upper_sum_set((f`|X)||A) & r=(upper_sum_set((f`|X)||A)).D
 end;
 
 theorem Th14:
-  for f being PartFunc of REAL,REAL st f is_non_decreasing_on A &
+  for f being PartFunc of REAL,REAL st f|A is non-decreasing &
   A c= dom f holds rng (f|A) is bounded
 proof
   let f be PartFunc of REAL,REAL;
   assume that
-A1: f is_non_decreasing_on A and
+A1: f|A is non-decreasing and
 A2: A c= dom f;
 A3: dom(f|A)=dom f /\ A by FUNCT_1:68
     .= A by A2,XBOOLE_1:28;
@@ -1248,12 +1250,12 @@ A10: x >= inf A by A3,A8,INTEGRA2:1;
 end;
 
 theorem Th15:
-  for f being PartFunc of REAL,REAL st f is_non_decreasing_on A & A c= dom f
+  for f being PartFunc of REAL,REAL st f|A is non-decreasing & A c= dom f
   holds inf rng (f|A) = f.(inf A) & sup rng (f|A) = f.(sup A)
 proof
   let f be PartFunc of REAL,REAL;
   assume that
-A1: f is_non_decreasing_on A and
+A1: f|A is non-decreasing and
 A2: A c= dom f;
 A3: dom(f|A) = dom f /\ A by FUNCT_1:68
     .= A by A2,XBOOLE_1:28;
@@ -1310,12 +1312,12 @@ A16: f.(sup A) = (f|A).(sup A) by A5,FUNCT_1:68;
   hence thesis by A4,A12,SEQ_4:63;
 end;
 
-Lm1: for f being PartFunc of REAL,REAL st f is_non_decreasing_on A &
+Lm1: for f being PartFunc of REAL,REAL st f|A is non-decreasing &
 A c= dom f holds f is_integrable_on A
 proof
   let f be PartFunc of REAL,REAL;
   assume that
-A1: f is_non_decreasing_on A and
+A1: f|A is non-decreasing and
 A2: A c= dom f;
 A3: for D being Element of divs A, k st k in dom D holds
   0 <= (upper_volume(f||A,D)).k-(lower_volume(f||A,D)).k &
@@ -1328,7 +1330,7 @@ A3: for D being Element of divs A, k st k in dom D holds
 A4: k in dom D;
     then
 A5: divset(D,k) c= A by INTEGRA1:10;
-A6: f is_non_decreasing_on divset(D,k) by A1,A4,INTEGRA1:10,RFUNCT_2:62;
+A6: f|divset(D,k) is non-decreasing  by A1,A4,INTEGRA1:10,RFUNCT_2:62;
     divset(D,k) c= dom f by A2,A5,XBOOLE_1:1;
     then
 A7: inf rng (f|divset(D,k)) = f.(inf divset(D,k)) &
@@ -1388,8 +1390,7 @@ A16: Sum(upper_volume(f||A,D)-lower_volume(f||A,D))
       .=upper_sum(f||A,D)-lower_sum(f||A,D) by INTEGRA1:def 10;
 A17: len D - 1 in NAT
     proof
-      len D <> 0 by CARD_2:59;
-      then len D >= 1 by NAT_1:14;
+      len D >= 1 by NAT_1:14;
       then consider j being Nat such that
 A18:  len D = 1 + j by NAT_1:10;
       thus thesis by A18,ORDINAL1:def 13;
@@ -1484,7 +1485,7 @@ A39:      i in Seg len D by A21,A34,FINSEQ_1:3;
 A40:      i in dom D by FINSEQ_1:def 3;
 A41:      F2.i = f.(inf divset(D,i)) by A21,A39,A22
             .= f.(D.(i-1)) by A38,A40,INTEGRA1:def 5;
-A42:      i > 1 by A34,A38,REAL_1:def 5;
+A42:      i > 1 by A34,A38,XXREAL_0:1;
           then 1+1<=i by NAT_1:13;
           then
 A43:      len <*f.(inf A)*>+1<=i by FINSEQ_1:56;
@@ -1580,7 +1581,7 @@ A59:  k in dom D by FINSEQ_1:def 3;
     end;
     hence upper_sum(f||A,D)-lower_sum(f||A,D) >= 0 by A16,RVSUM_1:114;
   end;
-A60: f||A is total & f||A is_bounded_on A
+A60: f||A is total & f||A|A is bounded
   proof
 A61: dom (f||A) = dom f /\ A by FUNCT_1:68
       .= A by A2,XBOOLE_1:28;
@@ -1590,7 +1591,7 @@ A62: x in A by SUBSET_1:10;
     inf A <= x & x <= sup A by A62,INTEGRA2:1;
     then
 A63: inf A <= sup A by XXREAL_0:2;
-A64: f||A is_bounded_above_on A
+A64: f||A|A is bounded_above
     proof
       for x being set st x in A /\ dom (f||A) holds (f||A).x <= (f||A).(sup A)
       proof
@@ -1607,9 +1608,9 @@ A69:    x <= sup A by INTEGRA2:1;
         f.x = (f|A).x & f.(sup A)=(f|A).(sup A) by A61,A67,FUNCT_1:68;
         hence thesis by A1,A68,A69,RFUNCT_2:48;
       end;
-      hence thesis by RFUNCT_1:def 9;
+      hence thesis by RFUNCT_1:87;
     end;
-    f||A is_bounded_below_on A
+    f||A|A is bounded_below
     proof
       for x being set st x in A /\ dom (f||A) holds (f||A).x >= (f||A).(inf A)
       proof
@@ -1626,9 +1627,9 @@ A74:    x >= inf A by INTEGRA2:1;
         f.x = (f|A).x & f.(inf A)=(f|A).(inf A) by A61,A72,FUNCT_1:68;
         hence thesis by A1,A73,A74,RFUNCT_2:48;
       end;
-      hence thesis by RFUNCT_1:def 10;
+      hence thesis by RFUNCT_1:88;
     end;
-    hence thesis by A64,RFUNCT_1:def 11;
+    hence thesis by A64;
   end;
   for T being DivSequence of A st delta(T) is convergent & lim delta(T)=0
   holds lim upper_sum(f||A,T)-lim lower_sum(f||A,T)=0
@@ -1652,7 +1653,7 @@ A81:  inf A in A & sup A in A by INTEGRA2:1;
       A = A /\ dom f by A2,XBOOLE_1:28;
       then
 A82:  f.(inf A) <= f.(sup A) by A1,A80,A81,RFUNCT_2:48;
-      now per cases by A82,REAL_1:def 5;
+      now per cases by A82,XXREAL_0:1;
         suppose
 A83:      f.(inf A)=f.(sup A);
           for m st 0<=m holds abs((upper_sum(f||A,T)-lower_sum(f||A,T)).m-0)<r
@@ -1726,25 +1727,25 @@ A93: upper_sum(f||A,T) is convergent & lower_sum(f||A,T) is convergent
 end;
 
 theorem
-  for f being PartFunc of REAL,REAL st f is_monotone_on A & A c= dom f
+  for f being PartFunc of REAL,REAL st f|A is monotone & A c= dom f
   holds f is_integrable_on A
 proof
   let f be PartFunc of REAL,REAL;
   assume that
-A1: f is_monotone_on A and
+A1: f|A is monotone and
 A2: A c= dom f;
   per cases by A1,RFUNCT_2:def 6;
-  suppose f is_non_decreasing_on A;
+  suppose f|A is non-decreasing;
     hence thesis by A2,Lm1;
   end;
-  suppose f is_non_increasing_on A;
+  suppose f|A is non-increasing;
     then
-A3: (-1)(#)f is_non_decreasing_on A by RFUNCT_2:67;
+A3: ((-1)(#)f)|A is non-decreasing by RFUNCT_2:67;
     dom f = dom -f by VALUED_1:8;
     then -f is_integrable_on A by A2,A3,Lm1;
     then
 A4: ((-f)||A) is_integrable_on A by Def2;
-A5: ((-f)||A) is total & ((-f)||A) is_bounded_on A
+A5: ((-f)||A) is total & (-f)||A|A is bounded
     proof
 A6:   dom ((-f)||A) = dom (-f) /\ A by FUNCT_1:68
         .= dom f /\ A by VALUED_1:8
@@ -1755,7 +1756,7 @@ A7:   x in A by SUBSET_1:10;
       inf A <= x & x <= sup A by A7,INTEGRA2:1;
       then
 A8:   inf A <= sup A by XXREAL_0:2;
-A9:   ((-f)||A) is_bounded_above_on A
+A9:   (-f)||A|A is bounded_above
       proof
         for x being set st x in A /\ dom ((-f)||A) holds
         ((-f)||A).x <= ((-f)||A).(sup A)
@@ -1774,9 +1775,9 @@ A13:      x <= sup A by INTEGRA2:1;
           FUNCT_1:68;
           hence thesis by A3,A12,A13,RFUNCT_2:48;
         end;
-        hence thesis by RFUNCT_1:def 9;
+        hence thesis by RFUNCT_1:87;
       end;
-      ((-f)||A) is_bounded_below_on A
+      (-f)||A|A is bounded_below
       proof
         for x being set st x in A /\ dom ((-f)||A) holds
         ((-f)||A).x >= ((-f)||A).(inf A)
@@ -1795,9 +1796,9 @@ A17:      x >= inf A by INTEGRA2:1;
           FUNCT_1:68;
           hence thesis by A3,A16,A17,RFUNCT_2:48;
         end;
-        hence thesis by RFUNCT_1:def 10;
+        hence thesis by RFUNCT_1:88;
       end;
-      hence thesis by A9,RFUNCT_1:def 11;
+      hence thesis by A9;
     end;
 A18: (-1)(#)((-f)||A) is_integrable_on A by A4,A5,INTEGRA2:31;
     (-1)(#)((-f)||A) = (f||A)
@@ -1892,8 +1893,8 @@ A14: C c= A by TARSKI:def 3;
   then
 A15: f`|X is_integrable_on A & f`|X is_integrable_on B &
   f`|X is_integrable_on C by A3,A12,Th11,FCONT_1:17;
-A16: f`|X is_bounded_on A by A3,Th10;
-  then f`|X is_bounded_on B & f`|X is_bounded_on C by A12,A14,RFUNCT_1:91;
+A16: (f`|X)|A is bounded by A3,Th10;
+  then (f`|X)|B is bounded & (f`|X)|C is bounded by A12,A14,RFUNCT_1:91;
   then integral(f`|X,A) = f.(sup A)-f.(inf A) &
   integral(f`|X,B) = f.(sup B)-f.(inf B) &
   integral(f`|X,C) = f.(sup C)-f.(inf C) by A1,A2,A12,A14,A15,A16,Th13,
@@ -1952,7 +1953,7 @@ A1: A = [.b,a.];
   consider a1,b1 being Real such that
 A2: a1 <= b1 & A = [.a1,b1.] by INTEGRA1:def 1;
 A3: a1 = b & b1 = a by A1,A2,INTEGRA1:6;
-  now per cases by A2,A3,REAL_1:def 5;
+  now per cases by A2,A3,XXREAL_0:1;
     suppose
 A4:   b < a;
       then integral(f,a,b)=-integral(f,[' b,a ']) by Def5;
@@ -1976,8 +1977,8 @@ end;
 theorem
   for f,g being PartFunc of REAL,REAL, X being open Subset of REAL
   st f is_differentiable_on X & g is_differentiable_on X & A c= X &
-  f`|X is_integrable_on A & f`|X is_bounded_on A & g`|X is_integrable_on A &
-  g`|X is_bounded_on A holds integral((f`|X)(#)g,A)
+  f`|X is_integrable_on A & (f`|X)|A is bounded & g`|X is_integrable_on A &
+  (g`|X)|A is bounded holds integral((f`|X)(#)g,A)
   =f.(sup A)*g.(sup A)-f.(inf A)*g.(inf A)-integral(f(#)(g`|X),A)
 proof
   let f,g be PartFunc of REAL,REAL;
@@ -1987,9 +1988,9 @@ A1: f is_differentiable_on X and
 A2: g is_differentiable_on X and
 A3: A c= X and
 A4: f`|X is_integrable_on A and
-A5: f`|X is_bounded_on A and
+A5: (f`|X)|A is bounded and
 A6: g`|X is_integrable_on A and
-A7: g`|X is_bounded_on A;
+A7: (g`|X)|A is bounded;
 A8: f(#)g is_differentiable_on X & (f(#)g)`|X = (f`|X)(#)g + f(#)(g`|X)
   by A1,A2,FDIFF_2:20;
 A9: f is_continuous_on X & g is_continuous_on X by A1,A2,FDIFF_1:33;
@@ -2005,13 +2006,13 @@ A12: A c= dom f & A c= dom g by A3,XBOOLE_1:1;
   then
 A13: f||A is Function of A,REAL & g||A is Function of A,REAL by Th6,
   FUNCT_2:131;
-A14: f is_bounded_on A & g is_bounded_on A by A3,A9,Th10,FCONT_1:17;
-A15: f||A is_bounded_on A & g||A is_bounded_on A by A10,Th9,Th10;
+A14: f|A is bounded & g|A is bounded by A3,A9,Th10,FCONT_1:17;
+A15: f||A|A is bounded & g||A|A is bounded by A10,Th9,Th10;
 A16: A c= dom(f`|X) & A c= dom(g`|X) by A1,A2,A3,FDIFF_1:def 8;
   then
 A17: (f`|X)||A is Function of A,REAL & (g`|X)||A is Function of A,REAL
   by Th6,FUNCT_2:131;
-  (f`|X)||A is_bounded_on A & (g`|X)||A is_bounded_on A by A5,A7,Th9;
+  (f`|X)||A|A is bounded & (g`|X)||A|A is bounded by A5,A7,Th9;
   then ((f`|X)||A)(#)(g||A) is_integrable_on A &
   (f||A)(#)((g`|X)||A) is_integrable_on A by A11,A13,A15,A17,INTEGRA4:29;
   then
@@ -2021,16 +2022,16 @@ A18: ((f`|X)(#)g)||A is_integrable_on A & (f(#)(g`|X))||A is_integrable_on A
   then A c= dom((f`|X)(#)g) by A12,A16,XBOOLE_1:19;
   then
 A19: ((f`|X)(#)g)||A is Function of A, REAL by Th6,FUNCT_2:131;
-A20: (f`|X)(#)g is_bounded_on (A /\ A) by A5,A14,RFUNCT_1:101;
+A20: ((f`|X)(#)g)|(A /\ A) is bounded  by A5,A14,RFUNCT_1:101;
   then
-A21: ((f`|X)(#)g)||A is_bounded_on A by Th9;
+A21: ((f`|X)(#)g)||A|A is bounded by Th9;
   dom (f(#)(g`|X)) = dom f /\ dom (g`|X) by VALUED_1:def 4;
   then A c= dom(f(#)(g`|X)) by A12,A16,XBOOLE_1:19;
   then
 A22: (f(#)(g`|X))||A is Function of A, REAL by Th6,FUNCT_2:131;
-A23: f(#)(g`|X) is_bounded_on (A /\ A) by A7,A14,RFUNCT_1:101;
+A23: (f(#)(g`|X))|(A /\ A) is bounded  by A7,A14,RFUNCT_1:101;
   then
-A24: (f(#)(g`|X))||A is_bounded_on A by Th9;
+A24: (f(#)(g`|X))||A|A is bounded by Th9;
 A25: f(#)g is_differentiable_on X by A1,A2,FDIFF_2:20;
 A26: (f(#)g)`|X is_integrable_on A
   proof
@@ -2039,9 +2040,9 @@ A26: (f(#)g)`|X is_integrable_on A
     then ((f`|X)(#)g + f(#)(g`|X))||A is_integrable_on A by Th5;
     hence thesis by A8,Def2;
   end;
-A27: (f(#)g)`|X is_bounded_on A
+A27: ((f(#)g)`|X)|A is bounded
   proof
-    (f`|X)(#)g + f(#)(g`|X) is_bounded_on (A /\ A) by A20,A23,RFUNCT_1:100;
+    ((f`|X)(#)g + f(#)(g`|X))|(A /\ A) is bounded  by A20,A23,RFUNCT_1:100;
     hence thesis by A1,A2,FDIFF_2:20;
   end;
 A28: integral(((f(#)g)`|X)||A)=integral((f(#)g)`|X,A)

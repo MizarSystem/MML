@@ -13,10 +13,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
@@ -26,12 +22,12 @@
 </Signature>
 <RCluster aid="NECKLACE" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLACE" nr="1">
@@ -40,7 +36,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="102">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -54,7 +50,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="23"/>
+<Adjective nr="8"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -62,84 +58,84 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="8"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="141">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="50"/>
+<Adjective nr="39"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="4">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="U" nr="4">
+<Func kind="U" nr="5">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="5">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="110">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="50"/>
+<Adjective nr="39"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="52"/>
+<Adjective nr="39"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="8">
@@ -147,53 +143,41 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLACE" nr="9">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Func kind="U" nr="1">
-<Func kind="K" nr="143">
+<Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <CCluster aid="NECKLACE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="15"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="21"/>
-</Cluster>
-</CCluster>
-<CCluster aid="NECKLACE" nr="2">
-<ArgTypes/>
-<Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
+<Adjective nr="8"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

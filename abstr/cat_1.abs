@@ -7,56 +7,29 @@
 environ
 
  vocabularies FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, TARSKI, WELLORD1,
-      CAT_1, ARYTM, GRAPH_1, AMI_1;
+      CAT_1, ARYTM, GRAPH_1, AMI_1, CAT_4, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, NUMBERS, BINOP_1, FUNCOP_1, GRAPH_1;
+      FUNCT_2, NUMBERS, BINOP_1, FUNCOP_1, STRUCT_0, GRAPH_1;
  constructors PARTFUN1, WELLORD2, BINOP_1, PBOOLE, GRAPH_1;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0;
  requirements SUBSET, BOOLE;
 
 
-begin   :: Auxiliary theorems
-
-reserve a,b,c,o,m for set;
-
-canceled 3;
-
-theorem :: CAT_1:4
-  for X,Y,Z being set, D being non empty set, f being Function of X,D
-  st Y c= X & f.:Y c= Z holds f|Y is Function of Y,Z;
+begin :: Structure of a Category
 
 definition
-  let a,b,c;
-  redefine func (a,b).-->c -> PartFunc of [:{a},{b}:],{c};
-end;
-
-canceled 2;
-
-theorem :: CAT_1:7
-  dom (a,b).-->c = [:{a},{b}:];
-
-theorem :: CAT_1:8
-  ((a,b).-->c).(a,b) = c;
-
-theorem :: CAT_1:9
-  for x being Element of {a} for y being Element of {b}
-  holds ((a,b).-->c).(x,y) = c;
-
-:: Structure of a Category
-
-definition
-  struct(MultiGraphStruct) CatStr (# Vertices,Edges -> set,
-    Source,Target -> Function of the Edges, the Vertices,
-    Comp -> PartFunc of [:the Edges, the Edges :],the Edges,
-    Id -> Function of the Vertices, the Edges #);
+  struct(MultiGraphStruct) CatStr (# carrier,carrier' -> set,
+    Source,Target -> Function of the carrier', the carrier,
+    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
+    Id -> Function of the carrier, the carrier' #);
 end;
 
 reserve C for CatStr;
 
 definition
   let C;
-  mode Object of C is Element of the Vertices of C;
-  mode Morphism of C is Element of the Edges of C;
+  mode Object of C is Element of the carrier of C;
+  mode Morphism of C is Element of the carrier' of C;
 end;
 
 reserve a,b,c,d for Object of C;
@@ -64,40 +37,12 @@ reserve f,g for Morphism of C;
 
 :: Domain and codomain of a Morphism
 
-definition let C;
- attr C is void means
-:: CAT_1:def 1
- the Vertices of C = {} or the Edges of C = {};
-end;
-
-definition
-  let m,o;
-  redefine
-  func m .--> o -> Function of {m}, {o};
-end;
-
 registration
- cluster non void CatStr;
-end;
-
-registration let C be non void CatStr;
- cluster the Vertices of C -> non empty;
- cluster the Edges of C -> non  empty;
+ cluster non void non empty CatStr;
 end;
 
 definition
-  let C be non void CatStr, f be Morphism of C;
-  func dom f -> Object of C equals
-:: CAT_1:def 2
-
-  (the Source of C).f;
-  func cod f -> Object of C equals
-:: CAT_1:def 3
-
-  (the Target of C).f;
-end;
-
-definition
+ canceled 3;
   let C,f,g;
   assume
  [g,f] in dom(the Comp of C);
@@ -108,7 +53,7 @@ definition
 end;
 
 definition
-  let C be non void CatStr, a be Object of C;
+  let C be non void non empty CatStr, a be Object of C;
   func id (a) -> Morphism of C equals
 :: CAT_1:def 5
 
@@ -116,17 +61,17 @@ definition
 end;
 
 definition
-  let C be non void CatStr, a,b be Object of C;
-  func Hom(a,b) -> Subset of the Edges of C equals
+  let C be non void non empty CatStr, a,b be Object of C;
+  func Hom(a,b) -> Subset of the carrier' of C equals
 :: CAT_1:def 6
   { f where f is Morphism of C : dom(f)=a & cod(f)=b };
 end;
 
-canceled 8;
-
-reserve C for non void CatStr,
+reserve C for non void non empty CatStr,
         f,g for Morphism of C,
         a,b,c,d for Object of C;
+
+canceled 17;
 
 theorem :: CAT_1:18
   f in Hom(a,b) iff dom(f)=a & cod(f)=b;
@@ -179,42 +124,38 @@ definition
   attr C is Category-like means
 :: CAT_1:def 8
 
-  (for f,g being Element of the Edges of C holds
+  (for f,g being Element of the carrier' of C holds
   [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C).f)
-  & (for f,g being Element of the Edges of C
+  & (for f,g being Element of the carrier' of C
   st (the Source of C).g=(the Target of C).f holds
   (the Source of C).((the Comp of C).(g,f)) = (the Source of C).f &
   (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g)
-  & (for f,g,h being Element of the Edges of C
+  & (for f,g,h being Element of the carrier' of C
   st (the Source of C).h = (the Target of C).g
    & (the Source of C).g = (the Target of C).f
   holds (the Comp of C).(h,(the Comp of C).(g,f))
   = (the Comp of C).((the Comp of C).(h,g),f) )
-  & (for b being Element of the Vertices of C holds
+  & (for b being Element of the carrier of C holds
   (the Source of C).((the Id of C).b) = b &
   (the Target of C).((the Id of C).b) = b &
-  (for f being Element of the Edges of C st (the Target of C).f = b
+  (for f being Element of the carrier' of C st (the Target of C).f = b
   holds (the Comp of C).((the Id of C).b,f) = f ) &
-  (for g being Element of the Edges of C st (the Source of C).g = b
+  (for g being Element of the carrier' of C st (the Source of C).g = b
   holds (the Comp of C).(g,(the Id of C).b) = g ) );
 end;
 
 registration
-  cluster Category-like non void CatStr;
+  cluster Category-like non void non empty strict CatStr;
 end;
 
 definition
-  mode Category is Category-like non void CatStr;
-end;
-
-registration
-  cluster strict Category;
+  mode Category is Category-like non void non empty CatStr;
 end;
 
 canceled;
 
 theorem :: CAT_1:29
-  for C being non void CatStr st ( for f,g being Morphism of C
+  for C being non void non empty CatStr st ( for f,g being Morphism of C
   holds [g,f] in dom(the Comp of C) iff dom g = cod f )
   & ( for f,g being Morphism of C st dom g = cod f
   holds dom(g*f) = dom f & cod (g*f) = cod g )
@@ -225,11 +166,13 @@ theorem :: CAT_1:29
   (for g being Morphism of C st dom g = b holds g*(id b) = g) )
   holds C is Category-like;
 
+reserve o,m for set;
+
 definition
   let o,m;
   func 1Cat(o,m) -> strict Category equals
 :: CAT_1:def 9
-  CatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m #);
+  CatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m #);
 end;
 
 canceled 6;
@@ -489,19 +432,19 @@ theorem :: CAT_1:93
 
 definition
   let C,D;
-  mode Functor of C,D -> Function of the Edges of C,the Edges of D
+  mode Functor of C,D -> Function of the carrier' of C,the carrier' of D
     means
 :: CAT_1:def 18
 
-    ( for c being Element of the Vertices of C
-    ex d being Element of the Vertices of D
+    ( for c being Element of the carrier of C
+    ex d being Element of the carrier of D
     st it.((the Id of C).c) = (the Id of D).d )
-    & ( for f being Element of the Edges of C holds
+    & ( for f being Element of the carrier' of C holds
     it.((the Id of C).((the Source of C).f)) =
     (the Id of D).((the Source of D).(it.f)) &
     it.((the Id of C).((the Target of C).f)) =
     (the Id of D).((the Target of D).(it.f)) )
-    & ( for f,g being Element of the Edges of C
+    & ( for f,g being Element of the carrier' of C
     st [g,f] in dom(the Comp of C)
     holds it.((the Comp of C).(g,f)) = (the Comp of D).(it.g,it.f) );
 end;
@@ -509,7 +452,7 @@ end;
 canceled 2;
 
 theorem :: CAT_1:96
-  for T being Function of the Edges of C,the Edges of D
+  for T being Function of the carrier' of C,the carrier' of D
   st ( for c being Object of C ex d being Object of D st T.(id c) = id d )
   & ( for f being Morphism of C
   holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) )
@@ -529,8 +472,8 @@ theorem :: CAT_1:99
   holds dom(T.g) = cod(T.f) & T.(g*f) = (T.g)*(T.f);
 
 theorem :: CAT_1:100
-  for T being Function of the Edges of C,the Edges of D
-  for F being Function of the Vertices of C, the Vertices of D
+  for T being Function of the carrier' of C,the carrier' of D
+  for F being Function of the carrier of C, the carrier of D
   st ( for c being Object of C holds T.(id c) = id(F.c) )
   & ( for f being Morphism of C
   holds F.(dom f) = dom (T.f) & F.(cod f) = cod (T.f) )
@@ -541,23 +484,23 @@ theorem :: CAT_1:100
 
 definition
   let C,D;
-  let F be Function of the Edges of C,the Edges of D;
+  let F be Function of the carrier' of C,the carrier' of D;
   assume
- for c being Element of the Vertices of C
-  ex d being Element of the Vertices of D
+ for c being Element of the carrier of C
+  ex d being Element of the carrier of D
   st F.((the Id of C).c) = (the Id of D).d;
-  func Obj(F) -> Function of the Vertices of C,the Vertices of D means
+  func Obj(F) -> Function of the carrier of C,the carrier of D means
 :: CAT_1:def 19
 
-  for c being Element of the Vertices of C
-  for d being Element of the Vertices of D
+  for c being Element of the carrier of C
+  for d being Element of the carrier of D
   st F.((the Id of C).c) = (the Id of D).d holds it.c = d;
 end;
 
 canceled;
 
 theorem :: CAT_1:102
-  for T being Function of the Edges of C,the Edges of D
+  for T being Function of the carrier' of C,the carrier' of D
   st for c being Object of C ex d being Object of D st T.(id c) = id d
   for c being Object of C for d being Object of D
   st T.(id c) = id d holds (Obj T).c = d;
@@ -614,7 +557,7 @@ definition
 end;
 
 theorem :: CAT_1:111
-  id the Edges of C is Functor of C,C;
+  id the carrier' of C is Functor of C,C;
 
 theorem :: CAT_1:112
   for T being (Functor of B,C),S being (Functor of C,D),b being Object of B
@@ -631,7 +574,7 @@ definition
   func id C -> Functor of C,C equals
 :: CAT_1:def 21
 
-  id the Edges of C;
+  id the carrier' of C;
 end;
 
 canceled 2;
@@ -640,7 +583,7 @@ theorem :: CAT_1:116
   for c being Object of C holds (Obj id C).c = c;
 
 theorem :: CAT_1:117
-  Obj id C = id the Vertices of C;
+  Obj id C = id the carrier of C;
 
 theorem :: CAT_1:118
   for c being Object of C holds (id C).c = c;
@@ -650,7 +593,7 @@ definition
   let T be Functor of C,D;
   attr T is isomorphic means
 :: CAT_1:def 22
-  T is one-to-one & rng T = the Edges of D & rng Obj T = the Vertices of D;
+  T is one-to-one & rng T = the carrier' of D & rng Obj T = the carrier of D;
   attr T is full means
 :: CAT_1:def 23
 

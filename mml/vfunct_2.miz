@@ -8,14 +8,14 @@ environ
 
  vocabularies NORMSP_1, PARTFUN1, RELAT_1, BOOLE, ARYTM_1, SEQ_1, FUNCT_1,
       RLVECT_1, ABSVALUE, RFUNCT_1, PARTFUN2, FINSEQ_4, ARYTM, CLVECT_1,
-      COMPLEX1, CFUNCT_1;
+      COMPLEX1, CFUNCT_1, SEQM_3, SEQ_2, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, FUNCT_1, STRUCT_0, RELSET_1, PARTFUN1, PARTFUN2, RLVECT_1,
-      VALUED_1, RFUNCT_1, COMPLEX1, CFUNCT_1, CLVECT_1, XXREAL_0;
+      VALUED_1, SEQ_2, COMPLEX1, CFUNCT_1, CLVECT_1, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, RFUNCT_1,
-      CFUNCT_1, CLVECT_1, SEQ_1, VALUED_1;
+      CFUNCT_1, CLVECT_1, SEQ_1, VALUED_1, SEQ_2;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, COMPLEX1, STRUCT_0,
-      VALUED_0;
+      VALUED_0, XBOOLE_0;
  requirements SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, XBOOLE_0, RLVECT_1, VALUED_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, ABSVALUE, PARTFUN1, PARTFUN2, RFUNCT_1,
@@ -1432,7 +1432,7 @@ A4: |.z.| >= 0 by COMPLEX1:132;
 end;
 
 theorem Th45:
-  f is_bounded_on Y implies ||.f.|| is_bounded_on Y & -f is_bounded_on Y
+  f is_bounded_on Y implies ||.f.|||Y is bounded & -f is_bounded_on Y
 proof
   assume
 A1: f is_bounded_on Y;
@@ -1450,7 +1450,7 @@ A4: c in Y & c in dom (||.f.||) by XBOOLE_0:def 3;
     then abs(||.f/.c.||) <= r1 by A3,ABSVALUE:def 1;
     hence abs((||.f.||).c) <= r1 by A4,Def5;
   end;
-  hence ||.f.|| is_bounded_on Y by RFUNCT_1:90;
+  hence ||.f.|||Y is bounded by RFUNCT_1:90;
   (-1r)(#)f is_bounded_on Y by A1,Th44;
   hence thesis by Th23;
 end;
@@ -1575,17 +1575,17 @@ A8:   ||.f/.c.|| <= abs(r2) by A7,XXREAL_0:2;
 end;
 
 theorem
-  f1 is_constant_on X & f2 is_constant_on Y implies
-  (f1 + f2) is_constant_on (X /\ Y) & (f1 - f2) is_constant_on (X /\ Y)
+  f1|X is constant & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is constant & (f1-f2)|(X /\ Y) is constant
 proof
   assume
-A1: f1 is_constant_on X & f2 is_constant_on Y;
+A1: f1|X is constant & f2|Y is constant;
   then consider r1 being VECTOR of V such that
 A2: for c be Element of M st c in X /\ dom f1 holds
-  (f1/.c) = r1 by PARTFUN2:def 3;
+  (f1/.c) = r1 by PARTFUN2:54;
   consider r2 being VECTOR of V such that
 A3: for c be Element of M st c in Y /\ dom f2 holds
-  (f2/.c) = r2 by A1,PARTFUN2:def 3;
+  (f2/.c) = r2 by A1,PARTFUN2:54;
   now
     let c be Element of M;
     assume c in X /\ Y /\ dom (f1+f2);
@@ -1600,7 +1600,7 @@ A6: c in X /\ dom f1 & c in Y /\ dom f2 by A5,XBOOLE_0:def 3;
       .= r1 + (f2/.c) by A2,A6
       .= r1 + r2 by A3,A6;
   end;
-  hence (f1 + f2) is_constant_on (X /\ Y) by PARTFUN2:def 3;
+  hence (f1+f2)|(X /\ Y) is constant by PARTFUN2:54;
   now
     let c be Element of M;
     assume c in X /\ Y /\ dom (f1-f2);
@@ -1614,22 +1614,22 @@ A8: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
       .= r1 - (f2/.c) by A2,A8
       .= r1 - r2 by A3,A8;
   end;
-  hence (f1 - f2) is_constant_on (X /\ Y) by PARTFUN2:def 3;
+  hence (f1-f2)|(X /\ Y) is constant by PARTFUN2:54;
 end;
 
 theorem
   for f1 be PartFunc of M,COMPLEX holds
-  f1 is_constant_on X & f2 is_constant_on Y implies
-  (f1 (#) f2) is_constant_on (X /\ Y)
+  f1|X is constant & f2|Y is constant implies
+  (f1(#)f2)|(X /\ Y) is constant
 proof
   let f1 be PartFunc of M,COMPLEX;
   assume
-A1: f1 is_constant_on X & f2 is_constant_on Y;
+A1: f1|X is constant & f2|Y is constant;
   then consider z1 be Complex such that
 A2: for c be Element of M st c in X /\ dom f1 holds f1.c = z1 by PARTFUN2:76;
   consider r2 being VECTOR of V such that
 A3: for c be Element of M st c in Y /\ dom f2 holds
-  (f2/.c) = r2 by A1,PARTFUN2:def 3;
+  (f2/.c) = r2 by A1,PARTFUN2:54;
   now
     let c be Element of M;
     assume c in X /\ Y /\ dom (f1(#)f2);
@@ -1646,15 +1646,15 @@ A8: f1/.c = f1.c by A6,PARTFUN1:def 8;
       .= z1 * (f2/.c) by A2,A7,A8
       .= z1 * r2 by A3,A7;
   end;
-  hence thesis by PARTFUN2:def 3;
+  hence thesis by PARTFUN2:54;
 end;
 
 theorem Th52:
-  f is_constant_on Y implies z(#)f is_constant_on Y
+  f|Y is constant implies (z(#)f)|Y is constant
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
-A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:def 3;
+A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
     let c be Element of M;
     assume c in Y /\ dom (z(#)f);
@@ -1666,15 +1666,15 @@ A3: c in Y /\ dom f by A2,XBOOLE_0:def 3;
     thus (z(#)f)/.c = z * f/.c by A2,Def4
       .= z*r by A1,A3;
   end;
-  hence thesis by PARTFUN2:def 3;
+  hence thesis by PARTFUN2:54;
 end;
 
 theorem Th53:
-  f is_constant_on Y implies ||.f.|| is_constant_on Y & -f is_constant_on Y
+  f|Y is constant implies ||.f.|||Y is constant & (-f)|Y is constant
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
-A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:def 3;
+A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
     let c be Element of M;
     assume c in Y /\ dom (||.f.||);
@@ -1686,7 +1686,7 @@ A3: c in Y /\ dom f by A2,XBOOLE_0:def 3;
     thus (||.f.||).c = ||.f/.c.|| by A2,Def5
       .= ||.r.|| by A1,A3;
   end;
-  hence ||.f.|| is_constant_on Y by PARTFUN2:76;
+  hence ||.f.|||Y is constant by PARTFUN2:76;
   now
     take p=-r;
     let c be Element of M;
@@ -1698,15 +1698,15 @@ A5: -f/.c = p by A1;
     c in dom (-f) by A4,XBOOLE_0:def 3;
     hence (-f)/.c = p by A5,Def6;
   end;
-  hence thesis by PARTFUN2:def 3;
+  hence thesis by PARTFUN2:54;
 end;
 
 theorem Th54:
-  f is_constant_on Y implies f is_bounded_on Y
+  f|Y is constant implies f is_bounded_on Y
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r being VECTOR of V such that
-A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:def 3;
+A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:54;
   now
     take p=||.r.||;
     let c be Element of M;
@@ -1717,34 +1717,37 @@ A1: for c be Element of M st c in Y /\ dom f holds f/.c = r by PARTFUN2:def 3;
 end;
 
 theorem
-  f is_constant_on Y implies (for z holds z(#)f is_bounded_on Y) &
-  (-f is_bounded_on Y) & ||.f.|| is_bounded_on Y
+  f|Y is constant implies (for z holds z(#)f is_bounded_on Y) &
+  (-f is_bounded_on Y) & ||.f.|||Y is bounded
 proof
   assume
-A1: f is_constant_on Y;
-  hence for z holds z(#)f is_bounded_on Y by Th52,Th54;
-  -f is_constant_on Y by A1,Th53;
+A1: f|Y is constant;
+  hereby let z;
+    (z(#)f)|Y is constant by A1,Th52;
+   hence z(#)f is_bounded_on Y by Th54;
+  end;
+  (-f)|Y is constant by A1,Th53;
   hence -f is_bounded_on Y by Th54;
-  ||.f.|| is_constant_on Y by A1,Th53;
-  hence ||.f.|| is_bounded_on Y by RFUNCT_1:108;
+  ||.f.|||Y is constant by A1,Th53;
+  hence ||.f.|||Y is bounded by RFUNCT_1:108;
 end;
 
 theorem
-  f1 is_bounded_on X & f2 is_constant_on Y implies
+  f1 is_bounded_on X & f2|Y is constant implies
   f1+f2 is_bounded_on (X /\ Y)
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_constant_on Y;
+A1: f1 is_bounded_on X & f2|Y is constant;
   then f2 is_bounded_on Y by Th54;
   hence thesis by A1,Th46;
 end;
 
 theorem
-  f1 is_bounded_on X & f2 is_constant_on Y implies
+  f1 is_bounded_on X & f2|Y is constant implies
   f1-f2 is_bounded_on X /\ Y & f2-f1 is_bounded_on X /\ Y
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_constant_on Y;
+A1: f1 is_bounded_on X & f2|Y is constant;
   then
 A2: f2 is_bounded_on Y by Th54;
   then -f1 is_bounded_on X & -f2 is_bounded_on Y by A1,Th45;

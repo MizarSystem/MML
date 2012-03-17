@@ -8,20 +8,22 @@ environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1,
       GRAPH_1, GRAPH_5, RLVECT_1, GRAPH_4, FINSEQ_4, FINSEQ_2, PROB_1, ARYTM_1,
-      MSAFREE2, ARYTM;
+      MSAFREE2, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, SEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSET_1, REAL_1, NAT_1, GRAPH_1, BINARITH, FUNCT_2, GRAPH_4,
+      FINSEQ_4, FINSET_1, REAL_1, NAT_1,
+      STRUCT_0, GRAPH_1, BINARITH, FUNCT_2,
+      GRAPH_4,
       CARD_3, RVSUM_1, GRAPH_3;
  constructors PARTFUN1, XXREAL_0, NAT_1, CARD_3, FINSEQ_4, FINSOP_1, BINARITH,
       GOBOARD1, GRAPH_4, SEQ_1, BINOP_2, ENUMSET1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_2, GRAPH_4, VALUED_0,
-      CARD_1;
+      CARD_1, STRUCT_0;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, FUNCT_1, RVSUM_1;
  theorems FUNCT_2, XBOOLE_1, GRAPH_1, FINSEQ_1, GRAPH_4, FUNCT_1, FINSEQ_3,
-      REAL_1, FINSEQ_4, NAT_1, CARD_1, TARSKI, YELLOW15, CARD_4, CARD_5,
+      FINSEQ_4, NAT_1, CARD_1, TARSKI, YELLOW15, CARD_4, CARD_5,
       FINSEQ_2, XBOOLE_0, CARD_2, RVSUM_1, SUBSET_1, ZFMISC_1,
       XREAL_1, BINARITH, XXREAL_0, FINSOP_1, PRE_CIRC, ORDINAL1, PARTFUN1;
  schemes FUNCT_1, NAT_1, CLASSES1;
@@ -330,7 +332,7 @@ A4:   1 <= n & n <= len p by A2,FINSEQ_3:27;
 A5:   1 <= m & m <= len p by A2,FINSEQ_3:27;
       per cases;
       suppose m <= n;
-        then m < n by A3,REAL_1:def 5;
+        then m < n by A3,XXREAL_0:1;
         hence contradiction by A1,A2,A4,A5;
       end;
       suppose m > n;
@@ -361,11 +363,11 @@ proof
 end;
 
 reserve G for Graph,
-  pe,qe for FinSequence of the Edges of G;
+  pe,qe for FinSequence of the carrier' of G;
 
 theorem
-  i in dom pe implies (the Source of G).(pe.i) in the Vertices of G
-  & (the Target of G).(pe.i) in the Vertices of G by FINSEQ_2:13,FUNCT_2:7;
+  i in dom pe implies (the Source of G).(pe.i) in the carrier of G
+  & (the Target of G).(pe.i) in the carrier of G by FINSEQ_2:13,FUNCT_2:7;
 
 theorem Th12:
   q^<*x*> is one-to-one & rng (q^<*x*>) c= rng p implies
@@ -440,11 +442,11 @@ theorem Th13:
 proof
   assume
 A1: p^q is Chain of G;
-  set r=p^q, D=the Edges of G, V=the Vertices of G;
+  set r=p^q, D=the carrier' of G, V=the carrier of G;
   consider f being FinSequence such that
 A2: len f = len r + 1 & (for n st 1 <= n & n <= len f holds f.n in V) &
   for n st 1 <= n & n <= len r ex x, y being Element of V st
-  x = f.n & y = f.(n+1) & r.n joins x, y by A1,GRAPH_1:def 11;
+  x = f.n & y = f.(n+1) & r.n joins x, y by A1,GRAPH_1:def 12;
 A3: p is FinSequence of D & q is FinSequence of D by A1,FINSEQ_1:50;
 A4: now
     let n;
@@ -491,7 +493,7 @@ A13:  1 <= n+1 by NAT_1:11;
       thus p.n joins x, y by A11,A12,Lm1;
     end;
   end;
-  hence p is Chain of G by A4,GRAPH_1:def 11;
+  hence p is Chain of G by A4,GRAPH_1:def 12;
 A14: now
     let n;
     assume 1 <= n & n <= len q;
@@ -537,7 +539,7 @@ A21:  x = f.m & y = f.(m+1) & r.m joins x, y by A2,A20;
       thus q.n joins x, y by A19,A21,Lm2;
     end;
   end;
-  hence thesis by A14,GRAPH_1:def 11;
+  hence thesis by A14,GRAPH_1:def 12;
 end;
 
 theorem Th14:
@@ -555,7 +557,7 @@ A4: 1 <= n & n < len p;
     len p <= len r by A2,NAT_1:11;
     then n < len r by A4,XXREAL_0:2;
     then
-A5: (the Source of G).(r.(n+1))=(the Target of G).(r.n) by A1,A4,GRAPH_1:def 12
+A5: (the Source of G).(r.(n+1))=(the Target of G).(r.n) by A1,A4,GRAPH_1:def 13
     ;
     n+1 <= len p by A4,NAT_1:13;
     then p.(n+1)=r.(n+1) by Lm1,NAT_1:11;
@@ -570,14 +572,14 @@ A7: m < len r by A2,A6,XREAL_1:10;
     n <= m by NAT_1:11;
     then 1 <= m by A6,XXREAL_0:2;
     then
-A8: (the Source of G).(r.(m+1))=(the Target of G).(r.m) by A1,A7,GRAPH_1:def 12
+A8: (the Source of G).(r.(m+1))=(the Target of G).(r.m) by A1,A7,GRAPH_1:def 13
     ;
     n+1 <= len q by A6,NAT_1:13;
     then q.(n+1)=r.(len p+(n+1)) by Lm2,NAT_1:11
       .=r.(m+1);
     hence (the Source of G).(q.(n+1))=(the Target of G).(q.n) by A6,A8,Lm2;
   end;
-  hence thesis by A1,A3,Th13,GRAPH_1:def 12;
+  hence thesis by A1,A3,Th13,GRAPH_1:def 13;
 end;
 
 theorem Th15:
@@ -603,9 +605,9 @@ A2: p={} or q={};
   suppose not (p={} or q={});
     then
 A3: len p >= 1 & len q >= 1 by FINSEQ_1:28;
-    consider vs1 being FinSequence of the Vertices of G such that
+    consider vs1 being FinSequence of the carrier of G such that
 A4: vs1 is_oriented_vertex_seq_of p by GRAPH_4:10;
-    consider vs2 being FinSequence of the Vertices of G such that
+    consider vs2 being FinSequence of the carrier of G such that
 A5: vs2 is_oriented_vertex_seq_of q by GRAPH_4:10;
 A6: len vs1 = len p + 1 &
     for n st 1<=n & n<=len p holds p.n orientedly_joins vs1/.n, vs1/.(n+1)
@@ -634,7 +636,7 @@ begin :: Additional Properties of Acyclic Oriented Paths
 theorem Th16:
   {} is Simple (oriented Chain of G)
 proof
-  consider v being Element of the Vertices of G;
+  consider v being Element of the carrier of G;
   set vs=<*v*>;
 A1: vs is_oriented_vertex_seq_of {} qua FinSequence by GRAPH_4:9;
   now
@@ -673,7 +675,7 @@ A3: not (p={} or q={});
     then len q <> 0;
     then
 A4: len q > 0;
-    consider vs being FinSequence of the Vertices of G such that
+    consider vs being FinSequence of the carrier of G such that
 A5: vs is_oriented_vertex_seq_of r &
     (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
     by A1,GRAPH_4:def 7;
@@ -686,7 +688,7 @@ A8: len vs = len p + (len q + 1) by A6;
 A9: len vs = len p + 1 +len q by A6,A7;
     then consider f1,f2 being FinSequence such that
 A10: len f1 = len p+1 & len f2 = len q & vs = f1^f2 by FINSEQ_2:25;
-    reconsider f1 as FinSequence of the Vertices of G by A10,FINSEQ_1:50;
+    reconsider f1 as FinSequence of the carrier of G by A10,FINSEQ_1:50;
     now
       let n;
       assume
@@ -737,7 +739,7 @@ A22:  f1.m=vs.m by A10,A20,Lm1;
     hence p is Simple (oriented Chain of G) by A1,A19,Th14,GRAPH_4:def 7;
     consider h1,h2 being FinSequence such that
 A23: len h1 = len p & len h2 = len q +1 & vs = h1^h2 by A8,FINSEQ_2:25;
-    reconsider h2 as FinSequence of the Vertices of G by A23,FINSEQ_1:50;
+    reconsider h2 as FinSequence of the carrier of G by A23,FINSEQ_1:50;
     now
       let n;
       assume
@@ -806,7 +808,7 @@ A1: len p = 1;
 A2: 1 in dom p by FINSEQ_3:27;
   set v1=(the Source of G).(p.1), v2=(the Target of G).(p.1);
 
-reconsider v1, v2 as Element of the Vertices of G by A2,FINSEQ_2:13,FUNCT_2:7;
+reconsider v1, v2 as Element of the carrier of G by A2,FINSEQ_2:13,FUNCT_2:7;
   set vs=<*v1,v2*>;
 A3: len vs = 2 by FINSEQ_1:61;
 A4: len vs = len p +1 by A1,FINSEQ_1:61;
@@ -836,7 +838,7 @@ A9: now
     let n;
     assume 1 <= n & n <= len p;
     then n in dom p by FINSEQ_3:27;
-    hence p.n in the Edges of G by FINSEQ_2:13;
+    hence p.n in the carrier' of G by FINSEQ_2:13;
   end;
 A10: now
     let n;
@@ -847,12 +849,12 @@ A11: 1 <= n & n <= len vs;
       then n <= 1 by NAT_1:13;
       then n=1 by A11,XXREAL_0:1;
       then vs.n=v1 by FINSEQ_1:61;
-      hence vs.n in the Vertices of G;
+      hence vs.n in the carrier of G;
     end;
     suppose n >= 2;
       then n=2 by A3,A11,XXREAL_0:1;
       then vs.n=v2 by FINSEQ_1:61;
-      hence vs.n in the Vertices of G;
+      hence vs.n in the carrier of G;
     end;
   end;
 A12: now
@@ -862,25 +864,25 @@ A12: now
 A13: n=1 by A1,XXREAL_0:1;
     take v1,v2;
     thus v1= vs.n & v2 = vs.(n+1) by A13,FINSEQ_1:61;
-    thus p.n joins v1, v2 by A13,GRAPH_1:def 9;
+    thus p.n joins v1, v2 by A13,GRAPH_1:def 10;
   end;
   for n st 1 <= n & n < len p &
   (the Source of G).(p.(n+1)) <> (the Target of G).(p.n) holds
   contradiction by A1;
-  hence thesis by A4,A6,A7,A9,A10,A12,GRAPH_1:def 11,def 12,GRAPH_4:def 7;
+  hence thesis by A4,A6,A7,A9,A10,A12,GRAPH_1:def 13,def 12,GRAPH_4:def 7;
 end;
 
 theorem Th19:
   for p being Simple (oriented Chain of G), q being FinSequence of
-  the Edges of G st len p >=1 & len q=1 &
+  the carrier' of G st len p >=1 & len q=1 &
   (the Source of G).(q.1)=(the Target of G).(p.(len p)) &
   (the Source of G).(p.1) <> (the Target of G).(p.(len p)) &
   not ex k st 1<=k & k <= len p & (the Target of G).(p.k)
   =(the Target of G).(q.1) holds p^q is Simple (oriented Chain of G)
 proof
-  let p be Simple (oriented Chain of G), q be FinSequence of the Edges of G;
+  let p be Simple (oriented Chain of G), q be FinSequence of the carrier' of G;
   set FS=the Source of G, FT=the Target of G, v1=FS.(q.1), v2=FT.(q.1),
-  vp=(the Target of G).(p.len p), E=the Edges of G, V=the Vertices of G;
+  vp=(the Target of G).(p.len p), E=the carrier' of G, V=the carrier of G;
   assume
 A1: len p >=1 & len q=1 & v1=vp & FS.(p.1) <> vp &
   not ex k st 1<=k & k <= len p & FT.(p.k) = v2;
@@ -925,7 +927,7 @@ A10: 1 <= n & n <= len rv;
       hence rv.n in V;
     end;
     suppose n<>len rv;
-      then n < len rv by A10,REAL_1:def 5;
+      then n < len rv by A10,XXREAL_0:1;
       then
 A11:  n <= len r by A7,NAT_1:13;
       then n in dom r by A10,FINSEQ_3:27;
@@ -949,11 +951,11 @@ A15:  n in dom r by A13,A14,FINSEQ_3:27;
       hence v1 = r.n by A1,A3,A14,A15,PARTFUN1:def 8
         .=rv.n by A13,A14,Lm1;
       thus v2 = rv.(n+1) by A14,FINSEQ_1:59;
-      q.1 joins v1, v2 by GRAPH_1:def 9;
+      q.1 joins v1, v2 by GRAPH_1:def 10;
       hence pq.n joins v1, v2 by A1,A3,A14,Lm2;
     end;
     suppose n<>len pq;
-      then n < len pq by A13,REAL_1:def 5;
+      then n < len pq by A13,XXREAL_0:1;
       then
 A16:  n < len p +1 by A1,FINSEQ_1:35;
       then
@@ -981,7 +983,7 @@ A22: 1 <= n & n < len pq;
     suppose
 A23:  n < len p;
       then
-A24:  FS.(p.(n+1)) = FT.(p.n) by A22,GRAPH_1:def 12;
+A24:  FS.(p.(n+1)) = FT.(p.n) by A22,GRAPH_1:def 13;
 A25:  p.n = pq.n by A22,A23,Lm1;
       n+1 <= len p by A23,NAT_1:13;
       hence FS.(pq.(n+1)) = FT.(pq.n) by A24,A25,Lm1,NAT_1:12;
@@ -1097,14 +1099,14 @@ A62:  k+1 in dom r by A46,A58,A60,FINSEQ_3:27;
     end;
   end;
   hence pq is Simple (oriented Chain of G) by A5,A8,A9,A12,A21,A45,
-  GRAPH_1:def 11,def 12,GRAPH_4:def 7;
+  GRAPH_1:def 13,def 12,GRAPH_4:def 7;
 end;
 
 theorem Th20:
   for p being Simple (oriented Chain of G) holds p is one-to-one
 proof
   let p be Simple (oriented Chain of G);
-  set VV=the Vertices of G;
+  set VV=the carrier of G;
   consider vs being FinSequence of VV such that
 A1: vs is_oriented_vertex_seq_of p &
   (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
@@ -1140,10 +1142,10 @@ A11: m <= len vs by A3,A9,XXREAL_0:2;
   hence thesis by Th9;
 end;
 
-begin :: The Set of the Vertices On a Path or an Edge
+begin :: The Set of the carrier On a Path or an Edge
 
 definition
-  let G be Graph, e be Element of the Edges of G;
+  let G be Graph, e be Element of the carrier' of G;
   func vertices e equals
 
   {(the Source of G).e, (the Target of G).e};
@@ -1152,21 +1154,21 @@ end;
 
 definition
   let G,pe;
-  func vertices pe -> Subset of the Vertices of G equals
+  func vertices pe -> Subset of the carrier of G equals
   {v where v is Vertex of G : ex i st i in dom pe & v in vertices(pe/.i)};
   coherence
   proof
     set VT={v where v is Vertex of G : ex i st i in dom pe &
     v in vertices(pe/.i) };
-    VT c= the Vertices of G
+    VT c= the carrier of G
     proof
       let x be set;
       assume x in VT;
       then consider v being Vertex of G such that
 A1:   x=v & ex i st i in dom pe & v in vertices(pe/.i);
-      thus x in the Vertices of G by A1;
+      thus x in the carrier of G by A1;
     end;
-    hence VT is Subset of the Vertices of G;
+    hence VT is Subset of the carrier of G;
   end;
 end;
 
@@ -1180,7 +1182,7 @@ proof
   set FT=the Target of G, FS=the Source of G;
   assume
 A1: p=pe^qe & len pe >= 1 & len qe >= 1 & FS.(p.1) <> FT.(p.len p);
-  consider vs being FinSequence of the Vertices of G such that
+  consider vs being FinSequence of the carrier of G such that
 A2: vs is_oriented_vertex_seq_of p &
   (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
   by GRAPH_4:def 7;
@@ -1309,7 +1311,7 @@ end;
 
 theorem Th23:
   not vertices pe c= V implies ex i being Element of NAT, q,r being FinSequence
-  of the Edges of G st i+1 <= len pe & not vertices(pe/.(i+1)) c= V &
+  of the carrier' of G st i+1 <= len pe & not vertices(pe/.(i+1)) c= V &
   len q=i & pe=q^r & vertices q c= V
 proof
   defpred P[Nat] means $1 in dom pe & not vertices(pe/.$1) c= V;
@@ -1328,7 +1330,7 @@ A5: len pe=k+j by A3,NAT_1:10;
   len pe=i+(1+j) by A4,A5;
   then consider q,r being FinSequence such that
 A6: len q = i & len r = 1+j & pe = q^r by FINSEQ_2:25;
-  reconsider q,r as FinSequence of the Edges of G by A6,FINSEQ_1:50;
+  reconsider q,r as FinSequence of the carrier' of G by A6,FINSEQ_1:50;
   take i,q,r;
   thus i+1 <= len pe & not vertices(pe/.(i+1)) c= V by A2,A4,FINSEQ_3:27;
   thus len q=i & pe=q^r by A6;
@@ -1391,7 +1393,7 @@ A2: rng pe c= rng(pe^qe) by FINSEQ_1:42;
   hence thesis by A1,A2,Th25;
 end;
 
-reserve v,v1,v2,v3 for Element of the Vertices of G;
+reserve v,v1,v2,v3 for Element of the carrier of G;
 
 canceled;
 
@@ -1487,7 +1489,7 @@ A9:     y=FS.(p/.i) or y=FT.(p/.i) by A4,TARSKI:def 2;
           suppose
 A10:        z=FS.(p.i);
             len q < len p by A2,NAT_1:13;
-            then z=FT.(p.(len q)) by A1,A8,A10,GRAPH_1:def 12
+            then z=FT.(p.(len q)) by A1,A8,A10,GRAPH_1:def 13
               .=FT.(q.(len q)) by A1,Lm1
               .=FT.(q/.(len q)) by A1,FINSEQ_4:24;
             then
@@ -1552,14 +1554,14 @@ A6: v=FT.(p.i);
   suppose
 A7: v=FS.(p.i);
     then
-A8: i > 1 by A1,A5,REAL_1:def 5;
+A8: i > 1 by A1,A5,XXREAL_0:1;
     consider j being Nat such that
 A9: i=1+j by A5,NAT_1:10;
     reconsider j as Element of NAT by ORDINAL1:def 13;
 A10: j >= 1 by A8,A9,NAT_1:13;
 A11: j < len p by A5,A9,NAT_1:13;
     take j;
-    thus thesis by A7,A9,A10,A11,GRAPH_1:def 12;
+    thus thesis by A7,A9,A10,A11,GRAPH_1:def 13;
   end;
 end;
 
@@ -1580,21 +1582,21 @@ definition
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G;
-  func OrientedPaths(v1,v2) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G;
+  func OrientedPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
   {p where p is oriented Chain of G : p is_orientedpath_of v1,v2};
   coherence
   proof
     set PT={p where p is oriented Chain of G: p is_orientedpath_of v1,v2};
-    PT c= ((the Edges of G)*)
+    PT c= ((the carrier' of G)*)
     proof
       let e be set;
       assume e in PT;
       then consider p being oriented Chain of G such that
 A1:   (e=p & p is_orientedpath_of v1,v2);
-      thus e in ((the Edges of G)*) by A1,FINSEQ_1:def 11;
+      thus e in ((the carrier' of G)*) by A1,FINSEQ_1:def 11;
     end;
-    hence PT is Subset of ((the Edges of G)*);
+    hence PT is Subset of ((the carrier' of G)*);
   end;
 end;
 
@@ -1687,7 +1689,7 @@ begin :: Acyclic (or Simple) Paths
 
 definition
   let G be Graph, p be oriented Chain of G,
-  v1,v2 be Element of the Vertices of G;
+  v1,v2 be Element of the carrier of G;
   pred p is_acyclicpath_of v1,v2 means
   :Def6:
   p is Simple & p is_orientedpath_of v1,v2;
@@ -1695,55 +1697,55 @@ end;
 
 definition
   let G be Graph, p be oriented Chain of G, v1,v2 be Element of
-  the Vertices of G,V be set;
+  the carrier of G,V be set;
   pred p is_acyclicpath_of v1,v2,V means
   :Def7:
   p is Simple & p is_orientedpath_of v1,v2,V;
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G;
-  func AcyclicPaths(v1,v2) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G;
+  func AcyclicPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
   {p where p is Simple (oriented Chain of G): p is_acyclicpath_of v1,v2};
   coherence
   proof
     set PT={p where p is Simple (oriented Chain of G):
     p is_acyclicpath_of v1,v2};
-    PT c= (the Edges of G)*
+    PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
       then consider p being Simple (oriented Chain of G) such that
 A1:   (e=p & p is_acyclicpath_of v1,v2);
-      thus e in (the Edges of G)* by A1,FINSEQ_1:def 11;
+      thus e in (the carrier' of G)* by A1,FINSEQ_1:def 11;
     end;
-    hence PT is Subset of (the Edges of G)*;
+    hence PT is Subset of (the carrier' of G)*;
   end;
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G,V be set;
-  func AcyclicPaths(v1,v2,V) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G,V be set;
+  func AcyclicPaths(v1,v2,V) -> Subset of ((the carrier' of G)*) equals
   {p where p is Simple (oriented Chain of G) : p is_acyclicpath_of v1,v2,V};
   coherence
   proof
     set PT={p where p is Simple (oriented Chain of G):
     p is_acyclicpath_of v1,v2,V};
-    PT c= (the Edges of G)*
+    PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
       then consider p being Simple (oriented Chain of G) such that
 A1:   (e=p & p is_acyclicpath_of v1,v2,V);
-      thus e in ((the Edges of G)*) by A1,FINSEQ_1:def 11;
+      thus e in ((the carrier' of G)*) by A1,FINSEQ_1:def 11;
     end;
-    hence PT is Subset of (the Edges of G)*;
+    hence PT is Subset of (the carrier' of G)*;
   end;
 end;
 
 definition
   let G be Graph, p be oriented Chain of G;
-  func AcyclicPaths(p) -> Subset of ((the Edges of G)*) equals
+  func AcyclicPaths(p) -> Subset of ((the carrier' of G)*) equals
   {q where q is Simple (oriented Chain of G) : q <> {} &
   (the Source of G).(q.1) = (the Source of G).(p.1) &
   (the Target of G).(q.(len q)) = (the Target of G).(p.(len p)) &
@@ -1754,7 +1756,7 @@ definition
     (the Source of G).(q.1) = (the Source of G).(p.1) &
     (the Target of G).(q.(len q)) = (the Target of G).(p.(len p)) &
     rng q c= rng p};
-    PT c= (the Edges of G)*
+    PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
@@ -1762,28 +1764,28 @@ definition
 A1:   e=q & q <> {} & (the Source of G).(q.1) = (the Source of G).(p.1) &
       (the Target of G).(q.(len q)) = (the Target of G).(p.(len p)) &
       rng q c= rng p;
-      thus e in ((the Edges of G)*) by A1,FINSEQ_1:def 11;
+      thus e in ((the carrier' of G)*) by A1,FINSEQ_1:def 11;
     end;
-    hence PT is Subset of (the Edges of G)*;
+    hence PT is Subset of (the carrier' of G)*;
   end;
 end;
 
 definition
   let G be Graph;
-  func AcyclicPaths(G) -> Subset of (the Edges of G)* equals
+  func AcyclicPaths(G) -> Subset of (the carrier' of G)* equals
   {q where q is Simple (oriented Chain of G) : not contradiction};
   coherence
   proof
     set PT={q where q is Simple (oriented Chain of G): not contradiction};
-    PT c= (the Edges of G)*
+    PT c= (the carrier' of G)*
     proof
       let e be set;
       assume e in PT;
       then consider q being Simple (oriented Chain of G) such that
 A1:   e=q;
-      thus e in ((the Edges of G)*) by A1,FINSEQ_1:def 11;
+      thus e in ((the carrier' of G)*) by A1,FINSEQ_1:def 11;
     end;
-    hence PT is Subset of (the Edges of G)*;
+    hence PT is Subset of (the carrier' of G)*;
   end;
 end;
 
@@ -1924,10 +1926,10 @@ A7:   len p1 = k+1 & len p2 = 1 & p = p1^p2 by FINSEQ_2:25;
 A8:   1 <= len p1 by A7,NAT_1:11;
       then
 A9:   1 in dom p1 & len p1 in dom p1 by FINSEQ_3:27;
-      then reconsider x=FS.(p1.1) as Element of the Vertices of G by
+      then reconsider x=FS.(p1.1) as Element of the carrier of G by
       FINSEQ_2:13,FUNCT_2:7;
 A10:  p1.1=p.1 by A7,A8,Lm1;
-      reconsider y=FT.(p1.(len p1)) as Element of the Vertices of G
+      reconsider y=FT.(p1.(len p1)) as Element of the carrier of G
       by A9,FINSEQ_2:13,FUNCT_2:7;
       p1 <> {} by A7;
       then p1 is_orientedpath_of x,y by Def3;
@@ -1942,7 +1944,7 @@ A13:  1 in dom p2 by A7,FINSEQ_3:27;
 A14:  p.(len p1+1)=p2.1 by A7,FINSEQ_1:def 7;
       len p1 < len p by A6,A7,NAT_1:13;
       then
-A15:  FS.(p.(len p1+1)) = FT.(p.(len p1)) by A8,GRAPH_1:def 12
+A15:  FS.(p.(len p1+1)) = FT.(p.(len p1)) by A8,GRAPH_1:def 13
         .=FT.(q.(len q)) by A7,A8,A12,Lm1;
 A16:  rng p1 c= rng p by A7,FINSEQ_1:42;
 A17:  rng p2 c= rng p by A7,FINSEQ_1:43;
@@ -2051,7 +2053,7 @@ A6: P[k];
       let p,v1,v2;
       assume
 A7:   len p <= k+1+1 & p is_orientedpath_of v1,v2,V;
-      consider vs being FinSequence of the Vertices of G such that
+      consider vs being FinSequence of the carrier of G such that
 A8:   vs is_oriented_vertex_seq_of p by GRAPH_4:10;
 A9:   len vs = len p + 1 & for n st 1<=n & n<=len p holds
       p.n orientedly_joins vs/.n, vs/.(n+1) by A8,GRAPH_4:def 5;
@@ -2088,7 +2090,7 @@ A18:    m=1+i by NAT_1:10;
           per cases;
           suppose
 A19:        n=1;
-            then m < len vs by A16,REAL_1:def 5;
+            then m < len vs by A16,XXREAL_0:1;
             then
 A20:        m <= len p by A9,NAT_1:13;
             then consider j being Nat such that
@@ -2143,7 +2145,7 @@ A34:        rng q c= rng p by A33,XBOOLE_1:1;
           end;
           suppose n<>1;
             then
-A35:        n > 1 by A16,REAL_1:def 5;
+A35:        n > 1 by A16,XXREAL_0:1;
             consider n1 being Nat such that
 A36:        n = 1+n1 by A16,NAT_1:10;
             reconsider n1 as Element of NAT by ORDINAL1:def 13;
@@ -2195,7 +2197,7 @@ A51:            rng q c= rng p by A42,A50,XBOOLE_1:1;
                 hence AcyclicPaths(p) <> {};
               end;
               suppose m<>len vs;
-                then m < len vs by A16,REAL_1:def 5;
+                then m < len vs by A16,XXREAL_0:1;
                 then
 A52:            m <= len p by A9,NAT_1:13;
                 then consider h being Nat such that
@@ -2311,18 +2313,18 @@ definition
   let G be Graph, W be Function;
   pred W is_weight>=0of G means
   :Def13:
-  W is Function of the Edges of G, Real>=0;
+  W is Function of the carrier' of G, Real>=0;
 end;
 
 definition
   let G be Graph, W be Function;
   pred W is_weight_of G means
   :Def14:
-  W is Function of (the Edges of G), REAL;
+  W is Function of (the carrier' of G), REAL;
 end;
 
 definition
-  let G be Graph, p be FinSequence of the Edges of G, W be Function;
+  let G be Graph, p be FinSequence of the carrier' of G, W be Function;
   assume
 A1: W is_weight_of G;
   func RealSequence(p,W) -> FinSequence of REAL means
@@ -2342,8 +2344,8 @@ A3: f is FinSequence by FINSEQ_1:def 2;
 A4:   i in dom f;
       then
 A5:   f.i=W.(p.i) by A2;
-A6:   W is Function of (the Edges of G), REAL by A1,Def14;
-      p.i in (the Edges of G) by A2,A4,FINSEQ_2:13;
+A6:   W is Function of (the carrier' of G), REAL by A1,Def14;
+      p.i in (the carrier' of G) by A2,A4,FINSEQ_2:13;
       hence f.i in REAL by A5,A6,FUNCT_2:7;
     end;
     then reconsider g=f as FinSequence of REAL by A3,FINSEQ_2:14;
@@ -2371,7 +2373,7 @@ A9:   i in dom f1;
 end;
 
 definition
-  let G be Graph, p be FinSequence of the Edges of G,W be Function;
+  let G be Graph, p be FinSequence of the carrier' of G,W be Function;
   func cost(p,W) -> Real equals
 
   Sum RealSequence(p,W);
@@ -2382,8 +2384,8 @@ theorem Th50:
   W is_weight>=0of G implies W is_weight_of G
 proof
   assume W is_weight>=0of G;
-  then W is Function of the Edges of G, Real>=0 by Def13;
-  then W is Function of the Edges of G, REAL by FUNCT_2:9;
+  then W is Function of the carrier' of G, Real>=0 by Def13;
+  then W is Function of the carrier' of G, REAL by FUNCT_2:9;
   hence thesis by Def14;
 end;
 
@@ -2398,13 +2400,13 @@ A1: W is_weight>=0of G & f = RealSequence(pe,W);
   then W is_weight_of G by Th50;
   then
 A2: dom pe = dom f & for i st i in dom pe holds f.i=W.(pe.i) by A1,Def15;
-A3: W is Function of the Edges of G, Real>=0 by A1,Def13;
+A3: W is Function of the carrier' of G, Real>=0 by A1,Def13;
   let i;
   assume
 A4: i in dom f;
   then
 A5: f.i=W.(pe.i) by A2;
-  pe.i in (the Edges of G) by A2,A4,FINSEQ_2:13;
+  pe.i in (the carrier' of G) by A2,A4,FINSEQ_2:13;
   then f.i in Real>=0 by A3,A5,FUNCT_2:7;
   then consider r being Real such that
 A6: f.i=r & r >= 0;
@@ -2543,11 +2545,11 @@ A1: pe = {} & W is_weight_of G;
 end;
 
 theorem Th56:
-  for D being non empty finite Subset of (the Edges of G)* st
+  for D being non empty finite Subset of (the carrier' of G)* st
   D = AcyclicPaths(v1,v2) ex pe st pe in D & for qe st qe in D
   holds cost(pe,W) <= cost(qe,W)
 proof
-  let D be non empty finite Subset of (the Edges of G)*;
+  let D be non empty finite Subset of (the carrier' of G)*;
   assume
 A1: D = AcyclicPaths(v1,v2);
   deffunc F(Element of D) = cost($1,W);
@@ -2558,7 +2560,7 @@ A2: for y being Element of D holds F(x) <= F(y) from MinValue;
 A3: x=p & p is_acyclicpath_of v1,v2;
   take p;
   thus p in D by A3;
-  let pe be FinSequence of the Edges of G;
+  let pe be FinSequence of the carrier' of G;
   assume pe in D;
   then reconsider y=pe as Element of D;
   F(x) <= F(y) by A2;
@@ -2566,11 +2568,11 @@ A3: x=p & p is_acyclicpath_of v1,v2;
 end;
 
 theorem Th57:
-  for D being non empty finite Subset of (the Edges of G)* st
+  for D being non empty finite Subset of (the carrier' of G)* st
   D = AcyclicPaths(v1,v2,V) holds ex pe st pe in D & for qe st qe in D
   holds cost(pe,W) <= cost(qe,W)
 proof
-  let D be non empty finite Subset of ((the Edges of G)*);
+  let D be non empty finite Subset of ((the carrier' of G)*);
   assume
 A1: D = AcyclicPaths(v1,v2,V);
   deffunc F(Element of D) = cost($1,W);
@@ -2638,7 +2640,7 @@ theorem Th59:
   qe is one-to-one & rng qe c= rng pe & W is_weight>=0of G implies
   cost(qe,W) <= cost(pe,W)
 proof
-  set D=the Edges of G;
+  set D=the carrier' of G;
   assume
 A1: qe is one-to-one & rng qe c= rng pe & W is_weight>=0of G;
   defpred P[Nat] means for p, q being FinSequence of D st q is one-to-one &
@@ -2719,18 +2721,18 @@ definition
   st q is_orientedpath_of v1,v2,V holds cost(p,W) <= cost(q,W);
 end;
 
-begin :: Basic Properties of a Graph with Finite Vertices
+begin :: Basic Properties of a Graph with Finite carrier
 
 reserve G for finite Graph,
   ps for Simple (oriented Chain of G),
   P,Q for oriented Chain of G,
-  v1,v2,v3 for Element of the Vertices of G,
-  pe,qe for FinSequence of the Edges of G;
+  v1,v2,v3 for Element of the carrier of G,
+  pe,qe for FinSequence of the carrier' of G;
 
 theorem
   len ps <= VerticesCount G
 proof
-  set VV=the Vertices of G;
+  set VV=the carrier of G;
   consider vs being FinSequence of VV such that
 A1: vs is_oriented_vertex_seq_of ps &
   (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
@@ -2762,10 +2764,10 @@ A10: vs.n=q.n by A3,FINSEQ_1:def 7;
   then
 A11: card(rng q)=len q by Th10;
 A12: rng vs c= VV by FINSEQ_1:def 4;
-  reconsider V =VV as finite set by GRAPH_1:def 8;
+  reconsider V =VV as finite set;
   rng q c= rng vs by A3,FINSEQ_1:42;
   then card(rng q) <= card V by A12,NAT_1:44,XBOOLE_1:1;
-  hence thesis by A4,A11,GRAPH_1:def 18;
+  hence thesis by A4,A11,GRAPH_1:def 19;
 end;
 
 theorem Th62:
@@ -2774,18 +2776,17 @@ proof
   ps is one-to-one by Th20;
   then
 A1: card rng ps=len ps by FINSEQ_4:77;
-A2: rng ps c= the Edges of G by FINSEQ_1:def 4;
-  reconsider V=the Edges of G as finite set by GRAPH_1:def 8;
+A2: rng ps c= the carrier' of G by FINSEQ_1:def 4;
+  reconsider V=the carrier' of G as finite set;
   card rng ps <= card V by A2,NAT_1:44;
-  hence len ps <= EdgesCount G by A1,GRAPH_1:def 19;
+  hence len ps <= EdgesCount G by A1,GRAPH_1:def 20;
 end;
 
 Lm5: AcyclicPaths(G) is finite
 proof
-  set n = EdgesCount G, D = the Edges of G,
+  set n = EdgesCount G, D = the carrier' of G,
   A = {x where x is Element of D* : len x <= n };
-A1: D is finite by GRAPH_1:def 8;
-X: A is finite by A1,Th4;
+X: A is finite by Th4;
   AcyclicPaths(G) c= A
   proof
     let x;
@@ -2856,8 +2857,8 @@ proof
   assume
 A1: P is_orientedpath_of v1,v2 & W is_weight>=0of G;
   then AcyclicPaths(v1,v2) <> {} by Th47;
-  then consider r being FinSequence of the Edges of G such that
-A2: r in AcyclicPaths(v1,v2) & for s being FinSequence of the Edges of G
+  then consider r being FinSequence of the carrier' of G such that
+A2: r in AcyclicPaths(v1,v2) & for s being FinSequence of the carrier' of G
   st s in AcyclicPaths(v1,v2) holds cost(r,W) <= cost(s,W) by Th56;
   consider t being Simple (oriented Chain of G) such that
 A3: r=t & t is_acyclicpath_of v1,v2 by A2;
@@ -2868,7 +2869,7 @@ A3: r=t & t is_acyclicpath_of v1,v2 by A2;
     assume
 A4: s is_orientedpath_of v1,v2;
     then AcyclicPaths(s) <> {} by Th47;
-    then consider x being Element of ((the Edges of G)*) such that
+    then consider x being Element of ((the carrier' of G)*) such that
 A5: x in AcyclicPaths(s) by SUBSET_1:10;
 A6: cost(x,W) <= cost(s,W) by A1,A5,Th60;
     AcyclicPaths(s) c= AcyclicPaths(v1,v2) by A4,Th44;
@@ -2884,8 +2885,8 @@ proof
   assume
 A1: P is_orientedpath_of v1,v2,V & W is_weight>=0of G;
   then AcyclicPaths(v1,v2,V) <> {} by Th48;
-  then consider r being FinSequence of the Edges of G such that
-A2: r in AcyclicPaths(v1,v2,V) & for s being FinSequence of the Edges of G
+  then consider r being FinSequence of the carrier' of G such that
+A2: r in AcyclicPaths(v1,v2,V) & for s being FinSequence of the carrier' of G
   st s in AcyclicPaths(v1,v2,V) holds cost(r,W) <= cost(s,W) by Th57;
   consider t being Simple (oriented Chain of G) such that
 A3: r=t & t is_acyclicpath_of v1,v2,V by A2;
@@ -2896,7 +2897,7 @@ A3: r=t & t is_acyclicpath_of v1,v2,V by A2;
     assume
 A4: s is_orientedpath_of v1,v2,V;
     then AcyclicPaths(s) <> {} by Th48;
-    then consider x being Element of ((the Edges of G)*) such that
+    then consider x being Element of ((the carrier' of G)*) such that
 A5: x in AcyclicPaths(s) by SUBSET_1:10;
 A6: cost(x,W) <= cost(s,W) by A1,A5,Th60;
     AcyclicPaths(s) c= AcyclicPaths(v1,v2,V) by A4,Th45;
@@ -2929,7 +2930,7 @@ A6: r is_orientedpath_of v1,v2;
     per cases;
     suppose not vertices r c= V;
       then consider i being Element of NAT, s,t being FinSequence of the
-      Edges of G such that
+      carrier' of G such that
 A7:   i+1 <= len r & not vertices(r/.(i+1)) c= V & len s=i
       & r=s^t & vertices(s) c= V by Th23;
       i+1 <= len s+len t by A7,FINSEQ_1:35;
@@ -3005,7 +3006,7 @@ A32:      i < len r by A7,NAT_1:13;
 A33:      now
             assume FS.(r.(i+1))=v3;
             then
-A34:        v3=FT.(r.i) by A30,A32,GRAPH_1:def 12;
+A34:        v3=FT.(r.i) by A30,A32,GRAPH_1:def 13;
             r.i=s.i by A7,A30,Lm1;
             then v3 in vertices s by A31,A34,Th28;
             hence contradiction by A7,A16;
@@ -3077,7 +3078,7 @@ A3: P is_shortestpath_of v1,v2,W by A1,Th67;
 end;
 
 definition
-  let G be Graph, pe be FinSequence of the Edges of G,
+  let G be Graph, pe be FinSequence of the carrier' of G,
   V be set, v1 be Vertex of G, W be Function;
   pred pe islongestInShortestpath V,v1,W means
   :Def19:
@@ -3087,8 +3088,8 @@ end;
 
 theorem
   for G being finite oriented Graph, P,Q,R being oriented Chain of G,
-  v1,v2,v3 being Element of the Vertices of G st
-  e in the Edges of G & W is_weight>=0of G & len P >= 1 &
+  v1,v2,v3 being Element of the carrier of G st
+  e in the carrier' of G & W is_weight>=0of G & len P >= 1 &
   P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 & R=P^<*e*> &
   Q is_shortestpath_of v1,v3,V,W & e orientedly_joins v2,v3 &
   P islongestInShortestpath V,v1,W holds
@@ -3096,15 +3097,15 @@ theorem
   (cost(Q,W) >= cost(R,W) implies R is_shortestpath_of v1,v3,V \/{v2},W)
 proof
   let G be finite oriented Graph, P,Q,R be oriented Chain of G,
-  v1,v2,v3 be Element of the Vertices of G;
+  v1,v2,v3 be Element of the carrier of G;
   assume
-A1: e in the Edges of G & W is_weight>=0of G & len P >= 1 &
+A1: e in the carrier' of G & W is_weight>=0of G & len P >= 1 &
   P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 &
   R=P^<*e*> & Q is_shortestpath_of v1,v3,V,W &
   e orientedly_joins v2,v3 & P islongestInShortestpath V,v1,W;
   set V'=V \/ {v2};
 A2: P is_orientedpath_of v1,v2,V by A1,Def18;
-  set Eg=the Edges of G;
+  set Eg=the carrier' of G;
   reconsider pe=<*e*> as FinSequence of Eg by A1,FINSEQ_1:95;
   len pe = 1 & pe.1=e by FINSEQ_1:57;
   then
@@ -3171,8 +3172,8 @@ A23: not v3 in vertices(s1) & not v1 in vertices(s2) by A1,A13,A17,A19,A20,Th21
     ;
 A24: len s1 < len s by A16,A17,NAT_1:13;
     then
-A25: FS.(s.(len s1+1))=FT.(s.(len s1)) by A19,GRAPH_1:def 12;
-A26: FS.(s2.1)=FT.(s1.(len s1)) by A16,A17,A18,A19,A22,A24,GRAPH_1:def 12;
+A25: FS.(s.(len s1+1))=FT.(s.(len s1)) by A19,GRAPH_1:def 13;
+A26: FS.(s2.1)=FT.(s1.(len s1)) by A16,A17,A18,A19,A22,A24,GRAPH_1:def 13;
 A27: vertices(s) \ {v3} = vertices(s1) \/ {v3} \ {v3} by A13,A17,A18,Th31,
     NAT_1:12
       .=vertices(s1) \ {v3} by XBOOLE_1:40
@@ -3196,7 +3197,7 @@ A32:    s2.1 in Eg by A17,FINSEQ_4:24;
           per cases;
           suppose
 A33:        FS.(s2.1)=v2;
-            then s2.1=e by A1,A13,A14,A18,A32,GRAPH_1:def 4;
+            then s2.1=e by A1,A13,A14,A18,A32,GRAPH_1:def 5;
             then
 A34:        s2=pe by A17,FINSEQ_1:57;
             s1 <> {} by A19;

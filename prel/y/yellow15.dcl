@@ -45,9 +45,9 @@
 </Signature>
 <FCluster aid="YELLOW15" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="144"/>
+<Func kind="K" nr="148"/>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW15" nr="2">
@@ -57,7 +57,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="10">
@@ -66,36 +66,36 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="305">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW15" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="156">
+<Func kind="K" nr="160">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="136">
+<Adjective nr="149">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="137">
+<Adjective nr="150">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="139">
+<Adjective nr="152">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="140">
+<Adjective nr="153">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -104,7 +104,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -118,14 +118,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 <CCluster aid="YELLOW15" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -141,7 +141,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 <CCluster aid="YELLOW15" nr="3">
@@ -149,10 +149,10 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="144"/>
+<Func kind="K" nr="148"/>
 </Typ>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

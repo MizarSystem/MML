@@ -12,12 +12,12 @@ environ
       COMPLEX1, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, VALUED_1, SEQ_1, SEQ_2,
       PROB_1, NAT_1, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, VALUED_1, SEQ_1, SEQ_2,
-      PROB_1;
+      PROB_1, XXREAL_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PROB_1, SUBSET_1;
- theorems FUNCT_1, REAL_1, FUNCT_2, SEQ_2, SUBSET_1, PROB_1, NAT_1, TARSKI,
+ theorems FUNCT_1, FUNCT_2, SEQ_2, SUBSET_1, PROB_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, COMPLEX1, XREAL_1, ORDINAL1,
       VALUED_1;
  schemes FUNCT_1, FUNCT_2, NAT_1;
@@ -144,12 +144,13 @@ A1: dom f = NAT & for n holds f.n = F(n) from FUNCT_1:sch 4;
 end;
 
 theorem Th10:
-  (ASeq is non-increasing &
-  for n holds BSeq.n = ASeq.n /\ B) implies BSeq is non-increasing
+  (ASeq is non-ascending &
+  for n holds BSeq.n = ASeq.n /\ B) implies BSeq is non-ascending
 proof
   assume
-A1: ASeq is non-increasing & for n holds BSeq.n = ASeq.n /\ B;
-  now
+A1: ASeq is non-ascending & for n holds BSeq.n = ASeq.n /\ B;
+  thus BSeq qua Function is non-ascending
+  proof
     let m,n;
     assume m<=n;
     then ASeq.n c= ASeq.m by A1,PROB_1:def 6;
@@ -157,7 +158,6 @@ A1: ASeq is non-increasing & for n holds BSeq.n = ASeq.n /\ B;
     then BSeq.n c= ASeq.m /\ B by A1;
     hence BSeq.n c= BSeq.m by A1;
   end;
-  hence thesis by PROB_1:def 6;
 end;
 
 theorem Th11:
@@ -234,13 +234,13 @@ end;
 
 theorem
   for X being set, S being SetSequence of X holds
-  S is non-increasing iff for n holds S.(n+1) c= S.n
+  S is non-ascending iff for n holds S.(n+1) c= S.n
 proof
   let X be set, S be SetSequence of X;
-  thus S is non-increasing implies for n holds S.(n+1) c= S.n
+  thus S is non-ascending implies for n holds S.(n+1) c= S.n
   proof
     assume
-A1: S is non-increasing;
+A1: S is non-ascending;
     now
       let n;
       n <= n+1 by NAT_1:11;
@@ -275,13 +275,13 @@ end;
 
 theorem
   for X being set, S being SetSequence of X holds
-  S is non-decreasing iff for n holds S.n c= S.(n+1)
+  S is non-descending iff for n holds S.n c= S.(n+1)
 proof
   let X be set, S be SetSequence of X;
-  thus S is non-decreasing implies for n holds S.n c= S.(n+1)
+  thus S is non-descending implies for n holds S.n c= S.(n+1)
   proof
     assume
-A1: S is non-decreasing;
+A1: S is non-descending;
     now
       let n;
       n <= n+1 by NAT_1:11;
@@ -329,13 +329,13 @@ end;
 
 theorem Th17:
   for ASeq being SetSequence of Omega holds
-  (ASeq is non-increasing iff Complement ASeq is non-decreasing)
+  (ASeq is non-ascending iff Complement ASeq is non-descending)
 proof
   let ASeq be SetSequence of Omega;
-  thus ASeq is non-increasing implies Complement ASeq is non-decreasing
+  thus ASeq is non-ascending implies Complement ASeq is non-descending
   proof
     assume
-A1: ASeq is non-increasing;
+A1: ASeq is non-ascending;
     now
       let n,m;
       assume n <= m;
@@ -347,7 +347,7 @@ A1: ASeq is non-increasing;
     hence thesis by PROB_1:def 7;
   end;
   assume
-A2: Complement ASeq is non-decreasing;
+A2: Complement ASeq is non-descending;
   now
     let n,m;
     assume n <= m;
@@ -360,13 +360,13 @@ A2: Complement ASeq is non-decreasing;
 end;
 
 Lm1: for ASeq being SetSequence of Omega holds
-(ASeq is non-decreasing iff Complement ASeq is non-increasing)
+(ASeq is non-descending iff Complement ASeq is non-ascending)
 proof
   let ASeq be SetSequence of Omega;
-  thus ASeq is non-decreasing implies Complement ASeq is non-increasing
+  thus ASeq is non-descending implies Complement ASeq is non-ascending
   proof
     assume
-A1: ASeq is non-decreasing;
+A1: ASeq is non-descending;
     now
       let n,m;
       assume n <= m;
@@ -378,7 +378,7 @@ A1: ASeq is non-decreasing;
     hence thesis by PROB_1:def 6;
   end;
   assume
-A2: Complement ASeq is non-increasing;
+A2: Complement ASeq is non-ascending;
   now
     let n,m;
     assume n <= m;
@@ -439,14 +439,14 @@ A3: x <> y;
   end;
 end;
 
-Lm2: for P,ASeq st ASeq is non-decreasing holds
+Lm2: for P,ASeq st ASeq is non-descending holds
 (P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq)
 proof
   let P,ASeq such that
-A1: ASeq is non-decreasing;
+A1: ASeq is non-descending;
   reconsider V = Union ASeq as Event of Sigma by PROB_1:58;
   set BSeq = @Complement ASeq;
-A2: BSeq is non-increasing by A1,Lm1;
+A2: BSeq is non-ascending by A1,Lm1;
   then
 A3: P * BSeq is convergent by PROB_1:def 13;
   Intersection BSeq = [#] Sigma \ Union ASeq;
@@ -480,25 +480,25 @@ theorem
   for P being Function of Sigma,REAL holds P is Probability of Sigma iff
   (for A holds 0 <= P.A) & (P.Omega = 1) &
   (for A,B st A misses B holds P.(A \/ B) = P.A + P.B) &
-  (for ASeq st ASeq is non-decreasing holds
+  (for ASeq st ASeq is non-descending holds
   (P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq))
 proof
   let P be Function of Sigma,REAL;
   thus P is Probability of Sigma implies (for A holds 0 <= P.A) &
   (P.Omega = 1) & (for A,B st A misses B holds P.(A \/ B) = P.A + P.B) &
-  (for ASeq st ASeq is non-decreasing holds
+  (for ASeq st ASeq is non-descending holds
   (P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq))
   by Lm2,PROB_1:def 13;
   assume that
 A1: (for A holds 0 <= P.A) & (P.Omega = 1) &
   (for A,B st A misses B holds P.(A \/ B) = P.A + P.B) and
-A2: (for ASeq st ASeq is non-decreasing holds
+A2: (for ASeq st ASeq is non-descending holds
   (P * ASeq is convergent & lim (P * ASeq) = P.Union ASeq));
-  (for ASeq st ASeq is non-increasing holds
+  (for ASeq st ASeq is non-ascending holds
   (P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq))
   proof
     let ASeq such that
-A3: ASeq is non-increasing;
+A3: ASeq is non-ascending;
 A4: for A holds P.(A`) = 1 - P.A
     proof
       let A;
@@ -512,7 +512,7 @@ A5:   A misses B by SUBSET_1:44;
     Intersection ASeq = @Intersection ASeq;
     then reconsider V = Intersection ASeq as Event of Sigma;
     set BSeq = @Complement ASeq;
-A6: BSeq is non-decreasing by A3,Th17;
+A6: BSeq is non-descending by A3,Th17;
     then
 A7: P * BSeq is convergent by A2;
     Union BSeq = (Intersection ASeq)`;
@@ -850,14 +850,14 @@ A6:     A /\ B misses C /\ B by XBOOLE_1:76;
           .= P.(A /\ B)/P.B + f.C by A5
           .= f.A + f.C by A5;
       end;
-      thus for ASeq st ASeq is non-increasing holds
+      thus for ASeq st ASeq is non-ascending holds
       (f*ASeq is convergent & lim (f*ASeq) = f.(Intersection ASeq))
       proof
         let ASeq such that
-A7:     ASeq is non-increasing;
+A7:     ASeq is non-ascending;
         consider BSeq such that
 A8:     for n holds BSeq.n = ASeq.n /\ B by Th9;
-A9:     BSeq is non-increasing by A7,A8,Th10;
+A9:     BSeq is non-ascending by A7,A8,Th10;
 A10:    dom(f*ASeq) = NAT by FUNCT_2:def 1;
 A11:    dom(P*BSeq) = NAT by FUNCT_2:def 1;
         now
@@ -1026,7 +1026,7 @@ proof
   let P,A,B such that
 A1: 0 < P.B;
   P.A + P.B - 1 <= P.(A /\ B) by Th25;
-  then (P.A + P.B - 1)/P.B <= P.(A /\ B)/P.B by A1,REAL_1:73;
+  then (P.A + P.B - 1)/P.B <= P.(A /\ B)/P.B by A1,XREAL_1:74;
   hence thesis by A1,Def7;
 end;
 
@@ -1101,7 +1101,7 @@ A1: 0 < P.B;
   P.B + P.A - 1 <= P.(A /\ B) by Th25;
   then P.B + -(1 - P.A) <= P.(A /\ B);
   then P.B + -P.([#] Sigma \ A) <= P.(A /\ B) by PROB_1:68;
-  then (P.B + -P.([#] Sigma \ A))/P.B <= P.(A /\ B)/P.B by A1,REAL_1:73;
+  then (P.B + -P.([#] Sigma \ A))/P.B <= P.(A /\ B)/P.B by A1,XREAL_1:74;
   then (P.B - P.([#] Sigma \ A))/P.B <= P.|.B.A by A1,Def7;
   then P.B/P.B - P.([#] Sigma \ A)/P.B <= P.|.B.A by XCMPLX_1:121;
   hence thesis by A1,XCMPLX_1:60;

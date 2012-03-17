@@ -9,7 +9,7 @@ environ
  vocabularies BOOLE, MCART_1, RELAT_1, AMI_1, CARD_1, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FUNCT_4, FUNCT_5, FUNCOP_1, PBOOLE, MARGREL1, BINARITH,
       CLASSES1, PARTFUN1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, LATTICES,
-      CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, FACIRC_2, ARYTM;
+      CIRCCOMB, FACIRC_1, ZF_REFLE, ZF_LANG, FACIRC_2, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
       MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCT_4, PBOOLE, MARGREL1, BINARITH, CLASSES1, PARTFUN1, MSUALG_1,
@@ -18,7 +18,7 @@ environ
       FACIRC_1, NAT_1, XREAL_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FRAENKEL,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, MARGREL1, FINSEQ_2, CARD_3, STRUCT_0,
-      MSUALG_1, CIRCCOMB, FACIRC_1, CIRCCMB2;
+      MSUALG_1, CIRCCOMB, FACIRC_1, CIRCCMB2, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, TARSKI, MSUALG_1, CIRCUIT2, CIRCCOMB, FACIRC_1,
       XBOOLE_0, MSAFREE2;
@@ -66,9 +66,9 @@ registration
   proof
     let S be ManySortedSign;
     assume
-A1: the OperSymbols of S = {};
+A1: the carrier' of S = {};
     hence the ResultSort of S = {} by RELSET_1:26
-      .= id the OperSymbols of S by A1,RELSET_1:27;
+      .= id the carrier' of S by A1,RELSET_1:27;
     thus S is gate`1=arity
     proof
       let g be set; thus thesis by A1;
@@ -94,17 +94,16 @@ definition
   proof consider a being Function of {},{x}*;
     consider r being Function of {},{x};
     reconsider S = ManySortedSign(#{x}, {}, a, r#) as
-    void strict ManySortedSign by MSUALG_1:def 5;
+    void strict ManySortedSign;
     take S; thus thesis;
   end;
   uniqueness
   proof
     let S1, S2 be strict void ManySortedSign such that
 A1: the carrier of S1 = {x} & the carrier of S2 = {x};
-A2: the OperSymbols of S1 = {} & the OperSymbols of S2 = {} by MSUALG_1:def 5;
-    then the Arity of S1 = the Arity of S2 &
+    the Arity of S1 = the Arity of S2 &
     the ResultSort of S1 = the ResultSort of S2 by PARTFUN1:58;
-    hence thesis by A1,A2;
+    hence thesis by A1;
   end;
 end;
 
@@ -127,8 +126,7 @@ definition
   proof
     set S = SingleMSS(x);
     let A1, A2 be Boolean strict MSAlgebra over S;
-    the OperSymbols of S = {} by MSUALG_1:def 5;
-    then dom the Charact of A1 = {} & dom the Charact of A2 = {}
+    dom the Charact of A1 = {} & dom the Charact of A2 = {}
     by PBOOLE:def 3;
     then the Sorts of A1 = (the carrier of S) --> BOOLEAN &
     the Sorts of A2 = (the carrier of S) --> BOOLEAN &
@@ -141,8 +139,7 @@ theorem
   for x being set, S being ManySortedSign holds SingleMSS x tolerates S
 proof
   let x be set, S be ManySortedSign;
-  the OperSymbols of SingleMSS x = {} by MSUALG_1:def 5;
-  then the ResultSort of SingleMSS x = {} &
+  the ResultSort of SingleMSS x = {} &
   the Arity of SingleMSS x = {} by RELSET_1:26;
   hence the Arity of SingleMSS x tolerates the Arity of S &
   the ResultSort of SingleMSS x tolerates the ResultSort of S by PARTFUN1:141;
@@ -158,14 +155,14 @@ proof
   then {x} c= the carrier of S by ZFMISC_1:37;
   then
 A1: {x} \/ the carrier of S = the carrier of S &
-  {} \/ the OperSymbols of S = the OperSymbols of S by XBOOLE_1:12;
-A2: the carrier of SingleMSS x = {x} & the OperSymbols of SingleMSS x = {}
-  by Def1,MSUALG_1:def 5;
-  then the ResultSort of SingleMSS x = {} & the Arity of SingleMSS x = {} &
+  {} \/ the carrier' of S = the carrier' of S by XBOOLE_1:12;
+A2: the carrier of SingleMSS x = {x} & the carrier' of SingleMSS x = {}
+  by Def1;
+  the ResultSort of SingleMSS x = {} & the Arity of SingleMSS x = {} &
   {}+*the ResultSort of S = the ResultSort of S &
   {}+*the Arity of S = the Arity of S by FUNCT_4:21,RELSET_1:26;
   then the carrier of T = the carrier of S &
-  the OperSymbols of T = the OperSymbols of S &
+  the carrier' of T = the carrier' of S &
   the ResultSort of T = the ResultSort of S &
   the Arity of T = the Arity of S by A1,A2,CIRCCOMB:def 2;
   hence thesis;
@@ -187,8 +184,7 @@ A2: the carrier of S1 = {x} &
   the Sorts of A1 = (the carrier of S1) --> BOOLEAN by Def1,CIRCCOMB:65;
   then
 A3: the Sorts of A1 tolerates the Sorts of A by CIRCCOMB:4;
-  the OperSymbols of S1 = {} by MSUALG_1:def 5;
-  then dom the Charact of A1 = {} by PBOOLE:def 3;
+  dom the Charact of A1 = {} by PBOOLE:def 3;
   then the Charact of A1 = {};
   then the Charact of A = (the Charact of A1)+*the Charact of A by FUNCT_4:21;
   then
@@ -846,7 +842,7 @@ Lm1: now
   let i be Element of NAT;
   let x be FinSeqLen of i+1;
 A1: i+1 <> 0 & len x = i+1 by CIRCCOMB:def 12;
-  then x <> <*> by CARD_1:47;
+  then x <> <*>;
   then consider y being FinSequence, a being set such that
 A2: x = y^<*a*> by FINSEQ_1:63;
   len <*a*> = 1 by FINSEQ_1:57;
@@ -1471,12 +1467,9 @@ A1: P[0]
   proof
     let x,y be nonpair-yielding FinSeqLen of 0;
     set f = (0-tuples_on BOOLEAN)-->FALSE;
-    len x = 0 & len y = 0 by CIRCCOMB:def 12;
-    then
-A2: x = {} & y = {} by CARD_2:59;
     0-BitAdderStr(x,y) = 1GateCircStr(<*>, f) by Th8;
     hence InputVertices (0-BitAdderStr(x,y))
-    = rng x \/ rng y by A2,CIRCCOMB:49;
+    = rng x \/ rng y by CIRCCOMB:49;
   end;
 A3: for i being Element of NAT st P[i] holds P[i+1]
   proof
@@ -1539,7 +1532,7 @@ proof
   let a1,a2,a3 be Element of BOOLEAN such that
 A1: a1 = s.x & a2 = s.y & a3 = s.c;
   set S = MajorityStr(x,y,c);
-A2: InnerVertices S = the OperSymbols of S by FACIRC_1:37;
+A2: InnerVertices S = the carrier' of S by FACIRC_1:37;
 A3: dom s = the carrier of S by CIRCUIT1:4;
 A4: x in the carrier of S & y in the carrier of S & c in the carrier of S
   by FACIRC_1:72;
@@ -1569,7 +1562,7 @@ proof
 A1: a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&'];
   set xy =[<*x,y*>,'&'], yc = [<*y,c*>,'&'], cx = [<*c,x*>,'&'];
   set S = MajorityStr(x,y,c);
-A2: InnerVertices S = the OperSymbols of S by FACIRC_1:37;
+A2: InnerVertices S = the carrier' of S by FACIRC_1:37;
 A3: dom s = the carrier of S by CIRCUIT1:4;
   reconsider xy, yc, cx as Element of InnerVertices S by FACIRC_1:73;
   thus (Following s).MajorityOutput(x,y,c)

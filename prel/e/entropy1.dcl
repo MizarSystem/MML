@@ -24,24 +24,24 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
-<ArticleID name="PRE_TOPC"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
-<ArticleID name="EUCLID"/>
 <ArticleID name="MATRPROB"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="SEQ_2"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="SEQ_4"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
+<ArticleID name="RVSUM_1"/>
+<ArticleID name="EUCLID"/>
 <ArticleID name="PSCOMP_1"/>
 <ArticleID name="PARTFUN3"/>
 <ArticleID name="ENTROPY1"/>
@@ -50,40 +50,40 @@
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
-<Adjective nr="26"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="146"/>
+<Adjective nr="23"/>
+<Adjective nr="28"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="159"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ENTROPY1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
-<Adjective nr="26"/>
-<Adjective nr="80"/>
-<Adjective nr="147">
+<Adjective nr="23"/>
+<Adjective nr="28"/>
+<Adjective nr="85"/>
+<Adjective nr="160">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -91,49 +91,49 @@
 <CCluster aid="ENTROPY1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="112"/>
+<Adjective nr="93"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="146"/>
+<Adjective nr="159"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ENTROPY1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="80"/>
-<Adjective nr="114"/>
+<Adjective nr="85"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="125">
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="128">
+<Func kind="K" nr="43"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ENTROPY1" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="80"/>
-<Adjective nr="115"/>
+<Adjective nr="85"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="125">
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="128">
+<Func kind="K" nr="43"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 </Registrations>

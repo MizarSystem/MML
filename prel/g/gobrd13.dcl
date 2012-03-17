@@ -35,12 +35,12 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="GOBOARD1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRLIN"/>
+<ArticleID name="GOBOARD1"/>
 <ArticleID name="GOBRD13"/>
 </Signature>
 <FCluster aid="GOBRD13" nr="1">
@@ -52,16 +52,16 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="356">
+<Func kind="K" nr="361">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <CCluster aid="GOBRD13" nr="1">
@@ -73,12 +73,12 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="135"/>
+<Adjective nr="141"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GOBRD13" nr="2">
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="135"/>
+<Adjective nr="141"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -94,7 +94,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="24"/>
+<Adjective nr="26"/>
 </Cluster>
 </CCluster>
 </Registrations>

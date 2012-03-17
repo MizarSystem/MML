@@ -7,19 +7,19 @@
 
 environ
 
- vocabularies PARTFUN1, RELAT_1, ABSVALUE, FUNCT_1, ORDINAL2, LATTICES,
+ vocabularies RELAT_1, ABSVALUE, FUNCT_1, ORDINAL2, LATTICES,
       COMPLEX1, SEQ_1, SEQ_2, SEQM_3, MEASURE6, ARYTM, ARYTM_1, PROB_1,
       SQUARE_1, RLVECT_1, GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1, FINSET_1,
-      XXREAL_2;
+      XXREAL_2, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, XXREAL_0, RELSET_1, FUNCT_2, PARTFUN1, NAT_1,
-      XXREAL_2, SUPINF_1,
+      XXREAL_2, SUPINF_1, VALUED_0,
       SUPINF_2, PSCOMP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, KURATO_2, LIMFUNC1,
-      RINFSUP1, MEASURE6, EXTREAL1, MESFUNC1, MESFUNC2, MESFUNC5;
+      RINFSUP1, MEASURE6, EXTREAL1, MESFUNC1, MESFUNC5;
  constructors REAL_1, NAT_1, DOMAIN_1, EXTREAL1, COMPLEX1, MEASURE6, MESFUNC1,
       PARTFUN3, LIMFUNC1, KURATO_2, RINFSUP1, MESFUNC5, SEQ_1, SUPINF_1;
  registrations SUBSET_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1, INT_1, NUMBERS,
-      XBOOLE_0, VALUED_0;
+      XBOOLE_0, VALUED_0, SEQ_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_2, MESFUNC1, RINFSUP1, MEASURE6;
  theorems NAT_1, TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, KURATO_2, SUPINF_2,
@@ -50,15 +50,14 @@ A5: X is bounded_above by SUPINF_1:def 11;
 A6: sup X <= sup Y by A4,XXREAL_2:def 3;
   not -infty in X by A1;
   then X <> {-infty} by TARSKI:def 1;
-  then sup X in REAL by A5,XXREAL_2:57;
   then
-A7: sup X is real number;
+B7: sup X in REAL by A5,XXREAL_2:57;
   for s be real number st s in Y holds s <= sup X by A1,XXREAL_2:4;
-  then sup Y <= sup X by A7,SEQ_4:62;
+  then sup Y <= sup X by B7,SEQ_4:62;
   hence sup Y = sup X by A6,XXREAL_0:1;
 end;
 
-theorem Th2:
+theorem
   X = Y & X is bounded_above implies Y is bounded_above & sup X = sup Y
    by Th1;
 
@@ -76,15 +75,14 @@ A4: X is bounded_below by SUPINF_1:def 12;
 A5: inf Y <= inf X by A3,XXREAL_2:def 4;
   not +infty in X by A1;
   then X <> {+infty} by TARSKI:def 1;
-  then inf X in REAL by A4,XXREAL_2:58;
   then
-A6: inf X is real number;
+B6: inf X in REAL by A4,XXREAL_2:58;
   for s be real number st s in Y holds inf X <= s by A1,XXREAL_2:3;
-  then inf X <= inf Y by A6,SEQ_4:60;
+  then inf X <= inf Y by B6,SEQ_4:60;
   hence inf Y = inf X by A5,XXREAL_0:1;
 end;
 
-theorem Th4:
+theorem
   X = Y & X is bounded_below implies Y is bounded_below & inf X = inf Y
         by Th3;
 
@@ -225,27 +223,11 @@ A4: for y be set st y in NAT holds seq1.y = seq2.y
 end;
 
 theorem
-  seq is finite implies seq is Real_Sequence
+  seq is real-valued implies seq is Real_Sequence
 proof
-  assume seq is finite;
+  assume seq is real-valued;
   then rng seq is Subset of REAL by MESFUNC2:35;
   hence thesis by FUNCT_2:8;
-end;
-
-definition
-  let f be PartFunc of NAT,ExtREAL;
-  attr f is increasing means
-  :Def8:
-  for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
-  attr f is decreasing means
-  :Def9:
-  for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
-  attr f is non-decreasing means
-  :Def10:
-  for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n;
-  attr f is non-increasing means
-  :Def11:
-  for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
 end;
 
 theorem Th7:
@@ -265,7 +247,7 @@ A1: dom seq = NAT by FUNCT_2:def 1;
   for m,n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n) &
   (seq is non-increasing iff
   for m,n st m in dom seq & n in dom seq & m <= n holds seq.n <= seq.m)
-  by Def8,Def9,Def10,Def11;
+  by SEQM_3:def 1,def 2,def 3,def 4;
   hence thesis by A1;
 end;
 
@@ -347,6 +329,7 @@ registration
 end;
 
 definition
+ canceled 4;
   let seq be ExtREAL_sequence;
   func lim_sup seq -> Element of ExtREAL equals
 
@@ -386,7 +369,7 @@ A3: ex Y1 being non empty Subset of ExtREAL st
     end;
     then reconsider Y2={rseq.k where k is Element of NAT: n <= k} as Subset of
     REAL;
-    rseq is bounded_above by A1,SEQ_2:def 5;
+    rseq is bounded_above by A1;
     then Y2 is bounded_above by RINFSUP1:31;
     then (superior_realsequence seq).x =sup Y2 by A1,A3,Th1;
     hence (superior_realsequence seq).x =(superior_realsequence rseq).x
@@ -397,7 +380,7 @@ A3: ex Y1 being non empty Subset of ExtREAL st
   then
 A4: superior_realsequence seq = superior_realsequence rseq by A2,FUNCT_1:9;
   superior_realsequence rseq is bounded by A1,RINFSUP1:58;
-  then superior_realsequence rseq is bounded_below by SEQ_2:def 5;
+  then superior_realsequence rseq is bounded_below;
   then rng superior_realsequence rseq is bounded_below by RINFSUP1:6;
   hence thesis by A4,Th3;
 end;
@@ -428,7 +411,7 @@ A3: Y1 = {seq.k where k is Element of NAT: n <= k} &
     end;
     then reconsider Y2={rseq.k where k is Element of NAT: n <= k} as Subset of
     REAL;
-    rseq is bounded_below by A1,SEQ_2:def 5;
+    rseq is bounded_below by A1;
     then Y2 is bounded_below by RINFSUP1:32;
     then inf Y1= inf Y2 by A1,A3,Th3;
     hence (inferior_realsequence seq).x = (inferior_realsequence rseq).x
@@ -439,7 +422,7 @@ A3: Y1 = {seq.k where k is Element of NAT: n <= k} &
   then
 A4: inferior_realsequence seq = inferior_realsequence rseq by A2,FUNCT_1:9;
   inferior_realsequence rseq is bounded by A1,RINFSUP1:58;
-  then inferior_realsequence rseq is bounded_above by SEQ_2:def 5;
+  then inferior_realsequence rseq is bounded_above;
   then rng inferior_realsequence rseq is bounded_above by RINFSUP1:5;
   hence thesis by A4,Th1;
 end;
@@ -478,8 +461,7 @@ proof
 A1: seq=rseq;
   hereby
     assume seq is bounded_above;
-    then rng seq is bounded_above by Def4;
-    then rng rseq is bounded_above by A1;
+    then rng rseq is bounded_above by A1,Def4;
     then consider p be real number such that
 A2: for y be real number st y in rng rseq holds y <= p by SEQ_4:def 1;
     now
@@ -511,8 +493,7 @@ proof
 A1: seq=rseq;
   hereby
     assume seq is bounded_below;
-    then rng seq is bounded_below by Def3;
-    then rng rseq is bounded_below by A1;
+    then rng rseq is bounded_below by A1,Def3;
     then consider p be real number such that
 A2: for y be real number st y in rng rseq holds p <= y by SEQ_4:def 2;
     now
@@ -535,22 +516,6 @@ A4: q in REAL by XREAL_0:def 1;
   end;
   then q is LowerBound of rng seq by XXREAL_2:def 2;
   hence rng seq is bounded_below by A4,SUPINF_1:def 12;
-end;
-
-Lm3: seq=rseq implies (rseq is non-increasing iff seq is non-increasing) &
-(rseq is non-decreasing iff seq is non-decreasing)
-proof
-  assume seq=rseq;
-  then
-A1: ((for n,m be Element of NAT st m<=n holds seq.m<=seq.n)
-  iff (for n,m be Element of NAT st m<=n holds rseq.m<=rseq.n)) &
-  ((for n,m be Element of NAT st m<=n holds seq.n<=seq.m)
-  iff (for n,m be Element of NAT st m<=n holds rseq.n<=rseq.m));
-  (rseq is non-decreasing iff
-  for n,m be Element of NAT st n<=m holds rseq.n<=rseq.m) &
-  (rseq is non-increasing iff
-  for n,m be Element of NAT st n<=m holds rseq.m<=rseq.n) by SEQM_3:12,14;
-  hence thesis by A1,Th7;
 end;
 
 theorem Th14:
@@ -1016,8 +981,7 @@ A1: UB in REAL by SUPINF_1:def 11;
       then consider n be set such that
 A2:   n in dom (seq^\k) & r = (seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A2;
-      seq.(n+k) in rng seq by FUNCT_2:6;
-      then seq.(n+k) <= UB by XXREAL_2:def 1;
+      seq.(n+k) <= UB by XXREAL_2:def 1,FUNCT_2:6;
       hence r <= UB by A2,KURATO_2:def 2;
     end;
     then UB is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
@@ -1035,8 +999,7 @@ A3: UB in REAL by SUPINF_1:def 12;
       then consider n be set such that
 A4:   n in dom (seq^\k) & r=(seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A4;
-      seq.(n+k) in rng seq by FUNCT_2:6;
-      then UB <= seq.(n+k) by XXREAL_2:def 2;
+      UB <= seq.(n+k) by XXREAL_2:def 2,FUNCT_2:6;
       hence UB <= r by A4,KURATO_2:def 2;
     end;
     then UB is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
@@ -1412,15 +1375,13 @@ A1: seq is bounded & seq is non-increasing;
 A2: seq is bounded_below by A1,Def5;
   then
 A3: rseq is bounded_below by Th13;
-A4: rseq is non-increasing by A1,Lm3;
-  then
-A5: rseq is convergent by A3,SEQ_4:52;
+A5: rseq is convergent by A3,SEQ_4:52,A1;
   then lim rseq = lim_sup rseq by RINFSUP1:91;
-  then lim rseq = inf rseq by A4,RINFSUP1:72;
+  then lim rseq = inf rseq by A1,RINFSUP1:72;
   then
 A6: lim seq = inf rseq by A5,Th14;
   rng seq is bounded_below by A2,Def3;
-  hence thesis by A5,A6,Th4,Th14;
+  hence thesis by A5,A6,Th3,Th14;
 end;
 
 Lm5: for
@@ -1434,15 +1395,13 @@ A1: seq is bounded & seq is non-decreasing;
 A2: seq is bounded_above by A1,Def5;
   then
 A3: rseq is bounded_above by Th12;
-A4: rseq is non-decreasing by A1,Lm3;
-  then
-A5: rseq is convergent by A3,SEQ_4:51;
+A5: rseq is convergent by A3,SEQ_4:51,A1;
   then lim rseq = lim_inf rseq by RINFSUP1:91;
-  then lim rseq = sup rseq by A4,RINFSUP1:66;
+  then lim rseq = sup rseq by A1,RINFSUP1:66;
   then
 A6: lim seq = sup rseq by A5,Th14;
   rng seq is bounded_above by A2,Def4;
-  hence thesis by A5,A6,Th2,Th14;
+  hence thesis by A5,A6,Th1,Th14;
 end;
 
 theorem Th32:
@@ -2000,7 +1959,7 @@ A2: seq^\k is bounded by A1,Th18;
   seq^\k is bounded_above & seq^\k is bounded_below by A2,Def5;
   then rseq0 is bounded_above & rseq0 is bounded_below by Th12,Th13;
   then
-A3: rseq0 is bounded by SEQ_2:def 5;
+A3: rseq0 is bounded;
   then lim_inf rseq0 = lim_inf (seq^\k) &
   lim_sup rseq0 = lim_sup (seq^\k) by Th9,Th10;
   then

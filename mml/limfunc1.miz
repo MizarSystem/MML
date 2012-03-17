@@ -10,7 +10,7 @@ environ
  vocabularies ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1,
       ARYTM_3, PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3,
       LATTICES, RFUNCT_1, RFUNCT_2, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
-      FRECHET2, SUPINF_1;
+      FRECHET2, SUPINF_1, ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
       PROB_1, RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1, RFUNCT_2,
@@ -18,10 +18,11 @@ environ
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1,
       SEQ_2, SEQM_3, PROB_1, RCOMP_1, RFUNCT_1, RFUNCT_2, SEQ_1, RECDEF_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
-      XXREAL_1, SEQM_3, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
+      XXREAL_1, SEQM_3, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, FUNCOP_1,
+      RFUNCT_2, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1, TARSKI, SEQ_2, XBOOLE_0, PROB_1, MEMBERED, VALUED_1;
- theorems TARSKI, REAL_1, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
+ theorems TARSKI, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       SQUARE_1, RFUNCT_1, RFUNCT_2, FUNCT_1, FUNCT_2, XREAL_0, XBOOLE_0,
       XBOOLE_1, REAL_2, FINSEQ_2, XCMPLX_0, XCMPLX_1, XREAL_1, FUNCOP_1,
       COMPLEX1, XXREAL_0, ORDINAL1, XXREAL_1, MEMBERED, VALUED_1;
@@ -39,7 +40,7 @@ Lm1: 0<g & r<=r1 implies r-g<r1 & r<r1+g
 proof
   assume
 A1: 0<g & r<=r1;
-  then r-g<r1-0 by REAL_1:92;
+  then r-g<r1-0 by XREAL_1:17;
   hence r-g<r1;
   r+0<r1+g by A1,XREAL_1:10;
   hence thesis;
@@ -116,7 +117,7 @@ proof
 A1: seq is non-decreasing;
     take seq.0-1;
     let n;
-A2: seq.0-1<seq.0-0 by REAL_1:92;
+A2: seq.0-1<seq.0-0 by XREAL_1:17;
     seq.0<=seq.n by A1,SEQM_3:21;
     hence thesis by A2,XXREAL_0:2;
   end;
@@ -130,11 +131,11 @@ A4: seq.0+0<seq.0+1 by XREAL_1:10;
 end;
 
 theorem Th27:
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing implies
-  for n holds seq.n<0
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing
+   implies for n holds seq.n<0
 proof
   assume that
-A1: seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing and
+A1: seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing and
 A2: ex n st not seq.n<0;
   consider n such that
 A3: not seq.n<0 by A2;
@@ -156,11 +157,11 @@ A7:   n<=n1+n by NAT_1:12;
 end;
 
 theorem Th28:
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing implies
-  for n holds 0<seq.n
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing
+     implies for n holds 0<seq.n
 proof
   assume that
-A1: seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing and
+A1: seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing and
 A2: ex n st not 0<seq.n;
   consider n such that
 A3: not 0<seq.n by A2;
@@ -254,7 +255,7 @@ canceled 2;
 
 theorem
   seq is divergent_to+infty or seq is divergent_to-infty implies
-  ex n st for m st n<=m holds seq^\m is_not_0
+  ex n st for m st n<=m holds seq^\m is non-zero
 proof
   assume
 A1: seq is divergent_to+infty or seq is divergent_to-infty;
@@ -270,7 +271,7 @@ A3:   n<=m;
         0<seq.(k+m) by A2,A3,NAT_1:12;
         hence 0<>(seq^\m).k by SEQM_3:def 9;
       end;
-      hence seq^\m is_not_0 by SEQ_1:7;
+      hence seq^\m is non-zero by SEQ_1:7;
     end;
     suppose seq is divergent_to-infty;
       then consider n such that
@@ -283,7 +284,7 @@ A5:   n<=m;
         seq.(k+m)<0 by A4,A5,NAT_1:12;
         hence (seq^\m).k<>0 by SEQM_3:def 9;
       end;
-      hence seq^\m is_not_0 by SEQ_1:7;
+      hence seq^\m is non-zero by SEQ_1:7;
     end;
   end;
   hence thesis;
@@ -605,7 +606,7 @@ proof
   assume
 A1: seq is divergent_to+infty & seq1 is convergent;
   then seq1 is bounded by SEQ_2:27;
-  then seq1 is bounded_below by SEQ_2:def 5;
+  then seq1 is bounded_below;
   hence thesis by A1,Th36;
 end;
 
@@ -616,7 +617,7 @@ proof
   assume
 A1: seq is divergent_to-infty & seq1 is convergent;
   then seq1 is bounded by SEQ_2:27;
-  then seq1 is bounded_above by SEQ_2:def 5;
+  then seq1 is bounded_above;
   hence thesis by A1,Th39;
 end;
 
@@ -864,7 +865,7 @@ A3:   seq is bounded_below by Th26;
       now per cases;
         suppose seq is bounded_above;
           then
-A4:       seq is bounded by A3,SEQ_2:def 5;
+A4:       seq is bounded by A3;
           seq is monotone by A2,SEQM_3:def 7;
           hence thesis by A4,SEQ_4:53;
         end;
@@ -881,7 +882,7 @@ A6:   seq is bounded_above by Th26;
       now per cases;
         suppose seq is bounded_below;
           then
-A7:       seq is bounded by A6,SEQ_2:def 5;
+A7:       seq is bounded by A6;
           seq is monotone by A5,SEQM_3:def 7;
           hence thesis by A7,SEQ_4:53;
         end;
@@ -948,7 +949,7 @@ A18:    seq.m<-0 by A13,Z,A14;
         then ((-1)*(r"))"<1/seq.m by XCMPLX_1:217;
         then
 A19:    (-1)"*(r"")<1/seq.m by XCMPLX_1:205;
-        1/seq.m<0/seq.m by A18,REAL_1:74;
+        1/seq.m<0/seq.m by A18,XREAL_1:77;
         then abs(1/seq.m)=-(1/seq.m) by ABSVALUE:def 1;
         then -(1*r)<-abs(1/seq.m) by A19;
         then abs(1/seq.m)<r by XREAL_1:26;
@@ -963,11 +964,11 @@ A19:    (-1)"*(r"")<1/seq.m by XCMPLX_1:205;
 end;
 
 theorem Th62:
-  seq is_not_0 & seq is convergent & lim seq=0 &
+  seq is non-zero & seq is convergent & lim seq=0 &
   (ex k st for n st k<=n holds 0<seq.n) implies seq" is divergent_to+infty
 proof
   assume
-A1: seq is_not_0 & seq is convergent & lim seq=0;
+A1: seq is non-zero & seq is convergent & lim seq=0;
   given k such that
 A2: for n st k<=n holds 0<seq.n;
   let r;
@@ -1000,11 +1001,11 @@ A7: 0<seq.n by A2;
 end;
 
 theorem Th63:
-  seq is_not_0 & seq is convergent & lim seq=0 &
+  seq is non-zero & seq is convergent & lim seq=0 &
   (ex k st for n st k<=n holds seq.n<0) implies seq" is divergent_to-infty
 proof
   assume
-A1: seq is_not_0 & seq is convergent & lim seq=0;
+A1: seq is non-zero & seq is convergent & lim seq=0;
   given k such that
 A2: for n st k<=n holds seq.n<0;
   let r;
@@ -1041,41 +1042,42 @@ A8: 0<-(seq.n) by XREAL_1:60;
 end;
 
 theorem Th64:
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing implies
-  seq" is divergent_to-infty
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing
+   implies seq" is divergent_to-infty
 proof
   assume
-A1: seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing;
+A1: seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing;
   then for n holds 0<=n implies seq.n<0 by Th27;
   hence thesis by A1,Th63;
 end;
 
 theorem Th65:
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing implies
-  seq" is divergent_to+infty
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing
+  implies seq" is divergent_to+infty
 proof
   assume
-A1: seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing;
+A1: seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing;
   then for n holds 0<=n implies 0<seq.n by Th28;
   hence thesis by A1,Th62;
 end;
 
 theorem
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is increasing implies
+  seq is non-zero & seq is convergent & lim seq=0 & seq is increasing implies
   seq" is divergent_to-infty by Th64;
 
 theorem
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is decreasing implies
+  seq is non-zero & seq is convergent & lim seq=0 & seq is decreasing implies
   seq" is divergent_to+infty by Th65;
 
 theorem
   seq1 is bounded &
   (seq2 is divergent_to+infty or seq2 is divergent_to-infty) &
-  seq2 is_not_0 implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0
+  seq2 is non-zero implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0
 proof
   assume
 A1: seq1 is bounded &
-  (seq2 is divergent_to+infty or seq2 is divergent_to-infty) & seq2 is_not_0;
+  (seq2 is divergent_to+infty or seq2 is divergent_to-infty) &
+  seq2 is non-zero;
   then seq2" is convergent & lim(seq2")=0 by Th61;
   hence thesis by A1,SEQ_2:39,40;
 end;
@@ -1763,13 +1765,13 @@ end;
 
 theorem
   f1 is divergent_in+infty_to+infty & (for r ex g st r<g & g in dom(f1+f2)) &
-  (ex r st f2 is_bounded_below_on right_open_halfline(r))
+  (ex r st f2|right_open_halfline r is bounded_below)
   implies f1+f2 is divergent_in+infty_to+infty
 proof
   assume
 A1: f1 is divergent_in+infty_to+infty & for r ex g st r<g & g in dom(f1+f2);
   given r1 such that
-A2: f2 is_bounded_below_on right_open_halfline(r1);
+A2: f2|right_open_halfline r1 is bounded_below;
   now
     let seq;
     assume
@@ -1788,7 +1790,7 @@ A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
 A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def7;
     consider r2 be real number such that
 A10: for g being set st g in right_open_halfline(r1)/\dom f2 holds r2<=f2.g
-    by A2,RFUNCT_1:def 10;
+    by A2,RFUNCT_1:88;
     now
       let n;
 A11:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
@@ -1802,7 +1804,7 @@ then (seq^\k).n in right_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 3;
       then
 A13:  r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by REAL_1:92;
+      then -abs(r2)-1<r2-0 by XREAL_1:17;
       hence -abs(r2)-1<(f2*(seq^\k)).n by A13,XXREAL_0:2;
     end;
     then f2*(seq^\k) is bounded_below by SEQ_2:def 4;
@@ -1866,13 +1868,13 @@ end;
 
 theorem
   f1 is divergent_in-infty_to+infty & (for r ex g st g<r & g in dom(f1+f2)) &
-  (ex r st f2 is_bounded_below_on left_open_halfline(r))
+  (ex r st f2|left_open_halfline r is bounded_below)
   implies f1+f2 is divergent_in-infty_to+infty
 proof
   assume
 A1: f1 is divergent_in-infty_to+infty & for r ex g st g<r & g in dom(f1+f2);
   given r1 such that
-A2: f2 is_bounded_below_on left_open_halfline(r1);
+A2: f2|left_open_halfline r1 is bounded_below;
   now
     let seq;
     assume
@@ -1891,7 +1893,7 @@ A8: rng(seq^\k)c=dom f1 & rng(seq^\k)c=dom f2 by A4,XBOOLE_1:1;
 A9: f1*(seq^\k) is divergent_to+infty by A1,A6,Def10;
     consider r2 be real number such that
 A10: for g being set st g in left_open_halfline(r1)/\dom f2 holds r2<=f2.g
-    by A2,RFUNCT_1:def 10;
+    by A2,RFUNCT_1:88;
     now
       let n;
 A11:  (seq^\k).n in rng(seq^\k) by RFUNCT_2:10;
@@ -1905,7 +1907,7 @@ then (seq^\k).n in left_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 3;
       then
 A12:  r2<=(f2*(seq^\k)).n by A4,A7,RFUNCT_2:21,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by REAL_1:92;
+      then -abs(r2)-1<r2-0 by XREAL_1:17;
       hence -abs(r2)-1<(f2*(seq^\k)).n by A12,XXREAL_0:2;
     end;
     then f2*(seq^\k) is bounded_below by SEQ_2:def 4;
@@ -2267,13 +2269,13 @@ A11:    rng seq c=dom f by VALUED_1:def 11;
 end;
 
 theorem Th95:
-  (ex r st f is_non_decreasing_on right_open_halfline(r) &
-  not f is_bounded_above_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is non-decreasing &
+  not f|right_open_halfline r is bounded_above) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to+infty
 proof
   given r1 such that
-A1: f is_non_decreasing_on right_open_halfline(r1) &
-  not f is_bounded_above_on right_open_halfline(r1);
+A1: f|right_open_halfline r1 is non-decreasing &
+  not f|right_open_halfline r1 is bounded_above;
   assume
 A2: for r ex g st r<g & g in dom f;
   now
@@ -2282,7 +2284,7 @@ A3: seq is divergent_to+infty & rng seq c=dom f;
     now
       let r;
       consider g1 being set such that
-A4:   g1 in right_open_halfline(r1)/\dom f & r<f.g1 by A1,RFUNCT_1:def 9;
+A4:   g1 in right_open_halfline(r1)/\dom f & r<f.g1 by A1,RFUNCT_1:87;
       reconsider g1 as Real by A4;
       consider n such that
 A5:   for m st n<=m holds abs(g1)+abs(r1)<seq.m by A3,Def4;
@@ -2304,7 +2306,7 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
       then g1+0<=abs(g1)+abs(r1) by A10,XREAL_1:9;
       then g1<seq.m by A7,XXREAL_0:2;
-      then f.g1<=f.(seq.m) by A1,A4,A9,RFUNCT_2:def 4;
+      then f.g1<=f.(seq.m) by A1,A4,A9,RFUNCT_2:45;
       then r<f.(seq.m) by A4,XXREAL_0:2;
       hence r<(f*seq).m by A3,RFUNCT_2:21;
     end;
@@ -2314,19 +2316,19 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
 end;
 
 theorem
-  (ex r st f is_increasing_on right_open_halfline(r) &
-  not f is_bounded_above_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is increasing &
+  not f|right_open_halfline r is bounded_above) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to+infty
-           by RFUNCT_2:55,Th95;
+           by Th95;
 
 theorem Th97:
-  (ex r st f is_non_increasing_on right_open_halfline(r) &
-  not f is_bounded_below_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is non-increasing &
+  not f|right_open_halfline r is bounded_below) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to-infty
 proof
   given r1 such that
-A1: f is_non_increasing_on right_open_halfline(r1) &
-  not f is_bounded_below_on right_open_halfline(r1);
+A1: f|right_open_halfline r1 is non-increasing &
+  not f|right_open_halfline r1 is bounded_below;
   assume
 A2: for r ex g st r<g & g in dom f;
   now
@@ -2335,7 +2337,7 @@ A3: seq is divergent_to+infty & rng seq c=dom f;
     now
       let r;
       consider g1 being set such that
-A4:   g1 in right_open_halfline(r1)/\dom f & f.g1<r by A1,RFUNCT_1:def 10;
+A4:   g1 in right_open_halfline(r1)/\dom f & f.g1<r by A1,RFUNCT_1:88;
       reconsider g1 as Real by A4;
       consider n such that
 A5:   for m st n<=m holds abs(g1)+abs(r1)<seq.m by A3,Def4;
@@ -2357,7 +2359,7 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
       then g1+0<=abs(g1)+abs(r1) by A10,XREAL_1:9;
       then g1<seq.m by A7,XXREAL_0:2;
-      then f.(seq.m)<=f.g1 by A1,A4,A9,RFUNCT_2:def 5;
+      then f.(seq.m)<=f.g1 by A1,A4,A9,RFUNCT_2:46;
       then f.(seq.m)<r by A4,XXREAL_0:2;
       hence (f*seq).m<r by A3,RFUNCT_2:21;
     end;
@@ -2367,19 +2369,19 @@ A10:  g1<=abs(g1) by ABSVALUE:11;
 end;
 
 theorem
-  (ex r st f is_decreasing_on right_open_halfline(r) &
-  not f is_bounded_below_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is decreasing &
+  not f|right_open_halfline r is bounded_below) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to-infty
-                        by RFUNCT_2:56,Th97;
+                        by Th97;
 
 theorem Th99:
-  (ex r st f is_non_increasing_on left_open_halfline(r) &
-  not f is_bounded_above_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is non-increasing &
+  not f|left_open_halfline r is bounded_above) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to+infty
 proof
   given r1 such that
-A1: f is_non_increasing_on left_open_halfline(r1) &
-  not f is_bounded_above_on left_open_halfline(r1);
+A1: f|left_open_halfline r1 is non-increasing &
+  not f|left_open_halfline r1 is bounded_above;
   assume
 A2: for r ex g st g<r & g in dom f;
   now
@@ -2388,7 +2390,7 @@ A3: seq is divergent_to-infty & rng seq c=dom f;
     now
       let r;
       consider g1 being set such that
-A4:   g1 in left_open_halfline(r1)/\dom f & r<f.g1 by A1,RFUNCT_1:def 9;
+A4:   g1 in left_open_halfline(r1)/\dom f & r<f.g1 by A1,RFUNCT_1:87;
       reconsider g1 as Real by A4;
       consider n such that
 A5:   for m st n<=m holds seq.m<-abs(r1)-abs(g1) by A3,Def5;
@@ -2400,7 +2402,7 @@ A6:   seq.m in rng seq by RFUNCT_2:10;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,REAL_1:92;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2408,9 +2410,9 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 3;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,REAL_1:92;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
       then seq.m<g1 by A7,XXREAL_0:2;
-      then f.g1<= f.(seq.m) by A1,A4,A9,RFUNCT_2:def 5;
+      then f.g1<= f.(seq.m) by A1,A4,A9,RFUNCT_2:46;
       then r<f.(seq.m) by A4,XXREAL_0:2;
       hence r<(f*seq).m by A3,RFUNCT_2:21;
     end;
@@ -2420,19 +2422,19 @@ A10:  -abs(g1)<=g1 by ABSVALUE:11;
 end;
 
 theorem
-  (ex r st f is_decreasing_on left_open_halfline(r) &
-  not f is_bounded_above_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is decreasing &
+  not f|left_open_halfline r is bounded_above) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to+infty
-                           by RFUNCT_2:56,Th99;
+                           by Th99;
 
 theorem Th101:
-  (ex r st f is_non_decreasing_on left_open_halfline(r) &
-  not f is_bounded_below_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is non-decreasing &
+  not f|left_open_halfline r is bounded_below) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to-infty
 proof
   given r1 such that
-A1: f is_non_decreasing_on left_open_halfline(r1) &
-  not f is_bounded_below_on left_open_halfline(r1);
+A1: f|left_open_halfline r1 is non-decreasing &
+  not f|left_open_halfline r1 is bounded_below;
   assume
 A2: for r ex g st g<r & g in dom f;
   now
@@ -2441,7 +2443,7 @@ A3: seq is divergent_to-infty & rng seq c=dom f;
     now
       let r;
       consider g1 being set such that
-A4:   g1 in left_open_halfline(r1)/\dom f & f.g1<r by A1,RFUNCT_1:def 10;
+A4:   g1 in left_open_halfline(r1)/\dom f & f.g1<r by A1,RFUNCT_1:88;
       reconsider g1 as Real by A4;
       consider n such that
 A5:   for m st n<=m holds seq.m<-abs(r1)-abs(g1) by A3,Def5;
@@ -2453,7 +2455,7 @@ A6:   seq.m in rng seq by RFUNCT_2:10;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,REAL_1:92;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2461,9 +2463,9 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 3;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,REAL_1:92;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
       then seq.m<g1 by A7,XXREAL_0:2;
-      then f.(seq.m)<= f.g1 by A1,A4,A9,RFUNCT_2:def 4;
+      then f.(seq.m)<= f.g1 by A1,A4,A9,RFUNCT_2:45;
       then f.(seq.m)<r by A4,XXREAL_0:2;
       hence (f*seq).m<r by A3,RFUNCT_2:21;
     end;
@@ -2473,10 +2475,10 @@ A10:  -abs(g1)<=g1 by ABSVALUE:11;
 end;
 
 theorem
-  (ex r st f is_increasing_on left_open_halfline(r) &
-  not f is_bounded_below_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is increasing &
+  not f|left_open_halfline r is bounded_below) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to-infty
-                     by RFUNCT_2:55,Th101;
+                     by Th101;
 
 theorem Th103:
   f1 is divergent_in+infty_to+infty & (for r ex g st r<g & g in dom f) &
@@ -2813,11 +2815,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,REAL_1:92;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,REAL_1:92;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -2855,11 +2857,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,REAL_1:92;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,REAL_1:92;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -3595,14 +3597,14 @@ end;
 theorem
   f1 is convergent_in+infty & lim_in+infty f1=0 &
   (for r ex g st r<g & g in dom(f1(#)f2)) &
-  (ex r st f2 is_bounded_on right_open_halfline(r)) implies
+  (ex r st f2|right_open_halfline r is bounded) implies
   f1(#)f2 is convergent_in+infty & lim_in+infty(f1(#)f2)=0
 proof
   assume
 A1: f1 is convergent_in+infty & lim_in+infty f1=0 &
   for r ex g st r<g & g in dom(f1(#)f2);
   given r such that
-A2: f2 is_bounded_on right_open_halfline(r);
+A2: f2|right_open_halfline r is bounded;
   consider g be real number such that
 A3: for r1 being set st r1 in right_open_halfline(r)/\dom f2 holds
   abs(f2.r1)<=g by A2,RFUNCT_1:90;
@@ -3659,14 +3661,14 @@ end;
 theorem
   f1 is convergent_in-infty & lim_in-infty f1=0 &
   (for r ex g st g<r & g in dom(f1(#)f2)) &
-  (ex r st f2 is_bounded_on left_open_halfline(r)) implies
+  (ex r st f2|left_open_halfline r is bounded) implies
   f1(#)f2 is convergent_in-infty & lim_in-infty(f1(#)f2)=0
 proof
   assume
 A1: f1 is convergent_in-infty & lim_in-infty f1=0 &
   for r ex g st g<r & g in dom(f1(#)f2);
   given r such that
-A2: f2 is_bounded_on left_open_halfline(r);
+A2: f2|left_open_halfline r is bounded;
   consider g be real number such that
 A3: for r1 being set st r1 in left_open_halfline(r)/\dom f2 holds
   abs(f2.r1)<=g by A2,RFUNCT_1:90;
@@ -4104,11 +4106,11 @@ A6: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A7: -abs(r)<=r by ABSVALUE:11;
     0<=abs(r1) by COMPLEX1:132;
-    then -abs(r)-abs(r1)<=r-0 by A7,REAL_1:92;
+    then -abs(r)-abs(r1)<=r-0 by A7,XREAL_1:15;
     hence g<r by A6,XXREAL_0:2;
 A8: -abs(r1)<=r1 by ABSVALUE:11;
     0<=abs(r) by COMPLEX1:132;
-    then -abs(r1)-abs(r)<=r1-0 by A8,REAL_1:92;
+    then -abs(r1)-abs(r)<=r1-0 by A8,XREAL_1:15;
     then g<r1 by A6,XXREAL_0:2;
     then g in {g1: g1<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -4304,10 +4306,10 @@ A5:     g<-n-abs(r) & g in dom f1 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A6:     -n-abs(r)<=-n-0 by REAL_1:92;
+A6:     -n-abs(r)<=-n-0 by XREAL_1:15;
 A7:     0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A7,REAL_1:92;
+        then -abs(r)-n<=r-0 by A7,XREAL_1:15;
         then g<r by A5,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4366,10 +4368,10 @@ A19:    g<-n-abs(r) & g in dom f2 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A20:    -n-abs(r)<=-n-0 by REAL_1:92;
+A20:    -n-abs(r)<=-n-0 by XREAL_1:15;
 A21:    0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A21,REAL_1:92;
+        then -abs(r)-n<=r-0 by A21,XREAL_1:15;
         then g<r by A19,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4562,7 +4564,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
 A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def12;
-A12: f*(s^\k) is_not_0 by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
@@ -4578,7 +4580,7 @@ A15: 0<= f.((s^\k).n) by A2;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A16: f*(s^\k) is_not_0 by SEQ_1:7;
+A16: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies 0<(f*(s^\k)).n by A13;
   then
 A17: (f*(s^\k))" is divergent_to+infty by A11,A16,Th62;
@@ -4628,7 +4630,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
 A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def12;
-A12: f*(s^\k) is_not_0 by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
@@ -4644,7 +4646,7 @@ A15: f.((s^\k).n)<=0 by A2;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A16: f*(s^\k) is_not_0 by SEQ_1:7;
+A16: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies (f*(s^\k)).n<0 by A13;
   then
 A17: (f*(s^\k))" is divergent_to-infty by A11,A16,Th63;
@@ -4694,7 +4696,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom (f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
 A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def13;
-A12: f*(s^\k) is_not_0 by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
@@ -4710,7 +4712,7 @@ A15: 0<=f.((s^\k).n) by A2;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A16: f*(s^\k) is_not_0 by SEQ_1:7;
+A16: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies 0<(f*(s^\k)).n by A13;
   then
 A17: (f*(s^\k))" is divergent_to+infty by A11,A16,Th62;
@@ -4760,7 +4762,7 @@ A9: rng(s^\k)c=rng s by RFUNCT_2:7;
 A10: rng(s^\k)c=dom(f^) & rng(s^\k)c=dom f by A4,A8,XBOOLE_1:1;
   then
 A11: f*(s^\k) is convergent & lim(f*(s^\k))=0 by A1,A6,Def13;
-A12: f*(s^\k) is_not_0 by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
+A12: f*(s^\k) is non-zero by A4,A9,RFUNCT_2:26,XBOOLE_1:1;
 A13: now
     let n;
 A14: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
@@ -4776,7 +4778,7 @@ A15: f.((s^\k).n)<=0 by A2;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A16: f*(s^\k) is_not_0 by SEQ_1:7;
+A16: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies (f*(s^\k)).n<0 by A13;
   then
 A17: (f*(s^\k))" is divergent_to-infty by A11,A16,Th63;
@@ -4867,7 +4869,7 @@ A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A18: f*(s^\k) is_not_0 by SEQ_1:7;
+A18: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies 0<(f*(s^\k)).n by A16;
   then
 A19: (f*(s^\k))" is divergent_to+infty by A15,A18,Th62;
@@ -4958,7 +4960,7 @@ A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A18: f*(s^\k) is_not_0 by SEQ_1:7;
+A18: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies (f*(s^\k)).n<0 by A16;
   then
 A19: (f*(s^\k))" is divergent_to-infty by A15,A18,Th63;
@@ -5049,7 +5051,7 @@ A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A18: f*(s^\k) is_not_0 by SEQ_1:7;
+A18: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies 0<(f*(s^\k)).n by A16;
   then
 A19: (f*(s^\k))" is divergent_to+infty by A15,A18,Th62;
@@ -5140,7 +5142,7 @@ A17: (s^\k).n in rng(s^\k) by RFUNCT_2:10;
   end;
   then for n holds 0<>(f*(s^\k)).n;
   then
-A18: f*(s^\k) is_not_0 by SEQ_1:7;
+A18: f*(s^\k) is non-zero by SEQ_1:7;
   for n holds 0<=n implies (f*(s^\k)).n<0 by A16;
   then
 A19: (f*(s^\k))" is divergent_to-infty by A15,A18,Th63;

@@ -9,7 +9,7 @@ environ
  vocabularies FINSEQ_1, RELAT_1, FUNCT_1, ZF_REFLE, PBOOLE, AMI_1, MSUALG_1,
       TREES_3, MSAFREE, DTCONSTR, FREEALG, LANG1, TREES_4, BOOLE, TDGROUP,
       PROB_1, TREES_2, FINSET_1, MCART_1, QC_LANG1, FINSEQ_4, TREES_9, TREES_1,
-      PRALG_1, ORDINAL1, FUNCT_6, CARD_3, MSATERM, ARYTM;
+      PRALG_1, ORDINAL1, FUNCT_6, CARD_3, MSATERM, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, MCART_1,
       RELAT_1, STRUCT_0, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2, FINSET_1,
       TREES_1, TREES_2, CARD_3, FUNCT_6, LANG1, TREES_3, TREES_4, TREES_9,
@@ -56,14 +56,6 @@ A2: p.(n+1) in rng p by FUNCT_1:def 5;
   hence p.(n+1) in x by A2;
 end;
 
-registration
-  let I be non empty set;
-  let X be non-empty ManySortedSet of I;
-  let i be Element of I;
-  cluster X.i -> non empty;
-  coherence;
-end;
-
 reserve S for non void non empty ManySortedSign,
   V for non-empty ManySortedSet of the carrier of S;
 
@@ -97,7 +89,7 @@ definition
   coherence
   proof
 A1: Sym(o, V) = [o,the carrier of S] &
-    NonTerminals DTConMSA V = [:the OperSymbols of S,{the carrier of S}:]
+    NonTerminals DTConMSA V = [:the carrier' of S,{the carrier of S}:]
     by MSAFREE:6,def 11;
     the carrier of S in { the carrier of S } by TARSKI:def 1;
     hence thesis by A1,ZFMISC_1:106;
@@ -216,9 +208,9 @@ Lm5: now
   let S, V;
   set G = DTConMSA V;
   let x be set;
-  NonTerminals G = [:the OperSymbols of S,{the carrier of S}:] by MSAFREE:6;
+  NonTerminals G = [:the carrier' of S,{the carrier of S}:] by MSAFREE:6;
   hence x is NonTerminal of G iff
-  x in [:the OperSymbols of S,{the carrier of S}:];
+  x in [:the carrier' of S,{the carrier of S}:];
 end;
 
 scheme TermInd { S() -> non void non empty ManySortedSign,
@@ -254,7 +246,7 @@ A6: for t being DecoratedTree of the carrier of G st t in rng ts holds P[t];
     {s where s is Symbol of G: ex n being FinSequence st s ==> n}
     by A5,LANG1:def 3;
     then reconsider sy = nt as NonTerminal of G;
-    sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+    sy in [:the carrier' of S(),{the carrier of S()}:] by Lm5;
     then consider o being OperSymbol of S(),
     x2 being Element of {the carrier of S()} such that
 A7: sy = [o,x2] by DOMAIN_1:9;
@@ -321,7 +313,7 @@ A7: for t being DecoratedTree of the carrier of G st t in rng ts holds P[t];
     {s where s is Symbol of G: ex n being FinSequence st s ==> n}
     by A6,LANG1:def 3;
     then reconsider sy = nt as NonTerminal of G;
-    sy in [:the OperSymbols of S(),{the carrier of S()}:] by Lm5;
+    sy in [:the carrier' of S(),{the carrier of S()}:] by Lm5;
     then consider o being OperSymbol of S(),
     x2 being Element of {the carrier of S()} such that
 A8: sy = [o,x2] by DOMAIN_1:9;
@@ -369,13 +361,13 @@ end;
 
 theorem Th2:
   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s]) or
-  t.{} in [:the OperSymbols of S,{the carrier of S}:]
+  t.{} in [:the carrier' of S,{the carrier of S}:]
 proof
   set G = DTConMSA V;
-A1: NonTerminals G = [:the OperSymbols of S,{the carrier of S}:] by MSAFREE:6;
+A1: NonTerminals G = [:the carrier' of S,{the carrier of S}:] by MSAFREE:6;
 A2: the carrier of G = (Terminals G) \/ (NonTerminals G) by LANG1:1;
   reconsider e = {} as Node of t by TREES_1:47;
-  t.e in Terminals G or t.e in [:the OperSymbols of S,{the carrier of S} :]
+  t.e in Terminals G or t.e in [:the carrier' of S,{the carrier of S} :]
   by A1,A2,XBOOLE_0:def 2;
   hence thesis by Lm3;
 end;
@@ -384,15 +376,15 @@ theorem
   for t being c-Term of A,V holds (ex s being SortSymbol of S, x being set st
   x in (the Sorts of A).s & t.{} = [x,s]) or
   (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s]) or
-  t.{} in [:the OperSymbols of S,{the carrier of S}:]
+  t.{} in [:the carrier' of S,{the carrier of S}:]
 proof
   let t be c-Term of A,V;
   set G = DTConMSA ((the Sorts of A) \/ V);
-A1: NonTerminals G = [:the OperSymbols of S,{the carrier of S}:] by MSAFREE:6;
+A1: NonTerminals G = [:the carrier' of S,{the carrier of S}:] by MSAFREE:6;
 A2: the carrier of G = (Terminals G) \/ (NonTerminals G) by LANG1:1;
   reconsider e = {} as Node of t by TREES_1:47;
   t.e in Terminals G or
-  t.e in [:the OperSymbols of S,{the carrier of S}:] by A1,A2,XBOOLE_0:def 2;
+  t.e in [:the carrier' of S,{the carrier of S}:] by A1,A2,XBOOLE_0:def 2;
   hence thesis by Lm4;
 end;
 
@@ -521,7 +513,7 @@ definition
   redefine func sy-tree p -> Term of S,V;
   coherence
   proof
-    sy in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+    sy in [:the carrier' of S,{the carrier of S}:] by Lm5;
     then consider o being OperSymbol of S,
     x2 being Element of {the carrier of S} such that
 A1: sy = [o,x2] by DOMAIN_1:9;
@@ -589,7 +581,7 @@ A1: x in X.s & ts = [x,s] by MSAFREE:7;
   end;
   suppose t.{} is not Terminal of G;
     then reconsider nt = t.e as NonTerminal of G by Lm6;
-    nt in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+    nt in [:the carrier' of S,{the carrier of S}:] by Lm5;
     then consider o being OperSymbol of S,
     x2 being Element of {the carrier of S} such that
 A2: nt = [o,x2] by DOMAIN_1:9;
@@ -719,7 +711,7 @@ A4: t = root-tree [x,s];
   then [x,s] in Terminals G & t.{} = [x,s] by Lm3,TREES_4:3;
   then t.{} is not NonTerminal of G by Lm6;
   then
-A5: not t.{} in [:the OperSymbols of S,{the carrier of S}:] by Lm5;
+A5: not t.{} in [:the carrier' of S,{the carrier of S}:] by Lm5;
   the carrier of S in {the carrier of S} by TARSKI:def 1;
   then consider y being set such that
 A6: y in X.tst & a = root-tree [y,tst] by A2,A3,A5,ZFMISC_1:106;
@@ -1044,7 +1036,7 @@ A10:      t = root-tree [v,s] & v in V2.s by A9,Th5,TARSKI:def 3;
           hence the_sort_of T = s by Th14
             .= (the_arity_of o).i by A8,A10,Th14;
         end;
-        suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
+        suppose t.{} in [:the carrier' of S,{the carrier of S}:];
           then consider o' being OperSymbol of S,
           x2 being Element of {the carrier of S} such that
 A11:      t.{} = [o',x2] by DOMAIN_1:9;
@@ -1079,7 +1071,7 @@ definition
   let S be non void non empty ManySortedSign;
   let V be non-empty ManySortedSet of the carrier of S;
   mode CompoundTerm of S,V -> Term of S,V means
-    it.{} in [:the OperSymbols of S, {the carrier of S}:];
+    it.{} in [:the carrier' of S, {the carrier of S}:];
   existence
   proof consider s being OperSymbol of S;
     reconsider nt = Sym(s, V) as NonTerminal of DTConMSA V;
@@ -1117,8 +1109,8 @@ A2: t.{} = [x,s];
     t = root-tree [x,s] by A2,Th5;
     hence thesis by A1;
   end;
-  suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
-    hence t.{} in [:the OperSymbols of S,{the carrier of S}:];
+  suppose t.{} in [:the carrier' of S,{the carrier of S}:];
+    hence t.{} in [:the carrier' of S,{the carrier of S}:];
   end;
 end;
 
@@ -1149,7 +1141,7 @@ A3: for q being Node of t st q = p holds t|q is Term of S,V and
 A4: p^<*n*> in dom t;
     reconsider u = t|p as Term of S,V by A3;
 A5: (ex s being SortSymbol of S, v being Element of V.s st u.{} = [v,s])
-    or u.{} in [:the OperSymbols of S,{the carrier of S}:] by Th2;
+    or u.{} in [:the carrier' of S,{the carrier of S}:] by Th2;
 A6: <*n*> in (dom t)|p & dom u = (dom t)|p & <*n*> <> {}
     by A4,TREES_1:def 9,TREES_2:def 11;
     let q be Node of t;
@@ -1780,9 +1772,9 @@ A9:   for i being Nat, t being c-Term of A,V st i in dom p & t = p.i
       ex vt being finite DecoratedTree st
       vt = q.i & vt is_an_evaluation_of t,f by Th35;
 A10:  vt.{} = Den(o,A).roots q by A8,TREES_4:def 4;
-A11:  dom ((the Sorts of A) * the ResultSort of S) = the OperSymbols of S &
-      dom ((the Sorts of A)#*the Arity of S) = the OperSymbols of S &
-      o in the OperSymbols of S by PBOOLE:def 3;
+A11:  dom ((the Sorts of A) * the ResultSort of S) = the carrier' of S &
+      dom ((the Sorts of A)#*the Arity of S) = the carrier' of S &
+      o in the carrier' of S by PBOOLE:def 3;
 A12:  Result(o,A)
       = ((the Sorts of A) * the ResultSort of S).o by MSUALG_1:def 10
         .= (the Sorts of A).((the ResultSort of S).o) by A11,FUNCT_1:22

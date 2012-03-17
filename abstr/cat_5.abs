@@ -8,13 +8,13 @@ environ
 
  vocabularies COMMACAT, MCART_1, CAT_1, RELAT_1, FUNCT_1, PARTFUN1, CAT_2,
       BOOLE, GROUP_6, TARSKI, SETFAM_1, GRCAT_1, FRAENKEL, FUNCT_3, CAT_5,
-      REALSET1, ARYTM, GRAPH_1, AMI_1;
+      REALSET1, ARYTM, GRAPH_1, AMI_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
       RELAT_1, REALSET1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NUMBERS,
-      BINOP_1, FUNCT_4, FRAENKEL, GRAPH_1, CAT_1, CAT_2;
- constructors SETFAM_1, PARTFUN1, REALSET1, NATTRA_1;
+      BINOP_1, FUNCT_4, FRAENKEL, STRUCT_0, GRAPH_1, CAT_1, CAT_2;
+ constructors SETFAM_1, PARTFUN1, REALSET1, NATTRA_1, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FRAENKEL, REALSET1,
-      CAT_1, CAT_2;
+      CAT_1, CAT_2, STRUCT_0;
  requirements SUBSET, BOOLE;
 
 
@@ -38,7 +38,7 @@ theorem :: CAT_5:1
   C is Category-like implies D is Category-like;
 
 definition
-  let IT be non void CatStr;
+  let IT be non void non empty CatStr;
   attr IT is with_triple-like_morphisms means
 :: CAT_5:def 1
 
@@ -50,12 +50,12 @@ registration
 end;
 
 theorem :: CAT_5:2
-  for C being with_triple-like_morphisms (non void CatStr),
+  for C being with_triple-like_morphisms (non void non empty CatStr),
       f being Morphism of C holds
   dom f = f`11 & cod f = f`12 & f = [[dom f, cod f], f`2];
 
 definition
-  let C be with_triple-like_morphisms (non void CatStr);
+  let C be with_triple-like_morphisms (non void non empty CatStr);
   let f be Morphism of C;
   redefine func f`11 -> Object of C;
   redefine func f`12 -> Object of C;
@@ -64,7 +64,7 @@ end;
 scheme :: CAT_5:sch 1
  CatEx { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
   ex C being with_triple-like_morphisms strict Category st
-  the Vertices of C = A() &
+  the carrier of C = A() &
   (for a,b being Element of A(), f being Element of B() st
   P[a,b,f] holds [[a,b],f] is Morphism of C) & (for m being Morphism of C
   ex a,b being Element of A(), f being Element of B() st
@@ -87,14 +87,14 @@ scheme :: CAT_5:sch 2
  CatUniq
   { A, B() -> non empty set, P[set, set, set], F(set,set) -> set }:
   for C1, C2 being strict with_triple-like_morphisms Category st
-  the Vertices of C1 = A() &
+  the carrier of C1 = A() &
   (for a,b being Element of A(), f being Element of B() st
   P[a,b,f] holds [[a,b],f] is Morphism of C1) & (for m being Morphism of C1
   ex a,b being Element of A(), f being Element of B() st
   m = [[a,b],f] & P[a,b,f]) &
   (for m1,m2 being (Morphism of C1), a1,a2,a3 being Element of A(),
   f1,f2 being Element of B() st m1 = [[a1,a2],f1] & m2 = [[a2,a3],f2]
-  holds m2*m1 = [[a1,a3], F(f2,f1)]) & the Vertices of C2 = A() &
+  holds m2*m1 = [[a1,a3], F(f2,f1)]) & the carrier of C2 = A() &
   (for a,b being Element of A(), f being Element of B() st
   P[a,b,f] holds [[a,b],f] is Morphism of C2) & (for m being Morphism of C2
   ex a,b being Element of A(), f being Element of B() st
@@ -138,22 +138,22 @@ definition
   func C1 /\ C2 -> strict Category means
 :: CAT_5:def 2
 
-   the Vertices of it = (the Vertices of C1) /\ the Vertices of C2 &
-  the Edges of it = (the Edges of C1) /\ the Edges of C2 &
-  the Source of it = (the Source of C1)|the Edges of C2 &
-  the Target of it = (the Target of C1)|the Edges of C2 &
-  the Comp of it = (the Comp of C1)||the Edges of C2 &
-  the Id of it = (the Id of C1)|the Vertices of C2;
+   the carrier of it = (the carrier of C1) /\ the carrier of C2 &
+  the carrier' of it = (the carrier' of C1) /\ the carrier' of C2 &
+  the Source of it = (the Source of C1)|the carrier' of C2 &
+  the Target of it = (the Target of C1)|the carrier' of C2 &
+  the Comp of it = (the Comp of C1)||the carrier' of C2 &
+  the Id of it = (the Id of C1)|the carrier of C2;
 end;
 
 reserve C for Category,
   C1,C2 for Subcategory of C;
 
 theorem :: CAT_5:5
-  the Vertices of C1 meets the Vertices of C2 implies C1 /\ C2 = C2 /\ C1;
+  the carrier of C1 meets the carrier of C2 implies C1 /\ C2 = C2 /\ C1;
 
 theorem :: CAT_5:6
-  the Vertices of C1 meets the Vertices of C2 implies
+  the carrier of C1 meets the carrier of C2 implies
   C1 /\ C2 is Subcategory of C1 & C1 /\ C2 is Subcategory of C2;
 
 definition
@@ -162,15 +162,15 @@ definition
   func Image F -> strict Subcategory of D means
 :: CAT_5:def 3
 
-  the Vertices of it = rng Obj F & rng F c= the Edges of it &
+  the carrier of it = rng Obj F & rng F c= the carrier' of it &
   for E being Subcategory of D st
-  the Vertices of E = rng Obj F & rng F c= the Edges of E
+  the carrier of E = rng Obj F & rng F c= the carrier' of E
   holds it is Subcategory of E;
 end;
 
 theorem :: CAT_5:7
   for C,D being Category, E be Subcategory of D, F being Functor of C,D st
-  rng F c= the Edges of E holds F is Functor of C, E;
+  rng F c= the carrier' of E holds F is Functor of C, E;
 
 theorem :: CAT_5:8
   for C,D being Category, F being Functor of C,D holds
@@ -212,7 +212,7 @@ definition
   attr C is Categorial means
 :: CAT_5:def 6
 
-  the Vertices of C is categorial &
+  the carrier of C is categorial &
   (for a being Object of C, A being Category st a = A holds
   id a = [[A,A], id A]) & (for m being Morphism of C
   for A,B being Category st A = dom m & B = cod m
@@ -253,8 +253,8 @@ end;
 
 theorem :: CAT_5:14
   for C1, C2 being Categorial Category st
-  the Vertices of C1 = the Vertices of C2 &
-  the Edges of C1 = the Edges of C2
+  the carrier of C1 = the carrier of C2 &
+  the carrier' of C1 = the carrier' of C2
   holds the CatStr of C1 = the CatStr of C2;
 
 registration
@@ -263,7 +263,7 @@ registration
 end;
 
 theorem :: CAT_5:15
-  for C,D being Categorial Category st the Edges of C c= the Edges of D
+  for C,D being Categorial Category st the carrier' of C c= the carrier' of D
   holds C is Subcategory of D;
 
 definition
@@ -289,15 +289,15 @@ theorem :: CAT_5:17
   (for A,B,C being Element of X
   for F being Functor of A,B, G being Functor of B,C st
   F in Y & G in Y holds G*F in Y) & (for A being Element of X holds id A in Y)
-  ex C being strict Categorial Category st the Vertices of C = X &
+  ex C being strict Categorial Category st the carrier of C = X &
   for A,B being Element of X, F being Functor of A,B holds
   [[A,B],F] is Morphism of C iff F in Y;
 
 theorem :: CAT_5:18
   for X being categorial non empty set, Y being non empty set
-  for C1, C2 being strict Categorial Category st the Vertices of C1 = X &
+  for C1, C2 being strict Categorial Category st the carrier of C1 = X &
   (for A,B being Element of X, F being Functor of A,B holds
-  [[A,B],F] is Morphism of C1 iff F in Y) & the Vertices of C2 = X &
+  [[A,B],F] is Morphism of C1 iff F in Y) & the carrier of C2 = X &
   (for A,B being Element of X, F being Functor of A,B holds
   [[A,B],F] is Morphism of C2 iff F in Y) holds C1 = C2;
 
@@ -316,16 +316,16 @@ end;
 
 theorem :: CAT_5:19
   for C1,C2 being full (Categorial Category) st
-  the Vertices of C1 = the Vertices of C2 holds
+  the carrier of C1 = the carrier of C2 holds
   the CatStr of C1 = the CatStr of C2;
 
 theorem :: CAT_5:20
   for A being categorial non empty set
-  ex C being full (Categorial strict Category) st the Vertices of C = A;
+  ex C being full (Categorial strict Category) st the carrier of C = A;
 
 theorem :: CAT_5:21
   for C being Categorial Category, D being full (Categorial Category) st
-  the Vertices of C c= the Vertices of D holds C is Subcategory of D;
+  the carrier of C c= the carrier of D holds C is Subcategory of D;
 
 theorem :: CAT_5:22
   for C being Category, D1,D2 being Categorial Category
@@ -337,11 +337,11 @@ begin :: Slice category
 definition
   let C be Category;
   let o be Object of C;
-  func Hom o -> Subset of the Edges of C equals
+  func Hom o -> Subset of the carrier' of C equals
 :: CAT_5:def 9
 
   (the Target of C)"{o};
-  func o Hom -> Subset of the Edges of C equals
+  func o Hom -> Subset of the carrier' of C equals
 :: CAT_5:def 10
 
   (the Source of C)"{o};
@@ -383,7 +383,7 @@ definition
   func C-SliceCat(o) -> strict with_triple-like_morphisms Category means
 :: CAT_5:def 11
 
-   the Vertices of it = Hom o &
+   the carrier of it = Hom o &
   (for a,b being Element of Hom o, f being Morphism of C st
   dom b = cod f & a = b*f holds [[a,b],f] is Morphism of it) &
   (for m being Morphism of it
@@ -395,7 +395,7 @@ definition
   func o-SliceCat(C) -> strict with_triple-like_morphisms Category means
 :: CAT_5:def 12
 
-   the Vertices of it = o Hom &
+   the carrier of it = o Hom &
   (for a,b being Element of o Hom, f being Morphism of C st
   dom f = cod a & f*a = b holds [[a,b],f] is Morphism of it) &
   (for m being Morphism of it

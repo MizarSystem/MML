@@ -13,6 +13,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="RINFSUP2"/>
 </Signature>
 <FCluster aid="RINFSUP2" nr="1">
@@ -20,25 +22,25 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Adjective nr="17">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="94">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Adjective nr="17">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="25"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINFSUP2" nr="2">
@@ -46,25 +48,25 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Adjective nr="17">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="87">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="48"/>
+<Adjective nr="17">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="24"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

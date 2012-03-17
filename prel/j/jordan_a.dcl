@@ -24,7 +24,6 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
@@ -53,15 +52,15 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="389">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="18">
+<Adjective nr="7"/>
+<Adjective nr="19">
 <Func kind="U" nr="1">
 <Func kind="K" nr="371">
 <Func kind="K" nr="298">
@@ -72,9 +71,9 @@
 </Func>
 </Func>
 </Func>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="92">
+<Adjective nr="105">
 <Func kind="K" nr="371">
 <Func kind="K" nr="298">
 <LocusVar nr="1"/>
@@ -90,7 +89,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="94"/>
+<Adjective nr="107"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -100,13 +99,13 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="18">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="390">
@@ -116,7 +115,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="100">
+<Adjective nr="109">
 <Func kind="K" nr="298">
 <Num nr="2"/>
 </Func>
@@ -127,7 +126,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="94"/>
+<Adjective nr="107"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -139,12 +138,12 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="18">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="44" value="false"/>
+<Adjective nr="2" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

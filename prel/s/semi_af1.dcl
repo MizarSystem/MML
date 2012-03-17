@@ -24,12 +24,12 @@
 </Signature>
 <RCluster aid="SEMI_AF1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 </Registrations>

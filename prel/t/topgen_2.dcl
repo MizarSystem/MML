@@ -20,8 +20,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="CANTOR_1"/>
 <ArticleID name="YELLOW_8"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FRAENKEL"/>
@@ -30,9 +30,9 @@
 </Signature>
 <RCluster aid="TOPGEN_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -48,30 +48,30 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="33"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPGEN_2" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33"/>
-<Adjective nr="52" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPGEN_2" nr="1">
@@ -83,13 +83,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_2" nr="2">
@@ -103,37 +103,37 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="32"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPGEN_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="65"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="52" value="false"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

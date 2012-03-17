@@ -11,47 +11,11 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CANTOR_1"/>
 </Signature>
 <FCluster aid="CANTOR_1" nr="1">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="74">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="4"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CANTOR_1" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="23"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="U" nr="4">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CANTOR_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -65,7 +29,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="85">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

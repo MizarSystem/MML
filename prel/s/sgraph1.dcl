@@ -22,11 +22,11 @@
 </Signature>
 <RCluster aid="SGRAPH1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SGRAPH1" nr="1">
@@ -42,12 +42,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SGRAPH1" nr="2">
@@ -56,7 +56,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="121">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

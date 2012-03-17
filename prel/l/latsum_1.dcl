@@ -18,42 +18,42 @@
 </Signature>
 <FCluster aid="LATSUM_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="83">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATSUM_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="83">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -25,15 +25,15 @@
 </Signature>
 <RCluster aid="RUSUB_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="82"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -42,14 +42,14 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 </Registrations>

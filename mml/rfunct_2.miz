@@ -8,20 +8,21 @@ environ
 
  vocabularies SEQ_1, ORDINAL2, SEQM_3, PARTFUN1, FUNCT_1, RELAT_1, BOOLE,
       ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4, PARTFUN2,
-      RCOMP_1, RFUNCT_2, FRECHET2;
+      RCOMP_1, RFUNCT_2, FRECHET2, ANPROJ_1, PROB_1, REALSET1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_1, SEQ_1,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, REALSET1,
+      RELSET_1, PARTFUN1, VALUED_1, SEQ_1,
       SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3, XXREAL_0,
       XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
-      PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2;
+      PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, REALSET1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
-      MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2, RELAT_1, REALSET1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SEQM_3, XBOOLE_0;
- theorems TARSKI, SUBSET_1, FUNCT_1, REAL_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
+ definitions TARSKI, SEQM_3, XBOOLE_0, FUNCT_1;
+ theorems TARSKI, SUBSET_1, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       PARTFUN1, PARTFUN2, RFUNCT_1, FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0, VALUED_1;
+      XBOOLE_1, XREAL_1, XXREAL_0, VALUED_1, XXREAL_1, ZFMISC_1;
 
 begin
 
@@ -278,19 +279,13 @@ A2: x = (seq *Ns).n by A1,Th9;
 end;
 
 theorem
-  seq1 is subsequence of seq & seq is_not_0 implies seq1 is_not_0
+  seq1 is subsequence of seq & seq is non-zero implies seq1 is non-zero
 proof
   assume
-A1: seq1 is subsequence of seq & seq is_not_0;
+A1: seq1 is subsequence of seq & seq is non-zero;
   then consider Ns such that
 A2: seq1=seq*Ns by SEQM_3:def 10;
-  now
-    given n such that
-A3: seq1.n=0;
-    seq.(Ns.n) = 0 by A2,A3,SEQM_3:31;
-    hence contradiction by A1,SEQ_1:7;
-  end;
-  hence thesis by SEQ_1:7;
+  thus thesis by A1,A2;
 end;
 
 theorem Th13:
@@ -390,10 +385,10 @@ A3: seq1 is convergent by A1,SEQ_2:23;
     let n;
 A4: seq1.n = -seq.n by SEQ_1:14;
     seq.n<=0 by A2;
-    hence -0<=seq1.n by A4,XREAL_1:26;
+    hence -(0 qua Real)<=seq1.n by A4,XREAL_1:26;
   end;
   then 0 <= lim seq1 by A3,SEQ_2:31;
-  then -0 <= - lim seq by A1,SEQ_2:24;
+  then -(0 qua Real) <= - lim seq by A1,SEQ_2:24;
   hence thesis by XREAL_1:26;
 end;
 
@@ -533,7 +528,7 @@ A2: rng seq c= dom abs(h) by VALUED_1:def 11;
 end;
 
 theorem
-  rng seq c= dom (h^) implies h*seq is_not_0
+  rng seq c= dom (h^) implies h*seq is non-zero
 proof
   assume
 A1: rng seq c= dom (h^);
@@ -619,7 +614,6 @@ theorem
   (h1-h2)*seq = h1*seq - h2*seq & (h1(#)h2)*seq = (h1*seq) (#) (h2*seq)
 proof
   assume h1 is total & h2 is total;
-  then h1+h2 is total;
   then dom (h1+h2) = REAL by PARTFUN1:def 4;
   then dom h1 /\ dom h2 = REAL by VALUED_1:def 1;
   then
@@ -870,12 +864,12 @@ end;
 
 theorem Th41:
   rng h is bounded & upper_bound (rng h) = lower_bound (rng h) implies
-  h is_constant_on dom h
+  h|dom h is constant
 proof
   assume that
 A1: rng h is bounded and
 A2: upper_bound (rng h) = lower_bound (rng h) and
-A3: not h is_constant_on dom h;
+A3: not h|dom h is constant;
   consider x1,x2 being Element of REAL such that
 A4: x1
   in dom h /\ dom h & x2 in dom h /\ dom h & h.x1 <> h.x2 by A3,PARTFUN2:77;
@@ -885,7 +879,7 @@ end;
 
 theorem
   Y c= dom h & h.:Y is bounded & upper_bound (h.:Y) = lower_bound (h.:Y)
-  implies h is_constant_on Y
+  implies h|Y is constant
 proof
   assume that
 A1: Y c= dom h & h.:Y is bounded and
@@ -895,7 +889,7 @@ A3: dom (h|Y) = dom h /\ Y by RELAT_1:90
 A4: rng (h|Y) is bounded by A1,RELAT_1:148;
   upper_bound (rng (h|Y)) = upper_bound (h.:Y) by RELAT_1:148
     .= lower_bound (rng (h|Y)) by A2,RELAT_1:148;
-  then h|Y is_constant_on Y by A3,A4,Th41;
+  then h|Y|Y is constant by A3,A4,Th41;
   then consider r such that
 A5: for p st p in Y /\ dom (h|Y) holds (h|Y).p = r by PARTFUN2:76;
   now
@@ -915,43 +909,158 @@ A7: (h|Y).p=r by A5;
 end;
 
 definition
-  let h,Y;
-  pred h is_increasing_on Y means
-  :Def2:
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 < h.r2;
-  pred h is_decreasing_on Y means
-  :Def3:
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 < h.r1;
-  pred h is_non_decreasing_on Y means
-  :Def4:
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 <= h.r2;
-  pred h is_non_increasing_on Y means
-  :Def5:
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <= h.r1;
+  let h;
+  attr h is increasing means
+:NDef2:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 < h.r2;
+  attr h is decreasing means
+:NDef3:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 < h.r1;
+  attr h is non-decreasing means
+:NDef4:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 <= h.r2;
+  attr h is non-increasing means
+:NDef5:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 <= h.r1;
+end;
+
+theorem Def2:
+  h|Y is increasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds
+   h.r1 < h.r2
+proof
+  thus h|Y is increasing implies
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 > h.r1
+  proof
+    assume
+A1: h|Y is increasing;
+    let r1,r2 such that
+A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+B2: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2 by A2,RELAT_1:90;
+    (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by B2,FUNCT_1:70;
+    hence thesis by A1,NDef2,B2;
+  end;
+  assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2>h.r1;
+  let r1,r2;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 < (h|Y).r2 by A3,X;
+end;
+
+theorem Def3:
+ h|Y is decreasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r2 < h.r1
+proof
+  thus h|Y is decreasing implies
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 < h.r1
+  proof
+    assume
+A1: h|Y is decreasing;
+    let r1,r2 such that
+A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+B2: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2 by A2,RELAT_1:90;
+    (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by B2,FUNCT_1:70;
+    hence thesis by A1,NDef3,B2;
+  end;
+  assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2<h.r1;
+  let r1,r2;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 > (h|Y).r2 by A3,X;
+end;
+
+theorem Def4:
+ h|Y is non-decreasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r1 <= h.r2
+proof
+  thus h|Y is non-decreasing implies
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 <= h.r2
+  proof
+    assume
+A1: h|Y is non-decreasing;
+    let r1,r2 such that
+A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+B2: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2 by A2,RELAT_1:90;
+    (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by B2,FUNCT_1:70;
+    hence thesis by A1,NDef4,B2;
+  end;
+  assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
+  dom h & r1<r2 holds h.r1 <= h.r2;
+  let r1,r2;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 <= (h|Y).r2 by A3,X;
+end;
+
+theorem Def5:
+ h|Y is non-increasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r2 <= h.r1
+proof
+  thus h|Y is non-increasing implies
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <= h.r1
+  proof
+    assume
+A1: h|Y is non-increasing;
+    let r1,r2 such that
+A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
+B2: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2 by A2,RELAT_1:90;
+    (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by B2,FUNCT_1:70;
+    hence thesis by A1,NDef5,B2;
+  end;
+  assume
+A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2<=h.r1;
+  let r1,r2;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 >= (h|Y).r2 by A3,X;
 end;
 
 definition
-  let h,Y;
-  pred h is_monotone_on Y means
+  let h;
+  attr h is monotone means
   :Def6:
-  h is_non_decreasing_on Y or h is_non_increasing_on Y;
+  h is non-decreasing or h is non-increasing;
 end;
 
-canceled 5;
+registration
+ cluster non-decreasing -> monotone PartFunc of REAL,REAL;
+ coherence by Def6;
+ cluster non-increasing -> monotone PartFunc of REAL,REAL;
+ coherence by Def6;
+ cluster non monotone ->
+  non non-decreasing non non-increasing PartFunc of REAL,REAL;
+ coherence;
+end;
+
+canceled;
 
 theorem Th48:
 
-h is_non_decreasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+h|Y is non-decreasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
   r1<=r2 holds h.r1 <= h.r2
 proof
-  thus h is_non_decreasing_on Y implies
+  thus h|Y is non-decreasing implies
   for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2 holds h.r1 <= h.r2
   proof
     assume
-A1: h is_non_decreasing_on Y;
+A1: h|Y is non-decreasing;
     let r1,r2 such that
 A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
-    now per cases by A2,REAL_1:def 5;
+    now per cases by A2,XXREAL_0:1;
       suppose r1 < r2;
         hence thesis by A1,A2,Def4;
       end;
@@ -965,23 +1074,27 @@ A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
 A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\
   dom h & r1<=r2 holds h.r1 <= h.r2;
   let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
-  hence thesis by A3;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 <= (h|Y).r2 by A3,X;
 end;
 
 theorem Th49:
 
-h is_non_increasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+h|Y is non-increasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
   r1<=r2 holds h.r2 <= h.r1
 proof
-  thus h is_non_increasing_on Y implies
+  thus h|Y is non-increasing implies
   for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2 holds h.r2 <= h.r1
   proof
     assume
-A1: h is_non_increasing_on Y;
+A1: h|Y is non-increasing;
     let r1,r2 such that
 A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
-    now per cases by A2,REAL_1:def 5;
+    now per cases by A2,XXREAL_0:1;
       suppose r1 < r2;
         hence thesis by A1,A2,Def5;
       end;
@@ -994,193 +1107,192 @@ A2: r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2;
   assume
 A3: for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<=r2 holds h.r2<=h.r1;
   let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2;
-  hence thesis by A3;
+  assume
+Z: r1 in dom(h|Y) & r2 in dom(h|Y) & r1<r2;
+  then
+X:   r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 by RELAT_1:90;
+   (h|Y).r1 = h.r1 & (h|Y).r2 = h.r2 by FUNCT_1:70,Z;
+  hence (h|Y).r1 >= (h|Y).r2 by A3,X;
 end;
 
-theorem Th50:
-  h is_increasing_on X iff h|X is_increasing_on X
-proof
-  thus h is_increasing_on X implies h|X is_increasing_on X
-  proof
-    assume
-A1: h is_increasing_on X;
-    let r1,r2;
-    assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
-    then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
-    then
-A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
-    then h.r1<h.r2 by A1,Def2;
-    then (h|X).r1<h.r2 by A2,FUNCT_1:71;
-    hence thesis by A2,FUNCT_1:71;
+registration
+ cluster decreasing -> non-increasing PartFunc of REAL,REAL;
+ coherence
+  proof let h be PartFunc of REAL,REAL;
+   assume
+Z:   h is decreasing;
+   let r1,r2 such that
+Z1: r1 in dom h and
+Z2: r2 in dom h and
+Z3: r1<r2;
+   thus h.r2 <= h.r1 by Z1,Z2,Z3,NDef3,Z;
   end;
-  assume
-A3: h|X is_increasing_on X;
-  let r1,r2;
-  assume
-A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
-  then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
-  then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
-  then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
-  then (h|X).r1<(h|X).r2 by A3,Def2;
-  then h.r1<(h|X).r2 by A4,FUNCT_1:71;
-  hence thesis by A4,FUNCT_1:71;
+ cluster increasing -> non-decreasing PartFunc of REAL,REAL;
+ coherence
+  proof let h be PartFunc of REAL,REAL;
+   assume
+Z:   h is increasing;
+   let r1,r2 such that
+Z1: r1 in dom h and
+Z2: r2 in dom h and
+Z3: r1<r2;
+   thus h.r1 <= h.r2 by Z1,Z2,Z3,NDef2,Z;
+  end;
+ cluster non-decreasing non-increasing -> constant PartFunc of REAL,REAL;
+ coherence
+  proof let h be PartFunc of REAL,REAL;
+   assume
+Z:   h is non-decreasing non-increasing;
+   let r1,r2 be set;
+   assume
+Z1: r1 in dom h & r2 in dom h;
+    then reconsider r1,r2 as Real;
+    r1 < r2 or r1 = r2 or r2 < r1 by XXREAL_0:1;
+    then h.r1 <= h.r2 & h.r2 <= h.r1 by Z1,NDef5,NDef4,Z;
+   hence thesis by XXREAL_0:1;
+  end;
 end;
 
-theorem Th51:
-  h is_decreasing_on X iff h|X is_decreasing_on X
-proof
-  thus h is_decreasing_on X implies h|X is_decreasing_on X
-  proof
-    assume
-A1: h is_decreasing_on X;
-    let r1,r2;
-    assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
-    then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
-    then
-A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
-    then h.r1>h.r2 by A1,Def3;
-    then (h|X).r1>h.r2 by A2,FUNCT_1:71;
-    hence (h|X).r1>(h|X).r2 by A2,FUNCT_1:71;
+registration
+ cluster trivial -> increasing decreasing PartFunc of REAL,REAL;
+ coherence
+  proof let h be PartFunc of REAL,REAL;
+   assume
+Z:  h is trivial;
+   thus h is increasing
+    proof let r1,r2;
+     assume r1 in dom h & r2 in dom h;
+      then r1 = r2 by Z,ZFMISC_1:def 10;
+     hence thesis;
+    end;
+   let r1,r2;
+   assume r1 in dom h & r2 in dom h;
+    then r1 = r2 by Z,ZFMISC_1:def 10;
+   hence thesis;
   end;
-  assume
-A3: h|X is_decreasing_on X;
-  let r1,r2;
-  assume
-A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
-  then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
-  then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
-  then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
-  then (h|X).r1>(h|X).r2 by A3,Def3;
-  then h.r1>(h|X).r2 by A4,FUNCT_1:71;
-  hence h.r1>h.r2 by A4,FUNCT_1:71;
 end;
+
+registration
+ cluster constant -> non-increasing non-decreasing PartFunc of REAL,REAL;
+ coherence
+  proof let h be PartFunc of REAL,REAL;
+   assume
+Z:  h is constant;
+   thus h is non-increasing
+    proof let r1,r2;
+     assume r1 in dom h & r2 in dom h;
+      then h.r1 = h.r2 by Z,FUNCT_1:def 16;
+     hence thesis;
+    end;
+   let r1,r2;
+   assume r1 in dom h & r2 in dom h;
+    then h.r1 = h.r2 by Z,FUNCT_1:def 16;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster trivial PartFunc of REAL,REAL;
+ existence
+  proof
+    reconsider f = {} as PartFunc of REAL,REAL by RELSET_1:25;
+   take f;
+   thus thesis;
+  end;
+end;
+
+registration let h be increasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> increasing PartFunc of REAL,REAL;
+ coherence
+  proof
+  now let r1,r2;
+   assume
+Z:  r1 in dom(h|X) & r2 in dom(h|X);
+    then
+A:   r1 in dom h & r2 in dom h by RELAT_1:86;
+B:  h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by Z,FUNCT_1:70;
+   assume r1 < r2;
+   hence (h|X).r1 < (h|X).r2 by B,A,NDef2;
+  end;
+ hence thesis by NDef2;
+ end;
+end;
+
+registration let h be decreasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> decreasing PartFunc of REAL,REAL;
+ coherence
+  proof
+  now let r1,r2;
+   assume
+Z:  r1 in dom(h|X) & r2 in dom(h|X);
+    then
+A:   r1 in dom h & r2 in dom h by RELAT_1:86;
+B:  h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by Z,FUNCT_1:70;
+   assume r1 < r2;
+   hence (h|X).r1 > (h|X).r2 by B,A,NDef3;
+  end;
+ hence thesis by NDef3;
+ end;
+end;
+
+registration let h be non-decreasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> non-decreasing PartFunc of REAL,REAL;
+ coherence
+  proof
+  now let r1,r2;
+   assume
+Z:  r1 in dom(h|X) & r2 in dom(h|X);
+    then
+A:   r1 in dom h & r2 in dom h by RELAT_1:86;
+B:  h.r1 = (h|X).r1 & h.r2 = (h|X).r2 by Z,FUNCT_1:70;
+   assume r1 < r2;
+   hence (h|X).r1 <= (h|X).r2 by B,A,NDef4;
+  end;
+ hence thesis by NDef4;
+ end;
+end;
+
+canceled 4;
 
 theorem
-  h is_non_decreasing_on X iff h|X is_non_decreasing_on X
-proof
-  thus h is_non_decreasing_on X implies h|X is_non_decreasing_on X
-  proof
-    assume
-A1: h is_non_decreasing_on X;
-    let r1,r2;
-    assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
-    then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
-    then
-A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
-    then h.r1<=h.r2 by A1,Def4;
-    then (h|X).r1<=h.r2 by A2,FUNCT_1:71;
-    hence thesis by A2,FUNCT_1:71;
-  end;
-  assume
-A3: h|X is_non_decreasing_on X;
-  let r1,r2;
-  assume
-A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
-  then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
-  then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
-  then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
-  then (h|X).r1<=(h|X).r2 by A3,Def4;
-  then h.r1<=(h|X).r2 by A4,FUNCT_1:71;
-  hence thesis by A4,FUNCT_1:71;
-end;
-
-theorem
-  h is_non_increasing_on X iff h|X is_non_increasing_on X
-proof
-  thus h is_non_increasing_on X implies h|X is_non_increasing_on X
-  proof
-    assume
-A1: h is_non_increasing_on X;
-    let r1,r2;
-    assume r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2;
-    then r1 in X/\(X/\dom h) & r2 in X/\(X/\dom h) & r1<r2 by RELAT_1:90;
-    then
-A2: r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2 by XBOOLE_1:16;
-    then h.r1>=h.r2 by A1,Def5;
-    then (h|X).r1>=h.r2 by A2,FUNCT_1:71;
-    hence thesis by A2,FUNCT_1:71;
-  end;
-  assume
-A3: h|X is_non_increasing_on X;
-  let r1,r2;
-  assume
-A4: r1 in X/\dom h & r2 in X/\dom h & r1<r2;
-  then r1 in X/\X/\dom h & r2 in X/\X/\dom h & r1<r2;
-  then r1 in X/\(dom h /\X) & r2 in X/\(dom h /\ X) & r1<r2 by XBOOLE_1:16;
-  then r1 in X/\dom(h|X) & r2 in X/\dom(h|X) & r1<r2 by RELAT_1:90;
-  then (h|X).r1>=(h|X).r2 by A3,Def5;
-  then h.r1>=(h|X).r2 by A4,FUNCT_1:71;
-  hence thesis by A4,FUNCT_1:71;
-end;
-
-theorem
-  Y misses dom h implies h is_increasing_on Y & h is_decreasing_on Y &
-  h is_non_decreasing_on Y & h is_non_increasing_on Y & h is_monotone_on Y
+  Y misses dom h implies h|Y is increasing & h|Y is decreasing &
+  h|Y is non-decreasing & h|Y is non-increasing & h|Y is monotone
 proof
   assume
 A1: Y /\ dom h = {};
   then for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies
   h.r1<h.r2);
-  hence h is_increasing_on Y by Def2;
+  hence h|Y is increasing by Def2;
   for r1,r2 holds ( r1 in Y /\ dom h &
   r2 in Y /\ dom h & r1<r2 implies h.r2<h.r1) by A1;
-  hence h is_decreasing_on Y by Def3;
+  hence h|Y is decreasing by Def3;
   for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.r1<=
   h.r2) by A1;
-  hence h is_non_decreasing_on Y by Def4;
+  hence h|Y is non-decreasing by Def4;
   for r1,r2 holds ( r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 implies h.r2<=
   h.r1) by A1;
-  hence h is_non_increasing_on Y by Def5;
-  hence thesis by Def6;
+  hence h|Y is non-increasing by Def5;
+  hence thesis;
 end;
 
 theorem
-  h is_increasing_on Y implies h is_non_decreasing_on Y
-proof
-  assume
-A1: h is_increasing_on Y;
-  let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
-  hence thesis by A1,Def2;
-end;
+  h is increasing implies h is non-decreasing;
 
 theorem
-  h is_decreasing_on Y implies h is_non_increasing_on Y
-proof
-  assume
-A1: h is_decreasing_on Y;
-  let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
-  hence thesis by A1,Def3;
-end;
+  h is decreasing implies h is non-increasing;
 
 theorem
-  h is_constant_on Y implies h is_non_decreasing_on Y
-proof
-  assume
-A1: h is_constant_on Y;
-  let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
-  hence h.r1 <= h.r2 by A1,PARTFUN2:77;
-end;
+  h is constant implies h is non-decreasing;
 
 theorem
-  h is_constant_on Y implies h is_non_increasing_on Y
-proof
-  assume
-A1: h is_constant_on Y;
-  let r1,r2;
-  assume r1 in Y /\ dom h & r2 in Y /\ dom h & r1 < r2;
-  hence h.r2 <= h.r1 by A1,PARTFUN2:77;
-end;
+  h is constant implies h is non-increasing;
 
 theorem
-  h is_non_decreasing_on Y & h is_non_increasing_on X implies
-  h is_constant_on (Y /\ X)
+  h|Y is non-decreasing & h|X is non-increasing implies
+  h|(Y /\ X) is constant
 proof
   assume
-A1: h is_non_decreasing_on Y & h is_non_increasing_on X;
+A1: h|Y is non-decreasing & h|X is non-increasing;
   now per cases;
     suppose Y /\ X /\ dom h = {};
       then Y /\ X misses dom h by XBOOLE_0:def 7;
@@ -1224,66 +1336,74 @@ A8:           h.p <= h.x by A1,A3,A4,Th48;
         end;
         hence for p st p in Y /\ X /\ dom h holds h.p = r1;
       end;
-      hence h is_constant_on (Y /\ X) by PARTFUN2:76;
+      hence h|(Y /\ X) is constant by PARTFUN2:76;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  X c= Y & h is_increasing_on Y implies h is_increasing_on X
+  X c= Y & h|Y is increasing implies h|X is increasing
 proof
   assume
-A1: X c= Y & h is_increasing_on Y;
-  let r1,r2 such that
+A1: X c= Y & h|Y is increasing;
+  now let r1,r2 such that
 A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
-  hence thesis by A1,A2,Def2;
+  hence h.r1 < h.r2 by A1,A2,Def2;
+ end;
+ hence thesis by Def2;
 end;
 
 theorem
-  X c= Y & h is_decreasing_on Y implies h is_decreasing_on X
+  X c= Y & h|Y is decreasing implies h|X is decreasing
 proof
   assume
-A1: X c= Y & h is_decreasing_on Y;
-  let r1,r2 such that
+A1: X c= Y & h|Y is decreasing;
+  now let r1,r2 such that
 A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
-  hence thesis by A1,A2,Def3;
+  hence h.r1 > h.r2 by A1,A2,Def3;
+ end;
+ hence thesis by Def3;
 end;
 
 theorem
-  X c= Y & h is_non_decreasing_on Y implies h is_non_decreasing_on X
+  X c= Y & h|Y is non-decreasing implies h|X is non-decreasing
 proof
   assume
-A1: X c= Y & h is_non_decreasing_on Y;
-  let r1,r2 such that
+A1: X c= Y & h|Y is non-decreasing;
+  now let r1,r2 such that
 A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
-  hence thesis by A1,A2,Def4;
+  hence h.r1 <= h.r2 by A1,A2,Def4;
+  end;
+ hence thesis by Def4;
 end;
 
 theorem
-  X c= Y & h is_non_increasing_on Y implies h is_non_increasing_on X
+  X c= Y & h|Y is non-increasing implies h|X is non-increasing
 proof
   assume
-A1: X c= Y & h is_non_increasing_on Y;
-  let r1,r2 such that
+A1: X c= Y & h|Y is non-increasing;
+  now let r1,r2 such that
 A2: r1 in X /\ dom h & r2 in X /\ dom h & r1 < r2;
   X /\ dom h c= Y /\ dom h by A1,XBOOLE_1:26;
-  hence thesis by A1,A2,Def5;
+  hence h.r1 >= h.r2 by A1,A2,Def5;
+ end;
+ hence thesis by Def5;
 end;
 
 theorem Th64:
-  (h is_increasing_on Y & 0<r implies r(#)h is_increasing_on Y) &
-  (r = 0 implies r(#)h is_constant_on Y) &
-  (h is_increasing_on Y & r<0 implies r(#)h is_decreasing_on Y)
+  (h|Y is increasing & 0<r implies (r(#)h)|Y is increasing) &
+  (r = 0 implies (r(#)h)|Y is constant) &
+  (h|Y is increasing & r<0 implies (r(#)h)|Y is decreasing)
 proof
-  thus h is_increasing_on Y & 0<r implies r(#)h is_increasing_on Y
+  thus h|Y is increasing & 0<r implies (r(#)h)|Y is increasing
   proof
     assume
-A1: h is_increasing_on Y & 0<r;
-    let r1,r2;
+A1: h|Y is increasing & 0<r;
+    now let r1,r2;
     assume
 A2: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#) h) & r1<r2;
     then
@@ -1295,7 +1415,10 @@ A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
     then r* h.r1 < r* h.r2 by A1,XREAL_1:70;
     then (r(#)h).r1 < r * h.r2 by A3,VALUED_1:def 5;
     hence (r(#)h).r1 < (r(#)h).r2 by A3,VALUED_1:def 5;
-  end; thus r = 0 implies r(#)h is_constant_on Y
+   end;
+   hence thesis by Def2;
+  end;
+ thus r = 0 implies (r(#)h)|Y is constant
   proof
     assume
 A4: r = 0;
@@ -1310,8 +1433,8 @@ A5:   r1 in dom (r(#)h) by XBOOLE_0:def 3;
     hence thesis by PARTFUN2:76;
   end;
   assume
-A6: h is_increasing_on Y & r<0;
-  let r1,r2;
+A6: h|Y is increasing & r<0;
+  now let r1,r2;
   assume
 A7: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#) h) & r1<r2;
   then
@@ -1322,18 +1445,20 @@ A8: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
   then h.r1 < h.r2 by A6,A7,Def2;
   then r* h.r2 < r* h.r1 by A6,XREAL_1:71;
   then (r(#)h).r2 < r * h.r1 by A8,VALUED_1:def 5;
-  hence thesis by A8,VALUED_1:def 5;
+  hence (r(#)h).r2 < (r(#)h).r1 by A8,VALUED_1:def 5;
+ end;
+ hence thesis by Def3;
 end;
 
 theorem
-  (h is_decreasing_on Y & 0<r implies r(#)h is_decreasing_on Y) &
-  (h is_decreasing_on Y & r<0 implies r(#)h is_increasing_on Y)
+  (h|Y is decreasing & 0<r implies (r(#)h)|Y is decreasing) &
+  (h|Y is decreasing & r<0 implies (r(#)h)|Y is increasing)
 proof
-  thus h is_decreasing_on Y & 0<r implies r(#)h is_decreasing_on Y
+  thus h|Y is decreasing & 0<r implies (r(#)h)|Y is decreasing
   proof
     assume
-A1: h is_decreasing_on Y & 0<r;
-    let r1,r2;
+A1: h|Y is decreasing & 0<r;
+    now let r1,r2;
     assume
 A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#) h) & r1<r2;
     then
@@ -1344,11 +1469,13 @@ A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
     then h.r2 < h.r1 by A1,A2,Def3;
     then r * h.r2 < r * h.r1 by A1,XREAL_1:70;
     then (r(#)h).r2 < r * h.r1 by A3,VALUED_1:def 5;
-    hence thesis by A3,VALUED_1:def 5;
+    hence (r(#)h).r2 < (r(#)h).r1 by A3,VALUED_1:def 5;
+   end;
+   hence thesis by Def3;
   end;
   assume
-A4: h is_decreasing_on Y & r<0;
-  let r1,r2;
+A4: h|Y is decreasing & r<0;
+  now let r1,r2;
   assume
 A5: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#) h) & r1<r2;
   then
@@ -1359,18 +1486,20 @@ A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
   then h.r2 < h.r1 by A4,A5,Def3;
   then r* h.r1 < r* h.r2 by A4,XREAL_1:71;
   then (r(#) h).r1 < r* h.r2 by A6,VALUED_1:def 5;
-  hence thesis by A6,VALUED_1:def 5;
+  hence (r(#) h).r1 < (r(#) h).r2 by A6,VALUED_1:def 5;
+ end;
+ hence thesis by Def2;
 end;
 
 theorem Th66:
-  (h is_non_decreasing_on Y & 0<=r implies r(#)h is_non_decreasing_on Y) &
-  (h is_non_decreasing_on Y & r<=0 implies r(#)h is_non_increasing_on Y)
+  (h|Y is non-decreasing & 0<=r implies (r(#)h)|Y is non-decreasing) &
+  (h|Y is non-decreasing & r<=0 implies (r(#)h)|Y is non-increasing)
 proof
-  thus h is_non_decreasing_on Y & 0<=r implies r(#)h is_non_decreasing_on Y
+  thus h|Y is non-decreasing & 0<=r implies (r(#)h)|Y is non-decreasing
   proof
     assume
-A1: h is_non_decreasing_on Y & 0<=r;
-    let r1,r2;
+A1: h|Y is non-decreasing & 0<=r;
+    now let r1,r2;
     assume
 A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#) h) & r1<r2;
     then
@@ -1381,11 +1510,13 @@ A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
     then h.r1 <= h.r2 by A1,A2,Def4;
     then r* h.r1 <= (h.r2)*r by A1,XREAL_1:66;
     then (r(#)h).r1 <= r * h.r2 by A3,VALUED_1:def 5;
-    hence thesis by A3,VALUED_1:def 5;
+    hence (r(#)h).r1 <= (r(#)h).r2 by A3,VALUED_1:def 5;
+   end;
+   hence thesis by Def4;
   end;
   assume
-A4: h is_non_decreasing_on Y & r<=0;
-  let r1,r2;
+A4: h|Y is non-decreasing & r<=0;
+  now let r1,r2;
   assume
 A5: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#) h) & r1<r2;
   then
@@ -1396,18 +1527,20 @@ A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
   then h.r1<=h.r2 by A4,A5,Def4;
   then r*h.r2<=r*h.r1 by A4,XREAL_1:67;
   then (r(#)h).r2<=r*h.r1 by A6,VALUED_1:def 5;
-  hence thesis by A6,VALUED_1:def 5;
+  hence (r(#)h).r2<=(r(#)h).r1 by A6,VALUED_1:def 5;
+ end;
+ hence thesis by Def5;
 end;
 
 theorem
-  (h is_non_increasing_on Y & 0<=r implies r(#)h is_non_increasing_on Y) &
-  (h is_non_increasing_on Y & r<=0 implies r(#)h is_non_decreasing_on Y)
+  (h|Y is non-increasing & 0<=r implies (r(#)h)|Y is non-increasing) &
+  (h|Y is non-increasing & r<=0 implies (r(#)h)|Y is non-decreasing)
 proof
-  thus h is_non_increasing_on Y & 0<=r implies r(#)h is_non_increasing_on Y
+  thus h|Y is non-increasing & 0<=r implies (r(#)h)|Y is non-increasing
   proof
     assume
-A1: h is_non_increasing_on Y & 0<=r;
-    let r1,r2;
+A1: h|Y is non-increasing & 0<=r;
+    now let r1,r2;
     assume
 A2: r1 in Y /\ dom(r(#)h) & r2 in Y /\ dom(r(#) h) & r1<r2;
     then
@@ -1418,11 +1551,13 @@ A3: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
     then h.r2 <= h.r1 by A1,A2,Def5;
     then r* h.r2 <= (h.r1)*r by A1,XREAL_1:66;
     then (r(#)h).r2 <= r * h.r1 by A3,VALUED_1:def 5;
-    hence thesis by A3,VALUED_1:def 5;
+    hence (r(#)h).r2 <= (r(#)h).r1 by A3,VALUED_1:def 5;
+   end;
+   hence thesis by Def5;
   end;
   assume
-A4: h is_non_increasing_on Y & r<=0;
-  let r1,r2;
+A4: h|Y is non-increasing & r<=0;
+  now let r1,r2;
   assume
 A5: r1 in Y /\ dom (r(#)h) & r2 in Y /\ dom (r(#)h) & r1<r2;
   then
@@ -1433,7 +1568,9 @@ A6: r1 in Y & r1 in dom (r(#)h) & r2 in Y & r2 in dom (r(#)
   then h.r2 <= h.r1 by A4,A5,Def5;
   then r* h.r1 <= r* h.r2 by A4,XREAL_1:67;
   then (r(#)h).r1 <= r * h.r2 by A6,VALUED_1:def 5;
-  hence thesis by A6,VALUED_1:def 5;
+  hence (r(#)h).r1 <= (r(#)h).r2 by A6,VALUED_1:def 5;
+ end;
+ hence thesis by Def4;
 end;
 
 theorem Th68:
@@ -1448,21 +1585,21 @@ then r in X & r in Y & r in dom h1 /\ dom h2 by VALUED_1:def 1,XBOOLE_0:def 3;
 end;
 
 theorem
-  (h1 is_increasing_on X & h2 is_increasing_on Y implies
-  h1+h2 is_increasing_on (X /\ Y)) &
-  (h1 is_decreasing_on X & h2 is_decreasing_on Y implies
-  h1+h2 is_decreasing_on (X /\ Y)) &
-  (h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y implies
-  h1+h2 is_non_decreasing_on X /\ Y) &
-  (h1 is_non_increasing_on X & h2 is_non_increasing_on Y implies
-  h1+h2 is_non_increasing_on X /\ Y)
+  (h1|X is increasing & h2|Y is increasing implies
+  (h1+h2)|(X /\ Y) is increasing) &
+  (h1|X is decreasing & h2|Y is decreasing implies
+  (h1+h2)|(X /\ Y) is decreasing) &
+  (h1|X is non-decreasing & h2|Y is non-decreasing implies
+  (h1+h2)|(X /\ Y) is non-decreasing) &
+  (h1|X is non-increasing & h2|Y is non-increasing implies
+  (h1+h2)|(X /\ Y) is non-increasing)
 proof
-  thus h1 is_increasing_on X & h2 is_increasing_on Y implies
-  h1+h2 is_increasing_on X /\ Y
+  thus h1|X is increasing & h2|Y is increasing implies
+  (h1+h2)|(X /\ Y) is increasing
   proof
     assume
-A1: h1 is_increasing_on X & h2 is_increasing_on Y;
-    let r1,r2;
+A1: h1|X is increasing & h2|Y is increasing;
+    now let r1,r2;
     assume
 A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
     then
@@ -1473,14 +1610,16 @@ A6: h1.r1 < h1.r2 by A1,A2,A3,A4,Def2;
     h2.r1 < h2.r2 by A1,A2,A3,A4,Def2;
     then h1.r1+h2.r1 < h1.r2+h2.r2 by A6,XREAL_1:10;
     then (h1+h2).r1 < h1.r2 + h2.r2 by A5,VALUED_1:def 1;
-    hence thesis by A5,VALUED_1:def 1;
+    hence (h1+h2).r1 < (h1+h2).r2 by A5,VALUED_1:def 1;
+   end;
+   hence thesis by Def2;
   end;
-  thus h1 is_decreasing_on X & h2 is_decreasing_on Y implies
-  h1+h2 is_decreasing_on X /\ Y
+  thus h1|X is decreasing & h2|Y is decreasing implies
+  (h1+h2)|(X /\ Y) is decreasing
   proof
     assume
-A7: h1 is_decreasing_on X & h2 is_decreasing_on Y;
-    let r1,r2;
+A7: h1|X is decreasing & h2|Y is decreasing;
+    now let r1,r2;
     assume
 A8: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
     then
@@ -1491,14 +1630,16 @@ A12: h1.r2 < h1.r1 by A7,A8,A9,A10,Def3;
     h2.r2 < h2.r1 by A7,A8,A9,A10,Def3;
     then h1.r2+h2.r2 < h1.r1+h2.r1 by A12,XREAL_1:10;
     then (h1+h2).r2 < h1.r1 + h2.r1 by A11,VALUED_1:def 1;
-    hence thesis by A11,VALUED_1:def 1;
+    hence (h1+h2).r2 < (h1+h2).r1 by A11,VALUED_1:def 1;
+   end;
+   hence thesis by Def3;
   end;
-  thus h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y implies
-  h1+h2 is_non_decreasing_on X /\ Y
+  thus h1|X is non-decreasing & h2|Y is non-decreasing implies
+  (h1+h2)|(X /\ Y) is non-decreasing
   proof
     assume
-A13: h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y;
-    let r1,r2;
+A13: h1|X is non-decreasing & h2|Y is non-decreasing;
+    now let r1,r2;
     assume
 A14: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
     then
@@ -1509,11 +1650,13 @@ A18: h1.r1 <= h1.r2 by A13,A14,A15,A16,Def4;
     h2.r1 <= h2.r2 by A13,A14,A15,A16,Def4;
     then h1.r1+h2.r1 <= h1.r2+h2.r2 by A18,XREAL_1:9;
     then (h1+h2).r1 <= h1.r2 + h2.r2 by A17,VALUED_1:def 1;
-    hence thesis by A17,VALUED_1:def 1;
+    hence (h1+h2).r1 <= (h1+h2).r2 by A17,VALUED_1:def 1;
+   end;
+   hence thesis by Def4;
   end;
   assume
-A19: h1 is_non_increasing_on X & h2 is_non_increasing_on Y;
-  let r1,r2;
+A19: h1|X is non-increasing & h2|Y is non-increasing;
+  now let r1,r2;
   assume
 A20: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1524,23 +1667,25 @@ A24: h1.r2 <= h1.r1 by A19,A20,A21,A22,Def5;
   h2.r2 <= h2.r1 by A19,A20,A21,A22,Def5;
   then h1.r2+h2.r2 <= h1.r1+h2.r1 by A24,XREAL_1:9;
   then (h1+h2).r2 <= h1.r1 + h2.r1 by A23,VALUED_1:def 1;
-  hence thesis by A23,VALUED_1:def 1;
+  hence (h1+h2).r2 <= (h1+h2).r1 by A23,VALUED_1:def 1;
+ end;
+ hence thesis by Def5;
 end;
 
 theorem
-  (h1 is_increasing_on X & h2 is_constant_on Y implies
-  h1+h2 is_increasing_on X /\ Y) &
-  (h1 is_decreasing_on X & h2 is_constant_on Y implies
-  h1+h2 is_decreasing_on X /\ Y)
+  (h1|X is increasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is increasing) &
+  (h1|X is decreasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is decreasing)
 proof
-  thus h1 is_increasing_on X & h2 is_constant_on Y implies
-  h1+h2 is_increasing_on X /\ Y
+  thus h1|X is increasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is increasing
   proof
     assume
-A1: h1 is_increasing_on X & h2 is_constant_on Y;
+A1: h1|X is increasing & h2|Y is constant;
     then consider r such that
 A2: for p st p in Y /\ dom h2 holds h2.p = r by PARTFUN2:76;
-    let r1,r2;
+    now let r1,r2;
     assume
 A3: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
     then
@@ -1552,13 +1697,15 @@ A6: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A3,XBOOLE_0:def 3;
     then h1.r1 + h2.r1 < h1.r2 + r by A2,A4;
     then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A2,A5;
     then (h1+h2).r1 < h1.r2 + h2.r2 by A6,VALUED_1:def 1;
-    hence thesis by A6,VALUED_1:def 1;
+    hence (h1+h2).r1 < (h1+h2).r2 by A6,VALUED_1:def 1;
+   end;
+   hence thesis by Def2;
   end;
   assume
-A7: h1 is_decreasing_on X & h2 is_constant_on Y;
+A7: h1|X is decreasing & h2|Y is constant;
   then consider r such that
 A8: for p st p in Y /\ dom h2 holds h2.p = r by PARTFUN2:76;
-  let r1,r2;
+  now let r1,r2;
   assume
 A9: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1570,16 +1717,18 @@ A12: r1 in dom (h1+h2) & r2 in dom (h1+h2) & r1<r2 by A9,XBOOLE_0:def 3;
   then h1.r2 + h2.r2 < h1.r1 + r by A8,A11;
   then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A8,A10;
   then (h1+h2).r2 < h1.r1 + h2.r1 by A12,VALUED_1:def 1;
-  hence thesis by A12,VALUED_1:def 1;
+  hence (h1+h2).r2 < (h1+h2).r1 by A12,VALUED_1:def 1;
+  end;
+  hence thesis by Def3;
 end;
 
 theorem
-  h1 is_increasing_on X & h2 is_non_decreasing_on Y implies
-  h1 + h2 is_increasing_on X /\ Y
+  h1|X is increasing & h2|Y is non-decreasing implies
+  (h1+h2)|(X /\ Y) is increasing
 proof
   assume
-A1: h1 is_increasing_on X & h2 is_non_decreasing_on Y;
-  let r1,r2;
+A1: h1|X is increasing & h2|Y is non-decreasing;
+  now let r1,r2;
   assume
 A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1598,16 +1747,18 @@ A6: h1.r1 < h1.r2 by A1,A2,Def2;
   then h2.r1 <= h2.r2 by A1,A2,Def4;
   then h1.r1 + h2.r1 < h1.r2 + h2.r2 by A6,XREAL_1:10;
   then (h1+h2).r1 < h1.r2 + h2.r2 by A3,VALUED_1:def 1;
-  hence thesis by A3,VALUED_1:def 1;
+  hence (h1+h2).r1 < (h1+h2).r2 by A3,VALUED_1:def 1;
+ end;
+ hence thesis by Def2;
 end;
 
 theorem
-  h1 is_non_increasing_on X & h2 is_constant_on Y implies
-  h1 + h2 is_non_increasing_on X /\ Y
+  h1|X is non-increasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is non-increasing
 proof
   assume
-A1: h1 is_non_increasing_on X & h2 is_constant_on Y;
-  let r1,r2;
+A1: h1|X is non-increasing & h2|Y is constant;
+  now let r1,r2;
   assume
 A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1626,16 +1777,18 @@ A6: h1.r2 <= h1.r1 by A1,A2,Def5;
   then h2.r2 = h2.r1 by A1,PARTFUN2:77;
   then h1.r2 + h2.r2 <= h1.r1 + h2.r1 by A6,XREAL_1:8;
   then (h1+h2).r2 <= h1.r1 + h2.r1 by A3,VALUED_1:def 1;
-  hence thesis by A3,VALUED_1:def 1;
+  hence (h1+h2).r2 <= (h1+h2).r1 by A3,VALUED_1:def 1;
+ end;
+ hence thesis by Def5;
 end;
 
 theorem
-  h1 is_decreasing_on X & h2 is_non_increasing_on Y implies
-  h1 + h2 is_decreasing_on X /\ Y
+  h1|X is decreasing & h2|Y is non-increasing implies
+  (h1+h2)|(X /\ Y) is decreasing
 proof
   assume
-A1: h1 is_decreasing_on X & h2 is_non_increasing_on Y;
-  let r1,r2;
+A1: h1|X is decreasing & h2|Y is non-increasing;
+  now let r1,r2;
   assume
 A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1654,16 +1807,18 @@ A6: h1.r2 < h1.r1 by A1,A2,Def3;
   then h2.r2 <= h2.r1 by A1,A2,Def5;
   then h1.r2 + h2.r2 < h1.r1 + h2.r1 by A6,XREAL_1:10;
   then (h1+h2).r2 < h1.r1 + h2.r1 by A3,VALUED_1:def 1;
-  hence thesis by A3,VALUED_1:def 1;
+  hence (h1+h2).r2 < (h1+h2).r1 by A3,VALUED_1:def 1;
+ end;
+ hence thesis by Def3;
 end;
 
 theorem
-  h1 is_non_decreasing_on X & h2 is_constant_on Y implies
-  h1 + h2 is_non_decreasing_on X /\ Y
+  h1|X is non-decreasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is non-decreasing
 proof
   assume
-A1: h1 is_non_decreasing_on X & h2 is_constant_on Y;
-  let r1,r2;
+A1: h1|X is non-decreasing & h2|Y is constant;
+  now let r1,r2;
   assume
 A2: r1 in X /\ Y /\ dom (h1+h2) & r2 in X /\ Y /\ dom (h1+h2) & r1<r2;
   then
@@ -1682,88 +1837,99 @@ A6: h1.r1 <= h1.r2 by A1,A2,Def4;
   then h2.r2 = h2.r1 by A1,PARTFUN2:77;
   then h1.r1 + h2.r1 <= h1.r2 + h2.r2 by A6,XREAL_1:8;
   then (h1+h2).r1 <= h1.r2 + h2.r2 by A3,VALUED_1:def 1;
-  hence thesis by A3,VALUED_1:def 1;
+  hence (h1+h2).r1 <= (h1+h2).r2 by A3,VALUED_1:def 1;
+ end;
+ hence thesis by Def4;
 end;
 
 theorem
-  h is_increasing_on {x}
+  h|{x} is non-increasing
 proof
-  let r1,r2;
+  now let r1,r2;
+  assume r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
+  then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
+  then r1 = x & r2 = x by TARSKI:def 1;
+  hence h.r1 >= h.r2;
+ end;
+ hence thesis by Def5;
+end;
+
+theorem
+  h|{x} is decreasing
+proof
+  now let r1,r2;
   assume
 A1: r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
   then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
   then r1 = x & r2 = x by TARSKI:def 1;
-  hence thesis by A1;
+  hence h.r1 > h.r2 by A1;
+ end;
+ hence thesis by Def3;
 end;
 
 theorem
-  h is_decreasing_on {x}
+  h|{x} is non-decreasing
 proof
-  let r1,r2;
-  assume
-A1: r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
-  then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
-  then r1 = x & r2 = x by TARSKI:def 1;
-  hence thesis by A1;
-end;
-
-theorem
-  h is_non_decreasing_on {x}
-proof
-  let r1,r2;
+  now let r1,r2;
   assume r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
   then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
   then r1 = x & r2 = x by TARSKI:def 1;
   hence h.r1 <= h.r2;
+ end;
+ hence thesis by Def4;
 end;
 
 theorem
-  h is_non_increasing_on {x}
+  h|{x} is non-increasing
 proof
-  let r1,r2;
+  now let r1,r2;
   assume r1 in {x} /\ dom h & r2 in {x} /\ dom h & r1<r2;
   then r1 in {x} & r2 in {x} by XBOOLE_0:def 3;
   then r1 = x & r2 = x by TARSKI:def 1;
   hence h.r2 <= h.r1;
+ end;
+ hence thesis by Def5;
 end;
 
 theorem
-  id R is_increasing_on R
+  (id R)|R is increasing
 proof
-  let r1,r2;
+  now let r1,r2;
   assume
 A1: r1 in R /\ dom (id R) & r2 in R /\ dom (id R) & r1<r2;
   then r1 in R & r1 in dom (id R) & r2 in R & r2 in dom (id R) by
   XBOOLE_0:def 3;
   then (id R).r1 = r1 & (id R).r2 = r2 by FUNCT_1:35;
-  hence thesis by A1;
+  hence (id R).r1 < (id R).r2 by A1;
+ end;
+ hence thesis by Def2;
 end;
 
 theorem
-  h is_increasing_on X implies -h is_decreasing_on X
+  h|X is increasing implies (-h)|X is decreasing
 proof
-  assume h is_increasing_on X;
-  then (-1)(#)h is_decreasing_on X by Th64;
+  assume h|X is increasing;
+  then ((-1)(#)h)|X is decreasing by Th64;
   hence thesis by RFUNCT_1:38;
 end;
 
 theorem
-  h is_non_decreasing_on X implies -h is_non_increasing_on X
+  h|X is non-decreasing implies (-h)|X is non-increasing
 proof
-  assume h is_non_decreasing_on X;
-  then (-1)(#)h is_non_increasing_on X by Th66;
+  assume h|X is non-decreasing;
+  then ((-1)(#)h)|X is non-increasing by Th66;
   hence thesis by RFUNCT_1:38;
 end;
 
 theorem
-  (h is_increasing_on [.p,g.] or h is_decreasing_on [.p,g.])
+  (h|[.p,g.] is increasing or h|[.p,g.] is decreasing)
   implies h|[.p,g.] is one-to-one
 proof
   assume
-A1: h is_increasing_on [.p,g.] or h is_decreasing_on [.p,g.];
+A1: h|[.p,g.] is increasing or h|[.p,g.] is decreasing;
   now per cases by A1;
     suppose
-A2:   h is_increasing_on [.p,g.];
+A2:   h|[.p,g.] is increasing;
       now
         let p1,p2;
         assume
@@ -1777,7 +1943,7 @@ A5:     p1 in [.p,g.] /\ dom h & p2 in [.p,g.] /\ dom h by A3,FUNCT_1:68;
         proof
           assume
 A6:       p1<>p2;
-          now per cases by A6,REAL_1:def 5;
+          now per cases by A6,XXREAL_0:1;
             suppose p1<p2;
               hence contradiction by A2,A4,A5,Def2;
             end;
@@ -1791,7 +1957,7 @@ A6:       p1<>p2;
       hence h|[.p,g.] is one-to-one by PARTFUN1:38;
     end;
     suppose
-A7:   h is_decreasing_on [.p,g.];
+A7:   h|[.p,g.] is decreasing;
       now
         let p1,p2;
         assume
@@ -1805,7 +1971,7 @@ A10:    p1 in [.p,g.] /\ dom h & p2 in [.p,g.] /\ dom h by A8,FUNCT_1:68;
         proof
           assume
 A11:      p1<>p2;
-          now per cases by A11,REAL_1:def 5;
+          now per cases by A11,XXREAL_0:1;
             suppose p1<p2;
               hence contradiction by A7,A9,A10,Def3;
             end;
@@ -1823,13 +1989,13 @@ A11:      p1<>p2;
 end;
 
 theorem
-  for h being one-to-one PartFunc of REAL, REAL st h is_increasing_on [.p,g .]
-  holds (h|[.p,g.])" is_increasing_on h.:[.p,g.]
+  for h being one-to-one PartFunc of REAL, REAL st h|[.p,g.] is increasing
+  holds (h|[.p,g.])"|(h.:[.p,g.]) is increasing
 proof
   let h be one-to-one PartFunc of REAL, REAL;
   assume that
-A1: h is_increasing_on [.p,g.] and
-A2: not (h|[.p,g.])" is_increasing_on h.:[.p,g.];
+A1: h|[.p,g.] is increasing and
+A2: (h|[.p,g.])"|(h.:[.p,g.]) is not increasing;
   consider y1,y2 be Real such that
 A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
   y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") & y1<y2 &
@@ -1837,7 +2003,7 @@ A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
   y1 in h.:[.p,g.] & y2 in h.:[.p,g.] by A3,XBOOLE_0:def 3;
   then
 A4: y1 in rng (h|[.p,g.]) & y2 in rng (h|[.p,g.]) by RELAT_1:148;
-A5: h|[.p,g.] is_increasing_on [.p,g.] by A1,Th50;
+A5: h|[.p,g.]|[.p,g.] is increasing by A1;
   now per cases;
     suppose ((h|[.p,g.])").y1 = ((h|[.p,g.])").y2;
       then y1 =(h|[.p,g.]).(((h|[.p,g.])").y2) by A4,FUNCT_1:57
@@ -1846,7 +2012,7 @@ A5: h|[.p,g.] is_increasing_on [.p,g.] by A1,Th50;
     end;
     suppose ((h|[.p,g.])").y1 <> ((h|[.p,g.])").y2;
       then
-A6:   ((h|[.p,g.])").y2 < ((h|[.p,g.])").y1 by A3,REAL_1:def 5;
+A6:   ((h|[.p,g.])").y2 < ((h|[.p,g.])").y1 by A3,XXREAL_0:1;
 A7:   ((h|[.p,g.])").y2 in dom (h|[.p,g.]) &
       ((h|[.p,g.])").y1 in dom (h|[.p,g.]) by A4,PARTFUN2:79;
       dom (h|[.p,g.])=dom ((h|[.p,g.])|[.p,g.]) by RELAT_1:101
@@ -1861,13 +2027,13 @@ A7:   ((h|[.p,g.])").y2 in dom (h|[.p,g.]) &
 end;
 
 theorem
-  for h being one-to-one PartFunc of REAL, REAL st h is_decreasing_on [.p,g .]
-  holds (h|[.p,g.])" is_decreasing_on h.:[.p,g.]
+  for h being one-to-one PartFunc of REAL, REAL st h|[.p,g.] is decreasing
+  holds (h|[.p,g.])"|(h.:[.p,g.]) is decreasing
 proof
   let h be one-to-one PartFunc of REAL, REAL;
   assume that
-A1: h is_decreasing_on [.p,g.] and
-A2: not (h|[.p,g.])" is_decreasing_on h.:[.p,g.];
+A1: h|[.p,g.] is decreasing and
+A2: not (h|[.p,g.])"|(h.:[.p,g.]) is decreasing;
   consider y1,y2 be Real such that
 A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
   y2 in h.:[.p,g.] /\ dom((h|[.p,g.])") & y1<y2 &
@@ -1875,7 +2041,7 @@ A3: y1 in h.:[.p,g.] /\ dom((h|[.p,g.])") &
   y1 in h.:[.p,g.] & y2 in h.:[.p,g.] by A3,XBOOLE_0:def 3;
   then
 A4: y1 in rng (h|[.p,g.]) & y2 in rng (h|[.p,g.]) by RELAT_1:148;
-A5: h|[.p,g.] is_decreasing_on [.p,g.] by A1,Th51;
+A5: h|[.p,g.]|[.p,g.] is decreasing by A1;
   now per cases;
     suppose ((h|[.p,g.])").y1 = ((h|[.p,g.])").y2;
       then y1 =(h|[.p,g.]).(((h|[.p,g.])").y2) by A4,FUNCT_1:57
@@ -1884,7 +2050,7 @@ A5: h|[.p,g.] is_decreasing_on [.p,g.] by A1,Th51;
     end;
     suppose ((h|[.p,g.])").y1 <> ((h|[.p,g.])").y2;
       then
-A6:   ((h|[.p,g.])").y2 > ((h|[.p,g.])").y1 by A3,REAL_1:def 5;
+A6:   ((h|[.p,g.])").y2 > ((h|[.p,g.])").y1 by A3,XXREAL_0:1;
 A7:   ((h|[.p,g.])").y2 in dom (h|[.p,g.]) &
       ((h|[.p,g.])").y1 in dom (h|[.p,g.]) by A4,PARTFUN2:79;
       dom (h|[.p,g.])=dom ((h|[.p,g.])|[.p,g.]) by RELAT_1:101

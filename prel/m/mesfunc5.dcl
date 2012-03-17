@@ -31,12 +31,12 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
-<ArticleID name="XXREAL_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="MESFUNC5"/>
@@ -51,16 +51,16 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="75"/>
+<Adjective nr="78"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="49"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="81"/>
+<Adjective nr="84"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MESFUNC5" nr="2">
@@ -73,16 +73,16 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="80"/>
+<Adjective nr="83"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="49"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="82"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -30,15 +30,15 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="32">
+<Adjective nr="34">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="23">
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -51,9 +51,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="36"/>
+<Adjective nr="20"/>
+<Adjective nr="25"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 </Registrations>

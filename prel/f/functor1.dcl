@@ -33,22 +33,22 @@
 </Signature>
 <RCluster aid="FUNCTOR1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="73"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="67"/>
+<Adjective nr="77"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCTOR1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,27 +57,27 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUNCTOR1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="86">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -87,20 +87,20 @@
 </Typ>
 <Typ kind="M" nr="22">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="86">
+<Adjective nr="90">
 <LocusVar nr="4"/>
 <LocusVar nr="2"/>
 </Adjective>

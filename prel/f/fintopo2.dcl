@@ -25,21 +25,21 @@
 </Signature>
 <RCluster aid="FINTOPO2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 </Registrations>

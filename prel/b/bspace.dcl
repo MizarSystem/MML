@@ -29,9 +29,6 @@
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
@@ -42,17 +39,17 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="93">
-<Func kind="K" nr="240"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="98">
+<Func kind="K" nr="215"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -64,7 +61,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="246">
+<Func kind="K" nr="221">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -75,59 +72,59 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="246">
+<Func kind="K" nr="221">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BSPACE" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="245">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="99">
-<Func kind="K" nr="240"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="104">
+<Func kind="K" nr="215"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <CCluster aid="BSPACE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="102"/>
+<Adjective nr="106"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="100"/>
+<Adjective nr="8"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BSPACE" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="100"/>
+<Adjective nr="8"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="102"/>
+<Adjective nr="106"/>
 </Cluster>
 </CCluster>
 </Registrations>

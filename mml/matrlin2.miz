@@ -20,10 +20,11 @@ environ
       VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13, MATRLIN, MATRIX15, RFINSEQ,
       WSIERP_1, MOD_2, VECTSP_5, RANKNULL, VECTSP10, MATRIXJ1;
  constructors FVSUM_1, VECTSP_9, MATRIX_6, LAPLACE, MATRIX15, RANKNULL,
-      VECTSP10, WSIERP_1, MATRIXJ1, XXREAL_0;
+      VECTSP10, WSIERP_1, MATRIXJ1, XXREAL_0, REALSET1;
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
       ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRLIN,
-      MATRIX13, XREAL_0, VECTSP_7, VECTSP_9, FRAENKEL, VECTSP10, MATRIXJ1;
+      MATRIX13, XREAL_0, VECTSP_7, VECTSP_9, FRAENKEL, VECTSP10, MATRIXJ1,
+      CARD_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions STRUCT_0, TARSKI, RLVECT_1, FINSEQ_1, VECTSP_4, FVSUM_1, VECTSP_1,
       MATRIX_1, MATRIX13, MATRLIN, MATRIX15, FUNCT_1, VECTSP_7, RANKNULL,
@@ -363,7 +364,7 @@ A1:  dim Lin(A) = card A;
 A2:  B c= A' & B is linearly-independent & Lin(B) = L by VECTSP_7:23;
   reconsider B as finite Subset of L by A2;
   B is Basis of L by A2,VECTSP_7:def 3;
-  then reconsider L as finite-dimensional VectSp of K by VECTSP_9:def 1;
+  then reconsider L as finite-dimensional VectSp of K by MATRLIN:def 3;
   card A = dim L by A1
         .= Card B by A2,VECTSP_9:30;
   then A=B by A2,CARD_FIN:1;
@@ -390,9 +391,9 @@ proof
 A1:  B c= A' & B is linearly-independent & Lin(B) = L by VECTSP_7:23;
   reconsider B as finite Subset of L by A1;
   B is Basis of L by A1,VECTSP_7:def 3;
-  then reconsider L as finite-dimensional VectSp of K by VECTSP_9:def 1;
+  then reconsider L as finite-dimensional VectSp of K by MATRLIN:def 3;
   card B = dim L & Card B c= Card A by A1,VECTSP_9:30,CARD_1:27;
-  hence thesis by CARD_2:57;
+  hence thesis by NAT_1:40;
 end;
 
 begin :: More on the Product of Finite Sequence of Scalars and Vectors
@@ -533,8 +534,7 @@ A2:    len R=0;
      then dom L=dom R by FINSEQ_3:31;
      then dom M=dom R by MATRLIN:16;
      then len R=len M by FINSEQ_3:31;
-     then R=<*>(the carrier of V1) & M=<*>(the carrier of V1)
-       by A2,CARD_2:59;
+     then R=<*>(the carrier of V1) & M=<*>(the carrier of V1) by A2;
      then Sum R=0.V1 & Sum M=0.V1 by RLVECT_1:60;
      hence thesis by VECTSP_1:59;
    end;
@@ -713,8 +713,7 @@ A11:     P[n];set n1=n+1;
        reconsider N=n as Element of NAT by ORDINAL1:def 13;
        assume
 A12:      n1<i;
-       then :::n<i &
-       n1<len M by A5,XXREAL_0:2;
+       then n1<len M by A5,XXREAL_0:2;
        then
 A13:     n<len M by NAT_1:13;
        1<=n1 & n1<=len R by A5,A12,XXREAL_0:2,NAT_1:11;
@@ -932,9 +931,9 @@ proof
  per cases;
     suppose dom b1={}; then
 A1:     len b1=0 & len (len b1|->0.K) =len b1 & len (0.V1|--b1)=len b1
-        by CARD_2:19,FINSEQ_2:69,MATRLIN:def 9,RELAT_1:64;
-      hence 0.V1|-- b1 = {} by CARD_2:59
-                      .= len b1 |-> 0.K by A1,CARD_2:59;
+        by CARD_1:47,FINSEQ_2:69,MATRLIN:def 9,RELAT_1:64;
+      hence 0.V1|-- b1 = {}
+                      .= len b1 |-> 0.K by A1;
     end;
     suppose dom b1<>{};
       then consider x such that
@@ -1283,7 +1282,7 @@ A1:  len A'=len B1 by MATRLIN:def 10;
     per cases;
       suppose
 A2:       len B1=0;
-        then AutMt(f,B1,b2)={} by A1,CARD_2:59;
+        then AutMt(f,B1,b2)={} by A1;
         hence thesis by A2,MATRIX_1:13;end;
       suppose len B1>0;
         then
@@ -1505,7 +1504,8 @@ A7: len M=len p1 & width M=len b1 & len Col(M,j) = len M
    then
 A8: dom p1=dom p2 & dom p1=dom B1 & dom p1=dom M & dom p1=Seg len p1 &
     dom b1=dom MC & dom b1 =Seg len b1 by A1,A5,FINSEQ_3:31,FINSEQ_1:def 3;
-   len b1<>0 by CARD_2:59,A2,RELAT_1:60;
+   b1 <> {} by A2;
+   then len b1<>0;
    then
 A9: len b1>0;
 A10:now let i such that
@@ -1685,9 +1685,8 @@ A3: i in dom A by A2,FINSEQ_3:27;
       hence thesis by A1,MATRIX_4:59;end;
     suppose width A=0;
       then width (A+B)=0 & len (Line(A,i)+LB)=0 by MATRIX_3:def 3,FINSEQ_2:109;
-      then len Line(A+B,i)=0 & Line(A,i)+Line(B,i)={} by
-        FINSEQ_2:109,CARD_2:59;
-      hence thesis by CARD_2:59;end;
+      then len Line(A+B,i)=0 & Line(A,i)+Line(B,i)={} by FINSEQ_2:109;
+      hence thesis;end;
 end;
 
 definition
@@ -1929,7 +1928,7 @@ A1:   len (A+B)=len A & width (A+B)=width A & len A=n
     per cases;
       suppose
 A2:       n=0;
-        then A+B={} by A1,CARD_2:59;
+        then A+B={} by A1;
         hence thesis by A2,MATRIX_1:13;
       end;
       suppose n>0;

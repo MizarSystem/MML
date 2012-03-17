@@ -21,7 +21,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -31,23 +31,23 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Adjective nr="18">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="88">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -63,36 +63,36 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Adjective nr="18">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Adjective nr="18">
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="46"/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="47"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Not>
 <And>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="88">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -104,11 +104,11 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="88">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

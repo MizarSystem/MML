@@ -17,12 +17,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -39,8 +39,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="4">
 <Var nr="1"/>
@@ -59,9 +59,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="F" nr="3"/>
 </Func>
 </Typ>
@@ -75,7 +75,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -92,8 +92,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>
@@ -106,9 +106,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
@@ -118,7 +118,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -135,8 +135,8 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="42"/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="43"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="3">
 <Var nr="1"/>
@@ -151,9 +151,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
@@ -161,7 +161,7 @@
 <Not>
 <Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="48"/>
 </Pred>
 </Not>
 </Scheme>

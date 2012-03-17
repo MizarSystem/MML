@@ -9,7 +9,8 @@ environ
  vocabularies PRE_TOPC, FCONT_1, SUBSET_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
       ARYTM_3, RELAT_1, FUNCOP_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2,
       SEQ_1, SEQ_2, SEQM_3, RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1,
-      PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1, FRECHET2;
+      PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1, FRECHET2,
+      ANPROJ_1;
  notations TARSKI, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PRE_TOPC,
       STRUCT_0, FUNCOP_1, PARTFUN2, XXREAL_0, XREAL_0, COMPLEX1, ORDINAL1,
       NUMBERS, REAL_1, NAT_1, RLVECT_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
@@ -20,16 +21,16 @@ environ
       RECDEF_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, SEQM_3, FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2,
-      VALUED_0, VALUED_1, FUNCT_2;
+      VALUED_0, VALUED_1, FUNCT_2, FUNCOP_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, NFCONT_1, NORMSP_1, BHSP_3, RLVECT_1, SUBSET_1,
-      VALUED_1;
- theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, SUBSET_1, REAL_1, REAL_2,
+      VALUED_1, STRUCT_0;
+ theorems TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, SUBSET_1, REAL_2,
       RELSET_1, RLVECT_1, XCMPLX_0, XCMPLX_1, ZFMISC_1, XREAL_0, FUNCOP_1,
       SEQ_1, SEQ_2, NAT_1, SEQM_3, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2, SEQ_4,
       NORMSP_1, LOPBAN_1, LOPBAN_2, LOPBAN_3, ANPROJ_1, PARTFUN1, PARTFUN2,
       NFCONT_1, FDIFF_1, BHSP_3, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
-      VALUED_1;
+      VALUED_1, STRUCT_0;
  schemes NAT_1, SEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Differentiable Function on Normed Linear Spaces
@@ -222,25 +223,32 @@ theorem
 ::::: Normed Linear Spaces versions of SEQ_1: -
 
 definition
-  let S be ZeroStr;
-  let f be sequence of S;
-  attr f is being_not_0 means
+  let X be set, S be ZeroStr;
+  let f be Function of X,S;
+  redefine attr f is non-zero means
   :Def1:
   rng f c= (the carrier of S) \ {0.S};
-end;
-
-notation
-  let S be ZeroStr;
-  let f be sequence of S;
-  synonym f is_not_0 for f is being_not_0;
+  compatibility
+   proof
+    thus f is non-zero implies rng f c= (the carrier of S) \ {0.S}
+     proof assume f is non-zero;
+       then not 0.S in rng f by STRUCT_0:def 16;
+      hence rng f c= (the carrier of S) \ {0.S} by ZFMISC_1:40;
+     end;
+    assume
+Z:    rng f c= (the carrier of S) \ {0.S};
+    assume 0.S in rng f;
+     then not 0.S in {0.S} by XBOOLE_0:def 4,Z;
+    hence contradiction by TARSKI:def 1;
+   end;
 end;
 
 theorem Th6:
-  seq is being_not_0 iff for x st x in NAT holds seq.x<>0.S
+  seq is non-zero iff for x st x in NAT holds seq.x<>0.S
 proof
-  thus seq is being_not_0 implies for x st x in NAT holds seq.x<>0.S
+  thus seq is non-zero implies for x st x in NAT holds seq.x<>0.S
   proof
-    assume seq is being_not_0;
+    assume seq is non-zero;
     then
 A1: rng seq c= (the carrier of S) \{0.S} by Def1;
     let x;
@@ -268,9 +276,9 @@ A5: seq.x=y by FUNCT_1:def 5;
 end;
 
 theorem Th7:
-  seq is being_not_0 iff for n holds seq.n<>0.S
+  seq is non-zero iff for n holds seq.n<>0.S
 proof
-  thus seq is being_not_0 implies for n holds seq.n<>0.S by Th6;
+  thus seq is non-zero implies for n holds seq.n<>0.S by Th6;
   assume for n holds seq.n<>0.S;
   then for x holds x in NAT implies seq.x<>0.S;
   hence thesis by Th6;
@@ -590,10 +598,10 @@ proof
 end;
 
 theorem Th17:
-  seq is_not_0 implies seq ^\k is_not_0
+  seq is non-zero implies seq ^\k is non-zero
 proof
   assume
-A1: seq is_not_0;
+A1: seq is non-zero;
   now
     let n;
     (seq ^\k).n=seq.(n+k) by LOPBAN_3:def 6;
@@ -676,7 +684,7 @@ definition
   let IT be sequence of S;
   attr IT is convergent_to_0 means
   :Def4:
-  IT is_not_0 & IT is convergent & lim IT = 0.S;
+  IT is non-zero & IT is convergent & lim IT = 0.S;
 end;
 
 theorem Th21:
@@ -756,7 +764,7 @@ A13: 1/(m+r)<pp by A11,XXREAL_0:2;
   0<=m by NAT_1:2;
   then 0+0<m+r by A1;
   then
-A14: 0/(m+r)<1/(m+r) by REAL_1:73;
+A14: 0/(m+r)<1/(m+r) by XREAL_1:76;
 A15: ||.seq.m-g.|| = ||.(1/(m+r))*x0 - 0.S.|| by A2
     .= ||.(1/(m+r))*x0.|| by RLVECT_1:26
     .= abs(1/(m+r))*||.x0.|| by NORMSP_1:def 2
@@ -810,7 +818,7 @@ A14: 1/(m+r)<pp by A12,XXREAL_0:2;
     0<=m by NAT_1:2;
     then 0+0<m+r by A1;
     then
-A15: 0/(m+r)<1/(m+r) by REAL_1:73;
+A15: 0/(m+r)<1/(m+r) by XREAL_1:76;
 A16: ||.seq.m-0.S.|| = ||.(1/(m+r))*x0 - 0.S.|| by A2
       .= ||.(1/(m+r))*x0.|| by RLVECT_1:26
       .= abs(1/(m+r))*||.x0.|| by NORMSP_1:def 2
@@ -829,14 +837,14 @@ proof
   let a be convergent_to_0 Real_Sequence;
   let z be Point of S such that
 A1: z <> 0.S;
-  thus a*z is_not_0
+  thus a*z is non-zero
   proof
     now
       let n be Element of NAT;
       assume (a*z).n = 0.S;
       then
 A2:   a.n*z = 0.S by Def3;
-      a is_not_0 by FDIFF_1:def 1;
+      a is non-zero by FDIFF_1:def 1;
       then a.n <> 0 & z <> 0.S by A1,SEQ_1:7;
       hence contradiction by A2,RLVECT_1:24;
     end;
@@ -924,7 +932,7 @@ A3:   1/(n+1) <> 0 by XCMPLX_1:217;
         hence contradiction by A1,A3,RLVECT_1:24;
       end;
     end;
-    hence s1 is_not_0 by Th7;
+    hence s1 is non-zero by Th7;
     thus thesis by A2,Th22,Th23;
   end;
 end;
@@ -1053,7 +1061,7 @@ A13:  1/(m+1) <= 1/(n+1) by A12,XREAL_1:120;
 A14: s is convergent by NORMSP_1:def 9;
     then
 A15: lim s = 0.S by A8,NORMSP_1:def 11;
-    s is_not_0 by A7,Th7;
+    s is non-zero by A7,Th7;
     then reconsider s as convergent_to_0 sequence of S by A14,A15,Def4;
     (||.s.||")(#)(R*s) is convergent & lim ((||.s.||")(#)(R*s)) = 0.T
     by A3,Def5;
@@ -1089,7 +1097,7 @@ A21: for r be Real st r > 0 ex d be Real st
     holds ( ||.z.||"* ||. R/.z .||) < r );
     now
       let s be convergent_to_0 sequence of S;
-A22:  s is_not_0 by Def4;
+A22:  s is non-zero by Def4;
 A23:  s is convergent & lim s = 0.S by Def4;
 A24:  now
         let r be Real such that
@@ -1144,7 +1152,7 @@ theorem Th27:
 proof
   let R be REST of S,T;
   let s be convergent_to_0 sequence of S;
-A1: s is_not_0 by Def4;
+A1: s is non-zero by Def4;
 A2: s is convergent & lim s = 0.S by Def4;
   now
     let n be Element of NAT;
@@ -1349,7 +1357,7 @@ A24:    ex n be Nat st P[n]
           take M;
 A25:      M<=M1 by A12,A23;
           M <> M1 by A18,A23;
-          hence M<M1 by A25,REAL_1:def 5;
+          hence M<M1 by A25,XXREAL_0:1;
           thus s2.M<>x0 by A12;
           take 0; thus thesis by A18;
         end;
@@ -1381,7 +1389,7 @@ A32:    F.(m+1)<=M1 by A18,A23,A27,A30;
 
         now
           assume F.(m+1)<>M1;
-          then F.(m+1)<M1 by A32,REAL_1:def 5;
+          then F.(m+1)<M1 by A32,XXREAL_0:1;
           hence contradiction by A28,A31;
 
         end;
@@ -1651,7 +1659,7 @@ A25:      (for n be Element of NAT
           deffunc F(Element of NAT) = r.$1*z;
           consider s be sequence of S such that
 A26:      for n holds s.n = F(n) from FUNCT_2:sch 4;
-          s is_not_0 & s is convergent & lim s = 0.S
+          s is non-zero & s is convergent & lim s = 0.S
           proof
             now
               let n be Element of NAT;
@@ -1660,7 +1668,7 @@ A26:      for n holds s.n = F(n) from FUNCT_2:sch 4;
               then r.n =0 or z=0.S by RLVECT_1:24;
               hence contradiction by A13,A25;
             end;
-            hence s is_not_0 by Th7;
+            hence s is non-zero by Th7;
             now
               let n be Element of NAT;
               thus s.n = r.n*z by A26
@@ -1710,7 +1718,7 @@ A34:        rng s c= dom R;
             then
 A35:        rng s c= dom R1;
 A36:        r.n > 0 by A25;
-            s is_not_0 by Def4;
+            s is non-zero by Def4;
             then s.n <> 0.S by Th7;
             then
 A37:        ||.s.n.|| <> 0 by NORMSP_1:def 2;
@@ -2073,8 +2081,8 @@ registration
   proof
     h^\n is convergent_to_0
     proof
-A1:   h is_not_0 & h is convergent & lim h = 0.S by Def4;
-      hence h^\n is_not_0 by Th17;
+A1:   h is non-zero & h is convergent & lim h = 0.S by Def4;
+      hence h^\n is non-zero by Th17;
       thus thesis by A1,LOPBAN_3:14;
     end;
     hence thesis;
@@ -2659,14 +2667,14 @@ end;
 
 theorem
   for Z be Subset of S st Z is open holds
-  (Z c= dom f & f is_constant_on Z implies
+  (Z c= dom f & f|Z is constant implies
   f is_differentiable_on Z & for x be Point of S st x in Z holds (f`|Z)/.x =
   0.R_NormSpace_of_BoundedLinearOperators(S,T))
 proof
   let Z be Subset of S such that
 A1: Z is open;
   assume
-A2: Z c= dom f & f is_constant_on Z;
+A2: Z c= dom f & f|Z is constant;
   then consider r be Point of T such that
 A3: for x be Point of S st x in Z/\dom f holds f.x=r by PARTFUN2:76;
 A4: now
@@ -2915,7 +2923,7 @@ A16:  (s3^\l).n=0.S;
       s3.(n+l)=0.S by A16,LOPBAN_3:def 6;
       hence contradiction by A12;
     end;
-    then s3^\l is_not_0 by Th7;
+    then s3^\l is non-zero by Th7;
     then reconsider h=s3^\l as convergent_to_0 sequence of S by A15,Def4;
     reconsider c =s2^\l as constant sequence of S;
 A17: rng c = {x0}
@@ -3117,7 +3125,7 @@ A7: now
       assume
 A8:   rng s1 c= dom R & s1 is convergent & lim s1 = 0.S &
       (for n holds s1.n<>0.S );
-      then s1 is_not_0 by Th7;
+      then s1 is non-zero by Th7;
       then s1 is convergent_to_0 sequence of S by A8,Def4;
       hence R*s1 is convergent & lim (R*s1)=R/.(0.S) by A5,Th27;
     end;

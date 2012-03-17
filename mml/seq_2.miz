@@ -7,15 +7,15 @@
 environ
 
  vocabularies ARYTM, SEQ_1, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE, FUNCT_1,
-      LATTICES, ORDINAL2, SEQ_2;
+      LATTICES, ORDINAL2, SEQ_2, VALUED_0, ANPROJ_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, RELAT_1, FUNCT_1, VALUED_1, SEQ_1, XXREAL_0;
+      NAT_1, RELAT_1, FUNCT_1, VALUED_0, VALUED_1, SEQ_1, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, PARTFUN1, VALUED_1, SEQ_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0,
       VALUED_0, VALUED_1, FUNCT_2, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions VALUED_1;
- theorems REAL_1, SEQ_1, ABSVALUE, NAT_1, XREAL_0, XCMPLX_0, XCMPLX_1, XREAL_1,
+ theorems SEQ_1, ABSVALUE, NAT_1, XREAL_0, XCMPLX_0, XCMPLX_1, XREAL_1,
       COMPLEX1, XXREAL_0, VALUED_1;
  schemes NAT_1;
 
@@ -25,7 +25,7 @@ reserve n,n1,n2,k,m for Element of NAT,
   r,r1,r2,p,g1,g2,g for real number,
   seq,seq',seq1 for Real_Sequence,
   y for set,
-  f for real-yielding Function;
+  f for real-valued Function;
 
 canceled 2;
 
@@ -53,7 +53,7 @@ A4:   abs(r)=g;
       end;
       hence contradiction by A2,A4,ABSVALUE:def 1;
     end;
-    hence thesis by A3,REAL_1:def 5;
+    hence thesis by A3,XXREAL_0:1;
   end;
   assume
 A5: abs(r)<g;
@@ -68,7 +68,7 @@ A9: -g<-0 by A5,A7,XREAL_1:26;
       .=g;
     hence contradiction by A5;
   end;
-  hence -g<r by A6,REAL_1:def 5;
+  hence -g<r by A6,XXREAL_0:1;
   thus r<g by A5,A8,ABSVALUE:def 1;
 end;
 
@@ -89,7 +89,7 @@ A2: r<>0;
 end;
 
 definition
-  let f be real-yielding Function;
+  let f be real-valued Function;
   attr f is bounded_above means
 
   ex r st for y st y in dom f holds f.y<r;
@@ -151,9 +151,9 @@ definition
 end;
 
 registration
-  cluster bounded -> bounded_above bounded_below (real-yielding Function);
+  cluster bounded -> bounded_above bounded_below (real-valued Function);
   coherence by Def5;
-  cluster bounded_above bounded_below -> bounded (real-yielding Function);
+  cluster bounded_above bounded_below -> bounded (real-valued Function);
   coherence by Def5;
 end;
 
@@ -449,7 +449,7 @@ A6: 0<abs(r) by COMPLEX1:133;
 A7: 0<p;
 A8: 0<>abs(r) by A5,COMPLEX1:133;
     0/abs(r)=0;
-    then 0<p/abs(r) by A6,A7,REAL_1:73;
+    then 0<p/abs(r) by A6,A7,XREAL_1:76;
     then consider n1 such that
 A9: for m st n1<=m holds abs(seq.m-g1)<p/abs(r) by A1;
     take k=n1;
@@ -496,7 +496,7 @@ A7: 0<abs(r) by COMPLEX1:133;
 A8: 0<p;
 A9: 0<>abs(r) by A6,COMPLEX1:133;
     0/abs(r)=0;
-    then 0<p/abs(r) by A7,A8,REAL_1:73;
+    then 0<p/abs(r) by A7,A8,XREAL_1:76;
     then consider n1 such that
 A10: for m st n1<=m holds abs(seq.m-(lim seq))<p/abs(r) by A1,Def7;
     take k=n1;
@@ -883,12 +883,12 @@ A12: -p<seq1.m-(lim seq) by A11,XXREAL_0:2;
 end;
 
 theorem Th35:
-  seq is convergent & (lim seq)<>0 & seq is_not_0 implies seq" is convergent
+  seq is convergent & (lim seq)<>0 & seq is non-zero implies seq" is convergent
 proof
   assume that
 A1: seq is convergent and
 A2: (lim seq)<>0 and
-A3: seq is_not_0;
+A3: seq is non-zero;
 A4: 0<abs(lim seq) by A2,COMPLEX1:133;
 A5: 0<>abs(lim seq) by A2,COMPLEX1:133;
   consider n1 such that
@@ -922,7 +922,7 @@ A13: seq.m<>0 by A3,SEQ_1:7;
   then
 A14: abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq))<
   (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
-  by A11,REAL_1:73;
+  by A11,XREAL_1:76;
 A15: (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
   =(p*(2"*(abs(lim seq)*abs(lim seq))))*
   (abs(seq.m)*abs(lim seq))" by XCMPLX_0:def 9
@@ -950,12 +950,13 @@ A19: (p*(abs(lim seq)/2))/abs(seq.m)<
 end;
 
 theorem Th36:
-  seq is convergent & (lim seq)<>0 & seq is_not_0 implies lim seq"=(lim seq)"
+  seq is convergent & (lim seq)<>0 & seq is non-zero
+   implies lim seq"=(lim seq)"
 proof
   assume that
 A1: seq is convergent and
 A2: (lim seq)<>0 and
-A3: seq is_not_0;
+A3: seq is non-zero;
 A4: seq" is convergent by A1,A2,A3,Th35;
 A5: 0<abs(lim seq) by A2,COMPLEX1:133;
 A6: 0<>abs(lim seq) by A2,COMPLEX1:133;
@@ -990,7 +991,7 @@ A14: seq.m<>0 by A3,SEQ_1:7;
     then
 A15: abs(seq.m-(lim seq))/(abs(seq.m)*abs(lim seq))<
     (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
-    by A12,REAL_1:73;
+    by A12,XREAL_1:76;
 A16: (p*((abs(lim seq)*abs(lim seq))/2))/(abs(seq.m)*abs(lim seq))
     =(p*(2"*(abs(lim seq)*abs(lim seq))))*
     (abs(seq.m)*abs(lim seq))" by XCMPLX_0:def 9
@@ -1021,26 +1022,26 @@ end;
 
 theorem
   seq' is convergent & seq is convergent & (lim seq)<>0
-  & seq is_not_0 implies seq'/"seq is convergent
+  & seq is non-zero implies seq'/"seq is convergent
 proof
   assume that
 A1: seq' is convergent and
 A2: seq is convergent and
 A3: (lim seq)<>0 and
-A4: seq is_not_0;
+A4: seq is non-zero;
   seq" is convergent by A2,A3,A4,Th35;
   hence thesis by A1,Th28;
 end;
 
 theorem
   seq' is convergent & seq is convergent & (lim seq)<>0
-  & seq is_not_0 implies lim(seq'/"seq)=(lim seq')/(lim seq)
+  & seq is non-zero implies lim(seq'/"seq)=(lim seq')/(lim seq)
 proof
   assume that
 A1: seq' is convergent and
 A2: seq is convergent and
 A3: (lim seq)<>0 and
-A4: seq is_not_0;
+A4: seq is non-zero;
   seq" is convergent by A2,A3,A4,Th35;
   then lim (seq'(#)(seq"))=(lim seq')*(lim seq") by A1,Th29
     .=(lim seq')*(lim seq)" by A2,A3,A4,Th36

@@ -8,15 +8,15 @@ environ
 
  vocabularies SEQ_1, ORDINAL2, SEQM_3, PARTFUN1, FUNCT_1, RELAT_1, BOOLE,
       ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4, PARTFUN2,
-      RCOMP_1, RFUNCT_2, FRECHET2;
+      RCOMP_1, RFUNCT_2, FRECHET2, ANPROJ_1, PROB_1, REALSET1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, VALUED_1, SEQ_1,
-      SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3, XXREAL_0, XXREAL_2,
-      RECDEF_1;
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, REALSET1, RELSET_1, PARTFUN1, VALUED_1,
+      SEQ_1, SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3, XXREAL_0,
+      XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
-      PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2;
+      PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, REALSET1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
-      MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2, RELAT_1, REALSET1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -67,7 +67,7 @@ theorem :: RFUNCT_2:11
   seq1 is subsequence of seq implies rng seq1 c= rng seq;
 
 theorem :: RFUNCT_2:12
-  seq1 is subsequence of seq & seq is_not_0 implies seq1 is_not_0;
+  seq1 is subsequence of seq & seq is non-zero implies seq1 is non-zero;
 
 theorem :: RFUNCT_2:13
   (seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) &
@@ -122,7 +122,7 @@ theorem :: RFUNCT_2:25
   rng seq c= dom h implies abs(h*seq) = (abs(h))*seq & -(h*seq) = (-h)*seq;
 
 theorem :: RFUNCT_2:26
-  rng seq c= dom (h^) implies h*seq is_not_0;
+  rng seq c= dom (h^) implies h*seq is non-zero;
 
 theorem :: RFUNCT_2:27
   rng seq c= dom (h^) implies (h^)*seq =(h*seq)";
@@ -181,178 +181,221 @@ theorem :: RFUNCT_2:40
 
 theorem :: RFUNCT_2:41
   rng h is bounded & upper_bound (rng h) = lower_bound (rng h) implies
-  h is_constant_on dom h;
+  h|dom h is constant;
 
 theorem :: RFUNCT_2:42
   Y c= dom h & h.:Y is bounded & upper_bound (h.:Y) = lower_bound (h.:Y)
-  implies h is_constant_on Y;
+  implies h|Y is constant;
 
 definition
-  let h,Y;
-  pred h is_increasing_on Y means
+  let h;
+  attr h is increasing means
 :: RFUNCT_2:def 2
-
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 < h.r2;
-  pred h is_decreasing_on Y means
+  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 < h.r2;
+  attr h is decreasing means
 :: RFUNCT_2:def 3
-
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 < h.r1;
-  pred h is_non_decreasing_on Y means
+  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 < h.r1;
+  attr h is non-decreasing means
 :: RFUNCT_2:def 4
-
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r1 <= h.r2;
-  pred h is_non_increasing_on Y means
+  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 <= h.r2;
+  attr h is non-increasing means
 :: RFUNCT_2:def 5
-
-  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds h.r2 <= h.r1;
+  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r2 <= h.r1;
 end;
 
+theorem :: RFUNCT_2:43
+  h|Y is increasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2 holds
+   h.r1 < h.r2;
+
+theorem :: RFUNCT_2:44
+ h|Y is decreasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r2 < h.r1;
+
+theorem :: RFUNCT_2:45
+ h|Y is non-decreasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r1 <= h.r2;
+
+theorem :: RFUNCT_2:46
+ h|Y is non-increasing iff
+  for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h & r1<r2
+   holds h.r2 <= h.r1;
+
 definition
-  let h,Y;
-  pred h is_monotone_on Y means
+  let h;
+  attr h is monotone means
 :: RFUNCT_2:def 6
 
-  h is_non_decreasing_on Y or h is_non_increasing_on Y;
+  h is non-decreasing or h is non-increasing;
 end;
 
-canceled 5;
+registration
+ cluster non-decreasing -> monotone PartFunc of REAL,REAL;
+ cluster non-increasing -> monotone PartFunc of REAL,REAL;
+ cluster non monotone ->
+  non non-decreasing non non-increasing PartFunc of REAL,REAL;
+end;
+
+canceled;
 
 theorem :: RFUNCT_2:48
 
-h is_non_decreasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+h|Y is non-decreasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
   r1<=r2 holds h.r1 <= h.r2;
 
 theorem :: RFUNCT_2:49
 
-h is_non_increasing_on Y iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
+h|Y is non-increasing iff for r1,r2 st r1 in Y /\ dom h & r2 in Y /\ dom h &
   r1<=r2 holds h.r2 <= h.r1;
 
-theorem :: RFUNCT_2:50
-  h is_increasing_on X iff h|X is_increasing_on X;
+registration
+ cluster decreasing -> non-increasing PartFunc of REAL,REAL;
+ cluster increasing -> non-decreasing PartFunc of REAL,REAL;
+ cluster non-decreasing non-increasing -> constant PartFunc of REAL,REAL;
+end;
 
-theorem :: RFUNCT_2:51
-  h is_decreasing_on X iff h|X is_decreasing_on X;
+registration
+ cluster trivial -> increasing decreasing PartFunc of REAL,REAL;
+end;
 
-theorem :: RFUNCT_2:52
-  h is_non_decreasing_on X iff h|X is_non_decreasing_on X;
+registration
+ cluster constant -> non-increasing non-decreasing PartFunc of REAL,REAL;
+end;
 
-theorem :: RFUNCT_2:53
-  h is_non_increasing_on X iff h|X is_non_increasing_on X;
+registration
+ cluster trivial PartFunc of REAL,REAL;
+end;
+
+registration let h be increasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> increasing PartFunc of REAL,REAL;
+end;
+
+registration let h be decreasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> decreasing PartFunc of REAL,REAL;
+end;
+
+registration let h be non-decreasing PartFunc of REAL,REAL, X be set;
+ cluster h|X -> non-decreasing PartFunc of REAL,REAL;
+end;
+
+canceled 4;
 
 theorem :: RFUNCT_2:54
-  Y misses dom h implies h is_increasing_on Y & h is_decreasing_on Y &
-  h is_non_decreasing_on Y & h is_non_increasing_on Y & h is_monotone_on Y;
+  Y misses dom h implies h|Y is increasing & h|Y is decreasing &
+  h|Y is non-decreasing & h|Y is non-increasing & h|Y is monotone;
 
 theorem :: RFUNCT_2:55
-  h is_increasing_on Y implies h is_non_decreasing_on Y;
+  h is increasing implies h is non-decreasing;
 
 theorem :: RFUNCT_2:56
-  h is_decreasing_on Y implies h is_non_increasing_on Y;
+  h is decreasing implies h is non-increasing;
 
 theorem :: RFUNCT_2:57
-  h is_constant_on Y implies h is_non_decreasing_on Y;
+  h is constant implies h is non-decreasing;
 
 theorem :: RFUNCT_2:58
-  h is_constant_on Y implies h is_non_increasing_on Y;
+  h is constant implies h is non-increasing;
 
 theorem :: RFUNCT_2:59
-  h is_non_decreasing_on Y & h is_non_increasing_on X implies
-  h is_constant_on (Y /\ X);
+  h|Y is non-decreasing & h|X is non-increasing implies
+  h|(Y /\ X) is constant;
 
 theorem :: RFUNCT_2:60
-  X c= Y & h is_increasing_on Y implies h is_increasing_on X;
+  X c= Y & h|Y is increasing implies h|X is increasing;
 
 theorem :: RFUNCT_2:61
-  X c= Y & h is_decreasing_on Y implies h is_decreasing_on X;
+  X c= Y & h|Y is decreasing implies h|X is decreasing;
 
 theorem :: RFUNCT_2:62
-  X c= Y & h is_non_decreasing_on Y implies h is_non_decreasing_on X;
+  X c= Y & h|Y is non-decreasing implies h|X is non-decreasing;
 
 theorem :: RFUNCT_2:63
-  X c= Y & h is_non_increasing_on Y implies h is_non_increasing_on X;
+  X c= Y & h|Y is non-increasing implies h|X is non-increasing;
 
 theorem :: RFUNCT_2:64
-  (h is_increasing_on Y & 0<r implies r(#)h is_increasing_on Y) &
-  (r = 0 implies r(#)h is_constant_on Y) &
-  (h is_increasing_on Y & r<0 implies r(#)h is_decreasing_on Y);
+  (h|Y is increasing & 0<r implies (r(#)h)|Y is increasing) &
+  (r = 0 implies (r(#)h)|Y is constant) &
+  (h|Y is increasing & r<0 implies (r(#)h)|Y is decreasing);
 
 theorem :: RFUNCT_2:65
-  (h is_decreasing_on Y & 0<r implies r(#)h is_decreasing_on Y) &
-  (h is_decreasing_on Y & r<0 implies r(#)h is_increasing_on Y);
+  (h|Y is decreasing & 0<r implies (r(#)h)|Y is decreasing) &
+  (h|Y is decreasing & r<0 implies (r(#)h)|Y is increasing);
 
 theorem :: RFUNCT_2:66
-  (h is_non_decreasing_on Y & 0<=r implies r(#)h is_non_decreasing_on Y) &
-  (h is_non_decreasing_on Y & r<=0 implies r(#)h is_non_increasing_on Y);
+  (h|Y is non-decreasing & 0<=r implies (r(#)h)|Y is non-decreasing) &
+  (h|Y is non-decreasing & r<=0 implies (r(#)h)|Y is non-increasing);
 
 theorem :: RFUNCT_2:67
-  (h is_non_increasing_on Y & 0<=r implies r(#)h is_non_increasing_on Y) &
-  (h is_non_increasing_on Y & r<=0 implies r(#)h is_non_decreasing_on Y);
+  (h|Y is non-increasing & 0<=r implies (r(#)h)|Y is non-increasing) &
+  (h|Y is non-increasing & r<=0 implies (r(#)h)|Y is non-decreasing);
 
 theorem :: RFUNCT_2:68
   r in X /\ Y /\ dom (h1+h2) implies r in X /\ dom h1 & r in Y /\ dom h2;
 
 theorem :: RFUNCT_2:69
-  (h1 is_increasing_on X & h2 is_increasing_on Y implies
-  h1+h2 is_increasing_on (X /\ Y)) &
-  (h1 is_decreasing_on X & h2 is_decreasing_on Y implies
-  h1+h2 is_decreasing_on (X /\ Y)) &
-  (h1 is_non_decreasing_on X & h2 is_non_decreasing_on Y implies
-  h1+h2 is_non_decreasing_on X /\ Y) &
-  (h1 is_non_increasing_on X & h2 is_non_increasing_on Y implies
-  h1+h2 is_non_increasing_on X /\ Y);
+  (h1|X is increasing & h2|Y is increasing implies
+  (h1+h2)|(X /\ Y) is increasing) &
+  (h1|X is decreasing & h2|Y is decreasing implies
+  (h1+h2)|(X /\ Y) is decreasing) &
+  (h1|X is non-decreasing & h2|Y is non-decreasing implies
+  (h1+h2)|(X /\ Y) is non-decreasing) &
+  (h1|X is non-increasing & h2|Y is non-increasing implies
+  (h1+h2)|(X /\ Y) is non-increasing);
 
 theorem :: RFUNCT_2:70
-  (h1 is_increasing_on X & h2 is_constant_on Y implies
-  h1+h2 is_increasing_on X /\ Y) &
-  (h1 is_decreasing_on X & h2 is_constant_on Y implies
-  h1+h2 is_decreasing_on X /\ Y);
+  (h1|X is increasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is increasing) &
+  (h1|X is decreasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is decreasing);
 
 theorem :: RFUNCT_2:71
-  h1 is_increasing_on X & h2 is_non_decreasing_on Y implies
-  h1 + h2 is_increasing_on X /\ Y;
+  h1|X is increasing & h2|Y is non-decreasing implies
+  (h1+h2)|(X /\ Y) is increasing;
 
 theorem :: RFUNCT_2:72
-  h1 is_non_increasing_on X & h2 is_constant_on Y implies
-  h1 + h2 is_non_increasing_on X /\ Y;
+  h1|X is non-increasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is non-increasing;
 
 theorem :: RFUNCT_2:73
-  h1 is_decreasing_on X & h2 is_non_increasing_on Y implies
-  h1 + h2 is_decreasing_on X /\ Y;
+  h1|X is decreasing & h2|Y is non-increasing implies
+  (h1+h2)|(X /\ Y) is decreasing;
 
 theorem :: RFUNCT_2:74
-  h1 is_non_decreasing_on X & h2 is_constant_on Y implies
-  h1 + h2 is_non_decreasing_on X /\ Y;
+  h1|X is non-decreasing & h2|Y is constant implies
+  (h1+h2)|(X /\ Y) is non-decreasing;
 
 theorem :: RFUNCT_2:75
-  h is_increasing_on {x};
+  h|{x} is non-increasing;
 
 theorem :: RFUNCT_2:76
-  h is_decreasing_on {x};
+  h|{x} is decreasing;
 
 theorem :: RFUNCT_2:77
-  h is_non_decreasing_on {x};
+  h|{x} is non-decreasing;
 
 theorem :: RFUNCT_2:78
-  h is_non_increasing_on {x};
+  h|{x} is non-increasing;
 
 theorem :: RFUNCT_2:79
-  id R is_increasing_on R;
+  (id R)|R is increasing;
 
 theorem :: RFUNCT_2:80
-  h is_increasing_on X implies -h is_decreasing_on X;
+  h|X is increasing implies (-h)|X is decreasing;
 
 theorem :: RFUNCT_2:81
-  h is_non_decreasing_on X implies -h is_non_increasing_on X;
+  h|X is non-decreasing implies (-h)|X is non-increasing;
 
 theorem :: RFUNCT_2:82
-  (h is_increasing_on [.p,g.] or h is_decreasing_on [.p,g.])
+  (h|[.p,g.] is increasing or h|[.p,g.] is decreasing)
   implies h|[.p,g.] is one-to-one;
 
 theorem :: RFUNCT_2:83
-  for h being one-to-one PartFunc of REAL, REAL st h is_increasing_on [.p,g .]
-  holds (h|[.p,g.])" is_increasing_on h.:[.p,g.];
+  for h being one-to-one PartFunc of REAL, REAL st h|[.p,g.] is increasing
+  holds (h|[.p,g.])"|(h.:[.p,g.]) is increasing;
 
 theorem :: RFUNCT_2:84
-  for h being one-to-one PartFunc of REAL, REAL st h is_decreasing_on [.p,g .]
-  holds (h|[.p,g.])" is_decreasing_on h.:[.p,g.];
+  for h being one-to-one PartFunc of REAL, REAL st h|[.p,g.] is decreasing
+  holds (h|[.p,g.])"|(h.:[.p,g.]) is decreasing;
 

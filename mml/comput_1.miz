@@ -9,7 +9,7 @@ environ
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, MATRIX_2, BOOLE,
       PARTFUN1, SETFAM_1, FUNCT_6, MSUALG_6, FRAENKEL, TARSKI, RFUNCT_3,
       SEQM_3, UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
-      BORSUK_1, PROB_1, FUNCT_5, FINSET_1, SQUARE_1, BINTREE1, CARD_3,
+      BORSUK_1, PROB_1, FINSET_1, SQUARE_1, BINTREE1, CARD_3,
       MONOID_0, QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1, ARYTM, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETFAM_1, SEQ_1,
@@ -23,13 +23,13 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCOP_1, FINSET_1, FRAENKEL, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       FINSEQ_1, FINSEQ_2, PRE_CIRC, FUNCT_7, ALTCAT_1, FUNCT_2, VALUED_0,
-      XXREAL_2;
+      XXREAL_2, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FRAENKEL, PARTFUN1, RFUNCT_3, UNIALG_1, FUNCT_1, RELAT_1, TARSKI,
       FINSEQ_2, FUNCOP_1;
  theorems TARSKI, NAT_1, ZFMISC_1, RELAT_1, RELSET_1, FINSEQ_1, FUNCOP_1,
       PARTFUN1, FINSEQ_2, MSUALG_1, FINSEQ_4, FUNCT_6, FUNCT_1, RFUNCT_3,
-      FUNCT_2, GRFUNC_1, FUNCT_7, FUNCT_4, FINSEQ_3, REAL_1, SUBSET_1, PRALG_3,
+      FUNCT_2, GRFUNC_1, FUNCT_7, FUNCT_4, FINSEQ_3, SUBSET_1, PRALG_3,
       SETFAM_1, CARD_5, PRE_CIRC, UNIALG_1, FUNCT_5, CARD_1, CARD_3, FRAENKEL,
       NEWTON, BINARITH, REAL_2, JORDAN2B, WSIERP_1, XBOOLE_0, XBOOLE_1,
       ORDINAL1, XXREAL_0, VALUED_0, CARD_2, XXREAL_2;
@@ -170,8 +170,10 @@ A3: Seg len xi = dom xi & Seg len x = dom x & Seg len yi = dom yi &
 A4: i in dom x;
 X: dom Del(x,i) = Seg len dx by FINSEQ_1:def 3;
     now thus len dx = len dx;
-      consider m being Nat such that
-A5:   len x = m+1 by NAT_1:6,CARD_2:59,A4,RELAT_1:60;
+      x <> {} by A4;
+      then len x <> 0;
+      then consider m being Nat such that
+A5:   len x = m+1 by NAT_1:6;
       reconsider m as Element of NAT by ORDINAL1:def 13;
 A6:   len x = m+1 by A5;
 A7:   len dx = m by A4,A5,FINSEQ_3:118;
@@ -216,7 +218,7 @@ proof
       assume x in S;
       then consider s being Element of X* such that
 A2:   x = s & len s = 0;
-      s = {} by A2,CARD_2:59;
+      s = {} by A2;
       hence x in {{}} by A2,TARSKI:def 1;
     end;
     assume x in {{}};
@@ -823,7 +825,7 @@ A2: X is empty;
     then
 A3: arity f = len <*>(X*) by A1,UNIALG_1:def 10;
     0-tuples_on X = {{}} by Th8;
-    hence x in (arity f)-tuples_on X by A1,A2,A3,FUNCT_7:19,CARD_1:47;
+    hence x in (arity f)-tuples_on X by A1,A2,A3,FUNCT_7:19;
   end;
   suppose X is non empty;
     then reconsider X' = X as non empty set;
@@ -1091,8 +1093,8 @@ theorem
 proof
   let F be with_the_same_arity FinSequence;
   assume len F = 0;
-  then for f being homogeneous Function holds not f in rng F
-  by CARD_2:59,RELAT_1:60;
+  then F = {};
+  then for f being homogeneous Function holds not f in rng F;
   hence arity F = 0 by Def7;
 end;
 
@@ -1154,7 +1156,7 @@ A1: dom f = {p} by FUNCOP_1:19;
 A2: len a = len b;
     assume a in dom f;
     then a = p by A1,TARSKI:def 1;
-    then b = {} by CARD_2:59,A2,CARD_1:47;
+    then b = {} by A2;
     hence thesis by A1,TARSKI:def 1;
   end;
 end;
@@ -2598,7 +2600,7 @@ A8:     dom (F.0) = {p+*(i,0)} by A1,A3,FUNCOP_1:19;
         then
 A9:     len Del(p,i) = arity f1 by A7,FINSEQ_2:109;
         p <> <*>NAT by A1;
-        then len p <> 0 by FINSEQ_1:32;
+        then len p <> 0;
         then consider n being Nat such that
 A10:    len p = n+1 by NAT_1:6;
 A11:    len Del(p,i) = n by A1,A10,FINSEQ_3:118;
@@ -4275,7 +4277,7 @@ A4: m <= n+1;
     by XBOOLE_1:7;
     then
 A5: prd.n c= prd.(n+1) by XBOOLE_1:1;
-    per cases by A4,REAL_1:def 5;
+    per cases by A4,XXREAL_0:1;
     suppose m < n+1;
       hence prd.m c= prd.(n+1) by A3,A5,NAT_1:13,XBOOLE_1:1;
     end;
@@ -4320,7 +4322,7 @@ A4: kf in dom prd & f in prd.kf by A3,CARD_5:10;
     reconsider kf as Element of NAT by A4;
     per cases;
     suppose arity f = 0;
-      then F = {} by A3,CARD_2:59;
+      then F = {} by A3;
       then
 A5:   rng F c= prd.kf by RELAT_1:60,XBOOLE_1:2;
       F is with_the_same_arity Element of (HFuncs NAT)* by FINSEQ_1:def 11;

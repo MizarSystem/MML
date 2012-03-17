@@ -10,7 +10,7 @@ environ
 
  vocabularies FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1, TARSKI,
       MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1, MEASURE4, MEASURE1,
-      MEASURE7, FUNCOP_1, PROB_1, ARYTM, XXREAL_2;
+      MEASURE7, FUNCOP_1, PROB_1, ARYTM, XXREAL_2, TBSP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
       ORDINAL1, NUMBERS, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, XXREAL_2,
@@ -19,7 +19,7 @@ environ
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, NAT_1, MEASURE4, MEASURE5,
       RECDEF_1, SUPINF_1, XREAL_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FRAENKEL,
-      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0;
+      NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0, XXREAL_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0, XXREAL_2;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4, MEASURE5,
@@ -726,7 +726,8 @@ Lm4: for n being Element of NAT holds G0.n is Interval
 proof
   let n be Element of NAT;
   G0.n in {REAL} by Lm2,FUNCT_2:6;
-  hence thesis by MEASURE6:35,TARSKI:def 1;
+  then G0.n = REAL by TARSKI:def 1;
+  hence thesis;
 end;
 
 definition
@@ -774,10 +775,10 @@ end;
 definition
   let A be Subset of REAL;
   let F be Interval_Covering of A;
-  deffunc F(Element of NAT) = vol(F.$1);
+  deffunc F(Element of NAT) = diameter(F.$1);
   func F vol -> Function of NAT,ExtREAL means
   :Def4:
-  for n being Element of NAT holds it.n = vol(F.n);
+  for n being Element of NAT holds it.n = diameter(F.n);
   existence
   proof
     thus ex G being Function of NAT,ExtREAL st
@@ -803,7 +804,7 @@ proof
     for n being Element of NAT holds 0. <= (F vol).n
     proof
       let n be Element of NAT;
-      (F vol).n = vol(F.n) by Def4;
+      (F vol).n = diameter(F.n) by Def4;
       hence thesis by MEASURE5:63;
     end;
     hence thesis by SUPINF_2:58;
@@ -895,7 +896,7 @@ A1: (vol(G)).n = vol(G.n) by Def7;
   for k being Element of NAT holds 0. <= ((G.n) vol).k
   proof
     let k be Element of NAT;
-    0. <= vol((G.n).k) by MEASURE5:63;
+    0. <= diameter((G.n).k) by MEASURE5:63;
     hence thesis by Def4;
   end;
   then ((G.n) vol) is nonnegative by SUPINF_2:58;
@@ -941,7 +942,7 @@ A2: rng F0 = {REAL,{}} & F0.0 = REAL &
     for n being Element of NAT st 0 < n holds F0.n = {} by MEASURE1:40;
 A3: union{REAL,{}} = REAL \/ {} by ZFMISC_1:93;
 
-for n being Element of NAT holds F0.n is Interval by A2,MEASURE6:35,NAT_1:3;
+for n being Element of NAT holds F0.n is Interval by A2,NAT_1:3;
     then reconsider F0 as Interval_Covering of A by A2,A3,Def2;
     vol F0 in D by A1;
     hence thesis by Def8;
@@ -1153,8 +1154,9 @@ A3: P[0]
     let G be Interval_Covering of F;
     reconsider GG = On(G,H) as Interval_Covering of union rng F;
 A4: Ser(GG vol).0 = (GG vol).0 by SUPINF_2:63;
-    (GG vol).0 = vol(GG.0) &
-    ((G.(pr1(H).0)) vol).(pr2(H).0) = vol((G.(pr1(H).0)).(pr2(H).0)) by Def4;
+    (GG vol).0 = diameter(GG.0) &
+    ((G.(pr1(H).0)) vol).(pr2(H).0) = diameter((G.(pr1(H).0)).(pr2(H).0))
+     by Def4;
     then (GG vol).0 <= ((G.(pr1(H).0)) vol).(pr2(H).0) by A2,Def13;
     then (GG vol).0 <= vol(G.(pr1(H).0)) by Th13,MEASURE6:3;
     then
@@ -1289,7 +1291,7 @@ A23:      n = pr1(H).(k+1);
             for s being Element of NAT holds ((G1.n) vol).s = 0.
             proof
               let s be Element of NAT;
-              vol((G1.n).s) = 0. by A15,A23,MEASURE5:60;
+              diameter((G1.n).s) = 0. by A15,A23,MEASURE5:60;
               hence thesis by Def4;
             end;
             then
@@ -1297,8 +1299,8 @@ A24:        SUM((G1.n) vol) = 0. by Th1;
             for s being Element of NAT holds ((G0.n) vol).s <= ((G.n) vol).s
             proof
               let s be Element of NAT;
-              ((G0.n) vol).s = vol((G0.n).s) by Def4
-                .= vol((G.n).s) by A11,A23
+              ((G0.n) vol).s = diameter((G0.n).s) by Def4
+                .= diameter((G.n).s) by A11,A23
                 .= ((G.n) vol).s by Def4;
               hence thesis;
             end;
@@ -1307,8 +1309,8 @@ A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by SUPINF_2:62;
             for s being Element of NAT holds ((G.n) vol).s <= ((G0.n) vol).s
             proof
               let s be Element of NAT;
-              ((G0.n) vol).s = vol((G0.n).s) by Def4
-                .= vol((G.n).s) by A11,A23
+              ((G0.n) vol).s = diameter((G0.n).s) by Def4
+                .= diameter((G.n).s) by A11,A23
                 .= ((G.n) vol).s by Def4;
               hence thesis;
             end;
@@ -1323,14 +1325,14 @@ A26:      n <> pr1(H).(k+1);
 A27:      for s being Element of NAT holds ((G1.n) vol).s = ((G.n) vol).s
           proof
             let s be Element of NAT;
-            ((G1.n) vol).s = vol((G1.n).s) &
-            ((G.n) vol).s = vol((G.n).s) by Def4;
+            ((G1.n) vol).s = diameter((G1.n).s) &
+            ((G.n) vol).s = diameter((G.n).s) by Def4;
             hence thesis by A15,A26;
           end;
 A28:      for s being Element of NAT holds ((G0.n) vol).s = 0.
           proof
             let s be Element of NAT;
-            vol((G0.n).s) = 0. by A11,A26,MEASURE5:60;
+            diameter((G0.n).s) = 0. by A11,A26,MEASURE5:60;
             hence thesis by Def4;
           end;
           SUM((G.n) vol) = SUM((G0.n) vol) + SUM((G1.n) vol)
@@ -1397,8 +1399,8 @@ A44:    s in N0;
         then consider s1 being Element of NAT such that
 A45:    s1 = s & pr1(H).(k+1) = pr1(H).s1;
 A46:    pr2(H).s =SOS.s by A38,A44;
-        (GG0 vol).s = vol(GG0.s) by Def4
-          .= vol((G0.(pr1(H).(k+1))).(pr2(H).s)) by A2,A45,Def13
+        (GG0 vol).s = diameter(GG0.s) by Def4
+          .= diameter((G0.(pr1(H).(k+1))).(pr2(H).s)) by A2,A45,Def13
           .= (G0.(pr1(H).(k+1)) vol).(SOS.s) by A46,Def4
           .= ((G0.(pr1(H).(k+1)) vol)*SOS).s by A44,FUNCT_2:21;
         hence thesis;
@@ -1406,8 +1408,8 @@ A46:    pr2(H).s =SOS.s by A38,A44;
       assume not s in N0;
       then
 A47:  not pr1(H).(k+1) = pr1(H).s;
-      (GG0 vol).s = vol(GG0.s) by Def4
-        .= vol((G0.(pr1(H).s)).(pr2(H).s)) by A2,Def13
+      (GG0 vol).s = diameter(GG0.s) by Def4
+        .= diameter((G0.(pr1(H).s)).(pr2(H).s)) by A2,Def13
         .= 0. by A11,A47,MEASURE5:60;
       hence thesis;
     end;
@@ -1454,10 +1456,11 @@ A60: (Ser vol(G)).m = (Ser vol(G0)).m + (Ser vol(G1)).m by A20,A59,Th3;
     holds ((On(G,H)) vol).n = (GG0 vol).n + (GG1 vol). n
     proof
       let n be Element of NAT;
-A61:  ((On(G,H)) vol).n = vol((On(G,H)).n) & (GG0 vol).n = vol(GG0.n) &
-      (GG1 vol).n = vol(GG1.n) by Def4;
+A61:  ((On(G,H)) vol).n = diameter((On(G,H)).n) &
+ (GG0 vol).n = diameter(GG0.n) &
+      (GG1 vol).n = diameter(GG1.n) by Def4;
       then
-A62:  ((On(G,H)) vol).n = vol((G.(pr1(H).n)).(pr2(H).n)) by A2,Def13;
+A62:  ((On(G,H)) vol).n = diameter((G.(pr1(H).n)).(pr2(H).n)) by A2,Def13;
       per cases;
       suppose
 A63:    pr1(H).n = pr1(H).(k+1);
@@ -1529,7 +1532,7 @@ A1: for A being Subset of REAL holds for F being Interval_Covering of A holds
     for n being Element of NAT holds 0. <= (F vol).n
     proof
       let n be Element of NAT;
-      (F vol).n = vol(F.n) by Def4;
+      (F vol).n = diameter(F.n) by Def4;
       hence thesis by MEASURE5:63;
     end;
     hence thesis by SUPINF_2:58;
@@ -1562,7 +1565,7 @@ A8: G vol is nonnegative by A1;
 A9: for r being Element of NAT holds 0 <= r implies (G vol).r = 0.
   proof
     let n be Element of NAT;
-    vol(G.n) = vol({}) by FUNCOP_1:13;
+    diameter(G.n) = diameter({}) by FUNCOP_1:13;
     hence thesis by Def4,MEASURE5:60;
   end;
   then vol(G) = Ser(G vol).0 by A8,SUPINF_2:67
@@ -1601,7 +1604,7 @@ A16: B c= union(rng F) &
 A17:  for n being Element of NAT holds (G vol).n <= (F vol).n
       proof
         let n be Element of NAT;
-        (G vol).n = vol(G.n) by Def4
+        (G vol).n = diameter(G.n) by Def4
           .= (F vol).n by Def4;
         hence thesis;
       end;
@@ -1609,7 +1612,7 @@ A18:  SUM(G vol) <= SUM(F vol) by A17,SUPINF_2:62;
 A19:  for n being Element of NAT holds (F vol).n <= (G vol).n
       proof
         let n be Element of NAT;
-        (G vol).n = vol(G.n) by Def4
+        (G vol).n = diameter(G.n) by Def4
           .= (F vol).n by Def4;
         hence thesis;
       end;

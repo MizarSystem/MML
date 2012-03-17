@@ -32,73 +32,73 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="209">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="219"/>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="219"/>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="50"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
-<Adjective nr="77"/>
+<Adjective nr="51"/>
+<Adjective nr="56"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="216"/>
+<Func kind="K" nr="220"/>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="73"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="79"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="216"/>
+<Func kind="K" nr="220"/>
 <Cluster>
-<Adjective nr="73"/>
-<Adjective nr="90"/>
+<Adjective nr="79"/>
+<Adjective nr="95"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="216"/>
+<Func kind="K" nr="220"/>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="71"/>
-<Adjective nr="73"/>
-<Adjective nr="75"/>
-<Adjective nr="76"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="56"/>
 <Adjective nr="77"/>
+<Adjective nr="79"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
 <Adjective nr="83"/>
-<Adjective nr="89"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
+<Adjective nr="88"/>
+<Adjective nr="94"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <CCluster aid="QUATERN2" nr="1">
@@ -107,11 +107,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="215"/>
+<Func kind="K" nr="219"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 <CCluster aid="QUATERN2" nr="2">
@@ -120,11 +120,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="216"/>
+<Func kind="K" nr="220"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </CCluster>
 </Registrations>

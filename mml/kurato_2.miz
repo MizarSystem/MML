@@ -6,7 +6,7 @@
 
 environ
 
- vocabularies KURATO_2, WELLFND1, FRECHET2, REARRAN1, YELLOW_6, BOOLE, EUCLID,
+ vocabularies KURATO_2, FRECHET2, YELLOW_6, BOOLE, EUCLID,
       PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1,
       ORDINAL2, LATTICES, SEQ_2, PROB_1, SEQ_1, FUNCT_1, SEQM_3, FRECHET,
       ARYTM_3, CONNSP_2, ARYTM, TOPS_1, ARYTM_1, NEWTON, NORMSP_1, COMPLEX1,
@@ -25,7 +25,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQM_3,
       STRUCT_0, TOPS_1, COMPTS_1, METRIC_1, PCOMPS_1, BORSUK_1, MONOID_0,
-      EUCLID, TOPREAL2, TOPREAL5, JORDAN2C;
+      EUCLID, TOPREAL2, TOPREAL5, JORDAN2C, FUNCOP_1;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions XBOOLE_0, TARSKI, EUCLID, SUBSET_1, STRUCT_0;
  theorems SETFAM_1, FRECHET, METRIC_1, TOPREAL3, YELLOW_6, TOPMETR, CONNSP_2,
@@ -102,9 +102,7 @@ registration
     set X = NAT --> A;
     reconsider X as SetSequence of T;
     take X;
-    rng X = {{a}} by FUNCOP_1:14;
-    then not {} in rng X by TARSKI:def 1;
-    hence thesis by RELAT_1:def 9;
+    thus thesis;
   end;
 end;
 
@@ -781,16 +779,6 @@ end;
 
 begin :: Ascending and Descending Families of Subsets
 
-definition
-  let T be set, S be SetSequence of T;
-  attr S is descending means
-  :Def5:
-  for i being Element of NAT holds S.(i+1) c= S.i;
-  attr S is ascending means
-  :Def6:
-  for i being Element of NAT holds S.i c= S.(i+1);
-end;
-
 theorem Th21:
   for f being Function st (for i being Element of NAT holds f.(i+1) c= f.i)
   for i, j being Element of NAT st i <= j holds f.j c= f.i
@@ -818,40 +806,56 @@ A8: i + k = j by A2,NAT_1:10;
   hence f.j c= f.i by A7,A8;
 end;
 
-theorem Th22:
-  for T being set, C being SetSequence of T st C is descending holds
-  for i, m being Element of NAT st i >= m holds C.i c= C.m
-proof
-  let T be set, C be SetSequence of T;
-  assume C is descending;
-  then
-A1: for i being Element of NAT holds C.(i+1) c= C.i by Def5;
-  let i, m be Element of NAT;
-  assume i >= m;
-  hence thesis by A1,Th21;
+definition
+  let T be set, S be SetSequence of T;
+  redefine attr S is non-ascending means
+  :Def5:
+  for i being Element of NAT holds S.(i+1) c= S.i;
+  compatibility
+   proof
+    thus S is non-ascending implies
+     for i being Element of NAT holds S.(i+1) c= S.i
+    proof assume
+Z:   S is non-ascending;
+     let i be Element of NAT;
+      i <=i+1 by NAT_1:13;
+     hence S.(i+1) c= S.i by Z,PROB_1:def 6;
+    end;
+    assume for i being Element of NAT holds S.(i+1) c= S.i;
+     then for i, j being Element of NAT st i <= j holds S.j c= S.i by Th21;
+    hence S is non-ascending by PROB_1:def 6;
+   end;
+  redefine attr S is non-descending means
+  :Def6:
+  for i being Element of NAT holds S.i c= S.(i+1);
+  compatibility
+   proof
+    thus S is non-descending implies
+     for i being Element of NAT holds S.i c= S.(i+1)
+    proof assume
+Z:   S is non-descending;
+     let i be Element of NAT;
+      i <=i+1 by NAT_1:13;
+     hence S.i c= S.(i+1) by Z,PROB_1:def 7;
+    end;
+    assume for i being Element of NAT holds S.i c= S.(i+1);
+     then for i, j being Element of NAT st i <= j holds S.i c= S.j
+      by MEASURE2:22;
+    hence S is non-descending by PROB_1:def 7;
+   end;
 end;
 
-theorem Th23:
-  for T being set, C being SetSequence of T st C is ascending holds
-  for i, m being Element of NAT st i >= m holds C.m c= C.i
-proof
-  let T be set, C be SetSequence of T;
-  assume C is ascending;
-  then
-A1: for i being Element of NAT holds C.i c= C.(i+1) by Def6;
-  let i, m be Element of NAT;
-  assume m <= i;
-  hence thesis by A1,MEASURE2:22;
-end;
+canceled 2;
 
 theorem Th24:
-  for T being set, F being SetSequence of T, x being set st F is descending &
+  for T being set, F being SetSequence of T, x being set
+   st F is non-ascending &
   ex k being Element of NAT st for n being Element of NAT st n > k
   holds x in F.n holds x in meet F
 proof
   let T be set, F be SetSequence of T, x be set;
   assume that
-A1: F is descending;
+A1: F is non-ascending;
   given k being Element of NAT such that
 A2: for n being Element of NAT st n > k holds x in F.n;
   k + 1 > k by NAT_1:13;
@@ -869,7 +873,7 @@ A5: y in dom F & Y = F.y by A4,FUNCT_1:def 5;
     hence thesis by A2,A4,A5;
   end;
   suppose y <= k;
-    then F.k c= F.y by A1,Th22;
+    then F.k c= F.y by A1,PROB_1:def 6;
     then
 A6: not x in F.k by A4,A5;
     F.(k + 1) c= F.k by A1,Def5;
@@ -878,12 +882,12 @@ A6: not x in F.k by A4,A5;
 end;
 
 theorem
-  for T being set, F being SetSequence of T st F is descending holds
+  for T being set, F being SetSequence of T st F is non-ascending holds
   lim_inf F = meet F
 proof
   let T be set, F be SetSequence of T;
   assume
-A1: F is descending;
+A1: F is non-ascending;
   thus lim_inf F c= meet F
   proof
     let x be set;
@@ -907,12 +911,12 @@ A3:   n = k + h by NAT_1:10;
 end;
 
 theorem
-  for T being set, F being SetSequence of T st F is ascending holds
+  for T being set, F being SetSequence of T st F is non-descending holds
   lim_sup F = Union F
 proof
   let T be set, F be SetSequence of T;
   assume
-A1: F is ascending;
+A1: F is non-descending;
   thus lim_sup F c= Union F by Th11;
   let x be set;
   assume x in Union F;
@@ -924,7 +928,7 @@ A3: for k being Element of NAT holds not x in F.(m+k) by Th8;
 A4: not x in F.(m+(0 qua Nat)) by A3;
   per cases;
   suppose n <= m;
-    then F.n c= F.m by A1,Th23;
+    then F.n c= F.m by A1,PROB_1:def 7;
     hence thesis by A2,A4;
   end;
   suppose n > m;
@@ -992,7 +996,8 @@ end;
 
 registration
   let T be set;
-  cluster constant -> convergent ascending descending SetSequence of T;
+  cluster constant ->
+   convergent non-descending non-ascending SetSequence of T;
   coherence
   proof
     let S be SetSequence of T;

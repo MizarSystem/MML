@@ -7,20 +7,21 @@
 environ
 
  vocabularies CAT_1, MCART_1, FUNCT_1, RELAT_1, PARTFUN1, CAT_2, FUNCT_3,
-      COMMACAT, GRAPH_1;
+      COMMACAT, GRAPH_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, BINOP_1, FUNCT_4, GRAPH_1, CAT_1, CAT_2, MCART_1, DOMAIN_1;
- constructors DOMAIN_1, CAT_2;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, CAT_1, CAT_2;
+      FUNCT_2, BINOP_1, FUNCOP_1, FUNCT_4,
+      STRUCT_0, GRAPH_1, CAT_1, CAT_2, MCART_1, DOMAIN_1;
+ constructors DOMAIN_1, CAT_2, FUNCOP_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, CAT_1, CAT_2, STRUCT_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, XBOOLE_0, CAT_1, BINOP_1, FUNCOP_1;
+ definitions TARSKI, XBOOLE_0, CAT_1, BINOP_1, FUNCOP_1, GRAPH_1;
  theorems TARSKI, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2, CAT_1, CAT_2, GRFUNC_1,
       RELSET_1, FUNCOP_1;
  schemes FUNCT_2, CLASSES1;
 
 begin
-deffunc obj(CatStr) = the Vertices of $1;
-deffunc morph(CatStr) = the Edges of $1;
+deffunc obj(CatStr) = the carrier of $1;
+deffunc morph(CatStr) = the carrier' of $1;
 
 definition
   canceled 4;
@@ -46,14 +47,14 @@ definition
   given c1,d1,f1 such that
 A1: f1 in Hom(F.c1,G.d1);
   func commaObjs(F,G) -> non empty Subset of
-  [:[:the Vertices of C, the Vertices of D:], the Edges of E:] equals
+  [:[:the carrier of C, the carrier of D:], the carrier' of E:] equals
   :Def5:
   {[[c,d],f] : f in Hom(F.c,G.d)};
   coherence
   proof
 A2: [[c1,d1],f1] in {[[c,d],f] : f in Hom(F.c,G.d)} by A1;
     {[[c,d],f] : f in Hom(F.c,G.d)} c=
-    [:[:the Vertices of C, the Vertices of D:], the Edges of E:]
+    [:[:the carrier of C, the carrier of D:], the carrier' of E:]
     proof
       let x;
       assume x in {[[c,d],f] : f in Hom(F.c,G.d)};
@@ -86,7 +87,7 @@ definition
 A1: f1 in Hom(F.c1,G.d1);
   func commaMorphs(F,G) -> non empty Subset of
   [:[:commaObjs(F,G), commaObjs(F,G):],
-  [:the Edges of C, the Edges of D:]:] equals
+  [:the carrier' of C, the carrier' of D:]:] equals
   :Def6:
   {[[o1,o2], [g,h]] : dom g = o1`11 & cod g = o2`11 &
   dom h = o1`12 & cod h = o2`12 & (o2`2)*(F.g) = (G.h)*(o1`2)};
@@ -106,7 +107,7 @@ A1: f1 in Hom(F.c1,G.d1);
     then
 A2: [[o,o],[id c1,id d1]] in X;
     X c= [:[:commaObjs(F,G), commaObjs(F,G):],
-    [:the Edges of C, the Edges of D:]:]
+    [:the carrier' of C, the carrier' of D:]:]
     proof
       let x;
       assume x in X;
@@ -268,8 +269,8 @@ definition
 A1: f1 in Hom(F.c1,G.d1);
   func F comma G -> strict Category means
 
-  the Vertices of it = commaObjs(F,G) &
-  the Edges of it = commaMorphs(F,G) &
+  the carrier of it = commaObjs(F,G) &
+  the carrier' of it = commaMorphs(F,G) &
   (for k holds (the Source of it).k = k`11) &
   (for k holds (the Target of it).k = k`12) &
   (for o holds (the Id of it).o = [[o,o], [id o`11,id o`12]]) &
@@ -418,14 +419,14 @@ A24:  g'`21*(id b'`11) = g'`21 & g'`22*(id b'`12) = g'`22 by CAT_1: 47;
   uniqueness
   proof
     let E1,E2 be strict Category such that
-A25: the Vertices of E1 = commaObjs(F,G) &
-    the Edges of E1 = commaMorphs(F,G) &
+A25: the carrier of E1 = commaObjs(F,G) &
+    the carrier' of E1 = commaMorphs(F,G) &
     (for k holds (the Source of E1).k = k`11) &
     (for k holds (the Target of E1).k = k`12) &
     (for o holds (the Id of E1).o = [[o,o], [id o`11,id o`12]]) &
     the Comp of E1 = commaComp(F,G) and
-A26: the Vertices of E2 = commaObjs(F,G) &
-    the Edges of E2 = commaMorphs(F,G) &
+A26: the carrier of E2 = commaObjs(F,G) &
+    the carrier' of E2 = commaMorphs(F,G) &
     (for k holds (the Source of E2).k = k`11) &
     (for k holds (the Target of E2).k = k`12) &
     (for o holds (the Id of E2).o = [[o,o], [id o`11,id o`12]]) &
@@ -455,7 +456,7 @@ A28: the Target of E1 = the Target of E2 by A25,A26,FUNCT_2:113;
 end;
 
 theorem
-  the Vertices of 1Cat(x,y) = {x} & the Edges of 1Cat(x,y) = {y};
+  the carrier of 1Cat(x,y) = {x} & the carrier' of 1Cat(x,y) = {y};
 
 theorem Th5:
   for a,b being Object of 1Cat(x,y) holds Hom(a,b) = {y}

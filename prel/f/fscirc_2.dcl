@@ -47,30 +47,30 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="399">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="91"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 </Registrations>

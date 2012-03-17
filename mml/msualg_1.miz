@@ -8,13 +8,13 @@ environ
 
  vocabularies ZF_REFLE, PBOOLE, BOOLE, RELAT_1, FUNCT_1, PRALG_1, TDGROUP,
       CARD_3, FINSEQ_2, FINSEQ_1, FUNCOP_1, FUNCT_2, AMI_1, QC_LANG1, UNIALG_1,
-      PARTFUN1, REALSET1, MSUALG_1, ARYTM, CAT_1;
+      PARTFUN1, REALSET1, MSUALG_1, ARYTM, CAT_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, STRUCT_0, PARTFUN1, FINSEQ_2, CARD_3, FUNCOP_1,
       PBOOLE, UNIALG_1;
  constructors CARD_3, PBOOLE, REALSET2, UNIALG_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSEQ_2,
-      PBOOLE, STRUCT_0, TEX_2, UNIALG_1, FUNCT_2;
+      PBOOLE, STRUCT_0, TEX_2, UNIALG_1, FUNCT_2, CARD_1, REALSET1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, FINSEQ_1, FUNCT_1, PBOOLE, STRUCT_0, XBOOLE_0, UNIALG_1,
       FUNCOP_1;
@@ -30,17 +30,9 @@ reserve i for set;
 begin :: Many Sorted Signatures
 
 definition
-  struct(1-sorted) ManySortedSign (# carrier -> set, OperSymbols -> set,
-    Arity -> Function of the OperSymbols, the carrier*,
-    ResultSort -> Function of the OperSymbols, the carrier #);
-end;
-
-definition
-  let IT be ManySortedSign;
-  canceled 4;
-  attr IT is void means
-  :Def5:
-  the OperSymbols of IT = {};
+  struct(2-sorted) ManySortedSign (# carrier,carrier' -> set,
+    Arity -> Function of the carrier', the carrier*,
+    ResultSort -> Function of the carrier', the carrier #);
 end;
 
 registration
@@ -51,7 +43,7 @@ registration
     then reconsider f = {}-->{} as Function of {},{{}}* by FUNCOP_1:58;
     reconsider g = {}-->{} as Function of {},{{}};
     take ManySortedSign(#{{}},{},f,g#);
-    thus thesis by Def5;
+    thus thesis;
   end;
   cluster non void strict non empty ManySortedSign;
   existence
@@ -60,7 +52,7 @@ registration
     then reconsider f = {{}}-->{} as Function of {{}},{{}}* by FUNCOP_1:58;
     reconsider g = {{}}-->{} as Function of {{}},{{}};
     take ManySortedSign(#{{}},{{}},f,g#);
-    thus thesis by Def5;
+    thus thesis;
   end;
 end;
 
@@ -69,36 +61,20 @@ reserve S for non empty ManySortedSign;
 definition
   let S;
   mode SortSymbol of S is Element of S;
-  mode OperSymbol of S is Element of the OperSymbols of S;
+  mode OperSymbol of S is Element of the carrier' of S;
 end;
 
 definition
+  canceled 5;
   let S be non void non empty ManySortedSign;
   let o be OperSymbol of S;
   func the_arity_of o -> Element of (the carrier of S)* equals
   (the Arity of S).o;
-  coherence
-  proof the OperSymbols of S <> {} by Def5;
-    then o in the OperSymbols of S;
-    then o in dom(the Arity of S) by FUNCT_2:def 1;
-    then
-A1: (the Arity of S).o in rng(the Arity of S) by FUNCT_1:def 5;
-    rng(the Arity of S) c= (the carrier of S)* by RELSET_1:12;
-    hence thesis by A1;
-  end;
-  correctness;
+  coherence;
   func the_result_sort_of o -> Element of S equals
 
   (the ResultSort of S).o;
-  coherence
-  proof the OperSymbols of S <> {} by Def5;
-    then o in the OperSymbols of S;
-    then o in dom(the ResultSort of S) by FUNCT_2:def 1;
-    then
-A2: (the ResultSort of S).o in rng(the ResultSort of S) by FUNCT_1:def 5;
-    rng(the ResultSort of S) c= the carrier of S by RELSET_1:12;
-    hence thesis by A2;
-  end;
+  coherence;
 end;
 
 begin :: Many Sorted Algebras
@@ -192,8 +168,7 @@ definition
   ((the Sorts of A)# * the Arity of S).o;
   coherence
   proof
-    the OperSymbols of S <> {} by Def5;
-    then o in the OperSymbols of S;
+    o in the carrier' of S;
     then o in dom((the Sorts of A)# * the Arity of S) by PBOOLE:def 3;
     then ((the Sorts of A)# * the Arity of S).o
     in rng((the Sorts of A)# * the Arity of S) by FUNCT_1:def 5;
@@ -204,8 +179,7 @@ definition
   ((the Sorts of A) * the ResultSort of S).o;
   coherence
   proof
-    the OperSymbols of S <> {} by Def5;
-    then o in the OperSymbols of S;
+    o in the carrier' of S;
     then o in dom((the Sorts of A) * the ResultSort of S) by PBOOLE:def 3;
     then ((the Sorts of A) * the ResultSort of S).o
     in rng((the Sorts of A) * the ResultSort of S) by FUNCT_1:def 5;
@@ -220,11 +194,7 @@ definition
   let A be MSAlgebra over S;
   func Den(o,A) -> Function of Args(o,A), Result(o,A) equals
   (the Charact of A).o;
-  coherence
-  proof
-    the OperSymbols of S <> {} by Def5;
-    hence thesis by PBOOLE:def 18;
-  end;
+  coherence by PBOOLE:def 18;
 end;
 
 canceled 5;
@@ -295,9 +265,9 @@ theorem Th9:
   for A being Universal_Algebra holds signature A is non empty
 proof
   let A be Universal_Algebra;
-  len(the charact of A) <> 0 by CARD_2:59;
+  len(the charact of A) <> 0;
   then len(signature A) <> 0 by UNIALG_1:def 11;
-  hence signature A is non empty by CARD_1:47;
+  hence signature A is non empty;
 end;
 
 begin :: Relationship to one sorted algebras
@@ -312,7 +282,7 @@ definition
   let IT be ManySortedSign;
   attr IT is segmental means
   :Def12:
-  ex n st the OperSymbols of IT = Seg n;
+  ex n st the carrier' of IT = Seg n;
 end;
 
 theorem Th10:
@@ -344,13 +314,13 @@ proof
   thus the carrier of S is non empty;
   signature A <> {} by Th9;
   then
-A1: the OperSymbols of S <> {} by RELAT_1:64;
+A1: the carrier' of S <> {} by RELAT_1:64;
   S is segmental
   proof
     take len signature(A);
-    thus the OperSymbols of S = Seg len signature(A) by FINSEQ_1:def 3;
+    thus the carrier' of S = Seg len signature(A) by FINSEQ_1:def 3;
   end;
-  hence thesis by A1,Def5;
+  hence thesis by A1;
 end;
 
 registration
@@ -369,7 +339,7 @@ definition
   let A be Universal_Algebra;
   func MSSign A -> non void strict segmental trivial ManySortedSign means
   :Def13:
-  the carrier of it = {0} & the OperSymbols of it = dom signature A &
+  the carrier of it = {0} & the carrier' of it = dom signature A &
   the Arity of it = (*-->0)*signature A &
   the ResultSort of it = dom signature(A)-->0;
   correctness
@@ -395,7 +365,7 @@ definition
   coherence
   proof
 A1: the carrier of MSSign A = {0} &
-    the OperSymbols of MSSign A = dom signature A &
+    the carrier' of MSSign A = dom signature A &
     the Arity of MSSign A = (*-->0)*signature A &
     the ResultSort of MSSign A = dom signature(A)-->0 by Def13;
     set M = {0}-->the carrier of A;
@@ -417,9 +387,9 @@ definition
   the charact of A;
   coherence
   proof
-    reconsider OS = the OperSymbols of MSSign A as non empty set by Def5;
+    reconsider OS = the carrier' of MSSign A as non empty set;
 A1: the carrier of MSSign A = {0} &
-    the OperSymbols of MSSign A = dom signature A &
+    the carrier' of MSSign A = dom signature A &
     the Arity of MSSign A = (*-->0)*signature A &
     the ResultSort of MSSign A = dom signature(A)-->0 by Def13;
     len signature A = len the charact of A by UNIALG_1:def 11;
@@ -510,10 +480,9 @@ proof
   let MS be segmental trivial non void non empty ManySortedSign,
   i be OperSymbol of MS, A be non-empty MSAlgebra over MS;
   set m = len the_arity_of i;
-A1: the OperSymbols of MS <> {} by Def5;
-  dom(the Arity of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+  dom(the Arity of MS) = the carrier' of MS by FUNCT_2:def 1;
   then
-A2: Args(i,A) = (the Sorts of A)# .((the Arity of MS).i) by A1,FUNCT_1:23
+A2: Args(i,A) = (the Sorts of A)# .((the Arity of MS).i) by FUNCT_1:23
     .= product((the Sorts of A)*the_arity_of i) by PBOOLE:def 19;
   consider n being Nat such that
 A3: dom the_arity_of i = Seg n by FINSEQ_1:def 2;
@@ -603,11 +572,11 @@ theorem Th14:
 proof
   let MS be segmental trivial non void non empty ManySortedSign,
   A be non-empty MSAlgebra over MS;
-A1: dom the Charact of A = the OperSymbols of MS by PBOOLE:def 3;
-  ex n being Element of NAT st the OperSymbols of MS = Seg n
+A1: dom the Charact of A = the carrier' of MS by PBOOLE:def 3;
+  ex n being Element of NAT st the carrier' of MS = Seg n
   proof
     consider n such that
-A2: the OperSymbols of MS = Seg n by Def12;
+A2: the carrier' of MS = Seg n by Def12;
     n in NAT by ORDINAL1:def 13;
     hence thesis by A2;
   end;
@@ -617,16 +586,16 @@ A2: the OperSymbols of MS = Seg n by Def12;
     let x be set;
     assume x in rng f;
     then consider i such that
-A3: i in the OperSymbols of MS and
+A3: i in the carrier' of MS and
 A4: f.i = x by A1,FUNCT_1:def 5;
     reconsider i as OperSymbol of MS by A3;
-A5: dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+A5: dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
 A6: (the Sorts of A).((the ResultSort of MS).i)
-    is Component of the Sorts of A by A3,FUNCT_2:7,PBOOLE:151;
+    is Component of the Sorts of A by PBOOLE:151;
     ((the Sorts of A)*the ResultSort of MS).i
-    = (the Sorts of A).((the ResultSort of MS).i) by A3,A5,FUNCT_1:23
+    = (the Sorts of A).((the ResultSort of MS).i) by A5,FUNCT_1:23
       .= the_sort_of A by A6,Def17;
-    then x is Function of Args(i,A),the_sort_of A by A3,A4,PBOOLE:def 18;
+    then x is Function of Args(i,A),the_sort_of A by A4,PBOOLE:def 18;
     then x is PartFunc of (the_sort_of A)*,the_sort_of A by Th13,PARTFUN1:30;
     hence x in PFuncs((the_sort_of A)*,the_sort_of A) by PARTFUN1:119;
   end;
@@ -660,17 +629,16 @@ A3:   h = (the_charact_of A).n;
       let x,y such that
 A4:   len x = len y and
 A5:   x in dom h;
-A6:   dom(the_charact_of A) = the OperSymbols of MS by PBOOLE:def 3;
       reconsider o = n as OperSymbol of MS by A2,PBOOLE:def 3;
-A7:   dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+A7:   dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
 A8:   ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
 A9:   (the Sorts of A).((the ResultSort of MS).o)
-      is Component of the Sorts of A by A2,A6,FUNCT_2:7,PBOOLE:151;
+      is Component of the Sorts of A by PBOOLE:151;
 A10:  ((the Sorts of A)*the ResultSort of MS).o
-      = (the Sorts of A).((the ResultSort of MS).o) by A2,A6,A7,FUNCT_1:23
+      = (the Sorts of A).((the ResultSort of MS).o) by A7,FUNCT_1:23
         .= the_sort_of A by A9,Def17;
       h is Function of ((the Sorts of A)# * the Arity of MS).o,
-      ((the Sorts of A) * the ResultSort of MS).o by A2,A3,A6,PBOOLE:def 18;
+      ((the Sorts of A) * the ResultSort of MS).o by A3,PBOOLE:def 18;
       then
 A11:  dom h = ((the Sorts of A)# * the Arity of MS).o by A10,FUNCT_2:def 1
         .= (len the_arity_of o)-tuples_on the_sort_of A by A8,Th11;
@@ -685,26 +653,22 @@ A13:  n in dom(the_charact_of A) and
 A14:  h = (the_charact_of A).n;
       let x,y being FinSequence such that
 A15:  x in dom h & y in dom h;
-A16:  dom(the_charact_of A) = the OperSymbols of MS by PBOOLE:def 3;
       reconsider o = n as OperSymbol of MS by A13,PBOOLE:def 3;
-A17:  dom(the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+A17:  dom(the ResultSort of MS) = the carrier' of MS by FUNCT_2:def 1;
 A18:  ((the Sorts of A)# * the Arity of MS).o = Args(o,A);
 A19:  (the Sorts of A).((the ResultSort of MS).o)
-      is Component of the Sorts of A by A13,A16,FUNCT_2:7,PBOOLE:151;
+      is Component of the Sorts of A by PBOOLE:151;
 A20:  ((the Sorts of A)*the ResultSort of MS).o
-      = (the Sorts of A).((the ResultSort of MS).o) by A13,A16,A17,FUNCT_1:23
+      = (the Sorts of A).((the ResultSort of MS).o) by A17,FUNCT_1:23
         .= the_sort_of A by A19,Def17;
       h is Function of ((the Sorts of A)# * the Arity of MS).o,
-      ((the Sorts of A) * the ResultSort of MS).o by A13,A14,A16,PBOOLE:def 18;
+      ((the Sorts of A) * the ResultSort of MS).o by A14,PBOOLE:def 18;
       then
 A21:  dom h = ((the Sorts of A)# * the Arity of MS).o by A20,FUNCT_2:def 1
         .= (len the_arity_of o)-tuples_on the_sort_of A by A18,Th11;
       hence len x = len the_arity_of o by A15,FINSEQ_2:109
         .= len y by A15,A21,FINSEQ_2:109;
     end;
-    the OperSymbols of MS <> {} by Def5;
-    then
-A22: the Charact of A <> {} by PBOOLE:def 3,RELAT_1:60;
     the_charact_of A is non-empty
     proof
       let n be set such that
@@ -714,7 +678,7 @@ A23:  n in dom the_charact_of A;
       h = Den(o,A);
       hence h is non empty;
     end;
-    hence thesis by A1,A12,A22,UNIALG_1:def 7,def 8,def 9;
+    hence thesis by A1,A12,UNIALG_1:def 7,def 8,def 9;
   end;
   correctness;
 end;
@@ -738,7 +702,7 @@ proof
   let z be Element of {0};
   z = 0 by TARSKI:def 1;
   then the carrier of MSSign A = {0} &
-  the OperSymbols of MSSign A = dom signature A &
+  the carrier' of MSSign A = dom signature A &
   the Arity of MSSign A = (*-->0)*signature A &
   the ResultSort of MSSign A = dom signature(A)-->z by Def13;
   hence thesis;

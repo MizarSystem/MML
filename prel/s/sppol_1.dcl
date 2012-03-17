@@ -22,9 +22,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RAT_1"/>
@@ -43,7 +40,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="287">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -51,12 +48,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="52">
-<Func kind="K" nr="287">
+<Adjective nr="61">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="74"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SPPOL_1" nr="2">
@@ -65,7 +62,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="287">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -73,52 +70,52 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="52">
-<Func kind="K" nr="287">
+<Adjective nr="61">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="75"/>
+<Adjective nr="83"/>
 </Cluster>
 </RCluster>
 <CCluster aid="SPPOL_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="53" value="false"/>
-<Adjective nr="74"/>
+<Adjective nr="2" value="false"/>
+<Adjective nr="82"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="287">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="75" value="false"/>
+<Adjective nr="83" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SPPOL_1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="53" value="false"/>
-<Adjective nr="75"/>
+<Adjective nr="2" value="false"/>
+<Adjective nr="83"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="287">
+<Func kind="K" nr="262">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="74" value="false"/>
+<Adjective nr="82" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

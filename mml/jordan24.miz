@@ -10,10 +10,11 @@ environ
       SUBSET_1, METRIC_1, BOOLE, TOPREAL2, CONNSP_1, TOPS_2, MCART_1, SQUARE_1,
       ARYTM_3, PCOMPS_1, FUNCT_1, JORDAN1, COMPLEX1, ORDINAL2, RELAT_2,
       WEIERSTR, VECTMETR, CONNSP_2, JGRAPH_2, FINSEQ_6, XCMPLX_0, COMPTRIG,
-      SIN_COS, SGRAPH1, TOPGRP_1;
+      SIN_COS, SGRAPH1, TOPGRP_1, INT_1, COMPTS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, COMPLEX1, SQUARE_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
-      REAL_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_1, METRIC_1, PCOMPS_1,
+      REAL_1, INT_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_1,
+      COMPTS_1, METRIC_1, PCOMPS_1,
       EUCLID, TOPREAL2, JORDAN1, TOPREAL6, WEIERSTR, VECTMETR, CONNSP_2,
       JGRAPH_2, COMPLEX2, COMPTRIG, SIN_COS, ARYTM_0, TOPGRP_1, TMAP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, SIN_COS, COMPTRIG, COMPLEX2, TOPS_1,
@@ -21,15 +22,16 @@ environ
       TOPGRP_1, VECTMETR, TOPREAL6, JGRAPH_2;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, XCMPLX_0, XXREAL_0, XREAL_0,
       SQUARE_1, MEMBERED, STRUCT_0, PRE_TOPC, PCOMPS_1, BORSUK_1, EUCLID,
-      TOPREAL2, TOPGRP_1, VECTMETR;
+      TOPREAL2, TOPGRP_1, VECTMETR, INT_1, SIN_COS6;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions TARSKI, XBOOLE_0, CONNSP_1, BORSUK_1, VECTMETR, TOPS_2, SPRECT_1,
+ definitions TARSKI, XBOOLE_0, FUNCT_2, COMPLEX2,
+      CONNSP_1, BORSUK_1, VECTMETR, TOPS_2, SPRECT_1,
       TOPGRP_1, SQUARE_1, SUBSET_1, EUCLID, PCOMPS_1, STRUCT_0;
  theorems PRE_TOPC, EUCLID, SQUARE_1, XREAL_1, JORDAN1K, JGRAPH_7, TOPREAL2,
       TOPS_2, FUNCT_2, RELAT_1, FUNCT_1, XBOOLE_1, STRUCT_0, WEIERSTR,
       CONNSP_2, GOBOARD6, METRIC_1, VECTMETR, JGRAPH_2, COMPLEX2, XCMPLX_0,
       COMPLEX1, COMPTRIG, SIN_COS, XCMPLX_1, TMAP_1, JORDAN16, RFUNCT_2,
-      TIETZE, XXREAL_0, XBOOLE_0, TOPREAL6;
+      TIETZE, XXREAL_0, XBOOLE_0, TOPREAL6, XREAL_0;
  schemes FUNCT_2;
 
 begin
@@ -52,8 +54,10 @@ set a = |[rl,0]|;
 set b = |[rp,0]|;
 
 theorem Th1:
+  for C being non empty compact Subset of TOP-REAL 2
   ex p1,p2 st p1,p2 realize-max-dist-in C
 proof
+  let C be non empty compact Subset of TOP-REAL 2;
   reconsider D=C as Subset of TopSpaceMetr Euclid 2;
   consider x1,x2 being Point of Euclid 2 such that
 A1: x1 in D & x2 in D & dist(x1,x2) = max_dist_max(D,D) by WEIERSTR:39;
@@ -177,15 +181,43 @@ A3: for p being Point of TOP-REAL 2 holds
   end;
 end;
 
+Lm1:
+now
+  let a be Real;
+  let c be complex number;
+  let i be integer number;
+  cos (a+Arg c) = cos (a+Arg c+2*PI*i) &
+  sin (a+Arg c) = sin (a+Arg c+2*PI*i) by COMPLEX2:9,10;
+  hence Rotate(c,a) = Rotate(c,a+2*PI*i);
+end;
+
+Lm2:
+now
+  let a be Real;
+  let i be integer number;
+  thus Rotate(a) = Rotate(a+2*PI*i)
+  proof
+    let p be Point of TOP-REAL 2;
+    set q = p`1+(p`2)*<i>;
+A1: Rotate(q,a) = Rotate(q,a+2*PI*i) by Lm1;
+    thus (Rotate(a)).p = |[Re Rotate(q,a),Im Rotate(q,a)]| by Def3
+    .= (Rotate(a+2*PI*i)).p by A1,Def3;
+  end;
+end;
+
 theorem Th2:
-  for a being Real st 0<= a & a < 2*PI
+  for a being Real
   for f being Function of TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2
   st f = Rotate a holds f is isometric
 proof
-  let a be Real such that
-A1: 0<=a & a< 2*PI;
+  let a be Real;
+  consider A being real number such that
+B1: A = 2*PI*(-[\a/(2*PI)/])+a and
+A1: 0 <= A & A < 2*PI by COMPLEX2:2;
+  reconsider A as Real by XREAL_0:def 1;
   let f be Function of TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 such that
 A2: f = Rotate a;
+B3: Rotate A = Rotate a by B1,Lm2;
   reconsider g=f as Function of Euclid 2,Euclid 2;
   g is isometric
   proof
@@ -203,34 +235,30 @@ A2: f = Rotate a;
 A3:     pz<>0;
         per cases;
         suppose
-A4:       a <= arg;
-          set qz=Rotate(pz,-a);
+A4:       A <= arg;
+          set qz=Rotate(pz,-A);
 A5:       qz<>0 by A3,COMPLEX2:66;
-A6:       0<=arg-a by A4,XREAL_1:50;
-          arg-a <= arg & arg < 2*PI by A1,COMPTRIG:52,XREAL_1:45;
+A6:       0<=arg-A by A4,XREAL_1:50;
+          arg-A <= arg & arg < 2*PI by A1,COMPTRIG:52,XREAL_1:45;
           then
-A7:       -a+arg < 2*PI by XXREAL_0:2;
-A8:       |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67;
-          then qz=[* |.qz.|*cos (-a+arg), |.qz.|*sin (-a+arg) *]
-          by COMPLEX2:def 4;
-          then Arg qz = -a+arg by A5,A6,A7,COMPLEX2:21;
-          then Rotate(qz,a) = [*|.qz.|*cos (a+(-a+arg)),|.qz.|*sin (a+(-a+
-          arg))*] by COMPLEX2:def 4;
+A7:       -A+arg < 2*PI by XXREAL_0:2;
+A8:       |.Rotate(pz,-A).| = |.pz.| by COMPLEX2:67;
+          then Arg qz = -A+arg by A5,A6,A7,COMPLEX2:21;
           then
-A9:       Rotate(qz,a) = pz by A8,COMPLEX2:19;
+A9:       Rotate(qz,A) = pz by A8,COMPLEX2:19;
           set q=|[Re qz,Im qz]|;
 A10:      dom g = the carrier of Euclid 2 by FUNCT_2:def 1;
-          g.q = |[Re Rotate(q`1+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
-          by A2,Def3
-            .= |[Re Rotate(Re qz+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
+          g.q = |[Re Rotate(q`1+(q`2)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
+          by A2,B3,Def3
+            .= |[Re Rotate(Re qz+(q`2)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
           by EUCLID:56
-            .= |[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
+            .= |[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
           by EUCLID:56
-            .= |[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(Re qz+(q`2)*<i>,a)]|
+            .= |[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(Re qz+(q`2)*<i>,A)]|
           by EUCLID:56
-            .=|[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(Re qz+(Im qz)*<i>,a)]|
+            .=|[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(Re qz+(Im qz)*<i>,A)]|
           by EUCLID:56
-            .= |[Re Rotate(qz,a),Im Rotate(Re qz+(Im qz)*<i>,a)]|
+            .= |[Re Rotate(qz,A),Im Rotate(Re qz+(Im qz)*<i>,A)]|
           by COMPLEX1:29
             .= |[Re pz,Im pz]| by A9,COMPLEX1:29
             .= |[p`1,Im pz]| by COMPLEX1:28
@@ -239,44 +267,40 @@ A10:      dom g = the carrier of Euclid 2 by FUNCT_2:def 1;
           hence o in rng g by A10,FUNCT_1:def 5;
         end;
         suppose
-A11:      a > arg;
-          set qz=Rotate(pz,-a);
+A11:      A > arg;
+          set qz=Rotate(pz,-A);
 A12:      qz<>0 by A3,COMPLEX2:66;
-          0<= 2*PI-a & arg >= 0 by A1,COMPTRIG:52,XREAL_1:50;
+          0<= 2*PI-A & arg >= 0 by A1,COMPTRIG:52,XREAL_1:50;
           then
-A13:      0<=2*PI-a+arg;
-          arg-a < 0 by A11,XREAL_1:51;
+A13:      0<=2*PI-A+arg;
+          arg-A < 0 by A11,XREAL_1:51;
           then
-A14:      2*PI+(arg-a) < 2*PI by XREAL_1:32;
-A15:      |.Rotate(pz,-a).| = |.pz.| by COMPLEX2:67;
-          then qz=[* |.qz.|*cos (-a+arg), |.qz.|*sin (-a+arg) *]
-          by COMPLEX2:def 4;
-          then qz=[* |.qz.|*cos (2*PI*1+(-a+arg)), |.qz.|*sin (-a+arg) *]
+A14:      2*PI+(arg-A) < 2*PI by XREAL_1:32;
+A15:      |.Rotate(pz,-A).| = |.pz.| by COMPLEX2:67;
+          then qz=[* |.qz.|*cos (2*PI*1+(-A+arg)), |.qz.|*sin (-A+arg) *]
           by COMPLEX2:10;
-          then qz=[* |.qz.|*cos (2*PI+(arg-a)), |.qz.|*sin (2*PI*1+(-a+arg))
+          then qz=[* |.qz.|*cos (2*PI+(arg-A)), |.qz.|*sin (2*PI*1+(-A+arg))
           *] by COMPLEX2:9;
-          then Arg qz = 2*PI+(arg-a) by A12,A13,A14,COMPLEX2:21;
-          then Rotate(qz,a) = [* |.qz.|*cos (a+(2*PI+(arg-a))),
-          |.qz.|*sin (a+(2*PI+(arg-a))) *] by COMPLEX2:def 4;
-          then Rotate(qz,a) = [* |.qz.|*cos arg, |.qz.|*sin (2*PI*1+arg) *]
+          then Arg qz = 2*PI+(arg-A) by A12,A13,A14,COMPLEX2:21;
+          then Rotate(qz,A) = [* |.qz.|*cos arg, |.qz.|*sin (2*PI*1+arg) *]
           by COMPLEX2:10;
-          then Rotate(qz,a) = [* |.qz.|*cos arg, |.qz.|*sin arg *] by
+          then Rotate(qz,A) = [* |.qz.|*cos arg, |.qz.|*sin arg *] by
           COMPLEX2:9;
           then
-A16:      Rotate(qz,a) = pz by A15,COMPLEX2:19;
+A16:      Rotate(qz,A) = pz by A15,COMPLEX2:19;
           set q=|[Re qz,Im qz]|;
 A17:      dom g = the carrier of Euclid 2 by FUNCT_2:def 1;
-          g.q = |[Re Rotate(q`1+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
-          by A2,Def3
-            .= |[Re Rotate(Re qz+(q`2)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
+          g.q = |[Re Rotate(q`1+(q`2)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
+          by A2,B3,Def3
+            .= |[Re Rotate(Re qz+(q`2)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
           by EUCLID:56
-            .= |[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(q`1+(q`2)*<i>,a)]|
+            .= |[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(q`1+(q`2)*<i>,A)]|
           by EUCLID:56
-            .= |[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(Re qz+(q`2)*<i>,a)]|
+            .= |[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(Re qz+(q`2)*<i>,A)]|
           by EUCLID:56
-            .=|[Re Rotate(Re qz+(Im qz)*<i>,a),Im Rotate(Re qz+(Im qz)*<i>,a)]|
+            .=|[Re Rotate(Re qz+(Im qz)*<i>,A),Im Rotate(Re qz+(Im qz)*<i>,A)]|
           by EUCLID:56
-            .=|[Re Rotate(qz,a),Im Rotate(Re qz+(Im qz)*<i>,a)]| by COMPLEX1:29
+            .=|[Re Rotate(qz,A),Im Rotate(Re qz+(Im qz)*<i>,A)]| by COMPLEX1:29
             .= |[Re pz,Im pz]| by A16,COMPLEX1:29
             .= |[p`1,Im pz]| by COMPLEX1:28
             .= |[p`1,p`2]| by COMPLEX1:28
@@ -412,12 +436,11 @@ A10: dist(x,y) =
 end;
 
 theorem Th4:
-  for A being Real st 0<=A & A<2*PI & p1,p2 realize-max-dist-in P holds
+  for A being Real st p1,p2 realize-max-dist-in P holds
   (Rotate A).p1,(Rotate A).p2 realize-max-dist-in (Rotate A).:P
 proof
   set C=P;
-  let A be Real such that
-A1: 0<=A & A<2*PI;
+  let A be Real;
   assume
 A2: p1,p2 realize-max-dist-in C;
   then
@@ -436,7 +459,7 @@ A6: yy in dom Rotate A & yy in C & (Rotate A).yy=y by A4,FUNCT_1:def 12;
   reconsider yy as Point of TOP-REAL 2 by A6;
   reconsider f=Rotate A as Function of
   TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2;
-  f is isometric by A1,Th2;
+  f is isometric by Th2;
   then consider g being isometric Function of Euclid 2,Euclid 2 such that
 A7: f=g by Def2;
   reconsider p1'=p1,p2'=p2,xx'=xx,yy'=yy as Point of Euclid 2;
@@ -456,11 +479,9 @@ theorem Th5:
   Rotate(z,-r) = Rotate(z,2*PI-r)
 proof
   let z be complex number, r be Real;
-  thus Rotate(z,-r) = [* |.z.|*cos (-r+Arg z), |.z.|*sin (-r+Arg z) *]
-  by COMPLEX2:def 4
-    .= [* |.z.|*cos (2*PI*1+(-r+Arg z)), |.z.|*sin (-r+Arg z) *] by COMPLEX2:10
-    .= [* |.z.|*cos (2*PI-r+Arg z), |.z.|*sin (2*PI-r+Arg z) *] by COMPLEX2:9
-    .= Rotate(z,2*PI-r) by COMPLEX2:def 4;
+  thus Rotate(z,-r)
+   = [* |.z.|*cos (2*PI*1+(-r+Arg z)), |.z.|*sin (-r+Arg z) *] by COMPLEX2:10
+  .= Rotate(z,2*PI-r) by COMPLEX2:9;
 end;
 
 theorem Th6:
@@ -498,45 +519,9 @@ A5: q1 = |[1 * (p1`1)+-p1`1,1 * (p1`2)+-p1`2]| by JGRAPH_2:def 2
     .= |[0,0]|;
   set arg=Arg(q2`1+q2`2 * <i>);
   set h=Rotate(-arg);
-  per cases;
-  suppose arg = 0;
-    then Re (q2`1+q2`2 * <i>) >= 0 & Im (q2`1+q2`2 * <i>) = 0 by COMPLEX2:34;
-    then
-A6: q2`1>=0 & q2`2 = 0 by COMPLEX1:28;
-A7: now
-      assume
-A8:   q2`1=0;
-      dom g = the carrier of TOP-REAL 2 by FUNCT_2:def 1;
-      then q1<>q2 by A3,FUNCT_1:def 8;
-      hence contradiction by A5,A6,A8,EUCLID:57;
-    end;
-    then 2/(q2`1) > 0 by A6;
-    then reconsider j=AffineMap(2/(q2`1),-1,2/(q2`1),0) as
-    being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by JGRAPH_7:50;
-    set E=j.:D,r1=j.q1,r2=j.q2;
-A9: r1=|[2/(q2`1)*q1`1+-1,2/(q2`1)*q1`2+0]| by JGRAPH_2:def 2
-      .= |[2/(q2`1)*0+-1,2/(q2`1)*q1`2+0]| by A5,EUCLID:56
-      .= a by A5,EUCLID:56;
-A10: r2=|[2/(q2`1)*q2`1+-1,2/(q2`1)*q2`2+0]| by JGRAPH_2:def 2
-      .=|[2+-1,2/(q2`1)*q2`2+0]| by A7,XCMPLX_1:88
-      .=b by A6;
-A11: r1,r2 realize-max-dist-in E by A4,Th3;
-    set f=j*g;
-    f is Homeomorphism of TOP-REAL 2
-    proof
-      thus f is being_homeomorphism by TOPS_2:71;
-    end;
-    then reconsider f as Homeomorphism of TOP-REAL 2;
-    take f;
-    thus a,b realize-max-dist-in (f.:C) by A9,A10,A11,RELAT_1:159;
-  end;
-  suppose arg<>0;
-    then 0<arg & arg < 2*PI by COMPTRIG:52;
-    then
-A12: 0<2*PI-arg & 2*PI-arg<2*PI by XREAL_1:46,52;
 A13: h=Rotate(2*PI-arg) by Th6;
-    then reconsider h0=h as isometric Function of
-    TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 by A12,Th2;
+    reconsider h0=h as isometric Function of
+    TopSpaceMetr Euclid 2, TopSpaceMetr Euclid 2 by Th2;
     h0 is being_homeomorphism;
     then reconsider h as being_homeomorphism Function
     of TOP-REAL 2,TOP-REAL 2;
@@ -578,9 +563,8 @@ A21:  q1<>q2 by A3,FUNCT_1:def 8;
       then s1<>s2 by A21,FUNCT_1:def 8;
       hence contradiction by A15,A16,A20,EUCLID:56;
     end;
-    then 2/(s2`1) > 0 by A18;
     then reconsider j=AffineMap(2/(s2`1),-1,2/(s2`1),0) as
-    being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by JGRAPH_7:50;
+    being_homeomorphism Function of TOP-REAL 2,TOP-REAL 2 by A18,JGRAPH_7:50;
     set E=j.:F,r1=j.s1,r2=j.s2;
     set f=j*(h*g);
     f is Homeomorphism of TOP-REAL 2
@@ -600,10 +584,9 @@ A23: r2=|[2/(s2`1)*s2`1+-1,2/(s2`1)*s2`2+0]| by JGRAPH_2:def 2
     then
 A24: f.:C=E by RELAT_1:159;
     (Rotate(2*PI-arg)).q1,(Rotate(2*PI-arg)).q2
-    realize-max-dist-in (Rotate(2*PI-arg)).:D by A4,A12,Th4;
+    realize-max-dist-in (Rotate(2*PI-arg)).:D by A4,Th4;
     hence a,b realize-max-dist-in (f.:C) by A13,A22,A23,A24,Th3;
   end;
-end;
 
 definition
   let T1,T2 be TopStruct;
@@ -655,7 +638,7 @@ proof
   hence thesis by XBOOLE_1:37;
 end;
 
-theorem Th10:
+theorem
   for T1,T2 being non empty TopSpace,
   f being Function of T1,T2 st f is_homeomorphism
   for A being Subset of T1 st A is connected holds f.:A is connected
@@ -674,7 +657,7 @@ A1: f is_homeomorphism;
   assume that
 A2: A is connected and
 A3: for B being Subset of T1 st B is connected holds A c= B implies A = B;
-  thus f.:A is connected by A1,A2,Th10;
+  thus f.:A is connected by A1,A2,TOPS_2:75;
   let B be Subset of T2;
   [#] T2 = the carrier of T2;
   then f is one-to-one & rng f = the carrier of T2 &
@@ -713,10 +696,8 @@ A2: g = f|A;
 A3: [#](T1|A) = A & [#](T2|(f.:A)) = f.:A by PRE_TOPC:def 10;
 A4: dom f = the carrier of T1 by FUNCT_2:def 1;
   per cases;
-  suppose
-A5: A is empty;
-    then f.:A = {} by RELAT_1:149;
-    then T2|(f.:A) is empty & T1|A is empty by A3,A5;
+  suppose A is empty;
+    then T2|(f.:A) is empty & T1|A is empty by A3,RELAT_1:149;
     hence thesis by TIETZE:6;
   end;
   suppose
@@ -823,4 +804,3 @@ A5: s' in S & f.s = f.s' by FUNCT_2:116;
   f.:(S`) = (f.:S)` by JORDAN1K:5;
   hence thesis by A4,Th15;
 end;
-

@@ -8,21 +8,22 @@ environ
 
  vocabularies SEQ_1, PARTFUN1, SUBSET_1, PRE_TOPC, RELAT_1, SEQ_2, ORDINAL2,
       BOOLE, LIMFUNC1, FUNCT_1, PROB_1, ARYTM, RCOMP_1, ARYTM_1, ABSVALUE,
-      ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1, FUNCOP_1;
+      ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1, FUNCOP_1, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, PROB_1, REAL_1, FUNCT_1, FUNCOP_1, VALUED_1, SEQ_1, RELSET_1,
-      SEQ_2, PARTFUN1, PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, LIMFUNC1,
-      XXREAL_0;
+      SEQ_2, PARTFUN1, PARTFUN2, RCOMP_1, FCONT_1, LIMFUNC1,
+      XXREAL_0, RFUNCT_2;
  constructors PARTFUN1, REAL_1, COMPLEX1, NAT_1, SEQ_2, PROB_1, RCOMP_1,
-      PARTFUN2, RFUNCT_2, FCONT_1, LIMFUNC1, VALUED_1, SEQ_1;
+      PARTFUN2, RFUNCT_2, FCONT_1, LIMFUNC1, VALUED_1, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_1, FUNCT_2, VALUED_0;
+      MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_1, FUNCT_2, VALUED_0,
+      XXREAL_2, FUNCOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RCOMP_1, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1;
- theorems REAL_1, FUNCT_1, NAT_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1, PARTFUN2,
+ theorems FUNCT_1, NAT_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1, PARTFUN2,
       RCOMP_1, RFUNCT_2, FCONT_1, SUBSET_1, REAL_2, LIMFUNC1, FCONT_2, TARSKI,
       FUNCT_2, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1, XXREAL_1;
+      COMPLEX1, XXREAL_0, VALUED_1, XXREAL_1, XXREAL_2;
  schemes SEQ_1, FUNCT_2;
 
 begin
@@ -145,21 +146,18 @@ registration
 end;
 
 theorem Th9:
-  0 < r & g in ].x0 - r,x0 + r.[ iff ex r1 st g = x0 + r1 & abs(r1) < r
+  g in ].x0 - r,x0 + r.[ implies ex r1 st g = x0 + r1 & abs(r1) < r
 proof
-  thus 0 < r & g in ].x0 - r,x0 + r.[ implies
-  ex r1 st g = x0 + r1 & abs(r1) < r
-  proof
-    assume 0 < r & g in ].x0 - r,x0 + r.[;
+    assume g in ].x0 - r,x0 + r.[;
     then
 A1: ex g1 st g1 = g & x0 - r < g1 & g1 < x0 + r;
     take r1 = g - x0;
     thus x0 + r1 = g;
-    now per cases;
+    per cases;
       suppose x0 <= g;
         then
 A2:     0 <= g - x0 by XREAL_1:50;
-        g - x0 < x0 + r - x0 by A1,REAL_1:92;
+        g - x0 < x0 + r - x0 by A1,XREAL_1:16;
         hence thesis by A2,ABSVALUE:def 1;
       end;
       suppose g <= x0;
@@ -167,13 +165,26 @@ A2:     0 <= g - x0 by XREAL_1:50;
         then
 A3:     x0 - g = abs(- (g - x0)) by ABSVALUE:def 1
           .= abs(g - x0) by COMPLEX1:138;
-        x0 - g < x0 - (x0 - r) by A1,REAL_1:92;
+        x0 - g < x0 - (x0 - r) by A1,XREAL_1:17;
         hence thesis by A3;
       end;
-    end;
-    hence thesis;
-  end;
-  given r1 such that
+end;
+
+theorem
+  g in ].x0 - r,x0 + r.[ implies g - x0 in ].-r,r.[
+proof
+    assume g in ].x0 - r,x0 + r.[;
+    then consider r1 such that
+A1: g = x0 + r1 & abs(r1) < r by Th9;
+    abs(r1 - 0) < r by A1;
+    then r1 in ].0 - r, 0 + r.[ by RCOMP_1:8;
+    hence g - x0 in ].-r, r.[ by A1;
+end;
+
+theorem Th11:
+  g = x0 + r1 & abs(r1) < r implies 0 < r & g in ].x0 - r,x0 + r.[
+proof
+  assume
 A4: g = x0 + r1 & abs(r1) < r;
   thus 0 < r by A4,COMPLEX1:132;
   abs(g - x0) < r by A4;
@@ -181,108 +192,15 @@ A4: g = x0 + r1 & abs(r1) < r;
 end;
 
 theorem
-  0 < r & g in ].x0 - r,x0 + r.[ iff g - x0 in ].-r,r.[
+  g - x0 in ].-r,r.[ implies 0 < r & g in ].x0 - r,x0 + r.[
 proof
-  thus 0 < r & g in ].x0 - r,x0 + r.[ implies g - x0 in ].-r,r.[
-  proof
-    assume 0 < r & g in ].x0 - r,x0 + r.[;
-    then consider r1 such that
-A1: g = x0 + r1 & abs(r1) < r by Th9;
-    abs(r1 - 0) < r by A1;
-    then r1 in ].0 - r, 0 + r.[ by RCOMP_1:8;
-    hence g - x0 in ].-r, r.[ by A1;
-  end;
   set r1 = g - x0;
   assume r1 in ].-r,r.[;
   then ex g1 st g1 = r1 & -r < g1 & g1 < r;
   then
 A2: abs(r1) < r by SEQ_2:9;
   x0 + r1 = g;
-  hence thesis by A2,Th9;
-end;
-
-theorem Th11:
-  left_closed_halfline(p) = {p} \/ left_open_halfline(p)
-proof
-  thus left_closed_halfline(p) c= {p} \/ left_open_halfline(p)
-  proof
-    let x;
-    assume x in left_closed_halfline(p);
-    then x in {g1: g1 <= p} by XXREAL_1:231;
-    then consider g1 such that
-A1: g1 = x & g1 <= p;
-    now per cases by A1,XXREAL_0:1;
-      suppose g1 < p;
-        then x in {g2: g2 < p} by A1;
-        then x in left_open_halfline(p) by XXREAL_1:229;
-        hence thesis by XBOOLE_0:def 2;
-      end;
-      suppose g1 = p;
-        then x in {p} by A1,TARSKI:def 1;
-        hence thesis by XBOOLE_0:def 2;
-      end;
-    end;
-    hence thesis;
-  end;
-  let x such that
-A2: x in {p} \/ left_open_halfline(p);
-  now per cases by A2,XBOOLE_0:def 2;
-    suppose x in {p};
-      then x = p by TARSKI:def 1;
-      then x in {g: g <= p};
-      hence thesis by XXREAL_1:231;
-    end;
-    suppose x in left_open_halfline(p);
-      then x in {g: g < p} by XXREAL_1:229;
-      then consider g1 such that
-A3:   g1 = x & g1 < p;
-      x in {g2: g2 <= p} by A3;
-      hence thesis by XXREAL_1:231;
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th12:
-  right_closed_halfline(p) = {p} \/ right_open_halfline(p)
-proof
-  thus right_closed_halfline(p) c= {p} \/ right_open_halfline(p)
-  proof
-    let x;
-    assume x in right_closed_halfline(p);
-    then x in {g1: p <= g1} by XXREAL_1:232;
-    then consider g1 such that
-A1: g1 = x & p <= g1;
-    now per cases by A1,XXREAL_0:1;
-      suppose p < g1;
-        then x in {g2: p < g2} by A1;
-        then x in right_open_halfline(p) by XXREAL_1:230;
-        hence thesis by XBOOLE_0:def 2;
-      end;
-      suppose g1 = p;
-        then x in {p} by A1,TARSKI:def 1;
-        hence thesis by XBOOLE_0:def 2;
-      end;
-    end;
-    hence thesis;
-  end;
-  let x such that
-A2: x in {p} \/ right_open_halfline(p);
-  now per cases by A2,XBOOLE_0:def 2;
-    suppose x in {p};
-      then x = p by TARSKI:def 1;
-      then x in {g: p <= g};
-      hence thesis by XXREAL_1:232;
-    end;
-    suppose x in right_open_halfline(p);
-      then x in {g: p < g} by XXREAL_1:230;
-      then consider g1 such that
-A3:   g1 = x & p < g1;
-      x in {g2: p <= g2} by A3;
-      hence thesis by XXREAL_1:232;
-    end;
-  end;
-  hence thesis;
+  hence thesis by A2,Th11;
 end;
 
 theorem Th13:
@@ -385,7 +303,7 @@ A11:  g2 = x & x0 - p/(n+1) < g2 & g2 < x0 + p/(n+1);
       0 + 1 <= n + 1 by A9,XREAL_1:9;
       then
 A12:  p/(n+1) <= p/1 by A4,REAL_2:201;
-      then x0 - p <= x0 - p/(n+1) by REAL_1:92;
+      then x0 - p <= x0 - p/(n+1) by XREAL_1:15;
       then
 A13:  x0 - p < g2 by A11,XXREAL_0:2;
       x0 + p/(n+1) <= x0 + p by A12,XREAL_1:9;
@@ -436,26 +354,26 @@ A23: 0 < r2;
 end;
 
 theorem
-  f is_increasing_on X or f is_decreasing_on X implies f|X is one-to-one
+  f|X is increasing or f|X is decreasing implies f|X is one-to-one
 proof
   assume
-A1: f is_increasing_on X or f is_decreasing_on X;
+A1: f|X is increasing or f|X is decreasing;
   now per cases by A1;
     suppose
-A2:   f is_increasing_on X;
+A2:   f|X is increasing;
       now
         given r1,r2 such that
 A3:     r1 in dom (f|X) & r2 in dom (f|X) & (f|X).r1 = (f|X).r2 and
 A4:     r1 <> r2;
 A5:     r1 in X /\ dom f & r2 in X /\ dom f by A3,FUNCT_1:68;
-        now per cases by A4,REAL_1:def 5;
+        now per cases by A4,XXREAL_0:1;
           suppose r1 < r2;
-            then f.r1 < f.r2 by A2,A5,RFUNCT_2:def 2;
+            then f.r1 < f.r2 by A2,A5,RFUNCT_2:43;
             then (f|X).r1 < f.r2 by A3,FUNCT_1:68;
             hence contradiction by A3,FUNCT_1:68;
           end;
           suppose r2 < r1;
-            then f.r2 < f.r1 by A2,A5,RFUNCT_2:def 2;
+            then f.r2 < f.r1 by A2,A5,RFUNCT_2:43;
             then (f|X).r2 < f.r1 by A3,FUNCT_1:68;
             hence contradiction by A3,FUNCT_1:68;
           end;
@@ -465,20 +383,20 @@ A5:     r1 in X /\ dom f & r2 in X /\ dom f by A3,FUNCT_1:68;
       hence thesis by PARTFUN1:38;
     end;
     suppose
-A6:   f is_decreasing_on X;
+A6:   f|X is decreasing;
       now
         given r1,r2 such that
 A7:     r1 in dom (f|X) & r2 in dom (f|X) & (f|X).r1 = (f|X).r2 and
 A8:     r1 <> r2;
 A9:     r1 in X /\ dom f & r2 in X /\ dom f by A7,FUNCT_1:68;
-        now per cases by A8,REAL_1:def 5;
+        now per cases by A8,XXREAL_0:1;
           suppose r1 < r2;
-            then f.r2 < f.r1 by A6,A9,RFUNCT_2:def 3;
+            then f.r2 < f.r1 by A6,A9,RFUNCT_2:44;
             then (f|X).r2 < f.r1 by A7,FUNCT_1:68;
             hence contradiction by A7,FUNCT_1:68;
           end;
           suppose r2 < r1;
-            then f.r1 < f.r2 by A6,A9,RFUNCT_2:def 3;
+            then f.r1 < f.r2 by A6,A9,RFUNCT_2:44;
             then (f|X).r1 < f.r2 by A7,FUNCT_1:68;
             hence contradiction by A7,FUNCT_1:68;
           end;
@@ -492,20 +410,20 @@ A9:     r1 in X /\ dom f & r2 in X /\ dom f by A7,FUNCT_1:68;
 end;
 
 theorem Th17:
-  for f be one-to-one PartFunc of REAL,REAL st f is_increasing_on X holds
-  (f|X)" is_increasing_on f.:X
+  for f be one-to-one PartFunc of REAL,REAL st f|X is increasing holds
+  (f|X)"|(f.:X) is increasing
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   assume that
-A1: f is_increasing_on X and
-A2: not (f|X)" is_increasing_on f.:X;
+A1: f|X is increasing and
+A2: not (f|X)"|(f.:X) is increasing;
   consider r1,r2 such that
 A3: r1 in f.:X /\ dom ((f|X)") & r2 in f.:X /\ dom((f|X)") & r1 < r2 &
-  ((f|X)").r1 >= ((f|X)").r2 by A2,RFUNCT_2:def 2;
+  ((f|X)").r1 >= ((f|X)").r2 by A2,RFUNCT_2:43;
   f.:X = rng (f|X) by RELAT_1:148;
   then
 A4: r1 in rng (f|X) & r2 in rng (f|X) by A3,XBOOLE_0:def 3;
-A5: f|X is_increasing_on X by A1,RFUNCT_2:50;
+A5: f|X|X is increasing by A1;
   now per cases;
     suppose ((f|X)").r1 = ((f|X)").r2;
       then r1 = (f|X).(((f|X)").r2) by A4,FUNCT_1:57
@@ -514,12 +432,12 @@ A5: f|X is_increasing_on X by A1,RFUNCT_2:50;
     end;
     suppose ((f|X)").r1 <> ((f|X)").r2;
       then
-A6:   ((f|X)").r2 < ((f|X)").r1 by A3,REAL_1:def 5;
+A6:   ((f|X)").r2 < ((f|X)").r1 by A3,XXREAL_0:1;
 A7:   ((f|X)").r2 in dom (f|X) & ((f|X)").r1 in dom (f|X) by A4,PARTFUN2:79;
       dom (f|X) = dom ((f|X)|X) by RELAT_1:101
         .= X /\ dom (f|X) by RELAT_1:90;
 
-then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:def 2;
+then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:43;
       then r2 < (f|X).(((f|X)").r1) by A4,FUNCT_1:57;
       hence contradiction by A3,A4,FUNCT_1:57;
     end;
@@ -528,20 +446,20 @@ then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:def 2;
 end;
 
 theorem Th18:
-  for f be one-to-one PartFunc of REAL,REAL st f is_decreasing_on X holds
-  (f|X)" is_decreasing_on f.:X
+  for f be one-to-one PartFunc of REAL,REAL st f|X is decreasing holds
+  (f|X)"|(f.:X) is decreasing
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   assume that
-A1: f is_decreasing_on X and
-A2: not (f|X)" is_decreasing_on f.:X;
+A1: f|X is decreasing and
+A2: not (f|X)"|(f.:X) is decreasing;
   consider r1,r2 such that
 A3: r1 in f.:X /\ dom ((f|X)") & r2 in f.:X /\ dom((f|X)") & r1 < r2 &
-  ((f|X)").r1 <= ((f|X)").r2 by A2,RFUNCT_2:def 3;
+  ((f|X)").r1 <= ((f|X)").r2 by A2,RFUNCT_2:44;
   f.:X = rng (f|X) by RELAT_1:148;
   then
 A4: r1 in rng (f|X) & r2 in rng (f|X) by A3,XBOOLE_0:def 3;
-A5: f|X is_decreasing_on X by A1,RFUNCT_2:51;
+A5: f|X|X is decreasing by A1;
   now per cases;
     suppose ((f|X)").r1 = ((f|X)").r2;
       then r1 = (f|X).(((f|X)").r2) by A4,FUNCT_1:57
@@ -550,12 +468,12 @@ A5: f|X is_decreasing_on X by A1,RFUNCT_2:51;
     end;
     suppose ((f|X)").r1 <> ((f|X)").r2;
       then
-A6:   ((f|X)").r2 > ((f|X)").r1 by A3,REAL_1:def 5;
+A6:   ((f|X)").r2 > ((f|X)").r1 by A3,XXREAL_0:1;
 A7:   ((f|X)").r2 in dom (f|X) & ((f|X)").r1 in dom (f|X) by A4,PARTFUN2:79;
       dom (f|X) = dom ((f|X)|X) by RELAT_1:101
         .= X /\ dom (f|X) by RELAT_1:90;
 
-then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:def 3;
+then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:44;
       then r2 < (f|X).(((f|X)").r1) by A4,FUNCT_1:57;
       hence contradiction by A3,A4,FUNCT_1:57;
     end;
@@ -564,18 +482,18 @@ then (f|X).(((f|X)").r2) < (f|X).(((f|X)").r1) by A5,A6,A7,RFUNCT_2:def 3;
 end;
 
 theorem Th19:
-  X c= dom f & f is_monotone_on X &
+  X c= dom f & f|X is monotone &
   (ex p st f.:X = left_open_halfline(p)) implies f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X;
+A1: X c= dom f & f|X is monotone;
   given p such that
 A2: f.:X = left_open_halfline(p);
   set L = left_open_halfline(p);
   now per cases by A1,RFUNCT_2:def 6;
-    suppose f is_non_decreasing_on X;
+    suppose f|X is non-decreasing;
       then
-A3:   f|X is_non_decreasing_on X by RFUNCT_2:52;
+A3:   f|X|X is non-decreasing;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -615,7 +533,7 @@ A18:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
           then
 A19:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
           then
-A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
+A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,XXREAL_2:def 12;
           M1 in N2 by A10,A11,A17;
           then consider r1 such that
 A21:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A7,A9,PARTFUN2:78;
@@ -632,9 +550,9 @@ A25:      r1 <> x0 by A21,A23,XREAL_1:21;
 A26:        x0 < r1;
 A27:        x0 in X /\ dom( f|X) by A4,A5,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A21,XBOOLE_0:def 3;
-            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:def 4;
+            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:45;
           end;
-          then r1 < x0 by A25,REAL_1:def 5;
+          then r1 < x0 by A25,XXREAL_0:1;
           then
 A28:      x0 - r1 > 0 by XREAL_1:52;
 A29:      M2 > (f|X).x0 by A12,XREAL_1:31;
@@ -644,9 +562,9 @@ A30:      x0 <> r2 by A12,A22,XREAL_1:31;
 A31:        r2 < x0;
 A32:        x0 in X /\ dom(f|X) by A4,A5,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
-            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:def 4;
+            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:45;
           end;
-          then x0 < r2 by A30,REAL_1:def 5;
+          then x0 < r2 by A30,XXREAL_0:1;
           then r2 - x0 > 0 by XREAL_1:52;
           then R > 0 by A28,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -673,20 +591,20 @@ A38:      x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A39:      x in X /\ dom (f|X) by A33,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
           then
-A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
+A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
           r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
+          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:45;
           then (f|X).x in [.M1,M2.] by A21,A22,A40;
           then (f|X).x in N3 by A11,A20;
           hence (f|X).x in N1 by A10;
         end;
-        hence thesis by A5,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
-    suppose f is_non_increasing_on X;
+    suppose f|X is non-increasing;
       then
-A41:  f|X is_non_increasing_on X by RFUNCT_2:53;
+A41:  f|X|X is non-increasing by RELAT_1:101;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -726,7 +644,7 @@ A56:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
           then
 A57:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
           then
-A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
+A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,XXREAL_2:def 12;
           M1 in N2 by A48,A49,A55;
           then consider r1 such that
 A59:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A45,A47,PARTFUN2:78;
@@ -743,9 +661,9 @@ A63:      r1 <> x0 by A59,A61,XREAL_1:21;
 A64:        x0 > r1;
 A65:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:def 5;
+            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:46;
           end;
-          then r1 > x0 by A63,REAL_1:def 5;
+          then r1 > x0 by A63,XXREAL_0:1;
           then
 A66:      r1 - x0 > 0 by XREAL_1:52;
 A67:      M2 > (f|X).x0 by A50,XREAL_1:31;
@@ -755,9 +673,9 @@ A68:      x0 <> r2 by A50,A60,XREAL_1:31;
 A69:        r2 > x0;
 A70:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A60,XBOOLE_0:def 3;
-            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:def 5;
+            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:46;
           end;
-          then x0 > r2 by A68,REAL_1:def 5;
+          then x0 > r2 by A68,XXREAL_0:1;
           then x0 - r2 > 0 by XREAL_1:52;
           then R > 0 by A66,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -784,14 +702,14 @@ A76:      x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A77:      x in X /\ dom(f|X) by A71,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom(f|X) by A60,XBOOLE_0:def 3;
           then
-A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
+A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
           r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
+          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:46;
           then (f|X).x in [.M1,M2.] by A59,A60,A78;
           then (f|X).x in N3 by A49,A58;
           hence (f|X).x in N1 by A48;
         end;
-        hence thesis by A43,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
@@ -800,18 +718,18 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
 end;
 
 theorem Th20:
-  X c= dom f & f is_monotone_on X &
+  X c= dom f & f|X is monotone &
   (ex p st f.:X = right_open_halfline(p)) implies f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X;
+A1: X c= dom f & f|X is monotone;
   given p such that
 A2: f.:X = right_open_halfline(p);
   set L = right_open_halfline(p);
   now per cases by A1,RFUNCT_2:def 6;
-    suppose f is_non_decreasing_on X;
+    suppose f|X is non-decreasing;
       then
-A3:   f|X is_non_decreasing_on X by RFUNCT_2:52;
+A3:   f|X|X is non-decreasing;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -851,7 +769,7 @@ A18:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
           then
 A19:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
           then
-A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
+A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,XXREAL_2:def 12;
           M1 in N2 by A10,A11,A17;
           then consider r1 such that
 A21:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A7,A9,PARTFUN2:78;
@@ -868,9 +786,9 @@ A25:      r1 <> x0 by A21,A23,XREAL_1:21;
 A26:        x0 < r1;
 A27:        x0 in X /\ dom( f|X) by A4,A5,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A21,XBOOLE_0:def 3;
-            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:def 4;
+            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:45;
           end;
-          then r1 < x0 by A25,REAL_1:def 5;
+          then r1 < x0 by A25,XXREAL_0:1;
           then
 A28:      x0 - r1 > 0 by XREAL_1:52;
 A29:      M2 > (f|X).x0 by A12,XREAL_1:31;
@@ -880,9 +798,9 @@ A30:      x0 <> r2 by A12,A22,XREAL_1:31;
 A31:        r2 < x0;
 A32:        x0 in X /\ dom(f|X) by A4,A5,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
-            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:def 4;
+            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:45;
           end;
-          then x0 < r2 by A30,REAL_1:def 5;
+          then x0 < r2 by A30,XXREAL_0:1;
           then r2 - x0 > 0 by XREAL_1:52;
           then R > 0 by A28,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -909,20 +827,20 @@ A38:      x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A39:      x in X /\ dom (f|X) by A33,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
           then
-A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
+A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
           r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
+          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:45;
           then (f|X).x in [.M1,M2.] by A21,A22,A40;
           then (f|X).x in N3 by A11,A20;
           hence (f|X).x in N1 by A10;
         end;
-        hence thesis by A5,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
-    suppose f is_non_increasing_on X;
+    suppose f|X is non-increasing;
       then
-A41:  f|X is_non_increasing_on X by RFUNCT_2:53;
+A41:  f|X|X is non-increasing by RELAT_1:101;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -962,7 +880,7 @@ A56:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
           then
 A57:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
           then
-A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
+A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,XXREAL_2:def 12;
           M1 in N2 by A48,A49,A55;
           then consider r1 such that
 A59:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A45,A47,PARTFUN2:78;
@@ -979,9 +897,9 @@ A63:      r1 <> x0 by A59,A61,XREAL_1:21;
 A64:        x0 > r1;
 A65:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:def 5;
+            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:46;
           end;
-          then r1 > x0 by A63,REAL_1:def 5;
+          then r1 > x0 by A63,XXREAL_0:1;
           then
 A66:      r1 - x0 > 0 by XREAL_1:52;
 A67:      M2 > (f|X).x0 by A50,XREAL_1:31;
@@ -991,9 +909,9 @@ A68:      x0 <> r2 by A50,A60,XREAL_1:31;
 A69:        r2 > x0;
 A70:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A60,XBOOLE_0:def 3;
-            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:def 5;
+            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:46;
           end;
-          then x0 > r2 by A68,REAL_1:def 5;
+          then x0 > r2 by A68,XXREAL_0:1;
           then x0 - r2 > 0 by XREAL_1:52;
           then R > 0 by A66,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -1020,14 +938,14 @@ A76:      x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A77:      x in X /\ dom(f|X) by A71,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom(f|X) by A60,XBOOLE_0:def 3;
           then
-A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
+A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
           r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
+          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:46;
           then (f|X).x in [.M1,M2.] by A59,A60,A78;
           then (f|X).x in N3 by A49,A58;
           hence (f|X).x in N1 by A48;
         end;
-        hence thesis by A43,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
@@ -1036,11 +954,11 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
 end;
 
 theorem Th21:
-  X c= dom f & f is_monotone_on X &
+  X c= dom f & f|X is monotone &
   (ex p st f.:X = left_closed_halfline(p)) implies f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X;
+A1: X c= dom f & f|X is monotone;
   given p such that
 A2: f.:X = left_closed_halfline(p);
   set l = left_closed_halfline(p);
@@ -1056,16 +974,16 @@ A4: x0 in dom (f|X) by RELAT_1:90;
     then
 A5: (f|X).x0 in (f|X).:X by A3,FUNCT_1:def 12;
 A6: (f|X).:X = f.:X by RFUNCT_2:5;
-    then (f|X).x0 in {p} \/ L by A2,A5,Th11;
+    then (f|X).x0 in {p} \/ L by A2,A5,XXREAL_1:423;
     then
 A7: (f|X).x0 in {p} or (f|X).x0 in L by XBOOLE_0:def 2;
 A8: L c= l by XXREAL_1:21;
     now
       let N1 be Neighbourhood of (f|X).x0;
       now per cases by A1,RFUNCT_2:def 6;
-        suppose f is_non_decreasing_on X;
+        suppose f|X is non-decreasing;
           then
-A9:       f|X is_non_decreasing_on X by RFUNCT_2:52;
+A9:       f|X|X is non-decreasing;
           now per cases by A7,TARSKI:def 1;
             suppose (f|X).x0 in L;
               then consider N2 being Neighbourhood of (f|X).x0 such that
@@ -1093,7 +1011,8 @@ A19:          (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A13,XREAL_1:31;
               then
 A20:          M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A19;
               then
-A21:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A18,RCOMP_1:17;
+A21:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[
+ by A18,XXREAL_2:def 12;
               M1 in N2 by A11,A12,A18;
               then M1 in L by A10;
               then consider r1 such that
@@ -1114,9 +1033,9 @@ A26:          r1 <> x0 by A22,A24,XREAL_1:21;
 A27:            x0 < r1;
 A28:            x0 in X /\ dom( f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom(f|X) by A22,XBOOLE_0:def 3;
-                hence contradiction by A9,A22,A25,A27,A28,RFUNCT_2:def 4;
+                hence contradiction by A9,A22,A25,A27,A28,RFUNCT_2:45;
               end;
-              then r1 < x0 by A26,REAL_1:def 5;
+              then r1 < x0 by A26,XXREAL_0:1;
               then
 A29:          x0 - r1 > 0 by XREAL_1:52;
 A30:          M2 > (f|X).x0 by A13,XREAL_1:31;
@@ -1126,9 +1045,9 @@ A31:          x0 <> r2 by A13,A23,XREAL_1:31;
 A32:            r2 < x0;
 A33:            x0 in X /\ dom(f|X) by A3,A4,XBOOLE_0:def 3;
                 r2 in X /\ dom (f|X) by A23,XBOOLE_0:def 3;
-                hence contradiction by A9,A23,A30,A32,A33,RFUNCT_2:def 4;
+                hence contradiction by A9,A23,A30,A32,A33,RFUNCT_2:45;
               end;
-              then x0 < r2 by A31,REAL_1:def 5;
+              then x0 < r2 by A31,XXREAL_0:1;
               then r2 - x0 > 0 by XREAL_1:52;
               then R > 0 by A29,XXREAL_0:15;
               then reconsider N = ].x0 - R,x0+ R.[ as Neighbourhood of x0 by
@@ -1155,9 +1074,9 @@ A39:          x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A40:          x in X /\ dom (f|X) by A34,RELAT_1:87,XBOOLE_1:28;
               r2 in X /\ dom (f|X) by A23,XBOOLE_0:def 3;
               then
-A41:          (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:def 4;
+A41:          (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:45;
               r1 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
-              then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:def 4;
+              then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:45;
               then (f|X).x in [.M1,M2.] by A22,A23,A41;
               then (f|X).x in N3 by A12,A21;
               hence (f|X).x in N1 by A11;
@@ -1181,10 +1100,10 @@ A50:          p - R < p by A44,XREAL_1:46;
               p < p + r by A43,XREAL_1:31;
               then
 A51:          p - R < p + r by A50,XXREAL_0:2;
-              p - r < p - R by A45,REAL_1:92;
+              p - r < p - R by A45,XREAL_1:17;
               then p - R in ].p - r, p + r.[ by A51;
               then
-A52:          [.p - R, p + R.] c= N1 by A43,A49,RCOMP_1:17;
+A52:          [.p - R, p + R.] c= N1 by A43,A49,XXREAL_2:def 12;
               p - R in {s : s < p} by A50;
               then p - R in L by XXREAL_1:229;
               then consider r1 such that
@@ -1196,9 +1115,9 @@ A54:          r1 <> x0 by A42,A44,A53,XREAL_1:46;
 A55:            x0 < r1;
 A56:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
-                hence contradiction by A9,A42,A50,A53,A55,A56,RFUNCT_2:def 4;
+                hence contradiction by A9,A42,A50,A53,A55,A56,RFUNCT_2:45;
               end;
-              then r1 < x0 by A54,REAL_1:def 5;
+              then r1 < x0 by A54,XXREAL_0:1;
               then x0 - r1 > 0 by XREAL_1:52;
               then reconsider N = ].x0 - (x0 - r1),x0 + (x0 - r1).[ as
               Neighbourhood of x0 by RCOMP_1:def 7;
@@ -1214,7 +1133,7 @@ A59:          (f|X).x <= p + R by A48,XXREAL_0:2;
 A60:          x in X /\ dom (f|X) by A57,A58,XBOOLE_0:def 3;
 A61:          r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
               ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1) by A57;
-              then p - R <= (f|X).x by A9,A53,A60,A61,RFUNCT_2:def 4;
+              then p - R <= (f|X).x by A9,A53,A60,A61,RFUNCT_2:45;
               then (f|X).x in [.p - R, p + R.] by A59;
               hence (f|X).x in N1 by A52;
             end;
@@ -1223,9 +1142,9 @@ A61:          r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
 
 for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
         end;
-        suppose f is_non_increasing_on X;
+        suppose f|X is non-increasing;
           then
-A62:      f|X is_non_increasing_on X by RFUNCT_2:53;
+A62:      f|X|X is non-increasing by RELAT_1:101;
           now per cases by A7,TARSKI:def 1;
             suppose (f|X).x0 in L;
               then consider N2 being Neighbourhood of (f|X).x0 such that
@@ -1253,7 +1172,8 @@ A72:          (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A66,XREAL_1:31;
               then
 A73:          M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A72;
               then
-A74:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A71,RCOMP_1:17;
+A74:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[
+ by A71,XXREAL_2:def 12;
               M1 in N2 by A64,A65,A71;
               then M1 in L by A63;
               then consider r1 such that
@@ -1274,9 +1194,9 @@ A79:          r1 <> x0 by A75,A77,XREAL_1:21;
 A80:            x0 > r1;
 A81:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
-                hence contradiction by A62,A75,A78,A80,A81,RFUNCT_2:def 5;
+                hence contradiction by A62,A75,A78,A80,A81,RFUNCT_2:46;
               end;
-              then r1 > x0 by A79,REAL_1:def 5;
+              then r1 > x0 by A79,XXREAL_0:1;
               then
 A82:          r1 - x0 > 0 by XREAL_1:52;
 A83:          M2 > (f|X).x0 by A66,XREAL_1:31;
@@ -1286,9 +1206,9 @@ A84:          x0 <> r2 by A66,A76,XREAL_1:31;
 A85:            r2 > x0;
 A86:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r2 in X /\ dom (f|X) by A76,XBOOLE_0:def 3;
-                hence contradiction by A62,A76,A83,A85,A86,RFUNCT_2:def 5;
+                hence contradiction by A62,A76,A83,A85,A86,RFUNCT_2:46;
               end;
-              then x0 > r2 by A84,REAL_1:def 5;
+              then x0 > r2 by A84,XXREAL_0:1;
               then x0 - r2 > 0 by XREAL_1:52;
               then R > 0 by A82,XXREAL_0:15;
               then reconsider N =].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -1315,9 +1235,9 @@ A92:          x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A93:          x in X /\ dom(f|X) by A87,RELAT_1:87,XBOOLE_1:28;
               r2 in X /\ dom(f|X) by A76,XBOOLE_0:def 3;
               then
-A94:          (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:def 5;
+A94:          (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:46;
               r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
-              then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:def 5;
+              then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:46;
               then (f|X).x in [.M1,M2.] by A75,A76,A94;
               then (f|X).x in N3 by A65,A74;
               hence (f|X).x in N1 by A64;
@@ -1341,10 +1261,10 @@ A103:         p - R < p by A97,XREAL_1:46;
               p < p + r by A96,XREAL_1:31;
               then
 A104:         p - R < p + r by A103,XXREAL_0:2;
-              p - r < p - R by A98,REAL_1:92;
+              p - r < p - R by A98,XREAL_1:17;
               then p - R in ].p - r, p + r.[ by A104;
               then
-A105:         [.p - R, p + R.] c= N1 by A96,A102,RCOMP_1:17;
+A105:         [.p - R, p + R.] c= N1 by A96,A102,XXREAL_2:def 12;
               p - R in {s : s < p} by A103;
               then p - R in L by XXREAL_1:229;
               then consider r1 such that
@@ -1357,9 +1277,9 @@ A108:           x0 > r1;
 A109:           x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
 
-hence contradiction by A62,A95,A103,A106,A108,A109,RFUNCT_2:def 5;
+hence contradiction by A62,A95,A103,A106,A108,A109,RFUNCT_2:46;
               end;
-              then r1 > x0 by A107,REAL_1:def 5;
+              then r1 > x0 by A107,XXREAL_0:1;
               then r1 - x0 > 0 by XREAL_1:52;
               then reconsider N = ].x0 - (r1 - x0),x0 + (r1 - x0).[ as
               Neighbourhood of x0 by RCOMP_1:def 7;
@@ -1375,7 +1295,7 @@ A112:         (f|X).x <= p + R by A101,XXREAL_0:2;
 A113:         x in X /\ dom (f|X) by A110,A111,XBOOLE_0:def 3;
 A114:         r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
               ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0) by A110;
-              then p - R <= (f|X).x by A62,A106,A113,A114,RFUNCT_2:def 5;
+              then p - R <= (f|X).x by A62,A106,A113,A114,RFUNCT_2:46;
               then (f|X).x in [.p - R, p + R.] by A112;
               hence (f|X).x in N1 by A105;
             end;
@@ -1388,17 +1308,17 @@ for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
       hence ex N being Neighbourhood of x0 st
       for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
     end;
-    hence thesis by A4,FCONT_1:4;
+    hence thesis by FCONT_1:4;
   end;
   hence f is_continuous_on X by A1,FCONT_1:def 2;
 end;
 
 theorem Th22:
-  X c= dom f & f is_monotone_on X &
+  X c= dom f & f|X is monotone &
   (ex p st f.:X = right_closed_halfline(p)) implies f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X;
+A1: X c= dom f & f|X is monotone;
   given p such that
 A2: f.:X = right_closed_halfline(p);
   set l = right_closed_halfline(p);
@@ -1414,16 +1334,16 @@ A4: x0 in dom (f|X) by RELAT_1:90;
     then
 A5: (f|X).x0 in (f|X).:X by A3,FUNCT_1:def 12;
 A6: (f|X).:X = f.:X by RFUNCT_2:5;
-    then (f|X).x0 in {p} \/ L by A2,A5,Th12;
+    then (f|X).x0 in {p} \/ L by A2,A5,XXREAL_1:427;
     then
 A7: (f|X).x0 in {p} or (f|X).x0 in L by XBOOLE_0:def 2;
 A8: L c= l by XXREAL_1:22;
     now
       let N1 be Neighbourhood of (f|X).x0;
       now per cases by A1,RFUNCT_2:def 6;
-        suppose f is_non_decreasing_on X;
+        suppose f|X is non-decreasing;
           then
-A9:       f|X is_non_decreasing_on X by RFUNCT_2:52;
+A9:       f|X|X is non-decreasing;
           now per cases by A7,TARSKI:def 1;
             suppose (f|X).x0 in L;
               then consider N2 being Neighbourhood of (f|X).x0 such that
@@ -1451,7 +1371,8 @@ A19:          (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A13,XREAL_1:31;
               then
 A20:          M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A19;
               then
-A21:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A18,RCOMP_1:17;
+A21:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[
+ by A18,XXREAL_2:def 12;
               M1 in N2 by A11,A12,A18;
               then M1 in L by A10;
               then consider r1 such that
@@ -1472,9 +1393,9 @@ A26:          r1 <> x0 by A22,A24,XREAL_1:21;
 A27:            x0 < r1;
 A28:            x0 in X /\ dom( f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom(f|X) by A22,XBOOLE_0:def 3;
-                hence contradiction by A9,A22,A25,A27,A28,RFUNCT_2:def 4;
+                hence contradiction by A9,A22,A25,A27,A28,RFUNCT_2:45;
               end;
-              then r1 < x0 by A26,REAL_1:def 5;
+              then r1 < x0 by A26,XXREAL_0:1;
               then
 A29:          x0 - r1 > 0 by XREAL_1:52;
 A30:          M2 > (f|X).x0 by A13,XREAL_1:31;
@@ -1484,9 +1405,9 @@ A31:          x0 <> r2 by A13,A23,XREAL_1:31;
 A32:            r2 < x0;
 A33:            x0 in X /\ dom(f|X) by A3,A4,XBOOLE_0:def 3;
                 r2 in X /\ dom (f|X) by A23,XBOOLE_0:def 3;
-                hence contradiction by A9,A23,A30,A32,A33,RFUNCT_2:def 4;
+                hence contradiction by A9,A23,A30,A32,A33,RFUNCT_2:45;
               end;
-              then x0 < r2 by A31,REAL_1:def 5;
+              then x0 < r2 by A31,XXREAL_0:1;
               then r2 - x0 > 0 by XREAL_1:52;
               then R > 0 by A29,XXREAL_0:15;
               then reconsider N = ].x0 - R,x0+ R.[ as Neighbourhood of x0 by
@@ -1513,9 +1434,9 @@ A39:          x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A40:          x in X /\ dom (f|X) by A34,RELAT_1:87,XBOOLE_1:28;
               r2 in X /\ dom (f|X) by A23,XBOOLE_0:def 3;
               then
-A41:          (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:def 4;
+A41:          (f|X).x <= (f|X).r2 by A9,A39,A40,RFUNCT_2:45;
               r1 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
-              then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:def 4;
+              then (f|X).r1 <= (f|X).x by A9,A37,A40,RFUNCT_2:45;
               then (f|X).x in [.M1,M2.] by A22,A23,A41;
               then (f|X).x in N3 by A12,A21;
               hence (f|X).x in N1 by A11;
@@ -1539,10 +1460,10 @@ A50:          p - R < p by A44,XREAL_1:46;
               p < p + r by A43,XREAL_1:31;
               then
 A51:          p - R < p + r by A50,XXREAL_0:2;
-              p - r < p - R by A45,REAL_1:92;
+              p - r < p - R by A45,XREAL_1:17;
               then p - R in ].p - r, p + r.[ by A51;
               then
-A52:          [.p - R, p + R.] c= N1 by A43,A49,RCOMP_1:17;
+A52:          [.p - R, p + R.] c= N1 by A43,A49,XXREAL_2:def 12;
               p + R in {s : p < s} by A48;
               then p + R in L by XXREAL_1:230;
               then consider r1 such that
@@ -1554,9 +1475,9 @@ A54:          r1 <> x0 by A42,A44,A53,XREAL_1:31;
 A55:            x0 > r1;
 A56:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
-                hence contradiction by A9,A42,A48,A53,A55,A56,RFUNCT_2:def 4;
+                hence contradiction by A9,A42,A48,A53,A55,A56,RFUNCT_2:45;
               end;
-              then r1 > x0 by A54,REAL_1:def 5;
+              then r1 > x0 by A54,XXREAL_0:1;
               then r1 - x0 > 0 by XREAL_1:52;
               then reconsider N = ].x0 - (r1 - x0),x0 + (r1 - x0).[ as
               Neighbourhood of x0 by RCOMP_1:def 7;
@@ -1572,7 +1493,7 @@ A59:          p - R <= (f|X).x by A50,XXREAL_0:2;
 A60:          x in X /\ dom (f|X) by A57,A58,XBOOLE_0:def 3;
 A61:          r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
               ex s st s = x & x0 - (r1-x0) < s & s < x0 + (r1-x0) by A57;
-              then p + R >= (f|X).x by A9,A53,A60,A61,RFUNCT_2:def 4;
+              then p + R >= (f|X).x by A9,A53,A60,A61,RFUNCT_2:45;
               then (f|X).x in [.p - R, p + R.] by A59;
               hence (f|X).x in N1 by A52;
             end;
@@ -1581,9 +1502,9 @@ A61:          r1 in X /\ dom (f|X) by A53,XBOOLE_0:def 3;
 
 for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
         end;
-        suppose f is_non_increasing_on X;
+        suppose f|X is non-increasing;
           then
-A62:      f|X is_non_increasing_on X by RFUNCT_2:53;
+A62:      f|X|X is non-increasing by RELAT_1:101;
           now per cases by A7,TARSKI:def 1;
             suppose (f|X).x0 in L;
               then consider N2 being Neighbourhood of (f|X).x0 such that
@@ -1611,7 +1532,8 @@ A72:          (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A66,XREAL_1:31;
               then
 A73:          M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A72;
               then
-A74:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A71,RCOMP_1:17;
+A74:          [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[
+ by A71,XXREAL_2:def 12;
               M1 in N2 by A64,A65,A71;
               then M1 in L by A63;
               then consider r1 such that
@@ -1632,9 +1554,9 @@ A79:          r1 <> x0 by A75,A77,XREAL_1:21;
 A80:            x0 > r1;
 A81:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
-                hence contradiction by A62,A75,A78,A80,A81,RFUNCT_2:def 5;
+                hence contradiction by A62,A75,A78,A80,A81,RFUNCT_2:46;
               end;
-              then r1 > x0 by A79,REAL_1:def 5;
+              then r1 > x0 by A79,XXREAL_0:1;
               then
 A82:          r1 - x0 > 0 by XREAL_1:52;
 A83:          M2 > (f|X).x0 by A66,XREAL_1:31;
@@ -1644,9 +1566,9 @@ A84:          x0 <> r2 by A66,A76,XREAL_1:31;
 A85:            r2 > x0;
 A86:            x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r2 in X /\ dom (f|X) by A76,XBOOLE_0:def 3;
-                hence contradiction by A62,A76,A83,A85,A86,RFUNCT_2:def 5;
+                hence contradiction by A62,A76,A83,A85,A86,RFUNCT_2:46;
               end;
-              then x0 > r2 by A84,REAL_1:def 5;
+              then x0 > r2 by A84,XXREAL_0:1;
               then x0 - r2 > 0 by XREAL_1:52;
               then R > 0 by A82,XXREAL_0:15;
               then reconsider N =].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -1673,9 +1595,9 @@ A92:          x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A93:          x in X /\ dom(f|X) by A87,RELAT_1:87,XBOOLE_1:28;
               r2 in X /\ dom(f|X) by A76,XBOOLE_0:def 3;
               then
-A94:          (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:def 5;
+A94:          (f|X).x <= (f|X).r2 by A62,A90,A93,RFUNCT_2:46;
               r1 in X /\ dom(f|X) by A75,XBOOLE_0:def 3;
-              then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:def 5;
+              then (f|X).r1 <= (f|X).x by A62,A92,A93,RFUNCT_2:46;
               then (f|X).x in [.M1,M2.] by A75,A76,A94;
               then (f|X).x in N3 by A65,A74;
               hence (f|X).x in N1 by A64;
@@ -1699,10 +1621,10 @@ A103:         p - R < p by A97,XREAL_1:46;
               p < p + r by A96,XREAL_1:31;
               then
 A104:         p - R < p + r by A103,XXREAL_0:2;
-              p - r < p - R by A98,REAL_1:92;
-              then p - R in ].p - r, p + r.[ by A104; :: ???
+              p - r < p - R by A98,XREAL_1:17;
+              then p - R in ].p - r, p + r.[ by A104;
               then
-A105:         [.p - R, p + R.] c= N1 by A96,A102,RCOMP_1:17;
+A105:         [.p - R, p + R.] c= N1 by A96,A102,XXREAL_2:def 12;
               p + R in {s : p < s} by A101;
               then p + R in L by XXREAL_1:230;
               then consider r1 such that
@@ -1715,9 +1637,9 @@ A108:           x0 < r1;
 A109:           x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
                 r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
 
-hence contradiction by A62,A95,A101,A106,A108,A109,RFUNCT_2:def 5;
+hence contradiction by A62,A95,A101,A106,A108,A109,RFUNCT_2:46;
               end;
-              then r1 < x0 by A107,REAL_1:def 5;
+              then r1 < x0 by A107,XXREAL_0:1;
               then x0 - r1 > 0 by XREAL_1:52;
               then reconsider N = ].x0 - (x0 - r1),x0 + (x0 - r1).[ as
               Neighbourhood of x0 by RCOMP_1:def 7;
@@ -1733,7 +1655,7 @@ A112:         p - R <= (f|X).x by A103,XXREAL_0:2;
 A113:         x in X /\ dom (f|X) by A110,A111,XBOOLE_0:def 3;
 A114:         r1 in X /\ dom (f|X) by A106,XBOOLE_0:def 3;
               ex s st s = x & x0 - (x0-r1) < s & s < x0 + (x0-r1) by A110;
-              then p + R >= (f|X).x by A62,A106,A113,A114,RFUNCT_2:def 5;
+              then p + R >= (f|X).x by A62,A106,A113,A114,RFUNCT_2:46;
               then (f|X).x in [.p - R, p + R.] by A112;
               hence (f|X).x in N1 by A105;
             end;
@@ -1746,24 +1668,24 @@ for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
       hence ex N being Neighbourhood of x0 st
       for r1 be real number st r1 in dom(f|X) & r1 in N holds (f|X).r1 in N1;
     end;
-    hence thesis by A4,FCONT_1:4;
+    hence thesis by FCONT_1:4;
   end;
   hence f is_continuous_on X by A1,FCONT_1:def 2;
 end;
 
 theorem Th23:
-  X c= dom f & f is_monotone_on X & (ex p,g st f.:X = ].p,g.[) implies
+  X c= dom f & f|X is monotone & (ex p,g st f.:X = ].p,g.[) implies
   f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X;
+A1: X c= dom f & f|X is monotone;
   given p,g such that
 A2: f.:X = ].p,g.[;
   set L = ].p,g.[;
   now per cases by A1,RFUNCT_2:def 6;
-    suppose f is_non_decreasing_on X;
+    suppose f|X is non-decreasing;
       then
-A3:   f|X is_non_decreasing_on X by RFUNCT_2:52;
+A3:   f|X|X is non-decreasing;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -1803,7 +1725,7 @@ A18:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A12,XREAL_1:31;
           then
 A19:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A18;
           then
-A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,RCOMP_1:17;
+A20:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A17,XXREAL_2:def 12;
           M1 in N2 by A10,A11,A17;
           then consider r1 such that
 A21:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A7,A9,PARTFUN2:78;
@@ -1820,9 +1742,9 @@ A25:      r1 <> x0 by A21,A23,XREAL_1:21;
 A26:        x0 < r1;
 A27:        x0 in X /\ dom( f|X) by A4,A5,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A21,XBOOLE_0:def 3;
-            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:def 4;
+            hence contradiction by A3,A21,A24,A26,A27,RFUNCT_2:45;
           end;
-          then r1 < x0 by A25,REAL_1:def 5;
+          then r1 < x0 by A25,XXREAL_0:1;
           then
 A28:      x0 - r1 > 0 by XREAL_1:52;
 A29:      M2 > (f|X).x0 by A12,XREAL_1:31;
@@ -1832,9 +1754,9 @@ A30:      x0 <> r2 by A12,A22,XREAL_1:31;
 A31:        r2 < x0;
 A32:        x0 in X /\ dom(f|X) by A4,A5,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
-            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:def 4;
+            hence contradiction by A3,A22,A29,A31,A32,RFUNCT_2:45;
           end;
-          then x0 < r2 by A30,REAL_1:def 5;
+          then x0 < r2 by A30,XXREAL_0:1;
           then r2 - x0 > 0 by XREAL_1:52;
           then R > 0 by A28,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -1861,20 +1783,20 @@ A38:      x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A39:      x in X /\ dom (f|X) by A33,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom (f|X) by A22,XBOOLE_0:def 3;
           then
-A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:def 4;
+A40:      (f|X).x <= (f|X).r2 by A3,A38,A39,RFUNCT_2:45;
           r1 in X /\ dom (f|X) by A21,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:def 4;
+          then (f|X).r1 <= (f|X).x by A3,A36,A39,RFUNCT_2:45;
           then (f|X).x in [.M1,M2.] by A21,A22,A40;
           then (f|X).x in N3 by A11,A20;
           hence (f|X).x in N1 by A10;
         end;
-        hence thesis by A5,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
-    suppose f is_non_increasing_on X;
+    suppose f|X is non-increasing;
       then
-A41:  f|X is_non_increasing_on X by RFUNCT_2:53;
+A41:  f|X|X is non-increasing by RELAT_1:101;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -1914,7 +1836,7 @@ A56:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A50,XREAL_1:31;
           then
 A57:      M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A56;
           then
-A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,RCOMP_1:17;
+A58:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A55,XXREAL_2:def 12;
           M1 in N2 by A48,A49,A55;
           then consider r1 such that
 A59:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A2,A45,A47,PARTFUN2:78;
@@ -1931,9 +1853,9 @@ A63:      r1 <> x0 by A59,A61,XREAL_1:21;
 A64:        x0 > r1;
 A65:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:def 5;
+            hence contradiction by A41,A59,A62,A64,A65,RFUNCT_2:46;
           end;
-          then r1 > x0 by A63,REAL_1:def 5;
+          then r1 > x0 by A63,XXREAL_0:1;
           then
 A66:      r1 - x0 > 0 by XREAL_1:52;
 A67:      M2 > (f|X).x0 by A50,XREAL_1:31;
@@ -1943,9 +1865,9 @@ A68:      x0 <> r2 by A50,A60,XREAL_1:31;
 A69:        r2 > x0;
 A70:        x0 in X /\ dom (f|X) by A42,A43,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A60,XBOOLE_0:def 3;
-            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:def 5;
+            hence contradiction by A41,A60,A67,A69,A70,RFUNCT_2:46;
           end;
-          then x0 > r2 by A68,REAL_1:def 5;
+          then x0 > r2 by A68,XXREAL_0:1;
           then x0 - r2 > 0 by XREAL_1:52;
           then R > 0 by A66,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -1972,14 +1894,14 @@ A76:      x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A77:      x in X /\ dom(f|X) by A71,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom(f|X) by A60,XBOOLE_0:def 3;
           then
-A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
+A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:46;
           r1 in X /\ dom(f|X) by A59,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:def 5;
+          then (f|X).r1 <= (f|X).x by A41,A76,A77,RFUNCT_2:46;
           then (f|X).x in [.M1,M2.] by A59,A60,A78;
           then (f|X).x in N3 by A49,A58;
           hence (f|X).x in N1 by A48;
         end;
-        hence thesis by A43,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
@@ -1988,14 +1910,14 @@ A78:      (f|X).x <= (f|X).r2 by A41,A74,A77,RFUNCT_2:def 5;
 end;
 
 theorem Th24:
-  X c= dom f & f is_monotone_on X & f.:X = REAL implies f is_continuous_on X
+  X c= dom f & f|X is monotone & f.:X = REAL implies f is_continuous_on X
 proof
   assume
-A1: X c= dom f & f is_monotone_on X & f.:X = REAL;
+A1: X c= dom f & f|X is monotone & f.:X = REAL;
   now per cases by A1,RFUNCT_2:def 6;
-    suppose f is_non_decreasing_on X;
+    suppose f|X is non-decreasing;
       then
-A2:   f|X is_non_decreasing_on X by RFUNCT_2:52;
+A2:   f|X|X is non-decreasing;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -2027,7 +1949,7 @@ A13:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A7,XREAL_1:31;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A9,XXREAL_0:2;
           then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A13;
           then
-A14:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A12,RCOMP_1:17;
+A14:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A12,XXREAL_2:def 12;
           consider r1 such that
 A15:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A1,A5,PARTFUN2:78;
           consider r2 such that
@@ -2042,9 +1964,9 @@ A19:      r1 <> x0 by A15,A17,XREAL_1:21;
 A20:        x0 < r1;
 A21:        x0 in X /\ dom (f|X) by A3,A4,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A15,XBOOLE_0:def 3;
-            hence contradiction by A2,A15,A18,A20,A21,RFUNCT_2:def 4;
+            hence contradiction by A2,A15,A18,A20,A21,RFUNCT_2:45;
           end;
-          then r1 < x0 by A19,REAL_1:def 5;
+          then r1 < x0 by A19,XXREAL_0:1;
           then
 A22:      x0 - r1 > 0 by XREAL_1:52;
 A23:      M2 > (f|X).x0 by A7,XREAL_1:31;
@@ -2054,9 +1976,9 @@ A24:      x0 <> r2 by A7,A16,XREAL_1:31;
 A25:        r2 < x0;
 A26:        x0 in X /\ dom(f|X) by A3,A4,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A16,XBOOLE_0:def 3;
-            hence contradiction by A2,A16,A23,A25,A26,RFUNCT_2:def 4;
+            hence contradiction by A2,A16,A23,A25,A26,RFUNCT_2:45;
           end;
-          then x0 < r2 by A24,REAL_1:def 5;
+          then x0 < r2 by A24,XXREAL_0:1;
           then r2 - x0 > 0 by XREAL_1:52;
           then R > 0 by A22,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -2083,19 +2005,19 @@ A32:      x - x0 + x0 < r2 - x0 + x0 by XREAL_1:8;
 A33:      x in X /\ dom (f|X) by A27,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom (f|X) by A16,XBOOLE_0:def 3;
           then
-A34:      (f|X).x <= (f|X).r2 by A2,A32,A33,RFUNCT_2:def 4;
+A34:      (f|X).x <= (f|X).r2 by A2,A32,A33,RFUNCT_2:45;
           r1 in X /\ dom (f|X) by A15,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A2,A30,A33,RFUNCT_2:def 4;
+          then (f|X).r1 <= (f|X).x by A2,A30,A33,RFUNCT_2:45;
           then (f|X).x in [.M1,M2.] by A15,A16,A34;
           hence (f|X).x in N1 by A6,A14;
         end;
-        hence thesis by A4,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
-    suppose f is_non_increasing_on X;
+    suppose f|X is non-increasing;
       then
-A35:  f|X is_non_increasing_on X by RFUNCT_2:53;
+A35:  f|X|X is non-increasing by RELAT_1:101;
       for x0 be real number st x0 in X holds f|X is_continuous_in x0
       proof
         let x0 be real number;
@@ -2127,7 +2049,7 @@ A46:      (f|X).x0 + r/2 < (f|X).x0 + r/2 + r/2 by A40,XREAL_1:31;
           then (f|X).x0 - r < (f|X).x0 + r/2 by A42,XXREAL_0:2;
           then M2 in ].(f|X).x0 - r,(f|X).x0 + r.[ by A46;
           then
-A47:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A45,RCOMP_1:17;
+A47:      [.M1,M2.] c= ].(f|X).x0 - r,(f|X).x0 + r.[ by A45,XXREAL_2:def 12;
           consider r1 such that
 A48:      r1 in dom (f|X) & r1 in X & M1 = (f|X).r1 by A1,A38,PARTFUN2:78;
           consider r2 such that
@@ -2142,9 +2064,9 @@ A52:      r1 <> x0 by A48,A50,XREAL_1:21;
 A53:        x0 > r1;
 A54:        x0 in X /\ dom (f|X) by A36,A37,XBOOLE_0:def 3;
             r1 in X /\ dom(f|X) by A48,XBOOLE_0:def 3;
-            hence contradiction by A35,A48,A51,A53,A54,RFUNCT_2:def 5;
+            hence contradiction by A35,A48,A51,A53,A54,RFUNCT_2:46;
           end;
-          then r1 > x0 by A52,REAL_1:def 5;
+          then r1 > x0 by A52,XXREAL_0:1;
           then
 A55:      r1 - x0 > 0 by XREAL_1:52;
 A56:      M2 > (f|X).x0 by A40,XREAL_1:31;
@@ -2154,9 +2076,9 @@ A57:      x0 <> r2 by A40,A49,XREAL_1:31;
 A58:        r2 > x0;
 A59:        x0 in X /\ dom (f|X) by A36,A37,XBOOLE_0:def 3;
             r2 in X /\ dom (f|X) by A49,XBOOLE_0:def 3;
-            hence contradiction by A35,A49,A56,A58,A59,RFUNCT_2:def 5;
+            hence contradiction by A35,A49,A56,A58,A59,RFUNCT_2:46;
           end;
-          then x0 > r2 by A57,REAL_1:def 5;
+          then x0 > r2 by A57,XXREAL_0:1;
           then x0 - r2 > 0 by XREAL_1:52;
           then R > 0 by A55,XXREAL_0:15;
           then reconsider N = ].x0 - R,x0 + R.[ as Neighbourhood of x0 by
@@ -2183,13 +2105,13 @@ A65:      x - x0 + x0 < r1 - x0 + x0 by XREAL_1:8;
 A66:      x in X /\ dom(f|X) by A60,RELAT_1:87,XBOOLE_1:28;
           r2 in X /\ dom(f|X) by A49,XBOOLE_0:def 3;
           then
-A67:      (f|X).x <= (f|X).r2 by A35,A63,A66,RFUNCT_2:def 5;
+A67:      (f|X).x <= (f|X).r2 by A35,A63,A66,RFUNCT_2:46;
           r1 in X /\ dom(f|X) by A48,XBOOLE_0:def 3;
-          then (f|X).r1 <= (f|X).x by A35,A65,A66,RFUNCT_2:def 5;
+          then (f|X).r1 <= (f|X).x by A35,A65,A66,RFUNCT_2:46;
           then (f|X).x in [.M1,M2.] by A48,A49,A67;
           hence (f|X).x in N1 by A39,A47;
         end;
-        hence thesis by A37,FCONT_1:4;
+        hence thesis by FCONT_1:4;
       end;
       hence f is_continuous_on X by A1,FCONT_1:def 2;
     end;
@@ -2199,18 +2121,18 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[) &
+  (f|].p,g.[ is increasing or f|].p,g.[ is decreasing) &
   ].p,g.[ c= dom f holds (f|].p,g.[)" is_continuous_on f.:].p,g.[
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   assume that
-A1: f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[ and
+A1: f|].p,g.[ is increasing or f|].p,g.[ is decreasing and
 A2: ].p,g.[ c= dom f;
   now per cases by A1;
-    suppose f is_increasing_on ].p,g.[;
-      then (f|].p,g.[)" is_non_decreasing_on f.:].p,g.[ by Th17,RFUNCT_2:55;
+    suppose f|].p,g.[ is increasing;
+      then (f|].p,g.[)"|(f.:].p,g.[) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A3:   (f|].p,g.[)" is_monotone_on f.:].p,g.[ by RFUNCT_2:def 6;
+A3:   (f|].p,g.[)"|(f.:].p,g.[) is monotone;
       now
         let r be Real;
         assume r in f.:].p,g.[;
@@ -2233,10 +2155,10 @@ A5:   f.:].p,g.[ c= dom ((f|].p,g.[)") by SUBSET_1:7;
         .= ].p,g.[ by A2,XBOOLE_1:28;
       hence thesis by A3,A5,Th23;
     end;
-    suppose f is_decreasing_on ].p,g.[;
-      then (f|].p,g.[)" is_non_increasing_on f.:].p,g.[ by Th18,RFUNCT_2:56;
+    suppose f|].p,g.[ is decreasing;
+      then (f|].p,g.[)"|(f.:].p,g.[) is non-increasing by Th18,RFUNCT_2:56;
       then
-A6:   (f|].p,g.[)" is_monotone_on f.:].p,g.[ by RFUNCT_2:def 6;
+A6:   (f|].p,g.[)"|(f.:].p,g.[) is monotone;
       now
         let r be Real;
         assume r in f.:].p,g.[;
@@ -2265,21 +2187,21 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on left_open_halfline(p) or
-  f is_decreasing_on left_open_halfline(p)) &
+  (f|left_open_halfline p is increasing or
+  f|left_open_halfline p is decreasing) &
   left_open_halfline(p) c= dom f holds
   (f|left_open_halfline(p))" is_continuous_on f.:left_open_halfline(p)
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = left_open_halfline(p);
   assume that
-A1: f is_increasing_on L or f is_decreasing_on L and
+A1: f|L is increasing or f|L is decreasing and
 A2: L c= dom f;
   now per cases by A1;
-    suppose f is_increasing_on L;
-      then (f|L)" is_non_decreasing_on f.:L by Th17,RFUNCT_2:55;
+    suppose f|L is increasing;
+      then (f|L)"|(f.:L) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A3:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A3:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2301,10 +2223,10 @@ A5:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= L by A2,XBOOLE_1:28;
       hence thesis by A3,A5,Th19;
     end;
-    suppose f is_decreasing_on L;
-      then (f|L)" is_non_increasing_on f.:L by Th18,RFUNCT_2:56;
+    suppose f|L is decreasing;
+      then (f|L)"|(f.:L) is non-increasing by Th18,RFUNCT_2:56;
       then
-A6:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A6:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2332,21 +2254,21 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on right_open_halfline(p) or
-  f is_decreasing_on right_open_halfline(p)) &
+  (f|right_open_halfline p is increasing or
+  f|right_open_halfline p is decreasing) &
   right_open_halfline(p) c= dom f holds
   (f|right_open_halfline(p))" is_continuous_on f.:right_open_halfline(p)
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = right_open_halfline(p);
   assume that
-A1: f is_increasing_on L or f is_decreasing_on L and
+A1: f|L is increasing or f|L is decreasing and
 A2: L c= dom f;
   now per cases by A1;
-    suppose f is_increasing_on L;
-      then (f|L)" is_non_decreasing_on f.:L by Th17,RFUNCT_2:55;
+    suppose f|L is increasing;
+      then (f|L)"|(f.:L) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A3:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A3:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2368,10 +2290,10 @@ A5:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= L by A2,XBOOLE_1:28;
       hence thesis by A3,A5,Th20;
     end;
-    suppose f is_decreasing_on L;
-      then (f|L)" is_non_increasing_on f.:L by Th18,RFUNCT_2:56;
+    suppose f|L is decreasing;
+      then (f|L)"|(f.:L) is non-increasing by Th18,RFUNCT_2:56;
       then
-A6:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A6:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2399,21 +2321,21 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on left_closed_halfline(p) or
-  f is_decreasing_on left_closed_halfline(p)) &
+  (f|left_closed_halfline p is increasing or
+  f|left_closed_halfline p is decreasing) &
   left_closed_halfline(p) c= dom f holds
   (f|left_closed_halfline(p))" is_continuous_on f.:left_closed_halfline(p)
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = left_closed_halfline(p);
   assume that
-A1: f is_increasing_on L or f is_decreasing_on L and
+A1: f|L is increasing or f|L is decreasing and
 A2: L c= dom f;
   now per cases by A1;
-    suppose f is_increasing_on L;
-      then (f|L)" is_non_decreasing_on f.:L by Th17,RFUNCT_2:55;
+    suppose f|L is increasing;
+      then (f|L)"|(f.:L) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A3:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A3:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2435,10 +2357,10 @@ A5:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= L by A2,XBOOLE_1:28;
       hence thesis by A3,A5,Th21;
     end;
-    suppose f is_decreasing_on L;
-      then (f|L)" is_non_increasing_on f.:L by Th18,RFUNCT_2:56;
+    suppose f|L is decreasing;
+      then (f|L)"|(f.:L) is non-increasing by Th18,RFUNCT_2:56;
       then
-A6:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A6:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2466,21 +2388,21 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on right_closed_halfline(p) or
-  f is_decreasing_on right_closed_halfline(p)) &
+  (f|right_closed_halfline p is increasing or
+  f|right_closed_halfline p is decreasing) &
   right_closed_halfline(p) c= dom f holds
   (f|right_closed_halfline(p))" is_continuous_on f.:right_closed_halfline(p)
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = right_closed_halfline(p);
   assume that
-A1: f is_increasing_on L or f is_decreasing_on L and
+A1: f|L is increasing or f|L is decreasing and
 A2: L c= dom f;
   now per cases by A1;
-    suppose f is_increasing_on L;
-      then (f|L)" is_non_decreasing_on f.:L by Th17,RFUNCT_2:55;
+    suppose f|L is increasing;
+      then (f|L)"|(f.:L) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A3:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A3:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2502,10 +2424,10 @@ A5:   f.:L c= dom ((f|L)") by SUBSET_1:7;
         .= L by A2,XBOOLE_1:28;
       hence thesis by A3,A5,Th22;
     end;
-    suppose f is_decreasing_on L;
-      then (f|L)" is_non_increasing_on f.:L by Th18,RFUNCT_2:56;
+    suppose f|L is decreasing;
+      then (f|L)"|(f.:L) is non-increasing by Th18,RFUNCT_2:56;
       then
-A6:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A6:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2533,20 +2455,20 @@ end;
 
 theorem
   for f be one-to-one PartFunc of REAL,REAL st
-  (f is_increasing_on [#](REAL) or f is_decreasing_on [#]
-  (REAL)) & f is total holds f" is_continuous_on rng f
+  (f|[#]REAL is increasing or f|[#]REAL is decreasing)
+   & f is total holds f" is_continuous_on rng f
 proof
   let f be one-to-one PartFunc of REAL,REAL;
   set L = [#] REAL;
   assume that
-A1: f is_increasing_on [#](REAL) or f is_decreasing_on [#](REAL) and
+A1: f|[#]REAL is increasing or f|[#]REAL is decreasing and
 A2: f is total;
 A3: dom f = [#] REAL by A2,PARTFUN1:def 4;
   now per cases by A1;
-    suppose f is_increasing_on L;
-      then (f|L)" is_non_decreasing_on f.:L by Th17,RFUNCT_2:55;
+    suppose f|L is increasing;
+      then (f|L)"|(f.:L) is non-decreasing by Th17,RFUNCT_2:55;
       then
-A4:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A4:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2570,10 +2492,10 @@ A6:   f.:L c= dom ((f|L)") by SUBSET_1:7;
       then (f|L)" is_continuous_on rng f by A3,RELAT_1:146;
       hence thesis by A3,RELAT_1:97;
     end;
-    suppose f is_decreasing_on L;
-      then (f|L)" is_non_increasing_on f.:L by Th18,RFUNCT_2:56;
+    suppose f|L is decreasing;
+      then (f|L)"|(f.:L) is non-increasing by Th18,RFUNCT_2:56;
       then
-A7:   (f|L)" is_monotone_on f.:L by RFUNCT_2:def 6;
+A7:   (f|L)"|(f.:L) is monotone;
       now
         let r be Real;
         assume r in f.:L;
@@ -2603,12 +2525,12 @@ end;
 
 theorem
   f is_continuous_on ].p,g.[ &
-  (f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[) implies
+  (f|].p,g.[ is increasing or f|].p,g.[ is decreasing) implies
   rng (f|].p,g.[) is open
 proof
   assume that
 A1: f is_continuous_on ].p,g.[ and
-A2: f is_increasing_on ].p,g.[ or f is_decreasing_on ].p,g.[;
+A2: f|].p,g.[ is increasing or f|].p,g.[ is decreasing;
   now
     set f1 = f|].p,g.[;
     let r1 be real number;
@@ -2625,10 +2547,10 @@ A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A7: f is_continuous_on N by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
-A9: x0 - r < x0 - r/2 by REAL_1:92;
+A9: x0 - r < x0 - r/2 by XREAL_1:17;
 A10: 0 < r/2 by A6,SEQ_2:3;
     then
-A11: x0 - r/2 < x0 - 0 by REAL_1:92;
+A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
     x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
@@ -2640,9 +2562,11 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
-A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,A5,A6,A12,A16,FCONT_1:17
-    ,RCOMP_1:17;
+A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
+    [.x0 - r/2, x0 + r/2.] c= ].p,g.[ by A5,A6,A12,A16
+    ,XXREAL_2:def 12;
+    then
+A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
@@ -2653,16 +2577,16 @@ A22: x0 - r/2 in ].p,g.[ /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
 A23: r1 = f.x0 by A3,FUNCT_1:68;
     now per cases by A2;
       suppose
-A24:    f is_increasing_on ].p,g.[;
-        then fm < fp by A19,A21,A22,RFUNCT_2:def 2;
+A24:    f|].p,g.[ is increasing;
+        then fm < fp by A19,A21,A22,RFUNCT_2:43;
         then [.fp,fm.] = {} by XXREAL_1:29;
         then
 A25:    [.fm,fp.] \/ [.fp,fm.] = [.fm,fp.];
-        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:def 2;
+        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:43;
         then
 A26:    0 < f.x0 - fm by XREAL_1:52;
         set R = min(f.x0 - fm,fp - f.x0);
-        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:def 2;
+        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:43;
         then 0 < fp - f.x0 by XREAL_1:52;
         then 0 < R by A26,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -2675,7 +2599,7 @@ A26:    0 < f.x0 - fm by XREAL_1:52;
           then consider r2 such that
 A27:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A28:      R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
-          then f.x0 - (f.x0 - fm) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fm) <= f.x0 - R by XREAL_1:15;
           then
 A29:      fm < r2 by A27,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
@@ -2695,16 +2619,16 @@ A32:      s in dom f1 by FUNCT_1:68;
         end;
       end;
       suppose
-A33:    f is_decreasing_on ].p,g.[;
-        then fp < fm by A19,A21,A22,RFUNCT_2:def 3;
+A33:    f|].p,g.[ is decreasing;
+        then fp < fm by A19,A21,A22,RFUNCT_2:44;
         then [.fm,fp.] = {} by XXREAL_1:29;
         then
 A34:    [.fm,fp.] \/ [.fp,fm.] = [.fp,fm.];
-        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:def 3;
+        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:44;
         then
 A35:    0 < fm - f.x0 by XREAL_1:52;
         set R = min(fm - f.x0,f.x0 - fp);
-        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:def 3;
+        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:44;
         then 0 < f.x0 - fp by XREAL_1:52;
         then 0 < R by A35,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -2717,7 +2641,7 @@ A35:    0 < fm - f.x0 by XREAL_1:52;
           then consider r2 such that
 A36:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A37:      R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
-          then f.x0 - (f.x0 - fp) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fp) <= f.x0 - R by XREAL_1:15;
           then
 A38:      fp < r2 by A36,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
@@ -2744,14 +2668,14 @@ end;
 
 theorem
   f is_continuous_on left_open_halfline(p) &
-  (f is_increasing_on left_open_halfline(p) or
-  f is_decreasing_on left_open_halfline(p)) implies
+  (f|left_open_halfline p is increasing or
+  f|left_open_halfline p is decreasing) implies
   rng (f|left_open_halfline(p)) is open
 proof
   set L = left_open_halfline(p);
   assume that
 A1: f is_continuous_on L and
-A2: f is_increasing_on L or f is_decreasing_on L;
+A2: f|L is increasing or f|L is decreasing;
   now
     set f1 = f|L;
     let r1 be real number;
@@ -2768,10 +2692,10 @@ A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A7: f is_continuous_on N by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
-A9: x0 - r < x0 - r/2 by REAL_1:92;
+A9: x0 - r < x0 - r/2 by XREAL_1:17;
 A10: 0 < r/2 by A6,SEQ_2:3;
     then
-A11: x0 - r/2 < x0 - 0 by REAL_1:92;
+A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
     x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
@@ -2783,9 +2707,10 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
-A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,A12,A16,FCONT_1:17
-    ,RCOMP_1:17;
+A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
+    then
+A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17
+    ;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
@@ -2796,16 +2721,16 @@ A22: x0 - r/2 in L /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
 A23: r1 = f.x0 by A3,FUNCT_1:68;
     now per cases by A2;
       suppose
-A24:    f is_increasing_on L;
-        then fm < fp by A19,A21,A22,RFUNCT_2:def 2;
+A24:    f|L is increasing;
+        then fm < fp by A19,A21,A22,RFUNCT_2:43;
         then [.fp,fm.] = {} by XXREAL_1:29;
         then
 A25:    [.fm,fp.] \/ [.fp,fm.] = [.fm,fp.];
-        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:def 2;
+        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:43;
         then
 A26:    0 < f.x0 - fm by XREAL_1:52;
         set R = min(f.x0 - fm,fp - f.x0);
-        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:def 2;
+        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:43;
         then 0 < fp - f.x0 by XREAL_1:52;
         then 0 < R by A26,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -2818,7 +2743,7 @@ A26:    0 < f.x0 - fm by XREAL_1:52;
           then consider r2 such that
 A27:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A28:      R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
-          then f.x0 - (f.x0 - fm) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fm) <= f.x0 - R by XREAL_1:15;
           then
 A29:      fm < r2 by A27,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
@@ -2838,16 +2763,16 @@ A32:      s in dom f1 by FUNCT_1:68;
         end;
       end;
       suppose
-A33:    f is_decreasing_on L;
-        then fp < fm by A19,A21,A22,RFUNCT_2:def 3;
+A33:    f|L is decreasing;
+        then fp < fm by A19,A21,A22,RFUNCT_2:44;
         then [.fm,fp.] = {} by XXREAL_1:29;
         then
 A34:    [.fm,fp.] \/ [.fp,fm.] = [.fp,fm.];
-        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:def 3;
+        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:44;
         then
 A35:    0 < fm - f.x0 by XREAL_1:52;
         set R = min(fm - f.x0,f.x0 - fp);
-        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:def 3;
+        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:44;
         then 0 < f.x0 - fp by XREAL_1:52;
         then 0 < R by A35,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -2860,7 +2785,7 @@ A35:    0 < fm - f.x0 by XREAL_1:52;
           then consider r2 such that
 A36:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A37:      R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
-          then f.x0 - (f.x0 - fp) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fp) <= f.x0 - R by XREAL_1:15;
           then
 A38:      fp < r2 by A36,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
@@ -2887,14 +2812,14 @@ end;
 
 theorem
   f is_continuous_on right_open_halfline(p) &
-  (f is_increasing_on right_open_halfline(p) or
-  f is_decreasing_on right_open_halfline(p)) implies
+  (f|right_open_halfline p is increasing or
+  f|right_open_halfline p is decreasing) implies
   rng (f|right_open_halfline(p)) is open
 proof
   set L = right_open_halfline(p);
   assume that
 A1: f is_continuous_on L and
-A2: f is_increasing_on L or f is_decreasing_on L;
+A2: f|L is increasing or f|L is decreasing;
   now
     set f1 = f|L;
     let r1 be real number;
@@ -2911,10 +2836,10 @@ A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A7: f is_continuous_on N by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
-A9: x0 - r < x0 - r/2 by REAL_1:92;
+A9: x0 - r < x0 - r/2 by XREAL_1:17;
 A10: 0 < r/2 by A6,SEQ_2:3;
     then
-A11: x0 - r/2 < x0 - 0 by REAL_1:92;
+A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
     x0 < x0 + r by A6,REAL_2:174;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
@@ -2926,9 +2851,10 @@ A15: x0 < x0 + r/2 by A10,REAL_2:174;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
     then
-A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,RCOMP_1:17;
-A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,A12,A16,FCONT_1:17
-    ,RCOMP_1:17;
+A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
+    then
+A18: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A6,A7,FCONT_1:17
+    ;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
@@ -2939,16 +2865,16 @@ A22: x0 - r/2 in L /\ dom f by A5,A6,A12,A20,XBOOLE_0:def 3;
 A23: r1 = f.x0 by A3,FUNCT_1:68;
     now per cases by A2;
       suppose
-A24:    f is_increasing_on L;
-        then fm < fp by A19,A21,A22,RFUNCT_2:def 2;
+A24:    f|L is increasing;
+        then fm < fp by A19,A21,A22,RFUNCT_2:43;
         then [.fp,fm.] = {} by XXREAL_1:29;
         then
 A25:    [.fm,fp.] \/ [.fp,fm.] = [.fm,fp.];
-        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:def 2;
+        fm < f.x0 by A4,A11,A22,A24,RFUNCT_2:43;
         then
 A26:    0 < f.x0 - fm by XREAL_1:52;
         set R = min(f.x0 - fm,fp - f.x0);
-        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:def 2;
+        f.x0 < fp by A4,A15,A21,A24,RFUNCT_2:43;
         then 0 < fp - f.x0 by XREAL_1:52;
         then 0 < R by A26,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -2961,7 +2887,7 @@ A26:    0 < f.x0 - fm by XREAL_1:52;
           then consider r2 such that
 A27:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A28:      R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
-          then f.x0 - (f.x0 - fm) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fm) <= f.x0 - R by XREAL_1:15;
           then
 A29:      fm < r2 by A27,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fp - f.x0) by A28,XREAL_1:9;
@@ -2981,16 +2907,16 @@ A32:      s in dom f1 by FUNCT_1:68;
         end;
       end;
       suppose
-A33:    f is_decreasing_on L;
-        then fp < fm by A19,A21,A22,RFUNCT_2:def 3;
+A33:    f|L is decreasing;
+        then fp < fm by A19,A21,A22,RFUNCT_2:44;
         then [.fm,fp.] = {} by XXREAL_1:29;
         then
 A34:    [.fm,fp.] \/ [.fp,fm.] = [.fp,fm.];
-        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:def 3;
+        f.x0 < fm by A4,A11,A22,A33,RFUNCT_2:44;
         then
 A35:    0 < fm - f.x0 by XREAL_1:52;
         set R = min(fm - f.x0,f.x0 - fp);
-        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:def 3;
+        fp < f.x0 by A4,A15,A21,A33,RFUNCT_2:44;
         then 0 < f.x0 - fp by XREAL_1:52;
         then 0 < R by A35,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -3003,7 +2929,7 @@ A35:    0 < fm - f.x0 by XREAL_1:52;
           then consider r2 such that
 A36:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A23;
 A37:      R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
-          then f.x0 - (f.x0 - fp) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fp) <= f.x0 - R by XREAL_1:15;
           then
 A38:      fp < r2 by A36,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fm - f.x0) by A37,XREAL_1:9;
@@ -3030,13 +2956,13 @@ end;
 
 theorem
   f is_continuous_on [#](REAL) &
-  (f is_increasing_on [#]REAL or f is_decreasing_on [#]REAL) implies
+  (f|[#]REAL is increasing or f|[#]REAL is decreasing) implies
   rng f is open
 proof
   set L = [#]REAL;
   assume that
 A1: f is_continuous_on L and
-A2: f is_increasing_on L or f is_decreasing_on L;
+A2: f|L is increasing or f|L is decreasing;
   now
     let r1 be real number;
     assume r1 in rng f;
@@ -3049,10 +2975,10 @@ A4: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A5: f is_continuous_on N by A1,FCONT_1:17;
 A6: r/2 < r by A4,XREAL_1:218;
     then
-A7: x0 - r < x0 - r/2 by REAL_1:92;
+A7: x0 - r < x0 - r/2 by XREAL_1:17;
 A8: 0 < r/2 by A4,SEQ_2:3;
     then
-A9: x0 - r/2 < x0 - 0 by REAL_1:92;
+A9: x0 - r/2 < x0 - 0 by XREAL_1:17;
     x0 < x0 + r by A4,REAL_2:174;
     then x0 - r/2 < x0 + r by A9,XXREAL_0:2;
     then
@@ -3064,7 +2990,7 @@ A13: x0 < x0 + r/2 by A8,REAL_2:174;
     then
 A14: x0 + r/2 in ].x0 - r, x0 + r.[ by A11;
     then
-A15: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A10,RCOMP_1:17;
+A15: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A10,XXREAL_2:def 12;
 A16: f is_continuous_on [.x0 - r/2, x0 + r/2.] by A1,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
@@ -3076,16 +3002,16 @@ A20: x0 - r/2 in L /\ dom f by A4,A10,A18,XBOOLE_0:def 3;
 A21: x0 in L /\ dom f by A3,XBOOLE_0:def 3;
     now per cases by A2;
       suppose
-A22:    f is_increasing_on L;
-        then fm < fp by A17,A19,A20,RFUNCT_2:def 2;
+A22:    f|L is increasing;
+        then fm < fp by A17,A19,A20,RFUNCT_2:43;
         then [.fp,fm.] = {} by XXREAL_1:29;
         then
 A23:    [.fm,fp.] \/ [.fp,fm.] = [.fm,fp.];
-        fm < f.x0 by A9,A20,A21,A22,RFUNCT_2:def 2;
+        fm < f.x0 by A9,A20,A21,A22,RFUNCT_2:43;
         then
 A24:    0 < f.x0 - fm by XREAL_1:52;
         set R = min(f.x0 - fm,fp - f.x0);
-        f.x0 < fp by A13,A19,A21,A22,RFUNCT_2:def 2;
+        f.x0 < fp by A13,A19,A21,A22,RFUNCT_2:43;
         then 0 < fp - f.x0 by XREAL_1:52;
         then 0 < R by A24,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -3098,7 +3024,7 @@ A24:    0 < f.x0 - fm by XREAL_1:52;
           then consider r2 such that
 A25:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A3;
 A26:      R <= f.x0 - fm & R <= fp - f.x0 by XXREAL_0:17;
-          then f.x0 - (f.x0 - fm) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fm) <= f.x0 - R by XREAL_1:15;
           then
 A27:      fm < r2 by A25,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fp - f.x0) by A26,XREAL_1:9;
@@ -3114,16 +3040,16 @@ A29:      s in [.x0 - r/2, x0 + r/2.] & x = f.s by A16,A17,A23,A25,A28,
         end;
       end;
       suppose
-A30:    f is_decreasing_on L;
-        then fp < fm by A17,A19,A20,RFUNCT_2:def 3;
+A30:    f|L is decreasing;
+        then fp < fm by A17,A19,A20,RFUNCT_2:44;
         then [.fm,fp.] = {} by XXREAL_1:29;
         then
 A31:    [.fm,fp.] \/ [.fp,fm.] = [.fp,fm.];
-        f.x0 < fm by A9,A20,A21,A30,RFUNCT_2:def 3;
+        f.x0 < fm by A9,A20,A21,A30,RFUNCT_2:44;
         then
 A32:    0 < fm - f.x0 by XREAL_1:52;
         set R = min(fm - f.x0,f.x0 - fp);
-        fp < f.x0 by A13,A19,A21,A30,RFUNCT_2:def 3;
+        fp < f.x0 by A13,A19,A21,A30,RFUNCT_2:44;
         then 0 < f.x0 - fp by XREAL_1:52;
         then 0 < R by A32,XXREAL_0:15;
         then reconsider N1 = ].r1 - R, r1 + R.[ as Neighbourhood of r1 by
@@ -3136,7 +3062,7 @@ A32:    0 < fm - f.x0 by XREAL_1:52;
           then consider r2 such that
 A33:      r2 = x & f.x0 - R < r2 & r2 < f.x0 + R by A3;
 A34:      R <= fm - f.x0 & R <= f.x0 - fp by XXREAL_0:17;
-          then f.x0 - (f.x0 - fp) <= f.x0 - R by REAL_1:92;
+          then f.x0 - (f.x0 - fp) <= f.x0 - R by XREAL_1:15;
           then
 A35:      fp < r2 by A33,XXREAL_0:2;
           f.x0 + R <= f.x0 + (fm - f.x0) by A34,XREAL_1:9;

@@ -7,12 +7,15 @@
 environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, ORDERS_1,
-      FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS, NAT_1, MCART_1, XXREAL_0;
- constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+      FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1, MSAFREE2, STRUCT_0, AMI_1,
+      CAT_1, VECTSP_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, FUNCT_5, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS, NAT_1,
+      MCART_1, XXREAL_0, STRUCT_0;
+ constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
+      FUNCT_5;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      XREAL_0, FINSEQ_1, ORDINAL1;
+      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -22,27 +25,36 @@ reserve x, y, z, v for set,
   n, m, k for Element of NAT;
 
 definition
-  struct MultiGraphStruct (# Vertices, Edges -> set,
-    Source, Target -> Function of the Edges, the Vertices #);
+  struct(2-sorted) MultiGraphStruct (# carrier, carrier' -> set,
+    Source, Target -> Function of the carrier', the carrier #);
 end;
 
-definition
-  let IT be MultiGraphStruct;
-  attr IT is Graph-like means
-:: GRAPH_1:def 1
-
-  the Vertices of IT is non empty set;
+definition let G be MultiGraphStruct;
+ mode Vertex of G is Element of the carrier of G;
+ mode Edge of G is Element of the carrier' of G;
 end;
 
 registration
-  cluster strict Graph-like MultiGraphStruct;
+  cluster strict non empty non void MultiGraphStruct;
 end;
 
 definition
-  mode Graph is Graph-like MultiGraphStruct;
+  mode Graph is non empty MultiGraphStruct;
 end;
 
 reserve G, G1, G2, G3 for Graph;
+
+:: from CAT_1, 2008.07.02, A.T.
+
+definition
+  let C be non void non empty MultiGraphStruct, f be Edge of C;
+  func dom f -> Vertex of C equals
+:: GRAPH_1:def 1
+  (the Source of C).f;
+  func cod f -> Vertex of C equals
+:: GRAPH_1:def 2
+  (the Target of C).f;
+end;
 
 definition
   let G1, G2;
@@ -50,14 +62,14 @@ definition
  (the Source of G1) tolerates (the Source of G2) &
   (the Target of G1) tolerates (the Target of G2);
   func G1 \/ G2 -> strict Graph means
-:: GRAPH_1:def 2
+:: GRAPH_1:def 3
 
-  the Vertices of it = (the Vertices of G1) \/ (the Vertices of G2) &
-  the Edges of it = (the Edges of G1) \/ (the Edges of G2) &
-  (for v st v in the Edges of G1 holds
+  the carrier of it = (the carrier of G1) \/ (the carrier of G2) &
+  the carrier' of it = (the carrier' of G1) \/ (the carrier' of G2) &
+  (for v st v in the carrier' of G1 holds
   (the Source of it).v = (the Source of G1).v &
   (the Target of it).v = (the Target of G1).v) &
-  (for v st v in the Edges of G2 holds
+  (for v st v in the carrier' of G2 holds
   (the Source of it).v = (the Source of G2).v &
   (the Target of it).v = (the Target of G2).v);
 end;
@@ -65,7 +77,7 @@ end;
 definition
   let G, G1, G2 be Graph;
   pred G is_sum_of G1, G2 means
-:: GRAPH_1:def 3
+:: GRAPH_1:def 4
 
   (the Target of G1) tolerates (the Target of G2) &
   (the Source of G1) tolerates (the Source of G2) &
@@ -75,37 +87,37 @@ end;
 definition
   let IT be Graph;
   attr IT is oriented means
-:: GRAPH_1:def 4
+:: GRAPH_1:def 5
 
-  for x,y st x in the Edges of IT & y in the Edges of IT &
+  for x,y st x in the carrier' of IT & y in the carrier' of IT &
   (the Source of IT).x = (the Source of IT).y &
   (the Target of IT).x = (the Target of IT).y holds x = y;
   attr IT is non-multi means
-:: GRAPH_1:def 5
+:: GRAPH_1:def 6
 
-  for x,y st x in the Edges of IT & y in the Edges of IT &
+  for x,y st x in the carrier' of IT & y in the carrier' of IT &
   (((the Source of IT).x = (the Source of IT).y &
   (the Target of IT).x = (the Target of IT).y) or
   ((the Source of IT).x = (the Target of IT).y &
   (the Source of IT).y = (the Target of IT).x)) holds x = y;
   attr IT is simple means
-:: GRAPH_1:def 6
-
-  not ex x st x in the Edges of IT &
-  (the Source of IT).x = (the Target of IT).x;
-  attr IT is connected means
 :: GRAPH_1:def 7
 
+  not ex x st x in the carrier' of IT &
+  (the Source of IT).x = (the Target of IT).x;
+  attr IT is connected means
+:: GRAPH_1:def 8
+
   not ex G1, G2 being Graph st
-  the Vertices of G1 misses the Vertices of G2 & IT is_sum_of G1, G2;
+  the carrier of G1 misses the carrier of G2 & IT is_sum_of G1, G2;
 end;
 
 definition
   let IT be MultiGraphStruct;
   attr IT is finite means
-:: GRAPH_1:def 8
+:: GRAPH_1:def 9
 
-  the Vertices of IT is finite & the Edges of IT is finite;
+  the carrier of IT is finite & the carrier' of IT is finite;
 end;
 
 registration
@@ -113,49 +125,54 @@ registration
   cluster finite non-multi oriented simple connected Graph;
 end;
 
-reserve x, y for Element of (the Vertices of G);
+registration let G be finite MultiGraphStruct;
+ cluster the carrier of G -> finite;
+ cluster the carrier' of G -> finite;
+end;
+
+reserve x, y for Element of (the carrier of G);
 
 definition
   let G;
   let x, y;
   let v;
   pred v joins x, y means
-:: GRAPH_1:def 9
+:: GRAPH_1:def 10
   ((the Source of G).v = x & (the Target of G).v = y) or
   ((the Source of G).v = y & (the Target of G).v = x);
 end;
 
 definition
   let G;
-  let x,y be Element of (the Vertices of G);
-  pred x,y are_incydent means
-:: GRAPH_1:def 10
-  ex v being set st v in the Edges of G & v joins x, y;
+  let x,y be Element of (the carrier of G);
+  pred x,y are_incident means
+:: GRAPH_1:def 11
+  ex v being set st v in the carrier' of G & v joins x, y;
 end;
 
 definition
   let G be Graph;
   mode Chain of G -> FinSequence means
-:: GRAPH_1:def 11
+:: GRAPH_1:def 12
 
-    (for n st 1 <= n & n <= len it holds it.n in the Edges of G) &
+    (for n st 1 <= n & n <= len it holds it.n in the carrier' of G) &
     ex p being FinSequence st len p = len it + 1 &
-    (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+    (for n st 1 <= n & n <= len p holds p.n in the carrier of G) &
     for n st 1 <= n & n <= len it
-    ex x', y' being Element of the Vertices of G st
+    ex x', y' being Vertex of G st
     x' = p.n & y' = p.(n+1) & it.n joins x', y';
 end;
 
 definition
   let G be Graph;
-  redefine mode Chain of G -> FinSequence of the Edges of G;
+  redefine mode Chain of G -> FinSequence of the carrier' of G;
 end;
 
 definition
   let G be Graph;
   let IT be Chain of G;
   attr IT is oriented means
-:: GRAPH_1:def 12
+:: GRAPH_1:def 13
 
   for n st 1 <= n & n < len IT holds
   (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
@@ -170,7 +187,7 @@ definition
   let G be Graph;
   let IT be Chain of G;
   redefine attr IT is one-to-one means
-:: GRAPH_1:def 13
+:: GRAPH_1:def 14
   for n, m st 1 <= n & n < m & m <= len IT holds IT.n <> IT.m;
 end;
 
@@ -199,13 +216,13 @@ definition
   let IT be Path of G;
   canceled;
   attr IT is cyclic means
-:: GRAPH_1:def 15
+:: GRAPH_1:def 16
 
   ex p being FinSequence st
   len p = len IT + 1 &
-  (for n st 1 <= n & n <= len p holds p.n in the Vertices of G) &
+  (for n st 1 <= n & n <= len p holds p.n in the carrier of G) &
   (for n st 1 <= n & n <= len IT
-  ex x', y' being Element of the Vertices of G st
+  ex x', y' being Vertex of G st
   x' = p.n & y' = p.(n+1) & IT.n joins x', y') & p.1 = p.(len p);
 end;
 
@@ -233,14 +250,15 @@ definition
   let G be Graph;
   canceled;
   mode Subgraph of G -> Graph means
-:: GRAPH_1:def 17
+:: GRAPH_1:def 18
 
-    the Vertices of it c= the Vertices of G &
-    the Edges of it c= the Edges of G & for v st v in the Edges of it holds
+    the carrier of it c= the carrier of G &
+    the carrier' of it c= the carrier' of G &
+     for v st v in the carrier' of it holds
     (the Source of it).v = (the Source of G).v &
     (the Target of it).v = (the Target of G).v &
-    (the Source of G).v in the Vertices of it &
-    (the Target of G).v in the Vertices of it;
+    (the Source of G).v in the carrier of it &
+    (the Target of G).v in the carrier of it;
 end;
 
 registration
@@ -251,35 +269,35 @@ end;
 definition
   let G be finite Graph;
   func VerticesCount G -> Element of NAT means
-:: GRAPH_1:def 18
-  ex B being finite set st B = the Vertices of G & it = card B;
-  func EdgesCount G -> Element of NAT means
 :: GRAPH_1:def 19
-  ex B being finite set st B = the Edges of G & it = card B;
+  ex B being finite set st B = the carrier of G & it = card B;
+  func EdgesCount G -> Element of NAT means
+:: GRAPH_1:def 20
+  ex B being finite set st B = the carrier' of G & it = card B;
 end;
 
 definition
   let G be finite Graph;
-  let x be Element of the Vertices of G;
+  let x be Vertex of G;
   func EdgesIn x -> Element of NAT means
-:: GRAPH_1:def 20
-
-  ex X being finite set st
-  (for z being set holds
-  z in X iff z in the Edges of G & (the Target of G).z = x) & it = card(X);
-  func EdgesOut x -> Element of NAT means
 :: GRAPH_1:def 21
 
   ex X being finite set st
   (for z being set holds
-  z in X iff z in the Edges of G & (the Source of G).z = x) & it = card(X);
+  z in X iff z in the carrier' of G & (the Target of G).z = x) & it = card(X);
+  func EdgesOut x -> Element of NAT means
+:: GRAPH_1:def 22
+
+  ex X being finite set st
+  (for z being set holds
+  z in X iff z in the carrier' of G & (the Source of G).z = x) & it = card(X);
 end;
 
 definition
   let G be finite Graph;
-  let x be Element of the Vertices of G;
+  let x be Vertex of G;
   func Degree x -> Element of NAT equals
-:: GRAPH_1:def 22
+:: GRAPH_1:def 23
 
   EdgesIn(x) + EdgesOut(x);
 end;
@@ -287,7 +305,7 @@ end;
 definition
   let G1, G2 be Graph;
   pred G1 c= G2 means
-:: GRAPH_1:def 23
+:: GRAPH_1:def 24
 
   G1 is Subgraph of G2;
   reflexivity;
@@ -296,7 +314,7 @@ end;
 definition
   let G be Graph;
   func bool G -> set means
-:: GRAPH_1:def 24
+:: GRAPH_1:def 25
 
   for x being set holds
   x in it iff x is strict Subgraph of G;
@@ -306,33 +324,27 @@ scheme :: GRAPH_1:sch 1
  GraphSeparation{G() -> Graph, P[set]}: ex X being set st
   for x being set holds x in X iff x is strict Subgraph of G() & P[x];
 
-::::::::::::::::::::::::::
 :: Properties of graphs ::
-::::::::::::::::::::::::::
 
 theorem :: GRAPH_1:1
-  for G being Graph holds dom(the Source of G) = the Edges of G &
-  dom(the Target of G) = the Edges of G;
+  for G being Graph holds dom(the Source of G) = the carrier' of G &
+  dom(the Target of G) = the carrier' of G;
 
 theorem :: GRAPH_1:2
-  for x being Element of the Vertices of G holds
-  x in the Vertices of G;
+  for x being Vertex of G holds
+  x in the carrier of G;
 
 theorem :: GRAPH_1:3
-  for v being set holds v in the Edges of G implies
-  (the Source of G).v in the Vertices of G &
-  (the Target of G).v in the Vertices of G;
+  for v being set holds v in the carrier' of G implies
+  (the Source of G).v in the carrier of G &
+  (the Target of G).v in the carrier of G;
 
-:::::::::::
 :: Chain ::
-:::::::::::
 
 theorem :: GRAPH_1:4
   for p being Chain of G holds p|Seg(n) is Chain of G;
 
-:::::::::::::::::::::::
 :: Sum of two graphs ::
-:::::::::::::::::::::::
 
 theorem :: GRAPH_1:5
   G1 c= G implies (the Source of G1) c= (the Source of G) &
@@ -366,9 +378,7 @@ theorem :: GRAPH_1:10
 theorem :: GRAPH_1:11
   for G being strict Graph holds G is_sum_of G, G;
 
-:::::::::::::::::::::::
 :: Graphs' inclusion ::
-:::::::::::::::::::::::
 
 theorem :: GRAPH_1:12
   (ex G st G1 c= G & G2 c= G) implies G1 \/ G2 = G2 \/ G1;
@@ -382,7 +392,8 @@ theorem :: GRAPH_1:14
 
 theorem :: GRAPH_1:15
   for H1, H2 being strict Subgraph of G st
-  the Vertices of H1 = the Vertices of H2 & the Edges of H1 = the Edges of H2
+  the carrier of H1 = the carrier of H2 &
+   the carrier' of H1 = the carrier' of H2
   holds H1 = H2;
 
 theorem :: GRAPH_1:16
@@ -428,9 +439,7 @@ theorem :: GRAPH_1:28
 theorem :: GRAPH_1:29
   for G being simple Graph st G1 c= G holds G1 is simple;
 
-::::::::::::::::::::::::::
 :: Set of all subgraphs ::
-::::::::::::::::::::::::::
 
 theorem :: GRAPH_1:30
   for G1 being strict Graph holds G1 in bool G iff G1 c= G;

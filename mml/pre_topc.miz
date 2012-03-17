@@ -7,14 +7,15 @@
 environ
 
  vocabularies SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
-      PRE_TOPC;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELSET_1, STRUCT_0;
- constructors SETFAM_1, PARTFUN1, STRUCT_0;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0;
+      PRE_TOPC, FUNCOP_1, TSP_1, COMPTS_1, CARD_5, GROUP_3, ARYTM;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, SETFAM_1,
+     FUNCT_2, FUNCOP_1, RELSET_1, CARD_1, STRUCT_0;
+ constructors SETFAM_1, PARTFUN1, STRUCT_0, FUNCOP_1, CARD_1, DOMAIN_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, RELAT_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, SUBSET_1;
  theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
-      FUNCT_2;
+      FUNCT_1, FUNCT_2, RELAT_1, RELSET_1, FUNCOP_1, CARD_1;
  schemes SUBSET_1;
 
 begin
@@ -117,24 +118,7 @@ proof
   hence thesis by Def1;
 end;
 
-canceled 6;
-
-theorem
-  for T being 1-sorted holds [#]T = the carrier of T;
-
-theorem
-  for T being non empty 1-sorted, p being Point of T holds p in [#]T;
-
-theorem
-  for T being 1-sorted, P being Subset of T holds P c= [#]T;
-
-canceled;
-
-theorem
-  for T being 1-sorted for A being set st A c= [#]T holds A is Subset of T;
-
-theorem
-  for T being 1-sorted, P being Subset of T holds P` = [#]T \ P;
+canceled 12;
 
 theorem
   for T being 1-sorted, P being Subset of T holds P \/ P` = [#]T
@@ -499,7 +483,7 @@ definition
   let S, T be TopStruct, f be Function of S,T;
   canceled;
   attr f is continuous means
-  for P1 being Subset of T st P1 is closed holds f" P1 is closed;
+:Def12: for P1 being Subset of T st P1 is closed holds f" P1 is closed;
 end;
 
 theorem
@@ -542,19 +526,16 @@ A1: A <> {}T;
   hence thesis by A1;
 end;
 
-theorem Th42:
-  [#]GX is closed
-proof
-A1: [#]GX \ [#]GX = {}GX by Th23;
-  {}GX in the topology of GX by Th5;
-  then {}GX is open by Def5;
-  hence [#]GX is closed by A1,Def6;
-end;
-
 registration
   let T be TopSpace;
   cluster [#]T -> closed;
-  coherence by Th42;
+  coherence
+proof
+A1: [#]T \ [#]T = {}T by Th23;
+  {}T in the topology of T by Th5;
+  then {}T is open by Def5;
+  hence [#]T is closed by A1,Def6;
+end;
 end;
 
 registration
@@ -576,6 +557,8 @@ registration
     thus thesis;
   end;
 end;
+
+canceled;
 
 theorem Th43:
   for X' being SubSpace of T, B being Subset of X' holds
@@ -1070,4 +1053,225 @@ theorem
   for A being Subset of T, p being Point of T holds p in Cl A iff
   T is non empty & for G being Subset of T st G is open holds
   p in G implies A meets G by Def13;
+
+begin ::Addenda
+
+:: from TOPMETR, 2008.07.06, A.T.
+
+theorem
+ for T being non empty TopStruct, A being non empty SubSpace of T
+  for p being Point of A holds p is Point of T
+proof let T be non empty TopStruct,A be non empty SubSpace of T;
+  [#] A c= [#] T by Def9;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem
+  for A,B,C being TopSpace for f being Function of A,C holds
+  f is continuous & C is SubSpace of B implies
+  for h being Function of A,B st h = f holds h is continuous
+proof
+  let A,B,C be TopSpace, f be Function of A,C;
+  assume that
+A1: f is continuous and
+A2: C is SubSpace of B;
+  let h be Function of A,B such that
+A3: h = f;
+  for P being Subset of B holds P is closed implies h"P is closed
+  proof
+    let P be Subset of B such that
+A4: P is closed;
+A5: rng h c= the carrier of C by A3,RELSET_1:12;
+A6: h"P = h"(rng h /\ P) by RELAT_1:168
+      .= h"(rng h /\ [#] C /\ P) by A5,XBOOLE_1:28
+      .= h"(rng h /\ ([#] C /\ P)) by XBOOLE_1:16
+      .= h"(P /\ [#] C) by RELAT_1:168;
+    reconsider C as SubSpace of B by A2;
+    reconsider Q = P /\ [#] C as Subset of C;
+    Q is closed by A4,Th43;
+    hence h"P is closed by A1,A3,A6,Def12;
+  end;
+  hence h is continuous by Def12;
+end;
+
+theorem
+  for A being TopSpace, B being non empty TopSpace for f being Function of A,B
+  for C being SubSpace of B holds f is continuous
+  implies for h being Function of A,C st h = f holds h is continuous
+proof
+  let A be TopSpace, B be non empty TopSpace, f be Function of A,B,
+  C be SubSpace of B;
+  assume that
+A1: f is continuous;
+  let h be Function of A,C such that
+A2: h = f;
+A3: rng f c= the carrier of C by A2,RELSET_1:12;
+  for P being Subset of C holds P is closed implies h"P is closed
+  proof
+    let P be Subset of C;
+    assume P is closed;
+    then consider Q being Subset of B such that
+A4: Q is closed & Q /\ ([#] C) = P by Th43;
+A5: f"Q c= dom f & the carrier of A = [#] A & dom f = the carrier of A
+    by FUNCT_2:def 1,RELAT_1:167;
+    h"P = f"Q /\ f"([#] C) by A2,A4,FUNCT_1:137
+      .= f"Q /\ f"(rng f /\ [#] C) by RELAT_1:168
+      .= f"Q /\ f"(rng f) by A3,XBOOLE_1:28
+      .= f"Q /\ dom f by RELAT_1:169
+      .= f"Q by A5,XBOOLE_1:28;
+    hence h"P is closed by A1,A4,Def12;
+  end;
+  hence h is continuous by Def12;
+end;
+
+:: from TOPS_1, 2008.07.07, A.T.
+
+registration
+  let T be TopSpace;
+  cluster {}T -> closed;
+  coherence
+proof
+  the carrier of T in the topology of T by Def1;
+  hence [#] T \ {} T is open by Def5;
+end;
+end;
+
+:: from BORSUK_1, 2008.07.07, A.T.
+
+registration
+  let X be TopSpace, Y be non empty TopSpace;
+  let y be Point of Y;
+  cluster X --> y -> continuous;
+  coherence
+proof
+  set F = X --> y, H = [#] X;
+  let P1 being Subset of Y such that P1 is closed;
+  per cases;
+  suppose y in P1;
+    then F"P1 = H by FUNCOP_1:20;
+    hence F"P1 is closed;
+  end;
+  suppose not y in P1;
+    then F"P1 = {}X by FUNCOP_1:22;
+    hence F"P1 is closed;
+  end;
+end;
+end;
+
+registration
+  let S be TopSpace;
+  let T be non empty TopSpace;
+  cluster continuous Function of S, T;
+  existence
+  proof
+    consider a be Point of T;
+    S --> a is continuous;
+    hence thesis;
+  end;
+end;
+
+reserve T for TopStruct,
+        x,y for Point of T;
+
+:: from TSP_1, T_0TOPSP, COMPTS_1, URYSOHN1 2008.07.16, A.T.
+
+definition let T;
+ attr T is T_0 means
+ for x,y
+    st for G being Subset of T st G is open holds x in G iff y in G
+   holds x = y;
+ attr T is T_1 means
+:Def15:  for p,q being Point of T st p <> q
+   ex G being Subset of T st G is open &
+    p in G & q in G`;
+ attr T is T_2 means
+:Def16:  for p, q being Point of T st p <> q
+   ex G1,G2 being Subset of T st G1 is open &G2 is open &
+    p in G1 & q in G2 & G1 misses G2;
+ attr T is regular means
+  for p being Point of T, F being Subset of T
+    st F is closed & p in F`
+  ex G1,G2 being Subset of T st G1 is open & G2 is open &
+   p in G1 & F c= G2 & G1 misses G2;
+ attr T is normal means
+ for F1,F2 being Subset of T
+    st F1 is closed & F2 is closed & F1 misses F2
+  ex G1,G2 being Subset of T st G1 is open & G2 is open &
+   F1 c= G1 & F2 c= G2 & G1 misses G2;
+end;
+
+definition let T;
+ attr T is T_3 means
+:Def19:  T is T_1 regular;
+ attr T is T_4 means
+:Def20:  T is T_1 normal;
+end;
+
+registration
+ cluster T_3 -> T_1 regular TopStruct;
+ coherence by Def19;
+ cluster T_1 regular -> T_3 TopStruct;
+ coherence by Def19;
+ cluster T_4 -> T_1 normal TopStruct;
+ coherence by Def20;
+ cluster T_1 normal -> T_4 TopStruct;
+ coherence by Def20;
+end;
+
+registration
+ cluster T_1 (non empty TopSpace);
+ existence
+  proof
+   set T = TopStruct(#1,[#]bool 1#);
+   [#]the carrier of T = the carrier of T;
+   then
+A: the carrier of T in the topology of T;
+B: for a being Subset-Family of T
+    st a c= the topology of T holds union a in the topology of T;
+   for a,b being Subset of T st
+    a in the topology of T & b in the topology of T
+    holds a /\ b in the topology of T;
+   then reconsider T as non empty TopSpace by A,B,Def1;
+   take T;
+   let p,q be Point of T;
+    p = 0 & q = 0 by CARD_1:87, TARSKI:def 1;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster T_1 -> T_0 TopStruct;
+ coherence
+  proof let T;
+   assume
+Z1:  T is T_1;
+   let x,y;
+   assume
+Z2:  for G being Subset of T st G is open holds x in G iff y in G;
+   assume x <> y;
+    then consider G being Subset of T such that
+W1:  G is open and
+W2:  x in G & y in G` by Z1,Def15;
+    not y in G by W2,XBOOLE_0:def 4;
+   hence contradiction by W1,W2,Z2;
+  end;
+ cluster T_2 -> T_1 TopStruct;
+ coherence
+  proof let T;
+   assume
+Z1: T is T_2;
+   let p,q being Point of T;
+   assume p <> q;
+    then consider G1,G2 being Subset of T such that
+W1:  G1 is open & G2 is open and
+W2:  p in G1 & q in G2 and
+W3:  G1 misses G2 by Z1,Def16;
+   take G1;
+   thus G1 is open  by W1;
+   thus p in G1 by W2;
+    G2 c= G1` by W3,SUBSET_1:43;
+   hence q in G1` by W2;
+  end;
+end;
+
 

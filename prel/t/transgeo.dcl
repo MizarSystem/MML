@@ -25,13 +25,13 @@
 </Signature>
 <RCluster aid="TRANSGEO" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="77"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="82"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 </Registrations>

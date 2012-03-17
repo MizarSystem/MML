@@ -37,25 +37,25 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
-<Adjective nr="26"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="53">
-<Func kind="K" nr="23">
+<Adjective nr="23"/>
+<Adjective nr="28"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55">
+<Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>

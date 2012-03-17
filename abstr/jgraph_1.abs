@@ -12,20 +12,20 @@ environ
       EUCLID, TOPREAL1, GOBOARD5, PRE_TOPC, TARSKI, MCART_1, GOBOARD1,
       GOBOARD4, COMPLEX1, METRIC_1, RLVECT_1, RVSUM_1, PCOMPS_1, COMPTS_1,
       WEIERSTR, NAT_1, ARYTM_3, BORSUK_1, TOPS_2, ORDINAL2, RCOMP_1, TBSP_1,
-      SUBSET_1, PSCOMP_1, LATTICES, JGRAPH_1, ARYTM;
+      SUBSET_1, PSCOMP_1, LATTICES, JGRAPH_1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, XXREAL_0, BINARITH, XREAL_0, COMPLEX1, REAL_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, FINSET_1, NAT_1,
-      NAT_D, SEQ_1, GRAPH_1, STRUCT_0, GRAPH_2, GRAPH_4, TOPREAL1, GOBOARD5,
-      PRE_TOPC, GOBOARD1, GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1, WEIERSTR,
-      TOPS_2, METRIC_1, TBSP_1, RCOMP_1, SQUARE_1, PSCOMP_1, RVSUM_1, EUCLID,
-      FUNCT_3;
+      NAT_D, SEQ_1, SEQM_3, GRAPH_1, STRUCT_0, GRAPH_2, GRAPH_4, TOPREAL1,
+      GOBOARD5, PRE_TOPC, GOBOARD1, GOBOARD4, TOPMETR, PCOMPS_1, COMPTS_1,
+      WEIERSTR, TOPS_2, METRIC_1, TBSP_1, RCOMP_1, SQUARE_1, PSCOMP_1, RVSUM_1,
+      EUCLID, FUNCT_3;
  constructors FUNCT_3, REAL_1, SQUARE_1, NAT_1, NAT_D, RCOMP_1, BINARITH,
       TOPS_2, COMPTS_1, TBSP_1, MONOID_0, GOBOARD1, GOBOARD4, GOBOARD5,
-      PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4, SEQ_1;
+      PSCOMP_1, GRAPH_2, WEIERSTR, GRAPH_4, SEQ_1, SEQM_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, METRIC_1, BORSUK_1, MONOID_0,
-      EUCLID, GRAPH_2, GRAPH_4, FINSET_1, VALUED_0, FUNCT_2;
+      EUCLID, GRAPH_2, GRAPH_4, FINSET_1, VALUED_0, FUNCT_2, CARD_1, XXREAL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -33,7 +33,7 @@ begin :: GRAPHS BY CARTESIAN PRODUCT
 
 reserve x,y for set;
 reserve G for Graph;
-reserve vs,vs' for FinSequence of the Vertices of G;
+reserve vs,vs' for FinSequence of the carrier of G;
 reserve IT for oriented Chain of G;
 reserve n,m,k,i,j for Element of NAT;
 reserve r,r1,r2 for Real;
@@ -54,7 +54,7 @@ end;
 canceled;
 
 theorem :: JGRAPH_1:6
-  for X being set holds the Vertices of PGraph(X)=X;
+  for X being set holds the carrier of PGraph(X)=X;
 
 definition
   let f be FinSequence;
@@ -69,25 +69,26 @@ reserve X for non empty set;
 
 registration
   let X be non empty set;
-  cluster PGraph(X) -> Graph-like;
+  cluster PGraph(X) -> non empty;
 end;
 
 theorem :: JGRAPH_1:7
   for f being FinSequence of X
-  holds f is FinSequence of the Vertices of PGraph(X);
+  holds f is FinSequence of the carrier of PGraph(X);
 
 theorem :: JGRAPH_1:8
   for f being FinSequence of X
-  holds PairF(f) is FinSequence of the Edges of PGraph(X);
+  holds PairF(f) is FinSequence of the carrier' of PGraph(X);
 
 definition
   let X be non empty set,f be FinSequence of X;
-  redefine func PairF(f) -> FinSequence of the Edges of PGraph(X);
+  redefine func PairF(f) -> FinSequence of the carrier' of PGraph(X);
 end;
 
 theorem :: JGRAPH_1:9
   for n being Element of NAT,f being FinSequence of X
-  st 1 <= n & n <= len PairF(f) holds (PairF(f)).n in the Edges of PGraph(X);
+  st 1 <= n & n <= len PairF(f) holds (PairF(f)).n in the carrier' of PGraph(X)
+;
 
 theorem :: JGRAPH_1:10
   for f being FinSequence of X holds PairF(f) is oriented Chain of PGraph(X);
@@ -99,7 +100,7 @@ end;
 
 theorem :: JGRAPH_1:11
   for f being FinSequence of X,
-  f1 being FinSequence of the Vertices of PGraph(X) st len f>=1 & f=f1 holds
+  f1 being FinSequence of the carrier of PGraph(X) st len f>=1 & f=f1 holds
   f1 is_oriented_vertex_seq_of PairF(f);
 
 begin ::  SHORTCUTS OF FINITE SEQUENCES IN PLANE
@@ -112,7 +113,7 @@ definition
   f.1=g.1 & f.len f=g.len g &
   ex fc being Subset of PairF(f),fvs being Subset of f,
   sc being oriented simple Chain of PGraph(X),
-  g1 being FinSequence of the Vertices of PGraph(X)
+  g1 being FinSequence of the carrier of PGraph(X)
   st Seq fc = sc & Seq fvs = g & g1=g & g1 is_oriented_vertex_seq_of sc;
 end;
 
@@ -332,7 +333,7 @@ theorem :: JGRAPH_1:63
 
 theorem :: JGRAPH_1:64
   for f being Function of X,Y, P being non empty Subset of Y
-  st X is compact & Y is_T2 & f is continuous one-to-one & P=rng f holds
+  st X is compact & Y is T_2 & f is continuous one-to-one & P=rng f holds
   ex f1 being Function of X,(Y|P) st f=f1 & f1 is_homeomorphism;
 
 ::  Fashoda Meet Theorem

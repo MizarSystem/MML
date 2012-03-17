@@ -21,16 +21,16 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
+<Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Not>
 <And>
@@ -40,8 +40,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Not>
 <And>
@@ -64,8 +64,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="78"/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="81"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Not>
 <And>
@@ -74,7 +74,7 @@
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="96">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

@@ -59,35 +59,35 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="484">
+<Func kind="K" nr="489">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="147"/>
+<Adjective nr="152"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
+<Adjective nr="16"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="487">
+<Func kind="K" nr="492">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="62" value="false"/>
-<Adjective nr="68"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="70"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 </Registrations>

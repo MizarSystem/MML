@@ -16,13 +16,14 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="1">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -49,7 +50,7 @@
 <Var nr="2"/>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -67,7 +68,7 @@
 <Var nr="2"/>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="40"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

@@ -14,7 +14,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NET_1" nr="2">
@@ -23,8 +23,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
+<Adjective nr="8"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NET_1" nr="1">
@@ -35,8 +35,8 @@
 <Func kind="K" nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
+<Adjective nr="8"/>
 </Cluster>
 </FCluster>
 </Registrations>

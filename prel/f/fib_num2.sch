@@ -15,9 +15,6 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -25,7 +22,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -42,7 +39,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Not>
@@ -51,14 +48,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="95">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="95">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
@@ -73,8 +70,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="2" value="false"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -90,8 +87,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="2" value="false"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Not>
@@ -100,14 +97,14 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="95">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="95">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>

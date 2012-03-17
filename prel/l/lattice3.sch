@@ -31,7 +31,7 @@
 <Var nr="1"/>
 </Pred>
 </Fraenkel>
-<Func kind="K" nr="14">
+<Func kind="K" nr="15">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -93,7 +93,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <Func kind="F" nr="4"/>
 <Func kind="F" nr="3">
 <Var nr="1"/>

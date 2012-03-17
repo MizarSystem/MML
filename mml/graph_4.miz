@@ -7,16 +7,17 @@
 environ
 
  vocabularies FINSEQ_1, GRAPH_1, ARYTM_1, FUNCT_1, ORDERS_1, BOOLE, GRAPH_2,
-      RELAT_1, FINSET_1, CARD_1, FINSEQ_2, GRAPH_4, FINSEQ_4, ARYTM;
+      RELAT_1, FINSET_1, CARD_1, FINSEQ_2, GRAPH_4, FINSEQ_4, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
-      FINSEQ_2, CARD_1, FINSET_1, NUMBERS, XCMPLX_0, NAT_1, GRAPH_1, GRAPH_2,
+      FINSEQ_2, CARD_1, FINSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      STRUCT_0, GRAPH_1, GRAPH_2,
       BINARITH, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, XREAL_0, NAT_1, RECDEF_1, BINARITH, GRAPH_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      GRAPH_2, ORDINAL1;
+      GRAPH_2, ORDINAL1, CARD_1, STRUCT_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_2;
- theorems TARSKI, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, GRAPH_1, RELAT_1, FUNCT_1,
+ theorems TARSKI, NAT_1, FINSEQ_1, FINSEQ_2, GRAPH_1, RELAT_1, FUNCT_1,
       GRFUNC_1, FUNCT_2, BINARITH, REAL_2, FINSET_1, FINSEQ_3, FINSEQ_4,
       GRAPH_2, XBOOLE_0, XBOOLE_1, XREAL_1, CARD_1, XXREAL_0, ORDINAL1, CARD_2;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
@@ -28,7 +29,7 @@ reserve p, q for FinSequence,
   i, j, k, m, n for Element of NAT,
   G for Graph;
 
-reserve x,y,v,v1,v2,v3,v4 for Element of the Vertices of G;
+reserve x,y,v,v1,v2,v3,v4 for Element of the carrier of G;
 
 definition
   let G;
@@ -44,14 +45,14 @@ theorem Th1:
 proof
   assume e orientedly_joins v1, v2;
   then ((the Source of G).e = v1 & (the Target of G).e = v2) by Def1;
-  hence e joins v1, v2 by GRAPH_1:def 9;
+  hence e joins v1, v2 by GRAPH_1:def 10;
 end;
 
 definition
   let G;
-  let x,y be Element of (the Vertices of G);
+  let x,y be Element of (the carrier of G);
   pred x,y are_orientedly_incident means
-  ex v being set st v in the Edges of G & v orientedly_joins x, y;
+  ex v being set st v in the carrier' of G & v orientedly_joins x, y;
 end;
 
 theorem Th2:
@@ -63,7 +64,7 @@ proof
   hence v1=v3 & v2=v4;
 end;
 
-reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
+reserve vs, vs1, vs2 for FinSequence of the carrier of G,
   c, c1, c2 for oriented Chain of G;
 
 registration
@@ -78,7 +79,7 @@ end;
 definition
   let G, X;
   func G-SVSet X -> set equals
-  { v: ex e being Element of the Edges of G st e in X &
+  { v: ex e being Element of the carrier' of G st e in X &
   v = (the Source of G).e };
   correctness;
 end;
@@ -86,7 +87,7 @@ end;
 definition
   let G, X;
   func G-TVSet X -> set equals
-  { v: ex e being Element of the Edges of G st e in X &
+  { v: ex e being Element of the carrier' of G st e in X &
   v = (the Target of G).e };
   correctness;
 end;
@@ -103,9 +104,9 @@ A2: G-SVSet X<>{};
     consider x being Element of G-SVSet X;
     x in G-SVSet X by A2;
     then consider v such that
-A3: v=x & (ex e being Element of the Edges of G st e in X &
+A3: v=x & (ex e being Element of the carrier' of G st e in X &
     (v = (the Source of G).e));
-    consider e being Element of the Edges of G such that
+    consider e being Element of the carrier' of G such that
 A4: e in X & (v = (the Source of G).e) by A3;
     thus contradiction by A4;
   end;
@@ -115,9 +116,9 @@ A5: G-TVSet X<>{};
     consider x being Element of G-TVSet X;
     x in G-TVSet X by A5;
     then consider v such that
-A6: v=x & (ex e being Element of the Edges of G st e in X &
+A6: v=x & (ex e being Element of the carrier' of G st e in X &
     (v = (the Target of G).e));
-    consider e being Element of the Edges of G such that
+    consider e being Element of the carrier' of G such that
 A7: e in X & (v = (the Target of G).e) by A6;
     thus contradiction by A7;
   end;
@@ -163,10 +164,10 @@ A2: len vs = len c + 1 by Def5;
   proof
     let y be set;
     assume y in G-SVSet rng c;
-    then consider v being Element of the Vertices of G such that
-A3: v=y & ex e being Element of the Edges of G st e in rng c &
+    then consider v being Element of the carrier of G such that
+A3: v=y & ex e being Element of the carrier' of G st e in rng c &
     v = (the Source of G).e;
-    consider e being Element of the Edges of G such that
+    consider e being Element of the carrier' of G such that
 A4: e in rng c & (v = (the Source of G).e) by A3;
     consider x being set such that
 A5: x in dom c & e = c.x by A4,FUNCT_1:def 5;
@@ -195,10 +196,10 @@ A1: vs is_oriented_vertex_seq_of c;
 A2: len vs = len c + 1 by Def5;
   let y be set;
   assume y in G-TVSet rng c;
-  then consider v being Element of the Vertices of G such that
-A3: v=y & ex e being Element of the Edges of G st e in rng c &
+  then consider v being Element of the carrier of G such that
+A3: v=y & ex e being Element of the carrier' of G st e in rng c &
   v = (the Target of G).e;
-  consider e being Element of the Edges of G such that
+  consider e being Element of the carrier' of G such that
 A4: e in rng c & (v = (the Target of G).e) by A3;
   consider x being set such that
 A5: x in dom c & e = c.x by A4,FUNCT_1:def 5;
@@ -237,8 +238,8 @@ A5: x<=len c;
 A6: 1<=x+1 & x+1<=len vs & x<=len vs by A2,NAT_1:12,XREAL_1:9;
     x in dom c by A4,A5,FINSEQ_3:27;
 
-then c.x in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5;
-    then reconsider e = c.x as Element of the Edges of G;
+then c.x in rng c & rng c c= the carrier' of G by FINSEQ_1:def 4,FUNCT_1:def 5;
+    then reconsider e = c.x as Element of the carrier' of G;
     set v1 = vs/.x;
     set v2 = vs/.(x+1);
 A7: v1 = vs.x & v2 = vs.(x+1) by A4,A6,FINSEQ_4:24;
@@ -253,14 +254,14 @@ A8: v1 = (the Source of G).e & v2 = (the Target of G).e by Def1;
   suppose
 A9: x=len c+1;
     set l = len c;
-    l <> 0 by A1,CARD_2:59;
+    l <> 0 by A1;
     then 0<l & 0+1=1;
     then
 A10: 1<=l & l<=l+1 by NAT_1:13;
     then l in dom c by FINSEQ_3:27;
 
-then c.l in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5;
-    then reconsider e = c.l as Element of the Edges of G;
+then c.l in rng c & rng c c= the carrier' of G by FINSEQ_1:def 4,FUNCT_1:def 5;
+    then reconsider e = c.l as Element of the carrier' of G;
     set v1 = vs/.l;
     set v2 = vs/.(l+1);
 A11: v1 = vs.l & v2 = vs.(l+1) by A2,A4,A9,A10,FINSEQ_4:24;
@@ -280,11 +281,10 @@ theorem
   <*v*> is_oriented_vertex_seq_of {}
 proof
   set c ={};
-  len c = 0 by CARD_1:47;
-  hence len <*v*> = len c +1 by FINSEQ_1:57;
+  thus len <*v*> = len c +1 by FINSEQ_1:57;
   let n;
   assume 1<=n & n<=len c;
-  hence thesis by CARD_1:47;
+  hence thesis;
 end;
 
 theorem Th10:
@@ -293,7 +293,7 @@ proof
   now per cases;
     case c <>{};
       then
-A1:   len c <>0 by CARD_2:59;
+A1:   len c <>0;
       defpred P[Nat,set] means
       (($1=len c+1 implies $2=(the Target of G).(c.len c)) &
       ($1<>len c+1 implies $2=(the Source of G).(c.$1)));
@@ -324,7 +324,7 @@ A4:   dom p = Seg (len c+1) & for k be Nat st k in Seg (len c+1) holds
       ((k=len c+1 implies p.k=(the Target of G).(c.len c)) &
       (k<>len c+1 implies p.k=(the Source of G).(c.k)));
 A5:   len p=len c+1 by A4,FINSEQ_1:def 3;
-      rng p c= (the Vertices of G)
+      rng p c= (the carrier of G)
       proof
         let y be set;
         assume y in rng p;
@@ -342,27 +342,27 @@ A8:         y=(the Target of G).(c.len c) by A4,A6;
             then len c in dom c by FINSEQ_1:def 3;
             then
 A9:         c.len c in rng c by FUNCT_1:def 5;
-            rng c c= the Edges of G by FINSEQ_1:def 4;
-            hence y in (the Vertices of G) by A8,A9,FUNCT_2:7;
+            rng c c= the carrier' of G by FINSEQ_1:def 4;
+            hence y in (the carrier of G) by A8,A9,FUNCT_2:7;
           end;
           case
 A10:        k<>len c+1;
             then
 A11:        y=(the Source of G).(c.k) by A4,A6;
-            k<len c+1 by A7,A10,REAL_1:def 5;
+            k<len c+1 by A7,A10,XXREAL_0:1;
             then k<=len c by NAT_1:13;
             then k in Seg len c by A7,FINSEQ_1:3;
             then k in dom c by FINSEQ_1:def 3;
             then
 A12:        c.k in rng c by FUNCT_1:def 5;
-            rng c c= the Edges of G by FINSEQ_1:def 4;
-            hence y in (the Vertices of G) by A11,A12,FUNCT_2:7;
+            rng c c= the carrier' of G by FINSEQ_1:def 4;
+            hence y in (the carrier of G) by A11,A12,FUNCT_2:7;
           end;
         end;
-        hence y in (the Vertices of G);
+        hence y in (the carrier of G);
       end;
 
-then reconsider vs=p as FinSequence of (the Vertices of G) by FINSEQ_1:def 4;
+then reconsider vs=p as FinSequence of (the carrier of G) by FINSEQ_1:def 4;
       for n st 1<=n & n<=len c holds c.n orientedly_joins vs/.n, vs/.(n+1)
       proof
         let n;
@@ -387,7 +387,7 @@ A18:      (the Source of G).(c.n) = vs/.n by A5,A13,A15,A16,FINSEQ_4:24;
         end;
         suppose n<>len c;
           then
-A19:      n<len c by A13,REAL_1:def 5;
+A19:      n<len c by A13,XXREAL_0:1;
           then n+1<=len c by NAT_1:13;
           then
 A20:      n+1<len c+1 by NAT_1:13;
@@ -403,7 +403,7 @@ A24:      (the Source of G).(c.n) = vs/.n by A5,A13,A21,A22,FINSEQ_4:24;
           1<n+1 by A13,NAT_1:13;
           then vs/.(n+1)=p.(n+1) by A5,A20,FINSEQ_4:24;
 
-then (the Target of G).(c.n) = vs/.(n+1) by A13,A19,A23,GRAPH_1:def 12;
+then (the Target of G).(c.n) = vs/.(n+1) by A13,A19,A23,GRAPH_1:def 13;
           hence thesis by A24,Def1;
         end;
       end;
@@ -412,13 +412,13 @@ then (the Target of G).(c.n) = vs/.(n+1) by A13,A19,A23,GRAPH_1:def 12;
     end;
     case
 A25:  c ={};
-      consider x being Element of the Vertices of G;
+      consider x being Element of the carrier of G;
       set vs=<*x*>;
-      len c =0 by A25,CARD_1:47;
+      len c =0 by A25;
       then
 A26:  len vs = len c + 1 by FINSEQ_1:57;
       for n st 1<=n & n<=len c holds c.n orientedly_joins vs/.n, vs/.(n+1)
-      by A25,CARD_1:47;
+      by A25;
       then vs is_oriented_vertex_seq_of c by A26,Def5;
       hence thesis;
     end;
@@ -468,7 +468,7 @@ A9:   (the Source of G).(c.n) = vs2/.n
 A10:  n=len c+1 by A5,XXREAL_0:1;
       then
 A11:  n-1=len c;
-      0<>len c by A1,CARD_2:59;
+      0<>len c by A1;
       then 0<len c;
       then
 A12:  0+1<=len c by NAT_1:13;
@@ -494,7 +494,7 @@ definition
   let G, c;
   assume
 A1: c <>{};
-  func oriented-vertex-seq c -> FinSequence of the Vertices of G means
+  func oriented-vertex-seq c -> FinSequence of the carrier of G means
   it is_oriented_vertex_seq_of c;
   existence by Th10;
   uniqueness by A1,Th11;
@@ -596,7 +596,7 @@ A10: 1<i+1 by A8,NAT_1:13;
     then c.(i+1) orientedly_joins v2, vs/.(i+1+1) by A2,A10,Def5;
     hence (the Source of G).(q.(k+1)) = (the Target of G).(q.k) by A7,A9,Def1;
   end;
-  then qq is oriented by GRAPH_1:def 12;
+  then qq is oriented by GRAPH_1:def 13;
   hence thesis;
 end;
 
@@ -697,7 +697,7 @@ A13:      1<=n+1 & n+1<=len vs1 by A1,Def5;
           then
 A14:      vs1/.n=vs1.n & vs1/.(n+1)=vs1.(n+1) by A10,A12,FINSEQ_4:24;
           p.n = vs1.n & p.(n+1) = vs1.(n+1) by A10,A12,A13,GRAPH_2:14;
-          hence ex v1, v2 being Element of the Vertices of G st
+          hence ex v1, v2 being Element of the carrier of G st
           v1 = p.n & v2 = p.(n+1) & q.n orientedly_joins v1, v2 by A9,A11,A14;
         end;
         case ex k being Nat st k in dom c2 & n=len c1 + k;
@@ -717,7 +717,7 @@ A21:      k<=len vs2 by A3,A17,NAT_1:12;
           then consider j such that
 A22:      0<=j & j<len vs2 & k=j+1 by A21,GRAPH_2:1;
 A23:      p.n = vs2.k
-          proof per cases by A17,REAL_1:def 5;
+          proof per cases by A17,XXREAL_0:1;
             suppose
 A24:          1=k;
 A25:          0+1<=len vs1 by A3,NAT_1:13;
@@ -736,12 +736,12 @@ A27:      k<len vs2 by A3,A17,NAT_1:13;
           p.(n+1) = p.(len c1 +1+k) by A15
             .= p.(len vs1+k) by A1,Def5
             .= vs2.(k+1) by A17,A27,GRAPH_2:15;
-          hence ex v1, v2 being Element of the Vertices of G st
+          hence ex v1, v2 being Element of the carrier of G st
           v1 = p.n & v2 = p.(n+1)
           & q.n orientedly_joins v1, v2 by A16,A19,A20,A23;
         end;
       end;
-      then consider v1,v2 being Element of the Vertices of G such that
+      then consider v1,v2 being Element of the carrier of G such that
 A28:  v1=p.n & v2=p.(n+1) & q.n orientedly_joins v1,v2;
 A29:  n+1 in dom q by A6,A7,FINSEQ_3:27;
       now per cases by A29,FINSEQ_1:38;
@@ -762,7 +762,7 @@ A36:      vs1/.(n+1)=vs1.(n+1) &
           vs1/.(n+1+1)=vs1.(n+1+1) by A32,A34,FINSEQ_4:24;
           p.(n+1) = vs1.(n+1) & p.(n+1+1) = vs1.(n+1+1) by A32,A34,A35,
           GRAPH_2:14;
-          hence ex v2'',v3' being Element of the Vertices of G st
+          hence ex v2'',v3' being Element of the carrier of G st
           v2'' = p.(n+1) & v3' = p.(n+1+1)
           & q.(n+1) orientedly_joins v2'', v3' by A31,A33,A36;
         end;
@@ -782,7 +782,7 @@ A43:      k<=len vs2 by A3,A39,NAT_1:12;
           then consider j such that
 A44:      0<=j & j<len vs2 & k=j+1 by A43,GRAPH_2:1;
 A45:      p.(n+1) = vs2.k
-          proof per cases by A39,REAL_1:def 5;
+          proof per cases by A39,XXREAL_0:1;
             suppose
 A46:          1=k;
 A47:          0+1<=len vs1 by A3,NAT_1:13;
@@ -801,18 +801,18 @@ A49:      k<len vs2 by A3,A39,NAT_1:13;
           p.((n+1)+1) = p.(len c1 +1+k) by A37
             .= p.(len vs1+k) by A1,Def5
             .= vs2.(k+1) by A39,A49,GRAPH_2:15;
-          hence ex v2'',v3' being Element of the Vertices of G st
+          hence ex v2'',v3' being Element of the carrier of G st
           v2'' = p.(n+1) & v3' = p.((n+1)+1)
           & q.(n+1) orientedly_joins v2'', v3' by A38,A41,A42,A45;
         end;
       end;
-      then consider v2',v3 being Element of the Vertices of G such that
+      then consider v2',v3 being Element of the carrier of G such that
 A50:  v2'=p.(n+1) & v3=p.(n+1+1) & q.(n+1) orientedly_joins v2',v3;
       (the Source of G).(q.n) = v1 & (the Target of G).(q.n) = v2 by A28,Def1;
       hence (the Source of G).(q.(n+1)) = (the Target of G).(q.n)
       by A28,A50,Def1;
     end;
-    then cc is oriented by GRAPH_1:def 12;
+    then cc is oriented by GRAPH_1:def 13;
     hence thesis;
   end;
 end;
@@ -829,14 +829,14 @@ A1: vs1 is_oriented_vertex_seq_of c1 & vs2 is_oriented_vertex_seq_of c2
 A2: c = c1^c2 & vs = vs1^'vs2;
 A3: len vs1 = len c1 + 1 & len vs2 = len c2 + 1 by A1,Def5;
   then
-A4: vs1 <> {} & vs2 <> {} by CARD_1:47;
+A4: vs1 <> {} & vs2 <> {};
   set q=c1^c2;
   set p=vs1^'vs2;
   len p +1 = len vs1 +len vs2 by A4,GRAPH_2:13;
   then
 A5: len p = len c1 + len c2 + 1 by A3
     .= len q + 1 by FINSEQ_1:35;
-  reconsider p as FinSequence of the Vertices of G;
+  reconsider p as FinSequence of the carrier of G;
   now
     let n be Element of NAT;
     assume
@@ -877,7 +877,7 @@ A19:  k<=len vs2 by A3,A17,NAT_1:12;
       then consider j such that
 A20:  0<=j & j<len vs2 & k=j+1 by A19,GRAPH_2:1;
 A21:  p.n = vs2.k
-      proof per cases by A17,REAL_1:def 5;
+      proof per cases by A17,XXREAL_0:1;
         suppose
 A22:      1=k;
 A23:      0+1<=len vs1 by A3,NAT_1:13;
@@ -908,9 +908,8 @@ Lm1: <*v*> is_oriented_vertex_seq_of {}
 proof
   set p = <*v*>, ec = {};
 A1: len p = 0 + 1 by FINSEQ_1:56
-    .= len ec + 1 by CARD_1:47;
-  for n st 1<=n & n<=len ec holds ec.n orientedly_joins p/.n,p/.(n+1)
-  by CARD_1:47;
+    .= len ec + 1;
+  for n st 1<=n & n<=len ec holds ec.n orientedly_joins p/.n,p/.(n+1);
   hence thesis by A1,Def5;
 end;
 
@@ -928,8 +927,8 @@ registration
   cluster Simple (oriented Chain of G);
   existence
   proof consider q being empty oriented Chain of G;
-    consider x being Element of the Vertices of G;
-    reconsider p =<*x*> as FinSequence of the Vertices of G;
+    consider x being Element of the carrier of G;
+    reconsider p =<*x*> as FinSequence of the carrier of G;
 A1: p is_oriented_vertex_seq_of q by Lm1;
     for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
     proof
@@ -948,8 +947,8 @@ registration
   cluster oriented simple Chain of G;
   existence
   proof consider q being empty oriented Chain of G;
-    consider x being Element of the Vertices of G;
-    reconsider p =<*x*> as FinSequence of the Vertices of G;
+    consider x being Element of the carrier of G;
+    reconsider p =<*x*> as FinSequence of the carrier of G;
 A1: p is_vertex_seq_of q by Lm1,Th5;
     reconsider q'=q as Chain of G;
     for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
@@ -980,7 +979,7 @@ A1: 1 <= i & i < len q';
     per cases;
     suppose n>=len q;
       then q|(Seg n)=q by FINSEQ_3:55;
-      hence thesis by A1,GRAPH_1:def 12;
+      hence thesis by A1,GRAPH_1:def 13;
     end;
     suppose
 A2:   n<len q;
@@ -995,10 +994,10 @@ A6:   i+1<=n by A1,A3,NAT_1:13;
       1<i+1 by A1,NAT_1:13;
       then i+1 in Seg n by A6,FINSEQ_1:3;
       then (q|(Seg n)).(i+1)=q.(i+1) by FUNCT_1:72;
-      hence thesis by A1,A4,A5,GRAPH_1:def 12;
+      hence thesis by A1,A4,A5,GRAPH_1:def 13;
     end;
   end;
-  hence thesis by GRAPH_1:4,def 12;
+  hence thesis by GRAPH_1:4,def 13;
 end;
 
 reserve sc for oriented simple Chain of G;
@@ -1079,7 +1078,7 @@ A7: n1+1 = n-1+1 by A5,BINARITH:def 3
   per cases by A2;
   suppose
 A8: n<>1 & m <> len vs;
-    then 1 < n by A2,REAL_1:def 5;
+    then 1 < n by A2,XXREAL_0:1;
     then 1 + 1<=n by NAT_1:13;
     then
 A9: 1+1-1<=n-1 by XREAL_1:11;
@@ -1087,7 +1086,7 @@ A9: 1+1-1<=n-1 by XREAL_1:11;
     then
 A10: n-1 < len c +1-1 by A3,XREAL_1:11;
 A11: 1<=n1+1 by NAT_1:12;
-A12: m < len vs by A2,A8,REAL_1:def 5;
+A12: m < len vs by A2,A8,XXREAL_0:1;
     then
 A13: m<=len c by A3,NAT_1:13;
 A14: 1<=m & m<=len c & len c <=len c by A2,A3,A12,NAT_1:13,XXREAL_0:2;
@@ -1096,8 +1095,8 @@ A14: 1<=m & m<=len c & len c <=len c by A2,A3,A12,NAT_1:13,XXREAL_0:2;
     set pp = (1,n)-cut vs;
     set p2 = (m,len c+1)-cut vs;
     set p2' = (m+1, len c +1)-cut vs;
-    reconsider pp as FinSequence of the Vertices of G;
-    reconsider p2 as FinSequence of the Vertices of G;
+    reconsider pp as FinSequence of the carrier of G;
+    reconsider p2 as FinSequence of the carrier of G;
 A15: 1<=n & n<=len vs by A2,XXREAL_0:2;
 A16: 1<=m & m<=len c + 1 & len c + 1<=len vs by A1,A2,Def5,XXREAL_0:2;
 A17: pp is_oriented_vertex_seq_of c1 by A1,A7,A9,A10,Th14;
@@ -1588,7 +1587,7 @@ A166: p2' = fvs*(Sgm DR) by TARSKI:2;
   suppose
 A167: n=1 & m <> len vs;
     then
-A168: m < len vs by A2,REAL_1:def 5;
+A168: m < len vs by A2,XXREAL_0:1;
     then
 A169: m<=len c by A3,NAT_1:13;
 A170: 1 < m by A2,XXREAL_0:2;
@@ -1823,7 +1822,7 @@ A243: 0<=i & i<len p2 & k=i+1 by A241,GRAPH_2:1;
   end;
   suppose
 A244: n<>1 & m = len vs;
-    then 1 < n by A2,REAL_1:def 5;
+    then 1 < n by A2,XXREAL_0:1;
     then 1 + 1<=n by NAT_1:13;
     then
 A245: 1+1-1<=n-1 by XREAL_1:11;
@@ -2141,9 +2140,9 @@ A4: q.n1=p.n1 by FUNCT_1:68;
     then Seg len q c= Seg len p by FINSEQ_1:def 3;
     then len q<=len p by FINSEQ_1:7;
     then m1<=len p by A2,XXREAL_0:2;
-    hence q.n1 <> q.m1 by A1,A2,A3,A4,GRAPH_1:def 13;
+    hence q.n1 <> q.m1 by A1,A2,A3,A4,GRAPH_1:def 14;
   end;
-  then p' is Path of G by GRAPH_1:def 13;
+  then p' is Path of G by GRAPH_1:def 14;
   hence thesis;
 end;
 
@@ -2152,7 +2151,7 @@ theorem Th25:
 proof
   assume not sc is OrientedPath of G;
   then consider m, n such that
-A1: 1<=m & m<n & n<=len sc & sc.m = sc.n by GRAPH_1:def 13;
+A1: 1<=m & m<n & n<=len sc & sc.m = sc.n by GRAPH_1:def 14;
   sc is Simple by Th20;
   then consider vs such that
 A2: vs is_oriented_vertex_seq_of sc &

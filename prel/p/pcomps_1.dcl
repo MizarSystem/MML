@@ -16,7 +16,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="COMPTS_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -24,66 +23,66 @@
 </Signature>
 <RCluster aid="PCOMPS_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="53"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="36"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PCOMPS_1" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="54"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PCOMPS_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PCOMPS_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="120">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

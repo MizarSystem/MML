@@ -23,56 +23,56 @@
 </Signature>
 <RCluster aid="NORMSP_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="77"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="77"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="52"/>
 <Adjective nr="77"/>
 <Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NORMSP_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="77"/>
 <Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 </Func>
 </Func>

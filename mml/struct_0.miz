@@ -8,9 +8,11 @@ environ
 
  vocabularies SETFAM_1, FUNCT_1, FINSEQ_1, PBOOLE, SUBSET_1, BOOLE, RLVECT_1,
       GROUP_1, VECTSP_1, NORMSP_1, PARTFUN1, REALSET1, STRUCT_0, FINSET_1,
-      ARYTM, XREAL_0, FUNCT_7, COLLSP;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, PARTFUN1, FUNCT_2,
-      NUMBERS, FINSEQ_1, REALSET1, PBOOLE, FUNCT_7;
+      ARYTM, XREAL_0, FUNCT_7, COLLSP, AMI_1, FUNCOP_1, RELAT_1, ANPROJ_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1,
+      RELSET_1, PARTFUN1, FUNCT_2,
+      NUMBERS, FINSEQ_1, FUNCOP_1,
+      REALSET1, PBOOLE, FUNCT_7;
  constructors PARTFUN1, PBOOLE, REALSET1, FUNCT_7, SETFAM_1;
  registrations XBOOLE_0, FUNCT_1, FUNCT_2, REALSET1, CARD_5;
  requirements BOOLE, SUBSET;
@@ -469,5 +471,109 @@ registration
   proof
     thus [#]S = the carrier of S;
   end;
+end;
+
+begin :: 2-sorted structures, 2008.07.02, A.T.
+
+definition
+ struct(1-sorted) 2-sorted(#carrier,carrier' -> set#);
+end;
+
+definition let S be 2-sorted;
+ attr S is void means
+:Def13: the carrier' of S is empty;
+end;
+
+registration
+ cluster empty void 2-sorted;
+ existence
+  proof
+   take S = 2-sorted(#{},{}#);
+   thus the carrier of S is empty;
+   thus the carrier' of S is empty;
+  end;
+end;
+
+registration let S be void 2-sorted;
+ cluster the carrier' of S -> empty;
+ coherence by Def13;
+end;
+
+registration
+ cluster non empty non void 2-sorted;
+ existence
+  proof
+   take S = 2-sorted(#1,1#);
+   thus the carrier of S is not empty;
+   thus the carrier' of S is not empty;
+  end;
+end;
+
+registration let S be non void 2-sorted;
+ cluster the carrier' of S -> non empty;
+ coherence by Def13;
+end;
+
+:: from BORSUK_1, 2008.07.07, A.T.
+
+definition
+  let X be 1-sorted,Y be non empty 1-sorted, y be Element of Y;
+  func X --> y -> Function of X,Y equals
+  (the carrier of X) --> y;
+  coherence;
+end;
+
+:: from RLVECT_1, 2008.07.28, A.T
+
+definition let S be ZeroStr, x be Element of S;
+ attr x is zero means
+:Def15: x = 0.S;
+end;
+
+registration let S be ZeroStr;
+ cluster zero Element of S;
+ existence
+  proof
+   take 0.S;
+   thus 0.S = 0.S;
+  end;
+end;
+
+registration
+ cluster non trivial ZeroStr;
+ existence
+  proof
+    take S = ZeroStr(#2,In(0,2)#);
+    0 in 2 & 1 in 2 by CARD_1:88,TARSKI:def 2;
+    then In(0,2) = 0 & In(1,2) = 1 by FUNCT_7:def 1;
+    hence thesis by Def10;
+  end;
+end;
+
+registration let S be non trivial ZeroStr;
+ cluster non zero Element of S;
+ existence
+  proof
+    consider x,y being Element of S such that
+W:   x <> y by Def10;
+   per cases by W;
+   suppose
+S:   x <> 0.S;
+    take x;
+    thus x <> 0.S by S;
+   end;
+   suppose
+S:   y <> 0.S;
+    take y;
+    thus y <> 0.S by S;
+   end;
+  end;
+end;
+
+:: comp. NDIFF_1, 2008.08.29, A.T.
+
+definition let X be set, S be ZeroStr, R be Relation of X, the carrier of S;
+ attr R is non-zero means
+  not 0.S in rng R;
 end;
 

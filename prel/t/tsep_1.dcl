@@ -17,9 +17,9 @@
 </Signature>
 <RCluster aid="TSEP_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -28,19 +28,19 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="26">
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster aid="TSEP_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="14" value="false"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -49,10 +49,10 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="26">
+<Adjective nr="14" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

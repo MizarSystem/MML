@@ -28,14 +28,14 @@
 </Signature>
 <RCluster aid="PARSP_2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -26,14 +26,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="90"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="96">
+<Func kind="K" nr="99">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="DYNKIN" nr="2">
@@ -48,14 +48,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="129">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
 </Cluster>
 </FCluster>
 <CCluster aid="DYNKIN" nr="1">

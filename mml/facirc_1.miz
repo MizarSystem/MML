@@ -9,7 +9,7 @@ environ
  vocabularies BOOLE, RELAT_1, FUNCT_1, FINSEQ_1, CIRCCOMB, FINSEQ_2, MSUALG_1,
       PARTFUN1, MSAFREE2, FUNCT_4, MARGREL1, MIDSP_3, BINARITH, ZF_LANG, AMI_1,
       ZF_REFLE, CIRCUIT1, QC_LANG1, CARD_3, LATTICES, MCART_1, FINSET_1,
-      CIRCUIT2, CLASSES1, FACIRC_1, ARYTM;
+      CIRCUIT2, CLASSES1, FACIRC_1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
       MCART_1, RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1,
       FINSEQ_2, FUNCT_4, MARGREL1, BINARITH, CARD_3, CLASSES1, PARTFUN1,
@@ -687,13 +687,6 @@ end;
 
 begin :: Computation and Stabilizable
 
-Lm1: now
-  let S be non void non empty ManySortedSign;
-  let o be Gate of S;
-  the OperSymbols of S is non empty by MSUALG_1:def 5;
-  hence o in the OperSymbols of S;
-end;
-
 theorem Th10:
   for S being Circuit-like non void (non empty ManySortedSign)
   for A being non-empty Circuit of S
@@ -704,10 +697,10 @@ proof
   let A be non-empty Circuit of S;
   let s be State of A, g be Gate of S;
   set v = the_result_sort_of g;
-A1: g in the OperSymbols of S by Lm1;
+    g in the carrier' of S;
 A2: g depends_on_in s = s*the_arity_of g by CIRCUIT1:def 3;
-  dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
-  then (the ResultSort of S).g in rng the ResultSort of S by A1,FUNCT_1:def 5;
+  dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
+  then (the ResultSort of S).g in rng the ResultSort of S by FUNCT_1:def 5;
   then
 A3: v in InnerVertices S by MSUALG_1:def 7;
   then action_at v = g by MSAFREE2:def 7;
@@ -1185,8 +1178,8 @@ registration
   coherence
   proof consider A being MSAlgebra over S such that
 A1: A is gate`2=den by CIRCCOMB:def 11;
-    g in the OperSymbols of S by Lm1;
-    then g`2 = [g`1, (the Charact of A).g]`2 by A1,CIRCCOMB:def 10
+    g in the carrier' of S;
+    g`2 = [g`1, (the Charact of A).g]`2 by A1,CIRCCOMB:def 10
       .= (the Charact of A).g by MCART_1:7
       .= Den(g, A) by MSUALG_1:def 11;
     hence thesis;
@@ -1201,17 +1194,17 @@ theorem Th34:
 proof
   let S be gate`2=den Circuit-like non void (non empty ManySortedSign);
   let A be non-empty Circuit of S such that
-A1: for g being set st g in the OperSymbols of S holds
+A1: for g being set st g in the carrier' of S holds
   g = [g`1, (the Charact of A).g];
   let s be State of A, g be Gate of S;
   set v = the_result_sort_of g;
-A2: g in the OperSymbols of S by Lm1;
+    g in the carrier' of S;
 A3: g depends_on_in s = s*the_arity_of g by CIRCUIT1:def 3;
 A4: Den(g, A) = (the Charact of A).g by MSUALG_1:def 11
     .= [g`1, (the Charact of A).g]`2 by MCART_1:7
-    .= g`2 by A1,Lm1;
-  dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
-  then (the ResultSort of S).g in rng the ResultSort of S by A2,FUNCT_1:def 5;
+    .= g`2 by A1;
+  dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
+  then (the ResultSort of S).g in rng the ResultSort of S by FUNCT_1:def 5;
   then
 A5: v in InnerVertices S by MSUALG_1:def 7;
   then action_at v = g by MSAFREE2:def 7;
@@ -1223,22 +1216,21 @@ theorem Th35:
   non void non empty ManySortedSign
   for A being Boolean gate`2=den non-empty Circuit of S
   for s being State of A, p being FinSequence, f being Function
-  st [p,f] in the OperSymbols of S holds (Following s).[p,f] = f.(s*p)
+  st [p,f] in the carrier' of S holds (Following s).[p,f] = f.(s*p)
 proof
   let S be gate`1=arity gate`2isBoolean unsplit
   non void non empty ManySortedSign;
   let A be Boolean gate`2=den non-empty Circuit of S;
   let s be State of A, p be FinSequence, f be Function;
-  assume
-A1: [p,f] in the OperSymbols of S;
+  assume [p,f] in the carrier' of S;
   then reconsider g = [p,f] as Gate of S;
 A2: the_arity_of g = (the Arity of S).g by MSUALG_1:def 6
     .= [(the Arity of S).g, g`2]`1 by MCART_1:7
-    .= g`1 by A1,CIRCCOMB:def 8;
+    .= g`1 by CIRCCOMB:def 8;
 A3: g`1 = p & g`2 = f by MCART_1:7;
   the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 7
     .= g
-  by A1,CIRCCOMB:52;
+  by CIRCCOMB:52;
   hence (Following s).[p,f] = f.(s*p) by A2,A3,Th34;
 end;
 
@@ -1247,7 +1239,7 @@ theorem
   non void non empty ManySortedSign
   for A being Boolean gate`2=den non-empty Circuit of S
   for s being State of A, p being FinSequence, f being Function
-  st [p,f] in the OperSymbols of S &
+  st [p,f] in the carrier' of S &
   for x being set st x in rng p holds s is_stable_at x
   holds Following s is_stable_at [p,f]
 proof
@@ -1255,26 +1247,25 @@ proof
   non void non empty ManySortedSign;
   let A be Boolean gate`2=den non-empty Circuit of S;
   let s be State of A, p be FinSequence, f be Function;
-  assume
-A1: [p,f] in the OperSymbols of S;
+  assume [p,f] in the carrier' of S;
   then reconsider g = [p,f] as Gate of S;
   assume
 A2: for x being set st x in rng p holds s is_stable_at x;
 A3: the_arity_of g = (the Arity of S).g by MSUALG_1:def 6
     .= [(the Arity of S).g, g`2]`1 by MCART_1:7
-    .= g`1 by A1,CIRCCOMB:def 8
+    .= g`1 by CIRCCOMB:def 8
     .= p by MCART_1:7;
   the_result_sort_of g = (the ResultSort of S).g by MSUALG_1:def 7
-    .= g by A1,CIRCCOMB:52;
+    .= g by CIRCCOMB:52;
   hence thesis by A2,A3,Th19;
 end;
 
 theorem Th37:
   for S being unsplit non empty ManySortedSign holds
-  InnerVertices S = the OperSymbols of S
+  InnerVertices S = the carrier' of S
 proof
   let S be unsplit non empty ManySortedSign;
-  the ResultSort of S = id the OperSymbols of S by CIRCCOMB:def 7;
+  the ResultSort of S = id the carrier' of S by CIRCCOMB:def 7;
   hence thesis by RELAT_1:71;
 end;
 
@@ -1380,7 +1371,7 @@ proof
   thus S is gate`1=arity
   proof
     let g be set;
-    assume g in the OperSymbols of S;
+    assume g in the carrier' of S;
     then g in {[p,f]} by CIRCCOMB:def 5;
     then g = [p,f] & [p,f]`2 = f by MCART_1:7,TARSKI:def 1;
     hence thesis by CIRCCOMB:def 5;
@@ -2247,7 +2238,7 @@ proof
   let a1,a2,a3 be Element of BOOLEAN such that
 A1: a1 = s.x & a2 = s.y & a3 = s.c;
   set S = MajorityStr(x,y,c);
-A2: InnerVertices S = the OperSymbols of S by Th37;
+A2: InnerVertices S = the carrier' of S by Th37;
 A3: dom s = the carrier of S by CIRCUIT1:4;
 A4: x in the carrier of S & y in the carrier of S & c in the carrier of S
   by Th72;
@@ -2313,7 +2304,7 @@ proof
 A1: a1 = s.[<*x,y*>,'&'] & a2 = s.[<*y,c*>,'&'] & a3 = s.[<*c,x*>,'&'];
   set xy =[<*x,y*>,'&'], yc = [<*y,c*>,'&'], cx = [<*c,x*>,'&'];
   set S = MajorityStr(x,y,c);
-A2: InnerVertices S = the OperSymbols of S by Th37;
+A2: InnerVertices S = the carrier' of S by Th37;
 A3: dom s = the carrier of S by CIRCUIT1:4;
   reconsider xy, yc, cx as Element of InnerVertices S by Th73;
   thus (Following s).MajorityOutput(x,y,c) = or3.(s*<*xy, yc, cx*>) by A2,Th35

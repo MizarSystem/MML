@@ -1,0 +1,1785 @@
+:: Partial Differentiation of Real Binary Functions
+::  by Bing Xie , Xiquan Liang , Hongwei Li and Yanping Zhuang
+:: 
+:: Received August 5, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, ARYTM, ARYTM_1, FINSEQ_1, FINSEQ_2, RELAT_1, ABSVALUE,
+      ORDINAL2, SEQ_1, SEQ_2, RCOMP_1, BOOLE, PARTFUN1, FDIFF_1, PDIFF_1,
+      BORSUK_1, PDIFF_2, ARYTM_3, SEQM_3, FCONT_1, FRECHET2, ANPROJ_1;
+ notations TARSKI, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, RFUNCT_2, XCMPLX_0,
+      XREAL_0, COMPLEX1, ORDINAL1, NUMBERS, REAL_1, VALUED_1, SEQ_1, SEQ_2,
+      FINSEQ_1, FINSEQ_2, RCOMP_1, EUCLID, FDIFF_1, XXREAL_0, NAT_1, SEQM_3,
+      FCONT_1, PDIFF_1;
+ constructors REAL_1, SEQ_2, PARTFUN1, RFUNCT_2, COMPLEX1, RCOMP_1, FDIFF_1,
+      SEQ_1, NAT_1, FCONT_1, PDIFF_1, BHSP_3, VFUNCT_1;
+ registrations RELSET_1, XREAL_0, MEMBERED, FDIFF_1, FUNCT_2, NAT_1, NUMBERS,
+      XBOOLE_0, XXREAL_0, FINSEQ_1, VALUED_0, VALUED_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, EUCLID, RCOMP_1, PDIFF_1;
+ theorems TARSKI, XBOOLE_0, XBOOLE_1, XREAL_1, RCOMP_1, SEQ_4, SEQ_1, SEQ_2,
+      FINSEQ_1, FINSEQ_2, RFUNCT_2, RELAT_1, FUNCT_1, FUNCT_2, PARTFUN1,
+      FDIFF_1, VALUED_1, SEQM_3, RFUNCT_1, XCMPLX_0, XCMPLX_1, PDIFF_1;
+ schemes SEQ_1;
+
+begin :: Preliminaries
+
+reserve Z for set;
+reserve X,Y for Subset of REAL;
+reserve x,x0,x1,x2,y,y0,y1,y2,g,g1,g2,r,r1,s,p,p1,p2 for Real;
+reserve z,z0 for Element of REAL 2;
+reserve n,m,k for Element of NAT;
+reserve Z,Z1 for Subset of REAL 2;
+reserve s1,s3 for Real_Sequence;
+reserve f,f1,f2,g for PartFunc of REAL 2,REAL;
+reserve R,R1,R2 for REST;
+reserve L,L1,L2 for LINEAR;
+
+theorem Th1:
+  dom proj(1,2) = REAL 2 & rng proj(1,2) = REAL &
+  for x,y be Element of REAL holds proj(1,2).<*x,y*> = x
+proof
+    set f = proj(1,2);
+A3: for x be set st x in REAL ex z be set st z in REAL 2 & x = f.z
+    proof
+      let x be set;
+      assume x in REAL;
+      then reconsider x1 = x as Element of REAL;
+      consider y be Element of REAL;
+      reconsider z = <*x1,y*> as Element of REAL 2 by FINSEQ_2:121;
+      f.z = z.1 by PDIFF_1:def 1;
+      then f.z = x by FINSEQ_1:61;
+      hence thesis;
+    end;
+    now let x,y be Element of REAL;
+      <*x,y*> is Element of 2-tuples_on REAL by FINSEQ_2:121;
+      then proj(1,2).<*x,y*> = <*x,y*>.1 by PDIFF_1:def 1;
+      hence proj(1,2).<*x,y*> = x by FINSEQ_1:61;
+    end;
+    hence thesis by A3,FUNCT_2:def 1,FUNCT_2:16;
+end;
+
+theorem Th2:
+  dom proj(2,2) = REAL 2 & rng proj(2,2) = REAL &
+  for x,y be Element of REAL holds proj(2,2).<*x,y*> = y
+proof
+    set f = proj(2,2);
+A3: for y be set st y in REAL ex z be set st z in REAL 2 & y = f.z
+    proof
+      let y be set;
+      assume y in REAL;
+      then reconsider y1 = y as Element of REAL;
+      consider x be Element of REAL;
+      reconsider z = <*x,y1*> as Element of REAL 2 by FINSEQ_2:121;
+      f.z = z.2 by PDIFF_1:def 1;
+      then f.z = y by FINSEQ_1:61;
+      hence thesis;
+    end;
+    now let x,y be Element of REAL;
+      <*x,y*> is Element of 2-tuples_on REAL by FINSEQ_2:121;
+      then proj(2,2).<*x,y*> = <*x,y*>.2 by PDIFF_1:def 1;
+      hence proj(2,2).<*x,y*> = y by FINSEQ_1:61;
+    end;
+    hence thesis by A3,FUNCT_2:def 1,FUNCT_2:16;
+end;
+
+begin :: Partial Differentiation of Real Binary Functions
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  func SVF1(f,z) -> PartFunc of REAL,REAL equals
+  f*reproj(1,z);
+  coherence;
+  func SVF2(f,z) -> PartFunc of REAL,REAL equals
+  f*reproj(2,z);
+  coherence;
+end;
+
+theorem Lem1:
+  z = <*x,y*> & f is_partial_differentiable_in z,1 implies
+  SVF1(f,z) is_differentiable_in x
+proof
+    assume that
+A1: z = <*x,y*> and
+A2: f is_partial_differentiable_in z,1;
+    proj(1,2).z = x by A1,Th1;
+    hence SVF1(f,z) is_differentiable_in x by A2,PDIFF_1:def 11;
+end;
+
+theorem Lem2:
+  z = <*x,y*> & f is_partial_differentiable_in z,2 implies
+  SVF2(f,z) is_differentiable_in y
+proof
+    assume that
+A1: z = <*x,y*> and
+A2: f is_partial_differentiable_in z,2;
+    proj(2,2).z = y by A1,Th2;
+    hence SVF2(f,z) is_differentiable_in y by A2,PDIFF_1:def 11;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  pred f is_partial_differentiable`1_in z means :Def6:
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  SVF1(f,z) is_differentiable_in x0;
+
+  pred f is_partial_differentiable`2_in z means :Def7:
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  SVF2(f,z) is_differentiable_in y0;
+end;
+
+theorem
+  z = <*x0,y0*> & f is_partial_differentiable`1_in z implies
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0)
+proof
+    assume that
+A1: z = <*x0,y0*> and
+A2: f is_partial_differentiable`1_in z;
+    consider x1,y1 such that
+A3: z = <*x1,y1*> &
+    SVF1(f,z) is_differentiable_in x1 by A2,Def6;
+    SVF1(f,z) is_differentiable_in x0 by A1,A3,FINSEQ_1:98;
+    hence ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+    ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by FDIFF_1:def 5;
+end;
+
+theorem
+  z = <*x0,y0*> & f is_partial_differentiable`2_in z implies
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0)
+proof
+    assume that
+A1: z = <*x0,y0*> and
+A2: f is_partial_differentiable`2_in z;
+    consider x1,y1 such that
+A3: z = <*x1,y1*> &
+    SVF2(f,z) is_differentiable_in y1 by A2,Def7;
+    SVF2(f,z) is_differentiable_in y0 by A1,A3,FINSEQ_1:98;
+    hence ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+    ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by FDIFF_1:def 5;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  redefine pred f is_partial_differentiable`1_in z means :Def10:
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0);
+compatibility
+proof
+  thus f is_partial_differentiable`1_in z implies
+  (ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0))
+  proof
+    assume
+ A1:f is_partial_differentiable`1_in z;
+    consider x0,y0 such that
+A2: z = <*x0,y0*> &
+    SVF1(f,z) is_differentiable_in x0 by A1,Def6;
+    ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+    ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A2,FDIFF_1:def 5;
+    hence ex x0,y0 being Real st z = <*x0,y0*> &
+    ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+    ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A2;
+  end;
+    assume (ex x0,y0 being Real st z = <*x0,y0*> &
+    ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+    ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0));
+    then consider x0,y0 such that
+A4: z = <*x0,y0*> & ex N being Neighbourhood of x0
+    st N c= dom SVF1(f,z) & ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0);
+    consider N being Neighbourhood of x0 such that
+A5: N c= dom SVF1(f,z) & ex L,R st for x st x in N holds
+    SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A4;
+    SVF1(f,z) is_differentiable_in x0 by A5,FDIFF_1:def 5;
+    hence f is_partial_differentiable`1_in z by A4,Def6;
+end;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  redefine pred f is_partial_differentiable`2_in z means :Def11:
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0);
+compatibility
+proof
+  thus f is_partial_differentiable`2_in z implies
+  (ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0))
+  proof
+    assume
+A1: f is_partial_differentiable`2_in z;
+    consider x0,y0 such that
+A2: z = <*x0,y0*> &
+    SVF2(f,z) is_differentiable_in y0 by A1,Def7;
+    ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+    ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A2,FDIFF_1:def 5;
+    hence ex x0,y0 being Real st z = <*x0,y0*> &
+    ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+    ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A2;
+  end;
+    assume (ex x0,y0 being Real st z = <*x0,y0*> &
+    ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+    ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0));
+    then consider x0,y0 such that
+A4: z = <*x0,y0*> & ex N being Neighbourhood of y0
+    st N c= dom SVF2(f,z) & ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0);
+    consider N being Neighbourhood of y0 such that
+A5: N c= dom SVF2(f,z) & ex L,R st for y st y in N holds
+    SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A4;
+    SVF2(f,z) is_differentiable_in y0 by A5,FDIFF_1:def 5;
+    hence f is_partial_differentiable`2_in z by A4,Def7;
+end;
+end;
+
+theorem Lem3:
+  for f be PartFunc of REAL 2,REAL
+  for z be Element of REAL 2 holds
+  f is_partial_differentiable`1_in z iff f is_partial_differentiable_in z,1
+proof
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  thus f is_partial_differentiable`1_in z implies
+  f is_partial_differentiable_in z,1
+  proof
+    assume
+A0: f is_partial_differentiable`1_in z;
+    consider x0,y0 being Real such that
+A1: z = <*x0,y0*> & SVF1(f,z) is_differentiable_in x0 by A0,Def6;
+AA: proj(1,2).z = x0 by A1,Th1;
+    thus f is_partial_differentiable_in z,1 by A1,AA,PDIFF_1:def 11;
+  end;
+    assume
+A2: f is_partial_differentiable_in z,1;
+    consider x0,y0 being Real such that
+A3: z = <*x0,y0*> by FINSEQ_2:120;
+A4: proj(1,2).z = x0 by A3,Th1;
+    SVF1(f,z) is_differentiable_in x0 by A2,A4,PDIFF_1:def 11;
+    hence f is_partial_differentiable`1_in z by A3,Def6;
+end;
+
+theorem Lem4:
+  for f be PartFunc of REAL 2,REAL
+  for z be Element of REAL 2 holds
+  f is_partial_differentiable`2_in z iff f is_partial_differentiable_in z,2
+proof
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  thus f is_partial_differentiable`2_in z implies
+  f is_partial_differentiable_in z,2
+  proof
+    assume
+A0: f is_partial_differentiable`2_in z;
+    consider x0,y0 being Real such that
+A1: z = <*x0,y0*> & SVF2(f,z) is_differentiable_in y0 by A0,Def7;
+AA: proj(2,2).z = y0 by A1,Th2;
+    thus f is_partial_differentiable_in z,2 by A1,AA,PDIFF_1:def 11;
+  end;
+    assume
+A2: f is_partial_differentiable_in z,2;
+    consider x0,y0 being Real such that
+A3: z = <*x0,y0*> by FINSEQ_2:120;
+A4: proj(2,2).z = y0 by A3,Th2;
+    SVF2(f,z) is_differentiable_in y0 by A2,A4,PDIFF_1:def 11;
+    hence f is_partial_differentiable`2_in z by A3,Def7;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let z be Element of REAL 2;
+  func partdiff1(f,z) -> Real equals
+  partdiff(f,z,1);
+  coherence;
+  func partdiff2(f,z) -> Real equals
+  partdiff(f,z,2);
+  coherence;
+end;
+
+def12:
+  z = <*x0,y0*> &
+  f is_partial_differentiable`1_in z implies
+  (r = diff(SVF1(f,z),x0) iff
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st r = L.1 & for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0))
+proof
+     set F1 = SVF1(f,z);
+     assume that
+A1:  z = <*x0,y0*> and
+A2:  f is_partial_differentiable`1_in z;
+     hereby assume AB: r = diff(F1,x0);
+AA:  f is_partial_differentiable_in z,1 by A2,Lem3;
+     F1 is_differentiable_in x0 by A1,AA,Lem1; then
+     consider N being Neighbourhood of x0 such that
+A4:  N c= dom F1 &
+     ex L,R st r=L.1 & for x st x in N holds F1.x-F1.x0 = L.(x-x0) + R.(x-x0)
+       by FDIFF_1:def 6,AB;
+     thus ex x0,y0 being Real st z = <*x0,y0*> &
+     ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+     ex L,R st r = L.1 & for x st x in N holds
+     SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A1,A4;
+   end;
+   given x1,y1 being Real such that
+C1:  z = <*x1,y1*> &
+   ex N being Neighbourhood of x1 st N c= dom SVF1(f,z) &
+   ex L,R st r = L.1 & for x st x in N holds
+   SVF1(f,z).x - SVF1(f,z).x1 = L.(x-x1) + R.(x-x1);
+D1:x1 = x0 by FINSEQ_1:98,C1,A1;
+   f is_partial_differentiable_in z,1 by A2,Lem3; then
+   F1 is_differentiable_in x0 by A1,Lem1;
+   hence thesis by FDIFF_1:def 6,D1,C1;
+end;
+
+def13:
+  z = <*x0,y0*> &
+  f is_partial_differentiable`2_in z implies
+  (r = diff(SVF2(f,z),y0) iff
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st r = L.1 & for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0))
+proof
+     set F1 = SVF2(f,z);
+     assume that
+A1:  z = <*x0,y0*> and
+A2:  f is_partial_differentiable`2_in z;
+     hereby assume AB: r = diff(F1,y0);
+AA:  f is_partial_differentiable_in z,2 by A2,Lem4;
+     F1 is_differentiable_in y0 by A1,AA,Lem2; then
+     consider N being Neighbourhood of y0 such that
+A4:  N c= dom F1 &
+     ex L,R st r=L.1 & for y st y in N holds F1.y-F1.y0 = L.(y-y0) + R.(y-y0)
+       by FDIFF_1:def 6,AB;
+     thus ex x0,y0 being Real st z = <*x0,y0*> &
+     ex N being Neighbourhood of y0 st N c= dom F1 &
+     ex L,R st r = L.1 & for y st y in N holds
+     SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A1,A4;
+   end;
+   given x1,y1 being Real such that
+C1:  z = <*x1,y1*> &
+   ex N being Neighbourhood of y1 st N c= dom F1 &
+   ex L,R st r = L.1 & for y st y in N holds
+   F1.y - F1.y1 = L.(y-y1) + R.(y-y1);
+D1:y1 = y0 by FINSEQ_1:98,C1,A1;
+   f is_partial_differentiable_in z,2 by A2,Lem4; then
+   F1 is_differentiable_in y0 by A1,Lem2;
+   hence thesis by FDIFF_1:def 6,D1,C1;
+end;
+
+theorem Def12:
+  z = <*x0,y0*> & f is_partial_differentiable`1_in z implies
+  (r = partdiff1(f,z) iff
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st r = L.1 & for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0))
+proof
+  assume AA:z = <*x0,y0*> & f is_partial_differentiable`1_in z;
+  hereby assume r = partdiff1(f,z); then
+  r = diff(SVF1(f,z),x0) by Th1,AA;
+  hence ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of x0 st N c= dom SVF1(f,z) &
+  ex L,R st r = L.1 & for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by def12,AA;
+  end;
+  given x1,y1 being Real such that
+C1: z = <*x1,y1*> &
+  ex N being Neighbourhood of x1 st N c= dom SVF1(f,z) &
+  ex L,R st r = L.1 & for x st x in N holds
+  SVF1(f,z).x - SVF1(f,z).x1 = L.(x-x1) + R.(x-x1);
+  r = diff(SVF1(f,z),x0) by C1,AA,def12;
+  hence thesis by Th1,AA;
+end;
+
+theorem Def13:
+  z = <*x0,y0*> & f is_partial_differentiable`2_in z implies
+  (r = partdiff2(f,z) iff
+  ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st r = L.1 & for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0))
+proof
+  assume AA:z = <*x0,y0*> & f is_partial_differentiable`2_in z;
+  hereby assume r = partdiff2(f,z); then
+  r = diff(SVF2(f,z),y0) by Th2,AA;
+  hence ex x0,y0 being Real st z = <*x0,y0*> &
+  ex N being Neighbourhood of y0 st N c= dom SVF2(f,z) &
+  ex L,R st r = L.1 & for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by def13,AA;
+  end;
+  given x1,y1 being Real such that
+C1: z = <*x1,y1*> &
+  ex N being Neighbourhood of y1 st N c= dom SVF2(f,z) &
+  ex L,R st r = L.1 & for y st y in N holds
+  SVF2(f,z).y - SVF2(f,z).y1 = L.(y-y1) + R.(y-y1);
+  r = diff(SVF2(f,z),y0) by C1,AA,def13;
+  hence thesis by Th2,AA;
+end;
+
+theorem
+  z = <*x0,y0*> & f is_partial_differentiable`1_in z implies
+  partdiff1(f,z) = diff(SVF1(f,z),x0)
+proof
+     set r = partdiff1(f,z);
+     assume that
+A1:  z = <*x0,y0*> and
+A2:  f is_partial_differentiable`1_in z;
+     consider x1,y1 being Real such that
+A3:  z = <*x1,y1*> &
+     ex N being Neighbourhood of x1 st N c= dom SVF1(f,z) &
+     ex L,R st r = L.1 & for x st x in N holds
+     SVF1(f,z).x - SVF1(f,z).x1 = L.(x-x1) + R.(x-x1) by A1,A2,Def12;
+     x0 = x1 & y0 = y1 by A1,A3,FINSEQ_1:98;
+     then consider N being Neighbourhood of x0 such that
+A4:  N c= dom SVF1(f,z) & ex L,R st r = L.1 & for x st x in N holds
+     SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A3;
+     consider L,R such that
+A5:  r = L.1 & for x st x in N holds
+     SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A4;
+     consider x2,y2 such that
+A6:  z = <*x2,y2*> & SVF1(f,z) is_differentiable_in x2 by A2,Def6;
+     consider N1 being Neighbourhood of x2 such that
+A7:  N1 c= dom SVF1(f,z) &
+     ex L,R st diff(SVF1(f,z),x2) = L.1 & for x st x in N1 holds
+     SVF1(f,z).x - SVF1(f,z).x2 = L.(x-x2) + R.(x-x2) by A6,FDIFF_1:def 6;
+     consider L1,R1 such that
+A8:  diff(SVF1(f,z),x2) = L1.1 & for x st x in N1 holds
+     SVF1(f,z).x - SVF1(f,z).x2 = L1.(x-x2) + R1.(x-x2) by A7;
+     consider r1 such that
+A9:  for p holds L.p = r1*p by FDIFF_1:def 4;
+     consider p1 such that
+A10: for p holds L1.p = p1*p by FDIFF_1:def 4;
+A11: r = r1*1 by A5,A9;
+A12: diff(SVF1(f,z),x2) = p1*1 by A8,A10;
+A13: x0 = x2 & y0 = y2 by A1,A6,FINSEQ_1:98;
+A14: now let x;
+       assume
+  A15: x in N & x in N1;
+       then SVF1(f,z).x - SVF1(f,z).x0 = L.(x-x0) + R.(x-x0) by A5;
+       then L.(x-x0) + R.(x-x0) = L1.(x-x0) + R1.(x-x0) by A8,A13,A15;
+       then r1*(x-x0) + R.(x-x0) = L1.(x-x0) + R1.(x-x0) by A9;
+       hence r*(x-x0) + R.(x-x0) = diff(SVF1(f,z),x2)*(x-x0) + R1.(x-x0)
+       by A10,A11,A12;
+     end;
+     consider N0 be Neighbourhood of x0 such that
+A16: N0 c= N & N0 c= N1 by A13,RCOMP_1:38;
+     consider g be real number such that
+A17: 0 < g & N0 = ].x0-g,x0+g.[ by RCOMP_1:def 7;
+     deffunc F(Element of NAT) = g/($1+2);
+     consider s1 such that
+A18: for n holds s1.n = F(n) from SEQ_1:sch 1;
+     now let n;
+       g/(n+2) <> 0 by A17,XREAL_1:141;
+       hence s1.n <> 0 by A18;
+     end; then
+A19: s1 is non-zero by SEQ_1:7;
+     s1 is convergent & lim s1 = 0 by A18,SEQ_4:46;
+     then reconsider h = s1 as convergent_to_0 Real_Sequence
+     by A19,FDIFF_1:def 1;
+A20: for n ex x st x in N & x in N1 & h.n = x-x0
+     proof
+       let n;
+  A21: g/(n+2) > 0 by A17,XREAL_1:141;
+       0+1 < n+1+1 by XREAL_1:8;
+       then g/(n+2) < g/1 by A17,XREAL_1:78;then
+  A22: x0+g/(n+2) < x0+g by XREAL_1:8;
+  AA:  x0+-g < x0+g/(n+2) by A21,XREAL_1:8,A17;
+  A23: x0+g/(n+2) in ].x0-g,x0+g.[ by A22,AA;
+       take x = x0+g/(n+2);
+       thus thesis by A16,A17,A18,A23;
+     end;
+A24: now let n;
+       ex x st x in N & x in N1 & h.n = x-x0 by A20;then
+  A25: r*(h.n) + R.(h.n) = diff(SVF1(f,z),x2)*(h.n) + R1.(h.n) by A14;
+       h is non-zero by FDIFF_1:def 1;then
+  A26: h.n <> 0 by SEQ_1:7;
+  A27: (r*(h.n))/(h.n) + (R.(h.n))/(h.n)
+       = (diff(SVF1(f,z),x2)*(h.n) + R1.(h.n))/(h.n) by A25,XCMPLX_1:63;
+  A28: (r*(h.n))/(h.n) = r*((h.n)/(h.n)) by XCMPLX_1:75
+       .= r*1 by A26,XCMPLX_1:60
+       .= r;
+       (diff(SVF1(f,z),x2)*(h.n))/(h.n)
+       = diff(SVF1(f,z),x2)*((h.n)/(h.n)) by XCMPLX_1:75
+       .= diff(SVF1(f,z),x2)*1 by A26,XCMPLX_1:60
+       .= diff(SVF1(f,z),x2);then
+  A29: r + (R.(h.n))/(h.n) = diff(SVF1(f,z),x2) + (R1.(h.n))/(h.n)
+       by A27,A28,XCMPLX_1:63;
+       R is total by FDIFF_1:def 3;
+       then dom R = REAL by PARTFUN1:def 4;then
+  A30: rng h c= dom R;
+       R1 is total by FDIFF_1:def 3;
+       then dom R1 = REAL by PARTFUN1:def 4;then
+  A31: rng h c= dom R1;
+  A32: (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
+       .= (R.(h.n))*(h".n) by VALUED_1:10
+       .= ((R*h).n)*(h".n) by A30,RFUNCT_2:21
+       .= ((h")(#)(R*h)).n by SEQ_1:12;
+       (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
+       .= (R1.(h.n))*(h".n) by VALUED_1:10
+       .= ((R1*h).n)*(h".n) by A31,RFUNCT_2:21
+       .= ((h")(#)(R1*h)).n by SEQ_1:12;
+       then r = diff(SVF1(f,z),x2) + (((h")(#)(R1*h)).n - ((h")(#)(R*h)).n)
+       by A29,A32;
+       hence r - diff(SVF1(f,z),x2) = (((h")(#)(R1*h))-((h")(#)(R*h))).n
+       by RFUNCT_2:6;
+     end; then
+A33: ((h")(#)(R1*h))-((h")(#)(R*h)) is constant by SEQM_3:def 6;
+     (((h")(#)(R1*h))-((h")(#)(R*h))).1 = r-diff(SVF1(f,z),x2) by A24;then
+A34: lim (((h")(#)(R1*h))-((h")(#)(R*h))) = r-diff(SVF1(f,z),x2)
+     by A33,SEQ_4:40;
+A35: (h")(#)(R*h) is convergent & lim ((h")(#)(R*h)) = 0 by FDIFF_1:def 3;
+     (h")(#)(R1*h) is convergent & lim ((h")(#)(R1*h)) = 0 by FDIFF_1:def 3;
+     then r-diff(SVF1(f,z),x2) = 0-0 by A34,A35,SEQ_2:26;
+     hence thesis by A1,A6,FINSEQ_1:98;
+end;
+
+theorem
+  z = <*x0,y0*> & f is_partial_differentiable`2_in z implies
+  partdiff2(f,z) = diff(SVF2(f,z),y0)
+proof
+     set r = partdiff2(f,z);
+     assume that
+A1:  z = <*x0,y0*> and
+A2:  f is_partial_differentiable`2_in z;
+     consider x1,y1 being Real such that
+A3:  z = <*x1,y1*> &
+     ex N being Neighbourhood of y1 st N c= dom SVF2(f,z) &
+     ex L,R st r = L.1 & for y st y in N holds
+     SVF2(f,z).y - SVF2(f,z).y1 = L.(y-y1) + R.(y-y1) by A1,A2,Def13;
+     x0 = x1 & y0 = y1 by A1,A3,FINSEQ_1:98;
+     then consider N being Neighbourhood of y0 such that
+A4:  N c= dom SVF2(f,z) & ex L,R st r = L.1 & for y st y in N holds
+     SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A3;
+     consider L,R such that
+A5:  r = L.1 & for y st y in N holds
+     SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A4;
+     consider x2,y2 such that
+A6:  z = <*x2,y2*> & SVF2(f,z) is_differentiable_in y2 by A2,Def7;
+     consider N1 being Neighbourhood of y2 such that
+A7:  N1 c= dom SVF2(f,z) &
+     ex L,R st diff(SVF2(f,z),y2) = L.1 & for y st y in N1 holds
+     SVF2(f,z).y - SVF2(f,z).y2 = L.(y-y2) + R.(y-y2) by A6,FDIFF_1:def 6;
+     consider L1,R1 such that
+A8:  diff(SVF2(f,z),y2) = L1.1 & for y st y in N1 holds
+     SVF2(f,z).y - SVF2(f,z).y2 = L1.(y-y2) + R1.(y-y2) by A7;
+     consider r1 such that
+A9:  for p holds L.p = r1*p by FDIFF_1:def 4;
+     consider p1 such that
+A10: for p holds L1.p = p1*p by FDIFF_1:def 4;
+A11: r = r1*1 by A5,A9;
+A12: diff(SVF2(f,z),y2) = p1*1 by A8,A10;
+A13: x0 = x2 & y0 = y2 by A1,A6,FINSEQ_1:98;
+A14: now let y;
+       assume
+  A15: y in N & y in N1;
+       then SVF2(f,z).y - SVF2(f,z).y0 = L.(y-y0) + R.(y-y0) by A5;
+       then L.(y-y0) + R.(y-y0) = L1.(y-y0) + R1.(y-y0) by A8,A13,A15;
+       then r1*(y-y0) + R.(y-y0) = L1.(y-y0) + R1.(y-y0) by A9;
+       hence r*(y-y0) + R.(y-y0) = diff(SVF2(f,z),y2)*(y-y0) + R1.(y-y0)
+       by A10,A11,A12;
+     end;
+     consider N0 be Neighbourhood of y0 such that
+A16: N0 c= N & N0 c= N1 by A13,RCOMP_1:38;
+     consider g be real number such that
+A17: 0 < g & N0 = ].y0-g,y0+g.[ by RCOMP_1:def 7;
+     deffunc F(Element of NAT) = g/($1+2);
+     consider s1 such that
+A18: for n holds s1.n = F(n) from SEQ_1:sch 1;
+     now let n;
+       g/(n+2) <> 0 by A17,XREAL_1:141;
+       hence s1.n <> 0 by A18;
+     end;
+     then
+A19: s1 is non-zero by SEQ_1:7;
+     s1 is convergent & lim s1 = 0 by A18,SEQ_4:46;
+     then reconsider h = s1 as convergent_to_0 Real_Sequence
+     by A19,FDIFF_1:def 1;
+A20: for n ex y st y in N & y in N1 & h.n = y-y0
+     proof
+       let n;
+  A21: g/(n+2) > 0 by A17,XREAL_1:141;
+       0+1 < n+1+1 by XREAL_1:8;
+       then g/(n+2) < g/1 by A17,XREAL_1:78;then
+  A22: y0+g/(n+2) < y0+g by XREAL_1:8;
+  AA:  y0+-g < y0+g/(n+2) by A21,XREAL_1:8,A17;
+  A23: y0+g/(n+2) in ].y0-g,y0+g.[ by A22,AA;
+       take y = y0+g/(n+2);
+       thus thesis by A16,A17,A18,A23;
+     end;
+A24: now let n;
+       ex y st y in N & y in N1 & h.n = y-y0 by A20;then
+  A25: r*(h.n) + R.(h.n) = diff(SVF2(f,z),y2)*(h.n) + R1.(h.n) by A14;
+       h is non-zero by FDIFF_1:def 1;then
+  A26: h.n <> 0 by SEQ_1:7;
+  A27: (r*(h.n))/(h.n) + (R.(h.n))/(h.n)
+       = (diff(SVF2(f,z),y2)*(h.n) + R1.(h.n))/(h.n) by A25,XCMPLX_1:63;
+  A28: (r*(h.n))/(h.n) = r*((h.n)/(h.n)) by XCMPLX_1:75
+       .= r*1 by A26,XCMPLX_1:60
+       .= r;
+       (diff(SVF2(f,z),y2)*(h.n))/(h.n)
+       = diff(SVF2(f,z),y2)*((h.n)/(h.n)) by XCMPLX_1:75
+       .= diff(SVF2(f,z),y2)*1 by A26,XCMPLX_1:60
+       .= diff(SVF2(f,z),y2);then
+  A29: r + (R.(h.n))/(h.n) = diff(SVF2(f,z),y2) + (R1.(h.n))/(h.n)
+       by A27,A28,XCMPLX_1:63;
+       R is total by FDIFF_1:def 3;
+       then dom R = REAL by PARTFUN1:def 4;then
+  A30: rng h c= dom R;
+       R1 is total by FDIFF_1:def 3;
+       then dom R1 = REAL by PARTFUN1:def 4;then
+  A31: rng h c= dom R1;
+  A32: (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
+       .= (R.(h.n))*(h".n) by VALUED_1:10
+       .= ((R*h).n)*(h".n) by A30,RFUNCT_2:21
+       .= ((h")(#)(R*h)).n by SEQ_1:12;
+       (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
+       .= (R1.(h.n))*(h".n) by VALUED_1:10
+       .= ((R1*h).n)*(h".n) by A31,RFUNCT_2:21
+       .= ((h")(#)(R1*h)).n by SEQ_1:12;
+       then r = diff(SVF2(f,z),y2) + (((h")(#)(R1*h)).n - ((h")(#)(R*h)).n)
+       by A29,A32;
+       hence r - diff(SVF2(f,z),y2) = (((h")(#)(R1*h))-((h")(#)(R*h))).n
+       by RFUNCT_2:6;
+     end;
+     then
+A33: ((h")(#)(R1*h))-((h")(#)(R*h)) is constant by SEQM_3:def 6;
+     (((h")(#)(R1*h))-((h")(#)(R*h))).1 = r-diff(SVF2(f,z),y2) by A24;then
+A34: lim (((h")(#)(R1*h))-((h")(#)(R*h))) = r-diff(SVF2(f,z),y2)
+     by A33,SEQ_4:40;
+A35: (h")(#)(R*h) is convergent & lim ((h")(#)(R*h)) = 0 by FDIFF_1:def 3;
+     (h")(#)(R1*h) is convergent & lim ((h")(#)(R1*h)) = 0 by FDIFF_1:def 3;
+     then r-diff(SVF2(f,z),y2) = 0-0 by A34,A35,SEQ_2:26;
+     hence partdiff2(f,z) = diff(SVF2(f,z),y0) by A1,A6,FINSEQ_1:98;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let Z be set;
+  pred f is_partial_differentiable`1_on Z means :Def16:
+  Z c= dom f & for z be Element of REAL 2 st z in Z holds
+  f|Z is_partial_differentiable`1_in z;
+
+  pred f is_partial_differentiable`2_on Z means :Def17:
+  Z c= dom f & for z be Element of REAL 2 st z in Z holds
+  f|Z is_partial_differentiable`2_in z;
+end;
+
+theorem
+  f is_partial_differentiable`1_on Z implies
+  Z c= dom f & for z st z in Z holds f is_partial_differentiable`1_in z
+proof
+    assume
+A1: f is_partial_differentiable`1_on Z;
+    hence Z c= dom f by Def16;
+    set g = f|Z;
+    let z0 be Element of REAL 2;
+    assume z0 in Z;then
+A2: g is_partial_differentiable`1_in z0 by A1,Def16;
+    consider x0,y0 being Real such that
+A3: z0 = <*x0,y0*> & ex N being Neighbourhood of x0
+    st N c= dom SVF1(g,z0) & ex L,R st for x st x in N holds
+    SVF1(g,z0).x - SVF1(g,z0).x0 = L.(x-x0) + R.(x-x0) by A2,Def10;
+    consider N being Neighbourhood of x0 such that
+A4: N c= dom SVF1(g,z0) & ex L,R st for x st x in N holds
+    SVF1(g,z0).x - SVF1(g,z0).x0 = L.(x-x0) + R.(x-x0) by A3;
+    for x be Real st x in dom SVF1(g,z0) holds x in dom SVF1(f,z0)
+    proof
+      let x;
+      assume
+  A6: x in dom SVF1(g,z0);
+  A7: x in dom reproj(1,z0) & reproj(1,z0).x in dom (f|Z)
+      by A6,FUNCT_1:21;
+      dom (f|Z) = dom f /\ Z by RELAT_1:90;then
+  A8: dom (f|Z) c= dom f by XBOOLE_1:17;
+      thus x in dom SVF1(f,z0) by A7,A8,FUNCT_1:21;
+    end;
+    then for x be set st x in dom SVF1(g,z0) holds x in dom SVF1(f,z0);
+    then dom SVF1(g,z0) c= dom SVF1(f,z0) by TARSKI:def 3;then
+A8: N c= dom SVF1(f,z0) by A4,XBOOLE_1:1;
+    consider L,R such that
+A9: for x st x in N holds SVF1(g,z0).x - SVF1(g,z0).x0 = L.(x-x0) + R.(x-x0)
+    by A4;
+    for x st x in N holds SVF1(f,z0).x - SVF1(f,z0).x0 =  L.(x-x0) + R.(x-x0)
+    proof
+      let x;
+      assume
+ A10: x in N;
+ A12: for x st x in dom (SVF1(g,z0)) holds SVF1(g,z0).x = SVF1(f,z0).x
+      proof
+        let x;
+        assume
+   A13: x in dom (SVF1(g,z0));
+   A14: x in dom reproj(1,z0) & reproj(1,z0).x in dom (f|Z)
+        by A13,FUNCT_1:21;
+        SVF1(g,z0).x = (f|Z).(reproj(1,z0).x) by A13,FUNCT_1:22
+        .= f.(reproj(1,z0).x) by A14,FUNCT_1:70
+        .= SVF1(f,z0).x by A14,FUNCT_1:23;
+        hence thesis;
+      end;
+ A16: x0 in N by RCOMP_1:37;
+      L.(x-x0) + R.(x-x0) = SVF1(g,z0).x - SVF1(g,z0).x0 by A9,A10
+      .= SVF1(f,z0).x - SVF1(g,z0).x0 by A4,A10,A12
+      .= SVF1(f,z0).x - SVF1(f,z0).x0 by A4,A12,A16;
+      hence thesis;
+    end;
+    hence f is_partial_differentiable`1_in z0 by A3,A8,Def10;
+end;
+
+theorem
+  f is_partial_differentiable`2_on Z implies
+  Z c= dom f & for z st z in Z holds f is_partial_differentiable`2_in z
+proof
+    assume
+A1: f is_partial_differentiable`2_on Z;
+    hence Z c= dom f by Def17;
+    set g = f|Z;
+    let z0 be Element of REAL 2;
+    assume z0 in Z;then
+A2: g is_partial_differentiable`2_in z0 by A1,Def17;
+    consider x0,y0 being Real such that
+A3: z0 = <*x0,y0*> & ex N being Neighbourhood of y0
+    st N c= dom SVF2(g,z0) & ex L,R st for y st y in N holds
+    SVF2(g,z0).y - SVF2(g,z0).y0 = L.(y-y0) + R.(y-y0) by A2,Def11;
+    consider N being Neighbourhood of y0 such that
+A4: N c= dom SVF2(g,z0) & ex L,R st for y st y in N holds
+    SVF2(g,z0).y - SVF2(g,z0).y0 = L.(y-y0) + R.(y-y0) by A3;
+    for y be Real st y in dom (SVF2(g,z0)) holds y in dom (SVF2(f,z0))
+    proof
+      let y;
+      assume
+  A6: y in dom (SVF2(g,z0));
+  A7: y in dom reproj(2,z0) & reproj(2,z0).y in dom (f|Z)
+      by A6,FUNCT_1:21;
+      dom (f|Z) = dom f /\ Z by RELAT_1:90;then
+      dom (f|Z) c= dom f by XBOOLE_1:17;
+      hence y in dom (SVF2(f,z0)) by A7,FUNCT_1:21;
+    end;
+    then for y be set st y in dom (SVF2(g,z0)) holds y in dom (SVF2(f,z0));
+    then dom (SVF2(g,z0)) c= dom (SVF2(f,z0)) by TARSKI:def 3;then
+A8: N c= dom (SVF2(f,z0)) by A4,XBOOLE_1:1;
+    consider L,R such that
+A9: for y st y in N holds SVF2(g,z0).y - SVF2(g,z0).y0 = L.(y-y0) + R.(y-y0)
+    by A4;
+    for y st y in N holds SVF2(f,z0).y - SVF2(f,z0).y0 =  L.(y-y0) + R.(y-y0)
+    proof
+      let y;
+      assume
+ A10: y in N;
+ A12: for y st y in dom SVF2(g,z0) holds SVF2(g,z0).y = SVF2(f,z0).y
+      proof
+        let y;
+        assume
+   A13: y in dom (SVF2(g,z0));
+   A14: y in dom reproj(2,z0) & reproj(2,z0).y in dom (f|Z)
+        by A13,FUNCT_1:21;
+        SVF2(g,z0).y = (f|Z).(reproj(2,z0).y) by A13,FUNCT_1:22
+        .= f.(reproj(2,z0).y) by A14,FUNCT_1:70
+        .= SVF2(f,z0).y by A14,FUNCT_1:23;
+        hence thesis;
+      end;
+ A16: y0 in N by RCOMP_1:37;
+      L.(y-y0) + R.(y-y0) = SVF2(g,z0).y - SVF2(g,z0).y0 by A9,A10
+      .= SVF2(f,z0).y - SVF2(g,z0).y0 by A4,A10,A12
+      .= SVF2(f,z0).y - SVF2(f,z0).y0 by A4,A12,A16;
+      hence thesis;
+    end;
+    hence f is_partial_differentiable`2_in z0 by A3,A8,Def11;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let Z be set;
+  assume A1: f is_partial_differentiable`1_on Z;
+  func f`partial1|Z -> PartFunc of REAL 2,REAL means
+  dom it = Z & for z be Element of REAL 2 st z in Z holds
+  it.z = partdiff1(f,z);
+existence
+proof
+    defpred P[Element of REAL 2] means $1 in Z;
+    deffunc F(Element of REAL 2) = partdiff1(f,$1);
+    consider F being PartFunc of REAL 2,REAL such that
+A2: (for z be Element of REAL 2 holds z in dom F iff P[z]) &
+    for z be Element of REAL 2 st z in dom F holds F.z = F(z)
+    from SEQ_1:sch 3;
+    take F;
+    for y be set st y in dom F holds y in Z by A2;then
+A3: dom F c= Z by TARSKI:def 3;
+    now
+      let y be set such that
+  A4: y in Z;
+      Z c= dom f by A1,Def16;
+      then Z is Subset of REAL 2 by XBOOLE_1:1;
+      hence y in dom F by A2,A4;
+    end;
+    then Z c= dom F by TARSKI:def 3;
+    hence dom F = Z by A3,XBOOLE_0:def 10;
+    let z be Element of REAL 2;
+    assume z in Z;
+    then z in dom F by A2;
+    hence F.z = partdiff1(f,z) by A2;
+end;
+uniqueness
+proof
+    let F,G be PartFunc of REAL 2,REAL;
+    assume that
+A6: dom F = Z & for z be Element of REAL 2 st z in Z holds
+    F.z = partdiff1(f,z) and
+A7: dom G = Z & for z be Element of REAL 2 st z in Z holds
+    G.z = partdiff1(f,z);
+    now
+      let z be Element of REAL 2;
+      assume
+  A8: z in dom F;
+      then F.z = partdiff1(f,z) by A6;
+      hence F.z = G.z by A6,A7,A8;
+    end;
+    hence thesis by A6,A7,PARTFUN1:34;
+end;
+end;
+
+definition
+  let f be PartFunc of REAL 2,REAL;
+  let Z be set;
+  assume A1: f is_partial_differentiable`2_on Z;
+  func f`partial2|Z -> PartFunc of REAL 2,REAL means
+  dom it = Z & for z be Element of REAL 2 st z in Z holds
+  it.z = partdiff2(f,z);
+existence
+proof
+    defpred P[Element of REAL 2] means $1 in Z;
+    deffunc F(Element of REAL 2) = partdiff2(f,$1);
+    consider F being PartFunc of REAL 2,REAL such that
+A2: (for z be Element of REAL 2 holds z in dom F iff P[z]) &
+    for z be Element of REAL 2 st z in dom F holds F.z = F(z)
+    from SEQ_1:sch 3;
+    take F;
+    for y be set st y in dom F holds y in Z by A2;then
+A3: dom F c= Z by TARSKI:def 3;
+    now
+      let y be set such that
+  A4: y in Z;
+      Z c= dom f by A1,Def17;
+      then Z is Subset of REAL 2 by XBOOLE_1:1;
+      hence y in dom F by A2,A4;
+    end;
+    then Z c= dom F by TARSKI:def 3;
+    hence dom F = Z by A3,XBOOLE_0:def 10;
+    let z be Element of REAL 2;
+    assume z in Z;
+    then z in dom F by A2;
+    hence F.z = partdiff2(f,z) by A2;
+end;
+uniqueness
+proof
+    let F,G be PartFunc of REAL 2,REAL;
+    assume that
+A6: dom F = Z & for z be Element of REAL 2 st z in Z holds
+    F.z = partdiff2(f,z) and
+A7: dom G = Z & for z be Element of REAL 2 st z in Z holds
+    G.z = partdiff2(f,z);
+    now
+      let z be Element of REAL 2;
+      assume
+  A8: z in dom F;
+      then F.z = partdiff2(f,z) by A6;
+      hence F.z = G.z by A6,A7,A8;
+    end;
+    hence thesis by A6,A7,PARTFUN1:34;
+end;
+end;
+
+begin :: Main Properties of Partial Differentiation of Real Binary Functions
+
+theorem
+  for z0 being Element of REAL 2
+  for N being Neighbourhood of proj(1,2).z0 st
+  f is_partial_differentiable`1_in z0 & N c= dom SVF1(f,z0) holds
+  for h be convergent_to_0 Real_Sequence,
+  c be constant Real_Sequence st rng c = {proj(1,2).z0} & rng (h+c) c= N
+  holds h"(#)(SVF1(f,z0)*(h+c) - SVF1(f,z0)*c) is convergent &
+  partdiff1(f,z0) = lim (h"(#)(SVF1(f,z0)*(h+c) - SVF1(f,z0)*c))
+proof
+     let z0 be Element of REAL 2;
+     let N be Neighbourhood of proj(1,2).z0;
+     assume
+A1:  f is_partial_differentiable`1_in z0 & N c= dom SVF1(f,z0);
+     let h be convergent_to_0 Real_Sequence,
+     c be constant Real_Sequence such that
+A2:  rng c = {proj(1,2).z0} & rng (h+c) c= N;
+     consider x0,y0 being Real such that
+A4:  z0 = <*x0,y0*> & ex N1 being Neighbourhood of x0
+     st N1 c= dom SVF1(f,z0) & ex L,R st for x st x in N1 holds
+     SVF1(f,z0).x - SVF1(f,z0).x0 = L.(x-x0) + R.(x-x0) by A1,Def10;
+     consider N1 be Neighbourhood of x0 such that
+A5:  N1 c= dom SVF1(f,z0) & ex L,R st for x st x in N1 holds
+     SVF1(f,z0).x - SVF1(f,z0).x0 = L.(x-x0) + R.(x-x0) by A4;
+     consider L,R such that
+A6:  for x st x in N1 holds
+     SVF1(f,z0).x - SVF1(f,z0).x0 = L.(x-x0) + R.(x-x0) by A5;
+A7:  proj(1,2).z0 = x0 by A4,Th1;
+     consider N2 be Neighbourhood of x0 such that
+A8:  N2 c= N & N2 c= N1 by A7,RCOMP_1:38;
+     consider g be real number such that
+A9:  0 < g & N2 = ].x0-g,x0+g.[ by RCOMP_1:def 7;
+A10: x0 in N2
+     proof
+  A11: x0 + 0 < x0 + g by A9,XREAL_1:10;
+       x0 - g < x0 - 0 by A9,XREAL_1:46;
+       hence thesis by A9,A11;
+     end;
+     ex n st rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2
+     proof
+  A12: c is convergent by SEQ_4:39;
+       x0 in rng c by A2,A7,TARSKI:def 1;then
+  A13: lim c = x0 by SEQ_4:40;
+  A14: h is convergent & lim h = 0 by FDIFF_1:def 1;then
+  A15: lim (h+c) = 0+x0 by A12,A13,SEQ_2:20
+       .= x0;
+       h + c is convergent by A12,A14,SEQ_2:19;
+       then consider n such that
+  A16: for m being Element of NAT st n <= m holds abs((h+c).m-x0) < g
+       by A9,A15,SEQ_2:def 7;
+       c^\n is subsequence of c by SEQM_3:47;then
+  A17: rng (c^\n) = {x0} by A2,A7,SEQM_3:55;
+       take n;
+       thus rng (c^\n) c= N2
+       proof
+         let y be set;
+         assume y in rng (c^\n);
+         hence y in N2 by A10,A17,TARSKI:def 1;
+       end;
+       let y be set;
+       assume y in rng ((h+c)^\n);
+       then consider m such that
+  A18: y = ((h+c)^\n).m by RFUNCT_2:9;
+       n + 0 <= n+m by XREAL_1:9;
+       then abs((h+c).(n+m)-x0)<g by A16;
+       then -g < (h+c).(m+n) - x0 & (h+c).(m+n) - x0 < g by SEQ_2:9;
+       then -g < ((h+c)^\n).m - x0 & ((h+c)^\n).m - x0 < g by SEQM_3:def 9;
+       then
+  AB:  x0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < x0 + g by XREAL_1:21,22;
+       thus y in N2 by A9,A18,AB;
+     end;
+     then consider n such that
+A19: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+A20: rng (c^\n) c= dom SVF1(f,z0)
+     proof
+       let y be set;
+       c^\n is subsequence of c by SEQM_3:47;then
+  A21: rng (c^\n) = rng c by SEQM_3:55;
+       assume y in rng (c^\n);
+       then y = x0 by A2,A7,A21,TARSKI:def 1;
+       then y in N by A8,A10;
+       hence thesis by A1;
+     end;
+A22: rng ((h+c)^\n) c= dom SVF1(f,z0)
+     proof
+       let y be set;
+       assume y in rng ((h+c)^\n);
+       then y in N2 by A19;
+       then y in N by A8;
+       hence y in dom SVF1(f,z0) by A1;
+     end;
+A23: rng c c= dom SVF1(f,z0)
+     proof
+       let y be set;
+       assume y in rng c;
+       then y = x0 by A2,A7,TARSKI:def 1;
+       then y in N by A8,A10;
+       hence thesis by A1;
+     end;
+A24: rng (h+c) c= dom SVF1(f,z0)
+     proof
+       let y be set;
+       assume y in rng (h+c);
+       then y in N by A2;
+       hence y in dom SVF1(f,z0) by A1;
+     end;
+A25: for x st x in N2 holds
+     SVF1(f,z0).x - SVF1(f,z0).x0 = L.(x-x0) + R.(x-x0) by A6,A8;
+A26: for k holds SVF1(f,z0).(((h+c)^\n).k) - SVF1(f,z0).((c^\n).k)
+     = L.((h^\n).k) + R.((h^\n).k)
+     proof
+       let k;
+       ((h+c)^\n).k in rng ((h+c)^\n) by RFUNCT_2:10;then
+  A27: ((h+c)^\n).k in N2 by A19;
+  A28: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:37
+      .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:11
+      .= (h^\n).k;
+  A29: (c^\n).k in rng (c^\n) by RFUNCT_2:10;
+       c^\n is subsequence of c by SEQM_3:47;
+       then rng (c^\n) = rng c by SEQM_3:55;
+       then (c^\n).k = x0 by A2,A7,A29,TARSKI:def 1;
+       hence thesis by A6,A8,A27,A28;
+     end;
+A30: L is total by FDIFF_1:def 4;
+A31: R is total by FDIFF_1:def 3;
+A32: SVF1(f,z0)*((h+c)^\n) - SVF1(f,z0)*(c^\n) = L*(h^\n) + R*(h^\n)
+     proof
+       now
+         let k;
+         thus (SVF1(f,z0)*((h+c)^\n) - SVF1(f,z0)*(c^\n)).k
+         = (SVF1(f,z0)*((h+c)^\n)).k - (SVF1(f,z0)*(c^\n)).k by RFUNCT_2:6
+        .= SVF1(f,z0).(((h+c)^\n).k) - (SVF1(f,z0)*(c^\n)).k
+           by A22,RFUNCT_2:21
+        .= SVF1(f,z0).(((h+c)^\n).k) - SVF1(f,z0).((c^\n).k)
+          by A20,RFUNCT_2:21
+        .= L.((h^\n).k) + R.((h^\n).k) by A26
+        .= (L*(h^\n)).k + R.((h^\n).k) by A30,RFUNCT_2:30
+        .= (L*(h^\n)).k + (R*(h^\n)).k by A31,RFUNCT_2:30
+        .= (L*(h^\n) + R*(h^\n)).k by SEQ_1:11;
+       end;
+       hence thesis by FUNCT_2:113;
+     end;
+A33: (L*(h^\n) + R*(h^\n))(#)(h^\n)" is convergent &
+     lim ((L*(h^\n) + R*(h^\n))(#)(h^\n)") = L.1
+     proof
+       deffunc F(Element of NAT) = L.1 + ((R*(h^\n))(#)(h^\n)").$1;
+       consider s1 such that
+  A34: for k holds s1.k = F(k) from SEQ_1:sch 1;
+       consider s such that
+  A35: for p1 holds L.p1 = s*p1 by FDIFF_1:def 4;
+  A36: L.1 = s*1 by A35
+       .= s;
+       now
+         let m;
+         h^\n is non-zero by FDIFF_1:def 1;then
+    A37: (h^\n).m <> 0 by SEQ_1:7;
+         thus ((L*(h^\n) + R*(h^\n))(#)(h^\n)").m
+         = ((L*(h^\n) + R*(h^\n)).m)*((h^\n)").m by SEQ_1:12
+         .= ((L*(h^\n)).m + (R*(h^\n)).m) * ((h^\n)").m by SEQ_1:11
+         .= ((L*(h^\n)).m)*((h^\n)").m + ((R*(h^\n)).m)*((h^\n)").m
+         .= ((L*(h^\n)).m)*((h^\n)").m + ((R*(h^\n))(#)(h^\n)").m
+         by SEQ_1:12
+         .= ((L*(h^\n)).m)*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m
+         by VALUED_1:10
+         .= (L.((h^\n).m))*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m
+         by A30,RFUNCT_2:30
+         .= (s*((h^\n).m))*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m by A35
+         .= s*(((h^\n).m)*((h^\n).m)") + ((R*(h^\n))(#)(h^\n)").m
+         .= s*1 + ((R*(h^\n))(#)(h^\n)").m by A37,XCMPLX_0:def 7
+         .= s1.m by A34,A36;
+       end;
+       then
+  A38: (L*(h^\n) + R*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:113;
+  A39: now
+         let r be real number such that
+   A40:  0 < r;
+         ((h^\n)")(#)(R*(h^\n)) is convergent &
+         lim (((h^\n)")(#)(R*(h^\n))) = 0 by FDIFF_1:def 3;
+         then consider m such that
+   A41:  for k st m <= k holds
+         abs((((h^\n)")(#)(R*(h^\n))).k-0) < r by A40,SEQ_2:def 7;
+         take n1 = m;
+         let k such that
+   A42:  n1 <= k;
+         abs(s1.k-L.1) = abs(L.1+((R*(h^\n))(#)(h^\n)").k-L.1 ) by A34
+         .= abs((((h^\n)")(#)(R*(h^\n))).k-0);
+         hence abs(s1.k-L.1) < r by A41,A42;
+       end;
+       hence (L*(h^\n)+R*(h^\n))(#)(h^\n)" is convergent by A38,SEQ_2:def 6;
+       hence thesis by A38,A39,SEQ_2:def 7;
+     end;
+A43: N2 c= dom SVF1(f,z0) by A1,A8,XBOOLE_1:1;
+A44: ((L*(h^\n)+R*(h^\n))(#)(h^\n)")
+     = ((((SVF1(f,z0)*(h+c))^\n)-SVF1(f,z0)*(c^\n))(#)(h^\n)")
+     by A24,A32,RFUNCT_2:22
+     .= ((((SVF1(f,z0)*(h+c))^\n)-((SVF1(f,z0)*c)^\n))(#)(h^\n)")
+     by A23,RFUNCT_2:22
+     .= ((((SVF1(f,z0)*(h+c))-(SVF1(f,z0)*c))^\n)(#)(h^\n)") by SEQM_3:39
+     .= ((((SVF1(f,z0)*(h+c))-(SVF1(f,z0)*c))^\n)(#)((h")^\n)) by SEQM_3:41
+     .= ((((SVF1(f,z0)*(h+c))-(SVF1(f,z0)*c))(#) h")^\n) by SEQM_3:42;then
+A45: L.1 = lim ((h")(#)((SVF1(f,z0)*(h+c))-(SVF1(f,z0)*c))) by A33,SEQ_4:36;
+     thus h"(#)(SVF1(f,z0)*(h+c)-SVF1(f,z0)*c) is convergent
+     by A33,A44,SEQ_4:35;
+     thus partdiff1(f,z0) = lim (h"(#)(SVF1(f,z0)*(h+c)-SVF1(f,z0)*c))
+     by A1,A4,A25,A43,A45,Def12;
+end;
+
+theorem
+  for z0 being Element of REAL 2
+  for N being Neighbourhood of proj(2,2).z0 st
+  f is_partial_differentiable`2_in z0 & N c= dom SVF2(f,z0) holds
+  for h be convergent_to_0 Real_Sequence,
+  c be constant Real_Sequence st rng c = {proj(2,2).z0} & rng (h+c) c= N
+  holds h"(#)(SVF2(f,z0)*(h+c) - SVF2(f,z0)*c) is convergent &
+  partdiff2(f,z0) = lim (h"(#)(SVF2(f,z0)*(h+c) - SVF2(f,z0)*c))
+proof
+     let z0 be Element of REAL 2;
+     let N be Neighbourhood of proj(2,2).z0;
+     assume
+A1:  f is_partial_differentiable`2_in z0 & N c= dom SVF2(f,z0);
+     let h be convergent_to_0 Real_Sequence,
+     c be constant Real_Sequence such that
+A2:  rng c = {proj(2,2).z0} & rng (h+c) c= N;
+     consider x0,y0 being Real such that
+A4:  z0 = <*x0,y0*> & ex N1 being Neighbourhood of y0
+     st N1 c= dom SVF2(f,z0) & ex L,R st for y st y in N1 holds
+     SVF2(f,z0).y - SVF2(f,z0).y0 = L.(y-y0) + R.(y-y0) by A1,Def11;
+     consider N1 be Neighbourhood of y0 such that
+A5:  N1 c= dom SVF2(f,z0) & ex L,R st for y st y in N1 holds
+     SVF2(f,z0).y - SVF2(f,z0).y0 = L.(y-y0) + R.(y-y0) by A4;
+     consider L,R such that
+A6:  for y st y in N1 holds
+     SVF2(f,z0).y - SVF2(f,z0).y0 = L.(y-y0) + R.(y-y0) by A5;
+A7:  proj(2,2).z0 = y0 by A4,Th2;
+     consider N2 be Neighbourhood of y0 such that
+A8:  N2 c= N & N2 c= N1 by A7,RCOMP_1:38;
+     consider g be real number such that
+A9:  0 < g & N2 = ].y0-g,y0+g.[ by RCOMP_1:def 7;
+A10: y0 in N2
+     proof
+  A11: y0 + 0 < y0 + g by A9,XREAL_1:10;
+  AA:  y0 - g < y0 - 0 by A9,XREAL_1:46;
+       thus thesis by A9,A11,AA;
+     end;
+     ex n st rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2
+     proof
+  A12: c is convergent by SEQ_4:39;
+       y0 in rng c by A2,A7,TARSKI:def 1;then
+  A13: lim c = y0 by SEQ_4:40;
+  A14: h is convergent & lim h = 0 by FDIFF_1:def 1;then
+  A15: lim (h+c) = 0+y0 by A12,A13,SEQ_2:20
+       .= y0;
+       h + c is convergent by A12,A14,SEQ_2:19;
+       then consider n such that
+  A16: for m being Element of NAT st n <= m holds abs((h+c).m-y0) < g
+       by A9,A15,SEQ_2:def 7;
+       c^\n is subsequence of c by SEQM_3:47;then
+  A17: rng (c^\n) = {y0} by A2,A7,SEQM_3:55;
+       take n;
+       thus rng (c^\n) c= N2
+       proof
+         let y be set;
+         assume y in rng (c^\n);
+         hence y in N2 by A10,A17,TARSKI:def 1;
+       end;
+       let y be set;
+       assume y in rng ((h+c)^\n);
+       then consider m such that
+  A18: y = ((h+c)^\n).m by RFUNCT_2:9;
+       n + 0 <= n+m by XREAL_1:9;
+       then abs((h+c).(n+m)-y0)<g by A16;
+       then -g < (h+c).(m+n) - y0 & (h+c).(m+n) - y0 < g by SEQ_2:9;
+       then -g < ((h+c)^\n).m - y0 & ((h+c)^\n).m - y0 < g by SEQM_3:def 9;
+       then
+  AB:  y0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < y0 + g by XREAL_1:21,22;
+       thus y in N2 by A9,A18,AB;
+     end;
+     then consider n such that
+A19: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+A20: rng (c^\n) c= dom SVF2(f,z0)
+     proof
+       let y be set;
+       c^\n is subsequence of c by SEQM_3:47;then
+  A21: rng (c^\n) = rng c by SEQM_3:55;
+       assume y in rng (c^\n);
+       then y = y0 by A2,A7,A21,TARSKI:def 1;
+       then y in N by A8,A10;
+       hence thesis by A1;
+     end;
+A22: rng ((h+c)^\n) c= dom SVF2(f,z0)
+     proof
+       let y be set;
+       assume y in rng ((h+c)^\n);
+       then y in N2 by A19;
+       then y in N by A8;
+       hence y in dom SVF2(f,z0) by A1;
+     end;
+A23: rng c c= dom SVF2(f,z0)
+     proof
+       let y be set;
+       assume y in rng c;
+       then y = y0 by A2,A7,TARSKI:def 1;
+       then y in N by A8,A10;
+       hence thesis by A1;
+     end;
+A24: rng (h+c) c= dom SVF2(f,z0)
+     proof
+       let y be set;
+       assume y in rng (h+c);
+       then y in N by A2;
+       hence y in dom SVF2(f,z0) by A1;
+     end;
+A25: for y st y in N2 holds
+     SVF2(f,z0).y - SVF2(f,z0).y0 = L.(y-y0) + R.(y-y0) by A6,A8;
+A26: for k holds SVF2(f,z0).(((h+c)^\n).k) - SVF2(f,z0).((c^\n).k)
+     = L.((h^\n).k) + R.((h^\n).k)
+     proof
+       let k;
+       ((h+c)^\n).k in rng ((h+c)^\n) by RFUNCT_2:10;then
+  A27: ((h+c)^\n).k in N2 by A19;
+  A28: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:37
+      .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:11
+      .= (h^\n).k;
+  A29: (c^\n).k in rng (c^\n) by RFUNCT_2:10;
+       c^\n is subsequence of c by SEQM_3:47;
+       then rng (c^\n) = rng c by SEQM_3:55;
+       then (c^\n).k = y0 by A2,A7,A29,TARSKI:def 1;
+       hence thesis by A6,A8,A27,A28;
+     end;
+A30: L is total by FDIFF_1:def 4;
+A31: R is total by FDIFF_1:def 3;
+A32: SVF2(f,z0)*((h+c)^\n) - SVF2(f,z0)*(c^\n) = L*(h^\n) + R*(h^\n)
+     proof
+       now
+         let k;
+         thus (SVF2(f,z0)*((h+c)^\n) - SVF2(f,z0)*(c^\n)).k
+         = (SVF2(f,z0)*((h+c)^\n)).k - (SVF2(f,z0)*(c^\n)).k by RFUNCT_2:6
+        .= SVF2(f,z0).(((h+c)^\n).k) - (SVF2(f,z0)*(c^\n)).k
+           by A22,RFUNCT_2:21
+        .= SVF2(f,z0).(((h+c)^\n).k) - SVF2(f,z0).((c^\n).k)
+           by A20,RFUNCT_2:21
+        .= L.((h^\n).k) + R.((h^\n).k) by A26
+        .= (L*(h^\n)).k + R.((h^\n).k) by A30,RFUNCT_2:30
+        .= (L*(h^\n)).k + (R*(h^\n)).k by A31,RFUNCT_2:30
+        .= (L*(h^\n) + R*(h^\n)).k by SEQ_1:11;
+       end;
+       hence thesis by FUNCT_2:113;
+     end;
+A33: (L*(h^\n) + R*(h^\n))(#)(h^\n)" is convergent &
+     lim ((L*(h^\n) + R*(h^\n))(#)(h^\n)") = L.1
+     proof
+       deffunc F(Element of NAT) = L.1 + ((R*(h^\n))(#)(h^\n)").$1;
+       consider s1 such that
+  A34: for k holds s1.k = F(k) from SEQ_1:sch 1;
+       consider s such that
+  A35: for p1 holds L.p1 = s*p1 by FDIFF_1:def 4;
+  A36: L.1 = s*1 by A35
+       .= s;
+       now
+         let m;
+         h^\n is non-zero by FDIFF_1:def 1;then
+    A37: (h^\n).m <> 0 by SEQ_1:7;
+         thus ((L*(h^\n) + R*(h^\n))(#)(h^\n)").m
+         = ((L*(h^\n) + R*(h^\n)).m)*((h^\n)").m by SEQ_1:12
+         .= ((L*(h^\n)).m + (R*(h^\n)).m) * ((h^\n)").m by SEQ_1:11
+         .= ((L*(h^\n)).m)*((h^\n)").m + ((R*(h^\n)).m)*((h^\n)").m
+         .= ((L*(h^\n)).m)*((h^\n)").m + ((R*(h^\n))(#)(h^\n)").m
+         by SEQ_1:12
+         .= ((L*(h^\n)).m)*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m
+         by VALUED_1:10
+         .= (L.((h^\n).m))*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m
+         by A30,RFUNCT_2:30
+         .= (s*((h^\n).m))*((h^\n).m)" + ((R*(h^\n))(#)(h^\n)").m by A35
+         .= s*(((h^\n).m)*((h^\n).m)") + ((R*(h^\n))(#)(h^\n)").m
+         .= s*1 + ((R*(h^\n))(#)(h^\n)").m by A37,XCMPLX_0:def 7
+         .= s1.m by A34,A36;
+       end;
+       then
+  A38: (L*(h^\n) + R*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:113;
+  A39: now
+         let r be real number such that
+   A40:  0 < r;
+         ((h^\n)")(#)(R*(h^\n)) is convergent &
+         lim (((h^\n)")(#)(R*(h^\n))) = 0 by FDIFF_1:def 3;
+         then consider m such that
+   A41:  for k st m <= k holds
+         abs((((h^\n)")(#)(R*(h^\n))).k-0) < r by A40,SEQ_2:def 7;
+         take n1 = m;
+         let k such that
+   A42:  n1 <= k;
+         abs(s1.k-L.1) = abs(L.1+((R*(h^\n))(#)(h^\n)").k-L.1 ) by A34
+         .= abs((((h^\n)")(#)(R*(h^\n))).k-0);
+         hence abs(s1.k-L.1) < r by A41,A42;
+       end;
+       hence (L*(h^\n)+R*(h^\n))(#)(h^\n)" is convergent by A38,SEQ_2:def 6;
+       hence thesis by A38,A39,SEQ_2:def 7;
+     end;
+A43: N2 c= dom SVF2(f,z0) by A1,A8,XBOOLE_1:1;
+A44: ((L*(h^\n)+R*(h^\n))(#)(h^\n)")
+     = ((((SVF2(f,z0)*(h+c))^\n)-SVF2(f,z0)*(c^\n))(#)(h^\n)")
+     by A24,A32,RFUNCT_2:22
+     .= ((((SVF2(f,z0)*(h+c))^\n)-((SVF2(f,z0)*c)^\n))(#)(h^\n)")
+     by A23,RFUNCT_2:22
+     .= ((((SVF2(f,z0)*(h+c))-(SVF2(f,z0)*c))^\n)(#)(h^\n)") by SEQM_3:39
+     .= ((((SVF2(f,z0)*(h+c))-(SVF2(f,z0)*c))^\n)(#)((h")^\n)) by SEQM_3:41
+     .= ((((SVF2(f,z0)*(h+c))-(SVF2(f,z0)*c))(#) h")^\n) by SEQM_3:42;then
+A45: L.1 = lim ((h")(#)((SVF2(f,z0)*(h+c))-(SVF2(f,z0)*c))) by A33,SEQ_4:36;
+     thus h"(#)(SVF2(f,z0)*(h+c)-SVF2(f,z0)*c) is convergent
+     by A33,A44,SEQ_4:35;
+     thus partdiff2(f,z0) = lim (h"(#)(SVF2(f,z0)*(h+c)-SVF2(f,z0)*c))
+     by A1,A4,A25,A43,A45,Def13;
+end;
+
+theorem
+  f1 is_partial_differentiable`1_in z0 &
+  f2 is_partial_differentiable`1_in z0 implies
+  f1+f2 is_partial_differentiable`1_in z0 &
+  partdiff1(f1+f2,z0) = partdiff1(f1,z0) + partdiff1(f2,z0)
+proof
+     assume that
+A1:  f1 is_partial_differentiable`1_in z0 and
+A2:  f2 is_partial_differentiable`1_in z0;
+     f1 is_partial_differentiable_in z0,1 &
+     f2 is_partial_differentiable_in z0,1 by Lem3,A1,A2; then
+     f1+f2 is_partial_differentiable_in z0,1 &
+     partdiff(f1+f2,z0,1)=partdiff(f1,z0,1)+partdiff(f2,z0,1) by PDIFF_1:29;
+     hence thesis by Lem3;
+end;
+
+theorem
+  f1 is_partial_differentiable`2_in z0 &
+  f2 is_partial_differentiable`2_in z0 implies
+  f1+f2 is_partial_differentiable`2_in z0 &
+  partdiff2(f1+f2,z0) = partdiff2(f1,z0) + partdiff2(f2,z0)
+proof
+     assume that
+A1:  f1 is_partial_differentiable`2_in z0 and
+A2:  f2 is_partial_differentiable`2_in z0;
+     f1 is_partial_differentiable_in z0,2 &
+     f2 is_partial_differentiable_in z0,2 by Lem4,A1,A2; then
+     f1+f2 is_partial_differentiable_in z0,2 &
+     partdiff(f1+f2,z0,2)=partdiff(f1,z0,2)+partdiff(f2,z0,2) by PDIFF_1:29;
+     hence thesis by Lem4;
+end;
+
+theorem
+  f1 is_partial_differentiable`1_in z0 &
+  f2 is_partial_differentiable`1_in z0 implies
+  f1-f2 is_partial_differentiable`1_in z0 &
+  partdiff1(f1-f2,z0) = partdiff1(f1,z0) - partdiff1(f2,z0)
+proof
+     assume that
+A1:  f1 is_partial_differentiable`1_in z0 and
+A2:  f2 is_partial_differentiable`1_in z0;
+     f1 is_partial_differentiable_in z0,1 &
+     f2 is_partial_differentiable_in z0,1 by Lem3,A1,A2; then
+     f1-f2 is_partial_differentiable_in z0,1 &
+     partdiff(f1-f2,z0,1)=partdiff(f1,z0,1)-partdiff(f2,z0,1) by PDIFF_1:31;
+     hence thesis by Lem3;
+end;
+
+theorem
+  f1 is_partial_differentiable`2_in z0 &
+  f2 is_partial_differentiable`2_in z0 implies
+  f1-f2 is_partial_differentiable`2_in z0 &
+  partdiff2(f1-f2,z0) = partdiff2(f1,z0) - partdiff2(f2,z0)
+proof
+     assume that
+A1:  f1 is_partial_differentiable`2_in z0 and
+A2:  f2 is_partial_differentiable`2_in z0;
+     f1 is_partial_differentiable_in z0,2 &
+     f2 is_partial_differentiable_in z0,2 by Lem4,A1,A2; then
+     f1-f2 is_partial_differentiable_in z0,2 &
+     partdiff(f1-f2,z0,2)=partdiff(f1,z0,2)-partdiff(f2,z0,2) by PDIFF_1:31;
+     hence thesis by Lem4;
+end;
+
+theorem
+  f is_partial_differentiable`1_in z0 implies
+  r(#)f is_partial_differentiable`1_in z0 &
+  partdiff1((r(#)f),z0) = r*partdiff1(f,z0)
+proof
+    assume
+A1: f is_partial_differentiable`1_in z0; then
+    f is_partial_differentiable_in z0,1 by Lem3; then
+    r(#)f is_partial_differentiable_in z0,1 &
+    partdiff(r(#)f,z0,1) = r*partdiff(f,z0,1) by PDIFF_1:33;
+    hence thesis by Lem3;
+end;
+
+theorem
+  f is_partial_differentiable`2_in z0 implies
+  r(#)f is_partial_differentiable`2_in z0 &
+  partdiff2((r(#)f),z0) = r*partdiff2(f,z0)
+proof
+    assume
+A1: f is_partial_differentiable`2_in z0; then
+    f is_partial_differentiable_in z0,2 by Lem4; then
+    r(#)f is_partial_differentiable_in z0,2 &
+    partdiff(r(#)f,z0,2) = r*partdiff(f,z0,2) by PDIFF_1:33;
+    hence thesis by Lem4;
+end;
+
+theorem
+  f1 is_partial_differentiable`1_in z0 &
+  f2 is_partial_differentiable`1_in z0 implies
+  f1(#)f2 is_partial_differentiable`1_in z0
+proof
+     assume that
+A1:  f1 is_partial_differentiable`1_in z0 and
+A2:  f2 is_partial_differentiable`1_in z0;
+     consider x0,y0 being Real such that
+A3:  z0 = <*x0,y0*> & ex N being Neighbourhood of x0
+     st N c= dom SVF1(f1,z0) & ex L,R st for x st x in N holds
+     SVF1(f1,z0).x - SVF1(f1,z0).x0 = L.(x-x0) + R.(x-x0) by A1,Def10;
+     consider N1 be Neighbourhood of x0 such that
+A4:  N1 c= dom SVF1(f1,z0) & ex L,R st for x st x in N1 holds
+     SVF1(f1,z0).x - SVF1(f1,z0).x0 = L.(x-x0) + R.(x-x0) by A3;
+     consider L1,R1 such that
+A5:  for x st x in N1 holds
+     SVF1(f1,z0).x - SVF1(f1,z0).x0 = L1.(x-x0) + R1.(x-x0) by A4;
+     consider x1,y1 being Real such that
+A6:  z0 = <*x1,y1*> & ex N being Neighbourhood of x1
+     st N c= dom SVF1(f2,z0) & ex L,R st for x st x in N holds
+     SVF1(f2,z0).x - SVF1(f2,z0).x1 = L.(x-x1) + R.(x-x1) by A2,Def10;
+A7:  x0 = x1 & y0 = y1 by A3,A6,FINSEQ_1:98;
+     consider N2 be Neighbourhood of x0 such that
+A8:  N2 c= dom SVF1(f2,z0) & ex L,R st for x st x in N2 holds
+     SVF1(f2,z0).x - SVF1(f2,z0).x0 = L.(x-x0) + R.(x-x0) by A6,A7;
+     consider L2,R2 such that
+A9:  for x st x in N2 holds
+     SVF1(f2,z0).x - SVF1(f2,z0).x0 = L2.(x-x0) + R2.(x-x0) by A8;
+     consider N be Neighbourhood of x0 such that
+A10: N c= N1 & N c= N2 by RCOMP_1:38;
+     reconsider L11=(SVF1(f2,z0).x0)(#)L1, L12=(SVF1(f1,z0).x0)(#)L2
+       as LINEAR by FDIFF_1:7;
+A11: L11 is total & L12 is total & L1 is total & L2 is total
+     by FDIFF_1:def 4;
+     reconsider L=L11+L12 as LINEAR by FDIFF_1:6;
+     reconsider R11=(SVF1(f2,z0).x0)(#)R1 as REST by FDIFF_1:9;
+     reconsider R12=(SVF1(f1,z0).x0)(#)R2 as REST by FDIFF_1:9;
+     reconsider R13=R11+R12 as REST by FDIFF_1:8;
+     reconsider R14=L1(#)L2 as REST by FDIFF_1:10;
+     reconsider R15=R13+R14 as REST by FDIFF_1:8;
+     reconsider R16=R1(#)L2, R18=R2(#)L1 as REST by FDIFF_1:11;
+     reconsider R17=R1(#)R2 as REST by FDIFF_1:8;
+     reconsider R19=R16+R17 as REST by FDIFF_1:8;
+     reconsider R20=R19+R18 as REST by FDIFF_1:8;
+     reconsider R=R15+R20 as REST by FDIFF_1:8;
+A12: R1 is total & R2 is total & R11 is total & R12 is total &
+     R13 is total & R14 is total & R15 is total & R16 is total &
+     R17 is total & R18 is total & R19 is total & R20 is total
+     by FDIFF_1:def 3;
+A13: N c= dom SVF1(f1,z0) by A4,A10,XBOOLE_1:1;
+A14: N c= dom SVF1(f2,z0) by A8,A10,XBOOLE_1:1;
+ AB: for y being Real st y in N holds y in dom SVF1(f1(#)f2,z0)
+     proof
+       let y;
+       assume
+  A15: y in N;
+  A16: y in dom reproj(1,z0) & reproj(1,z0).y in dom f1
+       by A13,A15,FUNCT_1:21;
+       y in dom reproj(1,z0) & reproj(1,z0).y in dom f2
+       by A14,A15,FUNCT_1:21;
+       then y in dom reproj(1,z0) & reproj(1,z0).y in dom f1 /\ dom f2
+       by A16,XBOOLE_0:def 3;then
+   AA: y in dom reproj(1,z0) & reproj(1,z0).y in dom (f1(#)f2)
+       by VALUED_1:def 4;
+       thus y in dom SVF1(f1(#)f2,z0) by AA,FUNCT_1:21;
+     end;
+     then for y be set st y in N holds y in dom SVF1(f1(#)f2,z0);then
+A17: N c= dom SVF1(f1(#)f2,z0) by TARSKI:def 3;
+A18: now
+       let x;
+       assume
+  A19: x in N;then
+  A20: SVF1(f1,z0).x - SVF1(f1,z0).x0 + SVF1(f1,z0).x0
+       = L1.(x-x0) + R1.(x-x0) + SVF1(f1,z0).x0 by A5,A10;
+       x in dom ((f1(#)f2)*reproj(1,z0)) by AB,A19;then
+  A21: x in dom reproj(1,z0) & reproj(1,z0).x in dom (f1(#)f2)
+       by FUNCT_1:21;
+       then reproj(1,z0).x in dom f1 /\ dom f2 by VALUED_1:def 4;
+       then reproj(1,z0).x in dom f1 & reproj(1,z0).x in dom f2
+       by XBOOLE_0:def 3;then
+  A22: x in dom (f1*reproj(1,z0)) & x in dom (f2*reproj(1,z0))
+       by A21,FUNCT_1:21;
+  A23: x0 in N by RCOMP_1:37;
+       x0 in dom ((f1(#)f2)*reproj(1,z0)) by AB,RCOMP_1:37;then
+  A24: x0 in dom reproj(1,z0) & reproj(1,z0).x0 in dom (f1(#)f2)
+       by FUNCT_1:21;
+       then reproj(1,z0).x0 in dom f1 /\ dom f2 by VALUED_1:def 4;
+       then reproj(1,z0).x0 in dom f1 & reproj(1,z0).x0 in dom f2
+       by XBOOLE_0:def 3;then
+  A25: x0 in dom (f1*reproj(1,z0)) & x0 in dom (f2*reproj(1,z0))
+       by A24,FUNCT_1:21;
+       thus SVF1(f1(#)f2,z0).x - SVF1(f1(#)f2,z0).x0
+       = (f1(#)f2).(reproj(1,z0).x) - SVF1(f1(#)f2,z0).x0
+         by A17,A19,FUNCT_1:22
+      .= (f1.(reproj(1,z0).x))*(f2.(reproj(1,z0).x)) - SVF1(f1(#)f2,z0).x0
+         by VALUED_1:5
+      .= (SVF1(f1,z0).x)*(f2.(reproj(1,z0).x)) - SVF1(f1(#)f2,z0).x0
+         by A22,FUNCT_1:22
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x) - ((f1(#)f2)*reproj(1,z0)).x0
+         by A22,FUNCT_1:22
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x) - (f1(#)f2).(reproj(1,z0).x0)
+         by A17,A23,FUNCT_1:22
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x) -
+         (f1.(reproj(1,z0).x0))*(f2.(reproj(1,z0).x0)) by VALUED_1:5
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x)
+         - (SVF1(f1,z0).x0)*(f2.(reproj(1,z0).x0)) by A25,FUNCT_1:22
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x)+-(SVF1(f1,z0).x)*(SVF1(f2,z0).x0)+
+         (SVF1(f1,z0).x)*(SVF1(f2,z0).x0)-(SVF1(f1,z0).x0)*(SVF1(f2,z0).x0)
+         by A25,FUNCT_1:22
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x-SVF1(f2,z0).x0)+
+         (SVF1(f1,z0).x-SVF1(f1,z0).x0)*(SVF1(f2,z0).x0)
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x-SVF1(f2,z0).x0)+
+         (L1.(x-x0)+R1.(x-x0))*(SVF1(f2,z0).x0) by A5,A10,A19
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x-SVF1(f2,z0).x0)+
+         ((SVF1(f2,z0).x0)*L1.(x-x0)+(SVF1(f2,z0).x0)*R1.(x-x0))
+      .= (SVF1(f1,z0).x)*(SVF1(f2,z0).x-SVF1(f2,z0).x0)+
+         (L11.(x-x0)+(SVF1(f2,z0).x0)*R1.(x-x0)) by A11,RFUNCT_1:73
+      .= (L1.(x-x0)+R1.(x-x0)+SVF1(f1,z0).x0)*(SVF1(f2,z0).x-SVF1(f2,z0).x0)+
+         (L11.(x-x0)+R11.(x-x0)) by A12,A20,RFUNCT_1:73
+      .= (L1.(x-x0)+R1.(x-x0)+SVF1(f1,z0).x0)*(L2.(x-x0)+R2.(x-x0))+
+         (L11.(x-x0)+R11.(x-x0)) by A9,A10,A19
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         ((SVF1(f1,z0).x0)*L2.(x-x0)+(SVF1(f1,z0).x0)*R2.(x-x0))+
+         (L11.(x-x0)+R11.(x-x0))
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         (L12.(x-x0)+(SVF1(f1,z0).x0)*R2.(x-x0))+(L11.(x-x0)+R11.(x-x0))
+         by A11,RFUNCT_1:73
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         (L12.(x-x0)+R12.(x-x0))+(L11.(x-x0)+R11.(x-x0)) by A12,RFUNCT_1:73
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         (L12.(x-x0)+(L11.(x-x0)+(R11.(x-x0)+R12.(x-x0))))
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         (L12.(x-x0)+(L11.(x-x0)+R13.(x-x0))) by A12,RFUNCT_1:72
+      .= (L1.(x-x0)+R1.(x-x0))*(L2.(x-x0)+R2.(x-x0))+
+         (L11.(x-x0)+L12.(x-x0)+R13.(x-x0))
+      .= (L1.(x-x0)*L2.(x-x0)+L1.(x-x0)*R2.(x-x0))+
+         R1.(x-x0)*(L2.(x-x0)+R2.(x-x0))+(L.(x-x0)+R13.(x-x0))
+         by A11,RFUNCT_1:72
+      .= R14.(x-x0)+R2.(x-x0)*L1.(x-x0)+R1.(x-x0)*(L2.(x-x0)+R2.(x-x0))+
+         (L.(x-x0)+R13.(x-x0)) by A11,RFUNCT_1:72
+      .= R14.(x-x0)+R18.(x-x0)+(R1.(x-x0)*L2.(x-x0)+R1.(x-x0)*R2.(x-x0))+
+         (L.(x-x0)+R13.(x-x0)) by A11,A12,RFUNCT_1:72
+      .= R14.(x-x0)+R18.(x-x0)+(R16.(x-x0)+R1.(x-x0)*R2.(x-x0))+
+         (L.(x-x0)+R13.(x-x0)) by A11,A12,RFUNCT_1:72
+      .= R14.(x-x0)+R18.(x-x0)+(R16.(x-x0)+R17.(x-x0))+(L.(x-x0)+R13.(x-x0))
+         by A12,RFUNCT_1:72
+      .= R14.(x-x0)+R18.(x-x0)+R19.(x-x0)+(L.(x-x0)+R13.(x-x0))
+         by A12,RFUNCT_1:72
+      .= R14.(x-x0)+(R19.(x-x0)+R18.(x-x0))+(L.(x-x0)+R13.(x-x0))
+      .= L.(x-x0)+R13.(x-x0)+(R14.(x-x0)+R20.(x-x0)) by A12,RFUNCT_1:72
+      .= L.(x-x0)+(R13.(x-x0)+R14.(x-x0)+R20.(x-x0))
+      .= L.(x-x0)+(R15.(x-x0)+R20.(x-x0)) by A12,RFUNCT_1:72
+      .= L.(x-x0)+R.(x-x0) by A12,RFUNCT_1:72;
+     end;
+     thus f1(#)f2 is_partial_differentiable`1_in z0 by A3,A17,A18,Def10;
+end;
+
+theorem
+  f1 is_partial_differentiable`2_in z0 &
+  f2 is_partial_differentiable`2_in z0 implies
+  f1(#)f2 is_partial_differentiable`2_in z0
+proof
+     assume that
+A1:  f1 is_partial_differentiable`2_in z0 and
+A2:  f2 is_partial_differentiable`2_in z0;
+     consider x0,y0 being Real such that
+A3:  z0 = <*x0,y0*> & ex N being Neighbourhood of y0
+     st N c= dom SVF2(f1,z0) & ex L,R st for y st y in N holds
+     SVF2(f1,z0).y - SVF2(f1,z0).y0 = L.(y-y0) + R.(y-y0) by A1,Def11;
+     consider N1 be Neighbourhood of y0 such that
+A4:  N1 c= dom SVF2(f1,z0) & ex L,R st for y st y in N1 holds
+     SVF2(f1,z0).y - SVF2(f1,z0).y0 = L.(y-y0) + R.(y-y0) by A3;
+     consider L1,R1 such that
+A5:  for y st y in N1 holds
+     SVF2(f1,z0).y - SVF2(f1,z0).y0 = L1.(y-y0) + R1.(y-y0) by A4;
+     consider x1,y1 being Real such that
+A6:  z0 = <*x1,y1*> & ex N being Neighbourhood of y1
+     st N c= dom SVF2(f2,z0) & ex L,R st for y st y in N holds
+     SVF2(f2,z0).y - SVF2(f2,z0).y1 = L.(y-y1) + R.(y-y1) by A2,Def11;
+A7:  x0 = x1 & y0 = y1 by A3,A6,FINSEQ_1:98;
+     consider N2 be Neighbourhood of y0 such that
+A8:  N2 c= dom SVF2(f2,z0) & ex L,R st for y st y in N2 holds
+     SVF2(f2,z0).y - SVF2(f2,z0).y0 = L.(y-y0) + R.(y-y0) by A6,A7;
+     consider L2,R2 such that
+A9:  for y st y in N2 holds
+     SVF2(f2,z0).y - SVF2(f2,z0).y0 = L2.(y-y0) + R2.(y-y0) by A8;
+     consider N be Neighbourhood of y0 such that
+A10: N c= N1 & N c= N2 by RCOMP_1:38;
+     reconsider L11=(SVF2(f2,z0).y0)(#)L1 as LINEAR by FDIFF_1:7;
+     reconsider L12=(SVF2(f1,z0).y0)(#)L2 as LINEAR by FDIFF_1:7;
+A11: L11 is total & L12 is total & L1 is total & L2 is total
+       by FDIFF_1:def 4;
+     reconsider L=L11+L12 as LINEAR by FDIFF_1:6;
+     reconsider R11=(SVF2(f2,z0).y0)(#)R1, R12=(SVF2(f1,z0).y0)(#)R2
+       as REST by FDIFF_1:9;
+     reconsider R13=R11+R12 as REST by FDIFF_1:8;
+     reconsider R14=L1(#)L2 as REST by FDIFF_1:10;
+     reconsider R15=R13+R14, R17=R1(#)R2 as REST by FDIFF_1:8;
+     reconsider R16=R1(#)L2, R18=R2(#)L1 as REST by FDIFF_1:11;
+     reconsider R19=R16+R17 as REST by FDIFF_1:8;
+     reconsider R20=R19+R18 as REST by FDIFF_1:8;
+     reconsider R=R15+R20 as REST by FDIFF_1:8;
+A12: R1 is total & R2 is total & R11 is total & R12 is total &
+     R13 is total & R14 is total & R15 is total & R16 is total &
+     R17 is total & R18 is total & R19 is total & R20 is total
+     by FDIFF_1:def 3;
+A13: N c= dom SVF2(f1,z0) by A4,A10,XBOOLE_1:1;
+A14: N c= dom SVF2(f2,z0) by A8,A10,XBOOLE_1:1;
+ AB: for y being Real st y in N holds y in dom SVF2(f1(#)f2,z0)
+     proof
+       let y;
+       assume
+  A15: y in N;
+  A16: y in dom reproj(2,z0) & reproj(2,z0).y in dom f1
+       by A13,A15,FUNCT_1:21;
+       y in dom reproj(2,z0) & reproj(2,z0).y in dom f2
+       by A14,A15,FUNCT_1:21;
+       then y in dom reproj(2,z0) & reproj(2,z0).y in dom f1 /\ dom f2
+       by A16,XBOOLE_0:def 3;then
+   AA: y in dom reproj(2,z0) & reproj(2,z0).y in dom (f1(#)f2)
+       by VALUED_1:def 4;
+       thus y in dom SVF2(f1(#)f2,z0) by AA,FUNCT_1:21;
+     end;
+     then for y be set st y in N holds y in dom SVF2(f1(#)f2,z0);then
+A17: N c= dom SVF2(f1(#)f2,z0) by TARSKI:def 3;
+A18: now
+       let y;
+       assume
+  A19: y in N;then
+  A20: SVF2(f1,z0).y - SVF2(f1,z0).y0 + SVF2(f1,z0).y0
+       = L1.(y-y0) + R1.(y-y0) + SVF2(f1,z0).y0 by A5,A10;
+       y in dom ((f1(#)f2)*reproj(2,z0)) by AB,A19;then
+  A21: y in dom reproj(2,z0) & reproj(2,z0).y in dom (f1(#)f2)
+       by FUNCT_1:21;
+       then reproj(2,z0).y in dom f1 /\ dom f2 by VALUED_1:def 4;
+       then reproj(2,z0).y in dom f1 & reproj(2,z0).y in dom f2
+       by XBOOLE_0:def 3;then
+  A22: y in dom (f1*reproj(2,z0)) & y in dom (f2*reproj(2,z0))
+       by A21,FUNCT_1:21;
+  A23: y0 in N by RCOMP_1:37;
+       y0 in dom ((f1(#)f2)*reproj(2,z0)) by AB,RCOMP_1:37;then
+  A24: y0 in dom reproj(2,z0) & reproj(2,z0).y0 in dom (f1(#)f2)
+       by FUNCT_1:21;
+       then reproj(2,z0).y0 in dom f1 /\ dom f2 by VALUED_1:def 4;
+       then reproj(2,z0).y0 in dom f1 & reproj(2,z0).y0 in dom f2
+       by XBOOLE_0:def 3;then
+  A25: y0 in dom (f1*reproj(2,z0)) & y0 in dom (f2*reproj(2,z0))
+       by A24,FUNCT_1:21;
+       thus SVF2(f1(#)f2,z0).y - SVF2(f1(#)f2,z0).y0
+       = (f1(#)f2).(reproj(2,z0).y) - SVF2(f1(#)f2,z0).y0
+         by A17,A19,FUNCT_1:22
+      .= (f1.(reproj(2,z0).y))*(f2.(reproj(2,z0).y)) - SVF2(f1(#)f2,z0).y0
+         by VALUED_1:5
+      .= (SVF2(f1,z0).y)*(f2.(reproj(2,z0).y)) - SVF2(f1(#)f2,z0).y0
+         by A22,FUNCT_1:22
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y) - ((f1(#)f2)*reproj(2,z0)).y0
+         by A22,FUNCT_1:22
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y) - (f1(#)f2).(reproj(2,z0).y0)
+         by A17,A23,FUNCT_1:22
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y) -
+         (f1.(reproj(2,z0).y0))*(f2.(reproj(2,z0).y0)) by VALUED_1:5
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y) -
+         (SVF2(f1,z0).y0)*(f2.(reproj(2,z0).y0)) by A25,FUNCT_1:22
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y)+-(SVF2(f1,z0).y)*(SVF2(f2,z0).y0)+
+         (SVF2(f1,z0).y)*(SVF2(f2,z0).y0)-(SVF2(f1,z0).y0)*(SVF2(f2,z0).y0)
+         by A25,FUNCT_1:22
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y-SVF2(f2,z0).y0)+
+         (SVF2(f1,z0).y-SVF2(f1,z0).y0)*(SVF2(f2,z0).y0)
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y-SVF2(f2,z0).y0)+
+         (L1.(y-y0)+R1.(y-y0))*(SVF2(f2,z0).y0) by A5,A10,A19
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y-SVF2(f2,z0).y0)+
+         ((SVF2(f2,z0).y0)*L1.(y-y0)+(SVF2(f2,z0).y0)*R1.(y-y0))
+      .= (SVF2(f1,z0).y)*(SVF2(f2,z0).y-SVF2(f2,z0).y0)+
+         (L11.(y-y0)+(SVF2(f2,z0).y0)*R1.(y-y0)) by A11,RFUNCT_1:73
+      .= (L1.(y-y0)+R1.(y-y0)+SVF2(f1,z0).y0)*(SVF2(f2,z0).y-SVF2(f2,z0).y0)+
+         (L11.(y-y0)+R11.(y-y0)) by A12,A20,RFUNCT_1:73
+      .= (L1.(y-y0)+R1.(y-y0)+SVF2(f1,z0).y0)*(L2.(y-y0)+R2.(y-y0))+
+         (L11.(y-y0)+R11.(y-y0)) by A9,A10,A19
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         ((SVF2(f1,z0).y0)*L2.(y-y0)+(SVF2(f1,z0).y0)*R2.(y-y0))+
+         (L11.(y-y0)+R11.(y-y0))
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         (L12.(y-y0)+(SVF2(f1,z0).y0)*R2.(y-y0))+(L11.(y-y0)+R11.(y-y0))
+         by A11,RFUNCT_1:73
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         (L12.(y-y0)+R12.(y-y0))+(L11.(y-y0)+R11.(y-y0)) by A12,RFUNCT_1:73
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         (L12.(y-y0)+(L11.(y-y0)+(R11.(y-y0)+R12.(y-y0))))
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         (L12.(y-y0)+(L11.(y-y0)+R13.(y-y0))) by A12,RFUNCT_1:72
+      .= (L1.(y-y0)+R1.(y-y0))*(L2.(y-y0)+R2.(y-y0))+
+         (L11.(y-y0)+L12.(y-y0)+R13.(y-y0))
+      .= (L1.(y-y0)*L2.(y-y0)+L1.(y-y0)*R2.(y-y0))+
+         R1.(y-y0)*(L2.(y-y0)+R2.(y-y0))+(L.(y-y0)+R13.(y-y0))
+         by A11,RFUNCT_1:72
+      .= R14.(y-y0)+R2.(y-y0)*L1.(y-y0)+R1.(y-y0)*(L2.(y-y0)+R2.(y-y0))+
+         (L.(y-y0)+R13.(y-y0)) by A11,RFUNCT_1:72
+      .= R14.(y-y0)+R18.(y-y0)+(R1.(y-y0)*L2.(y-y0)+R1.(y-y0)*R2.(y-y0))+
+         (L.(y-y0)+R13.(y-y0)) by A11,A12,RFUNCT_1:72
+      .= R14.(y-y0)+R18.(y-y0)+(R16.(y-y0)+R1.(y-y0)*R2.(y-y0))+
+         (L.(y-y0)+R13.(y-y0)) by A11,A12,RFUNCT_1:72
+      .= R14.(y-y0)+R18.(y-y0)+(R16.(y-y0)+R17.(y-y0))+(L.(y-y0)+R13.(y-y0))
+         by A12,RFUNCT_1:72
+      .= R14.(y-y0)+R18.(y-y0)+R19.(y-y0)+(L.(y-y0)+R13.(y-y0))
+         by A12,RFUNCT_1:72
+      .= R14.(y-y0)+(R19.(y-y0)+R18.(y-y0))+(L.(y-y0)+R13.(y-y0))
+      .= L.(y-y0)+R13.(y-y0)+(R14.(y-y0)+R20.(y-y0)) by A12,RFUNCT_1:72
+      .= L.(y-y0)+(R13.(y-y0)+R14.(y-y0)+R20.(y-y0))
+      .= L.(y-y0)+(R15.(y-y0)+R20.(y-y0)) by A12,RFUNCT_1:72
+      .= L.(y-y0)+R.(y-y0) by A12,RFUNCT_1:72;
+     end;
+     thus f1(#)f2 is_partial_differentiable`2_in z0 by A3,A17,A18,Def11;
+end;
+
+theorem
+  for z0 being Element of REAL 2 holds
+  f is_partial_differentiable`1_in z0
+  implies SVF1(f,z0) is_continuous_in proj(1,2).z0
+proof
+    let z0 be Element of REAL 2;
+    assume
+A0: f is_partial_differentiable`1_in z0;
+    consider x0,y0 being Real such that
+A1: z0 = <*x0,y0*> & SVF1(f,z0) is_differentiable_in x0 by A0,Def6;
+    SVF1(f,z0) is_continuous_in x0 by A1,FDIFF_1:32;
+    hence SVF1(f,z0) is_continuous_in proj(1,2).z0 by A1,Th1;
+end;
+
+theorem
+  for z0 being Element of REAL 2 holds
+  f is_partial_differentiable`2_in z0
+  implies SVF2(f,z0) is_continuous_in proj(2,2).z0
+proof
+    let z0 be Element of REAL 2;
+    assume
+A0: f is_partial_differentiable`2_in z0;
+    consider x0,y0 being Real such that
+A1: z0 = <*x0,y0*> & SVF2(f,z0) is_differentiable_in y0 by A0,Def7;
+    SVF2(f,z0) is_continuous_in y0 by A1,FDIFF_1:32;
+    hence SVF2(f,z0) is_continuous_in proj(2,2).z0 by A1,Th2;
+end;
+
+theorem
+  f is_partial_differentiable`1_in z0 implies
+  ex R st R.0 = 0 & R is_continuous_in 0
+proof
+    assume
+A0: f is_partial_differentiable`1_in z0;
+    consider x0,y0 being Real such that
+A1: z0 = <*x0,y0*> & SVF1(f,z0) is_differentiable_in x0 by A0,Def6;
+    thus ex R st R.0 = 0 & R is_continuous_in 0 by A1,FDIFF_1:35;
+end;
+
+theorem
+  f is_partial_differentiable`2_in z0 implies
+  ex R st R.0 = 0 & R is_continuous_in 0
+proof
+    assume
+A0: f is_partial_differentiable`2_in z0;
+    consider x0,y0 being Real such that
+A1: z0 = <*x0,y0*> & SVF2(f,z0) is_differentiable_in y0 by A0,Def7;
+    thus ex R st R.0 = 0 & R is_continuous_in 0 by A1,FDIFF_1:35;
+end;

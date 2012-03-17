@@ -13,7 +13,7 @@ environ
       ZF_REFLE, PBOOLE, MSATERM, TREES_9, FREEALG, MSUALG_2, MSAFREE2,
       PRE_CIRC, PRALG_1, MSAFREE, GROUP_6, PRELAMB, ALG_1, REALSET1, MSUALG_3,
       FUNCT_6, TARSKI, TDGROUP, QC_LANG1, UNIALG_2, DTCONSTR, TREES_3,
-      MSSCYC_1, FINSEQ_4, ARYTM;
+      MSSCYC_1, FINSEQ_4, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, CARD_1, NUMBERS,
       NAT_1, STRUCT_0, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       FUNCOP_1, FINSEQ_1, GRAPH_1, GRAPH_2, TREES_1, TREES_2, TREES_3, FUNCT_6,
@@ -24,10 +24,11 @@ environ
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
       INT_1, FINSEQ_1, PBOOLE, TREES_2, TREES_3, PRE_CIRC, TREES_9, STRUCT_0,
       DTCONSTR, MSUALG_1, MSAFREE, MSATERM, MSAFREE2, EXTENS_1, GRAPH_2,
-      ORDINAL1;
+      ORDINAL1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, GRAPH_1, GRAPH_2, MSAFREE, PBOOLE, PRE_CIRC, MSUALG_3;
- theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FINSET_1, FRAENKEL, GRAPH_1,
+ definitions TARSKI, GRAPH_1, GRAPH_2, MSAFREE, PBOOLE, PRE_CIRC, MSUALG_3,
+      STRUCT_0;
+ theorems TARSKI, NAT_1, ZFMISC_1, FINSET_1, FRAENKEL, GRAPH_1,
       GRAPH_2, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_6, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, CARD_1, CARD_3, CARD_4, TREES_1,
       TREES_3, TREES_4, PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3, MSAFREE,
@@ -55,8 +56,8 @@ definition
   let G be Graph;
   redefine mode Chain of G means
     :Def1:
-    it is FinSequence of the Edges of G &
-    ex p being FinSequence of the Vertices of G st p is_vertex_seq_of it;
+    it is FinSequence of the carrier' of G &
+    ex p being FinSequence of the carrier of G st p is_vertex_seq_of it;
   compatibility
   proof
     let c be FinSequence;
@@ -65,19 +66,19 @@ definition
 A1:   c is Chain of G;
       then consider p being FinSequence such that
 A2:   len p = len c + 1 and
-A3:   for n st 1 <= n & n <= len p holds p.n in the Vertices of G and
+A3:   for n st 1 <= n & n <= len p holds p.n in the carrier of G and
 A4:   for n st 1 <= n & n <= len c
-      ex x', y' being Element of the Vertices of G st
-      x' = p.n & y' = p.(n+1) & c.n joins x', y' by GRAPH_1:def 11;
+      ex x', y' being Element of the carrier of G st
+      x' = p.n & y' = p.(n+1) & c.n joins x', y' by GRAPH_1:def 12;
       now
         let i be Nat;
 A5:     i in NAT by ORDINAL1:def 13;
         assume i in dom p;
         then 1<=i & i<=len p by FINSEQ_3:27;
-        hence p.i in the Vertices of G by A3,A5;
+        hence p.i in the carrier of G by A3,A5;
       end;
-      then reconsider p as FinSequence of the Vertices of G by FINSEQ_2:14;
-      thus c is FinSequence of the Edges of G by A1;
+      then reconsider p as FinSequence of the carrier of G by FINSEQ_2:14;
+      thus c is FinSequence of the carrier' of G by A1;
       take p;
       thus p is_vertex_seq_of c
       proof
@@ -88,22 +89,22 @@ A6:     1<=n & n<=len c;
         then 1<=n+1 & n<=len p & n+1<=len p by A2,NAT_1:12,XREAL_1:8;
         then
 A7:     p/.n=p.n & p/.(n+1)=p.(n+1) by A6,FINSEQ_4:24;
-        ex x', y' being Element of the Vertices of G st
+        ex x', y' being Element of the carrier of G st
         x' = p.n & y' = p.(n+1) & c.n joins x', y' by A4,A6;
         hence c.n joins p/.n, p/.(n+1) by A7;
       end;
     end;
     assume
-A8: c is FinSequence of the Edges of G;
-    given p being FinSequence of the Vertices of G such that
+A8: c is FinSequence of the carrier' of G;
+    given p being FinSequence of the carrier of G such that
 A9: p is_vertex_seq_of c;
     hereby
       let n;
       assume 1 <= n & n <= len c;
       then n in dom c by FINSEQ_3:27;
-      then c.n in rng c & rng c c= the Edges of G by A8,FINSEQ_1:def 4
+      then c.n in rng c & rng c c= the carrier' of G by A8,FINSEQ_1:def 4
       ,FUNCT_1:def 5;
-      hence c.n in the Edges of G;
+      hence c.n in the carrier' of G;
     end;
     take p; thus
 A10: len p = len c + 1 by A9,GRAPH_2:def 7;
@@ -111,9 +112,9 @@ A10: len p = len c + 1 by A9,GRAPH_2:def 7;
       let n;
       assume 1 <= n & n <= len p;
       then n in dom p by FINSEQ_3:27;
-      then p.n in rng p & rng p c= the Vertices of G by FINSEQ_1:def 4
+      then p.n in rng p & rng p c= the carrier of G by FINSEQ_1:def 4
       ,FUNCT_1:def 5;
-      hence p.n in the Vertices of G;
+      hence p.n in the carrier of G;
     end;
     let n;
     assume
@@ -174,42 +175,35 @@ definition
   let IT be Chain of G;
   attr IT is cyclic means
   :Def2:
-  ex p being FinSequence of the Vertices of G st
+  ex p being FinSequence of the carrier of G st
   p is_vertex_seq_of IT & p.1 = p.(len p);
 end;
 
-definition
-  let IT be Graph;
-  attr IT is empty means
-  :Def3:
-  the Edges of IT is empty;
-end;
-
 registration
-  cluster empty Graph;
+  cluster void Graph;
   existence
   proof
     set V = {1}, E = {};
     consider S, T being Function of E, V;
-    reconsider G = MultiGraphStruct (# V, E, S, T #) as Graph by GRAPH_1:def 1;
+    reconsider G = MultiGraphStruct (# V, E, S, T #) as Graph;
     take G;
-    thus the Edges of G is empty;
+    thus the carrier' of G is empty;
   end;
 end;
 
 theorem Th3:
   for G being Graph holds
-  rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G
+  rng (the Source of G) \/ rng (the Target of G) c= the carrier of G
 proof
   let G be Graph;
-  rng (the Source of G) c= the Vertices of G &
-  rng (the Target of G) c= the Vertices of G by RELSET_1:12;
-  hence rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G
+  rng (the Source of G) c= the carrier of G &
+  rng (the Target of G) c= the carrier of G by RELSET_1:12;
+  hence rng (the Source of G) \/ rng (the Target of G) c= the carrier of G
   by XBOOLE_1:8;
 end;
 
 registration
-  cluster finite simple connected non empty strict Graph;
+  cluster finite simple connected non void strict Graph;
   existence
   proof
     set V = {1,2}, E = {1};
@@ -217,46 +211,47 @@ A1: 1 in E by TARSKI:def 1;
     1 in V & 2 in V by TARSKI:def 2;
     then reconsider S = E --> 1, T = E --> 2 as Function of E, V
     by FUNCOP_1:57;
-    reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
+    reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph;
 A2: S.1 = 1 & T.1 = 2 by A1,FUNCOP_1:13;
     take G;
-    thus G is finite by GRAPH_1:def 8;
+    thus G is finite by GRAPH_1:def 9;
     thus G is simple
     proof
       given x be set such that
-A3:   x in the Edges of G & (the Source of G).x = (the Target of G).x;
+A3:   x in the carrier' of G & (the Source of G).x = (the Target of G).x;
       x = 1 by A3,TARSKI:def 1;
       hence contradiction by A2,A3;
     end;
     thus G is connected
     proof
       given G1, G2 being Graph such that
-A4:   (the Vertices of G1) misses (the Vertices of G2) & G is_sum_of G1, G2;
+A4:   (the carrier of G1) misses (the carrier of G2) & G is_sum_of G1, G2;
       set MSG = the MultiGraphStruct of G;
 A5:   (the Target of G1) tolerates (the Target of G2) &
       (the Source of G1) tolerates (the Source of G2) &
-      the MultiGraphStruct of G = G1 \/ G2 by A4,GRAPH_1:def 3;
+      the MultiGraphStruct of G = G1 \/ G2 by A4,GRAPH_1:def 4;
       then
-A6:   the Vertices of MSG = (the Vertices of G1) \/ (the Vertices of G2) &
+A6:   the carrier of MSG = (the carrier of G1) \/ (the carrier of G2) &
 
-the Edges of MSG = (the Edges of G1) \/ (the Edges of G2) by GRAPH_1:def 2;
-      set E1 = the Edges of G1, E2 = the Edges of G2;
+the carrier' of MSG = (the carrier' of G1) \/ (the carrier' of G2)
+ by GRAPH_1:def 3;
+      set E1 = the carrier' of G1, E2 = the carrier' of G2;
       set S1 = the Source of G1, S2 = the Source of G2;
       set T1 = the Target of G1, T2 = the Target of G2;
-      set V1 = the Vertices of G1, V2 = the Vertices of G2;
+      set V1 = the carrier of G1, V2 = the carrier of G2;
 A7:   rng S1 \/ rng T1 c= V1 by Th3;
 A8:   rng S2 \/ rng T2 c= V2 by Th3;
       per cases by A6,ZFMISC_1:43;
       suppose
 A9:     E1 = E & E2 = E;
-        then S1.1 = S.1 & S2.1 = S.1 by A1,A5,GRAPH_1:def 2;
+        then S1.1 = S.1 & S2.1 = S.1 by A1,A5,GRAPH_1:def 3;
         then 1 in rng S1 & 1 in rng S2 by A1,A2,A9,FUNCT_2:6;
         then 1 in rng S1 \/ rng T1 & 1 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
         hence contradiction by A4,A7,A8,XBOOLE_0:3;
       end;
       suppose
 A10:    E1 = E & E2 = {};
-        then S1.1 = S.1 & T1.1 = T.1 by A1,A5,GRAPH_1:def 2;
+        then S1.1 = S.1 & T1.1 = T.1 by A1,A5,GRAPH_1:def 3;
         then 1 in rng S1 & 2 in rng T1 by A1,A2,A10,FUNCT_2:6;
         then 1 in rng S1 \/ rng T1 & 2 in rng S1 \/ rng T1 by XBOOLE_0:def 2;
         then V c=V1 & V1 c=V by A6,A7,XBOOLE_1:7,ZFMISC_1:38;
@@ -266,7 +261,7 @@ A10:    E1 = E & E2 = {};
       end;
       suppose
 A11:    E1 = {} & E2 = E;
-        then S2.1 = S.1 & T2.1 = T.1 by A1,A5,GRAPH_1:def 2;
+        then S2.1 = S.1 & T2.1 = T.1 by A1,A5,GRAPH_1:def 3;
         then 1 in rng S2 & 2 in rng T2 by A1,A2,A11,FUNCT_2:6;
         then 1 in rng S2 \/ rng T2 & 2 in rng S2 \/ rng T2 by XBOOLE_0:def 2;
         then V c=V2 & V2 c=V by A6,A8,XBOOLE_1:7,ZFMISC_1:38;
@@ -275,24 +270,18 @@ A11:    E1 = {} & E2 = E;
         hence contradiction by A4,XBOOLE_1:67;
       end;
     end;
-    thus G is non empty by Def3;
+    thus G is non void;
     thus thesis;
   end;
 end;
 
-registration
-  let G be non empty Graph;
-  cluster the Edges of G -> non empty;
-  coherence by Def3;
-end;
-
 theorem Th4:
-  for e being set for s, t being Element of the Vertices of G
+  for e being set for s, t being Element of the carrier of G
   st s = (the Source of G).e & t = (the Target of G).e
   holds <*s, t*> is_vertex_seq_of <*e*>
 proof
   let e be set;
-  let s, t be Element of the Vertices of G;
+  let s, t be Element of the carrier of G;
   assume
 A1: s = (the Source of G).e & t = (the Target of G).e;
   set vs = <*s, t*>;
@@ -305,18 +294,18 @@ A2: len c = 1 by FINSEQ_1:56;
 A3: n = 1 by A2,XXREAL_0:1;
   c.1 = e & vs.1 = s & vs.(1+1) = t & vs/.1 = s & vs/.(1+1) = t
   by FINSEQ_1:57,61,FINSEQ_4:26;
-  hence c.n joins vs/.n, vs/.(n+1) by A1,A3,GRAPH_1:def 9;
+  hence c.n joins vs/.n, vs/.(n+1) by A1,A3,GRAPH_1:def 10;
 end;
 
 theorem Th5:
-  for e being set st e in the Edges of G holds <*e*> is directed Chain of G
+  for e being set st e in the carrier' of G holds <*e*> is directed Chain of G
 proof
   let e be set;
   assume
-A1: e in the Edges of G;
+A1: e in the carrier' of G;
   then reconsider s = (the Source of G).e, t = (the Target of G).e
-  as Element of the Vertices of G by FUNCT_2:7;
-  reconsider E = the Edges of G as non empty set by A1;
+  as Element of the carrier of G by FUNCT_2:7;
+  reconsider E = the carrier' of G as non empty set by A1;
   reconsider e as Element of E by A1;
   <*s,t*> is_vertex_seq_of <*e*> by Th4;
   then reconsider c = <*e*> as Chain of G by Def1;
@@ -329,14 +318,14 @@ A1: e in the Edges of G;
   hence thesis;
 end;
 
-reserve G for non empty Graph;
+reserve G for non void Graph;
 
 registration
   let G;
   cluster directed non empty one-to-one Chain of G;
   existence
   proof
-    consider e being Element of the Edges of G;
+    consider e being Element of the carrier' of G;
     reconsider c = <*e*> as directed Chain of G by Th5;
     take c;
     thus c is directed;
@@ -350,32 +339,32 @@ A1: 1 <= n & n < m & m <= len c;
 end;
 
 Lm1: for G being non empty Graph,
-c being Chain of G, p being FinSequence of the Vertices of G
+c being Chain of G, p being FinSequence of the carrier of G
 st c is cyclic & p is_vertex_seq_of c holds p.1 = p.(len p)
 proof
   let G be non empty Graph;
-  let c be Chain of G, p be FinSequence of the Vertices of G;
+  let c be Chain of G, p be FinSequence of the carrier of G;
   assume
 A1: c is cyclic & p is_vertex_seq_of c;
-  then consider P being FinSequence of the Vertices of G such that
+  then consider P being FinSequence of the carrier of G such that
 A2: P is_vertex_seq_of c & P.1 = P.(len P) by Def2;
   per cases;
   suppose
-    Card the Vertices of G = 1 or c <>{} & not c alternates_vertices_in G;
+    Card the carrier of G = 1 or c <>{} & not c alternates_vertices_in G;
     then P = vertex-seq c & p = vertex-seq c by A1,A2,GRAPH_2:def 9;
     hence p.1 = p.(len p) by A2;
   end;
   suppose
-A3: not(Card the Vertices of G =1 or c <>{}&not c alternates_vertices_in G);
+A3: not(Card the carrier of G =1 or c <>{}&not c alternates_vertices_in G);
 A4: len p = len c+1 & len P = len c +1 by A1,A2,GRAPH_2:def 7;
     now
       per cases by A3;
-      suppose Card the Vertices of G <>1& c ={};
-        then len c =0 by CARD_1:47;
+      suppose Card the carrier of G <>1& c ={};
+        then len c =0;
         hence p.1 = p.(len p) by A4;
       end;
       suppose
-A5:     Card the Vertices of G <>1 & c alternates_vertices_in G;
+A5:     Card the carrier of G <>1 & c alternates_vertices_in G;
         then
 A6:     p is TwoValued Alternating & P is TwoValued Alternating by A1,A2,
         GRAPH_2:40;
@@ -405,45 +394,40 @@ end;
 
 theorem Th6:
   for G being Graph,
-  c being Chain of G, vs being FinSequence of the Vertices of G st
+  c being Chain of G, vs being FinSequence of the carrier of G st
   c is cyclic & vs is_vertex_seq_of c holds vs.1 = vs.(len vs)
 proof
-  let G be Graph, c be Chain of G, vs be FinSequence of the Vertices of G;
+  let G be Graph, c be Chain of G, vs be FinSequence of the carrier of G;
   assume
 A1: c is cyclic & vs is_vertex_seq_of c;
   per cases;
   suppose
 A2: c is empty;
     len vs = len c +1 by A1,GRAPH_2:def 7
-      .= 0+1 by A2,CARD_1:47;
+      .= 0+1 by A2;
     hence vs.1 = vs.(len vs);
   end;
   suppose c is non empty;
-    then rng c is non empty;
-    then consider x being set such that
-A3: x in rng c by XBOOLE_0:def 1;
-    c is FinSequence of the Edges of G by Def1;
-    then rng c c= the Edges of G by FINSEQ_1:def 4;
-    then G is non empty by A3,Def3;
-    hence thesis by A1,Lm1;
+    consider x being set;
+    thus thesis by A1,Lm1;
   end;
 end;
 
 theorem Th7:
-  for G being Graph, e being set st e in the Edges of G
+  for G being Graph, e being set st e in the carrier' of G
   for fe being directed Chain of G st fe = <*e*>
   holds vertex-seq fe = <*(the Source of G).e, (the Target of G).e*>
 proof
   let G be Graph;
   let e be set;
   assume
-A1: e in the Edges of G;
+A1: e in the carrier' of G;
   let fe be directed Chain of G;
   assume
 A2: fe = <*e*>;
   reconsider so = (the Source of G).e, ta = (the Target of G).e as
-  Element of the Vertices of G by A1,FUNCT_2:7;
-  reconsider sota = <*so, ta*> as FinSequence of the Vertices of G;
+  Element of the carrier of G by A1,FUNCT_2:7;
+  reconsider sota = <*so, ta*> as FinSequence of the carrier of G;
 A3: e = fe.1 by A2,FINSEQ_1:57;
 A4: len fe = 1 by A2,FINSEQ_1:56;
 A5: sota is_vertex_seq_of fe
@@ -453,7 +437,7 @@ A5: sota is_vertex_seq_of fe
     assume 1<=n & n<=len fe;
     then
 A6: n=1 by A4,XXREAL_0:1;
-    e joins so, ta & sota/.1 = so & sota/.2=ta by FINSEQ_4:26,GRAPH_1:def 9;
+    e joins so, ta & sota/.1 = so & sota/.2=ta by FINSEQ_4:26,GRAPH_1:def 10;
     hence fe.n joins sota/.n, sota/.(n+1) by A2,A6,FINSEQ_1:57;
   end;
   sota.1 = (the Source of G).(fe.1) by A3,FINSEQ_1:61;
@@ -479,7 +463,7 @@ A1: 1<=m & m<=n & n<=len f;
   end;
   suppose not (1<=m & m<=n & n<=len f);
     then (m,n)-cut f is empty by GRAPH_2:def 1;
-    hence thesis by CARD_1:47;
+    hence thesis;
   end;
 end;
 
@@ -507,9 +491,9 @@ A7: m+k = (m+i)+1 by A4;
     then 1<=m+i & m+i<len c by A1,NAT_1:12,XREAL_1:8;
 
 hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A5,A6,A7,
-    GRAPH_1:def 12;
+    GRAPH_1:def 13;
   end;
-  hence thesis by GRAPH_1:def 12;
+  hence thesis by GRAPH_1:def 13;
 end;
 
 theorem Th10:
@@ -527,7 +511,7 @@ registration
   cluster vertex-seq oc -> non empty;
   coherence
   proof len vertex-seq oc = len oc +1 by Th10;
-    hence thesis by CARD_1:47;
+    hence thesis;
   end;
 end;
 
@@ -562,7 +546,7 @@ A10:  vsoc/.1=vsoc/.(1+1) or vsoc/.1<>vsoc/.(1+1);
       then 1<=1+1 & 1+1<=len vsoc by A8,XREAL_1:8;
       then 1 in dom vsoc & 1+1 in dom vsoc by FINSEQ_3:27,FINSEQ_5:6;
       then vsoc/.1=vsoc.1 & vsoc/.(1+1)=vsoc.(1+1) by PARTFUN1:def 8;
-      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A6,A7,A9,A10,GRAPH_1:def 9;
+      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A6,A7,A9,A10,GRAPH_1:def 10;
     end;
     suppose n<>0;
       then
@@ -571,7 +555,7 @@ A11:  1<=n & n<=n+1 by NAT_1:11,14;
 A12:  n<=len oc by A4,XXREAL_0:2;
       n<len oc by A4,NAT_1:13;
       hence
-A13:  vsoc.(n+1) = S.(oc.(n+1)) by A3,A11,GRAPH_1:def 12;
+A13:  vsoc.(n+1) = S.(oc.(n+1)) by A3,A11,GRAPH_1:def 13;
 A14:  oc.(n+1) joins vsoc/.(n+1),vsoc/.(n+1+1) by A4,A5,GRAPH_2:def 7;
 A15:  vsoc/.(n+1)=vsoc/.(n+1+1) or vsoc/.(n+1)<>vsoc/.(n+1+1);
       len vsoc = len oc +1 by Th10;
@@ -580,7 +564,7 @@ A15:  vsoc/.(n+1)=vsoc/.(n+1+1) or vsoc/.(n+1)<>vsoc/.(n+1+1);
       then n+1 in dom vsoc & n+1+1 in dom vsoc by A4,FINSEQ_3:27;
       then vsoc/.(n+1)=vsoc.(n+1) & vsoc/.(n+1+1)=vsoc.(n+1+1) by
       PARTFUN1:def 8;
-      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A13,A14,A15,GRAPH_1:def 9;
+      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A13,A14,A15,GRAPH_1:def 10;
     end;
   end;
   thus for n holds P[n] from NAT_1:sch 1 (A1, A2);
@@ -599,7 +583,7 @@ A2: m<n+1 by NAT_1:13;
   lmn+m = n+1 by A1,GRAPH_2:def 1;
   then m-(lmn+m)<(n+1)-(n+1) by A2,XREAL_1:11;
   then --lmn>0;
-  hence thesis by CARD_1:47;
+  hence thesis;
 end;
 
 theorem
@@ -612,14 +596,14 @@ proof
 A1: 1<=m & m<=n & n<=len c & c1 = (m,n)-cut c;
   set mn1c=(m,n+1)-cut vertex-seq c;
   set vsc = vertex-seq c;
-A2: c is non empty by A1,CARD_1:47;
+A2: c is non empty by A1;
   then
 A3: vertex-seq c is_vertex_seq_of c by GRAPH_2:def 11;
   then
 A4: mn1c is_vertex_seq_of c1 by A1,GRAPH_2:45;
 A5: c1 is non empty by A1,A2,Th12;
   then
-A6: len c1 <> 0 by CARD_2:59;
+A6: len c1 <> 0;
 A7: m<=len c by A1,XXREAL_0:2;
 A8: m<=n+1 & 0<len c1 by A1,A6,NAT_1:12;
   then
@@ -627,9 +611,9 @@ A9: c1.(0+1) = c.(m+0) by A1,GRAPH_2:def 1;
 A10: len vsc = len c +1 by A3,GRAPH_2:def 7;
   then
 A11: n+1<=len vsc by A1,XREAL_1:8;
-  vsc is non empty by A10,CARD_1:47;
+  vsc is non empty by A10;
   then mn1c is non empty by A1,A8,A11,Th12;
-  then len mn1c <> 0 by CARD_2:59;
+  then len mn1c <> 0;
   then 0<len mn1c & m<=n+1 by A1,NAT_1:12;
   then vsc.(m+0) = mn1c.(0+1) by A1,A11,GRAPH_2:def 1;
   then mn1c.1 = (the Source of G).(c1.1) by A1,A2,A7,A9,Th11;
@@ -666,14 +650,14 @@ A4: (vertex-seq c1).(len c1 + 1) = (vertex-seq c2).1;
       let n;
       assume
 A5:   1 <= n & n < len c1c2;
-      per cases by REAL_1:def 5;
+      per cases by XXREAL_0:1;
       suppose
 A6:     n<len c1;
         then 1<=n+1 & n+1<=len c1 by NAT_1:11,13;
         then n in dom c1 & n+1 in dom c1 by A5,A6,FINSEQ_3:27;
         then c1c2.(n+1) = c1.(n+1) & c1c2.n = c1.n by FINSEQ_1:def 7;
         hence (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
-        by A5,A6,GRAPH_1:def 12;
+        by A5,A6,GRAPH_1:def 13;
       end;
       suppose
 A7:     n=len c1;
@@ -697,7 +681,7 @@ A13:    n = len c1 + k;
         n+1 = len c1 +(k+1);
         then c1c2.(n+1) = c2.(k+1) & c1c2.n = c2.k by A12,A13,FINSEQ_1:def 7;
         hence (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
-        by A10,A11,GRAPH_1:def 12;
+        by A10,A11,GRAPH_1:def 13;
       end;
     end;
     hence c1^c2 is directed non empty Chain of G;
@@ -709,12 +693,10 @@ A14: vsc1.(len c1 +1) =(the Target of G).(c1.(len c1)) by Th14;
 A15: n in dom c1 by FINSEQ_5:6;
   then
 A16: 1<=n & n<=len c1 by FINSEQ_3:27;
-  0<>len c2 by CARD_2:59;
-  then 0<len c2;
-  then n<len c1c2 by A3,XREAL_1:31;
+  n<len c1c2 by A3,XREAL_1:31;
   then
 A17: (the Source of G).(c1c2.(n+1)) = (the Target of G).(c1c2.n)
-  by A16,GRAPH_1:def 12;
+  by A16,GRAPH_1:def 13;
   1 in dom c2 by FINSEQ_5:6;
   then c1c2.(n+1) = c2.1 & c1c2.n = c1.n by A15,FINSEQ_1:def 7;
   hence thesis by A14,A17,GRAPH_2:def 11;
@@ -759,9 +741,9 @@ proof
   let c be directed non empty Chain of G;
   assume
 A1: c is cyclic;
-  c is FinSequence of the Edges of G by Def1;
+  c is FinSequence of the carrier' of G by Def1;
   then
-A2: rng c c= the Edges of G by FINSEQ_1:def 4;
+A2: rng c c= the carrier' of G by FINSEQ_1:def 4;
   defpred Z[Element of NAT] means ex ch being directed Chain of G st
   rng ch c= rng c & len ch = $1 & ch^c is directed non empty Chain of G;
 A3: Z[0]
@@ -770,7 +752,7 @@ A3: Z[0]
     take ch;
     rng ch = {};
     hence rng ch c= rng c by XBOOLE_1:2;
-    thus len ch = 0 by CARD_1:47;
+    thus len ch = 0;
     thus ch^c is directed non empty Chain of G by FINSEQ_1:47;
   end;
 A4: for i be Element of NAT st Z[i] holds Z[i+1]
@@ -781,7 +763,7 @@ A5: rng ch c= rng c & len ch = n & ch^c is directed non empty Chain of G;
     len c in dom c by FINSEQ_5:6;
     then
 A6: c.len c in rng c by FUNCT_1:def 5;
-    then reconsider clc = c.len c as Element of the Edges of G by A2;
+    then reconsider clc = c.len c as Element of the carrier' of G by A2;
     reconsider ch'= <*clc*> as directed Chain of G by Th5;
 A7: len ch' = 1 by FINSEQ_1:56;
 A8: rng ch' = {c.len c} by FINSEQ_1:55;
@@ -802,7 +784,7 @@ A10:  n = 0;
     end;
     suppose n<>0;
       then
-A11:  ch is non empty by A5,CARD_1:47;
+A11:  ch is non empty by A5;
       then 1 in dom ch by FINSEQ_5:6;
       then ch.1 in rng ch by FUNCT_1:def 5;
       then consider i being Nat such that
@@ -830,14 +812,14 @@ A15:      vsch'.(len ch' +1) = (the Target of G).clc by A7,FINSEQ_1:61
           hence ch1^c is directed non empty Chain of G by Th15;
         end;
         suppose i <> 1;
-          then 1<i by A13,REAL_1:def 5;
+          then 1<i by A13,XXREAL_0:1;
           then 1+1<=i by NAT_1:13;
           then consider k being Element of NAT such that
 A17:      1<=k & k<len c & i=k+1 by A13,GRAPH_2:1;
           k in dom c by A17,FINSEQ_3:27;
           then
 A18:      c.k in rng c by FUNCT_1:def 5;
-          then reconsider ck = c.k as Element of the Edges of G by A2;
+          then reconsider ck = c.k as Element of the carrier' of G by A2;
           reconsider ch'= <*ck*> as directed Chain of G by Th5;
 A19:      len ch' = 1 by FINSEQ_1:56;
           rng ch' = {c.k} by FINSEQ_1:55;
@@ -847,7 +829,7 @@ A20:      rng ch' c= rng c by A18,ZFMISC_1:37;
           vsch' = <*(the Source of G).ck, (the Target of G).ck*> by Th7;
           then
 A21:      vsch'.(len ch' +1) = (the Target of G).ck by A19,FINSEQ_1:61
-            .= (the Source of G).(ch.1) by A12,A17,GRAPH_1:def 12
+            .= (the Source of G).(ch.1) by A12,A17,GRAPH_1:def 13
             .= (vertex-seq ch).1 by A11,GRAPH_2:def 11;
           reconsider ch1 = ch'^ch as directed Chain of G by A11,A21,Th15;
           take ch1;
@@ -872,6 +854,7 @@ A23: for n being Element of NAT holds Z[n] from NAT_1:sch 1 (A3, A4);
 end;
 
 definition
+ canceled;
   let IT be Graph;
   attr IT is directed_cycle-less means
   :Def4:
@@ -884,20 +867,20 @@ notation
 end;
 
 registration
-  cluster empty -> directed_cycle-less Graph;
+  cluster void -> directed_cycle-less Graph;
   coherence
   proof
     let G be Graph;
     assume
-A1: G is empty;
+A1: G is void;
     let c be directed Chain of G;
     assume c is non empty;
     then 1 in dom c by FINSEQ_5:6;
     then
 A2: c.1 in rng c by FUNCT_1:def 5;
-    c is FinSequence of the Edges of G by Def1;
-    then rng c c= the Edges of G by FINSEQ_1:def 4;
-    hence thesis by A1,A2,Def3;
+    c is FinSequence of the carrier' of G by Def1;
+    then rng c c= the carrier' of G by FINSEQ_1:def 4;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -905,13 +888,13 @@ definition
   let IT be Graph;
   attr IT is well-founded means
   :Def5:
-  for v being Element of the Vertices of IT
+  for v being Element of the carrier of IT
   ex n st for c being directed Chain of IT
   st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n;
 end;
 
 registration
-  let G be empty Graph;
+  let G be void Graph;
   cluster -> empty Chain of G;
   coherence
   proof
@@ -920,20 +903,20 @@ registration
     then 1 in dom c by FINSEQ_5:6;
     then
 A1: c.1 in rng c by FUNCT_1:def 5;
-    c is FinSequence of the Edges of G by Def1;
-    then rng c c= the Edges of G by FINSEQ_1:def 4;
-    hence thesis by A1,Def3;
+    c is FinSequence of the carrier' of G by Def1;
+    then rng c c= the carrier' of G by FINSEQ_1:def 4;
+    hence thesis by A1;
   end;
 end;
 
 registration
-  cluster empty -> well-founded Graph;
+  cluster void -> well-founded Graph;
   coherence
   proof
     let G be Graph;
-    assume G is empty;
-    then reconsider G' = G as empty Graph;
-    let v be Element of the Vertices of G;
+    assume G is void;
+    then reconsider G' = G as void Graph;
+    let v be Element of the carrier of G;
     take 0;
     let c be directed Chain of G;
     reconsider c as Chain of G';
@@ -943,14 +926,14 @@ registration
 end;
 
 registration
-  cluster non well-founded -> non empty Graph;
+  cluster non well-founded -> non void Graph;
   coherence;
 end;
 
 registration
   cluster well-founded Graph;
   existence
-  proof consider G being empty Graph;
+  proof consider G being void Graph;
     G is well-founded;
     hence thesis;
   end;
@@ -962,13 +945,13 @@ registration
   proof
     let G be Graph;
     per cases;
-    suppose G is empty;
-      then reconsider G as empty Graph;
+    suppose G is void;
+      then reconsider G as void Graph;
       G is directed_cycle-less;
       hence thesis;
     end;
-    suppose G is non empty;
-      then reconsider G'=G as non empty Graph;
+    suppose G is non void;
+      then reconsider G'=G as non void Graph;
       assume that
 A1:   G is well-founded and
 A2:   G is non directed_cycle-less;
@@ -978,7 +961,7 @@ A3:   dc is non empty & dc is cyclic by A2,Def4;
       len p = len dc +1 by A3,Th10;
       then 1<=len p by NAT_1:11;
       then 1 in dom p by FINSEQ_3:27;
-      then reconsider v = p.1 as Element of the Vertices of G by FINSEQ_2:13;
+      then reconsider v = p.1 as Element of the carrier of G by FINSEQ_2:13;
       consider n such that
 A4:   for c being directed Chain of G'
       st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n
@@ -986,7 +969,7 @@ A4:   for c being directed Chain of G'
       consider ch being directed Chain of G' such that
 A5:   len ch = n+1 & ch^dc is directed non empty Chain of G' by A3,Th18;
       reconsider ch as directed non empty Chain of G'
-       by A5,CARD_1:47;
+       by A5;
       reconsider cc = ch^dc as directed non empty Chain of G' by A5;
       (vertex-seq dc).1 = (vertex-seq dc).(len dc +1) by A3,Th17;
       then (vertex-seq cc).(len cc +1) = v by A3,Th16;
@@ -1006,8 +989,8 @@ registration
     set V = {1}, E = {1};
     reconsider j = 1 as Element of V by TARSKI:def 1;
     reconsider S = E --> j, T = E --> j as Function of E, V;
-    reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph by GRAPH_1:def 1;
-    reconsider v = 1 as Element of the Vertices of G;
+    reconsider G = MultiGraphStruct(# V, E, S, T #) as Graph;
+    reconsider v = 1 as Element of the carrier of G;
 A2: S.1 = 1 & T.1 = 1 by FUNCOP_1:13;
 A3: G is with_directed_cycle
     proof
@@ -1064,9 +1047,9 @@ A2: t.{} = [v,s];
     t = root-tree [v,s] by A2,MSATERM:5;
     hence thesis by A1;
   end;
-  suppose t.{} in [:the OperSymbols of S,{the carrier of S}:];
+  suppose t.{} in [:the carrier' of S,{the carrier of S}:];
     then consider o, c being set such that
-A3: o in the OperSymbols of S & c in {the carrier of S} & t.{} = [o,c]
+A3: o in the carrier' of S & c in {the carrier of S} & t.{} = [o,c]
     by ZFMISC_1:def 2;
     reconsider o as OperSymbol of S by A3;
     take o;
@@ -1319,7 +1302,7 @@ A1: (the Arity of S).o = {};
 :: stolen from MSUALG_2
 A2: dom ((the Sorts of A)# qua ManySortedSet of(the carrier of S)*)
   = (the carrier of S)* by PBOOLE:def 3;
-A3: dom (the Arity of S) = the OperSymbols of S &
+A3: dom (the Arity of S) = the carrier' of S &
   rng(the Arity of S) c= (the carrier of S)* by FUNCT_2:def 1,RELSET_1:12;
   then (the Arity of S).o in rng (the Arity of S) by FUNCT_1:def 5;
   then
@@ -1385,8 +1368,8 @@ A8:   (the Arity of S).o = {} &
     COv is Subset of Ov from DOMAIN_1:sch 7;
     then
 A9: COv is finite by A3;
-    deffunc G(Element of the OperSymbols of S)=Den($1,A).{};
-    set aCOv = {G(o) where o is Element of the OperSymbols of S : o in COv };
+    deffunc G(Element of the carrier' of S)=Den($1,A).{};
+    set aCOv = {G(o) where o is Element of the carrier' of S : o in COv };
 A10: aCOv is finite from FRAENKEL:sch 21(A9);
     Constants(A,v) c= aCOv
     proof
@@ -1455,9 +1438,9 @@ A7:   t' = [o,the carrier of S]-tree ars by A4,A6,MSATERM:10;
       dt = root-tree (dt.{}) by A2,A3,TREES_1:80,TREES_4:5;
       then
 A8:   ars = {} by A3,A7,TREES_4:17;
-      then 0 = len ars by CARD_1:47
+      then 0 = len ars
         .= len the_arity_of o by MSATERM:22;
-      then the_arity_of o = {} by CARD_2:59;
+      then the_arity_of o = {};
       then
 A9:   (the Arity of S).o = {} by MSUALG_1:def 6;
 A10:  (the ResultSort of S).o = v by A6,MSUALG_1:def 7;

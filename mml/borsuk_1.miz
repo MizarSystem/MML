@@ -762,14 +762,14 @@ end;
 
 canceled;
 
-theorem Th41:
-  for X being non empty TopSpace, x being Point of X holds {x} is compact
+registration let X be non empty TopSpace, x be Point of X;
+ cluster {x} -> compact Subset of X;
+ coherence
 proof
-  let X be non empty TopSpace;
-  let x be Point of X;
-  let F be Subset-Family of X such that
-A1: F is Cover of {x} and F is open;
-  {x} c= union F by A1,SETFAM_1:def 12;
+  reconsider B = {x} as Subset of X;
+  now let F be Subset-Family of X such that
+A1: F is Cover of B and F is open;
+  B c= union F by A1,SETFAM_1:def 12;
   then x in union F by ZFMISC_1:37;
   then consider A being set such that
 A2: x in A & A in F by TARSKI:def 4;
@@ -778,23 +778,16 @@ A2: x in A & A in F by TARSKI:def 4;
   thus G c= F by A2,ZFMISC_1:37;
   A in G by TARSKI:def 1;
   then x in union G by A2,TARSKI:def 4;
-  hence {x} c= union G by ZFMISC_1:37;
+  then B c= union G by ZFMISC_1:37;
+  hence G is Cover of B by SETFAM_1:def 12;
   thus G is finite;
+  end;
+ hence thesis by COMPTS_1:def 7;
+end;
 end;
 
-theorem Th42:
-  for X being TopStruct for Y being SubSpace of X, A being Subset of X,
-  B being Subset of Y st A = B holds A is compact iff B is compact
-proof
-  let X be TopStruct;
-  let Y be SubSpace of X, A be Subset of X, B be Subset of Y such that
-A1: A = B;
-A2: B c= [#] Y;
-  hence A is compact implies B is compact by A1,COMPTS_1:11;
-  assume B is compact;
-  then for P being Subset of Y st P = A holds P is compact by A1;
-  hence A is compact by A1,A2,COMPTS_1:11;
-end;
+theorem
+  for X being non empty TopSpace, x being Point of X holds {x} is compact;
 
 begin
 
@@ -1013,7 +1006,7 @@ registration
   end;
 end;
 
-canceled 2;
+canceled 3;
 
 theorem Th45:
   for X, Y being TopSpace for B being Subset of [:X,Y:] holds
@@ -1700,18 +1693,13 @@ A27:  N is open by A25,Th51,TOPS_2:18;
       then
 A28:  N <> {} by ZFMISC_1:2;
       reconsider F = Pr1(X,Y).:N as Subset-Family of X;
-      F is open by A27,Th60;
-      then
-A29:  union F is open by TOPS_2:26;
+A29:  union F is open by TOPS_2:26,A27,Th60;
       F is Cover of A by A14,Th62;
       then A c= union F by SETFAM_1:def 12;
       then A c= Int union F by A29,TOPS_1:55;
       then reconsider V = union F as a_neighborhood of A by CONNSP_2:def 2;
       reconsider H = Pr2(X,Y).:N as Subset-Family of Y;
-A30:  H is finite by A12;
-      H is open by A27,Th60;
-      then
-A31:  meet H is open by A30,TOPS_2:27;
+A31:  meet H is open by A12,TOPS_2:27,A27,Th60;
 A32:  H <> {} by A28,Th61;
       now
         let C be set;
@@ -2402,7 +2390,6 @@ A17:    A = {x};
         then reconsider C = [#]X as Subset of XX;
         take W = Int V \ C;
         C is closed by Def14;
-        then C` is open;
         then (Int V) /\ C` is open by TOPS_1:38;
         hence W is open by SUBSET_1:32;
         x in A by A17,TARSKI:def 1;
@@ -2448,7 +2435,7 @@ registration
     let A be Subset of X;
     assume A in D;
     then ex x being Point of X st A = {x} by Th68;
-    hence A is compact by Th41;
+    hence A is compact;
   end;
 end;
 
@@ -2477,11 +2464,11 @@ A3:   A = Proj TrivExt D.W by A2;
 A4:       A = (Proj D).W' by A3,Th76;
           then reconsider B = A as Subset of X by A1,TARSKI:def 3;
           B is compact by A1,A4,Def15;
-          hence A is compact by Th42;
+          hence A is compact by COMPTS_1:28;
         end;
         suppose not W in the carrier of X;
           then A = {W} by A3,Th77;
-          hence A is compact by Th41;
+          hence A is compact;
         end;
       end;
       hence A is compact;
@@ -2642,7 +2629,6 @@ A33:  A = the carrier of T;
 A34:  union C = B` by A3,Th27;
       B = the carrier of Y by A1,A33,EQREL_1:def 6;
       then B is closed by Def14;
-      then B` is open;
       then B` in the topology of X by PRE_TOPC:def 5;
       then A` in the topology of space TrivExt D by A34,Th69;
       then A` is open by PRE_TOPC:def 5;
@@ -2829,9 +2815,8 @@ A4: xx=[x,t] by Th50;
 A5: xx'=[x',t'] by Th50;
 A6: II.(x,t)=[Proj TrivExt D.x,t] & II.(x',t')=[Proj TrivExt D.x',t'] by Th21;
     then t=t' & Proj TrivExt D.x=Proj TrivExt D.x' by A2,A4,A5,ZFMISC_1:33;
-    then x in the carrier of X & x' in the carrier of X by A3,A4,A5,Th78;
     then
-A7: CH1.xx=x & CH1.xx'=x' by A1,A4,A5;
+A7: CH1.xx=x & CH1.xx'=x' by A1,A5,A3,A4,Th78;
     (Proj TrivExt D*CH1).xx = Proj TrivExt D.(CH1.xx) &
     (Proj TrivExt D*CH1).xx' = Proj TrivExt D.(CH1.xx') by FUNCT_2:21;
     hence contradiction by A2,A3,A4,A5,A6,A7,ZFMISC_1:33;

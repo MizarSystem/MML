@@ -25,14 +25,14 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
+<Adjective nr="29"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
 </ArgTypes>

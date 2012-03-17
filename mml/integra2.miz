@@ -9,26 +9,26 @@ environ
  vocabularies FINSEQ_1, INTEGRA1, ARYTM, ORDINAL2, RCOMP_1, PROB_1, RELAT_1,
       FUNCT_1, RFINSEQ, FINSEQ_5, ARYTM_1, BOOLE, CARD_1, JORDAN3, PARTFUN1,
       RFUNCT_1, SEQ_2, ARYTM_3, SEQ_1, MEASURE5, RLVECT_1, FUNCT_3, SQUARE_1,
-      FINSET_1, INTEGRA2, MEMBERED, MSUALG_3;
+      INTEGRA2, MEMBERED, MSUALG_3, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XREAL_0,
       MEMBERED, REAL_1, NAT_1, FUNCT_1, RELSET_1, SEQ_4, PARTFUN1, FUNCT_2,
-      FINSEQ_1, RFUNCT_1, RVSUM_1, INTEGRA1, VALUED_1, SEQ_1,
-      JORDAN3, :::PRE_CIRC,
-      XXREAL_2, PSCOMP_1, RCOMP_1, FINSET_1, FINSEQ_5, RFINSEQ, BINARITH,
+      FINSEQ_1, RFUNCT_1, RVSUM_1, INTEGRA1, VALUED_1, SEQ_1, SEQ_2,
+      JORDAN3, XXREAL_2, PSCOMP_1, RCOMP_1, FINSEQ_5, RFINSEQ,
+      BINARITH,
       XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, SEQM_3, RFUNCT_1, RFINSEQ, BINARITH,
       FINSEQ_5, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA1, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FINSET_1, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, FINSEQ_1, RFINSEQ, INTEGRA1, VALUED_0,
-      VALUED_1, XXREAL_2;
+      VALUED_1, XXREAL_2, CARD_1, SEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, VALUED_1;
- theorems REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
+ theorems SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
       FUNCT_1, FINSEQ_1, RVSUM_1, NEWTON, PRE_CIRC, RCOMP_1, NAT_1, GOBOARD2,
       RFINSEQ, GOBOARD1, CARD_1, FINSEQ_5, FINSEQ_3, JORDAN3, RELAT_1, FUNCT_2,
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, BINARITH, XXREAL_0,
-      ORDINAL1, MEMBERED, VALUED_1, CARD_2, XXREAL_2, TARSKI;
- schemes SUBSET_1, SEQ_1, NAT_1, REAL_1;
+      ORDINAL1, MEMBERED, VALUED_1, CARD_2, XXREAL_2, TARSKI, SEQM_3, SEQ_2;
+ schemes SUBSET_1, SEQ_1, NAT_1;
 
 begin :: Lemmas of Finite Sequence
 
@@ -200,12 +200,12 @@ A12: P[0]
 A13:  len p = 0;
       assume
 A14:  p,q are_fiberwise_equipotent;
-      p = {} by A13,CARD_2:59;
+      p = {} by A13;
       then
 A15:  rng p = {};
       len q = 0 by A13,A14,RFINSEQ:16;
       then len Rev q = 0 by FINSEQ_5:def 3;
-      then Rev q = {} by CARD_2:59;
+      then Rev q = {};
       then
 A16:  rng Rev q = {};
       for x be set holds card (p"{x}) = card((Rev q)"{x})
@@ -348,7 +348,7 @@ definition
   proof
     defpred P[set] means ex z being Real st z in A & $1 = x * z;
     consider B being Subset of REAL such that
-A1: for y being Real holds y in B iff P[y] from REAL_1:sch 1;
+A1: for y being Real holds y in B iff P[y] from SUBSET_1:sch 3;
     reconsider B as Subset of REAL;
     take B;
     thus thesis by A1;
@@ -379,16 +379,16 @@ end;
 
 theorem
   for X,Y be non empty set, f be PartFunc of X,REAL st
-  f is_bounded_above_on X & Y c= X holds f|Y is_bounded_above_on Y
+  f|X is bounded_above & Y c= X holds f|Y|Y is bounded_above
 proof
   let X,Y be non empty set;
   let f be PartFunc of X,REAL;
   assume
-A1: f is_bounded_above_on X;
+A1: f|X is bounded_above;
   assume
 A2: Y c= X;
   consider a be real number such that
-A3: for x being set st x in X /\ dom f holds a>=f.x by A1,RFUNCT_1:def 9;
+A3: for x being set st x in X /\ dom f holds a>=f.x by A1,RFUNCT_1:87;
   for x being set st x in Y /\ dom (f|Y) holds a>=(f|Y).x
   proof
     let x be set;
@@ -401,21 +401,21 @@ A5: x in dom f /\ Y by FUNCT_1:68;
     then a >= f.x by A3,A5;
     hence thesis by A4,FUNCT_1:68;
   end;
-  hence thesis by RFUNCT_1:def 9;
+  hence thesis by RFUNCT_1:87;
 end;
 
 theorem
   for X,Y be non empty set, f be PartFunc of X,REAL
-  st f is_bounded_below_on X & Y c= X holds f|Y is_bounded_below_on Y
+  st f|X is bounded_below & Y c= X holds f|Y|Y is bounded_below
 proof
   let X,Y be non empty set;
   let f be PartFunc of X,REAL;
   assume
-A1: f is_bounded_below_on X;
+A1: f|X is bounded_below;
   assume
 A2: Y c= X;
   consider a be real number such that
-A3: for x being set st x in X /\ dom f holds f.x>=a by A1,RFUNCT_1:def 10;
+A3: for x being set st x in X /\ dom f holds f.x>=a by A1,RFUNCT_1:88;
   for x being set st x in Y /\ dom (f|Y) holds (f|Y).x>=a
   proof
     let x be set;
@@ -428,7 +428,7 @@ A5: x in dom f /\ Y by FUNCT_1:68;
     then a <= f.x by A3,A5;
     hence thesis by A4,FUNCT_1:68;
   end;
-  hence thesis by RFUNCT_1:def 10;
+  hence thesis by RFUNCT_1:88;
 end;
 
 theorem Th7:
@@ -864,27 +864,25 @@ end;
 
 theorem Th19:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f is_bounded_on A & r >= 0
+  D be Element of divs A st f|A is bounded & r >= 0
   holds (upper_sum_set(r(#)f)).D >= r*(inf rng f)*vol(A)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let D be Element of divs A;
   assume that
-A1: f is_bounded_on A and
+A1: f|A is bounded and
 A2: r >= 0;
 A3: dom(upper_sum_set(r(#)f))=divs A by INTEGRA1:def 11;
-  r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+Y: (r(#)f)|A is bounded by A1,RFUNCT_1:97;
   then
-A4: r(#)f is_bounded_below_on A & r(#)
-  f is_bounded_above_on A by RFUNCT_1:def 11;
-  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+A4: (r(#)f)|A is bounded_below & (r(#)f)|A is bounded_above;
+  f|A is bounded_below & f|A is bounded_above by A1;
   then
 A5: rng f is bounded_below by INTEGRA1:13;
   (upper_sum_set(r(#)f)).D = upper_sum(r(#)f,D) by A3,INTEGRA1:def 11;
   then
-A6: (upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by A1,INTEGRA1:30
-  ,RFUNCT_1:97;
+A6: (upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by INTEGRA1:30,Y;
 A7: lower_sum(r(#)f,D) >= (inf rng(r(#)f))*vol(A) by A4,INTEGRA1:27;
   (inf rng(r(#)f))=inf (r**(rng f)) by Th17
     .=r*(inf rng f) by A2,A5,Th15;
@@ -893,27 +891,25 @@ end;
 
 theorem Th20:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f is_bounded_on A & r <= 0
+  D be Element of divs A st f|A is bounded & r <= 0
   holds (upper_sum_set(r(#)f)).D >= r*(sup rng f)*vol(A)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let D be Element of divs A;
   assume that
-A1: f is_bounded_on A and
+A1: f|A is bounded and
 A2: r <= 0;
 A3: dom(upper_sum_set(r(#)f))=divs A by INTEGRA1:def 11;
-  r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+ (r(#)f)|A is bounded by A1,RFUNCT_1:97;
   then
-A4: r(#)f is_bounded_below_on A & r(#)
-  f is_bounded_above_on A by RFUNCT_1:def 11;
-  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+A4: (r(#)f)|A is bounded_below & (r(#)f)|A is bounded_above;
+  f|A is bounded_below & f|A is bounded_above by A1;
   then
 A5: rng f is bounded_above by INTEGRA1:15;
   (upper_sum_set(r(#)f)).D = upper_sum(r(#)f,D) by A3,INTEGRA1:def 11;
   then
-A6: (upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by A1,INTEGRA1:30
-  ,RFUNCT_1:97;
+A6: (upper_sum_set(r(#)f)).D >= lower_sum(r(#)f,D) by A4,INTEGRA1:30;
 A7: lower_sum(r(#)f,D) >= (inf rng(r(#)f))*vol(A) by A4,INTEGRA1:27;
   (inf rng(r(#)f))=inf (r**(rng f)) by Th17
     .=r*(sup rng f) by A2,A5,Th14;
@@ -922,27 +918,26 @@ end;
 
 theorem Th21:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f is_bounded_on A & r >= 0
+  D be Element of divs A st f|A is bounded & r >= 0
   holds (lower_sum_set(r(#)f)).D <= r*(sup rng f)*vol(A)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let D be Element of divs A;
   assume that
-A1: f is_bounded_on A and
+A1: f|A is bounded and
 A2: r >= 0;
 A3: dom(lower_sum_set(r(#)f))=divs A by INTEGRA1:def 12;
-  r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+ (r(#)f)|A is bounded by A1,RFUNCT_1:97;
   then
-A4: r(#)f is_bounded_below_on A & r(#)
-  f is_bounded_above_on A by RFUNCT_1:def 11;
-  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+A4: (r(#)f)|A is bounded_below & (r(#)f)|A is bounded_above;
+  f|A is bounded_below & f|A is bounded_above by A1;
   then
 A5: rng f is bounded_above by INTEGRA1:15;
   (lower_sum_set(r(#)f)).D = lower_sum(r(#)f,D) by A3,INTEGRA1:def 12;
   then
-A6: (lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by A1,INTEGRA1:30
-  ,RFUNCT_1:97;
+A6: (lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by A4,INTEGRA1:30
+  ;
 A7: upper_sum(r(#)f,D) <= (sup rng(r(#)f))*vol(A) by A4,INTEGRA1:29;
   (sup rng(r(#)f))=sup (r**(rng f)) by Th17
     .=r*(sup rng f) by A2,A5,Th13;
@@ -951,27 +946,26 @@ end;
 
 theorem Th22:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
-  D be Element of divs A st f is_bounded_on A & r <= 0
+  D be Element of divs A st f|A is bounded & r <= 0
   holds (lower_sum_set(r(#)f)).D <= r*(inf rng f)*vol(A)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let D be Element of divs A;
   assume that
-A1: f is_bounded_on A and
+A1: f|A is bounded and
 A2: r <= 0;
 A3: dom(lower_sum_set(r(#)f))=divs A by INTEGRA1:def 12;
-  r(#)f is_bounded_on A by A1,RFUNCT_1:97;
+X:  (r(#)f)|A is bounded by A1,RFUNCT_1:97;
   then
-A4: r(#)f is_bounded_below_on A & r(#)
-  f is_bounded_above_on A by RFUNCT_1:def 11;
-  f is_bounded_below_on A & f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+A4: (r(#)f)|A is bounded_below & (r(#)f)|A is bounded_above;
+  f|A is bounded_below & f|A is bounded_above by A1;
   then
 A5: rng f is bounded_below by INTEGRA1:13;
   (lower_sum_set(r(#)f)).D = lower_sum(r(#)f,D) by A3,INTEGRA1:def 12;
   then
-A6: (lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by A1,INTEGRA1:30
-  ,RFUNCT_1:97;
+A6: (lower_sum_set(r(#)f)).D <= upper_sum(r(#)f,D) by INTEGRA1:30
+  ,X;
 A7: upper_sum(r(#)f,D) <= (sup rng(r(#)f))*vol(A) by A4,INTEGRA1:29;
   (sup rng(r(#)f))=sup (r**(rng f)) by Th17
     .=r*(inf rng f) by A2,A5,Th16;
@@ -981,7 +975,7 @@ end;
 theorem Th23:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S, i st i in dom D &
-  f is_bounded_above_on A & r >= 0 holds
+  f|A is bounded_above & r >= 0 holds
   upper_volume(r(#)f,D).i = r*upper_volume(f,D).i
 proof
   let A be closed-interval Subset of REAL;
@@ -991,7 +985,7 @@ proof
   let i;
   assume that
 A1: i in dom D and
-A2: f is_bounded_above_on A and
+A2: f|A is bounded_above and
 A3: r >= 0;
   dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
     .= A /\ divset(D,i) by FUNCT_2:def 1
@@ -1015,7 +1009,7 @@ end;
 theorem Th24:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S, i st i in dom D &
-  f is_bounded_above_on A & r <= 0 holds
+  f|A is bounded_above & r <= 0 holds
   lower_volume(r(#)f,D).i = r*upper_volume(f,D).i
 proof
   let A be closed-interval Subset of REAL;
@@ -1025,7 +1019,7 @@ proof
   let i;
   assume that
 A1: i in dom D and
-A2: f is_bounded_above_on A and
+A2: f|A is bounded_above and
 A3: r <= 0;
   dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
     .= A /\ divset(D,i) by FUNCT_2:def 1
@@ -1049,7 +1043,7 @@ end;
 theorem Th25:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S, i st i in dom D &
-  f is_bounded_below_on A & r >= 0 holds
+  f|A is bounded_below & r >= 0 holds
   lower_volume(r(#)f,D).i = r*lower_volume(f,D).i
 proof
   let A be closed-interval Subset of REAL;
@@ -1059,7 +1053,7 @@ proof
   let i;
   assume that
 A1: i in dom D and
-A2: f is_bounded_below_on A and
+A2: f|A is bounded_below and
 A3: r >= 0;
   dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
     .= A /\ divset(D,i) by FUNCT_2:def 1
@@ -1083,7 +1077,7 @@ end;
 theorem Th26:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S, i st i in dom D &
-  f is_bounded_below_on A & r <= 0 holds
+  f|A is bounded_below & r <= 0 holds
   upper_volume(r(#)f,D).i = r*lower_volume(f,D).i
 proof
   let A be closed-interval Subset of REAL;
@@ -1093,7 +1087,7 @@ proof
   let i;
   assume that
 A1: i in dom D and
-A2: f is_bounded_below_on A and
+A2: f|A is bounded_below and
 A3: r <= 0;
   dom(f|divset(D,i)) = dom f /\ divset(D,i) by FUNCT_1:68
     .= A /\ divset(D,i) by FUNCT_2:def 1
@@ -1117,14 +1111,14 @@ end;
 theorem Th27:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S st
-  f is_bounded_above_on A & r >= 0 holds upper_sum(r(#)f,D) = r*upper_sum(f,D)
+  f|A is bounded_above & r >= 0 holds upper_sum(r(#)f,D) = r*upper_sum(f,D)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let S be non empty Division of A;
   let D be Element of S;
   assume that
-A1: f is_bounded_above_on A and
+A1: f|A is bounded_above and
 A2: r >= 0;
   upper_volume(r(#)f,D)=r*upper_volume(f,D)
   proof
@@ -1153,14 +1147,14 @@ end;
 theorem Th28:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S st
-  f is_bounded_above_on A & r <= 0 holds lower_sum(r(#)f,D) = r*upper_sum(f,D)
+  f|A is bounded_above & r <= 0 holds lower_sum(r(#)f,D) = r*upper_sum(f,D)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let S be non empty Division of A;
   let D be Element of S;
   assume that
-A1: f is_bounded_above_on A and
+A1: f|A is bounded_above and
 A2: r <= 0;
   lower_volume(r(#)f,D)=r*upper_volume(f,D)
   proof
@@ -1189,14 +1183,14 @@ end;
 theorem Th29:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S st
-  f is_bounded_below_on A & r >= 0 holds lower_sum(r(#)f,D) = r*lower_sum(f,D)
+  f|A is bounded_below & r >= 0 holds lower_sum(r(#)f,D) = r*lower_sum(f,D)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let S be non empty Division of A;
   let D be Element of S;
   assume that
-A1: f is_bounded_below_on A and
+A1: f|A is bounded_below and
 A2: r >= 0;
   lower_volume(r(#)f,D)=r*lower_volume(f,D)
   proof
@@ -1225,14 +1219,14 @@ end;
 theorem Th30:
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   S be non empty Division of A, D be Element of S st
-  f is_bounded_below_on A & r <= 0 holds upper_sum(r(#)f,D) = r*lower_sum(f,D)
+  f|A is bounded_below & r <= 0 holds upper_sum(r(#)f,D) = r*lower_sum(f,D)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let S be non empty Division of A;
   let D be Element of S;
   assume that
-A1: f is_bounded_below_on A and
+A1: f|A is bounded_below and
 A2: r <= 0;
   upper_volume(r(#)f,D)=r*lower_volume(f,D)
   proof
@@ -1260,19 +1254,19 @@ end;
 
 theorem Th31:
   for A be closed-interval Subset of REAL, f be Function of A,REAL
-  st f is_bounded_on A & f is_integrable_on A
+  st f|A is bounded & f is_integrable_on A
   holds r(#)f is_integrable_on A & integral(r(#)f) = r*integral(f)
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume that
-A1: f is_bounded_on A and
+A1: f|A is bounded and
 A2: f is_integrable_on A;
 A3: r(#)f is_upper_integrable_on A
   proof
     rng upper_sum_set(r(#)f) is bounded_below
     proof
-      upper_sum_set(r(#)f) is_bounded_below_on divs A
+      (upper_sum_set(r(#)f))|divs A is bounded_below
       proof
         ex a st for D be set st D in divs A /\ dom(upper_sum_set(r(#)f))
         holds a <= (upper_sum_set(r(#)f)).D
@@ -1293,7 +1287,7 @@ A3: r(#)f is_upper_integrable_on A
           end;
           hence thesis;
         end;
-        hence thesis by RFUNCT_1:def 10;
+        hence thesis by RFUNCT_1:88;
       end;
       hence thesis by INTEGRA1:13;
     end;
@@ -1303,7 +1297,7 @@ A4: r(#)f is_lower_integrable_on A
   proof
     rng lower_sum_set(r(#)f) is bounded_above
     proof
-      lower_sum_set(r(#)f) is_bounded_above_on divs A
+      (lower_sum_set(r(#)f))|divs A is bounded_above
       proof
         ex a st for D be set st D in divs A /\ dom(lower_sum_set(r(#)f))
         holds a >= (lower_sum_set(r(#)f)).D
@@ -1324,7 +1318,7 @@ A4: r(#)f is_lower_integrable_on A
           end;
           hence thesis;
         end;
-        hence thesis by RFUNCT_1:def 9;
+        hence thesis by RFUNCT_1:87;
       end;
       hence thesis by INTEGRA1:15;
     end;
@@ -1350,7 +1344,7 @@ A11: lower_sum_set(f) is total by PARTFUN1:def 4;
     then
 A12: lower_sum_set(f) is Function of divs A,REAL;
 A13: rng(lower_sum_set(f)) is non empty by A10,RELAT_1:65;
-A14: f is_bounded_above_on A & f is_bounded_below_on A by A1,RFUNCT_1:def 11;
+A14: f|A is bounded_above & f|A is bounded_below by A1;
     now per cases;
       suppose
 A15:    r >= 0;
@@ -1486,14 +1480,14 @@ begin :: Monotonicity of Integral
 
 theorem Th32:
   for A be closed-interval Subset of REAL,
-  f be Function of A,REAL st f is_bounded_on A &
+  f be Function of A,REAL st f|A is bounded &
   f is_integrable_on A &(for x st x in A holds f.x >= 0) holds
   integral(f) >= 0
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume
-A1: f is_bounded_on A & f is_integrable_on A &
+A1: f|A is bounded & f is_integrable_on A &
   (for x st x in A holds f.x >= 0);
 A2: upper_integral(f) = inf rng upper_sum_set(f) by INTEGRA1:def 15;
   dom upper_sum_set(f) is non empty by INTEGRA1:def 11;
@@ -1528,7 +1522,7 @@ A10:      dom(f|divset(D,i)) = dom f /\ divset(D,i) by RELAT_1:90;
         end;
 A12:    rng(f|divset(D,i)) is bounded_above
         proof
-          f is_bounded_above_on A by A1,RFUNCT_1:def 11;
+          f|A is bounded_above by A1;
           then rng f is bounded_above by INTEGRA1:15;
           hence thesis by XXREAL_2:43,RELAT_1:99;
         end;
@@ -1550,17 +1544,17 @@ end;
 
 theorem Th33:
   for A be closed-interval Subset of REAL,
-  f,g be Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & g is_bounded_on A & g is_integrable_on A holds
+  f,g be Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & g|A is bounded & g is_integrable_on A holds
   f-g is_integrable_on A & integral(f-g) = integral(f)-integral(g)
 proof
   let A be closed-interval Subset of REAL;
   let f,g be Function of A,REAL;
   assume
-A1: f is_bounded_on A & f is_integrable_on A
-  & g is_bounded_on A & g is_integrable_on A;
+A1: f|A is bounded & f is_integrable_on A
+  & g|A is bounded & g is_integrable_on A;
   then
-A2: -g is_bounded_on A by RFUNCT_1:99;
+A2: (-g)|A is bounded by RFUNCT_1:99;
   -g = (-1)(#)g;
   then
 A3: -g is_integrable_on A & integral(-g) = (-1)*integral(g) by A1,Th31;
@@ -1571,16 +1565,16 @@ end;
 
 theorem
   for A be closed-interval Subset of REAL,
-  f,g be Function of A,REAL st f is_bounded_on A &
-  f is_integrable_on A & g is_bounded_on A &
+  f,g be Function of A,REAL st f|A is bounded &
+  f is_integrable_on A & g|A is bounded &
   g is_integrable_on A & (for x st x in A holds f.x >= g.x) holds
   integral(f) >= integral(g)
 proof
   let A be closed-interval Subset of REAL;
   let f,g be Function of A,REAL;
   assume
-A1: f is_bounded_on A & f is_integrable_on A
-  & g is_bounded_on A & g is_integrable_on A &
+A1: f|A is bounded & f is_integrable_on A
+  & g|A is bounded & g is_integrable_on A &
   (for x st x in A holds f.x >= g.x);
   then
 A2: f-g is_integrable_on A & integral(f-g)=integral(f)-integral(g) by Th33;
@@ -1593,7 +1587,7 @@ A5: x in A;
     then (f-g).x = f.x - g.x by A3,VALUED_1:13;
     hence thesis by A1,A5,XREAL_1:50;
   end;
-  f-g is_bounded_on A /\ A by A1,RFUNCT_1:101;
+  (f-g)|(A /\ A) is bounded by A1,RFUNCT_1:101;
   then integral(f)-integral(g) >= 0 by A2,A4,Th32;
   hence thesis by REAL_2:105;
 end;
@@ -1602,12 +1596,12 @@ begin :: Definition of Division Sequence
 
 theorem
   for A be closed-interval Subset of REAL, f be Function of A,REAL
-  st f is_bounded_on A holds rng upper_sum_set(f) is bounded_below
+  st f|A is bounded holds rng upper_sum_set(f) is bounded_below
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume that
-A1: f is_bounded_on A;
+A1: f|A is bounded;
   consider D1 be Element of divs A;
   for a be real number st a in rng upper_sum_set(f) holds a >= lower_sum( f
   ,D1)
@@ -1624,12 +1618,12 @@ end;
 
 theorem
   for A be closed-interval Subset of REAL, f be Function of A,REAL
-  st f is_bounded_on A holds rng lower_sum_set(f) is bounded_above
+  st f|A is bounded holds rng lower_sum_set(f) is bounded_above
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   assume that
-A1: f is_bounded_on A;
+A1: f|A is bounded;
   consider D1 be Element of divs A;
   for a be real number st a in rng lower_sum_set(f) holds a <= upper_sum( f
   ,D1)
@@ -1748,12 +1742,10 @@ A3: for x1 holds x1 in X iff x1 in dom D2 & P[x1] from SUBSET_1:sch 1;
     proof
 A4:   len D2 in dom D2 & D2.(len D2) in rng D1 & D2.(len D2) >= D2.j
       proof
-        len D2 <> 0 by CARD_2:59;
-        then len D2 in Seg len D2 by FINSEQ_1:5;
+        len D2 in Seg len D2 by FINSEQ_1:5;
         hence
 A5:     len D2 in dom D2 by FINSEQ_1:def 3;
-        len D1 <> 0 by CARD_2:59;
-        then len D1 in Seg len D1 by FINSEQ_1:5;
+        len D1 in Seg len D1 by FINSEQ_1:5;
         then
 A6:     len D1 in dom D1 by FINSEQ_1:def 3;
         D2.(len D2) = sup A by INTEGRA1:def 2;
@@ -1813,7 +1805,7 @@ A18:          D2.j in A by A17;
               then D2.j in {r:inf A <= r & r <= D1.i} by A8,A9;
               hence thesis by RCOMP_1:def 1;
             end;
-            hence thesis by A12,A13,A14,RCOMP_1:16;
+            hence thesis by A12,A13,A14,XXREAL_2:def 12;
           end;
           suppose
 A19:        j<>1;
@@ -1853,7 +1845,7 @@ A27:          A = {r:inf A<=r & r<=sup A} by RCOMP_1:def 1;
               then D2.j in {r:inf A <= r & r <= D1.i} by A8,A9;
               hence thesis by RCOMP_1:def 1;
             end;
-            hence thesis by A12,A20,A21,RCOMP_1:16;
+            hence thesis by A12,A20,A21,XXREAL_2:def 12;
           end;
         end;
         hence thesis;
@@ -1872,7 +1864,7 @@ A31:      j=1;
           then
 A32:      1 <= i & i <= len D1 by FINSEQ_1:3;
           then
-A33:      i > 1 by A28,REAL_1:def 5;
+A33:      i > 1 by A28,XXREAL_0:1;
           1 <= 1 & 1 <= len D1 by A32,XXREAL_0:2;
           then 1 in Seg len D1 by FINSEQ_1:3;
           then
@@ -1892,7 +1884,7 @@ A37:      1 <= n & n <= len D2 by FINSEQ_1:3;
           then n in X by A3,A35,A36;
           then n >= min X by XXREAL_2:def 7;
           then D1.1 >= D1.i by A7,A9,A36,GOBOARD2:18;
-          hence contradiction by A9,A33,A34,GOBOARD1:def 1;
+          hence contradiction by A9,A33,A34,SEQM_3:def 1;
         end;
         then inf divset(D2,j) = D2.(j-1) & sup divset(D2,j) = D2.j
         by A2,INTEGRA1:def 5;
@@ -1922,7 +1914,7 @@ A47:      n in dom D2 & D1.(i-1) = D2.n by A44,PARTFUN1:26;
           then n in X by A3,A46,A47;
           then n >= min X by XXREAL_2:def 7;
           then D1.(i-1) >= D1.i by A7,A9,A47,GOBOARD2:18;
-          then i-1 >= i by A9,A45,GOBOARD1:def 1;
+          then i-1 >= i by A9,A45,SEQM_3:def 1;
           then
 A48:      i >= i+1 by XREAL_1:21;
           i <= i+1 by NAT_1:11;
@@ -1935,7 +1927,7 @@ A49:    D2.(j-1) in [. D1.(i-1),D1.i .] by RCOMP_1:def 1;
         D1.(i-1) <= D2.j & D2.j <= D1.i by A3,A7,A9,A40,A42,XXREAL_0:2;
         then D2.j in {r:D1.(i-1) <= r & r <= D1.i};
         then D2.j in [. D1.(i-1),D1.i .] by RCOMP_1:def 1;
-        hence thesis by A29,A38,A49,RCOMP_1:16;
+        hence thesis by A29,A38,A49,XXREAL_2:def 12;
       end;
     end;
     hence thesis;

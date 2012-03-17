@@ -37,15 +37,15 @@
 </Signature>
 <RCluster aid="EXTENS_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="47" value="false"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="50">
+<Adjective nr="55">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -61,6 +61,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
+<Adjective nr="7" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

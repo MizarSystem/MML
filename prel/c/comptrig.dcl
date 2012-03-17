@@ -28,10 +28,10 @@
 </Signature>
 <FCluster aid="COMPTRIG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="202"/>
+<Func kind="K" nr="205"/>
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="20" value="false"/>
+<Adjective nr="18"/>
+<Adjective nr="21" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

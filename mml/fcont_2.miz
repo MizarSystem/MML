@@ -9,7 +9,7 @@ environ
  vocabularies SEQ_1, PARTFUN1, RELAT_1, ABSVALUE, ARYTM_1, FUNCT_1, BOOLE,
       ARYTM_3, SQUARE_1, RFUNCT_1, ARYTM, FCONT_1, COMPTS_1, SEQ_2, ORDINAL2,
       SEQM_3, SEQ_4, PARTFUN2, RCOMP_1, FINSEQ_1, LATTICES, RFUNCT_2, FCONT_2,
-      FUNCOP_1, FRECHET2;
+      FUNCOP_1, FRECHET2, PROB_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, XXREAL_2,
       COMPLEX1, REAL_1, NAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
@@ -19,10 +19,10 @@ environ
       SEQM_3, SEQ_4, RCOMP_1, PARTFUN2, RFUNCT_1, RFUNCT_2, FCONT_1, SEQ_1,
       RECDEF_1, XXREAL_2;
  registrations XBOOLE_0, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
-      SEQM_3, RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1;
+      SEQM_3, RFUNCT_2, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1, XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions VALUED_1;
- theorems TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, ABSVALUE, SEQ_2, SEQM_3,
+ theorems TARSKI, SUBSET_1, NAT_1, FUNCT_1, ABSVALUE, SEQ_2, SEQM_3,
       SEQ_4, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1, RELAT_1, FUNCT_2,
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1,
       COMPLEX1, XXREAL_0, ORDINAL1, VALUED_1, XXREAL_2, XXREAL_1;
@@ -250,14 +250,14 @@ end;
 
 theorem
   f1 is_uniformly_continuous_on X & f2 is_uniformly_continuous_on X1 &
-  f1 is_bounded_on Z & f2 is_bounded_on Z1 implies
+  f1|Z is bounded & f2|Z1 is bounded implies
   f1(#)f2 is_uniformly_continuous_on X/\Z/\X1/\Z1
 proof
   assume that
 A1: f1 is_uniformly_continuous_on X and
 A2: f2 is_uniformly_continuous_on X1 and
-A3: f1 is_bounded_on Z and
-A4: f2 is_bounded_on Z1;
+A3: f1|Z is bounded and
+A4: f2|Z1 is bounded;
 A5: X c= dom f1 by A1,Def1;
 A6: X1 c= dom f2 by A2,Def1;
   then
@@ -584,7 +584,7 @@ A1: Y <> {} & Y c= dom f & Y is compact & f is_uniformly_continuous_on Y;
 end;
 
 theorem
-  X c= dom f & f is_constant_on X implies f is_uniformly_continuous_on X
+  X c= dom f & f|X is constant implies f is_uniformly_continuous_on X
   by Th10,FCONT_1:40;
 
 theorem Th16:
@@ -618,7 +618,7 @@ A10: r<> f.p by A8;
     reconsider f1 as PartFunc of REAL, REAL;
 A11: dom f1 = [.p,g.] by FUNCOP_1:19;
     then for x0 st x0 in [.p,g.] /\ dom f1 holds f1.x0=r by FUNCOP_1:13;
-    then f1 is_constant_on [.p,g.] by PARTFUN2:76;
+    then f1|[.p,g.] is constant by PARTFUN2:76;
     then f1 is_continuous_on [.p,g.] by A11,FCONT_1:44;
     then f1-f is_continuous_on [.p,g.] by A2,FCONT_1:19;
     then
@@ -648,7 +648,7 @@ A20: dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
       .= [.p,g.] /\ dom f by A11,VALUED_1:12
       .= [.p,g.] by A5,XBOOLE_1:28;
     then (abs(f1-f)^).:[.p,g.] is bounded by A4,A19,FCONT_1:30,RCOMP_1:28;
-    then (abs(f1-f)^).:[.p,g.] is bounded_above by XXREAL_2:def 11;
+    then (abs(f1-f)^).:[.p,g.] is bounded_above;
     then consider M being real number such that
 A21: for x1 be real number st x1 in (abs(f1-f)^).:[.p,g.] holds
     x1<=M by SEQ_4:def 1;
@@ -690,7 +690,7 @@ A29: 0<s & for x1,x2 st x1 in [.p,g.] & x2 in [.p,g .] &
         hence contradiction by A7;
       end;
       suppose p<>g;
-        then p < g by A1,REAL_1:def 5;
+        then p < g by A1,XXREAL_0:1;
         then
 A30:    0 < g-p by XREAL_1:52;
         consider k be Element of NAT such that
@@ -698,7 +698,7 @@ A31:    (g-p)/s < k by SEQ_4:10;
 A32:    0 < (g-p)/s by A29,A30,XREAL_1:141;
         (g-p)/s *s < s*k by A29,A31,XREAL_1:70;
         then (g-p) < s*k by A29,XCMPLX_1:88;
-        then (g-p)/k < s*k/k by A31,A32,REAL_1:73;
+        then (g-p)/k < s*k/k by A31,A32,XREAL_1:76;
         then (g-p)/k < s*k*k" by XCMPLX_0:def 9;
         then (g-p)/k < s*(k*k");
         then
@@ -749,7 +749,7 @@ A44:    s1.k = p + (g-p)/k*k by A35
 A45:    ex n be Nat st P[n] by A9;
         consider l be Nat such that
 A46:    P[l] & for m be Nat st P[m] holds l<=m from NAT_1:sch 5(A45);
-        l<>0 by A9,A10,A43,A46,REAL_1:def 5;
+        l<>0 by A9,A10,A43,A46,XXREAL_0:1;
         then consider l1 be Nat such that
 A47:    l=l1+1 by NAT_1:6;
         reconsider l1 as Element of NAT by ORDINAL1:def 13;
@@ -796,7 +796,7 @@ A55: r<> f.g by A53;
     reconsider f1 as PartFunc of REAL, REAL;
 A56: dom f1 = [.p,g.] by FUNCOP_1:19;
     then for x0 st x0 in [.p,g.] /\ dom f1 holds f1.x0=r by FUNCOP_1:13;
-    then f1 is_constant_on [.p,g.] by PARTFUN2:76;
+    then f1|[.p,g.] is constant by PARTFUN2:76;
     then f1 is_continuous_on [.p,g.] by A56,FCONT_1:44;
     then f1-f is_continuous_on [.p,g.] by A2,FCONT_1:19;
     then
@@ -826,7 +826,7 @@ A65: dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
       .= [.p,g.] /\ dom f by A56,VALUED_1:12
       .= [.p,g.] by A5,XBOOLE_1:28;
     then (abs(f1-f)^).:[.p,g.] is bounded by A4,A64,FCONT_1:30,RCOMP_1:28;
-    then (abs(f1-f)^).:[.p,g.] is bounded_above by XXREAL_2:def 11;
+    then (abs(f1-f)^).:[.p,g.] is bounded_above;
     then consider M being real number such that
 A66: for x1 be real number st x1 in (abs(f1-f)^).:[.p,g.] holds
     x1<=M by SEQ_4:def 1;
@@ -868,7 +868,7 @@ A74: 0<s & for x1,x2 st x1 in [.p,g.] & x2 in [.p,g .] &
         hence contradiction by A52;
       end;
       suppose p<>g;
-        then p < g by A1,REAL_1:def 5;
+        then p < g by A1,XXREAL_0:1;
         then
 A75:    0 < g-p by XREAL_1:52;
         consider k be Element of NAT such that
@@ -876,7 +876,7 @@ A76:    (g-p)/s < k by SEQ_4:10;
 A77:    0 < (g-p)/s by A74,A75,XREAL_1:141;
         (g-p)/s *s < s*k by A74,A76,XREAL_1:70;
         then (g-p) < s*k by A74,XCMPLX_1:88;
-        then (g-p)/k < s*k/k by A76,A77,REAL_1:73;
+        then (g-p)/k < s*k/k by A76,A77,XREAL_1:76;
         then (g-p)/k < s*k*k" by XCMPLX_0:def 9;
         then (g-p)/k < s*(k*k");
         then
@@ -898,22 +898,22 @@ A84:      abs(s1.(n+1) -s1.n) = abs(g- (g-p)/k*(n+1) - s1.n) by A80
             .= (g-p)/k by A79,ABSVALUE:def 1;
           (g-p)/k*n < (g-p)/k*k by A79,A82,XREAL_1:70;
           then (g-p)/k*n < (g-p) by A76,A77,XCMPLX_1:88;
-          then g -(g-p) < g-(g-p)/k*n by REAL_1:92;
+          then g -(g-p) < g-(g-p)/k*n by XREAL_1:17;
           then
 A85:      g-(g-p)< s1.n by A80;
           0*n<=(g-p)/k*n by A79;
-          then g-(g-p)/k*n<=g-0 by REAL_1:92;
+          then g-(g-p)/k*n<=g-0 by XREAL_1:15;
           then s1.n<=g by A80;
           then s1.n in {x2: p<=x2 & x2<=g} by A85;
           hence
 A86:      s1.n in [.p,g.] by RCOMP_1:def 1;
           (g-p)/k*(n+1) <= (g-p)/k*k by A79,A83,XREAL_1:66;
           then (g-p)/k*(n+1) <= (g-p) by A76,A77,XCMPLX_1:88;
-          then g -(g-p)<=g- (g-p)/k*(n+1) by REAL_1:92;
+          then g -(g-p)<=g- (g-p)/k*(n+1) by XREAL_1:15;
           then
 A87:      g-(g-p)<=s1.(n+1) by A80;
           0*(n+1)<=(g-p)/k*(n+1) by A79;
-          then g-(g-p)/k*(n+1)<=g-0 by REAL_1:92;
+          then g-(g-p)/k*(n+1)<=g-0 by XREAL_1:15;
           then s1.(n+1)<=g by A80;
           then s1.(n+1) in {x2: p<=x2 & x2<=g} by A87;
           hence s1.(n+1) in [.p,g.] by RCOMP_1:def 1;
@@ -929,7 +929,7 @@ A89:    s1.k = g- (g-p)/k*k by A80
 A90:    ex n be Nat st P[n] by A54;
         consider l be Nat such that
 A91:    P[l] & for m be Nat st P[m] holds l<=m from NAT_1:sch 5(A90);
-        l<>0 by A54,A55,A88,A91,REAL_1:def 5;
+        l<>0 by A54,A55,A88,A91,XXREAL_0:1;
         then consider l1 be Nat such that
 A92:    l=l1+1 by NAT_1:6;
         reconsider l1 as Element of NAT by ORDINAL1:def 13;
@@ -993,16 +993,16 @@ A8: [.lb,ub.] = [.lb,ub.] \/ [.ub,lb.] by A7,XXREAL_1:222,SEQ_4:24;
   now per cases;
     suppose
 A9:   x1 <= x2;
-A10:  [.x1,x2.] c= [.p,g.] by A6,RCOMP_1:16;
-      f is_continuous_on [.x1,x2.] by A1,A6,FCONT_1:17,RCOMP_1:16;
+A10:  [.x1,x2.] c= [.p,g.] by A6,XXREAL_2:def 12;
+      then f is_continuous_on [.x1,x2.] by A1,FCONT_1:17;
       then consider s such that
 A11:  s in [.x1,x2.] & r=f.s by A2,A6,A8,A9,Th16;
       take s; thus s in [.p,g.] & r=f.s by A10,A11;
     end;
     suppose
 A12:  x2 <= x1;
-A13:  [.x2,x1.] c= [.p,g.] by A6,RCOMP_1:16;
-      f is_continuous_on [.x2,x1.] by A1,A6,FCONT_1:17,RCOMP_1:16;
+A13:  [.x2,x1.] c= [.p,g.] by A6,XXREAL_2:def 12;
+      then f is_continuous_on [.x2,x1.] by A1,FCONT_1:17;
       then consider s such that
 A14:  s in [.x2,x1.] & r=f.s by A2,A6,A8,A12,Th16;
       take s; thus s in [.p,g.] & r=f.s by A13,A14;
@@ -1013,24 +1013,24 @@ end;
 
 theorem Th18:
   f is one-to-one & p<=g & f is_continuous_on [.p,g.] implies
-  f is_increasing_on [.p,g.] or f is_decreasing_on [.p,g.]
+  f|[.p,g.] is increasing or f|[.p,g.] is decreasing
 proof
   assume that
 A1: f is one-to-one and
 A2: p<=g & f is_continuous_on [.p,g.] and
-A3: not f is_increasing_on [.p,g.] & not f is_decreasing_on [.p,g.];
+A3: not f|[.p,g.] is increasing & not f|[.p,g.] is decreasing;
 A4: [.p,g.] c= dom f by A2,FCONT_1:def 2;
   now per cases;
     suppose p=g;
       then [.p,g.]={p} by XXREAL_1:17;
-      hence contradiction by A3,RFUNCT_2:75;
+      hence contradiction by A3,RFUNCT_2:76;
     end;
     suppose
 A5:   p<>g;
 A6:   p in [.p,g.] & g in [.p,g.] by A2,XXREAL_1:1;
       then
 A7:   f.p<>f.g by A1,A4,A5,FUNCT_1:def 8;
-      now per cases by A7,REAL_1:def 5;
+      now per cases by A7,XXREAL_0:1;
         suppose
 A8:       f.p<f.g;
 A9:       for x1 st p<=x1 & x1<=g holds f.p<=f.x1 & f.x1<=f.g
@@ -1048,16 +1048,17 @@ A12:            f.x1<f.p;
                   end;
                   suppose p<>x1;
                     then
-A13:                x1>p by A10,REAL_1:def 5;
+A13:                x1>p by A10,XXREAL_0:1;
                     x1 in {r: p<=r & r<=g} by A10;
                     then
 A14:                x1 in [.p,g.] by RCOMP_1:def 1;
-A15:                g in [.p,g.] by A2,XXREAL_1:1;
+                    g in [.p,g.] by A2,XXREAL_1:1;
                     then
-A16:                [.x1,g.] c= [.p,g.] by A14,RCOMP_1:16;
+A16:                [.x1,g.] c= [.p,g.] by A14,XXREAL_2:def 12;
+        then
 A17:                f
 
-is_continuous_on [.x1,g.] by A2,A14,A15,FCONT_1:17,RCOMP_1:16;
+is_continuous_on [.x1,g.] by A2,FCONT_1:17;
                     f.p in {r:f.x1<=r & r<=f.g} by A8,A12;
                     then f.p in [.f.x1,f.g.] by RCOMP_1:def 1;
                     then f.p in [.f.x1,f.g.] \/ [.f.g,f.x1.] by XBOOLE_0:def 2;
@@ -1082,12 +1083,13 @@ A21:                g<>x1;
                     x1 in {r:p<=r & r<=g} by A10;
                     then
 A22:                x1 in [.p,g.] by RCOMP_1:def 1;
-A23:                p in [.p,g.] by A2,XXREAL_1:1;
+                    p in [.p,g.] by A2,XXREAL_1:1;
                     then
-A24:                [.p,x1.] c= [.p,g.] by A22,RCOMP_1:16;
+A24:                [.p,x1.] c= [.p,g.] by A22,XXREAL_2:def 12;
+     then
 A25:                f
 
-is_continuous_on [.p,x1.] by A2,A22,A23,FCONT_1:17,RCOMP_1:16;
+is_continuous_on [.p,x1.] by A2,FCONT_1:17;
                     f.g in {r:f.p<=r & r<=f.x1} by A8,A20;
                     then f.g in [.f.p,f.x1.] by RCOMP_1:def 1;
                     then f.g in [.f.p,f.x1.] \/ [.f.x1,f.p.] by XBOOLE_0:def 2;
@@ -1098,7 +1100,7 @@ A26:                s in [.p,x1.] & f.s=f.g by A10,A25,Th16;
 A27:                s=g by A1,A4,A6,A26,FUNCT_1:def 8;
                     s in {t: p<=t & t<=x1} by A26,RCOMP_1:def 1;
                     then ex r st r=s & p<=r & r<=x1;
-                    hence contradiction by A10,A21,A27,REAL_1:def 5;
+                    hence contradiction by A10,A21,A27,XXREAL_0:1;
                   end;
                 end;
                 hence contradiction;
@@ -1108,7 +1110,7 @@ A27:                s=g by A1,A4,A6,A26,FUNCT_1:def 8;
           end;
           consider x1,x2 such that
 A28:      x1 in [.p,g.] /\ dom f & x2 in [.p,g.] /\ dom f & x1<x2 & f.x2<=f.x1
-          by A3,RFUNCT_2:def 2;
+          by A3,RFUNCT_2:43;
 A29:      x1 in [.p,g.] & x2 in [.p,g.] & x1 in dom f & x2 in dom f
           by A28,XBOOLE_0:def 3;
           then x1 in {t:p<=t & t<=g} & x2 in {r: p<=r & r<=g} by RCOMP_1:def 1;
@@ -1120,10 +1122,10 @@ A30:      (ex r st r=x1 & p<=r & r<=g) & p<=x2 & x2<=g;
           then f.x2 in [.f.p,f.x1.] by RCOMP_1:def 1;
           then
 A31:      f.x2 in [.f.p,f.x1.] \/ [.f.x1,f.p.] by XBOOLE_0:def 2;
-A32:      p in [.p,g.] by A2,XXREAL_1:1;
+          p in [.p,g.] by A2,XXREAL_1:1;
           then
-A33:      [.p,x1.] c= [.p,g.] by A29,RCOMP_1:16;
-          f is_continuous_on [.p,x1.] by A2,A29,A32,FCONT_1:17,RCOMP_1:16;
+A33:      [.p,x1.] c= [.p,g.] by A29,XXREAL_2:def 12;
+          then f is_continuous_on [.p,x1.] by A2,FCONT_1:17;
           then consider s such that
 A34:      s in [.p,x1.] & f.s=f.x2 by A30,A31,Th16;
 A35:      s in [.p,g.] by A33,A34;
@@ -1151,12 +1153,13 @@ A41:                g<>x1;
                     x1 in {r: p<=r & r<=g} by A38;
                     then
 A42:                x1 in [.p,g.] by RCOMP_1:def 1;
-A43:                p in [.p,g.] by A2,XXREAL_1:1;
+                    p in [.p,g.] by A2,XXREAL_1:1;
                     then
-A44:                [.p,x1.] c= [.p,g.] by A42,RCOMP_1:16;
+A44:                [.p,x1.] c= [.p,g.] by A42,XXREAL_2:def 12;
+             then
 A45:                f
 
-is_continuous_on [.p,x1.] by A2,A42,A43,FCONT_1:17,RCOMP_1:16;
+is_continuous_on [.p,x1.] by A2,FCONT_1:17;
                     f.g in {r:f.x1<=r & r<=f.p} by A36,A40;
                     then f.g in [.f.x1,f.p.] by RCOMP_1:def 1;
                     then f.g in [.f.p,f.x1.] \/ [.f.x1,f.p.] by XBOOLE_0:def 2;
@@ -1167,7 +1170,7 @@ A46:                s in [.p,x1.] & f.s=f.g by A38,A45,Th16;
 A47:                s=g by A1,A4,A6,A46,FUNCT_1:def 8;
                     s in {t: p<=t & t<=x1} by A46,RCOMP_1:def 1;
                     then ex r st r=s & p<=r & r<=x1;
-                    hence contradiction by A38,A41,A47,REAL_1:def 5;
+                    hence contradiction by A38,A41,A47,XXREAL_0:1;
                   end;
                 end;
                 hence contradiction;
@@ -1183,12 +1186,13 @@ A49:                p<>x1;
                     x1 in {r:p<=r & r<=g} by A38;
                     then
 A50:                x1 in [.p,g.] by RCOMP_1:def 1;
-A51:                g in [.p,g.] by A2,XXREAL_1:1;
+                    g in [.p,g.] by A2,XXREAL_1:1;
                     then
-A52:                [.x1,g.] c= [.p,g.] by A50,RCOMP_1:16;
+A52:                [.x1,g.] c= [.p,g.] by A50,XXREAL_2:def 12;
+        then
 A53:                f
 
-is_continuous_on [.x1,g.] by A2,A50,A51,FCONT_1:17,RCOMP_1:16;
+is_continuous_on [.x1,g.] by A2,FCONT_1:17;
                     f.p in {r:f.g<=r & r<=f.x1} by A36,A48;
                     then f.p in [.f.g,f.x1.] by RCOMP_1:def 1;
                     then f.p in [.f.x1,f.g.] \/ [.f.g,f.x1.] by XBOOLE_0:def 2;
@@ -1199,7 +1203,7 @@ A54:                s in [.x1,g.] & f.s=f.p by A38,A53,Th16;
 A55:                s=p by A1,A4,A6,A54,FUNCT_1:def 8;
                     s in {t: x1<=t & t<=g} by A54,RCOMP_1:def 1;
                     then ex r st r=s & x1<=r & r<=g;
-                    hence contradiction by A38,A49,A55,REAL_1:def 5;
+                    hence contradiction by A38,A49,A55,XXREAL_0:1;
                   end;
                 end;
                 hence contradiction;
@@ -1209,7 +1213,7 @@ A55:                s=p by A1,A4,A6,A54,FUNCT_1:def 8;
           end;
           consider x1,x2 such that
 A56:      x1 in [.p,g.] /\ dom f & x2 in [.p,g.] /\ dom f & x1<x2 & f.x1<=f.x2
-          by A3,RFUNCT_2:def 3;
+          by A3,RFUNCT_2:44;
 A57:      x1 in [.p,g.] & x2 in [.p,g.] &
           x1 in dom f & x2 in dom f by A56,XBOOLE_0:def 3;
           then x1 in {t:p<=t & t<=g} & x2 in {r: p<=r & r<=g} by RCOMP_1:def 1;
@@ -1221,10 +1225,10 @@ A58:      x1 in {t:p<=t & t<=g} & ex r st r=x2 & p<=r & r<=g;
           then f.x1 in [.f.g,f.x2.] by RCOMP_1:def 1;
           then
 A59:      f.x1 in [.f.x2,f.g.] \/ [.f.g,f.x2.] by XBOOLE_0:def 2;
-A60:      g in [.p,g.] by A2,XXREAL_1:1;
+          g in [.p,g.] by A2,XXREAL_1:1;
           then
-A61:      [.x2,g.] c= [.p,g.] by A57,RCOMP_1:16;
-          f is_continuous_on [.x2,g.] by A2,A57,A60,FCONT_1:17,RCOMP_1:16;
+A61:      [.x2,g.] c= [.p,g.] by A57,XXREAL_2:def 12;
+          then f is_continuous_on [.x2,g.] by A2,FCONT_1:17;
           then consider s such that
 A62:      s in [.x2,g.] & f.s=f.x1 by A58,A59,Th16;
 A63:      s in [.p,g.] by A61,A62;
@@ -1255,8 +1259,7 @@ A5: p in [.p,g.] & g in [.p,g.] by A1,XXREAL_1:1;
 A6: f.p in f.:[.p,g.] & f.g in f.:[.p,g.] by A3,FUNCT_1:def 12;
   f.:[.p,g.] is bounded by A1,A3,A4,FCONT_1:30,RCOMP_1:28;
   then
-A7: f.:[.p,g.] is bounded_above & f.:[.p,g.] is bounded_below
- by XXREAL_2:def 11;
+A7: f.:[.p,g.] is bounded_above & f.:[.p,g.] is bounded_below;
 A8: p in [.p,g.]/\dom f & g in [.p,g.]/\dom f by A3,A5,XBOOLE_0:def 3;
   consider x1,x2 be real number such that
 A9: x1 in [.p,g.] & x2 in [.p,g.] &
@@ -1268,19 +1271,19 @@ A10: (ex r st r=x1 & p<=r & r<=g) & ex r st r=x2 & p<=r & r<=g;
 A11: x1 in [.p,g.]/\dom f & x2 in [.p,g.]/\dom f by A3,A9,XBOOLE_0:def 3;
   now per cases by A1,Th18;
     suppose
-A12:  f is_increasing_on [.p,g.];
+A12:  f|[.p,g.] is increasing;
       now
         now
           assume x2<>p;
-          then p<x2 by A10,REAL_1:def 5;
-          then f.p<f.x2 by A8,A11,A12,RFUNCT_2:def 2;
+          then p<x2 by A10,XXREAL_0:1;
+          then f.p<f.x2 by A8,A11,A12,RFUNCT_2:43;
           hence contradiction by A6,A7,A9,SEQ_4:def 5;
         end;
         hence lower_bound (f.:[.p,g.])=f.p by A9;
         now
           assume x1<>g;
-          then x1<g by A10,REAL_1:def 5;
-          then f.x1<f.g by A8,A11,A12,RFUNCT_2:def 2;
+          then x1<g by A10,XXREAL_0:1;
+          then f.x1<f.g by A8,A11,A12,RFUNCT_2:43;
           hence contradiction by A6,A7,A9,SEQ_4:def 4;
         end;
         hence upper_bound (f.:[.p,g.])=f.g by A9;
@@ -1288,19 +1291,19 @@ A12:  f is_increasing_on [.p,g.];
       hence thesis;
     end;
     suppose
-A13:  f is_decreasing_on [.p,g.];
+A13:  f|[.p,g.] is decreasing;
       now
         now
           assume x1<>p;
-          then p<x1 by A10,REAL_1:def 5;
-          then f.x1<f.p by A8,A11,A13,RFUNCT_2:def 3;
+          then p<x1 by A10,XXREAL_0:1;
+          then f.x1<f.p by A8,A11,A13,RFUNCT_2:44;
           hence contradiction by A6,A7,A9,SEQ_4:def 4;
         end;
         hence upper_bound (f.:[.p,g.])=f.p by A9;
         now
           assume x2<>g;
-          then x2<g by A10,REAL_1:def 5;
-          then f.g<f.x2 by A8,A11,A13,RFUNCT_2:def 3;
+          then x2<g by A10,XXREAL_0:1;
+          then f.g<f.x2 by A8,A11,A13,RFUNCT_2:44;
           hence contradiction by A6,A7,A9,SEQ_4:def 5;
         end;
         hence lower_bound (f.:[.p,g.])=f.g by A9;
@@ -1322,8 +1325,7 @@ A2: [.p,g.] c= dom f by FCONT_1:def 2;
   [.p,g.] is compact by RCOMP_1:24;
   then f.:[.p,g.] is bounded by A1,A2,FCONT_1:30,RCOMP_1:28;
   then
-A3: f.:[.p,g.] is bounded_above & f.:[.p,g.] is bounded_below
-           by XXREAL_2:def 11;
+A3: f.:[.p,g.] is bounded_above & f.:[.p,g.] is bounded_below;
   now
     let y be Real;
     thus y in f.:[.p,g.] implies
@@ -1357,15 +1359,15 @@ A1: p<=g & f is_continuous_on [.p,g.];
   then
 A2: [.p,g.] c= dom f by FCONT_1:def 2;
   now per cases by A1,Th18;
-    suppose f is_increasing_on [.p,g.];
-      then (f|[.p,g.])" is_increasing_on f.:[.p,g.] by RFUNCT_2:83;
-      then (f")|(f.:[.p,g.]) is_increasing_on f.:[.p,g.] by RFUNCT_2:40;
-      then f" is_increasing_on f.:[.p,g.] by RFUNCT_2:50;
-      then f" is_non_decreasing_on f.:[.p,g.] by RFUNCT_2:55;
-      then f" is_monotone_on f.:[.p,g.] by RFUNCT_2:def 6;
+    suppose f|[.p,g.] is increasing;
+      then (f|[.p,g.])"|(f.:[.p,g.]) is increasing by RFUNCT_2:83;
+      then f"|(f.:[.p,g.])|(f.:[.p,g.]) is increasing by RFUNCT_2:40;
+      then f"|(f.:[.p,g.]) is increasing by RELAT_1:101;
+      then f"|(f.:[.p,g.]) is non-decreasing;
+      then f"|(f.:[.p,g.]) is monotone;
       then
-A3:   f" is_monotone_on [.lower_bound (f.:[.p,g.]),upper_bound (f.:
-      [.p,g .]).] by A1,Th20;
+A3:   f"|[.lower_bound (f.:[.p,g.]),upper_bound (f.:
+      [.p,g .]).] is monotone by A1,Th20;
       now
         let r;
         assume r in f.:[.p,g.];
@@ -1396,15 +1398,16 @@ A5:   [.lower_bound (f.:[.p,g.]),upper_bound (f.:[.p,g.]).] c= dom ( f")
         .= [.p,g.] by A2,XBOOLE_1:28;
       hence thesis by A1,A3,A5,FCONT_1:53;
     end;
-    suppose f is_decreasing_on [.p,g.];
-      then (f|[.p,g.])" is_decreasing_on f.:[.p,g.] by RFUNCT_2:84;
-      then (f")|(f.:[.p,g.]) is_decreasing_on f.:[.p,g.] by RFUNCT_2:40;
-      then f" is_decreasing_on f.:[.p,g.] by RFUNCT_2:51;
-      then f" is_non_increasing_on f.:[.p,g.] by RFUNCT_2:56;
-      then f" is_monotone_on f.:[.p,g.] by RFUNCT_2:def 6;
+    suppose f|[.p,g.] is decreasing;
+      then (f|[.p,g.])"|(f.:[.p,g.]) is decreasing by RFUNCT_2:84;
+      then f"|(f.:[.p,g.])|(f.:[.p,g.]) is decreasing
+                         by RFUNCT_2:40;
+      then f"|(f.:[.p,g.]) is decreasing by RELAT_1:101;
+      then f"|(f.:[.p,g.]) is non-increasing;
+      then f"|(f.:[.p,g.]) is monotone;
       then
-A6:   f" is_monotone_on [.lower_bound (f.:[.p,g.]),upper_bound (f.:
-      [.p,g .]).] by A1,Th20;
+A6:   f"|[.lower_bound (f.:[.p,g.]),upper_bound (f.:
+      [.p,g .]).] is monotone by A1,Th20;
       now
         let r;
         assume r in f.:[.p,g.];

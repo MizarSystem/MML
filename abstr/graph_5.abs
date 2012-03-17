@@ -8,16 +8,16 @@ environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1,
       GRAPH_1, GRAPH_5, RLVECT_1, GRAPH_4, FINSEQ_4, FINSEQ_2, PROB_1, ARYTM_1,
-      MSAFREE2, ARYTM;
+      MSAFREE2, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, SEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSET_1, REAL_1, NAT_1, GRAPH_1, BINARITH, FUNCT_2, GRAPH_4,
-      CARD_3, RVSUM_1, GRAPH_3;
+      FINSEQ_4, FINSET_1, REAL_1, NAT_1, STRUCT_0, GRAPH_1, BINARITH, FUNCT_2,
+      GRAPH_4, CARD_3, RVSUM_1, GRAPH_3;
  constructors PARTFUN1, XXREAL_0, NAT_1, CARD_3, FINSEQ_4, FINSOP_1, BINARITH,
       GOBOARD1, GRAPH_4, SEQ_1, BINOP_2, ENUMSET1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_2, GRAPH_4, VALUED_0,
-      CARD_1;
+      CARD_1, STRUCT_0;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
 
 
@@ -78,11 +78,11 @@ theorem :: GRAPH_5:10
   (for n,m st 1<=n & n<m & m<=len p holds p.n <> p.m) iff card rng p = len p;
 
 reserve G for Graph,
-  pe,qe for FinSequence of the Edges of G;
+  pe,qe for FinSequence of the carrier' of G;
 
 theorem :: GRAPH_5:11
-  i in dom pe implies (the Source of G).(pe.i) in the Vertices of G
-  & (the Target of G).(pe.i) in the Vertices of G;
+  i in dom pe implies (the Source of G).(pe.i) in the carrier of G
+  & (the Target of G).(pe.i) in the carrier of G;
 
 theorem :: GRAPH_5:12
   q^<*x*> is one-to-one & rng (q^<*x*>) c= rng p implies
@@ -115,7 +115,7 @@ theorem :: GRAPH_5:18
 
 theorem :: GRAPH_5:19
   for p being Simple (oriented Chain of G), q being FinSequence of
-  the Edges of G st len p >=1 & len q=1 &
+  the carrier' of G st len p >=1 & len q=1 &
   (the Source of G).(q.1)=(the Target of G).(p.(len p)) &
   (the Source of G).(p.1) <> (the Target of G).(p.(len p)) &
   not ex k st 1<=k & k <= len p & (the Target of G).(p.k)
@@ -124,10 +124,10 @@ theorem :: GRAPH_5:19
 theorem :: GRAPH_5:20
   for p being Simple (oriented Chain of G) holds p is one-to-one;
 
-begin :: The Set of the Vertices On a Path or an Edge
+begin :: The Set of the carrier On a Path or an Edge
 
 definition
-  let G be Graph, e be Element of the Edges of G;
+  let G be Graph, e be Element of the carrier' of G;
   func vertices e equals
 :: GRAPH_5:def 1
 
@@ -136,7 +136,7 @@ end;
 
 definition
   let G,pe;
-  func vertices pe -> Subset of the Vertices of G equals
+  func vertices pe -> Subset of the carrier of G equals
 :: GRAPH_5:def 2
   {v where v is Vertex of G : ex i st i in dom pe & v in vertices(pe/.i)};
 end;
@@ -152,7 +152,7 @@ theorem :: GRAPH_5:22
 
 theorem :: GRAPH_5:23
   not vertices pe c= V implies ex i being Element of NAT, q,r being FinSequence
-  of the Edges of G st i+1 <= len pe & not vertices(pe/.(i+1)) c= V &
+  of the carrier' of G st i+1 <= len pe & not vertices(pe/.(i+1)) c= V &
   len q=i & pe=q^r & vertices q c= V;
 
 theorem :: GRAPH_5:24
@@ -165,7 +165,7 @@ theorem :: GRAPH_5:26
   vertices(pe^qe) \ X c= V implies vertices(pe) \ X c= V &
   vertices(qe) \ X c= V;
 
-reserve v,v1,v2,v3 for Element of the Vertices of G;
+reserve v,v1,v2,v3 for Element of the carrier of G;
 
 canceled;
 
@@ -208,8 +208,8 @@ definition
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G;
-  func OrientedPaths(v1,v2) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G;
+  func OrientedPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 5
   {p where p is oriented Chain of G : p is_orientedpath_of v1,v2};
 end;
@@ -238,7 +238,7 @@ begin :: Acyclic (or Simple) Paths
 
 definition
   let G be Graph, p be oriented Chain of G,
-  v1,v2 be Element of the Vertices of G;
+  v1,v2 be Element of the carrier of G;
   pred p is_acyclicpath_of v1,v2 means
 :: GRAPH_5:def 6
 
@@ -247,7 +247,7 @@ end;
 
 definition
   let G be Graph, p be oriented Chain of G, v1,v2 be Element of
-  the Vertices of G,V be set;
+  the carrier of G,V be set;
   pred p is_acyclicpath_of v1,v2,V means
 :: GRAPH_5:def 7
 
@@ -255,22 +255,22 @@ definition
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G;
-  func AcyclicPaths(v1,v2) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G;
+  func AcyclicPaths(v1,v2) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 8
   {p where p is Simple (oriented Chain of G): p is_acyclicpath_of v1,v2};
 end;
 
 definition
-  let G be Graph, v1,v2 be Element of the Vertices of G,V be set;
-  func AcyclicPaths(v1,v2,V) -> Subset of ((the Edges of G)*) equals
+  let G be Graph, v1,v2 be Element of the carrier of G,V be set;
+  func AcyclicPaths(v1,v2,V) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 9
   {p where p is Simple (oriented Chain of G) : p is_acyclicpath_of v1,v2,V};
 end;
 
 definition
   let G be Graph, p be oriented Chain of G;
-  func AcyclicPaths(p) -> Subset of ((the Edges of G)*) equals
+  func AcyclicPaths(p) -> Subset of ((the carrier' of G)*) equals
 :: GRAPH_5:def 10
   {q where q is Simple (oriented Chain of G) : q <> {} &
   (the Source of G).(q.1) = (the Source of G).(p.1) &
@@ -280,7 +280,7 @@ end;
 
 definition
   let G be Graph;
-  func AcyclicPaths(G) -> Subset of (the Edges of G)* equals
+  func AcyclicPaths(G) -> Subset of (the carrier' of G)* equals
 :: GRAPH_5:def 11
   {q where q is Simple (oriented Chain of G) : not contradiction};
 end;
@@ -339,7 +339,7 @@ definition
   pred W is_weight>=0of G means
 :: GRAPH_5:def 13
 
-  W is Function of the Edges of G, Real>=0;
+  W is Function of the carrier' of G, Real>=0;
 end;
 
 definition
@@ -347,11 +347,11 @@ definition
   pred W is_weight_of G means
 :: GRAPH_5:def 14
 
-  W is Function of (the Edges of G), REAL;
+  W is Function of (the carrier' of G), REAL;
 end;
 
 definition
-  let G be Graph, p be FinSequence of the Edges of G, W be Function;
+  let G be Graph, p be FinSequence of the carrier' of G, W be Function;
   assume
  W is_weight_of G;
   func RealSequence(p,W) -> FinSequence of REAL means
@@ -361,7 +361,7 @@ definition
 end;
 
 definition
-  let G be Graph, p be FinSequence of the Edges of G,W be Function;
+  let G be Graph, p be FinSequence of the carrier' of G,W be Function;
   func cost(p,W) -> Real equals
 :: GRAPH_5:def 16
 
@@ -391,12 +391,12 @@ theorem :: GRAPH_5:55
   pe = {} & W is_weight_of G implies cost(pe,W) = 0;
 
 theorem :: GRAPH_5:56
-  for D being non empty finite Subset of (the Edges of G)* st
+  for D being non empty finite Subset of (the carrier' of G)* st
   D = AcyclicPaths(v1,v2) ex pe st pe in D & for qe st qe in D
   holds cost(pe,W) <= cost(qe,W);
 
 theorem :: GRAPH_5:57
-  for D being non empty finite Subset of (the Edges of G)* st
+  for D being non empty finite Subset of (the carrier' of G)* st
   D = AcyclicPaths(v1,v2,V) holds ex pe st pe in D & for qe st qe in D
   holds cost(pe,W) <= cost(qe,W);
 
@@ -432,13 +432,13 @@ definition
   st q is_orientedpath_of v1,v2,V holds cost(p,W) <= cost(q,W);
 end;
 
-begin :: Basic Properties of a Graph with Finite Vertices
+begin :: Basic Properties of a Graph with Finite carrier
 
 reserve G for finite Graph,
   ps for Simple (oriented Chain of G),
   P,Q for oriented Chain of G,
-  v1,v2,v3 for Element of the Vertices of G,
-  pe,qe for FinSequence of the Edges of G;
+  v1,v2,v3 for Element of the carrier of G,
+  pe,qe for FinSequence of the carrier' of G;
 
 theorem :: GRAPH_5:61
   len ps <= VerticesCount G;
@@ -495,7 +495,7 @@ theorem :: GRAPH_5:68
   holds cost(P,W) <= cost(Q,W)) implies P is_shortestpath_of v1,v2,U,W;
 
 definition
-  let G be Graph, pe be FinSequence of the Edges of G,
+  let G be Graph, pe be FinSequence of the carrier' of G,
   V be set, v1 be Vertex of G, W be Function;
   pred pe islongestInShortestpath V,v1,W means
 :: GRAPH_5:def 19
@@ -506,8 +506,8 @@ end;
 
 theorem :: GRAPH_5:69
   for G being finite oriented Graph, P,Q,R being oriented Chain of G,
-  v1,v2,v3 being Element of the Vertices of G st
-  e in the Edges of G & W is_weight>=0of G & len P >= 1 &
+  v1,v2,v3 being Element of the carrier of G st
+  e in the carrier' of G & W is_weight>=0of G & len P >= 1 &
   P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 & R=P^<*e*> &
   Q is_shortestpath_of v1,v3,V,W & e orientedly_joins v2,v3 &
   P islongestInShortestpath V,v1,W holds

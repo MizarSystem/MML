@@ -4,14 +4,16 @@
 // The main stylesheet mhtml_main.xsl can be used instead miz.xsl,
 // provided the included .xsl files are available in the same directory
 
-stylesheet 1.0;
+stylesheet 1.0
+extension-element-prefixes = "dc";
+xmlns dc "http://purl.org/dc/elements/1.1/";
 
 output method=html;
 
 
-// $Revision: 1.91 $
+// $Revision: 1.112 $
 //
-// File: miz.xsltxt - html-ization of Mizar XML, main file
+// File: mhtml_main.xsltxt - html-ization of Mizar XML, main file
 //
 // Author: Josef Urban
 //
@@ -90,6 +92,8 @@ output method=html;
    }
 }
 
+// default target frame for links
+#default_target = { if [$linking = "s"] { "_self"; } else { "mmlquery";} } 
 
 // put titles to links or not
 #titles = { "0"; }
@@ -110,10 +114,17 @@ $print_lab_identifiers = { "1"; }
 // tells whether relative or absolute names are shown
 #relnames= { "1"; }
 
-// link by inferences to ATP solutions rendered by MMLQuery; experimental - off
+// link by (now also from) inferences to ATP solutions rendered by MMLQuery; experimental - off
 // 1 - static linking (to pre-generated html)
 // 2 - dynamic linking to MML Query (static dli sent to MMLQuery DLI-processor)
+// 3 - dynamic linking to the TPTP-processor CGI ($lbytptpcgi)
 #linkby= { "0"; }
+
+// if > 0, call the mk_by_title function to create a title for by|from|;
+#by_titles = { "0"; }
+
+// If 1, the target frame for by explanations is _self
+#linkbytoself = { "0"; }
 
 // directory with by ATP solutions in HTML; each article in its own subdir
 #lbydir= { "_by/"; }
@@ -128,12 +139,30 @@ $print_lab_identifiers = { "1"; }
 // complete prefix of the DLI-processor CGI request
 $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 
+// URL of the TPTP-processor CGI
+#lbytptpcgi= { "http://octopi.mizar.org/~mptp/cgi-bin/showby.cgi"; }
+
+// tells if by action is fetched through AJAX; default is off
+#ajax_by = { "0"; }
+
+
+// temporary dir with  the tptp by files, needs to be passed as a param
+#lbytmpdir = { ""; }
 
 // tells if linkage of proof elements is done; default is off
 #proof_links = { "0"; }
 
+// tells if linkage of constants is done; default is 0 (off),
+// 1 tells to only create the anchors, 2 tells to also link constants
+// ##TODO: 2 is implement incorrectly and should not be used now,
+//         it should be done like privname (via the C key, not like now)
+#const_links = { "0"; }
+
 // tells if proofs are fetched through AJAX; default is off
 #ajax_proofs = { "0"; }
+
+// the dir with proofs that are fetched through AJAX
+#ajax_proof_dir = { "proofs"; }
 
 // tells to display thesis after skeleton items
 #display_thesis = { "1"; }
@@ -147,6 +176,9 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 
 // add IDV links and icons
 #idv =  { "0"; }
+
+// create header info from .hdr file
+#mk_header =  { "0"; }
 
 $lcletters= { "abcdefghijklmnopqrstuvwxyz"; }
 $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; } 
@@ -191,6 +223,9 @@ $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
 
 // .dfs file with imported definientia
 #dfs=  { `concat($anamelc, '.dfs')`; }
+
+// .hdr file with header info (done by mkxmlhdr.pl)
+#hdr=  { `concat($anamelc, '.hdr')`; }
 
 #varcolor = { "Olive"; }
 
@@ -354,23 +389,43 @@ tpl pvar(#nr) { if [$colored="1"] { <font { @color=$varcolor;
 tpl pconst(#nr) {  if [$colored="1"] { <font { @color=$constcolor; 
     "c"; <sub { $nr;} } } else { "c"; <sub { $nr;} } }
 
-tpl ppconst(#nr, #vid) 
+// #pl gives the optional proof level
+tpl ppconst(#nr, #vid, #pl) 
 { 
     if [($print_identifiers > 0) and ($vid > 0)] 
     {
+       $ctarget = 
+       { 
+         if [($const_links>0) and  ($pl)] { "c"; $nr; addp(#pl=$pl); } 
+	 else { `concat("c",$nr)`; }
+       }
 
        $nm = { get_vid_name(#vid = $vid); }
 
-       if [$colored = "1"] 
+       if [($const_links=2)] // const_links imply colored here
+       {
+	  <a 
+	  { 
+	      @class = "txt"; 
+	      @href  = `concat("#",$ctarget)`;
+	      <font 
+	      { 
+	         @color = $constcolor; 
+		 if [$titles="1"] { @title = $ctarget; } 
+		 $nm; 
+	      } 
+          } 
+       }       
+       else { if [$colored = "1"] 
        { 
 	  <font 
 	  { 
 	     @color = $constcolor; 
-	     if [$titles="1"] { @title=`concat("c",$nr)`; } 
+	     if [$titles="1"] { @title = $ctarget; } 
 	     $nm; 
           } 
        }
-       else { $nm;} 
+       else { $nm;} } 
     }
     else { pconst(#nr = $nr); }
 }
@@ -787,11 +842,18 @@ tpl dlist(#separ,#elems) {
 // the Typ is printed only once.
 // #sep2 is now either "be " or "being ", 
 // comma is added automatically.
-tpl jtlist(#j,#sep2,#elems) 
+// #pl passes proolevel if after addabsrefs processing 
+// (needed for const_links)
+tpl jtlist(#j,#sep2,#elems,#pl) 
 { 
+   $addpl = { if [$const_links>0] { addp(#pl = $pl); } }
+
    for-each [$elems] 
    { 
-      ppconst(#nr = `$j+position()`, #vid = `@vid`);
+      $nr1 = `$j+position()`;
+      if [$const_links>0] { <a { @NAME=`concat("c",$nr1,$addpl)`; } }
+
+      ppconst(#nr = $nr1, #vid = `@vid`);
 
       if [position()=last()] 
       { 
@@ -1367,7 +1429,8 @@ tpl [Const](#p,#i)
     {
        if [@vid > 0]
        {
-          ppconst(#nr = `@nr`, #vid = `@vid`);
+          $pl = { if[$const_links=2]  { get_nearest_level(#el = `..`); } }
+          ppconst(#nr = `@nr`, #vid = `@vid`, #pl = $pl);
        } 
        else    
        {
@@ -1593,16 +1656,14 @@ tpl mkref(#aid, #nr, #k, #c, #nm)
       }
       else 
       {
-
-        $ext1 = 
-	    { 
-	       if[($c = 1) and (($linking = 'm') or ($linking = 'l'))] { $selfext; }
-	       else { $ext; }
-            }
-
-        $mhtml1 = { if[($linking = 'l') and not($c = "1")] { $mizhtml; } else { ""; } }
-
-        @href = `concat($mhtml1,$alc, ".", $ext1, "#",$k, $nr)`;
+        @href =	
+	{
+           if[($c = 1) and (($linking = 'm') or ($linking = 'l'))]
+	   {
+	      `concat("#",$k, $nr)`;
+	   }
+	   else { `concat($mizhtml,$alc, ".",$ext, "#",$k, $nr)`; }
+	}
 
         if [$c = "1"] 
 	{
@@ -1658,14 +1719,16 @@ tpl absref(#elems, #c, #sym, #pid)
 	 }
 	 else 
 	 { 
-	    $ext1 = 
-	    { 
-	       if[($c = 1) and (($linking = 'm') or ($linking = 'l'))] { $selfext; }
-	       else { $ext; }
-            }
-	    $mhtml1 = { if[($linking = 'l') and not($c = "1")] { $mizhtml; } else { ""; } }
 
-            @href=`concat($mhtml1,$alc, ".", $ext1, "#", $n1, @kind, @nr)`; 
+            @href =	
+	    {
+               if[($c = 1) and (($linking = 'm') or ($linking = 'l'))]
+	       {
+	          `concat("#", $n1, @kind, @nr)`;
+	       }
+	       else { `concat($mizhtml,$alc, ".",$ext, "#", $n1, @kind, @nr)`; }
+	    }
+
 	    // this is probably needed if $mml = 1
 	    if [($c = "1") and not($linking = "s")] { @target="_self"; } 
          }
@@ -1698,26 +1761,29 @@ tpl absref(#elems, #c, #sym, #pid)
 // look up and link the constructor/pattern with kind #k and #nr;
 // #sym is optionally forces the given Mizar symbol
 // #pid links to  patterns instead of constructors
+// note that we can be inside a Notation document here already (see pp),
+// so the $doc = "" test does not have to mean that we are inside
+// the article (could be probably fixed in pp, don't know about expnadable modes though)
 tpl abs(#k, #nr, #sym, #pid) 
 {
    if [$pid>0] 
    {
       $k1  = `concat('P_',$k)`;
       $doc = { if [key($k1,$nr)[$pid=@relnr]] { ""; } else { $patts; } }
-      $c1  = { if [($doc = "") and ($mml = "0")] { "1"; } else { "0"; } }
 
       for-each [document($doc,/)] 
       {
+         $c1  = { if [(name(/*) = "Article") and ($mml = "0")] { "1"; } else { "0"; } }
          absref(#elems = `key($k1,$nr)[$pid=@relnr]`, #c = $c1, #sym = $sym, #pid = $pid);
       }
    } 
    else 
    {
       $doc = { if [key($k,$nr)] { ""; } else { $constrs; } }
-      $c1  = { if [($doc = "") and ($mml = "0")] { "1"; } else { "0"; } }
 
       for-each [document($doc,/)] 
       {
+         $c1  = { if [(name(/*) = "Article") and ($mml = "0")] { "1"; } else { "0"; } }
          absref(#elems = `key($k,$nr)`, #c = $c1, #sym = $sym);
       }
    }
@@ -1801,7 +1867,7 @@ tpl pp1(#k,#nr,#args,#vis,#fnr,#parenth,#loci,#pid,#i)
                      for-each [key('F',$fnr)] { 
                        if [@leftargnr] { `@leftargnr`;} else { "0";} }}} }
     // try if right bracket - returns '' if not
-    $rsym = { if [($k='K') and ($la='0')] { abs1(#k=$k, #nr=$nr, #r="1"); } }
+    $rsym = { if [($k='K') and ($la='0')] { abs1(#k=$k, #nr=$nr, #fnr=$fnr, #r="1"); } }
     $np = { if [not($vis) or ($k='G')] { "0"; } else {
                if [$parenth>0] { $parenth; } else { 
                   if [not($rsym='')] { "1"; } else { "0";} } } }
@@ -2033,6 +2099,8 @@ tpl [Proposition]
     else { apply; " ";} 
 }
 
+tpl mk_by_title(#line, #col) { `concat("Explain line ", $line, " column ", $col)`; }
+
 // Justifications
 tpl linkbyif(#line,#col,#by) 
 { 
@@ -2044,10 +2112,22 @@ tpl linkbyif(#line,#col,#by)
 	 { 
 	    when [$linkby=1] { `concat($lbydir,$anamelc,"/",$line,"_",$col,".html")`; }
 	    when [$linkby=2] { `concat($lbydlicgipref,$anamelc,"/",$line,"_",$col,".dli")`; } 
+	    when [$linkby=3] { `concat($lbytptpcgi,"?article=",$anamelc,"&lc=",$line,"_",$col,"&tmp=",$lbytmpdir)`; } 
+
 	 } 
       }
 
-      <a { @href=$byurl; @class="txt"; @target="byATP"; <b { $by; " "; } }
+      <a { 
+            if[$ajax_by > 0] { add_ajax_attrs(#u=$byurl); }
+	    else
+	    {
+	       @href=$byurl; @class="txt"; 
+	       if[$linkbytoself > 0] {@target="_self"; } else {@target="byATP";} 
+            }
+	    if [$by_titles>0] { @title=mk_by_title(#line=$line,#col=$col); }
+	    <b { $by; " "; } 
+	 }
+      if[$ajax_by > 0] { <span { " "; } } 
     }
     else { <b { $by; " "; } }
 }
@@ -2057,10 +2137,10 @@ tpl linkbyif(#line,#col,#by)
 //  expansions are handled on the same line)
 tpl [By	](#nbr) 
 { 
-   if [(count(*)>0)] 
+   if [(count(Ref)>0)] 
    { 
       linkbyif(#line = `@line`, #col = `@col`,#by = "by");
-      <i { list(#separ = ", ", #elems = `*`); } 
+      <i { list(#separ = ", ", #elems = `Ref`); } 
       ";"; 
    }
    else 
@@ -2072,16 +2152,25 @@ tpl [By	](#nbr)
    if [not($nbr = "1")] { <br;  }
 }
 
-tpl [IterStep/By] { if [(count(*)>0)] { 
+tpl [IterStep/By] { if [(count(Ref)>0)] { 
       linkbyif(#line=`@line`,#col=`@col`,#by="by");
-      <i { list(#separ=", ", #elems=`*`); } }}
-tpl [From](#nbr) { <b { "from "; }
-        <i { getref(#k="S", #anr=`@articlenr`, #nr=`@nr`); "(";
-             list(#separ=", ", #elems=`*`); ")"; ";"; 
-      if [not($nbr="1")] { <br;  } } }
-tpl [IterStep/From] { <b { "from "; } 
+      <i { list(#separ=", ", #elems=`Ref`); } }}
+tpl [From](#nbr) 
+{ 
+    linkbyif(#line=`@line`,#col=`@col`,#by="from");
+    <i 
+    { 
+        getref(#k="S", #anr=`@articlenr`, #nr=`@nr`); "(";
+	list(#separ=", ", #elems=`Ref`); ")"; ";"; 
+	if [not($nbr="1")] { <br;  } 
+    } 
+}
+tpl [IterStep/From] 
+{ 
+   linkbyif(#line=`@line`,#col=`@col`,#by="from");
    <i { getref(#k="S", #anr=`@articlenr`, #nr=`@nr`); "(";
-        list(#separ=", ", #elems=`*`); ")"; } }
+        list(#separ=", ", #elems=`Ref`); ")"; } 
+}
 
 
 // ##REQUIRE: the following two can be called only if $proof_links>0
@@ -2135,7 +2224,8 @@ tpl privname(#nr,#pl) {
 	      <a 
 	      { 
 	         @class = "txt"; 
-		 @href  = `concat($anamelc, ".", $ext, "#",$txt)`;
+//		 @href  = `concat($anamelc, ".", $ext, "#",$txt)`;
+		 @href  = `concat("#",$txt)`;
 		 pplab(#nr=`@nr`, #vid = `@vid`); 
               } 
             }
@@ -2271,7 +2361,13 @@ tpl [Let](#fst,#beg) {
   if [$beg] // no thesis guaranteed, only one const guaranteed
 	    // this sequence has already been started,
    {   
-       ", "; ppconst(#nr = `@nr`, #vid = `Typ/@vid`);
+       ", ";
+       if [$const_links>0] 
+       {   
+	     $addpl = { addp(#pl=`@plevel`); } 
+	     <a { @NAME=`concat("c",@nr,$addpl)`; }
+       } 
+       ppconst(#nr = `@nr`, #vid = `Typ/@vid`);
        if [$next="1"] // and does not end here - print the rest
        {
           apply[following-sibling::*[position()=$it_step]](#fst="1",#beg=$beg);
@@ -2287,12 +2383,17 @@ tpl [Let](#fst,#beg) {
        <b { "let "; }
        if [$next="1"] // not ending here; no thesis guaranteed, only one const guaranteed
        {
+          if [$const_links>0] 
+	  {   
+	     $addpl = { addp(#pl=`@plevel`); } 
+	     <a { @NAME=`concat("c",@nr,$addpl)`; }
+	  }
 	  ppconst(#nr = `@nr`, #vid = `Typ/@vid`);
 	  apply[following-sibling::*[position()=$it_step]](#fst="1",#beg=`@nr`);
        }
        else // print them all
        {
-          jtlist(#j=`@nr - 1`, #sep2=" be ", #elems=`Typ`);
+          jtlist(#j=`@nr - 1`, #sep2=" be ", #elems=`Typ`, #pl=`@plevel`);
 	  ";"; try_th_exps(); <br;
 	  apply[following-sibling::*[position()=$it_step][name()="Let"]](#fst="1");
        }
@@ -2313,7 +2414,7 @@ tpl [Given]
 { 
   $j=`@nr - 1`; 
   <b {"given ";} 
-  jtlist(#j=$j, #sep2=" being ", #elems=`Typ`); 
+  jtlist(#j=$j, #sep2=" being ", #elems=`Typ`, #pl=`@plevel`); 
   <b {" such that ";}
   andlist(#elems=`*[(name()="Proposition") and (position() > 1)]`); ";"; 
   try_th_exps(); <br; 
@@ -2322,8 +2423,15 @@ tpl [Given]
 tpl [Take] { <b { "take ";} apply; ";"; try_th_exps(); <br; }
 tpl [TakeAsVar] 
 { 
-   <b { "take "; } ppconst(#nr=`@nr`, #vid = `Typ[1]/@vid`); " = ";   apply[*[2]]; 
-		  ";"; try_th_exps(); <br; 
+   <b { "take "; } 
+   if [$const_links>0] 
+   {   
+      $addpl = { addp(#pl=`@plevel`); } 
+      <a { @NAME=`concat("c",@nr,$addpl)`; }
+   }
+   ppconst(#nr=`@nr`, #vid = `Typ[1]/@vid`); " = ";   
+   apply[*[2]]; 
+   ";"; try_th_exps(); <br; 
 }
 
 tpl [Conclusion] 
@@ -2393,7 +2501,7 @@ tpl [Consider]
       "consider ";
    }
 
-   jtlist(#j = $j, #sep2 = " being ", #elems = `Typ`);
+   jtlist(#j = $j, #sep2 = " being ", #elems = `Typ`, #pl=`@plevel`);
 
    if [count(Proposition) > 1] 
    { 
@@ -2418,12 +2526,17 @@ tpl [Consider]
 //    (elTyp, Term)+,
 //    elProposition, Justification
 //  }
-tpl [Reconsider] { $j=`@nr`; <b { if [By[@linked="true"]] { "then "; } 
-    "reconsider "; } 
+tpl [Reconsider] 
+{ 
+   $j=`@nr`; 
+   <b { if [By[@linked="true"]] { "then "; } "reconsider "; }
+   $addpl = { if [$const_links>0] { addp(#pl=`@plevel`); } }
 // should work both for old and new reconsider
     for-each [*[(not(name() = "Typ")) and (position() < (last() - 1))]] {
-	 $p1 = `position()`;
-	 ppconst(#nr=`$j + position() - 1`, #vid = `../Typ[$p1]/@vid`);
+	 $p1  = `position()`;
+	 $nr1 = `$j + $p1 - 1`;
+	 if [$const_links>0] {<a { @NAME=`concat("c",$nr1,$addpl)`; }}
+	 ppconst(#nr = $nr1, #vid = `../Typ[$p1]/@vid`);
 	 " = ";
 	 apply[.];
 	 if [not($p1=last())] { ", "; }}
@@ -2434,7 +2547,17 @@ tpl [Reconsider] { $j=`@nr`; <b { if [By[@linked="true"]] { "then "; }
     " as "; apply[*[1]]; " "; 
     apply[*[last()]]; } 
 
-tpl [Set] { <b { "set ";} ppconst(#nr=`@nr`, #vid=`Typ/@vid`); " = "; apply[*[1]]; ";"; <br; }
+tpl [Set] 
+{ 
+   <b { "set ";} 
+   if [$const_links>0] 
+   {   
+      $addpl = { addp(#pl=`@plevel`); } 
+      <a { @NAME=`concat("c",@nr,$addpl)`; }
+   }
+   ppconst(#nr=`@nr`, #vid=`Typ/@vid`); " = "; apply[*[1]]; ";"; <br; 
+}
+
 tpl [DefFunc] { <b { "deffunc "; } ppfunc(#nr=`@nr`); "(";  
                 list(#separ=",", #elems=`ArgTypes/Typ`); ") "; <b {"-> ";}
                 apply[*[3]]; " = ";
@@ -3320,7 +3443,7 @@ tpl [Proof/Proof | Now/Proof | Conclusion/Proof | CaseBlock/Proof | SupposeBlock
 // (now done as perl postproc)
 // if you want ajax_proofs
 tpl [Proof] {
-    $nm = `concat("proofs/",$anamelc,"/",@newlevel)`;
+    $nm = `concat($ajax_proof_dir,"/",$anamelc,"/",@newlevel)`;
     <div { 
 	 <a { 
 	    if [$ajax_proofs>0]	{ add_ajax_attrs(#u=$nm); } else { add_hs2_attrs(); }
@@ -3328,7 +3451,7 @@ tpl [Proof] {
 	    <b { "proof "; } 
 	    }
          if [$ajax_proofs>0]	{ <span; 
-// <xsl:document href="proofs/{$anamelc}/{@newlevel}" format="html">
+// <xsl:document href="{$ajax_proof_dir}/{$anamelc}/{@newlevel}" format="html">
 	    <div { @class="add"; apply; }
 // </xsl:document>
    $bogus=`1`;
@@ -3647,6 +3770,7 @@ span.p0:hover { color : inherit; background-color : #FFBAFF; }
 ";
 	                } 
         <head {  
+<title { $aname; }
 <script { @type="text/javascript";
 "
 <!-- 
@@ -3734,8 +3858,8 @@ return tstp_dump;
 // End -->
 ";
 }}
-<base { 
-if [$linking = "s"] { @target="_self"; } else { @target="mmlquery";} } 
+<base { @target=$default_target; }
+// if [$linking = "s"] { @target="_self"; } else { @target="mmlquery";} } 
 // <!-- 
 // var browse_url = \"http://merak.pb.bialystok.pl/mmlquery/fillin.php?entry=\"
 // function l1(c) { location = browse_url + c }
@@ -3743,6 +3867,8 @@ if [$linking = "s"] { @target="_self"; } else { @target="mmlquery";} }
 // "; }
 }
         <body {  
+
+	if[$mk_header > 0] { apply[document($hdr,/)/Header/*]; <br; }
 
 // first read the keys for imported stuff
 //          apply[document($constrs,/)/Constructors/Constructor]; 
@@ -3755,3 +3881,8 @@ if [$linking = "s"] { @target="_self"; } else { @target="mmlquery";} }
 // tpl [*] { copy { apply [@*]; apply; } }
 // tpl [@*] { copy-of `.`; }
 
+// Header rules
+tpl [dc:title] { pcomment(#str=`text()`); }
+tpl [dc:creator] { pcomment(#str=`concat("by ", text())`); pcomment(#str=""); }
+tpl [dc:date] { pcomment(#str=`concat("Received ", text())`); }
+tpl [dc:rights] { pcomment(#str=`concat("Copyright ", text())`); }

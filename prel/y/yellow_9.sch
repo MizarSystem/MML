@@ -90,9 +90,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -166,9 +166,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="16" value="false"/>
+<Adjective nr="17" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -242,9 +242,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -252,8 +252,8 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="9"/>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
 </Cluster>
 </Typ>
 </ArgTypes>

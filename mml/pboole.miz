@@ -2084,12 +2084,12 @@ registration
   cluster Function-yielding ManySortedSet of I;
   existence
   proof consider f being Function;
-A1: dom (I --> f) = I by FUNCOP_1:19;
+ dom (I --> f) = I by FUNCOP_1:19;
     then reconsider F = I --> f as ManySortedSet of I by Def3;
     take F;
     let x be set;
     assume x in dom F;
-    hence thesis by A1,FUNCOP_1:13;
+    thus thesis;
   end;
 end;
 
@@ -2484,7 +2484,7 @@ definition
   let F,G be Function-yielding Function;
   func G**F -> Function-yielding Function means
 
-  dom it = (dom F) /\ (dom G) &
+:Def24: dom it = (dom F) /\ (dom G) &
   for i be set st i in dom it holds it.i = (G.i)*(F.i);
   existence
   proof
@@ -2570,5 +2570,76 @@ registration
     rng [0]I c= {{}} by FUNCOP_1:19;
     hence thesis by RELAT_1:def 15;
   end;
+end;
+
+:: from MSUALG_9, 2008.07.06, A.T.
+
+scheme MSSExD { I() -> non empty set, P[set,set] }:
+  ex f being ManySortedSet of I() st for i being Element of I() holds P[i,f.i]
+provided
+A1: for i being Element of I() ex j being set st P[i,j]
+proof
+  defpred Z[set,set] means P[ $1,$2];
+A2: for i being set st i in I() ex j being set st Z[i,j] by A1;
+  consider f being ManySortedSet of I() such that
+A3: for i being set st i in I() holds Z[i,f.i] from MSSEx(A2);
+  take f;
+  let i be Element of I();
+  thus thesis by A3;
+end;
+
+:: from INDEX_1, 2008.07.06, A.T.
+
+registration
+  let A be non empty set;
+  cluster non-empty -> non empty-yielding ManySortedSet of A;
+  coherence;
+end;
+
+registration
+  let X be non empty set;
+  cluster -> non empty ManySortedSet of X;
+  coherence
+  proof
+    let f be ManySortedSet of X;
+    consider x be Element of X;
+    dom f = X by Def3;
+    then [x,f.x] in f by FUNCT_1:def 4;
+    hence f is non empty;
+  end;
+end;
+
+:: from AUTALG_1, 2008.07.06, A.T
+
+theorem
+  for F, G, H be Function-yielding Function
+  holds (H ** G) ** F = H ** (G ** F)
+proof
+  let F, G, H be Function-yielding Function;
+  set f = (H ** G) ** F, g = H ** (G ** F);
+  now
+A1: dom f = (dom (H ** G)) /\ dom F by Def24
+      .= (dom H) /\ (dom G) /\ (dom F) by Def24;
+    then
+A2: dom f = (dom H) /\ ((dom G) /\ dom F) by XBOOLE_1:16;
+    hence
+A3: dom f = (dom H) /\ (dom (G ** F)) by Def24
+      .= dom g by Def24;
+    let x be set;
+    assume
+A4: x in dom f;
+    then x in (dom H) /\ (dom G) by A1,XBOOLE_0:def 3;
+    then
+A5: x in dom (H ** G) by Def24;
+    x in (dom G) /\ (dom F) by A2,A4,XBOOLE_0:def 3;
+    then
+A6: x in dom (G ** F) by Def24;
+    thus f.x = ((H**G).x) * (F.x) by A4,Def24
+      .= (H.x)*(G.x)*(F.x) by A5,Def24
+      .= (H.x)*((G.x)*(F.x)) by RELAT_1:55
+      .= (H.x)*((G**F).x) by A6,Def24
+      .= g.x by A3,A4,Def24;
+  end;
+  hence thesis by FUNCT_1:9;
 end;
 

@@ -17,10 +17,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

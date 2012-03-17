@@ -23,17 +23,17 @@
 <ArgTypes/>
 <Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="54"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="28"/>
-<Adjective nr="30"/>
-<Adjective nr="34"/>
+<Adjective nr="22"/>
+<Adjective nr="29"/>
+<Adjective nr="31"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RFINSEQ" nr="1">
@@ -46,7 +46,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +56,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 </Registrations>

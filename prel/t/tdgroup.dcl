@@ -28,55 +28,55 @@
 </Signature>
 <RCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="93"/>
-<Adjective nr="97"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="47"/>
+<Adjective nr="52"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TDGROUP" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="31" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="98"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="99"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="93"/>
-<Adjective nr="97"/>
+<Adjective nr="47"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TDGROUP" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="161">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="94"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 </Registrations>

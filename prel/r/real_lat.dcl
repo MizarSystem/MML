@@ -21,26 +21,26 @@
 </Signature>
 <FCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="104"/>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="104"/>
 <Cluster>
-<Adjective nr="31"/>
-<Adjective nr="38"/>
+<Adjective nr="36"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="104"/>
 <Cluster>
-<Adjective nr="31"/>
-<Adjective nr="39"/>
+<Adjective nr="36"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <CCluster aid="REAL_LAT" nr="1">
@@ -49,11 +49,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="100"/>
+<Func kind="K" nr="104"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

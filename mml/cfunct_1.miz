@@ -8,13 +8,15 @@ environ
 
  vocabularies PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
       FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE, PARTFUN2,
-      CFUNCT_1;
+      CFUNCT_1, SEQM_3, LATTICES, SEQ_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2, RFUNCT_1, VALUED_1, COMPLEX1,
+      FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2,
+      SEQ_2, RFUNCT_1, VALUED_1, COMPLEX1,
       XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, VALUED_1,
-      RFUNCT_1, SEQ_1;
- registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, COMPLEX1, VALUED_0;
+      RFUNCT_1, SEQ_1, SEQ_2;
+ registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, COMPLEX1, VALUED_0,
+      XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, PARTFUN1, PARTFUN2, RFUNCT_1, COMPLEX1,
@@ -1710,7 +1712,7 @@ definition
   let C,f,Y;
   pred f is_bounded_on Y means
   :Def3:
-  |.f.| is_bounded_on Y;
+  |.f.||Y is bounded;
 end;
 
 theorem Th81:
@@ -1720,7 +1722,7 @@ proof
 A1: dom |.f.| = dom f by VALUED_1:def 11;
   hereby
     assume f is_bounded_on Y;
-    then |.f.| is_bounded_on Y by Def3;
+    then |.f.||Y is bounded by Def3;
     then consider p be real number such that
 A2: for c being set st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p
     by RFUNCT_1:90;
@@ -1747,7 +1749,7 @@ A8: c in dom |.f.| by A7,XBOOLE_0:def 3;
       .= abs(|.(f/.c).|) by A1,A8,PARTFUN1:def 8;
     hence abs(|.f.|.c) <= p by A5,A6,A7;
   end;
-  then |.f.| is_bounded_on Y by RFUNCT_1:90;
+  then |.f.||Y is bounded by RFUNCT_1:90;
   hence f is_bounded_on Y by Def3;
 end;
 
@@ -1755,8 +1757,8 @@ theorem
   Y c= X & f is_bounded_on X implies f is_bounded_on Y
 proof
   assume Y c= X & f is_bounded_on X;
-  then Y c= X & |.f.| is_bounded_on X by Def3;
-  then |.f.| is_bounded_on Y by RFUNCT_1:91;
+  then Y c= X & |.f.||X is bounded by Def3;
+  then |.f.||Y is bounded by RFUNCT_1:91;
   hence thesis by Def3;
 end;
 
@@ -1772,16 +1774,16 @@ theorem Th84:
   f is_bounded_on Y implies r(#)f is_bounded_on Y
 proof
   assume f is_bounded_on Y;
-  then |.f.| is_bounded_on Y by Def3;
-  then |.r.|(#) |.f.| is_bounded_on Y by RFUNCT_1:97;
-  then |.r(#)f.| is_bounded_on Y by Th39;
+  then |.f.||Y is bounded by Def3;
+  then (|.r.|(#)|.f.|)|Y is bounded by RFUNCT_1:97;
+  then |.r(#)f.||Y is bounded by Th39;
   hence r(#)f is_bounded_on Y by Def3;
 end;
 
 theorem
-  |.f.| is_bounded_below_on X
+  |.f.||X is bounded_below
 proof
-  take 0;
+  now take z=0;
   let c be set;
   assume c in X /\ dom (|.f.|);
   then
@@ -1789,16 +1791,18 @@ A1: c in dom (|.f.|) by XBOOLE_0:def 3;
   dom |.f.| = dom f by VALUED_1:def 11;
   then
 A2: f.c = f/.c by A1,PARTFUN1:def 8;
-  0 <= |. f/.c .| by COMPLEX1:132;
-  hence 0 <= (|.f.|).c by A2,VALUED_1:18;
+  z <= |. f/.c .| by COMPLEX1:132;
+  hence z <= (|.f.|).c by A2,VALUED_1:18;
+ end;
+ hence thesis by RFUNCT_1:88;
 end;
 
 theorem Th86:
-  f is_bounded_on Y implies |.f.| is_bounded_on Y & -f is_bounded_on Y
+  f is_bounded_on Y implies |.f.||Y is bounded & -f is_bounded_on Y
 proof
   assume
 A1: f is_bounded_on Y;
-  hence |.f.| is_bounded_on Y by Def3;
+  hence |.f.||Y is bounded by Def3;
   (-1r)(#)f is_bounded_on Y by A1,Th84;
   hence thesis by COMPLEX1:def 7;
 end;
@@ -1876,23 +1880,23 @@ proof
   assume
 A1: f is_bounded_on X & f is_bounded_on Y;
   then
-A2: |.f.| is_bounded_on X by Def3;
-  |.f.| is_bounded_on Y by A1,Def3;
-  then |.f.| is_bounded_on X \/ Y by A2,RFUNCT_1:104;
+A2: |.f.||X is bounded by Def3;
+  |.f.||Y is bounded by A1,Def3;
+  then |.f.||(X \/ Y) is bounded by A2,RFUNCT_1:104;
   hence f is_bounded_on X \/ Y by Def3;
 end;
 
 theorem
-  f1 is_constant_on X & f2 is_constant_on Y implies
-  (f1 + f2) is_constant_on (X /\ Y) & (f1 - f2) is_constant_on (X /\ Y) &
-  (f1 (#) f2) is_constant_on (X /\ Y)
+  f1|X is constant & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is constant & (f1-f2)|(X /\ Y) is constant &
+  (f1(#)f2)|(X /\ Y) is constant
 proof
   assume
-A1: f1 is_constant_on X & f2 is_constant_on Y;
+A1: f1|X is constant & f2|Y is constant;
   then consider cr1 such that
-A2: for c st c in X /\ dom f1 holds ((f1/.c)) = cr1 by PARTFUN2:def 3;
+A2: for c st c in X /\ dom f1 holds ((f1/.c)) = cr1 by PARTFUN2:54;
   consider cr2 such that
-A3: for c st c in Y /\ dom f2 holds ((f2/.c)) = cr2 by A1,PARTFUN2:def 3;
+A3: for c st c in Y /\ dom f2 holds ((f2/.c)) = cr2 by A1,PARTFUN2:54;
   now
     let c;
     assume c in X /\ Y /\ dom (f1+f2);
@@ -1907,7 +1911,7 @@ A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
       .= cr1 + ((f2/.c)) by A2,A5
       .= cr1 + cr2 by A3,A5;
   end;
-  hence (f1 + f2) is_constant_on (X /\ Y) by PARTFUN2:def 3;
+  hence (f1+f2)|(X /\ Y) is constant by PARTFUN2:54;
   now
     let c;
     assume c in X /\ Y /\ dom (f1-f2);
@@ -1921,7 +1925,7 @@ A7: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
       .= cr1 - ((f2/.c)) by A2,A7
       .= cr1 - cr2 by A3,A7;
   end;
-  hence (f1 - f2) is_constant_on (X /\ Y) by PARTFUN2:def 3;
+  hence (f1-f2)|(X /\ Y) is constant by PARTFUN2:54;
   now
     let c;
     assume c in X /\ Y /\ dom (f1(#)f2);
@@ -1935,15 +1939,15 @@ A9: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
       .= cr1 * ((f2/.c)) by A2,A9
       .= cr1 * cr2 by A3,A9;
   end;
-  hence thesis by PARTFUN2:def 3;
+  hence thesis by PARTFUN2:54;
 end;
 
 theorem Th91:
-  f is_constant_on Y implies q(#)f is_constant_on Y
+  f|Y is constant implies (q(#)f)|Y is constant
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r such that
-A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:def 3;
+A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
   now
     let c;
     assume c in Y /\ dom (q(#)f);
@@ -1955,15 +1959,15 @@ A3: c in Y /\ dom f by A2,XBOOLE_0:def 3;
     thus (q(#)f)/.c = q * (f/.c) by A2,Th7
       .= q*r by A1,A3;
   end;
-  hence q(#)f is_constant_on Y by PARTFUN2:def 3;
+  hence (q(#)f)|Y is constant by PARTFUN2:54;
 end;
 
 theorem Th92:
-  f is_constant_on Y implies |.f.| is_constant_on Y & -f is_constant_on Y
+  f|Y is constant implies |.f.||Y is constant & (-f)|Y is constant
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r such that
-A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:def 3;
+A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
   now
     let c;
     assume c in Y /\ dom (|.f.|);
@@ -1977,7 +1981,7 @@ A4: c in Y /\ dom f by A2,XBOOLE_0:def 3;
     hence (|.f.|).c = |.(f/.c).| by VALUED_1:18
       .= |.r.| by A1,A4;
   end;
-  hence |.f.| is_constant_on Y by PARTFUN2:76;
+  hence |.f.||Y is constant by PARTFUN2:76;
   now
     take p=-r;
     let c;
@@ -1989,15 +1993,15 @@ A6: -(f/.c) = p by A1;
     c in dom (-f) by A5,XBOOLE_0:def 3;
     hence (-f)/.c = p by A6,Th9;
   end;
-  hence thesis by PARTFUN2:def 3;
+  hence thesis by PARTFUN2:54;
 end;
 
 theorem Th93:
-  f is_constant_on Y implies f is_bounded_on Y
+  f|Y is constant implies f is_bounded_on Y
 proof
-  assume f is_constant_on Y;
+  assume f|Y is constant;
   then consider r such that
-A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:def 3;
+A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
   now
     take p=|.r.|;
     let c;
@@ -2008,36 +2012,39 @@ A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:def 3;
 end;
 
 theorem
-  f is_constant_on Y implies (for r holds r(#)f is_bounded_on Y) &
-  (-f is_bounded_on Y) & |.f.| is_bounded_on Y
+  f|Y is constant implies (for r holds r(#)f is_bounded_on Y) &
+  (-f is_bounded_on Y) & |.f.||Y is bounded
 proof
   assume
-A1: f is_constant_on Y;
-  hence for r holds r(#)f is_bounded_on Y by Th91,Th93;
-  -f is_constant_on Y by A1,Th92;
+A1: f|Y is constant;
+  hereby let r;
+    (r(#)f)|Y is constant by Th91,A1;
+   hence r(#)f is_bounded_on Y by Th93;
+  end;
+  (-f)|Y is constant by A1,Th92;
   hence -f is_bounded_on Y by Th93;
-  |.f.| is_constant_on Y by A1,Th92;
-  hence |.f.| is_bounded_on Y by RFUNCT_1:108;
+  |.f.||Y is constant by A1,Th92;
+  hence |.f.||Y is bounded by RFUNCT_1:108;
 end;
 
 theorem Th95:
-  (f1 is_bounded_on X & f2 is_constant_on Y implies
+  (f1 is_bounded_on X & f2|Y is constant implies
   f1+f2 is_bounded_on (X /\ Y))
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_constant_on Y;
+A1: f1 is_bounded_on X & f2|Y is constant;
   then f2 is_bounded_on Y by Th93;
   hence thesis by A1,Th87;
 end;
 
 theorem
-  (f1 is_bounded_on X & f2 is_constant_on Y implies
+  (f1 is_bounded_on X & f2|Y is constant implies
   f1-f2 is_bounded_on X /\ Y &
   f2-f1 is_bounded_on X /\ Y & f1(#)f2 is_bounded_on X /\ Y)
 proof
   assume
-A1: f1 is_bounded_on X & f2 is_constant_on Y;
-  then -f2 is_constant_on Y by Th92;
+A1: f1 is_bounded_on X & f2|Y is constant;
+  then (-f2)|Y is constant by Th92;
   hence f1-f2 is_bounded_on X /\ Y by A1,Th95;
 A2: f2 is_bounded_on Y by A1,Th93;
   hence f2-f1 is_bounded_on X /\ Y by A1,Th88;

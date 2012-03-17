@@ -25,68 +25,68 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
+<Adjective nr="20"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="30"/>
+<Adjective nr="20"/>
 <Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="30"/>
-<Adjective nr="33"/>
+<Adjective nr="20"/>
+<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="30"/>
-<Adjective nr="34"/>
+<Adjective nr="20"/>
+<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MODAL_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="146"/>
+<Func kind="K" nr="150"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MODAL_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="147"/>
+<Func kind="K" nr="151"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -96,10 +96,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="153"/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 </Registrations>

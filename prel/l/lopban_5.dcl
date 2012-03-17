@@ -34,29 +34,29 @@
 </Signature>
 <FCluster aid="LOPBAN_5" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="70"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
-<Adjective nr="98"/>
-<Adjective nr="102"/>
-<Adjective nr="119"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="83"/>
+<Adjective nr="108"/>
+<Adjective nr="109"/>
+<Adjective nr="110"/>
+<Adjective nr="111"/>
+<Adjective nr="114"/>
+<Adjective nr="131"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="176">
+<Func kind="K" nr="180">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="49"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

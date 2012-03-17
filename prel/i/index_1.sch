@@ -20,6 +20,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="OPPCAT_1"/>
@@ -40,13 +41,13 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -69,7 +70,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
+<Func kind="K" nr="13">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -92,12 +93,12 @@
 </Func>
 <Typ kind="M" nr="19">
 <Cluster/>
-<Func kind="K" nr="257">
+<Func kind="K" nr="265">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="257">
+<Func kind="K" nr="265">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="1"/>

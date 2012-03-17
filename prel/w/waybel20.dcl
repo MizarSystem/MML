@@ -33,10 +33,10 @@
 </Signature>
 <RCluster aid="WAYBEL20" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,9 +51,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="16">
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="17">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -61,7 +61,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="26">
+<Adjective nr="28">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -69,11 +69,11 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="84">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="102">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

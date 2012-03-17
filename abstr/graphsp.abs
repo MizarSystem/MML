@@ -8,11 +8,11 @@ environ
 
  vocabularies ARYTM_1, INT_1, RELAT_1, SCM_1, RLVECT_1, AMI_3, GRAPHSP,
       FUNCT_1, BOOLE, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1, FUNCT_2, GRAPH_1,
-      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM;
+      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM, STRUCT_0;
  notations XCMPLX_0, XXREAL_0, REAL_1, INT_1, TARSKI, XBOOLE_0, SUBSET_1,
       RELAT_1, FUNCT_1, FINSEQ_1, SEQ_1, FINSEQ_2, FINSEQ_4, CARD_1, FINSET_1,
-      GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3, GRAPH_5,
-      BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7, NAT_1;
+      STRUCT_0, GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3,
+      GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7, NAT_1;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, FINSOP_1,
       BINARITH, FUNCT_7, CQC_SIM1, GOBOARD1, GRAPH_4, GRAPH_5, SEQ_1, BINOP_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1, FRAENKEL,
@@ -39,7 +39,7 @@ theorem :: GRAPHSP:3
   1 <= ii & ii <= len p implies p/.ii = p.ii;
 
 reserve G for Graph,
-  pe,qe for FinSequence of the Edges of G,
+  pe,qe for FinSequence of the carrier' of G,
   p,q for oriented Chain of G,
   W for Function,
   U,V,e,ee for set,
@@ -49,7 +49,7 @@ theorem :: GRAPHSP:4
   W is_weight_of G & len pe = 1 implies cost(pe,W) = W.(pe.1);
 
 theorem :: GRAPHSP:5
-  e in the Edges of G implies <*e*> is Simple (oriented Chain of G);
+  e in the carrier' of G implies <*e*> is Simple (oriented Chain of G);
 
 theorem :: GRAPHSP:6
   for p being Simple (oriented Chain of G) st p=pe^qe & len pe >= 1 &
@@ -71,17 +71,19 @@ theorem :: GRAPHSP:9
 
 theorem :: GRAPHSP:10
   for G being oriented Graph,v1,v2 be Vertex of G,e1,e2 be set
-  st e1 in the Edges of G & e2 in the Edges of G &
+  st e1 in the carrier' of G & e2 in the carrier' of G &
   e1 orientedly_joins v1,v2 & e2 orientedly_joins v1,v2 holds e1=e2;
 
 theorem :: GRAPHSP:11
-  the Vertices of G= U \/ V & v1 in U & v2 in V & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+  the carrier of G= U \/ V & v1 in U & v2 in V & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G
+   & e orientedly_joins v3,v4))
   implies not ex p st p is_orientedpath_of v1,v2;
 
 theorem :: GRAPHSP:12
-  the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4)) &
+  the carrier of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G &
+   e orientedly_joins v3,v4)) &
   p is_orientedpath_of v1,v2 implies p is_orientedpath_of v1,v2,U;
 
 begin :: The basic theorems for Dijkstra's shortest path algorithm (continue)
@@ -92,28 +94,30 @@ reserve G for finite Graph,
 
 theorem :: GRAPHSP:13
   W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 &
-  Q is_shortestpath_of v1,v3,V,W & not (ex e st e in the Edges of G &
+  Q is_shortestpath_of v1,v3,V,W & not (ex e st e in the carrier' of G &
   e orientedly_joins v2,v3) & P islongestInShortestpath V,v1,W implies
   Q is_shortestpath_of v1,v3,V \/{v2},W;
 
 reserve G for finite oriented Graph,
   P,Q for oriented Chain of G,
-  W for Function of (the Edges of G), Real>=0,
+  W for Function of (the carrier' of G), Real>=0,
   v1,v2,v3,v4 for Vertex of G;
 
 theorem :: GRAPHSP:14
-  e in the Edges of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2
+  e in the carrier' of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2
   implies P is_shortestpath_of v1,v2,{v1},W;
 
 theorem :: GRAPHSP:15
-  e in the Edges of G & P is_shortestpath_of v1,v2,V,W & v1 <> v3 & Q=P^<*e*> &
+  e in the carrier' of G & P is_shortestpath_of v1,v2,V,W &
+   v1 <> v3 & Q=P^<*e*> &
   e orientedly_joins v2,v3 & v1 in V & (for v4 st v4 in V holds
-  not (ex ee st ee in the Edges of G & ee orientedly_joins v4,v3)) implies
+  not (ex ee st ee in the carrier' of G & ee orientedly_joins v4,v3)) implies
   Q is_shortestpath_of v1,v3,V \/{v2},W;
 
 theorem :: GRAPHSP:16
-  the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+  the carrier of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G &
+   e orientedly_joins v3,v4))
   implies (P is_shortestpath_of v1,v2,U,W iff P is_shortestpath_of v1,v2,W);
 
 begin  :: The definition of assignment statement
@@ -219,11 +223,11 @@ begin :: Defining a weight function for an oriented graph
 definition
   let G be oriented Graph,v1,v2 be Vertex of G;
   assume
- ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
-  func Edge(v1,v2) means
+ ex e be set st e in the carrier' of G & e orientedly_joins v1,v2;
+  func XEdge(v1,v2) means
 :: GRAPHSP:def 6
 
-  ex e be set st it = e & e in the Edges of G & e orientedly_joins v1,v2;
+  ex e be set st it = e & e in the carrier' of G & e orientedly_joins v1,v2;
 end;
 
 definition
@@ -231,30 +235,31 @@ definition
   func Weight(v1,v2,W) equals
 :: GRAPHSP:def 7
 
-  W.Edge(v1,v2) if ex e be set st e in the Edges of G &
+  W.XEdge(v1,v2) if ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2 otherwise -1;
 end;
 
 definition
   let G be oriented Graph,v1,v2 be Vertex of G,
-  W be Function of (the Edges of G), Real>=0;
+  W be Function of (the carrier' of G), Real>=0;
   redefine func Weight(v1,v2,W) -> Real;
 end;
 
 reserve G for oriented Graph,
   v1,v2 for Vertex of G,
-  W for Function of (the Edges of G), Real>=0;
+  W for Function of (the carrier' of G), Real>=0;
 
 theorem :: GRAPHSP:24
-  Weight(v1,v2,W) >= 0 iff ex e be set st e in the Edges of G &
+  Weight(v1,v2,W) >= 0 iff ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2;
 
 theorem :: GRAPHSP:25
-  Weight(v1,v2,W) = -1 iff not ex e be set st e in the Edges of G &
+  Weight(v1,v2,W) = -1 iff not ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2;
 
 theorem :: GRAPHSP:26
-  e in the Edges of G & e orientedly_joins v1,v2 implies Weight(v1,v2,W)=W.e;
+  e in the carrier' of G & e orientedly_joins v1,v2 implies Weight(v1,v2,W)=W.e
+;
 
 begin :: Basic operations for Dijkstra's shortest path algorithm
 
@@ -455,7 +460,7 @@ theorem :: GRAPHSP:50
   holds p = q;
 
 definition
-  let G be Graph,p be FinSequence of the Edges of G,vs be FinSequence;
+  let G be Graph,p be FinSequence of the carrier' of G,vs be FinSequence;
   pred p is_oriented_edge_seq_of vs means
 :: GRAPHSP:def 19
 
@@ -498,11 +503,11 @@ begin :: Data structure for Dijkstra's shortest path algorithm
 
 definition
   let f be Element of REAL*,G be oriented Graph,n be Element of NAT,
-  W be Function of (the Edges of G), Real>=0;
+  W be Function of (the carrier' of G), Real>=0;
   pred f is_Input_of_Dijkstra_Alg G,n,W means
 :: GRAPHSP:def 20
 
-  len f=n*n+3*n+1 & Seg n=the Vertices of G &
+  len f=n*n+3*n+1 & Seg n=the carrier of G &
   (for i st 1 <= i & i <= n holds f.i=1 & f.(2*n+i)=0) &
   f.(n+1)=0 & (for i st 2 <= i & i <= n holds f.(n+i)=-1) &
   (for i,j being Vertex of G,k,m st k=i & m=j holds
@@ -523,12 +528,12 @@ begin :: Justifying the correctness of Dijkstra's shortest path algorithm
 reserve p,q for FinSequence of NAT,
   G for finite oriented Graph,
   P,Q,R for oriented Chain of G,
-  W for Function of (the Edges of G), Real>=0,
+  W for Function of (the carrier' of G), Real>=0,
   v1,v2,v3,v4 for Vertex of G;
 
 theorem :: GRAPHSP:53
   f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & 1 <> v2 & v2=i & n >= 1 &
-  g=(DijkstraAlgorithm(n)).f implies the Vertices of G = UsedVx(g,n) \/
+  g=(DijkstraAlgorithm(n)).f implies the carrier of G = UsedVx(g,n) \/
   UnusedVx(g,n) & (v2 in UsedVx(g,n) implies ex p,P st
   p is_simple_vertex_seq_at g,i,n & P is_oriented_edge_seq_of p &
   P is_shortestpath_of v1,v2,W & cost(P,W)=g.(2*n+i)) &

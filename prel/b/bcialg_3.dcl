@@ -17,104 +17,104 @@
 </Signature>
 <RCluster aid="BCIALG_3" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="14" value="false"/>
 <Adjective nr="28"/>
-<Adjective nr="41"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
+<Adjective nr="14" value="false"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="14" value="false"/>
 <Adjective nr="28"/>
-<Adjective nr="41"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="46"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BCIALG_3" nr="4">
 <ArgTypes/>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="14" value="false"/>
 <Adjective nr="28"/>
-<Adjective nr="41"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
 <Adjective nr="46"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
 <Adjective nr="51"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BCIALG_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="80"/>
-<Cluster>
-<Adjective nr="41"/>
-</Cluster>
-</FCluster>
-<FCluster aid="BCIALG_3" nr="2">
-<ArgTypes/>
-<Func kind="K" nr="80"/>
-<Cluster>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-</Cluster>
-</FCluster>
-<FCluster aid="BCIALG_3" nr="3">
-<ArgTypes/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="84"/>
 <Cluster>
 <Adjective nr="46"/>
 </Cluster>
 </FCluster>
-<FCluster aid="BCIALG_3" nr="4">
+<FCluster aid="BCIALG_3" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="84"/>
 <Cluster>
 <Adjective nr="49"/>
+<Adjective nr="50"/>
+</Cluster>
+</FCluster>
+<FCluster aid="BCIALG_3" nr="3">
+<ArgTypes/>
+<Func kind="K" nr="84"/>
+<Cluster>
+<Adjective nr="51"/>
+</Cluster>
+</FCluster>
+<FCluster aid="BCIALG_3" nr="4">
+<ArgTypes/>
+<Func kind="K" nr="84"/>
+<Cluster>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BCIALG_3" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="84"/>
 <Cluster>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </FCluster>
 </Registrations>

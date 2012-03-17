@@ -18,10 +18,10 @@
 </Signature>
 <RCluster aid="LATTICE4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -35,25 +35,25 @@
 </RCluster>
 <FCluster aid="LATTICE4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="41"/>
+<Adjective nr="18" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
+<Func kind="K" nr="24">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
+<Func kind="K" nr="97">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

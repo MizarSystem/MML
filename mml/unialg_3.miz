@@ -14,7 +14,7 @@ environ
       LATTICES, LATTICE3, UNIALG_1, UNIALG_2;
  constructors SETFAM_1, BINOP_1, DOMAIN_1, LATTICE3, UNIALG_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, UNIALG_2,
-      ORDINAL1, FINSEQ_1;
+      ORDINAL1, FINSEQ_1, CARD_1;
  requirements BOOLE, SUBSET;
  definitions LATTICE3, VECTSP_8, LATTICES, UNIALG_2, TARSKI, XBOOLE_0,
       SUBSET_1;
@@ -158,15 +158,17 @@ A1: arity o = 0;
 A2: H is_closed_on o;
     consider s being FinSequence of H such that
 A3: len s = arity o by FINSEQ_1:24;
-    o.s in H by A2,A3,UNIALG_2:def 4;
-    hence o.{} in H by A1,A3,CARD_2:59;
+    s = {} by A1,A3;
+    hence o.{} in H by A2,A3,UNIALG_2:def 4;
   end;
   thus o.{} in H implies H is_closed_on o
   proof
-    assume o.{} in H;
-    then for s being FinSequence of H st len s = arity o holds o.s in H
-    by A1,CARD_2:59;
-    hence H is_closed_on o by UNIALG_2:def 4;
+    assume
+Z:   o.{} in H;
+    let s be FinSequence of H;
+    assume len s = arity o;
+     then s = {} by A1;
+    hence o.s in H by Z;
   end;
 end;
 
@@ -214,8 +216,8 @@ A4: a2 in dom o & u = o.a2 by A3,FUNCT_1:def 5;
     then a2 = <*>(the carrier of U0) by A4,FINSEQ_2:113;
     then reconsider a1 = a2 as FinSequence of the carrier of U0;
     len a1 = 0 by A2,A4,UNIALG_1:def 10;
-    then u = o.{} by A4,CARD_2:59;
-    hence thesis by A1,A2;
+    then a1 = {};
+    hence thesis by A1,A2,A4;
   end;
   thus S c= Constants(U0)
   proof

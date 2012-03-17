@@ -19,7 +19,7 @@ environ
       COMPLEX1, SEQ_2, SEQM_3, PROB_2, FINSOP_1, RVSUM_1, SERIES_1, PCOMPS_1,
       KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1,
-      MEMBERED, PROB_1, VALUED_0;
+      MEMBERED, PROB_1, VALUED_0, SEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, SEQ_1, ABSVALUE, SEQ_2, SUBSET_1, NAT_1, TARSKI,
@@ -118,10 +118,10 @@ A2: n in NAT by ORDINAL1:def 13;
 end;
 
 theorem Th6:
-  ASeq is non-decreasing implies P * ASeq is non-decreasing
+  ASeq is non-descending implies P * ASeq is non-decreasing
 proof
   assume
-A1: ASeq is non-decreasing;
+A1: ASeq is non-descending;
 A2: dom (P * ASeq) = NAT by SEQ_1:3;
   now
     let n,m be Element of NAT such that
@@ -135,10 +135,10 @@ A5: ASeq.n c= ASeq.m by A1,A3,PROB_1:def 7;
 end;
 
 theorem Th7:
-  ASeq is non-increasing implies P * ASeq is non-increasing
+  ASeq is non-ascending implies P * ASeq is non-increasing
 proof
   assume
-A1: ASeq is non-increasing;
+A1: ASeq is non-ascending;
 A2: dom (P * ASeq) = NAT by SEQ_1:3;
   now
     let n,m be Element of NAT such that
@@ -303,7 +303,7 @@ A1: n = k+1;
 end;
 
 theorem Th12:
-  Partial_Intersection A1 is non-increasing
+  Partial_Intersection A1 is non-ascending
 proof
   now
     let n be Element of NAT;
@@ -316,7 +316,7 @@ proof
 end;
 
 theorem Th13:
-  Partial_Union A1 is non-decreasing
+  Partial_Union A1 is non-descending
 proof
   now
     let n be Element of NAT;
@@ -339,7 +339,7 @@ A1: x in (Partial_Intersection A1).n;
       let k such that
 A2:   k <= n;
 A3:   n in NAT & k in NAT by ORDINAL1:def 13;
-      Partial_Intersection A1 is non-increasing by Th12;
+      Partial_Intersection A1 is non-ascending by Th12;
       then
 A4:   (Partial_Intersection A1).n c= (Partial_Intersection A1).k
       by A2,A3,PROB_1:def 6;
@@ -416,7 +416,7 @@ A9: x in A1.i;
   then
 A10: x in (Partial_Union A1).i by A9;
 A11: n in NAT & i in NAT by ORDINAL1:def 13;
-  Partial_Union A1 is non-decreasing by Th13;
+  Partial_Union A1 is non-descending by Th13;
   then (Partial_Union A1).i c= (Partial_Union A1).n by A8,A11,PROB_1:def 7;
   hence thesis by A10;
 end;
@@ -818,10 +818,10 @@ theorem
   x in (@Partial_Union XSeq).n iff ex k st k <= n & x in XSeq.k by Th15;
 
 theorem
-  @Partial_Intersection XSeq is non-increasing by Th12;
+  @Partial_Intersection XSeq is non-ascending by Th12;
 
 theorem
-  @Partial_Union XSeq is non-decreasing by Th13;
+  @Partial_Union XSeq is non-descending by Th13;
 
 theorem
   Intersection @Partial_Intersection XSeq = Intersection XSeq by Th16;
@@ -855,14 +855,14 @@ theorem
 theorem Th42:
   (P * @Partial_Union ASeq) is non-decreasing
 proof
-  @Partial_Union ASeq is non-decreasing by Th13;
+  @Partial_Union ASeq is non-descending by Th13;
   hence thesis by Th6;
 end;
 
 theorem
   (P * @Partial_Intersection ASeq) is non-increasing
 proof
-  @Partial_Intersection ASeq is non-increasing by Th12;
+  @Partial_Intersection ASeq is non-ascending by Th12;
   hence thesis by Th7;
 end;
 
@@ -890,11 +890,11 @@ theorem Th46:
   lim (P * @Partial_Union ASeq) = sup (P * @Partial_Union ASeq) &
   lim (P * @Partial_Union ASeq) = P.Union ASeq
 proof
-A1: @Partial_Union ASeq is non-decreasing by Th13;
+A1: @Partial_Union ASeq is non-descending by Th13;
   then P * @Partial_Union ASeq is convergent by PROB_2:20;
   then P * @Partial_Union ASeq is bounded by SEQ_2:27;
   then
-A2: P * @Partial_Union ASeq is bounded_above by SEQ_2:def 5;
+A2: P * @Partial_Union ASeq is bounded_above;
 A3: P * @Partial_Union ASeq is non-decreasing by Th42;
   lim (P * @Partial_Union ASeq) = P.Union (@Partial_Union ASeq)
   by A1,PROB_2:20
@@ -1801,29 +1801,29 @@ definition
   let IT be Subset-Family of X;
   attr IT is non-decreasing-closed means
   :Def12:
-  for A1 being SetSequence of X st A1 is non-decreasing &
+  for A1 being SetSequence of X st A1 is non-descending &
   (for n holds A1.n in IT) holds Union A1 in IT;
   attr IT is non-increasing-closed means
   :Def13:
-  for A1 being SetSequence of X st A1 is non-increasing &
+  for A1 being SetSequence of X st A1 is non-ascending &
   (for n holds A1.n in IT) holds Intersection A1 in IT;
 end;
 
 theorem Th71:
   for IT be Subset-Family of X holds
   IT is non-decreasing-closed iff (for A1 being SetSequence of X st
-  (A1 is non-decreasing & (for n holds A1.n in IT)) holds lim A1 in IT)
+  (A1 is non-descending & (for n holds A1.n in IT)) holds lim A1 in IT)
 proof
   let IT be Subset-Family of X;
   thus IT is non-decreasing-closed implies (for A1 being SetSequence of X st
-  (A1 is non-decreasing & (for n holds A1.n in IT)) holds lim A1 in IT)
+  (A1 is non-descending & (for n holds A1.n in IT)) holds lim A1 in IT)
   proof
     assume
 A1: IT is non-decreasing-closed;
     now
       let A1 be SetSequence of X;
       assume
-A2:   A1 is non-decreasing & (for n holds A1.n in IT);
+A2:   A1 is non-descending & (for n holds A1.n in IT);
       then Union A1 in IT by A1,Def12;
       hence lim A1 in IT by A2,SETLIM_1:63;
     end;
@@ -1831,13 +1831,13 @@ A2:   A1 is non-decreasing & (for n holds A1.n in IT);
   end;
   assume
 A3: for A1 being SetSequence of X st
-  A1 is non-decreasing & (for n holds A1.n in IT) holds lim A1 in IT;
-  for A1 being SetSequence of X st A1 is non-decreasing &
+  A1 is non-descending & (for n holds A1.n in IT) holds lim A1 in IT;
+  for A1 being SetSequence of X st A1 is non-descending &
   (for n holds A1.n in IT) holds Union A1 in IT
   proof
     let A1 be SetSequence of X;
     assume
-A4: A1 is non-decreasing & (for n holds A1.n in IT);
+A4: A1 is non-descending & (for n holds A1.n in IT);
     then lim A1 in IT by A3;
     hence thesis by A4,SETLIM_1:63;
   end;
@@ -1847,18 +1847,18 @@ end;
 theorem Th72:
   for IT be Subset-Family of X holds
   IT is non-increasing-closed iff (for A1 being SetSequence of X st
-  A1 is non-increasing & (for n holds A1.n in IT) holds lim A1 in IT)
+  A1 is non-ascending & (for n holds A1.n in IT) holds lim A1 in IT)
 proof
   let IT be Subset-Family of X;
   thus IT is non-increasing-closed implies (for A1 being SetSequence of X st
-  A1 is non-increasing & (for n holds A1.n in IT) holds lim A1 in IT)
+  A1 is non-ascending & (for n holds A1.n in IT) holds lim A1 in IT)
   proof
     assume
 A1: IT is non-increasing-closed;
     now
       let A1 be SetSequence of X;
       assume
-A2:   A1 is non-increasing & (for n holds A1.n in IT);
+A2:   A1 is non-ascending & (for n holds A1.n in IT);
       then Intersection A1 in IT by A1,Def13;
       hence lim A1 in IT by A2,SETLIM_1:64;
     end;
@@ -1866,13 +1866,13 @@ A2:   A1 is non-increasing & (for n holds A1.n in IT);
   end;
   assume
 A3: for A1 being SetSequence of X st
-  A1 is non-increasing & (for n holds A1.n in IT) holds lim A1 in IT;
-  for A1 being SetSequence of X st A1 is non-increasing &
+  A1 is non-ascending & (for n holds A1.n in IT) holds lim A1 in IT;
+  for A1 being SetSequence of X st A1 is non-ascending &
   (for n holds A1.n in IT) holds Intersection A1 in IT
   proof
     let A1 be SetSequence of X;
     assume
-A4: A1 is non-increasing & (for n holds A1.n in IT);
+A4: A1 is non-ascending & (for n holds A1.n in IT);
     then lim A1 in IT by A3;
     hence thesis by A4,SETLIM_1:64;
   end;
@@ -1883,10 +1883,10 @@ theorem Th73:
   bool X is non-decreasing-closed & bool X is non-increasing-closed
 proof
   for A1 be SetSequence of X st
-  A1 is non-decreasing & for n holds A1.n in bool X holds Union A1 in bool X;
+  A1 is non-descending & for n holds A1.n in bool X holds Union A1 in bool X;
   hence bool X is non-decreasing-closed by Def12;
   for A1 be SetSequence of X st
-  A1 is non-increasing & for n holds A1.n in bool X holds
+  A1 is non-ascending & for n holds A1.n in bool X holds
   Intersection A1 in bool X;
   hence thesis by Def13;
 end;
@@ -1922,10 +1922,10 @@ A2: Z is non-decreasing-closed & Z is non-increasing-closed by A1,Def14;
       assume
 A3:   A1 is monotone & for n holds A1.n in Z;
       per cases by A3,SETLIM_1:def 1;
-      suppose A1 is non-decreasing;
+      suppose A1 is non-descending;
         hence lim A1 in Z by A2,A3,Th71;
       end;
-      suppose A1 is non-increasing;
+      suppose A1 is non-ascending;
         hence lim A1 in Z by A2,A3,Th72;
       end;
     end;
@@ -1937,22 +1937,22 @@ A5: for A1 being SetSequence of X st
   A1 is monotone & (for n holds A1.n in Z) holds lim A1 in Z;
   reconsider Z as Subset-Family of X by A4;
   for A1 being SetSequence of X st
-  A1 is non-decreasing & (for n holds A1.n in Z) holds lim A1 in Z
+  A1 is non-descending & (for n holds A1.n in Z) holds lim A1 in Z
   proof
     let A1 be SetSequence of X;
     assume
-A6: A1 is non-decreasing & (for n holds A1.n in Z);
+A6: A1 is non-descending & (for n holds A1.n in Z);
     A1 is monotone & (for n holds A1.n in Z) implies lim A1 in Z by A5;
     hence thesis by A6,SETLIM_1:def 1;
   end;
   then
 A7: Z is non-decreasing-closed by Th71;
   for A1 being SetSequence of X st
-  A1 is non-increasing & (for n holds A1.n in Z) holds lim A1 in Z
+  A1 is non-ascending & (for n holds A1.n in Z) holds lim A1 in Z
   proof
     let A1 be SetSequence of X;
     assume
-A8: A1 is non-increasing & (for n holds A1.n in Z);
+A8: A1 is non-ascending & (for n holds A1.n in Z);
     A1 is monotone & (for n holds A1.n in Z) implies lim A1 in Z by A5;
     hence thesis by A8,SETLIM_1:def 1;
   end;
@@ -1969,12 +1969,12 @@ proof
   proof
     assume F is SigmaField of X;
     then reconsider F as SigmaField of X;
-    for A1 being SetSequence of X st A1 is non-decreasing &
+    for A1 being SetSequence of X st A1 is non-descending &
     (for n holds A1.n in F) holds Union A1 in F
     proof
       let A1 be SetSequence of X;
       assume that
-A1:   A1 is non-decreasing & for n holds A1.n in F;
+A1:   A1 is non-descending & for n holds A1.n in F;
       for n being Element of NAT holds A1.n in F by A1;
       then reconsider A2=A1 as SetSequence of F by PROB_1:def 9;
       Union A2 in F by PROB_1:46;
@@ -1984,7 +1984,7 @@ A1:   A1 is non-decreasing & for n holds A1.n in F;
 A2: F is non-decreasing-closed by Def12;
     F is non-increasing-closed
     proof
-      let A1 be SetSequence of X such that A1 is non-increasing;
+      let A1 be SetSequence of X such that A1 is non-ascending;
       assume for n holds A1.n in F;
       then for n being Element of NAT holds A1.n in F;
       hence Intersection A1 in F by PROB_1:def 8;
@@ -2018,7 +2018,7 @@ A8:     A1.(k+1) in F by A4;
         hence A2.(k+1) in F by A7,A8,FINSUB_1:def 2;
       end;
 A9:   for k holds P[k] from NAT_1:sch 2(A5,A6);
-      A2 is non-increasing by Th12;
+      A2 is non-ascending by Th12;
       then Intersection A2 in F by A3,A9,Def13;
       hence thesis by Th16;
     end;

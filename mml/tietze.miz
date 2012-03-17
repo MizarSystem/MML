@@ -6,14 +6,16 @@
 
 environ
 
- vocabularies FUNCT_1, ARYTM, TIETZE, RELAT_1, BOOLE, SEQ_1, COMPTS_1,
+ vocabularies FUNCT_1, ARYTM, TIETZE, RELAT_1, BOOLE, SEQ_1,
       PRE_TOPC, TOPMETR, ARYTM_1, ORDINAL2, ABSVALUE, ARYTM_3, FUNCOP_1,
       TARSKI, LIMFUNC1, RCOMP_1, TOPS_2, SETFAM_1, SEQFUNC, SERIES_1, PARTFUN1,
       GROUP_1, FUNCT_2, PSCOMP_1, TMAP_1, TDGROUP, METRIC_1, POWER, ASYMPT_0,
-      COMPLEX1, SEQ_2, PREPOWER, SUPINF_2, SEQM_3, RLVECT_1, SUBSET_1;
+      COMPLEX1, SEQ_2, PREPOWER, SUPINF_2, SEQM_3, RLVECT_1, SUBSET_1,
+      GROUP_3, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, XXREAL_0,
       XREAL_0, REAL_1, NAT_1, COMPLEX1, NEWTON, PREPOWER, POWER, RELAT_1,
-      FUNCT_1, RELSET_1, PARTFUN1, VALUED_1, SEQ_1, SEQ_2, FUNCT_2, SEQM_3,
+      FUNCT_1, RELSET_1, PARTFUN1,
+      VALUED_0, VALUED_1, SEQ_1, SEQ_2, FUNCT_2, SEQM_3,
       FUNCOP_1, SERIES_1, LIMFUNC1, RCOMP_1, SEQFUNC, STRUCT_0, PRE_TOPC,
       TOPS_2, BORSUK_1, COMPTS_1, TOPMETR, TSEP_1, TMAP_1, PSCOMP_1, TOPREALB,
       METRIC_1, PARTFUN3;
@@ -40,7 +42,7 @@ begin
 
 reserve r, s for real number,
   X for set,
-  f, g, h for real-yielding Function;
+  f, g, h for real-valued Function;
 
 theorem Th1:
   for a,b,c being real number st |.a-b.| <= c holds b-c <= a & a <= b+c
@@ -119,7 +121,7 @@ A6: x in dom f by A3,XBOOLE_0:def 3;
 end;
 
 definition
-  let f be real-yielding Function, r be real number, X be set;
+  let f be real-valued Function, r be real number, X be set;
   pred f,X is_absolutely_bounded_by r means
   :Def1:
   for x being set st x in X /\ dom f holds abs(f.x) <= r;
@@ -150,7 +152,7 @@ proof
   let f be Function of T1,T2;
   let A be Subset of T2;
   f"A = {} T1;
-  hence thesis by TOPS_1:22;
+  hence thesis;
 end;
 
 theorem
@@ -634,7 +636,7 @@ A3: F.x = y by FUNCT_1:def 5;
 A4: the carrier of X1 = dom f1 & the carrier of X2 = dom f2 by FUNCT_2:def 1;
 A5: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2
     by TSEP_1:def 2;
-A6: x is Point of X by A2,TOPMETR:2;
+A6: x is Point of X by A2,PRE_TOPC:55;
     per cases by A2,A5,XBOOLE_0:def 2;
     suppose
 A7:   x in the carrier of X1;
@@ -677,7 +679,7 @@ A2: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2
         then consider x being Element of X1 union X2 such that
 A3:     x in A and
 A4:     y = F.x by FUNCT_2:116;
-        x is Point of X by TOPMETR:2;
+        x is Point of X by PRE_TOPC:55;
         then F.x = f1.x by A1,A3,Th14;
         hence y in f1.:A by A3,A4,FUNCT_2:43;
       end;
@@ -686,7 +688,7 @@ A4:     y = F.x by FUNCT_2:116;
       then consider x being Element of X1 such that
 A5:   x in A and
 A6:   y = f1.x by FUNCT_2:116;
-      x is Point of X by TOPMETR:2;
+      x is Point of X by PRE_TOPC:55;
       then
 A7:   F.x = f1.x by A1,Th14;
       x in the carrier of X1 union X2 by A2,XBOOLE_0:def 2;
@@ -700,7 +702,7 @@ A7:   F.x = f1.x by A1,Th14;
     then consider x being Element of X1 union X2 such that
 A8: x in A and
 A9: y = F.x by FUNCT_2:116;
-    x is Point of X by TOPMETR:2;
+    x is Point of X by PRE_TOPC:55;
     then F.x = f2.x by A1,A8,Th14;
     hence y in f2.:A by A8,A9,FUNCT_2:43;
   end;
@@ -709,7 +711,7 @@ A9: y = F.x by FUNCT_2:116;
   then consider x being Element of X2 such that
 A10: x in A and
 A11: y = f2.x by FUNCT_2:116;
-  x is Point of X by TOPMETR:2;
+  x is Point of X by PRE_TOPC:55;
   then
 A12: F.x = f2.x by A1,Th14;
   x in the carrier of X1 union X2 by A2,XBOOLE_0:def 2;
@@ -758,7 +760,7 @@ reserve T for non empty TopSpace,
   A for closed Subset of T;
 
 theorem Th19:
-  r > 0 & T is being_T4 implies
+  r > 0 & T is normal implies
   for f being continuous Function of T|A, R^1 st f,A is_absolutely_bounded_by r
   ex g being continuous Function
   of T, R^1 st g,dom g is_absolutely_bounded_by r/3 &
@@ -766,7 +768,7 @@ theorem Th19:
 proof
   assume that
 A1: r > 0 and
-A2: T is being_T4;
+A2: T is normal;
   let f be continuous Function of T|A, R^1 such that
 A3: for x being set st x in A /\ dom f holds abs(f.x) <= r;
   set A1 = left_closed_halfline(-r/3);
@@ -823,9 +825,9 @@ A23: h is continuous by A11,TOPS_2:def 5;
   reconsider g = g1 as Function of T, R^1 by TOPREALA:28;
   reconsider F1 = F as Function of T, Closed-Interval-TSpace(0,1)
   by A14,A17,FUNCT_2:8;
-  F1 is continuous by A8,TOPMETR:8;
+  F1 is continuous by A8,PRE_TOPC:57;
   then h*F1 is continuous by A23;
-  then reconsider g as continuous Function of T, R^1 by TOPMETR:7;
+  then reconsider g as continuous Function of T, R^1 by PRE_TOPC:56;
   take g;
   thus g,dom g is_absolutely_bounded_by r/3
   proof
@@ -901,7 +903,7 @@ end;
 theorem Th20:
   (for A, B being non empty closed Subset of T st A misses B
   ex f being continuous Function of T, R^1 st f.:A = {0} & f.:B = {1})
-  implies T is_T4
+  implies T is normal
 proof
   assume
 A1: for A, B being non empty closed Subset of T st A misses B
@@ -1139,12 +1141,12 @@ end;
 :: Tietze Extension Theorem
 
 theorem
-  T is being_T4 implies for A for f being Function
+  T is normal implies for A for f being Function
   of T|A, Closed-Interval-TSpace(-1,1) st f is continuous
   ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f
 proof
   assume
-A1: T is being_T4;
+A1: T is normal;
   let A;
   let f be Function of T|A, Closed-Interval-TSpace(-1,1) such that
 A2: f is continuous;
@@ -1167,7 +1169,7 @@ A6: rng g = {0} by FUNCOP_1:14;
     then reconsider g as Function
     of T, Closed-Interval-TSpace(-1,1) by FUNCT_2:8;
     reconsider g as continuous Function of T, Closed-Interval-TSpace(-1,1)
-    by TOPMETR:8;
+    by PRE_TOPC:57;
     take g;
     g|A1 is empty;
     hence g|A = f;
@@ -1180,7 +1182,7 @@ A6: rng g = {0} by FUNCOP_1:14;
     then T --> R^1(0) in D;
     then reconsider D as non empty set;
     reconsider f1 = f as Function of T|A1,R^1 by TOPREALA:28;
-    f1 is continuous by A2,TOPMETR:7;
+    f1 is continuous by A2,PRE_TOPC:56;
     then reconsider f1 = f as continuous Function of T|A1,R^1;
     f1,A is_absolutely_bounded_by 1
     proof
@@ -1460,7 +1462,7 @@ theorem
   (for A being non empty closed Subset of T
   for f being continuous Function of T|A, Closed-Interval-TSpace(-1,1)
   ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f)
-  implies T is being_T4
+  implies T is normal
 proof
   assume
 A1: for A being non empty closed Subset of T
@@ -1508,13 +1510,13 @@ A13: rng f2 = {1} by FUNCOP_1:14;
     of T|(C\/D), Closed-Interval-TSpace(-1,1) by A5,A6,FUNCT_2:8;
     f is continuous Function of (T|C) union (T|D), R^1 by A3,A7,TMAP_1:148;
     then
-A14: h is continuous by A5,TOPMETR:8;
+A14: h is continuous by A5,PRE_TOPC:57;
     C \/ D is closed by TOPS_1:36;
     then consider g being continuous Function
     of T, Closed-Interval-TSpace(-1,1) such that
 A15: g|(C\/D) = f by A1,A14;
     reconsider F = g as continuous Function
-    of T, R^1 by TOPMETR:7,TOPREALA:28;
+    of T, R^1 by PRE_TOPC:56,TOPREALA:28;
     take F;
 A16: C c= C;
 A17: f1.:C = {0}

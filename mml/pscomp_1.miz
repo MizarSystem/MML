@@ -9,9 +9,9 @@ environ
  vocabularies AMI_1, FREEALG, HAHNBAN, COMPTS_1, BOOLE, FINSET_1, ZFMISC_1,
       SETFAM_1, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1, SEQ_1, SEQ_2, ORDINAL2,
       LATTICES, ARYTM_3, SEQ_4, PRE_TOPC, RCOMP_1, FUNCOP_1, PRALG_1, SUBSET_1,
-      NEWTON, INT_1, REALSET1, LIMFUNC1, PCOMPS_1, EUCLID, TOPREAL1, FUNCT_5,
+      NEWTON, INT_1, LIMFUNC1, EUCLID, TOPREAL1, FUNCT_5,
       MCART_1, PSCOMP_1, ARYTM, MEMBERED, FUZZY_2, PARTFUN1, VALUED_0,
-      XXREAL_2, SUPINF_1;
+      XXREAL_2, SUPINF_1, ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, SETFAM_1, FINSET_1, REAL_1, NAT_1, INT_1, MEMBERED, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, STRUCT_0, PRE_TOPC,
@@ -19,15 +19,15 @@ environ
       COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1, MEASURE6, XXREAL_0, XXREAL_2;
  constructors DOMAIN_1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQ_4, RCOMP_1,
       FUNCOP_1, LIMFUNC1, MEASURE6, TOPS_2, COMPTS_1, PCOMPS_1, TSP_1,
-      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2;
+      TOPREAL1, SEQ_1, SUPINF_1, XXREAL_2, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCT_2,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_2, SEQM_3,
       RCOMP_1, STRUCT_0, PRE_TOPC, COMPTS_1, EUCLID, SPPOL_2, VALUED_0,
-      VALUED_1;
+      VALUED_1, FUNCOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQ_2, TOPS_2, COMPTS_1, RCOMP_1, ORDINAL1,
-      XBOOLE_0, STRUCT_0, SUBSET_1, LIMFUNC1, VALUED_1, XXREAL_2;
- theorems TARSKI, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, SEQ_4, SUBSET_1,
+      XBOOLE_0, STRUCT_0, SUBSET_1, LIMFUNC1, VALUED_1, XXREAL_2, FINSET_1;
+ theorems TARSKI, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, SEQ_4, SUBSET_1,
       REAL_2, FCONT_3, RCOMP_1, FUNCOP_1, ABSVALUE, NAT_1, INT_1, EUCLID,
       RFUNCT_2, SEQ_1, SEQ_2, BORSUK_1, TOPS_1, TSP_1, COMPTS_1, LIMFUNC1,
       SETFAM_1, ZFMISC_1, PCOMPS_1, TOPREAL1, JORDAN1, GOBOARD7, SPPOL_1,
@@ -295,11 +295,11 @@ reserve seq for Real_Sequence,
 canceled;
 
 theorem Th6:
-  seq is convergent & seq is_not_0 & lim seq = 0 implies seq" is non bounded
+  seq is convergent & seq is non-zero & lim seq = 0 implies seq" is non bounded
 proof
   assume that
 A1: seq is convergent and
-A2: seq is_not_0 and
+A2: seq is non-zero and
 A3: lim seq = 0;
   given r such that
 A4: for n being Element of NAT holds (seq").n<r;
@@ -992,7 +992,7 @@ A3: (rng s1) c= Inv X and
 A4: s1 is convergent;
 A5: not 0 in rng s1 by A3;
 A6: now
-    assume not s1 is_not_0;
+    assume not s1 is non-zero;
     then ex n being Element of NAT st s1.n = 0 by SEQ_1:7;
     hence contradiction by A5,FUNCT_2:6;
   end;
@@ -1843,7 +1843,7 @@ A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"{} by A4,XBOOLE_0:def 7
         .= {}T by RELAT_1:171;
-      hence f"Y is closed by TOPS_1:22;
+      hence f"Y is closed;
     end;
   end;
 end;
@@ -1875,7 +1875,7 @@ A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
         .= f"{} by A4,XBOOLE_0:def 7
         .= {}S by RELAT_1:171;
-      hence f"Y is closed by TOPS_1:22;
+      hence f"Y is closed;
     end;
   end;
 end;
@@ -1986,7 +1986,7 @@ A13:  lim seq <> 0;
         hence contradiction by A2,A9,XBOOLE_0:def 3;
       end;
       then
-A14:  seq is_not_0 by SEQ_1:7;
+A14:  seq is non-zero by SEQ_1:7;
       then
 A15:  seq" is convergent by A10,A13,SEQ_2:35;
 A16:  lim (seq") = (lim seq)" by A10,A13,A14,SEQ_2:36;
@@ -2087,14 +2087,9 @@ A6: P = f"eR by A3,A5,Def2;
   hence P is closed by A1,A6,Def25;
 end;
 
-notation
-  let T be non empty TopStruct, f be RealMap of T, X be Subset of T;
-  synonym f||X for f|X;
-end;
-
 definition
   let T be non empty TopStruct, f be RealMap of T, X be Subset of T;
-  redefine func f||X -> RealMap of T|X;
+  redefine func f|X -> RealMap of T|X;
   coherence
   proof
     the carrier of T|X = X by PRE_TOPC:29;
@@ -2103,19 +2098,8 @@ definition
 end;
 
 registration
-  let T be non empty TopSpace;
-  cluster compact non empty Subset of T;
-  existence
-  proof
-    consider x being Point of T;
-    take {x};
-    thus thesis by BORSUK_1:41;
-  end;
-end;
-
-registration
   let T be non empty TopSpace, f be continuous RealMap of T, X be Subset of T;
-  cluster f||X -> continuous RealMap of T|X;
+  cluster f|X -> continuous RealMap of T|X;
   coherence
   proof
     now
@@ -2124,8 +2108,8 @@ registration
       then
 A1:   f"Y is open by Th54;
 A2:   the carrier of (T|X) = X by PRE_TOPC:29;
-      (f||X)"Y = X/\(f"Y) by FUNCT_1:139;
-      hence (f||X)"Y is open by A1,A2,TSP_1:def 1;
+      (f|X)"Y = X/\(f"Y) by FUNCT_1:139;
+      hence (f|X)"Y is open by A1,A2,TSP_1:def 1;
     end;
     hence thesis by Th54;
   end;
@@ -2243,7 +2227,7 @@ A17: x in the carrier of T & x in the carrier of T and
 A18: r = f.x by A15,FUNCT_2:115;
     reconsider x as Element of T by A17;
     f.x <= b & f.x <> b by A3,A4,A15,A18,Def3,SEQ_4:def 4;
-    then f.x+0 < b by REAL_1:def 5;
+    then f.x+0 < b by XXREAL_0:1;
     then
 A19: b-f.x > 0 by XREAL_1:22;
     g.x = (bf'.x)" by VALUED_1:10
@@ -2472,11 +2456,12 @@ A68: f.x in left_closed_halfline(fx') by A62,SETFAM_1:def 1;
 end;
 
 registration
-  cluster compact non empty TopSpace;
-  existence
+ cluster non empty compact TopSpace;
+ existence
   proof
-    take 1TopSp {{}};
-    thus thesis by PCOMPS_1:9;
+   consider T being non empty compact TopSpace;
+   take T;
+   thus thesis;
   end;
 end;
 
@@ -2500,37 +2485,37 @@ end;
 theorem Th62:
   for T being non empty TopSpace, X being non empty Subset of T,
   Y being compact Subset of T, f being continuous RealMap of T
-  st X c= Y holds inf (f||Y) <= inf (f||X)
+  st X c= Y holds inf (f|Y) <= inf (f|X)
 proof
   let T be non empty TopSpace, X be non empty Subset of T,
   Y be compact Subset of T, f be continuous RealMap of T;
   assume
 A1: X c= Y;
   then reconsider Y1 = Y as non empty compact Subset of T;
-A2: (f||Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
+A2: (f|Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
     .= f.:Y by RFUNCT_2:5;
-A3: (f||X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
+A3: (f|X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
     .= f.:X by RFUNCT_2:5;
-  (f||Y1).:the carrier of (T|Y1) is bounded_below by Def11;
-  hence inf (f||Y) <= inf (f||X) by A1,A2,A3,RELAT_1:156,SEQ_4:64;
+  (f|Y1).:the carrier of (T|Y1) is bounded_below by Def11;
+  hence inf (f|Y) <= inf (f|X) by A1,A2,A3,RELAT_1:156,SEQ_4:64;
 end;
 
 theorem Th63:
   for T being non empty TopSpace, X being non empty Subset of T,
   Y being compact Subset of T, f being continuous RealMap of T
-  st X c= Y holds sup (f||X) <= sup (f||Y)
+  st X c= Y holds sup (f|X) <= sup (f|Y)
 proof
   let T be non empty TopSpace, X be non empty Subset of T,
   Y be compact Subset of T, f be continuous RealMap of T;
   assume
 A1: X c= Y;
   then reconsider Y1 = Y as non empty compact Subset of T;
-A2: (f||Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
+A2: (f|Y).:the carrier of (T|Y) = (f|Y).:Y by PRE_TOPC:29
     .= f.:Y by RFUNCT_2:5;
-A3: (f||X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
+A3: (f|X).:the carrier of (T|X) = (f|X).:X by PRE_TOPC:29
     .= f.:X by RFUNCT_2:5;
-  (f||Y1).:the carrier of (T|Y1) is bounded_above by Def12;
-  hence sup (f||X) <= sup (f||Y) by A1,A2,A3,RELAT_1:156,SEQ_4:65;
+  (f|Y1).:the carrier of (T|Y1) is bounded_above by Def12;
+  hence sup (f|X) <= sup (f|Y) by A1,A2,A3,RELAT_1:156,SEQ_4:65;
 end;
 
 begin :: Bounding boxes of compact sets in TOP-REAL 2
@@ -2540,7 +2525,7 @@ theorem Th64:
   holds X /\ Y is compact
 proof
   let n be Element of NAT, X, Y be compact Subset of TOP-REAL n;
-  TOP-REAL n is_T2 by SPPOL_1:26;
+  TOP-REAL n is T_2 by SPPOL_1:26;
   hence X/\Y is compact by COMPTS_1:20;
 end;
 
@@ -2812,21 +2797,21 @@ end;
 
 theorem Th69:
   for X being Subset of TOP-REAL 2, p being Point of TOP-REAL 2
-  st p in X holds (proj1||X).p = p`1
+  st p in X holds (proj1|X).p = p`1
 proof
   let X be Subset of TOP-REAL 2, p be Point of TOP-REAL 2;
   assume p in X;
-  hence (proj1||X).p = proj1.p by FUNCT_1:72
+  hence (proj1|X).p = proj1.p by FUNCT_1:72
     .= p`1 by Def28;
 end;
 
 theorem Th70:
   for X being Subset of TOP-REAL 2, p being Point of TOP-REAL 2
-  st p in X holds (proj2||X).p = p`2
+  st p in X holds (proj2|X).p = p`2
 proof
   let X be Subset of TOP-REAL 2,p be Point of TOP-REAL 2;
   assume p in X;
-  hence (proj2||X).p = proj2.p by FUNCT_1:72
+  hence (proj2|X).p = proj2.p by FUNCT_1:72
     .= p`2 by Def29;
 end;
 
@@ -2834,34 +2819,34 @@ definition
   let X be Subset of TOP-REAL 2;
   func W-bound X -> Real equals
 
-  inf (proj1||X);
+  inf (proj1|X);
   coherence;
   func N-bound X -> Real equals
 
-  sup (proj2||X);
+  sup (proj2|X);
   coherence;
   func E-bound X -> Real equals
 
-  sup (proj1||X);
+  sup (proj1|X);
   coherence;
   func S-bound X -> Real equals
 
-  inf (proj2||X);
+  inf (proj2|X);
   coherence;
 end;
 
-Lm9: p in X implies inf (proj1||X) <= p`1 & p`1 <= sup (proj1||X) &
-inf (proj2||X) <= p`2 & p`2 <= sup (proj2||X)
+Lm9: p in X implies inf (proj1|X) <= p`1 & p`1 <= sup (proj1|X) &
+inf (proj2|X) <= p`2 & p`2 <= sup (proj2|X)
 proof
   assume
 A1: p in X;
   then reconsider p' = p as Point of (TOP-REAL 2)|X by PRE_TOPC:29;
-A2: ((proj1||X)).p' = p`1 by A1,Th69;
-  hence inf (proj1||X) <= p`1 by Th47;
-  thus p`1 <= sup (proj1||X) by A2,Th50;
-A3: ((proj2||X)).p' = p`2 by A1,Th70;
-  hence inf (proj2||X) <= p`2 by Th47;
-  thus p`2 <= sup (proj2||X) by A3,Th50;
+A2: ((proj1|X)).p' = p`1 by A1,Th69;
+  hence inf (proj1|X) <= p`1 by Th47;
+  thus p`1 <= sup (proj1|X) by A2,Th50;
+A3: ((proj2|X)).p' = p`2 by A1,Th70;
+  hence inf (proj2|X) <= p`2 by Th47;
+  thus p`2 <= sup (proj2|X) by A3,Th50;
 end;
 
 theorem
@@ -2941,7 +2926,7 @@ registration
   proof
 A1: (SW-corner X)`1 = W-bound X & (NW-corner X)`1 = W-bound X &
     (SW-corner X)`2 = S-bound X & (NW-corner X)`2 = N-bound X by EUCLID:56;
-    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
+    set p1X = (proj1|X), c = the carrier of (TOP-REAL 2)|X;
 A2: c = X by PRE_TOPC:29;
     p1X.:c is with_min by Def15;
     then inf (p1X.:c) in p1X.:c by Def4;
@@ -2958,7 +2943,7 @@ A4: p1X.p = p`1 by A2,A3,Th69;
   proof
 A5: (NW-corner X)`1 = W-bound X & (NE-corner X)`1 = E-bound X &
     (NW-corner X)`2 = N-bound X & (NE-corner X)`2 = N-bound X by EUCLID:56;
-    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
+    set p2X = (proj2|X), c = the carrier of (TOP-REAL 2)|X;
 A6: c = X by PRE_TOPC:29;
     p2X.:c is with_max by Def14;
     then sup (p2X.:c) in p2X.:c by Def3;
@@ -2975,7 +2960,7 @@ A8: p2X.p = p`2 by A6,A7,Th70;
   proof
 A9: (SE-corner X)`1 = E-bound X & (NE-corner X)`1 = E-bound X &
     (SE-corner X)`2 = S-bound X & (NE-corner X)`2 = N-bound X by EUCLID:56;
-    set p1X = (proj1||X), c = the carrier of (TOP-REAL 2)|X;
+    set p1X = (proj1|X), c = the carrier of (TOP-REAL 2)|X;
 A10: c = X by PRE_TOPC:29;
     p1X.:c is with_max by Def14;
     then sup (p1X.:c) in p1X.:c by Def3;
@@ -2992,7 +2977,7 @@ A12: p1X.p = p`1 by A10,A11,Th69;
   proof
 A13: (SW-corner X)`1 = W-bound X & (SE-corner X)`1 = E-bound X &
     (SW-corner X)`2 = S-bound X & (SE-corner X)`2 = S-bound X by EUCLID:56;
-    set p2X = (proj2||X), c = the carrier of (TOP-REAL 2)|X;
+    set p2X = (proj2|X), c = the carrier of (TOP-REAL 2)|X;
 A14: c = X by PRE_TOPC:29;
     p2X.:c is with_min by Def15;
     then inf (p2X.:c) in p2X.:c by Def4;
@@ -3009,28 +2994,28 @@ end;
 definition
   let X be Subset of TOP-REAL 2;
   func W-min X -> Point of TOP-REAL 2 equals
-  |[W-bound X, inf (proj2||W-most X)]|;
+  |[W-bound X, inf (proj2|W-most X)]|;
   coherence;
   func W-max X -> Point of TOP-REAL 2 equals
-  |[W-bound X, sup (proj2||W-most X)]|;
+  |[W-bound X, sup (proj2|W-most X)]|;
   coherence;
   func N-min X -> Point of TOP-REAL 2 equals
-  |[inf (proj1||N-most X), N-bound X]|;
+  |[inf (proj1|N-most X), N-bound X]|;
   coherence;
   func N-max X -> Point of TOP-REAL 2 equals
-  |[sup (proj1||N-most X), N-bound X]|;
+  |[sup (proj1|N-most X), N-bound X]|;
   coherence;
   func E-max X -> Point of TOP-REAL 2 equals
-  |[E-bound X, sup (proj2||E-most X)]|;
+  |[E-bound X, sup (proj2|E-most X)]|;
   coherence;
   func E-min X -> Point of TOP-REAL 2 equals
-  |[E-bound X, inf (proj2||E-most X)]|;
+  |[E-bound X, inf (proj2|E-most X)]|;
   coherence;
   func S-max X -> Point of TOP-REAL 2 equals
-  |[sup (proj1||S-most X), S-bound X]|;
+  |[sup (proj1|S-most X), S-bound X]|;
   coherence;
   func S-min X -> Point of TOP-REAL 2 equals
-  |[inf (proj1||S-most X), S-bound X]|;
+  |[inf (proj1|S-most X), S-bound X]|;
   coherence;
 end;
 
@@ -3052,11 +3037,11 @@ theorem Th87:
   (SW-corner X)`2 <= (NW-corner X)`2 & (W-min X)`2 <= (W-max X)`2 &
   (W-min X)`2 <= (NW-corner X)`2 & (W-max X)`2 <= (NW-corner X)`2
 proof
-A1: (SW-corner X)`2 = inf (proj2||X) by EUCLID:56;
+A1: (SW-corner X)`2 = inf (proj2|X) by EUCLID:56;
   set LX = W-most X;
-A2: (W-min X)`2 = inf (proj2||LX) by EUCLID:56;
-A3: (W-max X)`2 = sup (proj2||LX) by EUCLID:56;
-A4: (NW-corner X)`2 = sup (proj2||X) by EUCLID:56;
+A2: (W-min X)`2 = inf (proj2|LX) by EUCLID:56;
+A3: (W-max X)`2 = sup (proj2|LX) by EUCLID:56;
+A4: (NW-corner X)`2 = sup (proj2|X) by EUCLID:56;
 A5: (SW-corner X)`2 <= (W-min X)`2 by A1,A2,Th62,XBOOLE_1:17;
 A6: (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
 A7: (W-max X)`2 <= (NW-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
@@ -3081,7 +3066,7 @@ A2: p in LSeg(SW-corner Z, NW-corner Z) & p in Z by XBOOLE_0:def 3;
   hence p`1 = (W-min Z)`1 by A2,GOBOARD7:5;
   assume Z is compact;
   then reconsider Z as non empty compact Subset of TOP-REAL 2;
-  (W-min Z)`2 = inf (proj2||W-most Z) & (W-max Z)`2 = sup (proj2||W-most Z )
+  (W-min Z)`2 = inf (proj2|W-most Z) & (W-max Z)`2 = sup (proj2|W-most Z )
   by EUCLID:56;
   hence thesis by A1,Lm9;
 end;
@@ -3113,7 +3098,7 @@ end;
 theorem Th91:
   W-min X in W-most X & W-max X in W-most X
 proof
-  set p2W = (proj2||W-most X), c = the carrier of (TOP-REAL 2)|W-most X;
+  set p2W = (proj2|W-most X), c = the carrier of (TOP-REAL 2)|W-most X;
 A1: c = W-most X by PRE_TOPC:29;
   p2W.:c is with_min by Def15;
   then inf (p2W.:c) in p2W.:c by Def4;
@@ -3240,11 +3225,11 @@ theorem Th97:
   (NW-corner X)`1 <= (NE-corner X)`1 & (N-min X)`1 <= (N-max X)`1 &
   (N-min X)`1 <= (NE-corner X)`1 & (N-max X)`1 <= (NE-corner X)`1
 proof
-A1: (NW-corner X)`1 = inf (proj1||X) by EUCLID:56;
+A1: (NW-corner X)`1 = inf (proj1|X) by EUCLID:56;
   set LX = N-most X;
-A2: (N-min X)`1 = inf (proj1||LX) by EUCLID:56;
-A3: (N-max X)`1 = sup (proj1||LX) by EUCLID:56;
-A4: (NE-corner X)`1 = sup (proj1||X) by EUCLID:56;
+A2: (N-min X)`1 = inf (proj1|LX) by EUCLID:56;
+A3: (N-max X)`1 = sup (proj1|LX) by EUCLID:56;
+A4: (NE-corner X)`1 = sup (proj1|X) by EUCLID:56;
 A5: (NW-corner X)`1 <= (N-min X)`1 by A1,A2,Th62,XBOOLE_1:17;
 A6: (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
 A7: (N-max X)`1 <= (NE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
@@ -3269,7 +3254,7 @@ A2: p in LSeg(NW-corner Z, NE-corner Z) & p in Z by XBOOLE_0:def 3;
   hence p`2 = (N-min Z)`2 by A2,GOBOARD7:6;
   assume Z is compact;
   then reconsider Z as non empty compact Subset of TOP-REAL 2;
-  (N-min Z)`1 = inf (proj1||N-most Z) & (N-max Z)`1 = sup (proj1||N-most Z )
+  (N-min Z)`1 = inf (proj1|N-most Z) & (N-max Z)`1 = sup (proj1|N-most Z )
   by EUCLID:56;
   hence thesis by A1,Lm9;
 end;
@@ -3301,7 +3286,7 @@ end;
 theorem Th101:
   N-min X in N-most X & N-max X in N-most X
 proof
-  set p2W = (proj1||N-most X), c = the carrier of (TOP-REAL 2)|N-most X;
+  set p2W = (proj1|N-most X), c = the carrier of (TOP-REAL 2)|N-most X;
 A1: c = N-most X by PRE_TOPC:29;
   p2W.:c is with_min by Def15;
   then inf (p2W.:c) in p2W.:c by Def4;
@@ -3428,11 +3413,11 @@ theorem Th107:
   (SE-corner X)`2 <= (NE-corner X)`2 & (E-min X)`2 <= (E-max X)`2 &
   (E-min X)`2 <= (NE-corner X)`2 & (E-max X)`2 <= (NE-corner X)`2
 proof
-A1: (SE-corner X)`2 = inf (proj2||X) by EUCLID:56;
+A1: (SE-corner X)`2 = inf (proj2|X) by EUCLID:56;
   set LX = E-most X;
-A2: (E-min X)`2 = inf (proj2||LX) by EUCLID:56;
-A3: (E-max X)`2 = sup (proj2||LX) by EUCLID:56;
-A4: (NE-corner X)`2 = sup (proj2||X) by EUCLID:56;
+A2: (E-min X)`2 = inf (proj2|LX) by EUCLID:56;
+A3: (E-max X)`2 = sup (proj2|LX) by EUCLID:56;
+A4: (NE-corner X)`2 = sup (proj2|X) by EUCLID:56;
 A5: (SE-corner X)`2 <= (E-min X)`2 by A1,A2,Th62,XBOOLE_1:17;
 A6: (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
 A7: (E-max X)`2 <= (NE-corner X)`2 by A3,A4,Th63,XBOOLE_1:17;
@@ -3457,7 +3442,7 @@ A2: p in LSeg(SE-corner Z, NE-corner Z) & p in Z by XBOOLE_0:def 3;
   hence p`1 = (E-min Z)`1 by A2,GOBOARD7:5;
   assume Z is compact;
   then reconsider Z as non empty compact Subset of TOP-REAL 2;
-  (E-min Z)`2 = inf (proj2||E-most Z) & (E-max Z)`2 = sup (proj2||E-most Z )
+  (E-min Z)`2 = inf (proj2|E-most Z) & (E-max Z)`2 = sup (proj2|E-most Z )
   by EUCLID:56;
   hence thesis by A1,Lm9;
 end;
@@ -3489,7 +3474,7 @@ end;
 theorem Th111:
   E-min X in E-most X & E-max X in E-most X
 proof
-  set p2W = (proj2||E-most X), c = the carrier of (TOP-REAL 2)|E-most X;
+  set p2W = (proj2|E-most X), c = the carrier of (TOP-REAL 2)|E-most X;
 A1: c = E-most X by PRE_TOPC:29;
   p2W.:c is with_min by Def15;
   then inf (p2W.:c) in p2W.:c by Def4;
@@ -3616,11 +3601,11 @@ theorem Th117:
   (SW-corner X)`1 <= (SE-corner X)`1 & (S-min X)`1 <= (S-max X)`1 &
   (S-min X)`1 <= (SE-corner X)`1 & (S-max X)`1 <= (SE-corner X)`1
 proof
-A1: (SW-corner X)`1 = inf (proj1||X) by EUCLID:56;
+A1: (SW-corner X)`1 = inf (proj1|X) by EUCLID:56;
   set LX = S-most X;
-A2: (S-min X)`1 = inf (proj1||LX) by EUCLID:56;
-A3: (S-max X)`1 = sup (proj1||LX) by EUCLID:56;
-A4: (SE-corner X)`1 = sup (proj1||X) by EUCLID:56;
+A2: (S-min X)`1 = inf (proj1|LX) by EUCLID:56;
+A3: (S-max X)`1 = sup (proj1|LX) by EUCLID:56;
+A4: (SE-corner X)`1 = sup (proj1|X) by EUCLID:56;
 A5: (SW-corner X)`1 <= (S-min X)`1 by A1,A2,Th62,XBOOLE_1:17;
 A6: (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
 A7: (S-max X)`1 <= (SE-corner X)`1 by A3,A4,Th63,XBOOLE_1:17;
@@ -3645,7 +3630,7 @@ A2: p in LSeg(SW-corner Z, SE-corner Z) & p in Z by XBOOLE_0:def 3;
   hence p`2 = (S-min Z)`2 by A2,GOBOARD7:6;
   assume Z is compact;
   then reconsider Z as non empty compact Subset of TOP-REAL 2;
-  (S-min Z)`1 = inf (proj1||S-most Z) & (S-max Z)`1 = sup (proj1||S-most Z )
+  (S-min Z)`1 = inf (proj1|S-most Z) & (S-max Z)`1 = sup (proj1|S-most Z )
   by EUCLID:56;
   hence thesis by A1,Lm9;
 end;
@@ -3677,7 +3662,7 @@ end;
 theorem Th121:
   S-min X in S-most X & S-max X in S-most X
 proof
-  set p2W = (proj1||S-most X), c = the carrier of (TOP-REAL 2)|S-most X;
+  set p2W = (proj1|S-most X), c = the carrier of (TOP-REAL 2)|S-most X;
 A1: c = S-most X by PRE_TOPC:29;
   p2W.:c is with_min by Def15;
   then inf (p2W.:c) in p2W.:c by Def4;

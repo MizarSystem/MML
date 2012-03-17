@@ -27,31 +27,31 @@
 </Signature>
 <RCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="11">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="67"/>
-<Adjective nr="70"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="88"/>
-<Adjective nr="90"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="68"/>
+<Adjective nr="69"/>
+<Adjective nr="72"/>
+<Adjective nr="75"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="93"/>
 <Adjective nr="95"/>
-<Adjective nr="96"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="154"/>
+<Func kind="K" nr="158"/>
 <Cluster>
-<Adjective nr="63"/>
-<Adjective nr="70"/>
+<Adjective nr="68"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 </Registrations>

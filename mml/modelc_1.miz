@@ -17,21 +17,19 @@ environ
       ZF_LANG, KNASTER;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDERS_1, XBOOLEAN, MARGREL1,
-      KNASTER;
+      KNASTER, CARD_1;
  requirements REAL, NUMERALS, ARITHM, SUBSET, BOOLE;
  definitions RELAT_1, TARSKI, BINOP_1, MARGREL1, XBOOLEAN;
  theorems RELSET_1, XBOOLE_0, ZFMISC_1, XBOOLE_1, TARSKI, FUNCT_1, FUNCT_2,
       FUNCT_3, FUNCT_7, WELLORD2, PARTFUN1, RELAT_1, NAT_1, INT_1, KNASTER,
-      XREAL_1, ABIAN, FINSEQ_1, ORDERS_1, FUNCOP_1, XXREAL_0, REAL_1, RELSET_2,
-      MARGREL1, FINSEQ_5, XBOOLEAN, CARD_2;
+      XREAL_1, ABIAN, FINSEQ_1, ORDERS_1, FUNCOP_1, XXREAL_0, RELSET_2,
+      MARGREL1, FINSEQ_5, XBOOLEAN, CARD_2, ORDINAL1;
  schemes NAT_1, FUNCT_2, XBOOLE_0, BINOP_1, BINOP_2;
 
 begin
 
-::************
 :: definition of CTL(Computation Tree Logic) language.
 ::    refer to (reuse) construction & proof of ZF_LANG
-::************
 
 Lm1: for m,n,k be Nat st m < n & n <= k+1 holds m <= k
 proof
@@ -674,7 +672,7 @@ A8:   H = atom.k by Def14;
 A9:   len(H) = 1 by A8,FINSEQ_1:57;
       then len F <= 1 & 1 <= len F by A3,A4,Lm10,NAT_1:11;
       then 1 + len sq = 1 + 0 by A3,A4,A9,XXREAL_0:1;
-      then sq = {} by CARD_2:59;
+      then sq = {};
       hence H = F by A3,FINSEQ_1:47;
     end;
 A10: now
@@ -2105,18 +2103,19 @@ end;
 
 notation
   let f be Function;
-  let n be Element of NAT;
+  let n be Nat;
   synonym f|**n for iter (f,n);
 end;
 
 definition
   let S be set;
   let f be Function of S,S;
-  let n be Element of NAT;
+  let n be Nat;
   redefine func f|**n -> Function of S,S;
   coherence
   proof
-    iter(f,n) is Function of S,S;
+    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
+    iter(f,n') is Function of S,S;
     hence thesis;
   end;
 end;
@@ -2188,9 +2187,7 @@ A1: [s,p] in R by Lm31;
   hence thesis by A1,RELAT_1:def 13;
 end;
 
-::***********
 ::  scheme for path with condition F
-::***********
 
 scheme ExistPath{ S()-> non empty set, R()-> total Relation of S(),S(),
   s0()-> Element of S(), F(Element of S())-> set}:
@@ -4293,7 +4290,7 @@ A1: pai1.k = pai2.0;
   proof
     let n be Element of NAT;
     set n1=n+1;
-    per cases by REAL_1:def 5;
+    per cases by XXREAL_0:1;
     suppose
 A2:   n1 < k;
 A3:   pai.n1 = PathChange(pai1,pai2,k,n1) by Def69

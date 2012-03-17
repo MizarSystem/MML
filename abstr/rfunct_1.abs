@@ -7,15 +7,16 @@
 environ
 
  vocabularies PARTFUN1, ARYTM, ARYTM_1, RELAT_1, ARYTM_3, BOOLE, FUNCT_1,
-      FINSEQ_1, SEQ_1, ABSVALUE, FUNCT_3, PARTFUN2, RFUNCT_1, MEMBERED;
+      FINSEQ_1, SEQ_1, ABSVALUE, FUNCT_3, PARTFUN2, RFUNCT_1, MEMBERED,
+      VALUED_0, COMPLEX1, XCMPLX_0, SEQM_3, SEQ_2, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, MEMBERED, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
-      FUNCT_3, PARTFUN2, VALUED_1, SEQ_1, XXREAL_0;
+      COMPLEX1, MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_3,
+      PARTFUN2, VALUED_0, VALUED_1, SEQ_1, SEQ_2, XXREAL_0, REAL_1;
  constructors PARTFUN1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, VALUED_1,
-      PARTFUN2;
+      PARTFUN2, SEQ_2, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0, VALUED_1;
- requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+      VALUED_0, VALUED_1, XCMPLX_0, SEQ_2;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
 
 
 begin
@@ -23,15 +24,15 @@ begin
 reserve x,X,Y for set;
 reserve C for non empty set;
 reserve c for Element of C;
-reserve f,f1,f2,f3,g,g1 for real-yielding Function;
-reserve r,r1,r2,p for real number;
+reserve f,f1,f2,f3,g,g1 for complex-valued Function;
+reserve r,r1,r2,p for complex number;
 
 ::
 ::OPERATIONS ON PARTIAL FUNCTIONS FROM A DOMAIN, TO THE SET OF REAL NUMBERS
 ::
 
 definition
-  let f1,f2 be real-yielding Function;
+  let f1,f2 be complex-valued Function;
   canceled 3;
   func f1/f2 -> Function means
 :: RFUNCT_1:def 4
@@ -41,8 +42,19 @@ definition
 end;
 
 registration
-  let f1, f2 be real-yielding Function;
-  cluster f1/f2 -> real-yielding;
+  let f1, f2 be complex-valued Function;
+  cluster f1/f2 -> complex-valued;
+end;
+
+registration
+  let f1, f2 be real-valued Function;
+  cluster f1/f2 -> real-valued;
+end;
+
+definition
+  let C be set, D be complex-membered set;
+  let f1, f2 be PartFunc of C,D;
+  redefine func f1/f2 -> PartFunc of C,COMPLEX;
 end;
 
 definition
@@ -52,7 +64,7 @@ definition
 end;
 
 definition
-  let f be real-yielding Function;
+  let f be complex-valued Function;
   canceled 3;
   func f^ -> Function means
 :: RFUNCT_1:def 8
@@ -62,8 +74,18 @@ definition
 end;
 
 registration
-  let f be real-yielding Function;
-  cluster f^ -> real-yielding;
+  let f be complex-valued Function;
+  cluster f^ -> complex-valued;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster f^ -> real-valued;
+end;
+
+definition
+  let C be set, D be complex-membered set, f be PartFunc of C,D;
+  redefine func f^ -> PartFunc of C,COMPLEX;
 end;
 
 definition
@@ -181,7 +203,7 @@ theorem :: RFUNCT_1:45
   (-f)^ = (-1)(#)(f^);
 
 theorem :: RFUNCT_1:46
-  (abs(f))^ = abs((f^));
+  (abs(f))^ = abs(f^);
 
 theorem :: RFUNCT_1:47
   f/g = f(#) (g^);
@@ -226,9 +248,8 @@ theorem :: RFUNCT_1:60
   (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X;
 
 theorem :: RFUNCT_1:61
-
-(f1(#)f2)|X = f1|X (#) f2|X & (f1(#)f2)|X = f1|X (#) f2 & (f1(#)f2)|X = f1 (#)
-  f2|X;
+  (f1(#)f2)|X = f1|X (#) f2|X & (f1(#)f2)|X = f1|X (#) f2 &
+  (f1(#)f2)|X = f1 (#) f2|X;
 
 theorem :: RFUNCT_1:62
   (-f)|X = -(f|X) & (f^)|X = (f|X)^ & (abs(f))|X = abs((f|X));
@@ -246,6 +267,7 @@ theorem :: RFUNCT_1:65
 :: TOTAL PARTIAL FUNCTIONS FROM A DOMAIN, TO REAL
 ::
 
+reserve r,r1,r2,p for real number;
 reserve f,f1,f2 for PartFunc of C,REAL;
 
 theorem :: RFUNCT_1:66
@@ -327,124 +349,112 @@ theorem :: RFUNCT_1:86
 :: BOUNDED AND CONSTANT PARTIAL FUNCTIONS FROM A DOMAIN, TO REAL
 ::
 
-reserve f for real-yielding Function;
+reserve f for real-valued Function;
 
-definition
-  let f,Y;
-  pred f is_bounded_above_on Y means
-:: RFUNCT_1:def 9
-
+theorem :: RFUNCT_1:87
+ f|Y is bounded_above iff
   ex r st for c being set st c in Y /\ dom f holds f.c <= r;
-  pred f is_bounded_below_on Y means
-:: RFUNCT_1:def 10
 
+theorem :: RFUNCT_1:88
+ f|Y is bounded_below iff
   ex r st for c being set st c in Y /\ dom f holds r <= f.c;
-end;
 
-definition
-  let f,Y;
-  pred f is_bounded_on Y means
-:: RFUNCT_1:def 11
-
-  f is_bounded_above_on Y & f is_bounded_below_on Y;
-end;
-
-canceled 3;
+canceled;
 
 theorem :: RFUNCT_1:90
-  f is_bounded_on Y iff
+  f|Y is bounded iff
   ex r st for c being set st c in Y /\ dom f holds abs(f.c)<=r;
 
 theorem :: RFUNCT_1:91
-  (Y c= X & f is_bounded_above_on X implies f is_bounded_above_on Y) &
-  (Y c= X & f is_bounded_below_on X implies f is_bounded_below_on Y) &
-  (Y c= X & f is_bounded_on X implies f is_bounded_on Y);
+  (Y c= X & f|X is bounded_above implies f|Y is bounded_above) &
+  (Y c= X & f|X is bounded_below implies f|Y is bounded_below) &
+  (Y c= X & f|X is bounded implies f|Y is bounded);
 
 theorem :: RFUNCT_1:92
-  f is_bounded_above_on X & f is_bounded_below_on Y implies
-  f is_bounded_on X /\ Y;
+  f|X is bounded_above & f|Y is bounded_below implies
+  f|(X /\ Y) is bounded;
 
 theorem :: RFUNCT_1:93
-  X misses dom f implies f is_bounded_on X;
+  X misses dom f implies f|X is bounded;
 
 theorem :: RFUNCT_1:94
-  0 = r implies r(#)f is_bounded_on Y;
+  0 = r implies (r(#)f)|Y is bounded;
 
 theorem :: RFUNCT_1:95
-  (f is_bounded_above_on Y & 0<=r implies r(#)f is_bounded_above_on Y) &
-  (f is_bounded_above_on Y & r<=0 implies r(#)f is_bounded_below_on Y);
+  (f|Y is bounded_above & 0<=r implies (r(#)f)|Y is bounded_above) &
+  (f|Y is bounded_above & r<=0 implies (r(#)f)|Y is bounded_below);
 
 theorem :: RFUNCT_1:96
-  (f is_bounded_below_on Y & 0<=r implies r(#)f is_bounded_below_on Y) &
-  (f is_bounded_below_on Y & r<=0 implies r(#)f is_bounded_above_on Y);
+  (f|Y is bounded_below & 0<=r implies (r(#)f)|Y is bounded_below) &
+  (f|Y is bounded_below & r<=0 implies (r(#)f)|Y is bounded_above);
 
 theorem :: RFUNCT_1:97
-  f is_bounded_on Y implies r(#)f is_bounded_on Y;
+  f|Y is bounded implies (r(#)f)|Y is bounded;
 
 theorem :: RFUNCT_1:98
-  abs(f) is_bounded_below_on X;
+  (abs f)|X is bounded_below;
 
 theorem :: RFUNCT_1:99
-  f is_bounded_on Y implies abs(f) is_bounded_on Y & -f is_bounded_on Y;
+  f|Y is bounded implies (abs f)|Y is bounded & (-f)|Y is bounded;
 
-reserve f1,f2 for real-yielding Function;
+reserve f1,f2 for real-valued Function;
 
 theorem :: RFUNCT_1:100
-  (f1 is_bounded_above_on X & f2 is_bounded_above_on Y implies
-  f1+f2 is_bounded_above_on X /\ Y) &
-  (f1 is_bounded_below_on X & f2 is_bounded_below_on Y implies
-  f1+f2 is_bounded_below_on X /\ Y) &
-  (f1 is_bounded_on X & f2 is_bounded_on Y implies f1+f2 is_bounded_on X /\ Y);
+  (f1|X is bounded_above & f2|Y is bounded_above implies
+  (f1+f2)|(X /\ Y) is bounded_above) &
+  (f1|X is bounded_below & f2|Y is bounded_below implies
+  (f1+f2)|(X /\ Y) is bounded_below) &
+  (f1|X is bounded & f2|Y is bounded implies (f1+f2)|(X /\ Y) is bounded);
 
 theorem :: RFUNCT_1:101
-  f1 is_bounded_on X & f2 is_bounded_on Y implies
-  f1(#)f2 is_bounded_on X /\ Y & f1-f2 is_bounded_on X /\ Y;
+  f1|X is bounded & f2|Y is bounded implies
+  (f1(#)f2)|(X /\ Y) is bounded & (f1-f2)|(X /\ Y) is bounded;
 
 theorem :: RFUNCT_1:102
-  f is_bounded_above_on X & f is_bounded_above_on Y implies
-  f is_bounded_above_on X \/ Y;
+  f|X is bounded_above & f|Y is bounded_above implies
+  f|(X \/ Y) is bounded_above;
 
 theorem :: RFUNCT_1:103
-  f is_bounded_below_on X & f is_bounded_below_on Y implies
-  f is_bounded_below_on X \/ Y;
+  f|X is bounded_below & f|Y is bounded_below implies
+  f|(X \/ Y) is bounded_below;
 
 theorem :: RFUNCT_1:104
-  f is_bounded_on X & f is_bounded_on Y implies f is_bounded_on X \/ Y;
+  f|X is bounded & f|Y is bounded implies f|(X \/ Y) is bounded;
 
 reserve f,f1,f2 for PartFunc of C,REAL;
 
 theorem :: RFUNCT_1:105
-  f1 is_constant_on X & f2 is_constant_on Y implies
-  (f1 + f2) is_constant_on (X /\ Y) & (f1 - f2) is_constant_on (X /\ Y) &
-  (f1 (#) f2) is_constant_on (X /\ Y);
+  f1|X is constant & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is constant & (f1-f2)|(X /\ Y) is constant &
+  (f1(#)f2)|(X /\ Y) is constant;
 
 theorem :: RFUNCT_1:106
-  f is_constant_on Y implies p(#)f is_constant_on Y;
+  f|Y is constant implies (p(#)f)|Y is constant;
 
 theorem :: RFUNCT_1:107
-  f is_constant_on Y implies abs(f) is_constant_on Y & -f is_constant_on Y;
+  f|Y is constant implies (abs f)|Y is constant & (-f)|Y is constant;
 
 theorem :: RFUNCT_1:108
-  f is_constant_on Y implies f is_bounded_on Y;
+  f|Y is constant implies f|Y is bounded;
 
 theorem :: RFUNCT_1:109
-  f is_constant_on Y implies (for r holds r(#)f is_bounded_on Y) &
-  -f is_bounded_on Y & abs(f) is_bounded_on Y;
+  f|Y is constant implies (for r holds (r(#)f)|Y is bounded) &
+  (-f)|Y is bounded & (abs f)|Y is bounded;
 
 theorem :: RFUNCT_1:110
-  (f1 is_bounded_above_on X & f2 is_constant_on Y implies
-  f1+f2 is_bounded_above_on (X /\ Y)) &
-  (f1 is_bounded_below_on X & f2 is_constant_on Y implies
-  f1+f2 is_bounded_below_on (X /\ Y)) &
-  (f1 is_bounded_on X & f2 is_constant_on Y implies
-  f1+f2 is_bounded_on (X /\ Y));
+  (f1|X is bounded_above & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is bounded_above) &
+  (f1|X is bounded_below & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is bounded_below) &
+  (f1|X is bounded & f2|Y is constant implies
+  (f1+f2)|(X /\ Y) is bounded);
 
 theorem :: RFUNCT_1:111
-  (f1 is_bounded_above_on X & f2 is_constant_on Y implies
-  f1-f2 is_bounded_above_on (X /\ Y)) &
-  (f1 is_bounded_below_on X & f2 is_constant_on Y implies
-  f1-f2 is_bounded_below_on X /\ Y) &
-  (f1 is_bounded_on X & f2 is_constant_on Y implies
-  f1-f2 is_bounded_on X /\ Y &
-  f2-f1 is_bounded_on X /\ Y & f1(#)f2 is_bounded_on X /\ Y);
+  (f1|X is bounded_above & f2|Y is constant implies
+  (f1-f2)|(X /\ Y) is bounded_above) &
+  (f1|X is bounded_below & f2|Y is constant implies
+  (f1-f2)|(X /\ Y) is bounded_below) &
+  (f1|X is bounded & f2|Y is constant implies
+  (f1-f2)|(X /\ Y) is bounded &
+  (f2-f1)|(X /\ Y) is bounded& (f1(#)f2)|(X /\ Y) is bounded);
 

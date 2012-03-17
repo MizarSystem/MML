@@ -9,21 +9,22 @@ environ
  vocabularies AMI_1, ARYTM, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1, FINSEQ_5,
       FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
       GLIB_001, GLIB_002, GLIB_003, MSAFREE2, PARTFUN1, PBOOLE, REALSET1,
-      RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1;
+      RELAT_1, RELAT_2, RLVECT_1, TREES_1, VALUED_0;
  notations TARSKI, XBOOLE_0, CARD_1, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0,
       XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, PBOOLE, RELSET_1,
-      FUNCT_2, SEQ_1, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, FINSEQ_1, FINSET_1,
+      FUNCT_2, VALUED_0, SEQ_1,
+      GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, FINSEQ_1, FINSET_1,
       NAT_1, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, GLIB_002, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, NAT_1, BINOP_2, FINSOP_1, RVSUM_1, FINSEQ_5,
       GRAPH_5, GLIB_001, GLIB_002, SEQ_1, RECDEF_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       NUMBERS, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GLIB_000, GRAPH_2, POLYNOM1,
-      GLIB_002, INT_1, VALUED_0;
+      GLIB_002, INT_1, VALUED_0, CARD_1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions GLIB_000, FUNCOP_1, RVSUM_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_5,
       FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
-      GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3, REAL_1,
+      GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1, PBOOLE, POLYNOM3,
       RELAT_1, RELSET_1, RVSUM_1, TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0,
       ZFMISC_1, PRE_CIRC, XREAL_1, XXREAL_0, ENUMSET1, ORDERS_1, ORDINAL1,
       FINSOP_1, VALUED_0;
@@ -50,12 +51,6 @@ A2:   n in dom fs & x <= n & y = fs.n by A1,GLIB_001:4;
     then rng Seq fss c= D by TARSKI:def 3;
     hence thesis by FINSEQ_1:def 4;
   end;
-end;
-
-registration
-  let F be real-yielding Relation, X be set;
-  cluster F | X -> real-yielding;
-  coherence;
 end;
 
 theorem
@@ -98,7 +93,7 @@ A1: (for i being Element of NAT st i in dom fs holds 0 <= fs.i) &
     len Seq fss=0;
     then
 A2: for i being Nat st i in dom fs holds 0 <= fs.i;
-    Seq fss = <*> REAL by A1,CARD_2:59;
+    Seq fss = <*> REAL by A1;
     hence Sum (Seq fss) <= Sum fs by A2,RVSUM_1:102,114;
   end;
   then
@@ -243,9 +238,9 @@ A54:    a <> x or b <> y by A47,A48,TARSKI:def 1;
         [x,y] in {[x,y]} by TARSKI:def 1;
         then [x,y] in fss by A40;
         then a <> x by A46,A48,A54,FUNCT_1:def 1;
-        then a < x by A53,REAL_1:def 5;
+        then a < x by A53,XXREAL_0:1;
         then a+1 <= x by NAT_1:13;
-        then a+1-1 <= x-1 by REAL_1:92;
+        then a+1-1 <= x-1 by XREAL_1:15;
         then a in Seg xx1 by A52,FINSEQ_1:3;
         hence z in fssq by A48,A49,RELAT_1:def 11;
       end;
@@ -299,7 +294,7 @@ A69:      1 <= z' by A67,FINSEQ_3:27;
           now
             assume not z in {x};
             then z <> x by TARSKI:def 1;
-            then z' < xx1+1 by A68,REAL_1:def 5;
+            then z' < xx1+1 by A68,XXREAL_0:1;
             then z' <= xx1 by NAT_1:13;
             then z' in Seg xx1 by A69,FINSEQ_1:3;
             then [z,fss.z] in fssq by A66,RELAT_1:def 11;
@@ -369,7 +364,7 @@ A82:    v in dom g & g.v = x by A11,FUNCT_1:def 5;
         reconsider v as Element of NAT by A82;
 A83:    1 <= v & v <= len g by A82,FINSEQ_3:27;
         then
-A84:    v < len g by A79,A80,A82,REAL_1:def 5;
+A84:    v < len g by A79,A80,A82,XXREAL_0:1;
         set k2 = g.(len g);
         1 <= len g by A5,A79,NAT_1:12;
         then len g in dom g by FINSEQ_3:27;
@@ -1673,7 +1668,7 @@ definition
   let G be WGraph;
   attr G is real-weighted means
   :Def13: ::dWREALWL
-  the_Weight_of G is real-yielding;
+  the_Weight_of G is real-valued;
 end;
 
 definition
@@ -1691,7 +1686,7 @@ registration
     assume G is nonnegative-weighted;
     then rng the_Weight_of G c= Real>=0 by Def14;
     then rng (the_Weight_of G) c= REAL by XBOOLE_1:1;
-    then the_Weight_of G is real-yielding by VALUED_0:def 3;
+    then the_Weight_of G is real-valued by VALUED_0:def 3;
     hence thesis by Def13;
   end;
 end;
@@ -1700,14 +1695,14 @@ definition
   let G be EGraph;
   attr G is real-elabeled means
   :Def15: ::dEREALEL
-  the_ELabel_of G is real-yielding;
+  the_ELabel_of G is real-valued;
 end;
 
 definition
   let G be VGraph;
   attr G is real-vlabeled means
   :Def16: ::dVREALVL
-  the_VLabel_of G is real-yielding;
+  the_VLabel_of G is real-valued;
 end;
 
 definition
@@ -1747,7 +1742,7 @@ registration
 end;
 
 registration
-  let G be _Graph, X be real-yielding ManySortedSet of the_Edges_of G;
+  let G be _Graph, X be real-valued ManySortedSet of the_Edges_of G;
   cluster G.set(ELabelSelector,X) -> real-elabeled;
   coherence
   proof
@@ -1769,7 +1764,7 @@ registration
 end;
 
 registration
-  let G be _Graph, X be real-yielding ManySortedSet of the_Vertices_of G;
+  let G be _Graph, X be real-valued ManySortedSet of the_Vertices_of G;
   cluster G.set(VLabelSelector, X) -> real-vlabeled;
   coherence
   proof
@@ -1934,19 +1929,19 @@ end;
 
 registration
   let G be real-weighted WGraph;
-  cluster the_Weight_of G -> real-yielding;
+  cluster the_Weight_of G -> real-valued;
   coherence by Def13;
 end;
 
 registration
   let G be real-elabeled EGraph;
-  cluster the_ELabel_of G -> real-yielding;
+  cluster the_ELabel_of G -> real-valued;
   coherence by Def15;
 end;
 
 registration
   let G be real-vlabeled VGraph;
-  cluster the_VLabel_of G -> real-yielding;
+  cluster the_VLabel_of G -> real-valued;
   coherence by Def16;
 end;
 
@@ -3150,7 +3145,7 @@ proof
   then W.length() = 0 by GLIB_001:def 26;
   then len W.edgeSeq() = 0 by GLIB_001:def 18;
   then len W.weightSeq() = 0 by Def18;
-  hence W.weightSeq() = {} by CARD_2:59;
+  hence W.weightSeq() = {};
 end;
 
 theorem  ::tWWSEQ02

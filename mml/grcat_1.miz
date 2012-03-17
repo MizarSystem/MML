@@ -9,17 +9,17 @@ environ
  vocabularies CLASSES2, PARTFUN1, RELAT_1, FUNCT_1, MIDSP_1, BOOLE, VECTSP_2,
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
       ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1, REALSET1, SUBSET_1,
-      SGRAPH1, ALGSTR_0, GRAPH_1, AMI_1;
+      SGRAPH1, ALGSTR_0, GRAPH_1, AMI_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, MCART_1,
       REALSET1, PARTFUN1, FUNCT_2, CLASSES2, BINOP_1, FUNCT_5, STRUCT_0,
       ALGSTR_0, GRAPH_1, CAT_1, TOPS_2, RLVECT_1, VECTSP_1, FUNCOP_1, CAT_2,
       ALGSTR_1, MIDSP_2;
  constructors PARTFUN1, CLASSES1, CLASSES2, REALSET1, TOPS_2, VECTSP_2, CAT_2,
-      ALGSTR_1, MIDSP_2;
+      ALGSTR_1, MIDSP_2, FUNCOP_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, CLASSES2, STRUCT_0,
       ALGSTR_1, MIDSP_2, ALGSTR_0, CAT_1, CAT_2;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0;
+ definitions BINOP_1, STRUCT_0, ALGSTR_1, ALGSTR_0, GRAPH_1;
  theorems CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2, MCART_1,
       VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1, RELSET_1, ORDINAL1,
       XBOOLE_0, TOPS_2, BINOP_1, CARD_1;
@@ -125,12 +125,12 @@ theorem
 ::  0d. Auxiliary theorems: subcategories
 
 reserve C for Category;
-reserve O for non empty Subset of the Vertices of C;
+reserve O for non empty Subset of the carrier of C;
 
 definition
   let C,O;
   canceled 4;
-  func Morphs(O) -> Subset of the Edges of C equals
+  func Morphs(O) -> Subset of the carrier' of C equals
   union{Hom(a,b) where a is Object of C,b is Object of C : a in O & b in O};
   coherence by CAT_2:28;
 end;
@@ -181,7 +181,7 @@ end;
 canceled;
 
 theorem
-  the Vertices of cat(O) = O;
+  the carrier of cat(O) = O;
 
 ::  1a. Maps of the carriers of groups
 
@@ -266,7 +266,7 @@ proof
   hence thesis by Def13;
 end;
 
-::  1b. Edges of groups
+::  1b. carrier' of groups
 
 reserve G,H for AddGroup;
 
@@ -1346,7 +1346,7 @@ A9: dom c1 = dom c2
         assume
 A10:    x in dom c1;
         then consider g,f being Element of X such that
-A11:    x = [g,f] by A8,Th2;
+A11:    x = [g,f] by RELSET_1:12,Th2;
         P[g,f] by A4,A10,A11;
         hence x in dom c2 by A6,A11;
       end;
@@ -1357,7 +1357,7 @@ A12:  dom c1 c= dom c2 by TARSKI:def 3;
         assume
 A13:    x in dom c2;
         then consider g,f being Element of X such that
-A14:    x = [g,f] by A8,Th2;
+A14:    x = [g,f] by RELSET_1:12,Th2;
         P[g,f] by A6,A13,A14;
         hence x in dom c1 by A4,A14;
       end;
@@ -1393,7 +1393,7 @@ end;
 
 registration
   let UN;
-  cluster GroupCat(UN) -> strict non void;
+  cluster GroupCat(UN) -> strict non void non empty;
   coherence;
 end;
 
@@ -1405,10 +1405,8 @@ proof
   let f,g be Morphism of C;
   reconsider f' = f as Element of Morphs(V);
   reconsider g' = g as Element of Morphs(V);
-A1: dom g = dom(V).g' by CAT_1:def 2
-    .= dom(g') by Def32;
-  cod f = cod(V).f' by CAT_1:def 3
-    .= cod(f') by Def33;
+A1: dom g = dom(g') by Def32;
+  cod f = cod(f') by Def33;
   hence thesis by A1,Def35;
 end;
 
@@ -1447,21 +1445,7 @@ proof
     .= ID(b') by Def34;
 end;
 
-theorem Th49:
-  for f being Morphism of GroupCat(UN)
-  for f' being Element of Morphs(GroupObjects(UN)) st f = f'
-  holds dom f = dom f' & cod f = cod f'
-proof
-  set C = GroupCat(UN), V = GroupObjects(UN);
-  set X = Morphs(V);
-  let f be (Morphism of C), f' be Element of X;
-  assume
-A1: f = f';
-  hence dom f = dom(V).f' by CAT_1:def 2
-    .= dom f' by Def32;
-  thus cod f = cod(V).f' by A1,CAT_1:def 3
-    .= cod f' by Def33;
-end;
+canceled;
 
 theorem Th50:
   for f,g being (Morphism of GroupCat(UN)),
@@ -1478,11 +1462,11 @@ proof
   assume
 A1: f = f' & g = g';
   then
-A2: dom g = dom g' by Th49;
-A3: cod f = cod f' by A1,Th49;
-A4: dom f = dom f' by A1,Th49;
-A5: cod g = cod g' by A1,Th49;
-  thus dom g = cod f iff dom g' = cod f' by A1,A3,Th49; thus
+A2: dom g = dom g' by Def32;
+A3: cod f = cod f' by A1,Def33;
+A4: dom f = dom f' by A1,Def32;
+A5: cod g = cod g' by A1,Def33;
+  thus dom g = cod f iff dom g' = cod f' by A1,A3,Def32; thus
 A6: dom g = cod f iff [g',f'] in dom comp(V) by A2,A3,Def35;
   thus dom g = cod f implies g*f = g'*f'
   proof
@@ -1492,8 +1476,8 @@ A7: dom g = cod f;
     hence g*f = (comp(V)).(g',f') by A1,CAT_1:def 4
       .= g'*f' by A6,A7,Def35;
   end;
-  thus dom f = dom g iff dom f' = dom g' by A1,A4,Th49;
-  thus cod f = cod g iff cod f' = cod g' by A1,A5,Th49;
+  thus dom f = dom g iff dom f' = dom g' by A1,A4,Def32;
+  thus cod f = cod g iff cod f' = cod g' by A1,A5,Def33;
 end;
 
 Lm1: for f,g being Morphism of GroupCat(UN) st dom g = cod f holds
@@ -1541,9 +1525,9 @@ proof
   reconsider b'' = b' as AddGroup;
 A1: id b = ID(b') by Th48;
   hence
-A2: dom id b = dom ID(b'') by Th49
+A2: dom id b = dom ID(b'') by Def32
     .= b; thus
-A3: cod id b = cod ID(b'') by A1,Th49
+A3: cod id b = cod ID(b'') by A1,Def33
     .= b;
   thus for f being Morphism of C st cod f = b holds (id b)*f = f
   proof
@@ -1551,7 +1535,7 @@ A3: cod id b = cod ID(b'') by A1,Th49
 A4: cod f = b;
     reconsider f1 = f as strict Element of X by Th47;
     reconsider f' = f1 as strict GroupMorphism;
-A5: cod f' = b'' by A4,Th49;
+A5: cod f' = b'' by A4,Def33;
     thus (id b)*f = ID(b'')*f' by A1,A2,A4,Th50
       .= f by A5,Th34;
   end;
@@ -1561,7 +1545,7 @@ A5: cod f' = b'' by A4,Th49;
 A6: dom f = b;
     reconsider f1 = f as strict Element of X by Th47;
     reconsider f' = f1 as strict GroupMorphism;
-A7: dom f' = b'' by A6,Th49;
+A7: dom f' = b'' by A6,Def32;
     thus f*(id b) = f'*ID(b'') by A1,A3,A6,Th50
       .= f by A7,Th34;
   end;
@@ -1588,12 +1572,12 @@ end;
 
 definition
   let UN;
-  func AbGroupObjects(UN) -> Subset of the Vertices of GroupCat(UN) equals
-  {G where G is Element of the Vertices of GroupCat(UN)
+  func AbGroupObjects(UN) -> Subset of the carrier of GroupCat(UN) equals
+  {G where G is Element of the carrier of GroupCat(UN)
   : ex H being AbGroup st G = H};
   coherence
   proof
-    set D2 = the Vertices of GroupCat(UN);
+    set D2 = the carrier of GroupCat(UN);
     now
       let x be set;
       assume x in {G where G is Element of D2 : ex H being AbGroup st G = H};
@@ -1607,7 +1591,7 @@ end;
 theorem Th51:
   Trivial-addLoopStr in AbGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the Vertices of GroupCat(UN) by Th42;
+  Trivial-addLoopStr in the carrier of GroupCat(UN) by Th42;
   hence thesis;
 end;
 
@@ -1631,18 +1615,18 @@ registration
 end;
 
 theorem
-  the Vertices of AbGroupCat(UN) = AbGroupObjects(UN);
+  the carrier of AbGroupCat(UN) = AbGroupObjects(UN);
 
 ::  6. Subcategory of groups with the operator of 1/2
 
 definition
   let UN;
-  func MidOpGroupObjects(UN) -> Subset of the Vertices of AbGroupCat(UN) equals
-  {G where G is Element of the Vertices of AbGroupCat(UN)
+  func MidOpGroupObjects(UN) -> Subset of the carrier of AbGroupCat(UN) equals
+  {G where G is Element of the carrier of AbGroupCat(UN)
   : ex H being midpoint_operator AbGroup st G = H};
   coherence
   proof
-    set D2 = the Vertices of AbGroupCat(UN);
+    set D2 = the carrier of AbGroupCat(UN);
     now
       let x be set;
       assume x in {G where G is Element of D2
@@ -1660,7 +1644,7 @@ registration
   cluster MidOpGroupObjects(UN) -> non empty;
   coherence
   proof
-    set D2 = the Vertices of AbGroupCat(UN);
+    set D2 = the carrier of AbGroupCat(UN);
     set D1 = {G where G is Element of D2
     : ex H being midpoint_operator AbGroup st G = H};
     set T = Trivial-addLoopStr;
@@ -1692,12 +1676,12 @@ registration
 end;
 
 theorem
-  the Vertices of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
+  the carrier of MidOpGroupCat(UN) = MidOpGroupObjects(UN);
 
 theorem
   Trivial-addLoopStr in MidOpGroupObjects(UN)
 proof
-  Trivial-addLoopStr in the Vertices of AbGroupCat(UN) by Th51;
+  Trivial-addLoopStr in the carrier of AbGroupCat(UN) by Th51;
   hence thesis;
 end;
 

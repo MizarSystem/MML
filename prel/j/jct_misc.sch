@@ -60,8 +60,8 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="9">
+<Adjective nr="7"/>
+<Adjective nr="10">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -72,8 +72,8 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="9">
+<Adjective nr="7"/>
+<Adjective nr="10">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Adjective>
@@ -89,13 +89,13 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="70">
+<Func kind="K" nr="71">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="70">
+<Func kind="K" nr="71">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Var nr="2"/>

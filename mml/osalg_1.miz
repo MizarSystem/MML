@@ -8,7 +8,8 @@ environ
 
  vocabularies ZF_REFLE, PBOOLE, BOOLE, RELAT_1, RELAT_2, EQREL_1, FUNCT_1,
       PRALG_1, TDGROUP, SEQM_3, NATTRA_1, CARD_3, FINSEQ_1, FUNCOP_1, AMI_1,
-      QC_LANG1, CARD_5, CARD_LAR, SETFAM_1, MSUALG_1, ORDERS_1, OSALG_1;
+      QC_LANG1, CARD_5, CARD_LAR, SETFAM_1, MSUALG_1, ORDERS_1, OSALG_1,
+      STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
       ORDERS_1, FUNCT_2, EQREL_1, SETFAM_1, PARTFUN1, FINSEQ_1, FUNCOP_1,
       FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, STRUCT_0, MSUALG_1, ORDERS_3;
@@ -59,7 +60,7 @@ end;
 
 definition
   let S be non empty ManySortedSign;
-  mode OperSymbol of S is Element of the OperSymbols of S;
+  mode OperSymbol of S is Element of the carrier' of S;
 end;
 
 definition
@@ -71,32 +72,32 @@ end;
 
 :::::::::::::: Some structures :::::::::::::::::::
 :: overloaded MSALGEBRA is modelled using an Equivalence_Relation
-:: on OperSymbols ... partially hack enforced by previous articles,
+:: on carrier' ... partially hack enforced by previous articles,
 :: partially can give more general treatment than the usual definition
 
 definition
   struct(ManySortedSign) OverloadedMSSign (# carrier -> set,
-    OperSymbols -> set,
-    Overloading -> Equivalence_Relation of the OperSymbols,
-    Arity -> Function of the OperSymbols, the carrier*,
-    ResultSort -> Function of the OperSymbols, the carrier #);
+    carrier' -> set,
+    Overloading -> Equivalence_Relation of the carrier',
+    Arity -> Function of the carrier', the carrier*,
+    ResultSort -> Function of the carrier', the carrier #);
 end;
 
 :: Order Sorted Signatures
 
 definition
   struct(ManySortedSign,RelStr) RelSortedSign (# carrier -> set,
-    InternalRel -> (Relation of the carrier), OperSymbols -> set,
-    Arity -> Function of the OperSymbols, the carrier*,
-    ResultSort -> Function of the OperSymbols, the carrier #);
+    InternalRel -> (Relation of the carrier), carrier' -> set,
+    Arity -> Function of the carrier', the carrier*,
+    ResultSort -> Function of the carrier', the carrier #);
 end;
 
 definition
   struct(OverloadedMSSign,RelSortedSign) OverloadedRSSign (# carrier -> set,
-    InternalRel -> (Relation of the carrier), OperSymbols -> set,
-    Overloading -> Equivalence_Relation of the OperSymbols,
-    Arity -> Function of the OperSymbols, the carrier*,
-    ResultSort -> Function of the OperSymbols, the carrier #);
+    InternalRel -> (Relation of the carrier), carrier' -> set,
+    Overloading -> Equivalence_Relation of the carrier',
+    Arity -> Function of the carrier', the carrier*,
+    ResultSort -> Function of the carrier', the carrier #);
 end;
 
 :: The inheritance for structures should be much improved, much of the
@@ -123,7 +124,7 @@ proof
   the InternalRel of RS0 is_transitive_in the carrier of RS0 &
   the InternalRel of RS0 is_antisymmetric_in the carrier of RS0
   by RELAT_2:def 9,def 12,def 16;
-  hence thesis by MSUALG_1:def 5,ORDERS_2:def 4,def 5,def 6;
+  hence thesis by ORDERS_2:def 4,def 5,def 6;
 end;
 
 registration
@@ -158,7 +159,7 @@ registration
   existence
   proof consider A,R,O,Ol,f,g;
     take OverloadedRSSign(#A,R,O,Ol,f,g #);
-    thus thesis by Def2,MSUALG_1:def 5;
+    thus thesis by Def2;
   end;
 end;
 
@@ -179,18 +180,18 @@ definition
   [x,y] in the Overloading of S;
   symmetry
   proof
-    field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+    field the Overloading of S = the carrier' of S by ORDERS_1:97;
     then
-A1: the Overloading of S is_symmetric_in the OperSymbols of S
+A1: the Overloading of S is_symmetric_in the carrier' of S
     by RELAT_2:def 11;
     let x,y be OperSymbol of S;
     thus thesis by A1,RELAT_2:def 3;
   end;
   reflexivity
   proof
-    field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+    field the Overloading of S = the carrier' of S by ORDERS_1:97;
     then
-A2: the Overloading of S is_reflexive_in the OperSymbols of S
+A2: the Overloading of S is_reflexive_in the carrier' of S
     by RELAT_2:def 9;
     let x be OperSymbol of S;
     thus thesis by A2,RELAT_2:def 1;
@@ -204,9 +205,9 @@ theorem Th2:
   o,o1,o2 being OperSymbol of S holds o ~= o1 & o1 ~= o2 implies o ~= o2
 proof
   let S be non empty non void OverloadedMSSign;
-  field the Overloading of S = the OperSymbols of S by ORDERS_1:97;
+  field the Overloading of S = the carrier' of S by ORDERS_1:97;
   then
-A1: the Overloading of S is_transitive_in the OperSymbols of S
+A1: the Overloading of S is_transitive_in the carrier' of S
   by RELAT_2:def 16;
   let o,o1,o2 be OperSymbol of S;
   assume o ~= o1 & o1 ~= o2;
@@ -227,7 +228,7 @@ definition
   the_result_sort_of x = the_result_sort_of y holds x = y;
   attr S is op-discrete means
   :Def5:
-  the Overloading of S = id (the OperSymbols of S);
+  the Overloading of S = id (the carrier' of S);
 end;
 
 theorem Th3:
@@ -235,8 +236,8 @@ theorem Th3:
   for x,y be OperSymbol of S st x ~= y holds x = y
 proof
   let S be non empty non void OverloadedMSSign;
-  set d = id the OperSymbols of S;
-  set opss = the OperSymbols of S;
+  set d = id the carrier' of S;
+  set opss = the carrier' of S;
   thus S is op-discrete implies
   for x,y be OperSymbol of S st x ~= y holds x = y
   proof
@@ -299,17 +300,17 @@ definition
   :Def6:
   the carrier of S0 = the carrier of it &
   id the carrier of S0 = the InternalRel of it &
-  the OperSymbols of S0 = the OperSymbols of it &
-  id the OperSymbols of S0 = the Overloading of it &
+  the carrier' of S0 = the carrier' of it &
+  id the carrier' of S0 = the Overloading of it &
   the Arity of S0 = the Arity of it &
   the ResultSort of S0 = the ResultSort of it;
   existence
   proof
     set s = OverloadedRSSign(# the carrier of S0, id the carrier of S0,
-      the OperSymbols of S0, id the OperSymbols of S0, the Arity of S0,
+      the carrier' of S0, id the carrier' of S0, the Arity of S0,
       the ResultSort of S0 #);
     reconsider s1 = s as strict non empty non void order-sorted
-    OverloadedRSSign by Def2,MSUALG_1:def 5;
+    OverloadedRSSign by Def2;
     take s1;
     thus thesis;
   end;
@@ -321,7 +322,7 @@ theorem Th5:
 proof
   set s = OSSign S0;
   set ol = the Overloading of s;
-A1: the Overloading of OSSign S0 = id the OperSymbols of S0 &
+A1: the Overloading of OSSign S0 = id the carrier' of S0 &
   the carrier of S0 = the carrier of OSSign S0 &
   id the carrier of S0 = the InternalRel of OSSign S0 by Def6;
   hence OSSign S0 is discrete by ORDERS_3:def 1;
@@ -480,7 +481,7 @@ proof
   set ol = the Overloading of S;
   assume S is op-discrete;
   then
-A1: ol = id the OperSymbols of S by Def5;
+A1: ol = id the carrier' of S by Def5;
   let o be OperSymbol of S;
   let o2 be OperSymbol of S;
   assume o ~= o2 & (the_arity_of o) <= (the_arity_of o2);
@@ -1157,20 +1158,20 @@ definition
 :: more user-friendly
   proof
     set c = ConstOSSet(S,z);
-    deffunc ch1(Element of the OperSymbols of S) =
+    deffunc ch1(Element of the carrier' of S) =
     ((c# * the Arity of S).$1) --> (z1 qua set);
     consider ch2 being Function such that
-A1: dom ch2 = the OperSymbols of S &
-    for x being Element of (the OperSymbols of S) holds
+A1: dom ch2 = the carrier' of S &
+    for x being Element of (the carrier' of S) holds
     ch2.x = ch1(x) from FUNCT_1:sch 4;
     reconsider ch4 = ch2
-    as ManySortedSet of (the OperSymbols of S) by A1,PBOOLE:def 3;
-    for i being set st i in (the OperSymbols of S) holds ch4.i
+    as ManySortedSet of (the carrier' of S) by A1,PBOOLE:def 3;
+    for i being set st i in (the carrier' of S) holds ch4.i
     is Function of (ConstOSSet(S,z)# * the Arity of S).i,
     (ConstOSSet(S,z) * the ResultSort of S).i
     proof
       let i be set;
-      assume i in the OperSymbols of S;
+      assume i in the carrier' of S;
       then reconsider o=i as OperSymbol of S;
       (the ResultSort of S).o in the carrier of S;
       then
@@ -1206,7 +1207,7 @@ A6: the Sorts of T2 = ConstOSSet(S,z) &
     for o holds Den(o,T2) = Args(o,T2) --> z1;
     now
       let o1 be set such that
-A7:   o1 in the OperSymbols of S;
+A7:   o1 in the carrier' of S;
       reconsider o = o1 as OperSymbol of S by A7;
       thus (the Charact of T1).o1 = Den(o,T1) by MSUALG_1:def 11
         .=
@@ -1284,7 +1285,7 @@ reserve op1,op2 for OperSymbol of S;
 
 definition
   let S;
-  func OperNames S -> non empty (Subset-Family of the OperSymbols of S) equals
+  func OperNames S -> non empty (Subset-Family of the carrier' of S) equals
   Class the Overloading of S;
   coherence;
 end;
@@ -1296,7 +1297,7 @@ registration
   proof
     let X be Element of OperNames S;
     consider x being set such that
-A1: x in the OperSymbols of S &
+A1: x in the carrier' of S &
     X = Class(the Overloading of S,x) by EQREL_1:def 5;
     thus thesis by A1,EQREL_1:28;
   end;
@@ -1337,7 +1338,7 @@ proof
   hereby
     assume X is OperName of S;
     then consider x being set such that
-A1: x in the OperSymbols of S &
+A1: x in the carrier' of S &
     X = Class(the Overloading of S,x) by EQREL_1:def 5;
     reconsider x1 = x as OperSymbol of S by A1;
     take x1;
@@ -1368,7 +1369,7 @@ proof
     assume op1 is Element of on;
     then reconsider op = op1 as Element of on;
     consider op2 being set such that
-A1: op2 in the OperSymbols of S and
+A1: op2 in the carrier' of S and
 A2: on = Class(the Overloading of S,op2) by EQREL_1:def 5;
     Name op = Class(the Overloading of S,op);
     hence Name op1 = on by A1,A2,EQREL_1:31;

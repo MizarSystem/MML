@@ -48,36 +48,39 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="258">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="41"/>
 <Adjective nr="42"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN5A" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="262">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="93"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

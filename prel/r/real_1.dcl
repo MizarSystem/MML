@@ -18,13 +18,13 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="20"/>
+<Adjective nr="19"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <CCluster aid="REAL_1" nr="1">
@@ -32,10 +32,10 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 </Registrations>

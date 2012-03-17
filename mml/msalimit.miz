@@ -10,7 +10,7 @@ environ
       RLVECT_2, PRALG_1, MSUALG_3, ALG_1, ZF_REFLE, FUNCOP_1, PBOOLE, RELAT_2,
       CQC_LANG, MCART_1, MSUALG_2, UNIALG_2, TDGROUP, BOOLE, QC_LANG1, FUNCT_2,
       FINSEQ_1, COMPLEX1, FINSEQ_4, TARSKI, FUNCT_6, FUNCT_5, NATTRA_1,
-      PUA2MSS1, PARTFUN1, MSALIMIT, ORDERS_1;
+      PUA2MSS1, PARTFUN1, MSALIMIT, ORDERS_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, STRUCT_0, RELAT_2, FUNCT_2, FINSEQ_1, ORDERS_2, FUNCOP_1,
       FRAENKEL, RELSET_1, PARTFUN1, CARD_3, BINOP_1, FUNCT_5, FUNCT_6, PBOOLE,
@@ -81,10 +81,7 @@ definition
     PRALG_2:def 12;
     take Z;
     set G = (the InternalRel of P) --> id (the Sorts of A);
-    dom G = the InternalRel of P by PBOOLE:def 3;
-    then for ij be set st ij in dom G holds G.ij is Function by FUNCOP_1:13;
-    then reconsider G as ManySortedFunction of the InternalRel of P
-    by FUNCOP_1:def 6;
+    reconsider G as ManySortedFunction of the InternalRel of P;
     take G;
     let i, j, k;
     assume i >= j & j >= k;
@@ -509,18 +506,17 @@ A4:     y in dom K & x = K.y by A3,FUNCT_1:def 5;
 A5:     y in (dom (Den (o,product OAF))) & y in ((C# * the Arity of S).o)
         by A4,XBOOLE_0:def 3;
         reconsider MS = C as ManySortedSet of (the carrier of S);
-A6:     the OperSymbols of S is non empty by MSUALG_1:def 5;
-        dom (the Arity of S) = the OperSymbols of S by FUNCT_2:def 1;
-        then y in C# . ((the Arity of S).o) by A5,A6,FUNCT_1:23;
+        dom (the Arity of S) = the carrier' of S by FUNCT_2:def 1;
+        then y in C# . ((the Arity of S).o) by A5,FUNCT_1:23;
         then y in C# . the_arity_of o by MSUALG_1:def 6;
         then
 A7:     y in product (MS * the_arity_of o) by PBOOLE:def 19;
-A8:     dom (the ResultSort of S) = the OperSymbols of S by FUNCT_2:def 1;
+A8:     dom (the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
         x in Result (o,product OAF) by A3;
         then x in ((the Sorts of product OAF) * the ResultSort of S).o
         by MSUALG_1:def 10;
         then x in (the Sorts of product OAF).((the ResultSort of S).o)
-        by A6,A8,FUNCT_1:23;
+        by A8,FUNCT_1:23;
         then x in (SORTS OAF).((the ResultSort of S).o) by PRALG_2:20;
         then x in (SORTS OAF).(the_result_sort_of o) by MSUALG_1:def 7;
         then
@@ -924,8 +920,8 @@ hence (F.the_result_sort_of o).(x1.i) = x1.j by A86,A87,TARSKI:def 1;
         then x in C.the_result_sort_of o;
         then
 A88:    x in C.((the ResultSort of S).o) by MSUALG_1:def 7;
-        dom (the ResultSort of S) = the OperSymbols of S by FUNCT_2:def 1;
-        hence x in (C * the ResultSort of S).o by A6,A88,FUNCT_1:23;
+        dom (the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
+        hence x in (C * the ResultSort of S).o by A88,FUNCT_1:23;
       end;
       hence C is_closed_on o by MSUALG_2:def 6;
     end;
@@ -1096,7 +1092,7 @@ definition
     then reconsider g = {} --> {} as Function of {},{} by FUNCT_2:def 1
     ,RELSET_1:11;
     take ManySortedSign(#{},{},f,g#);
-    thus thesis by MSUALG_1:def 5;
+    thus thesis;
   end;
   uniqueness
   proof
@@ -1107,8 +1103,8 @@ A2: C2 is empty void;
     C1 = C2
     proof
 A3:   the carrier of C1 = {} & the carrier of C2 = {} by A1,A2;
-A4:   the OperSymbols of C1 = {} & the OperSymbols of C2 = {}
-      by A1,A2,MSUALG_1:def 5;
+A4:   the carrier' of C1 = {} & the carrier' of C2 = {}
+      by A1,A2;
       then reconsider RS = the ResultSort of C1, RT = the ResultSort of C2
       as Function of {},{} by A3;
 A5:   RS in { id {} } & RT in { id {} } by ALTCAT_1:3,FUNCT_2:12;
@@ -1138,41 +1134,37 @@ registration
 end;
 
 Lm1: for S be empty void ManySortedSign holds id the carrier of S,
-id the OperSymbols of S form_morphism_between S,S
+id the carrier' of S form_morphism_between S,S
 proof
   let S be empty void ManySortedSign;
   set f = id the carrier of S;
-A1: rng f = the carrier of S & rng f = the OperSymbols of S
-  by MSUALG_1:def 5;
 A2: {}*the ResultSort of S = (the ResultSort of S)*{};
   for o be set, p be Function st
-  o in the OperSymbols of S & p = (the Arity of S).o holds
-  f*p = (the Arity of S).(f.o) by MSUALG_1:def 5;
-  hence thesis by A1,A2,PUA2MSS1:def 13,RELAT_1:60,81;
+  o in the carrier' of S & p = (the Arity of S).o holds
+  f*p = (the Arity of S).(f.o);
+  hence thesis by A2,PUA2MSS1:def 13,RELAT_1:60,81;
 end;
 
 Lm2: for S be non empty void ManySortedSign
-holds id the carrier of S, id the OperSymbols of S form_morphism_between S,S
+holds id the carrier of S, id the carrier' of S form_morphism_between S,S
 proof
   let S be non empty void ManySortedSign;
-  set f = id the carrier of S, g = id the OperSymbols of S;
-A1: the carrier of S <> {} & the OperSymbols of S = {} by MSUALG_1:def 5;
-  then
-A2: dom f = the carrier of S & dom g = the OperSymbols of S &
-  rng f c= the carrier of S & rng g c= the OperSymbols of S by FUNCT_2:def 1;
-  dom (the ResultSort of S) = {} by A1;
+  set f = id the carrier of S, g = id the carrier' of S;
+A2: dom f = the carrier of S & dom g = the carrier' of S &
+  rng f c= the carrier of S & rng g c= the carrier' of S by FUNCT_2:def 1;
+  dom (the ResultSort of S) = {};
   then the ResultSort of S = {};
   then
 A3: f*the ResultSort of S = {} & (the ResultSort of S)*g = {};
   for o be set, p be Function st
-  o in the OperSymbols of S & p = (the Arity of S).o holds
-  f*p = (the Arity of S).(g.o) by MSUALG_1:def 5;
+  o in the carrier' of S & p = (the Arity of S).o holds
+  f*p = (the Arity of S).(g.o);
   hence thesis by A2,A3,PUA2MSS1:def 13;
 end;
 
 theorem
   for S be void ManySortedSign
-  holds id the carrier of S, id the OperSymbols of S form_morphism_between S,S
+  holds id the carrier of S, id the carrier' of S form_morphism_between S,S
 proof
   let S be void ManySortedSign;
   per cases;
@@ -1190,12 +1182,12 @@ definition
   :Def9:
   x in it iff
   ex S be strict non empty non void ManySortedSign st x = S &
-  ( the carrier of S c= A & the OperSymbols of S c= A );
+  ( the carrier of S c= A & the carrier' of S c= A );
   existence
   proof
     defpred P[set,set] means
     ex S be strict non empty non void ManySortedSign st S = $2 &
-    $1 = [the carrier of S, the OperSymbols of S,
+    $1 = [the carrier of S, the carrier' of S,
     the Arity of S, the ResultSort of S];
 A1: for x,y,z be set st P[x,y] & P[x,z] holds y = z
     proof
@@ -1203,13 +1195,13 @@ A1: for x,y,z be set st P[x,y] & P[x,z] holds y = z
       assume P[x,y] & P[x,z];
 
 then consider S1, S2 be strict non empty non void ManySortedSign such that
-A2:   S1 = y & x = [the carrier of S1, the OperSymbols of S1,
+A2:   S1 = y & x = [the carrier of S1, the carrier' of S1,
       the Arity of S1, the ResultSort of S1] & S2 = z &
-      x = [the carrier of S2, the OperSymbols of S2,
+      x = [the carrier of S2, the carrier' of S2,
       the Arity of S2, the ResultSort of S2] &
       (S2 is empty implies S2 is void);
       the carrier of S1 = the carrier of S2 &
-      the OperSymbols of S1 = the OperSymbols of S2 &
+      the carrier' of S1 = the carrier' of S2 &
       the Arity of S1 = the Arity of S2 &
       the ResultSort of S1 = the ResultSort of S2 by A2,MCART_1:33;
       hence thesis by A2;
@@ -1222,27 +1214,27 @@ A3: for x holds x in X iff
     let x be set;
     thus x in X iff
     ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the OperSymbols of S c= A )
+    ( the carrier of S c= A & the carrier' of S c= A )
     proof
       thus x in X implies
       ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the OperSymbols of S c= A )
+      ( the carrier of S c= A & the carrier' of S c= A )
       proof
         assume x in X;
         then consider y be set such that
 A4:     y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):] & P[y,x] by A3;
         consider S be strict non empty non void ManySortedSign such that
-A5:     S = x & y = [the carrier of S, the OperSymbols of S,
+A5:     S = x & y = [the carrier of S, the carrier' of S,
         the Arity of S, the ResultSort of S] by A4;
         take S;
-        the carrier of S in bool A & the OperSymbols of S in bool A
+        the carrier of S in bool A & the carrier' of S in bool A
         by A4,A5,MCART_1:84;
         hence thesis by A5;
       end;
       given S be strict non empty non void ManySortedSign such that
-A6:   x = S & ( the carrier of S c= A & the OperSymbols of S c= A );
+A6:   x = S & ( the carrier of S c= A & the carrier' of S c= A );
       consider y be set such that
-A7:   y = [the carrier of S,the OperSymbols of S,the Arity of S,
+A7:   y = [the carrier of S,the carrier' of S,the Arity of S,
       the ResultSort of S];
       reconsider C = the carrier of S as Subset of A by A6;
 A8:   C* c= A* by MSUHOM_1:2;
@@ -1251,7 +1243,7 @@ A9:   dom the Arity of S c= A & rng the Arity of S c= (the carrier of S)*
       rng the Arity of S c= A* by A8,XBOOLE_1:1;
       then
 A10:  the Arity of S in PFuncs (A,A*) by A9,PARTFUN1:def 5;
-A11:  dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
+A11:  dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
       rng the ResultSort of S c= A by A6,XBOOLE_1:1;
       then the ResultSort of S in PFuncs (A,A) by A6,A11,PARTFUN1:def 5;
       then y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):]
@@ -1263,15 +1255,15 @@ A11:  dom the ResultSort of S = the OperSymbols of S by FUNCT_2:def 1;
   proof
     let A1, A2 be set such that
 A12: x in A1 iff ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the OperSymbols of S c= A ) and
+    ( the carrier of S c= A & the carrier' of S c= A ) and
 A13: x in A2 iff ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the OperSymbols of S c= A );
+    ( the carrier of S c= A & the carrier' of S c= A );
     thus A1 c= A2
     proof
       let x be set;
       assume x in A1;
       then ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the OperSymbols of S c= A ) by A12;
+      ( the carrier of S c= A & the carrier' of S c= A ) by A12;
       hence thesis by A13;
     end;
     thus A2 c= A1
@@ -1279,7 +1271,7 @@ A13: x in A2 iff ex S be strict non empty non void ManySortedSign st x = S &
       let x be set;
       assume x in A2;
       then ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the OperSymbols of S c= A ) by A13;
+      ( the carrier of S c= A & the carrier' of S c= A ) by A13;
       hence thesis by A12;
     end;
   end;
@@ -1301,7 +1293,7 @@ A1: {a} c= A by ZFMISC_1:37;
     ManySortedSign(#{a},{a},f,g#) in X
     proof
       set SI = ManySortedSign(#{a},{a},f,g#);
-      SI is non void non empty by MSUALG_1:def 5;
+      SI is non void non empty;
       hence thesis by A1,Def9;
     end;
     hence X is non empty;
@@ -1310,7 +1302,7 @@ A1: {a} c= A by ZFMISC_1:37;
       let x be set;
       assume x in X;
       then consider S be strict non empty non void ManySortedSign such that
-A2:   x = S & the carrier of S c= A & the OperSymbols of S c= A by Def9;
+A2:   x = S & the carrier of S c= A & the carrier' of S c= A by Def9;
       thus thesis by A2;
     end;
   end;
@@ -1334,7 +1326,7 @@ definition
     ex f,g be Function st $1 = [f,g] & f,g form_morphism_between S1,S2;
     consider X be set such that
 A1: x in X iff x in [:PFuncs (the carrier of S1, the carrier of S2),
-    PFuncs (the OperSymbols of S1, the OperSymbols of S2):] &
+    PFuncs (the carrier' of S1, the carrier' of S2):] &
     P[x] from XBOOLE_0:sch 1;
     take X;
     thus x in X iff
@@ -1344,14 +1336,14 @@ A1: x in X iff x in [:PFuncs (the carrier of S1, the carrier of S2),
       ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2 by A1;
       given f,g be Function such that
 A2:   x = [f,g] & f,g form_morphism_between S1,S2;
-      dom f = the carrier of S1 & dom g = the OperSymbols of S1 &
-      rng f c= the carrier of S2 & rng g c= the OperSymbols of S2
+      dom f = the carrier of S1 & dom g = the carrier' of S1 &
+      rng f c= the carrier of S2 & rng g c= the carrier' of S2
       by A2,PUA2MSS1:def 13;
       then f in PFuncs (the carrier of S1, the carrier of S2) &
-      g in PFuncs (the OperSymbols of S1, the OperSymbols of S2)
+      g in PFuncs (the carrier' of S1, the carrier' of S2)
       by PARTFUN1:def 5;
       then x in [:PFuncs (the carrier of S1, the carrier of S2),
-      PFuncs (the OperSymbols of S1, the OperSymbols of S2):]
+      PFuncs (the carrier' of S1, the carrier' of S2):]
       by A2,ZFMISC_1:106;
       hence thesis by A1,A2;
     end;

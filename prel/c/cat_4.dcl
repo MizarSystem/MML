@@ -13,7 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCOP_1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -23,84 +23,90 @@
 </Signature>
 <RCluster aid="CAT_4" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="48"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="4">
 <ArgTypes/>
-<Typ kind="G" nr="3">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="5">
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="9">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="6">
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="9">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="7">
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="9">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="51"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="8">
 <ArgTypes/>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="9">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="63"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CAT_4" nr="1">
@@ -112,13 +118,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="2">
@@ -130,13 +137,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="38"/>
-<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="3">
@@ -148,13 +155,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="172">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="4">
@@ -166,14 +174,15 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="172">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="51"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 </Registrations>

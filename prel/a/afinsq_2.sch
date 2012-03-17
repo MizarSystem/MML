@@ -45,14 +45,14 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 <Func kind="F" nr="2"/>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="181">
+<Func kind="K" nr="185">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -71,7 +71,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="17">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

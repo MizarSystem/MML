@@ -15,10 +15,10 @@ environ
  constructors SETFAM_1, WELLORD1, XXREAL_0, XREAL_0, NAT_1, EQREL_1, PBOOLE,
       FINSEQ_5;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1, NAT_1, XXREAL_0,
-      XREAL_0, FINSEQ_1;
+      XREAL_0, FINSEQ_1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RELAT_1, RELAT_2, WELLORD1;
- theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, WELLORD1, RELAT_1, RELAT_2, FUNCT_1,
+ theorems TARSKI, ZFMISC_1, NAT_1, WELLORD1, RELAT_1, RELAT_2, FUNCT_1,
       FUNCOP_1, PBOOLE, FINSEQ_1, TREES_1, FINSEQ_5, EQREL_1, WELLORD2,
       XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, CARD_1, CARD_2;
  schemes NAT_1, RELAT_1, EQREL_1, TREES_2;
@@ -36,7 +36,7 @@ definition
   proof
     thus p = {} or q = {} implies ex r being FinSequence st r = p^q;
     assume p <> {} & q <> {};
-    then len p <> 0 & len p >= 0 by CARD_2:59;
+    then len p <> 0 & len p >= 0;
     then len p >= 0+1 by NAT_1:13;
     then consider i being Nat such that
 A1: len p = 1+i by NAT_1:10;
@@ -106,7 +106,7 @@ A4: len r = i by A1,FINSEQ_1:21;
   then consider t being FinSequence such that
 A5: p^t = r by A1,A2,A3,FINSEQ_1:64;
   len r + 0 = len p + len t by A5,FINSEQ_1:35;
-  then t = {} by A1,A3,A4,CARD_2:59;
+  then t = {} by A1,A3,A4;
   hence thesis by A1,A5,FINSEQ_1:47;
 end;
 
@@ -130,7 +130,7 @@ proof
 A1: p <> {};
   defpred P[Element of NAT] means
   for p st p <> {} & len p = $1 ex x,q st p = <*x*>^q & len p = len q+1;
-A2: P[0] by CARD_2:59;
+A2: P[0];
 A3: for i be Element of NAT st P[i] holds P[i+1]
   proof
     now
@@ -188,7 +188,7 @@ A7: 1 in Seg len q() & Seg len q() = dom q() by FINSEQ_1:3,def 3;
   let x,y be set;
   assume
 A8: x = (p()$^q()).i & y = (p()$^q()).(i+1);
-A9: p() <> {} & q() <> {} by A3,CARD_1:47;
+A9: p() <> {} & q() <> {} by A3;
   then consider r being FinSequence, a being set such that
 A10: p() = r^<*a*> by FINSEQ_1:63;
 A11: p()$^q() = r^q() by A9,A10,Th2;
@@ -211,7 +211,7 @@ A17: now
       then i+1 in dom r by FINSEQ_1:def 3;
       hence y = r.(i+1) & r.(i+1) = p().(i+1) by A8,A10,A11,FINSEQ_1:def 7;
     end;
-    i = len r or i < len r by A15,REAL_1:def 5;
+    i = len r or i < len r by A15,XXREAL_0:1;
     hence thesis by A3,A7,A8,A11,A12,A14,A16,A17,FINSEQ_1:def 7,NAT_1:13;
   end;
   suppose i >= len p();
@@ -241,7 +241,7 @@ definition
   proof consider x being set;
     take p = <*x*>;
 A1: dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
-    thus len p > 0 by FINSEQ_1:57;
+    thus len p > 0;
     let i be Element of NAT;
     assume i in dom p & i+1 in dom p;
     then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
@@ -263,7 +263,7 @@ proof
   let R be Relation, a be set;
   set p = <*a*>;
 A1: dom p = {1} & len p = 1 by FINSEQ_1:4,55,57;
-  thus len p > 0 by FINSEQ_1:57;
+  thus len p > 0;
   let i be Element of NAT;
   assume i in dom p & i+1 in dom p;
   then i = 1 & i+1 = 1 by A1,TARSKI:def 1;
@@ -301,13 +301,13 @@ A2: for i being Element of NAT st i in dom q & i+1 in dom q
   holds P[q.i, q.(i+1)] by Def2;
   assume p.len p = q.1;
   then
-A3: len p > 0 & len q > 0 & p.len p = q.1 by Def2;
+A3: len p > 0 & len q > 0 & p.len p = q.1;
   set r = p$^q;
   consider p1 being FinSequence, x being set such that
 A4: p = p1^<*x*> by FINSEQ_1:63;
   r = p1^q by A4,Th2;
   then len r = len p1+len q by FINSEQ_1:35;
-  then len r > len p1+0 & len p1+0 >= 0 by A3,XREAL_1:10;
+  then len r > len p1+0 & len p1+0 >= 0 by XREAL_1:10;
   hence len r > 0;
   for i being Element of NAT st i in dom (p$^q) & i+1 in dom (p$^q)
   for x,y being set st x = (p$^q).i & y = (p$^q).(i+1) holds P[x,y]
@@ -346,7 +346,7 @@ proof
   let R,Q be Relation such that
 A1: R c= Q;
   let p be RedSequence of R;
-  thus len p > 0 by Def2;
+  thus len p > 0;
   let i be Element of NAT;
   assume i in dom p & i+1 in dom p;
   then [p.i, p.(i+1)] in R by Def2;
@@ -412,14 +412,12 @@ proof
   let a,b be set;
   given p being RedSequence of {} such that
 A1: p.1 = a & p.len p = b;
-A2: len p > 0 & for i being Element of NAT st i in dom p & i+1 in dom p
-  holds [p.i, p.(i+1)] in {} by Def2;
   now
     assume len p > 1;
     then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
     hence contradiction by Def2;
   end;
-  then len p <= 1 & len p >= 0+1 by A2,NAT_1:13;
+  then len p <= 1 & len p >= 0+1 by NAT_1:13;
   hence thesis by A1,XXREAL_0:1;
 end;
 
@@ -430,8 +428,6 @@ proof
   let R be Relation, a,b be set;
   given p being RedSequence of R such that
 A1: p.1 = a & p.len p = b;
-A2: len p > 0 & for i being Element of NAT st i in dom p & i+1 in dom p
-  holds [p.i, p.(i+1)] in R by Def2;
   assume
 A3: not a in field R;
   now
@@ -440,7 +436,7 @@ A3: not a in field R;
     then [p.1, p.(1+1)] in R by Def2;
     hence contradiction by A1,A3,RELAT_1:30;
   end;
-  then len p <= 1 & len p >= 0+1 by A2,NAT_1:13;
+  then len p <= 1 & len p >= 0+1 by NAT_1:13;
   hence thesis by A1,XXREAL_0:1;
 end;
 
@@ -464,7 +460,6 @@ proof
 A1: p.1 = a & p.len p = b;
   given q being RedSequence of R such that
 A2: q.1 = b & q.len q = c;
-A3: len p > 0 & len q > 0 by Def2;
   reconsider r = p$^q as RedSequence of R by A1,A2,Th9;
   take r;
   consider p1 being FinSequence, x being set such that
@@ -472,13 +467,12 @@ A4: p = p1^<*x*> by FINSEQ_1:63;
 A5: r = p1^q by A4,Th2;
   then
 A6: len r = len p1+len q by FINSEQ_1:35;
-  len p1 = 0 or len p1 > 0;
-  then p1 = {} or len p1 >= 0+1 by CARD_2:59,NAT_1:13;
+  p1 = {} or len p1 >= 0+1 by NAT_1:13;
   then r = q & p = <*x*> or 1 in Seg len p1 by A4,A5,FINSEQ_1:3,47;
   then 1 in dom p1 or len p = 1 & r = q by FINSEQ_1:57,def 3;
   then r.1 = p1.1 & p1.1 = a or r.1 = b & b = a by A1,A2,A4,A5,FINSEQ_1:def 7;
   hence r.1 = a;
-  0+1 <= len q by A3,NAT_1:13;
+  0+1 <= len q by NAT_1:13;
   then len q in Seg len q by FINSEQ_1:3;
   then len q in dom q by FINSEQ_1:def 3;
   hence r.len r = c by A2,A5,A6,FINSEQ_1:def 7;
@@ -528,9 +522,8 @@ proof
 A1: a = p.1 & b = p.len p;
   assume
 A2: a <> b;
-  len p > 0 by Def2;
-  then len p <> 1 & len p >= 0+1 by A1,A2,NAT_1:13;
-  then len p > 1 by REAL_1:def 5;
+  len p <> 1 & len p >= 0+1 by A1,A2,NAT_1:13;
+  then len p > 1 by XXREAL_0:1;
   then 1 in dom p & 1+1 in dom p by Lm3,Lm4;
   then
 A3: [a,p.2] in R by A1,Def2;
@@ -577,8 +570,6 @@ A2: a = p.1 & b = p.len p by Def3;
     assume a <> b;
     then
 A3: a in field R & b in field R by A1,Th19;
-    len p > 0 by Def2;
-    then
 A4: len p >= 0+1 by NAT_1:13;
     now
       let i be Nat;
@@ -661,8 +652,6 @@ proof
   thus R reduces a,b implies R \/ id X reduces a,b by Th23,XBOOLE_1:7;
   given p being RedSequence of R \/ id X such that
 A1: p.1 = a & p.len p = b;
-  len p > 0 by Def2;
-  then
 A2: len p in dom p by Lm3;
   defpred P[Element of NAT] means $1 in dom p implies R reduces a,p.$1;
 A3: P[0] by Lm1;
@@ -729,7 +718,7 @@ proof
   given p being RedSequence of R such that
 A1: p.1 = a & p.len p = b;
   p is RedSequence of R \/ R~
-  proof thus len p > 0 by Def2;
+  proof thus len p > 0;
     let i be Element of NAT;
     assume i in dom p & i+1 in dom p;
     then [p.i, p.(i+1)] in R by Def2;
@@ -1523,7 +1512,7 @@ A5: p.1 = a & p.len p = b by A4,Def3;
 A6: len p in dom p by FINSEQ_5:6;
   consider q being RedSequence of R such that
 A7: q.1 = a & q.len q = c by A4,Def3;
-A8: len q in dom q & len q > 0 by Def2,FINSEQ_5:6;
+A8: len q in dom q & len q > 0 by FINSEQ_5:6;
   defpred P[Element of NAT,Element of NAT] means
   p.$1, q.$2 are_convergent_wrt R;
   defpred Q[Element of NAT] means
@@ -1830,8 +1819,6 @@ A9:   R reduces a,b & R reduces a,c;
 A10:  a = p.1 & b = p.len p by Def3;
       consider q being RedSequence of R such that
 A11:  a = q.1 & c = q.len q by A9,Def3;
-      len p > 0 & len q > 0 by Def2;
-      then
 A12:  len p >= 0+1 & len q >= 0+1 by NAT_1:13;
       per cases;
       suppose len p = 1;
@@ -1841,7 +1828,7 @@ A12:  len p >= 0+1 & len q >= 0+1 by NAT_1:13;
         hence b,c are_convergent_wrt R by A9,A11,Th37;
       end;
       suppose len p <> 1 & len q <> 1;
-        then len p > 1 & len q > 1 by A12,REAL_1:def 5;
+        then len p > 1 & len q > 1 by A12,XXREAL_0:1;
         then
 A13:    1 <= 2 & 1+1 <= len p & 1+1 <= len q by NAT_1:13;
         then

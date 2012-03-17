@@ -28,8 +28,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="16"/>
 <Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </RCluster>
 <FCluster aid="HEYTING2" nr="1">
@@ -39,17 +39,17 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="114">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="39"/>
-<Adjective nr="56"/>
+<Adjective nr="45"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 </Registrations>

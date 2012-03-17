@@ -33,61 +33,61 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="107"/>
+<Func kind="K" nr="110"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="27"/>
-<Adjective nr="41"/>
+<Adjective nr="25"/>
+<Adjective nr="28"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="107"/>
+<Func kind="K" nr="110"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14" value="false"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="27"/>
-<Adjective nr="41"/>
+<Adjective nr="25"/>
+<Adjective nr="28"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="107"/>
+<Func kind="K" nr="110"/>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="107"/>
+<Func kind="K" nr="110"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="219">
+<Func kind="K" nr="223">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

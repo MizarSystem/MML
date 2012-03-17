@@ -133,11 +133,11 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="15">
+<Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="24" value="false"/>
-<Adjective nr="94"/>
-<Adjective nr="118"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="100"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -154,7 +154,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="196">
+<Func kind="K" nr="200">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -163,7 +163,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
-<Func kind="K" nr="196">
+<Func kind="K" nr="200">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -188,7 +188,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="196">
+<Func kind="K" nr="200">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

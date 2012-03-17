@@ -22,13 +22,13 @@
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="53"/>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="54"/>
+<Func kind="K" nr="54"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 </Registrations>

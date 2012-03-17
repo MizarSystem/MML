@@ -21,9 +21,9 @@
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="CAT_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
@@ -64,15 +64,15 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="70">
-<Func kind="K" nr="352">
+<Adjective nr="73">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="352">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -89,14 +89,14 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
-<Func kind="U" nr="14">
-<Func kind="K" nr="352">
+<Func kind="K" nr="13">
+<Func kind="U" nr="12">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="358">
+<Func kind="K" nr="361">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -115,18 +115,18 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
-<Func kind="K" nr="206">
-<Func kind="K" nr="352">
+<Func kind="K" nr="13">
+<Func kind="K" nr="209">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="357">
+<Func kind="K" nr="360">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="18"/>
+<Func kind="K" nr="19"/>
 </Func>
 <Func kind="F" nr="5">
 <Var nr="2"/>
@@ -176,12 +176,12 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="12">
-<Func kind="K" nr="206">
-<Func kind="K" nr="352">
+<Func kind="K" nr="13">
+<Func kind="K" nr="209">
+<Func kind="K" nr="355">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="359">
+<Func kind="K" nr="362">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -189,7 +189,7 @@
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="111">
+<Func kind="K" nr="114">
 <Func kind="F" nr="2"/>
 <Var nr="6"/>
 <Var nr="5"/>

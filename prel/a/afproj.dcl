@@ -30,58 +30,58 @@
 </Signature>
 <RCluster aid="AFPROJ" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="91"/>
 <Adjective nr="96"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
-<Adjective nr="114"/>
+<Adjective nr="101"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="119"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFPROJ" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="40" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="91"/>
 <Adjective nr="96"/>
-<Adjective nr="110"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
+<Adjective nr="101"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFPROJ" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="40" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="91"/>
-<Adjective nr="114"/>
+<Adjective nr="96"/>
+<Adjective nr="119"/>
 </Cluster>
 </FCluster>
 </Registrations>

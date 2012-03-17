@@ -17,14 +17,14 @@
 </Signature>
 <Scheme>
 <ArgTypes/>
-<Pred kind="V" nr="16">
+<Pred kind="V" nr="17">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="90"/>
 </Typ>
-<Func kind="K" nr="70">
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="71">
+<Func kind="K" nr="90"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">

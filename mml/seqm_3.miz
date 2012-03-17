@@ -8,14 +8,14 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      FINSEQ_1, VALUED_0;
+      FINSEQ_1, VALUED_0, ANPROJ_1;
  notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0, XREAL_0,
       RELAT_1, PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2,
       COMPLEX1, NAT_1, FUNCOP_1, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
       VALUED_1, SEQ_1, SEQ_2, FINSEQ_1, RECDEF_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1;
+      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, FUNCT_1, VALUED_0, VALUED_1;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, FUNCT_2, RELAT_1,
@@ -199,7 +199,7 @@ end;
 ::
 
 definition
-  let f be PartFunc of NAT, REAL;
+  let f be ext-real-valued Function;
   attr f is increasing means
   :Def1:
   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
@@ -1004,10 +1004,10 @@ proof
 end;
 
 theorem
-  seq is_not_0 implies seq ^\k is_not_0
+  seq is non-zero implies seq ^\k is non-zero
 proof
   assume
-A1: seq is_not_0;
+A1: seq is non-zero;
   now
     let n;
     (seq ^\k).n=seq.(n+k) by Def9;
@@ -1299,9 +1299,9 @@ proof
   assume that
 A1: seq is bounded and
 A2: seq1 is subsequence of seq;
-  seq is bounded_above by A1,SEQ_2:def 5;
+  seq is bounded_above by A1;
   hence seq1 is bounded_above by A2,Th56;
-  seq is bounded_below by A1,SEQ_2:def 5;
+  seq is bounded_below by A1;
   hence seq1 is bounded_below by A2,Th57;
 end;
 
@@ -1676,7 +1676,7 @@ A1: seq is bounded implies for r holds r(#)seq is bounded
   proof
     assume seq is bounded;
     then
-A2: seq is bounded_above & seq is bounded_below by SEQ_2:def 5;
+A2: seq is bounded_above & seq is bounded_below;
     let r;
     per cases;
     suppose
@@ -1684,7 +1684,7 @@ A3:   0<r;
       then
 A4:   r(#)seq is bounded_above by A2,Th68;
       r(#)seq is bounded_below by A2,A3,Th69;
-      hence r(#)seq is bounded by A4,SEQ_2:def 5;
+      hence r(#)seq is bounded by A4;
     end;
     suppose 0=r;
       hence r(#)seq is bounded by Th68;
@@ -1694,7 +1694,7 @@ A5:   r<0;
       then
 A6:   r(#)seq is bounded_above by A2,Th69;
       r(#)seq is bounded_below by A2,A5,Th68;
-      hence r(#)seq is bounded by A6,SEQ_2:def 5;
+      hence r(#)seq is bounded by A6;
     end;
   end;
   thus seq is bounded implies -seq is bounded by A1;
@@ -1766,8 +1766,8 @@ A10: for n holds r2<seq1.n by A8,SEQ_2:def 4;
   assume that
 A11: seq is bounded and
 A12: seq1 is bounded;
-  thus seq+seq1 is bounded_above by A1,A11,A12,SEQ_2:def 5;
-  thus seq+seq1 is bounded_below by A6,A11,A12,SEQ_2:def 5;
+  thus seq+seq1 is bounded_above by A1,A11,A12;
+  thus seq+seq1 is bounded_below by A6,A11,A12;
 end;
 
 theorem Th72:
@@ -1855,7 +1855,7 @@ proof
 A1: seq is bounded_above and
 A2: seq1 is constant;
     seq1 is bounded by A2,Th73;
-    then seq1 is bounded_above by SEQ_2:def 5;
+    then seq1 is bounded_above;
     hence thesis by A1,Th71;
   end;
   thus seq is bounded_below & seq1 is constant implies
@@ -1865,7 +1865,7 @@ A2: seq1 is constant;
 A3: seq is bounded_below and
 A4: seq1 is constant;
     seq1 is bounded by A4,Th73;
-    then seq1 is bounded_below by SEQ_2:def 5;
+    then seq1 is bounded_below;
     hence thesis by A3,Th71;
   end;
   assume that
@@ -1948,22 +1948,7 @@ A3: for n holds r1<seq.n by A1,SEQ_2:def 4;
 end;
 
 theorem Th79: :: YELLOW_6:1
-  for X,x being set holds X --> x is constant
-proof
-  let X,a be set;
-  let x,y be set;
-A1: dom(X --> a) = X by FUNCOP_1:19;
-  assume
-A2: x in dom(X --> a) & y in dom(X --> a);
-  hence (X --> a).x = a by A1,FUNCOP_1:13
-    .= (X --> a).y by A1,A2,FUNCOP_1:13;
-end;
-
-registration
-  let X,x be set;
-  cluster X --> x -> constant;
-  coherence by Th79;
-end;
+  for X,x being set holds X --> x is constant;
 
 theorem
   incl NAT is increasing natural-yielding by Lm11;

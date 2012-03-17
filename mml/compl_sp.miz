@@ -6,11 +6,11 @@
 
 environ
 
- vocabularies WELLFND1, FRECHET2, REARRAN1, BOOLE, PRE_TOPC, COMPTS_1,
+ vocabularies WELLFND1, FRECHET2, BOOLE, PRE_TOPC, COMPTS_1,
       SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1, ORDINAL2, LATTICES,
       SEQ_2, PROB_1, SEQ_1, FUNCT_1, FRECHET, ARYTM_3, ARYTM, ARYTM_1,
       NORMSP_1, ZF_REFLE, RELAT_2, ABSVALUE, FINSET_1, TARSKI, BHSP_3, TBSP_1,
-      URYSOHN1, CARD_1, RLVECT_3, PARTFUN1, WELLORD1, METRIC_6, TOPGEN_1,
+      CARD_1, RLVECT_3, PARTFUN1, WELLORD1, METRIC_6, TOPGEN_1,
       CARD_4, AMI_1, ORDERS_1, WAYBEL23, SQUARE_1, COMPL_SP;
  notations BHSP_3, METRIC_6, RELAT_2, BINOP_1, URYSOHN1, TOPMETR, CARD_1,
       CANTOR_1, WELLORD1, COMPLEX1, FINSET_1, SEQ_2, TARSKI, XBOOLE_0,
@@ -21,11 +21,11 @@ environ
       ORDERS_2, CARD_4, TOPGEN_1, NAT_1;
  constructors REAL_1, NAT_1, TBSP_1, YELLOW_6, FRECHET, FRECHET2, KURATO_2,
       COMPLEX1, SEQ_2, TOPS_2, WELLORD1, CARD_4, CANTOR_1, URYSOHN3, METRIC_6,
-      REALSET1, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1, SEQ_1;
+      REALSET1, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1, SEQ_1, COMPTS_1;
  registrations REALSET1, TOPMETR, PRE_TOPC, PCOMPS_1, NAT_1, TBSP_1, XREAL_0,
       RELSET_1, SUBSET_1, STRUCT_0, TOPS_1, METRIC_1, METRIC_3, HAUSDORF,
       MEMBERED, XXREAL_0, YELLOW13, CARD_1, ORDERS_2, XBOOLE_0, VALUED_1,
-      FUNCT_2, NUMBERS, FINSET_1;
+      FUNCT_2, NUMBERS, FINSET_1, VALUED_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, TOPS_2, SUBSET_1, STRUCT_0, TBSP_1, PCOMPS_1, COMPTS_1,
       METRIC_1;
@@ -37,7 +37,7 @@ environ
       XXREAL_0, ORDINAL1, RELSET_1, FRECHET2, FRECHET, COMPTS_1, STIRL2_1,
       CARD_1, EULER_1, HAUSDORF, TOPMETR3, CARD_3, TOPGEN_4, DICKSON,
       RELSET_2, TOPGEN_1, WELLFND1, CARD_FIL, WAYBEL23, UNIFORM1,
-      CARD_2, TOPREAL6;
+      CARD_2, TOPREAL6, FINSET_1, PROB_1;
  schemes FUNCT_1, WELLFND1, TREES_2, FUNCT_2, NAT_1, FRAENKEL, BINOP_1,
       KURATO_2, SEQ_1;
 
@@ -143,17 +143,17 @@ end;
 
 theorem Th2:
   for M be Reflexive non empty MetrStruct
-  for S be bounded SetSequence of M st S is descending holds
+  for S be bounded SetSequence of M st S is non-ascending holds
   diameter S is bounded_above & diameter S is non-increasing
 proof
   let M be Reflexive non empty MetrStruct;
   let S be bounded SetSequence of M such that
-A1: S is descending;
+A1: S is non-ascending;
   set d=diameter S;
 A2: now
     let n be Element of NAT;
     S.n c= S.0 & S.0 is bounded & diameter S.n=d.n & diameter S.0=d.0
-    by A1,Def1,Def2,KURATO_2:22;
+    by A1,Def1,Def2,PROB_1:def 6;
     then d.n<=d.0 & d.0+0<d.0+1 by TBSP_1:32,XREAL_1:10;
     hence d.n<d.0+1 by XXREAL_0:2;
   end;
@@ -161,7 +161,7 @@ A2: now
     let m,n be Element of NAT such that
 A3: m in dom d & n in dom d & m <= n;
     S.n c= S.m & S.m is bounded & diameter S.n=d.n & diameter S.m=d.m
-    by A1,A3,Def1,Def2,KURATO_2:22;
+    by A1,A3,Def1,Def2,PROB_1:def 6;
     hence d.n<=d.m by TBSP_1:32;
   end;
   hence thesis by A2,SEQM_3:def 4,SEQ_2:def 3;
@@ -169,18 +169,18 @@ end;
 
 theorem
   for M be Reflexive non empty MetrStruct
-  for S be bounded SetSequence of M st S is ascending holds
+  for S be bounded SetSequence of M st S is non-descending holds
   diameter S is non-decreasing
 proof
   let M be Reflexive non empty MetrStruct;
   let S be bounded SetSequence of M such that
-A1: S is ascending;
+A1: S is non-descending;
   set d=diameter S;
   now
     let m,n be Element of NAT such that
 A2: m in dom d & n in dom d & m <= n;
     S.m c= S.n & S.n is bounded & diameter S.n=d.n & diameter S.m=d.m
-    by A1,A2,Def1,Def2,KURATO_2:23;
+    by A1,A2,Def1,Def2,PROB_1:def 7;
     hence d.n>=d.m by TBSP_1:32;
   end;
   hence thesis by SEQM_3:def 3;
@@ -188,12 +188,12 @@ end;
 
 theorem Th4:
   for M be non empty Reflexive MetrStruct for S be bounded SetSequence of M st
-  S is descending & lim diameter S = 0
+  S is non-ascending & lim diameter S = 0
   for F be sequence of M st for i holds F.i in S.i holds F is Cauchy
 proof
   let M be non empty Reflexive MetrStruct;
   let S be bounded SetSequence of M such that
-A1: S is descending & lim diameter S = 0;
+A1: S is non-ascending & lim diameter S = 0;
   set d=diameter S;
   let F be sequence of M such that
 A2: for i holds F.i in S.i;
@@ -208,7 +208,7 @@ A4: for m be Element of NAT st n <= m holds abs(d.m-0) < r
   let m1,m2 be Element of NAT such that
 A5: n <= m1 & n <= m2;
   S.m1 c= S.n & S.m2 c= S.n & F.m1 in S.m1 & F.m2 in S.m2
-  by A1,A2,A5,KURATO_2:22;
+  by A1,A2,A5,PROB_1:def 6;
   then F.m1 in S.n & F.m2 in S.n & S.n is bounded & diameter S.n=d.n
   by Def1,Def2;
   then
@@ -608,7 +608,7 @@ begin :: Cantor's theorem on complete spaces
 
 theorem Th9:
   for M be non empty MetrSpace for C be sequence of M
-  ex S be non-empty closed SetSequence of M st S is descending &
+  ex S be non-empty closed SetSequence of M st S is non-ascending &
   ( C is Cauchy implies S is bounded & lim diameter S = 0 ) &
   for i ex U be Subset of TopSpaceMetr M st
   U = { C.j where j is Element of NAT: j >= i } & S.i = Cl U
@@ -674,7 +674,7 @@ A11:  x=C.j & j>=i+1 by A9,A10;
     hence S.(i+1) c= S.i by A8,A9,PRE_TOPC:49;
   end;
   hence
-A12: S is descending by KURATO_2:def 5;
+A12: S is non-ascending by KURATO_2:def 5;
   thus C is Cauchy implies S is bounded & lim diameter S = 0
   proof
     assume
@@ -757,18 +757,18 @@ end;
 theorem Th10:
   for M be non empty MetrSpace holds M is complete iff
   for S be non-empty bounded closed SetSequence of M st
-  S is descending & lim diameter S = 0 holds meet S is non empty
+  S is non-ascending & lim diameter S = 0 holds meet S is non empty
 proof
   let M be non empty MetrSpace;
   set T=TopSpaceMetr(M);
   thus M is complete implies
   for S be non-empty bounded closed SetSequence of M st
-  S is descending & lim diameter S = 0 holds meet S is non empty
+  S is non-ascending & lim diameter S = 0 holds meet S is non empty
   proof
     assume
 A1: M is complete;
     let S be non-empty bounded closed SetSequence of M such that
-A2: S is descending & lim diameter S = 0;
+A2: S is non-ascending & lim diameter S = 0;
     defpred P[set,set] means $2 in S.$1;
 A3: for x st x in NAT ex y st y in the carrier of M & P[x,y]
     proof
@@ -810,7 +810,7 @@ A11:    x in rng F1;
 A12:    y in dom F1 & F1.y=x by A11,FUNCT_1:def 5;
         reconsider y as Element of NAT by A12;
         x=F.(y+i) & i<=y+i by A9,A12,NAT_1:11;
-        then x in S.(y+i) & S.(y+i) c= S.i by A2,A7,KURATO_2:22;
+        then x in S.(y+i) & S.(y+i) c= S.i by A2,A7,PROB_1:def 6;
         hence thesis;
       end;
       then
@@ -824,11 +824,11 @@ A13:  Lim F1 c= Si by A10,FRECHET2:12;
   end;
   assume
 A14: for S be non-empty bounded closed SetSequence of M st
-  S is descending & lim diameter S = 0 holds meet S is non empty;
+  S is non-ascending & lim diameter S = 0 holds meet S is non empty;
   let F be sequence of M such that
 A15: F is Cauchy;
   consider S be non-empty closed SetSequence of M such that
-A16: S is descending and
+A16: S is non-ascending and
 A17: F is Cauchy implies S is bounded & lim diameter S = 0 and
 A18: for i ex U be Subset of T st
   U={ F.j where j is Element of NAT:j >= i} & S.i = Cl U by Th9;
@@ -861,12 +861,12 @@ end;
 
 theorem Th11:
   for T be non empty TopSpace
-  for S be non-empty SetSequence of T st S is descending
+  for S be non-empty SetSequence of T st S is non-ascending
   for F be Subset-Family of T st F = rng S holds F is centered
 proof
   let T be non empty TopSpace;
   let S be non-empty SetSequence of T such that
-A1: S is descending;
+A1: S is non-ascending;
   let F be Subset-Family of T such that
 A2: F = rng S;
   dom S=NAT by FUNCT_2:def 1;
@@ -901,12 +901,12 @@ A11:  Y in G;
 A12:  f.Y in rng f by A8,FUNCT_1:def 5;
       then reconsider fY=f.Y as Element of NAT;
       Y=S.fY & fY <= i by A7,A9,A11,A12;
-      then S.i c= Y by A1,KURATO_2:22;
+      then S.i c= Y by A1,PROB_1:def 6;
       hence x in Y by A10;
     end;
     hence meet G<>{} by A4,SETFAM_1:def 1;
   end;
-  hence thesis by A3,COMPTS_1:def 2;
+  hence thesis by A3,FINSET_1:def 3;
 end;
 
 theorem Th12:
@@ -945,7 +945,7 @@ end;
 theorem Th13:
   for T be non empty TopSpace for F be Subset-Family of T
   for S be SetSequence of T st rng S c= F ex R be SetSequence of T st
-  R is descending & ( F is centered implies R is non-empty ) &
+  R is non-ascending & ( F is centered implies R is non-empty ) &
   ( F is open implies R is open ) & ( F is closed implies R is closed ) &
   for i holds R.i = meet {S.j where j is Element of NAT: j <= i}
 proof
@@ -1017,7 +1017,7 @@ A15:  x=S.j & j<=i by A14;
     then meet S1 c= meet SS & meet SS=R.i by A7,A13,SETFAM_1:7;
     hence R.(i+1) c= R.i by A7;
   end;
-  hence R is descending by KURATO_2:def 5;
+  hence R is non-ascending by KURATO_2:def 5;
   thus F is centered implies R is non-empty
   proof
     assume
@@ -1028,7 +1028,7 @@ A17:  x in dom R;
       reconsider i=x as Element of NAT by A17;
       set SS={S.j where j is Element of NAT:j<=i};
       SS is finite & S.0 in SS & SS c= F by A2,A8;
-      then meet SS<>{} by A16,COMPTS_1:def 2;
+      then meet SS<>{} by A16,FINSET_1:def 3;
       hence R.x is non empty by A7;
     end;
     hence thesis by FUNCT_1:def 15;
@@ -1107,7 +1107,7 @@ A9:   y in dom f & f.y=x by A8,FUNCT_1:def 5;
       hence thesis by A9;
     end;
     then consider R be SetSequence of T such that
-A10: R is descending and
+A10: R is non-ascending and
 A11: F is centered implies R is non-empty and F is open implies R is open and
 A12: F is closed implies R is closed and
 A13: for i holds R.i = meet {f.j where j is Element of NAT: j<=i} by Th13;
@@ -1120,7 +1120,7 @@ A13: for i holds R.i = meet {f.j where j is Element of NAT: j<=i} by Th13;
       hence R'.i is bounded by TBSP_1:21;
     end;
     then reconsider R' as non-empty bounded SetSequence of M by Def1;
-A14: R' is closed & R' is descending by A2,A10,A12,Th7;
+A14: R' is closed & R' is non-ascending by A2,A10,A12,Th7;
     deffunc F(Element of NAT)=1/(1+$1);
     consider seq be Real_Sequence such that
 A15: for n be Element of NAT holds seq.n=F(n) from SEQ_1:sch 1;
@@ -1201,7 +1201,7 @@ A33:      x=f.j & j<=i by A32;
         end;
         then SS is finite by A31;
         then {Y}\/SS is finite;
-        then meet({Y}\/SS)<>{} by A2,A28,COMPTS_1:def 2;
+        then meet({Y}\/SS)<>{} by A2,A28,FINSET_1:def 3;
         then meet {Y} /\ meet SS <> {} by A27,SETFAM_1:10;
         then Y /\meet SS<>{} by SETFAM_1:11;
         then Y/\R.i<>{} by A13;
@@ -1232,7 +1232,7 @@ A34:  now
         hence f'.(i+1) c= f'.i by XBOOLE_1:26;
       end;
       then
-A35:  f' is descending by KURATO_2:def 5;
+A35:  f' is non-ascending by KURATO_2:def 5;
       set df=diameter f';
       now
         let n be Element of NAT;
@@ -1269,7 +1269,7 @@ A38:    for j be Element of NAT st i<=j holds
       z in f'.0 & f'.0=R.0/\Y by A24,A36,KURATO_2:6;
       hence x0 in y by A37,XBOOLE_0:def 3;
     end;
-    F<>{} by A2,COMPTS_1:def 2;
+    F<>{} by A2,FINSET_1:def 3;
     hence thesis by A20,SETFAM_1:def 1;
   end;
   assume
@@ -1278,7 +1278,7 @@ A39: for F be Subset-Family of T st F is closed & F is centered &
   holds meet F is non empty;
   now
     let S be non-empty bounded closed SetSequence of M such that
-A40: S is descending & lim diameter S = 0;
+A40: S is non-ascending & lim diameter S = 0;
     reconsider RS=rng S as Subset-Family of T;
 A41: RS is closed & RS is centered by A40,Th11,Th12;
     now
@@ -1523,7 +1523,7 @@ A16:      x in cl_Ball(p,1/(i1+1));
         hence f.(i+1) c= f.i by A8;
       end;
       then
-A17:  f is descending by KURATO_2:def 5;
+A17:  f is non-ascending by KURATO_2:def 5;
       deffunc F(Element of NAT)=1/(1+$1);
       consider seq be Real_Sequence such that
 A18:  for n be Element of NAT holds seq.n=F(n) from SEQ_1:sch 1;
@@ -1643,7 +1643,7 @@ A2: F is centered & F is closed and
 A3: F is countable;
     assume
 A4: meet F = {};
-    F <> {} by A2,COMPTS_1:def 2;
+    F <> {} by A2,FINSET_1:def 3;
     then union COMPLEMENT(F) = (meet F)` by TOPS_2:12
       .= [#] T by A4;
     then COMPLEMENT(F) is Cover of T & COMPLEMENT(F) is open &
@@ -1665,7 +1665,7 @@ A10: meet COMPLEMENT(G') = (union G')` by A5,TOPS_2:5,11
       .= ([#] T) \ ([#] T) by A5,SETFAM_1:60
       .= {} by XBOOLE_1:37;
     COMPLEMENT(G') <> {} & COMPLEMENT(G') is finite by A6,A9,TOPS_2:10,13;
-    hence contradiction by A2,A7,A10,COMPTS_1:def 2;
+    hence contradiction by A2,A7,A10,FINSET_1:def 3;
   end;
   assume
 A11: for F being Subset-Family of T st
@@ -1682,7 +1682,7 @@ A14: COMPLEMENT(F) is countable & COMPLEMENT(F) is closed &
   by A11,A14,TOPS_2:10;
   then consider G' being set such that
 A15: G' <> {} & G' c= COMPLEMENT(F) and
-A16: G' is finite & meet G' = {} by COMPTS_1:def 2;
+A16: G' is finite & meet G' = {} by FINSET_1:def 3;
   reconsider G' as Subset-Family of T by A15,XBOOLE_1:1;
   take F'=COMPLEMENT(G');
   thus F' c= F
@@ -1701,18 +1701,18 @@ end;
 
 theorem Th22:
   for T being non empty TopSpace holds T is countably_compact iff
-  for S be non-empty closed SetSequence of T st S is descending
+  for S be non-empty closed SetSequence of T st S is non-ascending
   holds meet S <> {}
 proof
   let T being non empty TopSpace;
   thus T is countably_compact implies
   for S be non-empty closed SetSequence of T st
-  S is descending holds meet S <> {}
+  S is non-ascending holds meet S <> {}
   proof
     assume
 A1: T is countably_compact;
     let S be non-empty closed SetSequence of T such that
-A2: S is descending;
+A2: S is non-ascending;
     reconsider rngS=rng S as Subset-Family of T;
     dom S=NAT by FUNCT_2:def 1;
     then
@@ -1740,7 +1740,7 @@ A6: x in meet rngS by XBOOLE_0:def 1;
   end;
   assume
 A7: for S be non-empty closed SetSequence of T st
-  S is descending holds meet S <> {};
+  S is non-ascending holds meet S <> {};
   now
     let F be Subset-Family of T such that
 A8: F is centered & F is closed and
@@ -1753,7 +1753,7 @@ A10: Card F c= omega by A9,CARD_4:def 1;
 A11:    s is one-to-one & dom s = NAT & rng s = F by WELLORD2:def 4;
         reconsider s as SetSequence of T by A11,FUNCT_2:4;
         consider R be SetSequence of T such that
-A12:    R is descending and
+A12:    R is non-ascending and
 A13:    F is centered implies R is non-empty and
         F is open implies R is open and
 A14:    F is closed implies R is closed and
@@ -1776,8 +1776,8 @@ A18:      z in dom s & s.z=y by A11,FUNCT_1:def 5;
         hence meet F is non empty by A17,SETFAM_1:def 1;
       end;
       suppose Card F in omega;
-        then F is finite & F<>{} by A8,CARD_4:2,COMPTS_1:def 2;
-        hence meet F is non empty by A8,COMPTS_1:def 2;
+        then F is finite & F<>{} by A8,CARD_4:2,FINSET_1:def 3;
+        hence meet F is non empty by A8,FINSET_1:def 3;
       end;
     end;
     hence meet F<>{};
@@ -1788,7 +1788,7 @@ end;
 theorem Th23:
   for T being non empty TopSpace for F be Subset-Family of T
   for S be SetSequence of T st rng S c= F & S is non-empty
-  ex R be non-empty closed SetSequence of T st R is descending &
+  ex R be non-empty closed SetSequence of T st R is non-ascending &
   ( F is locally_finite & S is one-to-one implies meet R = {} ) &
   for i ex Si be Subset-Family of T st R.i = Cl union Si &
   Si = {S.j where j is Element of NAT: j >= i}
@@ -1873,7 +1873,7 @@ A17:  y=S.j & j>=n+1 by A14,A16;
     then union Sn1 c= union Sn by ZFMISC_1:95;
     hence R.(n+1) c= R.n by A13,A15,PRE_TOPC:49;
   end;
-  hence R is descending by KURATO_2:def 5;
+  hence R is non-ascending by KURATO_2:def 5;
   thus F is locally_finite & S is one-to-one implies meet R = {}
   proof
     assume
@@ -1954,7 +1954,7 @@ A7: x in dom f;
     hence f.x is non empty by A3,A6,SETFAM_1:def 9;
   end;
   then f is non-empty by FUNCT_1:def 15;
-  then ex R be non-empty closed SetSequence of T st R is descending &
+  then ex R be non-empty closed SetSequence of T st R is non-ascending &
   ( F is locally_finite & f is one-to-one implies meet R = {})&
   for i ex fi be Subset-Family of T st
   R.i = Cl union fi & fi = {f.j where j is Element of NAT: j >= i} by A6,Th23;
@@ -2069,12 +2069,12 @@ A7: x in dom F;
 end;
 
 theorem Th25:
-  for X be non empty set, F be SetSequence of X st F is descending
+  for X be non empty set, F be SetSequence of X st F is non-ascending
   for S be Function of NAT,X st for n holds S.n in F.n holds
   rng S is finite implies meet F is non empty
 proof
   let X be non empty set, F be SetSequence of X such that
-A1: F is descending;
+A1: F is non-ascending;
   let S be Function of NAT,X such that
 A2: for n holds S.n in F.n;
   assume
@@ -2103,21 +2103,21 @@ A6:     y in S"{x};
     then consider i such that
 A7: x in F.i & i>=n;
     i in NAT by ORDINAL1:def 13;
-    then F.i c= F.n by A1,A7,KURATO_2:22;
+    then F.i c= F.n by A1,A7,PROB_1:def 6;
     hence x in F.n by A7;
   end;
   hence thesis by KURATO_2:6;
 end;
 
-Lm5: for T be being_T1 non empty TopSpace st
+Lm5: for T be T_1 non empty TopSpace st
 for A be Subset of T st A is infinite countable holds Der A is non empty
 holds T is countably_compact
 proof
-  let T be being_T1 non empty TopSpace such that
+  let T be T_1 non empty TopSpace such that
 A1: for A be Subset of T st A is infinite countable holds Der A is non empty;
   assume not T is countably_compact;
   then consider S be non-empty closed SetSequence of T such that
-A2: S is descending & meet S = {} by Th22;
+A2: S is non-ascending & meet S = {} by Th22;
   defpred P[set,set] means $2 in S.$1;
 A3: for x st x in NAT ex y st y in the carrier of T & P[x,y]
   proof
@@ -2184,7 +2184,7 @@ A15: i in dom F & F.i=q by FUNCT_1:def 5;
     hence contradiction by A14,XBOOLE_0:def 3;
   end;
   suppose i>n;
-    then q in S.i & S.i c= S.n by A2,A6,A15,KURATO_2:22;
+    then q in S.i & S.i c= S.n by A2,A6,A15,PROB_1:def 6;
     then not q in (S.n)` by XBOOLE_0:def 4;
     then not q in U by XBOOLE_0:def 4;
     hence contradiction by A14,XBOOLE_0:def 3;
@@ -2201,7 +2201,7 @@ A1: for F be Subset-Family of T st F is locally_finite &
   for A be Subset of T st A in F holds Card A = 1 holds F is finite;
   assume not T is countably_compact;
   then consider S be non-empty closed SetSequence of T such that
-A2: S is descending & meet S = {} by Th22;
+A2: S is non-ascending & meet S = {} by Th22;
   defpred P[set,set] means $2 in S.$1;
 A3: for x st x in NAT ex y st y in the carrier of T & P[x,y]
   proof
@@ -2255,7 +2255,7 @@ A15:  z in dom F & y=F.z by A14,FUNCT_1:def 5;
       proof
         assume not z in i;
         then z>=i by EULER_1:1;
-        then y in S.z & S.z c= S.i by A2,A6,A15,KURATO_2:22;
+        then y in S.z & S.z c= S.i by A2,A6,A15,PROB_1:def 6;
         then y in S.i & y in Si' by A13,A14,ZFMISC_1:56;
         hence thesis by XBOOLE_0:def 4;
       end;
@@ -2321,10 +2321,10 @@ proof
 end;
 
 theorem Th28:
-  for T be being_T1 non empty TopSpace holds T is countably_compact iff
+  for T be T_1 non empty TopSpace holds T is countably_compact iff
   for A be Subset of T st A is infinite holds Der A is non empty
 proof
-  let T be being_T1 non empty TopSpace;
+  let T be T_1 non empty TopSpace;
   thus T is countably_compact implies
   for A be Subset of T st A is infinite holds Der A is non empty
   proof
@@ -2340,7 +2340,7 @@ proof
 end;
 
 theorem
-  for T be being_T1 non empty TopSpace holds T is countably_compact iff
+  for T be T_1 non empty TopSpace holds T is countably_compact iff
   for A be Subset of T st A is infinite countable holds
   Der A is non empty by Lm5,Th28;
 
@@ -3144,7 +3144,7 @@ A29: now
     by A27,A29,Def1,Def8,FUNCT_1:def 15;
     for n be Element of NAT holds f.(n+1) c= f.n by A26;
     then
-A30: f is descending by KURATO_2:def 5;
+A30: f is non-ascending by KURATO_2:def 5;
     deffunc F(Element of NAT)=1/(1+$1);
     consider seq be Real_Sequence such that
 A31: for n be Element of NAT holds seq.n=F(n) from SEQ_1:sch 1;
@@ -3211,7 +3211,7 @@ A45:  q in f.n\{p} by XBOOLE_0:def 1;
       then Ball(q',dist(p',q')) in Family_open_set M & dist(q',q')=0 &
       dist(p',q')<>0 & dist(p',q')>=0 by METRIC_1:1,2,5,PCOMPS_1:33;
       then B is open & q in B & f.n c= Cl xa & q in f.n
-      by A25,A30,A45,KURATO_2:22,METRIC_1:12,PRE_TOPC:def 5,ZFMISC_1:64;
+      by A25,A30,A45,PROB_1:def 6,METRIC_1:12,PRE_TOPC:def 5,ZFMISC_1:64;
       then B meets xa by PRE_TOPC:54;
       then consider s be set such that
 A46:  s in B & s in xa by XBOOLE_0:3;
@@ -4101,7 +4101,7 @@ theorem Th43:
   for a be Point of M st ex b be Point of M st dist(a,b)<>0
   for X be infinite set holds WellSpace(a,X) is complete &
   ex S be non-empty bounded SetSequence of WellSpace(a,X) st
-  S is closed & S is descending & meet S is empty
+  S is closed & S is non-ascending & meet S is empty
 proof
   let M be symmetric triangle Reflexive non empty MetrStruct such that
 A1: M is complete;
@@ -4162,7 +4162,7 @@ A15: y in dom S & S.y=x by A14,FUNCT_1:def 5;
     hence thesis;
   end;
   then consider R be non-empty closed SetSequence of TW such that
-A16: R is descending and
+A16: R is non-ascending and
 A17: F is locally_finite & S is one-to-one implies meet R = {} and
 A18: for i ex Si be Subset-Family of TW st R.i = Cl union Si &
   Si = {S.j where j is Element of NAT: j >= i} by A13,Th23;
@@ -4210,7 +4210,7 @@ A30:  yS=S.j2 & j2 >= i by A25,A28;
   end;
   then reconsider R' as non-empty bounded SetSequence of W by Def1;
   take R';
-  thus R' is closed & R' is descending by A16,Th7;
+  thus R' is closed & R' is non-ascending by A16,Th7;
 A31: for x,y be Point of W st x<>y & x in rngs & y in rngs holds
   dist(x,y)>=2*dist(a,b) by A20;
   now
@@ -4227,7 +4227,7 @@ end;
 theorem
   ex M be non empty MetrSpace st M is complete &
   ex S be non-empty bounded SetSequence of M st
-  S is closed & S is descending & meet S is empty
+  S is closed & S is non-ascending & meet S is empty
 proof
   reconsider D=DiscreteSpace 2 as non empty MetrSpace;
   reconsider a=0,b=1 as Point of D by EULER_1:1;
@@ -4236,7 +4236,7 @@ A1: 1=dist(a,b) by METRIC_1:def 11;
   then D is complete & NAT is infinite by TBSP_1:10;
   then WellSpace(a,NAT) is complete &
   ex S be non-empty bounded SetSequence of WellSpace(a,NAT) st
-  S is closed & S is descending & meet S is empty by A1,Th43;
+  S is closed & S is non-ascending & meet S is empty by A1,Th43;
   hence thesis;
 end;
 

@@ -8,7 +8,7 @@ environ
 
  vocabularies SUPINF_1, ARYTM, MEMBERED, ORDINAL2, SQUARE_1, FINSET_1,
   XXREAL_2, SEQ_2, INT_1, RAT_1, RCOMP_1, BOOLE, FINSUB_1, SETWISEO,
-  ARYTM_1, LATTICES, FUNCT_1, RELAT_1;
+  ARYTM_1, LATTICES, FUNCT_1, RELAT_1, RELAT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1,
   ORDINAL1, FINSET_1, FINSUB_1, SETWISEO, NUMBERS, MEMBERED, XXREAL_0,
   XCMPLX_0, XREAL_0, INT_1, NAT_1, RAT_1, XXREAL_1;
@@ -403,11 +403,11 @@ registration
   end;
 end;
 
-notation let X be left_end (non empty ext-real-membered set);
+notation let X be left_end (ext-real-membered set);
  synonym min X for inf X;
 end;
 
-notation let X be right_end (non empty ext-real-membered set);
+notation let X be right_end (ext-real-membered set);
  synonym max X for sup X;
 end;
 
@@ -714,7 +714,6 @@ registration
    take 0;
    let x;
    assume x in X;
-   then x is natural;
    hence thesis;
   end;
 end;
@@ -902,7 +901,7 @@ Z:  x < y;
   hence inf [.x,y.[ = x by A,Def4;
  end;
 
-theorem
+theorem Th27:
  x < y implies inf ].x,y.] = x
  proof
 A: x is LowerBound of ].x,y.] by Th18;
@@ -921,7 +920,7 @@ Z:  x < y;
   hence inf ].x,y.] = x by A,Def4;
  end;
 
-theorem
+theorem Th28:
  x < y implies inf ].x,y.[ = x
  proof
 A: x is LowerBound of ].x,y.[ by Th20;
@@ -968,7 +967,7 @@ Z:  x < y;
   hence sup ].x,y.] = y by A,Def3;
  end;
 
-theorem
+theorem Th31:
  x < y implies sup [.x,y.[ = y
  proof
 A: y is UpperBound of [.x,y.[ by Th23;
@@ -987,7 +986,7 @@ Z:  x < y;
   hence sup [.x,y.[ = y by A,Def3;
  end;
 
-theorem
+theorem Th32:
  x < y implies sup ].x,y.[ = y
  proof
 A: y is UpperBound of ].x,y.[ by Th24;
@@ -1006,7 +1005,7 @@ Z:  x < y;
   hence sup ].x,y.[ = y by A,Def3;
  end;
 
-theorem
+theorem Th33:
  x <= y implies  [.x,y.] is left_end right_end
   proof
    assume
@@ -1020,7 +1019,7 @@ Z: x <= y;
    hence sup [.x,y.] in [.x,y.] by Z,Th29;
   end;
 
-theorem
+theorem Th34:
  x < y implies [.x,y.[ is left_end
   proof
    assume
@@ -1029,7 +1028,7 @@ Z: x < y;
    hence inf [.x,y.[ in [.x,y.[ by Z,Th26;
   end;
 
-theorem
+theorem Th35:
  x < y implies ].x,y.] is right_end
   proof
    assume
@@ -1066,7 +1065,7 @@ A: -infty is UpperBound of {} by TW2;
  hence thesis by A,Def3;
 end;
 
-theorem
+theorem Th40:
  for X being ext-real-membered set holds
   X is non empty iff inf X <= sup X
  proof let X be ext-real-membered set;
@@ -1611,12 +1610,10 @@ Z0: X is bounded;
 Z:  x in X;
     then reconsider x as ext-real number;
     reconsider X as non empty ext-real-membered set by Z;
-    X is bounded_below by Z0;
-    then consider r being real number such that
-W1:  r is LowerBound of X by Def9;
-    X is bounded_above by Z0;
-    then consider s being real number such that
-W2:  s is UpperBound of X by Def10;
+    consider r being real number such that
+W1:  r is LowerBound of X by Def9,Z0;
+    consider s being real number such that
+W2:  s is UpperBound of X by Def10,Z0;
 A:  r <= x & x <= s by Z,W1,W2,Def1,Def2;
     r in REAL & s in REAL by XREAL_0:def 1;
     then x in REAL by A,XXREAL_0:45;
@@ -1673,12 +1670,10 @@ theorem
 Z:  A is bounded_above;
    per cases by Z,Th57;
    suppose A = {};
-    then sup A = -infty by TW4;
-   hence sup A <> +infty;
+   hence sup A <> +infty by TW4;
   end;
    suppose A = {-infty};
-    then sup A = -infty by Lm1;
-   hence sup A <> +infty;
+   hence sup A <> +infty by Lm1;
    end;
    suppose sup A in REAL;
     hence sup A <> +infty;
@@ -1707,12 +1702,10 @@ theorem
 Z:  A is bounded_below;
    per cases by Z,Th58;
    suppose A = {};
-    then inf A = +infty by TW3;
-   hence inf A <> -infty;
+   hence inf A <> -infty by TW3;
   end;
    suppose A = {+infty};
-    then inf A = +infty by Lm2;
-   hence inf A <> -infty;
+   hence inf A <> -infty by Lm2;
    end;
    suppose inf A in REAL;
     hence inf A <> -infty;
@@ -1733,3 +1726,718 @@ A:  +infty is LowerBound of A by S,Def4;
    thus thesis by Def4;
   end;
  end;
+
+begin :: Connectedness
+
+definition
+  let A be ext-real-membered set;
+  attr A is connected means
+:Def12: for r,s being ext-real number st r in A & s in A holds [.r,s.] c= A;
+end;
+
+registration
+ cluster ExtREAL -> connected;
+ coherence
+  proof let r,s;
+   thus thesis by MEMBERED:2;
+  end;
+ cluster empty -> connected (ext-real-membered set);
+ coherence
+  proof let A be ext-real-membered set;
+   assume
+Z:  A is empty;
+   let r,s;
+   thus thesis by Z;
+  end;
+ let r,s;
+ cluster [.r,s.] -> connected;
+ coherence
+  proof let x,y;
+   assume x in [.r,s.];
+   then
+A1: r <= x by XXREAL_1:1;
+   assume y in [.r,s.];
+   then
+A2: y <= s by XXREAL_1:1;
+   let z;
+   assume z in [.x,y.];
+    then x <= z & z <= y by XXREAL_1:1;
+    then r <= z & z <= s by A1,A2,XXREAL_0:2;
+   hence z in [.r,s.] by XXREAL_1:1;
+  end;
+ cluster ].r,s.] -> connected;
+ coherence
+  proof let x,y;
+   assume x in ].r,s.];
+   then
+A1: r < x by XXREAL_1:2;
+   assume y in ].r,s.];
+   then
+A2: y <= s by XXREAL_1:2;
+   let z;
+   assume z in [.x,y.];
+    then x <= z & z <= y by XXREAL_1:1;
+    then r < z & z <= s by A1,A2,XXREAL_0:2;
+   hence z in ].r,s.] by XXREAL_1:2;
+  end;
+ cluster [.r,s.[ -> connected;
+ coherence
+  proof let x,y;
+   assume x in [.r,s.[;
+   then
+A1: r <= x by XXREAL_1:3;
+   assume y in [.r,s.[;
+   then
+A2: y < s by XXREAL_1:3;
+   let z;
+   assume z in [.x,y.];
+    then x <= z & z <= y by XXREAL_1:1;
+    then r <= z & z < s by A1,A2,XXREAL_0:2;
+   hence z in [.r,s.[ by XXREAL_1:3;
+  end;
+ cluster ].r,s.[ -> connected;
+ coherence
+  proof let x,y;
+   assume x in ].r,s.[;
+   then
+A1: r < x by XXREAL_1:4;
+   assume y in ].r,s.[;
+   then
+A2: y < s by XXREAL_1:4;
+   let z;
+   assume z in [.x,y.];
+    then x <= z & z <= y by XXREAL_1:1;
+    then r < z & z < s by A1,A2,XXREAL_0:2;
+   hence z in ].r,s.[ by XXREAL_1:4;
+  end;
+end;
+
+registration
+ cluster REAL -> connected;
+ coherence by XXREAL_1:224;
+end;
+
+registration
+ cluster connected (non empty ext-real-membered set);
+ existence
+  proof
+   take REAL;
+   thus thesis;
+  end;
+end;
+
+registration
+ let A,B be connected (ext-real-membered set);
+ cluster A /\ B -> connected;
+ coherence
+  proof let r,s be ext-real number;
+   assume r in A /\ B & s in A /\ B;
+    then r in A & r in B & s in A & s in B by XBOOLE_0:def 3;
+    then [.r,s.] c= A & [.r,s.] c= B by Def12;
+   hence [.r,s.] c= A /\ B by XBOOLE_1:19;
+  end;
+end;
+
+reserve A,B for ext-real-membered set;
+
+registration let r,s;
+ cluster ].r,s.] -> non left_end;
+ coherence
+  proof
+   assume ].r,s.] is left_end;
+    then
+A:   inf ].r,s.] in ].r,s.] by Def5;
+    then r < inf ].r,s.] & inf ].r,s.] <= s by XXREAL_1:2;
+    then r < s by XXREAL_0:2;
+    then r = inf ].r,s.] by Th27;
+   hence contradiction by A,XXREAL_1:2;
+  end;
+ cluster [.r,s.[ -> non right_end;
+ coherence
+  proof
+   assume [.r,s.[ is right_end;
+    then
+A:   sup [.r,s.[ in [.r,s.[ by Def6;
+    then r <= sup [.r,s.[ & sup [.r,s.[ < s by XXREAL_1:3;
+    then r < s by XXREAL_0:2;
+    then s = sup [.r,s.[ by Th31;
+   hence contradiction by A,XXREAL_1:3;
+  end;
+ cluster ].r,s.[ -> non left_end non right_end;
+ coherence
+  proof
+   thus ].r,s.[ is non left_end
+  proof
+   assume ].r,s.[ is left_end;
+    then
+A:   inf ].r,s.[ in ].r,s.[ by Def5;
+    then r < inf ].r,s.[ & inf ].r,s.[ < s by XXREAL_1:4;
+    then r < s by XXREAL_0:2;
+    then r = inf ].r,s.[ by Th28;
+   hence contradiction by A,XXREAL_1:4;
+  end;
+   assume ].r,s.[ is right_end;
+    then
+A:   sup ].r,s.[ in ].r,s.[ by Def6;
+    then r < sup ].r,s.[ & sup ].r,s.[ < s by XXREAL_1:4;
+    then r < s by XXREAL_0:2;
+    then s = sup ].r,s.[ by Th32;
+   hence contradiction by A,XXREAL_1:4;
+  end;
+end;
+
+registration
+ cluster left_end right_end connected (ext-real-membered set);
+ existence
+  proof
+   take [.0,1.];
+   thus thesis by Th33;
+  end;
+ cluster non left_end right_end connected (ext-real-membered set);
+ existence
+  proof
+   take ].0,1.];
+   thus thesis by Th35;
+  end;
+ cluster left_end non right_end connected (ext-real-membered set);
+ existence
+  proof
+   take [.0,1.[;
+   thus thesis by Th34;
+  end;
+ cluster non left_end non right_end connected non empty
+              (ext-real-membered set);
+ existence
+  proof
+   take ].0,2.[;
+    1 in ].0,2.[ by XXREAL_1:4;
+   hence thesis;
+  end;
+end;
+
+theorem Th79:
+ for A being left_end right_end connected (ext-real-membered set)
+  holds A = [.min A, max A.]
+ proof
+  let A be left_end right_end connected (ext-real-membered set);
+  let x;
+  thus x in A implies x in [.min A, max A.]
+   proof assume x in A;
+     then min A <= x & x <= max A by Th3,Th3B;
+    hence thesis by XXREAL_1:1;
+   end;
+   min A in A & max A in A by Def5,Def6;
+   then [.min A, max A.] c= A by Def12;
+  hence thesis;
+ end;
+
+theorem Th80:
+ for A being non left_end right_end connected (ext-real-membered set)
+  holds A = ].inf A, max A.]
+ proof
+  let A be non left_end right_end connected (ext-real-membered set);
+  let x;
+  thus x in A implies x in ].inf A, max A.]
+   proof assume
+Z:    x in A;
+     then
+A:    inf A <= x & x <= max A by Th3,Th3B;
+     not inf A in A by Def5;
+     then inf A < x by A,Z,XXREAL_0:1;
+    hence thesis by A,XXREAL_1:2;
+   end;
+  assume
+Z:   x in ].inf A, max A.];
+   defpred P[ext-real number] means
+      $1 in A & $1 < x;
+  per cases;
+  suppose not ex r st P[r];
+   then x is LowerBound of A by Def2;
+   then x <= inf A by Def4;
+  hence thesis by Z,XXREAL_1:2;
+  end;
+  suppose ex r st P[r];
+   then consider r such that
+W3:  r in A and
+W4:  r < x;
+B: max A in A by Def6;
+   x <= max A by Z,XXREAL_1:2;
+   then
+A: x in [.r,max A.] by W4,XXREAL_1:1;
+   [.r,max A.] c= A by W3,B,Def12;
+  hence thesis by A;
+  end;
+ end;
+
+theorem Th81:
+ for A being left_end non right_end connected (ext-real-membered set)
+  holds A = [.min A, sup A.[
+ proof
+  let A be left_end non right_end connected (ext-real-membered set);
+  let x;
+  thus x in A implies x in [.min A, sup A.[
+   proof assume
+Z:    x in A;
+     then
+A:    min A <= x & x <= sup A by Th3,Th3B;
+     not sup A in A by Def6;
+     then x < sup A by A,Z,XXREAL_0:1;
+    hence thesis by A,XXREAL_1:3;
+   end;
+  assume
+Z:   x in [.min A, sup A.[;
+   defpred P[ext-real number] means
+      $1 in A & $1 > x;
+  per cases;
+  suppose not ex r st P[r];
+   then x is UpperBound of A by Def1;
+   then sup A <= x by Def3;
+  hence thesis by Z,XXREAL_1:3;
+  end;
+  suppose ex r st P[r];
+   then consider r such that
+W3:  r in A and
+W4:  r > x;
+B: min A in A by Def5;
+   inf A <= x by Z,XXREAL_1:3;
+   then
+A: x in [.inf A,r.] by W4,XXREAL_1:1;
+   [.inf A,r.] c= A by W3,B,Def12;
+  hence thesis by A;
+  end;
+ end;
+
+theorem Th82:
+ for A being non left_end non right_end non empty connected
+        (ext-real-membered set)
+  holds A =].inf A,sup A.[
+proof
+ let A be non left_end non right_end non empty connected
+        (ext-real-membered set);
+ let x;
+ thus x in A implies x in ].inf A,sup A.[
+  proof assume
+Z: x in A;
+   then
+A:  inf A <= x by Th3;
+    x <> inf A by Z,Def5;
+    then
+C:   inf A < x by A,XXREAL_0:1;
+B:  x <= sup A by Z,Th3B;
+    x <> sup A by Z,Def6;
+    then x < sup A by B,XXREAL_0:1;
+   hence thesis by C,XXREAL_1:4;
+  end;
+ assume
+Z:  x in ].inf A,sup A.[;
+   defpred P[ext-real number] means $1 in A & $1 < x;
+   defpred Q[ext-real number] means $1 in A & $1 > x;
+ per cases;
+ suppose not ex r st P[r];
+   then x is LowerBound of A by Def2;
+   then x <= inf A by Def4;
+  hence thesis by Z,XXREAL_1:4;
+ end;
+ suppose not ex r st Q[r];
+   then x is UpperBound of A by Def1;
+   then sup A <= x by Def3;
+  hence thesis by Z,XXREAL_1:4;
+ end;
+ suppose that
+S1: ex r st P[r] and
+S2: ex r st Q[r];
+  consider r such that
+W3:  r in A and
+W4:  r < x by S1;
+  consider s such that
+W5:  s in A and
+W6:  s > x by S2;
+A: x in [.r,s.] by W4,W6,XXREAL_1:1;
+   [.r,s.] c= A by W3,W5,Def12;
+ hence x in A by A;
+ end;
+ end;
+
+theorem Th83:
+ for A being non left_end non right_end connected (ext-real-membered set)
+  ex r,s st r <= s & A =].r,s.[
+proof let A be non left_end non right_end connected (ext-real-membered set);
+ per cases;
+ suppose
+S:  A is empty;
+  take -infty,-infty;
+ thus -infty <= -infty & A =].-infty,-infty.[ by S;
+ end;
+ suppose
+S: A is not empty;
+  take inf A, sup A;
+ thus inf A <= sup A by S,Th40;
+ thus thesis by S,Th82;
+ end;
+end;
+
+theorem Th84:
+ A is connected implies
+  for x,y,r st x in A & y in A & x <= r & r <= y holds r in A
+ proof assume
+Z: A is connected;
+  let x,y,r such that
+Z1: x in A and
+Z2: y in A and
+Z3: x <= r and
+Z4: r <= y;
+A: [.x,y.] c= A by Z,Z1,Z2,Def12;
+   r in [.x,y.] by Z3,Z4,XXREAL_1:1;
+  hence r in A by A;
+ end;
+
+theorem Th85:
+ A is connected implies
+  for x,r st x in A & x <= r & r < sup A holds r in A
+ proof assume
+Z: A is connected;
+  let x,r such that
+Z1: x in A and
+Z3: x <= r and
+Z4: r < sup A;
+  per cases;
+  suppose ex y st y in A & r < y;
+  hence thesis by Z,Z1,Z3,Th84;
+  end;
+  suppose not ex y st y in A & r < y;
+   then r is UpperBound of A by Def1;
+   hence thesis by Z4,Def3;
+  end;
+ end;
+
+theorem Th86:
+ A is connected implies
+  for x,r st x in A & inf A < r & r <= x holds r in A
+ proof assume
+Z: A is connected;
+  let x,r such that
+Z1: x in A and
+Z4: inf A < r and
+Z3: r <= x;
+  per cases;
+  suppose ex y st y in A & r > y;
+  hence thesis by Z,Z1,Z3,Th84;
+  end;
+  suppose not ex y st y in A & r > y;
+   then r is LowerBound of A by Def2;
+   hence thesis by Z4,Def4;
+  end;
+ end;
+
+theorem Th87:
+ A is connected implies
+  for r st inf A < r & r < sup A holds r in A
+ proof assume
+Z: A is connected;
+  let r such that
+Z4: inf A < r and
+Z3: r < sup A;
+  per cases;
+  suppose ex y st y in A & r > y;
+  hence thesis by Z,Z3,Th85;
+  end;
+  suppose not ex y st y in A & r > y;
+   then r is LowerBound of A by Def2;
+   hence thesis by Z4,Def4;
+  end;
+ end;
+
+theorem Th88:
+ (for x,y,r st x in A & y in A & x < r & r < y holds r in A)
+   implies A is connected
+ proof assume
+Z: for x,y,r st x in A & y in A & x < r & r < y holds r in A;
+  let x,y such that
+Z1: x in A & y in A;
+  let r;
+  assume
+Z2:   r in [.x,y.];
+   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+   then
+pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 2;
+  per cases by pc, TARSKI:def 2;
+  suppose r = x;
+  hence r in A by Z1;
+  end;
+  suppose r = y;
+  hence r in A by Z1;
+  end;
+  suppose r in ].x,y.[;
+   then x < r & r < y by XXREAL_1:4;
+  hence r in A by Z,Z1;
+  end;
+ end;
+
+theorem Th89:
+ (for x,r st x in A & x < r & r < sup A holds r in A)
+   implies A is connected
+ proof assume
+Z: for x,r st x in A & x < r & r < sup A holds r in A;
+  let x,y such that
+Z1: x in A & y in A;
+  let r;
+  assume
+Z2:   r in [.x,y.];
+   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+   then
+pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 2;
+  per cases by pc, TARSKI:def 2;
+  suppose r = x;
+  hence r in A by Z1;
+  end;
+  suppose r = y;
+  hence r in A by Z1;
+  end;
+  suppose
+S:  r in ].x,y.[;
+   then
+A:  x < r by XXREAL_1:4;
+B:  r < y by S,XXREAL_1:4;
+    y <= sup A by Z1,Th3B;
+    then r < sup A by B,XXREAL_0:2;
+  hence r in A by A,Z,Z1;
+  end;
+ end;
+
+theorem Th90:
+ (for y,r st y in A & inf A < r & r < y holds r in A)
+   implies A is connected
+ proof assume
+Z: for y,r st y in A & inf A < r & r < y holds r in A;
+  let x,y such that
+Z1: x in A & y in A;
+  let r;
+  assume
+Z2:   r in [.x,y.];
+   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+   then
+pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 2;
+  per cases by pc, TARSKI:def 2;
+  suppose r = x;
+  hence r in A by Z1;
+  end;
+  suppose r = y;
+  hence r in A by Z1;
+  end;
+  suppose
+S:  r in ].x,y.[;
+   then
+A:  x < r by XXREAL_1:4;
+B:  r < y by S,XXREAL_1:4;
+    inf A <= x by Z1,Th3;
+    then inf A < r by A,XXREAL_0:2;
+  hence r in A by B,Z,Z1;
+  end;
+ end;
+
+theorem Th91:
+ (for r st inf A < r & r < sup A holds r in A)
+   implies A is connected
+ proof assume
+Z: for r st inf A < r & r < sup A holds r in A;
+  let x,y such that
+Z1: x in A & y in A;
+  let r;
+  assume
+Z2:   r in [.x,y.];
+   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+   then
+pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 2;
+  per cases by pc, TARSKI:def 2;
+  suppose r = x;
+  hence r in A by Z1;
+  end;
+  suppose r = y;
+  hence r in A by Z1;
+  end;
+  suppose
+S:  r in ].x,y.[;
+   then
+A:  x < r by XXREAL_1:4;
+B:  r < y by S,XXREAL_1:4;
+    inf A <= x by Z1,Th3;
+    then
+E:   inf A < r by A,XXREAL_0:2;
+    y <= sup A by Z1,Th3B;
+    then r < sup A by B,XXREAL_0:2;
+  hence r in A by Z,E;
+  end;
+ end;
+
+theorem Th89:
+ (for x,y,r st x in A & y in A & x <= r & r <= y holds r in A)
+   implies A is connected
+ proof assume for x,y,r st x in A & y in A & x <= r & r <= y holds r in A;
+  then for x,y,r st x in A & y in A & x < r & r < y holds r in A;
+  hence thesis by Th88;
+ end;
+
+theorem
+ A is connected & B is connected & A meets B implies
+      A \/ B is connected
+ proof assume that
+Z1: A is connected and
+Z2: B is connected;
+  given z such that
+G1: z in A and
+G2: z in B;
+   for x,y,r st x in A \/ B & y in A \/ B & x <= r & r <= y holds r in A \/ B
+    proof let x,y,r such that
+Z3:   x in A \/ B and
+Z4:   y in A \/ B and
+Z5:   x <= r and
+Z6:   r <= y;
+     per cases by Z3,Z4,XBOOLE_0:def 2;
+     suppose x in A & y in A;
+      then r in A by Z1,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+     suppose that
+S1:   x in A and
+S2:   y in B;
+      per cases;
+       suppose r <= z;
+        then r in A by Z1,S1,G1,Z5,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+       suppose z <= r;
+        then r in B by Z2,S2,G2,Z6,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+     end;
+     suppose that
+S1:   x in B and
+S2:   y in A;
+      per cases;
+       suppose z <= r;
+        then r in A by Z1,S2,G1,Z6,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+       suppose r <= z;
+        then r in B by Z2,S1,G2,Z5,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+     end;
+     suppose x in B & y in B;
+      then r in B by Z2,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+    end;
+  hence A \/ B is connected by Th89;
+ end;
+
+theorem
+ A is connected & B is left_end connected & sup A = inf B implies
+   A \/ B is connected
+ proof assume that
+Z1: A is connected and
+Z2: B is left_end connected and
+Z3: sup A = inf B;
+   set z = inf B;
+G2: z in B by Z2,Def5;
+   for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
+    proof let x,y,r such that
+Z3':   x in A \/ B and
+Z4:   y in A \/ B and
+Z5:   x < r and
+Z6:   r < y;
+     per cases by Z3',Z4,XBOOLE_0:def 2;
+     suppose x in A & y in A;
+      then r in A by Z1,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+     suppose that
+S1:   x in A and
+S2:   y in B;
+      per cases;
+       suppose r < z;
+        then r in A by Z1,S1,Z5,Th85,Z3;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+       suppose z <= r;
+        then r in B by Z2,S2,G2,Z6,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+     end;
+     suppose that
+S1:   x in B and
+S2:   y in A;
+      per cases;
+       suppose
+S:      z < r;
+        y <= z by S2,Z3,Th3B;
+       hence r in A \/ B by S,Z6,XXREAL_0:2;
+       end;
+       suppose r <= z;
+        then r in B by Z2,S1,G2,Z5,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+     end;
+     suppose x in B & y in B;
+      then r in B by Z2,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+    end;
+  hence A \/ B is connected by Th88;
+ end;
+
+theorem
+ A is right_end connected & B is connected & sup A = inf B implies
+   A \/ B is connected
+ proof assume that
+Z1: A is right_end connected and
+Z2: B is connected and
+Z3: sup A = inf B;
+   set z = inf B;
+G1: z in A by Z1,Def6,Z3;
+   for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
+    proof let x,y,r such that
+Z3:   x in A \/ B and
+Z4:   y in A \/ B and
+Z5:   x < r and
+Z6:   r < y;
+     per cases by Z3,Z4,XBOOLE_0:def 2;
+     suppose x in A & y in A;
+      then r in A by Z1,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+     suppose that
+S1:   x in A and
+S2:   y in B;
+      per cases;
+       suppose r <= z;
+        then r in A by Z1,S1,G1,Z5,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+       suppose z < r;
+        then r in B by Z2,S2,Z6,Th86;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+     end;
+     suppose that
+S1:   x in B and
+S2:   y in A;
+      per cases;
+       suppose z <= r;
+        then r in A by Z1,S2,G1,Z6,Th84;
+       hence r in A \/ B by XBOOLE_0:def 2;
+       end;
+       suppose
+S:      r < z;
+        z <= x by S1,Th3;
+       hence r in A \/ B by S,Z5,XXREAL_0:2;
+       end;
+     end;
+     suppose x in B & y in B;
+      then r in B by Z2,Z5,Z6,Th84;
+     hence r in A \/ B by XBOOLE_0:def 2;
+     end;
+    end;
+  hence A \/ B is connected by Th88;
+ end;
+

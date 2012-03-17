@@ -37,20 +37,19 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="YELLOW_3"/>
 <ArticleID name="WAYBEL_2"/>
-<ArticleID name="COMPTS_1"/>
 <ArticleID name="YELLOW_6"/>
 <ArticleID name="WAYBEL_9"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="11">
+<Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
+<Adjective nr="30"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -65,7 +64,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="26">
+<Pred kind="V" nr="31">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -201,7 +200,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="82">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

@@ -16,12 +16,12 @@ environ
  constructors PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_3, SQUARE_1, NAT_1, FINSEQ_2,
       FUNCT_6, TREES_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, TREES_1, TREES_2, BINOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
       FUNCT_3, FUNCOP_1, FUNCT_6, FINSEQ_2, FINSEQ_3, ENUMSET1, TREES_1,
-      TREES_2, REAL_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
+      TREES_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
       XXREAL_0, ORDINAL1, CARD_1, CARD_2;
  schemes NAT_1, CARD_3, XBOOLE_0, FINSEQ_1;
 
@@ -1902,7 +1902,7 @@ A3: <*n1*> = <*i*> & i < n1;
   end;
   then not (len p < len q or len p > len q) by A1,A2;
   then
-A4: len p = len q by REAL_1:def 5;
+A4: len p = len q by XXREAL_0:1;
   now
     let i be Nat;
     assume
@@ -1956,7 +1956,7 @@ A1: p = {} or ex n,q st n < len {} & q in {} .(n+1) & p = <*n*>^q
     assume not thesis;
     then consider n,q such that
 A2: n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56;
-    thus contradiction by A2,CARD_1:47;
+    thus contradiction by A2;
   end;
   assume p in elementary_tree 0;
   then p = {} by TARSKI:def 1,TREES_1:56;
@@ -2055,7 +2055,7 @@ A9:     n = len p;
         then (p^<*T*>).(n+1) = T & r = r by FINSEQ_1:59;
         hence q in W by A2,A4,A9,TREES_1:def 12;
       end;
-      hence thesis by A5,A6,REAL_1:def 5;
+      hence thesis by A5,A6,XXREAL_0:1;
     end;
     hence thesis by A3,TREES_1:47;
   end;
@@ -2132,7 +2132,7 @@ A4: (elementary_tree (len p+1))|<*len p*> c= elementary_tree 0
 A5: n < len p+1 & <*len p*>^q = <*n*> by TREES_1:57;
     len <*n*> = 1 & len <*len p*> = 1 by FINSEQ_1:57;
     then 1+len q = 1+0 by A5,FINSEQ_1:35;
-    then x = {} by CARD_2:59;
+    then x = {};
     hence thesis by TREES_1:47;
   end;
   now
@@ -2222,7 +2222,7 @@ A14:    r in W2 by A1,A5,Def15;
         then not <*len p*> is_a_proper_prefix_of <*n*>^s by XBOOLE_0:def 8;
         hence r in W by A3,A5,A14,TREES_1:def 12;
       end;
-      hence thesis by A1,A5,A6,A7,A10,REAL_1:def 5;
+      hence thesis by A1,A5,A6,A7,A10,XXREAL_0:1;
     end;
     hence thesis by A4,TREES_1:47;
   end;
@@ -2248,7 +2248,7 @@ A21: n < len w2 & s in w2.(n+1) & r = <*n*>^s by A1,A15,A17,A19,Def15;
   (n = len p implies s = {}) & {} in T1
   by A1,A15,A16,A20,A21,Def15,TREES_1:33,47;
   then n <> len p & (n <= len p or n >= len p) by A1,A16,A20,A21,Def15;
-  then n < len p or n > len p & 1<=1 by REAL_1:def 5;
+  then n < len p or n > len p & 1<=1 by XXREAL_0:1;
   then 1 <= 1+n & 1+n = n+1 & n+1 <= len p & w1 = p^(<*T1*>^q) &
   w2 = p^(<*T2*>^q) or len p+1 < n+1 & n+1 <= len w1
   by A1,A21,FINSEQ_1:45,NAT_1:11,13,XREAL_1:8;
@@ -2370,7 +2370,13 @@ registration
     defpred X[set] means
     for p being FinTree-yielding FinSequence st len p = $1 holds
     tree(p) is finite Tree;
-A1: X[0] by Th55,CARD_2:59;
+A1: X[0]
+    proof
+     let p be FinTree-yielding FinSequence;
+     assume len p = 0;
+      then p = {};
+     hence thesis by Th55;
+    end;
 A2: X[n] implies X[n+1]
     proof
       assume
@@ -2378,7 +2384,7 @@ A3:   for p being FinTree-yielding FinSequence st len p = n holds
       tree(p) is finite Tree;
       let p be FinTree-yielding FinSequence such that
 A4:   len p = n+1;
-      p <> {} by A4,CARD_1:47;
+      p <> {} by A4;
       then consider q, x such that
 A5:   p = q^<*x*> by FINSEQ_1:63;
       reconsider q as FinTree-yielding FinSequence by A5,Th28;
@@ -2497,7 +2503,7 @@ proof
   let T1,T2 be Tree;
   len {} = 0 & <*T1*> = {}^<*T1*> & <*T2*> = {}^<*T2*> &
   <*T1*> = <*T1*>^{} & <*T2*> = <*T2*>^{}
-   by CARD_1:47,FINSEQ_1:47;
+   by FINSEQ_1:47;
   hence thesis by Th23,Th60;
 end;
 
@@ -2525,7 +2531,7 @@ A1: len p = 2 & p.1 = T1 & p.2 = T2 by FINSEQ_1:61;
 A2: n < len p & q in p.(n+1) & x = <*n*>^q by Def15;
     1+1 = 2;
     then n <= 1 by A1,A2,NAT_1:13;
-    then n = 1 or n < 0+1 by REAL_1:def 5;
+    then n = 1 or n < 0+1 by XXREAL_0:1;
     then n = 1 or n <= 0 & n >= 0 by NAT_1:13;
     then n = 1 or n = 0;
     hence thesis by A1,A2;
@@ -2550,7 +2556,7 @@ proof
   let T1,T2 be Tree;
   tree(T1,T2) = tree(<*T1,T2*>) & <*T1,T2*> = <*T1*>^<*T2*> &
   <*T1*> = {}^<*T1*> & len {} = 0
-   by CARD_1:47,FINSEQ_1:47,def 9;
+   by FINSEQ_1:47,def 9;
   hence thesis by Th23,Th54;
 end;
 
@@ -2627,7 +2633,7 @@ proof
   <*T1,T2*>^{} = <*T1,T2*> & <*T1,T*>^{} = <*T1,T*> & len <*T1*> = 1 &
   <*T1,T2*> = <*T1*>^<*T2*> & <*T1,T*> = <*T1*>^<*T*> &
   <*T,T2*> = <*T*>^<*T2*>
-   by CARD_1:47,FINSEQ_1:47,57,def 9;
+   by FINSEQ_1:47,57,def 9;
   hence thesis by Th23,Th60;
 end;
 
@@ -2650,7 +2656,7 @@ A1: for t being finite Tree st t in rng w holds height t <= n;
   consider p being FinSequence of NAT such that
 A2: p in tree(w) & len p = height tree(w) by TREES_1:def 15;
 A3: p = {} & len {} = 0 or ex n,q st n < len w & q in w.(n+1) & p = <*n*>^q
-  by A2,Def15,CARD_1:47;
+  by A2,Def15;
   now
     given k,q such that
 A4: k < len w & q in w.(k+1) & p = <*k*>^q;

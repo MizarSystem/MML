@@ -20,7 +20,8 @@ environ
       BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, EQREL_1,
-      MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN, GOBRD13;
+      MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN, GOBRD13,
+      CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1, FINSEQ_2,
       SUBSET_1, XBOOLEAN;
@@ -28,7 +29,7 @@ environ
       XBOOLE_0, XBOOLE_1, ORDERS_2, STRUCT_0, ENUMSET1, BAGORDER, WAYBEL_4,
       POLYNOM1, FINSET_1, SUBSET_1, SETFAM_1, MSSUBFAM, TREES_1, FUNCT_1,
       FINSEQ_4, FINSEQ_1, FINSEQ_2, FUNCOP_1, CARD_3, BINARI_3, NAT_1, EUCLID,
-      PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, REAL_1, FUNCT_4, FINSUB_1,
+      PBOOLE, FUNCT_2, MATRLIN, BINARITH, POWER, FUNCT_4, FINSUB_1,
       PARTFUN1, NUMBERS, XREAL_1, ORDERS_1, XXREAL_0, ORDINAL1, CARD_2;
  schemes FINSET_1, NAT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, XBOOLE_0,
  CLASSES1;
@@ -666,14 +667,15 @@ A3: now
     let n be Element of NAT such that
 A4: P[n];
     now
-      assume i < n+1;
+      assume
+Z:      i < n+1;
       then
 A5:   i <= n by NAT_1:13;
-      per cases by A5,REAL_1:def 5;
+      per cases by A5,XXREAL_0:1;
       suppose
 A6:     n = 0;
         then
-A7:     i = 0 by A5;
+A7:     i = 0 by Z,NAT_1:13;
         0*n = n |-> 0 by EUCLID:def 4;
         then dom 0*n =Seg n by FUNCOP_1:19;
         then
@@ -728,7 +730,7 @@ A21:  i < n+1;
 A22:  i+1 <=j & j <= n+1;
 A23:  i <= n by A21,NAT_1:13;
 A24:  0+1 <= i+1 by XREAL_1:8;
-      per cases by A23,REAL_1:def 5;
+      per cases by A23,XXREAL_0:1;
       suppose
 A25:    n = 0;
 A26:    dom B(n+1) = Seg (n+1) by Lm1;
@@ -749,10 +751,10 @@ A29:    n > 0 & n > i;
         then reconsider n' = n as non empty Element of NAT;
 A30:    2 to_power i < 2 to_power n by A29,POWER:44;
         thus B(n+1).(j+1) = FALSE
-        proof j<n+1 or j=n+1 by A22,REAL_1:def 5;
+        proof j<n+1 or j=n+1 by A22,XXREAL_0:1;
           then
 A31:      j <= n or j = n+1 by NAT_1:13;
-          per cases by A31,REAL_1:def 5;
+          per cases by A31,XXREAL_0:1;
           suppose
 A32:        j = n+1;
 A33:        dom B(n+1) = Seg (n+1) by Lm1;
@@ -802,10 +804,9 @@ A44:  i < n+1;
       let j be Element of NAT such that
 A45:  1 <=j & j < i+1;
 A46:  i <= n by A44,NAT_1:13;
-      per cases by A46,REAL_1:def 5;
+      per cases by A46,XXREAL_0:1;
       suppose n = 0;
-        then 0 <= i & i <= 0 by A44,NAT_1:13;
-        then i = 0;
+        then i = 0 by A44,NAT_1:13;
         hence B(n+1).j = FALSE by A45;
       end;
       suppose
@@ -842,7 +843,7 @@ A54: for n being Element of NAT holds P[n] from NAT_1:sch 1(A41,A42);
 A55: j in Seg n and
 A56: j<>i+1;
 A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
-  per cases by A56,A57,REAL_1:def 5;
+  per cases by A56,A57,XXREAL_0:1;
   suppose j < i+1;
     hence B.j = 0 by A1,A54,A57;
   end;
@@ -1543,18 +1544,16 @@ A1: x in F;
   reconsider S = { y where y is Element of FF: x <= y } as set;
   set DOX = Dependencies-Order X;
 A2: field DOX = [:bool X, bool X:] by Th19;
-  S c= field DOX
+B3: S c= field DOX
   proof
     let a be set;
     assume a in S;
     then ex b be Element of FF st a = b & x <= b;
     hence a in field DOX by A2;
   end;
-  then
-A3: S is finite Subset of field DOX by A2;
   x in S by A1;
   then consider m being Element of S such that
-A4: m is_maximal_wrt S, DOX by A3,Th2;
+A4: m is_maximal_wrt S, DOX by B3,Th2,A2;
   m in S by A4,WAYBEL_4:def 24;
   then consider y being Element of FF such that
 A5: m = y & x <= y;
@@ -3152,8 +3151,8 @@ A10:  x = [A,B] and A >|> B, BD;
   end;
   suppose
 A11: G is non empty;
-    then reconsider n =len H as non empty Element of NAT
-    by A3,CARD_2:59,RELAT_1:60;
+    then H is non empty by A3;
+    then reconsider n =len H as non empty Element of NAT;
 A12: dom H = Seg n by FINSEQ_1:def 3;
     defpred R[set, Element of n-tuples_on BOOLEAN ] means
     for i being Element of NAT st i in Seg n holds
@@ -3919,9 +3918,8 @@ A34:    Lf /\ A <> {} by A14,A32,A33;
         then consider a being set such that
 A35:    a in Lf /\ A by XBOOLE_0:def 1;
 A36:    a in A & a in Lf by A35,XBOOLE_0:def 3;
-A37:    dom (Lg --> Lg) = {} by A31;
 A38:    (g|A).a = g.a by A36,FUNCT_1:72
-          .= ((X --> 0) +* {}).a by A18,A37,RELAT_1:64
+          .= ((X --> 0) +* {}).a by A18,A31
           .= (X --> 0).a by FUNCT_4:22
           .= {} by A35,FUNCOP_1:13;
         (f|A).a = f.a by A36,FUNCT_1:72
@@ -3938,9 +3936,8 @@ A42:    Lg /\ A <> {} by A14,A40,A41;
         then consider a being set such that
 A43:    a in Lg /\ A by XBOOLE_0:def 1;
 A44:    a in A & a in Lg by A43,XBOOLE_0:def 3;
-A45:    dom (Lf --> Lf) = {} by A39;
 A46:    (f|A).a = f.a by A44,FUNCT_1:72
-          .= ((X --> 0) +* {}).a by A16,A45,RELAT_1:64
+          .= ((X --> 0) +* {}).a by A16,A39
           .= (X --> 0).a by FUNCT_4:22
           .= {} by A43,FUNCOP_1:13;
         (g|A).a = g.a by A44,FUNCT_1:72
@@ -4219,9 +4216,8 @@ A6:   [B\/C, D] in F;
     proof
       let A, B, C be Subset of X such that
 A7:   [A, B] in F;
-A8:   F is (DC3) by A1,A3;
       A c= A\/C by XBOOLE_1:7;
-      then [A\/C, A] in F by A8,Def16;
+      then [A\/C, A] in F by A1,A3,Def16;
       hence [A\/C, B] in F by A2,A7,Th20;
     end;
   end;

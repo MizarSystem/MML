@@ -30,11 +30,11 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
@@ -43,23 +43,23 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="343">
+<Func kind="K" nr="348">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="18">
-<Func kind="K" nr="313">
+<Adjective nr="19">
+<Func kind="K" nr="318">
 <Num nr="1"/>
 </Func>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="20">
-<Func kind="K" nr="313">
+<Adjective nr="21">
+<Func kind="K" nr="318">
 <Num nr="1"/>
 </Func>
-<Func kind="K" nr="42"/>
+<Func kind="K" nr="43"/>
 </Adjective>
 </Cluster>
 </FCluster>

@@ -7,86 +7,33 @@
 environ
 
  vocabularies FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, TARSKI, WELLORD1,
-      CAT_1, ARYTM, GRAPH_1, AMI_1;
+      CAT_1, ARYTM, GRAPH_1, AMI_1, CAT_4, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, NUMBERS, BINOP_1, FUNCOP_1, GRAPH_1;
+      FUNCT_2, NUMBERS, BINOP_1, FUNCOP_1,
+      STRUCT_0, GRAPH_1;
  constructors PARTFUN1, WELLORD2, BINOP_1, PBOOLE, GRAPH_1;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0;
  requirements SUBSET, BOOLE;
- definitions TARSKI, FUNCOP_1, BINOP_1;
+ definitions TARSKI, FUNCOP_1, BINOP_1, GRAPH_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, FUNCOP_1, SUBSET_1,
       WELLORD2, RELAT_1, RELSET_1, XBOOLE_1;
  schemes FUNCT_2;
 
-begin   :: Auxiliary theorems
-
-reserve a,b,c,o,m for set;
-
-canceled 3;
-
-theorem Th4:
-  for X,Y,Z being set, D being non empty set, f being Function of X,D
-  st Y c= X & f.:Y c= Z holds f|Y is Function of Y,Z
-proof
-  let X,Y,Z be set, D be non empty set, f be Function of X,D;
-  assume that
-A1: Y c= X and
-A2: f.:Y c= Z;
-  dom f = X by FUNCT_2:def 1;
-  then
-A3: dom(f|Y) = Y by A1,RELAT_1:91;
-A4: rng(f|Y) c= Z by A2,RELAT_1:148;
-  now
-    assume Z = {};
-    then rng(f|Y) = {} by A4,XBOOLE_1:3;
-    hence Y = {} by A3,RELAT_1:65;
-  end;
-  hence f|Y is Function of Y,Z by A3,A4,FUNCT_2:def 1,RELSET_1:11;
-end;
+begin :: Structure of a Category
 
 definition
-  let a,b,c;
-  redefine func (a,b).-->c -> PartFunc of [:{a},{b}:],{c};
-  coherence by ZFMISC_1:35;
-end;
-
-canceled 2;
-
-theorem
-  dom (a,b).-->c = [:{a},{b}:]
-proof
-  dom (a,b).-->c = {[a,b]} by FUNCOP_1:19;
-  hence dom (a,b).-->c = [:{a},{b}:] by ZFMISC_1:35;
-end;
-
-theorem
-  ((a,b).-->c).(a,b) = c by FUNCOP_1:86;
-
-theorem Th9:
-  for x being Element of {a} for y being Element of {b}
-  holds ((a,b).-->c).(x,y) = c
-proof
-  let x be Element of {a};
-  let y be Element of {b};
-  x = a & y = b by TARSKI:def 1;
-  hence thesis by FUNCOP_1:86;
-end;
-
-:: Structure of a Category
-
-definition
-  struct(MultiGraphStruct) CatStr (# Vertices,Edges -> set,
-    Source,Target -> Function of the Edges, the Vertices,
-    Comp -> PartFunc of [:the Edges, the Edges :],the Edges,
-    Id -> Function of the Vertices, the Edges #);
+  struct(MultiGraphStruct) CatStr (# carrier,carrier' -> set,
+    Source,Target -> Function of the carrier', the carrier,
+    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
+    Id -> Function of the carrier, the carrier' #);
 end;
 
 reserve C for CatStr;
 
 definition
   let C;
-  mode Object of C is Element of the Vertices of C;
-  mode Morphism of C is Element of the Edges of C;
+  mode Object of C is Element of the carrier of C;
+  mode Morphism of C is Element of the carrier' of C;
 end;
 
 reserve a,b,c,d for Object of C;
@@ -94,47 +41,17 @@ reserve f,g for Morphism of C;
 
 :: Domain and codomain of a Morphism
 
-definition let C;
- attr C is void means
-:Def1: the Vertices of C = {} or the Edges of C = {};
-end;
-
-definition
-  let m,o;
-  redefine
-  func m .--> o -> Function of {m}, {o};
-  coherence;
-end;
-
 registration
- cluster non void CatStr;
+ cluster non void non empty CatStr;
  existence
   proof
-    take CatStr(# {0},{1},1.-->0,1.-->0,(1,1).-->1,0.-->1 #);
-    thus thesis by Def1;
+    take CatStr(# {0},{1},1:->0,1:->0,(1,1):->1,0:->1 #);
+    thus thesis;
   end;
 end;
 
-registration let C be non void CatStr;
- cluster the Vertices of C -> non empty;
- coherence by Def1;
- cluster the Edges of C -> non  empty;
- coherence by Def1;
-end;
-
 definition
-  let C be non void CatStr, f be Morphism of C;
-  func dom f -> Object of C equals
-
-  (the Source of C).f;
-  correctness;
-  func cod f -> Object of C equals
-
-  (the Target of C).f;
-  correctness;
-end;
-
-definition
+ canceled 3;
   let C,f,g;
   assume
 A1: [g,f] in dom(the Comp of C);
@@ -145,7 +62,7 @@ A1: [g,f] in dom(the Comp of C);
 end;
 
 definition
-  let C be non void CatStr, a be Object of C;
+  let C be non void non empty CatStr, a be Object of C;
   func id (a) -> Morphism of C equals
 
   ( the Id of C ).a;
@@ -153,13 +70,13 @@ definition
 end;
 
 definition
-  let C be non void CatStr, a,b be Object of C;
-  func Hom(a,b) -> Subset of the Edges of C equals
+  let C be non void non empty CatStr, a,b be Object of C;
+  func Hom(a,b) -> Subset of the carrier' of C equals
   { f where f is Morphism of C : dom(f)=a & cod(f)=b };
   correctness
   proof
     set M = { f where f is Morphism of C : dom(f)=a & cod(f)=b };
-    M c= the Edges of C
+    M c= the carrier' of C
     proof
       let x be set;
       assume x in M;
@@ -170,11 +87,11 @@ definition
   end;
 end;
 
-canceled 8;
-
-reserve C for non void CatStr,
+reserve C for non void non empty CatStr,
         f,g for Morphism of C,
         a,b,c,d for Object of C;
+
+canceled 17;
 
 theorem Th18:
   f in Hom(a,b) iff dom(f)=a & cod(f)=b
@@ -288,50 +205,50 @@ end;
 
 Lm1: now
   let o,m be set;
-  let C be non void CatStr such that
-A1: C = CatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m #);
+  let C be non void non empty CatStr such that
+A1: C = CatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m #);
   set CP = the Comp of C, CD = the Source of C, CC = the Target of C,
   CI = the Id of C;
-  thus for f,g being Element of the Edges of C holds
+  thus for f,g being Element of the carrier' of C holds
   [g,f] in dom CP iff CD.g=CC.f
   proof
-    let f,g be Element of the Edges of C;
+    let f,g be Element of the carrier' of C;
     f = m & g = m & dom CP = {[m,m]} by A1,FUNCOP_1:19,TARSKI:def 1;
     hence thesis by A1,TARSKI:def 1;
   end;
-  thus for f,g being Element of the Edges of C
+  thus for f,g being Element of the carrier' of C
   st CD.g=CC.f holds CD.(CP.[g,f]) = CD.f & CC.(CP.[g,f]) = CC.g
   proof
-    let f,g be Element of the Edges of C;
-    CP.(g,f) = m by A1,Th9;
-    then reconsider gf = CP.[g,f] as Element of the Edges of C by A1,
+    let f,g be Element of the carrier' of C;
+    CP.(g,f) = m by A1,FUNCOP_1:92;
+    then reconsider gf = CP.[g,f] as Element of the carrier' of C by A1,
     TARSKI:def 1;
     CD.f = o & CC.g = o & CD.gf = o & CC.gf = o by A1,FUNCT_2:65;
     hence thesis;
   end;
-  thus for f,g,h being Element of the Edges of C
+  thus for f,g,h being Element of the carrier' of C
   st CD.h = CC.g & CD.g = CC.f holds CP.[h,CP.[g,f]] = CP.[CP.[h,g],f]
   proof
-    let f,g,h be Element of the Edges of C;
-    CP.(g,f) = m & CP.(h,g) = m by A1,Th9;
-    then reconsider gf = CP.(g,f),hg = CP.(h,g) as Element of the Edges of
+    let f,g,h be Element of the carrier' of C;
+    CP.(g,f) = m & CP.(h,g) = m by A1,FUNCOP_1:92;
+    then reconsider gf = CP.(g,f),hg = CP.(h,g) as Element of the carrier' of
     C by A1,TARSKI:def 1;
-    CP.(h,gf) = m & CP.(hg,f) = m by A1,Th9;
+    CP.(h,gf) = m & CP.(hg,f) = m by A1,FUNCOP_1:92;
     hence thesis;
   end;
-  let b be Element of the Vertices of C;
+  let b be Element of the carrier of C;
   b = o by A1,TARSKI:def 1;
   hence CD.(CI.b) = b & CC.(CI.b) = b by A1,FUNCT_2:65;
-  thus for f being Element of the Edges of C st CC.f = b
+  thus for f being Element of the carrier' of C st CC.f = b
   holds CP.(CI.b,f) = f
   proof
-    let f be Element of the Edges of C;
+    let f be Element of the carrier' of C;
     f = m by A1,TARSKI:def 1;
-    hence thesis by A1,Th9;
+    hence thesis by A1,FUNCOP_1:92;
   end;
-  let g be Element of the Edges of C;
+  let g be Element of the carrier' of C;
   g = m by A1,TARSKI:def 1;
-  hence CP.(g,CI.b) = g by A1,Th9;
+  hence CP.(g,CI.b) = g by A1,FUNCOP_1:92;
 end;
 
 :: Category
@@ -340,92 +257,63 @@ definition
   let C be CatStr;
   attr C is Category-like means
   :Def8:
-  (for f,g being Element of the Edges of C holds
+  (for f,g being Element of the carrier' of C holds
   [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C).f)
-  & (for f,g being Element of the Edges of C
+  & (for f,g being Element of the carrier' of C
   st (the Source of C).g=(the Target of C).f holds
   (the Source of C).((the Comp of C).(g,f)) = (the Source of C).f &
   (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g)
-  & (for f,g,h being Element of the Edges of C
+  & (for f,g,h being Element of the carrier' of C
   st (the Source of C).h = (the Target of C).g
    & (the Source of C).g = (the Target of C).f
   holds (the Comp of C).(h,(the Comp of C).(g,f))
   = (the Comp of C).((the Comp of C).(h,g),f) )
-  & (for b being Element of the Vertices of C holds
+  & (for b being Element of the carrier of C holds
   (the Source of C).((the Id of C).b) = b &
   (the Target of C).((the Id of C).b) = b &
-  (for f being Element of the Edges of C st (the Target of C).f = b
+  (for f being Element of the carrier' of C st (the Target of C).f = b
   holds (the Comp of C).((the Id of C).b,f) = f ) &
-  (for g being Element of the Edges of C st (the Source of C).g = b
+  (for g being Element of the carrier' of C st (the Source of C).g = b
   holds (the Comp of C).(g,(the Id of C).b) = g ) );
 end;
 
 registration
-  cluster Category-like non void CatStr;
+  cluster Category-like non void non empty strict CatStr;
   existence
   proof
-    reconsider C = CatStr(# {0},{1},1.-->0,1.-->0,(1,1).-->1,0.-->1 #)
-                  as non void CatStr by Def1;
+    reconsider C = CatStr(# {0},{1},1:->0,1:->0,(1,1):->1,0:->1 #)
+                  as non void non empty CatStr;
     take C;
-    thus (for f,g being Element of the Edges of C holds
+    thus (for f,g being Element of the carrier' of C holds
     [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C).f)
-    & (for f,g being Element of the Edges of C
+    & (for f,g being Element of the carrier' of C
     st (the Source of C).g=(the Target of C).f holds
     (the Source of C).((the Comp of C).(g,f)) = (the Source of C).f &
     (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g)
-    & (for f,g,h being Element of the Edges of C
+    & (for f,g,h being Element of the carrier' of C
     st (the Source of C).h = (the Target of C).g &
     (the Source of C).g = (the Target of C).f
     holds (the Comp of C).(h,(the Comp of C).(g,f))
     = (the Comp of C).((the Comp of C).(h,g),f) )
-    & (for b being Element of the Vertices of C holds
+    & (for b being Element of the carrier of C holds
     (the Source of C).((the Id of C).b) = b &
     (the Target of C).((the Id of C).b) = b &
-    (for f being Element of the Edges of C st (the Target of C).f = b
+    (for f being Element of the carrier' of C st (the Target of C).f = b
     holds (the Comp of C).((the Id of C).b,f) = f ) &
-    (for g being Element of the Edges of C st (the Source of C).g = b
+    (for g being Element of the carrier' of C st (the Source of C).g = b
     holds (the Comp of C).(g,(the Id of C).b) = g ) ) by Lm1;
    thus thesis;
   end;
 end;
 
 definition
-  mode Category is Category-like non void CatStr;
-end;
-
-registration
-  cluster strict Category;
-  existence
-  proof
-    set C = CatStr(# {0},{1},1.-->0,1.-->0,(1,1).-->1,0.-->1 #);
-    reconsider C as non void CatStr by Def1;
-    (for f,g being Element of the Edges of C holds
-    [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C).f)
-    & (for f,g being Element of the Edges of C
-    st (the Source of C).g=(the Target of C).f holds
-    (the Source of C).((the Comp of C).(g,f)) = (the Source of C).f &
-    (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g)
-    & (for f,g,h being Element of the Edges of C
-    st (the Source of C).h = (the Target of C).g &
-    (the Source of C).g = (the Target of C).f
-    holds (the Comp of C).(h,(the Comp of C).(g,f))
-    = (the Comp of C).((the Comp of C).(h,g),f) )
-    & (for b being Element of the Vertices of C holds
-    (the Source of C).((the Id of C).b) = b &
-    (the Target of C).((the Id of C).b) = b &
-    (for f being Element of the Edges of C st (the Target of C).f = b
-    holds (the Comp of C).((the Id of C).b,f) = f ) &
-    (for g being Element of the Edges of C st (the Source of C).g = b
-    holds (the Comp of C).(g,(the Id of C).b) = g ) ) by Lm1;
-    then C is Category by Def8;
-    hence thesis;
-  end;
+  mode Category is Category-like non void non empty CatStr;
 end;
 
 canceled;
 
 theorem
-  for C being non void CatStr st ( for f,g being Morphism of C
+  for C being non void non empty CatStr st ( for f,g being Morphism of C
   holds [g,f] in dom(the Comp of C) iff dom g = cod f )
   & ( for f,g being Morphism of C st dom g = cod f
   holds dom(g*f) = dom f & cod (g*f) = cod g )
@@ -436,7 +324,7 @@ theorem
   (for g being Morphism of C st dom g = b holds g*(id b) = g) )
   holds C is Category-like
 proof
-  let C be non void CatStr;
+  let C be non void non empty CatStr;
   set CP = the Comp of C, CD = the Source of C, CC = the Target of C,
   CI = the Id of C;
   assume that
@@ -448,27 +336,27 @@ A3: for f,g,h being Morphism of C st dom h = cod g & dom g = cod f
 A4: for b being Object of C holds dom id b = b & cod id b = b &
   (for f being Morphism of C st cod f = b holds (id b)*f = f) &
   (for g being Morphism of C st dom g = b holds g*(id b) = g); thus
-A5: for f,g being Element of the Edges of C
+A5: for f,g being Element of the carrier' of C
   holds [g,f] in dom CP iff CD.g=CC.f
   proof
-    let f,g be Element of the Edges of C;
+    let f,g be Element of the carrier' of C;
     CD.g = dom g & CC.f = cod f;
     hence thesis by A1;
   end; thus
-A6: for f,g being Element of the Edges of C st CD.g=CC.f
+A6: for f,g being Element of the carrier' of C st CD.g=CC.f
   holds CD.(CP.(g,f)) = CD.f & CC.(CP.(g,f)) = CC.g
   proof
-    let f,g be Element of the Edges of C such that
+    let f,g be Element of the carrier' of C such that
 A7: CD.g=CC.f;
     CD.g = dom g & CC.f = cod f;
     then dom(g*f)=dom f & cod(g*f)=cod g & [g,f] in dom CP &
     CD.(g*f) = dom(g*f) & CC.(g*f) = cod(g*f) by A2,A5,A7;
     hence thesis by Def4;
   end;
-  thus for f,g,h being Element of the Edges of C
+  thus for f,g,h being Element of the carrier' of C
   st CD.h = CC.g & CD.g = CC.f holds CP.(h,CP.(g,f)) = CP.(CP.(h,g),f)
   proof
-    let f,g,h be Element of the Edges of C such that
+    let f,g,h be Element of the carrier' of C such that
 A8: CD.h = CC.g & CD.g = CC.f;
 A9: CD.h = dom h & CC.g = cod g & CD.g = dom g & CC.f = cod f;
     [g,f] in dom CP & [h,g] in dom CP by A5,A8;
@@ -479,20 +367,20 @@ A10: g*f = CP.(g,f) & h*g = CP.(h,g) by Def4;
     then CP.(h,g*f) = h*(g*f) & CP.(h*g,f) = (h*g)*f by Def4;
     hence thesis by A3,A8,A9,A10;
   end;
-  let b be Element of the Vertices of C;
+  let b be Element of the carrier of C;
   dom id b = b & cod id b = b & id b = CI.b by A4;
   hence CD.(CI.b) = b & CC.(CI.b) = b;
-  thus for f being Element of the Edges of C st CC.f = b
+  thus for f being Element of the carrier' of C st CC.f = b
   holds CP.(CI.b,f) = f
   proof
-    let f be Element of the Edges of C such that
+    let f be Element of the carrier' of C such that
 A11: CC.f = b;
     dom id b = b & id b = CI.b by A4;
     then CD.(CI.b) = b & CC.f = cod f;
     then (id b)*f = f & [CI.b,f] in dom CP by A4,A5,A11;
     hence thesis by Def4;
   end;
-  let g be Element of the Edges of C such that
+  let g be Element of the carrier' of C such that
 A12: CD.g = b;
   cod id b = b & id b = CI.b by A4;
   then CC.(CI.b) = b & CD.g = dom g;
@@ -500,35 +388,37 @@ A12: CD.g = b;
   hence thesis by Def4;
 end;
 
+reserve o,m for set;
+
 definition
   let o,m;
   func 1Cat(o,m) -> strict Category equals
-  CatStr(# {o},{m},m.-->o,m.-->o,(m,m).-->m,o.-->m #);
+  CatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m #);
   correctness
   proof
     consider O,M being non empty set,d,c being (Function of M,O),
     p being (PartFunc of [:M,M:],M),i being (Function of O,M),
     C being CatStr such that
 A1: O = {o} & M = {m} & d = m.-->o & c = m.-->o & p = (m,m).-->m
-    & i = o.-->m & C = CatStr(# {o},{m},m.-->o,m.-->o, (m,m).-->m,o.-->m #);
-    reconsider C as non void CatStr by A1,Def1;
-    (for f,g being Element of the Edges of C holds
+    & i = o.-->m & C = CatStr(# {o},{m},m:->o,m:->o, (m,m):->m,o:->m #);
+    reconsider C as non void non empty CatStr by A1;
+    (for f,g being Element of the carrier' of C holds
     [g,f] in dom(the Comp of C) iff (the Source of C).g=(the Target of C).f)
-    & (for f,g being Element of the Edges of C
+    & (for f,g being Element of the carrier' of C
     st (the Source of C).g=(the Target of C).f holds
     (the Source of C).((the Comp of C).(g,f)) = (the Source of C).f &
     (the Target of C).((the Comp of C).(g,f)) = (the Target of C).g)
-    & (for f,g,h being Element of the Edges of C
+    & (for f,g,h being Element of the carrier' of C
     st (the Source of C).h = (the Target of C).g &
     (the Source of C).g = (the Target of C).f holds
     (the Comp of C).(h,(the Comp of C).(g,f))
     = (the Comp of C).((the Comp of C).(h,g),f) )
-    & (for b being Element of the Vertices of C holds
+    & (for b being Element of the carrier of C holds
     (the Source of C).((the Id of C).b) = b &
     (the Target of C).((the Id of C).b) = b &
-    (for f being Element of the Edges of C st (the Target of C).f = b
+    (for f being Element of the carrier' of C st (the Target of C).f = b
     holds (the Comp of C).((the Id of C).b,f) = f ) &
-    (for g being Element of the Edges of C st (the Source of C).g = b
+    (for g being Element of the carrier' of C st (the Source of C).g = b
     holds (the Comp of C).(g,(the Id of C).b) = g ) ) by A1,Lm1;
     hence thesis by A1,Def8;
   end;
@@ -1417,35 +1307,35 @@ end;
 
 definition
   let C,D;
-  mode Functor of C,D -> Function of the Edges of C,the Edges of D
+  mode Functor of C,D -> Function of the carrier' of C,the carrier' of D
     means
     :Def18:
-    ( for c being Element of the Vertices of C
-    ex d being Element of the Vertices of D
+    ( for c being Element of the carrier of C
+    ex d being Element of the carrier of D
     st it.((the Id of C).c) = (the Id of D).d )
-    & ( for f being Element of the Edges of C holds
+    & ( for f being Element of the carrier' of C holds
     it.((the Id of C).((the Source of C).f)) =
     (the Id of D).((the Source of D).(it.f)) &
     it.((the Id of C).((the Target of C).f)) =
     (the Id of D).((the Target of D).(it.f)) )
-    & ( for f,g being Element of the Edges of C
+    & ( for f,g being Element of the carrier' of C
     st [g,f] in dom(the Comp of C)
     holds it.((the Comp of C).(g,f)) = (the Comp of D).(it.g,it.f) );
   existence
-  proof consider d being Element of the Vertices of D;
-    reconsider F = (the Edges of C) --> (the Id of D).d
-    as Function of the Edges of C,the Edges of D;
+  proof consider d being Element of the carrier of D;
+    reconsider F = (the carrier' of C) --> (the Id of D).d
+    as Function of the carrier' of C,the carrier' of D;
     take F;
-    thus for c being Element of the Vertices of C
-    ex d being Element of the Vertices of D
+    thus for c being Element of the carrier of C
+    ex d being Element of the carrier of D
     st F.((the Id of C).c) = (the Id of D).d by FUNCOP_1:13;
-    thus for f being Element of the Edges of C holds
+    thus for f being Element of the carrier' of C holds
     F.((the Id of C).((the Source of C).f)) =
     (the Id of D).((the Source of D).(F.f)) &
     F.((the Id of C).((the Target of C).f)) =
     (the Id of D).((the Target of D).(F.f))
     proof
-      let f be Element of the Edges of C;
+      let f be Element of the carrier' of C;
 A1:   F.f = (the Id of D).d by FUNCOP_1:13;
       thus F.((the Id of C).((the Source of C).f))
       = (the Id of D).d by FUNCOP_1:13
@@ -1454,7 +1344,7 @@ A1:   F.f = (the Id of D).d by FUNCOP_1:13;
       = (the Id of D).d by FUNCOP_1:13
         .= (the Id of D).((the Target of D).(F.f)) by A1,Def8;
     end;
-    let f,g be Element of the Edges of C such that
+    let f,g be Element of the carrier' of C such that
 A2: [g,f] in dom(the Comp of C);
     set f' = F.f;
     F.g = (the Id of D).d & F.f = (the Id of D).d by FUNCOP_1:13;
@@ -1475,34 +1365,34 @@ end;
 canceled 2;
 
 theorem Th96:
-  for T being Function of the Edges of C,the Edges of D
+  for T being Function of the carrier' of C,the carrier' of D
   st ( for c being Object of C ex d being Object of D st T.(id c) = id d )
   & ( for f being Morphism of C
   holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) )
   & ( for f,g being Morphism of C st dom g = cod f
   holds T.(g*f) = (T.g)*(T.f)) holds T is Functor of C,D
 proof
-  let T be Function of the Edges of C,the Edges of D such that
+  let T be Function of the carrier' of C,the carrier' of D such that
 A1: for c being Object of C ex d being Object of D st T.(id c) = id d and
 A2: for f being Morphism of C
   holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f) and
 A3: for f,g being Morphism of C st dom g = cod f holds T.(g*f) = (T.g)*(T.f);
-  thus for c being Element of the Vertices of C
-  ex d being Element of the Vertices of D
+  thus for c being Element of the carrier of C
+  ex d being Element of the carrier of D
   st T.((the Id of C).c) = (the Id of D).d
   proof
-    let c be Element of the Vertices of C;
+    let c be Element of the carrier of C;
     consider d being Object of D such that
 A4: T.(id c) = id d by A1;
     thus thesis by A4;
   end;
-  thus for f being Element of the Edges of C holds
+  thus for f being Element of the carrier' of C holds
   T.((the Id of C).((the Source of C).f)) =
   (the Id of D).((the Source of D).(T.f)) &
   T.((the Id of C).((the Target of C).f))
       = (the Id of D).((the Target of D).(T.f))
   proof
-    let f be Element of the Edges of C;
+    let f be Element of the carrier' of C;
     (the Source of C).f = dom f & (the Id of C).(dom f) = id dom f &
     (the Source of D).(T.f) = dom(T.f) &
     (the Id of D).(dom (T.f)) = id dom(T.f) &
@@ -1511,7 +1401,7 @@ A4: T.(id c) = id d by A1;
     (the Id of D).(cod (T.f)) = id cod(T.f);
     hence thesis by A2;
   end;
-  let f,g be Element of the Edges of C;
+  let f,g be Element of the carrier' of C;
   assume [g,f] in dom(the Comp of C);
   then
 A5: dom g = cod f by Def8;
@@ -1528,7 +1418,7 @@ theorem Th97:
 proof
   let T be Functor of C,D;
   let c be Object of C;
-  consider d being Element of the Vertices of D such that
+  consider d being Element of the carrier of D such that
 A1: T.((the Id of C).c) = (the Id of D).d by Def18;
   id c = (the Id of C).c & id d = (the Id of D).d;
   hence thesis by A1;
@@ -1555,16 +1445,16 @@ A1: dom g = cod f;
 end;
 
 theorem Th100:
-  for T being Function of the Edges of C,the Edges of D
-  for F being Function of the Vertices of C, the Vertices of D
+  for T being Function of the carrier' of C,the carrier' of D
+  for F being Function of the carrier of C, the carrier of D
   st ( for c being Object of C holds T.(id c) = id(F.c) )
   & ( for f being Morphism of C
   holds F.(dom f) = dom (T.f) & F.(cod f) = cod (T.f) )
   & ( for f,g being Morphism of C st dom g = cod f
   holds T.(g*f) = (T.g)*(T.f)) holds T is Functor of C,D
 proof
-  let T be Function of the Edges of C,the Edges of D;
-  let F be Function of the Vertices of C, the Vertices of D;
+  let T be Function of the carrier' of C,the carrier' of D;
+  let F be Function of the carrier of C, the carrier of D;
   assume that
 A1: for c being Object of C holds T.(id c) = id(F.c) and
 A2: for f being Morphism of C
@@ -1594,52 +1484,52 @@ end;
 
 definition
   let C,D;
-  let F be Function of the Edges of C,the Edges of D;
+  let F be Function of the carrier' of C,the carrier' of D;
   assume
-A1: for c being Element of the Vertices of C
-  ex d being Element of the Vertices of D
+A1: for c being Element of the carrier of C
+  ex d being Element of the carrier of D
   st F.((the Id of C).c) = (the Id of D).d;
-  func Obj(F) -> Function of the Vertices of C,the Vertices of D means
+  func Obj(F) -> Function of the carrier of C,the carrier of D means
   :Def19:
-  for c being Element of the Vertices of C
-  for d being Element of the Vertices of D
+  for c being Element of the carrier of C
+  for d being Element of the carrier of D
   st F.((the Id of C).c) = (the Id of D).d holds it.c = d;
   existence
   proof
-    defpred P[set,set] means for d being Element of the Vertices of D
+    defpred P[set,set] means for d being Element of the carrier of D
     st F.((the Id of C).$1) = (the Id of D).d holds $2 = d;
-A2: for c being Element of the Vertices of C
-    ex y being Element of the Vertices of D st P[c,y]
+A2: for c being Element of the carrier of C
+    ex y being Element of the carrier of D st P[c,y]
     proof
-      let c be Element of the Vertices of C;
-      consider y being Element of the Vertices of D such that
+      let c be Element of the carrier of C;
+      consider y being Element of the carrier of D such that
 A3:   F.((the Id of C).c) = (the Id of D).y by A1;
       take y;
-      let d be Element of the Vertices of D;
+      let d be Element of the carrier of D;
       assume
 A4:   F.((the Id of C).c) = (the Id of D).d;
       id d = (the Id of D).d & id y = (the Id of D).y;
       hence y = d by A3,A4,Th45;
     end;
-    thus ex f being Function of the Vertices of C,the Vertices of D st
-    for x being Element of the Vertices of C holds P[x,f.x] from FUNCT_2:sch 3
+    thus ex f being Function of the carrier of C,the carrier of D st
+    for x being Element of the carrier of C holds P[x,f.x] from FUNCT_2:sch 3
     (A2);
   end;
   uniqueness
   proof
-    let F1,F2 be Function of the Vertices of C,the Vertices of D such that
-A5: for c being Element of the Vertices of C
-    for d being Element of the Vertices of D
+    let F1,F2 be Function of the carrier of C,the carrier of D such that
+A5: for c being Element of the carrier of C
+    for d being Element of the carrier of D
     st F.((the Id of C).c) = (the Id of D).d holds F1.c = d and
-A6: for c being Element of the Vertices of C
-    for d being Element of the Vertices of D
+A6: for c being Element of the carrier of C
+    for d being Element of the carrier of D
     st F.((the Id of C).c) = (the Id of D).d holds F2.c = d;
-    for c being Element of the Vertices of C holds F1.c = F2.c
+    for c being Element of the carrier of C holds F1.c = F2.c
     proof
-      let c be Element of the Vertices of C;
-      consider d1 being Element of the Vertices of D such that
+      let c be Element of the carrier of C;
+      consider d1 being Element of the carrier of D such that
 A7:   F.((the Id of C).c) = (the Id of D).d1 by A1;
-      consider d2 being Element of the Vertices of D such that
+      consider d2 being Element of the carrier of D such that
 A8:   F.((the Id of C).c) = (the Id of D).d2 by A1;
       id d1 = (the Id of D).d1 & id d2 = ( the Id of D ).d2 &
       dom id d1 = d1 & dom id d2 = d2 & c is Object of C by Def8;
@@ -1653,18 +1543,18 @@ end;
 canceled;
 
 theorem Th102:
-  for T being Function of the Edges of C,the Edges of D
+  for T being Function of the carrier' of C,the carrier' of D
   st for c being Object of C ex d being Object of D st T.(id c) = id d
   for c being Object of C for d being Object of D
   st T.(id c) = id d holds (Obj T).c = d
 proof
-  let T be Function of the Edges of C,the Edges of D such that
+  let T be Function of the carrier' of C,the carrier' of D such that
 A1: for c being Object of C ex d being Object of D st T.(id c) = id d;
-A2: for c being Element of the Vertices of C
-  ex d being Element of the Vertices of D
+A2: for c being Element of the carrier of C
+  ex d being Element of the carrier of D
   st T.((the Id of C).c) = (the Id of D).d
   proof
-    let c be Element of the Vertices of C;
+    let c be Element of the carrier of C;
     consider d being Object of D such that
 A3: T.(id c) = id d by A1;
     take d;
@@ -1735,8 +1625,8 @@ proof
   let T be Functor of B,C;
   let S be Functor of C,D;
   reconsider FF = (Obj S)*(Obj T)
-  as Function of the Vertices of B, the Vertices of D;
-  reconsider TT = S*T as Function of the Edges of B, the Edges of D;
+  as Function of the carrier of B, the carrier of D;
+  reconsider TT = S*T as Function of the carrier' of B, the carrier' of D;
   now
     thus for b being Object of B holds TT.(id b) = id(FF.b)
     proof
@@ -1784,10 +1674,10 @@ definition
 end;
 
 theorem Th111:
-  id the Edges of C is Functor of C,C
+  id the carrier' of C is Functor of C,C
 proof
-  set F = id the Vertices of C;
-  set T = id the Edges of C;
+  set F = id the carrier of C;
+  set T = id the carrier' of C;
   now
     thus for c being Object of C holds T.(id c) = id(F.c)
     proof
@@ -1836,7 +1726,7 @@ definition
   let C;
   func id C -> Functor of C,C equals
 
-  id the Edges of C;
+  id the carrier' of C;
   coherence by Th111;
 end;
 
@@ -1851,9 +1741,9 @@ proof
 end;
 
 theorem Th117:
-  Obj id C = id the Vertices of C
+  Obj id C = id the carrier of C
 proof
-  dom Obj id C = the Vertices of C & for x be set holds x in the Vertices of C
+  dom Obj id C = the carrier of C & for x be set holds x in the carrier of C
   implies (Obj id C).x = x by Th116,FUNCT_2:def 1;
   hence thesis by FUNCT_1:34;
 end;
@@ -1865,7 +1755,7 @@ definition
   let C,D be Category;
   let T be Functor of C,D;
   attr T is isomorphic means
-  T is one-to-one & rng T = the Edges of D & rng Obj T = the Vertices of D;
+  T is one-to-one & rng T = the carrier' of D & rng Obj T = the carrier of D;
   attr T is full means
   :Def23:
   for c,c' being Object of C st Hom(T.c,T.c') <> {}
@@ -1888,11 +1778,11 @@ canceled 3;
 theorem
   id C is_an_isomorphism
 proof
-  rng id the Edges of C
-  = the Edges of C & rng id the Vertices of C = the Vertices of C &
-  id the Edges of C is one-to-one by RELAT_1:71;
+  rng id the carrier' of C
+  = the carrier' of C & rng id the carrier of C = the carrier of C &
+  id the carrier' of C is one-to-one by RELAT_1:71;
   hence id C is one-to-one
-  & rng id C = the Edges of C & rng Obj id C = the Vertices of C by Th117;
+  & rng id C = the carrier' of C & rng Obj id C = the carrier of C by Th117;
 end;
 
 theorem Th123:
@@ -1999,7 +1889,7 @@ proof
   let c,c' be Object of C;
   let f be set;
   assume f in T.:Hom(c,c');
-  then ex g being Element of the Edges of C
+  then ex g being Element of the carrier' of C
   st g in Hom(c,c') & f = T.g by FUNCT_2:116;
   hence f in Hom(T.c,T.c') by Th123;
 end;
@@ -2012,9 +1902,9 @@ definition
   T|Hom(c,c');
   correctness
   proof
-    T is Function of the Edges of C, the Edges of D &
-    Hom(c,c') c= the Edges of C & T.:Hom(c,c') c= Hom(T.c,T.c') by Th129;
-    hence thesis by Th4;
+    T is Function of the carrier' of C, the carrier' of D &
+    Hom(c,c') c= the carrier' of C & T.:Hom(c,c') c= Hom(T.c,T.c') by Th129;
+    hence thesis by FUNCT_2:178;
   end;
 end;
 
@@ -2029,7 +1919,7 @@ proof
   assume
 A1: Hom(c,c') <> {};
   let f be Morphism of c,c';
-  T is Function of the Edges of C,the Edges of D & f in Hom(c,c')
+  T is Function of the carrier' of C,the carrier' of D & f in Hom(c,c')
   by A1,Def7;
   hence thesis by FUNCT_1:72;
 end;

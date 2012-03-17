@@ -40,9 +40,9 @@
 </Signature>
 <RCluster aid="PENCIL_2" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -59,7 +59,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="16">
+<Adjective nr="17">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -67,7 +67,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="51">
+<Adjective nr="64">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -75,7 +75,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="107">
+<Adjective nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

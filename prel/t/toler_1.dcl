@@ -21,9 +21,9 @@
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="11"/>
-<Adjective nr="13"/>
-<Adjective nr="19">
+<Adjective nr="12"/>
+<Adjective nr="14"/>
+<Adjective nr="20">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -38,7 +38,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="20">
+<Adjective nr="21">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -46,9 +46,8 @@
 </RCluster>
 <FCluster aid="TOLER_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="21"/>
+<Func kind="K" nr="22"/>
 <Cluster>
-<Adjective nr="11"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
@@ -56,6 +55,7 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 </Registrations>

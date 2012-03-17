@@ -27,15 +27,15 @@
 </Signature>
 <RCluster aid="GRSOLV_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="48"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
 <Adjective nr="78"/>
+<Adjective nr="84"/>
 </Cluster>
 </RCluster>
 </Registrations>

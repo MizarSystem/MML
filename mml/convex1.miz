@@ -18,7 +18,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, RUSUB_4, VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions XBOOLE_0, RLVECT_1, RVSUM_1;
+ definitions TARSKI, XBOOLE_0, RLVECT_1, RVSUM_1;
  theorems BHSP_1, SUBSET_1, RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI,
       ZFMISC_1, XBOOLE_0, REAL_2, SETFAM_1, RLSUB_1, RUSUB_4, RUSUB_5,
       XBOOLE_1, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, CARD_2, ENUMSET1,
@@ -580,7 +580,7 @@ A2: u = 0.V by TARSKI:def 1;
   hence thesis by RUSUB_4:def 6;
 end;
 
-theorem
+theorem Th9:
   for V being RealLinearSpace holds Up((Omega).V) is convex
 proof
   let V be RealLinearSpace;
@@ -1704,4 +1704,64 @@ theorem
 theorem
   for V being non empty addLoopStr, M being empty Subset of V,
   N being Subset of V holds M + N = {} by Lm8;
+
+begin ::Addenda
+
+:: from CONVEX2, 2008.07.07, A.T.
+
+registration
+ let V be non empty RLSStruct, M,N be convex Subset of V;
+ cluster M /\ N -> convex Subset of V;
+ coherence
+proof
+  now let x,y be VECTOR of V;
+  let r be Real;
+  assume
+A1: 0 < r & r < 1 & x in M /\ N & y in M /\ N;
+  then x in M & x in N & y in M & y in N by XBOOLE_0:def 3;
+  then r * x + (1-r) * y in M & r * x + (1-r) * y in N by A1,Def2;
+  hence r*x + (1-r)*y in M /\ N by XBOOLE_0:def 3;
+  end;
+ hence thesis by Def2;
+end;
+end;
+
+registration
+ let V be RealLinearSpace, M be Subset of V;
+ cluster Convex-Family M -> non empty;
+ coherence
+proof
+A1: Up((Omega).V) is convex by Th9;
+  M c= Up((Omega).V)
+  proof
+    let x be set;
+    assume x in M;
+    then reconsider x as Element of V;
+    x in the carrier of (the RLSStruct of V);
+    then x in the carrier of (Omega).V by RLSUB_1:def 4;
+    hence thesis by RUSUB_4:def 6;
+  end;
+  hence thesis by A1,Def4;
+end;
+end;
+
+theorem
+  for V being RealLinearSpace, M being Subset of V holds M c= conv(M)
+proof
+  let V be RealLinearSpace;
+  let M be Subset of V;
+  let v be set;
+  assume
+A1: v in M;
+  for Y being set holds Y in Convex-Family M implies v in Y
+  proof
+    let Y be set;
+    assume
+A3: Y in Convex-Family M;
+    then reconsider Y as Subset of V;
+    Y is convex & M c= Y by A3,Def4;
+    hence thesis by A1;
+  end;
+  hence thesis by SETFAM_1:def 1;
+end;
 

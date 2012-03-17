@@ -30,57 +30,57 @@
 </Signature>
 <RCluster aid="FUNCSDOM" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="11">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="73"/>
-<Adjective nr="77"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="56"/>
 <Adjective nr="79"/>
-<Adjective nr="81"/>
 <Adjective nr="83"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
+<Adjective nr="85"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="99"/>
+<Adjective nr="104"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="3">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="4">
 <ArgTypes/>
-<Typ kind="G" nr="13">
+<Typ kind="G" nr="14">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="77"/>
-<Adjective nr="79"/>
-<Adjective nr="81"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="56"/>
 <Adjective nr="83"/>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
+<Adjective nr="85"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
 <Adjective nr="99"/>
 <Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUNCSDOM" nr="1">
@@ -91,12 +91,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="73"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="79"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="2">
@@ -107,12 +107,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="73"/>
-<Adjective nr="75"/>
+<Adjective nr="79"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="3">
@@ -123,12 +123,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="30" value="false"/>
-<Adjective nr="99"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="4">
@@ -139,12 +139,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="75"/>
-<Adjective nr="99"/>
+<Adjective nr="81"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 </Registrations>

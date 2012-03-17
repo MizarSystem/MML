@@ -13,7 +13,7 @@ environ
       ZF_REFLE, PBOOLE, MSATERM, TREES_9, FREEALG, MSUALG_2, MSAFREE2,
       PRE_CIRC, PRALG_1, MSAFREE, GROUP_6, PRELAMB, ALG_1, REALSET1, MSUALG_3,
       FUNCT_6, TARSKI, TDGROUP, QC_LANG1, UNIALG_2, DTCONSTR, TREES_3,
-      MSSCYC_1, FINSEQ_4, ARYTM;
+      MSSCYC_1, FINSEQ_4, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, CARD_1, NUMBERS,
       NAT_1, STRUCT_0, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       FUNCOP_1, FINSEQ_1, GRAPH_1, GRAPH_2, TREES_1, TREES_2, TREES_3, FUNCT_6,
@@ -24,7 +24,7 @@ environ
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
       INT_1, FINSEQ_1, PBOOLE, TREES_2, TREES_3, PRE_CIRC, TREES_9, STRUCT_0,
       DTCONSTR, MSUALG_1, MSAFREE, MSATERM, MSAFREE2, EXTENS_1, GRAPH_2,
-      ORDINAL1;
+      ORDINAL1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -42,8 +42,8 @@ definition
   redefine mode Chain of G means
 :: MSSCYC_1:def 1
 
-    it is FinSequence of the Edges of G &
-    ex p being FinSequence of the Vertices of G st p is_vertex_seq_of it;
+    it is FinSequence of the carrier' of G &
+    ex p being FinSequence of the carrier of G st p is_vertex_seq_of it;
 end;
 
 theorem :: MSSCYC_1:2
@@ -61,44 +61,31 @@ definition
   attr IT is cyclic means
 :: MSSCYC_1:def 2
 
-  ex p being FinSequence of the Vertices of G st
+  ex p being FinSequence of the carrier of G st
   p is_vertex_seq_of IT & p.1 = p.(len p);
 end;
 
-definition
-  let IT be Graph;
-  attr IT is empty means
-:: MSSCYC_1:def 3
-
-  the Edges of IT is empty;
-end;
-
 registration
-  cluster empty Graph;
+  cluster void Graph;
 end;
 
 theorem :: MSSCYC_1:3
   for G being Graph holds
-  rng (the Source of G) \/ rng (the Target of G) c= the Vertices of G;
+  rng (the Source of G) \/ rng (the Target of G) c= the carrier of G;
 
 registration
-  cluster finite simple connected non empty strict Graph;
-end;
-
-registration
-  let G be non empty Graph;
-  cluster the Edges of G -> non empty;
+  cluster finite simple connected non void strict Graph;
 end;
 
 theorem :: MSSCYC_1:4
-  for e being set for s, t being Element of the Vertices of G
+  for e being set for s, t being Element of the carrier of G
   st s = (the Source of G).e & t = (the Target of G).e
   holds <*s, t*> is_vertex_seq_of <*e*>;
 
 theorem :: MSSCYC_1:5
-  for e being set st e in the Edges of G holds <*e*> is directed Chain of G;
+  for e being set st e in the carrier' of G holds <*e*> is directed Chain of G;
 
-reserve G for non empty Graph;
+reserve G for non void Graph;
 
 registration
   let G;
@@ -107,11 +94,11 @@ end;
 
 theorem :: MSSCYC_1:6
   for G being Graph,
-  c being Chain of G, vs being FinSequence of the Vertices of G st
+  c being Chain of G, vs being FinSequence of the carrier of G st
   c is cyclic & vs is_vertex_seq_of c holds vs.1 = vs.(len vs);
 
 theorem :: MSSCYC_1:7
-  for G being Graph, e being set st e in the Edges of G
+  for G being Graph, e being set st e in the carrier' of G
   for fe being directed Chain of G st fe = <*e*>
   holds vertex-seq fe = <*(the Source of G).e, (the Target of G).e*>;
 
@@ -170,6 +157,7 @@ theorem :: MSSCYC_1:18
   len ch = n & ch^c is directed non empty Chain of G;
 
 definition
+ canceled;
   let IT be Graph;
   attr IT is directed_cycle-less means
 :: MSSCYC_1:def 4
@@ -183,7 +171,7 @@ notation
 end;
 
 registration
-  cluster empty -> directed_cycle-less Graph;
+  cluster void -> directed_cycle-less Graph;
 end;
 
 definition
@@ -191,22 +179,22 @@ definition
   attr IT is well-founded means
 :: MSSCYC_1:def 5
 
-  for v being Element of the Vertices of IT
+  for v being Element of the carrier of IT
   ex n st for c being directed Chain of IT
   st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n;
 end;
 
 registration
-  let G be empty Graph;
+  let G be void Graph;
   cluster -> empty Chain of G;
 end;
 
 registration
-  cluster empty -> well-founded Graph;
+  cluster void -> well-founded Graph;
 end;
 
 registration
-  cluster non well-founded -> non empty Graph;
+  cluster non well-founded -> non void Graph;
 end;
 
 registration

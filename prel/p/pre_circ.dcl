@@ -40,7 +40,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PRE_CIRC" nr="1">
@@ -71,8 +71,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -82,15 +82,15 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="3">
@@ -99,8 +99,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -113,12 +113,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="183">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -126,8 +126,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRE_CIRC" nr="4">
@@ -136,14 +136,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="32"/>
+<Adjective nr="20"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PRE_CIRC" nr="1">
@@ -157,12 +157,12 @@
 <Cluster/>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="190">
+<Func kind="K" nr="194">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </CCluster>
 </Registrations>

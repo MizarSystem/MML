@@ -7,13 +7,13 @@
 environ
 
  vocabularies CAT_1, PARTFUN1, RELAT_1, FUNCT_1, BOOLE, ARYTM_3, OPPCAT_1,
-      GRAPH_1;
+      GRAPH_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, PARTFUN1, FUNCT_4, GRAPH_1, CAT_1;
+      BINOP_1, PARTFUN1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1;
  constructors PARTFUN1, BINOP_1, FUNCT_4, CAT_1;
- registrations XBOOLE_0, RELSET_1, FUNCT_2, CAT_1, CAT_2;
+ registrations XBOOLE_0, RELSET_1, FUNCT_2, CAT_1, CAT_2, STRUCT_0;
  requirements SUBSET, BOOLE;
- definitions CAT_1, BINOP_1;
+ definitions CAT_1, BINOP_1, GRAPH_1;
  theorems FUNCT_2, FUNCT_4, PARTFUN1, CAT_1, SUBSET_1, FUNCT_1;
  schemes FUNCT_2;
 
@@ -31,10 +31,11 @@ end;
 :: Opposite Category
 
 theorem Th1:
-  CatStr (#the Vertices of C, the Edges of C,the Target of C, the Source of C,
+  CatStr (#the carrier of C, the carrier' of C,
+  the Target of C, the Source of C,
     ~(the Comp of C), the Id of C#) is Category
 proof
-  set M = the Edges of C, d = the Target of C, c = the Source of C,
+  set M = the carrier' of C, d = the Target of C, c = the Source of C,
   p = ~(the Comp of C), i = the Id of C;
   now thus
 A1: for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f
@@ -73,7 +74,7 @@ A4:   d.h = c.g & d.g = c.f;
       p.(p.(h,g),f) = (the Comp of C).(f,(the Comp of C).(g,h)) by A2,A4;
       hence thesis by A4,CAT_1:def 8;
     end;
-    let b be Element of (the Vertices of C); thus
+    let b be Element of (the carrier of C); thus
 A5: d.(i.b) = b & c.(i.b) = b by CAT_1:def 8;
     thus for f being Element of M st c.f = b holds p.(i.b,f) = f
     proof
@@ -91,7 +92,8 @@ end;
 definition
   let C;
   func C opp -> strict Category equals
-  CatStr (#the Vertices of C, the Edges of C, the Target of C, the Source of C,
+  CatStr (#the carrier of C, the carrier' of C,
+  the Target of C, the Source of C,
     ~(the Comp of C), the Id of C#);
   coherence by Th1;
 end;
@@ -464,19 +466,19 @@ end;
 
 definition
   let C,B;
-  let S be Function of the Edges of C opp,the Edges of B;
-  func /*S -> Function of the Edges of C,the Edges of B means
+  let S be Function of the carrier' of C opp,the carrier' of B;
+  func /*S -> Function of the carrier' of C,the carrier' of B means
   :Def6:
   for f being Morphism of C holds it.f = S.(f opp);
   existence
   proof
     deffunc F(Morphism of C) = S.($1 opp);
-    thus ex F being Function of the Edges of C,the Edges of B st
+    thus ex F being Function of the carrier' of C,the carrier' of B st
     for f being Morphism of C holds F.f = F(f) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
-    let T1,T2 be Function of the Edges of C,the Edges of B such that
+    let T1,T2 be Function of the carrier' of C,the carrier' of B such that
 A1: for f being Morphism of C holds T1.f = S.(f opp) and
 A2: for f being Morphism of C holds T2.f = S.(f opp);
     now
@@ -489,10 +491,10 @@ A2: for f being Morphism of C holds T2.f = S.(f opp);
 end;
 
 theorem
-  for S being Function of the Edges of C opp,the Edges of B
+  for S being Function of the carrier' of C opp,the carrier' of B
   for f being Morphism of C opp holds (/*S).(opp f) = S.f
 proof
-  let S be Function of the Edges of C opp,the Edges of B;
+  let S be Function of the carrier' of C opp,the carrier' of B;
   let f be Morphism of C opp;
   thus (/*S).(opp f) = S.((opp f) opp) by Def6
     .= S.f;
@@ -587,7 +589,7 @@ end;
 definition
   let C,D;
   mode Contravariant_Functor of C,D
-    -> Function of the Edges of C,the Edges of D means
+    -> Function of the carrier' of C,the carrier' of D means
     :Def7:
     ( for c being Object of C ex d being Object of D st it.(id c) = id d )
     & ( for f being Morphism of C
@@ -786,20 +788,20 @@ end;
 
 definition
   let C,B;
-  let S be Function of the Edges of C,the Edges of B;
-  func *'S -> Function of the Edges of C opp,the Edges of B means
+  let S be Function of the carrier' of C,the carrier' of B;
+  func *'S -> Function of the carrier' of C opp,the carrier' of B means
   :Def8:
   for f being Morphism of C opp holds it.f = S.(opp f);
   existence
   proof
     deffunc F(Morphism of C opp) = S.(opp $1);
-    thus ex F being Function of the Edges of C opp,the Edges of B st
+    thus ex F being Function of the carrier' of C opp,the carrier' of B st
     for f being Morphism of C opp holds F.f = F(f) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
 
-let T1,T2 be Function of the Edges of C opp,the Edges of B such that
+let T1,T2 be Function of the carrier' of C opp,the carrier' of B such that
 A1: for f being Morphism of C opp holds T1.f = S.(opp f) and
 A2: for f being Morphism of C opp holds T2.f = S.(opp f);
     now
@@ -809,19 +811,19 @@ A2: for f being Morphism of C opp holds T2.f = S.(opp f);
     end;
     hence thesis by FUNCT_2:113;
   end;
-  func S*' -> Function of the Edges of C,the Edges of B opp means
+  func S*' -> Function of the carrier' of C,the carrier' of B opp means
   :Def9:
   for f being Morphism of C holds it.f = (S.f) opp;
   existence
   proof
     deffunc F(Morphism of C) = (S.$1) opp;
-    thus ex F being Function of the Edges of C,the Edges of B opp st
+    thus ex F being Function of the carrier' of C,the carrier' of B opp st
     for f being Morphism of C holds F.f = F(f) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
 
-let T1,T2 be Function of the Edges of C,the Edges of B opp such that
+let T1,T2 be Function of the carrier' of C,the carrier' of B opp such that
 A3: for f being Morphism of C holds T1.f = (S.f) opp and
 A4: for f being Morphism of C holds T2.f = (S.f) opp;
     now
@@ -834,10 +836,10 @@ A4: for f being Morphism of C holds T2.f = (S.f) opp;
 end;
 
 theorem
-  for S being Function of the Edges of C,the Edges of B
+  for S being Function of the carrier' of C,the carrier' of B
   for f being Morphism of C holds (*'S).(f opp) = S.f
 proof
-  let S be Function of the Edges of C,the Edges of B;
+  let S be Function of the carrier' of C,the carrier' of B;
   let f be Morphism of C;
   thus (*'S).(f opp) = S.(opp (f opp)) by Def8
     .= S.f;
@@ -949,30 +951,30 @@ proof
   hence (Obj S*').c = ((Obj S).c) opp by CAT_1:102;
 end;
 
-Lm14: for F being Function of the Edges of C,the Edges of D
+Lm14: for F being Function of the carrier' of C,the carrier' of D
 for f being Morphism of C opp holds *'F*'.f = (F.(opp f)) opp
 proof
-  let F be Function of the Edges of C,the Edges of D;
+  let F be Function of the carrier' of C,the carrier' of D;
   let f be Morphism of C opp;
   thus *'F*'.f = (*'F.f) opp by Def9
     .= (F.(opp f)) opp by Def8;
 end;
 
 theorem Th47:
-  for F being Function of the Edges of C,the Edges of D
+  for F being Function of the carrier' of C,the carrier' of D
   for f being Morphism of C holds *'F*'.(f opp) = (F.f) opp
 proof
-  let F be Function of the Edges of C,the Edges of D;
+  let F be Function of the carrier' of C,the carrier' of D;
   let f be Morphism of C;
   thus *'F*'.(f opp) = (F.(opp(f opp))) opp by Lm14
     .= (F.f) opp;
 end;
 
 theorem Th48:
-  for S being Function of the Edges of C,the Edges of D
+  for S being Function of the carrier' of C,the carrier' of D
   holds /*(*'S) = S
 proof
-  let S be Function of the Edges of C,the Edges of D;
+  let S be Function of the carrier' of C,the carrier' of D;
   now
     let f be Morphism of C;
     thus /*(*'S).f = (*'S).(f opp) by Def6
@@ -983,10 +985,10 @@ proof
 end;
 
 theorem
-  for S being Function of the Edges of C opp,the Edges of D
+  for S being Function of the carrier' of C opp,the carrier' of D
   holds *'(/*S) = S
 proof
-  let S be Function of the Edges of C opp,the Edges of D;
+  let S be Function of the carrier' of C opp,the carrier' of D;
   now
     let f be Morphism of C opp;
     thus *'(/*S).f = (/*S).(opp f) by Def8
@@ -997,10 +999,10 @@ proof
 end;
 
 theorem
-  for S being Function of the Edges of C, the Edges of D
+  for S being Function of the carrier' of C, the carrier' of D
   holds *'S*' = *'(S*')
 proof
-  let S be Function of the Edges of C, the Edges of D;
+  let S be Function of the carrier' of C, the carrier' of D;
   now
     let f be Morphism of C opp;
     thus *'S*'.f = (*'S.f) opp by Def9
@@ -1013,10 +1015,10 @@ end;
 
 theorem
   for D being strict Category,
-  S being Function of the Edges of C, the Edges of D holds S*'*' = S
+  S being Function of the carrier' of C, the carrier' of D holds S*'*' = S
 proof
   let D be strict Category;
-  let S be Function of the Edges of C, the Edges of D;
+  let S be Function of the carrier' of C, the carrier' of D;
   now thus D opp opp = D by FUNCT_4:54;
     let f be Morphism of C;
     thus S*'*'.f = (S*'.f) opp by Def9
@@ -1028,10 +1030,10 @@ end;
 
 theorem
   for C being strict Category,
-  S being Function of the Edges of C, the Edges of D holds *'*'S = S
+  S being Function of the carrier' of C, the carrier' of D holds *'*'S = S
 proof
   let C be strict Category;
-  let S be Function of the Edges of C, the Edges of D;
+  let S be Function of the carrier' of C, the carrier' of D;
   now thus C opp opp = C by FUNCT_4:54;
     let f be Morphism of C opp opp;
     thus *'*'S.f = *'S.(opp f) by Def8
@@ -1041,12 +1043,12 @@ proof
   hence thesis by FUNCT_2:113;
 end;
 
-Lm15: for S being Function of the Edges of C opp,the Edges of B
-for T being Function of the Edges of B,the Edges of D
+Lm15: for S being Function of the carrier' of C opp,the carrier' of B
+for T being Function of the carrier' of B,the carrier' of D
 holds /*(T*S) = T*(/*S)
 proof
-  let S be Function of the Edges of C opp,the Edges of B;
-  let T be Function of the Edges of B,the Edges of D;
+  let S be Function of the carrier' of C opp,the carrier' of B;
+  let T be Function of the carrier' of B,the carrier' of D;
   now
     let f be Morphism of C;
     thus /*(T*S).f = (T*S).(f opp) by Def6
@@ -1058,12 +1060,12 @@ proof
 end;
 
 theorem
-  for S being Function of the Edges of C,the Edges of B
-  for T being Function of the Edges of B,the Edges of D
+  for S being Function of the carrier' of C,the carrier' of B
+  for T being Function of the carrier' of B,the carrier' of D
   holds *'(T*S) = T*(*'S)
 proof
-  let S be Function of the Edges of C,the Edges of B;
-  let T be Function of the Edges of B,the Edges of D;
+  let S be Function of the carrier' of C,the carrier' of B;
+  let T be Function of the carrier' of B,the carrier' of D;
   now
     let f be Morphism of C opp;
     thus (*'(T*S)).f = (T*S).(opp f) by Def8
@@ -1075,12 +1077,12 @@ proof
 end;
 
 theorem
-  for S being Function of the Edges of C,the Edges of B
-  for T being Function of the Edges of B,the Edges of D
+  for S being Function of the carrier' of C,the carrier' of B
+  for T being Function of the carrier' of B,the carrier' of D
   holds (T*S)*' = T*'*S
 proof
-  let S be Function of the Edges of C,the Edges of B;
-  let T be Function of the Edges of B,the Edges of D;
+  let S be Function of the carrier' of C,the carrier' of B;
+  let T be Function of the carrier' of B,the carrier' of D;
   now
     let f be Morphism of C;
     thus (T*S)*'.f = ((T*S).f) opp by Def9
@@ -1092,12 +1094,12 @@ proof
 end;
 
 theorem
-  for F1 being Function of the Edges of C,the Edges of B
-  for F2 being Function of the Edges of B,the Edges of D
+  for F1 being Function of the carrier' of C,the carrier' of B
+  for F2 being Function of the carrier' of B,the carrier' of D
   holds *'(F2*F1)*' = (*'F2*')*(*'F1*')
 proof
-  let F1 be Function of the Edges of C,the Edges of B;
-  let F2 be Function of the Edges of B,the Edges of D;
+  let F1 be Function of the carrier' of C,the carrier' of B;
+  let F2 be Function of the carrier' of B,the carrier' of D;
   now
     let f be Morphism of C opp;
     thus (*'(F2*F1)*').f = ((F2*F1).(opp f)) opp by Lm14
@@ -1447,10 +1449,10 @@ proof
 end;
 
 theorem
-  for S being Function of the Edges of C,the Edges of D
+  for S being Function of the carrier' of C,the carrier' of D
   holds *'S = S*(*id C) & S*' = (id* D)*S
 proof
-  let S be Function of the Edges of C,the Edges of D;
+  let S be Function of the carrier' of C,the carrier' of D;
   now
     let f be Morphism of C opp;
     thus *'S.f = S.(opp f) by Def8

@@ -23,7 +23,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TREES_1" nr="2">
@@ -33,8 +33,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TREES_1" nr="3">
@@ -43,7 +43,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TREES_1" nr="1">
@@ -51,8 +51,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -60,14 +60,14 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="89">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TREES_1" nr="2">
@@ -75,8 +75,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -86,20 +86,20 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TREES_1" nr="3">
@@ -108,15 +108,15 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TREES_1" nr="1">
@@ -124,8 +124,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="16"/>
-<Adjective nr="22"/>
+<Adjective nr="17"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -135,7 +135,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </CCluster>
 </Registrations>

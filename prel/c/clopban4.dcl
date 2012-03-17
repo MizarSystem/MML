@@ -35,20 +35,20 @@
 </Signature>
 <FCluster aid="CLOPBAN4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="17">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="76"/>
-<Adjective nr="77"/>
-<Adjective nr="78"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="57"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
-<Adjective nr="88"/>
-<Adjective nr="90"/>
-<Adjective nr="98"/>
-<Adjective nr="101"/>
-<Adjective nr="108"/>
+<Adjective nr="89"/>
+<Adjective nr="93"/>
+<Adjective nr="95"/>
+<Adjective nr="103"/>
+<Adjective nr="106"/>
 <Adjective nr="113"/>
+<Adjective nr="118"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,19 +58,19 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="227">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="18">
-<Func kind="K" nr="46"/>
+<Adjective nr="19">
+<Func kind="K" nr="47"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="115">
+<Adjective nr="120">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

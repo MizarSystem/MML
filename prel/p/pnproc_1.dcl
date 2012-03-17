@@ -39,8 +39,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
-<Func kind="K" nr="119">
+<Func kind="K" nr="24">
+<Func kind="K" nr="122">
 <LocusVar nr="2"/>
 </Func>
 </Func>
@@ -49,14 +49,14 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
-<Func kind="K" nr="119">
+<Func kind="K" nr="24">
+<Func kind="K" nr="122">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -79,8 +79,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
-<Func kind="K" nr="119">
+<Func kind="K" nr="24">
+<Func kind="K" nr="122">
 <LocusVar nr="2"/>
 </Func>
 </Func>
@@ -89,14 +89,14 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="23">
-<Func kind="K" nr="119">
+<Func kind="K" nr="24">
+<Func kind="K" nr="122">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="200">
+<Func kind="K" nr="203">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -111,7 +111,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="26"/>
+<Adjective nr="28"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -119,8 +119,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
-<Adjective nr="26"/>
+<Adjective nr="22"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PNPROC_1" nr="2">
@@ -128,7 +128,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -136,7 +136,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="26"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -31,7 +31,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -60,7 +60,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="92">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -87,14 +87,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="92">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_4" nr="4">
@@ -115,7 +115,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="92">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -123,7 +123,7 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

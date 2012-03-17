@@ -29,7 +29,7 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="11"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -38,7 +38,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="139">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -47,7 +47,7 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="11"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFINSQ_2" nr="2">
@@ -55,12 +55,12 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
-<Func kind="K" nr="53"/>
+<Func kind="K" nr="54"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -71,17 +71,17 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="33"/>
+<Adjective nr="19"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="145">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="5"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFINSQ_2" nr="4">
@@ -91,20 +91,20 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
-<Func kind="K" nr="23"/>
+<Func kind="K" nr="24"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AFINSQ_2" nr="5">
@@ -113,8 +113,8 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="145">
-<Func kind="K" nr="23"/>
+<Func kind="K" nr="146">
+<Func kind="K" nr="24"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -122,7 +122,7 @@
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14"/>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </FCluster>
 <CCluster aid="AFINSQ_2" nr="1">
@@ -135,7 +135,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="13"/>
-<Adjective nr="33"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 </Registrations>

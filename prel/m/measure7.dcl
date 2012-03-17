@@ -29,20 +29,18 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
-<ArticleID name="XXREAL_1"/>
-<ArticleID name="MEASURE5"/>
 <ArticleID name="MEASURE7"/>
 </Signature>
 <FCluster aid="MEASURE7" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="23">
-<Func kind="K" nr="78"/>
+<Func kind="K" nr="24">
+<Func kind="K" nr="81"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="177">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -8,7 +8,7 @@ environ
 
  vocabularies SUPINF_1, ARYTM, MEMBERED, ORDINAL2, SQUARE_1, FINSET_1,
       XXREAL_2, SEQ_2, INT_1, RAT_1, RCOMP_1, BOOLE, FINSUB_1, SETWISEO,
-      ARYTM_1, LATTICES, FUNCT_1, RELAT_1;
+      ARYTM_1, LATTICES, FUNCT_1, RELAT_1, RELAT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
       FINSUB_1, SETWISEO, NUMBERS, MEMBERED, XXREAL_0, XCMPLX_0, XREAL_0,
       INT_1, NAT_1, RAT_1, XXREAL_1;
@@ -108,11 +108,11 @@ registration
  cluster right_end (non empty natural-membered set);
 end;
 
-notation let X be left_end (non empty ext-real-membered set);
+notation let X be left_end (ext-real-membered set);
  synonym min X for inf X;
 end;
 
-notation let X be right_end (non empty ext-real-membered set);
+notation let X be right_end (ext-real-membered set);
  synonym max X for sup X;
 end;
 
@@ -477,3 +477,121 @@ theorem :: XXREAL_2:77
 
 theorem :: XXREAL_2:78
  A is bounded_below iff inf A <> -infty;
+
+begin :: Connectedness
+
+definition
+  let A be ext-real-membered set;
+  attr A is connected means
+:: XXREAL_2:def 12
+ for r,s being ext-real number st r in A & s in A holds [.r,s.] c= A;
+end;
+
+registration
+ cluster ExtREAL -> connected;
+ cluster empty -> connected (ext-real-membered set);
+ let r,s;
+ cluster [.r,s.] -> connected;
+ cluster ].r,s.] -> connected;
+ cluster [.r,s.[ -> connected;
+ cluster ].r,s.[ -> connected;
+end;
+
+registration
+ cluster REAL -> connected;
+end;
+
+registration
+ cluster connected (non empty ext-real-membered set);
+end;
+
+registration
+ let A,B be connected (ext-real-membered set);
+ cluster A /\ B -> connected;
+end;
+
+reserve A,B for ext-real-membered set;
+
+registration let r,s;
+ cluster ].r,s.] -> non left_end;
+ cluster [.r,s.[ -> non right_end;
+ cluster ].r,s.[ -> non left_end non right_end;
+end;
+
+registration
+ cluster left_end right_end connected (ext-real-membered set);
+ cluster non left_end right_end connected (ext-real-membered set);
+ cluster left_end non right_end connected (ext-real-membered set);
+ cluster non left_end non right_end connected non empty
+              (ext-real-membered set);
+end;
+
+theorem :: XXREAL_2:79
+ for A being left_end right_end connected (ext-real-membered set)
+  holds A = [.min A, max A.];
+
+theorem :: XXREAL_2:80
+ for A being non left_end right_end connected (ext-real-membered set)
+  holds A = ].inf A, max A.];
+
+theorem :: XXREAL_2:81
+ for A being left_end non right_end connected (ext-real-membered set)
+  holds A = [.min A, sup A.[;
+
+theorem :: XXREAL_2:82
+ for A being non left_end non right_end non empty connected
+        (ext-real-membered set)
+  holds A =].inf A,sup A.[;
+
+theorem :: XXREAL_2:83
+ for A being non left_end non right_end connected (ext-real-membered set)
+  ex r,s st r <= s & A =].r,s.[;
+
+theorem :: XXREAL_2:84
+ A is connected implies
+  for x,y,r st x in A & y in A & x <= r & r <= y holds r in A;
+
+theorem :: XXREAL_2:85
+ A is connected implies
+  for x,r st x in A & x <= r & r < sup A holds r in A;
+
+theorem :: XXREAL_2:86
+ A is connected implies
+  for x,r st x in A & inf A < r & r <= x holds r in A;
+
+theorem :: XXREAL_2:87
+ A is connected implies
+  for r st inf A < r & r < sup A holds r in A;
+
+theorem :: XXREAL_2:88
+ (for x,y,r st x in A & y in A & x < r & r < y holds r in A)
+   implies A is connected;
+
+theorem :: XXREAL_2:89
+ (for x,r st x in A & x < r & r < sup A holds r in A)
+   implies A is connected;
+
+theorem :: XXREAL_2:90
+ (for y,r st y in A & inf A < r & r < y holds r in A)
+   implies A is connected;
+
+theorem :: XXREAL_2:91
+ (for r st inf A < r & r < sup A holds r in A)
+   implies A is connected;
+
+theorem :: XXREAL_2:92
+ (for x,y,r st x in A & y in A & x <= r & r <= y holds r in A)
+   implies A is connected;
+
+theorem :: XXREAL_2:93
+ A is connected & B is connected & A meets B implies
+      A \/ B is connected;
+
+theorem :: XXREAL_2:94
+ A is connected & B is left_end connected & sup A = inf B implies
+   A \/ B is connected;
+
+theorem :: XXREAL_2:95
+ A is right_end connected & B is connected & sup A = inf B implies
+   A \/ B is connected;
+

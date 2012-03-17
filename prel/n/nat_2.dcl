@@ -13,13 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 </Signature>
 <RCluster aid="NAT_2" nr="1">
 <ArgTypes/>
@@ -29,12 +23,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="14"/>
-<Adjective nr="18"/>
+<Adjective nr="11" value="false"/>
+<Adjective nr="15"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="24"/>
-<Adjective nr="25" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 </Registrations>

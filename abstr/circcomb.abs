@@ -9,7 +9,7 @@ environ
  vocabularies MSUALG_1, FUNCT_1, FUNCOP_1, PRALG_1, RELAT_1, CARD_3, FINSEQ_1,
       FINSEQ_2, AMI_1, ZF_REFLE, FUNCT_4, BOOLE, PBOOLE, PARTFUN1, TDGROUP,
       MSAFREE2, FINSET_1, QC_LANG1, PRE_CIRC, CIRCUIT1, CLASSES1, MCART_1,
-      MARGREL1, LATTICES, CIRCCOMB, CAT_1, ARYTM;
+      MARGREL1, LATTICES, CIRCCOMB, CAT_1, ARYTM, STRUCT_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_2, FUNCOP_1, PARTFUN1,
       FUNCT_4, CARD_3, CLASSES1, MARGREL1, PBOOLE, STRUCT_0, MSUALG_1,
@@ -17,7 +17,7 @@ environ
  constructors CLASSES1, MARGREL1, CIRCUIT1, CIRCUIT2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       FRAENKEL, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, STRUCT_0, MSUALG_1,
-      MSUALG_2, MSAFREE2, FUNCT_7;
+      MSUALG_2, MSAFREE2, FUNCT_7, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -25,14 +25,9 @@ begin :: Combining of ManySortedSign's
 
 definition
   let S be ManySortedSign;
-  mode Gate of S is Element of the OperSymbols of S;
+  mode Gate of S is Element of the carrier' of S;
 end;
 
-registration
-  let A be set;
-  let f be Function;
-  cluster A --> f -> Function-yielding;
-end;
 
 registration
   let f,g be non-empty Function;
@@ -105,7 +100,7 @@ definition
 :: CIRCCOMB:def 2
 
   the carrier of it = (the carrier of S1) \/ (the carrier of S2) &
-  the OperSymbols of it = (the OperSymbols of S1) \/ (the OperSymbols of S2) &
+  the carrier' of it = (the carrier' of S1) \/ (the carrier' of S2) &
   the Arity of it = (the Arity of S1) +* (the Arity of S2) &
   the ResultSort of it = (the ResultSort of S1) +* (the ResultSort of S2);
 end;
@@ -389,7 +384,7 @@ definition
   func 1GateCircStr(p,f,x) -> non void strict ManySortedSign means
 :: CIRCCOMB:def 5
 
-   the carrier of it = (rng p) \/ {x} & the OperSymbols of it = {[p,f]} &
+   the carrier of it = (rng p) \/ {x} & the carrier' of it = {[p,f]} &
   (the Arity of it).[p,f] = p & (the ResultSort of it).[p,f] = x;
 end;
 
@@ -422,7 +417,7 @@ definition
 :: CIRCCOMB:def 6
 
    the carrier of it = (rng p) \/ {[p,f]} &
-  the OperSymbols of it = {[p,f]} & (the Arity of it).[p,f] = p &
+  the carrier' of it = {[p,f]} & (the Arity of it).[p,f] = p &
   (the ResultSort of it).[p,f] = [p,f];
 end;
 
@@ -466,16 +461,16 @@ definition
   attr IT is unsplit means
 :: CIRCCOMB:def 7
 
-   the ResultSort of IT = id the OperSymbols of IT;
+   the ResultSort of IT = id the carrier' of IT;
   attr IT is gate`1=arity means
 :: CIRCCOMB:def 8
 
-   for g being set st g in the OperSymbols of IT holds
+   for g being set st g in the carrier' of IT holds
   g = [(the Arity of IT).g, g`2];
   attr IT is gate`2isBoolean means
 :: CIRCCOMB:def 9
 
-   for g being set st g in the OperSymbols of IT
+   for g being set st g in the carrier' of IT
   for p being FinSequence st p = (the Arity of IT).g
   ex f being Function of (len p)-tuples_on BOOLEAN, BOOLEAN st g = [g`1, f];
 end;
@@ -486,7 +481,7 @@ definition
   attr IT is gate`2=den means
 :: CIRCCOMB:def 10
 
-   for g being set st g in the OperSymbols of S holds
+   for g being set st g in the carrier' of S holds
   g = [g`1, (the Charact of IT).g];
 end;
 
@@ -509,11 +504,11 @@ scheme :: CIRCCOMB:sch 2
   ex A being strict MSAlgebra over S() st
   the Sorts of A = (the carrier of S()) --> BOOLEAN &
   for g being set, p being Element of (the carrier of S())* st
-  g in the OperSymbols of S() & p = (the Arity of S()).g
+  g in the carrier' of S() & p = (the Arity of S()).g
   holds (the Charact of A).g = F(g,p)
 provided
  for g being set, p being Element of (the carrier of S())* st
-g in the OperSymbols of S() & p = (the Arity of S()).g
+g in the carrier' of S() & p = (the Arity of S()).g
 holds F(g,p) is Function of (len p)-tuples_on BOOLEAN, BOOLEAN;
 
 registration
@@ -522,12 +517,12 @@ end;
 
 theorem :: CIRCCOMB:52
   for S being non empty ManySortedSign holds S is unsplit iff
-  for o being set st o in the OperSymbols of S holds
+  for o being set st o in the carrier' of S holds
   (the ResultSort of S).o = o;
 
 theorem :: CIRCCOMB:53
   for S being non empty ManySortedSign st S is unsplit holds
-  the OperSymbols of S c= the carrier of S;
+  the carrier' of S c= the carrier of S;
 
 registration
   cluster unsplit -> Circuit-like (non empty ManySortedSign);
@@ -585,6 +580,10 @@ definition
 :: CIRCCOMB:def 12
 
     len it = n;
+end;
+
+registration
+ cluster -> empty FinSeqLen of 0;
 end;
 
 definition

@@ -9,8 +9,9 @@ environ
  vocabularies PARTFUN1, SUPINF_1, MEASURE1, FUNCT_1, RAT_1, RELAT_1, COMPLEX1,
       SEQ_1, MEASURE6, BOOLE, ARYTM_1, MESFUNC1, TARSKI, RFUNCT_3, SQUARE_1,
       RLVECT_1, FUNCT_3, GROUP_1, PROB_2, FINSEQ_1, MESFUNC2, ARYTM, FUNCOP_1,
-      PROB_1, FINSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      PROB_1, FINSET_1, VALUED_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      VALUED_0, REAL_1,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1, WELLORD2, RAT_1,
       FINSEQ_1, PROB_1, XXREAL_0, SUPINF_1, FUNCOP_1, SUPINF_2, FUNCT_3, SEQ_1,
       PROB_2, MEASURE1, MEASURE2, MEASURE3, MEASURE6, EXTREAL1, MESFUNC1,
@@ -19,7 +20,7 @@ environ
       FINSEQ_1, PROB_2, MEASURE3, MEASURE6, EXTREAL1, MESFUNC1, EXTREAL2,
       SUPINF_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, RAT_1,
-      MEMBERED, FINSEQ_1, MEASURE1, VALUED_0, FUNCT_2;
+      MEMBERED, FINSEQ_1, MEASURE1, VALUED_0, FUNCT_2, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, MEASURE6, SUPINF_2, VALUED_0;
  theorems MEASURE1, TARSKI, SUBSET_1, PARTFUN1, FUNCT_1, FUNCT_2, NAT_1,
@@ -42,22 +43,17 @@ reserve r for Real;
 reserve n,m for Nat;
 reserve A,B for Element of S;
 
-notation
-  let X, f;
-  synonym f is finite for f is real-yielding;
-end;
-
 definition
   let X, f;
-  redefine attr f is finite means
+  redefine attr f is real-valued means
   :Def1:
   for x st x in dom f holds |. f.x .| < +infty;
   compatibility
   proof
-    thus f is finite implies for x st x in dom f holds |. f.x .| < +infty
+    thus f is real-valued implies for x st x in dom f holds |. f.x .| < +infty
     proof
       assume
-A1:   f is finite;
+A1:   f is real-valued;
       let x;
       assume x in dom f;
       then
@@ -92,14 +88,14 @@ A1: dom f = dom (1(#)f) by MESFUNC1:def 6;
 end;
 
 theorem Th2:
-  f is finite or g is finite implies
+  f is real-valued or g is real-valued implies
   dom (f+g) = dom f /\ dom g & dom (f-g) = dom f /\ dom g
 proof
   assume
-A1: f is finite or g is finite;
+A1: f is real-valued or g is real-valued;
   now per cases by A1;
     suppose
-A2:   f is finite;
+A2:   f is real-valued;
       not +infty in rng f by A2;
       then
 A4:   f"{+infty} = {} by FUNCT_1:142;
@@ -112,7 +108,7 @@ A4:   f"{+infty} = {} by FUNCT_1:142;
       hence thesis;
     end;
     suppose
-A6:   g is finite;
+A6:   g is real-valued;
       not +infty in rng g by A6;
       then
 A8:   g"{+infty} = {} by FUNCT_1:142;
@@ -129,14 +125,14 @@ A8:   g"{+infty} = {} by FUNCT_1:142;
 end;
 
 theorem Th3:
-  for f,g,F,r,A st f is finite & g is finite &
+  for f,g,F,r,A st f is real-valued & g is real-valued &
   (for p holds F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\
   less_dom(g,R_EAL (r-p)))) holds A /\ less_dom(f+g,R_EAL r) = union (rng F)
 proof
   let f,g,F,r,A;
   assume that
-A1: f is finite and
-A2: g is finite and
+A1: f is real-valued and
+A2: g is real-valued and
 A3: for p holds F.p = (A /\ less_dom(f,R_EAL p)) /\ (A /\
   less_dom(g,R_EAL (r-p)));
 A4: dom(f+g) = dom f /\ dom g by A1,Th2;
@@ -298,8 +294,8 @@ A2: for x1 being set st x1 in RAT ex y1 being set st y1 in S & P[x1,y1]
     then x1 is Rational;
     then consider p such that
 A3: p = x1;
-A4: A /\ less_dom(f,R_EAL p) is_measurable_on S by A1,MESFUNC1:def 17;
-A5: A /\ less_dom(g,R_EAL (r-p)) is_measurable_on S by A1,MESFUNC1:def 17;
+A4: A /\ less_dom(f,R_EAL p) in S by A1,MESFUNC1:def 17;
+A5: A /\ less_dom(g,R_EAL (r-p)) in S by A1,MESFUNC1:def 17;
     take (A /\ less_dom(f,R_EAL p)) /\ (A /\ less_dom(g,R_EAL (r-p)));
     thus thesis by A3,A4,A5,MEASURE1:19;
   end;
@@ -320,16 +316,16 @@ A8: q = p & G.p = (A /\ less_dom(f,R_EAL q)) /\ (A /\ less_dom(g,R_EAL (r-q)))
 end;
 
 theorem Th7:
-  for f,g,A st f is finite & g is finite & f is_measurable_on A &
+  for f,g,A st f is real-valued & g is real-valued & f is_measurable_on A &
   g is_measurable_on A holds f+g is_measurable_on A
 proof
   let f,g,A;
   assume that
-A1: f is finite and
-A2: g is finite and
+A1: f is real-valued and
+A2: g is real-valued and
 A3: f is_measurable_on A and
 A4: g is_measurable_on A;
-  for r be real number holds A /\ less_dom(f+g,R_EAL r) is_measurable_on S
+  for r be real number holds A /\ less_dom(f+g,R_EAL r) in S
   proof
     let r be real number;
     reconsider r as Real by XREAL_0:def 1;
@@ -469,13 +465,13 @@ end;
 
 theorem Th12:
   for C being non empty set, f being PartFunc of C,ExtREAL, r be Real
-  st f is finite holds r(#)f is finite
+  st f is real-valued holds r(#)f is real-valued
 proof
   let C be non empty set;
   let f be PartFunc of C,ExtREAL;
   let r be Real;
   assume
-A1: f is finite;
+A1: f is real-valued;
   for x being Element of C st x in dom(r(#)f) holds |.(r(#)f).x .| < +infty
   proof
     let x be Element of C;
@@ -497,19 +493,19 @@ A3: -infty < R_EAL r * R_EAL y & R_EAL r * R_EAL y < +infty by EXTREAL1:38;
 end;
 
 theorem
-  for f,g,A st f is finite & g is finite & f is_measurable_on A &
+  for f,g,A st f is real-valued & g is real-valued & f is_measurable_on A &
   g is_measurable_on A & A c= dom g holds f-g is_measurable_on A
 proof
   let f,g,A;
   assume that
-A1: f is finite and
-A2: g is finite and
+A1: f is real-valued and
+A2: g is real-valued and
 A3: f is_measurable_on A and
 A4: g is_measurable_on A and
 A5: A c= dom g;
-  (-1)(#)g is finite & (-1)(#)g is_measurable_on A
+  (-1)(#)g is real-valued & (-1)(#)g is_measurable_on A
   by A2,A4,A5,Th12,MESFUNC1:41;
-  then -g is finite & -g is_measurable_on A by Th11;
+  then -g is real-valued & -g is_measurable_on A by Th11;
   then f+(-g) is_measurable_on A by A1,A3,Th7;
   hence thesis by Th9;
 end;
@@ -964,7 +960,7 @@ theorem
 proof
   assume
 A1: f is_measurable_on A;
-  for r be real number holds A /\ less_dom(max+(f),R_EAL r) is_measurable_on S
+  for r be real number holds A /\ less_dom(max+(f),R_EAL r) in S
   proof
     let r be real number;
     reconsider r as Real by XREAL_0:def 1;
@@ -1056,7 +1052,7 @@ proof
   assume that
 A1: f is_measurable_on A and
 A2: A c= dom f;
-  for r be real number holds A /\ less_dom(max-(f),R_EAL r) is_measurable_on S
+  for r be real number holds A /\ less_dom(max-(f),R_EAL r) in S
   proof
     let r be real number;
     reconsider r as Real by XREAL_0:def 1;
@@ -1158,7 +1154,7 @@ proof
   assume that
 A1: f is_measurable_on A and
 A2: A c= dom f;
-  for r be real number holds A /\ less_dom(|.f.|,R_EAL r) is_measurable_on S
+  for r be real number holds A /\ less_dom(|.f.|,R_EAL r) in S
   proof
     let r be real number;
     reconsider r as Real by XREAL_0:def 1;
@@ -1210,7 +1206,7 @@ A14:      x in dom |.f.| by A11,MESFUNC1:def 10;
         R_EAL r) by TARSKI:def 3;
         hence thesis by A8,XBOOLE_0:def 10;
       end;
-      A /\ great_dom(f,R_EAL -r) /\ less_dom(f,R_EAL r) is_measurable_on S
+      A /\ great_dom(f,R_EAL -r) /\ less_dom(f,R_EAL r) in S
       by A1,A2,MESFUNC1:36;
       hence thesis by A3,XBOOLE_1:16;
     end;
@@ -1249,7 +1245,7 @@ end;
 canceled;
 
 theorem
-  chi(A,X) is finite
+  chi(A,X) is real-valued
 proof
   for x st x in dom chi(A,X) holds |.chi(A,X).x.| < +infty
   proof
@@ -1275,7 +1271,7 @@ theorem
   chi(A,X) is_measurable_on B
 proof
   for r be real number holds B /\ less_eq_dom(chi(A,X),R_EAL r)
-  is_measurable_on S
+  in S
   proof
     let r be real number;
     reconsider r as Real by XREAL_0:def 1;
@@ -1556,17 +1552,17 @@ definition
   canceled;
   pred f is_simple_func_in S means
   :Def5:
-  f is finite &
+  f is real-valued &
   ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
   for n being Nat,x,y being Element of X st
   n in dom F & x in F.n & y in F.n holds f.x = f.y);
 end;
 
 theorem
-  f is finite implies rng f is Subset of REAL
+  f is real-valued implies rng f is Subset of REAL
 proof
   assume
-A1: f is finite;
+A1: f is real-valued;
   rng f c= REAL
   proof
     let y be set;
@@ -1629,13 +1625,13 @@ A4: P[0]
 A5: 0 <= len F;
     reconsider G = F|(Seg 0) as FinSequence of S by FINSEQ_1:23;
     len G = 0 by A5,FINSEQ_1:21;
-    then G = {} by CARD_2:59;
+    then G = {};
     then rng G = {} by RELAT_1:60;
     then
 A6: dom(f|union rng G) = dom f /\ {} by FUNCT_1:68,ZFMISC_1:2
       .= {};
     for r be real number holds A /\ less_dom(f|union rng G,R_EAL r)
-    is_measurable_on S
+    in S
     proof
       let r be real number;
       for x1 being set st x1 in less_dom(f|union rng G,R_EAL r) holds
@@ -1658,7 +1654,7 @@ A8: m <= len F implies f|(union rng(F|(Seg m))) is_measurable_on A;
 A9:   m+1 <= len F;
 A10:  m <= m+1 by NAT_1:11;
       for r be real number holds
-      A /\ less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) is_measurable_on S
+      A /\ less_dom(f|union rng(F|(Seg(m+1))),R_EAL r) in S
       proof
         let r be real number;
         now per cases;
@@ -1704,7 +1700,7 @@ A16:        union rng (F|(Seg(m+1))) = union rng G1 \/
             union {F.(m+1)} by ZFMISC_1:96
               .= union rng G1 \/ F.(m+1) by ZFMISC_1:31;
 A17:        x in dom f by A2,A14,A15,TARSKI:def 4;
-            f is finite by A1,Def5;
+            f is real-valued by A1,Def5;
             then |. f.x .| < +infty by A17,Def1;
             then -(+infty) < f.x & f.x < +infty by EXTREAL2:58;
             then -infty < f.x & f.x < +infty by SUPINF_2:def 3;

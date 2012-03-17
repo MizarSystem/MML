@@ -45,31 +45,31 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="114">
+<Adjective nr="126">
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="115"/>
-<Adjective nr="116"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
+<Adjective nr="127"/>
+<Adjective nr="128"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="305">
+<Func kind="K" nr="309">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="113"/>
+<Adjective nr="125"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -36,7 +36,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="15">
+<Func kind="K" nr="16">
 <Func kind="F" nr="3">
 <Var nr="1"/>
 </Func>
@@ -56,7 +56,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="15">
+<Func kind="K" nr="16">
 <Func kind="F" nr="4">
 <Var nr="1"/>
 </Func>

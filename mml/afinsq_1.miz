@@ -7,7 +7,7 @@
 environ
 
  vocabularies FUNCT_1, BOOLE, ORDINAL1, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2,
-      CARD_1, TARSKI, PARTFUN1, ALGSEQ_1, ARYTM_1, FUNCT_4, FINSEQ_7, CAT_1,
+      CARD_1, PARTFUN1, ALGSEQ_1, ARYTM_1, FUNCT_4, FINSEQ_7, CAT_1,
       AFINSQ_1, FUNCOP_1, ARYTM, VALUED_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
@@ -15,14 +15,14 @@ environ
  constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, ORDINAL4, FUNCT_7, ORDINAL3,
       VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2;
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1;
- theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
+ theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
       CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1,
       XREAL_1, VALUED_0, PRE_CIRC;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, CLASSES1;
+ schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, CLASSES1;
 
 begin
 
@@ -494,7 +494,7 @@ proof
 A1: len p <= k & k < len p + len q;
   then consider m being Nat such that
 A2: len p + m = k by NAT_1:10;
-  k - len p < len p + len q - len p by A1,REAL_1:92;
+  k - len p < len p + len q - len p by A1,XREAL_1:16;
   then m in dom q by A2,EULER_1:1;
   hence thesis by A2,Def4;
 end;
@@ -519,7 +519,7 @@ A1: k < len p + len q by EULER_1:1;
     assume len p <= k;
     then consider n being Nat such that
 A3: k=len p + n by NAT_1:10;
-    n + len p - len p < len q + len p - len p by A1,A3,REAL_1:92;
+    n + len p - len p < len q + len p - len p by A1,A3,XREAL_1:16;
     then n in len q by EULER_1:1;
     hence thesis by A3;
   end;
@@ -605,7 +605,7 @@ A5:   len p <= k;
 A6:   q.(k-len p) = x by A1,A3,Th21;
       consider m being Nat such that
 A7:   len p + m = k by A5,NAT_1:10;
-      m + len p - len p < len p + len q - len p by A3,A7,REAL_1:92;
+      m + len p - len p < len p + len q - len p by A3,A7,XREAL_1:16;
       then m in len q by EULER_1:1;
       hence x in rng q by A6,A7,FUNCT_1:12;
     end;
@@ -1091,13 +1091,18 @@ proof
   let p;
   defpred P1[Real] means for p st len p = $1 holds P[p];
   consider X being Subset of REAL such that
-A3: for x being Real holds x in X iff P1[x] from REAL_1:sch 1;
+A3: for x being Real holds x in X iff P1[x] from SUBSET_1:sch 3;
   for k holds k in X
   proof
     defpred R[Element of NAT] means $1 in X;
 A4: R[0]
     proof
-      for q st len q = 0 holds P[q] by A1,CARD_2:59;
+        for p st len p = 0 holds P[p]
+        proof let p;
+         assume len p = 0;
+          then p = {};
+         hence P[p] by A1;
+        end;
       hence 0 in X by A3;
     end;
     now

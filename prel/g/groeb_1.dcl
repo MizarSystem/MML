@@ -52,20 +52,20 @@
 <ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="13">
-<Func kind="K" nr="373">
+<Func kind="G" nr="14">
+<Func kind="K" nr="378">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="393">
+<Func kind="K" nr="398">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="113"/>
-<Adjective nr="123"/>
+<Adjective nr="118"/>
+<Adjective nr="128"/>
 </Cluster>
 </FCluster>
 </Registrations>

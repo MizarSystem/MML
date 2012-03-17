@@ -14,7 +14,7 @@ environ
       ORDERS_1, QUANTAL1, FINSEQ_4, ORDINAL1, WAYBEL_0, ASYMPT_0, ZF_MODEL,
       OPPCAT_1, LATTICE3, CARD_5, AOFA_000, FINSEQ_2, CARD_1, PARTFUN1,
       FUNCT_4, QC_LANG1, FUNCT_2, ZF_LANG, LANG1, ARYTM, CAT_3, TREES_3,
-      FACIRC_1, YELLOW_0, YELLOW_1, ABCMIZ_0, ABCMIZ_1, FUNCT_7;
+      FACIRC_1, YELLOW_0, YELLOW_1, ABCMIZ_0, ABCMIZ_1, FUNCT_7, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, SETFAM_1, RELAT_1,
       FUNCT_1, RELSET_1, BINOP_1, FINSUB_1, PARTFUN1, PROB_2, FACIRC_1,
       ENUMSET1, FUNCT_2, FUNCT_4, CAT_3, FUNCOP_1, ARYTM_0, XCMPLX_0, XXREAL_0,
@@ -36,7 +36,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, XREAL_0, ORDINAL1, ORDINAL2, RELSET_1,
       FUNCT_1, FINSET_1, STRUCT_0, PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3,
       FINSEQ_1, TREES_9, CLASSES2, PARTFUN2, FILTER_0, FINSEQ_5, PRALG_1,
-      NAT_1, CARD_1, MSAFREE, CANTOR_1, TREES_3, MSAFREE1, PARTFUN1, MSATERM,
+      NAT_1, CARD_1, MSAFREE, FUNCOP_1, TREES_3, MSAFREE1, PARTFUN1, MSATERM,
       ORDERS_2, TREES_2, DTCONSTR, WAYBEL_0, YELLOW_0, YELLOW_1, LATTICE3,
       MEMBERED, RELAT_1, INDEX_1, PUA2MSS1, INSTALG1, CATALG_1, MSAFREE3,
       FACIRC_1, EQUATION, MSUALG_6, MSUALG_9, PRE_CIRC, WAYBEL_8, XXREAL_2;
@@ -109,10 +109,10 @@ theorem Th90:
    given x,y being set such that
 A1: t = [x,y];
     (ex s being SortSymbol of S, v being Element of X.s st t.{} = [v,s])
-    or t.{} in [:the OperSymbols of S,{the carrier of S}:]
+    or t.{} in [:the carrier' of S,{the carrier of S}:]
      by MSATERM:2; then
     (ex s being SortSymbol of S, v being Element of X.s st t.{} = [v,s])
-    or ex a,b being set st a in the OperSymbols of S &
+    or ex a,b being set st a in the carrier' of S &
           b in {the carrier of S} & t.{} = [a,b] by ZFMISC_1:def 2; then
     {{}} <> {{}, t.{}} by ZFMISC_1:9; then
 A4: [{}, t.{}] <> {x} by ZFMISC_1:9;
@@ -1271,12 +1271,12 @@ definition
  attr C is constructor means:
 CONSTRSIGN:
   the carrier of C = {a_Type, an_Adj, a_Term} &
-  {*, non_op} c= the OperSymbols of C &
+  {*, non_op} c= the carrier' of C &
   (the Arity of C).* = <*an_Adj, a_Type*> &
   (the Arity of C).non_op = <*an_Adj*> &
   (the ResultSort of C).* = a_Type &
   (the ResultSort of C).non_op = an_Adj &
-  for o being Element of the OperSymbols of C st o <> * & o <> non_op
+  for o being Element of the carrier' of C st o <> * & o <> non_op
    holds (the Arity of C).o in {a_Term}*;
 end;
 
@@ -1285,16 +1285,15 @@ registration
  coherence
   proof let C be Signature; assume
     the carrier of C = {a_Type, an_Adj, a_Term};
-   assume {*, non_op} c= the OperSymbols of C; then
-    the OperSymbols of C <> {};
-   hence thesis by MSUALG_1:def 5;
+   assume {*, non_op} c= the carrier' of C;
+   thus thesis;
   end;
 end;
 
 definition
  func MinConstrSign -> strict Signature means:
 MINdef:
-  it is constructor & the OperSymbols of it = {*, non_op};
+  it is constructor & the carrier' of it = {*, non_op};
  existence
   proof
    set A = {a_Type, an_Adj, a_Term};
@@ -1303,11 +1302,10 @@ MINdef:
    set C = ManySortedSign(# A, {*, non_op},
            (*, non_op) --> (<*a,t*>, aa),
            (*, non_op) --> (t, a) #);
-   reconsider C as non void non empty strict ManySortedSign
-     by MSUALG_1:def 5;
+   reconsider C as non void non empty strict ManySortedSign;
    take C;
    thus the carrier of C = {a_Type, an_Adj, a_Term} &
-    {*, non_op} c= the OperSymbols of C;
+    {*, non_op} c= the carrier' of C;
    thus (the Arity of C).* = <*an_Adj, a_Type*> by FUNCT_4:66;
    thus (the Arity of C).non_op = <*an_Adj*> by FUNCT_4:66;
    thus (the ResultSort of C).* = a_Type by FUNCT_4:66;
@@ -1316,8 +1314,8 @@ MINdef:
   end;
  correctness
   proof let C1, C2 be strict Signature such that
-A1: C1 is constructor & the OperSymbols of C1 = {*, non_op} and
-A2: C2 is constructor & the OperSymbols of C2 = {*, non_op};
+A1: C1 is constructor & the carrier' of C1 = {*, non_op} and
+A2: C2 is constructor & the carrier' of C2 = {*, non_op};
    set A = {a_Type, an_Adj, a_Term};
 A3: the carrier of C1 = A & the carrier of C2 = A by A1,A2,CONSTRSIGN;
 A4: (the Arity of C1).* = <*an_Adj, a_Type*> &
@@ -1400,7 +1398,7 @@ definition
  coherence by A1,ENUMSET1:def 1;
  func a_Term C -> SortSymbol of C equals a_Term;
  coherence by A1,ENUMSET1:def 1;
-       A2:  {*, non_op} c= the OperSymbols of C by CONSTRSIGN;
+       A2:  {*, non_op} c= the carrier' of C by CONSTRSIGN;
        A3:  * in {*, non_op} & non_op in {*, non_op} by TARSKI:def 2;
  func non_op C -> OperSymbol of C equals non_op;
  coherence by A2,A3;
@@ -1509,7 +1507,7 @@ A1: x in Modes \/ Attrs or x in Funcs by XBOOLE_0:def 2;
 definition
  func MaxConstrSign -> strict ConstructorSignature means:
 MAXdef:
-  the OperSymbols of it = {*, non_op} \/ Constructors &
+  the carrier' of it = {*, non_op} \/ Constructors &
   for o being OperSymbol of it st o is constructor
    holds (the ResultSort of it).o = o`1 &
      Card ((the Arity of it).o) = Card o`2`1;
@@ -1556,10 +1554,10 @@ A6: rng g \/ rng (*, non_op)-->(t, a) c= S \/ S by XBOOLE_1:13;
     rng R c= rng g \/ rng (*, non_op)-->(t, a) by FUNCT_4:18; then
    reconsider R as Function of O, S by A3,FUNCT_2:4,A6,XBOOLE_1:1;
    reconsider Max = ManySortedSign(# S, O, A, R #) as
-     non empty non void strict Signature by MSUALG_1:def 5;
+     non empty non void strict Signature;
     Max is constructor
      proof thus the carrier of Max = {a_Type, an_Adj, a_Term};
-      thus {*, non_op} c= the OperSymbols of Max by XBOOLE_1:7;
+      thus {*, non_op} c= the carrier' of Max by XBOOLE_1:7;
 B3:    * in {*, non_op} & non_op in {*, non_op} by TARSKI:def 2;
       hence (the Arity of Max).* = ((*, non_op)-->(<*a,t*>, aa)).*
               by B0,FUNCT_4:14
@@ -1573,7 +1571,7 @@ B3:    * in {*, non_op} & non_op in {*, non_op} by TARSKI:def 2;
       thus (the ResultSort of Max).non_op = ((*, non_op)-->(t, a)).non_op
               by B0,B3,FUNCT_4:14
         .= an_Adj by FUNCT_4:66;
-      let o be Element of the OperSymbols of Max;
+      let o be Element of the carrier' of Max;
       assume o <> * & o <> non_op; then
 B4:    not o in {*, non_op} by TARSKI:def 2; then
       reconsider c = o as Element of Constructors by XBOOLE_0:def 2;
@@ -1584,7 +1582,7 @@ B4:    not o in {*, non_op} by TARSKI:def 2; then
      end; then
    reconsider Max as strict ConstructorSignature;
    take Max;
-   thus the OperSymbols of Max = {*, non_op} \/ Constructors;
+   thus the carrier' of Max = {*, non_op} \/ Constructors;
    let o being OperSymbol of Max; assume o <> * & o <> non_op; then
 C1: not o in {*, non_op} by TARSKI:def 2; then
    reconsider c = o as Element of Constructors by XBOOLE_0:def 2;
@@ -1595,11 +1593,11 @@ C1: not o in {*, non_op} by TARSKI:def 2; then
   end;
  uniqueness
   proof let it1, it2 be strict ConstructorSignature such that
-A1: the OperSymbols of it1 = {*, non_op} \/ Constructors and
+A1: the carrier' of it1 = {*, non_op} \/ Constructors and
 A2: for o being OperSymbol of it1 st o is constructor
      holds (the ResultSort of it1).o = o`1 &
       Card ((the Arity of it1).o) = Card o`2`1 and
-A3: the OperSymbols of it2 = {*, non_op} \/ Constructors and
+A3: the carrier' of it2 = {*, non_op} \/ Constructors and
 A4: for o being OperSymbol of it2 st o is constructor
      holds (the ResultSort of it2).o = o`1 &
       Card ((the Arity of it2).o) = Card o`2`1;
@@ -1663,7 +1661,7 @@ registration
     the_result_sort_of m = a_Type and
 A2: the_arity_of m = {} and
     the_result_sort_of a = an_Adj & the_arity_of a = {};
-    the OperSymbols of MinConstrSign = {*, non_op} by MINdef; then
+    the carrier' of MinConstrSign = {*, non_op} by MINdef; then
     m = * or m = non_op by TARSKI:def 2;
    hence contradiction by A2,CONSTRSIGN;
   end;
@@ -1676,7 +1674,7 @@ A2: the_arity_of m = {} and
     m in Modes & a in Attrs by ZFMISC_1:def 2; then
     m in Modes \/ Attrs & a in Modes \/ Attrs by XBOOLE_0:def 2; then
     m in Constructors & a in Constructors &
-    the OperSymbols of MaxConstrSign = {*, non_op} \/ Constructors
+    the carrier' of MaxConstrSign = {*, non_op} \/ Constructors
      by MAXdef,XBOOLE_0:def 2; then
    reconsider m,a as OperSymbol of MaxConstrSign by XBOOLE_0:def 2;
 A1: m is constructor & a is constructor by CNSTR2;
@@ -1801,7 +1799,7 @@ definition
   Union (S variables_in t) = {};
  attr t is compound means:
 COMP:
-  t.{} in [:the OperSymbols of S, {the carrier of S}:];
+  t.{} in [:the carrier' of S, {the carrier of S}:];
 end;
 
 reserve C for initialized ConstructorSignature,
@@ -1845,9 +1843,11 @@ A: len the_arity_of c = 0;
   [c, the carrier of C]-tree {};
   coherence
   proof
+   the_arity_of c = {} by A;
+   then
 A1: root-tree [c, the carrier of C] in
     (the Sorts of Free(C, MSVars C)).the_result_sort_of c
-      by MSAFREE3:6,A,CARD_2:59;
+      by MSAFREE3:6;
     dom the Sorts of Free(C, MSVars C) = the carrier of C by PBOOLE:def 3; then
     root-tree [c, the carrier of C] in Union (the Sorts of Free(C, MSVars C))
     by A1,CARD_5:10;
@@ -1945,7 +1945,7 @@ registration
   proof
     (non_op C)term a = [non_op, the carrier of C]-tree <*a*> by ThNon; then
     ((non_op C)term a).{} = [non_op C, the carrier of C] by TREES_4:def 4;
-    hence ((non_op C)term a).{} in [:the OperSymbols of C, {the carrier of C}:]
+    hence ((non_op C)term a).{} in [:the carrier' of C, {the carrier of C}:]
     by ZFMISC_1:129;
   end;
 end;
@@ -2060,7 +2060,7 @@ registration
   proof
     (ast C)term(a,t) = [ *, the carrier of C]-tree <*a,t*> by ThAst; then
     ((ast C)term(a,t)).{} = [ast C, the carrier of C] by TREES_4:def 4;
-    hence ((ast C)term(a,t)).{} in [:the OperSymbols of C, {the carrier of C}:]
+    hence ((ast C)term(a,t)).{} in [:the carrier' of C, {the carrier of C}:]
     by ZFMISC_1:129;
   end;
 end;
@@ -2191,7 +2191,7 @@ registration
    a_Term C <> the carrier of C; then
    (x-term C).{} = [x, a_Term C] & a_Term C nin {the carrier of C}
    by TARSKI:def 1,TREES_4:3;
-   hence (x-term C).{} nin [:the OperSymbols of C, {the carrier of C}:]
+   hence (x-term C).{} nin [:the carrier' of C, {the carrier of C}:]
    by ZFMISC_1:106;
  end;
 end;
@@ -2304,7 +2304,7 @@ TERM:
   proof
     reconsider t = [c, the carrier of C]-tree p as expression of C by A,B,Th83;
     t.{} = [c, the carrier of C] by TREES_4:def 4; then
-    t.{} in [:the OperSymbols of C, {the carrier of C}:] by ZFMISC_1:129;
+    t.{} in [:the carrier' of C, {the carrier of C}:] by ZFMISC_1:129;
     hence thesis by COMP;
   end;
 end;
@@ -2472,8 +2472,8 @@ theorem ThNon2:
  e.{} = [non_op, the carrier of C] implies ex a st e = (non_op C)term a
   proof assume
 A0: e.{} = [non_op, the carrier of C];
-    non_op C in the OperSymbols of C; then
-A1: e.{} in [:the OperSymbols of C, {the carrier of C}:] by A0,ZFMISC_1:129;
+    non_op C in the carrier' of C; then
+A1: e.{} in [:the carrier' of C, {the carrier of C}:] by A0,ZFMISC_1:129;
     per cases by Th100;
     suppose
       ex x being variable st e = x-term C;
@@ -2507,8 +2507,8 @@ theorem ThAst2:
  e.{} = [ *, the carrier of C] implies ex a, t st e = (ast C)term(a,t)
   proof assume
 A0: e.{} = [ *, the carrier of C];
-    ast C in the OperSymbols of C; then
-A1: e.{} in [:the OperSymbols of C, {the carrier of C}:] by A0,ZFMISC_1:129;
+    ast C in the carrier' of C; then
+A1: e.{} in [:the carrier' of C, {the carrier of C}:] by A0,ZFMISC_1:129;
     per cases by Th100;
     suppose
       ex x being variable st e = x-term C;
@@ -4348,7 +4348,7 @@ Z0:   X"{{}} c= rng the ResultSort of S by WMV;
       X.s in {{}} by TARSKI:def 1; then
       s in X"{{}} by A0,FUNCT_1:def 13; then
       consider o being set such that
-Z1:   o in the OperSymbols of S & (the ResultSort of S).o = s by Z0,FUNCT_2:17;
+Z1:   o in the carrier' of S & (the ResultSort of S).o = s by Z0,FUNCT_2:17;
       reconsider o as OperSymbol of S by Z1;
       take o;
       thus the_result_sort_of o = s by Z1;
@@ -4376,7 +4376,7 @@ registration
 A0: m in Modes & a in Attrs & f in Funcs by ZFMISC_1:def 2; then
     m in Modes \/ Attrs & a in Modes \/ Attrs by XBOOLE_0:def 2; then
     m in Constructors & a in Constructors & f in Constructors &
-    the OperSymbols of MaxConstrSign = {*, non_op} \/ Constructors
+    the carrier' of MaxConstrSign = {*, non_op} \/ Constructors
      by A0,MAXdef,XBOOLE_0:def 2; then
    reconsider m,a,f as OperSymbol of MaxConstrSign by XBOOLE_0:def 2;
     m is constructor & a is constructor & f is constructor by CNSTR2; then
@@ -4614,27 +4614,27 @@ theorem ThTNT:
   for X being ManySortedSet of the carrier of S
   st X is with_missing_variables
   holds
-  NonTerminals DTConMSA X = [:the OperSymbols of S,{the carrier of S}:] &
+  NonTerminals DTConMSA X = [:the carrier' of S,{the carrier of S}:] &
   Terminals DTConMSA X = Union coprod X
   proof
     let S be non void Signature;
     let X be ManySortedSet of the carrier of S such that
 A0: X is with_missing_variables;
     set D = DTConMSA X,
-        A = [:the OperSymbols of S,{the carrier of S}:] \/
+        A = [:the carrier' of S,{the carrier of S}:] \/
             Union (coprod (X qua ManySortedSet of the carrier of S));
-A1: Union(coprod X) misses [:the OperSymbols of S,{the carrier of S}:]
+A1: Union(coprod X) misses [:the carrier' of S,{the carrier of S}:]
     by MSAFREE:4;
 A2: the carrier of D = (Terminals D) \/ (NonTerminals D) &
     (Terminals D) misses (NonTerminals D) by DTCONSTR:8,LANG1:1;
-    thus NonTerminals DTConMSA X c= [:the OperSymbols of S,{the carrier of S}:]
+    thus NonTerminals DTConMSA X c= [:the carrier' of S,{the carrier of S}:]
     by MSAFREE:6;
     thus
-A10:[:the OperSymbols of S,{the carrier of S}:] c= NonTerminals D
+A10:[:the carrier' of S,{the carrier of S}:] c= NonTerminals D
     proof
       let o,x2 be set; assume
-A11:  [o,x2] in [:the OperSymbols of S,{the carrier of S}:]; then
-A12:  o in the OperSymbols of S & x2 in {the carrier of S} by ZFMISC_1:106;then
+A11:  [o,x2] in [:the carrier' of S,{the carrier of S}:]; then
+A12:  o in the carrier' of S & x2 in {the carrier of S} by ZFMISC_1:106;then
       reconsider o as OperSymbol of S;
 A13:  the carrier of S = x2 by A12,TARSKI:def 1; then
       reconsider xa = [o,the carrier of S]
@@ -4671,7 +4671,7 @@ AA:       X.(O.a) = {}; then
 A3:       the_result_sort_of o = s by A0,LemMV;
           take y = [o,the carrier of S];
           the carrier of S in {the carrier of S} by TARSKI:def 1; then
-          y in [:the OperSymbols of S,{the carrier of S}:] by ZFMISC_1:106;
+          y in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:106;
           hence thesis by AA,A3,XBOOLE_0:def 2;
         end;
       end;
@@ -4697,7 +4697,7 @@ A21:  len b = len O by A17,FINSEQ_1:def 3;
         then (coprod(X)).(O.c) in rng coprod(X) by A24,FUNCT_1:def 5;
         then coprod(O.c,X) in rng coprod(X) by A24,MSAFREE:def 3; then
 AB:     X.(O.c) <> {} implies b.c in Union coprod(X) by A23,TARSKI:def 4;
-        thus b.c in [:the OperSymbols of S,{the carrier of S}:] implies
+        thus b.c in [:the carrier' of S,{the carrier of S}:] implies
           for o1 being OperSymbol of S st [o1,the carrier of S] = b.c
           holds the_result_sort_of o1 = O.c
           by A23,A1,AB,XBOOLE_0:3,ZFMISC_1:33;
@@ -4707,7 +4707,7 @@ B1:     b.c in Union (coprod X);
           consider o being OperSymbol of S such that
 B2:       b.c = [o,the carrier of S] & the_result_sort_of o = O.c by A17,A22;
           the carrier of S in {the carrier of S} by TARSKI:def 1; then
-          b.c in [:the OperSymbols of S,{the carrier of S}:]
+          b.c in [:the carrier' of S,{the carrier of S}:]
           by B2,ZFMISC_1:106;
           hence contradiction by B1,A1,XBOOLE_0:3;
         end;
@@ -4721,7 +4721,7 @@ B2:       b.c = [o,the carrier of S] & the_result_sort_of o = O.c by A17,A22;
     proof
       let x be set; assume
 A25:  x in Terminals D; then
-      not x in [:the OperSymbols of S,{the carrier of S}:]
+      not x in [:the carrier' of S,{the carrier of S}:]
       by A2,A10,XBOOLE_0:3;
       hence thesis by A25,XBOOLE_0:def 2;
     end;
@@ -4753,22 +4753,22 @@ A3: (the carrier of G)* c= (the carrier of G')* by A1,FINSEQ_1:83;
     proof
       let a,b be set; assume
 C1:   [a,b] in the Rules of G; then
-C2:   a in [:the OperSymbols of S,{the carrier of S}:] &
-      b in ([:the OperSymbols of S,{the carrier of S}:] \/ Union coprod X)*
+C2:   a in [:the carrier' of S,{the carrier of S}:] &
+      b in ([:the carrier' of S,{the carrier of S}:] \/ Union coprod X)*
       by MSAFREE1:2; then
       consider a1,a2 being set such that
-C3:   a1 in the OperSymbols of S & a2 in {the carrier of S} & a = [a1,a2]
+C3:   a1 in the carrier' of S & a2 in {the carrier of S} & a = [a1,a2]
       by ZFMISC_1:def 2;
       reconsider a1 as OperSymbol of S by C3;
-      reconsider a as Element of [:the OperSymbols of S,{the carrier of S}:]
+      reconsider a as Element of [:the carrier' of S,{the carrier of S}:]
       \/ Union coprod X by C2,XBOOLE_0:def 2;
       reconsider a' = a as
-      Element of [:the OperSymbols of S,{the carrier of S}:]
+      Element of [:the carrier' of S,{the carrier of S}:]
       \/ Union coprod Y by C2,XBOOLE_0:def 2;
       reconsider b as Element of
-      ([:the OperSymbols of S,{the carrier of S}:] \/ Union coprod X)* by C2;
+      ([:the carrier' of S,{the carrier of S}:] \/ Union coprod X)* by C2;
       reconsider b' = b as Element of
-      ([:the OperSymbols of S,{the carrier of S}:] \/ Union coprod Y)*
+      ([:the carrier' of S,{the carrier of S}:] \/ Union coprod Y)*
       by C2,A3;
       now let o be OperSymbol of S; assume
 C4:     [o,the carrier of S] = a';
@@ -4776,22 +4776,22 @@ C4:     [o,the carrier of S] = a';
 CC:     len b' = len (the_arity_of o) by C1,MSAFREE:def 9;
         let x be set; assume
 C5:     x in dom b';
-        hence b'.x in [:the OperSymbols of S,{the carrier of S}:] implies
+        hence b'.x in [:the carrier' of S,{the carrier of S}:] implies
         for o1 be OperSymbol of S st [o1,the carrier of S] = b.x
         holds the_result_sort_of o1 = (the_arity_of o).x
         by C1,C4,MSAFREE:def 9;
-C6:     Union coprod X misses [:the OperSymbols of S,{the carrier of S}:] &
-        Union coprod Y misses [:the OperSymbols of S,{the carrier of S}:]
+C6:     Union coprod X misses [:the carrier' of S,{the carrier of S}:] &
+        Union coprod Y misses [:the carrier' of S,{the carrier of S}:]
         by MSAFREE:4;
-C7:     b.x in [:the OperSymbols of S,{the carrier of S}:] \/ Union coprod X
+C7:     b.x in [:the carrier' of S,{the carrier of S}:] \/ Union coprod X
         by C5,DTCONSTR:2;
         dom b' = Seg len b' & dom the_arity_of o = Seg len b'
         by CC,FINSEQ_1:def 3; then
 C9:     (the_arity_of o).x in the carrier of S by C5,DTCONSTR:2;
         assume b'.x in Union coprod Y; then
-        (b.x in [:the OperSymbols of S,{the carrier of S}:] or
+        (b.x in [:the carrier' of S,{the carrier of S}:] or
         b.x in Union coprod X) &
-        b.x nin [:the OperSymbols of S,{the carrier of S}:]
+        b.x nin [:the carrier' of S,{the carrier of S}:]
         by C6,C7,XBOOLE_0:3,def 2; then
         b.x in coprod((the_arity_of o).x,X) by C1,C4,C5,MSAFREE:def 9; then
         consider a being set such that
@@ -4841,11 +4841,11 @@ theorem LemNTerm:
   proof
     let t be set;
     set X = MSVars C;
-A0: NonTerminals DTConMSA X = [:the OperSymbols of C,{the carrier of C}:]
+A0: NonTerminals DTConMSA X = [:the carrier' of C,{the carrier of C}:]
     by ThTNT;
     hereby assume t in NonTerminals DTConMSA MSVars C; then
       consider a,b being set such that
-A1:   a in the OperSymbols of C & b in {the carrier of C} & t = [a,b]
+A1:   a in the carrier' of C & b in {the carrier of C} & t = [a,b]
       by A0,ZFMISC_1:def 2;
       reconsider a as OperSymbol of C by A1;
       b = the carrier of C & (a is constructor or a is not constructor)
@@ -4944,11 +4944,11 @@ A1: dom X = the carrier of S & dom Y = the carrier of S by PBOOLE:def 3;
     let p2 be FinSequence of the carrier of G2; assume
 A0: g1 = g2 & p1 = p2 & g1 ==> p1; then
 Y4: [g1, p1] in REL X by LANG1:def 1; then
-Y5: g1 in [:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X) &
-    p1 in ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
+Y5: g1 in [:the carrier' of S,{the carrier of S}:] \/ Union (coprod X) &
+    p1 in ([:the carrier' of S,{the carrier of S}:] \/ Union (coprod X))*
     by ZFMISC_1:106; then
-Y6: g1 in [:the OperSymbols of S,{the carrier of S}:]  by Y4,MSAFREE:def 9;
-Y9: p2 in ([:the OperSymbols of S, {the carrier of S}:] \/
+Y6: g1 in [:the carrier' of S,{the carrier of S}:]  by Y4,MSAFREE:def 9;
+Y9: p2 in ([:the carrier' of S, {the carrier of S}:] \/
     Union (coprod Y))* by FINSEQ_1:def 11;
     now let o' be OperSymbol of S;
       assume
@@ -4957,7 +4957,7 @@ Y7:   [o',the carrier of S] = g2;
 Z4:   len p2 = len the_arity_of o' by A0,Y4,Y5,MSAFREE:def 9;
       let x be set; assume
 Y8:   x in dom p2;
-      hence p2.x in [:the OperSymbols of S,{the carrier of S}:]
+      hence p2.x in [:the carrier' of S,{the carrier of S}:]
       implies
       for o1 be OperSymbol of S st [o1,the carrier of S] = p2.x
       holds the_result_sort_of o1 = (the_arity_of o').x
@@ -4970,7 +4970,7 @@ B1:   (p2.x)`2 in dom Y & (p2.x)`1 in Y.(p2.x)`2 & p2.x = [(p2.x)`1,(p2.x)`2]
       by CARD_3:33;
       p2.x in rng p1 by A0,Y8,FUNCT_1:def 5; then
       the carrier of S nin the carrier of S &
-      p2.x in [:the OperSymbols of S,{the carrier of S}:] or
+      p2.x in [:the carrier' of S,{the carrier of S}:] or
       p2.x in Union coprod X by XBOOLE_0:def 2; then
       p2.x in coprod(i,X)
       by A0,Y4,Y5,Y7,Y8,A1,B1,ZFMISC_1:129,MSAFREE:def 9; then
@@ -5043,7 +5043,7 @@ Y3:     x in rng p; then
         hence x in TS G by Y0,Y2,Y3;
       end; then
       reconsider q = p as FinSequence of TS G by FINSEQ_1:def 4;
-      NonTerminals G = [:the OperSymbols of S,{the carrier of S}:]
+      NonTerminals G = [:the carrier' of S,{the carrier of S}:]
       by ThTNT; then
       [o,the carrier of S] in NonTerminals G by ZFMISC_1:129; then
       reconsider oo = [o,the carrier of S] as Symbol of G;
@@ -5052,7 +5052,7 @@ Y3:     x in rng p; then
       hence [o,the carrier of S]-tree p in TS G by DTCONSTR:def 4;
     end;
 TT: for t being Term of S,V holds P[t] from MSATERM:sch 1(T1,T2);
-A4: NonTerminals DTConMSA X = [:the OperSymbols of S,{the carrier of S}:] &
+A4: NonTerminals DTConMSA X = [:the carrier' of S,{the carrier of S}:] &
     Terminals DTConMSA X = Union coprod X by ThTNT;
     defpred Q[set] means $1 in Union U;
 D1: for s being Symbol of G st s in Terminals G holds Q[root-tree s]
@@ -5072,7 +5072,7 @@ Z1:   nt ==> roots ts and
 Z2:   for t being DecoratedTree of the carrier of G st t in rng ts holds Q[t];
       nt in NonTerminals G by Z1; then
       consider o,z being set such that
-Z3:   o in the OperSymbols of S & z in {the carrier of S} & nt = [o,z]
+Z3:   o in the carrier' of S & z in {the carrier of S} & nt = [o,z]
       by A4,ZFMISC_1:def 2;
       reconsider o as OperSymbol of S by Z3;
 Z5:   rng ts c= Union U
@@ -5485,7 +5485,7 @@ Z4:     nt`1 = c & c <> non_op by MCART_1:7;
     end;
     hereby let c be constructor OperSymbol of C();
       the carrier of C() in {the carrier of C()} by TARSKI:def 1; then
-      [c, the carrier of C()]in[:the OperSymbols of C(),{the carrier of C()}:]
+      [c, the carrier of C()]in[:the carrier' of C(),{the carrier of C()}:]
       by ZFMISC_1:106; then
       reconsider cc = [c,the carrier of C()] as Symbol of G
       by XBOOLE_0:def 2;

@@ -37,10 +37,10 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="63" value="false"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="20">
@@ -49,13 +49,13 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="227">
+<Func kind="K" nr="232">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="71">
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
@@ -64,7 +64,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,16 +72,16 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
 <Adjective nr="7"/>
+<Adjective nr="8"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PRALG_3" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="63" value="false"/>
+<Adjective nr="48" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -91,7 +91,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="U" nr="5">
+<Func kind="U" nr="4">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -101,9 +101,9 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="229">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="232">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 <LocusVar nr="4"/>
@@ -111,8 +111,8 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="17"/>
+<Adjective nr="7"/>
+<Adjective nr="18"/>
 </Cluster>
 </FCluster>
 </Registrations>

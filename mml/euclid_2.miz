@@ -9,9 +9,10 @@ environ
 
  vocabularies PRE_TOPC, ARYTM, FUNCT_1, FINSEQ_1, EUCLID, SQUARE_1, RLVECT_1,
       RVSUM_1, FINSEQ_2, ARYTM_1, RELAT_1, ARYTM_3, COMPLEX1, ABSVALUE,
-      FUNCT_3, EUCLID_2, BHSP_1, FUNCOP_1, VECTSP_1, SEQ_1;
+      FUNCT_3, EUCLID_2, BHSP_1, FUNCOP_1, VECTSP_1, VALUED_0;
  notations SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, NAT_1, FUNCOP_1, FINSEQ_1, FINSEQ_2, SEQ_1, QUIN_1, PRE_TOPC,
+      COMPLEX1, NAT_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
+      VALUED_0, SEQ_1, QUIN_1, PRE_TOPC,
       RVSUM_1, BINOP_2, EUCLID, SQUARE_1, XXREAL_0;
  constructors REAL_1, SQUARE_1, BINOP_2, COMPLEX1, QUIN_1, FINSEQOP, MONOID_0,
       TOPRNS_1, SEQ_1;
@@ -19,13 +20,13 @@ environ
       BINOP_2, MEMBERED, FINSEQ_2, RVSUM_1, MONOID_0, EUCLID, VALUED_0;
  requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
  definitions SQUARE_1, FINSEQ_2, RVSUM_1, VALUED_1;
- theorems EUCLID, RVSUM_1, REAL_1, REAL_2, FINSEQ_2, XREAL_0, FINSEQ_1,
+ theorems EUCLID, RVSUM_1, REAL_2, FINSEQ_2, XREAL_0, FINSEQ_1,
       FINSEQ_3, SQUARE_1, QUIN_1, ABSVALUE, TOPRNS_1, JORDAN2C, COMPLEX1,
-      XREAL_1, XXREAL_0, FUNCOP_1, XCMPLX_1, FINSEQOP, VALUED_1;
+      XREAL_1, XXREAL_0, FUNCOP_1, XCMPLX_1, FINSEQOP, VALUED_1, ORDINAL1;
 
 begin :: Preliminaries
 
-reserve i, n, j for Element of NAT,
+reserve i, n, j for Nat,
   x, y, a for real number,
   v for Element of n-tuples_on REAL,
   p, p1, p2, p3, q, q1, q2 for Point of TOP-REAL n;
@@ -170,7 +171,7 @@ end;
 begin :: Inner Product of Finite Sequences
 
 definition
-  let x1,x2 be real-yielding FinSequence;
+  let x1,x2 be real-valued FinSequence;
   func |( x1,x2 )| -> real number equals
 
   Sum mlt(x1,x2);
@@ -179,7 +180,7 @@ definition
 end;
 
 definition
-  let x1,x2 be real-yielding FinSequence;
+  let x1,x2 be real-valued FinSequence;
   redefine func |( x1,x2 )| -> Element of REAL;
   correctness;
   commutativity;
@@ -239,7 +240,7 @@ proof
 end;
 
 theorem Th12:
-  for x being FinSequence of REAL holds (|.x.|)^2=|(x,x)|
+  for x being FinSequence of REAL holds |.x.|^2 = |(x,x)|
 proof
   let x be FinSequence of REAL;
   reconsider z=x as Element of (len x)-tuples_on REAL by FINSEQ_2:110;
@@ -560,7 +561,7 @@ A5: x <> 0*(len x) implies abs(|(x,y)|) <= sqrt (|(x,x)|) * sqrt (|(y,y)|)
 A6: |(x,x)| <> 0 by Th15;
 A7: |(x,x)| >= 0 by Th11;
     then
-A8: |(x,x)| > 0 by A6,REAL_1:def 5;
+A8: |(x,x)| > 0 by A6,XXREAL_0:1;
 A9: for t be real number holds
     |(x,x)| * t^2 + (2 * (|(x,y)|)) * t + |(y,y)| >= 0
     proof
@@ -625,10 +626,8 @@ definition
 end;
 
 theorem
-  for n being Element of NAT,p1,p2 being Point of TOP-REAL n holds
   |(p1,p2)| = 1/4*((|. p1+p2 .|)^2-(|. p1-p2 .|)^2)
 proof
-  let n be Element of NAT,p1,p2 be Point of TOP-REAL n;
   reconsider q1= p1, q2= p2 as Element of REAL n by EUCLID:25;
   |. p1-p2 .|=|. q1-q2 .|;
   hence thesis by Th10;
@@ -765,8 +764,9 @@ end;
 theorem Th59:
   |.p.| = sqrt |(p,p)|
 proof
-  |.p.| = sqrt |.p.|^2 by SQUARE_1:89,TOPRNS_1:26
-    .= sqrt |(p,p)| by Th58;
+  n in NAT by ORDINAL1:def 13;
+  then |.p.| = sqrt |.p.|^2 by SQUARE_1:89,TOPRNS_1:26
+  .= sqrt |(p,p)| by Th58;
   hence thesis;
 end;
 
@@ -781,9 +781,8 @@ end;
 theorem Th61:
   |. 0.REAL n .| = 0
 proof
-  |. 0.REAL n .| = sqrt |(0.REAL n, 0.REAL n )| by Th59
-    .= 0 by Th54,SQUARE_1:82;
-  hence thesis;
+  n in NAT by ORDINAL1:def 13;
+  hence thesis by TOPRNS_1:24;
 end;
 
 theorem Th62:
@@ -803,15 +802,20 @@ theorem Th63:
 proof
   |(p,p)| = 0 implies p = 0.REAL n
   proof
+A1: n in NAT by ORDINAL1:def 13;
     assume |(p,p)| = 0;
     then |.p.| = 0 by Th62;
-    hence thesis by TOPRNS_1:25;
+    hence thesis by A1,TOPRNS_1:25;
   end;
   hence thesis by Th54;
 end;
 
-theorem
-  |.p.|=0 iff p= 0.REAL n by Th61,TOPRNS_1:25;
+theorem T:
+  |.p.|=0 iff p = 0.REAL n
+  proof
+    n in NAT by ORDINAL1:def 13;
+    hence thesis by Th61,TOPRNS_1:25;
+  end;
 
 theorem
   p <> 0.REAL n iff |(p, p)| > 0
@@ -822,7 +826,7 @@ proof
     then
 A1: |(p,p)| <> 0 by Th63;
     0 <= |(p,p)| by Th57;
-    hence thesis by A1,REAL_1:def 5;
+    hence thesis by A1,XXREAL_0:1;
   end;
   hence thesis by Th63;
 end;
@@ -832,11 +836,12 @@ theorem
 proof
   p <> 0.REAL n implies |.p.| > 0
   proof
+A2: n in NAT by ORDINAL1:def 13;
     assume p <> 0.REAL n;
     then
-A1: 0 <> |.p.| by TOPRNS_1:25;
+A1: 0 <> |.p.| by A2,TOPRNS_1:25;
     0 <= |.p.| by Th60;
-    hence thesis by A1,REAL_1:def 5;
+    hence thesis by A1,XXREAL_0:1;
   end;
   hence thesis by Th61;
 end;
@@ -900,19 +905,18 @@ A1: |(p-q, p-q)| = |(p,p)| - 2*|(p,q)| + |(q,q)| by Th53
   0 <= |(p,p)| & 0 <= |(q,q)| by Th57;
   then 0 + 0 <= |(p,p)| + |(q,q)| by XREAL_1:9;
   then
-A2: 0/2 <= (|(p,p)| + |(q,q)|)/2 by REAL_1:73;
+A2: 0/2 <= (|(p,p)| + |(q,q)|)/2 by XREAL_1:74;
   0 <= |(p-q,p-q)| by Th57;
   then 2*|(p,q)| <= |(p,p)| + |(q,q)| - 0 by A1,REAL_2:165;
-  then (2*|(p,q)|)/2 <= (|(p,p)| + |(q,q)|)/2 by REAL_1:73;
+  then (2*|(p,q)|)/2 <= (|(p,p)| + |(q,q)|)/2 by XREAL_1:74;
   then 0 + |(p,q)| <= (|(p,p)| + |(q,q)|)/2 + (|(p,p)| + |(q,q)|)/2
   by A2,XREAL_1:9;
   hence thesis;
 end;
 
 theorem Th73: :: Schwartz
-  for p,q being Point of TOP-REAL n holds abs( |(p,q)|) <= |.p.|*|.q.|
+  abs( |(p,q)|) <= |.p.|*|.q.|
 proof
-  let p,q be Point of TOP-REAL n;
   set x=p,y=q;
 A1: x = 0.REAL n implies abs(|(x,y)|) <= sqrt (|(x,x)|) * sqrt (|(y,y)|)
   proof
@@ -930,7 +934,7 @@ A4: x <> 0.REAL n implies abs(|(x,y)|) <= sqrt (|(x,x)|) * sqrt (|(y,y)|)
 A5: |(x,x)| <> 0 by Th63;
 A6: |(x,x)| >= 0 by Th57;
     then
-A7: |(x,x)| > 0 by A5,REAL_1:def 5;
+A7: |(x,x)| > 0 by A5,XXREAL_0:1;
 A8: for t be real number holds
     |(x,x)| * t^2 + (2 * (|(x,y)|)) * t + |(y,y)| >= 0
     proof
@@ -983,7 +987,7 @@ A5: (|.p+q.|)^2 <= (|.p.|)^2 + 2*|.p.|*|.q.|+(|.q.|)^2 by A3,XREAL_1:9;
 end;
 
 definition
-  let n, p, q;
+  let p, q be real-valued FinSequence;
   pred p,q are_orthogonal means
   :Def3:
   |(p,q)| = 0;

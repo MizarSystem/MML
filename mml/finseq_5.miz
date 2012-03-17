@@ -12,12 +12,12 @@ environ
       FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_4, REALSET1, RFINSEQ, BINARITH,
       XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_1, PARTFUN1, FINSEQ_4, REALSET1, RFINSEQ,
-      BINARITH;
+      BINARITH, REAL_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1;
+      XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FINSEQ_1;
- theorems TARSKI, ZFMISC_1, REAL_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
+ theorems TARSKI, ZFMISC_1, NAT_1, PARTFUN2, FUNCT_1, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RFINSEQ, REALSET1, RELAT_1, INT_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0, BINARITH, ORDINAL1, PARTFUN1,
       CARD_1, CARD_2;
@@ -55,7 +55,7 @@ A3: j <= n + 1 by XREAL_1:8;
     then -0 = -i;
     hence contradiction by A1,FINSEQ_1:3;
   end;
-  then j < n + 1 by A3,REAL_1:def 5;
+  then j < n + 1 by A3,XXREAL_0:1;
   then j <= n by NAT_1:13;
   hence thesis by A2;
 end;
@@ -147,8 +147,6 @@ theorem Th6:
   for f being non empty FinSequence holds 1 in dom f & len f in dom f
 proof
   let f be non empty FinSequence;
-  len f <> 0 by CARD_2:59;
-  then
 A1: len f >= 1 by NAT_1:14;
   hence 1 in dom f by FINSEQ_3:27;
   thus len f in dom f by A1,FINSEQ_3:27;
@@ -156,7 +154,7 @@ end;
 
 theorem
   for f being non empty FinSequence
-   ex i being Nat st i+1 = len f by NAT_1:6,CARD_2:59;
+   ex i being Nat st i+1 = len f by NAT_1:6;
 
 theorem Th8:
   for x being set, f being FinSequence holds len(<*x*>^f) = 1 + len f
@@ -270,7 +268,7 @@ theorem Th15:
 proof
   assume
 A1: len f = 1;
-  then f is non empty by CARD_1:47;
+  then f is non empty;
   then 1 in dom f by Th6;
   then f.1 = f/.1 by PARTFUN1:def 8;
   hence thesis by A1,FINSEQ_1:57;
@@ -359,7 +357,7 @@ theorem
 proof
   assume
 A1: i+1 = len f;
-  then f is non empty by CARD_1:47;
+  then f is non empty;
   then
 A2: i+1 in dom f by A1,Th6;
   dom f = Seg(i+1) by A1,FINSEQ_1:def 3;
@@ -456,7 +454,7 @@ proof
   end;
   suppose len f < i;
     then f/^i = <*>D by RFINSEQ:def 2;
-    hence thesis by FINSEQ_1:32;
+    hence thesis;
   end;
 end;
 
@@ -579,7 +577,7 @@ A10:  k = 1;
     end;
     suppose k <> 1;
       then
-A11:  1 < k by A7,REAL_1:def 5;
+A11:  1 < k by A7,XXREAL_0:1;
       reconsider k' = k-1 as Element of NAT by A7,INT_1:18;
       k'+1 = k;
       then
@@ -608,10 +606,10 @@ A1: len f <= i;
   suppose len f = i;
     then len(f/^i) = len f - len f by RFINSEQ:def 2
       .= 0;
-    hence thesis by CARD_2:59;
+    hence thesis;
   end;
   suppose len f <> i;
-    then len f < i by A1,REAL_1:def 5;
+    then len f < i by A1,XXREAL_0:1;
     hence thesis by RFINSEQ:def 2;
   end;
 end;
@@ -901,7 +899,7 @@ proof
 A1: p in rng f;
   then 1 <= p..f by FINSEQ_4:31;
   then 1 <= len(f-:p) by A1,Th45;
-  hence thesis by FINSEQ_3:27,RELAT_1:60;
+  hence thesis;
 end;
 
 theorem
@@ -1120,9 +1118,9 @@ registration
   let f be empty FinSequence;
   cluster Rev f -> empty;
   coherence
-  proof len {} = 0 by CARD_1:47;
+  proof len {} = 0;
     then len (Rev {}) = 0 by Def3;
-    hence thesis by CARD_2:59;
+    hence thesis;
   end;
 end;
 
@@ -1186,7 +1184,7 @@ A2: dom Rev f = {};
   end;
   suppose f is non empty;
     then
-A3: len f <> 0 by CARD_2:59;
+A3: len f <> 0;
     then len f in Seg len f by FINSEQ_1:5;
     then len f in dom f by FINSEQ_1:def 3;
     hence (Rev f).(len f) = f.(len f - len f + 1) by Th61
@@ -1234,17 +1232,15 @@ A2: len(g^(Rev f)) = len g + len (Rev f) by FINSEQ_1:35
     .= 1 + len (Rev f) by FINSEQ_1:56
     .= n by Def3;
 A3: len(Rev(f^g)) = n by A1,Def3;
-then
-X: dom (Rev(f^g)) = Seg n by FINSEQ_1:def 3;
   now
     let i be Nat;
     assume
 A4: i in dom (Rev(f^g));
     then
-A5: 1 <= i & i <= n by FINSEQ_1:3,X;
+A5: 1 <= i & i <= n by FINSEQ_3:27,A3;
 A6: len g = 1 by FINSEQ_1:57;
 A7: i in dom(Rev(f^g)) by A4;
-    per cases by A5,REAL_1:def 5;
+    per cases by A5,XXREAL_0:1;
     suppose
 A8:   i = 1;
       Seg len g = dom g by FINSEQ_1:def 3;
@@ -1488,7 +1484,7 @@ proof
   assume that
 A1: 1 <= n and
 A2: f is non empty;
-  len f <> 0 by A2,CARD_2:59;
+  len f <> 0 by A2;
   then
 A3: 1 <= len f by NAT_1:14;
   n <= len f implies len(f|n) = n by FINSEQ_1:80;
@@ -1556,7 +1552,7 @@ theorem
   for i be Nat holds (<*>D)|i=<*>D
 proof
   let i be Nat;
-  len (<*>D)=0 by FINSEQ_1:32;
+  len (<*>D)=0;
   hence thesis by FINSEQ_1:79;
 end;
 
@@ -1672,7 +1668,7 @@ A3: rng f c= D by FINSEQ_1:def 4;
     assume D is empty;
     then rng f = {} by A3;
     then f = {};
-    hence contradiction by A1,CARD_1:47;
+    hence contradiction by A1;
   end;
   then reconsider D as non empty set;
   reconsider f as FinSequence of D;

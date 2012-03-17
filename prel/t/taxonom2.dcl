@@ -11,9 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="ENUMSET1"/>
-<ArticleID name="DOMAIN_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELAT_2"/>
@@ -31,17 +28,17 @@
 </Signature>
 <RCluster aid="TAXONOM2" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
-<Adjective nr="55"/>
-<Adjective nr="57"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="56"/>
 <Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="2">
@@ -50,8 +47,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="2" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="3">
@@ -69,7 +66,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="4">
@@ -78,19 +75,19 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="38">
+<Adjective nr="39">
 <Func kind="K" nr="10">
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="66">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,13 +95,13 @@
 <CCluster aid="TAXONOM2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="2"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="64"/>
 </Cluster>
 </CCluster>
 </Registrations>

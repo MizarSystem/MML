@@ -8,10 +8,11 @@ environ
 
  vocabularies ARYTM_1, INT_1, RELAT_1, SCM_1, RLVECT_1, AMI_3, GRAPHSP,
       FUNCT_1, BOOLE, FINSET_1, ORDERS_1, FINSEQ_1, CARD_1, FUNCT_2, GRAPH_1,
-      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM;
+      FINSEQ_4, GRAPH_5, GRAPH_4, MSAFREE2, FUNCT_4, ARYTM, STRUCT_0;
  notations XCMPLX_0, XXREAL_0, REAL_1, INT_1, TARSKI, XBOOLE_0,
       SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, SEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
-      FINSET_1, GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3,
+      FINSET_1,
+      STRUCT_0, GRAPH_1, PARTFUN1, FUNCT_2, CQC_SIM1, GRAPH_4, GRAPH_3,
       GRAPH_5, BINARITH, DOMAIN_1, RVSUM_1, NUMBERS, FUNCT_7, NAT_1;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, FINSOP_1,
       BINARITH, FUNCT_7, CQC_SIM1, GOBOARD1, GRAPH_4, GRAPH_5, SEQ_1, BINOP_2;
@@ -21,7 +22,7 @@ environ
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions TARSKI, RVSUM_1;
  theorems FUNCT_2, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, FINSET_1, ZFMISC_1,
-      TARSKI, REAL_1, FINSEQ_3, XBOOLE_0, XBOOLE_1, SUBSET_1, GRAPH_1,
+      TARSKI, FINSEQ_3, XBOOLE_0, XBOOLE_1, SUBSET_1, GRAPH_1,
       FINSEQ_4, CARD_1, CARD_2, INT_1, GRAPH_5, GRAPH_4, FINSEQ_2, ENUMSET1,
       BINARITH, FUNCT_7, XREAL_1, XXREAL_0, FINSOP_1, ORDINAL1, POLYNOM1;
  schemes NAT_1, GRAPH_5, CLASSES1;
@@ -65,7 +66,7 @@ A1: 1 <= ii & ii <= len p;
 end;
 
 reserve G for Graph,
-  pe,qe for FinSequence of the Edges of G,
+  pe,qe for FinSequence of the carrier' of G,
   p,q for oriented Chain of G,
   W for Function,
   U,V,e,ee for set,
@@ -89,11 +90,11 @@ A4: f = <*f.1*> by FINSEQ_1:57;
 end;
 
 theorem Th5:
-  e in the Edges of G implies <*e*> is Simple (oriented Chain of G)
+  e in the carrier' of G implies <*e*> is Simple (oriented Chain of G)
 proof
-  assume e in the Edges of G;
+  assume e in the carrier' of G;
   then
-A1: <*e*> is FinSequence of the Edges of G by FINSEQ_1:95;
+A1: <*e*> is FinSequence of the carrier' of G by FINSEQ_1:95;
   len <*e*> = 1 by FINSEQ_1:57;
   hence thesis by A1,GRAPH_5:18;
 end;
@@ -127,7 +128,7 @@ proof
   set FT=the Target of G, FS=the Source of G;
   assume
 A1: p=pe^qe & len pe >= 1 & len qe >= 1;
-  consider vs being FinSequence of the Vertices of G such that
+  consider vs being FinSequence of the carrier of G such that
 A2: vs is_oriented_vertex_seq_of p &
   (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
   by GRAPH_4:def 7;
@@ -238,20 +239,20 @@ end;
 
 theorem Th10:
   for G being oriented Graph,v1,v2 be Vertex of G,e1,e2 be set
-  st e1 in the Edges of G & e2 in the Edges of G &
+  st e1 in the carrier' of G & e2 in the carrier' of G &
   e1 orientedly_joins v1,v2 & e2 orientedly_joins v1,v2 holds e1=e2
 proof
   let G be oriented Graph,v1,v2 be Vertex of G,e1,e2 be set;
   assume
-A1: e1 in the Edges of G & e2 in the Edges of G &
+A1: e1 in the carrier' of G & e2 in the carrier' of G &
   e1 orientedly_joins v1,v2 & e2 orientedly_joins v1,v2;
   then (the Source of G).e1 = v1 & (the Target of G).e1 = v2 &
   (the Source of G).e2 = v1 & (the Target of G).e2 = v2 by GRAPH_4:def 1;
-  hence thesis by A1,GRAPH_1:def 4;
+  hence thesis by A1,GRAPH_1:def 5;
 end;
 
-Lm3: 1 <= i & i <= len pe implies (the Source of G).(pe.i) in the Vertices of G
-& (the Target of G).(pe.i) in the Vertices of G
+Lm3: 1 <= i & i <= len pe implies (the Source of G).(pe.i) in the carrier of G
+& (the Target of G).(pe.i) in the carrier of G
 proof
   assume 1 <= i & i <= len pe;
   then i in dom pe by FINSEQ_3:27;
@@ -259,13 +260,14 @@ proof
 end;
 
 theorem Th11:
-  the Vertices of G= U \/ V & v1 in U & v2 in V & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+  the carrier of G= U \/ V & v1 in U & v2 in V & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G
+   & e orientedly_joins v3,v4))
   implies not ex p st p is_orientedpath_of v1,v2
 proof
   assume
-A1: the Vertices of G= U \/ V & v1 in U & v2 in V & (for v3,v4
-  st v3 in U & v4 in V holds not (ex e st e in the Edges of G &
+A1: the carrier of G= U \/ V & v1 in U & v2 in V & (for v3,v4
+  st v3 in U & v4 in V holds not (ex e st e in the carrier' of G &
   e orientedly_joins v3,v4));
   given p such that
 A2: p is_orientedpath_of v1,v2;
@@ -280,7 +282,7 @@ A6: ex k be Nat st PP[k] by A1,A3,A4;
 A7: PP[k] & for n be Nat st PP[n] holds n <= k from NAT_1:sch 6(A5,A6);
   reconsider k as Element of NAT by ORDINAL1:def 13;
   reconsider vx=FS.(p.k) as Vertex of G by A7,Lm3;
-A8: p.k in the Edges of G by A7,Th2;
+A8: p.k in the carrier' of G by A7,Th2;
   per cases;
   suppose k=len p;
     then p.k orientedly_joins vx,v2 by A3,GRAPH_4:def 1;
@@ -288,9 +290,9 @@ A8: p.k in the Edges of G by A7,Th2;
   end;
   suppose k<>len p;
     then
-A9: k < len p by A7,REAL_1:def 5;
+A9: k < len p by A7,XXREAL_0:1;
     then
-A10: FS.(p.(k+1)) = FT.(p.k) by A7,GRAPH_1:def 12;
+A10: FS.(p.(k+1)) = FT.(p.k) by A7,GRAPH_1:def 13;
 A11: k < k+1 by NAT_1:13;
 A12: now
       assume
@@ -317,20 +319,21 @@ A1: 1<= i & i <= len pe & (v1=(the Source of G).(pe.i) or
 end;
 
 theorem Th12:
-  the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4)) &
+  the carrier of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G &
+   e orientedly_joins v3,v4)) &
   p is_orientedpath_of v1,v2 implies p is_orientedpath_of v1,v2,U
 proof
   assume
-A1: the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G &
+A1: the carrier of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G &
   e orientedly_joins v3,v4)) & p is_orientedpath_of v1,v2;
   set FS=the Source of G, FT=the Target of G;
 A2: vertices p \ {v2} c= vertices p by XBOOLE_1:36;
   now
     assume not vertices p c= U;
     then consider i being Element of NAT,
-    q,r being FinSequence of the Edges of G such that
+    q,r being FinSequence of the carrier' of G such that
 A3: i+1 <= len p & not vertices(p/.(i+1)) c= U & len q=i & p=q^r &
     vertices q c= U by GRAPH_5:23;
 A4: 1 <= i+ 1 by NAT_1:12;
@@ -342,7 +345,7 @@ A6: now
       then vertices(p/.(i+1)) \/ U = U by A5,ZFMISC_1:48;
       hence contradiction by A3,XBOOLE_1:7;
     end;
-A7: p.(i+1) in the Edges of G by A3,Th2,NAT_1:12;
+A7: p.(i+1) in the carrier' of G by A3,Th2,NAT_1:12;
     reconsider vy=FT.(p.(i+1)) as Vertex of G by A3,A4,Lm3;
 A9: vy in U or vy in V by A1,XBOOLE_0:def 2;
     per cases;
@@ -371,7 +374,7 @@ A14:      i >= 1+0 by INT_1:20;
 A15:      vq in vertices(q) by A3,A14,Lm4;
 A16:      i < len p by A3,NAT_1:13;
           FT.(q.i)=FT.(p.i) by A3,A14,Lm1
-            .=FS.(p.(i+1)) by A14,A16,GRAPH_1:def 12;
+            .=FS.(p.(i+1)) by A14,A16,GRAPH_1:def 13;
           hence contradiction by A3,A13,A15;
         end;
       end;
@@ -389,14 +392,14 @@ reserve G for finite Graph,
 
 theorem Th13:
   W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W & v1 <> v2 & v1 <> v3 &
-  Q is_shortestpath_of v1,v3,V,W & not (ex e st e in the Edges of G &
+  Q is_shortestpath_of v1,v3,V,W & not (ex e st e in the carrier' of G &
   e orientedly_joins v2,v3) & P islongestInShortestpath V,v1,W implies
   Q is_shortestpath_of v1,v3,V \/{v2},W
 proof
   assume
 A1: W is_weight>=0of G & P is_shortestpath_of v1,v2,V,W &
   v1 <> v2 & v1 <> v3 & Q is_shortestpath_of v1,v3,V,W & not (ex e
-  st e in the Edges of G & e orientedly_joins v2,v3) &
+  st e in the carrier' of G & e orientedly_joins v2,v3) &
   P islongestInShortestpath V,v1,W;
   set V'=V \/ {v2}, FS=the Source of G, FT=the Target of G;
 A2: W is_weight_of G by A1,GRAPH_5:50;
@@ -460,7 +463,7 @@ A20:  1<=j & j <= len s & v2 = FT.(s.j) by A1,A11,GRAPH_5:32;
 A21:  len s1 >= 0+1 by INT_1:20;
 A22:  len s1 < len s by A8,A9,NAT_1:13;
 A23:  vx=FS.(s.(len s1+1)) by A9,Lm2
-        .=FT.(s.len s1) by A21,A22,GRAPH_1:def 12;
+        .=FT.(s.len s1) by A21,A22,GRAPH_1:def 13;
 A24:  now
         assume j > len s1;
         then j >= len s1+1 by INT_1:20;
@@ -540,16 +543,16 @@ end;
 
 reserve G for finite oriented Graph,
   P,Q for oriented Chain of G,
-  W for Function of (the Edges of G), Real>=0,
+  W for Function of (the carrier' of G), Real>=0,
   v1,v2,v3,v4 for Vertex of G;
 
 theorem Th14:
-  e in the Edges of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2
+  e in the carrier' of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2
   implies P is_shortestpath_of v1,v2,{v1},W
 proof
   assume
-A1: e in the Edges of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2;
-  set FS=the Source of G, FT=the Target of G, Eg=the Edges of G;
+A1: e in the carrier' of G & v1 <> v2 & P=<*e*> & e orientedly_joins v1,v2;
+  set FS=the Source of G, FT=the Target of G, Eg=the carrier' of G;
 A2: FS.e = v1 & FT.e = v2 by A1,GRAPH_4:def 1;
 A3: now
     let S be oriented Chain of G;
@@ -589,7 +592,7 @@ A14:  len s1 >=1 by FINSEQ_1:28;
 A15:  FT.(s.len s) <> FT.(s1.len s1) & FS.(s.1) <> FS.(s2.1) by A13,A14,Th6;
 A16:  len s1 < len s by A12,A13,NAT_1:13;
 A17:  FS.(s2.1)=FS.(s.(len s1+1)) by A13,Lm2
-        .=FT.(s.len s1) by A14,A16,GRAPH_1:def 12
+        .=FT.(s.len s1) by A14,A16,GRAPH_1:def 13
         .=FT.(s1.len s1) by A13,A14,Lm1;
       vertices(s2) c= vertices(s1^s2) by GRAPH_5:30;
       then
@@ -602,7 +605,7 @@ A18:  vertices(s2) c= {v1,v2} by A9,A11,A13,XBOOLE_0:def 10;
 A19: len s= 0+1 by A12,A13;
     s/.1 in Eg by A1;
     then s.1 in Eg by A19,FINSEQ_4:24;
-    then e = s.1 by A1,A2,A10,A19,GRAPH_1:def 4;
+    then e = s.1 by A1,A2,A10,A19,GRAPH_1:def 5;
     then s = P by A1,A19,FINSEQ_1:57;
     hence cost(P,W) <= cost(S,W) by A4,A5,GRAPH_5:def 18;
   end;
@@ -619,21 +622,22 @@ A22: P/.1=e by A20,FINSEQ_4:24;
 end;
 
 theorem Th15:
-  e in the Edges of G & P is_shortestpath_of v1,v2,V,W & v1 <> v3 & Q=P^<*e*> &
+  e in the carrier' of G & P is_shortestpath_of v1,v2,V,W &
+   v1 <> v3 & Q=P^<*e*> &
   e orientedly_joins v2,v3 & v1 in V & (for v4 st v4 in V holds
-  not (ex ee st ee in the Edges of G & ee orientedly_joins v4,v3)) implies
+  not (ex ee st ee in the carrier' of G & ee orientedly_joins v4,v3)) implies
   Q is_shortestpath_of v1,v3,V \/{v2},W
 proof
   assume
-A1: e in the Edges of G & P is_shortestpath_of v1,v2,V,W &
+A1: e in the carrier' of G & P is_shortestpath_of v1,v2,V,W &
   v1 <> v3 & Q=P^<*e*> & e orientedly_joins v2,v3 & v1 in V &
-  (for v4 st v4 in V holds not (ex ee st ee in the Edges of G &
+  (for v4 st v4 in V holds not (ex ee st ee in the carrier' of G &
   ee orientedly_joins v4,v3));
   set V'=V \/ {v2}, FS=the Source of G, FT=the Target of G;
 A2: W is_weight>=0of G by GRAPH_5:def 13;
   then
 A3: W is_weight_of G by GRAPH_5:50;
-  set Eg=the Edges of G;
+  set Eg=the carrier' of G;
 A4: now
     let S be oriented Chain of G;
     assume
@@ -666,7 +670,7 @@ A15:  len s= 1+ 0 by A10,A11;
 A16: len s1 >=1 by FINSEQ_1:28;
     len s1 < len s by A10,A11,NAT_1:13;
     then
-A17: FS.(s.len s)=FT.(s.len s1) by A10,A11,A16,GRAPH_1:def 12
+A17: FS.(s.len s)=FT.(s.len s1) by A10,A11,A16,GRAPH_1:def 13
       .=FT.(s1.len s1) by A11,A16,Lm1;
     set Vs=vertices s;
 A18: Vs \ {v3} c= V' by A7,GRAPH_5:def 4;
@@ -680,7 +684,7 @@ A21:  vx in Vs by A9,A12,Lm4;
       then
 A22:  vx in V or vx in {v2} by A18,XBOOLE_0:def 2;
 A23:  s2.1 orientedly_joins vx,v3 by A12,A13,GRAPH_4:def 1;
-      s2.1 in the Edges of G by A11,Th2;
+      s2.1 in the carrier' of G by A11,Th2;
       hence contradiction by A1,A20,A22,A23,TARSKI:def 1;
     end;
     FS.(s1.1)=v1 by A11,A13,A16,Lm1;
@@ -703,7 +707,7 @@ A26: cost(P,W) <= cost(s1,W) by A1,GRAPH_5:def 18;
     then
 A27: s2.1 in Eg by A11,FINSEQ_4:24;
     FS.e = v2 & FT.e = v3 by A1,GRAPH_4:def 1;
-    then e = s2.1 by A1,A12,A13,A19,A27,GRAPH_1:def 4;
+    then e = s2.1 by A1,A12,A13,A19,A27,GRAPH_1:def 5;
     then
 A28: s2 = <*e*> by A11,FINSEQ_1:57;
 A29: cost(s,W)=cost(s1,W)+cost(s2,W) by A2,A11,GRAPH_5:50,58;
@@ -725,14 +729,15 @@ A32: len P >=1 by FINSEQ_1:28;
 end;
 
 theorem Th16:
-  the Vertices of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
-  v4 in V holds not (ex e st e in the Edges of G & e orientedly_joins v3,v4))
+  the carrier of G= U \/ V & v1 in U & (for v3,v4 st v3 in U &
+  v4 in V holds not (ex e st e in the carrier' of G &
+   e orientedly_joins v3,v4))
   implies (P is_shortestpath_of v1,v2,U,W iff P is_shortestpath_of v1,v2,W)
 proof
   assume
-A1: the Vertices of G= U \/ V & v1 in U &
+A1: the carrier of G= U \/ V & v1 in U &
   (for v3,v4 st v3 in U & v4 in V holds not (ex e st e in
-  the Edges of G & e orientedly_joins v3,v4));
+  the carrier' of G & e orientedly_joins v3,v4));
   hereby
     assume
 A2: P is_shortestpath_of v1,v2,U,W;
@@ -1060,10 +1065,10 @@ begin :: Defining a weight function for an oriented graph
 definition
   let G be oriented Graph,v1,v2 be Vertex of G;
   assume
-A1: ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
-  func Edge(v1,v2) means
+A1: ex e be set st e in the carrier' of G & e orientedly_joins v1,v2;
+  func XEdge(v1,v2) means
   :Def6:
-  ex e be set st it = e & e in the Edges of G & e orientedly_joins v1,v2;
+  ex e be set st it = e & e in the carrier' of G & e orientedly_joins v1,v2;
   existence by A1;
   uniqueness by Th10;
 end;
@@ -1072,28 +1077,29 @@ definition
   let G be oriented Graph,v1,v2 be Vertex of G, W be Function;
   func Weight(v1,v2,W) equals
   :Def7:
-  W.Edge(v1,v2) if ex e be set st e in the Edges of G &
+  W.XEdge(v1,v2) if ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2 otherwise -1;
   correctness;
 end;
 
 definition
   let G be oriented Graph,v1,v2 be Vertex of G,
-  W be Function of (the Edges of G), Real>=0;
+  W be Function of (the carrier' of G), Real>=0;
   redefine func Weight(v1,v2,W) -> Real;
   coherence
   proof
     per cases;
     suppose
-A1:   ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
+A1:   ex e be set st e in the carrier' of G & e orientedly_joins v1,v2;
       then consider e being set such that
-A2:   Edge(v1,v2) = e & e in the Edges of G & e orientedly_joins v1,v2
+A2:   XEdge(v1,v2) = e & e in the carrier' of G & e orientedly_joins v1,v2
       by Def6;
       e in dom W by A2,FUNCT_2:def 1;
-      then W.Edge(v1,v2) in Real>=0 by A2,PARTFUN1:27;
+      then W.XEdge(v1,v2) in Real>=0 by A2,PARTFUN1:27;
       hence thesis by A1,Def7;
     end;
-    suppose not ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
+    suppose not ex e be set st e in the carrier' of G &
+     e orientedly_joins v1,v2;
       hence thesis by Def7;
     end;
   end;
@@ -1101,13 +1107,13 @@ end;
 
 reserve G for oriented Graph,
   v1,v2 for Vertex of G,
-  W for Function of (the Edges of G), Real>=0;
+  W for Function of (the carrier' of G), Real>=0;
 
 theorem Th24:
-  Weight(v1,v2,W) >= 0 iff ex e be set st e in the Edges of G &
+  Weight(v1,v2,W) >= 0 iff ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2
 proof
-  set EG=the Edges of G;
+  set EG=the carrier' of G;
   hereby
     assume
 A1: Weight(v1,v2,W) >= 0;
@@ -1115,9 +1121,9 @@ A1: Weight(v1,v2,W) >= 0;
     then Weight(v1,v2,W) = -1 by Def7;
     hence contradiction by A1;
   end;
-  assume ex e be set st e in the Edges of G & e orientedly_joins v1,v2;
+  assume ex e be set st e in the carrier' of G & e orientedly_joins v1,v2;
   then consider e being set such that
-A2: Edge(v1,v2) = e & e in EG & e orientedly_joins v1,v2 by Def6;
+A2: XEdge(v1,v2) = e & e in EG & e orientedly_joins v1,v2 by Def6;
   e in dom W by A2,FUNCT_2:def 1;
   then W.e in Real>=0 by PARTFUN1:27;
   then consider r being Real such that
@@ -1126,17 +1132,17 @@ A3: W.e=r & r >=0 by GRAPH_5:def 12;
 end;
 
 theorem
-  Weight(v1,v2,W) = -1 iff not ex e be set st e in the Edges of G &
+  Weight(v1,v2,W) = -1 iff not ex e be set st e in the carrier' of G &
   e orientedly_joins v1,v2 by Def7,Th24;
 
 theorem Th26:
-  e in the Edges of G & e orientedly_joins v1,v2 implies Weight(v1,v2,W)=W.e
+  e in the carrier' of G & e orientedly_joins v1,v2 implies Weight(v1,v2,W)=W.e
 proof
-  set EG=the Edges of G;
+  set EG=the carrier' of G;
   assume
 A1: e in EG & e orientedly_joins v1,v2;
   then consider e1 being set such that
-A2: Edge(v1,v2) = e1 & e1 in EG & e1 orientedly_joins v1,v2 by Def6;
+A2: XEdge(v1,v2) = e1 & e1 in EG & e1 orientedly_joins v1,v2 by Def6;
   e=e1 by A1,A2,Th10;
   hence thesis by A2,Def7;
 end;
@@ -2108,7 +2114,7 @@ A3: k=1
     assume
 A4: k<>1;
 A5: 1<=k & k<=n & f.k <> -1 & f.(n+k) <> -1 by A2,Th30;
-    then 1 < k by A4,REAL_1:def 5;
+    then 1 < k by A4,XXREAL_0:1;
     then 1+1 <= k by INT_1:20;
     hence contradiction by A1,A5;
   end;thus
@@ -2209,14 +2215,14 @@ A7: len p <> len q;
     suppose
 A8:   len p < len q;
 A9:   q is one-to-one by A1,Def18;
-A10:  len p -1 > 1-1 by A2,REAL_1:92;
+A10:  len p -1 > 1-1 by A2,XREAL_1:16;
       then reconsider k=len p -1 as Element of NAT by INT_1:16;
 A11:  k >= 0+1 by A10,INT_1:20;
 A12:  len p - k =0+1;
       k < len p by XREAL_1:148;
       then
 A13:  1=q.(len q-k) by A2,A3,A5,A8,A11,A12,Lm10;
-A14:  len q - k > 1 by A8,A12,REAL_1:92;
+A14:  len q - k > 1 by A8,A12,XREAL_1:16;
       then reconsider m=len q -k as Element of NAT by INT_1:16;
       m <= len q by Lm9;
       hence contradiction by A4,A9,A13,A14,GRAPH_5:9;
@@ -2224,7 +2230,7 @@ A14:  len q - k > 1 by A8,A12,REAL_1:92;
     suppose
 A15:  len p >= len q;
       then
-A16:  len p > len q by A7,REAL_1:def 5;
+A16:  len p > len q by A7,XXREAL_0:1;
 A17:  p is one-to-one by A1,Def18;
       hereby
         per cases;
@@ -2233,14 +2239,14 @@ A17:  p is one-to-one by A1,Def18;
         end;
         suppose len q > 1;
           then
-A18:      len q -1 > 1-1 by REAL_1:92;
+A18:      len q -1 > 1-1 by XREAL_1:16;
           then reconsider k=len q -1 as Element of NAT by INT_1:16;
 A19:      k >= 0+1 by A18,INT_1:20;
 A20:      len q - k =0+1;
           k < len q by XREAL_1:148;
           then
 A21:      1=p.(len p-k) by A3,A4,A5,A15,A19,A20,Lm10;
-A22:      len p - k > 1 by A16,A20,REAL_1:92;
+A22:      len p - k > 1 by A16,A20,XREAL_1:16;
           then reconsider m=len p -k as Element of NAT by INT_1:16;
           m <= len p by Lm9;
           hence contradiction by A2,A17,A21,A22,GRAPH_5:9;
@@ -2257,13 +2263,13 @@ A23: 1 <=k & k <= len p;
       hence p.k=q.k by A2,A5,A6,Def17;
     end;
     suppose k <> len p;
-      then k < len p by A23,REAL_1:def 5;
+      then k < len p by A23,XXREAL_0:1;
       then
-A24:  len p-k > k-k by REAL_1:92;
+A24:  len p-k > k-k by XREAL_1:16;
       then reconsider m=len p-k as Element of NAT by INT_1:16;
 A25:  m >= 0+1 by A24,INT_1:20;
 A26:  len q - m =0+k by A6;
-      len p - k <= len p -1 by A23,REAL_1:92;
+      len p - k <= len p -1 by A23,XREAL_1:15;
       then m < len p by XREAL_1:148,XXREAL_0:2;
       hence p.k=q.k by A3,A5,A25,A26,Lm10;
     end;
@@ -2272,7 +2278,7 @@ A26:  len q - m =0+k by A6;
 end;
 
 definition
-  let G be Graph,p be FinSequence of the Edges of G,vs be FinSequence;
+  let G be Graph,p be FinSequence of the carrier' of G,vs be FinSequence;
   pred p is_oriented_edge_seq_of vs means
   :Def19:
   len vs = len p + 1 &
@@ -2299,8 +2305,8 @@ A4: (the Source of G).(p.k) = vs.k by A1,Def19
       .=(the Source of G).(q.k) by A1,A2,A3,Def19;
 A5: (the Target of G).(p.k) = vs.(k+1) by A1,A3,Def19
       .=(the Target of G).(q.k) by A1,A2,A3,Def19;
-    p.k in the Edges of G & q.k in the Edges of G by A2,A3,Th2;
-    hence p.k=q.k by A4,A5,GRAPH_1:def 4;
+    p.k in the carrier' of G & q.k in the carrier' of G by A2,A3,Th2;
+    hence p.k=q.k by A4,A5,GRAPH_1:def 5;
   end;
   hence thesis by A2,FINSEQ_1:18;
 end;
@@ -2329,7 +2335,7 @@ A4:   k = len p + 1 by A1,Def19;
         .=vs2.k by A1,A4,Def19;
     end;
     suppose k <> len vs1;
-      then k < len vs1 by A3,REAL_1:def 5;
+      then k < len vs1 by A3,XXREAL_0:1;
       then k+1 <= len vs1 by INT_1:20;
       then k+1 <= len p+1 by A1,Def19;
       then
@@ -2446,10 +2452,10 @@ begin :: Data structure for Dijkstra's shortest path algorithm
 
 definition
   let f be Element of REAL*,G be oriented Graph,n be Element of NAT,
-  W be Function of (the Edges of G), Real>=0;
+  W be Function of (the carrier' of G), Real>=0;
   pred f is_Input_of_Dijkstra_Alg G,n,W means
   :Def20:
-  len f=n*n+3*n+1 & Seg n=the Vertices of G &
+  len f=n*n+3*n+1 & Seg n=the carrier of G &
   (for i st 1 <= i & i <= n holds f.i=1 & f.(2*n+i)=0) &
   f.(n+1)=0 & (for i st 2 <= i & i <= n holds f.(n+i)=-1) &
   (for i,j being Vertex of G,k,m st k=i & m=j holds
@@ -2470,7 +2476,7 @@ begin :: Justifying the correctness of Dijkstra's shortest path algorithm
 reserve p,q for FinSequence of NAT,
   G for finite oriented Graph,
   P,Q,R for oriented Chain of G,
-  W for Function of (the Edges of G), Real>=0,
+  W for Function of (the carrier' of G), Real>=0,
   v1,v2,v3,v4 for Vertex of G;
 
 Lm15: f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & n >= 1 &
@@ -2503,8 +2509,8 @@ A7: dom (M.f0) = dom f0 by Th34
   then h=R.(M.f0) by Th23;
   then
 A8: h=Relax(M.f0,n) by Def15;
-A9: Seg n=the Vertices of G by A1,Def20;
-  then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+A9: Seg n=the carrier of G by A1,Def20;
+  then reconsider VG=the carrier of G as non empty Subset of NAT by A1,
   FINSEQ_1:3;
 A10: W is_weight>=0of G by GRAPH_5:def 13;
 A11: 2*1 <= 2*n by A1,XREAL_1:66;
@@ -2529,7 +2535,7 @@ A20: nj -' n=j by BINARITH:39;
     n+1 <= nj by A16,XREAL_1:9;
     then
 A21: n < nj by NAT_1:13;
-    j > 1 by A1,A15,A16,REAL_1:def 5;
+    j > 1 by A1,A15,A16,XXREAL_0:1;
     then j >= 1+1 by INT_1:20;
     then f.nj=-1 by A1,A16,Def20;
     then
@@ -2569,7 +2575,7 @@ A36: Relax(M.f0,n).m2=newpathcost(M.f0,n,m2-'2*n)
 A37: h.nj=1 by A7,A8,A17,A18,A21,A22,A29,Def14;
     M.f0/.(2*n+n*(M.f0/.mi)+j) >= 0 by A20,A22,Def13;
     then consider e being set such that
-A38: e in the Edges of G & e orientedly_joins v1,v3 by A32,Th24;
+A38: e in the carrier' of G & e orientedly_joins v1,v3 by A32,Th24;
     reconsider pe= <*e*> as (oriented Chain of G) by A38,Th5;
     reconsider p=<*1,j*> as FinSequence of NAT;
     take p,pe;
@@ -2695,7 +2701,7 @@ A73: m3 in dom f by A3,A71,FINSEQ_3:27;
 A74: M.f0/.(2*n+n*(M.f0/.mi)+j)=M.f0.m3 by A7,A64,A73,PARTFUN1:def 8;
     M.f0.m3=f.m3 by A6,A71,A72,A73,Th19
       .=Weight(v1,v2,W) by A1,Def20;
-    then not ex e be set st e in the Edges of G & e orientedly_joins v1, v2
+    then not ex e be set st e in the carrier' of G & e orientedly_joins v1, v2
     by A70,A74,Th24;
     then
 A75: Weight(v1,v2,W)=-1 by Def7;
@@ -2771,10 +2777,10 @@ A3: p.(len p)=j by Def17;
     assume
 A4: 1<=k & k < len p;
     then
-A5: k - k < len p - k by REAL_1:92;
+A5: k - k < len p - k by XREAL_1:16;
     then reconsider m=len p - k as Element of NAT by INT_1:16;
 A6: 1+0 < m + 1 by A5,XREAL_1:10;
-    m <= len p - 1 by A4,REAL_1:92;
+    m <= len p - 1 by A4,XREAL_1:15;
     then
 A7: m +1 <= len p-1+1 by XREAL_1:9;
     then
@@ -2785,7 +2791,7 @@ A8: p/.(m+1)=p.(m+1) by A6,FINSEQ_4:24;
     end;
     suppose m+1<>len p;
       then
-A9:   m+1 < len p by A7,REAL_1:def 5;
+A9:   m+1 < len p by A7,XXREAL_0:1;
       thus p.(len p-k)=g.(n+p/.(len p-k+1)) by A2,A4,Def17
         .=h.(n+p/.(len p-k+1)) by A1,A6,A8,A9,Lm16;
     end;
@@ -2822,10 +2828,10 @@ A7: q.(len q)=j by A4,FINSEQ_1:59;
     assume
 A8: 1<=ii & ii < len q;
     then
-A9: ii - ii < len q - ii by REAL_1:92;
+A9: ii - ii < len q - ii by XREAL_1:16;
     then reconsider mm=len q - ii as Element of NAT by INT_1:16;
 A10: 1+0 < mm + 1 by A9,XREAL_1:10;
-    mm <= len q - 1 by A8,REAL_1:92;
+    mm <= len q - 1 by A8,XREAL_1:15;
     then
 A11: mm +1 <= len q-1+1 by XREAL_1:9;
     then
@@ -2836,7 +2842,7 @@ A12: q/.(mm+1)=q.(mm+1) by A10,FINSEQ_4:24;
     end;
     suppose mm+1<>len q;
       then
-A13:  mm+1 < len q by A11,REAL_1:def 5;
+A13:  mm+1 < len q by A11,XXREAL_0:1;
       then
 A14:  mm < len p by A4,XREAL_1:9;
 A15:  mm+1 <= len p by A4,A13,INT_1:20;
@@ -2853,18 +2859,18 @@ A18:      p/.(len p-1+1)=m by A2,A3,FINSEQ_4:24;
         end;
         suppose mm+1<>len p;
           then
-A19:      mm+1 < len p by A15,REAL_1:def 5;
+A19:      mm+1 < len p by A15,XXREAL_0:1;
 A20:      p/.(mm+1)=p.(mm+1) by A10,A15,FINSEQ_4:24;
           set i2=ii-1;
 A21:      now
             assume i2 <= 1;
-            then len p - 1 <= len p -i2 by REAL_1:92;
+            then len p - 1 <= len p -i2 by XREAL_1:15;
             hence contradiction by A4,A19,XREAL_1:22;
           end;
 A22:      q/.(len q-ii+1)= q.(mm+1) by A10,A11,FINSEQ_4:24
             .=p/.(mm+1) by A10,A15,A20,Lm1;
           reconsider i3=i2 as Element of NAT by A21,INT_1:16;
-          i2 < len q -1 by A8,REAL_1:92;
+          i2 < len q -1 by A8,XREAL_1:16;
           hence q.(len q-ii) = g.(n+p/.(len p-i3+1)) by A2,A4,A16,A21,Def17
             .=h.(n+q/.(len q-ii+1)) by A1,A4,A10,A19,A20,A22,Lm16;
         end;
@@ -2883,7 +2889,7 @@ A25: 1<=i & i <= len p by A24,FINSEQ_3:27;
       hence contradiction by A1,A2,A24,Def17;
     end;
     suppose i <> len p;
-      then i < len p by A25,REAL_1:def 5;
+      then i < len p by A25,XXREAL_0:1;
       hence contradiction by A1,A24,A25;
     end;
   end;
@@ -2910,7 +2916,7 @@ A3: q is_shortestpath_of v1,v2,V,W by A1,GRAPH_5:66;
 A4: q is_orientedpath_of v1,v2 & vertices(q) \ {v2} c= V by GRAPH_5:def 4;
   set FT=the Target of G;
 A5: q <> {} & FT.(q.(len q))= v2 by A4,GRAPH_5:def 3;
-  consider vs being FinSequence of the Vertices of G such that
+  consider vs being FinSequence of the carrier of G such that
 A6: vs is_oriented_vertex_seq_of q &
   for n1,m1 be Element of NAT st 1<=n1 & n1<m1 & m1<=len vs & vs.n1=vs.m1
   holds n1=1 & m1=len vs by GRAPH_4:def 7;
@@ -2921,7 +2927,7 @@ A8: len q >= 1 by A5,FINSEQ_1:28;
 A9: e orientedly_joins vs/.len q, vs/.(len q+1) by A6,A8,GRAPH_4:def 5;
   len q in dom q by A8,FINSEQ_3:27;
   then
-A10: e in the Edges of G by FINSEQ_2:13;
+A10: e in the carrier' of G by FINSEQ_2:13;
 A11: len q < len vs by A7,NAT_1:13;
 A12: 1 < len q+1 by A8,NAT_1:13;
 A13: vs/.len q=vs.len q by A8,A11,FINSEQ_4:24;
@@ -2939,7 +2945,7 @@ A18: q.1 orientedly_joins vs/.1, vs/.(1+1) by A6,A8,GRAPH_4:def 5;
       .=v3 by A6,A8,A11,A15,A17;
     hence contradiction by A1,A17;
   end;
-A19: Seg n=the Vertices of G by A1,Def20;
+A19: Seg n=the carrier of G by A1,Def20;
   len q in dom vs by A8,A11,FINSEQ_3:27;
   then v3 in Seg n by A19,FINSEQ_2:13;
   then reconsider m=v3 as Element of NAT;
@@ -2991,8 +2997,8 @@ A7: dom (M.g) = dom g by Th34;
   h=R.(M.g) by A1,Th23;
   then
 A8: h=Relax(M.g,n) by Def15;
-A9: Seg n=the Vertices of G by A1,Def20;
-  then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+A9: Seg n=the carrier of G by A1,Def20;
+  then reconsider VG=the carrier of G as non empty Subset of NAT by A1,
   FINSEQ_1:3;
 A10: W is_weight>=0of G by GRAPH_5:def 13;
 A11: 2*n+n=(2+1)*n;
@@ -3173,7 +3179,8 @@ A72:          M.g/.(2*n+n*(M.g/.mi)+j) >= 0;
 A73:          M.g/.m2 <= newpathcost(M.g,n,j) by A38,A56,A71,Def13;
 A74:          M.g/.m2 = cost(P,W) by A45,A47,A58,PARTFUN1:def 8;
               consider e be set such that
-A75:          e in the Edges of G & e orientedly_joins vk,v3 by A54,A72,Th24;
+A75:          e in the carrier' of G & e orientedly_joins vk,v3
+ by A54,A72,Th24;
               reconsider pe= <*e*> as (oriented Chain of G) by A75,Th5;
 A76:          len pe = 1 & pe.1=e by FINSEQ_1:57;
               then consider Q such that
@@ -3186,7 +3193,7 @@ A77:          Q=PK^pe & Q is_orientedpath_of v1,v3 by A23,A24,A75,GRAPH_5:37;
               by A1,A10,A14,A18,A24,A34,A58,A73,A74,A75,A77,GRAPH_5:69;
             end;
             suppose M.g/.(2*n+n*(M.g/.mi)+j) < 0;
-              then not ex e be set st e in the Edges of G &
+              then not ex e be set st e in the carrier' of G &
               e orientedly_joins vk,v3 by A54,Th24;
               hence P is_shortestpath_of v1,v3,Uh,W
               by A1,A10,A14,A18,A34,A58,Th13;
@@ -3275,7 +3282,7 @@ A98:    j=i & i in dom g & 1 <= i & i <= n & g.i = -1;
         thus contradiction by A16,A92,A98,Th33;
       end;
       consider e being set such that
-A99:  e in the Edges of G & e orientedly_joins vk,v3 by A54,A92,Th24;
+A99:  e in the carrier' of G & e orientedly_joins vk,v3 by A54,A92,Th24;
       reconsider pe= <*e*> as (oriented Chain of G) by A99,Th5;
 A100: len pe = 1 & pe.1=e by FINSEQ_1:57;
       then consider Q such that
@@ -3300,7 +3307,7 @@ A105:   i <= len pk by NAT_1:13;
           end;
           suppose i<>len pk;
             then
-A106:       i < len pk by A105,REAL_1:def 5;
+A106:       i < len pk by A105,XXREAL_0:1;
             q.i=pk.i by A104,A105,Lm1;
             hence q.i in {Ak} or q.i in Ug by A18,A104,A106;
           end;
@@ -3328,7 +3335,7 @@ A113:     FS.(Q.i)= vk & FT.(Q.i) = v3 by A99,GRAPH_4:def 1;
         end;
         suppose i<>len Q;
           then
-A114:     i < len Q by A110,REAL_1:def 5;
+A114:     i < len Q by A110,XXREAL_0:1;
           then
 A115:     i <= len PK by A107,NAT_1:13;
           then
@@ -3356,7 +3363,7 @@ A123:       v2 in Ug;
             then reconsider m=v2 as Element of NAT;
             -1= f.(2*n+n*m+j) by A3,A35,A122,A123
               .=Weight(v2,v3,W) by A1,A34,Def20;
-            hence not ex e be set st e in the Edges of G &
+            hence not ex e be set st e in the carrier' of G &
             e orientedly_joins v2,v3 by Th24;
           end;
           hence Q is_shortestpath_of v1,v3,Uh,W
@@ -3472,7 +3479,7 @@ A151: M.g/.(2*n+n*(M.g/.mi)+j)=M.g.Akj by A7,A26,A148,PARTFUN1:def 8
     suppose m in {Ak};
       then
 A152: m=Ak by TARSKI:def 1;
-      not ex e be set st e in the Edges of G & e orientedly_joins vk, v3
+      not ex e be set st e in the carrier' of G & e orientedly_joins vk, v3
       by A146,A151,Th24;
       then Weight(vk,v3,W)=-1 by Def7;
       hence f.(2*n+n*m+j) = -1 by A1,A152,Def20;
@@ -3497,7 +3504,7 @@ end;
 
 theorem
   f is_Input_of_Dijkstra_Alg G,n,W & v1=1 & 1 <> v2 & v2=i & n >= 1 &
-  g=(DijkstraAlgorithm(n)).f implies the Vertices of G = UsedVx(g,n) \/
+  g=(DijkstraAlgorithm(n)).f implies the carrier of G = UsedVx(g,n) \/
   UnusedVx(g,n) & (v2 in UsedVx(g,n) implies ex p,P st
   p is_simple_vertex_seq_at g,i,n & P is_oriented_edge_seq_of p &
   P is_shortestpath_of v1,v2,W & cost(P,W)=g.(2*n+i)) &
@@ -3520,8 +3527,8 @@ A2: g = RM.cn.f by A1,Def5;
   holds f.(2*n+n*m+j) = -1) & (for m st m in UsedVx(RM.$1.f,n) holds
   RM.$1.f.(n+m) <> -1);
 A3: RM.0 .f = f by Th22;
-A4: Seg n=the Vertices of G by A1,Def20;
-  then reconsider VG=the Vertices of G as non empty Subset of NAT by A1,
+A4: Seg n=the carrier of G by A1,Def20;
+  then reconsider VG=the carrier of G as non empty Subset of NAT by A1,
   FINSEQ_1:3;
 A5: 1 <= mi by NAT_1:12;
 A6: len f=mi & f.1=1 & f.(n+1) =0 & (for m st 1<=m & m<=n holds f.m=1) &
@@ -3547,7 +3554,7 @@ A10:  v3<>v1 & v3=j & h.(n+j)<>-1;
       v3 in VG;
       then
 A11:  1<=j & j<=n by A4,A10,FINSEQ_1:3;
-      then 1 < j by A1,A10,REAL_1:def 5;
+      then 1 < j by A1,A10,XXREAL_0:1;
       then 1+1 <= j by INT_1:20;
       hence contradiction by A1,A3,A10,A11,Def20;
     end;
@@ -3641,7 +3648,7 @@ A26:  x = k & k in dom g & 1 <= k & k <= n & g.k <> -1;
     end;
   end;
   hence
-A27: the Vertices of G = Ug \/ Vg by A20,XBOOLE_0:def 10;
+A27: the carrier of G = Ug \/ Vg by A20,XBOOLE_0:def 10;
   consider ii being Element of NAT such that
 A28: ii<=n & OuterVx(RM.ii.f,n) = {} by Th41;
 A29: OuterVx(g,n) = {} by A2,A28,Def4;
@@ -3661,7 +3668,8 @@ A32: v4 = j & j in dom g & 1 <= j & j <= n & g.j <> -1 by A31;
     end;
     then -1=f.(2*n+n*m+j) by A2,A19,A31,A32
       .=Weight(v3,v4,W) by A1,A32,Def20;
-    hence not ex e st e in the Edges of G & e orientedly_joins v3,v4 by Th24;
+    hence not ex e st e in the carrier' of G & e orientedly_joins v3,v4
+     by Th24;
   end;
   now
     assume

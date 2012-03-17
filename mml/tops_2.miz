@@ -461,7 +461,7 @@ A4: now
   now
     assume W = {};
     then union W = {}GX by ZFMISC_1:2;
-    hence union W is closed by TOPS_1:22;
+    hence union W is closed;
   end;
   hence thesis by A4;
 end;
@@ -482,7 +482,7 @@ A2: now
   now
     assume W = {};
     then meet W = {}GX by SETFAM_1:def 1;
-    hence meet W is closed by TOPS_1:22;
+    hence meet W is closed;
   end;
   hence thesis by A2;
 end;
@@ -1508,5 +1508,69 @@ A2: A is connected;
 A3: f".:A is connected by A2,Th75;
   rng f = [#]T & f is one-to-one by A1,Def5;
   hence f"A is connected by A3,Th68;
+end;
+
+begin :: Addenda
+
+:: from JORDAN1, 2008.07.07, A.T.
+
+reserve GX,GY for non empty TopSpace;
+
+theorem
+  for GX being non empty TopSpace st
+  (for x,y being Point of GX ex GY st (GY is connected &
+  ex f being Function of GY,GX st
+  f is continuous & x in rng(f)& y in rng(f))) holds GX is connected
+proof
+  let GX;
+  assume
+A1: (for x,y being Point of GX ex GY st (GY is connected &
+  ex f being Function of GY,GX st f is continuous & x in rng f & y in rng f));
+  for A,B being Subset of GX
+  st [#](GX) = A \/ B & A <> {}(GX) & B <> {}(GX) & A is open &
+  B is open holds A meets B
+  proof
+    let A,B be Subset of GX;
+    assume that
+A2: [#](GX) = A \/ B and
+A3: A <> {}(GX) and
+A4: B <> {}(GX) and
+A5: A is open and
+A6: B is open;
+    consider u being Element of A;
+    reconsider x=u as Point of GX by A2,A3,XBOOLE_0:def 2;
+    consider v being Element of B;
+    reconsider y=v as Point of GX by A2,A4,XBOOLE_0:def 2;
+    consider GY such that
+A7: GY is connected and
+A8: ex f being Function of GY,GX
+    st f is continuous & x in rng f & y in rng f by A1;
+    consider f being Function of GY,GX such that
+A9: f is continuous and
+A10: x in rng f and
+A11: y in rng f by A8;
+A12: [#]GX <> {};
+    then
+A13: f"A is open by A5,A9,Th55;
+A14: f"B is open by A6,A9,A12,Th55;
+    f"([#] GX)=[#] GY by Th52;
+    then
+A15: f"A \/ f"B = [#] GY by A2,RELAT_1:175;
+    rng f /\ A <> {} by A3,A10,XBOOLE_0:def 3;
+    then rng f meets A by XBOOLE_0:def 7;
+    then
+A16: f"A <> {}(GY) by RELAT_1:173;
+    rng f /\ B <> {} by A4,A11,XBOOLE_0:def 3;
+    then rng f meets B by XBOOLE_0:def 7;
+    then f"B <> {}(GY) by RELAT_1:173;
+    then f"A meets f"B by A7,A13,A14,A15,A16,CONNSP_1:12;
+    then f"A /\ f"B <> {} by XBOOLE_0:def 7;
+    then f"(A /\ B) <> {} by FUNCT_1:137;
+    then rng f meets (A /\ B) by RELAT_1:173;
+    then consider u1 being set such that
+A17: u1 in rng f & u1 in A /\ B by XBOOLE_0:3;
+    thus thesis by A17,XBOOLE_0:4;
+  end;
+  hence thesis by CONNSP_1:12;
 end;
 

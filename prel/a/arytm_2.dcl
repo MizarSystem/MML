@@ -14,14 +14,14 @@
 </Signature>
 <FCluster aid="ARYTM_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="54"/>
+<Func kind="K" nr="55"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ARYTM_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="55"/>
+<Func kind="K" nr="56"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

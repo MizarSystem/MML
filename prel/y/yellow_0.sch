@@ -25,10 +25,10 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="14" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 <Not>

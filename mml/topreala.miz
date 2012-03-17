@@ -10,7 +10,7 @@ environ
       TOPS_1, INT_1, FUNCT_1, ORDINAL2, ARYTM_1, MCART_1, T_0TOPSP, TOPS_2,
       ARYTM_3, RCOMP_1, ASYMPT_0, FUNCOP_1, TOPMETR, SGRAPH1, BOOLE, TOPREALA,
       FCONT_1, FINSEQ_1, PARTFUN1, TMAP_1, CONNSP_2, JGRAPH_6, NATTRA_1,
-      TDLAT_3, PARTFUN2, FINSEQ_4, MONOID_0;
+      TDLAT_3, PARTFUN2, FINSEQ_4, MONOID_0, SEQM_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       REAL_1, FUNCOP_1, PARTFUN2, INT_1, CARD_3, FINSEQ_1, FUNCT_4, MONOID_0,
@@ -25,14 +25,15 @@ environ
       BORSUK_6, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, FUNCT_2, PRE_TOPC, T_0TOPSP, TMAP_1, STRUCT_0,
-      RCOMP_1, FCONT_1, PARTFUN2, MONOID_0, EUCLID;
+      RCOMP_1, FCONT_1, MONOID_0, EUCLID, PARTFUN2;
  theorems PRE_TOPC, XREAL_0, FUNCT_2, BORSUK_1, INT_1, EUCLID, TOPS_2,
       BORSUK_3, FUNCT_1, TOPMETR, RELAT_1, FUNCOP_1, RCOMP_2, TOPREAL6,
       JORDAN16, BORSUK_6, TARSKI, ZFMISC_1, FUNCT_4, TSEP_1, HILBERT3,
-      FINSEQ_1, TMAP_1, XBOOLE_1, JORDAN6, REAL_1, TOPS_3, FCONT_1, CONNSP_2,
+      FINSEQ_1, TMAP_1, XBOOLE_1, JORDAN6, TOPS_3, FCONT_1, CONNSP_2,
       FRECHET, XBOOLE_0, FINSEQ_3, NAT_1, RCOMP_1, TEX_2, DOMAIN_1, TOPS_1,
       TOPGRP_1, T_0TOPSP, TREAL_1, CARD_3, SUBSET_1, JGRAPH_6, STRUCT_0,
-      TDLAT_3, ENUMSET1, TOPALG_3, XREAL_1, XXREAL_0, XXREAL_1, PARTFUN1;
+      TDLAT_3, ENUMSET1, TOPALG_3, XREAL_1, XXREAL_0, XXREAL_1, PARTFUN1,
+      PARTFUN2;
 
 begin :: Real numbers
 set R = the carrier of R^1;
@@ -110,7 +111,7 @@ A2: a < r+1;
 A3: [\a/] = [\r/]+1 by A1,Th5;
 A4: frac a = a-[\a/] & frac r = r-[\r/] by INT_1:def 6;
   a-1 < r by A2,XREAL_1:21;
-  then a-1-[\r/] < r-[\r/] by REAL_1:92;
+  then a-1-[\r/] < r-[\r/] by XREAL_1:16;
   hence frac a < frac r by A3,A4;
 end;
 
@@ -180,26 +181,26 @@ registration
   cluster ].r-s,r.[ -> non empty;
   coherence
   proof
-    r-s < r-0 by REAL_1:92;
+    r-s < r-0 by XREAL_1:17;
     then r-s < (r-s+r)/2 & (r-s+r)/2 < r by XREAL_1:228;
     hence thesis by XXREAL_1:4;
   end;
   cluster [.r-s,r.[ -> non empty;
   coherence
   proof
-    r-s < r-0 by REAL_1:92;
+    r-s < r-0 by XREAL_1:17;
     hence thesis by XXREAL_1:3;
   end;
   cluster ].r-s,r.] -> non empty;
   coherence
   proof
-    r-s < r-0 by REAL_1:92;
+    r-s < r-0 by XREAL_1:17;
     hence thesis by XXREAL_1:32;
   end;
   cluster [.r-s,r.] -> non empty;
   coherence
   proof
-    r-s < r-0 by REAL_1:92;
+    r-s < r-0 by XREAL_1:17;
     hence thesis by XXREAL_1:1;
   end;
 end;
@@ -264,7 +265,7 @@ proof
 A1: i+1 in dom f;
   then 1 <= i+1 by FINSEQ_3:27;
   then
-A2: 1 < i+1 or 1+0 = i+1 by REAL_1:def 5;
+A2: 1 < i+1 or 1+0 = i+1 by XXREAL_0:1;
   per cases by A2,NAT_1:13;
   suppose i = 0;
     hence thesis;
@@ -667,14 +668,18 @@ proof
   let f be PartFunc of REAL,REAL such that
 A1: f = REAL --> r;
 A2: dom f = REAL by A1,FUNCOP_1:19;
-  f is_constant_on REAL
+  f|REAL is constant
   proof
     reconsider r as Real by XREAL_0:def 1;
     take r;
     let c be Element of REAL;
-    assume c in REAL /\ dom f;
-    then c in dom f by XBOOLE_0:def 3;
-    hence f/.c = f.c by PARTFUN1:def 8
+    assume c in dom(f|REAL);
+    then
+Y:   c in REAL /\ dom f by RELAT_1:90;
+    then
+X:   c in dom f by XBOOLE_0:def 3;
+    thus (f|REAL)/.c = f/.c by PARTFUN2:34,Y
+      .= f.c by PARTFUN1:def 8,X
       .= r by A1,FUNCOP_1:13;
   end;
   hence f is_continuous_on REAL by A2,FCONT_1:44;
@@ -698,8 +703,6 @@ A4: f1 is_continuous_on X1 and
 A5: f2 is_continuous_on X2 and
 A6: for z being set st z in X1 holds f.z = f1.z and
 A7: for z being set st z in X2 holds f.z = f2.z;
-A8: f|(X1 \/ X2) = (f|X1) \/ (f|X2) by RELAT_1:107;
-A9: dom ((f|X1) \/ (f|X2)) = dom (f|X1) \/ dom (f|X2) by RELAT_1:13;
 A10: dom (f|X1) = dom f /\ X1 by RELAT_1:90;
 A11: dom f /\ X1 = X1 by A1,XBOOLE_1:7,28;
 A12: dom (f|X2) = dom f /\ X2 by RELAT_1:90;
@@ -714,7 +717,6 @@ A16: x in X1;
     then
 A17: (f|(X1 \/ X2)).x = f1.x by A6,A15
       .= (f1|X1).x by A16,FUNCT_1:72;
-A18: x in dom (f|(X1 \/ X2)) by A8,A9,A10,A11,A16,XBOOLE_0:def 2;
     for N1 being Neighbourhood of (f|(X1 \/ X2)).x
     ex N being Neighbourhood of x st
     for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
@@ -752,14 +754,13 @@ A28:    not x1 in dom (f|X1);
         hence (f|(X1 \/ X2)).x1 in N1 by A10,A11,A20,A28;
       end;
     end;
-    hence f|dom f is_continuous_in x by A1,A18,FCONT_1:4;
+    hence f|dom f is_continuous_in x by A1,FCONT_1:4;
   end;
   suppose
 A29: x in X2;
     then
 A30: (f|(X1 \/ X2)).x = f2.x by A7,A15
       .= (f2|X2).x by A29,FUNCT_1:72;
-A31: x in dom (f|(X1 \/ X2)) by A8,A9,A12,A13,A29,XBOOLE_0:def 2;
     for N1 being Neighbourhood of (f|(X1 \/ X2)).x
     ex N being Neighbourhood of x st
     for x1 being real number st x1 in dom (f|(X1 \/ X2)) & x1 in N holds
@@ -797,7 +798,7 @@ A41:    not x1 in dom (f|X2);
         hence (f|(X1 \/ X2)).x1 in N1 by A12,A13,A33,A41;
       end;
     end;
-    hence f|dom f is_continuous_in x by A1,A31,FCONT_1:4;
+    hence f|dom f is_continuous_in x by A1,FCONT_1:4;
   end;
 end;
 
@@ -980,7 +981,7 @@ A7:   a <= x by A3,A5,XXREAL_1:1;
       x < r by A6,XXREAL_1:4;
       hence thesis by A7,XXREAL_1:3;
     end;
-    a-1 < a-0 by REAL_1:92;
+    a-1 < a-0 by XREAL_1:17;
     then A c= C by XXREAL_1:48;
     hence thesis by XBOOLE_1:19;
   end;

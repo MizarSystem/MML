@@ -10,7 +10,7 @@ environ
  vocabularies ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1,
       ARYTM_3, PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3,
       LATTICES, RFUNCT_1, RFUNCT_2, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
-      FRECHET2, SUPINF_1;
+      FRECHET2, SUPINF_1, ANPROJ_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
       PROB_1, RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1, RFUNCT_2,
@@ -18,7 +18,8 @@ environ
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1,
       SEQ_2, SEQM_3, PROB_1, RCOMP_1, RFUNCT_1, RFUNCT_2, SEQ_1, RECDEF_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
-      XXREAL_1, SEQM_3, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
+      XXREAL_1, SEQM_3, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, FUNCOP_1,
+      RFUNCT_2, SEQ_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -63,12 +64,12 @@ theorem :: LIMFUNC1:26
   (seq is non-increasing implies seq is bounded_above);
 
 theorem :: LIMFUNC1:27
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing implies
-  for n holds seq.n<0;
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing
+   implies for n holds seq.n<0;
 
 theorem :: LIMFUNC1:28
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing implies
-  for n holds 0<seq.n;
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing
+     implies for n holds 0<seq.n;
 
 theorem :: LIMFUNC1:29
   seq is convergent & 0<lim seq implies ex n st for m st n<=m holds 0<seq.m;
@@ -95,7 +96,7 @@ canceled 2;
 
 theorem :: LIMFUNC1:33
   seq is divergent_to+infty or seq is divergent_to-infty implies
-  ex n st for m st n<=m holds seq^\m is_not_0;
+  ex n st for m st n<=m holds seq^\m is non-zero;
 
 theorem :: LIMFUNC1:34
   (seq^\k is divergent_to+infty implies seq is divergent_to+infty) &
@@ -212,33 +213,33 @@ theorem :: LIMFUNC1:61
   seq" is convergent & lim(seq")=0;
 
 theorem :: LIMFUNC1:62
-  seq is_not_0 & seq is convergent & lim seq=0 &
+  seq is non-zero & seq is convergent & lim seq=0 &
   (ex k st for n st k<=n holds 0<seq.n) implies seq" is divergent_to+infty;
 
 theorem :: LIMFUNC1:63
-  seq is_not_0 & seq is convergent & lim seq=0 &
+  seq is non-zero & seq is convergent & lim seq=0 &
   (ex k st for n st k<=n holds seq.n<0) implies seq" is divergent_to-infty;
 
 theorem :: LIMFUNC1:64
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-decreasing implies
-  seq" is divergent_to-infty;
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-decreasing
+   implies seq" is divergent_to-infty;
 
 theorem :: LIMFUNC1:65
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is non-increasing implies
-  seq" is divergent_to+infty;
+  seq is non-zero & seq is convergent & lim seq=0 & seq is non-increasing
+  implies seq" is divergent_to+infty;
 
 theorem :: LIMFUNC1:66
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is increasing implies
+  seq is non-zero & seq is convergent & lim seq=0 & seq is increasing implies
   seq" is divergent_to-infty;
 
 theorem :: LIMFUNC1:67
-  seq is_not_0 & seq is convergent & lim seq=0 & seq is decreasing implies
+  seq is non-zero & seq is convergent & lim seq=0 & seq is decreasing implies
   seq" is divergent_to+infty;
 
 theorem :: LIMFUNC1:68
   seq1 is bounded &
   (seq2 is divergent_to+infty or seq2 is divergent_to-infty) &
-  seq2 is_not_0 implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0;
+  seq2 is non-zero implies seq1/"seq2 is convergent & lim(seq1/"seq2)=0;
 
 theorem :: LIMFUNC1:69
   seq is divergent_to+infty & (for n holds seq.n<=seq1.n) implies
@@ -342,7 +343,7 @@ theorem :: LIMFUNC1:86
 
 theorem :: LIMFUNC1:87
   f1 is divergent_in+infty_to+infty & (for r ex g st r<g & g in dom(f1+f2)) &
-  (ex r st f2 is_bounded_below_on right_open_halfline(r))
+  (ex r st f2|right_open_halfline r is bounded_below)
   implies f1+f2 is divergent_in+infty_to+infty;
 
 theorem :: LIMFUNC1:88
@@ -353,7 +354,7 @@ theorem :: LIMFUNC1:88
 
 theorem :: LIMFUNC1:89
   f1 is divergent_in-infty_to+infty & (for r ex g st g<r & g in dom(f1+f2)) &
-  (ex r st f2 is_bounded_below_on left_open_halfline(r))
+  (ex r st f2|left_open_halfline r is bounded_below)
   implies f1+f2 is divergent_in-infty_to+infty;
 
 theorem :: LIMFUNC1:90
@@ -392,43 +393,43 @@ theorem :: LIMFUNC1:94
   implies abs(f) is divergent_in-infty_to+infty;
 
 theorem :: LIMFUNC1:95
-  (ex r st f is_non_decreasing_on right_open_halfline(r) &
-  not f is_bounded_above_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is non-decreasing &
+  not f|right_open_halfline r is bounded_above) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to+infty;
 
 theorem :: LIMFUNC1:96
-  (ex r st f is_increasing_on right_open_halfline(r) &
-  not f is_bounded_above_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is increasing &
+  not f|right_open_halfline r is bounded_above) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to+infty;
 
 theorem :: LIMFUNC1:97
-  (ex r st f is_non_increasing_on right_open_halfline(r) &
-  not f is_bounded_below_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is non-increasing &
+  not f|right_open_halfline r is bounded_below) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to-infty;
 
 theorem :: LIMFUNC1:98
-  (ex r st f is_decreasing_on right_open_halfline(r) &
-  not f is_bounded_below_on right_open_halfline(r)) &
+  (ex r st f|right_open_halfline r is decreasing &
+  not f|right_open_halfline r is bounded_below) &
   (for r ex g st r<g & g in dom f) implies f is divergent_in+infty_to-infty;
 
 theorem :: LIMFUNC1:99
-  (ex r st f is_non_increasing_on left_open_halfline(r) &
-  not f is_bounded_above_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is non-increasing &
+  not f|left_open_halfline r is bounded_above) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to+infty;
 
 theorem :: LIMFUNC1:100
-  (ex r st f is_decreasing_on left_open_halfline(r) &
-  not f is_bounded_above_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is decreasing &
+  not f|left_open_halfline r is bounded_above) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to+infty;
 
 theorem :: LIMFUNC1:101
-  (ex r st f is_non_decreasing_on left_open_halfline(r) &
-  not f is_bounded_below_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is non-decreasing &
+  not f|left_open_halfline r is bounded_below) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to-infty;
 
 theorem :: LIMFUNC1:102
-  (ex r st f is_increasing_on left_open_halfline(r) &
-  not f is_bounded_below_on left_open_halfline(r)) &
+  (ex r st f|left_open_halfline r is increasing &
+  not f|left_open_halfline r is bounded_below) &
   (for r ex g st g<r & g in dom f) implies f is divergent_in-infty_to-infty;
 
 theorem :: LIMFUNC1:103
@@ -601,13 +602,13 @@ theorem :: LIMFUNC1:132
 theorem :: LIMFUNC1:133
   f1 is convergent_in+infty & lim_in+infty f1=0 &
   (for r ex g st r<g & g in dom(f1(#)f2)) &
-  (ex r st f2 is_bounded_on right_open_halfline(r)) implies
+  (ex r st f2|right_open_halfline r is bounded) implies
   f1(#)f2 is convergent_in+infty & lim_in+infty(f1(#)f2)=0;
 
 theorem :: LIMFUNC1:134
   f1 is convergent_in-infty & lim_in-infty f1=0 &
   (for r ex g st g<r & g in dom(f1(#)f2)) &
-  (ex r st f2 is_bounded_on left_open_halfline(r)) implies
+  (ex r st f2|left_open_halfline r is bounded) implies
   f1(#)f2 is convergent_in-infty & lim_in-infty(f1(#)f2)=0;
 
 theorem :: LIMFUNC1:135

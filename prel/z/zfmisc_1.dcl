@@ -4,6 +4,7 @@
 <ArticleID name="HIDDEN"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
 </Signature>
 <FCluster aid="ZFMISC_1" nr="1">
 <ArgTypes>
@@ -22,4 +23,16 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
+<CCluster aid="ZFMISC_1" nr="1">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+</CCluster>
 </Registrations>

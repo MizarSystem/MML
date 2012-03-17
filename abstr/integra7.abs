@@ -10,17 +10,18 @@ environ
       REALSET1, SEQ_1, SEQ_2, FUNCT_3, RLVECT_1, BOOLE, RFUNCT_1, FCONT_1,
       ABSVALUE, ORDINAL2, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, PARTFUN2,
       PRE_TOPC, INTEGRA5, FINSEQ_1, FINSEQ_2, FINSEQ_4, ARYTM, SIN_COS,
-      INTEGRA7, MEASURE5, PREPOWER;
+      INTEGRA7, MEASURE5, PREPOWER, LATTICES, SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       XXREAL_0, COMPLEX1, REAL_1, NAT_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
       PARTFUN2, PSCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, SEQ_4,
       SQUARE_1, PREPOWER, FCONT_1, FDIFF_1, FINSEQ_2, RVSUM_1, INTEGRA1,
-      INTEGRA2, SEQFUNC, INTEGRA5, SIN_COS, TAYLOR_1;
+      INTEGRA2, SEQFUNC, SIN_COS, TAYLOR_1, INTEGRA5;
  constructors REAL_1, FDIFF_1, PARTFUN1, PARTFUN2, RFUNCT_1, INTEGRA2,
       LIMFUNC1, FCONT_1, PSCOMP_1, NAT_1, BINOP_2, INTEGRA5, SIN_COS, PREPOWER,
-      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2;
+      TAYLOR_1, SQUARE_1, SEQ_1, XXREAL_2, RFUNCT_2;
  registrations XREAL_0, RELSET_1, FINSEQ_2, INTEGRA1, RCOMP_1, INT_1, ORDINAL1,
-      MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2;
+      MEMBERED, PREPOWER, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1, FUNCT_2,
+      XXREAL_2, SEQ_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -45,7 +46,7 @@ theorem :: INTEGRA7:2
   inf rng f - inf rng g <= a & inf rng g - inf rng f <= a;
 
 theorem :: INTEGRA7:3
-  f|X is_bounded_on X implies f is_bounded_on X;
+  f|X|X is bounded implies f|X is bounded;
 
 theorem :: INTEGRA7:4
   for x be Real st
@@ -73,7 +74,7 @@ theorem :: INTEGRA7:9
 
 theorem :: INTEGRA7:10
   a <= b & [' a,b '] c= X & F is_differentiable_on X &
-  F`|X is_integrable_on [' a,b '] & F`|X is_bounded_on [' a,b '] implies
+  F`|X is_integrable_on [' a,b '] & (F`|X)|[' a,b '] is bounded implies
   F.b = integral(F`|X,a,b) + F.a;
 
 begin :: The Definition of Indefinite Integral
@@ -128,13 +129,13 @@ theorem :: INTEGRA7:17
 
 theorem :: INTEGRA7:18
   a <= b & [' a,b '] c= X & F is_integral_of f,X &
-  f is_integrable_on [' a,b '] & f is_bounded_on [' a,b ']
+  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
   implies F.b = integral(f,a,b) + F.a;
 
 theorem :: INTEGRA7:19
   a <= b & [. a,b .] c= X & f is_continuous_on X implies
   f is_continuous_on [' a,b '] & f is_integrable_on [' a,b '] &
-  f is_bounded_on [' a,b '];
+  f|[' a,b '] is bounded;
 
 theorem :: INTEGRA7:20
   a <= b & [. a,b .] c= X & f is_continuous_on X & F is_integral_of f,X
@@ -143,7 +144,7 @@ theorem :: INTEGRA7:20
 theorem :: INTEGRA7:21
   b <= a & [' b,a '] c= X &
   f is_integrable_on [' b,a '] & g is_integrable_on [' b,a '] &
-  f is_bounded_on [' b,a '] & g is_bounded_on [' b,a '] &
+  f|[' b,a '] is bounded & g|[' b,a '] is bounded &
   X c= dom f & X c= dom g & F is_integral_of f,X & G is_integral_of g,X
   implies
   (F.a)*(G.a) - (F.b)*(G.b) = integral(f(#)G,b,a) + integral(F(#)g,b,a);
@@ -185,9 +186,9 @@ begin :: Uniform Convergent Functional Sequence
 theorem :: INTEGRA7:31
   for H be Functional_Sequence of REAL,REAL, rseq be Real_Sequence st a < b &
   (for n be Element of NAT holds
-  H.n is_integrable_on [' a,b '] & H.n is_bounded_on [' a,b '] &
+  H.n is_integrable_on [' a,b '] & (H.n)|[' a,b '] is bounded &
   rseq.n = integral(H.n,a,b) ) & H is_unif_conv_on [' a,b '] holds
-  lim(H,[' a,b ']) is_bounded_on [' a,b '] &
+  lim(H,[' a,b '])|[' a,b '] is bounded  &
   lim(H,[' a,b ']) is_integrable_on [' a,b '] & rseq is convergent &
   lim rseq = integral(lim(H,[' a,b ']),a,b);
 

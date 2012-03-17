@@ -7,16 +7,17 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
-      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      FUNCT_3, MCART_1, SUBSET_1, COMPLEX1, FINSEQ_4, SETFAM_1, TARSKI;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+      RELAT_1, RELAT_2, FUNCT_1,
       RELSET_1, PARTFUN1, MCART_1;
- constructors RELAT_2, PARTFUN1, MCART_1;
+ constructors RELAT_2, PARTFUN1, MCART_1, SETFAM_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, PARTFUN1, FUNCT_1, SUBSET_1;
  theorems TARSKI, RELAT_1, FUNCT_1, ZFMISC_1, PARTFUN1, GRFUNC_1, RELSET_1,
-      SUBSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, RELAT_2, MCART_1;
- schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1, WELLORD2;
+      SUBSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, RELAT_2, MCART_1, SETFAM_1;
+ schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1, WELLORD2, SUBSET_1;
 
 begin
 
@@ -2198,5 +2199,281 @@ A2: f"A misses f"(A`) by XBOOLE_0:def 7;
     .= {}S by XBOOLE_1:37;
   then (f"A)` misses (f"(A`))` by XBOOLE_0:def 7;
   hence (f"A)` = f"(A`) by A2,SUBSET_1:46;
+end;
+
+:: from CAT_1, 2008.07.01, A.T.
+
+theorem
+  for X,Y,Z being set, D being non empty set, f being Function of X,D
+  st Y c= X & f.:Y c= Z holds f|Y is Function of Y,Z
+proof
+  let X,Y,Z be set, D be non empty set, f be Function of X,D;
+  assume that
+A1: Y c= X and
+A2: f.:Y c= Z;
+  dom f = X by Def1;
+  then
+A3: dom(f|Y) = Y by A1,RELAT_1:91;
+A4: rng(f|Y) c= Z by A2,RELAT_1:148;
+  now
+    assume Z = {};
+    then rng(f|Y) = {} by A4;
+    hence Y = {} by A3,RELAT_1:65;
+  end;
+  hence f|Y is Function of Y,Z by A3,A4,Def1,RELSET_1:11;
+end;
+
+:: from WEIERSTR, 2008.07.07, A.T.
+
+definition
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let G be Subset-Family of S;
+  func f"G -> Subset-Family of T means
+  :Def10:
+  for A being Subset of T holds
+  A in it iff ex B being Subset of S st B in G & A = f"B;
+  existence
+  proof
+    defpred P[Subset of T] means ex B being Subset of S st B in G & $1 = f"B;
+    ex R being Subset-Family of T st
+    for A being Subset of T holds A in R iff P[A] from SUBSET_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let R1,R2 be Subset-Family of T such that
+A1: for A being Subset of T holds A in R1 iff
+    ex B being Subset of S st (B in G & A = f"B) and
+A2: for A being Subset of T holds A in R2 iff
+    ex B being Subset of S st (B in G & A = f"B);
+    for x being set holds (x in R1 iff x in R2)
+    proof
+      let x be set;
+      thus x in R1 implies x in R2
+      proof
+        assume
+A3:     x in R1;
+        then reconsider x as Subset of T;
+        ex B being Subset of S st (B in G & x = f"B) by A1,A3;
+        hence thesis by A2;
+      end;
+      assume
+A4:   x in R2;
+      then reconsider x as Subset of T;
+      ex B being Subset of S st (B in G & x = f"B) by A2,A4;
+      hence thesis by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  A,B being Subset-Family of S st A c= B holds f"A c= f"B
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let A,B be Subset-Family of S;
+  assume
+A1: A c= B;
+  let x be set;
+  assume
+A2: x in f"A;
+  then reconsider x as Subset of T;
+  ex C being Subset of S st C in B & x = f"C
+  proof
+    consider C being Subset of S such that
+A3: C in A & x = f"C by A2,Def10;
+    take C;
+    thus thesis by A1,A3;
+  end;
+  hence thesis by Def10;
+end;
+
+definition
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let G be Subset-Family of T;
+  func f.:G -> Subset-Family of S means
+  :Def2:
+  for A being Subset of S holds
+  A in it iff ex B being Subset of T st (B in G & A = f.:B);
+  existence
+  proof thus
+    ex R being Subset-Family of S st for A being Subset of S holds A in R iff
+    ex B being Subset of T st (B in G & A = f.:B)
+    proof
+      defpred P[Subset of S] means
+      ex B being Subset of T st B in G & $1 = f.:B;
+      ex R being Subset-Family of S st
+      for A being Subset of S holds A in R iff P[A] from SUBSET_1:sch 3;
+      hence thesis;
+    end;
+  end;
+  uniqueness
+  proof
+    let R1,R2 be Subset-Family of S such that
+A1: for A being Subset of S holds A in R1 iff
+    ex B being Subset of T st (B in G & A = f.:B) and
+A2: for A being Subset of S holds A in R2 iff
+    ex B being Subset of T st (B in G & A = f.:B);
+    for x being set holds (x in R1 iff x in R2)
+    proof
+      let x be set;
+      thus x in R1 implies x in R2
+      proof
+        assume
+A3:     x in R1;
+        then reconsider x as Subset of S;
+        ex B being Subset of T st (B in G & x = f.:B) by A1,A3;
+        hence thesis by A2;
+      end;
+      assume
+A4:   x in R2;
+      then reconsider x as Subset of S;
+      ex B being Subset of T st (B in G & x = f.:B) by A2,A4;
+      hence thesis by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  A,B being Subset-Family of T holds A c= B implies f.:A c= f.:B
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let A,B be Subset-Family of T;
+  assume
+A1: A c= B;
+  let x be set;
+  assume
+A2: x in f.:A;
+  then reconsider x as Subset of S;
+  ex C being Subset of T st (C in B & x = f.:C)
+  proof
+    consider C being Subset of T such that
+A3: C in A & x = f.:C by A2,Def2;
+    take C;
+    thus thesis by A1,A3;
+  end;
+  hence thesis by Def2;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  B being Subset-Family of S, P being Subset of S st
+  f.:(f"B) is Cover of P holds B is Cover of P
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let B be Subset-Family of S;
+  let P be Subset of S;
+  assume f.:(f"B) is Cover of P;
+  then
+A1: P c= union (f.:(f"B)) by SETFAM_1:def 12;
+  P c= union B
+  proof
+    let x be set;
+    assume x in P;
+    then consider Y being set such that
+A2: x in Y & Y in f.:(f"(B)) by A1,TARSKI:def 4;
+    ex Z being set st (x in Z & Z in B)
+    proof
+      reconsider Y as Subset of S by A2;
+      consider Y1 being Subset of T such that
+A3:   Y1 in f"(B) & Y = f.:Y1 by A2,Def2;
+      consider Y2 being Subset of S such that
+A4:   Y2 in B & Y1 = f"(Y2) by A3,Def10;
+A5:   f.:(f"Y2) c= Y2 by FUNCT_1:145;
+      reconsider Y2 as set;
+      take Y2;
+      thus thesis by A2,A3,A4,A5;
+    end;
+    hence thesis by TARSKI:def 4;
+  end;
+  hence thesis by SETFAM_1:def 12;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  B being Subset-Family of T, P being Subset of T st B is Cover of P holds
+  f"(f.:B) is Cover of P
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let B be Subset-Family of T;
+  let P be Subset of T;
+  assume B is Cover of P;
+  then
+A1: P c= union B by SETFAM_1:def 12;
+  P c= union(f"(f.:B))
+  proof
+    let x be set;
+    assume x in P;
+    then consider Y being set such that
+A2: x in Y & Y in B by A1,TARSKI:def 4;
+    ex Z being set st (x in Z & Z in f"(f.:B))
+    proof
+      reconsider Y as Subset of T by A2;
+      set Z = f"(f.:Y);
+      dom f = T by Def1;
+      then
+A3:   Y c= f"(f.:Y) by FUNCT_1:146;
+A4:   f.:Y in f.:B & f"(f.:Y) = f"(f.:Y) by A2,Def2;
+      take Z;
+      thus thesis by A2,A3,A4,Def10;
+    end;
+    hence thesis by TARSKI:def 4;
+  end;
+  hence thesis by SETFAM_1:def 12;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  Q being Subset-Family of S holds union(f.:(f"(Q))) c= union Q
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let Q be Subset-Family of S;
+  let x be set;
+  thus x in union(f.:(f"(Q))) implies x in union Q
+  proof
+    assume x in union(f.:(f"Q));
+    then consider A being set such that
+A1: x in A & A in f.:(f"Q) by TARSKI:def 4;
+    reconsider A as Subset of S by A1;
+    consider A1 being Subset of T such that
+A2: A1 in f"Q & A = f.:A1 by A1,Def2;
+    consider A2 being Subset of S such that
+A3: A2 in Q & A1 = f"A2 by A2,Def10;
+    f.:(f"A2) c= A2 by FUNCT_1:145;
+    hence thesis by A1,A2,A3,TARSKI:def 4;
+  end;
+end;
+
+theorem
+  for T,S being non empty set, f being Function of T,S,
+  P being Subset-Family of T holds union P c= union(f"(f.:P))
+proof
+  let T,S be non empty set;
+  let f be Function of T,S;
+  let P be Subset-Family of T;
+  let x be set;
+  assume x in union P;
+  then consider A being set such that
+A1: x in A & A in P by TARSKI:def 4;
+A2: A c= T by A1;
+  reconsider A as Subset of T by A1;
+  reconsider A1 = f.:A as Subset of S;
+  reconsider A2 = f"A1 as Subset of T;
+  A c= dom f by A2,Def1;
+  then
+A3: A c= A2 by FUNCT_1:146;
+  A1 in f.:P by A1,Def2;
+  then A2 in f"(f.:P) by Def10;
+  hence thesis by A1,A3,TARSKI:def 4;
 end;
 

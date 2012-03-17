@@ -10,7 +10,7 @@ environ
       MSUALG_3, BOOLE, FINSEQ_1, FINSEQ_2, MSUALG_1, MATRIX_1, ZF_REFLE, AMI_1,
       MSAFREE, PROB_2, MSATERM, MCART_1, MSUALG_6, CAT_5, INSTALG1, FUNCT_5,
       QC_LANG1, CAT_1, PUA2MSS1, CARD_3, TDGROUP, ALG_1, CATALG_1, FINSEQ_4,
-      ARYTM, GRAPH_1;
+      ARYTM, CAT_4, STRUCT_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1,
       MCART_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
       MSAFREE1, FINSEQ_1, FINSEQ_2, CARD_3, FINSEQ_4, FUNCT_6, STRUCT_0,
@@ -20,7 +20,7 @@ environ
       MSATERM, MSAFREE1, PUA2MSS1, MSUALG_6, INSTALG1, XREAL_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, XREAL_0, FINSEQ_1, FINSEQ_2, PBOOLE, STRUCT_0, MSUALG_1,
-      MSAFREE, INSTALG1, CAT_1;
+      MSAFREE, INSTALG1, CAT_1, MSAFREE1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, MSUALG_1, MSUALG_3, PUA2MSS1, MSUALG_6,
       INSTALG1, PROB_2, MSAFREE1, XBOOLE_0, FUNCOP_1, PBOOLE;
@@ -335,32 +335,6 @@ end;
 
 registration
   let S be non empty non void ManySortedSign;
-  let X be non-empty ManySortedSet of the carrier of S;
-  cluster FreeMSA X -> disjoint_valued;
-  coherence
-  proof
-    set A = FreeMSA X;
-    let x,y be set;
-    assume
-A1: x <> y;
-    assume (the Sorts of A).x meets (the Sorts of A).y;
-    then consider z being set such that
-A2: z in (the Sorts of A).x & z in (the Sorts of A).y by XBOOLE_0:3;
-    dom the Sorts of A = the carrier of S by PBOOLE:def 3;
-    then reconsider x, y as SortSymbol of S by A2,FUNCT_1:def 4;
-    A = MSAlgebra(#FreeSort X, FreeOper X#) by MSAFREE:def 16;
-    then
-A3: (the Sorts of A).x = FreeSort(X,x) & (the Sorts of A).y = FreeSort (X, y)
-    by MSAFREE:def 13;
-    FreeSort(X,x) c= S-Terms X by MSATERM:12;
-    then reconsider z as Term of S,X by A2,A3;
-    the_sort_of z = x & the_sort_of z = y by A2,A3,MSATERM:def 5;
-    hence thesis by A1;
-  end;
-end;
-
-registration
-  let S be non empty non void ManySortedSign;
   cluster strict non-empty disjoint_valued MSAlgebra over S;
   existence
   proof consider X being non-empty ManySortedSet of the carrier of S;
@@ -392,7 +366,7 @@ definition
   func CatSign A -> strict ManySortedSign means
   :
   Def5: the carrier of it = [:{0},2-tuples_on A:] &
-  the OperSymbols of it = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] &
+  the carrier' of it = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] &
   (for a being set st a in A holds (the Arity of it).[1,<*a*>] = {} &
   (the ResultSort of it).[1,<*a*>] = [0,<*a,a*>]) &
   (for a,b,c being set st a in A & b in A & c in A holds
@@ -531,7 +505,7 @@ A29: for x being set st x in [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:]
     (#[:{0},2-tuples_on A:], [:{1},1-tuples_on A:]\/[:{2},3-tuples_on A:],
       Ar, R#);
     thus the carrier of S = [:{0},2-tuples_on A:];
-    thus the OperSymbols of S = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:];
+    thus the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:];
     hereby
       let a be set;
       assume
@@ -593,21 +567,21 @@ A38: [2,<*a,b,c*>] = [1,<*y1*>] & R.[2,<*a,b,c*>] = [0,<*y1,y1*>] or
   proof
     let S1,S2 be strict ManySortedSign such that
 A39: the carrier of S1 = [:{0},2-tuples_on A:] and
-A40: the OperSymbols of S1 = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] and
+A40: the carrier' of S1 = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] and
 A41: for a being set st a in A holds (the Arity of S1).[1,<*a*>] = {} &
     (the ResultSort of S1).[1,<*a*>] = [0,<*a,a*>] and
 A42: for a,b,c being set st a in A & b in A & c in A holds
     (the Arity of S1).[2,<*a,b,c*>] = <*[0,<*b,c*>],[0,<*a,b*>]*> &
     (the ResultSort of S1).[2,<*a,b,c*>] = [0,<*a,c*>] and
 A43: the carrier of S2 = [:{0},2-tuples_on A:] and
-A44: the OperSymbols of S2 = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] and
+A44: the carrier' of S2 = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] and
 A45: for a being set st a in A holds (the Arity of S2).[1,<*a*>] = {} &
     (the ResultSort of S2).[1,<*a*>] = [0,<*a,a*>] and
 A46: for a,b,c being set st a in A & b in A & c in A holds
     (the Arity of S2).[2,<*a,b,c*>] = <*[0,<*b,c*>],[0,<*a,b*>]*> &
     (the ResultSort of S2).[2,<*a,b,c*>] = [0,<*a,c*>];
-A47: dom the Arity of S1 = the OperSymbols of S1 &
-    dom the Arity of S2 = the OperSymbols of S2 by FUNCT_2:def 1;
+A47: dom the Arity of S1 = the carrier' of S1 &
+    dom the Arity of S2 = the carrier' of S2 by FUNCT_2:def 1;
     now
       let x be set;
       assume x in [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:];
@@ -650,8 +624,8 @@ A54:  [:{0},2-tuples_on A:] = {};
       hence [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] = {};
     end;
     then
-A55: dom the ResultSort of S1 = the OperSymbols of S1 &
-    dom the ResultSort of S2 = the OperSymbols of S2 by A39,A40,A43,A44,
+A55: dom the ResultSort of S1 = the carrier' of S1 &
+    dom the ResultSort of S2 = the carrier' of S2 by A39,A40,A43,A44,
     FUNCT_2:def 1;
     now
       let x be set;
@@ -710,9 +684,9 @@ registration
   proof
     the carrier of CatSign A = [:{0},2-tuples_on A:] by Def5;
     hence the carrier of CatSign A is non empty;
-    the OperSymbols of CatSign A =
+    the carrier' of CatSign A =
     [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5;
-    hence the OperSymbols of CatSign A <> {};
+    hence the carrier' of CatSign A <> {};
   end;
 end;
 
@@ -748,12 +722,12 @@ A4: q.1 in rng q & rng q c= A by FUNCT_1:def 5;
     then reconsider A' = A as non empty set;
     reconsider a = q.1 as Element of A' by A4;
     <*a*> is Element of 1-tuples_on A' by FINSEQ_2:118;
-    then [1,<*a*>] in [:{1},1-tuples_on A:] & the OperSymbols of CatSign A
+    then [1,<*a*>] in [:{1},1-tuples_on A:] & the carrier' of CatSign A
     = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5,ZFMISC_1:128;
-    then [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] c= the OperSymbols of
+    then [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] c= the carrier' of
     S & [1,<*a*>] in [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:]
     by A1,INSTALG1:11,XBOOLE_0:def 2;
-    hence the OperSymbols of S <> {};
+    hence the carrier' of S <> {};
   end;
 end;
 
@@ -868,10 +842,10 @@ definition
   : Def8:
   for x being set holds x in it iff
   ex a being set, f being Function st
-  [a,f] in (the carrier of S) \/ (the OperSymbols of S) & x in rng f;
+  [a,f] in (the carrier of S) \/ (the carrier' of S) & x in rng f;
   existence
   proof
-    set A = (the carrier of S) \/ (the OperSymbols of S);
+    set A = (the carrier of S) \/ (the carrier' of S);
     take X = proj2 union SubFuncs proj2 A;
     let x be set;
     hereby
@@ -887,7 +861,7 @@ A3:   [c,b] in A by RELAT_1:def 5;
       take c,b; thus [c,b] in A & x in rng b by A2,A3,RELAT_1:def 5;
     end;
     given a being set, f being Function such that
-A4: [a,f] in (the carrier of S) \/ (the OperSymbols of S) & x in rng f;
+A4: [a,f] in (the carrier of S) \/ (the carrier' of S) & x in rng f;
     consider b being set such that
 A5: [b,x] in f by A4,RELAT_1:def 5;
     f in proj2 A by A4,RELAT_1:def 5;
@@ -898,9 +872,10 @@ A5: [b,x] in f by A4,RELAT_1:def 5;
   uniqueness
   proof
     defpred P[set] means ex a being set, f being Function st
-    [a,f] in (the carrier of S) \/ (the OperSymbols of S) & $1 in rng f;
-    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    [a,f] in (the carrier of S) \/ (the carrier' of S) & $1 in rng f;
+    thus for X1,X2 being set st (for x being set holds x in X1 iff P[ x]) &
+    (for x being set holds x in X2 iff P[ x]) holds X1 = X2
+     from XBOOLE_0:sch 3;
   end;
 end;
 
@@ -910,15 +885,15 @@ proof
   let A be set;
   set S = CatSign A;
 A1: the carrier of S = [:{0},2-tuples_on A:] by Def5;
-A2: the OperSymbols of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:]
+A2: the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:]
   by Def5;
   hereby
     let x be set;
     assume x in underlay CatSign A;
     then consider a being set, f being Function such that
-A3: [a,f] in (the carrier of S) \/ (the OperSymbols of S) & x in rng f
+A3: [a,f] in (the carrier of S) \/ (the carrier' of S) & x in rng f
     by Def8;
-    [a,f] in the carrier of S or [a,f] in the OperSymbols of S
+    [a,f] in the carrier of S or [a,f] in the carrier' of S
     by A3,XBOOLE_0:def 2;
     then [a,f] in [:{0},2-tuples_on A:] or [a,f] in [:{1},1-tuples_on A:] or
     [a,f] in [:{2},3-tuples_on A:] by A2,Def5,XBOOLE_0:def 2;
@@ -933,7 +908,7 @@ A3: [a,f] in (the carrier of S) \/ (the OperSymbols of S) & x in rng f
   then <*x,x*> in 2-tuples_on A by Th10;
   then [0,<*x,x*>] in the carrier of S & rng <*x,x*> = {x,x}
   by A1,FINSEQ_2:147,ZFMISC_1:128;
-  then [0,<*x,x*>] in (the carrier of S) \/ (the OperSymbols of S) & x in
+  then [0,<*x,x*>] in (the carrier of S) \/ (the carrier' of S) & x in
   rng <*x,x*> by TARSKI:def 2,XBOOLE_0:def 2;
   hence thesis by Def8;
 end;
@@ -947,9 +922,9 @@ definition
   ex i being (Element of NAT), p being FinSequence
   st s = [i,p] & len p = f.i &
   [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of S) &
-  (for o being set st o in the OperSymbols of S ex i being (Element of NAT),
+  (for o being set st o in the carrier' of S ex i being (Element of NAT),
   p being FinSequence st o = [i,p] & len p = f.i &
-  [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S);
+  [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S);
 end;
 
 registration
@@ -997,7 +972,7 @@ A6: dom f = NAT & rng f c= NAT and
 A7: for i being set st i in NAT holds P[i,f.i] from WELLORD2:sch 1(A1);
     reconsider f as Function of NAT,NAT by A6,FUNCT_2:4;
 A8: the carrier of S = [:{0},2-tuples_on A:] by Def5;
-A9: the OperSymbols of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:]
+A9: the carrier' of S = [:{1},1-tuples_on A:] \/ [:{2}, 3-tuples_on A:]
     by Def5;
 A10: A = underlay S by Th15;
     take f;
@@ -1014,7 +989,7 @@ A11:  i in {0} & p in 2-tuples_on A & s = [i,p] by A8,ZFMISC_1:103;
     end;
     let o be set;
     assume
-A12: o in the OperSymbols of S;
+A12: o in the carrier' of S;
     per cases by A9,A12,XBOOLE_0:def 2;
     suppose o in [:{1}, 1-tuples_on A:];
       then consider i,p being set such that
@@ -1051,21 +1026,21 @@ end;
 
 theorem Th16:
   for S being delta-concrete ManySortedSign, x being set
-  st x in the carrier of S or x in the OperSymbols of S
+  st x in the carrier of S or x in the carrier' of S
   ex i being (Element of NAT), p being FinSequence st x = [i,p] &
   rng p c= underlay S
 proof
   let S be delta-concrete ManySortedSign, x be set such that
-A1: x in the carrier of S or x in the OperSymbols of S;
+A1: x in the carrier of S or x in the carrier' of S;
   consider f being Function of NAT,NAT such that
 A2: for s being set st s in the carrier of S
   ex i being (Element of NAT), p being FinSequence st s = [i,p] &
   len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of S and
-A3: for o being set st o in the OperSymbols of S
+A3: for o being set st o in the carrier' of S
   ex i being (Element of NAT), p being FinSequence st o = [i,p] &
   len p = f.i &
-  [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S by Def9;
-A4: x in (the carrier of S) \/ the OperSymbols of S by A1,XBOOLE_0:def 2;
+  [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S by Def9;
+A4: x in (the carrier of S) \/ the carrier' of S by A1,XBOOLE_0:def 2;
   per cases by A1;
   suppose x in the carrier of S;
     then consider i being (Element of NAT), p being FinSequence such that
@@ -1074,10 +1049,10 @@ A5: x = [i,p] & len p = f.i and
     take i,p; thus x = [i,p] by A5;
     let a be set; thus thesis by A4,A5,Def8;
   end;
-  suppose x in the OperSymbols of S;
+  suppose x in the carrier' of S;
     then consider i being (Element of NAT), p being FinSequence such that
 A6: x = [i,p] & len p = f.i and
-    [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S by A3;
+    [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S by A3;
     take i,p; thus x = [i,p] by A6;
     let a be set; thus thesis by A4,A6,Def8;
   end;
@@ -1087,20 +1062,20 @@ theorem
   for S being delta-concrete ManySortedSign, i being set,
   p1,p2 being FinSequence
   st [i,p1] in the carrier of S & [i,p2] in the carrier of S or
-  [i,p1] in the OperSymbols of S & [i,p2] in the OperSymbols of S
+  [i,p1] in the carrier' of S & [i,p2] in the carrier' of S
   holds len p1 = len p2
 proof
   let S be delta-concrete ManySortedSign, i be set, p1,p2 be FinSequence
   such that
 A1: [i,p1] in the carrier of S & [i,p2] in the carrier of S or
-  [i,p1] in the OperSymbols of S & [i,p2] in the OperSymbols of S;
+  [i,p1] in the carrier' of S & [i,p2] in the carrier' of S;
   consider f being Function of NAT,NAT such that
 A2: for s being set st s in the carrier of S
   ex i being (Element of NAT), p being FinSequence st s = [i,p] &
   len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of S and
-A3: for o being set st o in the OperSymbols of S ex i being (Element of NAT),
+A3: for o being set st o in the carrier' of S ex i being (Element of NAT),
   p being FinSequence st o = [i,p] & len p = f.i &
-  [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S by Def9;
+  [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S by Def9;
   per cases by A1;
   suppose
 A4: [i,p1] in the carrier of S & [i,p2] in the carrier of S;
@@ -1114,13 +1089,13 @@ A6: [i,p2] = [j2,q2] & len q2 = f.j2 and
     hence thesis by A5,A6;
   end;
   suppose
-A7: [i,p1] in the OperSymbols of S & [i,p2] in the OperSymbols of S;
+A7: [i,p1] in the carrier' of S & [i,p2] in the carrier' of S;
     then consider j1 being (Element of NAT), q1 being FinSequence such that
 A8: [i,p1] = [j1,q1] & len q1 = f.j1 and
-    [:{j1}, (f.j1)-tuples_on underlay S:] c= the OperSymbols of S by A3;
+    [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier' of S by A3;
     consider j2 being (Element of NAT), q2 being FinSequence such that
 A9: [i,p2] = [j2,q2] & len q2 = f.j2 and
-    [:{j2}, (f.j2)-tuples_on underlay S:] c= the OperSymbols of S by A3, A7;
+    [:{j2}, (f.j2)-tuples_on underlay S:] c= the carrier' of S by A3, A7;
     i = j1 & i = j2 & p1 = q1 & p2 = q2 by A8,A9,ZFMISC_1:33;
     hence thesis by A8,A9;
   end;
@@ -1130,7 +1105,7 @@ theorem
   for S being delta-concrete ManySortedSign, i being set,
   p1,p2 being FinSequence st len p2 = len p1 & rng p2 c= underlay S
   holds ([i,p1] in the carrier of S implies [i,p2] in the carrier of S) &
-  ([i,p1] in the OperSymbols of S implies [i,p2] in the OperSymbols of S)
+  ([i,p1] in the carrier' of S implies [i,p2] in the carrier' of S)
 proof
   let S be delta-concrete ManySortedSign, i be set, p1,p2 be FinSequence
   such that
@@ -1139,9 +1114,9 @@ A1: len p2 = len p1 & rng p2 c= underlay S;
 A2: for s being set st s in the carrier of S
   ex i being (Element of NAT), p being FinSequence st s = [i,p] &
   len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of S and
-A3: for o being set st o in the OperSymbols of S ex i being (Element of NAT),
+A3: for o being set st o in the carrier' of S ex i being (Element of NAT),
   p being FinSequence st o = [i,p] & len p = f.i &
-  [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S by Def9;
+  [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S by Def9;
   hereby
     assume [i,p1] in the carrier of S;
     then consider j1 being (Element of NAT), q1 being FinSequence such that
@@ -1152,10 +1127,10 @@ A6: i = j1 & p1 = q1 by A4,ZFMISC_1:33;
     then [i,p2] in [:{j1}, (f.j1)-tuples_on underlay S:] by A6,ZFMISC_1:128;
     hence [i,p2] in the carrier of S by A5;
   end;
-  assume [i,p1] in the OperSymbols of S;
+  assume [i,p1] in the carrier' of S;
   then consider j1 being (Element of NAT), q1 being FinSequence such that
 A7: [i,p1] = [j1,q1] & len q1 = f.j1 and
-A8: [:{j1}, (f.j1)-tuples_on underlay S:] c= the OperSymbols of S by A3;
+A8: [:{j1}, (f.j1)-tuples_on underlay S:] c= the carrier' of S by A3;
 A9: i = j1 & p1 = q1 by A7,ZFMISC_1:33;
   then p2 in (f.j1)-tuples_on underlay S by A1,A7,Th4;
   then [i,p2] in [:{j1}, (f.j1)-tuples_on underlay S:] by A9,ZFMISC_1:128;
@@ -1174,9 +1149,9 @@ A1: CatSign A is Subsignature of S &
 A2: for s being set st s in the carrier of S
   ex i being (Element of NAT), p being FinSequence st s = [i,p] &
   len p = f.i & [:{i}, (f.i)-tuples_on underlay S:] c= the carrier of S and
-  for o being set st o in the OperSymbols of S ex i being (Element of NAT),
+  for o being set st o in the carrier' of S ex i being (Element of NAT),
   p being FinSequence st o = [i,p] & len p = f.i &
-  [:{i}, (f.i)-tuples_on underlay S:] c= the OperSymbols of S by Def9;
+  [:{i}, (f.i)-tuples_on underlay S:] c= the carrier' of S by Def9;
   consider s being SortSymbol of S;
   consider i being (Element of NAT), p being FinSequence such that
 A3: s = [i,p] & len p = f.i &
@@ -1199,7 +1174,7 @@ A6: underlay S c= A
     then <*x,x*> in 2-tuples_on A by Th10;
     then [0,<*x,x*>] in the carrier of S & rng <*x,x*> = {x,x}
     by A1,FINSEQ_2:147,ZFMISC_1:128;
-    then [0,<*x,x*>] in (the carrier of S) \/ the OperSymbols of S &
+    then [0,<*x,x*>] in (the carrier of S) \/ the carrier' of S &
     x in rng <*x,x*> by TARSKI:def 2,XBOOLE_0:def 2;
     hence thesis by Def8;
   end;
@@ -1236,7 +1211,7 @@ end;
 
 registration
   let S be non void delta-concrete ManySortedSign;
-  let o be Element of the OperSymbols of S;
+  let o be Element of the carrier' of S;
   cluster o`2 -> Relation-like Function-like;
   coherence
   proof consider i being (Element of NAT), p being FinSequence such that
@@ -1272,7 +1247,7 @@ end;
 
 registration
   let S be non void delta-concrete ManySortedSign;
-  let o be Element of the OperSymbols of S;
+  let o be Element of the carrier' of S;
   cluster o`2 -> FinSequence-like;
   coherence
   proof consider i being (Element of NAT), p being FinSequence such that
@@ -1301,22 +1276,22 @@ end;
 
 theorem Th20:
   for A being non empty set, S being CatSignature of A
-  for a being Element of A holds idsym a in the OperSymbols of S &
+  for a being Element of A holds idsym a in the carrier' of S &
   for b being Element of A holds homsym(a,b) in the carrier of S &
-  for c being Element of A holds compsym(a,b,c) in the OperSymbols of S
+  for c being Element of A holds compsym(a,b,c) in the carrier' of S
 proof
   let A be non empty set, S be CatSignature of A;
   CatSign A is Subsignature of S by Def7;
   then
 A1: the carrier of CatSign A c= the carrier of S &
-  the OperSymbols of CatSign A c= the OperSymbols of S by INSTALG1:11;
+  the carrier' of CatSign A c= the carrier' of S by INSTALG1:11;
   let a be Element of A;
   <*a*> in 1-tuples_on A by Th8;
   then
-A2: [1,<*a*>] in [:{1},1-tuples_on A:] & the OperSymbols of CatSign A
+A2: [1,<*a*>] in [:{1},1-tuples_on A:] & the carrier' of CatSign A
   = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5,ZFMISC_1:128;
-  then [1,<*a*>] in the OperSymbols of CatSign A by XBOOLE_0:def 2;
-  hence idsym a in the OperSymbols of S by A1;
+  then [1,<*a*>] in the carrier' of CatSign A by XBOOLE_0:def 2;
+  hence idsym a in the carrier' of S by A1;
   let b be Element of A;
   <*a,b*> in 2-tuples_on A by Th10;
   then [0,<*a,b*>] in [:{0},2-tuples_on A:] &
@@ -1325,7 +1300,7 @@ A2: [1,<*a*>] in [:{1},1-tuples_on A:] & the OperSymbols of CatSign A
   let c be Element of A;
   <*a,b,c*> in 3-tuples_on A by Th12;
   then [2,<*a,b,c*>] in [:{2},3-tuples_on A:] by ZFMISC_1:128;
-  then [2,<*a,b,c*>] in the OperSymbols of CatSign A by A2,XBOOLE_0:def 2;
+  then [2,<*a,b,c*>] in the carrier' of CatSign A by A2,XBOOLE_0:def 2;
   hence thesis by A1;
 end;
 
@@ -1399,7 +1374,7 @@ theorem Th25:
   holds o`1 = 1 & len o`2 = 1 or o`1 = 2 & len o`2 = 3
 proof
   let A be non empty set, o be OperSymbol of CatSign A;
-  the OperSymbols of CatSign A
+  the carrier' of CatSign A
   = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5;
   then o in [:{1},1-tuples_on A:] or o in
   [:{2},3-tuples_on A:] by XBOOLE_0:def 2;
@@ -1414,7 +1389,7 @@ theorem Th26:
 proof
   let A be non empty set, o be OperSymbol of CatSign A such that
 A1: o`1 = 1 or len o`2 = 1;
-  the OperSymbols of CatSign A
+  the carrier' of CatSign A
   = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5;
   then o in [:{1},1-tuples_on A:] or o in
   [:{2},3-tuples_on A:] by XBOOLE_0:def 2;
@@ -1433,7 +1408,7 @@ theorem Th27:
 proof
   let A be non empty set, o be OperSymbol of CatSign A such that
 A1: o`1 = 2 or len o`2 = 3;
-  the OperSymbols of CatSign A
+  the carrier' of CatSign A
   = [:{1},1-tuples_on A:] \/ [:{2},3-tuples_on A:] by Def5;
   then o in [:{1},1-tuples_on A:] or o in
   [:{2},3-tuples_on A:] by XBOOLE_0:def 2;
@@ -1462,21 +1437,21 @@ begin :: Signature homomorphism generated by a functor
 definition
   let C1,C2 be Category;
   let F be Functor of C1,C2;
-  func Upsilon F -> Function of the carrier of CatSign the Vertices of C1,
-  the carrier of CatSign the Vertices of C2 means
+  func Upsilon F -> Function of the carrier of CatSign the carrier of C1,
+  the carrier of CatSign the carrier of C2 means
   :
-  Def13: for s being SortSymbol of CatSign the Vertices of C1
+  Def13: for s being SortSymbol of CatSign the carrier of C1
   holds it.s = [0,(Obj F)*s`2];
   uniqueness
   proof
-    let U1,U2 be Function of the carrier of CatSign the Vertices of C1,
-    the carrier of CatSign the Vertices of C2 such that
-A1: for s being SortSymbol of CatSign the Vertices of C1
+    let U1,U2 be Function of the carrier of CatSign the carrier of C1,
+    the carrier of CatSign the carrier of C2 such that
+A1: for s being SortSymbol of CatSign the carrier of C1
     holds U1.s = [0,(Obj F)*s`2] and
-A2: for s being SortSymbol of CatSign the Vertices of C1
+A2: for s being SortSymbol of CatSign the carrier of C1
     holds U2.s = [0,(Obj F)*s`2];
     now
-      let s be SortSymbol of CatSign the Vertices of C1;
+      let s be SortSymbol of CatSign the carrier of C1;
       thus U1.s = [0,(Obj F)*s`2] by A1
         .= U2.s by A2;
     end;
@@ -1484,27 +1459,27 @@ A2: for s being SortSymbol of CatSign the Vertices of C1
   end;
   existence
   proof
-    deffunc f(SortSymbol of CatSign the Vertices of C1) = [0,(Obj F)*$1`2];
+    deffunc f(SortSymbol of CatSign the carrier of C1) = [0,(Obj F)*$1`2];
     consider Up being Function such that
-A3: dom Up = the carrier of CatSign the Vertices of C1 and
-A4: for s being SortSymbol of CatSign the Vertices of C1
+A3: dom Up = the carrier of CatSign the carrier of C1 and
+A4: for s being SortSymbol of CatSign the carrier of C1
     holds Up.s = f(s) from FUNCT_1:sch 4;
-    rng Up c= the carrier of CatSign the Vertices of C2
+    rng Up c= the carrier of CatSign the carrier of C2
     proof
       let x be set;
       assume x in rng Up;
       then consider a being set such that
 A5:   a in dom Up & x = Up.a by FUNCT_1:def 5;
-      reconsider a as SortSymbol of CatSign the Vertices of C1 by A3,A5;
-      the carrier of CatSign the Vertices of C1
-      = [:{0},2-tuples_on the Vertices of C1:] by Def5;
-      then a`2 in 2-tuples_on the Vertices of C1 & a = [a`1,a`2]
+      reconsider a as SortSymbol of CatSign the carrier of C1 by A3,A5;
+      the carrier of CatSign the carrier of C1
+      = [:{0},2-tuples_on the carrier of C1:] by Def5;
+      then a`2 in 2-tuples_on the carrier of C1 & a = [a`1,a`2]
       by MCART_1:12,23;
       then consider a1,a2 being set such that
-A6:   a1 in the Vertices of C1 & a2 in the Vertices of C1 & a`2 = <*a1,a2*>
+A6:   a1 in the carrier of C1 & a2 in the carrier of C1 & a`2 = <*a1,a2*>
       by Th10;
       reconsider a1,a2 as Object of C1 by A6;
-      rng <*a1,a2*> c= the Vertices of C1 & dom Obj F = the Vertices of C1
+      rng <*a1,a2*> c= the carrier of C1 & dom Obj F = the carrier of C1
       by FUNCT_2:def 1;
       then
 A7:   dom ((Obj F)*<*a1,a2*>) = dom <*a1,a2*> by RELAT_1:46
@@ -1515,32 +1490,32 @@ A7:   dom ((Obj F)*<*a1,a2*>) = dom <*a1,a2*> by RELAT_1:46
       then len p = 2 & p.1 = (Obj F).a1 & p.2 = (Obj F).a2
       by A7,FINSEQ_1:4,def 3,FUNCT_1:22;
       then p = <*(Obj F).a1, (Obj F).a2*> by FINSEQ_1:61;
-      then p is Element of 2-tuples_on the Vertices of C2 by FINSEQ_2:121;
-      then the carrier of CatSign the Vertices of C2
-      = [:{0},2-tuples_on the Vertices of C2:] &
-      p in 2-tuples_on the Vertices of C2 by Def5;
-      then [0,p] in the carrier of CatSign the Vertices of C2 by ZFMISC_1:128;
-      hence x in the carrier of CatSign the Vertices of C2 by A4,A5,A6;
+      then p is Element of 2-tuples_on the carrier of C2 by FINSEQ_2:121;
+      then the carrier of CatSign the carrier of C2
+      = [:{0},2-tuples_on the carrier of C2:] &
+      p in 2-tuples_on the carrier of C2 by Def5;
+      then [0,p] in the carrier of CatSign the carrier of C2 by ZFMISC_1:128;
+      hence x in the carrier of CatSign the carrier of C2 by A4,A5,A6;
     end;
-    then Up is Function of the carrier of CatSign the Vertices of C1,
-    the carrier of CatSign the Vertices of C2 by A3,FUNCT_2:def 1 ,RELSET_1:11;
+    then Up is Function of the carrier of CatSign the carrier of C1,
+    the carrier of CatSign the carrier of C2 by A3,FUNCT_2:def 1 ,RELSET_1:11;
     hence thesis by A4;
   end;
-  func Psi F -> Function of the OperSymbols of CatSign the Vertices of C1,
-  the OperSymbols of CatSign the Vertices of C2 means
+  func Psi F -> Function of the carrier' of CatSign the carrier of C1,
+  the carrier' of CatSign the carrier of C2 means
   :
-  Def14: for o being OperSymbol of CatSign the Vertices of C1
+  Def14: for o being OperSymbol of CatSign the carrier of C1
   holds it.o = [o`1,(Obj F)*o`2];
   uniqueness
   proof
-    let U1,U2 be Function of the OperSymbols of CatSign the Vertices of C1,
-    the OperSymbols of CatSign the Vertices of C2 such that
-A8: for s being OperSymbol of CatSign the Vertices of C1
+    let U1,U2 be Function of the carrier' of CatSign the carrier of C1,
+    the carrier' of CatSign the carrier of C2 such that
+A8: for s being OperSymbol of CatSign the carrier of C1
     holds U1.s = [s`1,(Obj F)*s`2] and
-A9: for s being OperSymbol of CatSign the Vertices of C1
+A9: for s being OperSymbol of CatSign the carrier of C1
     holds U2.s = [s`1,(Obj F)*s`2];
     now
-      let s be OperSymbol of CatSign the Vertices of C1;
+      let s be OperSymbol of CatSign the carrier of C1;
       thus U1.s = [s`1,(Obj F)*s`2] by A8
         .= U2.s by A9;
     end;
@@ -1548,30 +1523,31 @@ A9: for s being OperSymbol of CatSign the Vertices of C1
   end;
   existence
   proof
-    deffunc f(OperSymbol of CatSign the Vertices of C1) = [$1`1,(Obj F)*$1`2];
+    deffunc f(OperSymbol of CatSign the carrier of C1)
+              = [ $1`1,(Obj F)*$1`2 ];
     consider Up being Function such that
-A10: dom Up = the OperSymbols of CatSign the Vertices of C1 and
-A11: for s being OperSymbol of CatSign the Vertices of C1
+A10: dom Up = the carrier' of CatSign the carrier of C1 and
+A11: for s being OperSymbol of CatSign the carrier of C1
     holds Up.s = f(s) from FUNCT_1:sch 4;
-    rng Up c= the OperSymbols of CatSign the Vertices of C2
+    rng Up c= the carrier' of CatSign the carrier of C2
     proof
       let x be set;
       assume x in rng Up;
       then consider a being set such that
 A12:  a in dom Up & x = Up.a by FUNCT_1:def 5;
-      reconsider a as OperSymbol of CatSign the Vertices of C1 by A10,A12;
-A13:  the OperSymbols of CatSign the Vertices of C1
-      = [:{1},1-tuples_on the Vertices of C1:] \/
-      [:{2},3-tuples_on the Vertices of C1:] by Def5;
+      reconsider a as OperSymbol of CatSign the carrier of C1 by A10,A12;
+A13:  the carrier' of CatSign the carrier of C1
+      = [:{1},1-tuples_on the carrier of C1:] \/
+      [:{2},3-tuples_on the carrier of C1:] by Def5;
       per cases by A13,XBOOLE_0:def 2;
-      suppose a in [:{1},1-tuples_on the Vertices of C1:];
+      suppose a in [:{1},1-tuples_on the carrier of C1:];
         then
-A14:    a`1 = 1 & a`2 in 1-tuples_on the Vertices of C1 & a = [a`1, a`2]
+A14:    a`1 = 1 & a`2 in 1-tuples_on the carrier of C1 & a = [a`1, a`2]
         by MCART_1:12,23;
         then consider a1 being set such that
-A15:    a1 in the Vertices of C1 & a`2 = <*a1*> by Th8;
+A15:    a1 in the carrier of C1 & a`2 = <*a1*> by Th8;
         reconsider a1 as Object of C1 by A15;
-        rng <*a1*> c= the Vertices of C1 & dom Obj F = the Vertices of C1
+        rng <*a1*> c= the carrier of C1 & dom Obj F = the carrier of C1
         by FUNCT_2:def 1;
         then
 A16:    dom ((Obj F)*<*a1*>) = dom <*a1*> by RELAT_1:46
@@ -1580,25 +1556,25 @@ A16:    dom ((Obj F)*<*a1*>) = dom <*a1*> by RELAT_1:46
         <*a1*>.1 = a1 & 1 in {1} by FINSEQ_1:57,TARSKI:def 1;
         then len p = 1 & p.1 = (Obj F).a1 by A16,FINSEQ_1:4,def 3,FUNCT_1:22;
         then p = <*(Obj F).a1*> by FINSEQ_1:57;
-        then p is Element of 1-tuples_on the Vertices of C2 by FINSEQ_2:118;
-        then the OperSymbols of CatSign the Vertices of C2
-        = [:{1},1-tuples_on the Vertices of C2:] \/
-        [:{2},3-tuples_on the Vertices of C2:] &
-        [1,p] in [:{1},1-tuples_on the Vertices of C2:] by Def5,ZFMISC_1:128;
-        then [1,p] in the OperSymbols of CatSign the Vertices of C2
+        then p is Element of 1-tuples_on the carrier of C2 by FINSEQ_2:118;
+        then the carrier' of CatSign the carrier of C2
+        = [:{1},1-tuples_on the carrier of C2:] \/
+        [:{2},3-tuples_on the carrier of C2:] &
+        [1,p] in [:{1},1-tuples_on the carrier of C2:] by Def5,ZFMISC_1:128;
+        then [1,p] in the carrier' of CatSign the carrier of C2
         by XBOOLE_0:def 2;
-        hence x in the OperSymbols of CatSign the Vertices of C2
+        hence x in the carrier' of CatSign the carrier of C2
         by A11,A12,A14,A15;
       end;
-      suppose a in [:{2},3-tuples_on the Vertices of C1:];
+      suppose a in [:{2},3-tuples_on the carrier of C1:];
         then
-A17:    a`1 = 2 & a`2 in 3-tuples_on the Vertices of C1 & a = [a`1, a`2]
+A17:    a`1 = 2 & a`2 in 3-tuples_on the carrier of C1 & a = [a`1, a`2]
         by MCART_1:12,23;
         then consider a1,a2,a3 being set such that
-A18:    a1 in the Vertices of C1 & a2 in the Vertices of C1 &
-        a3 in the Vertices of C1 & a`2 = <*a1,a2,a3*> by Th12;
+A18:    a1 in the carrier of C1 & a2 in the carrier of C1 &
+        a3 in the carrier of C1 & a`2 = <*a1,a2,a3*> by Th12;
         reconsider a1,a2,a3 as Object of C1 by A18;
-        rng <*a1,a2,a3*> c= the Vertices of C1 & dom Obj F = the Vertices of C1
+        rng <*a1,a2,a3*> c= the carrier of C1 & dom Obj F = the carrier of C1
         by FUNCT_2:def 1;
         then
 A19:    dom ((Obj F)*<*a1,a2,a3*>) = dom <*a1,a2,a3*> by RELAT_1: 46
@@ -1611,19 +1587,19 @@ then reconsider p = (Obj F)*<*a1,a2,a3*> as FinSequence by FINSEQ_1:def 2;
         then len p = 3 & p.1 = (Obj F).a1 & p.2 = (Obj F).a2 & p.3 = (Obj F).
         a3 by A19,FINSEQ_1:def 3,FINSEQ_3:1,FUNCT_1:22;
         then p = <*(Obj F).a1, (Obj F).a2, (Obj F).a3*> by FINSEQ_1:62;
-        then p is Element of 3-tuples_on the Vertices of C2 by FINSEQ_2:124;
-        then the OperSymbols of CatSign the Vertices of C2
-        = [:{1},1-tuples_on the Vertices of C2:] \/
-        [:{2},3-tuples_on the Vertices of C2:] &
-        [2,p] in [:{2},3-tuples_on the Vertices of C2:] by Def5,ZFMISC_1:128;
-        then [2,p] in the OperSymbols of CatSign the Vertices of C2 by
+        then p is Element of 3-tuples_on the carrier of C2 by FINSEQ_2:124;
+        then the carrier' of CatSign the carrier of C2
+        = [:{1},1-tuples_on the carrier of C2:] \/
+        [:{2},3-tuples_on the carrier of C2:] &
+        [2,p] in [:{2},3-tuples_on the carrier of C2:] by Def5,ZFMISC_1:128;
+        then [2,p] in the carrier' of CatSign the carrier of C2 by
         XBOOLE_0:def 2;
         hence x in
-        the OperSymbols of CatSign the Vertices of C2 by A11,A12,A17,A18;
+        the carrier' of CatSign the carrier of C2 by A11,A12,A17,A18;
       end;
     end;
-    then Up is Function of the OperSymbols of CatSign the Vertices of C1,
-    the OperSymbols of CatSign the Vertices of C2 by A10,FUNCT_2:def 1
+    then Up is Function of the carrier' of CatSign the carrier of C1,
+    the carrier' of CatSign the carrier of C2 by A10,FUNCT_2:def 1
     ,RELSET_1:11;
     hence thesis by A11;
   end;
@@ -1648,7 +1624,7 @@ theorem Th30:
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
   let a,b be Object of C1;
-A1: dom Obj F = the Vertices of C1 by FUNCT_2:def 1;
+A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
   thus (Upsilon F).homsym(a,b) = [0,(Obj F)*(homsym(a,b))`2] by Def13
     .= [0,(Obj F)*<*a,b*>] by MCART_1:7
     .= [0,<*(Obj F).a,(Obj F).b*>] by A1,FINSEQ_2:145
@@ -1662,7 +1638,7 @@ theorem Th31:
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
   let a be Object of C1;
-A1: dom Obj F = the Vertices of C1 by FUNCT_2:def 1;
+A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
   (idsym a)`1 = 1 & (idsym a)`2 = <*a*> by MCART_1:7;
   hence (Psi F).idsym(a) = [1,(Obj F)*<*a*>] by Def14
     .= [1,<*(Obj F).a*>] by A1,Lm2
@@ -1676,7 +1652,7 @@ theorem Th32:
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
   let a,b,c be Object of C1;
-A1: dom Obj F = the Vertices of C1 by FUNCT_2:def 1;
+A1: dom Obj F = the carrier of C1 by FUNCT_2:def 1;
   (compsym(a,b,c))`1 = 2 & (compsym(a,b,c))`2 = <*a,b,c*> by MCART_1:7;
   hence (Psi F).compsym(a,b,c) = [2,(Obj F)*<*a,b,c*>] by Def14
     .= [2,<*(Obj F).a,(Obj F).b,(Obj F).c*>] by A1,FINSEQ_2:146
@@ -1688,16 +1664,16 @@ end;
 theorem Th33:
   for C1,C2 being Category, F being Functor of C1,C2 holds
   Upsilon F, Psi F form_morphism_between
-  CatSign the Vertices of C1, CatSign the Vertices of C2
+  CatSign the carrier of C1, CatSign the carrier of C2
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
   set f = Upsilon F, g = Psi F;
-  set S1 = CatSign the Vertices of C1, S2 = CatSign the Vertices of C2;
-  thus dom f = the carrier of S1 & dom g = the OperSymbols of S1 by
+  set S1 = CatSign the carrier of C1, S2 = CatSign the carrier of C2;
+  thus dom f = the carrier of S1 & dom g = the carrier' of S1 by
   FUNCT_2:def 1;
-  thus rng f c= the carrier of S2 & rng g c= the OperSymbols of S2;
+  thus rng f c= the carrier of S2 & rng g c= the carrier' of S2;
   now
-    let o be OperSymbol of CatSign the Vertices of C1;
+    let o be OperSymbol of CatSign the carrier of C1;
     per cases by Th25;
     suppose o`1 = 1;
       then consider a being Object of C1 such that
@@ -1722,7 +1698,7 @@ A2:   o = compsym(a,b,c) by Th27;
   end;
   hence f*the ResultSort of S1 = (the ResultSort of S2)*g by FUNCT_2:113;
   let o be set, p be Function;
-  assume o in the OperSymbols of S1;
+  assume o in the carrier' of S1;
   then reconsider o' = o as OperSymbol of S1;
   assume
 A3: p = (the Arity of S1).o;
@@ -1761,16 +1737,16 @@ proof
     .= {{}} by CARD_3:19;
 end;
 
-Lm3: for C being Category, A being MSAlgebra over CatSign the Vertices of C st
+Lm3: for C being Category, A being MSAlgebra over CatSign the carrier of C st
 for a,b being Object of C holds (the Sorts of A).homsym(a,b) = Hom(a,b)
 for a,b,c being Object of C holds
 Args(compsym(a,b,c), A) = product <*Hom(b,c),Hom(a,b)*> &
 Result(compsym(a,b,c), A) = Hom(a,c)
 proof
-  let C be Category, A be MSAlgebra over CatSign the Vertices of C;
+  let C be Category, A be MSAlgebra over CatSign the carrier of C;
   assume
 A1: for a,b being Object of C holds (the Sorts of A).homsym(a,b) = Hom(a,b);
-A2: the carrier of CatSign the Vertices of C = dom the Sorts of A
+A2: the carrier of CatSign the carrier of C = dom the Sorts of A
   by PBOOLE:def 3;
   let a,b,c be Object of C;
   thus Args(compsym(a,b,c), A)
@@ -1823,18 +1799,18 @@ A7: for s being set st s in the carrier of CS holds P[s,S.s]
   ex F being Function of product<*H(b,c),H(a,b)*>, H(a,c) st F = $2 &
   for f,g being set st f in H(a,b) & g in H(b,c)
   holds F.<*g,f*> = R(a,b,c,g,f));
-A8: for o be set st o in the OperSymbols of CS ex u be set st Z[o,u]
+A8: for o be set st o in the carrier' of CS ex u be set st Z[o,u]
   proof
     let o be set;
     assume
-A9: o in the OperSymbols of CS;
+A9: o in the carrier' of CS;
     then
 A10: o`1 = 1 or o`1 = 2 by Th25;
 A11: now
       assume o`1 = 1;
       then consider a being Element of X() such that
 A12:  o = idsym a by A9,Th26;
-      set F = {} .--> I(a);
+      set F = {} :-> I(a);
       reconsider u = F as set;
 A13:  dom F = {{}} by FUNCOP_1:19;
       take u, a; thus o = idsym(a) by A12;
@@ -1891,15 +1867,15 @@ A19:  f' in H(a,b) & g' in H(b,c) & <*g,f*> = <*g',f'*> &
     holds F.<*g,f*> = R(a,b,c,g,f)) by A10,A11;
   end;
   consider O being Function such that
-A20: dom O = the OperSymbols of CS and
-A21: for o being set st o in the OperSymbols of CS holds Z[o,O.o]
+A20: dom O = the carrier' of CS and
+A21: for o being set st o in the carrier' of CS holds Z[o,O.o]
   from CLASSES1:sch 1(A8);
   reconsider S as ManySortedSet of the carrier of CS by A6,PBOOLE:def 3;
-  reconsider O as ManySortedSet of the OperSymbols of CS by A20,PBOOLE:def 3;
+  reconsider O as ManySortedSet of the carrier' of CS by A20,PBOOLE:def 3;
   O is ManySortedFunction of S#*the Arity of CS, S*the ResultSort of CS
   proof
     let o be set;
-    assume o in the OperSymbols of CS;
+    assume o in the carrier' of CS;
     then reconsider o as OperSymbol of CS;
 A22: (S#*the Arity of CS).o = S#.the_arity_of o by FUNCT_2:21
       .= product (S*the_arity_of o) by PBOOLE:def 19;
@@ -1974,7 +1950,7 @@ end;
 
 definition
   let C be Category;
-  func MSAlg C -> strict MSAlgebra over CatSign the Vertices of C means
+  func MSAlg C -> strict MSAlgebra over CatSign the carrier of C means
   :
   Def15: (
   for a,b being Object of C holds (the Sorts of it).homsym(a,b) = Hom(a,b)) &
@@ -1984,7 +1960,7 @@ definition
   holds Den(compsym(a,b,c),it).<*g,f*> = g*f;
   uniqueness
   proof
-    let A1,A2 be strict MSAlgebra over CatSign the Vertices of C such that
+    let A1,A2 be strict MSAlgebra over CatSign the carrier of C such that
 A1: for a,b being Object of C holds (the Sorts of A1).homsym(a,b) = Hom(a,b)
     and
 A2: for a being Object of C holds Den(idsym(a),A1).{} = id a and
@@ -1999,7 +1975,7 @@ A6: for a,b,c being Object of C for f,g being Morphism of C
     holds Den(compsym(a,b,c),A2).<*g,f*> = g*f;
     now
       let i be set;
-      assume i in the carrier of CatSign the Vertices of C;
+      assume i in the carrier of CatSign the carrier of C;
       then consider a,b being Object of C such that
 A7:   i = homsym(a,b) by Th24;
       thus (the Sorts of A1).i = Hom(a,b) by A1,A7
@@ -2009,8 +1985,8 @@ A7:   i = homsym(a,b) by Th24;
 A8: the Sorts of A1 = the Sorts of A2 by PBOOLE:3;
     now
       let i be set;
-      assume i in the OperSymbols of CatSign the Vertices of C;
-      then reconsider o = i as OperSymbol of CatSign the Vertices of C;
+      assume i in the carrier' of CatSign the carrier of C;
+      then reconsider o = i as OperSymbol of CatSign the carrier of C;
       per cases by Th25;
       suppose o`1 = 1;
         then consider a being Object of C such that
@@ -2080,7 +2056,7 @@ A15:      g in Hom(b,c) & f in Hom(a,b) & x = <*g,f*> by FUNCT_6:2;
     deffunc R(Object of C,Object of C,Object of C,
     (Morphism of C), Morphism of C) = $4*$5;
     deffunc I(Object of C) = id $1;
-A16: for a,b being Object of C holds H(a,b) c= the Edges of C;
+A16: for a,b being Object of C holds H(a,b) c= the carrier' of C;
 A17: for a being Object of C holds I(a) in H(a,a) by CAT_1:55;
 A18: now
       let a,b,c be Object of C, f,g be Morphism of C;
@@ -2089,13 +2065,13 @@ A18: now
       then dom (g*f) = a & cod (g*f) = c by CAT_1:42;
       hence R(a,b,c,g,f) in H(a,c) by CAT_1:18;
     end;
-    consider A being strict MSAlgebra over CatSign the Vertices of C such that
-A19: for a,b being Element of the Vertices of C holds
+    consider A being strict MSAlgebra over CatSign the carrier of C such that
+A19: for a,b being Element of the carrier of C holds
     (the Sorts of A).homsym(a,b) = H(a,b) and
-A20: for a being Element of the Vertices of C holds Den(idsym(a),A).{} = I(a)
+A20: for a being Element of the carrier of C holds Den(idsym(a),A).{} = I(a)
     and
-A21: for a,b,c being Element of the Vertices of C for f,g being Element of
-    the Edges of C st f in H(a,b) & g in H(b,c)
+A21: for a,b,c being Element of the carrier of C for f,g being Element of
+    the carrier' of C st f in H(a,b) & g in H(b,c)
     holds Den(compsym(a,b,c),A).<*g,f*> = R(a,b,c,g,f)
     from CatAlgEx(A16,A17,A18);
     take A;
@@ -2146,9 +2122,9 @@ A1:   x <> y & (the Sorts of MSAlg C).x meets (the Sorts of MSAlg C).y;
 A2:   z in (the Sorts of MSAlg C).x & z in (the Sorts of MSAlg C).y
       by XBOOLE_0:3;
       (the Sorts of MSAlg C).x <> {} & (the Sorts of MSAlg C).y <> {} &
-      dom the Sorts of MSAlg C = the carrier of CatSign the Vertices of C
+      dom the Sorts of MSAlg C = the carrier of CatSign the carrier of C
       by A2,PBOOLE:def 3;
-      then reconsider x,y as SortSymbol of CatSign the Vertices of C
+      then reconsider x,y as SortSymbol of CatSign the carrier of C
       by FUNCT_1:def 4;
       consider a,b being Object of C such that
 A3:   x = homsym(a,b) by Th24;
@@ -2159,7 +2135,7 @@ A5:   z in Hom(a,b) & z in Hom(c,d) by A2,A3,A4,Def15;
       dom z = a & dom z = c & cod z = b & cod z = d by A5,CAT_1:18;
       hence contradiction by A1,A3,A4;
     end;
-    let o be OperSymbol of CatSign the Vertices of C;
+    let o be OperSymbol of CatSign the carrier of C;
     per cases by Th25;
     suppose o`1 = 1;
       then consider a being Object of C such that
@@ -2183,12 +2159,12 @@ end;
 
 theorem Th38:
   for C1,C2 being Category, F being Functor of C1,C2 holds
-  F-MSF(the carrier of CatSign the Vertices of C1, the Sorts of MSAlg C1)
+  F-MSF(the carrier of CatSign the carrier of C1, the Sorts of MSAlg C1)
   is ManySortedFunction of
-  MSAlg C1, (MSAlg C2)|(CatSign the Vertices of C1, Upsilon F, Psi F)
+  MSAlg C1, (MSAlg C2)|(CatSign the carrier of C1, Upsilon F, Psi F)
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
-  set S1 = CatSign the Vertices of C1, S2 = CatSign the Vertices of C2;
+  set S1 = CatSign the carrier of C1, S2 = CatSign the carrier of C2;
   set A1 = MSAlg C1, A2 = MSAlg C2;
   set f = Upsilon F, g = Psi F, B1 = A2|(S1, f, g);
   f, g form_morphism_between S1,S2 by Th33;
@@ -2242,13 +2218,13 @@ theorem Th40:
   for f,g being Morphism of C1 st f in Hom(a,b) & g in Hom(b,c)
   for x being Element of Args(compsym(a,b,c),MSAlg C1) st x = <*g,f*>
   for H being ManySortedFunction of
-  MSAlg C1, (MSAlg C2)|(CatSign the Vertices of C1, Upsilon F, Psi F)
+  MSAlg C1, (MSAlg C2)|(CatSign the carrier of C1, Upsilon F, Psi F)
   st
-   H = F-MSF(the carrier of CatSign the Vertices of C1, the Sorts of MSAlg C1)
+   H = F-MSF(the carrier of CatSign the carrier of C1, the Sorts of MSAlg C1)
   holds H#x = <*F.g,F.f*>
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
-  set CS1 = CatSign the Vertices of C1, CS2 = CatSign the Vertices of C2;
+  set CS1 = CatSign the carrier of C1, CS2 = CatSign the carrier of C2;
   set A1 = MSAlg C1, A2 = MSAlg C2;
   set u = Upsilon F, p = Psi F;
   set B = A2|(CS1, u, p);
@@ -2351,13 +2327,13 @@ end;
 theorem
   for C1,C2 being Category, F being Functor of C1,C2
   ex H being ManySortedFunction of MSAlg C1,
-  (MSAlg C2)|(CatSign the Vertices of C1, Upsilon F, Psi F) st
-  H = F-MSF(the carrier of CatSign the Vertices of C1, the Sorts of MSAlg C1) &
+  (MSAlg C2)|(CatSign the carrier of C1, Upsilon F, Psi F) st
+  H = F-MSF(the carrier of CatSign the carrier of C1, the Sorts of MSAlg C1) &
   H is_homomorphism MSAlg C1,
-  (MSAlg C2)|(CatSign the Vertices of C1, Upsilon F, Psi F)
+  (MSAlg C2)|(CatSign the carrier of C1, Upsilon F, Psi F)
 proof
   let C1,C2 be Category, F be Functor of C1,C2;
-  set S1 = CatSign the Vertices of C1, S2 = CatSign the Vertices of C2;
+  set S1 = CatSign the carrier of C1, S2 = CatSign the carrier of C2;
   set A1 = MSAlg C1, A2 = MSAlg C2;
   set f = Upsilon F, G = Psi F;
   set B1 = A2|(S1, f, G);

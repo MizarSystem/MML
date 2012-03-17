@@ -27,7 +27,7 @@ environ
  theorems TARSKI, ZFMISC_1, NAT_1, ORDINAL1, ORDINAL2, ORDINAL3, WELLORD2,
       FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCOP_1, PARTFUN1, MCART_1, CARD_3,
       ORDERS_1, CARD_1, CARD_2, NEWTON, FINSEQ_1, FINSET_1, FINSEQ_2, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_D;
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_D, RELSET_1;
  schemes NAT_1, FUNCT_1, ORDINAL2, CARD_3, XBOOLE_0, BINOP_1, CLASSES1;
 
 begin
@@ -51,23 +51,7 @@ theorem Th2:
   X is finite iff Card X in omega
               by CARD_1:84,CARD_3:58,Th1;
 
-canceled;
-
-theorem
-  X is finite iff ex n st Card X = Card n
-proof
-  hereby
-    assume X is finite;
-    then reconsider X' = X as finite set;
-    Card X = Card card X';
-    hence ex n st Card X = Card n;
-  end;
-  given n such that
-A1: Card X = Card n;
-  thus thesis by A1,Th1;
-end;
-
-canceled 3;
+canceled 5;
 
 theorem Th8:
   A is infinite iff omega c= A
@@ -1525,11 +1509,12 @@ A38: ex f st Y = f & dom f c= [:M,M:] & rng f c= M by PARTFUN1:def 5;
 A39: dom f c= [:M,M:] & rng f c= M & Card M = M by A37,CARD_1:def 5;
   set A = rng f;
   set N = Card A;
+B60:
   now
     assume
 A40: A is finite;
-    then reconsider A as finite set;
-A41: N in omega & omega c= omega & N = Card card A by A40,Th2;
+    then
+A41: N in omega & omega c= omega & N = Card Card A by CARD_1:84,CARD_3:58;
     then
 A42: omega c= omega +` N & not omega is finite &
     omega +` N c= omega +` omega by Th41,Th72;
@@ -1539,7 +1524,8 @@ A43: omega = omega +` N & Card omega = omega &
     omega c= omega \/ A by A42,CARD_1:def 5,XBOOLE_0:def 10,XBOOLE_1:7;
     then
 A44: omega = Card (omega \ A) & Card (omega \/ A) c= omega &
-    omega c= Card (omega \/ A) by A41,Th76,CARD_1:27,CARD_2:47;
+    omega c= Card (omega \/ A)
+     by A40,Th76,CARD_1:27,CARD_2:47,CARD_3:58;
     (omega \ A) misses A & A misses (omega \ A) by XBOOLE_1:79;
     then
 A45: (omega \ A) /\ A = {} & A /\ (omega \ A) = {} by XBOOLE_0:def 7;
@@ -1637,7 +1623,7 @@ A57:  rng f /\ rng g = {} by XBOOLE_0:def 7;
     by A2,A37,A53,A54,A56,FUNCT_4:26;
     then
 A58: g+*f = f by A36;
-A59: omega \ A <> {} by A41,A43,CARD_2:4;
+A59: omega \ A <> {} by A40,A43,CARD_2:4,CARD_3:58;
     consider x being Element of omega \ A;
     x in omega & not x in A by A59,XBOOLE_0:def 4;
     hence contradiction by A53,A58,XBOOLE_0:def 2;
@@ -1711,7 +1697,8 @@ A76: g+*f in PFuncs([:M,M:],M) by A70,A72,A74,A75,PARTFUN1:def 5;
     proof
 A77:  A misses (M \ A) by XBOOLE_1:79;
       A /\ B c= A /\ (M \ A) by A62,XBOOLE_1:26;
-      then rng f /\ rng g c= {} by A70,A77,XBOOLE_0:def 7;
+      then
+B78:   rng f /\ rng g c= {} by A70,A77,XBOOLE_0:def 7;
       then
 A78:  rng f /\ rng g = {};
       let x,y;
@@ -1725,12 +1712,12 @@ A79:  (g+*f).x = f.x & (g+*f).y = f.y & (f.x = f.y implies x = y) or
       (g+*f).x = g.x & (g+*f).y = f.y & g.x in rng g & f.y in rng f
       by A37,A70,A71,FUNCT_1:def 5,def 8,FUNCT_4:14,17;
       assume (g+*f).x = (g+*f).y;
-      hence thesis by A78,A79,XBOOLE_0:def 3;
+      hence thesis by B78,A79,XBOOLE_0:def 3;
     end;
     then
 A80: g+*f in X & f c= (g+*f) & f = Y & (g+*f) = g+*f
     by A2,A37,A70,A72,A74,A76,FUNCT_4:26;
-A81: B <> {} by A60,A63;
+A81: B <> {} by B60,A63,Th1;
     consider x being Element of B;
     x in M \ A by A62,A81,TARSKI:def 3;
     then not x in rng f & x in rng (g+*f) by A70,A72,A81,XBOOLE_0:def 2,def 4;
@@ -1897,7 +1884,7 @@ A6: Card ((k+1)-tuples_on D) = Card [:(k-tuples_on D),1-tuples_on D:] by Th57,X
       .= Card (k-tuples_on D) *` Card D by CARD_2:def 2;
 A7: 0-tuples_on D = { <*>D } by FINSEQ_2:112;
     0 in Card (0-tuples_on D) & Card (0-tuples_on D) c= Card D
-    by A2,ORDINAL3:10,A7;
+    by A1,ORDINAL3:10,A7,Th1;
     hence thesis by A2,A5,A6,Th78;
   end;
    for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
@@ -1960,3 +1947,69 @@ A1:   x in dom f;
   end;
 end;
 
+registration
+ cluster non empty finite set;  :: refreshment
+ existence
+  proof
+   consider X being non empty finite set;
+   take X;
+   thus thesis;
+  end;
+end;
+
+:: from WAYBEL12 (proof form SUPINF_2), 2008.07.07, A.T.
+
+theorem
+  for A being non empty countable set
+  ex f being Function of NAT, A st rng f = A
+    proof let A be non empty countable set;
+      consider f being Function such that
+A3:   dom f = NAT and
+A4:   A c= rng f by Th45;
+      consider x being set such that
+A5:   x in A by XBOOLE_0:def 1;
+      set F = f|(f"A) +* (NAT \ f"A --> x);
+A6:   rng F = A & dom F = NAT
+      proof
+A7:     f"A c= NAT by A3,RELAT_1:167;
+A8:     dom(f|(f"A)) = NAT /\ (f"A) by A3,RELAT_1:90;
+        per cases;
+        suppose
+A9:       NAT = f"A;
+          then
+A10:      NAT \ f"A = {} by XBOOLE_1:37;
+          then dom(f|(f"A)) /\ dom(NAT \ f"A --> x) = {};
+          then dom(f|(f"A)) misses dom(NAT \ f"A --> x) by XBOOLE_0:def 7;
+          then F = (f|(f"A)) \/ (NAT \ f"A --> x) by FUNCT_4:32;
+          hence rng F = rng(f|(f"A)) \/ rng(NAT \ f"A --> x) by RELAT_1:26
+            .= rng(f|(f"A)) \/ {} by A10,FUNCOP_1:16
+            .= f.:(f"A) by RELAT_1:148
+            .= A by A4,FUNCT_1:147;
+          thus dom F = dom(f|(f"A)) \/ dom(NAT \ f"A --> x) by FUNCT_4:def 1
+            .= dom(f|(f"A)) \/ {} by A10
+            .= NAT by A8,A9;
+        end;
+        suppose
+A11:      NAT <> f"A;
+A12:      now
+            assume NAT \ f"A is empty;
+            then NAT c= f"A by XBOOLE_1:37;
+            hence contradiction by A7,A11,XBOOLE_0:def 10;
+          end;
+          dom(NAT \ f"A --> x) = NAT \ f"A by FUNCOP_1:19;
+          then F = (f|(f"A)) \/ (NAT \ f"A --> x) by A8,FUNCT_4:32
+          ,XBOOLE_1:89;
+          hence rng F = rng(f|(f"A)) \/ rng(NAT \ f"A --> x) by RELAT_1:26
+            .= rng(f|(f"A)) \/ {x} by A12,FUNCOP_1:14
+            .= f.:(f"A) \/ {x} by RELAT_1:148
+            .= A \/ {x} by A4,FUNCT_1:147
+            .= A by A5,ZFMISC_1:46;
+          thus dom F = dom(f|(f"A)) \/ dom(NAT \ f"A --> x) by FUNCT_4:def 1
+            .= NAT /\ (f"A) \/ (NAT \ f"A) by A8,FUNCOP_1:19
+            .= NAT by XBOOLE_1:51;
+        end;
+      end;
+      then reconsider F as Function of NAT, A by FUNCT_2:def 1,RELSET_1:11;
+      take F;
+      thus A = rng F by A6;
+    end;

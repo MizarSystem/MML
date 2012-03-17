@@ -28,19 +28,19 @@
 </Signature>
 <FCluster aid="RSSPACE2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="167"/>
+<Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="167"/>
+<Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

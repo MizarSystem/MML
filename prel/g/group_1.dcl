@@ -23,42 +23,42 @@
 </Signature>
 <RCluster aid="GROUP_1" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="48"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="54"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GROUP_1" nr="2">
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="48"/>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="74"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="54"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GROUP_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="77"/>
 </Cluster>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="76"/>
 </Cluster>
 </CCluster>
 </Registrations>

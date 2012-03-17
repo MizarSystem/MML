@@ -18,11 +18,11 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="16">
+<Pred kind="V" nr="17">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>
@@ -39,15 +39,15 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="16">
+<Pred kind="V" nr="17">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>
@@ -66,19 +66,19 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="16">
+<Pred kind="V" nr="17">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="47"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>

@@ -24,14 +24,14 @@
 </Signature>
 <RCluster aid="AFVECT01" nr="1">
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="31" value="false"/>
-<Adjective nr="77"/>
-<Adjective nr="80"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="82"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <FCluster aid="AFVECT01" nr="1">
@@ -53,13 +53,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="12">
+<Func kind="G" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="77"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="82"/>
 </Cluster>
 </FCluster>
 </Registrations>

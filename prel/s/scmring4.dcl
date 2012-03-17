@@ -25,9 +25,9 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="GRAPH_2"/>
@@ -40,31 +40,31 @@
 </Signature>
 <RCluster aid="SCMRING4" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
-<Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="73"/>
-<Adjective nr="81"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="139"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="52"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="86"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="143"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="210">
-<Func kind="U" nr="14">
-<Func kind="K" nr="282"/>
-<Func kind="K" nr="12">
+<Func kind="K" nr="217">
+<Func kind="U" nr="13">
+<Func kind="K" nr="289"/>
+<Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="311">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -73,26 +73,26 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
-<Adjective nr="130">
-<Func kind="K" nr="282"/>
-<Func kind="K" nr="12">
+<Adjective nr="20"/>
+<Adjective nr="134">
+<Func kind="K" nr="289"/>
+<Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="311">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="135" value="false">
-<Func kind="K" nr="282"/>
-<Func kind="K" nr="12">
+<Adjective nr="139" value="false">
+<Func kind="K" nr="289"/>
+<Func kind="K" nr="13">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="311">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>

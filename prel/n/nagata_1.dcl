@@ -36,10 +36,10 @@
 </Signature>
 <RCluster aid="NAGATA_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,17 +54,17 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="75">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster aid="NAGATA_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,25 +80,25 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="75">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster aid="NAGATA_1" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -107,47 +107,47 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="9">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="10">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="74">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Adjective nr="87">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="76">
+<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <RCluster aid="NAGATA_1" nr="4">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -156,44 +156,44 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="3"/>
-<Adjective nr="6"/>
-<Adjective nr="9">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="10">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="74">
-<Func kind="K" nr="82"/>
-<Func kind="K" nr="148">
-<Func kind="K" nr="148">
+<Adjective nr="87">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="152">
+<Func kind="K" nr="152">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="77">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster aid="NAGATA_1" nr="1">
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="75">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -206,12 +206,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="149">
+<Func kind="K" nr="153">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="75">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -219,7 +219,7 @@
 <CCluster aid="NAGATA_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

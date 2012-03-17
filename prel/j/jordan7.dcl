@@ -10,43 +10,33 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="PRE_TOPC"/>
-<ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_5"/>
-<ArticleID name="METRIC_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
-<ArticleID name="EUCLID"/>
-<ArticleID name="ALGSTR_0"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="MATRIX_1"/>
-<ArticleID name="GOBOARD1"/>
+<ArticleID name="SEQM_3"/>
 </Signature>
 <CCluster aid="JORDAN7" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="112"/>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="25"/>
+<Adjective nr="29"/>
+<Adjective nr="33"/>
 </Cluster>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
 <Adjective nr="5"/>
+<Adjective nr="25"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 </Registrations>

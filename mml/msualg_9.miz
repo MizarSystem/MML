@@ -19,11 +19,11 @@ environ
       PRE_CIRC, MSAFREE2, MSUALG_4, PZFMISC1, MSSUBFAM, CLOSURE1, CLOSURE2,
       MSUALG_5;
  constructors SETFAM_1, BINOP_1, PRE_CIRC, PZFMISC1, MSUALG_3, MSAFREE2,
-      MSUALG_5, CLOSURE1, CLOSURE2, PRALG_3;
+      MSUALG_5, CLOSURE1, CLOSURE2, PRALG_3, CARD_4;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, FUNCOP_1, FINSET_1,
       FRAENKEL, EQREL_1, PBOOLE, PRE_CIRC, PZFMISC1, MSSUBFAM, STRUCT_0,
       MSUALG_1, MSUALG_2, PRALG_2, MSUALG_3, MSAFREE, MSUALG_4, MSUALG_5,
-      CLOSURE2, CARD_3;
+      CLOSURE2, CARD_3, CARD_4;
  requirements SUBSET, BOOLE;
  definitions FINSEQ_1, FUNCT_1, MSAFREE2, MSUALG_1, MSUALG_3, PZFMISC1,
       MSUALG_4, PBOOLE, PRE_CIRC, TARSKI, XBOOLE_0;
@@ -31,27 +31,13 @@ environ
       FUNCOP_1, FUNCT_1, FUNCT_2, MCART_1, MSAFREE, MSAFREE2, MSSUBFAM,
       MSUALG_1, MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_5, MSUALG_6, MSUALG_7,
       PARTFUN1, PBOOLE, PRALG_1, PRALG_2, PRALG_3, PRE_CIRC, PZFMISC1, RELAT_2,
-      SETFAM_1, TARSKI, RELSET_1, XBOOLE_0, XBOOLE_1, ORDERS_1;
+      SETFAM_1, TARSKI, RELSET_1, XBOOLE_0, XBOOLE_1, ORDERS_1, CARD_4;
  schemes MSSUBFAM, PBOOLE, MSUALG_8, FUNCT_2;
 
 begin :: Preliminaries
 
 reserve a, I for set,
   S for non empty non void ManySortedSign;
-
-scheme MSSExD { I() -> non empty set, P[set,set] }:
-  ex f being ManySortedSet of I() st for i being Element of I() holds P[i,f.i]
-provided
-A1: for i being Element of I() ex j being set st P[i,j]
-proof
-  defpred Z[set,set] means P[ $1,$2];
-A2: for i being set st i in I() ex j being set st Z[i,j] by A1;
-  consider f being ManySortedSet of I() such that
-A3: for i being set st i in I() holds Z[i,f.i] from PBOOLE:sch 3(A2);
-  take f;
-  let i be Element of I();
-  thus thesis by A3;
-end;
 
 registration
   let I be set, M be ManySortedSet of I;
@@ -196,50 +182,7 @@ A3: x in X by XBOOLE_0:def 1;
   hence q in rng f by A1,A2,A3,FUNCT_1:def 5;
 end;
 
-theorem Th3:
-  for A being non empty finite set ex f being Function of NAT, A st rng f = A
-proof
-  let A be non empty finite set;
-  consider p being FinSequence such that
-A1: rng p = A by FINSEQ_1:73;
-  p is FinSequence of A
-  proof
-    thus rng p c= A by A1;
-  end;
-  then reconsider p as FinSequence of A;
-  defpred P[set,set] means ($1 in dom p implies $2 = p.$1) &
-  (not $1 in dom p implies ex a being Element of A st $2 = a);
-A2: for x being Element of NAT ex y being Element of A st P[x,y]
-  proof
-    let x be Element of NAT;
-    per cases;
-    suppose x in dom p;
-      then reconsider px = p.x as Element of A by PARTFUN1:27;
-      take px;
-      thus x in dom p implies px = p.x;
-      thus thesis;
-    end;
-    suppose
-A3:   not x in dom p;
-      consider a being Element of A;
-      take a;
-      thus x in dom p implies a = p.x by A3;
-      thus thesis;
-    end;
-  end;
-  consider f being Function of NAT, A such that
-A4: for x being Element of NAT holds P[x,f.x] from FUNCT_2:sch 3(A2);
-  take f;
-  thus rng f c= A;
-  let q be set;
-  assume q in A;
-  then consider x being Element of NAT such that
-A5: x in dom p and
-A6: q = p.x by A1,PARTFUN1:26;
-A7: f.x = p.x by A4,A5;
-  dom f = NAT by FUNCT_2:def 1;
-  hence q in rng f by A6,A7,FUNCT_1:def 5;
-end;
+canceled;
 
 theorem Th4:
   Class(nabla I) c= {I}
@@ -481,7 +424,7 @@ A1: for i being set st i in I ex j being set st P[i,j]
     assume i in I;
     then A.i is non empty & A.i is finite by PRE_CIRC:def 3;
     then consider f being Function of NAT, A.i such that
-A2: rng f = A.i by Th3;
+A2: rng f = A.i by CARD_4:88;
     take j = f;
     thus P[i,j] by A2;
   end;
@@ -1495,6 +1438,6 @@ A17:  Class(C1,x) in (Class C1).s by MSUALG_4:def 8;
   end;
   thus F = MSHomQuot F ** MSNat_Hom(A,MSCng F) by A1,Th31
     .= MSHomQuot F ** (C12 ** G) by A15,PBOOLE:3
-    .= H ** MSNat_Hom(A,C1) by AUTALG_1:13;
+    .= H ** MSNat_Hom(A,C1) by PBOOLE:154;
 end;
 

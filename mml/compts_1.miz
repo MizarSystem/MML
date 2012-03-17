@@ -7,16 +7,19 @@
 environ
 
  vocabularies FUNCT_1, RELAT_1, BOOLE, FINSET_1, TARSKI, PRE_TOPC, SETFAM_1,
-      SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1, YELLOW_6, PCOMPS_1;
+      SUBSET_1, ORDINAL2, TOPS_2, COMPTS_1, YELLOW_6, PCOMPS_1, FUNCT_4,
+      CARD_5, GROUP_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_3, SETFAM_1, FINSET_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_2;
- constructors SETFAM_1, DOMAIN_1, FUNCT_3, FINSET_1, TOPS_2;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, STRUCT_0, PRE_TOPC;
+      FUNCT_3, SETFAM_1, FINSET_1, DOMAIN_1,
+      FUNCT_4, STRUCT_0, PRE_TOPC, TOPS_2;
+ constructors SETFAM_1, DOMAIN_1, FUNCT_3, FINSET_1, TOPS_2, FUNCT_4;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, STRUCT_0, PRE_TOPC,
+      TOPS_1;
  requirements SUBSET, BOOLE;
- definitions TARSKI, TOPS_2, XBOOLE_0, SUBSET_1, STRUCT_0;
+ definitions TARSKI, TOPS_2, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC;
  theorems TARSKI, SETFAM_1, FUNCT_1, FUNCT_3, ZFMISC_1, ORDERS_1,
       PRE_TOPC, TOPS_1, TOPS_2, RELAT_1, XBOOLE_0, XBOOLE_1,
-      SUBSET_1, FUNCT_2;
+      SUBSET_1, FUNCT_2, STRUCT_0, FUNCT_4, RELSET_1, FINSET_1;
  schemes WELLORD2;
 
 begin
@@ -27,46 +30,98 @@ reserve x, y, z for set,
   P, Q for Subset of T;
 
 definition
- canceled;
-  let F be set;
-  attr F is centered means
-  :Def2:
-  F <> {} &
-  for G being set st G <> {} & G c= F & G is finite holds meet G <> {};
-end;
-
-definition
+ canceled 2;
   let T be TopStruct;
   attr T is compact means
   :Def3:
   for F being Subset-Family of T st
   F is Cover of T & F is open ex G being Subset-Family of T
   st G c= F & G is Cover of T & G is finite;
-  attr T is being_T2 means
-  :Def4:
-  for p, q being Point of T st p <> q
-  ex W, V being Subset of T st W is open & V is open &
-  p in W & q in V & W misses V;
-  attr T is being_T3 means
+end;
+
+definition
+  let T be non empty TopSpace;
+  canceled;
+  redefine attr T is regular means
 
   for p being Point of T, P being Subset of T
   st P <> {} & P is closed & p in P`
   ex W, V being Subset of T st W is open & V is open &
   p in W & P c= V & W misses V;
-  attr T is being_T4 means
-
+  compatibility
+   proof
+    thus T is regular implies
+     for p being Point of T, P being Subset of T
+      st P <> {} & P is closed & p in P`
+     ex W, V being Subset of T st W is open & V is open &
+      p in W & P c= V & W misses V by PRE_TOPC:def 17;
+    assume
+Z1:  for p being Point of T, P being Subset of T
+      st P <> {} & P is closed & p in P`
+     ex W, V being Subset of T st W is open & V is open &
+      p in W & P c= V & W misses V;
+    let p being Point of T, P being Subset of T;
+    assume
+Z2:   P is closed & p in P`;
+    per cases;
+    suppose
+S:   P = {};
+    take G1 = [#]T, G2 = {}T;
+    thus G1 is open & G2 is open;
+    thus p in G1;
+    thus P c= G2 & G1 misses G2 by S,XBOOLE_1:65;
+    end;
+    suppose P <> {};
+    hence ex G1,G2 being Subset of T st G1 is open & G2 is open &
+      p in G1 & P c= G2 & G1 misses G2 by Z1,Z2;
+    end;
+   end;
+  redefine attr T is normal means
   for W, V being Subset of T st W <> {} & V <> {} &
   W is closed & V is closed & W misses V
   ex P, Q being Subset of T st P is open & Q is open &
   W c= P & V c= Q & P misses Q;
+  compatibility
+   proof
+    thus T is normal implies
+     for W, V being Subset of T st W <> {} & V <> {} &
+     W is closed & V is closed & W misses V
+     ex P, Q being Subset of T st P is open & Q is open &
+     W c= P & V c= Q & P misses Q by PRE_TOPC:def 18;
+    assume
+Z1:  for W, V being Subset of T st W <> {} & V <> {} &
+     W is closed & V is closed & W misses V
+     ex P, Q being Subset of T st P is open & Q is open &
+     W c= P & V c= Q & P misses Q;
+    let F1,F2 be Subset of T such that
+Z:   F1 is closed & F2 is closed & F1 misses F2;
+   per cases;
+   suppose
+S:  F1 = {};
+    take G1 = {}T, G2 = [#]T;
+    thus G1 is open & G2 is open;
+    thus F1 c= G1 by S;
+    thus F2 c= G2;
+    thus G1 misses G2 by XBOOLE_1:65;
+   end;
+   suppose
+S:  F2 = {};
+    take G1 = [#]T, G2 = {}T;
+    thus G1 is open & G2 is open;
+    thus F1 c= G1;
+    thus F2 c= G2 by S;
+    thus G1 misses G2 by XBOOLE_1:65;
+   end;
+   suppose F1 <> {} & F2 <> {};
+    hence ex G1,G2 being Subset of T st G1 is open & G2 is open &
+   F1 c= G1 & F2 c= G2 & G1 misses G2 by Z1,Z;
+   end;
+   end;
 end;
 
 notation
   let T be TopStruct;
-  synonym T is Hausdorff for T is being_T2;
-  synonym T is_T2 for T is being_T2;
-  synonym T is_T3 for T is being_T3;
-  synonym T is_T4 for T is being_T4;
+  synonym T is Hausdorff for T is T_2;
 end;
 
 definition
@@ -102,37 +157,31 @@ A1: T is compact;
     assume that
 A2: F is Cover of [#] T and
 A3: F is open;
-    union F c= [#] T & [#] T c= union F by A2,SETFAM_1:def 12;
-    then union F = [#] T by XBOOLE_0:def 10;
-    then F is Cover of T by SETFAM_1:def 12;
+    F is Cover of T by A2;
     then consider G be Subset-Family of T such that
 A4: G c= F and
 A5: G is Cover of T and
 A6: G is finite by A1,A3,Def3;
     take G;
-    union G = [#] T by A5,SETFAM_1:60;
-    hence thesis by A4,A6,SETFAM_1:def 12;
+    thus thesis by A4,A6,A5;
   end;
   assume
 A7: [#] T is compact;
   let F be Subset-Family of T such that
 A8: F is Cover of T and
 A9: F is open;
-  union F = [#] T by A8,SETFAM_1:60;
-  then F is Cover of [#] T by SETFAM_1:def 12;
-  then consider G be Subset-Family of T such that
+  consider G be Subset-Family of T such that
 A10: G c= F and
 A11: G is Cover of [#] T and
-A12: G is finite by A7,A9,Def7;
+A12: G is finite by A7,A8,A9,Def7;
   take G;
-  union G c= [#] T & [#] T c= union G by A11,SETFAM_1:def 12;
-  then union G = [#] T by XBOOLE_0:def 10;
-  hence thesis by A10,A12,SETFAM_1:def 12;
+  thus thesis by A10,A11,A12;
 end;
 
 theorem Th11:
   Q c= [#] A implies (Q is compact iff
   (for P being Subset of A st P=Q holds P is compact))
+::        Q is compact Subset of A) poprawic!
 proof
   [#] A c= [#] T by PRE_TOPC:def 9;
   then reconsider AA = [#] A as Subset of T;
@@ -268,8 +317,7 @@ A2: P = {};
   assume that
 A3: T is TopSpace-like and
 A4: P <> {};
-  the carrier of T is non empty by A4;
-  then reconsider T' = T as non empty TopSpace by A3;
+  reconsider T' = T as non empty TopSpace by A3,A4;
   reconsider P' = P as non empty Subset of T' by A4;
 A5: [#](T'|P') is compact iff T'|P' is compact by Th10;
   hence P is compact implies T|P is compact by A1,Th11;
@@ -296,7 +344,7 @@ A3: F is closed;
     assume
 A4: meet F = {};
     reconsider C = COMPLEMENT(F) as Subset-Family of T;
-    F <> {} by A2,Def2;
+    F <> {} by A2,FINSET_1:def 3;
     then union COMPLEMENT(F) = (meet F)` by TOPS_2:12
       .= [#] T by A4;
     then
@@ -323,7 +371,7 @@ A13: meet F' = (union G')` by A7,TOPS_2:5,11
       .= ([#] T) \ ([#] T) by A7,SETFAM_1:60
       .= {} by XBOOLE_1:37;
     F' <> {} by A12,TOPS_2:10;
-    hence contradiction by A2,A9,A11,A13,Def2;
+    hence contradiction by A2,A9,A11,A13,FINSET_1:def 3;
   end;
   assume
 A14: for F being Subset-Family of T st
@@ -345,7 +393,7 @@ A20: G <> {} by A18,TOPS_2:10;
 A21: G' <> {} and
 A22: G' c= G and
 A23: G' is finite and
-A24: meet G' = {} by A20,Def2;
+A24: meet G' = {} by A20,FINSET_1:def 3;
     reconsider G' as Subset-Family of T by A22,XBOOLE_1:1;
     take F'=COMPLEMENT(G');
     thus F' c= F
@@ -384,7 +432,7 @@ A3: F is closed and
 A4: meet F = {};
     not F is centered by A1,A3,A4,Th13;
     then consider G being set such that
-A5: G <> {} & G c= F & G is finite & meet G = {} by A2,Def2;
+A5: G <> {} & G c= F & G is finite & meet G = {} by A2,FINSET_1:def 3;
     reconsider G as Subset-Family of T by A5,XBOOLE_1:1;
     take X=G;
     thus X <> {} & X c= F & X is finite & meet X = {} by A5;
@@ -402,10 +450,10 @@ A7: F is centered and
 A8: F is closed;
     assume
 A9: meet F = {};
-    F <> {} by A7,Def2;
+    F <> {} by A7,FINSET_1:def 3;
     then ex G being Subset-Family of T st G <> {} & G c= F & G is finite &
     meet G = {} by A6,A8,A9;
-    hence contradiction by A7,Def2;
+    hence contradiction by A7,FINSET_1:def 3;
   end;
   hence T is compact by Th13;
 end;
@@ -414,12 +462,12 @@ reserve TS for TopSpace;
 reserve PS, QS for Subset of TS;
 
 theorem Th15:
-  TS is_T2 implies for A being Subset of TS st A <> {} & A is compact
+  TS is T_2 implies for A being Subset of TS st A <> {} & A is compact
   for p being Point of TS st p in A`
   ex PS,QS st PS is open & QS is open & p in PS & A c= QS & PS misses QS
 proof
   assume
-A1: TS is_T2;
+A1: TS is T_2;
   let F be Subset of TS such that
 A2: F <> {} and
 A3: F is compact;
@@ -440,7 +488,7 @@ A8: W is open and
 A9: V is open and
 A10: a in W and
 A11: p in V and
-A12: W misses V by A1,A5,A7,Def4;
+A12: W misses V by A1,A5,A7,PRE_TOPC:def 16;
     reconsider PS=W, QS=V as set;
     take PS,QS;
     thus PS in the topology of TS & QS in the topology of TS
@@ -509,7 +557,6 @@ A31: f.y=x by FUNCT_1:def 12;
   end;
   then reconsider B = f.:H' as Subset-Family of TS;
   take G0 = meet B, G1 = union C';
-A32: B is finite by A28;
   B is open
   proof
     let G be Subset of TS;
@@ -521,7 +568,7 @@ A34: G = f.x by FUNCT_1:def 12;
     x in QS & PS /\ QS = {} by A13,A14,A33;
     hence G is open by A34;
   end;
-  hence G0 is open by A32,TOPS_2:27;
+  hence G0 is open by A28,TOPS_2:27;
   thus G1 is open by A21,A24,TOPS_2:18,26;
   consider z being Element of F;
   F c= union C' by A25,SETFAM_1:def 12;
@@ -575,15 +622,14 @@ A52: PS /\ QS = {} by A13,A14,A47;
 end;
 
 theorem Th16:
-  TS is_T2 & PS is compact implies PS is closed
+  TS is T_2 & PS is compact implies PS is closed
 proof
   assume that
-A1: TS is_T2 and
+A1: TS is T_2 and
 A2: PS is compact;
   per cases;
   suppose PS = {};
-    then PS = {} TS;
-    hence PS is closed by TOPS_1:22;
+    hence PS is closed;
   end;
   suppose
 A3: PS <> {};
@@ -682,7 +728,7 @@ A5: PS = [#] (TS|PS) by PRE_TOPC:def 10;
   end;
 end;
 
-theorem
+theorem Th19:
   P is compact & Q is compact implies P \/ Q is compact
 proof
   assume that
@@ -717,35 +763,36 @@ A11: G2 is finite by A2,A4,Def7;
 end;
 
 theorem
-  TS is_T2 & PS is compact & QS is compact implies PS /\ QS is compact
+  TS is T_2 & PS is compact & QS is compact implies PS /\ QS is compact
 proof
   assume
-A1: TS is_T2 & PS is compact & QS is compact;
+A1: TS is T_2 & PS is compact & QS is compact;
   then PS is closed & QS is closed by Th16;
   then PS /\ QS is closed by TOPS_1:35;
   hence thesis by A1,Th18,XBOOLE_1:17;
 end;
 
 theorem
-  TS is_T2 & TS is compact implies TS is_T3
-proof
+ for TS being non empty TopSpace holds
+  TS is T_2 & TS is compact implies TS is regular
+proof let TS be non empty TopSpace;
   assume that
-A1: TS is_T2 and
+A1: TS is T_2 and
 A2: TS is compact;
   let p be Point of TS;
   let F be Subset of TS such that
 A3: F <> {} and
 A4: F is closed and
 A5: p in F`;
-  F is compact by A2,A4,Th17;
-  hence thesis by A1,A3,A5,Th15;
+  thus thesis by A1,A3,A5,Th15,A2,A4,Th17;
 end;
 
 theorem
-  TS is_T2 & TS is compact implies TS is_T4
-proof
+ for TS being non empty TopSpace holds
+  TS is T_2 & TS is compact implies TS is normal
+proof let TS be non empty TopSpace;
   assume that
-A1: TS is_T2 and
+A1: TS is T_2 and
 A2: TS is compact;
   let A,B be Subset of TS such that
 A3: A <> {} and
@@ -754,7 +801,6 @@ A5: A is closed and
 A6: B is closed and
 A7: A /\ B = {};
 A8: A is compact by A2,A5,Th17;
-A9: B is compact by A2,A6,Th17;
   defpred P[set,set,set] means ex P,Q being Subset of TS st $2 = P & $3 = Q &
   P is open & Q is open & $1 in P & B c= Q & P /\ Q = {};
 A10: x in A implies ex y,z st y in the topology of TS &
@@ -764,13 +810,13 @@ A10: x in A implies ex y,z st y in the topology of TS &
 A11: x in A;
     then reconsider p=x as Point of TS;
     not p in B by A7,A11,XBOOLE_0:def 3;
-    then p in B` by A11,SUBSET_1:50;
+    then p in B` by SUBSET_1:50;
     then consider W,V being Subset of TS such that
 A12: W is open and
 A13: V is open and
 A14: p in W and
 A15: B c= V and
-A16: W misses V by A1,A4,A9,Th15;
+A16: W misses V by A1,A4,A2,A6,Th17,Th15;
     reconsider X = W, Y = V as set;
     take X,Y;
     thus X in the topology of TS & Y in the topology of TS
@@ -841,7 +887,6 @@ A35: g.y=x by FUNCT_1:def 12;
   then reconsider Bk = g.:H' as Subset-Family of TS;
   take W = union C, V = meet Bk;
   thus W is open by A25,A28,TOPS_2:18,26;
-A36: Bk is finite by A32;
   Bk is open
   proof
     let G be Subset of TS;
@@ -853,7 +898,7 @@ A38: G = g.x by FUNCT_1:def 12;
     P is open & Q is open & x in P & B c= Q & P /\ Q = {} by A17,A18,A37;
     hence G is open by A38;
   end;
-  hence V is open by A36,TOPS_2:27;
+  hence V is open by A32,TOPS_2:27;
   thus A c= W by A29,SETFAM_1:def 12;
   consider z being Element of A;
   A c= union C by A29,SETFAM_1:def 12;
@@ -926,9 +971,8 @@ A6: union G = f"(union F) by A3,FUNCT_3:30
     .= f"(f.:([#] T)) by FUNCT_2:def 1;
   [#] T c= dom f by FUNCT_2:def 1;
   then [#] T c= f"(f.:([#] T)) & f"(f.:([#] T)) c= [#] T by FUNCT_1:146;
-  then union G = [#] T by A6,XBOOLE_0:def 10;
   then
-A7: G is Cover of T by SETFAM_1:def 12;
+A7: G is Cover of T by SETFAM_1:def 12,A6;
   G is open by A2,A5,TOPS_2:59;
   then consider G' being Subset-Family of T such that
 A8: G' c= G and
@@ -997,12 +1041,12 @@ reserve SS for non empty TopSpace;
 reserve f for Function of TS,SS;
 
 theorem Th25:
-  TS is compact & SS is_T2 & rng f = [#] SS & f is continuous implies
+  TS is compact & SS is T_2 & rng f = [#] SS & f is continuous implies
   for PS st PS is closed holds f.:PS is closed
 proof
   assume that
 A1: TS is compact and
-A2: SS is_T2 and
+A2: SS is T_2 and
 A3: rng f = [#] SS and
 A4: f is continuous;
   let PS;
@@ -1012,12 +1056,12 @@ A4: f is continuous;
 end;
 
 theorem
-  TS is compact & SS is_T2 & dom f = [#]TS & rng f = [#]SS &
+  TS is compact & SS is T_2 & dom f = [#]TS & rng f = [#]SS &
   f is one-to-one & f is continuous implies f is_homeomorphism
 proof
   assume that
 A1: TS is compact and
-A2: SS is_T2 and
+A2: SS is T_2 and
 A3: dom f = [#]TS & rng f = [#] SS and
 A4: f is one-to-one and
 A5: f is continuous;
@@ -1069,7 +1113,7 @@ end;
 
 registration
   let x be set;
-  cluster 1TopSp {x} -> being_T2;
+  cluster 1TopSp {x} -> T_2;
   coherence
   proof
     let p, q be Point of 1TopSp {x};
@@ -1080,7 +1124,7 @@ A1: p = x & q = x by TARSKI:def 1;
 end;
 
 registration
-  cluster being_T2 non empty TopSpace;
+  cluster T_2 non empty TopSpace;
   existence
   proof
     consider a being set;
@@ -1090,7 +1134,7 @@ registration
 end;
 
 registration
-  let T be being_T2 non empty TopSpace;
+  let T be T_2 non empty TopSpace;
   cluster compact -> closed Subset of T;
   coherence by Th16;
 end;
@@ -1105,21 +1149,43 @@ registration
   end;
 end;
 
-theorem Th27:
-  for T being TopSpace st the carrier of T is finite holds T is compact
+registration let A be finite set;
+ cluster 1TopSp A -> finite;
+ coherence;
+end;
+
+registration
+ cluster non empty finite TopSpace;
+ existence
+  proof
+   take 1TopSp {{}};
+   thus thesis;
+  end;
+end;
+
+registration
+ cluster finite -> compact TopSpace;
+ coherence
 proof
   let T be TopSpace;
   assume
 A1: the carrier of T is finite;
   let F be Subset-Family of T such that
 A2: F is Cover of T & F is open;
-  reconsider F' = F as Subset-Family of T;
-  take F';
-  thus F' c= F & F' is Cover of T by A2;
-  bool(the carrier of T) is finite & F' c= bool(the carrier of T)
-  by A1;
-  hence F' is finite;
+  take F;
+  thus F c= F & F is Cover of T by A2;
+  thus F is finite by A1;
 end;
+end;
+
+theorem Th27:
+ for T being TopSpace st the carrier of T is finite holds T is compact
+ proof
+  let T be TopSpace;
+  assume the carrier of T is finite;
+  then T is finite;
+  hence T is compact;
+ end;
 
 registration
   let T be TopSpace;
@@ -1135,5 +1201,296 @@ A1: T|B is compact by Th27;
     B = {} or B <> {};
     hence thesis by A1,Th12;
   end;
+end;
+
+registration let T be non empty TopStruct;
+ cluster non empty finite Subset of T;
+ existence
+  proof
+    consider x being Point of T;
+   take {x};
+   thus thesis;
+  end;
+end;
+
+registration let T be non empty TopSpace;
+ cluster non empty compact Subset of T; :: dlaczego nie chce zaokraglic
+ existence
+  proof
+   consider A being finite non empty Subset of T;
+   take A;
+   thus thesis;
+  end;
+end;
+
+:: comp. TOPMETR:3, 2008.07.06, A.T.
+
+registration
+ cluster empty -> T_2 TopStruct;
+ coherence
+  proof let T be TopStruct;
+   assume
+Z:  T is empty;
+   let p, q be Point of T;
+   thus thesis by Z,STRUCT_0:def 10;
+  end;
+end;
+
+registration let T be T_2 TopStruct;
+ cluster -> T_2 SubSpace of T;
+ coherence
+proof let A be SubSpace of T;
+ per cases;
+ suppose A is empty;
+  hence thesis;
+ end;
+ suppose
+S: A is non empty;
+    let p,q be Point of A such that
+A2: not p = q;
+    [#]A c= [#]T by PRE_TOPC:def 9;
+    then T is non empty by S;
+    then reconsider p' = p, q' = q as Point of T by S,PRE_TOPC:55;
+    consider W,V being Subset of T such that
+A3: W is open & V is open &
+    p' in W & q' in V & W misses V by A2,PRE_TOPC:def 16;
+A4: W /\ V = {} by A3,XBOOLE_0:def 7;
+    reconsider W' = W /\ [#] A, V' = V /\ [#] A as Subset of A;
+    take W', V';
+    W in the topology of T & V in the topology of T by A3,PRE_TOPC:def 5;
+    then W' in the topology of A & V' in the topology of A by PRE_TOPC:def 9;
+    hence W' is open & V' is open by PRE_TOPC:def 5;
+    thus p in W' & q in V' by A3,XBOOLE_0:def 3,S;
+    W' /\ V' = W /\ (V /\ [#] A) /\ [#] A by XBOOLE_1:16
+      .= {} /\ [#] A by A4,XBOOLE_1:16
+      .= {};
+    hence thesis by XBOOLE_0:def 7;
+ end;
+end;
+end;
+
+:: from BORSUK_1, 2008.07.07, A.T.
+
+theorem Th42:
+  for X being TopStruct for Y being SubSpace of X, A being Subset of X,
+  B being Subset of Y st A = B holds A is compact iff B is compact
+proof
+  let X be TopStruct;
+  let Y be SubSpace of X, A be Subset of X, B be Subset of Y such that
+A1: A = B;
+A2: B c= [#] Y;
+  hence A is compact implies B is compact by A1,Th11;
+  assume B is compact;
+  then for P being Subset of Y st P = A holds P is compact by A1;
+  hence A is compact by A1,A2,Th11;
+end;
+
+:: from TOPMETR2, 2008.07.07, A.T.
+
+reserve T, S for non empty TopSpace,
+  p for Point of T;
+
+theorem
+  for T1,T2 being SubSpace of T,
+  f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} & T1 is compact &
+  T2 is compact & T is T_2 & f is continuous & g is continuous & f.p = g.p
+  holds f+*g is continuous Function of T,S
+proof
+  let T1,T2 be SubSpace of T, f be Function of T1,S, g be Function of T2,S;
+  assume that
+A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p} and
+A2: T1 is compact and
+A3: T2 is compact and
+A4: T is T_2 and
+A5: f is continuous and
+A6: g is continuous and
+A7: f.p = g.p;
+A8: dom f = [#] T1 by FUNCT_2:def 1;
+A9: dom g = [#] T2 by FUNCT_2:def 1;
+  set h = f+*g;
+A10: dom h = the carrier of T by A1,A8,A9,FUNCT_4:def 1;
+  rng h c= rng f \/ rng g & rng f \/ rng g c= the carrier of S by FUNCT_4:18;
+  then rng h c= the carrier of S by XBOOLE_1:1;
+  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
+  for P being Subset of S st P is closed holds h"P is closed
+  proof
+    let P be Subset of S;
+    assume
+A11: P is closed;
+A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
+    then
+A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
+      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
+A14: for x being set st x in [#] T1 holds h.x = f.x
+    proof
+      let x be set such that
+A15:  x in [#] T1;
+      now per cases;
+        suppose
+A16:      x in [#] T2;
+          then x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
+          then x = p by A1,TARSKI:def 1;
+          hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
+        end;
+        suppose not x in [#] T2;
+          hence h.x = f.x by A9,FUNCT_4:12;
+        end;
+      end;
+      hence thesis;
+    end;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T1 implies x in f"P
+      proof
+        assume x in h"P /\ [#] T1;
+        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
+        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
+        hence x in f"P by FUNCT_1:def 13;
+      end;
+      assume x in f"P;
+      then x in dom f & f.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#] T1 & h.x in P by A12,A14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
+    end;
+    then
+A17: h"P /\ [#] T1 = f"P by TARSKI:2;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T2 implies x in g"P
+      proof
+        assume x in h"P /\ [#] T2;
+        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
+        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
+        hence x in g"P by FUNCT_1:def 13;
+      end;
+      assume x in g"P;
+      then x in dom g & g.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#]
+      T2 & h.x in P by A12,FUNCT_4:14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
+    end;
+    then
+A18: h"P = f"P \/ g"P by A13,A17,TARSKI:2;
+    f"P c= [#] T1 & [#] T1 c= [#] T by A1,XBOOLE_1:7;
+    then reconsider P1 = f"P as Subset of T by XBOOLE_1:1;
+    g"P c= [#] T2 & [#] T2 c= [#] T by A1,XBOOLE_1:7;
+    then reconsider P2 = g"P as Subset of T by XBOOLE_1:1;
+    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
+    then f"P is compact & g"P is compact by A2,A3,Th17;
+    then P1 is compact & P2 is compact by Th42;
+    hence h"P is closed by A4,A18,Th16,Th19;
+  end;
+  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
+end;
+
+theorem
+  for T being non empty TopSpace, T1, T2 being SubSpace of T,
+  p1,p2 being Point of T
+  for f being Function of T1,S, g being Function of T2,S st
+  ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#]
+  T2) = {p1,p2} & T1 is compact &
+  T2 is compact & T is T_2 & f is continuous & g is continuous &
+  f.p1 = g.p1 & f.p2 = g.p2 holds f+*g is continuous Function of T,S
+proof
+  let T be non empty TopSpace, T1, T2 be SubSpace of T, p1,p2 be Point of T;
+  let f be Function of T1,S, g be Function of T2,S;
+  assume that
+A1: ([#] T1) \/ ([#] T2) = [#] T & ([#] T1) /\ ([#] T2) = {p1,p2} and
+A2: T1 is compact and
+A3: T2 is compact and
+A4: T is T_2 and
+A5: f is continuous and
+A6: g is continuous and
+A7: f.p1 = g.p1 & f.p2 = g.p2;
+  set h = f+*g;
+A8: dom f = [#] T1 by FUNCT_2:def 1;
+A9: dom g = [#] T2 by FUNCT_2:def 1;
+  then
+A10: dom h = the carrier of T by A1,A8,FUNCT_4:def 1;
+  rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g by FUNCT_4:18;
+  then rng h c= the carrier of S by XBOOLE_1:1;
+  then reconsider h as Function of T,S by A10,FUNCT_2:def 1,RELSET_1:11;
+  for P being Subset of S st P is closed holds h"P is closed
+  proof
+    let P be Subset of S;
+    assume
+A11: P is closed;
+A12: h"P c= dom h & dom h = dom f \/ dom g by FUNCT_4:def 1,RELAT_1:167;
+    then
+A13: h"P = h"P /\ ([#] T1 \/ [#] T2) by A8,A9,XBOOLE_1:28
+      .= (h"P /\ [#](T1)) \/ (h"P /\ [#](T2)) by XBOOLE_1:23;
+A14: for x being set st x in [#] T1 holds h.x = f.x
+    proof
+      let x be set such that
+A15:  x in [#] T1;
+      now per cases;
+        suppose
+A16:      x in [#] T2;
+          then
+A17:      x in [#] T1 /\ [#] T2 by A15,XBOOLE_0:def 3;
+          now per cases by A1,A17,TARSKI:def 2;
+            suppose x = p1;
+              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
+            end;
+            suppose x = p2;
+              hence h.x = f.x by A7,A9,A16,FUNCT_4:14;
+            end;
+          end;
+          hence h.x = f.x;
+        end;
+        suppose not x in [#] T2;
+          hence h.x = f.x by A9,FUNCT_4:12;
+        end;
+      end;
+      hence thesis;
+    end;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T1 implies x in f"P
+      proof
+        assume x in h"P /\ [#] T1;
+        then x in h"P & x in dom f & x in [#] T1 by A8,XBOOLE_0:def 3;
+        then h.x in P & x in dom f & f.x = h.x by A14,FUNCT_1:def 13;
+        hence x in f"P by FUNCT_1:def 13;
+      end;
+      assume x in f"P;
+      then x in dom f & f.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#] T1 & h.x in P by A12,A14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T1 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T1 by XBOOLE_0:def 3;
+    end;
+    then
+A18: h"P /\ [#] T1 = f"P by TARSKI:2;
+    now
+      let x be set;
+      thus x in h"P /\ [#] T2 implies x in g"P
+      proof
+        assume x in h"P /\ [#] T2;
+        then x in h"P & x in dom g & x in [#] T2 by A9,XBOOLE_0:def 3;
+        then h.x in P & x in dom g & g.x = h.x by FUNCT_1:def 13,FUNCT_4:14;
+        hence x in g"P by FUNCT_1:def 13;
+      end;
+      assume x in g"P;
+      then x in dom g & g.x in P by FUNCT_1:def 13;
+      then x in dom h & x in [#]
+      T2 & h.x in P by A12,FUNCT_4:14,XBOOLE_0:def 2;
+      then x in h"P & x in [#] T2 by FUNCT_1:def 13;
+      hence x in h"P /\ [#] T2 by XBOOLE_0:def 3;
+    end;
+    then
+A19: h"P = f"P \/ g"P by A13,A18,TARSKI:2;
+    f"P c= [#] T1 & [#] T1 c= [#] T by A1,XBOOLE_1:7;
+    then reconsider P1 = f"P as Subset of T by XBOOLE_1:1;
+    g"P c= [#] T2 & [#] T2 c= [#] T by A1,XBOOLE_1:7;
+    then reconsider P2 = g"P as Subset of T by XBOOLE_1:1;
+    f"P is closed & g"P is closed by A5,A6,A11,PRE_TOPC:def 12;
+    then f"P is compact & g"P is compact by A2,A3,Th17;
+    then P1 is compact & P2 is compact by Th42;
+    hence h"P is closed by A4,A19,Th16,Th19;
+  end;
+  hence f+*g is continuous Function of T,S by PRE_TOPC:def 12;
 end;
 
