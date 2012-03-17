@@ -28,7 +28,7 @@ environ
 begin :: PRELIMINARIES
 
 reserve x,y,z for real number,
-  a,b,c,d,e,f,g,h for Nat,
+  a,b,c,d,e,f,g,h for Element of NAT,
   k,l,m,n,m1,n1,m2,n2 for Integer,
   q for Rational;
 
@@ -110,7 +110,7 @@ registration
   cluster k |^ a -> integer;
   coherence
   proof
-    defpred Q[Nat] means k|^$1 is Integer;
+    defpred Q[Element of NAT] means k|^$1 is Integer;
 A1: Q[0] by NEWTON:9;
 A2: for a st Q[a] holds Q[a+1]
     proof
@@ -120,7 +120,7 @@ A2: for a st Q[a] holds Q[a+1]
       k|^(a+1)=k*b by NEWTON:11;
       hence thesis;
     end;
-    for a holds Q[a] from NAT_1:sch 2(A1,A2);
+    for a holds Q[a] from NAT_1:sch 1(A1,A2);
     hence thesis;
   end;
 end;
@@ -191,7 +191,7 @@ theorem Th15:
 proof
   assume
 A1: k,l are_relative_prime;
-  defpred P[Nat] means k|^$1,l are_relative_prime;
+  defpred P[Element of NAT] means k|^$1,l are_relative_prime;
   k|^0=1 by NEWTON:9;
   then
 A2: P[0] by Th14;
@@ -202,7 +202,7 @@ A3: for a st P[a] holds P[a+1]
     then k*(k|^a),l are_relative_prime by A1,INT_2:41;
     hence thesis by NEWTON:11;
   end;
-  for a holds P[a] from NAT_1:sch 2(A2,A3);
+  for a holds P[a] from NAT_1:sch 1(A2,A3);
   hence thesis;
 end;
 
@@ -447,7 +447,7 @@ definition
     defpred P[FinSequence of NAT] means Sum $1 is Element of NAT;
 A1: P[<*>NAT] by RVSUM_1:102;
 A2: now
-      let fp; let a be Element of NAT;
+      let fp,a;
       assume P[fp];
       then reconsider sp=Sum(fp) as Element of NAT;
       Sum(fp^<*a*>)=sp+a by RVSUM_1:104;
@@ -466,7 +466,7 @@ definition
     defpred P[FinSequence of NAT] means Product $1 is Element of NAT;
 A1: P[<*>NAT] by RVSUM_1:124;
 A2: now
-      let fp; let a be Element of NAT;
+      let fp,a;
       assume P[fp];
       then reconsider sp=Product(fp) as Element of NAT;
       Product(fp^<*a*>)=sp*a by RVSUM_1:126;
@@ -521,13 +521,12 @@ A3:   IT = Del(fs,a);
 A4:   len fs = m + 1 & len IT = m by A1,FINSEQ_3:113;
       thus len IT + 1 = len fs by A4;
       let b;
-X:     b in NAT by ORDINAL1:def 13;
-      hence b<a implies IT.b=fs.b by A2,A3,A4,FINSEQ_3:119;
+      thus b<a implies IT.b=fs.b by A2,A3,A4,FINSEQ_3:119;
       assume
 A5:   b>=a;
       per cases;
       suppose b<=len IT;
-        hence IT.b=fs.(b+1) by A1,A3,A4,A5,FINSEQ_3:120,X;
+        hence IT.b=fs.(b+1) by A1,A3,A4,A5,FINSEQ_3:120;
       end;
       suppose
 A6:     b > len IT;
@@ -588,6 +587,7 @@ A7: len(fs1^fs2)=len(Del(fs,a)) by FINSEQ_1:35;
     let e be Nat;
     assume
 A8: 1<=e & e<=len Del(fs,a);
+A9: e in NAT by ORDINAL1:def 13;
     now per cases;
       suppose
 A10:    e<a;
@@ -596,7 +596,7 @@ A10:    e<a;
 A11:    e in dom fs1 by A1,A8,FINSEQ_3:27;
         hence (fs1^fs2).e=fs1.e by FINSEQ_1:def 7
           .=fs.e by A3,A11,FINSEQ_1:def 7
-          .=(Del(fs,a)).e by A1,A10,Def1;
+          .=(Del(fs,a)).e by A1,A9,A10,Def1;
       end;
       suppose
 A12:    e>=a;
@@ -617,7 +617,7 @@ A18:    e+1-(a-1)<=len(<*v*>^fs2) by A5,XREAL_1:11;
           .=fs2.(f-1) by A1
           .=(<*v*>^fs2).f by A4,A15,A18,FINSEQ_1:37
           .=(fs1^(<*v*>^fs2)).(e+1) by A1,A3,A16,A17,FINSEQ_1:37
-          .=(Del(fs,a)).e by A1,A3,A12,Def1;
+          .=(Del(fs,a)).e by A1,A3,A9,A12,Def1;
       end;
     end;
     hence (fs1^fs2).e=(Del(fs,a)).e;
@@ -840,6 +840,7 @@ A13:    e>=1 by A12,NAT_1:14;
     let b be Nat;
     assume
 A14: 1<=b & b<=len fs;
+A15: b in NAT by ORDINAL1:def 13;
     now per cases by A14,XXREAL_0:1;
       suppose
 A16:    b=len fs;
@@ -853,7 +854,7 @@ A17:    b<len fs;
         then b <= len(Del(fs,len fs)) by A6,XREAL_1:21;
         then b in dom Del(fs,len fs) by A14,FINSEQ_3:27;
         hence fs2.b=(Del(fs,len fs)).b by FINSEQ_1:def 7
-          .=fs.b by A4,A17,Def1;
+          .=fs.b by A4,A15,A17,Def1;
       end;
     end;
     hence thesis;
@@ -907,14 +908,14 @@ A8:     Del(ft,a+1)=fs1^fs2 by A6,A7,Lm13;
     end;
     hence thesis;
   end;
-  for a holds P[a] from NAT_1:sch 2(A1,A2);
+  for a holds P[a] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
 theorem
   a in dom ft implies Sum Del(ft,a)+(ft.a)=Sum(ft)
 proof
-  defpred P[Nat] means
+  defpred P[Element of NAT] means
   $1 in dom ft implies (ft.$1)+Sum Del(ft,$1)=Sum(ft);
 A1: P[0] by FINSEQ_3:27;
 A2: for a st P[a] holds P[a+1]
@@ -958,7 +959,7 @@ A8:     Del(ft,a+1)=fs1^fs2 by A6,A7,Lm13;
     end;
     hence thesis;
   end;
-  for a holds P[a] from NAT_1:sch 2(A1,A2);
+  for a holds P[a] from NAT_1:sch 1(A1,A2);
   hence thesis;
 end;
 
@@ -1020,11 +1021,10 @@ theorem
   q<>0 & q=k/a & a<>0 & k,a are_relative_prime
   implies k=numerator(q) & a=denominator(q)
 proof
-X: a in NAT by ORDINAL1:def 13;
   assume
 A1: q<>0 & q=k/a & a<>0 & k,a are_relative_prime;
-  then consider b being Element of NAT such that
-A2: k=numerator(q)*b & a=denominator(q)*b by RAT_1:60,X;
+  then consider b such that
+A2: k=numerator(q)*b & a=denominator(q)*b by RAT_1:60;
   numerator(q),denominator(q) are_relative_prime by Th29;
   then k gcd a = abs(b) by A2,INT_2:39;
   then 1=abs(b) by A1,INT_2:def 4
@@ -1099,7 +1099,7 @@ A5: d=0;
     now
       assume
 A6:   not k is Element of NAT;
-      consider c being Element of NAT such that
+      consider c such that
 A7:   k=c or k=-c by INT_1:8;
       consider e such that
 A8:   d=2*e or d=2*e+1 by Lm4;
@@ -1111,7 +1111,7 @@ A9:   now
       now
         assume d=2*e+1;
         then -c|^d=a by A1,A6,A7,Th3;
-        then -a is Element of NAT by ORDINAL1:def 13;
+        then -a is Element of NAT;
         hence thesis by A2,INT_2:8;
       end;
       hence thesis by A8,A9;
@@ -1128,13 +1128,13 @@ proof
 A1: e>0 & (a|^e) divides (b|^e);
   then consider f be Nat such that
 A2: (a|^e)*f=(b|^e) by NAT_D:def 3;
-X: a in REAL & b in REAL by XREAL_0:def 1;
+A3: f in NAT by ORDINAL1:def 13;
 A4: now
     assume
 A5: a=0;
     then 0 divides (b|^e) by A1,NAT_1:14,NEWTON:16;
     then ex f be Nat st 0*f=b|^e by NAT_D:def 3;
-    hence thesis by A5,CARD_4:51,X;
+    hence thesis by A5,CARD_4:51;
   end;
 A6: now
     assume b=0;
@@ -1143,11 +1143,11 @@ A6: now
   end;
   now
     assume a<>0 & b<>0;
-    then a|^e<>0 by CARD_4:51,X;
+    then a|^e<>0 by CARD_4:51;
     then f=(b|^e)/(a|^e) by A2,XCMPLX_1:90
       .=(b/a)|^e by PREPOWER:15;
     then consider d such that
-A7: f=d|^e by Th32;
+A7: f=d|^e by A3,Th32;
     b|^e=(a*d)|^e by A2,A7,NEWTON:12;
     then b=a*d by A1,Th5;
     hence thesis by NAT_D:def 3;
@@ -1287,18 +1287,17 @@ theorem
 proof
   assume
 A1: f>0 & g>0 & (f hcf g)=1 & a|^f=b|^g;
-X: a in REAL & b in REAL by XREAL_0:def 1;
   now per cases;
     suppose
 A2:   a=0;
       then a|^f=0 by A1,NAT_1:14,NEWTON:16;
-      then a=0|^g & b=0|^f by A1,A2,CARD_4:51,X;
+      then a=0|^g & b=0|^f by A1,A2,CARD_4:51;
       hence thesis;
     end;
     suppose
 A3:   b=0;
       then b|^g=0 by A1,NAT_1:14,NEWTON:16;
-      then a=0|^g & b=0|^f by A1,A3,CARD_4:51,X;
+      then a=0|^g & b=0|^f by A1,A3,CARD_4:51;
       hence thesis;
     end;
     suppose
@@ -1426,14 +1425,13 @@ A12:  b=1|^d by NEWTON:15;
       a=0|^d by A7,A11,NAT_1:14,NEWTON:16;
       hence thesis by A12;
     end;
-X: c in REAL  by XREAL_0:def 1;
     now
       assume
 A13:  e<>0;
       then
 A14:  a<>0 or c <>0 by INT_2:5;
       then
-A15:  a <> 0 by A1,CARD_4:51,X;
+A15:  a <> 0 by A1,CARD_4:51;
 A16:  now
         assume 0=c;
         then
@@ -1487,8 +1485,7 @@ proof
   (for a st a in dom $1 holds ($1.a hcf d)=1) implies (Product($1) hcf d)=1;
 A1: TH[<*>NAT] by NEWTON:64,RVSUM_1:124;
 A2: now
-    let fp;
-    let a be Element of NAT such that
+    let fp,a such that
 A3: TH[fp];
     thus TH[fp^<*a*>]
     proof
@@ -1531,8 +1528,7 @@ proof
   defpred TH[FinSequence of NAT] means (len $1>=2 & RP[$1]) implies CC[$1];
 A1: TH[<*>NAT];
 A2: now
-    let fp;
-    let d be Element of NAT such that
+    let fp,d such that
 A3: TH[fp];
     set fp1=fp^<*d*>;
     set k=len fp;
@@ -1658,13 +1654,12 @@ A36:            fp.c = fp1.c by FINSEQ_1:def 7;
 hence (fp1.c)*(fr3.c)=(fp.c)*Product Del(fp,c)*m1+(fp.c)*(fr1.c) by A36
                   .=Product(fp)*m1+(fp.c)*(fr1.c) by A35,Lm18;
               end;
-X: b in NAT by ORDINAL1:def 13;
               now per cases by A32,NAT_1:8;
                 suppose
 A37:              b<=k;
                   then 1<=k by A32,XXREAL_0:2;
                   then
-A38:              1 in Seg k & b in Seg k by A32,A37,X;
+A38:              1 in Seg k & b in Seg k by A32,A37;
                   then 1 in dom fr & b in dom fr by A20,FINSEQ_1:def 3;
                   then
 A39:              fr2.1=fr.1 & fr2.b=fr.b by A19, FINSEQ_1:def 7;

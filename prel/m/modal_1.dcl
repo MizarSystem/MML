@@ -12,10 +12,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
@@ -30,7 +30,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 <Adjective nr="29"/>
 <Adjective nr="30"/>
 </Cluster>
@@ -44,7 +44,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 <Adjective nr="29"/>
 <Adjective nr="31"/>
 </Cluster>
@@ -58,7 +58,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 <Adjective nr="29"/>
 <Adjective nr="32"/>
 </Cluster>
@@ -72,7 +72,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 <Adjective nr="29"/>
 <Adjective nr="33"/>
 </Cluster>
@@ -99,7 +99,7 @@
 <Func kind="K" nr="149"/>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 </Cluster>
 </CCluster>
 </Registrations>

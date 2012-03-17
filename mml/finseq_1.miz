@@ -21,7 +21,7 @@ environ
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       PARTFUN1, WELLORD2, ORDINAL1, CARD_1, FINSET_1, XBOOLE_0, XBOOLE_1,
       FUNCOP_1, XREAL_1, XXREAL_0, FUNCT_4, CARD_2;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, WELLORD2, RELAT_1, CLASSES1;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, WELLORD2, RELAT_1;
 
 begin
 
@@ -252,6 +252,7 @@ registration
     Seg n is finite
     proof
 A1:   n = { k where k is Element of NAT: k < n } by AXIOMS:30;
+A2:   for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
 A3:   for x st x in n ex y st P[x,y]
       proof
         let x;
@@ -263,7 +264,7 @@ A3:   for x st x in n ex y st P[x,y]
       end;
       consider f such that
 A4:   dom f = n and
-A5:   for x st x in n holds P[x,f.x] from CLASSES1:sch 1(A3);
+A5:   for x st x in n holds P[x,f.x] from FUNCT_1:sch 2(A2,A3);
       take f;
       thus rng f = Seg n
       proof
@@ -464,8 +465,18 @@ end;
 scheme SeqEx{A()->Nat,P[set,set]}:
   ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
 provided
+A1: for k,y1,y2 st k in Seg A() & P[k,y1] & P[k,y2] holds y1=y2
+and
 A2: for k st k in Seg A() ex x st P[k,x]
 proof
+A3: for x,y1,y2 st x in Seg A() & P[x,y1] & P[x,y2] holds y1=y2
+  proof
+    let x,y1,y2;
+    assume
+A4: x in Seg A();
+    then x is Nat by ORDINAL1:def 13;
+    hence thesis by A1,A4;
+  end;
 A5: for x st x in Seg A() ex y st P[x,y]
   proof
     let x;
@@ -476,7 +487,7 @@ A6: x in Seg A();
   end;
   consider f being Function such that
 A7: dom f = Seg A() &
-  (for x st x in Seg A() holds P[x,f.x]) from CLASSES1:sch 1(A5);
+  (for x st x in Seg A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A5);
   reconsider p=f as FinSequence by A7,Def2;
   take p;
   thus thesis by A7;
@@ -754,6 +765,29 @@ definition
     (for k st k=$1 & 1 <= k & k <= len p holds $2=p.k) &
     (for k st k=$1 & len p + 1 <= k & k <= len p + len q
     holds $2=q.(k-len p));
+A1: for x,y1,y2 st x in Seg(len p + len q) & P[x,y1] & P[x,y2] holds y1=y2
+    proof
+      let x,y1,y2;
+      assume
+A2:   x in Seg(len p + len q) & P[x,y1] & P[x,y2];
+      then reconsider m=x as Element of NAT;
+A3:   now
+        assume
+A4:     len p + 1 <= m;
+        m <= len p + len q by A2,Th3;
+        then y1 = q.(m-len p) & y2 = q.(m-len p) by A2,A4;
+        hence thesis;
+      end;
+      now
+        assume not len p + 1 <= m;
+        then
+A5:     m <= len p by NAT_1:8;
+A6:     1 <= m by A2,Th3;
+        then y1=p.m by A2,A5;
+        hence thesis by A2,A5,A6;
+      end;
+      hence thesis by A3;
+    end;
 A7: for x st x in Seg(len p + len q) ex y st P[x,y]
     proof
       let x;
@@ -788,8 +822,8 @@ A12:    for k st k=x & 1 <= k & k <= len p holds y=p.k;
     end;
     consider f such that
 A13: dom f=Seg(len p + len q) &
-    for x st x in Seg(len p + len q) holds P[x,f.x] from CLASSES1:sch 1
-    (A7);
+    for x st x in Seg(len p + len q) holds P[x,f.x] from FUNCT_1:sch 2
+    (A1,A7);
 A14: for k st k in dom p holds f.k=p.k
     proof
       let k;
@@ -1763,10 +1797,11 @@ A14:  y + n = len q by NAT_1:10;
       reconsider k,n as Element of NAT by ORDINAL1:def 13;
       reconsider q1 = q | (Seg k) as FinSequence by Th19;
       defpred P[Nat,set] means $2 = q.(y + $1);
+A15:  for j being Nat,y1,y2 st j in Seg n & P[j,y1] & P[j,y2] holds y1 = y2;
 A16:  for j being Nat st j in Seg n ex x st P[j,x];
       consider q2 being FinSequence such that
 A17:  dom q2 = Seg n and
-A18:  for j being Nat st j in Seg n holds P[j,q2.j] from SeqEx(A16);
+A18:  for j being Nat st j in Seg n holds P[j,q2.j] from SeqEx(A15,A16);
       k <= y by A12,NAT_1:12;
       then
 A19:  k <= len q by A13,XXREAL_0:2;
@@ -2599,6 +2634,7 @@ A1: rng g = D and
 A2: dom g in omega;
     reconsider n = dom g as Element of NAT by A2;
     defpred R[set,set] means P[$2,$1];
+A3: for x,y1,y2 st x in Seg n & R[x,y1] & R[x,y2] holds y1 = y2;
 A4: for x st x in Seg n ex y st R[x,y]
     proof
       let x;
@@ -2611,7 +2647,7 @@ A5:   x in Seg n;
     end;
     consider f such that
 A6: dom f = Seg n and
-A7: for x st x in Seg n holds R[x,f.x] from CLASSES1:sch 1(A4);
+A7: for x st x in Seg n holds R[x,f.x] from FUNCT_1:sch 2(A3,A4);
 A8: rng f = dom g
     proof
 A9:   n = { k where k is Element of NAT: k < n } by AXIOMS:30;
@@ -2653,6 +2689,7 @@ A20: D = rng p;
   consider n such that
 A21: dom p = Seg n by Def2;
 A22: n = { k where k is Element of NAT: k < n } by AXIOMS:30;
+A23: for x,y1,y2 st x in n & P[x,y1] & P[x,y2] holds y1 = y2;
 A24: for x st x in n ex y st P[x,y]
   proof
     let x;
@@ -2664,7 +2701,7 @@ A24: for x st x in n ex y st P[x,y]
   end;
   consider f such that
 A25: dom f = n and
-A26: for x st x in n holds P[x,f.x] from CLASSES1:sch 1(A24);
+A26: for x st x in n holds P[x,f.x] from FUNCT_1:sch 2(A23,A24);
   take p*f;
 A27: rng f = dom p
   proof

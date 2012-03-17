@@ -290,7 +290,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="41">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -317,7 +317,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="41">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -394,7 +394,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="41">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -573,7 +573,7 @@
 <Cluster>
 <Adjective nr="18"/>
 </Cluster>
-<Typ kind="M" nr="40">
+<Typ kind="M" nr="41">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

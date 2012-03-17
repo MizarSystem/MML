@@ -22,7 +22,7 @@ environ
       PARTFUN1, ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
       CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1,
       XREAL_1, VALUED_0;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, CLASSES1;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0;
 
 begin
 
@@ -56,8 +56,8 @@ theorem
   k = k /\ n implies k <= n by Th2;
 
 theorem Th4:  :: ORDINAL1:def 1, NAT_1:39
-  for n being Nat holds n \/ { n } = n+1
-proof let n be Nat;
+  n \/ { n } = n+1
+proof
   n+1 = succ n by NAT_1:39;
   hence thesis;
 end;
@@ -248,8 +248,20 @@ end;
 scheme XSeqEx{A()->Nat,P[set,set]}:
   ex p st dom p = A() & for k st k in A() holds P[k,p.k]
 provided
+A1: for k,y1,y2 st k in A() & P[k,y1] & P[k,y2] holds y1=y2
+and
 A2: for k st k in A() ex x st P[k,x]
 proof
+A3: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1=y2
+  proof
+    let x,y1,y2;
+    assume
+A4: x in A() & P[x,y1] & P[x,y2];
+    A()={i where i is Element of NAT: i<A()} by AXIOMS:30;
+    then consider i being Element of NAT such that
+A5: i=x & i<A() by A4;
+    thus y1=y2 by A1,A4,A5;
+  end;
 A6: for x st x in A() ex y st P[x,y]
   proof
     let x;
@@ -262,7 +274,7 @@ A8: i=x & i<A() by A7;
   end;
   consider f being Function such that
 A9: dom f = A() &
-  (for x st x in A() holds P[x,f.x]) from CLASSES1:sch 1(A6);
+  (for x st x in A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
   A() in NAT by ORDINAL1:def 13;
   then reconsider p=f as XFinSequence by A9,Th7;
   take p;

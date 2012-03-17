@@ -11,13 +11,13 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="MCART_1"/>
 <ArticleID name="DOMAIN_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ORDINAL2"/>
@@ -50,8 +50,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="22"/>
+<Adjective nr="15"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </RCluster>
@@ -89,11 +89,11 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="12"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="96">
+<Func kind="K" nr="71">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -106,7 +106,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </Typ>
@@ -114,19 +114,19 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
@@ -137,14 +137,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="12"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </Typ>
@@ -156,7 +156,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
@@ -167,14 +167,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="12"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </Typ>
@@ -186,7 +186,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>

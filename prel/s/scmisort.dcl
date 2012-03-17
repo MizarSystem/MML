@@ -80,12 +80,12 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster>
 <Adjective nr="85" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster/>
 </Typ>
 </ArgTypes>

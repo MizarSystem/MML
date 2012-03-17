@@ -9,14 +9,14 @@ environ
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
       FINSEQ_4, ARYTM, RFINSEQ;
- notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, XBOOLEAN,
-      MARGREL1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
-      FUNCOP_1, SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, RFINSEQ, SEQ_1, NAT_1,
-      XXREAL_0;
+ notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, NAT_1,
+      XBOOLEAN, MARGREL1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2,
+      SETWISEO, FUNCOP_1, SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, RFINSEQ,
+      SEQ_1, XXREAL_0;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, BINOP_2, MARGREL1,
       PARTFUN1, FINSOP_1, SERIES_1, RFINSEQ, SEQ_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      BINOP_2, XBOOLEAN, MARGREL1, FINSEQ_2, XBOOLE_0, REAL_1;
+      BINOP_2, XBOOLEAN, MARGREL1, FINSEQ_2, XBOOLE_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -30,11 +30,11 @@ end;
 canceled;
 
 theorem :: BINARITH:2
-  for i,n being Nat, D being non empty set, d being Element of D,
+  for i,n being Element of NAT, D being non empty set, d being Element of D,
   z being Tuple of n,D st i in Seg n holds (z^<*d*>)/.i=z/.i;
 
 theorem :: BINARITH:3
-  for n being Nat, D being non empty set, d being Element of D,
+  for n being Element of NAT, D being non empty set, d being Element of D,
   z being Tuple of n,D holds (z^<*d*>)/.(n+1)=d;
 
 registration
@@ -109,30 +109,29 @@ canceled 5;
 theorem :: BINARITH:39
   for i,j being natural number holds i + j -' j = i;
 
-reserve i,j,k for Nat;
-reserve n for non empty Nat;
+reserve i,j,k for Element of NAT;
+reserve n for non empty Element of NAT;
 reserve x,y,z1,z2 for Tuple of n, BOOLEAN;
 
 definition
-  let n be Nat, x be Tuple of n, BOOLEAN;
+  let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func 'not' x -> Tuple of n, BOOLEAN means
 :: BINARITH:def 4
   for i st i in Seg n holds it/.i = 'not' (x/.i);
 end;
 
 definition
-  let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
+  let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
   func carry(x, y) -> Tuple of n, BOOLEAN means
 :: BINARITH:def 5
 
   it/.1 = FALSE &
-  for i being Nat st 1 <= i & i < n
-   holds it/.(i+1) = (x/.i) '&' (y/.i) 'or'
+  for i st 1 <= i & i < n holds it/.(i+1) = (x/.i) '&' (y/.i) 'or'
   (x/.i) '&' (it/.i) 'or' (y/.i) '&' (it/.i);
 end;
 
 definition
-  let n be Nat, x be Tuple of n, BOOLEAN;
+  let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func Binary(x) -> Tuple of n, NAT means
 :: BINARITH:def 6
 
@@ -141,7 +140,7 @@ definition
 end;
 
 definition
-  let n be Nat, x be Tuple of n, BOOLEAN;
+  let n be Element of NAT, x be Tuple of n, BOOLEAN;
   func Absval (x) -> Element of NAT equals
 :: BINARITH:def 7
 
@@ -166,6 +165,13 @@ definition
   (z1/.n) '&' (carry(z1,z2)/.n) 'or' (z2/.n) '&' (carry(z1,z2)/.n);
 end;
 
+scheme :: BINARITH:sch 1
+ Indfrom1 { P[set] } : for k being non empty Element of NAT holds P[k]
+provided
+ P[1]
+and
+ for k being non empty Element of NAT st P[k] holds P[k + 1];
+
 definition
   let n,z1,z2;
   pred z1,z2 are_summable means
@@ -184,7 +190,8 @@ theorem :: BINARITH:42
   for z1 being Tuple of 1,BOOLEAN st z1=<*TRUE*> holds Absval(z1)=1;
 
 definition
-  let n1,n2 be Nat;
+  let n1 be non empty Element of NAT;
+  let n2 be Element of NAT;
   let D be non empty set;
   let z1 be Tuple of n1,D;
   let z2 be Tuple of n2,D;
@@ -199,7 +206,7 @@ end;
 
 theorem :: BINARITH:43
   for z1,z2 being Tuple of n,BOOLEAN holds
-  for d1,d2 being Element of BOOLEAN holds for i being Nat holds
+  for d1,d2 being Element of BOOLEAN holds for i being Element of NAT holds
   i in Seg n implies carry(z1^<*d1*>,z2^<*d2*>)/.i = carry(z1,z2)/.i;
 
 theorem :: BINARITH:44

@@ -75,7 +75,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -161,7 +161,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="24">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -190,7 +190,7 @@
 <Adjective nr="108"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="24">
+<Typ kind="M" nr="23">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

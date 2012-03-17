@@ -117,7 +117,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="24">
+<Typ kind="M" nr="23">
 <Cluster/>
 <Func kind="K" nr="46"/>
 <LocusVar nr="1"/>

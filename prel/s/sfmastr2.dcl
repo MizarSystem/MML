@@ -10,15 +10,15 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
@@ -44,12 +44,12 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="75">
 <Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="113">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
@@ -63,7 +63,7 @@
 <Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="113">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>
@@ -71,7 +71,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="32">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -80,12 +80,12 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="75">
 <Func kind="K" nr="266"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="45"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="113">
 <Func kind="K" nr="45"/>
 </Func>
 </Func>

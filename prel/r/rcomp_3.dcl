@@ -546,7 +546,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="21">
+<Typ kind="M" nr="22">
 <Cluster/>
 <Func kind="K" nr="225"/>
 </Typ>

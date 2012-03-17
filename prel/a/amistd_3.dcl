@@ -296,7 +296,7 @@
 <Func kind="K" nr="87"/>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster>
 <Adjective nr="9"/>
 </Cluster>
@@ -344,7 +344,7 @@
 <Func kind="K" nr="87"/>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster>
 <Adjective nr="9" value="false"/>
 </Cluster>
@@ -392,7 +392,7 @@
 <Func kind="K" nr="87"/>
 <LocusVar nr="1"/>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 <Func kind="K" nr="87"/>
 <LocusVar nr="1"/>

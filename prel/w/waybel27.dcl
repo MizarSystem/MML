@@ -374,7 +374,7 @@
 <Cluster>
 <Adjective nr="44" value="false"/>
 </Cluster>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

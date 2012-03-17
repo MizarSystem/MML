@@ -69,7 +69,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="38">
+<Typ kind="M" nr="39">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

@@ -10,13 +10,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -62,7 +62,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -82,7 +82,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -174,7 +174,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="90">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -193,7 +193,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="92">
+<Func kind="K" nr="67">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -232,7 +232,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="90">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -254,9 +254,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="18"/>
-<Adjective nr="20"/>
-<Adjective nr="26">
+<Adjective nr="15"/>
+<Adjective nr="17"/>
+<Adjective nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -279,7 +279,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -353,7 +353,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="105">
-<Func kind="K" nr="97">
+<Func kind="K" nr="72">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

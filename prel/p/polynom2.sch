@@ -15,8 +15,6 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="REAL_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -45,10 +43,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="117">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="115">
+<Func kind="K" nr="90">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -62,14 +60,14 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="115">
+<Func kind="K" nr="90">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -94,7 +92,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="115">
+<Func kind="K" nr="90">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -140,7 +138,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="91">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -149,7 +147,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -188,17 +186,17 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -349,7 +347,7 @@
 </For>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="91">
 <Func kind="F" nr="4"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -358,7 +356,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="4"/>
@@ -397,17 +395,17 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="4"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="4"/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -420,7 +418,7 @@
 </And>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="116">
+<Func kind="K" nr="91">
 <Func kind="F" nr="5"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -429,7 +427,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
@@ -468,17 +466,17 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="138">
+<Func kind="K" nr="113">
 <Func kind="K" nr="51"/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="5"/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -553,7 +551,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -647,7 +645,7 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -681,7 +679,7 @@
 </Pred>
 <Pred kind="R" nr="3">
 <Var nr="1"/>
-<Func kind="K" nr="116">
+<Func kind="K" nr="91">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
@@ -716,7 +714,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="3">
-<Func kind="K" nr="116">
+<Func kind="K" nr="91">
 <Func kind="F" nr="2"/>
 </Func>
 <Var nr="1"/>
@@ -732,7 +730,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="17">
 <Func kind="F" nr="2"/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

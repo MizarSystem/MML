@@ -84,7 +84,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="26">
 <Cluster/>
 </Typ>
 <Cluster>
@@ -93,7 +93,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="26">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

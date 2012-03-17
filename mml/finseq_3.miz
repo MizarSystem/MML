@@ -22,7 +22,7 @@ environ
       INT_1, NAT_1, REAL_1, TARSKI, TREES_1, WELLORD2, ZFMISC_1, RELAT_1,
       XREAL_1, XBOOLE_0, XBOOLE_1, FUNCT_2, GRFUNC_1, SUBSET_1, XXREAL_0,
       ORDINAL1, NUMBERS;
- schemes FINSEQ_1, FUNCT_1, NAT_1, CLASSES1;
+ schemes FINSEQ_1, FUNCT_1, NAT_1;
 
 begin
 
@@ -374,10 +374,18 @@ end;
 canceled 3;
 
 theorem Th38:
-  {} <> <* x,y *> by CARD_1:47,FINSEQ_1:61;
+  {} <> <* x,y *>
+proof
+  len{} = 0 & len<* x,y *> = 2 by CARD_1:47,FINSEQ_1:61;
+  hence thesis;
+end;
 
 theorem
-  {} <> <* x,y,z *> by CARD_1:47,FINSEQ_1:62;
+  {} <> <* x,y,z *>
+proof
+  len{} = 0 & len<* x,y,z *> = 3 by CARD_1:47,FINSEQ_1:62;
+  hence thesis;
+end;
 
 theorem Th40:
   <* x *> <> <* y,z *>
@@ -1263,6 +1271,7 @@ A19: p " A misses B by XBOOLE_0:def 7;
   reconsider B as finite set by A1,FINSET_1:13,XBOOLE_1:7;
 A20: card X = card(p " A) + card B by A1,A19,CARD_2:53;
   defpred P[set,set] means ex i st $1 = i & $2 = len p + i;
+A21: for x,y,z st x in q " A & P[x,y] & P[x,z] holds y = z;
 A22: for x st x in q " A ex y st P[x,y]
   proof
     let x;
@@ -1276,7 +1285,7 @@ A22: for x st x in q " A ex y st P[x,y]
   end;
   consider f being Function such that
 A23: dom f = q " A and
-A24: for x st x in q " A holds P[x,f.x] from CLASSES1:sch 1(A22);
+A24: for x st x in q " A holds P[x,f.x] from FUNCT_1:sch 2(A21,A22);
 A25: rng f = B
   proof
     thus rng f c= B
@@ -1832,7 +1841,11 @@ A48: r.k = t.l by A5,A7,A12,FUNCT_1:23;
     let k be Element of NAT;
     assume
 A49: k in dom q;
-A50: not x in A by Lm7,A49,RELAT_1:60;
+A50: now
+      assume x in A;
+      then q = {} by Lm7;
+      hence contradiction by A49,RELAT_1:60;
+    end;
     then
 A51: q = <* x *> by Lm6;
     then
@@ -2100,7 +2113,17 @@ end;
 
 Lm12: for p,A st len p = 0 for n st n in dom p for B being finite set st
 B = {k where k is Element of NAT : k in dom p & k <= n & p.k in A}
-holds p.n in A or (p - A).(n - card B) = p.n by CARD_2:59,RELAT_1:60;
+holds p.n in A or (p - A).(n - card B) = p.n
+proof
+  let p,A;
+  assume
+A1: len p = 0;
+  let n;
+  assume
+A2: n in dom p;
+  p = {} by A1,CARD_2:59;
+  hence thesis by A2,RELAT_1:60;
+end;
 
 Lm13: for l st (for p,A st len p = l for n st n in dom p
 for B being finite set st
@@ -2968,7 +2991,7 @@ A2: X c= Seg n & i in {i} by TARSKI:def 1,XBOOLE_1:36;
   hence thesis by A2,Th44;
 end;
 
-reserve J for Element of NAT;
+reserve j for Element of NAT;
 
 theorem Th117:
   for i,k,m,n being Element of NAT st n=m+1 & k in Seg n & i in Seg m
@@ -3008,25 +3031,25 @@ A12:    k+1<i by A4,NAT_1:13;
             let x;
             assume x in X;
             then
-A13:        x in Seg g & not x in {i} & Seg g = {J: 1<=J & J<= g}
+A13:        x in Seg g & not x in {i} & Seg g = {j: 1<=j & j<= g}
             by FINSEQ_1:def 1,XBOOLE_0:def 4;
-            then consider J such that
-A14:        x=J & 1<=J & J<=g;
+            then consider j such that
+A14:        x=j & 1<=j & j<=g;
             x<>i by A13,TARSKI:def 1;
-            then J<g by A11,A14,REAL_1:def 5;
-            then J<=k+1 by A4,NAT_1:13;
+            then j<g by A11,A14,REAL_1:def 5;
+            then j<=k+1 by A4,NAT_1:13;
             hence thesis by A14,FINSEQ_1:3;
           end;
           let x;
           assume x in Seg(k+1);
-          then x in {J: 1<=J & J<=k+1} by FINSEQ_1:def 1;
-          then consider J such that
-A15:      x=J & 1<=J & J<=k+1;
+          then x in {j: 1<=j & j<=k+1} by FINSEQ_1:def 1;
+          then consider j such that
+A15:      x=j & 1<=j & j<=k+1;
           k+1<=g by A4,NAT_1:11;
-          then J<=g by A15,XXREAL_0:2;
+          then j<=g by A15,XXREAL_0:2;
           then
-A16:      J in Seg g by A15,FINSEQ_1:3;
-          not J in {i} by A12,A15,TARSKI:def 1;
+A16:      j in Seg g by A15,FINSEQ_1:3;
+          not j in {i} by A12,A15,TARSKI:def 1;
           hence thesis by A15,A16,XBOOLE_0:def 4;
         end;
         then Sgm X = idseq (k+1) by Th54;
@@ -3051,7 +3074,7 @@ A21:    X = A
             let x;
             assume x in X;
             then
-A22:        x in Seg g & not x in {i} & Seg g= {J: 1<=J & J<=g }
+A22:        x in Seg g & not x in {i} & Seg g= {j: 1<=j & j<=g }
             by FINSEQ_1:def 1,XBOOLE_0:def 4;
             then consider m being Element of NAT such that
 A23:        x=m & 1<=m & m<=g;
@@ -3066,7 +3089,7 @@ A24:      x=m & 1<=m & m<=g & m<>i;
           hence thesis by A24,XBOOLE_0:def 4;
         end;
         then
-A25:    ex J st Sgm(X).(k+1) = J & 1<=J & J<=g & J<>i by A20;
+A25:    ex j st Sgm(X).(k+1) = j & 1<=j & j<=g & j<>i by A20;
         1<=g & g<=g & g<>i by A10,A17,XXREAL_0:2;
         then g in rng Sgm(X) by A8,A21;
         then consider x be Nat such that
@@ -3097,17 +3120,17 @@ A33:        X = Y \/ {g}
               proof
                 let x;
                 assume x in X;
-                then consider J such that
-A34:            x=J & 1<=J & J<=g & J<>i by A21;
+                then consider j such that
+A34:            x=j & 1<=j & j<=g & j<>i by A21;
                 now per cases by A34,REAL_1:def 5;
-                  suppose J=g;
+                  suppose j=g;
                     then x in {g} by A34,TARSKI:def 1;
                     hence thesis by XBOOLE_0:def 2;
                   end;
-                  suppose J<g;
-                    then J<=k+1 by A4,NAT_1:13;
+                  suppose j<g;
+                    then j<=k+1 by A4,NAT_1:13;
 
-then J in Seg(k+1) & not J in {i} by A34,FINSEQ_1:3,TARSKI:def 1;
+then j in Seg(k+1) & not j in {i} by A34,FINSEQ_1:3,TARSKI:def 1;
                     then x in Y by A34,XBOOLE_0:def 4;
                     hence thesis by XBOOLE_0:def 2;
                   end;
@@ -3356,6 +3379,8 @@ A12: rng p = rng Sgm(F"A) \/ rng Sgm(F"(rng F \ A)) by FINSEQ_1:44
   hence thesis by A11,A12,FUNCT_2:3,83;
 end;
 
+reserve k for Element of NAT;
+
 theorem
   for F being FinSequence, A be Subset of rng F st F is one-to-one
   ex p being Permutation of dom F st (F-A`)^(F-A) = F*p
@@ -3395,7 +3420,7 @@ A8: len F3 = len F by FINSEQ_2:48
     .= len (F1^F2) by A1,A6,A7,FINSEQ_1:65
     .= len F1 + len F2 by FINSEQ_1:35;
 A9: now
-    let k be Element of NAT such that
+    let k such that
 A10: k in dom F1;
 A11: F"A` = F"(rng F \ A) by SUBSET_1:def 5
       .= F"(rng F) \ F"A by FUNCT_1:138
@@ -3428,7 +3453,7 @@ A15: dom Sgm(F"(rng F1)) = Seg len Sgm(F"(rng F1)) by FINSEQ_1:def 3
       .= F1.k by A11,XBOOLE_1:48;
   end;
   now
-    let k be Element of NAT such that
+    let k such that
 A16: k in dom F2;
 A17: F"(rng F) = dom F by RELAT_1:169;
     F"A c= dom F by RELAT_1:167;

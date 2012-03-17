@@ -20,9 +20,9 @@ environ
       BCIALG_2, REALSET1, ALGSTR_0;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions STRUCT_0, BINOP_1, BCIALG_1, FINSEQ_1, RLVECT_1, ALGSTR_0;
- theorems TARSKI, STRUCT_0, BCIALG_1, FINSEQ_1, FINSOP_1, SETWISEO,
+ theorems TARSKI, STRUCT_0, FUNCT_2, BCIALG_1, FINSEQ_1, FINSOP_1, SETWISEO,
       NAT_1, BINOP_1, BCIALG_2, CARD_1;
- schemes BINOP_1, NAT_1, CLASSES1;
+ schemes BINOP_1, FUNCT_1, NAT_1;
 
 begin :: Definition and Elementary Properties of BCI-Algebras with Condition(S)
 
@@ -751,6 +751,35 @@ definition
     defpred P[set,set] means ex g0 being Function of NAT, the carrier of X,
     h being Element of X st $1 = h & g0 = $2 &
     g0.0 = 0.X & for n holds g0.(n + 1) = (g0.n) * h;
+A1: for x,y1,y2 be set st x in the carrier of X & P[x,y1] & P[x,y2]
+    holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume x in the carrier of X;
+      given g1 being Function of NAT, the carrier of X,
+      h being Element of X such that
+A2:   x = h and
+A3:   g1 = y1 and
+A4:   g1.0 = 0.X and
+A5:   for n holds g1.(n + 1) = (g1.n) * h;
+      given g2 being Function of NAT, the carrier of X,
+      f being Element of X such that
+A6:   x = f and
+A7:   g2 = y2 and
+A8:   g2.0 = 0.X and
+A9:   for n holds g2.(n + 1) = (g2.n) * f;
+      defpred P[set] means g1.$1 = g2.$1;
+A10:  P[0] by A4,A8;
+A11:  now
+        let n;
+        assume P[n];
+        then g1.(n + 1) = (g2.n) * f by A2,A5,A6
+          .= g2.(n + 1) by A9;
+        hence P[n+1];
+      end;
+      for n holds P[n] from NAT_1:sch 1(A10,A11);
+      hence thesis by A3,A7,FUNCT_2:113;
+    end;
 A12: for x be set st x in the carrier of X ex y be set st P[x,y]
     proof
       let x be set;
@@ -771,7 +800,7 @@ A14:  for n being Nat holds g0.(n + 1) = F(n,g0.n)
     end;
     consider f being Function such that dom f = the carrier of X and
 A15: for x be set st x in the carrier of X holds P[x,f.x]
-    from CLASSES1:sch 1(A12);
+    from FUNCT_1:sch 2(A1,A12);
     defpred P[Element of X,Element of NAT,set] means
     ex g0 being Function of NAT, the carrier of X st g0 = f.$1 & $3 = g0.$2;
 A16: for a being Element of X, n being Element of NAT

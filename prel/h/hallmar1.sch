@@ -12,9 +12,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
@@ -74,7 +71,7 @@
 </Pred>
 </Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="98">
+<Func kind="K" nr="62">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -126,7 +123,7 @@
 <Var nr="1"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="98">
+<Func kind="K" nr="62">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

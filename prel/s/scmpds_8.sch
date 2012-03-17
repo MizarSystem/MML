@@ -14,10 +14,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
@@ -59,7 +59,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="77">
 <Func kind="K" nr="250"/>
 <Func kind="K" nr="1">
@@ -81,7 +81,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -129,7 +129,7 @@
 </And>
 <Not>
 <Pred kind="R" nr="15">
-<Func kind="K" nr="94">
+<Func kind="K" nr="89">
 <Func kind="F" nr="3"/>
 </Func>
 <Func kind="K" nr="72"/>
@@ -305,7 +305,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="77">
 <Func kind="K" nr="250"/>
 <Func kind="K" nr="1">
@@ -327,7 +327,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -380,7 +380,7 @@
 </And>
 <Not>
 <Pred kind="R" nr="15">
-<Func kind="K" nr="94">
+<Func kind="K" nr="89">
 <Func kind="F" nr="3"/>
 </Func>
 <Func kind="K" nr="72"/>
@@ -571,7 +571,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="77">
 <Func kind="K" nr="250"/>
 <Func kind="K" nr="1">
@@ -593,7 +593,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -641,7 +641,7 @@
 </And>
 <Not>
 <Pred kind="R" nr="15">
-<Func kind="K" nr="94">
+<Func kind="K" nr="89">
 <Func kind="F" nr="3"/>
 </Func>
 <Func kind="K" nr="72"/>
@@ -817,7 +817,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 <Adjective nr="77">
 <Func kind="K" nr="250"/>
 <Func kind="K" nr="1">
@@ -839,7 +839,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="30">
 <Cluster/>
 </Typ>
 <Typ kind="M" nr="1">
@@ -892,7 +892,7 @@
 </And>
 <Not>
 <Pred kind="R" nr="15">
-<Func kind="K" nr="94">
+<Func kind="K" nr="89">
 <Func kind="F" nr="3"/>
 </Func>
 <Func kind="K" nr="72"/>

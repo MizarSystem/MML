@@ -24,8 +24,7 @@ environ
       NAT_1, INT_1, CARD_1, CARD_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
       FUNCT_1, FUNCT_2, FUNCT_4, EQREL_1, BORSUK_1, ZFMISC_1, STRUCT_0,
       XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1, BINOP_1, XXREAL_0, ORDINAL1;
- schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1, BINOP_1,
- CLASSES1;
+ schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, RECDEF_1, EQREL_1, BINOP_1;
 
 begin :: Preliminaries
 
@@ -114,7 +113,11 @@ theorem
   for W being non empty set, PW being a_partition of W holds PW is non empty;
 
 theorem
-  for Z being finite set, PZ being a_partition of Z holds PZ is finite;
+  for Z being finite set, PZ being a_partition of Z holds PZ is finite
+proof
+  let Z be finite set, PZ be a_partition of Z;
+  thus PZ is finite;
+end;
 
 registration
   let Z be finite set;
@@ -4538,6 +4541,51 @@ A1: (the carrier of rtfsm1) misses (the carrier of rtfsm2) &
 A2: SRUN = final_states_partition UN by Def18;
   defpred P[set, set] means
   ex part being Element of SRUN st $1 in part & $2 in part \ { $1 };
+A3: for x,y1,y2 being set st x in Srtfsm1 & P[x,y1] & P[x,y2] holds y1 = y2
+  proof
+    let x, y1, y2 be set;
+    assume
+A4: x in Srtfsm1 & P[x,y1] & P[x,y2];
+    then reconsider x' = x as Element of Srtfsm1;
+    consider part1 being Element of SRUN such that
+A5: x' in part1 & y1 in part1 \ { x' } by A4;
+    consider part2 being Element of SRUN such that
+A6: x' in part2 & y2 in part2 \ { x' } by A4;
+    assume
+A7: y1 <> y2;
+A8: y1 in part1 by A5;
+    part1 is Subset of UN by A2,TARSKI:def 3;
+    then part1 is Subset of Srtfsm1 \/ Srtfsm2 by Def24;
+    then
+A9: y1 in Srtfsm1 or y1 in Srtfsm2 by A8,XBOOLE_0:def 2;
+A10: not y1 in Srtfsm1
+    proof
+      assume
+A11:  y1 in Srtfsm1;
+      reconsider y1 as Element of part1 by A5;
+      reconsider x' as Element of part1 by A5;
+      y1 <> x' by A5,ZFMISC_1:64;
+      hence contradiction by A1,A11,Th78;
+    end;
+A12: y2 in part2 by A6;
+    part2 is Subset of UN by A2,TARSKI:def 3;
+    then part2 is Subset of Srtfsm1 \/ Srtfsm2 by Def24;
+    then
+A13: y2 in Srtfsm1 or y2 in Srtfsm2 by A12,XBOOLE_0:def 2;
+A14: not y2 in Srtfsm1
+    proof
+      assume
+A15:  y2 in Srtfsm1;
+      reconsider y2 as Element of part2 by A6;
+      reconsider x' as Element of part2 by A6;
+      y2 <> x' by A6,ZFMISC_1:64;
+      hence contradiction by A1,A15,Th78;
+    end;
+A16: part1 is Subset of UN by A2,TARSKI:def 3;
+    part2 is Subset of UN by A2,TARSKI:def 3;
+    then part1 = part2 or part1 misses part2 by A2,A16,EQREL_1:def 6;
+    hence contradiction by A1,A5,A6,A7,A9,A10,A13,A14,Th79,XBOOLE_0:3;
+  end;
 A17: for x being set st x in Srtfsm1 ex y being set st P[x,y]
   proof
     let x be set;
@@ -4563,7 +4611,7 @@ A22: y in part \ xs by A20,ZFMISC_1:64;
   end;
   consider f being Function such that
 A23: dom f = Srtfsm1 & for x being set st x in Srtfsm1 holds P[x,f.x]
-  from CLASSES1:sch 1 (A17 );
+  from FUNCT_1:sch 2 ( A3,A17 );
 A24: f is one-to-one
   proof
     now

@@ -1719,31 +1719,18 @@ A1: a>0 & p=1;
     .= a by A1,Th30;
 end;
 
-Lm49:
-  a>=0 implies a #Z k >= 0
-  proof assume
-Z:  a>=0;
-   per cases by Z;
-   suppose
-S:    a = 0;
-    abs k = 0 or abs k >= 1 by NAT_1:14;
-    then (0 |^ abs k)" = 0" or (0 |^ abs k)" = 1" by NEWTON:9,16;
-    hence a #Z k >= 0 by S,Def4;
-   end;
-   suppose a > 0;
-   hence a #Z k >= 0 by Th49;
-   end;
-  end;
-
 theorem Th60:
-  for n be Nat st 0 <= a holds a #Q n = a |^ n
+  for n be Nat holds a>0 & p=n implies a #Q p = a |^ n
 proof
   let n be Nat;
   assume
-A1: 0 <= a;
-    denominator n=1 & numerator n=n by RAT_1:40;
-  hence a #Q n = a #Z n by Th30,A1,Lm49
-    .= a |^ n by Th46;
+A1: a>0 & p=n;
+  then
+A2: denominator(p)=1 & numerator(p)=n by RAT_1:40;
+  a #Z numerator(p)>=0 by A1,Th49;
+  hence a #Q p = a #Z numerator(p) by A2,Th30
+    .= a |^ abs(n) by A2,Def4
+    .= a |^ n by ABSVALUE:def 1;
 end;
 
 theorem Th61:
@@ -3795,18 +3782,3 @@ A1: a>=0 & b>=0;
     .=a gcd (b-a) by INT_2:51;
 end;
 
-:: missing, 2008.03.05, A.T.
-
-theorem
-  a>=0 implies a #Z l >= 0 by Lm49;
-
-theorem
- a > 0  implies a #Q l = a #Z l
-  proof assume a > 0;
-    then a #Z l > 0 by Th49;
-    then
-A:   a #Z l = 1-Root (a #Z l) |^ 1 by Def3;
-    denominator l=1 & numerator l=l by RAT_1:40;
-   hence a #Q l = 1-Root (a #Z l)
-       .= a #Z l by A,NEWTON:10;
-  end;

@@ -11,12 +11,12 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -81,8 +81,8 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="14" value="false"/>
-<Adjective nr="18"/>
-<Adjective nr="22"/>
+<Adjective nr="15"/>
+<Adjective nr="19"/>
 <Adjective nr="87">
 <LocusVar nr="1"/>
 </Adjective>
@@ -147,7 +147,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="19"/>
+<Adjective nr="16"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -203,7 +203,7 @@
 <Typ kind="M" nr="27">
 <Cluster>
 <Adjective nr="2"/>
-<Adjective nr="19"/>
+<Adjective nr="16"/>
 </Cluster>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -222,7 +222,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <CCluster>

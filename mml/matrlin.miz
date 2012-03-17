@@ -27,7 +27,7 @@ environ
       MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
       CARD_2, FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0,
       XBOOLE_1, RLVECT_2, XREAL_1, NEWTON, ORDINAL1, PARTFUN1, CARD_1;
- schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, NAT_1, CLASSES1, FINSEQ_4;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, CLASSES1;
 
 begin :: Preliminaries
 
@@ -2198,9 +2198,13 @@ A6: for i,j st [i,j] in Indices M holds M*(i,j) = V(i,j) from MATRIX_1:sch 1;
   deffunc W(Nat) = Sum mlt(a,Col(M,$1));
   consider dd being FinSequence of K such that
 A7: len dd = len b2 &
-  for j be Nat st j in dom dd holds dd/.j = W(j)
-  from FINSEQ_4:sch 2;
-A8: for j holds j in dom dd implies dd/.j = W(j) by A7;
+  for j be Element of NAT st j in dom dd holds dd/.j = W(j)
+  from GOBOARD2:sch 1;
+A8: now
+    let j;
+    j in NAT by ORDINAL1:def 13;
+    hence j in dom dd implies dd/.j = W(j) by A7;
+  end;
   len M = len b1 by MATRIX_1:def 3;
   then
 A9: dom M = dom b1 by FINSEQ_3:31;
@@ -2252,7 +2256,7 @@ A26:  [i,j] in Indices M by MATRIX_1:def 5;
   end;
 A27: j in dom dd by A2,A7,FINSEQ_3:31;
   thus (Sum(lmlt(a,f*b1))|--b2)/.j = (Sum(lmlt(dd,b2))|--b2)/.j
-  by A1,A3,A5,A7,A10,A20,Th38
+  by A1,A3,A5,A7,A8,A10,A20,Th38
     .= dd/.j by A7,Th41
     .= Sum(mlt(a,Col(M,j))) by A8,A27
     .= Sum(mlt(a,d)) by A12,A16,NEWTON:3;

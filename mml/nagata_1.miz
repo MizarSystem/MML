@@ -26,7 +26,7 @@ environ
       STRUCT_0, TOPS_1, COMPTS_1, METRIC_1, BORSUK_1, TOPMETR, PSCOMP_1,
       WAYBEL12, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions PCOMPS_1, TARSKI, BINOP_1, SUBSET_1, COMPTS_1, PRE_TOPC;
+ definitions PCOMPS_1, TARSKI, BINOP_1, SUBSET_1, COMPTS_1;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, METRIC_1, XREAL_0, XCMPLX_1, ABSVALUE,
       TOPMETR, TMAP_1, CARD_1, PCOMPS_1, PCOMPS_2, BORSUK_1, XBOOLE_1, TARSKI,
       SETFAM_1, XBOOLE_0, SUBSET_1, TOPS_1, TOPS_2, PRE_TOPC, REALSET1,
@@ -1020,7 +1020,7 @@ A2: metr is_metric_of (the carrier of T) &
   consider PM such that
 A3: PM = SpaceMetr(the carrier of T,metr);
   set TPM = TopSpaceMetr PM;
-X:[#]T =the carrier of T & [#]TPM=the carrier of TPM by PRE_TOPC:12;
+  [#]T =the carrier of T & [#]TPM=the carrier of TPM by PRE_TOPC:12;
   then
 A4: [#]T=[#]TPM by A2,A3,PCOMPS_2:8;
   deffunc BALL(Element of NAT)={Ball(x, 1/(2 |^ $1)) where x is Element of PM:
@@ -1044,12 +1044,14 @@ A6:   B=Ball(x,1/(2 |^ k)) & x is Element of PM;
   consider FB being Function of NAT,bool bool (the carrier of T) such that
 A7: for k being Element of NAT holds E[k,FB.k] from FUNCT_2:sch 3(A5);
 A8: for n ex PP being Subset-Family of T st
-  PP is_finer_than FB.n & PP is Cover of T &
+  PP is_finer_than FB.n & PP is_a_cover_of T &
   PP is open & PP is locally_finite
   proof
     let n;
-    [#]TPM c= union (FB.n)
+    [#]TPM = union (FB.n)
     proof
+      for x st x in [#]TPM holds x in union (FB.n)
+      proof
         let x;
         assume x in [#]TPM;
         then reconsider x'=x as Element of PM;
@@ -1059,9 +1061,27 @@ A8: for n ex PP being Subset-Family of T st
         Ball(x',1/(2|^ n)) in BALL(n) by METRIC_1:12;
         then x' in Ball(x',1/(2|^ n))&Ball(x',1/(2|^ n)) in FB.n by A7;
         hence thesis by TARSKI:def 4;
+      end;
+      then
+A9:   [#]TPM c= union (FB.n) by TARSKI:def 3;
+      for x st x in union (FB.n) holds x in [#]TPM
+      proof
+        assume ex x st x in union (FB.n) & not x in [#]TPM;
+        then consider x such that
+A10:    x in union (FB.n) & not x in [#]TPM;
+        consider A being set such that
+A11:    x in A & A in (FB.n) by A10,TARSKI:def 4;
+        x in A & A in BALL(n) by A7,A11;
+        then consider y being Element of PM such that
+A12:    A=Ball(y,1/(2|^ n))& y is Element of PM;
+        x in the carrier of TPM by A11,A12;
+        hence thesis by A10,PRE_TOPC:12;
+      end;
+      then union (FB.n) c= [#]TPM by TARSKI:def 3;
+      hence thesis by A9,XBOOLE_0:def 10;
     end;
     then
-A13: FB.n is Cover of T by A4,SETFAM_1:def 12,X;
+A13: (FB.n) is_a_cover_of T by A4,PRE_TOPC:def 8;
     for U being Subset of T holds U in (FB.n) implies U is open
     proof
       let U be Subset of T;
@@ -1073,12 +1093,12 @@ A14:  U = Ball(x,1/(2|^ n))& x is Element of PM;
       hence thesis by PRE_TOPC:def 5;
     end;
     then (FB.n) is open by TOPS_2:def 1;
-    then ex PP being Subset-Family of T st PP is open & PP is Cover of T
+    then ex PP being Subset-Family of T st PP is open & PP is_a_cover_of T
     & PP is_finer_than (FB.n) & PP is locally_finite by A1,A13,PCOMPS_2:12;
     hence thesis;
   end;
   defpred P[set,set] means ex W being Subset-Family of T st W = $2 &
-  W is open & W is Cover of T & W is_finer_than FB.$1 & W is locally_finite;
+  W is open & W is_a_cover_of T & W is_finer_than FB.$1 & W is locally_finite;
 A15: for k being set st k in NAT
   ex y st y in bool bool the carrier of T & P[k,y]
   proof
@@ -1086,7 +1106,7 @@ A15: for k being set st k in NAT
     assume k in NAT;
     then reconsider k as Element of NAT;
     ex PP being Subset-Family of T st
-    PP is_finer_than FB.k & PP is Cover of T &
+    PP is_finer_than FB.k & PP is_a_cover_of T &
     PP is open & PP is locally_finite by A8;
     hence thesis;
   end;
@@ -1127,7 +1147,7 @@ A23: r1>0 & Ball(p,r1) c=A by A21,A22,PCOMPS_1:def 5;
     consider n such that
 A24: 1/(2|^ n)<=r1 by A23,PREPOWER:106;
 A25: P[n+1,UC.(n+1)] by A16;
-    then union (UC.(n+1)) = the carrier of T by SETFAM_1:60;
+    then union (UC.(n+1)) = [#]T by PRE_TOPC:def 8;
     then union (UC.(n+1)) = the carrier of T by PRE_TOPC:12;
     then consider B being set such that
 A26: p in B & B in (UC.(n+1)) by TARSKI:def 4;

@@ -25,7 +25,7 @@ environ
       SEQ_4, FINSEQ_2, CARD_2, REAL_2, MATRIX_1, EUCLID, TOPREAL1, TOPREAL3,
       GOBOARD1, FINSEQ_4, FINSEQ_3, RELAT_1, PARTFUN2, INT_1, XBOOLE_0,
       XBOOLE_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, PARTFUN1;
- schemes NAT_1, MATRIX_1, FINSEQ_4;
+ schemes NAT_1, FINSEQ_2, MATRIX_1, FINSEQ_4;
 
 begin
 
@@ -37,6 +37,23 @@ reserve p,p1,p2,q for Point of TOP-REAL 2,
   G for Go-board,
   x for set;
 
+scheme PiLambdaD{D()-> non empty set, l()->Element of NAT,
+  F(set)-> Element of D()}: ex g being FinSequence of D() st
+  len g=l() & for n st n in dom g holds g/.n=F(n)
+proof
+  consider g being FinSequence of D() such that
+A1: len g=l() &
+  for n be Nat st n in dom g holds g.n=F(n) from FINSEQ_2:sch 1;
+A2: dom g = Seg l() by A1,FINSEQ_1:def 3;
+  take g;
+  thus len g=l() by A1;
+  let n;
+  assume
+A3: n in dom g;
+  then n in Seg l() by A1,FINSEQ_1:def 3;
+  then g.n = F(n) by A1,A2;
+  hence thesis by A3,PARTFUN1:def 8;
+end;
 defpred P[Nat] means
 for R being finite Subset of REAL st R <> {} & card R = $1 holds
 R is bounded_above & upper_bound(R) in R &
@@ -876,18 +893,17 @@ then reconsider w=i2-n as Element of NAT by A47,INT_1:18,XXREAL_0:2;
                   [i1,i2-n] in Indices G & i2-n in Seg width G
                   by A27,A28,ZFMISC_1:106;
                 end;
-                defpred P1[Nat,set] means
+                defpred P1[Element of NAT,set] means
                 for m st m=i2-$1 holds $2=G*(i1,m);
 A48:            now
-                  let n be Nat;
+                  let n;
                   assume n in Seg l;
                   then reconsider m=i2-n as Element of NAT by A46;
                   take p=G*(i1,m);
                   thus P1[n,p];
                 end;
                 consider g2 such that
-A49:            len g2 = l &
-for n being Nat st n in Seg l holds P1[n,g2/.n]
+A49:            len g2 = l & for n st n in Seg l holds P1[n,g2/.n]
                 from FINSEQ_4:sch 1(A48);
 A50:            dom g2 = Seg l by A49,FINSEQ_1:def 3;
                 take g=g1^g2;
@@ -1253,10 +1269,10 @@ A118:           l in dom g2 & len g=len g1 + len g2 & len g2 = l
               case
 A119:           i2<j2;
                 then reconsider l=j2-i2 as Element of NAT by INT_1:18;
-                deffunc F(Nat) = G*(i1,i2+$1);
+                deffunc F(Element of NAT) = G*(i1,i2+$1);
                 consider g2 such that
-A120:           len g2=l & for n being Nat st n in dom g2 holds g2/.n=F(n)
-                from FINSEQ_4:sch 2;
+A120:           len g2=l & for n st n in dom g2 holds g2/.n=F(n)
+                from PiLambdaD;
 A121:           dom g2 = Seg l by A120,FINSEQ_1:def 3;
                 take g=g1^g2;
 A122:           now
@@ -1655,18 +1671,17 @@ then reconsider w=i1-n as Element of NAT by A195,INT_1:18,XXREAL_0:2;
 hence i1-n is Element of NAT & [i1-n,i2] in Indices G & i1-n in dom G
                   by A27,A28,ZFMISC_1:106;
                 end;
-                defpred P1[Nat,set] means
+                defpred P1[Element of NAT,set] means
                 for m st m=i1-$1 holds $2=G*(m,i2);
 A196:           now
-                  let n be Nat;
+                  let n;
                   assume n in Seg l;
                   then reconsider m=i1-n as Element of NAT by A194;
                   take p=G*(m,i2);
                   thus P1[n,p];
                 end;
                 consider g2 such that
-A197:           len g2= l &
-for n being Nat st n in Seg l holds P1[n,g2/.n]
+A197:           len g2= l & for n st n in Seg l holds P1[n,g2/.n]
                 from FINSEQ_4:sch 1(A196);
 A198:           dom g2 = Seg l by A197,FINSEQ_1:def 3;
                 take g=g1^g2;
@@ -2033,10 +2048,10 @@ A265:           l in dom g2 & len g=len g1 + len g2 & len g2 = l
               case
 A266:           i1<j1;
                 then reconsider l=j1-i1 as Element of NAT by INT_1:18;
-                deffunc F(Nat) = G*(i1+$1,i2);
+                deffunc F(Element of NAT) = G*(i1+$1,i2);
                 consider g2 such that
-A267:           len g2 = l & for n being Nat st n in dom g2 holds g2/.n = F(n)
-                from FINSEQ_4:sch 2;
+A267:           len g2 = l & for n st n in dom g2 holds g2/.n = F(n)
+                from PiLambdaD;
 A268:           dom g2 = Seg l by A267,FINSEQ_1:def 3;
                 take g=g1^g2;
 A269:           now
@@ -2592,7 +2607,11 @@ A2: len v1=n+1 & len v2=n+1 & rng v1=rng v2 & v1 is increasing &
 A3: dom v1 = Seg len v1 & dom v2=Seg len v2 & rng v1 c= REAL
   by FINSEQ_1:def 3,def 4;
   reconsider X = rng v1 as Subset of REAL by FINSEQ_1:def 4;
-  X <> {} by RELAT_1:64,A2,CARD_1:47;
+  now
+    assume X={};
+    then v1={} by RELAT_1:64;
+    hence contradiction by A2,CARD_1:47;
+  end;
   then
 A4: X is bounded_above & upper_bound(X) in X by Th1;
   set u = upper_bound(X);

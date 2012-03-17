@@ -13,6 +13,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
@@ -31,23 +32,24 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="LOPBAN_2"/>
+<ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="52"/>
-<Adjective nr="77"/>
-<Adjective nr="78"/>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="58"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
-<Adjective nr="91"/>
-<Adjective nr="98"/>
-<Adjective nr="102"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="90"/>
+<Adjective nr="97"/>
 <Adjective nr="104"/>
-<Adjective nr="115"/>
+<Adjective nr="108"/>
+<Adjective nr="110"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -67,7 +69,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="19">
+<Adjective nr="25">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -94,8 +96,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="229">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -117,8 +121,10 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="229">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>

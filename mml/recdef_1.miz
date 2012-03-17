@@ -19,7 +19,7 @@ environ
  definitions TARSKI, BINOP_1;
  theorems TARSKI, REAL_1, NAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, RELAT_1, XBOOLE_1,
       FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
- schemes NAT_1, FUNCT_1, FINSEQ_1, BINOP_1, CLASSES1;
+ schemes NAT_1, FUNCT_1, FINSEQ_1, BINOP_1;
 
 begin
 
@@ -62,6 +62,37 @@ A2: for n being Element of NAT for x,y1,y2 being set
 st P[n,x,y1] & P[n,x,y2] holds y1=y2
 proof
   deffunc S(Element of NAT) = {k : k <= $1};
+A3: for p,q being Function,k st dom p = S(k) & dom q = S(k) & p.0 = q.0 &
+  for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)] holds p = q
+  proof
+    let p,q be Function;
+    let k;
+    defpred Z[Element of NAT] means $1 <= k implies p.$1 = q.$1;
+    assume
+A4: dom p = S(k) & dom q = S(k) & p.0 = q.0 &
+    for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)];
+    then
+A5: Z[0];
+A6: for n be Element of NAT st Z[n] holds Z[n+1]
+    proof
+      let n;
+      assume
+A7:   n <= k implies p.n = q.n;
+      assume n+1 <= k;
+      then n < k by NAT_1:13;
+      then P[n,p.n,p.(n+1)] & P[n,p.n,q.(n+1)] by A4,A7;
+      hence p.(n+1) = q.(n+1) by A2;
+    end;
+A8: for n holds Z[n] from NAT_1:sch 1(A5,A6);
+    for x st x in S(k) holds p.x = q.x
+    proof
+      let x;
+      assume x in S(k);
+      then ex m st m=x & m <= k;
+      hence p.x = q.x by A8;
+    end;
+    hence p = q by A4,FUNCT_1:9;
+  end;
 A9: for n ex p being Function st dom p = S(n) & p.0 = A() &
   for k st k < n holds P[k,p.k,p.(k+1)]
   proof
@@ -86,6 +117,30 @@ A12:  dom p = S(n) & p.0 = A() & for k st k < n holds P[k,p.k,p.(k+1)];
 A13:  P[n,p.n,z] by A1;
       defpred ST[set,set] means (for k st k=$1 holds
       (k <= n implies $2 = p.k) & (k=n+1 implies $2 = z ));
+A14:  for x,y1,y2 being set st x in S(n+1) & ST[x,y1] & ST[x,y2] holds y1 = y2
+      proof
+        let x,y1,y2 be set;
+        assume
+A15:    x in S(n+1) & (for k st k=x holds (k <= n implies y1 = p.k) &
+        (k=n+1 implies y1 = z )) & (for k st k=x holds
+        (k <= n implies y2 = p.k) & (k=n+1 implies y2 = z ));
+        then
+A16:    ex m st m=x & m <= n+1;
+        then reconsider x as Element of NAT;
+A17:    now
+          assume
+A18:      x = n+1;
+          hence y1 = z by A15
+            .= y2 by A15,A18;
+        end;
+        now
+          assume
+A19:      x <= n;
+          hence y1 = p.x by A15
+            .= y2 by A15,A19;
+        end;
+        hence thesis by A16,A17,NAT_1:8;
+      end;
 A20:  for x st x in S(n+1) ex y st ST[x,y]
       proof
         let x;
@@ -124,8 +179,8 @@ A26:      k=x;
         hence thesis by A21,A22,NAT_1:8;
       end;
       consider q being Function such that
-A27:  dom q = S(n+1) & for x st x in S(n+1) holds ST[x,q.x] from CLASSES1:sch 1
-      (A20);
+A27:  dom q = S(n+1) & for x st x in S(n+1) holds ST[x,q.x] from FUNCT_1:sch 2
+      (A14,A20);
       take q;
       thus dom q = S(n+1) by A27;
       thus q.0 = A()
@@ -198,6 +253,25 @@ A43:  n <= k implies p.n = q.n;
     defpred Z[set,set] means
     for n st n=$1 ex p being Function st dom p = S(n) & p.0 = A() &
     (for k st k < n holds P[k,p.k,p.(k+1)]) & $2 = p.n;
+A44: for x,y1,y2 being set st x in NAT & Z[x,y1] & Z[x,y2] holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume
+A45:  x in NAT &
+      (for n st n=x ex p being Function st dom p = S(n) & p.0 = A() &
+      (for k st k < n holds P[k,p.k,p.(k+1)]) & y1 = p.n) &
+      (for n st n=x ex p being Function st dom p = S(n) & p.0 = A() &
+      (for k st k < n holds P[k,p.k,p.(k+1)]) & y2 = p.n);
+      then reconsider n=x as Element of NAT;
+      consider p1 being Function such that
+A46:  dom p1 = S(n) & p1.0 = A() &
+      (for k st k < n holds P[k,p1.k,p1.(k+1)]) & y1 = p1.n by A45;
+      consider p2 being Function such that
+A47:  dom p2 = S(n) & p2.0 = A() &
+      (for k st k < n holds P[k,p2.k,p2.(k+1)]) & y2 = p2.n by A45;
+      for k st k < n holds P[k,p1.k,p1.(k+1)] & P[k,p2.k,p2.(k+1)] by A46,A47;
+      hence y1 = y2 by A3,A46,A47;
+    end;
 A48: for x st x in NAT ex y st Z[x,y]
     proof
       let x;
@@ -212,8 +286,8 @@ A50:  k = x;
       thus thesis by A49,A50;
     end;
     consider f being Function such that
-A51: dom f = NAT & for x st x in NAT holds Z[x,f.x] from CLASSES1:sch 1
-    (A48);
+A51: dom f = NAT & for x st x in NAT holds Z[x,f.x] from FUNCT_1:sch 2
+    (A44,A48);
     take f;
     thus dom f = NAT by A51;
     let n;
@@ -607,6 +681,7 @@ A68:    k+1+1 <= len Z by NAT_1:13;
     ex g being Function st dom g = NAT & for n holds g.n = h.(n+1)
     proof
       defpred P[set,set] means ex n st n = $1 & $2=h.(n+1);
+A69:  for x,y1,y2 st x in NAT & P[x,y1] & P[x,y2] holds y1=y2;
 A70:  for x st x in NAT ex y st P[x,y]
       proof
         let x;
@@ -616,8 +691,8 @@ A70:  for x st x in NAT ex y st P[x,y]
         take n;thus thesis;
       end;
       consider g being Function such that
-A71:  dom g = NAT & for x st x in NAT holds P[x,g.x] from CLASSES1:sch 1
-      (A70);
+A71:  dom g = NAT & for x st x in NAT holds P[x,g.x] from FUNCT_1:sch 2
+      (A69,A70);
       take g;
       thus dom g = NAT by A71;
       thus for n holds g.n = h.(n+1)
@@ -706,7 +781,7 @@ A85: P[n,g.n,f.(n,g.n)] by A3;
   hence P[n,g.n,g.(n+1)] by A75;
 end;
 
-scheme FinRecEx{A() -> set,N() -> Nat,P[set,set,set]}:
+scheme FinRecEx{A() -> set,N() -> Element of NAT,P[set,set,set]}:
   ex p being FinSequence st len p = N() & (p.1 = A() or N() = 0) &
   for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
 provided
@@ -763,9 +838,19 @@ A10: for x st x in REAL ex y st Q[x,y]
     take f.(r-1);
     thus thesis;
   end;
+A11: for x,y1,y2 st x in REAL & Q[x,y1] & Q[x,y2] holds y1 = y2
+  proof
+    let x,y1,y2;
+    assume
+A12: x in REAL & (for r being Real st r=x holds y1=f.(r-1)) &
+    (for r being Real st r=x holds y2=f.(r-1));
+    then reconsider r = x as Real;
+    thus y1 = f.(r-1) by A12
+      .= y2 by A12;
+  end;
   consider g being Function such that
 A13: dom g = REAL &
-  for x st x in REAL holds Q[x,g.x] from CLASSES1:sch 1(A10);
+  for x st x in REAL holds Q[x,g.x] from FUNCT_1:sch 2(A11,A10);
   Seg N() c= REAL by XBOOLE_1:1;
   then
 A14: dom (g|Seg N()) = Seg N() by A13,RELAT_1:91;
@@ -783,8 +868,7 @@ A18: n+1 in Seg N() by A17,FINSEQ_1:3;
       .= f.n;
     hence thesis by A18,FUNCT_1:72;
   end;
-   N() in NAT by ORDINAL1:def 13;
-  hence len p = N() by A14,FINSEQ_1:def 3;
+  thus len p = N() by A14,FINSEQ_1:def 3;
   thus p.1 = A() or N() = 0
   proof
     N() <> 0 implies thesis
@@ -819,7 +903,7 @@ A22: P[k+1,f.k,p.(k+1+1)] by A15,A20,A21;
 end;
 
 scheme FinRecExD{D() -> non empty set,A() -> Element of D(),
-  N() -> Nat, P[set,set,set]}:
+  N() -> Element of NAT, P[set,set,set]}:
   ex p being FinSequence of D() st len p = N() & (p.1 = A() or N() = 0) &
   for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
 provided
@@ -858,9 +942,19 @@ A6: for x st x in REAL ex y st P[x,y]
     take f.(r-1);
     thus thesis;
   end;
+A7: for x,y1,y2 st x in REAL & P[x,y1] & P[x,y2] holds y1 = y2
+  proof
+    let x,y1,y2;
+    assume
+A8: x in REAL & (for r being Real st r=x holds y1=f.(r-1)) &
+    (for r being Real st r=x holds y2=f.(r-1));
+    then reconsider r = x as Real;
+    thus y1 = f.(r-1) by A8
+      .= y2 by A8;
+  end;
   consider g being Function such that
 A9: dom g = REAL &
-  for x st x in REAL holds P[x,g.x] from CLASSES1:sch 1(A6);
+  for x st x in REAL holds P[x,g.x] from FUNCT_1:sch 2(A7,A6);
   Seg N() c= REAL by XBOOLE_1:1;
   then
 A10: dom (g|Seg N()) = Seg N() by A9,RELAT_1:91;
@@ -898,8 +992,7 @@ A17: n+1 in Seg N() by A16,FINSEQ_1:3;
       .= f.n;
     hence thesis by A17,FUNCT_1:72;
   end;
-   N() in NAT by ORDINAL1:def 13;
-  hence len p = N() by A10,FINSEQ_1:def 3;
+  thus len p = N() by A10,FINSEQ_1:def 3;
   thus p.1 = A() or N() = 0
   proof
     N() <> 0 implies thesis
@@ -998,7 +1091,7 @@ end;
 ::     Schemes of uniqueness        ::
 ::::::::::::::::::::::::::::::::::::::
 
-scheme FinRecUn{A() -> set,N() -> Nat,
+scheme FinRecUn{A() -> set,N() -> Element of NAT,
   F, G() -> FinSequence, P[set,set,set]}: F() = G()
 provided
 A1: for n st 1 <= n & n < N()
@@ -1041,7 +1134,7 @@ A12: k < N() by A8,XXREAL_0:2;
 end;
 
 scheme
-  FinRecUnD{D() -> non empty set, A() -> Element of D(), N() -> Nat,
+  FinRecUnD{D() -> non empty set, A() -> Element of D(), N() -> Element of NAT,
   F, G() -> FinSequence of D(), P[set,set,set]}: F() = G()
 provided
 A1: for n st 1 <= n & n < N() for x,y1,y2 being Element of D()
@@ -1138,7 +1231,7 @@ end;
 ::   Schemes of definitness  ::
 :::::::::::::::::::::::::::::::
 
-scheme DefRec{A() -> set,n() -> Nat,P[set,set,set]}:
+scheme DefRec{A() -> set,n() -> Element of NAT,P[set,set,set]}:
   (ex y being set st ex f being Function st
   y = f.n() & dom f = NAT & f.0 = A() & for n holds P[n,f.n,f.(n+1)]) &
   for y1,y2 being set st (ex f being Function st
@@ -1193,7 +1286,7 @@ A9: for n being Nat holds P[n,f2.n,f2.(n+1)]
   hence y1 = y2 by A6,A7;
 end;
 
-scheme LambdaDefRec{A() -> set,n() -> Nat,RecFun(set,set) -> set}:
+scheme LambdaDefRec{A() -> set,n() -> Element of NAT,RecFun(set,set) -> set}:
   (ex y being set st ex f being Function st
   y = f.n() & dom f = NAT & f.0 = A() & for n holds f.(n+1) = RecFun(n,f.n)) &
   for y1,y2 being set st (ex f being Function st

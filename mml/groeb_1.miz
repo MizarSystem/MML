@@ -32,7 +32,7 @@ environ
       CARD_3, DICKSON, FUNCOP_1, PBOOLE, PRALG_1, YELLOW_1, FUNCT_7, FUNCT_2,
       CARD_1, CARD_2, BAGORDER, ORDINAL1, VECTSP_2, POLYRED, RELAT_2, PARTFUN1,
       ORDERS_1, GROUP_1, XREAL_1, XXREAL_0, VALUED_0;
- schemes RELSET_1, NAT_1, CLASSES1;
+ schemes RELSET_1, NAT_1, FUNCT_1;
 
 begin :: Preliminaries
 
@@ -2784,6 +2784,7 @@ A7:     R = J.y & SJ.y = the carrier of R by PRALG_1:def 13;
     end;
     defpred Q[set,set] means
     $1 in S & (ex b being bag of n st b = $2 & b = $1);
+A8: for x,y1,y2 being set st x in S & Q[x,y1] & Q[x,y2] holds y1 = y2;
 A9: for x being set st x in S ex y being set st Q[x,y]
     proof
       let x be set;
@@ -2795,10 +2796,11 @@ A11:  x = g & dom g = dom SJ &
 A12:  x = g & dom g = n &
       for y being set st y in dom g holds g.y in NAT by A1,A10,A11;
       defpred QQ[set,set] means $2 = g.$1;
+A13:  for x,y1,y2 being set st x in n & QQ[x,y1] & QQ[x,y2] holds y1 = y2;
 A14:  for x being set st x in n ex y being set st QQ[x,y];
       consider b being Function such that
 A15:  dom b = n & for x being set st x in n holds QQ[x,b.x]
-      from CLASSES1:sch 1(A14);
+      from FUNCT_1:sch 2(A13,A14);
       reconsider b as ManySortedSet of n by A15,PBOOLE:def 3;
       now
         let u be set;
@@ -2819,7 +2821,7 @@ A17:    u = g.x by A15,A16;
     end;
     consider i being Function such that
 A18: dom i = S & for x being set st x in S holds Q[x,i.x]
-    from CLASSES1:sch 1(A9);
+    from FUNCT_1:sch 2(A8,A9);
     set R = RelStr(#Bags n, DivOrder n#);
 A19: now
       let v be set;
@@ -3127,10 +3129,11 @@ A31: M is finite
       defpred P[set,set] means
       $2 = {p where p is Polynomial of n,L : p in I & HT(p,T) = $1 &
       p <> 0_(n,L)};
+A32:  for x,y1,y2 being set st x in S & P[x,y1] & P[x,y2] holds y1 = y2;
 A33:  for x being set st x in S ex y being set st P[x,y];
       consider f being Function such that
 A34:  dom f = S & for x being set st x in S holds P[x,f.x]
-      from CLASSES1:sch 1(A33);
+      from FUNCT_1:sch 2(A32,A33);
 A35:  now
         let u be set;
         assume u in M;
@@ -3153,6 +3156,13 @@ A37:    s in dom f & u = f.s by FUNCT_1:def 5;
       hence thesis by A34,FINSET_1:26;
     end;
     defpred P[set,set] means G' /\ $1 = {$2} & $2 in G;
+A38: for x,y1,y2 being set st x in M & P[x,y1] & P[x,y2] holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume x in M & P[x,y1] & P[x,y2];
+      then y1 in {y2} by TARSKI:def 1;
+      hence thesis by TARSKI:def 1;
+    end;
 A39: for x being set st x in M ex y being set st P[x,y]
     proof
       let x be set;
@@ -3167,7 +3177,7 @@ A41:  G' /\ x = {y} by A24;
     end;
     consider f being Function such that
 A42: dom f = M & for x being set st x in M holds P[x,f.x]
-    from CLASSES1:sch 1(A39);
+    from FUNCT_1:sch 2(A38,A39);
 A43: now
       let u be set;
       assume u in G;
@@ -3961,10 +3971,11 @@ A16: M is finite
     p in I & HM(p,T) = Monom(1.L,b) & p <> 0_(n,L) &
     not(ex q being Polynomial of n,L st q in I & q < p,T & q <> 0_(n,L) &
     HM(q,T) = Monom(1.L,b))};
+A17: for x,y1,y2 being set st x in S & P[x,y1] & P[x,y2] holds y1 = y2;
 A18: for x being set st x in S ex y being set st P[x,y];
     consider f being Function such that
 A19: dom f = S & for x being set st x in S holds P[x,f.x]
-    from CLASSES1:sch 1(A18);
+    from FUNCT_1:sch 2(A17,A18);
 A20: now
       let u be set;
       assume u in M;
@@ -4143,6 +4154,19 @@ A54: G is finite
   proof
     defpred P[set,set] means ex p being Polynomial of n,L,
     x being Element of M st $1 = x & $2 = p & x = {p};
+A55: for x,y1,y2 being set st x in M & P[x,y1] & P[x,y2] holds y1 = y2
+    proof
+      let x,y1,y2 be set;
+      assume
+A56:  x in M & P[x,y1] & P[x,y2];
+      then consider p' being Polynomial of n,L,
+      x' being Element of M such that
+A57:  x' = x & y1 = p' & x' = {p'};
+      consider pp being Polynomial of n,L, xx being Element of M such that
+A58:  xx = x & y2 = pp & xx = {pp} by A56;
+      p' in {pp} by A57,A58,TARSKI:def 1;
+      hence y1 = y2 by A57,A58,TARSKI:def 1;
+    end;
 A59: for x being set st x in M ex y being set st P[x,y]
     proof
       let x be set;
@@ -4159,7 +4183,7 @@ A61:  q in I & x = {q} & q <> 0_(n,L) by A32,A60;
     end;
     consider f being Function such that
 A62: dom f = M & for x being set st x in M holds P[x,f.x]
-    from CLASSES1:sch 1(A59);
+    from FUNCT_1:sch 2(A55,A59);
 A63: now
       let u be set;
       assume u in G;

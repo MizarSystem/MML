@@ -12,9 +12,9 @@ environ
       FUNCT_1, PARTFUN1, NEWTON, POWER, FINSEQ_1, BINARITH, TREES_4, GR_CY_1,
       XXREAL_0, MESFUNC1;
  constructors PARTFUN1, REAL_1, NAT_1, NAT_D, FINSOP_1, NEWTON, POWER,
-      MESFUNC1, BINARITH, WSIERP_1, GR_CY_1, BINOP_2;
+      MESFUNC1, BINARITH, WSIERP_1, GR_CY_1;
  registrations RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, POWER;
+      MEMBERED, NEWTON, XBOOLE_0, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RVSUM_1;
  theorems REAL_2, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, EULER_1, BINARITH,
@@ -175,7 +175,23 @@ definition
   func Radix(n) -> Element of NAT equals
 
   2 to_power n;
-  correctness by ORDINAL1:def 13;
+  correctness
+  proof
+    defpred P[Nat] means 2 to_power $1 is Element of NAT;
+A1: n is Element of NAT by ORDINAL1:def 13;
+A2: P[0] by POWER:29;
+A3: for m be Element of NAT st P[m] holds P[m+1]
+    proof
+      let m be Element of NAT;
+      assume 2 to_power m is Element of NAT;
+      then reconsider k = 2 to_power m as Element of NAT;
+      2 to_power (m+1) = 2 to_power m * 2 to_power 1 by POWER:32
+        .= k * 2 by POWER:30;
+      hence thesis;
+    end;
+    for m be Element of NAT holds P[m] from NAT_1:sch 1(A2,A3);
+    hence 2 to_power n is Element of NAT by A1;
+  end;
 end;
 
 definition
@@ -455,7 +471,7 @@ A7: for x being Nat st P[x] holds P[(x+1)]
       per cases;
       suppose
 A8:     i = 0;
-        Radix(k) |^ i = Radix(k) to_power i
+        Radix(k) |^ i = Radix(k) to_power i by A1,POWER:46
           .= 1 by A8,POWER:29;
         then ((xx+1) mod T) = (((xx+1)*1) mod 1)
           .= 0 by NAT_D:13;
@@ -699,9 +715,9 @@ A19:    len z = len (DigitSD(DecSD(M,u,k))) + len <*N*> by FINSEQ_1:35
           .= u + len <*N*> by FINSEQ_2:109
           .= u + 1 by FINSEQ_1:56;
 A20:    len DD = u+1 by FINSEQ_2:109;
-        for i be Nat st 1 <= i & i <= len z holds z/.i = DD/.i
+        for i be Element of NAT st 1 <= i & i <= len z holds z/.i = DD/.i
         proof
-          let i be Nat;
+          let i be Element of NAT;
           assume 1 <= i & i <= len z;
           then
 A21:      i in Seg (u+1) by A19,FINSEQ_1:3;

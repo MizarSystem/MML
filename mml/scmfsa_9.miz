@@ -10,8 +10,8 @@ environ
       FUNCT_4, CAT_1, AMI_3, RELAT_1, BOOLE, AMI_1, AMI_5, FUNCT_1, ARYTM_1,
       RELOC, SF_MASTR, SCMFSA7B, UNIALG_2, AMI_2, SCM_1, CARD_3, SCMFSA6B,
       FUNCOP_1, SCMFSA_9, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, CARD_3, AMI_1, NAT_1, SCMNORM,
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, CARD_3, AMI_1, SEQ_1, SCMNORM,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA7B,
       SCMFSA8A, SCMFSA8B, XXREAL_0;
  constructors XXREAL_0, NAT_1, SEQ_1, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B,
@@ -23,7 +23,7 @@ environ
  definitions SCMFSA_2, SCMFSA_4;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_4, REAL_1, AMI_1, SCMFSA_2, SCMFSA_4,
       SCMFSA_5, SCMFSA6A, GRFUNC_1, SF_MASTR, SCMFSA6B, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, ZFMISC_1, CQC_LANG, PRE_CIRC, XBOOLE_0, XBOOLE_1,
+      SCMFSA8B, ZFMISC_1, CQC_LANG, PRE_CIRC, RELAT_1, XBOOLE_0, XBOOLE_1,
       XREAL_1, ORDINAL1, XXREAL_0, VALUED_1;
  schemes NAT_1;
 
@@ -1171,7 +1171,97 @@ proof
     .=StepWhile=0(a,I,sk).1;
 end;
 
-canceled 3;
+theorem
+  for f,g being Function holds f +* g +* g = f +* g
+proof
+  let f,g be Function;
+  thus f +* g +* g = f +*( g +* g ) by FUNCT_4:15
+    .= f +* g;
+end;
+
+theorem Th27:
+  for f,g,h being Function, D being set holds
+  (f +* g)|D =h | D implies (h +* g) | D = (f +* g) | D
+proof
+  let f,g,h be Function, D be set;
+  assume
+A1: (f +* g)|D =h | D;
+A2: dom ((f +* g) | D) = dom (f +* g) /\ D by RELAT_1:90
+    .= (dom f \/ dom g) /\ D by FUNCT_4:def 1;
+A3: dom ((h +* g) | D) = dom (h +* g) /\ D by RELAT_1:90
+    .= (dom h \/ dom g) /\ D by FUNCT_4:def 1;
+  then
+A4: dom ((h +* g) | D) = (dom h /\ D) \/ (dom g /\ D) by XBOOLE_1:23
+    .= ((dom f \/ dom g) /\ D) \/ (dom g /\ D) by A1,A2,RELAT_1:90
+    .= ((dom f \/ dom g) \/ dom g) /\ D by XBOOLE_1:23
+    .= (dom f \/ (dom g \/ dom g)) /\ D by XBOOLE_1:4
+    .= (dom f \/ dom g ) /\ D;
+  now
+    let x be set;
+    assume
+A5: x in dom ((f +* g) | D);
+    then
+A6: x in dom f \/ dom g & x in D by A2,XBOOLE_0:def 3;
+A7: x in dom h \/ dom g by A2,A3,A4,A5,XBOOLE_0:def 3;
+A8: ((h +* g) | D).x = (h +* g).x by A2,A4,A5,FUNCT_1:70;
+    per cases;
+    suppose
+A9:   x in dom g;
+      ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=g.x by A6,A9,FUNCT_4:def 1;
+      hence ((h +* g) | D).x =((f +* g) | D).x by A7,A8,A9,FUNCT_4:def 1;
+    end;
+    suppose not x in dom g;
+      hence ((h +* g) | D).x = h.x by A7,A8,FUNCT_4:def 1
+        .=((f +* g) | D).x by A1,A6,FUNCT_1:72;
+    end;
+  end;
+  hence thesis by A2,A4,FUNCT_1:9;
+end;
+
+theorem
+  for f,g,h being Function, D being set holds
+  f | D =h | D implies (h +* g) | D = (f +* g) | D
+proof
+  let f,g,h be Function, D be set;
+  assume
+A1: f |D =h | D;
+A2: dom ((f +* g) | D) = dom (f +* g) /\ D by RELAT_1:90
+    .= (dom f \/ dom g) /\ D by FUNCT_4:def 1;
+A3: dom ((h +* g) | D) = dom (h +* g) /\ D by RELAT_1:90
+    .= (dom h \/ dom g) /\ D by FUNCT_4:def 1;
+  then
+A4: dom ((h +* g) | D) = (dom h /\ D) \/ (dom g /\ D) by XBOOLE_1:23
+    .= dom (f| D) \/ (dom g /\ D) by A1,RELAT_1:90
+    .= (dom f /\ D) \/ (dom g /\ D) by RELAT_1:90
+    .= (dom f \/ dom g ) /\ D by XBOOLE_1:23;
+  now
+    let x be set;
+    assume
+A5: x in dom ((f +* g) | D);
+    then
+A6: x in dom f \/ dom g & x in D by A2,XBOOLE_0:def 3;
+A7: x in dom h \/ dom g by A2,A3,A4,A5,XBOOLE_0:def 3;
+A8: ((h +* g) | D).x = (h +* g).x by A2,A4,A5,FUNCT_1:70;
+    per cases;
+    suppose
+A9:   x in dom g;
+      ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=g.x by A6,A9,FUNCT_4:def 1;
+      hence ((h +* g) | D).x =((f +* g) | D).x by A7,A8,A9,FUNCT_4:def 1;
+    end;
+    suppose
+A10:  not x in dom g;
+      then
+A11:  ((h +* g) | D).x = h.x by A7,A8,FUNCT_4:def 1
+        .=(h | D ).x by A6,FUNCT_1:72;
+      thus ((f +* g) | D).x = (f +* g).x by A5,FUNCT_1:70
+        .=f.x by A6,A10,FUNCT_4:def 1
+        .=((h +* g) | D).x by A1,A6,A11,FUNCT_1:72;
+    end;
+  end;
+  hence thesis by A2,A4,FUNCT_1:9;
+end;
 
 theorem Th29:
   for s1,s2 being State of SCM+FSA
@@ -1239,7 +1329,7 @@ A4: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= IC sk by A1,SF_MASTR:66;
 A5: s2 | D = sk | D by SCMFSA8A:11;
   sk | IL =s1 | IL by A2,AMI_1:123;
-  then s2 | IL = sk | IL by FUNCT_4:100;
+  then s2 | IL = sk | IL by Th27;
   hence s2=sk by A4,A5,Th29;
   hence StepWhile=0(a,I,s).(k+1)=
    Computation( sk,LifeSpan (sk +* (I +* sl0)) + 3) by Def4
@@ -1346,7 +1436,7 @@ A26:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
       set D = Int-Locations \/ FinSeq-Locations;
 A27:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A21,AMI_1:123;
-      then sm1 | IL = sm | IL by FUNCT_4:100;
+      then sm1 | IL = sm | IL by Th27;
       then
 A28:  sm1=sm by A26,A27,Th29;
       while=0(a,I) is_halting_on sm by A22,Th18;
@@ -2449,7 +2539,7 @@ A4: IC s2 = s2.IC SCM+FSA by AMI_1:def 15
     .= IC sk by A1,SF_MASTR:66;
 A5: s2 | D = sk | D by SCMFSA8A:11;
   sk | IL =s1 | IL by A2,AMI_1:123;
-  then s2 | IL = sk | IL by FUNCT_4:100;
+  then s2 | IL = sk | IL by Th27;
   hence s2=sk by A4,A5,Th29;
   hence StepWhile>0(a,I,s).(k+1)=
    Computation( sk,LifeSpan (sk +* (I +* sl0)) + 3) by Def5
@@ -2554,7 +2644,7 @@ A26:  IC sm1 = sm1.IC SCM+FSA by AMI_1:def 15
         .= IC sm by A25,SF_MASTR:66;
 A27:  sm1 | D = sm | D by SCMFSA8A:11;
       sm | IL =s1 | IL by A21,AMI_1:123;
-      then sm1 | IL = sm | IL by FUNCT_4:100;
+      then sm1 | IL = sm | IL by Th27;
       then
 A28:  sm1=sm by A26,A27,Th29;
       while>0(a,I) is_halting_on sm by A22,Th43;

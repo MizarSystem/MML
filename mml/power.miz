@@ -19,8 +19,8 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems REAL_1, ABSVALUE, NAT_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4,
-      REAL_2, NEWTON, PREPOWER, TARSKI, FUNCT_2, XREAL_0, XCMPLX_1,
-      XREAL_1, XXREAL_0, ORDINAL1;
+      RAT_1, REAL_2, NEWTON, PREPOWER, TARSKI, FUNCT_2, XREAL_0, XCMPLX_1,
+      XREAL_1, XXREAL_0;
  schemes SEQ_1;
 
 begin
@@ -713,41 +713,12 @@ definition
   func a to_power b -> real number means
   :Def2:
   it = a #R b if a > 0,
-  it = 0 if a = 0 & b > 0,
-  ex k st k = b & it = a #Z k if b is Integer;
-  consistency
-   proof  let IT be real number;
-    thus a > 0 & a = 0 & b > 0 implies
-     (IT = a #R b iff IT = 0);
-    thus a > 0 & b is Integer implies
-     (IT = a #R b iff ex k st k = b & IT = a #Z k)
-     proof
-      assume
-Z1:    a > 0;
-      assume b is Integer;
-       then reconsider b as Integer;
-       a #R b = a #Q b by Z1,PREPOWER:88
-          .= a #Z b by Z1,PREPOWER:113;
-      hence thesis;
-     end;
-     a = 0 & b > 0 & b is Integer implies
-      (IT = 0 iff ex k st k = b & IT = a #Z k)
-     proof assume
-Z1:    a = 0;
-      assume
-Z2:    b > 0 & b is Integer;
-       then b in NAT by INT_1:16;
-       then reconsider b as Nat by ORDINAL1:def 13;
-        a #Z b = a |^ b by PREPOWER:46
-              .= 0 by Z1,NEWTON:16,Z2,NAT_1:14;
-      hence thesis;
-     end;
-    hence thesis;
-   end;
+  it = 0 if a = 0 & b > 0, it = 1 if a = 0 & b = 0,
+  ex k st k = b & it = a #Z k if a < 0 & b is Integer;
+  consistency;
   existence
   proof now
-      assume :::a <= 0 &
-      b is Integer;
+      assume a < 0 & b is Integer;
       then reconsider k = b as Integer;
       take c = a #Z k;
       thus ex k st k = b & c = a #Z k;
@@ -767,16 +738,43 @@ canceled 4;
 
 theorem Th29:
   a to_power 0 = 1
-proof
- thus a to_power 0 = a #Z 0 by Def2
-     .= 1 by PREPOWER:44;
+proof per cases;
+  suppose
+A1: a>0;
+    then a #R 0 = 1 by PREPOWER:85;
+    hence a to_power 0 = 1 by A1,Def2;
+  end;
+  suppose
+A2: a<0;
+    reconsider k=0 as Integer;
+    thus a to_power 0 = a #Z k by A2,Def2
+      .= 1 by PREPOWER:44;
+  end;
+  suppose a=0;
+    hence thesis by Def2;
+  end;
 end;
 
 theorem Th30:
   a to_power 1 = a
 proof
- thus a to_power 1 = a #Z 1 by Def2
-     .= a by PREPOWER:45;
+  now per cases;
+    suppose
+A1:   a > 0;
+      then a #R 1 = a by PREPOWER:86;
+      hence a to_power 1 = a by A1,Def2;
+    end;
+    suppose a=0;
+      hence a to_power 1 = a by Def2;
+    end;
+    suppose
+A2:   a<0;
+      reconsider k=1 as Integer; thus
+      a to_power 1 = a #Z k by A2,Def2
+        .= a by PREPOWER:45;
+    end;
+  end;
+  hence thesis;
 end;
 
 theorem Th31:
@@ -975,22 +973,82 @@ A6: 1<1/c by A1,XCMPLX_1:60;
   hence thesis by A5,REAL_2:154;
 end;
 
-registration let a be real number, n be Nat;
- identify a to_power n with a |^ n;
- compatibility
-  proof
-   thus a to_power n = a #Z n by Def2
+theorem Th46:
+  for n be Nat holds a<>0 implies a to_power n = a |^ n
+proof
+  let n be Nat;
+  assume
+A1: a<>0;
+  reconsider p=n as Rational;
+  reconsider k=n as Integer;
+  now per cases by A1;
+    suppose
+A2:   a>0;
+      hence a to_power n = a #R n by Def2
+        .= a #Q p by A2,PREPOWER:88
+        .= a |^ n by A2,PREPOWER:60;
+    end;
+    suppose a<0;
+      hence a to_power n = a #Z k by Def2
         .= a |^ n by PREPOWER:46;
+    end;
   end;
+  hence thesis;
+end;
+
+theorem Th47:
+  n>=1 implies a to_power n = a |^ n
+proof
+  assume
+A1: n>=1;
+  now per cases;
+    suppose a<>0;
+      hence a to_power n = a |^ n by Th46;
+    end;
+    suppose
+A2:   a=0;
+      reconsider k = 1, l = n as Integer;
+      reconsider m = l-k as Element of NAT by A1,INT_1:18;
+      a |^ n = a |^ (m+1)
+        .= a |^ m * 0 by A2,NEWTON:11
+        .= 0;
+      hence a to_power n = a |^ n by A1,A2,Def2;
+    end;
+  end;
+  hence thesis;
 end;
 
 theorem
-  for n be Nat holds a to_power n = a |^ n;
-
-canceled 3;
+  a<>0 implies a to_power n = a|^n by Th46;
 
 theorem
-  a to_power k = a #Z k by Def2;
+  n>=1 implies a to_power n = a|^n by Th47;
+
+theorem Th50:
+  a<>0 implies a to_power k = a #Z k
+proof
+  assume
+A1: a<>0;
+  reconsider p=k as Rational;
+  now per cases by A1;
+    suppose
+A2:   a>0;
+      then
+A3:   a #Z k>=0 by PREPOWER:49;
+      denominator(p)=1 & numerator(p)=p by RAT_1:40;
+      then
+A4:   a #Q p = 1 -Root (a #Z k) by PREPOWER:def 5
+        .= a #Z k by A3,PREPOWER:30;
+      thus
+      a to_power k = a #R k by A2,Def2
+        .= a #Z k by A2,A4,PREPOWER:88;
+    end;
+    suppose a<0;
+      hence a to_power k = a #Z k by Def2;
+    end;
+  end;
+  hence thesis;
+end;
 
 theorem Th51:
   a>0 implies a to_power p = a #Q p
@@ -1042,7 +1100,7 @@ A1:   a>0; thus
     suppose
 A2:   a<0;
       reconsider l=1 as Integer; thus
-      a to_power 2 = a #Z (l+l) by Def2
+      a to_power 2 = a #Z (l+l) by A2,Def2
         .= a #Z l * a #Z l by A2,PREPOWER:54
         .= a * a #Z l by PREPOWER:45
         .= a^2 by PREPOWER:45;
@@ -1062,26 +1120,29 @@ A2: k=2*l;
   now per cases by A1;
     suppose
 A3:   a>0;
-     thus
+      then
+A4:   -a<-0 by XREAL_1:26;
+A5:   -a<>-0 by A3; thus
       a to_power k = (a to_power 2) to_power l by A2,A3,Th38
         .= (a^2) to_power l by Th53
         .= ((-a)^2) to_power l
         .= ((-a) to_power 2) to_power l by Th53
-        .= ((-a) #Z l1) to_power l by Def2
-        .= ((-a) #Z l1) #Z l by Def2
+        .= ((-a) #Z l1) to_power l by A4,Def2
+        .= ((-a) #Z l1) #Z l by A5,Th50,PREPOWER:48
         .= (-a) #Z (l1*l) by PREPOWER:55
-        .= (-a) to_power k by A2,Def2;
+        .= (-a) to_power k by A2,A4,Def2;
     end;
-    suppose a<0;
+    suppose
+A6:   a<0;
       then -a>0 by XREAL_1:60;
       hence (-a) to_power k = ((-a) to_power 2) to_power l by A2,Th38
         .= ((-a)^2) to_power l by Th53
         .= (a^2) to_power l
         .= (a to_power 2) to_power l by Th53
-        .= (a #Z l1) to_power l by Def2
-        .= (a #Z l1) #Z l by Def2
+        .= (a #Z l1) to_power l by A6,Def2
+        .= (a #Z l1) #Z l by A6,Th50,PREPOWER:48
         .= a #Z (l1*l) by PREPOWER:55
-        .= a to_power k by A2,Def2;
+        .= a to_power k by A2,A6,Def2;
     end;
   end;
   hence thesis;
@@ -1098,15 +1159,17 @@ A2: k=2*l + 1;
   now per cases by A1;
     suppose
 A3:   a>0;
+      then
+A4:   -a<-0 by XREAL_1:26;
 A5:   -a<>-0 by A3;
       a to_power k = a to_power (2*l) * a to_power 1 by A2,A3,Th32
         .= a to_power (2*l) * a by Th30
         .= (-a) to_power (2*l) * a by A1,Th54
         .= - (-a) to_power (2*l) * (-a)
-        .= - (-a) #Z (2*l) * (-a) by Def2
+        .= - (-a) #Z (2*l) * (-a) by A4,Def2
         .= - (-a) #Z (2*l) * (-a) #Z l1 by PREPOWER:45
         .= - (-a) #Z k by A2,A5,PREPOWER:54
-        .= - (-a) to_power k by Def2;
+        .= - (-a) to_power k by A4,Def2;
       hence (-a) to_power k = - a to_power k;
     end;
     suppose
@@ -1116,17 +1179,25 @@ A6:   a<0;
         .= (-a) to_power (2*l) * (-a) by Th30
         .= a to_power (2*l) * (-a) by A1,Th54
         .= - a to_power (2*l) * a
-        .= - a #Z (2*l) * a by Def2
+        .= - a #Z (2*l) * a by A6,Def2
         .= - a #Z (2*l) * a #Z l1 by PREPOWER:45
         .= - a #Z k by A2,A6,PREPOWER:54
-        .= - a to_power k by Def2;
+        .= - a to_power k by A6,Def2;
     end;
   end;
   hence thesis;
 end;
 
-theorem
-  -1 < a implies (1 + a) to_power n >= 1 + n * a by PREPOWER:24;
+theorem Th56:
+  -1 < a implies (1 + a) to_power n >= 1 + n * a
+proof
+  assume
+A1: -1<a;
+  then
+A2: -1+1<1+a by XREAL_1:8;
+  (1 + a) |^ n >= 1 + n * a by A1,PREPOWER:24;
+  hence thesis by A2,Th46;
+end;
 
 theorem Th57:
   a>0 & a<>1 & c <>d implies a to_power c <> a to_power d
@@ -1197,7 +1268,7 @@ A5:     a>1 & b>0;
 A6:     n>1/(b*e) by SEQ_4:10;
         e>0-1 by A5,XREAL_1:11;
         then
-A7:     (1 + e) to_power n >= 1 + n * e by PREPOWER:24;
+A7:     (1 + e) to_power n >= 1 + n * e by Th56;
         1 + n * e >= 0 + n * e by XREAL_1:8;
         then
 A8:     (1 + e) to_power n >= n * e by A7,XXREAL_0:2;
@@ -1241,7 +1312,7 @@ A15:      n > (b1-1)/(a1-1) by SEQ_4:10;
           then
 A16:      1 + n*(a-1) > 1+(b-1) by XREAL_1:8;
           a-1>0-1 by A1,XREAL_1:11;
-          then (1+(a1-1)) to_power n >= 1 + n*(a1-1) by PREPOWER:24;
+          then (1+(a1-1)) to_power n >= 1 + n*(a1-1) by Th56;
           then
 A17:      a to_power n > b by A16,XXREAL_0:2;
           now
@@ -1349,7 +1420,7 @@ A39:      n > (b1-1)/(1/a1-1) by SEQ_4:10;
 A40:      1 + n*(1/a-1) > 1+(b-1) by XREAL_1:8;
           1/a>0 by A1,REAL_2:127;
           then 1/a-1>0-1 by XREAL_1:11;
-          then (1+(1/a1-1)) to_power n >= 1 + n*(1/a1-1) by PREPOWER:24;
+          then (1+(1/a1-1)) to_power n >= 1 + n*(1/a1-1) by Th56;
           then (1/a) to_power n > b by A40,XXREAL_0:2;
           then
 A41:      a1 to_power (-n) > b1 by A1,Th37;
@@ -1608,7 +1679,7 @@ A4: (1 + 1/(n+1+1))/(1 + 1/(n+1))
     then - 1/((n+2)*(n+2)) > -1 by XREAL_1:26;
 
 then (1 + -1/((n+2)*(n+2))) to_power (n+1+1) >= 1 + (n+1+1)*(-1/((n+2)*(n+2)
-    )) by PREPOWER:24;
+    )) by Th56;
     then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (n+2)*(1/((n+2)*(n+2)));
     then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (n+2)*1/((n+2)*(n+2))
     by XCMPLX_1:75;
@@ -1650,7 +1721,7 @@ A13: (1 + 1/(2*(n+1))) to_power (n+1)
       .= (1 - 1/(2*(n+1)+1)) to_power (-(n+1)) by XCMPLX_1:60
       .= 1 / (1 - 1/(2*(n+1)+1)) to_power (n+1) by A12,Th33;
     (1 + - 1/(2*(n+1)+1)) to_power (n+1) >= 1 + (n+1)*(- 1/(2*(n+1)+1)) by A11,
-    PREPOWER:24;
+    Th56;
     then (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1-(n+1)*(1/(2*(n+1)+1));
     then (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1-(n+1)/(2*(n+1)+1) by
     XCMPLX_1:100;

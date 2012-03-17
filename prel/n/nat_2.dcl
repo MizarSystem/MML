@@ -13,18 +13,20 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="1">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
@@ -33,8 +35,14 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="24" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -49,8 +57,8 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="24" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

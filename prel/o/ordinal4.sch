@@ -169,20 +169,20 @@
 <Adjective nr="23"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

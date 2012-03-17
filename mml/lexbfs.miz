@@ -33,7 +33,7 @@ environ
       XREAL_1, ZFMISC_1, PEPIN, ENUMSET1, CHORD, BINARITH, NECKLACE, FINSEQ_4,
       WELLORD1, UPROOTS, CARD_FIN, POLYNOM1, ORDINAL3, TREES_1, PRE_CIRC,
       NAT_2, XXREAL_0, NAT_D, VALUED_0;
- schemes NAT_1, FUNCT_1, RECDEF_1, FINSEQ_4, FRAENKEL;
+ schemes BINARITH, NAT_1, FUNCT_1, RECDEF_1, FINSEQ_4, FRAENKEL;
 
 begin :: Preliminaries
 
@@ -207,10 +207,19 @@ definition
   dom it = dom f \/ dom g &
   for x being set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
   existence
-  proof deffunc F(set) = f.$1 \/ g.$1;
-    thus ex IT being Function st dom IT = dom f \/ dom g &
-     for x being set st x in dom f \/ dom g holds IT.x=F(x)
-      from FUNCT_1:sch 3;
+  proof
+    deffunc A() = dom f \/ dom g;
+    defpred P[set,set] means f.$1 \/ g.$1 = $2;
+A1: for x,y1,y2 being set st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
+A2: for x being set st x in A() ex y being set st P[x,y];
+    ex f being Function st dom f = A() &
+    for x being set st x in A() holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
+    then consider IT being Function such that
+A3: dom IT = A() and
+A4: for x being set st x in A() holds P[x,IT.x];
+    take IT;
+    thus dom IT = dom f \/ dom g by A3;
+    thus for x being set st x in dom f \/ dom g holds IT.x = f.x \/ g.x by A4;
   end;
   uniqueness
   proof
@@ -550,9 +559,9 @@ A5:     c in dom p & c <= 1 & p.c = C;
       end;
       hence P[1] by A4;
     end;
-A6: for k being non empty Nat st P[k] holds P[k+1]
+A6: for k being non empty Element of NAT st P[k] holds P[k+1]
     proof
-      let k be non empty Nat such that
+      let k be non empty Element of NAT such that
 A7:   P[k];
       per cases;
       suppose
@@ -610,8 +619,8 @@ A18:        c in dom p & c <= k+1 & p.c = C;
         hence P[k+1] by NAT_1:13;
       end;
     end;
-    for k being non empty Nat holds P[k]
-    from NAT_1:sch 10(A3,A6);
+    for k being non empty Element of NAT holds P[k]
+    from BINARITH:sch 1(A3,A6);
     then consider a being Nat, A being bag of n such that
 A19: a in dom p & a <= len p & p.a = A and
 A20: for c being Nat, C being bag of n st c in dom p & c <= len p & p.c = C
@@ -678,21 +687,25 @@ definition
   proof
     set tVG = the_Vertices_of G;
     set tEG = the_Edges_of G;
-    len V >= 1 by CARD_2:59,NAT_1:14;
+    now
+      assume len V < 1;
+      then len V = 0 by NAT_1:14;
+      hence contradiction by CARD_2:59;
+    end;
     then
 A1: 2*len V >= 2*1 & 2>=1 by XREAL_1:66;
     then 2*len V >= 1 by XXREAL_0:2;
     then
 A2: 2*len V - 1 >= 1 - 1 by XREAL_1:15;
-    defpred P[Nat,set] means
+    defpred P[Element of NAT,set] means
     ($1 is odd implies $2 = V.(($1+1) div 2)) &
     ($1 is even implies $2 Joins V.($1 div 2),V.($1 div 2 + 1),G);
     deffunc N() = 2*len V -' 1;
     deffunc D() = the_Vertices_of G \/ the_Edges_of G;
-A3: for n being Nat st n in Seg N()
+A3: for n being Element of NAT st n in Seg N()
     ex d being Element of D() st P[n,d]
     proof
-      let n be Nat such that
+      let n be Element of NAT such that
 A4:   n in Seg N();
 A5:   1 <= n & n <= 2*len V -' 1 by A4,FINSEQ_1:3;
       2*len V -' 1 = 2*len V - 1 by A2,BINARITH:def 3;
@@ -700,7 +713,7 @@ A5:   1 <= n & n <= 2*len V -' 1 by A4,FINSEQ_1:3;
 A6:   n+1 <= 2*len V - 1 + 1 by A5,XREAL_1:9;
       per cases;
       suppose n is odd;
-        then reconsider n as odd Element of NAT by ORDINAL1:def 13;
+        then reconsider n as odd Element of NAT;
         set m = (n+1) div 2;
         2 divides n+1 by PEPIN:22;
         then
@@ -715,7 +728,7 @@ A7:     2*m = n+1 by NAT_D:3;
         thus thesis;
       end;
       suppose n is even;
-        then reconsider n as even Element of NAT by ORDINAL1:def 13;
+        then reconsider n as even Element of NAT;
         set m = n div 2;
         2 divides n by PEPIN:22;
         then
@@ -740,7 +753,7 @@ A10:    e Joins V.m,V.(m+1),G by A9,GLIB_001:def 1;
     end;
     consider f being FinSequence of D() such that
 A11: len f = N() and
-A12: for n being Nat st n in Seg N() holds P[n,f/.n]
+A12: for n being Element of NAT st n in Seg N() holds P[n,f/.n]
     from FINSEQ_4:sch 1(A3);
 A13: len f = 2*len V - 1 by A2,A11,BINARITH:def 3;
     len f <> 2*0 by A2,A11,BINARITH:def 3;

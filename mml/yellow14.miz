@@ -31,12 +31,12 @@ environ
  requirements SUBSET, BOOLE;
  definitions TARSKI, MONOID_0, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1, T_0TOPSP,
       LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_1, WAYBEL_3, YELLOW_8, FUNCT_2,
-      XBOOLE_0, FUNCOP_1, SETFAM_1;
+      XBOOLE_0, FUNCOP_1;
  theorems TARSKI, PRE_TOPC, ZFMISC_1, STRUCT_0, T_0TOPSP, FUNCT_1, FUNCT_2,
       FUNCT_7, PBOOLE, PRALG_1, FUNCOP_1, CARD_3, BORSUK_1, TOPS_2, TOPS_3,
       YELLOW_0, YELLOW_1, YELLOW_2, YELLOW_9, YELLOW12, WAYBEL_0, WAYBEL_1,
       WAYBEL_9, WAYBEL11, WAYBEL10, WAYBEL13, WAYBEL18, WAYBEL24, CARD_5,
-      MONOID_0, YELLOW_8, TOPMETR, TMAP_1, TSP_1, FUNCT_4, URYSOHN1,
+      MONOID_0, YELLOW_8, COMPTS_1, TOPMETR, TMAP_1, TSP_1, FUNCT_4, URYSOHN1,
       XBOOLE_0, XBOOLE_1, PARTFUN1, SETFAM_1;
 
 begin  :: Preliminaries
@@ -734,19 +734,25 @@ proof
   let S, T be TopStruct, A be Subset of S, B be Subset of T such that
 A1: A = B and
 A2: the TopStruct of S = the TopStruct of T and
-A3: for F being Subset-Family of S st F is Cover of A & F is open
-  ex G being Subset-Family of S st G c= F & G is Cover of A & G is finite;
+A3: for F being Subset-Family of S st F is_a_cover_of A & F is open
+  ex G being Subset-Family of S st G c= F & G is_a_cover_of A & G is finite;
   let F be Subset-Family of T such that
-A4: F is Cover of B & F is open;
+A4: F is_a_cover_of B & F is open;
   reconsider K = F as Subset-Family of S by A2;
-A5: K is Cover of A by A1,A4,SETFAM_1:def 12;
+A5: K is_a_cover_of A
+  proof
+    thus A c= union K by A1,A4,COMPTS_1:def 1;
+  end;
   K is open by A2,A4,WAYBEL_9:19;
   then consider L being Subset-Family of S such that
-A6: L c= K & L is Cover of A & L is finite by A3,A5;
+A6: L c= K & L is_a_cover_of A & L is finite by A3,A5;
   reconsider G = L as Subset-Family of T by A2;
   take G;
-  G is Cover of B by A1,A6,SETFAM_1:def 12;
-  hence G c= F & G is Cover of B & G is finite by A6;
+  G is_a_cover_of B
+  proof
+    thus B c= union G by A1,A6,COMPTS_1:def 1;
+  end;
+  hence G c= F & G is_a_cover_of B & G is finite by A6;
 end;
 
 theorem
@@ -800,19 +806,27 @@ theorem
 proof
   let S, T be TopStruct such that
 A1: the TopStruct of S = the TopStruct of T and
-A2: for F being Subset-Family of S st F is Cover of S & F is open
-  ex G being Subset-Family of S st G c= F & G is Cover of S & G is finite;
+A2: for F being Subset-Family of S st F is_a_cover_of S & F is open
+  ex G being Subset-Family of S st G c= F & G is_a_cover_of S & G is finite;
   let F be Subset-Family of T such that
-A3: F is Cover of T & F is open;
+A3: F is_a_cover_of T & F is open;
   reconsider K = F as Subset-Family of S by A1;
-A4: K is Cover of S by A1,A3,SETFAM_1:60;
+A4: K is_a_cover_of S
+  proof
+    thus [#]S = [#]T by A1
+      .= union K by A3,PRE_TOPC:def 8;
+  end;
   K is open by A1,A3,WAYBEL_9:19;
   then consider L being Subset-Family of S such that
-A5: L c= K & L is Cover of S & L is finite by A2,A4;
+A5: L c= K & L is_a_cover_of S & L is finite by A2,A4;
   reconsider G = L as Subset-Family of T by A1;
   take G;
-  G is Cover of T by A1,A5,SETFAM_1:60;
-  hence G c= F & G is Cover of T & G is finite by A5;
+  G is_a_cover_of T
+  proof
+    thus [#]T = [#]S by A1
+      .= union G by A5,PRE_TOPC:def 8;
+  end;
+  hence G c= F & G is_a_cover_of T & G is finite by A5;
 end;
 
 definition

@@ -442,7 +442,7 @@
 <Adjective nr="113"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="41">
+<Typ kind="M" nr="42">
 <Cluster>
 <Adjective nr="197"/>
 </Cluster>
@@ -523,7 +523,7 @@
 <Cluster>
 <Adjective nr="197"/>
 </Cluster>
-<Typ kind="M" nr="41">
+<Typ kind="M" nr="42">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -716,7 +716,7 @@
 <Cluster>
 <Adjective nr="197"/>
 </Cluster>
-<Typ kind="M" nr="41">
+<Typ kind="M" nr="42">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

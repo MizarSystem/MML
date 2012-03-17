@@ -322,6 +322,8 @@ definition
   proof
     defpred P[set,set] means
     ex j' being Element of dom G st j' = $1 & $2 = the carrier of G.j';
+A1: for j be Nat, y1,y2 be set st
+    j in Seg len G & P[j,y1] & P[j,y2] holds y1=y2;
 A2: for j being Nat st j in Seg len G ex x be set st P[j,x]
     proof
       let j be Nat;
@@ -332,7 +334,7 @@ A2: for j being Nat st j in Seg len G ex x be set st P[j,x]
     end;
     consider p being FinSequence such that
 A3: dom p = Seg len G & for j being Nat st j in Seg len G holds P[j,p.j]
-    from FINSEQ_1:sch 1(A2);
+    from FINSEQ_1:sch 1(A1,A2);
 A4: dom G = Seg len G by FINSEQ_1:def 3;
     consider i being Element of dom G;
     dom p = dom G by A3,FINSEQ_1:def 3;
@@ -1350,6 +1352,8 @@ A7: for k be Element of NAT ex yseqk be Element of (REAL I) st PQ[k,yseqk]
     let k be Element of NAT;
     defpred PPF[set,set] means
     ex i be Element of dom G st i=$1 & $2 = (yyseq.i).k;
+A8: for j be Nat, y1,y2 be set st
+    j in Seg I & PPF[j,y1] & PPF[j,y2] holds y1=y2;
 A9: for k be Nat st k in Seg I ex x be set st PPF[k,x]
     proof
       let j be Nat;
@@ -1360,7 +1364,7 @@ A9: for k be Nat st k in Seg I ex x be set st PPF[k,x]
     end;
     consider yseqk be FinSequence such that
 A10: dom yseqk = Seg I & for j be Nat st j in Seg I holds
-    PPF[j,yseqk.j] from FINSEQ_1:sch 1(A9);
+    PPF[j,yseqk.j] from FINSEQ_1:sch 1(A8,A9);
     now
       let j be Nat;
       assume j in dom yseqk;
@@ -1528,6 +1532,36 @@ A3: seq is Cauchy_sequence_by_Norm;
     ex seqi be sequence of G.i st seqi is convergent & $2 = lim seqi &
     for m be Element of NAT holds
     ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i;
+A4: for k be Nat, y1,y2 be set st
+    k in Seg I & PPG[k,y1] & PPG[k,y2] holds y1=y2
+    proof
+      let k be Nat, y1,y2 be set;
+      assume
+A5:   k in Seg I & PPG[k,y1] & PPG[k,y2];
+      then consider i1 be Element of dom G such that
+A6:   i1=k & ex seqi1 be sequence of G.i1 st
+      seqi1 is convergent & y1 = lim seqi1 & for m be Element of NAT holds
+      ex Sm be Element of product carr G st Sm= seq.m & seqi1.m=Sm.i1;
+      consider i2 be Element of dom G such that
+A7:   i2=k & ex seqi2 be sequence of G.i2 st
+      seqi2 is convergent & y2 = lim seqi2 & for m be Element of NAT holds
+      ex Sm be Element of product carr G st Sm= seq.m & seqi2.m=Sm.i2 by A5;
+      consider seqi1 be sequence of G.i1 such that
+A8:   seqi1 is convergent & y1 = lim seqi1 & for m be Element of NAT holds
+      ex Sm be Element of product carr G st Sm= seq.m & seqi1.m=Sm.i1 by A6;
+      consider seqi2 be sequence of G.i2 such that
+A9:   seqi2 is convergent & y2 = lim seqi2 & for m be Element of NAT holds
+      ex Sm be Element of product carr G st Sm= seq.m & seqi2.m=Sm.i2 by A7;
+      now
+        let m be Element of NAT;
+A10:    ex seqm1 be Element of product carr G st
+        seqm1= seq.m & seqi1.m=seqm1.i1 by A8;
+        ex seqm2 be Element of product carr G st
+        seqm2= seq.m & seqi2.m=seqm2.i2 by A9;
+        hence seqi1.m =seqi2.m by A6,A7,A10;
+      end;
+      hence y1=y2 by A6,A7,A8,A9,FUNCT_2:113;
+    end;
 A11: for k be Nat st k in Seg I ex x be set st PPG[k,x]
     proof
       let k be Nat;
@@ -1584,7 +1618,7 @@ A20:      ex seqm be Element of product carr G st
     end;
     consider yy0 be FinSequence such that
 A21: dom yy0 = Seg I & for j be Nat st j in Seg I holds PPG[j,yy0.j]
-    from FINSEQ_1:sch 1(A11);
+    from FINSEQ_1:sch 1(A4,A11);
     yy0 is Element of product carr G
     proof
       len yy0 = I by A21,FINSEQ_1:def 3;

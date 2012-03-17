@@ -52,7 +52,7 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="18">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

@@ -58,6 +58,12 @@ proof
   hence thesis by TARSKI:def 1;
 end;
 
+theorem
+  NAT,NAT are_equipotent;
+
+theorem Th2:
+  il.(S,i) + j = il.(S,i+j) by AMISTD_1:def 13;
+
 definition
   let N be with_non-empty_elements set,
   S be standard (IC-Ins-separated definite
@@ -76,6 +82,8 @@ proof
     .= l by AMISTD_1:def 13;
 end;
 
+canceled;
+
 theorem Th5:
   l + k -' k = l
 proof
@@ -83,6 +91,14 @@ proof
     .= il.(S,locnum l) by BINARITH:39
     .= l by AMISTD_1:def 13;
 end;
+
+canceled;
+
+theorem
+  for S being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
+  p being FinPartState of S holds dom DataPart p c=
+  (the carrier of S) \ ({IC S} \/ IL) by RELAT_1:87;
 
 Lm3: now
   let IL,N;
@@ -571,11 +587,11 @@ proof
   set INS = CurInstr s;
   consider m being natural number such that
 A1: IC s = il.(SCM R,m) by AMISTD_1:26;
-A2: IC s + k = il.(SCM R,m + k) by A1,AMISTD_1:def 13;
+A2: IC s + k = il.(SCM R,m + k) by A1,Th2;
 A3: Next IC (s +* Start-At (IC s + k)) = Next (IC s + k) by AMI_1:111
     .= il.(SCM R,(m + k) + 1) by A2,SCMRING3:67
     .= il.(SCM R,m + 1 + k)
-    .= il.(SCM R,m + 1) + k by AMISTD_1:def 13
+    .= il.(SCM R,m + 1) + k by Th2
     .= (Next il.(SCM R,m)) + k by SCMRING3:67
     .= IC (Exec(INS, s) +* Start-At ((Next IC s) + k)) by A1,AMI_1:111;
 A4: now
@@ -845,11 +861,11 @@ proof
   assume
 A1: IC s = il.(SCM R,j+k);
   then
-A2: Next (IC s -' k) = Next (il.(SCM R,j) + k -' k) by AMISTD_1:def 13
+A2: Next (IC s -' k) = Next (il.(SCM R,j) + k -' k) by Th2
     .= Next (il.(SCM R,j)) by Th5
     .= il.(SCM R,j+1) by SCMRING3:67
     .= il.(SCM R,j+1) + k -' k by Th5
-    .= il.(SCM R,j+1+k) -' k by AMISTD_1:def 13
+    .= il.(SCM R,j+1+k) -' k by Th2
     .= il.(SCM R,j+k+1) -' k
     .= (Next IC s) -' k by A1,SCMRING3:67;
 A3: now
@@ -1893,7 +1909,7 @@ proof
 A1: S is realistic;
   consider m being natural number such that
 A2: il = il.(S,m) by AMISTD_1:26;
-A3: il + k = il.(S,m+k) by A2,AMISTD_1:def 13;
+A3: il + k = il.(S,m+k) by A2,Th2;
 A4: dom ProgramPart(Relocated(g,k)) = { il.(S,j+k) where j is Element of NAT:
   il.(S,j) in dom ProgramPart(g) } by A1,Th49;
   ProgramPart(Relocated(g,k)) c= Relocated(g,k) by RELAT_1:88;
@@ -1985,7 +2001,7 @@ A3: x in dom f;
     il.(S,m) in dom IncAddr(p,i) } by A3,AMISTD_2:def 16;
     then consider m being Element of NAT such that
 A4: x = il.(S,m+i) & il.(S,m) in dom IncAddr(p,i);
-A5: x = il.(S,m) + i by A4,AMISTD_1:def 13;
+A5: x = il.(S,m) + i by A4,Th2;
 A6: il.(S,m) in dom p by A4,AMISTD_2:def 15;
     dom Shift(p,i) = { il.(S,mm+i) where mm is Element of NAT :
     il.(S,mm) in dom p} by AMISTD_2:def 16;
@@ -1994,7 +2010,7 @@ A7: x' in dom Shift(p,i) by A4,A6;
     reconsider mm=il.(S,m) as Element of NAT by ORDINAL1:def 13;
 A8: pi(p,mm) = p.(il.(S,m)) by A6,AMI_1:def 47
       .= Shift(p,i).(il.(S,m)+i) by A6,Th11
-      .= Shift(p,i).(il.(S,m+i)) by AMISTD_1:def 13
+      .= Shift(p,i).(il.(S,m+i)) by Th2
       .= pi(Shift(p,i),xx) by A4,A7,AMI_1:def 47;
     thus f.x = IncAddr(p,i).(il.(S,m)) by A4,A5,Th11
       .= IncAddr(pi(Shift(p,i),xx),i) by A6,A8,Th53
@@ -2023,7 +2039,7 @@ A4: il = il.(S,i) by AMISTD_1:26;
   il.(S,j) in dom ProgramPart(g) } by A2,A4;
   then il.(S,i+k) in dom ProgramPart(Relocated(g,k)) by A1,Th49;
   then
-A5: il + k in dom ProgramPart(Relocated(g,k)) by A4,AMISTD_1:def 13;
+A5: il + k in dom ProgramPart(Relocated(g,k)) by A4,Th2;
 A6: il in dom IncAddr(ProgramPart(g),k) by A2,AMISTD_2:def 15;
 A7: I = (ProgramPart g).il by A2,A3,GRFUNC_1:8;
   ProgramPart (Relocated(g, k)) c= (Relocated(g, k)) by RELAT_1:88;
@@ -2336,10 +2352,10 @@ A63: Cs3i1 = Following Cs3i by AMI_1:14
       .= Exec (CurInstr Cs1i, Cs3i) by A1,A3,A10,A11,Th41;
     consider j being natural number such that
 A64: IC Cs1i = il.(SCM R,j) by AMISTD_1:26;
-A65: Next (IC Cs1i + k) = Next (il.(SCM R,j + k)) by A64,AMISTD_1:def 13
+A65: Next (IC Cs1i + k) = Next (il.(SCM R,j + k)) by A64,Th2
       .= il.(SCM R,j+k+1) by SCMRING3:67
       .= il.(SCM R,j+1+k)
-      .= il.(SCM R,j+1) + k by AMISTD_1:def 13
+      .= il.(SCM R,j+1) + k by Th2
       .= (Next IC Cs1i) + k by A64,SCMRING3:67;
     set I = CurInstr(Cs1i);
     per cases by NAT_1:32,SCMRING3:71;
@@ -3230,10 +3246,10 @@ A31: IC Computation(s+*Relocated(p,k),i) = il.(SCM R,jk) by AMISTD_1:26;
     il.(SCM R,j) in dom ProgramPart(p) } by A29,A31,Th49;
     then consider j being Element of NAT such that
 A32: il.(SCM R,jk) = il.(SCM R,j+k) & il.(SCM R,j) in dom ProgramPart(p);
-A33: il.(SCM R,j+k) -' k + k = il.(SCM R,j) + k -'k + k by AMISTD_1:def 13
+A33: il.(SCM R,j+k) -' k + k = il.(SCM R,j) + k -'k + k by Th2
       .= il.(SCM R,j) + k by Th5
-      .= il.(SCM R,j+k) by AMISTD_1:def 13;
-A34: il.(SCM R,j+k) -' k = il.(SCM R,j) + k -' k by AMISTD_1:def 13
+      .= il.(SCM R,j+k) by Th2;
+A34: il.(SCM R,j+k) -' k = il.(SCM R,j) + k -' k by Th2
       .= il.(SCM R,j) by Th5;
     reconsider pp = ProgramPart(p) as programmed FinPartState of SCM R;
     dom Shift(pp, k) = { il.(SCM R,m+k) where m is Element of NAT:

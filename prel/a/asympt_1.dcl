@@ -15,9 +15,9 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -53,7 +53,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="27">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
@@ -65,7 +65,7 @@
 <Func kind="K" nr="216"/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="27">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
@@ -84,7 +84,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="27">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
@@ -98,7 +98,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="27">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
@@ -117,7 +117,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="27">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>

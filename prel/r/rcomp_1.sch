@@ -41,7 +41,8 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="85">
+<Func kind="K" nr="86">
+<Func kind="K" nr="78"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

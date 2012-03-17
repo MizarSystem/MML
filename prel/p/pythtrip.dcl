@@ -13,9 +13,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -41,7 +41,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="21"/>
 <Adjective nr="23" value="false"/>
 <Adjective nr="41"/>
@@ -61,7 +61,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="16"/>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="21"/>
 <Adjective nr="23" value="false"/>
 <Adjective nr="41" value="false"/>
@@ -139,7 +139,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="41"/>
 </Cluster>
 </Typ>
@@ -155,7 +155,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="17"/>
 <Adjective nr="41" value="false"/>
 </Cluster>
 </Typ>

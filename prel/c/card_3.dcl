@@ -176,7 +176,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="4">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

@@ -18,7 +18,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, STRUCT_0, PRE_TOPC, METRIC_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, WELLORD1, RELAT_2, SETFAM_1, XBOOLE_0, PRE_TOPC;
+ definitions TARSKI, WELLORD1, RELAT_2, SETFAM_1, XBOOLE_0;
  theorems PCOMPS_1, COMPTS_1, SETFAM_1, TOPS_1, TOPS_2, PRE_TOPC, SUBSET_1,
       TARSKI, WELLORD2, ZFMISC_1, NAT_1, REAL_1, REAL_2, PREPOWER, WELLORD1,
       RELAT_1, RELAT_2, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1, CARD_1,
@@ -220,15 +220,15 @@ reserve FX,GX,HX for Subset-Family of PT;
 reserve Y,V,W for Subset of PT;
 
 theorem Th6:
-  PT is_T3 implies for FX st FX is Cover of PT & FX is open
-  ex HX st HX is open & HX is Cover of PT &
+  PT is_T3 implies for FX st FX is_a_cover_of PT & FX is open
+  ex HX st HX is open & HX is_a_cover_of PT &
   for V st V in HX ex W st W in FX & Cl V c= W
 proof
   assume
 A1: PT is_T3;
   let FX;
   assume that
-A2: FX is Cover of PT and
+A2: FX is_a_cover_of PT and
 A3: FX is open;
   defpred P[set] means ex V1 being Subset of PT st V1 = $1 &
   V1 is open & ex W st W in FX & Cl V1 c= W;
@@ -244,10 +244,14 @@ A5: V1 = V & V1 is open & ex W st W in FX & Cl V1 c= W by A4;
     thus thesis by A5;
   end;
   hence HX is open by TOPS_2:def 1;
-    the carrier of PT c= union HX
+  thus HX is_a_cover_of PT
+  proof
+    [#](PT) = union HX
+    proof
+      thus [#](PT) c= union HX
       proof
         let x be set;
-        assume x in the carrier of PT;
+        assume x in [#](PT);
         then reconsider x as Point of PT;
         consider V being Subset of PT such that
 A6:     x in V & V in FX by A2,PCOMPS_1:5;
@@ -284,7 +288,19 @@ A16:        x in X by A13,PRE_TOPC:13;
         end;
         hence thesis;
       end;
-  hence HX is Cover of PT by SETFAM_1:def 12;
+      thus union HX c= [#](PT)
+      proof
+        let x be set;
+        assume x in union HX;
+        then consider V be set such that
+A17:    x in V & V in HX by TARSKI:def 4;
+        reconsider x as Point of PT by A17;
+        x in [#](PT) by PRE_TOPC:13;
+        hence thesis;
+      end;
+    end;
+    hence thesis by PRE_TOPC:def 8;
+  end;
   let V be Subset of PT;
   assume V in HX;
   then ex V1 being Subset of PT st V1 = V & V1 is open &
@@ -293,22 +309,22 @@ A16:        x in X by A13,PRE_TOPC:13;
 end;
 
 theorem
-  for PT,FX st PT is_T2 & PT is paracompact & FX is Cover of PT & FX is open
-  ex GX st GX is open & GX is Cover of PT &
+  for PT,FX st PT is_T2 & PT is paracompact & FX is_a_cover_of PT & FX is open
+  ex GX st GX is open & GX is_a_cover_of PT &
   clf GX is_finer_than FX & GX is locally_finite
 proof
   let PT,FX;
   assume that
 A1: PT is_T2 and
 A2: PT is paracompact and
-A3: FX is Cover of PT and
+A3: FX is_a_cover_of PT and
 A4: FX is open;
   PT is_T3 by A1,A2,PCOMPS_1:27;
   then consider HX such that
-A5: HX is open & HX is Cover of PT & for V st V in HX
+A5: HX is open & HX is_a_cover_of PT & for V st V in HX
   ex W st W in FX & Cl V c= W by A3,A4,Th6;
   consider GX such that
-A6: GX is open & GX is Cover of PT & GX is_finer_than HX &
+A6: GX is open & GX is_a_cover_of PT & GX is_finer_than HX &
   GX is locally_finite by A2,A5,PCOMPS_1:def 4;
 A7: for V st V in GX ex W st W in FX & (Cl V) c= W
   proof
@@ -664,8 +680,8 @@ end;
 
 theorem Th12:
   PT is metrizable implies for FX being Subset-Family of PT
-  st FX is Cover of PT & FX is open ex GX being Subset-Family of PT
-  st GX is open & GX is Cover of PT &
+  st FX is_a_cover_of PT & FX is open ex GX being Subset-Family of PT
+  st GX is open & GX is_a_cover_of PT &
   GX is_finer_than FX & GX is locally_finite
 proof
   assume PT is metrizable;
@@ -678,7 +694,7 @@ A2: Family_open_set( SpaceMetr (the carrier of PT,metr) ) =
 A3: PM = SpaceMetr(the carrier of PT,metr);
   let FX;
   assume that
-A4: FX is Cover of PT and
+A4: FX is_a_cover_of PT and
 A5: FX is open;
   consider R such that
 A6: R well_orders FX by WELLORD2:26;
@@ -818,14 +834,14 @@ A26:          a = Ball(c,1/(2 |^ (k+1))) and c in V\PartUnion(V,Mn) &
     end;
     hence thesis by TOPS_2:def 1;
   end; thus
-A27: GX is Cover of PT
+A27: GX is_a_cover_of PT
   proof
-A28: the carrier of PT c= union GX
+A28: [#](PT) c= union GX
     proof
       let x be set;
       defpred P1[set] means x in $1;
       assume
-A29:  x in the carrier of PT;
+A29:  x in [#](PT);
       then ex G be Subset of PT st x in G & G in FX by A4,PCOMPS_1:5;
       then
 A30:  ex G be set st G in FX & P1[G];
@@ -934,8 +950,19 @@ A58:        D = union (f.q) and q <= k by A57;
       end;
       hence contradiction by A43;
     end;
-     the carrier of PT c= union GX by A28;
-    hence thesis by SETFAM_1:def 12;
+    union GX c= [#](PT)
+    proof
+      let x be set;
+      assume x in union GX;
+      then consider X be set such that
+A59:  x in X and
+A60:  X in GX by TARSKI:def 4;
+      reconsider x'=x as Point of PT by A59,A60;
+      x' in the carrier of PT;
+      hence x in [#](PT) by PRE_TOPC:12;
+    end;
+    then [#](PT) = union GX by A28,XBOOLE_0:def 10;
+    hence thesis by PRE_TOPC:def 8;
   end;
   thus GX is_finer_than FX
   proof
@@ -1553,8 +1580,8 @@ theorem  :: Stone Theorem
   PT is metrizable implies PT is paracompact
 proof
   assume PT is metrizable;
-  then for FX being Subset-Family of PT st FX is Cover of PT & FX is open
-  ex GX being Subset-Family of PT st GX is open & GX is Cover of PT &
+  then for FX being Subset-Family of PT st FX is_a_cover_of PT & FX is open
+  ex GX being Subset-Family of PT st GX is open & GX is_a_cover_of PT &
   GX is_finer_than FX & GX is locally_finite by Th12;
   hence thesis by PCOMPS_1:def 4;
 end;
