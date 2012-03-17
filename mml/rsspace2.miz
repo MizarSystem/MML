@@ -8,18 +8,21 @@ environ
 
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, SQUARE_1, PROB_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE;
+      SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE, FUNCOP_1;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0, STRUCT_0,
-      XREAL_0, REAL_1, NAT_1, RELAT_1, PARTFUN1, FUNCT_1, FUNCT_2, PRE_TOPC,
+      XREAL_0, REAL_1, NAT_1, RELAT_1, PARTFUN1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      PRE_TOPC,
       COMPLEX1, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, BHSP_3, SQUARE_1, SEQ_1,
       SEQ_2, SEQM_3, SERIES_1, RSSPACE;
  constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
-      PARTFUN1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, COMPLEX1, MEMBERED;
- registrations RELSET_1, XREAL_0, STRUCT_0, SEQ_1, RSSPACE, MEMBERED, ORDINAL2;
+      PARTFUN1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, COMPLEX1, MEMBERED, FUNCOP_1;
+ registrations RELSET_1, XREAL_0, STRUCT_0, SEQ_1, RSSPACE, MEMBERED, ORDINAL2,
+     SEQM_3, FUNCOP_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  theorems RELAT_1, SQUARE_1, AXIOMS, ABSVALUE, ZFMISC_1, REAL_1, SEQ_1, SEQ_2,
       SEQM_3, SERIES_1, INT_1, FUNCT_1, NAT_1, FUNCT_2, RLVECT_1, RLSUB_1,
-      BHSP_1, BHSP_2, BHSP_3, SEQ_4, RSSPACE, XREAL_0, XCMPLX_1, COMPLEX1;
+      BHSP_1, BHSP_2, BHSP_3, SEQ_4, RSSPACE, XREAL_0, XCMPLX_1, COMPLEX1,
+      FUNCOP_1;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin :: Hilbert Space of Real Sequences
@@ -352,11 +355,9 @@ proof
 A1: seq is convergent
    and
 A2:ex k be Nat st (for i be Nat st k <= i holds seq.i <=e );
-   deffunc F(set)=e;
-   consider cseq be Real_Sequence such that
-A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
-A4:cseq is constant by A3,SEQM_3:def 6;
-then A5:cseq is convergent by SEQ_4:39;
+   reconsider cseq = NAT --> e as Real_Sequence by FUNCOP_1:57;
+A3:for n be Nat holds cseq.n=e by FUNCOP_1:13;
+A5:cseq is convergent by SEQ_4:39;
    consider k be Nat such that
 A6:for i be Nat st k <= i holds seq.i <=e by A2;
 A7:(seq ^\k) is convergent by A1,SEQ_4:33;
@@ -367,7 +368,7 @@ A10: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
      then seq.(k+i) <=e by A6;
      hence (seq ^\k) .i <= cseq.i by A3,A10;
   end;
-     lim cseq = cseq.0 by A4,SEQ_4:41 .= e by A3;
+     lim cseq = cseq.0 by SEQ_4:41 .= e by A3;
   hence thesis by A5,A7,A8,A9,SEQ_2:32;
 end;
 
@@ -382,9 +383,8 @@ proof
 A1:seq is convergent;
    let rseq be Real_Sequence such that
 A2:for i be Nat holds rseq .i = (seq.i-c)*(seq.i-c);
-   deffunc F(set)=c;
-   consider cseq be Real_Sequence such that
-A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
+   reconsider cseq = NAT --> c as Real_Sequence by FUNCOP_1:57;
+A3:for n be Nat holds cseq.n=c by FUNCOP_1:13;
   now let i be Nat;
      thus rseq.i=(seq.i-c)*(seq.i-c) by A2
         .=(seq.i-(cseq.i))*(seq.i-c) by A3
@@ -399,16 +399,15 @@ A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
    end;
 then A4:for x be set st x in NAT holds
      rseq.x =((seq -cseq) (#) (seq -cseq)).x;
-A5:cseq is constant by A3,SEQM_3:def 6;
-then A6:cseq is convergent by SEQ_4:39;
+ A6:cseq is convergent by SEQ_4:39;
 then A7:seq -cseq is convergent by A1,SEQ_2:25;
 then A8:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
       lim ((seq -cseq)(#)(seq -cseq))
      = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A7,SEQ_2:29
     .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A6,SEQ_2:26
     .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A6,SEQ_2:26
-    .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by A5,SEQ_4:41
-    .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by A5,SEQ_4:41
+    .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
+    .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by A3
     .= ((lim seq) - c)*((lim seq) - c) by A3;
    hence thesis by A4,A8,SEQ_1:8;
@@ -427,9 +426,8 @@ A1:seq is convergent and
 A2:seq1 is convergent;
    let rseq be Real_Sequence such that
 A3:for i be Nat holds rseq .i = (seq.i-c)*(seq.i-c)+seq1.i;
-   deffunc F(set)= c;
-   consider cseq be Real_Sequence such that
-A4:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
+   reconsider cseq = NAT --> c as Real_Sequence by FUNCOP_1:57;
+A4:for n be Nat holds cseq.n=c by FUNCOP_1:13;
   now let i be Nat;
      thus rseq.i=(seq.i-c)*(seq.i-c) +seq1.i by A3
             .=(seq.i-(cseq.i))*(seq.i-c) +seq1.i by A4
@@ -446,16 +444,15 @@ A4:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
    then for x be set st x in NAT holds
     rseq.x =((seq -cseq) (#) (seq -cseq)+seq1).x;
 then A5:rseq = ((seq -cseq) (#) (seq -cseq)+seq1) by SEQ_1:8;
-A6:cseq is constant by A4,SEQM_3:def 6;
-then A7:cseq is convergent by SEQ_4:39;
+ A7:cseq is convergent by SEQ_4:39;
 then A8:seq -cseq is convergent by A1,SEQ_2:25;
 then A9:(seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
       lim ((seq -cseq)(#)(seq -cseq))
      = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A8,SEQ_2:29
     .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,A7,SEQ_2:26
     .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,A7,SEQ_2:26
-    .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by A6,SEQ_4:41
-    .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by A6,SEQ_4:41
+    .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
+    .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by A4
     .= ((lim seq) - c)*((lim seq) - c) by A4;
    hence thesis by A2,A5,A9,SEQ_2:19,20;

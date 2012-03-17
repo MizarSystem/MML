@@ -15,7 +15,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="NATTRA_1"/>
@@ -26,15 +25,15 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13"/>
-<Adjective nr="23"/>
+<Adjective nr="12"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -43,9 +42,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
+<Adjective nr="11"/>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 </Registrations>

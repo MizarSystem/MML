@@ -9,21 +9,23 @@ environ
  vocabularies RLVECT_1, FUNCT_1, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1,
       SQUARE_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, BHSP_1, SUPINF_2,
       RSSPACE, CLVECT_1, COMSEQ_1, COMPLEX1, PROB_2, ARYTM_3, CSSPACE,
-      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0;
+      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
-      FUNCT_2, SEQ_1, BINOP_1, STRUCT_0, ZFMISC_1, NUMBERS, XCMPLX_0, XREAL_0,
+      FUNCT_2, FUNCOP_1,
+      SEQ_1, BINOP_1, STRUCT_0, ZFMISC_1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3,
       SERIES_1, NAT_1, RLVECT_1, NORMSP_1, CLVECT_1;
  constructors REAL_1, NAT_1, DOMAIN_1, SQUARE_1, SEQ_2, SERIES_1, PREPOWER,
       PARTFUN1, BINOP_1, MEMBERED, CLVECT_1, COMSEQ_1, COMPLEX1, FINSEQ_4,
-      COMSEQ_3, COMSEQ_2, COMPLEX2, ARYTM_0, NORMSP_1, BINOP_2;
+      COMSEQ_3, COMSEQ_2, COMPLEX2, ARYTM_0, NORMSP_1, BINOP_2, FUNCOP_1;
  registrations RELSET_1, STRUCT_0, SEQ_1, XREAL_0, MEMBERED, CLVECT_1, FUNCT_1,
-      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0;
+      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0, FUNCOP_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, NORMSP_1;
  theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
       REAL_1, SEQ_1, SERIES_1, COMSEQ_3, FUNCT_1, FUNCT_2, RLVECT_1, BINOP_1,
-      XCMPLX_0, COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, AXIOMS, NORMSP_1;
+      XCMPLX_0, COMSEQ_1, CLVECT_1, COMPLEX1, COMSEQ_2, AXIOMS, NORMSP_1,
+      FUNCOP_1;
  schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2, FUNCT_2, COMSEQ_1;
 
 begin
@@ -211,11 +213,10 @@ definition
   for n be Nat holds (seq_id it).n=0c;
 existence
 proof
-   deffunc F(set)= 0c;
-   consider zeroseq be Complex_Sequence such that
-A1: for n be Nat holds zeroseq.n=F(n) from COMSEQ_1:sch 1;
+    reconsider zeroseq = NAT --> 0c as Complex_Sequence by FUNCOP_1:57;
+A1: for n be Nat holds zeroseq.n=0c by FUNCOP_1:13;
 A2:zeroseq is Element of the_set_of_ComplexSequences by Def1;
-     zeroseq in the_set_of_ComplexSequences by Def1;
+A2: zeroseq in the_set_of_ComplexSequences by Def1;
    then seq_id(zeroseq) = zeroseq by Def2;
    hence thesis by A1,A2;
 end;
@@ -770,17 +771,16 @@ end;
 
 consider V0 being ComplexLinearSpace;
 Lm2:the carrier of (0).V0 = {0.V0} by CLVECT_1:def 5;
-    deffunc F(set,set) = 0c;
-consider nil_func being Function of
-    [: the carrier of (0).V0 , the carrier of (0).V0 :], COMPLEX such that
+ reconsider
+  nil_func = [: the carrier of (0).V0 , the carrier of (0).V0 :] --> 0c
+  as Function of
+   [: the carrier of (0).V0 , the carrier of (0).V0 :], COMPLEX by FUNCOP_1:57;
 Lm3:for x, y being VECTOR of (0).V0 holds
-     nil_func.[x,y] = F(x,y) from FUNCT_2:sch 8;
+     nil_func.[x,y] = 0c by FUNCOP_1:13;
 
-Lm4:nil_func.[0.V0,0.V0] = 0c
-proof
-     0.V0 in the carrier of (0).V0 by Lm2,TARSKI:def 1;
-   hence thesis by Lm3;
-end;
+ 0.V0 in the carrier of (0).V0 by Lm2,TARSKI:def 1;
+ then
+Lm4:nil_func.[0.V0,0.V0] = 0c by Lm3;
 
 Lm5:for u being VECTOR of (0).V0 holds
      0 <= Re(nil_func.[u,u]) & Im(nil_func.[u,u]) = 0

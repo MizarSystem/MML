@@ -33,6 +33,7 @@
 <ArticleID name="REALSET2"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSUALG_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="MSUALG_3"/>
 </Signature>
 <RCluster>
@@ -49,80 +50,40 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="46"/>
+<Adjective nr="105"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="14">
+<Cluster>
+<Adjective nr="25" value="false"/>
+<Adjective nr="96" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="G" nr="16">
+<Cluster>
+<Adjective nr="99">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="11">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="206">
+<LocusVar nr="1"/>
+<LocusVar nr="3"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="104"/>
 </Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="G" nr="14">
-<Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="96" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="G" nr="16">
-<Cluster>
-<Adjective nr="99">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="11">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="206">
-<LocusVar nr="1"/>
-<LocusVar nr="3"/>
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</RCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="G" nr="14">
-<Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="96" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="G" nr="16">
-<Cluster>
-<Adjective nr="99">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="11">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="206">
-<LocusVar nr="1"/>
-<LocusVar nr="3"/>
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</CCluster>
+</FCluster>
 </Registrations>

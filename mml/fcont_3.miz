@@ -8,21 +8,22 @@ environ
 
  vocabularies SEQ_1, PARTFUN1, SUBSET_1, PRE_TOPC, RELAT_1, SEQ_2, ORDINAL2,
       BOOLE, LIMFUNC1, FUNCT_1, SEQM_3, PROB_1, ARYTM, RCOMP_1, ARYTM_1,
-      ABSVALUE, ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1;
+      ABSVALUE, ARYTM_3, FCONT_1, RFUNCT_2, SQUARE_1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      PROB_1, REAL_1, NAT_1, FUNCT_1, SEQ_1, RELSET_1, SEQ_2, SEQM_3, PARTFUN1,
+      PROB_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      SEQ_1, RELSET_1, SEQ_2, SEQM_3, PARTFUN1,
       SQUARE_1, PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, LIMFUNC1, COMPLEX1;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, ABSVALUE, PROB_1, PARTFUN1,
       PARTFUN2, RCOMP_1, RFUNCT_2, FCONT_1, LIMFUNC1, MEMBERED, XBOOLE_0,
-      COMPLEX1;
+      COMPLEX1, FUNCOP_1;
  registrations RELSET_1, PARTFUN2, RFUNCT_2, XREAL_0, SEQ_1, ARYTM_3, MEMBERED,
-      ORDINAL2, RCOMP_1;
+      ORDINAL2, RCOMP_1, FUNCOP_1, SEQM_3;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RCOMP_1, XBOOLE_0;
  theorems AXIOMS, REAL_1, FUNCT_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       ABSVALUE, SQUARE_1, PARTFUN1, PROB_1, PARTFUN2, RCOMP_1, RFUNCT_2,
       FCONT_1, SUBSET_1, REAL_2, LIMFUNC1, FCONT_2, TARSKI, FUNCT_2, RELAT_1,
-      XREAL_0, XBOOLE_0, XBOOLE_1;
+      XREAL_0, XBOOLE_0, XBOOLE_1, FUNCOP_1;
  schemes SEQ_1, RCOMP_1;
 
 begin
@@ -71,16 +72,15 @@ theorem Th5:
  proof
    let a such that
   A1: rng a c= right_closed_halfline(r) & a is convergent;
-  deffunc F(Nat) = r;
-  consider b such that
-  A2: for n holds b.n = F(n) from SEQ_1:sch 1;
+  r in REAL by XREAL_0:def 1;
+  then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
+  A2: for n holds b.n = r by FUNCOP_1:13;
       now let n;
        b.n = r & b.(n+1) = r by A2;
     hence b.n = b.(n+1);
    end;
-  then A3: b is constant by SEQM_3:16;
-  then A4: b is convergent by SEQ_4:39;
-  A5: lim b = b.0 by A3,SEQ_4:41
+  A4: b is convergent by SEQ_4:39;
+  A5: lim b = b.0 by SEQ_4:41
            .= r by A2;
       now let n;  a.n in rng a by RFUNCT_2:10;
     then a.n in right_closed_halfline(r) by A1;
@@ -97,16 +97,15 @@ theorem Th6:
   left_closed_halfline(r) is closed
  proof let a such that
   A1: rng a c= left_closed_halfline(r) & a is convergent;
-  deffunc F(Nat) = r;
-  consider b such that
-  A2: for n holds b.n = F(n) from SEQ_1:sch 1;
+  r in REAL by XREAL_0:def 1;
+  then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
+  A2: for n holds b.n = r by FUNCOP_1:13;
       now let n;
        b.n = r & b.(n+1) = r by A2;
     hence b.n = b.(n+1);
    end;
-  then A3: b is constant by SEQM_3:16;
-  then A4: b is convergent by SEQ_4:39;
-  A5: lim b = b.0 by A3,SEQ_4:41
+  A4: b is convergent by SEQ_4:39;
+  A5: lim b = b.0 by SEQ_4:41
            .= r by A2;
       now let n;  a.n in rng a by RFUNCT_2:10;
     then a.n in left_closed_halfline(r) by A1;
@@ -274,9 +273,9 @@ theorem Th13:
  let x0 be real number;
  assume
   A1: for n holds a.n = x0 - p/(n+1);
-  deffunc F(Nat) = x0;
-  consider b such that
-  A2: for n holds b.n = F(n) from SEQ_1:sch 1;
+  x0 in REAL by XREAL_0:def 1;
+  then reconsider b = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
+  A2: for n holds b.n = x0 by FUNCOP_1:13;
   deffunc F(Nat) = p/($1+1);
   consider d such that
   A3: for n holds d.n = F(n) from SEQ_1:sch 1;
@@ -285,9 +284,8 @@ theorem Th13:
        b.n = x0 & b.(n+1) = x0 by A2;
     hence b.n = b.(n+1);
    end;
-  then A5: b is constant by SEQM_3:16;
-  then A6: b is convergent by SEQ_4:39;
-  A7: lim b = b.0 by A5,SEQ_4:41
+  A6: b is convergent by SEQ_4:39;
+  A7: lim b = b.0 by SEQ_4:41
   .= x0 by A2;
       now let n;
     thus (b - d).n = b.n - d.n by RFUNCT_2:6
@@ -308,9 +306,9 @@ theorem Th14:
  let x0 be real number;
  assume
   A1: for n holds a.n = x0 + p/(n+1);
-  deffunc F(Nat) = x0;
-  consider b such that
-  A2: for n holds b.n = F(n) from SEQ_1:sch 1;
+  x0 in REAL by XREAL_0:def 1;
+  then reconsider b = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
+  A2: for n holds b.n = x0 by FUNCOP_1:13;
   deffunc F(Nat) = p/($1+1);
   consider d such that
   A3: for n holds d.n = F(n) from SEQ_1:sch 1;
@@ -319,9 +317,8 @@ theorem Th14:
        b.n = x0 & b.(n+1) = x0 by A2;
     hence b.n = b.(n+1);
    end;
-  then A5: b is constant by SEQM_3:16;
-  then A6: b is convergent by SEQ_4:39;
-  A7: lim b = b.0 by A5,SEQ_4:41
+  A6: b is convergent by SEQ_4:39;
+  A7: lim b = b.0 by SEQ_4:41
   .= x0 by A2;
       now let n;
     thus (b + d).n = b.n + d.n by SEQ_1:11

@@ -23,6 +23,8 @@
 <ArticleID name="SEQM_3"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
+<ArticleID name="BHSP_1"/>
+<ArticleID name="BHSP_3"/>
 <ArticleID name="FRECHET2"/>
 </Signature>
 <Scheme>
@@ -50,7 +52,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -142,7 +144,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -271,7 +273,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="138">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>
@@ -396,7 +398,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="138">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="145">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>

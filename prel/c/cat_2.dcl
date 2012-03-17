@@ -14,7 +14,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 </Signature>
@@ -22,7 +21,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -31,24 +30,24 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
+<Adjective nr="11"/>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -60,22 +59,22 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="107">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
+<Adjective nr="11"/>
 <Adjective nr="12"/>
-<Adjective nr="13"/>
 </Cluster>
 </FCluster>
 </Registrations>

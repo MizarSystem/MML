@@ -9,24 +9,26 @@ environ
  vocabularies PRE_TOPC, FCONT_1, SUBSET_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
       ARYTM_3, RELAT_1, FUNCOP_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2,
       SEQ_1, SEQ_2, SEQM_3, RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1,
-      PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1;
+      PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       PRE_TOPC, STRUCT_0, FUNCOP_1, BINOP_1, PARTFUN2, XCMPLX_0, XREAL_0,
       COMPLEX1, ORDINAL1, NUMBERS, REAL_1, NAT_1, FINSEQ_4, RLVECT_1, SEQ_1,
-      SEQ_2, SEQM_3, REALSET2, SQUARE_1, VFUNCT_1, NORMSP_1, RSSPACE, LOPBAN_1,
+      SEQ_2, SEQM_3, REALSET2, SQUARE_1, VFUNCT_1, NORMSP_1, RSSPACE,
+      BHSP_3, LOPBAN_1,
       LOPBAN_2, LOPBAN_3, NFCONT_1, FDIFF_1;
  constructors REAL_1, BINARITH, SQUARE_1, MEMBERED, DOMAIN_1, SEQ_2, PREPOWER,
       PARTFUN1, PARTFUN2, REALSET1, FINSEQ_4, VFUNCT_1, RSSPACE3, LOPBAN_3,
-      NFCONT_1, FDIFF_1, COMPLEX1, REALSET2, NAT_1;
+      NFCONT_1, FDIFF_1, COMPLEX1, REALSET2, NAT_1, BHSP_3;
  registrations RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, FUNCT_1, SEQ_1,
       SEQM_3, LOPBAN_1, LOPBAN_2, FDIFF_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TARSKI, XBOOLE_0, LOPBAN_3, NFCONT_1, NORMSP_1;
+ definitions TARSKI, XBOOLE_0, LOPBAN_3, NFCONT_1, NORMSP_1, BHSP_3;
  theorems AXIOMS, TARSKI, ABSVALUE, XBOOLE_0, XBOOLE_1, SUBSET_1, REAL_1,
       REAL_2, BINOP_1, RELSET_1, RLVECT_1, XCMPLX_0, XCMPLX_1, ZFMISC_1,
       XREAL_0, FUNCOP_1, SEQ_1, SEQ_2, NAT_1, SEQM_3, SQUARE_1, RELAT_1,
       FUNCT_1, FINSEQ_4, VFUNCT_1, FUNCT_2, SEQ_4, NORMSP_1, LOPBAN_1,
-      LOPBAN_2, LOPBAN_3, ANPROJ_1, PARTFUN1, PARTFUN2, NFCONT_1, FDIFF_1;
+      LOPBAN_2, LOPBAN_3, ANPROJ_1, PARTFUN1, PARTFUN2, NFCONT_1, FDIFF_1,
+      BHSP_3;
  schemes NAT_1, SEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Differentiable Function on Normed Linear Spaces
@@ -578,7 +580,7 @@ theorem Th17:
    end;
 
 theorem Th18:
-  seq ^\k is_subsequence_of seq
+  seq ^\k is subsequence of seq
   proof deffunc U(Nat) = $1+k;
    consider seq1 be Real_Sequence such that
 A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
@@ -603,13 +605,13 @@ A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
   end;
 
 theorem Th19:
-   seq is constant & seq1 is_subsequence_of seq implies
+   seq is constant & seq1 is subsequence of seq implies
        seq1 is constant
  proof
   assume that A1:seq is constant and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq be increasing Seq_of_Nat such that
-A3:seq1=seq*Nseq by A2,LOPBAN_3:def 7;
+A3:seq1=seq*Nseq by A2,BHSP_3:def 4;
     consider r be Point of S such that
        A4: for n be Nat holds seq.n=r by A1,LOPBAN_3:def 5;
      now let n;
@@ -620,14 +622,14 @@ A3:seq1=seq*Nseq by A2,LOPBAN_3:def 7;
  end;
 
 theorem Th20:
-   seq is constant & seq1 is_subsequence_of
+   seq is constant & seq1 is subsequence of
    seq implies seq=seq1
   proof
     assume that
 A1: seq is constant and
-A2: seq1 is_subsequence_of seq;
+A2: seq1 is subsequence of seq;
     consider Nseq be increasing Seq_of_Nat such that
-A3: seq1=seq*Nseq by A2,LOPBAN_3:def 7;
+A3: seq1=seq*Nseq by A2,BHSP_3:def 4;
  consider r be Point of S such that
     A4: for n be Nat holds seq.n=r by A1,LOPBAN_3:def 5;
           now let n;
@@ -835,7 +837,7 @@ thus a*z is convergent by A3,NORMSP_1:def 9;
 hence lim (a*z) = 0.S by A3,NORMSP_1:def 11;
 end;
 
-theorem Th25:
+theorem
 (for r be Point of S holds r in Y iff r in the carrier of S)
 iff Y=the carrier of S
 proof
@@ -888,11 +890,9 @@ registration let S;
   cluster constant sequence of S;
   existence
 proof
- deffunc F(Nat) = 0.S;
- consider s1 be sequence of S such that
-   A1: for n holds s1.n=F(n) from FUNCT_2:sch 4;
+ reconsider s1 = NAT --> 0.S as sequence of S by FUNCOP_1:57;
  take s1;
- thus s1 is constant by A1,LOPBAN_3:def 5;
+ thus s1 is constant;
 end;
 end;
 
@@ -913,21 +913,16 @@ registration let S,T;
   cluster REST-like PartFunc of S,T;
 existence
  proof
-  defpred P[set] means $1 in the carrier of S;
-  deffunc F(set) = 0.T;
-  consider f be PartFunc of S,T such that
-A1: (for r be Point of S holds r in dom f iff P[r]) &
-  for r be Point of S st r in dom f holds f.r=F(r) from SEQ_1:sch 3;
+  reconsider f = (the carrier of S) --> 0.T as PartFunc of S,T by FUNCOP_1:57;
+A2: for r be Point of S holds f.r=0.T by FUNCOP_1:13;
   take f;
-    for y holds y in the carrier of S implies y in dom f by A1;
-  then the carrier of S c= dom f by TARSKI:def 3;
-  then A2: dom f = the carrier of S by XBOOLE_0:def 10;
+A1: dom f = the carrier of S by FUNCOP_1:19;
   hence f is total by PARTFUN1:def 4;
     now let h;
   A3: now let n;
-   A4: f/.(h.n) =f.(h.n) by A2,FINSEQ_4:def 4
-             .=0.T by A1,A2;
-   A5: rng h c= dom f by A2; thus
+   A4: f/.(h.n) =f.(h.n) by A1,FINSEQ_4:def 4
+             .=0.T by A2;
+   A5: rng h c= dom f by A1; thus
      ((||.h.||")(#)(f*h)).n = (||.h.||").n*((f*h).n) by Def2
     .= (||.h.||").n*(f/.(h.n)) by A5,NFCONT_1:8
     .= 0.T by A4,RLVECT_1:23;
@@ -1200,7 +1195,7 @@ suppose ex n st for m be Nat st n<=m holds s2.m=x0;
     N<=n+N by NAT_1:37; then s2.(n+N)=x0 by A3;
   hence (s2^\N).n=x0 by LOPBAN_3:def 6;
  end;
-   s2^\N is_subsequence_of s2 by LOPBAN_3:13;
+   s2^\N is subsequence of s2 by LOPBAN_3:13;
  then rng (s2^\N) c= rng s2 by NFCONT_1:7;
  then A5: rng (s2^\N) c= dom f by A2,XBOOLE_1:1;
  A6: now let p be Real such that A7: p>0;
@@ -1298,7 +1293,7 @@ A33: for n holds (s2*F).n<>x0
   end;
   thus for n holds P[n] from NAT_1:sch 1(A34,A35);
  end;
- A36: s2*F is_subsequence_of s2 by LOPBAN_3:def 7;
+ A36: s2*F is subsequence of s2 by BHSP_3:def 4;
 then A37: s2*F is convergent by A2,LOPBAN_3:11;
    rng (s2*F) c= rng s2 by A36,NFCONT_1:7;
 then A38: rng (s2*F) c= dom f by A2,XBOOLE_1:1;
@@ -1840,17 +1835,14 @@ such that A1: Z is open & Z c= dom f;
            BoundedLinearOperatorsNorm(S,T) #) by LOPBAN_1:def 15; then
  reconsider L as Element of BoundedLinearOperators(S,T);
 A5:  ((the carrier of S) --> 0.T) = L by LOPBAN_1:37;
- defpred P[set] means $1 in the carrier of S;
- deffunc F(Point of S) = 0.T;
- consider R being PartFunc of S,T such that
-A6:  (for r be Point of S holds r in dom R iff P[r]) &
-       for r be Point of S st r in dom R holds R.r=F(r) from SEQ_1:sch 3;
-  A7: dom R = the carrier of S by A6,Th25;
+  reconsider R = (the carrier of S) --> 0.T as PartFunc of S,T by FUNCOP_1:57;
+A6: for r be Point of S holds R.r=0.T by FUNCOP_1:13;
+  A7: dom R = the carrier of S by FUNCOP_1:19;
   then A8: R is total by PARTFUN1:def 4;
     now let h;
    A9: now let n;
    A10: R/.(h.n) =R.(h.n) by A7,FINSEQ_4:def 4
-                   .=0.T by A6,A7;
+                   .=0.T by A6;
     A11: rng h c= dom R by A7;
     thus ((||.h.||")(#)(R*h)).n
       = (||.h.||".n)*((R*h).n) by Def2
@@ -1871,7 +1863,7 @@ A6:  (for r be Point of S holds r in dom R iff P[r]) &
      holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0)
    proof let x be Point of S;
        A17: R/.(x-x0) =R.(x-x0) by A7,FINSEQ_4:def 4
-                       .=0.T by A6,A7;
+                       .=0.T by A6;
     assume x in N;
      hence f/.x - f/.x0 = r - f/.x0 by A3,A16
      .= r - r by A1,A3,A14
@@ -1890,7 +1882,7 @@ A6:  (for r be Point of S holds r in dom R iff P[r]) &
    holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0)
    proof let x be Point of S;
        A23: R/.(x-x0) =R.(x-x0) by A7,FINSEQ_4:def 4
-                       .=0.T by A6,A7;
+                       .=0.T by A6;
  assume x in N; hence f/.x - f/.x0 = r - f/.x0 by A3,A21
      .=r - r by A1,A3,A19
      .=0.T  by RLVECT_1:28
@@ -1922,7 +1914,7 @@ registration let S;
 coherence
  proof
     c^\n is constant
-  proof c^\n is_subsequence_of c by LOPBAN_3:13;
+  proof c^\n is subsequence of c by LOPBAN_3:13;
    hence c^\n is constant by Th19;
   end;
   hence thesis;
@@ -1971,7 +1963,7 @@ A2: rng c = {x0} & rng (h+c) c= N;
      then consider n such that
     A12: for m being Nat st n<=m holds
      ||.(h+c).m-x0.||<g by A6,A11,NORMSP_1:def 11;
-       c^\n is_subsequence_of c by Th18;
+       c^\n is subsequence of c by Th18;
     then A13: rng (c^\n) = {x0} by A2,Th20; take n;
     thus rng (c^\n) c= N2
      proof let y; assume y in rng (c^\n);
@@ -1990,7 +1982,7 @@ A2: rng c = {x0} & rng (h+c) c= N;
  then consider n such that
  A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
  A17: rng (c^\n) c= dom f
-   proof let y; c^\n is_subsequence_of c by Th18;
+   proof let y; c^\n is subsequence of c by Th18;
   then A18: rng (c^\n) = rng c by Th20;
     assume y in rng (c^\n); then y = x0 by A2,A18,TARSKI:def 1;
     then y in N by NFCONT_1:4; hence thesis by A1;
@@ -2023,7 +2015,7 @@ A24: ((h+c)^\n).k - (c^\n).k
     .= (h^\n).k + 0.S by RLVECT_1:28
     .= (h^\n).k by RLVECT_1:10;
  A25: (c^\n).k in rng (c^\n) by NFCONT_1:6;
-     c^\n is_subsequence_of c by Th18;
+     c^\n is subsequence of c by Th18;
    then rng (c^\n) = rng c by Th20;
    then (c^\n).k = x0 by A2,A25,TARSKI:def 1;
    hence thesis by A4,A5,A23,A24;
@@ -2267,9 +2259,6 @@ let f be PartFunc of S,S;
 let Z be Subset of S such that
 A1: Z is open;
  assume that A2: Z c= dom f and A3: f|Z = id Z;
- defpred P[set] means $1 in (the carrier of S);
- deffunc F(Point of S) = $1;
- deffunc G(Point of S) = 0.S;
  A4: R_NormSpace_of_BoundedLinearOperators(S,S) =
   NORMSTR (# BoundedLinearOperators(S,S),
          Zero_(BoundedLinearOperators(S,S),
@@ -2285,15 +2274,14 @@ A1: Z is open;
  reconsider L as Point
    of R_NormSpace_of_BoundedLinearOperators(S,S)
  by A4,LOPBAN_1:def 10;
- consider R being PartFunc of S,S  such that
- A5: (for r be Point of S holds r in dom R iff P[r]) &
- for r be Point of S st r in dom R holds R.r= G(r) from SEQ_1:sch 3;
- A6: dom R = (the carrier of S) by A5,Th25;
+ reconsider R = (the carrier of S) --> 0.S as PartFunc of S,S by FUNCOP_1:57;
+A5: for r be Point of S holds R.r=0.S by FUNCOP_1:13;
+ A6: dom R = (the carrier of S) by FUNCOP_1:19;
  then A7: R is total by PARTFUN1:def 4;
    now let h;
   A8: now let n;
      A9: R/.(h.n) =R.(h.n) by A6,FINSEQ_4:def 4
-                 .=0.S by A5,A6;
+                 .=0.S by A5;
   A10: rng h c= dom R by A6;
   thus ((||.h.||")(#)(R*h)).n = (||.h.||".n)*((R*h).n) by Def2
    .= (||.h.||".n)*(R/.(h.n)) by A10,NFCONT_1:8
@@ -2321,7 +2309,7 @@ A1: Z is open;
    assume
    A18: x in N;
         A19: R/.(x-x0) =R.(x-x0) by A6,FINSEQ_4:def 4
-                 .=0.S by A5,A6;
+                 .=0.S by A5;
     thus f/.x - f/.x0 = x - f/.x0 by A12,A16,A18
     .= x - x0 by A12,A15
     .= L.(x-x0) by FUNCT_1:34
@@ -2348,7 +2336,7 @@ A1: Z is open;
   holds f/.x - f/.x0 = L.(x-x0) + R/.(x-x0)
   proof let x be Point of S;
       A28: R/.(x-x0) =R.(x-x0) by A6,FINSEQ_4:def 4
-                   .=0.S by A5,A6;
+                   .=0.S by A5;
    assume x in N2; then x in N1 by A25;
    hence f/.x - f/.x0 = x - f/.x0 by A12,A24
     .= x - x0 by A12,A21
@@ -2464,18 +2452,14 @@ set L=0.R_NormSpace_of_BoundedLinearOperators(S,T);
            BoundedLinearOperatorsNorm(S,T) #) by LOPBAN_1:def 15;
 then reconsider L as Element of BoundedLinearOperators(S,T);
 A6:  ((the carrier of S) --> 0.T) = L by LOPBAN_1:37;
- defpred P[set] means $1 in the carrier of S;
- deffunc F(Point of S) = 0.T;
- consider R being PartFunc of S,T such that
- A7:  (for r be Point of S holds r in dom R iff P[r]) &
-       for r be Point of S st r in dom R
-       holds R.r=F(r) from SEQ_1:sch 3;
- A8: dom R = the carrier of S by A7,Th25;
+ reconsider R = (the carrier of S) --> 0.T as PartFunc of S,T by FUNCOP_1:57;
+A7: for r be Point of S holds R.r=0.T by FUNCOP_1:13;
+ A8: dom R = the carrier of S by FUNCOP_1:19;
  then A9: R is total by PARTFUN1:def 4;
     now let h;
   A10: now let n;
       A11: R/.(h.n) =R.(h.n) by A8,FINSEQ_4:def 4
-                       .=0.T by A7,A8;
+                       .=0.T by A7;
  A12: rng h c= dom R by A8;
     thus ((||.h.||")(#)(R*h)).n = (||.h.||".n)*((R*h).n) by Def2
      .=(||.h.||".n)*(R/.(h.n)) by A12,NFCONT_1:8
@@ -2497,7 +2481,7 @@ A6:  ((the carrier of S) --> 0.T) = L by LOPBAN_1:37;
       holds f/.x-f/.x0=L.(x-x0)+R/.(x-x0)
   proof let x be Point of S;
        A19: R/.(x-x0) =R.(x-x0) by A8,FINSEQ_4:def 4
-                       .=0.T by A7,A8;
+                       .=0.T by A7;
    assume x in N; then x in Z/\dom f by A17,A18,XBOOLE_0:def 3;
    hence f/.x-f/.x0=r-f/.x0 by A4
    .=r - r by A4,A16
@@ -2517,7 +2501,7 @@ A6:  ((the carrier of S) --> 0.T) = L by LOPBAN_1:37;
  =L.(x-x0)+R/.(x-x0)
   proof let x be Point of S;
    A27: R/.(x-x0) =R.(x-x0) by A8,FINSEQ_4:def 4
-                         .=0.T by A7,A8;
+                         .=0.T by A7;
    assume x in N; then x in Z/\dom f by A24,A25,XBOOLE_0:def 3;
    hence f/.x - f/.x0 = r - f/.x0 by A4
    .=r - r by A4,A22
@@ -2545,9 +2529,6 @@ proof
  assume
 A2: Z c= dom f
 & for x be Point of S st x in Z holds f/.x = r*x + p;
- defpred P[set] means $1 in the carrier of S;
- deffunc G(Point of S) = r*$1;
- deffunc F(Point of S) = 0.S;
  A3:R_NormSpace_of_BoundedLinearOperators(S,S) =
    NORMSTR (# BoundedLinearOperators(S,S),
           Zero_(BoundedLinearOperators(S,S),
@@ -2568,16 +2549,14 @@ reconsider II=FuncUnit(S) as
             R_VectorSpace_of_LinearOperators(S,S)).(r,FuncUnit(S))
           by A3,BINOP_1:def 1
          .=r*FuncUnit(S) by LOPBAN_2:def 3;
- consider R being PartFunc of S,S  such that
- A5: (for r be Point of S holds r in dom R iff P[r]) &
-      for r be Point of S st r in dom R holds R.r=F(r)
-      from SEQ_1:sch 3;
- A6: dom R = the carrier of S by A5,Th25;
+ reconsider R = (the carrier of S) --> 0.S as PartFunc of S,S by FUNCOP_1:57;
+A5: for r be Point of S holds R.r=0.S by FUNCOP_1:13;
+ A6: dom R = the carrier of S by FUNCOP_1:19;
  then A7: R is total by PARTFUN1:def 4;
    now let h;
   A8: now let n;
        A9: R/.(h.n) =R.(h.n) by A6,FINSEQ_4:def 4
-                         .=0.S by A5,A6;
+                         .=0.S by A5;
   A10: rng h c= dom R by A6;
     thus ((||.h.||")(#)(R*h)).n = (||.h.||".n)*((R*h).n) by Def2
      .=(||.h.||".n)*(R/.(h.n)) by A10,NFCONT_1:8
@@ -2600,7 +2579,7 @@ reconsider II=FuncUnit(S) as
    assume
 A16: x in N;
 A17: R/.(x-x0) =R.(x-x0) by A6,FINSEQ_4:def 4
-                      .=0.S by A5,A6;
+                      .=0.S by A5;
      (x-x0)=(id the carrier of S).(x-x0) by FUNCT_1:34; then
 A18: r* (x-x0)=r* ((FuncUnit(S)).(x-x0)) by LOPBAN_2:def 5
                  .=L.(x-x0) by LOPBAN_1:42;
@@ -2627,7 +2606,7 @@ A18: r* (x-x0)=r* ((FuncUnit(S)).(x-x0)) by LOPBAN_2:def 5
   proof let x be Point of S;
    assume A25:x in N;
       A26: R/.(x-x0) =R.(x-x0) by A6,FINSEQ_4:def 4
-                        .=0.S by A5,A6;
+                        .=0.S by A5;
     (x-x0)=(id the carrier of S).(x-x0) by FUNCT_1:34; then
         A27:   r* (x-x0)=r* ((FuncUnit(S)).(x-x0)) by LOPBAN_2:def 5
                     .=L.(x-x0) by LOPBAN_1:42;
@@ -2661,15 +2640,13 @@ proof
   A4: rng s1 c= dom f & s1 is convergent & lim s1 = x0 & for n holds s1.n<>x0;
   consider g be Real such that
   A5: 0<g & {y where y is Point of S:||.y-x0.|| < g } c= N by NFCONT_1:def 3;
-  deffunc F(Nat) = x0;
-  consider s2 be sequence of S such that
-  A6: for n holds s2.n=F(n) from FUNCT_2:sch 4;
+  reconsider s2 = NAT --> x0 as sequence of S by FUNCOP_1:57;
+   A6: for n holds s2.n=x0 by FUNCOP_1:13;
   deffunc G(Nat) = s1.$1-s2.$1;
   consider s3 be sequence of S such that
   A7: for n holds s3.n=G(n) from FUNCT_2:sch 4;
-  A8: s2 is constant by A6,LOPBAN_3:def 5;
-  then A9: s2 is convergent by Th21;
-  A10: lim s2 = s2.0 by A8,Th21
+  A9: s2 is convergent by Th21;
+  A10: lim s2 = s2.0 by Th21
     .=x0 by A6;
   A11: s3=s1-s2 by A7,NORMSP_1:def 6;
   then A12: s3 is convergent by A4,A9,NORMSP_1:35;
@@ -2690,9 +2667,8 @@ A18: (s3^\l).n=0.S; s3.(n+l)=0.S by A18,LOPBAN_3:def 6;
    then s3^\l is_not_0 by Th7;
   then reconsider h=s3^\l as convergent_to_0
   sequence of S by A17,Def4;
-  A19: s2^\l is_subsequence_of s2 by Th18;
-    s2 is constant by A6,LOPBAN_3:def 5;
-  then reconsider c =s2^\l as constant sequence of S by A19,Th19;
+  s2^\l is subsequence of s2 by Th18;
+  then reconsider c =s2^\l as constant sequence of S by Th19;
   A20: rng c = {x0}
   proof
   thus rng c c= {x0}

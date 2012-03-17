@@ -8,19 +8,23 @@ environ
 
  vocabularies FINSEQ_1, FUNCT_1, PBOOLE, RELAT_1, VECTSP_1, PRALG_1, RLVECT_2,
       ZF_REFLE, CARD_3, TARSKI, BINOP_1, GROUP_1, REALSET1, BOOLE, SEMI_AF1,
-      GROUP_2, FINSET_1, FUNCT_4, GROUP_6, WELLORD1, GROUP_7;
+      GROUP_2, FINSET_1, FUNCT_4, GROUP_6, WELLORD1, GROUP_7, FUNCOP_1,
+      MONOID_0, FRAENKEL;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       PARTFUN1, XREAL_0, NAT_1, FINSEQ_1, FUNCT_2, FUNCT_4, FINSET_1, BINOP_1,
-      STRUCT_0, GROUP_1, GROUP_2, GROUP_6, PBOOLE, CARD_3, PRALG_1, PRALG_2;
- constructors BINOP_1, GROUP_6, PRALG_2, ENUMSET1, XCMPLX_0, MEMBERED, PRALG_1;
+      FUNCOP_1, PBOOLE, PRE_CIRC, FRAENKEL,
+      STRUCT_0, MONOID_0,
+      GROUP_1, GROUP_2, GROUP_6, CARD_3, PRALG_1, PRALG_2;
+ constructors BINOP_1, GROUP_6, PRALG_2, ENUMSET1, XCMPLX_0, MEMBERED, PRALG_1,
+        PRE_CIRC, FUNCOP_1, MONOID_0;
  registrations STRUCT_0, PRALG_2, GROUP_1, FINSET_1, RELAT_1, GROUP_2,
-      FINSEQ_1, MOD_2, RELSET_1, ARYTM_3, MEMBERED;
+      FINSEQ_1, MOD_2, RELSET_1, ARYTM_3, MEMBERED, FUNCOP_1, MONOID_0;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions STRUCT_0, GROUP_1, TARSKI, GROUP_2, GROUP_6, FINSEQ_1, XBOOLE_0,
       PRALG_1, FUNCT_1, PBOOLE;
  theorems PRALG_1, FUNCT_1, PBOOLE, STRUCT_0, CARD_3, FUNCT_2, BINOP_1, TARSKI,
       ZFMISC_1, GROUP_1, GROUP_2, GROUP_6, FUNCT_4, FINSEQ_1, FINSEQ_3,
-      ENUMSET1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1;
+      ENUMSET1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1, FUNCOP_1, MONOID_0;
  schemes BINOP_1, WELLORD2, PBOOLE, FUNCT_2, XBOOLE_0;
 
 begin  :: Preliminaries
@@ -89,9 +93,8 @@ registration let I be set;
 existence
   proof
     consider H being non empty HGrStr;
-    deffunc F(set) = H;
-    consider f being ManySortedSet of I such that
-A1:   for i being set st i in I holds f.i = F(i) from PBOOLE:sch 4;
+    set f = I --> H;
+A1:   for i being set st i in I holds f.i = H by FUNCOP_1:13;
     take f;
     let a be set;
     assume a in rng f;
@@ -284,40 +287,13 @@ A22:    ex Gi being non empty HGrStr, h2 being Function st
 end;
 
 registration let I be set, F be HGrStr-Family of I;
- cluster product F -> non empty;
+ cluster product F -> non empty constituted-Functions;
 coherence
   proof
-        the carrier of product F = product Carrier F by Def2;
+A:   the carrier of product F = product Carrier F by Def2;
     hence the carrier of product F is non empty;
-  end;
-end;
-
-registration let I be set, F be HGrStr-Family of I;
- cluster -> Function-like Relation-like Element of product F;
-coherence
-  proof
-    let x be Element of product F;
-    reconsider y = x as Element of product Carrier F by Def2;
-        y is Function;
-    hence thesis;
-  end;
-end;
-
-registration let I be set,
-               F be HGrStr-Family of I,
-               f, g be Element of product Carrier F;
- cluster (the mult of product F).(f,g) -> Function-like Relation-like;
-coherence
-  proof
-    set A = product Carrier F;
-A1: the carrier of product F = product Carrier F by Def2;
-    then [f,g] in [:the carrier of product F, the carrier of product F:]
-      by ZFMISC_1:106;
-    then (the mult of product F).[f,g] is Element of A by A1,FUNCT_2:7;
-    then reconsider h = (the mult of product F).(f,g) as Element of A
-      by BINOP_1:def 1;
-        h is Function;
-    hence thesis;
+      the carrier of product F is functional by A;
+    hence thesis by MONOID_0:89;
   end;
 end;
 
@@ -428,8 +404,8 @@ existence
   proof
     consider H being commutative Group;
     deffunc F(set) = H;
-    consider f being ManySortedSet of I such that
-A1:   for i being set st i in I holds f.i = F(i) from PBOOLE:sch 4;
+    set f = I --> H;
+A1:   for i being set st i in I holds f.i = H by FUNCOP_1:13;
         f is HGrStr-yielding
     proof
       let i be set;

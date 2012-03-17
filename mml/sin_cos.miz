@@ -10,19 +10,20 @@ environ
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1,
-      XCMPLX_0;
+      XCMPLX_0, FUNCOP_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, REAL_1, FUNCT_1, FCONT_1, FUNCT_2, SEQ_1, SEQ_2, FDIFF_1,
-      RELAT_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON, COMPLEX1, SQUARE_1, PREPOWER,
+      RELAT_1, FUNCOP_1,
+      SERIES_1, NAT_1, FINSEQ_4, NEWTON, COMPLEX1, SQUARE_1, PREPOWER,
       PARTFUN1, SEQM_3, RCOMP_1, BINARITH, RFUNCT_1, RFUNCT_2, COMSEQ_1,
       COMSEQ_2, COMSEQ_3;
  constructors COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1, RFUNCT_1,
       FDIFF_1, SQUARE_1, COMSEQ_1, COMSEQ_2, PREPOWER, SERIES_1, PARTFUN1,
       BINARITH, RFUNCT_2, COMPLEX1, MEMBERED, ARYTM_0, ARYTM_3, FUNCT_4,
-      BINOP_2, NAT_1;
+      BINOP_2, NAT_1, FUNCOP_1;
  registrations COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1,
       COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, SQUARE_1,
-      XCMPLX_0;
+      XCMPLX_0, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions COMSEQ_3;
  theorems AXIOMS, NAT_1, REAL_1, ABSVALUE, REAL_2, INT_1, SEQ_1, SEQ_2,
@@ -30,7 +31,7 @@ environ
       SQUARE_1, COMSEQ_3, FCONT_2, FINSEQ_4, RCOMP_1, FUNCT_1, FDIFF_1,
       FDIFF_2, FCONT_1, FCONT_3, TARSKI, FUNCT_2, RFUNCT_1, SUBSET_1, RFUNCT_2,
       RELSET_1, POWER, PARTFUN1, ROLLE, NEWTON, RELAT_1, XREAL_0, BINARITH,
-      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, ARYTM_0;
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, ARYTM_0, FUNCOP_1;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1, FUNCT_1, PARTFUN2, BINOP_2;
 
 begin
@@ -2734,13 +2735,12 @@ theorem Th41: for p,th,rseq st rseq is convergent&
 proof
  let p,th, rseq such that
  A1: rseq is convergent & lim(rseq)=th &(for n holds rseq.n >= p);
-     deffunc U(Nat) = p;
- consider rseq1 such that
- A2: for n holds rseq1.n= U(n) from SEQ_1:sch 1;
- A3:rseq1 is constant by A2,SEQM_3:def 6;
- then A4: lim(rseq1)=rseq1.0 by SEQ_4:41
+ p in REAL by XREAL_0:def 1;
+ then reconsider rseq1 = NAT --> p as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds rseq1.n= p by FUNCOP_1:13;
+ A4: lim(rseq1)=rseq1.0 by SEQ_4:41
             .=p by A2;
- A5:  rseq1 is convergent by A3,SEQ_4:39;
+ A5:  rseq1 is convergent by SEQ_4:39;
       now let n;
        rseq.n >= p by A1; hence
         rseq.n >= rseq1.n by A2;
@@ -2991,7 +2991,7 @@ theorem Th47: cos.1>0 & sin.1>0 & cos.1<sin.1
 proof
  A1: cos.1>=1/2
  proof
-   A2: (Partial_Sums(1 P_cos))*bq is_subsequence_of Partial_Sums(1 P_cos)
+   A2: (Partial_Sums(1 P_cos))*bq is subsequence of Partial_Sums(1 P_cos)
  by SEQM_3:def 10;
    A3: Partial_Sums(1 P_cos) is convergent & cos.1=Sum(1 P_cos) by Th39,Th40;
    then A4: (Partial_Sums(1 P_cos))*bq is convergent by A2,SEQ_4:29;
@@ -3074,7 +3074,7 @@ k
  then A13: cos.1>0;
  A14: sin.1>=5/6
  proof
-    A15: (Partial_Sums(1 P_sin))*bq is_subsequence_of Partial_Sums(1 P_sin)
+    A15: (Partial_Sums(1 P_sin))*bq is subsequence of Partial_Sums(1 P_sin)
  by SEQM_3:def 10;
     A16: Partial_Sums(1 P_sin) is convergent & sin.1=Sum(1 P_sin) by Th39,Th40;
     then A17: (Partial_Sums(1 P_sin))*bq is convergent by A15,SEQ_4:29;
@@ -4545,7 +4545,7 @@ th in [.0,1 .] implies 0<cos.(th) & cos.(th)>=1/2
 proof
    assume th in [.0,1 .];
    then A1: 0<=th & th<=1 by RCOMP_1:48;
-   A2: (Partial_Sums(th P_cos))*bq is_subsequence_of Partial_Sums(th P_cos)
+   A2: (Partial_Sums(th P_cos))*bq is subsequence of Partial_Sums(th P_cos)
  by SEQM_3:def 10;
  th is Real by XREAL_0:def 1;
  then

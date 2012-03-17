@@ -9,20 +9,22 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, SEQ_1, RLVECT_1, FUNCT_1, SERIES_1, ARYTM_1,
       SUPINF_2, SEQ_2, ORDINAL2, SEQM_3, BHSP_3, LATTICES, ABSVALUE, ARYTM_3,
       POWER, PROB_1, INT_1, METRIC_1, ARYTM, GROUP_1, CSSPACE, CFUNCT_1,
-      COMPLEX1, COMSEQ_1;
- notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FUNCT_2,
+      COMPLEX1, COMSEQ_1, FUNCOP_1, FRECHET2;
+ notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
+      FUNCT_2, FUNCOP_1,
       SEQ_1, SEQ_2, SEQM_3, NAT_1, SERIES_1, PRE_TOPC, COMPLEX1, COMSEQ_1,
       STRUCT_0, RLVECT_1, NORMSP_1, BHSP_3, PREPOWER, POWER, INT_1, CFUNCT_1,
       COMSEQ_2, BHSP_4, COMSEQ_3, CLVECT_1, CSSPACE, CLVECT_2;
  constructors REAL_1, NAT_1, SEQ_2, SERIES_1, BHSP_3, PREPOWER, PARTFUN1,
       MEMBERED, COMPLEX1, CLVECT_2, BHSP_4, COMSEQ_1, COMSEQ_2, COMSEQ_3,
-      BINOP_2;
- registrations INT_1, STRUCT_0, XREAL_0, SEQ_1, MEMBERED, ORDINAL2, COMSEQ_1;
+      BINOP_2, FUNCOP_1;
+ registrations INT_1, STRUCT_0, XREAL_0, SEQ_1, MEMBERED, ORDINAL2, COMSEQ_1,
+      FUNCOP_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems REAL_1, NAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SERIES_1, ABSVALUE,
       RLVECT_1, SQUARE_1, PREPOWER, POWER, INT_1, AXIOMS, REAL_2, NORMSP_1,
       XREAL_0, XCMPLX_1, CLVECT_1, CSSPACE, CLVECT_2, BHSP_4, COMSEQ_1,
-      COMSEQ_2, COMPLEX1, COMSEQ_3;
+      COMSEQ_2, COMPLEX1, COMSEQ_3, FUNCOP_1;
  schemes NAT_1, RECDEF_1, FUNCT_2;
 
 begin :: Cauchy sequence of complex unitary space
@@ -279,7 +281,7 @@ then A5:  (PSseq ^\1) = PSseq + seq ^\1 by CLVECT_1:def 11;
    then seq ^\1 is convergent by A1,A2,CLVECT_2:4;
    hence
 A6: seq is convergent by CLVECT_2:101;
-    seq ^\1 is_subsequence_of seq by CLVECT_2:99;
+    seq ^\1 is subsequence of seq by CLVECT_2:99;
    hence thesis by A3,A4,A6,CLVECT_2:89;
 end;
 
@@ -366,11 +368,9 @@ A2:for k st _P[k] holds _P[k+1]
      then Partial_Sums(seq^\k) is convergent by Def2;
 then A3:  Partial_Sums(seq^\k)^\1 is convergent by CLVECT_2:100;
 A4:  seq^\(k+1)=(seq^\k)^\1 by CLVECT_2:93;
-     deffunc _F(Nat) = (seq^\k).0;
-     consider seq1 such that
-A5:  for m holds seq1.m = _F(m) from FUNCT_2:sch 4;
-      seq1 is constant by A5,NORMSP_1:def 4;
-then A6:  seq1 is convergent by CLVECT_2:1;
+     reconsider seq1 = NAT --> (seq^\k).0 as sequence of X by FUNCOP_1:57;
+A5:  for m holds seq1.m = (seq^\k).0 by FUNCOP_1:13;
+A6:  seq1 is convergent by CLVECT_2:1;
       Partial_Sums(seq^\k^\1) = (Partial_Sums(seq^\k)^\1) - seq1
        by A5,Th12;
      then Partial_Sums(seq^\k^\1) is convergent by A3,A6,CLVECT_2:4;
@@ -386,11 +386,10 @@ proof
 A1:seq^\k is summable;
     seq^\k^\1 is summable by A1,Th13;
 then A2:Partial_Sums(seq^\k^\1) is convergent by Def2;
-   deffunc _F(Nat) = Partial_Sums(seq).k;
-   consider seq1 such that
-A3: for n holds seq1.n = _F(n) from FUNCT_2:sch 4;
-    seq1 is constant by A3,NORMSP_1:def 4;
-then A4:seq1 is convergent by CLVECT_2:1;
+   reconsider seq1 = NAT --> Partial_Sums(seq).k as sequence of X
+        by FUNCOP_1:57;
+A3: for n holds seq1.n = Partial_Sums(seq).k by FUNCOP_1:13;
+A4:seq1 is convergent by CLVECT_2:1;
    defpred _P[Nat] means
    (Partial_Sums(seq)^\(k+1)).$1 = Partial_Sums(seq^\(k+1)).$1 + seq1.$1;
     for m holds _P[m]

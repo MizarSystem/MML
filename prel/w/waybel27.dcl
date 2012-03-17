@@ -20,8 +20,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FUNCT_4"/>
@@ -209,7 +209,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -362,7 +362,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -384,7 +384,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 <Adjective nr="83">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

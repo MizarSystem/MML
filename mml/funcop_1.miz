@@ -57,8 +57,7 @@ A6:    y in B;
 
 theorem Th2: delta A = <:id A, id A:>
  proof
-      [:A,A:] = {} implies A = {} by ZFMISC_1:113;
-  hence delta A = id [:A,A:]*delta A by FUNCT_2:23
+  thus delta A = id [:A,A:]*delta A by FUNCT_2:23
               .= [:id A, id A:]*delta A by FUNCT_3:90
               .= <:id A, id A:> by FUNCT_3:99;
  end;
@@ -251,7 +250,7 @@ then A8:     (f|A)~.x = (f|A).x by A2,A3,Def1;
   hence thesis by A1,A2,FUNCT_1:9;
  end;
 
-theorem f~~ = f;
+canceled;
 
 theorem
     (delta A)~ = delta A
@@ -351,13 +350,27 @@ A1: rng f = {x};
    hence thesis by A1,FUNCT_1:17;
   end;
 
-theorem Th16:
- dom ({} --> x) = {} & rng ({} --> x) = {}
+registration let x;
+ cluster {} --> x -> empty;
+ coherence
   proof
-A1:    ({} --> x) = [: {}, {x}:] by Def2 .= {} by ZFMISC_1:113;
-   hence dom ({} --> x) = {} by RELAT_1:60;
-   thus rng ({} --> x) = {} by A1,RELAT_1:60;
+    {} --> x = [: {}, {x}:] by Def2 .= {} by ZFMISC_1:113;
+   hence thesis;
   end;
+end;
+
+registration let x;
+ let A be empty set;
+ cluster A --> x -> empty;
+ coherence
+  proof
+    A --> x = {} --> x;
+   hence thesis;
+  end;
+end;
+
+theorem Th16:
+ dom ({} --> x) = {} & rng ({} --> x) = {};
 
 theorem Th17:
   (for z st z in dom f holds f.z = x) implies f = dom f --> x
@@ -366,7 +379,7 @@ A1:  for z st z in dom f holds f.z = x;
        now per cases;
      suppose
 A2:     dom f = {};
-then A3:     dom (dom f --> x) = {} by Th16;
+A3:     dom ({} --> x) = {};
           for z st z in {} holds f.z = (dom f --> x).z;
       hence f = dom f --> x by A2,A3,FUNCT_1:9;
      end;
@@ -416,7 +429,7 @@ theorem Th19:
   proof
        now per cases;
      suppose A = {};
-       then dom (A --> x) = A & rng (A --> x) = {} by Th16;
+       then dom ({} --> x) = A & rng ({} --> x) = {};
       hence thesis by XBOOLE_1:2;
      end;
      suppose A <> {};
@@ -433,8 +446,8 @@ A1:  x in B;
        now per cases;
      suppose
 A2:    A = {};
-       then rng (A --> x) = {} by Th16;
-       then (rng (A -->x) /\ B) = {};
+       rng ({} --> x) = {};
+       then rng (A -->x) /\ B = {} by A2;
        then rng (A -->x) misses B by XBOOLE_0:def 7;
       hence (A --> x)"B = A by A2,RELAT_1:173;
      end;

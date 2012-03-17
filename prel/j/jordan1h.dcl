@@ -248,19 +248,6 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="95"/>
-</Cluster>
-<Typ kind="M" nr="7">
-<Cluster/>
-<Func kind="K" nr="52"/>
-</Typ>
-<Cluster>
-<Adjective nr="6"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster>
 <Adjective nr="4" value="false"/>
 <Adjective nr="94"/>
 <Adjective nr="97"/>

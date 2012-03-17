@@ -8,18 +8,19 @@ environ
 
  vocabularies ARYTM, INT_1, RAT_1, SEQ_1, SEQ_2, FUNCT_1, ORDINAL2, SEQM_3,
       GROUP_1, SQUARE_1, ARYTM_3, RELAT_1, ARYTM_1, SEQ_4, ABSVALUE, LATTICES,
-      PREPOWER;
+      PREPOWER, FUNCOP_1;
  notations SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
-      NAT_1, NEWTON, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4,
+      NAT_1, NEWTON, FUNCT_1, FUNCOP_1,
+      SEQ_1, SEQ_2, SEQM_3, INT_1, SQUARE_1, SEQ_4,
       RAT_1, COMPLEX1;
  constructors REAL_1, NAT_1, SEQ_2, SEQM_3, SQUARE_1, SEQ_4, RAT_1, PARTFUN1,
-      NEWTON, INT_2, MEMBERED, XBOOLE_0, COMPLEX1, INT_1;
+      NEWTON, INT_2, MEMBERED, XBOOLE_0, COMPLEX1, INT_1, FUNCOP_1;
  registrations INT_1, RAT_1, XREAL_0, SEQ_1, RELSET_1, NEWTON, NAT_1, MEMBERED,
-      ORDINAL2;
+      ORDINAL2, FUNCOP_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems AXIOMS, REAL_1, ABSVALUE, NAT_1, SEQ_1, SEQ_2, SEQM_3, INT_1,
       SQUARE_1, SEQ_4, RAT_1, RFUNCT_1, RFUNCT_2, REAL_2, TARSKI, FUNCT_2,
-      NEWTON, XREAL_0, XCMPLX_0, XCMPLX_1, ORDINAL2;
+      NEWTON, XREAL_0, XCMPLX_0, XCMPLX_1, ORDINAL2, FUNCOP_1;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -66,12 +67,11 @@ theorem Th2:
 s1 is convergent & (for n holds s1.n>=a) implies lim s1 >= a
 proof assume that A1: s1 is convergent and
                   A2: for n holds s1.n>=a;
- deffunc F(set) = a;
- consider s being Real_Sequence such that A3:
- for n holds s.n = F(n) from SEQ_1:sch 1;
- A4: s is constant by A3,SEQM_3:def 6;
- then A5: s is convergent by SEQ_4:39;
- A6: lim s = s.0 by A4,SEQ_4:41 .= a by A3;
+ a in REAL by XREAL_0:def 1;
+ then reconsider s = NAT --> a as Real_Sequence by FUNCOP_1:57;
+ A3: for n holds s.n = a by FUNCOP_1:13;
+ A5: s is convergent by SEQ_4:39;
+ A6: lim s = s.0 by SEQ_4:41 .= a by A3;
     now let n;  s1.n >= a by A2; hence s1.n >= s.n by A3; end;
  hence thesis by A1,A5,A6,SEQ_2:32;
 end;
@@ -80,12 +80,11 @@ theorem Th3:
 s1 is convergent & (for n holds s1.n<=a) implies lim s1 <= a
 proof assume that A1: s1 is convergent and
                   A2: for n holds s1.n<=a;
- deffunc F(set) = a;
- consider s being Real_Sequence such that A3:
- for n holds s.n = F(n) from SEQ_1:sch 1;
- A4: s is constant by A3,SEQM_3:def 6;
- then A5: s is convergent by SEQ_4:39;
- A6: lim s = s.0 by A4,SEQ_4:41 .= a by A3;
+ a in REAL by XREAL_0:def 1;
+ then reconsider s = NAT --> a as Real_Sequence by FUNCOP_1:57;
+ A3: for n holds s.n = a by FUNCOP_1:13;
+ A5: s is convergent by SEQ_4:39;
+ A6: lim s = s.0 by SEQ_4:41 .= a by A3;
     now let n;  s1.n <= a by A2; hence s1.n <= s.n by A3; end;
  hence thesis by A1,A5,A6,SEQ_2:32;
 end;
@@ -1003,16 +1002,13 @@ proof let s be Real_Sequence;
  consider s1 being Real_Sequence such that A4:
  for n holds s1.n = O(n) from SEQ_1:sch 1;
  A5: s1 is convergent & lim s1 = 0 by A4,SEQ_4:46;
- deffunc O(Nat) = 1;
- consider s2 being Real_Sequence such that A6:
- for n holds s2.n = O(n) from SEQ_1:sch 1;
+ reconsider s2 = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
+ A6: for n holds s2.n = 1 by FUNCOP_1:13;
  set s3 = s2 + s1;
-    now let n; thus s2.n = 1 by A6 .= s2.(n+1) by A6; end;
- then A7: s2 is constant by SEQM_3:16;
- then A8: s2 is convergent by SEQ_4:39;
+ A8: s2 is convergent by SEQ_4:39;
  then A9: s3 is convergent by A5,SEQ_2:19;
- A10: lim s3 = s2.0 + 0 by A5,A7,SEQ_4:59 .= 1 by A6;
- A11: lim s2 = s2.0 by A7,SEQ_4:41 .= 1 by A6;
+ A10: lim s3 = s2.0 + 0 by A5,SEQ_4:59 .= 1 by A6;
+ A11: lim s2 = s2.0 by SEQ_4:41 .= 1 by A6;
  A12: now let n;
    n>=0 by NAT_1:18;
   then A13: n+1>=0+1 by AXIOMS:24;
@@ -1783,9 +1779,8 @@ registration
   cluster Rational_Sequence-like Real_Sequence;
   existence
     proof
-    deffunc O(Nat) = 0;
-    consider s being Real_Sequence such that
-    A1: for n holds s.n = O(n) from SEQ_1:sch 1;
+    reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
+    A1: for n holds s.n = 0 by FUNCOP_1:13;
     take s;
     let n;
     thus s.n is Rational by A1;
@@ -1818,20 +1813,17 @@ proof let a be real number;
  then reconsider s as Rational_Sequence by Def6;
  take s;
  reconsider a1 = a as Real by XREAL_0:def 1;
- deffunc O(Nat) = a1;
- consider s1 being Real_Sequence such that A2:
- for n holds s1.n = O(n) from SEQ_1:sch 1;
+ reconsider s1 = NAT --> a1 as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s1.n = a1 by FUNCOP_1:13;
  deffunc O(Nat) = 1/($1+1);
  consider s2 being Real_Sequence such that A3:
  for n holds s2.n = O(n) from SEQ_1:sch 1;
  A4: s2 is convergent & lim s2 = 0 by A3,SEQ_4:45;
  set s3 = s1 - s2;
-    now let n; thus s1.n = a by A2 .= s1.(n+1) by A2; end;
- then A5: s1 is constant by SEQM_3:16;
- then A6: s1 is convergent by SEQ_4:39;
+ A6: s1 is convergent by SEQ_4:39;
  then A7: s3 is convergent by A4,SEQ_2:25;
- A8: lim s3 = s1.0 - 0 by A4,A5,SEQ_4:59 .= a by A2;
- A9: lim s1 = s1.0 by A5,SEQ_4:41 .= a by A2;
+ A8: lim s3 = s1.0 - 0 by A4,SEQ_4:59 .= a by A2;
+ A9: lim s1 = s1.0 by SEQ_4:41 .= a by A2;
  A10: now let n;
    n+1>0 by NAT_1:19;
 then A11: (n+1)">=0 by REAL_1:72;
@@ -1874,20 +1866,18 @@ proof let a;
  end;
  then reconsider s as Rational_Sequence by Def6;
  take s;
- deffunc O(Nat) = a;
- consider s1 being Real_Sequence such that A2:
- for n holds s1.n = O(n) from SEQ_1:sch 1;
+ a in REAL by XREAL_0:def 1;
+ then reconsider s1 = NAT --> a as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s1.n = a by FUNCOP_1:13;
  deffunc O(Nat) = 1/($1+1);
  consider s2 being Real_Sequence such that A3:
  for n holds s2.n = O(n) from SEQ_1:sch 1;
  A4: s2 is convergent & lim s2 = 0 by A3,SEQ_4:45;
  set s3 = s1 + s2;
-    now let n; thus s1.n = a by A2 .= s1.(n+1) by A2; end;
- then A5: s1 is constant by SEQM_3:16;
- then A6: s1 is convergent by SEQ_4:39;
+ A6: s1 is convergent by SEQ_4:39;
  then A7: s3 is convergent by A4,SEQ_2:19;
- A8: lim s3 = s1.0 + 0 by A4,A5,SEQ_4:59 .= a by A2;
- A9: lim s1 = s1.0 by A5,SEQ_4:41 .= a by A2;
+ A8: lim s3 = s1.0 + 0 by A4,SEQ_4:59 .= a by A2;
+ A9: lim s1 = s1.0 by SEQ_4:41 .= a by A2;
  A10: now let n;
     n+1>0 by NAT_1:19;
  then A11: (n+1)">=0 by REAL_1:72;
@@ -2366,15 +2356,13 @@ canceled;
 theorem
 Th85: a > 0 implies a #R 0 = 1
   proof assume A1: a > 0;
-  deffunc O(Nat) = 0;
-  consider s being Real_Sequence such that
- A2: for n holds s.n = O(n) from SEQ_1:sch 1;
+ reconsider s = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s.n = 0 by FUNCOP_1:13;
    for n holds s.n is Rational by A2;
   then reconsider s as Rational_Sequence by Def6;
- A3: s is constant by A2,SEQM_3:def 6;
- then A4: s is convergent by SEQ_4:39;
+ A4: s is convergent by SEQ_4:39;
      s.0 = 0 by A2;
- then A5: lim s = 0 by A3,SEQ_4:41;
+ then A5: lim s = 0 by SEQ_4:41;
  A6: now let n; A7: s.n = 0 by A2; thus
      a #Q s .n = a #Q (s.n) by Def7
    .= 1 by A1,A7,Th58;
@@ -2389,15 +2377,13 @@ Th85: a > 0 implies a #R 0 = 1
 theorem
     a > 0 implies a #R 1 = a
   proof assume A1: a > 0;
-  deffunc O(Nat) = 1;
-  consider s being Real_Sequence such that
- A2: for n holds s.n = O(n) from SEQ_1:sch 1;
+ reconsider s = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s.n = 1 by FUNCOP_1:13;
      for n holds s.n is Rational by A2;
   then reconsider s as Rational_Sequence by Def6;
- A3: s is constant by A2,SEQM_3:def 6;
- then A4: s is convergent by SEQ_4:39;
+ A4: s is convergent by SEQ_4:39;
      s.0 = 1 by A2;
- then A5: lim s = 1 by A3,SEQ_4:41;
+ then A5: lim s = 1 by SEQ_4:41;
  A6: now let n; A7: s.n = 1 by A2; thus
      a #Q s .n = a #Q (s.n) by Def7
    .= a by A1,A7,Th59;
@@ -2428,12 +2414,11 @@ end;
 theorem Th88:
 a>0 implies a #R p = a #Q p
 proof assume A1: a>0;
-  deffunc O(Nat) = p;
- consider s being Real_Sequence such that A2:
- for n holds s.n = O(n) from SEQ_1:sch 1;
- A3: s is constant by A2,SEQM_3:def 6;
- then A4: s is convergent by SEQ_4:39;
- A5: lim s = s.0 by A3,SEQ_4:41 .= p by A2;
+ p in REAL by XREAL_0:def 1;
+ then reconsider s = NAT --> p as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s.n = p by FUNCOP_1:13;
+ A4: s is convergent by SEQ_4:39;
+ A5: lim s = s.0 by SEQ_4:41 .= p by A2;
     for n holds s.n is Rational by A2;
  then reconsider s as Rational_Sequence by Def6;
  A6: now let n; thus
@@ -2687,12 +2672,10 @@ s1 is convergent & s2 is convergent & lim s1 > 0 & p>=0 &
 proof assume that A1: s1 is convergent & s2 is convergent and
                   A2: lim s1 > 0 & p>=0 and
                   A3: for n holds s1.n>0 & s2.n = (s1.n) #Q p;
- deffunc O(Nat) = lim s1;
- consider s being Real_Sequence such that A4:
- for n holds s.n = O(n) from SEQ_1:sch 1;
- A5: s is constant by A4,SEQM_3:def 6;
- then A6: s is convergent by SEQ_4:39;
- A7: lim s = s.0 by A5,SEQ_4:41 .= lim s1 by A4;
+ reconsider s = NAT --> lim s1 as Real_Sequence by FUNCOP_1:57;
+ A4: for n holds s.n = lim s1 by FUNCOP_1:13;
+ A6: s is convergent by SEQ_4:39;
+ A7: lim s = s.0 by SEQ_4:41 .= lim s1 by A4;
     for n holds s1.n<>0 by A3;
  then A8: s1 is_not_0 by SEQ_1:7;
     for n holds s.n<>0 by A2,A4;

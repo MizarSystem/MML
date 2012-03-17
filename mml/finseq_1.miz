@@ -7,19 +7,21 @@
 environ
 
  vocabularies ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
-      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0;
+      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0,
+      FUNCOP_1, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL2, XCMPLX_0, XREAL_0,
-      RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
+      RELAT_1, FUNCT_1, FRAENKEL, FUNCOP_1,
+      WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
       MCART_1, FINSET_1, CARD_1;
  constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
-      DOMAIN_1;
+      DOMAIN_1, FUNCOP_1, FRAENKEL;
  registrations FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
-      ORDINAL2, FINSET_1;
+      ORDINAL2, FINSET_1, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1;
+ definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1, FRAENKEL;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       PARTFUN1, WELLORD2, ORDINAL1, CARD_1, FINSET_1, ORDINAL2, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, MCART_1, GRFUNC_1;
+      XBOOLE_1, XCMPLX_1, MCART_1, GRFUNC_1, FUNCOP_1;
  schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL, WELLORD2, RELAT_1;
 
 begin
@@ -124,7 +126,7 @@ A2: a is Nat by ORDINAL2:def 21;
    hence a in Seg a by Def1;
   end;
 
-theorem Th6:
+theorem
   a+1 in Seg(a+1) by Th5;
 
 theorem
@@ -229,11 +231,8 @@ theorem
   cluster FinSequence-like Function;
    existence
     proof
-     deffunc F(set) = 0;
-     consider f such that
- A1: dom f = {} & for x st x in {} holds f.x = F(x) from FUNCT_1:sch 3;
-     take f, 0;
-     thus thesis by A1,Th4;
+     take f = {} --> 0, 0;
+     thus thesis by Th4;
     end;
  end;
 
@@ -249,7 +248,6 @@ registration let n be natural number;
  cluster Seg n -> finite;
  coherence
   proof
-A1:n is Nat by ORDINAL2:def 21;
       Seg n is finite
    proof
 A2: n = { k : k < n } by AXIOMS:30;
@@ -423,16 +421,9 @@ canceled;
 theorem Th14:
     {} is FinSequence
  proof
-   deffunc F(set) = 0;
-   consider f such that
-  A1: dom f = {} & for x st x in {} holds f.x = F(x) from FUNCT_1:sch 3;
-       now consider x being Element of f;
-      assume
-A2:     f <> {};
-      then consider y,z such that A3: [y,z] = x by RELAT_1:def 1;
-      thus contradiction by A1,A2,A3,FUNCT_1:8;
-     end;
-  hence thesis by A1,Def2,Th4;
+   set f = {} --> 0;
+  A1: dom f = {} & for x st x in {} holds f.x = 0;
+  thus thesis by A1,Def2,Th4;
  end;
 
 theorem
@@ -604,23 +595,17 @@ theorem
   for D being non empty set
   ex p being FinSequence of D st len p = a
 proof let D be non empty set;
-    reconsider a as Nat by ORDINAL2:def 21;
-    consider y being Element of D;
-    deffunc F(Nat) = y;
-    consider p such that A1:
-      len p = a & for n st n in Seg a holds p.n=F(n) from SeqLambda;
-       rng p c= D
-      proof let z;
-          assume z in rng p;
-          then consider x such that A2: x in dom p & z=p.x by FUNCT_1:def 5;
-     A3:  x in Seg len p by A2,Def3;
-          reconsider m = x as Nat by A2;
-             p.m = y by A1,A3;
-        hence z in D by A2;
-      end;
+   reconsider a as Nat by ORDINAL2:def 21;
+   consider y being Element of D;
+   set p = Seg a --> y;
+X: dom p = Seg a by FUNCOP_1:19;
+   then reconsider p as FinSequence by Def2;
+Y: rng p c= {y} by FUNCOP_1:19;
+   {y} c= D by ZFMISC_1:37;
+   then rng p c= D by Y,XBOOLE_1:1;
    then reconsider q=p as FinSequence of D by Def4;
    take q;
-  thus thesis by A1;
+  thus thesis by X,Def3;
 end;
 
 ::::::::::::::::::::::::::::::::::::
@@ -660,7 +645,7 @@ theorem
 theorem
   p={} iff dom p = {} by RELAT_1:60,64;
 
-theorem Th27:
+theorem
   p={} iff rng p= {} by RELAT_1:60,64;
 
 canceled;
@@ -2858,7 +2843,7 @@ A2:   for x,y being set holds [x,y] in R2 iff x in field R & y in field R &
 end;
 
 theorem
-    for D1,D2 being set st D1 c= D2 holds D1* c= D2*
+  for D1,D2 being set st D1 c= D2 holds D1* c= D2*
   proof let D1,D2 be set such that
 A1:  D1 c= D2;
    let x be set; assume x in D1*;
@@ -2869,3 +2854,28 @@ A1:  D1 c= D2;
    hence thesis by Def11;
   end;
 
+:: 2005.05.13, A.T.
+
+registration let D be set;
+ cluster D* -> functional;
+ coherence
+  proof let x be set;
+   thus thesis by Def11;
+  end;
+end;
+
+registration
+  let f be finite Function;
+  cluster dom f -> finite;
+  coherence by FINSET_1:29;
+end;
+
+registration
+  let f be finite Function, x be set;
+  cluster f"x -> finite;
+  coherence
+  proof
+    f"x c= dom f by RELAT_1:167;
+    hence thesis by FINSET_1:13;
+  end;
+end;

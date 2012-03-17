@@ -8,20 +8,21 @@ environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
-      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0;
+      CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
-      XCMPLX_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      XCMPLX_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      BINOP_1,
       FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1,
       SEQ_2, COMPLEX1, CFUNCT_1, NORMSP_1;
  constructors DOMAIN_1, BINOP_1, REAL_1, NAT_1, MEMBERED, ABSVALUE, SQUARE_1,
-      ARYTM_0, PARTFUN1, COMPLEX1, NORMSP_1, SEQ_2, BINOP_2;
+      ARYTM_0, PARTFUN1, COMPLEX1, NORMSP_1, SEQ_2, BINOP_2, FUNCOP_1;
  registrations RELSET_1, STRUCT_0, XREAL_0, SUBSET_1, NAT_1, MEMBERED,
-      ORDINAL2, RLVECT_1, COMPLEX1, XCMPLX_0;
+      ORDINAL2, RLVECT_1, COMPLEX1, XCMPLX_0, FUNCOP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0;
  theorems STRUCT_0, TARSKI, RLVECT_1, BINOP_1, COMPLEX1, XCMPLX_0, SQUARE_1,
       FINSEQ_1, NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1,
-      RELSET_1, REAL_1, ABSVALUE, SEQ_2, AXIOMS, XREAL_0;
+      RELSET_1, REAL_1, ABSVALUE, SEQ_2, AXIOMS, XREAL_0, FUNCOP_1;
  schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
 
 begin :: Complex Linear Space
@@ -69,10 +70,14 @@ Lm1:
    deffunc A((Element of ZS), Element of ZS) = O;
    consider F being BinOp of ZS such that
 A1:for x,y being Element of ZS holds F.(x,y) = A(x,y) from BINOP_1:sch 2;
-   deffunc M(set,set) = O;
-   consider G being Function of [:COMPLEX,ZS:],ZS such that
+   reconsider G = [:COMPLEX,ZS:] --> O as Function of [:COMPLEX,ZS:],ZS
+           by FUNCOP_1:57;
 A2:for a being Element of COMPLEX for x being Element of ZS holds
-     G.[a,x qua set] = M(a,x) from FUNCT_2:sch 8;
+     G.[a,x qua set] = O
+    proof let a be Element of COMPLEX, x be Element of ZS;
+      [a,x] in [:COMPLEX,ZS:];
+     hence thesis by FUNCOP_1:13;
+    end;
    take F,G;
    set W = CLSStruct (# ZS,O,F,G #);
    thus for x,y being VECTOR of W holds x + y = y + x
@@ -125,7 +130,7 @@ BINOP_1:def 1;
 A5:  z * (x + y) = G.[z,x + y] by Def1;
        z * x + z * y = F.[z * x,z * y] by RLVECT_1:def 3
                   .= F.(z * x,z * y) by BINOP_1:def 1
-                  .= A(M(z,X),M(z,Y)) by A1;
+                  .= A(O,O) by A1;
      hence thesis by A2,A5;
    end;
 
@@ -137,10 +142,10 @@ A5:  z * (x + y) = G.[z,x + y] by Def1;
      set c = z1 + z2;
      reconsider X = x as Element of ZS;
 A6:  c * x = G.[c,x] by Def1
-          .= M(c,X) by A2;
+          .= O by A2;
        z1 * x + z2 * x = F.[z1 * x,z2 * x] by RLVECT_1:def 3
                    .= F.(z1 * x,z2 * x) by BINOP_1:def 1
-                   .= A(M(z1,X),M(z2,X)) by A1;
+                   .= A(O,O) by A1;
      hence thesis by A6;
    end;
 
@@ -152,9 +157,9 @@ A6:  c * x = G.[c,x] by Def1
      set c = z1 * z2;
      reconsider X = x as Element of ZS;
 A7:  c * x = G.[c,x] by Def1
-          .= M(c,X) by A2;
+          .= O by A2;
        z1 * (z2 * x) = G.[z1,z2 * x] by Def1
-                  .= M(z1,M(z2,X)) by A2;
+                  .= O by A2;
      hence thesis by A7;
    end;
 
@@ -163,7 +168,7 @@ A7:  c * x = G.[c,x] by Def1
      let x be VECTOR of W;
      reconsider X = x as Element of ZS;
      reconsider A' = 1 as Element of REAL;
-       1r * x = G.[1r,x] by Def1 .= M(A',X) by A2;
+       1r * x = G.[1r,x] by Def1 .= O by A2;
      hence thesis by TARSKI:def 1;
    end;
 end;
@@ -540,13 +545,12 @@ theorem
     Sum<* v,v,v *> = [* 3,0 *] * v
 proof
    reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-B: 2r = [*2,0*] by COMPLEX1:27;
 C: 2r + 1r = 3+0*<i> by COMPLEX1:def 7;
    thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
                     .= [* 2,0 *] * v + v by Th18
                     .= [* 2,0 *] * v + 1r * v by Def2
                     .= ([* 2,0 *] + 1r) * v by Def2
-                    .= (2r + 1r) * v by B
+                    .= (2r + 1r) * v by COMPLEX1:27
                     .= [* 3,0 *] * v by C,COMPLEX1:27;
 end;
 
@@ -1692,14 +1696,11 @@ then A3:not z * v in W by Th41;
    hence contradiction by A3,RLVECT_1:def 1;
 end;
 
-Lm8:
-(-1r) <> 0 by COMPLEX1:def 7;
-
 theorem Th71:
 v in W iff - v + W = the carrier of W
 proof
      (v in W iff ((- 1r) * v) + W = the carrier of W) & (- 1r) * v = - v
-      by Lm8,Th4,Th69,Th70;
+      by COMPLEX1:def 7,Th4,Th69,Th70;
    hence thesis;
 end;
 
@@ -1830,9 +1831,7 @@ A2:  u in W;
      then
 B:   ([* 2,0 *]" * [* 2,0 *]) * v = [* 2,0 *]" * u by Def2;
      [* 2,0 *] = 2+0*<i> by COMPLEX1:27;
-     then 0 <> [* 2,0 *];
-     then 1r * v = [* 2,0 *]" * u by COMPLEX1:def 7,XCMPLX_0:def 7,B;
-     then v = [* 2,0 *]" * u by Def2;
+     then v = [* 2,0 *]" * u by Def2,COMPLEX1:def 7,B;
      hence thesis by A2,Th41;
    end;
    assume v in W;
@@ -2336,18 +2335,12 @@ coherence;
 end;
      consider V being ComplexLinearSpace;
 Lm9:   the carrier of (0).V = {0.V} by Def5;
-  deffunc F(set) = 0;
-     consider nil_to_nil being Function
-     of the carrier of (0).V , REAL such that
-Lm10: for u being VECTOR of (0).V holds nil_to_nil.u = F(u)
-       from FUNCT_2:sch 4;
+  reconsider nil_to_nil = (the carrier of (0).V) --> 0
+      as Function of the carrier of (0).V , REAL by FUNCOP_1:57;
 
-Lm11:
-nil_to_nil.(0.V) = 0
-proof
-    0.V is VECTOR of (0).V by Lm9,TARSKI:def 1;
-hence thesis by Lm10;
-end;
+  0.V is VECTOR of (0).V by Lm9,TARSKI:def 1;
+  then
+Lm11: nil_to_nil.(0.V) = 0 by FUNCOP_1:13;
 
 Lm12:
 for u being VECTOR of (0).V , z holds

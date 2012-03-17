@@ -1,0 +1,2690 @@
+:: Lines on Planes in $n$-Dimensional Euclidean Spaces
+::  by Akihiro Kubo
+:: 
+:: Received May 24, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, AFF_1, JORDAN2C, ANALOAF, BHSP_1, ARYTM, ARYTM_1, AFF_4,
+      SEQ_2, SEQ_4, INCSP_1, ARYTM_3, FINSEQ_1, FINSEQ_2, COMPLEX1, EUCLID,
+      EUCLID_2, EUCLID_3, PRE_TOPC, FUNCT_1, SQUARE_1, SYMSP_1, METRIC_1,
+      EUCLIDLP;
+ notations XCMPLX_0, ORDINAL1, ZFMISC_1, PRE_TOPC, AFF_1, BINOP_1, FUNCT_1,
+      SEQ_4, TARSKI, XBOOLE_0, XREAL_0, NAT_1, NUMBERS, REAL_1, SUBSET_1,
+      RVSUM_1, TOPREAL1, FINSEQ_1, FINSEQ_2, EUCLID, JORDAN2C, SQUARE_1,
+      EUCLID_4;
+ constructors REAL_1, EUCLID_4, SEQ_4, JORDAN2C, TOPREAL1, FINSEQOP, AFF_1,
+      SQUARE_1;
+ registrations EUCLID, STRUCT_0, SUBSET_1, XREAL_0, NAT_1, REAL_1, MEMBERED;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0;
+ theorems REAL_1, SQUARE_1, XBOOLE_0, XCMPLX_1, RVSUM_1, EUCLID, EUCLID_4,
+      JORDAN2C, REAL_2, FINSEQ_1, FINSEQ_2, TARSKI, SEQ_4;
+
+begin
+
+ reserve a,a1,a2,a3,b,b1,b2,b3,r,r1,r2,r3,s,t,u,v,l for Real;
+ reserve i,j,n for Nat;
+ reserve x0,x,x1,x2,x3,y0,y,y1,y2,y3 for Element of REAL n;
+
+:: Preliminaries
+
+theorem LM001:
+  (s/t)*(u*x)=(s*u)/t*x & (1/t)*(u*x)= u/t*x
+proof
+  thus (s/t)*(u*x) = ((s/t)*u)*x by EUCLID_4:4
+                  .= (s*u)/t*x by XCMPLX_1:75;
+  thus (1/t)*(u*x) = ((1/t)*u)*x by EUCLID_4:4
+                  .= u/t*x by XCMPLX_1:100;
+end;
+
+theorem LM002:
+  x1 + (x2 + x3) = (x1 + x2) + x3
+proof
+  reconsider x1' = x1, x2' = x2, x3' = x3 as Element of n-tuples_on REAL
+    by EUCLID:def 1;
+  thus x1 + (x2 + x3) = (x1' + x2') + x3' by RVSUM_1:32
+                     .= (x1 + x2) + x3;
+end;
+
+theorem LM059:
+  x - 0*n = x
+proof
+  reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+  0.REAL n = 0*n & 0*n = n|->(0 qua Real) by EUCLID:def 4,def 9;
+  hence x - 0*n = x' by RVSUM_1:53
+              .= x;
+end;
+
+theorem LM004:
+  0*n - x = -x
+proof
+  reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+  0.REAL n = 0*n & 0*n = n|->(0 qua Real) by EUCLID:def 4,def 9;
+  hence 0*n - x = -x' by RVSUM_1:54
+               .= -x;
+end;
+
+theorem LM005:
+  x1 - (x2 + x3) = x1 - x2 - x3
+proof
+  reconsider x1' = x1, x2' = x2, x3' = x3 as Element of n-tuples_on REAL
+    by EUCLID:def 1;
+  thus x1 - (x2 + x3) = x1' - x2' - x3' by RVSUM_1:60
+                     .= x1 - x2 - x3;
+end;
+
+theorem LM007:
+  x1 - x2 = x1 + -x2
+proof
+  reconsider x1'= x1, x2' = x2 as Element of n-tuples_on REAL by EUCLID:def 1;
+  thus x1 - x2 = x1' + -x2' by RVSUM_1:52
+              .= x1 + -x2;
+end;
+
+theorem LM008:
+  x - x = 0*n & x + -x = 0*n
+proof
+  reconsider x' = x as Element of n-tuples_on REAL by EUCLID:def 1;
+  thus A1:x - x = x' - x'
+               .=(n|->0) by RVSUM_1:58
+               .= 0*n by EUCLID:def 4;
+  thus x + -x = 0*n by A1,LM007;
+end;
+
+LM065: (-1)*x = -x
+proof
+  thus -x = 0*n - x by LM004
+         .= 0 * x - x by EUCLID_4:3
+         .= (-1 + 1)*x + -x by LM007
+         .= (-1)*x + 1 * x + -x by EUCLID_4:7
+         .= (-1)*x + x + -x by EUCLID_4:3
+         .= (-1)*x + (x + -x) by LM002
+         .= (-1)*x + 0*n by LM008
+         .= (-1)*x by EUCLID_4:1;
+end;
+
+theorem LM006:
+  -a*x = (-a)*x & -a*x = a*(-x)
+proof
+  reconsider p1 = a*x as Point of TOP-REAL n by EUCLID:25;
+  thus -a*x = -p1 by EUCLID:def 12
+           .= (-1)*p1 by EUCLID:43
+           .= (-1)*(a*x) by EUCLID:def 11
+           .= ((-1)*a)*x by EUCLID_4:4
+           .= (-a)*x;
+  hence -a*x = (a*(-1))*x
+            .= a*((-1)*x) by EUCLID_4:4
+            .= a*(-x) by LM065;
+end;
+
+theorem LM058:
+  x1 - (x2 - x3) = x1 - x2 + x3
+proof
+  thus x1 - (x2 - x3) = x1 - (x2 + -x3) by LM007
+                     .= x1 - x2 - -x3 by LM005
+                     .= x1 - x2 + --x3 by LM007
+                     .= x1 - x2 + x3;
+end;
+
+theorem LM060:
+  x1 + (x2 - x3) = x1 + x2 - x3
+proof
+  thus x1 + (x2 - x3) = x1 + (x2 + -x3) by LM007
+                     .= x1 + x2 + -x3 by LM002
+                     .= x1 + x2 - x3 by LM007;
+end;
+
+theorem LM028:
+  x1 = x2 + x3 iff x2 = x1 - x3
+proof
+  thus x1 = x2 + x3 implies x2 = x1 - x3
+  proof
+    assume A1:x1 = x2 + x3;
+    thus x1 - x3 = (x2 + x3) + -x3 by LM007,A1
+                .= x2 + (x3 + -x3) by LM002
+                .= x2 + 0*n by LM008
+                .= x2 by EUCLID_4:1;
+  end;
+  now assume A2:x2 = x1 - x3;
+    thus x2 + x3 = x1 + -x3 + x3 by LM007,A2
+                .= x1 + (-x3 + x3) by LM002
+                .= x1 + 0*n by LM008
+                .= x1 by EUCLID_4:1;
+  end;
+  hence thesis;
+end;
+
+theorem LM025:
+  x=x1+x2+x3 iff x-x1=x2+x3
+proof
+  thus x=x1+x2+x3 implies x-x1=x2+x3
+  proof
+    assume x=x1+x2+x3;
+    then x = x1 + (x2 + x3) by LM002;
+    hence x - x1 = x2 + x3 by LM028;
+  end;
+  now assume x-x1=x2+x3;
+    hence x = x1 + (x2 + x3) by LM028
+           .= x1 + x2 + x3 by LM002;
+  end;
+  hence thesis;
+end;
+
+theorem LM019:
+  -(x1 + x2 + x3) = -x1 + -x2 + -x3
+proof
+  thus -(x1+x2+x3) = 0*n -(x1+x2+x3) by LM004
+            .= 0*n - (x1+x2) - x3 by LM005
+            .= 0*n - x1 - x2 - x3 by LM005
+            .= -x1 - x2 - x3 by LM004
+            .= -x1 + -x2 - x3 by LM007
+            .= -x1 + -x2 + -x3 by LM007;
+end;
+
+LM009:x1<>x2 implies |.x1-x2.|<>0
+proof
+  now assume A1: x1<>x2 & not |.x1-x2.| <> 0;
+    then |(x1-x2,x1-x2)| = 0 by EUCLID_4:21;
+    then x1 - x2 = 0*n by EUCLID_4:22;
+    then x1 = x2 + 0*n by LM028
+           .= x2 by EUCLID_4:1;
+    hence contradiction by A1;
+  end;
+  hence thesis;
+end;
+
+theorem LM032:
+  x1=x2 iff x1-x2=0*n
+proof
+  thus x1 = x2 implies x1 - x2 = 0*n by LM008;
+  assume A2:x1 - x2 = 0*n;
+  thus x1 = x2 + 0*n by A2,LM028
+         .= x2 by EUCLID_4:1;
+end;
+
+theorem LM045:
+  x1 - x0 = t*x & x1 <> x0 implies t <> 0
+proof
+  assume A1:x1 - x0 = t*x & x1 <> x0;
+  assume not t <> 0;
+  then x1 - x0 = 0*n by A1,EUCLID_4:3;
+  hence contradiction by LM032,A1;
+end;
+
+theorem LM018:
+  (a - b)*x = a*x + (-b)*x & (a - b)*x = a*x + -b*x & (a - b)*x = a*x - b*x
+proof
+  thus (a - b)*x = (a + -b)*x
+                .= a*x + (-b)*x by EUCLID_4:7;
+  hence (a - b)*x = a*x + -b*x by LM006;
+  hence thesis by LM007;
+end;
+
+theorem LM027:
+  a*(x - y) = a*x + -a*y & a*(x - y) = a*x + (-a)*y & a*(x - y) = a*x - a*y
+proof
+  thus A1:a*(x - y) = a*(x + -y) by LM007
+                   .= a*x + a*(-y) by EUCLID_4:6
+                   .= a*x + -a*y by LM006;
+  hence a*(x - y) = a*x + (-a)*y by LM006;
+  thus thesis by A1,LM007;
+end;
+
+theorem LM010:
+  (s - t - u)*x = s*x - t*x - u*x
+proof
+  thus (s - t - u)*x = (s - t)*x - u*x by LM018
+                    .= s*x - t*x - u*x by LM018;
+end;
+
+theorem LM020:
+  x - (a1*x1+a2*x2+a3*x3) = x + ((-a1)*x1 + (-a2)*x2 + (-a3)*x3)
+proof
+  thus x - (a1*x1+a2*x2+a3*x3) = x + -(a1*x1+a2*x2+a3*x3) by LM007
+           .= x + (-a1*x1 + -a2*x2 + -a3*x3) by LM019
+           .= x + ((-a1)*x1 + -a2*x2 + -a3*x3) by LM006
+           .= x + ((-a1)*x1 + (-a2)*x2 + -a3*x3) by LM006
+           .= x + ((-a1)*x1 + (-a2)*x2 + (-a3)*x3) by LM006;
+end;
+
+theorem
+  x - (s+t+u)*y = x + (-s)*y + (-t)*y + (-u)*y
+proof
+  thus x - (s+t+u)*y = x - ((s+t)*y + u*y) by EUCLID_4:7
+           .= x - (s*y + t*y + u*y) by EUCLID_4:7
+           .= x + ((-s)*y + (-t)*y + (-u)*y) by LM020
+           .= x + ((-s)*y + (-t)*y) + (-u)*y by LM002
+           .= x + (-s)*y + (-t)*y + (-u)*y by LM002;
+end;
+
+theorem LM037:
+  (x1+x2)+(y1+y2)=(x1+y1)+(x2+y2)
+proof
+  thus (x1+x2)+(y1+y2) = (x1+x2)+y1+y2 by LM002
+                      .= (x1+y1)+x2+y2 by LM002
+                      .= (x1+y1)+(x2+y2) by LM002;
+end;
+
+theorem LM021:
+  (x1+x2+x3)+(y1+y2+y3)=(x1+y1)+(x2+y2)+(x3+y3)
+proof
+  thus (x1+x2+x3)+(y1+y2+y3) = ((x1+x2)+(y1+y2))+(x3+y3) by LM037
+                            .= (x1+y1)+(x2+y2)+(x3+y3) by LM037;
+end;
+
+theorem LM038:
+  (x1+x2)-(y1+y2)=(x1-y1)+(x2-y2)
+proof
+  thus (x1+x2)-(y1+y2) = (x1 + x2) - y1 - y2 by LM005
+                      .= (x1 + x2) + -y1 -y2 by LM007
+                      .= (x1 + x2) + -y1 + -y2 by LM007
+                      .= (x1 + x2) + (-y1+ -y2) by LM002
+                      .= (x1 + -y1) + (x2 + -y2) by LM037
+                      .= (x1 - y1) + (x2 + -y2) by LM007
+                      .= (x1 - y1) + (x2 - y2) by LM007;
+end;
+
+theorem
+  (x1+x2+x3)-(y1+y2+y3)=(x1-y1)+(x2-y2)+(x3-y3)
+proof
+  thus (x1+x2+x3)-(y1+y2+y3) = ((x1+x2) - (y1+y2))+ (x3 - y3) by LM038
+                            .= (x1 - y1) + (x2 - y2) + (x3 - y3) by LM038;
+end;
+
+theorem LM022:
+  a*(x1+x2+x3)=a*x1+a*x2+a*x3
+proof
+  thus a*(x1+x2+x3) = a*(x1+x2)+a*x3 by EUCLID_4:6
+                   .= a*x1+a*x2+a*x3 by EUCLID_4:6;
+end;
+
+theorem LM039:
+  a*(b1*x1+b2*x2) = (a*b1)*x1+(a*b2)*x2
+proof
+  thus a*(b1*x1+b2*x2) = a*(b1*x1)+a*(b2*x2) by EUCLID_4:6
+                      .= (a*b1)*x1+a*(b2*x2) by EUCLID_4:4
+                      .= (a*b1)*x1+(a*b2)*x2 by EUCLID_4:4;
+end;
+
+theorem LM023:
+  a*(b1*x1+b2*x2+b3*x3) = (a*b1)*x1+(a*b2)*x2+(a*b3)*x3
+proof
+  thus a*(b1*x1+b2*x2+b3*x3) = a*(b1*x1)+a*(b2*x2)+a*(b3*x3) by LM022
+                            .= (a*b1)*x1+a*(b2*x2)+a*(b3*x3) by EUCLID_4:4
+                            .= (a*b1)*x1+(a*b2)*x2+a*(b3*x3) by EUCLID_4:4
+                            .= (a*b1)*x1+(a*b2)*x2+(a*b3)*x3 by EUCLID_4:4;
+end;
+
+theorem LM040:
+  (a1*x1+a2*x2)+(b1*x1+b2*x2)=(a1+b1)*x1+(a2+b2)*x2
+proof
+  thus (a1*x1+a2*x2)+(b1*x1+b2*x2)
+     = (a1*x1+b1*x1)+(a2*x2+b2*x2) by LM037
+    .= (a1+b1)*x1+(a2*x2+b2*x2) by EUCLID_4:7
+    .= (a1+b1)*x1+(a2+b2)*x2 by EUCLID_4:7;
+end;
+
+theorem LM024:
+  (a1*x1+a2*x2+a3*x3)+(b1*x1+b2*x2+b3*x3)=(a1+b1)*x1+(a2+b2)*x2+(a3+b3)*x3
+proof
+  thus (a1*x1+a2*x2+a3*x3)+(b1*x1+b2*x2+b3*x3)
+     = ((a1*x1+a2*x2)+(b1*x1+b2*x2))+(a3*x3+b3*x3) by LM037
+    .= (a1+b1)*x1+(a2+b2)*x2+(a3*x3+b3*x3) by LM040
+    .= (a1+b1)*x1+(a2+b2)*x2+(a3+b3)*x3 by EUCLID_4:7;
+end;
+
+theorem LM041:
+  (a1*x1+a2*x2)-(b1*x1+b2*x2)=(a1-b1)*x1+(a2-b2)*x2
+proof
+  thus (a1*x1+a2*x2)-(b1*x1+b2*x2)
+     = (a1*x1-b1*x1)+(a2*x2-b2*x2) by LM038
+    .= (a1-b1)*x1+(a2*x2-b2*x2) by LM018
+    .= (a1-b1)*x1+(a2-b2)*x2 by LM018;
+end;
+
+theorem LM031:
+  (a1*x1+a2*x2+a3*x3)-(b1*x1+b2*x2+b3*x3)=(a1-b1)*x1+(a2-b2)*x2+(a3-b3)*x3
+proof
+  thus (a1*x1+a2*x2+a3*x3)-(b1*x1+b2*x2+b3*x3)
+     = ((a1*x1+a2*x2)-(b1*x1+b2*x2))+(a3*x3-b3*x3) by LM038
+    .= ((a1-b1)*x1+(a2-b2)*x2)+(a3*x3-b3*x3) by LM041
+    .= (a1-b1)*x1+(a2-b2)*x2+(a3-b3)*x3 by LM018;
+end;
+
+theorem LM026:
+  a1+a2+a3=1 implies
+  a1*x1+a2*x2+a3*x3=x1+a2*(x2-x1)+a3*(x3-x1)
+proof
+  assume a1+a2+a3=1;
+  then a1=1-a2-a3;
+  hence a1*x1+a2*x2+a3*x3 = 1 * x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM010
+                        .= x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by EUCLID_4:3
+                        .= x1 + -a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM007
+                        .= x1 + -a2*x1 + -a3*x1 + a2*x2 + a3*x3 by LM007
+                        .= x1 + -a2*x1 + a2*x2 + -a3*x1 + a3*x3 by LM002
+                        .= x1 + (a2*x2 + -a2*x1) + -a3*x1 + a3*x3 by LM002
+                        .= x1 + (a2*x2 + -a2*x1) + (a3*x3 + -a3*x1) by LM002
+                        .= x1 + a2*(x2-x1) + (a3*x3 + -a3*x1) by LM027
+                        .= x1 + a2*(x2-x1) + a3*(x3-x1) by LM027;
+end;
+
+theorem LM029:
+  x=x1+a2*(x2-x1)+a3*(x3-x1) implies
+  ex a1 be Real st x=a1*x1+a2*x2+a3*x3 & a1+a2+a3=1
+proof
+  assume A1:x=x1+a2*(x2-x1)+a3*(x3-x1);
+  reconsider a1 = 1-a2-a3 as Real;
+A4:a1*x1+a2*x2+a3*x3 = 1 * x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM010
+                    .= x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by EUCLID_4:3
+                    .= x1 + -a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM007
+                    .= x1 + -a2*x1 + -a3*x1 + a2*x2 + a3*x3 by LM007
+                    .= x1 + -a2*x1 + a2*x2 + -a3*x1 + a3*x3 by LM002
+                    .= x1 + (a2*x2 + -a2*x1) + -a3*x1 + a3*x3 by LM002
+                    .= x1 + (a2*x2 + -a2*x1) + (a3*x3 + -a3*x1) by LM002
+                    .= x1 + a2*(x2-x1) + (a3*x3 + -a3*x1) by LM027
+                    .= x by A1,LM027;
+  take a1;
+  thus thesis by A4;
+end;
+
+theorem
+  for n being Nat st n >= 1 holds 1*n <> 0*n
+proof
+  let n be Nat;
+  assume A1:n >= 1;
+  assume A2:1*n = 0*n;
+A4:1*n = n|->1 by JORDAN2C:def 7;
+A6:1 in Seg n by A1,FINSEQ_1:3;
+A7:(n|->0).1 = 0 by A6,FINSEQ_2:70;
+   (n|->1).1 = 1 by A6,FINSEQ_2:70;
+  hence contradiction by A2,EUCLID:def 4,A4,A7;
+end;
+
+:: Lines
+
+theorem LM003:
+  for A be Subset of REAL n,x1,x2
+  holds A is_line & x1 in A & x2 in A & x1<>x2 implies A=Line(x1,x2)
+proof
+  let A be Subset of REAL n;
+  let x1,x2;
+  assume that A1: A is_line and A2:x1 in A & x2 in A & x1<>x2;
+A3:ex y1,y2 st y1<>y2 & A=Line(y1,y2) by A1,EUCLID_4:def 2;
+  then A4:Line(x1,x2) c= A by A2,EUCLID_4:11;
+  A c= Line(x1,x2) by A2,A3,EUCLID_4:12;
+  hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem LM011:
+  for x1, x2 being Element of REAL n holds
+  y1 in Line(x1,x2) & y2 in Line(x1,x2) implies ex a st y2 - y1 =a*(x2 - x1)
+proof
+  let x1, x2 be Element of REAL n;
+A1:Line(x1,x2) = { (1-l)*x1 + l*x2 : not contradiction } by EUCLID_4:def 1;
+  assume y1 in Line(x1,x2);
+  then consider t such that A2:y1 = (1-t)*x1 + t*x2 by A1;
+  assume y2 in Line(x1,x2);
+  then consider s such that A3:y2 = (1-s)*x1 + s*x2 by A1;
+A4:y2 - y1 = (1-s)*x1 + s*x2 - (1-t)*x1 - t*x2 by A2,A3,LM005
+       .= (1-s)*x1 + s*x2 +- (1-t)*x1 - t*x2 by LM007
+       .= (1-s)*x1 + s*x2 +- (1-t)*x1 +- t*x2 by LM007
+       .= s*x2 + (1-s)*x1 +- t*x2 +- (1-t)*x1 by LM002
+       .= s*x2 + - t*x2 + (1-s)*x1 +- (1-t)*x1 by LM002
+       .= (s - t)*x2 + (1-s)*x1 +- (1-t)*x1 by LM018
+       .= (s - t)*x2 + ((1-s)*x1 +- (1-t)*x1) by LM002
+       .= (s - t)*x2 + ((1-s)- (1-t))*x1 by LM018
+       .= (s - t)*x2 + (-(s - t))*x1
+       .= (s - t)*(x2 - x1) by LM027;
+  take a = s - t;
+  thus y2 - y1 =a*(x2 - x1) by A4;
+end;
+
+definition let n;let x1,x2 be Element of REAL n;
+  pred x1 // x2 means
+  :DE002: x1 <> 0*n & x2 <> 0*n & ex r st x1 = r*x2;
+end;
+
+theorem LM066:
+  for x1,x2 be Element of REAL n st x1 // x2
+  holds ex a st a <> 0 & x1 = a*x2
+proof
+  let x1,x2 being Element of REAL n;
+  assume x1 // x2;
+  then A1:x1 <> 0*n & x2 <> 0*n & ex r being Real st x1 = r*x2 by DE002;
+  then consider a such that A2:x1 = a*x2;
+  a <> 0 by A1,A2,EUCLID_4:3;
+  hence thesis by A2;
+end;
+
+definition let n;let x1,x2 be Element of REAL n;
+  redefine pred x1 // x2;
+  symmetry
+  proof
+    let x1,x2 being Element of REAL n;
+    assume A1: x1 // x2;
+    then B1:x1 <> 0*n & x2 <> 0*n by DE002;
+    consider a such that B2:a <> 0 & x1 = a*x2 by A1,LM066;
+B4: (1/a)*x1 = (a/a)*x2 by LM001,B2
+            .= (1)*x2 by B2,XCMPLX_1:60
+            .= x2 by EUCLID_4:3;
+    thus x2 // x1 by B4,B1,DE002;
+  end;
+end;
+
+theorem TH006:
+  x1 // x2 & x2 // x3 implies x1 // x3
+proof
+  assume B1:x1 // x2 & x2 // x3;
+B3:x1 <> 0*n & x2 <> 0*n & ex r st x1 = r*x2 by B1,DE002;
+B4:x2 <> 0*n & x3 <> 0*n & ex s st x2 = s*x3 by B1,DE002;
+  ex t st x1 = t*x3
+  proof
+    consider a such that B5:x1 = a*x2 by B1,DE002;
+    consider b such that B6:x2 = b*x3 by B1,DE002;
+    x1 = (a*b)*x3 by EUCLID_4:4,B6,B5;
+    hence thesis;
+  end;
+  hence thesis by B3,B4,DE002;
+end;
+
+definition let n be Nat,x1,x2 be Element of REAL n;
+  pred x1,x2 are_lindependent2 means
+  :DE003: for a1,a2 being Real st a1*x1+a2*x2=0*n holds a1=0 & a2=0;
+  symmetry;
+end;
+
+notation let n; let x1,x2 be Element of REAL n;
+  antonym x1,x2 are_ldependent2 for x1,x2 are_lindependent2; 
+end;
+
+LM030:x1,x2 are_lindependent2 implies x1<>0*n
+proof
+  assume A1:x1,x2 are_lindependent2 & not x1<>0*n;
+A3:1 * x1 = 0*n by EUCLID_4:2,A1;
+  1 * x1 + 0 * x2 = 0*n + 0*n by A3,EUCLID_4:3
+                  .= 0*n by EUCLID_4:1;
+  hence contradiction by A1,DE003;
+end;
+
+theorem
+  x1,x2 are_lindependent2 implies x1<>0*n & x2<>0*n by LM030;
+
+theorem TH009:
+  for x1,x2 st x1,x2 are_lindependent2 holds
+    a1*x1+a2*x2=b1*x1+b2*x2 implies a1=b1 & a2=b2
+proof
+  let x1,x2;
+  assume A1:x1,x2 are_lindependent2;
+  assume A2:a1*x1+a2*x2=b1*x1+b2*x2;
+  0*n = (a1*x1+a2*x2) - (a1*x1+a2*x2) by LM008
+     .= (a1-b1)*x1 + (a2-b2)*x2 by LM041,A2;
+  then a1 - b1 = 0 & a2 - b2 = 0 by A1,DE003;
+  hence thesis by XCMPLX_1:15;
+end;
+
+theorem TH010:
+  for x1,x2,y1,y1 st y1,y2 are_lindependent2 holds
+    y1 = a1*x1+a2*x2 & y2=b1*x1+b2*x2 implies
+      ex c1,c2,d1,d2 be Real st x1=c1*y1+c2*y2 & x2=d1*y1+d2*y2
+proof
+  let x1,x2,y1,y1;
+  assume A1:y1,y2 are_lindependent2;
+  assume A3:y1 = a1*x1+a2*x2 & y2=b1*x1+b2*x2;
+A4:b2*y1-a2*y2 = ((a1*b2)*x1+(a2*b2)*x2) - a2*(b1*x1+b2*x2) by LM039,A3
+              .= ((a1*b2)*x1+(a2*b2)*x2) - ((a2*b1)*x1+(a2*b2)*x2) by LM039
+              .= (a1*b2-a2*b1)*x1+(a2*b2-a2*b2)*x2 by LM041
+              .= (a1*b2-a2*b1)*x1 + 0*n by EUCLID_4:3
+              .= (a1*b2-a2*b1)*x1 by EUCLID_4:1;
+A5:a1*b2-a2*b1<>0
+  proof
+    assume A6:not a1*b2-a2*b1<>0;
+A7: b2*y1+(-a2)*y2 = b2*y1 + -a2*y2 by LM006
+                  .= 0 * x1 by LM007,A4,A6
+                  .= 0*n by EUCLID_4:3;
+    then A8:b2=0 & -a2=0 by A1,DE003;
+A9: a2 = -0 by A8
+      .= 0;
+A10:y1 = a1*x1 + 0*n by EUCLID_4:3,A3,A9
+      .= a1*x1 by EUCLID_4:1;
+A11:y2 = b1*x1 + 0 * x2 by A3,A7,A1,DE003
+      .= b1*x1 + 0*n by EUCLID_4:3
+      .= b1*x1 by EUCLID_4:1;
+    b1*y1+(-a1)*y2 = (a1*b1)*x1 + (-a1)*(b1*x1) by EUCLID_4:4,A10,A11
+                  .= (a1*b1)*x1 + ((-a1)*b1)*x1 by EUCLID_4:4
+                  .= (a1*b1+(-a1)*b1)*x1 by EUCLID_4:7
+                  .= 0*n by EUCLID_4:3;
+    then A12:b1=0 & -a1=0 by A1,DE003;
+A13:a1 = -0 by A12 .= 0;
+    y1 = 0*n + 0 * x2 by EUCLID_4:3,A3,A9,A13
+      .= 0*n + 0*n by EUCLID_4:3
+      .= 0*n by EUCLID_4:1;
+    hence contradiction by A1,LM030;
+  end;
+A14:x1 = 1 * x1 by EUCLID_4:3
+      .= (1/(a1*b2-a2*b1)*(a1*b2-a2*b1))*x1 by A5,XCMPLX_1:107
+      .= 1/(a1*b2-a2*b1)*((a1*b2-a2*b1)*x1) by EUCLID_4:4
+      .= 1/(a1*b2-a2*b1)*(b2*y1)-1/(a1*b2-a2*b1)*(a2*y2) by LM027,A4
+      .= b2/(a1*b2-a2*b1)*y1-1/(a1*b2-a2*b1)*(a2*y2) by LM001
+      .= b2/(a1*b2-a2*b1)*y1-(1/(a1*b2-a2*b1)*a2)*y2 by EUCLID_4:4
+      .= b2/(a1*b2-a2*b1)*y1+-(1/(a1*b2-a2*b1)*a2)*y2 by LM007
+      .= b2/(a1*b2-a2*b1)*y1+(-1/(a1*b2-a2*b1)*a2)*y2 by LM006
+      .= b2/(a1*b2-a2*b1)*y1+(1/(a1*b2-a2*b1)*(-a2))*y2
+      .= b2/(a1*b2-a2*b1)*y1+(-a2)/(a1*b2-a2*b1)*y2 by XCMPLX_1:100;
+A15:-b1*y1+a1*y2 = (-b1)*(a1*x1+a2*x2) + a1*(b1*x1+b2*x2) by LM006,A3
+             .= ((-b1)*a1)*x1+((-b1)*a2)*x2 + a1*(b1*x1+b2*x2) by LM039
+             .= (-a1*b1)*x1+(-a2*b1)*x2 + ((a1*b1)*x1+(a1*b2)*x2) by LM039
+             .= (-a1*b1 + a1*b1)*x1+(-a2*b1 + a1*b2)*x2 by LM040
+             .= 0*n + (-a2*b1+a1*b2)*x2 by EUCLID_4:3
+             .= (a1*b2 - a2*b1)*x2 by EUCLID_4:1;
+A16:x2 = 1 * x2 by EUCLID_4:3
+    .= (1/(a1*b2-a2*b1)*(a1*b2-a2*b1))*x2 by A5,XCMPLX_1:107
+    .= 1/(a1*b2-a2*b1)*((a1*b2-a2*b1)*x2) by EUCLID_4:4
+    .= 1/(a1*b2-a2*b1)*(-b1*y1)+1/(a1*b2-a2*b1)*(a1*y2) by EUCLID_4:6,A15
+    .= 1/(a1*b2-a2*b1)*((-b1)*y1)+1/(a1*b2-a2*b1)*(a1*y2) by LM006
+    .= (-b1)/(a1*b2-a2*b1)*y1+1/(a1*b2-a2*b1)*(a1*y2) by LM001
+    .= (-b1)/(a1*b2-a2*b1)*y1+a1/(a1*b2-a2*b1)*y2 by LM001;
+  set c1 = b2/(a1*b2-a2*b1);
+  set c2 = (-a2)/(a1*b2-a2*b1);
+  set d1 = (-b1)/(a1*b2-a2*b1);
+  set d2 = a1/(a1*b2-a2*b1);
+  take c1,c2,d1,d2;
+  thus thesis by A14,A16;
+end;
+
+theorem LM054:
+  x1,x2 are_lindependent2 implies x1 <> x2
+proof
+  assume A1:x1,x2 are_lindependent2;
+  assume A2:x1 = x2;
+  1 * x1 + (-1) * x2 = 1 * (x1 - x2) by LM027
+                    .= 1 * 0*n by A2,LM008
+                    .= 0*n by EUCLID_4:2;
+  hence contradiction by A1,DE003;
+end;
+
+theorem
+  x2 - x1,x3 - x1 are_lindependent2 implies x2 <> x3 by LM054;
+
+theorem
+  x1,x2 are_lindependent2 implies x1+t*x2,x2 are_lindependent2
+proof
+  assume A1:x1,x2 are_lindependent2;
+  for a,b being Real st a*(x1+t*x2)+b*x2=0*n holds a=0 & b=0
+  proof
+    let a,b;
+    assume a*(x1+t*x2)+b*x2=0*n;
+    then 0*n = a*(1 *x1+t*x2)+b*x2 by EUCLID_4:3
+            .= (a*1)*x1+(a*t)*x2+b*x2 by LM039
+            .= a*x1+((a*t)*x2+b*x2) by LM002
+            .= a*x1+(a*t+b)*x2 by EUCLID_4:7;
+    then a= 0 & a*t+b= 0 by A1,DE003;
+    hence thesis;
+  end;
+  hence thesis by DE003;
+end;
+
+theorem LM044:
+  x1 - x0, x3 - x2 are_lindependent2 &
+  y0 in Line(x0,x1) & y1 in Line(x0,x1) & y0 <> y1 &
+  y2 in Line(x2,x3) & y3 in Line(x2,x3) & y2 <> y3 implies
+    y1 - y0, y3 - y2 are_lindependent2
+proof
+  assume A1:x1 - x0, x3 - x2 are_lindependent2 &
+            y0 in Line(x0,x1) & y1 in Line(x0,x1) & y0 <> y1 &
+            y2 in Line(x2,x3) & y3 in Line(x2,x3) & y2 <> y3;
+  then consider s being Real such that
+A2: y1 - y0 = s*(x1 - x0) by LM011;
+A3: s <> 0 by A1,A2,LM045;
+  consider t being Real such that
+A4: y3 - y2 = t*(x3 - x2) by A1,LM011;
+A5:t <> 0 by A1,A4,LM045;
+  for a,b being Real st a*(y1 - y0)+b*(y3 - y2)=0*n holds a=0 & b=0
+  proof
+    let a,b;
+    assume a*(y1 - y0)+b*(y3 - y2)=0*n;
+    then 0*n = (a*s)*(x1 - x0)+b*(t*(x3 - x2)) by EUCLID_4:4,A4,A2
+            .= (a*s)*(x1 - x0)+(b*t)*(x3 - x2) by EUCLID_4:4;
+    then A8: a*s= 0 & b*t= 0 by A1,DE003;
+A9: a = a*s/s by A3,XCMPLX_1:90
+     .= 0 by A8;
+    b = b*t/t by A5,XCMPLX_1:90
+     .= 0 by A8;
+    hence thesis by A9;
+  end;
+  hence thesis by DE003;
+end;
+
+LM035: x1 // x2 implies x1,x2 are_ldependent2
+proof
+  assume x1 // x2;
+  then consider r being Real such that A2:x1 = r*x2 by DE002;
+  assume A3: x1,x2 are_lindependent2;
+  0*n = x1 - x1 by LM008
+     .= 1 * x1 - r*x2 by EUCLID_4:3,A2
+     .= 1 * x1 + -r*x2 by LM007
+     .= 1 * x1 + (-r)*x2 by LM006;
+  hence contradiction by A3,DE003;
+end;
+
+theorem
+  x1 // x2 implies x1,x2 are_ldependent2 & x1 <> 0*n & x2 <> 0*n
+    by DE002,LM035;
+
+LM036: x1, x2 are_ldependent2 & x1 <> 0*n & x2 <> 0*n implies x1 // x2
+proof
+  assume A1:x1, x2 are_ldependent2 & x1 <> 0*n & x2 <> 0*n;
+  then consider a1,a2 being Real such that
+A2: a1*x1+a2*x2=0*n & (a1<>0 or a2<>0) by DE003;
+    now per cases by A2;
+      case A6:a1<>0;
+A7:     a1*x1 = 0*n - a2*x2 by A2,LM028
+             .= -a2*x2 by LM004;
+A8:     x1 = 1 * x1 by EUCLID_4:3
+          .= (a1/a1)*x1 by A6,XCMPLX_1:60
+          .= 1/a1*(a1*x1) by LM001
+          .= 1/a1*((-a2)*x2) by LM006,A7
+          .= (-a2)/a1*x2 by LM001;
+        set t = (-a2)/a1;
+        take t;
+        thus x1 // x2 by A1,A8,DE002;
+      end;
+      case A9:a2<>0;
+A10:      a2*x2 = 0*n - a1*x1 by A2,LM028
+                      .= -a1*x1 by LM004;
+A11:    x2 = 1 * x2 by EUCLID_4:3
+          .= (a2/a2)*x2 by A9,XCMPLX_1:60
+          .= 1/a2*(a2*x2) by LM001
+          .= 1/a2*((-a1)*x1) by LM006,A10
+          .= (-a1)/a2*x1 by LM001;
+        set s = (-a1)/a2;
+        take s;
+        thus x1 // x2 by A1,A11,DE002;
+      end;
+    end;
+  hence thesis;
+end;
+
+theorem
+  x1, x2 are_ldependent2 implies x1 = 0*n or x2 = 0*n or x1 // x2 by LM036;
+
+theorem LM042:
+  for x1,x2,y1 being Element of REAL n
+  ex y2 being Element of REAL n st y2 in Line(x1,x2) &
+    x1-x2,y1-y2 are_orthogonal
+proof
+  let x1,x2,y1 being Element of REAL n;
+A1:Line(x1,x2) = { (1-l)*x1 + l*x2 : not contradiction } by EUCLID_4:def 1;
+  now per cases;
+  case x1<>x2;
+    then |.x1-x2.|<>0 by LM009;
+    then A2:|.x1-x2.|^2 <> 0 by SQUARE_1:74;
+    set mu = - |(x1-x2,y1-x1)|/|.x1-x2.|^2;
+    set y2 = (1-mu)*x1 + mu*x2;
+     |(x1-x2,y1-y2)| = |(x1-x2,y1 - (1 + -mu)*x1 - mu*x2)| by LM005
+      .= |(x1-x2,y1 - (1 *x1 + (-mu)*x1) - mu*x2)| by EUCLID_4:7
+      .= |(x1-x2,y1-1 *x1-(-mu)*x1-mu*x2)| by LM005
+      .= |(x1-x2,(y1-x1)-(-mu)*x1-mu*x2)| by EUCLID_4:3
+      .= |(x1-x2,(y1-x1)-((-mu)*x1+mu*x2))| by LM005
+      .= |(x1-x2,(y1-x1)-((-mu)*x1+ (-(-mu)*x2)))| by LM006
+      .= |(x1-x2,(y1-x1)-((-mu)*x1+ (-mu)*(-x2)))| by LM006
+      .= |(x1-x2,(y1-x1)-(-mu)*(x1 + (-x2)))| by EUCLID_4:6
+      .= |(x1-x2,(y1-x1)-(-mu)*(x1 -x2))| by LM007
+      .= |(x1-x2,y1-x1)| - |(x1-x2,(-mu)*(x1-x2))| by EUCLID_4:31
+      .= |(x1-x2,y1-x1)| - (-mu)*|(x1-x2,x1-x2)| by EUCLID_4:26
+      .= |(x1-x2,y1-x1)| + mu*|(x1-x2,x1-x2)|
+      .= |(x1-x2,y1-x1)| + mu*|.x1-x2.|^2 by EUCLID_4:18
+      .= |(x1-x2,y1-x1)| + (- |(x1-x2,y1-x1)|)/|.x1-x2.|^2*|.x1-x2.|^2
+                                            by XCMPLX_1:188
+      .= |(x1-x2,y1-x1)| + (- |(x1-x2,y1-x1)|) by A2,XCMPLX_1:88
+      .= 0;
+    hence y2 in Line(x1,x2) & x1-x2,y1-y2 are_orthogonal by A1,EUCLID_4:def 6;
+  end;
+  case x1=x2;
+    then A3:x1 - x2 = 0*n by LM008;
+    let mu be Real;
+    set y2 = (1-mu)*x1 + mu*x2;
+A4: |(x1-x2,y1-y2)| = 0 by A3,EUCLID_4:23;
+    take y2;
+    thus y2 in Line(x1,x2) & x1-x2,y1-y2 are_orthogonal
+      by A1,A4,EUCLID_4:def 6;
+    end;
+  end;
+  hence thesis;
+end;
+
+definition let n;let x1,x2 be Element of REAL n;
+  pred x1 _|_ x2 means
+  :DE004: x1 <> 0*n & x2 <> 0*n & x1, x2 are_orthogonal;
+  symmetry;
+end;
+
+theorem LM051:
+  x _|_ y0 & y0 // y1 implies x _|_ y1
+proof
+  assume A1: x _|_ y0 & y0 // y1;
+  then A2: x <> 0*n & y0 <> 0*n & x,y0 are_orthogonal by DE004;
+A3: y0 <> 0*n & y1 <> 0*n & ex r st y1 = r * y0 by A1,DE002;
+  then consider r such that
+A4: y1 = r * y0;
+  |(x,y1)| = r*|(x,y0)| by EUCLID_4:27,A4
+          .= r * 0 by A2,EUCLID_4:def 6
+          .= 0;
+  then x,y1 are_orthogonal by EUCLID_4:def 6;
+  hence thesis by A2,A3,DE004;
+end;
+
+theorem TH012:
+  x _|_ y implies x, y are_lindependent2
+proof
+  assume x _|_ y;
+  then A1:x <> 0*n & y <> 0*n & x, y are_orthogonal by DE004;
+  then A2:|(x,y)|=0 by EUCLID_4:def 6;
+  |(x,x)|<>0 & |(y,y)|<>0 by A1,EUCLID_4:22;
+  then A3:|(x,x)|>0 & |(y,y)|>0 by EUCLID_4:17;
+  for a,b being Real st a*x+b*y=0*n holds a=0 & b=0
+  proof
+    let a,b;
+    assume a*x+b*y=0*n;
+    then A5:0 = |(a*x+b*y,a*x+b*y)| by EUCLID_4:22
+             .= |(a*x,a*x)|+2*|(a*x,b*y)|+|(b*y,b*y)| by EUCLID_4:37
+             .= a*|(x,a*x)|+2*|(a*x,b*y)|+|(b*y,b*y)| by EUCLID_4:26
+             .= a*|(x,a*x)|+2*(a*|(x,b*y)|)+|(b*y,b*y)| by EUCLID_4:26
+             .= a*|(x,a*x)|+2*a*|(x,b*y)|+b*|(y,b*y)| by EUCLID_4:26
+             .= a*(a*|(x,x)|)+2*a*|(x,b*y)|+b*|(y,b*y)| by EUCLID_4:27
+             .= a*a*|(x,x)|+2*a*(b*|(x,y)|)+b*|(y,b*y)| by EUCLID_4:27
+             .= a*a*|(x,x)|+2*a*b*|(x,y)|+b*(b*|(y,y)|) by EUCLID_4:27
+             .= a*a*|(x,x)| + b*b*|(y,y)| by A2;
+A6: a*a >= 0 & b*b >= 0 by REAL_1:93;
+A7: a*a*|(x,x)| >= 0 & b*b*|(y,y)| >= 0 by A3,A6,REAL_2:121;
+    a*a = 0
+    proof
+      assume a*a <> 0;
+      then a*a > 0 by REAL_1:93;
+      then a*a*|(x,x)| > 0 by A3,REAL_2:122;
+      then a*a*|(x,x)| + b*b*|(y,y)| > 0 + 0 by A7,REAL_1:67;
+      hence contradiction by A5;
+    end;
+    then a^2 = 0 by SQUARE_1:def 3;
+    then A9:a =0 by SQUARE_1:73;
+    then b*b = 0 by A5,A3,XCMPLX_1:6;
+    then b^2 = 0 by SQUARE_1:def 3;
+    hence thesis by A9,SQUARE_1:73;
+  end;
+hence thesis by DE003;
+end;
+
+theorem LM063:
+  x1 // x2 implies not x1 _|_ x2
+proof
+  assume A1:x1 // x2;
+  then consider r such that
+A2: x1 = r * x2 by DE002;
+A3: x1 <> 0*n & x2 <> 0*n by A1,DE002;
+  then A4:r <> 0 by A2,EUCLID_4:3;
+A5: |(x1,x2)| = r*|(x2,x2)| by EUCLID_4:26,A2;
+  |(x2,x2)| <> 0 by A3,EUCLID_4:22;
+  then |(x1,x2)| <> 0 by A4,A5,XCMPLX_1:6;
+  then not x1,x2 are_orthogonal by EUCLID_4:def 6;
+  hence thesis by DE004;
+end;
+
+theorem
+  x1 _|_ x2 implies not x1 // x2 by LM063;
+
+definition let n;
+  func line_of_REAL n -> Subset of bool REAL n equals
+  :DE005: {L where L is Element of bool REAL n:
+    ex x1,x2 being Element of REAL n st L = Line(x1,x2)};
+  correctness
+  proof
+    set A = {L where L is Element of bool REAL n:
+               ex x1,x2 being Element of REAL n st L = Line(x1,x2)};
+    A c= bool REAL n
+    proof
+      let L be set;
+      assume L in A;
+      then consider L' be Subset of REAL n such that A1:L = L' &
+        ex x1,x2 being Element of REAL n st L' = Line(x1,x2);
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let n;
+  cluster line_of_REAL n -> non empty;
+  coherence
+  proof
+A1: line_of_REAL n = {L where L is Element of bool REAL n:
+      ex x1,x2 being Element of REAL n st L = Line(x1,x2)} by DE005;
+    reconsider L = Line(0*n,1*n) as Subset of REAL n;
+    L in line_of_REAL n by A1;
+    hence thesis;
+  end;
+end;
+
+theorem LM046:
+  Line(x1,x2) in line_of_REAL n
+proof
+A1:line_of_REAL n = {L where L is Element of bool REAL n:
+    ex y1,y2 being Element of REAL n st L = Line(y1,y2)} by DE005;
+  set L' = Line(x1,x2);
+  thus thesis by A1;
+end;
+
+ reserve L,L0,L1,L2 for Element of line_of_REAL n;
+
+theorem LM043:
+  x1 in L & x2 in L implies Line(x1,x2) c= L
+proof
+  assume A1:x1 in L & x2 in L;
+A2:line_of_REAL n = {L' where L' is Element of bool REAL n:
+      ex y1,y2 being Element of REAL n st L' = Line(y1,y2)} by DE005;
+  L in line_of_REAL n;
+  then consider L0 be Element of bool REAL n such that
+A4:L = L0 & ex y1,y2 being Element of REAL n st L0 = Line(y1,y2) by A2;
+  consider y1,y2 being Element of REAL n such that
+A5:L = Line(y1,y2) by A4;
+  thus thesis by A1,A5,EUCLID_4:11;
+end;
+
+theorem LM061:
+  L1 meets L2 iff ex x st x in L1 & x in L2
+proof
+  thus L1 meets L2 implies ex x st x in L1 & x in L2
+  proof
+    assume A1:L1 meets L2;
+    consider x being set such that
+A5:   x in L1 & x in L2 by A1,XBOOLE_0:3;
+    reconsider x as Element of REAL n by A5;
+    take x;
+    thus thesis by A5;
+  end;
+  thus thesis by XBOOLE_0:3;
+end;
+
+theorem
+  L0 misses L1 & x in L0 implies not x in L1 by LM061;
+
+theorem LM069:
+  ex x1,x2 st L = Line(x1,x2)
+proof
+A1:line_of_REAL n = {L' where L' is Element of bool REAL n:
+    ex y1,y2 being Element of REAL n st L' = Line(y1,y2)} by DE005;
+  L in line_of_REAL n;
+  then consider L0 be Element of bool REAL n such that
+A3:L = L0 & ex x1,x2 being Element of REAL n st L0 = Line(x1,x2) by A1;
+  consider x1,x2 being Element of REAL n such that
+A4:L = Line(x1,x2) by A3;
+  take x1, x2;
+  thus thesis by A4;
+end;
+
+theorem LM071:
+  ex x st x in L
+proof
+  consider x1,x2 such that
+A1: L = Line(x1,x2) by LM069;
+  take x1;
+  thus thesis by A1,EUCLID_4:10;
+end;
+
+theorem LM072:
+  x0 in L & L is_line implies ex x1 st x1 <> x0 & x1 in L
+proof
+  assume A1: x0 in L & L is_line;
+  consider y1,y2 such that
+A2: y1 in L & y2 in L & y1 <> y2 by A1,EUCLID_4:14;
+  now per cases;
+    case A3: y1 = x0;
+      take y2;
+      thus y2 <> x0 & y2 in L by A2,A3;
+    end;
+    case A4: y1 <> x0;
+      take y1;
+      thus y1 <> x0 & y1 in L by A2,A4;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem LM050:
+  (not x in L) & L is_line implies
+    ex x1,x2 st L = Line(x1,x2) & x - x1 _|_ x2 - x1
+proof
+  assume A1:(not x in L) & L is_line;
+  then consider y0,y1 such that
+A2: y0 <> y1 & L = Line(y0,y1) by EUCLID_4:def 2;
+  consider x1 being Element of REAL n such that
+A3: x1 in Line(y0,y1) & y0 - y1,x - x1 are_orthogonal by LM042;
+A5: y0 - y1 <> 0*n & x - x1 <> 0*n by A2,A3,A1,LM032;
+  then A11:y0 - y1 _|_ x - x1 by A3,DE004;
+  consider x2 being Element of REAL n such that
+A6: x1 <> x2 & x2 in L by A1,EUCLID_4:15;
+A7: x2 - x1 <> 0*n by A6,LM032;
+  consider a being Real such that
+A10: x2 - x1 = a*(y0 - y1) by A3,A2,A6,LM011;
+A12: x2 - x1 // y0 - y1 by A7,A5,A10,DE002;
+  take x1;take x2;
+  thus thesis by A1,A2,A3,A6,LM003,A12,A11,LM051;
+end;
+
+theorem TH015:
+  (not x in L) & L is_line implies
+    ex x1,x2 st L = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2
+proof
+  assume (not x in L) & L is_line;
+  then consider x1,x2 such that
+A2: L = Line(x1,x2) & x - x1 _|_ x2 - x1 by LM050;
+  take x1;take x2;
+  thus thesis by A2,TH012;
+end;
+
+definition let n be Nat,x be Element of REAL n,L be Element of line_of_REAL n;
+  func dist_v(x,L) -> Subset of REAL equals
+  :DE013: {|.x-x0.| where x0 is Element of REAL n : x0 in L};
+  correctness
+  proof
+    set A = {|.x-x0.| where x0 is Element of REAL n : x0 in L};
+    A c= REAL
+    proof let r be set;
+      assume r in A;
+      then consider x0 be Element of REAL n such that
+A1:     r = |.x - x0.| & x0 in L;
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let n be Nat,x be Element of REAL n,L be Element of line_of_REAL n;
+  func dist(x,L) -> Real equals
+  :DE014: lower_bound dist_v(x,L);
+  correctness;
+end;
+
+theorem
+  L = Line(x1,x2) implies
+  {|.x-x0.| where x0 is Element of REAL n : x0 in Line(x1,x2)} = dist_v(x,L)
+  by DE013;
+
+theorem LM067:
+  ex x0 st x0 in L & |.x-x0.|=dist(x,L)
+proof
+  consider x1,x2 being Element of REAL n such that
+A1: L = Line(x1,x2) by LM069;
+A2: {|.x-x'.| where x' is Element of REAL n : x' in Line(x1,x2)} = dist_v(x,L)
+      by A1,DE013;
+  then reconsider
+    R = {|.x-x'.| where x' is Element of REAL n : x' in Line(x1,x2)}
+    as Subset of REAL;
+  consider x0 being Element of REAL n such that
+A3: x0 in Line(x1,x2) & |.x-x0.|=lower_bound R & x1-x2,x-x0 are_orthogonal
+      by EUCLID_4:45;
+  take x0;
+  thus thesis by A1,A2,A3,DE014;
+end;
+
+theorem
+  dist(x,L) >= 0
+proof
+  consider x0 being Element of REAL n such that
+A1: x0 in L & |.x-x0.| = dist(x,L) by LM067;
+  thus thesis by A1,EUCLID_4:19;
+end;
+
+theorem
+  x in L iff dist(x,L) = 0
+proof
+A1:dist_v(x,L) = {|.x-x0.| where x0 is Element of REAL n : x0 in L} by DE013;
+  thus x in L implies dist(x,L) = 0
+  proof
+    assume B1:x in L;
+    |.x - x.| = |.0*n.| by LM032
+             .= sqrt |(0*n,0*n)| by EUCLID_4:20
+             .= 0 by SQUARE_1:82,EUCLID_4:22;
+    then A3:0 in dist_v(x,L) by A1,B1;
+A6: for s being real number st 0<s holds
+      ex r being real number st r in dist_v(x,L) & r < 0 + s by A3;
+A8: for r being real number st r in dist_v(x,L) holds 0 <= r
+    proof
+      let r be real number;
+      assume r in dist_v(x,L);
+      then consider x0 being Element of REAL n such that
+A9:     r= |.x-x0.| & x0 in L by A1;
+      thus 0 <= r by A9,EUCLID_4:19;
+    end;
+    then dist_v(x,L) is bounded_below by SEQ_4:def 2;
+    then 0 = lower_bound dist_v(x,L) by A3,A6,A8,SEQ_4:def 5;
+    hence thesis by DE014;
+  end;
+  now assume A10:dist(x,L) = 0;
+    consider x0 being Element of REAL n such that
+A11:  x0 in L & |.x-x0.| = dist(x,L) by LM067;
+    |(x - x0, x - x0)| = 0 by A10,A11,EUCLID_4:21;
+    then x - x0 = 0*n by EUCLID_4:22;
+    hence x in L by LM032,A11;
+  end;
+  hence thesis;
+end;
+
+definition let n;let L1,L2;
+  pred L1 // L2 means
+  :DE006: ex x1, x2, y1, y2 being Element of REAL n st
+  L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) // (y2 - y1);
+  symmetry;
+end;
+
+theorem TH031:     :: // is transitive
+  L0 // L1 & L1 // L2 implies L0 // L2
+proof
+  assume A1:L0 // L1 & L1 // L2;
+  then consider x0, x1, x2, x3 being Element of REAL n such that
+A2: L0 = Line(x0,x1) & L1 = Line(x2,x3) & (x1 - x0) // (x3 - x2) by DE006;
+  consider y0, y1, y2, y3 being Element of REAL n such that
+A3: L1 = Line(y0,y1) & L2 = Line(y2,y3) & (y1 - y0) // (y3 - y2) by A1,DE006;
+A4: x3 - x2 <> 0*n & y1 - y0 <> 0*n by A2,A3,DE002;
+  x3 in Line(y1,y0) & x2 in Line(y1,y0) by A2,A3,EUCLID_4:10;
+  then consider a such that A5:x3 - x2 = a*(y1 - y0) by LM011;
+  (x3 - x2) // (y1 - y0) by A4,A5,DE002;
+  then (x1 - x0) // (y1 - y0) by A2,TH006;
+  then L0 = Line(x0,x1) & L2 = Line(y2,y3) & (x1 - x0) // (y3 - y2)
+    by A2,A3,TH006;
+  hence thesis by DE006;
+end;
+
+definition let n;let L1,L2;
+  pred L1 _|_ L2 means
+  :DE012: ex x1, x2, y1, y2 being Element of REAL n st
+  L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) _|_ (y2 - y1);
+  symmetry;
+end;
+
+theorem TH017:
+  L0 _|_ L1 & L1 // L2 implies L0 _|_ L2
+proof
+  assume A1: L0 _|_ L1 & L1 // L2;
+  then consider x0, x1, x2, x3 such that
+A2: L0 = Line(x0,x1) & L1 = Line(x2,x3) & (x1 - x0) _|_ (x3 - x2) by DE012;
+A3: x1 - x0 <> 0*n & x3 - x2 <> 0*n by A2,DE004;
+  consider y0, y1, y2, y3 such that
+A4: L1 = Line(y0,y1) & L2 = Line(y2,y3) & (y1 - y0) // (y3 - y2) by A1,DE006;
+A5: y1 - y0 <> 0*n & y3 - y2 <> 0*n by A4,DE002;
+  x2 in Line(y0,y1) & x3 in Line(y0,y1) by A2,A4,EUCLID_4:10;
+  then consider a such that
+A7: x3 - x2 = a*(y1 - y0) by LM011;
+  x3 - x2 // y1 - y0 by A7,A5,A3,DE002;
+  then x3 - x2 // y3 - y2 by A4,TH006;
+  then x1 - x0 _|_ y3 - y2 by A2,LM051;
+  hence thesis by A2,A4,DE012;
+end;
+
+theorem LM081:
+  (not x in L) & L is_line implies
+  ex L0 st x in L0 & L0 _|_ L & L0 meets L
+proof
+  assume (not x in L) & L is_line;
+  then consider x1,x2 such that
+A2: L = Line(x1,x2) & (x - x1) _|_ (x2 - x1) by LM050;
+  reconsider L0 = Line(x1,x) as Subset of REAL n;
+  reconsider L0 as Element of line_of_REAL n by LM046;
+A4: x in L0 & x1 in L0 & x1 in L by A2,EUCLID_4:10;
+  then A5: L0 meets L by LM061;
+  L0 _|_ L by A2,DE012;
+  hence thesis by A4,A5;
+end;
+
+theorem LM090:
+  L1 misses L2 implies ex x st x in L1 & not x in L2
+proof
+  assume A1: L1 misses L2;
+  consider x such that
+A4: x in L1 by LM071;
+  take x;
+  thus thesis by A4,A1,LM061;
+end;
+
+theorem TH019:
+  x1 in L & x2 in L & x1 <> x2 implies Line(x1,x2) = L & L is_line
+proof
+  assume A1:x1 in L & x2 in L & x1 <> x2;
+A2:line_of_REAL n = {L' where L' is Element of bool REAL n:
+      ex y1,y2 being Element of REAL n st L' = Line(y1,y2)} by DE005;
+  L in line_of_REAL n;
+  then consider L0 be Element of bool REAL n such that
+A4:L = L0 & ex y1,y2 being Element of REAL n st L0 = Line(y1,y2) by A2;
+  consider y1,y2 being Element of REAL n such that
+A5:L = Line(y1,y2) by A4;
+A6: L c= Line(x1,x2) by A1,A5,EUCLID_4:12;
+  Line(x1,x2) c= L by A1,LM043;
+  then Line(x1,x2) = L by A6,XBOOLE_0:def 10;
+  hence thesis by A1,EUCLID_4:def 2;
+end;
+
+theorem LM092:
+  L1 is_line & L2 is_line & L1 = L2 implies L1 // L2
+proof
+  assume A1: L1 is_line & L2 is_line;
+  assume A2: L1 = L2;
+  consider x0,x1 such that
+A3: x0 <> x1 & L1 = Line(x0,x1) by A1,EUCLID_4:def 2;
+A5: x1 - x0 <> 0*n by A3,LM032; 
+  x1 - x0 = 1 * (x1 - x0) by EUCLID_4:3;
+  then x1 - x0 // x1 - x0 by A5,DE002;
+  hence thesis by A2,A3,DE006;
+end;
+
+theorem LM057:
+  L1 // L2 implies L1 is_line & L2 is_line
+proof
+  assume L1 // L2;
+  then consider x1,x2,y1,y2 such that
+A1:   L1 = Line(x1,x2) & L2 = Line(y1,y2) & x2 - x1 // y2 - y1 by DE006;
+  x2 - x1 <> 0*n & y2 - y1 <> 0*n by A1,DE002;
+  then x2 <> x1 & y2 <> y1 by LM032;
+  hence thesis by A1,EUCLID_4:def 2;
+end;
+
+theorem TH022:
+  L1 _|_ L2 implies L1 is_line & L2 is_line
+proof
+  assume L1 _|_ L2;
+  then consider x1,x2,y1,y2 such that
+A1:   L1 = Line(x1,x2) & L2 = Line(y1,y2) & x2 - x1 _|_ y2 - y1 by DE012;
+  x2 - x1 <> 0*n & y2 - y1 <> 0*n by A1,DE004;
+  then x2 <> x1 & y2 <> y1 by LM032;
+  hence thesis by A1,EUCLID_4:def 2;
+end;
+
+theorem
+  x in L & a<>1 & a*x in L implies 0*n in L
+proof
+  assume A1:x in L & a<>1 & a*x in L;
+  then A2:Line(x,a*x) c= L by LM043;
+A5:1-a<>0 by A1,XCMPLX_1:15;
+A6:1-1/(1-a)+(1/(1-a))*a = 1-1/(1-a)+a/(1-a) by XCMPLX_1:100
+                        .= 1 + (-1/(1-a) + a/(1-a))
+                        .= 1 + ((-1)/(1-a) + a/(1-a)) by XCMPLX_1:188
+                        .= 1 + (-1+a)/(1-a) by XCMPLX_1:63
+                        .= 1 + (-(-a + 1))/(1-a)
+                        .= 1 + - (1-a)/(1-a) by XCMPLX_1:188
+                        .= 1 - (1-a)/(1-a)
+                        .= 1 - 1 by A5,XCMPLX_1:60
+                        .= 0;
+A8:0*n = 0 * x by EUCLID_4:3
+      .= (1-1/(1-a))*x +((1/(1-a))*a)*x by EUCLID_4:7,A6
+      .= (1-1/(1-a))*x +(1/(1-a))*(a*x) by EUCLID_4:4;
+  Line(x,a*x)={(1-l)*x+l*(a*x):not contradiction} by EUCLID_4:def 1;
+  then 0*n in Line(x,a*x) by A8;
+  hence thesis by A2;
+end;
+
+theorem
+  x1 in L & x2 in L implies
+  ex x3 st x3 in L & x3 - x1 = a*(x2 - x1)
+proof
+  assume x1 in L & x2 in L;
+  then A2:Line(x1,x2) c= L by LM043;
+A3: Line(x1,x2)={ ( 1-l)*x1 + l*x2 : not contradiction } by EUCLID_4:def 1;
+  set x3 = (1-a)*x1 + a*x2;
+A4: x3 in Line(x1,x2) by A3;
+  x3 = 1 * x1 + -a*x1 + a*x2 by LM018
+    .= x1 + -a*x1 + a*x2 by EUCLID_4:3
+    .= x1 + (a*x2 + -a*x1) by LM002
+    .= x1 + a*(x2 - x1) by LM027;
+  then x3 - x1 = a*(x2 - x1) by LM028;
+  hence thesis by A2,A4;
+end;
+
+theorem LM078:
+  x1 in L & x2 in L & x3 in L & x1 <> x2 implies
+  ex a st x3 - x1 = a*(x2 - x1)
+proof
+  assume x1 in L & x2 in L & x3 in L & x1 <> x2;
+  then x1 in Line(x1,x2) & x3 in Line(x1,x2) by TH019;
+  then consider a such that
+A2: x3 - x1 = a*(x2 - x1) by LM011;
+  take a;
+  thus thesis by A2;
+end;
+
+theorem LM033:
+  L1 // L2 & L1<>L2 implies L1 misses L2
+proof
+  assume A1:L1 // L2 & L1<>L2;
+  assume A2:not L1 misses L2;
+  consider x1, x2, y1, y2 being Element of REAL n such that
+A3: L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) // (y2 - y1) by A1,DE006;
+  consider x be set such that
+A4: x in L1 & x in L2 by A2,XBOOLE_0:3;
+  reconsider x as Element of REAL n by A4;
+A5:x2 - x1 <> 0*n & y2 - y1 <> 0*n by A3,DE002;  
+  then x1 <> x2 & y1 <> y2 by LM032;
+  then A7:L1 is_line & L2 is_line by A3,EUCLID_4:def 2;
+  then consider x0 such that
+A8: x <> x0 & x0 in L1 by EUCLID_4:15;
+B1:L1 = Line(x,x0) by A4,A7,A8,LM003;
+  consider y0 such that
+A9: x <> y0 & y0 in L2 by A7,EUCLID_4:15;
+B2:L2 = Line(x,y0) by A4,A7,A9,LM003;
+A10:x0 - x <> 0*n & y0 - x <> 0*n by A8,A9,LM032;
+  consider a such that
+A11:x0 - x = a*(x2 - x1) by A8,A4,A3,LM011;
+A12:x0 - x // x2 - x1 by A5,A10,A11,DE002;
+  consider b such that
+A13:y0 - x = b*(y2 - y1) by A9,A4,A3,LM011;
+A14:y0 - x // y2 - y1 by A5,A10,A13,DE002;
+  x0 - x // y2 - y1 by A3,A12,TH006;
+  then A15:x0 - x // y0 - x by A14,TH006;
+A16:Line(x,x0) = {(1-l)*x + l*x0 : not contradiction } by EUCLID_4:def 1;
+A17:Line(x,y0) = {(1-l)*x + l*y0 : not contradiction } by EUCLID_4:def 1;
+A18:Line(x,x0) c= Line(x,y0)
+  proof
+    let y be set;
+    assume y in Line(x,x0);
+    then consider t such that A20:y = (1-t)*x + t*x0 by A16;
+A21:y = 1 * x + -t*x + t*x0 by A20,LM018
+     .= x + -t*x + t*x0 by EUCLID_4:3
+     .= x + (t*x0 + -t*x) by LM002
+     .= x + t*(x0 - x) by LM027;
+    consider a such that A22:x0 - x = a*(y0 - x) by A15,DE002;
+    y = x + (t*a)*(y0 - x) by EUCLID_4:4,A21,A22
+     .= x + ((t*a)*y0 + -(t*a)*x) by LM027
+     .= x + -(t*a)*x + (t*a)*y0 by LM002
+     .= 1 * x + -(t*a)*x + (t*a)*y0 by EUCLID_4:3
+     .= (1 -(t*a))*x + (t*a)*y0 by LM018;
+    hence y in Line(x,y0) by A17;
+  end;
+A23:Line(x,y0) c= Line(x,x0)
+  proof
+    let y be set;
+    assume y in Line(x,y0);
+    then consider t such that A25:y = (1-t)*x + t*y0 by A17;
+A26:y = 1 * x + -t*x + t*y0 by A25,LM018
+     .= x + -t*x + t*y0 by EUCLID_4:3
+     .= x + (t*y0 + -t*x) by LM002
+     .= x + t*(y0 - x) by LM027;
+    consider a such that A27:y0 - x = a*(x0 - x) by A15,DE002;
+    y = x + (t*a)*(x0 - x) by EUCLID_4:4,A26,A27
+     .= x + ((t*a)*x0 + -(t*a)*x) by LM027
+     .= x + -(t*a)*x + (t*a)*x0 by LM002
+     .= 1 * x + -(t*a)*x + (t*a)*x0 by EUCLID_4:3
+     .= (1 -(t*a))*x + (t*a)*x0 by LM018;
+    hence y in Line(x,x0) by A16;
+  end;
+  thus contradiction by A18,A23,XBOOLE_0:def 10,B1,B2,A1;
+end;
+
+theorem
+  L1 // L2 implies L1 = L2 or L1 misses L2 by LM033;
+
+theorem
+  L1 // L2 & L1 meets L2 implies L1 = L2 by LM033;
+
+theorem LM047:
+  L is_line implies ex L0 st x in L0 & L0 // L
+proof
+  assume A1: L is_line;
+  consider y0,y1 such that
+A2: y0 <> y1 & L = Line(y0,y1) by A1,EUCLID_4:def 2;
+  set x' = x + (y1 - y0);
+A3: x' - x = y1 - y0 by LM028;
+A4: x' - x = 1 * (y1 - y0) by A3,EUCLID_4:3;
+A5: y1 - y0 <> 0*n by A2,LM032;
+A9: (x' - x) // (y1 - y0) by A4,A5,A3,DE002;
+  reconsider L0 = Line(x,x') as Element of line_of_REAL n by LM046;
+  take L0;
+  thus thesis by EUCLID_4:10,A2,A9,DE006;
+end;
+
+theorem
+  for x,L st (not x in L) & L is_line holds
+    ex L0 st x in L0 & L0 // L & L0 <> L
+proof
+  let x,L;
+  assume A1: (not x in L) & L is_line;
+  consider L0 such that
+A2: x in L0 & L0 // L by A1,LM047;
+  thus thesis by A1,A2;
+end;
+
+theorem LM077:
+  for x0,x1,y0,y1,L1,L2 st x0 in L1 & x1 in L1 & x0 <> x1
+  & y0 in L2 & y1 in L2 & y0 <> y1 & L1 _|_ L2 holds x1 - x0 _|_ y1 - y0
+proof
+  let x0,x1,y0,y1,L1,L2;
+  assume A1:x0 in L1 & x1 in L1 & x0 <> x1
+          & y0 in L2 & y1 in L2 & y0 <> y1 & L1 _|_ L2;
+  then consider x2,x3,y2,y3 such that
+A2: L1 = Line(x2,x3) & L2 = Line(y2,y3) & x3 - x2 _|_ y3 - y2 by DE012;
+  x3 - x2,y3 - y2 are_orthogonal by A2,DE004;
+  then A3: |(x3 - x2,y3 - y2)| = 0 by EUCLID_4:def 6;
+B1: x1 - x0 <> 0*n & y1 - y0 <> 0*n by A1,LM032;
+  consider s such that
+A4: x1 - x0 = s*(x3 - x2) by A1,A2,LM011;
+  consider t such that
+A5: y1 - y0 = t*(y3 - y2) by A1,A2,LM011;
+  |(x1 - x0,y1 - y0)| = s * |(x3 - x2,y1 - y0)| by EUCLID_4:26,A4
+                     .= s * (t * |(x3 - x2,y3 - y2)|) by EUCLID_4:27,A5
+                     .= 0 by A3;
+  then x1 - x0,y1 - y0 are_orthogonal by EUCLID_4:def 6;
+  hence thesis by B1,DE004;
+end;
+
+theorem LM079:
+  for L1,L2 st L1 _|_ L2 holds L1 <> L2
+proof
+  let L1,L2;
+  assume A1: L1 _|_ L2;
+  now per cases;
+    case A3: L1 misses L2;
+      consider x such that
+B1:     x in L1 by LM071;
+      thus L1 <> L2 by B1,LM061,A3;
+    end;
+    case A4: L1 meets L2;
+      consider x0 such that
+B1:     x0 in L1 & x0 in L2 by A4,LM061;
+B2:   L1 is_line & L2 is_line by A1,TH022;
+      then consider x1 such that
+B3:     x1 <> x0 & x1 in L1 by B1,LM072;
+      consider x2 such that
+B4:     x2 <> x0 & x2 in L2 by B1,B2,LM072;
+B5:      x1 - x0 _|_ x2 - x0 by A1,B1,B3,B4,LM077;
+B6:   x1 - x0 <> 0*n & x2 - x0 <> 0*n by B3,B4,LM032;
+      not x1 in L2
+      proof
+        assume C1: x1 in L2;
+        consider a such that
+C2:       x1 - x0 = a * (x2 - x0) by B1,B4,C1,LM078;
+        x1 - x0 // x2 - x0 by C2,B6,DE002;
+        then x1 - x0,x2 - x0 are_ldependent2 by LM035;
+        hence contradiction by B5,TH012;
+      end;
+      hence L1 <> L2 by B3;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem LM056:
+  for x1,x2,L st L is_line & L = Line(x1,x2) holds x1 <> x2
+proof
+  let x1,x2,L;
+  assume A1: L is_line & L = Line(x1,x2);
+  then consider y1, y2 such that
+A2: y1 <> y2 & L = Line(y1,y2) by EUCLID_4:def 2;
+  y1 in L & y2 in L by A2,EUCLID_4:10;
+  then consider a such that
+A4: y2 - y1 = a*(x2 - x1) by A1,LM011;
+  thus x1 <> x2
+  proof
+    assume A5: x1 = x2;
+    y2 - y1 = a* 0*n by LM008,A4,A5
+           .= 0*n by EUCLID_4:2;
+    hence contradiction by A2,LM032;
+  end;
+end;
+
+theorem LM055:
+  x0 in L1 & x1 in L1 & x0 <> x1
+  & y0 in L2 & y1 in L2 & y0 <> y1 & L1 // L2 implies x1 - x0 // y1 - y0
+proof
+  assume A1:x0 in L1 & x1 in L1 & x0 <> x1
+          & y0 in L2 & y1 in L2 & y0 <> y1 & L1 // L2;
+  then consider x2,x3,y2,y3 such that
+A2: L1 = Line(x2,x3) & L2 = Line(y2,y3) & x3 - x2 // y3 - y2 by DE006;
+  consider s such that
+A3: x1 - x0 = s*(x3 - x2) by A1,A2,LM011;
+  consider t such that
+A4: y1 - y0 = t*(y3 - y2) by A1,A2,LM011;
+  consider a such that
+A5: x3 - x2 = a*(y3 - y2) by A2,DE002;
+A8: x1 - x0 <> 0*n & y1 - y0 <> 0*n by A1,LM032;
+  then A9: s <> 0 & t <> 0 by A3,A4,EUCLID_4:3;
+  x1 - x0 = (s*a)*(y3 - y2) by EUCLID_4:4,A3,A5
+           .= (s*a)*(1 * (y3 - y2)) by EUCLID_4:3
+           .= (s*a)*((1/t*t)*(y3 - y2)) by A9,XCMPLX_1:107
+           .= (s*a)*(1/t*(t*(y3 - y2))) by EUCLID_4:4
+           .= ((s*a)*(1/t))*(t*(y3 - y2)) by EUCLID_4:4
+           .= ((s*a)/t)*(y1 - y0) by A4,XCMPLX_1:100;
+  hence thesis by A8,DE002;
+end;
+
+theorem
+  x2 - x1,x3 - x1 are_lindependent2 & y2 in Line(x1,x2) & y3 in Line(x1,x3)
+    & L1 = Line(x2,x3) & L2 = Line(y2,y3) implies
+  (L1 // L2 iff
+  ex a st a <> 0 & y2 - x1 = a*(x2 - x1) & y3 - x1 = a*(x3 - x1))
+proof
+  assume A1:x2 - x1,x3 - x1 are_lindependent2
+    & y2 in Line(x1,x2) & y3 in Line(x1,x3)
+    & L1 = Line(x2,x3) & L2 = Line(y2,y3);
+A2: Line(x1,x2) = { (1-l)*x1 + l*x2 : not contradiction } by EUCLID_4:def 1;
+A3: Line(x1,x3) = { (1-l)*x1 + l*x3 : not contradiction } by EUCLID_4:def 1;
+  thus L1 // L2 implies
+    ex a st a <> 0 & y2 - x1 = a*(x2 - x1) & y3 - x1 = a*(x3 - x1)
+  proof
+    assume B1:L1 // L2;
+    then L1 is_line & L2 is_line by LM057;
+    then B3: x2 <> x3 & y2 <> y3 by A1,LM056;
+    x2 in L1 & x3 in L1 & y2 in L2 & y3 in L2 by A1,EUCLID_4:10;
+    then B10: y3 - y2 // x3 - x2 by B1,B3,LM055;
+    then consider a such that
+B4: y3 - y2 = a*(x3 - x2) by DE002;
+B12:y3 - y2 <> 0*n & x3 - x2 <> 0*n by B10,DE002;
+    consider s such that
+B5: y2 = (1 - s)*x1 + s*x2 by A1,A2;
+    consider t such that
+B6: y3 = (1 - t)*x1 + t*x3 by A1,A3;
+    0*n = y3 - y2 - a*(x3 - x2) by B4,LM032
+       .= (1 - t)*x1 + t*x3 - (1 - s)*x1 - s*x2 - a*(x3 - x2) by LM005,B5,B6
+       .= 1 * x1 + -t*x1 + t*x3 - (1 - s)*x1 - s*x2 - a*(x3 - x2) by LM018
+       .= 1 * x1 + -t*x1 + t*x3 - (1 * x1 + -s*x1)- s*x2- a*(x3 - x2) by LM018
+       .= 1 * x1 + -t*x1 + t*x3 - 1 * x1 - -s*x1 - s*x2- a*(x3 - x2) by LM005
+       .= 1 * x1 + -t*x1 + t*x3 - 1 * x1 + --s*x1 - s*x2- a*(x3 - x2) by LM007
+       .= 1 * x1 + -t*x1 + t*x3 + -1 * x1 + s*x1 - s*x2- a*(x3 - x2) by LM007
+       .= 1 * x1 + -t*x1 + -1 * x1 + t*x3 + s*x1 - s*x2- a*(x3 - x2) by LM002
+       .= 1 * x1 + -1 * x1 + -t*x1 + t*x3 + s*x1 - s*x2- a*(x3 - x2) by LM002
+       .= 0*n + -t*x1 + t*x3 + s*x1 - s*x2- a*(x3 - x2) by LM008
+       .= -t*x1 + t*x3 + s*x1 - s*x2- a*(x3 - x2) by EUCLID_4:1
+       .= t*(x3 - x1) + s*x1 - s*x2 - a*(x3 - x2) by LM027
+       .= t*(x3 - x1) + s*x1 + -s*x2 - a*(x3 - x2) by LM007
+       .= t*(x3 - x1) + -s*x2 + s*x1 - a*(x3 - x2) by LM002
+       .= t*(x3 - x1) - s*x2 + s*x1 - a*(x3 - x2) by LM007
+       .= t*(x3 - x1) - (s*x2 - s*x1) - a*(x3 - x2) by LM058
+       .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - x2) by LM027
+       .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - 0*n - x2) by LM059
+       .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - (x1 - x1) - x2) by LM008
+       .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - x1 + x1 - x2) by LM058
+       .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - x1 + x1 + -x2) by LM007
+       .= t*(x3 - x1) - s*(x2 - x1) - a*((x3 - x1) + (-x2 + x1)) by LM002
+     .= t*(x3 - x1) - s*(x2 - x1) - (a*(x3 - x1) + a*(-x2 + x1)) by EUCLID_4:6
+     .= t*(x3 - x1) - s*(x2 - x1) - a*(x3 - x1) - a*(-x2 + x1) by LM005
+     .= t*(x3 - x1) - (a*(x3 - x1) + s*(x2 - x1)) - a*(-x2 + x1) by LM005
+     .= t*(x3 - x1) - a*(x3 - x1) - s*(x2 - x1) - a*(-x2 + x1) by LM005
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) - a*(-x2 + x1) by LM018
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) - (a*(-x2) + a*x1) by EUCLID_4:6
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) - (-a*x2 + a*x1) by LM006
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) - -a*x2 - a*x1 by LM005
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) + --a*x2 - a*x1 by LM007
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) + a*x2 + - a*x1 by LM007
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) + (a*x2 + - a*x1) by LM002
+     .= (t - a)*(x3 - x1) - s*(x2 - x1) + a*(x2 - x1) by LM027
+     .= (t - a)*(x3 - x1) - (s*(x2 - x1) - a*(x2 - x1)) by LM058
+     .= (t - a)*(x3 - x1) - (s - a)*(x2 - x1) by LM018
+     .= (t - a)*(x3 - x1) + -(s - a)*(x2 - x1) by LM007
+     .= (t - a)*(x3 - x1) + (-(s - a))*(x2 - x1) by LM006
+     .= (t - a)*(x3 - x1) + (a - s)*(x2 - x1);
+    then t - a = 0 & a - s = 0 by A1,DE003;
+    then B7: t = a & a = s by XCMPLX_1:15;
+B8: y2 - x1 = 1 * x1 + -a*x1 + a*x2 - x1 by LM018,B5,B7
+           .= x1 + -a*x1 + a*x2 - x1 by EUCLID_4:3
+           .= -a*x1 + a*x2 + x1 - x1 by LM002
+           .= -a*x1 + a*x2 + (x1 - x1) by LM060
+           .= -a*x1 + a*x2 + 0*n by LM008
+           .= -a*x1 + a*x2 by EUCLID_4:1
+           .= a*(x2 - x1) by LM027;
+B9: y3 - x1 = 1 * x1 + -a*x1 + a*x3 - x1 by LM018,B6,B7
+           .= x1 + -a*x1 + a*x3 - x1 by EUCLID_4:3
+           .= -a*x1 + a*x3 + x1 - x1 by LM002
+           .= -a*x1 + a*x3 + (x1 - x1) by LM060
+           .= -a*x1 + a*x3 + 0*n by LM008
+           .= -a*x1 + a*x3 by EUCLID_4:1
+           .= a*(x3 - x1) by LM027;
+  take a;
+  thus thesis by B8,B9,B12,B4,EUCLID_4:3;
+  end;
+  now assume ex a st a <> 0 & y2 - x1 = a*(x2 - x1) & y3 - x1 = a*(x3 - x1);
+    then consider a such that
+B1:   a <> 0 & y2 - x1 = a*(x2 - x1) & y3 - x1 = a*(x3 - x1);
+B3:   y3 - y2 = x1 + a*(x3 - x1) - y2 by B1,LM028
+             .= a*(x3 - x1) + x1 - (x1 + a*(x2 - x1)) by B1,LM028
+             .= a*(x3 - x1) + x1 - x1 - a*(x2 - x1) by LM005
+             .= a*(x3 - x1) + (x1 - x1) - a*(x2 - x1) by LM060
+             .= a*(x3 - x1) + 0*n - a*(x2 - x1) by LM008
+             .= a*(x3 - x1) - a*(x2 - x1) by EUCLID_4:1
+             .= a*x3 + -a*x1 - a*(x2 - x1) by LM027
+             .= a*x3 + -a*x1 - (-a*x1 + a*x2) by LM027
+             .= a*x3 + -a*x1 - -a*x1 - a*x2 by LM005
+             .= a*x3 + (-a*x1 - -a*x1) - a*x2 by LM060
+             .= a*x3 + 0*n - a*x2 by LM008
+             .= a*x3 - a*x2 by EUCLID_4:1
+             .= a*(x3 - x2) by LM027;
+      x2 <> x3 by A1,LM054;
+    then B4: x3 - x2 <> 0*n by LM032;
+B5: y3 - y2 <> 0*n by B3,B4,EUCLID_4:5,B1;
+    take a;
+B6: y3 - y2 // x3 - x2 by B3,B4,B5,DE002;
+    take x2;take x3;take y2;take y3;
+    thus L1 // L2 by A1,B6,DE006;
+  end;
+  hence thesis;
+end;
+
+theorem LM052:
+  for L1,L2 st L1 is_line & L2 is_line & L1 <> L2
+    holds ex x st x in L1 & not x in L2
+proof
+  let L1,L2;
+  assume A1: L1 is_line & L2 is_line;
+  then consider x1,x2 such that
+A2: x1 <> x2 & L1 = Line(x1,x2) by EUCLID_4:def 2;
+  assume A8: L1 <> L2;
+  now per cases by A2,A1,LM003,A8;
+    case A9:not x1 in L2;
+      set x = x1;
+      thus x in L1 & not x in L2 by A9,A2,EUCLID_4:10;
+    end;
+    case A10:not x2 in L2;
+      set x = x2;
+      thus x in L1 & not x in L2 by A10,A2,EUCLID_4:10;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem LM074:
+  for x,L1,L2 st L1 _|_ L2 & x in L2 holds
+  ex L0 st x in L0 & L0 _|_ L2 & L0 // L1
+proof
+  let x,L1,L2;
+  assume A1: L1 _|_ L2 & x in L2;
+  then A2:L1 is_line & L2 is_line by TH022;
+  consider L0 such that
+A4: x in L0 & L0 // L1 by A2,LM047;
+  take L0;
+  thus thesis by A1,A4,TH017;
+end;
+
+theorem LM084:
+  for x,L1,L2 st x in L1 & x in L2 & L1 _|_ L2 holds
+  ex x0 st x <> x0 & x0 in L1 & not x0 in L2
+proof
+  let x,L1,L2;
+  assume A1: x in L1 & x in L2 & L1 _|_ L2;
+  then A2:L1 <> L2 by LM079;
+A3: L1 is_line & L2 is_line by A1,TH022;
+  consider x0 such that
+A4: x0 in L1 & not x0 in L2 by A2,A3,LM052;
+  thus thesis by A1,A4;
+end;
+
+:: Planes
+
+definition let n be Nat,x1,x2,x3 be Element of REAL n;
+  func plane(x1,x2,x3) -> Subset of REAL n equals
+  :DE008: {x where x is Element of REAL n:
+          ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3};
+  correctness
+  proof
+    set A = {x where x is Element of REAL n:
+          ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3};
+    A c= REAL n
+    proof
+      let x be set;
+      assume x in A;
+      then consider x' be Element of REAL n such that
+      A1:x = x' & ex a1,a2,a3 being Real st a1+a2+a3=1 & x'=a1*x1+a2*x2+a3*x3;
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let n be Nat,x1,x2,x3 be Element of REAL n;
+  cluster plane(x1,x2,x3) -> non empty;
+  coherence
+  proof
+A1: plane(x1,x2,x3) ={x where x is Element of REAL n:
+      ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3} by DE008;
+A2: 1+0+0=1;
+A3: 1 * x1 = x1 & 0 * x2 = 0*n & 0 * x3 = 0*n by EUCLID_4:3;
+    1 * x1 + 0 * x2 + 0 * x3 = x1 + 0*n by EUCLID_4:1,A3
+                            .= x1 by EUCLID_4:1;
+    then x1 in plane(x1,x2,x3) by A1,A2;
+    hence thesis;
+  end;
+end;
+
+definition let n; let A be Subset of REAL n;
+  attr A is being_plane means :DE009:
+  ex x1,x2,x3 st x2 - x1, x3 - x1 are_lindependent2 & A = plane(x1,x2,x3);
+end;
+
+theorem TH004:
+  x1 in plane(x1,x2,x3) & x2 in plane(x1,x2,x3) & x3 in plane(x1,x2,x3)
+proof
+A1:plane(x1,x2,x3) ={x where x is Element of REAL n:
+      ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3} by DE008;
+A2:1+0+0=1;
+A3:1 * x1 = x1 & 0 * x2 = 0*n & 0 * x3 = 0*n by EUCLID_4:3;
+  1 * x1 + 0 * x2 + 0 * x3 = x1 + 0*n by EUCLID_4:1,A3
+                          .= x1 by EUCLID_4:1;
+  then A4:x1 in plane(x1,x2,x3) by A1,A2;
+A5:0+1+0=1;
+  0 * x1 = 0*n & 1 * x2 = x2 & 0 * x3 = 0*n by EUCLID_4:3;
+  then 0 * x1 + 1 * x2 + 0 * x3 = x2 + 0*n by EUCLID_4:1
+                            .= x2 by EUCLID_4:1;
+  then A6:x2 in plane(x1,x2,x3) by A1,A5;
+A7:0+0+1=1;
+  0 * x1 = 0*n & 0 * x2 = 0*n & 1 * x3 = x3 by EUCLID_4:3;
+  then 0 * x1 + 0 * x2 + 1 * x3 = 0*n + x3 by EUCLID_4:1
+                            .= x3 by EUCLID_4:1;
+  hence thesis by A4,A6,A1,A7;
+end;
+
+theorem TH005:
+  x1 in plane(y1,y2,y3) & x2 in plane(y1,y2,y3) & x3 in plane(y1,y2,y3)
+    implies plane(x1,x2,x3) c= plane(y1,y2,y3)
+proof
+  assume A1:x1 in plane(y1,y2,y3) & x2 in plane(y1,y2,y3)
+            & x3 in plane(y1,y2,y3);
+B1:plane(y1,y2,y3) = 
+    {x where x is Element of REAL n:
+     ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*y1+a2*y2+a3*y3} by DE008; 
+   consider x1' be Element of REAL n such that
+A3: x1 = x1' & ex a11,a12,a13 being Real st a11 + a12 + a13 = 1 &
+    x1' = a11 * y1 + a12 * y2 + a13 * y3 by A1,B1;
+  consider a11,a12,a13 being Real such that
+A4: a11 + a12 + a13 = 1 & x1 = a11*y1 + a12*y2 + a13*y3 by A3;
+  consider x2' be Element of REAL n such that
+A5: x2 = x2' & ex a21,a22,a23 being Real st a21 + a22 + a23 = 1 &
+    x2' = a21 * y1 + a22 * y2 + a23 * y3 by A1,B1;
+  consider a21,a22,a23 being Real such that
+A6: a21 + a22 + a23 = 1 & x2 = a21*y1 + a22*y2 + a23*y3 by A5;
+  consider x3' be Element of REAL n such that
+A7: x3 = x3' & ex a31,a32,a33 being Real st a31 + a32 + a33 = 1 &
+    x3' = a31 * y1 + a32 * y2 + a33 * y3 by A1,B1;
+  consider a31,a32,a33 being Real such that
+A8: a31 + a32 + a33 = 1 & x3 = a31*y1 + a32*y2 + a33*y3 by A7;
+B2:plane(x1,x2,x3) = 
+    {x where x is Element of REAL n:
+     ex b1,b2,b3 being Real st b1+b2+b3=1 & x=b1*x1+b2*x2+b3*x3} by DE008; 
+  let x be set;
+  assume x in plane(x1,x2,x3);
+  then consider x' be Element of REAL n such that
+A10:x = x' & ex b1,b2,b3 being Real st b1 + b2 + b3 = 1 &
+    x' = b1 * x1 + b2 * x2 + b3 * x3 by B2;
+  consider b1,b2,b3 being Real such that
+A11: b1 + b2 + b3 = 1 & x = b1*x1 + b2*x2 + b3*x3 by A10;
+A12:x = ((b1*a11) * y1 + (b1*a12) * y2 + (b1*a13) * y3)
+       + b2*(a21 * y1 + a22 * y2 + a23 * y3)
+       + b3*(a31 * y1 + a32 * y2 + a33 * y3) by LM023,A4,A6,A8,A11
+     .= ((b1*a11) * y1 + (b1*a12) * y2 + (b1*a13) * y3)
+       + ((b2*a21) * y1 + (b2*a22) * y2 + (b2*a23) * y3)
+       + b3*(a31 * y1 + a32 * y2 + a33 * y3) by LM023
+     .= ((b1*a11) * y1 + (b1*a12) * y2 + (b1*a13) * y3)
+       + ((b2*a21) * y1 + (b2*a22) * y2 + (b2*a23) * y3)
+       + ((b3*a31) * y1 + (b3*a32) * y2 + (b3*a33) * y3) by LM023
+     .= ((b1*a11+b2*a21) * y1 + (b1*a12+b2*a22) * y2 + (b1*a13+b2*a23) * y3)
+       + ((b3*a31) * y1 + (b3*a32) * y2 + (b3*a33) * y3) by LM024
+     .= (b1*a11 + b2*a21 + b3*a31)*y1 + (b1*a12 + b2*a22 + b3*a32)*y2
+       + (b1*a13 + b2*a23 + b3*a33)*y3 by LM024;
+    (b1*a11 + b2*a21 + b3*a31) + (b1*a12 + b2*a22 + b3*a32)
+       + (b1*a13 + b2*a23 + b3*a33)
+      = b1*(a11 + a12 + a13) + b2*(a21 + a22 + a23)+ b3*(a31 + a32 + a33)
+     .= 1 by A11,A4,A6,A8;
+  hence thesis by B1,A12;
+end;
+
+theorem
+  for A being Subset of REAL n,x,x1,x2,x3 st x in plane(x1,x2,x3)
+    & ex c1,c2,c3 being Real st c1 + c2 + c3 = 0 & x = c1*x1 + c2*x2 + c3*x3
+    holds 0*n in plane(x1,x2,x3)
+proof
+  let A being Subset of REAL n,x,x1,x2,x3;
+  assume A1:x in plane(x1,x2,x3)
+    & ex c1,c2,c3 being Real st c1 + c2 + c3 = 0 & x = c1*x1 + c2*x2 + c3*x3;
+A3:plane(x1,x2,x3) = {y where y is Element of REAL n:
+     ex a1,a2,a3 being Real st a1+a2+a3=1 & y=a1*x1+a2*x2+a3*x3} by DE008; 
+  then consider x' be Element of REAL n such that
+A4:x = x' & ex a1,a2,a3 being Real st a1 + a2 + a3 = 1 &
+    x' = a1 * x1 + a2 * x2 + a3 * x3 by A1;
+  consider a1,a2,a3 being Real such that
+A5:a1 + a2 + a3 = 1 & x = a1 * x1 + a2 * x2 + a3 * x3 by A4;
+  consider c1,c2,c3 being Real such that
+A7:   c1 + c2 + c3 = 0 & x = c1*x1 + c2*x2 + c3*x3 by A1;
+A10:0*n = x - x by LM008
+       .= (a1*x1 + a2*x2 + a3*x3) + ((-c1)*x1 + (-c2)*x2 + (-c3)*x3)
+            by LM020,A7,A5
+       .= (a1 +-c1)*x1 + (a2+-c2)*x2 + (a3+-c3)*x3 by LM024;
+  (a1+ -c1) + (a2 + -c2) + (a3 + -c3)
+     = 1 - 0 by A5,A7
+    .= 1;
+  hence 0*n in plane(x1,x2,x3) by A3,A10;
+end;
+
+theorem TH008:
+  y1 in plane(x1,x2,x3) & y2 in plane(x1,x2,x3) implies
+    Line(y1,y2) c= plane(x1,x2,x3)
+proof
+A1:plane(x1,x2,x3) ={x where x is Element of REAL n:
+    ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3} by DE008;
+  assume A2:y1 in plane(x1,x2,x3) & y2 in plane(x1,x2,x3);
+  then consider y1' be Element of REAL n such that
+A3: y1 = y1' & ex a11,a12,a13 being Real st a11 + a12 + a13 = 1 &
+    y1' = a11 * x1 + a12 * x2 + a13 * x3 by A1;
+  consider y2' be Element of REAL n such that
+A4: y2 = y2' & ex a21,a22,a23 being Real st a21 + a22 + a23 = 1 &
+    y2' = a21 * x1 + a22 * x2 + a23 * x3 by A1,A2;
+A5:Line(y1,y2) = { (1-l)*y1 + l*y2 : not contradiction } by EUCLID_4:def 1;
+  Line(y1,y2) c= plane(x1,x2,x3)
+  proof
+    let x be set;
+    assume x in Line(y1,y2);
+    then consider t such that A7:x = (1-t)*y1 + t*y2 by A5;
+    consider a11,a12,a13 being Real such that A8:a11 + a12 + a13 = 1 &
+    y1' = a11 * x1 + a12 * x2 + a13 * x3 by A3;
+    consider a21,a22,a23 being Real such that A9:a21 + a22 + a23 = 1 &
+    y2' = a21 * x1 + a22 * x2 + a23 * x3 by A4;
+A10:x = (((1-t)*a11)*x1 + ((1-t)*a12)*x2 + ((1-t)*a13)*x3)
+        + t*(a21 * x1 + a22 * x2 + a23 * x3) by LM023,A8,A9,A3,A4,A7
+     .= (((1-t)*a11)*x1 + ((1-t)*a12)*x2 + ((1-t)*a13)*x3)
+        + ((t*a21)*x1 + (t*a22)*x2 + (t*a23)*x3) by LM023
+     .= ((1-t)*a11 + t*a21) * x1 + ((1-t)*a12 + t*a22) * x2
+        + ((1-t)*a13+t*a23) * x3 by LM024;
+    ((1-t)*a11+t*a21) + ((1-t)*a12+t*a22) + ((1-t)*a13+t*a23)
+      = (1-t)*(a11 + a12 + a13) + t*(a21 + a22 + a23)
+     .= (1-t) + t by A8,A9
+     .= 1;
+    hence thesis by A1,A10;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for A being Subset of REAL n,x
+  st A is being_plane & x in A & ex a st a<>1 & a*x in A holds 0*n in A
+proof
+  let A be Subset of REAL n,x;
+  assume A1:A is being_plane & x in A & ex a st a<>1 & a*x in A;
+  then consider x1,x2,x3 such that
+A2: x2-x1,x3-x1 are_lindependent2 & A = plane(x1,x2,x3) by DE009;
+  consider a such that A3:a<>1 & a*x in A by A1;
+A4:Line(x,a*x) c= A by A1,A2,A3,TH008;
+A5:1-a<>0 by A3,XCMPLX_1:15;
+A6:1-1/(1-a)+(1/(1-a))*a = 1-1/(1-a)+a/(1-a) by XCMPLX_1:100
+                        .= 1 + (-1/(1-a) + a/(1-a))
+                        .= 1 + ((-1)/(1-a) + a/(1-a)) by XCMPLX_1:188
+                        .= 1 + (-1+a)/(1-a) by XCMPLX_1:63
+                        .= 1 + (-(-a --1))/(1-a)
+                        .= 1 + - (1-a)/(1-a) by XCMPLX_1:188
+                        .= 1 - (1-a)/(1-a)
+                        .= 1 - 1 by A5,XCMPLX_1:60
+                        .= 0;
+A8:0*n = 0 * x by EUCLID_4:3
+      .= (1-1/(1-a))*x +((1/(1-a))*a)*x by EUCLID_4:7,A6
+      .= (1-1/(1-a))*x +(1/(1-a))*(a*x) by EUCLID_4:4;
+  Line(x,a*x)={(1-l)*x+l*(a*x):not contradiction} by EUCLID_4:def 1;
+  then 0*n in Line(x,a*x) by A8;
+  hence thesis by A4;
+end;
+
+theorem
+  x1-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3) & x = a1*x1+a2*x2+a3*x3
+  implies a1 + a2 + a3 = 1 or 0*n in plane(x1,x2,x3)
+proof
+  assume A1:x1-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3)
+            & x = a1*x1+a2*x2+a3*x3 & not a1+a2+a3 = 1;
+A3:plane(x1,x2,x3) ={y where y is Element of REAL n:
+      ex c1,c2,c3 being Real st c1+c2+c3=1 & y=c1*x1+c2*x2+c3*x3} by DE008;
+  then consider x' be Element of REAL n such that
+A4: x = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+    x' = a1'*x1+a2'*x2+a3'*x3 by A1;
+  consider a1',a2',a3' being Real such that
+A5: a1'+a2'+a3'=1 & x = a1'*x1+a2'*x2+a3'*x3 by A4;
+A6:0*n = (a1*x1+a2*x2+a3*x3) - (a1'*x1+a2'*x2+a3'*x3) by A1,A5,LM008
+      .= (a1-a1')*x1+(a2-a2')*x2+(a3-a3')*x3 by LM031;
+  (a1-a1')+(a2-a2')+(a3-a3') = (a1+a2+a3) - 1 by A5;
+  then A8:(a1-a1')+(a2-a2')+(a3-a3') <> 0 by A1,XCMPLX_1:15;
+  set t = (a1-a1')+(a2-a2')+(a3-a3');
+A10:0*n = (1/t) * 0*n by EUCLID_4:2
+       .= (1/t*(a1-a1'))*x1+(1/t*(a2-a2'))*x2+(1/t*(a3-a3'))*x3 by LM023,A6
+       .= (a1-a1')/t*x1+(1/t*(a2-a2'))*x2+(1/t*(a3-a3'))*x3 by XCMPLX_1:100
+       .= (a1-a1')/t*x1+(a2-a2')/t*x2+(1/t*(a3-a3'))*x3 by XCMPLX_1:100
+       .= (a1-a1')/t*x1+(a2-a2')/t*x2+(a3-a3')/t*x3 by XCMPLX_1:100;
+  (a1-a1')/t+(a2-a2')/t+(a3-a3')/t
+   = ((a1-a1')+(a2-a2')+(a3-a3'))/t by XCMPLX_1:64
+  .= 1 by A8,XCMPLX_1:60;
+  hence thesis by A3,A10;
+end;
+
+theorem LM085:
+  x in plane(x1,x2,x3) iff ex a1,a2,a3 st a1+a2+a3=1 & x = a1*x1+a2*x2+a3*x3
+proof
+A0: plane(x1,x2,x3) = {y where y is Element of REAL n:
+          ex a1,a2,a3 being Real st a1+a2+a3=1 & y=a1*x1+a2*x2+a3*x3} by DE008;
+  thus x in plane(x1,x2,x3) implies
+    ex a1,a2,a3 st a1+a2+a3=1 & x = a1*x1+a2*x2+a3*x3
+  proof
+    assume x in plane(x1,x2,x3);
+    then consider x' be Element of REAL n such that
+A3:   x = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+      x'=a1'*x1+a2'*x2+a3'*x3 by A0;
+    consider a1,a2,a3 such that
+A4:   a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3 by A3;
+    thus thesis by A4;
+  end;
+  thus thesis by A0;
+end;
+
+theorem
+  x2-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3) &
+    a1 + a2 + a3 = 1 & x = a1*x1+a2*x2+a3*x3
+  & b1 + b2 + b3 = 1 & x = b1*x1+b2*x2+b3*x3
+    implies a1 = b1 & a2 = b2 & a3 = b3
+proof
+  assume A0:x2-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3);
+  assume A1:a1 + a2 + a3 = 1 & x = a1*x1+a2*x2+a3*x3
+            & b1 + b2 + b3 = 1 & x = b1*x1+b2*x2+b3*x3;
+A3:a1 = a1 + a2 + a3 - a2 - a3
+     .= 1 - a2 -a3 by A1;
+  x = 1 * x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM010,A1,A3
+   .= x1 - a2*x1 - a3*x1 + a2*x2 + a3*x3 by EUCLID_4:3
+   .= x1 + -a2*x1 - a3*x1 + a2*x2 + a3*x3 by LM007
+   .= x1 + -a2*x1 + -a3*x1 + a2*x2 + a3*x3 by LM007
+   .= x1 + -a2*x1 + a2*x2 + -a3*x1 + a3*x3 by LM002
+   .= x1 + (a2*x2 + -a2*x1) + -a3*x1 + a3*x3 by LM002
+   .= x1 + (a2*x2 + -a2*x1) + (a3*x3 + -a3*x1) by LM002
+   .= x1 + (a2*x2 + a2*(-x1)) + (a3*x3 + -a3*x1) by LM006
+   .= x1 + (a2*x2 + a2*(-x1)) + (a3*x3 + a3*(-x1)) by LM006
+   .= x1 + a2*(x2 + -x1) + (a3*x3 + a3*(-x1)) by EUCLID_4:6
+   .= x1 + a2*(x2 + -x1) + a3*(x3 + -x1) by EUCLID_4:6
+   .= x1 + a2*(x2 - x1) + a3*(x3 + -x1) by LM007
+   .= x1 + a2*(x2 - x1) + a3*(x3 - x1) by LM007;
+  then A5:x - x1 = a2*(x2 - x1) + a3*(x3 - x1) by LM025;
+  x = (1 - b2 -b3)*x1 + b2*x2 + b3*x3 by A1
+   .= 1 * x1 - b2*x1 - b3*x1 + b2*x2 + b3*x3 by LM010
+   .= x1 - b2*x1 - b3*x1 + b2*x2 + b3*x3 by EUCLID_4:3
+   .= x1 + -b2*x1 - b3*x1 + b2*x2 + b3*x3 by LM007
+   .= x1 + -b2*x1 + -b3*x1 + b2*x2 + b3*x3 by LM007
+   .= x1 + -b2*x1 + b2*x2 + -b3*x1 + b3*x3 by LM002
+   .= x1 + (b2*x2 + -b2*x1) + -b3*x1 + b3*x3 by LM002
+   .= x1 + (b2*x2 + -b2*x1) + (b3*x3 + -b3*x1) by LM002
+   .= x1 + (b2*x2 + b2*(-x1)) + (b3*x3 + -b3*x1) by LM006
+   .= x1 + (b2*x2 + b2*(-x1)) + (b3*x3 + b3*(-x1)) by LM006
+   .= x1 + b2*(x2 + -x1) + (b3*x3 + b3*(-x1)) by EUCLID_4:6
+   .= x1 + b2*(x2 + -x1) + b3*(x3 + -x1) by EUCLID_4:6
+   .= x1 + b2*(x2 - x1) + b3*(x3 + -x1) by LM007
+   .= x1 + b2*(x2 - x1) + b3*(x3 - x1) by LM007;
+  then a2*(x2 - x1) + a3*(x3 - x1) = b2*(x2 - x1) + b3*(x3 - x1) by LM025,A5;
+  then a2 = b2 & a3 = b3 by A0,TH009;
+  hence thesis by A3,A1;
+end;
+
+definition let n;
+  func plane_of_REAL n -> Subset of bool REAL n equals
+  :DE011: {P where P is Element of bool REAL n:
+    ex x1,x2,x3 being Element of REAL n st P = plane(x1,x2,x3)};
+  correctness
+  proof
+    set A = {P where P is Element of bool REAL n:
+               ex x1,x2,x3 being Element of REAL n st P = plane(x1,x2,x3)};
+    A c= bool REAL n
+    proof
+      let P be set;
+      assume P in A;
+      then consider P' be Subset of REAL n such that A1:P = P' &
+        ex x1,x2,x3 being Element of REAL n st P' = plane(x1,x2,x3);
+      thus thesis by A1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let n;
+  cluster plane_of_REAL n -> non empty;
+  coherence
+  proof
+A1: plane_of_REAL n = {P where P is Element of bool REAL n:
+      ex x1,x2,x3 being Element of REAL n st P = plane(x1,x2,x3)} by DE011;
+    reconsider P = plane(0*n,1*n,1*n) as Subset of REAL n;
+    P in plane_of_REAL n by A1;
+    hence thesis;
+  end;
+end;
+
+theorem LM034:
+  plane(x1,x2,x3) in plane_of_REAL n
+proof
+A1:plane_of_REAL n = {P where P is Element of bool REAL n:
+    ex y1,y2,y3 being Element of REAL n st P = plane(y1,y2,y3)} by DE011;
+  set P' = plane(x1,x2,x3);
+  thus thesis by A1;
+end;
+
+reserve P,P0,P1,P2 for Element of plane_of_REAL n;
+
+theorem TH029:
+  x1 in P & x2 in P & x3 in P implies plane(x1,x2,x3) c= P
+proof
+  assume A1:x1 in P & x2 in P & x3 in P;
+A2:plane_of_REAL n = {P0 where P0 is Element of bool REAL n:
+    ex y1,y2,y3 being Element of REAL n st P0 = plane(y1,y2,y3)} by DE011;
+  P in plane_of_REAL n;
+  then consider P' being Element of bool REAL n such that
+A4:P = P' & ex y1,y2,y3 being Element of REAL n st P' = plane(y1,y2,y3) by A2;
+  consider y1,y2,y3 being Element of REAL n such that
+A5: P = plane(y1,y2,y3) by A4;
+  thus thesis by A1,A5,TH005;
+end;
+
+theorem TH007:
+  x1 in P & x2 in P & x3 in P & x2 - x1, x3 - x1 are_lindependent2
+  implies P = plane(x1,x2,x3)
+proof
+  assume A1:x1 in P & x2 in P & x3 in P & x2 - x1, x3 - x1 are_lindependent2;
+A2:plane_of_REAL n = {P0 where P0 is Element of bool REAL n:
+    ex y1,y2,y3 being Element of REAL n st P0 = plane(y1,y2,y3)} by DE011;
+  P in plane_of_REAL n;
+  then consider P' being Element of bool REAL n such that
+A4:P= P' & ex y1,y2,y3 being Element of REAL n st P' = plane(y1,y2,y3) by A2;
+  consider y1,y2,y3 being Element of REAL n such that
+A5: P = plane(y1,y2,y3) by A4;
+B1:plane(x1,x2,x3) c= P by A1,A5,TH005;
+B3:plane(y1,y2,y3) ={y where y is Element of REAL n:
+      ex c1,c2,c3 being Real st c1+c2+c3=1 & y=c1*y1+c2*y2+c3*y3} by DE008;
+  then consider x' be Element of REAL n such that
+A6: x1 = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+    x' = a1'*y1+a2'*y2+a3'*y3 by A1,A5;
+  consider a11,a12,a13 being Real such that
+A7: a11+a12+a13=1 & x1 = a11*y1+a12*y2+a13*y3 by A6;
+  consider x' be Element of REAL n such that
+A8: x2 = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+    x' = a1'*y1+a2'*y2+a3'*y3 by A1,A5,B3;
+  consider a21,a22,a23 being Real such that
+A9: a21+a22+a23=1 & x2 = a21*y1+a22*y2+a23*y3 by A8;
+  consider x' be Element of REAL n such that
+A10:x3 = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+    x' = a1'*y1+a2'*y2+a3'*y3 by A1,A5,B3;
+  consider a31,a32,a33 being Real such that
+A11:a31+a32+a33=1 & x3 = a31*y1+a32*y2+a33*y3 by A10;
+A12:x1 = y1 + a12*(y2 - y1) + a13*(y3 - y1) by A7,LM026;
+A14:x3 = y1 + a32*(y2 - y1) + a33*(y3 - y1) by A11,LM026;
+A15:x2 - x1 = y1 + a22*(y2 - y1) + a23*(y3 - y1)
+              - (y1 + a12*(y2 - y1) + a13*(y3 - y1)) by A12,A9,LM026
+           .= y1 + a22*(y2 - y1) + a23*(y3 - y1)
+              + -(y1 + a12*(y2 - y1) + a13*(y3 - y1)) by LM007
+           .= y1 + a22*(y2 - y1) + a23*(y3 - y1)
+              + (-y1 + -a12*(y2 - y1) + -a13*(y3 - y1)) by LM019
+           .= (y1 + -y1) + (a22*(y2 - y1) + -a12*(y2 - y1))
+              + (a23*(y3 - y1) + -a13*(y3 - y1)) by LM021
+           .= 0*n + (a22*(y2 - y1) + -a12*(y2 - y1))
+              + (a23*(y3 - y1) + -a13*(y3 - y1)) by LM008
+           .= 0*n + (a22 - a12)*(y2 - y1)
+              + (a23*(y3 - y1) + -a13*(y3 - y1)) by LM018
+           .= 0*n + (a22 - a12)*(y2 - y1) + (a23 - a13)*(y3 - y1) by LM018
+           .= (a22 - a12)*(y2 - y1) + (a23 - a13)*(y3 - y1) by EUCLID_4:1;
+A16:x3 - x1 = y1 + a32*(y2 - y1) + a33*(y3 - y1)
+              - (y1 + a12*(y2 - y1) + a13*(y3 - y1)) by A7,LM026,A14
+           .= y1 + a32*(y2 - y1) + a33*(y3 - y1)
+              + -(y1 + a12*(y2 - y1) + a13*(y3 - y1)) by LM007
+           .= y1 + a32*(y2 - y1) + a33*(y3 - y1)
+              + (-y1 + -a12*(y2 - y1) + -a13*(y3 - y1)) by LM019
+           .= (y1 + -y1) + (a32*(y2 - y1) + -a12*(y2 - y1))
+              + (a33*(y3 - y1) + -a13*(y3 - y1)) by LM021
+           .= 0*n + (a32*(y2 - y1) + -a12*(y2 - y1))
+              + (a33*(y3 - y1) + -a13*(y3 - y1)) by LM008
+           .= 0*n + (a32 - a12)*(y2 - y1)
+              + (a33*(y3 - y1) + -a13*(y3 - y1)) by LM018
+           .= 0*n + (a32 - a12)*(y2 - y1) + (a33 - a13)*(y3 - y1) by LM018
+           .= (a32 - a12)*(y2 - y1) + (a33 - a13)*(y3 - y1) by EUCLID_4:1;
+  consider c1,c2,d1,d2 be Real such that
+A17:y2 - y1 = c1*(x2 - x1) + c2*(x3 - x1)
+    & y3 - y1 = d1*(x2 - x1) + d2*(x3 - x1) by A1,A15,A16,TH010;
+A18: x1 = y1 + (a12*(y2 - y1) + a13*(y3 - y1)) by A12,LM002;
+  now let y be set;
+    assume A19: y in P;
+    consider x' be Element of REAL n such that
+A20:  y = x' & ex a1',a2',a3' being Real st a1'+a2'+a3'=1 &
+      x' = a1'*y1+a2'*y2+a3'*y3 by B3,A5,A19;
+    consider b1,b2,b3 being Real such that
+A21:  b1+b2+b3=1 & y = b1*y1+b2*y2+b3*y3 by A20;
+    y = y1 + b2*(y2 - y1) + b3*(y3 - y1) by A21,LM026
+     .= x1 - (a12*(y2 - y1) + a13*(y3 - y1))
+        + b2*(y2 - y1) + b3*(y3 - y1) by A18,LM028
+     .= x1 - a12*(y2 - y1) - a13*(y3 - y1)
+        + b2*(y2 - y1) + b3*(y3 - y1) by LM005
+     .= x1 + -a12*(y2 - y1) - a13*(y3 - y1)
+        + b2*(y2 - y1) + b3*(y3 - y1) by LM007
+     .= x1 + -a12*(y2 - y1) + -a13*(y3 - y1)
+        + b2*(y2 - y1) + b3*(y3 - y1) by LM007
+     .= x1 + -a12*(y2 - y1) + b2*(y2 - y1)
+        + -a13*(y3 - y1) + b3*(y3 - y1) by LM002
+     .= x1 + (-a12*(y2 - y1) + b2*(y2 - y1))
+        + -a13*(y3 - y1) + b3*(y3 - y1) by LM002
+     .= x1 + (-a12*(y2 - y1) + b2*(y2 - y1))
+        + (-a13*(y3 - y1) + b3*(y3 - y1)) by LM002
+     .= x1 + (b2-a12)*(y2 - y1)
+        + (-a13*(y3 - y1) + b3*(y3 - y1)) by LM018
+     .= x1 + (b2-a12)*(y2 - y1) + (b3-a13)*(y3 - y1) by LM018
+     .= x1 + ((b2-a12)*(c1*(x2 - x1)) + (b2-a12)*(c2*(x3 - x1)))
+        + (b3-a13)*(d1*(x2 - x1) + d2*(x3 - x1)) by A17,EUCLID_4:6
+     .= x1 + ((b2-a12)*(c1*(x2 - x1)) + (b2-a12)*(c2*(x3 - x1)))
+        + ((b3-a13)*(d1*(x2 - x1)) + (b3-a13)*(d2*(x3 - x1))) by EUCLID_4:6
+     .= x1 + ((((b2-a12)*c1)*(x2 - x1)) + (b2-a12)*(c2*(x3 - x1)))
+        + ((b3-a13)*(d1*(x2 - x1)) + (b3-a13)*(d2*(x3 - x1))) by EUCLID_4:4
+     .= x1 + (((b2-a12)*c1)*(x2 - x1) + ((b2-a12)*c2)*(x3 - x1))
+        + ((b3-a13)*(d1*(x2 - x1)) + (b3-a13)*(d2*(x3 - x1))) by EUCLID_4:4
+     .= x1 + (((b2-a12)*c1)*(x2 - x1) + ((b2-a12)*c2)*(x3 - x1))
+        + (((b3-a13)*d1)*(x2 - x1) + (b3-a13)*(d2*(x3 - x1))) by EUCLID_4:4
+     .= x1 + (((b2-a12)*c1)*(x2 - x1) + ((b2-a12)*c2)*(x3 - x1))
+        + (((b3-a13)*d1)*(x2 - x1) + ((b3-a13)*d2)*(x3 - x1)) by EUCLID_4:4
+     .= x1 + ((b2-a12)*c1)*(x2 - x1) + ((b2-a12)*c2)*(x3 - x1)
+        + (((b3-a13)*d1)*(x2 - x1) + ((b3-a13)*d2)*(x3 - x1)) by LM002
+     .= x1 + ((b2-a12)*c1)*(x2 - x1) + ((b2-a12)*c2)*(x3 - x1)
+        + ((b3-a13)*d1)*(x2 - x1) + ((b3-a13)*d2)*(x3 - x1) by LM002
+     .= x1 + ((b2-a12)*c1)*(x2 - x1) + ((b3-a13)*d1)*(x2 - x1)
+        + ((b2-a12)*c2)*(x3 - x1) + ((b3-a13)*d2)*(x3 - x1) by LM002
+     .= x1 + (((b2-a12)*c1)*(x2 - x1) + ((b3-a13)*d1)*(x2 - x1))
+        + ((b2-a12)*c2)*(x3 - x1) + ((b3-a13)*d2)*(x3 - x1) by LM002
+     .= x1 + (((b2-a12)*c1)*(x2 - x1) + ((b3-a13)*d1)*(x2 - x1))
+        + (((b2-a12)*c2)*(x3 - x1) + ((b3-a13)*d2)*(x3 - x1)) by LM002
+     .= x1 + ((b2-a12)*c1 + (b3-a13)*d1)*(x2 - x1)
+        + (((b2-a12)*c2)*(x3 - x1) + ((b3-a13)*d2)*(x3 - x1)) by EUCLID_4:7
+     .= x1 + ((b2-a12)*c1 + (b3-a13)*d1)*(x2 - x1)
+        + ((b2-a12)*c2 + (b3-a13)*d2)*(x3 - x1) by EUCLID_4:7;
+    then consider a be Real such that
+A23:  y = a*x1 + ((b2-a12)*c1 + (b3-a13)*d1)*x2+((b2-a12)*c2 + (b3-a13)*d2)*x3
+      & a+((b2-a12)*c1 + (b3-a13)*d1)+((b2-a12)*c2 + (b3-a13)*d2)=1 by LM029;
+A24:plane(x1,x2,x3) ={y0 where y0 is Element of REAL n:
+      ex c1,c2,c3 being Real st c1+c2+c3=1 & y0=c1*x1+c2*x2+c3*x3} by DE008;
+    thus y in plane(x1,x2,x3) by A23,A24;
+  end;
+  then P c= plane(x1,x2,x3) by TARSKI:def 3;
+  hence thesis by B1,XBOOLE_0:def 10;
+end;
+
+theorem
+  P1 is being_plane & P1 c= P2 implies P1 = P2
+proof
+  assume A1:P1 is being_plane & P1 c= P2;
+  consider x1,x2,x3 be Element of REAL n such that
+A2: x2 - x1, x3 - x1 are_lindependent2 & P1 = plane(x1,x2,x3) by A1,DE009;
+  x1 in plane(x1,x2,x3) & x2 in plane(x1,x2,x3) & x3 in plane(x1,x2,x3)
+    by TH004;
+  hence thesis by A1,A2,TH007;
+end;
+
+:: Lines in the planes
+
+theorem
+  Line(x1,x2) c= plane(x1,x2,x3) & Line(x2,x3) c= plane(x1,x2,x3)
+  & Line(x3,x1) c= plane(x1,x2,x3)
+proof
+  x1 in plane(x1,x2,x3) & x2 in plane(x1,x2,x3) & x3 in plane(x1,x2,x3)
+    by TH004;
+  hence thesis by TH008;
+end;
+
+theorem TH020:
+  x1 in P & x2 in P implies Line(x1,x2) c= P
+proof
+  assume A1: x1 in P & x2 in P;
+A2:plane_of_REAL n = {P0 where P0 is Element of bool REAL n:
+    ex y1,y2,y3 being Element of REAL n st P0 = plane(y1,y2,y3)} by DE011;
+  P in plane_of_REAL n;
+  then consider P' being Element of bool REAL n such that
+A4:P = P' & ex y1,y2,y3 being Element of REAL n st P' = plane(y1,y2,y3) by A2;
+  consider y1,y2,y3 being Element of REAL n such that
+A5:P = plane(y1,y2,y3) by A4;
+  thus thesis by A1,A5,TH008;
+end;
+
+definition let n be Nat,L1,L2 be Element of line_of_REAL n;
+  pred L1,L2 are_coplane means
+  :DE010: ex x1,x2,x3 being Element of REAL n
+         st L1 c= plane(x1,x2,x3) & L2 c= plane(x1,x2,x3);
+end;
+
+theorem LM062:
+  L1,L2 are_coplane iff ex P st L1 c= P & L2 c= P
+proof
+A0: plane_of_REAL n = {P0 where P0 is Element of bool REAL n:
+    ex x1,x2,x3 being Element of REAL n st P0 = plane(x1,x2,x3)} by DE011;
+  thus L1,L2 are_coplane implies ex P st L1 c= P & L2 c= P
+  proof
+    assume L1,L2 are_coplane;
+    then consider x1,x2,x3 being Element of REAL n such that
+A2:   L1 c= plane(x1,x2,x3) & L2 c= plane(x1,x2,x3) by DE010;
+    set P = plane(x1,x2,x3);
+    take P;
+    thus thesis by A2,LM034;
+  end;
+  now assume ex P st L1 c= P & L2 c= P;
+    then consider P such that
+A4:   L1 c= P & L2 c= P;
+    P in plane_of_REAL n;
+    then consider P' being Element of bool REAL n such that
+A5: P = P' & ex x1,x2,x3 being Element of REAL n st P' = plane(x1,x2,x3) by A0;
+    thus L1,L2 are_coplane by A4,A5,DE010;
+  end;
+  hence thesis;
+end;
+
+theorem TH023:
+  L1 // L2 implies L1,L2 are_coplane
+proof
+  assume L1 // L2;
+  then consider x1, x2, y1, y2 being Element of REAL n such that
+A2: L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) // (y2 - y1) by DE006;
+A3: plane(x1,y1,y2) = {x where x is Element of REAL n:
+      ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*y1+a3*y2} by DE008;
+  consider a such that
+A4: a <> 0 & x2 - x1 = a * (y2 - y1) by A2,LM066;
+A5: x2 = x1 + a * (y2 - y1) by A4,LM028
+      .= 1 * x1 + a * (y2 - y1) by EUCLID_4:3
+      .= 1 * x1 + (a * y2 + (-a) * y1) by LM027
+      .= 1 * x1 + (-a) * y1 + a * y2 by LM002;
+  1 + (-a) + a = 1;
+  then A6: x2 in plane(x1,y1,y2) by A3,A5;
+  x1 in plane(x1,y1,y2) & y1 in plane(x1,y1,y2) & y2 in plane(x1,y1,y2)
+    by TH004;
+  then L1 c= plane(x1,y1,y2) & L2 c= plane(x1,y1,y2) by A2,A6,TH008;
+  hence thesis by DE010;
+end;
+
+theorem LM087:
+  L1 is_line & L2 is_line & L1,L2 are_coplane &
+    L1 misses L2 implies ex P st L1 c= P & L2 c= P & P is being_plane
+proof
+  assume A1:L1 is_line & L2 is_line & L1,L2 are_coplane;
+  then consider x1,x2,x3 being Element of REAL n such that
+A2: L1 c= plane(x1,x2,x3) & L2 c= plane(x1,x2,x3) by DE010;
+  set P = plane(x1,x2,x3);
+  assume A3:L1 misses L2;
+A4:plane_of_REAL n = {P' where P' is Element of bool REAL n:
+    ex x1,x2,x3 being Element of REAL n st P' = plane(x1,x2,x3)} by DE011;
+A5:P in plane_of_REAL n by A4;
+  consider y0,y1 such that
+A6: y0 <> y1 & L1 = Line(y0,y1) by A1,EUCLID_4:def 2;
+  consider y2,y3 such that
+A7: y2 <> y3 & L2 = Line(y2,y3) by A1,EUCLID_4:def 2;
+A9: y0 in L1 & y1 in L1 & y2 in L2 by A6,A7,EUCLID_4:10;
+  consider y being Element of REAL n such that
+A11: y in Line(y0,y1) & y0 - y1,y2 - y are_orthogonal by LM042;
+A12:y <> y2 by A6,A11,A9,XBOOLE_0:3,A3;
+A13:y0 - y1 <> 0*n & y2 - y <> 0*n by A6,A12,LM032;
+  y0 - y1 _|_ y2 - y by A13,A11,DE004;
+  then A15:y0 - y1,y2 - y are_lindependent2 by TH012;
+  consider y' being Element of REAL n such that
+A16:y <> y' & y' in L1 by A1,EUCLID_4:15;
+  y in Line(y,y2) & y2 in Line(y,y2) by EUCLID_4:10;
+  then A18:y' - y, y2 - y are_lindependent2 by A6,A11,A12,A15,A16,LM044;
+A21: P = plane(y,y',y2) by A6,A2,A11,A16,A5,A9,A18,TH007;
+  take P;
+  thus thesis by A5,A2,A21,A18,DE009;
+end;
+
+theorem LM048:
+  ex P st x in P & L c= P
+proof
+A1:line_of_REAL n = {L' where L' is Element of bool REAL n:
+      ex x1,x2 being Element of REAL n st L' = Line(x1,x2)} by DE005;
+  L in line_of_REAL n;
+  then consider L0 be Element of bool REAL n such that
+A3:L = L0 & ex x1,x2 being Element of REAL n st L0 = Line(x1,x2) by A1;
+  consider x1,x2 being Element of REAL n such that
+A4:L = Line(x1,x2) by A3;
+  reconsider P = plane(x,x1,x2) as Subset of REAL n;
+  x in P & x1 in P & x2 in P by TH004;
+  then A7: L c= P by A4,TH008;
+  take P;
+  thus thesis by LM034,TH004,A7;
+end;
+
+theorem TH016:
+  (not x in L) & L is_line implies ex P st x in P & L c= P & P is being_plane
+proof
+  assume A1: (not x in L) & L is_line;
+  consider P being Element of plane_of_REAL n such that
+A2: x in P & L c= P by LM048;
+  consider x1,x2 being Element of REAL n such that
+A3: L = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2 by A1,TH015;
+  x1 in L & x2 in L by A3,EUCLID_4:10;
+  then A6:P = plane(x1,x,x2) by A2,A3,TH007;
+  take P;
+  thus thesis by A2,A6,A3,DE009;
+end;
+
+theorem LM083:
+  x in P & L c= P & (not x in L) & L is_line implies P is being_plane
+proof
+  assume A1:x in P & L c= P;
+  assume (not x in L) & L is_line;
+  then consider x1,x2 being Element of REAL n such that
+A3: L = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2 by TH015;
+  x1 in L & x2 in L by A3,EUCLID_4:10;
+  then P = plane(x1,x,x2) by A1,A3,TH007;
+  hence thesis by A3,DE009;
+end;
+
+theorem TH024:
+  (not x in L) & L is_line & x in P0 & L c= P0 & x in P1 & L c= P1
+  implies P0 = P1
+proof
+  assume A1:(not x in L) & L is_line & x in P0 & L c= P0 & x in P1 & L c= P1;
+  then consider x1,x2 being Element of REAL n such that
+A2: L = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2 by TH015;
+A3: x1 in L & x2 in L by A2,EUCLID_4:10;
+  then P0 = plane(x1,x,x2) by A1,A2,TH007;
+  hence thesis by A1,A2,A3,TH007;
+end;
+
+theorem
+  L1 is_line & L2 is_line & L1,L2 are_coplane & L1 <> L2 implies
+  ex P st L1 c= P & L2 c= P & P is being_plane
+proof
+  assume A1: L1 is_line & L2 is_line & L1,L2 are_coplane & L1 <> L2;
+  then consider P such that
+A2: L1 c= P & L2 c= P by LM062;
+  consider x such that
+A3: x in L2 & not x in L1 by A1,LM052;
+  P is being_plane by A1,A2,A3,LM083;
+  hence thesis by A2;
+end;
+
+theorem
+  for L1,L2 st L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2
+  holds ex P st L1 c= P & L2 c= P & P is being_plane
+proof
+  let L1,L2;
+  assume A1:L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2;
+  then consider x such that
+A2: x in L1 & not x in L2 by LM052;
+  consider P such that
+A3: x in P & L2 c= P & P is being_plane by A1,A2,TH016;
+  consider y such that
+A4: y in L1 & y in L2 by A1,LM061;
+  L1 = Line(x,y) by A4,A2,A1,LM003;
+  then L1 c= P by A3,A4,TH020;
+  hence thesis by A3;
+end;
+
+theorem
+  L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2
+  & L1 c= P1 & L2 c= P1 & L1 c= P2 & L2 c= P2 implies P1 = P2
+proof
+  assume A1:L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2
+    & L1 c= P1 & L2 c= P1 & L1 c= P2 & L2 c= P2;
+  consider x such that
+A3: x in L1 & not x in L2 by A1,LM052;
+  consider x1,x2 such that
+A4: L2 = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2 by A1,A3,TH015;
+A5: x1 in L2 & x2 in L2 by A4,EUCLID_4:10;
+  P2 = plane(x1,x,x2) by A1,A3,A4,A5,TH007;
+  hence thesis by A1,A3,A4,A5,TH007;
+end;
+
+theorem TH026:
+  L1 // L2 & L1 <> L2 implies ex P st L1 c= P & L2 c= P & P is being_plane
+proof
+  assume A1: L1 // L2 & L1 <> L2;
+  then A2: L1,L2 are_coplane by TH023;
+A3: L1 misses L2 by A1,LM033;
+  L1 is_line & L2 is_line by A1,LM057;
+  hence thesis by A2,A3,LM087;
+end;
+
+theorem TH025:
+  L1 _|_ L2 & L1 meets L2 implies
+  ex P st P is being_plane & L1 c= P & L2 c= P
+proof
+  assume A1: L1 _|_ L2 & L1 meets L2;
+  then consider x1 such that
+A2: x1 in L1 & x1 in L2 by LM061;
+A3: L1 is_line & L2 is_line by A1,TH022;
+  then consider x2 such that
+A4: x2 <> x1 & x2 in L1 by A2,LM072;
+  consider x3 such that
+A5: x3 <> x1 & x3 in L2 by A2,A3,LM072;
+A6: L1 = Line(x1,x2) by A2,A4,TH019;
+A7: L2 = Line(x1,x3) by A2,A5,TH019;
+  x2 - x1 _|_ x3 - x1 by A1,A2,A4,A5,LM077;
+  then A8: x2 - x1,x3 - x1 are_lindependent2 by TH012;
+  reconsider P = plane(x1,x2,x3) as Subset of REAL n;
+A11: x1 in P & x2 in P & x3 in P by TH004;
+  take P;
+  thus thesis by LM034,A8,DE009,A11,A6,A7,TH008;
+end;
+
+theorem LM080:
+  L0 c= P & L1 c= P & L2 c= P & x in L0 & x in L1 & x in L2 &
+    L0 _|_ L2 & L1 _|_ L2 implies L0 = L1
+proof
+  assume A1:L0 c= P & L1 c= P & L2 c= P & x in L0 & x in L1 & x in L2;
+  assume A2:L0 _|_ L2 & L1 _|_ L2;
+  then A3: L0 is_line & L1 is_line & L2 is_line by TH022;
+  consider x0 such that
+A4: x <> x0 & x0 in L0 & not x0 in L2 by A1,A2,LM084;
+  consider x2 such that
+A5: x <> x2 & x2 in L2 & not x2 in L1 by A1,A2,LM084;
+A6: L0 = Line(x,x0) by A1,A4,TH019;
+A8: x0 - x _|_ x2 - x by A1,A2,A4,A5,LM077;
+  then A9: x0 - x,x2 - x are_lindependent2 by TH012;
+  A10: P = plane(x,x0,x2) by A1,A4,A5,A9,TH007;
+  consider x1 such that
+A11: x1 <> x & x1 in L1 by A1,A3,LM072;
+  consider a1,a2,a3 such that
+A13: a1 + a2 + a3 = 1 & x1 = a1 * x + a2 * x0 + a3 * x2 by A1,A11,A10,LM085;
+A14: x1 - x = -x + (a1 * x + a2 * x0 + a3 * x2) by LM007,A13
+           .= -x + (x + a2*(x0 - x) + a3*(x2 - x)) by A13,LM026
+           .= -x + (x + (a2*(x0 - x) + a3*(x2 - x))) by LM002
+           .= (-x + x) + (a2*(x0 - x) + a3*(x2 - x)) by LM002
+           .= 0*n + (a2*(x0 - x) + a3*(x2 - x)) by LM008
+           .= a2*(x0 - x) + a3*(x2 - x) by EUCLID_4:1;
+A15: L1 = Line(x,x1) by A1,A11,TH019;
+A16: x1 - x _|_ x2 - x by A1,A2,A11,A5,LM077;
+  x0 - x,x2 - x are_orthogonal by A8,DE004;
+  then A17: |(x0 - x,x2 - x)|=0 by EUCLID_4:def 6;
+A18: x1 - x,x2 - x are_orthogonal by A16,DE004;
+  x2 - x <> 0*n by A5,LM032;
+  then A19: |(x2 - x,x2 - x)| <> 0 by EUCLID_4:22;
+  0 = |(a2*(x0 - x) + a3*(x2 - x),x2 - x)| by A14,A18,EUCLID_4:def 6
+   .= |(a2*(x0 - x),x2 - x)| + |(a3*(x2 - x),x2 - x)| by EUCLID_4:25
+   .= a2*|(x0 - x,x2 - x)| + |(a3*(x2 - x),x2 - x)| by EUCLID_4:26
+   .= a3*|(x2 - x,x2 - x)| by A17,EUCLID_4:26;
+  then A21: x1 - x = a2*(x0 - x) + 0 * (x2 - x) by A14,A19,XCMPLX_1:6
+                  .= a2*(x0 - x) + 0*n by EUCLID_4:3
+                  .= a2*(x0 - x) by EUCLID_4:1;
+  x1 - x <> 0*n & x0 - x <> 0*n by A11,A4,LM032;
+  then x1 - x // x0 - x by A21,DE002;
+  then A23: L1 // L0 by A15,A6,DE006;
+  L1 meets L0 by A1,LM061;
+  hence thesis by A23,LM033;
+end;
+
+theorem TH028:
+  L1,L2 are_coplane & L1 _|_ L2 implies L1 meets L2
+proof
+  assume A1: L1,L2 are_coplane;
+  assume A3: L1 _|_ L2;
+  then A4: L1 <> L2 by LM079;
+A5: L1 is_line & L2 is_line by A3,TH022;
+  consider x0 such that
+A6: x0 in L1 & not x0 in L2 by A4,A5,LM052;
+  consider L such that
+A7: x0 in L & L _|_ L2 & L meets L2 by A5,A6,LM081;
+  consider x such that
+A8: x in L & x in L2 by A7,LM061;
+  x in L1
+  proof
+    assume B1: not x in L1;
+    consider P0 such that
+B4:  L1 c= P0 & L2 c= P0 by A1,LM062;
+    consider P such that
+B8:  P is being_plane & L c= P & L2 c= P by A7,TH025;
+B10: P = P0 by A6,A5,B4,B8,A7,TH024;
+    consider L0 such that
+B3:  x in L0 & L0 _|_ L2 & L0 // L1 by A3,A8,LM074;
+B11: L0 is_line & L1 is_line by B3,LM057;
+    consider P1 such that
+B13: L0 c= P1 & L1 c= P1 & P1 is being_plane by B1,B3,TH026;
+B15: P = P1 by B1,B4,A8,B10,B11,B13,B3,TH024;
+B17:L = L0 by A7,A8,B3,B8,B13,B15,LM080;
+    L1 meets L by A6,A7,LM061;
+    hence contradiction by B17,B3,LM033,B1;
+  end;
+  hence thesis by A8,LM061;
+end;
+
+theorem LM093:
+  L1 c= P & L2 c= P & L1 _|_ L2 & x in P &
+    L0 // L2 & x in L0 implies L0 c= P & L0 _|_ L1
+proof
+  assume A1: L1 c= P & L2 c= P & L1 _|_ L2 & x in P;
+  assume A2: L0 // L2 & x in L0;
+  L1,L2 are_coplane by A1,LM062;
+  then L1 meets L2 by A1,TH028;
+  then consider x0 such that
+A4: x0 in L1 & x0 in L2 by LM061;
+  L1 is_line & L2 is_line by A1,TH022; 
+  then consider x1 such that
+A6: x1 <> x0 & x1 in L2 by A4,LM072;
+  L0 is_line by A2,LM057;
+  then consider x2 such that
+A9: x2 <> x & x2 in L0 by A2,LM072;
+A10: L0 = Line(x2,x) by A2,A9,TH019;
+  x2 - x // x1 - x0 by A2,A4,A6,A9,LM055;
+  then consider a such that
+A11: a <> 0 & x2 - x = a*(x1 - x0) by LM066;
+A12: x2 = x + a*(x1 - x0) by A11,LM028
+       .= 1 * x + a*(x1 - x0) by EUCLID_4:3
+       .= 1 * x + (a * x1 + (-a) * x0) by LM027
+       .= 1 * x + a * x1 + (-a) * x0 by LM002;
+  1 + a + (-a) = 1;
+  then A13: x2 in plane(x,x1,x0) by A12,LM085;
+  plane(x,x1,x0) c= P by A1,A4,A6,TH029;
+  hence thesis by A13,A10,A1,TH020,A2,TH017;
+end;
+
+theorem LM091:
+  L c= P & L1 c= P & L2 c= P & L _|_ L1 & L _|_ L2 implies L1 // L2
+proof
+  assume A1: L c= P & L1 c= P & L2 c= P;
+  then A2: L,L1 are_coplane & L,L2 are_coplane & L1,L2 are_coplane by LM062;
+  assume A3: L _|_ L1 & L _|_ L2;
+  then A4: L meets L1 & L meets L2 by A2,TH028;
+  then consider x1 such that
+A5: x1 in L & x1 in L1 by LM061;
+  consider x2 such that
+A6: x2 in L & x2 in L2 by A4,LM061;
+A7: L is_line & L1 is_line & L2 is_line by A3,TH022;
+  now per cases;
+    case B1: x1 = x2;
+      L1 = L2 by A1,A3,A5,A6,B1,LM080;
+      hence L1 // L2 by A7,LM092;
+    end;
+    case B2: x1 <> x2;
+      consider x0 such that
+B3:   x0 <> x1 & x0 in L1 by A5,A7,LM072;
+      consider x such that
+B4:   x <> x2 & x in L2 by A6,A7,LM072;
+B6:   x0 - x1 _|_ x2 - x1 by A3,A5,A6,B2,B3,LM077;
+      then x0 - x1,x2 - x1 are_lindependent2 by TH012;
+      then B8: P = plane(x1,x0,x2) by A1,A5,A6,B3,TH007;
+      consider a1,a3,a2 such that
+B10:  a1+a3+a2=1 & x = a1*x1+a3*x0+a2*x2 by B4,A1,B8,LM085;
+B11:  a2+a1+a3=1 by B10;
+B12:  x - x2 = (a2*x2+a1*x1+a3*x0) - x2 by LM002,B10
+            .= -x2 + (a2*x2+a1*x1+a3*x0) by LM007
+            .= -x2 + (x2 + a1*(x1 - x2) + a3*(x0 - x2)) by B11,LM026
+            .= -x2 + (x2 + (a1*(x1 - x2) + a3*(x0 - x2))) by LM002
+            .= (-x2 + x2) + (a1*(x1 - x2) + a3*(x0 - x2)) by LM002
+            .= 0*n + (a1*(x1 - x2) + a3*(x0 - x2)) by LM008
+            .= a1*(x1 - x2) + a3*(x0 - x2) by EUCLID_4:1;
+      x - x2 _|_ x1 - x2 by A3,A5,A6,B2,B4,LM077;
+      then B14: x - x2,x1 - x2 are_orthogonal by DE004;
+      x0 - x1,x2 - x1 are_orthogonal by B6,DE004;
+      then B15: |(x0 - x1,x2 - x1)|=0 by EUCLID_4:def 6;
+B16:  |(x0 - x1,x1 - x2)| = |(x0 - x1,x1 + -x2)| by LM007
+                         .= |(x0 - x1,(-1)*x2 + --x1)| by LM065
+                         .= |(x0 - x1,(-1)*x2 + (-1)*(-x1))| by LM065
+                         .= |(x0 - x1,(-1)*(x2 + -x1))| by EUCLID_4:6
+                         .= |(x0 - x1,(-1)*(x2 - x1))| by LM007
+                         .= (-1)*|(x0 - x1,x2 - x1)| by EUCLID_4:27
+                         .= 0 by B15;
+B17:  x0 - x2 = x0 - (0*n + x2) by EUCLID_4:1
+             .= x0 - ((x1 - x1) + x2) by LM008
+             .= x0 - (x1 - x1) - x2 by LM005
+             .= x0 - x1 + x1 - x2 by LM058
+             .= (x0 - x1) + (x1 - x2) by LM060;
+B18:  0 = |(a1*(x1 - x2) + a3*(x0 - x2),x1 - x2)| by B14,EUCLID_4:def 6,B12
+       .= |(a1*(x1 - x2),x1 - x2)|+|(a3*(x0 - x2),x1 - x2)| by EUCLID_4:25
+       .= a1*|(x1 - x2,x1 - x2)|+|(a3*(x0 - x2),x1 - x2)| by EUCLID_4:26
+       .= a1*|(x1 - x2,x1 - x2)|+a3*|(x0 - x2,x1 - x2)| by EUCLID_4:26
+       .= a1*|(x1 - x2,x1 - x2)|
+         +a3*(|(x0 - x1,x1 - x2)| + |(x1 - x2,x1 - x2)|) by EUCLID_4:25,B17
+       .= a1*|(x1 - x2,x1 - x2)|+a3*|(x1 - x2,x1 - x2)| by B16
+       .= (a1+a3)*|(x1 - x2,x1 - x2)|;
+      x1 - x2 <> 0*n by B2,LM032;
+      then |(x1 - x2,x1 - x2)| <> 0 by EUCLID_4:22;
+      then a1+a3 = 0 by B18,XCMPLX_1:6;
+      then a3 = a3 - (a1 + a3)
+             .= -a1;
+      then B21: x - x2 = a1*((x1 - x2) - (x0 - x2)) by LM027,B12
+                      .= a1*((x1 + -x2) - (x0 - x2)) by LM007
+                      .= a1*((x1 + -x2) - (x0 + -x2)) by LM007
+                      .= a1*((x1 - x0) + (-x2 - -x2)) by LM038
+                      .= a1*((x1 - x0) + 0*n) by LM008
+                      .= a1*(x1 - x0) by EUCLID_4:1;
+      x - x2 <> 0*n & x1 - x0 <> 0*n by B3,B4,LM032;
+      then B23: x - x2 // x1 - x0 by B21,DE002;
+      L1 = Line(x0,x1) & L2 = Line(x2,x) by A5,A6,B3,B4,TH019;
+      hence L1 // L2 by B23,DE006;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem LM089:
+  L0 c= P & L1 c= P & L2 c= P & L0 // L1 & L1 // L2 &
+    L0 <> L1 & L1 <> L2 & L2 <> L0 &
+      L meets L0 & L meets L1 implies L meets L2
+proof
+  assume A1: L0 c= P & L1 c= P & L2 c= P & L0 // L1 & L1 // L2
+    & L0 <> L1 & L1 <> L2 & L2 <> L0;
+  then A2: L0 // L2 by TH031;
+A3: L0 is_line & L1 is_line & L2 is_line by A1,LM057;
+  assume A4: L meets L0 & L meets L1;
+  then consider x0 such that
+A5: x0 in L & x0 in L0 by LM061;
+  consider x1 such that
+A6: x1 in L & x1 in L1 by A4,LM061;
+A7: L0 misses L1 & L1 misses L2 & L0 misses L2 by A1,A2,LM033;
+  then A8: not x0 in L1 & not x0 in L2 & not x1 in L0 & not x1 in L2
+    by A5,A6,LM061;
+  consider L' being Element of line_of_REAL n such that
+A9: x0 in L' & L' _|_ L1 & L' meets L1 by A3,A8,LM081;
+  consider y1 such that
+A10: y1 in L' & y1 in L1 by A9,LM061;
+A11: L' _|_ L2 by A9,A1,TH017;
+A13: x0 <> y1 by A5,A7,A10,LM061;
+  then A14: L' = Line(x0,y1) & L' is_line by A9,A10,TH019;
+  L' c= P by A1,A5,A10,A14,TH020;
+  then L',L2 are_coplane by A1,LM062;
+  then A17: L' meets L2 by A11,TH028;
+  then consider y2 such that
+A18:  y2 in L' & y2 in L2 by LM061;
+  consider x2 such that
+A22: x2 <> y2 & x2 in L2 by A3,A18,LM072;
+A29: L2 = Line(y2,x2) by A22,A18,TH019;
+  consider a such that
+A23: y2 - x0 = a*(y1 - x0) by A9,A10,A18,A13,LM078;
+  x0 <> x1 by A5,A6,A7,LM061;
+  then A26: L = Line(x0,x1) by A5,A6,TH019;
+A27: Line(x0,x1) = { (1-l)*x0 + l*x1 : not contradiction } by EUCLID_4:def 1;
+A28: Line(y2,x2) = { (1-l)*y2 + l*x2 : not contradiction } by EUCLID_4:def 1;
+  now per cases;
+    case x1 = y1;
+      hence L meets L2 by A14,A17,A5,A6,A13,TH019;
+    end;
+    case x1 <> y1;
+      then x2 - y2 // x1 - y1 by A6,A10,A22,A18,A1,LM055;
+      then consider b such that
+B3:     b <> 0 & x2 - y2 = b*(x1 - y1) by LM066;
+B4:   x1 - y1 = 1 * (x1 - y1) by EUCLID_4:3
+             .= (1/b*b)*(x1 - y1) by B3,XCMPLX_1:88
+             .= 1/b*(x2 - y2) by B3,EUCLID_4:4;
+      set x = (1 - a)*x0 + a*x1;
+B5:   x in L by A26,A27;
+      x = 1 * x0 + -a*x0 + a*x1 by LM018
+       .= x0 + -a*x0 + a*x1 by EUCLID_4:3
+       .= (a*x1 + -a*x0) + x0 by LM002
+       .= a*(x1 - x0) + x0 by LM027
+       .= a*(x1 + -x0) + x0 by LM007
+       .= a*(x1 + 0*n + -x0) + x0 by EUCLID_4:1
+       .= a*(x1 + (-y1 + y1) + -x0) + x0 by LM008
+       .= a*(x1 + -y1 + y1 + -x0) + x0 by LM002
+       .= a*(x1 + -y1 + (y1 + -x0)) + x0 by LM002
+       .= a*(x1 - y1 + (y1 + -x0)) + x0 by LM007
+       .= a*((x1 - y1) + (y1 -x0)) + x0 by LM007
+       .= a*((1/b)*(x2 - y2)) + a*(y1 - x0) + x0 by B4,EUCLID_4:6
+       .= (a*(1/b))*(x2 - y2) + a*(y1 - x0) + x0 by EUCLID_4:4
+       .= (a/b)*(x2 - y2) + a*(y1 - x0) + x0 by XCMPLX_1:100
+       .= (a/b)*(x2 - y2) + (y2 - x0 + x0) by LM002,A23
+       .= (a/b)*(x2 - y2) + (y2 + -x0 + x0) by LM007
+       .= (a/b)*(x2 - y2) + (y2 + (-x0 + x0)) by LM002
+       .= (a/b)*(x2 - y2) + (y2 + 0*n) by LM008
+       .= (a/b)*(x2 - y2) + y2 by EUCLID_4:1
+       .= (a/b)*x2 + -(a/b)*y2 + y2 by LM027
+       .= y2 + -(a/b)*y2 + (a/b)*x2 by LM002
+       .= 1 * y2 + -(a/b)*y2 + (a/b)*x2 by EUCLID_4:3
+       .= (1 - a/b)* y2 + (a/b)*x2 by LM018;
+      then x in L2 by A28,A29;
+      hence L meets L2 by B5,LM061;
+    end;
+  end;
+  hence thesis;
+end;
+
+theorem TH032:
+  L1,L2 are_coplane & L1 is_line & L2 is_line & L1 misses L2 implies
+    L1 // L2
+proof
+  assume A1: L1,L2 are_coplane & L1 is_line & L2 is_line;
+  assume A2: L1 misses L2;
+  consider x such that
+A3: x in L1 & not x in L2 by A2,LM090;
+  consider P such that
+A4: L1 c= P & L2 c= P by A1,LM062;
+  consider L' being Element of line_of_REAL n such that
+A5: x in L' & L' _|_ L2 & L' meets L2 by A3,A1,LM081;
+  consider x2 such that
+A10: x2 in L' & x2 in L2 by A5,LM061;
+A12: L' = Line(x2,x) & L' is_line by A3,A10,A5,TH019;
+A14: L' c= P by A3,A10,A4,A12,TH020;
+  consider L0 such that
+A6: x in L0 & L0 _|_ L' & L0 // L2 by A5,LM074;
+A15: L0 c= P by A6,A4,A5,A14,LM093;
+A18: L0 meets L1 by A3,A6,LM061;
+A7: L0 is_line & L' is_line by A6,TH022;
+  consider x1 such that
+A8: x1 <> x & x1 in L1 by A1,A3,LM072;
+A9: L1 = Line(x,x1) by A8,A3,TH019;
+  L1 = L0
+  proof
+    assume B0: L1 <> L0;
+B2: not x1 in L' by A5,A8,TH019,A9,A2;
+    then consider L such that
+B3:   x1 in L & L' _|_ L & L' meets L by A7,LM081;
+    consider x' being Element of REAL n such that
+B5:   x' in L' & x' in L by B3,LM061;
+B7: L = Line(x',x1) by B5,B2,B3,TH019;
+B8: L c= P by B5,A14,A8,A4,B7,TH020;
+B10: L <> L0 by A6,A8,TH019,B0,A9,B3;
+B11: L // L0 by A6,A14,A15,B3,B8,LM091;
+B12: L <> L2 by A2,A8,LM061,B3;
+    L meets L1 by A8,B3,LM061;
+    hence contradiction by A2,A4,A15,B8,A3,A6,B10,B11,B12,A18,LM089;
+  end;
+  hence thesis by A6;
+end;
+
+theorem
+  x1 in P & x2 in P & y1 in P & y2 in P &
+    x2 - x1, y2 - y1 are_lindependent2 implies
+      Line(x1,x2) meets Line(y1,y2)
+proof
+  assume A1:x1 in P & x2 in P & y1 in P & y2 in P
+            & x2 - x1, y2 - y1 are_lindependent2;
+  then x2 - x1 <> 0*n & y2 - y1 <> 0*n by LM030;
+  then A3: x2 <> x1 & y2 <> y1 by LM032;
+  reconsider L1 = Line(x1,x2),
+             L2 = Line(y1,y2) as Element of line_of_REAL n by LM046;
+  L1 c= P & L2 c= P by A1,TH020;
+  then A4: L1,L2 are_coplane by LM062;
+A5: L1 is_line & L2 is_line by A3,EUCLID_4:def 2;
+A6: x1 in L1 & x2 in L1 & y1 in L2 & y2 in L2 by EUCLID_4:10;
+  L1 meets L2
+  proof
+    assume L1 misses L2;
+    then L1 // L2 by A4,A5,TH032;
+    then x2 - x1 // y2 - y1 by A3,A6,LM055;
+    hence contradiction by LM035,A1;
+  end;
+  hence thesis;
+end;

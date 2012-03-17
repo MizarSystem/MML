@@ -7,11 +7,11 @@
 environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
-      ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1;
+      ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2;
  notations TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, PARTFUN1,
-      FUNCT_1, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1;
+      FUNCT_1, FUNCT_3, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1;
  constructors REAL_1, SEQ_2, ABSVALUE, NAT_1, PARTFUN1, MEMBERED, FUNCOP_1,
-      COMPLEX1, XBOOLE_0;
+      COMPLEX1, XBOOLE_0, FUNCT_3;
  registrations FUNCT_1, XREAL_0, RELSET_1, SEQ_1, ARYTM_3, MEMBERED, FUNCOP_1,
       ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -31,16 +31,16 @@ begin
 definition let f be PartFunc of NAT, REAL;
   attr f is increasing means
 :: SEQM_3:def 1
-   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
+ for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
   attr f is decreasing means
 :: SEQM_3:def 2
-   for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
+ for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
   attr f is non-decreasing means
 :: SEQM_3:def 3
-   for m,n st m in dom f & n in dom f & m < n holds f.m <= f.n;
+ for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n;
   attr f is non-increasing means
 :: SEQM_3:def 4
-   for m,n st m in dom f & n in dom f & m < n holds f.m >= f.n;
+ for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
 end;
 
 definition let f be Function;
@@ -52,7 +52,7 @@ end;
 definition let seq;
   redefine attr seq is constant means
 :: SEQM_3:def 6
-ex r st for n holds seq.n=r;
+ ex r st for n holds seq.n=r;
 end;
 
 definition let seq;
@@ -113,6 +113,13 @@ theorem :: SEQM_3:21
 
 theorem :: SEQM_3:22
  seq is non-increasing implies for n holds seq.n<=seq.0;
+
+registration
+ cluster increasing -> non-decreasing PartFunc of NAT, REAL;
+ cluster decreasing -> non-increasing PartFunc of NAT, REAL;
+ cluster constant -> non-decreasing non-increasing PartFunc of NAT, REAL;
+ cluster non-decreasing non-increasing -> constant PartFunc of NAT, REAL;
+end;
 
 theorem :: SEQM_3:23
     seq is increasing implies seq is non-decreasing;
@@ -187,10 +194,11 @@ end;
 :: DEFINITION OF SUBSEQUENCE
 ::
 
-definition let seq,seq1;
-  pred seq is_subsequence_of seq1 means
+definition let seq;
+  mode subsequence of seq -> Real_Sequence means
 :: SEQM_3:def 10
-   ex Nseq st seq=seq1*Nseq;
+
+   ex Nseq st it=seq*Nseq;
 end;
 
 definition let f be Real_Sequence;
@@ -250,56 +258,56 @@ theorem :: SEQM_3:45
     (seq*Nseq) ^\k=seq*(Nseq ^\k);
 
 theorem :: SEQM_3:46
-    seq is_subsequence_of seq;
+    seq is subsequence of seq;
 
 theorem :: SEQM_3:47
-    seq ^\k is_subsequence_of seq;
+    seq ^\k is subsequence of seq;
 
 theorem :: SEQM_3:48
-    seq is_subsequence_of seq1 & seq1 is_subsequence_of seq2
-       implies seq is_subsequence_of seq2;
+    seq is subsequence of seq1 & seq1 is subsequence of seq2
+       implies seq is subsequence of seq2;
 
 ::
 ::  SUBSEQUENCES OF MONOTONE SEQUENCE
 ::    SUBSEQUENCE OF BOUNDED SEQUENCE
 ::
 theorem :: SEQM_3:49
-    seq is increasing & seq1 is_subsequence_of seq implies
+    seq is increasing & seq1 is subsequence of seq implies
        seq1 is increasing;
 
 theorem :: SEQM_3:50
-    seq is decreasing & seq1 is_subsequence_of seq implies
+    seq is decreasing & seq1 is subsequence of seq implies
        seq1 is decreasing;
 
 theorem :: SEQM_3:51
- seq is non-decreasing & seq1 is_subsequence_of seq implies
+ seq is non-decreasing & seq1 is subsequence of seq implies
        seq1 is non-decreasing;
 
 theorem :: SEQM_3:52
- seq is non-increasing & seq1 is_subsequence_of seq implies
+ seq is non-increasing & seq1 is subsequence of seq implies
        seq1 is non-increasing;
 
 theorem :: SEQM_3:53
-    seq is monotone & seq1 is_subsequence_of seq implies
+    seq is monotone & seq1 is subsequence of seq implies
         seq1 is monotone;
 
 theorem :: SEQM_3:54
-    seq is constant & seq1 is_subsequence_of seq implies
+    seq is constant & seq1 is subsequence of seq implies
        seq1 is constant;
 
 theorem :: SEQM_3:55
-    seq is constant & seq1 is_subsequence_of seq implies seq=seq1;
+    seq is constant & seq1 is subsequence of seq implies seq=seq1;
 
 theorem :: SEQM_3:56
- seq is bounded_above & seq1 is_subsequence_of seq implies
+ seq is bounded_above & seq1 is subsequence of seq implies
        seq1 is bounded_above;
 
 theorem :: SEQM_3:57
- seq is bounded_below & seq1 is_subsequence_of seq implies
+ seq is bounded_below & seq1 is subsequence of seq implies
        seq1 is bounded_below;
 
 theorem :: SEQM_3:58
-    seq is bounded & seq1 is_subsequence_of seq implies
+    seq is bounded & seq1 is subsequence of seq implies
        seq1 is bounded;
 
 ::
@@ -426,3 +434,5 @@ registration let X,x be set;
  cluster X --> x -> constant;
 end;
 
+theorem :: SEQM_3:80
+ incl NAT is increasing natural-yielding;

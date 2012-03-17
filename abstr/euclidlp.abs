@@ -1,0 +1,560 @@
+:: Lines on Planes in $n$-Dimensional Euclidean Spaces
+::  by Akihiro Kubo
+:: 
+:: Received May 24, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, AFF_1, JORDAN2C, ANALOAF, BHSP_1, ARYTM, ARYTM_1, AFF_4,
+      SEQ_2, SEQ_4, INCSP_1, ARYTM_3, FINSEQ_1, FINSEQ_2, COMPLEX1, EUCLID,
+      EUCLID_2, EUCLID_3, PRE_TOPC, FUNCT_1, SQUARE_1, SYMSP_1, METRIC_1,
+      EUCLIDLP;
+ notations XCMPLX_0, ORDINAL1, ZFMISC_1, PRE_TOPC, AFF_1, BINOP_1, FUNCT_1,
+      SEQ_4, TARSKI, XBOOLE_0, XREAL_0, NAT_1, NUMBERS, REAL_1, SUBSET_1,
+      RVSUM_1, TOPREAL1, FINSEQ_1, FINSEQ_2, EUCLID, JORDAN2C, SQUARE_1,
+      EUCLID_4;
+ constructors REAL_1, EUCLID_4, SEQ_4, JORDAN2C, TOPREAL1, FINSEQOP, AFF_1,
+      SQUARE_1;
+ registrations EUCLID, STRUCT_0, SUBSET_1, XREAL_0, NAT_1, REAL_1, MEMBERED;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin
+
+ reserve a,a1,a2,a3,b,b1,b2,b3,r,r1,r2,r3,s,t,u,v,l for Real;
+ reserve i,j,n for Nat;
+ reserve x0,x,x1,x2,x3,y0,y,y1,y2,y3 for Element of REAL n;
+
+:: Preliminaries
+
+theorem :: EUCLIDLP:1
+  (s/t)*(u*x)=(s*u)/t*x & (1/t)*(u*x)= u/t*x;
+
+theorem :: EUCLIDLP:2
+  x1 + (x2 + x3) = (x1 + x2) + x3;
+
+theorem :: EUCLIDLP:3
+  x - 0*n = x;
+
+theorem :: EUCLIDLP:4
+  0*n - x = -x;
+
+theorem :: EUCLIDLP:5
+  x1 - (x2 + x3) = x1 - x2 - x3;
+
+theorem :: EUCLIDLP:6
+  x1 - x2 = x1 + -x2;
+
+theorem :: EUCLIDLP:7
+  x - x = 0*n & x + -x = 0*n;
+
+theorem :: EUCLIDLP:8
+  -a*x = (-a)*x & -a*x = a*(-x);
+
+theorem :: EUCLIDLP:9
+  x1 - (x2 - x3) = x1 - x2 + x3;
+
+theorem :: EUCLIDLP:10
+  x1 + (x2 - x3) = x1 + x2 - x3;
+
+theorem :: EUCLIDLP:11
+  x1 = x2 + x3 iff x2 = x1 - x3;
+
+theorem :: EUCLIDLP:12
+  x=x1+x2+x3 iff x-x1=x2+x3;
+
+theorem :: EUCLIDLP:13
+  -(x1 + x2 + x3) = -x1 + -x2 + -x3;
+
+theorem :: EUCLIDLP:14
+  x1=x2 iff x1-x2=0*n;
+
+theorem :: EUCLIDLP:15
+  x1 - x0 = t*x & x1 <> x0 implies t <> 0;
+
+theorem :: EUCLIDLP:16
+  (a - b)*x = a*x + (-b)*x & (a - b)*x = a*x + -b*x & (a - b)*x = a*x - b*x;
+
+theorem :: EUCLIDLP:17
+  a*(x - y) = a*x + -a*y & a*(x - y) = a*x + (-a)*y & a*(x - y) = a*x - a*y;
+
+theorem :: EUCLIDLP:18
+  (s - t - u)*x = s*x - t*x - u*x;
+
+theorem :: EUCLIDLP:19
+  x - (a1*x1+a2*x2+a3*x3) = x + ((-a1)*x1 + (-a2)*x2 + (-a3)*x3);
+
+theorem :: EUCLIDLP:20
+  x - (s+t+u)*y = x + (-s)*y + (-t)*y + (-u)*y;
+
+theorem :: EUCLIDLP:21
+  (x1+x2)+(y1+y2)=(x1+y1)+(x2+y2);
+
+theorem :: EUCLIDLP:22
+  (x1+x2+x3)+(y1+y2+y3)=(x1+y1)+(x2+y2)+(x3+y3);
+
+theorem :: EUCLIDLP:23
+  (x1+x2)-(y1+y2)=(x1-y1)+(x2-y2);
+
+theorem :: EUCLIDLP:24
+  (x1+x2+x3)-(y1+y2+y3)=(x1-y1)+(x2-y2)+(x3-y3);
+
+theorem :: EUCLIDLP:25
+  a*(x1+x2+x3)=a*x1+a*x2+a*x3;
+
+theorem :: EUCLIDLP:26
+  a*(b1*x1+b2*x2) = (a*b1)*x1+(a*b2)*x2;
+
+theorem :: EUCLIDLP:27
+  a*(b1*x1+b2*x2+b3*x3) = (a*b1)*x1+(a*b2)*x2+(a*b3)*x3;
+
+theorem :: EUCLIDLP:28
+  (a1*x1+a2*x2)+(b1*x1+b2*x2)=(a1+b1)*x1+(a2+b2)*x2;
+
+theorem :: EUCLIDLP:29
+  (a1*x1+a2*x2+a3*x3)+(b1*x1+b2*x2+b3*x3)=(a1+b1)*x1+(a2+b2)*x2+(a3+b3)*x3;
+
+theorem :: EUCLIDLP:30
+  (a1*x1+a2*x2)-(b1*x1+b2*x2)=(a1-b1)*x1+(a2-b2)*x2;
+
+theorem :: EUCLIDLP:31
+  (a1*x1+a2*x2+a3*x3)-(b1*x1+b2*x2+b3*x3)=(a1-b1)*x1+(a2-b2)*x2+(a3-b3)*x3;
+
+theorem :: EUCLIDLP:32
+  a1+a2+a3=1 implies
+  a1*x1+a2*x2+a3*x3=x1+a2*(x2-x1)+a3*(x3-x1);
+
+theorem :: EUCLIDLP:33
+  x=x1+a2*(x2-x1)+a3*(x3-x1) implies
+  ex a1 be Real st x=a1*x1+a2*x2+a3*x3 & a1+a2+a3=1;
+
+theorem :: EUCLIDLP:34
+  for n being Nat st n >= 1 holds 1*n <> 0*n;
+
+:: Lines
+
+theorem :: EUCLIDLP:35
+  for A be Subset of REAL n,x1,x2
+  holds A is_line & x1 in A & x2 in A & x1<>x2 implies A=Line(x1,x2);
+
+theorem :: EUCLIDLP:36
+  for x1, x2 being Element of REAL n holds
+  y1 in Line(x1,x2) & y2 in Line(x1,x2) implies ex a st y2 - y1 =a*(x2 - x1);
+
+definition let n;let x1,x2 be Element of REAL n;
+  pred x1 // x2 means
+:: EUCLIDLP:def 1
+   x1 <> 0*n & x2 <> 0*n & ex r st x1 = r*x2;
+end;
+
+theorem :: EUCLIDLP:37
+  for x1,x2 be Element of REAL n st x1 // x2
+  holds ex a st a <> 0 & x1 = a*x2;
+
+definition let n;let x1,x2 be Element of REAL n;
+  redefine pred x1 // x2;
+  symmetry;
+end;
+
+theorem :: EUCLIDLP:38
+  x1 // x2 & x2 // x3 implies x1 // x3;
+
+definition let n be Nat,x1,x2 be Element of REAL n;
+  pred x1,x2 are_lindependent2 means
+:: EUCLIDLP:def 2
+   for a1,a2 being Real st a1*x1+a2*x2=0*n holds a1=0 & a2=0;
+  symmetry;
+end;
+
+notation let n; let x1,x2 be Element of REAL n;
+  antonym x1,x2 are_ldependent2 for x1,x2 are_lindependent2;
+end;
+
+theorem :: EUCLIDLP:39
+  x1,x2 are_lindependent2 implies x1<>0*n & x2<>0*n;
+
+theorem :: EUCLIDLP:40
+  for x1,x2 st x1,x2 are_lindependent2 holds
+    a1*x1+a2*x2=b1*x1+b2*x2 implies a1=b1 & a2=b2;
+
+theorem :: EUCLIDLP:41
+  for x1,x2,y1,y1 st y1,y2 are_lindependent2 holds
+    y1 = a1*x1+a2*x2 & y2=b1*x1+b2*x2 implies
+      ex c1,c2,d1,d2 be Real st x1=c1*y1+c2*y2 & x2=d1*y1+d2*y2;
+
+theorem :: EUCLIDLP:42
+  x1,x2 are_lindependent2 implies x1 <> x2;
+
+theorem :: EUCLIDLP:43
+  x2 - x1,x3 - x1 are_lindependent2 implies x2 <> x3;
+
+theorem :: EUCLIDLP:44
+  x1,x2 are_lindependent2 implies x1+t*x2,x2 are_lindependent2;
+
+theorem :: EUCLIDLP:45
+  x1 - x0, x3 - x2 are_lindependent2 &
+  y0 in Line(x0,x1) & y1 in Line(x0,x1) & y0 <> y1 &
+  y2 in Line(x2,x3) & y3 in Line(x2,x3) & y2 <> y3 implies
+    y1 - y0, y3 - y2 are_lindependent2;
+
+theorem :: EUCLIDLP:46
+  x1 // x2 implies x1,x2 are_ldependent2 & x1 <> 0*n & x2 <> 0*n;
+
+theorem :: EUCLIDLP:47
+  x1, x2 are_ldependent2 implies x1 = 0*n or x2 = 0*n or x1 // x2;
+
+theorem :: EUCLIDLP:48
+  for x1,x2,y1 being Element of REAL n
+  ex y2 being Element of REAL n st y2 in Line(x1,x2) &
+    x1-x2,y1-y2 are_orthogonal;
+
+definition let n;let x1,x2 be Element of REAL n;
+  pred x1 _|_ x2 means
+:: EUCLIDLP:def 3
+   x1 <> 0*n & x2 <> 0*n & x1, x2 are_orthogonal;
+  symmetry;
+end;
+
+theorem :: EUCLIDLP:49
+  x _|_ y0 & y0 // y1 implies x _|_ y1;
+
+theorem :: EUCLIDLP:50
+  x _|_ y implies x, y are_lindependent2;
+
+theorem :: EUCLIDLP:51
+  x1 // x2 implies not x1 _|_ x2;
+
+theorem :: EUCLIDLP:52
+  x1 _|_ x2 implies not x1 // x2;
+
+definition let n;
+  func line_of_REAL n -> Subset of bool REAL n equals
+:: EUCLIDLP:def 4
+   {L where L is Element of bool REAL n:
+    ex x1,x2 being Element of REAL n st L = Line(x1,x2)};
+end;
+
+registration let n;
+  cluster line_of_REAL n -> non empty;
+end;
+
+theorem :: EUCLIDLP:53
+  Line(x1,x2) in line_of_REAL n;
+
+ reserve L,L0,L1,L2 for Element of line_of_REAL n;
+
+theorem :: EUCLIDLP:54
+  x1 in L & x2 in L implies Line(x1,x2) c= L;
+
+theorem :: EUCLIDLP:55
+  L1 meets L2 iff ex x st x in L1 & x in L2;
+
+theorem :: EUCLIDLP:56
+  L0 misses L1 & x in L0 implies not x in L1;
+
+theorem :: EUCLIDLP:57
+  ex x1,x2 st L = Line(x1,x2);
+
+theorem :: EUCLIDLP:58
+  ex x st x in L;
+
+theorem :: EUCLIDLP:59
+  x0 in L & L is_line implies ex x1 st x1 <> x0 & x1 in L;
+
+theorem :: EUCLIDLP:60
+  (not x in L) & L is_line implies
+    ex x1,x2 st L = Line(x1,x2) & x - x1 _|_ x2 - x1;
+
+theorem :: EUCLIDLP:61
+  (not x in L) & L is_line implies
+    ex x1,x2 st L = Line(x1,x2) & x - x1,x2 - x1 are_lindependent2;
+
+definition let n be Nat,x be Element of REAL n,L be Element of line_of_REAL n;
+  func dist_v(x,L) -> Subset of REAL equals
+:: EUCLIDLP:def 5
+   {|.x-x0.| where x0 is Element of REAL n : x0 in L};
+end;
+
+definition let n be Nat,x be Element of REAL n,L be Element of line_of_REAL n;
+  func dist(x,L) -> Real equals
+:: EUCLIDLP:def 6
+   lower_bound dist_v(x,L);
+end;
+
+theorem :: EUCLIDLP:62
+  L = Line(x1,x2) implies
+  {|.x-x0.| where x0 is Element of REAL n : x0 in Line(x1,x2)} = dist_v(x,L);
+
+theorem :: EUCLIDLP:63
+  ex x0 st x0 in L & |.x-x0.|=dist(x,L);
+
+theorem :: EUCLIDLP:64
+  dist(x,L) >= 0;
+
+theorem :: EUCLIDLP:65
+  x in L iff dist(x,L) = 0;
+
+definition let n;let L1,L2;
+  pred L1 // L2 means
+:: EUCLIDLP:def 7
+   ex x1, x2, y1, y2 being Element of REAL n st
+  L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) // (y2 - y1);
+  symmetry;
+end;
+
+theorem :: EUCLIDLP:66      :: // is transitive
+  L0 // L1 & L1 // L2 implies L0 // L2;
+
+definition let n;let L1,L2;
+  pred L1 _|_ L2 means
+:: EUCLIDLP:def 8
+   ex x1, x2, y1, y2 being Element of REAL n st
+  L1 = Line(x1,x2) & L2 = Line(y1,y2) & (x2 - x1) _|_ (y2 - y1);
+  symmetry;
+end;
+
+theorem :: EUCLIDLP:67
+  L0 _|_ L1 & L1 // L2 implies L0 _|_ L2;
+
+theorem :: EUCLIDLP:68
+  (not x in L) & L is_line implies
+  ex L0 st x in L0 & L0 _|_ L & L0 meets L;
+
+theorem :: EUCLIDLP:69
+  L1 misses L2 implies ex x st x in L1 & not x in L2;
+
+theorem :: EUCLIDLP:70
+  x1 in L & x2 in L & x1 <> x2 implies Line(x1,x2) = L & L is_line;
+
+theorem :: EUCLIDLP:71
+  L1 is_line & L2 is_line & L1 = L2 implies L1 // L2;
+
+theorem :: EUCLIDLP:72
+  L1 // L2 implies L1 is_line & L2 is_line;
+
+theorem :: EUCLIDLP:73
+  L1 _|_ L2 implies L1 is_line & L2 is_line;
+
+theorem :: EUCLIDLP:74
+  x in L & a<>1 & a*x in L implies 0*n in L;
+
+theorem :: EUCLIDLP:75
+  x1 in L & x2 in L implies
+  ex x3 st x3 in L & x3 - x1 = a*(x2 - x1);
+
+theorem :: EUCLIDLP:76
+  x1 in L & x2 in L & x3 in L & x1 <> x2 implies
+  ex a st x3 - x1 = a*(x2 - x1);
+
+theorem :: EUCLIDLP:77
+  L1 // L2 & L1<>L2 implies L1 misses L2;
+
+theorem :: EUCLIDLP:78
+  L1 // L2 implies L1 = L2 or L1 misses L2;
+
+theorem :: EUCLIDLP:79
+  L1 // L2 & L1 meets L2 implies L1 = L2;
+
+theorem :: EUCLIDLP:80
+  L is_line implies ex L0 st x in L0 & L0 // L;
+
+theorem :: EUCLIDLP:81
+  for x,L st (not x in L) & L is_line holds
+    ex L0 st x in L0 & L0 // L & L0 <> L;
+
+theorem :: EUCLIDLP:82
+  for x0,x1,y0,y1,L1,L2 st x0 in L1 & x1 in L1 & x0 <> x1
+  & y0 in L2 & y1 in L2 & y0 <> y1 & L1 _|_ L2 holds x1 - x0 _|_ y1 - y0;
+
+theorem :: EUCLIDLP:83
+  for L1,L2 st L1 _|_ L2 holds L1 <> L2;
+
+theorem :: EUCLIDLP:84
+  for x1,x2,L st L is_line & L = Line(x1,x2) holds x1 <> x2;
+
+theorem :: EUCLIDLP:85
+  x0 in L1 & x1 in L1 & x0 <> x1
+  & y0 in L2 & y1 in L2 & y0 <> y1 & L1 // L2 implies x1 - x0 // y1 - y0;
+
+theorem :: EUCLIDLP:86
+  x2 - x1,x3 - x1 are_lindependent2 & y2 in Line(x1,x2) & y3 in Line(x1,x3)
+    & L1 = Line(x2,x3) & L2 = Line(y2,y3) implies
+  (L1 // L2 iff
+  ex a st a <> 0 & y2 - x1 = a*(x2 - x1) & y3 - x1 = a*(x3 - x1));
+
+theorem :: EUCLIDLP:87
+  for L1,L2 st L1 is_line & L2 is_line & L1 <> L2
+    holds ex x st x in L1 & not x in L2;
+
+theorem :: EUCLIDLP:88
+  for x,L1,L2 st L1 _|_ L2 & x in L2 holds
+  ex L0 st x in L0 & L0 _|_ L2 & L0 // L1;
+
+theorem :: EUCLIDLP:89
+  for x,L1,L2 st x in L1 & x in L2 & L1 _|_ L2 holds
+  ex x0 st x <> x0 & x0 in L1 & not x0 in L2;
+
+:: Planes
+
+definition let n be Nat,x1,x2,x3 be Element of REAL n;
+  func plane(x1,x2,x3) -> Subset of REAL n equals
+:: EUCLIDLP:def 9
+   {x where x is Element of REAL n:
+          ex a1,a2,a3 being Real st a1+a2+a3=1 & x=a1*x1+a2*x2+a3*x3};
+end;
+
+registration let n be Nat,x1,x2,x3 be Element of REAL n;
+  cluster plane(x1,x2,x3) -> non empty;
+end;
+
+definition let n; let A be Subset of REAL n;
+  attr A is being_plane means
+:: EUCLIDLP:def 10
+  ex x1,x2,x3 st x2 - x1, x3 - x1 are_lindependent2 & A = plane(x1,x2,x3);
+end;
+
+theorem :: EUCLIDLP:90
+  x1 in plane(x1,x2,x3) & x2 in plane(x1,x2,x3) & x3 in plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:91
+  x1 in plane(y1,y2,y3) & x2 in plane(y1,y2,y3) & x3 in plane(y1,y2,y3)
+    implies plane(x1,x2,x3) c= plane(y1,y2,y3);
+
+theorem :: EUCLIDLP:92
+  for A being Subset of REAL n,x,x1,x2,x3 st x in plane(x1,x2,x3)
+    & ex c1,c2,c3 being Real st c1 + c2 + c3 = 0 & x = c1*x1 + c2*x2 + c3*x3
+    holds 0*n in plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:93
+  y1 in plane(x1,x2,x3) & y2 in plane(x1,x2,x3) implies
+    Line(y1,y2) c= plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:94
+  for A being Subset of REAL n,x
+  st A is being_plane & x in A & ex a st a<>1 & a*x in A holds 0*n in A;
+
+theorem :: EUCLIDLP:95
+  x1-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3) & x = a1*x1+a2*x2+a3*x3
+  implies a1 + a2 + a3 = 1 or 0*n in plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:96
+  x in plane(x1,x2,x3) iff ex a1,a2,a3 st a1+a2+a3=1 & x = a1*x1+a2*x2+a3*x3;
+
+theorem :: EUCLIDLP:97
+  x2-x1,x3-x1 are_lindependent2 & x in plane(x1,x2,x3) &
+    a1 + a2 + a3 = 1 & x = a1*x1+a2*x2+a3*x3
+  & b1 + b2 + b3 = 1 & x = b1*x1+b2*x2+b3*x3
+    implies a1 = b1 & a2 = b2 & a3 = b3;
+
+definition let n;
+  func plane_of_REAL n -> Subset of bool REAL n equals
+:: EUCLIDLP:def 11
+   {P where P is Element of bool REAL n:
+    ex x1,x2,x3 being Element of REAL n st P = plane(x1,x2,x3)};
+end;
+
+registration let n;
+  cluster plane_of_REAL n -> non empty;
+end;
+
+theorem :: EUCLIDLP:98
+  plane(x1,x2,x3) in plane_of_REAL n;
+
+reserve P,P0,P1,P2 for Element of plane_of_REAL n;
+
+theorem :: EUCLIDLP:99
+  x1 in P & x2 in P & x3 in P implies plane(x1,x2,x3) c= P;
+
+theorem :: EUCLIDLP:100
+  x1 in P & x2 in P & x3 in P & x2 - x1, x3 - x1 are_lindependent2
+  implies P = plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:101
+  P1 is being_plane & P1 c= P2 implies P1 = P2;
+
+:: Lines in the planes
+
+theorem :: EUCLIDLP:102
+  Line(x1,x2) c= plane(x1,x2,x3) & Line(x2,x3) c= plane(x1,x2,x3)
+  & Line(x3,x1) c= plane(x1,x2,x3);
+
+theorem :: EUCLIDLP:103
+  x1 in P & x2 in P implies Line(x1,x2) c= P;
+
+definition let n be Nat,L1,L2 be Element of line_of_REAL n;
+  pred L1,L2 are_coplane means
+:: EUCLIDLP:def 12
+   ex x1,x2,x3 being Element of REAL n
+         st L1 c= plane(x1,x2,x3) & L2 c= plane(x1,x2,x3);
+end;
+
+theorem :: EUCLIDLP:104
+  L1,L2 are_coplane iff ex P st L1 c= P & L2 c= P;
+
+theorem :: EUCLIDLP:105
+  L1 // L2 implies L1,L2 are_coplane;
+
+theorem :: EUCLIDLP:106
+  L1 is_line & L2 is_line & L1,L2 are_coplane &
+    L1 misses L2 implies ex P st L1 c= P & L2 c= P & P is being_plane;
+
+theorem :: EUCLIDLP:107
+  ex P st x in P & L c= P;
+
+theorem :: EUCLIDLP:108
+  (not x in L) & L is_line implies ex P st x in P & L c= P & P is being_plane;
+
+theorem :: EUCLIDLP:109
+  x in P & L c= P & (not x in L) & L is_line implies P is being_plane;
+
+theorem :: EUCLIDLP:110
+  (not x in L) & L is_line & x in P0 & L c= P0 & x in P1 & L c= P1
+  implies P0 = P1;
+
+theorem :: EUCLIDLP:111
+  L1 is_line & L2 is_line & L1,L2 are_coplane & L1 <> L2 implies
+  ex P st L1 c= P & L2 c= P & P is being_plane;
+
+theorem :: EUCLIDLP:112
+  for L1,L2 st L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2
+  holds ex P st L1 c= P & L2 c= P & P is being_plane;
+
+theorem :: EUCLIDLP:113
+  L1 is_line & L2 is_line & L1 <> L2 & L1 meets L2
+  & L1 c= P1 & L2 c= P1 & L1 c= P2 & L2 c= P2 implies P1 = P2;
+
+theorem :: EUCLIDLP:114
+  L1 // L2 & L1 <> L2 implies ex P st L1 c= P & L2 c= P & P is being_plane;
+
+theorem :: EUCLIDLP:115
+  L1 _|_ L2 & L1 meets L2 implies
+  ex P st P is being_plane & L1 c= P & L2 c= P;
+
+theorem :: EUCLIDLP:116
+  L0 c= P & L1 c= P & L2 c= P & x in L0 & x in L1 & x in L2 &
+    L0 _|_ L2 & L1 _|_ L2 implies L0 = L1;
+
+theorem :: EUCLIDLP:117
+  L1,L2 are_coplane & L1 _|_ L2 implies L1 meets L2;
+
+theorem :: EUCLIDLP:118
+  L1 c= P & L2 c= P & L1 _|_ L2 & x in P &
+    L0 // L2 & x in L0 implies L0 c= P & L0 _|_ L1;
+
+theorem :: EUCLIDLP:119
+  L c= P & L1 c= P & L2 c= P & L _|_ L1 & L _|_ L2 implies L1 // L2;
+
+theorem :: EUCLIDLP:120
+  L0 c= P & L1 c= P & L2 c= P & L0 // L1 & L1 // L2 &
+    L0 <> L1 & L1 <> L2 & L2 <> L0 &
+      L meets L0 & L meets L1 implies L meets L2;
+
+theorem :: EUCLIDLP:121
+  L1,L2 are_coplane & L1 is_line & L2 is_line & L1 misses L2 implies
+    L1 // L2;
+
+theorem :: EUCLIDLP:122
+  x1 in P & x2 in P & y1 in P & y2 in P &
+    x2 - x1, y2 - y1 are_lindependent2 implies
+      Line(x1,x2) meets Line(y1,y2);

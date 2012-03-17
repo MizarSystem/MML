@@ -8,21 +8,22 @@ environ
 
  vocabularies ARYTM, RCOMP_1, ARYTM_3, SIN_COS, ARYTM_1, SQUARE_1, RFUNCT_2,
       FDIFF_1, FUNCT_1, PARTFUN1, RELAT_1, ORDINAL2, VECTSP_1, SEQ_1, SEQ_2,
-      SEQM_3, BOOLE, PRE_TOPC, FCONT_1, SIN_COS2, FINSEQ_4, GROUP_1;
+      SEQM_3, BOOLE, PRE_TOPC, FCONT_1, SIN_COS2, FINSEQ_4, GROUP_1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, FCONT_1, FDIFF_1, NAT_1, FINSEQ_4, SQUARE_1, PREPOWER,
+      REAL_1, RELAT_1, FCONT_1, FDIFF_1, NAT_1, FINSEQ_4, FUNCOP_1,
+      SQUARE_1, PREPOWER,
       PARTFUN1, SEQ_2, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, SIN_COS, SEQ_1,
       BINOP_2;
  constructors NAT_1, COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1,
       RFUNCT_1, FDIFF_1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2, SIN_COS,
-      MEMBERED, BINOP_2;
+      MEMBERED, BINOP_2, FUNCOP_1;
  registrations XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1, MEMBERED, SQUARE_1,
-      SIN_COS;
+      SIN_COS, FUNCOP_1, SEQM_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems AXIOMS, REAL_1, REAL_2, SEQ_1, SEQM_3, SEQ_4, SQUARE_1, FINSEQ_4,
       RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_3, TARSKI, FUNCT_2, RFUNCT_1,
       SUBSET_1, RFUNCT_2, RELSET_1, PARTFUN1, ROLLE, SIN_COS, NEWTON, XREAL_0,
-      RELAT_1, XBOOLE_0, XCMPLX_0, XCMPLX_1, BINOP_2;
+      RELAT_1, XBOOLE_0, XCMPLX_0, XCMPLX_1, BINOP_2, FUNCOP_1;
  schemes NAT_1, PARTFUN2;
 
 begin :: Monotone increasing and monotone decreasing of sine and cosine.
@@ -1260,29 +1261,12 @@ PARTFUN2:sch 2;
       end;
     hence f1 is LINEAR by A6,FDIFF_1:def 4;
     end;
-    defpred X[set] means $1 in REAL;
-    deffunc U(Real) = 0;
-    consider f2 being PartFunc of REAL,REAL such that
-       A9:for p be Element of REAL holds p in dom f2 iff X[p] and
-       A10:for p be Element of REAL st p in dom f2
-                            holds f2/.p= U(p) from PARTFUN2:sch 2;
+    reconsider f2 = REAL --> 0 as PartFunc of REAL,REAL by FUNCOP_1:57;
+       A9: dom f2 = REAL by FUNCOP_1:19;
+       A10:for p be Element of REAL holds f2.p= 0 by FUNCOP_1:13;
    A11:f2 is REST
     proof
-    A12:dom f2 = REAL
-         proof
-           A13:  dom f2 c=REAL by RELSET_1:12;
-              for x be set st x in REAL holds x in dom f2 by A9;
-           then REAL c=dom f2 by TARSKI:def 3;
-          hence dom f2=REAL by A13,XBOOLE_0:def 10;
-         end;
-       then A14:f2 is total by PARTFUN1:def 4;
-  A15: for d be Element of REAL holds f2.d = 0
-       proof
-       let d be Element of REAL;
-       A16: d in dom f2 by A9;
-       then f2/.d = 0 by A10;
-       hence f2.d = 0 by A16,FINSEQ_4:def 4;
-    end;
+  A14:f2 is total by PARTFUN1:def 4,A9;
      f2 is REST-like PartFunc of REAL,REAL
    proof
       for hy1 be convergent_to_0 Real_Sequence holds
@@ -1295,10 +1279,10 @@ PARTFUN2:sch 2;
       A18: ((hy1")(#)(f2*hy1)).n
          = (hy1".n)*((f2*hy1).n) by SEQ_1:12
         .= (hy1.n)"*((f2*hy1).n) by SEQ_1:def 8;
-          rng hy1 c= dom f2 by A12;
+          rng hy1 c= dom f2 by A9;
       then ((hy1")(#)(f2*hy1)).n
          =(hy1.n)"*(f2.(hy1.n)) by A18,RFUNCT_2:21
-        .=(hy1.n)"*(0) by A15
+        .=(hy1.n)"*(0) by A10
         .= 0;
       hence thesis;
       end;
@@ -1335,10 +1319,9 @@ A23:       p is Real by XREAL_0:def 1;
          A25: for d be real number holds f2.d = 0
           proof
           let d be real number;
-A26:       d is Real by XREAL_0:def 1;
-          then A27: d in dom f2 by A9;
-          then f2/.d = 0 by A10,A26;
-          hence f2.d = 0 by A27,FINSEQ_4:def 4;
+          d is Real by XREAL_0:def 1;
+          then d in dom f2 by A9;
+          hence f2.d = 0 by A10,A9;
           end;
          compreal.r-compreal.p
         =(-1)*r - compreal.p by Lm12

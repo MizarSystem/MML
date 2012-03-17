@@ -9,15 +9,17 @@ environ
  vocabularies FUNCT_1, PRALG_1, RELAT_1, PBOOLE, PROB_1, TARSKI, FUNCT_6,
       MSUALG_3, BOOLE, FINSEQ_1, FINSEQ_2, MSUALG_1, MATRIX_1, ZF_REFLE, AMI_1,
       MSAFREE, PROB_2, MSATERM, MCART_1, MSUALG_6, CAT_5, INSTALG1, FUNCT_5,
-      QC_LANG1, CAT_1, PUA2MSS1, CARD_3, TDGROUP, ALG_1, CATALG_1, FINSEQ_4;
+      QC_LANG1, CAT_1, PUA2MSS1, CARD_3, TDGROUP, ALG_1, CATALG_1, FINSEQ_4,
+      FUNCOP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
-      NAT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, MSAFREE1, FINSEQ_1, FINSEQ_2,
-      CARD_3, FINSEQ_4, FUNCT_5, FUNCT_6, FUNCOP_1, STRUCT_0, PBOOLE, MSUALG_1,
+      NAT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      MSAFREE1, FINSEQ_1, FINSEQ_2,
+      CARD_3, FINSEQ_4, FUNCT_5, FUNCT_6, STRUCT_0, PBOOLE, MSUALG_1,
       MSUALG_3, MSAFREE, MSATERM, EXTENS_1, PUA2MSS1, MSUALG_6, INSTALG1,
       CAT_1;
  constructors ENUMSET1, CAT_1, FINSEQ_4, MSATERM, EXTENS_1, PUA2MSS1, MSUALG_6,
       INSTALG1, TWOSCOMP, MSAFREE1, MEMBERED, XCMPLX_0, ARYTM_0, ORDINAL2,
-      FACIRC_1, ORDINAL1, NAT_1, FUNCT_5, PRALG_1, MSUALG_3;
+      FACIRC_1, ORDINAL1, NAT_1, FUNCT_5, PRALG_1, MSUALG_3, FUNCOP_1;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
       PBOOLE, MSUALG_1, MSAFREE, INSTALG1, ARYTM_3, XBOOLE_0, MEMBERED,
       ORDINAL2, FUNCOP_1;
@@ -27,7 +29,7 @@ environ
  theorems TARSKI, ZFMISC_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
       FINSEQ_2, FINSEQ_3, FUNCT_3, MCART_1, ENUMSET1, FUNCT_5, FUNCT_6,
       FINSEQ_4, MONOID_1, CARD_3, PBOOLE, MSAFREE, MSATERM, MSUALG_1, PRALG_2,
-      MSUALG_3, INSTALG1, CAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+      MSUALG_3, INSTALG1, CAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1;
  schemes FUNCT_1, ZFREFLE1, PBOOLE, WELLORD2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -1752,21 +1754,18 @@ then A10:   o`1 = 1 or o`1 = 2 by Th25;
 A11:   now assume o`1 = 1;
        then consider a being Element of X() such that
 A12:     o = idsym a by A9,Th26;
-        deffunc f(set) = I(a);
-       consider F being Function such that
-A13:     dom F = {{}} & for x being set st x in {{}} holds F.x = f(x)
-         from FUNCT_1:sch 3;
+       set F = {{}} --> I(a);
        reconsider u = F as set;
+A13:    dom F = {{}} by FUNCOP_1:19;
        take u, a; thus o = idsym(a) by A12;
-           rng F c= H(a,a)
-         proof let y be set; assume y in rng F;
-           then ex x being set st x in dom F & y = F.x by FUNCT_1:def 5;
-           then y = I(a) by A13;
-          hence thesis by A2;
-         end;
+       I(a) in H(a,a) by A2;
+       then
+X:     {I(a)} c= H(a,a) by ZFMISC_1:37;
+       rng F c= {I(a)} by FUNCOP_1:19;
+       then rng F c= H(a,a) by X,XBOOLE_1:1;
        then reconsider F as Function of {{}}, H(a,a) by A13,FUNCT_2:4;
        take F;  {} in {{}} by TARSKI:def 1;
-       hence F = u & F.{} = I(a) by A13;
+       hence F = u & F.{} = I(a) by FUNCOP_1:13;
       end;
          now assume o`1 = 2;
        then consider a,b,c being Element of X() such that

@@ -9,7 +9,8 @@ environ
  vocabularies FINSEQ_1, RCOMP_1, COMPTS_1, SEQ_2, LATTICES, ORDINAL2, ARYTM,
       ARYTM_1, RELAT_1, FUNCT_1, MEASURE5, PARTFUN1, RLVECT_1, SUBSET_1, BOOLE,
       RFUNCT_1, FUNCT_3, PARTFUN2, FINSEQ_4, FINSEQ_2, VECTSP_1, RVSUM_1,
-      FINSET_1, SQUARE_1, RFINSEQ, JORDAN3, SEQ_4, CARD_1, INTEGRA1, REALSET1;
+      FINSET_1, SQUARE_1, RFINSEQ, JORDAN3, SEQ_4, CARD_1, INTEGRA1, REALSET1,
+      FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, NAT_1, FUNCT_1, REALSET1, RELSET_1, SEQ_1, SEQ_4,
       GOBOARD1, RCOMP_1, PSCOMP_1, FINSET_1, FUNCOP_1, FINSEQ_2, FINSEQ_4,
@@ -26,7 +27,8 @@ environ
       NAT_1, NAT_2, SUBSET_1, GOBOARD1, PARTFUN1, RFUNCT_1, PSCOMP_1, RVSUM_1,
       PARTFUN2, JORDAN3, BINARITH, ZFMISC_1, COMPLSP1, FUNCT_3, FINSEQ_4,
       TREAL_1, GOBOARD2, RFINSEQ, JORDAN7, CARD_1, SEQ_1, RELAT_1, SCMFSA_7,
-      AMI_5, FUNCT_2, XBOOLE_0, XBOOLE_1, SQUARE_1, XCMPLX_1, XREAL_0;
+      AMI_5, FUNCT_2, XBOOLE_0, XBOOLE_1, SQUARE_1, XCMPLX_1, XREAL_0,
+      FUNCOP_1, RELSET_1;
  schemes FINSEQ_2, SEQ_1, BINARITH, XBOOLE_0;
 
 begin :: Definition of closed interval and its properties
@@ -332,11 +334,13 @@ definition let A be non empty compact Subset of REAL;
 A1:sup A in A by RCOMP_1:32;
    consider a being Element of REAL such that
 A2:a = sup A;
-deffunc F(Nat)=a;
-   consider p being FinSequence of REAL such that
-A3:len p = 1 and
-A4:for n st n in Seg 1 holds p.n = F(n) from FINSEQ_2:sch 1;
-A5:Seg 1 = dom p by A3,FINSEQ_1:def 3;
+    reconsider p = Seg 1 --> a as Function of Seg 1, REAL by FUNCOP_1:57;
+A5:  dom p = Seg 1 by FUNCOP_1:19;
+    then reconsider p as FinSequence by FINSEQ_1:def 2;
+    rng p c= REAL by RELSET_1:12;
+    then reconsider p as FinSequence of REAL by FINSEQ_1:def 4;
+A3: len p = 1 by A5,FINSEQ_1:def 3;
+A4: for j being Nat st j in Seg 1 holds p.j = a by FUNCOP_1:13;
       for n st n in Seg 1 holds p.n in A by A1,A2,A4;
    then p is FinSequence of A by A5,FINSEQ_2:14;
 then A6:rng p c= A by FINSEQ_1:def 4;

@@ -9,7 +9,7 @@ environ
  vocabularies AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSUALG_3, RELAT_1,
       BOOLE, FUNCT_1, FUNCT_6, MSUALG_2, REALSET1, NATTRA_1, MSAFREE, LANG1,
       MCART_1, TREES_4, CQC_LANG, ALG_1, GROUP_6, FREEALG, PRELAMB, UNIALG_2,
-      QC_LANG1, TDGROUP, CARD_3, FINSEQ_4;
+      QC_LANG1, TDGROUP, CARD_3, FINSEQ_4, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1, MCART_1,
       FUNCOP_1, PZFMISC1, STRUCT_0, LANG1, FUNCT_2, CARD_3, FINSEQ_4, FUNCT_6,
       TREES_4, DTCONSTR, PBOOLE, CQC_LANG, MSUALG_1, MSUALG_2, MSUALG_3,
@@ -17,12 +17,12 @@ environ
  constructors CQC_LANG, MSUALG_3, AUTALG_1, MSAFREE, FINSEQ_4, MEMBERED,
       XBOOLE_0, FUNCT_5, PRALG_1, PZFMISC1;
  registrations FUNCT_1, MSAFREE, MSUALG_1, MSUALG_3, PBOOLE, FUNCOP_1,
-      RELSET_1, STRUCT_0, XBOOLE_0;
+      RELSET_1, STRUCT_0, XBOOLE_0, FRAENKEL;
  requirements SUBSET, BOOLE;
  definitions MSUALG_2, MSUALG_3, PBOOLE, FUNCOP_1, TARSKI, XBOOLE_0;
  theorems CQC_LANG, FUNCT_1, FUNCT_2, FUNCT_6, MCART_1, MSAFREE, MSAFREE2,
       MSUALG_1, MSUALG_2, MSUALG_3, MSUHOM_1, PBOOLE, RELAT_1, CARD_3,
-      FINSEQ_4, RELSET_1, PZFMISC1;
+      FINSEQ_4, RELSET_1, PZFMISC1, FUNCOP_1;
  schemes FUNCT_2, MSAFREE1, PBOOLE;
 
 begin :: Preliminaries
@@ -811,13 +811,10 @@ A7: FG is free by MSAFREE:17;
     set r = Reverse(B);
        FG is non-empty by MSAFREE:15;
     then reconsider FGj = FG.j, Bj = B.j as non empty set by A4,PBOOLE:def 16;
-    reconsider x1' = x1, x2' = x2 as Element of Bj by A6;
-    deffunc F(set) = x1';
-    deffunc G(set) = x2';
-    consider g be Function of FGj, Bj such that
-A8:  for x be Element of FGj holds g.x = F(x) from FUNCT_2:sch 4;
-    consider h be Function of FGj, Bj such that
-A9:  for x be Element of FGj holds h.x = G(x) from FUNCT_2:sch 4;
+    reconsider g = FGj --> x1 as Function of FGj, Bj by A6,FUNCOP_1:57;
+A8:  for x be Element of FGj holds g.x = x1 by FUNCOP_1:13;
+    reconsider h = FGj --> x2 as Function of FGj, Bj by A6,FUNCOP_1:57;
+A9:  for x be Element of FGj holds h.x = x2 by FUNCOP_1:13;
     deffunc F(set) = IFEQ($1, j, g, r.$1);
     consider G be ManySortedSet of I such that
 A10:  for i be set st i in I holds G.i = F(i) from PBOOLE:sch 4;
@@ -892,7 +889,7 @@ A23:   f is Function of B.i, C.i by A4,A20,PBOOLE:def 18;
        let x be set; assume
 A24:     x in FGj;
        hence fg.x = f.(g.x) by FUNCT_2:21
-                .= f.x2' by A6,A8,A24
+                .= f.x2 by A6,A8,A24
                 .= f.(h.x) by A9,A24
                 .= fh.x by A24,FUNCT_2:21;
       end;
@@ -935,7 +932,7 @@ A34:  h = IFEQ(i, j, h, r.i) by CQC_LANG:def 1
         now
       let x be Element of FGj;
       assume g = h;
-      then g.x = x2' by A9;
+      then g.x = x2 by A9;
       hence contradiction by A6,A8;
      end;
      hence G <> H by A33,A34;

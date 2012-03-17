@@ -8,18 +8,20 @@ environ
 
  vocabularies ARYTM, SEQ_1, ORDINAL2, SEQM_3, FUNCT_1, SEQ_2, LATTICES,
       ARYTM_1, ABSVALUE, ARYTM_3, BOOLE, COMPTS_1, RELAT_1, PRE_TOPC, SUBSET_1,
-      SQUARE_1, SEQ_4, RCOMP_1;
+      SQUARE_1, SEQ_4, RCOMP_1, FUNCOP_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, NAT_1, RELAT_1, FUNCT_2, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
+      REAL_1, NAT_1, RELAT_1, FUNCT_2, FUNCOP_1,
+      SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
       COMPLEX1;
  constructors NAT_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE, SQUARE_1, MEMBERED,
-      XBOOLE_0, COMPLEX1, REAL_1;
- registrations XREAL_0, RELSET_1, SEQM_3, SEQ_1, NAT_1, MEMBERED, ORDINAL2;
+      XBOOLE_0, COMPLEX1, REAL_1, FUNCOP_1;
+ registrations XREAL_0, RELSET_1, SEQM_3, SEQ_1, NAT_1, MEMBERED, ORDINAL2,
+ FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2, XBOOLE_0;
  theorems AXIOMS, TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2,
       SEQM_3, SEQ_4, ABSVALUE, SQUARE_1, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1,
-      XCMPLX_0, XCMPLX_1;
+      XCMPLX_0, XCMPLX_1, FUNCOP_1;
  schemes REAL_1, FUNCT_2, SEQ_1;
 
 begin
@@ -343,7 +345,7 @@ end;
 
 definition let X;
 attr X is compact means :Def3:
- for s1 st rng s1 c= X ex s2 st s2 is_subsequence_of s1 &
+ for s1 st rng s1 c= X ex s2 st s2 is subsequence of s1 &
  s2 is convergent & lim s2 in X;
 end;
 
@@ -409,13 +411,12 @@ A1: rng s1 c= [.s,g.] and
 A2: s1 is convergent;
 A3: lim s1 <= g
     proof
-     deffunc F(Nat) = g;
-     consider s2 be Real_Sequence such that
- A4: for n holds s2.n = F(n) from SEQ_1:sch 1;
+     g in REAL by XREAL_0:def 1;
+     then reconsider s2 = NAT --> g as Real_Sequence by FUNCOP_1:57;
+ A4: for n holds s2.n = g by FUNCOP_1:13;
 A5: s2.0 = g by A4;
-A6:  s2 is constant by A4,SEQM_3:def 6;
-then A7:  lim s2 = g by A5,SEQ_4:40;
-A8: s2 is convergent by A6,SEQ_4:39;
+A7:  lim s2 = g by A5,SEQ_4:40;
+A8: s2 is convergent by SEQ_4:39;
         now let n;
          n in NAT;
       then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5
@@ -427,13 +428,12 @@ A8: s2 is convergent by A6,SEQ_4:39;
     end;
        s <= lim s1
     proof
-     deffunc F(Nat)=s;
-     consider s2 be Real_Sequence such that
- A9: for n holds s2.n = F(n) from SEQ_1:sch 1;
+     s in REAL by XREAL_0:def 1;
+     then reconsider s2 = NAT --> s as Real_Sequence by FUNCOP_1:57;
+ A9: for n holds s2.n = s by FUNCOP_1:13;
 A10: s2.0 = s by A9;
-A11:  s2 is constant by A9,SEQM_3:def 6;
-then A12:  lim s2 = s by A10,SEQ_4:40;
-A13: s2 is convergent by A11,SEQ_4:39;
+A12:  lim s2 = s by A10,SEQ_4:40;
+A13: s2 is convergent by SEQ_4:39;
         now let n;
          n in NAT;
       then n in dom s1 by FUNCT_2:def 1; then s1.n in rng s1 by FUNCT_1:def 5
@@ -451,12 +451,12 @@ A13: s2 is convergent by A11,SEQ_4:39;
 theorem
     [.s,g.] is compact
   proof
-       for s1 st rng s1 c= [.s,g.] ex s2 st s2 is_subsequence_of s1 &
+       for s1 st rng s1 c= [.s,g.] ex s2 st s2 is subsequence of s1 &
     s2 is convergent & lim s2 in [.s,g.]
     proof let s1; assume A1: (rng s1) c= [.s,g.];
    then s1 is bounded by Th22;
       then consider s2 be Real_Sequence such that
-A2:   s2 is_subsequence_of s1 & s2 is convergent by SEQ_4:57;
+A2:   s2 is subsequence of s1 & s2 is convergent by SEQ_4:57;
       take s2; A3: [.s,g.] is closed by Th23;
           ex Nseq st s2 = s1*Nseq by A2,SEQM_3:def 10;
       then rng s2 c= rng s1 by RELAT_1:45;
@@ -545,21 +545,21 @@ proof
  then consider s1 such that A2:
  rng s1 c= X & s1 is convergent & not lim s1 in X by Def4;
      ex s2 st
- s2 is_subsequence_of s1 & s2 is convergent & (lim s2) in X by A1,A2,Def3;
+ s2 is subsequence of s1 & s2 is convergent & (lim s2) in X by A1,A2,Def3;
  hence contradiction by A2,SEQ_4:30;
 end;
 
 theorem Th27:
 (for p st p in X ex r,n st 0<r & (for m st n<m holds r<abs(s1.m - p)))
 implies
-for s2 st s2 is_subsequence_of s1 holds
+for s2 st s2 is subsequence of s1 holds
 not (s2 is convergent & lim s2 in X)
 proof
  assume that A1: for p st p in X
      ex r,n st 0<r & (for m st n<m holds r<abs(s1.m - p)) and
- A2: not for s2 st s2 is_subsequence_of s1 holds not (s2 is convergent &
+ A2: not for s2 st s2 is subsequence of s1 holds not (s2 is convergent &
      lim s2 in X);
- consider s2 such that A3: s2 is_subsequence_of s1 &
+ consider s2 such that A3: s2 is subsequence of s1 &
  s2 is convergent & lim s2 in X by A2;
  consider r,n such that A4: 0<r & for m st n<m holds
                             r<abs(s1.m - lim s2) by A1,A3;
@@ -619,7 +619,7 @@ then A12: 1 < f.m - p by REAL_1:86;
      reconsider y as Nat by A13,FUNCT_2:def 1;  f.y in X by A7;
      hence thesis by A13;
     end;
-   then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
+   then ex s2 st s2 is subsequence of f & s2 is convergent & lim s2 in X
           by A1,Def3;
   hence contradiction by A8,Th27;
   end;
@@ -662,7 +662,7 @@ then A24: 1 < p - f.m by REAL_1:86;
      reconsider y as Nat by A25,FUNCT_2:def 1;  f.y in X by A18;
      hence thesis by A25;
     end;
-   then ex s2 st s2 is_subsequence_of f & s2 is convergent & lim s2 in X
+   then ex s2 st s2 is subsequence of f & s2 is convergent & lim s2 in X
       by A1,Def3;
   hence contradiction by A19,Th27;
  end;
@@ -712,11 +712,11 @@ proof
    end;
   end;
   then consider s2 be Real_Sequence such that A10:
-  s2 is_subsequence_of s1 & s2 is convergent by SEQ_4:57;
+  s2 is subsequence of s1 & s2 is convergent by SEQ_4:57;
       ex Nseq st s2 = s1*Nseq by A10,SEQM_3:def 10;
   then rng s2 c= rng s1 by RELAT_1:45; then rng s2 c= X by A2,XBOOLE_1:1;
   then lim s2 in X by A1,A10,Def4;
-  hence ex s2 st s2 is_subsequence_of s1 & s2 is convergent &
+  hence ex s2 st s2 is subsequence of s1 & s2 is convergent &
   lim s2 in X by A10;
  end;
  hence thesis by Def3;

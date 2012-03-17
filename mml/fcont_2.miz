@@ -8,20 +8,22 @@ environ
 
  vocabularies SEQ_1, PARTFUN1, RELAT_1, ABSVALUE, ARYTM_1, FUNCT_1, BOOLE,
       ARYTM_3, SQUARE_1, RFUNCT_1, ARYTM, FCONT_1, COMPTS_1, SEQ_2, ORDINAL2,
-      SEQM_3, SEQ_4, PARTFUN2, RCOMP_1, FINSEQ_1, LATTICES, RFUNCT_2, FCONT_2;
+      SEQM_3, SEQ_4, PARTFUN2, RCOMP_1, FINSEQ_1, LATTICES, RFUNCT_2, FCONT_2,
+      FUNCOP_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, NAT_1, FUNCT_1, RELSET_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2,
+      REAL_1, NAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
+      RELSET_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2,
       SEQM_3, SEQ_4, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1, COMPLEX1;
  constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
       PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1, PARTFUN1, MEMBERED,
-      XBOOLE_0, COMPLEX1;
+      XBOOLE_0, COMPLEX1, FUNCOP_1;
  registrations RELSET_1, RFUNCT_2, PARTFUN2, XREAL_0, SEQ_1, SEQM_3, NAT_1,
-      MEMBERED;
+      MEMBERED, FUNCOP_1, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems TARSKI, AXIOMS, SUBSET_1, REAL_1, NAT_1, FUNCT_1, ABSVALUE, SEQ_1,
       SEQ_2, SEQM_3, SEQ_4, SQUARE_1, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1,
       FCONT_1, RELAT_1, FUNCT_2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1;
+      XCMPLX_1, FUNCOP_1;
  schemes NAT_1, SEQ_1, RCOMP_1;
 
 begin
@@ -372,12 +374,12 @@ proof let f,Y such that A1: Y is compact and
  x=s1.n by RFUNCT_2:9; hence x in Y by A9;
  end;
  then A25: rng s1 c= Y by TARSKI:def 3;
- then consider q1 such that A26: q1 is_subsequence_of s1 & q1 is convergent &
+ then consider q1 such that A26: q1 is subsequence of s1 & q1 is convergent &
  (lim q1) in Y by A1,RCOMP_1:def 3;
  A27: f|Y is_continuous_in (lim q1) by A2,A26,FCONT_1:def 2;
  consider Ns1 be increasing Seq_of_Nat such that
  A28: q1=s1*Ns1 by A26,SEQM_3:def 10;
- A29: (s1-s2)*Ns1 is_subsequence_of s1-s2 by SEQM_3:def 10;
+ A29: (s1-s2)*Ns1 is subsequence of s1-s2 by SEQM_3:def 10;
  then A30: (s1-s2)*Ns1 is convergent by A23,SEQ_4:29;
  A31: lim ((s1-s2)*Ns1) = 0 by A23,A24,A29,SEQ_4:30;
  set q2 = q1 - (s1-s2)*Ns1;
@@ -392,7 +394,7 @@ proof let f,Y such that A1: Y is compact and
    .= (s2*Ns1).n by SEQM_3:31;
  end;
 then A34: q2 = s2*Ns1 by FUNCT_2:113;
-then A35: q2 is_subsequence_of s2 by SEQM_3:def 10;
+then A35: q2 is subsequence of s2 by SEQM_3:def 10;
    now let x; assume x in rng s2; then ex n st
  x=s2.n by RFUNCT_2:9; hence x in Y by A12;
  end;
@@ -477,14 +479,11 @@ f.g} by A3,RCOMP_1:def 1;
 then A9:  ex s st s=r & f.p<=s & s<=f.g;
      p in {s: p<=s & s<=g} by A1;
   then p in [.p,g.] by RCOMP_1:def 1; then A10: r<> f.p by A8;
-  defpred P[set] means $1 in [.p,g.];
-  deffunc F(real number) = r;
-  consider f1 such that A11: (for x0 holds x0 in dom f1 iff P[x0]) &
-   (for x0 st x0 in dom f1 holds f1.x0 = F(x0)) from SEQ_1:sch 3;
-  A12: dom f1 = [.p,g.] by A11,SUBSET_1:8;
-     now let x0 such that A13: x0 in [.p,g.] /\ dom f1;
-      [.p,g.] /\ dom f1 c= dom f1 by XBOOLE_1:17; hence f1.x0=r by A11,A13;
-  end;
+  reconsider f1 = [.p,g.] --> r as Function of [.p,g.], REAL by FUNCOP_1:57;
+  reconsider f1 as PartFunc of REAL, REAL;
+A11: for x0 st x0 in [.p,g.] holds f1.x0 = r by FUNCOP_1:13;
+  A12: dom f1 = [.p,g.] by FUNCOP_1:19;
+  for x0 st x0 in [.p,g.] /\ dom f1 holds f1.x0=r by A11,A12;
   then f1 is_constant_on [.p,g.] by PARTFUN2:76;
   then f1 is_continuous_on [.p,g.] by A12,FCONT_1:44;
   then f1-f is_continuous_on [.p,g.] by A2,FCONT_1:19;
@@ -501,8 +500,7 @@ SEQ_1:def 10
 ;
    then x2 in dom f1 /\ dom f by SEQ_1:def 4;
    then A20: x2 in [.p,g.] & x2 in dom f by A12,XBOOLE_0:def 3;
-      f1.x2 -f.x2 = 0 by A18,A19,SEQ_1:def 4; then r - f.x2 = 0 by A11,A12,A20
-;
+      f1.x2 -f.x2 = 0 by A18,A19,SEQ_1:def 4; then r - f.x2 = 0 by A11,A20;
    then r = f.x2 by XCMPLX_1:15; hence contradiction by A8,A20;
   end;
   then A21: abs(f1-f)^ is_continuous_on [.p,g.] by A14,FCONT_1:23;
@@ -525,7 +523,7 @@ A22:  dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
    by SEQ_1:def 10;
  then abs((f1-f).x1)" <= M by A26,SEQ_1:def 10;
    then abs(f1.x1-f.x1)" <= M by A27,SEQ_1:def 4;
-   then A28: abs(r-f.x1)" <= M by A11,A12,A25;
+   then A28: abs(r-f.x1)" <= M by A11,A25;
       M<=abs(M) by ABSVALUE:11; then M+0<abs(M)+1 by REAL_1:67;
    then A29: abs(r-f.x1)" < abs(M)+1 by A28,AXIOMS:22;
       r<>f.x1 by A8,A25; then r-f.x1<>0 by XCMPLX_1:15;
@@ -625,14 +623,12 @@ then A57:  ex s st s=r & f.g<=s & s<=f.p;
      g in {s: p<=s & s<=g} by A1;
   then g in [.p,g.] by RCOMP_1:def 1;
 then A58:  r<> f.g by A56;
-  defpred P[set] means $1 in [.p,g.];
-  deffunc F(real number) = r;
-  consider f1 such that A59: (for x0 holds x0 in dom f1 iff P[x0]) &
-   (for x0 st x0 in dom f1 holds f1.x0 = F(x0)) from SEQ_1:sch 3;
-  A60: dom f1 = [.p,g.] by A59,SUBSET_1:8;
-     now let x0 such that A61: x0 in [.p,g.] /\ dom f1;
-      [.p,g.] /\ dom f1 c= dom f1 by XBOOLE_1:17; hence f1.x0=r by A59,A61;
-  end;
+  reconsider f1 = [.p,g.] --> r as Function of [.p,g.], REAL
+                by FUNCOP_1:57;
+  reconsider f1 as PartFunc of REAL, REAL;
+A59: for x0 st x0 in [.p,g.] holds f1.x0 = r by FUNCOP_1:13;
+  A60: dom f1 = [.p,g.] by FUNCOP_1:19;
+  for x0 st x0 in [.p,g.] /\ dom f1 holds f1.x0=r by A59,A60;
   then f1 is_constant_on [.p,g.] by PARTFUN2:76;
   then f1 is_continuous_on [.p,g.] by A60,FCONT_1:44;
   then f1-f is_continuous_on [.p,g.] by A2,FCONT_1:19;
@@ -649,7 +645,7 @@ SEQ_1:def 10;
    then x2 in dom f1 /\ dom f by SEQ_1:def 4;
    then A68: x2 in [.p,g.] & x2 in dom f by A60,XBOOLE_0:def 3;
       f1.x2 -f.x2 = 0 by A66,A67,SEQ_1:def 4;
-   then r - f.x2 = 0 by A59,A60,A68;
+   then r - f.x2 = 0 by A59,A68;
    then r = f.x2 by XCMPLX_1:15;
    hence contradiction by A56,A68;
   end;
@@ -673,7 +669,7 @@ A70:  dom (abs(f1-f)^) = dom (abs(f1-f)) \ abs(f1-f)"{0} by RFUNCT_1:def 8
    then x1 in dom abs(f1-f) by SEQ_1:def 10;
    then abs((f1-f).x1)" <= M by A74,SEQ_1:def 10;
    then abs(f1.x1-f.x1)" <= M by A75,SEQ_1:def 4;
-   then A76: abs(r-f.x1)" <= M by A59,A60,A73;
+   then A76: abs(r-f.x1)" <= M by A59,A73;
       M<=abs(M) by ABSVALUE:11;
    then M+0<abs(M)+1 by REAL_1:67;
    then A77: abs(r-f.x1)" < abs(M)+1 by A76,AXIOMS:22;

@@ -151,6 +151,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
+<Adjective nr="17"/>
 <Adjective nr="20"/>
 <Adjective nr="36"/>
 </Cluster>
@@ -415,6 +416,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
+<Adjective nr="17"/>
 <Adjective nr="20"/>
 <Adjective nr="36"/>
 </Cluster>
@@ -546,6 +548,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
+<Adjective nr="17"/>
 <Adjective nr="20"/>
 <Adjective nr="37"/>
 </Cluster>

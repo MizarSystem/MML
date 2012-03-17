@@ -8,19 +8,20 @@ environ
 
  vocabularies FINSET_1, ARYTM, ZF_LANG, ARYTM_1, SEQ_1, FUNCT_1, SQUARE_1,
       ARYTM_3, RELAT_1, SEQ_2, ORDINAL2, ABSVALUE, LIMFUNC1, FRAENKEL, FUNCT_2,
-      BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0;
+      BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, SEQ_1, SEQ_2,
+      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, INT_1, NAT_1,
+      SEQ_1, SEQ_2,
       NEWTON, POWER, PRE_CIRC, FINSET_1, SQUARE_1, LIMFUNC1, SFMASTR3;
  constructors REAL_1, FRAENKEL, SEQ_2, POWER, PRE_CIRC, SFMASTR3, LIMFUNC1,
-      CARD_4, PARTFUN1, ABSVALUE, NAT_1, ORDINAL2, COMPLEX1, NUMBERS;
+      CARD_4, PARTFUN1, ABSVALUE, NAT_1, ORDINAL2, COMPLEX1, NUMBERS, FUNCOP_1;
  registrations XREAL_0, FRAENKEL, FINSET_1, INT_1, SEQ_1, MEMBERED, ORDINAL2,
-      RELSET_1;
+      RELSET_1, FUNCOP_1, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FRAENKEL;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, AXIOMS, PRE_CIRC, REAL_1,
       SEQ_1, SQUARE_1, SEQ_2, ABSVALUE, LIMFUNC1, SFMASTR3, POWER, PRE_FF,
-      NEWTON, XREAL_0, XBOOLE_0, XCMPLX_0, XCMPLX_1;
+      NEWTON, XREAL_0, XBOOLE_0, XCMPLX_0, XCMPLX_1, FUNCOP_1;
  schemes FUNCT_2, GRAPH_2, SEQ_1, INT_2, NAT_1;
 
 begin :: Preliminaries
@@ -34,16 +35,16 @@ scheme FinSegRng1{m, n() -> Nat, X() -> non empty set,
  {F(i) where i is Nat: m() <= i & i <= n()} is finite non empty Subset of X()
 provided
 A1: m() <= n()
-proof deffunc _F(set) = F($1); defpred _P[Nat] means not contradiction;
-   set S = {_F(i) where i is Nat: m()<=i & i<=n() & _P[i]};
-   set S1 = {_F(i) where i is Nat: m()<=i & i<=n()};
+proof defpred _P[Nat] means not contradiction;
+   set S = {F(i) where i is Nat: m()<=i & i<=n() & _P[i]};
+   set S1 = {F(i) where i is Nat: m()<=i & i<=n()};
     A2: now let x be set;
      hereby assume x in S;
-        then ex i being Nat st x = _F(i) & m()<=i & i<=n() & _P[i];
+        then ex i being Nat st x = F(i) & m()<=i & i<=n() & _P[i];
       hence x in S1;
      end;
      assume x in S1;
-        then ex i being Nat st x = _F(i) & m()<=i & i<=n();
+        then ex i being Nat st x = F(i) & m()<=i & i<=n();
      hence x in S;
     end;
 A3: F(m()) in S by A1;
@@ -60,8 +61,7 @@ scheme FinImInit1{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
  {F(n) where n is Nat: n <= N()} is finite non empty Subset of X()
 proof
  set S = {F(n) where n is Nat: n <= N()};
-     deffunc _F(Nat) = F($1);
- set T = {_F(n) where n is Nat: 0<=n & n<=N()};
+ set T = {F(n) where n is Nat: 0<=n & n<=N()};
 A1: 0 <= N() by NAT_1:18;
 A2: T is finite non empty Subset of X() from FinSegRng1(A1);
        now let x be set;
@@ -84,8 +84,7 @@ A1: N() > 0
 proof set S = {F(n) where n is Nat: n < N()};
    consider m being Nat such that
 A2: N() = m+1 by A1,NAT_1:22;
-    deffunc _F(set) = F($1);
-    set T = {_F(n) where n is Nat: n <= m};
+    set T = {F(n) where n is Nat: n <= m};
 A3: T is finite non empty Subset of X() from FinImInit1;
        now let x be set;
     hereby assume x in S; then consider n being Nat such that
@@ -143,9 +142,8 @@ registration
  cluster eventually-nonnegative eventually-nonzero positive eventually-positive
          eventually-nondecreasing Real_Sequence;
   existence proof
-     deffunc _F(set) = 1;
-     consider f being Function of NAT, REAL such that
-  A1: for x being Nat holds f.x = _F(x) from FUNCT_2:sch 4;
+   reconsider f = NAT --> 1 as Function of NAT, REAL by FUNCOP_1:57;
+  A1: for x being Nat holds f.x = 1 by FUNCOP_1:13;
    take f;
    thus f is eventually-nonnegative proof
     take 0; let n; assume n >= 0;   f.n = 1 by A1; hence f.n >= 0;
@@ -1143,9 +1141,8 @@ A16: Big_Oh(f) = { t where t is Element of Funcs(NAT, REAL) :
    A20: for n st n >= N holds t.n <= c*f.n & t.n >= 0 by A18;
     set a = max(N, N2);
    A21: a >= N & a >= N2 by SQUARE_1:46;
-        deffunc _F(Real) = 1/c;
-       consider q being Real_Sequence such that
-   A22: for n holds q.n = _F(n) from SEQ_1:sch 1;
+    reconsider q = NAT --> 1/c as Real_Sequence by FUNCOP_1:57;
+   A22: for n holds q.n = 1/c by FUNCOP_1:13;
         now take a; let n; assume
          n >= a;
     then A23: n >= N & n >= N2 by A21,AXIOMS:22;

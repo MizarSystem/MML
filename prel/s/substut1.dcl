@@ -19,13 +19,15 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="SUBSTUT1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="173"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
@@ -40,14 +42,22 @@
 </Typ>
 <Cluster>
 <Adjective nr="6" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="173"/>
 <Cluster>
 <Adjective nr="6" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="173"/>
+<Cluster>
+<Adjective nr="6" value="false"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -57,7 +67,7 @@
 <Func kind="K" nr="112"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="171">
+<Func kind="K" nr="181">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -66,10 +76,10 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="188"/>
 <Cluster>
 <Adjective nr="6" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -90,49 +100,37 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="173"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="179">
+<Func kind="K" nr="189">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="188"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="200"/>
+<Func kind="K" nr="210"/>
 <Cluster>
 <Adjective nr="6" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="163"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</CCluster>
 </Registrations>

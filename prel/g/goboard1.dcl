@@ -35,7 +35,7 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
@@ -56,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -70,7 +70,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
@@ -84,7 +84,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="130">
 <Func kind="U" nr="1">

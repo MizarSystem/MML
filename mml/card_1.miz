@@ -7,15 +7,18 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
-      RELAT_1, FUNCT_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
- constructors NAT_1, WELLORD1, WELLORD2, FINSET_1, XREAL_0, MEMBERED, XBOOLE_0;
- registrations FUNCT_1, ORDINAL1, FINSET_1, NAT_1, SUBSET_1, ORDINAL2;
+      RELAT_1, FUNCT_1, FUNCOP_1,
+      WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
+ constructors NAT_1, WELLORD1, WELLORD2, FINSET_1, XREAL_0, MEMBERED, XBOOLE_0,
+ FUNCOP_1;
+ registrations FUNCT_1, ORDINAL1, FINSET_1, NAT_1, SUBSET_1, ORDINAL2,
+ FUNCOP_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, FINSET_1, ORDINAL2, WELLORD2, XBOOLE_0;
  theorems TARSKI, FUNCT_1, ZFMISC_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2,
-      NAT_1, AXIOMS, REAL_1, RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1;
+      NAT_1, AXIOMS, REAL_1, RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1;
  schemes ORDINAL1, ORDINAL2, FUNCT_1, NAT_1, FINSET_1, XBOOLE_0;
 
 begin
@@ -707,10 +710,8 @@ A1:     f is one-to-one & dom f = { x } & rng f = X by WELLORD2:def 4;
      end;
    given y such that
 A2:  X = { y };
-   deffunc f(set) = x;
-   consider f such that
-A3:  dom f = X & for y st y in X holds f.y = f(y) from FUNCT_1:sch 3;
-   take f;
+   take f = X --> x;
+A3:  dom f = X & for y st y in X holds f.y = x by FUNCOP_1:13,19;
    thus f is one-to-one
      proof let a,b; assume
           a in dom f & b in dom f & f.a = f.b;
@@ -718,13 +719,7 @@ A3:  dom f = X & for y st y in X holds f.y = f(y) from FUNCT_1:sch 3;
       hence thesis;
      end;
    thus dom f = X by A3;
-   thus rng f c= { x }
-     proof let a; assume a in rng f;
-      then consider b such that
-A4:     b in dom f & a = f.b by FUNCT_1:def 5;
-          f.b = x by A3,A4;
-      hence thesis by A4,TARSKI:def 1;
-     end;
+   thus rng f c= { x } by FUNCOP_1:19;
    let a; assume a in { x };
 then A5:  a = x & y in { y } by TARSKI:def 1;
     then f.y = x by A2,A3;

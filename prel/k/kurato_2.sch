@@ -328,7 +328,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="16">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

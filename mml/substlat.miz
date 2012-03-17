@@ -7,15 +7,17 @@
 environ
 
  vocabularies FINSUB_1, PARTFUN1, FINSET_1, BOOLE, NORMFORM, FUNCT_1, RELAT_1,
-      FINSEQ_1, FUNCT_4, LATTICES, BINOP_1, SUBSTLAT;
- notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, FINSUB_1, BINOP_1, RELAT_1,
+      FINSEQ_1, FUNCT_4, LATTICES, BINOP_1, SUBSTLAT, FRAENKEL;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, FINSUB_1, FRAENKEL, BINOP_1,
+       RELAT_1,
       STRUCT_0, FUNCT_1, PARTFUN1, LATTICES, FUNCT_4, RELSET_1;
- constructors PARTFUN1, FINSET_1, NORMFORM, FUNCT_4;
- registrations RELSET_1, LATTICES, FINSET_1, FINSUB_1, PARTFUN1, XBOOLE_0;
+ constructors PARTFUN1, FINSET_1, NORMFORM, FUNCT_4, FRAENKEL;
+ registrations RELSET_1, LATTICES, FINSET_1, FINSUB_1, PARTFUN1, XBOOLE_0,
+     FRAENKEL, WELLFND1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, LATTICES, XBOOLE_0;
  theorems ZFMISC_1, TARSKI, FINSUB_1, FINSET_1, FUNCT_4, PARTFUN1, BINOP_1,
-      STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, XBOOLE_1;
+      STRUCT_0, LATTICES, LATTICE2, XBOOLE_0, FRAENKEL, XBOOLE_1;
  schemes FRAENKEL, BINOP_1;
 
 begin :: Preliminaries
@@ -192,28 +194,12 @@ A9:   t = tt & tt is finite &
 end;
 
 registration let V, C;
- let A be non empty Element of SubstitutionSet (V, C);
- cluster -> Function-like Relation-like Element of A;
+ cluster -> functional Element of SubstitutionSet(V, C);
  coherence
- proof
-  let X be Element of A;
-A1:  X in A;
-     A c= PFuncs (V,C) by FINSUB_1:def 5;
-  then consider f being Function such that
-A2:    X = f & dom f c= V & rng f c= C by A1,PARTFUN1:def 5;
-  thus thesis by A2;
- end;
-end;
-
-registration let V, C;
- cluster -> Function-like Relation-like Element of PFuncs (V, C);
- coherence
-proof
- let a be Element of PFuncs (V, C);
- consider f be Function such that
-A1:    a = f & dom f c= V & rng f c= C by PARTFUN1:def 5;
- thus thesis by A1;
-end;
+  proof let A be Element of SubstitutionSet (V, C);
+    A c= PFuncs (V,C) by FINSUB_1:def 5;
+   hence thesis by FRAENKEL:17;
+  end;
 end;
 
 definition let V, C;

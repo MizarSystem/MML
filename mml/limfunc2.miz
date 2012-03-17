@@ -8,17 +8,20 @@ environ
 
  vocabularies SEQ_1, PARTFUN1, ARYTM, ARYTM_1, RELAT_1, BOOLE, ARYTM_3, SEQ_2,
       ORDINAL2, FUNCT_1, SEQM_3, LIMFUNC1, RCOMP_1, ABSVALUE, RFUNCT_1,
-      RFUNCT_2, FINSEQ_1, LATTICES, LIMFUNC2;
+      RFUNCT_2, FINSEQ_1, LATTICES, LIMFUNC2, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, NAT_1, COMPLEX1, SEQ_1, SEQ_2, SEQM_3, RELSET_1, RCOMP_1,
+      REAL_1, NAT_1, COMPLEX1, FUNCOP_1,
+      SEQ_1, SEQ_2, SEQM_3, RELSET_1, RCOMP_1,
       PARTFUN1, RFUNCT_1, RFUNCT_2, LIMFUNC1;
  constructors REAL_1, NAT_1, ABSVALUE, SEQ_2, SEQM_3, PROB_1, RCOMP_1,
-      RFUNCT_1, RFUNCT_2, LIMFUNC1, PARTFUN1, MEMBERED, XBOOLE_0, COMPLEX1;
- registrations RELSET_1, XREAL_0, SEQ_1, NAT_1, MEMBERED;
+      RFUNCT_1, RFUNCT_2, LIMFUNC1, PARTFUN1, MEMBERED, XBOOLE_0, COMPLEX1,
+      FUNCOP_1;
+ registrations RELSET_1, XREAL_0, SEQ_1, NAT_1, MEMBERED, FUNCOP_1, SEQM_3,
+ ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems TARSKI, AXIOMS, REAL_1, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
       SQUARE_1, RFUNCT_1, RFUNCT_2, LIMFUNC1, PROB_1, RCOMP_1, FUNCT_1,
-      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0;
+      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, FUNCOP_1;
  schemes SEQ_1, RCOMP_1;
 
 begin
@@ -68,13 +71,11 @@ end;
 theorem Th1:
 seq is convergent & r<lim seq implies ex n st for k st n<=k holds r<seq.k
 proof assume A1: seq is convergent & r<lim seq;
- deffunc U(Nat) = r;
- consider s be Real_Sequence such that A2: for n holds s.n= U(n)
-    from SEQ_1:sch 1;
-    now let n;  s.n=r & s.(n+1)=r by A2; hence s.n=s.(n+1); end;
- then A3: s is constant by SEQM_3:16; then A4: s is convergent by SEQ_4:39;
+ reconsider s = NAT --> r as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s.n= r by FUNCOP_1:13;
+ A4: s is convergent by SEQ_4:39;
  then A5: seq-s is convergent by A1,SEQ_2:25;
-    s.0=r by A2; then lim s=r by A3,SEQ_4:40;
+    s.0=r by A2; then lim s=r by SEQ_4:40;
  then lim(seq-s)=lim seq -r by A1,A4,SEQ_2:26; then 0<lim(seq-s) by A1,
 SQUARE_1:11;
  then consider n such that A6: for k st n<=
@@ -88,13 +89,11 @@ end;
 theorem Th2:
 seq is convergent & lim seq<r implies ex n st for k st n<=k holds seq.k<r
 proof assume A1: seq is convergent & lim seq<r;
- deffunc U(Nat) = r;
- consider s be Real_Sequence such that
- A2: for n holds s.n= U(n) from SEQ_1:sch 1;
-    now let n;  s.n=r & s.(n+1)=r by A2; hence s.n=s.(n+1); end;
- then A3: s is constant by SEQM_3:16; then A4: s is convergent by SEQ_4:39;
+ reconsider s = NAT --> r as Real_Sequence by FUNCOP_1:57;
+ A2: for n holds s.n= r by FUNCOP_1:13;
+A4: s is convergent by SEQ_4:39;
  then A5: s-seq is convergent by A1,SEQ_2:25;  s.0=r by A2;
- then lim s=r by A3,SEQ_4:40; then lim(s-seq)=r-lim seq by A1,A4,SEQ_2:26;
+ then lim s=r by SEQ_4:40; then lim(s-seq)=r-lim seq by A1,A4,SEQ_2:26;
  then 0<lim(s-seq) by A1,SQUARE_1:11; then consider n such that
  A6: for k st n<=k holds 0<(s-seq).k by A5,LIMFUNC1:29
 ; take n; let k;assume n<=k;
@@ -183,13 +182,10 @@ proof assume A1: for n holds x0-1/(n+1)<seq.n & seq.n<x0 & seq.n in dom f;
  deffunc U(Nat) = 1/($1+1);
  consider s1 be Real_Sequence such that
  A2: for n holds s1.n=U(n) from SEQ_1:sch 1;
- deffunc U(Nat) = x0;
- consider s2 be Real_Sequence such that
- A3: for n holds s2.n=U(n) from SEQ_1:sch 1;
-    now let n;  s2.n=x0 & s2.(n+1)=x0 by A3; hence s2.n=s2.(n+1); end;
- then A4: s2 is constant by SEQM_3:16;
- then A5: s2 is convergent by SEQ_4:39;  s2.0=x0 by A3;
- then A6: lim s2=x0 by A4,SEQ_4:40;
+ reconsider s2 = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
+ A3: for n holds s2.n= x0 by FUNCOP_1:13;
+ A5: s2 is convergent by SEQ_4:39;  s2.0=x0 by A3;
+ then A6: lim s2=x0 by SEQ_4:40;
  A7: s1 is convergent & lim s1=0 by A2,SEQ_4:45;
  then A8: s2-s1 is convergent by A5,SEQ_2:25;
  A9: lim(s2-s1)=x0-0 by A5,A6,A7,SEQ_2:26
@@ -219,13 +215,10 @@ proof assume A1: for n holds x0<seq.n & seq.n<x0+1/(n+1) & seq.n in dom f;
  deffunc U(Nat) = 1/($1+1);
  consider s1 be Real_Sequence such that
  A2: for n holds s1.n=U(n) from SEQ_1:sch 1;
- deffunc U(Nat) = x0;
- consider s2 be Real_Sequence such that
- A3: for n holds s2.n=U(n)from SEQ_1:sch 1;
-    now let n;  s2.n=x0 & s2.(n+1)=x0 by A3; hence s2.n=s2.(n+1); end;
- then A4: s2 is constant by SEQM_3:16;
- then A5: s2 is convergent by SEQ_4:39;  s2.0=x0 by A3;
- then A6: lim s2=x0 by A4,SEQ_4:40;
+ reconsider s2 = NAT --> x0 as Real_Sequence by FUNCOP_1:57;
+ A3: for n holds s2.n= x0 by FUNCOP_1:13;
+ A5: s2 is convergent by SEQ_4:39;  s2.0=x0 by A3;
+ then A6: lim s2=x0 by SEQ_4:40;
  A7: s1 is convergent & lim s1=0 by A2,SEQ_4:45;
  then A8: s2+s1 is convergent by A5,SEQ_2:19;
  A9: lim(s2+s1)=x0+0 by A5,A6,A7,SEQ_2:20

@@ -7,17 +7,17 @@
 environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
-      ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1;
+      ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2;
  notations TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1, PARTFUN1,
-      FUNCT_1, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1;
+      FUNCT_1, FUNCT_3, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1;
  constructors REAL_1, SEQ_2, ABSVALUE, NAT_1, PARTFUN1, MEMBERED, FUNCOP_1,
-      COMPLEX1, XBOOLE_0;
+      COMPLEX1, XBOOLE_0, FUNCT_3;
  registrations FUNCT_1, XREAL_0, RELSET_1, SEQ_1, ARYTM_3, MEMBERED, FUNCOP_1,
       ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2;
  theorems REAL_1, FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, AXIOMS,
-      FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1;
+      FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1;
  schemes NAT_1, SEQ_1;
 
 begin
@@ -178,14 +178,14 @@ Lm1:n<m implies ex k st m=n+1+k
 ::
 
 definition let f be PartFunc of NAT, REAL;
-  attr f is increasing means :Def1:
-   for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
-  attr f is decreasing means :Def2:
-   for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
-  attr f is non-decreasing means :Def3:
-   for m,n st m in dom f & n in dom f & m < n holds f.m <= f.n;
-  attr f is non-increasing means :Def4:
-   for m,n st m in dom f & n in dom f & m < n holds f.m >= f.n;
+  attr f is increasing means
+:Def1: for m,n st m in dom f & n in dom f & m < n holds f.m < f.n;
+  attr f is decreasing means
+:Def2: for m,n st m in dom f & n in dom f & m < n holds f.m > f.n;
+  attr f is non-decreasing means
+:Def3: for m,n st m in dom f & n in dom f & m <= n holds f.m <= f.n;
+  attr f is non-increasing means
+:Def4: for m,n st m in dom f & n in dom f & m <= n holds f.m >= f.n;
 end;
 
 Lm6: f is increasing iff for n being Nat holds f.n < f.(n+1)
@@ -233,7 +233,7 @@ A2:   dom f = NAT by FUNCT_2:def 1;
       hence thesis by A1,A2,Def3;
     end;
     assume A3:for n being Nat holds f.n <= f.(n+1);
-    let m,n; assume m in dom f & n in dom f & m < n;
+    let m,n; assume m in dom f & n in dom f & m <= n;
     then consider k such that
 A4: n = m+k by NAT_1:28;
     thus thesis by A3,A4,Lm4;
@@ -250,7 +250,7 @@ A2:   dom f = NAT by FUNCT_2:def 1;
       hence thesis by A1,A2,Def4;
     end;
     assume A3:for n being Nat holds f.n >= f.(n+1);
-    let m,n; assume m in dom f & n in dom f & m < n;
+    let m,n; assume m in dom f & n in dom f & m <= n;
     then consider k such that
 A4: n = m+k by NAT_1:28;
     thus thesis by A3,A4,Lm5;
@@ -262,7 +262,8 @@ definition let f be Function;
 end;
 
 definition let seq;
-  redefine attr seq is constant means :Def6: ex r st for n holds seq.n=r;
+  redefine attr seq is constant means
+:Def6: ex r st for n holds seq.n=r;
  compatibility
   proof
 A1:dom seq = NAT by FUNCT_2:def 1;
@@ -371,7 +372,7 @@ theorem
      hence thesis by Lm4;
     end;
    assume A1:for n,m st n<=m holds seq.n<=seq.m;
-   let n,m; assume n in dom seq & m in dom seq & n < m;
+   let n,m; assume n in dom seq & m in dom seq & n <= m;
    hence thesis by A1;
   end;
 
@@ -399,7 +400,7 @@ theorem
      hence thesis by Lm5;
     end;
    assume A1:for n,m st n<=m holds seq.m<=seq.n;
-   let n,m; assume n in dom seq & m in dom seq & n < m;
+   let n,m; assume n in dom seq & m in dom seq & n <= m;
    hence thesis by A1;
   end;
 
@@ -571,6 +572,69 @@ theorem
    hence seq.n<=seq.0 by A1,Th14;
   end;
 
+registration
+ cluster increasing -> non-decreasing PartFunc of NAT, REAL;
+ coherence
+  proof let f be PartFunc of NAT, REAL such that
+Z1: f is increasing;
+   let m,n such that
+Z2: m in dom f & n in dom f and
+Z3: m <= n;
+   per cases by Z3, XREAL_1:1;
+   suppose m < n;
+    then f.m < f.n by Z1,Z2,Def1;
+   hence f.m <= f.n;
+   end;
+   suppose m = n;
+    hence thesis;
+   end;
+  end;
+ cluster decreasing -> non-increasing PartFunc of NAT, REAL;
+ coherence
+  proof let f be PartFunc of NAT, REAL such that
+Z1: f is decreasing;
+   let m,n such that
+Z2: m in dom f & n in dom f and
+Z3: m <= n;
+   per cases by Z3, XREAL_1:1;
+   suppose m < n;
+    then f.m > f.n by Z1,Z2,Def2;
+   hence f.m >= f.n;
+   end;
+   suppose m = n;
+    hence thesis;
+   end;
+  end;
+ cluster constant -> non-decreasing non-increasing PartFunc of NAT, REAL;
+ coherence
+  proof let f be PartFunc of NAT, REAL such that
+Z:  f is constant;
+   thus f is non-decreasing
+    proof let m,n;
+     assume m in dom f & n in dom f & m <= n;
+      then f.m = f.n by Z,Def5;
+     hence f.m <= f.n;
+    end;
+   let m,n;
+   assume m in dom f & n in dom f & m <= n;
+    then f.m = f.n by Z,Def5;
+   hence f.m >= f.n;
+  end;
+ cluster non-decreasing non-increasing -> constant PartFunc of NAT, REAL;
+ coherence
+  proof let f be PartFunc of NAT, REAL such that
+Z1: f is non-decreasing non-increasing;
+   let x,y;
+   assume
+Z2: x in dom f & y in dom f;
+    dom f c= NAT by RELSET_1:12;
+    then reconsider m = x, n = y as Nat by Z2;
+    m <= n or n <= m;
+    then f.m <= f.n & f.n <= f.m by Z1,Z2,Def3,Def4;
+   hence thesis by XREAL_1:1;
+  end;
+end;
+
 theorem
     seq is increasing implies seq is non-decreasing
   proof
@@ -625,24 +689,27 @@ definition let IT be Relation;
   rng IT c= NAT;
 end;
 
-registration
-  cluster increasing natural-yielding Real_Sequence;
-existence
- proof deffunc U(Nat) = $1;
-  consider seq such that A1:for n holds seq.n=U(n) from SEQ_1:sch 1;
-  take seq;
+LmX: incl NAT is increasing natural-yielding
+ proof set seq = incl NAT;
       now let y; assume y in rng seq;
     then consider x such that A2:x in dom seq and
                          A3:seq.x=y by FUNCT_1:def 5;
        x in NAT by A2,FUNCT_2:def 1;
-    hence y in NAT by A1,A3;
+    hence y in NAT by FUNCT_1:35,A3;
    end;
   then A4: rng seq c=NAT by TARSKI:def 3;
-     now let n;
-      seq.n=n & seq.(n+1)=n+1 by A1;
+  now let n;
+      seq.n=n & seq.(n+1)=n+1 by FUNCT_1:35;
    hence seq.n<seq.(n+1) by NAT_1:38;
   end;
   hence thesis by A4,Def8,Lm6;
+ end;
+
+registration
+  cluster increasing natural-yielding Real_Sequence;
+existence
+ proof take incl NAT;
+  thus thesis by LmX;
  end;
 end;
 
@@ -780,9 +847,15 @@ end;
 :: DEFINITION OF SUBSEQUENCE
 ::
 
-definition let seq,seq1;
-  pred seq is_subsequence_of seq1 means :Def10:
-   ex Nseq st seq=seq1*Nseq;
+definition let seq;
+  mode subsequence of seq -> Real_Sequence means
+:Def10:
+   ex Nseq st it=seq*Nseq;
+  existence
+   proof reconsider s = incl NAT as increasing Seq_of_Nat by LmX;
+    take seq, s;
+    thus thesis by FUNCT_2:23;
+   end;
 end;
 
 definition let f be Real_Sequence;
@@ -954,26 +1027,25 @@ theorem
   end;
 
 theorem
-    seq is_subsequence_of seq
-  proof deffunc U(Nat) = $1;
-   consider seq1 such that A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
+    seq is subsequence of seq
+  proof set seq1 = incl NAT;
        now let n;
-        seq1.n=n & seq1.(n+1)=n+1 by A1;
+        seq1.n=n & seq1.(n+1)=n+1 by FUNCT_1:35;
      hence seq1.n<seq1.(n+1) by NAT_1:38;
     end;
    then A2:seq1 is increasing by Lm6;
-       for n holds seq1.n is Nat by A1;
+       for n holds seq1.n is Nat by FUNCT_1:35;
    then reconsider seq1 as increasing Seq_of_Nat by A2,Th29;
    take Nseq=seq1;
        now let n;
      thus (seq*Nseq).n=seq.(Nseq.n) by Th31
-       .=seq.n by A1;
+       .=seq.n by FUNCT_1:35;
     end;
    hence thesis by FUNCT_2:113;
   end;
 
 theorem
-    seq ^\k is_subsequence_of seq
+    seq ^\k is subsequence of seq
   proof deffunc U(Nat) = $1+k;
    consider seq1 such that A1:for n holds seq1.n=U(n) from SEQ_1:sch 1;
        now let n;
@@ -997,11 +1069,11 @@ theorem
   end;
 
 theorem
-    seq is_subsequence_of seq1 & seq1 is_subsequence_of seq2
-       implies seq is_subsequence_of seq2
+    seq is subsequence of seq1 & seq1 is subsequence of seq2
+       implies seq is subsequence of seq2
   proof
-   assume that A1:seq is_subsequence_of seq1 and
-               A2:seq1 is_subsequence_of seq2;
+   assume that A1:seq is subsequence of seq1 and
+               A2:seq1 is subsequence of seq2;
    consider Nseq1 such that A3:seq=seq1*Nseq1 by A1,Def10;
    consider Nseq2 such that A4:seq1=seq2*Nseq2 by A2,Def10;
    take Nseq=Nseq2*Nseq1;
@@ -1013,11 +1085,11 @@ theorem
 ::    SUBSEQUENCE OF BOUNDED SEQUENCE
 ::
 theorem
-    seq is increasing & seq1 is_subsequence_of seq implies
+    seq is increasing & seq1 is subsequence of seq implies
        seq1 is increasing
  proof
   assume that A1:seq is increasing and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
   let n;
      Nseq.n<Nseq.(n+1) by Lm6;
@@ -1027,11 +1099,11 @@ theorem
  end;
 
 theorem
-    seq is decreasing & seq1 is_subsequence_of seq implies
+    seq is decreasing & seq1 is subsequence of seq implies
        seq1 is decreasing
  proof
   assume that A1:seq is decreasing and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
   let n;
      Nseq.n<Nseq.(n+1) by Lm6;
@@ -1041,11 +1113,11 @@ theorem
  end;
 
 theorem
- Th51:seq is non-decreasing & seq1 is_subsequence_of seq implies
+ Th51:seq is non-decreasing & seq1 is subsequence of seq implies
        seq1 is non-decreasing
  proof
   assume that A1:seq is non-decreasing and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
   let n;
      Nseq.n<=Nseq.(n+1) by Lm6;
@@ -1055,11 +1127,11 @@ theorem
  end;
 
 theorem
- Th52:seq is non-increasing & seq1 is_subsequence_of seq implies
+ Th52:seq is non-increasing & seq1 is subsequence of seq implies
        seq1 is non-increasing
  proof
   assume that A1:seq is non-increasing and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
   let n;
      Nseq.n<=Nseq.(n+1) by Lm6;
@@ -1069,11 +1141,11 @@ theorem
  end;
 
 theorem
-    seq is monotone & seq1 is_subsequence_of seq implies
+    seq is monotone & seq1 is subsequence of seq implies
         seq1 is monotone
   proof
    assume that A1:seq is monotone and
-               A2:seq1 is_subsequence_of seq;
+               A2:seq1 is subsequence of seq;
     A3:now assume seq is non-decreasing;
      then seq1 is non-decreasing by A2,Th51;
      hence seq1 is monotone by Def7;
@@ -1085,12 +1157,12 @@ theorem
    hence thesis by A1,A3,Def7;
   end;
 
-theorem
-    seq is constant & seq1 is_subsequence_of seq implies
+theorem Th54:
+    seq is constant & seq1 is subsequence of seq implies
        seq1 is constant
  proof
   assume that A1:seq is constant and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider Nseq such that A3:seq1=seq*Nseq by A2,Def10;
       now let n;
        seq.(Nseq.(n+1))=seq.(Nseq.n) by A1,Th18;
@@ -1101,11 +1173,11 @@ theorem
  end;
 
 theorem
-    seq is constant & seq1 is_subsequence_of seq implies seq=seq1
+    seq is constant & seq1 is subsequence of seq implies seq=seq1
   proof
     assume that
 A1: seq is constant and
-A2: seq1 is_subsequence_of seq;
+A2: seq1 is subsequence of seq;
     consider Nseq such that
 A3: seq1=seq*Nseq by A2,Def10;
         now let n;
@@ -1116,11 +1188,11 @@ A3: seq1=seq*Nseq by A2,Def10;
   end;
 
 theorem
- Th56:seq is bounded_above & seq1 is_subsequence_of seq implies
+ Th56:seq is bounded_above & seq1 is subsequence of seq implies
        seq1 is bounded_above
  proof
   assume that A1:seq is bounded_above and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider r1 such that
   A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
   consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
@@ -1131,11 +1203,11 @@ theorem
  end;
 
 theorem
- Th57:seq is bounded_below & seq1 is_subsequence_of seq implies
+ Th57:seq is bounded_below & seq1 is subsequence of seq implies
        seq1 is bounded_below
  proof
   assume that A1:seq is bounded_below and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
   consider r1 such that
   A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
   consider Nseq such that A4:seq1=seq*Nseq by A2,Def10;
@@ -1146,11 +1218,11 @@ theorem
  end;
 
 theorem
-    seq is bounded & seq1 is_subsequence_of seq implies
+    seq is bounded & seq1 is subsequence of seq implies
        seq1 is bounded
  proof
   assume that A1:seq is bounded and
-              A2:seq1 is_subsequence_of seq;
+              A2:seq1 is subsequence of seq;
      seq is bounded_above by A1,SEQ_2:def 5;
   hence seq1 is bounded_above by A2,Th56;
      seq is bounded_below by A1,SEQ_2:def 5;
@@ -1783,3 +1855,5 @@ registration let X,x be set;
  coherence by Th79;
 end;
 
+theorem
+ incl NAT is increasing natural-yielding by LmX;

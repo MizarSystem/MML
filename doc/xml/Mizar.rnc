@@ -119,10 +119,14 @@ DefMeaning =
 ## corresponding to the arguments of original, otherwise it is just
 ## identity. This could be now encode with just one number like the
 ## superfluous does for Constructor.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.   
 Definiens =
  element Definiens {
    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
    attribute constrnr { xsd:integer},
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
    Typ*,
    element Essentials { Int*},
    Formula?,
@@ -143,10 +147,16 @@ Requirements =
  }
 
 ## Adjective is a possibly negated (and paramaterized) attribute
+## Optionally the article id (aid) and order in article (absnr)
+## can be given.   
+## The attribute kind (kind) 'V' can be added explicitly.   
 Adjective =
  element Adjective {
    attribute nr { xsd:integer },
    attribute value { xsd:boolean }?,
+   ( attribute absnr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   attribute kind { "V" }?,
    Term*
  }
 
@@ -157,11 +167,17 @@ Cluster =
 }
 
 ## Parameterized type - either mode or structure
+## The kinds "L" and "G" are equivalent, "G" is going to be
+## replaced by more correct "L" in Mizar gradually.   
 ## First goes the LowerCluster, than UpperCluster
+## Optionally the article id (aid) and order in article (absnr)
+## can be given.   
 Typ =
  element Typ {
-   attribute kind { "M" | "G" | "errortyp" },
+   attribute kind { "M" | "G" | "L" | "errortyp" },
    attribute nr { xsd:integer }?,
+   ( attribute absnr { xsd:integer },
+     attribute aid { xsd:string } )?,
    Cluster*,
    Term*
  }
@@ -191,10 +207,14 @@ Not =
  }
 
 ## Atomic predicate formulas - schematic, attributive and normal
+## Optionally the article id (aid) and order in article (absnr)
+## can be given.   
 Pred =
  element Pred {
    attribute kind { "P" | "V" | "R" },
    attribute nr { xsd:integer },
+   ( attribute absnr { xsd:integer },
+     attribute aid { xsd:string } )?,
    Term*
  }
 
@@ -249,10 +269,14 @@ Num =
  element Num { attribute nr { xsd:integer } }
 
 ## Functor terms - schematic, aggregates, normal and selectors
+## Optionally the article id (aid) and order in article (absnr)
+## can be given.   
 Func =
  element Func {
    attribute kind { "F" | "G" | "K" | "U" },
    attribute nr { xsd:integer },
+   ( attribute absnr { xsd:integer },
+     attribute aid { xsd:string } )?,
    Term*
  }
 
@@ -315,23 +339,35 @@ ErrorCluster =
    
 ## Existential (registration) cluster.
 ## This says that exists Typ with Cluster.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.   
 RCluster =   
  element RCluster {
-   ErrorCluster | (ArgTypes, Typ, Cluster)
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   ( ErrorCluster | (ArgTypes, Typ, Cluster) )
    }
 
 ## Conditional cluster.
 ## This says that Typ with the first cluster has also the second.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.   
 CCluster =   
  element CCluster {
-   ErrorCluster | (ArgTypes, Cluster, Typ, Cluster)
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   ( ErrorCluster | (ArgTypes, Cluster, Typ, Cluster) )
    }
 
 ## Functor (term) cluster.
 ## This says that exists Term with Cluster.
+## Optionally the article id (aid) and order in article (nr)
+## can be given.   
 FCluster =   
  element FCluster {
-   ErrorCluster | (ArgTypes, Term, Cluster)
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
+   ( ErrorCluster | (ArgTypes, Term, Cluster) )
    }
 
 ## Schemes keep types of their second-order variables.
@@ -399,10 +435,21 @@ Pair =
 StructLoci = 
  element StructLoci { Pair* }
 
-## Specify numbers of fields of aggregates and structmodes.
+## Specify fields of aggregates and structmodes by their relative
+## nr.
+## Optionally the article id (aid) and order in article (absnr)
+## can be given.
+## The selector kind (kind) 'U' can can be added explicitly.
 Fields = 
- element Fields { Int* }
-   
+ element Fields {
+   element Field {
+     attribute nr { xsd:integer},
+     attribute kind { 'U' }?,
+     attribute aid { xsd:string}?,
+     attribute absnr { xsd:integer}?
+   }*
+}
+
 Property = 
    ( element UnexpectedProp { empty }
    | element Symmetry { empty }
@@ -433,9 +480,11 @@ Properties =
 ## in environment for a particular article (it is not in prels).   
 ## All have  (possibly empty) properties, argtypes
 ## and some have one or more mother types.
-## The optional final NatFunc are fields for agrregates and structmodes.
+## The optional final Fields are selectors for agrregates and structmodes.
 ## aggregbase is for aggregates (maybe OVER-arguments),
-## structmodeaggrnr is for structmodes (nr of corresponding aggregate)
+## structmodeaggrnr is for structmodes (nr of corresponding aggregate).
+## absredefnr and redefaid optionally give absolute address of
+## a redefinition.   
 Constructor =
  element Constructor {
    attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' },
@@ -443,7 +492,10 @@ Constructor =
    attribute aid { xsd:string},
    attribute relnr { xsd:integer}?,
    ( attribute redefnr { xsd:integer},
-     attribute superfluous { xsd:integer})?,
+     attribute superfluous { xsd:integer},
+     ( attribute absredefnr { xsd:integer},
+       attribute redefaid { xsd:string} )?
+   )?,
    ( attribute structmodeaggrnr { xsd:integer}
    | attribute aggregbase { xsd:integer})?,
    Properties?, ArgTypes, StructLoci?, Typ*, Fields?
@@ -465,9 +517,13 @@ EndPosition =
 ## is uniform for all of them, so it does not have to be given.
 ## The invalid ConstrKind J is now used for forgetful functors,
 ## this should be changed.   
+## Optionally the article id (aid) and order in article (nr)
+## can be given.  
 Pattern =
  element Pattern {
    attribute kind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },
+   ( attribute nr { xsd:integer },
+     attribute aid { xsd:string } )?,
    ( attribute formatnr { xsd:integer}
    | Format ),
    attribute constrkind { 'M' | 'L' | 'V' | 'R' | 'K' | 'U' | 'G' | 'J' },

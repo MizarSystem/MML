@@ -23,8 +23,8 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TSEP_1"/>
 <ArticleID name="TDLAT_3"/>

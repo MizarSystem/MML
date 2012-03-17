@@ -26,12 +26,12 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="REALSET2"/>
@@ -149,7 +149,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="40"/>
-<Adjective nr="63"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -750,7 +750,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="40"/>
-<Adjective nr="63"/>
+<Adjective nr="62"/>
 <Adjective nr="118"/>
 </Cluster>
 </CCluster>

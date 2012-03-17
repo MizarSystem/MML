@@ -10,20 +10,22 @@ environ
       FINSET_1, FINSEQ_1, RELAT_1, FUNCT_1, ARYTM_1, SQUARE_1, ARYTM_3,
       PCOMPS_1, ARYTM, ABSVALUE, ORDINAL2, RELAT_2, NAGATA_1, NATTRA_1,
       REALSET1, PROB_1, GROUP_1, CARD_1, FUNCT_2, TOPMETR, TMAP_1, FINSOP_1,
-      PSCOMP_1, URYSOHN1, CARD_4, RLVECT_3, BINOP_1, SETWISEO, COH_SP;
+      PSCOMP_1, URYSOHN1, CARD_4, RLVECT_3, BINOP_1, SETWISEO, COH_SP,
+      FUNCOP_1;
  notations BINOP_1, SETWISEO, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, REALSET1,
       ZFMISC_1, STRUCT_0, PCOMPS_1, PRE_TOPC, FINSET_1, ORDINAL1, XREAL_0,
       REAL_1, TOPS_2, COMPTS_1, METRIC_1, CARD_3, PROB_1, NAT_1, URYSOHN1,
-      FUNCT_1, COMPLEX1, FUNCT_2, NUMBERS, CANTOR_1, FINSEQ_1, RELAT_1, CARD_1,
+      FUNCT_1, COMPLEX1, FUNCT_2, FUNCOP_1,
+      NUMBERS, CANTOR_1, FINSEQ_1, RELAT_1, CARD_1,
       CARD_4, DOMAIN_1, TOPMETR, FRAENKEL, URYSOHN3, PSCOMP_1, BORSUK_1,
       TMAP_1, FINSOP_1, RELSET_1, SQUARE_1;
  constructors METRIC_1, REAL_1, TOPS_2, COMPTS_1, SQUARE_1, FINSEQ_1, NAT_1,
       MEMBERED, SETWISEO, PREPOWER, URYSOHN3, TOPMETR, TMAP_1, BORSUK_1,
       HILBERT3, FINSOP_1, PSCOMP_1, CARD_3, CANTOR_1, CARD_2, CARD_4, CARD_5,
-      COMPLEX1, DOMAIN_1, REALSET1, PROB_1;
+      COMPLEX1, DOMAIN_1, REALSET1, PROB_1, FUNCOP_1;
  registrations SUBSET_1, BORSUK_1, METRIC_1, FINSET_1, STRUCT_0, XREAL_0,
       RELSET_1, TOPS_1, MEMBERED, PCOMPS_1, WAYBEL12, CARD_1, FRAENKEL,
-      TOPMETR, SEQ_1, FINSEQ_1, CARD_LAR, PSCOMP_1;
+      TOPMETR, SEQ_1, FINSEQ_1, CARD_LAR, PSCOMP_1, FUNCOP_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions PCOMPS_1, TARSKI, BINOP_1;
  theorems AXIOMS, REAL_1, SQUARE_1, FUNCT_1, FUNCT_2, METRIC_1, XREAL_0,
@@ -31,7 +33,8 @@ environ
       BORSUK_1, XBOOLE_1, TARSKI, SETFAM_1, XBOOLE_0, SUBSET_1, TOPS_1, TOPS_2,
       PRE_TOPC, REALSET1, FINSET_1, COMPTS_1, CARD_3, URYSOHN1, NAT_1,
       YELLOW_9, FINSEQ_1, CARD_2, CARD_4, CANTOR_1, FINSOP_1, SETWISEO, NEWTON,
-      PSCOMP_1, TOPREAL6, ZFMISC_1, BINOP_1, REAL_2, SEQ_2, HEINE, PROB_1;
+      PSCOMP_1, TOPREAL6, ZFMISC_1, BINOP_1, REAL_2, SEQ_2, HEINE, PROB_1,
+      FUNCOP_1;
  schemes INT_2, FUNCT_1, FRAENKEL, FUNCT_2;
 
 begin
@@ -559,21 +562,15 @@ end;
 Lm5:
 ex Un being FamilySequence of T st Un is sigma_discrete
 proof
-  deffunc C(set)={the carrier of T};
-  A1:for k being set st k in NAT holds C(k) in bool bool the carrier of T
-  proof
-   let k be set;
-   assume k in NAT;
-   the carrier of T in bool the carrier of T by ZFMISC_1:def 1;
-   then C(k) c= bool the carrier of T by ZFMISC_1:37;
-   hence thesis;
-  end;
-  consider f being Function of NAT,bool bool (the carrier of T) such that
-    A2:for k being set st k in NAT holds f.k=C(k) from FUNCT_2:sch 2(A1);
+  set C={the carrier of T};
+  the carrier of T in bool the carrier of T by ZFMISC_1:def 1;
+  then C c= bool the carrier of T by ZFMISC_1:37;
+  then reconsider f = NAT --> C
+    as Function of NAT,bool bool the carrier of T by FUNCOP_1:57;
   take f;
   now let n;
-    f.n={the carrier of T} & the carrier of T is Subset of T by A2,
-ZFMISC_1:def 1;
+    f.n={the carrier of T} & the carrier of T is Subset of T
+      by FUNCOP_1:13, ZFMISC_1:def 1;
     hence f.n is discrete by Th1;
   end;
   hence thesis by Def2;
@@ -1749,11 +1746,9 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
     proof
       ex map' be Element of F st map' is_a_unity_wrt ADD
       proof
-        deffunc F0(set)=0;
-        A2:for x st x in the carrier of T holds F0(x) in REAL;
-        consider map0 being RealMap of T such that
-          A3:for x st x in the carrier of T holds map0.x=F0(x)
-        from FUNCT_2:sch 2(A2);
+        reconsider map0 = (the carrier of T) --> 0 as RealMap of T
+            by FUNCOP_1:57;
+A3:     for x st x in the carrier of T holds map0.x=0 by FUNCOP_1:13;
         reconsider map0'=map0 as Element of F by FUNCT_2:11;
         take map0';
         now let f be Element of F;

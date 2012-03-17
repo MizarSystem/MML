@@ -18,7 +18,6 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="CLASSES1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="COH_SP"/>
 <ArticleID name="COHSP_1"/>
@@ -66,15 +65,15 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="60" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,10 +87,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="154">
+<Adjective nr="153">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="155">
+<Adjective nr="154">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -102,11 +101,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="238">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="60" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="62"/>
 <Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65"/>
@@ -121,32 +121,31 @@
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
-<Adjective nr="77"/>
-<Adjective nr="92"/>
+<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="60" value="false"/>
-<Adjective nr="70"/>
-<Adjective nr="92"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="91"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="60" value="false"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="70"/>
+<Adjective nr="72"/>
 <Adjective nr="73"/>
 <Adjective nr="74"/>
-<Adjective nr="75"/>
 </Cluster>
 </CCluster>
 </Registrations>

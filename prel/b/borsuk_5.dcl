@@ -36,8 +36,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="SQUARE_1"/>
 <ArticleID name="LIMFUNC1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="POWER"/>

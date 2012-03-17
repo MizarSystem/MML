@@ -72,6 +72,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
+<Adjective nr="13"/>
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>

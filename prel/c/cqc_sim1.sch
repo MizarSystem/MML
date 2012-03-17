@@ -1237,7 +1237,6 @@
 <Func kind="K" nr="161"/>
 </Func>
 <Func kind="K" nr="242">
-<Func kind="K" nr="160"/>
 <Func kind="K" nr="161"/>
 </Func>
 </Pred>

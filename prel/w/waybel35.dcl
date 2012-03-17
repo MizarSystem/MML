@@ -22,8 +22,8 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
@@ -368,7 +368,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="412">
+<Func kind="K" nr="411">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -380,8 +380,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="316">
-<Func kind="K" nr="407">
+<Func kind="K" nr="315">
+<Func kind="K" nr="406">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -389,8 +389,8 @@
 </Adjective>
 <Adjective nr="76">
 <LocusVar nr="1"/>
-<Func kind="K" nr="316">
-<Func kind="K" nr="407">
+<Func kind="K" nr="315">
+<Func kind="K" nr="406">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -417,7 +417,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="413">
+<Func kind="K" nr="412">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

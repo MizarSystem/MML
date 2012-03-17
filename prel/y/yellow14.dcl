@@ -323,6 +323,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="29"/>
+<Adjective nr="205"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -352,6 +353,7 @@
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="99"/>
+<Adjective nr="205"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -371,32 +373,6 @@
 <Adjective nr="222">
 <LocusVar nr="1"/>
 </Adjective>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="13" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="316">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
 </Cluster>
 </CCluster>
 <CCluster>

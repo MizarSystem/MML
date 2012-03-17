@@ -1240,11 +1240,8 @@ end;
 registration
  cluster DecoratedTree-like Function;
   existence
-   proof
-    deffunc U(set) = 0;
-    consider W; consider f such that
-A1:   dom f = W & for x st x in W holds f.x = U(x) from FUNCT_1:sch 3;
-    take f; thus dom f is Tree by A1;
+   proof consider W;
+    take f = W --> 0; thus dom f is Tree by FUNCOP_1:19;
    end;
 end;
 
@@ -1272,17 +1269,14 @@ registration let D;
  cluster DecoratedTree-like Function-like ParametrizedSubset of D;
   existence
    proof consider W; consider d being Element of D;
-    deffunc U(set) = d;
-    consider f such that
-A1:   dom f = W & for x st x in W holds f.x = U(x) from FUNCT_1:sch 3;
-    reconsider f as DecoratedTree by A1,Def8;
+    set f = W --> d;
+    dom f = W by FUNCOP_1:19;
+    then reconsider f as DecoratedTree by Def8;
+X:  rng f = {d} by FUNCOP_1:14;
        f is ParametrizedSubset of D
-    proof
-    let x; assume x in rng f;
-    then consider y such that
-A2:   y in dom f & x = f.y by FUNCT_1:def 5;
-        f.y = d & d in D by A1,A2;
-    hence thesis by A2;
+    proof let x; assume x in rng f;
+      then x = d by X,TARSKI:def 1;
+     hence thesis;
     end;
     hence thesis;
    end;
@@ -1449,8 +1443,6 @@ A5:         p = q;
      thus ex TT being DecoratedTree st
        dom TT = dom T with-replacement (p,dom T1) &
       for q st q in dom T with-replacement (p,dom T1) holds X[q,TT.q]
-:::       not p is_a_prefix_of q & TT.q = T.q or
-:::       ex r st r in dom T1 & q = p^r & TT.q = T1.r
           from DTreeEx(A2);
     end;
    uniqueness

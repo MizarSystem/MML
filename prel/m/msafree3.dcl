@@ -100,7 +100,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="487">
+<Func kind="K" nr="486">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -128,7 +128,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="487">
+<Func kind="K" nr="486">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -167,7 +167,7 @@
 <Func kind="K" nr="108">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="487">
+<Func kind="K" nr="486">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -202,7 +202,7 @@
 <Func kind="K" nr="108">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="487">
+<Func kind="K" nr="486">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -241,7 +241,7 @@
 <Func kind="K" nr="108">
 <Func kind="U" nr="12">
 <LocusVar nr="1"/>
-<Func kind="K" nr="487">
+<Func kind="K" nr="486">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -8,14 +8,15 @@ environ
 
  vocabularies AMI_1, MSUALG_1, PBOOLE, PRALG_1, FUNCT_1, RELAT_1, BOOLE,
       ZF_REFLE, QC_LANG1, TDGROUP, FUNCT_6, FUNCT_5, FINSEQ_4, ALG_1, CARD_3,
-      GROUP_6, WELLORD1, MSUALG_2, UNIALG_2, MSUALG_3;
+      GROUP_6, WELLORD1, MSUALG_2, UNIALG_2, MSUALG_3, FRAENKEL;
  notations TARSKI, XBOOLE_0, SUBSET_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, FUNCT_5, FUNCT_6, PBOOLE, STRUCT_0,
+      FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, FUNCT_5, FUNCT_6, PBOOLE, FRAENKEL,
+      STRUCT_0,
       PRALG_1, MSUALG_1, MSUALG_2, PRALG_2;
  constructors FINSEQ_4, MSUALG_2, PRALG_2, MEMBERED, PARTFUN1, RELAT_2,
-      XBOOLE_0, FUNCT_5, PRALG_1;
+      XBOOLE_0, FUNCT_5, PRALG_1, FRAENKEL;
  registrations FUNCT_1, PBOOLE, MSUALG_1, MSUALG_2, RELSET_1, STRUCT_0,
-      PARTFUN1, FUNCT_2, XBOOLE_0, FUNCOP_1;
+      PARTFUN1, FUNCT_2, XBOOLE_0, FUNCOP_1, FRAENKEL, CARD_3;
  requirements BOOLE, SUBSET;
  definitions TARSKI, MSUALG_2, XBOOLE_0;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, PBOOLE, CARD_3, MSUALG_1, PRALG_1,
@@ -232,7 +233,7 @@ A2:    g = id (B.i) by A1,Def1;
 A3:    G.i = g * f by A1,Th2;
       per cases; suppose
           B.i = {} implies A.i = {};
-      hence G.i = F.i by A2,A3,FUNCT_2:23;
+      thus G.i = F.i by A2,A3,FUNCT_2:23;
       end;
       suppose B.i = {} & A.i <> {}; then f = {} by FUNCT_2:def 1;
       hence G.i = F.i by A3,RELAT_1:62;
@@ -337,20 +338,14 @@ for I be set,A,B be non-empty ManySortedSet of I,
 definition canceled;
 end;
 
-Lm1:
-now let S; let U1 be MSAlgebra over S; let o;
- let x be set; assume x in Args(o,U1);
-  then x in product((the Sorts of U1) * (the_arity_of o)) by PRALG_2:10;
-  then ex f being Function st x = f &
-  dom f = dom ((the Sorts of U1) * (the_arity_of o)) & for y be set st
-  y in dom ((the Sorts of U1) * (the_arity_of o)) holds
-      f.y in ((the Sorts of U1) * (the_arity_of o)).y by CARD_3:def 5;
- hence x is Function;
-end;
 
 registration let S; let U1 be non-empty MSAlgebra over S; let o;
-cluster -> Function-like Relation-like Element of Args(o,U1);
-coherence by Lm1;
+cluster Args(o,U1) -> functional;
+coherence
+ proof
+   Args(o,U1) = product ((the Sorts of U1)*(the_arity_of o)) by PRALG_2:10;
+  hence thesis;
+ end;
 end;
 
 begin
@@ -565,7 +560,9 @@ then A20:   (F*the_arity_of o).n = F.((the_arity_of o).n) by FUNCT_1:22
    assume
 A21:  for n st n in dom f holds u.n = (F.((the_arity_of o)/.n)).(f.n);
 A22:  rng the_arity_of o c= dom F by A2,PBOOLE:def 3;
-   reconsider g = F#x as Function by A1,Lm1;
+   F#x is Element of product((the Sorts of U2) * (the_arity_of o))
+     by PRALG_2:10;
+   then reconsider g = F#x as Function;
 A23:  F#x = (Frege(F*the_arity_of o)).x by A1,Def7;
     then F#x = (F*the_arity_of o)..f by A1,A4,A16,PRALG_2:def 8;
 then A24:  dom g = dom(F*the_arity_of o) by PRALG_1:def 17
@@ -586,19 +583,10 @@ then A27:   (F*the_arity_of o).n = F.((the_arity_of o).n) by FUNCT_1:22
    hence u = F#x by A5,A8,A24,FUNCT_1:9;
 end;
 
-registration let S; let U1 be non-empty MSAlgebra over S; let o;
- cluster Function-like Relation-like Element of Args(o,U1);
- existence
-  proof consider x being Element of Args(o,U1);
-       x is Function-like Relation-like;
-   hence thesis;
-  end;
-end;
-
 definition let S; let U1,U2 be non-empty MSAlgebra over S; let o;
            let F be ManySortedFunction of U1,U2;
            let x be Element of Args(o,U1);
-redefine func F # x -> Function-like Relation-like Element of Args(o,U2 )
+redefine func F # x -> Element of Args(o,U2 )
   means :Def8:
  for n st n in dom x holds it.n = (F.((the_arity_of o)/.n)).(x.n);
  coherence;

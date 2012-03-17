@@ -21,8 +21,8 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="MULTOP_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
@@ -721,7 +721,7 @@
 </Is>
 <Not>
 <Is>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -740,7 +740,7 @@
 <Not>
 <And>
 <Is>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -838,7 +838,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="5"/>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -847,7 +847,7 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="6"/>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -877,7 +877,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="211">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -897,7 +897,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="211">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1023,7 +1023,7 @@
 </Is>
 <Not>
 <Is>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1042,7 +1042,7 @@
 <Not>
 <And>
 <Is>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1140,7 +1140,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="5"/>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1149,7 +1149,7 @@
 </Pred>
 <Pred kind="R" nr="1">
 <Var nr="6"/>
-<Func kind="K" nr="208">
+<Func kind="K" nr="207">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1179,7 +1179,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="213">
+<Func kind="K" nr="212">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -1199,7 +1199,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="213">
+<Func kind="K" nr="212">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

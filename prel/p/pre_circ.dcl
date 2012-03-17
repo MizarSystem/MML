@@ -27,7 +27,6 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="PRE_CIRC"/>
@@ -61,7 +60,7 @@
 <Adjective nr="1"/>
 <Adjective nr="2"/>
 <Adjective nr="4"/>
-<Adjective nr="52">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -215,30 +214,6 @@
 <Adjective nr="42"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="28">
-<Cluster>
-<Adjective nr="2"/>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="196">
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</CCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">

@@ -10,19 +10,20 @@ environ
 
  vocabularies FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1,
       ARYTM_3, TARSKI, MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1,
-      MEASURE4, MEASURE1, MEASURE3, MEASURE7;
+      MEASURE4, MEASURE1, MEASURE3, MEASURE7, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, NUMBERS, XREAL_0,
-      REAL_1, RELAT_1, FUNCT_1, NAT_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
+      REAL_1, RELAT_1, FUNCT_1, FUNCOP_1,
+      NAT_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
       MEASURE4, MEASURE5, FUNCT_2;
  constructors NAT_1, SUPINF_2, MEASURE3, MEASURE4, MEASURE6, MCART_1, FRAENKEL,
-      MEMBERED, XBOOLE_0;
+      MEMBERED, XBOOLE_0, FUNCOP_1;
  registrations SUBSET_1, SUPINF_1, MEASURE4, RELSET_1, ARYTM_3, FRAENKEL,
-      FUNCT_2, MEMBERED, ORDINAL2;
+      FUNCT_2, MEMBERED, ORDINAL2, FUNCOP_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0;
  theorems AXIOMS, TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4,
       MEASURE5, MEASURE6, ZFMISC_1, FUNCT_2, NAT_1, MCART_1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, FUNCOP_1;
  schemes FUNCT_2, NAT_1, BINOP_2, SUBSET_1, XBOOLE_0;
 
 begin :: Some theorems about series of R_eal numbers
@@ -773,9 +774,9 @@ proof
          hence thesis by Def2,Lm4;
       end;
       reconsider G = G0 as Element of Funcs(NAT,bool REAL) by FUNCT_2:11;
-    deffunc F(Element of NAT) = G;
-      consider H being Function of NAT,Funcs(NAT,bool REAL) such that
-   A2:for n being Element of NAT holds H.n = F(n) from FUNCT_2:sch 4;
+      reconsider H = NAT --> G as Function of NAT,Funcs(NAT,bool REAL)
+             by FUNCOP_1:57;
+   A2:for n being Element of NAT holds H.n = G by FUNCOP_1:13;
    A3:for n being Nat holds H.n is Interval_Covering of F.n
       proof
          let n be Nat;
@@ -1167,6 +1168,9 @@ A11:for n being Element of NAT holds G2.n = (G.(pr1(H).n)).(pr2(H).n);
 end;
 end;
 
+   reconsider D = NAT --> {} as Function of NAT,bool REAL by FUNCOP_1:57;
+G1: for n being Element of NAT holds D.n = {} by FUNCOP_1:13;
+
 theorem Th15:
    for H being Function of NAT,[:NAT,NAT:] st
    H is one-to-one & rng H = [:NAT,NAT:] holds
@@ -1180,9 +1184,6 @@ proof
    assume that
 A1:H is one-to-one and
 A2: rng H = [:NAT,NAT:];
-   deffunc F(Nat) = {};
-   consider D being Function of NAT,bool REAL such that
-A3: for n being Element of NAT holds D.n = F(n) from FUNCT_2:sch 4;
    reconsider y = D as Element of Funcs(NAT,bool REAL) by FUNCT_2:11;
    defpred P[Nat] means
       ex m being Nat st
@@ -1240,7 +1241,7 @@ A3: for n being Element of NAT holds D.n = F(n) from FUNCT_2:sch 4;
                   suppose
                  A12:n <> pr1(H).(k+1);
                      take y;
-                     thus thesis by A3,A12;
+                     thus thesis by G1,A12;
             end;
             end;
             consider G0 being Function of NAT,Funcs(NAT,bool REAL) such that
@@ -1266,7 +1267,7 @@ A3: for n being Element of NAT holds D.n = F(n) from FUNCT_2:sch 4;
                   suppose
                  A16:n = pr1(H).(k+1);
                      take y;
-                     thus thesis by A3,A16;
+                     thus thesis by G1,A16;
             end;
             end;
             consider G1 being Function of NAT,Funcs(NAT,bool REAL) such that
@@ -1280,7 +1281,7 @@ A3: for n being Element of NAT holds D.n = F(n) from FUNCT_2:sch 4;
             A18:G0.n = f0 & dom f0 = NAT & rng f0 c= bool REAL
                by FUNCT_2:def 2;
                reconsider f0 as Function of NAT,bool REAL by A18,FUNCT_2:4;
-                  D.n = {} by A3;
+                  D.n = {} by G1;
             then A19:D.n c= union(rng f0) by XBOOLE_1:2;
                   for s being Nat holds f0.s is Interval
                proof
@@ -1308,7 +1309,7 @@ A3: for n being Element of NAT holds D.n = F(n) from FUNCT_2:sch 4;
             A20:G1.n = f0 & dom f0 = NAT & rng f0 c= bool REAL
                by FUNCT_2:def 2;
                reconsider f0 as Function of NAT,bool REAL by A20,FUNCT_2:4;
-                  D.n = {} by A3;
+                  D.n = {} by G1;
             then A21:D.n c= union(rng f0) by XBOOLE_1:2;
                   for s being Nat holds f0.s is Interval
                proof
@@ -1635,17 +1636,15 @@ A1:for A being Subset of REAL holds
            hence thesis by A3,SUPINF_1:def 17;
          end;
      hence OS_Meas is nonnegative by MEASURE1:def 4;
-     deffunc F(Nat) = {};
-         consider G being Function of NAT,bool REAL such that
-      A7:for n being Element of NAT holds G.n = F(n) from FUNCT_2:sch 4;
+      set G = D;
       A8:{} c= union(rng G) by XBOOLE_1:2;
-            for n being Nat holds G.n is Interval by A7;
+            for n being Nat holds G.n is Interval by G1;
          then reconsider G as Interval_Covering of {} by A8,Def2;
       A9:G vol is nonnegative by A1;
 A10:   for r being Nat holds 0 <= r implies (G vol).r = 0.
          proof
             let n be Nat;
-               vol(G.n) = vol({}) by A7;
+               vol(G.n) = vol({}) by G1;
             hence thesis by Def4,MEASURE5:60;
          end;
             vol(G) = SUM(G vol) by Def6

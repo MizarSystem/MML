@@ -20,7 +20,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="CLASSES2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="XREAL_0"/>
@@ -39,10 +38,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="56"/>
+<Adjective nr="55"/>
+<Adjective nr="64"/>
 <Adjective nr="65"/>
 <Adjective nr="66"/>
-<Adjective nr="67"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="15">
@@ -60,10 +59,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="70">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="71">
+<Adjective nr="70">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -77,10 +76,10 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="56"/>
+<Adjective nr="55"/>
+<Adjective nr="64"/>
 <Adjective nr="65"/>
 <Adjective nr="66"/>
-<Adjective nr="67"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="17">
@@ -93,10 +92,10 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="74">
+<Adjective nr="73">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="75">
+<Adjective nr="74">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -116,14 +115,14 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="56"/>
+<Adjective nr="55"/>
+<Adjective nr="64"/>
 <Adjective nr="65"/>
 <Adjective nr="66"/>
-<Adjective nr="67"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="215">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -146,20 +145,20 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="56"/>
+<Adjective nr="55"/>
+<Adjective nr="64"/>
 <Adjective nr="65"/>
 <Adjective nr="66"/>
-<Adjective nr="67"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="225">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 </Registrations>

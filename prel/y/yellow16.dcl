@@ -58,6 +58,9 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="PRALG_1"/>
+<ArticleID name="GR_CY_1"/>
+<ArticleID name="VECTSP_2"/>
+<ArticleID name="MONOID_0"/>
 <ArticleID name="YELLOW16"/>
 </Signature>
 <RCluster>
@@ -151,7 +154,7 @@
 <Adjective nr="216"/>
 <Adjective nr="217"/>
 <Adjective nr="220"/>
-<Adjective nr="223"/>
+<Adjective nr="247"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -177,7 +180,7 @@
 <Adjective nr="122"/>
 <Adjective nr="217"/>
 <Adjective nr="220"/>
-<Adjective nr="223"/>
+<Adjective nr="247"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -190,12 +193,12 @@
 <Typ kind="M" nr="11">
 <Cluster>
 <Adjective nr="216"/>
-<Adjective nr="223"/>
+<Adjective nr="247"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="319">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -205,6 +208,7 @@
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
+<Adjective nr="230"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -223,7 +227,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="320">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -234,7 +238,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="430">
+<Func kind="K" nr="429">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -262,7 +266,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="319">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -273,7 +277,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="430">
+<Func kind="K" nr="429">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -298,7 +302,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="320">
+<Func kind="K" nr="319">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -330,7 +334,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="223"/>
+<Adjective nr="247"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

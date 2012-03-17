@@ -126,27 +126,6 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="126">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="17"/>
 <Adjective nr="23"/>
 </Cluster>
 </CCluster>

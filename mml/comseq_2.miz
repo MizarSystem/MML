@@ -9,18 +9,20 @@ environ
 
  vocabularies COMPLEX1, COMSEQ_1, RELAT_1, ARYTM_1, ARYTM_3, FUNCT_1, ARYTM,
       PARTFUN1, FINSEQ_4, ANPROJ_1, SEQ_1, LATTICES, SEQ_2, ORDINAL2, SQUARE_1,
-      ABSVALUE;
+      ABSVALUE, FUNCOP_1;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
-      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, SEQ_2, NAT_1, SQUARE_1, FINSEQ_4,
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
+      SEQ_2, NAT_1, SQUARE_1, FINSEQ_4,
       COMPLEX1, COMSEQ_1;
  constructors REAL_1, ABSVALUE, NAT_1, SQUARE_1, COMSEQ_1, SEQ_2, FINSEQ_4,
-      PARTFUN1, COMPLEX1, MEMBERED, BINOP_2;
+      PARTFUN1, COMPLEX1, MEMBERED, BINOP_2, FUNCOP_1;
  registrations XREAL_0, COMSEQ_1, RELSET_1, FUNCT_2, ARYTM_3, COMPLEX1,
-      MEMBERED, ORDINAL2, XCMPLX_0;
+      MEMBERED, ORDINAL2, XCMPLX_0, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, PARTFUN1;
  theorems COMSEQ_1, REAL_2, SEQ_2, FINSEQ_2, REAL_1, COMPLEX1, SQUARE_1,
-      AXIOMS, NAT_1, SUBSET_1, FUNCT_2, FINSEQ_4, XREAL_0, XCMPLX_0, XCMPLX_1;
+      AXIOMS, NAT_1, SUBSET_1, FUNCT_2, FINSEQ_4, XREAL_0, XCMPLX_0, XCMPLX_1,
+      FUNCOP_1;
  schemes NAT_1, COMSEQ_1, SEQ_1;
 
 begin
@@ -276,18 +278,16 @@ begin :: BOUNDED COMPLEX SEQUENCES
     ex r being Real st for n holds |.s.n.|<r;
   end;
 
+  reconsider sc = NAT --> 0c as Complex_Sequence by FUNCOP_1:57;
+G1:   for n holds sc.n = 0c by FUNCOP_1:13;
+
   registration
    cluster bounded Complex_Sequence;
    existence
     proof
-      deffunc F(Nat) = 0c;
-     consider s such that
-A1:   for n holds s.n = F(n) from COMSEQ_1:sch 1;
-     take s;
-     take 1;
+     take sc, 1;
      let n;
-      s.n = 0c by A1;
-     hence |.s.n.| < 1 by COMPLEX1:130;
+     thus |.sc.n.| < 1 by FUNCOP_1:13,COMPLEX1:130;
     end;
   end;
 
@@ -410,11 +410,8 @@ A3:    0<p;
    cluster convergent Complex_Sequence;
     existence
     proof
-      deffunc F(Nat) = 0c;
-     consider s such that
-A1:   for n holds s.n = F(n) from COMSEQ_1:sch 1;
-     take s;
-     thus thesis by A1,Th9;
+     take sc;
+     thus thesis by G1,Th9;
     end;
   end;
 

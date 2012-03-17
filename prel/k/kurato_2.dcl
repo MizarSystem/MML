@@ -309,7 +309,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="16">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

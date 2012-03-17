@@ -8,20 +8,23 @@ environ
 
  vocabularies SEQ_1, COMSEQ_1, COMPLEX1, FUNCT_1, SERIES_1, ABSVALUE, ARYTM,
       ARYTM_1, SUPINF_2, SEQ_2, ARYTM_3, PROB_1, ORDINAL2, SEQM_3, PREPOWER,
-      SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES, XCMPLX_0;
- notations SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1,
-      RELAT_1, FUNCT_2, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1, COMPLEX1,
+      SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES, XCMPLX_0, FUNCOP_1,
+      FRECHET2, FUNCT_3, BOOLE;
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+ ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FUNCT_3,
+      SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1, COMPLEX1,
       COMSEQ_1, COMSEQ_2, SQUARE_1, POWER;
  constructors SEQ_2, SEQM_3, SERIES_1, SQUARE_1, COMSEQ_1, COMSEQ_2, REAL_1,
       NAT_1, ABSVALUE, PARTFUN1, COMPLEX1, MEMBERED, ARYTM_0, ARYTM_3, FUNCT_4,
-      BINOP_2;
+      BINOP_2, FUNCOP_1, FUNCT_3;
  registrations XREAL_0, COMSEQ_2, SEQ_1, COMSEQ_1, RELSET_1, SEQM_3, NAT_1,
-      COMPLEX1, MEMBERED, ORDINAL2, XCMPLX_0;
+      COMPLEX1, MEMBERED, ORDINAL2, XCMPLX_0, FUNCOP_1, NUMBERS, FUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, COMSEQ_2, SERIES_1;
  theorems AXIOMS, NAT_1, REAL_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3,
       SEQ_4, POWER, COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, FUNCT_2, XREAL_0,
-      XCMPLX_0, XCMPLX_1;
+      XCMPLX_0, XCMPLX_1, FUNCOP_1, NUMBERS, RELSET_1, RELAT_1, XBOOLE_1;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1;
 
 begin  :: Preliminaries
@@ -75,16 +78,15 @@ A2:   0<p;
     hence abs((Partial_Sums abs(rseq)).m-0)<p by A2;
   end;
 
-  deffunc f(set) = 0;
+   reconsider C = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
+G1:   for n being Nat holds C.n = 0 by FUNCOP_1:13;
 
 registration
  cluster absolutely_summable Real_Sequence;
 existence
   proof
-    consider C being Real_Sequence such that
-A1:   for n being Nat holds C.n = f(n) from SEQ_1:sch 1;
     take C;
-    thus thesis by A1,Th3;
+    thus thesis by G1,Th3;
   end;
 end;
 
@@ -697,51 +699,45 @@ proof
       Im (seq1 (#) seq2)=Re seq1(#)Im seq2+Im seq1(#)Re seq2 by FUNCT_2:113;
 end;
 
-definition let seq be Complex_Sequence,
-               Nseq be increasing Seq_of_Nat;
- func seq (#) Nseq -> Complex_Sequence means :Def5:
-  for n holds it.n = seq.(Nseq.n);
- existence
- proof
-  deffunc f(Nat) = seq.(Nseq.$1);
-  thus ex f being Complex_Sequence st for n holds f.n = f(n) from
-COMSEQ_1:sch 1;
- end;
-
-uniqueness
-proof
-   let seq1,seq2 be Complex_Sequence such
-   that
-A1: for n holds seq1.n= seq.(Nseq.n) and
-A2: for n holds seq2.n=seq.(Nseq.n);
-       now let n;
-        seq1.n=seq.(Nseq.n) & seq2.n=seq.(Nseq.n) by A1,A2;
-     hence seq1.n=seq2.n;
-    end;
-   hence seq1=seq2 by COMSEQ_1:6;
-end;
+definition let Nseq be increasing Seq_of_Nat,
+               seq be Complex_Sequence;
+ canceled;
+ redefine
+ func seq * Nseq -> Complex_Sequence;
+  coherence
+  proof
+A1: dom Nseq=NAT by FUNCT_2:def 1;
+A2: rng seq c= COMPLEX by RELSET_1:12;
+    rng Nseq c= NAT by SEQM_3:def 8;
+    then rng Nseq c= dom seq by FUNCT_2:def 1;
+    then
+A3:  dom (seq*Nseq)=NAT by A1,RELAT_1:46;
+        rng (seq*Nseq) c= rng seq by RELAT_1:45;
+     then rng (seq*Nseq) c= COMPLEX by A2,XBOOLE_1:1;
+   hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
+  end;
 end;
 
 theorem Th22:
-Re (seq(#)Nseq)=(Re seq)*Nseq & Im (seq(#)Nseq)=(Im seq)*Nseq
+Re (seq*Nseq)=(Re seq)*Nseq & Im (seq*Nseq)=(Im seq)*Nseq
 proof
     now let n;
     thus
-       (Re (seq(#)Nseq)).n =Re((seq(#)Nseq).n) by Def3
-                   .=Re(seq.(Nseq.n)) by Def5
+       (Re (seq*Nseq)).n =Re((seq*Nseq).n) by Def3
+                   .=Re(seq.(Nseq.n)) by FUNCT_2:21
                    .=Re seq.(Nseq.n) by Def3
                    .=(Re seq*Nseq).n by SEQM_3:31;
  end;
  hence
-    Re (seq(#)Nseq)=Re seq*Nseq by FUNCT_2:113;
+    Re (seq*Nseq)=Re seq*Nseq by FUNCT_2:113;
     now let n;
     thus
-       Im (seq(#)Nseq).n =Im((seq(#)Nseq).n) by Def4
-                  .=Im(seq.(Nseq.n)) by Def5
+       Im (seq*Nseq).n =Im((seq*Nseq).n) by Def4
+                  .=Im(seq.(Nseq.n)) by FUNCT_2:21
                   .=Im seq.(Nseq.n) by Def4
                   .=(Im seq*Nseq).n by SEQM_3:31;
  end;
- hence Im (seq(#)Nseq)=Im seq*Nseq by FUNCT_2:113;
+ hence Im (seq*Nseq)=Im seq*Nseq by FUNCT_2:113;
  end;
 
 definition let seq be Complex_Sequence,
@@ -1532,7 +1528,7 @@ Y:   for n holds Im c.n=Im(c.n) by Def4;
     then
 X:   c is convergent by A1,A2,Th39;
   lim(c) = lim(Re c)+(lim(Im c))*<i> by A1,A2,Th39,Y;
- hence thesis by COMPLEX1:28,X;
+ hence thesis by COMPLEX1:28,Y,A1,A2,Th39;
 end;
 
 theorem Th43:
@@ -1564,11 +1560,8 @@ defpred P[Nat] means |. seq.$1 .|= |.z.| to_power ($1+1);
     for n holds P[n] from NAT_1:sch 1(A4,A5);
  hence thesis;
  end;
-    consider rseq be Real_Sequence such that
-      A7:for n holds rseq.n=f(n) from SEQ_1:sch 1;
-   A8:rseq is constant by A7,SEQM_3:def 6;
-     rseq.0=0 by A7;
-  then A9: rseq is convergent & lim(rseq)=0 by A8,SEQ_4:39,40;
+     C.0=0 by G1;
+  then A9: C is convergent & lim(C)=0 by SEQ_4:39,40;
 
 deffunc g(Nat) = |.z.| to_power ($1+1);
    consider rseq1 such that A10:
@@ -1576,7 +1569,7 @@ deffunc g(Nat) = |.z.| to_power ($1+1);
 
    A11: rseq1 is convergent & lim(rseq1)=0 by A1,A10,SERIES_1:1;
 
-   A12: (for n holds rseq.n <= abs(Re seq).n )
+   A12: (for n holds C.n <= abs(Re seq).n )
      & (for n holds abs(Re seq).n <= rseq1.n)
      proof
        A13: now let n;
@@ -1585,7 +1578,7 @@ deffunc g(Nat) = |.z.| to_power ($1+1);
                abs(Re seq).n=abs(Re seq.n) by SEQ_1:16;
             hence thesis by ABSVALUE:5;
          end;
-         hence rseq.n <= abs(Re seq).n by A7;
+         hence C.n <= abs(Re seq).n by G1;
        end;
 
            now let n;
@@ -1597,7 +1590,7 @@ deffunc g(Nat) = |.z.| to_power ($1+1);
        end;
        hence thesis by A13;
  end;
-   A16: (for n holds rseq.n <= abs(Im seq).n )
+   A16: (for n holds C.n <= abs(Im seq).n )
      & (for n holds abs(Im seq).n <= rseq1.n)
      proof
        A17:
@@ -1607,7 +1600,7 @@ deffunc g(Nat) = |.z.| to_power ($1+1);
                abs(Im seq).n=abs(Im seq.n) by SEQ_1:16;
             hence thesis by ABSVALUE:5;
          end;
-         hence rseq.n <= abs(Im seq).n by A7;
+         hence C.n <= abs(Im seq).n by G1;
        end;
           now let n;
          A18:   abs(Im seq).n = abs(Im seq.n) by SEQ_1:16;
@@ -1797,13 +1790,9 @@ theorem
 proof
 assume
 A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
-   ex rseq1  be Real_Sequence st for n holds rseq1.n = f(n) from SEQ_1:sch 1;
-   then consider rseq1 be Real_Sequence such that
-      A2:for n holds rseq1.n=0;
-   A3:rseq1 is constant by A2,SEQM_3:def 6;
-     rseq1.0=0 by A2;
-   then A4: rseq1 is convergent & lim(rseq1)=0 by A3,SEQ_4:39,40;
-   A5: (for n holds rseq1.n <= abs(Re(seq)).n )
+     C.0=0 by G1;
+   then A4: C is convergent & lim(C)=0 by SEQ_4:39,40;
+   A5: (for n holds C.n <= abs(Re(seq)).n )
      & (for n holds abs(Re(seq)).n <= rseq.n)
      proof
        A6: now let n;
@@ -1812,7 +1801,7 @@ A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
                abs(Re(seq)).n=abs(Re(seq).n) by SEQ_1:16;
             hence thesis by ABSVALUE:5;
          end;
-         hence rseq1.n <= abs(Re(seq)).n by A2;
+         hence C.n <= abs(Re(seq)).n by G1;
        end;
           now let n;
               Re(seq).n = Re(seq.n) by Def3;
@@ -1823,7 +1812,7 @@ A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
          end;
        hence thesis by A6;
  end;
-   A9: (for n holds rseq1.n <= abs(Im(seq)).n )
+   A9: (for n holds C.n <= abs(Im(seq)).n )
      & (for n holds abs(Im(seq)).n <= rseq.n)
      proof
        A10:
@@ -1833,7 +1822,7 @@ A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
                abs(Im(seq)).n=abs(Im(seq).n) by SEQ_1:16;
             hence thesis by ABSVALUE:5;
          end;
-         hence rseq1.n <= abs(Im(seq)).n by A2;
+         hence C.n <= abs(Im(seq)).n by G1;
        end;
 
            now let n;
@@ -1857,49 +1846,58 @@ end;
 
 begin  :: Summable and Absolutely Summable Complex Sequences
 
-definition let seq, seq1 be Complex_Sequence;
- pred seq is_subsequence_of seq1 means :Def9:
-  ex Nseq st seq = seq1(#)Nseq;
+definition let seq be Complex_Sequence;
+ mode subsequence of seq -> Complex_Sequence means
+:Def9: ex Nseq st it = seq*Nseq;
+ existence
+   proof
+     reconsider s = incl NAT as increasing Seq_of_Nat by SEQM_3:80;
+    take seq, s;
+     s is Function of NAT, COMPLEX by FUNCT_2:9,NUMBERS:11;
+    thus seq*s = seq by FUNCT_2:23;
+    COMPLEX = {} implies NAT = {};
+    seq*s = seq by FUNCT_2:23;
+   end;
 end;
 
 theorem
-   seq is_subsequence_of seq1 implies
- Re seq is_subsequence_of Re seq1 & Im seq is_subsequence_of Im seq1
+   seq is subsequence of seq1 implies
+ Re seq is subsequence of Re seq1 & Im seq is subsequence of Im seq1
 proof
-assume seq is_subsequence_of seq1; then consider Nseq such that
-A1:seq=seq1(#)Nseq by Def9;
+assume seq is subsequence of seq1; then consider Nseq such that
+A1:seq=seq1*Nseq by Def9;
       Re seq=Re seq1* Nseq by A1,Th22;
-    hence Re seq is_subsequence_of Re seq1 by SEQM_3:def 10;
+    hence Re seq is subsequence of Re seq1 by SEQM_3:def 10;
        Im seq=Im seq1 * Nseq by A1,Th22;
     hence thesis by SEQM_3:def 10;
 end;
 
 theorem Th50:
-seq is_subsequence_of seq1 & seq1 is_subsequence_of seq2
- implies seq is_subsequence_of seq2
+seq is subsequence of seq1 & seq1 is subsequence of seq2
+ implies seq is subsequence of seq2
 proof
 assume that
-A1:  seq is_subsequence_of seq1 and
-A2:  seq1 is_subsequence_of seq2;
+A1:  seq is subsequence of seq1 and
+A2:  seq1 is subsequence of seq2;
 
      consider Nseq such that
-A3:         seq=seq1(#)Nseq by A1,Def9;
+A3:         seq=seq1*Nseq by A1,Def9;
      consider Nseq1 such that
-A4:         seq1=seq2(#)Nseq1 by A2,Def9;
+A4:         seq1=seq2*Nseq1 by A2,Def9;
 
    now let n;
- thus (seq2(#)(Nseq1 * Nseq)).n = seq2.((Nseq1 * Nseq).n) by Def5
+ thus (seq2*(Nseq1 * Nseq)).n = seq2.((Nseq1 * Nseq).n) by FUNCT_2:21
    .=seq2.(Nseq1.(Nseq.n)) by SEQM_3:31
-   .=(seq2(#)Nseq1).(Nseq.n) by Def5
-   .=seq.n by A3,A4,Def5;
+   .=(seq2*Nseq1).(Nseq.n) by FUNCT_2:21
+   .=seq.n by A3,A4,FUNCT_2:21;
  end;
-then seq=seq2(#)(Nseq1*Nseq) by COMSEQ_1:6;
-hence seq is_subsequence_of seq2 by Def9;
+then seq=seq2*(Nseq1*Nseq) by COMSEQ_1:6;
+hence seq is subsequence of seq2 by Def9;
 end;
 
 theorem
    seq is bounded implies
- ex seq1 st seq1 is_subsequence_of seq & seq1 is convergent
+ ex seq1 st seq1 is subsequence of seq & seq1 is convergent
 proof
  assume seq is bounded;
  then consider r being Real such that
@@ -1912,38 +1910,38 @@ A1: 0 < r & for n holds |.seq.n.| <r by COMSEQ_2:8;
 end;
 then Re seq is bounded by A1,SEQ_2:15;
 then consider rseq1 such that
-A4: rseq1 is_subsequence_of Re seq
+A4: rseq1 is subsequence of Re seq
   & rseq1 is convergent by SEQ_4:57;
      consider Nseq such that
 A5:         rseq1=Re seq*Nseq by A4,SEQM_3:def 10;
 A6:
 now let n;
-           |. (seq (#) Nseq).n .|=|. seq.(Nseq.n) .| by Def5;
-       hence |. (seq (#) Nseq).n .| < r by A1;
+           |. (seq * Nseq).n .|=|. seq.(Nseq.n) .| by FUNCT_2:21;
+       hence |. (seq * Nseq).n .| < r by A1;
 end;
 
    now let n;
-  A7: |.(seq(#) Nseq).n.| <r by A6;
-  A8:abs(Im (seq(#)Nseq).n)=abs(Im((seq(#) Nseq).n)) by Def4;
-        abs(Im((seq(#) Nseq).n)) <= |.(seq(#) Nseq).n.| by Th13;
-  hence abs(Im (seq(#)Nseq).n) < r by A7,A8,AXIOMS:22;
+  A7: |.(seq* Nseq).n.| <r by A6;
+  A8:abs(Im (seq*Nseq).n)=abs(Im((seq* Nseq).n)) by Def4;
+        abs(Im((seq* Nseq).n)) <= |.(seq* Nseq).n.| by Th13;
+  hence abs(Im (seq*Nseq).n) < r by A7,A8,AXIOMS:22;
 end;
-then Im (seq(#)Nseq) is bounded by A1,SEQ_2:15;
+then Im (seq*Nseq) is bounded by A1,SEQ_2:15;
 then consider rseq2 such that
-A9: rseq2 is_subsequence_of Im (seq(#)Nseq)
+A9: rseq2 is subsequence of Im (seq*Nseq)
   & rseq2 is convergent by SEQ_4:57;
      consider Nseq1 such that
-A10:         rseq2=Im (seq(#)Nseq)*Nseq1 by A9,SEQM_3:def 10;
-A11: seq(#)Nseq is_subsequence_of seq by Def9;
-    (seq(#)Nseq)(#)Nseq1 is_subsequence_of seq(#)Nseq by Def9;
-then A12: (seq(#)Nseq)(#)Nseq1 is_subsequence_of seq by A11,Th50;
-A13:  Im ((seq(#)Nseq)(#)Nseq1) is convergent by A9,A10,Th22;
-   Re ((seq(#)Nseq)(#)Nseq1)=(Re (seq(#)Nseq))*Nseq1 by Th22
+A10:         rseq2=Im (seq*Nseq)*Nseq1 by A9,SEQM_3:def 10;
+A11: seq*Nseq is subsequence of seq by Def9;
+    (seq*Nseq)*Nseq1 is subsequence of seq*Nseq by Def9;
+then A12: (seq*Nseq)*Nseq1 is subsequence of seq by A11,Th50;
+A13:  Im ((seq*Nseq)*Nseq1) is convergent by A9,A10,Th22;
+   Re ((seq*Nseq)*Nseq1)=(Re (seq*Nseq))*Nseq1 by Th22
                     .=rseq1*Nseq1 by A5,Th22;
-then Re ((seq(#)Nseq)(#)
-Nseq1) is_subsequence_of rseq1 by SEQM_3:def 10;
-then Re ((seq(#)Nseq)(#)Nseq1) is convergent by A4,SEQ_4:29;
-then (seq(#)Nseq)(#)Nseq1 is convergent by A13,Th42;
+then Re ((seq*Nseq)*
+Nseq1) is subsequence of rseq1 by SEQM_3:def 10;
+then Re ((seq*Nseq)*Nseq1) is convergent by A4,SEQ_4:29;
+then (seq*Nseq)*Nseq1 is convergent by A13,Th42;
 hence thesis by A12;
 end;
 
@@ -1952,21 +1950,19 @@ definition let seq be Complex_Sequence;
   Partial_Sums seq is convergent;
 end;
 
-deffunc z(set) = 0c;
+ reconsider D = NAT --> 0c as Complex_Sequence by FUNCOP_1:57;
+G2:   for n holds C.n = 0c by FUNCOP_1:13;
 
 registration
  cluster summable Complex_Sequence;
 existence
   proof
-    consider C being Complex_Sequence such that
-A1:   for n holds C.n = z(n) from COMSEQ_1:sch 1;
-    take C;
-    take 0c;
+    take D, 0c;
     let p be Real such that
 A2:   0<p;
     take 0;
     let m such that 0<=m;
-    thus |.Partial_Sums C.m-0c.|<p by A1,A2,Th24,COMPLEX1:130;
+    thus |.Partial_Sums D.m-0c.|<p by G2,A2,Th24,COMPLEX1:130;
   end;
 end;
 
@@ -1999,10 +1995,8 @@ registration
  cluster absolutely_summable Complex_Sequence;
 existence
   proof
-    consider C being Complex_Sequence such that
-A1:   for n holds C.n = z(n) from COMSEQ_1:sch 1;
-    take C;
-    thus thesis by A1,Th52;
+    take D;
+    thus thesis by G2,Th52;
   end;
 end;
 
@@ -2292,16 +2286,14 @@ theorem Th65:
 |.z.| < 1 implies z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r-z)
 proof
 assume
-A1:  |.z.|<1;then
-    1r-z <>0c by COMPLEX1:134,XCMPLX_1:15;
-then A2: 1r <> z by XCMPLX_1:14;
+A1:  |.z.|<1;
+then A2: 1r <> z by COMPLEX1:134;
 deffunc f(Nat) = z #N ($1+1);
  consider seq1 such that
    A3:for n holds seq1.n=f(n) from COMSEQ_1:sch 1;
    A4:seq1 is convergent & lim(seq1)=0c by A1,A3,Th44;
-  deffunc j(set) = 1r;
-  consider seq2 such that
-   A5:for n holds seq2.n=j(n) from COMSEQ_1:sch 1;
+  reconsider seq2 = NAT --> 1r as Complex_Sequence by FUNCOP_1:57;
+   A5:for n holds seq2.n=1r by FUNCOP_1:13;
    A6:
     seq2 is convergent by A5,COMSEQ_2:9;
 then A7: seq2-seq1 is convergent by A4,COMSEQ_2:25;

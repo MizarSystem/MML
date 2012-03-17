@@ -31,9 +31,9 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="T_0TOPSP"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="COMPTS_1"/>

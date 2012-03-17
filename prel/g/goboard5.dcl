@@ -37,7 +37,7 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="U" nr="1">
 <Func kind="K" nr="222">

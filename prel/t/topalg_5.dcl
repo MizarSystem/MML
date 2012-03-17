@@ -26,7 +26,6 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RELAT_2"/>
@@ -37,6 +36,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="BORSUK_2"/>
@@ -61,17 +61,17 @@
 <Func kind="K" nr="352"/>
 <Cluster>
 <Adjective nr="34" value="false"/>
-<Adjective nr="69"/>
+<Adjective nr="68"/>
+<Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="74" value="false"/>
+<Adjective nr="73" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="74" value="false"/>
+<Adjective nr="73" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -121,10 +121,10 @@
 <Adjective nr="34" value="false"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="62"/>
+<Adjective nr="61"/>
+<Adjective nr="63"/>
 <Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="79"/>
+<Adjective nr="78"/>
 <Adjective nr="110"/>
 </Cluster>
 </FCluster>
@@ -152,7 +152,7 @@
 <Adjective nr="34" value="false"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
-<Adjective nr="79"/>
+<Adjective nr="78"/>
 <Adjective nr="107">
 <Func kind="K" nr="284"/>
 </Adjective>
@@ -410,11 +410,11 @@
 </Func>
 <Cluster>
 <Adjective nr="34" value="false"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="74" value="false"/>
+<Adjective nr="73" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -428,8 +428,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="17"/>
+<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 </Registrations>

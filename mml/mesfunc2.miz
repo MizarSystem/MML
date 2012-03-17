@@ -9,13 +9,15 @@ environ
  vocabularies PARTFUN1, SUPINF_1, MEASURE1, FUNCT_1, RAT_1, RELAT_1, COMPLEX1,
       SEQ_1, MEASURE6, BOOLE, ARYTM_1, MESFUNC1, TARSKI, ARYTM_3, FUNCT_2,
       RFUNCT_3, SQUARE_1, RLVECT_1, FUNCT_3, GROUP_1, PROB_2, FINSEQ_1,
-      MESFUNC2, ARYTM;
+      MESFUNC2, ARYTM, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, RELAT_1, FUNCT_1, NAT_1, WELLORD2, RAT_1, FINSEQ_1, SUPINF_1,
+      FUNCOP_1,
       SUPINF_2, FUNCT_3, PROB_2, MEASURE1, MEASURE2, MEASURE3, MEASURE6,
       FUNCT_2, PARTFUN1, EXTREAL1, MESFUNC1, EXTREAL2;
  constructors REAL_1, NAT_1, MEASURE3, WELLORD2, EXTREAL1, MESFUNC1, PARTFUN1,
-      MEASURE6, SUPINF_2, EXTREAL2, PROB_2, FUNCT_3, MEMBERED, RAT_1;
+      MEASURE6, SUPINF_2, EXTREAL2, PROB_2, FUNCT_3, MEMBERED, RAT_1,
+      FUNCOP_1;
  registrations SUPINF_1, XREAL_0, RELSET_1, RAT_1, FINSEQ_1, MEMBERED,
       ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
@@ -23,7 +25,8 @@ environ
  theorems MEASURE1, TARSKI, SUBSET_1, SUPINF_1, PARTFUN1, FUNCT_1, FUNCT_2,
       MEASURE6, NAT_1, REAL_1, REAL_2, SUPINF_2, AXIOMS, WELLORD2, RAT_1,
       RELSET_1, EXTREAL1, EXTREAL2, MESFUNC1, ZFMISC_1, FINSEQ_1, FINSEQ_3,
-      FINSEQ_5, XREAL_0, PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1, RELAT_1;
+      FINSEQ_5, XREAL_0, PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1, RELAT_1,
+      FUNCOP_1;
  schemes FUNCT_2, SEQ_1, FINSEQ_2, NAT_1;
 
 begin  :: Finite Valued Function ::
@@ -40,12 +43,12 @@ reserve n,m for Nat;
 reserve A,B for Element of S;
 
 definition let X; let f;
-pred f is_finite means :Def1:
-  for x st x in dom f holds |. f.x .| <' +infty;
+  pred f is_finite means :Def1:
+    for x st x in dom f holds |. f.x .| <' +infty;
 end;
 
 theorem
-   f = 1(#)f
+  f = 1(#)f
 proof
 A1:dom f = dom (1(#)f) by MESFUNC1:def 6;
       for x st x in dom (1(#)f) holds f.x = (1(#)f).x
@@ -59,10 +62,9 @@ A1:dom f = dom (1(#)f) by MESFUNC1:def 6;
 end;
 
 theorem Th2:
-for f,g,A st f is_finite or g is_finite
-holds dom (f+g) = dom f /\ dom g & dom (f-g) = dom f /\ dom g
+  f is_finite or g is_finite implies
+    dom (f+g) = dom f /\ dom g & dom (f-g) = dom f /\ dom g
 proof
-   let f,g,A;
    assume A1:f is_finite or g is_finite;
       now per cases by A1;
     suppose A2:f is_finite;
@@ -1329,10 +1331,13 @@ registration
 existence
 proof
    reconsider A = {} as Element of S by MEASURE1:45;
-   deffunc F(Nat) = A;
-   consider p being FinSequence of S such that
-A1:len p = 1 and
-A2:for n being Nat st n in Seg 1 holds p.n = F(n) from FINSEQ_2:sch 1;
+   reconsider p = Seg 1 --> A as Function of Seg 1, S by FUNCOP_1:57;
+X: dom p = Seg 1 by FUNCOP_1:19;
+   then reconsider p as FinSequence by FINSEQ_1:def 2;
+A1:len p = 1 by X,FINSEQ_1:def 3;
+A2:for n being Nat st n in Seg 1 holds p.n = A by FUNCOP_1:13;
+   rng p c= S by RELSET_1:12;
+   then reconsider p as FinSequence of S by FINSEQ_1:def 4;
 A3:for n,m being set st n <> m holds p.n misses p.m
    proof
     let n,m be set;

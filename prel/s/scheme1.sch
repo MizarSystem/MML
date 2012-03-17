@@ -50,10 +50,13 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="14">
+<Is>
 <Var nr="1"/>
+<Typ kind="M" nr="7">
+<Cluster/>
 <Func kind="F" nr="1"/>
-</Pred>
+</Typ>
+</Is>
 <For>
 <Typ kind="M" nr="4">
 <Cluster/>

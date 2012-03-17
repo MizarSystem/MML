@@ -9,21 +9,22 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, VECTSP_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, PROB_1, SEQ_2, SEQM_3,
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_1, LOPBAN_2,
-      LOPBAN_3, SUPINF_2, GROUP_1;
+      LOPBAN_3, SUPINF_2, GROUP_1, FUNCOP_1, FRECHET2;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
-      DOMAIN_1, BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
+      DOMAIN_1, BINOP_1, FUNCOP_1,
+      STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
       COMPLEX1, RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, RSSPACE3, SEQ_1, SEQ_2,
-      SEQM_3, SERIES_1, PREPOWER, POWER, LOPBAN_1, LOPBAN_2;
+      SEQM_3, SERIES_1, PREPOWER, POWER, BHSP_3, LOPBAN_1, LOPBAN_2;
  constructors REAL_1, NAT_1, FUNCT_7, DOMAIN_1, SEQ_2, SERIES_1, SEQ_4,
-      PREPOWER, RSSPACE3, LOPBAN_2, COMPLEX1, PARTFUN1;
+      PREPOWER, RSSPACE3, LOPBAN_2, COMPLEX1, PARTFUN1, FUNCOP_1, BHSP_3;
  registrations SUBSET_1, RELSET_1, STRUCT_0, ORDINAL2, VECTSP_1, NORMSP_1,
-      XREAL_0, MEMBERED, SEQ_1, SEQM_3, LOPBAN_2;
+      XREAL_0, MEMBERED, SEQ_1, SEQM_3, LOPBAN_2, FUNCOP_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SEQ_2, SERIES_1, NORMSP_1;
+ definitions SEQ_2, SERIES_1, NORMSP_1, BHSP_3;
  theorems AXIOMS, ABSVALUE, REAL_1, RLVECT_1, VECTSP_1, BINOP_1, FUNCSDOM,
       RELAT_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, FUNCT_1, NAT_1, INT_1, SQUARE_1,
       FUNCT_2, NORMSP_1, SEQ_4, RSSPACE3, LOPBAN_1, PREPOWER, LOPBAN_2,
-      GROUP_1;
+      GROUP_1, FUNCOP_1, BHSP_3;
  schemes SEQ_1, RECDEF_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Norm Space
@@ -118,11 +119,9 @@ let X be RealNormSpace;
 cluster summable sequence of X;
 existence
   proof
-  deffunc G(Nat) = 0.X;
-    consider C being sequence of X such that
-A1:   for n be Nat holds C.n = G(n) from FUNCT_2:sch 4;
-    take C;
-    take 0.X;
+    reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
+A1:   for n be Nat holds C.n = 0.X by FUNCOP_1:13;
+    take C, 0.X;
     let p be Real such that
 A2:   0<p;
     take 0;
@@ -373,10 +372,7 @@ end;
 end;
 
 definition
-  let X be RealNormSpace;
-  let seq,seq1 be sequence of X;
-  pred seq is_subsequence_of seq1 means :Def7:
-   ex Nseq be increasing Seq_of_Nat st seq=seq1*Nseq;
+ canceled;
 end;
 
 theorem Th7:
@@ -448,18 +444,18 @@ theorem Th11:
 for X be RealNormSpace
   for seq,seq1 be sequence of X
   holds
-    seq1 is_subsequence_of seq & seq is convergent implies
+    seq1 is subsequence of seq & seq is convergent implies
         seq1 is convergent
   proof
   let X be RealNormSpace;
   let seq,seq1 be sequence of X;
-   assume that A1:seq1 is_subsequence_of seq and
+   assume that A1:seq1 is subsequence of seq and
                A2:seq is convergent;
    consider g1 be Element of X such that
    A3:for p be Real st 0<p ex n be Nat st for m be Nat st n<=m holds
      ||.(seq.m)-g1.||< p by A2,NORMSP_1:def 9;
    consider Nseq be increasing Seq_of_Nat such that
-A4:seq1=seq*Nseq by A1,Def7;
+A4:seq1=seq*Nseq by A1,BHSP_3:def 4;
    take g=g1;
    let p be Real; assume 0<p;
    then consider n1 be Nat such that
@@ -475,16 +471,16 @@ A4:seq1=seq*Nseq by A1,Def7;
 theorem Th12:
 for X be RealNormSpace
   for seq,seq1 be sequence of X holds
-  seq1 is_subsequence_of seq & seq is convergent implies
+  seq1 is subsequence of seq & seq is convergent implies
         lim seq1=lim seq
   proof
   let X be RealNormSpace;
   let seq,seq1 be sequence of X;
-   assume that A1:seq1 is_subsequence_of seq and
+   assume that A1:seq1 is subsequence of seq and
                A2:seq is convergent;
    A3:seq1 is convergent by A1,A2,Th11;
    consider Nseq be increasing Seq_of_Nat such that
-A4:  seq1=seq*Nseq by A1,Def7;
+A4:  seq1=seq*Nseq by A1,BHSP_3:def 4;
        now let p be Real; assume 0<p;
      then consider n1 be Nat such that
       A5:for m be Nat st n1<=m
@@ -580,7 +576,7 @@ theorem Th13:
 for X be RealNormSpace
   for seq be sequence of X
    for k be Nat holds
-   seq ^\k is_subsequence_of seq
+   seq ^\k is subsequence of seq
   proof
    let X be RealNormSpace;
    let seq be sequence of X;
@@ -620,7 +616,7 @@ for X be RealNormSpace
    let seq,seq1 be sequence of X;
    let k be Nat;
    assume A1:seq is convergent;
-   A2:seq^\k is_subsequence_of seq by Th13;
+   A2:seq^\k is subsequence of seq by Th13;
    hence seq^\k is convergent by A1,Th11;
    thus lim (seq ^\k)=lim seq by A1,A2,Th12;
   end;
@@ -748,9 +744,8 @@ let X be RealNormSpace;
  cluster norm_summable sequence of X;
  existence
   proof
-  deffunc z(Nat)=0.X;
-    consider C being sequence of X such that
-A1:   for n be Nat holds C.n = z(n) from FUNCT_2:sch 4;
+    reconsider C = NAT --> 0.X as sequence of X by FUNCOP_1:57;
+A1:   for n be Nat holds C.n = 0.X by FUNCOP_1:13;
     take C;
     thus thesis by A1,Th18;
   end;
@@ -1041,11 +1036,9 @@ defpred X[Nat] means s^\$1 is summable;
   by Def2;
   then A3: Partial_Sums(s^\n)^\1 is convergent by Th14;
   A4: s^\(n+1)=(s^\n)^\1 by Th10;
-  deffunc U(Nat) = (s^\n).0;
-  consider s1 be sequence of X such that
-A5: for k be Nat holds s1.k = U(k) from FUNCT_2:sch 4;
-     s1 is constant by A5,Def5;
-  then A6: s1 is convergent by Th17;
+  reconsider s1 = NAT --> (s^\n).0 as sequence of X by FUNCOP_1:57;
+A5: for k be Nat holds s1.k = (s^\n).0 by FUNCOP_1:13;
+A6: s1 is convergent by Th17;
      Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th26;
   then Partial_Sums(s^\n^\1) is convergent by A3,A6,NORMSP_1:35;
   hence thesis by A4,Def2;

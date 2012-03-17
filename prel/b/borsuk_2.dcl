@@ -31,9 +31,9 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="T_0TOPSP"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="BORSUK_1"/>
 <ArticleID name="TOPMETR"/>
 <ArticleID name="SEQM_3"/>
@@ -161,7 +161,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="36">
+<Typ kind="M" nr="37">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -219,7 +219,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="36">
+<Typ kind="M" nr="37">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -256,7 +256,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="378">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -304,7 +304,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="36">
+<Typ kind="M" nr="37">
 <Cluster>
 <Adjective nr="78"/>
 </Cluster>
@@ -313,7 +313,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="404">
+<Func kind="K" nr="403">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -358,7 +358,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Typ>
-<Typ kind="M" nr="36">
+<Typ kind="M" nr="37">
 <Cluster>
 <Adjective nr="78"/>
 </Cluster>
@@ -367,7 +367,7 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="405">
+<Func kind="K" nr="404">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -546,7 +546,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="36">
+<Typ kind="M" nr="37">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

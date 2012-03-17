@@ -10,22 +10,25 @@ environ
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, GRCAT_1, UNIALG_1, LATTICES,
       FUNCOP_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3, BHSP_3, RSSPACE,
       RSSPACE3, PARTFUN1, LOPBAN_1, XCMPLX_0, COMPLEX1, CLVECT_1, CFUNCT_1,
-      CLOPBAN1, CSSPACE3;
+      CLOPBAN1, CSSPACE3, MONOID_0, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0, XCMPLX_0,
+      FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0, MONOID_0,
+      XCMPLX_0,
       XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, PSCOMP_1, ALG_1, COMPLEX1,
       RLVECT_1, FRAENKEL, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM,
       CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1;
  constructors FUNCT_3, ARYTM_0, REAL_1, NAT_1, DOMAIN_1, PSCOMP_1, FUNCSDOM,
-      COMPLEX1, FUNCT_2, PREPOWER, PARTFUN1, LOPBAN_1, CSSPACE3, BINOP_2;
+      COMPLEX1, FUNCT_2, PREPOWER, PARTFUN1, LOPBAN_1, CSSPACE3, BINOP_2,
+      MONOID_0;
  registrations SUBSET_1, RELSET_1, STRUCT_0, FUNCOP_1, RLVECT_1, XREAL_0,
-      MEMBERED, SEQ_1, CLVECT_1, CSSPACE3, COMPLEX1, ORDINAL2, XCMPLX_0;
+      MEMBERED, SEQ_1, CLVECT_1, CSSPACE3, COMPLEX1, ORDINAL2, XCMPLX_0,
+      SEQM_3, MONOID_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SEQ_4, RLVECT_1;
+ definitions SEQ_4, RLVECT_1, FRAENKEL;
  theorems XBOOLE_0, REAL_2, AXIOMS, TARSKI, ABSVALUE, REAL_1, RLVECT_1,
       BINOP_1, FUNCOP_1, FUNCSDOM, XREAL_0, XCMPLX_0, SEQ_1, SEQ_2, SEQM_3,
       FUNCT_1, NAT_1, FUNCT_2, SEQ_4, FUNCT_3, CLVECT_1, LOPBAN_1, CSSPACE,
-      COMPLEX1, CSSPACE3;
+      COMPLEX1, CSSPACE3, MONOID_0;
  schemes SEQ_1, FUNCT_2, XBOOLE_0;
 
 begin :: Complex Vector Space of Operators
@@ -392,17 +395,15 @@ end;
 registration
   let X be non empty set;
   let Y be ComplexLinearSpace;
-  cluster -> Function-like Relation-like VECTOR of ComplexVectSpace(X,Y);
+  cluster ComplexVectSpace(X,Y) -> constituted-Functions;
 coherence
-proof
-   let v be VECTOR of ComplexVectSpace(X,Y);
+ proof
     ComplexVectSpace(X,Y) =
    CLSStruct(#Funcs(X,the carrier of Y),
      (FuncZero(X,Y)),FuncAdd(X,Y),FuncExtMult(X,Y)#) by Def2;
-   then ex f being Function st v = f & dom f = X & rng f c= the carrier of Y
-     by FUNCT_2:def 2;
-   hence thesis;
-end;
+  hence thesis by MONOID_0:89;
+ end;
+
 end;
 
 definition
@@ -610,7 +611,7 @@ end;
 
 registration
   let X, Y be ComplexLinearSpace;
-  cluster LinearOperators(X,Y)  -> non empty;
+  cluster LinearOperators(X,Y)  -> non empty functional;
 coherence
 proof
    set f = (the carrier of X) --> 0.Y;
@@ -630,7 +631,10 @@ A1:f is additive
                  .= c*0.Y by CLVECT_1:2
                  .= c*f.x by FUNCOP_1:13;
    end;
-   hence thesis by A1,Def5;
+   hence LinearOperators(X,Y) is non empty by A1,Def5;
+   let x be set;
+   assume x in LinearOperators(X,Y);
+   hence x is Function by Def5;
 end;
 end;
 
@@ -795,18 +799,17 @@ end;
 
 registration
  let X,Y be ComplexLinearSpace;
- cluster -> Function-like Relation-like Element of
-            C_VectorSpace_of_LinearOperators(X,Y);
+ cluster C_VectorSpace_of_LinearOperators(X,Y) -> constituted-Functions;
  coherence
-proof
+  proof
     C_VectorSpace_of_LinearOperators(X,Y) =
   CLSStruct (# LinearOperators(X,Y),
              Zero_(LinearOperators(X,Y),ComplexVectSpace(the carrier of X,Y)),
            Add_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)),
            Mult_(LinearOperators(X,Y), ComplexVectSpace(the carrier of X,Y)) #)
        by Def6;
-  hence thesis by Def5;
-end;
+  hence thesis by MONOID_0:89;
+  end;
 end;
 
 definition
@@ -2238,12 +2241,10 @@ proof
    let seq be Real_Sequence such that
 A1:seq is convergent and
 A2:ex k be Nat st (for i be Nat st k <= i holds seq.i <=e );
-   deffunc F(set) = e;
-   consider cseq be Real_Sequence such that
-A3:for n be Nat holds cseq.n=F(n) from SEQ_1:sch 1;
-   reconsider e1=e as real number;
-A4:cseq is constant by A3,SEQM_3:def 6;
-then A5:cseq is convergent by SEQ_4:39;
+   reconsider cseq = NAT --> e as Real_Sequence by FUNCOP_1:57;
+A3:for n be Nat holds cseq.n=e by FUNCOP_1:13;
+A4:cseq is constant;
+A5:cseq is convergent by SEQ_4:39;
    consider k be Nat such that
 A6:for i be Nat st k <= i holds seq.i <=e by A2;
 A7:(seq ^\k) is convergent by A1,SEQ_4:33;
@@ -2254,7 +2255,7 @@ A10: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
      then seq.(k+i) <=e by A6;
      hence (seq ^\k) .i <= cseq.i by A3,A10;
   end;
-    lim cseq = cseq.0 by A4,SEQ_4:41 .= e by A3;
+    lim cseq = cseq.0 by SEQ_4:41 .= e by A3;
   hence thesis by A5,A7,A8,A9,SEQ_2:32;
 end;
 

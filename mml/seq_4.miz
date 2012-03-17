@@ -7,19 +7,20 @@
 environ
 
  vocabularies ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
-      LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED;
+      LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED, FUNCOP_1, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, SEQM_3, MEMBERED,
+      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, FUNCOP_1,
+      SEQM_3, MEMBERED,
       COMPLEX1;
  constructors REAL_1, SEQ_2, NAT_1, SEQM_3, ABSVALUE, PARTFUN1, XCMPLX_0,
-      XREAL_0, MEMBERED, XBOOLE_0, COMPLEX1;
+      XREAL_0, MEMBERED, XBOOLE_0, COMPLEX1, FUNCOP_1;
  registrations XREAL_0, RELSET_1, SEQ_1, SEQM_3, ARYTM_3, SUBSET_1, MEMBERED,
-      ORDINAL2;
+      ORDINAL2, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2;
  theorems REAL_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, AXIOMS, FUNCT_1, FUNCT_2,
       ABSVALUE, TARSKI, SQUARE_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_1,
-      SUBSET_1, XCMPLX_0, XCMPLX_1, MEMBERED, XREAL_1;
+      SUBSET_1, XCMPLX_0, XCMPLX_1, MEMBERED, XREAL_1, FUNCOP_1;
  schemes NAT_1, RECDEF_1, SEQ_1, REAL_1, SETWISEO;
 
 begin
@@ -526,10 +527,10 @@ then A6:     -((abs seq).n)<=seq.n by SEQ_1:16;
   end;
 
 theorem
- Th29:seq1 is_subsequence_of seq & seq is convergent implies
+ Th29:seq1 is subsequence of seq & seq is convergent implies
         seq1 is convergent
   proof
-   assume that A1:seq1 is_subsequence_of seq and
+   assume that A1:seq1 is subsequence of seq and
                A2:seq is convergent;
    consider g1 such that
    A3:for p st 0<p ex n st for m st n<=m holds
@@ -548,10 +549,10 @@ theorem
   end;
 
 theorem
- Th30:seq1 is_subsequence_of seq & seq is convergent implies
+ Th30:seq1 is subsequence of seq & seq is convergent implies
         lim seq1=lim seq
   proof
-   assume that A1:seq1 is_subsequence_of seq and
+   assume that A1:seq1 is subsequence of seq and
                A2:seq is convergent;
    A3:seq1 is convergent by A1,A2,Th29;
    consider Nseq such that A4:seq1=seq*Nseq by A1,SEQM_3:def 10;
@@ -633,7 +634,7 @@ theorem Th33:
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
   proof
    assume A1:seq is convergent;
-   A2:seq^\k is_subsequence_of seq by SEQM_3:47;
+   A2:seq^\k is subsequence of seq by SEQM_3:47;
    hence seq^\k is convergent by A1,Th29;
    thus lim (seq ^\k)=lim seq by A1,A2,Th30;
   end;
@@ -728,7 +729,7 @@ ABSVALUE:7;
 
 theorem
     seq is convergent & lim seq<>0 implies
-       ex seq1 st seq1 is_subsequence_of seq & seq1 is_not_0
+       ex seq1 st seq1 is subsequence of seq & seq1 is_not_0
   proof
    assume that A1:seq is convergent and
                A2:lim seq <>0;
@@ -750,6 +751,11 @@ theorem Th39:
     .=0 by ABSVALUE:7;
    hence abs((seq.m)-g)<p by A2;
   end;
+
+registration
+ cluster constant -> convergent Real_Sequence;
+ coherence by Th39;
+end;
 
 theorem
  Th40:(seq is constant & r in rng seq or
@@ -794,12 +800,12 @@ theorem
 
 theorem
     seq is convergent & lim seq<>0 implies
-       for seq1 st seq1 is_subsequence_of seq & seq1 is_not_0 holds
+       for seq1 st seq1 is subsequence of seq & seq1 is_not_0 holds
         lim (seq1")=(lim seq)"
   proof
    assume that A1:seq is convergent and
                A2:lim seq<>0;
-   let seq1 such that A3:seq1 is_subsequence_of seq and
+   let seq1 such that A3:seq1 is subsequence of seq and
                       A4:seq1 is_not_0;
    A5:seq1 is convergent by A1,A3,Th29;
       lim seq1=lim seq by A1,A3,Th30;
@@ -1079,11 +1085,11 @@ theorem
    A3:seq is convergent by A1,A2,Th51;
    let m;
    deffunc U(Nat) = seq.m;
-   consider seq1 such that A4:for n holds seq1.n=U(n) from SEQ_1:sch 1;
-   A5:seq1 is constant by A4,SEQM_3:def 6;
-   then A6:seq1 is convergent by Th39;
+   reconsider seq1 = NAT --> seq.m as Real_Sequence by FUNCOP_1:57;
+   A4:for n holds seq1.n=seq.m by FUNCOP_1:13;
+   A6:seq1 is convergent by Th39;
       seq1.0=seq.m by A4;
-   then A7:lim seq1=seq.m by A5,Th40;
+   then A7:lim seq1=seq.m by Th40;
    deffunc U(Nat) = seq.($1+m);
    consider seq2 such that
       A8:for n holds seq2.n=U(n) from SEQ_1:sch 1;
@@ -1146,7 +1152,7 @@ A11: seq2 is convergent by A3,A9,Th33;
           thus seq.n<=seq.k by A6;
         end;
        set seq1=seq ^\(1+k1);
-          seq1 is_subsequence_of seq by SEQM_3:47;
+          seq1 is subsequence of seq by SEQM_3:47;
        then consider Nseq such that
    A7:  seq1=seq*Nseq by SEQM_3:def 10;
    A8: now let k;
@@ -1289,12 +1295,12 @@ A42:       Nseq.n in XN by A38;
 
 theorem :: BOLZANO-WEIERSTRASS THEOREM
  Th57:seq is bounded implies
-      ex seq1 st seq1 is_subsequence_of seq & seq1 is convergent
+      ex seq1 st seq1 is subsequence of seq & seq1 is convergent
   proof
    assume A1:seq is bounded;
    consider Nseq such that A2: seq*Nseq is monotone by Th56;
    take seq1=seq*Nseq;
-   thus seq1 is_subsequence_of seq by SEQM_3:def 10;
+   thus seq1 is subsequence of seq by SEQM_3:def 10;
    then seq1 is bounded by A1,SEQM_3:58;
    hence seq1 is convergent by A2,Th53;
   end;
@@ -1354,7 +1360,7 @@ thus seq is convergent implies
       end;
      then seq is bounded by SEQ_2:15;
      then consider seq1 such that
-  A13: seq1 is_subsequence_of seq and
+  A13: seq1 is subsequence of seq and
   A14: seq1 is convergent by Th57;
      consider g1 such that
   A15: for s st 0<s ex n st for m st n<=m holds abs(seq1.m -g1)<s

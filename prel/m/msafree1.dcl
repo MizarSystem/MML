@@ -44,6 +44,7 @@
 <ArticleID name="TREES_4"/>
 <ArticleID name="DTCONSTR"/>
 <ArticleID name="MSAFREE"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="MSAFREE1"/>
 </Signature>
 <RCluster>
@@ -78,7 +79,7 @@
 <Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="110">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -129,7 +130,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="382">
+<Func kind="K" nr="383">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -139,7 +140,7 @@
 <Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="110">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -153,7 +154,7 @@
 </Typ>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="110">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -259,6 +260,7 @@
 </Func>
 <Cluster>
 <Adjective nr="6" value="false"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -353,7 +355,7 @@
 <Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="110">
+<Adjective nr="111">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

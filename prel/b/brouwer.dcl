@@ -27,9 +27,9 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="INT_1"/>

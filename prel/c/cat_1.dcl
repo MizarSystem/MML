@@ -10,7 +10,6 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="CAT_1"/>
 </Signature>
 <RCluster>
@@ -19,16 +18,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="11"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="12"/>
+<Adjective nr="10"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -38,7 +28,16 @@
 </Typ>
 <Cluster>
 <Adjective nr="11"/>
-<Adjective nr="12"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </RCluster>
 </Registrations>
