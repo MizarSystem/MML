@@ -22,7 +22,7 @@ environ
  theorems TARSKI, AXIOMS, NAT_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_6,
       MCART_1, FINSOP_1, BINOP_1, LANG1, FINSEQ_1, FINSEQ_2, FINSEQ_3, CARD_5,
       TREES_1, TREES_2, TREES_3, TREES_4, STRUCT_0, CARD_3, RELSET_1, XBOOLE_0,
-      XBOOLE_1;
+      XBOOLE_1, FIN_TOPO;
  schemes NAT_1, RECDEF_1, CQC_SIM1, FINSEQ_1, BINOP_1, RELSET_1, FRAENKEL,
       FUNCT_2, WELLORD2;
 
@@ -406,8 +406,7 @@ A19:  n in rng pn & for y being Nat st y in rng pn holds P[n,y]
                                 from CQC_SIM1:sch 4 ( A16, A17, A18 );
    take n;
    thus rng p c= f.n proof
-    let t be set; assume
-        t in rng p;
+    let t be set; assume t in rng p;
      then consider k being set such that
 A20:  k in dom p & t = p.k by FUNCT_1:def 5;
      reconsider k as Nat by A20,FINSEQ_3:25;
@@ -421,9 +420,18 @@ A22:   n = pnk + s by NAT_1:28;
            where o1 is Symbol of G(), p1 is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p1 = q & o1 ==> pr1 roots q };
-A23: for n being Nat holds f.(n+1) = f.n \/ H(n, f.n) by A3
-;
-    for k, s being Nat holds f.k c= f.(k+s) from NAT_1:sch 9 (A23);
+A23: for n being Nat holds f.n c= f.(n+1)
+    proof
+      let n be Nat;
+      f.(n+1) = f.n \/ H(n, f.n) by A3; 
+      hence thesis by XBOOLE_1:7;
+    end;
+    for k, s being Nat holds f.k c= f.(k+s) 
+    proof 
+      let k, s be Nat;
+      k <= k+s by NAT_1:29;
+      hence thesis by A23,FIN_TOPO:5; 
+    end;
 then A24:  f.pnk c= f.n by A22;
        t in f.(pn.k) by A12,A14,A20;
     hence thesis by A24;
@@ -791,7 +799,7 @@ for dt being Element of FinTrees SxD st dt in Union f
       hence height dom dt <= 0 by TREES_1:79,TREES_4:3;
      end;
      assume height dom dt <= 0;
-       then height dom dt = 0 by NAT_1:18;
+       then height dom dt = 0;
   then A6:  dom dt = elementary_tree 0 by TREES_1:80;
   defpred P[Nat] means not dt in f.$1;
      assume
@@ -880,9 +888,18 @@ A14: now let n be Nat; assume
            where o is Symbol of G(), p is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
-A28: for n being Nat holds f.(n+1) = f.n \/ F(n, f.n) by A3
-;
-   A29: for k, s being Nat holds f.k c= f.(k+s) from NAT_1:sch 9 (A28);
+A28: for n being Nat holds f.n c= f.(n+1)
+   proof
+     let n be Nat;
+     f.(n+1) = f.n \/ F(n, f.n) by A3;
+     hence thesis by XBOOLE_1:7;
+   end;   
+A29: for k, s being Nat holds f.k c= f.(k+s) 
+     proof
+       let k, s be Nat;
+       k <= k+s by NAT_1:29;
+       hence thesis by FIN_TOPO:5,A28;
+     end;
      per cases by NAT_1:22;
      suppose mk = 0;
       then f.mk c= f.(0+(n+1)) & 0+(n+1) = n+1 by A29;
@@ -1104,10 +1121,18 @@ A32:  n2 in NAT & dt2 in f.n2 by A1,A30,CARD_5:10;
            where o is Symbol of G(), p is Element of (f.$1)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q };
-A33: for n being Nat holds f.(n+1) = f.n \/ F(n, f.n) by A3
-;
-   A34: for k, s being Nat holds f.k c= f.(k+s) from NAT_1:sch 9 (A33);
-       n1 <= n2 or n1 >= n2;
+A33: for n being Nat holds f.n c= f.(n+1)
+   proof let n be Nat;
+     f.(n+1) = f.n \/ F(n, f.n) by A3;
+     hence thesis by XBOOLE_1:7;
+   end;   
+A34: for k, s being Nat holds f.k c= f.(k+s) 
+   proof 
+     let k, s be Nat;
+     k <= k+s by NAT_1:29;
+     hence thesis by FIN_TOPO:5,A33;
+   end;
+    n1 <= n2 or n1 >= n2;
     then (ex s being Nat st n2 = n1 + s) or (ex s being Nat st n1 = n2 + s)
                                   by NAT_1:28;
     then f.n1 c= f.n2 or f.n2 c= f.n1 by A34; hence dt1 = dt2 by A29,A30,A31
@@ -1953,7 +1978,7 @@ A1: x <> {};
 :Def10:  ex n being Nat st it = n+1 & x.1 = n;
  existence proof
      len x <> 0 by A1,FINSEQ_1:25;
-  then len x > 0 by NAT_1:19;
+  then len x > 0;
   then len x >= 0+1 by NAT_1:38;
   then 1 in dom x by FINSEQ_3:27;
   then x.1 in rng x & rng x c= NAT by FINSEQ_1:def 4,FUNCT_1:def 5;

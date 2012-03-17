@@ -83,7 +83,7 @@ theorem
      then x in {j where j is Nat: j<n+1} by AXIOMS:30;
      then consider j being Nat such that
 A1: j=x & j<n+1;
-        j=0 or 0<j & j<=n by A1,NAT_1:19,38;
+        j=0 or 0<j & j<=n by A1,NAT_1:38;
      then j=0 or 1<j+1 & j<=n by REAL_1:69;
      then j=0 or 1<=j & j<=n by NAT_1:38;
      then x in {0} or x in Seg n by A1,FINSEQ_1:3,TARSKI:def 1;
@@ -162,10 +162,10 @@ definition let p;
 A1:   dom p = n by Th7;
        dom p, p are_equipotent
      proof
-        deffunc _F(set) = [$1,p.$1];
+        deffunc F(set) = [$1,p.$1];
       consider g being Function such that
 A2:    dom g = dom p and
-A3:    for x st x in dom p holds g.x = _F(x) from FUNCT_1:sch 3;
+A3:    for x st x in dom p holds g.x = F(x) from FUNCT_1:sch 3;
       take g;
       thus g is one-to-one
        proof let x,y;
@@ -218,9 +218,9 @@ theorem
 proof
   given k such that
 A1: dom f c= k;
-  deffunc _F(set) = f.$1;
+  deffunc F(set) = f.$1;
   consider g such that
-A2: dom g = k & for x st x in k holds g.x = _F(x) from FUNCT_1:sch 3;
+A2: dom g = k & for x st x in k holds g.x = F(x) from FUNCT_1:sch 3;
   reconsider g as XFinSequence by A2,Th7;
   take g;
   let x; assume
@@ -240,21 +240,21 @@ scheme XSeqEx{A()->Nat,P[set,set]}:
    and
  A2: for k st k in A() ex x st P[k,x]
 proof
-    defpred _P[set, set] means P[$1,$2];
-   A3: for x,y1,y2 st x in A() & _P[x,y1] & _P[x,y2] holds y1=y2
-    proof let x,y1,y2;assume A4:x in A() & _P[x,y1] & _P[x,y2];
+    defpred P[set, set] means P[$1,$2];
+   A3: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1=y2
+    proof let x,y1,y2;assume A4:x in A() & P[x,y1] & P[x,y2];
          A()={i where i is Nat: i<A()} by AXIOMS:30;
       then consider i being Nat such that A5:i=x & i<A() by A4;
      thus y1=y2 by A1,A4,A5;
     end;
-   A6: for x st x in A() ex y st _P[x,y]
+   A6: for x st x in A() ex y st P[x,y]
     proof let x;assume A7:x in A();
          A()={i where i is Nat: i<A()} by AXIOMS:30;
       then consider i being Nat such that A8:i=x & i<A() by A7;
      thus thesis by A2,A7,A8;
     end;
     consider f being Function such that A9: dom f = A() &
-        (for x st x in A() holds _P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
+        (for x st x in A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
     reconsider p=f as XFinSequence by A9,Th7;
     take p;
     thus thesis by A9;
@@ -1140,12 +1140,12 @@ scheme IndXSeq{P[XFinSequence]}:
  A1: P[{}] and
  A2: for p,x st P[p] holds P[p^<%x%>]
 proof let p;
-    defpred _P[Real] means for p st len p = $1 holds P[p];
+  defpred P1[Real] means for p st len p = $1 holds P[p];
     consider X being Subset of REAL such that
-      A3:  for x being Real holds x in X iff _P[x] from REAL_1:sch 1;
+      A3:  for x being Real holds x in X iff P1[x] from REAL_1:sch 1;
       for k holds k in X proof
-         defpred _R[Nat] means $1 in X;
-      A4: _R[0]
+         defpred R[Nat] means $1 in X;
+      A4: R[0]
           proof
                for q st len q = 0 holds P[q] by A1,Th18;
            hence 0 in X by A3;
@@ -1164,8 +1164,8 @@ proof let p;
             end;
            hence n+1 in X by A3;
           end;
-    then A8:   for n st _R[n] holds _R[n+1];
-         thus for k holds _R[k] from NAT_1:sch 1(A4,A8);
+    then A8:   for n st R[n] holds R[n+1];
+         thus for k holds R[k] from NAT_1:sch 1(A4,A8);
        end;
 
       then len p in X;
@@ -1176,21 +1176,21 @@ theorem
      for p,q,r,s being XFinSequence st p^q = r^s & len p <= len r
   ex t being XFinSequence st p^t = r
  proof
-    defpred _P[XFinSequence] means
+    defpred P[XFinSequence] means
     for p,q,s st p^q=$1^s & len p <= len $1 holds
              ex t being XFinSequence st p^t=$1;
-    A1: _P[{}]
+    A1: P[{}]
          proof
             let p,q,s; assume p^q={}^s & len p <= len {};
        then len p <= 0 by Th18;
-then A2:            len p = 0 by NAT_1:18;
+then A2:            len p = 0;
             take {};
             thus
                  p^{} = p by Th32
               .= {} by A2,Th18;
          end;
 
-     A3:  for r,x st _P[r] holds _P[r^<%x%>]
+     A3:  for r,x st P[r] holds P[r^<%x%>]
         proof let r,x;
            assume A4: for p,q,s st p^q=r^s & len p <= len r
                      ex t st p^t=r;
@@ -1224,7 +1224,7 @@ A8:                     for k st k in dom p holds p.k=(r^<%x%>).k
                 end;
               hence thesis by A6;
         end;
-      for r holds _P[r] from IndXSeq(A1,A3);
+      for r holds P[r] from IndXSeq(A1,A3);
    hence thesis;
  end;
 
@@ -1233,9 +1233,9 @@ A8:                     for k st k in dom p holds p.k=(r^<%x%>).k
 :Def8: x in it iff x is XFinSequence of D;
    existence
     proof
-     defpred _P[set] means  $1 is XFinSequence of D;
+     defpred P[set] means  $1 is XFinSequence of D;
      consider X such that
-A1:    x in X iff x in bool [:NAT,D:] & _P[x] from XBOOLE_0:sch 1;
+A1:    x in X iff x in bool [:NAT,D:] & P[x] from XBOOLE_0:sch 1;
      take X;
      let x;
      thus x in X implies x is XFinSequence of D by A1;
@@ -1275,15 +1275,15 @@ end;
 scheme SepXSeq{D()->non empty set, P[XFinSequence]}:
  ex X st (for x holds x in X iff ex p st p in D()^omega & P[p] & x=p)
 proof
-  defpred _P[set] means ex p st P[p] & $1=p;
-  consider Y such that A1: x in Y iff x in D()^omega & _P[x]
+  defpred P1[set] means ex p st P[p] & $1=p;
+  consider Y such that A1: x in Y iff x in D()^omega & P1[x]
          from XBOOLE_0:sch 1;
   take Y;
-     x in Y implies ex p st p in D()^omega & P[p] & x=p
+  x in Y implies ex p st p in D()^omega & P[p] & x=p
   proof
    assume x in Y;
-       then x in D()^omega & ex p st P[p] & x=p by A1;
-   hence ex p st p in D()^omega & P[p] & x=p;
+   then x in D()^omega & ex p st P[p] & x=p by A1;
+   hence thesis;
   end;
 hence thesis by A1;
 end;

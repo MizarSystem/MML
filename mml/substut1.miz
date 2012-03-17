@@ -56,11 +56,7 @@ end;
 
 registration
   cluster vSUB -> functional;
-  coherence
-  proof
-     vSUB c= PFuncs(bound_QC-variables,bound_QC-variables) by Def1;
-    hence thesis by FRAENKEL:17;
-  end;
+  coherence by Def1;
 end;
 
  reserve Sub for CQC_Substitution;
@@ -541,14 +537,14 @@ A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
       end;
 end;
 
- reserve fin_Sub for finite CQC_Substitution;
+ reserve finSub for finite CQC_Substitution;
 
-definition let fin_Sub;
-  func Sub_Var(fin_Sub) -> finite Subset of NAT equals
-    {i : x.i in rng fin_Sub};
+definition let finSub;
+  func Sub_Var(finSub) -> finite Subset of NAT equals
+    {i : x.i in rng finSub};
     coherence
     proof
-    set X = {i : x.i in rng fin_Sub};
+    set X = {i : x.i in rng finSub};
     defpred P[set,set] means ex i st i = $1 & $2 = x.i;
     A1: for a,b1,b2 st a in NAT & P[a,b1] & P[a,b2] holds b1 = b2;
     A2: for a st a in NAT ex b st P[a,b]
@@ -572,7 +568,7 @@ A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
          thus thesis by A5,A6,A7,QC_LANG3:35;
         end;
         then A8: f|X is one-to-one by FUNCT_1:84;
-        rng(f|X) c= rng fin_Sub
+        rng(f|X) c= rng finSub
           proof
             let b;
             assume b in rng(f|X);
@@ -581,7 +577,7 @@ A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
       A10:  b = f.a by A9,FUNCT_1:70;
       A11:  a in X & a in dom f by A9,RELAT_1:86;
             then consider i such that A12: i = a & b = x.i by A4,A10;
-            consider i such that A13: a = i & x.i in rng fin_Sub by A11;
+            consider i such that A13: a = i & x.i in rng finSub by A11;
             thus thesis by A12,A13;
           end;
         then rng(f|X) is finite by FINSET_1:13;
@@ -590,7 +586,7 @@ A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
         proof
           let a;
           assume a in X;
-          then consider i such that A15: a = i & x.i in rng fin_Sub;
+          then consider i such that A15: a = i & x.i in rng finSub;
           thus thesis by A15;
         end;
         then reconsider X as Subset of NAT;
@@ -600,44 +596,44 @@ A7:      i2 = a2 & f.a2 = x.i2 by A4,A5;
       end;
 end;
 
-definition let p, fin_Sub;
-  func NSub(p,fin_Sub) -> non empty Subset of NAT equals
-    NAT\(Dom_Bound_Vars(p) \/ Sub_Var(fin_Sub));
+definition let p, finSub;
+  func NSub(p,finSub) -> non empty Subset of NAT equals
+    NAT\(Dom_Bound_Vars(p) \/ Sub_Var(finSub));
   coherence
   proof
-    set X = Dom_Bound_Vars(p) \/ Sub_Var(fin_Sub);
+    set X = Dom_Bound_Vars(p) \/ Sub_Var(finSub);
     Card X in Card NAT by CARD_3:58;
     hence thesis by CARD_2:4,XBOOLE_1:36;
   end;
 end;
 
-definition let fin_Sub, p;
-  func upVar(fin_Sub,p) -> Nat equals
-    min NSub(p,fin_Sub);
+definition let finSub, p;
+  func upVar(finSub,p) -> Nat equals
+    min NSub(p,finSub);
   coherence;
 end;
 
-definition let x, p, fin_Sub;
-  assume A1: ex Sub st fin_Sub = RestrictSub(x,All(x,p),Sub);
-  func ExpandSub(x,p,fin_Sub) -> CQC_Substitution equals
-    fin_Sub \/ {[x,x.upVar(fin_Sub,p)]} if x in rng fin_Sub
-       otherwise fin_Sub \/ {[x,x]};
+definition let x, p, finSub;
+  assume A1: ex Sub st finSub = RestrictSub(x,All(x,p),Sub);
+  func ExpandSub(x,p,finSub) -> CQC_Substitution equals
+    finSub \/ {[x,x.upVar(finSub,p)]} if x in rng finSub
+       otherwise finSub \/ {[x,x]};
   coherence
   proof
- A2: now assume x in rng fin_Sub;
-        reconsider Z = {[x,x.upVar(fin_Sub,p)]} as Relation-like set;
- A3:    dom fin_Sub /\ dom Z = {}
+ A2: now assume x in rng finSub;
+        reconsider Z = {[x,x.upVar(finSub,p)]} as Relation-like set;
+ A3:    dom finSub /\ dom Z = {}
       proof
         now given a such that
-  A4:     a in dom fin_Sub /\ dom Z;
-  A5:     a in dom fin_Sub & a in dom Z by A4,XBOOLE_0:def 3;
+  A4:     a in dom finSub /\ dom Z;
+  A5:     a in dom finSub & a in dom Z by A4,XBOOLE_0:def 3;
   A6:     dom Z = {x} by RELAT_1:23;
-          consider Sub such that A7: fin_Sub = RestrictSub(x,All(x,p),Sub)
+          consider Sub such that A7: finSub = RestrictSub(x,All(x,p),Sub)
                                                                   by A1;
           set X = {y : y in still_not-bound_in All(x,p) &
                       y is Element of dom Sub & y <> x & y <> Sub.y};
-          fin_Sub = Sub|X by A7,Def6; then
-          dom fin_Sub c= X by RELAT_1:87; then
+          finSub = Sub|X by A7,Def6; then
+          dom finSub c= X by RELAT_1:87; then
           a in X by A5;
           then consider y such that
 A8:       a = y & y in still_not-bound_in All(x,p) &
@@ -647,36 +643,36 @@ A8:       a = y & y in still_not-bound_in All(x,p) &
         hence thesis by XBOOLE_0:def 1;
       end;
       now let a,b1,b2 such that A9: [a,b1] in Z & [a,b2] in Z;
-        [a,b1] = [x,x.upVar(fin_Sub,p)] & [a,b2] = [x,x.upVar(fin_Sub,p)]
+        [a,b1] = [x,x.upVar(finSub,p)] & [a,b2] = [x,x.upVar(finSub,p)]
                                                            by A9,TARSKI:def 1;
         hence b1 = b2 by ZFMISC_1:33;
       end;
       then reconsider Z as Function by FUNCT_1:def 1;
-      for a st a in dom (@fin_Sub) /\ dom Z holds (@fin_Sub).a = Z.a
+      for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a
         by A3,Def2;
-      then consider h being Function such that A10: (@fin_Sub) \/ Z = h
+      then consider h being Function such that A10: (@finSub) \/ Z = h
                                                                  by PARTFUN1:2;
       reconsider Z as Relation of bound_QC-variables,bound_QC-variables
                                                                  by RELSET_1:8;
-      @fin_Sub \/ Z = h by A10; then
+      @finSub \/ Z = h by A10; then
       h is CQC_Substitution by Def1,PARTFUN1:119;
-      hence fin_Sub \/ {[x,x.upVar(fin_Sub,p)]} is CQC_Substitution
+      hence finSub \/ {[x,x.upVar(finSub,p)]} is CQC_Substitution
         by A10,Def2;
       end;
-      now assume not x in rng fin_Sub;
+      now assume not x in rng finSub;
         reconsider Z = {[x,x]} as Relation-like set;
-A11:     dom fin_Sub /\ dom Z = {}
+A11:     dom finSub /\ dom Z = {}
       proof
         now given a such that
-  A12:     a in dom fin_Sub /\ dom Z;
-  A13:     a in dom fin_Sub & a in dom Z by A12,XBOOLE_0:def 3;
+  A12:     a in dom finSub /\ dom Z;
+  A13:     a in dom finSub & a in dom Z by A12,XBOOLE_0:def 3;
   A14:     dom Z = {x} by RELAT_1:23;
           consider Sub such that
-A15:       fin_Sub = RestrictSub(x,All(x,p),Sub) by A1;
+A15:       finSub = RestrictSub(x,All(x,p),Sub) by A1;
           set X = {y : y in still_not-bound_in All(x,p) &
                                 y is Element of dom Sub & y <> x & y <> Sub.y};
-          fin_Sub = Sub|X by A15,Def6; then
-          dom fin_Sub c= X by RELAT_1:87; then
+          finSub = Sub|X by A15,Def6; then
+          dom finSub c= X by RELAT_1:87; then
           a in X by A13;
           then consider y such that
   A16:     a = y & y in still_not-bound_in All(x,p) &
@@ -690,15 +686,15 @@ A15:       fin_Sub = RestrictSub(x,All(x,p),Sub) by A1;
         hence b1 = b2 by ZFMISC_1:33;
       end;
       then reconsider Z as Function by FUNCT_1:def 1;
-      for a st a in dom (@fin_Sub) /\ dom Z holds (@fin_Sub).a = Z.a
+      for a st a in dom (@finSub) /\ dom Z holds (@finSub).a = Z.a
         by A11,Def2;
       then consider h being Function such that
-A18:  (@fin_Sub) \/ Z = h by PARTFUN1:2;
+A18:  (@finSub) \/ Z = h by PARTFUN1:2;
       reconsider Z as Relation of bound_QC-variables,bound_QC-variables
         by RELSET_1:8;
-      @fin_Sub \/ Z = h by A18; then
+      @finSub \/ Z = h by A18; then
       h is CQC_Substitution by Def1,PARTFUN1:119;
-      hence fin_Sub \/ {[x,x]} is CQC_Substitution by A18,Def2;
+      hence finSub \/ {[x,x]} is CQC_Substitution by A18,Def2;
       end;
       hence thesis by A2;
    end;
@@ -1199,7 +1195,7 @@ definition let S, x;
   end;
 end;
 
-scheme Sub_QC_Ind { Pro[Element of QC-Sub-WFF]}:
+scheme SubQCInd { Pro[Element of QC-Sub-WFF]}:
         for S being Element of QC-Sub-WFF holds Pro[S]
   provided
         A1: for k being Nat, P being (QC-pred_symbol of k),
@@ -1407,7 +1403,7 @@ A5: for x being bound_QC-variable,
                    SQ being second_Q_comp of [S,x] st
        [S,x] is quantifiable & P[S] holds P[Sub_All([S,x], SQ)] by Def28;
    thus for S being Element of QC-Sub-WFF holds P[S]
-                           from Sub_QC_Ind (A1, A2, A3, A4, A5);
+                           from SubQCInd (A1, A2, A3, A4, A5);
  end;
 
 definition let S such that A1: S is Sub_atomic;
@@ -1702,7 +1698,7 @@ theorem Th21:
    end;
 
 scheme
-  Sub_QC_Ind2 {Pro[Element of QC-Sub-WFF]}:
+  SubQCInd2 {Pro[Element of QC-Sub-WFF]}:
   for S being Element of QC-Sub-WFF holds Pro[S]
   provided
   A1:     for S being Element of QC-Sub-WFF holds
@@ -1737,7 +1733,7 @@ A9: now let x be bound_QC-variable, S be Element of QC-Sub-WFF,
      then S = Sub_the_scope_of(Sub_All([S,x], SQ)) by MCART_1:7;
      hence Pro[Sub_All([S,x], SQ)] by A1,A10,A11;
     end;
- thus thesis from Sub_QC_Ind (A2, A3, A4, A6, A9);
+ thus thesis from SubQCInd (A2, A3, A4, A6, A9);
 end;
 
 theorem Th22:
@@ -1891,7 +1887,7 @@ theorem Th27:
  end;
 
 scheme
-  Sub_Func_Ex { D()-> non empty set,
+  SubFuncEx { D()-> non empty set,
                     V() -> (Element of D()),
                     A(Element of QC-Sub-WFF)  -> (Element of D()),
                     N(Element of D()) -> (Element of D()),
@@ -2170,7 +2166,7 @@ A52:          len @((Sub_the_left_argument_of S)`1) <
                   .= G.S by A39,A53,A55;
          end;
        end;
-       for S being Element of QC-Sub-WFF holds Pro[S] from Sub_QC_Ind2 (A40);
+       for S being Element of QC-Sub-WFF holds Pro[S] from SubQCInd2 (A40);
        hence F.x = G.x';
    end;
  consider F being Function such that
@@ -2265,7 +2261,7 @@ A67:      k < len @(S`1);
 end;
 
 scheme
-  Sub_QC_Func_Uniq { D() -> non empty set,
+  SubQCFuncUniq { D() -> non empty set,
                 F1() -> (Function of QC-Sub-WFF, D()),
                 F2() -> (Function of QC-Sub-WFF, D()),
                 V() -> (Element of D()),
@@ -2345,7 +2341,7 @@ A14:   Sub_All([S,x],SQ) is Sub_universal by A13,Th14;
   = R(Sub_All([S,x],SQ), F2().Sub_the_scope_of Sub_All([S,x],SQ)) by A1,A13,A14
  .= F2().Sub_All([S,x],SQ) by A2,A14;
     end;
-    Pro[S] from Sub_QC_Ind(A3,A4,A5,A8,A12);
+    Pro[S] from SubQCInd(A3,A4,A5,A8,A12);
   hence thesis by FUNCT_2:113;
  end;
 
@@ -2463,7 +2459,7 @@ A2:  for S being Element of QC-Sub-WFF
            d2 = F2.(Sub_the_right_argument_of S) implies F2.S = C(d1,d2)) &
         (S is Sub_universal & d1 = F2.Sub_the_scope_of S implies
                                                                F2.S = R(S,d1));
-   thus F1 = F2 from Sub_QC_Func_Uniq(A1,A2);
+   thus F1 = F2 from SubQCFuncUniq(A1,A2);
  end;
 
 begin :: Definition and Properties of Substitution
@@ -2501,7 +2497,7 @@ A1:     for S being Element of QC-Sub-WFF
         (S is Sub_conjunctive & d1 = F.(Sub_the_left_argument_of S) &
           d2 = F.(Sub_the_right_argument_of S) implies F.S = C(d1,d2)) &
         (S is Sub_universal & d1 = F.Sub_the_scope_of S implies
-                                               F.S = R(S,d1)) from Sub_Func_Ex;
+                                               F.S = R(S,d1)) from SubFuncEx;
         take F.S,F;
         thus F.S = F.S;
         thus thesis by A1;
@@ -2820,7 +2816,7 @@ A3: Quant(S',CQC_Sub(Sub_the_scope_of S')) =
  reserve S,S' for Element of CQC-Sub-WFF,
          p,q for Element of CQC-WFF;
 
-scheme Sub_CQC_Ind { Pro[set] } :
+scheme SubCQCInd { Pro[set] } :
   for S holds Pro[S]
   provided
 A1: for S,S' being Element of CQC-Sub-WFF,
@@ -2906,7 +2902,7 @@ A17:  Sub_All([S,x],SQ) = S' &
       hence thesis by A1,A16;
     end;
     for S being Element of QC-Sub-WFF holds Pro1[S]
-                                              from Sub_QC_Ind(A2,A6,A7,A10,A15
+                                              from SubQCInd(A2,A6,A7,A10,A15
 );
     hence thesis;
  end;
@@ -2925,7 +2921,7 @@ A1:  for S,S' being Element of CQC-Sub-WFF,
            (S`2 = (S')`2 &  P[S] & P[S'] implies P[Sub_&(S,S')]) &
       ([S,x] is quantifiable & P[S] implies P[Sub_All([S,x], SQ)])
                                                  by Th33,Th35,Th36,Th37,Th38;
-    for S holds P[S] from Sub_CQC_Ind(A1);
+    for S holds P[S] from SubCQCInd(A1);
     hence thesis;
   end;
 end;

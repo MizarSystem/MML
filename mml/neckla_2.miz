@@ -18,7 +18,7 @@ environ
       SQUARE_1, COHSP_1, CARD_LAR, REALSET2, MEMBERED;
  registrations RELSET_1, ORDERS_2, STRUCT_0, FINSET_1, NAT_1, NECKLACE,
       ORDINAL1, CLASSES2, YELLOW13, XREAL_0, COHSP_1, XBOOLE_0, CARD_1,
-      ORDINAL2;
+      ORDINAL2, CARD_LAR;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
  definitions TARSKI;
  theorems FUNCT_1, FUNCT_2, ENUMSET1, RELSET_1, ZFMISC_1, XBOOLE_1, TARSKI,
@@ -61,7 +61,7 @@ theorem Th2:
       proof
         let x be set;
         assume A9: x in A;
-        per cases by A9,ENUMSET1:28;
+        per cases by A9,ENUMSET1:def 4;
         suppose x = [0,1];
         hence thesis by A1,A2,XBOOLE_0:def 2;
         end;
@@ -96,7 +96,7 @@ theorem Th2:
            then i < 2+1 by REAL_1:55;
            then i <= 2 by NAT_1:38;
            then y = 0 or y = 1 or y = 2 by A13,CQC_THE1:3;
-         hence thesis by A11,A13,ENUMSET1:29;
+         hence thesis by A11,A13,ENUMSET1:def 4;
         end;
         suppose x in {[i+1,i] where i is Nat: i+1<4};
          then consider i be Nat such that
@@ -106,7 +106,7 @@ theorem Th2:
            then i < 2+1 by REAL_1:55;
            then i <= 2 by NAT_1:38;
            then z = 0 or z = 1 or z = 2 by A15,CQC_THE1:3;
-        hence thesis by A11,A15,ENUMSET1:29;
+        hence thesis by A11,A15,ENUMSET1:def 4;
       end;
       end;
     hence thesis by A8,XBOOLE_0:def 10;
@@ -115,36 +115,33 @@ theorem Th2:
 registration let n be natural number;
   cluster -> finite Element of Rank n;
   coherence
-    proof
-      let x be Element of Rank n;
-      defpred P[natural number] means
-           for x being set st x is Element of Rank $1
-           holds x is finite;
-      A1: P[0] by CLASSES1:33,SUBSET_1:def 2;
-      A2: for k being natural number st P[k] holds P[k + 1]
-       proof
-         let k being natural number such that P[k];
-         let x be set such that A3: x is Element of Rank (k+1);
-         consider m being Nat such that A4: m = k by CARD_1:54;
-               x is Element of Rank (succ m) by A3,A4,CARD_1:52;
-           then A5: x is Element of bool Rank m by CLASSES1:34;
-               Rank m is finite by CARD_3:57;
-         hence thesis by A5,FINSET_1:13;
-       end;
-            for k being natural number holds P[k] from NAT_1:sch 2(A1,A2);
+  proof
+    let x be Element of Rank n;
+    reconsider m = n as Nat by ORDINAL2:def 21;
+    per cases;
+    suppose Rank n = {}; then
+      x = {} by SUBSET_1:def 2;
       hence thesis;
     end;
- end;
+    suppose Rank n <> {}; then
+    x in Rank n; then
+    x c= Rank n by CLASSES1:38; then
+A5: x is Element of bool Rank n;
+    Rank m is finite by CARD_3:57;
+    hence thesis by A5,FINSET_1:13;
+    end;
+  end;
+end;
 
 theorem Th3:
   for x be set st x in FinSETS holds x is finite
   proof
     let x be set such that A1: x in FinSETS;
-         omega is_limit_ordinal by ORDINAL2:def 5;
+    omega is_limit_ordinal by ORDINAL2:def 5;
     then consider n being Ordinal such that A2: n in omega &
     x in Rank n by A1,CLASSES1:35,CLASSES2:71;
     reconsider n as natural number by A2,ORDINAL2:def 21;
-          x is Element of Rank n by A2;
+    x is Element of Rank n by A2;
     hence thesis;
   end;
 
@@ -159,7 +156,7 @@ registration
    proof
      let n be number;
      assume n is finite ordinal;
-       then n in omega by CARD_4:7;
+     then n in omega by CARD_4:7;
      hence n is natural by ORDINAL2:def 21;
    end;
 end;
@@ -181,9 +178,9 @@ registration
      assume A1: f is one-to-one;
 A2: dom f = the carrier of Y by FUNCT_2:def 1
              .= {0,1,2,3} by NECKLACE:2,21;
-then A3: 1 in dom f by ENUMSET1:19;
-A4: 2 in dom f by A2,ENUMSET1:19;
-A5: 3 in dom f by A2,ENUMSET1:19;
+then A3: 1 in dom f by ENUMSET1:def 2;
+A4: 2 in dom f by A2,ENUMSET1:def 2;
+A5: 3 in dom f by A2,ENUMSET1:def 2;
 then A6: f.1 <> f.3 by A1,A3,FUNCT_1:def 8;
 A7: f.2 <> f.3 by A1,A4,A5,FUNCT_1:def 8;
 A8: f.1 in X by A3,PARTFUN1:27;
@@ -268,18 +265,18 @@ A3: y = R1;
     given R2 being strict RelStr such that
 A4: x = [the carrier of R2,the InternalRel of R2] and
 A5: z = R2;
-          the carrier of R1 = the carrier of R2 &
+    the carrier of R1 = the carrier of R2 &
     the InternalRel of R1 = the InternalRel of R2 by A2,A4,ZFMISC_1:33;
     hence thesis by A3,A5;
    end;
    consider X being set such that A6: for x being set holds x in X iff
      ex y being set st y in FinSETS & P[y,x] from TARSKI:sch 1(A1);
    take X;
-        for x being set holds x in X iff
+   for x being set holds x in X iff
       ex R being strict RelStr st x = R &
       the carrier of R in FinSETS
     proof
-     let x being set;
+     let x be set;
      thus x in X implies
         ex R being strict RelStr st x = R &
         the carrier of R in FinSETS
@@ -426,11 +423,11 @@ then A11: IT = meet X by SETFAM_1:def 10;
                        H2 in Y by A11,A17,A19,SETFAM_1:def 1;
                  hence thesis by A1,A15,A19,A20;
                end;
-                sum_of(H1,H2) in IT
+            sum_of(H1,H2) in IT
             proof
-                  for Y being set holds Y in X implies sum_of(H1,H2) in Y
+               for Y being set holds Y in X implies sum_of(H1,H2) in Y
                proof
-                 let Y being set; assume A21: Y in X;
+                 let Y be set; assume A21: Y in X;
              then A22: H1 in Y by A11,A16,SETFAM_1:def 1;
                   H2 in Y by A11,A17,A21,SETFAM_1:def 1;
                 hence thesis by A1,A15,A21,A22;
@@ -442,10 +439,10 @@ then A11: IT = meet X by SETFAM_1:def 10;
        hence thesis by A12;
      end;
      let Y be Subset of fin_RelStr such that A23: P[Y];
-          IT c= Y
+     IT c= Y
       proof
        let x be set such that A24: x in IT;
-             Y in X by A1,A23;
+       Y in X by A1,A23;
        hence thesis by A11,A24,SETFAM_1:def 1;
       end;
      hence thesis;
@@ -497,11 +494,11 @@ registration
    correctness
     proof
       reconsider R = [:{0},{0}:] as Relation of {0} by RELSET_1:def 1;
-           RelStr(#{0},R#) in fin_RelStr_sp
+      RelStr(#{0},R#) in fin_RelStr_sp
        proof
          set X = RelStr(#{0},R#);
          A1: the carrier of X is non empty trivial by REALSET1:def 4;
-               0 in Tarski-Class {} by CLASSES2:62;
+          0 in Tarski-Class {} by CLASSES2:62;
           then the carrier of X in FinSETS by CLASSES2:63,def 2;
          hence thesis by A1,Def5;
        end;
@@ -527,18 +524,18 @@ theorem Th4:
        A6: the carrier of S is non empty trivial &
        the carrier of S in FinSETS;
        then A7: S in F by Def5;
-             S <> R by A4,A6,STRUCT_0:def 1;
-        then not S in {R} by TARSKI:def 1;
+       S <> R by A4,A6,STRUCT_0:def 1;
+       then not S in {R} by TARSKI:def 1;
        hence S in M by A7,XBOOLE_0:def 4;
       end;
-          now let H1,H2 be strict RelStr;
+      now let H1,H2 be strict RelStr;
        assume that
        A8: (the carrier of H1) misses (the carrier of H2) and
        A9: H1 in M and A10: H2 in M;
-             H1 in F & H2 in F by A9,A10,XBOOLE_0:def 4;
+       H1 in F & H2 in F by A9,A10,XBOOLE_0:def 4;
        then A11: union_of(H1,H2) in F & sum_of(H1,H2) in F by A8,Def5;
         A12: not H1 in {R} by A9,XBOOLE_0:def 4;
-            the carrier of H1 <> {}
+        the carrier of H1 <> {}
         proof
           per cases by A12,TARSKI:def 1;
           suppose (the carrier of H1) <> (the carrier of R);
@@ -547,18 +544,18 @@ theorem Th4:
           suppose
           A13: (the InternalRel of H1) <> (the InternalRel of R);
           set cR = the carrier of R,
-              Inter_H1 = the InternalRel of H1,
+              InterH1 = the InternalRel of H1,
               cH1 = the carrier of H1;
                 cR is empty by A4,STRUCT_0:def 1;
-           then Inter_H1 <> {} by A13,RELSET_1:26;
+           then InterH1 <> {} by A13,RELSET_1:26;
           then consider x being set such that
-          A14:x in Inter_H1 by XBOOLE_0:def 1;
+          A14:x in InterH1 by XBOOLE_0:def 1;
                 ex a,b being set st x=[a,b] &
           a in cH1 & b in cH1 by A14,RELSET_1:6;
           hence thesis;
         end;
         end;
-        then reconsider A = (the carrier of H1) as non empty set;
+        then reconsider A = the carrier of H1 as non empty set;
              A \/ (the carrier of H2) <> {};
         then the carrier of union_of(H1,H2) <> {} by Def2;
         then union_of(H1,H2) <> R by A4,STRUCT_0:def 1;
@@ -623,21 +620,20 @@ theorem Th6:
        proof
          let i,j being Nat; assume i <= j;
          then consider k being Nat such that A9: j=i+k by NAT_1:28;
-         defpred P[Nat] means
-                f.i c= f.(i+$1);
+         defpred P[Nat] means f.i c= f.(i+$1);
          A10: P[0];
          A11: for k being Nat st P[k] holds P[k+1]
-            proof
-              let k being Nat such that A12: P[k];
-                    f.(i+k) c= f.(i+k+1) by A6;
-              hence thesis by A12,XBOOLE_1:1;
-            end;
-               for k being Nat holds P[k] from NAT_1:sch 1(A10,A11);
+         proof
+           let k be Nat such that A12: P[k];
+           f.(i+k) c= f.(i+k+1) by A6;
+           hence thesis by A12,XBOOLE_1:1;
+         end;
+         for k being Nat holds P[k] from NAT_1:sch 1(A10,A11);
          hence thesis by A9;
        end;
     A13: Union f c= fin_RelStr_sp
      proof
-       let y being set;
+       let y be set;
        assume y in Union f;
        then consider x being set such that
        A14: x in dom f and A15: y in f.x by CARD_5:10;
@@ -646,13 +642,13 @@ theorem Th6:
         proof
           let y be set;
           assume y in f.0;
-           then ex a being Element of fin_RelStr_sp st y = a &
+          then ex a being Element of fin_RelStr_sp st y = a &
           a is trivial RelStr by A4;
           hence thesis;
         end;
        A17: for k being Nat st P[k] holds P[k+1]
         proof
-          let k being Nat such that A18: P[k];
+          let k be Nat such that A18: P[k];
           A19: f.(k+1) = f.k \/ {a where a is Element of fin_RelStr_sp:
           ex R1,R2 being strict RelStr st
           (the carrier of R1) misses (the carrier of R2) &
@@ -679,8 +675,8 @@ theorem Th6:
             end;
           hence thesis by A18,A19,XBOOLE_1:8;
         end;
-             for k being Nat holds P[k] from NAT_1:sch 1(A16,A17);
-         then f.x c= fin_RelStr_sp by A3,A14;
+        for k being Nat holds P[k] from NAT_1:sch 1(A16,A17);
+        then f.x c= fin_RelStr_sp by A3,A14;
       hence thesis by A15;
      end;
      then reconsider M = Union f as Subset of fin_RelStr by XBOOLE_1:1;
@@ -742,8 +738,7 @@ theorem Th6:
     H1 in Y & H2 in Y & ( X = union_of(H1,H2) or X = sum_of(H1,H2) )
      proof
         consider y being set such that
-       A42: y in dom f and A43: X in f.y by A1,A40,CARD_5:10
-;
+       A42: y in dom f and A43: X in f.y by A1,A40,CARD_5:10;
        defpred P[Nat] means X in f.$1 implies
        ex H1,H2 being strict RelStr st
        (the carrier of H1) misses (the carrier of H2) &
@@ -788,7 +783,7 @@ and
           hence thesis by A53,A54;
         end;
         end;
-             for n being Nat holds P[n] from NAT_1:sch 1(A44,A47);
+        for n being Nat holds P[n] from NAT_1:sch 1(A44,A47);
         hence thesis by A3,A42,A43;
      end;
     hence thesis;
@@ -800,20 +795,20 @@ theorem
   for R being strict non empty RelStr st
       R in fin_RelStr_sp holds R is N-free
   proof
-    set N_4 = Necklace 4;
-    let R being strict non empty RelStr; assume
+    set N4 = Necklace 4;
+    let R be strict non empty RelStr; assume
     A1: R in fin_RelStr_sp;
     then consider S being strict RelStr such that A2: R = S and
     A3: the carrier of S in FinSETS by Def4;
-    assume A4: R embeds N_4;
+    assume A4: R embeds N4;
     defpred P[Nat] means ex S being strict non empty RelStr st
     S in fin_RelStr_sp &
-    Card (the carrier of S) = $1 & S embeds N_4;
+    Card (the carrier of S) = $1 & S embeds N4;
     reconsider C = the carrier of R as Element of FinSETS by A2,A3;
     set k = card C;
     A5: ex i being Nat st P[i]
     proof
-            P[k] by A1,A4;
+      P[k] by A1,A4;
       hence thesis;
     end;
     A6: for m being Nat st m <> 0 & P[m] ex n being Nat st n < m & P[n]
@@ -821,27 +816,27 @@ theorem
       let m be Nat such that m <> 0 and A7: P[m];
       consider S being non empty strict RelStr such that
       A8: S in fin_RelStr_sp and A9: Card (the carrier of S) = m and
-      A10: S embeds N_4 by A7;
+      A10: S embeds N4 by A7;
       per cases by A8,Th6;
       suppose A11: S is strict non empty trivial RelStr;
-       consider f being map of N_4,S such that A12: f is one-to-one
-       & for x,y being Element of N_4 holds
-       [x,y] in the InternalRel of N_4 iff
+       consider f being map of N4,S such that A12: f is one-to-one
+       & for x,y being Element of N4 holds
+       [x,y] in the InternalRel of N4 iff
        [f.x,f.y] in the InternalRel of S by A10,NECKLACE:def 2;
-       A13: the carrier of N_4 = {0,1,2,3} by NECKLACE:2,21;
-        then A14: 0 in the carrier of N_4 by ENUMSET1:19;
-       A15: 1 in the carrier of N_4 by A13,ENUMSET1:19;
-             (0 = 0+1 or 1 = 0 +1);
-         then [0,1] in the InternalRel of N_4 by A14,A15,NECKLACE:26;
+       A13: the carrier of N4 = {0,1,2,3} by NECKLACE:2,21;
+        then A14: 0 in the carrier of N4 by ENUMSET1:def 2;
+       A15: 1 in the carrier of N4 by A13,ENUMSET1:def 2;
+         0 = 0+1 or 1 = 0+1;
+         then [0,1] in the InternalRel of N4 by A14,A15,NECKLACE:26;
         then A16: [f.0,f.1] in the InternalRel of S by A12,A14,A15;
        then A17: f.0 in dom (the InternalRel of S) &
        f.1 in rng (the InternalRel of S) by RELAT_1:20;
-             dom (the InternalRel of S ) c= (the carrier of S) &
-       rng (the InternalRel of S) c= (the carrier of S) by RELSET_1:12;
-         then f.0 = f.1 by A11,A17,REALSET2:def 7;
-       then [0,0] in (the InternalRel of N_4) by A12,A14,A16;
+       dom the InternalRel of S c= (the carrier of S) &
+       rng the InternalRel of S c= (the carrier of S) by RELSET_1:12;
+       then f.0 = f.1 by A11,A17,REALSET2:def 7;
+       then [0,0] in (the InternalRel of N4) by A12,A14,A16;
         then [0,0] = [0,1] or [0,0]=[1,0] or [0,0]=[1,2] or [0,0]=[2,1] or
-       [0,0]=[2,3] or [0,0]=[3,2] by Th2,ENUMSET1:28;
+       [0,0]=[2,3] or [0,0]=[3,2] by Th2,ENUMSET1:def 4;
       hence thesis by ZFMISC_1:33;
       end;
       suppose ex H1,H2 being strict RelStr st
@@ -853,20 +848,20 @@ theorem
         A19: H1 in fin_RelStr_sp & H2 in fin_RelStr_sp and
         A20: (S = union_of(H1,H2) or S = sum_of(H1,H2));
         A21: now assume A22: S = union_of(H1,H2);
-            consider f being map of N_4,S such that A23: f is one-to-one
-           and A24: for x,y being Element of N_4 holds
-           [x,y] in the InternalRel of N_4 iff
+            consider f being map of N4,S such that A23: f is one-to-one
+           and A24: for x,y being Element of N4 holds
+           [x,y] in the InternalRel of N4 iff
            [f.x,f.y] in the InternalRel of S by A10,NECKLACE:def 2;
-             the carrier of N_4 = {0,1,2,3} by NECKLACE:2,21;
-            then A25: 0 in the carrier of N_4 &
-           1 in the carrier of N_4 & 2 in the carrier of N_4 &
-           3 in the carrier of N_4 by ENUMSET1:19;
-           A26: [0,1] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A27: [1,0] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A28: [1,2] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A29: [2,1] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A30: [2,3] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A31: [3,2] in the InternalRel of N_4 by Th2,ENUMSET1:29;
+             the carrier of N4 = {0,1,2,3} by NECKLACE:2,21;
+            then A25: 0 in the carrier of N4 &
+           1 in the carrier of N4 & 2 in the carrier of N4 &
+           3 in the carrier of N4 by ENUMSET1:def 2;
+           A26: [0,1] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A27: [1,0] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A28: [1,2] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A29: [2,1] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A30: [2,3] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A31: [3,2] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
            A32: dom (the InternalRel of S) c= (the carrier of S) &
            rng (the InternalRel of S) c= (the carrier of S) by RELSET_1:12;
            A33: [f.0,f.1] in the InternalRel of S by A24,A25,A26;
@@ -960,14 +955,14 @@ Def2;
               A58: f.3 in rng (the InternalRel of H1) by A56,RELAT_1:20;
                    H2 is non empty by A19,Th4;
              then A59: the carrier of H2 is non empty by STRUCT_0:def 1;
-             A60: dom f = the carrier of N_4 by FUNCT_2:def 1;
+             A60: dom f = the carrier of N4 by FUNCT_2:def 1;
                   rng f c= the carrier of H1
                proof
                  let y be set;
                  assume y in rng f;
                   then consider x being set such that A61: x in dom f &
                  y = f.x by FUNCT_1:def 5;
-                 per cases by A60,A61,Lm1,ENUMSET1:18;
+                 per cases by A60,A61,Lm1,ENUMSET1:def 2;
                  suppose x = 0;
                  hence thesis by A41,A61;
                  end;
@@ -981,20 +976,20 @@ Def2;
                  hence thesis by A42,A58,A61;
                end;
                end;
-                then A62: f is Function of the carrier of N_4,the carrier of H1
+                then A62: f is Function of the carrier of N4,the carrier of H1
                   by FUNCT_2:8;
-             A63: H1 embeds N_4
+             A63: H1 embeds N4
               proof
-                   for x,y being Element of N_4
-               holds [x,y] in the InternalRel of N_4
+                   for x,y being Element of N4
+               holds [x,y] in the InternalRel of N4
                iff [f.x,f.y] in the InternalRel of H1
                 proof
-                 let x,y being Element of N_4;
-                 thus [x,y] in the InternalRel of N_4 implies
+                 let x,y being Element of N4;
+                 thus [x,y] in the InternalRel of N4 implies
                  [f.x,f.y] in the InternalRel of H1
                  proof
-                  assume A64:[x,y] in the InternalRel of N_4;
-                  per cases by A64,Th2,ENUMSET1:28;
+                  assume A64:[x,y] in the InternalRel of N4;
+                  per cases by A64,Th2,ENUMSET1:def 4;
                   suppose [x,y] = [0,1];
                      then x = 0 & y = 1 by ZFMISC_1:33;::as1
                   hence thesis by A46;
@@ -1021,14 +1016,14 @@ Def2;
                  end;
                  end;
                  thus [f.x,f.y] in the InternalRel of H1 implies
-                 [x,y] in the InternalRel of N_4
+                 [x,y] in the InternalRel of N4
                   proof
                    assume A65: [f.x,f.y] in the InternalRel of H1;
                          [f.x,f.y] in the InternalRel of S implies
-                   [x,y] in the InternalRel of N_4 by A24;
+                   [x,y] in the InternalRel of N4 by A24;
                     then [f.x,f.y] in (the InternalRel of H1) \/
                    (the InternalRel of H2) implies
-                   [x,y] in the InternalRel of N_4 by A22,Def2;
+                   [x,y] in the InternalRel of N4 by A22,Def2;
                    hence thesis by A65,XBOOLE_0:def 2;
                   end;
                 end;
@@ -1139,14 +1134,14 @@ Def2;
               A88: f.3 in rng (the InternalRel of H2) by A86,RELAT_1:20;
                    H1 is non empty by A19,Th4;
              then A89: the carrier of H1 is non empty by STRUCT_0:def 1;
-             A90: dom f = the carrier of N_4 by FUNCT_2:def 1;
+             A90: dom f = the carrier of N4 by FUNCT_2:def 1;
                   rng f c= the carrier of H2
                proof
                  let y be set;
                  assume y in rng f;
                   then consider x being set such that A91: x in dom f &
                  y = f.x by FUNCT_1:def 5;
-                 per cases by A90,A91,Lm1,ENUMSET1:18;
+                 per cases by A90,A91,Lm1,ENUMSET1:def 2;
                  suppose x = 0;
                  hence thesis by A71,A91;
                  end;
@@ -1160,20 +1155,20 @@ Def2;
                  hence thesis by A72,A88,A91;
                end;
                end;
-                then A92: f is Function of the carrier of N_4,the carrier of H2
+                then A92: f is Function of the carrier of N4,the carrier of H2
                   by FUNCT_2:8;
-             A93: H2 embeds N_4
+             A93: H2 embeds N4
               proof
-                   for x,y being Element of N_4
-               holds [x,y] in the InternalRel of N_4
+                   for x,y being Element of N4
+               holds [x,y] in the InternalRel of N4
                iff [f.x,f.y] in the InternalRel of H2
                 proof
-                 let x,y being Element of N_4;
-                 thus [x,y] in the InternalRel of N_4 implies
+                 let x,y being Element of N4;
+                 thus [x,y] in the InternalRel of N4 implies
                  [f.x,f.y] in the InternalRel of H2
                  proof
-                  assume A94:[x,y] in the InternalRel of N_4;
-                  per cases by A94,Th2,ENUMSET1:28;
+                  assume A94:[x,y] in the InternalRel of N4;
+                  per cases by A94,Th2,ENUMSET1:def 4;
                   suppose [x,y] = [0,1];
                      then x = 0 & y = 1 by ZFMISC_1:33;
                   hence thesis by A76;
@@ -1200,14 +1195,14 @@ Def2;
                  end;
                  end;
                  thus [f.x,f.y] in the InternalRel of H2 implies
-                 [x,y] in the InternalRel of N_4
+                 [x,y] in the InternalRel of N4
                   proof
                    assume A95: [f.x,f.y] in the InternalRel of H2;
                          [f.x,f.y] in the InternalRel of S implies
-                   [x,y] in the InternalRel of N_4 by A24;
+                   [x,y] in the InternalRel of N4 by A24;
                     then [f.x,f.y] in (the InternalRel of H1) \/
                    (the InternalRel of H2) implies
-                   [x,y] in the InternalRel of N_4 by A22,Def2;
+                   [x,y] in the InternalRel of N4 by A22,Def2;
                    hence thesis by A95,XBOOLE_0:def 2;
                   end;
                 end;
@@ -1241,14 +1236,14 @@ Def2;
          end;
          end;
               now assume A101: S = sum_of(H1,H2);
-           consider f being map of N_4,S such that A102: f is one-to-one
-           and A103: for x,y being Element of N_4 holds
-           [x,y] in the InternalRel of N_4 iff
+           consider f being map of N4,S such that A102: f is one-to-one
+           and A103: for x,y being Element of N4 holds
+           [x,y] in the InternalRel of N4 iff
            [f.x,f.y] in the InternalRel of S by A10,NECKLACE:def 2;
-              the carrier of N_4 = {0,1,2,3} by NECKLACE:2,21;
-            then A104: 0 in the carrier of N_4 &
-           1 in the carrier of N_4 & 2 in the carrier of N_4 &
-           3 in the carrier of N_4 by ENUMSET1:19;
+              the carrier of N4 = {0,1,2,3} by NECKLACE:2,21;
+            then A104: 0 in the carrier of N4 &
+           1 in the carrier of N4 & 2 in the carrier of N4 &
+           3 in the carrier of N4 by ENUMSET1:def 2;
             set A = the InternalRel of H1,
                 B = the InternalRel of H2,
                 C = [:the carrier of H1,the carrier of H2:],
@@ -1256,12 +1251,12 @@ Def2;
                 cH1 = the carrier of H1,
                 cH2 = the carrier of H2,
                 cS = the carrier of S;
-           A105: [0,1] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A106: [1,0] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A107: [1,2] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A108: [2,1] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A109: [2,3] in the InternalRel of N_4 by Th2,ENUMSET1:29;
-           A110: [3,2] in the InternalRel of N_4 by Th2,ENUMSET1:29;
+           A105: [0,1] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A106: [1,0] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A107: [1,2] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A108: [2,1] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A109: [2,3] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
+           A110: [3,2] in the InternalRel of N4 by Th2,ENUMSET1:def 4;
            A111: dom (the InternalRel of S) c= cS &
            rng (the InternalRel of S) c= cS by RELSET_1:12;
            A112: [f.0,f.1] in the InternalRel of S by A103,A104,A105;
@@ -1285,10 +1280,10 @@ Def2;
             A122: f.0 in cH1 \/ cH2 by A101,A114,Def3;
             A123: dom B c= cH2 & rng B c= cH2 by RELSET_1:12;
             A124: dom A c= cH1 & rng A c= cH1 by RELSET_1:12;
-            A125: not [0,2] in the InternalRel of N_4
+            A125: not [0,2] in the InternalRel of N4
              proof
-              assume A126: [0,2] in the InternalRel of N_4;
-               per cases by A126,Th2,ENUMSET1:28;
+              assume A126: [0,2] in the InternalRel of N4;
+               per cases by A126,Th2,ENUMSET1:def 4;
                suppose [0,2] = [0,1];
                hence contradiction by ZFMISC_1:33;
                end;
@@ -1308,10 +1303,10 @@ Def2;
                hence contradiction by ZFMISC_1:33;
              end;
              end;
-            A127: not [0,3] in the InternalRel of N_4
+            A127: not [0,3] in the InternalRel of N4
              proof
-               assume A128: [0,3] in the InternalRel of N_4;
-               per cases by A128,Th2,ENUMSET1:28;
+               assume A128: [0,3] in the InternalRel of N4;
+               per cases by A128,Th2,ENUMSET1:def 4;
                suppose [0,3] = [0,1];
                hence contradiction by ZFMISC_1:33;
                end;
@@ -1331,10 +1326,10 @@ Def2;
                hence contradiction by ZFMISC_1:33;
              end;
              end;
-            A129: not [1,3] in the InternalRel of N_4
+            A129: not [1,3] in the InternalRel of N4
              proof
-               assume A130: [1,3] in the InternalRel of N_4;
-               per cases by A130,Th2,ENUMSET1:28;
+               assume A130: [1,3] in the InternalRel of N4;
+               per cases by A130,Th2,ENUMSET1:def 4;
                suppose [1,3] = [0,1];
                hence contradiction by ZFMISC_1:33;
                end;
@@ -1546,14 +1541,14 @@ Def2;
              end;
                   H2 is non empty by A19,Th4;
             then A169: the carrier of H2 is non empty by STRUCT_0:def 1;
-            A170: dom f = the carrier of N_4 by FUNCT_2:def 1;
+            A170: dom f = the carrier of N4 by FUNCT_2:def 1;
                  rng f c= the carrier of H1
              proof
               let y be set;
               assume y in rng f;
                then consider x being set such that A171: x in dom f &
               y = f.x by FUNCT_1:def 5;
-              per cases by A170,A171,Lm1,ENUMSET1:18;
+              per cases by A170,A171,Lm1,ENUMSET1:def 2;
               suppose x = 0;
               hence thesis by A141,A171;
               end;
@@ -1567,19 +1562,19 @@ Def2;
               hence thesis by A143,A171;
              end;
              end;
-               then A172: f is Function of the carrier of N_4,cH1 by FUNCT_2:8;
-            A173: H1 embeds N_4
+               then A172: f is Function of the carrier of N4,cH1 by FUNCT_2:8;
+            A173: H1 embeds N4
               proof
-                   for x,y being Element of N_4
-               holds [x,y] in the InternalRel of N_4
+                   for x,y being Element of N4
+               holds [x,y] in the InternalRel of N4
                iff [f.x,f.y] in the InternalRel of H1
                 proof
-                 let x,y being Element of N_4;
-                 thus [x,y] in the InternalRel of N_4 implies
+                 let x,y being Element of N4;
+                 thus [x,y] in the InternalRel of N4 implies
                  [f.x,f.y] in the InternalRel of H1
                  proof
-                  assume A174:[x,y] in the InternalRel of N_4;
-                  per cases by A174,Th2,ENUMSET1:28;
+                  assume A174:[x,y] in the InternalRel of N4;
+                  per cases by A174,Th2,ENUMSET1:def 4;
                   suppose [x,y] = [0,1];
                      then x = 0 & y = 1 by ZFMISC_1:33;
                   hence thesis by A146;
@@ -1606,17 +1601,17 @@ Def2;
                  end;
                  end;
                  thus [f.x,f.y] in the InternalRel of H1 implies
-                 [x,y] in the InternalRel of N_4
+                 [x,y] in the InternalRel of N4
                   proof
                    assume A175: [f.x,f.y] in the InternalRel of H1;
                          [f.x,f.y] in the InternalRel of S implies
-                   [x,y] in the InternalRel of N_4 by A103;
+                   [x,y] in the InternalRel of N4 by A103;
                     then [f.x,f.y] in (((A \/ B) \/ C) \/ D) implies
-                   [x,y] in the InternalRel of N_4 by A101,Def3;
+                   [x,y] in the InternalRel of N4 by A101,Def3;
                     then [f.x,f.y] in ((A \/ B) \/ (C\/ D)) implies
-                   [x,y] in the InternalRel of N_4 by XBOOLE_1:4;
+                   [x,y] in the InternalRel of N4 by XBOOLE_1:4;
                     then [f.x,f.y] in (A \/ (B\/(C\/D))) implies
-                   [x,y] in the InternalRel of N_4 by XBOOLE_1:4;
+                   [x,y] in the InternalRel of N4 by XBOOLE_1:4;
                    hence thesis by A175,XBOOLE_0:def 2;
                   end;
                 end;
@@ -1788,14 +1783,14 @@ Def2;
              end;
                   H1 is non empty by A19,Th4;
             then A209: the carrier of H1 is non empty by STRUCT_0:def 1;
-            A210: dom f = the carrier of N_4 by FUNCT_2:def 1;
+            A210: dom f = the carrier of N4 by FUNCT_2:def 1;
                  rng f c= the carrier of H2
              proof
               let y be set;
               assume y in rng f;
                then consider x being set such that A211: x in dom f &
               y = f.x by FUNCT_1:def 5;
-              per cases by A210,A211,Lm1,ENUMSET1:18;
+              per cases by A210,A211,Lm1,ENUMSET1:def 2;
               suppose x = 0;
               hence thesis by A181,A211;
               end;
@@ -1809,19 +1804,19 @@ Def2;
               hence thesis by A183,A211;
              end;
              end;
-               then A212: f is Function of the carrier of N_4,cH2 by FUNCT_2:8;
-            A213: H2 embeds N_4
+               then A212: f is Function of the carrier of N4,cH2 by FUNCT_2:8;
+            A213: H2 embeds N4
               proof
-                   for x,y being Element of N_4
-               holds [x,y] in the InternalRel of N_4
+                   for x,y being Element of N4
+               holds [x,y] in the InternalRel of N4
                iff [f.x,f.y] in the InternalRel of H2
                 proof
-                 let x,y being Element of N_4;
-                 thus [x,y] in the InternalRel of N_4 implies
+                 let x,y being Element of N4;
+                 thus [x,y] in the InternalRel of N4 implies
                  [f.x,f.y] in the InternalRel of H2
                  proof
-                  assume A214:[x,y] in the InternalRel of N_4;
-                  per cases by A214,Th2,ENUMSET1:28;
+                  assume A214:[x,y] in the InternalRel of N4;
+                  per cases by A214,Th2,ENUMSET1:def 4;
                   suppose [x,y] = [0,1];
                      then x = 0 & y = 1 by ZFMISC_1:33;
                   hence thesis by A186;
@@ -1848,17 +1843,17 @@ Def2;
                  end;
                  end;
                  thus [f.x,f.y] in the InternalRel of H2 implies
-                 [x,y] in the InternalRel of N_4
+                 [x,y] in the InternalRel of N4
                   proof
                    assume A215: [f.x,f.y] in the InternalRel of H2;
                          [f.x,f.y] in the InternalRel of S implies
-                   [x,y] in the InternalRel of N_4 by A103;
+                   [x,y] in the InternalRel of N4 by A103;
                     then [f.x,f.y] in (((A \/ B) \/ C) \/ D) implies
-                   [x,y] in the InternalRel of N_4 by A101,Def3;
+                   [x,y] in the InternalRel of N4 by A101,Def3;
                     then [f.x,f.y] in ((A \/ B) \/ (C\/ D)) implies
-                   [x,y] in the InternalRel of N_4 by XBOOLE_1:4;
+                   [x,y] in the InternalRel of N4 by XBOOLE_1:4;
                     then [f.x,f.y] in (B \/ (A\/(C\/D))) implies
-                   [x,y] in the InternalRel of N_4 by XBOOLE_1:4;
+                   [x,y] in the InternalRel of N4 by XBOOLE_1:4;
                    hence thesis by A215,XBOOLE_0:def 2;
                   end;
                 end;
@@ -1894,6 +1889,6 @@ Def2;
           P[0] from NAT_1:sch 7(A5,A6);
     then consider S being strict non empty RelStr such that
           S in fin_RelStr_sp and A221: Card (the carrier of S) = 0 and
-          S embeds N_4;
+          S embeds N4;
     thus thesis by A221,CARD_2:59;
   end;

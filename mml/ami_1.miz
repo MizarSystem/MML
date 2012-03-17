@@ -569,11 +569,11 @@ definition let f be Function;
      for x st x in dom g holds g.x in f.x;
  existence
  proof
-   defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+   defpred P[set] means ex g st $1 = g & dom g c= dom f &
      for x st x in dom g holds g.x in f.x;
    consider A being set such that
 A1:x in A iff x in
- PFuncs(dom f, union rng f) & _P[x] from XBOOLE_0:sch 1;
+ PFuncs(dom f, union rng f) & P[x] from XBOOLE_0:sch 1;
       now let x;
     thus x in A implies ex g st x = g & dom g c= dom f &
          for x st x in dom g holds g.x in f.x by A1;
@@ -595,10 +595,10 @@ A4:      g.z in f.z by A2,A3;
   hence thesis;
  end;
  uniqueness
-  proof defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+  proof defpred P[set] means ex g st $1 = g & dom g c= dom f &
                                for x st x in dom g holds g.x in f.x;
    let A,B be set such that
-A5: x in A iff _P[x] and A6: x in B iff _P[x];
+A5: x in A iff P[x] and A6: x in B iff P[x];
    thus thesis from XBOOLE_0:sch 2(A5,A6);
   end;
 end;
@@ -607,10 +607,10 @@ registration let f be Function;
  cluster sproduct f -> functional non empty;
  coherence
  proof
-   defpred _P[set] means ex g st $1 = g & dom g c= dom f &
+   defpred P[set] means ex g st $1 = g & dom g c= dom f &
      for x st x in dom g holds g.x in f.x;
    consider A being set such that
-A1:x in A iff x in  PFuncs(dom f, union rng f) & _P[x] from XBOOLE_0:sch 1;
+A1:x in A iff x in  PFuncs(dom f, union rng f) & P[x] from XBOOLE_0:sch 1;
       {} is PartFunc of dom f, union rng f by PARTFUN1:56;
 then A2:{} in PFuncs(dom f, union rng f) by PARTFUN1:119;
       dom {} c= dom f & for x st x in dom {} holds {} .x in f.x by XBOOLE_1:2;
@@ -1220,17 +1220,17 @@ theorem Th51:
  for k holds
  (Computation s).(i+k) = (Computation (Computation s).i).k
  proof
-    defpred _P[Nat] means
+    defpred P[Nat] means
      (Computation s).(i+$1) = (Computation (Computation s).i).$1;
-A1: _P[0] by Def19;
+A1: P[0] by Def19;
 A2: now let k; assume
-A3:  _P[k];
+A3:  P[k];
       (Computation s).(i+(k+1)) = (Computation s).(i+k+1)
          .= Following (Computation s).(i+k) by Def19
          .= (Computation (Computation s).i).(k+1) by A3,Def19;
-     hence _P[k+1];
+     hence P[k+1];
    end;
-  thus for k holds _P[k] from NAT_1:sch 1(A1,A2);
+  thus for k holds P[k] from NAT_1:sch 1(A1,A2);
  end;
 
 theorem Th52:
@@ -1247,18 +1247,18 @@ A1:   j = i + k by NAT_1:28;
       (non empty non void AMI-Struct over N);
   let s be State of S such that
 A2: CurInstr((Computation s).i) = halt S;
-    defpred _P[Nat] means
+    defpred P[Nat] means
      (Computation s).(i+$1) = (Computation s).i;
-A3: _P[0];
+A3: P[0];
 A4: now let k; assume
-A5:  _P[k];
+A5:  P[k];
       (Computation s).(i+(k+1)) = (Computation s).(i+k+1)
          .= Following (Computation s).(i+k) by Def19
          .= Exec(halt S,(Computation s).i) by A2,A5,Def18
          .= (Computation s).i by Def8;
-     hence _P[k+1];
+     hence P[k+1];
    end;
-      for k holds _P[k] from NAT_1:sch 1(A3,A4);
+      for k holds P[k] from NAT_1:sch 1(A3,A4);
   hence (Computation s).j = (Computation s).i by A1;
  end;
 
@@ -1321,16 +1321,16 @@ theorem Th54:
   let S be steady-programmed
     IC-Ins-separated definite (non empty non void AMI-Struct over N);
   let s be State of S, i be Instruction-Location of S;
-    defpred _P[Nat] means s.i = (Computation s).$1.i;
-A1: _P[0] by Def19;
+    defpred P[Nat] means s.i = (Computation s).$1.i;
+A1: P[0] by Def19;
 A2: now let k;
-    assume _P[k];
+    assume P[k];
     then s.i = Exec(CurInstr (Computation s).k,(Computation s).k).i by Def13
           .= (Following (Computation s).k).i by Def18
           .= (Computation s).(k+1).i by Def19;
-    hence _P[k+1];
+    hence P[k+1];
    end;
-  thus for k holds _P[k] from NAT_1:sch 1(A1,A2);
+  thus for k holds P[k] from NAT_1:sch 1(A1,A2);
  end;
 
 theorem
@@ -1415,8 +1415,8 @@ definition let N be set; let S be AMI-Struct over N;
  func FinPartSt S -> Subset of sproduct the Object-Kind of S equals
      { p where p is Element of sproduct the Object-Kind of S: p is finite };
  coherence
-  proof defpred _P[set] means $1 is finite;
-       { p where p is Element of sproduct the Object-Kind of S: _P[p] } c=
+  proof defpred P[set] means $1 is finite;
+       { p where p is Element of sproduct the Object-Kind of S: P[p] } c=
     sproduct the Object-Kind of S from FRAENKEL:sch 10;
    hence thesis;
   end;
@@ -1743,17 +1743,17 @@ A1: l = loc;
 A2: h = halt S;
    let s be State of S such that
 A3: (IC S,loc) --> (l, h) c= s;
-    defpred _P[Nat] means (Computation s).$1 = s;
-A4: _P[0] by Def19;
+    defpred P[Nat] means (Computation s).$1 = s;
+A4: P[0] by Def19;
 A5: now let i;
     assume
-A6:  _P[i];
+A6:  P[i];
       (Computation s).(i+1) = Following (Computation s).i by Def19
      .= Exec(CurInstr s,s) by A6,Def18 .= Exec(halt S,s) by A1,A2,A3,Th64
      .= s by Def8;
-    hence _P[i+1];
+    hence P[i+1];
    end;
- thus for i holds _P[i] from NAT_1:sch 1(A4,A5);
+ thus for i holds P[i] from NAT_1:sch 1(A4,A5);
 end;
 
 theorem Th67:

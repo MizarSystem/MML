@@ -363,7 +363,7 @@ A3:   k + m = n;
       assume not m < n;
       then m + k >= n + k by REAL_1:55;
       then n - n >= n + k - n by A3,REAL_1:49;
-      hence contradiction by A1,NAT_1:19;
+      hence contradiction by A1;
     end;
   end;
 
@@ -373,7 +373,7 @@ registration
   proof
     take m = 0;
     defpred P[Nat] means for n holds m <= n;
-    P[n] by NAT_1:18;
+    P[n];
     hence thesis;
   end;
 end;
@@ -593,7 +593,7 @@ A1: dom q c= Seg k by FINSEQ_1:def 12;
 
 begin :: Fibonacci Numbers
 
-scheme Fib_Ind_1 {P[Nat] } :
+scheme FibInd1 {P[Nat] } :
   for k being non empty Nat holds P[k] provided
 A1:  P[1] and
 A2:  P[2] and
@@ -614,7 +614,7 @@ A7:  for k being non empty Nat holds Q[k] from BINARITH:sch 1(A4,A5);
      thus thesis by A7;
    end;
 
-scheme Fib_Ind_2 {P[Nat] } :
+scheme FibInd2 {P[Nat] } :
   for k be non trivial Nat holds P[k] provided
 A1:  P[2] and
 A2:  P[3] and
@@ -625,9 +625,8 @@ A4:   Q[1] by A1,A2;
 A5:   for k being non empty Nat st Q[k] holds Q[k+1]
       proof
         let k be non empty Nat;
-A6:     k+1 <> 0 by NAT_1:21;
         k+1 <> 0 + 1 by XCMPLX_1:2; then
-A7:     k+1 is non trivial Nat by A6,NAT_2:def 1;
+A7:     k+1 is non trivial Nat by NAT_2:def 1;
         assume Q[k];
         then P[k+1] & P[k+1+1];
         hence thesis by A3,A7;
@@ -1278,7 +1277,7 @@ A6:   P[m+1];
       .= F2 + Fib (m+2-'1) * Fib (n) by A4,JORDAN4:3;
       hence thesis;
     end;
-    for k being non empty Nat holds P[k] from Fib_Ind_1(A1,A2,A3);
+    for k being non empty Nat holds P[k] from FibInd1(A1,A2,A3);
     hence thesis;
   end;
 
@@ -1356,7 +1355,7 @@ A6:   P[k];
       then Fib (k+2) < Fib (k+3) by Th27;
       hence thesis;
     end;
-    for n being non trivial Nat holds P[n] from Fib_Ind_2(A3,A4,A5);
+    for n being non trivial Nat holds P[n] from FibInd2(A3,A4,A5);
     hence thesis by A2;
   end;
 
@@ -1412,7 +1411,6 @@ A5:   P[1] by A4,Th46;
 A6:   for r being non empty Nat st P[r] holds P[r+1]
       proof
         let r be non empty Nat;
-        r > 0 by NAT_1:19; then
 A7:     k + r > 0 + 1 by A4,REAL_1:67;
         assume
 A8:     P[r];
@@ -2123,16 +2121,11 @@ A13:  m divides Fib (r-'1) * Fib (n-'r) by A4,A12,NAT_1:57; then
 A14:for k being Nat st P[k] holds P[k+1]
     proof
       let k be Nat;
-A15:  k + 2 >= 0 by NAT_1:37;
-      1 + k + 2 >= 0 by NAT_1:37;then
-A16:  1 / (1 + k + 2) >= 0 by REAL_2:125;
-A17:  k + 2 <> 0 by NAT_1:37;
-A18:  1 + k + 2 <> 0 by NAT_1:37;
       assume
 A19:  P[k]; then
-A20:  r * (k+2) <= n / (k+2) * (k+2) by A15,AXIOMS:25;then
-A21:  r * (k+2) <= n by A17,XCMPLX_1:88;
-      r + r * (k+1) <= n by A17,A20,XCMPLX_1:88;
+A20:  r * (k+2) <= n / (k+2) * (k+2) by AXIOMS:25;then
+A21:  r * (k+2) <= n by XCMPLX_1:88;
+      r + r * (k+1) <= n by A20,XCMPLX_1:88;
       then r * (k+1) < n by A7,Th16; then
 A22:  (k+1) * r - (k+1) * r < n - (k+1) * r by REAL_1:54;
 A23:  n - r * (k+2) <> 0
@@ -2167,7 +2160,7 @@ A28:  n -' (k+1) * r -' r = n -' (k+1) * r - r by BINARITH:def 3
        .= n - (k+1) * r - r by A22,BINARITH:def 3
        .= n -'((k+2) * r) by A27,BINARITH:def 3;
       n - r * (k+1) >= r + r * (k+1) - r * (k+1) by A21,REAL_1:49;
-      then r <= n -' r * (k+1) by A22,BINARITH:def 3;then
+      then r <= n -' r * (k+1) by BINARITH:def 3;then
 A29:  Fib (n -' (k+1) * r) = Fib (n -' (k+2) * r + r) by A28,AMI_5:4
        .= Fib (r) * Fib (n-'(k+2) * r+1) + Fib (r-'1) * Fib (n-'(k+2)*r)
          by A7,Th42;
@@ -2177,32 +2170,30 @@ A31:  m divides Fib (n-'(k+2) * r) by A1,A8,NEWTON:98;
 A32:  n -' (k+2) * r <> 0 by A27,BINARITH:def 3;
       n -' (k+2) * r < n
       proof
-A33:    k + 1+1 > 0 by NAT_1:29;
-        r > 0 by A7,NAT_1:19;
+        r > 0 by A7;
         then - r < -0 by REAL_1:50;
-        then (- r) * (k+2) < 0 * (k+2) by A33,REAL_1:70;
+        then (- r) * (k+2) < 0 * (k+2) by REAL_1:70;
         then - r * (k+2) + n < 0 + n by REAL_1:53;
         hence thesis by A27,BINARITH:def 3;
       end;
       then n -' (k+2) * r in C by A31,A32;
       then n -'(k+2) * r >= r by CQC_SIM1:def 8;
       then n >= r + (k+2) * r by A21,SPRECT_3:7;
-      then n * (1/(1+k+2)) >= (r * (1+k+2)) * (1/(1+k+2)) by A16,AXIOMS:25;
+      then n * (1/(1+k+2)) >= (r * (1+k+2)) * (1/(1+k+2)) by AXIOMS:25;
       then n * (1/(1+k+2)) >= (r * (1+k+2)) / (1+k+2) by XCMPLX_1:100;
       then n / (1+k+2) >= r * (1+k+2) / (1+k+2) by XCMPLX_1:100;
-      hence thesis by A1,A8,A18,A30,NEWTON:98,XCMPLX_1:90;
+      hence thesis by A1,A8,A30,NEWTON:98,XCMPLX_1:90;
     end;
 A34:for k being Nat holds P[k] from NAT_1:sch 1(A9,A14);
     r < 1 + 0
     proof
 A35:  n + 2 > n by REAL_1:69;
-      then n + 2 > 0 by NAT_1:18; then
 A36:  n / (n+2) < 1 by A35,REAL_2:118;
       r <= n /(n+2) by A34;
       hence thesis by A36,AXIOMS:22;
     end;
     then r <= 0 by NAT_1:38;
-    hence contradiction by A7,NAT_1:18;
+    hence contradiction by A7;
   end;
 
 begin :: Fibonacci Numbers and Pythagorean Triples

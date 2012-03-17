@@ -67,14 +67,12 @@ scheme Fraenkel6'{ B() -> non empty set, F(set) -> set, P[set], Q[set] } :
  provided
 A1: for v being Element of B() holds P[v] iff Q[v]
 proof
- defpred PP[set] means P[$1];
- defpred QQ[set] means Q[$1];
  deffunc G(set) = F($1);
- set A = { G(v1) where v1 is Element of B() : PP[v1] },
-     B = { G(v2) where v2 is Element of B() : QQ[v2] };
-A2: for v being Element of B() holds PP[v] implies QQ[v] by A1;
+ set A = { G(v1) where v1 is Element of B() : P[v1] },
+     B = { G(v2) where v2 is Element of B() : Q[v2] };
+A2: for v being Element of B() holds P[v] implies Q[v] by A1;
  thus A c= B from Fraenkel5'(A2);
-A3: for v being Element of B() holds QQ[v] implies PP[v] by A1;
+A3: for v being Element of B() holds Q[v] implies P[v] by A1;
  thus B c= A from Fraenkel5'(A3);
 end;
 
@@ -87,18 +85,16 @@ scheme Fraenkel6''
 A1: for u being (Element of A()), v being Element of B()
       holds P[u,v] iff Q[u,v]
 proof
- defpred PP[set,set] means P[$1,$2];
- defpred QQ[set,set] means Q[$1,$2];
  deffunc G(set,set) = F($1,$2);
  set A =
-  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : PP[u1,v1] };
+  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] };
  set B =
-  { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() : QQ[u2,v2] };
+  { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() : Q[u2,v2] };
 A2: for u being (Element of A()), v being Element of B()
-      holds PP[u,v] implies QQ[u,v] by A1;
+      holds P[u,v] implies Q[u,v] by A1;
  thus A c= B from Fraenkel5''(A2);
 A3: for u being (Element of A()), v being Element of B()
-      holds QQ[u,v] implies PP[u,v] by A1;
+      holds Q[u,v] implies P[u,v] by A1;
  thus B c= A from Fraenkel5''(A3);
 end;
 
@@ -202,26 +198,24 @@ A1: for u being (Element of A()), v being Element of B()
 A2: for u being (Element of A()), v being Element of B()
       holds F(u,v) = F(v,u)
 proof
- defpred PP[set,set] means P[$1,$2];
- defpred QQ[set,set] means Q[$1,$2];
  deffunc G(set,set) = F($1,$2);
  deffunc H(set,set) = F($2,$1);
 A3: for u being Element of A(), v being Element of B()
       holds G(u,v) = H(u,v) by A2;
 A4: for u being (Element of A()), v being Element of B()
-      holds PP[u,v] implies QQ[u,v] by A1;
+      holds P[u,v] implies Q[u,v] by A1;
 A5:
-  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : PP[u1,v1] }
+  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() : P[u1,v1] }
   c= { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() :
-     QQ[u2,v2] } from Fraenkel5''(A4);
+     Q[u2,v2] } from Fraenkel5''(A4);
 A6: for u being (Element of A()), v being Element of B()
-      holds QQ[u,v] implies PP[u,v] by A1;
+      holds Q[u,v] implies P[u,v] by A1;
 A7:  { G(u1,v1) where u1 is (Element of A()), v1 is Element of B() :
-         QQ[u1,v1] }
+         Q[u1,v1] }
   c= { G(u2,v2) where u2 is (Element of A()), v2 is Element of B() :
-         PP[u2,v2] } from Fraenkel5''(A6);
-     { G(u1,v1) where u1 is Element of A(), v1 is Element of B() : QQ[u1,v1] }
-  = { H(u2,v2) where u2 is Element of A(), v2 is Element of B() : QQ[u2,v2] }
+         P[u2,v2] } from Fraenkel5''(A6);
+     { G(u1,v1) where u1 is Element of A(), v1 is Element of B() : Q[u1,v1] }
+  = { H(u2,v2) where u2 is Element of A(), v2 is Element of B() : Q[u2,v2] }
                                                      from FraenkelF''(A3);
  hence thesis by A5,A7,XBOOLE_0:def 10;
 end;
@@ -293,7 +287,7 @@ A5: for v being Element of A() st PP[v] holds F(v) = G(v) by A1,Th3;
  hence thesis by A4;
 end;
 
-scheme Fr_Set0{ A() -> non empty set, P[set] }:
+scheme FrSet0{ A() -> non empty set, P[set] }:
   { x where x is Element of A(): P[x] } c= A()
 proof
     { x where x is Element of A(): P[x] } is Subset of A() from DOMAIN_1:sch 7;
@@ -305,9 +299,9 @@ scheme Gen1''{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
  for s being (Element of A()), t being Element of B()
       st P[s,t] holds Q[F(s,t)]
 provided
-A1: for s_t being set st s_t in
+A1: for st1 being set st st1 in
     { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] }
-    holds Q[s_t]
+    holds Q[st1]
 proof let s be (Element of A()), t be Element of B();
  assume P[s,t];
   then F(s,t) in
@@ -317,47 +311,47 @@ end;
 
 scheme Gen1''A{A() -> non empty set, B() -> non empty set, F(set,set) -> set,
               P[set, set], Q[set] } :
-  for s_t being set st s_t in
+  for st1 being set st st1 in
     { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] }
-    holds Q[s_t]
+    holds Q[st1]
 provided
 A1: for s being (Element of A()), t being Element of B()
       st P[s,t] holds Q[F(s,t)]
-proof let s_t be set; assume s_t in
+proof let st1 be set; assume st1 in
     { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(): P[s1,t1] };
    then ex s1 being (Element of A()), t1 being Element of B() st
-      s_t = F(s1,t1) & P[s1,t1];
-  hence Q[s_t] by A1;
+      st1 = F(s1,t1) & P[s1,t1];
+  hence Q[st1] by A1;
  end;
 
 scheme Gen2''{A() -> non empty set, B() -> non empty set, C() -> non empty set,
               F(set,set) -> (Element of C()),
               P[set, set], Q[set] } :
- { s_t where s_t is Element of C()
-     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+ { st1 where st1 is Element of C()
+     : st1 in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
               : P[s1,t1] }
-   & Q[s_t] }
+   & Q[st1] }
 = { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
     : P[s2,t2] & Q[F(s2,t2)]}
 proof thus
-    { s_t where s_t is Element of C()
-     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+    { st1 where st1 is Element of C()
+     : st1 in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
               : P[s1,t1] }
-   & Q[s_t] }
+   & Q[st1] }
  c= { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
     : P[s2,t2] & Q[F(s2,t2)]}
  proof let x be set;
-  assume x in { s_t where s_t is Element of C()
-     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+  assume x in { st1 where st1 is Element of C()
+     : st1 in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
               : P[s1,t1] }
-   & Q[s_t] };
-   then consider s_t being Element of C() such that
-A1: x = s_t and
-A2: s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+   & Q[st1] };
+   then consider st1 being Element of C() such that
+A1: x = st1 and
+A2: st1 in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
               : P[s1,t1] } and
-A3: Q[s_t];
+A3: Q[st1];
       ex s1 being (Element of A()), t1 being Element of B() st
-      s_t = F(s1,t1) & P[s1,t1] by A2;
+      st1 = F(s1,t1) & P[s1,t1] by A2;
   hence
       x in { F(s2,t2) where s2 is (Element of A()), t2 is Element of B()
     : P[s2,t2] & Q[F(s2,t2)]} by A1,A3;
@@ -372,10 +366,10 @@ A6:  Q[F(s2,t2)];
        F(s2,t2) in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B(
 )
               : P[s1,t1] } by A5;
- hence x in { s_t where s_t is Element of C()
-     : s_t in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
+ hence x in { st1 where st1 is Element of C()
+     : st1 in { F(s1,t1) where s1 is (Element of A()), t1 is Element of B()
               : P[s1,t1] }
-   & Q[s_t] } by A4,A6;
+   & Q[st1] } by A4,A6;
 end;
 
 scheme Gen3'{A() -> non empty set, F(set) -> set, P[set], Q[set] } :
@@ -447,7 +441,7 @@ t'
 ]}                                                 by A2;
   end;
 
-scheme FrSet_1{ D() -> non empty set, A() -> set, P[set], F(set) -> set }:
+scheme FrSet1{ D() -> non empty set, A() -> set, P[set], F(set) -> set }:
   { F(y) where y is Element of D() : F(y) in A() & P[y] } c= A()
 proof let x be set;
   assume x in { F(y) where y is Element of D() : F(y) in A() & P[y] };
@@ -455,7 +449,7 @@ proof let x be set;
   hence thesis;
  end;
 
-scheme FrSet_2{ D() -> non empty set, A() -> set, Q[set], F(set) -> set }:
+scheme FrSet2{ D() -> non empty set, A() -> set, Q[set], F(set) -> set }:
   { F(y) where y is Element of D() : Q[y] & not F(y) in A() } misses A()
 proof
    assume { F(y) where y is Element of D() : Q[y] & not F(y) in A() }
@@ -503,12 +497,11 @@ scheme FrEqua2{ A()-> non empty set, B() -> non empty set, F(set,set) -> set,
     = { F(s',x()) where s' is Element of A(): P[s',x()] }
 proof
     defpred Q[set,set] means $2 = x() & P[$1,$2];
-    defpred P'[set,set] means P[$1,$2];
 A1: for s being Element of A() for t being Element of B() holds
-      Q[s,t] iff t = x() & P'[s,t];
+      Q[s,t] iff t = x() & P[s,t];
     deffunc G(set,set) = F($1,$2);
   thus { G(s,t) where s is Element of A(), t is Element of B(): Q[s,t] }
-    = { G(s',x()) where s' is Element of A(): P'[s',x()] } from FrEqua1(A1);
+    = { G(s',x()) where s' is Element of A(): P[s',x()] } from FrEqua1(A1);
  end;
 
 :: dziedziny funkcji
@@ -821,7 +814,7 @@ A29:    P[v,x];
  hence thesis;
 end;
 
-scheme Fin_Im{A() ->non empty set, B()->non empty set
+scheme FinIm{A() ->non empty set, B()->non empty set
 , x()-> (Element of Fin B()),
   F(set)->(Element of A()), P[set,set]}:
   ex c1 being Element of Fin A() st
@@ -843,7 +836,7 @@ A2:  c is finite from FraenkelFin(A1);
       hence thesis;
      end;
 then A3: c1 is finite by A2,FINSET_1:13;
-      c1 c= A() from Fr_Set0;
+      c1 c= A() from FrSet0;
    then reconsider c1 as Element of Fin A() by A3,FINSUB_1:def 5;
   take c1; let t be Element of A();
       t in c1 implies

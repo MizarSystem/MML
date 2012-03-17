@@ -291,25 +291,25 @@ theorem :: SFMASTR3:32
 begin :: Finding minimum in a section of an array
 
 definition
- let start, finish, min_pos be Int-Location, f be FinSeq-Location;
+ let start, finish, minpos be Int-Location, f be FinSeq-Location;
 ::  set aux1 = 1-stRWNotIn {start, finish, min_pos};
 ::  set aux2 = 2-ndRWNotIn {start, finish, min_pos};
 ::  set cv =   3-rdRWNotIn {start, finish, min_pos};
- func FinSeqMin(f, start, finish, min_pos) -> Macro-Instruction equals
+ func FinSeqMin(f, start, finish, minpos) -> Macro-Instruction equals
 :: SFMASTR3:def 9
 
-  min_pos := start ';'
+  minpos := start ';'
   for-up ( cv, start, finish,
            aux1 := (f, cv) ';'
-           (aux2 := (f, min_pos)) ';'
-           if>0(aux2, aux1, Macro (min_pos := cv), SCM+FSA-Stop)
+           (aux2 := (f, minpos)) ';'
+           if>0(aux2, aux1, Macro (minpos := cv), SCM+FSA-Stop)
          );
 end;
 
 registration
- let start, finish be Int-Location, min_pos be read-write Int-Location,
+ let start, finish be Int-Location, minpos be read-write Int-Location,
      f be FinSeq-Location;
- cluster FinSeqMin(f, start, finish, min_pos) -> good;
+ cluster FinSeqMin(f, start, finish, minpos) -> good;
 end;
 
 theorem :: SFMASTR3:33
@@ -381,10 +381,10 @@ definition
 
  func Selection-sort f -> Macro-Instruction equals
 :: SFMASTR3:def 11
-  (1-stNotUsed swap(f, cv, min_pos)) :=len f ';'
-  for-up ( cv, intloc 0, (1-stNotUsed swap(f, cv, min_pos)),
-           FinSeqMin(f, cv, (1-stNotUsed swap(f, cv, min_pos)), min_pos) ';'
-           swap(f, cv, min_pos)
+  (1-stNotUsed swap(f, cv, minpos)) :=len f ';'
+  for-up ( cv, intloc 0, (1-stNotUsed swap(f, cv, minpos)),
+           FinSeqMin(f, cv, (1-stNotUsed swap(f, cv, minpos)), minpos) ';'
+           swap(f, cv, minpos)
          );
 end;
 

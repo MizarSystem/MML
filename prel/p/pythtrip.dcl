@@ -40,6 +40,7 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="21"/>
 <Adjective nr="41"/>
 <Adjective nr="44"/>
@@ -58,6 +59,7 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="21"/>
 <Adjective nr="41" value="false"/>
 <Adjective nr="44"/>

@@ -25,7 +25,7 @@ environ
  registrations DICKSON, YELLOW_1, ORDERS_2, CARD_1, POLYNOM1, BINARITH,
       STRUCT_0, RELSET_1, SUBSET_1, WAYBEL_0, FINSET_1, FINSUB_1, CARD_5,
       CQC_LANG, ORDINAL1, FUNCT_1, FINSEQ_1, XREAL_0, RELAT_1, FUNCT_2,
-      NUMBERS, ORDINAL2;
+      NUMBERS, ORDINAL2, NAT_1;
  requirements SUBSET, NUMERALS, REAL, BOOLE, ARITHM;
  definitions TARSKI, RELAT_2, WELLFND1;
  theorems WELLORD1, TARSKI, RELAT_2, RELSET_1, ZFMISC_1, ORDERS_2, NAT_1,
@@ -75,7 +75,7 @@ proof
     end;
     assume A3: k-1 is Nat & k-1 < n;
     then reconsider k1 = k-1 as Nat;
-        0 <= k1 by NAT_1:18;
+        0 <= k1;
     then A4: 0+1 <= k-1+1 by AXIOMS:24;
     reconsider n1 = n-1 as Nat by A3,NAT_1:60;
      k-1+1 <= n-1+1 by A3,NAT_1:38;
@@ -153,10 +153,10 @@ proof
             now let k be Nat such that
         A5: k in Seg len fs;
                 now assume fs.k <> 0;
-                then 0 < fs.k by NAT_1:19;
+                then 0 < fs.k;
             then A6: ex k being Nat
                  st k in dom fs' & 0 < fs.k by A2,A5;
-                    for k being Nat st k in dom fs holds 0 <= fs.k by NAT_1:19;
+                    for k being Nat st k in dom fs holds 0 <= fs.k;
                 hence contradiction by A1,A6,RVSUM_1:115;
             end;
             hence fs.k = ((len fs) |-> 0).k by A3,A5,FUNCOP_1:13;
@@ -172,8 +172,8 @@ definition
   func (i,j)-cut b -> ManySortedSet of j-'i means :Def1:
     for k being Nat st k in j-'i holds it.k = b.(i+k);
 existence proof
-    defpred _P[set,set] means ex k1 being Nat st k1 = $1 & $2 = b.(i+k1);
-A1: for x,y1,y2 being set st x in j-'i & _P[x,y1] & _P[x,y2] holds y1 = y2;
+    defpred P[set,set] means ex k1 being Nat st k1 = $1 & $2 = b.(i+k1);
+A1: for x,y1,y2 being set st x in j-'i & P[x,y1] & P[x,y2] holds y1 = y2;
         now let x be set such that
     A2: x in j-'i;
             j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
@@ -183,12 +183,12 @@ A1: for x,y1,y2 being set st x in j-'i & _P[x,y1] & _P[x,y2] holds y1 = y2;
         consider y being set such that
     A4: y = b.(i+x');
         take y;
-        thus _P[x,y] by A4; :: ex k' being Nat st k'=x & y = b.(i+k') by A4;
+        thus P[x,y] by A4; :: ex k' being Nat st k'=x & y = b.(i+k') by A4;
     end;
-then A5: for x being set st x in j-'i ex y being set st _P[x,y];
+then A5: for x being set st x in j-'i ex y being set st P[x,y];
     consider f being Function such that
 A6: dom f = j-'i and
-A7: for k being set st k in j-'i holds _P[k,f.k]  from FUNCT_1:sch 2(A1, A5);
+A7: for k being set st k in j-'i holds P[k,f.k]  from FUNCT_1:sch 2(A1, A5);
     reconsider f as ManySortedSet of j-'i by A6,PBOOLE:def 3;
     take f;
     let k be Nat such that
@@ -305,8 +305,7 @@ registration
   cluster Fin (x,n) -> non empty;
 coherence proof
     consider y being Element of x;
-        0 < n by NAT_1:19;
-    then A1: 0+1 < n+1 by REAL_1:67;
+    A1: 0+1 < n+1 by REAL_1:67;
     A2: now per cases by ORDINAL1:26;
         suppose 1 c= n;
             hence Card {y} <=`n by CARD_1:79;
@@ -337,9 +336,9 @@ proof
 A1: IR is_transitive_in CR by ORDERS_2:def 5;
 A2: IR is_antisymmetric_in CR by ORDERS_2:def 6;
 A3: X is finite;
-    defpred _P[set] means (($1 <> {}) implies (ex x being Element of R
+    defpred P[set] means (($1 <> {}) implies (ex x being Element of R
                             st x in $1 & x is_maximal_wrt $1, IR));
-A4: _P[{}];
+A4: P[{}];
         now let y,B be set such that
     A5: y in X & B c= X and
     A6: ((B <> {}) implies (ex x being Element of R
@@ -445,8 +444,8 @@ WAYBEL_4:def 24;
                   st x in (B \/ {y}) & x is_maximal_wrt (B \/ {y}), IR;
     end;
     end;
-then A20: for y,B being set st y in X & B c= X & _P[B] holds _P[B \/ {y}];
-    thus _P[X] from FINSET_1:sch 2(A3, A4, A20);
+then A20: for y,B being set st y in X & B c= X & P[B] holds P[B \/ {y}];
+    thus P[X] from FINSET_1:sch 2(A3, A4, A20);
 end;
 
 theorem Th8:
@@ -461,9 +460,9 @@ proof
 A1: IR is_transitive_in CR by ORDERS_2:def 5;
 A2: IR is_antisymmetric_in CR by ORDERS_2:def 6;
 A3: X is finite;
-    defpred _P[set] means (($1 <> {}) implies (ex x being Element of R
+    defpred P[set] means (($1 <> {}) implies (ex x being Element of R
                             st x in $1 & x is_minimal_wrt $1, IR));
-A4: _P[{}];
+A4: P[{}];
         now let y,B be set such that
     A5: y in X & B c= X and
     A6: ((B <> {}) implies (ex x being Element of R
@@ -569,8 +568,8 @@ WAYBEL_4:def 26;
     end;
     end;
 then A20: for y,B being set
-     st y in X & B c= X & _P[B] holds _P[B \/ {y}];
-    thus _P[X] from FINSET_1:sch 2(A3, A4, A20);
+     st y in X & B c= X & P[B] holds P[B \/ {y}];
+    thus P[X] from FINSET_1:sch 2(A3, A4, A20);
 end;
 
 theorem
@@ -585,10 +584,10 @@ A1: f is descending;
     set IR = the InternalRel of R, CR = the carrier of R;
 A2: IR is_transitive_in CR by ORDERS_2:def 5;
 A3: IR is_antisymmetric_in CR by ORDERS_2:def 6;
-    defpred _P[Nat] means (for i being Nat st i < $1
+    defpred P[Nat] means (for i being Nat st i < $1
           holds f.i <> f.$1 & [f.$1, f.i] in IR);
 
-A4: _P[0] by NAT_1:18;
+A4: P[0];
         now let j be Nat such that
     A5: for i being Nat st i < j
          holds f.i <> f.j & [f.j, f.i] in IR;
@@ -611,8 +610,8 @@ RELAT_2:def 4,def 8;
         end;
         hence f.i <> f.(j+1) & [f.(j+1), f.i] in IR;
     end;
-then A8: for j being Nat st _P[j] holds _P[j+1];
-    thus for j being Nat holds _P[j] from NAT_1:sch 1(A4,A8);
+then A8: for j being Nat st P[j] holds P[j+1];
+    thus for j being Nat holds P[j] from NAT_1:sch 1(A4,A8);
 end;
 
 definition
@@ -629,8 +628,8 @@ proof let R be non empty transitive RelStr, f be sequence of R such that
 A1: f is non-increasing;
     set IR = the InternalRel of R, CR = the carrier of R;
 A2: IR is_transitive_in CR by ORDERS_2:def 5;
-    defpred _P[Nat] means (for i being Nat st i < $1 holds [f.$1, f.i] in IR);
-A3: _P[0] by NAT_1:18;
+    defpred P[Nat] means (for i being Nat st i < $1 holds [f.$1, f.i] in IR);
+A3: P[0];
         now let j be Nat such that
     A4: for i being Nat st i < j holds [f.j, f.i] in IR;
         let i be Nat such that
@@ -650,8 +649,8 @@ A3: _P[0] by NAT_1:18;
         end;
         hence [f.(j+1), f.i] in IR;
     end;
-then A7: for j being Nat st _P[j] holds _P[j+1];
-    thus for j being Nat holds _P[j] from NAT_1:sch 1(A3,A7);
+then A7: for j being Nat st P[j] holds P[j+1];
+    thus for j being Nat holds P[j] from NAT_1:sch 1(A3,A7);
 end;
 
 theorem Th11:
@@ -925,7 +924,7 @@ A1: dom CUT1 = j-'i by PBOOLE:def 3;
             reconsider k'=k as Nat by A3;
                 CUT1.k = (EmptyBag n).(i+k') by A1,A2,Def1
                   .= 0 by POLYNOM1:56;
-            hence CUT1.k <= (EmptyBag (j-'i)).k by NAT_1:18;
+            hence CUT1.k <= (EmptyBag (j-'i)).k;
         end;
         suppose not k in dom CUT1;
             then CUT1.k = {} by FUNCT_1:def 4;
@@ -995,8 +994,7 @@ A1: b divides a;
   let x be set;
   assume x in support b;
 then A2: b.x <> 0 by POLYNOM1:def 7;
-       now assume a.x = 0; then b.x <= 0 & 0 <= b.x by A1,NAT_1:18
-,POLYNOM1:def 13
+       now assume a.x = 0; then b.x <= 0 & 0 <= b.x by A1,POLYNOM1:def 13
 ;
     hence contradiction by A2;
    end;
@@ -1096,7 +1094,7 @@ then A1: R is well_founded by WELLORD1:def 4;
        cr = field ir by ORDERS_1:100;
    then ir is_well_founded_in cr by A1,WELLORD1:5;
 then A2: r is well_founded by WELLFND1:def 2;
-    defpred _P[set,set] means $2 = (o-->0)+*($1,1);
+    defpred P[set,set] means $2 = (o-->0)+*($1,1);
 A3: now let n be Element of NAT; set y = (o-->0)+*(n,1);
     A4: dom (o-->0) = o by FUNCOP_1:19;
         reconsider y as ManySortedSet of o;
@@ -1128,10 +1126,10 @@ A3: now let n be Element of NAT; set y = (o-->0)+*(n,1);
         then y is finite-support by POLYNOM1:def 8;
       then reconsider y as Element of cr by A6,POLYNOM1:def 14;
     take y;
-    thus _P[n,y];
+    thus P[n,y];
     end;
   consider f being Function of NAT, cr such that
-A10: for n being Element of NAT holds _P[n,f.n] from FUNCT_2:sch 3(A3);
+A10: for n being Element of NAT holds P[n,f.n] from FUNCT_2:sch 3(A3);
   reconsider f as sequence of r;
       f is descending proof let n be Nat;
   set fn1 = f.(n+1), fn = f.n;
@@ -1170,13 +1168,13 @@ definition
       ex i being Ordinal st i in n & p.i < q.i &
        for k being Ordinal st i in k & k in n holds p.k = q.k;
 existence proof
-   defpred _P[set,set] means ($1 = $2 or
+   defpred P[set,set] means ($1 = $2 or
    ex p,q being Element of Bags n st $1 = p & $2 = q &
     ex i being Ordinal st i in n & p.i < q.i &
      for k being Ordinal st i in k & k in n holds p.k = q.k);
     consider ILO being Relation of Bags n, Bags n such that
 A1: for x, y being set holds [x,y] in ILO iff
-    x in Bags n & y in Bags n & _P[x,y] from RELSET_1:sch 1;
+    x in Bags n & y in Bags n & P[x,y] from RELSET_1:sch 1;
 A2: ILO is_reflexive_in Bags n proof
         let x be set; assume
             x in Bags n;
@@ -1474,7 +1472,7 @@ proof let n be Ordinal; set ILO = InvLexOrder n;
           thus j in n by A25,A27;
        A28: a.j <> 0 by A25,A27,POLYNOM1:def 7;
               (EmptyBag n).j = 0 by POLYNOM1:56;
-          hence (EmptyBag n).j < a.j by A28,NAT_1:19;
+          hence (EmptyBag n).j < a.j by A28;
           let k be Ordinal such that
           A29: j in k & k in n;
           A30: j c= k by A29,ORDINAL1:def 2;
@@ -1540,9 +1538,9 @@ end;
 
 theorem Th26:
 for o being Ordinal holds InvLexOrder o is well-ordering proof
-    defpred _P[Ordinal] means InvLexOrder $1 is well-ordering;
+    defpred P[Ordinal] means InvLexOrder $1 is well-ordering;
 A1: now let o be Ordinal such that
-A2:   for n being Ordinal st n in o holds _P[n];
+A2:   for n being Ordinal st n in o holds P[n];
      set ilo = InvLexOrder o;
 A3:     ilo is_strongly_connected_in Bags o by Def7;
        then ilo is_reflexive_in Bags o by ORDERS_1:92;
@@ -1573,23 +1571,23 @@ A5:   now assume ilo is non well_founded;
                  for k being Ordinal st i in k & k in o holds b.k = a.k
                by A12,Def8;
                  b.i < 0 by A11,A13,POLYNOM1:56;
-          hence contradiction by NAT_1:18;
+          hence contradiction;
          end;
      then A14: len s in dom s by FINSEQ_5:6,RELAT_1:60;
          then A15: s.len s in rng s by FUNCT_1:12;
          then reconsider j = s.len s as Ordinal by A10,ORDINAL1:23;
-         defpred _P[set,set] means ex b being bag of o st f.$1 = b & $2 = b.j;
+         defpred P[set,set] means ex b being bag of o st f.$1 = b & $2 = b.j;
          A16: now let x be Nat;
              reconsider b = f.x as bag of o by POLYNOM1:def 14;
              take y = b.j;
-             thus _P[x,y];
+             thus P[x,y];
          end;
          consider t being Function of NAT, NAT such that
-     A17: for i being Nat holds _P[i,t.i] from FUNCT_2:sch 3(A16);
-     defpred _P[Nat] means for i being Ordinal, b being bag of o
+     A17: for i being Nat holds P[i,t.i] from FUNCT_2:sch 3(A16);
+     defpred P[Nat] means for i being Ordinal, b being bag of o
           st j in i & i in o & f.$1 = b holds b.i = 0;
-     A18: for n being Nat holds _P[n] proof
-         A19: _P[0] proof let i be Ordinal, b be bag of o such that
+     A18: for n being Nat holds P[n] proof
+         A19: P[0] proof let i be Ordinal, b be bag of o such that
              A20: j in i & i in o & f.0 = b;
               assume b.i <> 0;
                 then i in support a by A20,POLYNOM1:def 7;
@@ -1608,7 +1606,7 @@ A5:   now assume ilo is non well_founded;
               hence contradiction by A20,A21,ORDINAL1:7;
              end;
              end;
-         A23: for n being Nat st _P[n] holds _P[n+1] proof let n be Nat; assume
+         A23: for n being Nat st P[n] holds P[n+1] proof let n be Nat; assume
              A24: for i being Ordinal, b being bag of o
                   st j in i & i in o & f.n = b holds b.i = 0;
               let i be Ordinal, b1 be bag of o such that
@@ -1626,12 +1624,12 @@ A5:   now assume ilo is non well_founded;
                  hence b1.i = 0 by A25,A26,A29;
                end;
                suppose i1 = i;
-                 hence b1.i = 0 by A26,A28,NAT_1:18;
+                 hence b1.i = 0 by A26,A28;
                end;
                suppose A30: i in i1; assume b1.i <> 0;
                        j in i1 by A25,A30,ORDINAL1:19;
                    then b.i1 = 0 by A24,A27;
-                hence contradiction by A28,NAT_1:18;
+                hence contradiction by A28;
              end;
              end;
           thus thesis from NAT_1:sch 1(A19,A23);
@@ -1648,7 +1646,7 @@ DICKSON:def 15;
         A34: fn1.i < fn.i and
         A35: for k being Ordinal st i in k & k in o holds fn1.k = fn.k
              by A32,Def8;
-        A36: fn.i <> 0 by A34,NAT_1:18;
+        A36: fn.i <> 0 by A34;
             consider bn being bag of o such that
         A37: fn = bn & tn = bn.j by A17;
             consider bn1 being bag of o such that
@@ -1676,17 +1674,17 @@ DICKSON:def 15;
    then A39: field(iln) = Bags n by PARTIT_2:9;
         consider p being Nat such that
      A40: for r being Nat st p <= r holds t.p = t.r by A31,Th11;
-     defpred _P[Nat,set] means
+     defpred P[Nat,set] means
        ex b being bag of o st b = f.(p+$1) & $2 = b|j;
      A41: now let x be Element of NAT;
             reconsider b = f.(p+x) as bag of o by POLYNOM1:def 14;
             reconsider y = b|j as bag of n by A10,A15,Th21;
             reconsider y as Element of Bags n by POLYNOM1:def 14;
          take y;
-         thus _P[x,y];
+         thus P[x,y];
         end;
         consider g being Function of NAT, Bags n such that
-     A42: for x being Element of NAT holds _P[x,g.x] from FUNCT_2:sch 3(A41);
+     A42: for x being Element of NAT holds P[x,g.x] from FUNCT_2:sch 3(A41);
         reconsider g as sequence of S;
             now let k be Nat;
            consider b being bag of o such that
@@ -1763,9 +1761,9 @@ A65:     ilo is_antisymmetric_in Bags o by A62,RELAT_2:def 12;
 A66:     ilo is_connected_in field ilo by A3,A4,ORDERS_1:92;
            ilo is_well_founded_in field ilo by A5,WELLORD1:5;
      then ilo well_orders field ilo by A4,A63,A64,A65,A66,WELLORD1:def 5;
-    hence _P[o] by WELLORD1:8;
+    hence P[o] by WELLORD1:8;
    end;
-thus for o being Ordinal holds _P[o] from ORDINAL1:sch 2(A1);
+thus for o being Ordinal holds P[o] from ORDINAL1:sch 2(A1);
 end;
 
 definition
@@ -1776,12 +1774,12 @@ A1: for a,b,c being bag of n st [a,b] in o holds [a+c, b+c] in o;
         ((TotDegree a < TotDegree b) or
          (TotDegree a = TotDegree b & [a,b] in o));
 existence proof
-    defpred _P[set,set] means
+    defpred P[set,set] means
     (ex x', y' being bag of n st x'=$1 & y'=$2 &
      ((TotDegree x' < TotDegree y') or
       (TotDegree x' = TotDegree y' & [x',y'] in o)));
     consider R being Relation of Bags n such that
-A2: for x,y being set holds [x,y] in R iff x in Bags n & y in Bags n & _P[x,y]
+A2: for x,y being set holds [x,y] in R iff x in Bags n & y in Bags n & P[x,y]
                  from RELSET_1:sch 1;
 A3:  now
            now let x be set such that
@@ -1956,7 +1954,7 @@ A2: o is_strongly_connected_in Bags n;
         end;
         suppose a <> EmptyBag n;
             then TotDegree a <> 0 by Th16;
-            then TotDegree EmptyBag n < TotDegree a by A7,NAT_1:19;
+            then TotDegree EmptyBag n < TotDegree a by A7;
             hence [EmptyBag n, a] in Graded o by A1,Def9;
     end;
     end;
@@ -2020,7 +2018,7 @@ then A2: R is well_founded by WELLORD1:def 4;
        cr = field ir by ORDERS_1:100;
    then ir is_well_founded_in cr by A2,WELLORD1:5;
 then A3: r is well_founded by WELLFND1:def 2;
-    defpred _P[Nat, set] means $2 = (o-->0)+*($1,1);
+    defpred P[Nat, set] means $2 = (o-->0)+*($1,1);
 A4: now let n be Element of NAT; set y = (o-->0)+*(n,1);
     A5: dom (o-->0) = o by FUNCOP_1:19;
         reconsider y as ManySortedSet of o;
@@ -2052,10 +2050,10 @@ A4: now let n be Element of NAT; set y = (o-->0)+*(n,1);
         then y is finite-support by POLYNOM1:def 8;
       then reconsider y as Element of cr by A7,POLYNOM1:def 14;
     take y;
-    thus _P[n,y];
+    thus P[n,y];
     end;
   consider f being Function of NAT, cr such that
-A11: for n being Element of NAT holds _P[n,f.n] from FUNCT_2:sch 3(A4);
+A11: for n being Element of NAT holds P[n,f.n] from FUNCT_2:sch 3(A4);
   reconsider f as sequence of r;
       f is descending proof let n be Nat;
   set fn1 = f.(n+1), fn = f.n;
@@ -2237,13 +2235,13 @@ definition
      ((0,i+1)-cut p = (0,i+1)-cut q & [(i+1,n)-cut p,(i+1,n)-cut q] in o2);
 existence proof
 A1: i+1 = (i+1)-'0 by JORDAN3:2;
-    defpred _P[set,set] means
+    defpred P[set,set] means
     (ex p,q being bag of n st $1 = p & $2 = q &
     (((0,i+1)-cut p <> (0,i+1)-cut q & [(0,i+1)-cut p, (0,i+1)-cut q] in o1) or
    ((0,i+1)-cut p = (0, i+1)-cut q & [(i+1, n)-cut p, (i+1, n)-cut q] in o2)));
     consider BO being Relation of Bags n, Bags n such that
 A2: for x, y being set holds [x,y] in BO iff
-              x in Bags n & y in Bags n & _P[x,y] from RELSET_1:sch 1;
+              x in Bags n & y in Bags n & P[x,y] from RELSET_1:sch 1;
         now let x be set such that
     A3: x in Bags n;
         reconsider x' = x as bag of n by A3,POLYNOM1:def 14;
@@ -2533,11 +2531,11 @@ definition
      the carrier of it = Bags n &
    for x,y being bag of n holds [x,y] in the InternalRel of it iff x divides y;
 existence proof
-    defpred _P[set,set] means (ex x',y' being bag of n
+    defpred P[set,set] means (ex x',y' being bag of n
        st x' = $1 & y'= $2 & x' divides y');
     consider IR being Relation of Bags n, Bags n such that
 A1: for x,y being set holds [x,y] in IR iff
-      x in Bags n & y in Bags n & _P[x,y] from RELSET_1:sch 1;
+      x in Bags n & y in Bags n & P[x,y] from RELSET_1:sch 1;
     set IT = RelStr(# Bags n, IR #);
     reconsider IT as strict RelStr;
     take IT;
@@ -2857,24 +2855,24 @@ definition
 existence proof
     set IR = the InternalRel of R, CR = the carrier of R;
     set FBCP = [: Fin CR, Fin CR :];
-    defpred _P[Nat,set,set] means $3 =
+    defpred P[Nat,set,set] means $3 =
      {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
       PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in $2};
-A1: for n being Nat for x being set ex y being set st _P[n,x,y];
+A1: for n being Nat for x being set ex y being set st P[n,x,y];
 A2: for n being Nat for x,y1,y2 being set
-     st _P[n,x,y1] & _P[n,x,y2] holds y1 = y2;
+     st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
     consider f being Function such that
 A3: dom f = NAT and
 A4: f.0 = {[x,y] where x, y is Element of Fin CR :
            x={} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
            [PosetMax x,PosetMax y] in IR)} and
-A5: for n being Element of NAT holds _P[n,f.n,f.(n+1)] from RECDEF_1:sch 1
+A5: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 1
 (A1, A2);
         now thus dom f = NAT by A3;
         let x be set such that
     A6: x in NAT;
         reconsider x' = x as Nat by A6;
-        per cases by NAT_1:19;
+        per cases;
         suppose A7: x' = 0;
             set F0 = {[a,b] where a, b is Element of Fin the carrier of R :
                       a={} or (a<>{} & b<>{} & PosetMax a <> PosetMax b &
@@ -2928,21 +2926,21 @@ A16: dom IT2 = NAT & IT2.0 = {[x,y] where x, y is Element of Fin CR :
      for n being Element of NAT holds IT2.(n+1) =
        {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
        PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in IT2.n};
-     defpred _P[Nat,set,set] means
+     defpred P[Nat,set,set] means
       $3 = {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
        PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in $2};
 A17: dom IT1 = NAT &
     IT1.0 = {[x,y] where x, y is Element of Fin CR :
         x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
         [PosetMax x,PosetMax y] in IR)} &
-    for n being Element of NAT holds _P[n,IT1.n,IT1.(n+1)] by A15;
+    for n being Element of NAT holds P[n,IT1.n,IT1.(n+1)] by A15;
 A18: dom IT2 = NAT &
     IT2.0 = {[x,y] where x, y is Element of Fin CR :
         x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
         [PosetMax x,PosetMax y] in IR)} &
-    for n being Element of NAT holds _P[n,IT2.n,IT2.(n+1)] by A16;
+    for n being Element of NAT holds P[n,IT2.n,IT2.(n+1)] by A16;
 A19: for n being Nat, x,y1,y2 being set st
-        _P[n,x,y1] & _P[n,x,y2] holds y1 = y2;
+        P[n,x,y1] & P[n,x,y2] holds y1 = y2;
     thus IT1 = IT2 from RECDEF_1:sch 9(A17, A18, A19);
 end;
 end;
@@ -2971,7 +2969,7 @@ A2: dom FOAR = NAT by Def16;
         consider n being set such that
     A4: n in dom FOAR & Y = FOAR.n by A3,FUNCT_1:def 5;
         reconsider n as Nat by A4;
-        per cases by NAT_1:19;
+        per cases;
         suppose n = 0;
             then consider a,b being Element of Fin CR such that
         A5: [x,y] = [a,b] and
@@ -3089,7 +3087,7 @@ proof
         a be Element of Fin the carrier of R;
     assume
 A1: Card a = n+1;
-then A2: a <> {} by CARD_1:47,INT_2:9,XCMPLX_0:def 6;
+then A2: a <> {} by CARD_1:47;
     reconsider a'=a as finite set;
         now let w be set such that
     A3: w in {PosetMax a};
@@ -3131,16 +3129,16 @@ A4:  now
        then A7: (FOAR).0 in rng FOAR
                by FUNCT_1:def 5;
            reconsider x'=x as Element of Fin CR by A5;
-           defpred _P[Nat] means
+           defpred P[Nat] means
             (for x being Element of Fin CR st Card x = $1
               holds [x,x] in union rng FOAR);
-       A8: _P[0]  proof let x be Element of Fin CR such that
+       A8: P[0]  proof let x be Element of Fin CR such that
            A9: Card x = 0;
                    x = {} by A9,CARD_2:59;
                then [x,x] in (FOAR).0 by A1;
                hence [x,x] in union rng FOAR by A7,TARSKI:def 4;
            end;
-       A10: for n being Nat st _P[n] holds _P[n+1] proof
+       A10: for n being Nat st P[n] holds P[n+1] proof
                let n be Nat such that
            A11: for x being Element of Fin CR st Card x = n
                 holds [x,x] in union rng FOAR;
@@ -3159,7 +3157,7 @@ A4:  now
                    hence [y,y] in union rng FOAR by A13,Th36;
            end;
            end;
-       A14: for n being Nat holds _P[n] from NAT_1:sch 1(A8, A10);
+       A14: for n being Nat holds P[n] from NAT_1:sch 1(A8, A10);
            consider n being Nat such that
        A15: x,n are_equipotent by A6,CARD_1:74;
                Card x' = n by A15,CARD_1:def 5;
@@ -3171,7 +3169,7 @@ A4:  now
        A16: x in Fin CR & y in Fin CR & [x,y] in X & [y,x] in X;
            reconsider x'=x as Element of Fin CR by A16;
        A17: x c= CR & x is finite by A16,FINSUB_1:def 5;
-       defpred _R[Nat] means  (for x, y being Element of Fin CR
+       defpred R[Nat] means  (for x, y being Element of Fin CR
              st Card x = $1 & [x,y] in X & [y,x] in X holds x = y);
                now let a,b be Element of Fin CR such that
            A18: Card a = 0 & [a,b] in X & [b,a] in X;
@@ -3179,7 +3177,7 @@ A4:  now
                    a' = {} by A18,CARD_2:59;
                hence a = b by A18,Th37;
            end;
-       then A19: _R[0];
+       then A19: R[0];
                now let n be Nat such that
            A20: for a,b being Element of Fin CR
                 st Card a = n & [a,b] in X & [b,a] in X
@@ -3246,8 +3244,8 @@ A4:  now
                    hence a = b;
            end;
            end;
-       then A29: for n being Nat st _R[n] holds _R[n+1];
-       A30: for n being Nat holds _R[n] from NAT_1:sch 1(A19,A29);
+       then A29: for n being Nat st R[n] holds R[n+1];
+       A30: for n being Nat holds R[n] from NAT_1:sch 1(A19,A29);
            consider n being Nat such that
        A31: x,n are_equipotent by A17,CARD_1:74;
                Card x' = n by A31,CARD_1:def 5;
@@ -3258,7 +3256,7 @@ A4:  now
            now let x,y,z be set such that
        A32: x in Fin CR & y in Fin CR & z in Fin CR &
            [x,y] in X & [y,z] in X;
-        defpred _S[Nat] means
+        defpred S[Nat] means
          (for a,b,c being Element of Fin CR
               st Card a = $1 & [a,b] in X & [b,c] in X
               holds [a,c] in X);
@@ -3268,7 +3266,7 @@ A4:  now
                    a' = {} by A33,CARD_2:59;
                hence [a,c] in X by Th36;
            end;
-       then A34: _S[0];
+       then A34: S[0];
                now let n be Nat such that
            A35: for a,b,c being Element of Fin CR
                 st Card a = n & [a,b] in X & [b,c] in X
@@ -3345,8 +3343,8 @@ ORDERS_1:14;
                    hence [a,c] in X;
            end;
            end;
-       then A45: for n being Nat st _S[n] holds _S[n+1];
-       A46: for n being Nat holds _S[n] from NAT_1:sch 1(A34, A45);
+       then A45: for n being Nat st S[n] holds S[n+1];
+       A46: for n being Nat holds S[n] from NAT_1:sch 1(A34, A45);
            reconsider x'=x as Element of Fin CR by A32;
            x c= CR & x is finite by A32,FINSUB_1:def 5;
            then consider n being Nat such that
@@ -3438,14 +3436,14 @@ correctness proof
 A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
         now let x,y be Element of FinPoset R;
         reconsider x'=x,y'=y as Element of Fin CR by A1;
-        defpred _P[Nat] means (for x,y being Element of Fin CR
+        defpred P[Nat] means (for x,y being Element of Fin CR
                st Card x = $1 holds ([x,y] in FIR or [y,x] in FIR));
                 now let a,b be Element of Fin CR such that
             A2: Card a = 0;
                a = {} by A2,CARD_2:59;
                 hence [a,b] in FIR or [a,b] in FIR by A1,Th40;
             end;
-        then A3: _P[0];
+        then A3: P[0];
                 now let n be Nat such that
             A4: for x,y being Element of Fin CR
                  st Card x = n
@@ -3501,8 +3499,8 @@ A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
                   hence [a,b] in FIR or [b,a] in FIR;
             end;
             end;
-        then A11: for n being Nat st _P[n] holds _P[n+1];
-        A12: for n being Nat holds _P[n] from NAT_1:sch 1(A3,A11);
+        then A11: for n being Nat st P[n] holds P[n+1];
+        A12: for n being Nat holds P[n] from NAT_1:sch 1(A3,A11);
                 x' in Fin CR;
             then consider n being Nat such that
         A13: x,n are_equipotent by CARD_1:74;
@@ -3562,8 +3560,8 @@ definition
     for i being Nat holds it.i = s.(i+j);
 existence proof
     set CR = the carrier of R;
-    defpred _P[set,set] means (ex i being Nat st i = $1 & $2 = (s.(i+j)));
-A1: for x being set st x in NAT ex y being set st y in CR & _P[x,y] proof
+    defpred P[set,set] means (ex i being Nat st i = $1 & $2 = (s.(i+j)));
+A1: for x being set st x in NAT ex y being set st y in CR & P[x,y] proof
         let x be set such that
     A2: x in NAT;
         reconsider i=x as Nat by A2;
@@ -3574,7 +3572,7 @@ A1: for x being set st x in NAT ex y being set st y in CR & _P[x,y] proof
         thus i = x & y = s.(i+j);
     end;
     consider f being Function of NAT,CR such that
-A3: for x being set st x in NAT holds _P[x,f.x] from FUNCT_2:sch 1(A1);
+A3: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
      reconsider f as sequence of R;
     take f;
     let i be Nat;
@@ -3630,7 +3628,7 @@ A3: A is descending by WELLFND1:15;
         A in zz by A3;
     then reconsider zz as non empty set;
     set Z = [: CR, zz :];
-    defpred _S[Nat,set,set] means  ex Sn2 being sequence of FinPoset R,
+    defpred S[Nat,set,set] means  ex Sn2 being sequence of FinPoset R,
         Smax being Function of NAT, CR,
         an being Element of R,
         ix being Nat,
@@ -3648,7 +3646,7 @@ A3: A is descending by WELLFND1:15;
         $3 = [an,bn];
 
 A4: for n being Nat for Sn being Element of Z
-     ex Sn1 being Element of Z st _S[n,Sn,Sn1]
+     ex Sn1 being Element of Z st S[n,Sn,Sn1]
     proof
         let n being Nat, Sn be Element of Z;
         set Sn2 = Sn`2;
@@ -3664,10 +3662,10 @@ A4: for n being Nat for Sn being Element of Z
             then [Sn2i1, {}] in union rng FinOrd-Approx R by A7,Def17;
             hence contradiction by A7,A8,Th37;
         end;
-        defpred _P[Nat,set] means
+        defpred P[Nat,set] means
         (ex Sn2i being Element of Fin CR st Sn2i = Sn2.$1 &
                   Sn2i <> {} & $2 = PosetMax Sn2i);
-    A9: for i being Nat ex y being Element of CR st _P[i,y] proof
+    A9: for i being Nat ex y being Element of CR st P[i,y] proof
             let i be Nat;
             set Sn2i = Sn2.i;
             reconsider Sn2i as Element of Fin CR by A2;
@@ -3679,11 +3677,11 @@ A4: for n being Nat for Sn being Element of Z
             thus y = PosetMax Sn2i;
         end;
         consider Smax being Function of NAT, CR such that
-    A10: for i being Nat holds _P[i,Smax.i] from FUNCT_2:sch 3(A9);
+    A10: for i being Nat holds P[i,Smax.i] from FUNCT_2:sch 3(A9);
         set an = MinElement(rng Smax, R);
         set ix = Smax mindex an;
         set bnt = SeqShift(Sn2,ix);
-    defpred _R[set,set] means
+    defpred R[set,set] means
        (ex bni being Element of FCR st bni = bnt.$1 \{an} & $2 = bni);
             now let i be Nat;
             set bni = bnt.i \ {an};
@@ -3696,15 +3694,15 @@ A4: for n being Nat for Sn being Element of Z
             thus bni = bnt.i \ {an};
             thus y = bni;
         end;
-    then A11: for i being Nat ex y being Element of FCR st _R[i,y];
-    defpred _P[Nat] means Smax.(ix+$1) = an;
+    then A11: for i being Nat ex y being Element of FCR st R[i,y];
+    defpred P[Nat] means Smax.(ix+$1) = an;
     A12:  dom Smax = NAT by FUNCT_2:def 1;
              rng Smax c= CR by RELSET_1:12;
     then A13: an in rng Smax & an is_minimal_wrt rng Smax, IR
            by A1,Def19;
-    then A14: _P[0] by A12,DICKSON:def 11;
+    then A14: P[0] by A12,DICKSON:def 11;
     A15: now let k be Nat such that
-        A16: _P[k];
+        A16: P[k];
             set ixk = ix+k, ixk1 = ix+(k+1), ixk1' = (ix+k)+1;
             consider Sn2ixk being Element of Fin CR such that
         A17: Sn2ixk = Sn2.ixk & Sn2ixk <> {} & Smax.ixk = PosetMax Sn2ixk by
@@ -3725,19 +3723,19 @@ A10;
               [x\{PosetMax x},y\{PosetMax y}] in FinOrd R)) by A2,Th40;
             per cases by A20;
             suppose x = {};
-                hence _P[k+1] by A18,A19;
+                hence P[k+1] by A18,A19;
             end;
             suppose A21: (x<>{} & y<>{} & PosetMax x <> PosetMax y &
                       [PosetMax x,PosetMax y] in IR);
                       Smax.ixk1 in rng Smax by A12,FUNCT_1:def 5;
-                hence _P[k+1] by A13,A16,A17,A18,A19,A21,WAYBEL_4:def 26;
+                hence P[k+1] by A13,A16,A17,A18,A19,A21,WAYBEL_4:def 26;
             end;
             suppose (x<>{} & y<>{} & PosetMax x = PosetMax y &
                   [x\{PosetMax x},y\{PosetMax y}] in FinOrd R);
-                hence _P[k+1] by A16,A17,A18,A19;
+                hence P[k+1] by A16,A17,A18,A19;
         end;
         end;
-    A22: for k being Nat holds _P[k] from NAT_1:sch 1(A14, A15);
+    A22: for k being Nat holds P[k] from NAT_1:sch 1(A14, A15);
         A23: now let i be Nat such that
         A24: ix <= i;
             consider k being Nat such that
@@ -3764,7 +3762,7 @@ A10;
             thus PosetMax bnti = an by A30,Def20;
         end;
         consider bn being Function of NAT, FCR such that
-    A31: for i being Nat holds _R[i,bn.i] from FUNCT_2:sch 3(A11);
+    A31: for i being Nat holds R[i,bn.i] from FUNCT_2:sch 3(A11);
         reconsider bn as sequence of FinPoset R by A2;
         set Sn1 = [an, bn];
     A32: bnt is descending by A5,Th41;
@@ -3852,26 +3850,26 @@ A46: for i being Nat st i0 <= i holds S0max.i = a0 and
 A47: S01 = [a0,b0] by A4;
     consider S being Function of NAT,Z such that
 A48: S.0 = S01 and
-A49: for n being Element of NAT holds _S[n,S.n,S.(n+1)] from RECDEF_1:sch 2
+A49: for n being Element of NAT holds S[n,S.n,S.(n+1)] from RECDEF_1:sch 2
 (A4);
-    deffunc _F(set) = (S.$1)`1;
+    deffunc F(set) = (S.$1)`1;
 A50: now let x be set such that
     A51: x in NAT;
         reconsider x'=x as Nat by A51;
         reconsider Sx = S.x' as Element of [:CR, zz:];
             Sx`1 in CR;
-        hence _F(x) in CR;
+        hence F(x) in CR;
     end;
     consider a being Function of NAT, CR such that
-A52: for x being set st x in NAT holds a.x = _F(x) from FUNCT_2:sch 2(A50);
+A52: for x being set st x in NAT holds a.x = F(x) from FUNCT_2:sch 2(A50);
     reconsider a as sequence of R;
-    defpred _PP[Nat] means (for i being Nat holds
+    defpred PP[Nat] means (for i being Nat holds
          (ex b being sequence of FinPoset R
            st (b = (S.$1)`2) &
               (for x being set
                 st x in b.i
                 holds x <> (S.$1)`1 & [x, (S.$1)`1] in IR)));
-A53: _PP[0] proof let i be Nat;
+A53: PP[0] proof let i be Nat;
         set b = (S.0)`2;
             b in zz;
         then consider z being sequence of FinPoset R such that
@@ -3903,8 +3901,8 @@ A43;
         then x' <= a0 by WAYBEL_0:def 29;
         hence [x, (S.0)`1] in IR by A56,ORDERS_2:def 9;
     end;
-A61: for n being Nat st _PP[n] holds _PP[n+1] proof let n be Nat;
-        assume _PP[n];
+A61: for n being Nat st PP[n] holds PP[n+1] proof let n be Nat;
+        assume PP[n];
         let i be Nat;
         set n1 = n+1;
         reconsider n1 as Nat;
@@ -3954,10 +3952,10 @@ A61: for n being Nat st _PP[n] holds _PP[n+1] proof let n be Nat;
         then x' <= an by WAYBEL_0:def 29;
         hence [x, (S.(n+1))`1] in IR by A66,ORDERS_2:def 9;
     end;
-A71: for n being Nat holds _PP[n]  from NAT_1:sch 1(A53, A61);
-    defpred _P3[Nat] means (ex b being sequence of FinPoset R, i being Nat
+A71: for n being Nat holds PP[n]  from NAT_1:sch 1(A53, A61);
+    defpred P3[Nat] means (ex b being sequence of FinPoset R, i being Nat
        st b = (S.$1)`2 & a.($1+1) in b.i);
-A72: _P3[0] proof set b = (S.0)`2;
+A72: P3[0] proof set b = (S.0)`2;
             b in zz;
         then consider z being sequence of FinPoset R such that
     A73: z = b & z is descending;
@@ -3991,8 +3989,8 @@ A72: _P3[0] proof set b = (S.0)`2;
         a1 in b.i by A75,A79,A80,Def15;
         hence a.(0+1) in b.i by A74,A78,MCART_1:def 1;
     end;
-A81: for n being Nat st _P3[n] holds _P3[n+1] proof let n being Nat;
-        assume _P3[n];
+A81: for n being Nat st P3[n] holds P3[n+1] proof let n being Nat;
+        assume P3[n];
         set b = (S.(n+1))`2;
             b in zz;
         then consider z being sequence of FinPoset R such that
@@ -4029,9 +4027,9 @@ A81: for n being Nat st _P3[n] holds _P3[n+1] proof let n being Nat;
             (S.(n1+1))`1 = an1 by A86,MCART_1:def 1;
         hence a.((n+1)+1) in b.i by A52,A89;
     end;
-A90: for n being Nat holds _P3[n] from NAT_1:sch 1(A72, A81);
-    defpred _P4[Nat] means (a.($1+1) <> a.$1 & [a.($1+1), a.$1] in IR);
-A91: _P4[0] proof
+A90: for n being Nat holds P3[n] from NAT_1:sch 1(A72, A81);
+    defpred P4[Nat] means (a.($1+1) <> a.$1 & [a.($1+1), a.$1] in IR);
+A91: P4[0] proof
     A92: a.0 = (S.0)`1 by A52;
         consider b being sequence of FinPoset R, i being Nat such that
     A93: b = (S.0)`2 & a.(0+1) in b.i by A90;
@@ -4041,7 +4039,7 @@ A91: _P4[0] proof
          x <> (S.0)`1 & [x, (S.0)`1] in IR by A71;
         thus a.(0+1) <> a.0 & [a.(0+1), a.0] in IR by A92,A93,A94,A95;
     end;
-A96: for n being Nat st _P4[n] holds _P4[n+1] proof let n be Nat;
+A96: for n being Nat st P4[n] holds P4[n+1] proof let n be Nat;
         assume (a.(n+1) <> a.(n) & [a.(n+1), a.n] in IR);
     A97: a.(n+1) = (S.(n+1))`1 by A52;
         consider b being sequence of FinPoset R, i being Nat such that
@@ -4052,7 +4050,7 @@ A96: for n being Nat st _P4[n] holds _P4[n+1] proof let n be Nat;
         thus a.((n+1)+1) <> a.(n+1) & [a.((n+1)+1), a.(n+1)] in IR by A97,A98
 ,A99;
     end;
-      for n being Nat holds _P4[n] from NAT_1:sch 1(A91, A96);
+      for n being Nat holds P4[n] from NAT_1:sch 1(A91, A96);
       then a is descending by WELLFND1:def 7;
     hence contradiction by A1,WELLFND1:15;
 end;

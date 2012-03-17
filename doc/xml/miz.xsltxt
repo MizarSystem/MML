@@ -9,6 +9,7 @@ stylesheet 1.0;
 // Then e.g.: xalan -XSL miz.xsl <ordinal2.pre >ordinal2.pre1
 
 // TODO: number B vars in fraenkel
+//       handle F and H parenthesis as K parenthesis
 //       numbers for Deffunc, Defpred
 //       article numbering in Ref?
 //       absolute definiens numbers for thesisExpansions?
@@ -40,13 +41,18 @@ key "T" [/Theorems/Theorem[@kind='T']] `concat(@articlenr,':',@nr)`;
 key "D" [/Theorems/Theorem[@kind='D']] `concat(@articlenr,':',@nr)`;
 key "S" [/Schemes/Scheme] `concat(@articlenr,':',@nr)`;
 
-key "P_M" [Pattern[@kind='M']] `@constrnr` ;
-key "P_L" [Pattern[@kind='L']] `@constrnr` ;
-key "P_V" [Pattern[@kind='V']] `@constrnr` ;
-key "P_R" [Pattern[@kind='R']] `@constrnr` ;
-key "P_K" [Pattern[@kind='K']] `@constrnr` ;
-key "P_U" [Pattern[@kind='U']] `@constrnr` ;
-key "P_G" [Pattern[@kind='G']] `@constrnr` ;
+// patterns are slightly tricky, since a predicate pattern
+// may be linked to an attribute constructor; hence the
+// indexing is done according to @constrkind and not @kind
+// TODO: the attribute<->predicate change should propagate to usage
+//       of "is"
+key "P_M" [Pattern[@constrkind='M']] `@constrnr` ;
+key "P_L" [Pattern[@constrkind='L']] `@constrnr` ;
+key "P_V" [Pattern[@constrkind='V']] `@constrnr` ;
+key "P_R" [Pattern[@constrkind='R']] `@constrnr` ;
+key "P_K" [Pattern[@constrkind='K']] `@constrnr` ;
+key "P_U" [Pattern[@constrkind='U']] `@constrnr` ;
+key "P_G" [Pattern[@constrkind='G']] `@constrnr` ;
 
 key "F" [Format] `@nr`;
 
@@ -102,15 +108,34 @@ $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
 //       the rest is linked to mmlquery
 #linking = { "m"; }
 
+#varcolor = { "Olive"; }
+
+#constcolor = { "Maroon"; }
+
+#locicolor = { "Maroon"; }
+
+#labcolor = { "Green"; }
+
+// number of parenthesis colors (see the stylesheet in the bottom)
+#pcolors_nr = { "6"; }
 
 // Formulas
 
 // #i is nr of the bound variable, 1 by default 
-tpl [For](#i) { 
-  "for B";  if [$i] { $i;} else { "1"; }
-  " being"; apply[*[1]]; " holds "; <br; 
-  if [$i] {  apply[*[2]](#i=`$i+1`); } 
-  else { apply[*[2]](#i="2");   } }
+// #k is start of the sequence of vars with the same type, $i by default 
+// we now output only one typing for such sequences
+tpl [For](#i,#k) { 
+  $j = { if [$i] { $i;} else { "1"; } }
+  $l = { if [$k] { $k;} else { $j; } }
+  $nm = { `name(*[2])`; }
+  if [($nm = "For") and (*[1]/@nr = *[2]/*[1]/@nr) 
+      and (string(*[1]) = string(*[2]/*[1]))] { 
+     apply[*[2]](#i=`$j+1`,#k=$l); }
+  else {
+  "for "; ft_list(#f=$l,#t=$j,#sep=", ");
+  " being"; apply[*[1]]; if [not(($nm = "For"))] {" holds ";} 
+  if [not(($nm = "Pred"))] { <br; }
+  apply[*[2]](#i=`$j+1`); } }
 
 // tpl [And/For] { <div {"for B being"; apply[*[1]]; 	
 //                " holds "; <div { @class="add";  apply[*[2]]; } } }
@@ -122,40 +147,51 @@ tpl [Not](#i) { "not "; apply[*[1]](#i=$i); }
 tpl [And](#i) { "( "; ilist(#separ=" & ", #elems=`*`, #i=$i); " )"; }
 tpl [Pred](#i) { 
     choose {
-      when [@kind='P'] { `@kind`; `@nr`; }
+      when [@kind='P'] { "P"; `@nr`; "["; list(#separ=",", #elems=`*`); "]";}
       when [@kind='V']  { apply[*[position() = last()]]; " is ";  
         abs(#k=`@kind`, #nr=`@nr`, #sym=abs1(#k=`@kind`, #nr=`@nr`)); }
       otherwise { pp(#k=`@kind`,#nr=`@nr`,#args=`*`); }} }
 //,#sym1=abs(#k=`@kind`, #nr=`@nr`, #sym=abs1(#k=`@kind`, #nr=`@nr`))); }}
 //  "[ "; list(#separ=",", #elems=`*`); "]"; }
-tpl [PrivPred](#i) { "S"; `@nr`; "[ "; list(#separ=",", #elems=`*`); "]"; }
+tpl [PrivPred](#i) { "S"; `@nr`; "["; 
+    list(#separ=",", #elems=`*[position() < last()]`); "]"; }
 tpl [Is](#i) { apply[*[1]]; " is "; apply[*[2]]; } 
 tpl [Verum](#i) { "verum"; }
 tpl [ErrorFrm](#i) { "errorfrm"; }
 
 // Terms
-tpl [Var] { "B"; `@nr`; }
-tpl [LocusVar] { "A"; `@nr`; }
-tpl [FreeVar] { "X"; `@nr`; }
-tpl [Const] { "C"; `@nr`; }
-tpl [InfConst] { "D"; `@nr`; }
-tpl [Num] {  `@nr`; }
-tpl [Func] { 
+// #p is the parenthesis count
+tpl [Var](#p) { pvar(#nr=`@nr`); } 
+tpl [LocusVar](#p) { ploci(#nr=`@nr`); } 
+tpl [FreeVar](#p) { "X"; `@nr`; }
+tpl [Const](#p) { pconst(#nr=`@nr`); }
+tpl [InfConst](#p) { "D"; `@nr`; }
+tpl [Num](#p) {  `@nr`; }
+tpl [Func](#p) { 
     choose {
-      when [@kind='F'] { `@kind`; `@nr`; }
+      when [@kind='F'] { "F"; `@nr`; "("; list(#separ=",", #elems=`*`); ")";}
       when [@kind='U'] { "the ";
         abs(#k=`@kind`, #nr=`@nr`, #sym=abs1(#k=`@kind`, #nr=`@nr`));
-        " of "; apply[*[position() = last()]]; }
-      otherwise { pp(#k=`@kind`,#nr=`@nr`,#args=`*`); }}}
-// { abs(#k=`@kind`, #nr=`@nr`, #sym=abs1(#k=`@kind`, #nr=`@nr`)); }
-//   "( "; list(#separ=",", #elems=`*`); ")"; }
-tpl [PrivFunc] { "H"; `@nr`; "( "; list(#separ=",", #elems=`*`); ")"; }
-tpl [ErrorTrm] { "errortrm"; }
-tpl [Fraenkel] { "{ "; 
-     apply[*[position() = last() - 1]]; 
-     if  [count(*)>2] { " where B is ";
-      list(#separ=", B is ", #elems=`*[position() < last() - 1]`); }
-     " : "; apply[*[position() = last()]]; " } "; }
+        " of "; apply[*[position() = last()]](#p=$p); }
+      otherwise { 
+        $par = { if [$p>0] { `$p+1`;} else { 
+                 if [name(..)='Func'] { "1"; } else { "0";} }  }
+        pp(#k=`@kind`,#nr=`@nr`,#args=`*`,#parenth=$par); }}} 
+
+tpl [PrivFunc](#p) { "H"; `@nr`; "("; 
+    list(#separ=",", #elems=`*[position()>1]`); ")"; }
+tpl [ErrorTrm](#p) { "errortrm"; }
+tpl [Fraenkel](#p) { 
+     $par = { if [$p>0] { `$p+1`;} else { "1"; } }
+     $paren_color = `$par mod $pcolors_nr`;
+     <span { @class=`concat("paren",$paren_color)`; "{"; 
+       <span { @class="default"; " ";
+         apply[*[position() = last() - 1]](#p=$par); 
+         if  [count(*)>2] { " where B is ";
+            list(#separ=", B is ", #elems=`*[position() < last() - 1]`); }
+         " : "; apply[*[position() = last()]]; " "; }
+       "}"; } " ";
+ }
 
 // Types
 tpl [Typ] { 
@@ -177,27 +213,27 @@ tpl [Adjective] { if [@value="false"] { "non "; }
                  abs(#k="V", #nr=`@nr`, #sym=abs1(#k="V", #nr=`@nr`)); }
 //	         if [count(*)>0] { "("; list(#separ=",", #elems=`*`); ")"; }}
 
-tpl [Proposition] { if [@nr>0] { "E"; `@nr`; ": ";} apply; " ";}
+tpl [Proposition] { if [@nr>0] { plab(#nr=`@nr`); ": ";}  apply; " ";}
 
 // Justifications
-tpl [By] { if [(@linked="true") or (count(*)>0)] { <b { "by "; } }  
-           if [@linked="true"] { "previous"; } 
-           if [count(*)>0] { if [@linked="true"] { ","; }
-                             list(#separ=",", #elems=`*`); }
-           ";"; <br; }
+tpl [By	] { if [(@linked="true") or (count(*)>0)] { <b { "by "; } } 
+      <i { if [@linked="true"] { "previous"; } 
+           if [count(*)>0] { if [@linked="true"] { ", "; }
+                             list(#separ=", ", #elems=`*`); }
+           ";"; <br; } }
 tpl [IterStep/By] { if [(@linked="true") or (count(*)>0)] { <b { "by "; } }  
-           if [@linked="true"] { "previous"; } 
-           if [count(*)>0] { if [@linked="true"] { ","; }
-                             list(#separ=",", #elems=`*`); } }
+      <i { if [@linked="true"] { "previous"; } 
+           if [count(*)>0] { if [@linked="true"] { ", "; }
+                             list(#separ=", ", #elems=`*`); } } }
 
 tpl [From] { <b { "from "; }
-             getschref(#anr=`@articlenr`, #nr=`@nr`); "(";
-             list(#separ=",", #elems=`*`); ")"; ";"; <br; }
-tpl [IterStep/From] { 
-        <b { "from "; } getschref(#anr=`@articlenr`, #nr=`@nr`); "(";
-        list(#separ=",", #elems=`*`); ")"; }
+        <i { getschref(#anr=`@articlenr`, #nr=`@nr`); "(";
+             list(#separ=", ", #elems=`*`); ")"; ";"; <br; } }
+tpl [IterStep/From] { <b { "from "; } 
+   <i { getschref(#anr=`@articlenr`, #nr=`@nr`); "(";
+        list(#separ=", ", #elems=`*`); ")"; } }
 
-tpl [Ref] { if [not(@articlenr)] { "E";`@nr`; }
+tpl [Ref] { if [not(@articlenr)] {  plab(#nr=`@nr`); }
             else { getref(#k=`@kind`, #anr=`@articlenr`, #nr=`@nr`);} }
 tpl [ErrorInf] { "errorinference;"; <br; }
 tpl [IterStep/ErrorInf] { "errorinference"; }
@@ -206,25 +242,27 @@ tpl [IterStep/SkippedProof] { "skippedproof"; }
 
 //   Term, elIterStep+
 tpl [IterEquality] {
-   if [@nr>0] { "E"; `@nr`; ": ";}
+   if [@nr>0] {  plab(#nr=`@nr`); ": ";}
    apply[*[1]]; " = ";
    nlist(#separ=".= ", #elems=`IterStep`); ";"; <br; }
 tpl [IterStep] { apply;  }
 
 // Skeleton steps
-tpl [Let] { $j=`@nr`; <b { "let"; } " C"; $j; " be "; 
-            jlist(#j=$j, #sep1=", C", #sep2=" be ", #elems=`*`); ";"; <br; }
+tpl [Let] { $j=`@nr`; <b { "let "; } pconst(#nr=$j);
+             " be "; 
+            jlist(#j=$j, #sep1=", ", #sep2=" be ", #elems=`*`); ";"; <br; }
 
 tpl [Assume] { <b { "assume "; }  if [count(*)>1] { "that "; }
 	       nlist(#separ="and ", #elems=`*`);
                ";"; <br; }
-tpl [Given] { $j=`@nr`; <b {"given";} " C"; $j; " being "; 
-              jlist(#j=$j, #sep1=", C", #sep2=" being ", #elems=`Typ`); 
+tpl [Given] { $j=`@nr`; <b {"given ";} pconst(#nr=$j);
+              " being "; 
+              jlist(#j=$j, #sep1=", ", #sep2=" being ", #elems=`Typ`); 
 	      " such that ";
               nlist(#separ="and ",#elems=`Proposition`); 
               ";"; <br; }
 tpl [Take] { <b { "take ";} apply; ";"; <br; }
-tpl [TakeAsVar] { <b { "take C"; } `@nr`; " = ";   apply[*[2]]; ";"; <br; }
+tpl [TakeAsVar] { <b { "take "; } pconst(#nr=`@nr`); " = ";   apply[*[2]]; ";"; <br; }
 tpl [Conclusion] { <b { "thus "; } apply; }
 tpl [Case] { <b { "case "; } if [count(*)>1] { "that ";}
              nlist(#separ="and ", #elems=`*`); ";"; <br; }
@@ -233,8 +271,8 @@ tpl [Suppose] { <b { "suppose "; } if [count(*)>1] { "that ";}
 tpl [PerCases] { <b { "per cases "; } apply; }
 
 // Auxiliary items
-tpl [Consider] { $j=`@nr`; <b { "consider";} " C"; $j; " being "; 
-                 jlist(#j=$j, #sep1=", C",#sep2=" being ", #elems=`Typ`);
+tpl [Consider] { $j=`@nr`; <b { "consider ";} pconst(#nr=$j); " being "; 
+                 jlist(#j=$j, #sep1=", ",#sep2=" being ", #elems=`Typ`);
 	         if [count(Proposition) > 1] { 
                    " such that "; <br; 
 		   nlist(#separ="and ",
@@ -242,15 +280,15 @@ tpl [Consider] { $j=`@nr`; <b { "consider";} " C"; $j; " being ";
                  apply[*[2]]; }
 
 tpl [Reconsider] { $j=`@nr`;
-    <b { "reconsider"; } " C"; $j; " = "; 
-    jlist(#j=$j, #sep1=", C", #sep2=" = ", #elems=`*[(position() > 1) 
+    <b { "reconsider "; } pconst(#nr=$j); " = "; 
+    jlist(#j=$j, #sep1=", ", #sep2=" = ", #elems=`*[(position() > 1) 
                         and (position() < (last() - 1))]`);
     " as "; apply[*[1]]; " "; 
     apply[*[last()]]; } 
 
-tpl [Set] { <b { "set";} " C"; `@nr`; " = "; apply[*[1]]; ";"; <br; }
+tpl [Set] { <b { "set ";} pconst(#nr=`@nr`); " = "; apply[*[1]]; ";"; <br; }
 tpl [DefFunc] { <b { "deffunc"; } " H(";  
-                list(#separ=",", #elems=`ArgTypes/Typ`); ") -> ";
+                list(#separ=",", #elems=`ArgTypes/Typ`); ") "; <b {"-> ";}
                 apply[*[3]]; " = ";
 	        apply[*[2]]; ";"; <br; }
 tpl [DefPred] { <b { "defpred";} " S["; 
@@ -269,12 +307,12 @@ tpl [RCluster] { <b { "cluster "; }
                  ";"; <br; }
 tpl [CCluster] { <b { "cluster "; }
                  if [ErrorCluster] { "errorcluster"; }
-	         else { apply[*[2]]; " -> "; apply[*[4]]; " "; 
+	         else { apply[*[2]]; <b {" -> ";} apply[*[4]]; " "; 
                         apply[*[3]]; }
                  ";"; <br; }
 tpl [FCluster] { <b { "cluster "; }
                  if [ErrorCluster] { "errorcluster"; }
-	         else { apply[*[2]]; " -> "; apply[*[3]]; }
+	         else { apply[*[2]]; <b {" -> ";} apply[*[3]]; }
                  ";"; <br; }
 // Blocks
 tpl [BlockThesis] { } // "blockthesis: "; apply; ";"; <br; }
@@ -320,8 +358,14 @@ tpl [Now] {
 tpl [Reservation/Typ] { ""; }
 tpl [Definiens/*] { ""; }
 
-tpl [JustifiedTheorem] { <b { "theorem"; } <br; apply; }
-tpl [DefTheorem] { <b { "deftheorem"; } <br; apply;  ";"; <br; }
+tpl [JustifiedTheorem] { <b { "theorem "; } 
+    for-each [Proposition[@nr > 0]] { plab(#nr=`@nr`); ": "; } <br; 
+    if [Proof] { <div { @class="add"; apply[*[1]/*[1]]; } apply[*[2]]; }
+    else { <div { @class="add"; apply[*[1]/*[1]]; " "; apply[*[2]]; } } }
+
+tpl [DefTheorem] { <b { "deftheorem "; } 
+    for-each [Proposition[@nr > 0]] { plab(#nr=`@nr`); ": "; } <br; 
+    <div { @class="add"; apply[*[1]/*[1]];  ";"; }  }
 
 
 //   Property, elProposition, Justification
@@ -341,7 +385,7 @@ tpl [Canceled] { <b { "canceled;"; } <br; }
 
 tpl [SchemeFuncDecl] { 
     "F"; `@nr`; "(";
-     list(#separ=",", #elems=`ArgTypes/Typ`); ") -> ";
+     list(#separ=",", #elems=`ArgTypes/Typ`); ") "; <b {"-> ";}
      apply[*[2]]; }
 
 tpl [SchemePredDecl] { 
@@ -369,24 +413,24 @@ tpl [Definition] {
       for-each [Constructor[@kind="G"]] {
         <a { @NAME=`concat("G",@nr)`; <b { "aggr "; } } 
         abs(#k="G",#nr=`@relnr`,#sym=abs1(#k="G", #nr=`@relnr`)); "(# "; }
-      for-each [Constructor[@kind="L"]/Fields/Int] { 
-       abs(#k="U",#nr=`@x`,#sym=abs1(#k="U", #nr=`@x`)); 
+      for-each [Constructor[@kind="L"]/Fields/Field] { 
+       abs(#k="U",#nr=`@nr`,#sym=abs1(#k="U", #nr=`@nr`)); 
       if [not(position()=last())] { ", "; } }
-      " #) -> "; apply[Constructor[@kind="G"]/Typ]; ";"; <br; 
+      " #)"; <b {" -> ";} apply[Constructor[@kind="G"]/Typ]; ";"; <br; 
       for-each [Constructor[@kind="L"]] {
         <a { @NAME=`concat("L",@nr)`; <b { "struct "; } } 
         abs(#k="L",#nr=`@relnr`,#sym=abs1(#k="G", #nr=`@relnr`)); "( ";
-        arglist(#separ=",", #letter="A", #elems=`ArgTypes/Typ`);
-        ") -> ( "; list(#separ=", ", #elems=`Typ`); " );"; <br; }
+        arglist(#separ=",", #elems=`ArgTypes/Typ`);
+        ") "; <b {"-> ";} "( "; list(#separ=", ", #elems=`Typ`); " );"; <br; }
       for-each [Constructor[@kind="U"]] {
         <a { @NAME=`concat("U",@nr)`; <b { "selector "; } } 
         abs(#k="U",#nr=`@relnr`,#sym=abs1(#k="U", #nr=`@relnr`)); "( ";
-        arglist(#separ=",", #letter="A", #elems=`ArgTypes/Typ`); 
-        ") -> "; apply[Typ]; <br; } 
+        arglist(#separ=",", #elems=`ArgTypes/Typ`); 
+        ") "; <b {"-> ";} apply[Typ]; <br; } 
       for-each [Constructor[@kind="V"]] {
         <a { @NAME=`concat("V",@nr)`; <b { "attr "; }  } 
         abs(#k="V",#nr=`@relnr`,#sym=abs1(#k="V", #nr=`@relnr`)); "( ";
-        arglist(#separ=",", #letter="A", #elems=`ArgTypes/Typ`); 
+        arglist(#separ=",", #elems=`ArgTypes/Typ`); 
         ")"; <br; }
    }
    else { 
@@ -399,8 +443,8 @@ tpl [Definition] {
          abs(#k=`@kind`,#nr=`@redefnr`,#sym=abs1(#k=`@kind`, #nr=`@redefnr`));
          " as "; }
        abs(#k=`@kind`,#nr=`@relnr`,#sym=abs1(#k=`@kind`, #nr=`@relnr`)); "( ";
-       arglist(#separ=",", #letter="A", #elems=`ArgTypes/Typ`); ")";
-       if [(@kind = 'M') or (@kind = 'K')] { " -> "; apply[Typ]; }
+       arglist(#separ=",", #elems=`ArgTypes/Typ`); ")";
+       if [(@kind = 'M') or (@kind = 'K')] { <b {" -> ";} apply[Typ]; }
        ";"; <br; }
      apply[*[not(name()='Constructor')]];
 }}}
@@ -452,17 +496,22 @@ tpl dlist(#separ,#elems) {
 }
 
 // argument list
-tpl arglist(#separ,#letter,#elems) { 
+tpl arglist(#separ,#elems) { 
  for-each [$elems] {
-  $letter; `position()`; if [not(position()=last())] { $separ; } }
+  ploci(#nr=`position()`); if [not(position()=last())] { $separ; } }
 }
 
-// add numbers starting at #j+1 between #sep1 and #sep2
+// add numbers starting at #j+1 between #sep1 and #sep2 - now with constants
 tpl jlist(#j,#sep1,#sep2,#elems) { 
 for-each [$elems] {
-  apply[.]; if [not(position()=last())] { $sep1; `$j+position()`; $sep2; } }}
+  apply[.]; if [not(position()=last())] 
+  {  $sep1; pconst(#nr=`$j+position()`); $sep2; } }}
 
-
+// from-to list of variables starting numbering at $f ending at $t
+tpl ft_list(#f,#t,#sep) {
+  if [$f = $t] {  pvar(#nr=$f); }
+  else { if [$f < $t] { pvar(#nr=$f); $sep; 
+            ft_list(#f=`$f+1`,#t=$t,#sep=$sep); } }}
 
 // add the constructor href, $c tells if it is from current article
 // #sym is optional Mizar symbol
@@ -527,53 +576,90 @@ tpl formt_nr(#k,#nr) {
 
 // pretty printer - gets arguments, visibility info from pattern,
 // format telling arities, the linked symbol and optionally right bracket
-tpl pp(#k,#nr,#args) {
+// parenth hints to put the whole expression in parentheses, but this
+// is overrriden if the expression uses functor brackets
+tpl pp(#k,#nr,#args,#parenth) {
      $pkey=`concat('P_',$k)`;
      if [key($pkey,$nr)] { 
         for-each [key($pkey,$nr)[position()=1]] {
-       pp1(#k=$k,#nr=$nr,#args=$args,
-           #vis=`Visible/Int`, #fnr=`@formatnr`); } }
+       pp1(#k=$k,#nr=$nr,#args=$args, #vis=`Visible/Int`, 
+           #fnr=`@formatnr`, #parenth=$parenth); } }
      else { for-each [document($patts,/)] {
                 for-each [key($pkey,$nr)[position()=1]] { 
-     pp1(#k=$k,#nr=$nr,#args=$args,
-         #vis=`Visible/Int`, #fnr=`@formatnr`); } }}}
+     pp1(#k=$k,#nr=$nr,#args=$args, #vis=`Visible/Int`,
+         #fnr=`@formatnr`, #parenth=$parenth); } }}}
  
 
-tpl pp1(#k,#nr,#args, #vis, #fnr) {
+tpl pp1(#k,#nr,#args,#vis,#fnr,#parenth) {
     $la = { if [($k='M') or ($k='G') or ($k='L')] {  "0"; } 
             else { for-each [document($formats,/)] {
                      for-each [key('F',$fnr)] { 
                        if [@leftargnr] { `@leftargnr`;} else { "0";} }}} }
-    for-each [$vis] { 
-      if [position() <= $la] {
-	$x=`@x`;
-	apply[$args[position() = $x]]; 
-	if [position() < $la] { ",";} } }
-    " "; abs(#k=$k, #nr=$nr, #sym=abs1(#k=$k, #nr=$nr)); " ";
-    for-each [$vis] { 
-      if [(position() = 1) and (($k='M') or ($k='L'))] { "of "; }
-      if [position() > $la] {
-	$x=`@x`;
-        apply[$args[position()  = $x]]; 
-        if [position() < last()] { ",";} } }
     // try if right bracket
-    if [($k='K') and ($la='0')] {
-       $rsym=abs1(#k=$k, #nr=$nr, #r="1"); 
-       if [$rsym] { abs(#k=$k, #nr=$nr, #sym=$rsym); } } 
-//  abs1(#k=$k, #nr=$nr, #r='1')); }
+    $rsym = { if [($k='K') and ($la='0')] {
+                 abs1(#k=$k, #nr=$nr, #r="1"); } }
+    $np = { if [not($args)] { "0"; } else {
+               if [$parenth>0] { $parenth; } else { 
+                  if [not($rsym='')] { "1"; } else { "0";} } } }
+    $paren_color = `$np mod $pcolors_nr`;
+
+    // print spanned paranthesis or left bracket
+    if [($np>0)] { <span { @class=`concat("paren",$paren_color)`;
+      if [$rsym=''] { "("; } else { 
+         abs(#k=$k, #nr=$nr, #sym=abs1(#k=$k, #nr=$nr)); }
+      <span { @class="default";
+
+    // this is duplicated later - needed for Mozilla - bad escaping
+      for-each [$vis] { 
+       if [position() <= $la] {
+	$x=`@x`;
+	apply[$args[position() = $x]](#p=$np); 
+	if [position() < $la] { ",";} } }
+      if [$rsym=''] {
+       if [not($parenth>0) or ($la>0)] { " "; } 
+       abs(#k=$k, #nr=$nr, #sym=abs1(#k=$k, #nr=$nr)); " "; }
+      for-each [$vis] { 
+       if [(position() = 1) and (($k='M') or ($k='L'))] { "of "; }
+       if [position() > $la] {
+	$x=`@x`;
+        apply[$args[position()  = $x]](#p=$np); 
+        if [position() < last()] { ",";} } }
+       }
+      if [$rsym=''] { ")"; } else { abs(#k=$k, #nr=$nr, #sym=$rsym); } }
+    } else {
+
+      for-each [$vis] { 
+       if [position() <= $la] {
+	$x=`@x`;
+	apply[$args[position() = $x]](#p=$np); 
+	if [position() < $la] { ",";} } }
+      if [$rsym=''] {
+       if [not($parenth>0) or ($la>0)] { " "; } 
+       abs(#k=$k, #nr=$nr, #sym=abs1(#k=$k, #nr=$nr)); " "; }
+      for-each [$vis] { 
+       if [(position() = 1) and (($k='M') or ($k='L'))] { "of "; }
+       if [position() > $la] {
+	$x=`@x`;
+        apply[$args[position()  = $x]](#p=$np); 
+        if [position() < last()] { ",";} } }
+     }
  }
 
 
 //  apply[.]; if [not(position()=last())] { $sep1; `$j+position()`; $sep2; } }}
 
-
-
+// pretty print variables and labels
+tpl pvar(#nr) { <font { @color=$varcolor; "b"; <sub { $nr;} } }
+tpl pconst(#nr) { <font { @color=$constcolor; "c"; <sub { $nr;} } }
+tpl ploci(#nr) { <font { @color=$locicolor; "a"; <sub { $nr;} } }
+tpl plab(#nr) { <i { <font { @color=$labcolor; "E"; `@nr`; } } }
 
 // theorem, definition and scheme references
 // add the reference's href, $c tells if it is from current article
 tpl mkref(#aid,#nr,#k,#c) { 
       $mk=refkind(#kind=$k);
-      <a { 
+      <a {   
+       @class="ref";
        if [($linking = 'q') or (($linking = 'm') and not($c))] { 
           @href=`concat($mmlq,$aid,":",$mk,".",$nr)`;
 	  @title=`concat($aid,":",$mk,".",$nr)`; }
@@ -631,10 +717,10 @@ tpl [Theorem] { <b { "theorem "; }
 tpl [Constructor] { <b { "constructor "; } 
     absref(#elems=`key(@kind,@relnr)`); <br; 
     absref(#elems=`key(@kind,@relnr)`); "( "; 
-    arglist(#separ=",", #letter="A", #elems=`ArgTypes/Typ`); ")";
+    arglist(#separ=",", #elems=`ArgTypes/Typ`); ")";
     if [(@kind = 'M') or (@kind = 'K') or (@kind= 'G') 
         or (@kind= 'U') or (@kind= 'L')] 
-       { " -> "; list(#separ=",",#elems=`Typ`); }
+       { <b {" -> ";} list(#separ=",",#elems=`Typ`); }
      ";"; <br; <br; }
 
 // ignore Patterns now
@@ -644,8 +730,22 @@ tpl [Pattern] {}
 tpl [/] { <html { 
 
 // output the css defaults for div and p (for indenting)
-        <style { @type="text/css"; 
-                 "div { padding: 0 0 0 0; margin: 0 0 0 0; } div.add { padding-left: 3mm; padding-bottom: 0mm;  margin: 0 0 0 0; } p { margin: 0 0 0 0; }";
+        <style { @type="text/css";  "
+div { padding: 0 0 0 0; margin: 0 0 0 0; } 
+div.add { padding-left: 3mm; padding-bottom: 0mm;  margin: 0 0 0 0; } 
+p { margin: 0 0 0 0; } 
+a {text-decoration:none} a:hover { color: red; } 
+a.ref:link { color:green; } 
+a.ref:hover { color: red; } 
+span.paren1:hover { color : inherit; background-color : #BAFFFF; } 
+span.paren2:hover { color : inherit; background-color : #FFCACA; }
+span.paren3:hover { color : inherit; background-color : #FFFFBA; }
+span.paren4:hover { color : inherit; background-color : #CACAFF; }
+span.paren5:hover { color : inherit; background-color : #CAFFCA; }
+span.paren0:hover { color : inherit; background-color : #FFBAFF; }
+.default { background-color: white; color: black; } 
+.default:hover { background-color: white; color: black; }
+";
 	                } 
         <head {  <base { @target="mmlquery"; } }
         <body {  

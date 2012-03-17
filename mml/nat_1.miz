@@ -7,10 +7,10 @@
 environ
 
  vocabularies ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0,
-      FUNCT_1, BOOLE;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, FUNCT_1, NUMBERS,
+      BOOLE, ASYMPT_0, ZF_LANG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS,
       XCMPLX_0, XREAL_0, REAL_1;
- constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0, FUNCT_1;
+ constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0;
  registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REAL_1;
@@ -53,9 +53,9 @@ then A2:  NAT c= A by A1,AXIOMS:29;
  redefine func n + k -> Nat;
    coherence
     proof
-       defpred _P[Real] means ex k st $1 = k & n + k is Nat;
+       defpred P[Real] means ex k st $1 = k & n + k is Nat;
      consider X such that
-A1:    x in X iff _P[x] from REAL_1:sch 1;
+A1:    x in X iff P[x] from REAL_1:sch 1;
          n + 0 = n;
 then A2:    0 in X by A1;
          now let x; assume
@@ -90,9 +90,9 @@ scheme Ind { P[Nat] } :
 A1:   P[0] and
 A2:   for k being Nat st P[k] holds P[k + 1]
 proof let k;
-      defpred _P[Real] means ex k st P[k] & k = $1;
+      defpred P1[Real] means ex k st P[k] & k = $1;
     consider X such that
-A3:   x in X iff _P[x] from REAL_1:sch 1;
+A3:   x in X iff P1[x] from REAL_1:sch 1;
 A4:   0 in X by A1,A3;
       for x st x in X holds x + 1 in X
       proof let x; assume
@@ -107,16 +107,16 @@ A5:      P[k] & k = x by A3;
     hence P[k];
    end;
 
-scheme Nat_Ind { P[natural number] } :
+scheme NatInd { P[natural number] } :
  for k being natural number holds P[k]
    provided
 A1:   P[0] and
 A2:   for k be natural number st P[k] holds P[k + 1]
 proof
-      defpred _P[Nat] means P[$1];
-A3: _P[0] by A1;
-A4:   for k st _P[k] holds _P[k + 1] by A2;
-A5:   for k holds _P[k] from Ind(A3,A4);
+      defpred P[Nat] means P[$1];
+A3: P[0] by A1;
+A4:   for k st P[k] holds P[k + 1] by A2;
+A5:   for k holds P[k] from Ind(A3,A4);
       let k be natural number;
          k is Nat by ORDINAL2:def 21;
       hence thesis by A5;
@@ -128,16 +128,16 @@ A5:   for k holds _P[k] from Ind(A3,A4);
  definition let n,k be Nat;
  redefine func n * k -> Nat;
    coherence
-    proof   defpred _P[Nat] means n*$1 is Nat;
-A1:    _P[0];
-A2:    _P[m] implies _P[m+1]
+    proof   defpred P[Nat] means n*$1 is Nat;
+A1:    P[0];
+A2:    P[m] implies P[m+1]
        proof
-          assume _P[m];
+          assume P[m];
         then reconsider k = n * m as Nat;
        k + n is Nat;
         hence n * (m + 1) is Nat;
        end;
-         _P[m] from Ind(A1,A2);
+         P[m] from Ind(A1,A2);
      hence thesis;
     end;
  end;
@@ -164,13 +164,13 @@ canceled 15;
 theorem
  Th18: 0 <= i
   proof
-     defpred _P[Nat] means 0 <= $1;
-A1:  _P[0];
-A2:  now let n; assume _P[n];
+     defpred P[Nat] means 0 <= $1;
+A1:  P[0];
+A2:  now let n; assume P[n];
       then 0 + 1 <= n + 1 by AXIOMS:24;
-      hence _P[n + 1];
+      hence P[n + 1];
      end;
-A3:for k holds _P[k] from Ind(A1,A2);
+A3:for k holds P[k] from Ind(A1,A2);
       i is Nat by ORDINAL2:def 21;
    hence thesis by A3;
   end;
@@ -197,10 +197,10 @@ A1:  0 = i + 1;
 theorem
  Th22: i = 0 or ex k st i = k + 1
   proof
-     defpred _P[natural number] means $1 = 0 or ex k st $1 = k + 1;
-A1:  _P[0];
-A2:  _P[h] implies _P[h + 1];
-       for i holds _P[i] from Nat_Ind(A1,A2);
+     defpred P[natural number] means $1 = 0 or ex k st $1 = k + 1;
+A1:  P[0];
+A2:  P[h] implies P[h + 1];
+       for i holds P[i] from NatInd(A1,A2);
    hence thesis;
   end;
 
@@ -229,25 +229,25 @@ registration let m be natural number, n be non zero (natural number);
   coherence by Th23;
 end;
 
-scheme Def_by_Ind { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
+scheme DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
   (for k ex n st P[k,n] ) &
     for k,n,m st P[k,n] & P[k,m] holds n = m
      provided
 A1:    for k,n holds P[k,n] iff
        k = 0 & n = N() or ex m,l st k = m + 1 & P[m,l] & n = F(k,l)
 proof
-      defpred _P[Nat] means ex n st P[$1,n];
+      defpred P[Nat] means ex n st P[$1,n];
         P[0,N()] by A1;
-then A2:   _P[0];
-A3:   _P[k] implies _P[k+1]
+then A2:   P[0];
+A3:   P[k] implies P[k+1]
       proof given n such that
 A4:      P[k,n];
        take F(k+1,n);
        thus P[k+1,F(k+1,n)] by A1,A4;
       end;
-    thus for k holds _P[k] from Ind(A2,A3);
-    defpred _P[Nat] means for n,m st P[$1,n] & P[$1,m] holds n = m;
-A5:   _P[0]
+    thus for k holds P[k] from Ind(A2,A3);
+    defpred P[Nat] means for n,m st P[$1,n] & P[$1,m] holds n = m;
+A5:   P[0]
       proof let n,m such that
 A6:     P[0,n] & P[0,m];
            (not ex m,l st 0 = m + 1 & P[m,l] & n = F(0,l) ) &
@@ -255,7 +255,7 @@ A6:     P[0,n] & P[0,m];
         then n = N() & m = N() by A1,A6;
        hence n = m;
       end;
-A7:   for k st _P[k] holds _P[k+1]
+A7:   for k st P[k] holds P[k+1]
       proof let k such that
 A8:      for n,m st P[k,n] & P[k,m] holds n = m;
        let n,m such that
@@ -267,7 +267,7 @@ A11:      k + 1 = v + 1 & P[v,w] & m = F(k + 1,w) by A1,A9;
            l = k & v = k by A10,A11,XCMPLX_1:2;
        hence n = m by A8,A10,A11;
       end;
-    thus for k holds _P[k] from Ind(A5,A7);
+    thus for k holds P[k] from Ind(A5,A7);
    end;
 
 canceled 2;
@@ -275,10 +275,10 @@ canceled 2;
 theorem
  Th26: for i,j st i <= j + 1 holds i <= j or i = j + 1
   proof
-     defpred _P[natural number] means
+     defpred P[natural number] means
      for j holds $1 <= j + 1 implies $1 <= j or $1 = j+1;
-A1:  _P[0] by Th18;
-A2:  for i st _P[i] holds _P[i+1]
+A1:  P[0] by Th18;
+A2:  for i st P[i] holds P[i+1]
      proof let i such that
 A3:     i <= j + 1 implies i <= j or i = j + 1;
       let j such that
@@ -300,7 +300,7 @@ A10:       j = k + 1;
        end;
      hence thesis by A7,Th22;
     end;
-   thus for i holds _P[i] from Nat_Ind(A1,A2);
+   thus for i holds P[i] from NatInd(A1,A2);
   end;
 
 theorem
@@ -314,15 +314,15 @@ A1:   i <= j & j <= i + 1;
 theorem
  Th28: for i,j st i <= j ex k st j = i + k
   proof let i;
-     defpred _P[natural number] means
+     defpred P[natural number] means
      i <= $1 implies ex k st $1 = i + k;
-A1: _P[0]
+A1: P[0]
      proof assume
 A2:   i <= 0;
       take 0;
       thus thesis by A2,Th18;
      end;
-A3:  for j st _P[j] holds _P[j+1]
+A3:  for j st P[j] holds P[j+1]
      proof let j such that
 A4:   i <= j implies ex k st j = i + k;
       assume
@@ -338,7 +338,7 @@ A7:     j = i + k by A4;
        end;
       hence thesis by A5,A6,Th26;
      end;
-   thus for j holds _P[j] from Nat_Ind(A1,A3);
+   thus for j holds P[j] from NatInd(A1,A3);
   end;
 
 theorem
@@ -349,14 +349,14 @@ A1:  0 + i = i;
    hence thesis by A1,REAL_1:55;
   end;
 
-scheme Comp_Ind { P[Nat] } :
+scheme CompInd { P[Nat] } :
  for k holds P[k]
    provided
 A1:   for k st for n st n < k holds P[n] holds P[k]
 proof
-      defpred _P[Nat] means for n st n < $1 holds P[n];
-A2:   _P[0] by Th18;
-A3:   _P[k] implies _P[k+1]
+      defpred P1[Nat] means for n st n < $1 holds P[n];
+A2:   P1[0] by Th18;
+A3:   P1[k] implies P1[k+1]
       proof assume
 A4:   for n st n < k holds P[n];
       let n; assume
@@ -366,8 +366,8 @@ A4:   for n st n < k holds P[n];
       hence thesis by A1,A4;
     end;
     let k;
-        for k holds _P[k] from Ind(A2,A3);
-     then for n st n < k holds P[n];
+    for k holds P1[k] from Ind(A2,A3);
+    then for n st n < k holds P[n];
     hence P[k] by A1;
    end;
 
@@ -378,14 +378,14 @@ scheme Min { P[Nat] } :
   provided
 A1:  ex k st P[k]
 proof assume A2: not thesis;
-      defpred _P[Nat] means not P[$1];
-A3:   for k st for n st n < k holds _P[n] holds _P[k]
+      defpred P1[Nat] means not P[$1];
+A3:   for k st for n st n < k holds P1[n] holds P1[k]
       proof let k;
 A4:    not (ex n st P[n] & not k <= n) implies not P[k] by A2;
        assume for n st n < k holds not P[n];
        hence thesis by A4;
       end;
-        for k holds _P[k] from Comp_Ind(A3);
+      for k holds P1[k] from CompInd(A3);
     hence contradiction by A1;
    end;
 
@@ -397,11 +397,11 @@ scheme Max { P[Nat],N()->Nat } :
 A1:   for k st P[k] holds k <= N() and
 A2:   ex k st P[k]
 proof
-      defpred _P[Nat] means for n st P[n] holds n <= $1;
-A3:   ex k st _P[k] by A1;
+      defpred P1[Nat] means for n st P[n] holds n <= $1;
+A3:   ex k st P1[k] by A1;
     consider k such that
-A4:   _P[k] &
-      for m st _P[m] holds k <= m from Min(A3);
+A4:   P1[k] &
+      for m st P1[m] holds k <= m from Min(A3);
     take k;
     thus P[k]
       proof assume
@@ -412,8 +412,7 @@ A6:      P[n] by A2;
        then k <> 0 by Th18;
        then consider m such that
 A7:      k = m + 1 by Th22;
-           now let n; assume
-             P[n];
+           now let n; assume P[n];
           then n <= k & n <> k by A4,A5;
          hence n <= m by A7,Th26;
         end;
@@ -495,10 +494,10 @@ scheme Regr { P[Nat] } :
 A1:  ex k st P[k] and
 A2:  for k st k <> 0 & P[k] ex n st n < k & P[n]
 proof
-     defpred _P[Nat] means P[$1];
-A3: ex k st _P[k] by A1;
+     defpred P[Nat] means P[$1];
+A3: ex k st P[k] by A1;
    consider k such that
-A4:  _P[k] & for n st _P[n] holds k <= n from Min(A3);
+A4:  P[k] & for n st P[n] holds k <= n from Min(A3);
        now assume k <> 0;
       then ex n st n < k & P[n] by A2,A4;
      hence contradiction by A4;
@@ -515,10 +514,10 @@ theorem
    proof let m;
     assume
 A1:   0 < m;
-     defpred _P[Nat] means ex k,t st $1 = (m*k)+t & t < m;
+     defpred P[Nat] means ex k,t st $1 = (m*k)+t & t < m;
         0 = m*0+0;
-then A2:   _P[0] by A1;
-A3:   for n st _P[n] holds _P[n+1]
+then A2:   P[0] by A1;
+A3:   for n st P[n] holds P[n+1]
       proof let n;
        given k1,t1 such that
 A4:     n = (m*k1)+t1 & t1 < m;
@@ -539,7 +538,7 @@ A8:        t1+1 = m;
          end;
        hence ex k,t st n+1 = (m*k)+t & t < m by A5,A6,REAL_1:def 5;
       end;
-    thus for n holds _P[n] from Ind(A2,A3);
+    thus for n holds P[n] from Ind(A2,A3);
    end;
 
 theorem
@@ -803,12 +802,12 @@ A2:      k = 0 or n = 0;
          now assume
 A3:      k <> 0 & n <> 0;
 A4:      k divides k * n & n divides k * n by Def3;
-      defpred _P[Nat] means k divides $1 & n divides $1 & k <= $1;
+      defpred P[Nat] means k divides $1 & n divides $1 & k <= $1;
            0 <= n by Th18; then 0 + 1 <= n by A3,Th38;
         then k * 1 <= k * n by Th20;
-then A5:  ex m st _P[m] by A4;
+then A5:  ex m st P[m] by A4;
        consider l such that
-A6:      _P[l] & for m st _P[m] holds l <= m
+A6:      P[l] & for m st P[m] holds l <= m
           from Min(A5);
        take l;
        thus k divides l & n divides l by A6;
@@ -852,9 +851,9 @@ A13:    k divides m2 & n divides m2 & for m st k divides m & n divides
  n holds m divides it;
    existence
     proof
-       defpred _P[Nat] means $1 divides k & $1 divides n;
+       defpred P[Nat] means $1 divides k & $1 divides n;
          1 divides k & 1 divides n by Th53;
-then A1:    ex m st _P[m];
+then A1:    ex m st P[m];
 A2:    now assume
 A3:     k = 0;
        take m = n;
@@ -865,9 +864,9 @@ A3:     k = 0;
          now assume
 A4:      k <> 0;
            0 <= k by Th18;
-then A5:      for m st _P[m] holds m <= k by A4,Th54;
+then A5:      for m st P[m] holds m <= k by A4,Th54;
        consider m such that
-A6:      _P[m] & for l st _P[l] holds l <= m from Max(A5,A1);
+A6:      P[m] & for l st P[l] holds l <= m from Max(A5,A1);
        take m;
        thus m divides k & m divides n by A6;
        let l; assume l divides k & l divides n;
@@ -908,9 +907,9 @@ A1:   0 < b() & b() < a() and
 A2:   Q(0) = a() & Q(1) = b() and
 A3:   for n holds Q(n + 2) = Q(n) mod Q(n + 1)
 proof
-     defpred _P[Nat] means ex n st $1 = Q(n);
-A4:  ex k st _P[k] by A2;
-A5:  for k st k <> 0 & _P[k] holds ex n st n < k & _P[n]
+     defpred P[Nat] means ex n st $1 = Q(n);
+A4:  ex k st P[k] by A2;
+A5:  for k st k <> 0 & P[k] holds ex n st n < k & P[n]
      proof let k; assume
 A6:    k <> 0 & ex n st k = Q(n);
       then consider n such that
@@ -928,18 +927,18 @@ A9:      n = m + 1;
        end;
       hence thesis by A8,Th22;
      end;
-A11:  _P[0] from Regr(A4,A5);
-     defpred _Q[Nat] means 0 = Q($1);
-A12: ex n st _Q[n] by A11;
+A11:  P[0] from Regr(A4,A5);
+     defpred Q[Nat] means 0 = Q($1);
+A12: ex n st Q[n] by A11;
    consider k such that
-A13:  _Q[k] & for n st _Q[n] holds k <= n from Min(A12);
+A13:  Q[k] & for n st Q[n] holds k <= n from Min(A12);
    consider n such that
 A14:  k = n + 1 by A1,A2,A13,Th22;
    take n;
-   defpred _PP[Nat] means Q(n) divides Q($1) & Q(n) divides Q($1 + 1);
-       _PP[n] by A13,A14,Th53;
-then A15:  ex k st _PP[k];
-A16:  for k st k <> 0 & _PP[k] ex m st m < k & _PP[m]
+   defpred PP[Nat] means Q(n) divides Q($1) & Q(n) divides Q($1 + 1);
+       PP[n] by A13,A14,Th53;
+then A15:  ex k st PP[k];
+A16:  for k st k <> 0 & PP[k] ex m st m < k & PP[m]
      proof let l; assume
 A17:    l <> 0 & Q(n) divides Q(l) & Q(n) divides Q(l + 1);
       then consider m such that
@@ -957,12 +956,12 @@ A22:        m + 1 <> k;
               k <= m + 1 by A13,A21;
            then k < m + 1 by A22,REAL_1:def 5;
 then A23:        k <= m by Th38;
-defpred _Q[Nat] means k <= $1 implies Q($1) = 0;
-A24: _Q[0]
+defpred Q[Nat] means k <= $1 implies Q($1) = 0;
+A24: Q[0]
             proof assume A25: k <= 0;  0 <= k by Th18;
              hence thesis by A13,A25,AXIOMS:21;
             end;
-A26:  for m st _Q[m] holds _Q[m+1]
+A26:  for m st Q[m] holds Q[m+1]
      proof let m such that
 A27:           k <= m implies Q(m) = 0 and
 A28:           k <= m + 1;
@@ -975,7 +974,7 @@ A30:             m = l + 1 by A1,A2,A27,Th22,Th38;
               end;
              hence Q(m + 1) = 0 by A13;
             end;
-              for m holds _Q[m] from Ind(A24,A26);
+              for m holds Q[m] from Ind(A24,A26);
            then Q(m) = 0 by A23;
           hence Q(n) divides Q(m) by Th53;
          end;
@@ -996,21 +995,21 @@ then A33:      Q(m) = Q(m + 1) * (Q(m) div Q(m + 1)) + Q(m + 2) by A31,A32,Th47
       thus Q(n) divides Q(m + 1) by A17,A18;
      end;
        now
-         _PP[0] from Regr(A15,A16);
+         PP[0] from Regr(A15,A16);
      hence Q(n) divides a() & Q(n) divides b() by A2;
      let m;
-     defpred _P1[Nat] means m divides Q($1) & m divides Q($1 + 1);
+     defpred P1[Nat] means m divides Q($1) & m divides Q($1 + 1);
      assume
          m divides a() & m divides b();
-then A34: _P1[0] by A2;
-A35:    for k st _P1[k] holds _P1[k+1]
+then A34: P1[0] by A2;
+A35:    for k st P1[k] holds P1[k+1]
        proof let k; assume
 A36:       m divides Q(k) & m divides Q(k + 1);
         hence m divides Q(k + 1);
        Q(k + 2) = Q(k) mod Q(k + 1) by A3;
         hence m divides Q(k + 1 + 1) by A36,Th58;
        end;
-         for k holds _P1[k] from Ind(A34,A35);
+         for k holds P1[k] from Ind(A34,A35);
      hence m divides Q(n);
     end;
    hence Q(n) = a() hcf b() by Def5;
@@ -1220,26 +1219,6 @@ theorem
   hence thesis by Th39;
  end;
 
-:: from DTCONSTR
-
-scheme MonoSetSeq { f() -> Function, A() -> set, H(set, set) -> set}:
- for k, s being Nat holds f().k c= f().(k+s)
-provided
-A1: for n being Nat holds f().(n+1) = f().n \/ H(n, f().n)
-proof let k be Nat;
-set f = f();
-  defpred P[Nat] means f.k c= f.(k+$1);
-A2: P[0];
-A3: now let s be Nat; assume
-A4:    P[s];
-        f.(k+(s+1)) = f.((k+s)+1)
-                  .= f.(k+s) \/ H(k+s, f.(k+s)) by A1;
-       then f.(k+s) c= f.(k+(s+1)) by XBOOLE_1:7;
-      hence P[s+1] by A4,XBOOLE_1:1;
-     end;
- thus for s being Nat holds P[s] from Ind(A2,A3);
-end;
-
 registration
   cluster non zero Nat;
   existence
@@ -1247,4 +1226,9 @@ registration
     take 1;
     thus thesis;
   end;
+end;
+
+registration
+  cluster -> non negative Element of NAT;
+  coherence by Th18;
 end;

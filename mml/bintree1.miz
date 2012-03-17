@@ -98,7 +98,7 @@ theorem :: BinEx2:
     elementary_tree 2 is binary
   proof set T = elementary_tree 2; let t be Element of T; assume
 A1:  not t in Leaves T;
-   per cases by ENUMSET1:13,MODAL_1:10;
+   per cases by ENUMSET1:def 1,MODAL_1:10;
    suppose
 A2:   t = {};
 A3:   succ t = { t^<*n*> where n is Nat : t^<*n*> in T} by TREES_2:def 5;
@@ -111,7 +111,7 @@ A3:   succ t = { t^<*n*> where n is Nat : t^<*n*> in T} by TREES_2:def 5;
 A4:      x = t^<*n*> & t^<*n*> in T;
 A5:      x = <*n*> by A2,A4,FINSEQ_1:47;
          reconsider x' = x as FinSequence by A4;
-         per cases by A4,ENUMSET1:13,MODAL_1:10;
+         per cases by A4,ENUMSET1:def 1,MODAL_1:10;
           suppose x = {};
            then len x' = 0 & len x' = 1 by A5;
            hence x in {t^<*0*>,t^<*1*>};
@@ -127,7 +127,7 @@ A5:      x = <*n*> by A2,A4,FINSEQ_1:47;
 then A7:      x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
         reconsider x' = x as FinSequence by A6,TARSKI:def 2;
            x' = <*0*> or x' = <*1*> by A2,A7,FINSEQ_1:47;
-        then x' in T by ENUMSET1:14,MODAL_1:10;
+        then x' in T by ENUMSET1:def 1,MODAL_1:10;
       hence x in { t^<*n*> where n is Nat : t^<*n*> in T} by A7;
      end;
     hence succ t = {t^<*0*>,t^<*1*>} by A3,TARSKI:2;
@@ -136,7 +136,7 @@ then A7:      x = t^<*0*> or x = t^<*1*> by TARSKI:def 2;
 A8:   t = <*0*>;
         now assume
 A9:     t^<*0*> in T;
-      per cases by A9,ENUMSET1:13,MODAL_1:10;
+      per cases by A9,ENUMSET1:def 1,MODAL_1:10;
       suppose t^<*0*> = {};
         then len (t^<*0*>) = 0;
         then len t + len <*0*> = 0 by FINSEQ_1:35;
@@ -163,7 +163,7 @@ FINSEQ_1:56;
 A10:   t = <*1*>;
         now assume
 A11:     t^<*0*> in T;
-      per cases by A11,ENUMSET1:13,MODAL_1:10;
+      per cases by A11,ENUMSET1:def 1,MODAL_1:10;
       suppose t^<*0*> = {};
         then len (t^<*0*>) = 0;
         then len t + len <*0*> = 0 by FINSEQ_1:35;
@@ -754,14 +754,13 @@ A2: for nt being NonTerminal of G(),
     st nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr]
     holds P[nt-tree(tl, tr)]
 proof
-    defpred _P[set] means P[$1];
-A3: for s being Symbol of G() st s in Terminals G() holds _P[root-tree s]
+A3: for s being Symbol of G() st s in Terminals G() holds P[root-tree s]
       by A1;
 A4: for nt being Symbol of G(),
        ts being FinSequence of TS(G()) st nt ==> roots ts &
     for t being DecoratedTree of the carrier of G() st t in rng ts
-                                                     holds _P[t]
-    holds _P[nt-tree ts]
+                                                     holds P[t]
+    holds P[nt-tree ts]
  proof let nt be Symbol of G(),
        ts be FinSequence of TS(G()) such that
 A5: nt ==> roots ts and
@@ -776,7 +775,7 @@ A9:   tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
   hence P[nt-tree ts] by A2,A5,A7,A8,A9;
  end;
     for t being DecoratedTree of the carrier of G()
-       st t in TS(G()) holds _P[t] from DTCONSTR:sch 7(A3, A4);
+       st t in TS(G()) holds P[t] from DTCONSTR:sch 7(A3, A4);
  hence thesis;
 end;
 
@@ -798,10 +797,10 @@ scheme BinDTConstrIndDef
 proof
  deffunc BNTV(Symbol of G(), FinSequence, FinSequence of D()) =
                 NTermVal($1, $2.1, $2.2, $3.1, $3.2);
-  deffunc _TermVal(set) = TermVal($1);
+  deffunc TermVal(set) = TermVal($1);
   consider f being Function of TS(G()), D() such that
 A1: for t being Symbol of G() st t in Terminals G()
-         holds f.(root-tree t) = _TermVal(t) and
+         holds f.(root-tree t) = TermVal(t) and
 A2: for nt being Symbol of G(),
        ts being FinSequence of TS(G()) st nt ==> roots ts
          holds f.(nt-tree ts) = BNTV(nt, roots ts, f * ts) from DTCONSTR:sch 8;
@@ -901,10 +900,10 @@ A2:
 proof
  deffunc BNTV(Symbol of G(), FinSequence, FinSequence of D()) =
                 NTermVal($1, $2.1, $2.2, $3.1, $3.2);
-    deffunc _TermVal(set) = TermVal($1);
+    deffunc TermVal(set) = TermVal($1);
 A3: now
       thus for t being Symbol of G() st t in Terminals G()
-             holds f1().(root-tree t) = _TermVal(t) by A1;
+             holds f1().(root-tree t) = TermVal(t) by A1;
       let nt be Symbol of G(),
           ts be FinSequence of TS G();
        set rts = roots ts;
@@ -925,7 +924,7 @@ then x.1 = xl & x.2 = xr by A5,FUNCT_1:23;
      end;
 A8: now
       thus for t be Symbol of G() st t in Terminals G()
-             holds f2().(root-tree t) = _TermVal(t) by A2;
+             holds f2().(root-tree t) = TermVal(t) by A2;
       let nt be Symbol of G(),
           ts be FinSequence of TS G();
        set rts = roots ts;
@@ -954,7 +953,7 @@ definition
  coherence by MCART_1:73;
 end;
 
-scheme BinDTC_DefLambda
+scheme BinDTCDefLambda
     { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
              (non empty DTConstrStr),
       A, B() -> non empty set,
@@ -974,52 +973,52 @@ scheme BinDTC_DefLambda
      for a being Element of A() holds g.a = H(nt, f1, f2, a))
 proof
  reconsider FAB = Funcs(A(), B()) as non empty set by FUNCT_2:11;
-    defpred _P[set,set] means
+    defpred P[set,set] means
       for tv being Function of A(), B() st tv = $2
        for a being Element of A() holds tv.a = F($1, a);
 A1: now let x be Element of Terminals G();
-       deffunc _F(set) = F(x,$1);
+       deffunc F(set) = F(x,$1);
        consider y being Function of A(), B() such that
-A2:      for a being Element of A() holds y.a = _F(a) from FUNCT_2:sch 4;
+A2:      for a being Element of A() holds y.a = F(a) from FUNCT_2:sch 4;
           A() = dom y & rng y c= B() by FUNCT_2:def 1,RELSET_1:12;
        then reconsider y as Element of FAB by FUNCT_2:def 2;
       take y;
-      thus _P[x,y] by A2;
+      thus P[x,y] by A2;
      end;
  consider TV being Function of Terminals G(), FAB such that
-A3: for e being Element of Terminals G() holds _P[e,TV.e] from FUNCT_2:sch 3
+A3: for e being Element of Terminals G() holds P[e,TV.e] from FUNCT_2:sch 3
  (A1);
-    defpred _P[set,set,set,set] means
+    defpred P[set,set,set,set] means
     for a being Element of A()
           for ntv being Function of A(), B() st ntv = $4
             holds ntv.a = H($1, $2, $3, a);
 A4: now let x be Element of NonTerminals G(),
                y, z be Element of FAB;
-         deffunc _F(set) = H(x, y, z, $1);
+         deffunc F(set) = H(x, y, z, $1);
         consider fab being Function of A(), B() such that
-A5:       for a being Element of A() holds fab.a = _F(a) from FUNCT_2:sch 4;
+A5:       for a being Element of A() holds fab.a = F(a) from FUNCT_2:sch 4;
            A() = dom fab & rng fab c= B() by FUNCT_2:def 1,RELSET_1:12;
         then reconsider fab as Element of FAB by FUNCT_2:def 2;
        take fab;
-       thus _P[x,y,z,fab] by A5;
+       thus P[x,y,z,fab] by A5;
       end;
  consider NTV being Function of
            [:NonTerminals G(), FAB, FAB:],
            FAB such that
 A6:  for x being Element of NonTerminals G(), y,z being Element of FAB
-      holds _P[x,y,z,NTV.[x,y,z]] from MULTOP_1:sch 1 (A4);
-  deffunc _TermVal(Terminal of G()) = TV.$1;
-  deffunc _NTermVal(Element of NonTerminals G(), set, set,
+      holds P[x,y,z,NTV.[x,y,z]] from MULTOP_1:sch 1 (A4);
+  deffunc TermVal(Terminal of G()) = TV.$1;
+  deffunc NTermVal(Element of NonTerminals G(), set, set,
                     Element of FAB,Element of FAB) = NTV.[$1, $4, $5];
  consider f being Function of TS(G()), FAB such that
-A7:(for t being Terminal of G() holds f.(root-tree t) = _TermVal(t))
+A7:(for t being Terminal of G() holds f.(root-tree t) = TermVal(t))
 &
   (for nt being NonTerminal of G(),
        tl, tr being Element of TS(G()),
        rtl, rtr being Symbol of G()
      st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
    for xl, xr being Element of FAB st xl = f.tl & xr = f.tr
-               holds f.(nt-tree (tl, tr)) = _NTermVal(nt,rtl,rtr,xl,xr))
+               holds f.(nt-tree (tl, tr)) = NTermVal(nt,rtl,rtr,xl,xr))
                                                 from BinDTConstrIndDef;
   reconsider f' = f as Function of TS G(), Funcs(A(), B());
   take f';
@@ -1057,7 +1056,7 @@ A12:    ntvval = NTV.[nt, f1, f2] & dom ntvval = A() & rng ntvval c= B()
    thus for a being Element of A() holds ntvval.a = H(nt, f1, f2, a)
                                                         by A6,A12;
 end;
-scheme BinDTC_DefLambdaUniq
+scheme BinDTCDefLambdaUniq
     { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
              (non empty DTConstrStr),
       A, B() -> non empty set,
@@ -1089,35 +1088,35 @@ A2:  (for t being Terminal of G() ex g being Function of A(), B()
 proof
  reconsider FAB = Funcs(A(), B()) as non empty set by FUNCT_2:11;
 
-  defpred _P[set,set] means
+  defpred P[set,set] means
       for tv being Function of A(), B() st tv = $2
        for a being Element of A() holds tv.a = F($1, a);
 
 A3: now let x be Element of Terminals G();
-       deffunc _F(Element of A()) = F(x,$1);
+       deffunc F(Element of A()) = F(x,$1);
        consider y being Function of A(), B() such that
-A4:      for a being Element of A() holds y.a = _F(a) from FUNCT_2:sch 4;
+A4:      for a being Element of A() holds y.a = F(a) from FUNCT_2:sch 4;
           A() = dom y & rng y c= B() by FUNCT_2:def 1,RELSET_1:12;
        then reconsider y as Element of FAB by FUNCT_2:def 2;
       take y;
-      thus _P[x,y] by A4;
+      thus P[x,y] by A4;
      end;
  consider TV being Function of Terminals G(), FAB such that
-A5: for e being Element of Terminals G() holds _P[e,TV.e] from FUNCT_2:sch 3
+A5: for e being Element of Terminals G() holds P[e,TV.e] from FUNCT_2:sch 3
  (A3);
-    defpred _P[set,set,set,set] means
+    defpred P[set,set,set,set] means
     for a being Element of A()
           for ntv being Function of A(), B() st ntv = $4
             holds ntv.a = H($1, $2, $3, a);
 A6: now let x be Element of NonTerminals G(),
                y, z be Element of FAB;
-        deffunc _F(Element of A()) = H(x, y, z, $1);
+        deffunc F(Element of A()) = H(x, y, z, $1);
         consider fab being Function of A(), B() such that
-A7:       for a being Element of A() holds fab.a = _F(a) from FUNCT_2:sch 4;
+A7:       for a being Element of A() holds fab.a = F(a) from FUNCT_2:sch 4;
            A() = dom fab & rng fab c= B() by FUNCT_2:def 1,RELSET_1:12;
         then reconsider fab as Element of FAB by FUNCT_2:def 2;
        take fab;
-       thus _P[x,y,z,fab] by A7;
+       thus P[x,y,z,fab] by A7;
       end;
  consider NTV being Function of
            [:NonTerminals G(), FAB, FAB:],
@@ -1125,11 +1124,11 @@ A7:       for a being Element of A() holds fab.a = _F(a) from FUNCT_2:sch 4;
 A8:  for x being Element of NonTerminals G(),
       y being Element of FAB,
       z being Element of FAB
-   holds _P[x,y,z,NTV.[x,y,z]] from MULTOP_1:sch 1 (A6);
+   holds P[x,y,z,NTV.[x,y,z]] from MULTOP_1:sch 1 (A6);
  reconsider f1' = f1() as Function of TS G(), FAB;
  reconsider f2' = f2() as Function of TS G(), FAB;
-     deffunc _TermVal(Terminal of G()) = TV.$1;
-     deffunc _NTV(NonTerminal of G(),set,set,Element of FAB,Element of FAB) =
+     deffunc TermVal(Terminal of G()) = TV.$1;
+     deffunc NTV(NonTerminal of G(),set,set,Element of FAB,Element of FAB) =
              NTV.[$1, $4, $5];
 A9: now
  hereby
@@ -1150,7 +1149,7 @@ A11:   TV.t = TVt & dom TVt = A() & rng TVt c= B() by FUNCT_2:def 2;
          .= (TVt).xx by A5,A11;
     hence g.x = TVt.x;
    end;
-  hence f1'.(root-tree t) = _TermVal(t) by A10,A11,FUNCT_1:9;
+  hence f1'.(root-tree t) = TermVal(t) by A10,A11,FUNCT_1:9;
  end;
  let nt be NonTerminal of G(),
      tl, tr be Element of TS(G()),
@@ -1177,7 +1176,7 @@ A15: ntvnt = NTV.[nt, xl, xr] & dom ntvnt = A() & rng ntvnt c= B()
         .= ntvnt.xx by A8,A15;
    hence g.x = ntvnt.x;
   end;
- hence f1'.(nt-tree (tl, tr)) = _NTV(nt,rtl,rtr,xl,xr) by A14,A15,FUNCT_1:9;
+ hence f1'.(nt-tree (tl, tr)) = NTV(nt,rtl,rtr,xl,xr) by A14,A15,FUNCT_1:9;
      end;
 A16: now
  hereby
@@ -1198,7 +1197,7 @@ A18:   TV.t = TVt & dom TVt = A() & rng TVt c= B() by FUNCT_2:def 2;
          .= (TVt).xx by A5,A18;
     hence g.x = TVt.x;
    end;
-  hence f2'.(root-tree t) = _TermVal(t) by A17,A18,FUNCT_1:9;
+  hence f2'.(root-tree t) = TermVal(t) by A17,A18,FUNCT_1:9;
  end;
  let nt be NonTerminal of G(),
      tl, tr be Element of TS(G()),
@@ -1225,7 +1224,7 @@ A22: ntvnt = NTV.[nt, xl, xr] & dom ntvnt = A() & rng ntvnt c= B()
         .= ntvnt.xx by A8,A22;
    hence g.x = ntvnt.x;
   end;
- hence f2'.(nt-tree (tl, tr)) = _NTV(nt, rtl,rtr,xl, xr) by A21,A22,FUNCT_1:9;
+ hence f2'.(nt-tree (tl, tr)) = NTV(nt, rtl,rtr,xl, xr) by A21,A22,FUNCT_1:9;
      end;
     f1' = f2' from BinDTConstrUniqDef ( A9, A16 );
  hence thesis;
@@ -1235,16 +1234,16 @@ registration
  let G be binary with_terminals with_nonterminals (non empty DTConstrStr);
  cluster -> binary Element of TS G;
   coherence proof
-    defpred _P[DecoratedTree] means $1 is binary;
+    defpred P[DecoratedTree] means $1 is binary;
 A1: now let s be Terminal of G;
          dom root-tree s is binary by Th6,TREES_4:3;
-     hence _P[root-tree s] by Def3;
+     hence P[root-tree s] by Def3;
     end;
 A2: for nt being NonTerminal of G,
         tl, tr being Element of TS(G) st
-       nt ==> <*root-label tl, root-label tr*> & _P[tl] & _P[tr]
-      holds _P[nt-tree(tl, tr)] by Th11;
-   thus for x being Element of TS(G) holds _P[x] from BinDTConstrInd ( A1, A2)
+       nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr]
+      holds P[nt-tree(tl, tr)] by Th11;
+   thus for x being Element of TS(G) holds P[x] from BinDTConstrInd ( A1, A2)
 ;
   end;
 end;

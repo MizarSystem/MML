@@ -103,6 +103,7 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="19"/>
+<Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
 </Cluster>
 </CCluster>
@@ -121,6 +122,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
+<Adjective nr="21" value="false"/>
 <Adjective nr="22"/>
 </Cluster>
 </CCluster>

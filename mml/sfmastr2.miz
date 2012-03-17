@@ -450,8 +450,7 @@ A4: for k being Nat st X[k] holds X[k+1]
   proof let k be Nat; assume that
   A5: k <= s.a implies ST.k.intloc 0 = 1 and
   A6: k+1 <= s.a;
-         0 <= k+1 by NAT_1:18;
-      then reconsider sa = s.a as Nat by A6,INT_1:16;
+      reconsider sa = s.a as Nat by A6,INT_1:16;
   A7: k < sa by A6,NAT_1:38;
       then I is_closed_on ST.k & I is_halting_on ST.k by A1,Def3;
       hence ST.(k+1).intloc 0 = 1 by A5,A7,Th12;
@@ -482,8 +481,7 @@ A6: for k being Nat st X[k] holds X[k+1]
   proof let k be Nat such that
  A7: k <= s.a implies ST.k.au+k = s.a and
  A8: k+1 <= s.a;
-        0 <= k+1 by NAT_1:18;
-     then reconsider sa = s.a as Nat by A8,INT_1:16;
+     reconsider sa = s.a as Nat by A8,INT_1:16;
  A9: k < sa by A8,NAT_1:38;
  then A10:  ST.k.intloc 0 = 1 by A2,Th16;
  A11:  I is_closed_on ST.k by A2,A9,Def3;
@@ -720,7 +718,7 @@ A1: s.a = k; assume
 then A2: ProperTimesBody a, I, s by Th15;
    assume
 A3: s.intloc 0 = 1 or a is read-write;
-A4: 0 <= s.a by A1,NAT_1:18;
+A4: 0 <= s.a by A1;
    set au = 1-stRWNotIn ({a} \/ UsedIntLoc I);
    set ISu = I ';' SubFrom(au, intloc 0);
    set WH = while>0 ( au, ISu );
@@ -819,7 +817,7 @@ A44: (for i being Nat st ISW.i.au <= 0 holds K <= i) and
 
 A45: ISW.k | D = SW.k | D by A7,A8,SCMFSA9A:40;
 A46: ISW.K | D = SW.K | D by A7,A8,SCMFSA9A:40;
-         SW.k.au = 0 by A1,A2,A3,A4,A6,Th18;
+         SW.k.au = 0 by A1,A2,A3,A6,Th18;
       then ISW.k.au = 0 by A45,SCMFSA6A:38;
 then A47:   K <= k by A44;
       then A48: SW.K.au+K = k by A1,A2,A3,A6,Th17;
@@ -1072,7 +1070,7 @@ A16: for k st X[k] holds X[k+1]
      end;
    hereby assume
   A30:   k+1 < s.a;
-           0 <= k+1 by NAT_1:18; then 0 <= s.a by A30;
+        then 0 <= s.a;
         then reconsider sa = s.a as Nat by INT_1:16;
   A31:  k < sa by A30,NAT_1:37;
   then A32:  ST.(k+1).intloc 0 = 1 by A17,Th12;
@@ -1115,7 +1113,7 @@ begin :: A macro for the Fibonacci sequence
 definition
  let N, result be Int-Location;
    set next = 1-stRWNotIn {N, result};
-   set N_save = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
+   set Nsave = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
 :: set next = 1-stRWNotIn {N, result};
 ::      local variable
 :: set N_save = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
@@ -1126,11 +1124,11 @@ definition
 
  func Fib-macro (N, result) -> Macro-Instruction equals
 :Def5:
-   N_save := N ';'
+   Nsave := N ';'
    (SubFrom(result, result)) ';'
    (next := intloc 0) ';'
    times( N, AddTo(result, next) ';' swap(result, next) ) ';'
-   (N := N_save);
+   (N := Nsave);
  correctness;
 end;
 
@@ -1144,8 +1142,8 @@ proof let N, result be read-write Int-Location such that
 A1: N <> result;
 
    set next = 1-stRWNotIn {N, result};
-   set N_save = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
-   set i0 = N_save := N;
+   set Nsave = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
+   set i0 = Nsave := N;
    set i1 = SubFrom(result, result);
    set i2 = next := intloc 0;
    set i30 = AddTo (result, next);
@@ -1154,12 +1152,12 @@ A1: N <> result;
    set i02 = i0 ';' i1 ';' i2;
    set s1 = IExec(i02, s);
    set I3 = times( N, I301 );
-   set i4 = N := N_save;
+   set i4 = N := Nsave;
 
 A2: Fib-macro(N, result) = i02 ';' I3 ';' i4 by Def5;
 
-    A3: N_save = 1-stRWNotIn UsedIntLoc I3 by SFMASTR1:def 4;
-then A4: not N_save in UsedIntLoc I3 by SFMASTR1:21;
+    A3: Nsave = 1-stRWNotIn UsedIntLoc I3 by SFMASTR1:def 4;
+then A4: not Nsave in UsedIntLoc I3 by SFMASTR1:21;
     set UIFS = UsedIntLoc I301 \/ FinSeq-Locations;
 A5: UsedIntLoc I301 = (UsedIntLoc i30) \/ UsedIntLoc I31 by SF_MASTR:33
        .= {result, next} \/ UsedIntLoc I31 by SF_MASTR:18;
@@ -1174,11 +1172,11 @@ A10: next <> N by A8,TARSKI:def 2;
 A11:{N} \/ UsedIntLoc I301 c= UsedIntLoc I3 by Th8;
         N in {N} by TARSKI:def 1;
      then N in {N} \/ UsedIntLoc I301 by XBOOLE_0:def 2;
-then A12: N_save <> N by A3,A11,SFMASTR1:21;
+then A12: Nsave <> N by A3,A11,SFMASTR1:21;
         next in {N} \/ UsedIntLoc I301 by A7,XBOOLE_0:def 2;
-then A13: N_save <> next by A3,A11,SFMASTR1:21;
+then A13: Nsave <> next by A3,A11,SFMASTR1:21;
         result in {N} \/ UsedIntLoc I301 by A6,XBOOLE_0:def 2;
-then A14: N_save <> result by A3,A11,SFMASTR1:21;
+then A14: Nsave <> result by A3,A11,SFMASTR1:21;
 
 A15: s1.intloc 0
    = Exec(i2, IExec(i0 ';' i1, s)).intloc 0 by SCMFSA6C:7
@@ -1187,11 +1185,11 @@ A15: s1.intloc 0
   .= Exec(i0, Initialize s).intloc 0 by SCMFSA_2:91
   .= (Initialize s).intloc 0 by SCMFSA_2:89
   .= 1 by SCMFSA6C:3;
-A16: s1.N_save
-   = Exec(i2, IExec(i0 ';' i1, s)).N_save by SCMFSA6C:7
-  .= IExec(i0 ';' i1, s).N_save by A13,SCMFSA_2:89
-  .= Exec(i1, Exec(i0, Initialize s)).N_save by SCMFSA6C:9
-  .= Exec(i0, Initialize s).N_save by A14,SCMFSA_2:91
+A16: s1.Nsave
+   = Exec(i2, IExec(i0 ';' i1, s)).Nsave by SCMFSA6C:7
+  .= IExec(i0 ';' i1, s).Nsave by A13,SCMFSA_2:89
+  .= Exec(i1, Exec(i0, Initialize s)).Nsave by SCMFSA6C:9
+  .= Exec(i0, Initialize s).Nsave by A14,SCMFSA_2:91
   .= (Initialize s).N by SCMFSA_2:89
   .= s.N by SCMFSA6C:3;
 A17: s1.result
@@ -1266,8 +1264,8 @@ A35: i02 ';' I3 is_closed_on Initialize s by A30,A31,A33,SFMASTR1:3;
    .= Fib n by A19,A27,A28;
  thus IExec(Fib-macro(N, result), s).N
     = Exec(i4, IExec(i02 ';' I3, s)).N by A2,A34,A35,SFMASTR1:12
-   .= IExec( i02 ';' I3, s).N_save by SCMFSA_2:89
-   .= IExec(I3, s1).N_save by A31,SFMASTR1:8
+   .= IExec( i02 ';' I3, s).Nsave by SCMFSA_2:89
+   .= IExec(I3, s1).Nsave by A31,SFMASTR1:8
    .= s.N by A4,A16,A32,Th3;
 end;
 

@@ -738,6 +738,12 @@
 <Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="57">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="58">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="120">
 <LocusVar nr="1"/>
 </Adjective>

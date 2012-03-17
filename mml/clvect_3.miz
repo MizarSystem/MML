@@ -40,17 +40,17 @@ begin :: Cauchy sequence of complex unitary space
 
 deffunc 0'(ComplexUnitarySpace) = 0.$1;
 
-scheme Rec_Func_Ex_CUS{ X() -> ComplexUnitarySpace,
+scheme RecFuncExCUS{ X() -> ComplexUnitarySpace,
                      z() -> Point of X(),
                      G(Nat, Point of X()) -> Point of X()}:
 ex f being Function of NAT, the carrier of X() st
  f.0 = z() & for n being Element of NAT,
   x being Point of X() st x = f.n holds f.(n + 1) = G(n,x)
 proof
-   deffunc _G(Nat,Point of X()) = G($1,$2);
+   deffunc G(Nat,Point of X()) = G($1,$2);
    consider f being Function of NAT, the carrier of X() such that
 A1:f.0 = z() &
-   for n being Element of NAT holds f.(n+1) = _G(n,f.n) from RECDEF_1:sch 4;
+   for n being Element of NAT holds f.(n+1) = G(n,f.n) from RECDEF_1:sch 4;
    take f;
    thus f.0 = z() by A1;
    thus for n being Nat, x being Point of X() st x = f.n
@@ -64,11 +64,11 @@ definition
     for n holds it.(n + 1) = it.n + seq.(n + 1);
 existence
 proof
-   deffunc _G(Nat,Point of X) = $2 + seq.($1 + 1);
+   deffunc G(Nat,Point of X) = $2 + seq.($1 + 1);
    consider f being Function of NAT,the carrier of X such that
 A1:f.0 = seq.0 &
    for n being Nat, x being Point of X st x = f.n holds
-    f.(n + 1) = _G(n,x) from Rec_Func_Ex_CUS;
+    f.(n + 1) = G(n,x) from RecFuncExCUS;
    reconsider f as sequence of X;
    take f;
    thus thesis by A1;
@@ -81,16 +81,16 @@ A2:seq1.0 = seq.0 &
     for n holds seq1.(n + 1) = seq1.n + seq.(n + 1) and
 A3:seq2.0 = seq.0 &
     for n holds seq2.(n + 1) = seq2.n + seq.(n + 1);
-   defpred _P[Nat] means seq1.$1 = seq2.$1;
-A4:_P[0] by A2,A3;
-A5:for k be Nat st _P[k] holds _P[k+1]
+   defpred P[Nat] means seq1.$1 = seq2.$1;
+A4:P[0] by A2,A3;
+A5:for k be Nat st P[k] holds P[k+1]
    proof
      let k be Nat;
      assume seq1.k =seq2.k;
      hence seq1.(k + 1) = seq2.k + seq.(k+1) by A2
                        .= seq2.(k + 1) by A3;
    end;
-    for n holds _P[n] from NAT_1:sch 1(A4,A5);
+    for n holds P[n] from NAT_1:sch 1(A4,A5);
    hence seq1 = seq2 by FUNCT_2:113;
 end;
 end;
@@ -358,10 +358,10 @@ end;
 theorem Th13:
 seq is summable implies for k holds seq^\k is summable
 proof
-   defpred _P[Nat] means seq^\($1) is summable;
+   defpred P[Nat] means seq^\($1) is summable;
    assume seq is summable;
-then A1:_P[0] by CLVECT_2:91;
-A2:for k st _P[k] holds _P[k+1]
+then A1:P[0] by CLVECT_2:91;
+A2:for k st P[k] holds P[k+1]
    proof
      let k;
      assume seq^\k is summable;
@@ -376,7 +376,7 @@ A6:  seq1 is convergent by CLVECT_2:1;
      then Partial_Sums(seq^\k^\1) is convergent by A3,A6,CLVECT_2:4;
      hence thesis by A4,Def2;
    end;
-   thus for k holds _P[k] from NAT_1:sch 1(A1,A2);
+   thus for k holds P[k] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem
@@ -390,9 +390,9 @@ then A2:Partial_Sums(seq^\k^\1) is convergent by Def2;
         by FUNCOP_1:57;
 A3: for n holds seq1.n = Partial_Sums(seq).k by FUNCOP_1:13;
 A4:seq1 is convergent by CLVECT_2:1;
-   defpred _P[Nat] means
+   defpred P[Nat] means
    (Partial_Sums(seq)^\(k+1)).$1 = Partial_Sums(seq^\(k+1)).$1 + seq1.$1;
-    for m holds _P[m]
+    for m holds P[m]
    proof
 A5:  Partial_Sums(seq^\(k+1)).0 = (seq^\(k+1)).0 by Def1
         .= seq.(0+(k+1)) by CLVECT_2:def 11
@@ -401,10 +401,10 @@ A5:  Partial_Sums(seq^\(k+1)).0 = (seq^\(k+1)).0 by Def1
       = Partial_Sums(seq).(0+(k+1)) by CLVECT_2:def 11
      .= Partial_Sums(seq).k + seq.(k+1) by Def1
      .= Partial_Sums(seq^\(k+1)).0 + seq1.0 by A3,A5;
-then A6:  _P[0];
+then A6:  P[0];
 A7:  now let m;
        assume
-A8:    _P[m];
+A8:    P[m];
         Partial_Sums(seq^\(k+1)).(m+1) + seq1.(m+1)
         = seq1.(m+1) + (Partial_Sums(seq^\(k+1)).m + (seq^\(k+1)).(m+1))
            by Def1
@@ -418,7 +418,7 @@ A8:    _P[m];
        .= Partial_Sums(seq).(m+(k+1)+1) by Def1
        .= Partial_Sums(seq).(m+1+(k+1))
        .= (Partial_Sums(seq)^\(k+1)).(m+1) by CLVECT_2:def 11;
-       hence _P[m+1];
+       hence P[m+1];
      end;
      thus thesis from NAT_1:sch 1(A6,A7);
    end;
@@ -794,9 +794,9 @@ then A3:||.seq.m.|| > 0 by CSSPACE:46;
     now let n;
      assume
 A4:  n >= m;
-     defpred _P[Nat] means ||.seq.(m+$1).|| >= ||.seq.m.||;
-A5:  _P[0];
-A6:  for k st _P[k] holds _P[k+1]
+     defpred P[Nat] means ||.seq.(m+$1).|| >= ||.seq.m.||;
+A5:  P[0];
+A6:  for k st P[k] holds P[k+1]
      proof
        let k;
        assume
@@ -809,7 +809,7 @@ then A9:   ||.seq.(m+k).|| <> 0 by CSSPACE:44;
        then ||.seq.(m+k+1).|| >= ||.seq.(m+k).|| by A8,A9,REAL_2:118;
        hence thesis by A7,AXIOMS:22;
      end;
-A10: for k holds _P[k] from NAT_1:sch 1(A5,A6);
+A10: for k holds P[k] from NAT_1:sch 1(A5,A6);
       ex k st n = m + k by A4,NAT_1:28;
      hence ||.seq.n.|| >= ||.seq.m.|| by A10;
    end;
@@ -962,14 +962,14 @@ end;
 theorem Th37:
 for n holds ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n
 proof
-   defpred _P[Nat] means
+   defpred P[Nat] means
      ||.Partial_Sums(seq).$1.|| <= Partial_Sums(||.seq.||).$1;
     Partial_Sums(||.seq.||).0 = ||.seq.||.0 by SERIES_1:def 1
                             .= ||.(seq.0).|| by CLVECT_2:def 3;
-then A1:_P[0] by Def1;
+then A1:P[0] by Def1;
 A2:now let n;
      assume
-A3:  _P[n];
+A3:  P[n];
       Partial_Sums(seq).(n+1) = Partial_Sums(seq).n + seq.(n+1) by Def1;
 then A4:  ||.Partial_Sums(seq).(n+1).||
        <= ||.Partial_Sums(seq).n.|| + ||.seq.(n+1).|| by CSSPACE:48;
@@ -979,9 +979,9 @@ then A4:  ||.Partial_Sums(seq).(n+1).||
        <= Partial_Sums(||.seq.||).n + ||.seq.(n+1).|| by A4,AXIOMS:22;
      then ||.Partial_Sums(seq).(n+1).||
        <= Partial_Sums(||.seq.||).n + ||.seq.||.(n+1) by CLVECT_2:def 3;
-     hence _P[n+1] by SERIES_1:def 1;
+     hence P[n+1] by SERIES_1:def 1;
    end;
-   thus for n holds _P[n] from NAT_1:sch 1(A1,A2);
+   thus for n holds P[n] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem
@@ -1002,15 +1002,15 @@ A1:now assume
 A2:  n <= m;
      set PSseq = Partial_Sums(seq);
      set PSseq' = Partial_Sums(||.seq.||);
-     defpred _P[Nat] means
+     defpred P[Nat] means
       ||.PSseq.(n+$1) - PSseq.n.|| <=  abs(PSseq'.(n+$1) - PSseq'.n);
       ||.PSseq.(n+0) - PSseq.n.|| = ||.0'(X).|| by RLVECT_1:28
                                 .= 0 by CSSPACE:44;
-then A3:  _P[0] by ABSVALUE:5;
+then A3:  P[0] by ABSVALUE:5;
 A4:  PSseq' is non-decreasing by Th35;
 A5:  now let k;
        assume
-A6:    _P[k];
+A6:    P[k];
         ||.PSseq.(n+(k+1)) - PSseq.n.||
          = ||.seq.(n+k+1) + PSseq.(n+k) - PSseq.n.|| by Def1
         .= ||.seq.(n+k+1) + (PSseq.(n+k) - PSseq.n).|| by RLVECT_1:42;
@@ -1031,9 +1031,9 @@ REAL_1:55;
         = abs(PSseq'.(n+k) + (||.seq.||).(n+k+1) - PSseq'.n) by SERIES_1:def 1
        .= abs(||.seq.(n+k+1).|| + PSseq'.(n+k) - PSseq'.n) by CLVECT_2:def 3
        .= abs(||.seq.(n+k+1).|| + (PSseq'.(n+k) - PSseq'.n));
-       hence _P[k+1] by A10,A11,ABSVALUE:def 1;
+       hence P[k+1] by A10,A11,ABSVALUE:def 1;
      end;
-A12: for k holds _P[k] from NAT_1:sch 1(A3,A5);
+A12: for k holds P[k] from NAT_1:sch 1(A3,A5);
      reconsider d = n, t = m as Integer;
      reconsider k = t - d as Nat by A2,INT_1:18;
       n + k = m;
@@ -1043,15 +1043,15 @@ A12: for k holds _P[k] from NAT_1:sch 1(A3,A5);
 A13: n >= m;
      set PSseq = Partial_Sums(seq);
      set PSseq' = Partial_Sums(||.seq.||);
-     defpred _P[Nat] means
+     defpred P[Nat] means
      ||.PSseq.m - PSseq.(m+$1).|| <= abs(PSseq'.m - PSseq'.(m+$1));
       ||.PSseq.m - PSseq.(m+0).|| = ||.0'(X).|| by RLVECT_1:28
                                 .= 0 by CSSPACE:44;
-then A14: _P[0] by ABSVALUE:5;
+then A14: P[0] by ABSVALUE:5;
 A15: PSseq' is non-decreasing by Th35;
 A16: now let k;
        assume
-A17:   _P[k];
+A17:   P[k];
         ||.PSseq.m - PSseq.(m+(k+1)).||
         = ||.PSseq.m - (PSseq.(m+k) + seq.(m+k+1)).|| by Def1
        .= ||.(PSseq.m - PSseq.(m+k)) - seq.(m+k+1).|| by RLVECT_1:41
@@ -1080,9 +1080,9 @@ REAL_1:55;
        .= abs(PSseq'.(m+k) + (||.seq.||).(m+k+1) - PSseq'.m) by SERIES_1:def 1
        .= abs(||.seq.(m+k+1).|| + PSseq'.(m+k) - PSseq'.m) by CLVECT_2:def 3
        .= abs((PSseq'.(m+k) - PSseq'.m) + ||.seq.(m+k+1).||);
-       hence _P[k+1] by A21,A22,ABSVALUE:def 1;
+       hence P[k+1] by A21,A22,ABSVALUE:def 1;
      end;
-A23: for k holds _P[k] from NAT_1:sch 1(A14,A16);
+A23: for k holds P[k] from NAT_1:sch 1(A14,A16);
      reconsider d = n, t = m as Integer;
      reconsider k = d - t as Nat by A13,INT_1:18;
       m + k = n;
@@ -1171,8 +1171,8 @@ definition
   for n holds it.n = Cseq.n * seq.n;
 existence
 proof
-   deffunc _F(Nat) = Cseq.$1 * seq.$1;
-  thus ex M being sequence of X st for n holds M.n = _F(n) from FUNCT_2:sch 4;
+   deffunc F(Nat) = Cseq.$1 * seq.$1;
+  thus ex M being sequence of X st for n holds M.n = F(n) from FUNCT_2:sch 4;
 end;
 uniqueness
 proof
@@ -1564,7 +1564,7 @@ for n holds
  Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).n
      = Partial_Sums(Cseq * seq).(n+1) - (Cseq * Partial_Sums(seq)).(n+1)
 proof
-   defpred _P[Nat] means
+   defpred P[Nat] means
     Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).$1
      = Partial_Sums(Cseq * seq).($1+1) - (Cseq * Partial_Sums(seq)).($1+1);
 A1:Partial_Sums(Cseq * seq).(0+1)
@@ -1606,9 +1606,9 @@ A3:(Cseq * Partial_Sums(seq)).(0+1)
    then Partial_Sums(Cseq * seq).(0+1) - (Cseq * Partial_Sums(seq)).(0+1)
     = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).0 + 0'(X)
        by RLVECT_1:28;
-then A4:_P[0] by RLVECT_1:10;
+then A4:P[0] by RLVECT_1:10;
 A5:now let n;
-     assume _P[n];
+     assume P[n];
      then Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).n +
       (Cseq * Partial_Sums(seq)).(n+1) =
        Partial_Sums(Cseq * seq).(n+1) - ((Cseq * Partial_Sums(seq)).(n+1)
@@ -1686,9 +1686,9 @@ then A6:  Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).n +
 1)+1)
       = Partial_Sums((Cseq - Cseq^\1) * Partial_Sums(seq)).(n+1)
        + 0'(X) by RLVECT_1:28;
-     hence _P[n+1] by RLVECT_1:10;
+     hence P[n+1] by RLVECT_1:10;
    end;
-   thus for n holds _P[n] from NAT_1:sch 1(A4,A5);
+   thus for n holds P[n] from NAT_1:sch 1(A4,A5);
 end;
 
 theorem Th53:

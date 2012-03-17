@@ -19,7 +19,7 @@ environ
  constructors FINSUB_1, BORSUK_1, ALG_1, FINSEQ_5, REALSET2, LATTICE3,
       REWRITE1, YELLOW_2, INT_1, NAT_1, DOMAIN_1, BINOP_2;
  registrations XREAL_0, REWRITE1, SUBSET_1, FINSUB_1, FINSET_1, NAT_1,
-      BINARITH, RELAT_1, STRUCT_0, RELSET_1, FINSEQ_5, LATTICE3, YELLOW_0,
+      RELAT_1, STRUCT_0, RELSET_1, FINSEQ_5, LATTICE3, YELLOW_0,
       WAYBEL_0, YELLOW_1, YELLOW_7, YELLOW_9, FINSEQ_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_2, REALSET2, FUNCT_1, FINSEQ_1, LATTICE3,
@@ -612,10 +612,10 @@ definition
      x in it iff ex t being type of T st x = t & a in adjs t;
  existence
   proof
-   defpred _P[set] means ex t being type of T st $1 = t & a in adjs t;
+   defpred P[set] means ex t being type of T st $1 = t & a in adjs t;
    consider tt being set such that
 A1: for x being set holds x in tt iff
-      x in the carrier of T & _P[x] from XBOOLE_0:sch 1;
+      x in the carrier of T & P[x] from XBOOLE_0:sch 1;
       tt c= the carrier of T proof let x be set; thus thesis by A1; end;
    then reconsider tt as Subset of T;
    take tt; let x be set;
@@ -633,10 +633,10 @@ A2: x = t & a in adjs t;
   end;
  uniqueness
   proof
-     defpred _P[set] means ex t being type of T st $1 = t & a in adjs t;
+     defpred P[set] means ex t being type of T st $1 = t & a in adjs t;
      let X1,X2 be Subset of T such that
-A3: for x being set holds x in X1 iff _P[x] and
-A4: for x being set holds x in X2 iff _P[x];
+A3: for x being set holds x in X1 iff P[x] and
+A4: for x being set holds x in X2 iff P[x];
    thus thesis from XBOOLE_0:sch 2(A3,A4);
   end;
 end;
@@ -649,10 +649,10 @@ definition
      t in it iff for a being adjective of T st a in A holds t in types a;
  existence
   proof
-   defpred _P[set] means
+   defpred P[set] means
      for a being adjective of T st a in A holds $1 in types a;
    consider tt being set such that
-A1: for x being set holds x in tt iff x in the carrier of T & _P[x]
+A1: for x being set holds x in tt iff x in the carrier of T & P[x]
      from XBOOLE_0:sch 1;
       tt c= the carrier of T proof let x be set; thus thesis by A1; end;
    then reconsider tt as Subset of T;
@@ -1195,13 +1195,13 @@ definition
     holds it.(i+1) = a ast t;
   existence
   proof
-    defpred _P[set,set,set] means
+    defpred P[set,set,set] means
     ex a being adjective of T st
       a = p.$1 & ($2 is not type of T & $3 = 0 or
                  ex t being type of T st t = $2 & $3 = a ast t);
 A1: for i being Nat st 1 <= i & i < len p+1
     for x being set
-     ex y being set st _P[i,x,y]
+     ex y being set st P[i,x,y]
      proof let i be Nat; assume
 A2:    1 <= i;
        assume i < len p+1;
@@ -1221,29 +1221,29 @@ A3:    x is not type of T; take 0, a; thus thesis by A3;
      end;
      end;
 A4: for n being Nat st 1 <= n & n < len p+1
-     for x,y1,y2 being set st _P[n,x,y1] & _P[n,x,y2]
+     for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2]
      holds y1 = y2;
     consider q being FinSequence such that
 A5: len q = len p+1 and
 A6: q.1 = t or len p+1 = 0 and
-A7: for i being Nat st 1 <= i & i < len p+1 holds _P[i,q.i,q.(i+1)]
+A7: for i being Nat st 1 <= i & i < len p+1 holds P[i,q.i,q.(i+1)]
      from RECDEF_1:sch 5(A1,A4);
-    defpred _P[Nat] means $1 in dom q implies q.$1 is type of T;
-A8: _P[0] by FINSEQ_3:26;
+    defpred P[Nat] means $1 in dom q implies q.$1 is type of T;
+A8: P[0] by FINSEQ_3:26;
 A9: now let k be Nat such that
-A10:   _P[k];
+A10:   P[k];
         now assume
     k+1 in dom q;
-      then (k <> 0 implies k > 0) & k+1 <= len q by FINSEQ_3:27,NAT_1:19;
+      then (k <> 0 implies k > 0) & k+1 <= len q by FINSEQ_3:27;
 then A11:   (k <> 0 implies k >= 0+1) & k < len q by NAT_1:38;
       then k <> 0 implies ex a being adjective of T st a = p.k &
       (q.k is not type of T & q.(k+1) = 0
        or ex t being type of T st t = q.k & q.(k+1) = a ast t) by A5,A7;
       hence q.(k+1) is type of T by A6,A10,A11,FINSEQ_3:27;
       end;
-      hence _P[k+1];
+      hence P[k+1];
     end;
-A12: for k being Nat holds _P[k] from NAT_1:sch 1(A8,A9);
+A12: for k being Nat holds P[k] from NAT_1:sch 1(A8,A9);
       rng q c= the carrier of T
     proof
       let a be set; assume a in rng q;
@@ -1274,15 +1274,15 @@ A18: for i being Nat, a being adjective of T, t being type of T
      st i in dom p & a = p.i & t = q2.i
      holds q2.(i+1) = a ast t;
 A19: dom q1 = dom q2 by A15,A17,FINSEQ_3:31;
-    defpred _P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
-A20: _P[0] by FINSEQ_3:27;
+    defpred P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
+A20: P[0] by FINSEQ_3:27;
 A21: now let i be Nat such that
-A22:   _P[i];
+A22:   P[i];
         now assume
     i+1 in dom q1;
       then i+1 <= len q1 & i <= i+1 by FINSEQ_3:27,NAT_1:38;
 then A23:  i <= len p & i <= len q1 by A15,AXIOMS:22,REAL_1:53;
-     per cases by NAT_1:19; suppose i = 0;
+     per cases; suppose i = 0;
       hence q1.(i+1) = q2.(i+1) by A15,A17;
      end;
      suppose i > 0;
@@ -1293,9 +1293,9 @@ then A24:  i in dom p & i in dom q1 by A23,FINSEQ_3:27;
       thus q1.(i+1) = a ast t by A16,A24
                    .= q2.(i+1) by A18,A22,A24;
       end;
-      end; hence _P[i+1];
+      end; hence P[i+1];
     end;
-     for i being Nat holds _P[i] from NAT_1:sch 1(A20,A21);
+     for i being Nat holds P[i] from NAT_1:sch 1(A20,A21);
    hence thesis by A19,FINSEQ_1:17;
   end;
 end;
@@ -1445,7 +1445,7 @@ A6:  len s = len tt+(len v2+1) by A1,A3,FINSEQ_1:35
           .= len v1+len v2+1 by A5
           .= len p+1 by FINSEQ_1:35;
 A7:  s.1 = t
-     proof per cases by NAT_1:19;
+     proof per cases;
        suppose len v1 = 0;
        then v1 = <*>the adjectives of T & tt = {} by A5,FINSEQ_1:25;
        then s = apply(v2, v1 ast t) & v1 ast t = t by A3,Th31,FINSEQ_1:47;
@@ -1541,9 +1541,8 @@ theorem Th37:
     let v1,v2 be FinSequence of the adjectives of T; set v = v1^v2;
 A1: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1
       by Def19;
-A2: apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35;
-      0 < len apply(v2, v1 ast t) by A1,NAT_1:19;
-    then apply(v,t).(len v1+1+0) = apply(v2, v1 ast t).(0+1) by A1,A2,Th34;
+    apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35;
+    then apply(v,t).(len v1+1+0) = apply(v2, v1 ast t).(0+1) by A1,Th34;
     hence thesis by Def19;
    end;
 
@@ -1685,15 +1684,15 @@ A2: 1 <= i1 & i1 <= i2 & i2 <= len v+1;
 A3: ex j being Nat st i2 = i1+j by A2,NAT_1:28;
 A4: len apply(v,t) = len v+1 by Def19;
     let s1,s2 be type of T;
-    defpred _P[Nat] means i1+$1 <= len apply(v,t) implies
+    defpred P[Nat] means i1+$1 <= len apply(v,t) implies
             for s being type of T st s = apply(v,t).(i1+$1) holds s <= s1;
     assume
 A5: s1 = apply(v,t).i1 & s2 = apply(v,t).i2;
-then A6: _P[0];
+then A6: P[0];
 A7: for i being Nat
-     st _P[i] holds _P[i+1]
+     st P[i] holds P[i+1]
      proof let i be Nat such that
-A8:    _P[i] and
+A8:    P[i] and
 A9:    i1+(i+1) <= len apply(v,t);
 A10:    i1 <= i1+i & i1+(i+1) = i1+i+1 by NAT_1:29;
 then A11:    1 <= i1+i & i1+i <= len v & i1+i is Nat
@@ -1713,7 +1712,7 @@ A14:   apply(v,t).(i1+i+1) = a ast s by A12,Def19;
          s <= s1 & a ast s <= s by A8,A9,A10,A13,Th21,NAT_1:38;
        hence thesis by A14,YELLOW_0:def 2;
      end;
-      for i being Nat holds _P[i] from NAT_1:sch 1(A6,A7);
+      for i being Nat holds P[i] from NAT_1:sch 1(A6,A7);
     hence thesis by A2,A3,A4,A5;
   end;
 
@@ -1838,16 +1837,16 @@ A2: x in dom apply(v',t) & s = apply(v',t).x by FUNCT_1:def 5;
       x in Seg len apply(v',t) by A2,FINSEQ_1:def 3;
     then reconsider x as non empty Nat by BINARITH:5;
 A3: x <= len apply(v',t) by A2,FINSEQ_3:27;
-    defpred _P[Nat] means
+    defpred P[Nat] means
     $1 <= len apply(v',t) implies
       for s being type of T st s = apply(v',t).$1 holds v ast t <= s;
       apply(v',t).1 = t by Def19;
-then A4: _P[1] by A1,Th44;
-A5: for i being non empty Nat st _P[i] holds _P[i+1]
+then A4: P[1] by A1,Th44;
+A5: for i being non empty Nat st P[i] holds P[i+1]
      proof let i be non empty Nat such that
-A6:    _P[i] and
+A6:    P[i] and
 A7:    i+1 <= len apply(v',t);
-A8:    i > 0 & len apply(v',t) = len v'+1 by Def19,NAT_1:19;
+A8:    i > 0 & len apply(v',t) = len v'+1 by Def19;
 then A9:    0+1 <= i & i <= len v' by A7,NAT_1:38,REAL_1:53;
 then A10:   i in dom v' by FINSEQ_3:27;
 then A11:    v'.i in rng v' & rng v' c= the adjectives of T
@@ -1864,7 +1863,7 @@ A12:   apply(v',t).(i+1) = a ast s by A10,Def19;
        then v ast t <= s & a in adjs (v ast t) by A6,A7,NAT_1:38;
        hence thesis by A12,Th24;
      end;
-      for i being non empty Nat holds _P[i] from BINARITH:sch 1(A4,A5);
+      for i being non empty Nat holds P[i] from BINARITH:sch 1(A4,A5);
     hence thesis by A2,A3;
   end;
 
@@ -2464,28 +2463,27 @@ A1:  ex A being finite set st P[A]
 proof
     consider A being finite set such that
 A2: P[A] by A1;
-    defpred _P[set] means P[$1];
     consider Y being set such that
-A3: for x being set holds x in Y iff x in bool A & _P[x] from XBOOLE_0:sch 1;
+A3: for x being set holds x in Y iff x in bool A & P[x] from XBOOLE_0:sch 1;
       A c= A;
     then reconsider Y as non empty set by A2,A3;
 A4: bool A is finite by FINSET_1:24;
       Y c= bool A proof let x be set; thus thesis by A3; end;
     then reconsider Y as finite non empty set by A4,FINSET_1:13;
-    defpred _R[set,set] means $1 c= $2;
-A5: for x being Element of Y holds _R[x,x];
-A6: for x,y being Element of Y st _R[x,y] & _R[y,x] holds x = y
+    defpred R[set,set] means $1 c= $2;
+A5: for x being Element of Y holds R[x,x];
+A6: for x,y being Element of Y st R[x,y] & R[y,x] holds x = y
      by XBOOLE_0:def 10;
-A7: for x,y,z being Element of Y st _R[x,y] & _R[y,z] holds _R[x,z]
+A7: for x,y,z being Element of Y st R[x,y] & R[y,z] holds R[x,z]
      by XBOOLE_1:1;
 A8:  for X being set st X c= Y &
      (for x,y being Element of Y st x in X & y in X
-       holds _R[x,y] or _R[y,x]) holds
+       holds R[x,y] or R[y,x]) holds
      ex y being Element of Y st
-      for x being Element of Y st x in X holds _R[y,x]
+      for x being Element of Y st x in X holds R[y,x]
      proof let X be set such that
 A9:   X c= Y and
-A10:   for x,y being Element of Y st x in X & y in X holds _R[x,y] or _R[y,x];
+A10:   for x,y being Element of Y st x in X & y in X holds R[x,y] or R[y,x];
       per cases;
       suppose
 A11:   X = {}; consider y being Element of Y;
@@ -2506,11 +2504,11 @@ FUNCT_1:sch 3;
         hence thesis;
       end;
       then reconsider fx0 as finite set by FINSET_1:13;
-      defpred _P[Nat] means
+      defpred P[Nat] means
         ex x being Element of Y st x in X & $1 = f.x;
         f.x0 = card fx0 by A12,A13;
-then A14:   ex n being Nat st _P[n] by A12;
-A15:   for k being Nat st k<>0 & _P[k] ex n being Nat st n<k & _P[n]
+then A14:   ex n being Nat st P[n] by A12;
+A15:   for k being Nat st k<>0 & P[k] ex n being Nat st n<k & P[n]
       proof let k being Nat such that
 A16:     k <> 0;
         given x being Element of Y such that
@@ -2553,7 +2551,7 @@ then A22:     n <= k by A19,CARD_1:56;
         hence n < k by A19,A22,REAL_1:def 5;
         take y; thus y in X & n = f.y by A13,A18;
       end;
-        _P[0] from NAT_1:sch 7(A14,A15);
+        P[0] from NAT_1:sch 7(A14,A15);
       then consider y being Element of Y such that
 A23:   y in X & 0 = f.y;
 A24:   f.y = Card {z where z is Element of Y: z in X & z c< y} by A13,A23;
@@ -2563,11 +2561,11 @@ A25:   x in X;
       then x c= y or y c= x by A10,A23;
       then x c< y or y c= x by XBOOLE_0:def 8;
       then x in {z where z is Element of Y: z in X & z c< y} or y c= x by A25;
-      hence _R[y,x] by A23,A24,CARD_2:59;
+      hence R[y,x] by A23,A24,CARD_2:59;
     end;
     end;
     consider x being Element of Y such that
-A26: for y being Element of Y st x <> y holds not _R[y,x]
+A26: for y being Element of Y st x <> y holds not R[y,x]
       from ORDERS_1:sch 2(A5,A6,A7,A8);
       x in bool A by A3;
     then reconsider x as finite set by FINSET_1:13;
@@ -2592,17 +2590,17 @@ theorem Th65:
    proof
      let T be non empty non void reflexive transitive TAS-structure;
      let t be type of T, A be Subset of the adjectives of T;
-   defpred _P[set] means
+   defpred P[set] means
     ex B being Subset of the adjectives of T st
       $1 = B & $1 c= A & B is_properly_applicable_to t & A ast t = B ast t;
      assume A is_properly_applicable_to t;
      then A is finite & A c= A & A is_properly_applicable_to t & A ast t = A
 ast t
       by Th63;
-then A1:  ex a being finite set st _P[a];
+then A1:  ex a being finite set st P[a];
      consider B being finite set such that
-A2:  _P[B] and
-A3:  for C being set st C c= B & _P[C] holds C = B from MinimalFiniteSet(A1);
+A2:  P[B] and
+A3:  for C being set st C c= B & P[C] holds C = B from MinimalFiniteSet(A1);
      reconsider B as Subset of the adjectives of T by A2;
      take B;
      thus B c= A & B is_properly_applicable_to t & A ast t = B ast t by A2;
@@ -2687,14 +2685,14 @@ theorem Th66:
     let t be type of T, A be Subset of the adjectives of T;
     given s' being FinSequence of the adjectives of T such that
 A1: rng s' = A & s' is_properly_applicable_to t;
-    defpred _P[Nat] means
+    defpred P[Nat] means
     ex s being FinSequence of the adjectives of T st
      $1 = len s & rng s = A & s is_properly_applicable_to t;
       len s' = len s';
-then A2: ex k being Nat st _P[k] by A1;
+then A2: ex k being Nat st P[k] by A1;
     consider k being Nat such that
-A3: _P[k] and
-A4: for n being Nat st _P[n] holds k <= n from NAT_1:sch 5(A2);
+A3: P[k] and
+A4: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A2);
     consider s being FinSequence of the adjectives of T such that
 A5: k = len s & rng s = A & s is_properly_applicable_to t by A3;
       s is one-to-one
@@ -2765,12 +2763,12 @@ definition
       a is_properly_applicable_to t2 & a ast t2 = t1;
   existence
   proof
-    defpred _P[Element of T, Element of T] means
+    defpred P[Element of T, Element of T] means
      ex a being adjective of T st not a in adjs $2 &
        a is_properly_applicable_to $2 & a ast $2 = $1;
     consider R being Relation of the carrier of T such that
 A1: for t1,t2 being Element of T
-     holds [t1,t2] in R iff _P[t1,t2] from RELSET_1:sch 2;
+     holds [t1,t2] in R iff P[t1,t2] from RELSET_1:sch 2;
     reconsider R as Relation of T;
     take R; thus thesis by A1;
   end;
@@ -2823,10 +2821,10 @@ proof
     let x,y be Element of X();
     given p being RedSequence of R() such that
 A4: p.1 = x & p.len p = y;
-    defpred _P[Nat] means 1+$1 <= len p implies P[x, p.(1+$1)];
-A5: _P[0] by A2,A4;
+    defpred P[Nat] means 1+$1 <= len p implies P[x, p.(1+$1)];
+A5: P[0] by A2,A4;
 A6: now let i be Nat such that
-A7:   _P[i];
+A7:   P[i];
         now assume
 A8:   1+(i+1) <= len p;
       then i+1 < len p & i+1 >= 1 & 1+(i+1) >= 1 by NAT_1:29,38;
@@ -2836,12 +2834,12 @@ then A9:   [p.(i+1), p.(1+(i+1))] in R() by REWRITE1:def 2;
 then A10:   p.(i+1) in X() & p.(1+(i+1)) in X() by ZFMISC_1:106;
       then P[p.(i+1), p.(1+(i+1))] by A1,A9;
       hence P[x, p.(1+(i+1))] by A3,A7,A8,A10,NAT_1:38;
-     end; hence _P[i+1];
+     end; hence P[i+1];
     end;
       len p > 0 by REWRITE1:def 2;
     then len p >= 0+1 by NAT_1:38;
 then A11: ex n being Nat st len p = 1+n by NAT_1:28;
-      for n being Nat holds _P[n] from NAT_1:sch 1(A5,A6);
+      for n being Nat holds P[n] from NAT_1:sch 1(A5,A6);
     hence thesis by A4,A11;
   end;
 
@@ -2855,16 +2853,16 @@ theorem Th68:
     (non empty non void reflexive transitive Noetherian TAS-structure);
     let t1,t2 be type of T;
     set R = T@-->;
-    defpred _P[Element of T, Element of T] means
+    defpred P[Element of T, Element of T] means
      $1 <= $2;
 A1: now let x,y be Element of T;
         R c= the InternalRel of T by Th67;
-      hence [x,y] in R implies _P[x, y] by ORDERS_2:def 9;
+      hence [x,y] in R implies P[x, y] by ORDERS_2:def 9;
     end;
-A2: for x being Element of T holds _P[x, x];
+A2: for x being Element of T holds P[x, x];
 A3: for x,y,z be Element of T
-      holds _P[x, y] & _P[y, z] implies _P[x, z] by YELLOW_0:def 2;
-      for x,y being Element of T st R reduces x,y holds _P[x,y]
+      holds P[x, y] & P[y, z] implies P[x, z] by YELLOW_0:def 2;
+      for x,y being Element of T st R reduces x,y holds P[x,y]
       from RedInd(A1,A2,A3);
     hence thesis;
   end;
@@ -3041,7 +3039,7 @@ A1: for C being Subset of the adjectives of T
 A2: rng s = A & s is_properly_applicable_to t;
 A3: len Rev apply(s, t) = len apply(s, t) & len apply(s, t) = len s+1 &
     dom Rev apply(s, t) = dom apply(s, t) by Def19,FINSEQ_5:60,def 3;
-    hence len Rev apply(s, t) > 0 by NAT_1:19;
+    hence len Rev apply(s, t) > 0;
     let i be Nat; assume
       i in dom Rev apply(s, t) & i+1 in dom Rev apply(s, t);
 then A4: i >= 1 & i+1 <= len s+1 & (Rev apply(s, t)).i = apply(s, t).(len s+1-i
@@ -3169,7 +3167,7 @@ A1: p.1 = t1 & t2 = p.len p;
 then A2: len p >= 0+1 by NAT_1:38;
     then consider i being Nat such that
 A3: len p = 1+i by NAT_1:28;
-    defpred _P[set,set] means
+    defpred P[set,set] means
       ex j being Nat,
         a being adjective of T, t being type of T st
         $2 = a & $1 = j & a ast t = p.j & t = p.(j+1) &
@@ -3183,24 +3181,24 @@ then A7:   [p.j, p.(j+1)] in R by REWRITE1:def 2;
       then reconsider q1 = p.j, q2 = p.(j+1) as type of T by ZFMISC_1:106;
         ex a being adjective of T st not a in adjs q2 &
         a is_properly_applicable_to q2 & a ast q2 = q1 by A7,Def31;
-      hence ex y being set st y in the adjectives of T & _P[x,y];
+      hence ex y being set st y in the adjectives of T & P[x,y];
     end;
     consider f being Function such that
 A8: dom f = Seg i & rng f c= the adjectives of T and
-A9: for x being set st x in Seg i holds _P[x,f.x] from WELLORD2:sch 1(A4);
+A9: for x being set st x in Seg i holds P[x,f.x] from WELLORD2:sch 1(A4);
       f is FinSequence by A8,FINSEQ_1:def 2;
     then reconsider f as FinSequence of the adjectives of T by A8,
 FINSEQ_1:def 4;
     set r = Rev f;
-    defpred _P[Nat] means
+    defpred P[Nat] means
      1+$1 <= len p implies (Rev p).(1+$1) = apply(r, t2).(1+$1);
 A10: len r = len f & len apply(r, t2) = len r+1 & len f = i & len Rev p = len p
       by A8,Def19,FINSEQ_1:def 3,FINSEQ_5:def 3;
     then 1 in dom Rev p & len p-1+1 = len p by A2,FINSEQ_3:27;
     then (Rev p).1 = t2 by A1,FINSEQ_5:def 3;
-then A11: _P[0] by Def19;
+then A11: P[0] by Def19;
 A12: now let j be Nat such that
-A13:   _P[j];
+A13:   P[j];
         now assume
 A14:   1+(j+1) <= len p;
       then j+1 <= i by A3,REAL_1:53;
@@ -3227,9 +3225,9 @@ then A21:   (Rev p).(j+1) = p.(x+1+1) & (Rev p).(1+(j+1)) = p.(x+1)
              .= a by A10,A15,A17;
       hence (Rev p).(1+(j+1)) = apply(r, t2).(1+(j+1))
         by A13,A14,A17,A20,A21,Def19,NAT_1:38;
-      end; hence _P[j+1];
+      end; hence P[j+1];
     end;
-A22: for j being Nat holds _P[j] from NAT_1:sch 1(A11,A12);
+A22: for j being Nat holds P[j] from NAT_1:sch 1(A11,A12);
       now
       let j be Nat; assume 1 <= j;
       then ex k being Nat st j = 1+k by NAT_1:28;

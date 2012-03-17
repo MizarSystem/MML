@@ -287,6 +287,9 @@
 <Adjective nr="22">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="24">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
@@ -317,6 +320,12 @@
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="22">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="25">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="26">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="28">
@@ -556,7 +565,19 @@
 <Adjective nr="21">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="22">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="25">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="26">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="27">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="29">

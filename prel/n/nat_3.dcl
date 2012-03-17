@@ -749,6 +749,8 @@
 <Adjective nr="12"/>
 <Adjective nr="19"/>
 <Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="40"/>
 <Adjective nr="62"/>
 <Adjective nr="118"/>

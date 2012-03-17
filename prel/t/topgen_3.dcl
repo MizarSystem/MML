@@ -48,22 +48,6 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="49"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
-<Adjective nr="18" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
 <Func kind="K" nr="64"/>
 <Cluster>
 <Adjective nr="1" value="false"/>

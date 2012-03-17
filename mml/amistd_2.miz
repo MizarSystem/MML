@@ -21,7 +21,7 @@ environ
  registrations AMI_1, AMISTD_1, XREAL_0, FINSEQ_1, FINSEQ_2, FINSET_1,
       FRAENKEL, FUNCT_7, INT_1, TREES_2, RELAT_1, RELSET_1, SUBSET_1, NAT_1,
       SCMFSA_4, TEX_2, WAYBEL12, YELLOW13, XBOOLE_0, MEMBERED, PRE_CIRC,
-      SETFAM_1, STRUCT_0;
+      SETFAM_1, STRUCT_0, CARD_4;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FRAENKEL, REAL_1, FUNCT_7,
       AMI_1, AMI_3, PRALG_2, YELLOW_8, AMISTD_1, XBOOLE_0;
@@ -189,12 +189,12 @@ uniqueness
      (for i being set st i in dom B holds B.i = pi(S,i))
      implies A = B
     proof
-      defpred _P[set] means for f being Function st f in S holds $1 in dom f;
+      defpred P[set] means for f being Function st f in S holds $1 in dom f;
       assume that
          S is non empty and
-A7:  for x being set holds x in dom A iff _P[x] and
+A7:  for x being set holds x in dom A iff P[x] and
 A8:  for i being set st i in dom A holds A.i = pi(S,i) and
-A9:  for x being set holds x in dom B iff _P[x] and
+A9:  for x being set holds x in dom B iff P[x] and
 A10:  for i being set st i in dom B holds B.i = pi(S,i);
 A11:   dom A = dom B from XBOOLE_0:sch 2(A7,A9);
           now
@@ -2019,9 +2019,9 @@ definition
   for m being Nat st il.(S,m) in dom p holds it.il.(S,m+k) = p.il.(S,m);
 existence
   proof
-    deffunc _F(Nat) = il.(S,$1+k);
-    deffunc _G(Nat) = il.(S,$1);
-    set A = { _F(m) where m is Nat: _G(m) in dom p };
+    deffunc F(Nat) = il.(S,$1+k);
+    deffunc G(Nat) = il.(S,$1);
+    set A = { F(m) where m is Nat: G(m) in dom p };
     defpred P [set,set] means
       ex m being Nat st $1 = il.(S,m+k) & $2 = p.il.(S,m);
 A1: for e being set st e in A ex u being set st P[e,u]
@@ -2070,7 +2070,7 @@ then A14:  il.(S,m) in dom p by A13,XCMPLX_1:2;
                    by A6,AMI_1:def 16
 ;
 A15:dom p is finite;
-A16:for m1, m2 being Nat st _G(m1) = _G(m2) holds m1 = m2 by AMISTD_1:25;
+A16:for m1, m2 being Nat st G(m1) = G(m2) holds m1 = m2 by AMISTD_1:25;
         A is finite from FUNCT_7:sch 2(A15,A16);
     then f is finite by A3,FINSET_1:29;
     then reconsider f as FinPartState of S by AMI_1:def 24;
@@ -2841,7 +2841,7 @@ A6: card f = card F - 1 by Th49
     end;
     suppose k - 1 < 0;
     then m + k = 0 or m + k < 0 by A5,A6,BINARITH:def 3;
-    then m = 0 & k = 0 by NAT_1:18,23;
+    then m = 0 & k = 0 by NAT_1:23;
     hence thesis by A6,CARD_2:59;
   end;
   end;
@@ -2930,12 +2930,7 @@ A3:  card (F ';' G)
      .= card CutLastLoc F + card G by PRE_CIRC:21
      .= card F - 1 + card G by Th49
      .= card F + card G - 1;
-        card F <> 0 & card G <> 0 by CARD_2:59;
-    then card F >= 1 & card G >= 1 by NAT_1:39;
-    then card F + card G >= 1+1 by REAL_1:55;
-    then card F + card G - 1 >= 2 - 1 by REAL_1:49;
-    then card F + card G - 1 >= 0;
-    hence thesis by A3,BINARITH:def 3;
+    thus thesis by A3,BINARITH:def 3;
   end;
 
 registration
@@ -3035,7 +3030,7 @@ then A5: locnum f = locnum il.(S,card F -' 1) by AMISTD_1:55
 A6: card P = card F + card G - 1 by Th52
       .= card F - 1 + card G;
         0 <> card G by CARD_2:59;
-    then 0 < card G by NAT_1:19;
+    then 0 < card G;
     then locnum f < card P by A5,A6,REAL_1:53;
     then il.(S,locnum f) in dom P by AMISTD_1:50;
     hence x in dom P by AMISTD_1:def 13;
@@ -3207,8 +3202,7 @@ then A8: 1 <= card F by NAT_1:39;
     then card G >= 1 by NAT_1:39;
 then A9: card G - 1 >= 0 by SQUARE_1:12;
     then A10: k + (card G - 1) >= k+0 by AXIOMS:24;
-        k+0 >= 0 by NAT_1:18;
-then A11: k + card G -' 1 = k + card G - 1 by A10,BINARITH:def 3
+A11: k + card G -' 1 = k + card G - 1 by A10,BINARITH:def 3
      .= k + (card G - 1)
      .= k + (card G -' 1) by A9,BINARITH:def 3;
     thus P.(LastLoc P) = P.il.(S,card P -' 1) by AMISTD_1:55
@@ -3245,8 +3239,7 @@ then A4: 1 <= card F by NAT_1:39;
     then card G >= 1 by NAT_1:39;
 then A5: card G - 1 >= 0 by SQUARE_1:12;
     then A6: k + (card G - 1) >= k+0 by AXIOMS:24;
-        k+0 >= 0 by NAT_1:18;
-then A7: k + card G -' 1 = k + card G - 1 by A6,BINARITH:def 3
+A7: k + card G -' 1 = k + card G - 1 by A6,BINARITH:def 3
      .= k + (card G - 1)
      .= k + (card G -' 1) by A5,BINARITH:def 3;
     let f be Instruction-Location of S such that
@@ -3887,7 +3880,7 @@ then A78:   x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
         by A14,A75;
 A79:   x = il.(S, (card G -' 1) + (card F -' 1)) by A9,A20,A21,A74;
           0 <> card H by CARD_2:59;
-      then 0 < card H by NAT_1:19;
+      then 0 < card H;
       then card G - 1 + 0 < card G - 1 + card H by REAL_1:53;
       then card G -' 1 < card G + card H - 1 by Th4;
       then card G -' 1 < card (G ';' H) by Th52;

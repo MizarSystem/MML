@@ -21,7 +21,7 @@ environ
  registrations FINSET_1, SUBSET_1, ALTCAT_1, PBOOLE, FINSEQ_1, FINSEQ_2,
       GOBRD13, FUNCT_1, ORDERS_2, CANTOR_1, RELSET_1, EQREL_1, WAYBEL_7, INT_1,
       MARGREL1, BINARITH, XBOOLE_0, MATRLIN, PRALG_1, FRAENKEL, XREAL_0,
-      NUMBERS, ORDINAL2, FUNCOP_1;
+      NUMBERS, ORDINAL2, FUNCOP_1, NAT_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, RELAT_2, YELLOW_0, SETFAM_1, MATRLIN, WAYBEL_4, FINSUB_1;
  theorems TARSKI, RELSET_1, ZFMISC_1, EQREL_1, MCART_1, RELAT_1, RELAT_2,
@@ -133,7 +133,7 @@ A7: y in X & y <> x & [x, y] in R;
   thus thesis by A6,A7,WAYBEL_4:def 24;
 end;
 
-scheme SubsetS_Eq { X() -> set, P[set] }:
+scheme SubsetSEq { X() -> set, P[set] }:
  for X1,X2 being Subset of X() st
    (for y being set holds y in X1 iff P[y]) &
    (for y being set holds y in X2 iff P[y]) holds X1 = X2
@@ -159,9 +159,9 @@ definition
  let X be set, R be Relation;
  func R Maximal_in X -> Subset of X means :Def1:
   for x being set holds x in it iff x is_maximal_wrt X, R;
- existence proof defpred _P[set] means $1 is_maximal_wrt X, R;
+ existence proof defpred P[set] means $1 is_maximal_wrt X, R;
      consider I being set such that
- A1: for x being set holds x in I iff x in X & _P[x] from XBOOLE_0:sch 1;
+ A1: for x being set holds x in I iff x in X & P[x] from XBOOLE_0:sch 1;
        for x being set st x in I holds x in X by A1;
     then reconsider I as Subset of X by TARSKI:def 3;
   take I; let x be set; thus x in I implies x is_maximal_wrt X, R by A1;
@@ -170,10 +170,10 @@ definition
    hence x in I by A1,A2;
  end;
  uniqueness proof
- defpred _P[set] means $1 is_maximal_wrt X, R;
+ defpred P[set] means $1 is_maximal_wrt X, R;
  thus for X1,X2 being Subset of X st
-   (for y being set holds y in X1 iff _P[y]) &
-   (for y being set holds y in X2 iff _P[y]) holds X1 = X2 from SubsetS_Eq;
+   (for y being set holds y in X1 iff P[y]) &
+   (for y being set holds y in X2 iff P[y]) holds X1 = X2 from SubsetSEq;
  end;
 end;
 
@@ -209,10 +209,10 @@ definition
   A3: x is_/\-irreducible_in X; then x in X by Def2;
    hence x in irr by A3;
   end;
-  uniqueness proof defpred _P[set] means $1 is_/\-irreducible_in X;
+  uniqueness proof defpred P[set] means $1 is_/\-irreducible_in X;
   thus for X1,X2 being Subset of X st
-   (for y being set holds y in X1 iff _P[y]) &
-   (for y being set holds y in X2 iff _P[y]) holds X1 = X2 from SubsetS_Eq;
+   (for y being set holds y in X1 iff P[y]) &
+   (for y being set holds y in X2 iff P[y]) holds X1 = X2 from SubsetSEq;
   end;
 end;
 
@@ -457,10 +457,10 @@ definition
  func p '&' q -> Tuple of n, BOOLEAN means :Def5:
  for i being set st i in Seg n holds it.i = (p/.i) '&' (q/.i);
  existence proof
-  deffunc _F(set) = (p/.$1) '&' (q/.$1);
+  deffunc F(set) = (p/.$1) '&' (q/.$1);
   consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j being Nat st j in Seg n holds z.j = _F(j) from FINSEQ_2:sch 1;
+A2: for j being Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
 A3: n-tuples_on BOOLEAN =
       { s where s is Element of BOOLEAN*: len s = n } by FINSEQ_2:def 4;
       z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1,A3
@@ -539,16 +539,16 @@ proof let n, i be Nat; assume
 A1: i < n;
  set B = n-BinarySequence 2 to_power i;
  deffunc B(Nat) = $1-BinarySequence 2 to_power i;
- defpred _P[Nat] means i < $1 implies B($1).(i+1) = TRUE;
-A2: _P[0] by NAT_1:18;
+ defpred P[Nat] means i < $1 implies B($1).(i+1) = TRUE;
+A2: P[0];
 A3: now let n be Nat such that
- A4: _P[n];
+ A4: P[n];
      now assume
       i < n+1;
     then A5: i <= n by NAT_1:38;
-    per cases by A5,NAT_1:19,REAL_1:def 5;
+    per cases by A5,REAL_1:def 5;
     suppose A6: n = 0;
-    then A7: i = 0 by A5,NAT_1:18;
+    then A7: i = 0 by A5;
            0*n = n |-> 0 by EUCLID:def 4; then dom 0*n =Seg n by FINSEQ_2:68;
     then A8: len 0*n = n by FINSEQ_1:def 3;  dom <*TRUE*> =Seg 1 by FINSEQ_1:55
 ;
@@ -568,28 +568,28 @@ FINSEQ_1:55;
     end;
     suppose A13: n > 0 & n > i;
       then reconsider n' = n as non empty Nat;
-    A14: 2 to_power i < 2 to_power n by A13,POWER:44;  0 <= i by NAT_1:18;
-    then A15: 0+1 <= i+1 by AXIOMS:24;  i+1 <= n by A13,NAT_1:38;
+    A14: 2 to_power i < 2 to_power n by A13,POWER:44;
+    A15: 0+1 <= i+1 by AXIOMS:24;  i+1 <= n by A13,NAT_1:38;
         then i+1 in Seg n by A15,FINSEQ_1:3;
     then A16: i+1 in dom B(n) by Lm1;
       thus B(n+1).(i+1) = (B(n')^<*FALSE*>).(i+1) by A14,BINARI_3:28
         .= TRUE by A4,A13,A16,FINSEQ_1:def 7;
     end;
-    end; hence _P[n+1];
+    end; hence P[n+1];
     end;
-A17: for n being Nat holds _P[n] from NAT_1:sch 1(A2,A3);
-     defpred _P[Nat] means
+A17: for n being Nat holds P[n] from NAT_1:sch 1(A2,A3);
+     defpred P[Nat] means
   i < $1 implies for j being Nat st i+1 <=j & j <= $1 holds B($1).(j+1)= FALSE;
-A18: _P[0] by NAT_1:18;
+A18: P[0];
 A19: now let n be Nat such that
- A20: _P[n];
+ A20: P[n];
      now assume
     A21: i < n+1;
         let j be Nat such that
     A22: i+1 <=j & j <= n+1;
-    A23: i <= n by A21,NAT_1:38;  0 <= i by NAT_1:18;
-    then A24: 0+1 <= i+1 by AXIOMS:24;
-    per cases by A23,NAT_1:19,REAL_1:def 5;
+    A23: i <= n by A21,NAT_1:38;  
+    A24: 0+1 <= i+1 by AXIOMS:24;
+    per cases by A23,REAL_1:def 5;
     suppose A25: n = 0;
     A26: dom B(n+1) = Seg (n+1) by Lm1;  1 <= j by A22,A24,AXIOMS:22;
         then j = 1 by A22,A25,AXIOMS:21;
@@ -628,21 +628,21 @@ A19: now let n be Nat such that
       end;
       end;
     end;
-    end; hence _P[n+1];
+    end; hence P[n+1];
     end;
-A40: for n being Nat holds _P[n] from NAT_1:sch 1(A18,A19);
-     defpred _P[Nat] means
+A40: for n being Nat holds P[n] from NAT_1:sch 1(A18,A19);
+     defpred P[Nat] means
      i < $1 implies for j being Nat st 1 <=j & j < i+1 holds B($1).j = FALSE;
-A41: _P[0] by NAT_1:18;
+A41: P[0];
 A42: now let n be Nat such that
- A43: _P[n];
+ A43: P[n];
        now assume
  A44: i < n+1;
      let j be Nat such that
  A45: 1 <=j & j < i+1;
  A46: i <= n by A44,NAT_1:38;
-   per cases by A46,NAT_1:19,REAL_1:def 5;
-   suppose n = 0; then 0 <= i & i <= 0 by A44,NAT_1:18,38;
+   per cases by A46,REAL_1:def 5;
+   suppose n = 0; then 0 <= i & i <= 0 by A44,NAT_1:38;
     then i = 0;
     hence B(n+1).j = FALSE by A45;
    end;
@@ -664,9 +664,9 @@ A42: now let n be Nat such that
       .= (0*n).j by A53,FINSEQ_1:def 7
       .= FALSE by A51,A52,FINSEQ_2:70,MARGREL1:def 13;
      end;
-     end; hence _P[n+1];
+     end; hence P[n+1];
    end;
-A54: for n being Nat holds _P[n] from NAT_1:sch 1(A41,A42);
+A54: for n being Nat holds P[n] from NAT_1:sch 1(A41,A42);
  thus B.(i+1) = 1 by A1,A17,MARGREL1:def 14; let j be Nat such that
 A55: j in Seg n and
 A56: j<>i+1;
@@ -676,14 +676,14 @@ A57: 1 <= j & j <= n by A55,FINSEQ_1:3;
   hence B.j = 0 by A1,A54,A57,MARGREL1:def 13;
  end;
  suppose A58: j > i+1 & j < n;
-   then j <> 0 by NAT_1:18; then consider k being Nat such that
+   then j <> 0; then consider k being Nat such that
  A59: j = k+1 by NAT_1:22;
  A60: i+1 <= k by A58,A59,NAT_1:38;  k <= n by A58,A59,NAT_1:38;
   hence B.j = 0 by A1,A40,A59,A60,MARGREL1:def 13;
  end;
- suppose A61: j > i+1 & j = n;  i >= 0 by NAT_1:18; then i+1 > 0 by NAT_1:38;
+ suppose A61: j > i+1 & j = n;
   then consider m being Nat such that
- A62: n = m+1 by A61,NAT_1:22;  i < m by A61,A62,AXIOMS:24;
+ A62: n = m+1 by NAT_1:22;  i < m by A61,A62,AXIOMS:24;
      then 2 to_power i < 2 to_power m by POWER:44;
   hence B.j = 0 by A61,A62,BINARI_3:27,MARGREL1:def 13;
 end;
@@ -1396,9 +1396,9 @@ proof let X be finite non empty set, F be full_family Dependency-set of X;
     set DOX = Dependencies-Order X; set MEF = Maximal_wrt F;
  thus Maximal_wrt F is (M1) proof let A be Subset of X;
  A1: field DOX = [:bool X, bool X:] by Th19;
-     defpred _P[set] means ex y being Dependency of X st $1 = y & y >= [A,A];
+     defpred P[set] means ex y being Dependency of X st $1 = y & y >= [A,A];
      consider MA being set such that
- A2: for x being set holds x in MA iff x in F & _P[x] from XBOOLE_0:sch 1;
+ A2: for x being set holds x in MA iff x in F & P[x] from XBOOLE_0:sch 1;
        [A, A] in F by Def16;
  then A3: MA <> {} by A2;
        MA c= F proof let x be set; assume x in MA; hence x in F by A2; end;
@@ -1560,9 +1560,9 @@ A38: M = Maximal_wrt G;
    A39: x in G; then consider a, b being Subset of X such that
    A40: x = [a,b] by Th10;
    A41: field DOX = [:bool X, bool X:] by Th19;
-     defpred _P[set] means ex y being Dependency of X st $1 = y & y >= [a,b];
+     defpred P[set] means ex y being Dependency of X st $1 = y & y >= [a,b];
      consider MA being set such that
-   A42: for x being set holds x in MA iff x in G & _P[x] from XBOOLE_0:sch 1;
+   A42: for x being set holds x in MA iff x in G & P[x] from XBOOLE_0:sch 1;
    A43: MA <> {} by A39,A40,A42;
          MA c= G proof let x be set; assume x in MA; hence x in G by A42
 ; end;
@@ -2620,38 +2620,38 @@ then A8: X --> 0 is Element of product D by CARD_3:def 5;
   suppose A12: G is non empty;
    then reconsider n =len H as non empty Nat by A4,FINSEQ_1:25,RELAT_1:60;
 A13: dom H = Seg n by FINSEQ_1:def 3;
-     defpred _R[set, Element of n-tuples_on BOOLEAN ] means
+     defpred R[set, Element of n-tuples_on BOOLEAN ] means
      for i being Nat st i in Seg n holds
       ($1 in H.i implies ($2).i = 0) & (not $1 in H.i implies ($2).i = 1);
 A14: now let x be Element of X;
-     defpred _P[set,set] means
+     defpred P[set,set] means
        (x in H.$1 implies $2 = 0) & (not x in H.$1 implies $2 = 1);
    A15: for i being Nat st i in Seg n ex x being Element of BOOLEAN
-         st _P[i,x]
+         st P[i,x]
       proof let i be Nat; assume i in Seg n;
        per cases;
        suppose A16: x in H.i;
         reconsider b = FALSE as Element of BOOLEAN;
         take b;
-        thus _P[i,b] by A16,MARGREL1:def 13;
+        thus P[i,b] by A16,MARGREL1:def 13;
        end;
        suppose A17: not x in H.i;
         reconsider b = TRUE as Element of BOOLEAN;
         take b;
-        thus _P[i,b] by A17,MARGREL1:def 14;
+        thus P[i,b] by A17,MARGREL1:def 14;
        end;
        end; consider y being FinSequence of BOOLEAN such that
    A18: dom y = Seg n and
-   A19: for i being Nat st i in Seg n holds _P[i,y.i] from FINSEQ_1:sch 5(A15);
+   A19: for i being Nat st i in Seg n holds P[i,y.i] from FINSEQ_1:sch 5(A15);
    A20: y in BOOLEAN* by FINSEQ_1:def 11;
           len y = n by A18,FINSEQ_1:def 3;
        then y in { s where s is Element of BOOLEAN*: len s = n } by A20;
        then reconsider y as Tuple of n, BOOLEAN by FINSEQ_2:def 4;
        take y;
-       thus _R[x,y] by A19;
+       thus R[x,y] by A19;
    end; consider M being Function of X, n-tuples_on BOOLEAN such that
 A21: for x being Element of X holds
-  _R[x,(M.x) qua Element of n-tuples_on BOOLEAN] from FUNCT_2:sch 3(A14);
+  R[x,(M.x) qua Element of n-tuples_on BOOLEAN] from FUNCT_2:sch 3(A14);
    set R = {f where f is Element of product D :
               ex i being Nat st for x being Element of X holds
                                f.x = Absval ((n-BinarySequence i) '&' (M.x)) };
@@ -2775,15 +2775,15 @@ then A23: X --> 0 in R by A8;
         then consider k being Nat such that
     A60: i = k+1 by NAT_1:22;
     A61: k < n by A59,A60,NAT_1:38;
-        deffunc _F(Element of X) = Absval ((n-BinarySequence 0) '&' (M.$1));
+        deffunc F(Element of X) = Absval ((n-BinarySequence 0) '&' (M.$1));
         consider f being Function of X, NAT such that
     A62: for x being Element of X
-          holds f.x = _F(x) from FUNCT_2:sch 4;
-        deffunc _F(Element of X) =
+          holds f.x = F(x) from FUNCT_2:sch 4;
+        deffunc F(Element of X) =
                         Absval ((n-BinarySequence 2 to_power k) '&' (M.$1));
         consider g being Function of X, NAT such that
     A63: for x being Element of X holds
-        g.x = _F(x) from FUNCT_2:sch 4;
+        g.x = F(x) from FUNCT_2:sch 4;
     A64: dom f = dom D by A5,FUNCT_2:def 1;
             now let x be set; assume x in dom D;
              then reconsider x' = x as Element of X by PBOOLE:def 3;

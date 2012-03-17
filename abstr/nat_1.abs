@@ -7,10 +7,10 @@
 environ
 
  vocabularies ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0,
-      FUNCT_1, BOOLE;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, FUNCT_1, NUMBERS,
-      XCMPLX_0, XREAL_0, REAL_1;
- constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0, FUNCT_1;
+      BOOLE, ASYMPT_0, ZF_LANG;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1;
+ constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0;
  registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
@@ -57,7 +57,7 @@ scheme :: NAT_1:sch 1
    for k being Nat st P[k] holds P[k + 1];
 
 scheme :: NAT_1:sch 2
- Nat_Ind { P[natural number] } :
+ NatInd { P[natural number] } :
  for k being natural number holds P[k]
    provided
    P[0] and
@@ -111,7 +111,7 @@ registration let m be natural number, n be non zero (natural number);
 end;
 
 scheme :: NAT_1:sch 3
- Def_by_Ind { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
+ DefbyInd { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
   (for k ex n st P[k,n] ) &
     for k,n,m st P[k,n] & P[k,m] holds n = m
      provided
@@ -133,7 +133,7 @@ theorem :: NAT_1:29
   i <= i + j;
 
 scheme :: NAT_1:sch 4
- Comp_Ind { P[Nat] } :
+ CompInd { P[Nat] } :
  for k holds P[k]
    provided
    for k st for n st n < k holds P[n] holds P[k];
@@ -335,14 +335,10 @@ theorem :: NAT_1:70
 theorem :: NAT_1:71
   k<2 implies k=0 or k=1;
 
-:: from DTCONSTR
-
-scheme :: NAT_1:sch 9
- MonoSetSeq { f() -> Function, A() -> set, H(set, set) -> set}:
- for k, s being Nat holds f().k c= f().(k+s)
-provided
- for n being Nat holds f().(n+1) = f().n \/ H(n, f().n);
-
 registration
   cluster non zero Nat;
+end;
+
+registration
+  cluster -> non negative Element of NAT;
 end;

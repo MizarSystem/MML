@@ -711,12 +711,12 @@ A1: f1 is bijective and
 A2: for m, n being Nat holds m <= n iff f1.m <= f1.n and
 A3: f2 is bijective and
 A4: for m, n being Nat holds m <= n iff f2.m <= f2.n;
-  defpred _P[Nat] means f1.$1 <> f2.$1;
+  defpred P[Nat] means f1.$1 <> f2.$1;
   assume f1 <> f2;
-  then A5: ex c being Nat st _P[c] by FUNCT_2:113;
+  then A5: ex c being Nat st P[c] by FUNCT_2:113;
       consider d being Nat such that
-  A6: _P[d] and
-  A7: for n being Nat st _P[n] holds d <= n from NAT_1:sch 5(A5);
+  A6: P[d] and
+  A7: for n being Nat st P[n] holds d <= n from NAT_1:sch 5(A5);
           f1 is onto & f2 is onto by A1,A3,FUNCT_2:def 4;
   then A8: rng f1 = the Instruction-Locations of S &
       rng f2 = the Instruction-Locations of S by FUNCT_2:def 3;
@@ -895,10 +895,10 @@ A51:  for k being Nat holds f.(k+1) in SUCC (f.k) &
    suppose A53: m < n;
     thus f.m <= f.n proof
        set mn = n -' m;
-       deffunc _F(Nat) = f.(m+$1-'1);
+       deffunc F(Nat) = f.(m+$1-'1);
        consider F being FinSequence of the Instruction-Locations of S such that
     A54: len F = mn+1 and
-    A55: for j being Nat st j in Seg (mn+1) holds F.j = _F(j) from
+    A55: for j being Nat st j in Seg (mn+1) holds F.j = F(j) from
 FINSEQ_2:sch 1;
      reconsider F as non empty FinSequence of the Instruction-Locations of S
            by A54,FINSEQ_1:25;
@@ -942,11 +942,11 @@ A66: dom f = NAT by FUNCT_2:def 1;
    A67: F/.1 = f.m & F/.len F = f.n and
    A68: for n being Nat st 1 <= n & n < len F holds F/.(n+1) in SUCC F/.n
        by A64,Def8;
-      defpred _P[Nat] means
+      defpred P[Nat] means
       1 <= $1 & $1 <= len F implies ex l being Nat st F/.$1 = f.l & m <= l;
- A69: _P[0];
+ A69: P[0];
  A70: now let k be Nat such that
-   A71: _P[k];
+   A71: P[k];
          now assume
    A72: 1 <= k+1 & k+1 <= len F;
        per cases by NAT_1:19;
@@ -968,9 +968,9 @@ A73:       k > 0;
            then m <= l1 by A76,AXIOMS:22;
         hence ex l being Nat st F/.(k+1) = f.l & m <= l by A77;
       end;
-      end; hence _P[k+1];
+      end; hence P[k+1];
      end;
- A78: for k being Nat holds _P[k] from NAT_1:sch 1(A69, A70);
+ A78: for k being Nat holds P[k] from NAT_1:sch 1(A69, A70);
        len F <> 0 by FINSEQ_1:25;
    then 1 <= len F by NAT_1:39;
    then ex l being Nat st F/.len F = f.l & m <= l by A78;
@@ -1042,8 +1042,8 @@ definition
  proof
    set O = NAT \/ {NAT};
        NAT in {NAT} by TARSKI:def 1;
-   then reconsider IC_ = NAT as Element of O by XBOOLE_0:def 2;
-   reconsider IL_ = NAT as non empty Subset of O by XBOOLE_1:7;
+   then reconsider IC1 = NAT as Element of O by XBOOLE_0:def 2;
+   reconsider IL = NAT as non empty Subset of O by XBOOLE_1:7;
        0 in {0,1} & 1 in {0,1} & 0 in ((union N) \/ O)* by FINSEQ_1:66
 ,TARSKI:def 2;
    then [1,0] in [:{0,1}, ((union N) \/ O)*:] & [0,0] in [:{0,1}, ((union N)
@@ -1052,17 +1052,17 @@ definition
      by ZFMISC_1:106;
    then reconsider ins = III as
          non empty Subset of [:{0,1}, ((union N) \/ O)*:] by ZFMISC_1:38;
-A1: dom ((NAT --> ins)+*({NAT}-->IL_)) = O by Lm3;
+A1: dom ((NAT --> ins)+*({NAT}-->IL)) = O by Lm3;
 A2: rng (NAT --> ins) = {ins} by FUNCOP_1:14;
-    rng ({NAT}-->IL_) = {NAT} by FUNCOP_1:14;
-then A3: rng ((NAT --> ins)+*({NAT}-->IL_)) c= {ins}\/{NAT} by A2,FUNCT_4:18;
+    rng ({NAT}-->IL) = {NAT} by FUNCOP_1:14;
+then A3: rng ((NAT --> ins)+*({NAT}-->IL)) c= {ins}\/{NAT} by A2,FUNCT_4:18;
     {ins}\/{NAT}= {ins, NAT} by ENUMSET1:41;
     then {ins}\/{NAT} c= N \/ {ins, NAT} by XBOOLE_1:7;
-    then rng ((NAT --> ins)+*({NAT}-->IL_))
+    then rng ((NAT --> ins)+*({NAT}-->IL))
        c= N \/ {ins, NAT} by A3,XBOOLE_1:1;
-   then reconsider Ok = (NAT --> ins)+*({NAT}-->IL_) as
-         Function of O, N \/ {ins, IL_} by A1,FUNCT_2:def 1,RELSET_1:11;
-    deffunc _F(Element of product Ok) = $1+*({NAT}-->succ($1.NAT));
+   then reconsider Ok = (NAT --> ins)+*({NAT}-->IL) as
+         Function of O, N \/ {ins, IL} by A1,FUNCT_2:def 1,RELSET_1:11;
+    deffunc F(Element of product Ok) = $1+*({NAT}-->succ($1.NAT));
 A4: now let s be Element of product Ok;
           now
       A5: {NAT} c= dom Ok by A1,XBOOLE_1:7;
@@ -1087,10 +1087,10 @@ A4: now let s be Element of product Ok;
        suppose A9: o = NAT;
                NAT in {NAT} by TARSKI:def 1;
        then A10: NAT in dom Ok by A1,XBOOLE_0:def 2;
-               dom ({NAT}-->IL_) = {NAT} by FUNCOP_1:19;
-       then A11: NAT in dom ({NAT}-->IL_) by TARSKI:def 1;
+               dom ({NAT}-->IL) = {NAT} by FUNCOP_1:19;
+       then A11: NAT in dom ({NAT}-->IL) by TARSKI:def 1;
        A12: NAT in {NAT} by TARSKI:def 1;
-       A13: Ok.o = ({NAT}-->IL_).NAT by A9,A11,FUNCT_4:14
+       A13: Ok.o = ({NAT}-->IL).NAT by A9,A11,FUNCT_4:14
                .= NAT by A12,FUNCOP_1:13;
            then reconsider k = s.NAT as Nat by A9,A10,CARD_3:18;
                NAT is_limit_ordinal by ORDINAL2:def 5;
@@ -1102,10 +1102,10 @@ A15:        o in {NAT} by A9,TARSKI:def 1;
         hence (s+*({NAT}-->succ(s.NAT))).o in Ok.o by A13,A14;
       end;
       end;
-     hence _F(s) in product Ok by CARD_3:18;
+     hence F(s) in product Ok by CARD_3:18;
     end;
    consider f being Function of product Ok, product Ok such that
-A16:  for s being Element of product Ok holds f.s= _F(s) from FUNCT_2:sch 12
+A16:  for s being Element of product Ok holds f.s= F(s) from FUNCT_2:sch 12
 (A4);
    set E = ({[1,0]} --> f) +* ({[0,0]} --> id product Ok);
 A17:dom E = dom ({[1,0]} --> f) \/ dom ({[0,0]} --> id product Ok)
@@ -1128,7 +1128,7 @@ A19:rng ({[1,0]} --> f) c= {f} &
    end;
    then reconsider E as Function of ins, Funcs(product Ok, product Ok)
      by A17,FUNCT_2:def 1,RELSET_1:11;
-   set M = AMI-Struct(# O, IC_, IL_, {0,1}, ins, Ok, E#);
+   set M = AMI-Struct(# O, IC1, IL, {0,1}, ins, Ok, E#);
   take M;
   thus the carrier of M = NAT \/ {NAT};
   thus the Instruction-Counter of M = NAT;
@@ -2084,10 +2084,10 @@ proof
 A1: F is closed;
  let s be State of S such that
 A2: F c= s & IC s in dom F;
-    defpred _P[Nat] means IC (Computation s).$1 in dom F;
-A3: _P[0] by A2,AMI_1:def 19;
+    defpred P[Nat] means IC (Computation s).$1 in dom F;
+A3: P[0] by A2,AMI_1:def 19;
 A4: now let k be Nat such that
-    A5: _P[k];
+    A5: P[k];
         set l = IC (Computation s).k;
     A6: NIC(pi(F,l), l) c= dom F by A1,A5,Def17;
     A7: NIC(pi(F,l),l) = { IC Following t where t is State of S :
@@ -2098,9 +2098,9 @@ A4: now let k be Nat such that
     then t.l = pi(F,l) by A8,AMI_1:54;
     then A9: IC Following t in NIC(pi(F,l),l) by A7;
             (Computation s).(k+1) = Following t by AMI_1:def 19;
-     hence _P[k+1] by A6,A9;
+     hence P[k+1] by A6,A9;
     end;
- thus for k being Nat holds _P[k] from NAT_1:sch 1(A3,A4);
+ thus for k being Nat holds P[k] from NAT_1:sch 1(A3,A4);
 end;
 
 registration
@@ -2212,10 +2212,10 @@ theorem Th50:
   z < card P iff il.(T,z) in dom P
   proof
     let P be lower programmed FinPartState of T;
-    deffunc _F(Nat) = il.(T,$1);
-    defpred _P[Nat] means _F($1) in dom P;
-    set A1 = {k : _F(k) in dom P};
-    set A = { k : _P[k]};
+    deffunc F(Nat) = il.(T,$1);
+    defpred P[Nat] means F($1) in dom P;
+    set A1 = {k : F(k) in dom P};
+    set A = { k : P[k]};
 A1: now
       let x be set;
       assume
@@ -2225,9 +2225,9 @@ A2:     x in dom P;
 A3:     x = il.(T,n) by A2,Th26;
        reconsider n as Element of NAT by ORDINAL2:def 21;
       take n;
-      thus x = _F(n) by A3;
+      thus x = F(n) by A3;
     end;
-A4: for k1, k2 being Nat st _F(k1) = _F(k2) holds k1 = k2 by Th25;
+A4: for k1, k2 being Nat st F(k1) = F(k2) holds k1 = k2 by Th25;
 A5: dom P, A1 are_equipotent from FUNCT_7:sch 3(A1,A4);
 A6: A is Subset of NAT from DOMAIN_1:sch 7;
         now
@@ -2269,8 +2269,8 @@ definition
                         : l in dom F } &
      it = il.(S, max M);
  existence proof
-    deffunc _F(Element of the Instruction-Locations of S) = locnum $1;
-    set M = { _F(l) where l is Element of the Instruction-Locations of S
+    deffunc F(Element of the Instruction-Locations of S) = locnum $1;
+    set M = { F(l) where l is Element of the Instruction-Locations of S
                            : l in dom F };
  A1: dom F is finite;
  A2: M is finite from FRAENKEL:sch 21(A1);

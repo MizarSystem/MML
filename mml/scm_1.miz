@@ -78,9 +78,8 @@ canceled 2;
 theorem Th7: for n, m being Nat holds
   IC SCM <> il.n & IC SCM <> dl.n & il.n <> dl.m by AMI_3:56,57;
 
-Lm1: now let p be FinSequence, n be Nat; assume
-A1:    n < len p;   n >= 0 by NAT_1:18;
-       then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:38,REAL_1:55;
+Lm1: now let p be FinSequence, n be Nat; assume n < len p;
+       then n+1 >= 0+1 & n+1 <= len p by NAT_1:38;
        then n+1 in dom p & dom p = Seg len p by FINSEQ_1:def 3,FINSEQ_3:27;
       hence n+1 in dom p & p.(n+1) in rng p by FUNCT_1:def 5;
  end;
@@ -526,17 +525,17 @@ now let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
-A3: c_s_k.0 = il.n by A1,Th1;
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
+A3: csk.0 = il.n by A1,Th1;
    assume
 A4:  s.il.n = a := b or s.il.n = AddTo(a,b) or s.il.n = SubFrom(a, b) or
       s.il.n = MultBy(a, b) or a<>b & s.il.n = Divide(a,b);
     thus
-A5:  c_s_k1 = (Exec(CurInstr c_s_k, c_s_k)) by Lm10
-           .= (Exec(s.il.n, c_s_k)) by A2,A3,Th1;
-    thus IC c_s_k1 = c_s_k1.0 by Th1
-      .= Next IC c_s_k by A4,A5,AMI_3:4,8,9,10,11,12
+A5:  csk1 = (Exec(CurInstr csk, csk)) by Lm10
+           .= (Exec(s.il.n, csk)) by A2,A3,Th1;
+    thus IC csk1 = csk1.0 by Th1
+      .= Next IC csk by A4,A5,AMI_3:4,8,9,10,11,12
       .= il.(n+1) by A1,Lm9;
 end;
 
@@ -550,13 +549,13 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
 proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = a := b;
-    then c_s_k1 = Exec(a:=b, c_s_k) by A1,Lm11;
-  hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.b &
-    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+    then csk1 = Exec(a:=b, csk) by A1,Lm11;
+  hence IC csk1 = il.(n+1) & csk1.a = csk.b &
+    for d being Data-Location st d <> a holds csk1.d = csk.d
       by A1,A2,Lm11,AMI_3:8;
 end;
 
@@ -570,13 +569,13 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
 proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = AddTo(a,b);
-    then c_s_k1 = Exec(AddTo(a,b), c_s_k) by A1,Lm11;
-  hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a + c_s_k.b &
-    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+    then csk1 = Exec(AddTo(a,b), csk) by A1,Lm11;
+  hence IC csk1 = il.(n+1) & csk1.a = csk.a + csk.b &
+    for d being Data-Location st d <> a holds csk1.d = csk.d
       by A1,A2,Lm11,AMI_3:9;
 end;
 
@@ -590,13 +589,13 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
 proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k= il.n;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = SubFrom(a,b);
-    then c_s_k1 = Exec(SubFrom(a,b), c_s_k) by A1,Lm11;
-   hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a - c_s_k.b &
-    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+    then csk1 = Exec(SubFrom(a,b), csk) by A1,Lm11;
+   hence IC csk1 = il.(n+1) & csk1.a = csk.a - csk.b &
+    for d being Data-Location st d <> a holds csk1.d = csk.d
       by A1,A2,Lm11,AMI_3:10;
 end;
 
@@ -610,13 +609,13 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
 proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = MultBy(a,b);
-    then c_s_k1 = Exec(MultBy(a,b), c_s_k) by A1,Lm11;
-   hence IC c_s_k1 = il.(n+1) & c_s_k1.a = c_s_k.a * c_s_k.b &
-    for d being Data-Location st d <> a holds c_s_k1.d = c_s_k.d
+    then csk1 = Exec(MultBy(a,b), csk) by A1,Lm11;
+   hence IC csk1 = il.(n+1) & csk1.a = csk.a * csk.b &
+    for d being Data-Location st d <> a holds csk1.d = csk.d
       by A1,A2,Lm11,AMI_3:11;
 end;
 
@@ -631,14 +630,14 @@ for k, n being Nat, s being State of SCM, a, b being Data-Location
 proof let k, n be Nat, s be State of SCM, a, b be Data-Location;
  assume
 A1: IC (Computation s).k = il.n;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
   assume
 A2:  s.il.n = Divide(a,b) & a <> b;
-    then c_s_k1 = Exec(Divide(a,b), c_s_k) by A1,Lm11;
-   hence IC c_s_k1 = il.(n+1) &
-    c_s_k1.a = c_s_k.a div c_s_k.b & c_s_k1.b = c_s_k.a mod c_s_k.b &
-    for d being Data-Location st d <> a & d <> b holds c_s_k1.d = c_s_k.d
+    then csk1 = Exec(Divide(a,b), csk) by A1,Lm11;
+   hence IC csk1 = il.(n+1) &
+    csk1.a = csk.a div csk.b & csk1.b = csk.a mod csk.b &
+    for d being Data-Location st d <> a & d <> b holds csk1.d = csk.d
       by A1,A2,Lm11,AMI_3:12;
 end;
 
@@ -654,12 +653,12 @@ let k, n be Nat, s be State of SCM,
     il be Instruction-Location of SCM; assume
 A1: IC (Computation s).k = il.n & s.il.n = goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
-A3: c_s_k.0 = il.n by A1,Th1;
- A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
-           .= Exec(goto il, c_s_k) by A1,A2,A3,Th1;
- thus IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15 .= il by A4,AMI_3:13;
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
+A3: csk.0 = il.n by A1,Th1;
+ A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+           .= Exec(goto il, csk) by A1,A2,A3,Th1;
+ thus IC csk1 = csk1.IC SCM by AMI_1:def 15 .= il by A4,AMI_3:13;
  thus thesis by A4,AMI_3:13;
 end;
 
@@ -676,16 +675,16 @@ let k, n be Nat, s be State of SCM, a be Data-Location,
     il be Instruction-Location of SCM; assume
 A1: IC (Computation s).k = il.n & s.il.n = a =0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
-A3: c_s_k.0 = il.n by A1,Th1;
- A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
-           .= Exec(a =0_goto il, c_s_k) by A1,A2,A3,Th1;
- A5: IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15;
- hence c_s_k.a = 0 implies IC c_s_k1 = il by A4,AMI_3:14;
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
+A3: csk.0 = il.n by A1,Th1;
+ A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+           .= Exec(a =0_goto il, csk) by A1,A2,A3,Th1;
+ A5: IC csk1 = csk1.IC SCM by AMI_1:def 15;
+ hence csk.a = 0 implies IC csk1 = il by A4,AMI_3:14;
  hereby assume
-       c_s_k.a <> 0;
-  hence IC c_s_k1 = Next il.n by A1,A4,A5,AMI_3:14
+       csk.a <> 0;
+  hence IC csk1 = Next il.n by A1,A4,A5,AMI_3:14
                .= il.(n+1) by Lm9;
  end;
  thus thesis by A4,AMI_3:14;
@@ -704,16 +703,16 @@ let k, n be Nat, s be State of SCM, a be Data-Location,
     il be Instruction-Location of SCM; assume
 A1: IC (Computation s).k = il.n & s.il.n = a >0_goto il;
 A2: (Computation s).k.il.n = s.il.n by AMI_1:54;
-   set c_s_k = (Computation s).k;
-   set c_s_k1 = (Computation s).(k+1);
-A3: c_s_k.0 = il.n by A1,Th1;
- A4: c_s_k1 = Exec(CurInstr c_s_k, c_s_k) by Lm10
-           .= Exec(a >0_goto il, c_s_k) by A1,A2,A3,Th1;
- A5: IC c_s_k1 = c_s_k1.IC SCM by AMI_1:def 15;
- hence c_s_k.a > 0 implies IC c_s_k1 = il by A4,AMI_3:15;
+   set csk = (Computation s).k;
+   set csk1 = (Computation s).(k+1);
+A3: csk.0 = il.n by A1,Th1;
+ A4: csk1 = Exec(CurInstr csk, csk) by Lm10
+           .= Exec(a >0_goto il, csk) by A1,A2,A3,Th1;
+ A5: IC csk1 = csk1.IC SCM by AMI_1:def 15;
+ hence csk.a > 0 implies IC csk1 = il by A4,AMI_3:15;
  hereby assume
-       c_s_k.a <= 0;
-  hence IC c_s_k1 = Next il.n by A1,A4,A5,AMI_3:15
+       csk.a <= 0;
+  hence IC csk1 = Next il.n by A1,A4,A5,AMI_3:15
                .= il.(n+1) by Lm9;
  end;
  thus thesis by A4,AMI_3:15;
@@ -875,7 +874,7 @@ A3:  k < len I;   len I=9 & 9=8+1 by Th13;
     then (k <= 1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) & 1=0+1
                                                            by NAT_1:26;
     then (k <= 0 or k=1 or k= 2 or k=3 or k=4 or k=5 or k = 6 or k=7 or k=8) &
-                                        0 <= k by NAT_1:18,26;
+                                        0 <= k by NAT_1:26;
     then k=0 or k=1 or k=2 or k=3 or k=4 or k=5 or k=6 or k=7 or k=8;
     hence s.il.(0+k)=I.(k+1) by A1,Th13;
    end;
@@ -884,7 +883,7 @@ A4: k < len D;   len D=4 & 4=3+1 by Th8;
     then k <= 3 & 3=2+1 by A4,NAT_1:38;
     then (k <= 2 or k=3) & 2=1+1 by NAT_1:26;
     then (k <= 1 or k=2 or k=3) & 1=0+1 by NAT_1:26;
-    then (k <= 0 or k = 1 or k=2 or k=3) & 0 <= k by NAT_1:18,26;
+    then (k <= 0 or k = 1 or k=2 or k=3) & 0 <= k by NAT_1:26;
     then k=0 or k=1 or k=2 or k=3;
     hence s.dl.(0+k)=D.(k+1) by A1,Th8;
    end;
@@ -912,7 +911,7 @@ then s.IC s0 = halt SCM by A2,Def1;
 A4: s is halting by Th3;
       CurInstr s0 = halt SCM &
   for k be Nat st CurInstr (Computation s).k = halt SCM holds
-  0 <= k by A1,A2,A3,Th2,NAT_1:18;
+  0 <= k by A1,A2,A3,Th2;
  hence Complexity s = 0 by A4,Def2;
 
  thus Result s = s by A1,A2,A3,Th4;

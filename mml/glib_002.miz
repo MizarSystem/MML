@@ -15,7 +15,7 @@ environ
       FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, GLIB_000, GLIB_001, ABIAN;
  constructors DOMAIN_1, SEQ_1, CARD_FIL, REAL_1, AMISTD_2, PSCOMP_1, POLYNOM2,
       BINARITH, GRAPH_2, GLIB_001;
- registrations SUBSET_1, RELSET_1, FINSET_1, BINARITH, CARD_1, INT_1, ABIAN,
+ registrations SUBSET_1, RELSET_1, FINSET_1, NAT_1, CARD_1, INT_1, ABIAN,
       JORDAN1D, ORDINAL2, GLIB_000, GLIB_001, POLYNOM1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI;
@@ -220,10 +220,10 @@ A2: the_Vertices_of G = V & the_Edges_of G = E & the_Source_of G = S &
         thus contradiction by A2,B1,ZFMISC_1:9;
     end;
     hence G is non trivial & G is finite by GLIB_000:def 21;
-    reconsider _0 = 0, _1 = 1 as Vertex of G by A2,TARSKI:def 2;
+    reconsider a0 = 0, a1 = 1 as Vertex of G by A2,TARSKI:def 2;
 A3: 0 in the_Edges_of G by A2,TARSKI:def 1;
 AZ:(the_Source_of G).0 = 0 & (the_Target_of G).0 = 1 by A2,CQC_LANG:6; then
-A4: 0 Joins _0,_1, G by A3, GLIB_000:def 15;
+A4: 0 Joins 0,1, G by A3, GLIB_000:def 15;
     now given W being Walk of G such that
     B1: W is Cycle-like;
     B2: W is closed & W is non trivial & W is Path-like
@@ -239,7 +239,7 @@ A4: 0 Joins _0,_1, G by A3, GLIB_000:def 15;
               (((the_Source_of G).e = v1 & (the_Target_of G).e = v1) or
               ((the_Source_of G).e = v1 & (the_Target_of G).e = v1))
               by C2, GLIB_000:def 15; then
-            (v1 = _0 & v1 = _1) or (v1 = _1 & v1 = _0) by AZ,A2,TARSKI:def 1;
+            (v1 = 0 & v1 = 1) or (v1 = 1 & v1 = 0) by AZ,A2,TARSKI:def 1;
             hence contradiction; end;
           suppose
         C1: len W <> 3;
@@ -257,20 +257,20 @@ A4: 0 Joins _0,_1, G by A3, GLIB_000:def 15;
         hence contradiction;
     end; then
 A5: G is acyclic by dGACYCLIC;
-    set W1 = G.walkOf(_0,0,_1), W2 = W1.reverse();
-A6: W1 is_Walk_from _0,_1 by A4,GLIB_001:16; then
-A7: W2 is_Walk_from _1,_0 by GLIB_001:24;
+    set W1 = G.walkOf(0,0,1), W2 = W1.reverse();
+A6: W1 is_Walk_from 0,1 by A4,GLIB_001:16; then
+A7: W2 is_Walk_from 1,0 by GLIB_001:24;
     now let u,v be Vertex of G;
         now per cases by A2,TARSKI:def 2;
-        suppose u = _0 & v = _0; then
-            G.walkOf(_0) is_Walk_from u,v by GLIB_001:14;
+        suppose u = 0 & v = 0; then
+            G.walkOf(a0) is_Walk_from u,v by GLIB_001:14;
             hence ex W being Walk of G st W is_Walk_from u,v; end;
-        suppose u = _0 & v = _1;
+        suppose u = 0 & v = 1;
             hence ex W being Walk of G st W is_Walk_from u,v by A6; end;
-        suppose u = _1 & v = _0;
+        suppose u = 1 & v = 0;
             hence ex W being Walk of G st W is_Walk_from u,v by A7; end;
-        suppose u = _1 & v = _1; then
-            G.walkOf(_1) is_Walk_from u,v by GLIB_001:14;
+        suppose u = 1 & v = 1; then
+            G.walkOf(a1) is_Walk_from u,v by GLIB_001:14;
             hence ex W being Walk of G st W is_Walk_from u,v; end;
         end;
         hence ex W being Walk of G st W is_Walk_from u,v;
@@ -670,28 +670,28 @@ A2: v.edgesInOut() = {ev} & not ev Joins v, v,G1 by GLIB_000:def 53;
             consider n being even Nat such that
         C2: 1 <= n & n <= len T & T.n = e by GLIB_001:100;
             n in dom T by C2, FINSEQ_3:27; then
-            consider n_1 being odd Nat such that
-        C3: n_1 = n-1 & n-1 in dom T & n+1 in dom T &
-               T.n Joins T.(n_1), T.(n+1),G1 by GLIB_001:10;
-        C5: n_1 <= len T & n+1 <= len T by C3, FINSEQ_3:27;
+            consider n1 being odd Nat such that
+        C3: n1 = n-1 & n-1 in dom T & n+1 in dom T &
+               T.n Joins T.(n1), T.(n+1),G1 by GLIB_001:10;
+        C5: n1 <= len T & n+1 <= len T by C3, FINSEQ_3:27;
             now assume
             D1: e in v.edgesInOut(); then
             D2: e = ev by A2, TARSKI:def 1;
                 now per cases by C2,C3,D1, GLIB_000:68;
                 suppose
-                E0: T.(n_1) = v; then
-                E1: T.vertexAt(n_1) = v by C5, GLIB_001:def 8;
-                E2: n_1 <> 1 by BZ,TARSKI:def 1, B5, E0;
-                E3: 1 <= n_1 by HEYTING3:1; then
-                EZ: 1 < n_1 by E2,REAL_1:def 5;
-                    reconsider n_2 = n_1 - 1 as even Nat
+                E0: T.(n1) = v; then
+                E1: T.vertexAt(n1) = v by C5, GLIB_001:def 8;
+                E2: n1 <> 1 by BZ,TARSKI:def 1, B5, E0;
+                E3: 1 <= n1 by HEYTING3:1; then
+                EZ: 1 < n1 by E2,REAL_1:def 5;
+                    reconsider n2 = n1 - 1 as even Nat
                       by E3,INT_1:18;
-                    T.n_2 in v.edgesInOut() by C5, E1,EZ,GLIB_001:12; then
-                E4: T.n = T.n_2 by A2,D2,C2,TARSKI:def 1;
+                    T.n2 in v.edgesInOut() by C5, E1,EZ,GLIB_001:12; then
+                E4: T.n = T.n2 by A2,D2,C2,TARSKI:def 1;
                     n - 1  < n - 0 by REAL_1:92; then
-                E5: n_1 - 1 < n - 0 by C3, REAL_1:92;
-                    1+1 <= n_1 by EZ, NAT_1:38; then
-                    1+1-1 <= n_2 by REAL_1:92;
+                E5: n1 - 1 < n - 0 by C3, REAL_1:92;
+                    1+1 <= n1 by EZ, NAT_1:38; then
+                    1+1-1 <= n2 by REAL_1:92;
                     hence contradiction by C2, E4, E5, GLIB_001:139; end;
                 suppose
                 E0: T.(n+1) = v; then
@@ -799,7 +799,7 @@ A1: G1 == G2 & v1 = v2;
     hence thesis by TARSKI:2;
 end;
 
-lSUBGRAPH_GA01:
+lSUBGRAPHGA01:
   for G1 being _Graph, G2 being connected Subgraph of G1 holds
     G2 is spanning implies G1 is connected  proof
     let G1 be _Graph, G2 be connected Subgraph of G1; assume
@@ -896,7 +896,7 @@ A2: the_Edges_of C c= EB by GLIB_000:37;
               by GLIB_000:def 39; then
         C4: C is spanning Subgraph of GX
               by A2,GLIB_000:47,GLIB_000:def 35;then
-            GX is connected by lSUBGRAPH_GA01; then
+            GX is connected by lSUBGRAPHGA01; then
             not C c< GX by dGCOMPLIKE; then
             GX == C or not C c= GX by GLIB_000:def 38;
             hence contradiction by C1,B1,C3,GLIB_000:def 36,C4,GLIB_000:def 37;
@@ -1257,19 +1257,19 @@ lCUTV03:
                1 <= n by HEYTING3:1; then
                1 < n by J4, K1, REAL_1:def 5; then
                1+1 <= n by NAT_1:38; then
-               reconsider n_2 = n-2*1 as odd Nat by INT_1:18;
-               set e1 = P.(n_2+1), e2 = P.(n+1);
+               reconsider n2 = n-2*1 as odd Nat by INT_1:18;
+               set e1 = P.(n2+1), e2 = P.(n+1);
                n - 2 < len P - 0 by K1, REAL_1:92; then
-               e1 Joins P.n_2, P.(n_2+2), G by GLIB_001:def 3; then
-           K3: e1 Joins v, P.n_2, G by K1,GLIB_000:17;
+               e1 Joins P.n2, P.(n2+2), G by GLIB_001:def 3; then
+           K3: e1 Joins v, P.n2, G by K1,GLIB_000:17;
            K4: n < len P by J4, K1, REAL_1:def 5; then
            K5: e2 Joins v, P.(n+2), G by K1, GLIB_001:def 3;
             now assume
-            L1: P.n_2 = v;
-                n_2 < n - 0 by REAL_1:92;
+            L1: P.n2 = v;
+                n2 < n - 0 by REAL_1:92;
                 hence contradiction by J4,K1,L1,GLIB_001:def 28;
             end; then
-           K6: P.n_2 = cv by H3,K3;
+           K6: P.n2 = cv by H3,K3;
            K7: n+2 <= len P by K4, GLIB_001:1;
             now assume
             L1: P.(n+2) = v;
@@ -1277,8 +1277,8 @@ lCUTV03:
                 hence contradiction by J4,K7,L1,K1,GLIB_001:def 28;
             end; then
            K8: P.(n+2) = cv by H3,K5;
-               n_2 < n - 0 by REAL_1:92; then
-               n_2+0 < n+2 by REAL_1:67; then
+               n2 < n - 0 by REAL_1:92; then
+               n2+0 < n+2 by REAL_1:67; then
                cv = P.1 & cv = P.(len P) by K6,K7,K8,GLIB_001:def 28; then
                cv = x & cv = y by J3, GLIB_001:18;
                hence contradiction by J1;
@@ -1376,7 +1376,7 @@ lCUTV03:
              M2: 1 <= m by HEYTING3:1; then
                  m in dom P2 by M1, FINSEQ_3:27; then
              M3: P.(n+m-1) = cv & n+m-1 in dom P by L1,M1,GLIB_001:48;then
-                 reconsider nm_1 = n+m-1 as odd Nat;
+                 reconsider nm1 = n+m-1 as odd Nat;
                  1+1 < n+m by L3, M2, REAL_1:67; then
                  1+1-1 < n+m-1 by REAL_1:92; then
              M4: 2*0+1 < n+m-1;
@@ -1465,7 +1465,7 @@ lCUTV03:
               M2: 1 <= m by HEYTING3:1; then
                   m in dom P2 by M1, FINSEQ_3:27; then
               M3: P.(n+m-1) = cv & n+m-1 in dom P by L1, M1, GLIB_001:48; then
-                  reconsider nm_1 = n+m-1 as odd Nat;
+                  reconsider nm1 = n+m-1 as odd Nat;
                   1+1 < n+m by L3, M2, REAL_1:67; then
                   1+1-1 < n+m-1 by REAL_1:92; then
               M4: 2*0+1 < n+m-1;
@@ -1559,7 +1559,7 @@ lCUTV03:
               M2: 1 <= m by HEYTING3:1; then
                   m in dom P2 by M1, FINSEQ_3:27; then
               M3: P.(n+m-1) = cv & n+m-1 in dom P by L1, M1, GLIB_001:48; then
-                  reconsider nm_1 = n+m-1 as odd Nat;
+                  reconsider nm1 = n+m-1 as odd Nat;
                   1+1 < n+m by L3, M2, REAL_1:67; then
                   1+1-1 < n+m-1 by REAL_1:92; then
               M4: 2*0+1 < n+m-1;
@@ -1722,8 +1722,8 @@ AE: now let W be Path of G; assume
     B3: W is non trivial by AA,A9,GLIB_001:126;
         2+1 <= len W by B1,A6,A9; then
         2 < len W by NAT_1:38; then
-        reconsider lenW_2 = len W - 2*1 as odd Nat by INT_1:18;
-    B4: lenW_2 + 2 = len W;
+        reconsider lenW2 = len W - 2*1 as odd Nat by INT_1:18;
+    B4: lenW2 + 2 = len W;
         now assume not W.last() is endvertex; then
             W.last().degree() <> 1 by GLIB_000:def 54; then
         C1: card W.last().edgesInOut() <> 1 by GLIB_000:22;
@@ -1739,16 +1739,16 @@ AE: now let W be Path of G; assume
               e2 in W.last().edgesInOut() & e1 <> e2 by tCARD02;
             now per cases;
             suppose
-            D1: e1 = W.(lenW_2+1); take e2;
-                thus e2 in W.last().edgesInOut() & e2 <> W.(lenW_2+1)
+            D1: e1 = W.(lenW2+1); take e2;
+                thus e2 in W.last().edgesInOut() & e2 <> W.(lenW2+1)
                   by C2,D1; end;
             suppose
-            D1: e1 <> W.(lenW_2+1); take e1;
-                thus e1 in W.last().edgesInOut() & e1 <> W.(lenW_2+1)
+            D1: e1 <> W.(lenW2+1); take e1;
+                thus e1 in W.last().edgesInOut() & e1 <> W.(lenW2+1)
                   by C2,D1; end;
             end; then
             consider e being set such that
-        C3: e in W.last().edgesInOut() & e <> W.(lenW_2+1);
+        C3: e in W.last().edgesInOut() & e <> W.(lenW2+1);
             consider v being Vertex of G such that
         C4: e Joins W.last(),v,G by C3, GLIB_000:67;
             now per cases;
@@ -1775,22 +1775,22 @@ AE: now let W be Path of G; assume
                     W2.edges() c= W.edges() by GLIB_001:107; then
                     consider a being even Nat such that
                 E3: 1 <= a & a <= len W & W.a = e by E1,GLIB_001:100;
-                    a < lenW_2 + 2 by E3, REAL_1:def 5; then
-                    a+1 <= lenW_2+1+1 by NAT_1:38; then
-                    a <= lenW_2+1 by REAL_1:53; then
-                E4: a < lenW_2+1 by C3,E3,REAL_1:def 5;
-                    reconsider a_1 = a - 1 as odd Nat by E3, INT_1:18;
-                E5: a_1 < len W-0 by E3, REAL_1:92;
-                    a_1+1 = a; then
-                E7: e Joins W.a_1, W.(a_1+2), G by E3, E5, GLIB_001:def 3;
+                    a < lenW2 + 2 by E3, REAL_1:def 5; then
+                    a+1 <= lenW2+1+1 by NAT_1:38; then
+                    a <= lenW2+1 by REAL_1:53; then
+                E4: a < lenW2+1 by C3,E3,REAL_1:def 5;
+                    reconsider a1 = a - 1 as odd Nat by E3, INT_1:18;
+                E5: a1 < len W-0 by E3, REAL_1:92;
+                    a1+1 = a; then
+                E7: e Joins W.a1, W.(a1+2), G by E3, E5, GLIB_001:def 3;
                     now per cases by C4,E7, GLIB_000:18;
-                    suppose W.last() = W.a_1 & v = W.(a_1+2); then
-                        W.(len W) = W.a_1 by GLIB_001:def 7;
+                    suppose W.last() = W.a1 & v = W.(a1+2); then
+                        W.(len W) = W.a1 by GLIB_001:def 7;
                         hence contradiction by B1, E5, GLIB_001:148; end;
-                    suppose W.last() = W.(a_1+2) & v = W.a_1; then
-                    F1: W.(len W) = W.(a_1+2) by GLIB_001:def 7;
-                        a_1 < lenW_2+1-1 by E4, REAL_1:92; then
-                        a_1+2 < len W by B4, REAL_1:67;
+                    suppose W.last() = W.(a1+2) & v = W.a1; then
+                    F1: W.(len W) = W.(a1+2) by GLIB_001:def 7;
+                        a1 < lenW2+1-1 by E4, REAL_1:92; then
+                        a1+2 < len W by B4, REAL_1:67;
                         hence contradiction by B1, F1, GLIB_001:148; end;
                     end;
                     hence contradiction; end;
@@ -2117,15 +2117,15 @@ A8: X2.reverse() is_Walk_from v2,v1 by GLIB_001:24;
             now assume e in P2.edges(); then
                 consider x being even Nat such that
             D1: 1 <= x & x <= len P2 & P2.x = e by GLIB_001:100;
-                reconsider x_1 = x-1 as odd Nat by D1, INT_1:18;
-            D2: x_1+1 = x;
-                x_1 < len P2 - 0 by D1, REAL_1:92; then
-            D3: e = P.(m+2+x_1) & m+2+x_1 in dom P
+                reconsider x1 = x-1 as odd Nat by D1, INT_1:18;
+            D2: x1+1 = x;
+                x1 < len P2 - 0 by D1, REAL_1:92; then
+            D3: e = P.(m+2+x1) & m+2+x1 in dom P
                   by C1,D1,D2,GLIB_001:37; then
-            D4: m+2+x_1 <= len P by FINSEQ_3:27;
+            D4: m+2+x1 <= len P by FINSEQ_3:27;
             D5: m+1 < m+1+1 by NAT_1:38;
-                0 <= x_1 by NAT_1:18; then
-            D6: m+1+0 < m+2+x_1 by D5, REAL_1:67;
+                0 <= x1 by NAT_1:18; then
+            D6: m+1+0 < m+2+x1 by D5, REAL_1:67;
                 1 <= m+1 by NAT_1:37;
                 hence contradiction by C1, D3, D4, D6, GLIB_001:139;
             end; then reconsider P2'=P2 as Walk of G2 by GLIB_001:173;
@@ -2335,7 +2335,7 @@ end;
 
 theorem  ::tSUBGRAPH_GA01
   for G1 being _Graph, G2 being connected Subgraph of G1 holds
-    G2 is spanning implies G1 is connected by lSUBGRAPH_GA01;
+    G2 is spanning implies G1 is connected by lSUBGRAPHGA01;
 
 theorem  ::tGCOMPSET01
   union G.componentSet() = the_Vertices_of G proof
@@ -2465,7 +2465,7 @@ A9: the_Edges_of G2A = the_Edges_of G1A by A6,A7,GLIB_000:50;
     hence G2.numComponents() <` G2A.numComponents() by A3,lGNUMCOMP02;
 end;
 
-theorem tGCONNECT_GF01: ::tGCONNECT_GF01
+theorem tGCONNECTGF01: ::tGCONNECT_GF01
   for G being finite connected _Graph holds
      G.order() <= G.size() + 1 proof
    defpred P[finite _Graph] means
@@ -2570,10 +2570,10 @@ theorem tGTREE02: ::tGTREE02
             let T be finite Tree-like _Graph; assume
         C2: T.order() = k+1; then
             T.order() <> 1 by XCMPLX_1:3; then
-            reconsider _T = T as non trivial finite Tree-like _Graph
+            reconsider aT = T as non trivial finite Tree-like _Graph
               by GLIB_000:29;
-            consider v being endvertex Vertex of _T;
-            consider T2 being removeVertex of _T,v;
+            consider v being endvertex Vertex of aT;
+            consider T2 being removeVertex of aT,v;
             T2.order() + 1 - 1 = k + 1 - 1 by C2, GLIB_000:51; then
             T2.order() = k + 1 - 1 by XCMPLX_1:26; then
         C5: k = T2.size() + 1 by C1;
@@ -2610,16 +2610,16 @@ A2: P[1];
             0 + 1 = k + 1 by B2;
             hence contradiction by XCMPLX_1:2;
         end; then
-        reconsider _G = G as non trivial finite acyclic _Graph by GLIB_000:29;
+        reconsider aG = G as non trivial finite acyclic _Graph by GLIB_000:29;
         now assume the_Edges_of G = {}; then
             G.size() = 0 by CARD_1:78, GLIB_000:def 27;
             hence contradiction by B2, XCMPLX_1:2;
         end; then
-        consider v,v2 being Vertex of _G such that
+        consider v,v2 being Vertex of aG such that
     B3: v <> v2 & v is endvertex & v2 is endvertex &
-          v2 in _G.reachableFrom(v) by lGACYCLIC03;
-        consider G2 being removeVertex of _G,v;
-    B4: G2.order() + 1 = G.order() & G2.size() + card v.edgesInOut() = G.size()
+    v2 in aG.reachableFrom(v) by lGACYCLIC03;
+        consider G2 being removeVertex of G,v;
+B4: G2.order() + 1 = aG.order() & G2.size() + card v.edgesInOut() = aG.size()
           by GLIB_000:51;
         G2.order() + 1 = k + 1 by B2, GLIB_000:51; then
     B5: G2.order() = k by XCMPLX_1:2;
@@ -2656,7 +2656,7 @@ A1: G is connected & G.order() = G.size() + 1;
     B2: e in W.edges();
     B3: G2 is connected by A1, B1, B4,tGCONNECT04;
         G2.order()=G.order() & G2.size()+1=G.size() by B2,GLIB_000:55; then
-        G2.size() + 1 + 1 <= G2.size() + 1 + 0 by A1,B3, tGCONNECT_GF01;
+        G2.size() + 1 + 1 <= G2.size() + 1 + 0 by A1,B3, tGCONNECTGF01;
         hence contradiction by REAL_1:53;
     end;
     hence G is Tree-like by A1, dGTREE;

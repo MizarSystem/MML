@@ -79,59 +79,6 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="40">
-<Func kind="F" nr="1"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Not>
-<For>
-<Typ kind="M" nr="9">
-<Cluster>
-<Adjective nr="5"/>
-<Adjective nr="21">
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="40">
-<Func kind="F" nr="1"/>
-</Func>
-</Adjective>
-</Cluster>
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="40">
-<Func kind="F" nr="1"/>
-</Func>
-</Typ>
-<Not>
-<For>
-<Typ kind="M" nr="4">
-<Cluster/>
-<Func kind="K" nr="52"/>
-<Func kind="K" nr="56"/>
-</Typ>
-<Pred kind="R" nr="1">
-<Func kind="K" nr="138">
-<Func kind="F" nr="1"/>
-<Var nr="1"/>
-<Var nr="2"/>
-</Func>
-<Func kind="F" nr="2">
-<Var nr="2"/>
-</Func>
-</Pred>
-</For>
-</Not>
-</For>
-</Not>
-</Scheme>
-<Scheme>
-<ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="20" value="false"/>

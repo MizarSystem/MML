@@ -76,10 +76,9 @@ definition
    let S be sigma_Field_Subset of X;
    let T be N_Measure_fam of S;
    redefine func meet T -> Element of S;
-coherence by Th3;
-
+   coherence by Th3;
    redefine func union T -> Element of S;
-coherence by Th3;
+   coherence by Th3;
 end;
 
 theorem Th4:
@@ -149,7 +148,7 @@ theorem Th6:
        N,F being Function of NAT,S holds
     F.0 = N.0 & (for n being Element of NAT holds F.(n+1) = N.(n+1) \/ F.n)
    implies (for r being set for n being Nat holds (r in F.n iff
-   ex k being Nat st (k <= n & r in N.k)))
+   ex k being Nat st k <= n & r in N.k))
 proof
    let S be non empty Subset-Family of X,
        N,F be Function of NAT,S;
@@ -555,15 +554,13 @@ A2:T = rng F by A1;
 end;
 
 theorem Th15:
-   for S being sigma_Field_Subset of X,
-       N, F being Function of NAT,S st
+   for N, F being Function st
    (F.0 = {} &
    for n being Element of NAT holds (F.(n+1) = N.0 \ N.n & N.(n+1) c= N.n))
    holds
    for n being Element of NAT holds F.n c= F.(n+1)
 proof
-   let S be sigma_Field_Subset of X;
-   let N,F be Function of NAT,S;
+   let N,F be Function;
    assume
 A1:F.0 = {} & for n being Element of NAT holds
    F.(n+1) = N.0 \ N.n & N.(n+1) c= N.n;
@@ -755,7 +752,7 @@ end;
 canceled 2;
 
 theorem
-      for S being sigma_Field_Subset of X,
+  for S being sigma_Field_Subset of X,
        N,F being Function of NAT,S holds
    (F.0 = {} & for n being Element of NAT holds
    (F.(n+1) = N.0 \ N.n & N.(n+1) c= N.n)) implies
@@ -772,53 +769,42 @@ A2:rng F c= S by RELSET_1:12;
 end;
 
 theorem Th22:
-   for S being non empty Subset-Family of X,
-       N being Function of NAT,S holds
+   for N being Function holds
    (for n being Element of NAT holds N.n c= N.(n+1))
-   implies (for m,n being Nat st n < m holds N.n c= N.m)
+   implies (for m,n being Nat st n <= m holds N.n c= N.m)
 proof
-   let S be non empty Subset-Family of X,
-       N be Function of NAT,S;
+   let N be Function;
    assume
 A1:for n being Element of NAT holds N.n c= N.(n+1);
-   defpred P[Nat] means for n being Nat st n < $1 holds N.n c= N.$1;
-A2: P[0] by NAT_1:18;
+   defpred P[Nat] means for n being Nat st n <= $1 holds N.n c= N.$1;
+A2:P[0] by NAT_1:19; 
 A3:for m being Nat st P[m] holds P[m+1]
    proof
       let m be Nat;
       assume
-   A4:for n being Nat st n < m holds N.n c= N.m;
+   A4:for n being Nat st n <= m holds N.n c= N.m;
       let n be Nat;
-      assume
-   A5:n < m+1;
-   A6:n = m or n < m
+      assume n <= m+1; then
+   A6:n = m+1 or n <= m by NAT_1:26;
+      n <= m implies N.n c= N.(m+1)
       proof
-         assume
-      A7:n <> m & not n < m;
-            n <= m by A5,NAT_1:38;
-         hence thesis by A7,REAL_1:def 5;
-      end;
-         n < m implies N.n c= N.(m+1)
-      proof
-         assume n < m;
+         assume n <= m;
          then A8:N.n c= N.m by A4;
-            N.m c= N.(m+1) by A1;
+         N.m c= N.(m+1) by A1;
          hence thesis by A8,XBOOLE_1:1;
       end;
-      hence thesis by A1,A6;
+      hence thesis by A6;
    end;
    thus for m being Nat holds P[m] from NAT_1:sch 1(A2,A3);
 end;
 
 theorem Th23:
-   for S being sigma_Field_Subset of X,
-       N,F being Function of NAT,S holds
+   for N,F being Function holds
    (F.0 = N.0 & for n being Element of NAT holds
    (F.(n+1) = N.(n+1) \ N.n & N.n c= N.(n+1)))
    implies (for n,m being Nat st n < m holds F.n misses F.m)
 proof
-   let S be sigma_Field_Subset of X,
-       N,F be Function of NAT,S;
+   let N,F be Function;
    assume
 A1:F.0 = N.0 & for n being Element of NAT holds
    (F.(n+1) = N.(n+1) \ N.n & N.n c= N.(n+1));
@@ -841,22 +827,22 @@ A5:n <= k by A2,A3,NAT_1:38;
          proof
             let n be Nat;
             assume F.n c= N.n;
-               F.(n+1) = N.(n+1) \ N.n by A1;
+            F.(n+1) = N.(n+1) \ N.n by A1;
             hence thesis by XBOOLE_1:36;
          end;
          thus for n being Nat holds P[n] from NAT_1:sch 1(A7,A8);
       end;
-         for n,m being Nat st n <= m holds F.n c= N.m
+      for n,m being Nat st n <= m holds F.n c= N.m
       proof
          let n,m be Nat;
          assume n <= m;
          then A9:n = m or n < m by REAL_1:def 5;
-            n < m implies F.n c= N.m
+         n < m implies F.n c= N.m
          proof
             assume
         A10:n < m;
         A11:F.n c= N.n by A6;
-               N.n c= N.m by A1,A10,Th22;
+            N.n c= N.m by A1,A10,Th22;
             hence thesis by A11,XBOOLE_1:1;
          end;
          hence thesis by A6,A9;

@@ -35,12 +35,12 @@ scheme FinSegRng1{m, n() -> Nat, X() -> non empty set,
  {F(i) where i is Nat: m() <= i & i <= n()} is finite non empty Subset of X()
 provided
 A1: m() <= n()
-proof defpred _P[Nat] means not contradiction;
-   set S = {F(i) where i is Nat: m()<=i & i<=n() & _P[i]};
+proof defpred P[Nat] means not contradiction;
+   set S = {F(i) where i is Nat: m()<=i & i<=n() & P[i]};
    set S1 = {F(i) where i is Nat: m()<=i & i<=n()};
     A2: now let x be set;
      hereby assume x in S;
-        then ex i being Nat st x = F(i) & m()<=i & i<=n() & _P[i];
+        then ex i being Nat st x = F(i) & m()<=i & i<=n() & P[i];
       hence x in S1;
      end;
      assume x in S1;
@@ -62,13 +62,12 @@ scheme FinImInit1{N() -> Nat, X() -> non empty set, F(set) -> Element of X()} :
 proof
  set S = {F(n) where n is Nat: n <= N()};
  set T = {F(n) where n is Nat: 0<=n & n<=N()};
-A1: 0 <= N() by NAT_1:18;
+A1: 0 <= N();
 A2: T is finite non empty Subset of X() from FinSegRng1(A1);
        now let x be set;
     hereby assume x in S; then consider n being Nat such that
-    A3: x = F(n) & n <= N();
-            n >= 0 by NAT_1:18;
-     hence x in T by A3;
+A3:   x = F(n) & n <= N();
+     thus x in T by A3;
     end;
     assume x in T; then consider n being Nat such that
     A4: x = F(n) & 0 <= n & n <= N();
@@ -232,9 +231,9 @@ definition let f be Real_Sequence, c be real number;
   for n holds it.n = c + f.n;
  existence proof
     reconsider c as Real by XREAL_0:def 1;
-    deffunc _F(Nat) = c+f.$1;
+    deffunc F(Nat) = c+f.$1;
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
+ A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus thesis by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -293,9 +292,9 @@ definition let f,g be Real_Sequence;
  func max(f, g) -> Real_Sequence means :Def10:
   for n holds it.n = max( f.n, g.n );
  existence proof
-    deffunc _F(Nat) = max(f.$1, g.$1);
+    deffunc F(Nat) = max(f.$1, g.$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
+ A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
    take h; let n; thus h.n = max(f.n, g.n) by A1;
  end;
  uniqueness proof let j, k be Real_Sequence such that
@@ -352,16 +351,16 @@ proof
 A1: for n st n >= N holds f.n <= f.(n+1);
    let n,m; assume
 A2:  n >= N;
-     defpred _P[Nat] means f.n <= f.$1;
-A3: _P[n];
-A4: for m st m >= n & _P[m] holds _P[m+1] proof
+     defpred P[Nat] means f.n <= f.$1;
+A3: P[n];
+A4: for m st m >= n & P[m] holds P[m+1] proof
     let m; assume
    A5: m >= n & f.n <= f.m;
     then m >= N by A2,AXIOMS:22;
     then f.m <= f.(m+1) by A1;
     hence f.n <= f.(m+1) by A5,AXIOMS:22;
    end;
-       for m st m >= n holds _P[m] from INT_2:sch 1(A3,A4);
+       for m st m >= n holds P[m] from INT_2:sch 1(A3,A4);
   hence thesis;
 end;
 
@@ -633,16 +632,16 @@ proof
       consider c,N such that
   A4: c > 0 and
   A5: for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A3;
-   per cases by NAT_1:19;
+   per cases;
    suppose
    A6: N = 0;
-    take c; thus c > 0 by A4; let n;   n >= 0 by NAT_1:18;
-    hence t.n <= c*f.n by A2,A5,A6;
+    take c; thus c > 0 by A4; let n;
+    thus t.n <= c*f.n by A2,A5,A6;
    end;
    suppose
    A7: N > 0;
-       deffunc _F(Nat) = t.$1 / f.$1;
-    reconsider B = { _F(n) : n < N }
+       deffunc F(Nat) = t.$1 / f.$1;
+    reconsider B = { F(n) : n < N }
       as finite non empty Subset of REAL from FinImInit2(A7);
     set b = max B;
    A8: for n st n < N holds t.n <= b*f.n proof
@@ -726,10 +725,10 @@ A4: ex c,N st c > 0 & for n st n >= N holds s.n <= c*f.n & s.n >= 0 by A1;
     consider c2 being Real, M such that
 A5:  c2 > 0 and
 A6:  for n st n >= M holds t.n <= c2*f.n & t.n >= 0 by A3,A4;
-     deffunc _T(Nat) = t.$1;
- set tset = { _T(n) : N <= n & n <= max(M,N) };
-     deffunc _F(Nat) = f.$1;
- set fset = { _F(n) : N <= n & n <= max(M,N) };
+     deffunc T(Nat) = t.$1;
+ set tset = { T(n) : N <= n & n <= max(M,N) };
+     deffunc F(Nat) = f.$1;
+ set fset = { F(n) : N <= n & n <= max(M,N) };
 A7: M <= max(M,N) by SQUARE_1:46;
 A8: N <= max(M,N) by SQUARE_1:46;
         tset is finite non empty Subset of REAL from FinSegRng1(A8);
@@ -1419,16 +1418,16 @@ A1: Big_Omega(f) = { s where s is Element of Funcs(NAT, REAL) :
     consider d,N such that
  A4: d > 0 and
  A5: for n st n >= N holds d*f.n <= s.n & s.n >= 0 by A3;
-   per cases by NAT_1:19;
+   per cases;
    suppose
    A6: N = 0;
-    take d; thus d > 0 by A4; let n;   n >= 0 by NAT_1:18;
-    hence d*f.n <= t.n by A2,A5,A6;
+    take d; thus d > 0 by A4; let n;
+    thus d*f.n <= t.n by A2,A5,A6;
    end;
    suppose
    A7: N > 0;
-       deffunc _F(Nat) = t.$1 / f.$1;
-       reconsider B = { _F(n) : n < N }
+       deffunc F(Nat) = t.$1 / f.$1;
+       reconsider B = { F(n) : n < N }
          as finite non empty Subset of REAL from FinImInit2(A7);
     set b = min B;
    A8: for n st n < N holds b*f.n <= t.n proof
@@ -1741,17 +1740,16 @@ A1: Big_Theta(f) = { s where s is Element of Funcs(NAT, REAL) :
   A4: c > 0 and
   A5: d > 0 and
   A6: for n st n >= N holds d*f.n <= s.n & s.n <= c*f.n by A3;
-   per cases by NAT_1:19;
+   per cases;
    suppose
    A7: N = 0;
-    take c,d; thus c > 0 by A4; thus d > 0 by A5; let n;   n >= 0 by NAT_1:18
-;
-    hence d*f.n <= t.n & t.n <= c*f.n by A2,A6,A7;
+    take c,d; thus c > 0 by A4; thus d > 0 by A5; let n; 
+    thus d*f.n <= t.n & t.n <= c*f.n by A2,A6,A7;
    end;
    suppose
    A8: N > 0;
-      deffunc _F(Nat) = t.$1 / f.$1;
-      reconsider B = { _F(n) : n < N }
+      deffunc F(Nat) = t.$1 / f.$1;
+      reconsider B = { F(n) : n < N }
         as finite non empty Subset of REAL from FinImInit2(A8);
     set b = max B;
    A9: for n st n < N holds t.n <= b*f.n proof
@@ -2165,9 +2163,9 @@ definition :: Definition of f(bn) (page 89)
   func f taken_every b -> Real_Sequence means :Def18:
    for n holds it.n = f.(b*n);
  existence proof
-    deffunc _F(Nat) = f.(b*$1);
+    deffunc F(Nat) = f.(b*$1);
     consider h being Function of NAT, REAL such that
- A1: for n being Nat holds h.n = _F(n) from FUNCT_2:sch 4;
+ A1: for n being Nat holds h.n = F(n) from FUNCT_2:sch 4;
   take h; let n; thus h.n = f.(b*n) by A1;
  end;
  uniqueness proof let j,k be Real_Sequence such that
@@ -2238,23 +2236,22 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
             b to_power log(b,a) <= b to_power i by A13,A18,PRE_FF:10;
       hence thesis by A15,A23,POWER:48;
      end;
- A24: n >= 0 by NAT_1:18;
-  then A25: a*n <= i1*n by A22,AXIOMS:25;
+  A25: a*n <= i1*n by A22,AXIOMS:25;
          a >= 1 by A11,AXIOMS:22;
- then A26: a*n >= 1*n by A24,AXIOMS:25;
+ then A26: a*n >= 1*n by AXIOMS:25;
      then a*n >= N3 by A21,AXIOMS:22;
      then f.(a*n) <= f.(i1*n) by A9,A25,Th1;
      then (f taken_every a).n <= f.(i1*n) by Def18;
   then A27: (f taken_every a).n <= (f taken_every i1).n by Def18;
-      defpred _P[Nat] means  f.(b|^$1*n) <= c|^$1*f.n;
- A28: _P[0] proof
+      defpred P[Nat] means  f.(b|^$1*n) <= c|^$1*f.n;
+ A28: P[0] proof
             f.(b|^0*n) = f.((b to_power 0)*n) by A15,POWER:48
                   .= f.(1*n) by POWER:29
                   .= 1*f.n
                   .= (c to_power 0)*f.n by POWER:29;
       hence thesis by A7,POWER:48;
      end;
- A29: for k st _P[k] holds _P[k+1] proof
+ A29: for k st P[k] holds P[k+1] proof
       let k;
        set m = b|^k*n;
        assume
@@ -2268,7 +2265,7 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
               m = n1*n;
           then reconsider m as Nat;
               m >= N2 proof
-           per cases by NAT_1:19;
+           per cases;
            suppose k = 0;
               then b|^k*n = (b to_power 0)*n by A15,POWER:48
                     .= 1*n by POWER:29
@@ -2278,7 +2275,7 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
            suppose k > 0;
               then b to_power k > 1 by A13,POWER:40;
               then b|^k > 1 by A15,POWER:48;
-              then b|^k*n >= 1*n by A24,AXIOMS:25;
+              then b|^k*n >= 1*n by AXIOMS:25;
             hence thesis by A21,AXIOMS:22;
           end;
           end;
@@ -2292,7 +2289,7 @@ A10: N >= N2 & N >= N3 by SQUARE_1:46;
           then c*f.m <= c|^(k+1)*f.n by A7,POWER:48;
        hence thesis by A31,A32,AXIOMS:22;
      end;
-         for k holds _P[k] from NAT_1:sch 1( A28, A29 );
+         for k holds P[k] from NAT_1:sch 1( A28, A29 );
      then f.(b|^i*n) <= c|^i*f.n;
      then (f taken_every i1).n <= c|^i*f.n by Def18;
    hence (f taken_every a).n <= c|^i*f.n by A27,AXIOMS:22;
@@ -2361,9 +2358,8 @@ then A17: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by AXIOMS:22;
 A18: N >= N5 & N >= max(1, b*N0) &
      max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by SQUARE_1:46;
 then A19: N >= 1 & N >= b*N0 by AXIOMS:22;
-A20: N0 >= 0 by NAT_1:18;
 A21:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,AXIOMS:22;
-   then b*N0 >= 1*N0 by A20,AXIOMS:25;
+   then b*N0 >= 1*N0 by AXIOMS:25;
 then A22: N >= N0 by A19,AXIOMS:22;
 A23: a*c > c*0 by A10,A14,REAL_1:70;
 A24: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
@@ -2396,8 +2392,7 @@ hence contradiction by A27,A29,AXIOMS:24;
        .= b to_power ([\log(b,n)/] + 1) by A21,POWER:32;
          log(b,n) <= [\log(b,n)/] + 1 by INT_1:52;
  then A33: n <= n2 by A21,A30,A32,PRE_FF:10;
- A34: b" > 0 by A21,REAL_1:72;
-     then n*b" <= b"*(b*(b to_power [\log(b,n)/])) by A33,AXIOMS:25;
+     n*b" <= b"*(b*(b to_power [\log(b,n)/])) by A33,AXIOMS:25;
      then n*b" <= (b"*b)*(b to_power [\log(b,n)/]);
      then n*b" <= 1*(b to_power [\log(b,n)/]) by A21,XCMPLX_0:def 7;
  then A35: n/b <= n1 by XCMPLX_0:def 9;
@@ -2409,10 +2404,10 @@ hence contradiction by A27,A29,AXIOMS:24;
  A38: t.n <= t.n2 by A6,A26,A33,Th1;
  A39: t.n2 <= a*f.n2 by A12,A15,A36,A37;
  A40: f.(b*n1) = s.n1 by A8,Def18;
-         N*b" >= b"*(b*N0) by A19,A34,AXIOMS:25;
+         N*b" >= b"*(b*N0) by A19,AXIOMS:25;
      then N*b" >= (b"*b)*N0;
  then A41: N*b" >= 1*N0 by A21,XCMPLX_0:def 7;
-         n*b" >= N*b" by A25,A34,AXIOMS:25;
+         n*b" >= N*b" by A25,AXIOMS:25;
      then n*b" >= N0 by A41,AXIOMS:22;
      then n/b >= N0 by XCMPLX_0:def 9;
  then A42: n1 >= N0 by A35,AXIOMS:22;
@@ -2487,9 +2482,8 @@ then A18: N0 >= N1 & N0 >= N2 & N0 >= N3 & N0 >= N4 by AXIOMS:22;
 A19: N >= N5 & N >= max(1, b*N0) &
      max(1, b*N0) >= 1 & max(1, b*N0) >= b*N0 by SQUARE_1:46;
 then A20: N >= 1 & N >= b*N0 by AXIOMS:22;
-A21: N0 >= 0 by NAT_1:18;
 A22:b >= 1 & b > 1 & b > 0 & b <> 0 & b <> 1 by A2,AXIOMS:22;
-   then b*N0 >= 1*N0 by A21,AXIOMS:25;
+   then b*N0 >= 1*N0 by AXIOMS:25;
 then A23: N >= N0 by A20,AXIOMS:22;
 A24: c" > 0 by A11,REAL_1:72;
 then A25:  a*c" > c"*0 by A15,REAL_1:70;
@@ -2521,16 +2515,15 @@ A26: t is Element of Funcs(NAT, REAL) by FUNCT_2:11;
        .= b to_power ([\log(b,n)/] + 1) by A22,POWER:32;
          log(b,n) <= [\log(b,n)/] + 1 by INT_1:52;
  then A35: n <= n2 by A22,A32,A34,PRE_FF:10;
- A36: b" > 0 by A22,REAL_1:72;
-     then n*b" <= b"*(b*(b to_power [\log(b,n)/]))
+     n*b" <= b"*(b*(b to_power [\log(b,n)/]))
                                 by A35,AXIOMS:25;
      then n*b" <= (b"*b)*(b to_power [\log(b,n)/]);
      then n*b" <= 1*(b to_power [\log(b,n)/]) by A22,XCMPLX_0:def 7;
  then A37: n/b <= n1 by XCMPLX_0:def 9;
-         N*b" >= b"*(b*N0) by A20,A36,AXIOMS:25;
+         N*b" >= b"*(b*N0) by A20,AXIOMS:25;
      then N*b" >= (b"*b)*N0;
  then A38: N*b" >= 1*N0 by A22,XCMPLX_0:def 7;
-         n*b" >= N*b" by A27,A36,AXIOMS:25;
+         n*b" >= N*b" by A27,AXIOMS:25;
      then n*b" >= N0 by A38,AXIOMS:22;
      then n/b >= N0 by XCMPLX_0:def 9;
  then A39: n1 >= N0 by A37,AXIOMS:22;

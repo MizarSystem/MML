@@ -256,17 +256,6 @@
 </Cluster>
 </FCluster>
 <FCluster>
-<ArgTypes/>
-<Func kind="K" nr="28"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="7"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="18" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>

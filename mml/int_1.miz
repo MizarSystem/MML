@@ -389,9 +389,8 @@ theorem Th16:
     consider k such that A2: i0 = k or i0 = - k by Th8;
     now
      assume A3: i0 = - k;
-     then A4: k <= -0 by A1,REAL_1:50;
-     -0 <= k by NAT_1:18;
-     hence i0 is Element of NAT by A3,A4,AXIOMS:21;
+     then k <= -0 by A1,REAL_1:50;
+     hence i0 is Element of NAT by A3,AXIOMS:21;
     end;
     hence thesis by A2;
    end;
@@ -419,8 +418,7 @@ theorem Th19:
     now
      assume A1: i1 + k = i2;
      reconsider i0 = k as Integer;
-     0 <= k by NAT_1:18;
-     then 0 + (i1 + k) <= k + i2 by A1,AXIOMS:24;
+     0 + (i1 + k) <= k + i2 by A1,AXIOMS:24;
      then i1 + i0 - i0 <= i2 + i0 - i0 by REAL_1:49;
      hence thesis;
     end;
@@ -433,7 +431,7 @@ Lm4:
     then j < 0 + 1;
     then A1: j <= 0 by NAT_1:38;
    assume j <> 0;
-  hence thesis by A1,NAT_1:18;
+  hence thesis by A1;
  end;
 
 Lm5: 0 < i1 implies 1 <= i1
@@ -561,7 +559,7 @@ A2:  i0 in X implies P[i0]
     hence thesis by A2;
    end;
 
-scheme Int_Ind_Up { F() -> Integer, P[Integer] } :
+scheme IntIndUp { F() -> Integer, P[Integer] } :
  for i0 st F() <= i0 holds P[i0] provided
 A1: P[F()] and
 A2: for i2 st F() <= i2 holds P[i2] implies P[i2 + 1]
@@ -603,7 +601,7 @@ A9: for k holds Q[k] from NAT_1:sch 1(A4,A5);
   hence P[i0] by A9;
  end;
 
-scheme Int_Ind_Down { F() -> Integer, P[Integer] } :
+scheme IntIndDown { F() -> Integer, P[Integer] } :
  for i0 st i0 <= F() holds P[i0] provided
   A1: P[F()] and
   A2: for i2 st i2 <= F() holds P[i2] implies P[i2 - 1]
@@ -637,12 +635,12 @@ A5: for i2 st - F() <= i2 holds Q[i2] implies Q[i2 + 1]
      then P[i3 + 1 - 1] by A2,A9;
      hence thesis;
     end;
-A10: for i2 st - F() <= i2 holds Q[i2] from Int_Ind_Up(A4,A5);
+A10: for i2 st - F() <= i2 holds Q[i2] from IntIndUp(A4,A5);
        - F() <= - i0 by A3,REAL_1:50;
   hence thesis by A10;
  end;
 
-scheme Int_Ind_Full { F() -> Integer, P[Integer] } :
+scheme IntIndFull { F() -> Integer, P[Integer] } :
  for i0 holds P[i0] provided
   A1: P[F()] and
   A2: for i2 holds P[i2] implies P[i2 - 1] & P[i2 + 1]
@@ -653,19 +651,19 @@ proof
 A4: now
     assume A5: F() <= i0;
     A6: for i2 st F() <= i2 holds P1[i2] implies P1[i2 + 1] by A2;
-    for i2 st F() <= i2 holds P1[i2] from Int_Ind_Up(A3,A6);
+    for i2 st F() <= i2 holds P1[i2] from IntIndUp(A3,A6);
     hence P[i0] by A5;
    end;
    now
     assume A7: i0 <= F();
 A8: for i2 st i2 <= F() holds P1[i2] implies P1[i2 - 1] by A2;
-    for i2 st i2 <= F() holds P1[i2] from Int_Ind_Down(A3,A8);
+    for i2 st i2 <= F() holds P1[i2] from IntIndDown(A3,A8);
     hence P[i0] by A7;
    end;
   hence thesis by A4;
  end;
 
-scheme Int_Min { F() -> Integer, P[Integer] } :
+scheme IntMin { F() -> Integer, P[Integer] } :
  ex i0 st P[i0] & for i1 st P[i1] holds i0 <= i1 provided
 A1: for i1 st P[i1] holds F() <= i1 and
 A2: ex i1 st P[i1]
@@ -690,7 +688,7 @@ proof
    hence thesis by A6;
  end;
 
-scheme Int_Max { F() -> Integer, P[Integer] } :
+scheme IntMax { F() -> Integer, P[Integer] } :
  ex i0 st P[i0] & for i1 st P[i1] holds i1 <= i0 provided
 A1: for i1 st P[i1] holds i1 <= F() and
 A2: ex i1 st P[i1]
@@ -1003,7 +1001,7 @@ A3:   for i1 st P[i1] holds -n <= i1
        r < i0 by A4;
     then A5: ex i0 st P[i0];
       consider i1 such that
-A6:    P[i1] & for i2 st P[i2] holds i1 <= i2 from Int_Min(A3,A5);
+A6:    P[i1] & for i2 st P[i2] holds i1 <= i2 from IntMin(A3,A5);
 A7:   r < i1 - 1 implies i1 <= i1-1 by A6;
      r - 1 < i1 - 1 by A6,REAL_1:54;
      hence thesis by A7,Th26;

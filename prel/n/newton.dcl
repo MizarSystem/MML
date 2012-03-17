@@ -35,6 +35,7 @@
 <Adjective nr="9"/>
 <Adjective nr="16"/>
 <Adjective nr="22"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>

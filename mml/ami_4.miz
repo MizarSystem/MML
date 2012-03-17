@@ -77,14 +77,14 @@ A5: for k st G(k) > 0 holds F(k+1) = G(k) & G(k+1) = F(k) mod G(k)
 proof
 
 A6: 0 < b() & b() < a() by A1,A2;
-   deffunc _F(Nat,set) = IFEQ($2,0,0,G($1));
+   deffunc F(Nat,set) = IFEQ($2,0,0,G($1));
    consider q being Function of NAT,NAT such that
 A7: q.0 = a() and
-A8: for i holds q.(i+1) = _F(i,q.i) from RECDEF_1:sch 4;
-   deffunc _Q(Nat) = q.$1;
+A8: for i holds q.(i+1) = F(i,q.i) from RECDEF_1:sch 4;
+   deffunc Q(Nat) = q.$1;
       q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
-     .= G(0) by A1,A2,A7,CQC_LANG:def 1;
-then A9: _Q(0) = a() & _Q(1) = b() by A4,A7;
+     .= G(0) by A2,A7,CQC_LANG:def 1;
+then A9: Q(0) = a() & Q(1) = b() by A4,A7;
 A10: for k st q.k qua Nat > 0 holds q.k = F(k)
     proof let k such that
 A11:    q.k qua Nat > 0;
@@ -108,7 +108,7 @@ A14:        q.i qua Nat = 0;
      end;
      hence q.k = F(k);
     end;
-A15: for k holds _Q(k+2) = _Q(k) mod _Q(k+1)
+A15: for k holds Q(k+2) = Q(k) mod Q(k+1)
     proof let k;
          now per cases;
        case
@@ -121,7 +121,7 @@ A18:        q.k = 0 or q.k <> 0;
             .= 0 by A17,A18,CQC_LANG:def 1;
           hence contradiction by A16;
          end;
-         then A19:       G(k) > 0 by NAT_1:19;
+         then A19:       G(k) > 0;
 A20:       q.(k+(1+1)) = q.((k+1)+1)
            .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
            .= G(k+1) by A16,CQC_LANG:def 1
@@ -132,7 +132,7 @@ A22:         q.k = 0;
             .= 0 by A22,CQC_LANG:def 1;
           hence contradiction by A16;
          end;
-then A23:       q.k qua Nat > 0 by NAT_1:19;
+then A23:       q.k qua Nat > 0;
             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
             .= G(k) by A21,CQC_LANG:def 1;
         hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
@@ -148,7 +148,7 @@ A24:       q.(k+1) = 0;
      hence q.(k+2) = q.(k) mod q.(k+1);
     end;
    consider k such that
-A25:  _Q(k) = a() hcf b() & _Q(k + 1) = 0 from NAT_1:sch 8(A6,A9,A15);
+A25:  Q(k) = a() hcf b() & Q(k + 1) = 0 from NAT_1:sch 8(A6,A9,A15);
   take k;
 A26: a() hcf b() > 0 by A1,NEWTON:72;
   hence F(k) = a() hcf b() by A10,A25;
@@ -234,16 +234,16 @@ then A7: dom EA1 = { il.1 } \/ { il.2,il.3,il.4 } by A1,FUNCT_4:def 1
           .= { il.1,il.2,il.3,il.4 } by ENUMSET1:44;
   assume A8: Euclide-Algorithm c= s;
        il.0 <> il.1 & il.0 <> il.2 & il.0 <> il.3 & il.0 <> il.4 by AMI_3:53;
-    then A9: not il.0 in dom EA1 by A7,ENUMSET1:18;
-    il.0 in dom EA0 by Def1,Th4,ENUMSET1:24;
+    then A9: not il.0 in dom EA1 by A7,ENUMSET1:def 2;
+    il.0 in dom EA0 by Def1,Th4,ENUMSET1:def 3;
   hence s.il.0 = EA0.il.0 by A8,Def1,GRFUNC_1:8
       .= IN0.il.0 by A9,FUNCT_4:12
       .= c := b by CQC_LANG:6;
       EA1 c= EA0 by FUNCT_4:26;
 then A10: EA1 c= s by A8,Def1,XBOOLE_1:1;
        il.1 <> il.2 & il.1 <> il.3 & il.1 <> il.4 by AMI_3:53;
-then A11: not il.1 in dom EA2 by A6,ENUMSET1:13;
-    il.1 in dom EA1 by A7,ENUMSET1:19;
+then A11: not il.1 in dom EA2 by A6,ENUMSET1:def 1;
+    il.1 in dom EA1 by A7,ENUMSET1:def 2;
   hence s.il.1 = EA1.il.1 by A10,GRFUNC_1:8
       .= IN1.il.1 by A11,FUNCT_4:12
       .= Divide(a,b) by CQC_LANG:6;
@@ -251,7 +251,7 @@ then A11: not il.1 in dom EA2 by A6,ENUMSET1:13;
 then A12: EA2 c= s by A10,XBOOLE_1:1;
        il.2 <> il.3 & il.2 <> il.4 by AMI_3:53;
 then A13: not il.2 in dom EA3 by A5,TARSKI:def 2;
-    il.2 in dom EA2 by A6,ENUMSET1:14;
+    il.2 in dom EA2 by A6,ENUMSET1:def 1;
   hence s.il.2 = EA2.il.2 by A12,GRFUNC_1:8
       .= IN2.il.2 by A13,FUNCT_4:12
       .= a := c by CQC_LANG:6;
@@ -405,12 +405,12 @@ Lm3:
 A1: IC s = il.0 and
 A2:  Euclide-Algorithm c= s and
 A3:  s.a > 0 & s.b > 0;
-    defpred _P[Nat] means
+    defpred P[Nat] means
 (Computation s).(4*$1).a > 0 &
    ((Computation s).(4*$1).b > 0 & IC (Computation s).(4*$1) = il.0 or
    (Computation s).(4*$1).b = 0 & IC (Computation s).(4*$1) = il.4);
-A4: _P[0]  by A1,A3,AMI_1:def 19;
-A5: for k st _P[k] holds _P[k+1] proof let k;
+A4: P[0]  by A1,A3,AMI_1:def 19;
+A5: for k st P[k] holds P[k+1] proof let k;
     set c4 = (Computation s).(4*k), c5 = (Computation s).(4*k+1),
         c6 = (Computation s).(4*k+2), c7 = (Computation s).(4*k+3),
         c8 = (Computation s).(4*k+4);
@@ -446,9 +446,9 @@ then (c7.b > 0 implies IC c8 = il.0) &
        hence c8.a > 0 & c8.b = 0 & IC c8 = il.4 by A2,A9,A10,Th9;
      end;
      end;
-    hence _P[k+1];
+    hence P[k+1];
    end;
-      for k holds _P[k] from NAT_1:sch 1(A4,A5);
+      for k holds P[k] from NAT_1:sch 1(A4,A5);
   hence thesis;
  end;
 
@@ -499,16 +499,16 @@ A2: Euclide-Algorithm c= s;
   let x, y be Integer such that
 A3: s.a = x & s.b = y and
 A4: x > y & y > 0;
-   A5: x >= 0 & y >= 0 by A4;
+    x >= 0 & y >= 0 by A4;
    then reconsider x' = x, y' = y as Nat by INT_1:16;
 A6: 0 < y' by A4;
 A7: y' < x' by A4;
    deffunc F(Nat) = abs((Computation s).(4*$1).a);
    deffunc G(Nat) = abs((Computation s).(4*$1).b);
 A8: F(0) = abs(x) by A3,AMI_1:def 19
-      .= x' by A5,ABSVALUE:def 1;
+      .= x' by ABSVALUE:def 1;
 A9: G(0) = abs(y) by A3,AMI_1:def 19
-      .= y' by A4,ABSVALUE:def 1;
+      .= y' by ABSVALUE:def 1;
 A10:
   now let k;
 A11: (Computation s).(4*k).b > 0 or (Computation s).(4*k).b = 0
@@ -525,7 +525,7 @@ A13: (Computation s).(4*(k+1)).b >= 0 by A1,A2,A3,A4,Lm3;
   consider k such that
 A15: F(k) = x' hcf y' and
 A16: G(k) = 0 from Euklides'(A6,A7,A8,A9,A10);
-A17: abs(x) = x' & abs(y) = y' by A5,ABSVALUE:def 1;
+A17: abs(x) = x' & abs(y) = y' by ABSVALUE:def 1;
 A18: ((Computation s).(4*k)).a > 0 by A1,A2,A3,A4,Lm3;
       (Computation s).(4*k).b = 0 by A16,ABSVALUE:7;
    then A19: IC (Computation s).(4*k) = il.4 by A1,A2,A3,A4,Lm3;
@@ -556,8 +556,8 @@ A6: y > 0;
 A7:  x = y;
      take s' = (Computation s).4;
      reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
-       abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
-    then A8:  x mod y = x' mod y' by A5,A6,Th2
+       abs(x) = x' & abs(y) = y' by ABSVALUE:def 1;
+    then A8:  x mod y = x' mod y' by Th2
            .= 0 by A7,GR_CY_1:5;
 
 A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
@@ -573,8 +573,8 @@ A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
 A10:  y > x;
      take s' = (Computation s).4;
      reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
-       abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
-    then A11:  x mod y = x' mod y' by A5,A6,Th2
+       abs(x) = x' & abs(y) = y' by ABSVALUE:def 1;
+    then A11:  x mod y = x' mod y' by Th2
            .= x' by A10,GR_CY_1:4;
 
 A12:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by
@@ -601,9 +601,9 @@ definition
     p = (dl.0,dl.1) --> (x,y) & q = dl.0 .--> (x gcd y);
  existence
   proof
-    defpred _P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
+    defpred P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
        $1 = (a,b) --> (x,y) & $2 = a .--> (x gcd y);
-A1: for p,q1,q2 being set st _P[p,q1] & _P[p,q2] holds q1=q2
+A1: for p,q1,q2 being set st P[p,q1] & P[p,q2] holds q1=q2
     proof let p,q1,q2 be set;
      given x1,y1 being Integer such that
 A2:    x1 > 0 & y1 > 0 &  p = (a,b) --> (x1,y1) & q1 = a .--> (x1 gcd y1);
@@ -617,7 +617,7 @@ then A5:    x1 = ((a,b) --> (x1,y1)).a by FUNCT_4:66
      hence q1 = q2 by A2,A3,A5;
     end;
     consider f being Function such that
-A6:   for p,q being set holds [p,q] in f iff p in FinPartSt SCM & _P[p,q]
+A6:   for p,q being set holds [p,q] in f iff p in FinPartSt SCM & P[p,q]
     from FUNCT_1:sch 1(A1);
 A7:  dom f c= FinPartSt SCM
      proof let e be set;
@@ -649,11 +649,11 @@ A9:   x > 0 & y > 0 &
   end;
  uniqueness
   proof
-   defpred _P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
+   defpred P[set,set] means ex x,y being Integer st x > 0 & y > 0 &
      $1 = (a,b) --> (x,y) & $2 = a .--> (x gcd y);
    let IT1,IT2 be PartFunc of FinPartSt SCM, FinPartSt SCM such that
-A10: for p,q being FinPartState of SCM holds [p,q] in IT1 iff _P[p,q] and
-A11: for p,q being FinPartState of SCM holds [p,q] in IT2 iff _P[p,q];
+A10: for p,q being FinPartState of SCM holds [p,q] in IT1 iff P[p,q] and
+A11: for p,q being FinPartState of SCM holds [p,q] in IT2 iff P[p,q];
    thus IT1 = IT2 from AMI_3:sch 2(A10,A11);
   end;
 end;
@@ -715,7 +715,7 @@ A7:    x in dom p & x in dom s by XBOOLE_0:3;
         by A5,A7,XBOOLE_0:def 2;
 then A8:     x = IC SCM or x = il.0 or x = il.1 or x = il.2 or x = il.3 or x =
 il.4
-       by ENUMSET1:23,TARSKI:def 1;
+       by ENUMSET1:def 3,TARSKI:def 1;
          x = a or x = b by A3,A7,TARSKI:def 2;
      hence contradiction by A8,AMI_3:56,57;
     end;
@@ -733,7 +733,7 @@ then A14:     not IC SCM in dom s by A13,XBOOLE_0:def 3;
       IC SCM in dom(p +* s) by A12,A13;
           IC SCM <> il.0 & IC SCM <> il.1 & IC SCM <> il.2 &
         IC SCM <> il.3 & IC SCM <> il.4 by AMI_3:57;
-then A15:    not IC SCM in dom q by Th4,ENUMSET1:23;
+then A15:    not IC SCM in dom q by Th4,ENUMSET1:def 3;
       thus IC(p +* s) = (p +* s).IC SCM by A12,A13,AMI_3:def 16
         .= p.IC SCM by A14,FUNCT_4:12
         .= (Start-At il.0).IC SCM by A15,FUNCT_4:12
@@ -774,9 +774,9 @@ A29:  Euclide-Algorithm c= Cs2.k by A26,AMI_3:43;
       .= (Cs2.k)|C by A29,Th4,GRFUNC_1:64;
 A31: dom(Cs.k) = the carrier of SCM by AMI_3:36
      .= dom(Cs2.k) by AMI_3:36;
-    defpred _P[Nat] means  (Cs.$1).IC SCM = (Cs2.$1).IC SCM &
+    defpred P[Nat] means  (Cs.$1).IC SCM = (Cs2.$1).IC SCM &
     (Cs.$1).a = (Cs2.$1).a & (Cs.$1).b = (Cs2.$1).b;
-A32: _P[0] proof
+A32: P[0] proof
 A33:   Cs.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
      hence (Cs.0).IC SCM = IC s1 by AMI_1:def 15
       .= il.0 by A23,AMI_3:def 14
@@ -785,7 +785,7 @@ A33:   Cs.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
      thus (Cs.0).a = (Cs2.0).a &
           (Cs.0).b = (Cs2.0).b by A16,A21,A27,A33;
     end;
-A34: for i,j st _P[4*i] & j<>0 & j<=4 holds _P[4*i+j] proof let i,j;
+A34: for i,j st P[4*i] & j<>0 & j<=4 holds P[4*i+j] proof let i,j;
      assume that
 A35:   (Cs.(4*i)).IC SCM = (Cs2.(4*i)).IC SCM and
 A36:   (Cs.(4*i)).a = (Cs2.(4*i)).a and
@@ -853,7 +853,7 @@ Lm2;
     end;
     end;
 A60: 4 > 0;
-      _P[k] from AMI_3:sch 1(A32,A60,A34);
+      P[k] from AMI_3:sch 1(A32,A60,A34);
    then (Cs.k)|A = (Cs2.k)|A by A31,AMI_3:26;
     hence (Computation s1).k|dom(p +* s) = (Computation s2).k|dom(p +* s)
      by A28,A30,AMI_3:20;
@@ -874,8 +874,8 @@ A65:   t.a = i1 & t.b = i2 by A16,A62;
    end;
    suppose
 A66:   i1 = i2;
-       abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
-    then A67:  i1 mod i2 = i1' mod i2' by A1,Th2
+       abs(i1) = i1' & abs(i2) = i2' by ABSVALUE:def 1;
+    then A67:  i1 mod i2 = i1' mod i2' by Th2
            .= 0 by A66,GR_CY_1:5;
 
 A68:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by
@@ -887,8 +887,8 @@ AMI_1:def 19;
    end;
    suppose
 A69:  i1 < i2;
-       abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
-    then A70:  i1 mod i2 = i1' mod i2' by A1,Th2
+       abs(i1) = i1' & abs(i2) = i2' by ABSVALUE:def 1;
+    then A70:  i1 mod i2 = i1' mod i2' by Th2
            .= i1' by A69,GR_CY_1:4;
 
 A71:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by

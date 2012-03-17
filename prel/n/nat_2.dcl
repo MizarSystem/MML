@@ -31,6 +31,8 @@
 <Adjective nr="12"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22" value="false"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25" value="false"/>

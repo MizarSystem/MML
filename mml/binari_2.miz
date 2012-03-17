@@ -60,10 +60,10 @@ definition let n be Nat;
   for i st i in Seg n holds it/.i = IFEQ(i,1,TRUE,FALSE);
   existence
   proof
-   deffunc _F(set) = IFEQ($1,1,TRUE,FALSE);
+   deffunc F(set) = IFEQ($1,1,TRUE,FALSE);
    consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j st j in Seg n holds z.j = _F(j) from FINSEQ_2:sch 1;
+A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
    reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
    take z;
    let i;
@@ -332,8 +332,8 @@ theorem Th9:
 theorem Th10:
   for m holds Intval (Bin1(m)^<*FALSE*>) = 1
   proof
-  defpred _P[non empty Nat] means Intval (Bin1($1)^<*FALSE*>) = 1;
-  A1: _P[1] proof
+  defpred P[non empty Nat] means Intval (Bin1($1)^<*FALSE*>) = 1;
+  A1: P[1] proof
            consider k being Element of BOOLEAN such that
        A2: Bin1(1) = <* k *> by FINSEQ_2:117;
        A3: (Bin1(1))/.1 = k by A2,FINSEQ_4:25;
@@ -342,7 +342,7 @@ theorem Th10:
   hence thesis by Th4;
     end;
   A4: now let m be non empty Nat such that
-       A5: _P[m];
+       A5: P[m];
               (Bin1(m)^<*FALSE*>)/.(m+1) = FALSE by BINARITH:3;
   then A6: Absval(Bin1(m)^<*FALSE*>) = 1 by A5,Def3;
               (Bin1(m+1)^<*FALSE*>)/.(m+1+1) = FALSE by BINARITH:3;
@@ -353,9 +353,9 @@ theorem Th10:
                + IFEQ(FALSE,FALSE,0,2 to_power(m+1)) by BINARITH:46
              .= 1 + 0 by A6,CQC_LANG:def 1
              .= 1;
-       hence _P[m+1];
+       hence P[m+1];
     end;
-  thus for m holds _P[m] from BINARITH:sch 1 (A1,A4);
+  thus for m holds P[m] from BINARITH:sch 1 (A1,A4);
   end;
 
 theorem Th11:
@@ -687,10 +687,10 @@ theorem Th15:
   for m for x being Tuple of m, BOOLEAN holds
    Absval('not' x) = - Absval(x) + 2 to_power m - 1
   proof
-  defpred _P[Nat] means
+  defpred P[Nat] means
   for x being Tuple of $1, BOOLEAN holds
    Absval('not' x) = - Absval(x) + 2 to_power $1 - 1;
-  A1: _P[1] proof let x be Tuple of 1, BOOLEAN;
+  A1: P[1] proof let x be Tuple of 1, BOOLEAN;
       per cases by BINARITH:40;
       suppose A2: x = <*FALSE*>;
        then A3: x/.1 = FALSE by FINSEQ_4:25;
@@ -722,7 +722,7 @@ theorem Th15:
     end;
     end;
   A12: now let m;
-  assume A13: _P[m];
+  assume A13: P[m];
    now
   let x be Tuple of m+1, BOOLEAN;
   consider t being (Element of m-tuples_on BOOLEAN),
@@ -771,9 +771,9 @@ d,FALSE,0,2 to_power m) by BINARITH:46
       hence thesis by A20;
      end;
      end;
-    end; hence _P[m+1];
+    end; hence P[m+1];
   end;
-  thus for m holds _P[m] from BINARITH:sch 1 (A1,A12);
+  thus for m holds P[m] from BINARITH:sch 1 (A1,A12);
   end;
 
 theorem Th16:
@@ -871,11 +871,11 @@ theorem
         for d being Element of BOOLEAN holds
           Neg2(Neg2(z^<*d*>)) = z^<*d*>
   proof
-    defpred _P[non empty Nat] means
+    defpred P[non empty Nat] means
      for z being Tuple of $1, BOOLEAN
         for d being Element of BOOLEAN holds Neg2(Neg2(z^<*d*>)) = z^<*d*>;
 
-  A1: _P[1] proof
+  A1: P[1] proof
     let z be Tuple of 1, BOOLEAN;
     let d be Element of BOOLEAN;
     set NZD = 'not' d 'xor' 'not' (z/.1);
@@ -1096,7 +1096,7 @@ d '&' (z/.1)) 'xor' 'not' (z/.1) by BINARITH:9
     hence thesis by A10,FINSEQ_1:def 9;
     end;
   A11: now let m;
-  assume A12: _P[m];
+  assume A12: P[m];
    now
   let z be Tuple of m+1, BOOLEAN;
   let d be Element of BOOLEAN;
@@ -1313,9 +1313,9 @@ C))) 'xor' C by BINARITH:27
     .= Neg2(Neg2(z))^<*'not' ('not' d 'xor' add_ovfl('not'
 z,Bin1(m+1))) 'xor' add_ovfl('not' Neg2(z),Bin1(m+1))*> by Th16
     .= z^<*d*> by A12,A13,A22,A23,A24;
-  end; hence _P[m+1];
+  end; hence P[m+1];
   end;
-  thus for m holds _P[m] from BINARITH:sch 1 (A1,A11);
+  thus for m holds P[m] from BINARITH:sch 1 (A1,A11);
   end;
 
 definition let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
@@ -1324,11 +1324,11 @@ definition let n be non empty Nat, x, y be Tuple of n, BOOLEAN;
     it/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
   existence
     proof
-   deffunc _F(Nat) = (x/.$1) 'xor' ((Neg2(y))/.$1)
+   deffunc F(Nat) = (x/.$1) 'xor' ((Neg2(y))/.$1)
                      'xor' ((carry(x,Neg2(y)))/.$1);
    consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j st j in Seg n holds z.j = _F(j) from FINSEQ_2:sch 1;
+A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
    reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
    take z;
    let i;

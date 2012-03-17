@@ -31,11 +31,9 @@ reserve a,b,m,x,n,k,l,xi,xj for Nat,
         t,z for Integer,
         f,F for FinSequence of NAT;
 
-Lm1:0 <> a & 0 <> b implies a gcd b = a hcf b
+Lm1:a gcd b = a hcf b
 proof
-  assume 0 <> a & 0 <> b;
-  then 0 < a & 0 < b by NAT_1:19;
-  then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+  abs(a) = a & abs(b) = b by ABSVALUE:def 1;
   hence thesis by INT_2:def 3;
 end;
 
@@ -88,15 +86,13 @@ proof
   proof
     assume a,(b qua Integer) are_relative_prime;
     then A1:a gcd b = 1 by INT_2:def 4;
-       a >= 0 & b >= 0 by NAT_1:18;
-    then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+    abs(a) = a & abs(b) = b by ABSVALUE:def 1;
     then a hcf b = 1 by A1,INT_2:def 3;
     hence thesis by INT_2:def 6;
   end;
   assume a,b are_relative_prime;
   then A2:a hcf b = 1 by INT_2:def 6;
-     a >= 0 & b >= 0 by NAT_1:18;
-  then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+  abs(a) = a & abs(b) = b by ABSVALUE:def 1;
   then a gcd b = 1 by A2,INT_2:def 3;
   hence thesis by INT_2:def 4;
 end;
@@ -106,9 +102,8 @@ theorem
 proof
   assume A1:m > 1 & m*t >= 1;
   assume A2:t < 1;
-  A3:m > 0 by A1;
      t <= 0 by A2,Lm2;
-  then m*t <= 0 by A3,REAL_2:123;
+  then m*t <= 0 by REAL_2:123;
   hence contradiction by A1;
 end;
 
@@ -156,11 +151,10 @@ proof
   consider t being Nat such that
     A3:a*b = m*t+(a*b mod m) and
        (a*b mod m) < m by A1,NAT_1:def 2;
-  A4:a*b <> a*0 by A1,XCMPLX_1:5;
+  a*b <> a*0 by A1,XCMPLX_1:5;
   then A5:a*b+(-t)*m gcd m = a*b gcd m by A1,EULER_1:17;
-  A6: a*b gcd m = 1 by A1,A2,A4,Lm1;
-     a*b mod m >= 0 & m >= 0 by NAT_1:18;
-  then abs(a*b mod m) = a*b mod m & abs(m) = m by ABSVALUE:def 1;
+  A6: a*b gcd m = 1 by A2,Lm1;
+  abs(a*b mod m) = a*b mod m & abs(m) = m by ABSVALUE:def 1;
   then (a*b mod m) hcf m = 1 by A3,A5,A6,INT_2:def 3;
   hence thesis by INT_2:def 6;
 end;
@@ -176,7 +170,7 @@ proof
   then A2:m hcf b <> 1 by INT_2:def 6;
   set k = m hcf b;
   A3: m <> 0 by A1;
-  m > 0 & b > 0 by A1,NAT_1:19;
+  m > 0 & b > 0 by A1;
   then A4:k > 0 by NEWTON:72;
   A5:k divides m & k divides b by NAT_1:def 5;
   then consider km being Nat such that
@@ -194,8 +188,7 @@ proof
   proof
     assume A12: tm = 0;
     A13:0 = abs(0) by ABSVALUE:7;
-       k*km >= 0 by NAT_1:18;
-    then k*km = abs(k*km) by ABSVALUE:def 1;
+    k*km = abs(k*km) by ABSVALUE:def 1;
     then k*km gcd 0 = k*km hcf 0 by A13,INT_2:def 3
               .= k*km by NEWTON:65;
     hence thesis by A1,A6,A8,A10,A12;
@@ -209,8 +202,7 @@ proof
     hence contradiction by A2,A16,A17,INT_1:22;
   end;
   A18:m gcd n = abs(m) hcf abs(n) by INT_2:def 3;
-     m >= 0 & n >= 0 by NAT_1:18;
-  then m = abs(m) & n = abs(n) by ABSVALUE:def 1;
+  m = abs(m) & n = abs(n) by ABSVALUE:def 1;
   hence contradiction by A1,A11,A14,A18,INT_2:def 6;
 end;
 
@@ -345,8 +337,7 @@ proof
     let f,g be FinSequence of NAT; assume
     A4:f,g are_fiberwise_equipotent & len f = n+1;
     then A5:rng f = rng g & len f = len g by RFINSEQ:1,16;
-       0<n+1 by NAT_1:19;
-    then 0+1<=n+1 by NAT_1:38;
+    0+1<=n+1 by NAT_1:38;
     then A6:n+1 in dom f by A4,FINSEQ_3:27;
     reconsider a = f.(n+1) as Nat;
        a in rng g by A5,A6,FUNCT_1:def 5;
@@ -514,8 +505,7 @@ RFINSEQ:20
       end;
       hence thesis by A14,FINSEQ_1:18;
     end;
-       0<n+1 by NAT_1:19;
-    then 0+1<=n+1 by NAT_1:38;
+    0+1<=n+1 by NAT_1:38;
     then n+1 in dom f by A6,FINSEQ_3:27;
     then (f mod m).(n+1) = f.(n+1) mod m by Def1;
     then f mod m = (fn mod m) ^ <* f.(n+1) mod m *> by A11,A12,RFINSEQ:20;
@@ -839,7 +829,7 @@ proof
       hence contradiction by A1,A9,A11,INT_2:def 6;
     end;
     then A12:a*t mod m >= 1 by NAT_1:39;
-       m > 0 by A2,NAT_1:19;
+       m > 0 by A2;
     then a*t mod m <= m by NAT_1:46;
     hence thesis by A4,A10,A12;
   end;
@@ -851,7 +841,7 @@ proof
     assume A14:xi in X & xj in X & xi <> xj;
     assume A15:a*xi mod m = a*xj mod m;
     set tm = a*xi mod m,sm = a*xj mod m;
-    A16:m > 0 by A2,NAT_1:19;
+    A16:m > 0 by A2;
     consider t being Nat such that
       A17:t = xi and
          m,t are_relative_prime and
@@ -889,12 +879,11 @@ A22: sm = (a*s)-m*((a*s) div m) by A16,A20,NEWTON:77;
          xx <> m by A1,A27,EULER_1:2;
       then xx < m by A28,AXIOMS:21;
       then A29:xx mod m = xx by GR_CY_1:4;
-      A30:xx <> 0 by A28;
       consider i,j being Integer such that
         A31:i*a+j*m = xx by A1,EULER_1:11;
         A32: i = (i div m)*m+(i mod m) by A2,NEWTON:80;
       then A33: xx = (i mod m)*a+(((i div m)*a)+j)*m by A31;
-      A34:m > 0 by A2,NAT_1:19;
+      A34:m > 0 by A2;
       A35:i mod m <> 0
       proof
         assume i mod m = 0;
@@ -906,10 +895,10 @@ A22: sm = (a*s)-m*((a*s) div m) by A16,A20,NEWTON:77;
                     .= m*(1 gcd ((i div m)*a+j)) by A34,A37,EULER_1:16
                     .= m*1 by Lm4
                     .= m;
-        then m hcf xx = m by A2,A30,Lm1;
+        then m hcf xx = m by Lm1;
         hence contradiction by A1,A27,INT_2:def 6;
       end;
-         i mod m >= 0 by A34,NEWTON:78;
+         i mod m >= 0 by NEWTON:78;
       then reconsider im = i mod m as Nat by INT_1:16;
       A38:im >= 1 by A35,NAT_1:39;
       A39:im <= m by A34,NEWTON:79;
@@ -1064,13 +1053,11 @@ A22: sm = (a*s)-m*((a*s) div m) by A16,A20,NEWTON:77;
           (Product (FY|$1)) mod m = (a |^ len(FY|$1)*Product (FX|$1)) mod m;
     A82: P[0]
     proof
-         0 <= len FY by NAT_1:18;
+         0 <= len FY;
       then A83: len (FY|0) = 0 by FINSEQ_1:80;
-         0 <= len FX by NAT_1:18;
-      then len (FX|0) = 0 by FINSEQ_1:80;
-      then Product (FX|0) = 1 by RVSUM_1:124;
+      Product (FX|0) = 1 by RVSUM_1:124;
       then a |^ len(FY|0)*Product (FX|0) = 1 by A83,NEWTON:9;
-      hence thesis by A83,RVSUM_1:124;
+      hence thesis by RVSUM_1:124;
     end;
     A84: for n st P[n] holds P[n+1]
     proof
@@ -1084,8 +1071,7 @@ A22: sm = (a*s)-m*((a*s) div m) by A16,A20,NEWTON:77;
           A89:len (FY|(n+1)) = n+1 by A85,FINSEQ_1:80;
           then A90:FY|(n+1)
                  = (FY|(n+1))|n ^ <* (FY|(n+1)).(n+1) *> by RFINSEQ:20;
-             0 < n+1 by NAT_1:19;
-          then 0+1 <= n+1 by NAT_1:38;
+          0+1 <= n+1 by NAT_1:38;
           then A91: n+1 in dom FY by A85,FINSEQ_3:27;
           A92:(FY|(n+1))|n = FY|n by A87,JORDAN4:15;
           A93: (FY|(n+1)).(n+1) = FY.(n+1) by JORDAN3:20;
@@ -1155,9 +1141,7 @@ Lm7;
       $1 <= len FX implies (Product (FX|$1)),m are_relative_prime;
     A107: P[0]
     proof
-         0 <= len FX by NAT_1:18;
-      then len (FX|0) = 0 by FINSEQ_1:80;
-      then (Product (FX|0)) = 1 by RVSUM_1:124;
+      (Product (FX|0)) = 1 by RVSUM_1:124;
       then (Product (FX|0)) hcf m = 1 by NEWTON:64;
       hence thesis by INT_2:def 6;
     end;
@@ -1176,8 +1160,7 @@ Lm7;
           then A113:FX|n = FF|n by JORDAN4:15;
           A114:rng FX = X by A45,FINSEQ_1:def 13;
           A115:(FX|(n+1)).(n+1) = FX.(n+1) by JORDAN3:20;
-             n >= 0 by NAT_1:18;
-          then 0+1 <= (n+1) by AXIOMS:24;
+          0+1 <= (n+1) by AXIOMS:24;
           then n+1 in dom FX by A109,FINSEQ_3:27;
           then (FX|(n+1)).(n+1) in rng FX by A115,FUNCT_1:def 5;
           then consider p being Nat such that

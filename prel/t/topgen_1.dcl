@@ -245,11 +245,23 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
+<Adjective nr="32">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="33">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
+<Adjective nr="44">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="45">
+<LocusVar nr="1"/>
+</Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -335,6 +347,9 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
+<Adjective nr="32">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
@@ -343,6 +358,12 @@
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
+<Adjective nr="44">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="45">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
@@ -389,6 +410,12 @@
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
+<Adjective nr="44">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="45">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>

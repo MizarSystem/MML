@@ -40,6 +40,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="36"/>
+<Adjective nr="38" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="43"/>
 </Cluster>
@@ -57,6 +58,7 @@
 <Adjective nr="19"/>
 <Adjective nr="25"/>
 <Adjective nr="36"/>
+<Adjective nr="38" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="43" value="false"/>
 </Cluster>
