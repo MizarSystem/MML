@@ -52,25 +52,25 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="257">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
 </Adjective>
-<Adjective nr="46">
+<Adjective nr="47">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="257">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
 </Adjective>
-<Adjective nr="53">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Adjective>
-<Adjective nr="55">
+<Adjective nr="56">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

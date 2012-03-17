@@ -18,7 +18,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="8"/>
+<Adjective nr="9"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI" nr="2">
@@ -27,7 +27,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="10"/>
+<Adjective nr="11"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI" nr="3">
@@ -36,7 +36,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </RCluster>
 </Registrations>

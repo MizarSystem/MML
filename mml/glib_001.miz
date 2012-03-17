@@ -15,7 +15,7 @@ environ
       RELSET_1, MCART_1, FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000,
       ABIAN;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      RECDEF_1, FINSEQ_5, GLIB_000, ABIAN, GRAPH_2, VALUED_1;
+      RECDEF_1, FINSEQ_5, GLIB_000, ABIAN, GRAPH_2, VALUED_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, GLIB_000, ABIAN, GRAPH_2,
       GRAPH_3, HEYTING3;
@@ -435,8 +435,6 @@ definition
     hereby
       assume
 A1:   W1.last() = W2.first();
-      len W2 <> 0;
-      then
 A2:   W2 <> {} by CARD_1:47;
 A3:   now
         assume len W is even;
@@ -465,12 +463,7 @@ A8:         n < len W1 by A6,NAT_1:16,XXREAL_0:2;
 A9:         len W1 < n+2;
             then consider k being Nat such that
 A10:        n + 2 = len W1 + k by NAT_1:10;
-            now
-              assume k is odd;
-              then reconsider k as odd Element of NAT by ORDINAL1:def 13;
-              n+2 = len W1 + k by A10;
-              hence contradiction;
-            end;
+            k is even by A10;
             then reconsider k as even Element of NAT by ORDINAL1:def 13;
             k <> 0 by A9,A10;
             then 0 < k;
@@ -1230,8 +1223,7 @@ proof
   assume W1.last() = W2.first();
   then
 A1: W = W1 ^' W2 by Def10;
-  len W2 <> 0;
-  then W2 <> {} by CARD_1:47;
+  W2 <> {} by CARD_1:47;
   hence thesis by A1,GRAPH_2:13;
 end;
 
@@ -3309,12 +3301,7 @@ A12:              W.(n+2) = W2.(2+1) by A1,Lm13;
             suppose ex k being Element of NAT st k < len W2 & n = len W1 + k;
               then consider k being Element of NAT such that
 A13:          k < len W2 & n = len W1 + k;
-              now
-                assume k is odd;
-                then reconsider k' = k as odd Element of NAT;
-                n = len W1 + k' by A13;
-                hence contradiction;
-              end;
+              k is even by A13;
               then reconsider k as even Element of NAT;
 A14:          W.n = W2.(k+1) by A1,A13,Lm13;
               n + 1 < len W + 1 by A2,XREAL_1:10;
@@ -3715,8 +3702,6 @@ holds W3 is Subwalk of W1
 proof
   let G be _Graph, W1 be Walk of G, W2 be Subwalk of W1, W3 be Subwalk of W2;
   set fs = W1.edgeSeq(),fs1 = W2.edgeSeq(),fs2 = W3.edgeSeq();
-A1: W3 is_Walk_from W2.first(), W2.last() &
-  ex fss1 being Subset of fs1 st fs2 = Seq fss1 by Def32;
   W2 is_Walk_from W1.first(), W1.last() &
   ex fss being Subset of fs st fs1 = Seq fss by Def32;
   then
@@ -3813,7 +3798,7 @@ A12:    dom es = Z by RELAT_1:90;
 A13:    Z c= Seg len W.edgeSeq() by A10,FINSEQ_1:def 3;
         then
 A14:    X c= Seg len W.edgeSeq() & Y c= Seg len W.edgeSeq() by XBOOLE_1:11;
-        reconsider Z as finite set by A10,FINSET_1:13;
+        reconsider Z as finite set by A10;
         reconsider X,Y as finite set by A13,FINSET_1:13,XBOOLE_1:11;
 A15:    now
           let a,b be Element of NAT;
@@ -3856,7 +3841,7 @@ A28:          x in X by XBOOLE_0:def 1;
 A29:          x' = x & 1 <= x' & x' <= maa1 div 2 by A28;
               thus contradiction by A27,A29;
             end;
-            hence card X = maa1 div 2 by A27,CARD_1:78;
+            hence card X = maa1 div 2 by A27,CARD_1:47;
           end;
           suppose maa1 div 2 <> 0;
             then consider k being Nat such that
@@ -3883,7 +3868,7 @@ A35:          x' = x & n1 div 2 <= x' & x' <= lenWaa1 div 2 by A34;
             then len W < n+1 by REAL_1:def 5;
             then len W <= n by NAT_1:13;
             then len W = n by A1,XXREAL_0:1;
-            hence card Y = lenWn4 div 2 by A33,CARD_1:78,NAT_2:4;
+            hence card Y = lenWn4 div 2 by A33,CARD_1:47,NAT_2:4;
           end;
           suppose n1 div 2 <= lenWaa1 div 2;
             then reconsider k = (lenWaa1 div 2) - (n1 div 2) as Element of NAT
@@ -4267,7 +4252,7 @@ A53:  m <= len P;
       hence P.rfind(m) = m by A52,A53;
     end;
     then P is Path-like by Lm67;
-    hence P is Trail-like & P is Path-like by Def28;
+    hence P is Trail-like & P is Path-like;
   end;
 end;
 
@@ -4621,7 +4606,7 @@ A88:          len W2.edgeSeq() = len Seq esb + len <*e*> by FINSEQ_1:35
 A89:          len Seq es = card es by Th5
                 .= card esb + card ((k+1).-->e) by A86,PRE_CIRC:27
                 .= card esb + card {[k+1,e]} by FUNCT_4:87
-                .= len W2.edgeSeq() by A88,CARD_1:79;
+                .= len W2.edgeSeq() by A88,CARD_1:50;
 A90:          {k+1} c= Seg (k+1) by A67,A72,XBOOLE_1:11;
               now
                 let m, n be Element of NAT;
@@ -5690,7 +5675,6 @@ A6:     2*x-1 in dom W.cut(1,n) by A4,Th74;
         then
 A7:     y = W.(2*x-1) by A1,A5,Lm23;
 A8:     2*x-1 is Element of NAT by A6;
-        then
 A9:     1 <= 2*x-1 & 2*x-1 <= len W.cut(1,n) by A6,FINSEQ_3:27;
         then 2*x-1 <= n by A1,Lm22;
         then 2*x-1 <= len W by A1,XXREAL_0:2;
@@ -6050,11 +6034,10 @@ A4:   W.reverse().(len W - n + 1) = x by A2,Th25;
 A5:   lenW-n+1 is odd Element of NAT by A2,FINSEQ_5:1;
       n in Seg len W by A3,FINSEQ_1:def 3;
       then
-A6:   lenW-n+1 in Seg len W by FINSEQ_5:2;
+   lenW-n+1 in Seg len W by FINSEQ_5:2;
       then
 A7:   lenW-n+1 in dom W by FINSEQ_1:def 3;
-      lenW-n+1 is Element of NAT by A6;
-      then lenW-n+1 <= len W by A7,FINSEQ_3:27;
+      lenW-n+1 <= len W by A7,FINSEQ_3:27;
       then
 A8:   lenW-n+1 <= len W.reverse() by FINSEQ_5:def 3;
       thus x in W.reverse().vertices() by A4,A5,A8,Lm45;
@@ -6073,7 +6056,7 @@ A14: lenW-n+1 is odd Element of NAT by FINSEQ_5:1;
     n in Seg len W by A11,A13,FINSEQ_1:3;
     then lenW-n+1 in Seg len W by FINSEQ_5:2;
     then
-A15: lenW-n+1 <= len W by A14,FINSEQ_1:3;
+A15: lenW-n+1 <= len W by FINSEQ_1:3;
     thus x in W.vertices() by A12,A14,A15,Lm45;
   end;
   hence thesis by TARSKI:2;
@@ -6110,12 +6093,7 @@ A7:       n > len W1;
           then consider k being Nat such that
 A8:       len W1 + k = n by NAT_1:10;
           reconsider lenW1 = len W1 as odd Element of NAT;
-          now
-            assume k is odd;
-            then reconsider k'=k as odd Element of NAT by ORDINAL1:def 13;
-            lenW1 + k' = n by A8;
-            hence contradiction;
-          end;
+          k is even by A8;
           then reconsider k as even Element of NAT by ORDINAL1:def 13;
           k <> 0 by A7,A8;
           then 0 < k;
@@ -6728,12 +6706,7 @@ theorem ::tTVWALK04
 theorem ::tTVWALK05
   W is trivial iff W.reverse() is trivial
 proof
-  hereby
-    assume W is trivial;
-    then len W = 1 by Lm55;
-    then len W.reverse() = 1 by FINSEQ_5:def 3;
-    hence W.reverse() is trivial by Lm55;
-  end;
+  thus W is trivial implies W.reverse() is trivial;
   assume W.reverse() is trivial;
   then len W.reverse() = 1 by Lm55;
   then len W = 1 by FINSEQ_5:def 3;
@@ -6746,7 +6719,6 @@ proof
   assume W2 is trivial;
   then
 A1: len W2 = 1 by Lm55;
-  then
 A2: W2 <> {} by CARD_1:47;
   now per cases;
     suppose W1.last() = W2.first();
@@ -6914,7 +6886,7 @@ proof
   W is trivial iff W.length() = 0 by Def26;
   hence W is trivial implies W.edges() = {} by CARD_2:59,RELAT_1:60;
   assume W.edges() = {};
-  then W.edgeSeq() = {} by RELAT_1:64;
+  then W.edgeSeq() = {};
   then W.length() = 0 by CARD_1:47;
   hence W is trivial by Def26;
 end;
@@ -7439,15 +7411,15 @@ A4: 1 <= n by HEYTING3:1;
 A5: n+2-2 < len W1-0 by A2,REAL_1:92;
   then
 A6: WB is_Walk_from W1.first(), v1 by A2,A4,Lm16;
-  W1 is closed by A1,Def31;
+  W1 is closed by A1;
   then
 A7: WB is_Walk_from W1.last(), v1 by A6,Def24;
   then
 A8: WA.append(WB) is_Walk_from v2,v1 by A3,Th32;
 A9: WA.last() = W1.last() & WB.first() = W1.last() by A2,A7,Def23,Lm16;
-  W1 is Path-like by A1,Def31;
+  W1 is Path-like by A1;
   then
-A10: W1 is Trail-like by Def28;
+A10: W1 is Trail-like;
 A11: now
     assume e in WA.edges();
     then consider m being even Element of NAT such that
@@ -7880,7 +7852,7 @@ A65:      2 * ((k2+1) div 2) <= 2*len W4.edgeSeq() by XREAL_1:66;
         then
 A66:    dom es5 misses dom g by XBOOLE_0:def 7;
         then len Seq es = card dom es5 + card dom g by A41,A62,CARD_2:53
-          .= card dom es5 + 1 by A42,CARD_1:79
+          .= card dom es5 + 1 by A42,CARD_1:50
           .= card es5 + 1 by PRE_CIRC:21
           .= len W5.edgeSeq() + 1 by A39,Th5;
         then
@@ -8176,7 +8148,7 @@ A10:      y in v.edgesIn() \/ v.edgesOut() by GLIB_000:63;
   then rng W2 c= (the_Vertices_of G2) \/ (the_Edges_of G2) by TARSKI:def 3;
   then reconsider W2 as FinSequence of (the_Vertices_of G2)\/(the_Edges_of G2
   ) by FINSEQ_1:def 4;
-  now thus len W2 is odd by Def3;
+  now thus len W2 is odd;
 A11: W.first() in the_Vertices_of G1;
     W.first() in W.vertices() by Th89;
     then not W2.1 in {v} by A1,TARSKI:def 1;
@@ -8188,7 +8160,7 @@ A12: n < len W2;
     then
 A13: W.(n+1) Joins W.n, W.(n+2), G1 by Def3;
 A14: W.n <> v by A1,A12,Lm45;
-    reconsider lenW2 = len W2 as odd Element of NAT by Def3;
+    reconsider lenW2 = len W2 as odd Element of NAT;
     n+1 <= len W2 by A12,NAT_1:13;
     then n+1 < lenW2 by REAL_1:def 5;
     then n+1+1 <= len W2 by NAT_1:13;

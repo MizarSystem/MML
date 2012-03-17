@@ -46,7 +46,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="67"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -10,20 +10,21 @@ environ
 
  vocabularies FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1, TARSKI,
       MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1, MEASURE4, MEASURE1,
-      MEASURE7, FUNCOP_1, PROB_1, ARYTM;
+      MEASURE7, FUNCOP_1, PROB_1, ARYTM, XXREAL_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, MCART_1, DOMAIN_1,
       ORDINAL1, NUMBERS, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, NAT_1, PROB_1, XXREAL_2,
+      SUPINF_1, SUPINF_2, MEASURE1,
       MEASURE4, MEASURE5, RECDEF_1;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, NAT_1, MEASURE4, MEASURE5,
-      RECDEF_1;
+      RECDEF_1, SUPINF_1, XREAL_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FRAENKEL,
       NUMBERS, XREAL_0, MEMBERED, MEASURE1, MEASURE4, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0;
+ definitions TARSKI, SUPINF_1, MEASURE4, XBOOLE_0, XXREAL_2;
  theorems TARSKI, SUPINF_1, SUPINF_2, MEASURE1, FUNCT_1, MEASURE4, MEASURE5,
       MEASURE6, ZFMISC_1, FUNCT_2, NAT_1, MCART_1, XBOOLE_0, XBOOLE_1,
-      FUNCOP_1, XXREAL_0, ORDINAL1;
+      FUNCOP_1, XXREAL_0, ORDINAL1, XXREAL_2;
  schemes FUNCT_2, NAT_1, BINOP_2, SUBSET_1, XBOOLE_0;
 
 begin :: Some theorems about series of R_eal numbers
@@ -49,7 +50,7 @@ A4: for t being Element of NAT st P[t] holds P[t+1]
       .= 0. by A1;
   end;
 A5: for s being Element of NAT holds P[s] from NAT_1:sch 1(A3,A4);
-A6: sup {0.} = 0. by SUPINF_1:85;
+A6: sup {0.} = 0. by XXREAL_2:11;
   rng Ser(F) = {0.}
   proof
 A7: dom Ser(F) = NAT & rng Ser(F) c= ExtREAL by FUNCT_2:def 1;
@@ -174,7 +175,7 @@ A8: 0. <= Ser(G).k & 0. <= G.(k+1) &
       .= Ser(G).(k+1) + Ser(H).(k+1) by A6,A8,MEASURE4:1;
   end;
 A9: for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
-  SUM(G) + SUM(H) is majorant of rng Ser(F)
+  SUM(G) + SUM(H) is UpperBound of rng Ser(F)
   proof
     let x be ext-real number;
     assume
@@ -184,14 +185,14 @@ A10: x in rng Ser(F);
 A11: n in NAT & x = Ser(F).n by A10,FUNCT_1:def 5;
     reconsider n as Element of NAT by A11;
     Ser(G).n <= sup(rng Ser(G)) & Ser(H).n <= sup(rng Ser(H))
-    by FUNCT_2:6,SUPINF_1:76;
+    by FUNCT_2:6,XXREAL_2:4;
     then
 A12: Ser(G).n <= SUM(G) & Ser(H).n <= SUM(H) by SUPINF_2:def 23;
     0. <= Ser(G).n & 0. <= Ser(H).n by A2,SUPINF_2:59;
     then Ser(G).n + Ser(H).n <= SUM(G) + SUM(H) by A12,MEASURE1:4;
     hence thesis by A9,A11;
   end;
-  then sup(rng Ser(F)) <= SUM(G) + SUM(H) by SUPINF_1:def 16;
+  then sup(rng Ser(F)) <= SUM(G) + SUM(H) by XXREAL_2:def 3;
   hence thesis by SUPINF_2:def 23;
 end;
 
@@ -204,14 +205,14 @@ theorem Th6:
 proof
   let F,G be Function of NAT,ExtREAL;
   assume that
-A1: F is nonnegative and
+ F is nonnegative and
 A2: for n being Element of NAT holds F.n <= G.n;
   let n be Element of NAT;
 A3: SUM(G) = sup(rng Ser(G)) by SUPINF_2:def 23;
   set y = Ser(G).n;
   dom Ser(G) = NAT & rng Ser(G) c= ExtREAL by FUNCT_2:def 1;
-  then y in rng Ser(G) & Ser(F).n <= y by A1,A2,FUNCT_1:def 5,SUPINF_2:61;
-  hence thesis by A3,SUPINF_1:97;
+  then y in rng Ser(G) & Ser(F).n <= y by A2,FUNCT_1:def 5,SUPINF_2:61;
+  hence thesis by A3,XXREAL_2:61;
 end;
 
 theorem Th7:
@@ -684,7 +685,7 @@ A62:  for F being Function of NAT,ExtREAL st F is nonnegative holds
     hence thesis;
   end;
   then
-A63: sup(rng Ser(On(G*H))) <= sup(rng Ser(G)) by SUPINF_1:99;
+A63: sup(rng Ser(On(G*H))) <= sup(rng Ser(G)) by XXREAL_2:63;
   SUM(G) = sup(rng Ser(G)) by SUPINF_2:def 23;
   hence thesis by A63,SUPINF_2:def 23;
 end;
@@ -1280,7 +1281,6 @@ A21:  (vol(G)).n = vol(G.n) & (vol(G0)).n = vol(G0.n) &
       (vol(G1)).n = vol(G1.n) by Def7;
       vol(G.n) = vol(G0.n) + vol(G1.n)
       proof
-A22:    (G.n) vol is nonnegative & (G0.n) vol is nonnegative by Th13;
         per cases;
         suppose
 A23:      n = pr1(H).(k+1);
@@ -1303,7 +1303,7 @@ A24:        SUM((G1.n) vol) = 0. by Th1;
               hence thesis;
             end;
             then
-A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by A22,SUPINF_2:62;
+A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by SUPINF_2:62;
             for s being Element of NAT holds ((G.n) vol).s <= ((G0.n) vol).s
             proof
               let s be Element of NAT;
@@ -1312,7 +1312,7 @@ A25:        SUM((G0.n) vol) <= SUM((G.n) vol) by A22,SUPINF_2:62;
                 .= ((G.n) vol).s by Def4;
               hence thesis;
             end;
-            then SUM((G.n) vol) <= SUM((G0.n) vol) by A22,SUPINF_2:62;
+            then SUM((G.n) vol) <= SUM((G0.n) vol) by SUPINF_2:62;
             then SUM((G.n) vol) = SUM((G0.n) vol) by A25,XXREAL_0:1;
             hence thesis by A24,SUPINF_2:18;
           end;
@@ -1335,15 +1335,14 @@ A28:      for s being Element of NAT holds ((G0.n) vol).s = 0.
           end;
           SUM((G.n) vol) = SUM((G0.n) vol) + SUM((G1.n) vol)
           proof
-A29:        (G.n) vol is nonnegative & (G1.n) vol is nonnegative by Th13;
 A30:        SUM((G0.n) vol) = 0. by A28,Th1;
             for s being Element of NAT holds
             ((G1.n) vol).s <= ((G.n) vol).s by A27;
             then
-A31:        SUM((G1.n) vol) <= SUM((G.n) vol) by A29,SUPINF_2:62;
+A31:        SUM((G1.n) vol) <= SUM((G.n) vol) by SUPINF_2:62;
             for s being Element of NAT holds
             ((G.n) vol).s <= ((G1.n) vol).s by A27;
-            then SUM((G.n) vol) <= SUM((G1.n) vol) by A22,SUPINF_2:62;
+            then SUM((G.n) vol) <= SUM((G1.n) vol) by SUPINF_2:62;
             then SUM((G.n) vol) = SUM((G1.n) vol) by A31,XXREAL_0:1;
             hence thesis by A30,SUPINF_2:18;
           end;
@@ -1513,9 +1512,9 @@ A5: for F being Function of NAT,bool REAL holds
     hence thesis by A4,A5,FUNCT_1:def 5;
   end;
   then
-A6: vol(GG) <= SUM(vol(G)) by A2,A3,SUPINF_1:99;
+A6: vol(GG) <= SUM(vol(G)) by A2,A3,XXREAL_2:63;
   Q in Svc(union rng F) by Def8;
-  then inf Svc(union rng F) <= Q by SUPINF_1:79;
+  then inf Svc(union rng F) <= Q by XXREAL_2:3;
   hence thesis by A6,XXREAL_0:2;
 end;
 
@@ -1539,7 +1538,7 @@ A2: for A being Subset of REAL holds 0.<= OS_Meas.A
   proof
     let A be Subset of REAL;
 A3: OS_Meas.A = inf(Svc(A)) by Def10;
-    0. is minorant of Svc(A)
+    0. is LowerBound of Svc(A)
     proof
       let x be ext-real number;
       assume x in Svc(A);
@@ -1549,10 +1548,10 @@ A5:   F vol is nonnegative by A1;
 A6:   SUM(F vol) = sup(rng Ser(F vol)) by SUPINF_2:def 23;
       set y = Ser(F vol).0;
       y in rng Ser(F vol) & 0. <= y by A5,FUNCT_2:6,SUPINF_2:59;
-      then 0. <= y & y <= sup(rng Ser(F vol)) by SUPINF_1:76;
+      then 0. <= y & y <= sup(rng Ser(F vol)) by XXREAL_2:4;
       hence thesis by A4,A6,XXREAL_0:2;
     end;
-    hence thesis by A3,SUPINF_1:def 17;
+    hence thesis by A3,XXREAL_2:def 4;
   end;
   hence OS_Meas is nonnegative by MEASURE1:def 4;
   set G = D;
@@ -1571,16 +1570,16 @@ A9: for r being Element of NAT holds 0 <= r implies (G vol).r = 0.
     .= 0. by A9;
   then
 A10: 0. in Svc({}) by Def8;
-  0. is minorant of Svc {}
+  0. is LowerBound of Svc {}
   proof
     let x be ext-real number;
     assume
 A11: x in Svc({});
     0. <= OS_Meas.{} by A2;
-    then 0. <= inf Svc({}) & inf Svc({}) <= x by A11,Def10,SUPINF_1:79;
+    then 0. <= inf Svc({}) & inf Svc({}) <= x by A11,Def10,XXREAL_2:3;
     hence thesis by XXREAL_0:2;
   end;
-  then inf Svc {} = 0. by A10,SUPINF_1:81;
+  then inf Svc {} = 0. by A10,XXREAL_2:56;
   hence OS_Meas.{} = 0. by Def10;
   let A,B be Subset of REAL;
   assume
@@ -1606,8 +1605,6 @@ A17:  for n being Element of NAT holds (G vol).n <= (F vol).n
           .= (F vol).n by Def4;
         hence thesis;
       end;
-      G vol is nonnegative by A1;
-      then
 A18:  SUM(G vol) <= SUM(F vol) by A17,SUPINF_2:62;
 A19:  for n being Element of NAT holds (F vol).n <= (G vol).n
       proof
@@ -1616,14 +1613,13 @@ A19:  for n being Element of NAT holds (F vol).n <= (G vol).n
           .= (F vol).n by Def4;
         hence thesis;
       end;
-      F vol is nonnegative by A1;
-      then SUM(F vol) <= SUM(G vol) by A19,SUPINF_2:62;
+      SUM(F vol) <= SUM(G vol) by A19,SUPINF_2:62;
       hence thesis by A15,A18,XXREAL_0:1;
     end;
     hence thesis by Def8;
   end;
   OS_Meas.A = inf Svc(A) & OS_Meas.B = inf Svc(B) by Def10;
-  hence OS_Meas.A <= OS_Meas.B by A13,SUPINF_1:94;
+  hence OS_Meas.A <= OS_Meas.B by A13,XXREAL_2:60;
   let F be Function of NAT,bool REAL;
   per cases;
   suppose
@@ -1645,7 +1641,7 @@ A24:  not inf Svc(union rng F) <= sup(rng Ser(OS_Meas*F));
       0. <= (OS_Meas*F).0 by A22;
       then
 A25:  0. <= Ser(OS_Meas*F).0 by SUPINF_2:63;
-      Ser(OS_Meas*F).0 <= x by FUNCT_2:6,SUPINF_1:76;
+      Ser(OS_Meas*F).0 <= x by FUNCT_2:6,XXREAL_2:4;
       then 0. <= x by A25,XXREAL_0:2;
       then consider eps being R_eal such that
 A26:  0. < eps & x + eps < y & eps in REAL by A24,MEASURE6:25;
@@ -1669,10 +1665,10 @@ A30:    x in Svc(F.n) \ {+infty} by XBOOLE_0:def 1;
 A31:    x in Svc(F.n) & not x in {+infty} by A30,XBOOLE_0:def 4;
         then
 A32:    x in Svc(F.n) & x <> +infty by TARSKI:def 1;
-        inf Svc(F.n) <= x by A31,SUPINF_1:79;
+        inf Svc(F.n) <= x by A31,XXREAL_2:3;
         then 0 is Real & 0. <= inf Svc(F.n) & inf Svc(F.n) < +infty
         by A29,A32,XXREAL_0:2,4;
-        then 0. < E.n & inf Svc(F.n) is Real by A27,MEASURE6:17;
+        then 0. < E.n & inf Svc(F.n) is Real by A27,XXREAL_0:46;
         then consider S being ext-real number such that
 A33:    S in Svc(F.n) & S < inf Svc(F.n) + E.n by MEASURE6:32;
         consider FS being Interval_Covering of F.n such that
@@ -1711,9 +1707,6 @@ A42:    F0 = FF.n & vol(F0) < inf Svc(F.n) + E.n by A35;
         then (vol(FF)).n < (OS_Meas*F).n + E.n by Def7;
         hence thesis by A39;
       end;
-      for n being Element of NAT holds 0. <= (vol(FF)).n by Th14;
-      then vol(FF) is nonnegative by SUPINF_2:58;
-      then
 A43:  SUM(vol(FF)) <= SUM(G0) by A41,SUPINF_2:62;
       0. <= SUM(OS_Meas*F) & 0. <= SUM(E) by A23,A37,MEASURE6:2;
       then SUM(OS_Meas*F) + SUM(E) <= SUM(OS_Meas*F) + eps by A27,MEASURE1:4;
@@ -1728,7 +1721,7 @@ A44:  SUM (vol(FF)) <= SUM (OS_Meas*F) + eps by A43,XXREAL_0:2;
   suppose ex n being Element of NAT st Svc(F.n) = {+infty};
     then consider n being Element of NAT such that
 A45: Svc(F.n) = {+infty};
-    inf {+infty} = +infty by SUPINF_1:86;
+    inf {+infty} = +infty by XXREAL_2:13;
     then OS_Meas.(F.n) = +infty by A45,Def10;
     then
 A46: (OS_Meas*F).n = +infty by FUNCT_2:21;

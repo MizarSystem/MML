@@ -61,7 +61,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <CCluster aid="GOBRD13" nr="1">
@@ -78,7 +78,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="134"/>
+<Adjective nr="135"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GOBRD13" nr="2">
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="134"/>
+<Adjective nr="135"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -94,7 +94,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -16,15 +16,13 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_4"/>
 </Signature>
 <CCluster aid="SEQ_4" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="78"/>
 </Adjective>
@@ -36,24 +34,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="78"/>
 </Adjective>
-<Adjective nr="28"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SEQ_4" nr="2">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="34"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="34"/>
-<Adjective nr="36"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 </Registrations>

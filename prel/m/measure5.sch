@@ -10,10 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="SUPINF_1"/>
 </Signature>
 <Scheme>
 <ArgTypes/>
@@ -21,14 +17,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="64"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Not>

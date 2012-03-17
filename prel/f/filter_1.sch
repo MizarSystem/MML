@@ -25,9 +25,9 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="15"/>
-<Adjective nr="16">
+<Adjective nr="11"/>
+<Adjective nr="16"/>
+<Adjective nr="17">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -74,9 +74,9 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="15"/>
-<Adjective nr="16">
+<Adjective nr="11"/>
+<Adjective nr="16"/>
+<Adjective nr="17">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -147,9 +147,9 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="10"/>
-<Adjective nr="15"/>
-<Adjective nr="16">
+<Adjective nr="11"/>
+<Adjective nr="16"/>
+<Adjective nr="17">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>

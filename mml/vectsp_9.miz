@@ -148,7 +148,7 @@ A7: {} = Carrier(L) /\ rng G by XBOOLE_0:def 7
       .= Carrier(L) /\ (rng p \/ rng<*x*>) by A6,FINSEQ_1:44
       .= Carrier(L) /\ (rng p \/ {x}) by FINSEQ_1:55
       .= Carrier(L) /\ rng p \/ Carrier(L) /\ {x} by XBOOLE_1:23;
-    then Carrier(L) /\ rng p = {} & Carrier(L) /\ {x} = {} by XBOOLE_1:15;
+    then Carrier(L) /\ rng p = {} & Carrier(L) /\ {x} = {};
     then Carrier(L) misses rng p by XBOOLE_0:def 7;
     then
 A8: Sum(L (#) p) = 0.V by A5;
@@ -156,7 +156,7 @@ A8: Sum(L (#) p) = 0.V by A5;
       assume x in Carrier(L);
       then x in Carrier(L) & x in {x} by TARSKI:def 1;
       then x in Carrier(L) /\ {x} by XBOOLE_0:def 3;
-      hence contradiction by A7,XBOOLE_1:15;
+      hence contradiction by A7;
     end;
     then
 A9: L.x = 0.GF by VECTSP_6:20;
@@ -970,7 +970,7 @@ A11: v in B by A8,CARD_1:47,XBOOLE_0:def 1;
     {v} is Subset of B by A11,SUBSET_1:63;
     then
 A12: card(B \ {v}) = card(B) - card({v}) by CARD_2:63
-      .= m + 1 - 1 by A8,CARD_1:79
+      .= m + 1 - 1 by A8,CARD_1:50
       .= m;
     set Bv = B \ {v};
 A13: Bv c= B by XBOOLE_1:36;
@@ -1003,7 +1003,7 @@ A23: Cw c= A by A18,XBOOLE_1:1;
     {w} is Subset of C by A21,SUBSET_1:63;
     then
 A24: card(Cw) = card(C) - card({w}) by CARD_2:63
-      .= n - m - 1 by A19,CARD_1:79
+      .= n - m - 1 by A19,CARD_1:50
       .= n - (m + 1);
 A25: C = Cw \/ {w} by A21,Lm1;
 A26: C \/ Bv \ {w} \/ {v} = (Cw \/ (Bv \ {w})) \/ {v} by XBOOLE_1:42
@@ -1187,20 +1187,6 @@ A30: dom q = Seg len p & for i being Nat st i in Seg len p holds P[i, q.i];
 A31: dom p = dom q by A30,FINSEQ_1:def 3;
   now
     let x be set;
-    assume x in rng q;
-    then consider i being set such that
-A32: i in dom q and
-A33: x = q.i by FUNCT_1:def 5;
-    reconsider i as Element of NAT by A32;
-    consider L being Linear_Combination of B such that
-A34: x = Carrier(L) and
-A35: Sum(L) = p.i by A30,A32,A33;
-    thus x in Car by A31,A32,A34,A35;
-  end;
-  then
-A36: rng q c= Car by TARSKI:def 3;
-  now
-    let x be set;
     assume x in Car;
     then consider L being Linear_Combination of B such that
 A37: x = Carrier(L) and
@@ -1213,7 +1199,7 @@ A39: i in dom p & Sum(L) = p.i by A38;
   end;
   then Car c= rng q by TARSKI:def 3;
   then
-A40: Car is finite by A36,XBOOLE_0:def 10;
+A40: Car is finite;
   for R being set st R in Car holds R is finite
   proof
     let R be set;
@@ -1236,7 +1222,7 @@ A1: V is finite-dimensional;
   then consider B being Basis of V such that
 A2: A c= B by VECTSP_7:27;
   B is finite by A1,Th24;
-  hence A is finite by A2,FINSET_1:13;
+  hence A is finite by A2;
 end;
 
 theorem Th26:
@@ -1282,7 +1268,7 @@ A1: V is finite-dimensional;
   consider I being Basis of V such that
 A2: A c= I by Th17;
   I is finite by A1,Th24;
-  then A is finite by A2,FINSET_1:13;
+  then A is finite by A2;
   hence thesis by MATRLIN:def 3;
 end;
 
@@ -1506,7 +1492,7 @@ A3: v <> 0.V and
 A4: (Omega).V = Lin{v};
   {v} is linearly-independent & Lin{v} = the VectSpStr of V
   by A3,A4,VECTSP_4:def 4,VECTSP_7:5;
-  then {v} is Basis of V & Card {v} = 1 by CARD_1:79,VECTSP_7:def 3;
+  then {v} is Basis of V & Card {v} = 1 by CARD_1:50,VECTSP_7:def 3;
   hence dim V = 1 by Def2;
 end;
 
@@ -1526,7 +1512,7 @@ A3: u in I by CARD_1:47,XBOOLE_0:def 1;
     now
       assume I c= {u};
       then card I <= card {u} by NAT_1:44;
-      then 2 <= 1 by A2,CARD_1:79;
+      then 2 <= 1 by A2,CARD_1:50;
       hence contradiction;
     end;
     then consider v being set such that
@@ -1571,10 +1557,9 @@ theorem Th36:
 proof
   reconsider V as VectSp of GF;
   reconsider W1, W2 as Subspace of V;
-A1: W1 /\ W2 is finite-dimensional by Th28;
-  then consider I being finite Subset of W1 /\ W2 such that
+  consider I being finite Subset of W1 /\ W2 such that
 A2: I is Basis of W1 /\ W2 by Def1;
-A3: Card I = dim(W1 /\ W2) by A1,A2,Def2;
+A3: Card I = dim(W1 /\ W2) by A2,Def2;
   W1 /\ W2 is Subspace of W1 by VECTSP_5:20;
   then consider I1 being Basis of W1 such that
 A4: I c= I1 by A2,Th17;
@@ -1584,7 +1569,6 @@ A4: I c= I1 by A2,Th17;
 A5: I c= I2 by A2,Th17;
   reconsider I2 as finite Subset of W2 by Th24;
 A6: Card I2 = dim W2 by Def2;
-A7: W1 + W2 is finite-dimensional by Th28;
   set A = I1 \/ I2;
   now
     let v be set;
@@ -1819,12 +1803,12 @@ A70:    x = v & L2.v <> 0.GF by VECTSP_6:19;
         hence contradiction by A66,A70,RLVECT_1:10;
       end;
     end;
-    hence Carrier(L) = {} by A60,XBOOLE_1:3;
+    hence Carrier(L) = {} by A60;
   end;
   then A is linearly-independent by VECTSP_7:def 1;
   then A is Basis of W1 + W2 by A29,VECTSP_7:def 3;
   then dim(W1 + W2) + dim(W1 /\ W2)
-  = card I1 + card I2 + - card I + card I by A3,A7,A20,Def2
+  = card I1 + card I2 + - card I + card I by A3,A20,Def2
     .= dim W1 + dim W2 by A6,Def2;
   hence thesis;
 end;
@@ -1864,7 +1848,6 @@ proof
 A1: n <= dim V;
   consider I being finite Subset of V such that
 A2: I is Basis of V by Def1;
-A3: n is Element of NAT by ORDINAL1:def 13;
   n <= card I by A1,A2,Def2;
   then consider A being finite Subset of I such that
 A4: Card A = n by FINSEQ_4:87;

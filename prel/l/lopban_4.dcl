@@ -39,18 +39,18 @@
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="85"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="92"/>
-<Adjective nr="99"/>
-<Adjective nr="106"/>
-<Adjective nr="110"/>
-<Adjective nr="112"/>
-<Adjective nr="123"/>
+<Adjective nr="89"/>
+<Adjective nr="93"/>
+<Adjective nr="100"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -66,13 +66,13 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
+<Adjective nr="17">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="125">
+<Adjective nr="126">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

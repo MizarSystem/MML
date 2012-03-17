@@ -42,11 +42,11 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="120"/>
+<Adjective nr="51"/>
 <Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,7 +60,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="51">
+<Adjective nr="52">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -71,15 +71,15 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="47"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="42"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="89"/>
-<Adjective nr="120"/>
+<Adjective nr="51"/>
+<Adjective nr="90"/>
 <Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICE7" nr="3">
@@ -103,10 +103,10 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
-<Adjective nr="89"/>
-<Adjective nr="120"/>
+<Adjective nr="47"/>
+<Adjective nr="90"/>
 <Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -54,8 +54,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>
@@ -103,8 +103,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>
@@ -121,8 +121,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>
@@ -203,8 +203,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>
@@ -243,8 +243,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>
@@ -261,8 +261,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="165">
 <Num nr="1"/>
 <Func kind="K" nr="372"/>

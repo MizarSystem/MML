@@ -10,8 +10,9 @@ environ
       SUBSET_1, SETFAM_1, TOPS_1, CARD_4, TARSKI, RELAT_1, RELAT_2, WAYBEL_0,
       YELLOW_0, ORDINAL2, LATTICE3, LATTICES, QUANTAL1, WAYBEL_6, WAYBEL_3,
       FINSUB_1, FILTER_0, FREEALG, ORDERS_2, REALSET1, YELLOW_1, TOPS_3,
-      YELLOW_8, CANTOR_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
+      YELLOW_8, CANTOR_1, ARYTM, SUPINF_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1,
+      CARD_1, NUMBERS, NAT_1,
       RELAT_1, SETFAM_1, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, FINSUB_1,
       DOMAIN_1, XXREAL_0, FUNCT_2, STRUCT_0, CARD_4, PRE_TOPC, ORDERS_2,
       TOPS_1, TOPS_2, TOPS_3, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_4,
@@ -22,7 +23,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, FINSUB_1,
       XREAL_0, CARD_1, FINSEQ_1, STRUCT_0, LATTICE3, YELLOW_0, CANTOR_1,
       WAYBEL_0, YELLOW_1, WAYBEL_1, YELLOW_4, WAYBEL_3, YELLOW_6, WAYBEL_6,
-      WAYBEL_7, YELLOW_8;
+      WAYBEL_7, YELLOW_8, SETWISEO, RLVECT_2, CARD_4;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, WAYBEL_0, PRE_TOPC, TOPS_2, YELLOW_4, WAYBEL_6, YELLOW_8,
       CARD_4, LATTICE3, XBOOLE_0, SUBSET_1, STRUCT_0;
@@ -72,7 +73,7 @@ A6: {f.m where m is Element of NAT: m in {0} \/ Seg n} is finite by CARD_2:68;
 A7: q = f.m and m <= n;
     thus q in the carrier of L by A7;
   end;
-  hence thesis by A1,A2,A6,FINSET_1:13;
+  hence thesis by A1,A2,A6;
 end;
 
 definition
@@ -99,64 +100,6 @@ definition
   for X being Subset of T st X in F holds X is dense;
 end;
 
-registration
-  let S be empty 1-sorted;
-  cluster -> empty Subset of S;
-  coherence by XBOOLE_1:3;
-end;
-
-registration
-  cluster finite -> countable set;
-  coherence by CARD_4:43;
-end;
-
-registration :: repeated, to be round up to countable !!!, A.T. 2007.04.09
-  cluster non empty finite set;
-  existence
-  proof
-    take {0};
-    thus thesis;
-  end;
-end;
-
-registration
-  let S be 1-sorted;
-  cluster empty Subset of S;
-  existence
-  proof
-    reconsider A = {} as Subset of S by XBOOLE_1:2;
-    take A;
-    thus thesis;
-  end;
-end;
-
-registration
-  let L be non empty RelStr;
-  cluster non empty finite Subset of L;
-  existence
-  proof
-    consider a being Element of L;
-    take {a};
-    thus thesis;
-  end;
-end;
-
-registration
-  cluster infinite countable set;
-  existence by CARD_4:44;
-end;
-
-registration
-  let S be 1-sorted;
-  cluster empty Subset-Family of S;
-  existence
-  proof
-    reconsider A = {} as Subset-Family of S by XBOOLE_1:2;
-    take A;
-    thus thesis;
-  end;
-end;
-
 canceled;
 
 theorem Th2:
@@ -164,19 +107,19 @@ theorem Th2:
 proof
   let X, Y be set such that
 A1: Card X c= Card Y;
-  assume Card Y c= alef 0;
-  hence Card X c= alef 0 by A1,XBOOLE_1:1;
+  assume Card Y c= omega;
+  hence Card X c= omega by A1,XBOOLE_1:1;
 end;
 
 theorem Th3:
-  for A being infinite countable set holds NAT,A are_equipotent
+  for A being denumerable set holds NAT,A are_equipotent
 proof
-  let A be infinite countable set;
-  not Card A in alef 0 by CARD_4:2;
+  let A be denumerable set;
+  not Card A in omega by CARD_4:2;
   then
-A1: alef 0 c= Card A by CARD_1:14;
-  Card A c= alef 0 by CARD_4:def 1;
-  then Card NAT = Card A by A1,CARD_1:38,XBOOLE_0:def 10;
+A1: omega c= Card A by CARD_1:14;
+  Card A c= omega by CARD_4:def 1;
+  then Card NAT = Card A by A1,CARD_1:84,XBOOLE_0:def 10;
   hence NAT,A are_equipotent by CARD_1:21;
 end;
 
@@ -743,10 +686,10 @@ A2: for x being Element of C holds P[{x}]
     "/\"({x},L) = x by YELLOW_0:39;
     hence P[{x}] by TARSKI:def 1,YELLOW_0:38;
   end;
-A3: for B1, B2 being Element of Fin C st B1 <> {} & B2 <> {}
+A3: for B1, B2 being non empty Element of Fin C
   holds P[B1] & P[B2] implies P[B1 \/ B2]
   proof
-    let B1, B2 be Element of Fin C such that B1 <> {} & B2 <> {} and
+    let B1, B2 be non empty Element of Fin C such that
 A4: P[B1] & P[B2];
     B1 c= C & B2 c= C by FINSUB_1:def 5;
     then "/\"(B1,L) <= "/\"(B2,L) or "/\"(B2,L) <= "/\"(B1,L) by A1,A4;
@@ -756,7 +699,7 @@ A5: "/\"(B1,L) "/\" "/\"(B2,L) = "/\"(B1,L) or "/\"(B1,L) "/\" "/\"(B2,L ) =
     "/\"(B1 \/ B2,L) = "/\"(B1, L) "/\" "/\"(B2, L) by A4,YELLOW_2:4;
     hence P[B1 \/ B2] by A4,A5,XBOOLE_0:def 2,YELLOW_2:4;
   end;
-A6: for B being Element of Fin C st B <> {} holds P[B]
+A6: for B being non empty Element of Fin C holds P[B]
   from SETWISEO:sch 3(A2,A3);
   Y in Fin C by FINSUB_1:def 5;
   hence "/\"(Y,L) in Y by A6;
@@ -777,10 +720,10 @@ A2: for x being Element of C holds P[{x}]
     "\/"({x},L) = x by YELLOW_0:39;
     hence P[{x}] by TARSKI:def 1,YELLOW_0:38;
   end;
-A3: for B1, B2 being Element of Fin C st B1 <> {} & B2 <> {}
+A3: for B1, B2 being non empty Element of Fin C
   holds P[B1] & P[B2] implies P[B1 \/ B2]
   proof
-    let B1, B2 be Element of Fin C such that B1 <> {} & B2 <> {} and
+    let B1, B2 be non empty Element of Fin C such that
 A4: P[B1] & P[B2];
     B1 c= C & B2 c= C by FINSUB_1:def 5;
     then "\/"(B1,L) <= "\/"(B2,L) or "\/"(B2,L) <= "\/"(B1,L) by A1,A4;
@@ -790,7 +733,7 @@ A5: "\/"(B1,L) "\/" "\/"(B2,L) = "\/"(B1,L) or "\/"(B1,L) "\/" "\/"(B2,L ) =
     "\/"(B1 \/ B2,L) = "\/"(B1, L) "\/" "\/"(B2, L) by A4,YELLOW_2:3;
     hence P[B1 \/ B2] by A4,A5,XBOOLE_0:def 2,YELLOW_2:3;
   end;
-A6: for B being Element of Fin C st B <> {} holds P[B]
+A6: for B being non empty Element of Fin C holds P[B]
   from SETWISEO:sch 3(A2,A3);
   Y in Fin C by FINSUB_1:def 5;
   hence "\/"(Y,L) in Y by A6;
@@ -963,7 +906,6 @@ A1: rng f = G and
 A2: for n being Element of NAT holds
   g.n = "/\"({f.m where m is Element of NAT: m <= n},L);
 A3: g.0 in rng g by FUNCT_2:6;
-A4: G is_coarser_than rng g by A1,A2,Th35;
   rng g is_coarser_than F
   proof
     let a be Element of L;
@@ -990,7 +932,7 @@ A9: "/\"(Y,L) in F by WAYBEL_0:43;
     g.n = "/\"(Y,L) by A2;
     hence ex b being Element of L st b in F & b <= a by A6,A9;
   end;
-  hence rng g is GeneratorSet of F by A3,A4,Th34;
+  hence rng g is GeneratorSet of F by A3,A1,A2,Th35,Th34;
 end;
 
 begin  :: On the Baire Category Theorem

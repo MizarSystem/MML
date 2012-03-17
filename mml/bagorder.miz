@@ -21,11 +21,11 @@ environ
       FINSEQOP, RFINSEQ, RECDEF_1;
  constructors DOMAIN_1, FINSEQOP, RFINSEQ, BINARITH, PRE_CIRC, WSIERP_1,
       PRALG_1, TRIANG_1, WAYBEL_4, WELLFND1, POLYNOM2, DICKSON, SEQ_1,
-      RECDEF_1, BINOP_2;
+      RECDEF_1, BINOP_2, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED,
       FINSEQ_1, CARD_5, STRUCT_0, ORDERS_2, WAYBEL_0, YELLOW_1, POLYNOM1,
-      DICKSON, VALUED_0;
+      DICKSON, VALUED_0, XXREAL_2;
  requirements SUBSET, NUMERALS, REAL, BOOLE, ARITHM;
  definitions TARSKI, RELAT_2, WELLFND1, FINSEQ_2;
  theorems WELLORD1, TARSKI, RELAT_2, RELSET_1, ZFMISC_1, ORDERS_2, NAT_1,
@@ -35,27 +35,24 @@ environ
       ORDINAL1, FUNCT_2, CARD_2, MCART_1, FINSUB_1, ORDERS_1, FUNCT_7, CARD_4,
       TRIANG_1, WELLORD2, FINSEQ_3, FINSEQ_5, SEQ_4, FINSEQOP, RFINSEQ,
       EULER_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XREAL_1, XXREAL_0, VALUED_0,
-      VALUED_1;
+      VALUED_1, XXREAL_2;
  schemes NAT_1, RELSET_1, FINSET_1, RECDEF_1, FUNCT_2, ORDINAL1,
  CLASSES1;
 
 begin :: Preliminaries
 
 theorem Th1:
-  for x,y,z being set st z in x & z in y holds x \ {z} = y \ {z} iff x = y
+  for x,y,z being set st z in x & z in y holds x \ {z} = y \ {z} implies x = y
 proof
   let x,y,z be set;
   assume
 A1: z in x & z in y;
-  hereby
     assume
 A2: x \ {z} = y \ {z};
     thus x = x \/ {z} by A1,ZFMISC_1:46
       .= (y \ {z}) \/ {z} by A2,XBOOLE_1:39
       .= y \/ {z} by XBOOLE_1:39
       .= y by A1,ZFMISC_1:46;
-  end;
-  thus thesis;
 end;
 
 theorem
@@ -106,7 +103,7 @@ A2:   (f|X).x <> 0 by POLYNOM1:def 7;
       then f.x <> 0 by A1,A2,FUNCT_1:70;
       hence x in support f by POLYNOM1:def 7;
     end;
-    then support (f|X) is finite by FINSET_1:13;
+    then support (f|X) is finite;
     hence thesis by POLYNOM1:def 8;
   end;
 end;
@@ -330,7 +327,7 @@ registration
 A1: 0 qua Nat+1 < n+1 by XREAL_1:10;
     now per cases by ORDINAL1:26;
       suppose 1 c= n;
-        hence Card {y} c=n by CARD_1:79;
+        hence Card {y} c=n by CARD_1:50;
       end;
       suppose
 A2:     n in 1;
@@ -786,8 +783,8 @@ A12: rng xs = sb \/ sbs'b by FINSEQ_1:44;
   then reconsider h as FinSequence by A3,FINSEQ_1:20;
   per cases;
   suppose n = {};
-    then b = {} by A3,RELAT_1:64;
-    then f = {} & g = {} by A1,A2,RELAT_1:62;
+    then b = {} by A3;
+    then f = {} & g = {} by A1,A2;
     hence Sum f = Sum g;
   end;
   suppose n <> {};
@@ -1068,12 +1065,8 @@ A1: b divides a;
   let x be set;
   assume x in support b;
   then
-A2: b.x <> 0 by POLYNOM1:def 7;
-  now
-    assume a.x = 0;
-    then b.x <= 0 & 0 <= b.x by A1,POLYNOM1:def 13;
-    hence contradiction by A2;
-  end;
+ b.x <> 0 by POLYNOM1:def 7;
+  then a.x <> 0 by A1,POLYNOM1:def 13;
   hence x in support a by POLYNOM1:def 7;
 end;
 
@@ -1541,7 +1534,7 @@ A12:        k in dom s & s.k = x by A7,FINSEQ_2:11;
 A13:  P[j] and
 A14:  for k being Nat st P[k] holds k <= j from NAT_1:sch 6(A8,A9);
 A15:  s.j in rng s by A13,FUNCT_1:12;
-      then reconsider J = s.j as Ordinal by A7,ORDINAL1:23;
+      then reconsider J = s.j as Ordinal by A7;
       now
         take J;
         thus J in n by A7,A15;
@@ -1597,7 +1590,7 @@ A25:  rng s = support a by TRIANG_1:def 2;
 A26:  len s in dom s by FINSEQ_5:6,RELAT_1:60;
       then
 A27:  s.len s in rng s by FUNCT_1:12;
-      then reconsider j = s.len s as Ordinal by A25,ORDINAL1:23;
+      then reconsider j = s.len s as Ordinal by A25;
       now
         take j;
         thus j in n by A25,A27;
@@ -1714,7 +1707,7 @@ A13:    b.i < a.i and for k being Ordinal st i in k & k in o holds b.k = a.k
 A14:  len s in dom s by FINSEQ_5:6,RELAT_1:60;
       then
 A15:  s.len s in rng s by FUNCT_1:12;
-      then reconsider j = s.len s as Ordinal by A10,ORDINAL1:23;
+      then reconsider j = s.len s as Ordinal by A10;
       defpred P[set,set] means ex b being bag of o st f.$1 = b & $2 = b.j;
 A16:  now
         let x be Element of NAT;
@@ -1856,7 +1849,7 @@ A49:      o = dom b & o = dom b1 by PBOOLE:def 3;
           now
             let m be set such that
 A50:        m in o;
-A51:        m is Ordinal by A50,ORDINAL1:23;
+A51:        m is Ordinal by A50;
             per cases by A51,ORDINAL1:24;
             suppose m in j;
               then (b|j).m = b.m & (b1|j).m = b1.m by FUNCT_1:72;
@@ -1866,7 +1859,7 @@ A51:        m is Ordinal by A50,ORDINAL1:23;
               hence b.m = b1.m by A42,A43,A45,A46,A47;
             end;
             suppose j in m;
-              then b.m = 0 & b1.m = 0 by A18,A42,A43,A50,A51;
+              then b.m = 0 & b1.m = 0 by A18,A42,A43,A50;
               hence b.m = b1.m;
             end;
           end;
@@ -2395,7 +2388,7 @@ A13: mTD c= field(gilo)
 A14:  x = y and y in Y and TotDegree y = min TD;
       thus x in field gilo by A2,A14;
     end;
-    min TD in TD by SEQ_4:def 6;
+    min TD in TD by XXREAL_2:def 7;
     then consider y being Element of Bags o such that
 A15: TotDegree y = min TD and
 A16: y in Y;
@@ -2425,7 +2418,7 @@ A27:  z <> a & [z,a] in gilo by A25,WELLORD1:def 1;
       suppose
 A28:    TotDegree z < TotDegree a;
         TotDegree z in TD by A26;
-        hence contradiction by A22,A23,A28,SEQ_4:def 6;
+        hence contradiction by A22,A23,A28,XXREAL_2:def 7;
       end;
       suppose
 A29:    TotDegree z = TotDegree a;
@@ -3419,7 +3412,7 @@ A8:   P[0]
       proof
         let x be Element of Fin CR such that
 A9:     Card x = 0;
-        x = {} by A9,CARD_2:59;
+        x = {} by A9;
         then [x,x] in (FOAR).0 by A1;
         hence [x,x] in union rng FOAR by A7,TARSKI:def 4;
       end;
@@ -3463,7 +3456,7 @@ A18:  x c= CR & x is finite by A17,FINSUB_1:def 5;
         let a,b be Element of Fin CR such that
 A19:    Card a = 0 & [a,b] in X & [b,a] in X;
         reconsider a'=a as finite set;
-        a' = {} by A19,CARD_2:59;
+        a' = {} by A19;
         hence a = b by A19,Th37;
       end;
       then
@@ -3476,7 +3469,7 @@ A21:    for a,b being Element of Fin CR
 A22:    Card a = n+1 & [a,b] in X & [b,a] in X;
         per cases by A22,Th36;
         suppose a = {};
-          hence a = b by A22,Th37;
+          hence a = b by A22;
         end;
         suppose
 A23:      a <> {} & b <>{} & PosetMax a <> PosetMax b &
@@ -3558,7 +3551,7 @@ A34:  x in Fin CR & y in Fin CR & z in Fin CR & [x,y] in X & [y,z] in X;
         let a,b,c be Element of Fin CR such that
 A35:    Card a = 0 & [a,b] in X & [b,c] in X;
         reconsider a'=a as finite set;
-        a' = {} by A35,CARD_2:59;
+        a' = {} by A35;
         hence [a,c] in X by Th36;
       end;
       then
@@ -3728,7 +3721,7 @@ A1: FinPoset R = RelStr(#FCR, FIR#);
       now
         let a,b be Element of Fin CR such that
 A2:     Card a = 0;
-        a = {} by A2,CARD_2:59;
+        a = {} by A2;
         hence [a,b] in FIR or [a,b] in FIR by A1,Th40;
       end;
       then
@@ -3791,8 +3784,7 @@ A10:              Card ax = n by A5,Lm1;
       then
 A11:  for n being Element of NAT st P[n] holds P[n+1];
 A12:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A11);
-      x' in Fin CR;
-      then consider n being Nat such that
+      consider n being Nat such that
 A13:  x,n are_equipotent by CARD_1:74;
 A14:  n in NAT by ORDINAL1:def 13;
       Card x' = n by A13,CARD_1:def 5;

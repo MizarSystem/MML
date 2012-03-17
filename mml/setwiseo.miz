@@ -173,7 +173,7 @@ A1: A c= B;
   B c= X by FINSUB_1:def 5;
   then
 A2: A c= X by A1,XBOOLE_1:1;
-  A is finite by A1,FINSET_1:13;
+  A is finite by A1;
   hence A is Element of Fin X by A2,FINSUB_1:def 5;
 end;
 
@@ -239,7 +239,7 @@ A2: for a being Element of A() holds a in y iff X[a] from SUBSET_1:sch 3;
     reconsider B = B() as Subset of A() by FINSUB_1:def 5;
     for x being Element of A() holds x in y implies x in B by A2;
     then y c= B() by SUBSET_1:7;
-    then y is finite by FINSET_1:13;
+    then y is finite;
     then reconsider y as Element of Fin A() by FINSUB_1:def 5;
     take y' = y;
     thus X[x,y'] by A2;
@@ -379,14 +379,14 @@ A8: ex B' being Element of Fin X() st B' = A & P[B'];
 end;
 
 scheme FinSubInd2{ X() -> non empty set, P[Element of Fin X()] } :
-  for B being Element of Fin X() st B <> {} holds P[B]
+  for B being non empty Element of Fin X() holds P[B]
 provided
 A1: for x being Element of X() holds P[{.x.}]
 and
-A2: for B1,B2 being Element of Fin X() st B1 <> {} & B2 <> {}
-holds P[B1] & P[B2] implies P[B1 \/ B2]
+A2: for B1,B2 being non empty Element of Fin X() st P[B1] & P[B2]
+  holds P[B1 \/ B2]
 proof
-  let B be Element of Fin X();
+  let B be non empty Element of Fin X();
 A3: B is finite;
   defpred X[set] means
   $1 <> {} implies ex B' being Element of Fin X() st B' = $1 & P[B'];
@@ -998,7 +998,7 @@ A6:   B = {};
 A7:   B <> {};
       thus F $$ (B1 \/ (B \/ {.x.}),f)
       = F $$ (B1 \/ B \/ {.x.},f) by XBOOLE_1:4
-        .= F.(F.(F $$ (B1,f),F $$ (B,f)), f.x) by A1,A5,A7,Th29,XBOOLE_1:15
+        .= F.(F.(F $$ (B1,f),F $$ (B,f)), f.x) by A1,A5,A7,Th29
         .= F.(F $$ (B1,f),F.(F $$ (B,f), f.x)) by A1,BINOP_1:def 3
         .= F.(F $$ (B1,f),F $$ (B \/ {.x.},f)) by A1,A7,Th29;
     end;
@@ -1031,7 +1031,7 @@ A1: F is commutative & F is associative & F is idempotent;
   let B,C be Element of Fin X such that
 A2: B <> {} and
 A3: B c= C;
-  C <> {} by A2,A3,XBOOLE_1:3;
+  C <> {} by A2,A3;
   hence F.(F$$(B,f),F$$(C,f)) = F$$(B \/ C,f) by A1,A2,Th30
     .= F$$(C,f) by A3,XBOOLE_1:12;
 end;
@@ -1055,11 +1055,10 @@ A5: x in { x } by TARSKI:def 1;
     thus F$$({.x.},f) = f.x by A2,Th26
       .= a by A4,A5;
   end;
-A6: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
+A6: for B1,B2 being non empty Element of Fin X
   holds X[B1] & X[B2] implies X[B1 \/ B2]
   proof
-    let B1,B2 be Element of Fin X such that
-A7: B1 <> {} & B2 <> {};
+    let B1,B2 be non empty Element of Fin X;
     assume that
 A8: (for b being Element of X st b in B1 holds f.b = a) implies F$$(B1,f) = a
     and
@@ -1078,10 +1077,10 @@ A11: now
       then b in B1 \/ B2 by XBOOLE_0:def 2;
       hence f.b = a by A10;
     end;
-    hence F$$(B1 \/ B2,f) = F.(a,a) by A2,A7,A8,A9,A11,Th30
+    hence F$$(B1 \/ B2,f) = F.(a,a) by A2,A8,A9,A11,Th30
       .= a by A2,BINOP_1:def 4;
   end;
-  for B being Element of Fin X st B<>{} holds X[B] from FinSubInd2(A3,A6);
+  for B being non empty Element of Fin X holds X[B] from FinSubInd2(A3,A6);
   hence thesis by A1;
 end;
 
@@ -1230,19 +1229,18 @@ A4: for x being Element of X holds X[{.x.}]
       .= (G[;](a,f)).x by FUNCOP_1:66
       .= F$$({.x.},G[;](a,f)) by A1,Th26;
   end;
-A5: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
+A5: for B1,B2 being non empty  Element of Fin X
   holds X[B1] & X[B2] implies X[B1 \/ B2]
   proof
-    let B1,B2 be Element of Fin X such that
-A6: B1 <> {} & B2 <> {};
+    let B1,B2 be non empty Element of Fin X;
     assume that
 A7: G.(a,F$$(B1,f)) = F$$(B1,G[;](a,f)) and
 A8: G.(a,F$$(B2,f)) = F$$(B2,G[;](a,f));
-    thus G.(a,F$$(B1 \/ B2,f)) = G.(a,F.(F$$(B1,f),F$$(B2,f))) by A1,A6,Th30
+    thus G.(a,F$$(B1 \/ B2,f)) = G.(a,F.(F$$(B1,f),F$$(B2,f))) by A1,Th30
       .= F.(F$$(B1,G[;](a,f)), F$$(B2,G[;] (a,f))) by A2,A7,A8,BINOP_1:23
-      .= F$$(B1 \/ B2,G[;](a,f)) by A1,A6,Th30;
+      .= F$$(B1 \/ B2,G[;](a,f)) by A1,Th30;
   end;
-  for B being Element of Fin X st B <> {} holds X[B] from FinSubInd2(A4,A5);
+  for B being non empty Element of Fin X holds X[B] from FinSubInd2(A4,A5);
   hence G.(a,F$$(B,f)) = F$$(B,G[;](a,f)) by A3;
 end;
 
@@ -1267,19 +1265,18 @@ A4: for x being Element of X holds X[{.x.}]
       .= (G[:](f,a)).x by FUNCOP_1:60
       .= F$$({.x.},G[:](f,a)) by A1,Th26;
   end;
-A5: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
+A5: for B1,B2 being non empty Element of Fin X
   holds X[B1] & X[B2] implies X[B1 \/ B2]
   proof
-    let B1,B2 be Element of Fin X such that
-A6: B1 <> {} & B2 <> {};
+    let B1,B2 be non empty Element of Fin X;
     assume that
 A7: G.(F$$(B1,f),a) = F$$(B1,G[:](f,a)) and
 A8: G.(F$$(B2,f),a) = F$$(B2,G[:](f,a));
-    thus G.(F$$(B1 \/ B2,f),a) = G.(F.(F$$(B1,f),F$$(B2,f)),a) by A1,A6,Th30
+    thus G.(F$$(B1 \/ B2,f),a) = G.(F.(F$$(B1,f),F$$(B2,f)),a) by A1,Th30
       .= F.(F$$(B1,G[:](f,a)), F$$(B2,G[:] (f,a))) by A2,A7,A8,BINOP_1:23
-      .= F$$(B1 \/ B2,G[:](f,a)) by A1,A6,Th30;
+      .= F$$(B1 \/ B2,G[:](f,a)) by A1,Th30;
   end;
-  for B being Element of Fin X st B <> {} holds X[B] from FinSubInd2(A4,A5);
+  for B being non empty Element of Fin X holds X[B] from FinSubInd2(A4,A5);
   hence G.(F$$(B,f),a) = F$$(B,G[:](f,a)) by A3;
 end;
 
@@ -1314,13 +1311,12 @@ A4: for x being Element of X holds X[{.x.}]
       .= (g*f).x by FUNCT_2:21
       .= F$$({.x.},g*f) by A1,Th26;
   end;
-A5: for B1,B2 being Element of Fin X st B1 <> {} & B2 <> {}
+A5: for B1,B2 being non empty Element of Fin X
   holds X[B1] & X[B2] implies X[B1 \/ B2]
   proof
-    let B1,B2 be Element of Fin X such that
-A6: B1 <> {} & B2 <> {};
+    let B1,B2 be non empty Element of Fin X;
     B1 c= X & B2 c= X by FINSUB_1:def 5;
-    then X /\ B1 <> {} & X /\ B2 <> {} by A6,XBOOLE_1:28;
+    then X /\ B1 <> {} & X /\ B2 <> {} by XBOOLE_1:28;
     then X meets B1 & X meets B2 by XBOOLE_0:def 7;
     then
 A7: f.:B1 <> {} & f.:B2 <> {} by A3,RELAT_1:151;
@@ -1328,9 +1324,9 @@ A7: f.:B1 <> {} & f.:B2 <> {} by A3,RELAT_1:151;
 A8: F$$(f.:B1,g) = F$$(B1,g*f) & F$$(f.:B2,g) = F$$(B2,g*f);
     thus F$$(f.:(B1 \/ B2),g) = F$$(f.:B1 \/ f.:B2, g) by RELAT_1:153
       .= F.(F$$(f.:B1,g), F$$(f.:B2,g)) by A1,A7,Th30
-      .= F$$(B1 \/ B2,g*f) by A1,A6,A8,Th30;
+      .= F$$(B1 \/ B2,g*f) by A1,A8,Th30;
   end;
-  for B being Element of Fin X st B <> {} holds X[B] from FinSubInd2(A4,A5);
+  for B being non empty Element of Fin X holds X[B] from FinSubInd2(A4,A5);
   hence F$$(f.:B,g) = F$$(B,g*f) by A2;
 end;
 

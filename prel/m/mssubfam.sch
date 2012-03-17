@@ -56,8 +56,8 @@
 <For>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="8">
+<Adjective nr="6"/>
+<Adjective nr="9">
 <Func kind="K" nr="35">
 <Func kind="F" nr="2"/>
 <Var nr="2"/>

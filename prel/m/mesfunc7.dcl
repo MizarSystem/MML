@@ -10,7 +10,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -21,15 +20,14 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="SETWISEO"/>
@@ -51,8 +49,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="57"/>
-<Adjective nr="68"/>
+<Adjective nr="44"/>
+<Adjective nr="67"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MESFUNC7" nr="2">
@@ -65,12 +63,12 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="27"/>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MESFUNC7" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="219"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -90,7 +88,7 @@
 </FCluster>
 <FCluster aid="MESFUNC7" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="219"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -100,7 +98,7 @@
 </Func>
 <Func kind="K" nr="48"/>
 </Adjective>
-<Adjective nr="70">
+<Adjective nr="69">
 <Func kind="K" nr="48"/>
 </Adjective>
 </Cluster>
@@ -113,7 +111,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -125,7 +123,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="4">
@@ -134,7 +132,7 @@
 <Func kind="K" nr="48"/>
 </Func>
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="5">
@@ -148,7 +146,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="6">
@@ -158,7 +156,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -166,7 +164,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -178,7 +176,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="57"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 </Registrations>

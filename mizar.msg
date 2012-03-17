@@ -5,6 +5,8 @@ Mizar Errors Explanation File
 It is not true
 # 4
 This inference is not accepted
+# 8
+Too many instantiations
 # 9
 Too many instantiations
 # 10

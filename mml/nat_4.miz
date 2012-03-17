@@ -13,22 +13,23 @@ environ
  notations SUBSET_1, XXREAL_0, PREPOWER, TARSKI, XBOOLE_0, ORDINAL1, CARD_1,
       NUMBERS, XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, BINARITH, ABIAN,
       SQUARE_1, NEWTON, FINSET_1, PEPIN, NAT_3, RELAT_1, REAL_1, FUNCT_1,
-      FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, PRE_CIRC, POWER,
-      MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1, RECDEF_1;
+      FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, XXREAL_2,
+      POWER, MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1, RECDEF_1;
  constructors REAL_1, NAT_1, NAT_D, FINSEQOP, PREPOWER, POWER, BINARITH,
       PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3, SEQ_1, RECDEF_1,
-      BINOP_2;
+      BINOP_2, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, FINSEQ_2,
-      RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0, VALUED_1;
+      RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0, VALUED_1,
+      XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON;
  theorems TARSKI, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1,
       CARD_2, FINSET_1, SQUARE_1, EULER_1, EULER_2, BINARITH, PREPOWER, POWER,
       ABSVALUE, NEWTON, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1,
-      CARD_4, XBOOLE_0, PRE_CIRC, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
+      CARD_4, XBOOLE_0, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
       FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1, PROB_3, INTEGRA5,
-      COMPTRIG, XXREAL_0, NAT_D, VALUED_1;
+      COMPTRIG, XXREAL_0, NAT_D, VALUED_1, XXREAL_2;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -61,7 +62,7 @@ theorem Th3:
   for a,n being Nat st a>1 holds a|^n > n
 proof
   defpred P[Nat] means for a being Nat st a>1 holds a|^$1 > $1;
-A1: P[0] by NEWTON:9;
+A1: P[0];
 A2: for n being Nat holds P[n] implies P[n+1]
   proof
     let n be Nat;
@@ -200,7 +201,7 @@ A29:  (n+1)!<>0 by NEWTON:23;
 A30:  (n choose k)/(((n+1) choose k)/((n+1) choose k)) =
       (nk+1)/(n+1)*((n+1) choose k) by A27,XCMPLX_1:83;
 A31:  n choose k = (n choose k)/1
-        .= (nk+1)/(n+1)*((n+1) choose k) by A26,A28,A29,A30,XCMPLX_1:50,60;
+        .= (nk+1)/(n+1)*((n+1) choose k) by A26,A28,A29,A30,XCMPLX_1:60;
       [\ n/2 /]<=n/2 by INT_1:def 4;
       then -[\ n/2 /] >= -n/2 by XREAL_1:26;
       then
@@ -484,8 +485,7 @@ proof
   per cases;
   suppose
 A1: n = 0;
-    4|^0 / (2*0) = 0;
-    hence thesis by A1;
+    thus thesis by A1;
   end;
   suppose n <> 0;
     then
@@ -1065,7 +1065,7 @@ A37:  card(support pfexp b)=n+1;
       assume
 A38:  for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b;
-      support pfexp b<>{} by A37,CARD_4:17;
+      support pfexp b<>{} by A37;
       then consider x being set such that
 A39:  x in support pfexp b by XBOOLE_0:def 1;
       reconsider x as Prime by A39,NAT_3:34;
@@ -1163,10 +1163,7 @@ A3: p is prime & p divides n;
 A4: not (p divides (a|^((n-'1) div q)-'1));
 A5: p > 1 & q > 1 by A1,A3,INT_2:def 5;
   then
-A6: q|^n1 > 0 by PREPOWER:13;
-  then
-A7: k*q|^n1 > k*0 by A1,XREAL_1:70;
-  then
+A6: q|^n1 > 0;
 A8: n-1+1 > 0+1 by A1,XREAL_1:8;
   then
 A9: n-'1=n-1 by BINARITH:50;
@@ -1177,7 +1174,7 @@ A10: n1-'1=n1-1 by BINARITH:50;
   consider i being Nat such that
 A11: n=p*i by A3,NAT_D:def 3;
   reconsider i as Element of NAT by ORDINAL1:def 13;
-  i*p<>0 by A1,A7,A11;
+  i*p<>0 by A1,A11;
   then
 A12: a|^(n-'1) mod p = 1 by A2,A3,A5,A11,PEPIN:9;
   set nn=n-'1;
@@ -1187,13 +1184,13 @@ A13: 1<=nn by NAT_1:13;
   then
 A14: a,p are_relative_prime by A3,A12,Th15;
   then
-A15: order(a,p) divides k*q|^(n1-'1+1) by A1,A5,A7,A9,A10,A12,PEPIN:52;
+A15: order(a,p) divides k*q|^(n1-'1+1) by A1,A5,A9,A10,A12,PEPIN:52;
   a|^((n-'1) div q)>=1
   proof
     assume a|^((n-'1) div q)<1;
     then a|^((n-'1) div q)=0 by NAT_1:14;
     then
-A16: a=0 by PREPOWER:12;
+A16: a=0;
     n-'1 + 1 > 1 by A8,BINARITH:50;
     then n-'1 >= 1 by NAT_1:13;
     then a|^(n-'1) mod n = 0*n mod n by A16,NEWTON:16
@@ -1238,8 +1235,7 @@ A2: for q being Element of NAT st q divides f & q is prime holds
   (a|^((n-'1) div q)-'1) hcf n = 1;
   assume
 A3: not (n is prime);
-  f*c>0*c by A1,XREAL_1:70;
-  then n-1+1>0+1 by A1,XREAL_1:8;
+  n-1+1>0+1 by A1,XREAL_1:8;
   then consider p be Element of NAT such that
 A4: p divides n & 1<p & p*p<=n & p is prime by A3,Lm1;
 A5: for q1 being Element of NAT st q1 in support (pfexp f) & q1 |-count f > 0
@@ -1266,7 +1262,7 @@ A13: k>0
     proof
       assume k<=0;
       then 0=d*c;
-      then d=0 by A1,XCMPLX_1:6;
+      then d=0 by A1;
       hence contradiction by A1,A11;
     end;
 A14: q1 is prime by A6,NAT_3:34;
@@ -1294,12 +1290,11 @@ A19:  q1 in support (pfexp f);
       then (pfexp f).q1<>0 by POLYNOM1:def 7;
       then q1 |-count f<>0 by A18,NAT_3:def 8;
       then
-A20:  q1 |-count f>0;
+  q1 |-count f>0;
       then
 A21:  p mod q1|^(q1 |-count f) = 1 by A5,A19;
 A22:  q1>1 by A18,INT_2:def 5;
-      then q1|^(q1 |-count f)>0 by A20,PEPIN:26;
-      then q1 |-count (q1|^(q1 |-count f)) <=
+      q1 |-count (q1|^(q1 |-count f)) <=
       q1 |-count (p-'1) by A15,A17,A18,A21,NAT_3:30,PEPIN:8;
       hence thesis by A22,NAT_3:25;
     end;
@@ -1345,8 +1340,6 @@ A2: a|^(n-'1) mod n = 1;
   assume
 A3: (a|^((n-'1) div q)-'1) hcf n = 1;
   set f=q|^n1;
-  q>1 by A1,INT_2:def 5;
-  then
 A4: 1 = f hcf d by A1,Th10;
   for q1 being Element of NAT st q1 divides f & q1 is prime holds
   ex a being Element of NAT st a|^(n-'1) mod n = 1 &
@@ -2394,7 +2387,7 @@ A12:  F.(n+1) = F2.1 by A7,A9,FINSEQ_1:def 7;
 A13:  x > 0 by A5,A12,FINSEQ_1:5;
       Product F = Product (F1^<*x*>) by A8,A9,FINSEQ_1:57
         .= Product F1 * x by RVSUM_1:126;
-      hence thesis by A11,A13,XREAL_1:131;
+      hence thesis by A11,A13;
     end;
     hence thesis;
   end;
@@ -2430,14 +2423,8 @@ A4: P[n];
       assume
 A5:   X1 c= X2 & X2 c= NAT & (not {} in X2) & card X2 = n+1;
       set A=X2;
-      now
-        let y be set;
-        assume y in A;
-        then y is Element of NAT by A5;
-        hence y is real;
-      end;
-      then reconsider A as finite non empty real-membered set
-      by A5,CARD_1:78,MEMBERED:def 3;
+      reconsider A as finite non empty real-membered set
+      by A5;
       set m = max A;
       set X11=X1 \ {m};
       set X12=X2 \ {m};
@@ -2445,7 +2432,7 @@ A6:   X11 c= X12 by A5,XBOOLE_1:33;
 A7:   X12 c= X2 by XBOOLE_1:36;
       then
 A8:   X12 c= NAT by A5,XBOOLE_1:1;
-A9:   m in X2 by PRE_CIRC:def 1;
+A9:   m in X2 by XXREAL_2:def 8;
       then
 A10:  X12 \/ {m} = X2 by ZFMISC_1:140;
 A11:  X12 /\ {m} = (X2 /\ {m}) \ {m} by XBOOLE_1:49
@@ -2453,7 +2440,7 @@ A11:  X12 /\ {m} = (X2 /\ {m}) \ {m} by XBOOLE_1:49
         .= {} by XBOOLE_1:37;
       card(X12\/{m})=card X12 + card {m} - card(X12 /\{m}) by CARD_2:64;
       then
-A12:  card X2 = card X12 + 1 - card {} by A10,A11,CARD_1:79;
+A12:  card X2 = card X12 + 1 - card {} by A10,A11,CARD_1:50;
 A13:  not {} in X12 by A5,A7;
       then
 A14:  Product Sgm X11 <= Product Sgm X12 by A4,A5,A8,A12,XBOOLE_1:33;
@@ -2466,7 +2453,7 @@ A15:    x in X12;
 A16:    x in A by A7;
         set r=x;
         reconsider r as Element of NAT by A5,A16;
-A17:    r <= m by A7,A15,PRE_CIRC:def 1;
+A17:    r <= m by A7,A15,XXREAL_2:def 8;
         not r=0 by A5,A7,A15;
         then 0 < r;
         then 0+1 < r+1 by XREAL_1:8;
@@ -2475,7 +2462,7 @@ A17:    r <= m by A7,A15,PRE_CIRC:def 1;
       end;
       then
 A18:  X12 c= Seg m by TARSKI:def 3;
-A19:  not m=0 by A5,PRE_CIRC:def 1;
+A19:  not m=0 by A5,XXREAL_2:def 8;
       then 0 < m;
       then 0+1 < m+1 by XREAL_1:8;
       then
@@ -2492,7 +2479,7 @@ A23:    n2=m by TARSKI:def 1;
         not n1 in {m} by A22,XBOOLE_0:def 4;
         then
 A24:    n1<>m by TARSKI:def 1;
-        n1 <= m by A7,A22,PRE_CIRC:def 1;
+        n1 <= m by A7,A22,XXREAL_2:def 8;
         hence n1 < n2 by A23,A24,XXREAL_0:1;
       end;
       then Product Sgm X2 = Product((Sgm X12) ^ (Sgm {m}))
@@ -2515,7 +2502,7 @@ A28:      x in X1 by XBOOLE_0:def 4;
 A29:      x in A by A5;
           set r=x;
           reconsider r as Element of NAT by A5,A29;
-A30:      r <= m by A5,A28,PRE_CIRC:def 1;
+A30:      r <= m by A5,A28,XXREAL_2:def 8;
           not r=0 by A5,A28;
           then 0 < r;
           then 0+1 < r+1 by XREAL_1:8;
@@ -2534,7 +2521,7 @@ A33:      n2=m by TARSKI:def 1;
           then
 A34:      n1<>m by TARSKI:def 1;
           n1 in X12 by A6,A32;
-          then n1 <= m by A7,PRE_CIRC:def 1;
+          then n1 <= m by A7,XXREAL_2:def 8;
           hence n1 < n2 by A33,A34,XXREAL_0:1;
         end;
         then Product Sgm X1 = Product((Sgm X11) ^ (Sgm {m}))
@@ -2591,8 +2578,7 @@ A5: F=<*>REAL by A3,FINSEQ_1:32;
     per cases by A4;
     suppose
 A6:   not(p in rng F implies p |-count a = 1);
-      rng {}={};
-      hence contradiction by A5,A6;
+      thus contradiction by A5,A6;
     end;
     suppose
 A7:   not(not(p in rng F) implies p |-count a = 0);
@@ -2929,7 +2915,7 @@ A38:        b>0
 A39:          b=0;
 A40:          (k!)*(r!)<>0 by NEWTON:25;
               (2*k+1)!<>0 by NEWTON:23;
-              hence contradiction by A36,A39,A40,XCMPLX_1:50;
+              hence contradiction by A36,A39,A40;
             end;
             for p being Element of NAT st p is prime
             holds p |-count a <= p |-count b
@@ -3184,7 +3170,7 @@ A6:   y'=y & y'<=x;
       y'=y & y'<m by A5,A6,XXREAL_0:2;
       hence thesis by NEWTON:def 7;
     end;
-    hence thesis by FINSET_1:13;
+    hence thesis;
   end;
 A7: A is non empty
   proof
@@ -3206,7 +3192,7 @@ A8: A is empty;
   end;
   then reconsider A as finite non empty real-membered set by A2,A7;
   set q = max A;
-  q in A by PRE_CIRC:def 1;
+  q in A by XXREAL_2:def 8;
   then consider q' being prime Element of NAT such that
 A9: q'=q & q'<=x;
   reconsider q as Prime by A9;
@@ -3228,7 +3214,7 @@ A11:    y'=y & y'<=q;
 A12:  y in {p where p is prime Element of NAT:p<=x};
       then consider y' being prime Element of NAT such that
 A13:  y'=y & y'<=x;
-      y'<=q by A12,A13,PRE_CIRC:def 1;
+      y'<=q by A12,A13,XXREAL_2:def 8;
       hence y in {p where p is prime Element of NAT:p<=q} by A13;
     end;
     hence thesis by TARSKI:2;
@@ -3272,8 +3258,6 @@ proof
 A1: n<>0;
   defpred P[Nat,set] means
   ($2=1 iff p|^$1 divides n) & ($2=0 iff not p|^$1 divides n);
-A2: for k being Nat,y1,y2 being set st
-  k in Seg n & P[k,y1] & P[k,y2] holds y1 = y2;
 A3: for k being Nat st k in Seg n ex x being set st P[k,x]
   proof
     let k be Nat;
@@ -3518,7 +3502,7 @@ A25:      (n+1)/(p|^k) = r/((p|^k)/(p|^k)) by A24,XCMPLX_1:78
             .= r;
           p|^k-1>=1-1 by A21,XREAL_1:11;
           then
-A26:      0/(p|^k)<=(p|^k-1)/(p|^k) by XREAL_1:74;
+A26:      0/(p|^k)<=(p|^k-1)/(p|^k);
           ((p|^k)/(p|^k))+((-1)/(p|^k))-1<0 by A22;
           then
 A27:      (p|^k+(-1))/(p|^k)-1<0 by XCMPLX_1:63;
@@ -3545,7 +3529,7 @@ A30:      n+1 = (p|^k) * d + m by NAT_D:2;
           then m>=1 by NAT_1:13;
           then m-1>=1-1 by XREAL_1:11;
           then
-A31:      0/(p|^k)<=(m-1)/(p|^k) by XREAL_1:74;
+A31:      0/(p|^k)<=(m-1)/(p|^k);
 A32:      m<p|^k by NAT_D:1;
           0+p|^k<1+p|^k by XREAL_1:8;
           then m<p|^k+1 by A32,XXREAL_0:2;
@@ -3694,19 +3678,19 @@ A23:  p |-count (2*n choose n) = 0 by A22,NAT_3:21,NEWTON:27;
 A24:  n<>0;
 A25:  n!<>0 by NEWTON:23;
       then
-A26:  (n!)*(n!)<>0 by XCMPLX_1:6;
+A26:  (n!)*(n!)<>0;
 A27:  n+n>n+0 & 2*n-n=n by A24,XREAL_1:8;
       then
 A28:  2*n choose n = ((2*n)!)/((n!)*(n!)) by NEWTON:def 3;
       (2*n choose n)*((n!)*(n!))
       = ((2*n)!)/((n!)*(n!))*((n!)*(n!)) by A27,NEWTON:def 3
-        .= (2*n)! by A25,XCMPLX_1:6,88;
+        .= (2*n)! by A25,XCMPLX_1:88;
       then
 A29:  ((n!) * (n!)) divides ((2*n)!) by NAT_D:def 3;
       then
 A30:  2*n choose n = ((n!) * (n!)) * (((2*n)!) div ((n!) * (n!)))
       /((n!)*(n!)) by A28,NAT_D:3
-        .= ((2*n)!) div ((n!) * (n!)) by A25,XCMPLX_1:6,90;
+        .= ((2*n)!) div ((n!) * (n!)) by A25,XCMPLX_1:90;
 A31:  (2*n)!<>0 by NEWTON:23;
       then
 A32:  p |-count (((2*n)!) div ((n!)*(n!))) =
@@ -4091,8 +4075,7 @@ A5:   x in dom g & y=g.x by FUNCT_1:def 5;
     let i be set;
     assume
 A6: i in dom g;
-    then i is Nat by ORDINAL1:def 13;
-    hence thesis by A2,A6;
+    thus thesis by A2,A6;
   end;
   uniqueness
   proof
@@ -4712,7 +4695,7 @@ A2: n >= 3;
 A3: 2*n >= 3*2 by XREAL_1:66;
   m * (2*n) >= 4|^n / (2*n) * (2*n) by A1,Th6,XREAL_1:66;
   then
-A4: m<>0 by A3,XCMPLX_1:88;
+A4: m<>0 by A3;
   defpred P1[Element of NAT,Element of NAT,Prime] means
   $3<=sqrt(2*$1) & $3 |-count $2>0;
   set X1 = {p|^(p |-count m) where p is prime Element of NAT: P1[n,m,p]};
@@ -4747,9 +4730,9 @@ A10: Product f3 > 0 by A4;
   set n1=Product f1;
   set n2=Product f2;
   set n3=Product f3;
-  Product f1 * Product f2 <> 0 by A6,A8,XCMPLX_1:6;
+  Product f1 * Product f2 <> 0 by A6,A8;
   then
-A11: k<>0 by A10,XCMPLX_1:6;
+A11: k<>0 by A10;
 A12: for p being Prime, n being Element of NAT,
   m being non empty Element of NAT, X being set
   st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']}
@@ -5176,7 +5159,7 @@ A2: n>=3;
 A3: 2*n >= 3*2 by XREAL_1:66;
   m * (2*n) >= 4|^n / (2*n) * (2*n) by A1,Th6,XREAL_1:66;
   then
-A4: m<>0 by A3,XCMPLX_1:88;
+A4: m<>0 by A3;
   set X = {p|^(p |-count m) where
   p is prime Element of NAT: p<=sqrt(2*n) & p |-count m>0};
   set f1 = Sgm X;
@@ -5216,7 +5199,7 @@ A12: Product f1 <= (2*n) to_power len(f1) by A3,Th55;
   n*2 >= 3*2 by A2,XREAL_1:66;
   then
 A13: 2*n > 1 by XXREAL_0:2;
-  reconsider X as finite set by A6,FINSET_1:13;
+  reconsider X as finite set by A6;
 A14: len f1 = card X by A6,FINSEQ_3:44;
 A15: [\ sqrt(2*n) /] <= sqrt(2*n) by INT_1:def 4;
   defpred P[Element of NAT,Element of NAT] means $1 |-count $2 > 0;
@@ -5280,7 +5263,7 @@ A8:   p<=[/ 2*n/3 \] by A7,XXREAL_0:2;
     end;
     then X c= Seg mm by TARSKI:def 3;
     then
-A9: X c= NAT & X is finite by FINSET_1:13,XBOOLE_1:1;
+A9: X c= NAT & X is finite by XBOOLE_1:1;
 A10: now
       assume {} in X;
       then ex p being prime Element of NAT st p = {} & p<=2*n/3;
@@ -5376,7 +5359,7 @@ A26: (n1+1) to_power 6 <= (2 to_power (6-root(2*n))) to_power 6 by POWER:42;
     sqrt(2*n)>0 by A5,SQUARE_1:93;
     then sqrt(2*n)+1>0+1 by XREAL_1:8;
     then
-A27: (sqrt(2*n)+1)*3>0*3 by XREAL_1:70;
+A27: (sqrt(2*n)+1)*3>0*3;
     reconsider 2n=2*n as real number;
 A28: 6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:46
       .= 2n by COMPTRIG:17;

@@ -30,17 +30,17 @@
 <ArgTypes/>
 <Func kind="K" nr="167"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RSSPACE2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="167"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="95"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 </Registrations>

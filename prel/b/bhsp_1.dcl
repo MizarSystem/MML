@@ -28,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="80"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="2">
@@ -37,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="3">
@@ -47,14 +47,14 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="70"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="46"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
 <Adjective nr="73"/>
-<Adjective nr="80"/>
+<Adjective nr="74"/>
 <Adjective nr="81"/>
+<Adjective nr="82"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BHSP_1" nr="1">
@@ -71,7 +71,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -88,7 +88,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <Func kind="K" nr="78"/>
 <LocusVar nr="1"/>
@@ -105,7 +105,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -128,8 +128,8 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="80"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 </Registrations>

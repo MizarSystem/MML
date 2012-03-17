@@ -29,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="2">
@@ -38,8 +38,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="39"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="3">
@@ -48,7 +48,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="4">
@@ -57,8 +57,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="5">
@@ -67,8 +67,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 </Registrations>

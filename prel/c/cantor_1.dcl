@@ -32,15 +32,15 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CANTOR_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="22"/>
+<Adjective nr="14" value="false"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -35,9 +35,11 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="MATRPROB"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="SEQ_2"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="PSCOMP_1"/>
@@ -53,19 +55,19 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="82"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
-<Adjective nr="140"/>
+<Adjective nr="85"/>
+<Adjective nr="146"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ENTROPY1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -78,10 +80,10 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="79"/>
-<Adjective nr="141">
+<Adjective nr="22"/>
+<Adjective nr="26"/>
+<Adjective nr="80"/>
+<Adjective nr="147">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -89,7 +91,7 @@
 <CCluster aid="ENTROPY1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="111"/>
+<Adjective nr="112"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -97,30 +99,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="140"/>
+<Adjective nr="146"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ENTROPY1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="79"/>
-<Adjective nr="113"/>
-</Cluster>
-<Typ kind="M" nr="7">
-<Cluster/>
-<Func kind="K" nr="125">
-<Func kind="K" nr="42"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="3" value="false"/>
-<Adjective nr="79"/>
-</Cluster>
-</CCluster>
-<CCluster aid="ENTROPY1" nr="3">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="79"/>
+<Adjective nr="80"/>
 <Adjective nr="114"/>
 </Cluster>
 <Typ kind="M" nr="7">
@@ -131,7 +116,24 @@
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="79"/>
+<Adjective nr="80"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ENTROPY1" nr="3">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="80"/>
+<Adjective nr="115"/>
+</Cluster>
+<Typ kind="M" nr="7">
+<Cluster/>
+<Func kind="K" nr="125">
+<Func kind="K" nr="42"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="3" value="false"/>
+<Adjective nr="80"/>
 </Cluster>
 </CCluster>
 </Registrations>

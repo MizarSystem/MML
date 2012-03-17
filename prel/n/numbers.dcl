@@ -51,28 +51,28 @@
 <ArgTypes/>
 <Func kind="K" nr="45"/>
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NUMBERS" nr="7">
 <ArgTypes/>
 <Func kind="K" nr="44"/>
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NUMBERS" nr="8">
 <ArgTypes/>
 <Func kind="K" nr="42"/>
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NUMBERS" nr="9">
 <ArgTypes/>
 <Func kind="K" nr="43"/>
 <Cluster>
-<Adjective nr="15" value="false"/>
+<Adjective nr="16" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

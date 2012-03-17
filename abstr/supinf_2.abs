@@ -8,12 +8,12 @@ environ
 
  vocabularies SUPINF_1, ARYTM_1, RLVECT_1, BOOLE, ORDINAL2, SEQ_2, FUNCT_1,
       RELAT_1, LATTICES, CARD_4, FUNCT_4, FUNCOP_1, SUPINF_2, FUNCT_3,
-      PARTFUN1, ARYTM, VALUED_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XCMPLX_0,
-      REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCOP_1,
-      VALUED_0, FUNCT_4, NAT_1, CARD_4, SUPINF_1;
+      PARTFUN1, ARYTM, VALUED_0, XXREAL_2, MEMBERED;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XXREAL_0,
+      XCMPLX_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      FUNCOP_1, VALUED_0, FUNCT_4, NAT_1, CARD_4, XXREAL_2, SUPINF_1;
  constructors FUNCT_3, FUNCOP_1, FUNCT_4, FINSET_1, REAL_1, NAT_1, SUPINF_1,
-      CARD_4, VALUED_1;
+      CARD_4, VALUED_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1,
       NUMBERS, XREAL_0, MEMBERED, VALUED_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -107,15 +107,10 @@ theorem :: SUPINF_2:13
 
 theorem :: SUPINF_2:14
   for x,y,s,t being R_eal holds
-  not ((x = +infty & s = -infty) or (x = -infty & s = +infty)) &
-  not ((y = +infty & t = -infty) or (y = -infty & t = +infty
-  )) & x <= y & s <= t implies x + s <= y + t;
+  x <= y & s <= t implies x + s <= y + t;
 
 theorem :: SUPINF_2:15
-  for x,y,s,t being R_eal holds
-  not ((x = +infty & t = +infty) or (x = -infty & t = -infty)) &
-  not ((y = +infty & s = +infty) or (y = -infty & s = -infty
-  )) & x <= y & s <= t implies x - t <= y - s;
+  for x,y,s,t being R_eal holds x <= y & s <= t implies x - t <= y - s;
 
 theorem :: SUPINF_2:16
   for x,y being R_eal holds x <= y iff - y <= - x;
@@ -131,9 +126,6 @@ theorem :: SUPINF_2:19
 
 theorem :: SUPINF_2:20
   for x,y,z being R_eal st 0. <= z & 0. <= x & y = x + z holds x <= y;
-
-theorem :: SUPINF_2:21
-  for x being R_eal st x in NAT holds 0. <= x;
 
 ::
 ::       operations " + "," - " in a subset of ExtREAL
@@ -167,6 +159,8 @@ registration
   cluster - X -> non empty;
 end;
 
+canceled;
+
 theorem :: SUPINF_2:22
   for X being non empty Subset of ExtREAL holds --X = X;
 
@@ -181,7 +175,7 @@ theorem :: SUPINF_2:25
   for z being R_eal holds z in REAL iff - z in REAL;
 
 definition
-  let X be non empty Subset of ExtREAL;
+  let X be ext-real-membered set;
   redefine
   func inf X -> R_eal;
   func sup X -> R_eal;
@@ -189,15 +183,11 @@ end;
 
 theorem :: SUPINF_2:26
   for X,Y being non empty Subset of ExtREAL holds
-  (not(-infty in X & +infty in Y or +infty in X & -infty in Y) &
-  not(sup X = +infty & sup Y = -infty or sup X = -infty & sup Y = +infty
-  )) implies sup (X + Y) <= sup X + sup Y;
+  sup (X + Y) <= sup X + sup Y;
 
 theorem :: SUPINF_2:27
   for X,Y being non empty Subset of ExtREAL holds
-  (not(-infty in X & +infty in Y or +infty in X & -infty in Y) &
-  not(inf X = +infty & inf Y = -infty or inf X = -infty & inf Y = +infty
-  )) implies inf X + inf Y <= inf (X + Y);
+  inf X + inf Y <= inf (X + Y);
 
 theorem :: SUPINF_2:28
   for X,Y being non empty Subset of ExtREAL holds
@@ -209,11 +199,11 @@ theorem :: SUPINF_2:29
 
 theorem :: SUPINF_2:30
   for X being non empty Subset of ExtREAL, a being R_eal holds
-  a is majorant of X iff - a is minorant of - X;
+  a is UpperBound of X iff - a is LowerBound of - X;
 
 theorem :: SUPINF_2:31
   for X being non empty Subset of ExtREAL holds for a being R_eal holds
-  a is minorant of X iff - a is majorant of - X;
+  a is LowerBound of X iff - a is UpperBound of - X;
 
 theorem :: SUPINF_2:32
   for X being non empty Subset of ExtREAL holds inf(- X) = - sup X;
@@ -267,18 +257,14 @@ theorem :: SUPINF_2:34
   rng(F + G) c= rng F + rng G;
 
 theorem :: SUPINF_2:35
-  for X being non empty set, Y,Z being non empty Subset of ExtREAL st
-  not(-infty in Y & +infty in Z or +infty in Y & -infty in Z) holds
-  for F being Function of X,Y for G being Function of X,Z st
-  not(sup F = +infty & sup G = -infty or sup F = -infty & sup G = +infty
-  ) holds sup(F + G) <= sup F + sup G;
+  for X being non empty set, Y,Z being non empty Subset of ExtREAL
+  for F being Function of X,Y for G being Function of X,Z
+  holds sup(F + G) <= sup F + sup G;
 
 theorem :: SUPINF_2:36
-  for X being non empty set holds for Y,Z being non empty Subset of ExtREAL st
-  not(-infty in Y & +infty in Z or +infty in Y & -infty in Z) holds
-  for F being Function of X,Y for G being Function of X,Z st
-  not(inf F = +infty & inf G = -infty or inf F = -infty & inf G = +infty
-  ) holds inf F + inf G <= inf(F + G);
+  for X being non empty set holds for Y,Z being non empty Subset of ExtREAL
+  for F being Function of X,Y for G being Function of X,Z
+  holds inf F + inf G <= inf(F + G);
 
 definition
   let X be non empty set;
@@ -405,26 +391,20 @@ theorem :: SUPINF_2:52
 ::       Series of Elements of ExtREAL numbers
 ::
 
-notation
-  let D be non empty set;
-  let IT be Subset of D;
-  synonym IT is denumerable for IT is countable;
-end;
-
 definition
   let D be non empty set, IT be Subset of D;
-  redefine attr IT is denumerable means
+  redefine attr IT is countable means
 :: SUPINF_2:def 14
 
   IT is empty or ex F being Function of NAT,D st IT = rng F;
 end;
 
 registration
-  cluster denumerable (non empty Subset of ExtREAL);
+  cluster countable (non empty Subset of ExtREAL);
 end;
 
 definition
-  mode Denum_Set_of_R_EAL is denumerable non empty Subset of ExtREAL;
+  mode Denum_Set_of_R_EAL is countable non empty Subset of ExtREAL;
 end;
 
 definition
@@ -557,12 +537,12 @@ theorem :: SUPINF_2:60
   for n,m being Element of NAT holds Ser(F).n <= Ser(F).(n + m);
 
 theorem :: SUPINF_2:61
-  for F1,F2 being Function of NAT,ExtREAL st F1 is nonnegative &
+  for F1,F2 being Function of NAT,ExtREAL st
   (for n being Element of NAT holds F1.n <= F2.n) holds
   for n being Element of NAT holds Ser(F1).n <= Ser(F2).n;
 
 theorem :: SUPINF_2:62
-  for F1,F2 being Function of NAT,ExtREAL st F1 is nonnegative &
+  for F1,F2 being Function of NAT,ExtREAL st
   (for n being Element of NAT holds F1.n <= F2.n) holds SUM(F1) <= SUM(F2);
 
 theorem :: SUPINF_2:63
@@ -617,4 +597,26 @@ theorem :: SUPINF_2:70
 theorem :: SUPINF_2:71
   for X being set, F being PartFunc of X,ExtREAL st
   for n being set st n in dom F holds 0. <= F.n holds F is nonnegative;
+
+:: missing, 2008.06.08, A.T.
+
+reserve x,y for R_eal;
+
+theorem :: SUPINF_2:72
+ x <= y implies y-x >= 0;
+
+theorem :: SUPINF_2:73
+  x - x = 0;
+
+reserve x,y,w,z for R_eal;
+
+theorem :: SUPINF_2:74
+  (z = -infty & y = +infty implies x <= 0) &
+  (z = +infty & y = -infty implies x <= 0) implies
+  (x - y <= z implies x <= z + y);
+
+theorem :: SUPINF_2:75
+  (x = +infty & y = +infty implies 0 <= z) &
+  (x = -infty & y = -infty implies 0 <= z) implies
+  (x <= z + y implies x - y <= z);
 

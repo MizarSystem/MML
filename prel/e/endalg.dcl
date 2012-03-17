@@ -16,13 +16,13 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -42,7 +42,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ENDALG" nr="2">
@@ -50,13 +50,13 @@
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -73,7 +73,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -81,15 +81,15 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="80">
+<Adjective nr="81">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="91">
+<Adjective nr="92">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="95">
+<Adjective nr="93">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -104,9 +104,9 @@
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="30" value="false"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="102"/>
-<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -123,9 +123,9 @@
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="30" value="false"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="102"/>
-<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -134,8 +134,8 @@
 </Func>
 <Cluster>
 <Adjective nr="59"/>
-<Adjective nr="77"/>
-<Adjective nr="84"/>
+<Adjective nr="78"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ENDALG" nr="3">
@@ -143,12 +143,12 @@
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="105" value="false"/>
+<Adjective nr="103" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="108">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -169,12 +169,12 @@
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="105" value="false"/>
+<Adjective nr="103" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="108">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -187,8 +187,8 @@
 </Func>
 <Cluster>
 <Adjective nr="59"/>
-<Adjective nr="77"/>
-<Adjective nr="84"/>
+<Adjective nr="78"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -31,62 +31,62 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
-<Adjective nr="80"/>
-<Adjective nr="82"/>
-<Adjective nr="88"/>
-<Adjective nr="94"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="72"/>
+<Adjective nr="79"/>
+<Adjective nr="81"/>
+<Adjective nr="83"/>
+<Adjective nr="89"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 <CCluster aid="BINOM" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="94"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="39"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BINOM" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="94"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="41"/>
 </Cluster>
 </CCluster>
 <CCluster aid="BINOM" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="95"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="48"/>
 <Adjective nr="96"/>
+<Adjective nr="97"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="41"/>
 </Cluster>
 </CCluster>
 </Registrations>

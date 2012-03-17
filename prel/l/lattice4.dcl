@@ -20,8 +20,8 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -37,9 +37,9 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="40"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

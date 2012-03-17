@@ -30,29 +30,29 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="40" value="false"/>
 <Adjective nr="54"/>
-<Adjective nr="78"/>
+<Adjective nr="55"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="84"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ANPROJ_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="79"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,13 +67,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="79"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,13 +88,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="54"/>
-<Adjective nr="79"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="55"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -102,8 +102,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="85"/>
+<Adjective nr="35" value="false"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -22,7 +22,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -93,7 +93,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="22">
+<Pred kind="V" nr="23">
 <Func kind="F" nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">

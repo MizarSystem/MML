@@ -334,7 +334,6 @@ A1:   Y is empty or for x, y being Point of Y st x <> y holds
       assume
 A2:   Y is not empty;
       let x, y be Point of Y;
-A3:   the carrier of Y <> {} by A2,STRUCT_0:def 1;
       assume
 A4:   x <> y;
       hereby per cases by A1,A2,A4;
@@ -348,7 +347,7 @@ A7:       not y in V;
             V = [#]Y \ F by PRE_TOPC:22;
             hence F is closed by A5,PRE_TOPC:def 6;
             thus not x in F by A6,XBOOLE_0:def 4;
-            thus y in F by A3,A7,SUBSET_1:50;
+            thus y in F by A2,A7,SUBSET_1:50;
           end;
           hence (ex E being Subset of Y
           st E is closed & x in E & not y in E) or (ex F being Subset of Y
@@ -363,7 +362,7 @@ A10:      y in W;
             take E = W`;
             W = [#]Y \ E by PRE_TOPC:22;
             hence E is closed by A8,PRE_TOPC:def 6;
-            thus x in E by A3,A9,SUBSET_1:50;
+            thus x in E by A2,A9,SUBSET_1:50;
             thus not y in E by A10,XBOOLE_0:def 4;
           end;
           hence (ex E being Subset of Y
@@ -383,7 +382,6 @@ A11: Y is empty or for x, y being Point of Y st x <> y holds
       assume
 A12:  Y is not empty;
       let x, y be Point of Y;
-A13:  the carrier of Y <> {} by A12,STRUCT_0:def 1;
       assume
 A14:  x <> y;
       hereby per cases by A11,A12,A14;
@@ -397,7 +395,7 @@ A17:      not y in E;
             W = [#]Y \ E;
             hence W is open by A15,PRE_TOPC:def 6;
             thus not x in W by A16,XBOOLE_0:def 4;
-            thus y in W by A13,A17,SUBSET_1:50;
+            thus y in W by A12,A17,SUBSET_1:50;
           end;
           hence (ex V being Subset of Y st V is open & x in V & not y in V) or
           (ex W being Subset of Y st W is open & not x in W & y in W);
@@ -411,7 +409,7 @@ A20:      y in F;
             take V = F`;
             V = [#]Y \ F;
             hence V is open by A18,PRE_TOPC:def 6;
-            thus x in V by A13,A19,SUBSET_1:50;
+            thus x in V by A12,A19,SUBSET_1:50;
             thus not y in V by A20,XBOOLE_0:def 4;
           end;
           hence (ex V being Subset of Y st V is open & x in V & not y in V) or
@@ -441,23 +439,7 @@ A2:   x = a & y = a by A1,TARSKI:def 1;
     hence thesis by Def3;
   end;
   cluster non T_0 -> non trivial (non empty TopStruct);
-  coherence
-  proof
-    let Y be non empty TopStruct;
-    assume
-A3: Y is non T_0;
-    assume Y is trivial;
-    then consider a being Point of Y such that
-A4: the carrier of Y = {a} by TEX_1:def 1;
-    now
-      let x, y be Point of Y;
-A5:   x = a & y = a by A4,TARSKI:def 1;
-      assume x <> y;
-      hence (ex V being Subset of Y st V is open & x in V & not y in V) or
-      (ex W being Subset of Y st W is open & not x in W & y in W) by A5;
-    end;
-    hence contradiction by A3,Def3;
-  end;
+  coherence;
 end;
 
 Lm1: for
@@ -531,34 +513,13 @@ A2:   x <> y;
     hence thesis by Def3;
   end;
   cluster non T_0 -> non discrete (non empty TopSpace);
-  coherence
-  proof
-    let Y be non empty TopSpace;
-    assume
-A3: Y is non T_0;
-    assume
-A4: Y is discrete;
-    now
-      let x, y be Point of Y;
-      assume
-A5:   x <> y;
-      now
-        take V = {x};
-        thus V is open by A4,TDLAT_3:17;
-        thus x in V by TARSKI:def 1;
-        thus not y in V by A5,TARSKI:def 1;
-      end;
-      hence (ex V being Subset of Y st V is open & x in V & not y in V) or
-      (ex W being Subset of Y st W is open & not x in W & y in W);
-    end;
-    hence contradiction by A3,Def3;
-  end;
+  coherence;
   cluster anti-discrete non trivial -> non T_0 (non empty TopSpace);
   coherence by Lm1;
   cluster anti-discrete T_0 -> trivial (non empty TopSpace);
-  coherence by Lm1;
+  coherence;
   cluster T_0 non trivial -> non anti-discrete (non empty TopSpace);
-  coherence by Lm1;
+  coherence;
 end;
 
 Lm2: for X being non empty TopSpace, x being Point of X holds x in Cl {x}
@@ -783,81 +744,9 @@ A7:     (Cl {x}) misses Cl {a} by A6,TSEP_1:40;
     hence thesis by A1,TDLAT_3:28;
   end;
   cluster almost_discrete non discrete -> non T_0 (non empty TopSpace);
-  coherence
-  proof
-    let Y be non empty TopSpace;
-    assume
-A8: Y is almost_discrete non discrete;
-    assume
-A9: Y is T_0;
-    for A being Subset of Y, x being Point of Y st A = {x} holds A is closed
-    proof
-      let A be Subset of Y, x be Point of Y;
-      assume
-A10:  A = {x};
-      x in Cl {x} by Lm2;
-      then
-A11:  {x} c= Cl {x} by ZFMISC_1:37;
-      now
-        assume not Cl {x} c= {x};
-        then consider a being set such that
-A12:    a in Cl {x} and
-A13:    not a in {x} by TARSKI:def 3;
-        reconsider a as Point of Y by A12;
-        a <> x by A13,TARSKI:def 1;
-        then not x in Cl {a} by A9,A12,Def6;
-        then x in (Cl {a})` by SUBSET_1:50;
-        then {x} c= (Cl {a})` by ZFMISC_1:37;
-        then
-A14:    {x} misses Cl {a} by SUBSET_1:43;
-        Cl {a} is open by A8,TDLAT_3:24;
-        then
-A15:    (Cl {x}) misses Cl {a} by A14,TSEP_1:40;
-        a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
-        hence contradiction by A12,A15,XBOOLE_0:3;
-      end;
-      hence A is closed by A10,A11,XBOOLE_0:def 10;
-    end;
-    hence contradiction by A8,TDLAT_3:28;
-  end;
+  coherence;
   cluster non discrete T_0 -> non almost_discrete (non empty TopSpace);
-  coherence
-  proof
-    let Y be non empty TopSpace;
-    assume
-A16: Y is non discrete T_0;
-    assume
-A17: Y is almost_discrete;
-    for A being Subset of Y, x being Point of Y st A = {x} holds A is closed
-    proof
-      let A be Subset of Y, x be Point of Y;
-      assume
-A18:  A = {x};
-      x in Cl {x} by Lm2;
-      then
-A19:  {x} c= Cl {x} by ZFMISC_1:37;
-      now
-        assume not Cl {x} c= {x};
-        then consider a being set such that
-A20:    a in Cl {x} and
-A21:    not a in {x} by TARSKI:def 3;
-        reconsider a as Point of Y by A20;
-        a <> x by A21,TARSKI:def 1;
-        then not x in Cl {a} by A16,A20,Def6;
-        then x in (Cl {a})` by SUBSET_1:50;
-        then {x} c= (Cl {a})` by ZFMISC_1:37;
-        then
-A22:    {x} misses Cl {a} by SUBSET_1:43;
-        Cl {a} is open by A17,TDLAT_3:24;
-        then
-A23:    (Cl {x}) misses Cl {a} by A22,TSEP_1:40;
-        a in {a} & {a} c= Cl {a} by PRE_TOPC:48,TARSKI:def 1;
-        hence contradiction by A20,A23,XBOOLE_0:3;
-      end;
-      hence A is closed by A18,A19,XBOOLE_0:def 10;
-    end;
-    hence contradiction by A16,A17,TDLAT_3:28;
-  end;
+  coherence;
 end;
 
 definition
@@ -1652,7 +1541,6 @@ A2:     Y0 is non empty;
         let x, y be Point of Y;
         assume x is Point of Y0 & y is Point of Y0;
         then reconsider x0 = x, y0 = y as Point of Y0;
-A3:     the carrier of Y0 <> {} by A2,STRUCT_0:def 1;
         assume
 A4:     x <> y;
         now per cases by A1,A2,A4,Def3;
@@ -1670,7 +1558,7 @@ A9:           E0 = E /\ A by A5,Def1;
               thus E is open by A8;
               E /\ A c= E by XBOOLE_1:17;
               hence x in E by A6,A9;
-              thus not y in E by A3,A7,A9,XBOOLE_0:def 3;
+              thus not y in E by A2,A7,A9,XBOOLE_0:def 3;
             end;
             hence (ex E being Subset of Y
             st E is open & x in E & not y in E) or (ex F being Subset of Y
@@ -1688,7 +1576,7 @@ A13:          F is open and
 A14:          F0 = F /\ A by A10,Def1;
               take F;
               thus F is open by A13;
-              thus not x in F by A3,A11,A14,XBOOLE_0:def 3;
+              thus not x in F by A2,A11,A14,XBOOLE_0:def 3;
               F /\ A c= F by XBOOLE_1:17;
               hence y in F by A12,A14;
             end;
@@ -1710,8 +1598,7 @@ A15: Y0 is empty or for x, y being Point of Y st
       assume
 A16:  Y0 is non empty;
       let x0, y0 be Point of Y0;
-A17:  the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
-      the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+      the carrier of Y0 <> {} by A16;
       then
 A18:  x0 in the carrier of Y0 & y0 in the carrier of Y0;
       the carrier of Y0 c= the carrier of Y by Def1;
@@ -1730,7 +1617,7 @@ A23:        E0 is open and
 A24:        E0 = E /\ A by A20,Th2;
             take E0;
             thus E0 is open by A23;
-            thus x0 in E0 by A17,A21,A24,XBOOLE_0:def 3;
+            thus x0 in E0 by A16,A21,A24,XBOOLE_0:def 3;
             now
               assume
 A25:          y0 in E0;
@@ -1761,7 +1648,7 @@ A31:          x0 in F0;
               hence contradiction by A27,A30,A31;
             end;
             hence not x0 in F0;
-            thus y0 in F0 by A17,A28,A30,XBOOLE_0:def 3;
+            thus y0 in F0 by A16,A28,A30,XBOOLE_0:def 3;
           end;
           hence (ex E0 being Subset of Y0
           st E0 is open & x0 in E0 & not y0 in E0) or
@@ -1802,7 +1689,6 @@ A2:     Y0 is not empty;
         let x, y be Point of Y;
         assume x is Point of Y0 & y is Point of Y0;
         then reconsider x0 = x, y0 = y as Point of Y0;
-A3:     the carrier of Y0 <> {} by A2,STRUCT_0:def 1;
         assume
 A4:     x <> y;
         now per cases by A1,A2,A4,Def4;
@@ -1820,7 +1706,7 @@ A9:           E0 = E /\ A by A5,Def2;
               thus E is closed by A8;
               E /\ A c= E by XBOOLE_1:17;
               hence x in E by A6,A9;
-              thus not y in E by A3,A7,A9,XBOOLE_0:def 3;
+              thus not y in E by A2,A7,A9,XBOOLE_0:def 3;
             end;
             hence (ex E being Subset of Y
             st E is closed & x in E & not y in E) or (ex F being Subset of Y
@@ -1838,7 +1724,7 @@ A13:          F is closed and
 A14:          F0 = F /\ A by A10,Def2;
               take F;
               thus F is closed by A13;
-              thus not x in F by A3,A11,A14,XBOOLE_0:def 3;
+              thus not x in F by A2,A11,A14,XBOOLE_0:def 3;
               F /\ A c= F by XBOOLE_1:17;
               hence y in F by A12,A14;
             end;
@@ -1860,8 +1746,7 @@ A15: Y0 is empty or for x, y being Point of Y st
       assume
 A16:  Y0 is not empty;
       let x0, y0 be Point of Y0;
-A17:  the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
-      the carrier of Y0 <> {} by A16,STRUCT_0:def 1;
+      the carrier of Y0 <> {} by A16;
       then
 A18:  x0 in the carrier of Y0 & y0 in the carrier of Y0;
       the carrier of Y0 c= the carrier of Y by Def1;
@@ -1880,7 +1765,7 @@ A23:        E0 is closed and
 A24:        E0 = E /\ A by A20,Th4;
             take E0;
             thus E0 is closed by A23;
-            thus x0 in E0 by A17,A21,A24,XBOOLE_0:def 3;
+            thus x0 in E0 by A16,A21,A24,XBOOLE_0:def 3;
             now
               assume
 A25:          y0 in E0;
@@ -1912,7 +1797,7 @@ A31:          x0 in F0;
               hence contradiction by A27,A30,A31;
             end;
             hence not x0 in F0;
-            thus y0 in F0 by A17,A28,A30,XBOOLE_0:def 3;
+            thus y0 in F0 by A16,A28,A30,XBOOLE_0:def 3;
           end;
           hence (ex E0 being Subset of Y0
           st E0 is closed & x0 in E0 & not y0 in E0) or
@@ -2075,25 +1960,12 @@ registration
     then reconsider A = the carrier of X as non empty Subset of X by TSEP_1:1;
     assume X0 is non proper;
     then A0 is not proper by TEX_2:13;
-    then A0 = A by TEX_2:5;
+    then A0 = A by SUBSET_1:def 7;
     then A0 is not T_0 by Th6;
     hence thesis by Th15;
   end;
   cluster T_0 -> proper (non empty SubSpace of X);
-  coherence
-  proof
-    let X0 be non empty SubSpace of X;
-    reconsider A0 = the carrier of X0 as non empty Subset of X by TSEP_1:1;
-    X is SubSpace of X by TSEP_1:2;
-    then reconsider A = the carrier of X as non empty Subset of X by TSEP_1:1;
-    assume
-A1: X0 is T_0;
-    assume X0 is non proper;
-    then A0 is not proper by TEX_2:13;
-    then A0 = A by TEX_2:5;
-    then A0 is not T_0 by Th6;
-    hence contradiction by A1,Th15;
-  end;
+  coherence;
 end;
 
 registration

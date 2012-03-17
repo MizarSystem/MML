@@ -8,20 +8,20 @@ environ
 
  vocabularies ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
       LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED, FUNCOP_1, FRECHET2,
-      SQUARE_1;
+      SQUARE_1, XXREAL_2, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, RELAT_1, COMPLEX1, FUNCT_2, VALUED_1, SEQ_1, SEQ_2, NAT_1,
-      FUNCOP_1, SQUARE_1, SEQM_3, MEMBERED, XXREAL_0, RECDEF_1;
+      FUNCOP_1, SQUARE_1, SEQM_3, MEMBERED, XXREAL_0, XXREAL_2, RECDEF_1;
  constructors FUNCOP_1, REAL_1, NAT_1, COMPLEX1, PARTFUN1, SEQ_2, SEQM_3,
-      SQUARE_1, VALUED_1, SEQ_1, RECDEF_1;
+      SQUARE_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2;
+      XREAL_0, MEMBERED, SEQM_3, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, SEQ_2, SQUARE_1;
+ definitions TARSKI, SEQ_2, SQUARE_1, XXREAL_2;
  theorems REAL_1, NAT_1, SEQ_1, SEQ_2, SEQM_3, AXIOMS, FUNCT_1, FUNCT_2,
       ABSVALUE, TARSKI, RELAT_1, RELSET_1, XREAL_0, XBOOLE_1, SUBSET_1,
       XCMPLX_0, MEMBERED, XREAL_1, FUNCOP_1, COMPLEX1, XXREAL_0, ORDINAL1,
-      SQUARE_1;
+      SQUARE_1, XXREAL_2;
  schemes NAT_1, RECDEF_1, SEQ_1, REAL_1, SUBSET_1, FUNCT_2;
 
 begin
@@ -108,19 +108,58 @@ end;
 
 definition
   let X be real-membered set;
-  attr X is bounded_above means
+  redefine attr X is bounded_above means
   :Def1:
   ex p st for r st r in X holds r<=p;
+  compatibility
+   proof
+    thus X is bounded_above implies
+     ex p st for r st r in X holds r<=p
+    proof
+     given p being real number such that
+G:    p is UpperBound of X;
+     reconsider p as Element of REAL by XREAL_0:def 1;
+     take p;
+     let r;
+     thus thesis by G,XXREAL_2:def 1;
+    end;
+    given p such that
+G:   for r st r in X holds r<=p;
+    take p;
+    let r be ext-real number;
+    assume
+Z:   r in X;
+     then r is real;
+     then reconsider r as Element of REAL by XREAL_0:def 1;
+     r <= p by Z,G;
+    hence thesis;
+   end;
   attr X is bounded_below means
   :Def2:
   ex p st for r st r in X holds p<=r;
-end;
-
-definition
-  let X;
-  attr X is bounded means
-  :Def3:
-  X is bounded_below bounded_above;
+  compatibility
+   proof
+    thus X is bounded_below implies
+     ex p st for r st r in X holds p<=r
+    proof
+     given p being real number such that
+G:    p is LowerBound of X;
+     reconsider p as Element of REAL by XREAL_0:def 1;
+     take p;
+     let r;
+     thus thesis by G,XXREAL_2:def 2;
+    end;
+    given p such that
+G:   for r st r in X holds p<=r;
+    take p;
+    let r be ext-real number;
+    assume
+Z:   r in X;
+     then r is real;
+     then reconsider r as Element of REAL by XREAL_0:def 1;
+     p <= r by Z,G;
+    hence thesis;
+   end;
 end;
 
 canceled 3;
@@ -132,17 +171,17 @@ proof
   proof
     assume
 A1: X is bounded;
-    then X is bounded_above by Def3;
+    then X is bounded_above;
     then consider s1 such that
 A2: for r st r in X holds r<=s1 by Def1;
-    X is bounded_below by A1,Def3;
+    X is bounded_below by A1;
     then consider s2 such that
 A3: for r st r in X holds s2<=r by Def2;
     take s=abs(s1)+abs(s2)+1;
 A4: 0<=abs(s1) by COMPLEX1:132;
 A5: 0<=abs(s2) by COMPLEX1:132;
-    then 0+0<=abs(s1)+abs(s2) by A4,XREAL_1:9;
-    hence 0<s by XREAL_1:10;
+    then 0+0<=abs(s1)+abs(s2) by A4;
+    hence 0<s;
     let r such that
 A6: r in X;
 A7: s1<=abs(s1) by ABSVALUE:11;
@@ -152,7 +191,7 @@ A7: s1<=abs(s1) by ABSVALUE:11;
     then
 A8: r<s by XREAL_1:10;
 A9: -abs(s2)<=s2 by ABSVALUE:11;
-A10: -abs(s1)<=-0 by A4,XREAL_1:26;
+A10: -abs(s1)<=-0 by A4;
     s2<=r by A3,A6;
     then -abs(s2)<=r by A9,XXREAL_0:2;
     then -abs(s1)+-abs(s2)<=0+r by A10,XREAL_1:9;
@@ -184,7 +223,7 @@ A15: -s<-abs(r) by XREAL_1:26;
     hence g<=r by A15,XXREAL_0:2;
   end;
   then X is bounded_below by Def2;
-  hence thesis by A14,Def3;
+  hence thesis by A14;
 end;
 
 definition
@@ -267,18 +306,16 @@ A3: for r st r in X holds r<=g2 and
 A4: for s st 0<s ex r st (r in X & g2-s<r);
 A5: now
     assume g1<g2;
-    then 0<g2-g1 by XREAL_1:52;
     then consider r1 such that
 A6: r1 in X and
-A7: g2-(g2-g1)<r1 by A4;
+A7: g2-(g2-g1)<r1 by A4,XREAL_1:52;
     thus contradiction by A1,A6,A7;
   end;
   now
     assume g2<g1;
-    then 0<g1-g2 by XREAL_1:52;
     then consider r1 such that
 A8: r1 in X and
-A9: g1-(g1-g2)<r1 by A2;
+A9: g1-(g1-g2)<r1 by A2,XREAL_1:52;
     thus contradiction by A3,A8,A9;
   end;
   hence thesis by A5,XXREAL_0:1;
@@ -334,24 +371,23 @@ A3: for r st r in X holds g2<=r and
 A4: for s st 0<s ex r st (r in X & r<g2+s);
 A5: now
     assume g1<g2;
-    then 0<g2-g1 by XREAL_1:52;
     then consider r1 such that
 A6: r1 in X and
-A7: r1<g1+(g2-g1) by A2;
+A7: r1<g1+(g2-g1) by A2,XREAL_1:52;
     thus contradiction by A3,A6,A7;
   end;
   now
     assume g2<g1;
-    then 0<g1-g2 by XREAL_1:52;
     then consider r1 such that
 A8: r1 in X and
-A9: r1<g2+(g1-g2) by A4;
+A9: r1<g2+(g1-g2) by A4,XREAL_1:52;
     thus contradiction by A1,A8,A9;
   end;
   hence thesis by A5,XXREAL_0:1;
 end;
 
 definition
+ canceled;
   let X be real-membered set;
   assume
 A1: X is non empty bounded_above;
@@ -373,6 +409,80 @@ A1: X is non empty bounded_below;
   uniqueness by Th19;
 end;
 
+Lm61:
+  for X being non empty real-membered set st (for s st s in X holds s >= r) &
+  for t st for s st s in X holds s >= t holds r >= t holds r = lower_bound X
+proof
+  let X be non empty real-membered set;
+  assume that
+A1: for s st s in X holds s >= r and
+A2: for t st for s st s in X holds s >= t holds r >= t;
+A3: X is bounded_below by A1,Def2;
+  now
+    let s be real number such that
+A4: 0 < s;
+    assume for t be real number st t in X holds t >= r+s;
+    then r >= r+s by A2;
+    hence contradiction by A4,XREAL_1:31;
+  end;
+  hence r = lower_bound X by A1,A3,Def5;
+end;
+
+Lm63:
+  for X being non empty real-membered set, r
+  st (for s st s in X holds s <= r) &
+  for t st for s st s in X holds s <= t holds r <= t holds r = upper_bound X
+proof
+  let X be non empty real-membered set, r;
+  assume that
+A1: for s st s in X holds s <= r and
+A2: for t st for s st s in X holds s <= t holds r <= t;
+A3: X is bounded_above by A1,Def1;
+  now
+    let s be real number such that
+A4: 0 < s;
+    assume for t be real number st t in X holds r-s >= t;
+    then r <= r-s by A2;
+    then r+s <= r by XREAL_1:21;
+    hence contradiction by A4,XREAL_1:31;
+  end;
+  hence r = upper_bound X by A1,A3,Def4;
+end;
+
+registration
+  let X be non empty bounded_below (real-membered set);
+  identify lower_bound X with inf X;
+  compatibility
+   proof
+A:  for s st s in X holds s >= inf X by XXREAL_2:3;
+    now let t;
+     assume
+Z:    for s st s in X holds s >= t;
+      for x being ext-real number st x in X holds t <= x by Z;
+      then t is LowerBound of X by XXREAL_2:def 2;
+     hence inf X >= t by XXREAL_2:def 4;
+    end;
+    hence lower_bound X = inf X by A,Lm61;
+   end;
+end;
+
+registration
+  let X be non empty bounded_above (real-membered set);
+  identify upper_bound X with sup X;
+  compatibility
+   proof
+A:  for s st s in X holds s <= sup X by XXREAL_2:4;
+    now let t;
+     assume
+Z:    for s st s in X holds t >= s;
+      for x being ext-real number st x in X holds x <= t by Z;
+      then t is UpperBound of X by XXREAL_2:def 1;
+     hence t >= sup X by XXREAL_2:def 3;
+    end;
+    hence upper_bound X = sup X by A,Lm63;
+   end;
+end;
+
 definition
   let X;
   redefine func upper_bound X -> Real;
@@ -389,8 +499,8 @@ proof
   set X={r};
 A1: X is bounded by Th15;
   then
-A2: X is bounded_below by Def3;
-A3: X is bounded_above by A1,Def3;
+A2: X is bounded_below;
+A3: X is bounded_above by A1;
   now
     thus for p st p in X holds r<=p by TARSKI:def 1;
     now
@@ -434,7 +544,7 @@ A1: X is bounded and
 A2: X is non empty;
   consider r being Element of REAL such that
 A3: r in X by A2,SUBSET_1:10;
-A4: X is bounded_below & X is bounded_above by A1,Def3;
+A4: X is bounded_below & X is bounded_above by A1;
   then
 A5: lower_bound X<=r by A3,Def5;
   r<=upper_bound X by A3,A4,Def4;
@@ -457,22 +567,22 @@ A5: p<>r;
 A6: now
       assume
 A7:   p<r;
-      X is bounded_below by A1,Def3;
+      X is bounded_below by A1;
       then lower_bound X<=p by A4,Def5;
       then
 A8:   lower_bound X<r by A7,XXREAL_0:2;
-      X is bounded_above by A1,Def3;
+      X is bounded_above by A1;
       then r<=upper_bound X by A3,Def4;
       hence lower_bound X<upper_bound X by A8,XXREAL_0:2;
     end;
     now
       assume
 A9:   r<p;
-      X is bounded_below by A1,Def3;
+      X is bounded_below by A1;
       then lower_bound X<=r by A3,Def5;
       then
 A10:  lower_bound X<p by A9,XXREAL_0:2;
-      X is bounded_above by A1,Def3;
+      X is bounded_above by A1;
       then p<=upper_bound X by A4,Def4;
       hence lower_bound X<upper_bound X by A10,XXREAL_0:2;
     end;
@@ -483,16 +593,8 @@ A11: lower_bound X<upper_bound X and
 A12: for r,p st r in X & p in X holds p=r;
   consider r being Element of REAL such that
 A13: r in X by A2,SUBSET_1:10;
-  now
-    let x;
-    now
-      assume
-A14:  x in X;
-      then x is Real;
-      hence x=r by A12,A13,A14;
-    end;
-    hence x in X iff x=r by A13;
-  end;
+    for x st x in X holds x = r by A12,A13;
+    then x in X iff x=r by A13;
   then X={r} by TARSKI:def 1;
   hence contradiction by A11,Th23;
 end;
@@ -868,7 +970,7 @@ A5: rng seq={r1} by A3,SEQM_3:15;
     consider r2 such that
 A6: for n holds seq.n=r2 by A3,SEQM_3:def 6;
 A7: r=r1 by A4,A5,TARSKI:def 1;
-A8: seq is convergent by A3,Th39;
+A8: seq is convergent by A3;
     now
       let p such that
 A9:   0<p;
@@ -935,15 +1037,15 @@ A5: n<=m;
   then 1/(k1+r)<1/p" by A3,XREAL_1:78;
   then
 A6: 1/(k1+r)<1*p"" by XCMPLX_0:def 9;
-A7: 0+0<n+r by A1,A3,A4,XREAL_1:10;
+A7: 0+0<n+r by A1,A3,A4;
   n+r<=m+r by A5,XREAL_1:8;
   then 1/(m+r)<=1/(n+r) by A7,XREAL_1:120;
   then
 A8: 1/(m+r)<p by A6,XXREAL_0:2;
 A9: seq.m=1/(m+r) by A2;
   0<=m by NAT_1:2;
-  then 0+0<=m+r by A1,XREAL_1:9;
-  then 0/(m+r)<=1/(m+r) by XREAL_1:74;
+  then 0+0<=m+r by A1;
+  then 0/(m+r)<=1/(m+r);
   hence abs(seq.m-g)<p by A8,A9,ABSVALUE:def 1;
 end;
 
@@ -968,15 +1070,15 @@ A6: n<=m;
     then 1/(k1+r)<1/p" by A4,XREAL_1:78;
     then
 A7: 1/(k1+r)<1*p"" by XCMPLX_0:def 9;
-A8: 0+0<n+r by A1,A4,A5,XREAL_1:10;
+A8: 0+0<n+r by A1,A4,A5;
     n+r<=m+r by A6,XREAL_1:8;
     then 1/(m+r)<=1/(n+r) by A8,XREAL_1:120;
     then
 A9: 1/(m+r)<p by A7,XXREAL_0:2;
 A10: seq.m=1/(m+r) by A2;
     0<=m by NAT_1:2;
-    then 0+0<=m+r by A1,XREAL_1:9;
-    then 0/(m+r)<=1/(m+r) by XREAL_1:74;
+    then 0+0<=m+r by A1;
+    then 0/(m+r)<=1/(m+r);
     hence abs(seq.m-0)<p by A9,A10,ABSVALUE:def 1;
   end;
   hence thesis by A3,SEQ_2:def 7;
@@ -996,10 +1098,8 @@ A2: for n holds seq.n=g/(n+r);
   deffunc U(Element of NAT) = 1/($1+r1);
   consider seq1 such that
 A3: for n holds seq1.n=U(n) from SEQ_1:sch 1;
-A4: seq1 is convergent by A1,A3,Th43;
-  then
-A5: g(#)seq1 is convergent by SEQ_2:21;
-A6: lim (g(#)seq1)=g*(lim seq1) by A4,SEQ_2:22
+A5: g(#)seq1 is convergent by SEQ_2:21,A1,A3,Th43;
+A6: lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th43,SEQ_2:22
     .=g*0 by A1,A3,Th44
     .=0;
   now
@@ -1033,7 +1133,7 @@ A6: n<=m;
   0<=n & 0<=m by NAT_1:2;
   then
 A7: n*n<=m*m by A6,XREAL_1:68;
-A8: k1>0 by A3,A5,XREAL_1:124;
+A8: k1>0 by A3,A5;
   then k1>=1+0 by NAT_1:13;
   then k1<=k1*k1 by XREAL_1:153;
   then
@@ -1045,15 +1145,15 @@ A9: k1+r<=k1*k1+r by XREAL_1:8;
 A10: 1/(k1*k1+r)<1*p"" by XCMPLX_0:def 9;
   0<n^2 by A8,SQUARE_1:74;
   then
-A11: 0+0<n*n+r by A1,XREAL_1:10;
+A11: 0+0<n*n+r by A1;
   n*n+r<=m*m+r by A7,XREAL_1:8;
   then 1/(m*m+r)<=1/(n*n+r) by A11,XREAL_1:120;
   then
 A12: 1/(m*m+r)<p by A10,XXREAL_0:2;
 A13: seq.m=1/(m*m+r) by A2;
   0<=m*m by NAT_1:2;
-  then 0+0<=m*m+r by A1,XREAL_1:9;
-  then 0/(m*m+r)<=1/(m*m+r) by XREAL_1:74;
+  then 0+0<=m*m+r by A1;
+  then 0/(m*m+r)<=1/(m*m+r);
   hence abs(seq.m-g)<p by A12,A13,ABSVALUE:def 1;
 end;
 
@@ -1078,7 +1178,7 @@ A7: n<=m;
     0<=n & 0<=m by NAT_1:2;
     then
 A8: n*n<=m*m by A7,XREAL_1:68;
-A9: k1>0 by A4,A6,XREAL_1:124;
+A9: k1>0 by A4,A6;
     then k1>=1+0 by NAT_1:13;
     then k1<=k1*k1 by XREAL_1:153;
     then
@@ -1090,15 +1190,15 @@ A10: k1+r<=k1*k1+r by XREAL_1:8;
 A11: 1/(k1*k1+r)<1*p"" by XCMPLX_0:def 9;
     0<n^2 by A9,SQUARE_1:74;
     then
-A12: 0+0<n*n+r by A1,XREAL_1:10;
+A12: 0+0<n*n+r by A1;
     n*n+r<=m*m+r by A8,XREAL_1:8;
     then 1/(m*m+r)<=1/(n*n+r) by A12,XREAL_1:120;
     then
 A13: 1/(m*m+r)<p by A11,XXREAL_0:2;
 A14: seq.m=1/(m*m+r) by A2;
     0<=m*m by NAT_1:2;
-    then 0+0<=m*m+r by A1,XREAL_1:9;
-    then 0/(m*m+r)<=1/(m*m+r) by XREAL_1:74;
+    then 0+0<=m*m+r by A1;
+    then 0/(m*m+r)<=1/(m*m+r);
     hence abs(seq.m-0)<p by A13,A14,ABSVALUE:def 1;
   end;
   hence thesis by A3,SEQ_2:def 7;
@@ -1118,10 +1218,8 @@ A2: for n holds seq.n=g/(n*n+r);
   deffunc U(Element of NAT) = 1/($1*$1+r1);
   consider seq1 such that
 A3: for n holds seq1.n=U(n) from SEQ_1:sch 1;
-A4: seq1 is convergent by A1,A3,Th47;
-  then
-A5: g(#)seq1 is convergent by SEQ_2:21;
-A6: lim (g(#)seq1)=g*(lim seq1) by A4,SEQ_2:22
+A5: g(#)seq1 is convergent by SEQ_2:21,A1,A3,Th47;
+A6: lim (g(#)seq1)=g*(lim seq1) by A1,A3,Th47,SEQ_2:22
     .=g*0 by A1,A3,Th48
     .=0;
   now
@@ -1279,7 +1377,7 @@ A3: seq is convergent by A1,A2,Th52;
 A4: for n holds seq1.n= U(n) from SEQ_1:sch 1;
 A5: seq1 is constant by A4,SEQM_3:def 6;
   then
-A6: seq1 is convergent by Th39;
+A6: seq1 is convergent;
   seq1.0=seq.m by A4;
   then
 A7: lim seq1=seq.m by A5,Th40;
@@ -1327,7 +1425,7 @@ A7: seq1=seq*Nseq by SEQM_3:def 10;
 A8: now
       let k;
       0<=k by NAT_1:2;
-      then 0<k+1 by NAT_1:13;
+      then 0<k+1;
       then 0+k1<k+1+k1 by XREAL_1:10;
       then consider n such that
 A9:   k+1+k1<n and
@@ -1472,7 +1570,7 @@ A42:  Nseq.n in XN by A38;
       hence (seq*Nseq).n<(seq*Nseq).(n+1) by SEQM_3:31;
     end;
     then seq*Nseq is increasing by SEQM_3:def 11;
-    then seq*Nseq is non-decreasing by SEQM_3:23;
+    then seq*Nseq is non-decreasing;
     hence seq*Nseq is monotone by SEQM_3:def 7;
   end;
   hence thesis by A2;
@@ -1503,9 +1601,8 @@ proof
 A1: for s st 0<s ex n st for m st n<=m holds abs(seq.m -g1)<s by SEQ_2:def 6;
     let s;
     assume 0<s;
-    then 0<s/2 by XREAL_1:217;
     then consider n1 such that
-A2: for m st n1<=m holds abs(seq.m -g1)<s/2 by A1;
+A2: for m st n1<=m holds abs(seq.m -g1)<s/2 by A1,XREAL_1:217;
     take n=n1;
     let m such that
 A3: n<=m;
@@ -1529,7 +1626,7 @@ A9: for m st m<=n1 holds abs(seq.m)<r1 by SEQ_2:16;
   now
     take r=r1+abs(seq.n1)+1;
     0+0<r1+abs(seq.n1) by A8,COMPLEX1:132,XREAL_1:10;
-    hence 0<r by XREAL_1:10;
+    hence 0<r;
     let m;
 A10: now
       assume m<=n1;
@@ -1560,13 +1657,12 @@ A14: for s st 0<s ex n st for m st n<=m holds abs(seq1.m -g1)<s
 A15: seq1=seq*Nseq by A12,SEQM_3:def 10;
   take g=g1;
   let s;
-  assume 0<s;
-  then
-A16: 0<s/3 by XREAL_1:224;
+  assume
+Z:  0<s;
   then consider n1 such that
-A17: for m st n1<=m holds abs(seq1.m -g1)<s/3 by A14;
+A17: for m st n1<=m holds abs(seq1.m -g1)<s/3 by A14,XREAL_1:224;
   consider n2 such that
-A18: for m st n2<=m holds abs(seq.m -seq.n2)<s/3 by A6,A16;
+A18: for m st n2<=m holds abs(seq.m -seq.n2)<s/3 by A6,Z,XREAL_1:224;
   take n=n1+n2;
   let m such that
 A19: n<=m;
@@ -1606,7 +1702,7 @@ proof
   assume that
 A1: seq is constant and
 A2: seq1 is convergent;
-A3: seq is convergent by A1,Th39;
+A3: seq is convergent by A1;
   hence lim (seq+seq1)=(lim seq)+(lim seq1) by A2,SEQ_2:20
     .=(seq.0)+(lim seq1) by A1,Th40;
   thus lim (seq-seq1)=(lim seq)-(lim seq1) by A2,A3,SEQ_2:26
@@ -1640,24 +1736,10 @@ A3: t' in X & t' < r+s by A2,Def5;
   thus contradiction by A1,A3;
 end;
 
-theorem Th61:
+theorem
   for X being non empty real-membered set st (for s st s in X holds s >= r) &
   for t st for s st s in X holds s >= t holds r >= t holds r = lower_bound X
-proof
-  let X be non empty real-membered set;
-  assume that
-A1: for s st s in X holds s >= r and
-A2: for t st for s st s in X holds s >= t holds r >= t;
-A3: X is bounded_below by A1,Def2;
-  now
-    let s be real number such that
-A4: 0 < s;
-    assume for t be real number st t in X holds t >= r+s;
-    then r >= r+s by A2;
-    hence contradiction by A4,XREAL_1:31;
-  end;
-  hence r = lower_bound X by A1,A3,Def5;
-end;
+                 by Lm61;
 
 theorem Th62:
   for X being non empty real-membered set, r
@@ -1682,22 +1764,7 @@ theorem
   for X being non empty real-membered set, r
   st (for s st s in X holds s <= r) &
   for t st for s st s in X holds s <= t holds r <= t holds r = upper_bound X
-proof
-  let X be non empty real-membered set, r;
-  assume that
-A1: for s st s in X holds s <= r and
-A2: for t st for s st s in X holds s <= t holds r <= t;
-A3: X is bounded_above by A1,Def1;
-  now
-    let s be real number such that
-A4: 0 < s;
-    assume for t be real number st t in X holds r-s >= t;
-    then r <= r-s by A2;
-    then r+s <= r by XREAL_1:21;
-    hence contradiction by A4,XREAL_1:31;
-  end;
-  hence r = upper_bound X by A1,A3,Def4;
-end;
+                 by Lm63;
 
 theorem
   for X being non empty real-membered set, Y being real-membered set
@@ -1723,73 +1790,12 @@ A2: Y is bounded_above;
   hence upper_bound X <= upper_bound Y by Th62;
 end;
 
-registration
-  cluster -> bounded_below (natural-membered set);
-  coherence
-  proof
-    let A be natural-membered set;
-    take 0;
-    let r;
-    assume r in A;
-    then r is natural by MEMBERED:def 6;
-    hence thesis by NAT_1:2;
-  end;
-end;
-
 :: from CQC_SIM1, 2007.03.15, A.T.
-
-notation
-  let A be non empty natural-membered set;
-  synonym min A for lower_bound A;
-end;
-
-Lm1: for
-A being non empty natural-membered set, k be natural number st k in A &
-for n being Nat st n in A holds k <= n holds k = min A
-proof
-  let A be non empty natural-membered set, k be natural number such that
-A1: k in A and
-A2: for n being Nat st n in A holds k <= n;
-  defpred P[Element of NAT] means $1 in A;
-  consider a being Element of A;
-A3: now
-    let r be real number;
-    assume
-A4: r in A;
-    then r is natural by MEMBERED:def 6;
-    hence k <= r by A2,A4;
-  end;
-  for t being real number st for s being real number st s in A holds t <= s
-  holds t <= k by A1;
-  hence thesis by A3,Th61;
-end;
-
-Lm2: for A being non empty natural-membered set holds min A in A
-proof
-  let A be non empty natural-membered set;
-  defpred P[set] means $1 in A;
-  consider a being Element of A;
-  a in NAT by ORDINAL1:def 13;
-  then
-A1: ex k being Nat st P[k];
-  consider k being Nat such that
-A2: P[k] and
-A3: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A1);
-  thus thesis by A2,A3,Lm1;
-end;
 
 definition
   let A be non empty natural-membered set;
-  redefine func min A -> Element of NAT means
-  :Def6:
-  it in A & for k being natural number st k in A holds it <= k;
-  coherence
-  proof
-    min A in A by Lm2;
-    then min A is natural by MEMBERED:def 6;
-    hence thesis by ORDINAL1:def 13;
-  end;
-  compatibility by Def5,Lm1,Lm2;
+  redefine func min A -> Element of NAT;
+  coherence by ORDINAL1:def 13;
 end;
 
 :: from SCMFSA9A, 2007.07.26, A.T.
@@ -1807,7 +1813,7 @@ A3: for k holds f.k = F(k) from FUNCT_2:sch 4;
     f.0 in rng f by FUNCT_2:6;
     then reconsider rf = rng f as non empty Subset of NAT by RELSET_1:12;
     set m = min rf;
-    m in rf by Def6;
+    m in rf by XXREAL_2:def 7;
     then consider x being set such that
 A4: x in dom f & m = f.x by FUNCT_1:def 5;
     reconsider x as Element of NAT by A4,FUNCT_2:def 1;
@@ -1815,7 +1821,7 @@ A4: x in dom f & m = f.x by FUNCT_1:def 5;
     then
 A5: f.(x+1) < f.x or P[x] by A1;
     f.(x+1) in rf by FUNCT_2:6;
-    hence contradiction by A2,A4,A5,Def6;
+    hence contradiction by A2,A4,A5,XXREAL_2:def 7;
   end;
   then
 A6: ex k be Nat st P[k];

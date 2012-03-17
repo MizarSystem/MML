@@ -44,19 +44,19 @@
 <Adjective nr="4"/>
 <Adjective nr="6"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="15">
+<Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="25"/>
-<Adjective nr="61">
+<Adjective nr="21"/>
+<Adjective nr="26"/>
+<Adjective nr="62">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
@@ -80,7 +80,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="15">
+<Adjective nr="16">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -110,12 +110,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="39">
+<Adjective nr="40">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -131,8 +131,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="68">
+<Adjective nr="37"/>
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -8,7 +8,7 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, VECTSP_1, OPPCAT_1, RLVECT_1, ARYTM_1,
       FUNCSDOM, VECTSP_2, LATTICES, BINOP_1, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
-      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ALGSTR_0;
+      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ALGSTR_0, SGRAPH1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
       STRUCT_0, ALGSTR_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
       VECTSP_2, GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
@@ -17,7 +17,7 @@ environ
       ALGSTR_0;
  requirements SUBSET, BOOLE;
  definitions RLVECT_1, STRUCT_0, GROUP_1, GROUP_6, GRCAT_1, RINGCAT1, VECTSP_1,
-      ALGSTR_0;
+      ALGSTR_0, FUNCT_2;
  theorems FUNCT_1, FUNCT_2, RINGCAT1, VECTSP_1, VECTSP_2, FUNCT_4, RLVECT_1,
       RELAT_1, GROUP_1, FUNCOP_1, GRCAT_1, GROUP_6, ALGSTR_0, STRUCT_0;
 
@@ -907,7 +907,7 @@ A2: J is antiisomorphism by Def17;
     then
 A3: J is antimonomorphism by Def13;
     then J is antilinear by Def9;
-    then J is additive antimultiplicative unity-preserving by Def7;
+    then J is additive antimultiplicative unity-preserving;
     hence for x,y being Scalar of K holds J.(x+y) = J.x+J.y
     & for x,y being Scalar of K holds J.(x*y) = J.y*J.x
     & J.(1_K) = 1_K by Def6,GRCAT_1:def 13,GROUP_1:def 17;
@@ -922,7 +922,7 @@ A5: J is one-to-one and
 A6: rng J = the carrier of K;
     J is additive antimultiplicative unity-preserving
     by A4,Def6,GRCAT_1:def 13,GROUP_1:def 17;
-    then J is antilinear by Def7;
+    then J is antilinear;
     then J is antimonomorphism by A5,Def9;
     then J is antiisomorphism by A6,Def13;
     hence J is antiautomorphism by Def17;
@@ -1021,7 +1021,7 @@ Lm10: J is antilinear implies J.(0.K) = 0.L
 proof
   assume J is antilinear;
   then
-A1: J is additive by Def7;
+A1: J is additive;
   set a = 0.K;
   a+a = a by RLVECT_1:10;
   then J.a+J.a = J.a by A1,GRCAT_1:def 13
@@ -1034,7 +1034,7 @@ proof
   assume
 A1: J is antilinear;
   then
-A2: J is additive by Def7;
+A2: J is additive;
   set a = 0.K, b = 0.L, y = J.x;
 A3: x+-x = a & y+-y = b by RLVECT_1:16;
   then y+J.(-x) = J.a by A2,GRCAT_1:def 13
@@ -1046,7 +1046,7 @@ Lm12: J is antilinear implies J.(x-y) = J.x-J.y
 proof
   assume
 A1: J is antilinear;
-  then J is additive by Def7;
+  then J is additive;
   hence J.(x-y) = J.x+J.(-y) by GRCAT_1:def 13
     .= J.x-J.y by A1,Lm11;
 end;
@@ -1169,12 +1169,12 @@ A4: for x,y being Scalar of K holds J'.(x*y) = J'.y*J'.x
       .= 1_L';
     then J' is additive antimultiplicative unity-preserving
     by A3,A4,Def6,GRCAT_1:def 13,GROUP_1:def 17;
-    hence J' is antilinear by Def7;
+    hence J' is antilinear;
   end;
   now
     assume J' is antilinear;
     then
-A5: J' is additive antimultiplicative unity-preserving by Def7;
+A5: J' is additive antimultiplicative unity-preserving;
 A6: for x,y being Scalar of K holds J.(x+y) = J.x+J.y
     proof
       let x,y be Scalar of K;
@@ -1203,7 +1203,7 @@ proof
   hereby
     assume J is antilinear;
     then
-A1: J is additive antimultiplicative unity-preserving by Def7;
+A1: J is additive antimultiplicative unity-preserving;
     thus J' is linear
     proof
       thus J' is additive
@@ -1367,36 +1367,12 @@ end;
 reserve f for Homomorphism of G,H;
 
 definition
-  let G,H;
-  let IT be Homomorphism of G,H;
-  attr IT is monomorphism means
-
-  IT is one-to-one;
-end;
-
-definition
-  let G,H;
-  let IT be Homomorphism of G,H;
-  attr IT is epimorphism means
-
-  rng IT = the carrier of H;
-end;
-
-definition
-  let G,H;
-  let IT be Homomorphism of G,H;
-  attr IT is isomorphism means
-  :Def22:
-  IT is one-to-one & rng IT = the carrier of H;
-end;
-
-definition
   let G;
   mode Endomorphism of G is Homomorphism of G,G;
 end;
 
 Lm14: (for x,y being Element of G holds (id G).(x+y) = (id G).x+(id G).y)
-& id G is one-to-one & rng id G = the carrier of G
+& id G is one-to-one onto
 proof
   set f = id G;
   thus for x,y being Element of G holds f.(x+y) = f.x+f.y
@@ -1411,22 +1387,22 @@ end;
 
 registration
   let G;
-  cluster isomorphism Endomorphism of G;
+  cluster bijective Endomorphism of G;
   existence
   proof
     set f = id G;
     for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm14;
     then reconsider f as Homomorphism of G,G by Def19;
 A1: f is one-to-one by Lm14;
-A2: rng f = the carrier of G by Lm14;
+A2: f is onto by Lm14;
     take f;
-    thus f is isomorphism by A1,A2,Def22;
+    thus f is bijective by A1,A2,FUNCT_2:def 4;
   end;
 end;
 
 definition
   let G;
-  mode Automorphism of G is isomorphism Endomorphism of G;
+  mode Automorphism of G is bijective Endomorphism of G;
 end;
 
 definition
@@ -1438,8 +1414,8 @@ definition
     for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm14;
     then reconsider f as Homomorphism of G,G by Def19;
 A1: f is one-to-one by Lm14;
-    rng f = the carrier of G by Lm14;
-    hence thesis by A1,Def22;
+    f is onto by Lm14;
+    hence thesis by A1,FUNCT_2:def 4;
   end;
 end;
 
@@ -1515,7 +1491,7 @@ end;
 
 definition
   let K,L,J,V,W;
-  canceled;
+  canceled 4;
   mode Homomorphism of J,V,W -> Function of V,W means
     :Def24:
     (for x,y being Vector of V holds it.(x+y) = it.x+it.y)

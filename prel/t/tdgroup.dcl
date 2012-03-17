@@ -32,14 +32,14 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="45"/>
-<Adjective nr="70"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="46"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="92"/>
-<Adjective nr="96"/>
+<Adjective nr="73"/>
+<Adjective nr="93"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TDGROUP" nr="2">
@@ -48,26 +48,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="30" value="false"/>
-<Adjective nr="93"/>
-<Adjective nr="97"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="94"/>
+<Adjective nr="98"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TDGROUP" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="149"/>
 <Cluster>
-<Adjective nr="40"/>
-<Adjective nr="92"/>
-<Adjective nr="96"/>
+<Adjective nr="41"/>
+<Adjective nr="93"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TDGROUP" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -75,8 +75,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="93"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 </Registrations>

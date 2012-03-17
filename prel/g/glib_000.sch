@@ -28,8 +28,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -39,8 +39,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>
@@ -63,7 +63,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <Not>
@@ -71,8 +71,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>
@@ -95,8 +95,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>
@@ -128,8 +128,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -139,8 +139,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>
@@ -169,8 +169,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>
@@ -193,8 +193,8 @@
 <For>
 <Typ kind="M" nr="15">
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>

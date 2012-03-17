@@ -11,9 +11,9 @@ environ
       SQUARE_1, SEQ_4, RCOMP_1, FUNCOP_1, FRECHET2, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_2, FUNCOP_1, SEQ_1, SEQ_2,
-      SEQM_3, SEQ_4, XXREAL_0, XXREAL_1, RECDEF_1;
+      SEQM_3, SEQ_4, XXREAL_0, XXREAL_1, XXREAL_2, RECDEF_1;
  constructors FUNCOP_1, REAL_1, NAT_1, XXREAL_1, COMPLEX1, PARTFUN1, SEQ_1,
-      SEQ_2, SEQM_3, SEQ_4, RECDEF_1;
+      SEQ_2, SEQM_3, SEQ_4, RECDEF_1, XXREAL_2, MEMBERED;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, SEQM_3, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -27,26 +27,6 @@ reserve s,g,g1,g2,r,p,q,t for real number;
 reserve s1,s2,s3 for Real_Sequence;
 reserve Nseq for increasing Seq_of_Nat;
 reserve X,Y,Y1 for Subset of REAL;
-
-scheme :: RCOMP_1:sch 1
- RealSeqChoice { P[set,set] }: ex s1 being Function of NAT, REAL st
-  for n being Element of NAT holds P[n,s1.n]
-provided
- for n being Element of NAT ex r being real number st P[n,r];
-
-theorem :: RCOMP_1:1
-  (for r holds r in X implies r in Y) implies X c= Y;
-
-canceled;
-
-theorem :: RCOMP_1:3
-  Y1 c= Y & Y is bounded_below implies Y1 is bounded_below;
-
-theorem :: RCOMP_1:4
-  Y1 c= Y & Y is bounded_above implies Y1 is bounded_above;
-
-theorem :: RCOMP_1:5
-  Y1 c= Y & Y is bounded implies Y1 is bounded;
 
 reserve a for Element of ExtREAL;
 
@@ -64,7 +44,7 @@ definition
   {r where r is Real : g<r & r<s };
 end;
 
-canceled 2;
+canceled 7;
 
 theorem :: RCOMP_1:8
   r in ].p-g,p+g.[ iff abs(r-p)<g;
@@ -75,30 +55,13 @@ theorem :: RCOMP_1:9
 theorem :: RCOMP_1:10
   r in ].p,g.[ iff abs(p+g-2*r)<g-p;
 
-theorem :: RCOMP_1:11
-  for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s};
-
-theorem :: RCOMP_1:12
-  p <= g implies ].g,p.[ = {};
-
-theorem :: RCOMP_1:13
-  p < g implies [.g,p.] = {};
-
-theorem :: RCOMP_1:14
-  [.p,p.] = {p};
-
-theorem :: RCOMP_1:15
-  (p<g implies ].p,g.[ <> {}) & (p<=g implies p in [.p,g.] & g in [.p,g.]) &
-  ].p,g.[ c= [.p,g.];
+canceled 5;
 
 theorem :: RCOMP_1:16
   r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.];
 
 theorem :: RCOMP_1:17
   r in ].p,g.[ & s in ].p,g.[ implies [.r,s.] c= ].p,g.[;
-
-theorem :: RCOMP_1:18
-  p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.];
 
 definition
   let X;
@@ -125,7 +88,7 @@ definition
   X` is closed;
 end;
 
-canceled 3;
+canceled 4;
 
 theorem :: RCOMP_1:22
   for s1 st rng s1 c= [.s,g.] holds s1 is bounded;
@@ -214,8 +177,7 @@ theorem :: RCOMP_1:41
   (for r st r in X holds ex N be Neighbourhood of r st N c= X)
   implies X is open;
 
-theorem :: RCOMP_1:42
-  (for r st r in X holds ex N be Neighbourhood of r st N c= X) iff X is open;
+canceled;
 
 theorem :: RCOMP_1:43
   X is open bounded_above implies not upper_bound X in X;
@@ -226,41 +188,4 @@ theorem :: RCOMP_1:44
 theorem :: RCOMP_1:45
   X is open bounded & (for g1,g2 st g1 in X & g2 in X holds [.g1,g2.] c= X)
   implies ex p,g st X = ].p,g.[;
-
-begin :: Addenda
-
-:: from JORDAN6, 2005.02.05, A.T.
-
-theorem :: RCOMP_1:46
-  for r,s being real number holds ].r,s.[ misses {r,s};
-
-theorem :: RCOMP_1:47
-  for a,b,c being real number holds c in ].a,b.[ iff a < c & c < b;
-
-:: from TOPREAL5, 2005.02.05, A.T.
-
-theorem :: RCOMP_1:48
-
-for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b;
-
-:: from TREAL_1, 2006.07.19, A.T.
-
-reserve a,b,c,d for real number;
-
-theorem :: RCOMP_1:49
-  a <= c & d <= b implies [.c,d.] c= [.a,b.];
-
-theorem :: RCOMP_1:50
-
-a <= c & b <= d & c <= b implies [.a,b.] \/ [.c,d.] = [.a,d.];
-
-theorem :: RCOMP_1:51
-  a <= c & b <= d & c <= b implies [.a,b.] /\ [.c,d.] = [.c,b.];
-
-:: from JGRAPH_3, 2006.07.25, A.T.
-
-reserve x,y,z,u for real number;
-
-theorem :: RCOMP_1:52
-  x<=y & z<=u implies ].y,z.[ c= ].x,u.[;
 

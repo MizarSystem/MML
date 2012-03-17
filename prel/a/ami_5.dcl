@@ -48,17 +48,17 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="18"/>
-<Adjective nr="70">
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="19"/>
+<Adjective nr="72">
 <Func kind="K" nr="249"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
 <Func kind="K" nr="262"/>
 </Adjective>
-<Adjective nr="75" value="false">
+<Adjective nr="77" value="false">
 <Func kind="K" nr="249"/>
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
@@ -71,7 +71,7 @@
 <ArgTypes/>
 <Func kind="K" nr="246"/>
 <Cluster>
-<Adjective nr="18" value="false"/>
+<Adjective nr="19" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_5" nr="2">
@@ -91,7 +91,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 </Registrations>

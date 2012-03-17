@@ -38,7 +38,7 @@
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GOBOARD1"/>
-<ArticleID name="SEQ_4"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="INTEGRA1"/>
 </Signature>
 <RCluster aid="INTEGRA1" nr="1">
@@ -50,10 +50,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="126"/>
+<Adjective nr="41"/>
+<Adjective nr="129"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="2">
@@ -65,10 +65,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="126"/>
+<Adjective nr="41"/>
+<Adjective nr="129"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="3">
@@ -76,14 +76,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="17">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -96,14 +96,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="K" nr="53"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="320">
+<Func kind="K" nr="316">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -113,7 +113,7 @@
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="126"/>
+<Adjective nr="129"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -123,13 +123,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="126"/>
+<Adjective nr="129"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -138,7 +138,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="125"/>
+<Adjective nr="128"/>
 </Cluster>
 </CCluster>
 </Registrations>

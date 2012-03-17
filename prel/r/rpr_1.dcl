@@ -32,7 +32,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <CCluster aid="RPR_1" nr="1">
@@ -45,7 +45,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="13"/>
+<Adjective nr="14"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -55,8 +55,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="11"/>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
+<Adjective nr="14"/>
 </Cluster>
 </CCluster>
 </Registrations>

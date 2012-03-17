@@ -16,7 +16,7 @@ environ
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, NAT_1,
       NAT_D, MEMBERED, REALSET1, GROUP_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, FINSUB_1, MEMBERED,
-      REALSET1, STRUCT_0, GROUP_1, ALGSTR_0;
+      REALSET1, STRUCT_0, GROUP_1, ALGSTR_0, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, GROUP_1, STRUCT_0, TARSKI, XBOOLE_0, BINOP_1, REALSET1,
       SUBSET_1, ALGSTR_0;
@@ -36,12 +36,7 @@ Lm1: x in A implies x is Element of G;
 canceled 2;
 
 theorem
-  G is finite implies A is finite
-proof
-  assume G is finite;
-  then A c= the carrier of G & the carrier of G is finite by STRUCT_0:def 11;
-  hence thesis by FINSET_1:13;
-end;
+  G is finite implies A is finite;
 
 reserve y,y1,y2,Y,Z for set;
 reserve k for Element of NAT;
@@ -768,8 +763,8 @@ theorem Th48:
 proof
   assume G is finite;
   then the carrier of H c= the carrier of G &
-  the carrier of G is finite by Def5,STRUCT_0:def 11;
-  hence the carrier of H is finite by FINSET_1:13;
+  the carrier of G is finite by Def5;
+  hence the carrier of H is finite;
 end;
 
 theorem Th49:
@@ -1259,7 +1254,7 @@ theorem Th80:
   (1).G is finite
 proof
   the carrier of (1).G = {1_G} & {1_G} is finite by Def7;
-  hence thesis by STRUCT_0:def 11;
+  hence thesis;
 end;
 
 registration
@@ -1294,7 +1289,7 @@ theorem Th81:
   ord (1).G = 1
 proof
   (1).G is finite & the carrier of (1).G = {1_G} & card{1_G} = 1
-  by Def7,CARD_1:79;
+  by Def7,CARD_1:50;
   hence thesis;
 end;
 
@@ -1673,7 +1668,7 @@ proof
   assume
 A1: H1 is finite or H2 is finite;
   H1 /\ H2 is Subgroup of H1 & H1 /\ H2 is Subgroup of H2 by Lm4;
-  hence thesis by A1,Th48;
+  hence thesis by A1;
 end;
 
 definition
@@ -2186,7 +2181,6 @@ theorem Th151:
   a * H,b * H are_equipotent
 proof
   defpred P[set,set] means ex g1 st $1 = g1 & $2 = b * a" * g1;
-A1: for x,y1,y2 st x in a * H & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x st x in a * H ex y st P[x,y]
   proof
     let x;
@@ -2252,7 +2246,6 @@ theorem Th152:
   a * H,H * b are_equipotent
 proof
   defpred P[set,set] means ex g1 st $1 = g1 & $2 = a" * g1 * b;
-A1: for x,y1,y2 st x in a * H & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x st x in a * H ex y st P[x,y]
   proof
     let x;
@@ -2348,7 +2341,7 @@ A1: carr(H) is finite & carr(H),a * H are_equipotent &
   carr(H),H * a are_equipotent by Th154;
   then reconsider B = a * H, C = H * a as finite set by CARD_1:68;
   take B,C;
-  thus thesis by A1,CARD_1:81;
+  thus thesis by A1,CARD_1:21;
 end;
 
 definition
@@ -2398,15 +2391,7 @@ end;
 canceled 7;
 
 theorem
-  G is finite implies Right_Cosets H is finite & Left_Cosets H is finite
-proof
-  assume G is finite;
-  then the carrier of G is finite by STRUCT_0:def 11;
-  then bool(the carrier of G) is finite &
-  Right_Cosets H c= bool(the carrier of G) &
-  Left_Cosets H c= bool(the carrier of G) by FINSET_1:24;
-  hence thesis by FINSET_1:13;
-end;
+  G is finite implies Right_Cosets H is finite & Left_Cosets H is finite;
 
 theorem
   carr H in Left_Cosets H & carr H in Right_Cosets H
@@ -2418,21 +2403,6 @@ theorem Th166:
   Left_Cosets H, Right_Cosets H are_equipotent
 proof
   defpred P[set,set] means ex g st $1 = g * H & $2 = H * g";
-A1: for x,y1,y2 being set st x in Left_Cosets H &
-  P[x,y1] & P[x,y2] holds y1 = y2
-  proof
-    let x,y1,y2;
-    assume x in Left_Cosets H;
-    given a such that
-A2: x = a * H and
-A3: y1 = H * a";
-    given b such that
-A4: x = b * H and
-A5: y2 = H * b";
-    b" * a in H by A2,A4,Th137;
-    then b" * a"" in H by GROUP_1:19;
-    hence y1 = y2 by A3,A5,Th143;
-  end;
 A6: for x st x in Left_Cosets H ex y st P[x,y]
   proof
     let x;
@@ -2756,7 +2726,8 @@ A1: Left_Cosets H is finite;
 A2: B = Left_Cosets H & index H = card B by Def18;
   reconsider C = Right_Cosets H as finite set by A1,Th166,CARD_1:68;
   take C;
-  thus thesis by A2,Th166,CARD_1:81;
+   B, C are_equipotent by Th166;
+  hence thesis by A2,CARD_1:21;
 end;
 
 Lm5: for X being finite set st
@@ -2772,7 +2743,7 @@ A1: X = {};
     for Z st Z in X & Y <> Z holds Y,Z are_equipotent & Y misses Z;
     reconsider E = {} as finite set;
     take E;
-    thus thesis by A1,CARD_1:78,ZFMISC_1:2;
+    thus thesis by A1,CARD_1:47,ZFMISC_1:2;
   end;
   suppose X <> {};
     then reconsider D = X as non empty set;
@@ -2780,7 +2751,7 @@ A1: X = {};
     (for Y st Y in $1 ex B being finite set st B = Y & card B = k &
     for Z st Z in $1 & Y <> Z holds Y,Z are_equipotent & Y misses Z) implies
     ex C being finite set st C = union $1 & card C = k * card $1;
-A2: P[{}.D] by CARD_1:78,ZFMISC_1:2;
+A2: P[{}.D] by ZFMISC_1:2;
 A3: for S being Element of Fin D, s being Element of D st
     P[S] & not s in S holds P[S \/ {.s.}]
     proof
@@ -2916,7 +2887,7 @@ A1: I = J;
 A2: ord G = ord H * index H & ord G = ord I * index I by Th177;
   ord H = ord J * index J by Th177;
   then ord I * (index J * index H) = ord I * index I & ord I <> 0
-  by A1,A2,GROUP_1:90;
+  by A1,A2;
   hence thesis by XCMPLX_1:5;
 end;
 
@@ -2924,7 +2895,7 @@ theorem
   index (Omega).G = 1
 proof Left_Cosets (Omega).G = {the carrier of G} by Th172;
   hence index (Omega).G = card{the carrier of G} by Def18
-    .= 1 by CARD_1:79;
+    .= 1 by CARD_1:50;
 end;
 
 theorem
@@ -3000,7 +2971,7 @@ theorem Th184:
 proof
   let G be finite Group, H be strict Subgroup of G;
   assume index H = ord G;
-  then 1 * ord G = ord H * ord G & ord G <> 0 by Th177,GROUP_1:90;
+  then 1 * ord G = ord H * ord G & ord G <> 0 by Th177;
   hence thesis by Th82,XCMPLX_1:5;
 end;
 
@@ -3014,7 +2985,7 @@ A1: Left_Cosets H is finite and
 A2: Index H = Ord G;
   the carrier of G is finite by A1,A2,CARD_2:68;
   hence
-A3: G is finite by STRUCT_0:def 11;
+A3: G is finite;
   ex B being finite set st B = Left_Cosets H & index H = card B by A1,Def18;
   hence thesis by A2,A3,Th184;
 end;

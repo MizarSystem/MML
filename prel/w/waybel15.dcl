@@ -51,25 +51,25 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="43"/>
-<Adjective nr="135"/>
+<Adjective nr="44"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="70"/>
+<Adjective nr="48"/>
 <Adjective nr="71"/>
-<Adjective nr="125"/>
+<Adjective nr="72"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="136">
+<Adjective nr="137">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -80,7 +80,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="132">
+<Adjective nr="133">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

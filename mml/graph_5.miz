@@ -14,14 +14,15 @@ environ
       FINSEQ_4, FINSET_1, REAL_1, NAT_1, GRAPH_1, BINARITH, FUNCT_2, GRAPH_4,
       CARD_3, RVSUM_1, GRAPH_3;
  constructors PARTFUN1, XXREAL_0, NAT_1, CARD_3, FINSEQ_4, FINSOP_1, BINARITH,
-      GOBOARD1, GRAPH_4, SEQ_1, BINOP_2;
+      GOBOARD1, GRAPH_4, SEQ_1, BINOP_2, ENUMSET1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_2, GRAPH_4, VALUED_0;
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, GRAPH_1, GRAPH_2, GRAPH_4, VALUED_0,
+      CARD_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, FUNCT_1, RVSUM_1;
  theorems FUNCT_2, XBOOLE_1, GRAPH_1, FINSEQ_1, GRAPH_4, FUNCT_1, FINSEQ_3,
       REAL_1, FINSEQ_4, NAT_1, CARD_1, TARSKI, YELLOW15, CARD_4, CARD_5,
-      FINSEQ_2, FINSET_1, XBOOLE_0, CARD_2, RVSUM_1, SUBSET_1, ZFMISC_1,
+      FINSEQ_2, XBOOLE_0, CARD_2, RVSUM_1, SUBSET_1, ZFMISC_1,
       XREAL_1, BINARITH, XXREAL_0, FINSOP_1, PRE_CIRC, ORDINAL1, PARTFUN1;
  schemes FUNCT_1, NAT_1, CLASSES1;
 
@@ -49,7 +50,6 @@ proof
   defpred P[set,set] means ($1 is Element of B() implies ex
   x being Element of B() st x=$1 & $2=F(x))
   & (not $1 is Element of B() implies $2=0);
-A1: for x,y1,y2 st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x st x in A() ex y st P[x,y]
   proof
     let x;
@@ -120,7 +120,7 @@ A8: m in dom f by A2,A5,FINSEQ_1:3;
     then y in f.m by A2,A8;
     hence x in Union f by A5,A8,CARD_5:10;
   end;
-  hence thesis by A4,FINSET_1:13;
+  hence thesis by A4;
 end;
 
 theorem Th4:
@@ -141,7 +141,7 @@ A3: y=x & len x <= n by A1;
     suppose len x < 0+1;
       then len x <= 0 by NAT_1:13;
       then len x = 0;
-      then x = {} by CARD_2:59;
+      then x = {};
       then x in { {} } by TARSKI:def 1;
       hence y in { {} } \/ B by A3,XBOOLE_0:def 2;
     end;
@@ -151,27 +151,11 @@ A3: y=x & len x <= n by A1;
     end;
   end;
   B is finite by Th3;
-  then { {} } \/ B is finite by FINSET_1:14;
-  hence thesis by A2,FINSET_1:13;
+  then { {} } \/ B is finite;
+  hence thesis by A2;
 end;
 
-theorem Th5:
-  for D being finite set holds card D <> 0 iff D <> {}
-proof
-  let D be finite set;
-  thus card D <> 0 implies D <> {} by CARD_1:78;
-  assume D <> {};
-  then consider x being set such that
-A1: x in D by XBOOLE_0:def 1;
-  set C = D \ {x};
-  {x} c= D by A1,ZFMISC_1:37;
-  then
-A2: D=C \/ {x} by XBOOLE_1:45;
-  x in {x} by TARSKI:def 1;
-  then not x in C by XBOOLE_0:def 4;
-  then card D = card C + 1 by A2,CARD_2:54;
-  hence card D <> 0;
-end;
+canceled;
 
 theorem Th6:
   for D being finite set, k being Element of NAT st card D = k+1 holds
@@ -180,7 +164,7 @@ proof
   let D be finite set,k be Element of NAT;
   assume
 A1: card D = k+1;
-  then D <> {} by Th5;
+  then D <> {};
   then consider x being set such that
 A2: x in D by XBOOLE_0:def 1;
   reconsider C=D \ { x } as Subset of D;
@@ -204,7 +188,7 @@ proof
   then consider x being Element of D,C being Subset of D such that
 A1: D = C \/ { x } & card C = 0 by Th6;
   take x;
-  C = {} by A1,Th5;
+  C = {} by A1;
   hence D = {x} by A1;
 end;
 
@@ -238,7 +222,7 @@ A4: P[k];
 A5:   k+1+1 = card A;
       then consider x being Element of A,C being Subset of A such that
 A6:   A = C \/ { x } & card C = k+1 by Th6;
-A7:   A <> {} by A5,Th5;
+A7:   A <> {} by A5;
       then x in A;
       then reconsider x as Element of D();
       reconsider C as Subset of D() by XBOOLE_1:1;
@@ -686,7 +670,7 @@ A2: p={} or q={};
   end;
   suppose
 A3: not (p={} or q={});
-    then len q <> 0 by CARD_2:59;
+    then len q <> 0;
     then
 A4: len q > 0;
     consider vs being FinSequence of the Vertices of G such that
@@ -800,7 +784,7 @@ A36:  h2.n=vs.(len h1+n) by A23,A35,Lm2;
       1 <= m by A35,XXREAL_0:2;
       then
 A37:  h2.m=vs.(len h1+m) by A23,A35,Lm2;
-      len p <> 0 by A3,CARD_2:59;
+      len p <> 0 by A3;
       then 0 < len p;
       then
 A38:  0 +1 < len h1 + n by A23,A35,XREAL_1:10;
@@ -1670,7 +1654,7 @@ A3: FS.(pe.1)=v2 & FT.(pe.1)=v3 by A1,GRAPH_4:def 1;
 A4: len q=len p +1 by A1,FINSEQ_1:35;
   then len q >= 1 by NAT_1:12;
   then
-A5: q <> {} by FINSEQ_1:28;
+A5: q <> {};
 A6: FS.(q.1)=v1 by A1,A2,Lm1;
   FT.(q.(len q))=v3 by A1,A3,A4,Lm2;
   hence thesis by A5,A6,Def3;
@@ -1920,7 +1904,7 @@ A2: P[0]
     assume
 A3: 0+1 = len p & p is_orientedpath_of v1,v2;
     then reconsider r=p as Simple (oriented Chain of G) by Th18;
-    r <> {} by A3,CARD_1:47;
+    r <> {} by A3;
     then r in {q where q is Simple (oriented Chain of G) : q <> {} &
     FS.(q.1) = FS.(p.1) & FT.(q.(len q)) = FT.(p.(len p)) & rng q c= rng p};
     hence AcyclicPaths(p) <> {};
@@ -1945,7 +1929,7 @@ A9:   1 in dom p1 & len p1 in dom p1 by FINSEQ_3:27;
 A10:  p1.1=p.1 by A7,A8,Lm1;
       reconsider y=FT.(p1.(len p1)) as Element of the Vertices of G
       by A9,FINSEQ_2:13,FUNCT_2:7;
-      p1 <> {} by A7,CARD_1:47;
+      p1 <> {} by A7;
       then p1 is_orientedpath_of x,y by Def3;
       then AcyclicPaths(p1) <> {} by A5,A7;
       then consider r being set such that
@@ -1975,7 +1959,7 @@ A21:    len q1 = k & len q2 = i & q = q1^q2 by A20,FINSEQ_2:25;
         rng q1 c= rng q by A21,FINSEQ_1:42;
         then
 A22:    rng q1 c= rng p1 by A12,XBOOLE_1:1;
-A23:    q1 <> {} by A19,A21,CARD_1:47;
+A23:    q1 <> {} by A19,A21;
 A24:    rng q1 c= rng p by A16,A22,XBOOLE_1:1;
 A25:    FS.(q1.1) = FS.(p.1) by A10,A12,A19,A21,Lm1;
         FT.(q1.(len q1)) = FT.(p.(len p)) by A6,A7,A14,A19,A21,Lm1;
@@ -1997,7 +1981,7 @@ A28:        len q >=1 by A12,FINSEQ_1:28;
 A29:        qp is Simple (oriented Chain of G) by A7,A14,A15,A26,A27,Th19;
 A30:        len qp = len q + 1 by A7,FINSEQ_1:35;
             then
-A31:        qp <> {} by CARD_1:47;
+A31:        qp <> {};
 A32:        FS.(qp.1) = FS.(p.1) by A10,A12,A28,Lm1;
 A33:        FT.(qp.(len qp)) = FT.(p.(len p)) by A6,A7,A14,A30,Lm2;
 A34:        rng qp = rng q \/ rng p2 by FINSEQ_1:44;
@@ -2011,7 +1995,7 @@ A34:        rng qp = rng q \/ rng p2 by FINSEQ_1:44;
           suppose
 A35:        FS.(q.1) = FT.(q.(len q));
             reconsider p2 as Simple (oriented Chain of G) by A7,Th18;
-A36:        p2 <> {} by A7,CARD_1:47;
+A36:        p2 <> {} by A7;
             FT.(p2.(len p2)) =FT.(p.(len p)) by A6,A7,Lm2;
             then p2 in {w where w is Simple (oriented Chain of G) : w <> {} &
             FS.(w.1) = FS.(p.1) & FT.(w.(len w)) = FT.(p.(len p)) &
@@ -2130,7 +2114,7 @@ A28:        p2.1=p.m by A18,A23,Lm2;
             then
 A29:        FT.(p2.(len p2))=v2 by A10,Def3;
             reconsider p1,p2 as oriented Chain of G by A23,Th14;
-            p2 <> {} by A27,FINSEQ_1:28;
+            p2 <> {} by A27;
             then
 A30:        p2 is_orientedpath_of v1,v2 by A26,A28,A29,Def3;
             vertices(p1^p2) \ {v2} c= V by A7,A23,Def4;
@@ -2187,7 +2171,7 @@ A45:        p1.(len p1)=p.n1 by A40,A41,Lm1;
               suppose m=len vs;
                 then
 A46:            FT.(p1.(len p1))=v2 by A10,A15,A16,A44,A45,Def3;
-                p1 <> {} by A40,A41,FINSEQ_1:28;
+                p1 <> {} by A40,A41;
                 then
 A47:            p1 is_orientedpath_of v1,v2 by A43,A46,Def3;
                 vertices(p1^p2) \ {v2} c= V by A7,A40,Def4;
@@ -2238,7 +2222,7 @@ A59:            FT.(pq.(len pq))=v2 by A10,Def3;
 A60:            len pq = n1 + (1+h) by A40,A55,FINSEQ_1:35;
                 1 <= 1+h & 1+h <= n1+(1+h) by NAT_1:12;
                 then 1<= len pq by A60,XXREAL_0:2;
-                then pq <> {} by FINSEQ_1:28;
+                then pq <> {};
                 then
 A61:            pq is_orientedpath_of v1,v2 by A58,A59,Def3;
 A62:            rng q2 c= rng p by A55,FINSEQ_1:43;
@@ -2466,8 +2450,7 @@ A2: for i be Nat st i in dom f holds f.i >= 0;
     then consider y being set such that
 A3: y in dom f & x = f.y by FUNCT_1:def 5;
     reconsider y as Element of NAT by A3;
-    y is Nat;
-    hence x >= 0 by A2,A3;
+    thus x >= 0 by A2,A3;
   end;
 end;
 
@@ -2555,7 +2538,7 @@ A1: pe = {} & W is_weight_of G;
   set f=RealSequence(pe,W);
   dom f = dom pe by A1,Def15;
   then len f = len pe by FINSEQ_3:31
-    .= 0 by A1,CARD_1:47;
+    .= 0 by A1;
   hence 0=cost(pe,W) by FINSEQ_1:32,RVSUM_1:102;
 end;
 
@@ -2664,7 +2647,7 @@ A2: P[0]
   proof
     let p, q be FinSequence of D;
     assume q is one-to-one & rng q c= rng p & len q = 0;
-    then q = {} by CARD_2:59;
+    then q = {};
     then cost(q,W) = 0 by A1,Th50,Th55;
     hence cost(q,W) <= cost(p,W) by A1,Th54;
   end;
@@ -2753,7 +2736,7 @@ A1: vs is_oriented_vertex_seq_of ps &
   (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs)
   by GRAPH_4:def 7;
 A2: len vs = len ps + 1 by A1,GRAPH_4:def 5;
-  then vs <> {} by CARD_1:47;
+  then vs <> {};
   then consider q being FinSequence, x be set such that
 A3: vs = q^<*x*> by FINSEQ_1:63;
 A4: len ps + 1 = len q + len <*x*> by A2,A3,FINSEQ_1:35
@@ -2802,6 +2785,7 @@ proof
   set n = EdgesCount G, D = the Edges of G,
   A = {x where x is Element of D* : len x <= n };
 A1: D is finite by GRAPH_1:def 8;
+X: A is finite by A1,Th4;
   AcyclicPaths(G) c= A
   proof
     let x;
@@ -2812,7 +2796,7 @@ A3: p is Element of D* by FINSEQ_1:def 11;
     len p <= n by Th62;
     hence x in A by A2,A3;
   end;
-  hence thesis by A1,Th4,FINSET_1:13;
+  hence thesis by X;
 end;
 
 registration
@@ -2824,19 +2808,19 @@ end;
 Lm6: AcyclicPaths(P) is finite
 proof
   AcyclicPaths(P) c= AcyclicPaths(G) by Th42;
-  hence thesis by FINSET_1:13;
+  hence thesis;
 end;
 
 Lm7: AcyclicPaths(v1,v2) is finite
 proof
   AcyclicPaths(v1,v2) c= AcyclicPaths(G) by Th43;
-  hence thesis by FINSET_1:13;
+  hence thesis;
 end;
 
 Lm8: AcyclicPaths(v1,v2,V) is finite
 proof
   AcyclicPaths(v1,v2,V) c= AcyclicPaths(G) by Th49;
-  hence thesis by FINSET_1:13;
+  hence thesis;
 end;
 
 registration
@@ -2981,7 +2965,7 @@ A18:  v1=FS.(r.1) by A6,Def3;
 A19:      i=0;
           then
 A20:      v1=FS.e by A6,A14,Def3;
-A21:      t1 <> {} by A10,FINSEQ_1:28;
+A21:      t1 <> {} by A10;
 A22:      FS.(t1.1) = v1 by A6,A15,A19,Def3;
 A23:      t1 is_orientedpath_of v1,v3 by A1,A2,A10,A14,A15,A16,A17,A20,A21,Def3
           ,Th35;
@@ -3006,7 +2990,7 @@ A28:      cost(P,W) <= cost(q,W) by A1,A16,A27;
           cost(q,W) <= cost(t1,W) by A26,A27,Def18;
           then
 A29:      cost(P,W) <= cost(t1,W) by A28,XXREAL_0:2;
-          s = {} by A7,A19,CARD_2:59;
+          s = {} by A7,A19;
           then s^t1 = t1 by FINSEQ_1:47;
           hence cost(P,W) <= cost(r,W) by A13,A29,XXREAL_0:2;
         end;
@@ -3030,7 +3014,7 @@ A34:        v3=FT.(r.i) by A30,A32,GRAPH_1:def 12;
 A35:      len u = len s + len t1 by FINSEQ_1:35;
           then len u >= 1 by A10,NAT_1:12;
           then
-A36:      u <> {} by FINSEQ_1:28;
+A36:      u <> {};
           u.1 =s.1 by A7,A30,Lm1
             .=r.1 by A7,A30,Lm1;
           then
@@ -3215,7 +3199,7 @@ A33:        FS.(s2.1)=v2;
             then s2.1=e by A1,A13,A14,A18,A32,GRAPH_1:def 4;
             then
 A34:        s2=pe by A17,FINSEQ_1:57;
-            s1 <> {} by A19,FINSEQ_1:28;
+            s1 <> {} by A19;
             then s1 is_orientedpath_of v1,v2 by A21,A26,A33,Def3;
             then s1 is_orientedpath_of v1,v2,V by A30,Def4;
             then
@@ -3272,7 +3256,7 @@ A45:        FS.(q'.1)=v1 & FT.(q'.len q')=vx & q'<>{} by Def3;
             ,A25,Th15;
 A46:        len qx = len q' + 1 by A17,FINSEQ_1:35;
             then
-A47:        qx <> {} by CARD_1:47;
+A47:        qx <> {};
 A48:        len q' >= 1 by A45,FINSEQ_1:28;
             then
 A49:        FS.(qx.1)=v1 by A45,Lm1;
@@ -3304,7 +3288,7 @@ A54:        len s1=i+j by A31,NAT_1:10;
             consider t1,t2 being FinSequence such that
 A55:        len t1 = i & len t2 = j & s1 = t1^t2 by A54,FINSEQ_2:25;
             reconsider t1,t2 as Simple (oriented Chain of G) by A55,Th17;
-A56:        t1 <> {} by A31,A55,FINSEQ_1:28;
+A56:        t1 <> {} by A31,A55;
 A57:        FS.(t1.1)=v1 by A21,A31,A55,Lm1;
             FT.(t1.len t1)=v2 by A31,A55,Lm1;
             then

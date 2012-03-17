@@ -17,19 +17,21 @@ environ
       RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FINSET_1, ORDINAL1,
       NUMBERS, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, COMPLEX1, BINARITH,
       FUNCOP_1, FUNCT_4, SEQ_1, SEQ_2, SEQ_4, STRUCT_0, METRIC_1, TBSP_1,
-      FINSEQ_1, FINSEQ_2, RVSUM_1, NEWTON, CARD_3, FINSEQ_4, RCOMP_1, PRE_TOPC,
+      FINSEQ_1, FINSEQ_2, RVSUM_1, NEWTON, XXREAL_0, XXREAL_1, XXREAL_2,
+      CARD_3, FINSEQ_4, RCOMP_1, PRE_TOPC,
       TOPS_1, TOPS_2, CONNSP_1, CONNSP_2, COMPTS_1, BORSUK_1, PCOMPS_1, EUCLID,
       WEIERSTR, TOPMETR, TOPREAL1, TOPREAL2, T_0TOPSP, JORDAN1, TOPREAL4,
-      PSCOMP_1, SPPOL_1, SPRECT_1, JORDAN2C, XXREAL_0;
+      PSCOMP_1, SPPOL_1, SPRECT_1, JORDAN2C;
  constructors SETFAM_1, FUNCT_3, REAL_1, SQUARE_1, NAT_1, CARD_3, FINSEQOP,
       RCOMP_1, FINSEQ_4, FINSOP_1, NEWTON, BINARITH, TOPS_1, CONNSP_1, TOPS_2,
       COMPTS_1, TBSP_1, T_0TOPSP, MONOID_0, TOPREAL1, TOPREAL2, TOPREAL4,
-      SPPOL_1, JORDAN1, PSCOMP_1, WEIERSTR, SPRECT_1, JORDAN2C, SEQ_1;
+      SPPOL_1, JORDAN1, PSCOMP_1, WEIERSTR, SPRECT_1, JORDAN2C, SEQ_1,
+      XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_4, FINSET_1,
       NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, FINSEQ_1, RCOMP_1,
       STRUCT_0, PRE_TOPC, TOPS_1, COMPTS_1, METRIC_1, PCOMPS_1, BORSUK_1,
       TEX_4, MONOID_0, EUCLID, TOPMETR, JORDAN1, PSCOMP_1, GOBOARD9, WAYBEL_2,
-      SPRECT_1, TOPGRP_1, JORDAN2C, BORSUK_3, VALUED_0;
+      SPRECT_1, TOPGRP_1, JORDAN2C, BORSUK_3, VALUED_0, XXREAL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUBSET_1, FUNCT_1, PRE_TOPC, TOPS_2, CONNSP_1, CONNSP_2,
       BORSUK_1, JORDAN1, JORDAN2C, SEQ_4, PSCOMP_1, SPPOL_1, T_0TOPSP,
@@ -42,7 +44,7 @@ environ
       RVSUM_1, SEQ_4, SPPOL_1, SPRECT_1, SQUARE_1, SUBSET_1, TARSKI, TBSP_1,
       TOPMETR, TOPREAL1, TOPREAL3, TOPREAL4, TOPS_1, TOPS_2, WEIERSTR,
       YELLOW12, ZFMISC_1, XREAL_0, FUNCOP_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
-      COMPLEX1, XREAL_1, BINARITH, XXREAL_0;
+      COMPLEX1, XREAL_1, BINARITH, XXREAL_0, XXREAL_1, XXREAL_2;
  schemes FINSET_1, NAT_1, BINOP_1;
 
 begin  :: Real numbers
@@ -67,19 +69,19 @@ proof
   assume
 A1: 0 <= a & 0 <= b;
   then
-A2: 0 + 0 <= a + b by XREAL_1:9;
+A2: 0 + 0 <= a + b;
   0 <= sqrt a & 0 <= sqrt b by A1,SQUARE_1:def 4;
   then
-A3: 0 + 0 <= sqrt a + sqrt b by XREAL_1:9;
+A3: 0 + 0 <= sqrt a + sqrt b;
 A4: sqrt(a + 2*sqrt a*sqrt b + b)
   = sqrt((sqrt a)^2 + 2*sqrt a*sqrt b + b) by A1,SQUARE_1:def 4
     .= sqrt((sqrt a)^2 + 2*sqrt a*sqrt b + (sqrt b)^2) by A1,SQUARE_1:def 4
     .= sqrt((sqrt a + sqrt b)^2)
     .= sqrt a + sqrt b by A3,SQUARE_1:89;
-  0 <= a*b by A1,REAL_2:121;
+  0 <= a*b by A1;
   then 0 <= sqrt(a*b) by SQUARE_1:def 4;
   then 0 <= sqrt a*sqrt b by A1,SQUARE_1:97;
-  then 0 <= 2*(sqrt a*sqrt b) by REAL_2:121;
+  then 0 <= 2*(sqrt a*sqrt b);
   then a + 0 <= a + 2*sqrt a*sqrt b by XREAL_1:8;
   then a + b <= a + 2*sqrt a*sqrt b + b by XREAL_1:8;
   hence thesis by A2,A4,SQUARE_1:94;
@@ -442,7 +444,7 @@ proof
 A1: a in A;
   then reconsider r = a as Real;
   inf A <= r & r <= sup A by A1,SEQ_4:def 4,def 5;
-  hence a in [.inf A,sup A.] by RCOMP_1:48;
+  hence a in [.inf A,sup A.] by XXREAL_1:1;
 end;
 
 begin  :: Topological preliminaries
@@ -450,10 +452,7 @@ begin  :: Topological preliminaries
 registration
   let T be TopStruct, A be finite Subset of T;
   cluster T|A -> finite;
-  coherence
-  proof
-    thus the carrier of T|A is finite by PRE_TOPC:29;
-  end;
+  coherence by PRE_TOPC:29;
 end;
 
 registration
@@ -474,9 +473,9 @@ registration
     assume C is empty;
     then reconsider D = C as empty Subset of T;
     let A, B be Subset of T|C such that
-A1: [#](T|C) = A \/ B and A,B are_separated;
+ [#](T|C) = A \/ B and A,B are_separated;
     [#](T|D) = {};
-    hence A = {}(T|C) or B = {}(T|C) by A1,XBOOLE_1:15;
+    hence A = {}(T|C) or B = {}(T|C);
   end;
 end;
 
@@ -489,7 +488,7 @@ proof
 A1: f is_homeomorphism;
   assume
 A2: S is connected;
-A3: f is continuous by A1,TOPS_2:def 5;
+A3: f is continuous by A1;
   dom f = [#]S & rng f = [#]T by A1,TOPS_2:def 5;
   then f.:[#]S = [#]T by RELAT_1:146;
   hence T is connected by A2,A3,CONNSP_1:15;
@@ -658,8 +657,8 @@ A2: s <> p and
 A3: 0 <= r;
   assume
 A4: r <= 0;
-  then s = (1-0)*p + r*q by A1,A3,REAL_1:def 5
-    .= (1-0)*p + 0 * q by A3,A4,REAL_1:def 5
+  then s = (1-0)*p + r*q by A1,A3
+    .= (1-0)*p + 0 * q by A3,A4
     .= 1 * p + 0.REAL 2 by EUCLID:33
     .= 1 * p by EUCLID:31
     .= p by EUCLID:33;
@@ -1105,16 +1104,12 @@ A9: g.1 in A & g.2 in B by A4,A8;
 A10: m = g.1 and p`1-r/sqrt 2 < m & m < p`1+r/sqrt 2 by A5;
   consider n being Real such that
 A11: n = g.2 and p`2-r/sqrt 2 < n & n < p`2+r/sqrt 2 by A6,A9;
-  p`1+r/sqrt 2 > p`1-r/sqrt 2 by A9,RCOMP_1:12;
+  p`1+r/sqrt 2 > p`1-r/sqrt 2 by A9,XXREAL_1:28;
   then p`1-(p`1+r/sqrt 2) < p`1-(p`1-r/sqrt 2) by REAL_1:92;
   then -r/sqrt 2+r/sqrt 2 < r/sqrt 2+r/sqrt 2 by XREAL_1:8;
   then
 A12: 0 < (r+r)/sqrt 2 by XCMPLX_1:63;
-A13: now
-    assume 0 >= r;
-    then 0+0 >= r+r by XREAL_1:9;
-    hence contradiction by A12,REAL_2:126,SQUARE_1:84;
-  end;
+A13: 0 < r by A12,SQUARE_1:84;
 A14: dom <*g.1,g.2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
   now
     let k be set;
@@ -1127,7 +1122,7 @@ A14: dom <*g.1,g.2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
   reconsider b = c as Point of Euclid 2 by TOPREAL3:13;
   0 <= (m-p`1)^2 & 0 <= (n-p`2)^2 by XREAL_1:65;
   then
-A15: 0+0 <= (m-p`1)^2 + (n-p`2)^2 by XREAL_1:9;
+A15: 0+0 <= (m-p`1)^2 + (n-p`2)^2;
   abs(m-p`1) < r/sqrt 2 & abs(n-p`2) < r/sqrt 2 by A9,A10,A11,RCOMP_1:8;
   then (abs(m-p`1))^2 < (r/sqrt 2)^2 & (abs(n-p`2))^2 < (r/sqrt 2)^2
   by COMPLEX1:132,SQUARE_1:78;
@@ -1170,13 +1165,13 @@ A5: x in dom f;
 A6:   x = 1;
 A7:   f.1 = A by FUNCT_4:66;
       p`1-r < q`1 & q`1 < p`1+r by A1,A2,Th47;
-      hence g.x in f.x by A6,A7,RCOMP_1:47;
+      hence g.x in f.x by A6,A7,XXREAL_1:4;
     end;
     suppose
 A8:   x = 2;
 A9:   f.2 = B by FUNCT_4:66;
       p`2-r < q`2 & q`2 < p`2+r by A1,A2,Th48;
-      hence g.x in f.x by A8,A9,RCOMP_1:47;
+      hence g.x in f.x by A8,A9,XXREAL_1:4;
     end;
   end;
   hence a in product f by A3,A4,CARD_3:18;
@@ -1199,13 +1194,13 @@ A5: a = proj1.x by FUNCT_2:115;
     reconsider b = a as Real by A5;
     a = x`1 by A5,PSCOMP_1:def 28;
     then p`1-r < b & b < p`1+r by A1,A2,A4,Th47;
-    hence a in ].p`1-r,p`1+r.[ by RCOMP_1:47;
+    hence a in ].p`1-r,p`1+r.[ by XXREAL_1:4;
   end;
   let a be set;
   assume
 A6: a in ].p`1-r,p`1+r.[;
   then reconsider b = a as Real;
-  b < p`1+r by A6,RCOMP_1:47;
+  b < p`1+r by A6,XXREAL_1:4;
   then
 A7: b - p`1 < p`1+r - p`1 by XREAL_1:11;
 A8: a = |[b,p`2]|`1 by EUCLID:56
@@ -1225,7 +1220,7 @@ A9: dist(f,e) = (Pitag_dist 2).(f,e) by METRIC_1:def 1
 A10:  -(b - p`1) > 0 by XREAL_1:60;
 A11:  sqrt ((b - p`1)^2) = sqrt ((-(b - p`1))^2)
         .= -(b - p`1) by A10,SQUARE_1:89;
-      p`1 - r < b by A6,RCOMP_1:47;
+      p`1 - r < b by A6,XXREAL_1:4;
       then p`1 - r + r < b + r by XREAL_1:8;
       then p`1 - b < r + b - b by XREAL_1:11;
       hence dist(f,e) < r by A9,A11;
@@ -1252,13 +1247,13 @@ A5: a = proj2.x by FUNCT_2:115;
     reconsider b = a as Real by A5;
     a = x`2 by A5,PSCOMP_1:def 29;
     then p`2-r < b & b < p`2+r by A1,A2,A4,Th48;
-    hence a in ].p`2-r,p`2+r.[ by RCOMP_1:47;
+    hence a in ].p`2-r,p`2+r.[ by XXREAL_1:4;
   end;
   let a be set;
   assume
 A6: a in ].p`2-r,p`2+r.[;
   then reconsider b = a as Real;
-  b < p`2+r by A6,RCOMP_1:47;
+  b < p`2+r by A6,XXREAL_1:4;
   then
 A7: b - p`2 < p`2+r - p`2 by XREAL_1:11;
 A8: a = |[p`1,b]|`2 by EUCLID:56
@@ -1277,7 +1272,7 @@ A9: dist(f,e) = (Pitag_dist 2).(f,e) by METRIC_1:def 1
 A10:  -(b - p`2) > 0 by XREAL_1:60;
 A11:  sqrt ((b - p`2)^2) = sqrt ((-(b - p`2))^2)
         .= -(b - p`2) by A10,SQUARE_1:89;
-      p`2 - r < b by A6,RCOMP_1:47;
+      p`2 - r < b by A6,XXREAL_1:4;
       then p`2 - r + r < b + r by XREAL_1:8;
       then p`2 - b < r + b - b by XREAL_1:11;
       hence dist(f,e) < r by A9,A11;
@@ -1497,7 +1492,7 @@ A16:  abs(e) + abs(s) + 0 <= abs(e) + abs(s) + abs(n) by A11,XREAL_1:9;
       then abs(B`1) + abs(B`2) <= abs(w) + abs(s) by XREAL_1:9;
       then
 A17:  dist(p,b) <= abs(w) + abs(s) by A6,A7,XXREAL_0:2;
-      0 + 0 <= abs(e) + abs(n) by A10,A11,XREAL_1:9;
+      0 + 0 <= abs(e) + abs(n) by A10,A11;
       then 0 + (abs(w) + abs(s)) <= abs(e) + abs(n) + (abs(w) + abs(s))
       by XREAL_1:9;
       then abs(w) + abs(s) < r by A2,XREAL_1:10;
@@ -1951,7 +1946,7 @@ A1: A = B;
     hence [#]R^1 \ B is open by A1,Lm2,PRE_TOPC:def 5,TOPMETR:24;
   end;
   assume B is closed;
-  then B` is open by TOPS_1:29;
+  then B` is open;
   then B` in the topology of R^1 by PRE_TOPC:def 5;
   then A` is open by A1,Lm2,JORDAN5A:6,TOPMETR:24;
   then A`` is closed by RCOMP_1:def 5;
@@ -2016,7 +2011,7 @@ A2: A is compact;
     suppose
 A3:   A <> {};
       reconsider X = [.inf A,sup A.] as Subset of R^1 by TOPMETR:24;
-      A is closed by A2,RCOMP_1:26;
+      A is closed by A2;
       then
 A4:   B is closed by A1,Th79;
 A5:   A is bounded by A2,RCOMP_1:28;
@@ -2035,14 +2030,7 @@ end;
 
 registration
   cluster finite -> compact Subset of REAL;
-  coherence
-  proof
-    let A be Subset of REAL;
-    assume A is finite;
-    then reconsider B = A as finite Subset of R^1 by TOPMETR:24;
-    B is compact;
-    hence A is compact by Th81;
-  end;
+  coherence by TOPMETR:24,Th81;
 end;
 
 registration
@@ -2063,12 +2051,12 @@ A1: a <> b;
     per cases by A1,REAL_1:def 5;
     suppose
 A2:   a > b;
-      hence Cl ].a,b.[ = {} by PSCOMP_1:35,RCOMP_1:12
-        .= [.a,b.] by A2,RCOMP_1:13;
+      hence Cl ].a,b.[ = {} by PSCOMP_1:35,XXREAL_1:28
+        .= [.a,b.] by A2,XXREAL_1:29;
     end;
     suppose
 A3:   a < b;
-      ].a,b.[ c= [.a,b.] by RCOMP_1:15;
+      ].a,b.[ c= [.a,b.] by XXREAL_1:25;
       hence Cl ].a,b.[ c= [.a,b.] by PSCOMP_1:32;
 A4:   [.a,b.] = {w where w is Real : a <= w & w <= b } by RCOMP_1:def 1;
 A5:   ].a,b.[ = {w where w is Real : a < w & w < b } by RCOMP_1:def 2;
@@ -2180,8 +2168,8 @@ A34:          b-g < (a+b)/2 by A33,XXREAL_0:2;
   assume that
 A35: Cl ].a,b.[ = [.a,b.] and
 A36: a = b;
-  [.a,b.] = {a} by A36,RCOMP_1:14;
-  hence contradiction by A35,A36,PSCOMP_1:35,RCOMP_1:12;
+  [.a,b.] = {a} by A36,XXREAL_1:17;
+  hence contradiction by A35,A36,PSCOMP_1:35,XXREAL_1:28;
 end;
 
 registration
@@ -2190,7 +2178,7 @@ registration
   proof
     reconsider a = {0} as finite Subset of REAL;
     take a;
-    thus thesis by RCOMP_1:28;
+    thus thesis;
   end;
 end;
 
@@ -2457,7 +2445,7 @@ A5: for x, y being Real holds h. [x,y] = <*x,y*>
   then
 A6: h.:[:A1,B1:] = X by Th84;
   h is_homeomorphism by A5,Th85;
-  then h is continuous by TOPS_2:def 5;
+  then h is continuous;
   hence thesis by A1,A6,WEIERSTR:14;
 end;
 
@@ -2472,7 +2460,7 @@ A2: C c= Ball(e,r) by METRIC_6:def 10;
   reconsider p = e as Point of TOP-REAL 2 by TOPREAL3:13;
 A3: Ball(e,r) c= product ((1,2)-->(].p`1-r,p`1+r.[,].p`2-r,p`2+r.[)) by Th50;
   ].p`1-r,p`1+r.[ c= [.p`1-r,p`1+r.] & ].p`2-r,p`2+r.[ c= [.p`2-r,p`2+r .]
-  by RCOMP_1:15;
+  by XXREAL_1:25;
   then product ((1,2)-->(].p`1-r,p`1+r.[,].p`2-r,p`2+r.[)) c=
   product ((1,2)-->([.p`1-r,p`1+r.],[.p`2-r,p`2+r.])) by Th29;
   then
@@ -2619,7 +2607,7 @@ A3: W-bound D = inf (proj1.:D) & W-bound Cl D = inf (proj1.:
   Cl D) by SPRECT_1:48;
 A4: proj1.:Cl D is bounded_below by A2,SPRECT_1:46;
   D c= Cl D by PRE_TOPC:48;
-  then proj1.:D is bounded_below by A4,RCOMP_1:3,RELAT_1:156;
+  then proj1.:D is bounded_below by A4,XXREAL_2:44,RELAT_1:156;
   then inf (proj1.:D) = inf Cl(proj1.:D) by Th77
     .= inf (proj1.:Cl D) by A1,Th92;
   hence thesis by A3;
@@ -2636,7 +2624,7 @@ A3: E-bound D = sup (proj1.:D) & E-bound Cl D = sup (proj1.:
   Cl D) by SPRECT_1:51;
 A4: proj1.:Cl D is bounded_above by A2,SPRECT_1:47;
   D c= Cl D by PRE_TOPC:48;
-  then proj1.:D is bounded_above by A4,RCOMP_1:4,RELAT_1:156;
+  then proj1.:D is bounded_above by A4,XXREAL_2:43,RELAT_1:156;
   then sup (proj1.:D) = sup Cl(proj1.:D) by Th78
     .= sup (proj1.:Cl D) by A1,Th92;
   hence thesis by A3;
@@ -2653,7 +2641,7 @@ A3: N-bound D = sup (proj2.:D) & N-bound Cl D = sup (proj2.:
   Cl D) by SPRECT_1:50;
 A4: proj2.:Cl D is bounded_above by A2,SPRECT_1:47;
   D c= Cl D by PRE_TOPC:48;
-  then proj2.:D is bounded_above by A4,RCOMP_1:4,RELAT_1:156;
+  then proj2.:D is bounded_above by A4,XXREAL_2:43,RELAT_1:156;
   then sup (proj2.:D) = sup Cl(proj2.:D) by Th78
     .= sup (proj2.:Cl D) by A1,Th93;
   hence thesis by A3;
@@ -2670,7 +2658,7 @@ A3: S-bound D = inf (proj2.:D) & S-bound Cl D = inf (proj2.:
   Cl D) by SPRECT_1:49;
 A4: proj2.:Cl D is bounded_below by A2,SPRECT_1:46;
   D c= Cl D by PRE_TOPC:48;
-  then proj2.:D is bounded_below by A4,RCOMP_1:3,RELAT_1:156;
+  then proj2.:D is bounded_below by A4,XXREAL_2:44,RELAT_1:156;
   then inf (proj2.:D) = inf Cl(proj2.:D) by Th77
     .= inf (proj2.:Cl D) by A1,Th93;
   hence thesis by A3;

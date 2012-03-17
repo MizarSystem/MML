@@ -15,7 +15,7 @@ environ
  constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
       FINSEQOP;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1;
+      XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, WELLORD2, XBOOLE_0, FINSEQ_2;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_1,
@@ -91,8 +91,7 @@ theorem
 proof
   assume
 A1: k <> 0;
-  0 <= k;
-  then 0 + 1 <= k by A1,NAT_1:13;
+  0 + 1 <= k by A1,NAT_1:13;
   then 1 <= k & k <= k + n by NAT_1:12;
   hence thesis by FINSEQ_1:3;
 end;
@@ -148,9 +147,6 @@ A1: k - n in Seg k;
     then x = 0;
     hence contradiction by A1,FINSEQ_1:3;
   end;
-
-:::    assume A2: n < k;
-:::     then k in Seg k by FINSEQ_1:5;
   thus thesis by Th13,FINSEQ_1:5;
 end;
 
@@ -184,21 +180,7 @@ theorem
   Seg k <> Seg(k + 1) by Th9,FINSEQ_1:6;
 
 theorem
-  Seg k = Seg(k + n) implies n = 0
-proof
-  assume
-A1: Seg k = Seg(k + n);
-  now per cases;
-    suppose k = 0;
-      hence thesis by A1,FINSEQ_1:4,5;
-    end;
-    suppose k <> 0;
-      then k + n <> 0 by NAT_1:7;
-      hence thesis by A1,Th11,FINSEQ_1:5;
-    end;
-  end;
-  hence thesis;
-end;
+  Seg k = Seg(k + n) implies n = 0 by Th11,FINSEQ_1:5;
 
 theorem Th19:
   Seg k c= Seg(k + n)
@@ -357,8 +339,8 @@ theorem Th33:
   x in rng p implies 1 in dom p
 proof
   assume x in rng p;
-  then p <> {} by RELAT_1:60;
-  then len p <> 0 by CARD_2:59;
+  then p <> {};
+  then len p <> 0;
   then 1 <= 1 & 1 <= len p & dom p = Seg(len p) by FINSEQ_1:def 3,NAT_1:14;
   hence thesis by FINSEQ_1:3;
 end;
@@ -458,7 +440,7 @@ proof
   then Seg(len(Sgm A)),A are_equipotent & Seg(len(Sgm A)) is finite
   by WELLORD2:def 4;
   then card(Seg(len(Sgm A))) = len(Sgm A) & card A = card(Seg(len(Sgm A)))
-  by CARD_1:81,FINSEQ_1:78;
+  by CARD_1:21,FINSEQ_1:78;
   hence thesis;
 end;
 
@@ -524,7 +506,7 @@ A6:   not thesis;
     end;
     then
 A7: X misses Y by XBOOLE_0:def 7;
-    reconsider X1 = X, Y1 = Y as finite set by A1,A2,FINSET_1:13;
+    reconsider X1 = X, Y1 = Y as finite set by A1,A2;
 A8: len r = card(X1 \/ Y1) by A1,A2,A3,Th44,XBOOLE_1:8
       .= card X1 + card Y1 by A7,CARD_2:53
       .= len p + card Y1 by A1,Th44
@@ -813,8 +795,8 @@ end;
 
 theorem Th49:
   Sgm {} = {}
-proof consider k being Element of NAT;
-  {} c= Seg k by XBOOLE_1:2;
+proof
+  {} c= Seg 0 by XBOOLE_1:2;
   hence thesis by FINSEQ_1:72;
 end;
 
@@ -827,7 +809,7 @@ proof
   then n in Seg n by FINSEQ_1:5;
   then {n} c= Seg n by ZFMISC_1:37;
   then rng(Sgm{n}) = {n} & len(Sgm{n}) = card{n} by Th44,FINSEQ_1:def 13;
-  then rng(Sgm{n}) = {n} & len(Sgm{n}) = 1 by CARD_1:79;
+  then rng(Sgm{n}) = {n} & len(Sgm{n}) = 1 by CARD_1:50;
   hence thesis by FINSEQ_1:56;
 end;
 
@@ -1335,10 +1317,9 @@ definition
   p * Sgm ((dom p) \ p " A);
   coherence
   proof
-A1: p = {} implies ex r st p * Sgm((dom p) \ p " A) = r by RELAT_1:62;
     now
       assume p <> {};
-      then len p <> 0 by CARD_2:59;
+      then len p <> 0;
       then reconsider D = Seg(len p) as non empty Subset of NAT by FINSEQ_1:5;
       Seg(len p) \ p " A c= Seg(len p) by XBOOLE_1:36;
       then rng Sgm(Seg(len p) \ p " A) c= D by FINSEQ_1:def 13;
@@ -1348,7 +1329,7 @@ A1: p = {} implies ex r st p * Sgm((dom p) \ p " A) = r by RELAT_1:62;
       take rr = r;
       thus rr = p * Sgm((dom p) \ p " A) by FINSEQ_1:def 3;
     end;
-    hence thesis by A1;
+    hence thesis;
   end;
 end;
 
@@ -1393,7 +1374,7 @@ A1: len(p - A) = len p;
   then not p " A,{} are_equipotent & p " A c= dom p &
   dom p = Seg(len p) & Seg(len p ) is finite
   by CARD_1:46,FINSEQ_1:def 3,RELAT_1:167;
-  then 0 <> card(p " A) & 0 <= card(p " A) by CARD_1:21,78;
+  then 0 <> card(p " A) & 0 <= card(p " A) by CARD_1:21,47;
   then 0 < card(p " A) & len(p - A) = len p - card(p " A) by Th66;
   hence thesis by A1;
 end;
@@ -1498,11 +1479,11 @@ A1: p - A = {} and
 A2: not rng p c= A;
     rng p \ A <> {} by A2,XBOOLE_1:37;
     then rng(p - A) <> {} by Th72;
-    hence thesis by A1,RELAT_1:60;
+    hence thesis by A1;
   end;
   assume rng p c= A;
   then rng p \ A = {} & rng(p - A) = rng p \ A by Th72,XBOOLE_1:37;
-  hence thesis by RELAT_1:64;
+  hence thesis;
 end;
 
 theorem Th76:
@@ -1654,7 +1635,7 @@ A17:  card(t " A) = card(p " A) + card(<* x *> " A) by Th63;
       then <* x *> " A = {} or <* x *> " A = {1} by ZFMISC_1:39;
       then (card(t " A) = card(p " A) or
       card(t " A) = card(p " A) + 1) & card(t " A) <= card(t " A) &
-      card(p " A) <= card(p " A) + 1 by A17,CARD_1:78,79,NAT_1:12;
+      card(p " A) <= card(p " A) + 1 by A17,CARD_1:47,50,NAT_1:12;
       then l + card(t " A) <= l + (card(p " A) + 1) by XREAL_1:9;
       then l + card(t " A) <= len t by A16,XXREAL_0:2;
       then l <= len s1 by A9,XREAL_1:21;
@@ -2130,7 +2111,7 @@ A6: len q = l by A2,Th59;
     then ex k being Element of NAT st x = k & k in dom q & k <= n & q.k in A;
     hence thesis;
   end;
-  then reconsider B as finite set by FINSET_1:13;
+  then reconsider B as finite set;
   now per cases;
     suppose
 A7:   p.(l + 1) in A;
@@ -2276,7 +2257,7 @@ A47:        k in Seg n by A45,FINSEQ_1:3;
 A48:      {n} c= Seg n by ZFMISC_1:37;
           card B <= card((Seg n) \ {n}) by A42,NAT_1:44;
           then card B <= card(Seg n) - card{n} by A48,CARD_2:63;
-          then b <= card(Seg n) - 1 by CARD_1:79;
+          then b <= card(Seg n) - 1 by CARD_1:50;
           then b <= n - 1 by FINSEQ_1:78;
           then b + 1 <= n by XREAL_1:21;
           then
@@ -2371,7 +2352,7 @@ A1: p is one-to-one;
   Seg(len p) \ p " A c= Seg(len p) by XBOOLE_1:36;
   then p - A = p * Sgm(Seg(len p) \ p " A) &
   Sgm(Seg(len p) \ p " A) is one-to-one by Lm1,FINSEQ_1:def 3;
-  hence thesis by A1,FUNCT_1:46;
+  hence thesis by A1;
 end;
 
 theorem Th95:
@@ -2423,7 +2404,7 @@ A13: y in p " A by A11,FUNCT_1:def 13;
     then f.y = x by A4,A12;
     hence thesis by A3,A13,FUNCT_1:def 5;
   end;
-  then card(p " A) = card(A /\ rng p) by CARD_1:81;
+  then card(p " A) = card(A /\ rng p) by CARD_1:21;
   hence thesis by Th66;
 end;
 
@@ -2447,7 +2428,7 @@ A1: p is one-to-one and
 A2: x in rng p;
   {x} c= rng p by A2,ZFMISC_1:37;
   then len(p - {x}) = len p - card{x} by A1,Th96;
-  hence thesis by CARD_1:79;
+  hence thesis by CARD_1:50;
 end;
 
 theorem Th98:
@@ -2749,7 +2730,7 @@ proof
   let D be non empty set, df be FinSequence of D;
   assume df is non empty;
   then
-A1: len df <> 0 by CARD_2:59;
+A1: len df <> 0;
   then 1 <= len df by NAT_1:14;
   then 1 in dom df by Th27;
   then reconsider d = df.1 as Element of D by FINSEQ_2:13;
@@ -2853,9 +2834,9 @@ proof
   hereby
     assume
 A1: i in dom p;
-    then p <> {} by RELAT_1:60;
+    then p <> {};
     then
-A2: len p <> 0 by CARD_2:59;
+A2: len p <> 0;
 A3: i in Seg len p by A1,FINSEQ_1:def 3;
     consider m being Nat such that
 A4: len p = m+1 by A2,NAT_1:6;

@@ -14,20 +14,23 @@ environ
  notations TARSKI, XBOOLE_0, CARD_1, NUMBERS, SUBSET_1, XCMPLX_0, XXREAL_0,
       XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1, FINSEQ_1, SEQ_1,
       PBOOLE, FUNCT_2, GRAPH_5, ORDINAL1, POLYNOM1, UPROOTS, RELSET_1,
-      FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, PRE_CIRC, SEQM_3, GLIB_000,
+      FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, PRE_CIRC,
+      XXREAL_2, SEQM_3, GLIB_000,
       GLIB_001, ABIAN, GLIB_002, GLIB_003, GLIB_004, RECDEF_1;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, NAT_D, BINOP_2, PRE_CIRC,
-      GRAPH_2, GRAPH_5, UPROOTS, GLIB_004, SEQ_1, RECDEF_1;
+      GRAPH_2, GRAPH_5, UPROOTS, GLIB_004, SEQ_1, RECDEF_1, XXREAL_2, RVSUM_1,
+      SEQM_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, RFINSEQ, GLIB_000,
-      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, GLIB_004, VALUED_0;
+      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, GLIB_004, VALUED_0,
+      XXREAL_2;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions GLIB_000, GLIB_003, FUNCOP_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
       FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_003, GLIB_004, GRAPH_5,
       HEYTING3, INT_1, NAT_1, PBOOLE, PEPIN, POLYNOM1, REAL_1, RELAT_1, TARSKI,
       UPROOTS, XBOOLE_0, XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1,
-      NAT_D, VALUED_0, XREAL_0, PRE_CIRC;
+      NAT_D, VALUED_0, XREAL_0, PRE_CIRC, XXREAL_2;
  schemes NAT_1, SUBSET_1, FINSEQ_1, RECDEF_1, CLASSES1;
 
 begin ::Preliminaries definitions for Maximum Flow Algorithm
@@ -587,13 +590,13 @@ end;
 registration
   let s be real-weighted WEVGraphSeq, n be Nat;
   cluster s.n -> real-weighted WEVGraph;
-  coherence by GLIB_003:def 27;
+  coherence;
 end;
 
 registration
   let s be real-elabeled WEVGraphSeq, n be Nat;
   cluster s.n -> real-elabeled WEVGraph;
-  coherence by GLIB_003:def 29;
+  coherence;
 end;
 
 definition
@@ -850,7 +853,7 @@ A1: for n being Element of NAT holds CS.n <> CS.(n+1);
     defpred P[Element of NAT] means card (CS.$1).labeledV() = $1+1;
     (CS.0).labeledV() = {source} by Th3;
     then
-A2: P[0] by CARD_1:79;
+A2: P[0] by CARD_1:50;
 A3: now
       let n be Element of NAT;
       assume
@@ -2219,10 +2222,10 @@ A2:   x in dom W.edgeSeq() & y = W.edgeSeq().x by A1,FUNCT_1:def 5;
       then reconsider D as non empty finite Subset of REAL;
       reconsider IT = min D as Real by XREAL_0:def 1;
       take IT;
-      thus IT in rng W.flowSeq() by PRE_CIRC:def 4;
+      thus IT in rng W.flowSeq() by XXREAL_2:def 7;
       let k be Real;
       assume k in rng W.flowSeq();
-      hence IT <= k by PRE_CIRC:def 4;
+      hence IT <= k by XXREAL_2:def 7;
     end;
     thus thesis;
   end;
@@ -2653,13 +2656,13 @@ end;
 registration
   let s be real-weighted WEGraphSeq, n be Nat;
   cluster s.n -> real-weighted WEGraph;
-  coherence by GLIB_003:def 27;
+  coherence;
 end;
 
 registration
   let s be real-elabeled WEGraphSeq, n be Nat;
   cluster s.n -> real-elabeled WEGraph;
-  coherence by GLIB_003:def 29;
+  coherence;
 end;
 
 registration
@@ -3140,10 +3143,10 @@ A41:  V2 qua set \ {x} is Subset of V2;
       then sink in (VG \ V2) by A40,XBOOLE_0:def 4;
       then {sink} c= (VG \ V2) by ZFMISC_1:37;
       then card ((VG\V2)\{sink}) = n+1-card {sink} by A40,CARD_2:63
-        .= n+1-1 by CARD_1:79
+        .= n+1-1 by CARD_1:50
         .= n;
       then
-A42:  x in (VG)\V2 & not x in {sink} by CARD_1:78,XBOOLE_0:def 4;
+A42:  x in (VG)\V2 & not x in {sink} by CARD_1:47,XBOOLE_0:def 4;
       then
 A43:  x in VG & not x in V2 by XBOOLE_0:def 4;
       set V1 = V2 \/ {x};
@@ -3159,7 +3162,7 @@ A44:  VG \ V1 = (VG \ V2) \ {x} by XBOOLE_1:41;
       {x} c= VG \ V2 by A42,ZFMISC_1:37;
       then
 A45:  card (VG \ V1) = card (VG \ V2) - card {x} by A44,CARD_2:63
-        .= n + 1 - 1 by A40,CARD_1:79
+        .= n + 1 - 1 by A40,CARD_1:50
         .= n;
 A46:  source in V1 by A40,XBOOLE_0:def 2;
 A47:  x <> sink by A42,TARSKI:def 1;
@@ -3984,7 +3987,7 @@ A16:      2 * n1div2 + 1 = n + 2 by A14;
 A17:          e DJoins P.n,P.(n+2),G;
               then
 A18:          EL1.e + P.tolerance() = EL2.e by A3,A6,Def20;
-              0 + 0 <= EL1.e + P.tolerance() by A5,A9,XREAL_1:9;
+              0 + 0 <= EL1.e + P.tolerance() by A5,A9;
               hence 0 <= EL2.e by A3,A6,A17,Def20;
               PFS.n1div2 = (the_Weight_of G).e - EL1.e
               by A6,A13,A15,A16,A17,Def18;
@@ -5045,9 +5048,7 @@ A4: the_ELabel_of G0 = the_Edges_of G --> 0 by A2,GLIB_000:11;
       assume e in the_Edges_of G0;
       then
 A5:   e in the_Edges_of G by A3,GLIB_000:def 36;
-      hence 0 <= (the_ELabel_of G0).e by A4,FUNCOP_1:13;
-      G0 is nonnegative-weighted by GLIB_003:def 28;
-      then
+      thus 0 <= (the_ELabel_of G0).e by A4;
 A6:   rng the_Weight_of G0 c= Real>=0 by GLIB_003:def 14;
       dom the_Weight_of G0 = the_Edges_of G0 by PBOOLE:def 3
         .= the_Edges_of G by A3,GLIB_000:def 36;

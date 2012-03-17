@@ -14,13 +14,14 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, MCART_1, SETFAM_1,
       MEMBERED, FINSET_1, RELAT_1, FUNCT_1, FUNCT_2, FRAENKEL, REALSET1,
       FUNCT_4, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1,
-      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, STRUCT_0, AMI_1, PRE_CIRC,
-      AMISTD_1;
+      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, XXREAL_2,
+      STRUCT_0, AMI_1, AMISTD_1;
  constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, BINARITH, PRE_CIRC, PRALG_2,
-      AMISTD_1, INT_1;
+      AMISTD_1, INT_1, MEMBERED, XXREAL_2;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       FRAENKEL, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3,
-      REALSET1, PRE_CIRC, FUNCT_7, STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4;
+      REALSET1, PRE_CIRC, FUNCT_7, STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4,
+      XXREAL_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FRAENKEL, REAL_1, FUNCT_7,
       AMI_1, YELLOW_8, AMISTD_1, XBOOLE_0, FUNCOP_1, CARD_3;
@@ -28,7 +29,7 @@ environ
       FINSEQ_2, FINSEQ_3, FUNCT_1, FUNCT_2, FUNCT_4, GRFUNC_1, INT_1, MCART_1,
       CATALG_1, NAT_1, PRE_CIRC, REAL_1, REALSET1, RELAT_1, SETFAM_1, TARSKI,
       YELLOW_8, ZFMISC_1, CARD_3, ORDINAL1, XBOOLE_0, XBOOLE_1, FINSET_1,
-      XREAL_1, XXREAL_0, DOMAIN_1, FUNCT_7, PARTFUN1;
+      XREAL_1, XXREAL_0, DOMAIN_1, FUNCT_7, PARTFUN1, XXREAL_2;
  schemes FUNCT_7, FINSEQ_1, CLASSES1;
 
 begin
@@ -980,7 +981,7 @@ proof
   let S be standard halting (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over NAT,N));
   thus card Stop S = card {[il.(S,0),halt S]} by FUNCT_4:87
-    .= 1 by CARD_1:79;
+    .= 1 by CARD_1:50;
 end;
 
 theorem Th26:
@@ -1400,7 +1401,7 @@ theorem
   realistic (standard-ins IC-Ins-separated definite
   (non empty stored-program AMI-Struct over NAT,N)),
   I being Instruction of S st I is sequential
-  holds IncAddr(I,k) is sequential by Th24,Th29;
+  holds IncAddr(I,k) is sequential by Th29;
 
 theorem Th37:
   for S being regular standard (standard-ins IC-Ins-separated definite
@@ -1574,7 +1575,7 @@ registration
   coherence
   proof
     dom IncAddr(F,k) = dom F by Def15;
-    hence thesis by RELAT_1:60;
+    hence thesis;
   end;
 end;
 
@@ -1803,7 +1804,7 @@ A2: a in dom F by XBOOLE_0:def 1;
 A3: a = il.(S,m) by AMISTD_1:26;
     reconsider m as Element of NAT by ORDINAL1:def 13;
     il.(S,m+k) in dom Shift(F,k) by A1,A2,A3;
-    hence thesis by RELAT_1:60;
+    hence thesis;
   end;
 end;
 
@@ -1856,7 +1857,7 @@ A2: il.(S,0) in dom Shift(F,k);
   then consider m being Element of NAT such that
 A3: il.(S,0) = il.(S,m+k) and il.(S,m) in dom F by A2;
   m+k=0 by A3,AMISTD_1:25;
-  hence contradiction by A1,NAT_1:7;
+  hence contradiction by A1;
 end;
 
 theorem
@@ -2039,7 +2040,7 @@ A4: IC Exec(I, s2) = NextLoc IC s2 by A1,AMISTD_1:def 16
   IC Exec(I,s1) = NextLoc IC s1 by A1,AMISTD_1:def 16
     .= il.(S,locnum IC s1 + 1);
   hence IC Exec(I,s1) + k = IC Exec(I,s2) by A4,AMISTD_1:def 13
-    .= IC Exec(IncAddr(I,k), s2) by A1,Th24,Th29;
+    .= IC Exec(IncAddr(I,k), s2) by A1,Th29;
 end;
 
 registration
@@ -2071,7 +2072,7 @@ A3: IC S in dom (IC S .--> (IC s1 + k)) by TARSKI:def 1;
     .= (IC S .--> (IC s1 + k)).IC S by FUNCOP_1:87
     .= IC s2 by A2,A3,FUNCT_4:14
     .= IC Exec(I,s2) by A1,AMI_1:def 8
-    .= IC Exec(IncAddr(I,k), s2) by A1,Th23,Th29;
+    .= IC Exec(IncAddr(I,k), s2) by A1,Th29;
 end;
 
 registration
@@ -2136,7 +2137,7 @@ A4:     InsCode IncAddr(I,k) = 1 by Def14;
         then
 A5:     I is halting by AMISTD_1:20;
         then
-A6:     IncAddr(I,k) is halting by Th23,Th29;
+A6:     IncAddr(I,k) is halting;
         thus IC Exec(I,s1) + k = IC s1 + k by A5,AMI_1:def 8
           .= IC Exec(IncAddr(I,k), s2) by A2,A6,AMI_1:def 8;
       end;
@@ -2401,7 +2402,7 @@ A6:     dom F \ dom R = dom G by Th47;
 A7:     m in dom F by A1,A2,AMISTD_1:def 20;
         locnum l in M by A1,A3,A6;
         then
-A8:     locnum l <= max M by PRE_CIRC:def 1;
+A8:     locnum l <= max M by XXREAL_2:def 8;
         now
           assume m = LastLoc F;
           then LastLoc F <= il.(S,locnum l) by A2,AMISTD_1:def 13;
@@ -2441,7 +2442,7 @@ A1: [a,b] = [LastLoc F,F.LastLoc F] by TARSKI:def 1;
   hence card CutLastLoc F = card F - card (LastLoc F .--> F.LastLoc F)
   by CARD_2:63
     .= card F - card {[LastLoc F,F.LastLoc F]} by FUNCT_4:87
-    .= card F - 1 by CARD_1:79;
+    .= card F - 1 by CARD_1:50;
 end;
 
 theorem Th50:
@@ -2481,7 +2482,7 @@ A6: card f = card F - 1 by Th49
   end;
   suppose k - 1 < 0;
     then m + k = 0 or m + k < 0 by A5,A6,BINARITH:def 3;
-    hence thesis by A6,NAT_1:7;
+    hence thesis by A6;
   end;
 end;
 
@@ -3296,7 +3297,7 @@ A33:      x = il.(S,m+(card (F ';' G) -' 1)) and
           k = m + (card G -' 1) + (card F -' 1) by A9,A15,A33,AMISTD_1:25;
           then m + (card G -' 1) + (card F -' 1) = card F -' 1
           by A31,PRE_CIRC:25;
-          then card G -' 1 = 0 by NAT_1:7;
+          then card G -' 1 = 0;
           then card G - 1 = 0 by PRE_CIRC:25;
           hence contradiction by A4,Th26;
         end;
@@ -3345,7 +3346,7 @@ A46:    not il.(S,0) in dom Shift(IncAddr(H,card G -' 1), card G -' 1) by
         Th41;
         card CutLastLoc G <> {} by A45,Th49;
         then
-A47:    il.(S,0) in dom CutLastLoc G by AMISTD_1:49,CARD_1:78;
+A47:    il.(S,0) in dom CutLastLoc G by AMISTD_1:49,CARD_1:47;
 A48:    pi(G,il.(S,0)) = G.il.(S,0) by A36,AMI_1:def 47
           .= (CutLastLoc G).il.(S,0) by A47,GRFUNC_1:8
           .= (G ';' H).il.(S,0) by A46,FUNCT_4:12

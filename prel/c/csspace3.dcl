@@ -35,7 +35,7 @@
 <ArgTypes/>
 <Func kind="K" nr="169"/>
 <Cluster>
-<Adjective nr="82">
+<Adjective nr="83">
 <Func kind="K" nr="157"/>
 </Adjective>
 </Cluster>
@@ -58,12 +58,12 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="70"/>
+<Adjective nr="46"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="80"/>
+<Adjective nr="73"/>
 <Adjective nr="81"/>
+<Adjective nr="82"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE3" nr="4">
@@ -80,7 +80,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -97,7 +97,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <Func kind="K" nr="79"/>
 <LocusVar nr="1"/>
@@ -114,7 +114,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <LocusVar nr="1"/>
 <Func kind="K" nr="78"/>
 </Adjective>
@@ -131,21 +131,21 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="83"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="84"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE3" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="70"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="46"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
-<Adjective nr="81"/>
-<Adjective nr="84"/>
+<Adjective nr="73"/>
+<Adjective nr="82"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 </Registrations>

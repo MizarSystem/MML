@@ -25,9 +25,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="15"/>
-<Adjective nr="19"/>
-<Adjective nr="21"/>
+<Adjective nr="16"/>
+<Adjective nr="20"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ZF_LANG" nr="1">
@@ -53,7 +53,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="3">
@@ -72,14 +72,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="46"/>
 </Typ>
@@ -88,20 +88,20 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="46"/>
 </Typ>
@@ -111,7 +111,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ZF_LANG" nr="6">
@@ -122,7 +122,7 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="46"/>
 </Typ>
@@ -132,7 +132,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -23,7 +23,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="5"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SETWISEO" nr="2">
@@ -42,7 +42,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="5"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -59,7 +59,7 @@
 <Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="14"/>
-<Adjective nr="16">
+<Adjective nr="17">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

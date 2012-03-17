@@ -6,96 +6,34 @@
 
 environ
 
- vocabularies MEASURE5, BOOLE, MEASURE6, SUPINF_1, ARYTM_1, RLVECT_1, ARYTM_3,
+ vocabularies MEASURE5, BOOLE, SUPINF_1, ARYTM_1, RLVECT_1, ARYTM_3,
       RCOMP_1, RELAT_1, GROUP_1, INT_1, URYSOHN1, PRALG_2, ORDINAL2, ABSVALUE,
-      ARYTM, PROB_1, LIMFUNC1, MSUALG_3;
+      ARYTM, PROB_1, LIMFUNC1, MSUALG_3, XXREAL_2, SEQ_4, SEQ_2, MEMBERED;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0, REAL_1,
-      COMPLEX1, NUMBERS, NEWTON, INT_1, NAT_1, SUPINF_1, SUPINF_2, MEASURE5,
-      PROB_1, MEASURE6, URYSOHN1, INTEGRA2, LIMFUNC1;
+      COMPLEX1, NUMBERS, MEMBERED,
+      NEWTON, INT_1, NAT_1, XXREAL_1, XXREAL_2,
+      SUPINF_1, MEASURE5,
+      PROB_1, MEASURE6, URYSOHN1, INTEGRA2, LIMFUNC1, SEQ_4, SUPINF_2,
+      EXTREAL1;
  constructors DOMAIN_1, REAL_1, NAT_1, PROB_1, LIMFUNC1, NEWTON, SUPINF_2,
-      MEASURE6, URYSOHN1, INTEGRA2;
+      MEASURE6, URYSOHN1, INTEGRA2, SUPINF_1, EXTREAL1, SEQ_4, PSCOMP_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, MEMBERED;
+      INT_1, MEMBERED, XXREAL_1, SEQ_4, XXREAL_2, MEASURE6;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0, PROB_1, LIMFUNC1;
+ definitions TARSKI, XBOOLE_0, PROB_1, LIMFUNC1, XXREAL_2, XCMPLX_0;
  theorems TARSKI, NAT_1, REAL_1, REAL_2, SEQ_4, ABSVALUE, URYSOHN1, XREAL_0,
       SUPINF_1, SUPINF_2, MEASURE5, MEASURE6, INT_1, INTEGRA2, XBOOLE_0,
       XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, NEWTON, ORDINAL1,
-      NUMBERS, LIMFUNC1, XXREAL_1;
+      NUMBERS, LIMFUNC1, XXREAL_1, MEMBERED, XXREAL_2, EXTREAL1;
  schemes REAL_1, NAT_1;
 
 begin
 
 ::                    Properties of the Intervals
 
-theorem Th1:
-  for A being Interval st A <> {} holds
-  (^^A < A^^ implies vol(A) = A^^ - ^^A) & (A^^ = ^^A implies vol(A) = 0.)
-proof
-  let A be Interval;
-  assume
-A1: A <> {};
-  set aa = ^^A, bb = A^^;
-A2: A^^ = ^^A implies vol(A) = 0.
-  proof
-    assume
-A3: A^^ = ^^A;
-    now per cases by MEASURE5:def 9;
-      case
-A4:     A is open_interval;
-        then A = ].aa,bb.[ & aa <= bb by A1,MEASURE6:48;
-        hence thesis by A3,A4,MEASURE5:53;
-      end;
-      case
-A5:     A is closed_interval;
-        then A = [.aa,bb.] & aa <= bb by A1,MEASURE6:49;
-        hence thesis by A3,A5,MEASURE5:54;
-      end;
-      case
-A6:     A is right_open_interval;
-        then A = [.aa,bb.[ & aa <= bb by A1,MEASURE6:50;
-        hence thesis by A3,A6,MEASURE5:55;
-      end;
-      case
-A7:     A is left_open_interval;
-        then A = ].^^A,A^^.] by A1,MEASURE6:51;
-        hence thesis by A3,A7,MEASURE5:56;
-      end;
-    end;
-    hence thesis;
-  end;
-  ^^A < A^^ implies vol(A) = A^^ - ^^A
-  proof
-    assume
-A8: ^^A < A^^;
-    now per cases by MEASURE5:def 9;
-      case
-A9:     A is open_interval;
-        then A = ].^^A,A^^.[ by A1,MEASURE6:48;
-        hence thesis by A8,A9,MEASURE5:53;
-      end;
-      case
-A10:    A is closed_interval;
-        then A = [.aa,bb.] & aa <= bb by A1,MEASURE6:49;
-        hence thesis by A8,A10,MEASURE5:54;
-      end;
-      case
-A11:    A is right_open_interval;
-        then A = [.^^A,A^^.[ by A1,MEASURE6:50;
-        hence thesis by A8,A11,MEASURE5:55;
-      end;
-      case
-A12:    A is left_open_interval;
-        then A = ].^^A,A^^.] by A1,MEASURE6:51;
-        hence thesis by A8,A12,MEASURE5:56;
-      end;
-    end;
-    hence thesis;
-  end;
-  hence thesis by A2;
-end;
+canceled;
 
-theorem
+theorem Th2:
   for A being Subset of REAL holds for x being Real st x <> 0 holds
   x" ** (x ** A) = A
 proof
@@ -123,13 +61,8 @@ A4: t in A & z = x * t by A3,INTEGRA2:def 2;
 A5: y in A;
   then reconsider y as Real;
   set t = y / x";
-  x" <> 0 by A1,XCMPLX_1:203;
-  then
-A6: y = x" * t by XCMPLX_1:88;
-  t = 1 * t
-    .= x * x" * t by A1,XCMPLX_0:def 7
-    .= x * y by A6;
-  then t in x ** A by A5,INTEGRA2:def 2;
+A6: y = x" * t by XCMPLX_1:88,A1,XCMPLX_1:203;
+   t in x ** A by A5,INTEGRA2:def 2;
   hence thesis by A6,INTEGRA2:def 2;
 end;
 
@@ -191,7 +124,6 @@ theorem Th5:
   for x being Real holds x ** {} = {}
 proof
   let x be Real;
-A1: {} c= x ** {} by XBOOLE_1:2;
   x ** {} c= {}
   proof
     let y be set;
@@ -202,7 +134,7 @@ A2: y in x ** {};
 A3: z in {} & y = x * z by A2,INTEGRA2:def 2;
     thus thesis by A3;
   end;
-  hence thesis by A1,XBOOLE_0:def 10;
+  hence thesis;
 end;
 
 theorem Th6:
@@ -222,10 +154,10 @@ A1: a <= b;
 end;
 
 theorem Th7:
-  for x being R_eal holds [.x,x.] is Interval
+  for x being R_eal holds |[.x,x.]| is Interval
 proof
   let x be R_eal;
-  [.x,x.] is closed_interval by MEASURE5:def 6;
+  |[.x,x.]| is closed_interval by MEASURE5:def 6;
   hence thesis by MEASURE5:def 9;
 end;
 
@@ -241,7 +173,7 @@ A1: s = 0.;
   end;
   suppose
 A2: A <> {};
-    0 ** A = [.s,s.]
+    0 ** A = |[.s,s.]|
     proof
       0 ** A = {0} by A2,Th4;
       hence thesis by A1,MEASURE5:14;
@@ -268,7 +200,7 @@ A4:   x < 0;
       now per cases by A3,Th6;
         case a = -infty & b = -infty;
           then
-A5:       ].a,b.[ = {} by MEASURE5:15;
+A5:       ].a,b.[ = {};
           then x ** A = {} by A3,Th5;
           hence thesis by A3,A5,MEASURE5:def 5;
         end;
@@ -328,7 +260,7 @@ A17:          q = x * (q / x) by A1,XCMPLX_1:88;
           hence thesis by A8,MEASURE5:def 5;
         end;
         case a = -infty & b = +infty;
-          hence thesis by A2,A3,A4,Th3,MEASURE6:35;
+          hence thesis by A2,A3,A4,Th3,XXREAL_1:224;
         end;
         case
 A18:      a in REAL & b in REAL;
@@ -452,7 +384,7 @@ A42:          q = x * (q / x) by A1,XCMPLX_1:88;
         end;
         case a = +infty & b = +infty;
           then
-A43:      ].a,b.[ = {} by MEASURE5:15;
+A43:      ].a,b.[ = {};
           then x ** A = {} by A3,Th5;
           hence thesis by A3,A43,MEASURE5:def 5;
         end;
@@ -467,7 +399,7 @@ A44:  0 < x;
       now per cases by A3,Th6;
         case a = -infty & b = -infty;
           then
-A45:      ].a,b.[ = {} by MEASURE5:15;
+A45:      ].a,b.[ = {};
           then x ** A = {} by A3,Th5;
           hence thesis by A3,A45,MEASURE5:def 5;
         end;
@@ -528,7 +460,7 @@ A56:          q = x * (q / x) by A1,XCMPLX_1:88;
           hence thesis by A47,MEASURE5:def 5;
         end;
         case a = -infty & b = +infty;
-          hence thesis by A2,A3,A44,Th3,MEASURE6:35;
+          hence thesis by A2,A3,A44,Th3,XXREAL_1:224;
         end;
         case
 A57:      a in REAL & b in REAL;
@@ -649,7 +581,7 @@ A83:          q = x * (q / x) by A1,XCMPLX_1:88;
         end;
         case a = +infty & b = +infty;
           then
-A84:      ].a,b.[ = {} by MEASURE5:15;
+A84:      ].a,b.[ = {};
           then x ** A = {} by A3,Th5;
           hence thesis by A3,A84,MEASURE5:def 5;
         end;
@@ -671,7 +603,7 @@ A1: x <> 0;
   assume
 A2: A is closed_interval;
   then consider a,b being R_eal such that
-A3: a <= b & A = [.a,b.] by MEASURE5:def 6;
+A3: a <= b & A = |[.a,b.]| by MEASURE5:def 6;
   now per cases;
     case
 A4:   x < 0;
@@ -687,9 +619,9 @@ A6:       a = -infty & b in REAL;
           then reconsider s = b as Real;
           set c = +infty;
           reconsider d = x * s as R_eal by XXREAL_0:def 1;
-A7:       x ** A = [.d,c.]
+A7:       x ** A = |[.d,c.]|
           proof
-A8:         x ** A c= [.d,c.]
+A8:         x ** A c= |[.d,c.]|
             proof
               let q be set;
               assume
@@ -706,11 +638,11 @@ A12:          x * o <= x * r by A4,A11,XREAL_1:67;
               q < +infty by XXREAL_0:9;
               hence thesis by A10,A11,A12,MEASURE5:def 1;
             end;
-            [.d,c.] c= x ** A
+            |[.d,c.]| c= x ** A
             proof
               let q be set;
               assume
-A13:          q in [.d,c.];
+A13:          q in |[.d,c.]|;
               then reconsider q as Real;
               reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A14:          d <= q1 & q1 <= c & q1 in REAL by A13,MEASURE5:def 1;
@@ -744,9 +676,9 @@ A17:      a in REAL & b in REAL;
           reconsider r = b as Real by A17;
           reconsider d = x * s as R_eal by XXREAL_0:def 1;
           reconsider g = x * r as R_eal by XXREAL_0:def 1;
-A18:      x ** A = [.g,d.]
+A18:      x ** A = |[.g,d.]|
           proof
-A19:        x ** A c= [.g,d.]
+A19:        x ** A c= |[.g,d.]|
             proof
               let q be set;
               assume
@@ -764,15 +696,14 @@ A25:          x * 2r <= x * 2o by A4,A24,XREAL_1:67;
               x * 1o is R_eal & x * 1r is R_eal by XXREAL_0:def 1;
               then consider 1o1,1r1 being R_eal such that
 A26:          1o1 = x * 1o & 1r1 = x * 1r;
-              consider 2o1,2r1 being R_eal;
               1r1 <= 1o1 by A4,A23,A26,XREAL_1:67;
               hence thesis by A21,A23,A24,A25,A26,MEASURE5:def 1;
             end;
-            [.g,d.] c= x ** A
+            |[.g,d.]| c= x ** A
             proof
               let q be set;
               assume
-A27:          q in [.g,d.];
+A27:          q in |[.g,d.]|;
               then reconsider q as Real;
               reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A28:          g <= q1 & q1 <= d & q1 in REAL by A27,MEASURE5:def 1;
@@ -814,9 +745,9 @@ A33:      a in REAL & b = +infty;
           then reconsider s = a as Real;
           set c = -infty;
           reconsider d = x * s as R_eal by XXREAL_0:def 1;
-A34:      x ** A = [.c,d.]
+A34:      x ** A = |[.c,d.]|
           proof
-A35:        x ** A c= [.c,d.]
+A35:        x ** A c= |[.c,d.]|
             proof
               let q be set;
               assume
@@ -833,11 +764,11 @@ A39:          x * r <= x * o by A4,A38,XREAL_1:67;
               -infty < q by XXREAL_0:12;
               hence thesis by A37,A38,A39,MEASURE5:def 1;
             end;
-            [.c,d.] c= x ** A
+            |[.c,d.]| c= x ** A
             proof
               let q be set;
               assume
-A40:          q in [.c,d.];
+A40:          q in |[.c,d.]|;
               then reconsider q as Real;
               q is R_eal by XXREAL_0:def 1;
               then consider q1 being R_eal such that
@@ -868,8 +799,8 @@ A43:                r = q1 & o = d & r <= o by A41;
           hence thesis by A34,MEASURE5:def 6;
         end;
         case a = +infty & b = +infty;
-          then [.a,b.] = {} by MEASURE5:14;
-          then x ** A = [.a,b.] by A3,Th5;
+          then |[.a,b.]| = {} by MEASURE5:14;
+          then x ** A = |[.a,b.]| by A3,Th5;
           hence thesis by A3,MEASURE5:def 6;
         end;
       end;
@@ -883,7 +814,7 @@ A44:  0 < x;
       now per cases by A3,Th6;
         case a = -infty & b = -infty;
           then
-A45:      [.a,b.] = {} by MEASURE5:14;
+A45:      |[.a,b.]| = {} by MEASURE5:14;
           then x ** A = {} by A3,Th5;
           hence thesis by A3,A45,MEASURE5:def 6;
         end;
@@ -893,9 +824,9 @@ A46:      a = -infty & b in REAL;
           consider c being R_eal such that
 A47:      c = -infty;
           reconsider d = x * s as R_eal by XXREAL_0:def 1;
-A48:      x ** A = [.c,d.]
+A48:      x ** A = |[.c,d.]|
           proof
-A49:        x ** A c= [.c,d.]
+A49:        x ** A c= |[.c,d.]|
             proof
               let q be set;
               assume
@@ -912,11 +843,11 @@ A53:          x * r <= x * o by A44,A52,XREAL_1:66;
               -infty < q by XXREAL_0:12;
               hence thesis by A47,A51,A52,A53,MEASURE5:def 1;
             end;
-            [.c,d.] c= x ** A
+            |[.c,d.]| c= x ** A
             proof
               let q be set;
               assume
-A54:          q in [.c,d.];
+A54:          q in |[.c,d.]|;
               then reconsider q as Real;
               reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A55:          q = x * (q / x) by A1,XCMPLX_1:88;
@@ -958,9 +889,9 @@ A58:      a in REAL & b in REAL;
           then consider d being R_eal such that
 A59:      d = x * s;
           reconsider g = x * r as R_eal by XXREAL_0:def 1;
-A60:      x ** A = [.d,g.]
+A60:      x ** A = |[.d,g.]|
           proof
-A61:        x ** A c= [.d,g.]
+A61:        x ** A c= |[.d,g.]|
             proof
               let q be set;
               assume
@@ -978,15 +909,14 @@ A67:          x * 2o <= x * 2r by A44,A66,XREAL_1:66;
               x * 1o is R_eal & x * 1r is R_eal by XXREAL_0:def 1;
               then consider 1o1,1r1 being R_eal such that
 A68:          1o1 = x * 1o & 1r1 = x * 1r;
-              consider 2o1,2r1 being R_eal;
               1o1 <= 1r1 by A44,A65,A68,XREAL_1:66;
               hence thesis by A59,A63,A65,A66,A67,A68,MEASURE5:def 1;
             end;
-            [.d,g.] c= x ** A
+            |[.d,g.]| c= x ** A
             proof
               let q be set;
               assume
-A69:          q in [.d,g.];
+A69:          q in |[.d,g.]|;
               then reconsider q as Real;
               q is R_eal by XXREAL_0:def 1;
               then consider q1 being R_eal such that
@@ -1031,9 +961,9 @@ A76:      a in REAL & b = +infty;
           then reconsider s = a as Real;
           reconsider c = +infty as R_eal;
           reconsider d = x * s as R_eal by XXREAL_0:def 1;
-A77:      x ** A = [.d,c.]
+A77:      x ** A = |[.d,c.]|
           proof
-A78:        x ** A c= [.d,c.]
+A78:        x ** A c= |[.d,c.]|
             proof
               let q be set;
               assume
@@ -1050,11 +980,11 @@ A82:          x * o <= x * r by A44,A81,XREAL_1:66;
               q < +infty by XXREAL_0:9;
               hence thesis by A80,A81,A82,MEASURE5:def 1;
             end;
-            [.d,c.] c= x ** A
+            |[.d,c.]| c= x ** A
             proof
               let q be set;
               assume
-A83:          q in [.d,c.];
+A83:          q in |[.d,c.]|;
               then reconsider q as Real;
               reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A84:          q = x * (q / x) by A1,XCMPLX_1:88;
@@ -1109,11 +1039,11 @@ A1: 0 < x;
   assume
 A2: A is right_open_interval;
   then consider a,b being R_eal such that
-A3: a <= b & A = [.a,b.[ by MEASURE5:def 7;
+A3: a <= b & A = |[.a,b.[ by MEASURE5:def 7;
   now per cases by A3,Th6;
     case a = -infty & b = -infty;
       then
-A4:   [.a,b.[ = {} by MEASURE5:15;
+A4:   |[.a,b.[ = {} by MEASURE5:15;
       then x ** A = {} by A3,Th5;
       hence thesis by A3,A4,MEASURE5:def 7;
     end;
@@ -1122,9 +1052,9 @@ A5:   a = -infty & b in REAL;
       then reconsider s = b as Real;
       reconsider c = -infty as R_eal;
       reconsider d = x * s as R_eal by XXREAL_0:def 1;
-A6:   x ** A = [.c,d.[
+A6:   x ** A = |[.c,d.[
       proof
-A7:     x ** A c= [.c,d.[
+A7:     x ** A c= |[.c,d.[
         proof
           let q be set;
           assume
@@ -1138,16 +1068,15 @@ A9:       z2 in A & q = x * z2 by A8,INTEGRA2:def 2;
           then consider r,o being Real such that
 A10:      r = z2 & o = b & r <= o by A5;
 A11:      r < o by A3,A9,A10,MEASURE5:def 4;
-          consider o1,r1 being R_eal;
 A12:      q < d by A1,A9,A10,A11,XREAL_1:70;
           -infty < q by XXREAL_0:12;
           hence thesis by A12,MEASURE5:def 4;
         end;
-        [.c,d.[ c= x ** A
+        |[.c,d.[ c= x ** A
         proof
           let q be set;
           assume
-A13:      q in [.c,d.[;
+A13:      q in |[.c,d.[;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1193,9 +1122,9 @@ A21:  d = x * s;
       x * r is R_eal by XXREAL_0:def 1;
       then consider g being R_eal such that
 A22:  g = x * r;
-A23:  x ** A = [.d,g.[
+A23:  x ** A = |[.d,g.[
       proof
-A24:    x ** A c= [.d,g.[
+A24:    x ** A c= |[.d,g.[
         proof
           let q be set;
           assume
@@ -1212,18 +1141,17 @@ A29:      1o= a & 1r = z2 & 1o <= 1r by A18,A27;
 A30:      2o= z2 & 2r = b & 2o <= 2r by A18,A28;
 A31:      x * 1o <= x * 1r by A1,A29,XREAL_1:66;
 A32:      2o< 2r by A3,A26,A30,MEASURE5:def 4;
-          consider 1o1,1r1 being R_eal;
           x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
           then consider 2o1,2r1 being R_eal such that
 A33:      2o1 = x * 2o & 2r1 = x * 2r;
           2o1 < 2r1 by A1,A32,A33,XREAL_1:70;
           hence thesis by A19,A20,A21,A22,A26,A29,A30,A31,A33,MEASURE5:def 4;
         end;
-        [.d,g.[ c= x ** A
+        |[.d,g.[ c= x ** A
         proof
           let q be set;
           assume
-A34:      q in [.d,g.[;
+A34:      q in |[.d,g.[;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1274,9 +1202,9 @@ A43:  c = +infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A44:  d = x * s;
-A45:  x ** A = [.d,c.[
+A45:  x ** A = |[.d,c.[
       proof
-A46:    x ** A c= [.d,c.[
+A46:    x ** A c= |[.d,c.[
         proof
           let q be set;
           assume
@@ -1293,11 +1221,11 @@ A50:      x * o <= x * r by A1,A49,XREAL_1:66;
           q < +infty by XXREAL_0:9;
           hence thesis by A42,A43,A44,A48,A49,A50,MEASURE5:def 4;
         end;
-        [.d,c.[ c= x ** A
+        |[.d,c.[ c= x ** A
         proof
           let q be set;
           assume
-A51:      q in [.d,c.[;
+A51:      q in |[.d,c.[;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1331,8 +1259,8 @@ A55:            r = d & o = q1 & r <= o by A44,A52;
       hence thesis by A45,MEASURE5:def 7;
     end;
     case a = +infty & b = +infty;
-      then [.a,b.[ = {} by MEASURE5:15;
-      then x ** A = [.a,b.[ by A3,Th5;
+      then |[.a,b.[ = {} by MEASURE5:15;
+      then x ** A = |[.a,b.[ by A3,Th5;
       hence thesis by A3,MEASURE5:def 7;
     end;
   end;
@@ -1349,13 +1277,13 @@ proof
 A1: x < 0;
   assume A is right_open_interval;
   then consider a,b being R_eal such that
-A2: a <= b & A = [.a,b.[ by MEASURE5:def 7;
+A2: a <= b & A = |[.a,b.[ by MEASURE5:def 7;
   now per cases by A2,Th6;
     case
 A3:   a = -infty & b = -infty;
       then
-A4:   ].a,b.] = {} by MEASURE5:15;
-      [.a,b.[ = {} by A3,MEASURE5:15;
+A4:   ].a,b.]| = {} by MEASURE5:15;
+      |[.a,b.[ = {} by A3,MEASURE5:15;
       then x ** A = {} by A2,Th5;
       hence thesis by A2,A4,MEASURE5:def 8;
     end;
@@ -1368,9 +1296,9 @@ A7:   c = +infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A8:   d = x * s;
-A9:   x ** A = ].d,c.]
+A9:   x ** A = ].d,c.]|
       proof
-A10:    x ** A c= ].d,c.]
+A10:    x ** A c= ].d,c.]|
         proof
           let q be set;
           assume
@@ -1386,15 +1314,14 @@ A13:      r = z2 & o = b & r <= o by A5;
           r < o by A2,A12,A13,MEASURE5:def 4;
           then
 A14:      x * o < x * r by A1,XREAL_1:71;
-          consider o1,r1 being R_eal;
           q < +infty by XXREAL_0:9;
           hence thesis by A6,A7,A8,A12,A13,A14,MEASURE5:def 3;
         end;
-        ].d,c.] c= x ** A
+        ].d,c.]| c= x ** A
         proof
           let q be set;
           assume
-A15:      q in ].d,c.];
+A15:      q in ].d,c.]|;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1411,7 +1338,6 @@ A19:        q3 = q2;
             proof
               q3 < b
               proof
-                consider r,o being Real;
                 x * q2 = q by A1,XCMPLX_1:88;
                 hence thesis by A1,A6,A8,A16,A17,A19,XREAL_1:67;
               end;
@@ -1427,7 +1353,7 @@ A19:        q3 = q2;
       hence thesis by A9,MEASURE5:def 8;
     end;
     case a = -infty & b = +infty;
-      then ex p,q being R_eal st (p <= q & x ** A = ].p,q.])
+      then ex p,q being R_eal st (p <= q & x ** A = ].p,q.]|)
       by A1,A2,Th3,MEASURE6:35;
       hence thesis by MEASURE5:def 8;
     end;
@@ -1443,9 +1369,9 @@ A23:  d = x * s;
       x * r is R_eal by XXREAL_0:def 1;
       then consider g being R_eal such that
 A24:  g = x * r;
-A25:  x ** A = ].g,d.]
+A25:  x ** A = ].g,d.]|
       proof
-A26:    x ** A c= ].g,d.]
+A26:    x ** A c= ].g,d.]|
         proof
           let q be set;
           assume
@@ -1468,11 +1394,11 @@ A35:      2o1 = x * 2o & 2r1 = x * 2r;
           2r1 < 2o1 by A1,A34,A35,XREAL_1:71;
           hence thesis by A21,A22,A23,A24,A28,A31,A32,A33,A35,MEASURE5:def 3;
         end;
-        ].g,d.] c= x ** A
+        ].g,d.]| c= x ** A
         proof
           let q be set;
           assume
-A36:      q in ].g,d.];
+A36:      q in ].g,d.]|;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1523,9 +1449,9 @@ A47:  c = -infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A48:  d = x * s;
-A49:  x ** A = ].c,d.]
+A49:  x ** A = ].c,d.]|
       proof
-A50:    x ** A c= ].c,d.]
+A50:    x ** A c= ].c,d.]|
         proof
           let q be set;
           assume
@@ -1542,11 +1468,11 @@ A54:      x * r <= x * o by A1,A53,XREAL_1:67;
           -infty < q by XXREAL_0:12;
           hence thesis by A46,A47,A48,A52,A53,A54,MEASURE5:def 3;
         end;
-        ].c,d.] c= x ** A
+        ].c,d.]| c= x ** A
         proof
           let q be set;
           assume
-A55:      q in ].c,d.];
+A55:      q in ].c,d.]|;
           then reconsider q as Real;
           reconsider q1 = q as R_eal by XXREAL_0:def 1;
           set q2 = q / x;
@@ -1577,10 +1503,10 @@ A57:            r = q1 & o = d & r <= o by A48;
     end;
     case
 A58:  a = +infty & b = +infty;
-      then [.a,b.[ = {} by MEASURE5:15;
+      then |[.a,b.[ = {} by MEASURE5:15;
       then
 A59:  x ** A = {} by A2,Th5;
-      ].a,b.] = {} by A58,MEASURE5:15;
+      ].a,b.]| = {} by A58,MEASURE5:15;
       hence thesis by A2,A59,MEASURE5:def 8;
     end;
   end;
@@ -1598,11 +1524,11 @@ A1: 0 < x;
   assume
 A2: A is left_open_interval;
   then consider a,b being R_eal such that
-A3: a <= b & A = ].a,b.] by MEASURE5:def 8;
+A3: a <= b & A = ].a,b.]| by MEASURE5:def 8;
   now per cases by A3,Th6;
     case a = -infty & b = -infty;
-      then ].a,b.] = {} by MEASURE5:15;
-      then x ** A = ].a,b.] by A3,Th5;
+      then ].a,b.]| = {} by MEASURE5:15;
+      then x ** A = ].a,b.]| by A3,Th5;
       hence thesis by A3,MEASURE5:def 8;
     end;
     case
@@ -1614,9 +1540,9 @@ A6:   c = -infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A7:   d = x * s;
-A8:   x ** A = ].c,d.]
+A8:   x ** A = ].c,d.]|
       proof
-A9:     x ** A c= ].c,d.]
+A9:     x ** A c= ].c,d.]|
         proof
           let q be set;
           assume
@@ -1633,11 +1559,11 @@ A13:      x * r <= x * o by A1,A12,XREAL_1:66;
           -infty < q by XXREAL_0:12;
           hence thesis by A5,A6,A7,A11,A12,A13,MEASURE5:def 3;
         end;
-        ].c,d.] c= x ** A
+        ].c,d.]| c= x ** A
         proof
           let q be set;
           assume
-A14:      q in ].c,d.];
+A14:      q in ].c,d.]|;
           then reconsider q as Real;
           reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A15:      q = x * (q / x) by A1,XCMPLX_1:88;
@@ -1682,9 +1608,9 @@ A20:  d = x * s;
       x * r is R_eal by XXREAL_0:def 1;
       then consider g being R_eal such that
 A21:  g = x * r;
-A22:  x ** A = ].d,g.]
+A22:  x ** A = ].d,g.]|
       proof
-A23:    x ** A c= ].d,g.]
+A23:    x ** A c= ].d,g.]|
         proof
           let q be set;
           assume
@@ -1701,18 +1627,17 @@ A28:      2o= z2 & 2r = b & 2o <= 2r by A18,A26;
           1o< 1r by A3,A25,A27,MEASURE5:def 3;
           then
 A29:      x * 1o < x * 1r by A1,XREAL_1:70;
-          consider 1o1,1r1 being R_eal;
           x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
           then consider 2o1,2r1 being R_eal such that
 A30:      2o1 = x * 2o & 2r1 = x * 2r;
           2o1 <= 2r1 by A1,A28,A30,XREAL_1:66;
           hence thesis by A19,A20,A21,A25,A27,A28,A29,A30,MEASURE5:def 3;
         end;
-        ].d,g.] c= x ** A
+        ].d,g.]| c= x ** A
         proof
           let q be set;
           assume
-A31:      q in ].d,g.];
+A31:      q in ].d,g.]|;
           then reconsider q as Real;
           reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A32:      q = x * (q / x) by A1,XCMPLX_1:88;
@@ -1735,7 +1660,6 @@ A35:            p = q1 & o = g & p <= o by A21;
               a < q3
               proof
 A36:            d < q1 by A31,MEASURE5:def 3;
-                consider r,o being Real;
                 x * q2 = q by A1,XCMPLX_1:88;
                 hence thesis by A1,A20,A33,A36,XREAL_1:66;
               end;
@@ -1759,9 +1683,9 @@ A39:  c = +infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A40:  d = x * s;
-A41:  x ** A = ].d,c.]
+A41:  x ** A = ].d,c.]|
       proof
-A42:    x ** A c= ].d,c.]
+A42:    x ** A c= ].d,c.]|
         proof
           let q be set;
           assume
@@ -1777,15 +1701,14 @@ A45:      o = a & r = z2 & o <= r by A37;
           o < r by A3,A44,A45,MEASURE5:def 3;
           then
 A46:      x * o < x * r by A1,XREAL_1:70;
-          consider o1,r1 being R_eal;
           q < +infty by XXREAL_0:9;
           hence thesis by A38,A39,A40,A44,A45,A46,MEASURE5:def 3;
         end;
-        ].d,c.] c= x ** A
+        ].d,c.]| c= x ** A
         proof
           let q be set;
           assume
-A47:      q in ].d,c.];
+A47:      q in ].d,c.]|;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1803,7 +1726,6 @@ A52:        q3 = q2;
             proof
               a < q3
               proof
-                consider r,o being Real;
                 x * q2 = q by A1,A51,XCMPLX_1:88;
                 hence thesis by A1,A38,A40,A48,A49,A52,XREAL_1:66;
               end;
@@ -1820,7 +1742,7 @@ A52:        q3 = q2;
     end;
     case a = +infty & b = +infty;
       then
-A53:  ].a,b.] = {} by MEASURE5:15;
+A53:  ].a,b.]| = {} by MEASURE5:15;
       then x ** A = {} by A3,Th5;
       hence thesis by A3,A53,MEASURE5:def 8;
     end;
@@ -1838,13 +1760,13 @@ proof
 A1: x < 0;
   assume A is left_open_interval;
   then consider a,b being R_eal such that
-A2: a <= b & A = ].a,b.] by MEASURE5:def 8;
+A2: a <= b & A = ].a,b.]| by MEASURE5:def 8;
   now per cases by A2,Th6;
     case
 A3:   a = -infty & b = -infty;
-      then ].a,b.] = {} by MEASURE5:15;
+      then ].a,b.]| = {} by MEASURE5:15;
       then x ** A = {} by A2,Th5;
-      then x ** A = [.a,b.[ by A3,MEASURE5:15;
+      then x ** A = |[.a,b.[ by A3,MEASURE5:15;
       hence thesis by A2,MEASURE5:def 7;
     end;
     case
@@ -1856,9 +1778,9 @@ A6:   c = +infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A7:   d = x * s;
-A8:   x ** A = [.d,c.[
+A8:   x ** A = |[.d,c.[
       proof
-A9:     x ** A c= [.d,c.[
+A9:     x ** A c= |[.d,c.[
         proof
           let q be set;
           assume
@@ -1875,11 +1797,11 @@ A13:      x * o <= x * r by A1,A12,XREAL_1:67;
           q < +infty by XXREAL_0:9;
           hence thesis by A5,A6,A7,A11,A12,A13,MEASURE5:def 4;
         end;
-        [.d,c.[ c= x ** A
+        |[.d,c.[ c= x ** A
         proof
           let q be set;
           assume
-A14:      q in [.d,c.[;
+A14:      q in |[.d,c.[;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1914,7 +1836,7 @@ A19:            r = d & o = q1 & r <= o by A7,A15;
       hence thesis by A8,MEASURE5:def 7;
     end;
     case a = -infty & b = +infty;
-      then ex d,c being R_eal st (d <= c & x ** A = [.d,c.[)
+      then ex d,c being R_eal st (d <= c & x ** A = |[.d,c.[)
       by A1,A2,Th3,MEASURE6:35;
       hence thesis by MEASURE5:def 7;
     end;
@@ -1927,9 +1849,9 @@ A21:  d = x * s;
       x * r is R_eal by XXREAL_0:def 1;
       then consider g being R_eal such that
 A22:  g = x * r;
-A23:  x ** A = [.g,d.[
+A23:  x ** A = |[.g,d.[
       proof
-A24:    x ** A c= [.g,d.[
+A24:    x ** A c= |[.g,d.[
         proof
           let q be set;
           assume
@@ -1946,18 +1868,17 @@ A29:      2o= z2 & 2r = b & 2o <= 2r by A20,A27;
           1o< 1r by A2,A26,A28,MEASURE5:def 3;
           then
 A30:      x * 1r < x * 1o by A1,XREAL_1:71;
-          consider 1o1,1r1 being R_eal;
           x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
           then consider 2o1,2r1 being R_eal such that
 A31:      2o1 = x * 2o & 2r1 = x * 2r;
           2r1 <= 2o1 by A1,A29,A31,XREAL_1:67;
           hence thesis by A21,A22,A26,A28,A29,A30,A31,MEASURE5:def 4;
         end;
-        [.g,d.[ c= x ** A
+        |[.g,d.[ c= x ** A
         proof
           let q be set;
           assume
-A32:      q in [.g,d.[;
+A32:      q in |[.g,d.[;
           then reconsider q as Real;
           q is R_eal by XXREAL_0:def 1;
           then consider q1 being R_eal such that
@@ -1983,7 +1904,6 @@ A39:            p = g & o = q1 & p <= o by A22,A33;
               end;
               a < q3
               proof
-                consider r,o being Real;
                 x * q2 = q by A1,A36,XCMPLX_1:88;
                 hence thesis by A1,A21,A33,A34,A37,XREAL_1:67;
               end;
@@ -2007,9 +1927,9 @@ A42:  c = -infty;
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
 A43:  d = x * s;
-A44:  x ** A = [.c,d.[
+A44:  x ** A = |[.c,d.[
       proof
-A45:    x ** A c= [.c,d.[
+A45:    x ** A c= |[.c,d.[
         proof
           let q be set;
           assume
@@ -2025,15 +1945,14 @@ A48:      o = a & r = z2 & o <= r by A40;
           o < r by A2,A47,A48,MEASURE5:def 3;
           then
 A49:      x * r < x * o by A1,XREAL_1:71;
-          consider o1,r1 being R_eal;
           -infty <= q by XXREAL_0:5;
           hence thesis by A41,A42,A43,A47,A48,A49,MEASURE5:def 4;
         end;
-        [.c,d.[ c= x ** A
+        |[.c,d.[ c= x ** A
         proof
           let q be set;
           assume
-A50:      q in [.c,d.[;
+A50:      q in |[.c,d.[;
           then reconsider q as Real;
           reconsider q1 = q as R_eal by XXREAL_0:def 1;
           set q2 = q / x;
@@ -2045,7 +1964,6 @@ A51:      q2 in A
               a < q3
               proof
 A52:            q1 < d by A50,MEASURE5:def 4;
-                consider r,o being Real;
                 x * q2 = q by A1,XCMPLX_1:88;
                 hence thesis by A1,A41,A43,A52,XREAL_1:67;
               end;
@@ -2063,52 +1981,43 @@ A52:            q1 < d by A50,MEASURE5:def 4;
     end;
     case
 A53:  a = +infty & b = +infty;
-      then ].a,b.] = {} by MEASURE5:15;
+      then ].a,b.]| = {} by MEASURE5:15;
       then x ** A = {} by A2,Th5;
-      then x ** A = [.a,b.[ by A53,MEASURE5:15;
+      then x ** A = |[.a,b.[ by A53,MEASURE5:15;
       hence thesis by A2,MEASURE5:def 7;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th15:
-  for A being Interval st A <> {} holds for x being Real st 0 < x holds
-  for B being Interval st B = x ** A holds
-  A = [.^^A,A^^.] implies (B = [.^^B,B^^.] &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+theorem
+  for A being non empty Interval holds for x being Real st 0 < x
+  for B being non empty Interval st B = x ** A holds
+  A = |[.inf A,sup A.]| implies (B = |[.inf B,sup B.]| &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
 proof
-  let A be Interval;
-  assume
-A1: A <> {};
+  let A be non empty Interval;
   let x be Real;
   assume
 A2: 0 < x;
-  let B be Interval;
+  let B be non empty Interval;
   assume
 A3: B = x ** A;
-A4: ex a being set st a in B
-  proof
-    consider o being set such that
-A5: o in A by A1,XBOOLE_0:def 1;
-    reconsider o as Real by A5;
-    consider p being Real such that
-A6: p = x * o;
-    take p;
-    thus thesis by A3,A5,A6,INTEGRA2:def 2;
-  end;
-  A = [.^^A,A^^.] implies (B = [.^^B,B^^.] &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+  A = |[.inf A,sup A.]| implies (B = |[.inf B,sup B.]| &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
   proof
     assume
-A7: A = [.^^A,A^^.];
-A8: ^^A <= A^^ by A1,MEASURE6:52;
-A9: for s,t being Real st s = ^^A & t = A^^ holds (^^B = x * s & B^^ = x * t)
+A7: A = |[.inf A,sup A.]|;
+A8: inf A <= sup A by MEASURE6:52;
+A9: for s,t being Real st s = inf A & t = sup A
+ holds (inf B = x * s & sup B = x * t)
     proof
       let s,t be Real;
       assume
-A10:  s = ^^A & t = A^^;
-      ^^B = x * s & B^^ = x * t
+A10:  s = inf A & t = sup A;
+      inf B = x * s & sup B = x * t
       proof
         x * s is R_eal by XXREAL_0:def 1;
         then consider d being R_eal such that
@@ -2116,9 +2025,9 @@ A11:    d = x * s;
         x * t is R_eal by XXREAL_0:def 1;
         then consider g being R_eal such that
 A12:    g = x * t;
-A13:    x ** A = [.d,g.]
+A13:    x ** A = |[.d,g.]|
         proof
-A14:      x ** A c= [.d,g.]
+A14:      x ** A c= |[.d,g.]|
           proof
             let q be set;
             assume
@@ -2127,11 +2036,11 @@ A15:        q in x ** A;
             consider z2 being Real such that
 A16:        z2 in A & q = x * z2 by A15,INTEGRA2:def 2;
             reconsider z2 as R_eal by XXREAL_0:def 1;
-A17:        ^^A <= z2 & z2 <= A^^ by A7,A16,MEASURE5:def 1;
+A17:        inf A <= z2 & z2 <= sup A by A7,A16,MEASURE5:def 1;
             then consider 1o,1r being Real such that
-A18:        1o= ^^A & 1r = z2 & 1o <= 1r by A10;
+A18:        1o= inf A & 1r = z2 & 1o <= 1r by A10;
             consider 2o,2r being Real such that
-A19:        2o= z2 & 2r = A^^ & 2o <= 2r by A10,A17;
+A19:        2o= z2 & 2r = sup A & 2o <= 2r by A10,A17;
 A20:        x * 1o <= x * 1r by A2,A18,XREAL_1:66;
             x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
             then consider 2o1,2r1 being R_eal such that
@@ -2139,11 +2048,11 @@ A21:        2o1 = x * 2o & 2r1 = x * 2r;
             2o1 <= 2r1 by A2,A19,A21,XREAL_1:66;
             hence thesis by A10,A11,A12,A16,A18,A19,A20,A21,MEASURE5:def 1;
           end;
-          [.d,g.] c= x ** A
+          |[.d,g.]| c= x ** A
           proof
             let q be set;
             assume
-A22:        q in [.d,g.];
+A22:        q in |[.d,g.]|;
             then reconsider q as Real;
             reconsider q1 = q as R_eal by XXREAL_0:def 1;
             set q2 = q / x;
@@ -2152,9 +2061,9 @@ A23:        q2 in A
               q2 is R_eal by XXREAL_0:def 1;
               then consider q3 being R_eal such that
 A24:          q3 = q2;
-              ^^A <= q3 & q3 <= A^^ & q3 in REAL
+              inf A <= q3 & q3 <= sup A & q3 in REAL
               proof
-A25:            q3 <= A^^
+A25:            q3 <= sup A
                 proof
                   q1 <= g by A22,MEASURE5:def 1;
                   then consider p,o being Real such that
@@ -2162,7 +2071,7 @@ A26:              p = q1 & o = g & p <= o by A12;
                   p/x <= o/x by A2,A26,REAL_1:73;
                   hence thesis by A2,A10,A12,A24,A26,XCMPLX_1:90;
                 end;
-                ^^A <= q3
+                inf A <= q3
                 proof
                   d <= q1 by A22,MEASURE5:def 1;
                   then consider t,o being Real such that
@@ -2179,55 +2088,46 @@ A27:              t = d & o = q1 & t <= o by A11;
           end;
           hence thesis by A14,XBOOLE_0:def 10;
         end;
-        x * s <= x * t by A2,A8,A10,XREAL_1:66;
-        hence thesis by A3,A4,A11,A12,A13,MEASURE6:def 4,def 5;
+        x * s <= x * t by A2,MEASURE6:52,A10,XREAL_1:66;
+        hence thesis by A3,A11,A12,A13,MEASURE6:def 4,def 5;
       end;
       hence thesis;
     end;
     0 < x & A is closed_interval by A2,A7,A8,MEASURE5:def 6;
     then x ** A is closed_interval by Th10;
-    hence thesis by A3,A4,A9,MEASURE6:49;
+    hence thesis by A3,A9,MEASURE6:49;
   end;
   hence thesis;
 end;
 
-theorem Th16:
-  for A being Interval st A <> {} holds for x being Real st 0 < x holds
-  for B being Interval st B = x ** A holds
-  A = ].^^A,A^^.] implies (B = ].^^B,B^^.] &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+theorem
+  for A being non empty Interval holds for x being Real st 0 < x
+  for B being non empty Interval st B = x ** A holds
+  A = ].inf A,sup A.]| implies (B = ].inf B,sup B.]| &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
 proof
-  let A be Interval;
-  assume
-A1: A <> {};
+  let A be non empty Interval;
   let x be Real;
   assume
 A2: 0 < x;
-  let B be Interval;
+  let B be non empty Interval;
   assume
 A3: B = x ** A;
-A4: ex a being set st a in B
-  proof
-    consider o being set such that
-A5: o in A by A1,XBOOLE_0:def 1;
-    reconsider o as Real by A5;
-    consider p being Real such that
-A6: p = x * o;
-    take p;
-    thus thesis by A3,A5,A6,INTEGRA2:def 2;
-  end;
-  A = ].^^A,A^^.] implies (B = ].^^B,B^^.] &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+  A = ].inf A,sup A.]| implies (B = ].inf B,sup B.]| &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
   proof
     assume
-A7: A = ].^^A,A^^.];
-A8: ^^A <= A^^ by A1,MEASURE6:52;
-A9: for s,t being Real st s = ^^A & t = A^^ holds (^^B = x * s & B^^ = x * t)
+A7: A = ].inf A,sup A.]|;
+A8: inf A <= sup A by MEASURE6:52;
+A9: for s,t being Real st s = inf A & t = sup A
+ holds (inf B = x * s & sup B = x * t)
     proof
       let s,t be Real;
       assume
-A10:  s = ^^A & t = A^^;
-      ^^B = x * s & B^^ = x * t
+A10:  s = inf A & t = sup A;
+      inf B = x * s & sup B = x * t
       proof
         x * s is R_eal by XXREAL_0:def 1;
         then consider d being R_eal such that
@@ -2235,9 +2135,9 @@ A11:    d = x * s;
         x * t is R_eal by XXREAL_0:def 1;
         then consider g being R_eal such that
 A12:    g = x * t;
-A13:    x ** A = ].d,g.]
+A13:    x ** A = ].d,g.]|
         proof
-A14:      x ** A c= ].d,g.]
+A14:      x ** A c= ].d,g.]|
           proof
             let q be set;
             assume
@@ -2247,32 +2147,30 @@ A15:        q in x ** A;
 A16:        z2 in A & q = x * z2 by A15,INTEGRA2:def 2;
             reconsider z2 as R_eal by XXREAL_0:def 1;
             reconsider q as R_eal by XXREAL_0:def 1;
-A17:        ^^A <= z2 & z2 <> ^^A & z2 <= A^^ by A7,A16,MEASURE5:def 3;
+A17:        inf A <= z2 & z2 <> inf A & z2 <= sup A by A7,A16,MEASURE5:def 3;
             then consider 1o,1r being Real such that
-A18:        1o= ^^A & 1r = z2 & 1o <= 1r by A10;
+A18:        1o= inf A & 1r = z2 & 1o <= 1r by A10;
             consider 2o,2r being Real such that
-A19:        2o= z2 & 2r = A^^ & 2o <= 2r by A10,A17;
+A19:        2o= z2 & 2r = sup A & 2o <= 2r by A10,A17;
 A20:        1o< 1r by A7,A16,A18,MEASURE5:def 3;
 A21:        x * 2o <= x * 2r by A2,A19,XREAL_1:66;
-            consider 1o1,1r1 being R_eal;
-            consider 2o1,2r1 being R_eal;
             d < q by A2,A10,A11,A16,A18,A20,XREAL_1:70;
             hence thesis by A10,A12,A16,A19,A21,MEASURE5:def 3;
           end;
-          ].d,g.] c= x ** A
+          ].d,g.]| c= x ** A
           proof
             let q be set;
             assume
-A22:        q in ].d,g.];
+A22:        q in ].d,g.]|;
             then reconsider q as Real;
             reconsider q1 = q as R_eal by XXREAL_0:def 1;
             set q2 = q / x;
 A23:        q2 in A
             proof
               reconsider q3 = q2 as R_eal by XXREAL_0:def 1;
-              ^^A < q3 & q3 <= A^^ & q3 in REAL
+              inf A < q3 & q3 <= sup A & q3 in REAL
               proof
-A24:            q3 <= A^^
+A24:            q3 <= sup A
                 proof
                   q1 <= g by A22,MEASURE5:def 3;
                   then consider p,o being Real such that
@@ -2280,10 +2178,9 @@ A25:              p = q1 & o = g & p <= o by A12;
                   p/x <= o/x by A2,A25,REAL_1:73;
                   hence thesis by A2,A10,A12,A25,XCMPLX_1:90;
                 end;
-                ^^A < q3
+                inf A < q3
                 proof
 A26:              d < q1 by A22,MEASURE5:def 3;
-                  consider t,o being Real;
                   x * q2 = q by A2,XCMPLX_1:88;
                   hence thesis by A2,A10,A11,A26,XREAL_1:66;
                 end;
@@ -2296,56 +2193,46 @@ A26:              d < q1 by A22,MEASURE5:def 3;
           end;
           hence thesis by A14,XBOOLE_0:def 10;
         end;
-        x * s <= x * t by A2,A8,A10,XREAL_1:66;
-        hence thesis by A3,A4,A11,A12,A13,MEASURE6:def 4,def 5;
+        x * s <= x * t by A2,MEASURE6:52,A10,XREAL_1:66;
+        hence thesis by A3,A11,A12,A13,MEASURE6:def 4,def 5;
       end;
       hence thesis;
     end;
     0 < x & A is left_open_interval by A2,A7,A8,MEASURE5:def 8;
     then B is left_open_interval by A3,Th13;
-    hence thesis by A4,A9,MEASURE6:51;
+    hence thesis by A9,MEASURE6:51;
   end;
   hence thesis;
 end;
 
-theorem Th17:
-  for A being Interval st A <> {} holds for x being Real st 0 < x holds
-  for B being Interval st B = x ** A holds
-  A = ].^^A,A^^.[ implies (B = ].^^B,B^^.[ &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+theorem
+  for A being non empty Interval holds for x being Real st 0 < x
+  for B being non empty Interval st B = x ** A holds
+  A = ].inf A,sup A.[ implies (B = ].inf B,sup B.[ &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
 proof
-  let A be Interval;
-  assume
-A1: A <> {};
+  let A be non empty Interval;
   let x be Real;
   assume
 A2: 0 < x;
-  let B be Interval;
+  let B be non empty Interval;
   assume
 A3: B = x ** A;
-A4: ex a being set st a in B
-  proof
-    consider o being set such that
-A5: o in A by A1,XBOOLE_0:def 1;
-    reconsider o as Real by A5;
-    consider p being Real such that
-A6: p = x * o;
-    take p;
-    thus thesis by A3,A5,A6,INTEGRA2:def 2;
-  end;
-  A = ].^^A,A^^.[ implies (B = ].^^B,B^^.[ &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+  A = ].inf A,sup A.[ implies (B = ].inf B,sup B.[ &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
   proof
     assume
-A7: A = ].^^A,A^^.[;
-A8: ^^A <= A^^ by A1,MEASURE6:52;
-A9: for s,t being Real st s = ^^A & t = A^^ holds
-    (^^B = x * s & B^^ = x * t & B is open_interval)
+A7: A = ].inf A,sup A.[;
+A8: inf A <= sup A by MEASURE6:52;
+A9: for s,t being Real st s = inf A & t = sup A holds
+    (inf B = x * s & sup B = x * t & B is open_interval)
     proof
       let s,t be Real;
       assume
-A10:  s = ^^A & t = A^^;
-      ^^B = x * s & B^^ = x * t & B is open_interval
+A10:  s = inf A & t = sup A;
+      inf B = x * s & sup B = x * t & B is open_interval
       proof
         x * s is R_eal by XXREAL_0:def 1;
         then consider d being R_eal such that
@@ -2364,17 +2251,16 @@ A15:        q in x ** A;
             consider z2 being Real such that
 A16:        z2 in A & q = x * z2 by A15,INTEGRA2:def 2;
             reconsider z2 as R_eal by XXREAL_0:def 1;
-A17:        ^^A <= z2 & z2 <> ^^A & z2 <= A^^ & z2 <> A^^ by A7,A16,
+A17:        inf A <= z2 & z2 <> inf A & z2 <= sup A & z2 <> sup A by A7,A16,
             MEASURE5:def 2;
             then consider 1o,1r being Real such that
-A18:        1o= ^^A & 1r = z2 & 1o <= 1r by A10;
+A18:        1o= inf A & 1r = z2 & 1o <= 1r by A10;
             consider 2o,2r being Real such that
-A19:        2o= z2 & 2r = A^^ & 2o <= 2r by A10,A17;
+A19:        2o= z2 & 2r = sup A & 2o <= 2r by A10,A17;
             1o< 1r by A7,A16,A18,MEASURE5:def 2;
             then
 A20:        x * 1o < x * 1r by A2,XREAL_1:70;
 A21:        2o< 2r by A7,A16,A19,MEASURE5:def 2;
-            consider 1o1,1r1 being R_eal;
             x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
             then consider 2o1,2r1 being R_eal such that
 A22:        2o1 = x * 2o & 2r1 = x * 2r;
@@ -2398,19 +2284,18 @@ A26:        q = x * (q / x) by A2,XCMPLX_1:88;
               q2 is R_eal by XXREAL_0:def 1;
               then consider q3 being R_eal such that
 A27:          q3 = q2;
-              ^^A < q3 & q3 < A^^ & q3 in REAL
+              inf A < q3 & q3 < sup A & q3 in REAL
               proof
-A28:            q3 < A^^
+A28:            q3 < sup A
                 proof
                   consider p,o being Real such that
 A29:              p = q1 & o = g & p <= o by A12,A25;
                   p/x < o/x by A2,A25,A29,REAL_1:73;
                   hence thesis by A2,A10,A12,A24,A27,A29,XCMPLX_1:90;
                 end;
-                ^^A < q3
+                inf A < q3
                 proof
 A30:              d < q1 by A23,A24,MEASURE5:def 2;
-                  consider t,o being Real;
                   x * q2 = q by A2,XCMPLX_1:88;
                   hence thesis by A2,A10,A11,A24,A27,A30,XREAL_1:66;
                 end;
@@ -2422,53 +2307,42 @@ A30:              d < q1 by A23,A24,MEASURE5:def 2;
           end;
           hence thesis by A14,XBOOLE_0:def 10;
         end;
-        x * s <= x * t by A2,A8,A10,XREAL_1:66;
-        hence thesis by A3,A4,A11,A12,A13,MEASURE5:def 5,MEASURE6:def 4,def 5;
+        x * s <= x * t by A2,MEASURE6:52,A10,XREAL_1:66;
+        hence thesis by A3,A11,A12,A13,MEASURE5:def 5,MEASURE6:def 4,def 5;
       end;
       hence thesis;
     end;
     x <> 0 & A is open_interval by A2,A7,A8,MEASURE5:def 5;
     then x ** A is open_interval by Th9;
-    hence thesis by A3,A4,A9,MEASURE6:48;
+    hence thesis by A3,A9,MEASURE6:48;
   end;
   hence thesis;
 end;
 
-theorem Th18:
-  for A being Interval st A <> {} holds for x being Real st 0 < x holds
-  for B being Interval st B = x ** A holds
-  A = [.^^A,A^^.[ implies (B = [.^^B,B^^.[ &
-  for s,t being Real st s = ^^A & t = A^^ holds ^^B = x * s & B^^ = x * t)
+theorem
+  for A being non empty Interval holds for x being Real st 0 < x
+  for B being non empty Interval st B = x ** A holds
+  A = |[.inf A,sup A.[ implies (B = |[.inf B,sup B.[ &
+  for s,t being Real st s = inf A & t = sup A
+   holds inf B = x * s & sup B = x * t)
 proof
-  let A be Interval;
-  assume
-A1: A <> {};
+  let A be non empty Interval;
   let x be Real;
   assume
 A2: 0 < x;
-  let B be Interval;
+  let B be non empty Interval;
   assume
 A3: B = x ** A;
-A4: ex a being set st a in B
-  proof
-    consider o being set such that
-A5: o in A by A1,XBOOLE_0:def 1;
-    reconsider o as Real by A5;
-    consider p being Real such that
-A6: p = x * o;
-    take p;
-    thus thesis by A3,A5,A6,INTEGRA2:def 2;
-  end;
   assume
-A7: A = [.^^A,A^^.[;
-A8: ^^A <= A^^ by A1,MEASURE6:52;
-A9: for s,t being Real st s = ^^A & t = A^^ holds
-  (^^B = x * s & B^^ = x * t & B is right_open_interval)
+A7: A = |[.inf A,sup A.[;
+A8: inf A <= sup A by MEASURE6:52;
+A9: for s,t being Real st s = inf A & t = sup A holds
+  (inf B = x * s & sup B = x * t & B is right_open_interval)
   proof
     let s,t be Real;
     assume
-A10: s = ^^A & t = A^^;
-    ^^B = x * s & B^^ = x * t & B is right_open_interval
+A10: s = inf A & t = sup A;
+    inf B = x * s & sup B = x * t & B is right_open_interval
     proof
       x * s is R_eal by XXREAL_0:def 1;
       then consider d being R_eal such that
@@ -2476,9 +2350,9 @@ A11:  d = x * s;
       x * t is R_eal by XXREAL_0:def 1;
       then consider g being R_eal such that
 A12:  g = x * t;
-A13:  x ** A = [.d,g.[
+A13:  x ** A = |[.d,g.[
       proof
-A14:    x ** A c= [.d,g.[
+A14:    x ** A c= |[.d,g.[
         proof
           let q be set;
           assume
@@ -2487,11 +2361,11 @@ A15:      q in x ** A;
           consider z2 being Real such that
 A16:      z2 in A & q = x * z2 by A15,INTEGRA2:def 2;
           reconsider z2 as R_eal by XXREAL_0:def 1;
-A17:      ^^A <= z2 & z2 <= A^^ & z2 <> A^^ by A7,A16,MEASURE5:def 4;
+A17:      inf A <= z2 & z2 <= sup A & z2 <> sup A by A7,A16,MEASURE5:def 4;
           then consider 1o,1r being Real such that
-A18:      1o= ^^A & 1r = z2 & 1o <= 1r by A10;
+A18:      1o= inf A & 1r = z2 & 1o <= 1r by A10;
           consider 2o,2r being Real such that
-A19:      2o= z2 & 2r = A^^ & 2o <= 2r by A10,A17;
+A19:      2o= z2 & 2r = sup A & 2o <= 2r by A10,A17;
 A20:      x * 1o <= x * 1r by A2,A18,XREAL_1:66;
 A21:      2o< 2r by A7,A16,A19,MEASURE5:def 4;
           x * 2o is R_eal & x * 2r is R_eal by XXREAL_0:def 1;
@@ -2500,11 +2374,11 @@ A22:      2o1 = x * 2o & 2r1 = x * 2r;
           2o1 < 2r1 by A2,A21,A22,XREAL_1:70;
           hence thesis by A10,A11,A12,A16,A18,A19,A20,A22,MEASURE5:def 4;
         end;
-        [.d,g.[ c= x ** A
+        |[.d,g.[ c= x ** A
         proof
           let q be set;
           assume
-A23:      q in [.d,g.[;
+A23:      q in |[.d,g.[;
           then reconsider q as Real;
           reconsider q1 = q as R_eal by XXREAL_0:def 1;
 A24:      d <= q1 & q1 < g & q1 in REAL by A23,MEASURE5:def 4;
@@ -2513,9 +2387,9 @@ A25:      q = x * (q / x) by A2,XCMPLX_1:88;
           q2 in A
           proof
             reconsider q3 = q2 as R_eal by XXREAL_0:def 1;
-            ^^A <= q3 & q3 < A^^ & q3 in REAL
+            inf A <= q3 & q3 < sup A & q3 in REAL
             proof
-A26:          q3 < A^^
+A26:          q3 < sup A
               proof
 A27:            q1 < g by A23,MEASURE5:def 4;
                 consider p,o being Real such that
@@ -2535,14 +2409,14 @@ A29:          t = d & o = q1 & t <= o by A11;
         end;
         hence thesis by A14,XBOOLE_0:def 10;
       end;
-      x * s <= x * t by A2,A8,A10,XREAL_1:66;
-      hence thesis by A3,A4,A11,A12,A13,MEASURE5:def 7,MEASURE6:def 4,def 5;
+      x * s <= x * t by A2,MEASURE6:52,A10,XREAL_1:66;
+      hence thesis by A3,A11,A12,A13,MEASURE5:def 7,MEASURE6:def 4,def 5;
     end;
     hence thesis;
   end;
   A is right_open_interval by A7,A8,MEASURE5:def 7;
   then x ** A is right_open_interval by A2,Th11;
-  hence thesis by A3,A4,A9,MEASURE6:50;
+  hence thesis by A3,A9,MEASURE6:50;
 end;
 
 theorem Th19:
@@ -2603,135 +2477,202 @@ registration
   correctness by Th19;
 end;
 
+Lx1:
+ for A being non empty Subset of REAL, x being Real
+  st x > 0 & x**A is bounded_above
+  holds A is bounded_above
+proof
+ let A be non empty Subset of REAL, x be Real such that
+Z1: x > 0 and
+Z2: x**A is bounded_above;
+  consider r being real number such that
+W: r in A by MEMBERED:9;
+R:  sup(x**A) <> +infty by Z2,XXREAL_2:77;
+ per cases by R,XXREAL_0:14;
+ suppose
+S:  sup(x**A) = -infty;
+ take 0;
+T: -infty is UpperBound of x**A by S,XXREAL_2:def 3;
+  x*r in x**A by W,INTEGRA2:def 2;
+  hence thesis by XXREAL_0:6,T,XXREAL_2:def 1;
+ end;
+ suppose sup(x**A) in REAL;
+  then reconsider r = sup(x**A) as Real;
+ take r/x;
+ let z be ext-realnumber;
+ assume
+Z: z in A;
+   then reconsider z1=z as Real;
+   x" ** (x ** A) = A by Z1,Th2;
+   then consider s being Real such that
+W1: s in x**A and
+W2: z = x" * s by Z,INTEGRA2:def 2;
+  s <= r by W1,XXREAL_2:4;
+  then s/x <= r/x by Z1,XREAL_1:74;
+ hence z <= r/x by W2;
+ end;
+end;
+
+theorem Tx1:
+ for A being non empty Subset of REAL, x being Real, y being R_eal
+   st x = y & 0 <= y
+  holds sup(x ** A) = y * sup A
+proof let A be non empty Subset of REAL, x being Real, y being R_eal such that
+Z1: x = y and
+Z2: 0 <= y;
+   reconsider Y = x ** A as non empty Subset of REAL by INTEGRA2:7;
+ per cases;
+ suppose
+SS:  A is not bounded_above;
+  per cases by Z2;
+  suppose
+S:  y = 0;
+   then x ** A = {0} by Z1,INTEGRA2:42;
+  hence sup(x ** A) = 0 by XXREAL_2:11
+  .= y * sup A by S,EXTREAL1:22;
+  end;
+  suppose
+S:  y > 0;
+   Y is not bounded_above by Lx1,S,SS,Z1;
+  hence sup(x ** A) = +infty by XXREAL_2:77
+        .= y * +infty by S,EXTREAL1:def 1
+        .= y * sup A by SS,XXREAL_2:77;
+  end;
+ end;
+ suppose
+    A is bounded_above;
+  then reconsider X = A as non empty bounded_above (real-membered set);
+   reconsider u = upper_bound X as Real by XREAL_0:def 1;
+   x ** X is bounded_above by INTEGRA2:9,Z1,Z2;
+   then reconsider Y as non empty bounded_above (real-membered set);
+  thus sup(x ** A) = upper_bound Y
+    .= x * u by Z1,Z2,INTEGRA2:13
+    .= y * sup A by Z1,EXTREAL1:13;
+  end;
+end;
+
+Lx2:
+ for A being non empty Subset of REAL, x being Real
+  st x > 0 & x**A is bounded_below
+  holds A is bounded_below
+proof
+ let A be non empty Subset of REAL, x be Real such that
+Z1: x > 0 and
+Z2: x**A is bounded_below;
+  consider r being real number such that
+W: r in A by MEMBERED:9;
+R:  inf(x**A) <> -infty by Z2,XXREAL_2:78;
+ per cases by R,XXREAL_0:14;
+ suppose
+S:  inf(x**A) = +infty;
+ take 0;
+T: +infty is LowerBound of x**A by S,XXREAL_2:def 4;
+  x*r in x**A by W,INTEGRA2:def 2;
+  hence thesis by XXREAL_0:4,T,XXREAL_2:def 2;
+ end;
+ suppose inf(x**A) in REAL;
+  then reconsider r = inf(x**A) as Real;
+ take r/x;
+ let z be ext-realnumber;
+ assume
+Z: z in A;
+   then reconsider z1=z as Real;
+   x" ** (x ** A) = A by Z1,Th2;
+   then consider s being Real such that
+W1: s in x**A and
+W2: z = x" * s by Z,INTEGRA2:def 2;
+  r/x <= s/x by Z1,XREAL_1:74,W1,XXREAL_2:3;
+ hence r/x <= z by W2;
+ end;
+end;
+
+theorem Tx2:
+ for A being non empty Subset of REAL, x being Real, y being R_eal
+  st x = y & 0 <= y
+  holds inf(x ** A) = y * inf A
+proof let A be non empty Subset of REAL, x being Real, y being R_eal such that
+Z1: x = y and
+Z2: 0 <= y;
+   reconsider Y = x ** A as non empty Subset of REAL by INTEGRA2:7;
+ per cases;
+ suppose
+SS:  A is not bounded_below;
+  per cases by Z2;
+  suppose
+S:  y = 0;
+   then x ** A = {0} by Z1,INTEGRA2:42;
+  hence inf(x ** A) = 0 by XXREAL_2:13
+  .= y * inf A by S,EXTREAL1:22;
+  end;
+  suppose
+S:  y > 0;
+   Y is not bounded_below by Lx2,S,SS,Z1;
+  hence inf(x ** A) = -infty by XXREAL_2:78
+        .= y * -infty by S,EXTREAL1:def 1
+        .= y * inf A by SS,XXREAL_2:78;
+  end;
+ end;
+ suppose
+    A is bounded_below;
+  then reconsider X = A as non empty bounded_below (real-membered set);
+   reconsider u = lower_bound X as Real by XREAL_0:def 1;
+   x ** X is bounded_below by INTEGRA2:11,Z1,Z2;
+   then reconsider Y as non empty bounded_below (real-membered set);
+  thus inf(x ** A) = lower_bound Y
+    .= x * u by Z1,Z2,INTEGRA2:15
+    .= y * inf A by Z1,EXTREAL1:13;
+  end;
+end;
+
 theorem
   for A being Interval for x being Real st 0 <= x
   for y being Real st y = vol(A) holds x * y = vol(x ** A)
 proof
   let A be Interval;
-  let x be Real;
-  assume
-A1: 0 <= x;
-  let y be Real;
-  assume
-A2: y = vol(A);
+  let x be Real such that
+Z1: 0 <= x;
+  let y be Real such that
+Z2: y = vol(A);
   per cases;
-  suppose A = {};
-    hence thesis by A2,Th5,MEASURE5:60;
+  suppose
+S:  A is empty;
+X: now assume x ** A is non empty;
+     then consider y being real number such that
+W:    y in x ** A by MEMBERED:9;
+     reconsider y as Real by XREAL_0:def 1;
+     ex z being Real st z in A & y = x * z by W,INTEGRA2:def 2;
+    hence contradiction by S;
+   end;
+   thus x * y = 0 by S,MEASURE5:60,Z2
+      .= vol(x ** A) by X,MEASURE5:60;
   end;
   suppose
-A3: not A = {};
-    now per cases by A1;
-      case
-A4:     x = 0;
-        then x ** A = {0.} by A3,Th4;
-        then x ** A = [.0.,0..] by MEASURE5:14;
-        hence thesis by A4,MEASURE5:def 10;
-      end;
-      case
-A5:     0 < x;
-A6:     not ((^^A = +infty & A^^ = +infty) or (^^A = -infty & A^^ = -infty))
-        proof
-          assume
-A7:       (^^A = +infty & A^^ = +infty) or (^^A = -infty & A^^ = -infty);
-          A = ].^^A,A^^.[ or A = ].^^A,A^^.] or
-          A = [.^^A,A^^.] or A = [.^^A,A^^.[ by A3,MEASURE6:52;
-          hence thesis by A3,A7,MEASURE5:13,14,XXREAL_1:20;
-        end;
-A8:     ^^A <= A^^ by A3,MEASURE6:52;
-A9:     ((^^A < A^^) implies (vol(A) = A^^ - ^^A)) &
-        (A^^ = ^^A implies vol(A) = 0. ) by A3,Th1;
-        reconsider B = x ** A as Interval;
-A10:    B <> {}
-        proof
-          consider a being set such that
-A11:      a in A by A3,XBOOLE_0:def 1;
-          reconsider a as Real by A11;
-          x * a is Real;
-          hence thesis by A11,INTEGRA2:def 2;
-        end;
-        then
-A12:    (^^B < B^^ implies vol(B) = B^^ - ^^B) &
-        (B^^ = ^^B implies vol(B) = 0. ) by Th1;
-        ^^A is Real & A^^ is Real
-        proof
-          assume
-A13:      not ^^A is Real or not A^^ is Real;
-          consider a being set such that
-A14:      a in A by A3,XBOOLE_0:def 1;
-          reconsider a as Real by A14;
-          R_EAL a = a by MEASURE6:def 1;
-          then
-A15:      -infty < R_EAL a & R_EAL a < +infty by XXREAL_0:9,12;
-          now per cases by A13;
-            case not ^^A is Real;
-              then
-A16:          ^^A in {-infty,+infty} by XBOOLE_0:def 2,XXREAL_0:def 4;
-              per cases by A16,TARSKI:def 2;
-              case ^^A = -infty;
-                hence thesis by A2,A6,A8,A9,SUPINF_2:7,XXREAL_0:1;
-              end;
-              case ^^A = +infty;
-                hence thesis by A14,A15,MEASURE6:54;
-              end;
-            end;
-            case not A^^ is Real;
-              then
-A17:          A^^ in {-infty,+infty} by XBOOLE_0:def 2,XXREAL_0:def 4;
-              now per cases by A17,TARSKI:def 2;
-                case A^^ = -infty;
-                  hence thesis by A14,A15,MEASURE6:54;
-                end;
-                case A^^ = +infty;
-                  hence thesis by A2,A6,A8,A9,SUPINF_2:6,XXREAL_0:1;
-                end;
-              end;
-              hence thesis;
-            end;
-          end;
-          hence thesis;
-        end;
-        then consider s,t being Real such that
-A18:    t = A^^ & s = ^^A;
-A19:    ^^B = x * s & B^^ = x * t
-        proof
-          now per cases by A3,MEASURE6:52;
-            case A = ].^^A,A^^.[;
-              hence thesis by A3,A5,A18,Th17;
-            end;
-            case A = ].^^A,A^^.];
-              hence thesis by A3,A5,A18,Th16;
-            end;
-            case A = [.^^A,A^^.];
-              hence thesis by A3,A5,A18,Th15;
-            end;
-            case A = [.^^A,A^^.[;
-              hence thesis by A3,A5,A18,Th18;
-            end;
-          end;
-          hence thesis;
-        end;
-        now per cases by A8,XXREAL_0:1;
-          case A^^ = ^^A;
-            hence thesis by A2,A9,A10,A18,A19,Th1;
-          end;
-          case
-A20:        ^^A < A^^;
-            then
-A21:        vol(A) = t - s by A9,A18,SUPINF_2:5;
-            consider s1,t1 being Real;
-            vol(B) = x * t - x * s by A5,A12,A18,A19,A20,SUPINF_2:5,XREAL_1:70
-              .= x * y by A2,A21;
-            hence thesis;
-          end;
-        end;
-        hence thesis;
-      end;
+S:  A is non empty;
+   then reconsider AA = A as non empty Subset of REAL;
+    consider z being real number such that
+W:    z in A by MEMBERED:9,S;
+      reconsider z as Real by XREAL_0:def 1;
+XX:   x * z in x ** A by W,INTEGRA2:def 2;
+   reconsider z = x as R_eal by XXREAL_0:def 1;
+    reconsider u = x as R_eal by XXREAL_0:def 1;
+R1: now assume sup A = +infty & inf A = +infty;
+      then A = {+infty} by XXREAL_2:74;
+      then +infty in A by TARSKI:def 1;
+     hence contradiction;
     end;
-    hence thesis;
+R2: now assume sup A = -infty & inf A = -infty;
+      then A = {-infty} by XXREAL_2:74;
+      then -infty in A by TARSKI:def 1;
+     hence contradiction;
+    end;
+Y2: inf(x ** AA) = u * inf AA by Tx2,Z1;
+  thus x * y = z * vol A by Z2,EXTREAL1:13
+     .= z * (sup A - inf A) by S,MEASURE5:def 10
+     .= z * sup A - (z * inf A) by EXTREAL1:30,R1,R2
+     .= sup(x ** A) - inf(x ** A) by Tx1,Z1,Y2
+     .= vol(x ** A) by XX,MEASURE5:def 10;
   end;
 end;
-
-canceled 2;
 
 theorem Th23:
   for eps being Real st 0 < eps holds
@@ -2826,7 +2767,7 @@ A9:       x in A;
       proof
         let x be set;
         assume x in NAT;
-        then reconsider x as Nat by ORDINAL1:def 13;
+        then reconsider x as Nat;
         x in A by A7,NAT_1:1;
         hence thesis;
       end;
@@ -2902,15 +2843,13 @@ proof
   assume
 A1: a < b & 0 <= a & b <= 1;
   set eps = b - a;
-  0 < eps by A1,XREAL_1:52;
-  then consider n being Element of NAT such that
-A2: 1 < 2|^n * eps by Th23;
+  consider n being Element of NAT such that
+A2: 1 < 2|^n * eps by Th23,A1,XREAL_1:52;
   set aa = 2|^n * a, bb = 2|^n * b;
 A3: 1 < bb - aa by A2;
 A4: 0 < 2|^n by NEWTON:102;
-  0 <= 2|^n * a by A1,REAL_2:121;
-  then consider m being Element of NAT such that
-A5: aa < m & m < bb by A3,Th24;
+  consider m being Element of NAT such that
+A5: aa < m & m < bb by A3,Th24,A1;
   a < m / 2|^n & m / 2|^n < b by A4,A5,REAL_2:178;
   then m / 2|^n < 1 by A1,XXREAL_0:2;
   then
@@ -2935,7 +2874,7 @@ A2: a < 0 & b <= 1;
 A3:     b <= 0;
         consider c being real number such that
 A4:     a < c & c < b by A1,XREAL_1:7;
-A5:     halfline 0 = {g where g is Real : g<0} by LIMFUNC1:151;
+A5:     halfline 0 = {g where g is Real : g<0} by XXREAL_1:229;
         reconsider c as Real by XREAL_0:def 1;
         c in halfline 0 by A3,A4,A5;
         then c in (halfline 0) \/ DYADIC by XBOOLE_0:def 2;
@@ -2978,7 +2917,7 @@ A14: 0 <= a & 1 < b;
 A15:    1 <= a;
         consider c being real number such that
 A16:    a < c & c < b by A1,XREAL_1:7;
-A17:    right_open_halfline 1 = {g where g is Real : 1<g} by LIMFUNC1:152;
+A17:    right_open_halfline 1 = {g where g is Real : 1<g} by XXREAL_1:230;
         reconsider c as Real by XREAL_0:def 1;
         1 < c by A15,A16,XXREAL_0:2;
         then c in right_open_halfline 1 by A17;
@@ -3012,24 +2951,22 @@ proof
   let a,b be R_eal;
   assume
 A1: A c= [.a,b.];
-  consider q being set such that
-A2: q in A by XBOOLE_0:def 1;
   reconsider B = [.a,b.] as non empty Subset of ExtREAL
-  by A1,A2,NUMBERS:31,XBOOLE_1:1;
+  by A1,MEMBERED:2;
 A3: a <= inf A
   proof
     for x being ext-real number holds (x in B implies a <= x)
-    by MEASURE5:def 1;
-    then a is minorant of B by SUPINF_1:def 10;
-    then a is minorant of A by A1,SUPINF_1:39;
-    hence thesis by SUPINF_1:def 17;
+    by XXREAL_1:1;
+    then a is LowerBound of B by XXREAL_2:def 2;
+    then a is LowerBound of A by A1,XXREAL_2:5;
+    hence thesis by XXREAL_2:def 4;
   end;
   sup A <= b
   proof
-    for x being ext-real number st x in B holds x <= b by MEASURE5:def 1;
-    then b is majorant of B by SUPINF_1:def 9;
-    then b is majorant of A by A1,SUPINF_1:34;
-    hence thesis by SUPINF_1:def 16;
+    for x being ext-real number st x in B holds x <= b by XXREAL_1:1;
+    then b is UpperBound of B by XXREAL_2:def 1;
+    then b is UpperBound of A by A1,XXREAL_2:6;
+    hence thesis by XXREAL_2:def 3;
   end;
   hence thesis by A3;
 end;
@@ -3042,11 +2979,8 @@ proof
 end;
 
 theorem
-  for a,b being R_eal st a = 0 & b = 1 holds DYADIC c= [.a,b.]
+  DYADIC c= [. 0,1 .]
 proof
-  let a,b being R_eal;
-  assume
-A1: a = 0 & b = 1;
   let x be set;
   assume
 A2: x in DYADIC;
@@ -3054,8 +2988,8 @@ A2: x in DYADIC;
   consider n being Element of NAT such that
 A3: x in dyadic(n) by A2,URYSOHN1:def 4;
   reconsider x as R_eal by XXREAL_0:def 1;
-  a <= x & x <= b by A1,A3,URYSOHN1:5;
-  hence thesis by MEASURE5:def 1;
+  0 <= x & x <= 1 by A3,URYSOHN1:5;
+  hence thesis by XXREAL_1:1;
 end;
 
 theorem
@@ -3173,7 +3107,7 @@ A11: d - eps1 < r2 by A5,A9,XXREAL_0:2;
     then
 A12: abs(r2 - r1) < eps by A5,A6,A10,A11,Th34;
     0 <= r2 - r1 by A9,XREAL_1:50;
-    hence thesis by A5,A6,A7,A8,A12,ABSVALUE:def 1,URYSOHN1:1,XBOOLE_0:def 2;
+    hence thesis by A5,A6,A7,A8,A12,ABSVALUE:def 1,XXREAL_1:233,XBOOLE_0:def 2;
   end;
   suppose
 A13: d <= eps1;
@@ -3184,8 +3118,8 @@ A14: r1 in DOM & 0 < r1 & r1 < d by A2,Th29;
     then consider r2 being Real such that
 A15: d < r2 & r2 < r1 + eps1 & r2 in DOM;
     take r1,r2;
-A16: not r1 in halfline 0 by A14,URYSOHN1:1;
-A17: not r2 in halfline 0 by A2,A15,URYSOHN1:1;
+A16: not r1 in halfline 0 by A14,XXREAL_1:233;
+A17: not r2 in halfline 0 by A2,A15,XXREAL_1:233;
     (r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1) &
     (r2 in halfline 0 \/ DYADIC or r2 in right_open_halfline 1)
     by A14,A15,URYSOHN1:def 5,XBOOLE_0:def 2;
@@ -3197,3 +3131,16 @@ A18: (r1 in DYADIC or r1 in right_open_halfline 1) &
   end;
 end;
 
+begin :: Addenda
+
+:: missing, 2008.06.10, A.T.
+
+theorem
+ for A being non empty Subset of REAL, x being Real
+  st x > 0 & x**A is bounded_above
+  holds A is bounded_above by Lx1;
+
+theorem
+ for A being non empty Subset of REAL, x being Real
+  st x > 0 & x**A is bounded_below
+  holds A is bounded_below by Lx2;

@@ -29,28 +29,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="13"/>
-<Adjective nr="17"/>
+<Adjective nr="14"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="24" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster aid="NAT_2" nr="2">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="3" value="false"/>
-<Adjective nr="13"/>
-<Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="24" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

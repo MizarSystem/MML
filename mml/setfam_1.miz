@@ -7,7 +7,7 @@
 environ
 
  vocabularies BOOLE, TARSKI, SUBSET_1, SETFAM_1, AMI_1, CANTOR_1, ABIAN,
-      TRIANG_1;
+      TRIANG_1, BORSUK_5;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1;
  constructors TARSKI, ENUMSET1, SUBSET_1;
  registrations XBOOLE_0, SUBSET_1;
@@ -170,7 +170,7 @@ proof
   assume
 A1: X <> {} & Y <> {};
   then
-A2: X \/ Y <> {} by XBOOLE_1:15;
+A2: X \/ Y <> {};
   meet (X \/ Y) c= meet X & meet (X \/ Y) c= meet Y by A1,Th7,XBOOLE_1:7;
   then
 A3: meet (X \/ Y) c= meet X /\ meet Y by XBOOLE_1:19;
@@ -1447,7 +1447,7 @@ registration
   coherence
   proof consider d being Element of D;
     d c= union D by ZFMISC_1:92;
-    hence thesis by XBOOLE_1:3;
+    hence thesis;
   end;
 end;
 
@@ -1463,7 +1463,7 @@ A1: X is non empty and
 A2: X is with_non-empty_elements;
     consider x being Element of X such that
 A3: x in [#]X by A1,SUBSET_1:10;
-    reconsider x as non empty set by A2,A3,Def9;
+    reconsider x as non empty set by A2,A3;
     take x;
     thus thesis by A3;
   end;
@@ -1491,5 +1491,60 @@ Z: F is Cover of X;
    thus thesis by Z,Dfx;
   end;
  thus thesis by Dfx;
+end;
+
+:: from MEASURE1, 2008.06.08, A.T.
+
+theorem Th61:
+  {{}} is Subset-Family of X
+proof
+  {} c= X by XBOOLE_1:2;
+  hence thesis by ZFMISC_1:37;
+end;
+
+:: from BORSUK_5 (generalized), 2008.06.08, A.T.
+
+definition
+  let X be set;
+  let F be Subset-Family of X;
+  attr F is with_proper_subsets means
+  :Def6:
+  not X in F;
+end;
+
+theorem
+  for TS being set, F, G being Subset-Family of TS st
+  F is with_proper_subsets & G c= F holds G is with_proper_subsets
+proof
+  let TS be set, F, G being Subset-Family of TS;
+  assume
+A1: F is with_proper_subsets & G c= F;
+  assume not G is with_proper_subsets;
+  then TS in G by Def6;
+  hence thesis by A1,Def6;
+end;
+
+registration
+  let TS be non empty set;
+  cluster with_proper_subsets Subset-Family of TS;
+  existence
+  proof
+    reconsider F = { {} } as Subset-Family of TS by Th61;
+    take F;
+    assume TS in F;
+    hence thesis by TARSKI:def 1;
+  end;
+end;
+
+theorem
+  for TS being non empty set,
+  A, B being with_proper_subsets Subset-Family of TS holds
+  A \/ B is with_proper_subsets
+proof
+  let TS be non empty set,
+  A, B be with_proper_subsets Subset-Family of TS;
+  assume TS in A \/ B;
+  then TS in A or TS in B by XBOOLE_0:def 2;
+  hence thesis by Def6;
 end;
 

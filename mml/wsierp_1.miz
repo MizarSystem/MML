@@ -281,8 +281,8 @@ theorem Th20:
 proof
   assume
 A1: a divides 1;
-  then a divides (1+1) by NAT_D:8;
-  hence thesis by A1,NEWTON:52;
+  then a divides 1+1 by NAT_D:8;
+  hence thesis by A1,NEWTON:51;
 end;
 
 theorem
@@ -488,8 +488,7 @@ A1: a in dom fs;
   then consider fs3,fs2 such that
 A2: len fs3=a & len fs2=b & fs=fs3^fs2 by FINSEQ_2:25;
   a<>0 by A1,FINSEQ_3:27;
-  then fs3 <> {} by A2,CARD_1:47;
-  then a in dom fs3 by A2,FINSEQ_5:6;
+  then a in dom fs3 by FINSEQ_5:6,A2,CARD_1:47;
   then
 A3: fs3.a=fs.a by A2,FINSEQ_1:def 7;
   a=d+1;
@@ -761,7 +760,7 @@ A3: Del(<*v*>,1)={}
   proof
     1 in dom <*v*> by A1,FINSEQ_3:27;
     then len(Del(<*v*>,1))+1=1 by A1,Def1;
-    hence thesis by CARD_2:59;
+    hence thesis;
   end;
 A4: fs^{}=fs & {}^fs=fs by FINSEQ_1:47;
   hence Del(<*v*>^fs,1)=fs by A2,A3,Lm15;
@@ -982,7 +981,7 @@ A2: fp.a<>0;
   suppose
 A3: fp.a=0;
     Product(fp)/fp.a = Product(fp)*(fp.a)" by XCMPLX_0:def 9
-      .= Product(fp)*(0 qua Nat) by A3,XCMPLX_0:def 7
+      .= Product(fp)*(0 qua Nat) by A3
       .= 0;
     hence thesis;
   end;
@@ -1001,7 +1000,6 @@ A2: not k,h are_relative_prime;
   reconsider a=k gcd h as Element of NAT by INT_2:29;
 A3: a<>1 by A2,INT_2:def 4;
   a<>0 by A1,INT_2:35;
-  then a>0;
   then a>=0 qua Nat+1 by NAT_1:13;
   then
 A4: a>1 by A3,REAL_1:def 5;
@@ -1065,8 +1063,7 @@ A9:   e+1=b by A4,NAT_1:6;
       (k |^ b)=a*((d |^ e)*d) by A7,A9,NEWTON:11
         .=(a*(d |^ e))*d;
       then d divides (k |^ b) by INT_1:def 9;
-      then d divides ((k |^ b) gcd d) by INT_2:33;
-      then d=1 or d=-1 by A8,INT_2:17;
+      then d=1 or d=-1 by A8,INT_2:17,INT_2:33;
       hence thesis by A1,A5,INT_2:9;
     end;
     hence thesis by A2;
@@ -1111,8 +1108,7 @@ A9:   now
       now
         assume d=2*e+1;
         then -c|^d=a by A1,A6,A7,Th3;
-        then -a is Element of NAT by ORDINAL1:def 13;
-        hence thesis by A2,INT_2:8;
+        hence thesis by A2;
       end;
       hence thesis by A8,A9;
     end;
@@ -1173,21 +1169,18 @@ A2:   b=0;
 A3:   (a hcf b)=0*m+a*n by A1;
       thus thesis by A2,A3;
     end;
-    suppose a<>0 & b<>0;
-      then a>0 & b>0;
-      then
-A4:   b>0 & a+b>b by XREAL_1:31;
+    suppose
+S:     a<>0 & b<>0;
       defpred P[set] means ex m,n st $1=a*m+b*n & $1<>0;
       a+b=a*1+b*1;
       then
-A5:   ex c be Nat st P[c] by A4;
+A5:   ex c be Nat st P[c] by S;
       consider d being Nat such that
 A6:   P[d] & for c being Nat st P[c] holds d<=c from NAT_1:sch 5(A5);
-A7:   d>0 by A6;
       consider m,n such that
 A8:   d=a*m+b*n by A6;
       consider e,f be Nat such that
-A9:   a=d*e+f & f<d by A7,NAT_1:17;
+A9:   a=d*e+f & f<d by A6,NAT_1:17;
       now
         assume
 A10:    f<>0;
@@ -1198,7 +1191,7 @@ A10:    f<>0;
       then
 A11:  d divides a by A9,NAT_D:def 3;
       consider e,f be Nat such that
-A12:  b=d*e+f & f<d by A7,NAT_1:17;
+A12:  b=d*e+f & f<d by A6,NAT_1:17;
       now
         assume
 A13:    f<>0;
@@ -1270,12 +1263,10 @@ proof
 A1: a<>0 & b<>0;
   consider m,n such that
 A2: (a hcf b)=a*m+b*n by Th34;
-A3: a>0 & b>0 by A1;
   set k=[/max(-m/b,n/a)\]+1;
-  k>max(-m/b,n/a) by INT_1:57;
-  then k>-m/b & k>n/a by XXREAL_0:31;
+  k>-m/b & k>n/a by XXREAL_0:31,INT_1:57;
   then k>(-m)/b & k>n/a by XCMPLX_1:188;
-  then k*b>-m & k*a>n by A3,REAL_2:177;
+  then k*b>-m & k*a>n by A1,REAL_2:177;
   then k*b--m>0 & k*a-n>0 by XREAL_1:52;
   then reconsider e=k*b+m,d=k*a-n as Element of NAT by INT_1:16;
   a*e-b*d=a*m+(0 qua Nat)+b*n;
@@ -1413,8 +1404,8 @@ A6: d=0;
 A7: d<>0;
     then
 A8: d>=1 by NAT_1:14;
-    then consider d1 being Nat such that
-A9: d=1+d1 by NAT_1:10;
+    consider d1 being Nat such that
+A9: d=1+d1 by NAT_1:10,NAT_1:14,A7;
     reconsider d1 as Element of NAT by ORDINAL1:def 13;
 A10: now
       assume e=0;
@@ -1628,11 +1619,10 @@ A29: dom s2 = Seg k by A28,FINSEQ_1:def 3;
             for a being Nat st a in dom s2 holds s2.a in INT
             proof
               let a be Nat;
-              assume a in dom s2;
-              then
-A30:          a in Seg len s2 by FINSEQ_1:def 3;
+              assume
+Z:             a in dom s2;
               reconsider a as Element of NAT by ORDINAL1:def 13;
-              s2.a=Product Del(fp,a)*m1+fr1.a by A28,A30,A29;
+              s2.a=Product Del(fp,a)*m1+fr1.a by A28,Z;
               hence thesis by INT_1:def 2;
             end;
             then reconsider s2 as FinSequence of INT by FINSEQ_2:14;
@@ -1706,14 +1696,6 @@ A43:              (fp1.1)*(fr3.1)+(fr2.1)=
 end;
 
 :: THUE'S THEOREM
-
-Lm19: a divides b & b<a implies b=0
-proof
-  assume
-A1: not thesis;
-  then b>0;
-  hence contradiction by A1,NAT_D:7;
-end;
 
 Lm20: k divides m iff k divides (abs(m))
 proof
@@ -1799,7 +1781,6 @@ proof
 A1: a<>0 & (a gcd k)=1;
   then
 A2: a>=1 by NAT_1:14;
-A3: a>0 by A1;
   per cases by A2,REAL_1:def 5;
   suppose
 A4: a=1;
@@ -1814,7 +1795,7 @@ A5: a>1;
 A6: sqrt a<a by Lm24;
     set d=[\sqrt a/];
     set d1=d+1;
-A7: sqrt a>0 by A3,SQUARE_1:93;
+A7: sqrt a>0 by A1,SQUARE_1:93;
 A8: d<=sqrt a & d>sqrt a -1 by INT_1:def 4;
     then
 A9: d<a by A6,XXREAL_0:2;
@@ -1823,7 +1804,6 @@ A9: d<a by A6,XXREAL_0:2;
 A10: sqrt a -1>0 by XREAL_1:52;
     then reconsider d as Element of NAT by A8,INT_1:16;
 A11: d+1>=1 & 1>0 by Lm1;
-A12: d1>0 by A8,A10,Lm1;
     reconsider d1 as Element of NAT by A11;
     set e1=d1^2;
     e1=d1*d1;
@@ -1845,11 +1825,11 @@ A17: rng fs c= Seg a
 A18:  b in dom fs & fs.b=v by FINSEQ_2:11;
 A19:  v=1+ ((k*((b-1) div d1)+((b-1) mod d1)) mod a) by A14,A18;
       then reconsider v1=v as Integer;
-      0<=((k*((b-1) div d1)+((b-1) mod d1)) mod a) by NEWTON:78;
+B20:  0<=((k*((b-1) div d1)+((b-1) mod d1)) mod a) by NEWTON:78;
       then
 A20:  1<=v1 by A19,Lm1;
-      then reconsider v1 as Element of NAT by INT_1:16;
-      ((k*((b-1) div d1)+((b-1) mod d1)) mod a)<a by A3,NEWTON:79;
+      reconsider v1 as Element of NAT by INT_1:16,B20,A19;
+      ((k*((b-1) div d1)+((b-1) mod d1)) mod a)<a by A1,NEWTON:79;
       then v1<=a by A19,Lm9;
       hence v in Seg a by A20;
     end;
@@ -1869,7 +1849,7 @@ A24: x<>0 or y<>0
         .=v2-1 by A11,NEWTON:80;
       hence contradiction by A22;
     end;
-A25: y1<d1 & y2<d1 by A12,NEWTON:79;
+A25: y1<d1 & y2<d1 by A8,A10,NEWTON:79;
 A26: y1>=0 & y2>=0 by NEWTON:78;
 A27: abs(y)<=d
     proof
@@ -1890,9 +1870,9 @@ A31:  x1=[\(v1-1)/d1/] & x2=[\(v2-1)/d1/] by INT_1:def 7;
 A32:  x1<=(v1-1)/d1 & x2<=(v2-1)/d1 by INT_1:def 4;
       v1-1<=e1-1 & v2-1<=e1-1 by A23,XREAL_1:11;
       then
-A33:  (v1-1)/d1<=(e1-1)/d1 & (v2-1)/d1<=(e1-1)/d1 by A12,REAL_1:73;
+A33:  (v1-1)/d1<=(e1-1)/d1 & (v2-1)/d1<=(e1-1)/d1 by A8,A10,REAL_1:73;
 A34:  (e1-1)/d1=d1-1/d1 by A11,XCMPLX_1:128;
-      1/d1>0 by A12,REAL_2:127;
+      1/d1>0 by A8,A10,REAL_2:127;
       then (e1-1)/d1<d1 by A34,Lm1;
       then (v1-1)/d1<d1 & (v2-1)/d1<d1 by A33,XXREAL_0:2;
       then x1<d1 & x2<d1 by A32,XXREAL_0:2;
@@ -1900,7 +1880,6 @@ A34:  (e1-1)/d1=d1-1/d1 by A11,XCMPLX_1:128;
 A35:  x1<=d & x2<=d by Lm9;
 A36:  [\0/]=0 by INT_1:47;
       v1-1>=0 & v2-1>=0 by A23,XREAL_1:50;
-      then (v1-1)/d1>=0 & (v2-1)/d1>=0 by REAL_2:125;
       then x1>=0 & x2>=0 by A31,A36,PRE_FF:11;
       then
 A37:  x<=d & x2-x1<=d by A35,Lm2;
@@ -1921,7 +1900,7 @@ A43: now
       assume
 A44:  x=0;
       then a divides (abs(y)) by A40,Lm20;
-      then abs(y)=0 by A29,Lm19;
+      then abs(y)=0 by A29,NAT_D:7;
       hence contradiction by A24,A44,ABSVALUE:7;
     end;
 A45: now
@@ -1929,7 +1908,7 @@ A45: now
 A46:  y=0;
       then a divides x by A1,A39,A41,Lm23,Th36;
       then a divides (abs(x)) by Lm20;
-      then abs(x)=0 by A38,Lm19;
+      then abs(x)=0 by A38,NAT_D:7;
       hence contradiction by A24,A46,ABSVALUE:7;
     end;
     take b=abs(x), e=abs(y);

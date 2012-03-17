@@ -10,24 +10,26 @@ environ
       FUNCT_1, UNIALG_2, BOOLE, FINSEQ_1, TDGROUP, PRALG_1, FUNCOP_1, PRALG_2,
       CARD_3, QC_LANG1, TREES_3, TREES_4, MSAFREE, FINSET_1, TREES_2, TREES_1,
       DTCONSTR, LANG1, FUNCT_6, PROB_1, FREEALG, CARD_1, SQUARE_1, ARYTM_1,
-      FUNCT_4, CIRCUIT1, FINSEQ_4, ORDINAL2, ARYTM, MEMBERED;
+      FUNCT_4, CIRCUIT1, FINSEQ_4, ORDINAL2, ARYTM, MEMBERED, SUPINF_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XREAL_0, REAL_1, NAT_1, MEMBERED, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
       RELSET_1, FINSET_1, CARD_3, FUNCT_4, FUNCT_6, TREES_1, TREES_2, TREES_3,
       TREES_4, STRUCT_0, LANG1, DTCONSTR, PBOOLE, MSUALG_1, MSUALG_2, MSAFREE,
-      PRE_CIRC, MSAFREE2, XXREAL_0;
- constructors FUNCT_4, XXREAL_0, REAL_1, NAT_1, PRE_CIRC, MSUALG_2, MSAFREE2;
+      XXREAL_2, PRE_CIRC, MSAFREE2, XXREAL_0;
+ constructors FUNCT_4, XXREAL_0, REAL_1, NAT_1, PRE_CIRC, MSUALG_2, MSAFREE2,
+      MEMBERED, XXREAL_2, SEQ_4;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, FRAENKEL,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, TREES_1, CARD_3,
       PBOOLE, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, DTCONSTR, MSUALG_1,
-      MSAFREE, MSAFREE2, FUNCT_2;
+      MSAFREE, MSAFREE2, FUNCT_2, XXREAL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, MEMBERED, MSAFREE2;
  theorems TARSKI, REAL_1, ZFMISC_1, NAT_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
       FUNCT_1, FUNCT_2, TREES_1, TREES_2, TREES_3, TREES_4, CARD_1, CARD_2,
       CARD_3, FUNCOP_1, PBOOLE, PRALG_2, MSUALG_1, MSUALG_2, RELAT_1, MSAFREE1,
       MSAFREE, PRE_CIRC, DTCONSTR, LANG1, MSAFREE2, FUNCT_4, FUNCT_6, XBOOLE_0,
-      XBOOLE_1, MEMBERED, FINSET_1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1;
+      XBOOLE_1, MEMBERED, FINSET_1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1,
+      XXREAL_2;
  schemes NAT_1, FINSEQ_1, PRE_CIRC, PBOOLE, FRAENKEL, DOMAIN_1;
 
 begin
@@ -224,7 +226,7 @@ proof
   assume
 A1: IIG is with_input_V;
   reconsider A = InputVertices IIG as Subset of IIG;
-  reconsider A as non empty Subset of IIG by A1,MSAFREE2:def 4;
+  reconsider A as non empty Subset of IIG by A1;
   reconsider SS = the Sorts of SCS as non-empty ManySortedSet of
   the carrier of IIG;
   reconsider SI = SS | A as ManySortedSet of A;
@@ -297,7 +299,7 @@ definition
   coherence
   proof
     Args(o,SCS) = product ((the Sorts of SCS)*(the_arity_of o)) by PRALG_2:10;
-    hence s * (the_arity_of o) is Element of Args (o, SCS) by PRE_CIRC:11;
+    hence s * (the_arity_of o) is Element of Args (o, SCS) by CARD_3:100;
   end;
   correctness;
 end;
@@ -361,26 +363,14 @@ registration
   let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
   cluster -> finite non empty
     Function-like Relation-like Element of (the Sorts of FreeEnv SCS).v;
-  coherence
-  proof
-    let a be Element of (the Sorts of FreeEnv SCS).v;
-    reconsider b = a as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
-    b is finite non empty Function-like Relation-like;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
   let IIG;
   let SCS be locally-finite non-empty MSAlgebra over IIG, v be Vertex of IIG;
   cluster -> DecoratedTree-like Element of (the Sorts of FreeEnv SCS).v;
-  coherence
-  proof
-    let a be Element of (the Sorts of FreeEnv SCS).v;
-    reconsider b = a as Element of (the Sorts of FreeMSA the Sorts of SCS).v;
-    b is DecoratedTree-like;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 theorem Th7:
@@ -641,7 +631,7 @@ A55:      e2 in (FreeSort the Sorts of SCS).s1 by A19,A54,MSAFREE:def 13;
   ex r being FinSequence of NAT st r in dom e2
   & q'' = m'^r & eke.q'' = e2.r by TREES_2:def 12;
   then
-A56: eke.{} = [av,the carrier of IIG] by A2,FINSEQ_1:48 ,TREES_4:def 4;
+A56: eke.{} = [av,the carrier of IIG] by A2,TREES_4:def 4;
   now
     take av;
     the_result_sort_of av = v by A25,MSAFREE2:def 7;
@@ -786,7 +776,7 @@ A1: s = { card t where t is Element of (the Sorts of FreeEnv A).v
 A2: size(v,A) = max s by Def4;
   reconsider Y = s as finite non empty real-membered set;
   max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
-  : not contradiction } by A1,PRE_CIRC:def 1;
+  : not contradiction } by A1,XXREAL_2:def 8;
   then consider e being Element of (the Sorts of FreeEnv A).v such that
 A3: card e = max Y;
 A4: e in (the Sorts of FreeEnv A).v;
@@ -874,12 +864,12 @@ A20:    co in Y by A1;
 A21:    [{},o'] in op by A16,FUNCT_1:8;
         the_arity_of o <> {} by A13,MSUALG_1:def 6;
         then
-A22:    dom p <> {} by A19,RELAT_1:64;
+A22:    dom p <> {} by A19;
         consider q being DTree-yielding FinSequence such that
 A23:    p = q and
 A24:    dom op = tree(doms q) by TREES_4:def 4;
-        p <> {} by A22,RELAT_1:60;
-        then rng p <> {} by RELAT_1:64;
+        p <> {} by A22;
+        then rng p <> {};
         then
 A25:    1 in dom p by FINSEQ_3:34;
         0 + 1 = 1;
@@ -898,7 +888,7 @@ A30:    { [{},o'], [<*0*>,T.q] } c= op by A21,ZFMISC_1:38;
         then card { [{},o'], [<*0*>,T.q] } = 2 by CARD_2:76;
         then 2 <= co by A30,NAT_1:44;
         then co > size(v,A) by A8,XXREAL_0:2;
-        hence contradiction by A2,A20,PRE_CIRC:def 1;
+        hence contradiction by A2,A20,XXREAL_2:def 8;
       end;
       suppose not ((the ResultSort of IIG).o = v);
         hence contradiction by A11;
@@ -915,7 +905,7 @@ A32: a = root-tree[x,v] by A7,MSAFREE2:2;
     root-tree[x,v] = {{}} --> [x,v] by TREES_1:56,TREES_4:def 2
       .= [: {{}}, {[x,v]} :] by FUNCOP_1:def 2
       .= { [{},[x,v]] } by ZFMISC_1:35;
-    hence size(v,A) = 1 by A2,A3,A6,A32,CARD_1:79;
+    hence size(v,A) = 1 by A2,A3,A6,A32,CARD_1:50;
   end;
   suppose v in SortsWithConstants IIG;
     then v in { v' where v' is SortSymbol of IIG : v' is with_const_op }
@@ -932,7 +922,7 @@ A36: (the ResultSort of IIG).o = v' by A34,MSUALG_2:def 2;
         then consider x being set such that x in (the Sorts of A).v and
 A37:    a = root-tree[x,v];
         root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
-        hence size(v,A) = 1 by A2,A3,A6,A37,CARD_1:79;
+        hence size(v,A) = 1 by A2,A3,A6,A37,CARD_1:50;
       end;
       suppose ex o' being OperSymbol of IIG st
         [o',the carrier of IIG] = a.{} & the_result_sort_of o' = v;
@@ -958,7 +948,7 @@ A42:    a = nt-tree ts and nt ==> roots ts by A38,DTCONSTR:10;
         then ts = {} by CARD_2:59;
         then a = root-tree nt by A42,TREES_4:20
           .= { [{},nt] } by TREES_4:6;
-        hence size(v,A) = 1 by A2,A3,A6,CARD_1:79;
+        hence size(v,A) = 1 by A2,A3,A6,CARD_1:50;
       end;
     end;
     hence thesis;
@@ -992,12 +982,12 @@ A6: sw = { card t where t is Element of (the Sorts of FreeEnv SCS).w
 A7: size(w,SCS) = max sw by Def4;
   reconsider Y = sw as finite non empty real-membered set;
   card e2 in Y by A6;
-  then card e2 <= max Y by PRE_CIRC:def 1;
+  then card e2 <= max Y by XXREAL_2:def 8;
   then
 A8: card e2 < max Y by A5,A7,REAL_1:def 5;
   reconsider m = max Y as real number;
   m in { card t where t is Element of (the Sorts of FreeEnv SCS).w
-  : not contradiction } by A6,PRE_CIRC:def 1;
+  : not contradiction } by A6,XXREAL_2:def 8;
   then consider e3 being Element of (the Sorts of FreeEnv SCS).w such that
 A9: card e3 = m;
   consider sv being finite non empty Subset of NAT such that
@@ -1033,7 +1023,7 @@ A20: card(e1 with-replacement (k',e3)) + card (e1|k') = card e1 + card e3
   e1|k' = e2 by A3,A13,A14,A16,TREES_4:def 4;
   then card e1 + card (e1|k') < card e1 + card e3 by A8,A9,XREAL_1:8;
   then card e1 < card (e1 with-replacement (k',e3)) by A20,XREAL_1:8;
-  hence contradiction by A2,A11,A19,PRE_CIRC:def 1;
+  hence contradiction by A2,A11,A19,XXREAL_2:def 8;
 end;
 
 theorem Th13:
@@ -1164,7 +1154,7 @@ A5: sv = { card tv where tv is Element of (the Sorts of FreeEnv A).v
   : not contradiction } and
 A6: size(v,A) = max sv by Def4;
   reconsider Yv = sv as finite non empty real-membered set;
-  max Yv in Yv by PRE_CIRC:def 1;
+  max Yv in Yv by XXREAL_2:def 8;
   then consider tv being Element of (the Sorts of FreeEnv A).v such that
 A7: card tv = max Yv by A5;
   reconsider e1 = tv as finite DecoratedTree;
@@ -1183,7 +1173,7 @@ A11: (the ResultSort of IIG).oo = v' by A9,MSUALG_2:def 2;
     then
 A12: av = oo by MSAFREE2:def 6;
     reconsider aoo = (the Arity of IIG).oo as FinSequence by A10;
-    dom aoo = {} by A10,RELAT_1:60;
+    dom aoo = {} by A10;
     hence contradiction by A3,A12,MSUALG_1:def 6;
   end;
   then
@@ -1195,7 +1185,7 @@ A15: sw = { card tw where tw is Element of (the Sorts of FreeEnv A).w
   : not contradiction } and
 A16: size(w,A) = max sw by Def4;
   reconsider Yw = sw as finite non empty real-membered set;
-  max Yw in Yw by PRE_CIRC:def 1;
+  max Yw in Yw by XXREAL_2:def 8;
   then consider tw being Element of (the Sorts of FreeEnv A).w such that
 A17: card tw = max Yw by A15;
   reconsider e2 = tw as finite DecoratedTree;
@@ -1216,14 +1206,14 @@ A22: k1 + 1 = k;
   reconsider de2 = dom e2 as finite Tree;
   reconsider o as Element of de1;
 A23: dom eoe = de1 with-replacement (o,de2) by TREES_2:def 12;
-  then reconsider deoe = dom eoe as finite Tree;
+  reconsider deoe = dom eoe as finite Tree;
   p.k in (the Sorts of FreeEnv A).((the_arity_of av).k)
   by A3,A14,A20,MSAFREE2:14;
   then reconsider eoe as Element of (the Sorts of FreeEnv A).v by A4,A13
   ,A14,A21,A22,Th7;
   card eoe in Yv by A5;
   then
-A24: card eoe <= size(v,A) by A6,PRE_CIRC:def 1;
+A24: card eoe <= size(v,A) by A6,XXREAL_2:def 8;
 A25: card deoe + card (de1|o) = card de1 + card de2 by A23,PRE_CIRC:22;
   card (de1|o) < card de1 by PRE_CIRC:20;
   then card (de1|o) + card de2 < card deoe + card (de1|o) by A25,XREAL_1:8;
@@ -1247,7 +1237,7 @@ A1: s = { card t where t is Element of (the Sorts of FreeEnv A).v
 A2: size(v,A) = max s by Def4;
   reconsider Y = s as finite non empty real-membered set;
   max Y in { card t where t is Element of (the Sorts of FreeEnv A).v
-  : not contradiction } by A1,PRE_CIRC:def 1;
+  : not contradiction } by A1,XXREAL_2:def 8;
   then consider t being Element of (the Sorts of FreeEnv A).v such that
 A3: card t = max Y;
   size(v,A) <> 0 by A2,A3,CARD_2:59;
@@ -1281,7 +1271,7 @@ A5: size(v,A) = max s by Def4;
   reconsider S = s as finite non empty real-membered set;
 A6: card e in S by A4;
   now
-    let r be real number;
+    let r be ext-real number;
     FreeEnv A = MSAlgebra (# FreeSort the Sorts of A,
       FreeOper the Sorts of A #) by MSAFREE:def 16;
     then
@@ -1307,7 +1297,7 @@ A11: (ex x being set st x in (the Sorts of A).v & a' = root-tree[x,v]) or
       then consider x being set such that
 A12:  x in (the Sorts of A).v & a' = root-tree[x,v];
       root-tree[x,v] = { [{},[x,v]] } by TREES_4:6;
-      hence r <= card e by A8,A9,A10,A12,CARD_1:79;
+      hence r <= card e by A8,A9,A10,A12,CARD_1:50;
     end;
     suppose ex o being OperSymbol of IIG st [o,the carrier of IIG] = a'.{}
       & the_result_sort_of o = v;
@@ -1395,7 +1385,7 @@ A42:            len qk1 = len p by FINSEQ_3:31;
                 Element of (the Sorts of FreeEnv A).v1 by A38,PARTFUN1:def 8;
                 card T1 in S1 by A36;
                 then
-A43:            card T1 <= card e1 by A37,PRE_CIRC:def 1;
+A43:            card T1 <= card e1 by A37,XXREAL_2:def 8;
                 reconsider Tx = p.1 as finite DecoratedTree by A34;
 A44:            {} is Element of dom Tx by TREES_1:47;
                 <*0*> = <*0*>^{} by FINSEQ_1:47;
@@ -1560,7 +1550,7 @@ A83:            len qk1 = len p by A59,FINSEQ_3:31;
                 MSAFREE2:14;
                 card T1 in S1 by A79;
                 then
-A84:            card T1 <= card e1 by A80,PRE_CIRC:def 1;
+A84:            card T1 <= card e1 by A80,XXREAL_2:def 8;
 A85:            {} is Element of dom Tx by TREES_1:47;
 A86:            len qk = len p by A60,FINSEQ_3:31;
 A87:            k < len qk by A56,A60,FINSEQ_3:31;
@@ -1653,7 +1643,7 @@ A110:     len p in dom p by A25,FINSEQ_3:27;
       hence r <= card e;
     end;
   end;
-  hence thesis by A5,A6,PRE_CIRC:def 1;
+  hence thesis by A5,A6,XXREAL_2:def 8;
 end;
 
 begin :: Depth
@@ -1728,7 +1718,7 @@ A1: Ds = { depth(v',A) where v' is Element of IIG :
 A2: depth A = max Ds by Def7;
   reconsider Y = Ds as finite non empty real-membered set;
   depth(v,A) in Y by A1;
-  hence depth(v,A) <= depth A by A2,PRE_CIRC:def 1;
+  hence depth(v,A) <= depth A by A2,XXREAL_2:def 8;
 end;
 
 theorem Th19:
@@ -1744,7 +1734,7 @@ A1: s = { depth t where t is Element of (the Sorts of FreeEnv A).v
 A2: depth(v,A) = max s by Def6;
   reconsider Y = s as finite non empty real-membered set;
   max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
-  : not contradiction } by A1,PRE_CIRC:def 1;
+  : not contradiction } by A1,XXREAL_2:def 8;
   then consider t being Element of (the Sorts of FreeEnv A).v such that
 A3: depth t = max Y;
   consider t2 being Element of (the Sorts of FreeMSA the Sorts of A).v
@@ -1772,17 +1762,17 @@ A13: depth(v,A) = 0;
     then rng t'' = { t.{} } by A2,A3,A4,A5,A6,A7,A8,FUNCT_1:14, TREES_1:56,80;
     then t'' = { [{},t.{}] } by A2,A3,A4,A5,A6,A7,A8,A13,PRE_CIRC:2,
     TREES_1:56,80;
-    then card t = 1 by CARD_1:79;
+    then card t = 1 by CARD_1:50;
     then
 A14: 1 in YY by A11;
-    for kk being real number st kk in YY holds kk <= 1
+    for kk being ext-real number st kk in YY holds kk <= 1
     proof
-      let kk be real number;
+      let kk be ext-real number;
       assume kk in YY;
       then consider tt being Element of (the Sorts of FreeEnv A).v such that
 A15:  card tt = kk by A11;
       depth tt in Y by A1;
-      then depth tt <= 0 by A2,A13,PRE_CIRC:def 1;
+      then depth tt <= 0 by A2,A13,XXREAL_2:def 8;
       then
 A16:  depth tt = 0;
       consider tiv being Element of (the Sorts of FreeMSA the Sorts of A).v
@@ -1797,9 +1787,9 @@ A21:  depth tiv = height t''' by MSAFREE2:def 14;
       rng tt = { tt.{} } by A16,A17,A18,A19,A20,A21,FUNCT_1:14, TREES_1:56,80;
       then tt = { [{},tt.{}] } by A16,A17,A18,A19,A20,A21,PRE_CIRC
       :2,TREES_1:56,80;
-      hence kk <= 1 by A15,CARD_1:79;
+      hence kk <= 1 by A15,CARD_1:50;
     end;
-    then size(v,A) = 1 by A12,A14,PRE_CIRC:def 1;
+    then size(v,A) = 1 by A12,A14,XXREAL_2:def 8;
     then v in InputVertices IIG \/ SortsWithConstants IIG by Th11;
     hence v in InputVertices IIG or v in SortsWithConstants IIG
     by XBOOLE_0:def 2;
@@ -1811,7 +1801,7 @@ A22: size(v,A) = 1 by Th11;
 A23: card t in ss by A11;
   card t in NAT;
   then reconsider ct = card t as Real;
-  ct <= 1 by A12,A22,A23,PRE_CIRC:def 1;
+  ct <= 1 by A12,A22,A23,XXREAL_2:def 8;
   then
 A24: card t <= 0 or card t = 0 + 1 by NAT_1:8;
   now
@@ -1850,7 +1840,7 @@ A3: s = { depth t where t is Element of (the Sorts of FreeEnv A).v
 A4: depth(v,A) = max s by Def6;
   reconsider Y = s as finite non empty real-membered set;
   max Y in { depth t where t is Element of (the Sorts of FreeEnv A).v
-  : not contradiction } by A3,PRE_CIRC:def 1;
+  : not contradiction } by A3,XXREAL_2:def 8;
   then consider t being Element of (the Sorts of FreeEnv A).v such that
 A5: depth t = max Y;
   consider s1 being finite non empty Subset of NAT such that
@@ -1859,7 +1849,7 @@ A6: s1 = { depth t1 where t1 is Element of (the Sorts of FreeEnv A).v1
 A7: depth(v1,A) = max s1 by Def6;
   reconsider Y1 = s1 as finite non empty real-membered set;
   max Y1 in { depth t1 where t1 is Element of (the Sorts of FreeEnv A ) .
-v1: not contradiction } by A6,PRE_CIRC:def 1;
+v1: not contradiction } by A6,XXREAL_2:def 8;
   then consider t1 being Element of (the Sorts of FreeEnv A).v1 such that
 A8: depth t1 = max Y1;
   consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v1
@@ -1950,7 +1940,7 @@ A41: q'.k in (the Sorts of FreeEnv A).v1
   reconsider dtft = depth tft as Real;
   dtft in Y by A3;
   then
-A42: dtft <= depth t by A5,PRE_CIRC:def 1;
+A42: dtft <= depth t by A5,XXREAL_2:def 8;
   consider e' being Element of (the Sorts of FreeMSA the Sorts of A).v
   such that
 A43: tft = e' and

@@ -43,7 +43,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="83" value="false"/>
+<Adjective nr="85" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SF_MASTR" nr="1">
@@ -64,8 +64,8 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="79">
+<Adjective nr="25"/>
+<Adjective nr="81">
 <Func kind="K" nr="275"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="86"/>
@@ -94,15 +94,15 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SF_MASTR" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="79">
+<Adjective nr="25"/>
+<Adjective nr="81">
 <Func kind="K" nr="275"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="86"/>
@@ -131,7 +131,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SF_MASTR" nr="5">
@@ -140,15 +140,15 @@
 <Func kind="K" nr="88"/>
 </Func>
 <Cluster>
-<Adjective nr="83"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SF_MASTR" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="79">
+<Adjective nr="25"/>
+<Adjective nr="81">
 <Func kind="K" nr="275"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="86"/>
@@ -177,7 +177,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="83" value="false"/>
+<Adjective nr="85" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

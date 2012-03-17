@@ -31,9 +31,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="4"/>
+<Adjective nr="3"/>
 <Adjective nr="5"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PBOOLE" nr="2">
@@ -47,9 +47,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="3"/>
-<Adjective nr="5"/>
+<Adjective nr="4"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PBOOLE" nr="3">
@@ -63,9 +63,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="11"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PBOOLE" nr="4">
@@ -75,7 +75,7 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -86,9 +86,9 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
 <Adjective nr="3"/>
-<Adjective nr="5"/>
+<Adjective nr="4"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PBOOLE" nr="1">
@@ -98,7 +98,7 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -108,7 +108,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PBOOLE" nr="2">
@@ -120,7 +120,7 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -147,7 +147,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="4"/>
+<Adjective nr="5"/>
 </Cluster>
 </FCluster>
 <CCluster aid="PBOOLE" nr="1">
@@ -159,14 +159,14 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="3"/>
+<Adjective nr="4"/>
 </Cluster>
 <Typ kind="M" nr="11">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="4" value="false"/>
+<Adjective nr="5" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PBOOLE" nr="2">
@@ -178,14 +178,14 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="4"/>
+<Adjective nr="5"/>
 </Cluster>
 <Typ kind="M" nr="11">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="3" value="false"/>
+<Adjective nr="4" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PBOOLE" nr="3">
@@ -210,7 +210,7 @@
 <LocusVar nr="3"/>
 </Typ>
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </CCluster>
 </Registrations>

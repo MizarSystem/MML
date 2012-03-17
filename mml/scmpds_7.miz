@@ -283,7 +283,6 @@ proof
 A1: I is_closed_on s1 & IsI c= s1 & IsI c= s2 & DataPart s1 = DataPart s2;
   then
 A2: s1=s1 +* IsI by FUNCT_4:79;
-:::  set C1 = Computation s1;::, C2 = Computation s2;
   defpred P[Element of NAT] means
   IC Computation(s1,$1) = IC Computation(s2,$1) &
   CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
@@ -667,8 +666,6 @@ A3: card I > 0 and
 A4: IC s2 = inspos n and
 A5: DataPart s1 = DataPart s2;
 A6: s1=s1 +* II by A1,FUNCT_4:79;
-:::  set C1 = Computation s1;
-:::  set C2 = Computation s2;
   defpred P[Element of NAT] means $1 < LifeSpan s1 implies
   IC Computation(s1,$1) + n = IC Computation(s2,$1) &
   CurInstr (Computation(s1,$1)) = CurInstr (Computation(s2,$1)) &
@@ -684,8 +681,6 @@ A11: P[0]
   proof
     assume 0 < LifeSpan s1;
 A12: IC SCMPDS in dom II by SCMPDS_4:7;
-    inspos 0 + n in dom Shift(I,n) by A9,VALUED_1:25;
-:::    then
 A13: inspos (0 + n) in dom Shift(I,n) by A9,VALUED_1:25;
     IC Computation(s1,0) = s1.IC SCMPDS by AMI_1:13
       .= II.IC SCMPDS by A1,A12,GRFUNC_1:8
@@ -793,8 +788,6 @@ theorem Th36:
 proof
   let I be No-StopCode shiftable Program of SCMPDS;
   set II=Initialized stop I;
-:::  , C1=Computation s1;
-:::  , C2=Computation s2;
   assume
 A1: II c= s1 & I is_closed_on s1 & I is_halting_on s1;
   let n be Element of NAT;
@@ -880,7 +873,6 @@ A2: s1 =s +* spI +* SA0 by FUNCT_4:15
 A3: s2 = s +* (I ';' J) +* SA0 by FUNCT_4:15
     .= s+*SA0+*(I ';' J) by SCMPDS_4:62;
   set IL=NAT;
-:::  set Cs1 = Computation s1;::, Cs2 = Computation s2;
 A4: s +* SA0 +* spI, s +* SA0 equal_outside IL by AMI_1:120,FUNCT_7:28;
 A5: s +* SA0, s +* SA0 +* (I ';' J) equal_outside IL by AMI_1:120;
   defpred X[Element of NAT] means
@@ -937,7 +929,6 @@ A2: I is_closed_on s and
 A3: I is_halting_on s and
 A4: k <= m;
   set iJ=Initialized J, s1 = s +* iJ, s2 = s +* IsI;
-:::  set Cs1=Computation s1;::, Cs2=Computation s2;
   defpred P[Element of NAT] means $1 <= m implies
   Computation(s1,$1),Computation(s2,$1) equal_outside IL;
 A5: dom I c= dom J by A1,GRFUNC_1:8;
@@ -1377,10 +1368,7 @@ proof
   let I be No-StopCode Program of SCMPDS,J be shiftable Program of SCMPDS;
   set ps = s | A, IsI = Initialized stop I, IsJ = Initialized stop J,
   IJ = I ';' J, IsIJ =Initialized stop IJ, s1 = s +* IsI, m1 = LifeSpan s1,
-:::  C1 = Computation s1,
   s2 = s +* IsIJ, s3 = Computation(s1,m1) +* IsJ, m3 = LifeSpan s3,
-:::  C2 = Computation s2,
-:::  C3 = Computation s3,
   sE = IExec(I,s);
   assume
 A1: I is_closed_on s & I is_halting_on s &
@@ -1445,7 +1433,6 @@ A21: Result s1 +* ps +* IsJ, Result s1 +* IsJ equal_outside A by A8
   ,A9,FUNCT_7:28;
 A22: IsJ c= R1 by FUNCT_4:26;
   IsJ c= R2 by FUNCT_4:26;
-:::  then Result R1, Result R2 equal_outside A by A7,A21,A22,Th28;
   then
 A23: IC Result (Result s1 +* IsJ)
   = IC Result (IExec(I,s) +* IsJ) by AMI_1:121,A7,A21,A22,Th28;
@@ -1634,7 +1621,6 @@ proof
 A1: s.d1 >= 0;
   set FOR=for-up(a,i,n,I), pFOR=stop FOR, iFOR=Initialized pFOR,
   s3 = s +* iFOR,
-:::  C3 = Computation s3,
   s4 = Computation(s3,1);
   set i1=(a,i)>=0_goto (card I+3), i2=AddTo(a,i,n), i3=goto -(card I+2);
 A2: IC s3 =inspos 0 by SCMPDS_6:21;
@@ -1879,7 +1865,6 @@ A14:  t.a=s.a;
       suppose
 A15:    t.b < 0;
         set t2 = t +* IsI, t3 = t +* iFOR,
-:::        Ct3 = Computation t3,
         t4 = Computation(t3,1);
 A16:    IExec(I,t).a=t.a & IExec(I,t).b=t.b
         & I is_closed_on t & I is_halting_on t &
@@ -2006,7 +1991,7 @@ A53:      now
 A54:    t8.b=t7.b by A48,SCMPDS_2:66
           .=t.b+n by A38,A39,A41,A43,SCMPDS_2:60;
         -(-n) > 0 by A3;
-        then -n < 0 by XREAL_1:60;
+        then -n < 0;
         then -n <= -1 by INT_1:21;
         then
 A55:    -n-t.b <= -1-t.b by XREAL_1:11;
@@ -2114,7 +2099,6 @@ proof
   set b=DataLoc(s.a,i);
   set FOR=for-up(a,i,n,I), iFOR=Initialized stop FOR, iI= Initialized stop I,
   s1= s +* iFOR,
-:::  C1=Computation s1,
   ps= s | A;
   set i1=(a,i)>=0_goto (card I+3), i2=AddTo(a,i,n), i3=goto -(card I+2);
   assume
@@ -2138,7 +2122,6 @@ A6: for t be State of SCMPDS st
 A7: s1 is halting by SCMPDS_6:def 3;
   set sI= s +* iI, m1=LifeSpan sI+3, J=I ';' AddTo(a,i,n),
   sJ=s +* Initialized stop J, s2=IExec(J,s) +* iFOR,
-:::  C2=Computation s2,
   m2=LifeSpan s2;
   set Es=IExec(J,s), bj=DataLoc(Es.a,i);
 A8: (for x be Int_position st x in X holds s.x=s.x) & s.a=s.a;
@@ -2455,7 +2438,6 @@ proof
 A1: s.d1 <= 0;
   set FOR=for-down(a,i,n,I), pFOR=stop FOR, iFOR=Initialized pFOR,
   s3 = s +* iFOR,
-:::  Ct3 = Computation s3,
   s4 = Computation(s3,1);
   set i1=(a,i)<=0_goto (card I+3), i2=AddTo(a,i,-n), i3=goto -(card I+2);
 A2: IC s3 =inspos 0 by SCMPDS_6:21;
@@ -2689,7 +2671,6 @@ A12:  t.a=s.a;
       suppose
 A13:    t.b > 0;
         set t2 = t +* IsI, t3 = t +* iFOR,
-:::        Ct3 = Computation t3,
         t4 = Computation(t3,1);
 A14:    IExec(I,t).a=t.a & IExec(I,t).b=t.b
         & I is_closed_on t & I is_halting_on t &
@@ -2816,7 +2797,7 @@ A51:      now
 A52:    t8.b=t7.b by A46,SCMPDS_2:66
           .=t.b+ -n by A36,A37,A39,A41,SCMPDS_2:60;
         -(-n) > 0 by A3;
-        then -n < 0 by XREAL_1:60;
+        then -n < 0;
         then -n <= -1 by INT_1:21;
         then
 A53:    -n+t.b <= -1+t.b by XREAL_1:8;
@@ -2921,7 +2902,6 @@ proof
   set b=DataLoc(s.a,i);
   set FOR=for-down(a,i,n,I), iFOR=Initialized stop FOR,
   iI= Initialized stop I, s1= s +* iFOR,
-:::  C1=Computation s1,
   ps= s | A;
   set i1=(a,i)<=0_goto (card I+3), i2=AddTo(a,i,-n), i3=goto -(card I+2);
   assume
@@ -2945,7 +2925,6 @@ A6: for t be State of SCMPDS st
 A7: s1 is halting by SCMPDS_6:def 3;
   set sI= s +* iI, m1=LifeSpan sI+3, J=I ';' AddTo(a,i,-n),
   sJ=s +* Initialized stop J, s2=IExec(J,s) +* iFOR,
-:::  C2=Computation s2,
   m2=LifeSpan s2;
   set Es=IExec(J,s), bj=DataLoc(Es.a,i);
 A8: (for x be Int_position st x in X holds s.x=s.x) & s.a=s.a;

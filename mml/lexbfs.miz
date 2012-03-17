@@ -16,14 +16,15 @@ environ
       XREAL_0, RELAT_1, RELAT_2, WELLORD1, MEMBERED, PARTFUN1, FUNCT_1,
       FUNCT_2, BINARITH, PBOOLE, ORDINAL1, SEQM_3, POLYNOM1, FINSET_1,
       XCMPLX_0, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, GLIB_002,
-      PRE_CIRC, GLIB_003, BAGORDER, TERMORD, UPROOTS, CHORD, FINSEQ_1,
+      PRE_CIRC,
+      XXREAL_2, GLIB_003, BAGORDER, TERMORD, UPROOTS, CHORD, FINSEQ_1,
       DOMAIN_1, ABIAN, RELSET_1, RECDEF_1;
  constructors WELLORD1, DOMAIN_1, FUNCT_4, XXREAL_0, NAT_D, PRE_CIRC, BAGORDER,
-      TERMORD, UPROOTS, GLIB_002, GLIB_003, CHORD, RECDEF_1;
+      TERMORD, UPROOTS, GLIB_002, GLIB_003, CHORD, RECDEF_1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, PRE_CIRC,
       GLIB_000, ABIAN, POLYNOM1, HEYTING3, BAGORDER, TERMORD, CARD_FIN,
-      GLIB_001, GLIB_002, GLIB_003, CHORD, VALUED_0;
+      GLIB_001, GLIB_002, GLIB_003, CHORD, VALUED_0, XXREAL_2;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions GLIB_000, GLIB_001, GLIB_003, FINSEQ_1, FUNCOP_1;
  theorems AXIOMS, CARD_1, CARD_2, CARD_4, FUNCOP_1, FINSEQ_1, FINSEQ_2,
@@ -32,7 +33,7 @@ environ
       PARTFUN1, PBOOLE, REAL_1, RELAT_1, RELSET_1, TARSKI, XBOOLE_0, XBOOLE_1,
       XREAL_1, ZFMISC_1, PEPIN, ENUMSET1, CHORD, BINARITH, NECKLACE, FINSEQ_4,
       WELLORD1, UPROOTS, CARD_FIN, POLYNOM1, ORDINAL3, TREES_1, PRE_CIRC,
-      NAT_2, XXREAL_0, NAT_D, VALUED_0;
+      NAT_2, XXREAL_0, NAT_D, VALUED_0, XXREAL_2;
  schemes NAT_1, FUNCT_1, RECDEF_1, FINSEQ_4, FRAENKEL;
 
 begin :: Preliminaries
@@ -65,7 +66,7 @@ A3:   F.w = x & A<=w & w<=A+0;
   end;
   then {F.w where w is Element of NAT: A<=w & w<=A+0} = {F.A} by TARSKI:2;
   then
-A4: P[0] by CARD_1:79;
+A4: P[0] by CARD_1:50;
 A5: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
@@ -306,7 +307,7 @@ A3:   x in Sn;
 A4:   x in {k -' n};
       then
 A5:   x = k -' n by TARSKI:def 1;
-      reconsider y = x as Nat by A4,TARSKI:def 1;
+      reconsider y = x as Nat by A4;
       now
         assume y = 0;
         then k - n + n = 0 + n by A1,A5,BINARITH:50;
@@ -533,7 +534,7 @@ A1: rng p = B by FINSEQ_1:73;
     (ex a being Nat, A being bag of n st a in dom p & a <= $1 & p.a = A &
     (for c being Nat, C being bag of n st c in dom p & c <= $1 & p.c = C
     holds C <= A, T));
-    p <> {} by A1,RELAT_1:60;
+    p <> {} by A1;
     then
 A2: 0 <> len p by CARD_2:59;
 A3: P[1]
@@ -745,7 +746,7 @@ A12: for n being Nat st n in Seg N() holds P[n,f/.n]
 A13: len f = 2*len V - 1 by A2,A11,BINARITH:def 3;
     len f <> 2*0 by A2,A11,BINARITH:def 3;
     then f <> {} by CARD_1:47;
-    then rng f <> {} by RELAT_1:64;
+    then rng f <> {};
     then
 A14: 1 in dom f by FINSEQ_3:34;
     then
@@ -933,7 +934,7 @@ A9: G1 == G by GLIB_000:def 39;
     then G.edgesBetween(C) = G1.edgesBetween(C) by GLIB_000:93;
     then
 A10: G2 is inducedSubgraph of G,C by A9,GLIB_000:98;
-A11: H2 is inducedSubgraph of H,C by A2,A3,A4,A8,CHORD:29,XBOOLE_1:1;
+A11: H2 is inducedSubgraph of H,C by A2,A3,A8,XBOOLE_1:1;
     G.edgesBetween(C) = H.edgesBetween(C) by A1,GLIB_000:93;
     then H2 is inducedSubgraph of G,C by A1,A11,GLIB_000:98;
     hence thesis by A10,GLIB_000:96;
@@ -1304,7 +1305,7 @@ A4: G is finite by A3,GLIB_000:def 19;
     the_VLabel_of G is natural-yielding by FINSEQ_1:91;
     hence G is natural-vlabeled by Def7;
 A5: rng FF c= bool NAT by RELAT_1:60,XBOOLE_1:2;
-    for x be set st x in rng FF holds x is finite by RELAT_1:60;
+    for x be set st x in rng FF holds x is finite;
     then
 A6: the_V2Label_of G is finite-yielding &
     the_V2Label_of G is natsubset-yielding by A3,A5,Def3,Lm2;
@@ -2035,46 +2036,43 @@ end;
 definition
   let Gs be VVGraphSeq, n being natural number;
   redefine func Gs.n -> VVGraph;
-  coherence
-  proof
-    thus Gs.n is VVGraph by Def20;
-  end;
+  coherence by Def20;
 end;
 
 registration
   let Gs be finite VVGraphSeq, n be natural number;
   cluster Gs.n -> finite VVGraph;
-  coherence by GLIB_000:def 60;
+  coherence;
 end;
 
 registration
   let Gs be chordal VVGraphSeq, n be natural number;
   cluster Gs.n -> chordal VVGraph;
-  coherence by Def18;
+  coherence;
 end;
 
 registration
   let Gs be natural-vlabeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natural-vlabeled VVGraph;
-  coherence by Def17;
+  coherence;
 end;
 
 registration
   let Gs be finite-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> finite-v2labeled VVGraph;
-  coherence by Def22;
+  coherence;
 end;
 
 registration
   let Gs be natsubset-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natsubset-v2labeled VVGraph;
-  coherence by Def23;
+  coherence;
 end;
 
 registration
   let Gs be natural-v2labeled VVGraphSeq, n be natural number;
   cluster Gs.n -> natural-v2labeled VVGraph;
-  coherence by Def21;
+  coherence;
 end;
 
 begin :: Vertices numbering sequences
@@ -2194,7 +2192,7 @@ A19: F.n = F.(n+1);
     then n = 0;
     hence contradiction by A3,A7,A8,A19;
   end;
-  thus F is eventually-constant by A15,A17,Th14;
+  thus F is eventually-constant by A15,A17;
   for n being Nat holds F.n is finite by A12;
   hence F is finite by GLIB_000:def 60;
   now
@@ -2221,7 +2219,7 @@ A21: n = 0;
     take v;
     F.Lifespan() - 0 = 1 - 0 by A14,A15,A18,GLIB_000:def 57;
     then F.Lifespan() -' n = 1 by A21,BINARITH:def 3;
-    hence thesis by A3,A7,A13,A21,FUNCT_4:21,RELAT_1:60;
+    hence thesis by A3,A7,A13,A21,FUNCT_4:21;
   end;
   hence thesis by Def25;
 end;
@@ -2386,7 +2384,7 @@ A5: dom VK1 = dom VLK \/ {w} by A4,FUNCT_4:def 1;
     not w in dom VLK by A3,Def27;
     hence thesis by A3,A5,CARD_2:54;
   end;
-A6: P[0] by Def24,CARD_1:78,RELAT_1:60;
+A6: P[0] by Def24,CARD_1:47,RELAT_1:60;
 A7: for k being Nat st P[k] holds P[k+1]
   proof
     let k be Nat such that
@@ -2915,7 +2913,7 @@ A7:   now
       end;
       then
 A8:   S is non empty by RELAT_1:65;
-A9:   now
+   now
         let x be set such that
 A10:    x in S;
 A11:    x in rng V2G by A3,A10;
@@ -2937,7 +2935,7 @@ A14:  W() is finite;
 A15:  B is finite from FRAENKEL:sch 21(A14);
       consider z being set such that
 A16:  z in S by XBOOLE_0:def 1;
-      reconsider z as finite Subset of NAT by A9,A16;
+      reconsider z as finite Subset of NAT by A16;
 A17:  (z,1)-bag in B by A16;
       now
         let x be set such that
@@ -3702,7 +3700,7 @@ A6: dom VK1 = dom VLK \/ {w} by A5,FUNCT_4:def 1;
   end;
   (LexBFS:CSeq(G)).0 = LexBFS:Init(G) by Def33;
   then
-A7: P[0] by Th37,CARD_1:78,RELAT_1:60;
+A7: P[0] by Th37,CARD_1:47,RELAT_1:60;
 A8: for k being Nat st P[k] holds P[k+1]
   proof
     let k be Nat such that
@@ -4816,7 +4814,7 @@ A8: 0+1 <= k by NAT_1:13;
   set VLG = the_VLabel_of G;
 A9: V is one-to-one by CHORD:def 12;
   then
-A10: VLG is one-to-one by A3,FUNCT_1:62;
+A10: VLG is one-to-one by A3;
 A11: rng V = the_Vertices_of G by CHORD:def 12;
   consider ha,hb being Vertex of HH such that
 A12: ha<>hb & hv<>ha & hv<>hb and
@@ -4961,7 +4959,7 @@ A58: not c in P.vertices() by A44;
     then Qr is Path-like & Qr is open & Qr is chordless
     by A47,A50,A51,A58,CHORD:97;
     then
-A59: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121,149;
+A59: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121;
 A60: 1 in dom Qr & 3 in dom Qr & 5 in dom Qr & 7 in dom Qr by A53,FINSEQ_3:27;
 A61: Q.length() = (3+1)-1 by A52,Lm5;
 A62: dom Q = dom Qr & len Q = len Qr by GLIB_001:22;
@@ -5055,7 +5053,7 @@ A92: not v5 in P.vertices() by A73,A79;
     then Qr is Path-like & Qr is open & Qr is chordless
     by A70,A86,A92,CHORD:97;
     then
-A93: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121,149;
+A93: Q is Path-like & Q is open & Q is chordless by CHORD:91,GLIB_001:121;
 A94: Q.length() = (k+1)-1 by A87,Lm5;
 A95: len Q = len Qr by GLIB_001:22;
     then v2 = Q.(len Q-3+1) & v3 = Q.(len Q-(len Qr-2)+1)
@@ -5103,7 +5101,7 @@ theorem :: Theorem 4.3, Golumbic p. 86
 proof
   let G be finite chordal VVGraph;
   set Hh = (LexBFS:CSeq(G)).Result();
-  reconsider H = Hh as finite chordal natural-vlabeled VVGraph by Def18;
+  reconsider H = Hh as finite chordal natural-vlabeled VVGraph;
 A1: H == G by Th42;
 A2: H is with_property_L3 by Th65;
   H.labeledV() = the_Vertices_of G by Th61;
@@ -5179,7 +5177,7 @@ A6:   now
       by A6,FINSET_1:26,RELAT_1:65;
       set IT = choose (F " {max S});
       set y = max S;
-      y in S by PRE_CIRC:def 1;
+      y in S by XXREAL_2:def 8;
       then F " {max S} is non empty by FUNCT_1:142;
       then IT in dom F by FUNCT_1:def 13;
       then reconsider IT as Vertex of G by A3;
@@ -5498,7 +5496,7 @@ A4: S = rng F and
 A5: F = V2G | (VG \ dom VLG) and
 A6: w = choose (F " {max S}) by A2,A3,Def36;
   set y = max S;
-  y in rng F by A4,PRE_CIRC:def 1;
+  y in rng F by A4,XXREAL_2:def 8;
   then F " {max S} is non empty by FUNCT_1:142;
   then
 A7: w in dom F & F.w in {max S} by A6,FUNCT_1:def 13;
@@ -5514,7 +5512,7 @@ A10: x in dom F by A2,A9,XBOOLE_0:def 3;
     then
 A11: F.x = V2G.x by A5,FUNCT_1:70;
     F.x in S by A4,A10,FUNCT_1:def 5;
-    hence V2G.x <= V2G.w by A8,A11,PRE_CIRC:def 1;
+    hence V2G.x <= V2G.w by A8,A11,XXREAL_2:def 8;
   end;
   suppose not x in the_Vertices_of G;
     hence V2G.x <= V2G.w by A2,FUNCT_1:def 4;
@@ -5542,7 +5540,7 @@ A4: S = rng F and
 A5: F = V2G | (VG \ dom VLG) and
 A6: w = choose (F " {max S}) by A1,A2,Def36;
   set y = max S;
-  y in rng F by A4,PRE_CIRC:def 1;
+  y in rng F by A4,XXREAL_2:def 8;
   then F " {max S} is non empty by FUNCT_1:142;
   then
 A7: w in dom F by A6,FUNCT_1:def 13;
@@ -5795,7 +5793,7 @@ A6: dom VK1 = dom VLK \/ {w} by A5,FUNCT_4:def 1;
   end;
   (MCS:CSeq(G)).0 = MCS:Init(G) by Def40;
   then
-A7: P[0] by Th69,CARD_1:78,RELAT_1:60;
+A7: P[0] by Th69,CARD_1:47,RELAT_1:60;
 A8: for k being Nat st P[k] holds P[k+1]
   proof
     let k be Nat such that
@@ -6109,7 +6107,7 @@ A1: not x in dom VLN;
     assume not x in dom VL0;
 A2: C0 = MCS:Init(G) by Def40;
     then dom VL0 = {} by Th69,RELAT_1:60;
-    hence V20.x = card (G.AdjacentSet({x}) /\ dom VL0) by A2,Th70,CARD_1:78;
+    hence V20.x = card (G.AdjacentSet({x}) /\ dom VL0) by A2,Th70,CARD_1:47;
   end;
   then
 A3: P[0];
@@ -6354,7 +6352,7 @@ A2: dom the_VLabel_of G = the_Vertices_of G;
 A3: V" = VLG;
 A4: V is one-to-one by CHORD:def 12;
   then
-A5: VLG is one-to-one by A3,FUNCT_1:62;
+A5: VLG is one-to-one by A3;
 A6: VLG" = V by A3,A4,FUNCT_1:65;
   len V = card the_Vertices_of G by CHORD:104;
   then dom V = Seg G.order() by FINSEQ_1:def 3;
@@ -6709,7 +6707,7 @@ A110:   R.ja = D.jr by A92;
     end;
     hence contradiction by A15,A16,A85,A86,A87,A88,A91;
   end;
-A111: rng V = dom VLG & dom V = rng VLG by A3,A4,A5,A6,FUNCT_1:54;
+A111: rng V = dom VLG & dom V = rng VLG by A3,A4,A6,FUNCT_1:54;
   now
     let a,b,c be Vertex of G such that
 A112: b<>c & a,b are_adjacent & a,c are_adjacent;

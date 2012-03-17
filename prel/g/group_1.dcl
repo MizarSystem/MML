@@ -27,10 +27,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="70"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="48"/>
 <Adjective nr="71"/>
+<Adjective nr="72"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GROUP_1" nr="2">
@@ -39,26 +39,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="69"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="48"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="73"/>
+<Adjective nr="72"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GROUP_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="71"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="69"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="70"/>
 </Cluster>
 </CCluster>
 </Registrations>

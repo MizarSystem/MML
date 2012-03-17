@@ -20,7 +20,6 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
@@ -32,6 +31,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -55,7 +55,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster aid="JORDAN16" nr="2">
@@ -69,30 +69,30 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="42">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="68"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN16" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="16"/>
+<Adjective nr="17"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -102,11 +102,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="68"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 </Registrations>

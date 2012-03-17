@@ -353,37 +353,41 @@ ErrorCluster =
  element ErrorCluster { empty }   
    
 ## Existential (registration) cluster.
-## This says that exists Typ with Cluster.
+## This says that exists Typ with Cluster (optionally followed
+## by its extended version created by rounding up in current environment).   
 ## Optionally the article id (aid) and order in article (nr)
 ## can be given.   
 RCluster =   
  element RCluster {
    ( attribute nr { xsd:integer },
      attribute aid { xsd:string } )?,
-   ( ErrorCluster | (ArgTypes, Typ, Cluster) )
+   ( ErrorCluster | (ArgTypes, Typ, Cluster, Cluster?) )
    }
 
 ## Conditional cluster.
-## This says that Typ with the first cluster has also the second.
+## This says that Typ with the first cluster has also the second
+## (optionally followed by its extended version created by rounding
+## up in current environment).      
 ## Optionally the article id (aid) and order in article (nr)
 ## can be given.   
 CCluster =   
  element CCluster {
    ( attribute nr { xsd:integer },
      attribute aid { xsd:string } )?,
-   ( ErrorCluster | (ArgTypes, Cluster, Typ, Cluster) )
+   ( ErrorCluster | (ArgTypes, Cluster, Typ, Cluster, Cluster?) )
    }
 
 ## Functor (term) cluster.
-## This says that Term with ArgTypes has Cluster,
+## This says that Term with ArgTypes has Cluster (optionally followed
+## by its extended version created by rounding up in current environment),
 ## optionally with explicit Typ.
 ## Optionally the article id (aid) and order in article (nr)
-## can be given.   
-FCluster =   
+## can be given.
+FCluster =
  element FCluster {
    ( attribute nr { xsd:integer },
      attribute aid { xsd:string } )?,
-   ( ErrorCluster | (ArgTypes, Term, Cluster, Typ?) )
+   ( ErrorCluster | (ArgTypes, Term, Cluster, Cluster?, Typ?) )
    }
 
 ## Identification (unoriented, this is not used currently, see identifyWithExp instead).
@@ -424,7 +428,7 @@ IdentifyWithExp =
          ( (Term, Term) | (Formula, Formula) )
        )
    )
- }
+   }
 
 ## Schemes keep types of their second-order variables.
 ## First comes the scheme thesis, then the premises.
@@ -723,7 +727,7 @@ FromExplanations =
 ## optionally gives a location of the local MIZFILES directory used
 ## during processing the article (needed to know for browsing of
 ## locally installed html in MIZFILES/html).
-Article = 
+Article =
  element Article {
    attribute aid { xsd:string },
    attribute mizfiles { xsd:string }?,

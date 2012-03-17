@@ -49,10 +49,10 @@
 <For>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="39"/>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="50"/>
+<Adjective nr="40"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Not>
@@ -512,19 +512,19 @@
 <For>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="39"/>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="50"/>
+<Adjective nr="40"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="39"/>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
-<Adjective nr="50"/>
+<Adjective nr="40"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Not>
@@ -1049,14 +1049,14 @@
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

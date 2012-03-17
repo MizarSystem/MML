@@ -20,7 +20,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="2">
@@ -29,8 +29,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="13" value="false"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="3">
@@ -39,10 +39,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="13" value="false"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COLLSP" nr="4">
@@ -51,11 +51,11 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="13" value="false"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 </Registrations>

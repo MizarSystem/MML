@@ -13,17 +13,18 @@ environ
       SEQ_2, ORDINAL2, COMPTS_1, SUBSET_1, LATTICES;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XREAL_0,
       REAL_1, NAT_1, FINSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1,
-      FINSEQ_1, BINARITH, PRE_CIRC, SEQ_4, RCOMP_1, TOPMETR, CONNSP_2,
+      FINSEQ_1, BINARITH, XXREAL_2,
+      PRE_CIRC, SEQ_4, RCOMP_1, TOPMETR, CONNSP_2,
       REALSET1, DOMAIN_1, STRUCT_0, PRE_TOPC, TBSP_1, PCOMPS_1, COMPTS_1,
       BORSUK_1, METRIC_1, EUCLID, TOPREAL1, TOPREAL2, GOBRD10, WEIERSTR,
       JORDAN5C, JORDAN6, JORDAN7, PSCOMP_1, JORDAN1K, XXREAL_0;
  constructors SETFAM_1, REAL_1, NAT_1, RCOMP_1, BINARITH, PRE_CIRC, TOPS_2,
       REALSET2, TBSP_1, MONOID_0, TOPREAL1, PSCOMP_1, GOBRD10, JORDAN5C,
-      JORDAN6, JORDAN7, JORDAN1K;
+      JORDAN6, JORDAN7, JORDAN1K, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
       XREAL_0, MEMBERED, FINSEQ_1, RCOMP_1, REALSET1, PRE_CIRC, STRUCT_0,
       COMPTS_1, BORSUK_1, MONOID_0, EUCLID, TOPMETR, TOPREAL1, TOPREAL2,
-      PSCOMP_1, WAYBEL_2, TOPREAL6, VALUED_0;
+      PSCOMP_1, WAYBEL_2, TOPREAL6, VALUED_0, XXREAL_2;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions XBOOLE_0, TARSKI, GOBRD10, PSCOMP_1, EUCLID, BINOP_1;
  theorems EUCLID, PCOMPS_1, FINSEQ_3, FINSET_1, NAT_1, FINSEQ_5, JGRAPH_1,
@@ -33,7 +34,8 @@ environ
       BORSUK_1, JORDAN16, JORDAN1K, RCOMP_1, BORSUK_3, TOPREAL6, TOPMETR,
       FUNCT_2, BINOP_1, TOPS_1, JCT_MISC, CONNSP_2, FUNCT_1, RELAT_1, TOPREAL5,
       JORDAN17, TOPREAL1, TOPREAL8, GOBRD10, ORDINAL1, XREAL_0, REALSET1,
-      XREAL_1, BINARITH, XXREAL_0, GOBOARD6, PARTFUN1, CARD_1;
+      XREAL_1, BINARITH, XXREAL_0, GOBOARD6, PARTFUN1, CARD_1, XXREAL_2,
+      XXREAL_1;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, TOPREAL1;
 
 begin :: Preliminaries
@@ -43,35 +45,7 @@ reserve C for Simple_closed_curve,
   i,j,k,n for Element of NAT,
   r,s for real number;
 
-theorem Th1:
-  for A,B being finite non empty Subset of REAL
-  holds min(A \/ B) = min(min A, min B)
-proof
-  let A,B be finite non empty Subset of REAL;
-A1: min A in A & min B in B by PRE_CIRC:def 4;
-  min(min A, min B) = min A or min(min A, min B) = min B by XXREAL_0:15;
-  then
-A2: min(min A, min B) in A \/ B by A1,XBOOLE_0:def 2;
-  for k being real number st k in A \/ B holds min(min A, min B) <= k
-  proof
-    let k be real number such that
-A3: k in A \/ B;
-    per cases by A3,XBOOLE_0:def 2;
-    suppose k in A;
-      then
-A4:   min A <= k by PRE_CIRC:def 4;
-      min(min A, min B) <= min A by XXREAL_0:17;
-      hence min(min A, min B) <= k by A4,XXREAL_0:2;
-    end;
-    suppose k in B;
-      then
-A5:   min B <= k by PRE_CIRC:def 4;
-      min(min A, min B) <= min B by XXREAL_0:17;
-      hence min(min A, min B) <= k by A5,XXREAL_0:2;
-    end;
-  end;
-  hence min(A \/ B) = min(min A, min B) by A2,PRE_CIRC:def 4;
-end;
+canceled;
 
 theorem Th2:
   for T being non empty TopSpace, f being continuous RealMap of T,
@@ -93,11 +67,12 @@ proof
 A1: B c= A;
   A is bounded by RCOMP_1:28;
   then
-A2: A is bounded_below by SEQ_4:def 3;
+A2: A is bounded_below;
   then
-A3: B is bounded_below by A1,RCOMP_1:3;
+A3: B is bounded_below by A1,XXREAL_2:44;
 A4: Cl B c= A by A1,PSCOMP_1:32;
-  then inf Cl B in Cl B by A2,RCOMP_1:3,31;
+  then Cl B is bounded_below by A2,XXREAL_2:44;
+  then inf Cl B in Cl B by RCOMP_1:31;
   then inf Cl B in A by A4;
   hence inf B in A by A3,TOPREAL6:77;
 end;
@@ -120,7 +95,7 @@ A2: [:A,B:] is compact by BORSUK_3:27;
 A3: f.:[:A,B:] is compact by Th2;
   f.:[:A,B:] is bounded by A2,Th2,RCOMP_1:28;
   then
-A4: f.:[:A,B:] is bounded_below by SEQ_4:def 3;
+A4: f.:[:A,B:] is bounded_below;
 A5: g.:A c= f.:[:A,B:]
   proof
     let u be set;
@@ -147,7 +122,7 @@ A13:  q1 in B by A9;
     hence u in f.:[:A,B:] by A3,A10,A11,Th3;
   end;
   then
-A14: g.:A is bounded_below by A4,RCOMP_1:3;
+A14: g.:A is bounded_below by A4,XXREAL_2:44;
 A15: for r st r in f.:[:A,B:] holds inf(g.:A)<=r
   proof
     let r;
@@ -178,7 +153,7 @@ A25:  q1 in B by A21;
       hence u in f.:[:A,B:] by A24,FUNCT_2:43;
     end;
     then
-A26: G is bounded_below by A4,RCOMP_1:3;
+A26: G is bounded_below by A4,XXREAL_2:44;
     r = f.(p,q) by A17,A19;
     then r in G by A20,A21;
     then
@@ -219,7 +194,7 @@ A2: [:A,B:] is compact by BORSUK_3:27;
 A3: f.:[:A,B:] is compact by Th2;
   f.:[:A,B:] is bounded by A2,Th2,RCOMP_1:28;
   then
-A4: f.:[:A,B:] is bounded_below by SEQ_4:def 3;
+A4: f.:[:A,B:] is bounded_below;
 A5: g.:B c= f.:[:A,B:]
   proof
     let u be set;
@@ -246,7 +221,7 @@ A13:  p1 in A by A9;
     hence u in f.:[:A,B:] by A3,A10,A11,Th3;
   end;
   then
-A14: g.:B is bounded_below by A4,RCOMP_1:3;
+A14: g.:B is bounded_below by A4,XXREAL_2:44;
 A15: for r st r in f.:[:A,B:] holds inf(g.:B)<=r
   proof
     let r;
@@ -277,7 +252,7 @@ A25:  p1 in A by A21;
       hence u in f.:[:A,B:] by A24,FUNCT_2:43;
     end;
     then
-A26: G is bounded_below by A4,RCOMP_1:3;
+A26: G is bounded_below by A4,XXREAL_2:44;
     r = f.(p,q) by A17,A19;
     then r in G by A20,A21;
     then
@@ -365,7 +340,7 @@ definition
       assume
 A1:   f is continuous;
       let p be Point of T, N be Neighbourhood of f.p;
-A2:   f"(N`) = (f"N)` by JCT_MISC:5;
+A2:   f"(N`) = (f"N)` by FUNCT_2:177;
       N` is closed by RCOMP_1:def 5;
       then f"(N`) is closed by A1,PSCOMP_1:def 25;
       then
@@ -389,7 +364,7 @@ A5: Y` is open by RCOMP_1:def 5;
     proof
       let p be Point of T;
       assume p in (f"Y)`;
-      then p in f"Y` by JCT_MISC:5;
+      then p in f"Y` by FUNCT_2:177;
       then f.p in Y` by FUNCT_2:46;
       then consider N being Neighbourhood of f.p such that
 A6:   N c= Y` by A5,RCOMP_1:39;
@@ -402,7 +377,7 @@ A7:   f.:V c= N by A4;
 A8:   f"(f.:V) c= f"Y` by RELAT_1:178;
       V c= f"(f.:V) by FUNCT_2:50;
       then V c= f"Y` by A8,XBOOLE_1:1;
-      hence V c= (f"Y)` by JCT_MISC:5;
+      hence V c= (f"Y)` by FUNCT_2:177;
     end;
     then (f"Y)` is open by CONNSP_2:9;
     then (f"Y)`` is closed by TOPS_1:30;
@@ -481,7 +456,7 @@ A19: f.p-r < s by REAL_2:165;
     s - f.p <= |.q1-p1.| + |.q2-p2.| by A16,A17,A18,XXREAL_0:2;
     then s - f.p < r by A12,XXREAL_0:2;
     then s < f.p+r by XREAL_1:21;
-    hence thesis by A2,A19,RCOMP_1:47;
+    hence thesis by A2,A19,XXREAL_1:4;
   end;
 end;
 
@@ -1404,9 +1379,9 @@ A4: W-min C = S/.1 by Def3;
   then LE S/.1, p, C by A1,JORDAN7:3;
   then 1 in X by A3;
   then reconsider X as finite non empty Subset of NAT
-  by A2,FINSET_1:13,XBOOLE_1:1;
+  by A2,XBOOLE_1:1;
   take max X;
-A5: max X in X by PRE_CIRC:def 1;
+A5: max X in X by XXREAL_2:def 8;
   hence max X in dom S by A2;
 A6: 1 <= max X & max X <= len S by A2,A5,FINSEQ_3:27;
 A7: ex i st max X = i & i in dom S & LE S/.i, p, C by A5;
@@ -1427,7 +1402,7 @@ A13: rng S c= C by Def3;
     now
       assume LE S/.(max X+1),p,C;
       then max X +1 in X by A9;
-      then max X +1 <= max X by PRE_CIRC:def 1;
+      then max X +1 <= max X by XXREAL_2:def 8;
       hence contradiction by XREAL_1:31;
     end;
     then LE p,S/.(max X+1),C by A1,A12,A13,JORDAN16:11;
@@ -1623,7 +1598,7 @@ A2: diameter S = max S1 by Def6;
   suppose 1 <= i & i < len S;
     then i in dom S by FINSEQ_3:27;
     then diameter Segm(S,i) in S1 by A1;
-    hence diameter Segm(S,i) <= diameter S by A2,PRE_CIRC:def 1;
+    hence diameter Segm(S,i) <= diameter S by A2,XXREAL_2:def 8;
   end;
   suppose
 A3: not(1 <= i & i < len S);
@@ -1631,7 +1606,7 @@ A4: Segm(S,len S) = Segment(S/.len S,S/.1,C) by Def4
       .= Segm(S,i) by A3,Def4;
     len S in dom S by FINSEQ_5:6;
     then diameter Segm(S,i) in S1 by A1,A4;
-    hence diameter Segm(S,i) <= diameter S by A2,PRE_CIRC:def 1;
+    hence diameter Segm(S,i) <= diameter S by A2,XXREAL_2:def 8;
   end;
 end;
 
@@ -1644,14 +1619,9 @@ A1: for i holds diameter Segm(S,i) < e;
   consider S1 being non empty finite Subset of REAL such that
 A2: S1 = { diameter Segm(S,i): i in dom S} and
 A3: diameter S = max S1 by Def6;
-  for r being Real st r in S1 holds r < e
-  proof
-    let r be Real;
-    assume r in S1;
-    then ex i st r = diameter Segm(S,i) & i in dom S by A2;
-    hence r < e by A1;
-  end;
-  hence thesis by A3,JORDAN16:1;
+   diameter S in S1 by A3,XXREAL_2:def 8;
+   then ex i st diameter S = diameter Segm(S,i) & i in dom S by A2;
+  hence thesis by A1;
 end;
 
 theorem
@@ -1784,7 +1754,7 @@ A17: dist_min(Segm(S,1),Segm(S,3)) in S1 by A15;
     then 2<len S -' 1 by BINARITH:70;
     then dist_min(Segm(S,len S),Segm(S,2)) in S2;
     then reconsider S1, S2 as non empty finite Subset of REAL
-    by A4,A9,A10,A11,A13,A14,A17,FINSET_1:13;
+    by A4,A9,A10,A11,A13,A14,A17;
     reconsider mm = min(min S1,min S2) as Element of REAL by XREAL_0:def 1;
     take mm,S1,S2;
     thus thesis;
@@ -1860,7 +1830,7 @@ A21:  i <= len S -' 1 by A17,BINARITH:67;
       hence e in F by XBOOLE_0:def 2;
     end;
   end;
-  thus S-Gap S = min F by A3,Th1;
+  thus S-Gap S = min F by A3,XXREAL_2:68;
 end;
 
 theorem
@@ -1871,7 +1841,7 @@ proof
 A1: F = { dist_min(Segm(S,i),Segm(S,j)):
   1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j)} and
 A2: S-Gap S = min F by Th36;
-  S-Gap S in F by A2,PRE_CIRC:def 4;
+  S-Gap S in F by A2,XXREAL_2:def 7;
   then ex i,j st S-Gap S = dist_min(Segm(S,i),Segm(S,j)) &
   1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j) by A1;
   hence S-Gap S > 0 by Th8;

@@ -26,9 +26,9 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="19"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Not>

@@ -39,7 +39,7 @@
 <CCluster aid="JORDAN7" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="111"/>
+<Adjective nr="112"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

@@ -43,7 +43,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 <Pred kind="R" nr="16">

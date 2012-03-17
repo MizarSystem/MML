@@ -13,14 +13,15 @@ environ
       MEMBERED, SEQ_2, SEQ_4, ARYTM_1, CARD_FIN, INT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, REAL_1, INT_1, MCART_1, CARD_1, MEMBERED, SEQ_4, RELAT_1,
-      FUNCT_1, FINSET_1, FINSUB_1, SETWISEO, FUNCT_2, XXREAL_0, BINOP_1,
+      FUNCT_1, FINSET_1, FINSUB_1, SETWISEO, FUNCT_2, XXREAL_0, XXREAL_2,
+      BINOP_1,
       FUNCOP_1, FUNCT_4, CARD_3, BINARITH, TREES_1, TREES_2, TREES_3, TREES_4,
       FUNCT_5, FUNCT_6, PBOOLE, FINSEQ_1, FINSEQ_2, NAT_1;
  constructors WELLORD2, BINOP_1, FUNCT_4, SETWISEO, XXREAL_0, NAT_1, FUNCT_5,
-      CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1;
+      CARD_3, SEQ_4, PBOOLE, TREES_4, BINARITH, INT_1, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, FRAENKEL, NUMBERS, XREAL_0, MEMBERED, FINSEQ_1, TREES_1,
-      CARD_3, PBOOLE, TREES_2, TREES_3;
+      CARD_3, PBOOLE, TREES_2, TREES_3, XXREAL_2, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCOP_1, WELLORD2, FUNCT_1, RELAT_1, PBOOLE, XBOOLE_0,
       SEQ_4, FINSEQ_2, FINSET_1;
@@ -28,7 +29,7 @@ environ
       FUNCT_2, FUNCT_4, FUNCT_5, TREES_1, TREES_2, TREES_3, TREES_4, NAT_1,
       RELAT_1, CARD_3, FUNCOP_1, MCART_1, PBOOLE, CARD_2, CARD_1, FUNCT_6,
       FINSET_1, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XCMPLX_1, MEMBERED,
-      SEQ_4, ORDERS_1, XREAL_1, XXREAL_0, BINARITH;
+      SEQ_4, ORDERS_1, XREAL_1, XXREAL_0, BINARITH, XXREAL_2;
  schemes SETWISEO, DOMAIN_1, PBOOLE, FUNCT_1, FRAENKEL, FINSEQ_1, NAT_1;
 
 begin
@@ -47,7 +48,7 @@ A2: B is finite from FRAENKEL:sch 21(A1);
 A3: F(b) = a and P[b];
     thus thesis by A3;
   end;
-  hence thesis by A2,FINSET_1:13;
+  hence thesis by A2;
 end;
 
 canceled;
@@ -105,127 +106,6 @@ A1: f +* h c= g +* h by Th3;
   hence f c= g +* h by A1,XBOOLE_1:1;
 end;
 
-registration
-  cluster finite non empty natural-membered set;
-  existence
-  proof
-    consider A being finite non empty Subset of NAT;
-    take A;
-    thus A is finite non empty natural-membered;
-  end;
-end;
-
-notation
-  let A be finite non empty real-membered set;
-  synonym max A for upper_bound A;
-end;
-
-definition
-  let A be finite non empty real-membered set;
-  redefine func max A -> real number means
-  :Def1:
-  it in A & for k being real number st k in A holds k <= it;
-  compatibility
-  proof
-    let n be real number;
-    reconsider X' = A as finite non empty Subset of REAL by MEMBERED:3;
-    reconsider X' as Finite_Subset of REAL by FINSUB_1:def 5;
-    defpred P[Finite_Subset of REAL] means $1 <> {}.REAL implies
-    ex m being Real st m in $1 & for x being Real st x in $1 holds x<=m;
-A1: P[{}.REAL];
-A2: now
-      let B be (Element of Fin REAL), b be Real;
-      assume
-A3:   P[B];
-      thus P[B \/ {.b.}]
-      proof
-        per cases;
-        suppose
-A4:       B = {}.REAL;
-          assume B \/ {b} <> {}.REAL;
-          take bb = b;
-          bb in {b} by TARSKI:def 1;
-          hence bb in B \/ {b} by XBOOLE_0:def 2;
-          let x be Real;
-          assume x in B \/ {b};
-          hence x <= bb by A4,TARSKI:def 1;
-        end;
-        suppose B <> {}.REAL;
-          then consider m being Real such that
-A5:       m in B and
-A6:       for x being Real st x in B holds x <= m by A3;
-          now
-            per cases;
-            suppose
-A7:           m <= b;
-              take bb = b;
-              bb in {b} by TARSKI:def 1;
-              hence bb in B \/ {b} by XBOOLE_0:def 2;
-              let x be Real;
-              assume x in B \/ {b};
-              then x in B or x in {b} by XBOOLE_0:def 2;
-              then x <= m or x = b by A6,TARSKI:def 1;
-              hence x <= bb by A7,XXREAL_0:2;
-            end;
-            suppose
-A8:           b <= m;
-              take m;
-              thus m in B \/ {b} by A5,XBOOLE_0:def 2;
-              let x be Real;
-              assume x in B \/ {b};
-              then x in B or x in {b} by XBOOLE_0:def 2;
-              hence x <= m by A6,A8,TARSKI:def 1;
-            end;
-          end;
-          hence P[B \/ {.b.}];
-        end;
-      end;
-    end;
-    for B being Element of Fin REAL holds P[B] from SETWISEO:sch 4 (A1, A2);
-    then consider m being Real such that
-A9: m in X' and
-A10: for x being Real st x in X' holds x<=m;
-A11: A is bounded_above
-    proof
-      take m;
-      thus for r being real number st r in A holds r<=m by A10;
-    end;
-    reconsider X' as finite Subset of REAL;
-    upper_bound A in A
-    proof :: jakim cudem to akceptuje, musi pluskwa ?
-A12:  for p being real number st p in X' holds m >= p by A10;
-      for q being real number st
-      for p being real number st p in X' holds q >= p holds q >= m by A9;
-      hence thesis by A9,A12,SEQ_4:63;
-    end;
-    hence n = upper_bound A implies n in A &
-    for k being real number st k in A holds k <= n by A11,SEQ_4:def 4;
-    assume that
-A13: n in A and
-A14: for k being real number st k in A holds k <= n;
-    for s being real number st 0<s ex r being real number st r in A & n-s < r
-    proof
-      let s be real number such that
-A15:  0<s;
-      take n;
-      thus n in A by A13;
-      n < n+s by A15,XREAL_1:31;
-      hence n-s < n by XREAL_1:21;
-    end;
-    hence n = upper_bound A by A11,A14,SEQ_4:def 4;
-  end;
-  coherence;
-end;
-
-registration
-  let X be finite non empty natural-membered set;
-  cluster max X -> natural;
-  coherence
-  proof max X in X by Def1;
-    hence max X is natural by MEMBERED:def 6;
-  end;
-end;
-
 begin
 
 ::---------------------------------------------------------------------------
@@ -238,7 +118,7 @@ proof
   let I be set, MSS be ManySortedSet of I;
   reconsider eI = <*>I as Element of I* by FINSEQ_1:66;
   thus MSS#.<*>I = product (MSS*eI) by PBOOLE:def 19
-    .= {{}} by CARD_3:19,RELAT_1:62;
+    .= {{}} by CARD_3:19;
 end;
 
 reserve i,j,x,y for set,
@@ -280,7 +160,7 @@ end;
 definition
   let I be set;
   let IT be ManySortedSet of I;
-  canceled;
+  canceled 2;
   redefine attr IT is locally-finite means
   for i st i in I holds IT.i is finite;
   compatibility
@@ -374,7 +254,7 @@ proof
   let I be set;
   per cases;
   suppose I = {};
-    then dom (I-->{}) = {} by FUNCOP_1:16;
+    then dom (I-->{}) = {};
     hence thesis by FUNCT_5:50,RELAT_1:64;
   end;
   suppose I <> {};
@@ -382,7 +262,7 @@ proof
       .= Funcs({} qua set, {} qua set) by FUNCT_5:64;
     then dom uncurry (I --> {}) = [:dom (I --> {}), {}:] by FUNCT_5:33
       .= {} by ZFMISC_1:113;
-    hence thesis by RELAT_1:64;
+    hence thesis;
   end;
 end;
 
@@ -414,7 +294,7 @@ A5:   (I -->A).i = A by A4,FUNCOP_1:13;
 A6: F = I --> {} by A1,FUNCOP_1:15;
     commute F = curry' uncurry F by FUNCT_6:def 12
       .= {} by A6,Th7,FUNCT_5:49;
-    hence thesis by A2,RELAT_1:60;
+    hence thesis by A2;
   end;
   suppose
 A7: A is non empty;
@@ -429,7 +309,7 @@ A8: Funcs (I, union rng B) is non empty by FUNCT_2:11;
 A9:   i in dom F & x = F.i by FUNCT_1:def 5;
       (I -->A).i = A by A1,A9,FUNCOP_1:13;
       then reconsider x' = x as Function of A, B.i by A1,A9,PBOOLE:def 18;
-      B.i <> {} by A1,A9,PBOOLE:def 16;
+      B.i <> {} by A1,A9;
       then
 A10:  dom x' = A & rng x' c= B.i by FUNCT_2:def 1 ,RELSET_1:12;
       B.i in rng B by A1,A9,FUNCT_1:def 5;
@@ -550,7 +430,7 @@ A3:   i = [x,y] and
 A4:   x in dom InpFs and
 A5:   g = InpFs.x and
 A6:   y in dom g by FUNCT_5:def 4;
-A7:   C.x <> {} by A2,A4,PBOOLE:def 16;
+A7:   C.x <> {} by A2,A4;
       g is Function of (A-->B).x, C.x by A2,A4,A5,PBOOLE:def 18;
       then dom g = (A-->B).x by A7,FUNCT_2:def 1;
       then dom g = B by A2,A4,FUNCOP_1:13;
@@ -563,7 +443,7 @@ A8: [i1,i2] in [:A,B:];
 A9: [i1,i2] = [[i1,i2]`1,[i1,i2]`2] by MCART_1:23;
 A10: [i1,i2]`1 in dom InpFs by A2,A8,MCART_1:10;
     reconsider g = InpFs.[i1,i2]`1 as Function;
-A11: C.[i1,i2]`1 <> {} by A2,A10,PBOOLE:def 16;
+A11: C.[i1,i2]`1 <> {} by A2,A10;
     g is Function of (A-->B).[i1,i2]`1, C.[i1,i2]`1
               by PBOOLE:def 18,A8,MCART_1:10;
     then dom g = (A-->B).[i1,i2]`1 by A11,FUNCT_2:def 1;
@@ -583,7 +463,7 @@ A13: for i st i in A holds g.i = (uncurry InpFs).(i,b) by FUNCT_5:39;
   assume
 A14: i in A;
   reconsider h = InpFs.i as Function;
-A15: C.i <> {} by A14,PBOOLE:def 16;
+A15: C.i <> {} by A14;
   (A-->B).i = B by A14,FUNCOP_1:13;
   then
 A16: h is Function of B, C.i by A14,PBOOLE:def 18;
@@ -594,29 +474,7 @@ A17: dom h = B by A15,FUNCT_2:def 1;
   hence c.i in C.i by A15,A16,FUNCT_2:7;
 end;
 
-theorem
-  for I being set, M be ManySortedSet of I,
-  x, g being Function st x in product M holds x * g in product (M * g)
-proof
-  let I be set, M be ManySortedSet of I, x, g be Function;
-  assume
-A1: x in product M;
-  set xg = x * g;
-  set Mg = M * g;
-  consider gg being Function such that
-A2: x = gg & dom gg = dom M and
-A3: for x being set st x in dom M holds gg.x in M.x by A1,CARD_3:def 5;
-A4: dom xg = dom Mg by A2,RELAT_1:198;
-  now
-    let y be set;
-    assume y in dom Mg;
-    then
-A5: y in dom g & g.y in dom M by FUNCT_1:21;
-    then xg.y = x.(g.y) & Mg.y = M.(g.y) by FUNCT_1:23;
-    hence xg.y in Mg.y by A2,A3,A5;
-  end;
-  hence x * g in product (M * g) by A4,CARD_3:def 5;
-end;
+canceled;
 
 theorem
   for n being Element of NAT, a being set
@@ -1168,11 +1026,11 @@ A13: i = p'^n & n in T|p;
     assume X = T;
     then {} in X by TREES_1:47;
     then ex n being Element of NAT* st {} = p'^n & n in T|p;
-    hence contradiction by A1,FINSEQ_1:48;
+    hence contradiction by A1;
   end;
   then
 A14: X c< T by A12,XBOOLE_0:def 8;
-  card X = card(T|p) by A2,CARD_1:81;
+  card X = card(T|p) by A2,CARD_1:21;
   hence card (T|p) < card T by A14,CARD_2:67;
 end;
 
@@ -1306,8 +1164,9 @@ A18: i = p^n;
     hence i in rng f by A11,FUNCT_1:def 5;
   end;
   then reconsider C as finite set by CARD_1:68;
-A19: card T1 = card C by A10,CARD_1:81;
-  card(T|p) = card B by Th13,CARD_1:81;
+A19: card T1 = card C by A10,CARD_1:21;
+  T|p,B are_equipotent by Th13;
+  then card(T|p) = card B by CARD_1:21;
   hence card(T with-replacement (p,T1)) + card (T|p) =
   card A + card C + card B by A3,A4,CARD_2:53
     .= card A + card B + card C
@@ -1344,105 +1203,10 @@ theorem
 proof
   let x be set;
   root-tree x = {[{},x]} by TREES_4:6;
-  hence card root-tree x = 1 by CARD_1:79;
+  hence card root-tree x = 1 by CARD_1:50;
 end;
 
 begin :: Addenda
-
-:: from SFMASTR3, 2006.03.06, A.T.
-
-notation
-  let A be finite non empty real-membered set;
-  synonym min A for lower_bound A;
-end;
-
-definition
-  let A be finite non empty real-membered set;
-  redefine func min A means
-  :Def4:
-  it in A & for k being real number st k in A holds it <= k;
-  compatibility
-  proof
-    let n be real number;
-    reconsider X' = A as finite non empty Subset of REAL by MEMBERED:3;
-    reconsider X' as Finite_Subset of REAL by FINSUB_1:def 5;
-    defpred P[Finite_Subset of REAL] means $1 <> {}.REAL implies
-    ex m being Real st m in $1 & for x being Real st x in $1 holds m<=x;
-A1: P[{}.REAL];
-A2: now
-      let B be (Element of Fin REAL), b be Real;
-      assume
-A3:   P[B];
-      thus P[B \/ {.b.}]
-      proof
-        per cases;
-        suppose
-A4:       B = {}.REAL;
-          assume B \/ {b} <> {}.REAL;
-          take b;
-          b in {b} by TARSKI:def 1;
-          hence b in B \/ {b} by XBOOLE_0:def 2;
-          let x be Real;
-          assume x in B \/ {b};
-          hence b <= x by A4,TARSKI:def 1;
-        end;
-        suppose B <> {}.REAL;
-          then consider m being Real such that
-A5:       m in B and
-A6:       for x being Real st x in B holds m <= x by A3;
-          now
-            per cases;
-            suppose
-A7:           b <= m;
-              take bb = b;
-              bb in {b} by TARSKI:def 1;
-              hence bb in B \/ {b} by XBOOLE_0:def 2;
-              let x be Real;
-              assume x in B \/ {b};
-              then x in B or x in {b} by XBOOLE_0:def 2;
-              then m <= x or x = b by A6,TARSKI:def 1;
-              hence bb <= x by A7,XXREAL_0:2;
-            end;
-            suppose
-A8:           m <= b;
-              take m;
-              thus m in B \/ {b} by A5,XBOOLE_0:def 2;
-              let x be Real;
-              assume x in B \/ {b};
-              then x in B or x in {b} by XBOOLE_0:def 2;
-              hence m <= x by A6,A8,TARSKI:def 1;
-            end;
-          end;
-          hence P[B \/ {.b.}];
-        end;
-      end;
-    end;
-    for B being Element of Fin REAL holds P[B] from SETWISEO:sch 4 (A1, A2);
-    then consider m being Real such that
-A9: m in X' and
-A10: for x being Real st x in X' holds m<=x;
-A11: A is bounded_below
-    proof
-      take m;
-      thus for r being real number st r in A holds m<=r by A10;
-    end;
-    lower_bound A in A
-    proof
-A12:  for p being real number st p in A holds p >= m by A10;
-      for q being real number st
-      for p being real number st p in A holds p >= q holds m >= q by A9;
-      hence thesis by A9,A12,SEQ_4:61;
-    end;
-    hence n = lower_bound A implies n in A &
-    for k being real number st k in A holds n <= k by A11,SEQ_4:def 5;
-    assume that
-A13: n in A and
-A14: for k being real number st k in A holds n <= k;
-    for s being real number st 0<s ex r being real number st r in A & r<n+s
-    by A13,XREAL_1:31;
-    hence n = lower_bound A by A11,A14,SEQ_4:def 5;
-  end;
-end;
 
 :: from AMISTD_2
 
@@ -1450,8 +1214,7 @@ theorem
   for F being non empty finite set holds card F - 1 = card F -' 1
 proof
   let F be non empty finite set;
-  card F <> 0 by CARD_2:59;
-  then card F - 1 >= 0 by NAT_1:14,XREAL_1:50;
+  card F - 1 >= 0 by NAT_1:14,XREAL_1:50;
   hence thesis by BINARITH:def 3;
 end;
 
@@ -1486,28 +1249,9 @@ A1: dom f misses dom g;
     .= card f + card g by Th21;
 end;
 
-:: from SFMASTR3, 2007.07.26, A.T.
-
-registration
-  let X be finite non empty natural-membered set;
-  cluster min X -> integer;
-  coherence
-  proof min X in X by Def4;
-    hence min X is integer by MEMBERED:def 5;
-  end;
-end;
-
-:: from AMISTD_1, 2007.07.26, A.T.
-
-theorem
-  for r being real number holds max {r} = r
-proof
-  let r be real number;
-  r in {r} & for k being real number st k in {r} holds k <= r by TARSKI:def 1;
-  hence max {r} = r by Def1;
-end;
-
 :: from SCMPDS_9. 2008.05.06, A.T.
+
+canceled;
 
 theorem
   {k where k is Element of NAT: k > 1} is infinite
@@ -1525,14 +1269,14 @@ A2: X c= NAT
   2 in X;
   then reconsider X as non empty finite Subset of NAT by A1,A2;
   set m = max X;
-  m in X by Def1;
+  m in X by XXREAL_2:def 8;
   then consider k being Element of NAT such that
 A3: m = k and
 A4: k > 1;
   k+1 > k+0 by XREAL_1:10;
   then k+1 > 1 by A4,XXREAL_0:2;
   then m+1 in X by A3;
-  then m+1 <= m+0 by Def1;
+  then m+1 <= m+0 by XXREAL_2:def 8;
   hence contradiction by XREAL_1:10;
 end;
 

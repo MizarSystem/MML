@@ -36,14 +36,14 @@
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="69"/>
-<Adjective nr="94"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="70"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="97"/>
-<Adjective nr="101"/>
-<Adjective nr="118"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
+<Adjective nr="119"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,12 +51,12 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="21" value="false"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="48"/>
+<Adjective nr="45"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

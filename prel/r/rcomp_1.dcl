@@ -25,22 +25,22 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RCOMP_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -49,7 +49,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -62,12 +62,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -76,7 +76,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -88,7 +88,7 @@
 <CCluster aid="RCOMP_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -97,14 +97,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 <CCluster aid="RCOMP_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -114,7 +114,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

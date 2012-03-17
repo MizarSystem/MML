@@ -41,8 +41,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINTOPO5" nr="2">
@@ -65,8 +65,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 </Registrations>

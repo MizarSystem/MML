@@ -28,7 +28,8 @@ environ
       TOPMETR2, MCART_1, ZFMISC_1, FUNCT_3, COMPTS_1, XBOOLE_0, XBOOLE_1,
       XCMPLX_1, BORSUK_2, TMAP_1, BORSUK_3, BORSUK_4, XREAL_0, YELLOW12,
       JORDAN6, JGRAPH_2, TSEP_1, JGRAPH_1, JORDAN5B, MEMBERED, TOPREAL6,
-      EUCLID, FINSEQ_1, CATALG_1, JORDAN1K, XREAL_1, XXREAL_0, FINSEQ_2;
+      EUCLID, FINSEQ_1, CATALG_1, JORDAN1K, XREAL_1, XXREAL_0, FINSEQ_2,
+      XXREAL_1;
  schemes RECDEF_2, DOMAIN_1, XBOOLE_0, JGRAPH_2, PARTFUN1, BINOP_1;
 
 begin :: Preliminaries
@@ -88,8 +89,8 @@ A5: (x - a) / (b - a) <= 1
     end;
   end;
   x - a >= 0 by A1,XREAL_1:50;
-  then (x - a) / (b - a) >= 0 by A4,REAL_2:125;
-  then (x - a) / (b - a) in [.0,1.] by A5,RCOMP_1:48;
+  then (x - a) / (b - a) >= 0 by A4;
+  then (x - a) / (b - a) in [.0,1.] by A5,XXREAL_1:1;
   hence thesis by TOPMETR:25;
 end;
 
@@ -101,7 +102,7 @@ proof
   then
 A1: 2 * x <= 2 * (1/2) by XREAL_1:66;
   0 <= x by BORSUK_1:86;
-  then 2 * 0 <= 2 * x by XREAL_1:66;
+  then 2 * 0 <= 2 * x;
   hence thesis by A1,BORSUK_1:86;
 end;
 
@@ -125,7 +126,7 @@ proof
   let p, q be Point of I[01];
 A1: 0 <= p & p <= 1 & 0 <= q & q <= 1 by BORSUK_1:86;
   then
-A2: 0 <= p * q by REAL_2:121;
+A2: 0 <= p * q;
   p * q <= 1 by A1,REAL_2:140;
   hence thesis by A2,BORSUK_1:86;
 end;
@@ -136,7 +137,7 @@ proof
   let x be Point of I[01];
   x >= 0 by BORSUK_1:86;
   then
-A1: 1/2 * x >= 1/2 * 0 by XREAL_1:66;
+A1: 1/2 * x >= 1/2 * 0;
   x <= 1 by BORSUK_1:86;
   then 1/2 * x <= 1/2 * 1 by XREAL_1:66;
   then 1/2 * x <= 1 by XXREAL_0:2;
@@ -180,8 +181,8 @@ A3: [.a,b.] is Subset of I[01] by BORSUK_4:43;
   then
 A4: [:[.a,b.], [.c,d.]:] c=
   [:the carrier of I[01], the carrier of I[01]:] by A3,ZFMISC_1:119;
-A5: a in [.a,b.] by A1,RCOMP_1:48;
-  c in [.c,d.] by A2,RCOMP_1:48;
+A5: a in [.a,b.] by A1,XXREAL_1:1;
+  c in [.c,d.] by A2,XXREAL_1:1;
   then reconsider Ewa = [:[.a,b.], [.c,d.]:] as
   non empty Subset of [:I[01], I[01]:] by A4,A5,BORSUK_1:def 5,ZFMISC_1:106;
   [.a,b.] is compact Subset of I[01] &
@@ -413,13 +414,8 @@ theorem Th18:
   for x being Element of T holds x is real
 proof
   let T be non empty 1-sorted;
-  hereby
-    assume T is real-membered;
-    then
-A1: the carrier of T is real-membered by BORSUK_4:def 2;
-    let x be Element of T;
-    thus x is real by A1,MEMBERED:def 3;
-  end;
+  thus T is real-membered implies
+   for x being Element of T holds x is real;
   assume for x being Element of T holds x is real;
   then for x being set st x in the carrier of T holds x is real;
   then the carrier of T is real-membered by MEMBERED:def 3;
@@ -474,7 +470,7 @@ registration
     p in the carrier of [:S, T:];
     then p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5;
     then p`1 in the carrier of S by MCART_1:10;
-    hence thesis by MEMBERED:def 3;
+    hence thesis;
   end;
   cluster p`2 -> real;
   coherence
@@ -482,7 +478,7 @@ registration
     p in the carrier of [:S, T:];
     then p in [:the carrier of S, the carrier of T:] by BORSUK_1:def 5;
     then p`2 in the carrier of T by MCART_1:10;
-    hence thesis by MEMBERED:def 3;
+    hence thesis;
   end;
 end;
 
@@ -512,7 +508,7 @@ registration
   cluster R^1 -> real-membered;
   coherence
   proof
-    for x being Element of R^1 holds x is real by TOPMETR:24,XREAL_0:def 1;
+    for x being Element of R^1 holds x is real by TOPMETR:24;
     hence thesis by Th18;
   end;
 end;
@@ -1002,7 +998,7 @@ A2: B = [:[.1/2,1.], [.0,1.]:];
     .= A \/ B by PRE_TOPC:def 10
     .= [:[.0,1/2.] \/ [.1/2,1.], [.0,1.]:]
   by A1,A2,ZFMISC_1:120
-    .= [:[.0,1.], [.0,1.]:] by RCOMP_1:50
+    .= [:[.0,1.], [.0,1.]:] by XXREAL_1:174
     .= [#] [:I[01],I[01]:] by BORSUK_1:83,def 5;
   hence thesis;
 end;
@@ -1058,7 +1054,7 @@ theorem Th35:
 proof
   let T be TopStruct, a, b be real number;
   assume a > b;
-  then [.a,b.] = {}T by RCOMP_1:13;
+  then [.a,b.] = {}T by XXREAL_1:29;
   hence thesis;
 end;
 
@@ -1106,7 +1102,7 @@ proof
   let a, b, c, d be real number;
   assume
 A1: a < b & c < d;
-  then a in [.a,b.] by RCOMP_1:48;
+  then a in [.a,b.] by XXREAL_1:1;
   then a in the carrier of Closed-Interval-TSpace (a,b) by A1,TOPMETR:25;
   then a in dom P[01](a,b,(#)(0,1),(0,1)(#)) by FUNCT_2:def 1;
   hence L[01](a,b,c,d).a =
@@ -1116,7 +1112,7 @@ A1: a < b & c < d;
     .= L[01]((#)(c,d),(c,d)(#)).((#)(0,1)) by A1,TREAL_1:16
     .= (#)(c,d) by A1,TREAL_1:12
     .= c by A1,TREAL_1:def 1;
-  b in [.a,b.] by A1,RCOMP_1:48;
+  b in [.a,b.] by A1,XXREAL_1:1;
   then b in the carrier of Closed-Interval-TSpace (a,b) by A1,TOPMETR:25;
   then b in dom P[01](a,b,(#)(0,1),(0,1)(#)) by FUNCT_2:def 1;
   hence L[01](a,b,c,d).b =
@@ -1141,7 +1137,7 @@ A2: L[01]((#)(c,d),(c,d)(#)) is continuous Function of
   Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(c,d) by TREAL_1:11;
   P[01](a,b,(#)(0,1),(0,1)(#)) is continuous Function of
   Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1) by A1,TREAL_1:15;
-  hence thesis by A2,TOPS_2:58;
+  hence thesis by A2;
 end;
 
 theorem Th39:
@@ -1163,7 +1159,7 @@ A4: x <= b;
   set F = L[01]((#)(c,d),(c,d)(#));
   set G = P[01](a,b,(#)(0,1),(0,1)(#));
 A5: (#)(c,d) = c & (c,d)(#) = d by A2,TREAL_1:def 1,def 2;
-  x in [.a,b.] by A3,A4,RCOMP_1:48;
+  x in [.a,b.] by A3,A4,XXREAL_1:1;
   then
 A6: x in the carrier of Closed-Interval-TSpace (a,b) by A1,TOPMETR:25;
   then
@@ -1198,7 +1194,7 @@ A1: f1 is continuous & f2 is continuous &
   then consider g being Function of X,R^1 such that
 A2: (for p being Point of X,r1,r2 being real number st
   f1'.p=r1 & f2'.p=r2 holds g.p=r1*r2) & g is continuous by JGRAPH_2:35;
-  reconsider A = [.0,1.] as non empty Subset of R^1 by RCOMP_1:48,TOPMETR:24;
+  reconsider A = [.0,1.] as non empty Subset of R^1 by XXREAL_1:1,TOPMETR:24;
 A3: [.0,1.] = the carrier of R^1|A by PRE_TOPC:29;
 A4: rng g c= [.0,1.]
   proof
@@ -1238,7 +1234,7 @@ A1: f1 is continuous & f2 is continuous &
   then consider g being Function of X,R^1 such that
 A2: (for p being Point of X,r1,r2 being real number st
   f1'.p=r1 & f2'.p=r2 holds g.p=r1+r2) & g is continuous by JGRAPH_2:29;
-  reconsider A = [.0,1.] as non empty Subset of R^1 by RCOMP_1:48,TOPMETR:24;
+  reconsider A = [.0,1.] as non empty Subset of R^1 by XXREAL_1:1,TOPMETR:24;
 A3: [.0,1.] = the carrier of R^1|A by PRE_TOPC:29;
 A4: rng g c= [.0,1.]
   proof
@@ -1278,7 +1274,7 @@ A1: f1 is continuous & f2 is continuous &
   then consider g being Function of X,R^1 such that
 A2: (for p being Point of X,r1,r2 being real number st
   f1'.p=r1 & f2'.p=r2 holds g.p=r1-r2) & g is continuous by JGRAPH_2:31;
-  reconsider A = [.0,1.] as non empty Subset of R^1 by RCOMP_1:48,TOPMETR:24;
+  reconsider A = [.0,1.] as non empty Subset of R^1 by XXREAL_1:1,TOPMETR:24;
 A3: [.0,1.] = the carrier of R^1|A by PRE_TOPC:29;
 A4: rng g c= [.0,1.]
   proof
@@ -1314,7 +1310,7 @@ A1: P is continuous;
   by TOPMETR:27;
   reconsider f = P * g as Function of I[01], T;
   g is continuous by TOPMETR:27,TREAL_1:11;
-  then f is continuous by A1,TOPS_2:58;
+  then f is continuous by A1;
   hence P * L[01]((0,1)(#),(#)(0,1)) is continuous Function of I[01], T;
 end;
 
@@ -1335,9 +1331,9 @@ A4: e.1 = e.(0,1)(#) by TREAL_1:def 2
     .= (#)(0,1) by TREAL_1:12
     .= 0 by TREAL_1:def 1;
 A5: the carrier of Closed-Interval-TSpace(0,1) = [. 0,1 .] by TOPMETR:25;
-  0 in [. 0,1 .] by RCOMP_1:48;
+  0 in [. 0,1 .] by XXREAL_1:1;
   hence (P * e).0 = b by A2,A3,A5,FUNCT_2:21;
-  1 in [. 0,1 .] by RCOMP_1:48;
+  1 in [. 0,1 .] by XXREAL_1:1;
   hence (P * e).1 = a by A1,A4,A5,FUNCT_2:21;
 end;
 
@@ -1478,7 +1474,7 @@ A2: PF.0 = P.(f.0) by FUNCT_1:23
 A3: PF.1 = P.(f.1) by FUNCT_1:23
       .= b by A1,BORSUK_2:def 2;
     P is continuous by A1,BORSUK_2:def 2;
-    then PF is continuous by TOPS_2:58;
+    then PF is continuous;
     hence thesis by A1,A2,A3,BORSUK_2:def 2;
   end;
 end;
@@ -1499,7 +1495,7 @@ A2: 0 is Point of I[01] & 1 is Point of I[01] by BORSUK_1:86;
   set G1 = -ID;
   reconsider G2 = pr2 (the carrier of I[01], the carrier of I[01])
   as continuous Function of X, I[01] by YELLOW12:40;
-  reconsider f1 = G1 * G2 as continuous Function of X, I[01] by TOPS_2:58;
+  reconsider f1 = G1 * G2 as continuous Function of X, I[01];
 A3: for s, t being Point of I[01] holds f1. [s,t] = 1 - t
   proof
     let s, t be Point of I[01];
@@ -1514,7 +1510,7 @@ A4: 1 - t in the carrier of I[01] by JORDAN5B:4;
   end;
   reconsider F2 = pr1 (the carrier of I[01], the carrier of I[01])
   as continuous Function of X, I[01] by YELLOW12:39;
-  reconsider f2 = f * F2 as continuous Function of X, I[01] by TOPS_2:58;
+  reconsider f2 = f * F2 as continuous Function of X, I[01];
 A5: for s, t being Point of I[01] holds f2.(s,t) = f.s
   proof
     let s, t be Point of I[01];
@@ -1561,15 +1557,15 @@ A12: s in the carrier of I[01] & t in the carrier of I[01] & p = [s,t]
     per cases;
     suppose
 A13:  f.s <= s;
-      0 <= t & t <= 1 by BORSUK_1:83,RCOMP_1:48;
+      0 <= t & t <= 1 by BORSUK_1:83,XXREAL_1:1;
       then
 A14:  a<=(1-t)*a+t*s & (1-t)*a+t*s<=s by A13,XREAL_1:174,175;
 A15:  g1.p + g2.p = (1 - t) * f.s + g2.p by A9,A12
         .= (1 - t) * f.s + t * s by A11,A12;
-A16:  0 <= a by BORSUK_1:83,RCOMP_1:48;
-      s <= 1 by BORSUK_1:83,RCOMP_1:48;
+A16:  0 <= a by BORSUK_1:83,XXREAL_1:1;
+      s <= 1 by BORSUK_1:83,XXREAL_1:1;
       then (1-t)*a+t*s <= 1 by A14,XXREAL_0:2;
-      hence thesis by A14,A15,A16,BORSUK_1:83,RCOMP_1:48;
+      hence thesis by A14,A15,A16,BORSUK_1:83,XXREAL_1:1;
     end;
     suppose
 A17:  a > s;
@@ -1580,10 +1576,10 @@ A17:  a > s;
 A18:  s <= (1 - j)*s + j * a & (1 - j)*s + j * a <= a by A17,XREAL_1:174,175;
 A19:  g1.p + g2.p = (1 - t) * f.s + g2.p by A9,A12
         .= (1 - t) * f.s + t * s by A11,A12;
-A20:  0 <= s by BORSUK_1:83,RCOMP_1:48;
-      a <= 1 by BORSUK_1:83,RCOMP_1:48;
+A20:  0 <= s by BORSUK_1:83,XXREAL_1:1;
+      a <= 1 by BORSUK_1:83,XXREAL_1:1;
       then (1-t)*a+t*s <= 1 by A18,XXREAL_0:2;
-      hence thesis by A18,A19,A20,BORSUK_1:83,RCOMP_1:48;
+      hence thesis by A18,A19,A20,BORSUK_1:83,XXREAL_1:1;
     end;
   end;
   then consider h being Function of X,I[01] such that
@@ -1626,7 +1622,7 @@ A27: dom h = the carrier of [:I[01],I[01]:] by FUNCT_2:def 1
   set H = P * h;
   P is continuous by A1,BORSUK_2:def 2;
   then
-A28: H is continuous by A21,TOPS_2:58;
+A28: H is continuous by A21;
 A29: for s being Point of I[01] holds H.(s,0) = Q.s & H.(s,1) = P.s
   proof
     let s be Point of I[01];
@@ -1760,7 +1756,7 @@ A1: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
 A2: g = (the carrier of T2) --> 1 by BORSUK_1:def 2,def 18;
 A3: ([#] T1) \/ ([#] T2) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
       .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
-      .= [#] T by BORSUK_1:83,RCOMP_1:50;
+      .= [#] T by BORSUK_1:83,XXREAL_1:174;
     for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p
     proof
       let p be set;
@@ -1770,7 +1766,7 @@ A3: ([#] T1) \/ ([#] T2) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
       then p in {1/2} by TOPMETR2:1;
       then
 A4:   p = 1/2 by TARSKI:def 1;
-      then p in [.1/2,1.] by RCOMP_1:48;
+      then p in [.1/2,1.] by XXREAL_1:1;
       then
 A5:   p in the carrier of T2 by PRE_TOPC:29;
       f.p = ((1 - 0)/(1/2 - 0)) * (1/2 - 0) + 0 by A4,Th39
@@ -1790,7 +1786,7 @@ A7:     dom g = the carrier of T2 by FUNCT_2:def 1
         suppose
 A8:       x < 1/2;
           then
-A9:       not x in dom g by A7,RCOMP_1:48;
+A9:       not x in dom g by A7,XXREAL_1:1;
           0 <= x by BORSUK_1:86;
           then
 A10:      f.x = ((1 - 0)/(1/2 - 0)) * (x - 0) + 0 by A8,Th39
@@ -1801,7 +1797,7 @@ A10:      f.x = ((1 - 0)/(1/2 - 0)) * (x - 0) + 0 by A8,Th39
         suppose
 A11:      x = 1/2;
           then
-A12:      x in dom g by A7,RCOMP_1:48;
+A12:      x in dom g by A7,XXREAL_1:1;
           thus 1RP.x = 2 * (1/2) by A11,Def7
             .= g.x by A2,A12,FUNCOP_1:13
             .= (f +* g).x by A12,FUNCT_4:14;
@@ -1810,7 +1806,7 @@ A12:      x in dom g by A7,RCOMP_1:48;
 A13:      x > 1/2;
           x <= 1 by BORSUK_1:86;
           then
-A14:      x in dom g by A7,A13,RCOMP_1:48;
+A14:      x in dom g by A7,A13,XXREAL_1:1;
           thus 1RP.x = 1 by A13,Def7
             .= g.x by A2,A14,FUNCOP_1:13
             .= (f +* g).x by A14,FUNCT_4:14;
@@ -1916,7 +1912,7 @@ A1: 0 is Point of I[01] & 1/2 is Point of I[01] & 1 is Point of I[01]
 A2: g = (the carrier of T1) --> 0 by BORSUK_1:def 2,def 17;
 A3: ([#] T2) \/ ([#] T1) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
       .= [.0,1/2.] \/ [.1/2,1.] by PRE_TOPC:def 10
-      .= [#] T by BORSUK_1:83,RCOMP_1:50;
+      .= [#] T by BORSUK_1:83,XXREAL_1:174;
     for p be set st p in ([#] T2) /\ ([#] T1) holds f.p = g.p
     proof
       let p be set;
@@ -1926,7 +1922,7 @@ A3: ([#] T2) \/ ([#] T1) = [.0,1/2.] \/ ([#] T2) by PRE_TOPC:def 10
       then p in {1/2} by TOPMETR2:1;
       then
 A4:   p = 1/2 by TARSKI:def 1;
-      then p in [.0,1/2.] by RCOMP_1:48;
+      then p in [.0,1/2.] by XXREAL_1:1;
       then
 A5:   p in the carrier of T1 by PRE_TOPC:29;
       f.p = ((1 - 0)/(1 - 1/2)) * (1/2 - 1/2) + 0 by A4,Th39
@@ -1947,7 +1943,7 @@ A7:     dom f = the carrier of T2 by FUNCT_2:def 1
 A8:       x > 1/2;
           x <= 1 by BORSUK_1:86;
           then
-A9:       x in dom f by A7,A8,RCOMP_1:48;
+A9:       x in dom f by A7,A8,XXREAL_1:1;
           1 >= x by BORSUK_1:86;
           then
 A10:      f.x = ((1 - 0)/(1 - 1/2)) * (x - 1/2) + 0 by A8,Th39
@@ -1958,7 +1954,7 @@ A10:      f.x = ((1 - 0)/(1 - 1/2)) * (x - 1/2) + 0 by A8,Th39
         suppose
 A11:      x = 1/2;
           then
-A12:      x in dom f by A7,RCOMP_1:48;
+A12:      x in dom f by A7,XXREAL_1:1;
           thus 2RP.x = ((1 - 0)/(1 - 1/2)) * (1/2 - 1/2) + 0 by A11,Def8
             .= f.x by A11,Th39
             .= (g +* f).x by A12,FUNCT_4:14;
@@ -1966,9 +1962,9 @@ A12:      x in dom f by A7,RCOMP_1:48;
         suppose
 A13:      x < 1/2;
           then
-A14:      not x in dom f by A7,RCOMP_1:48;
+A14:      not x in dom f by A7,XXREAL_1:1;
           x >= 0 by BORSUK_1:86;
-          then x in [.0,1/2.] by A13,RCOMP_1:48;
+          then x in [.0,1/2.] by A13,XXREAL_1:1;
           then
 A15:      x in the carrier of T1 by PRE_TOPC:29;
           thus 2RP.x = 0 by A13,Def8
@@ -2115,7 +2111,7 @@ A8: for x being Point of T1 holds f.x = 1/2 * x
       let x be Point of T1;
       x in the carrier of T1;
       then x in A by PRE_TOPC:29;
-      then 0 <= x & x <= 1/2 by RCOMP_1:48;
+      then 0 <= x & x <= 1/2 by XXREAL_1:1;
       then f.x = ((1/4 - 0)/(1/2 - 0)) * (x - 0) + 0 by Th39
         .= 1/2 * x;
       hence thesis;
@@ -2128,7 +2124,7 @@ A9: for x being Point of T2 holds g.x = x - 1/4
       let x be Point of T2;
       x in the carrier of T2;
       then x in B by PRE_TOPC:29;
-      then 1/2 <= x & x <= 3/4 by RCOMP_1:48;
+      then 1/2 <= x & x <= 3/4 by XXREAL_1:1;
       then g.x = ((1/2 - 1/4)/(3/4 - 1/2)) * (x - 1/2) + 1/4 by Th39
         .= x - 1/4;
       hence thesis;
@@ -2141,18 +2137,18 @@ A10: for x being Point of T3 holds h.x = 2 * x - 1
       let x be Point of T3;
       x in the carrier of T3;
       then x in C by PRE_TOPC:29;
-      then 3/4 <= x & x <= 1 by RCOMP_1:48;
+      then 3/4 <= x & x <= 1 by XXREAL_1:1;
       then h.x = ((1 - 1/2)/(1 - 3/4)) * (x - 3/4) + 1/2 by Th39
         .= 2 * x - 1;
       hence thesis;
     end;
     reconsider G = [.0,3/4.] as non empty compact Subset of I[01]
     by A1,BORSUK_4:49;
-    reconsider TT1 = T1, TT2 = T2 as SubSpace of T|G by RCOMP_1:49,TOPMETR:29;
+    reconsider TT1 = T1, TT2 = T2 as SubSpace of T|G by XXREAL_1:34,TOPMETR:29;
     set f1 = f, g1 = g;
 A11: ([#] TT1) \/ ([#] TT2) = A \/ ([#] TT2) by PRE_TOPC:def 10
       .= A \/ B by PRE_TOPC:def 10
-      .= [.0,3/4.] by RCOMP_1:50
+      .= [.0,3/4.] by XXREAL_1:174
       .= [#] (T|G) by PRE_TOPC:def 10;
 A12: T|G is_T2 by TOPMETR:3;
 A13: ([#] TT1) /\ ([#] TT2) = A /\ ([#] TT2) by PRE_TOPC:def 10
@@ -2164,7 +2160,7 @@ A13: ([#] TT1) /\ ([#] TT2) = A /\ ([#] TT2) by PRE_TOPC:def 10
       assume p in ([#] TT1) /\ ([#] TT2);
       then
 A14:  p = 1/2 by A13,TARSKI:def 1;
-      then reconsider p as Point of I[01] by BORSUK_1:83,RCOMP_1:48;
+      then reconsider p as Point of I[01] by BORSUK_1:83,XXREAL_1:1;
       f1.p = ((1/4 - 0)/(1/2 - 0)) * (p - 0) + 0 by A14,Th39
         .= ((1/2 - 1/4)/(3/4 - 1/2)) * (p - 1/2) + 1/4 by A14
         .= g1.p by A14,Th39;
@@ -2174,7 +2170,7 @@ A14:  p = 1/2 by A13,TARSKI:def 1;
 A15: FF = f1 +* g1 & FF is continuous by A11,A12,BORSUK_2:1;
 A16: ([#] (T|G)) \/ ([#] T3) = G \/ ([#] T3) by PRE_TOPC:def 10
       .= G \/ C by PRE_TOPC:def 10
-      .= [#] T by BORSUK_1:83,RCOMP_1:50;
+      .= [#] T by BORSUK_1:83,XXREAL_1:174;
 A17: ([#] (T|G)) /\ ([#] T3) = G /\ ([#] T3) by PRE_TOPC:def 10
       .= G /\ C by PRE_TOPC:def 10
       .= {3/4} by TOPMETR2:1;
@@ -2185,7 +2181,7 @@ A17: ([#] (T|G)) /\ ([#] T3) = G /\ ([#] T3) by PRE_TOPC:def 10
       then
 A18:  p = 3/4 by A17,TARSKI:def 1;
       then reconsider p as Point of T by BORSUK_1:86;
-      p in [.1/2,3/4.] by A18,RCOMP_1:48;
+      p in [.1/2,3/4.] by A18,XXREAL_1:1;
       then p in the carrier of T2 by PRE_TOPC:29;
       then p in dom g by FUNCT_2:def 1;
       then FF.p = g.p by A15,FUNCT_4:14
@@ -2202,15 +2198,15 @@ A20:  0 <= x & x <= 1 by BORSUK_1:86;
       per cases by REAL_1:def 5;
       suppose
 A21:    x < 1/2;
-        then x in [.0,1/2.] by A20,RCOMP_1:48;
+        then x in [.0,1/2.] by A20,XXREAL_1:1;
         then
 A22:    x is Point of T1 by PRE_TOPC:29;
-        not x in [.1/2,3/4.] by A21,RCOMP_1:48;
+        not x in [.1/2,3/4.] by A21,XXREAL_1:1;
         then not x in the carrier of T2 by PRE_TOPC:29;
         then
 A23:    not x in dom g;
         x < 3/4 by A21,XXREAL_0:2;
-        then not x in [.3/4,1.] by RCOMP_1:48;
+        then not x in [.3/4,1.] by XXREAL_1:1;
         then not x in the carrier of T3 by PRE_TOPC:29;
         then not x in dom h;
         then HH.x = FF.x by A19,FUNCT_4:12
@@ -2221,11 +2217,11 @@ A23:    not x in dom g;
       end;
       suppose
 A24:    x = 1/2;
-        then x in [.1/2,3/4.] by RCOMP_1:48;
+        then x in [.1/2,3/4.] by XXREAL_1:1;
         then x in the carrier of T2 by PRE_TOPC:29;
         then
 A25:    x in dom g by FUNCT_2:def 1;
-        not x in [.3/4,1.] by A24,RCOMP_1:48;
+        not x in [.3/4,1.] by A24,XXREAL_1:1;
         then not x in the carrier of T3 by PRE_TOPC:29;
         then not x in dom h;
         then HH.x = FF.x by A19,FUNCT_4:12
@@ -2236,12 +2232,12 @@ A25:    x in dom g by FUNCT_2:def 1;
       end;
       suppose
 A26:    x > 1/2 & x < 3/4;
-        then x in [.1/2,3/4.] by RCOMP_1:48;
+        then x in [.1/2,3/4.] by XXREAL_1:1;
         then
 A27:    x in the carrier of T2 by PRE_TOPC:29;
         then
 A28:    x in dom g by FUNCT_2:def 1;
-        not x in [.3/4,1.] by A26,RCOMP_1:48;
+        not x in [.3/4,1.] by A26,XXREAL_1:1;
         then not x in the carrier of T3 by PRE_TOPC:29;
         then not x in dom h;
         then HH.x = FF.x by A19,FUNCT_4:12
@@ -2252,7 +2248,7 @@ A28:    x in dom g by FUNCT_2:def 1;
       end;
       suppose
 A29:    x = 3/4;
-        then x in [.3/4,1.] by RCOMP_1:48;
+        then x in [.3/4,1.] by XXREAL_1:1;
         then x in the carrier of T3 by PRE_TOPC:29;
         then x in dom h by FUNCT_2:def 1;
         then HH.x = h.x by A19,FUNCT_4:14
@@ -2262,7 +2258,7 @@ A29:    x = 3/4;
       end;
       suppose
 A30:    x > 3/4;
-        then x in [.3/4,1.] by A20,RCOMP_1:48;
+        then x in [.3/4,1.] by A20,XXREAL_1:1;
         then
 A31:    x in the carrier of T3 by PRE_TOPC:29;
         then x in dom h by FUNCT_2:def 1;
@@ -2900,7 +2896,7 @@ A2: x <= 1 & x >= 0 by BORSUK_1:86;
   then 2 * x <= 2 * 1 by XREAL_1:66;
   then
 A3: 2 * x - 1 <= 2 * 1 - 1 by REAL_1:92;
-  2 * x >= 2 * 0 by A2,XREAL_1:66;
+  2 * x >= 2 * 0 by A2;
   then 1 - 2 * x <= 1 - 2 * 0 by REAL_1:92;
   hence thesis by A1,A3,Def11;
 end;
@@ -3099,12 +3095,12 @@ A7: 0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
 A8: I[01] = I[01] | A01 by TSEP_1:100;
   Closed-Interval-TSpace (0,1/2) = I[01] | B01 by TOPMETR:31;
   then T1 = [:Closed-Interval-TSpace(0,1/2),I[01]:] by A8,BORSUK_3:26;
-  then reconsider K1 = f * f1 as continuous Function of T1, T by A5,TOPS_2:58;
+  then reconsider K1 = f * f1 as continuous Function of T1, T by A5;
   reconsider g1 as continuous Function of
   [:Closed-Interval-TSpace(1/2,1),I[01]:], [:I[01],I[01]:] by BORSUK_2:12;
   Closed-Interval-TSpace (1/2,1) = I[01] | B02 by TOPMETR:31;
   then T2 = [:Closed-Interval-TSpace(1/2,1),I[01]:] by A8,BORSUK_3:26;
-  then reconsider K2 = g * g1 as continuous Function of T2, T by A6,TOPS_2:58;
+  then reconsider K2 = g * g1 as continuous Function of T2, T by A6;
 A9: ([#] T1) \/ ([#] T2) = [#] BB by Th32;
 A10: dom K2 = the carrier of [:Closed-Interval-TSpace(1/2,1), I[01]:]
   by FUNCT_2:def 1
@@ -3128,7 +3124,7 @@ A13: x in {1/2} & y in [.0,1.] & p = [x,y] by ZFMISC_1:def 2;
 A14: y in the carrier of I[01] by A13,TOPMETR:25,27;
     reconsider y as Point of I[01] by A13,TOPMETR:25,27;
 A15: x = 1/2 by A13,TARSKI:def 1;
-    then x in [.0,1/2.] by RCOMP_1:48;
+    then x in [.0,1/2.] by XXREAL_1:1;
     then
 A16: x in the carrier of Closed-Interval-TSpace(0,1/2) by TOPMETR:25;
     then p in [:the carrier of Closed-Interval-TSpace(0,1/2),
@@ -3137,7 +3133,7 @@ A16: x in the carrier of Closed-Interval-TSpace(0,1/2) by TOPMETR:25;
     by BORSUK_1:def 5;
     then
 A17: p in dom f1 by FUNCT_2:def 1;
-    x in [.1/2,1.] by A15,RCOMP_1:48;
+    x in [.1/2,1.] by A15,XXREAL_1:1;
     then
 A18: x in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
     then p in [:the carrier of Closed-Interval-TSpace(1/2,1),
@@ -3176,12 +3172,12 @@ A28: h.(s,0) = (P1+Q1).s
       suppose
 A29:    s < 1/2;
 A30:    s >= 0 by BORSUK_1:86;
-        not s in [.1/2,1.] by A29,RCOMP_1:48;
+        not s in [.1/2,1.] by A29,XXREAL_1:1;
         then not s in the carrier of Closed-Interval-TSpace(1/2,1)
         by TOPMETR:25;
         then
 A31:    not [s,0] in dom K2 by A10,ZFMISC_1:106;
-        s in [.0,1/2.] by A29,A30,RCOMP_1:48;
+        s in [.0,1/2.] by A29,A30,XXREAL_1:1;
         then
 A32:    s in the carrier of Closed-Interval-TSpace(0,1/2) &
         0 in the carrier of I[01] by BORSUK_1:86,TOPMETR:25;
@@ -3204,7 +3200,7 @@ A37:    2 * s is Point of I[01] by A29,Th6;
       suppose
 A38:    s >= 1/2;
 A39:    s <= 1 by BORSUK_1:86;
-        then s in [.1/2,1.] by A38,RCOMP_1:48;
+        then s in [.1/2,1.] by A38,XXREAL_1:1;
         then
 A40:    s in the carrier of Closed-Interval-TSpace(1/2,1) &
         0 in the carrier of I[01] by BORSUK_1:86,TOPMETR:25;
@@ -3232,12 +3228,12 @@ A46:    2 * s - 1 is Point of I[01] by A38,Th7;
       suppose
 A47:    s < 1/2;
 A48:    s >= 0 by BORSUK_1:86;
-        not s in [.1/2,1.] by A47,RCOMP_1:48;
+        not s in [.1/2,1.] by A47,XXREAL_1:1;
         then not s in the carrier of Closed-Interval-TSpace(1/2,1)
         by TOPMETR:25;
         then
 A49:    not [s,1] in dom K2 by A10,ZFMISC_1:106;
-        s in [.0,1/2.] by A47,A48,RCOMP_1:48;
+        s in [.0,1/2.] by A47,A48,XXREAL_1:1;
         then
 A50:    s in the carrier of Closed-Interval-TSpace(0,1/2) &
         1 in the carrier of I[01] by BORSUK_1:86,TOPMETR:25;
@@ -3260,7 +3256,7 @@ A55:    2 * s is Point of I[01] by A47,Th6;
       suppose
 A56:    s >= 1/2;
 A57:    s <= 1 by BORSUK_1:86;
-        then s in [.1/2,1.] by A56,RCOMP_1:48;
+        then s in [.1/2,1.] by A56,XXREAL_1:1;
         then
 A58:    s in the carrier of Closed-Interval-TSpace(1/2,1) &
         1 in the carrier of I[01] by BORSUK_1:86,TOPMETR:25;
@@ -3291,23 +3287,23 @@ A65: dom K2 = the carrier of [:Closed-Interval-TSpace(1/2,1), I[01]:]
     by FUNCT_2:def 1
       .= [:the carrier of Closed-Interval-TSpace(1/2,1),
     the carrier of I[01]:] by BORSUK_1:def 5;
-    not 0 in [.1/2,1.] by RCOMP_1:48;
+    not 0 in [.1/2,1.] by XXREAL_1:1;
     then not 0 in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
     then
 A66: not [0,t] in dom K2 by A65,ZFMISC_1:106;
-    1 in [.1/2,1.] by RCOMP_1:48;
+    1 in [.1/2,1.] by XXREAL_1:1;
     then
 A67: 1 in the carrier of Closed-Interval-TSpace (1/2,1) by TOPMETR:25;
     then
 A68: [1,t] in dom K2 by A65,ZFMISC_1:106;
-    0 in [.0,1/2.] by RCOMP_1:48;
+    0 in [.0,1/2.] by XXREAL_1:1;
     then
 A69: 0 in the carrier of Closed-Interval-TSpace (0,1/2) by TOPMETR:25;
     then
 A70: 0 in dom R1 by FUNCT_2:def 1;
 A71: t in the carrier of I[01];
 A72: [0,t] in dom f1 by A11,A69,ZFMISC_1:106;
-    1 in [.1/2,1.] by RCOMP_1:48;
+    1 in [.1/2,1.] by XXREAL_1:1;
     then 1 in the carrier of Closed-Interval-TSpace (1/2,1) by TOPMETR:25;
     then
 A73: [1,t] in dom g1 by A12,ZFMISC_1:106;
@@ -3369,7 +3365,7 @@ A4: dom fB = the carrier of I[01] & dom fF = the carrier of I[01]
 A5: 0 is Point of I[01] by BORSUK_1:86;
   reconsider ff = f * F as Function of [:I[01],I[01]:], T;
   take ff;
-  thus ff is continuous by A2,A3,TOPS_2:58;
+  thus ff is continuous by A2,A3;
 A6: for s being Point of I[01] holds ff.(s,0) = (-P).s & ff.(s,1) = (-Q).s
   proof
     let s be Point of I[01];
@@ -3506,31 +3502,31 @@ A9: dom g1 = dom e2 by A8,RELAT_1:46,TOPMETR:27,ZFMISC_1:119
 A10: the carrier of Closed-Interval-TSpace(0,1/2) = [.0,1/2.] &
   the carrier of Closed-Interval-TSpace(1/2,1) = [.1/2,1.] by TOPMETR:25;
 A11: [.0,1.] c= the carrier of I[01] by BORSUK_1:83;
-  [.0,1/2.] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:49;
+  [.0,1/2.] c= the carrier of I[01] by BORSUK_1:83,XXREAL_1:34;
   then
 A12: [:[.0,1.], [.0,1/2.]:] c= [:the carrier of I[01], the carrier of I[01]:]
   by BORSUK_1:83,ZFMISC_1:119;
-A13: 1 in [.0,1.] by RCOMP_1:48;
-  0 in [.0,1/2.] by RCOMP_1:48;
+A13: 1 in [.0,1.] by XXREAL_1:1;
+  0 in [.0,1/2.] by XXREAL_1:1;
   then reconsider Ewa = [:[.0,1.], [.0,1/2.]:] as
   non empty Subset of [:I[01], I[01]:] by A12,A13,BORSUK_1:def 5,ZFMISC_1:106;
-  [.1/2,1.] c= the carrier of I[01] by BORSUK_1:83,RCOMP_1:49;
+  [.1/2,1.] c= the carrier of I[01] by BORSUK_1:83,XXREAL_1:34;
   then
 A14: [:[.0,1.], [.1/2,1.]:] c= [:the carrier of I[01], the carrier of I[01]:]
   by BORSUK_1:83,ZFMISC_1:119;
-  1 in [.1/2,1.] by RCOMP_1:48;
+  1 in [.1/2,1.] by XXREAL_1:1;
   then reconsider Ewa1 = [:[.0,1.], [.1/2,1.]:] as
   non empty Subset of [:I[01], I[01]:] by A13,A14,BORSUK_1:def 5,ZFMISC_1:106;
   set T1 = [:I[01], I[01]:] | Ewa;
   set T2 = [:I[01], I[01]:] | Ewa1;
-  reconsider A01 = [.0,1.] as non empty Subset of I[01] by A11,RCOMP_1:48;
+  reconsider A01 = [.0,1.] as non empty Subset of I[01] by A11,XXREAL_1:1;
   reconsider B01 = [.0,1/2.] as non empty Subset of I[01]
-  by BORSUK_1:83,RCOMP_1:48,49;
-  1/2 in [.0,1/2.] by RCOMP_1:48;
+  by BORSUK_1:83,XXREAL_1:1,34;
+  1/2 in [.0,1/2.] by XXREAL_1:1;
   then
 A15: 1/2 in the carrier of Closed-Interval-TSpace(0,1/2) by TOPMETR:25;
   reconsider B02 = [.1/2,1.] as non empty Subset of I[01]
-  by BORSUK_1:83,RCOMP_1:48,49;
+  by BORSUK_1:83,XXREAL_1:1,34;
   A01 = [#] I[01] by BORSUK_1:83;
   then
 A16: I[01] = I[01] | A01 by TSEP_1:100;
@@ -3544,10 +3540,10 @@ A19: [#] T1 = Ewa & [#] T2 = Ewa1 by PRE_TOPC:def 10;
   then
 A20: [#] T1 \/ [#] T2 = [:[.0,1.], [.0,1/2.] \/ [.1/2,1.]:] by ZFMISC_1:120
     .= [:the carrier of I[01], the carrier of I[01]:]
-  by BORSUK_1:83,RCOMP_1:50
+  by BORSUK_1:83,XXREAL_1:174
     .= [#] [:I[01],I[01]:] by BORSUK_1:def 5;
-  reconsider f1 as continuous Function of T1, T by A2,A6,A17,TOPS_2:58;
-  reconsider g1 as continuous Function of T2,T by A3,A7,A18,TOPS_2:58;
+  reconsider f1 as continuous Function of T1, T by A2,A6,A17;
+  reconsider g1 as continuous Function of T2,T by A3,A7,A18;
 A21: 0 is Point of I[01] & 1 is Point of I[01] & 1/2 is Point of I[01]
   by BORSUK_1:86;
   then
@@ -3555,11 +3551,11 @@ A22: [.0,1.] is compact Subset of I[01] &
   [.0,1/2.] is compact Subset of I[01] by BORSUK_4:49;
   then Ewa is compact Subset of [:I[01], I[01]:] by BORSUK_3:27;
   then
-A23: T1 is compact by COMPTS_1:12;
+A23: T1 is compact;
   [.1/2,1.] is compact Subset of I[01] by A21,BORSUK_4:49;
   then Ewa1 is compact Subset of [:I[01], I[01]:] by A22,BORSUK_3:27;
   then
-A24: T2 is compact by COMPTS_1:12;
+A24: T2 is compact;
 A25: [#] T1 /\ [#] T2
   = [:[.0,1.], [.0,1/2.] /\ [.1/2,1.]:] by A19,ZFMISC_1:122
     .= [:[.0,1.], {1/2} :] by TOPMETR2:1;
@@ -3573,7 +3569,7 @@ A27: dom e2 = the carrier of [:I[01], Closed-Interval-TSpace(1/2,1):]
   the carrier of Closed-Interval-TSpace(1/2,1):] by BORSUK_1:def 5;
 A28: dom e1 = [:dom id I[01], dom P1:] by FUNCT_3:def 9;
 A29: dom e2 = [:dom id I[01], dom P2:] by FUNCT_3:def 9;
-A30: 1/2 in [.1/2,1.] by RCOMP_1:48;
+A30: 1/2 in [.1/2,1.] by XXREAL_1:1;
   then
 A31: 1/2 in the carrier of Closed-Interval-TSpace(1/2,1) by TOPMETR:25;
   for p be set st p in [#] T1 /\ [#] T2 holds f1.p = g1.p
@@ -3590,7 +3586,7 @@ A34: r1 = x & 0 <= r1 & r1 <= 1;
     f1.p = g1.p
     proof
 A35:  x in the carrier of I[01] by A34,BORSUK_1:86;
-      1/2 in [.0,1/2.] by RCOMP_1:48;
+      1/2 in [.0,1/2.] by XXREAL_1:1;
       then reconsider y' = 1/2 as Point of Closed-Interval-TSpace(0,1/2)
       by TOPMETR:25;
       reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
@@ -3632,10 +3628,10 @@ A43: for s being Point of I[01] holds h.(s,0) = P.s & h.(s,1) = R.s
   proof
     let s be Point of I[01];
 A44: the carrier of Closed-Interval-TSpace(1/2,1) = [. 1/2,1 .] by TOPMETR:25;
-    then not 0 in the carrier of Closed-Interval-TSpace(1/2,1) by RCOMP_1:48;
+    then not 0 in the carrier of Closed-Interval-TSpace(1/2,1) by XXREAL_1:1;
     then
 A45: not [s,0] in dom g1 by A9,ZFMISC_1:106;
-A46: 0 in the carrier of Closed-Interval-TSpace(0,1/2) by A42,RCOMP_1:48;
+A46: 0 in the carrier of Closed-Interval-TSpace(0,1/2) by A42,XXREAL_1:1;
     then
 A47: [s,0] in dom e1 by A26,ZFMISC_1:106;
     reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
@@ -3648,7 +3644,7 @@ A49: h.(s,0) = f1.(s,0) by A40,A45,FUNCT_4:12
       .= f.(id I[01].s, P1.0) by A28,A47,FUNCT_3:86
       .= f.(s,0) by A48,TMAP_1:91
       .= P.s by A2;
-A50: 1 in the carrier of Closed-Interval-TSpace(1/2,1) by A44,RCOMP_1:48;
+A50: 1 in the carrier of Closed-Interval-TSpace(1/2,1) by A44,XXREAL_1:1;
     then
 A51: [s,1] in dom g1 by A9,ZFMISC_1:106;
 A52: [s,1] in dom e2 by A27,A50,ZFMISC_1:106;
@@ -3672,11 +3668,11 @@ A55:  t < 1/2;
 A56:  0 <= t by BORSUK_1:86;
 A57:  0 in the carrier of I[01] by BORSUK_1:86;
       not t in the carrier of Closed-Interval-TSpace(1/2,1)
-      by A41,A55,RCOMP_1:48;
+      by A41,A55,XXREAL_1:1;
       then
 A58:  not [0,t] in dom g1 by A9,ZFMISC_1:106;
 A59:  t in the carrier of Closed-Interval-TSpace(0,1/2)
-      by A42,A55,A56,RCOMP_1:48;
+      by A42,A55,A56,XXREAL_1:1;
       then
 A60:  [0,t] in dom e1 by A26,A57,ZFMISC_1:106;
       reconsider r1 = (#)(0,1), r2 = (0,1)(#) as Real
@@ -3696,11 +3692,11 @@ A62:  P1.t is Point of I[01] by A55,Th6;
         .= f.(0,P1.t) by A21,TMAP_1:91
         .= a by A2,A62;
       not t in the carrier of Closed-Interval-TSpace(1/2,1)
-      by A10,A55,RCOMP_1:48;
+      by A10,A55,XXREAL_1:1;
       then
 A63:  not [1,t] in dom g1 by A9,ZFMISC_1:106;
       t in the carrier of Closed-Interval-TSpace(0,1/2)
-      by A10,A55,A56,RCOMP_1:48;
+      by A10,A55,A56,XXREAL_1:1;
       then
 A64:  [1,t] in dom e1 by A26,A54,ZFMISC_1:106;
       P1.t = ((r2 - r1)/(1/2 - 0))*t + ((1/2)*r1 - 0 *r2)/(1/2 - 0)
@@ -3722,7 +3718,7 @@ A66:  t >= 1/2;
 A67:  0 in the carrier of I[01] by BORSUK_1:86;
       t <= 1 by BORSUK_1:86;
       then
-A68:  t in the carrier of Closed-Interval-TSpace(1/2,1) by A41,A66,RCOMP_1:48;
+A68:  t in the carrier of Closed-Interval-TSpace(1/2,1) by A41,A66,XXREAL_1:1;
       then
 A69:  [0,t] in dom g1 by A9,A67,ZFMISC_1:106;
 A70:  [0,t] in dom e2 by A27,A67,A68,ZFMISC_1:106;
@@ -3825,8 +3821,7 @@ A3: a, a are_connected;
   then reconsider PP = P + -P as continuous Path of a,a by BORSUK_2:def 2;
   set ff = PP * e1;
   reconsider f = ff|IAA as Function of S1, T by PRE_TOPC:30;
-  PP * e1 is continuous by TOPS_2:58;
-  then reconsider f as continuous Function of S1, T by TOPMETR:10;
+  reconsider f as continuous Function of S1, T by TOPMETR:10;
 A4: for x being Point of S1 holds f.x = P.(2 * x`1)
   proof
     let x be Point of S1;
@@ -3852,7 +3847,7 @@ A12: x`1 <= 1/2 by A5,Th67;
     hence thesis;
   end;
   set gg = (-P) * e2;
-  reconsider gg as continuous Function of S, T by A2,TOPS_2:58;
+  reconsider gg as continuous Function of S, T by A2;
   reconsider g = gg|IBB as Function of S2, T by PRE_TOPC:30;
   reconsider g as continuous Function of S2, T by TOPMETR:10;
 A13: for x being Point of S2 holds g.x = P.(1 - x`2)
@@ -3880,8 +3875,7 @@ A20: x in dom e2 by A15,FUNCT_2:def 1;
   end;
   set hh = PP * e1;
   reconsider h = hh|ICC as Function of S3, T by PRE_TOPC:30;
-  PP * e1 is continuous by TOPS_2:58;
-  then reconsider h as continuous Function of S3, T by TOPMETR:10;
+  reconsider h as continuous Function of S3, T by TOPMETR:10;
 A21: for x being Point of S3 holds h.x = (-P).(2 * x`1 - 1)
   proof
     let x be Point of S3;
@@ -4140,8 +4134,7 @@ A3: a, a are_connected;
   then reconsider PP = -P + P as continuous Path of a,a by BORSUK_2:def 2;
   set ff = PP * e1;
   reconsider f = ff|IAA as Function of S1, T by PRE_TOPC:30;
-  PP * e1 is continuous by TOPS_2:58;
-  then reconsider f as continuous Function of S1, T by TOPMETR:10;
+  reconsider f as continuous Function of S1, T by TOPMETR:10;
 A4: for x being Point of S1 holds f.x = (-P).(2 * x`1)
   proof
     let x be Point of S1;
@@ -4167,7 +4160,7 @@ A12: x`1 <= 1/2 by A5,Th67;
     hence thesis;
   end;
   set gg = P * e2;
-  reconsider gg as continuous Function of S, T by A2,TOPS_2:58;
+  reconsider gg as continuous Function of S, T by A2;
   reconsider g = gg|IBB as Function of S2, T by PRE_TOPC:30;
   reconsider g as continuous Function of S2, T by TOPMETR:10;
 A13: for x being Point of S2 holds g.x = (-P).(1 - x`2)
@@ -4196,8 +4189,7 @@ A21: x in dom e2 by A15,FUNCT_2:def 1;
   end;
   set hh = PP * e1;
   reconsider h = hh|ICC as Function of S3, T by PRE_TOPC:30;
-  PP * e1 is continuous by TOPS_2:58;
-  then reconsider h as continuous Function of S3, T by TOPMETR:10;
+  reconsider h as continuous Function of S3, T by TOPMETR:10;
 A22: for x being Point of S3 holds h.x = P.(2 * x`1 - 1)
   proof
     let x be Point of S3;

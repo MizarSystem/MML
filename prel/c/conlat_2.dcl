@@ -44,7 +44,7 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="123" value="false"/>
+<Adjective nr="124" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -52,18 +52,18 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="38"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CONLAT_2" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="139"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,8 +71,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="26"/>
-<Adjective nr="139"/>
+<Adjective nr="27"/>
+<Adjective nr="140"/>
 </Cluster>
 </FCluster>
 </Registrations>

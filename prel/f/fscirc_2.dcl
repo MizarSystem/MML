@@ -51,16 +51,16 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="28"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="28"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -70,7 +70,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 </Registrations>

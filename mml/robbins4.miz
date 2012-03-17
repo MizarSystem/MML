@@ -1,0 +1,2900 @@
+:: Orthomodular Lattices
+::  by El\.zbieta M\c{a}dra and Adam Grabowski
+:: 
+:: Received June 27, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BINOP_1, BOOLE, FUNCT_1, SUBSET_1, LATTICES, ROBBINS3, ORDERS_1,
+      LATTICE3, ROBBINS1, OPOSET_1, FILTER_1, REALSET1, RELAT_2, ROBBINS4,
+      BHSP_1, SYMSP_1, YELLOW_1, ARYTM, FILTER_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, BINOP_1, RELAT_1,
+      FUNCT_1, RELSET_1, PARTFUN1, ORDINAL1, NUMBERS, CARD_1, XXREAL_0,
+      RELAT_2, FUNCT_2, STRUCT_0, LATTICE3, LATTICES, ORDERS_1, ORDERS_2,
+      ROBBINS1, OPOSET_1, WAYBEL_1, YELLOW_0, YELLOW_1, ROBBINS3;
+ constructors BINOP_1, REALSET2, WAYBEL_1, LATTICE3, YELLOW_6, OPOSET_1,
+      ROBBINS3, YELLOW_1, ORDINAL1, XXREAL_0, XCMPLX_0;
+ registrations SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, REALSET1,
+      STRUCT_0, LATTICES, YELLOW_0, YELLOW_1, ROBBINS1, OPOSET_1, SHEFFER1,
+      ROBBINS3, XBOOLE_0, ORDINAL1;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ definitions LATTICES, RELAT_2, TARSKI, ROBBINS3, ROBBINS1, REALSET1, SUBSET_1,
+      ORDERS_2, LATTICE3, YELLOW_0;
+ theorems ZFMISC_1, STRUCT_0, LATTICE3, FILTER_1, LATTICES, FUNCT_2, ROBBINS3,
+      ROBBINS1, FILTER_0, YELLOW11, XBOOLE_1, TARSKI, ENUMSET1, CARD_5,
+      XBOOLE_0, SUBSET_1, YELLOW_1, CARD_1, NAT_1, RELSET_1, YELLOW_0;
+ schemes FUNCT_2;
+
+begin :: Preliminaries
+
+registration let L be Lattice;
+  cluster the LattStr of L -> Lattice-like;
+  coherence by ROBBINS3:15;
+end;
+
+theorem Strict:
+  for K,L being Lattice st the LattStr of K = the LattStr of L holds
+    LattPOSet K = LattPOSet L
+  proof
+    let K, L be Lattice;
+    assume
+T0: the LattStr of K = the LattStr of L;
+    for p, q being Element of K holds
+      [p,q] in LattRel K iff [p,q] in LattRel L
+    proof
+      let p,q be Element of K;
+      reconsider p' = p, q' = q as Element of L by T0;
+      hereby assume [p,q] in LattRel K; then
+        p [= q by FILTER_1:32; then
+        p "\/" q = q by LATTICES:def 3; then
+        p' "\/" q' = q' by T0; then
+        p' [= q' by LATTICES:def 3;
+        hence [p,q] in LattRel L by FILTER_1:32;
+      end;
+      assume [p,q] in LattRel L; then
+      p' [= q' by FILTER_1:32; then
+      p' "\/" q' = q' by LATTICES:def 3; then
+      p "\/" q = q by T0; then
+      p [= q by LATTICES:def 3;
+      hence thesis by FILTER_1:32;
+    end;
+    hence thesis by T0,RELSET_1:def 3;
+  end;
+
+registration
+  cluster trivial -> meet-Absorbing (non empty OrthoLattStr);
+  coherence;
+end;
+
+registration
+  cluster -> lower-bounded Ortholattice;
+  coherence
+  proof
+    let IT be Ortholattice;
+    ex c being Element of IT st
+      for a being Element of IT holds c "/\" a = c & a "/\" c = c
+    proof
+      consider x being Element of IT;
+      take c = (x`` "\/" x`)`;
+      let a be Element of IT;
+      thus c "/\" a = (a`` "\/" a`)` "/\" a by ROBBINS3:def 7
+         .= (a` "/\" a) "/\" a by ROBBINS1:def 23
+         .= a` "/\" (a "/\" a) by LATTICES:def 7
+         .= a` "/\" a by LATTICES:18
+         .= (a`` "\/" a`)` by ROBBINS1:def 23
+         .= c by ROBBINS3:def 7;
+      hence thesis;
+    end;
+    hence thesis by LATTICES:def 13;
+  end;
+  cluster -> upper-bounded Ortholattice;
+  coherence
+  proof
+    let IT be Ortholattice;
+    ex c being Element of IT st
+      for a being Element of IT holds c "\/" a = c & a "\/" c = c
+    proof
+      consider x being Element of IT;
+      take c = x` "\/" x;
+      let a be Element of IT;
+      c "\/" a = (a` "\/" a) "\/" a by ROBBINS3:def 7
+          .= a` "\/" (a "\/" a) by LATTICES:def 5
+          .= a` "\/" a by LATTICES:17
+          .= c by ROBBINS3:def 7;
+      hence thesis;
+    end;
+    hence thesis by LATTICES:def 14;
+  end;
+end;
+
+ reserve L for Ortholattice,
+         a, b, c for Element of L;
+
+theorem yy:
+  a "\/" a` = Top L & a "/\" a` = Bottom L
+  proof
+    thus a "\/" a` = Top L
+    proof
+A:    (a "\/" a`) "\/" b = a "\/" a`
+      proof
+        thus (a "\/" a`) "\/" b = (b "\/" b`) "\/" b by ROBBINS3:def 7
+           .= b` "\/" (b "\/" b) by LATTICES:def 5
+           .= b` "\/" b by LATTICES:17
+           .= a "\/" a` by ROBBINS3:def 7;
+      end;
+      b "\/" (a "\/" a`) = a "\/" a` by A;
+      hence thesis by A,LATTICES:def 17;
+    end;
+A:  (a "/\" a`) "/\" b = a "/\" a`
+    proof
+      thus (a "/\" a`) "/\" b = (a` "\/" a``)` "/\" b by ROBBINS1:def 23
+         .= (b` "\/" b``)` "/\" b by ROBBINS3:def 7
+         .= (b "/\" b`) "/\" b by ROBBINS1:def 23
+         .= b` "/\" (b "/\" b) by LATTICES:def 7
+         .= b` "/\" b by LATTICES:18
+         .= (b`` "\/" b`)` by ROBBINS1:def 23
+         .= (a`` "\/" a`)` by ROBBINS3:def 7
+         .= a "/\" a` by ROBBINS1:def 23;
+    end; then
+    b "/\" (a "/\" a`) = a "/\" a`;
+    hence thesis by A,LATTICES:def 16;
+end;
+
+theorem 3ort:
+  for L being non empty OrthoLattStr holds
+    L is Ortholattice iff
+    (for a, b, c being Element of L holds
+      (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a) &
+    (for a, b being Element of L holds a = a "/\" (a "\/" b)) &
+    (for a, b being Element of L holds a = a "\/" (b "/\" b`))
+proof
+  let L be non empty OrthoLattStr;
+  thus L is Ortholattice implies
+    (for a, b, c being Element of L holds
+      (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a) &
+    (for a, b being Element of L holds a = a "/\" (a "\/" b)) &
+    (for a, b being Element of L holds a = a "\/" (b "/\" b`))
+    proof
+      assume a: L is Ortholattice;
+      thus (for a, b, c being Element of L holds
+        (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a)
+      proof
+        let a,b,c be Element of L;
+        (c` "/\" b`)` "\/" a=((c`` "\/" b``)`)` "\/" a by ROBBINS1:def 23,a;
+        then (c` "/\" b`)` "\/" a=((c "\/" b``)`)` "\/" a by ROBBINS3:def 6,a;
+        then (c` "/\" b`)` "\/" a=(c "\/" b)`` "\/" a by ROBBINS3:def 6,a;
+        then (c` "/\" b`)` "\/" a=(c "\/" b) "\/" a by ROBBINS3:def 6,a;
+        then (c` "/\" b`)` "\/" a=a "\/" (c "\/" b) by a,LATTICES:def 4;
+        then (c` "/\" b`)` "\/" a=c "\/" (a "\/" b) by ROBBINS3:def 1,a;
+        hence thesis by a,LATTICES:def 4;
+      end;
+      thus (for a, b being Element of L holds a = a "/\" (a "\/" b))
+              by LATTICES:def 9,a;
+      let a,b be Element of L;
+      thus a "\/" (b "/\" b`) = a "\/" (b` "\/" b``)` by ROBBINS1:def 23,a
+       .= a "\/" (b` "\/" b)` by ROBBINS3:def 6,a
+       .= a "\/" (b "\/" b`)` by a,LATTICES:def 4
+       .= a "\/" (a "\/" a`)` by ROBBINS3:def 7,a
+       .= a "\/" (a`` "\/" a`)` by ROBBINS3:def 6,a
+       .= a "\/" (a` "/\" a) by ROBBINS1:def 23,a
+       .= (a` "/\" a)"\/"a by a,LATTICES:def 4
+       .= a by LATTICES:def 8,a;
+    end;
+    assume z1: for a, b, c being Element of L holds
+      (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a;
+    assume z2:for a, b being Element of L holds a = a "/\" (a "\/" b);
+    assume z3:for a, b being Element of L holds a = a "\/" (b "/\" b`);
+  a:for a being Element of L holds a "/\" a = a
+    proof
+      let a be Element of L;
+      thus a "/\" a = a "/\" (a "\/" (a "/\" a`)) by z3 .= a by z2;
+    end;
+  b:for a,b being Element of L holds a = (b "/\" b`)`` "\/" a
+    proof
+      let a,b be Element of L;
+      set x = b "/\" b`;
+      (a "\/" x) "\/" x = (x` "/\" x`)` "\/" a by z1; then
+      (a "\/" x) "\/" x = x`` "\/" a by a; then
+      a "\/" x = x`` "\/" a by z3;
+      hence thesis by z3;
+    end;
+  c:for a being Element of L holds a "/\" a` = (a "/\" a`)``
+    proof
+      let a be Element of L;
+      set x = a "/\" a`;
+      thus x = x`` "\/" x by b
+       .= x`` by z3;
+    end;
+  d:for a,b being Element of L holds a = (b "/\" b`) "\/" a
+    proof
+      let a,b be Element of L;
+      a = (b "/\" b`)`` "\/" a by b;
+      hence thesis by c;
+    end;
+ e: for a,b being Element of L holds a "/\" a` = b "/\" b`
+    proof
+      let a,b be Element of L;
+      a "/\" a` = (a "/\" a`) "\/" (b "/\" b`) by z3;
+      hence thesis by d;
+    end;
+  f:for a,b being Element of L holds a "\/" b = (b` "/\" a`)`
+    proof
+      let a,b be Element of L;
+      set x = a "/\" a`;
+      (x "\/" a) "\/" b = (b` "/\" a`)` "\/" x by z1;
+      hence a "\/" b = (b` "/\" a`)` "\/" x by d .= (b` "/\" a`)` by z3;
+    end;
+ k1:L is join-commutative
+    proof
+      let a,b be Element of L;
+      set x = a "/\" a`;
+      x "\/" b = (b` "/\" x`)` by f;
+      hence b "\/" a = (b` "/\" x`)` "\/" a by d
+              .= (a "\/" x) "\/" b by z1
+              .= a "\/" b by z3;
+    end;
+ k2:L is join-associative
+    proof
+      let a,b,c be Element of L;
+      set x = a "/\" a`;
+      thus (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a by z1
+             .= (b "\/" c) "\/" a by f
+             .= a "\/" (b "\/" c) by k1,LATTICES:def 4;
+    end;
+ l1:L is involutive
+    proof
+      let a be Element of L;
+   a2:a` = a` "/\" (a` "\/" a) by z2;
+      a` "\/" a = (a` "/\" a``)` by f;
+      hence a`` = (a` "/\" a``) "\/" a by f,a2
+         .= a by d;
+    end;
+ l2:L is de_Morgan
+    proof
+      let a,b be Element of L;
+      thus (a` "\/" b`)` = (b` "\/" a`)` by k1, LATTICES:def 4
+         .= (a`` "/\" b``)`` by f
+         .= a`` "/\" b`` by l1,ROBBINS3:def 6
+         .= a`` "/\" b by l1,ROBBINS3:def 6
+         .= a "/\" b by l1,ROBBINS3:def 6;
+    end;
+ l3:L is with_Top
+    proof
+      let a,b be Element of L;
+      (a` "/\" a``)` = (b` "/\" b``)` by e;
+      then (a` "/\" a``)` = b` "\/" b by f;
+      then a` "\/" a = b` "\/" b by f;
+      then a` "\/" a = b "\/" b` by k1, LATTICES:def 4;
+      hence thesis by k1, LATTICES:def 4;
+    end;
+ k3:L is join-absorbing by z2,LATTICES:def 9;
+k5: L is meet-associative
+    proof
+      let a,b,c be Element of L;
+      thus a "/\" (b "/\" c) = (a` "\/" (b "/\" c)`)` by ROBBINS1:def 23,l2
+               .= (a` "\/" (b` "\/" c`)``)` by ROBBINS1:def 23,l2
+               .= (a` "\/" (b` "\/" c`))` by l1, ROBBINS3:def 6
+               .= ((a` "\/" b`) "\/" c`)` by k2,LATTICES:def 5
+               .= ((a` "\/" b`)`` "\/" c`)` by l1, ROBBINS3:def 6
+               .= ((a "/\" b)` "\/" c`)` by ROBBINS1:def 23,l2
+               .= (a "/\" b) "/\" c by ROBBINS1:def 23,l2;
+    end;
+    L is meet-absorbing
+    proof
+      let a,b be Element of L;
+      thus (a "/\" b) "\/" b = (b` "/\" (a "/\" b)`)` by f
+           .= (b` "/\" (a` "\/" b`)``)` by ROBBINS1:def 23,l2
+           .= (b` "/\" (a` "\/" b`))` by ROBBINS3:def 6,l1
+           .= (b` "/\" (b` "\/" a`))` by LATTICES:def 4,k1
+           .= b`` by z2
+           .= b by ROBBINS3:def 6,l1;
+    end;
+    hence thesis by l1,l2,l3,k1,k2,k3,k5;
+end;
+
+theorem theo:
+  for L being involutive Lattice-like (non empty OrthoLattStr) holds
+    L is de_Morgan iff
+    for a,b being Element of L st a [= b holds b` [= a`
+proof
+  let L be involutive Lattice-like (non empty OrthoLattStr);
+  thus L is de_Morgan implies
+    for a,b being Element of L st a [= b holds b` [= a`
+  proof
+    assume a1:L is de_Morgan;
+    let a,b be Element of L;
+    assume a [= b;then
+    a` = (a"/\"b)` by LATTICES:21
+      .= (a`"\/"b`)`` by a1, ROBBINS1:def 23
+      .= b`"\/"a` by ROBBINS3:def 6;
+    then a` "/\" b` = b` by LATTICES:def 9;
+    hence thesis by LATTICES:21;
+  end;
+  assume a: for a,b being Element of L st a [= b holds b` [= a`;
+  let x,y be Element of L;
+b:x` [= (x "/\" y)` by a,LATTICES:23;
+c:y` [= (x "/\" y)` by a,LATTICES:23;
+  x` "\/" y` [= (x "/\" y)` by b,c,FILTER_0:6;
+  then (x "/\" y)`` [= (x` "\/" y`)` by a;
+  then A: x "/\" y [= (x` "\/" y`)` by ROBBINS3:def 6;
+  (x` "\/" y`)` [= x`` by a,LATTICES:22; then
+d:(x` "\/" y`)` [= x by ROBBINS3:def 6;
+  (x` "\/" y`)` [= y`` by a,LATTICES:22;
+  then e: (x` "\/" y`)` [= y by ROBBINS3:def 6;
+  (x` "\/" y`)` [= x "/\" y by d,e,FILTER_0:7;
+  hence thesis by A,LATTICES:26;
+end;
+
+begin :: Orthomodularity
+
+definition let L be non empty OrthoLattStr;
+  attr L is orthomodular means :DefModular:
+    for x, y being Element of L st
+      x [= y holds y = x "\/" (x` "/\" y);
+end;
+
+registration
+  cluster trivial orthomodular modular Boolean Ortholattice;
+  existence
+  proof
+    consider L being trivial Ortholattice;
+    L is orthomodular
+    proof
+      let x, y be Element of L;
+      thus thesis by STRUCT_0:def 10;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem twMod:
+  for L being modular Ortholattice holds
+    L is orthomodular
+  proof
+    let L be modular Ortholattice;
+    let x, y be Element of L;
+    assume x [= y;
+    then x "\/" (x` "/\" y) = (x "\/" x`) "/\" y by LATTICES:def 12;
+    then x "\/" (x` "/\" y) = (y "\/" y`) "/\" y by ROBBINS3:def 7;
+    hence thesis by LATTICES:def 9;
+  end;
+
+definition
+  mode Orthomodular_Lattice is orthomodular Ortholattice;
+end;
+
+theorem tw1:
+  for L being orthomodular meet-absorbing join-absorbing
+    join-associative meet-commutative (non empty OrthoLattStr),
+      x, y being Element of L holds
+    x "\/" (x` "/\" (x "\/" y)) = x "\/" y
+  proof
+    let L be orthomodular meet-absorbing join-absorbing join-associative
+      meet-commutative (non empty OrthoLattStr);
+    let x, y be Element of L;
+    x [= x "\/" y by LATTICES:22;
+    hence thesis by DefModular;
+  end;
+
+definition let L be non empty OrthoLattStr;
+  attr L is Orthomodular means :DefMod3:
+    for x, y being Element of L holds
+      x "\/" (x` "/\" (x "\/" y)) = x "\/" y;
+end;
+
+registration
+  cluster Orthomodular -> orthomodular
+    (meet-absorbing join-absorbing join-associative
+      meet-commutative (non empty OrthoLattStr));
+  coherence
+  proof
+    let L be meet-absorbing join-absorbing join-associative
+      meet-commutative (non empty OrthoLattStr);
+    assume B1: L is Orthomodular;
+    let x, y be Element of L;
+    assume x [= y; then
+    x "\/" y = y by LATTICES:def 3;
+    hence thesis by B1,DefMod3;
+  end;
+  cluster orthomodular -> Orthomodular
+    (meet-absorbing join-absorbing join-associative
+      meet-commutative (non empty OrthoLattStr));
+  coherence
+  proof
+    let L be meet-absorbing join-absorbing join-associative
+      meet-commutative (non empty OrthoLattStr);
+    assume L is orthomodular; then
+    for x, y being Element of L holds
+      x "\/" (x` "/\" (x "\/" y)) = x "\/" y by tw1;
+    hence thesis by DefMod3;
+  end;
+end;
+
+registration
+  cluster modular -> orthomodular Ortholattice;
+  coherence by twMod;
+end;
+
+registration
+  cluster join-Associative meet-Absorbing de_Morgan orthomodular
+      Ortholattice;
+  existence
+  proof
+    consider L being trivial Ortholattice;
+    take L;
+    thus thesis;
+  end;
+end;
+
+begin :: Examples: The Benzene Ring
+
+definition
+  func B_6 -> RelStr equals
+    InclPoset { 0, 1, 3 \ 1, 2, 3 \ 2, 3 };
+  coherence;
+end;
+
+registration
+  cluster B_6 -> non empty;
+  coherence;
+  cluster B_6 -> reflexive transitive antisymmetric;
+  coherence;
+end;
+
+L1: 3 \ 2 misses 2 by XBOOLE_1:79;
+L2: 1 c= 2 by NAT_1:40; then
+Lem1: 3 \ 2 misses 1 by L1,XBOOLE_1:63;
+
+registration
+  cluster B_6 -> with_suprema with_infima;
+  coherence
+  proof
+    set Z = {0, 1, 3 \ 1, 2, 3 \ 2, 3};
+    set N = B_6;
+AA: the carrier of N = {0, 1, 3 \ 1, 2, 3 \ 2, 3} by YELLOW_1:1;
+A1: N is with_suprema
+    proof
+      let x,y be Element of N;
+A8:   Z = the carrier of N by YELLOW_1:1;
+      thus ex z being Element of N st x <= z & y <= z &
+      for z' being Element of N st x <= z' & y <= z' holds z <= z'
+      proof
+        per cases by A8,ENUMSET1:def 4;
+        suppose x = 0 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3\1;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 2;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3\2;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 3\1;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A9:       x = 3\1 & y = 2;
+          3 in Z by ENUMSET1:def 4;
+          then reconsider z = 3 as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by A9,NAT_1:40;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let z' be Element of N;
+A10:      z' is Element of Z by YELLOW_1:1;
+          assume x <= z' & y <= z';
+          then
+A11:      3\1 c= z' & 2 c= z' by A9,YELLOW_1:3;
+A12:      now
+            assume z' = 3\1;
+            then not 0 in z' & 0 in 2 by YELLOW11:3,TARSKI:def 2,CARD_1:88;
+            hence contradiction by A11;
+          end;
+A13:      now
+            assume z' = 2;
+            then not 2 in z' & 2 in 3\1 by YELLOW11:3,TARSKI:def 2;
+            hence contradiction by A11;
+          end;
+A14:      now
+            assume z' = 3\2;
+            then not 1 in z' & 1 in 2
+              by YELLOW11:4,TARSKI:def 1,TARSKI:def 2,CARD_5:1;
+            hence contradiction by A11;
+          end;
+A00:      z' <> 1 by A11,NAT_1:40;
+          z' <> 0 by A11;
+          hence z <= z' by A00,A10,A12,A13,A14,ENUMSET1:def 4;
+        end;
+        suppose x = 1 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 1 & y = 1;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose A: x = 1 & y = 3\1;
+B:        1 c= 3 by NAT_1:40;
+          1 \/ (3\1) = 1 \/ 3 by XBOOLE_1:39 .= 3 by B,XBOOLE_1:12;
+          then reconsider z = x \/ y as Element of N
+            by ENUMSET1:def 4,AA,A;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose A9:x = 1 & y = 3\2;
+          3 in Z by ENUMSET1:def 4;
+          then reconsider z = 3 as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by A9,NAT_1:40;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let z' be Element of N;
+A10:      z' is Element of Z by YELLOW_1:1;
+          assume x <= z' & y <= z';
+          then
+A11:      3\2 c= z' & 1 c= z' by A9,YELLOW_1:3;
+A12:      now
+            assume z' = 3\1;
+            then not 0 in z' & 0 in 1
+              by YELLOW11:3,TARSKI:def 1,def 2,CARD_1:87;
+            hence contradiction by A11;
+          end;
+A13:      now
+            assume z' = 2;
+            then not 2 in z' & 2 in 3\2 by YELLOW11:4,TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+A14:      now
+            assume z' = 3\2;
+            then not 0 in z' & 0 in 1
+              by YELLOW11:4,TARSKI:def 1,CARD_5:1;
+            hence contradiction by A11;
+          end;
+A00:      now
+            assume z' = 1;
+            then not 2 in z' & 2 in 3\2 by YELLOW11:4,CARD_5:1,TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+          z' <> 0 by A11;
+          hence z <= z' by A00,A10,A12,A13,A14,ENUMSET1:def 4;
+        end;
+        suppose F1: x = 1 & y = 3;
+          1 c= 3 by NAT_1:40;
+          then reconsider z = x \/ y as Element of N by F1,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose AA: x = 1 & y = 2;
+          1 c= 2 by NAT_1:40;
+          then reconsider z = x \/ y as Element of N by AA,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 1;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose A: y = 1 & x = 3\1;
+B:        1 c= 3 by NAT_1:40;
+          1 \/ (3\1) = 1 \/ 3 by XBOOLE_1:39 .= 3 by B,XBOOLE_1:12;
+          then reconsider z = x \/ y as Element of N by A,AA,ENUMSET1:def 4;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose A9: y = 1 & x = 3\2;
+          3 in Z by ENUMSET1:def 4;
+          then reconsider z = 3 as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by A9,NAT_1:40;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let z' be Element of N;
+A10:      z' is Element of Z by YELLOW_1:1;
+          assume x <= z' & y <= z';
+          then
+A11:      3\2 c= z' & 1 c= z' by A9,YELLOW_1:3;
+A12:      now
+            assume z' = 3\1;
+            then not 0 in z' & 0 in 1
+              by YELLOW11:3,TARSKI:def 1,def 2,CARD_1:87;
+            hence contradiction by A11;
+          end;
+A13:      now
+            assume z' = 2;
+            then not 2 in z' & 2 in 3\2
+              by YELLOW11:4,TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+A14:      now
+            assume z' = 3\2;
+            then not 0 in z' & 0 in 1
+              by YELLOW11:4,TARSKI:def 1,CARD_5:1;
+            hence contradiction by A11;
+          end;
+A00:      now
+            assume z' = 1;
+            then not 2 in z' & 2 in 3\2 by YELLOW11:4,CARD_5:1,TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+          z' <> 0 by A11;
+          hence z <= z' by A00,A10,A12,A13,A14,ENUMSET1:def 4;
+        end;
+        suppose F1:y = 1 & x = 3;
+          1 c= 3 by NAT_1:40;
+          then reconsider z = x \/ y as Element of N by F1,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose F1: y = 1 & x = 2;
+          1 c= 2 by NAT_1:40; then
+          reconsider z = x \/ y as Element of N by F1,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 3\2; then
+          reconsider z = x \/ y as Element of N
+            by XBOOLE_1:12,XBOOLE_1:34,L2;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 3;
+          then reconsider z = x \/ y as Element of N by XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 2 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A16:      x = 2 & y = 3\1;
+          3 in Z by ENUMSET1:def 4;
+          then reconsider z = 3 as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by A16,NAT_1:40;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let z' be Element of N;
+A10:      z' is Element of Z by YELLOW_1:1;
+          assume x <= z' & y <= z';
+          then
+A11:      3\1 c= z' & 2 c= z' by A16,YELLOW_1:3;
+A12:      now
+            assume z' = 3\1;
+            then not 0 in z' & 0 in 2 by YELLOW11:3,TARSKI:def 2,CARD_1:88;
+            hence contradiction by A11;
+          end;
+A13:      now
+            assume z' = 2;
+            then not 2 in z' & 2 in 3\1 by YELLOW11:3,TARSKI:def 2;
+            hence contradiction by A11;
+          end;
+A14:      now
+            assume z' = 3\2;
+            then not 1 in z' & 1 in 2
+              by YELLOW11:4,TARSKI:def 1,TARSKI:def 2,CARD_5:1;
+            hence contradiction by A11;
+          end;
+A00:      z' <> 1 by A11,NAT_1:40;
+          z' <> 0 by A11;
+          hence z <= z' by A00,A10,A12,A13,A14,ENUMSET1:def 4;
+        end;
+        suppose x = 2 & y = 2;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A22:      x = 2 & y = 3\2;
+A:        2 c= 3 by NAT_1:40;
+          2 \/ (3\2) = 2 \/ 3 by XBOOLE_1:39 .= 3 by A,XBOOLE_1:12;
+          then x \/ y in Z by A22,ENUMSET1:def 4;
+          then reconsider z = x \/ y as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A23:      x = 2 & y = 3;
+          2 c= 3 by NAT_1:40;
+          then reconsider z = x \/ y as Element of N by A23,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 3\1;
+          then reconsider z = x \/ y as Element of N
+            by XBOOLE_1:12,XBOOLE_1:34,L2;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A24:      x = 3\2 & y = 2;
+A:        2 c= 3 by NAT_1:40;
+          2 \/ (3\2) = 2 \/ 3 by XBOOLE_1:39 .= 3 by XBOOLE_1:12,A;
+          then x \/ y in Z by A24,ENUMSET1:def 4;
+          then reconsider z = x \/ y as Element of N by YELLOW_1:1;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 3\2;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 3;
+          then reconsider z = x \/ y as Element of N by XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 0;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 3\1;
+          then reconsider z = x \/ y as Element of N by XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A27:      x = 3 & y = 2;
+          2 c= 3 by NAT_1:40;
+          then reconsider z = x \/ y as Element of N by A27,XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 3\2;
+          then reconsider z = x \/ y as Element of N by XBOOLE_1:12;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 3;
+          then reconsider z = x \/ y as Element of N;
+          take z;
+          x c= z & y c= z by XBOOLE_1:7;
+          hence x <= z & y <= z by YELLOW_1:3;
+          let w be Element of N;
+          assume x <= w & y <= w;
+          then x c= w & y c= w by YELLOW_1:3;
+          then x \/ y c= w by XBOOLE_1:8;
+          hence thesis by YELLOW_1:3;
+        end;
+      end;
+    end;
+    N is with_infima
+    proof
+      let x,y be Element of N;
+A8:   Z = the carrier of N by YELLOW_1:1;
+      thus ex z being Element of N st z <= x & z <= y &
+      for z' being Element of N st z' <= x & z' <= y holds z' <= z
+      proof
+        per cases by A8,ENUMSET1:def 4;
+        suppose x = 0 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3\1;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 2;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3\2;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 0 & y = 3;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 3\1;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A9:       x = 3\1 & y = 2;
+          0 in Z by ENUMSET1:def 4;
+          then reconsider z = 0 as Element of N by YELLOW_1:1;
+          take z;
+          z c= x & z c= y by XBOOLE_1:2;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let z' be Element of N;
+A10:      z' is Element of Z by YELLOW_1:1;
+          assume z' <= x & z' <= y;
+          then
+A11:      z' c= 3\1 & z' c= 2 by A9,YELLOW_1:3;
+A12:      now
+            assume z'= 3\1;
+            then 2 in z' & not 2 in 2 by YELLOW11:3,TARSKI:def 2;
+            hence contradiction by A11;
+          end;
+A13:      now
+            assume z'= 2;
+            then 0 in z' & not 0 in 3\1 by YELLOW11:3,CARD_5:1,TARSKI:def 2;
+            hence contradiction by A11;
+          end;
+A14:      now
+            assume z'= 3\2;
+            then 2 in z' & not 2 in 2 by YELLOW11:4,TARSKI:def 1;
+            hence contradiction by A11;
+          end;
+A00:      now
+            assume z'= 1;
+            then 0 in z' & not 0 in 3\1
+              by CARD_1:87,TARSKI:def 1,def 2,YELLOW11:3;
+            hence contradiction by A11;
+          end;
+          now
+            assume z'= 3;
+            then 2 in z' & not 2 in 2 by CARD_1:89,ENUMSET1:def 1;
+            hence contradiction by A11;
+          end;
+          hence z' <= z by A00,A10,A12,A13,A14,ENUMSET1:def 4;
+        end;
+        suppose x = 1 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 1 & y = 1;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 1 & y = 3\1; then
+          x misses y by XBOOLE_1:79; then
+          x /\ y = 0 by XBOOLE_0:def 7;
+          then reconsider z = x /\ y as Element of N
+            by ENUMSET1:def 4,AA;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 1 & y = 3\2; then
+          x /\ y = 0 by Lem1,XBOOLE_0:def 7;
+          then reconsider z = x /\ y as Element of N
+            by ENUMSET1:def 4,AA;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose F1: x = 1 & y = 3;
+          1 c= 3 by NAT_1:40;
+          then reconsider z = x /\ y as Element of N by F1,XBOOLE_1:28;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 1 & y = 2;
+          then reconsider z = x /\ y as Element of N
+            by ZFMISC_1:19,CARD_1:87,88;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 1;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 3\1; then
+          x misses y by XBOOLE_1:79; then
+          x /\ y = 0 by XBOOLE_0:def 7;
+          then reconsider z = x /\ y as Element of N by AA,ENUMSET1:def 4;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 3\2; then
+          x /\ y = {} by XBOOLE_0:def 7,Lem1;
+          then reconsider z = x /\ y as Element of N
+            by AA,ENUMSET1:def 4;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose F1:y = 1 & x = 3;
+          1 c= 3 by NAT_1:40;
+          then reconsider z = x /\ y as Element of N by F1,XBOOLE_1:28;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose y = 1 & x = 2; then
+          reconsider z = x /\ y as Element of N
+            by ZFMISC_1:19,CARD_1:87,88;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\1 & y = 3\2;
+          then reconsider z = x /\ y as Element of N
+            by YELLOW11:3,4,ZFMISC_1:19;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A15:      x = 3\1 & y = 3;
+          (3\1) /\ 3 = (3 /\ 3) \ 1 by XBOOLE_1:49
+            .= 3\1;
+          then reconsider z = x /\ y as Element of N by A15;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 2 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A16:      x = 2 & y = 3\1;
+          0 in Z by ENUMSET1:def 4;
+          then reconsider z = 0 as Element of N by YELLOW_1:1;
+          take z;
+          z c= x & z c= y by XBOOLE_1:2;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let z' be Element of N;
+A17:      z' is Element of Z by YELLOW_1:1;
+          assume z' <= x & z' <= y;
+          then
+A18:      z' c= 3\1 & z' c= 2 by A16,YELLOW_1:3;
+A19:      now
+            assume z'= 3\1;
+            then 2 in z' & not 2 in 2 by YELLOW11:3,TARSKI:def 2;
+            hence contradiction by A18;
+          end;
+A20:      now
+            assume z'= 2;
+            then 0 in z' & not 0 in 3\1 by YELLOW11:3,CARD_5:1,TARSKI:def 2;
+            hence contradiction by A18;
+          end;
+A21:      now
+            assume z'= 3\2;
+            then 2 in z' & not 2 in 2 by YELLOW11:4,TARSKI:def 1;
+            hence contradiction by A18;
+          end;
+A202:     now
+            assume z'= 3;
+            then 2 in z' & not 2 in 2 by CARD_1:89,ENUMSET1:def 1;
+            hence contradiction by A18;
+          end;
+          now
+            assume z'= 1;
+            then 0 in z' & not 0 in 3\1
+              by CARD_1:87,TARSKI:def 1,def 2,YELLOW11:3;
+            hence contradiction by A18;
+          end;
+          hence z' <= z by A17,A19,A20,A21,ENUMSET1:def 4,A202;
+        end;
+        suppose x = 2 & y = 2;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A22:      x = 2 & y = 3\2;
+          2 misses (3\2) by XBOOLE_1:79;
+          then 2 /\ (3\2) = 0 by XBOOLE_0:def 7;
+          then x /\ y in Z by A22,ENUMSET1:def 4;
+          then reconsider z = x /\ y as Element of N by YELLOW_1:1;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A23:      x = 2 & y = 3;
+          2 c= 3 by NAT_1:40;
+          then reconsider z = x /\ y as Element of N by A23,XBOOLE_1:28;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 3\1;
+          then reconsider z = x /\ y as Element of N
+            by YELLOW11:3,YELLOW11:4,ZFMISC_1:19;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A24:      x = 3\2 & y = 2;
+          2 misses (3\2) by XBOOLE_1:79;
+          then 2 /\ (3\2) = 0 by XBOOLE_0:def 7;
+          then x /\ y in Z by A24,ENUMSET1:def 4;
+          then reconsider z = x /\ y as Element of N by YELLOW_1:1;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3\2 & y = 3\2;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A25:      x = 3\2 & y = 3;
+          (3\2) /\ 3 = (3 /\ 3) \2 by XBOOLE_1:49
+            .= 3\2;
+          then reconsider z = x /\ y as Element of N by A25;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 0;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A26:      x = 3 & y = 3\1;
+          (3\1) /\ 3 = (3 /\ 3) \ 1 by XBOOLE_1:49
+            .= 3\1;
+          then reconsider z = x /\ y as Element of N by A26;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A27:      x = 3 & y = 2;
+          2 c= 3 by NAT_1:40;
+          then reconsider z = x /\ y as Element of N by A27,XBOOLE_1:28;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose
+A28:      x = 3 & y = 3\2;
+          (3\2) /\ 3 = (3 /\ 3) \2 by XBOOLE_1:49
+            .= 3\2;
+          then reconsider z = x /\ y as Element of N by A28;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+        suppose x = 3 & y = 3;
+          then reconsider z = x /\ y as Element of N;
+          take z;
+          z c= x & z c= y by XBOOLE_1:17;
+          hence z <= x & z <= y by YELLOW_1:3;
+          let w be Element of N;
+          assume w <= x & w <= y;
+          then w c= x & w c= y by YELLOW_1:3;
+          then w c= x /\ y by XBOOLE_1:19;
+          hence thesis by YELLOW_1:3;
+        end;
+      end;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+theorem LemBA:
+  the carrier of latt B_6 = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+  proof
+    the RelStr of B_6 = LattPOSet latt B_6 by LATTICE3:def 15;
+    hence thesis by YELLOW_1:1;
+  end;
+
+theorem CosikX1:
+  for a being set st
+    a in the carrier of latt B_6 holds a c= 3
+  proof
+    let a be set;
+    assume a in the carrier of latt B_6; then
+    a = 0 or a = 1 or a = 3 \ 1 or a = 2 or a = 3 \ 2 or a = 3
+      by ENUMSET1:def 4,LemBA;
+    hence thesis by NAT_1:40;
+  end;
+
+definition
+  func Benzene -> strict OrthoLattStr means :BenDef:
+    the LattStr of it = latt B_6 &
+    for x being Element of the carrier of it,
+        y being Subset of 3 st x = y holds
+      (the Compl of it).x = y`;
+  existence
+  proof
+    set N = latt B_6;
+    set M = the carrier of N;
+    set A = the L_join of N, B = the L_meet of N;
+    defpred P[set,set] means
+      for y being Subset of 3 st $1 = y holds $2 = y`;
+A1: for x being Element of M ex y being Element of M st P[x,y]
+    proof
+      let x be Element of M;
+      reconsider z = x as Subset of 3 by CosikX1;
+A1:   1 c= 3 & 2 c= 3 by NAT_1:40;
+      now per cases by LemBA,ENUMSET1:def 4;
+        suppose z = 0;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+        suppose z = 1;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+        suppose z = 3\1; then
+          z` = 3 /\ 1 by XBOOLE_1:48 .= 1 by A1,XBOOLE_1:28;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+        suppose z = 3\2; then
+          z` = 3 /\ 2 by XBOOLE_1:48 .= 2 by A1,XBOOLE_1:28;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+        suppose z = 2;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+        suppose z = 3; then
+          z` = 0 by XBOOLE_1:37;
+          hence z` in M by ENUMSET1:def 4,LemBA;
+        end;
+      end; then
+      reconsider y = z` as Element of M;
+      take y;
+      thus thesis;
+    end;
+    ex f being Function of M,M st
+      for x being Element of M holds P[x,f.x] from FUNCT_2:sch 3(A1); then
+    consider C being UnOp of M such that
+T1: for x being Element of M,
+        y being Subset of 3 st x = y holds C.x = y`;
+    take IT = OrthoLattStr (#M, A, B, C#);
+    thus thesis by T1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be strict OrthoLattStr such that
+A0: the LattStr of A1 = latt B_6 &
+    for x being Element of the carrier of A1,
+        y being Subset of 3 st x = y holds
+      (the Compl of A1).x = y` and
+A2: the LattStr of A2 = latt B_6 &
+    for x being Element of the carrier of A2,
+        y being Subset of 3 st x = y holds
+      (the Compl of A2).x = y`;
+    set M = the carrier of A1;
+    set f1 = the Compl of A1;
+    set f2 = the Compl of A2;
+    for x being Element of M holds f1.x = f2.x
+    proof
+      let x be Element of M;
+      reconsider y = x as Subset of 3 by A0,CosikX1;
+      thus f1.x = y` by A0 .= f2.x by A2,A0;
+    end;
+    hence thesis by A0,A2,FUNCT_2:113;
+  end;
+end;
+
+theorem LemBen:
+  the carrier of Benzene = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+  proof
+A2: the LattStr of Benzene = the LattStr of latt B_6 by BenDef;
+    LattPOSet latt B_6 = the RelStr of B_6 by LATTICE3:def 15;
+    hence thesis by A2,YELLOW_1:1;
+  end;
+
+theorem LemBen2:
+  the carrier of Benzene c= bool 3
+  proof
+    let a be set;
+    assume A1: a in the carrier of Benzene; then
+    reconsider x = a as Element of Benzene;
+A2: a = 0 or a = 1 or a = 3 \ 1 or a = 2 or a = 3 \ 2 or a = 3
+      by ENUMSET1:def 4,LemBen,A1;
+    0 c= 3 & 1 c= 3 & 2 c= 3 & 3 c= 3 by NAT_1:40;
+    hence thesis by A2;
+  end;
+
+theorem CosikX:
+  for a being set st
+    a in the carrier of Benzene holds a c= {0,1,2} by LemBen2,CARD_1:89;
+
+registration
+  cluster Benzene -> non empty;
+  coherence by LemBen;
+  cluster Benzene -> Lattice-like;
+  coherence
+  proof
+    the LattStr of Benzene = latt B_6 by BenDef;
+    hence thesis by ROBBINS3:15;
+  end;
+end;
+
+theorem Strict2:
+  LattPOSet the LattStr of Benzene = B_6
+  proof
+    LattPOSet the LattStr of Benzene = LattPOSet latt B_6 by BenDef;
+    hence thesis by LATTICE3:def 15;
+  end;
+
+theorem HiHi:
+  for a, b being Element of B_6,
+      x, y being Element of Benzene st a = x & b = y holds
+    a <= b iff x [= y
+    proof
+      let a, b be Element of B_6,
+          x, y be Element of Benzene;
+      assume
+A0:   a = x & b = y;
+      hereby assume a <= b; then
+        x% <= y% by Strict,A0,Strict2;
+        hence x [= y by LATTICE3:7;
+      end;
+      assume x [= y; then
+      x% <= y% by LATTICE3:7;
+      hence thesis by A0,Strict2,Strict;
+    end;
+
+theorem Ha0:
+  for a, b being Element of B_6,
+      x, y being Element of Benzene st a = x & b = y holds
+    a "\/" b = x "\/" y & a "/\" b = x "/\" y
+  proof
+    let a, b be Element of B_6,
+        x, y be Element of Benzene;
+    assume
+X0: a = x & b = y;
+    reconsider xy = x "\/" y as Element of B_6 by YELLOW_1:1,LemBen;
+    x [= x "\/" y & y [= x "\/" y by LATTICES:22; then
+X1: a <= xy & b <= xy by X0,HiHi;
+t1: for d being Element of B_6 st d >= a & d >= b holds xy <= d
+    proof
+      let d be Element of B_6;
+      reconsider e = d as Element of Benzene by YELLOW_1:1,LemBen;
+      assume d >= a & d >= b; then
+      x [= e & y [= e by X0,HiHi; then
+      x "\/" y [= e by FILTER_0:6;
+      hence thesis by HiHi;
+    end;
+    reconsider xy = x "/\" y as Element of B_6 by YELLOW_1:1,LemBen;
+    x "/\" y [= x & x "/\" y [= y by LATTICES:23; then
+x1: xy <= a & xy <= b by X0,HiHi;
+    for d being Element of B_6 st d <= a & d <= b holds xy >= d
+    proof
+      let d be Element of B_6;
+      reconsider e = d as Element of Benzene by YELLOW_1:1,LemBen;
+      assume d <= a & d <= b; then
+      e [= x & e [= y by X0,HiHi; then
+      e [= x "/\" y by FILTER_0:7;
+      hence thesis by HiHi;
+    end;
+    hence thesis by t1,X1,YELLOW_0:23,22,x1;
+  end;
+
+theorem Ha1:
+  for a, b being Element of B_6 st a = 3 \ 1 & b = 2 holds
+    a "\/" b = 3 &
+    a "/\" b = 0
+proof
+  let a,b be Element of B_6;
+Z1: the carrier of B_6 = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } by YELLOW_1:1;
+  assume Z: a = 3\1 & b = 2;
+  3 in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & 0 in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider t = 3, z = 0 as Element of B_6 by YELLOW_1:1;
+   a c= t & b c= t by NAT_1:40,Z; then
+A0:a <= t & b <= t by YELLOW_1:3;
+a1:for d being Element of B_6 st d >= a & d >= b holds t <= d
+   proof
+     let z' be Element of B_6;
+     assume z' >= a & z' >= b; then
+A11: 3\1 c= z' & 2 c= z' by Z,YELLOW_1:3;
+A12: now
+       assume z' = 3\1;
+       then not 0 in z' & 0 in 2 by YELLOW11:3,TARSKI:def 2,CARD_1:88;
+       hence contradiction by A11;
+     end;
+A13: now
+       assume z' = 2;
+       then not 2 in z' & 2 in 3\1 by YELLOW11:3,TARSKI:def 2;
+       hence contradiction by A11;
+     end;
+A14: now
+       assume z' = 3\2;
+       then not 1 in z' & 1 in 2
+         by YELLOW11:4,TARSKI:def 1,TARSKI:def 2,CARD_5:1;
+       hence contradiction by A11;
+     end;
+A00: z' <> 1 by A11,NAT_1:40;
+     z' <> 0 by A11;
+     hence t <= z' by A00,A12,A13,A14,ENUMSET1:def 4,Z1;
+   end;
+   z c= a & z c= b by XBOOLE_1:2; then
+Z0:z <= a & z <= b by YELLOW_1:3;
+   for d being Element of B_6 st a >= d & b >= d holds d <= z
+   proof
+     let z' be Element of B_6;
+     assume a >= z' & b >= z'; then
+A11: z' c= 3\1 & z' c= 2 by Z,YELLOW_1:3;
+A12: now
+       assume z' = 3\1;
+       then 2 in z' & not 2 in 2 by YELLOW11:3,TARSKI:def 2;
+       hence contradiction by A11;
+     end;
+A13: now
+       assume z' = 2;
+       then 0 in z' & not 0 in 3\1 by YELLOW11:3,CARD_5:1,TARSKI:def 2;
+       hence contradiction by A11;
+     end;
+A14: now
+       assume z' = 3\2;
+       then 2 in z' & not 2 in 2 by YELLOW11:4,TARSKI:def 1;
+       hence contradiction by A11;
+     end;
+A00: now
+       assume z' = 1;
+       then 0 in z' & not 0 in 3\1
+         by CARD_1:87,TARSKI:def 1,def 2,YELLOW11:3;
+       hence contradiction by A11;
+     end;
+     now
+       assume z'= 3;
+       then 2 in z' & not 2 in 2 by CARD_1:89,ENUMSET1:def 1;
+       hence contradiction by A11;
+     end;
+     hence z' <= z by A00,A12,A13,A14,ENUMSET1:def 4,Z1;
+   end;
+   hence thesis by a1,Z0,A0,YELLOW_0:23,YELLOW_0:22;
+end;
+
+theorem Ha11:
+  for a, b being Element of B_6 st a = 3 \ 2 & b = 1 holds
+    a "\/" b = 3 &
+    a "/\" b = 0
+proof
+  let a,b be Element of B_6;
+Z1: the carrier of B_6 = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } by YELLOW_1:1;
+  assume Z: a = 3\2 & b = 1;
+  3 in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & 0 in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider t = 3, z = 0 as Element of B_6 by YELLOW_1:1;
+   a c= t & b c= t by NAT_1:40,Z; then
+A0:a <= t & b <= t by YELLOW_1:3;
+a1:for d being Element of B_6 st d >= a & d >= b holds t <= d
+   proof
+     let z' be Element of B_6;
+     assume z' >= a & z' >= b; then
+A11: 3\2 c= z' & 1 c= z' by Z,YELLOW_1:3;
+A12: now
+       assume z' = 3\2;
+       then not 0 in z' & 0 in 1 by YELLOW11:4,TARSKI:def 1,CARD_1:87;
+       hence contradiction by A11;
+     end;
+A13: now
+       assume z' = 2;
+       then not 2 in z' & 2 in 3\2 by YELLOW11:4,TARSKI:def 1;
+       hence contradiction by A11;
+     end;
+A14: now
+       assume z' = 3\1;
+       then not 0 in z' & 0 in 1
+         by YELLOW11:3,TARSKI:def 1,TARSKI:def 2,CARD_5:1;
+       hence contradiction by A11;
+     end;
+A00: now
+       assume z'= 1; then
+       2 in 3\2 & not 2 in z' by YELLOW11:4,TARSKI:def 1,CARD_5:1;
+       hence contradiction by A11;
+     end;
+     z' <> 0 by A11;
+     hence t <= z' by A00,A12,A13,A14,ENUMSET1:def 4,Z1;
+   end;
+   z c= a & z c= b by XBOOLE_1:2; then
+Z0:z <= a & z <= b by YELLOW_1:3;
+   for d being Element of B_6 st a >= d & b >= d holds d <= z
+   proof
+     let z' be Element of B_6;
+     assume a >= z' & b >= z'; then
+A11: z' c= 3\2 & z' c= 1 by Z,YELLOW_1:3;
+A12: now
+       assume z'= 3\1;
+       then 2 in z' & not 2 in 1 by YELLOW11:3,TARSKI:def 2,CARD_5:1;
+       hence contradiction by A11;
+     end;
+A13: now
+       assume z'= 2;
+       then 0 in z' & not 0 in 3\2 by YELLOW11:4,CARD_5:1,TARSKI:def 2,def 1;
+       hence contradiction by A11;
+     end;
+A14: now
+       assume z'= 3\2;
+       then 2 in z' & not 2 in 1 by YELLOW11:4,TARSKI:def 1,CARD_5:1;
+       hence contradiction by A11;
+     end;
+A00: now
+       assume z'= 1;
+       then 0 in z' & not 0 in 3\2
+         by CARD_1:87,TARSKI:def 1,YELLOW11:4;
+       hence contradiction by A11;
+     end;
+     now
+       assume z'= 3;
+       then 2 in z' & not 2 in 1
+         by CARD_1:89,ENUMSET1:def 1,CARD_5:1,TARSKI:def 1;
+       hence contradiction by A11;
+     end;
+     hence z' <= z by A00,A12,A13,A14,ENUMSET1:def 4,Z1;
+   end;
+   hence thesis by a1,Z0,A0,YELLOW_0:23,YELLOW_0:22;
+end;
+
+theorem Hax:
+  for a, b being Element of B_6 st a = 3 \ 1 & b = 1 holds
+    a "\/" b = 3 &
+    a "/\" b = 0
+proof
+    let x,y be Element of B_6;
+Z1: the carrier of B_6 = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } by YELLOW_1:1;
+    assume Z: x = 3\1 & y = 1;
+    x misses y by Z,XBOOLE_1:79; then
+P:  x /\ y = 0 by XBOOLE_0:def 7;
+B:  1 c= 3 by NAT_1:40;
+C:  1 \/ (3\1) = 1 \/ 3 by XBOOLE_1:39 .= 3 by B,XBOOLE_1:12;
+    reconsider z = 3 as Element of B_6 by ENUMSET1:def 4,Z1;
+    now
+      x c= z & y c= z by Z,NAT_1:40;
+      hence x <= z & y <= z by YELLOW_1:3;
+      let w be Element of B_6;
+      assume x <= w & y <= w;
+      then x c= w & y c= w by YELLOW_1:3;
+      then x \/ y c= w by XBOOLE_1:8;
+      hence z <= w by C,Z,YELLOW_1:3;
+    end;
+    hence x "\/" y = 3 by YELLOW_0:22;
+    reconsider z = 0 as Element of B_6 by ENUMSET1:def 4,Z1;
+    now
+      z c= x & z c= y by XBOOLE_1:2;
+      hence z <= x & z <= y by YELLOW_1:3;
+      let w be Element of B_6;
+      assume w <= x & w <= y;
+      then w c= x & w c= y by YELLOW_1:3;
+      then w c= x /\ y by XBOOLE_1:19;
+      hence w <= z by P;
+    end;
+    hence thesis by YELLOW_0:23;
+end;
+
+theorem Hax2:
+  for a, b being Element of B_6 st a = 3 \ 2 & b = 2 holds
+    a "\/" b = 3 &
+    a "/\" b = 0
+proof
+    let x,y be Element of B_6;
+Z1: the carrier of B_6 = { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } by YELLOW_1:1;
+    assume Z: x = 3\2 & y = 2;
+    x misses y by Z,XBOOLE_1:79; then
+P:  x /\ y = 0 by XBOOLE_0:def 7;
+B:  2 c= 3 by NAT_1:40;
+C:  2 \/ (3\2) = 2 \/ 3 by XBOOLE_1:39 .= 3 by B,XBOOLE_1:12;
+    reconsider z = 3 as Element of B_6 by ENUMSET1:def 4,Z1;
+    now
+      x c= z & y c= z by Z,NAT_1:40;
+      hence x <= z & y <= z by YELLOW_1:3;
+      let w be Element of B_6;
+      assume x <= w & y <= w;
+      then x c= w & y c= w by YELLOW_1:3;
+      then x \/ y c= w by XBOOLE_1:8;
+      hence z <= w by YELLOW_1:3,C,Z;
+    end;
+    hence x "\/" y = 3 by YELLOW_0:22;
+    reconsider z = 0 as Element of B_6 by ENUMSET1:def 4,Z1;
+    now
+      z c= x & z c= y by XBOOLE_1:2;
+      hence z <= x & z <= y by YELLOW_1:3;
+      let w be Element of B_6;
+      assume w <= x & w <= y;
+      then w c= x & w c= y by YELLOW_1:3;
+      then w c= x /\ y by XBOOLE_1:19;
+      hence w <= z by P;
+    end;
+    hence thesis by YELLOW_0:23;
+end;
+
+theorem Haczyk1:
+  for a, b being Element of Benzene st a = 3 \ 1 & b = 2 holds
+    a "\/" b = 3 &
+    a "/\" b = 0
+proof
+  let a,b be Element of Benzene;
+  assume A: a = 3\1 & b = 2; then
+  a in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & b in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider aa = a, bb = b as Element of B_6 by YELLOW_1:1;
+  aa "\/" bb = 3 & aa "/\" bb = 0 by A,Ha1;
+  hence thesis by Ha0;
+end;
+
+theorem
+  for a, b being Element of Benzene st a = 3 \ 2 & b = 1 holds
+    a "\/" b = 3
+proof
+  let a,b be Element of Benzene;
+  assume A: a = 3 \ 2 & b = 1; then
+  a in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & b in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider aa = a, bb = b as Element of B_6 by YELLOW_1:1;
+  aa "\/" bb = 3 & aa "/\" bb = 0 by A,Ha11;
+  hence thesis by Ha0;
+end;
+
+theorem Haczyk3:
+  for a, b being Element of Benzene st a = 3 \ 1 & b = 1 holds
+    a "\/" b = 3
+proof
+  let a,b be Element of Benzene;
+  assume A: a = 3\1 & b = 1; then
+  a in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & b in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider aa = a, bb = b as Element of B_6 by YELLOW_1:1;
+  aa "\/" bb = 3 by A,Hax;
+  hence thesis by Ha0;
+end;
+
+theorem Haczyk4:
+  for a, b being Element of Benzene st a = 3 \ 2 & b = 2 holds
+    a "\/" b = 3
+proof
+  let a,b be Element of Benzene;
+  assume A: a = 3\2 & b = 2; then
+  a in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 } & b in { 0, 1, 3 \ 1, 2, 3 \ 2, 3 }
+    by ENUMSET1:def 4; then
+  reconsider aa = a, bb = b as Element of B_6 by YELLOW_1:1;
+  aa "\/" bb = 3 by A,Hax2;
+  hence thesis by Ha0;
+end;
+
+theorem twU:
+  for a being Element of Benzene holds
+    (a = 0 implies a` = 3) &
+    (a = 3 implies a` = 0) &
+    (a = 1 implies a` = 3\1) &
+    (a = 3\1 implies a` = 1) &
+    (a = 2 implies a` = 3\2) &
+    (a = 3\2 implies a` = 2)
+  proof
+    let a be Element of Benzene;
+    set B = Benzene;
+    set X = bool the carrier of B;
+B4: 1 in 3 by YELLOW11:1,ENUMSET1:def 1;
+B8: 0 in 3 by YELLOW11:1,ENUMSET1:def 1;
+    a in the carrier of B; then
+    reconsider c = a as Subset of 3 by LemBen2;
+V0: a` = c` by BenDef; then
+A2: a` = {} or a` = {0} or a` = {1} or a` = {2} or a` = {0,1} or
+    a` = {1,2} or a` = {0,2} or a` = {0,1,2} by ZFMISC_1:142,YELLOW11:1;
+V1: a` c= c` by BenDef;
+    thus a = 0 implies a` = 3 by V0;
+    thus a = 3 implies a` = 0
+    proof
+      assume AA:a = 3;
+      not 0 in c` by XBOOLE_0:def 4,AA; then
+b2:   not 0 in a` by BenDef;
+      1 in c by AA,ENUMSET1:def 1,YELLOW11:1;then
+c2:   not 1 in a` by V1,XBOOLE_0:def 4;
+      2 in c by AA,ENUMSET1:def 1,YELLOW11:1; then
+      not 2 in a` by V1,XBOOLE_0:def 4;
+      hence thesis by TARSKI:def 2,b2,c2,TARSKI:def 1,ENUMSET1:def 1,A2;
+    end;
+    thus a = 1 implies a` = 3 \ 1 by V0;
+    thus a = 3\1 implies a` = 1
+    proof
+      assume aa:a = 3\1; then
+bb:   1 in c & 2 in c by TARSKI:def 2,YELLOW11:3; then
+cc:   not 1 in a` by V1,XBOOLE_0:def 4;
+ee:   not 2 in a` by V1,XBOOLE_0:def 4,bb;
+      not 0 in c by aa,TARSKI:def 2,YELLOW11:3;
+      hence thesis by CARD_5:1,TARSKI:def 2,cc,ee,TARSKI:def 1,A2,
+        ENUMSET1:def 1,V0,XBOOLE_0:def 4,B8;
+    end;
+    thus a = 2 implies a` = 3\2 by V0;
+      assume h1: a = 3\2; then
+      2 in c by TARSKI:def 1,YELLOW11:4; then
+B3:   not 2 in a` by V1,XBOOLE_0:def 4;
+      not 1 in c by h1,TARSKI:def 1,YELLOW11:4; then
+B1:   1 in a` by V0,XBOOLE_0:def 4,B4;
+      not 0 in c by h1,TARSKI:def 1,YELLOW11:4; then
+      0 in a` by V0,XBOOLE_0:def 4,B8;
+      hence thesis by CARD_5:1,TARSKI:def 1,B1,A2,
+        ENUMSET1:def 1,B3,TARSKI:def 2;
+  end;
+
+theorem Inkl:
+  for a, b being Element of Benzene holds a [= b iff a c= b
+  proof
+    let a, b be Element of Benzene;
+    reconsider x = a, y = b as Element of B_6 by YELLOW_1:1,LemBen;
+    hereby assume a [= b; then
+      x <= y by HiHi;
+      hence a c= b by YELLOW_1:3;
+    end;
+    assume a c= b; then
+    x <= y by YELLOW_1:3;
+    hence thesis by HiHi;
+  end;
+
+theorem KL1:
+  for a, x being Element of Benzene st a = 0 holds
+    a "/\" x = a
+  proof
+    let a, x be Element of Benzene;
+    assume a = 0; then
+    a c= x by XBOOLE_1:2; then
+    a [= x by Inkl;
+    hence thesis by LATTICES:21;
+  end;
+
+theorem Bot2:
+  for a, x being Element of Benzene st a = 0 holds
+    a "\/" x = x
+  proof
+    let a, x be Element of Benzene;
+    assume a = 0; then
+    a c= x by XBOOLE_1:2; then
+    a [= x by Inkl;
+    hence thesis by LATTICES:def 3;
+  end;
+
+theorem Bot1:
+  for a, x being Element of Benzene st a = 3 holds
+    a "\/" x = a
+  proof
+    let a, x be Element of Benzene;
+    assume a = 3; then
+    x c= a by CosikX,YELLOW11:1; then
+    x [= a by Inkl;
+    hence thesis by LATTICES:def 3;
+  end;
+
+registration
+  cluster Benzene -> lower-bounded;
+  coherence
+  proof
+    reconsider B = 0 as Element of Benzene by LemBen,ENUMSET1:def 4;
+    take B;
+    for a being Element of Benzene holds
+      B "/\" a = B & a "/\" B = B by KL1;
+    hence thesis;
+  end;
+  cluster Benzene -> upper-bounded;
+  coherence
+  proof
+    reconsider B = 3 as Element of Benzene by LemBen,ENUMSET1:def 4;
+    take B;
+    for a being Element of Benzene holds
+      B "\/" a = B & a "\/" B = B by Bot1;
+    hence thesis;
+  end;
+end;
+
+theorem
+  Top Benzene = 3
+  proof
+    reconsider x = 3 as Element of Benzene by LemBen,ENUMSET1:def 4;
+    for a being Element of Benzene holds
+      x "\/" a = x & a "\/" x = x by Bot1;
+    hence thesis by LATTICES:def 17;
+  end;
+
+theorem Stan0:
+  Bottom Benzene = 0
+  proof
+    reconsider x = 0 as Element of Benzene by LemBen,ENUMSET1:def 4;
+    for a being Element of Benzene holds
+      x "/\" a = x & a "/\" x = x by KL1;
+    hence thesis by LATTICES:def 16;
+  end;
+
+registration
+  cluster Benzene -> involutive with_Top de_Morgan;
+  coherence
+  proof
+   set B = Benzene;
+     for a being Element of B holds a`` = a
+     proof
+     let a be Element of B;
+     per cases by ENUMSET1:def 4,LemBen;
+      suppose x:a = 0;then
+        a` = 3 by twU;
+        hence thesis by x,twU;
+      end;
+      suppose x:a = 1;then
+        a` = 3\1 by twU;
+        hence thesis by x,twU;
+      end;
+      suppose x:a = 3\1;then
+        a` = 1 by twU;
+        hence thesis by x,twU;
+      end;
+      suppose x:a = 2;then
+        a` = 3\2 by twU;
+        hence thesis by x,twU;
+      end;
+      suppose x:a = 3\2;then
+        a` = 2 by twU;
+        hence thesis by x,twU;
+      end;
+      suppose x:a = 3;then
+        a` = 0 by twU;
+        hence thesis by x,twU;
+      end;
+    end;
+   hence I:B is involutive by ROBBINS3:def 6;
+B:   for a being Element of B holds a "\/" a` = 3
+     proof
+     let a be Element of B;
+     per cases by ENUMSET1:def 4,LemBen;
+      suppose x:a = 0;then
+        a` = 3 by twU;
+        hence thesis by x,Bot2;
+      end;
+      suppose x:a = 1; then
+        a` = 3\1 by twU;
+        hence thesis by x,Haczyk3;
+      end;
+      suppose x:a = 3\1; then
+        a` = 1 by twU;
+        hence thesis by x,Haczyk3;
+      end;
+      suppose x:a = 2;then
+        a` = 3\2 by twU;
+        hence thesis by x,Haczyk4;
+      end;
+      suppose x:a = 3\2;then
+        a` = 2 by twU;
+        hence thesis by x,Haczyk4;
+      end;
+      suppose a = 3;
+        hence thesis by Bot1;
+      end;
+    end;
+   thus B is with_Top
+   proof
+     let a,b be Element of B;
+     a "\/" a` = 3 by B;
+     hence thesis by B;
+   end;
+   thus B is de_Morgan
+   proof
+     for a,b being Element of B holds a [= b implies b` [= a`
+     proof
+       let a,b be Element of B;
+       reconsider x = a, y = b as Subset of {0,1,2} by CosikX;
+       reconsider x, y as Subset of 3 by CARD_1:89;
+A1:    a` = x` by BenDef;
+A2:    b` = y` by BenDef;
+       assume a [= b; then
+       x c= y by Inkl; then
+       y` c= x` by SUBSET_1:31;
+       hence thesis by A1,A2,Inkl;
+     end;
+     hence thesis by theo,I;
+   end;
+  end;
+  cluster Benzene -> non orthomodular;
+  coherence
+  proof
+    not for x, y being Element of Benzene st
+      x [= y holds y = x "\/" (x` "/\" y)
+    proof
+      set x = 1; set y = 2;
+      reconsider x, y as Element of Benzene by LemBen,ENUMSET1:def 4;
+d:    x` = 3\1 by twU;
+f:    for z being set holds z in 1 implies z in 2
+      proof
+        let z be set;
+        assume z in 1;
+        then z = 0 by TARSKI:def 1,CARD_5:1;
+        hence thesis by CARD_1:88,TARSKI:def 2;
+      end;
+      1 c= 2 by f,TARSKI:def 3;then
+a:    x [= y by Inkl;
+      x "\/" (x` "/\" y) = x
+      proof
+        x` "/\" y = 0 by Haczyk1,d;
+        hence thesis by LATTICES:39,Stan0;
+      end;
+      hence thesis by a;
+    end;
+    hence thesis by DefModular;
+  end;
+end;
+
+begin :: Orthogonality
+
+definition let L be Ortholattice, a,b be Element of L;
+  pred a, b are_orthogonal means :orthogonal:
+    a [= b`;
+end;
+
+notation let L be Ortholattice, a,b be Element of L;
+  synonym a _|_ b for a, b are_orthogonal;
+end;
+
+theorem
+  a _|_ a iff a = Bottom L
+  proof
+    thus a _|_ a implies a = Bottom L
+    proof
+      assume a_|_a;
+      then a [= a` by orthogonal;
+      then a "/\" a` = a by LATTICES:21;
+      hence thesis by yy;
+    end;
+    assume a = Bottom L;
+    then a "/\" a` = a by yy;
+    then a [= a` by LATTICES:21;
+    hence thesis by orthogonal;
+  end;
+
+definition let L be Ortholattice; let a, b be Element of L;
+  redefine pred a,b are_orthogonal;
+  symmetry
+  proof
+    let a, b be Element of L;
+    assume a _|_ b;then
+    a [= b` by orthogonal;
+    then b`` [= a` by theo;
+    then b [= a` by ROBBINS3:def 6;
+    hence thesis by orthogonal;
+  end;
+end;
+
+theorem
+  a _|_ b & a _|_ c implies a _|_ (b "/\" c) & a _|_ (b "\/" c)
+proof
+  assume a: a _|_ b;
+  assume b: a _|_ c;
+c:a [= b` by orthogonal,a;
+d:a [= c` by orthogonal,b;
+  b`[= b` "\/" c` by LATTICES:22;then
+  a [= b` "\/" c` by c, LATTICES:25;then
+  a [= (b` "\/" c`)`` by ROBBINS3:def 6; then
+  a [= (b "/\" c)` by ROBBINS1:def 23;
+  hence a _|_ (b "/\" c) by orthogonal;
+  a "/\" c` [= b` "/\" c` by c,LATTICES:27;then
+  a [= b` "/\" c` by d,LATTICES:21;then
+  a [= (b`` "\/" c``)` by ROBBINS1:def 23;then
+  a [= (b "\/" c``)` by ROBBINS3:def 6;then
+  a [= (b "\/" c)` by ROBBINS3:def 6;
+  hence a _|_ (b "\/" c) by orthogonal;
+end;
+
+begin :: Orthomodularity Conditions
+
+theorem
+  L is orthomodular iff (for a,b being Element of L st
+    b` [= a & a "/\" b = Bottom L holds a = b`)
+proof
+  thus L is orthomodular implies for a,b being Element of L st
+    b` [= a & a "/\" b = Bottom L holds a = b`
+  proof
+    assume z1: L is orthomodular;
+    let x,y be Element of L;
+    assume z2: y` [= x;
+    assume z3: x "/\" y = Bottom L;
+    thus x = y` "\/" (y`` "/\" x) by z1,z2,DefModular
+     .= y` "\/" (y "/\" x) by ROBBINS3:def 6
+     .= y` by LATTICES:39,z3;
+  end;
+  assume z: for a,b being Element of L st
+    b` [= a & a "/\" b = Bottom L holds a = b`;
+  let x,y be Element of L;
+  assume x [= y;
+  then x "\/" (x` "/\" y) [= y "\/" (x` "/\" y) by FILTER_0:1;
+  then x "\/" (x` "/\" y) [= y by LATTICES:def 8;
+  then a: (x"\/"(x`"/\"y))``[=y by ROBBINS3:def 6;
+b:  (x"\/"(x`"/\"y))`"/\"y=y"/\"(x``"\/"(x`"/\"y))` by ROBBINS3:def 6
+    .= y"/\"(x``"\/"(x`"/\"y)``)` by ROBBINS3:def 6
+    .= y"/\"(x`"/\"(x`"/\"y)`) by ROBBINS1:def 23
+    .= y"/\"(x`"/\"(x``"\/"y`)``) by ROBBINS1:def 23
+    .= y"/\"(x`"/\"(x``"\/"y`)) by ROBBINS3:def 6
+    .= y"/\"(x`"/\"(x"\/"y`)) by ROBBINS3:def 6
+    .= (y"/\"x`)"/\"(x"\/"y`) by LATTICES:def 7
+    .= (y`"\/"x``)`"/\"(x"\/"y`) by ROBBINS1:def 23
+    .= (x"\/"y`)` "/\" (x "\/" y`) by ROBBINS3:def 6
+    .= Bottom L by yy;
+  (x "\/" (x` "/\" y))`` = y by a,b,z;
+  hence thesis by ROBBINS3:def 6;
+end;
+
+theorem
+  L is orthomodular iff
+    (for a,b being Element of L st a _|_ b & a "\/" b = Top L holds a = b`)
+proof
+  thus L is orthomodular implies (for a,b being Element of L st
+    a _|_ b & a "\/" b = Top L holds a = b`)
+  proof
+    assume z1: L is orthomodular;
+    let x,y be Element of L;
+    assume z2: x _|_ y;
+    assume z3: x "\/" y = Top L;
+    x [= y` by z2,orthogonal;
+    hence y` = x "\/" (x` "/\" y`) by z1,DefModular
+      .= x "\/" (x`` "\/" y``)` by ROBBINS1:def 23
+      .= x "\/" (x "\/" y``)` by ROBBINS3:def 6
+      .= x "\/" (x "\/" y)` by ROBBINS3:def 6
+      .= x "\/" (x``"\/"x`)` by yy,z3
+      .= x "\/" (x`"/\"x) by ROBBINS1:def 23
+      .= x by LATTICES:def 8;
+  end;
+  assume z: for a,b being Element of L st a _|_ b & a "\/" b = Top L holds
+    a = b`;
+  let x,y be Element of L;
+  assume x [= y;
+  then x "\/" (x` "/\" y) [= y "\/" (x` "/\" y) by FILTER_0:1;
+  then x "\/" (x` "/\" y) [= y by LATTICES:def 8;
+  then a: x "\/" (x` "/\" y) [= y`` by ROBBINS3:def 6;
+b:  y` "\/" (x "\/" (x` "/\" y)) = (y` "\/" x) "\/" (x` "/\" y)
+    by LATTICES:def 5
+   .= (y` "\/" x``) "\/" (x` "/\" y) by ROBBINS3:def 6
+   .= (y` "\/" x``)`` "\/" (x` "/\" y) by ROBBINS3:def 6
+   .= (y "/\" x`)` "\/" (x` "/\" y) by ROBBINS1:def 23
+   .= Top L by yy;
+  x "\/" (x` "/\" y) _|_ y` by a,orthogonal; then
+  x "\/" (x` "/\" y) = y`` by b,z;
+  hence thesis by ROBBINS3:def 6;
+end;
+
+theorem twDual:
+  L is orthomodular iff
+    (for a,b being Element of L st b [= a holds a "/\" (a` "\/" b) = b)
+proof
+  thus L is orthomodular implies (for a,b being Element of L st
+    b [= a holds a "/\" (a` "\/" b) = b)
+  proof
+    assume z1:L is orthomodular;
+    let a,b be Element of L;
+    assume b [= a;
+    then a` [= b` by theo;
+    then b` = a` "\/" (a`` "/\" b`) by DefModular,z1
+           .= a` "\/" (a "/\" b`) by ROBBINS3:def 6
+           .= a` "\/" (a` "\/" b``)` by ROBBINS1:def 23
+           .= a` "\/" (a` "\/" b)` by ROBBINS3:def 6
+           .= (a` "\/" (a` "\/" b)`)`` by ROBBINS3:def 6
+           .= (a "/\" (a` "\/" b))` by ROBBINS1:def 23;
+    then b``= (a "/\" (a` "\/" b)) by ROBBINS3:def 6;
+    hence thesis by ROBBINS3:def 6;
+  end;
+  assume z1:for a,b being Element of L st b [= a holds a "/\" (a` "\/" b) = b;
+  let a,b be Element of L;
+  assume a [= b;
+  then b` [= a` by theo; then
+  b` = a`"/\"(a``"\/"b`) by z1
+    .= a`"/\"(a``"\/"b`)`` by ROBBINS3:def 6
+    .= a` "/\" (a` "/\" b)` by ROBBINS1:def 23
+    .= (a`` "\/"(a` "/\" b)``)` by ROBBINS1:def 23
+    .= (a "\/" (a` "/\" b)``)` by ROBBINS3:def 6
+    .= (a "\/" (a` "/\" b))` by ROBBINS3:def 6;
+  then b`` = (a "\/" (a` "/\" b)) by ROBBINS3:def 6;
+  hence b = a "\/" (a` "/\" b) by ROBBINS3:def 6;
+end;
+
+theorem
+  L is orthomodular iff
+    (for a,b holds a "/\" (a` "\/" (a "/\" b)) = a "/\" b)
+proof
+   thus L is orthomodular implies
+     (for a,b holds a "/\" (a` "\/" (a "/\" b)) = a "/\" b)
+   proof
+     assume a:L is orthomodular;
+     let a,b;
+     a "/\" b [= a by LATTICES:23;
+     hence thesis by twDual,a;
+   end;
+   assume z1: for a,b holds a "/\" (a` "\/" (a "/\" b)) = a "/\" b;
+   for a,b holds b [= a implies a "/\" (a` "\/" b) = b
+   proof
+     let a,b;
+     assume z2: b [= a;
+     hence b = a "/\" b by LATTICES:21
+      .= a "/\" (a` "\/" (a "/\" b)) by z1
+      .= a "/\" (a` "\/" b) by LATTICES:21,z2;
+   end;
+   hence thesis by twDual;
+end;
+
+theorem dziw:
+  L is orthomodular iff
+    (for a,b being Element of L holds
+      a "\/" b = ((a "\/" b) "/\" a) "\/" ((a "\/" b) "/\" a`))
+proof
+  thus L is orthomodular implies (for a,b being Element of L holds
+    a "\/" b = ((a "\/" b) "/\" a) "\/" ((a "\/" b) "/\" a`))
+  proof
+    assume z:L is orthomodular;
+    let a,b be Element of L;
+    a "\/" b = a "\/" ((a "\/" b) "/\" a`) by tw1,z;
+    hence thesis by LATTICES:def 9;
+  end;
+  assume z1:for a,b being Element of L holds
+    a "\/" b = ((a "\/" b) "/\" a) "\/" ((a "\/" b) "/\" a`);
+  let x,y be Element of L;
+  assume z2: x [= y;
+  hence y = x "\/" y by LATTICES:def 3
+    .= ((x "\/" y) "/\" x) "\/" ((x "\/" y) "/\" x`) by z1
+    .= (y "/\" x) "\/" ((x "\/" y) "/\" x`) by z2,LATTICES:def 3
+    .= (y "/\" x) "\/" (y "/\" x`) by z2,LATTICES:def 3
+    .= x "\/" (x` "/\" y) by LATTICES:21,z2;
+end;
+
+theorem
+  L is orthomodular iff
+    (for a,b st a [= b holds
+      (a "\/" b) "/\" (b "\/" a`) = (a "/\" b) "\/" (b "/\" a`))
+proof
+  thus L is orthomodular implies (for a,b st
+    a [= b holds (a "\/" b) "/\" (b "\/" a`) = (a "/\" b) "\/" (b "/\" a`))
+  proof
+    assume z1: L is orthomodular;
+    let a,b;
+    assume z2: a [= b;
+b:  (a"/\"b)[=(a"\/"b) by FILTER_0:3,LATTICES:23;
+c:  (a"/\"b)[=(b"\/"a`) by LATTICES:23,FILTER_0:3;
+e:  (b"/\"a`)[=(b"\/"a`) by FILTER_0:3,LATTICES:23;
+f:  (b"/\"a`)[=(a"\/"b) by FILTER_0:3,LATTICES:23;
+g:  (a"/\"b)"\/" (b"/\"a`)[=(a"\/"b) by FILTER_0:6,b,f;
+    (a"/\"b)"\/" (b"/\"a`)[=(b"\/"a`) by FILTER_0:6,c,e;then
+B:  (a"/\"b)"\/" (b"/\"a`)[=(a"\/"b)"/\"(b"\/"a`) by FILTER_0:7,g;
+h:  a "\/"b = ((a"\/"b)"/\"a)"\/"((a"\/"b)"/\"a`) by z1,dziw
+          .= (b"/\"a)"\/"((a"\/"b)"/\"a`) by z2,LATTICES:def 3
+          .= (b"/\"a)"\/"(b"/\"a`) by z2,LATTICES:def 3;
+    (a"\/"b)"/\"(b"\/"a`)[= a"\/"b by LATTICES:23;
+    hence thesis by B,LATTICES:26,h;
+  end;
+  assume z1:for a,b st a[=b holds
+    (a "\/" b) "/\" (b "\/" a`) = (a "/\" b) "\/" (b "/\" a`);
+  let a,b;
+  assume z2: a [= b;
+  then (a "\/" b) "/\" (b "\/" a`) = (a "/\" b) "\/" (b "/\" a`) by z1
+    .= a "\/" (a` "/\" b) by LATTICES:21,z2;
+  hence a "\/" (a` "/\" b) = b "/\" (b "\/" a`) by LATTICES:def 3,z2
+    .= b by LATTICES:def 9;
+end;
+
+theorem
+  for L being non empty OrthoLattStr holds
+    L is Orthomodular_Lattice iff
+    (for a, b, c being Element of L holds
+      (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a) &
+    (for a, b,c being Element of L holds
+      a "\/" b = ((a "\/" b) "/\" (a "\/" c)) "\/" ((a "\/" b) "/\" a`)) &
+    (for a, b being Element of L holds a = a "\/" (b "/\" b`))
+proof
+  let L be non empty OrthoLattStr;
+  thus L is Orthomodular_Lattice implies
+    (for a, b, c being Element of L holds
+       (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a) &
+    (for a, b,c being Element of L holds
+       a "\/" b = ((a "\/" b) "/\" (a "\/" c)) "\/" ((a "\/" b) "/\" a`)) &
+    (for a, b being Element of L holds a = a "\/" (b "/\" b`))
+  proof
+    assume a:L is Orthomodular_Lattice;
+    thus (for a, b, c being Element of L holds
+      (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a) by 3ort,a;
+    thus (for a, b,c being Element of L holds
+      a "\/" b = ((a "\/" b) "/\" (a "\/" c)) "\/" ((a "\/" b) "/\" a`))
+    proof
+      let a,b,c be Element of L;
+  A:  a "\/"b [= ((a"\/"b)"/\"(a"\/"c))"\/"((a"\/"b)"/\"a`)
+      proof
+      c:a"\/"b=((a"\/"b)"/\"a)"\/"((a"\/"b)"/\"a`) by a,dziw;
+        a"/\"(a"\/"b)[=(a"\/"c)"/\"(a"\/"b) by LATTICES:27,a,LATTICES:22;then
+        (a"\/"b)"/\"a[=(a"\/"c)"/\"(a"\/"b) by a,LATTICES:def 6;then
+        (a"\/"b)"/\"a[= (a"\/"b)"/\"(a"\/"c) by a,LATTICES:def 6;then
+        ((a"\/"b)"/\"a`)"\/"((a"\/"b)"/\"a)[=
+           ((a"\/"b)"/\"a`)"\/"((a"\/"b)"/\"(a"\/"c)) by a,FILTER_0:1;then
+        ((a"\/"b)"/\"a)"\/"((a"\/"b)"/\"a`)[=
+           ((a"\/"b)"/\"a`)"\/"((a"\/"b)"/\"(a"\/"c))by a,LATTICES:def 4;
+        hence thesis by c,a,LATTICES:def 4;
+      end;
+      ((a"\/"b)"/\"(a"\/"c))"\/"((a"\/"b)"/\"a`) [= a "\/"b
+      proof
+      b:(a"\/"b)"/\"a` [= a "\/"b by LATTICES:23,a;
+        (a"\/"b)"/\"(a"\/"c) [= a "\/"b by LATTICES:23,a;
+        hence thesis by FILTER_0:6,b,a;
+      end;
+      hence thesis by A,LATTICES:26,a;
+    end;
+    thus for a, b being Element of L holds a = a "\/" (b "/\" b`) by 3ort,a;
+  end;
+  assume z1:(for a, b, c being Element of L holds
+     (a "\/" b) "\/" c = (c` "/\" b`)` "\/" a);
+  assume z2: (for a, b,c being Element of L holds
+     a "\/" b = ((a"\/"b)"/\"(a"\/"c))"\/"((a"\/"b)"/\"a`));
+  assume z3:(for a, b being Element of L holds a = a "\/" (b "/\" b`));
+A:for a, c being Element of L holds a = a "/\" (a"\/"c)
+  proof
+    let a,c be Element of L;
+    set b = a "/\" a`;
+    thus a = a "\/" b by z3
+     .= ((a"\/"b)"/\"(a"\/"c))"\/"((a"\/"b)"/\"a`) by z2
+     .= (a"/\"(a"\/"c))"\/"((a"\/"b)"/\"a`) by z3
+     .= (a"/\"(a"\/"c))"\/"(a"/\"a`) by z3
+     .= a"/\"(a"\/"c) by z3;
+  end;
+B:L is Ortholattice by z1,z3,A,3ort;
+  for a,b being Element of L holds
+    a "\/" b = ((a "\/" b) "/\" a) "\/" ((a "\/" b) "/\" a`)
+  proof
+    let a,b be Element of L;
+    set c = a "/\" a`;
+    a "\/" b = ((a "\/" b) "/\" (a "\/" c)) "\/" ((a "\/" b) "/\" a`) by z2;
+    hence thesis by z3;
+  end;
+  hence thesis by dziw,B;
+end;
+
+ reserve L for join-Associative meet-Absorbing de_Morgan orthomodular
+      Lattice-like (non empty OrthoLattStr);
+ reserve v0,v1,v2,v63,v64,v65,v66 for Element of L;
+
+registration
+  cluster -> with_Top (join-Associative meet-Absorbing
+    de_Morgan orthomodular Lattice-like (non empty OrthoLattStr));
+  coherence
+  proof
+    let L;
+    deffunc c(Element of L) = $1`;
+    for x,y be Element of L holds x "\/" c(x) = y "\/" c(y)
+    proof
+A7:   (v0 "\/" c((c(c(v0)) "\/" c((v0 "\/" v1))))) = v0 "\/" v1
+      proof
+        (c(v0) "/\" (v0 "\/" v1))=c((c(c(v0)) "\/" c((v0 "\/" v1))))
+          by ROBBINS1:def 23;
+        hence thesis by DefMod3;
+      end;
+A8:   v0 "\/" c((c(v0) "\/" c(v1))) = v0
+      proof
+        (v0 "/\" v1)=c((c(v0) "\/" c(v1))) by ROBBINS1:def 23;
+        hence thesis by ROBBINS3:def 3;
+      end;
+A11:  v64 "\/" c(c(v64)) = v64
+      proof
+        now let v64,v1;
+          (c(v64) "\/" c((c(c(v64)) "\/" c(v1)))) = c(v64) by A8;
+          hence (v64 "\/" c(c(v64))) = v64 by A8;
+        end;
+        hence thesis;
+      end;
+A15:  v64 "\/" v65 = v65 "\/" (v64 "\/" c(c(v65)))
+      proof
+        v65 "\/" c(c(v65)) = v65 by A11;
+        hence thesis by ROBBINS3:def 1;
+      end;
+A20:  v64 "\/" c((c(v64) "\/" v1)) = v64
+      proof
+        (c(v64) "\/" c((c(c(c(v64))) "\/" c((c(v64) "\/" v1))))) =
+          (c(v64) "\/" v1) by A7;
+        hence thesis by A8;
+      end;
+A24:  v64 "\/" v65 = (v65 "\/" (v64 "\/" c((c(v65) "\/" v1))))
+      proof
+        v65 "\/" c((c(v65) "\/" v1)) = v65 by A20;
+        hence thesis by ROBBINS3:def 1;
+      end;
+A33:  (v64 "\/" c((c(c(v64)) "\/" c((v1 "\/" v64)))))
+        = (v64 "\/" (v1 "\/" c(c(v64))))
+      proof
+        (v64 "\/" (v1 "\/" c(c(v64)))) = (v1 "\/" v64) by A15;
+        hence thesis by A7;
+      end;
+A35:  (v64 "\/" c((c(c(v64)) "\/" c((v1 "\/" v64))))) = v1 "\/" v64
+      proof
+        v64 "\/" (v1 "\/" v64``) = v1 "\/" v64 by A15;
+        hence thesis by A33;
+      end;
+A50:  v64 "\/" v64`` = v64```` "\/" v64
+      proof
+        v64```` "\/" v64`` = v64`` by A11;
+        hence thesis by A15;
+      end;
+A52:  v64 = v64```` "\/" v64
+      proof
+        v64 "\/" v64`` = v64 by A11;
+        hence thesis by A50;
+      end;
+A62:  v65``` "\/" v65` = v65```
+      proof
+        v65```` "\/" v65 = v65 by A52;
+        hence thesis by A20;
+      end;
+A64:  v65` = v65```
+      proof
+        v65``` "\/" v65` = v65` by A11;
+        hence thesis by A62;
+      end;
+A69:  (c(c(c(c(v65)))) "\/" c((c(c(c(c(c(c(v65)))))) "\/"
+        c(v65))))=(c(c(c(c(v65)))) "\/" v65)
+      proof
+        (c(c(c(c(v65)))) "\/" v65) = v65 by A52;
+        hence thesis by A7;
+      end;
+A71:  (c(c(v65)) "\/" c((c(c(c(c(c(c(v65)))))) "\/" c(v65))))
+        = (c(c(c(c(v65)))) "\/" v65)
+      proof
+        v65``` = v65` by A64;
+        hence thesis by A69;
+      end;
+A73:  (c(c(v65)) "\/" c((c(c(c(c(v65)))) "\/" c(v65))))
+        = c(c(c(c(v65)))) "\/" v65
+      proof
+        v65``` = v65` by A64;
+        hence thesis by A71;
+      end;
+A75:  (c(c(v65)) "\/" c((c(c(v65)) "\/" c(v65))))
+        = c(c(c(c(v65)))) "\/" v65
+      proof
+        v65``` = v65` by A64;
+        hence thesis by A73;
+      end;
+A77:  (c(c(v65)) "\/" c((c(c(v65)) "\/" c(v65)))) = (c(c(v65)) "\/" v65)
+      proof
+        v65``` = v65` by A64;
+        hence thesis by A75;
+      end;
+A79:  (c(c(v65)) "\/" c((c(c(v65)) "\/" c(v65)))) = v65
+      proof
+        v65`` "\/" v65 = v65 by A11;
+        hence thesis by A77;
+      end;
+A82:  (c(c(v0)) "\/" c((v65 "\/" c(v0)))) = v0``
+      proof
+        v0``` = v0` by A64;
+        hence thesis by A20;
+      end;
+A85:  v0`` = v0
+      proof
+        (c(c(v0)) "\/" c((c(c(v0)) "\/" c(v0)))) = v0`` by A82;
+        hence thesis by A79;
+      end;
+A87:  (v0 "\/" c((v0 "\/" c((v1 "\/" v0))))) = v1 "\/" v0
+      proof
+        v0`` = v0 by A85;
+        hence thesis by A35;
+      end;
+A89:  (c(v0) "\/" c((v0 "\/" v65))) = v0`
+      proof
+        v0`` = v0 by A85;
+        hence thesis by A20;
+      end;
+A148: (v64 "\/" (v1 "\/" c(v64))) = (c(v64) "\/" v64)
+      proof
+        (c(v64) "\/" c((c(v64) "\/" c((v1 "\/" c(v64))))))=(v1 "\/" c(v64))
+          by A87;
+        hence thesis by A24;
+      end;
+A152: ((v0 "\/" v1) "\/" c(v0))=(c((v0 "\/" v1)) "\/" (v0 "\/" v1))
+      proof
+        (v0` "\/" c((v0 "\/" v1)))=c(v0) by A89;
+        hence thesis by A148;
+      end;
+A154: (v0 "\/" (v1 "\/" c(v0))) = (c((v0 "\/" v1)) "\/" (v0 "\/" v1))
+      proof
+        ((v0 "\/" v1) "\/" c(v0)) = (v0 "\/" (v1 "\/" c(v0)))
+          by ROBBINS3:def 1;
+        hence thesis by A152;
+      end;
+A158: (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1)))))
+        = (c((v0 "\/" v1)) "\/" (v0 "\/" v1))
+      proof
+        ((v0 "\/" v1) "\/" (v65 "\/" c((v0 "\/" v1)))) =
+          (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1))))) by ROBBINS3:def 1;
+        hence thesis by A148;
+      end;
+A159: (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1)))))
+         =(v0 "\/" (v1 "\/" c(v0)))
+      proof
+        (c((v0 "\/" v1)) "\/" (v0 "\/" v1))=(v0 "\/" (v1 "\/" c(v0))) by A154;
+        hence thesis by A158;
+      end;
+A164: (c((v1 "\/" v0)) "\/" (v0 "\/" v1)) =
+        (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1)))))
+      proof
+        ((v0 "\/" v1) "\/" (v65 "\/" c((v0 "\/" v1)))) =
+          (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1))))) by ROBBINS3:def 1;
+        hence thesis by A148;
+      end;
+A166: (c((v1 "\/" v0)) "\/" (v0 "\/" v1)) = (v0 "\/" (v1 "\/" c(v0)))
+      proof
+        now let v65,v1,v0;
+          (v0 "\/" (v1 "\/" (v65 "\/" c((v0 "\/" v1))))) =
+            (v0 "\/" (v1 "\/" c(v0))) by A159;
+          hence (c((v1 "\/" v0)) "\/" (v0 "\/" v1))=(v0 "\/" (v1 "\/" c(v0)))
+            by A164;
+        end;
+        hence thesis;
+      end;
+A172: (v2 "\/" (v1 "\/" c(v2))) =
+        ((v1 "\/" v2) "\/" (v65 "\/" c((v1 "\/" v2))))
+      proof
+        (c((v1 "\/" v2)) "\/" (v2 "\/" v1))=(v2 "\/" (v1 "\/" c(v2))) by A166;
+        hence thesis by A148;
+      end;
+A174: (v2 "\/" (v1 "\/" v2`)) = v1 "\/" (v2 "\/" (v65 "\/" c((v1 "\/" v2))))
+      proof
+        ((v1 "\/" v2) "\/" (v65 "\/" c((v1 "\/" v2)))) =
+          (v1 "\/" (v2 "\/" (v65 "\/" c((v1 "\/" v2))))) by ROBBINS3:def 1;
+        hence thesis by A172;
+      end;
+A176: v2 "\/" (v1 "\/" v2`) = v1 "\/" (v2 "\/" v1`)
+      proof
+        now let v65,v2,v1;
+          (v1 "\/" (v2 "\/" (v65 "\/" c((v1 "\/" v2))))) =
+            (v1 "\/" (v2 "\/" c(v1))) by A159;
+          hence v2 "\/" (v1 "\/" c(v2)) = v1 "\/" (v2 "\/" c(v1)) by A174;
+        end;
+        hence thesis;
+      end;
+A183: v0 "\/" v0` = v1 "\/" (v0 "\/" v1`)
+      proof
+        v0 "\/" (v1 "\/" v0`) = v0 "\/" v0` by A148;
+        hence thesis by A176;
+      end;
+      let v1,v0;
+      v1 "\/" (v0 "\/" v1`) = v1 "\/" v1` by A148;
+      hence thesis by A183;
+    end;
+    hence thesis by ROBBINS3:def 7;
+  end;
+end;
+
+theorem
+  for L being non empty OrthoLattStr holds
+    L is Orthomodular_Lattice iff
+    L is join-Associative meet-Absorbing de_Morgan Orthomodular
+proof
+  let L be non empty OrthoLattStr;
+  thus L is Orthomodular_Lattice implies
+    L is join-Associative meet-Absorbing de_Morgan Orthomodular;
+    assume z1: L is join-Associative;
+    assume z2: L is meet-Absorbing;
+    assume z3: L is de_Morgan;
+    assume z4: L is Orthomodular;
+ a: for x,y being Element of L holds x = x "\/" (x` "\/" y`)`
+    proof
+      let x,y be Element of L;
+      thus x = x "\/" (x "/\" y) by z2,ROBBINS3:def 3
+       .= x "\/" (x` "\/" y`)` by z3,ROBBINS1:def 23;
+    end;
+ b: for x being Element of L holds x = x "\/" x``
+    proof
+      let x be Element of L;
+      thus x = x "\/" (x` "\/" (x`` "\/" x``)`)` by a
+       .= x "\/" (x` "\/" (x` "/\" x`))` by z3,ROBBINS1:def 23
+       .= x "\/" x`` by z2,ROBBINS3:def 3;
+    end;
+  c:for x,y being Element of L holds x "\/" y = x "\/"(x``"\/" (x "\/" y)`)`
+    proof
+      let x,y be Element of L;
+      thus x "\/" y = x "\/" (x` "/\" (x "\/" y)) by z4,DefMod3
+             .= x "\/" (x`` "\/" (x "\/" y)`)` by z3,ROBBINS1:def 23;
+    end;
+  d:for x,y being Element of L holds x "\/" (x` "\/" y)` = x
+    proof
+      let x,y be Element of L;
+      thus x "\/" (x` "\/" y)` = x "\/" (x` "\/" (x``` "\/" (x` "\/" y)`)`)`
+        by c
+                    .= x by a;
+    end;
+  e:for x,y being Element of L holds x "\/" (y "\/" x``) = y "\/" x
+    proof
+      let x,y be Element of L;
+      y "\/" x = y "\/" (x "\/" x``) by b;
+      hence thesis by z1,ROBBINS3:def 1;
+    end;
+ f: for x,y being Element of L holds x "\/" (y "\/" x`)` = x
+    proof
+      let x,y be Element of L;
+      thus x "\/" (y "\/" x`)` = x "\/" (x` "\/" (y "\/" x```))` by e
+                          .= x by d;
+    end;
+ g: for x being Element of L holds x` "\/" x` = x`
+    proof
+      let x be Element of L;
+       thus x` = x` "\/" (x "\/" x``)` by f
+         .= x` "\/" x` by b;
+    end;
+  h:for x being Element of L holds x`` "\/" x = x
+    proof
+      let x be Element of L;
+      x`` "\/" x = x "\/" (x`` "\/" x``) by e
+             .= x "\/" x`` by g;
+      hence thesis by b;
+    end;
+  i:for x being Element of L holds x```` "\/" x = x
+    proof
+      let x be Element of L;
+      x```` "\/" x = x "\/" (x```` "\/" x``) by e
+                  .= x "\/" x`` by h;
+      hence thesis by b;
+    end;
+ j: for x being Element of L holds x``` = x`
+    proof
+      let x be Element of L;
+      x``` = x``` "\/" (x```` "\/" x)` by d
+          .= x``` "\/" x` by i;
+      hence thesis by h;
+    end;
+  k:for x being Element of L holds x`` "\/" (x`` "\/" x`)` = x
+    proof
+      let x be Element of L;
+      x = x```` "\/" x by i
+       .= x```` "\/" (x`````` "\/" (x```` "\/" x)`)` by c
+       .= x```` "\/" (x`````` "\/" x`)` by i
+       .= x`` "\/" (x`````` "\/" x`)` by j
+       .= x`` "\/" (x```` "\/" x`)` by j;
+      hence thesis by j;
+    end;
+  l:for x,y being Element of L holds x`` "\/" (y "\/" x`)` = x``
+    proof
+      let x,y be Element of L;
+      x`` = x`` "\/" (y "\/" x```)` by f;
+      hence thesis by j;
+    end;
+  m:for x being Element of L holds x`` = x
+    proof
+      let x be Element of L;
+      thus x = x`` "\/" (x`` "\/" x`)` by k
+       .= x`` by l;
+    end;
+l3: L is join-absorbing
+    proof
+      let a,b be Element of L;
+      a "/\" (a "\/" b) = (a` "\/" (a "\/" b)`)` by z3,ROBBINS1:def 23
+              .= (a` "\/" (a`` "\/" b)`)` by m
+              .= a`` by d
+              .= a by m;
+      hence thesis;
+    end;
+l1: L is meet-Associative
+    proof
+      let a,b,c be Element of L;
+      thus a "/\" (b "/\" c) = a "/\" (b` "\/" c`)` by z3,ROBBINS1:def 23
+                      .= (a` "\/" (b` "\/" c`)``)` by z3,ROBBINS1:def 23
+                      .= (a` "\/" (b` "\/" c`))` by m
+                      .= (b` "\/" (a` "\/" c`))` by z1,ROBBINS3:def 1
+                      .= (b` "\/" (a` "\/" c`)``)` by m
+                      .= (b` "\/" (a "/\" c)`)` by z3,ROBBINS1:def 23
+                      .= b "/\" (a "/\" c) by z3,ROBBINS1:def 23;
+    end;
+    reconsider L' = L as Lattice-like (non empty OrthoLattStr)
+      by z2,l1,z1,l3;
+    reconsider L' as join-Associative meet-Absorbing de_Morgan Orthomodular
+      Lattice-like (non empty OrthoLattStr) by z3,z4;
+    L' is with_Top;
+    hence L is Orthomodular_Lattice by m,ROBBINS3:def 6;
+  end;

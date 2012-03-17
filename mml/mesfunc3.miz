@@ -10,16 +10,17 @@ environ
       SUPINF_2, BOOLE, ARYTM_1, TARSKI, FUNCOP_1, RVSUM_1, RLVECT_1, FUNCT_3,
       GROUP_1, PROB_2, FINSEQ_1, FINSEQ_2, INTEGRA1, MESFUNC2, MESFUNC3,
       VECTSP_1, SETWISEO, ORDINAL2, FINSOP_1, FINSET_1, SETFAM_1, CARD_4,
-      CARD_1, PROB_1, ARYTM;
+      CARD_1, PROB_1, ARYTM, XXREAL_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, NAT_1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       SETWOP_2, FINSEQ_1, SETFAM_1, FUNCOP_1, FINSOP_1, FUNCT_3, FINSET_1,
-      CARD_4, PROB_1, PROB_2, XXREAL_0, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
+      CARD_4, PROB_1, PROB_2, XXREAL_0, XXREAL_2,
+      SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
       FINSEQOP, FINSEQ_2, BINOP_1, SEQ_1, BINOP_2, RVSUM_1, EXTREAL1, MESFUNC1,
       MESFUNC2, CONVFUN1;
  constructors PARTFUN1, BINOP_1, SETWISEO, REAL_1, NAT_1, FINSEQOP, PROB_2,
       FINSOP_1, RVSUM_1, MEASURE3, MEASURE6, EXTREAL1, MESFUNC1, BINARITH,
-      MESFUNC2, CONVFUN1, SEQ_1, BINOP_2;
+      MESFUNC2, CONVFUN1, SEQ_1, BINOP_2, SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQ_1, SUPINF_2,
       MEASURE1, FINSET_1, VALUED_0;
@@ -30,7 +31,7 @@ environ
       FINSEQ_3, FUNCOP_1, FINSEQ_4, PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1,
       RELAT_1, RVSUM_1, BINOP_2, MESFUNC2, CONVFUN1, MEASURE2, FINSOP_1,
       FINSET_1, CARD_4, CARD_1, CARD_2, XREAL_1, PROB_1, XXREAL_0, XREAL_0,
-      ORDINAL1, NUMBERS, VALUED_1;
+      ORDINAL1, NUMBERS, VALUED_1, XXREAL_2;
  schemes FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, PARTFUN1, BINOP_1;
 
 begin  :: Integral of Simple Valued Function ::
@@ -315,7 +316,7 @@ A12:  Sum G1 = Sum g1 by A5,A6,A11,XXREAL_0:2;
           assume
 A13:      -infty in rng G1 or -infty in rng <*G.(k+1)*>;
           rng g1 c= REAL & rng g2 c= REAL;
-          hence contradiction by A1,A6,A13,XREAL_0:def 1;
+          hence contradiction by A1,A6,A13;
         end;
         hence thesis;
       end;
@@ -570,7 +571,7 @@ A2: (union rng F = union rng G &
 A3: M.(union rng F) = SUM(M*G) by A2,MEASURE1:def 11
     .= sup(rng Ser(M*G));
   reconsider G1 = M*G as Num of (rng(M*G) qua
-  denumerable non empty Subset of ExtREAL) by SUPINF_2:def 16;
+  countable non empty Subset of ExtREAL) by SUPINF_2:def 16;
 A4: Ser(M*G) = Ser(rng (M*G),G1) by SUPINF_2:def 21;
   then
 A5: Ser(M*G).0 = G1.0 &
@@ -619,12 +620,7 @@ A15: k < len F1 by NAT_1:13;
   end;
 A16: for k be Nat holds Q[k] from NAT_1:sch 2(A11,A12);
   defpred P[Nat] means $1 >= len F1 implies Ser(M*G).$1 = Ser(M*G).(len F1);
-A17: P[0]
-  proof
-    assume 0 >= len F1;
-    then 0 = len F1;
-    hence thesis;
-  end;
+A17: P[0];
 A18: M*G is nonnegative by MEASURE2:1;
 A19: for k be Nat st P[k] holds P[k+1]
   proof
@@ -719,13 +715,13 @@ A37: n in dom Ser(M*G) & z = Ser(M*G).n by FUNCT_1:def 5;
     hence thesis;
   end;
   then
-A38: Ser(M*G).(len F1) is majorant of rng Ser(M*G) by SUPINF_1:def 9;
+A38: Ser(M*G).(len F1) is UpperBound of rng Ser(M*G) by XXREAL_2:def 1;
   Ser(M*G).(len F1) in rng Ser(M*G)
   proof
     dom (Ser(M*G)) = NAT by FUNCT_2:def 1;
     hence thesis by FUNCT_1:12;
   end;
-  then Ser(M*G).(len F1) = sup(rng Ser(M*G)) by A38,SUPINF_1:80;
+  then Ser(M*G).(len F1) = sup(rng Ser(M*G)) by A38,XXREAL_2:55;
   hence thesis by A1,A3,A16;
 end;
 
@@ -1623,7 +1619,7 @@ A9: z = n' & n' in dom F1 &
   end;
   then
 A10: N c= dom F1 by TARSKI:def 3;
-  then reconsider N as finite set by FINSET_1:13;
+  then reconsider N as finite set;
   consider P1 be FinSequence such that
 A11: rng P1 = N & P1 is one-to-one by FINSEQ_4:73;
   set M = findom F1 \ N;
@@ -1828,16 +1824,7 @@ A51:        y1 in F.k by XBOOLE_0:def 1;
             take x = f.y1;
             for y be Element of X holds
             (y in F.k implies x = f.y) & (F.k = {} implies x=1.)
-            proof
-              let y be Element of X;
-              y in F.k implies x = f.y
-              proof
-                assume y in F.k;
-                then y in F1.k' & y1 in F1.k' by A49,A51;
-                hence thesis by A5,A49;
-              end;
-              hence thesis by A51;
-            end;
+              by A49,A51,A5;
             hence thesis;
           end;
         end;
@@ -2720,29 +2707,6 @@ A75:      for i,j be Nat st i in Seg n & j in Seg m
             defpred P[Nat,set] means ex r be FinSequence of REAL st
             dom(r) = Seg m & $2=Sum(r)
             & for j be Nat st j in dom(r) holds r.j=a.[$1,j];
-A76:        for k be Nat,y1,y2 be set st
-            k in Seg n & P[k,y1] & P[k,y2] holds y1=y2
-            proof
-              let k be Nat,y1,y2 be set such that k in Seg n and
-A77:          P[k,y1] and
-A78:          P[k,y2];
-              consider r1 be FinSequence of REAL such that
-A79:          dom(r1) = Seg m and
-A80:          y1=Sum(r1) and
-A81:          for j be Nat st j in dom(r1) holds r1.j=a.[k,j] by A77;
-              consider r2 be FinSequence of REAL such that
-A82:          dom(r2) = Seg m and
-A83:          y2=Sum(r2) and
-A84:          for j be Nat st j in dom(r2) holds r2.j=a.[k,j] by A78;
-              now
-                let j be Nat;
-                assume
-A85:            j in dom (r1);
-                hence r1.j = a.[k,j] by A81
-                  .= r2.j by A79,A82,A84,A85;
-              end;
-              hence thesis by A79,A80,A82,A83,FINSEQ_1:17;
-            end;
 A86:        for k be Nat st k in Seg n ex x be set st P[k,x]
             proof
               let k be Nat;
@@ -2794,29 +2758,6 @@ A94:      dom p=Seg n & for i be Nat st i in dom p
             defpred P[Nat,set] means ex s be FinSequence of REAL st
             dom(s) = Seg n & $2=Sum(s)
             & for i be Nat st i in dom(s) holds s.i=a.[i,$1];
-A95:        for k be Nat,y1,y2 be set st
-            k in Seg m & P[k,y1] & P[k,y2] holds y1=y2
-            proof
-              let k be Nat,y1,y2 be set such that k in Seg m and
-A96:          P[k,y1] and
-A97:          P[k,y2];
-              consider s1 be FinSequence of REAL such that
-A98:          dom(s1) = Seg n and
-A99:          y1=Sum(s1) and
-A100:          for j be Nat st j in dom s1 holds s1.j=a.[j,k] by A96;
-              consider s2 be FinSequence of REAL such that
-A101:         dom(s2) = Seg n and
-A102:         y2=Sum(s2) and
-A103:         for j be Nat st j in dom(s2) holds s2.j=a.[j,k] by A97;
-              now
-                let j be Nat;
-                assume
-A104:           j in dom (s1);
-                hence s1.j = a.[j,k] by A100
-                  .= s2.j by A98,A101,A103,A104;
-              end;
-              hence thesis by A98,A99,A101,A102,FINSEQ_1:17;
-            end;
 A105:       for k be Nat st k in Seg m ex x be set st P[k,x]
             proof
               let k be Nat;

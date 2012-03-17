@@ -99,15 +99,15 @@
 </Typ>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="51" value="false"/>
-<Adjective nr="66"/>
-<Adjective nr="91"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="67"/>
 <Adjective nr="92"/>
 <Adjective nr="93"/>
-<Adjective nr="99"/>
-<Adjective nr="121"/>
+<Adjective nr="94"/>
+<Adjective nr="100"/>
 <Adjective nr="122"/>
+<Adjective nr="123"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -116,10 +116,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="46" value="false"/>
-<Adjective nr="51" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="122"/>
+<Adjective nr="47" value="false"/>
+<Adjective nr="52" value="false"/>
+<Adjective nr="90"/>
+<Adjective nr="123"/>
 </Cluster>
 </FCluster>
 </Registrations>

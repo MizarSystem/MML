@@ -28,16 +28,16 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
-<Func kind="K" nr="89"/>
-<Func kind="K" nr="86"/>
-</Adjective>
 <Adjective nr="9">
 <Func kind="K" nr="89"/>
 <Func kind="K" nr="86"/>
 </Adjective>
-<Adjective nr="19"/>
-<Adjective nr="25"/>
+<Adjective nr="10">
+<Func kind="K" nr="89"/>
+<Func kind="K" nr="86"/>
+</Adjective>
+<Adjective nr="20"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -23,11 +23,10 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="GRAPH_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_2"/>
@@ -40,6 +39,7 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINARITH"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="SCMNORM"/>
 <ArticleID name="SCMPDS_4"/>
@@ -49,16 +49,16 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="27"/>
-<Adjective nr="88">
+<Adjective nr="28"/>
+<Adjective nr="84">
 <Func kind="K" nr="260"/>
 <Func kind="K" nr="14">
 <Func kind="K" nr="45"/>
 </Func>
 <Func kind="K" nr="273"/>
 </Adjective>
-<Adjective nr="96"/>
-<Adjective nr="100"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 <Func kind="K" nr="135">
 <Func kind="U" nr="10">
@@ -72,16 +72,16 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="27"/>
-<Adjective nr="88">
+<Adjective nr="28"/>
+<Adjective nr="84">
 <Func kind="K" nr="260"/>
 <Func kind="K" nr="14">
 <Func kind="K" nr="45"/>
 </Func>
 <Func kind="K" nr="273"/>
 </Adjective>
-<Adjective nr="96"/>
-<Adjective nr="100"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 <Func kind="K" nr="135">
 <Func kind="U" nr="10">
@@ -98,7 +98,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -109,16 +109,16 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
-<Adjective nr="88">
+<Adjective nr="28"/>
+<Adjective nr="84">
 <Func kind="K" nr="260"/>
 <Func kind="K" nr="14">
 <Func kind="K" nr="45"/>
 </Func>
 <Func kind="K" nr="273"/>
 </Adjective>
-<Adjective nr="96"/>
-<Adjective nr="100"/>
+<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

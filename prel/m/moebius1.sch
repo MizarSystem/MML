@@ -32,8 +32,8 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="F" nr="2"/>
 </Adjective>

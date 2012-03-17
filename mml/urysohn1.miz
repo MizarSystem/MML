@@ -21,42 +21,10 @@ environ
  theorems TARSKI, SUBSET_1, FUNCT_1, NAT_1, FINSEQ_1, ZFMISC_1, PRE_TOPC,
       TOPS_1, ENUMSET1, REAL_1, SQUARE_1, COMPTS_1, NEWTON, REAL_2, CONNSP_2,
       XBOOLE_0, XBOOLE_1, SCHEME1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1,
-      LIMFUNC1;
+      LIMFUNC1, XXREAL_1;
  schemes SUBSET_1, REAL_1, NAT_1, FINSEQ_1, FUNCT_2;
 
 begin
-
-theorem
-  for x being Real holds x in halfline 0 iff x < 0
-proof
-  let x be Real;
-  hereby
-    assume x in halfline 0;
-    then x in {r where r is Real : r < 0} by LIMFUNC1:151;
-    then consider r being Real such that
-A1: x = r & r < 0;
-    thus x < 0 by A1;
-  end;
-  assume x < 0;
-  then x in {r where r is Real : r < 0};
-  hence thesis by LIMFUNC1:151;
-end;
-
-theorem
-  for x being Real holds x in right_open_halfline 1 iff 1 < x
-proof
-  let x be Real;
-  hereby
-    assume x in right_open_halfline 1;
-    then x in {r where r is Real : r > 1} by LIMFUNC1:152;
-    then consider r being Real such that
-A1: x = r & r > 1;
-    thus x > 1 by A1;
-  end;
-  assume x > 1;
-  then x in {r where r is Real : r > 1};
-  hence thesis by LIMFUNC1:152;
-end;
 
 definition
   canceled 2;
@@ -168,7 +136,7 @@ definition
   end;
 end;
 
-canceled 2;
+canceled 4;
 
 theorem Th5:
   for n being Element of NAT holds for x being Real st x in dyadic(n) holds
@@ -404,13 +372,7 @@ end;
 
 registration
   cluster DOM -> non empty;
-  coherence
-  proof
-    consider x being set such that
-A1: x in DYADIC by XBOOLE_0:def 1;
-    x in (halfline 0) \/ DYADIC by A1,XBOOLE_0:def 2;
-    hence thesis by XBOOLE_0:def 2;
-  end;
+  coherence;
 end;
 
 theorem Th11:
@@ -425,10 +387,9 @@ A1: x in dyadic(n);
     reconsider x as Real by A1;
     consider i being Element of NAT such that
 A2: 0 <= i & i <= (2|^n) & x = i/(2|^n) by A1,Def3;
-A3: 0*2 <= i*2 by A2,XREAL_1:66;
 A4: 2|^(n+1) = (2|^n)*2 by NEWTON:11;
     take i*2;
-    thus thesis by A2,A3,A4,XCMPLX_1:92,XREAL_1:66;
+    thus thesis by A2,A4,XCMPLX_1:92,XREAL_1:66;
   end;
   hence thesis by Def3;
 end;
@@ -1005,12 +966,11 @@ A20: for p being Point of T holds {p} is closed;
     let p,q be Point of T;
     assume
 A21: not p = q;
-A22: {p}` = [#](T) \ {p} & {q}` = [#](T) \ {q};
     consider V,W being Subset of T such that
 A23: V = {p}`& W = {q}`;
     {p} is closed & {q} is closed by A20;
     then
-A24: V is open & W is open by A22,A23,PRE_TOPC:def 6;
+A24: V is open & W is open by A23;
     p in W & not q in W & q in V & not p in V
     proof
 A25:  not p in {q} & not q in {p} by A21,TARSKI:def 1;
@@ -1069,7 +1029,7 @@ A9:   C is open & Q is open & W c= C & V c= Q & C misses Q
       proof
         consider x being set such that
 A10:    x in W by A5,XBOOLE_0:def 1;
-A11:    Q` is closed by A9,TOPS_1:30;
+A11:    Q` is closed by A9;
         consider Q0,C0 being Subset of [#](T) such that
 A12:    Q0 = Q & C0 = C;
         C0 c= Q0` by A9,A12,SUBSET_1:43;
@@ -1129,7 +1089,7 @@ A4:         W is open & V is open &
               W /\ V = {} by A4,XBOOLE_0:def 7;
               then V /\ Cl(W) c= Cl({} T) by A4,TOPS_1:40;
               then V /\ Cl(W) c= {} by PRE_TOPC:52;
-              then V /\ Cl(W) = {} by XBOOLE_1:3;
+              then V /\ Cl(W) = {};
               then V misses Cl(W) by XBOOLE_0:def 7;
               then
 A5:           P misses Cl(W) by A4,XBOOLE_1:63;
@@ -1168,8 +1128,7 @@ A8:   P <> {} & P is closed & p in P`;
       proof
         consider A being Subset of T such that
 A9:     A = P`;
-        A is open by A8,A9,TOPS_1:29;
-        then consider B being open Subset of T such that
+        consider B being open Subset of T such that
 A10:    p in B & Cl(B) c= A by A7,A8,A9;
         consider C being Subset of T such that
 A11:    C = [#](T) \ Cl(B);
@@ -1239,7 +1198,7 @@ A10:  B is open & Q is open & W c= B & V c= Q & B misses Q
       proof
         consider x being set such that
 A11:    x in W by A5,XBOOLE_0:def 1;
-A12:    Q` is closed by A10,TOPS_1:30;
+A12:    Q` is closed by A10;
         B c= Q` by A10,SUBSET_1:43;
         then Cl(B) c= Q` by A12,TOPS_1:31;
         then Cl(B) misses Q by SUBSET_1:43;
@@ -1294,7 +1253,7 @@ A9: C is open & Q is open & B c= C & V c= Q & C misses Q
     by A1,A3,A6,A7,COMPTS_1:def 6;
     take C;
     thus C is open & B c= C by A9;
-A10: Q` is closed by A9,TOPS_1:30;
+A10: Q` is closed by A9;
     C c= Q` by A9,SUBSET_1:43;
     then Cl(C) c= Q` by A10,TOPS_1:31;
     then V c= Q & Q misses Cl(C) by A9,SUBSET_1:43;

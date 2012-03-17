@@ -53,7 +53,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="109"/>
 </Cluster>
 <Func kind="U" nr="9">
 <Func kind="K" nr="282"/>
@@ -71,8 +71,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
-<Adjective nr="86">
+<Adjective nr="32"/>
+<Adjective nr="88">
 <Func kind="K" nr="282"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="86"/>
@@ -82,15 +82,15 @@
 </Func>
 <Func kind="K" nr="298"/>
 </Adjective>
-<Adjective nr="100"/>
 <Adjective nr="102"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMISORT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="33">
 <Cluster>
-<Adjective nr="103" value="false"/>
+<Adjective nr="105" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="33">
@@ -102,7 +102,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 </Registrations>

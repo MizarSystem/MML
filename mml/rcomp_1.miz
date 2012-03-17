@@ -11,16 +11,17 @@ environ
       SQUARE_1, SEQ_4, RCOMP_1, FUNCOP_1, FRECHET2, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_2, FUNCOP_1, SEQ_1, SEQ_2,
-      SEQM_3, SEQ_4, XXREAL_0, XXREAL_1, RECDEF_1;
+      SEQM_3, SEQ_4, XXREAL_0, XXREAL_1, XXREAL_2, RECDEF_1;
  constructors FUNCOP_1, REAL_1, NAT_1, XXREAL_1, COMPLEX1, PARTFUN1, SEQ_1,
-      SEQ_2, SEQM_3, SEQ_4, RECDEF_1;
+      SEQ_2, SEQM_3, SEQ_4, RECDEF_1, XXREAL_2, MEMBERED;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, SEQM_3, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2, XBOOLE_0, SUBSET_1, XXREAL_1;
  theorems TARSKI, SUBSET_1, REAL_1, NAT_1, FUNCT_1, FUNCT_2, SEQ_2, SEQM_3,
       SEQ_4, ABSVALUE, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, NUMBERS, XXREAL_1;
+      XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, NUMBERS, XXREAL_1,
+      XXREAL_2, MEMBERED;
  schemes REAL_1, FUNCT_2, SEQ_1;
 
 begin
@@ -31,79 +32,6 @@ reserve s,g,g1,g2,r,p,q,t for real number;
 reserve s1,s2,s3 for Real_Sequence;
 reserve Nseq for increasing Seq_of_Nat;
 reserve X,Y,Y1 for Subset of REAL;
-
-scheme RealSeqChoice { P[set,set] }: ex s1 being Function of NAT, REAL st
-  for n being Element of NAT holds P[n,s1.n]
-provided
-A1: for n being Element of NAT ex r being real number st P[n,r]
-proof
-A2: for t being Element of NAT ex ff being Element of REAL st P[t,ff]
-  proof
-    let t be Element of NAT;
-    consider ff being real number such that
-A3: P[t,ff] by A1;
-    reconsider ff as Real by XREAL_0:def 1;
-    P[t,ff] by A3;
-    hence thesis;
-  end;
-  consider f being Function of NAT,REAL such that
-A4: for t being Element of NAT holds P[t,f.t] from FUNCT_2:sch 3(A2);
-  take f;
-  let n;
-  thus thesis by A4;
-end;
-
-theorem Th1:
-  (for r holds r in X implies r in Y) implies X c= Y
-proof
-  assume
-A1: for r holds r in X implies r in Y;
-  now
-    let x;
-    assume
-A2: x in X;
-    then x is Real;
-    hence x in Y by A1,A2;
-  end;
-  hence X c= Y by TARSKI:def 3;
-end;
-
-canceled;
-
-theorem Th3:
-  Y1 c= Y & Y is bounded_below implies Y1 is bounded_below
-proof
-  assume
-A1: Y1 c= Y & Y is bounded_below;
-  then consider p such that
-A2: for r st r in Y holds p<=r by SEQ_4:def 2;
-  for r st r in Y1 holds p<=r by A1,A2;
-  hence thesis by SEQ_4:def 2;
-end;
-
-theorem Th4:
-  Y1 c= Y & Y is bounded_above implies Y1 is bounded_above
-proof
-  assume
-A1: Y1 c= Y & Y is bounded_above;
-  then consider p such that
-A2: for r st r in Y holds r<=p by SEQ_4:def 1;
-  for r st r in Y1 holds r<=p by A1,A2;
-  hence thesis by SEQ_4:def 1;
-end;
-
-theorem
-  Y1 c= Y & Y is bounded implies Y1 is bounded
-proof
-  assume
-A1: Y1 c= Y & Y is bounded;
-  then
-A2: Y is bounded_above bounded_below by SEQ_4:def 3;
-  then
-A3: Y1 is bounded_above by A1,Th4;
-  Y1 is bounded_below by A1,A2,Th3;
-  hence thesis by A3,SEQ_4:def 3;
-end;
 
 reserve a for Element of ExtREAL;
 
@@ -190,7 +118,7 @@ A3:   x = r & g < r & r<s;
   end;
 end;
 
-canceled 2;
+canceled 7;
 
 theorem Th8:
   r in ].p-g,p+g.[ iff abs(r-p)<g
@@ -268,21 +196,7 @@ A2: 1 /2*(2*r)>1/2*(2*p) by XREAL_1:70;
   hence thesis by A2;
 end;
 
-theorem
-  for g,s st g<=s holds [.g,s.] = ].g,s.[ \/ {g,s} by XXREAL_1:128;
-
-theorem
-  p <= g implies ].g,p.[ = {} by XXREAL_1:28;
-
-theorem
-  p < g implies [.g,p.] = {} by XXREAL_1:29;
-
-theorem
-  [.p,p.] = {p} by XXREAL_1:17;
-
-theorem
-  (p<g implies ].p,g.[ <> {}) & (p<=g implies p in [.p,g.] & g in [.p,g.]) &
-  ].p,g.[ c= [.p,g.] by XXREAL_1:1,25,33;
+canceled 5;
 
 theorem
   r in [.p,g.] & s in [.p,g.] implies [.r,s.] c= [.p,g.]
@@ -318,9 +232,6 @@ A5: p<q by A2,A4,XXREAL_0:2;
   hence thesis by A4,A5;
 end;
 
-theorem
-  p<=g implies [.p,g.] = [.p,g.] \/ [.g,p.] by XXREAL_1:222;
-
 definition
   let X;
   attr X is compact means
@@ -343,7 +254,7 @@ definition
   X` is closed;
 end;
 
-canceled 3;
+canceled 4;
 
 theorem Th22:
   for s1 st rng s1 c= [.s,g.] holds s1 is bounded
@@ -491,7 +402,7 @@ A4:     r is Real by XREAL_0:def 1;
         then r<=p or q<=r by A4;
         hence r in X by A1,A4;
       end;
-      hence thesis by Th1;
+      hence thesis by MEMBERED:def 9;
     end;
     now
       let r;
@@ -502,7 +413,7 @@ A6:   r is Real by XREAL_0:def 1;
       then not r in ].p,q.[;
       hence r in ].p,q.[` by A6,XBOOLE_0:def 4;
     end;
-    hence thesis by Th1;
+    hence thesis by MEMBERED:def 9;
   end;
   now
     let s1 such that
@@ -610,7 +521,7 @@ proof
 A1: X is compact;
   assume
 A2: not X is bounded;
-  now per cases by A2,SEQ_4:def 3;
+  now per cases by A2,XXREAL_2:def 11;
     suppose
 A3:   not X is bounded_above;
       defpred P[Element of NAT,Element of REAL] means
@@ -734,7 +645,7 @@ A2: rng s1 c= X;
     s1 is bounded
     proof
       thus s1 is bounded_above
-      proof X is bounded_above by A1,SEQ_4:def 3;
+      proof X is bounded_above by A1,XXREAL_2:def 11;
         then consider p such that
 A3:     for q st q in X holds q<=p by SEQ_4:def 1;
         take r = p+1;
@@ -758,7 +669,7 @@ A5:       t<=p by A2,A3;
         hence thesis;
       end;
       thus s1 is bounded_below
-      proof X is bounded_below by A1,SEQ_4:def 3;
+      proof X is bounded_below by A1,XXREAL_2:def 11;
         then consider p such that
 A6:     for q st q in X holds p<=q by SEQ_4:def 2;
         take r = p - 1;
@@ -942,8 +853,9 @@ proof
   let X such that
 A1: X<>{} and
 A2: X is compact;
-  X is bounded closed by A2,Th26,Th28;
-  then X is bounded_above & X is bounded_below & X is closed by SEQ_4:def 3;
+  X is bounded closed by A2,Th28;
+  then X is bounded_above & X is bounded_below & X is closed
+   by XXREAL_2:def 11;
   hence thesis by A1,Th30,Th31;
 end;
 
@@ -963,9 +875,9 @@ A3: X={};
   end;
   suppose
 A4: X<>{};
-    X is bounded closed by A1,Th26,Th28;
+    X is bounded closed by A1,Th28;
     then
-A5: X is bounded_below & X is bounded_above & X is closed by SEQ_4:def 3;
+A5: X is bounded_below & X is bounded_above & X is closed by XXREAL_2:def 11;
     then
 A6: upper_bound X in X by A4,Th30;
 A7: lower_bound X in X by A4,A5,Th31;
@@ -1113,7 +1025,7 @@ A6: x=s & r-g<s & s<r+g by A4,A5;
   end;
   defpred P[Element of NAT,real number] means
   $2 in ].r - 1/($1+1),r + 1/($1+1) .[ & $2 in X`;
-A7: for n ex s st P[n,s]
+A7: for n ex s being Real st P[n,s]
   proof
     let n;
     0 < 1 * (n + 1)" by XREAL_1:124;
@@ -1130,7 +1042,7 @@ A8: for n holds s1.n = F(n) from SEQ_1:sch 1;
   consider s2 be Real_Sequence such that
 A9: for n holds s2.n = G(n) from SEQ_1:sch 1;
   consider s3 such that
-A10: for n holds P[n,s3.n] from RealSeqChoice(A7);
+A10: for n holds P[n,s3.n] from FUNCT_2:sch 3(A7);
 A11: now
     let s;
     assume 0<s;
@@ -1224,7 +1136,7 @@ A2: 0<g & N = ].r-g,r+g.[ by Def7;
   thus thesis by A1,A2;
 end;
 
-theorem Th41:
+theorem
   (for r st r in X holds ex N be Neighbourhood of r st N c= X)
   implies X is open
 proof
@@ -1254,9 +1166,7 @@ A8: s1.n in {s where s is Real: (lim s1) - g < s & s <(lim s1) + g};
   hence contradiction by A3,A4,A6,A8,XBOOLE_0:def 4;
 end;
 
-theorem
-  (for r st r in X holds ex N be Neighbourhood of r st N c= X) iff X is open
-  by Th39,Th41;
+canceled;
 
 theorem Th43:
   X is open bounded_above implies not upper_bound X in X
@@ -1318,7 +1228,7 @@ A3: X={};
   end;
   suppose
 A4: X<>{};
-A5: X is bounded_below & X is bounded_above by A1,SEQ_4:def 3;
+A5: X is bounded_below & X is bounded_above by A1,XXREAL_2:def 11;
     take p=lower_bound X, g=upper_bound X;
     now
       let r be Real;
@@ -1352,43 +1262,4 @@ A12:  r in {s where s is Real: g1<=s & s<=g2} by A10,A11;
     hence X = ].p,g.[ by SUBSET_1:8;
   end;
 end;
-
-begin :: Addenda
-
-:: from JORDAN6, 2005.02.05, A.T.
-
-theorem
-  for r,s being real number holds ].r,s.[ misses {r,s} by XXREAL_1:86;
-
-theorem
-  for a,b,c being real number holds c in ].a,b.[ iff a < c & c < b
-  by XXREAL_1:4;
-
-:: from TOPREAL5, 2005.02.05, A.T.
-
-theorem
-
-for a,b,c being real number holds c in [.a,b.] iff a<=c & c <=b by XXREAL_1:1;
-
-:: from TREAL_1, 2006.07.19, A.T.
-
-reserve a,b,c,d for real number;
-
-theorem
-  a <= c & d <= b implies [.c,d.] c= [.a,b.] by XXREAL_1:34;
-
-theorem
-
-a <= c & b <= d & c <= b implies [.a,b.] \/ [.c,d.] = [.a,d.] by XXREAL_1:174;
-
-theorem
-  a <= c & b <= d & c <= b implies [.a,b.] /\ [.c,d.] = [.c,b.]
-  by XXREAL_1:143;
-
-:: from JGRAPH_3, 2006.07.25, A.T.
-
-reserve x,y,z,u for real number;
-
-theorem
-  x<=y & z<=u implies ].y,z.[ c= ].x,u.[ by XXREAL_1:46;
 

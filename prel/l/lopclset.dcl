@@ -25,9 +25,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
@@ -41,6 +40,7 @@
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LOPCLSET" nr="2">
@@ -59,15 +59,15 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LOPCLSET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -82,10 +82,10 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="47"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -100,10 +100,10 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="47"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -118,10 +118,10 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="47"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -129,9 +129,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="19" value="false"/>
 <Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -19,7 +19,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -31,6 +30,7 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="MSSCYC_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GRAPH_3"/>
 </Signature>
@@ -50,8 +50,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
+<Adjective nr="20"/>
+<Adjective nr="24"/>
 <Adjective nr="77">
 <LocusVar nr="1"/>
 </Adjective>
@@ -62,13 +62,13 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="39"/>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="39"/>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,7 +104,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPH_3" nr="3">
@@ -131,7 +131,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPH_3" nr="4">
@@ -158,7 +158,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPH_3" nr="5">
@@ -265,7 +265,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPH_3" nr="9">
@@ -288,7 +288,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="GRAPH_3" nr="10">

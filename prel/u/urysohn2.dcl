@@ -15,15 +15,13 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="MEASURE5"/>
@@ -48,10 +46,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="47"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="62"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -59,12 +57,12 @@
 <Func kind="K" nr="62"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="355">
+<Func kind="K" nr="338">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 </Registrations>

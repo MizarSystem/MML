@@ -28,7 +28,8 @@ environ
       CONNSP_1, COMPTS_1, TBSP_1, TSEP_1, TEX_2, MONOID_0, TOPREAL1, TREAL_1,
       TOPREAL4, SPPOL_1, JORDAN1, SPPOL_2, CONNSP_3, WAYBEL_3, JORDAN5C,
       JORDAN6, TOPGRP_1, JORDAN2C, TOPREAL6, JCT_MISC, BORSUK_4, JORDAN21,
-      JGRAPH_6, TOPREAL9, TOPREALA, PARTFUN3, BROUWER, JORDAN24, SEQ_1;
+      JGRAPH_6, TOPREAL9, TOPREALA, PARTFUN3, BROUWER, JORDAN24, SEQ_1,
+      XXREAL_2, BORSUK_6;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, REALSET1, STRUCT_0,
       PRE_TOPC, TOPS_1, COMPTS_1, METRIC_1, BORSUK_1, TEX_2, TEX_4, MONOID_0,
@@ -53,7 +54,7 @@ environ
       ENUMSET1, METRIC_1, PCOMPS_1, TOPREALB, ABSVALUE, TEX_2, MCART_1,
       BORSUK_5, METRIC_6, COMPLEX1, JGRAPH_2, SEQ_2, TIETZE, CONNSP_2, GRCAT_1,
       FUNCT_4, TREAL_1, JGRAPH_1, PARTFUN3, RFUNCT_1, YELLOW12, XCMPLX_0,
-      FUNCT_3, JORDAN5B, TOPALG_5, GOBOARD6, XXREAL_0, VALUED_1;
+      FUNCT_3, JORDAN5B, TOPALG_5, GOBOARD6, XXREAL_0, VALUED_1, XXREAL_1;
  schemes FUNCT_2;
 
 begin :: Preliminaries
@@ -272,13 +273,9 @@ A2: r <= p2`1;
   set l = (r-a) / (b-a);
   set k = (1-l)*p1+l*p2;
 A3: a-a <= r-a by A1,XREAL_1:11;
-  a <= b by A1,A2,XXREAL_0:2;
-  then b-b <= b-a by XREAL_1:12;
-  then
-A4: 0 <= l by A3,XREAL_1:138;
   r-a <= b-a by A2,XREAL_1:11;
   then
-A5: k in LSeg(p1,p2) by A3,A4,SPPOL_1:22,XREAL_1:185;
+A5: k in LSeg(p1,p2) by A3,SPPOL_1:22,XREAL_1:185;
   per cases;
   suppose a <> b;
     then
@@ -308,13 +305,9 @@ A2: r <= p2`2;
   set l = (r-a) / (b-a);
   set k = (1-l)*p1+l*p2;
 A3: a-a <= r-a by A1,XREAL_1:11;
-  a <= b by A1,A2,XXREAL_0:2;
-  then b-b <= b-a by XREAL_1:12;
-  then
-A4: 0 <= l by A3,XREAL_1:138;
   r-a <= b-a by A2,XREAL_1:11;
   then
-A5: k in LSeg(p1,p2) by A3,A4,SPPOL_1:22,XREAL_1:185;
+A5: k in LSeg(p1,p2) by A3,SPPOL_1:22,XREAL_1:185;
   per cases;
   suppose a <> b;
     then
@@ -334,21 +327,12 @@ A8: p1 in LSeg(p1,p2) by TOPREAL1:6;
   end;
 end;
 
-Lm4: now
-  let n;
-  let A be Subset of TOP-REAL n such that
-A1: A is empty;
-  consider p being Point of TOP-REAL n;
-  A c= {p} by A1,XBOOLE_1:2;
-  hence A is Bounded by JORDAN2C:16;
-end;
-
 registration
   let n;
   cluster empty -> Bounded Subset of TOP-REAL n;
-  coherence by Lm4;
+  coherence;
   cluster non Bounded -> non empty Subset of TOP-REAL n;
-  coherence by Lm4;
+  coherence;
 end;
 
 registration
@@ -410,8 +394,6 @@ A5: x`2 < p`2 by A4,REAL_1:def 5;
   hence thesis by A5,JORDAN21:42;
 end;
 
-Lm5: for A being non empty convex Subset of T2 holds A is connected;
-
 theorem Th12:
   for C being compact Subset of TOP-REAL 2 holds
   north_halfline UMP C \ {UMP C} c= UBD C
@@ -420,7 +402,7 @@ proof
   set A = north_halfline UMP C \ {UMP C};
   reconsider A as non Bounded Subset of T2 by JORDAN2C:130,TOPREAL6:99;
   A is convex by JORDAN21:6;
-  then A is connected by Lm5;
+  then A is connected;
   hence thesis by Th10,JORDAN2C:133;
 end;
 
@@ -432,7 +414,7 @@ proof
   set A = south_halfline LMP C \ {LMP C};
   reconsider A as non Bounded Subset of T2 by JORDAN2C:131,TOPREAL6:99;
   A is convex by JORDAN21:7;
-  then A is connected by Lm5;
+  then A is connected;
   hence thesis by Th11,JORDAN2C:133;
 end;
 
@@ -625,7 +607,7 @@ A10: 0 < l & l < 1 by A8,REAL_1:def 5;
 A11: |. k-x .| = abs(l) * |. y-x .| by TOPRNS_1:8
       .= l*|. y-x .| by A8,ABSVALUE:def 1
       .= l*r by A1,TOPREAL9:9;
-    0 <= r by A1,TOPREAL9:39;
+    0 <= r by A1;
     then l*r < 1 * r by A6,A10,XREAL_1:70;
     hence thesis by A11,TOPREAL9:7;
   end;
@@ -663,11 +645,10 @@ proof
   per cases;
   suppose
 A1: Ball(x,r) is empty;
-    then r < 0 by TOPREAL9:21;
+    then r < 0;
     then
-A2: cl_Ball(x,r) is empty by TOPREAL9:22;
-    for A being empty Subset of TOP-REAL n holds Cl A is empty;
-    hence thesis by A1,A2;
+A2: cl_Ball(x,r) is empty;
+    thus thesis by A1,A2;
   end;
   suppose
 A3: Ball(x,r) is non empty;
@@ -676,7 +657,7 @@ A3: Ball(x,r) is non empty;
 A4: a in cl_Ball(x,r);
     then reconsider a as Point of TOP-REAL n;
     reconsider ae = a as Point of Euclid n by TOPREAL3:13;
-A5: 0 < r by A3,TOPREAL9:20;
+A5: 0 < r by A3;
     for s being real number st 0 < s & s < r holds Ball(ae,s) meets Ball(x,r)
     proof
       let s be real number such that
@@ -756,7 +737,7 @@ registration
   coherence
   proof
     [#]TOP-REAL n is not Bounded by JORDAN2C:41,NAT_1:14;
-    hence thesis by TEX_2:5;
+    hence thesis by SUBSET_1:def 7;
   end;
 end;
 
@@ -835,17 +816,9 @@ A6: |.p1-a.| <= |.p1-x1.| + |.x1-a.| by TOPRNS_1:35;
   hence thesis by TOPREAL9:7;
 end;
 
-theorem Th27:
+theorem
   for S, T being TopStruct, f being Function
-  of S, T st f is_homeomorphism holds f is onto
-proof
-  let S, T be TopStruct;
-  let f be Function of S, T;
-  assume f is_homeomorphism;
-  then rng f = [#]T by TOPS_2:def 5
-    .= the carrier of T;
-  hence f is onto by FUNCT_2:def 3;
-end;
+  of S, T st f is_homeomorphism holds f is onto;
 
 registration
   let T be non empty being_T2 TopSpace;
@@ -1046,7 +1019,7 @@ A4: f.x = y by FUNCT_1:def 5;
 A5: dom(g+f) = the carrier of I[01] by FUNCT_2:def 1;
   reconsider x as Point of I[01] by A3;
   0 <= x by BORSUK_1:86;
-  then 0/2 <= x/2 by XREAL_1:74;
+  then 0/2 <= x/2;
   then
 A6: 0+1/2 <= x/2+1/2 by XREAL_1:8;
   x <= 1 by BORSUK_1:86;
@@ -1273,7 +1246,7 @@ A3: h.0 = p1 & h.1 = p2 by A1,TOPREAL1:def 2;
   then reconsider h1 = h as Function of I[01],TOP-REAL n by TOPREALA:28;
   h1 is Path of p1,p2
   proof
-    h is continuous by A2,TOPS_2:def 5;
+    h is continuous by A2;
     hence h1 is continuous & h1.0 = p1 & h1.1 = p2 by A3,TOPMETR:7;
   end;
   then reconsider f = h as Path of p1,p2;
@@ -1566,8 +1539,7 @@ A9: |[a,c]|`1 = a & |[a,c]|`2 = c by EUCLID:56;
     (proj1||X). |[a,c]| = |[a,c]|`1 by A1,PSCOMP_1:69,TOPREALA:52;
     hence thesis by A2,A3,A8,A9,FUNCT_2:43;
   end;
-  dom(proj1||X) = X by A2,FUNCT_2:def 1;
-  then Z is non empty by A2,A3,RELAT_1:152;
+  Z is non empty by A3;
   hence W-bound X = a by A4,A7,SEQ_4:61;
 end;
 
@@ -1599,8 +1571,7 @@ A9: |[a,c]|`1 = a & |[a,c]|`2 = c by EUCLID:56;
     (proj2||X). |[a,c]| = |[a,c]|`2 by A1,PSCOMP_1:70,TOPREALA:52;
     hence thesis by A2,A3,A8,A9,FUNCT_2:43;
   end;
-  dom(proj2||X) = X by A2,FUNCT_2:def 1;
-  then Z is non empty by A2,A3,RELAT_1:152;
+  Z is non empty by A3;
   hence S-bound X = c by A4,A7,SEQ_4:61;
 end;
 
@@ -1634,8 +1605,7 @@ A9: |[b,d]| in X by A1;
     hence thesis by A2,A7,A8,A9,FUNCT_2:43;
   end;
 A10: |[a,c]| in X by A1,TOPREALA:52;
-  dom(proj1||X) = X by A2,FUNCT_2:def 1;
-  then Z is non empty by A2,A10,RELAT_1:152;
+  Z is non empty by A10;
   hence E-bound X = b by A3,A6,SEQ_4:63;
 end;
 
@@ -1669,8 +1639,7 @@ A9: |[b,d]| in X by A1;
     hence thesis by A2,A7,A8,A9,FUNCT_2:43;
   end;
 A10: |[a,c]| in X by A1,TOPREALA:52;
-  dom(proj2||X) = X by A2,FUNCT_2:def 1;
-  then Z is non empty by A2,A10,RELAT_1:152;
+  Z is non empty by A10;
   hence N-bound X = d by A3,A6,SEQ_4:63;
 end;
 
@@ -1725,14 +1694,14 @@ A16: rng f = [#](T2|P) by A14,TOPS_2:def 5
     then consider na being set such that
 A17: na in dom f and
 A18: f.na = n by A16,FUNCT_1:def 5;
-    na is real by A17,MEMBERED:def 3;
+    na is real by A17;
     then reconsider na as Real by XREAL_0:def 1;
 A19: 0 <= na & na <= 1 by A17,BORSUK_1:86;
 A20: Segment(P,p1,p2,p1,n) c= P by JORDAN16:5;
     then consider xa being set such that
 A21: xa in dom f and
 A22: f.xa = x by A5,A16,FUNCT_1:def 5;
-    xa is real by A21,MEMBERED:def 3;
+    xa is real by A21;
     then reconsider xa as Real by XREAL_0:def 1;
 A23: 0 <= xa & xa <= 1 by A21,BORSUK_1:86;
 A24: Segment(P,p1,p2,p1,x) is_an_arc_of p1,x by A2,A4,A5,A6,A20,JORDAN16:39;
@@ -1755,7 +1724,7 @@ A29: LE zz,x,P,p1,p2 by A26;
     then consider za being set such that
 A30: za in dom f and
 A31: f.za = z by A16,A26,FUNCT_1:def 5;
-    za is real by A30,MEMBERED:def 3;
+    za is real by A30;
     then reconsider za as Real by XREAL_0:def 1;
 A32: 0 <= za & za <= 1 by A30,BORSUK_1:86;
     then
@@ -1990,7 +1959,7 @@ A13: p`2`1-g < x2 & x2 < p`2`1+g;
     a`2`1 = x2 by A12,EUCLID:56;
     then p`2`1 - g - o`1 < a`2`1 - o`1 & a`2`1 - o`1 < p`2`1 + g - o`1
     by A13,XREAL_1:11;
-    then a`2`1 - o`1 in ].r-g,r+g.[ by RCOMP_1:47;
+    then a`2`1 - o`1 in ].r-g,r+g.[ by XXREAL_1:4;
     hence b in V by A5,A9,A11;
   end;
   hence thesis by JGRAPH_2:20;
@@ -2049,7 +2018,7 @@ A13: p`2`2-g < y2 & y2 < p`2`2+g;
     a`2`2 = y2 by A12,EUCLID:56;
     then p`2`2 - g - o`2 < a`2`2 - o`2 & a`2`2 - o`2 < p`2`2 + g - o`2
     by A13,XREAL_1:11;
-    then a`2`2 - o`2 in ].r-g,r+g.[ by RCOMP_1:47;
+    then a`2`2 - o`2 in ].r-g,r+g.[ by XXREAL_1:4;
     hence b in V by A6,A9,A11;
   end;
   hence thesis by JGRAPH_2:20;
@@ -2560,13 +2529,12 @@ A23: Zdy. [y,z] = dy. [y,z] by A4,A5,A8,A16;
 A24: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by A14,A16,VALUED_1:1
       .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z] by VALUED_1:5
       .= r1^2+r2^2 by A19,A20,A21,A22,A23,VALUED_1:5;
-A25: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
       hence contradiction by A18,TOPREAL3:11;
     end;
-    hence 0 < b by A15,A16,A24,A25;
+    hence 0 < b by A15,A16,A24;
   end;
   then reconsider m as positive-yielding continuous RealMap of TD
   by PARTFUN3:def 1;
@@ -3006,13 +2974,12 @@ A27: Zdy. [y,z] = dy. [y,z] by A8,A9,A12,A20;
 A28: m. [y,z] = (Zdx(#)Zdx). [y,z] + (Zdy(#)Zdy). [y,z] by A18,A20,VALUED_1:1
       .= Zdx. [y,z] * Zdx. [y,z] + (Zdy(#)Zdy). [y,z] by VALUED_1:5
       .= r1^2+r2^2 by A23,A24,A25,A26,A27,VALUED_1:5;
-A29: 0+0 <= r1^2+r2^2 by XREAL_1:9;
     now
       assume r1^2+r2^2 = 0;
       then r1 = 0 & r2 = 0 by COMPLEX1:2;
       hence contradiction by A22,TOPREAL3:11;
     end;
-    hence 0 < b by A19,A20,A28,A29;
+    hence 0 < b by A19,A20,A28;
   end;
   then reconsider m as positive-yielding continuous RealMap of TD
   by PARTFUN3:def 1;
@@ -3294,11 +3261,11 @@ A1: U is_a_component_of T;
 A2: the carrier of T|U = U by PRE_TOPC:29;
 A3: U <> {}T by A1,CONNSP_1:34;
   then
-A4: T|U is non empty by A2,STRUCT_0:def 1;
+A4: T|U is non empty;
   per cases;
   suppose
 A5: a = b;
-    reconsider TU = T|U as non empty TopSpace by A2,A3,STRUCT_0:def 1;
+    reconsider TU = T|U as non empty TopSpace by A3;
     reconsider a as Point of TU;
     reconsider f = I[01] --> a as Function of I[01],T|U;
     take f;
@@ -3326,7 +3293,7 @@ A13: g.0 = a & g.1 = b by TOPREAL1:def 2;
 A14: the carrier of T2|P = P by PRE_TOPC:29;
     then reconsider f = g as Function of I[01], T|U by A2,A10,A11,FUNCT_2:9;
     take f;
-A15: g is continuous by A12,TOPS_2:def 5;
+A15: g is continuous by A12;
     T2|P is SubSpace of T|U by A2,A7,A10,A14,TSEP_1:4;
     hence f is continuous by A15,TOPMETR:7;
     thus f.0 = a & f.1 = b by A13;
@@ -3351,7 +3318,7 @@ A2: A is Subset of D;
 A3: h is_homeomorphism and h.0 = p1 and h.1 = p2 by A1,TOPREAL1:def 2;
 A4: h1 is_homeomorphism by TREAL_1:20;
   then
-A5: h1 is continuous by TOPS_2:def 5;
+A5: h1 is continuous;
   reconsider hh = h as Function of C0,TA by TOPMETR:27;
 A6: TA = D|A1 by TOPALG_5:4;
   then reconsider f = h1*hh" as Function of D|A1,C1;
@@ -3359,15 +3326,15 @@ A6: TA = D|A1 by TOPALG_5:4;
   then
 A7: A1 is closed by TSEP_1:12;
   hh" is continuous by A3,TOPMETR:27,TOPS_2:def 5;
-  then h1*hh" is continuous by A5,TOPS_2:58;
+  then h1*hh" is continuous by A5;
   then consider g being continuous Function of D,C1 such that
 A8: g|A1 = f by A6,A7,TIETZE:25;
   reconsider R = hh*h1"*g as Function of D,(TOP-REAL 2)|A;
   take R;
-A9: hh is continuous by A3,TOPMETR:27,TOPS_2:def 5;
+A9: hh is continuous by A3,TOPMETR:27;
   h1" is continuous by A4,TOPS_2:def 5;
-  then hh*h1" is continuous by A9,TOPS_2:58;
-  hence R is continuous by TOPS_2:58;
+  then hh*h1" is continuous by A9;
+  hence R is continuous;
 A10: the carrier of TA = A1 by PRE_TOPC:29;
   dom R = the carrier of D by FUNCT_2:def 1;
   then
@@ -3379,9 +3346,9 @@ A12: dom id A = A by RELAT_1:71;
 A13: a in dom(R|A);
 A14: dom g = the carrier of D by FUNCT_2:def 1;
 A15: dom(h1*hh") = the carrier of TA by FUNCT_2:def 1;
-A16: h1 is one-to-one by A4,TOPS_2:def 5;
-A17: h1 is onto by A4,Th27;
-A18: hh is one-to-one onto by A3,Th27,TOPMETR:27,TOPS_2:def 5;
+A16: h1 is one-to-one by A4;
+A17: h1 is onto by A4;
+A18: hh is one-to-one onto by A3,TOPMETR:27;
 A19: hh*h1"*(h1*hh") = hh*h1"*h1*hh" by RELAT_1:55
       .= hh*(h1"*h1)*hh" by RELAT_1:55
       .= hh*id C0*hh" by A16,A17,GRCAT_1:56
@@ -3502,7 +3469,7 @@ A33: F1 is closed by TSEP_1:8;
     thus thesis by A9,A10;
   end;
   then P is open by SPRECT_3:18;
-  then P` is closed by TOPS_1:30;
+  then P` is closed;
   then DT /\ P` is closed by TOPS_1:35;
   then
 A34: F3 is closed by TSEP_1:8;
@@ -3687,7 +3654,7 @@ A33: F1 is closed by TSEP_1:8;
     thus thesis by A9,A10;
   end;
   then P is open by SPRECT_3:18;
-  then P` is closed by TOPS_1:30;
+  then P` is closed;
   then DT /\ P` is closed by TOPS_1:35;
   then
 A34: F3 is closed by TSEP_1:8;
@@ -3881,12 +3848,12 @@ A41: S is SubSpace of D by A31,A32,A33,TSEP_1:4;
     p is Point of D by Th17;
     then g is continuous by Th64;
     then
-A42: g*f is continuous by A39,TOPS_2:58;
+A42: g*f is continuous by A39;
     |. p-p .| = 0 by TOPRNS_1:29;
     then
 A43: p in Ball(p,r) by TOPREAL9:7;
     then h is continuous by Th66;
-    then h*(g*f) is continuous by A42,TOPS_2:58;
+    then h*(g*f) is continuous by A42;
     then
 A44: F is continuous by A41,TOPMETR:7;
     now
@@ -3999,12 +3966,12 @@ A81: S is SubSpace of D by A72,A73,A74,TSEP_1:4;
     p is Point of D by Th17;
     then g is continuous by Th64;
     then
-A82: g*f is continuous by A79,TOPS_2:58;
+A82: g*f is continuous by A79;
     |. p-p .| = 0 by TOPRNS_1:29;
     then
 A83: p in Ball(p,r) by TOPREAL9:7;
     then h is continuous by Th66;
-    then h*(g*f) is continuous by A82,TOPS_2:58;
+    then h*(g*f) is continuous by A82;
     then
 A84: F is continuous by A81,TOPMETR:7;
     now
@@ -6015,7 +5982,7 @@ A236: rng beta = rng Pcm \/ rng Pml \/ rng Plk \/ rng Pkj \/ rng Pjd by Lm13;
   then beta.:dom beta is compact by WEIERSTR:14;
   then rng beta is compact by RELAT_1:146;
   then
-A237: rng beta is closed by COMPTS_1:16;
+A237: rng beta is closed;
 A238: ml misses V by A27,A233,XBOOLE_1:63;
   {l,k} c= LSeg(l,k)
   proof

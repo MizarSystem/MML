@@ -31,27 +31,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="62"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="63"/>
-<Adjective nr="66"/>
-<Adjective nr="69"/>
-<Adjective nr="77"/>
+<Adjective nr="64"/>
+<Adjective nr="67"/>
+<Adjective nr="70"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="87"/>
-<Adjective nr="89"/>
-<Adjective nr="94"/>
+<Adjective nr="80"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
 <Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_2" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="154"/>
 <Cluster>
-<Adjective nr="62"/>
-<Adjective nr="69"/>
+<Adjective nr="63"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 </Registrations>

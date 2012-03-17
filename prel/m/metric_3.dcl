@@ -29,7 +29,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
+<Adjective nr="17">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -49,8 +49,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 </Registrations>

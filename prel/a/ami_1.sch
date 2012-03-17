@@ -41,8 +41,8 @@
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60">
+<Adjective nr="35" value="false"/>
+<Adjective nr="62">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -57,7 +57,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="21">
+<Pred kind="V" nr="23">
 <Fraenkel>
 <Typ kind="M" nr="26">
 <Cluster/>
@@ -74,7 +74,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="21">
+<Pred kind="V" nr="23">
 <Func kind="F" nr="4"/>
 </Pred>
 </Scheme>
@@ -93,8 +93,8 @@
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60">
+<Adjective nr="35" value="false"/>
+<Adjective nr="62">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>

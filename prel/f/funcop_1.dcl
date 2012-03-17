@@ -21,7 +21,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUNCOP_1" nr="1">
@@ -168,7 +168,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -190,7 +190,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -206,7 +206,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCOP_1" nr="9">

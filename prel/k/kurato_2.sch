@@ -10,16 +10,15 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="STRUCT_0"/>
@@ -42,7 +41,7 @@
 <For>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="6"/>
 <Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="10">
@@ -63,7 +62,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="104">
+<Func kind="K" nr="109">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -87,7 +86,7 @@
 </Typ>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="6"/>
 <Adjective nr="16">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="10">

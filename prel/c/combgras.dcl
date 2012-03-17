@@ -23,10 +23,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COMBGRAS" nr="2">
@@ -44,7 +44,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="39">
+<Adjective nr="40">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

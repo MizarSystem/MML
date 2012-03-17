@@ -27,16 +27,16 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -45,25 +45,25 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BVFUNC26" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,9 +72,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="32"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 </Registrations>

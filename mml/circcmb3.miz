@@ -15,14 +15,15 @@ environ
       FUNCT_1, FINSET_1, ORDINAL2, CLASSES1, FUNCT_2, XXREAL_0, NAT_1,
       PARTFUN1, LIMFUNC1, REWRITE1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP,
       PBOOLE, STRUCT_0, MSUALG_1, FACIRC_1, MSAFREE2, CIRCUIT1, CIRCUIT2,
-      CIRCCOMB, PRE_CIRC, MCART_1, BINARITH, SEQM_3, YELLOW_6;
+      CIRCCOMB, PRE_CIRC,
+      XXREAL_2, MCART_1, BINARITH, SEQM_3, YELLOW_6;
  constructors DOMAIN_1, ORDINAL2, CLASSES1, SEQM_3, FINSEQOP, FINSEQ_4,
       LIMFUNC1, BINARITH, REWRITE1, CIRCUIT1, CIRCUIT2, FACIRC_1, YELLOW_6,
-      NAT_1;
+      NAT_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
       FRAENKEL, XREAL_0, MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3, SEQM_3,
       FINSEQ_4, PBOOLE, PRE_CIRC, STRUCT_0, MSUALG_1, MSAFREE, CIRCCOMB,
-      FACIRC_1, YELLOW_6;
+      FACIRC_1, YELLOW_6, XXREAL_2;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, RELAT_1, REWRITE1, PRE_CIRC, MSAFREE2, CIRCUIT2,
       CIRCCOMB, FACIRC_1;
@@ -31,7 +32,7 @@ environ
       FACIRC_1, ORDINAL2, MCART_1, FUNCT_4, FINSET_1, ALG_1, NAT_1, RELAT_1,
       YELLOW_6, MSUALG_1, MSAFREE2, FUNCT_2, RELSET_1, CLASSES1, ORDINAL1,
       CIRCUIT2, PRE_CIRC, XBOOLE_1, XREAL_1, XXREAL_0, FINSEQ_4, STRUCT_0,
-      VALUED_0;
+      VALUED_0, XXREAL_2;
  schemes TARSKI, XBOOLE_0, FUNCT_2, NAT_1, REWRITE1, CLASSES1, RELAT_1;
 
 begin :: Stabilizing circuits
@@ -658,7 +659,7 @@ registration
   coherence
   proof
     the carrier of 1GateCircStr(p,x) = (rng p) \/ {[p,x]} by CIRCCOMB:def 6;
-    hence thesis by STRUCT_0:def 11;
+    hence thesis;
   end;
 end;
 
@@ -1082,8 +1083,8 @@ proof
   let f be constant Function;
   per cases;
   suppose f = {};
-    then dom f = {} & dom ({} --> the_value_of f) = {} by RELAT_1:60;
-    hence thesis by RELAT_1:64;
+    then dom f = {} & dom ({} --> the_value_of f) = {};
+    hence thesis;
   end;
   suppose
 A1: f <> {};
@@ -1533,7 +1534,7 @@ registration
   proof
     the carrier of S1+*S2 = (the carrier of S1) \/ the carrier of S2
     by CIRCCOMB:def 2;
-    hence thesis by STRUCT_0:def 11;
+    hence thesis;
   end;
 end;
 
@@ -1712,7 +1713,7 @@ A24: RS c= the carrier of S
       hence thesis by A19,A22;
     end;
     then
-A25: RS is finite by FINSET_1:13;
+A25: RS is finite;
     defpred P[set,set] means ex n being Element of NAT st $2 = n &
     for s being State of A, m being Element of NAT st m >= n
     holds Following(s,m).$1 = Following(s,n).$1;
@@ -1782,7 +1783,7 @@ A40:    f.x = l & for s being State of A, m being Element of NAT st m >= l
         holds Following(s,m).x = Following(s,l).x by A29;
         l in rng f by A28,A39,A40,FUNCT_1:12;
         then
-A41:    max C >= l by PRE_CIRC:def 1;
+A41:    max C >= l by XXREAL_2:def 8;
         now
           let k be Nat;
 A42:      mC + k >= max C by NAT_1:11;
@@ -1891,7 +1892,7 @@ A61: f.x = n & for s being State of A, m being Element of NAT st m >= n
     holds Following(s,m).x = Following(s,n).x by A18,A56;
     n in C by A18,A55,A60,A61,FUNCT_1:12;
     then
-A62: N >= n by PRE_CIRC:def 1;
+A62: N >= n by XXREAL_2:def 8;
     then
 A63: N+1 >= n by NAT_1:13;
     thus Following(s,N).x = Following(s,n).x by A61,A62
@@ -3246,9 +3247,9 @@ registration
   let X be non empty finite set;
   cluster with_nonpair_inputs (one-gate Signature of X);
   existence
-  proof consider n being Element of NAT;
-    consider f being Function of n-tuples_on X, X;
-    consider p being natural-yielding FinSeqLen of n;
+  proof
+    consider f being Function of 0-tuples_on X, X;
+    consider p being natural-yielding FinSeqLen of 0;
     take 1GateCircStr(p,f); thus thesis;
   end;
 end;
@@ -3363,10 +3364,6 @@ registration
   coherence;
 end;
 
-Lm1: for x being non pair set holds {x} is without_pairs;
-
-Lm2: for x,y being without_pairs set holds x \/ y is without_pairs;
-
 theorem Th56:
   for x1,x2 being set, X being non empty finite set
   for f being Function of 2-tuples_on X, X
@@ -3391,9 +3388,8 @@ A2: not Output 1GateCircStr(<*x1,x2*>, f) in InputVertices S
     InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) = {x2} \/ InputVertices S
     or {x1} is without_pairs &
     InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) = {x1} \/ InputVertices S
-    by A1,A2,Lm1,Th42,Th43,Th44;
-    hence InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) is without_pairs
-    by Lm2;
+    by A1,A2,Th42,Th43,Th44;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2*>, f)) is without_pairs;
   end;
   suppose x1 is non pair & x2 is non pair;
     then reconsider a = x1, b = x2 as non pair set;
@@ -3424,8 +3420,6 @@ registration
   cluster S +* 1GateCircStr(<*x1,x2*>, f) -> with_nonpair_inputs;
   coherence by Th56;
 end;
-
-Lm3: for x,y being non pair set holds {x,y} is without_pairs;
 
 theorem Th57:
   for x1,x2,x3 being set, X being non empty finite set
@@ -3473,9 +3467,8 @@ A2: not Output 1GateCircStr(<*x1,x2,x3*>, f) in InputVertices S
     {x2,x3} \/ InputVertices S or {x1,x3} is without_pairs &
     InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) =
     {x1,x3} \/ InputVertices S
-    by A1,A2,Lm1,Lm3,Th45,Th46,Th47,Th48,Th49,Th50,Th51;
-    hence InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) is without_pairs
-    by Lm2;
+    by A1,A2,Th45,Th46,Th47,Th48,Th49,Th50,Th51;
+    hence InputVertices (S +* 1GateCircStr(<*x1,x2,x3*>, f)) is without_pairs;
   end;
   suppose x1 is non pair & x2 is non pair & x3 is non pair;
     then reconsider a = x1, b = x2, c = x3 as non pair set;

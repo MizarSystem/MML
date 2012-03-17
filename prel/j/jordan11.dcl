@@ -38,7 +38,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="67"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">

@@ -30,18 +30,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="31"/>
+<Adjective nr="23"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="2">
@@ -56,17 +56,17 @@
 <Adjective nr="4"/>
 <Adjective nr="6"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="3">
@@ -79,10 +79,10 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="32"/>
+<Adjective nr="23"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="4">
@@ -95,10 +95,10 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
+<Adjective nr="23"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="5">
@@ -112,18 +112,18 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="60"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="60"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="34"/>
+<Adjective nr="23"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FDIFF_1" nr="1">
@@ -131,11 +131,11 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
@@ -151,11 +151,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FDIFF_1" nr="2">
@@ -164,7 +164,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
@@ -184,7 +184,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>
@@ -196,7 +196,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="64"/>
 <Func kind="K" nr="60"/>
 </Adjective>

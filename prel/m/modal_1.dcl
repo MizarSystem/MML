@@ -30,9 +30,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="29"/>
+<Adjective nr="19"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="2">
@@ -44,9 +44,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="29"/>
-<Adjective nr="31"/>
+<Adjective nr="19"/>
+<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="3">
@@ -58,9 +58,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="29"/>
-<Adjective nr="32"/>
+<Adjective nr="19"/>
+<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MODAL_1" nr="4">
@@ -72,9 +72,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="29"/>
-<Adjective nr="33"/>
+<Adjective nr="19"/>
+<Adjective nr="30"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MODAL_1" nr="1">
@@ -99,7 +99,7 @@
 <Func kind="K" nr="149"/>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </CCluster>
 </Registrations>

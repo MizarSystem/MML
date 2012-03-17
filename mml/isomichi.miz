@@ -20,8 +20,8 @@ environ
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, LIMFUNC1, PROB_1;
  theorems TARSKI, SUBSET_1, XBOOLE_0, XBOOLE_1, PRE_TOPC, TOPS_1, TDLAT_1,
-      TDLAT_3, PCOMPS_1, TEX_1, TEX_2, BORSUK_5, BORSUK_4, TOPMETR, RCOMP_1,
-      HEINE, TOPREAL6, FCONT_3, LIMFUNC1, DECOMP_1, XREAL_0, TOPGEN_1, TOPS_3,
+      TDLAT_3, PCOMPS_1, TEX_1, TEX_2, BORSUK_5, TOPMETR,
+      TOPREAL6, FCONT_3, DECOMP_1, XREAL_0, TOPGEN_1, TOPS_3,
       XXREAL_0, XXREAL_1, STRUCT_0;
 
 begin :: Preliminaries
@@ -35,7 +35,7 @@ registration
   coherence
   proof
     ADTS D = TopStruct (# D,cobool D #) by TEX_1:def 3;
-    hence thesis by STRUCT_0:def 9;
+    hence thesis;
   end;
 end;
 
@@ -77,13 +77,18 @@ definition
   Cl Int A = Cl A;
 end;
 
-theorem Th3: :: Remark 1
-  A is closed implies A is supercondensed
-proof
+registration let T;
+ cluster closed -> supercondensed Subset of T;
+ coherence
+proof let A be Subset of T;
   assume A is closed;
   then Int Cl A = Int A by PRE_TOPC:52;
   hence thesis by Def1;
 end;
+end;
+
+theorem  :: Remark 1
+  A is closed implies A is supercondensed;
 
 theorem Th4: :: Remark 1
   A is open implies A is subcondensed
@@ -140,8 +145,8 @@ registration
   proof
     set A = {}T;
     take A;
-    A is supercondensed subcondensed by Th3,Th4;
-    hence thesis by Th5;
+    A is supercondensed subcondensed by Th4;
+    hence thesis;
   end;
 end;
 
@@ -229,15 +234,10 @@ end;
 theorem Th10: :: Corollary to Theorem 2
   A is condensed iff (Int Cl A c= A & A c= Cl Int A)
 proof
-  thus A is condensed implies Int Cl A c= A & A c= Cl Int A
-  proof
-    assume A is condensed;
-    then A is supercondensed & A is subcondensed by Th5;
-    hence thesis by Th8,Th9;
-  end;
+  thus A is condensed implies Int Cl A c= A & A c= Cl Int A by Th8,Th9;
   assume Int Cl A c= A & A c= Cl Int A;
   then A is supercondensed & A is subcondensed by Th8,Th9;
-  hence thesis by Th5;
+  hence thesis;
 end;
 
 begin :: Regular Open and Regular Closed Sets
@@ -437,8 +437,8 @@ A6: Cl Int A c= Cl B by A3,PRE_TOPC:49;
   Int B c= Int A by A2,TOPS_1:48;
   then
 A7: Cl Int B c= Cl Int A by PRE_TOPC:49;
-  B is condensed by A2,TOPS_1:107;
-  then B is subcondensed by Th5;
+  B is condensed by A2;
+  then B is subcondensed;
   then Cl Int B = Cl B by Def2;
   then Cl B = Cl Int A by A6,A7,XBOOLE_0:def 10;
   hence thesis by A2,A5,Th10;
@@ -472,8 +472,8 @@ A6: Int B c= Int Cl A by A3,TOPS_1:48;
   Cl A c= Cl B by A2,PRE_TOPC:49;
   then
 A7: Int Cl A c= Int Cl B by TOPS_1:48;
-  B is condensed by A2,TOPS_1:106;
-  then B is supercondensed by Th5;
+  B is condensed by A2;
+  then B is supercondensed;
   then Int Cl A c= Int B by A7,Def1;
   then Int B = Int Cl A by A6,XBOOLE_0:def 10;
   hence thesis by A2,A5,Th10;
@@ -506,10 +506,10 @@ proof
     assume
 A1: A is condensed;
     then A` is condensed by TDLAT_1:16;
-    then A` is supercondensed & A` is subcondensed by Th5;
+    then A` is supercondensed & A` is subcondensed;
     then
 A2: Cl Int A` = Cl A` by Def2;
-    A is supercondensed & A is subcondensed by A1,Th5;
+    A is supercondensed & A is subcondensed by A1;
     then Int Cl A = Int A & Cl Int A = Cl A by Def1,Def2;
     hence thesis by A2,TOPS_1:def 2;
   end;
@@ -548,7 +548,7 @@ A16: Cl A` = (Int A)` by TDLAT_3:3;
     .= (Int Cl A)` by TDLAT_3:3;
   then Int A = (Int Cl A)`` by A15,A16;
   then A is supercondensed by Def1;
-  hence thesis by A8,Th5;
+  hence thesis by A8;
 end;
 
 definition
@@ -566,7 +566,7 @@ proof
   thus Border A is regular_open
   proof
     Fr A = Cl Fr A by PRE_TOPC:52;
-    hence thesis by Th17;
+    hence thesis;
   end;
   thus Border A = (Int Cl A) \ (Cl Int A)
   proof
@@ -650,15 +650,10 @@ theorem :: Corollary to Theorem 7
   Int A is regular_open & Cl A is regular_closed & Border A is empty
 proof
   thus A is condensed implies Int A is regular_open &
-  Cl A is regular_closed & Border A is empty
-  proof
-    assume A is condensed;
-    then A is supercondensed & A is subcondensed by Th5;
-    hence thesis by Th25,Th26;
-  end;
+  Cl A is regular_closed & Border A is empty by Th25,Th26;
   assume Int A is regular_open & Cl A is regular_closed & Border A is empty;
   then A is supercondensed & A is subcondensed by Th25,Th26;
-  hence thesis by Th5;
+  hence thesis;
 end;
 
 begin :: Auxiliary Theorems
@@ -669,9 +664,9 @@ theorem
 proof
   let A be Subset of R^1, a be real number;
   assume A = ]. -infty, a.];
-  then A` = ].a,+infty .[ by BORSUK_5:98;
+  then A` = ].a,+infty .[ by XXREAL_1:224,288,TOPMETR:24;
   then Cl A` = [.a,+infty .[ by BORSUK_5:75;
-  then (Cl A`)` = ]. -infty, a.[ by BORSUK_5:99;
+  then (Cl A`)` = ]. -infty, a.[ by XXREAL_1:224,294,TOPMETR:24;
   hence thesis by TOPS_1:def 1;
 end;
 
@@ -681,9 +676,9 @@ theorem
 proof
   let A be Subset of R^1, a be real number;
   assume A = [.a,+infty .[;
-  then A` = ]. -infty,a.[ by BORSUK_5:99;
+  then A` = ]. -infty,a.[ by XXREAL_1:224,294,TOPMETR:24;
   then Cl A` = ]. -infty,a.] by BORSUK_5:77;
-  then (Cl A`)` = ].a,+infty .[ by BORSUK_5:98;
+  then (Cl A`)` = ].a,+infty .[ by XXREAL_1:224,288,TOPMETR:24;
   hence thesis by TOPS_1:def 1;
 end;
 
@@ -701,22 +696,22 @@ A1: A = ]. -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[;
     let x be set;
     assume
 A2: x in B;
-    then reconsider x' = x as real number by XREAL_0:def 1;
+    then reconsider x' = x as real number;
     per cases;
     suppose x' <= a;
-      then x' in ]. -infty,a.] by BORSUK_5:16;
+      then x' in ]. -infty,a.] by XXREAL_1:234;
       then x' in ]. -infty,a.] \/ IRRAT (a,b) by XBOOLE_0:def 2;
       hence thesis by A1,XBOOLE_0:def 2;
     end;
     suppose x' > a & x' < b;
-      then x' in ]. a, b .[ by RCOMP_1:47;
+      then x' in ]. a, b .[ by XXREAL_1:4;
       then x' in IRRAT /\ ]. a, b .[ by A2,XBOOLE_0:def 3;
       then x' in IRRAT (a, b) by BORSUK_5:def 5;
       then x' in ]. -infty,a.] \/ IRRAT (a,b) by XBOOLE_0:def 2;
       hence thesis by A1,XBOOLE_0:def 2;
     end;
     suppose x' >= b;
-      then x' in [.b,+infty .[ by BORSUK_5:15;
+      then x' in [.b,+infty .[ by XXREAL_1:236;
       hence thesis by A1,XBOOLE_0:def 2;
     end;
   end;
@@ -733,7 +728,7 @@ proof
   let A be Subset of R^1, a, b be real number;
   assume
 A1: A = RAT (a,b);
-  A` = REAL \ A by BORSUK_5:83
+  A` = REAL \ A by TOPMETR:24
     .= ]. -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[ by A1,BORSUK_5:85;
   then Cl A` = [#]R^1 by Th30;
   then (Cl A`)` = {}R^1 by XBOOLE_1:37;
@@ -751,39 +746,10 @@ A1: A = IRRAT (a,b);
   A = IRRAT /\ ]. a, b .[ by A1,BORSUK_5:def 5;
   then A c= B by XBOOLE_1:17;
   then A is boundary by TOPGEN_1:57,TOPS_3:11;
-  hence thesis by TOPS_3:def 1;
+  hence thesis;
 end;
 
-theorem Th33:
-  for a,b being real number holds ]. -infty,a.] \ ]. -infty,b.[ = [.b,a.]
-proof
-  let a,b be real number;
-A1: ]. -infty,a.] \ ]. -infty,b.[ c= [.b,a.]
-  proof
-    let x be set;
-    assume
-A2: x in ]. -infty,a.] \ ]. -infty,b.[;
-    then reconsider x as real number by XREAL_0:def 1;
-    x in ]. -infty,a.] & not x in ]. -infty,b.[ by A2,XBOOLE_0:def 4;
-    then x <= a & not x < b by BORSUK_5:16,17;
-    hence thesis by RCOMP_1:48;
-  end;
-  [.b,a.] c= ]. -infty,a.] \ ]. -infty,b.[
-  proof
-    let x be set;
-    assume
-A3: x in [.b,a.];
-    then reconsider x as real number by XREAL_0:def 1;
-    x >= b & x <= a by A3,RCOMP_1:48;
-    then x in ]. -infty,a.] & not x in ]. -infty,b.[ by BORSUK_5:16,17;
-    hence thesis by XBOOLE_0:def 4;
-  end;
-  hence thesis by A1,XBOOLE_0:def 10;
-end;
-
-theorem
-  for a,b being real number st a < b holds
-  [.b,+infty .[ misses ]. -infty,a.[ by XXREAL_1:94;
+canceled 2;
 
 theorem Th35:
   for a,b being real number st a >= b holds IRRAT (a,b) = {}
@@ -792,7 +758,7 @@ proof
   assume
 A1: a >= b;
   IRRAT (a,b) = IRRAT /\ ]. a, b .[ by BORSUK_5:def 5
-    .= IRRAT /\ {} by A1,RCOMP_1:12;
+    .= IRRAT /\ {} by A1,XXREAL_1:28;
   hence thesis;
 end;
 
@@ -806,9 +772,9 @@ A1: a < b;
     let x be set;
     assume
 A2: x in IRRAT (a,b);
-    then reconsider x as real number by XREAL_0:def 1;
+    then reconsider x as real number;
     x is irrational & a < x & x < b by A1,A2,BORSUK_5:53;
-    hence thesis by BORSUK_5:15;
+    hence thesis by XXREAL_1:236;
   end;
   suppose a >= b;
     then IRRAT (a,b) = {} by Th35;
@@ -833,7 +799,7 @@ A1: Cl B = B by PRE_TOPC:52;
 A2: Cl D = D by PRE_TOPC:52;
   assume
 A3: A = ]. -infty, a.[ \/ RAT (b,c) & a < b & b < c;
-  then A` = REAL \ ( ]. -infty, a.[ \/ RAT (b,c)) by BORSUK_5:83
+  then A` = REAL \ ( ]. -infty, a.[ \/ RAT (b,c)) by TOPMETR:24
     .= (REAL \ RAT (b,c)) \ ]. -infty, a.[ by XBOOLE_1:41
     .= (]. -infty,b.] \/ IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[
   by BORSUK_5:85
@@ -842,7 +808,8 @@ A3: A = ]. -infty, a.[ \/ RAT (b,c) & a < b & b < c;
     .= (]. -infty,b.] \ ]. -infty,a.[) \/
   ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[) by XBOOLE_1:42;
   then
-A4: A` = [.a,b.] \/ ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[) by Th33
+A4: A` = [.a,b.] \/ ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[)
+ by XXREAL_1:289
     .= [.a,b.] \/ ((IRRAT (b,c) \ ]. -infty,a.[) \/
   ([.c,+infty .[ \ ]. -infty,a.[)) by XBOOLE_1:42;
   IRRAT (b,c) misses ]. -infty,a.[
@@ -861,60 +828,23 @@ A6: a < c by A3,XXREAL_0:2;
   then Cl A` = Cl (B \/ C) \/ Cl D by PRE_TOPC:50
     .= Cl B \/ Cl C \/ Cl D by PRE_TOPC:50
     .= B \/ [.b,c.] \/ D by A1,A2,A3,BORSUK_5:55
-    .= [.a,c.] \/ D by A3,HEINE:2
+    .= [.a,c.] \/ D by A3,XXREAL_1:165
     .= [. a,+infty .[ by A6,BORSUK_5:28;
-  then (Cl A`)` = ]. -infty, a .[ by BORSUK_5:99;
+  then (Cl A`)` = ]. -infty, a .[ by XXREAL_1:224,294,TOPMETR:24;
   hence thesis by TOPS_1:def 1;
 end;
-
-theorem
-  for a,b being real number holds [.a,b.] misses ].b,+infty .[ by XXREAL_1:89;
 
 Lm1: for a,b being real number st a < b holds [.a,b.] \/ {b} = [.a,b.]
 proof
   let a,b be real number;
   assume
 A1: a < b;
-  then [. a, b .] = [. a, b .[ \/ { b } by BORSUK_4:34
+  then [. a, b .] = [. a, b .[ \/ { b } by XXREAL_1:129
     .= [. a, b .[ \/ { b } \/ {b} by XBOOLE_1:6;
-  hence thesis by A1,BORSUK_4:34;
+  hence thesis by A1,XXREAL_1:129;
 end;
 
-theorem
-  for b being real number holds [.b,+infty .[ \ ].b,+infty .[ = {b}
-proof
-  let b be real number;
-A1: [.b,+infty .[ \ ].b,+infty .[ c= {b}
-  proof
-    let x be set;
-    assume
-A2: x in [.b,+infty .[ \ ].b,+infty .[;
-    then reconsider x as real number by XREAL_0:def 1;
-    x in [.b,+infty .[ & not x in ].b,+infty .[ by A2,XBOOLE_0:def 4;
-    then x >= b & not x > b by BORSUK_5:14,15;
-    then x = b by XXREAL_0:1;
-    hence thesis by TARSKI:def 1;
-  end;
-  {b} c= [.b,+infty .[ \ ].b,+infty .[
-  proof
-    let x be set;
-    assume
-A3: x in {b};
-    then reconsider x as real number by XREAL_0:def 1;
-    x = b by A3,TARSKI:def 1;
-    then x in [.b,+infty .[ & not x in ].b,+infty .[ by BORSUK_5:14,15;
-    hence thesis by XBOOLE_0:def 4;
-  end;
-  hence thesis by A1,XBOOLE_0:def 10;
-end;
-
-theorem Th40:
-  for a,b being real number holds [.a,b.] = [.a,+infty .[ \ ].b,+infty .[
-proof
-  let a,b be real number;
-  b in REAL by XREAL_0:def 1;
-  hence thesis by XXREAL_0:9,XXREAL_1:196;
-end;
+canceled 3;
 
 theorem
   for a,b being real number st a < b holds
@@ -924,7 +854,7 @@ proof
   assume
 A1: a < b;
   REAL = (REAL \ {a}) \/ {a} by XBOOLE_1:45
-    .= (]. -infty,a.[ \/ ].a,+infty .[) \/ {a} by BORSUK_5:18
+    .= (]. -infty,a.[ \/ ].a,+infty .[) \/ {a} by XXREAL_1:389
     .= ]. -infty,a.[ \/ (].a,+infty .[ \/ {a}) by XBOOLE_1:4
     .= ]. -infty,a.[ \/ [.a,+infty .[ by BORSUK_5:67
     .= ]. -infty,a.[ \/ ([.a,b.] \/ [.b,+infty .[) by A1,BORSUK_5:28
@@ -934,43 +864,7 @@ A1: a < b;
   hence thesis by A1,Lm1;
 end;
 
-theorem Th42:
-  for a,b being real number holds ].a,b.[ = ].a,+infty .[ \ [.b,+infty .[
-proof
-  let a,b be real number;
-  b in REAL by XREAL_0:def 1;
-  hence thesis by XXREAL_0:9,XXREAL_1:195;
-end;
-
-theorem Th43:
-  for a,b,c being real number st b < c & c < a holds
-  ]. -infty,a.[ \ [.b,c.] = ]. -infty, b .[ \/ ].c,a.[
-proof
-  let a,b,c be real number;
-  assume b < c & c < a;
-  then
-A1: b < a by XXREAL_0:2;
-  thus ]. -infty,a.[ \ [.b,c.] c= ]. -infty, b .[ \/ ].c,a.[
-  proof
-    let x be set;
-    assume
-A2: x in ]. -infty,a.[ \ [.b,c.];
-    then reconsider x as real number by XREAL_0:def 1;
-    x in ]. -infty,a.[ & not x in [.b,c.] by A2,XBOOLE_0:def 4;
-    then x < a & not (x >= b & x <= c) by BORSUK_5:17,RCOMP_1:48;
-    then x in ]. -infty,b.[ or x in ].c,a.[ by BORSUK_5:17,RCOMP_1:47;
-    hence thesis by XBOOLE_0:def 2;
-  end;
-  let x be set;
-  assume
-A3: x in ]. -infty, b .[ \/ ].c,a.[;
-  then reconsider x as real number by XREAL_0:def 1;
-  x in ]. -infty,b.[ or x in ].c,a.[ by A3,XBOOLE_0:def 2;
-  then x < b or (x > c & x < a) by BORSUK_5:17,RCOMP_1:47;
-  then (x < a & x < b) or (x > c & x < a) by A1,XXREAL_0:2;
-  then x in ]. -infty,a.[ & not x in [.b,c.] by BORSUK_5:17,RCOMP_1:48;
-  hence thesis by XBOOLE_0:def 4;
-end;
+canceled 2;
 
 theorem Th44:
   for A being Subset of R^1, a, b, c being real number st
@@ -983,21 +877,21 @@ A1: A = ]. -infty, a .] \/ [.b,c.] & a < b & b < c;
   reconsider B = ]. a,b .[, C = ].c,+infty .[ as Subset of R^1 by TOPMETR:24;
 A2: Cl B = [. a,b .] by A1,BORSUK_5:36;
 A3: Cl C = [. c,+infty .[ by BORSUK_5:75;
-  a < c by A1,XXREAL_0:2;
+X:  a < c by A1,XXREAL_0:2;
   then
 A4: ].c,+infty .[ /\ ].a,+infty .[ = ].c,+infty .[ by XBOOLE_1:28,XXREAL_1:46;
-  A` = REAL \ (]. -infty, a .] \/ [.b,c.]) by A1,BORSUK_5:83
+  A` = REAL \ (]. -infty, a .] \/ [.b,c.]) by A1,TOPMETR:24
     .= (REAL \ left_closed_halfline a) \ [.b,c.] by XBOOLE_1:41
-    .= right_open_halfline a \ [.b,c.] by LIMFUNC1:24
-    .= ].a,+infty .[ \ ([.b,+infty .[ \ ].c,+infty .[) by Th40
+    .= right_open_halfline a \ [.b,c.] by XXREAL_1:224,288
+    .= ].a,+infty .[ \ ([.b,+infty .[ \ ].c,+infty .[) by XXREAL_1:295
     .= ( ].a,+infty .[ \ [.b,+infty .[) \/ ( ].a,+infty .[ /\ ].c,+infty .[)
   by XBOOLE_1:52
-    .= ]. a,b .[ \/ ]. c,+infty .[ by A4,Th42;
+    .= ]. a,b .[ \/ ]. c,+infty .[ by A4,XXREAL_1:294;
   then Cl A` = [. a,b .] \/ [. c,+infty .[ by A2,A3,PRE_TOPC:50;
-  then (Cl A`)` = REAL \ ([. c,+infty .[ \/ [.a,b.]) by BORSUK_5:83
+  then (Cl A`)` = REAL \ ([. c,+infty .[ \/ [.a,b.]) by TOPMETR:24
     .= (REAL \ right_closed_halfline c) \ [.a,b.] by XBOOLE_1:41
-    .= left_open_halfline c \ [.a,b.] by LIMFUNC1:24
-    .= ]. -infty, a .[ \/ ].b,c.[ by A1,Th43;
+    .= left_open_halfline c \ [.a,b.] by XXREAL_1:224,294
+    .= ]. -infty, a .[ \/ ].b,c.[ by X,XXREAL_1:339;
   hence thesis by TOPS_1:def 1;
 end;
 
@@ -1068,16 +962,7 @@ A5: not Int Cl A c= Cl Int A by A3,XBOOLE_0:def 8;
     hence thesis by A5,Def6,Def8;
   end;
   cluster 3rd_class -> non 1st_class non 2nd_class Subset of T;
-  coherence
-  proof
-    let A be Subset of T;
-    assume A is 3rd_class;
-    then Cl Int A, Int Cl A are_c=-incomparable by Def8;
-    then
-A6: not Cl Int A c= Int Cl A & not Int Cl A c= Cl Int A by XBOOLE_0:def 9;
-    then not Cl Int A c< Int Cl A by XBOOLE_0:def 8;
-    hence thesis by A6,Def6,Def7;
-  end;
+  coherence;
 end;
 
 theorem Th47: :: Remark 1
@@ -1141,7 +1026,7 @@ registration
     let A be Subset of T;
     assume
 A1: A is proper non empty;
-    then A <> the carrier of T by TEX_2:5;
+    then A <> the carrier of T by SUBSET_1:def 7;
     then Int A = {} by TEX_1:12;
     then
 A2: Cl Int A = {} by TEX_1:11;
@@ -1171,8 +1056,7 @@ registration
   existence
   proof
     consider T being anti-discrete non trivial non empty strict TopSpace;
-    consider A being supercondensed Subset of T;
-    A is 1st_class;
+    {}T is 1st_class;
     then
 A1: T is with_1st_class_subsets by Def9;
     consider B being 2nd_class Subset of T;
@@ -1193,12 +1077,12 @@ A3: Cl B = ]. -infty, 1 .] by BORSUK_5:77;
     then Cl A = ]. -infty, 1 .] \/ [. 2,4 .] by A3,PRE_TOPC:50;
     then
 A4: Int Cl A = ]. -infty, 1 .[ \/ ]. 2,4 .[ by Th44;
-    3 in ]. 2, 4 .[ by RCOMP_1:47;
+    3 in ]. 2, 4 .[ by XXREAL_1:4;
     then 3 in Int Cl A by A4,XBOOLE_0:def 2;
     then
-A5: not Int Cl A c= Cl Int A by A2,BORSUK_5:16;
-A6: 1 in Cl Int A by A2,BORSUK_5:16;
-    not 1 in ]. -infty,1.[ & not 1 in ].2,4.[ by BORSUK_5:17,RCOMP_1:47;
+A5: not Int Cl A c= Cl Int A by A2,XXREAL_1:234;
+A6: 1 in Cl Int A by A2,XXREAL_1:234;
+    not 1 in ]. -infty,1.[ & not 1 in ].2,4.[ by XXREAL_1:4;
     then not Cl Int A c= Int Cl A by A4,A6,XBOOLE_0:def 2;
     then Int Cl A, Cl Int A are_c=-incomparable by A5,XBOOLE_0:def 9;
     then A is 3rd_class by Def8;

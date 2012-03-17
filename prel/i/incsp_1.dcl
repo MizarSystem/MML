@@ -16,7 +16,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="5"/>
+<Adjective nr="6"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INCSP_1" nr="2">
@@ -25,7 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
+<Adjective nr="7"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INCSP_1" nr="3">
@@ -34,20 +34,19 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="6"/>
-<Adjective nr="19"/>
+<Adjective nr="7"/>
+<Adjective nr="20"/>
 </Cluster>
 </RCluster>
 <CCluster aid="INCSP_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 <Typ kind="G" nr="2">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>
@@ -57,6 +56,7 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 </CCluster>
 </Registrations>

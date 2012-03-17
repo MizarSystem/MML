@@ -30,16 +30,16 @@
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="98"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="171"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="103"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="104"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -43,18 +43,18 @@
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="111">
+<Adjective nr="8" value="false"/>
+<Adjective nr="112">
 <Func kind="U" nr="1">
 <Func kind="K" nr="257">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="112"/>
 <Adjective nr="113"/>
-<Adjective nr="117"/>
+<Adjective nr="114"/>
 <Adjective nr="118"/>
+<Adjective nr="119"/>
 </Cluster>
 <Func kind="U" nr="1">
 <Func kind="K" nr="257">

@@ -25,10 +25,10 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="FUNCT_6"/>
@@ -61,8 +61,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="15"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <For>
@@ -90,7 +90,7 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
@@ -129,8 +129,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="15"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <For>
@@ -158,7 +158,7 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
@@ -214,8 +214,8 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="15"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <For>
@@ -243,7 +243,7 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
@@ -321,7 +321,7 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Not>
@@ -331,7 +331,7 @@
 <Fraenkel>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>

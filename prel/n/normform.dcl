@@ -28,7 +28,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <Func kind="K" nr="24">
 <Func kind="K" nr="81">
@@ -47,16 +47,6 @@
 </Func>
 </Func>
 </Func>
-<Func kind="K" nr="24">
-<Func kind="K" nr="81">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="K" nr="81">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Adjective>
-<Adjective nr="11">
 <Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
@@ -77,6 +67,16 @@
 </Func>
 </Adjective>
 <Adjective nr="13">
+<Func kind="K" nr="24">
+<Func kind="K" nr="81">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="K" nr="81">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Adjective>
+<Adjective nr="14">
 <Func kind="K" nr="24">
 <Func kind="K" nr="81">
 <LocusVar nr="1"/>
@@ -124,8 +124,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMFORM" nr="5">
@@ -138,8 +138,8 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="36"/>
+<Adjective nr="30"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NORMFORM" nr="6">
@@ -152,9 +152,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="37"/>
-<Adjective nr="39"/>
+<Adjective nr="30"/>
+<Adjective nr="38"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -46,12 +46,12 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="81"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
-<Adjective nr="111"/>
+<Adjective nr="84"/>
+<Adjective nr="112"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="2">
@@ -64,11 +64,11 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="81"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
 <Adjective nr="82"/>
 <Adjective nr="83"/>
+<Adjective nr="84"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="3">
@@ -87,13 +87,13 @@
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
-<Adjective nr="25"/>
-<Adjective nr="79"/>
-<Adjective nr="113"/>
+<Adjective nr="22"/>
+<Adjective nr="26"/>
+<Adjective nr="80"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </RCluster>
 </Registrations>

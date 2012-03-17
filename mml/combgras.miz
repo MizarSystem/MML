@@ -20,7 +20,7 @@ environ
  definitions TARSKI, XBOOLE_0, INCSP_1, INCPROJ, FUNCT_1, FUNCT_2, RELAT_1;
  theorems ENUMSET1, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
       SETFAM_1, PENCIL_1, INCSP_1, WELLORD2, CARD_1, CARD_2, NAT_1, CARD_4,
-      ORDINAL1, CARD_FIL, STIRL2_1, CARD_FIN, FINSET_1, XXREAL_0, INCPROJ,
+      ORDINAL1, CARD_FIL, STIRL2_1, CARD_FIN, XXREAL_0, INCPROJ,
       REAL_1, FUNCT_1, FUNCT_2, RELAT_1;
  schemes FUNCT_1, NAT_1, CLASSES1;
 
@@ -49,12 +49,12 @@ A3: a c= a \/ b & b c= a \/ b & a /\ b c= a & a /\ b c= b by XBOOLE_1:7,17;
   then
 A4: (Card a = Card (a /\ b) & Card (a /\ b) = Card b) or
   (Card (a \/ b) = Card a & Card (a \/ b) = Card b) by A1,A2,XBOOLE_0:def 10;
-  n = Card n by CARD_1:66;
+  n = Card n by CARD_1:def 5;
   then
-A5: a is finite set & b is finite set by A1,CARD_4:4;
-  then (a \/ b) is finite set & (a /\ b) is finite set by A3,FINSET_1:13,14;
+    a is finite set & b is finite set by A1,CARD_4:4;
+  then (a \/ b) is finite set & (a /\ b) is finite set;
   then (a = a /\ b & b = a /\ b) or (a = a \/ b & b = a \/ b)
-  by A3,A4,A5,CARD_FIN:1;
+  by A3,A4,CARD_FIN:1;
   hence contradiction by A1;
 end;
 
@@ -65,7 +65,7 @@ proof
   let a,b be set;
   assume
 A1: Card a = n + k & Card b = n + k;
-  Card(n + k) = n + k by CARD_1:66;
+  Card(n + k) = n + k by CARD_1:def 5;
   then
 A2: a is finite & b is finite by A1,CARD_4:4;
   thus Card(a /\ b) = n implies Card(a \/ b) = n + 2*k
@@ -78,12 +78,12 @@ A2: a is finite & b is finite by A1,CARD_4:4;
   proof
     assume
 A3: Card(a \/ b) = n + 2*k;
-    a /\ b is finite by A2,FINSET_1:13,XBOOLE_1:17;
+    a /\ b is finite by A2;
     then consider m being Nat such that
 A4: Card m = Card (a /\ b) by CARD_4:4;
-    m = Card (a /\ b) by A4,CARD_1:66;
+    m = Card (a /\ b) by A4,CARD_1:def 5;
     then n + 2*k = n + k + (n + k) - m by A1,A2,A3,CARD_2:64;
-    hence thesis by A4,CARD_1:66;
+    hence thesis by A4,CARD_1:def 5;
   end;
   thus thesis;
 end;
@@ -235,11 +235,11 @@ A13: n = 2 implies (Card(a /\ b /\ c) = n - 2 & Card(a \/ b \/ c) = n + 1)
 A14: n = 2;
     then
 A15: a /\ b = {} & a /\ b /\ c c= a /\ b & a /\ b c= {}
-    by A1,CARD_2:59,XBOOLE_1:17;
+    by A1,XBOOLE_1:17;
     Card(a \/ b \/ c) = n + 1
     proof
 A16:  a /\ b /\ c = a /\ c & a /\ b /\ c = b /\ c & a /\ b /\ c = a /\ b
-      & x3 in {x3} by A1,A3,A12,A15,CARD_FIN:1,TARSKI:def 1;
+      & x3 in {x3} by A1,A15,TARSKI:def 1;
       then
 A17:  not x3 in a & not x3 in b & x1 <> x3 & x2 <> x3 by A10,XBOOLE_0:def 3;
       a \/ b \/ c = (a /\ b /\ c) \/ ({x1,x2} \/ {x3})
@@ -247,7 +247,7 @@ A17:  not x3 in a & not x3 in b & x1 <> x3 & x2 <> x3 by A10,XBOOLE_0:def 3;
       then a \/ b \/ c = (a /\ b /\ c) \/ {x1,x2,x3} by ENUMSET1:43;
       hence thesis by A11,A14,A15,A17,CARD_2:77;
     end;
-    hence thesis by A14,A15,CARD_1:78;
+    hence thesis by A14,A15;
   end;
   3 <= n implies (Card(a /\ b /\ c) = n - 2 & Card(a \/ b \/ c) = n + 1) or
   (Card(a /\ b /\ c) = n - 3 & Card(a \/ b \/ c) = n)
@@ -259,7 +259,7 @@ A19: x1 in c implies (Card(a /\ b /\ c) = n - 3 & Card(a \/ b \/ c) = n)
     proof
       assume x1 in c;
       then x1 in a /\ c by A5,A9,XBOOLE_0:def 3;
-      then {x1} c= a /\ c & Card {x1} = 1 by CARD_1:79,ZFMISC_1:37;
+      then {x1} c= a /\ c & Card {x1} = 1 by CARD_1:50,ZFMISC_1:37;
       then
 A20:  Card((a /\ c) \ {x1}) = (n - 2) - 1 &
       Card(a \ (a /\ c)) = (n - 1) - (n - 2) by A1,A3,CARD_2:63;
@@ -348,9 +348,9 @@ A32:    z2 in (a /\ c) /\ {x1} or z2 in (a /\ b) /\ {x1} by XBOOLE_0:def 1;
       end;
       then a /\ c c= a \ {x1} & a /\ b c= a \ {x1} & a \ {x1} c= a & {x1} c=
       a & Card(a \ {x1}) = (n - 1) - 1 & a \ {x1} is finite
-      by A1,A3,A4,A5,CARD_2:63,FINSET_1:13,XBOOLE_1:86;
+      by A1,A3,A4,A5,CARD_2:63,XBOOLE_1:86;
       then
-A33:  a /\ c = a \ {x1} & a /\ b = a \ {x1} by A1,A3,CARD_FIN:1;
+A33:  a /\ c = a \ {x1} & a /\ b = a \ {x1} by A1,CARD_FIN:1;
       then (a /\ b) /\ (a /\ c) = a /\ b;
       then b /\ a /\ a /\ c = a /\ b by XBOOLE_1:16;
       then
@@ -574,7 +574,7 @@ A16:  Card (a \/ b) c= k + 1 by A12,CARD_1:27;
       k + 1 c= Card (a \/ b) by A9,A10,A14,Th1;
       then
 A17:  Card (a \/ b) = k + 1 & Card (k + 1) = k + 1
-      by A16,CARD_1:66,XBOOLE_0:def 10;
+      by A16,CARD_1:def 5,XBOOLE_0:def 10;
       then a \/ b is finite & l2 is finite & l1 is finite by A11,A12,CARD_4:4;
       then a \/ b = l1 & a \/ b = l2 by A11,A12,A15,A17,CARD_FIN:1,XBOOLE_1:8;
       hence thesis;
@@ -697,7 +697,7 @@ A17: Card (A1 \/ A3) c= k + 1 & Card (A2 \/ A4) c= k + 1
   by A4,A5,A6,A7,Th1;
   then
 A18: Card (A1 \/ A3) = k + 1 & Card (A2 \/ A4) = k + 1 &
-  Card (k + 1) = k + 1 by A17,CARD_1:66,XBOOLE_0:def 10;
+  Card (k + 1) = k + 1 by A17,CARD_1:def 5,XBOOLE_0:def 10;
   then A1 \/ A3 is finite & L3 is finite & A2 \/ A4 is finite
   & L4 is finite by A11,A12,CARD_4:4;
   then A1 \/ A3 = L3 & A2 \/ A4 = L4 by A11,A12,A14,A18,CARD_FIN:1,XBOOLE_1:8;
@@ -795,31 +795,28 @@ A15: A6 on L3 & A6 on L4 by A13,INCPROJ:def 13;
 A16: a6 = A6 & Card a6 = k by A2;
 A17: A6 c= L3 & A6 c= L4 & k - 1 is Element of NAT by A1,A15,Th10,NAT_1:20;
   then
-A18: k + 1 = Card (k + 1) & k = Card k & k - 1 = Card (k - 1) by CARD_1:66;
+A18: k + 1 = Card (k + 1) & k = Card k & k - 1 = Card (k - 1) by CARD_1:def 5;
   then
 A19: L1 is finite & L2 is finite & L3 is finite & L4 is finite & A6 is
   finite & A1 is finite & A2 is finite & A3 is finite & A4 is finite
   by A4,A5,A6,A7,A9,A10,A11,A12,A16,CARD_4:4;
 A20: L3 /\ L4 = A6
   proof
-    L3 /\ L4 c= L3 by XBOOLE_1:17;
-    then
-A21: A6 c= L3 /\ L4 & L3 /\ L4 is finite by A17,A19,FINSET_1:13,XBOOLE_1:19;
+A21: A6 c= L3 /\ L4 & L3 /\ L4 is finite by A17,A19,XBOOLE_1:19;
     then
 A22: k c= Card (L3 /\ L4) by A16,CARD_1:27;
     Card (L3 /\ L4) in k + 1 by A11,A12,A13,Th1;
     then Card (L3 /\ L4) in succ k by NAT_1:39;
     then Card (L3 /\ L4) c= k by ORDINAL1:34;
     then Card (L3 /\ L4) = k by A22,XBOOLE_0:def 10;
-    hence thesis by A16,A19,A21,CARD_FIN:1;
+    hence thesis by A16,A21,CARD_FIN:1;
   end;
   then
 A23: A1 /\ A2 c= A6 & A3 /\ A4 c= A6 by A14,XBOOLE_1:27;
   then
 A24: (A1 /\ A2) \/ (A3 /\ A4) c= A6 by XBOOLE_1:8;
-  then
 A25: (A1 /\ A2) \/ (A3 /\ A4) is finite & A1 /\ A2 c= (A1 /\ A2) \/ (A3 /\ A4)
-  & A3 /\ A4 c= (A1 /\ A2) \/ (A3 /\ A4) by A19,FINSET_1:13,XBOOLE_1:7;
+  & A3 /\ A4 c= (A1 /\ A2) \/ (A3 /\ A4) by A19,XBOOLE_1:7;
 A26: A6 on L1 implies A6 = (A1 /\ A2) \/ (A3 /\ A4)
   proof
     assume
@@ -908,7 +905,7 @@ A44:      Card ((A1 /\ A2) \/ (A3 /\ A4)) = k - 1;
           then
 A45:      Card ((A1 /\ A2) /\ (A3 /\ A4)) = k - 1 by A17,A41,Th2;
           then
-A46:      (A1 /\ A2) /\ (A3 /\ A4) c= (A1 /\ A2) \/ (A3 /\ A4) &
+          (A1 /\ A2) /\ (A3 /\ A4) c= (A1 /\ A2) \/ (A3 /\ A4) &
           (A1 /\ A2) /\ (A3 /\ A4) is finite by A17,A18,CARD_4:4,XBOOLE_1:29;
           then (A1 /\ A2) /\ (A3 /\ A4) c= (A1 /\ A2) \/ (A3 /\ A4) &
           A1 /\ A2 /\ A3 /\ A4 is finite &
@@ -928,7 +925,7 @@ A48:      Card (A1 \ (A1 /\ A2 /\ A3 /\ A4)) = k - (k - 1) &
           Card (A2 \ (A1 /\ A2 /\ A3 /\ A4)) = k - (k - 1) &
           Card (A3 \ (A1 /\ A2 /\ A3 /\ A4)) = k - (k - 1) &
           Card (A4 \ (A1 /\ A2 /\ A3 /\ A4)) = k - (k - 1)
-          by A4,A5,A6,A7,A19,A44,A46,CARD_2:63;
+          by A4,A5,A6,A7,A19,A44,CARD_2:63;
           then consider x1 being set such that
 A49:      A1 \ (A1 /\ A2 /\ A3 /\ A4) = {x1} by CARD_2:60;
           consider x2 being set such that
@@ -960,7 +957,7 @@ A54:      x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4
           by A4,A5,A6,A7,A9,A10,A38,A39,Th1,CARD_1:27;
           then A1 \/ A2 is finite & A3 \/ A4 is finite &
           Card(A1 \/ A2) = k + 1 & Card(A3 \/ A4) = k + 1
-          by A19,FINSET_1:14,XBOOLE_0:def 10;
+          by A19,XBOOLE_0:def 10;
           then A1 \/ A2 = L1 & A3 \/ A4 = L2 by A9,A10,A14,A19,CARD_FIN:1
           ,XBOOLE_1:8;
           then
@@ -1006,7 +1003,7 @@ A60:          x in L1 & x in L2 & not x in A1 /\ A2 /\ A3 /\ A4
         end;
         hence thesis by A42,A43,XBOOLE_0:def 10;
       end;
-      hence thesis by A16,A19,A23,A25,CARD_FIN:1,XBOOLE_1:8;
+      hence thesis by A16,A19,A23,CARD_FIN:1,XBOOLE_1:8;
     end;
     hence thesis by A32;
   end;
@@ -1206,9 +1203,8 @@ A46: Card((a1 /\ b1) /\ (a3 /\ b3)) = k - 2 &
   then
 A47: r \/ s \/ t c= X & r is finite & s is finite & t is finite
   by A31,A32,A33,CARD_4:4,XBOOLE_1:8;
-  then r \/ s \/ t is Subset of X & s \/ t is finite by FINSET_1:14;
-  then r c= r \/ (s \/ t) & s c= s \/ (r \/ t) & t c= t \/ (r \/ s) &
-  r \/ (s \/ t) is finite by A47,FINSET_1:14,XBOOLE_1:7;
+  r c= r \/ (s \/ t) & s c= s \/ (r \/ t) & t c= t \/ (r \/ s) &
+  r \/ (s \/ t) is finite by A47,XBOOLE_1:7;
   then
 A48: r c= r \/ s \/ t & s c= r \/ s \/ t & t c= r \/ s \/ t &
   r \/ s \/ t is finite by XBOOLE_1:4;
@@ -1242,7 +1238,7 @@ A53:  O = r \/ s \/ t;
     proof
       assume Card(r \/ s \/ t) = k;
       then r = r \/ s \/ t & s = r \/ s \/ t & t = r \/ s \/ t
-      by A31,A32,A33,A47,A48,CARD_FIN:1;
+      by A31,A32,A33,A48,CARD_FIN:1;
       then {r,s,t} on A1 by A16,INCSP_1:12;
       hence thesis;
     end;
@@ -1308,7 +1304,7 @@ A7: succ(k - 1) = (k - 1) + 1 & succ k = k + 1 & succ(k + 1) = (k + 1) + 1 &
   Card k = k & Card(k - 1) = k - 1 & Card 2 = 2 & Card 1 = 1 & Card 0 = 0
   & succ 1 = 1 + 1 & succ 0 = 0 + 1 & Card(k + 1) = k + 1 &
   Card(k - 2) = k - 2 & succ(k - 2) = (k - 2)+ 1 & succ 2 = 2 + 1
-  by A2,A4,CARD_1:66,NAT_1:39;
+  by A2,A4,CARD_1:def 5,NAT_1:39;
 A8: K is STAR implies K is maximal_clique
   proof
     assume K is STAR;
@@ -1327,8 +1323,6 @@ A13:  A1 = A & Card A1 = k & S c= A1 by A9;
 A14:  B1 = B & Card B1 = k & S c= B1 by A9,A12;
 A15:  A is finite & B is finite & A /\ B c= A & A /\ B c= B
       by A7,A13,A14,CARD_4:4,XBOOLE_1:17;
-      then
-A16:  A /\ B is finite & A c= X & B c= X by A13,A14,FINSET_1:13;
       S c= A /\ B by A13,A14,XBOOLE_1:19;
       then
 A17:  k - 1 c= Card(A /\ B) & Card(A /\ B) c= k by A9,A13,A15,CARD_1:27;
@@ -1355,7 +1349,7 @@ A21:    L = A \/ B;
       proof
         assume Card(A /\ B) = k;
         then
-A22:    A /\ B = A & A /\ B = B by A13,A14,A15,A16,CARD_FIN:1;
+A22:    A /\ B = A & A /\ B = B by A13,A14,A15,CARD_FIN:1;
 A23:    Card A c= Card X by A13,CARD_1:27;
         Card A <> Card X
         proof
@@ -1397,13 +1391,12 @@ A30:  A2 = A by A28;
 A31:  A1 = A & Card A1 = k by A5,A29;
 A32:  not S c= A & A is finite & A c= X by A7,A9,A28,A31,CARD_4:4;
 A33:  S /\ A c= S & S /\ A c= A by XBOOLE_1:17;
-A34:  S /\ A is finite by A32,FINSET_1:13,XBOOLE_1:17;
       Card(S /\ A) c= k - 1 by A9,CARD_1:27,XBOOLE_1:17;
       then Card(S /\ A) in succ(k - 1) & succ(k - 2) = (k - 2) + 1
       by A2,A4,NAT_1:39,ORDINAL1:34;
       then Card(S /\ A) in succ(k - 2) or Card (S /\ A) = k - 1 by ORDINAL1:13;
       then
-A35:  Card(S /\ A) c= k - 2 by A2,A9,A10,A32,A33,A34,CARD_FIN:1,ORDINAL1:34;
+A35:  Card(S /\ A) c= k - 2 by A2,A9,A10,A32,A33,CARD_FIN:1,ORDINAL1:34;
       k - 1 < (k - 1) + 1 by A4,NAT_1:13;
       then Card S in Card A by A4,A7,A9,A31,CARD_2:58;
       then A \ S <> {} by CARD_2:4;
@@ -1556,12 +1549,12 @@ A69:  Card A c= Card S by A55,A66,NAT_1:40;
       then Card A in Card S by A69,CARD_1:13;
       then S \ A <> {} by CARD_2:4;
       then
-A70:  Card(S \ A) <> 0 by CARD_4:17;
+A70:  Card(S \ A) <> 0;
       2 c= Card(S \ A)
       proof
         assume not 2 c= Card(S \ A);
         then
-A71:    Card(S \ A) in succ 1 & 0 c= Card(S \ A) by ORDINAL1:26;
+        Card(S \ A) in succ 1 & 0 c= Card(S \ A) by ORDINAL1:26;
         then Card(S \ A) in 1 or Card(S \ A) = 1 by ORDINAL1:13;
         then
 A72:    Card(S \ A) c= 0 or Card(S \ A) = 1 by A7,ORDINAL1:34;
@@ -1570,29 +1563,25 @@ A72:    Card(S \ A) c= 0 or Card(S \ A) = 1 by A7,ORDINAL1:34;
           assume
 A73:      Card(S \ A) = 1;
 A74:      S \ A c= S by XBOOLE_1:36;
-          S \ A is finite by A56,FINSET_1:13,XBOOLE_1:36;
-          then
 A75:      Card(S \ (S \ A)) = (k + 1) - 1 & S \ (S \ A) = S /\ A &
           S /\ A c= S & S /\ A c= A
           by A55,A56,A73,A74,CARD_2:63,XBOOLE_1:17,48;
-          then Card(S /\ A) = k & S /\ A is finite by A7,CARD_4:4;
-          hence contradiction by A66,A67,A75,CARD_FIN:1;
+          thus contradiction by A66,A67,A75,CARD_FIN:1;
         end;
-        hence contradiction by A70,A71,A72,XBOOLE_0:def 10;
+        hence contradiction by A70,A72;
       end;
       then consider B1 being set such that
 A76:  B1 c= S \ A & Card B1 = 2 by CARD_FIL:36;
 A77:  B1 c= S & B1 misses A by A76,XBOOLE_1:106;
       then
-A78:  B1 is finite by A56,FINSET_1:13;
-      then
+A78:  B1 is finite by A56;
 A79:  Card(S \ B1) = (k + 1) - 2 by A55,A56,A76,A77,CARD_2:63;
       k - 2 <= (k - 2) + 1 by A2,NAT_1:11;
-      then k - 2 c= Card(S \ B1) by A2,A4,A79,NAT_1:40;
+      then k - 2 c= Card(S \ B1) by A2,A79,NAT_1:40;
       then consider B2 being set such that
 A80:  B2 c= S \ B1 & Card B2 = k - 2 by A2,CARD_FIL:36;
 A81:  B2 c= S & B2 misses B1 by A80,XBOOLE_1:106;
-      then B2 is finite & B1 c= X & B2 c= X by A56,A76,FINSET_1:13,XBOOLE_1:1;
+      then B2 is finite & B1 c= X & B2 c= X by A56,A76,XBOOLE_1:1;
       then
 A82:  Card(B1 \/ B2) = 2 + (k - 2) & B1 \/ B2 c= X & B1 \/ B2 c= S
       by A76,A77,A78,A80,A81,CARD_2:53,XBOOLE_1:8;
@@ -1621,7 +1610,7 @@ A89:      y in ({x} \/ B1) /\ (A /\ B) by XBOOLE_0:def 1;
         end;
         (B1 /\ A) /\ B c= {} & {x} c= A by A68,A85,ZFMISC_1:37;
         then (B1 /\ A) /\ B = {} & B1 c= B & {x} c= A \/ B
-        by A83,XBOOLE_1:3,10;
+        by A83,XBOOLE_1:10;
         then B1 /\ (A /\ B) = {} & B1 c= A \/ B & (A /\ B) \/ {x} c= A \/ B
         by A84,XBOOLE_1:8,10,16;
         then (A /\ B) \/ {x} \/ B1 c= A \/ B by XBOOLE_1:8;
@@ -1638,7 +1627,7 @@ A90:    (A /\ B) \/ ({x} \/ B1) c= A \/ B & Card(A \/ B) c= k + 1
         then
 A91:    Card(A /\ B) = k - 1 or Card(A /\ B) = k by A4,Th2;
         Card({x} \/ B1) = 2 + 1 & {x} \/ B1 is finite & A /\ B is finite
-        by A67,A76,A78,A84,CARD_2:54,FINSET_1:14,15;
+        by A67,A76,A78,A84,CARD_2:54;
         then (Card((A /\ B) \/ ({x} \/ B1)) = (k - 1) + 3 or
         Card((A /\ B) \/ ({x} \/ B1)) = k + 3) &
         Card((A /\ B) \/ ({x} \/ B1)) c= Card(A \/ B)
@@ -1697,7 +1686,7 @@ A8: succ(k - 1) = (k - 1) + 1 & succ k = k + 1 & succ(k + 1) = (k + 1) + 1 &
   Card k = k & Card(k - 1) = k - 1 & Card 2 = 2 & Card 1 = 1 & Card 0 = 0
   & succ 1 = 1 + 1 & succ 0 = 0 + 1 & Card(k + 1) = k + 1 &
   Card(k - 2) = k - 2 & succ(k - 2) = (k - 2)+ 1 & succ 2 = 2 + 1
-  by A2,A5,CARD_1:66,NAT_1:39;
+  by A2,A5,CARD_1:def 5,NAT_1:39;
   assume
 A9: K is maximal_clique;
   then
@@ -1828,7 +1817,7 @@ A42: U is clique
   0 c= Card K by XBOOLE_1:2;
   then 0 in succ(Card K) by ORDINAL1:34;
   then Card K = 0 or 0 in Card K by ORDINAL1:13;
-  then 1 c= Card K by A8,A13,CARD_4:17,ORDINAL1:33;
+  then 1 c= Card K by A8,A13,ORDINAL1:33;
   then 1 in succ Card K by ORDINAL1:34;
   then Card K = 1 or 1 in Card K by ORDINAL1:13;
   then
@@ -1866,7 +1855,7 @@ A57: Card(A \/ B) c= k + 1 & k + 1 c= Card(A \/ B)
   by A45,A48,A49,A50,A51,A55,Th1,CARD_1:27;
   then
 A58: Card(A \/ B) = k + 1 & A /\ B c= X & A \/ B is finite
-  by A55,A56,FINSET_1:13,XBOOLE_0:def 10,XBOOLE_1:1;
+  by A55,A56,XBOOLE_0:def 10,XBOOLE_1:1;
   then
 A59: A \/ B = L by A55,A56,CARD_FIN:1;
 A60: (ex C being POINT of G_(k,X) st C in K & C on L & A <> C & B <> C)
@@ -1884,7 +1873,7 @@ A64: A \/ C c= L & B \/ C c= L & C is finite & L is finite
     then
 A65: A \/ B \/ C c= L & Card(A \/ C) c= k + 1 & k + 1 c= Card(A \/ C ) &
     A \/ B is finite & Card(B \/ C) c= k + 1 & k + 1 c= Card(B \/ C)
-    by A50,A51,A54,A55,A56,A61,A62,A63,Th1,CARD_1:27,FINSET_1:14,XBOOLE_1:8;
+    by A50,A51,A55,A56,A61,A62,A63,Th1,CARD_1:27,XBOOLE_1:8;
     then
 A66: Card(A \/ B) = (k - 1) + 2*1 & Card(B \/ C) = (k - 1) + 2*1 &
     A \/ B c= (A \/ B) \/ C & Card(A \/ C) = (k - 1) + 2*1 &
@@ -1892,7 +1881,7 @@ A66: Card(A \/ B) = (k - 1) + 2*1 & Card(B \/ C) = (k - 1) + 2*1 &
     by A50,A51,A57,A63,XBOOLE_0:def 10,XBOOLE_1:7;
     then Card(A /\ B) = k - 1 & Card(B /\ C) = k - 1
     & A \/ B = L & Card(A /\ C) = k - 1 & A \/ B c= A \/ B \/ C
-    by A5,A55,A56,A65,Th2,CARD_FIN:1;
+    by A5,A55,A56,Th2,CARD_FIN:1;
     then
 A67: Card(A \/ B \/ C) = k + 1 & Card A = (k + 1) - 1 & Card B = (k + 1) - 1
     & Card C = (k + 1) - 1 & Card(A /\ C) = (k + 1) - 2 & 2 + 1 <= k + 1 &
@@ -1951,10 +1940,10 @@ A82:  Card A = (k - 1) + 1 & Card B = (k - 1) + 1 & Card C = (k - 1) + 1 &
 A83:  Card(A /\ D) = k - 1 & Card(B /\ D) = k - 1 & Card(C /\ D) = k - 1 &
       {x} c= D & D is finite & Card {x} = 1 & D \ {x} c= D &
       A /\ D is finite & B /\ D is finite & C /\ D is finite
-      by A5,A8,A54,A64,A74,Th2,CARD_1:79,CARD_4:4,FINSET_1:15,ZFMISC_1:37;
+      by A5,A8,A54,A64,A74,Th2,CARD_1:50,CARD_4:4,ZFMISC_1:37;
       then
 A84:  Card(D \ {x}) = k - 1 & D \ {x} is finite & not x in A & not x in B &
-      not x in C by A53,A62,A72,A73,A74,CARD_2:63,FINSET_1:13;
+      not x in C by A53,A62,A72,A73,A74,CARD_2:63;
 A85:  A /\ D c= D \ {x}
       proof
         let z be set;
@@ -2037,7 +2026,7 @@ A98: Card L c= Card X by A1,A3,A55,XBOOLE_1:1;
     then consider x being set such that
 A99: x in X \ L by XBOOLE_0:def 1;
 A100: {x} c= X & not x in A /\ B & not x in A & not x in B & A /\ B is finite
-    by A5,A8,A53,A56,A96,A99,CARD_4:4,XBOOLE_0:def 4,ZFMISC_1:37;
+    by A53,A56,A99,XBOOLE_0:def 4,ZFMISC_1:37;
     then
 A101: Card((A /\ B) \/ {x}) = (k - 1) + 1 & (A /\ B) \/ {x} c= X
     by A58,A96,CARD_2:54,XBOOLE_1:8;
@@ -2075,8 +2064,7 @@ A110: L1 = A \/ C;
     then consider L2 being LINE of G_(k,X) such that
 A111: L2 = B \/ C;
 A112: A /\ B is finite & A /\ C is finite & B /\ C is finite & C is finite
-    by A8,A54,A101,A102,CARD_4:4,FINSET_1:15;
-    then
+    by A54,A102;
 A113: Card(A \ (A /\ B)) = k - (k - 1) & Card(B \ (A /\ B)) = k - (k - 1)
     by A50,A51,A54,A105,A108,CARD_2:63;
     then consider z1 being set such that
@@ -2179,11 +2167,10 @@ A137: A \/ B = A \/ B \/ E by A58,A136,CARD_FIN:1;
       then E c= L by A56,A137,XBOOLE_1:1;
       hence contradiction by A4,A133,Th10;
     end;
-    then A /\ B /\ E is finite by A5,A8,A134,CARD_4:4;
-    then A /\ B = A /\ B /\ E by A100,A108,A134,A135,CARD_FIN:1,XBOOLE_1:17;
+    A /\ B = A /\ B /\ E by A100,A108,A134,A135,CARD_FIN:1,XBOOLE_1:17;
     then
 A138: A /\ B c= E & E is finite by A8,A127,A128,CARD_4:4,XBOOLE_1:17;
-    then Card(E \ (A /\ B)) = k - (k - 1) by A108,A112,A127,A128,CARD_2:63;
+    then Card(E \ (A /\ B)) = k - (k - 1) by A108,A127,A128,CARD_2:63;
     then consider z4 being set such that
 A139: E \ (A /\ B) = {z4} by CARD_2:60;
 A140: E = (A /\ B) \/ {z4} by A138,A139,XBOOLE_1:45;
@@ -2237,12 +2224,7 @@ A153: Card(A /\ D) = k - 1 & Card(B /\ D) = k - 1 & Card(E /\ D) = k - 1
 A154: A /\ B <> (A /\ B) /\ D & (A /\ B) /\ D c= A /\ B & not z4 in A /\ B
       by XBOOLE_0:def 4,XBOOLE_1:17;
 A155: Card((A /\ B) /\ D) <> Card(A /\ B)
-      proof
-        assume
-A156:   Card((A /\ B) /\ D) = Card(A /\ B);
-        then (A /\ B) /\ D is finite by A5,A8,A108,CARD_4:4;
-        hence contradiction by A112,A154,A156,CARD_FIN:1;
-      end;
+         by A112,A154,CARD_FIN:1;
 A157: z1 in D & z2 in D & z4 in D
       proof
         assume not z1 in D or not z2 in D or not z4 in D;
@@ -2256,10 +2238,10 @@ A157: z1 in D & z2 in D & z4 in D
         by XBOOLE_0:def 7,XBOOLE_1:23;
         hence contradiction by A5,A107,A153,A155,Th2;
       end;
-A158: (A /\ B) /\ D is finite by A112,A154,FINSET_1:13;
+A158: (A /\ B) /\ D is finite by A112;
       then consider r being Nat such that
 A159: Card((A /\ B) /\ D) = Card r by CARD_4:4;
-A160: Card((A /\ B) /\ D) = r by A159,CARD_1:66;
+A160: Card((A /\ B) /\ D) = r by A159,CARD_1:def 5;
       A /\ D = ((A /\ B) \/ {z1}) /\ D by A105,A114,XBOOLE_1:45;
       then A /\ D = ((A /\ B) /\ D) \/ ({z1} /\ D) & {z1} /\ D = {z1}
       by A157,XBOOLE_1:23,ZFMISC_1:52;
@@ -2268,7 +2250,7 @@ A161: A /\ D = ((A /\ B) /\ D) \/ {z1} & not z1 in (A /\ B) /\ D &
       (A /\ B) /\ D c= D by A118,XBOOLE_0:def 3,XBOOLE_1:17;
       then Card(A /\ D) = r + 1 by A158,A160,CARD_2:54;
       then
-A162: Card((A /\ B) /\ D) = k - 2 by A153,A159,CARD_1:66;
+A162: Card((A /\ B) /\ D) = k - 2 by A153,A159,CARD_1:def 5;
       {z1,z2} c= D & {z4} c= D by A157,ZFMISC_1:37,38;
       then {z1,z2} \/ {z4} c= D by XBOOLE_1:8;
       then
@@ -2652,7 +2634,7 @@ A1: F is automorphism & K is maximal_clique;
   by Def9,Th18;
   then
 A2: K is clique & F is incidence_preserving & the line-map of F is onto &
-  the point-map of F is onto by A1,Def3,Def9,FUNCT_2:def 4;
+  the point-map of F is onto by A1,Def3,Def9;
   then
 A3: F.:K is clique & F"K is clique &
   the Points of S = dom (the point-map of F) &
@@ -2710,7 +2692,7 @@ A4: 2 - 2 < k & k + 1 c= Card X & 2 - 1 <= k - 1 & 1 <= k + 1 &
   then
 A5: 1 c= k + 1 & 1 c= k & 1 c= k - 1 & Card(k + 1) = k + 1 & Card 1 = 1 &
   Card k = k & succ(k - 1) = (k - 1) + 1 & succ 2 = 2 + 1
-  by A3,CARD_1:66,NAT_1:39,40;
+  by A3,CARD_1:def 5,NAT_1:39,40;
 A6: the Points of G_(k,X) = {A where A is Subset of X: Card A = k} by A4,Def1;
 A7: the Lines of G_(k,X) = {L where L is Subset of X: Card L = k + 1}
   by A4,Def1;
@@ -2733,7 +2715,7 @@ A13: X1 is finite & B is finite by A5,A11,A12,CARD_4:4;
 A14: Card(B \ X1) = (k + 1) - 1 by A11,A12,CARD_2:63;
     then consider X2 being set such that
 A15: X2 c= B \ X1 & Card X2 = 1 by A5,CARD_FIL:36;
-A16: X2 is finite & B \ X1 is finite by A5,A14,A15,CARD_4:4;
+     X2 is finite & B \ X1 is finite by A5,A14,A15,CARD_4:4;
     then Card((B \ X1) \ X2) = k - 1 by A14,A15,CARD_2:63;
     then consider X3 being set such that
 A17: X3 c= (B \ X1) \ X2 & Card X3 = 1 by A5,CARD_FIL:36;
@@ -2743,7 +2725,7 @@ A17: X3 c= (B \ X1) \ X2 & Card X3 = 1 by A5,CARD_FIL:36;
 A18: X3 c= B & X2 c= B & X3 is finite & X3 c= (B \ X2) \ X1 &
     the point-map of F is onto & the line-map of F is onto &
     F is incidence_preserving & the point-map of F is one-to-one
-    by A2,A5,A15,A17,Def9,CARD_4:4,FUNCT_2:def 4,XBOOLE_1:41,106;
+    by A2,A5,A15,A17,Def9,CARD_4:4,XBOOLE_1:41,106;
     then
 A19: Card(B \ X2) = (k + 1) - 1 & Card(B \ X3) = (k + 1) - 1 & B \ X1 c= X &
     B \ X2 c= X & B \ X3 c= X & X3 c= B \ X2 & X3 c= B \ X1 &
@@ -2753,7 +2735,7 @@ A19: Card(B \ X2) = (k + 1) - 1 & Card(B \ X3) = (k + 1) - 1 & B \ X1 c= X &
     the Lines of G_(k,X) = rng(the line-map of F) &
     the Points of G_(k,X) = dom(the point-map of F) &
     the Lines of G_(k,X) = dom(the line-map of F)
-    by A11,A13,A15,A16,A17,CARD_2:63,FUNCT_2:67,def 3,XBOOLE_1:106;
+    by A11,A13,A15,A17,CARD_2:63,FUNCT_2:67,def 3,XBOOLE_1:106;
     then
 A20: B \ X1 in the Points of G_(k,X) & B \ X2 in the Points of G_(k,X) &
     B \ X3 in the Points of G_(k,X) & B in the Lines of G_(k,X)
@@ -2764,7 +2746,7 @@ A21: B \ X1 <> B \ X2 & B \ X2 <> B \ X3 & B \ X1 <> B \ X3
       then X2 c= B \ X2 or X3 c= B \ X3 or X3 c= B \ X3
       by A15,A17,A18,XBOOLE_1:106;
       then X2 = {} or X3 = {} or X3 = {} by XBOOLE_1:38;
-      hence contradiction by A15,A17,CARD_4:17;
+      hence contradiction by A15,A17;
     end;
     consider B1 being POINT of G_(k,X) such that
 A22: B \ X1 = B1 by A20;
@@ -2893,7 +2875,7 @@ A56: X1 is finite & B is finite by A5,A54,A55,CARD_4:4;
 A57: Card(B \ X1) = (k + 1) - 1 by A54,A55,CARD_2:63;
     then consider X2 being set such that
 A58: X2 c= B \ X1 & Card X2 = 1 by A5,CARD_FIL:36;
-A59: X2 is finite & B \ X1 is finite by A5,A57,A58,CARD_4:4;
+     X2 is finite & B \ X1 is finite by A5,A57,A58,CARD_4:4;
     then Card((B \ X1) \ X2) = k - 1 by A57,A58,CARD_2:63;
     then consider X3 being set such that
 A60: X3 c= (B \ X1) \ X2 & Card X3 = 1 by A5,CARD_FIL:36;
@@ -2904,7 +2886,7 @@ A61: X3 c= B & X2 c= B & X3 is finite & X3 c= (B \ X2) \ X1 &
     the point-map of F is onto & the line-map of F is onto &
     F is incidence_preserving & the point-map of F is one-to-one &
     the point-map of F is Function-like
-    by A2,A5,A58,A60,Def9,CARD_4:4,FUNCT_2:def 4,XBOOLE_1:41,106;
+    by A2,A5,A58,A60,Def9,CARD_4:4,XBOOLE_1:41,106;
     then
 A62: Card(B \ X2) = (k + 1) - 1 & Card(B \ X3) = (k + 1) - 1 & B \ X1 c= X &
     B \ X2 c= X & B \ X3 c= X & X3 c= B \ X2 & X3 c= B \ X1 &
@@ -2914,7 +2896,7 @@ A62: Card(B \ X2) = (k + 1) - 1 & Card(B \ X3) = (k + 1) - 1 & B \ X1 c= X &
     the Lines of G_(k,X) = rng(the line-map of F) &
     the Points of G_(k,X) = dom(the point-map of F) &
     the Lines of G_(k,X) = dom(the line-map of F)
-    by A54,A56,A58,A59,A60,CARD_2:63,FUNCT_2:67,def 3,XBOOLE_1:106;
+    by A54,A56,A58,A60,CARD_2:63,FUNCT_2:67,def 3,XBOOLE_1:106;
     then
 A63: B \ X1 in the Points of G_(k,X) & B \ X2 in the Points of G_(k,X) &
     B \ X3 in the Points of G_(k,X) & B in the Lines of G_(k,X)
@@ -2923,7 +2905,7 @@ A64: B \ X1 <> B \ X2 & B \ X2 <> B \ X3 & B \ X1 <> B \ X3
     proof
       assume B \ X1 = B \ X2 or B \ X2 = B \ X3 or B \ X1 = B \ X3;
       then X2 = {} or X3 = {} or X3 = {} by A58,A62,XBOOLE_1:38;
-      hence contradiction by A58,A60,CARD_4:17;
+      hence contradiction by A58,A60;
     end;
     consider B1 being POINT of G_(k,X) such that
 A65: B \ X1 = B1 by A63;
@@ -3142,7 +3124,7 @@ A6: for x being set st x in X holds c.x = CH(x) from FUNCT_1:sch 3;
     assume y in rng c;
     then consider x being set such that
 A7: x in dom c & y = c.x by FUNCT_1:def 5;
-    {x} c= X & Card {x} = 1 & y = {x} by A5,A6,A7,CARD_1:79,ZFMISC_1:37;
+    {x} c= X & Card {x} = 1 & y = {x} by A5,A6,A7,CARD_1:50,ZFMISC_1:37;
     hence thesis by A2;
   end;
   then reconsider c as Function of X, the Points of G_(k,X) by A5,FUNCT_2:4;
@@ -3174,11 +3156,10 @@ A15: the point-map of F is bijective &
   dom(the line-map of F) = the Lines of G_(k,X) & 0 < k &
   F is incidence_preserving by A1,A4,Def9,FUNCT_2:67;
   then
-A16: the point-map of F is one-to-one & the point-map of F is onto
-  by FUNCT_2:def 4;
+     the point-map of F is one-to-one & the point-map of F is onto;
   then
 A17: rng(the point-map of F) = the Points of G_(k,X) & Card 2 = 2 & Card 1 = 1
-  by CARD_1:66,FUNCT_2:def 3;
+  by CARD_1:def 5,FUNCT_2:def 3;
   f is bijective
   proof
     thus f is one-to-one
@@ -3203,7 +3184,7 @@ A24:  A12 = A2 & Card A12 = 1 by A2;
 A25:  A2 = {y2} by A24,CARD_2:60;
       f.x1 = y1 & f.x2 = y2 by A19,A20,A21,A23,A25,ZFMISC_1:31;
       then c.x1 = c.x2 & c.x1 = {x1} & c.x2 = {x2}
-      by A6,A15,A16,A18,A20,A21,A23,A25,FUNCT_1:def 8;
+      by A6,A15,A18,A20,A21,A23,A25,FUNCT_1:def 8;
       hence thesis by ZFMISC_1:6;
     end;
     thus f is onto
@@ -3212,7 +3193,7 @@ A25:  A2 = {y2} by A24,CARD_2:60;
       proof
         let y be set;
         assume y in X;
-        then {y} c= X & Card{y} = 1 by CARD_1:79,ZFMISC_1:37;
+        then {y} c= X & Card{y} = 1 by CARD_1:50,ZFMISC_1:37;
         then {y} in rng(the point-map of F) by A2,A17;
         then consider a being set such that
 A26:    a in dom(the point-map of F) & {y} = (the point-map of F).a
@@ -3287,7 +3268,7 @@ A45:    incprojmap(k,f).A = f.:A & x1 in X & x2 in X
         by A1,A43,A44,Def14,ZFMISC_1:38;
         reconsider x1,x2 as Element of X by A43,A44,ZFMISC_1:38;
 A46:    c.x1 = {x1} & c.x2 = {x2} & Card{x1} = 1 & Card{x2} = 1 &
-        {x1} c= X & {x2} c= X by A6,CARD_1:79;
+        {x1} c= X & {x2} c= X by A6,CARD_1:50;
         then consider A1 being POINT of G_(k,X) such that
 A47:    A1 = {x1};
         consider A2 being POINT of G_(k,X) such that
@@ -3302,7 +3283,7 @@ A50:    Im(f,x1) = {f.x1} & Im(f,x2) = {f.x2} by A8,FUNCT_1:117;
         then
 A51:    f.:A1 = {f.x1} & f.:A2 = {f.x2} & F.A1 on F.A & F.A2 on F. A &
         incprojmap(k,f).A1 = f.:A1 & incprojmap(k,f).A2 = f.:A2 &
-        F.A1 <> F.A2 by A1,A8,A15,A47,A48,A49,Def8,Def14,FUNCT_1:def 8;
+        F.A1 <> F.A2 by A1,A15,A47,A48,A49,Def8,Def14,FUNCT_1:def 8;
         then
 A52:    F.A1 c= F.A & F.A2 c= F.A by A1,Th10;
 A53:    F.A1 in the Points of G_(k,X) & F.A2 in the Points of G_(k,X);
@@ -3327,7 +3308,7 @@ A59:    F.A2 = {y2} by A55,CARD_2:60;
         end;
         then Card(F.A1 \/ F.A2) = 1 + 1 & F.A1 \/ F.A2 is finite & f.:A1 = F
         .A1 &
-        f.:A2 = F.A2 by A47,A48,A49,A50,A54,A58,A59,CARD_2:54,FINSET_1:14
+        f.:A2 = F.A2 by A47,A48,A49,A50,A54,A58,A59,CARD_2:54
         ,ZFMISC_1:31;
         hence thesis by A42,A45,A49,A52,A56,A57,CARD_FIN:1,XBOOLE_1:8;
       end;
@@ -3356,7 +3337,7 @@ A4: F is automorphism;
   consider c being Function such that
 A5: dom c = X and
 A6: for x being set st x in X holds c.x = CH(x) from FUNCT_1:sch 3;
-A7: Card(k + 1) = k + 1 & Card 1 = 1 & Card k = k by CARD_1:66;
+A7: Card(k + 1) = k + 1 & Card 1 = 1 & Card k = k by CARD_1:def 5;
   then
 A8: X is finite by A1,CARD_4:4;
   rng c c= the Points of G_(k,X)
@@ -3365,7 +3346,7 @@ A8: X is finite by A1,CARD_4:4;
     assume y in rng c;
     then consider x being set such that
 A9: x in dom c & y = c.x by FUNCT_1:def 5;
-A10: y = X \ {x} & {x} c= X & Card{x} = 1 by A5,A6,A9,CARD_1:79,ZFMISC_1:37;
+A10: y = X \ {x} & {x} c= X & Card{x} = 1 by A5,A6,A9,CARD_1:50,ZFMISC_1:37;
     then Card(X \ {x}) = (k + 1) - 1 & X \ {x} c= X by A1,A8,CARD_2:63;
     hence thesis by A2,A10;
   end;
@@ -3387,8 +3368,7 @@ A15: A = F.(c.a);
     A in the Points of G_(k,X);
     then consider A1 being Subset of X such that
 A16: A1 = A & Card A1 = k by A2;
-    A is finite by A7,A16,CARD_4:4;
-    then Card(X \ A) = (k + 1) - k by A1,A8,A16,CARD_2:63;
+    Card(X \ A) = (k + 1) - k by A1,A8,A16,CARD_2:63;
     then consider x being set such that
 A17: X \ A = {x} by CARD_2:60;
     x in X by A17,ZFMISC_1:37;
@@ -3402,11 +3382,11 @@ A18: the point-map of F is bijective &
   the line-map of F is bijective by A1,A4,Def9,FUNCT_2:67;
   then
 A19: the point-map of F is one-to-one & the point-map of F is onto &
-  the line-map of F is onto by FUNCT_2:def 4;
+  the line-map of F is onto;
   then
 A20: rng(the point-map of F) = the Points of G_(k,X) & Card 2 = 2 &
   Card 1 = 1 & rng(the line-map of F) = the Lines of G_(k,X)
-  by CARD_1:66,FUNCT_2:def 3;
+  by CARD_1:def 5,FUNCT_2:def 3;
 A21: f is one-to-one
   proof
     let x1,x2 be set such that
@@ -3423,9 +3403,6 @@ A26: A11 = A1 & Card A11 = k by A2;
     A2 in the Points of G_(k,X);
     then consider A12 being Subset of X such that
 A27: A12 = A2 & Card A12 = k by A2;
-    X \ A1 c= X & X \ A2 c= X & A1 is finite & A2 is finite
-    by A7,A26,A27,CARD_4:4;
-    then
 A28: Card(X \ A1) = (k + 1) - k & Card(X \ A2) = (k + 1) - k
     by A1,A8,A26,A27,CARD_2:63;
     then consider y1 being set such that
@@ -3445,7 +3422,7 @@ A30: X \ A2 = {y2} by A28,CARD_2:60;
     let y be set;
     assume y in X;
     then
-A31: {y} c= X & Card{y} = 1 by CARD_1:79,ZFMISC_1:37;
+A31: {y} c= X & Card{y} = 1 by CARD_1:50,ZFMISC_1:37;
     then Card(X \ {y}) = (k + 1) - 1 & X \ {y} c= X by A1,A8,CARD_2:63;
     then X \ {y} in rng(the point-map of F) by A2,A20;
     then consider a being set such that
@@ -3454,8 +3431,7 @@ A32: a in dom(the point-map of F) & X \ {y} = (the point-map of F).a
     a in the Points of G_(k,X) by A32;
     then consider A1 being Subset of X such that
 A33: A1 = a & Card A1 = k by A2;
-    a is finite by A7,A33,CARD_4:4;
-    then Card(X \ a) = (k + 1) - k by A1,A8,A33,CARD_2:63;
+    Card(X \ a) = (k + 1) - k by A1,A8,A33,CARD_2:63;
     then consider x being set such that
 A34: X \ a = {x} by CARD_2:60;
     reconsider x as Element of X by A34,ZFMISC_1:37;
@@ -3470,7 +3446,7 @@ A34: X \ a = {x} by CARD_2:60;
   then
 A35: rng f = X by FUNCT_2:16;
   then f is onto by FUNCT_2:def 3;
-  then reconsider f as Permutation of X by A21,FUNCT_2:def 4;
+  then reconsider f as Permutation of X by A21;
   the IncProjMap of F = incprojmap(k,f)
   proof
 A36: the point-map of F = the point-map of incprojmap(k,f)
@@ -3528,14 +3504,11 @@ A51:    x in dom(the line-map of F);
 A52:    x = A;
         consider A11 being Subset of X such that
 A53:    x = A11 & Card A11 = k + 1 by A3,A18,A51;
-        A11 is finite by A7,A53,CARD_4:4;
-        then
 A54:    x = X by A1,A8,A53,CARD_FIN:1;
         F.A in the Lines of G_(k,X);
         then consider y being Subset of X such that
 A55:    y = F.A & Card y = k + 1 by A3;
-        F.A is finite & f.:x = X by A7,A35,A54,A55,CARD_4:4,FUNCT_2:79;
-        then F.A = X & incprojmap(k,f).A = f.:x
+        F.A = X & incprojmap(k,f).A = f.:x
         by A1,A8,A52,A55,Def14,CARD_FIN:1;
         hence thesis by A35,A52,A54,FUNCT_2:79;
       end;
@@ -3560,7 +3533,7 @@ A1: 0 < k & k + 1 c= Card X;
   let S be Subset of X;
 A2: k - 1 is Element of NAT by A1,NAT_1:20;
   then
-A3: Card(k - 1) = k - 1 & Card k = k by CARD_1:66;
+A3: Card(k - 1) = k - 1 & Card k = k by CARD_1:def 5;
   assume
 A4: Card S = k - 1 & T = {A where A is Subset of X: Card A = k & S c= A};
   then
@@ -3641,7 +3614,7 @@ A21:      z in S /\ {y} by XBOOLE_0:def 1;
         end;
         then S c= a1 \ {y} by A14,XBOOLE_1:86;
         then S c= (a1 \ {y}) \/ {y2} & S = a1 \ {y}
-        by A4,A5,A16,A18,CARD_FIN:1,XBOOLE_1:10;
+        by A4,A16,A18,CARD_FIN:1,XBOOLE_1:10;
         then
 A22:    (a1 \ {y}) \/ {y2} in T & not y in (a1 \ {y}) & not y in { y2}
         by A4,A12,A19,A20,TARSKI:def 1;
@@ -3742,7 +3715,7 @@ A1: 0 < k & k + 3 c= Card X;
 A2: F is automorphism;
 A3: (k + 1) + 2 c= Card X & (k + 1) + 0 <= (k + 1) + 2 &
   0 + 2 < k + (1 + 1) & Card k = k & (k + 1) + 1 <= (k + 1) + 2
-  by A1,CARD_1:66,XREAL_1:8;
+  by A1,CARD_1:def 5,XREAL_1:8;
   then k + 1 c= k + 3 & k + 2 c= k + 3 & 0 + 2 < (k + 1) + 1 & k + 0 < k + 1
   by NAT_1:40,XREAL_1:10;
   then
@@ -3794,8 +3767,7 @@ A16: Card S = (k+1) - 1 &
   ,X) by A10,FUNCT_2:4;
   the point-map of F is bijective by A2,Def9;
   then
-A17: the point-map of F is onto & the point-map of F is one-to-one
-  by FUNCT_2:def 4;
+A17: the point-map of F is onto & the point-map of F is one-to-one;
   then
 A18: dom the point-map of F = the Points of G_(k+1,X) &
   rng the point-map of F = the Points of G_(k+1,X) by FUNCT_2:67,def 3;
@@ -3867,7 +3839,7 @@ A36:    S = meet(F"(^^(y,X,k+1))) & S in the Points of G_(k,X)
       end;
       then rng Hp = the Points of G_(k,X) by FUNCT_2:16;
       then Hp is onto by FUNCT_2:def 3;
-      hence thesis by A23,FUNCT_2:def 4;
+      hence thesis by A23;
     end;
     H is incidence_preserving
     proof
@@ -3959,7 +3931,7 @@ A4: the IncProjMap of H = incprojmap(k,f);
   then
 A5: k + 2 c= k + 3 & k + 1 c= k + 2 & k + 1 c= k + 3 & k c= k + 1
   & Card k = k & Card(k + 1) = k + 1 & Card(k + 2) = k + 2
-  by CARD_1:66,NAT_1:40;
+  by CARD_1:def 5,NAT_1:40;
   then
 A6: k + 1 c= Card X & (k + 1) + 1 c= Card X & 0 < k + 1 by A1,XBOOLE_1:1;
   then
@@ -3975,9 +3947,6 @@ A10: the point-map of F is bijective & F is incidence_preserving &
   dom(the point-map of incprojmap(k+1,f)) = the Points of G_(k+1,X) &
   dom(the line-map of incprojmap(k+1,f)) = the Lines of G_(k+1,X)
   by A2,Def9,FUNCT_2:67;
-  then
-A11: the point-map of F is one-to-one & the point-map of F is onto
-  by FUNCT_2:def 4;
 A12: the point-map of F = the point-map of incprojmap(k+1,f)
   proof
     for x st x in dom(the point-map of F) holds
@@ -4016,7 +3985,7 @@ A19:  B1 is finite & C1 is finite & x is finite & x \ B1 c= x & C1 c= x
       then
 A20:  Card(x \ B1) = (k + 2) - (k + 1) & C1 misses(x \ B1) &
       x \ B1 is finite & C1 \/ (x \ B1) c= x
-      by A16,A17,A18,CARD_2:63,FINSET_1:13,XBOOLE_1:8,85;
+      by A16,A17,A18,CARD_2:63,XBOOLE_1:8,85;
       then
 A21:  Card(C1 \/ (x \ B1)) = k + 1 & C1 \/ (x \ B1) c= X & B1 c= X &
       B1 \/ (C1 \/ (x \ B1)) c= x by A16,A17,A18,A19,CARD_2:53,XBOOLE_1:1,8;
@@ -4028,7 +3997,7 @@ A23:  b1 = B1;
       consider b2 being POINT of G_(k+1,X) such that
 A24:  b2 = C1 \/ (x \ B1) by A22;
       B1 misses (x \ B1) by XBOOLE_1:79;
-      then Card((x \ B1) /\ B1) = 0 by CARD_1:78,XBOOLE_0:def 7;
+      then Card((x \ B1) /\ B1) = 0 by CARD_1:47,XBOOLE_0:def 7;
       then
 A25:  b1 <> b2 by A20,A23,A24,XBOOLE_1:11,28;
       then Card(b1 \/ b2) c= k + 2 & (k + 1) + 1 c= Card(b1 \/ b2) &
@@ -4036,7 +4005,7 @@ A25:  b1 <> b2 by A20,A23,A24,XBOOLE_1:11,28;
       by A5,A6,A15,A16,A17,A20,A21,A23,A24,Th1,Th10,CARD_1:27,CARD_4:4;
       then Card(b1 \/ b2) = k + 2 & b1 \/ b2 is finite & b1 \/ b2 c= x &
       F.b1 on F.A & F.b2 on F.A
-      by A10,A17,A19,A20,A23,A24,Def8,FINSET_1:14,XBOOLE_0:def 10,XBOOLE_1:8;
+      by A10,A17,A19,A20,A23,A24,Def8,XBOOLE_0:def 10,XBOOLE_1:8;
       then
 A26:  b1 \/ b2 = x & f.:b1 \/ f.:b2 = f.:(b1 \/ b2) &
       F.b1 in the Points of G_(k+1,X) & F.b2 in the Points of G_(k+1,X) &
@@ -4049,11 +4018,11 @@ A28:  F.b2 = B12 & Card B12 = k + 1 by A8,A26;
       consider L1 being Subset of X such that
 A29:  F.A = L1 & Card L1 = (k + 1) + 1 by A9,A26;
 A30:  F.b1 <> F.b2 & F.b1 \/ F.b2 c= F.A & F.A is finite
-      by A5,A10,A11,A25,A26,A29,CARD_4:4,FUNCT_1:def 8,XBOOLE_1:8;
+      by A5,A10,A25,A26,A29,CARD_4:4,FUNCT_1:def 8,XBOOLE_1:8;
       then (k + 1) + 1 c= Card(F.b1 \/ F.b2) & Card(F.b1 \/ F.b2) c= k + 2
       by A27,A28,A29,Th1,CARD_1:27;
       then Card(F.b1 \/ F.b2) = k + 2 & F.b1 \/ F.b2 is finite
-      by A30,FINSET_1:13,XBOOLE_0:def 10;
+      by A30,XBOOLE_0:def 10;
       then F.b1 \/ F.b2 = F.A & incprojmap(k+1,f).A = f.:x &
       F.b2 = incprojmap(k+1,f).b2 & F.b1 = incprojmap(k+1,f).b1 &
       incprojmap(k+1,f).b1 = f.:b1 & incprojmap(k+1,f).b2 = f.:b2
@@ -4095,7 +4064,7 @@ A7:   F2 is automorphism;
       0 c= i by NAT_1:40;
       then 0 in succ i & (i + 1) + 2 <= k + 2 by A6,ORDINAL1:34,XREAL_1:9;
       then (0 = i or 0 in i) & Card i = i & i + 3 c= k + 2
-      by CARD_1:66,NAT_1:40,ORDINAL1:13;
+      by CARD_1:def 5,NAT_1:40,ORDINAL1:13;
       then
 A8:   (0 = i or 0 < i) & i + 3 c= Card X by A1,XBOOLE_1:1;
 A9:   i = 0 implies ex
@@ -4192,7 +4161,7 @@ A16:    A = s"y;
       by FUNCT_2:16;
       hence thesis by FUNCT_2:def 3;
     end;
-    hence thesis by A6,FUNCT_2:def 4;
+    hence thesis by A6;
   end;
 A17: the point-map of incprojmap(k,s) is bijective
   proof
@@ -4241,7 +4210,7 @@ A28:    A = s"y;
       by FUNCT_2:16;
       hence thesis by FUNCT_2:def 3;
     end;
-    hence thesis by A18,FUNCT_2:def 4;
+    hence thesis by A18;
   end;
   incprojmap(k,s) is incidence_preserving
   proof
@@ -4284,7 +4253,7 @@ A2: F is automorphism implies
     assume
 A3: F is automorphism;
 A4: 0 + 1 < k + 1 & succ k = k + 1 & Card 1 = 1 & Card(k + 1) = k + 1 &
-    Card k = k by A1,CARD_1:66,NAT_1:39,XREAL_1:10;
+    Card k = k by A1,CARD_1:def 5,NAT_1:39,XREAL_1:10;
     then 1 in succ k & k + 1 in succ Card X by A1,NAT_1:42,ORDINAL1:34;
     then (1 = k or 1 in k) & (k + 1 = Card X or k + 1 in Card X) &
     succ 1 = 1 + 1 & succ(k + 1) = (k + 1) + 1 by NAT_1:39,ORDINAL1:13;

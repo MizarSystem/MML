@@ -21,7 +21,7 @@ environ
  requirements SUBSET, BOOLE;
  definitions TARSKI, FILTER_0, XBOOLE_0;
  theorems ZFMISC_1, TARSKI, FINSUB_1, FINSET_1, PARTFUN1, BINOP_1, LATTICES,
-      LATTICE2, RELAT_1, FUNCT_1, GRFUNC_1, FUNCT_2, SUBSTLAT, SETWISEO,
+      LATTICE2, RELAT_1, FUNCT_1, FUNCT_2, SUBSTLAT, SETWISEO,
       FUNCOP_1, FILTER_0, HEYTING1, RELSET_1, XBOOLE_0, XBOOLE_1;
  schemes FRAENKEL, BINOP_1, LATTICE3, PRE_CIRC, FUNCT_1, FUNCT_2, XBOOLE_0;
 
@@ -61,8 +61,7 @@ A1: b in SubstitutionSet (V, C) & a in b;
 A2: A = b & ( for u being set st u in A holds u is finite ) &
   for s, t being Element of PFuncs (V, C) holds
   ( s in A & t in A & s c= t implies s = t );
-  a is Element of PFuncs (V, C) by A1,SETWISEO:14;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2;
 end;
 
 theorem Th3:
@@ -74,7 +73,7 @@ proof
 A1: g c= f;
   consider f1 be Function such that
 A2: f1 = f & dom f1 c= V & rng f1 c= C by PARTFUN1:def 5;
-  reconsider g' = g as Function by A1,GRFUNC_1:6;
+  reconsider g' = g as Function by A1;
   dom g' c= dom f1 & rng g' c= rng f1 by A1,A2,RELAT_1:25;
   then dom g' c= V & rng g' c= C by A2,XBOOLE_1:1;
   hence thesis by PARTFUN1:def 5;
@@ -106,10 +105,10 @@ end;
 theorem Th5:
   V is finite & C is finite implies PFuncs (V, C) is finite
 proof
-  assume V is finite & C is finite;
-  then [:V,C:] is finite by FINSET_1:19;
-  then bool [:V,C:] is finite by FINSET_1:24;
-  hence PFuncs(V,C) is finite by Th4,FINSET_1:13;
+  assume
+X:  V is finite & C is finite;
+    PFuncs(V,C) c= bool [:V,C:] by Th4;
+  hence PFuncs(V,C) is finite by X;
 end;
 
 registration
@@ -313,16 +312,15 @@ A7: Y = dom f1 & f1 in A & f1 is finite by A6;
   end;
   then
 A8: Involved A = union X by TARSKI:def 4;
-A9: X is finite by A2,A4,FINSET_1:13;
   for x be set st x in X holds x is finite
   proof
     let x be set;
     assume x in X;
     then consider f1 being Element of PFuncs(V, C) such that
 A10: x = dom f1 & f1 in A & f1 is finite;
-    thus thesis by A10,FINSET_1:29;
+    thus thesis by A10;
   end;
-  hence thesis by A8,A9,FINSET_1:25;
+  hence thesis by A8,A2,A4,FINSET_1:25;
 end;
 
 theorem Th11:
@@ -390,10 +388,8 @@ A3: PFuncs (Involved A, C) is finite by Th5;
 A4:   f1 = a & not contradiction;
       thus thesis by A4;
     end;
-    then { f where f is Element of PFuncs (Involved A, C) : not contradiction
-    } is finite by A3,FINSET_1:13;
     then
-A5: M is finite by A2,FINSET_1:13;
+A5: M is finite by A2,A3;
     M c= PFuncs (V, C)
     proof
       let a be set;
@@ -652,7 +648,7 @@ A4:     z = union {f1.i \ i where i is Element of PFuncs (V, C) : i in A}
     union {$1.i \ i where i is Element of PFuncs (V, C) : i in A};
     defpred P[Element of PF] means $1 in PFuncs(A,B) & dom $1 = A;
     { F(f) where f is Element of PF : P[f]} is finite from PRE_CIRC:sch 1;
-    then K is finite by A2,FINSET_1:15;
+    then K is finite by A2;
     hence thesis by A1,FINSUB_1:def 5;
   end;
 end;
@@ -753,7 +749,7 @@ proof
   assume
 A1: X c= K;
   K c= PFuncs (V, C) & K is finite by FINSUB_1:def 5;
-  then X c= PFuncs (V, C) & X is finite by A1,FINSET_1:13,XBOOLE_1:1;
+  then X c= PFuncs (V, C) & X is finite by A1,XBOOLE_1:1;
   then reconsider B = X as Element of Fin PFuncs (V, C) by FINSUB_1:def 5;
 A2: for x be set st x in X holds x is finite by A1,Th2;
   for a,b st a in B & b in B & a c= b holds a = b by A1,SUBSTLAT:5;
@@ -867,9 +863,7 @@ A7: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
   coherence
   proof
     reconsider u' = u as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-    u' is finite;
-    then
-A8: bool u is finite by FINSET_1:24;
+A8: u' is finite;
     bool u c= the carrier of SubstLatt (V, C)
     proof
       let x be set;
@@ -1366,9 +1360,7 @@ A5: c in u';
     then reconsider c' = c as Element of PFuncs (V, C) by SETWISEO:14;
 A6: a in Aa by Th28;
 A7: c' tolerates a by A1,A4;
-    c is finite by A5,Th2;
-    then
-A8: c \/ a is finite by FINSET_1:14;
+A8: c is finite by A5,Th2;
     c \/ a in { s1 \/ t1 where s1,t1 is Element of PFuncs (V,C) :
     s1 in u' & t1 in Aa & s1 tolerates t1 } by A4,A6,A7;
     then c \/ a in u' ^ Aa by SUBSTLAT:def 3;
@@ -1395,10 +1387,9 @@ A14: b in u' =>> v' and
 A15: b c= c by A3,Th29;
     c in Aa by A13;
     then c is finite by Th2;
-    then b is finite by A15,FINSET_1:13;
     then consider d be set such that
 A16: d c= b and
-A17: d in mi(u' =>> v') by A14,SUBSTLAT:10;
+A17: d in mi(u' =>> v') by A14,SUBSTLAT:10,A15;
     take e = d;
     thus e in (StrongImpl(V, C).(u, v)) by A17,Def5;
     thus e c= c by A15,A16,XBOOLE_1:1;

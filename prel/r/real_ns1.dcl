@@ -54,7 +54,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="24">
 <Func kind="K" nr="300">
 <LocusVar nr="1"/>
@@ -67,12 +67,12 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="113">
+<Adjective nr="114">
 <Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="114">
+<Adjective nr="115">
 <Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
@@ -92,9 +92,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="45" value="false"/>
-<Adjective nr="92"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_NS1" nr="3">
@@ -108,14 +108,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="85"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="92"/>
+<Adjective nr="89"/>
 <Adjective nr="93"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_NS1" nr="4">
@@ -129,9 +129,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="92"/>
-<Adjective nr="129"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="130"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_NS1" nr="5">
@@ -147,9 +147,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="45" value="false"/>
-<Adjective nr="96"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_NS1" nr="6">
@@ -163,14 +163,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="85"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="61"/>
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="96"/>
+<Adjective nr="89"/>
 <Adjective nr="97"/>
+<Adjective nr="98"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_NS1" nr="7">
@@ -184,9 +184,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="96"/>
-<Adjective nr="106"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="97"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 </Registrations>

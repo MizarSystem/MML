@@ -11,15 +11,16 @@ environ
       COMPLEX1, SEQ_1, SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, POWER, MESFUNC1,
       TARSKI, ARYTM_3, SQUARE_1, RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2,
       MESFUNC5, SUPINF_1, SUPINF_2, MESFUNC7, FUNCT_3, RFUNCT_3, FINSET_1,
-      VALUED_0;
+      VALUED_0, XXREAL_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XREAL_0,
-      REAL_1, XXREAL_0, MEASURE1, NAT_1, COMPLEX1, SUPINF_1, RELAT_1, RELSET_1,
+      REAL_1, XXREAL_0, XXREAL_2,
+      MEASURE1, NAT_1, COMPLEX1, SUPINF_1, RELAT_1, RELSET_1,
       SETWISEO, PARTFUN1, FINSEQ_1, FINSEQ_2, SETWOP_2, BINOP_1, FUNCT_2,
       NEWTON, SQUARE_1, PROB_1, SUPINF_2, EXTREAL1, POWER, MESFUNC5, MESFUNC1,
       MESFUNC2, MEASURE6;
  constructors REAL_1, NAT_1, DOMAIN_1, FINSOP_1, EXTREAL1, BINOP_1, NEWTON,
       POWER, MESFUNC1, MEASURE6, MESFUNC2, MEASURE3, SETWISEO, EXTREAL2,
-      SQUARE_1, MESFUNC5;
+      SQUARE_1, MESFUNC5, SUPINF_1;
  registrations SUBSET_1, NAT_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1,
       FINSEQ_1, MEASURE1, NUMBERS, XXREAL_0, XCMPLX_0, XBOOLE_0, VALUED_0,
       POWER;
@@ -30,7 +31,7 @@ environ
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, MESFUNC2, NEWTON, XREAL_1,
       SQUARE_1, COMPLEX1, XXREAL_0, REAL_2, FINSEQ_2, MESFUNC5, FINSOP_1,
       NAT_1, RELAT_1, FUNCT_3, MEASURE1, MESFUNC6, MEASURE6, ORDINAL1,
-      VALUED_0;
+      VALUED_0, XXREAL_2;
  schemes FUNCT_2, NAT_1, PARTFUN2, BINOP_1, BINOP_2;
 
 begin  ::  Lemmas for extended real valued functions
@@ -52,49 +53,14 @@ A1: for x be Element of X st x in dom f holds f.x <= g.x;
     assume y in rng (g-f);
     then consider x being set such that
 A2: x in dom (g-f) & y = (g-f).x by FUNCT_1:def 5;
-A3: dom (g-f) = (dom g /\ dom f)\((g"{+infty} /\ f"{+infty}) \/ (g"{-infty} /\
+    dom (g-f) = (dom g /\ dom f)\((g"{+infty} /\ f"{+infty}) \/ (g"{-infty} /\
     f"{-infty})) by MESFUNC1:def 4;
     then x in dom g /\ dom f by A2,XBOOLE_0:def 4;
     then
 A4: x in dom f & x in dom g by XBOOLE_0:def 3;
-    then
-A5: f.x <=g.x by A1;
-A6: now
-      assume f.x <> -infty;
-      then
-A7:   -infty <g.x by A5,XXREAL_0:2,6;
-      now
-        assume not (f.x < +infty);
-        then
-A8:     +infty = f.x by XXREAL_0:4;
-        then +infty = g.x by A1,A4,XXREAL_0:4;
-        then f.x in {+infty} & g.x in {+infty} by A8,TARSKI:def 1;
-        then x in f"{+infty} & x in g"{+infty} by A4,FUNCT_1:def 13;
-        then x in g"{+infty} /\ f"{+infty} by XBOOLE_0:def 3;
-        then x in (g"{+infty} /\ f"{+infty}) \/ (g"{-infty} /\ f"{-infty})
-        by XBOOLE_0:def 2;
-        hence contradiction by A2,A3,XBOOLE_0:def 4;
-      end;
-      then 0. <= g.x-f.x by A1,A4,A7,EXTREAL1:40;
-      hence 0. <=(g-f).x by A2,MESFUNC1:def 4;
-    end;
-    now
-      assume
-A9:   f.x = -infty;
-      now
-        assume not(-infty < g.x);
-        then -infty = g.x by XXREAL_0:6;
-        then f.x in {-infty} & g.x in {-infty} by A9,TARSKI:def 1;
-        then x in f"{-infty} & x in g"{-infty} by A4,FUNCT_1:def 13;
-        then x in g"{-infty} /\ f"{-infty} by XBOOLE_0:def 3;
-        then x in (g"{+infty} /\ f"{+infty}) \/ (g"{-infty} /\ f"{-infty})
-        by XBOOLE_0:def 2;
-        hence contradiction by A2,A3,XBOOLE_0:def 4;
-      end;
-      then 0. <= g.x-f.x by A9,EXTREAL1:40;
-      hence 0. <=(g-f).x by A2,MESFUNC1:def 4;
-    end;
-    hence 0 <= y by A2,A6;
+      0. <= g.x-f.x by A1,A4,SUPINF_2:72;
+      then 0. <=(g-f).x by A2,MESFUNC1:def 4;
+   hence 0 <= y by A2;
   end;
   then rng (g-f) is nonnegative by SUPINF_2:def 15;
   hence g-f is nonnegative by SUPINF_2:def 22;
@@ -761,7 +727,7 @@ A29:    0 <= |.f.| .x by EXTREAL2:51;
         end;
         suppose |.f.| .x <> +infty;
           then reconsider fx= |.f.| .x as Element of REAL by A29,SUPINF_2:2;
-A30:      0 < 1/k by A12,REAL_2:127;
+A30:      0 < 1/k by A12;
 A31:      r <= ((|.f.|)|^k).x by A26,MESFUNC1:def 15;
           ((|.f.|)|^k).x = ((|.f.|).x)|^k by A27,Def5;
           then ((|.f.|)|^k).x = fx|^k by Th11;
@@ -773,7 +739,7 @@ A33:      r to_power (1/k) <= (fx to_power k) to_power (1/k)
           by A15,A30,A32,HOLDER_1:3;
           0 < k by A11;
           then (fx to_power k) to_power (1/k) = fx to_power (k * 1/k)
-          by A28,A30,EXTREAL2:51,HOLDER_1:2;
+          by A28,EXTREAL2:51,HOLDER_1:2;
           then (fx to_power k) to_power (1/k) = fx by A13,POWER:30;
           hence x in great_eq_dom(|.f.|, R_EAL r to_power (1/k))
           by A2,A27,A33,MESFUNC1:def 15;
@@ -956,18 +922,18 @@ theorem Th16:
 proof
   assume
 A1: rng f is bounded;
-  then rng f is bounded_above by SUPINF_1:def 13;
-  then consider UB being majorant of rng f such that
+  then rng f is bounded_above by XXREAL_2:def 11;
+  then consider UB being UpperBound of rng f such that
 A2: UB in REAL by SUPINF_1:def 11;
-  rng f is bounded_below by A1,SUPINF_1:def 13;
-  then consider LB being minorant of rng f such that
+  rng f is bounded_below by A1,XXREAL_2:def 11;
+  then consider LB being LowerBound of rng f such that
 A3: LB in REAL by SUPINF_1:def 12;
 A4: UB < +infty & -infty < LB by A2,A3,XXREAL_0:9,12;
   now
     let x be Element of X;
     assume x in dom f;
     then f.x in rng f by FUNCT_1:12;
-    then f.x <= UB & LB <= f.x by SUPINF_1:def 9,def 10;
+    then f.x <= UB & LB <= f.x by XXREAL_2:def 1,def 2;
     then
 A5: f.x < +infty & -infty < f.x by A4,XXREAL_0:2;
     then -(+infty) < f.x by EXTREAL1:4;
@@ -997,12 +963,12 @@ A3: E1 = dom |.g.| & |.g.| is_measurable_on E1
   then
 A4: g is_measurable_on E & |.g.| is_measurable_on E by A1,A2,MESFUNC1:34
   ,XBOOLE_1:17;
-A5: rng f is bounded_below & rng f is bounded_above by A1,SUPINF_1:def 13;
+A5: rng f is bounded_below & rng f is bounded_above by A1,XXREAL_2:def 11;
 A6: f is finite by A1,Th16;
 A7: rng f is Subset of REAL by A1,Th16,MESFUNC2:35;
-  then not +infty in rng f & not -infty in rng f by SUPINF_1:1,6;
+  then not +infty in rng f & not -infty in rng f;
   then rng f <> {+infty} & rng f <> {-infty} by TARSKI:def 1;
-  then reconsider k0=inf F, l0=sup F as Real by A1,A5,SUPINF_1:83,84;
+  then reconsider k0=inf F, l0=sup F as Real by A1,A5,XXREAL_2:57,58;
   |.inf F.|=abs k0 & |.sup F.|=abs l0 by EXTREAL2:49;
   then reconsider k1= |.inf F.|, l1= |.sup F.| as Real;
 A8: dom |.g.| = dom g by MESFUNC1:def 10;
@@ -1023,8 +989,8 @@ A16: dom (f(#)|.g.|) = dom f /\ dom |.g.| by MESFUNC1:def 5;
   then
 A17: dom (f(#)|.g.|) = E by A1,MESFUNC1:def 10;
 A18: dom ((f(#)|.g.|)|E) = dom (f(#)|.g.|) /\ E by FUNCT_1:68;
-A19: inf F is minorant of rng f & sup F is majorant of rng f
-  by A1,SUPINF_1:def 16,def 17;
+A19: inf F is LowerBound of rng f & sup F is UpperBound of rng f
+  by A1,XXREAL_2:def 3,def 4;
 A20: for x be Element of X st x in E holds |. f.x .| <= |.inf F.| + |.sup F.|
   proof
     let x be Element of X;
@@ -1032,7 +998,7 @@ A20: for x be Element of X st x in E holds |. f.x .| <= |.inf F.| + |.sup F.|
     then
 A21: f.x in rng f by A9,FUNCT_1:12;
     then reconsider fx=f.x as Real by A7;
-A22: k0 <=fx & fx <=l0 by A19,A21,SUPINF_1:def 9,def 10;
+A22: k0 <=fx & fx <=l0 by A19,A21,XXREAL_2:def 1,def 2;
     l0 <= abs l0 & 0 <= abs k0 by COMPLEX1:132,162;
     then l0+abs k0 <=abs l0 + abs k0 & l0+0 <=l0+abs k0 by XREAL_1:8;
     then
@@ -1134,7 +1100,7 @@ A48: for x be Element of X st x in E holds
     assume x in E;
     then f.x in rng f by A9,FUNCT_1:12;
     then
-A49: inf F <= f.x & f.x <= sup F by A19,SUPINF_1:def 9,def 10;
+A49: inf F <= f.x & f.x <= sup F by A19,XXREAL_2:def 1,def 2;
     0 <= |.g.x.| by EXTREAL2:51;
     hence thesis by A49,EXTREAL1:42;
   end;
@@ -1256,7 +1222,7 @@ A73:  Integral(M, (|.g.|)|E) = 0.;
       consider y be set such that
 A74:  y in F by XBOOLE_0:def 1;
       reconsider y as Element of ExtREAL by A74;
-      inf F <= y & y <= sup F by A74,SUPINF_1:76,79;
+      inf F <= y & y <= sup F by A74,XXREAL_2:3,4;
       then
 A75:  inf F <= k0 & k0 <= sup F by XXREAL_0:2;
       0. <= Integral(M, (f(#)|.g.|)|E) by A53,A57,A58,A73,EXTREAL1:22;
@@ -1585,7 +1551,7 @@ A2: XX = dom chi(E1,X) & chi(E1,X) is_measurable_on XX
     then
 A3: (chi(E1,X)).x in rng chi(E1,X) by FUNCT_1:12;
     rng chi(E1,X) c= {0,1} by FUNCT_3:48;
-    hence 0. <= (chi(E1,X)).x by A3,TARSKI:def 2;
+    hence 0. <= (chi(E1,X)).x by A3;
   end;
   then
 A4: chi(E1,X) is nonnegative by SUPINF_2:71;

@@ -15,13 +15,13 @@ environ
       NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_D, INT_2, RELAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, PBOOLE, POLYNOM1, POLYNOM2, RVSUM_1,
       NAT_1, NEWTON, WSIERP_1, BINARITH, TREES_4, UPROOTS, BINOP_2, PRE_CIRC,
-      SETWOP_2;
+      XXREAL_2, SETWOP_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_D, FINSEQOP, FINSOP_1, NEWTON,
       REALSET1, BINARITH, PRE_CIRC, WSIERP_1, FACIRC_1, POLYNOM2, UPROOTS,
-      SEQ_1, RECDEF_1, BINOP_2;
+      SEQ_1, RECDEF_1, BINOP_2, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, NEWTON,
-      PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0, FINSEQ_1;
+      PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0, FINSEQ_1, XXREAL_2;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
  definitions TARSKI, XBOOLE_0, INT_2, NAT_D, FINSEQ_1, POLYNOM1, FINSEQ_2,
       VALUED_0;
@@ -30,7 +30,7 @@ environ
       FINSET_1, FINSEQ_1, TARSKI, XBOOLE_1, FUNCOP_1, CARD_1, WSIERP_1,
       XBOOLE_0, RADIX_1, BINARITH, BAGORDER, FINSEQ_2, FINSEQ_3, FINSEQ_4,
       RELAT_1, UPROOTS, PRE_CIRC, CIRCCMB3, FINSOP_1, FUNCT_2, XREAL_1,
-      NUMBERS, XXREAL_0, NAT_D, VALUED_0;
+      NUMBERS, XXREAL_0, NAT_D, VALUED_0, XXREAL_2;
  schemes NAT_1, PRE_CIRC, FINSEQ_1, FINSEQ_2, PBOOLE, FUNCT_1, CLASSES1;
 
 begin :: Preliminaries
@@ -101,16 +101,14 @@ A4: P[k];
 A5: k+1 <= a |^ k + 1 by A4,XREAL_1:8;
 A6: a |^ (k+1) = a |^ k * a by NEWTON:11;
     now
-A7:   a is Real by XREAL_0:def 1;
-A8:   k in NAT by ORDINAL1:def 13;
       set x = a |^ k;
       assume x + 1 > x * a;
       then x*a - (x+1) < (x+1) - (x+1) by REAL_1:92;
       then x*a1 - 1 + 1 < 0+1 by XREAL_1:8;
       then x*a1 <= 0 by NAT_1:13;
       then x*a1 = 0;
-      then x = 0 or a1 = 0 by XCMPLX_1:6;
-      hence contradiction by A1,A7,CARD_4:51;
+      then x = 0 or a1 = 0;
+      hence contradiction by A1;
     end;
     hence k+1 <= a |^ (k+1) by A5,A6,XXREAL_0:2;
   end;
@@ -290,8 +288,7 @@ A2: for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch 2;
     let i be set;
     assume
 A5: i in dom p;
-    then i is Nat by ORDINAL1:def 13;
-    hence thesis by A2,A5;
+    thus thesis by A2,A5;
   end;
   uniqueness
   proof
@@ -619,7 +616,7 @@ A1: a <> 0;
     let x be set;
     assume x in support b;
     then b.x <> 0 by POLYNOM1:def 7;
-    then a*b.x <> 0 by A1,XCMPLX_1:6;
+    then a*b.x <> 0 by A1;
     then (a*b).x <> 0 by Def2;
     hence x in support (a*b) by POLYNOM1:def 7;
   end;
@@ -640,8 +637,7 @@ registration
     per cases;
     suppose
 A1:   a = 0;
-      support (0*b) = {};
-      hence support (a*b) is finite by A1;
+      thus support (a*b) is finite by A1;
     end;
     suppose a <> 0;
       then support (a*b) = support b by Th16;
@@ -756,7 +752,7 @@ registration
   coherence
   proof
     support min(b1,b2) c= support b1 \/ support b2 by Th17;
-    hence support min(b1,b2) is finite by FINSET_1:13;
+    hence support min(b1,b2) is finite;
   end;
 end;
 
@@ -866,19 +862,7 @@ registration
   coherence
   proof
     support max(b1,b2) c= support b1 \/ support b2 by Th18;
-    hence support max(b1,b2) is finite by FINSET_1:13;
-  end;
-end;
-
-registration
-  cluster natural-yielding -> complex-yielding Relation;
-  coherence
-  proof
-    let f be Relation;
-    assume f is natural-yielding;
-    then rng f c= NAT by VALUED_0:def 6;
-    then rng f c= COMPLEX by NUMBERS:20,XBOOLE_1:1;
-    hence thesis by VALUED_0:def 1;
+    hence support max(b1,b2) is finite;
   end;
 end;
 
@@ -998,9 +982,9 @@ A33: dom p = Seg card sab by A8,A9,A23,RELAT_1:46;
 A34: dom g = Seg card sab by FINSEQ_1:def 3;
 A35: rng p = rng (cg") by A9,A23,RELAT_1:47;
   then reconsider p as Function of dom g, dom g by A24,A33,A34,FUNCT_2:3;
-  cg" is one-to-one by A22,FUNCT_1:62;
+  cg" is one-to-one by A22;
   then
-A36: p is one-to-one by A10,FUNCT_1:46;
+A36: p is one-to-one by A10;
   p is onto by A24,A34,A35,FUNCT_2:def 3;
   then reconsider p as Permutation of dom g by A36,FUNCT_2:def 4;
 A37: dom (g*p) = Seg card sab by A24,A33,A34,A35,RELAT_1:46;
@@ -1013,7 +997,7 @@ A39: (g*p).x = g.(p.x) by A11,A37,A38,FUNCT_1:22
       .= g.cgx by A8,A11,A38,FUNCT_1:23;
 A40: cf.x in sab by A8,A9,A11,A38,FUNCT_1:12;
     then cgx in Seg card sab by A23,A24,FUNCT_1:12;
-    then reconsider cgx as natural number by ORDINAL1:def 13;
+    then reconsider cgx as natural number;
     reconsider cgxN = cgx as Nat;
     consider d being set such that
 A41: d in dom cg and
@@ -1070,7 +1054,7 @@ A59:  cg.cgx = cb.(cgx-len ca) by A30,A31,A44,FINSEQ_1:36;
 A60:  cgx-len ca <= len ca + len cb - len ca by A30,A31,A44,XREAL_1:11;
 A61:  len ca + 1 - len ca <= cgx-len ca by A30,A57,XREAL_1:11;
       then cgxN-len ca in NAT by INT_1:16;
-      then cgxN-len ca is Nat by ORDINAL1:def 13;
+      then cgxN-len ca is Nat;
       then
 A62:  cgxN-len ca in dom cb by A60,A61,FINSEQ_3:27;
 A63:  g.cgx = fb.(cgxN-len fa) by A44,A57,FINSEQ_1:36
@@ -1207,9 +1191,9 @@ proof
   set b = EmptyBag A;
   set cS = canFS(support b);
   support b = {} by BAGORDER:19;
-  then len cS = 0 by CARD_1:78,UPROOTS:def 1;
+  then len cS = 0 by CARD_1:47,UPROOTS:def 1;
   then cS = <*>NAT by FINSEQ_1:32;
-  then b*cS = <*>COMPLEX by RELAT_1:62;
+  then b*cS = <*>COMPLEX;
   hence Product b = 1 by Def5,RVSUM_1:124;
 end;
 
@@ -1705,7 +1689,7 @@ A3:   x is prime Element of NAT by ORDINAL1:def 13;
       then x <= n by Th35;
       hence thesis by A3;
     end;
-    hence support f is finite by A1,FINSET_1:13;
+    hence support f is finite by A1;
   end;
 end;
 
@@ -1835,7 +1819,6 @@ A1: a hcf b = 1 by INT_2:def 4;
 A2: x in support f and
 A3: x in support g by XBOOLE_0:3;
   reconsider x as Prime by A2,Th34;
-A4: x in NAT by ORDINAL1:def 13;
 A5: f.x <> 0 by A2,POLYNOM1:def 7;
 A6: f.x = x |-count a by Def8;
 A7: x <> 1 by INT_2:def 5;
@@ -2133,7 +2116,7 @@ A20:      n lcm m = (j |^ y)*j*k by A19,NEWTON:11
           then
 A21:      0 < k;
           then
-A22:      0*k < (j |^ y)*k by XREAL_1:70;
+A22:      0*k < (j |^ y)*k;
           consider t being Nat such that
 A23:      n = (j |^ x) * t by A7,NAT_D:def 3;
           consider u being Nat such that
@@ -2207,7 +2190,7 @@ A39:      n lcm m = (j |^ x)*j*k by A38,NEWTON:11
           then
 A40:      0 < k;
           then
-A41:      0*k < (j |^ x)*k by XREAL_1:70;
+A41:      0*k < (j |^ x)*k;
           consider t being Nat such that
 A42:      m = (j |^ y) * t by A10,NAT_D:def 3;
           consider u being Nat such that
@@ -2458,7 +2441,7 @@ A5: a hcf b = 1 by A1,INT_2:def 4;
     suppose
 A6:   p |-count (a*b) = 0;
       then
-A7:   (p |-count a) = 0 & (p |-count b) = 0 by A3,NAT_1:7;
+A7:   (p |-count a) = 0 & (p |-count b) = 0 by A3;
       thus (ppf (a*b)).i = 0 by A6,Th55
         .= 0 + (ppf b).i by A7,Th55
         .= (ppf a).i + (ppf b).i by A7,Th55
@@ -2561,7 +2544,7 @@ A4:   p |-count n = 0;
     end;
     suppose
 A5:   p |-count n <> 0;
-      hence (ppf (n|^m)).i = p |^ (p |-count (n |^ m)) by A2,Th56,XCMPLX_1:6
+      hence (ppf (n|^m)).i = p |^ (p |-count (n |^ m)) by A2,Th56
         .= (p |^ (p |-count n)) |^ m by A2,NEWTON:14
         .= ((ppf n) |^ m).i by A3,A5,Th56;
     end;
@@ -2618,7 +2601,7 @@ A13:    not k+1 in support ppf n;
 A14:      x in support ppf n;
           then
 A15:      x is Prime by A10,Th34;
-          reconsider m = x as natural number by A10,A14,Th34;
+          reconsider m = x as natural number by A14;
 A16:      1 <= m by A15,INT_2:def 5;
           m <= k+1 by A9,A14,FINSEQ_1:3;
           then m < k+1 by A13,A14,REAL_1:def 5;
@@ -2648,7 +2631,7 @@ A23:    x in support ppf t;
 A24:    x in support pfexp t by Def9;
         then
 A25:    x is Prime by Th34;
-        reconsider m = x as natural number by A24,Th34;
+        reconsider m = x as natural number by A24;
 A26:    1 <= m by A25,INT_2:def 5;
         support ppf t c= support ppf n by A10,A20,A21,Th45;
         then m in support ppf n by A23;
@@ -2752,9 +2735,9 @@ A48: support ppf n = support pfexp n by Def9;
 A49:  x in support ppf n;
       then
 A50:  x is Prime by A48,Th34;
-      reconsider m = x as natural number by A48,A49,Th34;
+      reconsider m = x as natural number by A49;
 A51:  1 <= m by A50,INT_2:def 5;
-      m <= max S by A49,PRE_CIRC:def 1;
+      m <= max S by A49,XXREAL_2:def 8;
       hence x in Seg max S by A51,FINSEQ_1:3;
     end;
     hence thesis by A47;

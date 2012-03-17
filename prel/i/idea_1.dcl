@@ -38,7 +38,7 @@
 <ArgTypes/>
 <Func kind="K" nr="211"/>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="IDEA_1" nr="3">
@@ -73,8 +73,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="27"/>
+<Adjective nr="19"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster aid="IDEA_1" nr="4">
@@ -109,8 +109,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="18"/>
-<Adjective nr="27"/>
+<Adjective nr="19"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <CCluster aid="IDEA_1" nr="1">
@@ -121,7 +121,7 @@
 <Func kind="K" nr="211"/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

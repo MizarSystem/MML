@@ -10,17 +10,19 @@ environ
       COMPLEX1, ARYTM_1, ZF_LANG, PROB_1, BOOLE, FUNCOP_1, JORDAN1, TOPREAL1,
       ABSVALUE, UNIALG_1, GRCAT_1, JGRAPH_2, MCART_1, POLYEQ_1, FUNCT_3,
       SQUARE_1, ARYTM_3, METRIC_1, RLVECT_1, RVSUM_1, FINSEQ_1, EUCLID_2,
-      JORDAN2C, LATTICES, ASYMPT_0, FINSEQ_2;
+      JORDAN2C, LATTICES, ASYMPT_0, FINSEQ_2, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      VALUED_0,
       FUNCOP_1, SQUARE_1, QUIN_1, POLYEQ_1, STRUCT_0, PRE_TOPC, BORSUK_1,
       TOPREAL1, COMPLEX1, METRIC_1, TBSP_1, EUCLID, JORDAN1, JORDAN2C,
       JGRAPH_2, JGRAPH_6, EUCLID_2;
  constructors REAL_1, SQUARE_1, BINOP_2, COMPLEX1, QUIN_1, FINSEQOP, POLYEQ_1,
       BORSUK_1, TBSP_1, MONOID_0, TOPREAL1, JORDAN1, JORDAN2C, EUCLID_2,
-      JGRAPH_2, JGRAPH_6;
+      JGRAPH_2, JGRAPH_6, VALUED_0;
  registrations XBOOLE_0, RELSET_1, XXREAL_0, XREAL_0, SQUARE_1, NAT_1,
-      MEMBERED, STRUCT_0, METRIC_1, MONOID_0, EUCLID, TOPALG_2, VALUED_0;
+      MEMBERED, STRUCT_0, METRIC_1, MONOID_0, EUCLID, TOPALG_2, VALUED_0,
+      FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, JORDAN1, SQUARE_1, EUCLID, VALUED_1;
  theorems JGRAPH_6, TOPRNS_1, XREAL_0, TARSKI, SUBSET_1, FUNCT_2, EUCLID,
@@ -123,9 +125,9 @@ A3: r = 1 or y = z;
 end;
 
 theorem Th5:
-  for f being FinSequence of REAL holds |.f.|^2 = Sum sqr f
+  for f being real-valued FinSequence holds |.f.|^2 = Sum sqr f
 proof
-  let f be FinSequence of REAL;
+  let f be real-valued FinSequence;
   Sum sqr f >= 0 by RVSUM_1:116;
   hence |.f.|^2 = Sum sqr f by SQUARE_1:def 4;
 end;
@@ -327,7 +329,7 @@ A3: q in Sphere(x,r);
   hence thesis by METRIC_1:14;
 end;
 
-theorem Th16:
+theorem
   Ball(x,r) c= cl_Ball(x,r)
 proof
   reconsider e = x as Point of Euclid n by TOPREAL3:13;
@@ -394,26 +396,10 @@ registration
 end;
 
 theorem
-  Ball(x,r) is non empty implies r > 0
-proof
-  assume
-A1: Ball(x,r) is non empty;
-  assume r <= 0;
-  then reconsider r as non positive (real number);
-  Ball(x,r) is empty;
-  hence thesis by A1;
-end;
+  Ball(x,r) is non empty implies r > 0;
 
 theorem
-  Ball(x,r) is empty implies r <= 0
-proof
-  assume
-A1: Ball(x,r) is empty;
-  assume r > 0;
-  then reconsider r as positive (real number);
-  Ball(x,r) is non empty;
-  hence thesis by A1;
-end;
+  Ball(x,r) is empty implies r <= 0;
 
 registration
   let n, x;
@@ -441,26 +427,10 @@ registration
 end;
 
 theorem
-  cl_Ball(x,r) is non empty implies r >= 0
-proof
-  assume
-A1: cl_Ball(x,r) is non empty;
-  assume r < 0;
-  then reconsider r as negative (real number);
-  cl_Ball(x,r) is empty;
-  hence thesis by A1;
-end;
+  cl_Ball(x,r) is non empty implies r >= 0;
 
 theorem
-  cl_Ball(x,r) is empty implies r < 0
-proof
-  assume
-A1: cl_Ball(x,r) is empty;
-  assume r >= 0;
-  then reconsider r as non negative (real number);
-  cl_Ball(x,r) is non empty;
-  hence thesis by A1;
-end;
+  cl_Ball(x,r) is empty implies r < 0;
 
 theorem Th24:
   a + b = 1 & abs(a) + abs(b) = 1 & b <> 0 &
@@ -584,7 +554,7 @@ A15: |.q-Q.| <= |.(1-r)*(p1-Q).| + |.r*(p2-Q).| by TOPRNS_1:30;
     hence x in P by A1;
   end;
   suppose 1-r <= 0;
-    then 1-r+r = 0+r by A10,XXREAL_0:1;
+    then 1-r+r = 0+r by A10;
     then x = p2 by A5,Th4;
     hence x in P by A1,A3;
   end;
@@ -818,7 +788,7 @@ A3: d in halfline(p,x);
 A4: d = (1-r)*p + r*x and
 A5: 0 <= r by A3,Th26;
   set o = r*R;
-A6: 0 <= o by A2,A5,XREAL_1:129;
+A6: 0 <= o by A2,A5;
   d = (1-r)*p + (r*((1-R)*p) + r*(R*q)) by A1,A4,EUCLID:36
     .= (1-r)*p + r*((1-R)*p) + r*(R*q) by EUCLID:30
     .= (1-r)*p + r*(1-R)*p + r*(R*q) by EUCLID:34
@@ -847,7 +817,7 @@ A5: d in halfline(p,q);
 A6: d = (1-r)*p + r*q and
 A7: 0 <= r by A5,Th26;
     set o = r/R;
-A8: 0 <= o by A3,A7,XREAL_1:138;
+A8: 0 <= o by A3,A7;
     R <> 0 by A2,A4,Th4;
     then o*R = r by XCMPLX_1:88;
     then d = (1-o + o*(1-R))*p + o*(R*q) by A6,EUCLID:34
@@ -893,10 +863,10 @@ A7: x = (1-r)*u+r*v by JGRAPH_1:52;
     set o = (1-r)*a+r*b;
     1-r >= r-r by A6,REAL_1:92;
     then
-A8: (1-r)*a >= 0 * a by A2,XREAL_1:66;
-    r*b >= 0 * 0 by A4,A5,XREAL_1:129;
+A8: (1-r)*a >= 0 * a by A2;
+    r*b >= 0 * 0 by A4,A5;
     then
-A9: 0+0 <= o by A8,XREAL_1:9;
+A9: 0+0 <= o by A8;
     x = (1-r)*((1-a)*p)+(1-r)*(a*q) + r*((1-b)*p+b*q) by A1,A3,A7,EUCLID:36
       .= (1-r)*((1-a)*p) + (1-r)*(a*q) + (r*((1-b)*p) + r*(b*q)) by EUCLID:36
       .= (1-r)*((1-a)*p) + (r*((1-b)*p) + r*(b*q)) + (1-r)*(a*q) by EUCLID:30
@@ -940,7 +910,7 @@ A8: r = |. w - x .| by A7,Th9
       .= |. (1-d)*(s-x) + d*(t-x) .| by EUCLID:53;
     d-1 <= 1-1 by A5,XREAL_1:11;
     then
-A9: -0 <= -(d-1) by XREAL_1:26;
+A9: -0 <= -(d-1);
 A10: |. (1-d)*(s-x) .| = abs(1-d)*|. s-x .| by TOPRNS_1:8
       .= (1-d)*|. s-x .| by A9,ABSVALUE:def 1
       .= (1-d)*r by A1,Th9;
@@ -1220,11 +1190,8 @@ A3: s in Ball(x,r) and
 A4: a = (-(2*|(z-y,y-x)|) + sqrt delta
   (Sum sqr (T-S), 2 * |(z-y,y-x)|, Sum sqr (S-X) - r^2)) /
   (2 * Sum sqr (T-S));
-A5: Ball(x,r) c= cl_Ball(x,r) by Th16;
   reconsider G = x as Point of Euclid n by TOPREAL3:13;
-  cl_Ball(G,r) = cl_Ball(x,r) by Th14;
-  then
-A6: 0 <= --r by A3,A5,TOPREAL6:63;
+A6: 0 <= --r by A3;
   set A = Sum sqr (T-S);
   set B = 2 * |(t-s,s-x)|;
   set C = Sum sqr (S-X) - r^2;
@@ -1252,7 +1219,7 @@ A14: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
 A15: 4*A*C < 0 by A8,A12,XREAL_1:131,134;
   B^2 >= 0 by XREAL_1:65;
   then
-A16: B^2 - 4*A*C > 0 by A15,REAL_2:173;
+A16: B^2 - 4*A*C > 0 by A15;
 A17: for x being real number holds Polynom(A,B,C,x) = Quard(A,l1,l2,x)
   proof
     let x be real number;
@@ -1288,7 +1255,7 @@ A20: e1 in halfline(s,t) by A8,A14,A16,A18,QUIN_1:27;
 A21: |. e1 - x .| = r or |. e1 - x .| = -r by SQUARE_1:109;
   r = 0 or r <> 0;
   then
-A22: e1 in Sphere(x,r) by A6,A21,XREAL_1:60;
+A22: e1 in Sphere(x,r) by A6,A21;
   hereby
     let d be set;
     assume d in {e1};
@@ -1420,7 +1387,7 @@ A21:  e1 = (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t by A17,EUCLID:36
         .= (1-l)*(1/2)*s + ((1-l)*(1/2) + l)*t by EUCLID:37
         .= (1-o)*s + o*t;
       1+0 <= 1+l by A18,XREAL_1:8;
-      then 0 <= o by XREAL_1:138;
+      then 0 <= o;
       then
 A22:  e1 in halfline(s,t) by A21;
       e1 in Sphere(x,r) by A14,A16,XBOOLE_0:def 3;
@@ -1520,29 +1487,10 @@ reconsider S = s, T = s + 1.REAL n, XX = x as Element of REAL n by EUCLID:25;
 end;
 
 theorem
-  Sphere(x,r) is non empty implies r >= 0
-proof
-  assume
-A1: Sphere(x,r) is non empty;
-  assume r < 0;
-  then reconsider r as negative (real number);
-  Sphere(x,r) is empty;
-  hence thesis by A1;
-end;
+  Sphere(x,r) is non empty implies r >= 0;
 
 theorem
-  n is non empty & Sphere(x,r) is empty implies r < 0
-proof
-  assume that
-A1: n is non empty and
-A2: Sphere(x,r) is empty;
-  assume r >= 0;
-  then reconsider r as non negative (real number);
-  reconsider n as non empty Element of NAT by A1;
-  reconsider x as Point of TOP-REAL n;
-  Sphere(x,r) is non empty;
-  hence thesis by A2;
-end;
+  n is non empty & Sphere(x,r) is empty implies r < 0;
 
 begin :: Subsets of TOP-REAL 2
 

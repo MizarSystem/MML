@@ -35,13 +35,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="50"/>
-<Adjective nr="52"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="51"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="56"/>
+<Adjective nr="55"/>
 <Adjective nr="57"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="2">
@@ -50,8 +50,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="11" value="false"/>
-<Adjective nr="58"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="3">
@@ -69,7 +69,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TAXONOM2" nr="4">
@@ -83,14 +83,14 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="37">
+<Adjective nr="38">
 <Func kind="K" nr="10">
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="60">
+<Adjective nr="61">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,13 +98,13 @@
 <CCluster aid="TAXONOM2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 </CCluster>
 </Registrations>

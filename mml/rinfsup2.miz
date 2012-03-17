@@ -9,20 +9,22 @@ environ
 
  vocabularies PARTFUN1, RELAT_1, ABSVALUE, FUNCT_1, ORDINAL2, LATTICES,
       COMPLEX1, SEQ_1, SEQ_2, SEQM_3, MEASURE6, ARYTM, ARYTM_1, PROB_1,
-      SQUARE_1, RLVECT_1, GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1, FINSET_1;
+      SQUARE_1, RLVECT_1, GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1, FINSET_1,
+      XXREAL_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, XXREAL_0, RELSET_1, FUNCT_2, PARTFUN1, NAT_1, SUPINF_1,
+      COMPLEX1, REAL_1, XXREAL_0, RELSET_1, FUNCT_2, PARTFUN1, NAT_1,
+      XXREAL_2, SUPINF_1,
       SUPINF_2, PSCOMP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, KURATO_2, LIMFUNC1,
       RINFSUP1, MEASURE6, EXTREAL1, MESFUNC1, MESFUNC2, MESFUNC5;
  constructors REAL_1, NAT_1, DOMAIN_1, EXTREAL1, COMPLEX1, MEASURE6, MESFUNC1,
-      PARTFUN3, LIMFUNC1, KURATO_2, RINFSUP1, MESFUNC5, SEQ_1;
+      PARTFUN3, LIMFUNC1, KURATO_2, RINFSUP1, MESFUNC5, SEQ_1, SUPINF_1;
  registrations SUBSET_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1, INT_1, NUMBERS,
       XBOOLE_0, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_2, MESFUNC1, RINFSUP1, MEASURE6;
  theorems NAT_1, TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, KURATO_2, SUPINF_2,
       EXTREAL1, INT_1, EXTREAL2, SEQ_2, SEQM_3, SEQ_4, RINFSUP1, XREAL_0,
-      XBOOLE_0, MESFUNC2, XREAL_1, XXREAL_0, ORDINAL1, MESFUNC5;
+      XBOOLE_0, MESFUNC2, XREAL_1, XXREAL_0, ORDINAL1, MESFUNC5, XXREAL_2;
  schemes FUNCT_2, DOMAIN_1;
 
 begin :: Inferior limit, superior limit and convergence of sequence
@@ -39,80 +41,52 @@ proof
   assume that
 A1: X=Y and
 A2: Y is bounded_above;
-  now
-    let r be ext-real number;
-    assume
-A3: r in X;
-    then r is real number by A1,XREAL_0:def 1;
-    hence r <= sup Y by A1,A2,A3,SEQ_4:def 4;
-  end;
+  for r be ext-real number st r in X holds r <= sup Y
+   by A1,A2,SEQ_4:def 4;
   then
-A4: sup Y is majorant of X by SUPINF_1:def 9;
+A4: sup Y is UpperBound of X by XXREAL_2:def 1;
   hence
 A5: X is bounded_above by SUPINF_1:def 11;
-A6: sup X <= sup Y by A4,SUPINF_1:def 16;
-  not -infty in X by A1,SUPINF_1:6;
+A6: sup X <= sup Y by A4,XXREAL_2:def 3;
+  not -infty in X by A1;
   then X <> {-infty} by TARSKI:def 1;
-  then sup X in REAL by A5,SUPINF_1:83;
+  then sup X in REAL by A5,XXREAL_2:57;
   then
-A7: sup X is real number by XREAL_0:def 1;
-  for s be real number st s in Y holds s <= sup X by A1,SUPINF_1:76;
+A7: sup X is real number;
+  for s be real number st s in Y holds s <= sup X by A1,XXREAL_2:4;
   then sup Y <= sup X by A7,SEQ_4:62;
   hence sup Y = sup X by A6,XXREAL_0:1;
 end;
 
 theorem Th2:
   X = Y & X is bounded_above implies Y is bounded_above & sup X = sup Y
-proof
-  assume
-A1: X=Y & X is bounded_above;
-  then consider UB being majorant of X such that
-A2: UB in REAL by SUPINF_1:def 11;
-  reconsider UB as real number by A2,XREAL_0:def 1;
-  for x be real number st x in Y holds x <= UB by A1,SUPINF_1:def 9;
-  then Y is bounded_above by SEQ_4:def 1;
-  hence thesis by A1,Th1;
-end;
+   by Th1;
 
 theorem Th3:
   X = Y & Y is bounded_below implies X is bounded_below & inf X = inf Y
 proof
   assume
 A1: X=Y & Y is bounded_below;
-  now
-    let r be ext-real number;
-    assume
-A2: r in X;
-    then r is real number by A1,XREAL_0:def 1;
-    hence inf Y <= r by A1,A2,SEQ_4:def 5;
-  end;
+  for r be ext-real number st r in X holds inf Y <= r
+   by A1,SEQ_4:def 5;
   then
-A3: inf Y is minorant of X by SUPINF_1:def 10;
+A3: inf Y is LowerBound of X by XXREAL_2:def 2;
   hence
 A4: X is bounded_below by SUPINF_1:def 12;
-A5: inf Y <= inf X by A3,SUPINF_1:def 17;
-  not +infty in X by A1,SUPINF_1:1;
+A5: inf Y <= inf X by A3,XXREAL_2:def 4;
+  not +infty in X by A1;
   then X <> {+infty} by TARSKI:def 1;
-  then inf X in REAL by A4,SUPINF_1:84;
+  then inf X in REAL by A4,XXREAL_2:58;
   then
-A6: inf X is real number by XREAL_0:def 1;
-  for s be real number st s in Y holds inf X <= s by A1,SUPINF_1:79;
+A6: inf X is real number;
+  for s be real number st s in Y holds inf X <= s by A1,XXREAL_2:3;
   then inf X <= inf Y by A6,SEQ_4:60;
   hence inf Y = inf X by A5,XXREAL_0:1;
 end;
 
 theorem Th4:
   X = Y & X is bounded_below implies Y is bounded_below & inf X = inf Y
-proof
-  assume
-A1: X=Y & X is bounded_below;
-  then consider UB being minorant of X such that
-A2: UB in REAL by SUPINF_1:def 12;
-  reconsider UB as real number by A2,XREAL_0:def 1;
-  for x be real number st x in Y holds UB <= x by A1,SUPINF_1:def 10;
-  then Y is bounded_below by SEQ_4:def 2;
-  hence thesis by A1,Th3;
-end;
+        by Th3;
 
 definition
   let seq be ExtREAL_sequence;
@@ -303,11 +277,11 @@ proof
 A1: Y = {seq.k where k is Element of NAT: n <= k} &
   (inferior_realsequence seq).n = inf Y by Def6;
 A2: seq.n in Y by A1;
-  hence (inferior_realsequence seq).n <= seq.n by A1,SUPINF_1:79;
+  hence (inferior_realsequence seq).n <= seq.n by A1,XXREAL_2:3;
   ex Z being non empty Subset of ExtREAL st
   Z = {seq.k where k is Element of NAT: n <= k} &
   (superior_realsequence seq).n = sup Z by Def7;
-  hence seq.n <=(superior_realsequence seq).n by A1,A2,SUPINF_1:76;
+  hence seq.n <=(superior_realsequence seq).n by A1,A2,XXREAL_2:4;
 end;
 
 Lm1: superior_realsequence seq is non-increasing
@@ -332,7 +306,7 @@ A4:   z=seq.k & n <= k by A3;
       hence z in Y by A2,A4;
     end;
     hence (superior_realsequence seq).n <= (superior_realsequence seq).m
-    by A2,A3,SUPINF_1:91;
+    by A2,A3,XXREAL_2:59;
   end;
   hence thesis by Th7;
 end;
@@ -359,7 +333,7 @@ A4:   z=seq.k & n <= k by A3;
       hence z in Y by A2,A4;
     end;
     hence (inferior_realsequence seq).m <= (inferior_realsequence seq).n
-    by A2,A3,SUPINF_1:94;
+    by A2,A3,XXREAL_2:60;
   end;
   hence thesis by Th7;
 end;
@@ -477,11 +451,11 @@ proof
 A1: seq is bounded;
   then seq is bounded_above by Def5;
   then rng seq is bounded_above by Def4;
-  then consider UB being majorant of rng seq such that
+  then consider UB being UpperBound of rng seq such that
 A2: UB in REAL by SUPINF_1:def 11;
   seq is bounded_below by A1,Def5;
   then rng seq is bounded_below by Def3;
-  then consider UL being minorant of rng seq such that
+  then consider UL being LowerBound of rng seq such that
 A3: UL in REAL by SUPINF_1:def 12;
 A4: dom seq =NAT by FUNCT_2:def 1;
   now
@@ -490,7 +464,7 @@ A4: dom seq =NAT by FUNCT_2:def 1;
     then
 A5: seq.x in rng seq by FUNCT_2:6;
     UB < +infty & -infty < UL by A2,A3,XXREAL_0:9,12;
-    then seq.x <> +infty & seq.x <> -infty by A5,SUPINF_1:def 9,def 10;
+    then seq.x <> +infty & seq.x <> -infty by A5,XXREAL_2:def 1,def 2;
     then seq.x is Real by EXTREAL1:1;
     hence seq.x in REAL;
   end;
@@ -505,7 +479,7 @@ A1: seq=rseq;
   hereby
     assume seq is bounded_above;
     then rng seq is bounded_above by Def4;
-    then rng rseq is bounded_above by A1,Th2;
+    then rng rseq is bounded_above by A1;
     then consider p be real number such that
 A2: for y be real number st y in rng rseq holds y <= p by SEQ_4:def 1;
     now
@@ -526,7 +500,7 @@ A4: q in REAL by XREAL_0:def 1;
     then ex x be set st x in dom rseq & r=rseq.x by A1,FUNCT_1:def 5;
     hence r <= q by A3;
   end;
-  then q is majorant of rng seq by SUPINF_1:def 9;
+  then q is UpperBound of rng seq by XXREAL_2:def 1;
   hence rng seq is bounded_above by A4,SUPINF_1:def 11;
 end;
 
@@ -538,7 +512,7 @@ A1: seq=rseq;
   hereby
     assume seq is bounded_below;
     then rng seq is bounded_below by Def3;
-    then rng rseq is bounded_below by A1,Th4;
+    then rng rseq is bounded_below by A1;
     then consider p be real number such that
 A2: for y be real number st y in rng rseq holds p <= y by SEQ_4:def 2;
     now
@@ -559,7 +533,7 @@ A4: q in REAL by XREAL_0:def 1;
     then ex x be set st x in dom rseq & r = rseq.x by A1,FUNCT_1:def 5;
     hence q<=r by A3;
   end;
-  then q is minorant of rng seq by SUPINF_1:def 10;
+  then q is LowerBound of rng seq by XXREAL_2:def 2;
   hence rng seq is bounded_below by A4,SUPINF_1:def 12;
 end;
 
@@ -782,8 +756,8 @@ A2: not ex k1 be Element of NAT st (superior_realsequence seq).k1 <= K1;
       x = (superior_realsequence seq).n by FUNCT_1:def 5;
       hence K1 <= x by A2;
     end;
-    then K1 is minorant of rng superior_realsequence seq by SUPINF_1:def 10;
-    then a+1 <= a by A1,SUPINF_1:def 17;
+    then K1 is LowerBound of rng superior_realsequence seq by XXREAL_2:def 2;
+    then a+1 <= a by A1,XXREAL_2:def 4;
     hence contradiction by XREAL_1:31;
   end;
   then consider k1 be Element of NAT such that
@@ -799,8 +773,8 @@ A4: not (ex k2 be Element of NAT st K2 <= (inferior_realsequence seq).k2);
       x = (inferior_realsequence seq).n by FUNCT_1:def 5;
       hence x <= K2 by A4;
     end;
-    then K2 is majorant of rng inferior_realsequence seq by SUPINF_1:def 9;
-    then a <= a-1 by SUPINF_1:def 16;
+    then K2 is UpperBound of rng inferior_realsequence seq by XXREAL_2:def 1;
+    then a <= a-1 by XXREAL_2:def 3;
     then a+0 < a-1+1 by XREAL_1:10;
     hence contradiction;
   end;
@@ -836,7 +810,7 @@ A10: x=seq.(n+k) by A9,KURATO_2:def 2;
     k <= n+k by NAT_1:11;
     hence x <= K1 by A7,A10;
   end;
-  then K1 is majorant of rng (seq^\k) by SUPINF_1:def 9;
+  then K1 is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
   hence rng (seq^\k) is bounded_above by SUPINF_1:def 11;
   now
     let x be ext-real number;
@@ -848,7 +822,7 @@ A12: x=seq.(n+k) by A11,KURATO_2:def 2;
     k <= n+k by NAT_1:11;
     hence K2 <= x by A7,A12;
   end;
-  then K2 is minorant of rng (seq^\k) by SUPINF_1:def 10;
+  then K2 is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
   hence rng (seq^\k) is bounded_below by SUPINF_1:def 12;
 end;
 
@@ -885,14 +859,14 @@ A8: n in dom(seq^\K) & r=(seq^\K).n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A8;
     |.seq.(n+k)-lim seq .| <= 1. by A5,NAT_1:11;
     then seq.(n+k)-lim seq <= 1. by EXTREAL2:60;
-    then seq.(n+k)+-lim seq +lim seq <= 1. +lim seq by A4,SUPINF_2:14;
+    then seq.(n+k)+-lim seq +lim seq <= 1. +lim seq by SUPINF_2:14;
     then seq.(n+k)+(-lim seq +lim seq) <= 1. +lim seq by A4,A7,EXTREAL1:8;
     then seq.(n+k)+0. <= 1. +lim seq by EXTREAL1:9;
     then seq.(n+k) <= 1. +lim seq by SUPINF_2:18;
     then seq.(n+k) <= UB by A4,A6,SUPINF_2:1;
     hence r <= UB by A8,KURATO_2:def 2;
   end;
-  then UB is majorant of rng(seq^\K) by SUPINF_1:def 9;
+  then UB is UpperBound of rng(seq^\K) by XXREAL_2:def 1;
   hence rng (seq^\K) is bounded_above by SUPINF_1:def 11;
   now
     let r be ext-real number;
@@ -902,7 +876,7 @@ A9: n in dom (seq^\K) & r=(seq^\K).n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A9;
     |.seq.(n+k)-lim seq .| < 1 by A5,NAT_1:11;
     then -1. <=seq.(n+k)-lim seq by EXTREAL2:60;
-    then -1. +lim seq <= seq.(n+k)+-lim seq +lim seq by A4,SUPINF_2:14;
+    then -1. +lim seq <= seq.(n+k)+-lim seq +lim seq by SUPINF_2:14;
     then -1. +lim seq <= seq.(n+k)+(-lim seq +lim seq) by A4,A7,EXTREAL1:8;
     then
 A10: -1. +lim seq <= seq.(n+k)+0. by EXTREAL1:9;
@@ -911,7 +885,7 @@ A10: -1. +lim seq <= seq.(n+k)+0. by EXTREAL1:9;
     then UL <= seq.(n+k) by A10,SUPINF_2:18;
     hence UL <= r by A9,KURATO_2:def 2;
   end;
-  then UL is minorant of rng (seq^\K) by SUPINF_1:def 10;
+  then UL is LowerBound of rng (seq^\K) by XXREAL_2:def 2;
   hence rng (seq^\K) is bounded_below by SUPINF_1:def 12;
 end;
 
@@ -1034,7 +1008,7 @@ proof
   hereby
     assume seq is bounded_above;
     then rng seq is bounded_above by Def4;
-    then consider UB being majorant of rng seq such that
+    then consider UB being UpperBound of rng seq such that
 A1: UB in REAL by SUPINF_1:def 11;
     now
       let r be ext-real number;
@@ -1043,17 +1017,17 @@ A1: UB in REAL by SUPINF_1:def 11;
 A2:   n in dom (seq^\k) & r = (seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A2;
       seq.(n+k) in rng seq by FUNCT_2:6;
-      then seq.(n+k) <= UB by SUPINF_1:def 9;
+      then seq.(n+k) <= UB by XXREAL_2:def 1;
       hence r <= UB by A2,KURATO_2:def 2;
     end;
-    then UB is majorant of rng (seq^\k) by SUPINF_1:def 9;
+    then UB is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
     then rng (seq^\k) is bounded_above by A1,SUPINF_1:def 11;
     hence seq^\k is bounded_above by Def4;
   end;
   hereby
     assume seq is bounded_below;
     then rng seq is bounded_below by Def3;
-    then consider UB being minorant of rng seq such that
+    then consider UB being LowerBound of rng seq such that
 A3: UB in REAL by SUPINF_1:def 12;
     now
       let r be ext-real number;
@@ -1062,10 +1036,10 @@ A3: UB in REAL by SUPINF_1:def 12;
 A4:   n in dom (seq^\k) & r=(seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A4;
       seq.(n+k) in rng seq by FUNCT_2:6;
-      then UB <= seq.(n+k) by SUPINF_1:def 10;
+      then UB <= seq.(n+k) by XXREAL_2:def 2;
       hence UB <= r by A4,KURATO_2:def 2;
     end;
-    then UB is minorant of rng (seq^\k) by SUPINF_1:def 10;
+    then UB is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
     then rng (seq^\k) is bounded_below by A3,SUPINF_1:def 12;
     hence seq^\k is bounded_below by Def3;
   end;
@@ -1075,9 +1049,9 @@ theorem Th23:
   inf seq <= seq.n & seq.n <= sup seq
 proof
 A1: seq.n in rng seq by FUNCT_2:6;
-  inf rng seq is minorant of rng seq &
-  sup rng seq is majorant of rng seq by SUPINF_1:def 16,def 17;
-  hence thesis by A1,SUPINF_1:def 9,def 10;
+  inf rng seq is LowerBound of rng seq &
+  sup rng seq is UpperBound of rng seq by XXREAL_2:def 3,def 4;
+  hence thesis by A1,XXREAL_2:def 1,def 2;
 end;
 
 theorem Th24:
@@ -1113,9 +1087,9 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     then inf seq <= seq0.n by Th23;
     hence inf rng seq <= y by A2;
   end;
-  then inf rng seq is minorant of rng seq0 by SUPINF_1:def 10;
+  then inf rng seq is LowerBound of rng seq0 by XXREAL_2:def 2;
   then
-A3: inf rng seq <= inf rng seq0 by SUPINF_1:def 17;
+A3: inf rng seq <= inf rng seq0 by XXREAL_2:def 4;
   now
     let y be ext-real number;
     assume y in rng seq;
@@ -1129,8 +1103,8 @@ A5: seq.(n+k) <= seq.n by A1,Th7;
     then inf seq0 <= seq.(n+k) by Th23;
     hence inf rng seq0 <= y by A4,A5,XXREAL_0:2;
   end;
-  then inf rng seq0 is minorant of rng seq by SUPINF_1:def 10;
-  then inf rng seq0 <= inf rng seq by SUPINF_1:def 17;
+  then inf rng seq0 is LowerBound of rng seq by XXREAL_2:def 2;
+  then inf rng seq0 <= inf rng seq by XXREAL_2:def 4;
   hence thesis by A3,XXREAL_0:1;
 end;
 
@@ -1160,9 +1134,9 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     then seq0.n <=sup seq by Th23;
     hence y <= sup rng seq by A2;
   end;
-  then sup rng seq is majorant of rng seq0 by SUPINF_1:def 9;
+  then sup rng seq is UpperBound of rng seq0 by XXREAL_2:def 1;
   then
-A3: sup rng seq0 <= sup rng seq by SUPINF_1:def 16;
+A3: sup rng seq0 <= sup rng seq by XXREAL_2:def 3;
   now
     let y be ext-real number;
     assume y in rng seq;
@@ -1176,8 +1150,8 @@ A5: seq.n <= seq.(n+k) by A1,Th7;
     then seq.(n+k) <= sup seq0 by Th23;
     hence y <= sup rng seq0 by A4,A5,XXREAL_0:2;
   end;
-  then sup rng seq0 is majorant of rng seq by SUPINF_1:def 9;
-  then sup rng seq <= sup rng seq0 by SUPINF_1:def 16;
+  then sup rng seq0 is UpperBound of rng seq by XXREAL_2:def 1;
+  then sup rng seq <= sup rng seq0 by XXREAL_2:def 3;
   hence thesis by A3,XXREAL_0:1;
 end;
 
@@ -1389,13 +1363,13 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     hence y <= seq.k by A2,KURATO_2:def 2;
   end;
   then
-A3: seq.k is majorant of rng seq0 by SUPINF_1:def 9;
+A3: seq.k is UpperBound of rng seq0 by XXREAL_2:def 1;
   seq.k in REAL by A1,XXREAL_0:14;
   then
 A4: rng seq0 is bounded_above by A3,SUPINF_1:def 11;
   seq0.0= seq.(0+k) by KURATO_2:def 2;
   then seq.k in rng seq0 by FUNCT_2:6;
-  hence thesis by A3,A4,Def4,SUPINF_1:80;
+  hence thesis by A3,A4,Def4,XXREAL_2:55;
 end;
 
 theorem Th31:
@@ -1418,13 +1392,13 @@ A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
     hence seq.k <= y by A2,KURATO_2:def 2;
   end;
   then
-A3: seq.k is minorant of rng seq0 by SUPINF_1:def 10;
+A3: seq.k is LowerBound of rng seq0 by XXREAL_2:def 2;
   seq.k in REAL by A1,XXREAL_0:14;
   then
 A4: rng seq0 is bounded_below by A3,SUPINF_1:def 12;
   seq0.0 = seq.(0+k) by KURATO_2:def 2;
   then seq.k in rng seq0 by FUNCT_2:6;
-  hence thesis by A3,A4,Def3,SUPINF_1:81;
+  hence thesis by A3,A4,Def3,XXREAL_2:56;
 end;
 
 Lm4: for
@@ -1544,9 +1518,9 @@ A5:   n<=m & g < seq.m by A3;
       then seq.m <= seq.n by A1,A5,Th7;
       hence g <= y by A4,A5,XXREAL_0:2;
     end;
-    then g is minorant of rng seq by SUPINF_1:def 10;
+    then g is LowerBound of rng seq by XXREAL_2:def 2;
     then
-A6: g <= inf rng seq by SUPINF_1:def 17;
+A6: g <= inf rng seq by XXREAL_2:def 4;
     g in REAL by XREAL_0:def 1;
     hence contradiction by A1,A6,XXREAL_0:12;
   end;
@@ -1580,9 +1554,9 @@ A5:   n<=m & seq.m < g by A3;
       then seq.n <= seq.m by A1,A5,Th7;
       hence y <= g by A4,A5,XXREAL_0:2;
     end;
-    then g is majorant of rng seq by SUPINF_1:def 9;
+    then g is UpperBound of rng seq by XXREAL_2:def 1;
     then
-A6: sup rng seq <= g by SUPINF_1:def 16;
+A6: sup rng seq <= g by XXREAL_2:def 3;
     g in REAL by XREAL_0:def 1;
     hence contradiction by A1,A6,XXREAL_0:9;
   end;
@@ -1637,7 +1611,7 @@ A7:       not y in rng seq;
       then {+infty} c= rng seq by TARSKI:def 3;
       hence thesis by A5,XBOOLE_0:def 10;
     end;
-    then inf seq = +infty by SUPINF_1:86;
+    then inf seq = +infty by XXREAL_2:13;
     hence lim seq = inf seq by A3,A4,MESFUNC5:def 12;
   end;
   suppose not (for n be Element of NAT holds +infty <= seq.n);
@@ -1657,16 +1631,16 @@ A12:  rng seq0 is bounded_above by Def4;
       now
         assume
 A13:    rng seq0 ={-infty};
-A14:    -infty is minorant of rng seq0 by SUPINF_1:36;
+A14:    -infty is LowerBound of rng seq0 by XXREAL_2:42;
         -infty in rng seq0 by A13,TARSKI:def 1;
-        hence contradiction by A9,A10,A14,SUPINF_1:81;
+        hence contradiction by A9,A10,A14,XXREAL_2:56;
       end;
       then
-A15:  sup rng seq0 < +infty by A12,SUPINF_1:83,XXREAL_0:9;
+A15:  sup rng seq0 < +infty by A12,XXREAL_2:57,XXREAL_0:9;
       inf seq0 <= sup seq0 by Th24;
       then
 A16:  inf rng seq0 in REAL by A9,A10,A15,XXREAL_0:14;
-      inf rng seq0 is minorant of rng seq0 by SUPINF_1:def 17;
+      inf rng seq0 is LowerBound of rng seq0 by XXREAL_2:def 4;
       then rng seq0 is bounded_below by A16,SUPINF_1:def 12;
       then seq0 is bounded_below by Def3;
       then seq0 is bounded by A11,Def5;
@@ -1729,7 +1703,7 @@ A7:       not y in rng seq;
       then {-infty} c= rng seq by TARSKI:def 3;
       hence thesis by A5,XBOOLE_0:def 10;
     end;
-    then sup seq = -infty by SUPINF_1:85;
+    then sup seq = -infty by XXREAL_2:11;
     hence lim seq = sup seq by A3,A4,MESFUNC5:def 12;
   end;
   suppose not (for n be Element of NAT holds seq.n <= -infty);
@@ -1751,15 +1725,15 @@ A13:  rng seq0 is bounded_below by Def3;
         assume rng seq0 ={+infty};
         then
 A14:    +infty in rng seq0 by TARSKI:def 1;
-        +infty is majorant of rng seq0 by SUPINF_1:33;
-        hence contradiction by A9,A10,A14,SUPINF_1:80;
+        +infty is UpperBound of rng seq0 by XXREAL_2:41;
+        hence contradiction by A9,A10,A14,XXREAL_2:55;
       end;
       then
-A15:  -infty < inf rng seq0 by A13,SUPINF_1:84,XXREAL_0:12;
+A15:  -infty < inf rng seq0 by A13,XXREAL_2:58,XXREAL_0:12;
       inf seq0 <= sup seq0 by Th24;
       then
 A16:  sup rng seq0 in REAL by A9,A10,A15,XXREAL_0:14;
-      sup rng seq0 is majorant of rng seq0 by SUPINF_1:def 16;
+      sup rng seq0 is UpperBound of rng seq0 by XXREAL_2:def 3;
       then rng seq0 is bounded_above by A16,SUPINF_1:def 11;
       then seq0 is bounded_above by Def4;
       then seq0 is bounded by A12,Def5;
@@ -1822,9 +1796,9 @@ A9:   seq2^\k2 is bounded by A7,Th19;
       then
 A10:  rng(seq1^\k1) is bounded_below & rng(seq1^\k1) is bounded_above
       by Def3,Def4;
-      then consider LB being minorant of rng (seq1^\k1) such that
+      then consider LB being LowerBound of rng (seq1^\k1) such that
 A11:  LB in REAL by SUPINF_1:def 12;
-      consider UB being majorant of rng (seq1^\k1) such that
+      consider UB being UpperBound of rng (seq1^\k1) such that
 A12:  UB in REAL by A10,SUPINF_1:def 11;
 A13:  dom(seq1^\k1) = NAT by FUNCT_2:def 1;
       now
@@ -1840,8 +1814,8 @@ A15:    y=seq1.(k+n) by A14,KURATO_2:def 2;
         hence y in rng(seq1^\k1) by A13,FUNCT_1:def 5;
       end;
       then rng (seq1^\k) c=rng (seq1^\k1) by TARSKI:def 3;
-      then LB is minorant of rng (seq1^\k) &
-      UB is majorant of rng (seq1^\k) by SUPINF_1:34,39;
+      then LB is LowerBound of rng (seq1^\k) &
+      UB is UpperBound of rng (seq1^\k) by XXREAL_2:5,6;
       then rng (seq1^\k)is bounded_below &
       rng (seq1^\k)is bounded_above by A11,A12,SUPINF_1:def 11,def 12;
       then seq1^\k is bounded_below & seq1^\k is bounded_above by Def3,Def4;
@@ -1851,9 +1825,9 @@ A15:    y=seq1.(k+n) by A14,KURATO_2:def 2;
       then
 A16:  rng(seq2^\k2)is bounded_below & rng(seq2^\k2) is bounded_above
       by Def3,Def4;
-      then consider LB being minorant of rng (seq2^\k2) such that
+      then consider LB being LowerBound of rng (seq2^\k2) such that
 A17:  LB in REAL by SUPINF_1:def 12;
-      consider UB being majorant of rng (seq2^\k2) such that
+      consider UB being UpperBound of rng (seq2^\k2) such that
 A18:  UB in REAL by A16,SUPINF_1:def 11;
 A19:  dom(seq2^\k2) = NAT by FUNCT_2:def 1;
       now
@@ -1869,8 +1843,8 @@ A21:    y=seq2.(k+n) by A20,KURATO_2:def 2;
         hence y in rng(seq2^\k2) by A19,FUNCT_1:def 5;
       end;
       then rng (seq2^\k) c= rng (seq2^\k2) by TARSKI:def 3;
-      then LB is minorant of rng (seq2^\k) &
-      UB is majorant of rng (seq2^\k) by SUPINF_1:34,39;
+      then LB is LowerBound of rng (seq2^\k) &
+      UB is UpperBound of rng (seq2^\k) by XXREAL_2:5,6;
       then rng (seq2^\k)is bounded_below & rng (seq2^\k ) is bounded_above
       by A17,A18,SUPINF_1:def 11,def 12;
       then seq2^\k is bounded_below & seq2^\k is bounded_above by Def3,Def4;
@@ -2112,8 +2086,8 @@ A15:        x=seq.k & m <= k by A13;
             N <= k by A14,A15,XXREAL_0:2;
             hence x <= g by A12,A15;
           end;
-          then g is majorant of Y by SUPINF_1:def 9;
-          hence iseq.m <= g by A13,SUPINF_1:def 16;
+          then g is UpperBound of Y by XXREAL_2:def 1;
+          hence iseq.m <= g by A13,XXREAL_2:def 3;
         end;
         hence contradiction by A11;
       end;
@@ -2171,8 +2145,8 @@ A26:        x = seq.k & m <= k by A25;
             N <= k by A24,A26,XXREAL_0:2;
             hence g <= x by A23,A26;
           end;
-          then g is minorant of Y by SUPINF_1:def 10;
-          hence g<=iseq.m by A25,SUPINF_1:def 17;
+          then g is LowerBound of Y by XXREAL_2:def 2;
+          hence g<=iseq.m by A25,XXREAL_2:def 4;
         end;
         hence contradiction by A22;
       end;

@@ -22,8 +22,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="21"/>
+<Adjective nr="16"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -34,8 +34,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="21"/>
+<Adjective nr="16"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Not>

@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, RLVECT_3, PBOOLE, RELAT_1, FUNCT_1, PROB_1, CARD_1,
       ARYTM, BOOLE, FRECHET, SETFAM_1, TARSKI, WAYBEL23, CANTOR_1, ORDINAL1,
       CARD_4, CARD_2, FINSET_1, NATTRA_1, PUA2MSS1, SUBSET_1, TOPS_1, YELLOW_9,
-      FINSUB_1, FUNCT_5, FINSEQ_1, EQREL_1, PCOMPS_1, TOPGEN_2;
+      FINSUB_1, FUNCT_5, FINSEQ_1, EQREL_1, PCOMPS_1, TOPGEN_2, ORDINAL2;
  notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, SETFAM_1, RELAT_1, FUNCT_1,
       RELSET_1, FUNCT_2, CARD_1, FINSEQ_1, CARD_3, EQREL_1, ORDINAL1, FINSET_1,
       FINSUB_1, CARD_2, CARD_4, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, TDLAT_3,
@@ -23,7 +23,7 @@ environ
       YELLOW_8, YELLOW_9, SUBSET_1;
  theorems XBOOLE_1, ZFMISC_1, SETFAM_1, CANTOR_1, CARD_5, YELLOW_8, YELLOW_9,
       PBOOLE, TOPS_1, CARD_1, CARD_4, CARD_LAR, XBOOLE_0, TSEP_1, PRE_TOPC,
-      TARSKI, TOPS_2, FUNCT_1, CARD_3, FINSET_1, STRUCT_0, TDLAT_3, CARD_2,
+      TARSKI, TOPS_2, FUNCT_1, CARD_3, FINSET_1, TDLAT_3, CARD_2,
       EQREL_1, FUNCT_2, WELLORD2, WAYBEL23, SUBSET_1, BORSUK_5, FINSEQ_1,
       FINSUB_1, WAYBEL19, PCOMPS_1, MSSUBFAM, ENUMSET1;
  schemes ORDINAL1, WELLORD2, PBOOLE, FUNCT_1, FUNCT_2;
@@ -255,12 +255,12 @@ end;
 
 theorem
   for T being non empty TopSpace holds
-  T is first-countable iff Chi(T) c= alef 0
+  T is first-countable iff Chi(T) c= omega
 proof
   let T be non empty TopSpace;
   set X = {Chi(x,T) where x is Point of T: not contradiction};
 A1: Chi(T) = union X by Th4;
-  thus T is first-countable implies Chi(T) c= alef 0
+  thus T is first-countable implies Chi(T) c= omega
   proof
     assume
 A2: for x be Point of T ex B be Basis of x st B is countable;
@@ -271,19 +271,19 @@ A2: for x be Point of T ex B be Basis of x st B is countable;
 A3:   a = Chi(x,T);
       consider B being Basis of x such that
 A4:   B is countable by A2;
-      Chi(x,T) c= Card B & Card B c= alef 0 by A4,Def1,CARD_4:def 1;
-      hence a c= alef 0 by A3,XBOOLE_1:1;
+      Chi(x,T) c= Card B & Card B c= omega by A4,Def1,CARD_4:def 1;
+      hence a c= omega by A3,XBOOLE_1:1;
     end;
-    hence Chi(T) c= alef 0 by A1,ZFMISC_1:94;
+    hence Chi(T) c= omega by A1,ZFMISC_1:94;
   end;
   assume
-A5: Chi(T) c= alef 0;
+A5: Chi(T) c= omega;
   let x be Point of T;
   consider B being Basis of x such that
 A6: Chi(x,T) = Card B by Def1;
   take B;
   Chi(x,T) c= Chi(T) by Th5;
-  hence Card B c= alef 0 by A5,A6,XBOOLE_1:1;
+  hence Card B c= omega by A5,A6,XBOOLE_1:1;
 end;
 
 begin :: Neighborhood system
@@ -379,11 +379,11 @@ Lm2: now
   let x be Element of T such that
 A1: x in Cl A;
   let B be Basis of x, U be set;
-  assume U in B;
-  then
-A2: x in U & U is open Subset of T by YELLOW_8:21;
+  assume
+Z:  U in B;
+  then x in U & U is open Subset of T by YELLOW_8:21;
   then U meets Cl A by A1,XBOOLE_0:3;
-  hence U meets A by A2,TSEP_1:40;
+  hence U meets A by Z,TSEP_1:40,YELLOW_8:21;
 end;
 
 Lm3: now
@@ -524,21 +524,12 @@ registration
     consider B being Basis of T such that
 A1: Card B = weight T by WAYBEL23:75;
     assume the carrier of T is finite;
-    then bool the carrier of T is finite by FINSET_1:24;
-    then B is finite by FINSET_1:13;
-    hence weight T is finite by A1,CARD_4:1;
+    then bool the carrier of T is finite;
+    then B is finite;
+    hence weight T is finite by A1;
   end;
   cluster infinite-weight -> infinite TopStruct;
-  coherence
-  proof
-    let T be TopStruct;
-    consider B being Basis of T such that
-A2: Card B = weight T by WAYBEL23:75;
-    assume weight T is infinite;
-    then B is infinite by A2,CARD_4:1;
-    then bool the carrier of T is infinite by FINSET_1:13;
-    hence the carrier of T is infinite by FINSET_1:24;
-  end;
+  coherence;
 end;
 
 registration
@@ -548,8 +539,8 @@ registration
     consider A being finite non empty set;
     reconsider O = bool A as Subset-Family of A;
     reconsider T = TopStruct(#A, O#) as discrete non empty TopStruct
-    by STRUCT_0:def 1,TDLAT_3:def 1;
-    take T; thus thesis by STRUCT_0:def 11;
+    by TDLAT_3:def 1;
+    take T; thus thesis;
   end;
 end;
 
@@ -570,8 +561,6 @@ A1: A = {{x} where x is Element of X :not contradiction} by EQREL_1:46;
 A2: for a st a in X holds F(a) in A by A1;
     consider f being Function of X,A such that
 A3: for a st a in X holds f.a = F(a) from FUNCT_2:sch 2(A2);
-A4: {x0} in A by A1;
-    then
 A5: dom f = X & rng f c= A by FUNCT_2:def 1;
 A6: rng f = A
     proof thus rng f c= A;
@@ -580,7 +569,7 @@ A6: rng f = A
       then consider b being Element of X such that
 A7:   a = {b} by A1;
       f.b = a by A3,A7;
-      hence thesis by A4,FUNCT_2:6;
+      hence thesis by FUNCT_2:6;
     end;
     f is one-to-one
     proof
@@ -652,8 +641,7 @@ A2: Card B0 = Card the carrier of T by Th13;
 A3: weight T = meet M by WAYBEL23:def 5;
   Card B0 in M;
   hence weight T c= Card the carrier of T by A2,A3,SETFAM_1:4;
-  B0 c= B by Th14;
-  hence Card the carrier of T c= weight T by A1,A2,CARD_1:27;
+  thus Card the carrier of T c= weight T by A1,A2,CARD_1:27,Th14;
 end;
 
 registration
@@ -663,10 +651,10 @@ registration
     consider A being infinite set;
     reconsider O = bool A as Subset-Family of A;
     reconsider T = TopStruct(#A, O#) as discrete non empty TopStruct
-    by STRUCT_0:def 1,TDLAT_3:def 1;
+    by TDLAT_3:def 1;
     take T;
     the carrier of T is infinite & weight T = Card the carrier of T by Th15;
-    hence weight T is infinite by CARD_4:1;
+    hence weight T is infinite;
   end;
 end;
 
@@ -756,7 +744,7 @@ proof
 A1: Card B = weight T by WAYBEL23:75;
   weight T is finite by Def4;
   then
-A2: B is finite by A1,CARD_4:1;
+A2: B is finite by A1;
   deffunc F(set) = meet {U where U is Subset of T: $1 in U & U in B};
 A3: now
     let a;
@@ -777,7 +765,7 @@ A6: S c= B
       hence thesis;
     end;
     then reconsider S as Subset-Family of T by XBOOLE_1:1;
-    S is finite by A2,A6,FINSET_1:13;
+    S is finite by A2,A6;
     then Intersect S in FinMeetCl B & U in S by A5,A6,CANTOR_1:def 4;
     then Intersect S in the topology of T & S <> {} by A4;
     hence F(a) in the topology of T by SETFAM_1:def 10;
@@ -879,8 +867,7 @@ A2: Card B = weight T by WAYBEL23:75;
 A3: weight T = meet M by WAYBEL23:def 5;
   Card B0 in M;
   hence weight T c= Card B0 by A3,SETFAM_1:4;
-  B0 c= B by A1,Th18;
-  hence thesis by A2,CARD_1:27;
+  thus thesis by A2,CARD_1:27,A1,Th18;
 end;
 
 Lm5: for T being finite-weight non empty TopSpace for B being Basis of T
@@ -990,7 +977,7 @@ A8:   a in O2 & b in O2;
 A9:   a = F1` & F1 is finite;
       consider F2 being Subset of X such that
 A10:  b = F2` & F2 is finite by A8;
-      a/\b = (F1\/F2)` & F1\/F2 is finite by A9,A10,FINSET_1:14,XBOOLE_1:53;
+      a/\b = (F1\/F2)` & F1\/F2 is finite by A9,A10,XBOOLE_1:53;
       then a/\b in O2;
       hence a /\ b in the topology of T by A1,XBOOLE_0:def 2;
     end;
@@ -1007,10 +994,7 @@ end;
 registration
   let X be non empty set, x0 be set;
   cluster DiscrWithInfin(X,x0) -> non empty;
-  coherence
-  proof
-    thus the carrier of DiscrWithInfin(X,x0) is non empty by Def5;
-  end;
+  coherence by Def5;
 end;
 
 theorem Th21:
@@ -1084,7 +1068,7 @@ A2: X is infinite;
   assume
 A3: U = {x0};
   then X = U` \/ {x0} by A1,XBOOLE_1:45;
-  then U` is infinite & x0 in U by A2,A3,FINSET_1:14,TARSKI:def 1;
+  then U` is infinite & x0 in U by A2,A3,TARSKI:def 1;
   hence U is not open by Th21;
 end;
 
@@ -1121,8 +1105,7 @@ proof
   let X,x0 be set such that
 A1: x0 in X;
   set T = DiscrWithInfin(X,x0);
-  the carrier of T = X by Def5;
-  then reconsider T as non empty TopSpace by A1,STRUCT_0:def 1;
+  reconsider T as non empty TopSpace by A1;
   reconsider x = x0 as Point of T by A1,Def5;
   let A be Subset of DiscrWithInfin(X,x0);
   reconsider B = {x} as Subset of T;
@@ -1156,8 +1139,7 @@ proof
   let X,x0 be set such that
 A1: x0 in X;
   set T = DiscrWithInfin(X,x0);
-  the carrier of T = X by Def5;
-  then reconsider T as non empty TopSpace by A1,STRUCT_0:def 1;
+  reconsider T as non empty TopSpace by A1;
   reconsider x = x0 as Point of T by A1,Def5;
   let A be Subset of DiscrWithInfin(X,x0);
   reconsider A' = A as Subset of T;
@@ -1204,7 +1186,7 @@ A4: a is Subset of T & a in SmallestPartition X & a <> {x0}
     then a is open Subset of T by A3,Def5,Th21;
     hence thesis by PRE_TOPC:def 5;
   end;
-  B2 c= the topology of T
+B6: B2 c= the topology of T
   proof
     let a;
     assume a in B2;
@@ -1214,8 +1196,6 @@ A5: a = F` & F is finite;
     then a is open Subset of T by A1,A5,Th21;
     hence thesis by PRE_TOPC:def 5;
   end;
-  then
-A6: B0 c= the topology of T by A2,XBOOLE_1:8;
   now
     let A be Subset of T such that
 A7: A is open;
@@ -1235,7 +1215,8 @@ A9: {p'} in SmallestPartition X;
     by A8,XBOOLE_0:def 2,ZFMISC_1:37;
     hence ex a being Subset of T st a in B0 & p in a & a c= A by A8;
   end;
-  then reconsider B0 as Basis of DiscrWithInfin(X,x0) by A6,YELLOW_9:32;
+  then reconsider B0 as Basis of DiscrWithInfin(X,x0)
+   by B6,YELLOW_9:32,A2,XBOOLE_1:8;
   take B0;
   thus B0 = B1 \/ B2;
 end;
@@ -1343,7 +1324,7 @@ proof
 A1: Card FX = Card X by Th33;
   assume
 A2: B0 = (SX \ {{x0}}) \/ FX;
-A3: Card {{x0}} = 1 & Card SX = Card X by Th13,CARD_1:79;
+A3: Card {{x0}} = 1 & Card SX = Card X by Th13,CARD_1:50;
 A4: 1 in Card X by CARD_4:13;
   then Card X +` 1 = Card X by CARD_4:34;
   then
@@ -1362,7 +1343,7 @@ proof
   set T = DiscrWithInfin(X,x0);
 A1: the carrier of T = X by Def5;
   set SX = SmallestPartition X;
-A2: Card {{x0}} = 1 & Card SX = Card X by Th13,CARD_1:79;
+A2: Card {{x0}} = 1 & Card SX = Card X by Th13,CARD_1:50;
 A3: 1 in Card X by CARD_4:13;
   then Card X +` 1 = Card X by CARD_4:34;
   then
@@ -1459,8 +1440,8 @@ A6: a = F` & F is finite by A1;
       then reconsider F as non empty Subset of T;
       SF is a_partition of F;
       then reconsider SF as non empty Subset-Family of T;
-      bool F is finite by A6,FINSET_1:24;
-      then SF is finite by FINSET_1:13;
+      bool F is finite by A6;
+      then SF is finite;
       then
 A7:   COMPLEMENT SF is finite by TOPS_2:13;
       COMPLEMENT SF c= pB
@@ -1530,7 +1511,7 @@ A3: a in Cl union F & not a in union clf F \/ meet Z;
 A4: b in Z & not a in b by SETFAM_1:def 1;
     consider G being Subset-Family of T such that
 A5: b = Cl union G & G in I by A4;
-A6: T is non empty by A3,STRUCT_0:def 1;
+A6: T is non empty by A3;
     F = G \/ (F\G) by A5,XBOOLE_1:45;
     then union F = union G \/ union (F\G) by ZFMISC_1:96;
     then Cl union F = Cl union G \/ Cl union (F\G) & F\G c= F
@@ -1587,7 +1568,7 @@ A2: a in Cl union F & not a in union clf F \/ meet Z;
 A3: b in Z & not a in b by SETFAM_1:def 1;
     consider G being Subset-Family of T such that
 A4: b = Cl union G & G c= F & F\G is finite by A3;
-A5: T is non empty by A2,STRUCT_0:def 1;
+A5: T is non empty by A2;
     F = G \/ (F\G) by A4,XBOOLE_1:45;
     then union F = union G \/ union (F\G) by ZFMISC_1:96;
     then Cl union F = Cl union G \/ Cl union (F\G) & F\G c= F
@@ -1775,7 +1756,7 @@ A10: a in O;
   then FinMeetCl union O c= FinMeetCl the topology of T by A7,CANTOR_1:16;
   then
 A11: B c= UniCl FinMeetCl the topology of T by A7,CANTOR_1:9;
-  X <> {} implies T is non empty by A7,STRUCT_0:def 1;
+  X <> {} implies T is non empty by A7;
   hence the topology of TopStruct(#X,B#) c= the topology of T
   by A1,A2,A3,A9,A11,CANTOR_1:7,ZFMISC_1:37;
 end;

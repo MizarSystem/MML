@@ -13,8 +13,6 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="SUPINF_1"/>
 <ArticleID name="MEASURE5"/>
 </Signature>
 <RCluster aid="MEASURE5" nr="1">
@@ -22,14 +20,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="31"/>
+<Adjective nr="21"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="2">
@@ -37,14 +35,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="32"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="3">
@@ -52,14 +50,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="33"/>
+<Adjective nr="21"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="4">
@@ -67,14 +65,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="34"/>
+<Adjective nr="21"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="5">
@@ -82,14 +80,14 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="35"/>
+<Adjective nr="21"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MEASURE5" nr="6">
@@ -97,75 +95,75 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="35"/>
+<Adjective nr="21"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <CCluster aid="MEASURE5" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="25"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MEASURE5" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="32"/>
+<Adjective nr="26"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MEASURE5" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MEASURE5" nr="4">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="28"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="68"/>
+<Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="29"/>
 </Cluster>
 </CCluster>
 </Registrations>

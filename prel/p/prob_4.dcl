@@ -13,8 +13,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -39,7 +39,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="84"/>
 <Func kind="K" nr="23">
 <LocusVar nr="1"/>
@@ -51,7 +51,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PROB_4" nr="2">
@@ -62,10 +62,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="28">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="31">
+<Adjective nr="34">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -85,7 +85,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="84"/>
 <Func kind="K" nr="23">
 <LocusVar nr="1"/>
@@ -97,7 +97,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 </Registrations>

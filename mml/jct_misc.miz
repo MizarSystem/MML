@@ -13,12 +13,13 @@ environ
       LATTICES, EUCLID, FUNCT_5;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, FUNCT_1, COMPLEX1,
       RELSET_1, FUNCT_2, INTEGRA1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, REAL_1, BINARITH, VALUED_1, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
+      XREAL_0, REAL_1, XXREAL_2, BINARITH, VALUED_1, SEQ_1, SEQ_2, SEQ_4,
+      RCOMP_1,
       STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1, PSCOMP_1, SEQM_3, METRIC_1,
       TBSP_1, TOPMETR, LIMFUNC1, CONNSP_1, JORDAN2C, EUCLID, RECDEF_1;
  constructors SETFAM_1, REAL_1, COMPLEX1, NAT_1, SEQM_3, PROB_1, LIMFUNC1,
       BINARITH, CONNSP_1, COMPTS_1, TBSP_1, TSP_1, TOPMETR, PSCOMP_1, JORDAN2C,
-      INTEGRA1, SEQ_1, RECDEF_1;
+      INTEGRA1, SEQ_1, RECDEF_1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, SEQM_3, STRUCT_0, PRE_TOPC, COMPTS_1, BORSUK_1,
       EUCLID, TOPMETR, TOPREAL1, PSCOMP_1, JORDAN2C, BORSUK_3, TOPREAL6,
@@ -30,8 +31,8 @@ environ
       BORSUK_1, TOPMETR, JORDAN6, UNIFORM1, SQUARE_1, RELAT_1, SEQ_2, TOPREAL6,
       TSP_1, SEQ_1, INTEGRA1, CONNSP_1, XREAL_0, LIMFUNC1, FCONT_3, TSEP_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, COMPLEX1, BINARITH, JORDAN2C, PRE_TOPC,
-      TOPREAL3, METRIC_6, XXREAL_0;
- schemes FUNCT_2, PSCOMP_1;
+      TOPREAL3, METRIC_6, XXREAL_0, XXREAL_1;
+ schemes FUNCT_2;
 
 begin :: Preliminaries
 
@@ -43,36 +44,10 @@ A1: a0 in A() by XBOOLE_0:def 1;
   hence thesis;
 end;
 
-canceled 4;
-
-theorem Th5:
-  for S,X being set, f being Function of S,X, A being Subset of X
-  st X = {} implies S = {} holds (f"A)` = f"(A`)
-proof
-  let S,X be set, f be Function of S,X, A be Subset of X such that
-A1: X = {} implies S = {};
-  A misses A` by XBOOLE_1:79;
-  then A /\ A` = {} by XBOOLE_0:def 7;
-  then f"A /\ f"(A`) = f"({}X) by FUNCT_1:137
-    .= {} by RELAT_1:171;
-  then
-A2: f"A misses f"(A`) by XBOOLE_0:def 7;
-  f"A \/ f"(A`) = f"(A \/ A`) by RELAT_1:175
-    .= f"[#]X by SUBSET_1:25
-    .= [#]S by A1,FUNCT_2:48;
-  then (f"A)` /\ (f"(A`))` = ([#]S)` by XBOOLE_1:53
-    .= {}S by XBOOLE_1:37;
-  then (f"A)` misses (f"(A`))` by XBOOLE_0:def 7;
-  hence (f"A)` = f"(A`) by A2,SUBSET_1:46;
-end;
-
-theorem
-  for S being 1-sorted, X being non empty set,
-  f being Function of the carrier of S,X, A being Subset of X
-  holds (f"A)` = f"(A`) by Th5;
-
 reserve i,j,m,n for Element of NAT,
   r,s,r0,s0,t for real number;
+
+canceled 6;
 
 theorem
   m <= n implies n-'(n-'m) = m
@@ -94,11 +69,11 @@ proof
 A1: r in [.a,b.] and
 A2: s in [.a,b.];
   reconsider a,b,r,s as Real by XREAL_0:def 1;
-  a <= r & a <= s by A1,A2,RCOMP_1:48;
+  a <= r & a <= s by A1,A2,XXREAL_1:1;
   then a+a <= r+s by XREAL_1:9;
   then
 A3: (a+a)/2 <= (r+s)/2 by REAL_1:73;
-  r <= b & s <= b by A1,A2,RCOMP_1:48;
+  r <= b & s <= b by A1,A2,XXREAL_1:1;
   then r+s <= b+b by XREAL_1:9;
   then (r+s)/2 <= (b+b)/2 by REAL_1:73;
   hence thesis by A3;
@@ -121,7 +96,7 @@ proof
   assume
 A1: t in ].r,s.[;
   reconsider r,t,s as Real by XREAL_0:def 1;
-A2: r < t & t < s by A1,RCOMP_1:47;
+A2: r < t & t < s by A1,XXREAL_1:4;
   per cases;
   suppose
 A3: t >= 0;
@@ -285,10 +260,10 @@ A9: not t in f.:A by SUBSET_1:7;
   set P1 = f"left_open_halfline t, Q1 = f"right_open_halfline t,
   P = P1 /\ A, Q = Q1 /\ A, X = left_open_halfline t \/ right_open_halfline t;
   reconsider Y = {t} as Subset of REAL;
-  Y` = REAL \ [.t,t.] by RCOMP_1:14
-    .= X by LIMFUNC1:25;
+  Y` = REAL \ [.t,t.] by XXREAL_1:17
+    .= X by XXREAL_1:385;
   then
-A10: (f"Y)` = f"X by Th5
+A10: (f"Y)` = f"X by FUNCT_2:177
     .= P1 \/ Q1 by RELAT_1:175;
 A11: A c= f"(f.:A) by FUNCT_2:50;
   f"{t} misses f"(f.:A) by A9,FUNCT_1:141,ZFMISC_1:56;
@@ -297,15 +272,15 @@ A11: A c= f"(f.:A) by FUNCT_2:50;
   then
 A12: A = A /\ (P1 \/ Q1) by XBOOLE_1:28
     .= P \/ Q by XBOOLE_1:23;
-A13: left_open_halfline t = {r1 where r1 is Real: r1 < t} by LIMFUNC1:151;
-A14: right_open_halfline t = {r1 where r1 is Real: t < r1} by LIMFUNC1:152;
-  r <= t & r <> t by A2,A8,A9,RCOMP_1:48;
+A13: left_open_halfline t = {r1 where r1 is Real: r1 < t} by XXREAL_1:229;
+A14: right_open_halfline t = {r1 where r1 is Real: t < r1} by XXREAL_1:230;
+  r <= t & r <> t by A2,A8,A9,XXREAL_1:1;
   then r < t by XXREAL_0:1;
   then r in left_open_halfline t by A13;
   then p in P1 by A4,FUNCT_2:46;
   then
 A15: P <> {}T by A3,XBOOLE_0:def 3;
-  t <= s & s <> t by A5,A8,A9,RCOMP_1:48;
+  t <= s & s <> t by A5,A8,A9,XXREAL_1:1;
   then t < s by XXREAL_0:1;
   then s in right_open_halfline t by A14;
   then q in Q1 by A7,FUNCT_2:46;
@@ -319,8 +294,8 @@ A17: P1 is open by PSCOMP_1:54;
 A18: Q1 is open by PSCOMP_1:54;
 A19: P c= P1 by XBOOLE_1:17;
 A20: Q c= Q1 by XBOOLE_1:17;
-  left_open_halfline t /\ right_open_halfline t = ].t,t.[ by LIMFUNC1:18
-    .= {} by RCOMP_1:12;
+  left_open_halfline t /\ right_open_halfline t = ].t,t.[ by XXREAL_1:269
+    .= {} by XXREAL_1:28;
   then left_open_halfline t misses right_open_halfline t by XBOOLE_0:def 7;
   then P1 misses Q1 by FUNCT_1:141;
   then P1 /\ Q1 = {} by XBOOLE_0:def 7;
@@ -490,8 +465,8 @@ A1: the carrier of R^1|At = At & the carrier of R^1|Bt = Bt by PRE_TOPC:29;
   reconsider AB = [:R^1|At, R^1|Bt:] as compact (non empty TopSpace);
   defpred P[set,set] means ex r,s being Real st $1 = [r,s] & $2 = abs(r-s);
 A2: now
-    let x be set;
-    assume x in the carrier of AB;
+    let x be Element of the carrier of AB;
+    x in the carrier of AB;
     then x in [:A,B:] by A1,BORSUK_1:def 5;
     then consider r,s being set such that
 A3: r in REAL & s in REAL and
@@ -501,7 +476,7 @@ A4: x = [r,s] by ZFMISC_1:103;
     thus P[x,t] by A4;
   end;
   consider f being RealMap of AB such that
-A5: for x being Element of AB holds P[x,f.x] from PSCOMP_1:sch 1(A2);
+A5: for x being Element of AB holds P[x,f.x] from FUNCT_2:sch 3(A2);
   for Y being Subset of REAL st Y is open holds f"Y is open
   proof
     let Y be Subset of REAL such that

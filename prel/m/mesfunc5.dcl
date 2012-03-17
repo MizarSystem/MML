@@ -31,8 +31,7 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="SUPINF_1"/>
+<ArticleID name="XXREAL_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>

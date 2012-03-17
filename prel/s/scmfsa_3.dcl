@@ -55,8 +55,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
-<Adjective nr="70">
+<Adjective nr="21"/>
+<Adjective nr="72">
 <Func kind="K" nr="270"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
@@ -66,7 +66,7 @@
 </Func>
 <Func kind="K" nr="286"/>
 </Adjective>
-<Adjective nr="75" value="false">
+<Adjective nr="77" value="false">
 <Func kind="K" nr="270"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>

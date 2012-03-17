@@ -48,7 +48,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="66">
+<Adjective nr="67">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -62,8 +62,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster aid="GOBOARD9" nr="1">
@@ -73,7 +73,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -84,7 +84,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

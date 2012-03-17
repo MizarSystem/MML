@@ -29,13 +29,13 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="98"/>
+<Adjective nr="91"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="9">
@@ -49,27 +49,27 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="97"/>
+<Adjective nr="91"/>
 <Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RUSUB_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="98"/>
+<Adjective nr="91"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -84,13 +84,13 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="98"/>
+<Adjective nr="91"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -106,21 +106,21 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="36"/>
+<Adjective nr="30"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RUSUB_2" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="62"/>
-<Adjective nr="87"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="63"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="98"/>
+<Adjective nr="91"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -136,11 +136,11 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="38"/>
+<Adjective nr="30"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="42"/>
+<Adjective nr="41"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -27,7 +27,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="2">
@@ -36,7 +36,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="3">
@@ -45,9 +45,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="48"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="4">
@@ -56,10 +56,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="38"/>
 <Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="5">
@@ -68,7 +68,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="6">
@@ -77,7 +77,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="7">
@@ -86,9 +86,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="50"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CAT_4" nr="8">
@@ -97,10 +97,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="50"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="38"/>
 <Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CAT_4" nr="1">
@@ -117,8 +117,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="2">
@@ -135,8 +135,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
-<Adjective nr="47"/>
+<Adjective nr="38"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="3">
@@ -153,8 +153,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="50"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CAT_4" nr="4">
@@ -171,9 +171,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="50"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 </Registrations>

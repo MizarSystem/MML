@@ -158,24 +158,10 @@ registration
 end;
 
 Lm7: for L being addLoopStr st L is left_add-cancelable
-for x,y,z being Element of L st x+y = x+z holds y = z
-proof
-  let L be addLoopStr;
-  assume L is left_add-cancelable;
-  then reconsider L as left_add-cancelable addLoopStr;
-  for x,y,z being Element of L st x+y = x+z holds y = z by ALGSTR_0:def 3;
-  hence thesis;
-end;
+for x,y,z being Element of L st x+y = x+z holds y = z by ALGSTR_0:def 3;
 
 Lm8: for L being addLoopStr st L is right_add-cancelable
-for x,y,z being Element of L st y+x = z+x holds y = z
-proof
-  let L be addLoopStr;
-  assume L is right_add-cancelable;
-  then reconsider L as right_add-cancelable addLoopStr;
-  for x,y,z being Element of L st y+x = z+x holds y = z by ALGSTR_0:def 4;
-  hence thesis;
-end;
+for x,y,z being Element of L st y+x = z+x holds y = z by ALGSTR_0:def 4;
 
 theorem Th7:
   for L being non empty addLoopStr holds L is Loop-like iff
@@ -185,17 +171,12 @@ theorem Th7:
   & (for a,x,y be Element of L holds x+a=y+a implies x=y)
 proof
   let L be non empty addLoopStr;
-  hereby
-    assume L is Loop-like;
-    then
-A1: L is left_add-cancelable right_add-cancelable
-    add-left-invertible add-right-invertible by Def12;
-    hence for a,b be Element of L ex x being Element of L st a+x=b by Def9;
-    thus for a,b be Element of L ex x being Element of L st x+a=b by A1,Def8;
-    thus for a,x,y be Element of L holds a+x=a+y implies x=y by A1,Lm7;
-    let a,x,y be Element of L;
-    thus x+a=y+a implies x=y by A1,Lm8;
-  end;
+  thus L is Loop-like implies
+   (for a,b be Element of L ex x being Element of L st a+x=b) &
+   (for a,b be Element of L ex x being Element of L st x+a=b) &
+   (for a,x,y be Element of L holds a+x=a+y implies x=y) &
+    for a,x,y being Element of L st x+a=y+a holds x=y
+    by Lm7,Lm8,Def8,Def9;
   assume
 A2: (for a,b be Element of L ex x being Element of L st a+x=b)
   & (for a,b be Element of L ex x being Element of L st x+a=b)
@@ -253,13 +234,7 @@ end;
 
 registration
   cluster Loop-like -> add-left-invertible (non empty addLoopStr);
-  coherence
-  proof
-    let L be (non empty addLoopStr);
-    assume L is Loop-like;
-    hence for a,b being Element of L
-    ex x being Element of L st x+a = b by Th7;
-  end;
+  coherence;
   cluster add-associative right_zeroed right_complementable
     -> left_zeroed Loop-like (non empty addLoopStr);
   coherence
@@ -568,7 +543,7 @@ A6:   a*z = 1.L by A1;
         .= y by A1;
     end;
   end;
-  hence thesis by A1,Def14,ALGSTR_0:def 25,GROUP_1:def 4,VECTSP_1:def 16;
+  hence thesis by A1,Def14,GROUP_1:def 4,VECTSP_1:def 16;
 end;
 
 registration
@@ -803,7 +778,7 @@ A2: L is almost_invertible almost_cancelable &
     proof
       let a,x,y be Element of L such that
 A3:   a<>0.L;
-      L is almost_left_cancelable by A2,ALGSTR_0:def 38;
+      L is almost_left_cancelable by A2;
       then a is left_mult-cancelable by A3,ALGSTR_0:def 36;
       hence a*x=a*y implies x=y by ALGSTR_0:def 20;
     end; thus
@@ -811,7 +786,7 @@ A3:   a<>0.L;
     proof
       let a,x,y be Element of L such that
 A4:   a<>0.L;
-      L is almost_right_cancelable by A2,ALGSTR_0:def 38;
+      L is almost_right_cancelable by A2;
       then a is right_mult-cancelable by A4,ALGSTR_0:def 37;
       hence x*a=y*a implies x=y by ALGSTR_0:def 21;
     end;
@@ -845,7 +820,7 @@ A8: x <> 0.L;
   end;
   then L is almost_invertible almost_cancelable
   & (for a be Element of L holds a*0.L = 0.L)
-  & (for a be Element of L holds 0.L*a = 0.L) by A5,A6,Def24,ALGSTR_0:def 38;
+  & (for a be Element of L holds 0.L*a = 0.L) by A5,A6,Def24;
   hence thesis by Def26;
 end;
 

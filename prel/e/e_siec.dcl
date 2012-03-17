@@ -20,7 +20,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="2">
@@ -29,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="3">
@@ -38,7 +38,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="4">
@@ -47,9 +47,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -26,11 +26,11 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
@@ -59,7 +59,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,15 +67,15 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="146"/>
+<Adjective nr="147"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_7" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
-<Adjective nr="18"/>
+<Adjective nr="15"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -83,11 +83,11 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="61" value="false"/>
-<Adjective nr="67"/>
-<Adjective nr="110"/>
+<Adjective nr="62" value="false"/>
+<Adjective nr="68"/>
 <Adjective nr="111"/>
-<Adjective nr="113"/>
+<Adjective nr="112"/>
+<Adjective nr="114"/>
 </Cluster>
 </FCluster>
 </Registrations>

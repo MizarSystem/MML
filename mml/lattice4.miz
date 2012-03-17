@@ -8,7 +8,7 @@ environ
 
  vocabularies SETFAM_1, BOOLE, LATTICES, FILTER_0, GROUP_6, FUNCT_1, MOD_4,
       RELAT_1, WELLORD1, FILTER_1, ZF_LANG, SUBSET_1, FINSUB_1, LATTICE2,
-      SETWISEO, BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN;
+      SETWISEO, BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, LATTICES,
       LATTICE2, FILTER_0, FUNCOP_1, SETWISEO, WELLORD1, FILTER_1;
@@ -143,23 +143,12 @@ A1: a1 [= b1;
   end;
 end;
 
-definition
-  let L1,L2;
-  let f be Function of the carrier of L1, the carrier of L2;
-  attr f is monomorphism means
-  :Def2:
-  f is one-to-one;
-  attr f is epimorphism means
-  :Def3:
-  rng f = the carrier of L2;
-end;
-
 theorem Th8:
-  f is monomorphism implies (a1 [= b1 iff (f.a1) [= (f.b1))
+  f is one-to-one implies (a1 [= b1 iff (f.a1) [= (f.b1))
 proof
-  assume f is monomorphism;
+  assume f is one-to-one;
   then
-A1: f is one-to-one by Def2;
+A1: f is one-to-one;
   reconsider f as Function of the carrier of L1,the carrier of L2;
   f.a1 [= f.b1 implies a1 [= b1
   proof
@@ -173,13 +162,13 @@ end;
 
 theorem Th9:
   for f being Function of the carrier of L1, the carrier of L2 holds
-  f is epimorphism implies (for a2 ex a1 st a2 = f.a1)
+  f is onto implies (for a2 ex a1 st a2 = f.a1)
 proof
   let f be Function of the carrier of L1, the carrier of L2;
   assume
-A1: f is epimorphism;
+A1: f is onto;
   reconsider g = f as Function of the carrier of L1,the carrier of L2;
-A2: rng g = the carrier of L2 by A1,Def3;
+A2: rng g = the carrier of L2 by A1,FUNCT_2:def 3;
   now
     let a2 be Element of L2;
     consider x be set such that
@@ -190,20 +179,14 @@ A3: x in the carrier of L1 & g.x = a2 by A2,FUNCT_2:17;
 end;
 
 definition
-  let L1,L2,f;
-  attr f is isomorphism means
-  :Def4:
-  f is monomorphism epimorphism;
-end;
-
-definition
   let L1,L2;
+  canceled 3;
   redefine pred L1,L2 are_isomorphic means
 
-  ex f st f is isomorphism;
+  ex f st f is bijective;
   compatibility
   proof
-    thus L1,L2 are_isomorphic implies ex f st f is isomorphism
+    thus L1,L2 are_isomorphic implies ex f st f is bijective
     proof
       assume L1,L2 are_isomorphic;
       then LattRel L1, LattRel L2 are_isomorphic by FILTER_1:def 9;
@@ -219,7 +202,7 @@ A3:   dom F = field R & rng F = field S & F is one-to-one &
       now
         let a1,b1 be Element of L1;
         reconsider a1'=a1,b1'=b1 as Element of L1;
-A4:     F is epimorphism by A2,A3,Def3;
+A4:     F is onto by A2,A3,FUNCT_2:def 3;
         thus F.(a1 "\/" b1) = F.a1 "\/" F.b1
         proof
           consider k1 being Element of L1 such that
@@ -277,18 +260,18 @@ A10:      F.(a1' "/\" b1') [= F.a1' by FILTER_1:32;
       end;
       then reconsider F as Homomorphism of L1,L2 by Def1;
       take F;
-      F is monomorphism epimorphism by A2,A3,Def2,Def3;
-      hence thesis by Def4;
+      F is one-to-one onto by A2,A3,FUNCT_2:def 3;
+      hence thesis;
     end;
     given f such that
-A11: f is isomorphism;
-A12: f is monomorphism epimorphism by A11,Def4;
+A11: f is bijective;
+A12: f is one-to-one onto by A11;
     then
-A13: f is one-to-one by Def2;
+A13: f is one-to-one;
     set R = LattRel L1, S = LattRel L2;
 A14: dom f = the carrier of L1 by FUNCT_2:def 1
       .= field R by FILTER_1:33;
-A15: rng f = the carrier of L2 by A12,Def3
+A15: rng f = the carrier of L2 by A12,FUNCT_2:def 3
       .= field S by FILTER_1:33;
     for a,b be set holds [a,b] in R iff
     a in field R & b in field R & [f.a,f.b] in S
@@ -418,10 +401,10 @@ reserve DL for distributive Lattice;
 reserve f for Homomorphism of DL,L2;
 
 theorem Th18:
-  f is epimorphism implies L2 is distributive
+  f is onto implies L2 is distributive
 proof
   assume
-A1: f is epimorphism;
+A1: f is onto;
   thus L2 is distributive
   proof
     let a,b,c be Element of L2;
@@ -447,12 +430,12 @@ reserve 0L for lower-bounded Lattice,
   b for Element of 0L;
 
 theorem Th19:
-  for f being Homomorphism of 0L,L2 st f is epimorphism holds
+  for f being Homomorphism of 0L,L2 st f is onto holds
   L2 is lower-bounded & f preserves_bottom
 proof
   let f be Homomorphism of 0L,L2;
   assume
-A1: f is epimorphism;
+A1: f is onto;
   set r = f.(Bottom 0L);
 A2: now
     let a2 be Element of L2;
@@ -553,12 +536,12 @@ reserve 1L for upper-bounded Lattice,
   b for Element of 1L;
 
 theorem Th25:
-  for f being Homomorphism of 1L,L2 st f is epimorphism
+  for f being Homomorphism of 1L,L2 st f is onto
   holds L2 is upper-bounded & f preserves_top
 proof
   let f be Homomorphism of 1L,L2;
   assume
-A1: f is epimorphism;
+A1: f is onto;
   set r = f.(Top 1L);
 A2: now
     let a2 be Element of L2;
@@ -725,10 +708,10 @@ proof
 end;
 
 theorem Th34:
-  f is monomorphism implies (f.i "/\" f.k [= f.j implies f.k [= f.(i => j))
+  f is one-to-one implies (f.i "/\" f.k [= f.j implies f.k [= f.(i => j))
 proof
   assume
-A1: f is monomorphism;
+A1: f is one-to-one;
   hereby
     assume f.i "/\" f.k [= f.j;
     then f.(i "/\" k) [= f.j by Def1;
@@ -739,11 +722,11 @@ A1: f is monomorphism;
 end;
 
 theorem
-  f is isomorphism implies (CL is implicative & f preserves_implication)
+  f is bijective implies (CL is implicative & f preserves_implication)
 proof
-  assume f is isomorphism;
+  assume f is bijective;
   then
-A1: f is epimorphism monomorphism by Def4;
+A1: f is onto one-to-one;
   thus CL is implicative
   proof
     let p,q be Element of CL;
@@ -805,16 +788,16 @@ proof
 end;
 
 theorem
-  f is epimorphism implies CL is Boolean & f preserves_complement
+  f is onto implies CL is Boolean & f preserves_complement
 proof
   assume
-A1: f is epimorphism;
+A1: f is onto;
   then
 A2: f preserves_top by Th25;
 A3: f preserves_bottom by A1,Th19;
   thus CL is bounded complemented;
   thus CL is distributive by A1,Th18;
-  then reconsider CL as Boolean Lattice by LATTICES:def 20;
+  then reconsider CL as Boolean Lattice;
   reconsider f as Homomorphism of BL,CL;
   now
     let a1;
@@ -1298,7 +1281,7 @@ A4: B c= SetImp AF by ZFMISC_1:37;
 A5: x = FinMeet B & B c= SetImp AF;
     thus x in the carrier of BL by A5;
   end;
-  then reconsider A1 as non empty Subset of BL by A1,A2;
+  then reconsider A1 as non empty Subset of BL by A2;
 A6: A1 is Field of BL
   proof
     let p,q;

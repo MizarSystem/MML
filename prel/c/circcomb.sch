@@ -17,11 +17,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_4"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
@@ -41,8 +38,8 @@
 </Typ>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
+<Adjective nr="6"/>
+<Adjective nr="16">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -107,7 +104,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -118,7 +115,7 @@
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="63">
+<Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -134,7 +131,7 @@
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="178">
+<Func kind="K" nr="171">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -151,7 +148,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="163">
+<Func kind="K" nr="157">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -207,7 +204,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="163">
+<Func kind="K" nr="157">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -238,10 +235,10 @@
 </Func>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="5"/>
-<Adjective nr="15">
-<Func kind="K" nr="164">
-<Func kind="K" nr="145">
+<Adjective nr="6"/>
+<Adjective nr="16">
+<Func kind="K" nr="158">
+<Func kind="K" nr="139">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="119"/>
@@ -249,8 +246,8 @@
 <Func kind="K" nr="119"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="164">
-<Func kind="K" nr="145">
+<Func kind="K" nr="158">
+<Func kind="K" nr="139">
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="119"/>

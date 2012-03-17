@@ -25,14 +25,14 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="11"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
-<Adjective nr="17"/>
+<Adjective nr="14"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INT_2" nr="2">
@@ -44,14 +44,14 @@
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
 <Adjective nr="10" value="false"/>
-<Adjective nr="11"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
-<Adjective nr="17"/>
+<Adjective nr="14"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21" value="false"/>
+<Adjective nr="21"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

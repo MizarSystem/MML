@@ -33,7 +33,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="19"/>
 </Cluster>
 <Func kind="K" nr="73"/>
 </Typ>
@@ -53,11 +53,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="2">
@@ -65,11 +65,11 @@
 <Func kind="K" nr="216"/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="3">
@@ -84,11 +84,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="4">
@@ -98,11 +98,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="5">
@@ -117,11 +117,11 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

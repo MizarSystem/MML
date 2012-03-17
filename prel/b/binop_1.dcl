@@ -17,7 +17,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <Func kind="K" nr="18"/>
 <Func kind="K" nr="18"/>
@@ -36,17 +36,17 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="K" nr="24">
 <Func kind="K" nr="18"/>
 <Func kind="K" nr="18"/>
 </Func>
 <Func kind="K" nr="18"/>
 </Adjective>
-<Adjective nr="11">
+<Adjective nr="12">
 <Func kind="K" nr="18"/>
 </Adjective>
-<Adjective nr="12">
+<Adjective nr="13">
 <Func kind="K" nr="18"/>
 </Adjective>
 </Cluster>

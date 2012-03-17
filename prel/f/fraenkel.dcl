@@ -22,7 +22,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FRAENKEL" nr="1">
@@ -39,19 +39,19 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FRAENKEL" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -60,7 +60,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="12"/>
+<Adjective nr="13"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FRAENKEL" nr="3">
@@ -77,14 +77,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FRAENKEL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="14"/>
+<Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -26,10 +26,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="INT_1"/>
@@ -50,13 +50,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="11"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
-<Adjective nr="19" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="23" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="14"/>
+<Adjective nr="20" value="false"/>
+<Adjective nr="22"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="2">
@@ -65,8 +65,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="60" value="false"/>
-<Adjective nr="107"/>
+<Adjective nr="61" value="false"/>
+<Adjective nr="108"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="3">
@@ -84,7 +84,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="108">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -100,7 +100,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WELLFND1" nr="2">
@@ -113,10 +113,10 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="93">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="108">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

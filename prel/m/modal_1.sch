@@ -180,7 +180,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="15">
+<Adjective nr="16">
 <Func kind="K" nr="149"/>
 <Func kind="F" nr="1"/>
 </Adjective>

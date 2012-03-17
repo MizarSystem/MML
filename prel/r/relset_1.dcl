@@ -22,7 +22,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="2"/>
+<Adjective nr="3"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RELSET_1" nr="2">
@@ -49,7 +49,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="3"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RELSET_1" nr="3">
@@ -76,7 +76,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="3"/>
 </Cluster>
 </FCluster>
 <CCluster aid="RELSET_1" nr="1">
@@ -99,7 +99,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="3"/>
 </Cluster>
 </CCluster>
 <CCluster aid="RELSET_1" nr="2">

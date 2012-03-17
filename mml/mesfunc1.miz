@@ -8,12 +8,14 @@ environ
 
  vocabularies INT_1, RAT_1, ARYTM_1, TARSKI, FUNCT_1, FUNCT_2, RELAT_1, BOOLE,
       ARYTM_3, CARD_4, CARD_1, FINSET_1, PARTFUN1, SUPINF_1, SEQ_1, MEASURE6,
-      RLVECT_1, GROUP_1, COMPLEX1, SETFAM_1, MESFUNC1, ARYTM, PROB_1, VALUED_0;
+      RLVECT_1, GROUP_1, COMPLEX1, SETFAM_1, MESFUNC1, ARYTM, PROB_1, VALUED_0,
+      ORDINAL2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, XREAL_0, MEASURE6, REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
       NAT_1, INT_1, RAT_1, FINSET_1, CARD_4, XXREAL_0, VALUED_0, PROB_1,
       SUPINF_1, SUPINF_2, MEASURE1, MEASURE2, MEASURE3, EXTREAL1;
- constructors WELLORD2, REAL_1, NAT_1, RAT_1, MEASURE3, MEASURE6, EXTREAL1;
+ constructors WELLORD2, REAL_1, NAT_1, RAT_1, MEASURE3, MEASURE6, EXTREAL1,
+      SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, CARD_1, MEMBERED, MEASURE1, VALUED_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
@@ -220,10 +222,8 @@ registration
   cluster RAT_with_denominator(n+1) -> non empty;
   coherence
   proof
-    consider i being Integer;
     reconsider i1=n+1 as Integer;
-    i/i1 in RAT by RAT_1:def 1;
-    then reconsider q=i/i1 as Rational by RAT_1:def 2;
+    reconsider q=0/i1 as Rational;
     q in RAT_with_denominator(n+1) by Def2;
     hence thesis;
   end;
@@ -242,7 +242,7 @@ A1: for x being Element of INT ex y being Element of RAT_with_denominator(n+1)
     reconsider i1=n+1 as Integer;
     set y=x/i1;
     y in RAT by RAT_1:def 1;
-    then reconsider y as Rational by RAT_1:def 2;
+    then reconsider y as Rational;
     y in RAT_with_denominator(n+1) by Def2;
     hence thesis;
   end;
@@ -268,7 +268,7 @@ A6:   x1 in dom f & x2 in dom f & f.x1=f.x2;
       let y being set;
       assume
 A7:   y in RAT_with_denominator(n+1);
-      then reconsider y as Rational by RAT_1:def 2;
+      then reconsider y as Rational;
       consider i being Integer such that
 A8:   y = i/(n+1) by A7,Def2;
       reconsider i as Element of INT by INT_1:def 2;
@@ -321,7 +321,7 @@ A7: union rng F c= RAT by TARSKI:def 3;
     proof
       let x be set;
       assume x in RAT;
-      then reconsider x as Rational by RAT_1:def 2;
+      then reconsider x as Rational;
 A8:   dom F = NAT by FUNCT_2:def 1;
       denominator x <> 0 by RAT_1:def 3;
       then consider m being Nat such that
@@ -352,15 +352,15 @@ A11: n in dom F & F.n = Y by FUNCT_1:def 5;
     then NAT,Y are_equipotent by Th3,WELLORD2:22;
     then
 A12: Card NAT = Card Y by CARD_1:21;
-    Card NAT c= alef 0 by CARD_4:44,def 1;
+    Card NAT c= omega by CARD_4:44,def 1;
     hence thesis by A12,CARD_4:def 1;
   end;
   then RAT is countable by A4,A10,CARD_4:62;
-  then Card RAT c= alef 0 by CARD_4:def 1;
-  then not alef 0 in Card RAT by CARD_1:14;
-  then not alef 0 c= Card RAT or not alef 0 <> Card RAT by CARD_1:13;
+  then Card RAT c= omega by CARD_4:def 1;
+  then not omega in Card RAT;
+  then not omega c= Card RAT or not omega <> Card RAT by CARD_1:13;
   then
-A13: Card RAT in alef 0 by A1,CARD_1:14,21,38;
+A13: Card RAT in omega by A1,CARD_1:14,21,84;
   thus contradiction by A13,CARD_4:2;
 end;
 
@@ -1511,7 +1511,7 @@ A10:  for m holds x in A & x in dom f & R_EAL(r-1/(m+1)) < f.x
             then
 A11:        not +infty <= y by XXREAL_0:4;
             R_EAL(r-1/(1+1))<y by A10;
-            then reconsider y1=y as Real by A11,MEASURE6:15;
+            then reconsider y1=y as Real by A11,XXREAL_0:48;
             for m holds r-1/(m+1) <= y1
             proof
               let m;
@@ -1611,7 +1611,7 @@ A10:  for m holds x in A & x in dom f & f.x < R_EAL(r+1/(m+1))
             then
 A11:        not y <= -infty by XXREAL_0:6;
             y < R_EAL(r+1/(1+1)) by A10;
-            then reconsider y1=y as Real by A11,MEASURE6:15;
+            then reconsider y1=y as Real by A11,XXREAL_0:48;
             for m holds y1-1/(m+1) <= r
             proof
               let m;
@@ -1664,7 +1664,7 @@ A8:         f.x = -infty;
           end;
           suppose not f.x =-infty;
             then not f.x <= -infty by XXREAL_0:6;
-            then reconsider y1=f.x as Real by A7,MEASURE6:15;
+            then reconsider y1=f.x as Real by A7,XXREAL_0:48;
             consider m such that
 A9:         1/(m+1) < r-y1 by A7,Th13;
             y1+1/(m+1) < r by A9,XREAL_1:22;
@@ -1759,7 +1759,7 @@ A7:         f.x = +infty;
           end;
           suppose not f.x=+infty;
             then not +infty <= f.x by XXREAL_0:4;
-            then reconsider y1=f.x as Real by A6,MEASURE6:15;
+            then reconsider y1=f.x as Real by A6,XXREAL_0:48;
             consider m such that
 A8:         1/(m+1) < y1-r by A6,Th13;
             take m;
@@ -1935,7 +1935,7 @@ A7:       f.x = -infty;
         end;
         suppose not f.x = -infty;
           then not f.x <= -infty by XXREAL_0:6;
-          then reconsider y1=f.x as Real by A6,MEASURE6:15;
+          then reconsider y1=f.x as Real by A6,XXREAL_0:48;
           consider n1 being Element of NAT such that
 A8:       y1 <= n1 by Th11;
 A9:       n1 < n1+1 by NAT_1:13;
@@ -2099,7 +2099,7 @@ A7:       f.x = +infty;
         end;
         suppose not f.x = +infty;
           then not +infty <= f.x by XXREAL_0:4;
-          then reconsider y1=f.x as Real by A6,MEASURE6:15;
+          then reconsider y1=f.x as Real by A6,XXREAL_0:48;
           consider n1 being Element of NAT such that
 A8:       -n1 <= y1 by Th12;
           n1 < n1+1 by NAT_1:13;

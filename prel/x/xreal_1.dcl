@@ -20,7 +20,7 @@
 <Func kind="K" nr="42"/>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="16"/>
 </Cluster>
 </CCluster>
 </Registrations>

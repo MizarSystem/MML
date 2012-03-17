@@ -7,16 +7,19 @@
 environ
 
  vocabularies ARYTM, ARYTM_1, ORDINAL2, NAT_1, ARYTM_3, RELAT_1, INT_1, BOOLE,
-      COMPLEX1, ARYTM_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, ARYTM_2, ARYTM_1,
+      COMPLEX1, ARYTM_2, FINSET_1, FUNCT_1, GR_CY_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, FINSET_1, RELAT_1,
+      FUNCT_1, CARD_1, ARYTM_2, ARYTM_1,
       NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0, REAL_1, NAT_1, XXREAL_0;
- constructors FUNCT_4, ARYTM_1, ARYTM_0, XXREAL_0, REAL_1, NAT_1;
- registrations ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1, XBOOLE_0;
+ constructors FUNCT_4, ARYTM_1, ARYTM_0, XXREAL_0, REAL_1, NAT_1, FINSET_1,
+      CARD_1;
+ registrations ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, NAT_1, XBOOLE_0,
+      FINSET_1, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, CARD_1;
  theorems REAL_1, NAT_1, AXIOMS, TARSKI, XREAL_0, XCMPLX_0, XCMPLX_1, ZFMISC_1,
       XBOOLE_0, NUMBERS, ARYTM_0, ARYTM_2, ARYTM_1, XREAL_1, XXREAL_0,
-      ORDINAL1;
+      ORDINAL1, FUNCT_1, FINSET_1;
  schemes NAT_1, XBOOLE_0, REAL_1;
 
 begin
@@ -232,7 +235,7 @@ proof
 A1: k in NAT by ORDINAL1:def 13;
   assume r = k or r = -k;
   then r in INT by A1,Def1;
-  hence thesis by Def2;
+  hence thesis;
 end;
 
 theorem Th8:
@@ -249,13 +252,7 @@ registration
   cluster -> integer Element of NAT;
   coherence by Th7;
   cluster natural -> integer number;
-  coherence
-  proof
-    let n be number;
-    assume n is natural;
-    then n is Element of NAT by ORDINAL1:def 13;
-    hence thesis by Th7;
-  end;
+  coherence by Th7;
 end;
 
 Lm3: x in INT implies x in REAL by NUMBERS:15;
@@ -287,11 +284,6 @@ registration
 A1: (i1 = k or i1 = - k) by Th8;
     consider l such that
 A2: (i2 = l or i2 = - l) by Th8;
-A3: now
-      assume i1 = k & i2 = l;
-      then i1 + i2 = k + l;
-      hence i1 + i2 is Integer;
-    end;
 A4: now
       assume
 A5:   i1 = k & i2 = - l;
@@ -337,7 +329,7 @@ A13:    l = k + z by NAT_1:10;
       then i1 + i2 = - (k + l);
       hence i1 + i2 is Integer by Th7;
     end;
-    hence thesis by A1,A2,A3,A4,A9;
+    hence thesis by A1,A2,A4,A9;
   end;
   cluster i1 * i2 -> integer;
   coherence
@@ -346,11 +338,6 @@ A13:    l = k + z by NAT_1:10;
 A14: (i1 = k or i1 = - k) by Th8;
     consider l such that
 A15: (i2 = l or i2 = - l) by Th8;
-A16: now
-      assume i1 = k & i2 = l;
-      then i1 * i2 = k * l;
-      hence i1 * i2 is Integer;
-    end;
 A17: now
       assume i1 = - k & i2 = - l;
       then i1 * i2 = k * l;
@@ -361,7 +348,7 @@ A17: now
       then i1 * i2 = - (k * l);
       hence i1 * i2 is Integer by Th7;
     end;
-    hence i1 * i2 is integer by A14,A15,A16,A17;
+    hence i1 * i2 is integer by A14,A15,A17;
   end;
 end;
 
@@ -418,18 +405,12 @@ proof
 A1: 0 <= i0;
   consider k such that
 A2: i0 = k or i0 = - k by Th8;
-  i0 = - k implies i0 is Element of NAT by A1,XXREAL_0:1;
+  i0 = - k implies i0 is Element of NAT by A1;
   hence thesis by A2;
 end;
 
 theorem
-  r is Integer implies r + 1 is Integer & r - 1 is Integer
-proof
-  assume r is Integer;
-  then reconsider i1 = r as Integer;
-  i1 + 1 is Integer & i1 - 1 is Integer;
-  hence thesis;
-end;
+  r is Integer implies r + 1 is Integer & r - 1 is Integer;
 
 theorem Th18:
   i2 <= i1 implies i1 - i2 in NAT
@@ -509,14 +490,14 @@ A3: now
     end;
     now
       assume i1 < 0 & i2 < 0;
-      then 0 <= - i1 & 0 <= - i2 by XREAL_1:60;
+      then 0 <= - i1 & 0 <= - i2;
       then
 A4:   (- i1) is Element of NAT & (- i2) is Element of NAT by Th16;
       (- i1) * (- i2) = i1 * i2;
       then - (- i1) = - 1 & - (- i2) = - 1 by A1,A4,NAT_1:15;
       hence i1 = - 1 & i2 = - 1;
     end;
-    hence thesis by A1,A2,A3,XREAL_1:134;
+    hence thesis by A1,A2,A3;
   end;
   thus thesis;
 end;
@@ -688,9 +669,7 @@ A2: ex i1 st P[i1]
 proof
   consider i1 such that
 A3: P[i1] by A2;
-  F() <= i1 by A1,A3;
-  then
-A4: ex k st F() + k = i1 by Lm6;
+A4: ex k st F() + k = i1 by Lm6,A1,A3;
   defpred Q[Nat] means P[F() + $1];
 A5: ex k be Nat st Q[k] by A3,A4;
   consider l be Nat such that
@@ -701,9 +680,8 @@ A6: Q[l] & for n be Nat st Q[n] holds l <= n from NAT_1:sch 5(A5);
     let i1;
     assume
 A7: P[i1];
-    then F() <= i1 by A1;
     then consider n such that
-A8: F() + n = i1 by Lm6;
+A8: F() + n = i1 by Lm6,A1;
     i0 - F() <= i1 - F() by A6,A7,A8;
     hence i0 <= i1 by XREAL_1:11;
   end;
@@ -719,9 +697,7 @@ A2: ex i1 st P[i1]
 proof
   consider i1 such that
 A3: P[i1] by A2;
-  i1 <= F() by A1,A3;
-  then
-A4: ex k st i1 = F() - k by Lm7;
+A4: ex k st i1 = F() - k by Lm7,A1,A3;
   defpred Q[Nat] means P[F() - $1];
 A5: ex k be Nat st Q[k] by A3,A4;
   consider l be Nat such that
@@ -732,9 +708,8 @@ A6: Q[l] & for n be Nat st Q[n] holds l <= n from NAT_1:sch 5(A5);
     let i1;
     assume
 A7: P[i1];
-    then i1 <= F() by A1;
     then consider n such that
-A8: F() - n = i1 by Lm7;
+A8: F() - n = i1 by Lm7,A1;
     l <= n by A6,A7,A8;
     then F() + (- i0) - F() <= F() - i1 - F() by A8,XREAL_1:11;
     then - i0 <= F() + (- i1) - F();
@@ -1400,7 +1375,7 @@ end;
 
 :: from SCMFSA_7, 2005.02.05, A.T.
 
-theorem
+theorem Th79:
   for a,b being Integer st a < b holds a <= b - 1
 proof
   let a,b be Integer;
@@ -1532,7 +1507,7 @@ proof
   let i,j be Integer such that
 A1: i >= 0 & j >= 0;
 A2: i / j - 1 < [\ i / j /] by Def4;
-  i / j >= 0 by A1,XREAL_1:138;
+  i / j >= 0 by A1;
   then i / j - 1 >= 0-1 by XREAL_1:11;
   then - 1 < [\ i / j /] by A2,XXREAL_0:2;
   hence i div j >= 0 by Th21;
@@ -1570,10 +1545,9 @@ A5: k <= a/n
     end;
     a/n - 1 < k
     proof
-A6:   not(-n > 0);
       -n <> 0 by A1;
       then
-A7:   -n + a < 0 + a by A6,XREAL_1:8;
+A7:   -n + a < 0 + a by XREAL_1:8;
       0 < n" by A1,XREAL_1:124;
       then (-n + a) * n" < (n * k) * n" by A3,A7,XREAL_1:70;
       then (-n) * n" + a * n" < (n * k) * n";
@@ -1621,5 +1595,19 @@ A1: [\ r/s /] = r/s by Th47;
 A2: -r/s = (-r)/s by XCMPLX_1:188;
   then (-r) / s - 1 < - [\ r/s /] - 0 by A1,REAL_1:92;
   hence - [\ r/s /] = [\ (-r) / s /] by A1,A2,Def4;
+end;
+
+:: missing, 2008.05.16, A.T.
+
+theorem
+ r <= i implies [/ r \] <= i
+proof
+  assume
+A1: r <= i;
+A2: [/ r \] < r+1 by Def5;
+  r+1 <= i+1 by A1,XREAL_1:8;
+  then[/ r \] <  i+1 by A2,XXREAL_0:2;
+  then[/ r \] <=  i+1-1 by Th79;
+  hence [/ r \] <= i;
 end;
 

@@ -24,7 +24,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="24" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -39,10 +39,10 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="38"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -50,22 +50,22 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="31"/>
-<Adjective nr="36"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="32"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <CCluster aid="METRIC_2" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="38"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 </ArgTypes>

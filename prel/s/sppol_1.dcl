@@ -51,12 +51,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="51">
+<Adjective nr="52">
 <Func kind="K" nr="287">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="73"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SPPOL_1" nr="2">
@@ -73,19 +73,39 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="51">
+<Adjective nr="52">
 <Func kind="K" nr="287">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <CCluster aid="SPPOL_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="52" value="false"/>
-<Adjective nr="73"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="74"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<Func kind="K" nr="287">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="75" value="false"/>
+</Cluster>
+</CCluster>
+<CCluster aid="SPPOL_1" nr="2">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="53" value="false"/>
+<Adjective nr="75"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -99,26 +119,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="74" value="false"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SPPOL_1" nr="2">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="52" value="false"/>
-<Adjective nr="74"/>
-</Cluster>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<Func kind="K" nr="287">
-<Num nr="2"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="73" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

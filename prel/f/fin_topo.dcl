@@ -23,8 +23,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FIN_TOPO" nr="2">
@@ -33,27 +33,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="22"/>
-<Adjective nr="24"/>
-<Adjective nr="26"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
 <Func kind="K" nr="103"/>
 <Cluster>
-<Adjective nr="16" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="103"/>
 <Cluster>
-<Adjective nr="22"/>
-<Adjective nr="24"/>
-<Adjective nr="26"/>
+<Adjective nr="23"/>
+<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

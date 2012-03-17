@@ -32,8 +32,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="58"/>
+<Adjective nr="29"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <FCluster aid="COH_SP" nr="1">
@@ -60,7 +60,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COH_SP" nr="3">
@@ -146,7 +146,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="11"/>
+<Adjective nr="12"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COH_SP" nr="9">
@@ -197,8 +197,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="58"/>
+<Adjective nr="29"/>
+<Adjective nr="59"/>
 </Cluster>
 </CCluster>
 </Registrations>

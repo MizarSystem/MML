@@ -25,25 +25,25 @@
 <CCluster aid="HESSENBE" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="77"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="81"/>
+<Adjective nr="80"/>
 <Adjective nr="82"/>
-<Adjective nr="85"/>
+<Adjective nr="83"/>
+<Adjective nr="86"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="77"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="81"/>
+<Adjective nr="80"/>
 <Adjective nr="82"/>
-<Adjective nr="84"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -35,8 +35,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="35">
+<Adjective nr="24"/>
+<Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

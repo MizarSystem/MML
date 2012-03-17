@@ -59,15 +59,15 @@
 <Adjective nr="5"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
-<Adjective nr="24"/>
-<Adjective nr="27" value="false"/>
-<Adjective nr="126"/>
+<Adjective nr="21"/>
+<Adjective nr="25"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="127"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
-<Adjective nr="131"/>
+<Adjective nr="130"/>
 <Adjective nr="132"/>
+<Adjective nr="133"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">
@@ -77,14 +77,14 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -96,7 +96,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

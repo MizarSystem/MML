@@ -9,7 +9,7 @@ environ
  vocabularies FUNCT_1, REALSET1, GROUP_2, GROUP_3, RLSUB_1, INT_1, BOOLE,
       RELAT_1, GROUP_1, RCOMP_1, SUBSET_1, GROUP_4, GROUP_5, VECTSP_1,
       NATTRA_1, FINSET_1, CARD_1, BINOP_1, QC_LANG1, ABSVALUE, WELLORD1,
-      LATTICES, GROUP_6, FUNCOP_1, COHSP_1, ENDALG, ARYTM, ALGSTR_0;
+      LATTICES, GROUP_6, FUNCOP_1, COHSP_1, ENDALG, ARYTM, ALGSTR_0, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, CARD_1, NUMBERS,
       XXREAL_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
       FINSET_1, BINOP_1, INT_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3,
@@ -20,7 +20,7 @@ environ
       XREAL_0, INT_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, ORDINAL1, ALGSTR_0;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, TARSKI, BINOP_1, REALSET1,
-      GROUP_4, ALGSTR_0;
+      GROUP_4, ALGSTR_0, FUNCT_2;
  theorems BINOP_1, CARD_1, CARD_2, FINSET_1, FUNCT_1, FUNCT_2, GROUP_1,
       GROUP_2, GROUP_3, GROUP_4, GROUP_5, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, FUNCOP_1, STRUCT_0;
@@ -370,7 +370,7 @@ proof
   proof
     let G be trivial Group;
     ex x st the carrier of G = {x} by Def2;
-    hence thesis by CARD_1:79;
+    hence thesis by CARD_1:50;
   end;
   let G be finite Group;
   assume ord G = 1;
@@ -1106,7 +1106,6 @@ definition
   existence
   proof
     defpred P[set,set] means ex a st $1 = a & $2 = a * N;
-A1: for x,y1,y2 st x in the carrier of G & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x st x in the carrier of G ex y st P[x,y]
     proof
       let x;
@@ -1451,10 +1450,10 @@ theorem Th59:
   G is finite implies Image g is finite
 proof
   assume G is finite;
-  then the carrier of G is finite by STRUCT_0:def 11;
-  then g .: (the carrier of G) is finite by FINSET_1:17;
+  then the carrier of G is finite;
+  then g .: (the carrier of G) is finite;
   then the carrier of Image g is finite by Def11;
-  hence thesis by STRUCT_0:def 11;
+  hence thesis;
 end;
 
 registration
@@ -1503,30 +1502,14 @@ proof
   hence thesis by CARD_2:57;
 end;
 
-definition
-  let G,H,h;
-  attr h is being_monomorphism means
-  :Def12:
-  h is one-to-one;
-  attr h is being_epimorphism means
-  :Def13:
-  rng h = the carrier of H;
-end;
-
-notation
-  let G,H,h;
-  synonym h is_monomorphism for h is being_monomorphism;
-  synonym h is_epimorphism for h is being_epimorphism;
-end;
-
 theorem
-  h is_monomorphism & c in Image h implies h.(h".c) = c
+  h is one-to-one & c in Image h implies h.(h".c) = c
 proof
   assume that
-A1: h is_monomorphism and
+A1: h is one-to-one and
 A2: c in Image h;
   reconsider h' = h as Function of G,Image h by Th58;
-A3: h' is one-to-one by A1,Def12;
+A3: h' is one-to-one by A1;
   h'.(h'".c) = c
   proof
 A4: rng h' = the carrier of Image h by Th53;
@@ -1536,20 +1519,15 @@ A4: rng h' = the carrier of Image h by Th53;
   hence thesis;
 end;
 
-theorem Th64:
-  h is_monomorphism implies h".(h.a) = a
-proof
-  assume h is one-to-one;
-  hence thesis by FUNCT_2:32;
-end;
+canceled;
 
 theorem Th65:
-  h is_monomorphism implies h" is Homomorphism of Image h,G
+  h is one-to-one implies h" is Homomorphism of Image h,G
 proof
   assume
 A1: h is one-to-one;
   then
-A2: h is_monomorphism by Def12;
+A2: h is one-to-one;
   reconsider Imh = Image h as Group;
   h" is Function of Imh,G
   proof
@@ -1568,17 +1546,17 @@ A5: h.a1 = a' by Th54;
 A6: h.b1 = b' by A4,Th54;
     thus h'.(a * b) = h'.(h.a1 * h.b1) by A5,A6,GROUP_2:52
       .= h'.(h.(a1 * b1)) by Def7
-      .= a1 * b1 by A2,Th64
-      .= h'.a * b1 by A2,A5,Th64
-      .= h'.a * h'.b by A2,A6,Th64;
+      .= a1 * b1 by A2,FUNCT_2:32
+      .= h'.a * b1 by A2,A5,FUNCT_2:32
+      .= h'.a * h'.b by A2,A6,FUNCT_2:32;
   end;
   hence thesis by Def7;
 end;
 
 theorem Th66:
-  h is_monomorphism iff Ker h = (1).G
+  h is one-to-one iff Ker h = (1).G
 proof
-  thus h is_monomorphism implies Ker h = (1).G
+  thus h is one-to-one implies Ker h = (1).G
   proof
     assume
 A1: h is one-to-one;
@@ -1633,15 +1611,15 @@ A7: b * a" in the carrier of Ker h by STRUCT_0:def 5;
   end;
   then for a,b st h.a = h.b holds a = b;
   then h is one-to-one by Th1;
-  hence thesis by Def12;
+  hence thesis;
 end;
 
 theorem Th67:
   for H being strict Group, h being Homomorphism of G,H holds
-  h is_epimorphism iff Image h = H
+  h is onto iff Image h = H
 proof
   let H be strict Group, h be Homomorphism of G,H;
-  thus h is_epimorphism implies Image h = H
+  thus h is onto implies Image h = H
   proof
     assume rng h = the carrier of H;
     then the carrier of Image h = the carrier of H by Th53;
@@ -1659,15 +1637,15 @@ A1: Image h = H;
     hence thesis by FUNCT_1:def 5;
   end;
   then rng h = the carrier of H by XBOOLE_0:def 10;
-  hence thesis by Def13;
+  hence thesis by FUNCT_2:def 3;
 end;
 
 theorem Th68:
   for H being strict Group, h being Homomorphism of G,H st
-  h is_epimorphism holds for c being Element of H ex a st h.a = c
+  h is onto holds for c being Element of H ex a st h.a = c
 proof
   let H be strict Group, h be Homomorphism of G,H;
-  assume h is_epimorphism;
+  assume h is onto;
   then
 A1: Image h = H by Th67;
   now
@@ -1679,77 +1657,58 @@ A1: Image h = H by Th67;
 end;
 
 theorem Th69:
-  for N being normal Subgroup of G holds nat_hom N is_epimorphism
+  for N being normal Subgroup of G holds nat_hom N is onto
 proof
   let N be normal Subgroup of G;
   Image nat_hom N = G./.N by Th57;
   hence thesis by Th67;
 end;
 
-definition
-  let G,H,h;
-  attr h is being_isomorphism means
-  :Def14:
-  h is_epimorphism & h is_monomorphism;
-end;
-
-notation
-  let G,H,h;
-  synonym h is_isomorphism for h is being_isomorphism;
-end;
-
 theorem Th70:
-  h is_isomorphism iff rng h = the carrier of H & h is one-to-one
+  h is bijective iff rng h = the carrier of H & h is one-to-one
 proof
-  thus h is_isomorphism implies rng h = the carrier of H & h is one-to-one
-  proof
-    assume h is_epimorphism & h is_monomorphism;
-    hence thesis by Def12,Def13;
-  end;
+  thus h is bijective implies rng h = the carrier of H & h is one-to-one
+              by FUNCT_2:def 3;
   assume rng h = the carrier of H & h is one-to-one;
-  hence h is_epimorphism & h is_monomorphism by Def12,Def13;
+  hence h is one-to-one onto by FUNCT_2:def 3;
 end;
 
 theorem
-  h is_isomorphism implies dom h = the carrier of G & rng h = the carrier of H
-proof
-  assume h is_isomorphism;
-  then h is_epimorphism by Def14;
-  hence thesis by Def13,FUNCT_2:def 1;
-end;
+  h is bijective implies dom h = the carrier of G & rng h = the carrier of H
+   by FUNCT_2:def 1,def 3;
 
 theorem Th72:
   for H being strict Group, h being Homomorphism of G,H st
-  h is_isomorphism holds h" is Homomorphism of H,G
+  h is bijective holds h" is Homomorphism of H,G
 proof
   let H be strict Group, h be Homomorphism of G,H;
   assume
-A1: h is_epimorphism & h is_monomorphism;
+A1: h is one-to-one onto;
   then H = Image h by Th67;
   hence thesis by A1,Th65;
 end;
 
 theorem Th73:
-  h is_isomorphism & g1 = h" implies g1 is_isomorphism
+  h is bijective & g1 = h" implies g1 is bijective
 proof
   assume that
-A1: h is_isomorphism and
+A1: h is bijective and
 A2: g1 = h";
-A3: h is one-to-one by A1,Th70;
+A3: h is one-to-one by A1;
   then
-A4: g1 is one-to-one by A2,FUNCT_1:62;
+A4: g1 is one-to-one by A2;
 A5: dom h = the carrier of G by FUNCT_2:def 1;
   rng g1 = dom h by A2,A3,FUNCT_1:55;
   hence thesis by A4,A5,Th70;
 end;
 
 theorem Th74:
-  h is_isomorphism & h1 is_isomorphism implies h1 * h is_isomorphism
+  h is bijective & h1 is bijective implies h1 * h is bijective
 proof
   assume
-A1: h is_isomorphism & h1 is_isomorphism;
+A1: h is bijective & h1 is bijective;
   then
-A2: h is one-to-one & h1 is one-to-one by Th70;
+A2: h is one-to-one & h1 is one-to-one;
 A3: rng(h1 * h) = the carrier of I
   proof
 A4: dom h1 = the carrier of H by FUNCT_2:def 1;
@@ -1757,31 +1716,31 @@ A4: dom h1 = the carrier of H by FUNCT_2:def 1;
     hence rng(h1 * h) = rng h1 by A4,RELAT_1:47
       .= the carrier of I by A1,Th70;
   end;
-  h1 * h is one-to-one by A2,FUNCT_1:46;
+  h1 * h is one-to-one by A2;
   hence thesis by A3,Th70;
 end;
 
 theorem Th75:
-  for G being Group holds nat_hom (1).G is_isomorphism
+  for G being Group holds nat_hom (1).G is bijective
 proof
   let G be Group;
   set g = nat_hom (1).G;
   Ker g = (1).G by Th52;
-  then g is_monomorphism & g is_epimorphism by Th66,Th69;
-  hence nat_hom (1).G is_isomorphism by Def14;
+  then g is one-to-one & g is onto by Th66,Th69;
+  hence nat_hom (1).G is bijective;
 end;
 
 definition
   let G,H;
+ canceled 3;
   pred G,H are_isomorphic means
   :Def15:
-  ex h st h is_isomorphism;
+  ex h st h is bijective;
   reflexivity
   proof
     let G;
     reconsider i = id the carrier of G as Homomorphism of G,G by Th47;
-    i is one-to-one & rng i = the carrier of G by FUNCT_2:def 3;
-    then i is_isomorphism by Th70;
+    i is bijective;
     hence thesis;
   end;
 end;
@@ -1795,7 +1754,7 @@ proof
   let G,H be strict Group;
   assume G,H are_isomorphic;
   then consider h being Homomorphism of G,H such that
-A1: h is_isomorphism by Def15;
+A1: h is bijective by Def15;
   reconsider g = h" as Homomorphism of H,G by A1,Th72;
   take g;
   thus thesis by A1,Th73;
@@ -1814,26 +1773,26 @@ proof
 A1: G,H are_isomorphic and
 A2: H,I are_isomorphic;
   consider g such that
-A3: g is_isomorphism by A1,Def15;
+A3: g is bijective by A1,Def15;
   consider h1 such that
-A4: h1 is_isomorphism by A2,Def15;
-  (h1 * g) is_isomorphism by A3,A4,Th74;
+A4: h1 is bijective by A2,Def15;
+  (h1 * g) is bijective by A3,A4,Th74;
   hence thesis by Def15;
 end;
 
 theorem
-  h is_monomorphism implies G,Image h are_isomorphic
+  h is one-to-one implies G,Image h are_isomorphic
 proof
   assume
 A1: h is one-to-one;
   reconsider ih = h as Homomorphism of G,Image h by Th58;
   take ih;
-A2: ih is_monomorphism by A1,Def12;
+A2: ih is one-to-one by A1;
   now
     the carrier of Image h = rng ih by Th53;
-    hence ih is_epimorphism by Def13;
+    hence ih is onto by FUNCT_2:def 3;
   end;
-  hence thesis by A2,Def14;
+  hence thesis by A2;
 end;
 
 theorem Th80:
@@ -1846,15 +1805,15 @@ proof
 A1: G = (1).G & H = (1).H by Th13;
   take 1:(G,H);
   set h = 1:(G,H);
-A2: h is_epimorphism
+A2: h is onto
   proof
     the carrier of (1).G = {1_G} by GROUP_2:def 7;
     then rng h = {h.(1_G)} by A1,FUNCT_2:62
       .= {1_H} by Def8
       .= the carrier of (1).H by GROUP_2:def 7;
-    hence thesis by A1,Def13;
+    hence thesis by A1,FUNCT_2:def 3;
   end;
-  h is_monomorphism
+  h is one-to-one
   proof
     now
       let a,b be Element of G;
@@ -1865,9 +1824,9 @@ A2: h is_epimorphism
       hence a = b;
     end;
     then h is one-to-one by Th1;
-    hence thesis by Def12;
+    hence thesis;
   end;
-  hence thesis by A2,Def14;
+  hence thesis by A2;
 end;
 
 theorem
@@ -1877,7 +1836,7 @@ theorem
   for G being strict Group holds G,G./.(1).G are_isomorphic
 proof
   let G be strict Group;
-  nat_hom (1).G is_isomorphism by Th75;
+  nat_hom (1).G is bijective by Th75;
   hence G,G./.(1).G are_isomorphic by Def15;
 end;
 
@@ -1896,14 +1855,14 @@ proof
   assume
 A1: G,H are_isomorphic;
   then consider h being Homomorphism of G,H such that
-A2: h is_isomorphism by Def15;
+A2: h is bijective by Def15;
   consider g1 being Homomorphism of H,G such that
-A3: g1 is_isomorphism by A1,Def15;
-  h is_epimorphism by A2,Def14;
+A3: g1 is bijective by A1,Def15;
+  h is onto by A2;
   then Image h = H by Th67;
   then
 A4: Ord H c= Ord G by Th61;
-  g1 is_epimorphism by A3,Def14;
+  g1 is onto by A3;
   then Image g1 = G by Th67;
   then Ord G c= Ord H by Th61;
   hence thesis by A4,XBOOLE_0:def 10;
@@ -1916,14 +1875,14 @@ proof
 A1: G,H are_isomorphic and
 A2: G is finite;
   consider h such that
-A3: h is_isomorphism by A1,Def15;
-  h is_epimorphism by A3,Def14;
+A3: h is bijective by A1,Def15;
+  h is onto by A3;
   then
-A4: rng h = the carrier of H by Def13;
-  the carrier of G is finite by A2,STRUCT_0:def 11;
-  then dom h is finite by FUNCT_2:def 1;
+A4: rng h = the carrier of H by FUNCT_2:def 3;
+  the carrier of G is finite by A2;
+  then dom h is finite;
   then the carrier of H is finite by A4,FINSET_1:26;
-  hence thesis by STRUCT_0:def 11;
+  hence thesis;
 end;
 
 theorem
@@ -1954,8 +1913,8 @@ proof
 A1: G,H are_isomorphic and
 A2: G is commutative;
   consider h being Homomorphism of G,H such that
-A3: h is_isomorphism by A1,Def15;
-A4: h is_epimorphism by A3,Def14;
+A3: h is bijective by A1,Def15;
+A4: h is onto by A3;
   now
     let c,d be Element of H;
     consider a such that
@@ -1970,7 +1929,7 @@ A6: h.b = d by A4,Th68;
 end;
 
 Lm3: G./.Ker g,Image g are_isomorphic &
-ex h being Homomorphism of G./.Ker g,Image g st h is_isomorphism &
+ex h being Homomorphism of G./.Ker g,Image g st h is bijective &
 g = h * nat_hom Ker g
 proof
   set I = G./.Ker g;
@@ -2047,12 +2006,12 @@ A13: f.y1 = f.y2;
     then b" * a in Ker g by Th50;
     hence thesis by A11,A12,GROUP_2:137;
   end;
-  then f is_isomorphism by A9,Th70;
+  then f is bijective by A9,Th70;
   hence G./.Ker g,Image g are_isomorphic by Def15;
   take f;
 A14: dom nat_hom Ker g = the carrier of G & dom g = the carrier of G
   by FUNCT_2:def 1;
-  thus f is_isomorphism by A9,A10,Th70;
+  thus f is bijective by A9,A10,Th70;
 A15: now
     let x;
     thus x in dom g implies x in dom nat_hom Ker g & (nat_hom Ker g).x in
@@ -2083,7 +2042,7 @@ theorem
   G./.Ker g, Image g are_isomorphic by Lm3;
 
 theorem
-  ex h being Homomorphism of G./.Ker g,Image g st h is_isomorphism &
+  ex h being Homomorphism of G./.Ker g,Image g st h is bijective &
   g = h * nat_hom Ker g by Lm3;
 
 theorem
@@ -2178,7 +2137,7 @@ A14: x = a * N & x = N * a by Th28;
     hence thesis by A14,FUNCT_1:def 5;
   end;
   then rng f = the carrier of G./.N by XBOOLE_0:def 10;
-  then f is_epimorphism by Def13;
+  then f is onto by FUNCT_2:def 3;
   then Image f = G./.N by Th67;
   hence thesis by A10,Lm3;
 end;
@@ -2274,7 +2233,7 @@ A17: a1 in the carrier of B & a1 in the carrier of G by A16,STRUCT_0:def 5;
     hence thesis by A3,A17,FUNCT_1:def 5;
   end;
   then the carrier of I = rng g by XBOOLE_0:def 10;
-  then g is_epimorphism by Def13;
+  then g is onto by FUNCT_2:def 3;
   then Image g = (B "\/" N)./.(B "\/" N,N)`*` by Th67;
   hence thesis by A12,Lm3;
 end;

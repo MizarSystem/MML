@@ -35,17 +35,17 @@
 <ArgTypes/>
 <Func kind="K" nr="189"/>
 <Cluster>
-<Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="68"/>
+<Adjective nr="30"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FRECHET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,33 +68,33 @@
 <CCluster aid="FRECHET" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="68"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="69"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="70"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="71"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FRECHET" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="70"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="71"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="71"/>
+<Adjective nr="21" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="72"/>
 </Cluster>
 </CCluster>
 </Registrations>

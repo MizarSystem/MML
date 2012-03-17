@@ -53,19 +53,19 @@
 <Adjective nr="4"/>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="19"/>
-<Adjective nr="23"/>
-<Adjective nr="25">
+<Adjective nr="20"/>
+<Adjective nr="24"/>
+<Adjective nr="26">
 <Func kind="U" nr="1">
 <Func kind="K" nr="292">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="112"/>
 <Adjective nr="113"/>
-<Adjective nr="117"/>
+<Adjective nr="114"/>
 <Adjective nr="118"/>
+<Adjective nr="119"/>
 </Cluster>
 </RCluster>
 </Registrations>

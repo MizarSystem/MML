@@ -10,7 +10,7 @@ environ
  vocabularies UNIALG_1, FUNCT_1, GROUP_6, ALG_1, RELAT_1, FRAENKEL, FUNCT_2,
       BINOP_1, REALSET1, GROUP_1, PBOOLE, NATTRA_1, BOOLE, FUNCOP_1, PRALG_1,
       MSUALG_3, ZF_REFLE, AMI_1, MSUALG_1, CARD_3, MSUHOM_1, CQC_SIM1,
-      WELLORD1, AUTALG_1, CAT_1, ARYTM, ALGSTR_0, VECTSP_1;
+      WELLORD1, AUTALG_1, CAT_1, ARYTM, ALGSTR_0, VECTSP_1, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, NUMBERS, FUNCOP_1, STRUCT_0, ALGSTR_0, FINSEQ_1, BINOP_1,
       FRAENKEL, PBOOLE, GROUP_1, GROUP_6, CARD_3, PZFMISC1, UNIALG_1, UNIALG_2,
@@ -21,7 +21,7 @@ environ
       FRAENKEL, PBOOLE, STRUCT_0, MSUALG_1, ALGSTR_0;
  requirements BOOLE, SUBSET;
  definitions ALG_1, FRAENKEL, GROUP_1, GROUP_6, MSUALG_3, TARSKI, XBOOLE_0,
-      PZFMISC1, FUNCOP_1, ALGSTR_0;
+      PZFMISC1, FUNCOP_1, ALGSTR_0, FUNCT_2;
  theorems ALG_1, BINOP_1, CARD_3, FUNCOP_1, FUNCT_1, FUNCT_2, GROUP_1, GROUP_6,
       MSUALG_1, MSUALG_3, MSUHOM_1, PBOOLE, TARSKI, ZFMISC_1, RELAT_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, PZFMISC1;
@@ -422,7 +422,7 @@ A1: F is "1-1" "onto";
 A2: i in I;
     then reconsider g = F.i as Function of A.i, B.i by PBOOLE:def 18;
     g is one-to-one by A1,A2,MSUALG_3:1;
-    then g" is one-to-one by FUNCT_1:62;
+    then g" is one-to-one;
     hence (F"".i) is one-to-one by A1,A2,MSUALG_3:def 5;
   end;
   hence F"" is "1-1" by MSUALG_3:1;
@@ -432,7 +432,7 @@ A2: i in I;
     assume
 A3: i in I;
     then
-A4: A.i <> {} & B.i <> {} by PBOOLE:def 16;
+A4: A.i <> {} & B.i <> {};
     reconsider g = F.i as Function of A.i, B.i by A3,PBOOLE:def 18;
 A5: g is one-to-one by A1,A3,MSUALG_3:1;
     A.i = dom g by A4,FUNCT_2:def 1
@@ -477,7 +477,7 @@ A3: (G**F).i = f;
   dom (G**F) = (dom G) /\ (dom F) by PBOOLE:def 24;
   then i in dom G & i in dom F by A2,XBOOLE_0:def 3;
   then G.i is one-to-one & F.i is one-to-one by A1,MSUALG_3:def 2;
-  then (G.i)*(F.i) is one-to-one by FUNCT_1:46;
+  then (G.i)*(F.i) is one-to-one;
   hence f is one-to-one by A2,A3,PBOOLE:def 24;
 end;
 
@@ -498,8 +498,8 @@ A2: G is "onto";
 A3: i in I;
     then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
     reconsider g = G.i as Function of B.i, C.i by A3,PBOOLE:def 18;
-A4: B.i <> {} by A3,PBOOLE:def 16;
-A5: C.i <> {} by A3,PBOOLE:def 16;
+A4: B.i <> {} by A3;
+A5: C.i <> {} by A3;
     rng f = B.i & rng g = C.i by A1,A2,A3,MSUALG_3:def 3;
     then rng (g * f) = C.i by A4,A5,FUNCT_2:20;
     hence rng ((G ** F).i) = C.i by A3,MSUALG_3:2;
@@ -562,8 +562,8 @@ A2: i in I;
     reconsider g = G.i as Function of B.i, A.i by A2,PBOOLE:def 18;
 A3: (F"").i = f" by A1,A2,MSUALG_3:def 5;
     now
-      thus A.i <> {} by A2,PBOOLE:def 16;
-      thus B.i <> {} by A2,PBOOLE:def 16;
+      thus A.i <> {} by A2;
+      thus B.i <> {} by A2;
       thus rng f = B.i by A1,A2,MSUALG_3:def 3;
       (G ** F).i = id (A.i) by A1,A2,MSUALG_3:def 1;
       hence g*f = id (A.i) by A2,MSUALG_3:2;
@@ -1185,20 +1185,15 @@ end;
 
 theorem Th41:
   for h be Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA) st
-  for x be set st x in UAAut UA holds h.x = 0 .--> x holds h is_isomorphism
+  for x be set st x in UAAut UA holds h.x = 0 .--> x holds h is bijective
 proof
   let h be Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA);
   assume
 A1: for x be set st x in UAAut UA holds h.x = 0 .--> x;
   set G = UAAutGroup UA;
-  thus h is_isomorphism
+  thus h is bijective
   proof
-    thus h is_epimorphism
-    proof
-      dom h = UAAut UA by FUNCT_2:def 1;
-      hence rng h = the carrier of MSAAutGroup (MSAlg UA) by A1,Lm4;
-    end;
-    thus h is_monomorphism
+    thus h is one-to-one
     proof
       thus h is one-to-one
       proof
@@ -1216,6 +1211,11 @@ A3:       h.a = 0 .--> a by A1
         end;
         hence thesis by GROUP_6:1;
       end;
+    end;
+    thus h is onto
+    proof
+      dom h = UAAut UA by FUNCT_2:def 1;
+      hence rng h = the carrier of MSAAutGroup (MSAlg UA) by A1,Lm4;
     end;
   end;
 end;

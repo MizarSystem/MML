@@ -25,11 +25,11 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="8">
+<Adjective nr="9">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>
-<Adjective nr="10">
+<Adjective nr="11">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="1"/>
 </Adjective>

@@ -25,16 +25,16 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="26"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="26"/>
+<Adjective nr="3"/>
+<Adjective nr="6"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -229,7 +229,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="2"/>
+<Adjective nr="3"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -253,7 +253,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="28">
+<Pred kind="V" nr="29">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>

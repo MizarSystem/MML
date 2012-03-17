@@ -13,15 +13,15 @@ environ
       FDIFF_1, RCOMP_1, INTEGRA5, ARYTM, RFINSEQ, INTEGRA4, RSSPACE;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, INT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      RCOMP_1, PSCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, GOBOARD1,
-      FDIFF_1, RFINSEQ, PRE_CIRC, RVSUM_1, INTEGRA1, INTEGRA2, FCONT_1,
-      RFUNCT_2, RSSPACE, INTEGRA4, INTEGRA5, XXREAL_0;
+      RCOMP_1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, SEQ_2, GOBOARD1,
+      FDIFF_1, RFINSEQ, XXREAL_2, PSCOMP_1, RVSUM_1, INTEGRA1, INTEGRA2,
+      FCONT_1, RFUNCT_2, RSSPACE, INTEGRA4, INTEGRA5, XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, RFUNCT_1, RFUNCT_2,
       FCONT_1, FDIFF_1, RFINSEQ, PRE_CIRC, RSSPACE, PSCOMP_1, INTEGRA2,
-      INTEGRA4, INTEGRA5, SEQ_1;
+      INTEGRA4, INTEGRA5, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, RCOMP_1, FDIFF_1, GOBOARD1,
-      INTEGRA1, VALUED_0, VALUED_1, FINSET_1;
+      INTEGRA1, VALUED_0, VALUED_1, FINSET_1, XXREAL_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, XCMPLX_0, INTEGRA1, FINSEQ_1, INTEGRA5;
  theorems ORDINAL1, REAL_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1, FUNCT_1,
@@ -29,7 +29,7 @@ environ
       INT_1, COMPLEX1, TARSKI, INTEGRA2, INTEGRA3, RFINSEQ, GOBOARD1, INTEGRA4,
       FINSEQ_2, FINSEQ_3, RCOMP_1, FCONT_1, RFUNCT_2, XREAL_0, XXREAL_0,
       FUNCT_2, FINSEQ_5, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, INTEGRA5,
-      RSSPACE, RELAT_1, VALUED_1, CARD_1, CARD_2;
+      RSSPACE, RELAT_1, VALUED_1, CARD_1, CARD_2, XXREAL_2, XXREAL_1;
  schemes FUNCT_2, PARTFUN1, FINSEQ_2;
 
 begin :: Preliminaries
@@ -53,7 +53,7 @@ theorem Th2:
 proof
   assume a <= b;
   then x-b <= x - a & x+a <= x+b by XREAL_1:9,12;
-  hence thesis by RCOMP_1:52;
+  hence thesis by XXREAL_1:46;
 end;
 
 theorem Th3:
@@ -106,7 +106,7 @@ proof
   assume a<=b;
   then
 A1: [' a,b '] = [.a,b.] by INTEGRA5:def 4;
-  then [.a,b.] = [.inf([.a,b.]), sup([.a,b.]).] by INTEGRA1:5;
+  then [.a,b.] = [.inf [.a,b.], sup [.a,b.].] by INTEGRA1:5;
   then a=inf([.a,b.]) & b=sup([.a,b.]) by A1,INTEGRA1:6;
   hence vol(['a,b ']) = b-a by A1;
 end;
@@ -440,7 +440,7 @@ A25:    ex n being Element of NAT, e being Element of divs A st
       then {vol(A)/(i+1)} c= rng upper_volume(chi(A,A),(T.i)) by TARSKI:def 3;
       hence thesis by A18,XBOOLE_0:def 10;
     end;
-    then (delta T).i in {vol(A)/(i+1)} by A7,PRE_CIRC:def 1;
+    then (delta T).i in {vol(A)/(i+1)} by A7,XXREAL_2:def 8;
     hence thesis by TARSKI:def 1;
   end;
 A26: for i,j be Element of NAT st i <= j holds (delta T).i >= (delta T).j
@@ -461,7 +461,7 @@ A28: for a be Real st 0 < a ex i be Element of NAT st abs((delta T).i-0)<a
 A29: 0<a;
 A30: vol A >= 0 by INTEGRA1:11;
     then
-A31: vol(A)/a >= 0 by A29,REAL_2:125;
+A31: vol(A)/a >= 0 by A29;
     reconsider i1=[\vol(A)/a/]+1 as Integer;
     [\vol(A)/a/]+1>0 by A31,INT_1:52;
     then reconsider i1 as Element of NAT by INT_1:16;
@@ -469,7 +469,7 @@ A31: vol(A)/a >= 0 by A29,REAL_2:125;
     then vol(A)/a < 1*(i1+1) by INT_1:52,XXREAL_0:2;
     then
 A32: vol(A)/(i1+1) < 1*a by A29,REAL_2:193;
-    vol(A)/(i1+1) >= 0 by A30,REAL_2:125;
+    vol(A)/(i1+1) >= 0 by A30;
     then
 A33: vol(A)/(i1+1)-0 = abs(vol(A)/(i1+1)-0) by ABSVALUE:def 1;
     (delta T).i1 = vol(A)/(i1+1) by A6;
@@ -515,11 +515,11 @@ A1: a <= b & [' a,b '] c= dom f & f is_integrable_on [' a,b '] &
   f is_bounded_on [' a,b '] & c in [' a,b '] & b <> c;
 A2: [' a,b '] = [.a,b.] by A1,INTEGRA5:def 4;
   then
-A3: a <= c & c <= b by A1,RCOMP_1:48;
+A3: a <= c & c <= b by A1,XXREAL_1:1;
   then
 A4: [' a,c '] = [.a,c.] & [' c,b '] = [.c,b.] by INTEGRA5:def 4;
   then
-A5: [' a,c '] c= [' a,b '] & [' c,b '] c= [' a,b '] by A2,A3,RCOMP_1:49;
+A5: [' a,c '] c= [' a,b '] & [' c,b '] c= [' a,b '] by A2,A3,XXREAL_1:34;
   [.a,b.] = [.inf([.a,b.]), sup([.a,b.]).] &
   [.c,b.] = [.inf([.c,b.]), sup([.c,b.]).] &
   [.a,c.] = [.inf([.a,c.]), sup([.a,c.]).] by A2,A4,INTEGRA1:5;
@@ -695,7 +695,7 @@ A43: rng E c=[' c,b '] by INTEGRA1:def 2;
 A44: 1 in dom E & 2 in dom E by FINSEQ_1:def 3;
     then E.1 in rng E by FUNCT_1:def 5;
     then
-A45: c <= E.1 & E.1 <= b by A4,A43,RCOMP_1:48;
+A45: c <= E.1 & E.1 <= b by A4,A43,XXREAL_1:1;
 A46: E.1 < E.2 by A44,GOBOARD1:def 1;
     then
 A47: c < D.1 by A42,A45,XXREAL_0:2;
@@ -788,7 +788,7 @@ sup(divset((S2.n),2)) =sup([. inf([' c,b ']),sup(divset((S2.n),2)) .])
             then (upper_volume(XCB,S2.n)).2 in rng upper_volume(XCB,S2.n)
             by FUNCT_1:def 5;
             then (upper_volume(XCB,S2.n)).2 <= max rng upper_volume(XCB,S2.n)
-            by PRE_CIRC:def 1;
+            by XXREAL_2:def 8;
             then
 A72:        (upper_volume(XCB,S2.n)).2 < e/2 by A55,XXREAL_0:2;
             len(upper_volume(XCB,S2.n))= len D + 1 by A61,A64,INTEGRA1:def 7;
@@ -799,7 +799,7 @@ A72:        (upper_volume(XCB,S2.n)).2 < e/2 by A55,XXREAL_0:2;
             then (upper_volume(XCB,S2.n)).1 in rng upper_volume(XCB,S2.n)
             by FUNCT_1:def 5;
             then (upper_volume(XCB,S2.n)).1 <= max rng upper_volume(XCB,S2.n)
-            by PRE_CIRC:def 1;
+            by XXREAL_2:def 8;
             then
 A73:        (upper_volume(XCB,S2.n)).1 < e/2 by A55,XXREAL_0:2;
             1 in Seg len E by A61,A62,A63;
@@ -886,14 +886,14 @@ A89:        y = (upper_volume(XCB,S2.n)).i1 by A60,A61,A87,B88
             ,INTEGRA1:def 7;
             i1 in dom upper_volume(XCB,S2.n) by A88,FINSEQ_1:def 3;
             then y in rng upper_volume(XCB,S2.n) by A89,FUNCT_1:def 5;
-            then y <= max rng upper_volume(XCB,S2.n) by PRE_CIRC:def 1;
+            then y <= max rng upper_volume(XCB,S2.n) by XXREAL_2:def 8;
             then y < e/2 by A55,XXREAL_0:2;
             hence y < e by A52,XXREAL_0:2;
           end;
           hence y < e by A65;
         end;
         max rng upper_volume(XCB,T2.n) in rng upper_volume(XCB,T2.n)
-        by PRE_CIRC:def 1;
+        by XXREAL_2:def 8;
         then delta(T2.n) < e by A56;
         then abs delta(T2.n) < e by A54,ABSVALUE:def 1;
         hence abs(delta(T2).n-0) < e by INTEGRA2:def 3;
@@ -917,7 +917,7 @@ A91: S1 is non empty increasing FinSequence of REAL &
     S2 is non empty increasing FinSequence of REAL &
     rng S2 c= [' c,b '] & S2.(len S2) = sup [' c,b '] by INTEGRA1:def 2;
     then rng S1 \/ rng S2 c= [' a,c '] \/ [' c,b '] by XBOOLE_1:13;
-    then rng S1 \/ rng S2 c=[.a,b.] by A3,A4,RCOMP_1:50;
+    then rng S1 \/ rng S2 c=[.a,b.] by A3,A4,XXREAL_1:174;
     then
 A92: rng T c= [' a,b '] by A2,FINSEQ_1:44;
     ex D be DivisionPoint of [' c,b '] st D = T2.i0 & 1 <= len D by A34;
@@ -966,7 +966,7 @@ A107:     i in dom S1 by A96,FINSEQ_3:27;
           then T.i = S1.i by FINSEQ_1:def 7;
           then T.i in rng S1 by A107,FUNCT_1:def 5;
           then
-A108:     a <= T.i & T.i <= c by A4,A91,RCOMP_1:48;
+A108:     a <= T.i & T.i <= c by A4,A91,XXREAL_1:1;
           ex DD be DivisionPoint of [' c,b '] st DD = T2.i0 &
           for k be Element of NAT st k in dom DD holds c < DD.k by A36;
           hence T.i < T.j by A101,A105,A108,XXREAL_0:2;
@@ -1060,7 +1060,7 @@ A132: 1 < k by A129,A130,REAL_1:def 5;
       then 1+1 <= k by NAT_1:13;
       then
 A133: 2-1 <= k-1 by XREAL_1:11;
-A134: k-1 is Element of NAT by A132,NAT_1:20;
+ k-1 is Element of NAT by A132,NAT_1:20;
       then k-1 in Seg len S1 by A131,A133;
       then
 A135: k-1 in dom S1 by FINSEQ_1:def 3;
@@ -1068,7 +1068,7 @@ A135: k-1 in dom S1 by FINSEQ_1:def 3;
       =[. S.(k-1),sup divset(T.i,k) .] by A125,A126,A129,INTEGRA1:def 5
         .=[. S.(k-1),S.k .] by A125,A129,INTEGRA1:def 5
         .=[. S.(k-1),S1.k .] by A123,A124,FINSEQ_1:def 7
-        .=[. S1.(k-1),S1.k .] by A123,A134,A135,FINSEQ_1:def 7
+        .=[. S1.(k-1),S1.k .] by A123,A135,FINSEQ_1:def 7
         .=[. inf divset(T1.i,k),S1.k .] by A123,A124,A129,INTEGRA1:def 5
         .= divset(T1.i,k) by A123,A124,A126,A129,INTEGRA1:def 5;
     end;
@@ -1129,7 +1129,7 @@ A151: k-1 <= len S2 by A148,XXREAL_0:2;
       1+1 <= k by A149,NAT_1:13;
       then
 A152: 2-1 <= k-1 by XREAL_1:11;
-A153: k-1 is Element of NAT by A149,NAT_1:20;
+ k-1 is Element of NAT by A149,NAT_1:20;
       then k-1 in Seg len S2 by A151,A152;
       then
 A154: k-1 in dom S2 by FINSEQ_1:def 3; thus
@@ -1138,7 +1138,7 @@ A154: k-1 in dom S2 by FINSEQ_1:def 3; thus
       by A141,A142,A150,INTEGRA1:def 5
         .=[. S.(len S1 + k-1),S.(len S1 + k) .] by A141,A150,INTEGRA1:def 5
         .=[. S.(len S1 + (k-1)),S2.k .] by A139,A140,FINSEQ_1:def 7
-        .=[. S2.(k-1),S2.k .] by A139,A153,A154,FINSEQ_1:def 7
+        .=[. S2.(k-1),S2.k .] by A139,A154,FINSEQ_1:def 7
         .=[. inf divset(T2.i,k), S2.k .] by A139,A140,A147,INTEGRA1:def 5
         .= divset(T2.i,k) by A139,A140,A142,A147,INTEGRA1:def 5;
     end;
@@ -1216,7 +1216,7 @@ A176:       y=(upper_volume(XAC,T1.m)).i by A169,A170,A174,B173,
             len (upper_volume(XAC,T1.m)) = len S1 by A170,INTEGRA1:def 7;
             then i in dom (upper_volume(XAC,T1.m)) by A173,FINSEQ_1:def 3;
             then y in rng upper_volume(XAC,T1.m) by A176,FUNCT_1:def 5;
-            then y <= max rng upper_volume(XAC,T1.m) by PRE_CIRC:def 1;
+            then y <= max rng upper_volume(XAC,T1.m) by XXREAL_2:def 8;
             hence y < e by A162,XXREAL_0:2;
           end;
           suppose i > len S1;
@@ -1244,12 +1244,12 @@ A183:       y=(upper_volume(XCB,T2.m)).i1 by A170,INTEGRA1:def 7,B180;
             len (upper_volume(XCB,T2.m)) = len S2 by A170,INTEGRA1:def 7;
             then i1 in dom (upper_volume(XCB,T2.m)) by A180,FINSEQ_1:def 3;
             then y in rng upper_volume(XCB,T2.m) by A183,FUNCT_1:def 5;
-            then y <= max rng upper_volume(XCB,T2.m) by PRE_CIRC:def 1;
+            then y <= max rng upper_volume(XCB,T2.m) by XXREAL_2:def 8;
             hence y < e by A164,XXREAL_0:2;
           end;
         end;
         max rng upper_volume(XAB,T.m) in rng upper_volume(XAB,T.m)
-        by PRE_CIRC:def 1;
+        by XXREAL_2:def 8;
         then
 A184:   delta(T.m) < e by A165;
         0 <= delta(T.m) by INTEGRA3:8;
@@ -1530,9 +1530,9 @@ A1: a <= c & c <= b;
 A2: a <= b by XXREAL_0:2;
 A3: [' a,b '] = [.a,b.] & [' a,c '] = [.a,c.] & [' c,b '] = [.c,b.]
   by A1,INTEGRA5:def 4,XXREAL_0:2;
-A4: c in [.a,b.] by A1,RCOMP_1:48;
+A4: c in [.a,b.] by A1,XXREAL_1:1;
   hence c in [' a,b '] by A1,INTEGRA5:def 4,XXREAL_0:2;
-  a in [.a,b.] & b in [.a,b.] by A2,RCOMP_1:48;
+  a in [.a,b.] & b in [.a,b.] by A2,XXREAL_1:1;
   hence thesis by A3,A4,RCOMP_1:16;
 end;
 
@@ -1600,7 +1600,7 @@ A1: a<=b & c <= d & f is_integrable_on [' a,b '] & f is_bounded_on [' a,b '] &
   [' a,b '] c= dom f & c in [' a,b '] & d in [' a,b '];
   then [' a,b '] = [.a,b.] by INTEGRA5:def 4;
   then
-A2: a <= d & a <= c & d <= b by A1,RCOMP_1:48;
+A2: a <= d & a <= c & d <= b by A1,XXREAL_1:1;
   then
 A3: c in [' a,d '] & [' a,d '] c= [' a,b '] by A1,Lm3;
   then
@@ -1641,7 +1641,7 @@ A1: a <= b & c <= d & f is_integrable_on [' a,b '] &
   f is_bounded_on [' a,b '] & [' a,b '] c= dom f &
   c in [' a,b '] & d in [' a,b '];
   [' a,b '] = [.a,b.] by A1,INTEGRA5:def 4;
-  then a<=c & d <= b by A1,RCOMP_1:48;
+  then a<=c & d <= b by A1,XXREAL_1:1;
   then [' c,d '] c= dom f & f is_integrable_on [' c,d '] &
   f is_bounded_on [' c,d '] by A1,Th18;
   hence thesis by A1,Th7,Th8,RFUNCT_1:99,VALUED_1:def 11;
@@ -1827,7 +1827,7 @@ A1: a <= b & c <= d &
   f is_bounded_on [' a,b '] & g is_bounded_on [' a,b '] &
   [' a,b '] c= dom f & [' a,b '] c= dom g & c in ['a,b '] & d in ['a,b '];
   then ['a,b '] = [.a,b.] by INTEGRA5:def 4;
-  then a<=c & d <= b by A1,RCOMP_1:48;
+  then a<=c & d <= b by A1,XXREAL_1:1;
   then
 A2: f is_integrable_on ['c,d '] & f is_bounded_on ['c,d '] &
   ['c,d '] c= dom f & g is_integrable_on ['c,d '] & g is_bounded_on ['c,d '] &
@@ -1881,7 +1881,7 @@ A1: a <= b & c <= d & f is_integrable_on [' a,b '] &
   f is_bounded_on [' a,b '] & [' a,b '] c= dom f &
   c in ['a,b '] & d in ['a,b '];
   then ['a,b '] = [.a,b.] by INTEGRA5:def 4;
-  then a <= c & d <= b by A1,RCOMP_1:48;
+  then a <= c & d <= b by A1,XXREAL_1:1;
   then f is_integrable_on ['c,d '] & f is_bounded_on ['c,d '] & ['c,d '] c=
   dom f by A1,Th18;
   hence integral(e(#)f,c,d)=e*integral(f,c,d) by A1,Th10;
@@ -1932,7 +1932,7 @@ A4: for x be set st x in [' a,b '] holds g.x = h.x
     let x0 be set;
     assume
 A5: x0 in [' a,b '];
-    then reconsider x=x0 as real number by XREAL_0:def 1;
+    then reconsider x=x0 as real number;
 A6: h.x in {e1} by A3,A5,FUNCT_2:6;
     g.x0 = f.x by A5,FUNCT_1:72;
     then g.x0 = e by A1,A5;
@@ -1976,7 +1976,7 @@ A1: a<=b & (for x be real number st x in [' a,b '] holds f.x=e) &
   [' a,b '] c= dom f & c in ['a,b '] & d in ['a,b '];
   then ['a,b '] = [.a,b.] by INTEGRA5:def 4;
   then
-A2: a <= c & d <= b & a <= d & c <= b by A1,RCOMP_1:48;
+A2: a <= c & d <= b & a <= d & c <= b by A1,XXREAL_1:1;
   then
 A3: ['c,b '] c= [' a,b '] & ['a,c '] c= [' a,b '] by Lm3;
 A4: f is_integrable_on ['a,b '] & f is_bounded_on ['a,b '] &
@@ -2065,7 +2065,7 @@ A8:   0 < e & e < e0 by XREAL_1:217,218;
 A9:   0 < p & for t be real number st
       t in dom f & abs(t - x0) < p holds abs(f.t - f.x0) < e by A1,FCONT_1:3;
       consider N be Neighbourhood of x0 such that
-A10:  N c= ].a,b.[ by A1,RCOMP_1:42;
+A10:  N c= ].a,b.[ by A1,RCOMP_1:39;
       consider q be real number such that
 A11:  0<q & N = ].x0-q,x0+q.[ by RCOMP_1:def 7;
       set r=min(p/2,q/2);
@@ -2074,7 +2074,7 @@ A12:  0 < p/2 & 0 < q/2 & p/2 < p & q/2 < q by A9,A11,XREAL_1:217,218;
 A13:  0 < r & r <= p/2 & r <= q/2 by XXREAL_0:15,17;
       then
 A14:  ].x0-r,x0+r.[ c= ].x0-q,x0+q.[ by A12,Th2,XXREAL_0:2;
-A15:  ].a,b.[ c= [.a,b.] by RCOMP_1:15;
+A15:  ].a,b.[ c= [.a,b.] by XXREAL_1:25;
       h is convergent & lim(h) = 0 by FDIFF_1:def 1;
       then consider n be Element of NAT such that
 A16:  for m be Element of NAT st n <= m holds abs(h.m - 0)<r
@@ -2206,7 +2206,7 @@ A42:  abs(R.(h.m)/(h.m)) <= e by A39,A40,XCMPLX_1:90;
   end;
   then reconsider R as REST by A6,FDIFF_1:def 3;
   consider N be Neighbourhood of x0 such that
-A43: N c= ].a,b.[ by A1,RCOMP_1:42;
+A43: N c= ].a,b.[ by A1,RCOMP_1:39;
 A44: N c= dom F by A1,A43,XBOOLE_1:1;
 A45: for x be Real st x in N holds F.x-F.x0 = L.(x-x0) + R.(x-x0)
   proof

@@ -42,13 +42,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="50" value="false"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="51" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="53">
+<Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

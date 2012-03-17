@@ -94,7 +94,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FINSEQ_4" nr="4">
@@ -123,7 +123,7 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </FCluster>
 </Registrations>

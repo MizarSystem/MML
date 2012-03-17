@@ -18,12 +18,12 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="INT_1"/>
@@ -66,7 +66,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RFUNCT_3" nr="1">
@@ -79,7 +79,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="K" nr="85"/>
@@ -91,7 +91,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RFUNCT_3" nr="2">
@@ -104,7 +104,7 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="K" nr="85"/>
@@ -116,7 +116,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 </Registrations>

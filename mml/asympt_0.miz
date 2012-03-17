@@ -11,18 +11,19 @@ environ
       BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, VALUED_1,
-      SEQ_1, SEQ_2, NEWTON, POWER, PRE_CIRC, FINSET_1, LIMFUNC1, XXREAL_0;
+      SEQ_1, SEQ_2, NEWTON, POWER, PRE_CIRC,
+      XXREAL_2, FINSET_1, LIMFUNC1, XXREAL_0;
  constructors FRAENKEL, REAL_1, NAT_1, SEQ_2, LIMFUNC1, NEWTON, POWER,
-      PRE_CIRC, SEQ_1, VALUED_1, PARTFUN1;
+      PRE_CIRC, SEQ_1, VALUED_1, PARTFUN1, XXREAL_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, VALUED_0, VALUED_1, FUNCT_2,
-      POWER;
+      POWER, XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FRAENKEL, VALUED_1;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, PRE_CIRC, REAL_1, SEQ_1,
       SQUARE_1, SEQ_2, ABSVALUE, LIMFUNC1, POWER, PRE_FF, XREAL_0, XBOOLE_0,
       XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
-      VALUED_1;
+      VALUED_1, XXREAL_2;
  schemes FUNCT_2, FINSEQ_1, NAT_1;
 
 begin :: Preliminaries
@@ -188,7 +189,7 @@ cluster eventually-nonnegative eventually-nonzero positive eventually-positive
     proof
       take 0;
       let n;
-      assume n >= 0; thus f.n >= 0 by FUNCOP_1:13;
+      assume n >= 0; thus f.n >= 0;
     end;
     thus f is eventually-nonzero
     proof
@@ -312,7 +313,7 @@ A4:   f.n >= 0 by A1;
       a >= M by XXREAL_0:25;
       then n >= M by A3,XXREAL_0:2;
       then g.n >= 0 by A2;
-      then 0 + 0 <= f.n + g.n by A4,XREAL_1:9;
+      then 0 + 0 <= f.n + g.n by A4;
       hence (f + g).n >= 0 by SEQ_1:11;
     end;
     hence thesis;
@@ -333,7 +334,7 @@ A1: for n st n >= N holds f.n >= 0 by Def4;
       let n;
       assume n >= N;
       then f.n >= 0 by A1;
-      then c*f.n >= c*0 by XREAL_1:66;
+      then c*f.n >= c*0;
       hence thesis by SEQ_1:13;
     end;
     hence thesis;
@@ -353,7 +354,7 @@ A1: for n st n >= N holds f.n >= 0 by Def4;
       let n;
       assume n >= N;
       then f.n >= 0 by A1;
-      then c + f.n >= 0 + 0 by XREAL_1:9;
+      then c + f.n >= 0 + 0;
       hence (c+f).n >= 0 by VALUED_1:2;
     end;
     hence thesis;
@@ -373,7 +374,7 @@ A1: for n st n >= N holds f.n >= 0 by Def4;
       let n;
       assume n >= N;
       then f.n >= 0 by A1;
-      then c + f.n > 0 + 0 by XREAL_1:10;
+      then c + f.n > 0 + 0;
       hence (c+f).n > 0 by VALUED_1:2;
     end;
     hence thesis;
@@ -669,11 +670,7 @@ A15:  g.n > 0;
       then g.n < (p*f.n)*((g.n)"*g.n);
       then
 A16:  g.n < (p*f.n)*1 by A9,XCMPLX_0:def 7;
-      now
-        assume f.n <= 0;
-        then p*f.n <= 0*p by A4,XREAL_1:66;
-        hence contradiction by A15,A16;
-      end;
+      f.n > 0 by A4,A15,A16;
       then (f.n)" > 0 by XREAL_1:124;
       hence abs((g/"f).n-0)<p by A13,A14,A15,A16,ABSVALUE:def 1,XREAL_1:70;
     end;
@@ -683,17 +680,9 @@ A17:  g.n < 0;
       then g.n > (p*f.n)*((g.n)"*g.n);
       then
 A18:  g.n > (p*f.n)*1 by A9,XCMPLX_0:def 7;
-A19:  now
-        assume f.n >= 0;
-        then p*f.n >= 0*p by A4,XREAL_1:66;
-        hence contradiction by A17,A18;
-      end;
+A19:  f.n < 0 by A4,A17,A18;
 A20:  (f.n)" <> 0 by A10,XCMPLX_1:203;
-      now
-        assume (f.n)" >= 0;
-        then (f.n)"*f.n < 0*f.n by A19,A20,XREAL_1:71;
-        hence contradiction by A12,XCMPLX_0:def 7;
-      end;
+      (f.n)" < 0 by A19,A20;
       hence abs((g/"f).n-0)<p by A13,A14,A17,A18,ABSVALUE:def 1,XREAL_1:71;
     end;
   end;
@@ -792,7 +781,7 @@ A7:   for n st n < N holds t.n <= b*f.n
         assume n < N;
         then t.n / f.n in B;
         then
-A8:     t.n / f.n <= b by PRE_CIRC:def 1;
+A8:     t.n / f.n <= b by XXREAL_2:def 8;
 A9:     f.n > 0 by Def5;
         then t.n / f.n * f.n <= b * f.n by A8,XREAL_1:66;
         hence thesis by A9,XCMPLX_1:88;
@@ -880,7 +869,7 @@ A8: N <= max(M,N) by XXREAL_0:25;
   then reconsider fset as finite non empty Subset of REAL;
   set T = max(tset);
   set F = min(fset);
-  F in fset by PRE_CIRC:def 4;
+  F in fset by XXREAL_2:def 7;
   then consider n1 being Element of NAT such that
 A9: f.n1 = F & n1 >= N & n1 <= max(M,N);
 A10: F > 0 by A2,A9;
@@ -913,18 +902,14 @@ A16: N <= M;
 A17:    n <= max(M,N) by A7,XXREAL_0:2;
         then t.n in tset by A12;
         then
-A18:    t.n <= T by PRE_CIRC:def 1;
+A18:    t.n <= T by XXREAL_2:def 8;
 A19:    t.M >= 0 by A6;
         t.M in tset by A7,A16;
         then
-A20:    t.M <= T by PRE_CIRC:def 1;
-A21:    now
-          assume c1 < 0;
-          then c1*F < 0*F by A10,XREAL_1:70;
-          hence contradiction by A11,A19,A20,XCMPLX_1:88;
-        end;
+A20:    t.M <= T by XXREAL_2:def 8;
+A21:    c1 >= 0 by A19,A20,A10;
         f.n in fset by A12,A17;
-        then f.n >= F by PRE_CIRC:def 4;
+        then f.n >= F by XXREAL_2:def 7;
         then
 A22:    c1*f.n >= c1*F by A21,XREAL_1:66;
         now
@@ -1303,10 +1288,8 @@ A20:  n >= N & n >= N2 by A19,XXREAL_0:2;
       then
 A21:  g.n <= c*f.n & g.n >= 0 by A15,A18;
 A22:  g.n > 0 by A6,A20;
-      then
-A23:  (g.n)" > 0 by XREAL_1:124;
 A24:  c" > 0 by A17,XREAL_1:124;
-      g.n*(g.n)" <= c*f.n*(g.n)" by A21,A23,XREAL_1:66;
+      g.n*(g.n)" <= c*f.n*(g.n)" by A21,XREAL_1:66;
       then 1 <= c*f.n*(g.n)" by A22,XCMPLX_0:def 7;
       then c"*1 <= c"*(c*(f.n*(g.n)")) by A24,XREAL_1:66;
       then c"*1 <= (c"*c)*(f.n*(g.n)");
@@ -1345,7 +1328,7 @@ A28:  p1 > 0;
     end;
     then lim( q ) = 1/c by A27,SEQ_2:def 7;
     then 1/c <= 0 by A1,A2,A25,A27,Th4;
-    then (1/c) * c <= 0 * c by A17,XREAL_1:66;
+    then (1/c) * c <= 0 * c by A17;
     hence contradiction by A17,XCMPLX_1:107;
   end;
   hence thesis by A3,A7;
@@ -1610,7 +1593,7 @@ A7:   for n st n < N holds b*f.n <= t.n
         assume n < N;
         then t.n / f.n in B;
         then
-A8:     t.n / f.n >= b by PRE_CIRC:def 4;
+A8:     t.n / f.n >= b by XXREAL_2:def 7;
 A9:     f.n > 0 by Def5;
         then t.n / f.n * f.n >= b * f.n by A8,XREAL_1:66;
         hence thesis by A9,XCMPLX_1:88;
@@ -1622,7 +1605,7 @@ A9:     f.n > 0 by Def5;
 A10:      b <= d;
           reconsider b as Element of REAL by XREAL_0:def 1;
           take b;
-          b in B by PRE_CIRC:def 4;
+          b in B by XXREAL_2:def 7;
           then consider n1 such that
 A11:      b = t.n1 / f.n1 and n1 < N;
 A12:      t.n1 > 0 & f.n1 > 0 by Def5;
@@ -1849,7 +1832,7 @@ A17: a >= N & a >= N1 by XXREAL_0:25;
 A18:  n >= N & n >= N1 by A17,XXREAL_0:2;
       hence t.n <= c*f.n by A15;
       f.n >= 0 by A16,A18;
-      then d*f.n >= d*0 by A14,XREAL_1:66;
+      then d*f.n >= d*0 by A14;
       hence t.n >= 0 by A15,A18;
     end;
     then
@@ -1862,7 +1845,7 @@ A19: x in Big_Oh(f) by A11,A13;
 A20:  n >= N & n >= N1 by A17,XXREAL_0:2;
       hence d*f.n <= t.n by A15;
       f.n >= 0 by A16,A20;
-      then d*f.n >= d*0 by A14,XREAL_1:66;
+      then d*f.n >= d*0 by A14;
       hence t.n >= 0 by A15,A20;
     end;
     then x in Big_Omega(f) by A11,A14;
@@ -1944,7 +1927,7 @@ A9:   for n st n < N holds t.n <= b*f.n
         assume n < N;
         then t.n / f.n in B;
         then
-A10:    t.n / f.n <= b by PRE_CIRC:def 1;
+A10:    t.n / f.n <= b by XXREAL_2:def 8;
 A11:    f.n > 0 by Def5;
         then t.n / f.n * f.n <= b * f.n by A10,XREAL_1:66;
         hence thesis by A11,XCMPLX_1:88;
@@ -1956,7 +1939,7 @@ A12:  for n st n < N holds t.n >= a*f.n
         assume n < N;
         then t.n / f.n in B;
         then
-A13:    t.n / f.n >= a by PRE_CIRC:def 4;
+A13:    t.n / f.n >= a by XXREAL_2:def 7;
 A14:    f.n > 0 by Def5;
         then t.n / f.n * f.n >= a * f.n by A13,XREAL_1:66;
         hence thesis by A14,XCMPLX_1:88;
@@ -1974,7 +1957,7 @@ A16:      f.n > 0 & t.n > 0 by Def5;
         end;
 A17:    a > 0
         proof
-          a in B by PRE_CIRC:def 4;
+          a in B by XXREAL_2:def 7;
           then consider n such that
 A18:      a = t.n / f.n and n < N;
           thus thesis by A15,A18;
@@ -2313,7 +2296,7 @@ A9:     n in X;
 A10:    n >= N & n >= N1 by A7,A8,XXREAL_0:2;
         hence t.n <= c*f.n by A5,A9;
         f.n >= 0 by A6,A10;
-        then d*f.n >= d*0 by A4,XREAL_1:66;
+        then d*f.n >= d*0 by A4;
         hence t.n >= 0 by A5,A9,A10;
       end;
       then
@@ -2327,7 +2310,7 @@ A13:    n in X;
 A14:    n >= N & n >= N1 by A7,A12,XXREAL_0:2;
         hence d*f.n <= t.n by A5,A13;
         f.n >= 0 by A6,A14;
-        then d*f.n >= d*0 by A4,XREAL_1:66;
+        then d*f.n >= d*0 by A4;
         hence t.n >= 0 by A5,A13,A14;
       end;
       then x in Big_Omega(f,X) by A1,A4;
@@ -2622,7 +2605,7 @@ A31: n <= n2 by A19,A28,A30,PRE_FF:10;
     then n*b" <= 1*(b to_power [\log(b,n)/]) by A2,XCMPLX_0:def 7;
     then
 A32: n/b <= n1 by XCMPLX_0:def 9;
-    [\log(b,n)/] + 1 >= 0+0 by A26,XREAL_1:9;
+    [\log(b,n)/] + 1 >= 0+0 by A26;
     then reconsider n3 = [\log(b,n)/] + 1 as Element of NAT by INT_1:16;
     n2 = b|^n3 by A30,POWER:46;
     then
@@ -3029,7 +3012,7 @@ A28: f' is Element of Funcs(NAT,REAL) & g' is Element of Funcs(NAT,REAL)
       then
 A29:  t.n >= 0 & f.n >= 0 by A20,A21;
       then
-A30:  0*f.n <= c*f.n by A19,XREAL_1:66;
+A30:  0*f.n <= c*f.n by A19;
       per cases;
       suppose t.n <= c*f.n;
         hence f'.n <= c*f.n & f'.n >= 0 by A25,A29;
@@ -3047,7 +3030,7 @@ A31: f' in Big_Oh(f) by A19,A28;
       then
 A32:  t.n >= 0 & g.n >= 0 & t.n <= c*(f+g).n by A20,A22;
       then
-A33:  0*g.n <= c*g.n by A19,XREAL_1:66;
+A33:  0*g.n <= c*g.n by A19;
       per cases;
       suppose t.n <= c*f.n;
         hence g'.n <= c*g.n & g'.n >= 0 by A27,A33;
@@ -3212,7 +3195,7 @@ A33:  n >= N;
       then
 A34:  t.n >= 0 & f.n >= 0 & t.n <= c*max(f,g).n by A21,A22;
       then
-A35:  0*f.n <= c*f.n by A20,XREAL_1:66;
+A35:  0*f.n <= c*f.n by A20;
       per cases;
       suppose
 A36:    f.n >= g.n;
@@ -3234,7 +3217,7 @@ A38:  n >= N;
       then
 A39:  t.n >= 0 & g.n >= 0 & t.n <= c*max(f,g).n by A21,A23;
       then
-A40:  0*g.n <= c*g.n by A20,XREAL_1:66;
+A40:  0*g.n <= c*g.n by A20;
       per cases;
       suppose f.n >= g.n;
         hence g'.n <= c*g.n & g'.n >= 0 by A31,A38,A40;
