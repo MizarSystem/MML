@@ -1,0 +1,1715 @@
+:: The {H}all {M}arriage {T}heorem
+::  by Ewa Romanowicz and Adam Grabowski
+:: 
+:: Received May 11, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, CARD_1, ARYTM_1,
+      FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, PARTFUN1, REALSET1,
+      BINARITH, ORDERS_1, FINSET_1, CARD_1, FINSEQ_1, FUNCT_2, FUNCT_7;
+ constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
+      FINSEQ_1, REALSET1, REAL_1, BINARITH, FUNCT_7, AMI_1, FUNCT_2, ORDERS_1;
+ clusters FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
+      MEMBERED, ZFMISC_1, XBOOLE_0, FINSET_1, REALSET1, CHAIN_1, FUNCT_7,
+      FINSEQ_1, GOBOARD1, AMI_1, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0, FUNCT_1;
+ theorems CARD_2, SPPOL_1, EULER_1, XBOOLE_1, ZFMISC_1, FUNCT_1, PARTFUN1,
+      FINSET_1, PENCIL_1, CARD_1, AXIOMS, TARSKI, REAL_1, XCMPLX_1, NAT_1,
+      XBOOLE_0, FINSEQ_1, FUNCT_7, FINSEQ_3, FINSEQ_5, TAXONOM1, RELAT_1,
+      FUNCT_2, RELSET_1, CQC_THE1, ENUMSET1, FINSEQ_2;
+ schemes NAT_1, FUNCT_2, NATTRA_1, XBOOLE_0;
+
+begin :: Preliminaries
+
+theorem Th1:
+  for X,Y being finite set holds
+    card (X \/ Y) + card (X /\ Y) = card X + card Y
+  proof
+    let X,Y be finite set;
+    card (X \/ Y) = card X + card Y - card (X /\ Y) by CARD_2:64;
+    hence thesis;
+  end;
+
+scheme Regr11 { n() -> Nat, P[set] }:
+  for k be Nat st 1 <= k & k <= n() holds P[k]
+  provided
+A1:  P[n()] & n() >= 2 and
+A2:  for k be Nat st 1 <= k & k < n() & P[k+1] holds P[k]
+  proof
+    defpred X[Nat] means 1 <= $1 & $1 <= n() & not P[$1];
+    assume
+A3: ex k be Nat st X[k];
+A4: for l be Nat st X[l] holds l <= n();
+    consider l be Nat such that
+A5: X[l] and
+A6: for n be Nat st X[n] holds n <= l from NAT_1:sch 6(A4,A3);
+A7: l < n() by A1,A5,REAL_1:def 5; then
+A8: l + 1 <= n() by NAT_1:38;
+A9: l + 1 >= 1 by NAT_1:37;
+    now assume not P[l+1];
+      then l + 1 <= l by A6,A8,A9;
+      hence contradiction by REAL_1:69;
+    end;
+    hence contradiction by A2,A5,A7;
+  end;
+
+scheme Regr2 { P[Nat] } :
+  P[1]
+  provided
+A1:  ex n be Nat st n > 1 & P[n] and
+A2:  for k be Nat st k >= 1 & P[k+1] holds P[k]
+  proof
+    consider n be Nat such that
+A3: n > 1 & P[n] by A1;
+    P[n] & n >= 1+1 by A3,NAT_1:38;then
+A4: P[n] & n >= 2;
+A5: for k be Nat st 1 <= k & k < n & P[k+1] holds P[k] by A2;
+    for k be Nat st 1 <= k & k <= n holds P[k] from Regr11(A4,A5);
+    hence thesis by A3;
+  end;
+
+registration let F be non empty set;
+  cluster non empty non-empty FinSequence of bool F;
+  existence
+  proof
+    consider x being non empty Element of bool F;
+    take v = <*x*>;
+    thus v is non empty by FINSEQ_1:55,RELAT_1:60;
+    rng v = {x} by FINSEQ_1:56; then
+    not {} in rng v by TARSKI:def 1;
+    hence thesis by RELAT_1:def 9;
+  end;
+end;
+
+theorem Th2:
+  for F being non empty set,
+      f being non-empty FinSequence of bool F,
+      i being Nat st i in dom f holds
+    f.i <> {}
+  proof
+    let F be non empty set,
+        f be non-empty FinSequence of bool F,
+        i be Nat;
+    assume
+A1: i in dom f;
+    assume f.i = {}; then
+    {} in rng f by A1,FUNCT_1:12;
+    hence thesis by RELAT_1:def 9;
+  end;
+
+registration let F be finite set,
+                 A be FinSequence of bool F;
+             let i be Nat;
+  cluster A.i -> finite;
+  coherence
+  proof
+    per cases;
+    suppose i in dom A; then
+      A.i in bool F by PARTFUN1:27;
+      hence thesis by FINSET_1:13;
+    end;
+    suppose not i in dom A;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+begin :: Union of Finite Sequences
+
+definition let F be set;
+           let A be FinSequence of bool F;
+           let J be set;
+  func union (A, J) -> set means :Def1:
+    for x being set holds
+      x in it iff ex j being set st j in J & j in dom A & x in A.j;
+  existence
+  proof
+    defpred P[set] means ex j being set st j in J & j in dom A & $1 in A.j;
+    consider X being set such that
+A1: for x being set holds
+    x in X iff x in F & P[x] from XBOOLE_0:sch 1;
+    take X;
+    let x be set;
+    thus x in X implies
+      ex j being set st j in J & j in dom A & x in A.j by A1;
+    given j being set such that
+A2: j in J & j in dom A & x in A.j;
+A3: rng A c= bool F by FINSEQ_1:def 4;
+    A.j in rng A by A2, FUNCT_1:12;
+    hence thesis by A3, A2, A1;
+  end;
+  uniqueness
+  proof
+    let A1, A2 be set such that
+A4: for x being set holds x in A1 iff
+      ex j being set st j in J & j in dom A & x in A.j and
+A5: for x being set holds x in A2 iff
+      ex j being set st j in J & j in dom A & x in A.j;
+    defpred P[set] means
+      ex j being set st j in J & j in dom A & $1 in A.j;
+A6: for x being set holds x in A1 iff P[x] by A4;
+A7: for x being set holds x in A2 iff P[x] by A5;
+    A1 = A2 from XBOOLE_0:sch 2(A6,A7);
+    hence thesis;
+  end;
+end;
+
+theorem Th3:
+  for F being set,
+      A being FinSequence of bool F,
+      J being set holds
+    union (A, J) c= F
+  proof
+    let F be set,
+        A be FinSequence of bool F,
+        J be set;
+    let x be set;
+    assume x in union (A, J); then
+    consider j being set such that
+A1: j in J & j in dom A & x in A.j by Def1;
+A2: rng A c= bool F by FINSEQ_1:def 4;
+    A.j in rng A by A1, FUNCT_1:12;
+    hence thesis by A1, A2;
+  end;
+
+theorem
+  for F being finite set,
+      A being FinSequence of bool F,
+      J, K being set st
+      J c= K holds
+   union (A, J) c= union (A, K)
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        J, K be set;
+    assume
+A1: J c= K;
+    thus union (A, J) c= union (A, K)
+    proof
+      let a be set;
+      assume a in union (A, J); then
+      consider j being set such that
+A2:   j in J & j in dom A & a in A.j by Def1;
+      thus a in union (A, K) by Def1, A2, A1;
+    end;
+end;
+
+registration let F be finite set;
+             let A be FinSequence of bool F;
+             let J be set;
+  cluster union (A, J) -> finite;
+  coherence
+  proof
+    union (A, J) c= F by Th3;
+    hence thesis by FINSET_1:13;
+  end;
+end;
+
+theorem Th5:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A holds
+    union (A, {i}) = A.i
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat such that
+A1: i in dom A;
+    thus union (A, {i}) c= A.i
+    proof
+      let x be set;
+      assume x in union (A, {i}); then
+      consider j be set such that
+A2:   j in {i} & j in dom A & x in A.j by Def1;
+      thus thesis by TARSKI:def 1, A2;
+    end;
+    thus A.i c= union (A, {i})
+    proof
+      let x be set;
+      assume A3: x in A.i;
+      i in {i} by TARSKI:def 1;
+      hence thesis by Def1, A3, A1;
+    end;
+  end;
+
+theorem Th6:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i,j being Nat st i in dom A & j in dom A holds
+    union (A, {i,j}) = A.i \/ A.j
+   proof
+     let F be finite set,
+         A be FinSequence of bool F,
+         i,j be Nat such that
+A1:  i in dom A and
+A2:  j in dom A;
+     thus union (A, { i,j }) c= A.i \/ A.j
+     proof
+       let x be set;
+       assume x in union (A, { i,j }); then
+       consider k be set such that
+A3:    k in {i,j} & k in dom A & x in A.k by Def1;
+       per cases by A3, TARSKI:def 2;
+       suppose k = i & k in dom A & x in A.k;
+         hence thesis by XBOOLE_0:def 2;
+       end;
+       suppose k = j & k in dom A & x in A.k;
+         hence thesis by XBOOLE_0:def 2;
+       end;
+     end;
+     thus A.i \/ A.j c= union (A, { i,j })
+     proof
+       let x be set;
+       assume
+A4:    x in A.i \/ A.j;
+       per cases by A4,XBOOLE_0:def 2;
+       suppose
+A5:      x in A.i;
+         i in {i,j} by TARSKI:def 2;
+         hence thesis by Def1, A5, A1;
+       end;
+       suppose
+A6:      x in A.j;
+         j in {i,j} by TARSKI:def 2;
+         hence thesis by Def1, A6, A2;
+       end;
+     end;
+   end;
+
+theorem Th7:
+  for J being set,
+      F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in J & i in dom A holds
+    A.i c= union (A, J)
+  proof
+    let J be set;
+    let F be finite set;
+    let A be FinSequence of bool F;
+    let i be Nat such that
+A1: i in J & i in dom A;
+    let x be set;
+    assume x in A.i;
+    hence thesis by A1, Def1;
+  end;
+
+theorem Th8:
+  for J being set,
+      F being finite set,
+      i being Nat,
+      A being FinSequence of bool F st
+    i in J & i in dom A holds
+      union (A, J) = union (A, J \ {i}) \/ A.i
+   proof
+     let J be set;
+     let F be finite set;
+     let i be Nat;
+     let A be FinSequence of bool F such that
+A1:  i in J & i in dom A;
+A2:  A.i c= union (A, J) by A1, Th7;
+     thus union (A, J) c= union (A, J \{i}) \/ A.i
+     proof
+       let x be set;
+       assume x in union (A, J); then
+       consider j be set such that
+A3:    j in J & j in dom A & x in A.j by Def1;
+       per cases;
+       suppose i = j;
+         hence thesis by A3, XBOOLE_0:def 2;
+       end;
+       suppose i <> j; then
+       not j in {i} by TARSKI:def 1; then
+A4:    j in J \ {i} by A3, XBOOLE_0:def 4;
+       x in union (A, J\{i}) by A3, A4, Def1;
+       hence thesis by XBOOLE_0:def 2;
+       end;
+     end;
+     thus union (A, J\{i}) \/ A.i c= union (A, J)
+     proof
+      let x be set;
+      assume x in union (A, J\{i}) \/ A.i; then
+A5:   x in union (A, J\{i}) or x in A.i by XBOOLE_0:def 2;
+      per cases by A5, A2;
+        suppose x in union (A, J\{i}); then
+          consider j be set such that
+A6:       j in J\{i} & j in dom A & x in A.j by Def1;
+          j in J & not j in {i} & j in dom A & x in A.j
+            by A6, XBOOLE_0:def 4;
+          hence thesis by Def1;
+        end;
+        suppose x in union (A, J);
+          hence thesis;
+        end;
+     end;
+   end;
+
+theorem Th9:
+  for J1, J2 being set,
+      F being finite set,
+      i being Nat,
+      A being FinSequence of bool F st i in dom A holds
+    union (A,{i} \/ J1 \/ J2) = A.i \/ union (A,J1 \/ J2)
+   proof
+     let J1, J2 be set;
+     let F be finite set;
+     let i be Nat;
+     let A be FinSequence of bool F such that
+A1:  i in dom A;
+A2:  union (A, {i}) = A.i by A1, Th5;
+     thus union (A,{i}\/J1\/J2) c= A.i \/ union (A,J1\/J2)
+     proof
+       let x be set;
+       assume x in union (A,{i}\/J1\/J2); then
+       consider j be set such that
+A3:    j in {i}\/J1\/J2 & j in dom A & x in A.j by Def1;
+       per cases;
+       suppose i = j;
+         hence thesis by XBOOLE_0:def 2, A3;
+       end;
+       suppose
+A4:      i <> j;
+         j in {i}\/(J1\/J2) by A3, XBOOLE_1:4; then
+         j in {i} or j in J1\/J2 by XBOOLE_0:def 2; then
+         x in union (A, J1\/J2) by A3, Def1, A4, TARSKI:def 1;
+         hence thesis by XBOOLE_0:def 2;
+       end;
+     end;
+     thus A.i \/ union (A,J1\/J2) c= union (A,{i}\/J1\/J2)
+     proof
+       let x be set;
+       assume
+A5:    x in A.i \/ union (A,J1\/J2);
+       per cases by A5, A2, XBOOLE_0:def 2;
+       suppose x in union (A, {i}); then
+         consider j be set such that
+A6:      j in {i} & j in dom A & x in A.j by Def1;
+         j in {i}\/(J1\/J2) & j in dom A & x in A.j
+           by A6, XBOOLE_0:def 2; then
+         j in {i}\/J1\/J2 & j in dom A & x in A.j by XBOOLE_1:4;
+         hence thesis by Def1;
+       end;
+       suppose x in union (A,J1\/J2); then
+         consider j be set such that
+A7:      j in J1 \/ J2 & j in dom A & x in A.j by Def1;
+         j in {i} \/ (J1\/J2) & j in dom A & x in A.j
+           by A7, XBOOLE_0:def 2; then
+         j in {i}\/J1\/J2 & j in dom A & x in A.j by XBOOLE_1:4;
+         hence thesis by Def1;
+       end;
+     end;
+   end;
+
+theorem Th10:
+  for F being finite set,
+      A being FinSequence of bool F
+  for i being Nat
+  for x,y being set st x <> y & x in A.i & y in A.i holds
+     (A.i \ {x}) \/ (A.i \ {y}) = A.i
+   proof
+     let F be finite set;
+     let A be FinSequence of bool F;
+     let i be Nat;
+     let x,y be set such that
+A1:  x <> y and
+A2:  x in A.i and
+A3:  y in A.i;
+     (A.i\{x}) \/ (A.i\{y}) = A.i
+     proof
+       thus (A.i\{x}) \/ (A.i\{y}) c= A.i
+       proof
+         let z be set;
+         assume
+A4:      z in (A.i\{x}) \/ (A.i\{y});
+         per cases by A4, XBOOLE_0:def 2;
+         suppose z in (A.i\{x});
+           hence thesis by XBOOLE_0:def 4;
+         end;
+         suppose z in (A.i\{y});
+           hence thesis by XBOOLE_0:def 4;
+         end;
+       end;
+       thus A.i c= (A.i\{x}) \/ (A.i\{y})
+       proof
+         let z be set;
+         assume A5: z in A.i;
+         {} = {y} \ ({y} \/ {}) by XBOOLE_1:46; then
+         A.i = A.i \ ({y} \ {y}); then
+         A.i = (A.i \ {y}) \/ A.i /\ {y} by XBOOLE_1:52; then
+A6:      A.i = A.i \ {y} \/ {y} by ZFMISC_1:52, A3;
+         not x in {y} by TARSKI:def 1, A1; then
+A7:      x in A.i\{y} by A2, XBOOLE_0:def 4;
+         not y in {x} by TARSKI:def 1, A1; then
+A8:      y in A.i\{x} by A3, XBOOLE_0:def 4;
+         z in (A.i \ {x} \/ {x}) \/ (A.i \ {y} \/ {y})
+           by XBOOLE_0:def 2, A5, A6; then
+         z in (A.i \ {x}) \/ ({x} \/ ({y} \/ (A.i \{y}))) by XBOOLE_1:4; then
+         z in (A.i \ {x}) \/ (({x} \/ {y}) \/ (A.i \{y})) by XBOOLE_1:4; then
+         z in ((A.i \ {x}) \/ ({y} \/ {x})) \/ (A.i \{y}) by XBOOLE_1:4; then
+         z in (((A.i \ {x}) \/ {y}) \/ {x}) \/ (A.i \{y}) by XBOOLE_1:4; then
+         z in ((A.i \ {x}) \/ {y}) \/ ({x} \/ (A.i \{y})) by XBOOLE_1:4; then
+         z in (A.i \ {x}) \/ ({x} \/ (A.i \{y})) by A8, ZFMISC_1:46;
+         hence thesis by A7, ZFMISC_1:46;
+       end;
+     end;
+     hence thesis;
+   end;
+
+begin :: Cut Operation for Finite Sequences
+
+definition let F be finite set;
+           let A be FinSequence of bool F;
+           let i be Nat;
+           let x be set;
+  func Cut (A, i, x) -> FinSequence of bool F means :Def2:
+    dom it = dom A &
+    for k being Nat st k in dom it holds
+     (i = k implies it.k = A.k \ {x}) &
+     (i <> k implies it.k = A.k);
+  existence
+  proof
+A1: A.i \ {x} c= A.i by XBOOLE_1:36;
+    A.i c= F
+    proof
+      per cases;
+      suppose i in dom A; then
+        A.i in bool F by FINSEQ_2:13;
+        hence thesis;
+      end;
+      suppose not i in dom A; then
+        A.i = {} by FUNCT_1:def 4;
+        hence thesis by XBOOLE_1:2;
+      end;
+    end; then
+    reconsider EX = A.i \ {x} as Element of bool F by A1, XBOOLE_1:1;
+    set XX = A +* (i, EX);
+    reconsider XX as FinSequence of bool F;
+    take XX;
+A2: dom XX = dom A by FUNCT_7:32;
+    for k being Nat st k in dom XX holds
+     (i = k implies XX.k = A.k \ {x}) &
+     (i <> k implies XX.k = A.k)
+    proof
+      let k be Nat;
+      assume
+A3:   k in dom XX;
+      thus i = k implies XX.k = A.k \ {x} by A3, A2, FUNCT_7:33;
+      assume i <> k;
+      hence thesis by FUNCT_7:34;
+    end;
+    hence thesis by FUNCT_7:32;
+  end;
+  uniqueness
+  proof
+    let f1, f2 be FinSequence of bool F;
+    assume that
+A4: dom f1 = dom A &
+    for k being Nat st k in dom f1 holds
+     (i = k implies f1.k = A.k \ {x}) &
+     (i <> k implies f1.k = A.k) and
+A5: dom f2 = dom A &
+    for k being Nat st k in dom f2 holds
+     (i = k implies f2.k = A.k \ {x}) &
+     (i <> k implies f2.k = A.k);
+    for z being Nat st z in dom f1 holds
+      f1. z = f2. z
+    proof
+      let z be Nat;
+      assume
+A6:   z in dom f1;
+      per cases;
+      suppose
+A7:     z = i; then
+        f1. z = A.i \ {x} by A4, A6 .= f2. z by A4, A6, A7, A5;
+        hence thesis;
+      end;
+      suppose
+A8:     z <> i; then
+        f1. z = A.z by A4, A6 .= f2. z by A4, A6, A8, A5;
+        hence thesis;
+      end;
+    end;
+    hence thesis by A4, A5, FINSEQ_1:17;
+  end;
+end;
+
+theorem Th11:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    card (Cut (A,i,x).i) = card (A.i) - 1
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x be set;
+    set f = Cut (A,i,x);
+    assume
+A1: i in dom A & x in A.i; then
+A2: {x} c= A.i by ZFMISC_1:37;
+    i in dom f by A1,Def2; then
+    f.i = A.i \ {x} by Def2; then
+    card (f.i) = card (A.i) - card {x} by A2,CARD_2:63
+              .= card (A.i) - 1 by CARD_2:60;
+    hence thesis;
+  end;
+
+theorem Th12:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set holds
+   union (Cut (A, i, x), J \ {i}) = union (A, J \ {i})
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x, J be set;
+A1: dom Cut (A, i, x) = dom A by Def2;
+    thus union (Cut (A, i, x), J\{i}) c= union (A, J\{i})
+    proof
+      let z be set;
+      assume z in union (Cut (A, i, x), J\{i}); then
+      consider j be set such that
+A2:   j in J\{i} & j in dom Cut (A, i, x) & z in Cut (A, i, x).j
+        by Def1;
+A3:   j in J & not j in {i} & j in dom Cut (A, i, x) &
+        z in Cut (A, i, x).j by XBOOLE_0:def 4, A2;
+A4:   i <> j by TARSKI:def 1, A3;
+      j in J\{i} & j in dom A & z in A.j by A2, Def2, A4;
+      hence thesis by Def1;
+    end;
+    thus union (A, J\{i}) c= union (Cut (A, i, x), J\{i})
+    proof
+      let z be set;
+      assume z in union (A, J\{i}); then
+      consider j be set such that
+A5:   j in J \ {i} & j in dom A & z in A.j by Def1;
+      j in J & not j in {i} by XBOOLE_0:def 4, A5; then
+      i <> j by TARSKI:def 1; then
+      Cut (A, i, x).j = A.j by Def2, A5, A1;
+      hence thesis by Def1, A5, A1;
+    end;
+  end;
+
+theorem Th13:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set st not i in J holds
+    union (A, J) = union (Cut(A, i, x), J)
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x, J be set;
+    assume
+A1: not i in J;
+    thus union (A, J) c= union (Cut(A, i, x), J)
+    proof
+      let z be set;
+      assume z in union (A, J); then
+      consider j being set such that
+A2:   j in J & j in dom A & z in A.j by Def1;
+A3:   j in dom (Cut(A,i,x)) by Def2, A2;
+      per cases;
+      suppose i = j;
+        hence thesis by A2, A1;
+      end;
+      suppose i <> j; then
+        (Cut(A,i,x)).j = A.j by A3, Def2;
+        hence thesis by Def1, A2, A3;
+      end;
+    end;
+    let z be set;
+    assume z in union (Cut(A, i, x), J); then
+    consider j being set such that
+A4: j in J & j in dom Cut(A, i, x) & z in (Cut(A, i, x)).j by Def1;
+A5: j in dom A by A4, Def2;
+    per cases;
+    suppose i = j;
+      hence thesis by A4, A1;
+    end;
+    suppose i <> j; then
+      (Cut(A,i,x)).j = A.j by A4, Def2;
+      hence thesis by A4, A5, Def1;
+    end;
+  end;
+
+theorem Th14:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set st
+    i in dom Cut (A, i, x) & J c= dom Cut (A, i, x) & i in J holds
+    union (Cut (A, i, x), J) = union (A, J \ {i}) \/ (A.i \ {x})
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x, J be set such that
+A1: i in dom Cut (A, i, x) & J c= dom Cut (A, i, x) and
+A2: i in J;
+    union (Cut (A, i, x), J) = union (Cut (A, i, x), J \ {i}) \/
+      (Cut (A, i, x).i) by A1, Th8,A2
+           .= union (A, J \ {i}) \/ (Cut (A, i, x).i) by Th12
+           .= union (A, J \ {i}) \/ (A.i \ {x}) by Def2, A1;
+    hence thesis;
+  end;
+
+begin :: System of Different Representatives and Hall Property
+
+definition let F be finite set;
+           let X be FinSequence of bool F;
+           let A be set;
+  pred A is_a_system_of_different_representatives_of X means :Def3:
+    ex f being FinSequence of F st
+      f = A &
+       dom X = dom f &
+        (for i being Nat st i in dom f holds f.i in X.i) &
+          f is one-to-one;
+end;
+
+definition let F be finite set;
+           let A be FinSequence of bool F;
+  attr A is Hall means :Def4:
+    for J being finite set st J c= dom A holds
+      card J <= card (union (A, J));
+end;
+
+theorem Th15:
+  for F being finite set,
+      A being non empty FinSequence of bool F st A is Hall holds
+     A is non-empty
+  proof
+    let F be finite set,
+        A be non empty FinSequence of bool F;
+    assume
+A1: A is Hall;
+    assume A is non non-empty; then
+    {} in rng A by RELAT_1:def 9; then
+    consider i being set such that
+A2: i in dom A & A.i = {} by FUNCT_1:def 5;
+    set J = {i};
+A3: J c= dom A by A2,ZFMISC_1:37;
+A4: card (union (A, J)) = 0 by CARD_1:78, A2,Th5;
+    card J = 1 by CARD_2:60;
+    hence thesis by A3, A4, A1, Def4;
+  end;
+
+theorem Th16:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A & A is Hall holds
+    card (A.i) >= 1
+  proof
+  let F be finite set,
+      A be FinSequence of bool F,
+      i be Nat;
+    assume
+A1: i in dom A & A is Hall;
+    assume
+A2: card (A.i) < 1;
+    set J = {i};
+A3: union (A,J) = A.i by A1,Th5;
+    J c= dom A by A1, ZFMISC_1:37; then
+    card J <= card (union (A,J)) by Def4,A1;
+    hence thesis by A2, A3, CARD_2:60;
+  end;
+
+theorem Th17:
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F st
+    (for i being Nat st i in dom A holds card (A.i) = 1) &
+   A is Hall holds
+     (ex X being set st X is_a_system_of_different_representatives_of A)
+  proof
+    let F be non empty finite set,
+        A be non empty FinSequence of bool F;
+    assume
+A1: for i be Nat st i in dom A holds card (A.i) = 1;
+    assume
+A2: A is Hall;
+    consider x being set;
+A3: card { x } = 1 by CARD_1:79;
+    reconsider dA = dom A as non empty set;
+    deffunc F(Element of dA) = A.$1;
+A4: for a being Element of dA holds F meets F(a)
+    proof
+      let a be Element of dA;
+A5:   rng A c= bool F by FINSEQ_1:def 4;
+A6:   A.a in rng A by FUNCT_1:12;
+      consider z being Element of A.a;
+A7:   A is non-empty by A2, Th15;
+      A.a <> {} by A6, A7, RELAT_1:def 9; then
+      z in A.a;
+      hence thesis by A6, XBOOLE_0:3, A5;
+    end;
+    ex f being Function of dA, F st
+    for a being Element of dA holds f.a in F(a)
+      from NATTRA_1:sch 1(A4); then
+    consider f being Function of dA, F such that
+A8: for a being Element of dA holds f.a in F(a);
+A9: dom f = dom A by FUNCT_2:def 1;
+    consider n being Nat such that
+A10: dom A = Seg n by FINSEQ_1:def 2;
+A11: f is FinSequence by FINSEQ_1:def 2, A10, A9;
+    rng f c= F
+    proof
+      let x be set;
+      assume x in rng f; then
+      consider y being set such that
+A12:   y in dom f & x = f.y by FUNCT_1:def 5;
+A13:   f.y in A.y by A12, A9, A8;
+A14:   A.y in rng A by FUNCT_1:12, A12, A9;
+      rng A c= bool F by FINSEQ_1:def 4;
+      hence thesis by A12, A13, A14;
+    end; then
+    reconsider f as FinSequence of F by A11, FINSEQ_1:def 4;
+A15: dom A = dom f by FUNCT_2:def 1;
+A16: for i being Nat st i in dom f holds f.i in A.i by A9, A8;
+    for i, j being Nat st i in dom f & j in dom f & i <> j holds
+      f.i <> f.j
+    proof
+      let i, j be Nat;
+      assume
+A17:   i in dom f & j in dom f & i <> j;
+      thus f.i <> f.j
+      proof
+        assume
+A18:    f.i = f.j;
+        set J = { i, j };
+A19:    card J = 2 by A17, CARD_2:76;
+A20:    i in dom A & j in dom A by A17, FUNCT_2:def 1; then
+A21:    J c= dom A by ZFMISC_1:38;
+        card (A.i) = card { x } by A3, A17, A15, A1; then
+        consider y being set such that
+A22:    A.i = { y } by CARD_1:49;
+        card (A.j) = card { x } by A3, A20, A1; then
+        consider z being set such that
+A23:    A.j = { z } by CARD_1:49;
+A24:    A.i = { f.i }
+        proof
+          thus A.i c= { f.i }
+          proof
+            let x be set;
+            assume
+A25:         x in A.i;
+            x = f.i
+            proof
+              assume
+A26:          x <> f.i;
+              f.i in A.i by A9, A8, A17; then
+              f.i = y by A22, TARSKI:def 1;
+              hence thesis by A26, TARSKI:def 1, A22, A25;
+            end;
+            hence thesis by TARSKI:def 1;
+          end;
+          let x be set;
+          assume x in { f.i }; then
+          x = f.i by TARSKI:def 1;
+          hence thesis by A17, A9, A8;
+        end;
+A27:    A.j = { f.j }
+        proof
+          thus A.j c= { f.j }
+          proof
+            let x be set;
+            assume
+A28:        x in A.j;
+            x = f.j
+            proof
+              assume
+A29:          x <> f.j;
+              f.j in A.j by A9, A8, A17; then
+              f.j = z by A23, TARSKI:def 1;
+              hence thesis by A29, TARSKI:def 1, A28, A23;
+            end;
+            hence thesis by TARSKI:def 1;
+          end;
+          let x be set;
+          assume x in { f.j }; then
+          x = f.j by TARSKI:def 1;
+          hence thesis by A17, A9, A8;
+        end;
+A30:    {f.i, f.j} = {f.i} by A18, ENUMSET1:69;
+        card (union (A, J)) = card (A.i \/ A.j) by Th6, A20
+                           .= card ({f.i, f.j}) by ENUMSET1:41, A24, A27
+                           .= 1 by A30,CARD_1:79;
+        hence contradiction by A19, A21, A2, Def4;
+      end;
+    end; then
+    for i, j being set st i in dom f & j in dom f & f.i = f.j holds
+      i = j; then
+    f is one-to-one by FUNCT_1:def 8; then
+    f is_a_system_of_different_representatives_of A by A15, A16, Def3;
+    hence thesis;
+  end;
+
+theorem Th18:      :: SDR --> Hall
+  for F being finite set,
+      A being FinSequence of bool F holds
+   (ex X being set st X is_a_system_of_different_representatives_of A)
+    implies A is Hall
+  proof
+    let F be finite set,
+        A be FinSequence of bool F;
+    given X being set such that
+A1: X is_a_system_of_different_representatives_of A;
+    consider f being FinSequence of F such that
+    f = X and
+A2: dom A = dom f and
+A3: (for i being Nat st i in dom f holds f.i in A.i) and
+A4: f is one-to-one by Def3, A1;
+    for J being finite set st J c= dom A holds
+      card J <= card (union (A, J))
+    proof
+      let J be finite set;
+      assume
+A5:   J c= dom A;
+      set X = J;
+      set Y = union (A, J);
+      set g = f | X;
+A6:   g is one-to-one by A4, FUNCT_1:84;
+A7:   dom g = X by RELAT_1:91, A5, A2;
+A8:   dom g c= dom f & rng g c= rng f by FUNCT_1:76;
+      rng g c= Y
+      proof
+        let x be set;
+        assume x in rng g; then
+        consider a being set such that
+A9:     a in dom g & x = g.a by FUNCT_1:def 5;
+        a in dom f by A9, A8; then
+        reconsider a as Nat;
+        f.a in A.a by A3, A2, A5, A9, A7; then
+        g.a in A.a by A9,FUNCT_1:70;
+        hence thesis by A9, Def1, A7, A5;
+      end; then
+      Card X <=` Card Y by A6, A7, CARD_1:26;
+      hence thesis by CARD_2:57;
+    end;
+    hence A is Hall by Def4;
+  end;
+
+begin :: Reductions and Singlifications of Finite Sequences
+
+definition let F be set,
+               A be FinSequence of bool F,
+               i be Nat;
+  mode Reduction of A, i -> FinSequence of bool F means :Def5:
+    dom it = dom A &
+    (for j being Nat st j in dom A & j <> i holds A.j = it.j) &
+    it.i c= A.i;
+  existence
+  proof
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition let F be set,
+               A be FinSequence of bool F;
+  mode Reduction of A -> FinSequence of bool F means :Def6:
+    dom it = dom A &
+    for i being Nat st i in dom A holds it.i c= A.i;
+  existence
+  proof
+    dom A = dom A &
+    for i being Nat st i in dom A holds A.i c= A.i;
+    hence thesis;
+  end;
+end;
+
+definition let F be set,
+               A be FinSequence of bool F,
+               i be Nat;
+  assume
+A1:  i in dom A & A.i <> {};
+  mode Singlification of A, i -> Reduction of A means :Def7:
+    Card (it.i) = 1;
+  existence
+  proof
+    consider x being Element of A.i;
+A2: A.i in bool F by A1,PARTFUN1:27;
+    x in A.i by A1; then
+    reconsider E = {x} as Element of bool F by A2, ZFMISC_1:37;
+    reconsider G = A +* (i,E) as FinSequence of bool F;
+A3: dom G = dom A by FUNCT_7:32;
+A4: for j being Nat st j in dom A holds G.j c= A.j
+    proof
+      let j be Nat;
+      assume j in dom A;
+      per cases;
+      suppose
+A5:     j = i;
+        G.i = {x} by A1,FUNCT_7:33;
+        hence thesis by A5, A1, ZFMISC_1:37;
+      end;
+      suppose j <> i;
+        hence thesis by FUNCT_7:34;
+      end;
+    end;
+A6: G is Reduction of A by Def6,A4,A3;
+    G.i = {x} by A1,FUNCT_7:33; then
+    Card (G.i) = 1 by CARD_2:60;
+    hence thesis by A6;
+  end;
+end;
+
+theorem Th19:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      C being Reduction of A, i holds
+    C is Reduction of A
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        C be Reduction of A, i;
+A1: dom C = dom A &
+    (for j being Nat st j in dom A & j <> i holds A.j = C.j) &
+    C.i c= A.i by Def5;
+    for j being Nat st j in dom C holds C.j c= A.j
+    proof
+      let j be Nat;
+      assume
+A2:   j in dom C;
+      per cases;
+      suppose j = i;
+        hence thesis by Def5;
+      end;
+      suppose j <> i;
+        hence thesis by A1,A2;
+      end;
+    end;
+    hence thesis by A1,Def6;
+  end;
+
+theorem Th20:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    Cut (A,i,x) is Reduction of A,i
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x be set;
+     set f = Cut (A,i,x);
+     assume
+A1:  i in dom A & x in A.i;
+A2:  dom f = dom A by Def2;
+A3:  for j being Nat st j in dom A & j <> i holds A.j = f.j by A2, Def2;
+A4:  A.i \ {x} c= A.i by XBOOLE_1:36;
+     f.i = A.i \ {x} by A1,A2,Def2;
+     hence thesis by A4, Def5,A2,A3;
+  end;
+
+theorem Th21:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    Cut (A,i,x) is Reduction of A
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat,
+        x be set;
+    assume i in dom A & x in A.i; then
+    Cut (A,i,x) is Reduction of A,i by Th20;
+    hence thesis by Th19;
+  end;
+
+theorem Th22:
+  for F being finite set,
+      A being FinSequence of bool F,
+      B being Reduction of A
+  for C being Reduction of B holds
+    C is Reduction of A
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        B be Reduction of A;
+    let C be Reduction of B;
+A1: dom B = dom C &
+    for i being Nat st i in dom B holds C.i c= B.i by Def6;
+A2: dom A = dom C by Def6, A1;
+    for i being Nat st i in dom A holds C.i c= A.i
+    proof
+      let i be Nat;
+      assume
+A3:   i in dom A; then
+A4:   i in dom B by Def6;
+A5:   B.i c= A.i by A3, Def6;
+      C.i c= B.i by A4, Def6;
+      hence thesis by A5,XBOOLE_1:1;
+    end;
+    hence thesis by A2, Def6;
+  end;
+
+theorem
+  for F being non empty finite set,
+      A being non-empty FinSequence of bool F,
+      i being Nat,
+      B being Singlification of A, i st i in dom A holds
+    B.i <> {}
+  proof
+    let F be non empty finite set,
+        A be non-empty FinSequence of bool F,
+        i be Nat,
+        B be Singlification of A, i;
+        assume
+A1: i in dom A; then
+    A.i <> {} by Th2;
+    hence thesis by CARD_1:47,A1,Def7;
+  end;
+
+theorem Th24:
+  for F being non empty finite set,
+      A being non-empty FinSequence of bool F,
+      i, j being Nat,
+      B being Singlification of A, i,
+      C being Singlification of B, j st
+    i in dom A & j in dom A & C.i <> {} & B.j <> {} holds
+    C is Singlification of A, j & C is Singlification of A, i
+  proof
+    let F be non empty finite set,
+        A be non-empty FinSequence of bool F,
+        i, j be Nat,
+        B be Singlification of A, i,
+        C be Singlification of B, j;
+    assume
+A1: i in dom A & j in dom A & C.i <> {} & B.j <> {};
+A2: dom B = dom A by Def6;
+A3: A.i <> {} & A.j <> {} by A1,Th2;
+A4: C is Reduction of A by Th22;
+A5: Card (C.j) = 1 by Def7, A1, A2;
+A6: Card (B.i) = 1 by Def7,A3,A1;
+A7: card (C.i) <> 0 by A1,CARD_2:59;
+    C.i c= B.i by A1,Def6,A2; then
+    card (C.i) <= 1 by A6, CARD_1:80; then
+    card (C.i) = 1 by A7, CQC_THE1:2;
+    hence thesis by A5,A1,A3,Def7,A4;
+  end;
+
+theorem
+  for F being set,
+      A being FinSequence of bool F,
+      i being Nat holds
+    A is Reduction of A,i
+  proof
+    let F be set,
+        A be FinSequence of bool F,
+        i be Nat;
+    dom A = dom A &
+    (for j being Nat st j in dom A & j <> i holds A.j = A.j) &
+    A.i c= A.i;
+    hence thesis by Def5;
+  end;
+
+theorem Th26:
+  for F being set,
+      A being FinSequence of bool F holds
+    A is Reduction of A
+  proof
+    let F be set,
+        A be FinSequence of bool F;
+    for i being Nat st i in dom A holds A.i c= A.i;
+    hence thesis by Def6;
+  end;
+
+definition let F be non empty set,
+               A be FinSequence of bool F;
+  assume A1: A is non-empty;
+  mode Singlification of A -> Reduction of A means :Def8:
+    for i being Nat st i in dom A holds Card (it.i) = 1;
+  existence
+  proof
+    deffunc F(set) = {choose A.$1};
+A2: for x being set st x in dom A holds F(x) in bool F
+    proof
+      let x be set;
+      assume
+A3:   x in dom A; then
+      A.x <> {} by A1,Th2; then
+A4:   {choose A.x} c= A.x by ZFMISC_1:37;
+      A.x in bool F by A3,PARTFUN1:27; then
+      {choose A.x} c= F by A4,XBOOLE_1:1;
+      hence thesis;
+    end;
+    ex f being Function of dom A, bool F st
+    for x being set st x in dom A holds f.x = F(x)
+      from FUNCT_2:sch 2(A2); then
+    consider f being Function of dom A, bool F such that
+A5: for x being set st x in dom A holds f.x = F(x);
+    dom f = dom A by FUNCT_2:def 1
+         .= Seg len A by FINSEQ_1:def 3; then
+A6: f is FinSequence by FINSEQ_1:def 2;
+    rng f c= bool F by RELSET_1:12; then
+A7: f is FinSequence of bool F by A6,FINSEQ_1:def 4;
+A8: dom f = dom A by FUNCT_2:def 1;
+A9: for i being Nat st i in dom f holds f.i = {choose A.i}
+    proof
+      let i be Nat;
+      assume i in dom f; then
+      i in dom A by FUNCT_2:def 1;
+      hence thesis by A5;
+    end;
+    for i being Nat st i in dom A holds f.i c= A.i
+    proof
+      let i be Nat;
+      assume
+A10:  i in dom A;
+      A.i <> {} by A1,A10,Th2; then
+      {choose A.i} c= A.i by ZFMISC_1:37;
+      hence thesis by A9,A10,A8;
+    end; then
+    reconsider f as Reduction of A by A8,A7,Def6;
+    for i being Nat st i in dom A holds Card (f.i) = 1
+    proof
+      let i be Nat;
+      assume i in dom A; then
+      i in dom f by FUNCT_2:def 1; then
+      f.i = {choose A.i} by A9;
+      hence thesis by CARD_2:60;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th27:
+  for F being non empty finite set,
+      A being non empty non-empty FinSequence of bool F,
+      f being Function holds
+    f is Singlification of A iff
+    (dom f = dom A &
+    for i being Nat st i in dom A holds f is Singlification of A, i)
+  proof
+    let F be non empty finite set,
+        A be non empty non-empty FinSequence of bool F,
+        f be Function;
+    hereby assume f is Singlification of A; then
+      reconsider f' = f as Singlification of A;
+      f' is Reduction of A;
+      hence dom f = dom A by Def6;
+      let i be Nat;
+      assume
+A1:   i in dom A; then
+A2:   Card (f'.i) = 1 by Def8;
+      A.i <> {} by Th2,A1;
+      hence f is Singlification of A, i by Def7,A1,A2;
+    end;
+    assume
+A3: dom f = dom A &
+    for i being Nat st i in dom A holds f is Singlification of A, i;
+    1 in dom A by FINSEQ_5:6; then
+    reconsider f as FinSequence of bool F by A3;
+    for i being Nat st i in dom A holds f.i c= A.i
+    proof
+      let i be Nat;
+      assume
+A4:   i in dom A; then
+      f is Singlification of A, i by A3;
+      hence thesis by A4,Def6;
+    end; then
+    reconsider f' = f as Reduction of A by A3,Def6;
+    for i being Nat st i in dom A holds Card (f'.i) = 1
+    proof
+      let i be Nat;
+      assume
+A5:   i in dom A; then
+A6:   f is Singlification of A, i by A3;
+      A.i <> {} by Th2,A5;
+      hence thesis by A5,A6,Def7;
+    end;
+    hence thesis by Def8;
+  end;
+
+registration let F be non empty finite set,
+                 A be non empty FinSequence of bool F,
+                 k be Nat;
+  cluster -> non empty Singlification of A, k;
+  coherence
+  proof
+    let G be Singlification of A, k;
+    dom G = dom A by Def6;
+    hence thesis by RELAT_1:60;
+  end;
+end;
+
+registration let F be non empty finite set,
+                 A be non empty FinSequence of bool F;
+  cluster -> non empty Singlification of A;
+  coherence
+  proof
+    let G be Singlification of A;
+    dom G = dom A by Def6;
+    hence thesis by RELAT_1:60;
+  end;
+end;
+
+begin :: Rado Proof of the Hall Marriage Theorem
+
+theorem Th28:
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F,
+      X being set,
+      B being Reduction of A st
+    X is_a_system_of_different_representatives_of B holds
+      X is_a_system_of_different_representatives_of A
+  proof
+    let F be non empty finite set,
+        A be non empty FinSequence of bool F,
+        X be set,
+        B be Reduction of A such that
+A1: X is_a_system_of_different_representatives_of B;
+    X is_a_system_of_different_representatives_of A
+    proof
+      consider f being FinSequence of F such that
+A2:   f = X &
+      dom B = dom f &
+      (for i being Nat st i in dom f holds f.i in B.i) &
+      f is one-to-one by Def3, A1;
+A3:   dom A = dom B by Def6;
+      for i being Nat st i in dom f holds f.i in A.i
+      proof
+        let i be Nat such that
+A4:     i in dom f;
+        f.i in A.i
+        proof
+A5:       f.i in B.i by A2, A4;
+          dom B = dom A &
+          for i being Nat st i in dom A holds B.i c= A.i by Def6; then
+          B.i c= A.i by A2, A4;
+          hence thesis by A5;
+        end;
+        hence thesis;
+      end;
+      hence thesis by Def3, A2, A3;
+    end;
+    hence thesis;
+  end;
+
+theorem Th29:  :: Rado Lemma
+  for F being finite set,
+      A being FinSequence of bool F st A is Hall
+  for i being Nat st card (A.i) >= 2
+    ex x being set st x in A.i & Cut (A, i, x) is Hall
+  proof
+    let F be finite set;
+    let A be FinSequence of bool F such that
+A1: A is Hall;
+    let i be Nat such that
+A2: card (A.i) >= 2;
+    2 c= card (A.i) by A2, CARD_1:56; then
+    reconsider Ai = A.i as non trivial finite set by PENCIL_1:4;
+    consider x, y be set such that
+A3: x in Ai and
+A4: y in Ai and
+A5: x <> y by SPPOL_1:3;
+A6: i in dom A
+    proof
+      assume not i in dom A; then
+      card (A.i) = 0 by CARD_1:47, FUNCT_1:def 4;
+      hence thesis by A2;
+    end;
+    assume A7: for z being set st z in A.i holds not Cut (A, i, z) is Hall;
+    then not Cut (A, i, x) is Hall by A3; then
+    consider JJ1 being finite set such that
+A8: JJ1 c= dom Cut (A, i, x) &
+    card JJ1 > card (union (Cut (A, i, x), JJ1)) by Def4;
+    ex J1 being finite set st
+      not i in J1 &
+      J1 c= dom Cut (A, i, x) &
+      card J1 >= card (union (A,J1) \/ (A.i \ {x}))
+    proof
+      per cases;
+      suppose A9: i in JJ1;
+        set J1 = JJ1 \ {i};
+A10:    card J1 = card JJ1 - card {i} by EULER_1:5, A9
+               .= card JJ1 - 1 by CARD_1:79;
+        union (Cut (A, i, x), JJ1) = union (A, JJ1 \ {i}) \/ (A.i \ {x})
+          by A9, Th14, A8; then
+A11:    card J1 >= card (union (A, J1) \/ (A.i \ {x})) by A8, A10, SPPOL_1:6;
+        J1 c= JJ1 by XBOOLE_1:36; then
+A12:    J1 c= dom Cut (A, i, x) by A8, XBOOLE_1:1;
+        {i} misses J1 by XBOOLE_1:79; then
+        not i in J1 by ZFMISC_1:54;
+        hence thesis by A12, A11;
+      end;
+      suppose A13: not i in JJ1;
+        set J1 = JJ1;
+        take J1;
+A14:    J1 c= dom A by A8, Def2;
+        card J1 > card (union (A, J1)) by A13, A8, Th13;
+        hence thesis by A1, A14, Def4;
+      end;
+    end; then
+    consider J1 being finite set such that
+A15: not i in J1 and
+A16: J1 c= dom Cut (A, i, x) &
+      card J1 >= card (union (A,J1) \/ (A.i \ {x}));
+    set S1 = union (A,J1) \/ (A.i \ {x});
+    not Cut (A, i, y) is Hall by A4, A7; then
+    consider JJ2 being finite set such that
+A17: JJ2 c= dom Cut (A, i, y) &
+    card JJ2 > card (union (Cut (A, i, y), JJ2)) by Def4;
+    ex J2 being finite set st
+      not i in J2 &
+      J2 c= dom Cut (A, i, y) &
+      card J2 >= card (union (A,J2) \/ (A.i \ {y}))
+    proof
+      per cases;
+      suppose A18: i in JJ2;
+        set J2 = JJ2 \ {i};
+A19:    card J2 = card JJ2 - card {i} by EULER_1:5, A18
+               .= card JJ2 - 1 by CARD_1:79;
+        union (Cut (A, i, y), JJ2) = union (A, JJ2 \ {i}) \/ (A.i \ {y})
+          by A18, Th14, A17; then
+A20:    card J2 >= card (union (A, J2) \/ (A.i \ {y})) by A17, A19, SPPOL_1:6;
+        J2 c= JJ2 by XBOOLE_1:36; then
+A21:    J2 c= dom Cut (A, i, y) by A17, XBOOLE_1:1;
+        {i} misses J2 by XBOOLE_1:79; then
+        not i in J2 by ZFMISC_1:54;
+        hence thesis by A21, A20;
+      end;
+      suppose A22: not i in JJ2;
+        set J2 = JJ2;
+        take J2;
+A23:     J2 c= dom A by A17, Def2;
+        card J2 > card (union (A, J2)) by A22, Th13, A17;
+        hence thesis by A1, A23, Def4;
+      end;
+    end; then
+    consider J2 being finite set such that
+A24: not i in J2 and
+A25: J2 c= dom Cut (A, i, y) &
+      card J2 >= card (union (A,J2) \/ (A.i \ {y}));
+    set S2 = union (A,J2) \/ (A.i \ {y});
+A26: card J1 + card J2 >= card S1 + card S2 by A16, A25, REAL_1:55;
+      :: 2. przejscie
+A27:card J1 + card J2 >= card ( (union (A,J1) \/ (Ai\{x})) \/
+      (union (A,J2) \/ (Ai\{y})) )
+      ::::::   ABC1
+      + card ( (union (A,J1) \/ (Ai\{x})) /\ (union (A,J2) \/ (Ai\{y})) )
+        by A26, Th1;
+    union (A,J1\/J2) \/ Ai c=
+      ( union (A,J1) \/ (Ai\{x}) ) \/ ( union (A,J2) \/ (Ai\{y}) )
+    proof
+      let a be set;
+      assume
+A28:  a in union (A, J1 \/ J2) \/ Ai;
+      per cases by A28, XBOOLE_0:def 2;
+      suppose a in union (A, J1 \/ J2); then
+        consider j be set such that
+A29:    j in J1 \/ J2 & j in dom A & a in A.j by Def1;
+        (j in J1 or j in J2) & j in dom A & a in A.j
+          by A29, XBOOLE_0:def 2; then
+        a in union (A, J1) or a in  union (A, J2) by Def1; then
+        a in union (A, J1) \/ union (A, J2) by XBOOLE_0:def 2; then
+        a in union (A, J1) \/ union (A, J2) \/ ((Ai\{x}) \/ (Ai\{y}))
+          by XBOOLE_0:def 2; then
+        a in union (A, J1) \/ union (A, J2) \/ (Ai\{x}) \/ (Ai\{y})
+          by XBOOLE_1:4; then
+        a in union (A, J1) \/ (Ai\{x}) \/ union (A, J2) \/ (Ai\{y})
+          by XBOOLE_1:4;
+        hence thesis by XBOOLE_1:4;
+      end;
+      suppose a in Ai; then
+        a in union (A, {i}) by Th5, A6; then
+        consider j be set such that
+A30:    j in {i} & j in dom A & a in A.j by Def1;
+        a in union (A, {i}) or a in union (A, J1) or a in union (A, J2)
+          by Def1, A30; then
+        a in Ai or a in union (A, J1) or a in union (A, J2) by Th5, A6; then
+        a in (Ai\{x}) \/ (Ai\{y}) or a in union (A, J1) or a in union (A, J2)
+          by Th10, A3, A4, A5; then
+        a in ((Ai\{x}) \/ (Ai\{y})) \/  union (A, J1) or a in union (A, J2)
+          by XBOOLE_0:def 2; then
+        a in ((Ai\{x}) \/ (Ai\{y})) \/  union (A, J1) \/ union (A, J2)
+          by XBOOLE_0:def 2; then
+        a in union (A, J1) \/ union (A, J2) \/ ((Ai\{x}) \/ (Ai\{y}))
+          by XBOOLE_1:4; then
+        a in union (A, J1) \/ union (A, J2) \/  (Ai\{x}) \/ (Ai\{y})
+          by XBOOLE_1:4; then
+        a in union (A, J1) \/ (Ai\{x}) \/ union (A, J2) \/ (Ai\{y})
+          by XBOOLE_1:4;
+        hence thesis by XBOOLE_1:4;
+      end;
+    end; then
+A31:card ((union (A,J1) \/ (Ai\{x}) ) \/ ( union (A,J2) \/ (Ai\{y}) )) >=
+      card (union (A,J1\/J2) \/ Ai) by CARD_1:80;
+    union (A,J1) /\ union (A,J2) c= (union (A,J1) \/ (Ai\{x})) /\
+      (union (A,J2) \/ (Ai\{y}))
+    proof
+      let a be set;
+      assume a in union (A,J1) /\ union (A,J2); then
+A32:  a in union (A,J1) & a in union (A,J2) by XBOOLE_0:def 3; then
+      consider j be set such that
+A33:  j in J1 & j in dom A & a in A.j by Def1;
+      consider k be set such that
+A34:  k in J2 & k in dom A & a in A.k by Def1, A32;
+      a in union (A, J1) or a in Ai\{x} by A33, Def1; then
+A35:  a in union (A, J1) \/ (Ai\{x}) by XBOOLE_0:def 2;
+      a in union (A, J2) or a in Ai\{y} by A34, Def1; then
+      a in union (A, J2) \/ (Ai\{y}) by XBOOLE_0:def 2;
+      hence thesis by A35, XBOOLE_0:def 3;
+    end; then
+    card((union (A,J1) \/ (Ai\{x})) /\ (union (A,J2) \/ (Ai\{y}))) >=
+    card (union (A,J1) /\ union (A,J2)) by CARD_1:80; then
+    card ( (union (A,J1) \/ (Ai\{x})) \/ (union (A,J2) \/ (Ai\{y})) )
+      + card ( (union (A,J1) \/ (Ai\{x})) /\ (union (A,J2) \/ (Ai\{y})) )
+        >= card (union (A,J1\/J2) \/ Ai)
+          + card (union (A,J1) /\ (union (A,J2))) by A31, REAL_1:55; then
+A36:card J1 + card J2 >= card (union (A,J1\/J2) \/ Ai)
+          :::::::::::: ABC2
+       + card (union (A,J1) /\ (union (A,J2))) by A27, AXIOMS:22;
+    union (A,J1/\J2) c= union (A,J1) /\ union (A,J2)
+    proof
+      let x be set;
+      assume x in union (A,J1/\J2); then
+      consider j be set such that
+A37:   j in J1/\J2 & j in dom A & x in A.j by Def1;
+      j in J1 & j in J2 & j in dom A & x in A.j
+        by A37, XBOOLE_0:def 3; then
+      x in union (A, J1) & x in union (A, J2) by Def1;
+      hence thesis by XBOOLE_0:def 3;
+    end; then
+    card(union (A,J1) /\ union (A,J2)) >= card( union (A,J1/\J2))
+      by CARD_1:80; then
+    card (union (A,J1\/J2) \/ Ai)
+      + card (union (A,J1) /\ (union (A,J2)))
+      >= card (Ai \/ union (A,J1\/J2)) + card (union (A,J1/\J2)) by REAL_1:55;
+    then
+A38: card J1 + card J2 >=
+      card (Ai \/ union (A,J1\/J2)) + card (union (A,J1/\J2))
+        by A36, AXIOMS:22;  :::::: ABC3
+    reconsider J12 = J1/\J2 as finite set;
+A39:J1 /\ J2 c= J1 by XBOOLE_1:17;
+    J1 c= dom A by A16, Def2; then
+    J1 /\ J2 c= dom A by A39, XBOOLE_1:1; then
+A40:card (union (A,J1/\J2)) >= card (J1/\J2) by A1, Def4;
+A41:J1 c= dom A & J2 c= dom A by A16, A25, Def2;
+    not i in J1 \/ J2 by A15, A24, XBOOLE_0:def 2; then
+A42: {i} misses J1 \/ J2 by ZFMISC_1:56;
+    reconsider L = {i} \/ (J1\/J2) as finite set;
+    {i} c= dom A & (J1 \/ J2) c= dom A
+      by A6, XBOOLE_1:8, A41, ZFMISC_1:37; then
+    L c= dom A by XBOOLE_1:8; then
+    card (union (A,{i}\/(J1\/J2))) >= card ({i}\/(J1\/J2))
+      by Def4, A1; then
+A43: card (union (A,{i}\/J1\/J2)) >= card ({i}\/(J1\/J2)) by XBOOLE_1:4;
+A44: card (union (A,{i}\/J1\/J2)) = card (Ai \/ union (A,J1\/J2))
+      by Th9, A6;
+    card ({i}\/(J1\/J2)) = card {i} + card (J1\/J2) by A42, CARD_2:53; then
+A45: card (Ai \/ union (A,J1\/J2)) >= 1 + card (J1\/J2)
+      by A44, A43, CARD_1:79;
+A46: card (Ai \/ union (A,J1\/J2)) + card (union (A,J1/\J2)) >=
+      1 + card (J1\/J2) + card (J1/\J2) by A45, REAL_1:55, A40;
+      :::::::::: ABC4
+    card (J1\/J2) + card (J1/\J2) = card J1 + card J2 by Th1; then
+      ::::::::::  ABC5
+    1 + card (J1\/J2) + card (J1/\J2) = 1 + (card J1 + card J2)
+      by XCMPLX_1:1;
+    hence thesis by A46, NAT_1:38, A38;
+  end;
+
+theorem Th30:
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A & A is Hall holds
+    ex G being Singlification of A, i st G is Hall
+  proof
+    let F be finite set,
+        A be FinSequence of bool F,
+        i be Nat such that
+A1:  i in dom A & A is Hall;
+     defpred P[Nat] means
+       ex G being Reduction of A st
+       G is Hall & card (G.i) = $1;
+     set n = card (A.i);
+A2:  n >= 1 by Th16,A1;
+A3:  A.i <> {} by CARD_1:78, Th16,A1;
+A4:  A is Reduction of A by Th26;
+     per cases by A2,REAL_1:def 5;
+     suppose n = 1; then
+       A is Singlification of A, i by Def7,A4,A1,CARD_1:78;
+       hence thesis by A1;
+     end;
+     suppose
+A5:    n > 1;
+       A is Reduction of A &
+         A is Hall & card (A.i) = n by Th26,A1; then
+A6:    ex n be Nat st n > 1 & P[n] by A5;
+A7:    for k be Nat st k >= 1 & P[k+1] holds P[k]
+       proof
+         let k be Nat;
+         assume
+A8:      k >= 1 & P[k+1]; then
+         consider G being Reduction of A such that
+A9:      G is Hall & card (G.i) = k+1;
+A10:     dom G = dom A by Def6;
+         1 + 1 <= k + 1 by A8,AXIOMS:24; then
+         consider x being set such that
+A11:     x in G.i & Cut (G, i, x) is Hall by Th29,A9;
+         set H = Cut (G,i,x);
+         H is Reduction of G by A10,Th21,A11,A1; then
+A12:     H is Reduction of A by Th22;
+         card (H.i) = k + 1 - 1 by A10, A1,A9,A11,Th11 .= k;
+         hence thesis by A11,A12;
+       end;
+       P[1] from Regr2(A6,A7); then
+       consider G being Reduction of A such that
+A13:   G is Hall & card (G.i) = 1;
+       G is Singlification of A, i by Def7,A13,A1,A3;
+       hence thesis by A13;
+     end;
+   end;
+
+theorem Th31:
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F st A is Hall holds
+    ex G being Singlification of A st G is Hall
+  proof
+    let F be non empty finite set,
+        A be non empty FinSequence of bool F;
+    assume
+A1: A is Hall; then
+A2: A is non-empty by Th15;
+    defpred P[Nat] means
+    $1 in dom A implies
+    ex g being Singlification of A, $1 st g is Hall &
+    for k being Nat st 1 <= k & k <= $1 holds
+      g is Singlification of A, k;
+A3: P[0]
+    proof
+      assume 0 in dom A; then
+      consider G being Singlification of A, 0 such that
+A4:   G is Hall by A1, Th30;
+      for k being Nat st 1 <= k & k <= 0 holds
+        G is Singlification of A, k by NAT_1:19;
+      hence thesis by A4;
+    end;
+A5: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+      assume
+A6:   P[k];
+      k+1 in dom A implies
+      ex g being Singlification of A, k + 1 st g is Hall &
+      for l being Nat st 1 <= l & l <= k + 1 holds
+        g is Singlification of A, l
+      proof
+        assume
+A7:     k+1 in dom A;
+        per cases by A7, TAXONOM1:1;
+        suppose
+A8:       k = 0;
+          consider g being Singlification of A, k + 1 such that
+A9:       g is Hall by A7,A1,Th30;
+          for l being Nat st 1 <= l & l <= k + 1 holds
+          g is Singlification of A, l by A8, REAL_1:def 5;
+          hence thesis by A9;
+        end;
+        suppose
+A10:    k in dom A; then
+        consider g being Singlification of A, k such that
+A11:    g is Hall &
+        for l being Nat st 1 <= l & l <= k holds
+        g is Singlification of A, l by A6;
+A12:    dom g = dom A by Def6;
+        k+1 in dom g by A7, Def6; then
+        consider G being Singlification of g, k + 1 such that
+A13:    G is Hall by Th30,A11;
+A14:    dom G = dom A by A12, Def6;
+A15:    G is non-empty by A13, Th15; then
+A16:    G.k <> {} by Th2, A10, A14;
+        g is non-empty by A11,Th15; then
+A17:    g.(k+1) <> {} by Th2,A12, A7;
+        reconsider G as Singlification of A, k + 1 by Th24,A2,A16,A17,A10,A7;
+        for l being Nat st 1 <= l & l <= k + 1 holds
+        G is Singlification of A, l
+        proof
+          let l be Nat;
+          assume
+A18:      1 <= l & l <= k + 1;
+          k + 1 <= len A by A7,FINSEQ_3:27; then
+          l <= len A by A18,AXIOMS:22; then
+A19:      l in dom A by A18,FINSEQ_3:27; then
+A20:      G.l <> {} by A15,Th2, A14;
+          per cases by A18, NAT_1:26;
+          suppose l <= k; then
+            g is Singlification of A, l by A18,A11;
+            hence G is Singlification of A, l by A7,A19,Th24,A2,A20,A17;
+          end;
+          suppose l = k + 1;
+            hence G is Singlification of A, l;
+          end;
+        end;
+        hence thesis by A13;
+        end;
+      end;
+      hence thesis;
+    end;
+    for n being Nat holds P[n] from NAT_1:sch 1(A3,A5); then
+A21: len A in dom A implies
+     ex g being Singlification of A, len A st g is Hall &
+    for l being Nat st 1 <= l & l <= len A holds
+      g is Singlification of A, l;
+    consider G being Singlification of A, len A such that
+A22: G is Hall &
+    for l being Nat st 1 <= l & l <= len A holds
+    G is Singlification of A, l by A21, FINSEQ_5:6;
+A23: dom G = dom A by Def6;
+    for i being Nat st i in dom A holds G is Singlification of A, i
+    proof
+      let i be Nat;
+      assume i in dom A; then
+      1 <= i & i <= len A by FINSEQ_3:27;
+      hence thesis by A22;
+    end; then
+    G is Singlification of A by A2,A23,Th27;
+    hence thesis by A22;
+  end;
+
+theorem :: Hall Marriage Theorem
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F holds
+    (ex X being set st X is_a_system_of_different_representatives_of A) iff
+      A is Hall
+  proof
+    let F be non empty finite set,
+        A be non empty FinSequence of bool F;
+    thus (ex X being set st
+      X is_a_system_of_different_representatives_of A) implies
+        A is Hall by Th18;
+    thus A is Hall implies ex X being set st
+      X is_a_system_of_different_representatives_of A
+    proof
+      assume
+A1:   A is Hall; then
+      consider G being Singlification of A such that
+A2:   G is Hall by Th31;
+A3:   A is non-empty by A1, Th15;
+      for i being Nat st i in dom G holds card (G.i) = 1
+      proof
+        let i be Nat;
+A4:     dom G = dom A by Def6;
+        assume i in dom G;
+        hence thesis by A3, A4, Def8;
+      end; then
+      consider X being set such that
+A5:   X is_a_system_of_different_representatives_of G
+        by A2, Th17;
+      X is_a_system_of_different_representatives_of A by A5, Th28;
+      hence thesis;
+    end;
+  end;

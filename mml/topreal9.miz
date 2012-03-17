@@ -1,0 +1,1950 @@
+:: Intersections of Intervals and Balls in TOP-REAL n
+::  by Artur Korni{\l}owicz and Yasunari Shidama
+:: 
+:: Received May 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, EUCLID, ORDINAL2, RELAT_1, ARYTM, JGRAPH_6,
+      COMPLEX1, ARYTM_1, ZF_LANG, PROB_1, BOOLE, FUNCOP_1, JORDAN1, TOPREAL1,
+      ABSVALUE, UNIALG_1, GRCAT_1, JGRAPH_2, MCART_1, POLYEQ_1, FUNCT_3,
+      SQUARE_1, ARYTM_3, METRIC_1, RLVECT_1, RVSUM_1, FINSEQ_1, EUCLID_2,
+      JORDAN2C, LATTICES, ASYMPT_0, FINSEQ_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NAT_1, FUNCT_2, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, ABSVALUE, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      SQUARE_1, QUIN_1, POLYEQ_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPREAL1,
+      METRIC_1, TBSP_1, EUCLID, TOPRNS_1, JORDAN1, JORDAN2C, JGRAPH_2,
+      JGRAPH_6, EUCLID_2;
+ constructors JGRAPH_6, TOPRNS_1, JORDAN2C, TOPALG_1, REALSET1, JORDAN1,
+      TOPREAL1, REAL_1, JGRAPH_2, QUIN_1, POLYEQ_1, SQUARE_1, EUCLID_2, TBSP_1,
+      FINSEQOP;
+ clusters STRUCT_0, EUCLID, ARYTM_3, XREAL_0, REAL_1, NUMBERS, XBOOLE_0, TEX_2,
+      QUIN_1, SQUARE_1, METRIC_1, BINARITH, TOPALG_2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, JORDAN1;
+ theorems JGRAPH_6, TOPRNS_1, XREAL_0, TARSKI, SUBSET_1, FUNCT_2, EUCLID,
+      JGRAPH_2, XBOOLE_1, XBOOLE_0, BORSUK_1, FUNCOP_1, JORDAN2C, JORDAN1,
+      TOPREAL1, SQUARE_1, REAL_1, XCMPLX_1, ABSVALUE, AXIOMS, REAL_2, JGRAPH_1,
+      QUIN_1, POLYEQ_1, JGRAPH_3, TOPREAL3, METRIC_1, TOPREAL6, RVSUM_1,
+      EUCLID_2, TBSP_1, GOBOARD6, REVROT_1, ENUMSET1;
+
+begin :: Preliminaries
+
+reserve
+  n for Nat,
+  a, b, r for real number,
+  x, y, z for Point of TOP-REAL n,
+  e for Point of Euclid n;
+
+theorem Twz2:
+  x - y - z = x - z - y
+proof
+  thus x - y - z = x +- y - z by EUCLID:45
+    .= x - z +- y by JORDAN2C:9
+    .= x - z - y by EUCLID:45;
+end;
+
+theorem Troz1:
+  x + y = x + z implies y = z
+proof
+a1: x - x = 0.REAL n by EUCLID:46;
+  assume x + y = x + z;
+  then x - x + y = x + z - x by JORDAN2C:9;
+  then x - x + y = x - x + z by JORDAN2C:9;
+  hence y = 0.REAL n + z by a1,EUCLID:31
+     .= z by EUCLID:31;
+end;
+  
+theorem Troz:
+  n is non empty implies x <> x + 1.REAL n
+proof
+  assume that
+a0: n is non empty and  
+a1: x = x + 1.REAL n;
+  x = x + 0.REAL n by EUCLID:31;
+  then 0.REAL n = 1.REAL n by a1,Troz1;
+  hence thesis by a0,REVROT_1:19;
+end;
+  
+theorem Tkom:
+  for x being set holds x = (1-r)*y + r*z implies
+  (x = y iff r = 0 or y = z) & (x = z iff r = 1 or y = z)
+proof
+  let x be set;
+  assume
+a0:  x = (1-r)*y + r*z;
+  hereby
+    assume x = y;
+    then 0.REAL n = (1-r)*y + r*z - y by a0,EUCLID:46
+      .= (1-r)*y - y + r*z by JORDAN2C:9
+      .= (1-r)*y - 1 * y + r*z by EUCLID:33
+      .= (1-r-1)*y + r*z by EUCLID:54
+      .= (-r)*y + r*z
+      .= -r*y + r*z by EUCLID:44
+      .= r*z - r*y by EUCLID:45
+      .= r*(z-y) by EUCLID:53;
+    then r = 0 or z-y = 0.REAL n by EUCLID:35;
+    hence r = 0 or y = z by EUCLID:47;
+  end;
+  hereby
+    assume
+a1:   r = 0 or y = z;
+    per cases by a1;
+    suppose r = 0;
+    hence x = y + 0 * z by a0,EUCLID:33
+    .= y + 0.REAL n by EUCLID:33
+    .= y by EUCLID:31;
+    end;
+    suppose z = y;
+    hence x = (1-r+r)*y by a0,EUCLID:37
+       .= y by EUCLID:33;
+    end;
+  end;
+  hereby
+    assume x = z;
+    then 0.REAL n = (1-r)*y + r*z - z by a0,EUCLID:46
+      .= (1-r)*y + (r*z - z) by EUCLID:49
+      .= (1-r)*y + (r*z - 1 * z) by EUCLID:33
+      .= (1-r)*y + (r*z +- 1 * z) by EUCLID:45
+      .= (1-r)*y + ((-1)*z + r*z) by EUCLID:44
+      .= (1-r)*y + (-1+r)*z by EUCLID:37
+      .= (1-r)*y + (-(1-r))*z
+      .= (1-r)*y + -(1-r)*z by EUCLID:44
+      .= (1-r)*y - (1-r)*z by EUCLID:45
+      .= (1-r)*(y-z) by EUCLID:53;
+    then 1-r+r = 0+r or y-z = 0.REAL n by EUCLID:35;
+    hence r = 1 or y = z by EUCLID:47,XCMPLX_1:27;
+  end;
+  assume
+a2: r = 1 or y = z;
+  per cases by a2;
+  suppose r = 1;
+  hence x = 0.REAL n + 1 * z by a0,EUCLID:33
+     .= 1 * z by EUCLID:31
+     .= z by EUCLID:33;
+  end;
+  suppose y = z;
+  hence x = (1-r+r)*z by a0,EUCLID:37
+     .= z by EUCLID:33;
+  end;
+end;
+
+theorem Tuy:
+  for f being FinSequence of REAL holds |.f.|^2 = Sum sqr f
+proof
+  let f be FinSequence of REAL;
+a1: Sum sqr f >= 0 by RVSUM_1:116;
+  thus |.f.|^2 = (sqrt Sum sqr f)^2 by EUCLID:def 5
+    .= Sum sqr f by a1,SQUARE_1:def 4;
+end;
+
+theorem Tr0:
+  for M being non empty MetrSpace,
+      z1, z2, z3 being Point of M st
+   z1 <> z2 & z1 in cl_Ball(z3,r) & z2 in cl_Ball(z3,r) holds
+  r > 0
+proof
+  let M be non empty MetrSpace,
+      z1, z2, z3 be Point of M such that
+a1: z1 <> z2 and
+a2: z1 in cl_Ball(z3,r) and
+a3: z2 in cl_Ball(z3,r);
+  now
+    assume r = 0;
+    then cl_Ball(z3,r) = {z3} by TOPREAL6:64;
+    then z1 = z3 & z2 = z3 by a2,a3,TARSKI:def 1;
+    hence contradiction by a1;
+  end;
+  hence r > 0 by a2,TOPREAL6:63;
+end;
+
+begin :: Subsets of TOP-REAL n
+
+definition
+  let n be Nat, x be Point of TOP-REAL n, r be real number;
+  func Ball(x,r) -> Subset of TOP-REAL n equals :dball:
+  {p where p is Point of TOP-REAL n: |. p-x .| < r};
+coherence
+proof
+  {p where p is Point of TOP-REAL n: |. p-x .| < r} c=
+  the carrier of TOP-REAL n
+  proof
+    let q be set;
+    assume q in {p where p is Point of TOP-REAL n: |. p-x .| < r};
+    then ex p being Point of TOP-REAL n st q = p & |. p-x .| < r;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+  func cl_Ball(x,r) -> Subset of TOP-REAL n equals :dcl:
+  {p where p is Point of TOP-REAL n: |. p-x .| <= r};
+coherence
+proof
+  {p where p is Point of TOP-REAL n: |. p-x .| <= r} c=
+  the carrier of TOP-REAL n
+  proof
+    let q be set;
+    assume q in {p where p is Point of TOP-REAL n: |. p-x .| <= r};
+    then ex p being Point of TOP-REAL n st q = p & |. p-x .| <= r;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+  func Sphere(x,r) -> Subset of TOP-REAL n equals :dsph:
+  {p where p is Point of TOP-REAL n: |. p-x .| = r};
+coherence
+proof
+  {p where p is Point of TOP-REAL n: |. p-x .| = r} c=
+  the carrier of TOP-REAL n
+  proof
+    let q be set;
+    assume q in {p where p is Point of TOP-REAL n: |. p-x .| = r};
+    then ex p being Point of TOP-REAL n st q = p & |. p-x .| = r;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+end;
+
+theorem Tball:
+  y in Ball(x,r) iff |. y-x .| < r
+proof
+a1: Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| < r} by dball;
+  hereby
+    assume y in Ball(x,r);
+    then ex p being Point of TOP-REAL n st y = p & |. p-x .| < r by a1;
+    hence |. y-x .| < r;
+  end;
+  thus thesis by a1;
+end;
+  
+theorem Tclball:
+  y in cl_Ball(x,r) iff |. y-x .| <= r
+proof
+a1: cl_Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| <= r} by dcl;
+  hereby
+    assume y in cl_Ball(x,r);
+    then ex p being Point of TOP-REAL n st y = p & |. p-x .| <= r by a1;
+    hence |. y-x .| <= r;
+  end;
+  thus thesis by a1;
+end;
+  
+theorem Tsphere:
+  y in Sphere(x,r) iff |. y-x .| = r
+proof
+a1: Sphere(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| = r} by dsph;
+  hereby
+    assume y in Sphere(x,r);
+    then ex p being Point of TOP-REAL n st y = p & |. p-x .| = r by a1;
+    hence |. y-x .| = r;
+  end;
+  thus thesis by a1;
+end;
+  
+theorem
+  y in Ball(0.REAL n,r) implies |.y.| < r
+proof
+  assume y in Ball(0.REAL n,r);
+  then |. y-0.REAL n .| < r by Tball;
+  hence |.y.| < r by JORDAN2C:13;
+end;
+
+theorem
+  y in cl_Ball(0.REAL n,r) implies |.y.| <= r
+proof
+  assume y in cl_Ball(0.REAL n,r);
+  then |. y-0.REAL n .| <= r by Tclball;
+  hence |.y.| <= r by JORDAN2C:13;
+end;
+
+theorem T89:
+  y in Sphere(0.REAL n,r) implies |.y.| = r
+proof
+  assume y in Sphere(0.REAL n,r);
+  then |. y-0.REAL n .| = r by Tsphere;
+  hence |.y.| = r by JORDAN2C:13;
+end;
+
+theorem TB0:
+  x = e implies Ball(e,r) = Ball(x,r)
+proof
+  assume
+a0: x = e;
+  hereby
+    let q be set;
+    assume
+a1:   q in Ball(e,r);
+    then reconsider f = q as Point of Euclid n;
+    reconsider p = f as Point of TOP-REAL n by TOPREAL3:13;
+    dist(f,e) < r by a1,METRIC_1:12;
+    then |. p-x .| < r by a0,JGRAPH_1:45;
+    hence q in Ball(x,r) by Tball;
+  end;
+  let q be set;
+  assume
+a2: q in Ball(x,r);
+  then reconsider q as Point of TOP-REAL n;
+  reconsider f = q as Point of Euclid n by TOPREAL3:13;
+  |. q-x .| < r by a2,Tball;
+  then dist(f,e) < r by a0,JGRAPH_1:45; 
+  hence thesis by METRIC_1:12;
+end;
+
+theorem TB1:
+  x = e implies cl_Ball(e,r) = cl_Ball(x,r)
+proof
+  assume
+a0: x = e;
+  hereby
+    let q be set;
+    assume
+a1:   q in cl_Ball(e,r);
+    then reconsider f = q as Point of Euclid n;
+    reconsider p = f as Point of TOP-REAL n by TOPREAL3:13;
+    dist(f,e) <= r by a1,METRIC_1:13;
+    then |. p-x .| <= r by a0,JGRAPH_1:45;
+    hence q in cl_Ball(x,r) by Tclball;
+  end;
+  let q be set;
+  assume
+a2: q in cl_Ball(x,r);
+  then reconsider q as Point of TOP-REAL n;
+  reconsider f = q as Point of Euclid n by TOPREAL3:13;
+  |. q-x .| <= r by a2,Tclball;
+  then dist(f,e) <= r by a0,JGRAPH_1:45; 
+  hence thesis by METRIC_1:13;
+end;
+
+theorem TB2:
+  x = e implies Sphere(e,r) = Sphere(x,r)
+proof
+  assume
+a0: x = e;
+  hereby
+    let q be set;
+    assume
+a1:   q in Sphere(e,r);
+    then reconsider f = q as Point of Euclid n;
+    reconsider p = f as Point of TOP-REAL n by TOPREAL3:13;
+    dist(f,e) = r by a1,METRIC_1:14;
+    then |. p-x .| = r by a0,JGRAPH_1:45;
+    hence q in Sphere(x,r) by Tsphere;
+  end;
+  let q be set;
+  assume
+a2: q in Sphere(x,r);
+  then reconsider q as Point of TOP-REAL n;
+  reconsider f = q as Point of Euclid n by TOPREAL3:13;
+  |. q-x .| = r by a2,Tsphere;
+  then dist(f,e) = r by a0,JGRAPH_1:45; 
+  hence thesis by METRIC_1:14;
+end;
+
+theorem TBB:
+  Ball(x,r) c= cl_Ball(x,r)
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a1: Ball(x,r) = Ball(e,r) by TB0;
+  cl_Ball(x,r) = cl_Ball(e,r) by TB1;
+  hence thesis by a1,METRIC_1:15;
+end;
+  
+theorem TSB:
+  Sphere(x,r) c= cl_Ball(x,r)
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a1: Sphere(x,r) = Sphere(e,r) by TB2;
+  cl_Ball(x,r) = cl_Ball(e,r) by TB1;
+  hence thesis by a1,METRIC_1:16;
+end;
+  
+theorem Tsum1:
+  Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r)
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a1: Sphere(x,r) = Sphere(e,r) by TB2;
+a2: Ball(x,r) = Ball(e,r) by TB0;
+  cl_Ball(x,r) = cl_Ball(e,r) by TB1;
+  hence thesis by a1,a2,METRIC_1:17;
+end;
+
+theorem T56:
+  Ball(x,r) misses Sphere(x,r)
+proof
+  assume not thesis;
+  then consider q being set such that
+a1: q in Ball(x,r) and
+a2: q in Sphere(x,r) by XBOOLE_0:3;
+  reconsider q as Point of TOP-REAL n by a1;
+  |. q - x .| = r by a2,Tsphere;
+  hence thesis by a1,Tball;
+end;
+
+registration
+  let n, x; let r be non positive (real number);
+  cluster Ball(x,r) -> empty;
+coherence
+proof
+  assume not thesis;
+  then consider y being Point of TOP-REAL n such that
+a1: y in Ball(x,r) by SUBSET_1:10;  
+  |. y - x .| < r by a1,Tball;
+  hence contradiction by TOPRNS_1:26;
+end;
+end;
+
+registration
+  let n, x; let r be positive (real number);
+  cluster Ball(x,r) -> non empty;
+coherence
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+  Ball(x,r) = Ball(e,r) by TB0;
+  hence thesis by GOBOARD6:4;
+end;
+end;
+
+theorem
+  Ball(x,r) is non empty implies r > 0
+proof
+  assume
+a1:  Ball(x,r) is non empty;
+  assume r <= 0;
+  then reconsider r as non positive (real number);
+  Ball(x,r) is empty;
+  hence thesis by a1;
+end;
+  
+theorem
+  Ball(x,r) is empty implies r <= 0
+proof
+  assume
+a1:  Ball(x,r) is empty;
+  assume r > 0;
+  then reconsider r as positive (real number);
+  Ball(x,r) is non empty;
+  hence thesis by a1;
+end;
+  
+registration
+  let n, x; let r be negative (real number);
+  cluster cl_Ball(x,r) -> empty;
+coherence
+proof
+  assume not thesis;
+  then consider y being Point of TOP-REAL n such that
+a1: y in cl_Ball(x,r) by SUBSET_1:10;  
+  |. y - x .| <= r by a1,Tclball;
+  hence contradiction by TOPRNS_1:26;
+end;
+end;
+
+registration
+  let n, x; let r be non negative (real number);
+  cluster cl_Ball(x,r) -> non empty;
+coherence
+proof
+  |. x-x .| = 0 by TOPRNS_1:29;
+  hence thesis by Tclball;
+end;
+end;
+
+theorem
+  cl_Ball(x,r) is non empty implies r >= 0
+proof
+  assume
+a1:  cl_Ball(x,r) is non empty;
+  assume r < 0;
+  then reconsider r as negative (real number);
+  cl_Ball(x,r) is empty;
+  hence thesis by a1;
+end;
+  
+theorem
+  cl_Ball(x,r) is empty implies r < 0
+proof
+  assume
+a1:  cl_Ball(x,r) is empty;
+  assume r >= 0;
+  then reconsider r as non negative (real number);
+  cl_Ball(x,r) is non empty;
+  hence thesis by a1;
+end;
+  
+theorem Tlem:
+  a + b = 1 & abs(a) + abs(b) = 1 & b <> 0 &
+  x in cl_Ball(z,r) & y in Ball(z,r) implies
+  a * x + b * y in Ball(z,r)
+proof
+  assume that
+a3: a + b = 1 and
+b2: abs(a) + abs(b) = 1 and
+a2: b <> 0 and
+a4: x in cl_Ball(z,r) and
+a5: y in Ball(z,r);
+  reconsider w = a * x + b * y as Point of Euclid n by TOPREAL3:13;
+a6: a*z + b*z = (a+b)*z by EUCLID:37
+     .= z by a3,EUCLID:33;
+b3:  |. a*z + b*z - (a*x + b*y) .|
+   = |. a*z - (a*x + b*y) + b*z .| by JORDAN2C:9
+  .= |. a*z - a*x - b*y + b*z .| by EUCLID:50
+  .= |. a*z - a*x + b*z - b*y .| by JORDAN2C:9
+  .= |. a*z - a*x + (b*z - b*y) .| by EUCLID:49
+  .= |. a*(z-x) + (b*z - b*y) .| by EUCLID:53
+  .= |. a*(z-x) + b*(z-y) .| by EUCLID:53;
+c1: a is Real by XREAL_0:def 1;
+c2: b is Real by XREAL_0:def 1;
+b1: 0 <= abs(a) by ABSVALUE:5;
+A2: 0 < abs(b) by a2,ABSVALUE:6;
+  |. x-z .| <= r & |. y-z .| < r by a4,a5,Tball,Tclball;
+  then |. z-x .| <= r & |. z-y .| < r by TOPRNS_1:28;
+  then abs(a)*|. z-x .| <= abs(a)*r & abs(b)*|. z-y .| < abs(b)*r
+    by b1,A2,AXIOMS:25,REAL_1:70;
+  then abs(a)*|. z-x .| + abs(b)*|. z-y .| < abs(a)*r + abs(b)*r
+    by REAL_1:67;
+  then |. a*(z-x) .| + abs(b)*|. z-y .| < 1 * r by c1,b2,TOPRNS_1:8;
+  then
+m1: |. a*(z-x) .| + |. b*(z-y) .| < r by c2,TOPRNS_1:8;
+  |. a*z + b*z - (a*x + b*y) .| <= |. a*(z-x) .| + |. b*(z-y) .|
+      by b3,TOPRNS_1:30;
+  then |. a*z + b*z - (a*x + b*y) .| < r by m1,AXIOMS:22;
+  then |. a*x + b*y - (a*z + b*z) .| < r by TOPRNS_1:28;
+  hence a * x + b * y in Ball(z,r) by a6,Tball;
+end;
+
+registration
+  let n, x, r;
+  cluster Ball(x,r) -> open Bounded;
+coherence
+proof
+a1: r is Real by XREAL_0:def 1;  
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a2: Ball(e,r) is bounded by TBSP_1:19;
+  Ball(e,r) = Ball(x,r) by TB0;
+  hence thesis by a1,a2,GOBOARD6:6,JORDAN2C:def 2;
+end;
+  cluster cl_Ball(x,r) -> closed Bounded;
+coherence
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a2: cl_Ball(e,r) is bounded by TOPREAL6:67;
+  cl_Ball(e,r) = cl_Ball(x,r) by TB1;
+  hence thesis by a2,TOPREAL6:66,JORDAN2C:def 2;
+end;
+  cluster Sphere(x,r) -> closed Bounded;
+coherence
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+a2: Sphere(e,r) is bounded by TOPREAL6:70;
+  Sphere(e,r) = Sphere(x,r) by TB2;
+  hence thesis by a2,TOPREAL6:69,JORDAN2C:def 2;
+end;
+end;
+  
+Th77a:
+  for a being real number, P being Subset of TOP-REAL n,
+      Q being Point of TOP-REAL n st
+  P = {q where q is Point of TOP-REAL n: |.q - Q.| <= a} holds
+  P is convex
+proof
+  let a be real number,
+      P be Subset of TOP-REAL n,
+      Q be Point of TOP-REAL n;
+  assume
+A1: P = {q where q is Point of TOP-REAL n: |.q - Q.| <= a};
+  let p1,p2 be Point of TOP-REAL n;
+  assume p1 in P;
+  then consider q1 being Point of TOP-REAL n such that
+A3: q1=p1 & |.q1-Q.| <= a by A1;
+  assume p2 in P;
+  then consider q2 being Point of TOP-REAL n such that
+A4: q2=p2 & |.q2-Q.| <= a by A1;
+  let x be set;
+  assume
+A5: x in LSeg(p1,p2);
+  then x in {(1-r)*p1+r*p2 where r is Real: 0<=r & r<=1} by TOPREAL1:def 4;
+  then consider r being Real such that
+A6: x = (1-r)*p1+r*p2 and
+a6: 0 <= r and
+hy: r <= 1;
+W1: r = abs(r) by a6,ABSVALUE:def 1;
+   reconsider q = x as Point of TOP-REAL n by A5;
+A8: |.(1-r)*(p1-Q).| = abs(1-r)*|.p1-Q.| by TOPRNS_1:8;
+A9: 1-r >= 0 by hy,SQUARE_1:12;
+   then
+A10:abs(1-r) = 1-r by ABSVALUE:def 1;
+   per cases;
+   suppose 1-r > 0;
+   then
+A11: abs(1-r)*|.p1-Q.| <= abs(1-r)*a by A3,A10,AXIOMS:25;
+A12: |.r*(p2-Q).| = abs(r)*|.p2-Q.| by TOPRNS_1:8;
+   0 <= abs(r) by ABSVALUE:5;
+   then
+A13:abs(r)*|.p2-Q.| <= abs(r)*a by A4,AXIOMS:25;
+t1: (1-r)*Q + r*Q = 1 * Q - r*Q + r*Q by EUCLID:54
+    .= 1 * Q by EUCLID:52
+    .= Q by EUCLID:33;
+  q-Q = (1-r)*p1+r*p2-(1-r)*Q-r*Q by A6,t1,EUCLID:50
+     .= (1-r)*p1+r*p2+-(1-r)*Q-r*Q by EUCLID:45
+     .= (1-r)*p1+-(1-r)*Q+r*p2-r*Q by EUCLID:30
+     .= (1-r)*p1-(1-r)*Q+r*p2-r*Q by EUCLID:45
+     .= (1-r)*(p1-Q)+r*p2-r*Q by EUCLID:53
+     .= (1-r)*(p1-Q)+(r*p2-r*Q) by EUCLID:49
+     .= (1-r)*(p1-Q)+r*(p2-Q) by EUCLID:53;
+   then
+G1: |.q-Q.| <= |.(1-r)*(p1-Q).| + |.r*(p2-Q).| by TOPRNS_1:30;
+  |.(1-r)*(p1-Q).|+|.r*(p2-Q).| <= (1-r)*a+r*a
+    by A8,A10,A11,A12,A13,W1,REAL_1:55;
+  then |.q-Q.| <= a by G1,AXIOMS:22;
+  hence x in P by A1;
+  end;
+  suppose 1-r <= 0;
+  then 1-r+r = 0+r by A9,AXIOMS:21;
+  then 1 = r by XCMPLX_1:27;
+  then x = p2 by A6,Tkom;
+  hence x in P by A1,A4;
+  end;
+end;
+
+Th77b:
+  for a being real number, P being Subset of TOP-REAL n,
+      Q being Point of TOP-REAL n st
+  P = {q where q is Point of TOP-REAL n: |.q - Q.| < a} holds
+  P is convex
+proof
+  let a be real number,
+      P be Subset of TOP-REAL n,
+      Q be Point of TOP-REAL n;
+  assume
+A1: P = {q where q is Point of TOP-REAL n: |.q - Q.| < a};
+  let p1,p2 be Point of TOP-REAL n;
+  assume
+a1: p1 in P & p2 in P;
+  reconsider e = Q as Point of Euclid n by TOPREAL3:13;
+  Ball(e,a) = Ball(Q,a) by TB0
+   .= P by A1,dball;
+  hence LSeg(p1,p2) c= P by a1,TOPREAL3:28;
+end;
+
+:: Convex subsets of TOP-REAL n
+
+registration
+  let n, x, r;
+  cluster Ball(x,r) -> convex;
+coherence
+proof
+  Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| < r} by dball;
+  hence thesis by Th77b;
+end;
+  cluster cl_Ball(x,r) -> convex;
+coherence
+proof
+  cl_Ball(x,r) = {p where p is Point of TOP-REAL n: |. p-x .| <= r} by dcl;
+  hence thesis by Th77a;
+end;
+end;
+
+definition
+  let n be Nat; let f be map of TOP-REAL n, TOP-REAL n;
+  attr f is homogeneous means :dhom:
+  for r being real number, x being Point of TOP-REAL n holds f.(r*x) = r * f.x;
+  attr f is additive means :dadd:
+  for x, y being Point of TOP-REAL n holds f.(x+y) = f.x + f.y;
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n --> 0.REAL n -> homogeneous additive;
+coherence
+proof
+  set f = TOP-REAL n --> 0.REAL n;
+  thus f is homogeneous
+  proof
+  let r be real number, x be Point of TOP-REAL n;
+a1: f = (the carrier of TOP-REAL n) --> 0.REAL n by BORSUK_1:def 3;  
+  hence f.(r*x) = 0.REAL n by FUNCOP_1:13
+     .= r * 0.REAL n by EUCLID:32
+     .= r * f.x by a1,FUNCOP_1:13;
+ end;
+  let x, y be Point of TOP-REAL n;
+a1: f = (the carrier of TOP-REAL n) --> 0.REAL n by BORSUK_1:def 3;  
+  hence f.(x+y) = 0.REAL n by FUNCOP_1:13
+     .= 0.REAL n + 0.REAL n by EUCLID:31
+     .= f.x + 0.REAL n by a1,FUNCOP_1:13
+     .= f.x + f.y by a1,FUNCOP_1:13;
+end;
+end;
+
+registration
+  let n;
+  cluster homogeneous additive continuous map of TOP-REAL n, TOP-REAL n;
+existence
+proof
+  take TOP-REAL n --> 0.REAL n;
+  thus thesis by BORSUK_1:36;
+end;
+end;
+
+registration
+  let a, c be real number;
+  cluster AffineMap(a,0,c,0) -> homogeneous additive;
+coherence
+proof
+  set f = AffineMap(a,0,c,0);
+  hereby
+  let r be real number, x be Point of TOP-REAL 2;
+a1: (r*x)`1 = r*x`1 by TOPREAL3:9;
+a2: (r*x)`2 = r*x`2 by TOPREAL3:9;
+  thus f.(r*x) = |[a*((r*x)`1)+0,c*((r*x)`2)+0]| by JGRAPH_2:def 2
+    .= |[r*(a*(x`1)),r*(c*(x`2))]| by a1,a2
+    .= r * |[a*(x`1)+0,c*(x`2)+0]| by EUCLID:62
+    .= r * f.x by JGRAPH_2:def 2;
+  end;
+  let x, y be Point of TOP-REAL 2;
+a1: (x+y)`1 = x`1 + y`1 by TOPREAL3:7;
+a2: (x+y)`2 = x`2 + y`2 by TOPREAL3:7;
+  thus f.(x+y) = |[a*((x+y)`1)+0,c*((x+y)`2)+0]| by JGRAPH_2:def 2
+    .= |[a*(x`1)+a*(y`1),c*(x`2)+c*(y`2)]| by a1,a2
+    .= |[a*(x`1)+0,c*(x`2)+0]| + |[a*(y`1),c*(y`2)]| by EUCLID:60
+    .= f.x + |[a*(y`1)+0,c*(y`2)+0]| by JGRAPH_2:def 2
+    .= f.x + f.y by JGRAPH_2:def 2;
+end;
+end;
+  
+theorem
+  for f being homogeneous additive map of TOP-REAL n, TOP-REAL n,
+      X being convex Subset of TOP-REAL n holds
+  f.:X is convex
+proof
+  let f be homogeneous additive map of TOP-REAL n, TOP-REAL n,
+      X be convex Subset of TOP-REAL n;
+  let p, q be Point of TOP-REAL n;
+  assume p in f.:X;
+  then consider p0 being Point of TOP-REAL n such that
+a1: p0 in X and
+a2: p = f.p0 by FUNCT_2:116;
+  assume q in f.:X;
+  then consider q0 being Point of TOP-REAL n such that
+a3: q0 in X and
+a4: q = f.q0 by FUNCT_2:116;
+a5:LSeg(p,q) = { (1-l)*p + l*q where l is Real: 0 <= l & l <= 1 }
+    by TOPREAL1:def 4;
+a8:LSeg(p0,q0) = { (1-l)*p0 + l*q0 where l is Real: 0 <= l & l <= 1 }
+    by TOPREAL1:def 4;
+  let x be set;
+  assume x in LSeg(p,q);
+  then consider l being Real such that
+a6: x = (1-l)*p + l*q and
+a7: 0 <= l & l <= 1 by a5;
+  set a = (1-l)*p0 + l*q0;
+b2: a in LSeg(p0,q0) by a8,a7;
+b1: LSeg(p0,q0) c= X by a1,a3,JORDAN1:def 1;
+  f.a = f.((1-l)*p0) + f.(l*q0) by dadd
+     .= f.((1-l)*p0) + l*f.q0 by dhom
+     .= x by a2,a4,a6,dhom;
+  hence x in f.:X by b1,b2,FUNCT_2:43;
+end;
+
+:: Halflines
+
+reserve
+  p, q for Point of TOP-REAL n;
+
+definition
+  let n be Nat; let p, q be Point of TOP-REAL n;
+  func halfline(p,q) -> Subset of TOP-REAL n equals :dh:
+  { (1-l)*p + l*q where l is Real: 0 <= l };
+coherence
+proof
+  set X = { (1-l)*p + l*q where l is Real: 0 <= l };
+  X c= the carrier of TOP-REAL n
+  proof
+    let x be set;
+    assume x in X;
+    then ex l being Real st x = (1-l)*p + l*q & 0 <= l;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+end;
+
+theorem Th:
+  for x being set holds x in halfline(p,q) iff
+  ex l being real number st x = (1-l)*p + l*q & 0 <= l
+proof
+  let x be set;
+a1: halfline(p,q) = { (1-l)*p + l*q where l is Real: 0 <= l } by dh;
+  hereby
+    assume x in halfline(p,q);
+    then ex l being Real st x = (1-l)*p + l*q & 0 <= l by a1;
+    hence ex l being real number st x = (1-l)*p + l*q & 0 <= l;
+  end;
+  given l being real number such that
+a2: x = (1-l)*p + l*q & 0 <= l;
+  l is Real by XREAL_0:def 1;
+  hence thesis by a1,a2;
+end;
+
+registration
+  let n, p, q;
+  cluster halfline(p,q) -> non empty;
+coherence
+proof
+  (1-0)*p + 0 * q in halfline(p,q) by Th;
+  hence thesis;
+end;
+end;
+
+theorem T3:
+  p in halfline(p,q)
+proof
+  (1-0)*p + 0 * q = p + 0 * q by EUCLID:33
+    .= p + 0.REAL n by EUCLID:33
+    .= p by EUCLID:31;
+  hence thesis by Th;
+end;
+  
+theorem T4:
+  q in halfline(p,q)
+proof
+  (1-1)*p + 1 * q = 0 * p + q by EUCLID:33
+    .= 0.REAL n + q by EUCLID:33
+    .= q by EUCLID:31;
+  hence thesis by Th;
+end;
+
+theorem Tpp:
+  halfline(p,p) = {p}
+proof
+  hereby
+    let d be set;
+    assume d in halfline(p,p);
+    then consider r being real number such that
+a1:   d = (1-r)*p+r*p and 0 <= r by Th;
+    d = p by a1,Tkom;
+    hence d in {p} by TARSKI:def 1;
+  end;
+  let d be set;
+  assume d in {p};
+  then d = p by TARSKI:def 1;
+  hence thesis by T3;
+end;
+
+theorem T21:
+  x in halfline(p,q) implies halfline(p,x) c= halfline(p,q)
+proof
+  assume x in halfline(p,q);
+  then consider R being real number such that
+a0: x = (1-R)*p + R*q and
+a1: 0 <= R by Th;
+  let d be set;
+  assume
+a2: d in halfline(p,x);
+  then reconsider d as Point of TOP-REAL n;
+  consider r being real number such that
+a3: d = (1-r)*p + r*x and
+a4: 0 <= r by a2,Th;
+  set o = r*R;
+a5: 0 <= o by a1,a4,SQUARE_1:19;  
+  d = (1-r)*p + (r*((1-R)*p) + r*(R*q)) by a0,a3,EUCLID:36
+   .= (1-r)*p + r*((1-R)*p) + r*(R*q) by EUCLID:30
+   .= (1-r)*p + r*(1-R)*p + r*(R*q) by EUCLID:34
+   .= ((1-r) + r*(1-R))*p + r*(R*q) by EUCLID:37
+   .= (1-o)*p + o*q by EUCLID:34;
+  hence thesis by a5,Th;
+end;
+  
+theorem
+  x in halfline(p,q) & x <> p implies halfline(p,q) = halfline(p,x)
+proof
+  assume
+aa: x in halfline(p,q);
+  then consider R being real number such that
+a0: x = (1-R)*p + R*q and
+a1: 0 <= R by Th;
+  assume
+a2: x <> p;
+  thus halfline(p,q) c= halfline(p,x)
+  proof
+    let d be set;
+    assume
+a5:   d in halfline(p,q);
+    then reconsider d as Point of TOP-REAL n;
+    consider r being real number such that
+a3:   d = (1-r)*p + r*q and
+a4:   0 <= r by a5,Th;
+    set o = r/R;
+a6: 0 <= o by a1,a4,SQUARE_1:27;
+    R <> 0 by a0,a2,Tkom;
+    then o*R = r by XCMPLX_1:88;
+    then d = (1-o + o*(1-R))*p + o*(R*q) by a3,EUCLID:34
+     .= (1-o)*p + o*(1-R)*p + o*(R*q) by EUCLID:37
+     .= (1-o)*p + o*((1-R)*p) + o*(R*q) by EUCLID:34
+     .= (1-o)*p + (o*((1-R)*p) + o*(R*q)) by EUCLID:30
+     .= (1-o)*p + o*((1-R)*p + R*q) by EUCLID:36;
+    hence thesis by a0,a6,Th;
+  end;
+  thus thesis by aa,T21;
+end;
+
+theorem
+  LSeg(p,q) c= halfline(p,q)
+proof
+  let a be set;
+  assume a in LSeg(p,q);
+  then ex r being Real st 0<=r & r<=1 & a = (1-r)*p+r*q by JGRAPH_1:52;
+  hence thesis by Th;
+end;
+  
+registration
+  let n, p, q;
+  cluster halfline(p,q) -> convex;
+coherence
+proof
+  set P = halfline(p,q);
+  let u, v be Point of TOP-REAL n;
+  assume u in P;
+  then consider a being real number such that
+a1: u = (1-a)*p+a*q and
+a2: 0 <= a by Th;
+  assume v in P;
+  then consider b being real number such that
+b1: v = (1-b)*p+b*q and
+b2: 0 <= b by Th;
+  let x be set;
+  assume x in LSeg(u,v);
+  then consider r being Real such that
+a3: 0 <= r and
+a4: r <= 1 and
+a5: x = (1-r)*u+r*v by JGRAPH_1:52;
+  set o = (1-r)*a+r*b;
+  1-r >= r-r by a4,REAL_1:92;
+  then
+f1: (1-r)*a >= 0 * a by a2,AXIOMS:25;
+  r*b >= 0 * 0 by b2,a3,SQUARE_1:19;
+  then
+c1: 0+0 <= o by f1,REAL_1:55;
+  x = (1-r)*((1-a)*p)+(1-r)*(a*q) + r*((1-b)*p+b*q) by a1,b1,a5,EUCLID:36
+   .= (1-r)*((1-a)*p) + (1-r)*(a*q) + (r*((1-b)*p) + r*(b*q)) by EUCLID:36
+   .= (1-r)*((1-a)*p) + (r*((1-b)*p) + r*(b*q)) + (1-r)*(a*q) by EUCLID:30
+   .= (1-r)*((1-a)*p) + r*((1-b)*p) + r*(b*q) + (1-r)*(a*q) by EUCLID:30
+   .= (1-r)*(1-a)*p + r*((1-b)*p) + r*(b*q) + (1-r)*(a*q) by EUCLID:34
+   .= (1-r)*(1-a)*p + r*(1-b)*p + r*(b*q) + (1-r)*(a*q) by EUCLID:34
+   .= (1-r)*(1-a)*p + r*(1-b)*p + r*b*q + (1-r)*(a*q) by EUCLID:34
+   .= (1-r)*(1-a)*p + r*(1-b)*p + r*b*q + (1-r)*a*q by EUCLID:34
+   .= ((1-r)*(1-a) + r*(1-b)) * p + r*b*q + (1-r)*a*q by EUCLID:37
+   .= ((1-r)*(1-a) + r*(1-b)) * p + (r*b*q + (1-r)*a*q) by EUCLID:30
+   .= (1-o)*p + o*q by EUCLID:37;
+  hence x in P by c1,Th;
+end;
+end;
+
+theorem TL2a:
+  y in Sphere(x,r) & z in Ball(x,r) implies LSeg(y,z) /\ Sphere(x,r) = {y}
+proof
+  set s = y, t = z;
+  assume that
+a1: s in Sphere(x,r) and
+a2: t in Ball(x,r);
+  hereby
+    let m be set;
+    assume
+a4:   m in LSeg(s,t) /\ Sphere(x,r);
+    then reconsider w = m as Point of TOP-REAL n;
+    w in LSeg(s,t) by a4,XBOOLE_0:def 3;
+    then consider d being Real such that
+a5:   0 <= d and
+a6:   d <= 1 and
+a7:   w = (1-d)*s + d*t by JGRAPH_1:52;
+b2: m in Sphere(x,r) by a4,XBOOLE_0:def 3;
+  reconsider G = x as Point of Euclid n by TOPREAL3:13;
+c2: r = |. w - x .| by b2,Tsphere
+     .= |. (1-d)*s + d*t - (1-d+d)*x .| by a7,EUCLID:33
+     .= |. (1-d)*s + d*t - ((1-d)*x + d*x) .| by EUCLID:37
+     .= |. (1-d)*s + d*t - (1-d)*x - d*x .| by EUCLID:50
+     .= |. (1-d)*s - (1-d)*x + d*t - d*x .| by JORDAN2C:9
+     .= |. (1-d)*(s-x) + d*t - d*x .| by EUCLID:53
+     .= |. (1-d)*(s-x) + (d*t - d*x) .| by EUCLID:49
+     .= |. (1-d)*(s-x) + d*(t-x) .| by EUCLID:53;
+    d-1 <= 1-1 by a6,REAL_1:49;
+    then
+c1: -0 <= -(d-1) by REAL_1:50;
+c4: |. (1-d)*(s-x) .| = abs(1-d)*|. s-x .| by TOPRNS_1:8
+      .= (1-d)*|. s-x .| by c1,ABSVALUE:def 1
+      .= (1-d)*r by a1,Tsphere;
+c5: |. d*(t-x) .| = abs(d)*|. t-x .| by TOPRNS_1:8
+      .= d*|. t-x .| by a5,ABSVALUE:def 1;
+    per cases by a5;
+    suppose
+c6:   d > 0;
+    |. t-x .| < r by a2,Tball;
+    then d*|. t-x .| < d*r by c6,REAL_1:70;
+    then (1-d)*r + d*|. t-x .| < (1-d)*r + d*r by REAL_1:67;
+    hence m in {s} by c5,c2,c4,TOPRNS_1:30;
+    end;
+    suppose d = 0;
+    then m = 1 * s + 0.REAL n by a7,EUCLID:33
+      .= 1 * s by EUCLID:31
+      .= s by EUCLID:33;      
+    hence m in {s} by TARSKI:def 1;
+    end;
+  end;
+  let m be set;
+  assume m in {s};
+  then
+a3: m = s by TARSKI:def 1;
+  s in LSeg(s,t) by TOPREAL1:6;
+  hence thesis by a1,a3,XBOOLE_0:def 3;
+end;
+
+theorem Twazne:
+  y in Sphere(x,r) & z in Sphere(x,r) implies LSeg(y,z) \ {y,z} c= Ball(x,r)
+proof
+  assume that
+a1: y in Sphere(x,r) and
+a2: z in Sphere(x,r);
+  per cases;
+  suppose y = z;
+  then LSeg(y,z) = {y} & {y,z} = {y} by TOPREAL1:7,ENUMSET1:69;
+  then LSeg(y,z) \ {y,z} = {} by XBOOLE_1:37;
+  hence thesis by XBOOLE_1:2;
+  end;  
+  suppose
+e1: y <> z;
+  let a be set;
+  assume
+a3: a in LSeg(y,z) \ {y,z};
+  then reconsider R = a as Point of TOP-REAL n;
+u3: R in LSeg(y,z) by a3,XBOOLE_0:def 4;
+  then consider l being Real such that
+a5: 0 <= l and
+a6: l <= 1 and
+a7: R = (1-l)*y + l*z by JGRAPH_1:52;
+  set l1 = 1-l;
+  set X = |(y-x,z-x)|;
+j7: the carrier of TOP-REAL n = REAL n by EUCLID:25;
+  then
+  reconsider xf = x, yf = y, zf = z as Element of n-tuples_on REAL
+    by EUCLID:def 1;
+  reconsider y1 = y-x, z1 = z-x as FinSequence of REAL by EUCLID:27;
+  consider Rf being FinSequence of REAL such that
+j3: R-x = Rf and
+j4: |. R-x .| = |.Rf.| by TOPRNS_1:def 6;
+j5: Sum sqr Rf >= 0 by RVSUM_1:116;
+k1: |. y-x .|^2 = r^2 by a1,Tsphere;
+k2: |. z-x .|^2 = r^2 by a2,Tsphere;
+  reconsider W1 = l1*(y-x), W2 = l*(z-x) as Element of n-tuples_on REAL
+    by j7,EUCLID:def 1;
+t1: y-x = yf-xf by j7,EUCLID:def 13;
+  then
+q2: l1*(y-x) = l1*(yf-xf) by j7,EUCLID:def 11;
+t2: z-x = zf-xf by j7,EUCLID:def 13;
+  then
+q3: l*(z-x) = l*(zf-xf) by j7,EUCLID:def 11;
+q1: W1 + W2 = l1*(y-x) + l*(z-x) by j7,EUCLID:def 10
+      .= l1*y-l1*x+l*(z-x) by EUCLID:53
+      .= l1*y-l1*x+(l*z-l*x) by EUCLID:53
+      .= l1*y-l1*x+l*z-l*x by EUCLID:49
+      .= l1*y+l*z-l1*x-l*x by JORDAN2C:9
+      .= l1*y+l*z-(l1*x+l*x) by EUCLID:50
+      .= l1*y+l*z-(1 *x-l*x+l*x) by EUCLID:54
+      .= l1*y+l*z-1 *x by EUCLID:52
+      .= Rf by j3,a7,EUCLID:33;
+  |. R-x .|^2 = (sqrt Sum sqr Rf)^2 by j4,EUCLID:def 5
+    .= Sum sqr Rf by j5,SQUARE_1:def 4
+    .= Sum (sqr W1 + 2*mlt(W1,W2) + sqr W2) by q1,RVSUM_1:98
+    .= Sum (sqr W1 + 2*mlt(W1,W2)) + Sum sqr W2 by RVSUM_1:119
+    .= Sum sqr W1 + Sum (2*mlt(W1,W2)) + Sum sqr W2 by RVSUM_1:119
+    .= Sum (l1^2*sqr (yf-xf)) + Sum (2*mlt(W1,W2)) + Sum sqr (l*(zf-xf))
+       by q2,q3,RVSUM_1:84
+    .= l1^2*Sum sqr (yf-xf) + Sum (2*mlt(W1,W2)) + Sum sqr (l*(zf-xf))
+       by RVSUM_1:117
+    .= l1^2*Sum sqr (yf-xf) + Sum (2*mlt(W1,W2)) + Sum (l^2*sqr (zf-xf))
+       by RVSUM_1:84
+    .= l1^2*Sum sqr (yf-xf) + Sum (2*mlt(W1,W2)) + l^2*Sum sqr (zf-xf)
+       by RVSUM_1:117
+    .= l1^2*|.y1.|^2 + Sum (2*mlt(W1,W2)) + l^2*Sum sqr (zf-xf) by t1,Tuy
+    .= l1^2*|.y1.|^2 + Sum (2*mlt(W1,W2)) + l^2*|.z1.|^2 by t2,Tuy
+    .= l1^2*r^2 + Sum (2*mlt(W1,W2)) + l^2*|.z1.|^2 by k1,TOPRNS_1:def 6
+    .= l1^2*r^2 + Sum (2*mlt(W1,W2)) + l^2*r^2 by k2,TOPRNS_1:def 6
+    .= l1^2*r^2 + 2*Sum mlt(W1,W2) + l^2*r^2 by RVSUM_1:117
+    .= l1^2*r^2 + 2*Sum (l1*mlt(yf-xf,l*(zf-xf))) + l^2*r^2 by q2,q3,RVSUM_1:94
+    .= l1^2*r^2 + 2*Sum (l1*(l*mlt(yf-xf,zf-xf))) + l^2*r^2 by RVSUM_1:94
+    .= l1^2*r^2 + 2*Sum (l1*l*mlt(yf-xf,zf-xf)) + l^2*r^2 by RVSUM_1:71
+    .= l1^2*r^2 + 2*(l1*l*Sum mlt(yf-xf,zf-xf)) + l^2*r^2 by RVSUM_1:117
+    .= l1^2*r^2 + 2*l1*l*Sum mlt(yf-xf,zf-xf) + l^2*r^2
+    .= l1^2*r^2 + 2*l1*l*|(y1,z1)| + l^2*r^2 by t1,t2,EUCLID_2:def 1
+    .= l1^2*r^2 + 2*l1*l*X + l^2*r^2 by EUCLID_2:def 2
+    .= (l1^2+l^2)*r^2 + 2*l*l1*X
+    .= (1^2-2*1 *l+l^2+l^2)*r^2 + 2*l*l1*X by SQUARE_1:64
+    .= (1-2*l+l^2+l^2)*r^2 + 2*l*l1*X by SQUARE_1:59;
+  then
+f2: |. R-x .|^2 - r^2 = (-2*l+2*l^2)*r^2+2*l*l1*X
+    .= (-2*1 *l+2*(l*l))*r^2+2*l*l1*X by SQUARE_1:def 3
+    .= 2*l*l1*(-r^2+X);
+  Sphere(x,r) c= cl_Ball(x,r) by TSB;
+  then LSeg(y,z) c= cl_Ball(x,r) by a1,a2,JORDAN1:def 1;
+  then
+f1: |. R-x .| <= r by u3,Tclball;
+  now
+    assume l = 0;
+    then R = y by a7,Tkom;
+    then R in {y,z} by TARSKI:def 2;
+    hence contradiction by a3,XBOOLE_0:def 4;
+  end;
+  then
+f4: 2*l > 0 by a5,SQUARE_1:21;
+u1: 1-1 <= l1 by a6,REAL_1:92;
+  now
+    assume l1 = 0;
+    then 1-l+l = 0+l;
+    then l = 1 by XCMPLX_1:27;
+    then R = z by a7,Tkom;
+    then R in {y,z} by TARSKI:def 2;
+    hence contradiction by a3,XBOOLE_0:def 4;
+  end;
+  then
+f3: 2*l*l1 > 0 by f4,u1,SQUARE_1:21;
+  now
+j6: Sum sqr (yf-zf) >= 0 by RVSUM_1:116;
+j8: y-z = yf-zf by j7,EUCLID:def 13;
+    assume |. R-x .| = r;
+    then 2*l*l1*(-r^2+X) = 0 by f2,XCMPLX_1:14;
+    then X-r^2 = 0 by f3,XCMPLX_1:6;
+    then X = r^2 by XCMPLX_1:15;
+    then 0 = |. y-x .|^2 - 2*X + |. z-x .|^2 by k1,k2
+      .= |. y-x - (z-x) .|^2 by EUCLID_2:68
+      .= |. y-x-z+x .|^2 by EUCLID:51
+      .= |. y-x+x-z .|^2 by JORDAN2C:9
+      .= |.y-z.|^2 by EUCLID:52
+      .= |.yf-zf.|^2 by j8,TOPRNS_1:def 6
+      .= (sqrt Sum sqr (yf-zf))^2 by EUCLID:def 5
+      .= Sum sqr (yf-zf) by j6,SQUARE_1:def 4;
+    then yf-zf = n |-> 0 by RVSUM_1:121;
+    hence contradiction by e1,RVSUM_1:59;
+  end;
+  then |. R-x .| < r by f1,REAL_1:def 5;
+  hence thesis by Tball;
+  end;
+end;
+  
+theorem Tw2:
+  y in Sphere(x,r) & z in Sphere(x,r) implies LSeg(y,z) /\ Sphere(x,r) = {y,z}
+proof
+  assume that
+a1: y in Sphere(x,r) and
+a2: z in Sphere(x,r);
+a3: LSeg(y,z) \ {y,z} c= Ball(x,r) by a1,a2,Twazne;
+  hereby
+    let a be set;
+    assume
+a5:   a in LSeg(y,z) /\ Sphere(x,r);
+    then
+a4: a in LSeg(y,z) by XBOOLE_0:def 3;
+    assume not a in {y,z};
+    then
+a6: a in LSeg(y,z) \ {y,z} by a4,XBOOLE_0:def 4;
+a7: a in Sphere(x,r) by a5,XBOOLE_0:def 3;
+    Ball(x,r) misses Sphere(x,r) by T56;
+    hence contradiction by a3,a6,a7,XBOOLE_0:3;
+  end;
+  let a be set;
+  assume a in {y,z};
+  then
+b1: a = y or a = z by TARSKI:def 2;
+  y in LSeg(y,z) & z in LSeg(y,z) by TOPREAL1:6;
+  hence thesis by a1,a2,b1,XBOOLE_0:def 3;
+end;
+
+theorem Tex2aat1:
+  y in Sphere(x,r) & z in Sphere(x,r) implies
+  halfline(y,z) /\ Sphere(x,r) = {y,z}
+proof
+  assume that
+a2: y in Sphere(x,r) and
+a3: z in Sphere(x,r);
+  per cases;
+  suppose
+M1: y = z;
+  then
+M2: halfline(y,z) = {y} by Tpp;
+M3: {y,z} = {y} by M1,ENUMSET1:69;
+  hence for m being set st m in halfline(y,z) /\ Sphere(x,r) holds
+    m in {y,z} by M2,XBOOLE_0:def 3;
+  let m be set;
+  assume
+M5: m in {y,z};
+  then m = y by M3,TARSKI:def 1;
+  hence thesis by a2,M2,M3,M5,XBOOLE_0:def 3;
+  end;
+  suppose 
+a1: y <> z;
+  hereby
+    let m be set;
+    assume
+w1:   m in halfline(y,z) /\ Sphere(x,r);
+    then
+a5: m in Sphere(x,r) by XBOOLE_0:def 3;
+    reconsider w = m as Point of TOP-REAL n by w1;
+    m in halfline(y,z) by w1,XBOOLE_0:def 3;
+    then consider R being real number such that
+b1:   m = (1-R)*y + R*z and
+b2:   0 <= R by Th;
+    reconsider R as Real by XREAL_0:def 1;
+b6: LSeg(y,z) = {(1-l)*y + l*z where l is Real: 0 <= l & l <= 1}
+      by TOPREAL1:def 4;
+B6: LSeg(y,w) = {(1-l)*y + l*w where l is Real: 0 <= l & l <= 1}
+      by TOPREAL1:def 4;
+    per cases by b2,REAL_1:def 5;
+    suppose R = 0;
+    then m = y by b1,Tkom;
+    hence m in {y,z} by TARSKI:def 2;
+    end;
+    suppose R = 1;
+    then m = z by b1,Tkom;
+    hence m in {y,z} by TARSKI:def 2;
+    end;
+    suppose
+b5:   R > 0 & R < 1;
+b3: LSeg(y,z) \ {y,z} c= Ball(x,r) by a2,a3,Twazne;
+b4: w in LSeg(y,z) by b1,b5,b6;
+    now
+      assume m in {y,z};
+      then m = y or m = z by TARSKI:def 2;
+      hence contradiction by a1,b1,b5,Tkom;
+    end;
+    then m in LSeg(y,z) \ {y,z} by b4,XBOOLE_0:def 4;
+    then |. w-x .| < r by b3,Tball;
+    hence m in {y,z} by a5,Tsphere;
+    end;
+    suppose
+d4:   R > 1;
+    then
+d1: 1/R < 1 by SQUARE_1:2;
+d5: R > 0 by d4,AXIOMS:22;
+    then
+d2: 1/R > 0 by REAL_2:127;
+d3: (1-1/R)*y + 1/R*w = (1-1/R)*y + (1/R*((1-R)*y) + 1/R*(R*z)) by b1,EUCLID:36
+      .= (1-1/R)*y + (1/R*((1-R)*y) + 1/R*R*z) by EUCLID:34
+      .= (1-1/R)*y + (1/R*((1-R)*y) + 1 * z) by d5,XCMPLX_1:88
+      .= (1-1/R)*y + (1/R*((1-R)*y) + z) by EUCLID:33
+      .= (1-1/R)*y + 1/R*((1-R)*y) + z by EUCLID:30
+      .= (1-1/R)*y + 1/R*(1-R)*y + z by EUCLID:34
+      .= (1-1/R+1/R*(1-R))*y + z by EUCLID:37
+      .= (1-1/R+1/R*1-1/R*R)*y + z
+      .= (1-1/R+1/R*1-1)*y + z by d5,XCMPLX_1:88
+      .= 0.REAL n + z by EUCLID:33
+      .= z by EUCLID:31;
+    then
+c1: z in LSeg(y,w) by d1,d2,B6;
+    now
+      assume z in {y,w};
+      then z = y or z = w by TARSKI:def 2;
+      hence contradiction by a1,d1,d3,Tkom;
+    end;
+    then
+c2: z in LSeg(y,w) \ {y,w} by c1,XBOOLE_0:def 4;
+    LSeg(y,w) \ {y,w} c= Ball(x,r) by a2,a5,Twazne;
+    then |. z-x .| < r by c2,Tball;
+    hence m in {y,z} by a3,Tsphere;
+    end;
+  end;
+  let m be set;
+  assume m in {y,z};
+  then
+a4: m = y or m = z by TARSKI:def 2;
+  y in halfline(y,z) & z in halfline(y,z) by T3,T4;
+  hence thesis by a2,a3,a4,XBOOLE_0:def 3;
+  end;
+end;
+
+theorem Tf:
+  y <> z & y in Ball(x,r) implies
+  ex e being Point of TOP-REAL n st {e} = halfline(y,z) /\ Sphere(x,r)
+proof
+  set s = y, t = z;
+  assume that
+a1: s <> t and
+XX: s in Ball(x,r);
+a2: Ball(x,r) c= cl_Ball(x,r) by TBB;
+  reconsider G = x as Point of Euclid n by TOPREAL3:13;
+  cl_Ball(G,r) = cl_Ball(x,r) by TB1;
+  then
+UU: 0 <= --r by a2,XX,TOPREAL6:63;
+  reconsider S = s, T = t, X = x as Element of REAL n by EUCLID:25;
+  set A = Sum sqr (T-S);
+  set B = 2 * |(t-s,s-x)|;
+  set C = Sum sqr (S-X) - r^2;
+  set l1 = (- B - sqrt delta(A,B,C)) / (2 * A);
+  set l2 = (- B + sqrt delta(A,B,C)) / (2 * A);
+Z1: |. T-S .| <> 0 by a1,EUCLID:19;
+b4:now
+    assume A <= 0;
+    then A = 0 by RVSUM_1:116;
+    hence contradiction by Z1,EUCLID:def 5,SQUARE_1:82;
+  end;
+b2: |. s-x .| < r by XX,Tball;
+Z2: |. S-X .| = sqrt Sum sqr (S-X) by EUCLID:def 5;
+Z3: |. S-X .| >= 0 by EUCLID:12;
+  t-s = T-S by EUCLID:def 13;
+  then
+W2: |. t-s .| = |. T-S .| by TOPRNS_1:def 6;
+W0: |. T-S .| = sqrt Sum sqr (T-S) by EUCLID:def 5;
+  Sum sqr (T-S) >= 0 by RVSUM_1:116;
+  then
+W4: |. T-S .|^2 = Sum sqr (T-S) by W0,SQUARE_1:def 4;
+  Sum sqr (S-X) >= 0 by RVSUM_1:116;
+  then
+Z7: |. S-X .|^2 = Sum sqr (S-X) by Z2,SQUARE_1:def 4;
+  s-x = S-X by EUCLID:def 13;
+  then
+Z6: |. s-x .| = |. S-X .| by TOPRNS_1:def 6;
+  then (sqrt Sum sqr (S-X))^2 < r^2 by Z2,Z3,b2,SQUARE_1:78;
+  then
+b5: C < 0 by Z2,Z7,REAL_2:105;
+  then
+d1: C/A < 0 by b4,REAL_2:128;
+b7: delta(A,B,C) = B^2 - 4*A*C by QUIN_1:def 1;
+  4*A > 0 by b4,SQUARE_1:21;
+  then
+b6: 4*A*C < 0 by b5,SQUARE_1:24;
+  B^2 >= 0 by SQUARE_1:72;
+  then
+c3: B^2 - 4*A*C > 0 by b6,REAL_2:173;
+  then
+d3: l2 > l1 by b4,b7,QUIN_1:27;
+m2: for x being real number holds Poly2(A,B,C,x) = Quard(A,l1,l2,x)
+  proof
+    let x be real number;
+    thus Poly2(A,B,C,x) = A*x^2+B*x+C by POLYEQ_1:def 2
+      .= A*(x-l1)*(x-l2) by b4,b7,c3,QUIN_1:16
+      .= A*((x-l1)*(x-l2))
+      .= Quard(A,l1,l2,x) by POLYEQ_1:def 3;
+  end;
+  then C/A = l1*l2 by b4,POLYEQ_1:11;
+  then
+d2: l1 < 0 & l2 > 0 or l1 > 0 & l2 < 0 by d1,REAL_2:132;
+  take e1 = (1-l2)*s+l2*t;
+  A*l2^2+B*l2--C = A*l2^2+B*l2+C
+    .= Poly2(A,B,C,l2) by POLYEQ_1:def 2
+    .= Quard(A,l1,l2,l2) by m2
+    .= A*((l2-l1)*(l2-l2)) by POLYEQ_1:def 3
+    .= 0;
+  then -C = A*l2^2+B*l2 by XCMPLX_1:15;
+  then
+M4: C = -(A*l2^2+B*l2);
+c1: e1 in halfline(s,t) by d2,d3,Th,AXIOMS:22;
+d6: |. e1 - x .| >= 0 by TOPRNS_1:26;
+W9: l2 is Real by XREAL_0:def 1;
+  |. e1 - x .|^2 = |. 1 * s - l2*s + l2*t - x .|^2 by EUCLID:54
+   .= |. s - l2*s + l2*t - x .|^2 by EUCLID:33
+   .= |. s + l2*t - l2*s - x .|^2 by JORDAN2C:9
+   .= |. s + (l2*t - l2*s) - x .|^2 by EUCLID:49
+   .= |. s - x + (l2*t - l2*s) .|^2 by JORDAN2C:9
+   .= |. s-x + l2*(t-s) .|^2 by EUCLID:53
+   .= |. s-x .|^2 + 2*|(l2*(t-s),s-x)| + |. l2*(t-s) .|^2 by EUCLID_2:67
+   .= Sum sqr (S-X) + 2*(l2*|(t-s,s-x)|) + |. l2*(t-s) .|^2
+      by Z6,Z7,EUCLID_2:41
+   .= Sum sqr (S-X) + 2*l2*|(t-s,s-x)| + (abs(l2)*|. t-s .|)^2
+      by W9,TOPRNS_1:8
+   .= Sum sqr (S-X) + 2*l2*|(t-s,s-x)| + (abs(l2))^2*|. t-s .|^2
+      by SQUARE_1:68
+   .= C + r^2 + l2*B + l2^2*A by W2,W4,SQUARE_1:62
+   .= r^2 by M4;
+  then
+uu:  |. e1 - x .| = r or |. e1 - x .| = -r by JGRAPH_3:1;
+  r = 0 or r <> 0;
+  then
+ee: e1 in Sphere(x,r) by uu,d6,UU,Tsphere,REAL_1:66;
+  hereby
+    let d be set;
+    assume d in {e1};
+    then d = e1 by TARSKI:def 1;
+    hence d in halfline(s,t) /\ Sphere(x,r) by c1,ee,XBOOLE_0:def 3;
+  end;
+  let d be set;
+  assume
+k0: d in halfline(s,t) /\ Sphere(x,r);
+  then d in halfline(s,t) by XBOOLE_0:def 3;
+  then consider l being real number such that
+k1:  d = (1-l)*s+l*t and
+k2:  0 <= l by Th;
+   l is Real by XREAL_0:def 1;
+   then
+W1: |. l*(t-s) .|^2 = (abs(l)*|. t-s .|)^2 by TOPRNS_1:8
+   .= (abs(l))^2 * |. t-s .|^2 by SQUARE_1:68
+   .= l^2 * |. t-s .|^2 by SQUARE_1:62;
+  d in Sphere(x,r) by k0,XBOOLE_0:def 3;
+  then r = |. (1-l)*s+l*t - x .| by k1,Tsphere
+    .= |. 1 * s - l*s + l*t - x .| by EUCLID:54
+    .= |. s - l*s + l*t - x .| by EUCLID:33
+    .= |. s - (l*s - l*t) - x .| by EUCLID:51
+    .= |. s-x - (l*s - l*t) .| by Twz2
+    .= |. s-x - l*(s-t) .| by EUCLID:53
+    .= |. s-x +- l*(s-t) .| by EUCLID:45
+    .= |. s-x + l*(-(s-t)) .| by EUCLID:44
+    .= |. s-x + l*(t-s) .| by EUCLID:48;
+  then r^2 = |. s-x .|^2 + 2*|(l*(t-s),s-x)| + |. l*(t-s) .|^2 by EUCLID_2:67
+    .= |. s-x .|^2 + 2*(l*|(t-s,s-x)|) + |. l*(t-s) .|^2 by EUCLID_2:41;
+  then A*l^2+B*l+C = 0 by W1,Z7,Z6,W2,W4;
+  then Poly2(A,B,C,l) = 0 by POLYEQ_1:def 2;
+  then l = l1 or l = l2 by b4,b7,c3,POLYEQ_1:5;
+  hence thesis by k1,k2,d2,d3,AXIOMS:22,TARSKI:def 1;
+end;
+
+theorem Tui:
+  y <> z & y in Sphere(x,r) & z in cl_Ball(x,r) implies
+  ex e being Point of TOP-REAL n st e <> y &
+     {y,e} = halfline(y,z) /\ Sphere(x,r)
+proof
+  set s = y, t = z;
+  assume that
+a1: s <> t and
+a4: s in Sphere(x,r) and
+a3: t in cl_Ball(x,r);
+  reconsider G = x as Point of Euclid n by TOPREAL3:13;
+w4: Ball(G,r) = Ball(x,r) by TB0;
+w5: Sphere(x,r) c= cl_Ball(x,r) by TSB;
+  per cases;
+  suppose
+ur:  t in Sphere(x,r);
+  take e1 = t;
+  thus thesis by a1,a4,ur,Tex2aat1;
+  end;
+  suppose
+s2:  not t in Sphere(x,r);  
+  set X = 1/2 * s + 1/2 * t;
+b1: 1/2 + 1/2 = 1;
+b2: abs(1/2) = 1/2 by ABSVALUE:def 1;
+jj: Ball(G,r) = Ball(x,r) by TB0;
+  Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r) by Tsum1;
+  then t in Ball(G,r) by a3,s2,w4,XBOOLE_0:def 2;
+  then
+kk: X in Ball(G,r) by jj,b1,b2,a4,w5,Tlem;
+b7: now
+     assume X = t;
+     then t - 1/2 * s - 1/2 * t = t - t by EUCLID:50
+       .= 0.REAL n by EUCLID:46;
+     then 0.REAL n = t - 1/2 * t - 1/2 * s by Twz2
+       .= 1 * t - 1/2 * t - 1/2 * s by EUCLID:33
+       .= (1-1/2) * t - 1/2 * s by EUCLID:54
+       .= 1/2 * (t-s) by EUCLID:53;
+     then t-s = 0.REAL n by EUCLID:35;
+     hence contradiction by a1,EUCLID:47;
+    end;
+  consider e1 being Point of TOP-REAL n such that
+b6: {e1} = halfline(X,t) /\ Sphere(x,r) by b7,w4,kk,Tf;
+  take e1;
+c1: e1 in {e1} by TARSKI:def 1;
+   then e1 in halfline(X,t) by b6,XBOOLE_0:def 3;
+   then consider l being real number such that
+c2:  e1 = (1-l)*X + l*t and
+c3:  0 <= l by Th;
+  hereby
+    assume e1 = s;
+    then 0.REAL n = (1-l)*X + l*t - s by c2,EUCLID:46
+      .= (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t - s by EUCLID:36
+      .= (1-l)*(1/2*s) + ((1-l)*(1/2*t) + l*t) - s by EUCLID:30
+      .= (1-l)*(1/2*s) - s + ((1-l)*(1/2*t) + l*t) by JORDAN2C:9
+      .= (1-l)*(1/2*s) - 1 * s + ((1-l)*(1/2*t) + l*t) by EUCLID:33
+      .= (1-l)*(1/2)*s - 1 * s + ((1-l)*(1/2*t) + l*t) by EUCLID:34
+      .= ((1-l)*(1/2) - 1) * s + ((1-l)*(1/2*t) + l*t) by EUCLID:54
+      .= (-1/2 - l*(1/2)) * s + ((1-l)*(1/2)*t + l*t) by EUCLID:34
+      .= (-1/2 - l*(1/2)) * s + ((1-l)*(1/2) + l) * t by EUCLID:37
+      .= ((-1)*(1/2 + l*(1/2))) * s + (1/2 + l*(1/2)) * t
+      .= (-1)*((1/2 + l*(1/2)) * s) + (1/2 + l*(1/2)) * t by EUCLID:34
+      .= - (1/2 + l*(1/2)) * s + (1/2 + l*(1/2)) * t by EUCLID:43
+      .= (1/2 + l*(1/2)) * t - (1/2 + l*(1/2)) * s by EUCLID:45
+      .= (1/2 + l*(1/2)) * (t - s) by EUCLID:53;
+    then 1/2 + l*(1/2) = 0 or t - s = 0.REAL n by EUCLID:35;
+    then (1+l)*(1/2) = 0 by a1,EUCLID:47;
+    then 1+l-1 = 0-1 by XCMPLX_1:6;
+    then l = -1 by XCMPLX_1:26;
+    hence contradiction by c3;
+  end;
+d1: s in halfline(s,t) by T3;
+  hereby
+    let m be set;
+    assume m in {s,e1};
+    then
+d3: m = s or m = e1 by TARSKI:def 2;
+    set o = (1+l)/2;
+d5: e1 = (1-l)*(1/2*s) + (1-l)*(1/2*t) + l*t by c2,EUCLID:36
+      .= (1-l)*(1/2)*s + (1-l)*(1/2*t) + l*t by EUCLID:34
+      .= (1-l)*(1/2)*s + (1-l)*(1/2)*t + l*t by EUCLID:34
+      .= (1-l)*(1/2)*s + ((1-l)*(1/2)*t + l*t) by EUCLID:30
+      .= (1-l)*(1/2)*s + ((1-l)*(1/2) + l)*t by EUCLID:37
+      .= (1-o)*s + o*t;
+    1+0 <= 1+l by c3,AXIOMS:24;
+    then 1+l >= 0 by AXIOMS:22;
+    then 0 <= o by SQUARE_1:27;
+    then
+d2: e1 in halfline(s,t) by d5,Th;
+    e1 in Sphere(x,r) by b6,c1,XBOOLE_0:def 3;
+    hence m in halfline(s,t) /\ Sphere(x,r) by a4,d1,d2,d3,XBOOLE_0:def 3;
+  end;
+  let m be set;
+  assume
+ty: m in halfline(s,t) /\ Sphere(x,r);
+  then
+f1: m in halfline(s,t) & m in Sphere(x,r) by XBOOLE_0:def 3;
+  reconsider m as Point of TOP-REAL n by ty;
+  per cases;
+  suppose m in halfline(X,t);
+  then m in halfline(X,t) /\ Sphere(x,r) by f1,XBOOLE_0:def 3;
+  then m = e1 by b6,TARSKI:def 1;
+  hence thesis by TARSKI:def 2;
+  end;
+  suppose
+s0: not m in halfline(X,t);
+  consider M being real number such that
+f2: m = (1-M)*s + M*t and
+f3: 0 <= M by f1,Th;
+g1:now
+    set o = 2*M-1;
+    assume M > 1;
+    then 2*M > 2*1 by REAL_1:70;
+    then 2*M-1 > 2*1-1 by REAL_1:92;
+    then
+f5: 0 <= o by AXIOMS:22;      
+    (1-o)*X + o*t = (1-o)*(1/2 * s) + (1-o)*(1/2 * t) + o*t by EUCLID:36
+      .= (1-o)*(1/2) * s + (1-o)*(1/2 * t) + o*t by EUCLID:34
+      .= (1-o)*(1/2) * s + (1-o)*(1/2) * t + o*t by EUCLID:34
+      .= (1-o)*(1/2) * s + ((1-o)*(1/2) * t + o*t) by EUCLID:30
+      .= (1-o)*(1/2) * s + ((1-o)*(1/2)+o) * t by EUCLID:37
+      .= m by f2;
+    hence contradiction by s0,f5,Th;
+  end;
+g6: |. t-x .| <= r by a3,Tclball;
+  |. t-x .| <> r by s2,Tsphere;
+  then |. t-x .| < r by g6,REAL_1:def 5;
+  then t in Ball(x,r) by Tball;
+  then
+g3: LSeg(s,t) /\ Sphere(x,r) = {s} by a4,TL2a;
+g2: M is Real by XREAL_0:def 1;    
+  LSeg(s,t) = { (1-d)*s + d*t where d is Real: 0 <= d & d <= 1 }
+    by TOPREAL1:def 4;
+  then m in LSeg(s,t) by f2,g1,f3,g2;
+  then m in {s} by g3,f1,XBOOLE_0:def 3;
+  then m = s by TARSKI:def 1;
+  hence thesis by TARSKI:def 2;
+  end;
+  end;
+end;
+
+registration
+  let n, x; let r be negative (real number);
+  cluster Sphere(x,r) -> empty;
+coherence
+proof
+  assume not thesis;
+  then consider y being Point of TOP-REAL n such that
+a1: y in Sphere(x,r) by SUBSET_1:10;  
+  |. y - x .| = r by a1,Tsphere;
+  hence contradiction by TOPRNS_1:26;
+end;
+end;
+
+registration
+  let n be non empty Nat, x be Point of TOP-REAL n;
+  let r be non negative (real number);
+  cluster Sphere(x,r) -> non empty;
+coherence
+proof
+  reconsider e = x as Point of Euclid n by TOPREAL3:13;
+  per cases;
+  suppose r = 0;
+  then Sphere(e,r) = {e} by TOPREAL6:62;
+  hence thesis by TB2;
+  end;
+  suppose r > 0;
+  then reconsider r as positive (real number);
+  consider s being Point of TOP-REAL n such that
+a2: s in Ball(x,r) by SUBSET_1:10;
+  s <> s + 1.REAL n by Troz;
+  then ex e being Point of TOP-REAL n st
+    {e} = halfline(s,s + 1.REAL n) /\ Sphere(x,r) by a2,Tf;
+  hence thesis;
+  end;
+end;
+end;
+
+theorem
+  Sphere(x,r) is non empty implies r >= 0
+proof
+  assume
+a1:  Sphere(x,r) is non empty;
+  assume r < 0;
+  then reconsider r as negative (real number);
+  Sphere(x,r) is empty;
+  hence thesis by a1;
+end;
+  
+theorem
+  n is non empty & Sphere(x,r) is empty implies r < 0
+proof
+  assume that
+a0: n is non empty and  
+a1: Sphere(x,r) is empty;
+  assume r >= 0;
+  then reconsider r as non negative (real number);
+  reconsider n as non empty Nat by a0;
+  reconsider x as Point of TOP-REAL n;
+  Sphere(x,r) is non empty;
+  hence thesis by a1;
+end;
+  
+begin :: Subsets of TOP-REAL 2
+
+reserve
+  s, t for Point of TOP-REAL 2;
+  
+theorem
+  (a*s + b*t)`1 = a * s`1 + b * t`1
+proof
+  thus (a*s+b*t)`1 = (a*s)`1 + (b*t)`1 by TOPREAL3:7
+    .= a*s`1 + (b*t)`1 by TOPREAL3:9
+    .= a*s`1+b*t`1 by TOPREAL3:9;
+end;
+  
+theorem
+  (a*s + b*t)`2 = a * s`2 + b * t`2
+proof
+  thus (a*s+b*t)`2 = (a*s)`2 + (b*t)`2 by TOPREAL3:7
+    .= a*s`2 + (b*t)`2 by TOPREAL3:9
+    .= a*s`2+b*t`2 by TOPREAL3:9;
+end;
+  
+theorem Tc:
+  t in circle(a,b,r) iff |. t - |[a,b]| .| = r
+proof
+a1: circle(a,b,r) =
+  {x where x is Point of TOP-REAL 2: |. x - |[a,b]| .| = r} by JGRAPH_6:def 5;
+  hereby
+    assume t in circle(a,b,r);
+    then ex x being Point of TOP-REAL 2 st t = x & |. x - |[a,b]| .| = r
+      by a1;
+    hence |. t - |[a,b]| .| = r;
+  end;
+  thus thesis by a1;
+end;
+  
+theorem Td:
+  t in closed_inside_of_circle(a,b,r) iff |. t - |[a,b]| .| <= r
+proof
+a1: closed_inside_of_circle(a,b,r) =
+  {x where x is Point of TOP-REAL 2: |. x - |[a,b]| .| <= r} by JGRAPH_6:def 7;
+  hereby
+    assume t in closed_inside_of_circle(a,b,r);
+    then ex x being Point of TOP-REAL 2 st t = x & |. x - |[a,b]| .| <= r
+      by a1;
+    hence |. t - |[a,b]| .| <= r;
+  end;
+  thus thesis by a1;
+end;
+  
+theorem Ti:
+  t in inside_of_circle(a,b,r) iff |. t - |[a,b]| .| < r
+proof
+a1: inside_of_circle(a,b,r) =
+  {x where x is Point of TOP-REAL 2: |. x - |[a,b]| .| < r} by JGRAPH_6:def 6;
+  hereby
+    assume t in inside_of_circle(a,b,r);
+    then ex x being Point of TOP-REAL 2 st t = x & |. x - |[a,b]| .| < r
+      by a1;
+      hence |. t - |[a,b]| .| < r;
+  end;
+  thus thesis by a1;
+end;
+  
+registration
+  let a, b be real number;
+  let r be positive (real number);
+  cluster inside_of_circle(a,b,r) -> non empty;
+coherence
+proof
+  |. |[a,b]| - |[a,b]| .| = 0 by TOPRNS_1:29;
+  hence thesis by Ti;
+end;
+end;
+
+registration
+  let a, b be real number;
+  let r be non negative (real number);
+  cluster closed_inside_of_circle(a,b,r) -> non empty;
+coherence
+proof
+  |. |[a,b]| - |[a,b]| .| = 0 by TOPRNS_1:29;
+  hence thesis by Td;
+end;
+end;
+
+theorem
+  circle(a,b,r) c= closed_inside_of_circle(a,b,r)
+proof
+  let x be set;
+  assume
+a2:  x in circle(a,b,r);
+  then reconsider x as Point of TOP-REAL 2;
+  |. x - |[a,b]| .| = r by a2,Tc;
+  hence thesis by Td;
+end;
+
+theorem Tcl:
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  cl_Ball(x,r) = closed_inside_of_circle(a,b,r)
+proof
+  let x be Point of Euclid 2 such that
+a1: x = |[a,b]|;
+  hereby
+    let w be set;
+    assume
+a3:   w in cl_Ball(x,r);
+    then reconsider u = w as Point of TOP-REAL 2 by TOPREAL3:13;
+    reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+    dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+    then |. u - |[a,b]| .| <= r by a3,METRIC_1:13;
+    hence w in closed_inside_of_circle(a,b,r) by Td;
+  end;
+  let w be set;
+  assume
+a3: w in closed_inside_of_circle(a,b,r);
+  then reconsider u = w as Point of TOP-REAL 2;
+  reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+  dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+  then dist(e,x) <= r by a3,Td;
+  hence w in cl_Ball(x,r) by METRIC_1:13;
+end;
+
+theorem Tins:
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  Ball(x,r) = inside_of_circle(a,b,r)
+proof
+  let x be Point of Euclid 2 such that
+a1: x = |[a,b]|;
+  hereby
+    let w be set;
+    assume
+a3:   w in Ball(x,r);
+    then reconsider u = w as Point of TOP-REAL 2 by TOPREAL3:13;
+    reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+    dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+    then |. u - |[a,b]| .| < r by a3,METRIC_1:12;
+    hence w in inside_of_circle(a,b,r) by Ti;
+  end;
+  let w be set;
+  assume
+a3: w in inside_of_circle(a,b,r);
+  then reconsider u = w as Point of TOP-REAL 2;
+  reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+  dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+  then dist(e,x) < r by a3,Ti;
+  hence w in Ball(x,r) by METRIC_1:12;
+end;
+
+theorem Tsp:
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  Sphere(x,r) = circle(a,b,r)
+proof
+  let x be Point of Euclid 2 such that
+a1: x = |[a,b]|;
+  hereby
+    let w be set;
+    assume
+a3:   w in Sphere(x,r);
+    then reconsider u = w as Point of TOP-REAL 2 by TOPREAL3:13;
+    reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+    dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+    then |. u - |[a,b]| .| = r by a3,METRIC_1:14;
+    hence w in circle(a,b,r) by Tc;
+  end;
+  let w be set;
+  assume
+a3: w in circle(a,b,r);
+  then reconsider u = w as Point of TOP-REAL 2;
+  reconsider e = u as Point of Euclid 2 by TOPREAL3:13;
+  dist(e,x) = |. u - |[a,b]| .| by a1,JGRAPH_1:45;
+  then dist(e,x) = r by a3,Tc;
+  hence w in Sphere(x,r) by METRIC_1:14;
+end;
+
+theorem Tu1:
+  Ball(|[a,b]|,r) = inside_of_circle(a,b,r)
+proof
+  reconsider e = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  thus Ball(|[a,b]|,r) = Ball(e,r) by TB0
+    .= inside_of_circle(a,b,r) by Tins;
+end;
+
+theorem
+  cl_Ball(|[a,b]|,r) = closed_inside_of_circle(a,b,r)
+proof
+  reconsider e = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  thus cl_Ball(|[a,b]|,r) = cl_Ball(e,r) by TB1
+    .= closed_inside_of_circle(a,b,r) by Tcl;
+end;
+
+theorem Tu3:
+  Sphere(|[a,b]|,r) = circle(a,b,r)
+proof
+  reconsider e = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  thus Sphere(|[a,b]|,r) = Sphere(e,r) by TB2
+    .= circle(a,b,r) by Tsp;
+end;
+
+theorem
+  inside_of_circle(a,b,r) c= closed_inside_of_circle(a,b,r)
+proof
+  let x be set;
+  assume
+a2: x in inside_of_circle(a,b,r);
+  then reconsider x as Point of TOP-REAL 2;
+  |. x - |[a,b]| .| < r by a2,Ti;
+  hence thesis by Td;
+end;
+
+theorem
+  inside_of_circle(a,b,r) misses circle(a,b,r)
+proof
+  assume not thesis;
+  then consider x being set such that
+a1: x in inside_of_circle(a,b,r) and
+a2: x in circle(a,b,r) by XBOOLE_0:3;
+  reconsider x as Point of TOP-REAL 2 by a1;
+  |. x - |[a,b]| .| = r by a2,Tc;
+  hence thesis by a1,Ti;
+end;
+
+theorem
+  inside_of_circle(a,b,r) \/ circle(a,b,r) = closed_inside_of_circle(a,b,r)
+proof
+  reconsider p = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+a1: Sphere(p,r) = circle(a,b,r) by Tsp;
+a2: Ball(p,r) = inside_of_circle(a,b,r) by Tins;
+  cl_Ball(p,r) = closed_inside_of_circle(a,b,r) by Tcl;
+  hence thesis by a1,a2,METRIC_1:17;
+end;
+
+theorem
+  s in Sphere(0.REAL 2,r) implies s`1^2 + s`2^2 = r^2
+proof
+  assume s in Sphere(0.REAL 2,r);
+  then |. s-0.REAL 2 .| = r by Tsphere;
+  then |. s .| = r by JORDAN2C:13;
+  hence s`1^2 + s`2^2 = r^2 by JGRAPH_1:46;
+end;
+
+theorem
+  s <> t &
+  s in closed_inside_of_circle(a,b,r) & t in closed_inside_of_circle(a,b,r)
+  implies r > 0
+proof
+  reconsider x = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  cl_Ball(x,r) = closed_inside_of_circle(a,b,r) by Tcl;
+  hence thesis by Tr0;
+end;
+  
+theorem
+  s <> t & s in inside_of_circle(a,b,r) implies
+   ex e being Point of TOP-REAL 2 st {e} = halfline(s,t) /\ circle(a,b,r)
+proof
+  assume that
+a1: s <> t and
+XX: s in inside_of_circle(a,b,r);
+k1: Ball(|[a,b]|,r) = inside_of_circle(a,b,r) by Tu1;
+  Sphere(|[a,b]|,r) = circle(a,b,r) by Tu3;
+  hence thesis by a1,XX,k1,Tf;
+end;
+  
+theorem
+  s in circle(a,b,r) & t in inside_of_circle(a,b,r) implies
+  LSeg(s,t) /\ circle(a,b,r) = {s}
+proof
+  assume that
+a1: s in circle(a,b,r) and
+a2: t in inside_of_circle(a,b,r);
+  reconsider e = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+a3: circle(a,b,r) = Sphere(e,r) by Tsp
+     .= Sphere(|[a,b]|,r) by TB2;
+  inside_of_circle(a,b,r) = Ball(e,r) by Tins
+    .= Ball(|[a,b]|,r) by TB0;
+  hence thesis by a1,a2,a3,TL2a;
+end;
+
+theorem
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  LSeg(s,t) \ {s,t} c= inside_of_circle(a,b,r)
+proof
+  assume that
+a1: s in circle(a,b,r) and
+a2: t in circle(a,b,r);
+  reconsider G = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+e2: Ball(|[a,b]|,r) = inside_of_circle(a,b,r) by Tu1;
+  Sphere(G,r) = circle(a,b,r) by Tsp;
+  then Sphere(|[a,b]|,r) = circle(a,b,r) by TB2;
+  hence thesis by a1,a2,e2,Twazne;
+end;
+
+theorem
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  LSeg(s,t) /\ circle(a,b,r) = {s,t}
+proof
+  assume that
+a1: s in circle(a,b,r) and
+a2: t in circle(a,b,r);
+  reconsider G = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  Sphere(G,r) = circle(a,b,r) by Tsp;
+  then Sphere(|[a,b]|,r) = circle(a,b,r) by TB2;
+  hence thesis by a1,a2,Tw2;
+end;
+
+theorem
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  halfline(s,t) /\ circle(a,b,r) = {s,t}
+proof
+  assume that
+a2: s in circle(a,b,r) and
+a3: t in circle(a,b,r);
+  reconsider e = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+  circle(a,b,r) = Sphere(e,r) by Tsp
+    .= Sphere(|[a,b]|,r) by TB2;
+  hence thesis by a2,a3,Tex2aat1;
+end;
+
+theorem 
+  s <> t & s in circle(a,b,r) & t in closed_inside_of_circle(a,b,r) implies
+   ex e being Point of TOP-REAL 2 st e <> s &
+     {s,e} = halfline(s,t) /\ circle(a,b,r)
+proof
+  assume that
+a1: s <> t and
+a4: s in circle(a,b,r) and
+a3: t in closed_inside_of_circle(a,b,r);
+  reconsider G = |[a,b]| as Point of Euclid 2 by TOPREAL3:13;
+w2: cl_Ball(G,r) = closed_inside_of_circle(a,b,r) by Tcl;
+W2: cl_Ball(G,r) = cl_Ball(|[a,b]|,r) by TB1;
+  Sphere(G,r) = circle(a,b,r) by Tsp;
+  then Sphere(|[a,b]|,r) = circle(a,b,r) by TB2;
+  hence thesis by a1,a4,a3,w2,W2,Tui;
+end;
+
+registration
+  let a, b, r be real number;
+  cluster inside_of_circle(a,b,r) -> convex;
+coherence
+proof
+  inside_of_circle(a,b,r) =
+   {q where q is Point of TOP-REAL 2: |.q - |[a,b]|.| < r } by JGRAPH_6:def 6;
+  hence thesis by Th77b;
+end;
+  cluster closed_inside_of_circle(a,b,r) -> convex;
+coherence
+proof
+  closed_inside_of_circle(a,b,r) =
+   {q where q is Point of TOP-REAL 2: |.q - |[a,b]|.| <= r } by JGRAPH_6:def 7;
+  hence thesis by Th77a;
+end;
+end;
+

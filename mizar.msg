@@ -309,6 +309,8 @@ Accessible mode format has empty list of arguments
 Accessible structure format has empty list of arguments
 # 185
 Unknown structured mode format
+# 190
+Inaccessible theorem
 # 191
 Unknown scheme
 # 192

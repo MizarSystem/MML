@@ -1,0 +1,379 @@
+:: Intersections of Intervals and Balls in TOP-REAL n
+::  by Artur Korni{\l}owicz and Yasunari Shidama
+:: 
+:: Received May 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, EUCLID, ORDINAL2, RELAT_1, ARYTM, JGRAPH_6,
+      COMPLEX1, ARYTM_1, ZF_LANG, PROB_1, BOOLE, FUNCOP_1, JORDAN1, TOPREAL1,
+      ABSVALUE, UNIALG_1, GRCAT_1, JGRAPH_2, MCART_1, POLYEQ_1, FUNCT_3,
+      SQUARE_1, ARYTM_3, METRIC_1, RLVECT_1, RVSUM_1, FINSEQ_1, EUCLID_2,
+      JORDAN2C, LATTICES, ASYMPT_0, FINSEQ_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NAT_1, FUNCT_2, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, ABSVALUE, FINSEQ_1, FINSEQ_2, RVSUM_1,
+      SQUARE_1, QUIN_1, POLYEQ_1, STRUCT_0, PRE_TOPC, BORSUK_1, TOPREAL1,
+      METRIC_1, TBSP_1, EUCLID, TOPRNS_1, JORDAN1, JORDAN2C, JGRAPH_2,
+      JGRAPH_6, EUCLID_2;
+ constructors JGRAPH_6, TOPRNS_1, JORDAN2C, TOPALG_1, REALSET1, JORDAN1,
+      TOPREAL1, REAL_1, JGRAPH_2, QUIN_1, POLYEQ_1, SQUARE_1, EUCLID_2, TBSP_1,
+      FINSEQOP;
+ clusters STRUCT_0, EUCLID, ARYTM_3, XREAL_0, REAL_1, NUMBERS, XBOOLE_0, TEX_2,
+      QUIN_1, SQUARE_1, METRIC_1, BINARITH, TOPALG_2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve
+  n for Nat,
+  a, b, r for real number,
+  x, y, z for Point of TOP-REAL n,
+  e for Point of Euclid n;
+
+theorem :: TOPREAL9:1
+  x - y - z = x - z - y;
+
+theorem :: TOPREAL9:2
+  x + y = x + z implies y = z;
+
+theorem :: TOPREAL9:3
+  n is non empty implies x <> x + 1.REAL n;
+
+theorem :: TOPREAL9:4
+  for x being set holds x = (1-r)*y + r*z implies
+  (x = y iff r = 0 or y = z) & (x = z iff r = 1 or y = z);
+
+theorem :: TOPREAL9:5
+  for f being FinSequence of REAL holds |.f.|^2 = Sum sqr f;
+
+theorem :: TOPREAL9:6
+  for M being non empty MetrSpace,
+      z1, z2, z3 being Point of M st
+   z1 <> z2 & z1 in cl_Ball(z3,r) & z2 in cl_Ball(z3,r) holds
+  r > 0;
+
+begin :: Subsets of TOP-REAL n
+
+definition
+  let n be Nat, x be Point of TOP-REAL n, r be real number;
+  func Ball(x,r) -> Subset of TOP-REAL n equals
+:: TOPREAL9:def 1
+  {p where p is Point of TOP-REAL n: |. p-x .| < r};
+  func cl_Ball(x,r) -> Subset of TOP-REAL n equals
+:: TOPREAL9:def 2
+  {p where p is Point of TOP-REAL n: |. p-x .| <= r};
+  func Sphere(x,r) -> Subset of TOP-REAL n equals
+:: TOPREAL9:def 3
+  {p where p is Point of TOP-REAL n: |. p-x .| = r};
+end;
+
+theorem :: TOPREAL9:7
+  y in Ball(x,r) iff |. y-x .| < r;
+
+theorem :: TOPREAL9:8
+  y in cl_Ball(x,r) iff |. y-x .| <= r;
+
+theorem :: TOPREAL9:9
+  y in Sphere(x,r) iff |. y-x .| = r;
+
+theorem :: TOPREAL9:10
+  y in Ball(0.REAL n,r) implies |.y.| < r;
+
+theorem :: TOPREAL9:11
+  y in cl_Ball(0.REAL n,r) implies |.y.| <= r;
+
+theorem :: TOPREAL9:12
+  y in Sphere(0.REAL n,r) implies |.y.| = r;
+
+theorem :: TOPREAL9:13
+  x = e implies Ball(e,r) = Ball(x,r);
+
+theorem :: TOPREAL9:14
+  x = e implies cl_Ball(e,r) = cl_Ball(x,r);
+
+theorem :: TOPREAL9:15
+  x = e implies Sphere(e,r) = Sphere(x,r);
+
+theorem :: TOPREAL9:16
+  Ball(x,r) c= cl_Ball(x,r);
+
+theorem :: TOPREAL9:17
+  Sphere(x,r) c= cl_Ball(x,r);
+
+theorem :: TOPREAL9:18
+  Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r);
+
+theorem :: TOPREAL9:19
+  Ball(x,r) misses Sphere(x,r);
+
+registration
+  let n, x; let r be non positive (real number);
+  cluster Ball(x,r) -> empty;
+end;
+
+registration
+  let n, x; let r be positive (real number);
+  cluster Ball(x,r) -> non empty;
+end;
+
+theorem :: TOPREAL9:20
+  Ball(x,r) is non empty implies r > 0;
+
+theorem :: TOPREAL9:21
+  Ball(x,r) is empty implies r <= 0;
+
+registration
+  let n, x; let r be negative (real number);
+  cluster cl_Ball(x,r) -> empty;
+end;
+
+registration
+  let n, x; let r be non negative (real number);
+  cluster cl_Ball(x,r) -> non empty;
+end;
+
+theorem :: TOPREAL9:22
+  cl_Ball(x,r) is non empty implies r >= 0;
+
+theorem :: TOPREAL9:23
+  cl_Ball(x,r) is empty implies r < 0;
+
+theorem :: TOPREAL9:24
+  a + b = 1 & abs(a) + abs(b) = 1 & b <> 0 &
+  x in cl_Ball(z,r) & y in Ball(z,r) implies
+  a * x + b * y in Ball(z,r);
+
+registration
+  let n, x, r;
+  cluster Ball(x,r) -> open Bounded;
+  cluster cl_Ball(x,r) -> closed Bounded;
+  cluster Sphere(x,r) -> closed Bounded;
+end;
+
+:: Convex subsets of TOP-REAL n
+
+registration
+  let n, x, r;
+  cluster Ball(x,r) -> convex;
+  cluster cl_Ball(x,r) -> convex;
+end;
+
+definition
+  let n be Nat; let f be map of TOP-REAL n, TOP-REAL n;
+  attr f is homogeneous means
+:: TOPREAL9:def 4
+  for r being real number, x being Point of TOP-REAL n holds f.(r*x) = r * f.x;
+  attr f is additive means
+:: TOPREAL9:def 5
+  for x, y being Point of TOP-REAL n holds f.(x+y) = f.x + f.y;
+end;
+
+registration
+  let n;
+  cluster TOP-REAL n --> 0.REAL n -> homogeneous additive;
+end;
+
+registration
+  let n;
+  cluster homogeneous additive continuous map of TOP-REAL n, TOP-REAL n;
+end;
+
+registration
+  let a, c be real number;
+  cluster AffineMap(a,0,c,0) -> homogeneous additive;
+end;
+
+theorem :: TOPREAL9:25
+  for f being homogeneous additive map of TOP-REAL n, TOP-REAL n,
+      X being convex Subset of TOP-REAL n holds
+  f.:X is convex;
+
+:: Halflines
+
+reserve
+  p, q for Point of TOP-REAL n;
+
+definition
+  let n be Nat; let p, q be Point of TOP-REAL n;
+  func halfline(p,q) -> Subset of TOP-REAL n equals
+:: TOPREAL9:def 6
+  { (1-l)*p + l*q where l is Real: 0 <= l };
+end;
+
+theorem :: TOPREAL9:26
+  for x being set holds x in halfline(p,q) iff
+  ex l being real number st x = (1-l)*p + l*q & 0 <= l;
+
+registration
+  let n, p, q;
+  cluster halfline(p,q) -> non empty;
+end;
+
+theorem :: TOPREAL9:27
+  p in halfline(p,q);
+
+theorem :: TOPREAL9:28
+  q in halfline(p,q);
+
+theorem :: TOPREAL9:29
+  halfline(p,p) = {p};
+
+theorem :: TOPREAL9:30
+  x in halfline(p,q) implies halfline(p,x) c= halfline(p,q);
+
+theorem :: TOPREAL9:31
+  x in halfline(p,q) & x <> p implies halfline(p,q) = halfline(p,x);
+
+theorem :: TOPREAL9:32
+  LSeg(p,q) c= halfline(p,q);
+
+registration
+  let n, p, q;
+  cluster halfline(p,q) -> convex;
+end;
+
+theorem :: TOPREAL9:33
+  y in Sphere(x,r) & z in Ball(x,r) implies LSeg(y,z) /\ Sphere(x,r) = {y};
+
+theorem :: TOPREAL9:34
+  y in Sphere(x,r) & z in Sphere(x,r) implies LSeg(y,z) \ {y,z} c= Ball(x,r);
+
+theorem :: TOPREAL9:35
+  y in Sphere(x,r) & z in Sphere(x,r) implies LSeg(y,z) /\ Sphere(x,r) = {y,z};
+
+theorem :: TOPREAL9:36
+  y in Sphere(x,r) & z in Sphere(x,r) implies
+  halfline(y,z) /\ Sphere(x,r) = {y,z};
+
+theorem :: TOPREAL9:37
+  y <> z & y in Ball(x,r) implies
+  ex e being Point of TOP-REAL n st {e} = halfline(y,z) /\ Sphere(x,r);
+
+theorem :: TOPREAL9:38
+  y <> z & y in Sphere(x,r) & z in cl_Ball(x,r) implies
+  ex e being Point of TOP-REAL n st e <> y &
+     {y,e} = halfline(y,z) /\ Sphere(x,r);
+
+registration
+  let n, x; let r be negative (real number);
+  cluster Sphere(x,r) -> empty;
+end;
+
+registration
+  let n be non empty Nat, x be Point of TOP-REAL n;
+  let r be non negative (real number);
+  cluster Sphere(x,r) -> non empty;
+end;
+
+theorem :: TOPREAL9:39
+  Sphere(x,r) is non empty implies r >= 0;
+
+theorem :: TOPREAL9:40
+  n is non empty & Sphere(x,r) is empty implies r < 0;
+
+begin :: Subsets of TOP-REAL 2
+
+reserve
+  s, t for Point of TOP-REAL 2;
+
+theorem :: TOPREAL9:41
+  (a*s + b*t)`1 = a * s`1 + b * t`1;
+
+theorem :: TOPREAL9:42
+  (a*s + b*t)`2 = a * s`2 + b * t`2;
+
+theorem :: TOPREAL9:43
+  t in circle(a,b,r) iff |. t - |[a,b]| .| = r;
+
+theorem :: TOPREAL9:44
+  t in closed_inside_of_circle(a,b,r) iff |. t - |[a,b]| .| <= r;
+
+theorem :: TOPREAL9:45
+  t in inside_of_circle(a,b,r) iff |. t - |[a,b]| .| < r;
+
+registration
+  let a, b be real number;
+  let r be positive (real number);
+  cluster inside_of_circle(a,b,r) -> non empty;
+end;
+
+registration
+  let a, b be real number;
+  let r be non negative (real number);
+  cluster closed_inside_of_circle(a,b,r) -> non empty;
+end;
+
+theorem :: TOPREAL9:46
+  circle(a,b,r) c= closed_inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:47
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  cl_Ball(x,r) = closed_inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:48
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  Ball(x,r) = inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:49
+  for x being Point of Euclid 2 st x = |[a,b]| holds
+  Sphere(x,r) = circle(a,b,r);
+
+theorem :: TOPREAL9:50
+  Ball(|[a,b]|,r) = inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:51
+  cl_Ball(|[a,b]|,r) = closed_inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:52
+  Sphere(|[a,b]|,r) = circle(a,b,r);
+
+theorem :: TOPREAL9:53
+  inside_of_circle(a,b,r) c= closed_inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:54
+  inside_of_circle(a,b,r) misses circle(a,b,r);
+
+theorem :: TOPREAL9:55
+  inside_of_circle(a,b,r) \/ circle(a,b,r) = closed_inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:56
+  s in Sphere(0.REAL 2,r) implies s`1^2 + s`2^2 = r^2;
+
+theorem :: TOPREAL9:57
+  s <> t &
+  s in closed_inside_of_circle(a,b,r) & t in closed_inside_of_circle(a,b,r)
+  implies r > 0;
+
+theorem :: TOPREAL9:58
+  s <> t & s in inside_of_circle(a,b,r) implies
+   ex e being Point of TOP-REAL 2 st {e} = halfline(s,t) /\ circle(a,b,r);
+
+theorem :: TOPREAL9:59
+  s in circle(a,b,r) & t in inside_of_circle(a,b,r) implies
+  LSeg(s,t) /\ circle(a,b,r) = {s};
+
+theorem :: TOPREAL9:60
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  LSeg(s,t) \ {s,t} c= inside_of_circle(a,b,r);
+
+theorem :: TOPREAL9:61
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  LSeg(s,t) /\ circle(a,b,r) = {s,t};
+
+theorem :: TOPREAL9:62
+  s in circle(a,b,r) & t in circle(a,b,r) implies
+  halfline(s,t) /\ circle(a,b,r) = {s,t};
+
+theorem :: TOPREAL9:63
+  s <> t & s in circle(a,b,r) & t in closed_inside_of_circle(a,b,r) implies
+   ex e being Point of TOP-REAL 2 st e <> s &
+     {s,e} = halfline(s,t) /\ circle(a,b,r);
+
+registration
+  let a, b, r be real number;
+  cluster inside_of_circle(a,b,r) -> convex;
+  cluster closed_inside_of_circle(a,b,r) -> convex;
+end;
+

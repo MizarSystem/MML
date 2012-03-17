@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.90 $
+;; $Revision: 1.91 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -391,8 +391,7 @@ MoMM should be installed for this."
 (defcustom mizar-main-keywords 
 (list "theorem" "scheme" "definition" "registration" 
       "notation" "schemes" "constructors" "definitions" 
-      "theorems" "vocabulary" "clusters" "signature"
-      "requirements" )
+      "theorems" "vocabulary" "clusters" "requirements" )
 "*Keywords starting main mizar text items. 
 Now also the environmental declarations."
 :type '(repeat string)
@@ -3952,9 +3951,11 @@ then the MoMM db."
 (interactive)
 (let ((pos (mizar-pos-at-point)))
   (if pos
-      (let ((line (cadr pos))
-	    (col  (car (last pos)))
-	    (f (concat  mizar-mml "/" (car pos) ".miz")))
+      (let* ((line (cadr pos))
+	     (col (car (last pos)))
+	     (f1 (concat (car pos) ".miz"))
+	     (f (if (file-readable-p f1) f1
+		  (concat  mizar-mml "/" f1))))
 	(save-excursion
 	  (find-file-other-window f)
 	  (set-buffer (get-file-buffer f))

@@ -1,0 +1,361 @@
+:: The {H}all {M}arriage {T}heorem
+::  by Ewa Romanowicz and Adam Grabowski
+:: 
+:: Received May 11, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, CARD_1, ARYTM_1,
+      FINSEQ_1, HALLMAR1, REALSET1, FUNCT_4, ZF_REFLE, NEWTON;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, PARTFUN1, REALSET1,
+      BINARITH, ORDERS_1, FINSET_1, CARD_1, FINSEQ_1, FUNCT_2, FUNCT_7;
+ constructors NAT_1, RELSET_1, WELLORD2, CARD_1, XREAL_0, MEMBERED, XBOOLE_0,
+      FINSEQ_1, REALSET1, REAL_1, BINARITH, FUNCT_7, AMI_1, FUNCT_2, ORDERS_1;
+ clusters FUNCT_1, RELAT_1, RELSET_1, CARD_1, SUBSET_1, NAT_1, XREAL_0,
+      MEMBERED, ZFMISC_1, XBOOLE_0, FINSET_1, REALSET1, CHAIN_1, FUNCT_7,
+      FINSEQ_1, GOBOARD1, AMI_1, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+theorem :: HALLMAR1:1
+  for X,Y being finite set holds
+    card (X \/ Y) + card (X /\ Y) = card X + card Y;
+
+scheme :: HALLMAR1:sch 1
+ Regr11 { n() -> Nat, P[set] }:
+  for k be Nat st 1 <= k & k <= n() holds P[k]
+  provided
+  P[n()] & n() >= 2 and
+  for k be Nat st 1 <= k & k < n() & P[k+1] holds P[k];
+
+scheme :: HALLMAR1:sch 2
+ Regr2 { P[Nat] } :
+  P[1]
+  provided
+  ex n be Nat st n > 1 & P[n] and
+  for k be Nat st k >= 1 & P[k+1] holds P[k];
+
+registration let F be non empty set;
+  cluster non empty non-empty FinSequence of bool F;
+end;
+
+theorem :: HALLMAR1:2
+  for F being non empty set,
+      f being non-empty FinSequence of bool F,
+      i being Nat st i in dom f holds
+    f.i <> {};
+
+registration let F be finite set,
+                 A be FinSequence of bool F;
+             let i be Nat;
+  cluster A.i -> finite;
+end;
+
+begin :: Union of Finite Sequences
+
+definition let F be set;
+           let A be FinSequence of bool F;
+           let J be set;
+  func union (A, J) -> set means
+:: HALLMAR1:def 1
+    for x being set holds
+      x in it iff ex j being set st j in J & j in dom A & x in A.j;
+end;
+
+theorem :: HALLMAR1:3
+  for F being set,
+      A being FinSequence of bool F,
+      J being set holds
+    union (A, J) c= F;
+
+theorem :: HALLMAR1:4
+  for F being finite set,
+      A being FinSequence of bool F,
+      J, K being set st
+      J c= K holds
+   union (A, J) c= union (A, K);
+
+registration let F be finite set;
+             let A be FinSequence of bool F;
+             let J be set;
+  cluster union (A, J) -> finite;
+end;
+
+theorem :: HALLMAR1:5
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A holds
+    union (A, {i}) = A.i;
+
+theorem :: HALLMAR1:6
+  for F being finite set,
+      A being FinSequence of bool F,
+      i,j being Nat st i in dom A & j in dom A holds
+    union (A, {i,j}) = A.i \/ A.j;
+
+theorem :: HALLMAR1:7
+  for J being set,
+      F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in J & i in dom A holds
+    A.i c= union (A, J);
+
+theorem :: HALLMAR1:8
+  for J being set,
+      F being finite set,
+      i being Nat,
+      A being FinSequence of bool F st
+    i in J & i in dom A holds
+      union (A, J) = union (A, J \ {i}) \/ A.i;
+
+theorem :: HALLMAR1:9
+  for J1, J2 being set,
+      F being finite set,
+      i being Nat,
+      A being FinSequence of bool F st i in dom A holds
+    union (A,{i} \/ J1 \/ J2) = A.i \/ union (A,J1 \/ J2);
+
+theorem :: HALLMAR1:10
+  for F being finite set,
+      A being FinSequence of bool F
+  for i being Nat
+  for x,y being set st x <> y & x in A.i & y in A.i holds
+     (A.i \ {x}) \/ (A.i \ {y}) = A.i;
+
+begin :: Cut Operation for Finite Sequences
+
+definition let F be finite set;
+           let A be FinSequence of bool F;
+           let i be Nat;
+           let x be set;
+  func Cut (A, i, x) -> FinSequence of bool F means
+:: HALLMAR1:def 2
+    dom it = dom A &
+    for k being Nat st k in dom it holds
+     (i = k implies it.k = A.k \ {x}) &
+     (i <> k implies it.k = A.k);
+end;
+
+theorem :: HALLMAR1:11
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    card (Cut (A,i,x).i) = card (A.i) - 1;
+
+theorem :: HALLMAR1:12
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set holds
+   union (Cut (A, i, x), J \ {i}) = union (A, J \ {i});
+
+theorem :: HALLMAR1:13
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set st not i in J holds
+    union (A, J) = union (Cut(A, i, x), J);
+
+theorem :: HALLMAR1:14
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x, J being set st
+    i in dom Cut (A, i, x) & J c= dom Cut (A, i, x) & i in J holds
+    union (Cut (A, i, x), J) = union (A, J \ {i}) \/ (A.i \ {x});
+
+begin :: System of Different Representatives and Hall Property
+
+definition let F be finite set;
+           let X be FinSequence of bool F;
+           let A be set;
+  pred A is_a_system_of_different_representatives_of X means
+:: HALLMAR1:def 3
+    ex f being FinSequence of F st
+      f = A &
+       dom X = dom f &
+        (for i being Nat st i in dom f holds f.i in X.i) &
+          f is one-to-one;
+end;
+
+definition let F be finite set;
+           let A be FinSequence of bool F;
+  attr A is Hall means
+:: HALLMAR1:def 4
+    for J being finite set st J c= dom A holds
+      card J <= card (union (A, J));
+end;
+
+theorem :: HALLMAR1:15
+  for F being finite set,
+      A being non empty FinSequence of bool F st A is Hall holds
+     A is non-empty;
+
+theorem :: HALLMAR1:16
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A & A is Hall holds
+    card (A.i) >= 1;
+
+theorem :: HALLMAR1:17
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F st
+    (for i being Nat st i in dom A holds card (A.i) = 1) &
+   A is Hall holds
+     (ex X being set st X is_a_system_of_different_representatives_of A);
+
+theorem :: HALLMAR1:18       :: SDR --> Hall
+  for F being finite set,
+      A being FinSequence of bool F holds
+   (ex X being set st X is_a_system_of_different_representatives_of A)
+    implies A is Hall;
+
+begin :: Reductions and Singlifications of Finite Sequences
+
+definition let F be set,
+               A be FinSequence of bool F,
+               i be Nat;
+  mode Reduction of A, i -> FinSequence of bool F means
+:: HALLMAR1:def 5
+    dom it = dom A &
+    (for j being Nat st j in dom A & j <> i holds A.j = it.j) &
+    it.i c= A.i;
+end;
+
+definition let F be set,
+               A be FinSequence of bool F;
+  mode Reduction of A -> FinSequence of bool F means
+:: HALLMAR1:def 6
+    dom it = dom A &
+    for i being Nat st i in dom A holds it.i c= A.i;
+end;
+
+definition let F be set,
+               A be FinSequence of bool F,
+               i be Nat;
+  assume
+  i in dom A & A.i <> {};
+  mode Singlification of A, i -> Reduction of A means
+:: HALLMAR1:def 7
+    Card (it.i) = 1;
+end;
+
+theorem :: HALLMAR1:19
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      C being Reduction of A, i holds
+    C is Reduction of A;
+
+theorem :: HALLMAR1:20
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    Cut (A,i,x) is Reduction of A,i;
+
+theorem :: HALLMAR1:21
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat,
+      x being set st i in dom A & x in A.i holds
+    Cut (A,i,x) is Reduction of A;
+
+theorem :: HALLMAR1:22
+  for F being finite set,
+      A being FinSequence of bool F,
+      B being Reduction of A
+  for C being Reduction of B holds
+    C is Reduction of A;
+
+theorem :: HALLMAR1:23
+  for F being non empty finite set,
+      A being non-empty FinSequence of bool F,
+      i being Nat,
+      B being Singlification of A, i st i in dom A holds
+    B.i <> {};
+
+theorem :: HALLMAR1:24
+  for F being non empty finite set,
+      A being non-empty FinSequence of bool F,
+      i, j being Nat,
+      B being Singlification of A, i,
+      C being Singlification of B, j st
+    i in dom A & j in dom A & C.i <> {} & B.j <> {} holds
+    C is Singlification of A, j & C is Singlification of A, i;
+
+theorem :: HALLMAR1:25
+  for F being set,
+      A being FinSequence of bool F,
+      i being Nat holds
+    A is Reduction of A,i;
+
+theorem :: HALLMAR1:26
+  for F being set,
+      A being FinSequence of bool F holds
+    A is Reduction of A;
+
+definition let F be non empty set,
+               A be FinSequence of bool F;
+  assume  A is non-empty;
+  mode Singlification of A -> Reduction of A means
+:: HALLMAR1:def 8
+    for i being Nat st i in dom A holds Card (it.i) = 1;
+end;
+
+theorem :: HALLMAR1:27
+  for F being non empty finite set,
+      A being non empty non-empty FinSequence of bool F,
+      f being Function holds
+    f is Singlification of A iff
+    (dom f = dom A &
+    for i being Nat st i in dom A holds f is Singlification of A, i);
+
+registration let F be non empty finite set,
+                 A be non empty FinSequence of bool F,
+                 k be Nat;
+  cluster -> non empty Singlification of A, k;
+end;
+
+registration let F be non empty finite set,
+                 A be non empty FinSequence of bool F;
+  cluster -> non empty Singlification of A;
+end;
+
+begin :: Rado Proof of the Hall Marriage Theorem
+
+theorem :: HALLMAR1:28
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F,
+      X being set,
+      B being Reduction of A st
+    X is_a_system_of_different_representatives_of B holds
+      X is_a_system_of_different_representatives_of A;
+
+theorem :: HALLMAR1:29   :: Rado Lemma
+  for F being finite set,
+      A being FinSequence of bool F st A is Hall
+  for i being Nat st card (A.i) >= 2
+    ex x being set st x in A.i & Cut (A, i, x) is Hall;
+
+theorem :: HALLMAR1:30
+  for F being finite set,
+      A being FinSequence of bool F,
+      i being Nat st i in dom A & A is Hall holds
+    ex G being Singlification of A, i st G is Hall;
+
+theorem :: HALLMAR1:31
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F st A is Hall holds
+    ex G being Singlification of A st G is Hall;
+
+theorem :: HALLMAR1:32 :: Hall Marriage Theorem
+  for F being non empty finite set,
+      A being non empty FinSequence of bool F holds
+    (ex X being set st X is_a_system_of_different_representatives_of A) iff
+      A is Hall;

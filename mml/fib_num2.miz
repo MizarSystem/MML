@@ -1,0 +1,2243 @@
+:: Some Properties of {F}ibonacci Numbers
+::  by Magdalena Jastrz\c{e}bska and Adam Grabowski
+:: 
+:: Received May 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, SQUARE_1, FUNCT_1, PRE_FF, FILTER_0,
+      RELAT_1, ORDINAL2, FIB_NUM, PREPOWER, POWER, SEQ_2, GROUP_1, INT_1,
+      FINSEQ_1, FIB_NUM2, CARD_1, RLVECT_1, REALSET1, MATRIX_2, FUNCOP_1,
+      RELOC, FUNCT_4, TURING_1, FINSET_1, MEMBERED, BOOLE, AMI_1, PYTHTRIP;
+ notation TARSKI, ORDINAL1, ORDINAL2, SUBSET_1, XBOOLE_0, NUMBERS, XCMPLX_0,
+      XREAL_0, CARD_1, SQUARE_1, INT_1, NAT_1, INT_2, FINSET_1, MEMBERED,
+      RELAT_1, FUNCT_1, FUNCT_2, PRE_FF, RVSUM_1, REALSET1, CQC_SIM1, NEWTON,
+      PREPOWER, POWER, PRE_CIRC, AMI_1, ABIAN, DOMAIN_1, FINSEQ_1, BINARITH,
+      FUNCT_4, FIB_NUM, WSIERP_1, PYTHTRIP, PEPIN, SEQ_4, PNPROC_1;
+ constructors REAL_1, PREPOWER, INT_2, PRE_FF, POWER, FIB_NUM, BINARITH,
+      WSIERP_1, PRE_CIRC, DOMAIN_1, PNPROC_1, CQC_SIM1, REALSET1, ABIAN, AMI_1,
+      PYTHTRIP, PEPIN;
+ clusters XREAL_0, SQUARE_1, NEWTON, RELSET_1, MEMBERED, INT_1, ORDINAL2,
+      FINSEQ_1, FINSET_1, FUNCT_1, PNPROC_1, AMI_1, PRE_CIRC, NAT_2, ABIAN,
+      PREPOWER;
+ requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
+ definitions TARSKI, XBOOLE_0, SEQ_4;
+ theorems NAT_1, PRE_FF, AXIOMS, INT_2, NAT_LAT, REAL_1, SQUARE_1, WSIERP_1,
+      PYTHTRIP, REAL_2, POWER, NEWTON, PREPOWER, XCMPLX_1, JORDAN3, GOBOARD9,
+      AMI_5, JORDAN4, NAT_2, FINSEQ_1, XBOOLE_1, RELAT_1, RELSET_1, MEMBERED,
+      AMI_1, PRE_CIRC, ORDINAL2, CARD_2, PNPROC_1, FINSEQ_3, RVSUM_1, XBOOLE_0,
+      AMI_3, FIB_NUM, TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, BINARITH, SCMFSA_7,
+      PEPIN, SPRECT_3, GRFUNC_1, FUNCT_4, FINSEQ_2, ENUMSET1, ABIAN, CQC_SIM1;
+ schemes NAT_1, FIB_NUM, BINARITH, FUNCT_2, COMPLSP1, DOMAIN_1;
+
+begin :: Preliminaries
+
+ reserve n, k, r, m, i, j for Nat;
+
+theorem
+  for n being non empty Nat holds
+    n -' 1 + 2 = n + 1
+  proof
+    let n be non empty Nat;
+    n >= 1 by NAT_2:21;
+    then n -' 1 + 2 = n + 2 -' 1 by JORDAN4:3
+      .= n + 2 - 1 by JORDAN4:2;
+    hence thesis;
+  end;
+
+theorem Th2:
+  for n being odd Integer,
+      m being non empty real number holds
+    (-m) to_power n = -(m to_power n)
+  proof
+    let n be odd Integer,
+        m be non empty real number;
+     m <> 0 & ex l being Integer st n = 2*l + 1 by ABIAN:1;
+    hence thesis by POWER:55;
+  end;
+
+theorem Th3:
+  for n being odd Integer holds
+    (-1) to_power n = -1
+  proof
+    let n be odd Integer;
+    (-1) to_power n = -(1 to_power n) by Th2
+                   .= -1 by POWER:31;
+    hence thesis;
+  end;
+
+theorem Th4:
+  for n being even Integer,
+      m being non empty real number holds
+    (-m) to_power n = m to_power n
+  proof
+    let n be even Integer,
+        m be non empty real number;
+    m <> 0 & ex l being Integer st n = 2*l by ABIAN:def 1;
+    hence thesis by POWER:54;
+  end;
+
+theorem Th5:
+  for n being even Integer holds
+    (-1) to_power n = 1
+  proof
+    let n be even Integer;
+    (-1) to_power n = 1 to_power n by Th4;
+    hence thesis by POWER:31;
+  end;
+
+theorem Th6:
+  for m being non empty real number, n being Integer holds
+    ((-1) * m) to_power n = ((-1) to_power n) * (m to_power n)
+  proof
+    let m be non empty real number, n be Integer;
+    per cases;
+    suppose
+A1:   n is odd;
+      then (-m) to_power n = -(m to_power n) by Th2
+                     .= (-1) * (m to_power n)
+                     .= ((-1) to_power n) * (m to_power n) by A1,Th3;
+      hence thesis;
+    end;
+    suppose
+A2:   n is even;
+      then (-m) to_power n = 1 * (m to_power n) by Th4
+                     .= ((-1) to_power n) * (m to_power n) by A2,Th5;
+      hence thesis;
+    end;
+  end;
+
+theorem Th7:
+  for a being non empty real number holds
+    a to_power (k+m) = (a to_power k) * (a to_power m)
+  proof
+    let a be non empty real number;
+    per cases;
+    suppose a > 0;
+      hence thesis by POWER:32;
+    end;
+    suppose
+A1:   a < 0;
+      then a to_power (k+m) = a #Z (k+m) by POWER:def 2
+      .= (a #Z k) * (a #Z m) by PREPOWER:54
+      .= (a to_power k) * (a #Z m) by A1,POWER:def 2
+      .= (a to_power k) * (a to_power m) by A1,POWER:def 2;
+      hence thesis;
+    end;
+  end;
+
+theorem Th8:
+  for k being non empty real number,
+      m being odd Integer holds
+    k to_power m to_power n = k to_power (m * n)
+  proof
+    let k be non empty real number,
+        m be odd Integer;
+    per cases;
+    suppose k > 0;
+      hence thesis by POWER:38;
+    end;
+    suppose
+A1:   k < 0;
+      then -k > 0 by REAL_1:26,50; then
+A2:   (-k) to_power m > 0 by POWER:39;
+      (-k) to_power m = -(k to_power m) by Th2; then
+A3:   k to_power m < 0 by A2,REAL_1:26,50;
+      k to_power (m * n) = k #Z (m * n) by A1,POWER:def 2
+       .= k #Z m #Z n by PREPOWER:55
+       .= k to_power m #Z n by A1,POWER:def 2
+       .= k to_power m to_power n by A3,POWER:def 2;
+      hence thesis;
+    end;
+  end;
+
+theorem Th9:
+  ((-1) to_power (-n)) ^2 = 1
+  proof
+    ((-1) to_power (-n)) ^2 = ((-1) #Z (-n)) ^2 by POWER:def 2
+     .= (1 / (-1) #Z n) ^2 by PREPOWER:51
+     .= (1 / ((-1) #Z n)) to_power 2 by POWER:53
+     .= (1 / ((-1) #Z n)) |^2 by POWER:47
+     .= 1 / (((-1) #Z n) |^ 2) by PREPOWER:14
+     .= 1 / (((-1) #Z n) #Z 2) by PREPOWER:46
+     .= 1 / ((-1) #Z (n*2)) by PREPOWER:55
+     .= 1 / ((-1) |^ (2*n)) by PREPOWER:46
+     .= 1 / (1 |^ (2*n)) by WSIERP_1:3
+     .= 1 / ((1 |^2) |^ n) by NEWTON:14
+     .= 1 / (1 |^ n) by NEWTON:15
+     .= 1 / 1 by NEWTON:15;
+    hence thesis;
+  end;
+
+theorem Th10:
+  for a being non empty real number holds
+    (a to_power (-k)) * (a to_power (-m)) = a to_power (-k-m)
+  proof
+    set K = -k;
+    set M = -m;
+    let a be non empty real number;
+    per cases;
+    suppose
+A1:   a < 0; then
+      (a to_power (-k)) *(a to_power (-m)) = (a #Z (-k)) * (a to_power (-m))
+        by POWER:def 2
+      .= (a #Z K) * (a #Z M) by A1,POWER:def 2
+      .= a #Z (K+M) by PREPOWER:54
+      .= a to_power (-k-m) by A1,POWER:def 2;
+      hence thesis;
+    end;
+    suppose a > 0; then
+      (a to_power (-k)) *(a to_power (-m)) = a to_power (-k+(-m)) by POWER:32;
+      hence thesis;
+    end;
+  end;
+
+theorem Th11:
+  (-1) to_power (-2 * n) = 1
+  proof
+    (-1) to_power (-2 * n) = (-1) #Z ((-1) * (2 * n)) by POWER:def 2
+     .= ((-1) #Z (-1)) #Z (2 * n) by PREPOWER:55
+     .= (1 / (-1) #Z 1) #Z (2 * n) by PREPOWER:51
+     .= (1 / (-1)) #Z (2 * n) by PREPOWER:45
+     .= (-1) |^ (2 * n) by PREPOWER:46
+     .= 1 |^ (2 * n) by WSIERP_1:3
+     .= (1 |^2) |^ n by NEWTON:14
+     .= 1 |^ n by NEWTON:15
+     .= 1 by NEWTON:15;
+    hence thesis;
+  end;
+
+theorem Th12:
+  for a being non empty real number holds
+    (a to_power k) * (a to_power (-k)) = 1
+  proof
+    let a be non empty real number;
+    per cases;
+    suppose a > 0; then
+      (a to_power k) * (a to_power (-k)) = a to_power (k + (-k)) by POWER:32
+        .= 1 by POWER:29;
+      hence thesis;
+    end;
+    suppose
+A1:   a < 0; then
+      (a to_power k) * (a to_power (-k)) = (a #Z k) * (a to_power (-k))
+        by POWER:def 2
+        .= (a #Z k) * (a #Z (-k)) by A1,POWER:def 2
+        .= a #Z (k + (-k)) by PREPOWER:54
+        .= 1 by PREPOWER:44;
+      hence thesis;
+    end;
+  end;
+
+registration let n be odd Integer;
+  cluster -n -> odd;
+  coherence
+  proof
+    -1 = 2 * (-1) + 1;
+    then reconsider e = -1 as odd Integer;
+    e * n is odd;
+    hence thesis;
+  end;
+end;
+
+registration let n be even Integer;
+  cluster -n -> even;
+  coherence
+  proof
+    reconsider e = -1 as Integer;
+    e * n is even;
+    hence thesis;
+  end;
+end;
+
+theorem Th13:
+  (-1) to_power (-n) = (-1) to_power n
+  proof
+    per cases;
+    suppose n is odd;
+      then reconsider n as odd Integer;
+      (-1) to_power (-n) = -1 by Th3
+        .= (-1) to_power n by Th3;
+      hence thesis;
+    end;
+    suppose n is even;
+      then reconsider n as even Integer;
+      (-1) to_power (-n) = 1 by Th5
+        .= (-1) to_power n by Th5;
+      hence thesis;
+    end;
+  end;
+
+theorem Th14:
+  for k, m, m1, n1 being Nat st k divides m & k divides n holds
+    k divides m * m1 + n * n1
+  proof
+    let k, m, m1, n1 be Nat;
+    assume k divides m & k divides n;
+    then k divides m * m1 & k divides n * n1 by NAT_1:56;
+    hence thesis by NAT_1:55;
+  end;
+
+registration
+  cluster finite non empty natural-membered with_non-empty_elements set;
+  existence
+  proof
+    take X = {1};
+    thus X is finite non empty;
+    thus X is natural-membered;
+    thus X is with_non-empty_elements;
+  end;
+end;
+
+registration let f be Function of NAT, NAT;
+             let A be finite natural-membered with_non-empty_elements set;
+  cluster f | A -> FinSubsequence-like;
+  coherence
+  proof
+    per cases;
+    suppose A is non empty;
+    then reconsider A' = A as non empty finite natural-membered
+      with_non-empty_elements set;
+    reconsider k = max A' as Nat by ORDINAL2:def 21;
+A1: dom (f | A) c= A by RELAT_1:87;
+    dom (f | A) c= Seg k
+    proof
+      let x be set;
+      assume A2: x in dom (f | A);
+      then reconsider x' = x as natural number by A1,MEMBERED:def 5;
+      reconsider x' as Nat by ORDINAL2:def 21;
+      x' <> 0 by A1,A2,AMI_1:def 1; then
+A3:   1 <= x' by NAT_1:39;
+      x' <= k by A1,A2,PRE_CIRC:def 1;
+      hence thesis by A3,FINSEQ_1:3;
+    end;
+    hence thesis by FINSEQ_1:def 12;
+    end;
+    suppose A is empty;
+    hence thesis by RELAT_1:110;
+  end;
+  end;
+end;
+
+theorem Th15:
+  for p being FinSubsequence holds
+    rng Seq p c= rng p
+  proof
+    let p be FinSubsequence;
+    p * Sgm (dom p) = Seq p by FINSEQ_1:def 14;
+    hence thesis by RELAT_1:45;
+  end;
+
+definition let f be Function of NAT, NAT;
+           let A be finite with_non-empty_elements natural-membered set;
+  func Prefix (f, A) -> FinSequence of NAT equals
+    :Def1: Seq (f | A);
+  coherence
+  proof
+A1: rng Seq (f | A) c= rng (f | A) by Th15;
+A2: rng f c= NAT by RELSET_1:12;
+    rng (f | A) c= rng f by RELAT_1:99;
+    then rng (f | A) c= NAT by A2,XBOOLE_1:1;
+    then rng Seq (f | A) c= NAT by A1,XBOOLE_1:1;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+theorem Th16:
+  for k being Nat st k <> 0 holds
+    k + m <= n implies m < n
+  proof
+    let k be Nat;
+    assume
+A1: k <> 0;
+    assume
+A2: k + m <= n;
+    per cases by A2,REAL_1:def 5;
+    suppose k + m < n;
+      hence thesis by NAT_1:37;
+    end;
+    suppose
+A3:   k + m = n;
+      assume not m < n;
+      then m + k >= n + k by REAL_1:55;
+      then n - n >= n + k - n by A3,REAL_1:49;
+      hence contradiction by A1,NAT_1:19;
+    end;
+  end;
+
+registration
+  cluster NAT -> bounded_below;
+  coherence
+  proof
+    take m = 0;
+    defpred P[Nat] means for n holds m <= n;
+    P[n] by NAT_1:18;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster {1,2,3} -> natural-membered with_non-empty_elements;
+  coherence
+  proof
+     {1,2,3} is with_non-empty_elements
+     proof
+       not 0 in {1,2,3} by ENUMSET1:def 1;
+       hence thesis by AMI_1:def 1;
+     end;
+     hence thesis;
+  end;
+end;
+
+registration
+  cluster {1,2,3,4} -> natural-membered with_non-empty_elements;
+  coherence
+  proof
+    {1,2,3,4} is with_non-empty_elements
+    proof
+      not 0 in {1,2,3,4} by ENUMSET1:def 2;
+      hence thesis by AMI_1:def 1;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th17:
+  for x, y being set st 0 < i & i < j holds {[i,x], [j,y]} is FinSubsequence
+  proof
+    let x, y be set;
+    assume
+A1: 0 < i & i < j;
+    then reconsider X = {[i,x],[j,y]} as Function by GRFUNC_1:19;
+A2: 0 + 1 <= i by A1,NAT_1:38;
+    X is FinSubsequence-like
+    proof
+A3:   dom X = {i,j} by RELAT_1:24;
+      {i,j} c= Seg j
+      proof
+         now let x be set;
+        assume x in {i,j};
+        then x = i or x = j by TARSKI:def 2;
+        hence x in Seg j by A1,A2,FINSEQ_1:3,5;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+      hence thesis by A3,FINSEQ_1:def 12;
+    end;
+    hence thesis;
+  end;
+
+theorem Th18:
+  for x, y being set,
+      q being FinSubsequence st i < j & q = {[i,x], [j,y]} holds
+    Seq q = <*x,y*>
+  proof
+    let x, y be set,
+        q be FinSubsequence;
+    assume
+A1: i < j & q = {[i,x],[j,y]};
+    then [i,x] in q & [j,y] in q by TARSKI:def 2;then
+A2: i in dom q & j in dom q by RELAT_1:20;
+    consider k be Nat such that
+A3: dom q c= Seg k by FINSEQ_1:def 12;
+    i >= 0+1 by A2,A3,FINSEQ_1:3; then
+A4: i > 0 by NAT_1:38;
+A5: q = (i,j) --> (x,y) by A1,FUNCT_4:71;
+A6: Seq q = q* Sgm(dom q) by FINSEQ_1:def 14;
+    dom q = {i,j} by A1,RELAT_1:24;
+    then Seq q = q*<*i,j*> by A1,A4,A6,FINSEQ_3:51
+              .= <*q.i,q.j*> by A2,FINSEQ_2:145
+              .= <*x,q.j*> by A1,A5,FUNCT_4:66
+              .= <*x,y*> by A1,A5,FUNCT_4:66;
+    hence thesis;
+  end;
+
+registration let n be Nat;
+  cluster Seg n -> with_non-empty_elements;
+  coherence
+  proof
+    not 0 in Seg n by FINSEQ_1:3;
+    hence thesis by AMI_1:def 1;
+  end;
+end;
+
+registration let A be with_non-empty_elements set;
+  cluster -> with_non-empty_elements Subset of A;
+  coherence
+  proof
+    let L be Subset of A;
+    not 0 in L by AMI_1:def 1;
+    hence thesis by AMI_1:def 1;
+  end;
+end;
+
+registration let A be with_non-empty_elements set;
+             let B be set;
+  cluster A /\ B -> with_non-empty_elements;
+  coherence
+  proof
+    reconsider AB = A /\ B as Subset of A by XBOOLE_1:17;
+    AB is with_non-empty_elements;
+    hence thesis;
+  end;
+  cluster B /\ A -> with_non-empty_elements;
+  coherence
+  proof
+    reconsider AB = A /\ B as Subset of A by XBOOLE_1:17;
+    AB is with_non-empty_elements;
+    hence thesis;
+  end;
+end;
+
+theorem Th19:
+  for k being Nat, a being set st k >= 1 holds
+    {[k, a]} is FinSubsequence
+  proof
+    let k be Nat,
+        a be set;
+    assume
+A1: k >= 1;
+    reconsider H = {[k,a]} as Function by GRFUNC_1:15;
+A2: dom H = {k} by RELAT_1:23;
+    dom H c= Seg k
+    proof
+      let x be set;
+      assume x in dom H;
+      then x = k by A2,TARSKI:def 1;
+      hence thesis by A1,FINSEQ_1:3;
+    end;
+    hence thesis by FINSEQ_1:def 12;
+  end;
+
+theorem Th20:
+  for i, k being Nat,
+      y being set,
+      f being FinSubsequence st f = { [1,y] } holds
+    i Shift f = { [1+i,y] }
+  proof
+    let i, k be Nat,
+        y be set,
+        f be FinSubsequence;
+    assume
+A1: f = { [1,y] };
+    then Card f = 1 by CARD_2:60;
+    then Card (i Shift f) = 1 by PNPROC_1:57;
+    then consider x being set such that
+A2: i Shift f = {x} by CARD_2:60;
+    set g = i Shift f;
+A3: dom f = {1} by A1,RELAT_1:23;
+    dom g = {1+i}
+    proof
+      hereby let x be set;
+        assume x in dom g;
+        then x in {i+o where o is Element of NAT : o in dom f }
+          by PNPROC_1:def 15;
+        then consider w being Nat such that
+A4:     i + w = x & w in dom f;
+        w = 1 by A3,A4,TARSKI:def 1;
+        hence x in {1+i} by A4,TARSKI:def 1;
+      end;
+      let x be set;
+      assume x in {1+i}; then
+A5:   x = 1 + i by TARSKI:def 1;
+      1 in dom f by A3,TARSKI:def 1;
+      then x in {i + o where o is Element of NAT : o in dom f } by A5;
+      hence thesis by PNPROC_1:def 15;
+    end; then
+A6: 1 + i in dom g by TARSKI:def 1;
+    1 in dom f by A3,TARSKI:def 1;
+    then g.(1+i) = f.1 by PNPROC_1:def 15 .= y by A1,GRFUNC_1:16;
+    then [1+i,y] in g by A6,FUNCT_1:def 4;
+    hence thesis by A2,TARSKI:def 1;
+  end;
+
+theorem Th21:
+  for q being FinSubsequence,
+      k, n being Nat st dom q c= Seg k & n > k
+   ex p being FinSequence st q c= p & dom p = Seg n
+  proof
+    let q be FinSubsequence,
+        k, n be Nat;
+    assume
+A1: dom q c= Seg k & n > k;
+    reconsider IK = id Seg n as Function;
+    set IS = IK +* q;
+    Seg k c= Seg n by A1,FINSEQ_1:7;then
+A2: dom q c= Seg n by A1,XBOOLE_1:1;
+A3: dom IS = dom IK \/ dom q by FUNCT_4:def 1
+          .= Seg n \/ dom q by RELAT_1:71
+          .= Seg n by A2,XBOOLE_1:12;
+    then reconsider IS as FinSequence by FINSEQ_1:def 2;
+    q c= IS by FUNCT_4:26;
+    hence thesis by A3;
+  end;
+
+theorem Th22:
+  for q being FinSubsequence holds
+    ex p being FinSequence st q c= p
+  proof
+    let q be FinSubsequence;
+    consider k being Nat such that
+A1: dom q c= Seg k by FINSEQ_1:def 12;
+    reconsider IK = id Seg k as Function;
+    set IS = IK +* q;
+    dom IS = dom IK \/ dom q by FUNCT_4:def 1
+          .= Seg k \/ dom q by RELAT_1:71
+          .= Seg k by A1,XBOOLE_1:12;
+    then reconsider IS as FinSequence by FINSEQ_1:def 2;
+    q c= IS by FUNCT_4:26;
+    hence thesis;
+  end;
+
+begin :: Fibonacci Numbers
+
+scheme Fib_Ind_1 {P[Nat] } :
+  for k being non empty Nat holds P[k] provided
+A1:  P[1] and
+A2:  P[2] and
+A3:  for k being non empty Nat st P[k] & P[k+1] holds P[k+2]
+    proof
+      defpred Q[Nat] means P[$1] & P[$1 + 1];
+A4:   Q[1] by A1,A2;
+A5:   for k being non empty Nat st Q[k] holds Q[k+1]
+      proof
+        let k be non empty Nat;
+        assume
+A6:     Q[k];
+        k + 2 = (k + 1) + 1;
+        hence thesis by A3,A6;
+     end;
+A7:  for k being non empty Nat holds Q[k] from BINARITH:sch 1(A4,A5);
+     let k be non empty Nat;
+     thus thesis by A7;
+   end;
+
+scheme Fib_Ind_2 {P[Nat] } :
+  for k be non trivial Nat holds P[k] provided
+A1:  P[2] and
+A2:  P[3] and
+A3:  for k be non trivial Nat st P[k] & P[k+1] holds P[k+2]
+    proof
+      defpred Q[Nat] means P[$1+1] & P[$1+2];
+A4:   Q[1] by A1,A2;
+A5:   for k being non empty Nat st Q[k] holds Q[k+1]
+      proof
+        let k be non empty Nat;
+A6:     k+1 <> 0 by NAT_1:21;
+        k+1 <> 0 + 1 by XCMPLX_1:2; then
+A7:     k+1 is non trivial Nat by A6,NAT_2:def 1;
+        assume Q[k];
+        then P[k+1] & P[k+1+1];
+        hence thesis by A3,A7;
+      end;
+A8:   for k being non empty Nat holds Q[k] from BINARITH:sch 1(A4,A5);
+      let k be non trivial Nat;
+      k <> 0 & k <> 1 by NAT_2:def 1; then
+A9:   k > 1 by NAT_2:21;
+      then k - 1 > 1 - 1 by REAL_1:54; then
+A10:  k - 1 > 0;
+      k -' 1 + 1 = k by A9,AMI_5:4;
+      hence thesis by A8,A10;
+    end;
+
+theorem Th23:
+  Fib (2) = 1
+  proof
+    Fib (2) = Fib (0+1+1)
+           .= 1 by PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th24:
+  Fib (3) = 2
+  proof
+    Fib (3) = Fib (1+1+1)
+           .= 2 by Th23,PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th25:
+  Fib (4) = 3
+  proof
+    Fib (4) = Fib (2 + 1 + 1)
+           .= 3 by Th23,Th24,PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th26:
+  Fib (n + 2) = Fib (n) + Fib (n + 1)
+  proof
+    defpred P[Nat] means Fib($1 + 2) = Fib($1) + Fib($1 + 1);
+A1: P[0]
+    proof
+      Fib (0+2) = Fib (0+1+1)
+               .= Fib (0) + Fib (1) by PRE_FF:1;
+      hence thesis;
+    end;
+A2: P[1] by PRE_FF:1;
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
+    proof
+      let k be Nat;
+      assume P[k];
+      assume P[k+1];
+      Fib (k+2+2) = Fib ((k+2+1)+1)
+                 .= Fib (k+2) + Fib (k+2+1) by PRE_FF:1;
+      hence thesis;
+    end;
+    for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+    hence thesis;
+  end;
+
+theorem Th27:
+  Fib (n + 3) = Fib (n + 2) + Fib (n + 1)
+  proof
+    Fib (n+3) = Fib ((n+1)+2)
+             .= Fib (n+1+1) + Fib (n+1) by Th26
+             .= Fib (n+2) + Fib (n+1);
+    hence thesis;
+  end;
+
+theorem Th28:
+  Fib (n + 4) = Fib (n + 2) + Fib (n + 3)
+  proof
+    Fib (n + 4) = Fib (n + 2 + 1 + 1)
+      .= Fib (n + 2) + Fib (n + 2 + 1) by PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th29:
+  Fib (n + 5) = Fib (n + 3) + Fib (n + 4)
+  proof
+    Fib (n + 5) = Fib (n + 3 + 1 + 1)
+      .= Fib (n + 3) + Fib (n + 3 + 1) by PRE_FF:1;
+    hence thesis;
+  end;
+
+Lm1:
+  Fib (2 * (k + 2) + 1) = Fib (2 * k + 3) + Fib (2 * k + 4)
+  proof
+    Fib (2 * (k + 2) + 1) = Fib (2 * k + 2 + 1 + 1 + 1)
+      .= Fib (2 * k + 2 + 1) + Fib (2 * k + 2 + 1 + 1) by PRE_FF:1
+      .= Fib (2 * k + 3) + Fib (2 * k + 4);
+    hence thesis;
+  end;
+
+theorem Th30:
+  Fib (n + 2) = Fib (n + 3) - Fib (n + 1)
+  proof
+    Fib (n + 3) = Fib (n + 1 + 1 + 1)
+      .= Fib (n + 1) + Fib (n + 1 + 1) by PRE_FF:1
+      .= Fib (n + 1) + Fib (n + 2);
+    hence thesis;
+  end;
+
+theorem Th31:
+  Fib (n + 1) = Fib (n + 2) - Fib (n)
+  proof
+    Fib (n+2) - Fib (n) = Fib (n+1+1) - Fib (n)
+      .= Fib (n) + Fib (n+1) - Fib (n) by PRE_FF:1
+      .= Fib (n+1);
+    hence thesis;
+  end;
+
+theorem Th32:
+  Fib (n) = Fib (n+2) - Fib (n+1)
+  proof
+    Fib (n+2) - Fib (n+1) = Fib (n) + Fib (n+1) - Fib (n+1) by Th26
+      .= Fib (n);
+    hence thesis;
+  end;
+
+begin :: Cassini's and Catalan's Identities
+
+theorem Th33:
+  Fib (n) * Fib (n+2) - (Fib (n+1)) ^2 = (-1) |^ (n+1)
+  proof
+    defpred P[Nat] means
+      Fib ($1) * Fib ($1+2) - (Fib ($1+1)) ^2 = (-1) |^ ($1+1);
+A1: P[0] by NEWTON:10,PRE_FF:1,SQUARE_1:59;
+A2: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+      assume
+A3:   P[k];
+A4:   Fib (k) = Fib (k+2) - Fib (k+1)
+      proof
+        Fib (k+2) - Fib (k+1) = Fib (k+1) + Fib (k) - Fib (k+1) by Th26
+                             .= Fib (k);
+        hence thesis;
+      end;
+A5:   Fib (k+2) = Fib (k+3) - Fib (k+1)
+      proof
+        Fib (k+3) - Fib (k+1) = Fib (k+2) + Fib (k+1) - Fib (k+1) by Th27
+                             .= Fib (k+2);
+        hence thesis;
+      end;
+      set FK1 = 2 * Fib (k+3) * Fib(k+1);
+      set FK2 = Fib (k+2) * Fib (k+1);
+      set FK3 = (Fib (k+1)) ^2;
+      set FK4 = (Fib (k+3)) ^2;
+      set FK5 = Fib (k+1) * Fib (k+3);
+      set FK6 = 2 * Fib (k+1);
+      set FK7 = 2 * Fib (k+1) - Fib (k+3);
+      (-1) |^ (k+1+1) = (-1) * (Fib (k) * Fib (k+2) - (Fib (k+1)) ^2)
+        by A3,NEWTON:11
+      .= FK2 - Fib (k+2) * Fib (k+2) + FK3 by A4
+      .= FK2 - (Fib (k+3) - Fib (k+1)) ^2 + FK3 by A5,SQUARE_1:def 3
+      .= FK2 - ( FK4 - FK1 + FK3 ) + FK3 by SQUARE_1:64
+      .= FK2 - FK4 + FK1
+      .= FK2 - Fib (k+3) * Fib (k+3) + Fib (k+3) * 2 * Fib (k+1)
+      by SQUARE_1:def 3
+      .= Fib (k+3) * (FK7) + ( FK5 - Fib (k+1) * Fib (k+1)) by A5
+      .= Fib (k+3) * (FK7) + ( FK5 - FK3) by SQUARE_1:def 3
+      .= Fib (k+3) * ( FK6 - ( Fib (k+2) + Fib (k+1))) + ( FK5 - FK3 )
+      by Th27
+      .= Fib (k+3) * ( Fib (k+1) + Fib (k+1) - Fib (k+1) - Fib (k+2)) + FK5
+      - FK3
+      .= ( Fib (k+1) + Fib (k+2)) * (Fib (k+1) - Fib (k+2)) + FK5 - FK3
+      by Th27
+      .= FK3 - (Fib (k+2)) ^2 + FK5 - FK3 by SQUARE_1:67
+      .= FK5 - (Fib (k+2)) ^2
+      .= Fib (k+1) * Fib ((k+1)+2) - ( Fib ((k+1)+1)) ^2;
+      hence thesis;
+    end;
+    for n being Nat holds P[n] from NAT_1:sch 1(A1, A2);
+    hence thesis;
+  end;
+
+theorem
+  for n being non empty Nat holds
+    Fib (n-'1) * Fib (n+1) - (Fib (n)) ^2 = (-1) |^n
+  proof
+    let n be non empty Nat;
+A1: n >= 1 by NAT_2:21;
+    set a = n-'1;
+    n = a + 1 by A1,AMI_5:4;
+    then Fib (n-'1) * Fib (n+1) - (Fib (n)) ^2 =
+      Fib (a) * Fib (a+2) - (Fib (a+1)) ^2
+         .= (-1) |^(n-'1+1) by Th33
+         .= (-1) |^(n) by A1,AMI_5:4;
+    hence thesis;
+  end;
+
+theorem Th35:
+  tau > 0
+  proof
+    1 > 0 & sqrt 5 > 0 by SQUARE_1:93;
+    then 1 + (sqrt 5) > 0 + 0 by REAL_1:67;
+    hence thesis by FIB_NUM:def 1,REAL_2:127;
+  end;
+
+theorem Th36:
+  tau_bar = (- tau) to_power (-1)
+  proof
+    sqrt 5 <> 1 by SQUARE_1:85,95; then
+A1: 1 - sqrt 5 <> 0 by XCMPLX_1:15;
+    1 + sqrt 5 > 0 by Th35,FIB_NUM:def 1,REAL_2:136;
+    then -(1 + sqrt 5) < 0 by REAL_1:26,50; then
+A2: (-1 - sqrt 5) / 2 < 0 by REAL_2:128;
+    then (- tau) to_power (-1) = ((- 1 - sqrt 5) / 2) #Z (-1)
+      by FIB_NUM:def 1,POWER:def 2
+      .= 1 / ((- 1 - sqrt 5) / 2) #Z 1  by A2,PREPOWER:51
+      .= 1 / ((- 1 - sqrt 5) / 2) by PREPOWER:45
+      .= 2 / (-(1 + sqrt 5)) by XCMPLX_1:57
+      .= -2 / (1 + sqrt 5) by XCMPLX_1:189
+      .= (-2) / (1 + sqrt 5) by XCMPLX_1:188
+      .= ((-2) * (1 - sqrt 5)) / ((1 + sqrt 5) * (1 - sqrt 5))
+         by A1,XCMPLX_1:92
+      .= ((-2) * (1 - sqrt 5)) / (1 ^2 - (sqrt 5) ^2) by SQUARE_1:67
+      .= ((-2) * (1 - sqrt 5)) / (1 - 5) by SQUARE_1:59,def 4
+      .= (1 - sqrt 5) * (-2) / (2 * (-2))
+      .= tau_bar by FIB_NUM:def 2,XCMPLX_1:92;
+    hence thesis;
+  end;
+
+theorem Th37:
+  (-tau) to_power ((-1) * n) = (-tau) to_power (-1) to_power n
+  proof
+A1: - tau < 0 by Th35,REAL_1:26,50;then
+A2: 1 / (- tau) < 0 by REAL_2:128;
+    (- tau) to_power ((-1) * n) = (- tau) #Z ((-1) * n) by A1,POWER:def 2
+      .= ((- tau) #Z (-1)) #Z n by PREPOWER:55
+      .= (1 / (- tau) #Z 1) #Z n by A1,PREPOWER:51
+      .= (1 / (- tau)) #Z n by PREPOWER:45
+      .= (1 / (- tau)) to_power n by A2,POWER:def 2
+      .= ((1 / (- tau)) to_power 1) to_power n by POWER:30
+      .= ((1 / (- tau)) #Z 1) to_power n by A2,POWER:def 2
+      .= (1 / (- tau) #Z 1) to_power n by PREPOWER:52
+      .= ((- tau) #Z (-1)) to_power n by A1,PREPOWER:51;
+    hence thesis by A1,POWER:def 2;
+  end;
+
+theorem Th38:
+  - 1 / tau = tau_bar
+  proof
+    sqrt 5 <> 1 by SQUARE_1:85,95;then
+A1: 1 - sqrt 5 <> 0 by XCMPLX_1:15;
+     - 1 / tau = -1 * (2 / (1 + sqrt 5)) by FIB_NUM:def 1,XCMPLX_1:57
+    .= -1 * ((2 * (1 - sqrt 5)) / ((1 + sqrt 5) * (1 - sqrt 5)))
+      by A1,XCMPLX_1:92
+    .= -1 * ((2 * (1 - sqrt 5)) / (1 - (sqrt 5) ^2)) by SQUARE_1:59,67
+    .= -1 * ((2 * (1 - sqrt 5)) / (1 - 5)) by SQUARE_1:def 4
+    .= (-1) * (((1 - sqrt 5) * 2) / ((-2) * 2)) by XCMPLX_1:175
+    .= (-1) * ((1 - sqrt 5) / (-2)) by XCMPLX_1:92
+    .= ((1 - sqrt 5) * (-1)) / (2 * (-1)) by XCMPLX_1:75
+    .= (1 - sqrt 5) / 2 by XCMPLX_1:92;
+    hence thesis by FIB_NUM:def 2;
+  end;
+
+theorem Th39:
+  (tau to_power r) ^2 - 2 * ((-1) to_power r) + (tau to_power (-r)) ^2 =
+    ((tau to_power r) - (tau_bar to_power r)) ^2
+  proof
+    (-1) / tau < 0 by Th35,REAL_2:128; then
+A1: -1 / tau < 0 by XCMPLX_1:188;then
+A2: 1 / tau > 0 by REAL_1:26,50;
+A3: (1 / tau) ^2 <> 0 by A1,REAL_1:26,SQUARE_1:74;
+    (((tau to_power r) - (tau_bar to_power r))) ^2 =
+      (tau to_power r) ^2 - 2 * (tau to_power r) * ((-1 / tau) to_power r) +
+      ((-1 / tau) to_power r) ^2 by Th38,SQUARE_1:64
+     .= (tau to_power r) ^2 - 2 * (tau to_power r) *
+       (((-1) * (1 / tau)) #Z r) +
+       ((-1 / tau) to_power r) ^2 by A1,POWER:def 2
+     .= (tau to_power r) ^2 - 2 * (tau to_power r) * (((-1) #Z r) *
+       ((1 / tau) #Z r)) + ((-1 / tau) to_power r) ^2 by PREPOWER:50
+     .= (tau to_power r) ^2 - 2 * (tau to_power r) * (((1 / tau) |^ r) *
+       ((-1) #Z r)) + ((-1 / tau) to_power r) ^2 by PREPOWER:46
+     .= (tau to_power r) ^2 - 2 * (tau |^ r) * (((1 / tau) |^ r) *
+       ((-1) #Z r)) + ((-1 / tau) to_power r) ^2 by Th35,POWER:46
+     .= (tau to_power r) ^2 - 2 * ((tau |^ r) * ((1 / tau) |^ r)) *
+       ((-1) #Z r) + ((-1 / tau) to_power r) ^2
+     .= (tau to_power r) ^2 - 2 * ((tau * (1 / tau))|^ r) * ((-1) #Z r) +
+       ((-1 / tau) to_power r) ^2 by NEWTON:12
+     .= (tau to_power r) ^2 - 2 * (1 |^ r) * ((-1) #Z r) +
+       ((-1 / tau) to_power r) ^2 by Th35,XCMPLX_1:107
+     .= (tau to_power r) ^2 - 2 * 1 * ((-1) #Z r) +
+       ((-1 / tau) to_power r) ^2 by NEWTON:15
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       ((-1 / tau) to_power r) ^2 by POWER:def 2
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       ((-1 / tau) #Z r) ^2 by A1,POWER:def 2
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       ((-1 / tau) #Z r) * ((-1 / tau) #Z r) by SQUARE_1:def 3
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((-1 / tau) * (-1 / tau)) #Z r) by PREPOWER:50
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((-1 / tau) ^2) #Z r) by SQUARE_1:def 3
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((-1 / tau) ^2) |^ r) by PREPOWER:46
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((1 / tau) ^2) |^ r) by SQUARE_1:61
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((1 / tau) ^2) to_power r) by A3,POWER:46
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       (((1 / tau) * (1 / tau)) to_power r) by SQUARE_1:def 3
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       ((1 / tau) to_power r) * ((1 / tau) to_power r) by A2,POWER:35
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) +
+       ((1 / tau) to_power r) ^2 by SQUARE_1:def 3
+     .= (tau to_power r) ^2 - 2 * ((-1) to_power r) + (tau to_power (-r)) ^2
+       by Th35,POWER:37;
+    hence thesis;
+  end;
+
+theorem
+  for n,r being non empty Nat st r <= n holds
+    (Fib (n)) ^2 - Fib (n+r) * Fib (n-'r) = ((-1) |^(n-'r)) * (Fib (r)) ^2
+  proof
+    let n,r be non empty Nat such that
+A1: r <= n;
+    set S = 1 / (sqrt 5);
+    set X = n + r;
+    set Y = n -' r;
+    set T = tau;
+A2: -T <> 0 by Th35,XCMPLX_1:135;
+    reconsider T as non empty real number by Th35;
+    set tn = T to_power n;
+    set tx = T to_power X;
+    set ty = T to_power Y;
+    set tnu = T to_power (-n);
+    set txu = T to_power (-X);
+    set tyu = T to_power (-Y);
+    A3: r <= r + (n + n) by NAT_1:37;
+A4: X + Y = r + n + (n - r) by A1,SCMFSA_7:3
+    .= (r + n + n) - r
+    .= r + 2 * n -' r by A3,SCMFSA_7:3
+    .= r -' r + 2 * n by JORDAN4:3
+    .= 0 + 2 * n by GOBOARD9:1
+    .= 2 * n;
+A5: X - Y = n + r - (n - r) by A1,SCMFSA_7:3
+    .= 2 * r;
+A6: Y - X = - (X - Y)
+    .= - 2 * r by A5;
+A7: - X - Y = - (X + Y)
+    .= - 2 * n by A4;
+A8:  -1 is non empty by XCMPLX_1:135;
+A9: - 1 = 2 * (-1) + 1; then
+A10: -1 is odd;
+     (Fib (n)) ^2 - Fib (X) * Fib (Y) =
+    ((tn - (tau_bar to_power n)) / (sqrt 5)) ^2 -Fib (X) * Fib (Y) by FIB_NUM:7
+    .= ((tn - (tau_bar to_power n)) / (sqrt 5)) ^2 -
+    ((tx - (tau_bar to_power X)) / (sqrt 5)) * (Fib (Y)) by FIB_NUM:7
+    .= ((tn - (tau_bar to_power n)) / (sqrt 5)) ^2 -
+    ((tx - (tau_bar to_power X)) / (sqrt 5)) *
+    ((ty - (tau_bar to_power Y)) / (sqrt 5)) by FIB_NUM:7
+    .= ((tn - (tau_bar to_power n)) * S) ^2 - ((tx - (tau_bar to_power X)) /
+    (sqrt 5)) * ((ty - (tau_bar to_power Y)) / (sqrt 5)) by XCMPLX_1:100
+    .= ((tn - (tau_bar to_power n)) * S) ^2 -
+      ((tx - (tau_bar to_power X)) * S) *
+    ((ty - (tau_bar to_power Y)) / (sqrt 5)) by XCMPLX_1:100
+    .= ((tn - (tau_bar to_power n)) * S) ^2 -
+      ((tx - (tau_bar to_power X)) * S) *
+    ((ty - (tau_bar to_power Y)) * S) by XCMPLX_1:100
+    .= ((tn - (tau_bar to_power n)) ^2) * (S ^2) -
+    ((tx - (tau_bar to_power X)) * (S * S)) *
+    (ty - (tau_bar to_power Y)) by SQUARE_1:68
+    .= (S ^2) * ((tn - (tau_bar to_power n)) ^2)  -
+    ((S ^2) * (tx - (tau_bar to_power X))) *
+    (ty - (tau_bar to_power Y)) by SQUARE_1:def 3
+    .= (S ^2) * ((tn - (tau_bar to_power n)) ^2 - (tx - (tau_bar to_power X)) *
+    (ty - (tau_bar to_power Y)))
+    .= (S ^2) * ((tn) ^2 - 2 * (tn) * ((-T) to_power (-1) to_power n) +
+    ((-T) to_power (-1) to_power n) ^2 -
+      (tx - ((-T) to_power (-1) to_power X)) *
+    (ty - ((-T) to_power (-1) to_power Y))) by Th36,SQUARE_1:64
+    .= (S ^2) * ((tn) ^2 - 2 * (tn) * ((-T) to_power ((-1) * n)) +
+    ((-T) to_power (-1) to_power n) ^2 -
+      (tx - ((-T) to_power (-1) to_power X)) *
+    (ty - ((-T) to_power (-1) to_power Y))) by A2,A9,Th8
+    .= (S ^2) * ((tn) ^2 - 2 * tn * ((-T) to_power (- n)) +
+    ((-T) to_power ((-1) * n)) ^2 - (tx - ((-T) to_power (-1) to_power X)) *
+    (ty - ((-T) to_power (-1) to_power Y))) by A2,A10,Th8
+    .= (S ^2) * (tn ^2 - 2 * tn * ((-T) to_power (- n)) +
+    ((-T) to_power (- n)) ^2 - (tx - ((-T) to_power ((-1) * X))) *
+    (ty - ((-T) to_power (-1) to_power Y))) by Th37
+    .= (S ^2) * (tn ^2 - 2 * tn * ((-T) to_power (- n)) +
+    ((-T) to_power (- n)) ^2 - (tx - ((-T) to_power (- X))) *
+    (ty - ((-T) to_power ((-1) * Y)))) by Th37
+    .= (S ^2) * ((tn) ^2 - 2 * tn * (((-1) * T) to_power (- n)) +
+    (((-1) * T) to_power (- n)) ^2 - (tx - (((-1) * T) to_power (- X))) *
+    (ty - (((-1) * T) to_power (-Y))))
+    .= (S ^2) * ((tn) ^2 - 2 * tn * (((-1) * T) to_power (-n)) +
+    (((-1) * T) to_power (-n)) ^2 -
+    tx * ty + tx * (((-1) * T) to_power (-Y)) + (((-1) * T) to_power
+    (-X)) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) * T) to_power (-Y)))
+    .= (S ^2) * (tn ^2 - 2 * tn * (((-1) * T) to_power (-n)) +
+    (((-1) * T) to_power (-n)) ^2 -
+    tx * ty + tx * (((-1) * T) to_power (-Y)) +
+    (((-1) * T) to_power (-X)) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) to_power (-Y)) * tyu)) by Th6
+    .= (S ^2) * ((tn) ^2 - 2 * tn * (((-1) to_power (-n)) * tnu) +
+    (((-1) * T) to_power (-n)) ^2 -
+    tx * ty + tx * (((-1) * T) to_power (-Y)) +
+    (((-1) * T) to_power (-X)) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) to_power (-Y)) * tyu)) by Th6
+    .= (S ^2) * (tn ^2 - 2 * tn * (((-1) to_power (-n)) * tnu) +
+    (((-1) to_power (-n)) * tnu) ^2 -
+    tx * ty + tx * (((-1) * T) to_power (-Y)) +
+    (((-1) * T) to_power (-X)) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) to_power (-Y)) * tyu)) by Th6
+    .= (S ^2) * (tn ^2 - 2 * tn * (((-1) to_power (-n)) * tnu) +
+    (((-1) to_power (-n)) * tnu) ^2 -
+    tx * ty + tx * (((-1) to_power (-Y)) * tyu) +
+    (((-1) * T) to_power (-X)) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) to_power (-Y)) * tyu)) by Th6
+    .= (S ^2) * (tn ^2 - 2 * tn * (((-1) to_power (-n)) * tnu) +
+    (((-1) to_power (-n)) * tnu) ^2 -
+    tx * ty + tx * (((-1) to_power (-Y)) * tyu) +
+    (((-1) to_power (-X)) * txu) * ty -
+    (((-1) * T) to_power (-X)) * (((-1) to_power (-Y)) * tyu)) by Th6
+    .= (S ^2) * (tn ^2 - 2 * tn * (((-1) to_power (-n)) * tnu) +
+    (((-1) to_power (-n)) * tnu) ^2 -
+    tx * ty + tx * (((-1) to_power (-Y)) * tyu) +
+    (((-1) to_power (-X)) * txu) * ty -
+    (((-1) to_power (-X)) * txu) * (((-1) to_power (-Y)) * tyu))  by Th6
+    .= (S ^2) * ((tn) ^2 - 2 * (tn * tnu) * ((-1) to_power (-n)) +
+    ((-1) to_power (-n)) ^2 * tnu ^2 - tx * ty + tx *
+    ((-1) to_power (-Y)) * tyu + ((-1) to_power (-X)) * txu * ty -
+    (((-1) to_power (-X)) * txu * ((-1) to_power (-Y))) * tyu)
+      by SQUARE_1:68
+    .= (S ^2) * ((tn) ^2 - 2 * 1 * ((-1) to_power (-n)) +
+    ((-1) to_power (-n)) ^2 * tnu ^2 - tx * ty +
+    tx * ((-1) to_power (-Y)) * tyu + ((-1) to_power (-X)) * txu * ty -
+    (((-1) to_power (-X)) * txu * ((-1) to_power (-Y))) * tyu) by Th12
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    1 * tnu ^2 - tx * ty +
+    tx * tyu * ((-1) to_power (-Y)) + ((-1) to_power (-X)) * txu * ty -
+    (((-1) to_power (-X)) * ((-1) to_power (-Y)) * txu) * tyu) by Th9
+    .= (S ^2) * ((tn) ^2 - 2 * ((-1) to_power (-n)) + tnu ^2 - tx * ty +
+    tx * (1 / ty) * ((-1) to_power (-Y)) +
+    ((-1) to_power (-X)) * txu * ty -
+    (((-1) to_power (-X)) * ((-1) to_power (-Y)) * txu) * tyu)
+      by Th35,POWER:33
+    .= (S ^2) * ((tn) ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - tx * ty +
+    (tx / ty) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) * txu * ty -
+    (((-1) to_power (-X)) * ((-1) to_power (-Y)) * txu) * tyu)
+    by XCMPLX_1:100
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - tx * ty +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    txu * ty -
+    (((-1) to_power (-X)) * ((-1) to_power (-Y)) * txu) * tyu)
+      by Th35,POWER:34
+    .= (S ^2) * ((tn) ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (X+Y)) +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (ty * txu) - (((-1) to_power (-X)) * ((-1) to_power (-Y))) *
+    (txu * tyu)) by Th35,POWER:32
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (X+Y)) +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (ty * (1 / tx)) - (((-1) to_power (-X)) * ((-1) to_power (-Y))) *
+    (txu * tyu)) by Th35,POWER:33
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (X+Y)) +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X))
+    * (ty / tx) - (((-1) to_power (-X)) *
+    ((-1) to_power (-Y))) * ((txu) * (tyu))) by XCMPLX_1:100
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (X+Y)) +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (Y-X)) - (((-1) to_power (-X)) * ((-1) to_power (-Y))) *
+    (txu * tyu)) by Th35,POWER:34
+    .= (S ^2) * (tn ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (X+Y)) +
+    (T to_power (X-Y)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (Y-X)) - ((-1) to_power (-X-Y)) *
+      (txu * tyu)) by A8,Th10
+    .= (S ^2) * ((tn) ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (2 * n)) +
+    (T to_power (2 * r)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) -
+    ((-1) to_power (-2 * n)) * (T to_power (-2 * n))) by A4,A5,A6,A7,Th10
+    .= (S ^2) * ((tn) ^2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (2 * n)) +
+    (T to_power (2 * r)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) -
+    1 * (T to_power (-2 * n))) by Th11
+    .= (S ^2) * (tn to_power 2 - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (2 * n)) +
+    (T to_power (2 * r)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) -
+    1 * (T to_power (-2 * n))) by POWER:53
+    .= (S ^2) * (T to_power (2 * n) - 2 * ((-1) to_power (-n)) +
+    tnu ^2 - (T to_power (2 * n)) +
+    (T to_power (2 * r)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) - (T to_power (-2 * n))) by Th35,POWER:38
+    .= (S ^2) * (T to_power (2 * n) - 2 * ((-1) to_power n) +
+    tnu ^2 - (T to_power (2 * n)) +
+    (T to_power (2 * r)) * ((-1) to_power (-Y)) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) - (T to_power (-2 * n))) by Th13
+    .= (S ^2) * (T to_power (2 * n) - (T to_power (2 * n)) -
+    2 * ((-1) to_power n) + (tnu) ^2 +
+    (T to_power (2 * r)) * ((-1) to_power Y) + ((-1) to_power (-X)) *
+    (T to_power (-2 * r)) - (T to_power (-2 * n))) by Th13
+    .= (S ^2) * (- 2 * ((-1) to_power n) + tnu ^2 +
+    (T to_power (2 * r)) * ((-1) to_power Y) + ((-1) to_power X) *
+    (T to_power (-2 * r)) - (T to_power (2 * (-n)))) by Th13
+    .= (S ^2) * (- 2 * ((-1) to_power n) + tnu ^2 +
+    (T to_power (2 * r)) * ((-1) to_power Y) + ((-1) to_power X) *
+    (T to_power (-2 * r)) - (T to_power (-n) to_power 2)) by Th35,POWER:38
+    .= (S ^2) * (- 2 * ((-1) to_power n) +
+    (T to_power (2 * r)) * ((-1) to_power Y) + ((-1) to_power X) *
+    (T to_power (-2 * r)) + (tnu) ^2 - tnu ^2) by POWER:53
+     .= (S ^2) * (-2 * ((-1) to_power (n-'r+r)) +
+    (T to_power (2 * r)) * ((-1) to_power Y) +
+    (T to_power (-2 * r)) * ((-1) to_power X)) by A1,AMI_5:4
+    .= (S ^2) * (-2 * ((-1) to_power (n-'r+r)) +
+    ((-1) to_power Y) * (T to_power (2 * r)) +
+    ((-1) to_power (2 * r + Y)) * (T to_power (-2 * r))) by A5,XCMPLX_1:27
+    .= (S ^2) * (- 2 * (((-1) to_power r) * ((-1) to_power (n -' r))) +
+    ((-1) to_power Y) * (T to_power (2 * r)) +
+    ((-1) to_power (2 * r + Y)) * (T to_power (-2 * r))) by A8,Th7
+    .= (S ^2) * (- 2 * (((-1) to_power r) * ((-1) to_power (n -' r))) +
+    ((-1) to_power (n-'r)) * (T to_power (2 * r)) +
+    (((-1) to_power (2 * r)) * ((-1) to_power (n -'r))) *
+      (T to_power (-2 * r))) by A8,Th7
+    .= (S ^2) * (-2 * (((-1) to_power r)) +
+    T to_power (2 * r) + T to_power (-2 * r) * ((-1) to_power (2 * r))) *
+    ((-1) to_power (n-'r))
+    .= (S ^2) * (-2 * (((-1) to_power r)) +
+    T to_power (2 * r) + T to_power (-2 * r) * 1) *
+    ((-1) to_power (n-'r)) by Th5
+    .= (S ^2) * (T to_power (2 * r) - 2 * ((-1) to_power r) +
+    T to_power (2 * (-r))) * ((-1) to_power (n-'r))
+    .= (S ^2) * (T to_power r to_power 2 - 2 * ((-1) to_power r) +
+    T to_power ((-r) * 2)) * ((-1) to_power (n-'r)) by Th35,POWER:38
+    .= (S ^2) * ((T to_power r) ^2 - 2 * ((-1) to_power r) +
+    T to_power ((-r) * 2)) * ((-1) to_power (n-'r)) by POWER:53
+    .= ((-1) to_power (n-'r)) * ((S^2) * ((T to_power r) ^2 -
+    2 * ((-1) to_power r) + T to_power (-r) to_power 2)) by Th35,POWER:38
+    .= ((-1) to_power (n-'r)) * ((S^2) * ((T to_power r) ^2 -
+    2 * ((-1) to_power r) + (T to_power (-r)) ^2)) by POWER:53
+    .= ((-1) to_power (n-'r)) * ((S^2) * (((tau to_power r) -
+    (tau_bar to_power r)) ^2)) by Th39
+    .= ((-1) to_power (n-'r)) * (((tau to_power r) -
+    (tau_bar to_power r)) * S) ^2 by SQUARE_1:68
+    .= ((-1) to_power (n-'r)) * (((tau to_power r) -
+    (tau_bar to_power r)) / (sqrt 5)) ^2 by XCMPLX_1:100
+    .= ((-1) |^(n-'r)) * (((T to_power r) - (tau_bar to_power r)) /
+      (sqrt 5)) ^2 by POWER:48
+    .= ((-1) |^(n-'r)) * (Fib (r)) ^2 by FIB_NUM:7;
+    hence thesis;
+  end;
+
+theorem
+  (Fib (n)) ^2 + (Fib (n+1)) ^2 = Fib (2*n + 1)
+  proof
+    defpred P[Nat] means (Fib ($1)) ^2 + (Fib ($1+1)) ^2 = Fib (2*$1 + 1);
+A1: P[0]
+    proof
+      thus thesis by PRE_FF:1,SQUARE_1:59,60;
+    end;
+A2: P[1] by Th23,PRE_FF:1,SQUARE_1:59;
+A3: for k being Nat st P[k]& P[k+1] holds P[k+2]
+    proof
+      let k be Nat;
+      assume A4: P[k];
+      assume A5: P[k+1];
+      Fib (2 * (k+2) + 1) = Fib (2*k + 3) + Fib (2 * k + 4) by Lm1
+      .= Fib (2 * k + 3) + (Fib (2 * k + 3) + Fib (2 * k + 2)) by Th28
+      .= Fib (2 * k + 3) + Fib (2 * k + 3) + Fib (2 * k + 2)
+      .= 2 * Fib (2 * k + 3) +  (Fib (2 * k + 3) - Fib (2 * k + 1)) by Th30
+      .= 3 * Fib (2 * k + 3) - Fib (2 * k + 1)
+      .= 3 * (Fib (k+1)) ^2 + 3 * (Fib (k+2)) ^2 -
+      ((Fib (k)) ^2 + (Fib (k+1)) ^2) by A4,A5,XCMPLX_1:8
+      .= 2 * (Fib (k+1)) ^2 + 2 * (Fib (k+2)) ^2 +
+        ((Fib (k+2)) ^2 - (Fib (k)) ^2)
+      .= 2 * (Fib (k+1)) ^2 + 2 * (Fib (k+2)) ^2 + (Fib (k+2) -
+      Fib (k)) * (Fib (k+2) + Fib (k)) by SQUARE_1:67
+      .=  2 * (Fib (k+1)) ^2 + 2 * (Fib (k+2)) ^2 +
+      Fib (k+1) * (Fib (k+2) + Fib (k)) by Th31
+      .= 2 * (Fib (k+1)) ^2 + Fib (k+1) * Fib (k) +
+      2 * (Fib (k+2)) ^2 + Fib (k+1) * Fib (k+2)
+      .= 2 * (Fib (k+1) * Fib (k+1)) + Fib (k+1) * Fib (k) +
+      2 * (Fib (k+2)) ^2 + Fib (k+1) * Fib (k+2) by SQUARE_1:def 3
+      .= 2 * (Fib (k+1) * Fib (k+1)) + Fib (k+1) * Fib (k) +
+      2 * (Fib (k+2) * Fib (k+2)) + Fib (k+1) * Fib (k+2) by SQUARE_1:def 3
+      .= Fib (k+1) * (Fib (k+1) +  (Fib (k+1) + Fib (k))) +
+      Fib (k+2) * (Fib (k+2) + (Fib (k+2) + Fib (k+1)))
+      .= Fib (k+1) * (Fib (k+1) + Fib (k+2)) + Fib (k+2) * (Fib (k+2) +
+      (Fib (k+2) + Fib (k+1))) by Th26
+      .= Fib (k+1) * (Fib (k+2) + Fib (k+1)) + Fib (k+2) *
+        (Fib (k+2) + Fib (k+3)) by Th27
+      .= Fib (k+1) * Fib (k+3) + (Fib (k+2) * Fib (k+2) +
+         Fib (k+2) * Fib (k+3)) by Th27
+      .= Fib (k+1) * Fib (k+3) + Fib (k+2) * Fib (k+3) +
+         Fib (k+2) * Fib (k+2)
+      .= Fib (k+3) * (Fib (k+1) + Fib (k+2)) + (Fib (k+2)) ^2 by SQUARE_1:def 3
+      .= Fib (k+3) * Fib (k+3) + (Fib (k+2)) ^2 by Th27
+      .= (Fib (k+3)) ^2 + (Fib (k+2)) ^2 by SQUARE_1:def 3;
+      hence thesis;
+    end;
+    for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+    hence thesis;
+  end;
+
+theorem Th42:
+  for k being non empty Nat holds
+    Fib (n+k) = Fib (k) * Fib (n+1) + Fib (k-'1) * Fib (n)
+  proof
+    defpred P[Nat] means
+    Fib (n+$1) = Fib ($1) * Fib (n+1) + Fib ($1-'1) * Fib (n);
+A1: P[1]
+    proof
+      Fib (1) * Fib (n+1) + Fib (1-'1) * Fib (n) = 1 * Fib (n+1) + 0 * Fib (n)
+         by GOBOARD9:1,PRE_FF:1
+      .= Fib (n+1);
+      hence thesis;
+    end;
+A2: P[2]
+    proof
+      2 -' 1 = 2 - 1 by JORDAN3:1;
+      hence thesis by Th26,Th23,PRE_FF:1;
+    end;
+A3: for m being non empty Nat st P[m] & P[m+1] holds P[m+2]
+    proof
+      let m be non empty Nat;
+A4:   m >= 1 by NAT_2:21;
+      set k = m-'1;
+      set F1 = Fib (n+1) * Fib (m+2);
+      set F2 = Fib (m+2) * Fib (n+1);
+      assume that
+A5:   P[m] and
+A6:   P[m+1];
+      Fib (n+(m+2)) = Fib ((n+m)+2)
+      .= Fib (n+m) + Fib (n+m+1) by Th26
+      .= (Fib (m) * Fib (n+1) + Fib (k) * Fib (n)) + (Fib (m+1) * Fib (n+1)
+      + Fib (m+(1-'1)) * Fib (n)) by A5,A6,JORDAN4:3
+      .= (Fib (m) * Fib (n+1) + Fib (k) * Fib (n)) + (Fib (m+1) * Fib (n+1)
+      + Fib (m+0) * Fib (n)) by GOBOARD9:1
+      .= (Fib (m) * Fib (n+1) + Fib (k) * Fib (n)) + (Fib (m+1) * Fib (n+1)
+      + Fib (m) * Fib (n))
+      .= Fib (n+1) * (Fib (m) + Fib (m+1)) + Fib (n) * (Fib (k) + Fib (m))
+      .= F1 + Fib (n) * (Fib (k) + Fib (m)) by Th26
+      .= F1 + Fib (n) * (Fib (k) + Fib (k+1)) by A4,AMI_5:4
+      .= F2 + Fib (n) * Fib (m-'1+2) by Th26
+      .= F2 + Fib (m+2-'1) * Fib (n) by A4,JORDAN4:3;
+      hence thesis;
+    end;
+    for k being non empty Nat holds P[k] from Fib_Ind_1(A1,A2,A3);
+    hence thesis;
+  end;
+
+theorem Th43:
+  for n being non empty Nat holds
+    Fib (n) divides Fib (n*k)
+  proof
+    let n be non empty Nat;
+    defpred P[Nat] means Fib (n) divides Fib (n*$1);
+A1: P[0] by NAT_1:53,PRE_FF:1;
+A2: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+      assume
+A3:   P[k];
+      Fib (n * (k+1)) = Fib ((n*k) + n)
+      .= Fib (n) * Fib (n*k + 1) + Fib (n*k) * Fib (n -' 1) by Th42;
+      hence thesis by A3,Th14;
+    end;
+    for n being Nat holds P[n] from NAT_1:sch 1(A1, A2);
+    hence thesis;
+  end;
+
+theorem Th44:
+  for k being non empty Nat holds
+    k divides n implies Fib (k) divides Fib (n)
+  proof
+    let k be non empty Nat;
+    assume k divides n;
+    then consider m such that
+A1: n = k * m by NAT_1:def 3;
+    thus thesis by A1,Th43;
+  end;
+
+theorem Th45:
+  Fib (n) <= Fib (n + 1)
+  proof
+    defpred P[Nat] means Fib ($1) <= Fib ($1 + 1);
+A1: P[0] by PRE_FF:1;
+A2: P[1] by Th23,PRE_FF:1;
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
+    proof
+      let k be Nat;
+      assume
+A4:   P[k];
+      assume P[k+1];
+      then Fib (k) + Fib (k+1) <= Fib (k+1) + Fib (k+2) by A4,REAL_1:55;
+      then Fib (k+2) <= Fib (k+1) + Fib (k+2) by Th26;
+      then Fib (k+2) <= Fib (k+3) by Th27;
+      hence thesis;
+    end;
+    for n being Nat holds P[n] from FIB_NUM:sch 1(A1,A2,A3);
+    hence thesis;
+  end;
+
+theorem Th46:
+  for n being Nat st n > 1 holds
+    Fib (n) < Fib (n+1)
+  proof
+    let n be Nat such that
+A1: n > 1;
+    n <> 0 & n <> 1 by A1; then
+A2: n is non trivial by NAT_2:def 1;
+    defpred P[Nat] means Fib ($1) < Fib ($1 + 1);
+A3: P[2] by Th23,Th24;
+A4: P[3] by Th24,Th25;
+A5: for k being non trivial Nat st P[k] & P[k+1] holds P[k+2]
+    proof
+      let k be non trivial Nat;
+      assume
+A6:   P[k];
+      assume P[k+1];
+      then Fib (k) + Fib (k+1) < Fib (k+1) + Fib (k+2) by A6,REAL_1:67;
+      then Fib (k+2) < Fib (k+1) + Fib (k+2) by Th26;
+      then Fib (k+2) < Fib (k+3) by Th27;
+      hence thesis;
+    end;
+    for n being non trivial Nat holds P[n] from Fib_Ind_2(A3,A4,A5);
+    hence thesis by A2;
+  end;
+
+theorem
+  for m, n being Nat st m >= n holds Fib(m) >= Fib(n)
+  proof
+    let m, n;
+    assume m >= n;
+    then consider k such that
+A1: m = n + k by NAT_1:28;
+    for k, n being Nat holds Fib(n+k) >= Fib(n)
+    proof
+      defpred P[Nat] means
+      for n being Nat holds Fib(n+$1) >= Fib(n);
+A2:   P[0];
+A3:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k;
+        assume
+A4:     P[k];
+        let n;
+        n + (k+1) = (n+k) + 1;then
+A5:     Fib(n + (k+1)) >= Fib(n+k) by Th45;
+        Fib(n+k) >= Fib(n) by A4;
+        hence thesis by A5,AXIOMS:22;
+      end;
+A6:   for k holds P[k] from NAT_1:sch 1(A2, A3);
+      let k;
+      let n;
+      thus thesis by A6;
+    end;
+    hence thesis by A1;
+  end;
+
+theorem Th48:
+  for k being Nat st k > 1 holds
+    k < n implies Fib (k) < Fib (n)
+  proof
+    let k be Nat such that
+A1: k > 1;
+    assume
+A2: k < n;
+    then consider m being Nat such that A3: n = k + m by NAT_1:28;
+    m <> 0 by A2,A3;
+    then reconsider m as non empty Nat;
+    k > 0 by A1,AXIOMS:22;
+    then reconsider k as non empty Nat;
+    for k, m being non empty Nat st k > 1 holds Fib (k) < Fib (k + m)
+    proof
+      let k, m be non empty Nat such that A4:k > 1;
+      defpred P[Nat] means Fib (k) < Fib (k + $1);
+A5:   P[1] by A4,Th46;
+A6:   for r being non empty Nat st P[r] holds P[r+1]
+      proof
+        let r be non empty Nat;
+        r > 0 by NAT_1:19; then
+A7:     k + r > 0 + 1 by A4,REAL_1:67;
+        assume
+A8:     P[r];
+        Fib (k + r) < Fib ((k + r) + 1) by A7,Th46;
+        hence thesis by A8,AXIOMS:22;
+      end;
+      for k being non empty Nat holds P[k] from BINARITH:sch 1(A5,A6);
+      hence thesis;
+    end;
+    then Fib (k) < Fib (k + m) by A1;
+    hence thesis by A3;
+  end;
+
+theorem Th49:
+  Fib (k) = 1 iff k = 1 or k = 2
+  proof
+    Fib (k) = 1 implies k = 1 or k = 2
+    proof
+      assume
+A1:   Fib (k) = 1;
+      assume not (k = 1 or k = 2);
+      then (k = 0 or k > 1) & (k < 2 or k > 2) by NAT_2:21,REAL_1:def 5;
+      hence contradiction by A1,Th23,Th48,PRE_FF:1;
+    end;
+    hence thesis by Th23,PRE_FF:1;
+  end;
+
+theorem Th50:
+  for k,n being Nat st n > 1 & k <> 0 & k <> 1 &
+    ((k <> 1 & n <> 2) or (k <> 2 & n <> 1)) holds
+      Fib (k) = Fib (n) iff k = n
+  proof
+    let k, n be Nat such that
+A1: n > 1 & k <> 0 & k <> 1 &
+    ((k <> 1 & n <> 2) or (k <> 2 & n <> 1));
+    k is non trivial by A1,NAT_2:def 1;
+    then k >= 1 + 1 by NAT_2:31; then
+A2: k > 1 by NAT_1:38;
+    Fib (k) = Fib (n) implies k = n
+    proof
+      assume
+A3:   Fib (k) = Fib (n);
+      assume
+A4:   k <> n;
+      per cases by A4,REAL_1:def 5;
+      suppose k > n;
+        hence contradiction by A1,A3,Th48;
+      end;
+      suppose k < n;
+        hence contradiction by A2,A3,Th48;
+      end;
+    end;
+    hence thesis;
+  end;
+
+theorem Th51:
+  for n being Nat st n > 1 & n <> 4 holds
+  n is non prime implies ex k being non empty Nat st
+    k <> 1 & k <> 2 & k <> n & k divides n
+  proof
+    let n be Nat such that
+A1: n > 1 & n <> 4;
+A2: n <> 0 by A1;
+    assume
+A3: n is non prime;
+    per cases by A3,INT_2:def 5;
+    suppose n <= 1;
+      hence thesis by A1;
+    end;
+    suppose not for k being Nat holds k divides n implies k = 1 or k = n;
+      then consider k being Nat such that
+A4:   k divides n and
+A5:   k <> 1 & k <> n;
+      consider m being Nat such that A6: n = k*m by A4,NAT_1:def 3;
+A7:   m <> 1 by A5,A6;
+A8:   m <> n by A2,A5,A6,XCMPLX_1:7;
+A9:   m divides n by A6,NAT_1:def 3;
+A10:  k is non empty Nat by A2,A4,INT_2:3;
+A11:  m is non empty Nat by A2,A6;
+      k <> 2 or m <> 2 by A1,A6;
+      hence thesis by A4,A5,A7,A8,A9,A10,A11;
+    end;
+  end;
+
+theorem
+  for n being Nat st n > 1 & n <> 4 holds
+    Fib (n) is prime implies n is prime
+  proof
+    let n be Nat such that
+A1: n > 1 & n <> 4;
+    assume
+A2: Fib (n) is prime;
+    assume not n is prime;
+    then consider k being non empty Nat such that
+A3: k <> 1 & k <> 2 &
+    k <> n & k divides n by A1,Th51;
+A4: Fib (k) <> 1 by A3,Th49;
+A5: Fib (k) <> Fib (n) by A1,A3,Th50;
+    Fib (k) divides Fib (n) by A3,Th44;
+    hence contradiction by A2,A4,A5,INT_2:def 5;
+  end;
+
+begin :: Sequence of Fibonacci Numbers
+
+definition
+  func FIB -> Function of NAT, NAT means :Def2:
+    for k being Nat holds it.k = Fib(k);
+  existence
+  proof
+    deffunc F(Nat) = Fib($1);
+     ex f being Function of NAT,NAT st
+      for x being Element of NAT holds f.x = F(x) from FUNCT_2:sch 4;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    deffunc F(Nat) = Fib($1);
+    let f1, f2 be Function of NAT, NAT such that
+A1: for k being Nat holds f1.k = F(k) and
+A2: for k being Nat holds f2.k = F(k);
+     for f1, f2 be Function of NAT, NAT st
+    (for x being Element of NAT holds f1.x = F(x)) &
+    (for x being Element of NAT holds f2.x = F(x)) holds f1 = f2
+      from COMPLSP1:sch 1;
+    hence thesis by A1,A2;
+  end;
+end;
+
+definition
+  func EvenNAT -> Subset of NAT equals :Def3:
+    { 2 * k where k is Nat : not contradiction };
+   coherence
+   proof
+     deffunc F(Nat) = 2 * $1;
+     defpred P[set] means not contradiction;
+      { F(k) where k is Nat : P[k] } is Subset of NAT from COMPLSP1:sch 3;
+     hence thesis;
+   end;
+   func OddNAT -> Subset of NAT equals :Def4:
+     { 2 * k + 1 where k is Nat : not contradiction };
+   coherence
+   proof
+     deffunc F(Nat) = 2 * $1 + 1;
+     defpred P[set] means not contradiction;
+      { F(k) where k is Nat : P[k] } is Subset of NAT from COMPLSP1:sch 3;
+     hence thesis;
+   end;
+ end;
+
+theorem Th53:
+  for k being Nat holds 2 * k in EvenNAT & not 2 * k + 1 in EvenNAT
+  proof
+    let k be Nat;
+    thus 2 * k in EvenNAT by Def3;
+    assume 2 * k + 1 in EvenNAT;
+    then consider p being Nat such that
+A1: 2 * k + 1 = 2 * p & not contradiction by Def3;
+    thus thesis by A1;
+  end;
+
+theorem Th54:
+  for k being Nat holds 2 * k + 1 in OddNAT & not 2 * k in OddNAT
+  proof
+    let k be Nat;
+    thus 2 * k + 1 in OddNAT by Def4;
+    assume 2 * k in OddNAT;
+    then consider p being Nat such that
+A1: 2 * k = 2 * p + 1 & not contradiction by Def4;
+    thus thesis by A1;
+  end;
+
+definition let n be Nat;
+  func EvenFibs (n) -> FinSequence of NAT equals :Def5:
+    Prefix (FIB, EvenNAT /\ Seg n);
+  coherence;
+  func OddFibs (n) -> FinSequence of NAT equals :Def6:
+    Prefix (FIB, OddNAT /\ Seg n);
+  coherence;
+end;
+
+theorem Th55:
+  EvenFibs (0) = {}
+  proof
+    reconsider E = {} as Subset of NAT by XBOOLE_1:2;
+    set FG = FIB | (EvenNAT /\ {});
+A1: FG = {} by RELAT_1:110;
+    reconsider FG as FinSubsequence by RELAT_1:110;
+     EvenFibs(0) = Prefix (FIB,EvenNAT /\ Seg 0) by Def5
+    .= Seq FG by Def1,FINSEQ_1:4
+    .= {} by A1,PNPROC_1:2;
+    hence thesis;
+  end;
+
+theorem
+  Seq (FIB | {2}) = <*1*>
+  proof
+    reconsider H = {[2,FIB.2]} as Function by GRFUNC_1:15;
+A1: dom H = {2} by RELAT_1:23;
+    dom H c= Seg 2
+    proof
+      let x be set;
+      assume x in dom H;
+      then x = 2 by A1,TARSKI:def 1;
+      hence thesis by FINSEQ_1:4,TARSKI:def 2;
+    end;
+    then reconsider H as FinSubsequence by FINSEQ_1:def 12;
+    2 in NAT;
+    then 2 in dom FIB by FUNCT_2:def 1;
+    then Seq (FIB | {2}) = Seq H by AMI_3:22
+      .= <*FIB.2*> by PNPROC_1:3
+      .= <*1*> by Def2,Th23;
+    hence thesis;
+  end;
+
+theorem Th57:
+  EvenFibs (2) = <*1*>
+  proof
+    set q = {[2,FIB.2]};
+    reconsider q as FinSubsequence by Th19;
+    2 in NAT; then
+A1: 2 in dom FIB by FUNCT_2:def 1;
+A2: EvenNAT /\ {1,2} = {2}
+    proof
+      thus EvenNAT /\ {1,2} c= {2}
+      proof
+        now let x be set;
+          assume x in EvenNAT /\ {1,2}; then
+A3:       x in EvenNAT & x in {1,2} by XBOOLE_0:def 3;
+          per cases by A3,TARSKI:def 2;
+          suppose x = 2 * 0 + 1;
+            hence x in {2} by A3,Th53;
+          end;
+          suppose x = 2 * 1;
+            hence x in {2} by TARSKI:def 1;
+          end;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+      thus {2} c= EvenNAT /\ {1,2}
+       proof
+         now let x be set;
+           assume x in {2}; then
+A4:        x = 2 * 1 by TARSKI:def 1; then
+A5:        x in EvenNAT by Th53;
+           x in {1,2} by A4,TARSKI:def 2;
+           hence x in EvenNAT /\ {1,2} by A5,XBOOLE_0:def 3;
+         end;
+        hence thesis by TARSKI:def 3;
+      end;
+    end;
+    EvenFibs (2) = Prefix (FIB,EvenNAT /\ Seg 2) by Def5
+     .= Seq (FIB | (EvenNAT /\ {1,2})) by Def1,FINSEQ_1:4
+     .= Seq q by A1,A2,AMI_3:22
+     .= <*FIB.2*> by PNPROC_1:3
+     .= <*1*> by Def2,Th23;
+    hence thesis;
+  end;
+
+theorem
+  EvenFibs (4) = <*1,3*>
+  proof
+    set q = {[2,FIB.2],[4,FIB.4]};
+    reconsider q as FinSubsequence by Th17;
+    2 in NAT & 4 in NAT;then
+A1: 2 in dom FIB & 4 in dom FIB by FUNCT_2:def 1;
+A2: EvenNAT /\ {1,2,3,4} = {2,4}
+    proof
+      thus EvenNAT /\ {1,2,3,4} c= {2,4}
+      proof
+        now let x be set;
+          assume x in EvenNAT /\ {1,2,3,4};then
+A3:       x in EvenNAT & x in {1,2,3,4} by XBOOLE_0:def 3;
+          per cases by A3,ENUMSET1:def 2;
+          suppose x = 2 * 0 + 1;
+            hence x in {2,4} by A3,Th53;
+          end;
+          suppose x = 2 * 1;
+            hence x in {2,4} by TARSKI:def 2;
+          end;
+          suppose x = 2 * 1 + 1;
+            hence x in {2,4} by A3,Th53;
+          end;
+          suppose x = 2 * 2;
+            hence x in {2,4} by TARSKI:def 2;
+          end;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+      thus {2,4} c= EvenNAT /\ {1,2,3,4}
+      proof
+        now let x be set;
+          assume A4: x in {2,4};then
+A5:       x = 2 or x = 4 by TARSKI:def 2;
+          x = 2 * 1 or x = 2 * 2 by A4,TARSKI:def 2;then
+A6:       x in EvenNAT by Th53;
+          x in {1,2,3,4} by A5,ENUMSET1:def 2;
+          hence x in EvenNAT /\ {1,2,3,4} by A6,XBOOLE_0:def 3;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+    end;
+A7: FIB | ({2} \/ {4}) = (FIB | {2}) \/ (FIB | {4}) by RELAT_1:107
+    .= {[2,FIB.2]} \/ (FIB | {4}) by A1,AMI_3:22
+    .= {[2,FIB.2]} \/ {[4,FIB.4]} by A1,AMI_3:22
+    .= q by ENUMSET1:41;
+     EvenFibs (4) = Prefix (FIB,EvenNAT /\ Seg 4) by Def5
+    .= Seq (FIB | ({2,4})) by A2,Def1,FINSEQ_3:2
+    .= Seq q by A7,ENUMSET1:41
+    .= <*FIB.2,FIB.4*> by Th18
+    .= <*(Fib (2)),FIB.4*> by Def2
+    .= <*1,3*> by Def2,Th23,Th25;
+    hence thesis;
+  end;
+
+theorem Th59:
+  for k being Nat holds
+    (EvenNAT /\ Seg (2 * k + 2)) \/ {2 * k + 4} = EvenNAT /\ Seg (2 * k + 4)
+  proof
+    let k be Nat;
+    2 * k + 4 = 2 * (k + 2); then
+A1: 2 * k + 4 in EvenNAT by Def3;
+    2 * k + 3 = 2 * (k + 1) + 1;
+    then not 2 * k + 3 in EvenNAT by Th53;then
+A2: {2*k+3} misses EvenNAT by ZFMISC_1:56;
+    EvenNAT /\ Seg (2 * k + 4) = EvenNAT /\ Seg (2 * k + 3 + 1)
+    .= EvenNAT /\ (Seg (2 * k + 3) \/ {2 * k + 4}) by FINSEQ_1:11
+    .= EvenNAT /\ Seg (2 * k + 3) \/ EvenNAT /\ {2 * k + 4} by XBOOLE_1:23
+    .= EvenNAT /\ Seg (2 * k + 2 + 1) \/ {2 * k + 4} by A1,ZFMISC_1:52
+    .= EvenNAT /\ (Seg (2 * k + 2) \/ {2 * k + 3}) \/ {2 * k + 4}
+      by FINSEQ_1:11
+    .= EvenNAT /\ Seg (2 * k + 2) \/ EvenNAT /\ {2 * k + 3} \/ {2 * k + 4}
+      by XBOOLE_1:23
+    .= EvenNAT /\ Seg (2 * k + 2) \/ {} \/ {2 * k + 4} by A2,XBOOLE_0:def 7
+    .= EvenNAT /\ Seg (2 * k + 2) \/  {2 * k + 4};
+    hence thesis;
+  end;
+
+theorem Th60:
+  for k being Nat holds
+    FIB | (EvenNAT /\ Seg (2 * k + 2)) \/ {[2*k+4,FIB.(2 * k + 4)]} =
+    FIB | (EvenNAT /\ Seg (2 * k + 4))
+  proof
+    let k be Nat;
+A1: dom FIB = NAT by FUNCT_2:def 1;
+    FIB | (EvenNAT /\ Seg (2 * k + 4)) =
+    FIB | ((EvenNAT /\ Seg (2 * k + 2)) \/  {2 * k + 4}) by Th59
+    .= (FIB | (EvenNAT /\ Seg (2 * k + 2))) \/  (FIB |{2 * k + 4})
+      by RELAT_1:107
+    .= FIB | (EvenNAT /\ Seg (2 * k + 2)) \/ {[2*k+4,FIB.(2*k+4)]}
+      by A1,AMI_3:22;
+    hence thesis;
+  end;
+
+theorem Th61:
+  for n being Nat holds
+    EvenFibs (2 * n + 2) = EvenFibs (2 * n) ^ <* Fib (2 * n + 2) *>
+    proof
+      let n be Nat;
+      defpred P[Nat] means EvenFibs (2 * $1 + 2) =
+        EvenFibs (2 * $1) ^ <* Fib (2 * $1 + 2) *>;
+A1:   P[0] by Th23,Th55,Th57,FINSEQ_1:47;
+A2:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];
+        set LEFTk = EvenFibs (2 * (k+1) + 2);
+        set RIGHTk = EvenFibs (2 * (k+1)) ^ <*Fib (2 * (k+1) + 2)*>;
+A3:     LEFTk = Prefix (FIB, EvenNAT /\ Seg (2 * k + 4)) by Def5
+          .= Seq (FIB | (EvenNAT /\ Seg (2 * k + 4))) by Def1;
+        reconsider RS = FIB | (EvenNAT /\ Seg (2 * k + 2)) as FinSubsequence;
+        reconsider ARR = {[1,FIB.(2*k+4)]} as FinSubsequence by Th19;
+        set RR = (2*k + 3) Shift ARR;
+A4:     dom RS c= EvenNAT /\ Seg (2 * k + 2) by RELAT_1:87;
+        EvenNAT /\ Seg (2 * k + 2) c= Seg (2 * k + 2) by XBOOLE_1:17;then
+A5:     dom RS c= Seg (2*k+2) by A4,XBOOLE_1:1;
+        2 * k + 3 > 2 * k + 2 by REAL_1:53;
+        then consider p1 being FinSequence such that
+A6:     RS c= p1 & dom p1 = Seg (2*k+3) by A5,Th21;
+        consider p2 being FinSequence such that
+A7:     ARR c= p2 by Th22;
+        len p1 = 2*k + 3 by A6,FINSEQ_1:def 3;
+        then consider RSR being FinSubsequence such that
+A8:     RSR = RS \/ RR and
+A9:     (Seq RS)^(Seq ARR) = Seq RSR by A6,A7,PNPROC_1:82;
+        1 + (2 * k + 3) = 2*k+4;then
+A10:    RR = {[2*k+4,FIB.(2*k+4)]} by Th20;
+        RIGHTk = Prefix (FIB, EvenNAT /\ Seg (2 * k + 2)) ^
+          <* Fib (2 * k + 4)*> by Def5
+           .= Seq (FIB | (EvenNAT /\ Seg (2 * k + 2))) ^
+           <* Fib (2 * k + 4) *> by Def1
+           .= Seq (FIB | (EvenNAT /\ Seg (2 * k + 2))) ^
+           <* FIB.(2 * k + 4) *> by Def2
+           .= Seq (RSR) by A9,PNPROC_1:3
+           .= LEFTk by A3,A8,A10,Th60;
+        hence thesis;
+      end;
+      for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+      hence thesis;
+    end;
+
+theorem Th62:
+  OddFibs (1) = <*1*>
+  proof
+    set q = {[1,FIB.1]};
+    reconsider q as FinSubsequence by Th19;
+    1 in NAT;then
+A1: 1 in dom FIB by FUNCT_2:def 1;
+A2: OddNAT /\ {1} = {1}
+    proof
+      thus OddNAT /\ {1} c= {1}
+      proof
+         for x be set st x in OddNAT /\ {1} holds x in {1} by XBOOLE_0:def 3;
+         hence thesis by TARSKI:def 3;
+       end;
+        thus {1} c= OddNAT /\ {1}
+        proof
+           now let x be set;
+            assume A3:x in {1};
+            then x = 2 * 0 + 1 by TARSKI:def 1;
+            then x in OddNAT by Th54;
+            hence x in OddNAT /\ {1} by A3,XBOOLE_0:def 3;
+          end;
+          hence thesis by TARSKI:def 3;
+        end;
+    end;
+    OddFibs (1) = Prefix (FIB, OddNAT /\ Seg 1) by Def6
+     .= Seq (FIB | (OddNAT /\ {1})) by Def1,FINSEQ_1:4
+     .= Seq q by A1,A2,AMI_3:22
+     .= <*FIB.1*> by PNPROC_1:3
+     .= <*1*> by Def2,PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th63:
+  OddFibs (3) = <*1,2*>
+  proof
+    set q = {[1,FIB.1],[3,FIB.3]};
+    reconsider q as FinSubsequence by Th17;
+    1 in NAT & 3 in NAT; then
+A1: 1 in dom FIB & 3 in dom FIB by FUNCT_2:def 1;
+A2: OddNAT /\ {1,2,3} = {1,3}
+    proof
+      thus OddNAT /\ {1,2,3} c= {1,3}
+      proof
+        now let x be set;
+          assume x in OddNAT /\ {1,2,3}; then
+A3:       x in OddNAT & x in {1,2,3} by XBOOLE_0:def 3;
+          per cases by A3,ENUMSET1:def 1;
+          suppose x = 2 * 0 + 1;
+            hence x in {1,3} by TARSKI:def 2;
+          end;
+          suppose x = 2 * 1;
+            hence x in {1,3} by A3,Th54;
+          end;
+          suppose x = 2 * 1 + 1;
+            hence x in {1,3} by TARSKI:def 2;
+          end;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+      thus {1,3} c= OddNAT /\ {1,2,3}
+      proof
+         now let x be set;
+          assume
+A4:       x in {1,3}; then
+A5:       x = 1 or x = 3 by TARSKI:def 2;
+          x = 2 * 0 + 1 or x = 2 * 1 + 1 by A4,TARSKI:def 2;then
+A6:       x in OddNAT by Th54;
+          x in {1,2,3} by A5,ENUMSET1:def 1;
+          hence x in OddNAT /\ {1,2,3} by A6,XBOOLE_0:def 3;
+        end;
+        hence thesis by TARSKI:def 3;
+      end;
+    end;
+A7: FIB | ({1} \/ {3}) = (FIB | {1}) \/ (FIB | {3}) by RELAT_1:107
+    .= {[1,FIB.1]} \/ (FIB | {3}) by A1,AMI_3:22
+    .= {[1,FIB.1]} \/ {[3,FIB.3]} by A1,AMI_3:22
+    .= q by ENUMSET1:41;
+     OddFibs (3) = Prefix (FIB, OddNAT /\ Seg 3) by Def6
+    .= Seq (FIB | (OddNAT /\ {1,2,3})) by Def1,FINSEQ_3:1
+    .= Seq (FIB | ({1} \/ {3})) by A2,ENUMSET1:41
+    .= <*FIB.1,FIB.3*> by A7,Th18
+    .= <* Fib (1), FIB.3 *> by Def2
+    .= <* 1, 2 *> by Def2,Th24,PRE_FF:1;
+    hence thesis;
+  end;
+
+theorem Th64:
+  for k being Nat holds
+    OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5} = OddNAT /\ Seg (2 * k + 5)
+  proof
+    let k be Nat;
+    2 * k + 5 = 2 * (k + 2) + 1;then
+A1: 2 * k + 5 in OddNAT by Def4;
+    2 * k + 4 = 2 * ((k+1) +1);
+    then not 2 * k + 4 in OddNAT by Th54; then
+A2: {2 * k + 4} misses OddNAT by ZFMISC_1:56;
+    OddNAT /\ Seg (2 * k + 5) = OddNAT /\ Seg (2 * k + 4 + 1)
+      .= OddNAT /\ (Seg (2 * k + 4) \/ {2 * k + 5}) by FINSEQ_1:11
+      .= OddNAT /\ Seg (2 * k + 3 + 1) \/ OddNAT /\ {2 * k + 5}
+         by XBOOLE_1:23
+      .= OddNAT /\ (Seg (2 * k + 3) \/ {2 * k + 4}) \/ OddNAT /\ {2 * k + 5}
+         by FINSEQ_1:11
+      .= OddNAT /\ Seg (2 * k + 3) \/ OddNAT /\ {2 * k + 4} \/
+         OddNAT /\ {2 * k + 5} by XBOOLE_1:23
+      .= OddNAT /\ Seg (2 * k + 3) \/ {} \/ OddNAT /\ {2 * k + 5}
+         by A2,XBOOLE_0:def 7
+      .= OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5} by A1,ZFMISC_1:52;
+    hence thesis;
+  end;
+
+theorem Th65:
+  for k being Nat holds
+    (FIB | (OddNAT /\ Seg (2 * k + 3))) \/ {[2*k+5,FIB.(2 * k + 5)]} =
+      (FIB | (OddNAT /\ Seg (2 * k + 5)))
+  proof
+    let k be Nat;
+A1: dom FIB = NAT by FUNCT_2:def 1;
+    (FIB | (OddNAT /\ Seg (2 * k + 5))) =
+    (FIB | (OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5})) by Th64
+    .= FIB | (OddNAT /\ Seg (2 * k + 3)) \/ (FIB | ({2 * k + 5}))
+      by RELAT_1:107
+    .= FIB | (OddNAT /\ Seg (2 * k + 3)) \/ {[2*k+5,FIB.(2 * k + 5)]}
+      by A1,AMI_3:22;
+    hence thesis;
+  end;
+
+theorem Th66:
+  for n being Nat holds
+    OddFibs (2 * n + 3) = OddFibs (2 * n + 1) ^ <* Fib (2 * n + 3) *>
+    proof
+      let n be Nat;
+      defpred P[Nat] means
+      OddFibs (2 * $1 + 3) = OddFibs (2 * $1 + 1) ^ <* Fib (2 * $1 + 3) *>;
+A1:   P[0] by Th24,Th62,Th63,FINSEQ_1:def 9;
+A2:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        assume P[k];
+        set LEFTk = OddFibs (2 * (k + 1) + 3);
+        set RIGHTk = OddFibs (2 * (k + 1) + 1) ^ <* Fib (2 * (k + 1) + 3)*>;
+A3:     LEFTk = Prefix (FIB, OddNAT /\ Seg (2 * k + 5)) by Def6
+         .= Seq (FIB | (OddNAT /\ Seg (2 * k + 5))) by Def1;
+        reconsider RS = FIB | (OddNAT /\ Seg (2 * k + 3)) as FinSubsequence;
+        reconsider ARR = {[1,FIB.(2 * k + 5)]} as FinSubsequence by Th19;
+        set RR = (2 * k + 4) Shift ARR;
+A4:     dom RS c= OddNAT /\ Seg (2 * k + 3) by RELAT_1:87;
+        OddNAT /\ Seg (2 * k + 3) c= Seg (2 * k + 3) by XBOOLE_1:17;then
+A5:     dom RS c= Seg (2 * k + 3) by A4,XBOOLE_1:1;
+        2 * k + 4 > 2 * k + 3 by REAL_1:53;
+        then consider p1 being FinSequence such that
+A6:     RS c= p1 & dom p1 = Seg (2 * k + 4) by A5,Th21;
+        consider p2 being FinSequence such that
+A7:     ARR c= p2 by Th22;
+        len p1 = 2 * k + 4 by A6,FINSEQ_1:def 3;
+        then consider RSR being FinSubsequence such that
+A8:     RSR = RS \/ RR and
+A9:     (Seq RS) ^ (Seq ARR) = Seq RSR by A6,A7,PNPROC_1:82;
+        1 + (2 * k + 4) = 2 * k + 5; then
+A10:    RR = {[2 * k + 5,FIB.(2 * k + 5)]} by Th20;
+        RIGHTk = Prefix (FIB, OddNAT /\ Seg (2 * k + 3)) ^
+          <* Fib (2 * k + 5)*> by Def6
+          .= Seq (FIB | (OddNAT /\ Seg (2 * k + 3))) ^
+          <* Fib (2 * k + 5) *> by Def1
+          .= Seq (FIB | (OddNAT /\ Seg (2 * k + 3))) ^
+          <* FIB.(2 * k + 5) *> by Def2
+          .= Seq (RSR) by A9,PNPROC_1:3
+          .= LEFTk by A3,A8,A10,Th65;
+        hence thesis;
+      end;
+      for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+      hence thesis;
+    end;
+
+theorem
+  for n being Nat holds
+    Sum EvenFibs (2 * n + 2) = Fib (2 * n + 3) - 1
+    proof
+      let n be Nat;
+      defpred P[Nat] means Sum EvenFibs (2 * $1 + 2) = Fib (2 * $1 + 3) - 1;
+A1:   P[0] by Th24,Th57,RVSUM_1:103;
+A2:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        reconsider EE = EvenFibs (2 * ( k + 1)) as FinSequence of REAL
+          by FINSEQ_2:27;
+        assume A3: P[k];
+        Sum EvenFibs (2 * (k + 1) + 2) =
+        Sum ((EvenFibs (2 * ( k + 1)) qua FinSequence of NAT) ^
+         <*Fib (2 * (k + 1) + 2)*>) by Th61
+         .= Sum EE + Fib (2 * (k + 1) + 2) by RVSUM_1:104
+         .= Fib (2 * k + 3) - 1 + Fib (2 * k + 4) by A3
+         .= Fib (2 * k + 3) + Fib (2 * k + 4) - 1
+         .= Fib (2 * k + 5) - 1 by Th29;
+        hence thesis;
+      end;
+      for n being Nat holds P[n] from NAT_1:sch 1(A1, A2);
+      hence thesis;
+    end;
+
+theorem
+  for n being Nat holds
+    Sum OddFibs (2 * n + 1) = Fib (2 * n + 2)
+    proof
+      let n be Nat;
+      defpred P[Nat] means Sum OddFibs (2 * $1 + 1) = Fib (2 * $1 + 2);
+A1:   P[0] by Th23,Th62,RVSUM_1:103;
+A2:   for k being Nat st P[k] holds P[k+1]
+      proof
+        let k be Nat;
+        reconsider EE = OddFibs (2 * k + 1) as FinSequence of REAL
+        by FINSEQ_2:27;
+        assume
+A3:     P[k];
+        Sum OddFibs (2 * (k + 1) + 1) =
+         Sum ((OddFibs (2 * k + 1)) ^ <*(Fib (2 * k + 3) qua Nat)*>)
+          by Th66
+        .= Sum EE + Fib (2 * k + 3) by RVSUM_1:104
+        .= Fib (2 * k + 4) by A3,Th28;
+        hence thesis;
+      end;
+       for n being Nat holds P[n] from NAT_1:sch 1(A1, A2);
+      hence thesis;
+    end;
+
+begin :: Carmichael's Theorem on Prime Divisors
+
+theorem Th69:
+  for n being Nat holds Fib (n), Fib (n+1) are_relative_prime
+  proof
+    let n be Nat;
+A1: n,n + 1 are_relative_prime by PEPIN:1;
+    Fib (n) hcf Fib (n + 1) = Fib (n hcf (n + 1)) by FIB_NUM:5
+     .= 1 by A1,INT_2:def 6,PRE_FF:1;
+    hence thesis by INT_2:def 6;
+  end;
+
+theorem Th70:
+  for n being non empty Nat, m being Nat st m <> 1 holds
+    m divides Fib (n) implies not m divides Fib (n-'1)
+  proof
+    let n be non empty Nat;
+A1: n >= 1 by NAT_2:21;
+    let m be Nat;
+    assume
+A2: m <> 1;
+    assume
+A3: m divides Fib (n);
+    assume
+A4: m divides Fib (n-'1);
+    n = n -' 1 + 1 by A1,AMI_5:4;
+    then Fib (n-'1), Fib (n) are_relative_prime by Th69;
+    then Fib (n-'1) hcf Fib (n) = 1 by INT_2:def 6;
+    then m divides 1 by A3,A4,NAT_1:def 5;
+    hence contradiction by A2,WSIERP_1:20;
+  end;
+
+theorem
+  for n being non empty Nat holds
+    m is prime & n is prime & m divides Fib (n) implies
+      for r being Nat st r < n & r <> 0 holds not m divides Fib (r)
+  proof
+    let n be non empty Nat;
+    assume
+A1: m is prime; then
+A2: m <> 1 by INT_2:def 5;
+    assume
+A3: n is prime;
+    assume
+A4: m divides Fib(n);
+    assume
+A5: not for r being Nat st (r < n & r <> 0) holds  not m divides Fib (r);
+    defpred R[Nat] means $1 < n & $1 <> 0 & m divides Fib ($1);
+    reconsider C = {x where x is Element of NAT : R[x]} as Subset of NAT
+      from DOMAIN_1:sch 7;
+    C is non empty Subset of NAT
+    proof
+      consider r being Nat such that
+A6:   r < n & r <> 0 & m divides Fib (r) by A5;
+      r in C by A6;
+      hence thesis;
+    end;
+    then reconsider C as non empty Subset of NAT;
+    set r = min C;
+    r in C by CQC_SIM1:def 8;
+    then consider r' being Element of NAT such that
+A7: r' = r & R[r'];
+    defpred P[Nat] means
+     (m divides Fib (n -' r * ($1 + 1)) & r <= n / ($1 + 2));
+A8: not m divides Fib (r-'1) by A2,A7,Th70;
+A9: P[0]
+    proof
+A10:  n -' r < n by A7,NAT_2:11;
+      r - r < n - r by A7,REAL_1:54;
+      then n - r > 0; then
+A11:  n -' r <> 0 by BINARITH:def 3;
+A12:  Fib (n) = Fib (n -' r + r) by A7,AMI_5:4
+       .= Fib (r) * Fib (n-'r+1) + Fib (r-'1) * Fib (n-'r) by A7,Th42;
+      m divides Fib (r) * Fib (n-'r+1) by A7,NAT_1:56; then
+A13:  m divides Fib (r-'1) * Fib (n-'r) by A4,A12,NAT_1:57; then
+      m divides Fib (n-'r) by A1,A8,NAT_LAT:95;then
+      n -' r in C by A10,A11;
+      then n -' r >= r by CQC_SIM1:def 8;
+      then n >= r + r by A7,SPRECT_3:7;
+      then n / 2 >= (2*r) / 2 by REAL_1:73;
+      hence thesis by A1,A8,A13,NAT_LAT:95;
+    end;
+A14:for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat;
+A15:  k + 2 >= 0 by NAT_1:37;
+      1 + k + 2 >= 0 by NAT_1:37;then
+A16:  1 / (1 + k + 2) >= 0 by REAL_2:125;
+A17:  k + 2 <> 0 by NAT_1:37;
+A18:  1 + k + 2 <> 0 by NAT_1:37;
+      assume
+A19:  P[k]; then
+A20:  r * (k+2) <= n / (k+2) * (k+2) by A15,AXIOMS:25;then
+A21:  r * (k+2) <= n by A17,XCMPLX_1:88;
+      r + r * (k+1) <= n by A17,A20,XCMPLX_1:88;
+      then r * (k+1) < n by A7,Th16; then
+A22:  (k+1) * r - (k+1) * r < n - (k+1) * r by REAL_1:54;
+A23:  n - r * (k+2) <> 0
+      proof
+        assume
+A24:    n - r * (k+2) = 0; then
+A25:    n - r * (k+2) + r * (k+2) = 0 + r * (k+2); then
+A26:    r divides n & k+2 divides n by A24,NAT_1:def 3;
+        per cases by A3,A26,INT_2:def 5;
+        suppose r = 1 & k+2 = n;
+          then m = 1 by A7,PRE_FF:1,WSIERP_1:20;
+          hence contradiction by A1,INT_2:def 5;
+        end;
+        suppose r=1 & k+2=1;
+          hence contradiction by A3,A24,A25,INT_2:def 5;
+        end;
+        suppose r=n & k+2=n;
+          hence contradiction by A7;
+        end;
+        suppose r=n & k+2=1;
+          hence contradiction by A7;
+        end;
+      end;
+A27:  n - r * (k+2) > 0
+      proof
+        n - r * (k+2) >= r * (k+2) - r * (k+2) by A21,REAL_1:49;
+        hence thesis by A23;
+      end;
+      then n - (k+1) * r - r > 0;
+      then n -' (k+1) * r - r > 0 by A22,BINARITH:def 3; then
+A28:  n -' (k+1) * r -' r = n -' (k+1) * r - r by BINARITH:def 3
+       .= n - (k+1) * r - r by A22,BINARITH:def 3
+       .= n -'((k+2) * r) by A27,BINARITH:def 3;
+      n - r * (k+1) >= r + r * (k+1) - r * (k+1) by A21,REAL_1:49;
+      then r <= n -' r * (k+1) by A22,BINARITH:def 3;then
+A29:  Fib (n -' (k+1) * r) = Fib (n -' (k+2) * r + r) by A28,AMI_5:4
+       .= Fib (r) * Fib (n-'(k+2) * r+1) + Fib (r-'1) * Fib (n-'(k+2)*r)
+         by A7,Th42;
+      m divides Fib (r) * Fib (n-'(k+2) * r+1) by A7,NAT_1:56; then
+A30:  m divides Fib (r-'1) * Fib (n-'(k+2) * r) by A19,A29,NAT_1:57; then
+A31:  m divides Fib (n-'(k+2) * r) by A1,A8,NAT_LAT:95;
+A32:  n -' (k+2) * r <> 0 by A27,BINARITH:def 3;
+      n -' (k+2) * r < n
+      proof
+        k + 1 <> 0 by NAT_1:21;
+        then k + 1 > 0 by NAT_1:19; then
+A33:    k + 1+1 > 0 by NAT_1:29;
+        r > 0 by A7,NAT_1:19;
+        then - r < 0 by REAL_1:26,50;
+        then (- r) * (k+2) < 0 * (k+2) by A33,REAL_1:70;
+        then - r * (k+2) + n < 0 + n by REAL_1:53;
+        hence thesis by A27,BINARITH:def 3;
+      end;
+      then n -' (k+2) * r in C by A31,A32;
+      then n -'(k+2) * r >= r by CQC_SIM1:def 8;
+      then n >= r + (k+2) * r by A21,SPRECT_3:7;
+      then n * (1/(1+k+2)) >= (r * (1+k+2)) * (1/(1+k+2)) by A16,AXIOMS:25;
+      then n * (1/(1+k+2)) >= (r * (1+k+2)) / (1+k+2) by XCMPLX_1:100;
+      then n / (1+k+2) >= r * (1+k+2) / (1+k+2) by XCMPLX_1:100;
+      hence thesis by A1,A8,A18,A30,NAT_LAT:95,XCMPLX_1:90;
+    end;
+A34:for k being Nat holds P[k] from NAT_1:sch 1(A9,A14);
+    r < 1 + 0
+    proof
+A35:  n + 2 > n by REAL_1:69;
+      then n + 2 > 0 by NAT_1:18; then
+A36:  n / (n+2) < 1 by A35,REAL_2:118;
+      r <= n /(n+2) by A34;
+      hence thesis by A36,AXIOMS:22;
+    end;
+    then r <= 0 by NAT_1:38;
+    hence contradiction by A7,NAT_1:18;
+  end;
+
+begin :: Fibonacci Numbers and Pythagorean Triples
+
+theorem
+   for n being non empty Nat holds
+     {Fib (n) * Fib (n+3), 2 * Fib (n+1) * Fib (n+2),
+       (Fib (n+1)) ^2 + (Fib (n+2)) ^2} is Pythagorean_triple
+  proof
+    let n be non empty Nat;
+    (Fib (n) * Fib (n+3)) ^2 + ((2 * Fib (n+1)) * Fib (n+2)) ^2 =
+    (Fib (n)) ^2 * (Fib (n+3)) ^2 + ((2 * Fib (n+1)) * Fib (n+2)) ^2
+    by SQUARE_1:68
+    .= (Fib (n)) ^2 * (Fib (n+3)) ^2 + (2 * Fib (n+1)) ^2 * (Fib (n+2)) ^2
+    by SQUARE_1:68
+    .= (Fib (n)) ^2 * (Fib (n+3)) ^2 + 2 ^2 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2
+    by SQUARE_1:68
+    .= (Fib (n)) ^2 * (Fib (n+3)) ^2 +
+      (2 * 2) * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by SQUARE_1:def 3
+    .= (Fib (n)) ^2 * (Fib (n+2) + Fib (n+1)) ^2 +
+    4 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by Th27
+    .= (Fib (n+2) - Fib (n+1)) ^2 * (Fib (n+2) + Fib (n+1)) ^2 +
+    4 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by Th32
+    .= ((Fib (n+2) - Fib (n+1)) * (Fib (n+2) + Fib (n+1))) ^2 +
+    4 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by SQUARE_1:68
+    .= ((Fib (n+2)) ^2 - (Fib (n+1)) ^2) ^2 +
+    4 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by SQUARE_1:67
+    .= ((Fib (n+2)) ^2) ^2 - 2 * (Fib (n+2)) ^2 * (Fib (n+1)) ^2 +
+    ((Fib (n+1)) ^2) ^2 + 4 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 by SQUARE_1:64
+    .= ((Fib (n+1)) ^2) ^2  + 2 * (Fib (n+1)) ^2 * (Fib (n+2)) ^2 +
+    ((Fib (n+2)) ^2) ^2
+    .= ((Fib (n+1)) ^2 + (Fib (n+2)) ^2) ^2 by SQUARE_1:63;
+    hence thesis by PYTHTRIP:def 4;
+  end;

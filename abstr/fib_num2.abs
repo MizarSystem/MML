@@ -1,0 +1,396 @@
+:: Some Properties of {F}ibonacci Numbers
+::  by Magdalena Jastrz\c{e}bska and Adam Grabowski
+:: 
+:: Received May 10, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, ARYTM_3, SQUARE_1, FUNCT_1, PRE_FF, FILTER_0,
+      RELAT_1, ORDINAL2, FIB_NUM, PREPOWER, POWER, SEQ_2, GROUP_1, INT_1,
+      FINSEQ_1, FIB_NUM2, CARD_1, RLVECT_1, REALSET1, MATRIX_2, FUNCOP_1,
+      RELOC, FUNCT_4, TURING_1, FINSET_1, MEMBERED, BOOLE, AMI_1, PYTHTRIP;
+ notation TARSKI, ORDINAL1, ORDINAL2, SUBSET_1, XBOOLE_0, NUMBERS, XCMPLX_0,
+      XREAL_0, CARD_1, SQUARE_1, INT_1, NAT_1, INT_2, FINSET_1, MEMBERED,
+      RELAT_1, FUNCT_1, FUNCT_2, PRE_FF, RVSUM_1, REALSET1, CQC_SIM1, NEWTON,
+      PREPOWER, POWER, PRE_CIRC, AMI_1, ABIAN, DOMAIN_1, FINSEQ_1, BINARITH,
+      FUNCT_4, FIB_NUM, WSIERP_1, PYTHTRIP, PEPIN, SEQ_4, PNPROC_1;
+ constructors REAL_1, PREPOWER, INT_2, PRE_FF, POWER, FIB_NUM, BINARITH,
+      WSIERP_1, PRE_CIRC, DOMAIN_1, PNPROC_1, CQC_SIM1, REALSET1, ABIAN, AMI_1,
+      PYTHTRIP, PEPIN;
+ clusters XREAL_0, SQUARE_1, NEWTON, RELSET_1, MEMBERED, INT_1, ORDINAL2,
+      FINSEQ_1, FINSET_1, FUNCT_1, PNPROC_1, AMI_1, PRE_CIRC, NAT_2, ABIAN,
+      PREPOWER;
+ requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
+
+
+begin :: Preliminaries
+
+ reserve n, k, r, m, i, j for Nat;
+
+theorem :: FIB_NUM2:1
+  for n being non empty Nat holds
+    n -' 1 + 2 = n + 1;
+
+theorem :: FIB_NUM2:2
+  for n being odd Integer,
+      m being non empty real number holds
+    (-m) to_power n = -(m to_power n);
+
+theorem :: FIB_NUM2:3
+  for n being odd Integer holds
+    (-1) to_power n = -1;
+
+theorem :: FIB_NUM2:4
+  for n being even Integer,
+      m being non empty real number holds
+    (-m) to_power n = m to_power n;
+
+theorem :: FIB_NUM2:5
+  for n being even Integer holds
+    (-1) to_power n = 1;
+
+theorem :: FIB_NUM2:6
+  for m being non empty real number, n being Integer holds
+    ((-1) * m) to_power n = ((-1) to_power n) * (m to_power n);
+
+theorem :: FIB_NUM2:7
+  for a being non empty real number holds
+    a to_power (k+m) = (a to_power k) * (a to_power m);
+
+theorem :: FIB_NUM2:8
+  for k being non empty real number,
+      m being odd Integer holds
+    k to_power m to_power n = k to_power (m * n);
+
+theorem :: FIB_NUM2:9
+  ((-1) to_power (-n)) ^2 = 1;
+
+theorem :: FIB_NUM2:10
+  for a being non empty real number holds
+    (a to_power (-k)) * (a to_power (-m)) = a to_power (-k-m);
+
+theorem :: FIB_NUM2:11
+  (-1) to_power (-2 * n) = 1;
+
+theorem :: FIB_NUM2:12
+  for a being non empty real number holds
+    (a to_power k) * (a to_power (-k)) = 1;
+
+registration let n be odd Integer;
+  cluster -n -> odd;
+end;
+
+registration let n be even Integer;
+  cluster -n -> even;
+end;
+
+theorem :: FIB_NUM2:13
+  (-1) to_power (-n) = (-1) to_power n;
+
+theorem :: FIB_NUM2:14
+  for k, m, m1, n1 being Nat st k divides m & k divides n holds
+    k divides m * m1 + n * n1;
+
+registration
+  cluster finite non empty natural-membered with_non-empty_elements set;
+end;
+
+registration let f be Function of NAT, NAT;
+             let A be finite natural-membered with_non-empty_elements set;
+  cluster f | A -> FinSubsequence-like;
+end;
+
+theorem :: FIB_NUM2:15
+  for p being FinSubsequence holds
+    rng Seq p c= rng p;
+
+definition let f be Function of NAT, NAT;
+           let A be finite with_non-empty_elements natural-membered set;
+  func Prefix (f, A) -> FinSequence of NAT equals
+:: FIB_NUM2:def 1
+     Seq (f | A);
+end;
+
+theorem :: FIB_NUM2:16
+  for k being Nat st k <> 0 holds
+    k + m <= n implies m < n;
+
+registration
+  cluster NAT -> bounded_below;
+end;
+
+registration
+  cluster {1,2,3} -> natural-membered with_non-empty_elements;
+end;
+
+registration
+  cluster {1,2,3,4} -> natural-membered with_non-empty_elements;
+end;
+
+theorem :: FIB_NUM2:17
+  for x, y being set st 0 < i & i < j holds {[i,x], [j,y]} is FinSubsequence;
+
+theorem :: FIB_NUM2:18
+  for x, y being set,
+      q being FinSubsequence st i < j & q = {[i,x], [j,y]} holds
+    Seq q = <*x,y*>;
+
+registration let n be Nat;
+  cluster Seg n -> with_non-empty_elements;
+end;
+
+registration let A be with_non-empty_elements set;
+  cluster -> with_non-empty_elements Subset of A;
+end;
+
+registration let A be with_non-empty_elements set;
+             let B be set;
+  cluster A /\ B -> with_non-empty_elements;
+  cluster B /\ A -> with_non-empty_elements;
+end;
+
+theorem :: FIB_NUM2:19
+  for k being Nat, a being set st k >= 1 holds
+    {[k, a]} is FinSubsequence;
+
+theorem :: FIB_NUM2:20
+  for i, k being Nat,
+      y being set,
+      f being FinSubsequence st f = { [1,y] } holds
+    i Shift f = { [1+i,y] };
+
+theorem :: FIB_NUM2:21
+  for q being FinSubsequence,
+      k, n being Nat st dom q c= Seg k & n > k
+   ex p being FinSequence st q c= p & dom p = Seg n;
+
+theorem :: FIB_NUM2:22
+  for q being FinSubsequence holds
+    ex p being FinSequence st q c= p;
+
+begin :: Fibonacci Numbers
+
+scheme :: FIB_NUM2:sch 1
+ Fib_Ind_1 {P[Nat] } :
+  for k being non empty Nat holds P[k] provided
+  P[1] and
+  P[2] and
+  for k being non empty Nat st P[k] & P[k+1] holds P[k+2];
+
+scheme :: FIB_NUM2:sch 2
+ Fib_Ind_2 {P[Nat] } :
+  for k be non trivial Nat holds P[k] provided
+  P[2] and
+  P[3] and
+  for k be non trivial Nat st P[k] & P[k+1] holds P[k+2];
+
+theorem :: FIB_NUM2:23
+  Fib (2) = 1;
+
+theorem :: FIB_NUM2:24
+  Fib (3) = 2;
+
+theorem :: FIB_NUM2:25
+  Fib (4) = 3;
+
+theorem :: FIB_NUM2:26
+  Fib (n + 2) = Fib (n) + Fib (n + 1);
+
+theorem :: FIB_NUM2:27
+  Fib (n + 3) = Fib (n + 2) + Fib (n + 1);
+
+theorem :: FIB_NUM2:28
+  Fib (n + 4) = Fib (n + 2) + Fib (n + 3);
+
+theorem :: FIB_NUM2:29
+  Fib (n + 5) = Fib (n + 3) + Fib (n + 4);
+
+theorem :: FIB_NUM2:30
+  Fib (n + 2) = Fib (n + 3) - Fib (n + 1);
+
+theorem :: FIB_NUM2:31
+  Fib (n + 1) = Fib (n + 2) - Fib (n);
+
+theorem :: FIB_NUM2:32
+  Fib (n) = Fib (n+2) - Fib (n+1);
+
+begin :: Cassini's and Catalan's Identities
+
+theorem :: FIB_NUM2:33
+  Fib (n) * Fib (n+2) - (Fib (n+1)) ^2 = (-1) |^ (n+1);
+
+theorem :: FIB_NUM2:34
+  for n being non empty Nat holds
+    Fib (n-'1) * Fib (n+1) - (Fib (n)) ^2 = (-1) |^n;
+
+theorem :: FIB_NUM2:35
+  tau > 0;
+
+theorem :: FIB_NUM2:36
+  tau_bar = (- tau) to_power (-1);
+
+theorem :: FIB_NUM2:37
+  (-tau) to_power ((-1) * n) = (-tau) to_power (-1) to_power n;
+
+theorem :: FIB_NUM2:38
+  - 1 / tau = tau_bar;
+
+theorem :: FIB_NUM2:39
+  (tau to_power r) ^2 - 2 * ((-1) to_power r) + (tau to_power (-r)) ^2 =
+    ((tau to_power r) - (tau_bar to_power r)) ^2;
+
+theorem :: FIB_NUM2:40
+  for n,r being non empty Nat st r <= n holds
+    (Fib (n)) ^2 - Fib (n+r) * Fib (n-'r) = ((-1) |^(n-'r)) * (Fib (r)) ^2;
+
+theorem :: FIB_NUM2:41
+  (Fib (n)) ^2 + (Fib (n+1)) ^2 = Fib (2*n + 1);
+
+theorem :: FIB_NUM2:42
+  for k being non empty Nat holds
+    Fib (n+k) = Fib (k) * Fib (n+1) + Fib (k-'1) * Fib (n);
+
+theorem :: FIB_NUM2:43
+  for n being non empty Nat holds
+    Fib (n) divides Fib (n*k);
+
+theorem :: FIB_NUM2:44
+  for k being non empty Nat holds
+    k divides n implies Fib (k) divides Fib (n);
+
+theorem :: FIB_NUM2:45
+  Fib (n) <= Fib (n + 1);
+
+theorem :: FIB_NUM2:46
+  for n being Nat st n > 1 holds
+    Fib (n) < Fib (n+1);
+
+theorem :: FIB_NUM2:47
+  for m, n being Nat st m >= n holds Fib(m) >= Fib(n);
+
+theorem :: FIB_NUM2:48
+  for k being Nat st k > 1 holds
+    k < n implies Fib (k) < Fib (n);
+
+theorem :: FIB_NUM2:49
+  Fib (k) = 1 iff k = 1 or k = 2;
+
+theorem :: FIB_NUM2:50
+  for k,n being Nat st n > 1 & k <> 0 & k <> 1 &
+    ((k <> 1 & n <> 2) or (k <> 2 & n <> 1)) holds
+      Fib (k) = Fib (n) iff k = n;
+
+theorem :: FIB_NUM2:51
+  for n being Nat st n > 1 & n <> 4 holds
+  n is non prime implies ex k being non empty Nat st
+    k <> 1 & k <> 2 & k <> n & k divides n;
+
+theorem :: FIB_NUM2:52
+  for n being Nat st n > 1 & n <> 4 holds
+    Fib (n) is prime implies n is prime;
+
+begin :: Sequence of Fibonacci Numbers
+
+definition
+  func FIB -> Function of NAT, NAT means
+:: FIB_NUM2:def 2
+    for k being Nat holds it.k = Fib(k);
+end;
+
+definition
+  func EvenNAT -> Subset of NAT equals
+:: FIB_NUM2:def 3
+    { 2 * k where k is Nat : not contradiction };
+   func OddNAT -> Subset of NAT equals
+:: FIB_NUM2:def 4
+     { 2 * k + 1 where k is Nat : not contradiction };
+ end;
+
+theorem :: FIB_NUM2:53
+  for k being Nat holds 2 * k in EvenNAT & not 2 * k + 1 in EvenNAT;
+
+theorem :: FIB_NUM2:54
+  for k being Nat holds 2 * k + 1 in OddNAT & not 2 * k in OddNAT;
+
+definition let n be Nat;
+  func EvenFibs (n) -> FinSequence of NAT equals
+:: FIB_NUM2:def 5
+    Prefix (FIB, EvenNAT /\ Seg n);
+  func OddFibs (n) -> FinSequence of NAT equals
+:: FIB_NUM2:def 6
+    Prefix (FIB, OddNAT /\ Seg n);
+end;
+
+theorem :: FIB_NUM2:55
+  EvenFibs (0) = {};
+
+theorem :: FIB_NUM2:56
+  Seq (FIB | {2}) = <*1*>;
+
+theorem :: FIB_NUM2:57
+  EvenFibs (2) = <*1*>;
+
+theorem :: FIB_NUM2:58
+  EvenFibs (4) = <*1,3*>;
+
+theorem :: FIB_NUM2:59
+  for k being Nat holds
+    (EvenNAT /\ Seg (2 * k + 2)) \/ {2 * k + 4} = EvenNAT /\ Seg (2 * k + 4);
+
+theorem :: FIB_NUM2:60
+  for k being Nat holds
+    FIB | (EvenNAT /\ Seg (2 * k + 2)) \/ {[2*k+4,FIB.(2 * k + 4)]} =
+    FIB | (EvenNAT /\ Seg (2 * k + 4));
+
+theorem :: FIB_NUM2:61
+  for n being Nat holds
+    EvenFibs (2 * n + 2) = EvenFibs (2 * n) ^ <* Fib (2 * n + 2) *>;
+
+theorem :: FIB_NUM2:62
+  OddFibs (1) = <*1*>;
+
+theorem :: FIB_NUM2:63
+  OddFibs (3) = <*1,2*>;
+
+theorem :: FIB_NUM2:64
+  for k being Nat holds
+    OddNAT /\ Seg (2 * k + 3) \/ {2 * k + 5} = OddNAT /\ Seg (2 * k + 5);
+
+theorem :: FIB_NUM2:65
+  for k being Nat holds
+    (FIB | (OddNAT /\ Seg (2 * k + 3))) \/ {[2*k+5,FIB.(2 * k + 5)]} =
+      (FIB | (OddNAT /\ Seg (2 * k + 5)));
+
+theorem :: FIB_NUM2:66
+  for n being Nat holds
+    OddFibs (2 * n + 3) = OddFibs (2 * n + 1) ^ <* Fib (2 * n + 3) *>;
+
+theorem :: FIB_NUM2:67
+  for n being Nat holds
+    Sum EvenFibs (2 * n + 2) = Fib (2 * n + 3) - 1;
+
+theorem :: FIB_NUM2:68
+  for n being Nat holds
+    Sum OddFibs (2 * n + 1) = Fib (2 * n + 2);
+
+begin :: Carmichael's Theorem on Prime Divisors
+
+theorem :: FIB_NUM2:69
+  for n being Nat holds Fib (n), Fib (n+1) are_relative_prime;
+
+theorem :: FIB_NUM2:70
+  for n being non empty Nat, m being Nat st m <> 1 holds
+    m divides Fib (n) implies not m divides Fib (n-'1);
+
+theorem :: FIB_NUM2:71
+  for n being non empty Nat holds
+    m is prime & n is prime & m divides Fib (n) implies
+      for r being Nat st r < n & r <> 0 holds not m divides Fib (r);
+
+begin :: Fibonacci Numbers and Pythagorean Triples
+
+theorem :: FIB_NUM2:72
+   for n being non empty Nat holds
+     {Fib (n) * Fib (n+3), 2 * Fib (n+1) * Fib (n+2),
+       (Fib (n+1)) ^2 + (Fib (n+2)) ^2} is Pythagorean_triple;
